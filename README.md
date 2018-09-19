@@ -7,6 +7,9 @@ A meta-library that makes it easy to use multiple
 
 ### Browser
 
+Download the latest `cubing.js` browser dev build for easy experimentation:
+https://github.com/cubing/cubing.js/releases/
+
     <script src="cubing.js"></script>
     <script>
       const {parse, invert, algToString} = alg;
@@ -20,6 +23,8 @@ A meta-library that makes it easy to use multiple
     </script>
 
 ### Node
+
+After `npm install cubing`:
 
     const {parse, invert, algToString} = require("cubing/alg");
     const {KPuzzle, Puzzles} = require("cubing/kpuzzle");
@@ -38,7 +43,7 @@ Try it [at `runkit.com`](https://runkit.com/embed/jj71d1c08sta).
     import {KPuzzle, Puzzles} from "cubing/kpuzzle"
 
     console.log(algToString(invert(parse("R U R' U R U2 R'"))));
-    
+
     const puzzle = new KPuzzle(Puzzles["333"]);
     puzzle.applyMove("R");
     console.log(puzzle.state);
