@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "es6",
+
+    "rootDir": "src",
+    "outDir": "",
+    "declaration": true,
+    "sourceMap": true,
+
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true
+  },
+  "include": [
+    "src",
+    "alg",
+    "kpuzzle"
+  ]
+}
