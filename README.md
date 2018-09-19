@@ -1,6 +1,6 @@
 # `cubing.js`
 
-A meta-library that makes it easy to use multiple
+A bundle that makes it easy to use multiple
 [js.cubing.net](https://js.cubing.net) libraries.
 
 ## Usage
