@@ -5,6 +5,9 @@ A bundle that makes it easy to use multiple
 
 ## Usage
 
+There are a few ways to use `cubing.js`. Here is the same example, used in a few
+different ways:
+
 ### Browser
 
 Download the latest `cubing.js` browser dev build for easy experimentation:
