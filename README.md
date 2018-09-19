@@ -47,3 +47,13 @@ Try it [at `runkit.com`](https://runkit.com/embed/jj71d1c08sta).
     const puzzle = new KPuzzle(Puzzles["333"]);
     puzzle.applyMove("R");
     console.log(puzzle.state);
+
+## Bundle Size
+
+The browser dev build is partially minified, but contains all original variable
+names in full.
+
+If you use `node.js` and import individual sub-package with a slash (e.g.
+`cubing/alg`), then `node.js` will only import the code once for each of those
+sub-packages. Combined with your favorite minifier/tree shaker/gzip, this should
+be fairly lightweight.
