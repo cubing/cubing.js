@@ -9,26 +9,36 @@ A meta-library that makes it easy to use multiple
 
     <script src="cubing.js"></script>
     <script>
-      const sune = alg.parse("R U R' U R U2 R'");
-      const antiSune = alg.invert(sune);
-      console.log(alg.algToString(antiSune));
-
+      const {parse, invert, algToString} = alg;
       const {KPuzzle, Puzzles} = kpuzzle;
+
+      console.log(algToString(invert(parse("R U R' U R U2 R'"))));
 
       const puzzle = new KPuzzle(Puzzles["333"]);
       puzzle.applyMove("R");
       console.log(puzzle.state);
     </script>
 
-### Node / TypeScript
+### Node
+
+    const {parse, invert, algToString} = require("cubing/alg");
+    const {KPuzzle, Puzzles} = require("cubing/kpuzzle");
+
+    console.log(algToString(invert(parse("R U R' U R U2 R'"))));
+
+    const puzzle = new KPuzzle(Puzzles["333"]);
+    puzzle.applyMove("R");
+    console.log(puzzle.state);
+
+Try it [at `runkit.com`](https://runkit.com/embed/jj71d1c08sta).
+
+### ES6 / TypeScript
 
     import {parse, invert, algToString} from "cubing/alg"
     import {KPuzzle, Puzzles} from "cubing/kpuzzle"
 
-    const sune = parse("R U R' U R U2 R'");
-    const antiSune = invert(sune);
-    console.log(algToString(antiSune));
-
+    console.log(algToString(invert(parse("R U R' U R U2 R'"))));
+    
     const puzzle = new KPuzzle(Puzzles["333"]);
     puzzle.applyMove("R");
     console.log(puzzle.state);
