@@ -3,6 +3,15 @@
 A bundle that makes it easy to use multiple
 [js.cubing.net](https://js.cubing.net) libraries.
 
+| Library | Purpose |
+|--------|--------|
+| [`alg`](https://github.com/cubing/alg.js) | Parse and transform twisty puzzle algorithms ("algs"). |
+| [`kpuzzle`](https://github.com/cubing/kpuzzle.js) | Represent and transform twisty puzzles. |
+| [`twisty`](https://github.com/cubing/twisty.js) | Animate and interact with twisty puzzles. |
+| [`cuble`](https://github.com/cubing/cuble.js) | Connect to bluetooth twisty puzzles. |
+| [`puzzle-geometry`](https://github.com/cubing/puzzle-geometry.js) | Generate new twisty puzzle geometries. |
+
+
 ## Usage
 
 There are a few ways to use `cubing.js`. Here is the same example, used in a few
