@@ -59,3 +59,11 @@ If you use `node.js` and import individual sub-package with a slash (e.g.
 `cubing/alg`), then `node.js` will only import the code once for each of those
 sub-packages. Combined with your favorite minifier/tree shaker/gzip, this should
 be fairly lightweight.
+
+In addition, `cubing.js` shares its source with the individual packages it bundles:
+
+    > require("cubing/alg") == require("alg")
+    true
+
+Therefore, if a project depends on both `cubing.js` and some of its individual
+sub-packages, `node.js` will not load any redundant code.
