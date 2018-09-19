@@ -4,4 +4,4 @@ node_js:
   - "lts/*"
 script:
   - yarn install
-  # - make test
+  - make test
