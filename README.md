@@ -48,6 +48,8 @@ Try it [at `runkit.com`](https://runkit.com/embed/jj71d1c08sta).
     puzzle.applyMove("R");
     console.log(puzzle.state);
 
+All packages bundled by `cubing.js` have associated TypeScript declarations.
+
 ## Bundle Size
 
 The browser dev build is partially minified, but contains all original variable
