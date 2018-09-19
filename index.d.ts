@@ -1,11 +1,11 @@
-import * as _alg from "alg";
-import * as _kpuzzle from "../kpuzzle";
-import * as _twisty from "../twisty";
-import * as _cuble from "../cuble";
-import * as _puzzleGeometry from "../puzzle-geometry";
+import * as alg from "alg";
+import * as kpuzzle from "../kpuzzle";
+import * as twisty from "../twisty";
+import * as cuble from "../cuble";
+import * as puzzleGeometry from "../puzzle-geometry";
 
-export const alg: typeof _alg;
-export const kpuzzle: typeof _kpuzzle;
-export const twisty: typeof _twisty;
-export const cuble: typeof _cuble;
-export const puzzleGeometry: typeof _puzzleGeometry;
+export {alg as alg};
+export {kpuzzle as kpuzzle};
+export {twisty as twisty};
+export {cuble as cuble};
+export {puzzleGeometry as puzzleGeometry};
