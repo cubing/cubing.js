@@ -40,12 +40,7 @@ After `npm install cubing`:
 
     const {parse, invert, algToString} = require("cubing/alg");
     const {KPuzzle, Puzzles} = require("cubing/kpuzzle");
-
-    console.log(algToString(invert(parse("R U R' U R U2 R'"))));
-
-    const puzzle = new KPuzzle(Puzzles["333"]);
-    puzzle.applyMove("R");
-    console.log(puzzle.state);
+    // ...
 
 Try it [at `runkit.com`](https://runkit.com/embed/jj71d1c08sta).
 
@@ -53,12 +48,7 @@ Try it [at `runkit.com`](https://runkit.com/embed/jj71d1c08sta).
 
     import {parse, invert, algToString} from "cubing/alg"
     import {KPuzzle, Puzzles} from "cubing/kpuzzle"
-
-    console.log(algToString(invert(parse("R U R' U R U2 R'"))));
-
-    const puzzle = new KPuzzle(Puzzles["333"]);
-    puzzle.applyMove("R");
-    console.log(puzzle.state);
+    // ...
 
 All packages bundled by `cubing.js` have associated TypeScript declarations.
 
