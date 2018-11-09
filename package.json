@@ -1,7 +1,7 @@
 {
   "name": "cubing",
   "main": "./cubing.js",
-  "version": "0.9.17",
+  "version": "0.9.18",
   "description": "Meta-library containing multiple js.cubing.net projects.",
   "author": "The js.cubing.net team",
   "license": "GPL-3.0-or-later",
@@ -11,11 +11,11 @@
   },
   "types": "./index.d.ts",
   "dependencies": {
-    "alg": "^0.9.17",
-    "cuble": "^0.9.17",
-    "kpuzzle": "^0.9.17",
+    "alg": "^0.9.18",
+    "cuble": "^0.9.18",
+    "kpuzzle": "^0.9.18",
     "puzzle-geometry": "^0.9.17",
-    "twisty": "^0.9.17"
+    "twisty": "^0.9.18"
   },
   "externalsForWebpack": [],
   "devDependencies": {

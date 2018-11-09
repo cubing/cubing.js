@@ -212,9 +212,10 @@ ajv@^6.1.0:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-alg@^0.9.17:
-  version "0.9.17"
-  resolved "https://registry.yarnpkg.com/alg/-/alg-0.9.17.tgz#33a5b1a6c2419641a5ce056bfee3052e4bb54d18"
+alg@^0.9.18:
+  version "0.9.18"
+  resolved "https://registry.yarnpkg.com/alg/-/alg-0.9.18.tgz#61edf7ffceea85c7d03423701cd5602c8bb98433"
+  integrity sha512-vwaFSKzwSauw0L4NZD2XnamycPnrFaYA3ng9/PfA8cytBaqfB3u3pzHwoFl3IW27BM99ohbwIS8F1O9BXEbMUQ==
 
 ansi-escapes@^3.0.0:
   version "3.1.0"
@@ -1365,12 +1366,13 @@ cssstyle@^1.0.0:
   dependencies:
     cssom "0.3.x"
 
-cuble@^0.9.17:
-  version "0.9.17"
-  resolved "https://registry.yarnpkg.com/cuble/-/cuble-0.9.17.tgz#88a3930575a3de4d878f0381a9de9b9f5129b0d7"
+cuble@^0.9.18:
+  version "0.9.18"
+  resolved "https://registry.yarnpkg.com/cuble/-/cuble-0.9.18.tgz#6725e652ebab72c5d9d43ee7450a8bdbd163694c"
+  integrity sha512-/Txb+4E+cMKzGwHQBSwWzEddhPvXffyrrBj6ZsNaLtbR5TbC4Ujg3Ot0u1iH1jYp4I9DyOzbXiCD/eXwaNjNkw==
   dependencies:
-    alg "^0.9.17"
-    kpuzzle "^0.9.17"
+    alg "^0.9.18"
+    kpuzzle "^0.9.18"
 
 cyclist@~0.2.2:
   version "0.2.2"
@@ -2928,11 +2930,12 @@ kleur@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-2.0.2.tgz#b704f4944d95e255d038f0cb05fb8a602c55a300"
 
-kpuzzle@^0.9.17:
-  version "0.9.17"
-  resolved "https://registry.yarnpkg.com/kpuzzle/-/kpuzzle-0.9.17.tgz#123a1c8cab8a532f36f97d8c0eba51a61dc16c6f"
+kpuzzle@^0.9.18:
+  version "0.9.18"
+  resolved "https://registry.yarnpkg.com/kpuzzle/-/kpuzzle-0.9.18.tgz#b7dce896cfebd76bbd9dad80b83522bb97dcfb7c"
+  integrity sha512-1BqMihQlLHjDA1uKxEwnOdoz2JS7fiRGJwLQ+JsWvKI5lhBdrPQ0VPThyVI71L6lH/9i74+eNWXtebknuOG8Vw==
   dependencies:
-    alg "^0.9.17"
+    alg "^0.9.18"
 
 lcid@^1.0.0:
   version "1.0.0"
@@ -4406,6 +4409,11 @@ test-exclude@^4.2.1:
     read-pkg-up "^1.0.1"
     require-main-filename "^1.0.1"
 
+three@^0.96.0:
+  version "0.96.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.96.0.tgz#6f48bb9e321506906ae4708bda69b0ffa808ee7f"
+  integrity sha512-tS+A5kelQgBblElc/E1G5zR3m6wNjbqmrf6OAjijuNJM7yoYQjOktPoa+Lglx73OTiTOJ3+Ff+pgWdOFt7cOhQ==
+
 throat@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/throat/-/throat-4.1.0.tgz#89037cbc92c56ab18926e6ba4cbb200e15672a6a"
@@ -4534,12 +4542,14 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-twisty@^0.9.17:
-  version "0.9.17"
-  resolved "https://registry.yarnpkg.com/twisty/-/twisty-0.9.17.tgz#8f594a73639952d0c1ef7146c3d042c38fd282b9"
+twisty@^0.9.18:
+  version "0.9.18"
+  resolved "https://registry.yarnpkg.com/twisty/-/twisty-0.9.18.tgz#f1ff0cbb1a0d17579f68aa1fb0e1ab83ece6420c"
+  integrity sha512-Wthjgd110nBNc0PhOjkv52GpSuEN2SnwCtloKt0nyMn00a5LxhQD7wHje+FOcfiGBXClusbON5URHX1mG1SQ2Q==
   dependencies:
-    alg "^0.9.17"
-    kpuzzle "^0.9.17"
+    alg "^0.9.18"
+    kpuzzle "^0.9.18"
+    three "^0.96.0"
 
 type-check@~0.3.2:
   version "0.3.2"
