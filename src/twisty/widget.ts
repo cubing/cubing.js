@@ -1,12 +1,12 @@
-import * as THREE from "three"
+import * as THREE from "three";
 
-import {Sequence, BlockMove, algToString} from "../alg/index"
-import {Combine, KPuzzleDefinition, SVG, Transformation, stateForBlockMove} from "../kpuzzle/index"
+import {algToString, BlockMove, Sequence} from "../alg/index";
+import {Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation} from "../kpuzzle/index";
 
-import {CursorObserver, DirectionObserver, JumpObserver, AnimModel} from "./anim"
-import {Cursor} from "./cursor"
-import {Puzzle} from "./puzzle"
-import {Cube3D} from "./3D/cube3D"
+import {Cube3D} from "./3D/cube3D";
+import {AnimModel, CursorObserver, DirectionObserver, JumpObserver} from "./anim";
+import {Cursor} from "./cursor";
+import {Puzzle} from "./puzzle";
 
 export type VisualizationFormat = "2D" | "3D";
 
@@ -34,14 +34,14 @@ namespace FullscreenAPI {
            document.webkitFullscreenElement;
   }
   export function request(element: HTMLElement) {
-    var requestFullscreen = element.requestFullscreen ||
+    let requestFullscreen = element.requestFullscreen ||
                             (element as any).mozRequestFullScreen ||
                             (element as any).msRequestFullscreen ||
                             (element as any).webkitRequestFullscreen;
     requestFullscreen.call(element);
   }
   export function exit() {
-    var exitFullscreen = document.exitFullscreen ||
+    let exitFullscreen = document.exitFullscreen ||
                          (document as any).mozCancelFullScreen ||
                          (document as any).msExitFullscreen ||
                          (document as any).webkitExitFullscreen;
@@ -50,9 +50,9 @@ namespace FullscreenAPI {
 }
 
 // TODO: Expose this as a config per instance.
-var showJumpingFlash = true;
+let showJumpingFlash = true;
 export function experimentalShowJumpingFlash(show: boolean): void {
-  console.log("show jumping flash:", show)
+  console.log("show jumping flash:", show);
   showJumpingFlash = show;
 }
 
@@ -66,17 +66,17 @@ export abstract class Button {
     this.element.addEventListener("click", this.onpress.bind(this));
   }
 
-  abstract onpress(): void
+  public abstract onpress(): void;
 }
 
-export module Button {
+export namespace Button {
 
   export class Fullscreen extends Button {
     constructor(private fullscreenElement: HTMLElement) {
       super("Full Screen", "fullscreen");
     }
 
-    onpress(): void {
+    public onpress(): void {
       if (FullscreenAPI.element() === this.fullscreenElement) {
         FullscreenAPI.exit();
       } else {
@@ -88,28 +88,28 @@ export module Button {
   export class SkipToStart extends Button {
     constructor(private anim: AnimModel) {
       super("Skip To Start", "skip-to-start"); }
-    onpress(): void { this.anim.skipToStart(); }
+    public onpress(): void { this.anim.skipToStart(); }
   }
   export class SkipToEnd extends Button {
     constructor(private anim: AnimModel) {
       super("Skip To End", "skip-to-end"); }
-    onpress(): void { this.anim.skipToEnd(); }
+    public onpress(): void { this.anim.skipToEnd(); }
   }
   export class PlayPause extends Button implements DirectionObserver {
     constructor(private anim: AnimModel) {
       super("Play", "play");
       this.anim.dispatcher.registerDirectionObserver(this);
     }
-    onpress(): void {
+    public onpress(): void {
       if (this.anim.isPaused() && this.anim.isAtEnd()) {
         this.anim.skipToStart();
       }
       this.anim.togglePausePlayForward();
     }
-    animDirectionChanged(direction: Cursor.Direction): void {
+    public animDirectionChanged(direction: Cursor.Direction): void {
       // TODO: Handle flash of pause button when pressed while the Twisty is already at the end.
-      var newClass = direction === Cursor.Direction.Paused ? "play" : "pause";
-      this.element.classList.remove("play", "pause")
+      let newClass = direction === Cursor.Direction.Paused ? "play" : "pause";
+      this.element.classList.remove("play", "pause");
       this.element.classList.add(newClass);
 
       this.element.title = direction === Cursor.Direction.Paused ? "Play" : "Pause";
@@ -118,12 +118,12 @@ export module Button {
   export class StepForward extends Button {
     constructor(private anim: AnimModel) {
       super("Step forward", "step-forward"); }
-    onpress(): void { this.anim.stepForward(); }
+    public onpress(): void { this.anim.stepForward(); }
   }
   export class StepBackward extends Button {
     constructor(private anim: AnimModel) {
       super("Step backward", "step-backward"); }
-    onpress(): void { this.anim.stepBackward(); }
+    public onpress(): void { this.anim.stepBackward(); }
   }
 }
 
@@ -153,20 +153,30 @@ export class Scrubber implements CursorObserver {
     this.anim.dispatcher.registerCursorObserver(this);
   }
 
-  updateFromAnim() {
-    var bounds = this.anim.getBounds();
+  public updateFromAnim() {
+    let bounds = this.anim.getBounds();
     this.element.min = String(bounds[0]);
     this.element.max = String(bounds[1]);
     this.element.value = String(this.anim.cursor.currentTimestamp());
   }
 
+  public animCursorChanged(cursor: Cursor<Puzzle>): void {
+    this.element.value = String(cursor.currentTimestamp());
+    this.updateBackground();
+  }
+
+  public animBoundsChanged(): void {
+    // TODO
+    this.updateBackground();
+  }
+
   private updateBackground() {
     // TODO: Figure out the most efficient way to do this.
     // TODO: Pad by the thumb radius at each end.
-    var min = parseInt(this.element.min);
-    var max = parseInt(this.element.max);
-    var value = parseInt(this.element.value);
-    var v = (value - min) / max * 100;
+    let min = parseInt(this.element.min);
+    let max = parseInt(this.element.max);
+    let value = parseInt(this.element.value);
+    let v = (value - min) / max * 100;
     this.element.style.background = `linear-gradient(to right, \
       rgb(204, 24, 30) 0%, \
       rgb(204, 24, 30) ${v}%, \
@@ -180,16 +190,6 @@ export class Scrubber implements CursorObserver {
     this.anim.skipAndPauseTo(parseInt(this.element.value));
     this.updateBackground();
   }
-
-  animCursorChanged(cursor: Cursor<Puzzle>): void {
-    this.element.value = String(cursor.currentTimestamp());
-    this.updateBackground();
-  }
-
-  animBoundsChanged(): void {
-    // TODO
-    this.updateBackground();
-  }
 }
 
 export class CursorTextView implements CursorObserver {
@@ -200,7 +200,7 @@ export class CursorTextView implements CursorObserver {
     this.anim.dispatcher.registerCursorObserver(this);
   }
 
-  animCursorChanged(cursor: Cursor<Puzzle>) {
+  public animCursorChanged(cursor: Cursor<Puzzle>) {
     this.element.textContent = String(Math.floor(cursor.currentTimestamp()));
   }
 }
@@ -216,19 +216,19 @@ export class CursorTextMoveView implements CursorObserver {
     this.animCursorChanged(anim.cursor);
   }
 
-  private formatFraction(k: number) {
-    return (String(k) + (Math.floor(k) === k ? "." : "") + "000000").slice(0, 5)
-  }
-
-  animCursorChanged(cursor: Cursor<Puzzle>) {
-    var pos = cursor.currentPosition();
-    var s = "" + Math.floor(cursor.currentTimestamp());
+  public animCursorChanged(cursor: Cursor<Puzzle>) {
+    let pos = cursor.currentPosition();
+    let s = "" + Math.floor(cursor.currentTimestamp());
     if (pos.moves.length > 0) {
       // TODO: cache the name.
       // TODO: Don't wrap in Sequence if we can add toString() to AlgPart interface?
       s += " " + algToString(new Sequence([pos.moves[0].move])) + " " + this.formatFraction(pos.moves[0].fraction);
     }
     this.element.textContent = s;
+  }
+
+  private formatFraction(k: number) {
+    return (String(k) + (Math.floor(k) === k ? "." : "") + "000000").slice(0, 5);
   }
 }
 
@@ -244,18 +244,18 @@ export class KSolveView implements CursorObserver, JumpObserver {
     this.element.appendChild(this.svg.element);
   }
 
-  animCursorChanged(cursor: Cursor<Puzzle>) {
-    var pos = cursor.currentPosition();
+  public animCursorChanged(cursor: Cursor<Puzzle>) {
+    let pos = cursor.currentPosition();
     if (pos.moves.length > 0) {
 
-      var move = (pos.moves[0].move as BlockMove);
+      let move = (pos.moves[0].move as BlockMove);
 
-      var def = this.definition;
-      var partialMove = new BlockMove(move.outerLayer, move.innerLayer, move.family, move.amount * pos.moves[0].direction)
-      var newState = Combine(
+      let def = this.definition;
+      let partialMove = new BlockMove(move.outerLayer, move.innerLayer, move.family, move.amount * pos.moves[0].direction);
+      let newState = Combine(
         def,
         pos.state as Transformation,
-        stateForBlockMove(def, partialMove)
+        stateForBlockMove(def, partialMove),
       );
       this.svg.draw(this.definition, pos.state as Transformation, newState, pos.moves[0].fraction);
     } else {
@@ -263,7 +263,7 @@ export class KSolveView implements CursorObserver, JumpObserver {
     }
   }
 
-  animCursorJumped() {
+  public animCursorJumped() {
     if (showJumpingFlash) {
       this.element.classList.add("flash");
       setTimeout(() => this.element.classList.remove("flash"), 0);
@@ -282,26 +282,26 @@ export class Cube3DView implements CursorObserver, JumpObserver {
     this.cube3D = new Cube3D(definition); // TODO: Dynamic puzzle
 
     setTimeout(function() {
-      this.cube3D.newVantage(this.element)
+      this.cube3D.newVantage(this.element);
     }.bind(this), 0);
 
     this.createBackViewForTesting();
   }
 
   // TODO: Remove
-  createBackViewForTesting() {
+  public createBackViewForTesting() {
     const backWrapper = document.createElement("cube3d-back-wrapper");
     this.element.appendChild(backWrapper);
     setTimeout(function() {
-      this.cube3D.newVantage(backWrapper, {position: new THREE.Vector3(-1.25, -2.5, -2.5)})
+      this.cube3D.newVantage(backWrapper, {position: new THREE.Vector3(-1.25, -2.5, -2.5)});
     }.bind(this), 0);
   }
 
-  animCursorChanged(cursor: Cursor<Puzzle>) {
+  public animCursorChanged(cursor: Cursor<Puzzle>) {
     this.cube3D.draw(cursor.currentPosition());
   }
 
-  animCursorJumped() {
+  public animCursorJumped() {
     if (showJumpingFlash) {
       this.element.classList.add("flash");
       setTimeout(() => this.element.classList.remove("flash"), 0);
@@ -336,7 +336,7 @@ export class Player {
     this.element.appendChild((new CursorTextMoveView(this.anim)).element);
   }
 
-  updateFromAnim(): void {
-    this.scrubber.updateFromAnim()
+  public updateFromAnim(): void {
+    this.scrubber.updateFromAnim();
   }
 }

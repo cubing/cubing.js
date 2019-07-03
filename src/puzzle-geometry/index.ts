@@ -1,18 +1,18 @@
 export {
-  Quat
-} from "./Quat"
+  Quat,
+} from "./Quat";
 export {
-   PlatonicGenerator
-} from "./PlatonicGenerator"
+   PlatonicGenerator,
+} from "./PlatonicGenerator";
 export {
-   PuzzleGeometry
-} from "./PuzzleGeometry"
+   PuzzleGeometry,
+} from "./PuzzleGeometry";
 export {
-   Perm
-} from "./Perm"
+   Perm,
+} from "./Perm";
 export {
-   OrbitDef, OrbitsDef, Orbit, Transformation, VisibleState
-} from "./PermOriSet"
+   OrbitDef, OrbitsDef, Orbit, Transformation, VisibleState,
+} from "./PermOriSet";
 export {
-   SchreierSims
+   SchreierSims,
 } from "./SchreierSims" ;

@@ -1,4 +1,4 @@
-import {BlockMove, BareBlockMove} from "./algorithm/index"
+import {BareBlockMove, BlockMove} from "./algorithm/index";
 
 const cubeKeyMapping: {[key: number]: BlockMove} = {
   73: BareBlockMove("R"), 75: BareBlockMove("R", -1),
@@ -7,7 +7,7 @@ const cubeKeyMapping: {[key: number]: BlockMove} = {
   68: BareBlockMove("L"), 69: BareBlockMove("L", -1),
   74: BareBlockMove("U"), 70: BareBlockMove("U", -1),
   72: BareBlockMove("F"), 71: BareBlockMove("F", -1), // Heise
-  78: BareBlockMove("F"), 86: BareBlockMove("F", -1), //Kirjava
+  78: BareBlockMove("F"), 86: BareBlockMove("F", -1), // Kirjava
 
   67: BareBlockMove("l"), 82: BareBlockMove("l", -1),
   85: BareBlockMove("r"), 77: BareBlockMove("r", -1),
@@ -17,13 +17,13 @@ const cubeKeyMapping: {[key: number]: BlockMove} = {
   80: BareBlockMove("z"), 81: BareBlockMove("z", -1),
 
   190: BareBlockMove("M", -1),
-}
+};
 
 // TODO: options about whether to ignore modifier keys (e.g. alt, ctrl).
 // TODO: Support different mappings.
 // TODO: Return BaseMove instead?
 export function keyToMove(e: KeyboardEvent): BlockMove | null {
-  if(e.altKey || e.ctrlKey) {
+  if (e.altKey || e.ctrlKey) {
     return null;
   }
 

@@ -1,14 +1,14 @@
-import {reportTypeMismatch} from "../debug"
+import {reportTypeMismatch} from "../debug";
 
 export type AlgPartType = string;
 
 export abstract class AlgPart {
-  abstract type: AlgPartType;
+  public abstract type: AlgPartType;
 }
 
 // type Constructor<T> = Function & { prototype: T }
 export function matchesAlgType<T extends AlgPart>(a: any, t: AlgPartType): boolean {
-  return a.type == t
+  return a.type == t;
 }
 
 export function assertMatchesType<T extends AlgPart>(a: any, t: AlgPartType): T {
@@ -21,7 +21,7 @@ export function assertMatchesType<T extends AlgPart>(a: any, t: AlgPartType): T 
 // Assumes that every `AlgPart` is a `Unit` or a `Sequence`.
 export function isUnit(a: AlgPart): boolean {
   if (!("type" in a)) {
-    return false
+    return false;
   }
   return !matchesAlgType(a, "sequence");
 }
@@ -61,21 +61,21 @@ export interface WithAmount {
 }
 export class Group extends Container implements WithAmount {
   public type: string = "group";
-  constructor(public nestedSequence: Sequence, public amount: number=1) {
+  constructor(public nestedSequence: Sequence, public amount: number= 1) {
     super();
     Object.freeze(this);
   }
 }
 export class Commutator extends Container implements WithAmount {
   public type: string = "commutator";
-  constructor(public A: Sequence, public B: Sequence, public amount: number=1) {
+  constructor(public A: Sequence, public B: Sequence, public amount: number= 1) {
     super();
     Object.freeze(this);
   }
 }
 export class Conjugate extends Container implements WithAmount {
   public type: string = "conjugate";
-  constructor(public A: Sequence, public B: Sequence, public amount: number=1) {
+  constructor(public A: Sequence, public B: Sequence, public amount: number= 1) {
     super();
     Object.freeze(this);
   }

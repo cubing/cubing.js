@@ -5,21 +5,21 @@ import {
   CommentShort,
   Commutator,
   Conjugate,
+  expand,
   Group,
   NewLine,
   Pause,
   Sequence,
-  expand
-} from "../alg/index"
-import {TraversalUp} from "../alg/index"
-import {Puzzle, State} from "./puzzle"
+} from "../alg/index";
+import {TraversalUp} from "../alg/index";
+import {Puzzle, State} from "./puzzle";
 
 "use strict";
 
 // TODO: Include Pause.
 class CountAnimatedMoves extends TraversalUp<number> {
   public traverseSequence(sequence: Sequence): number {
-    var total = 0;
+    let total = 0;
     for (const part of sequence.nestedUnits) {
       total += this.traverse(part);
     }
@@ -32,15 +32,15 @@ class CountAnimatedMoves extends TraversalUp<number> {
     return 1;
   }
   public traverseCommutator(commutator: Commutator): number {
-    return 2*(this.traverseSequence(commutator.A) + this.traverseSequence(commutator.B));
+    return 2 * (this.traverseSequence(commutator.A) + this.traverseSequence(commutator.B));
   }
   public traverseConjugate(conjugate: Conjugate): number {
-    return 2*(this.traverseSequence(conjugate.A)) + this.traverseSequence(conjugate.B);
+    return 2 * (this.traverseSequence(conjugate.A)) + this.traverseSequence(conjugate.B);
   }
-  public traversePause(pause: Pause):                      number { return 0; }
-  public traverseNewLine(newLine: NewLine):                number { return 0; }
+  public traversePause(pause: Pause): number { return 0; }
+  public traverseNewLine(newLine: NewLine): number { return 0; }
   public traverseCommentShort(commentShort: CommentShort): number { return 0; }
-  public traverseCommentLong(commentLong: CommentLong):    number { return 0; }
+  public traverseCommentLong(commentLong: CommentLong): number { return 0; }
 }
 
 const countAnimatedMovesInstance = new CountAnimatedMoves();
@@ -58,23 +58,136 @@ export class Cursor<P extends Puzzle> {
     this.setMoves(alg);
     this.setPositionToStart();
 
-    this.durationFn = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount)
+    this.durationFn = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount);
   }
 
   public experimentalSetMoves(alg: Sequence) {
     this.setMoves(alg);
   }
 
+  public setPositionToStart() {
+    this.moveIdx = 0;
+    this.moveStartTimestamp = 0;
+    this.algTimestamp = 0;
+    this.state = this.puzzle.startState();
+  }
+
+  public setPositionToEnd() {
+    this.setPositionToStart();
+    this.forward(this.algDuration(), false);
+  }
+
+  public startOfAlg(): Cursor.Duration {
+    return 0;
+  }
+  public endOfAlg(): Cursor.Duration {
+    return this.algDuration();
+  }
+
+  public currentPosition(): Cursor.Position<P> {
+    let pos = {
+      state: this.state,
+      moves: [],
+    } as Cursor.Position<P>;
+    let move = this.moves.nestedUnits[this.moveIdx];
+    let moveTS = this.algTimestamp - this.moveStartTimestamp;
+    if (moveTS !== 0) {
+      pos.moves.push({
+        move,
+        direction: Cursor.Direction.Forwards,
+        // TODO: Expose a way to traverse `Unit`s directly?
+        fraction: moveTS / this.durationFn.traverse(new Sequence([move])),
+      });
+    }
+    return pos;
+  }
+  public currentTimestamp(): Cursor.Duration {
+    return this.algTimestamp;
+  }
+  public delta(duration: Cursor.Duration, stopAtMoveBoundary: boolean): boolean {
+    // TODO: Unify forward and backward?
+    if (duration > 0) {
+      return this.forward(duration, stopAtMoveBoundary);
+    } else {
+      return this.backward(-duration, stopAtMoveBoundary);
+    }
+  }
+
+  // TODO: Avoid assuming a single move at a time.
+  public forward(duration: Cursor.Duration, stopAtEndOfMove: boolean): /* TODO: Remove this. Represents if move breakpoint was reached. */ boolean {
+    if (duration < 0) {
+      throw new Error("negative");
+    }
+    let remainingOffset = (this.algTimestamp - this.moveStartTimestamp) + duration;
+
+    while (this.moveIdx < this.numMoves()) {
+      let move = this.moves.nestedUnits[this.moveIdx];
+      if (move.type != "blockMove") {
+        throw new Error("TODO — Only BlockMove supported for cursor.");
+      }
+      let lengthOfMove = this.durationFn.traverse(move);
+      if (remainingOffset < lengthOfMove) {
+        this.algTimestamp = this.moveStartTimestamp + remainingOffset;
+        return false;
+      }
+      this.state = this.puzzle.combine(
+        this.state,
+        this.puzzle.stateFromMove(move as BlockMove),
+      );
+      this.moveIdx += 1;
+      this.moveStartTimestamp += lengthOfMove;
+      this.algTimestamp = this.moveStartTimestamp;
+      remainingOffset -= lengthOfMove;
+      if (stopAtEndOfMove) {
+        return (remainingOffset > 0);
+      }
+    }
+    return true;
+  }
+  public backward(duration: Cursor.Duration, stopAtStartOfMove: boolean): /* TODO: Remove this. Represents of move breakpoint was reached. */ boolean {
+    if (duration < 0) {
+      throw new Error("negative");
+    }
+    let remainingOffset = (this.algTimestamp - this.moveStartTimestamp) - duration;
+
+    while (this.moveIdx >= 0) {
+      if (remainingOffset >= 0) {
+        this.algTimestamp = this.moveStartTimestamp + remainingOffset;
+        return false;
+      }
+      if (stopAtStartOfMove || this.moveIdx === 0) {
+        this.algTimestamp = this.moveStartTimestamp;
+        return true; // TODO
+      }
+
+      let prevMove = this.moves.nestedUnits[this.moveIdx - 1];
+      if (prevMove.type != "blockMove") {
+        throw new Error("TODO - only BlockMove supported");
+      }
+
+      this.state = this.puzzle.combine(
+        this.state,
+        this.puzzle.invert(this.puzzle.stateFromMove(prevMove as BlockMove)),
+      );
+      let lengthOfMove = this.durationFn.traverse(prevMove);
+      this.moveIdx -= 1;
+      this.moveStartTimestamp -= lengthOfMove;
+      this.algTimestamp = this.moveStartTimestamp;
+      remainingOffset += lengthOfMove;
+    }
+    return true;
+  }
+
   private setMoves(alg: Sequence) {
-    var moves = expand(alg);
+    let moves = expand(alg);
     if (moves.type == "sequence") {
-      this.moves = moves
+      this.moves = moves;
     } else {
       this.moves = new Sequence([moves]);
     }
 
     if (this.moves.nestedUnits.length === 0) {
-      throw "empty alg"
+      throw new Error("empty alg");
     }
     // TODO: Avoid assuming all base moves are block moves.
   }
@@ -87,119 +200,6 @@ export class Cursor<P extends Puzzle> {
   private numMoves() {
     // TODO: Cache internally once performance matters.
     return countAnimatedMoves(this.moves);
-  }
-
-  setPositionToStart() {
-    this.moveIdx = 0;
-    this.moveStartTimestamp = 0;
-    this.algTimestamp = 0;
-    this.state = this.puzzle.startState();
-  }
-
-  setPositionToEnd() {
-    this.setPositionToStart();
-    this.forward(this.algDuration(), false);
-  }
-
-  startOfAlg(): Cursor.Duration {
-    return 0;
-  }
-  endOfAlg(): Cursor.Duration {
-    return this.algDuration();
-  }
-
-  currentPosition(): Cursor.Position<P> {
-    var pos = <Cursor.Position<P>>{
-      state: this.state,
-      moves: []
-    }
-    var move = this.moves.nestedUnits[this.moveIdx];
-    var moveTS = this.algTimestamp - this.moveStartTimestamp;
-    if (moveTS !== 0) {
-      pos.moves.push({
-        move: move,
-        direction: Cursor.Direction.Forwards,
-        // TODO: Expose a way to traverse `Unit`s directly?
-        fraction: moveTS / this.durationFn.traverse(new Sequence([move]))
-      });
-    }
-    return pos;
-  }
-  currentTimestamp(): Cursor.Duration {
-    return this.algTimestamp;
-  }
-  delta(duration: Cursor.Duration, stopAtMoveBoundary: boolean): boolean {
-    // TODO: Unify forward and backward?
-    if (duration > 0) {
-      return this.forward(duration, stopAtMoveBoundary);
-    } else {
-      return this.backward(-duration, stopAtMoveBoundary);
-    }
-  }
-
-  // TODO: Avoid assuming a single move at a time.
-  forward(duration: Cursor.Duration, stopAtEndOfMove: boolean): /* TODO: Remove this. Represents if move breakpoint was reached. */ boolean {
-    if (duration < 0) {
-      throw "negative";
-    }
-    var remainingOffset = (this.algTimestamp - this.moveStartTimestamp) + duration;
-
-    while (this.moveIdx < this.numMoves()) {
-      var move = this.moves.nestedUnits[this.moveIdx];
-      if(move.type != "blockMove") {
-        throw "TODO — Only BlockMove supported for cursor.";
-      }
-      var lengthOfMove = this.durationFn.traverse(move);
-      if (remainingOffset < lengthOfMove) {
-        this.algTimestamp = this.moveStartTimestamp + remainingOffset;
-        return false;
-      }
-      this.state = this.puzzle.combine(
-        this.state,
-        this.puzzle.stateFromMove(move as BlockMove)
-      );
-      this.moveIdx += 1;
-      this.moveStartTimestamp += lengthOfMove;
-      this.algTimestamp = this.moveStartTimestamp;
-      remainingOffset -= lengthOfMove;
-      if (stopAtEndOfMove) {
-        return (remainingOffset > 0);
-      }
-    }
-    return true;
-  }
-  backward(duration: Cursor.Duration, stopAtStartOfMove: boolean): /* TODO: Remove this. Represents of move breakpoint was reached. */ boolean {
-    if (duration < 0) {
-      throw "negative";
-    }
-    var remainingOffset = (this.algTimestamp - this.moveStartTimestamp) - duration;
-
-    while (this.moveIdx >= 0) {
-      if (remainingOffset >= 0) {
-        this.algTimestamp = this.moveStartTimestamp + remainingOffset;
-        return false;
-      }
-      if (stopAtStartOfMove || this.moveIdx === 0) {
-        this.algTimestamp = this.moveStartTimestamp;
-        return true; // TODO
-      }
-
-      var prevMove = this.moves.nestedUnits[this.moveIdx - 1];
-      if(prevMove.type != "blockMove") {
-        throw "TODO - only BlockMove supported";
-      }
-
-      this.state = this.puzzle.combine(
-        this.state,
-        this.puzzle.invert(this.puzzle.stateFromMove(prevMove as BlockMove))
-      );
-      var lengthOfMove = this.durationFn.traverse(prevMove);
-      this.moveIdx -= 1;
-      this.moveStartTimestamp -= lengthOfMove;
-      this.algTimestamp = this.moveStartTimestamp;
-      remainingOffset += lengthOfMove;
-    }
-    return true;
   }
 }
 
@@ -214,23 +214,23 @@ export namespace Cursor {
   export enum Direction {
     Forwards = 1,
     Paused = 0,
-    Backwards = -1
+    Backwards = -1,
   }
 
   export interface MoveProgress {
-    move: AlgPart
-    direction: Direction
-    fraction: number
+    move: AlgPart;
+    direction: Direction;
+    fraction: number;
   }
 
-  export type Position<P extends Puzzle> = {
-    state: State<P>
-    moves: MoveProgress[]
+  export interface Position<P extends Puzzle> {
+    state: State<P>;
+    moves: MoveProgress[];
   }
 
   export enum BreakpointType {
     Move,
-    EntireMoveSequence
+    EntireMoveSequence,
   }
 
   export type DurationForAmount = (amount: number) => Duration;
@@ -255,24 +255,24 @@ export namespace Cursor {
   export class AlgDuration extends TraversalUp<Duration> {
     // TODO: Pass durationForAmount as Down type instead?
     constructor(public durationForAmount = DefaultDurationForAmount) {
-      super()
+      super();
     }
 
-    public traverseSequence(sequence: Sequence):             Duration {
-      var total = 0;
+    public traverseSequence(sequence: Sequence): Duration {
+      let total = 0;
       for (const alg of sequence.nestedUnits) {
-        total += this.traverse(alg)
+        total += this.traverse(alg);
       }
       return total;
     }
-    public traverseGroup(group: Group):                      Duration { return group.amount * this.traverse(group.nestedSequence); }
-    public traverseBlockMove(blockMove: BlockMove):             Duration { return this.durationForAmount(blockMove.amount); }
-    public traverseCommutator(commutator: Commutator):       Duration { return commutator.amount * 2 * (this.traverse(commutator.A) + this.traverse(commutator.B)); }
-    public traverseConjugate(conjugate: Conjugate):          Duration { return conjugate.amount * (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B)); }
-    public traversePause(pause: Pause):                      Duration { return this.durationForAmount(1); }
-    public traverseNewLine(newLine: NewLine):                Duration { return this.durationForAmount(1); }
+    public traverseGroup(group: Group): Duration { return group.amount * this.traverse(group.nestedSequence); }
+    public traverseBlockMove(blockMove: BlockMove): Duration { return this.durationForAmount(blockMove.amount); }
+    public traverseCommutator(commutator: Commutator): Duration { return commutator.amount * 2 * (this.traverse(commutator.A) + this.traverse(commutator.B)); }
+    public traverseConjugate(conjugate: Conjugate): Duration { return conjugate.amount * (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B)); }
+    public traversePause(pause: Pause): Duration { return this.durationForAmount(1); }
+    public traverseNewLine(newLine: NewLine): Duration { return this.durationForAmount(1); }
     public traverseCommentShort(commentShort: CommentShort): Duration { return this.durationForAmount(0); }
-    public traverseCommentLong(commentLong: CommentLong):    Duration { return this.durationForAmount(0); }
+    public traverseCommentLong(commentLong: CommentLong): Duration { return this.durationForAmount(0); }
   }
 }
 
@@ -290,7 +290,6 @@ export namespace Cursor {
 // console.log(c.currentPosition());
 // c.forward(10000, true);
 // console.log(c.currentPosition());
-
 
 // abstract class Position<AlgType extends Algorithm> {
 //   Alg: AlgType;

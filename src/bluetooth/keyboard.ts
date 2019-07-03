@@ -1,6 +1,6 @@
-import {keyToMove} from "../alg/index"
-import {KPuzzle, Puzzles} from "../kpuzzle/index"
-import {BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle"
+import {keyToMove} from "../alg/index";
+import {KPuzzle, Puzzles} from "../kpuzzle/index";
+import {BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle";
 
 const def = Puzzles["333"];
 
@@ -17,7 +17,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
     return "Keyboard Input";
   }
 
-  async getState(): Promise<PuzzleState> {
+  public async getState(): Promise<PuzzleState> {
     return this.puzzle.state;
   }
 
@@ -32,7 +32,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
       this.dispatchMove({
         latestMove: move,
         timeStamp: e.timeStamp,
-        state: this.puzzle.state
+        state: this.puzzle.state,
       });
       e.preventDefault();
     }

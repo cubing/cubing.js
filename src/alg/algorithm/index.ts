@@ -13,7 +13,7 @@ export {
   Pause,
   NewLine,
   CommentShort,
-  CommentLong
+  CommentLong,
 } from "./alg-part";
 
 export {
@@ -21,5 +21,5 @@ export {
   BlockMove,
   BareBlockMove,
   LayerBlockMove,
-  RangeBlockMove
+  RangeBlockMove,
 } from "./block-move";

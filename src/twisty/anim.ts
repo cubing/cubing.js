@@ -1,5 +1,5 @@
-import {Cursor} from "./cursor"
-import {Puzzle} from "./puzzle"
+import {Cursor} from "./cursor";
+import {Puzzle} from "./puzzle";
 
 "use strict";
 
@@ -27,42 +27,42 @@ export class Dispatcher implements CursorObserver, DirectionObserver {
   private directionObservers: Set<DirectionObserver> = new Set<DirectionObserver>();
   private jumpObservers: Set<JumpObserver> = new Set<JumpObserver>();
 
-  registerCursorObserver(observer: CursorObserver) {
+  public registerCursorObserver(observer: CursorObserver) {
     if (this.cursorObservers.has(observer)) {
-      throw "Duplicate cursor observer added.";
+      throw new Error("Duplicate cursor observer added.");
     }
     this.cursorObservers.add(observer);
   }
 
-  registerDirectionObserver(observer: DirectionObserver) {
+  public registerDirectionObserver(observer: DirectionObserver) {
     if (this.directionObservers.has(observer)) {
-      throw "Duplicate direction observer added.";
+      throw new Error("Duplicate direction observer added.");
     }
     this.directionObservers.add(observer);
   }
 
-  registerJumpObserver(observer: JumpObserver) {
+  public registerJumpObserver(observer: JumpObserver) {
     if (this.jumpObservers.has(observer)) {
-      throw "Duplicate direction observer added.";
+      throw new Error("Duplicate direction observer added.");
     }
     this.jumpObservers.add(observer);
   }
 
-  animCursorChanged(cursor: Cursor<Puzzle>) {
+  public animCursorChanged(cursor: Cursor<Puzzle>) {
     // TODO: guard against nested changes and test.
     for (const observer of this.cursorObservers) {
       observer.animCursorChanged(cursor);
     }
   }
 
-  animDirectionChanged(direction: Cursor.Direction) {
+  public animDirectionChanged(direction: Cursor.Direction) {
     // TODO: guard against nested changes and test.
     for (const observer of this.directionObservers) {
       observer.animDirectionChanged(direction);
     }
   }
 
-  animCursorJumped() {
+  public animCursorJumped() {
     // TODO: guard against nested changes and test.
     for (const observer of this.jumpObservers) {
       observer.animCursorJumped();
@@ -71,12 +71,12 @@ export class Dispatcher implements CursorObserver, DirectionObserver {
 }
 
 export class AnimModel {
+  public dispatcher: Dispatcher = new Dispatcher();
   private lastCursorTime: Cursor.Timestamp = 0;
   private direction: Cursor.Direction = Cursor.Direction.Paused;
   private breakpointType: Cursor.BreakpointType = Cursor.BreakpointType.EntireMoveSequence;
   private scheduler: FrameScheduler;
   private tempo: number = 1.5; // TODO: Support setting tempo.
-  public dispatcher: Dispatcher = new Dispatcher();
   // TODO: cache breakpoints instead of re-querying the model constantly.
   constructor(public cursor: Cursor<Puzzle>) {
     this.scheduler = new FrameScheduler(this.frame.bind(this));
@@ -89,8 +89,70 @@ export class AnimModel {
   public getBounds(): Cursor.Duration[] {
     return [
       this.cursor.startOfAlg(),
-      this.cursor.endOfAlg()
+      this.cursor.endOfAlg(),
     ];
+  }
+
+  public isPaused() {
+    return this.direction === Cursor.Direction.Paused;
+  }
+
+  public skipAndPauseTo(duration: Cursor.Duration): void {
+    this.pause();
+    this.cursor.setPositionToStart();
+    this.cursor.forward(duration, false); // TODO
+    this.scheduler.singleFrame();
+  }
+
+  public playForward(): void {
+    this.setBreakpointType(Cursor.BreakpointType.EntireMoveSequence);
+    this.animateDirection(Cursor.Direction.Forwards);
+  }
+
+  // A simple wrapper for animateDirection(Paused).
+  public pause(): void {
+    this.animateDirection(Cursor.Direction.Paused);
+  }
+
+  public playBackward(): void {
+    this.setBreakpointType(Cursor.BreakpointType.EntireMoveSequence);
+    this.animateDirection(Cursor.Direction.Backwards);
+  }
+
+  public skipToStart(): void {
+    this.skipAndPauseTo(this.cursor.startOfAlg());
+    // TODO: Wait for flash to finish before animating?
+    this.dispatcher.animCursorJumped();
+  }
+
+  public skipToEnd(): void {
+    this.skipAndPauseTo(this.cursor.endOfAlg());
+    // TODO: Wait for flash to finish before animating?
+    this.dispatcher.animCursorJumped();
+  }
+
+  public isAtEnd() {
+    return this.cursor.currentTimestamp() == this.cursor.endOfAlg();
+  }
+
+  public stepForward(): void {
+    this.cursor.forward(0.1, false); // TODO
+    this.setBreakpointType(Cursor.BreakpointType.Move);
+    this.animateDirection(Cursor.Direction.Forwards);
+  }
+
+  public stepBackward(): void {
+    this.cursor.backward(0.1, false); // TODO
+    this.setBreakpointType(Cursor.BreakpointType.Move);
+    this.animateDirection(Cursor.Direction.Backwards);
+  }
+
+  public togglePausePlayForward(): void {
+    if (this.isPaused()) {
+      this.playForward();
+    } else {
+      this.pause();
+    }
   }
 
   private timeScaling(): number {
@@ -107,13 +169,13 @@ export class AnimModel {
 
     // var previousCursor = this.cursor;
 
-    var elapsed = timestamp - this.lastCursorTime;
+    let elapsed = timestamp - this.lastCursorTime;
     this.lastCursorTime = timestamp;
     // Workaround for the first frame: https://twitter.com/lgarron/status/794846097445269504
     if (elapsed < 0) {
       elapsed = 0;
     }
-    var reachedMoveBreakpoint = this.cursor.delta(elapsed * this.timeScaling(), this.breakpointType === Cursor.BreakpointType.Move);
+    let reachedMoveBreakpoint = this.cursor.delta(elapsed * this.timeScaling(), this.breakpointType === Cursor.BreakpointType.Move);
     if (reachedMoveBreakpoint) {
         this.setDirection(Cursor.Direction.Paused);
         this.scheduler.stop();
@@ -137,10 +199,6 @@ export class AnimModel {
     this.breakpointType = breakpointType;
   }
 
-  public isPaused() {
-    return this.direction === Cursor.Direction.Paused;
-  }
-
   // Animate or pause in the given direction.
   // Idempotent.
   private animateDirection(direction: Cursor.Direction): void {
@@ -159,72 +217,13 @@ export class AnimModel {
       this.scheduler.start();
     }
   }
-
-  public skipAndPauseTo(duration: Cursor.Duration): void {
-    this.pause();
-    this.cursor.setPositionToStart();
-    this.cursor.forward(duration, false); // TODO
-    this.scheduler.singleFrame();
-  }
-
-  playForward(): void {
-    this.setBreakpointType(Cursor.BreakpointType.EntireMoveSequence);
-    this.animateDirection(Cursor.Direction.Forwards);
-  }
-
-  // A simple wrapper for animateDirection(Paused).
-  pause(): void {
-    this.animateDirection(Cursor.Direction.Paused);
-  }
-
-  playBackward(): void {
-    this.setBreakpointType(Cursor.BreakpointType.EntireMoveSequence);
-    this.animateDirection(Cursor.Direction.Backwards);
-  }
-
-  skipToStart(): void {
-    this.skipAndPauseTo(this.cursor.startOfAlg());
-    // TODO: Wait for flash to finish before animating?
-    this.dispatcher.animCursorJumped();
-  }
-
-  skipToEnd(): void {
-    this.skipAndPauseTo(this.cursor.endOfAlg());
-    // TODO: Wait for flash to finish before animating?
-    this.dispatcher.animCursorJumped();
-  }
-
-  public isAtEnd() {
-    return this.cursor.currentTimestamp() == this.cursor.endOfAlg();
-  }
-
-  stepForward(): void {
-    this.cursor.forward(0.1, false); // TODO
-    this.setBreakpointType(Cursor.BreakpointType.Move);
-    this.animateDirection(Cursor.Direction.Forwards);
-  }
-
-  stepBackward(): void {
-    this.cursor.backward(0.1, false); // TODO
-    this.setBreakpointType(Cursor.BreakpointType.Move);
-    this.animateDirection(Cursor.Direction.Backwards);
-  }
-
-  togglePausePlayForward(): void {
-    if (this.isPaused()) {
-      this.playForward();
-    } else {
-      this.pause();
-    }
-  }
 }
-
 
 class FrameScheduler {
   private animating: boolean = false;
   constructor(private callback: (timestamp: Cursor.Timestamp) => void) {}
 
-  animFrame(timestamp: Cursor.Timestamp) {
+  public animFrame(timestamp: Cursor.Timestamp) {
     this.callback(timestamp);
     if (this.animating) {
       // TODO: use same bound frame instead of creating a new binding each frame.
@@ -234,7 +233,7 @@ class FrameScheduler {
 
   // Start scheduling frames if not already running.
   // Idempotent.
-  start(): void {
+  public start(): void {
     if (!this.animating) {
       this.animating = true;
       requestAnimationFrame(this.animFrame.bind(this));
@@ -243,11 +242,11 @@ class FrameScheduler {
 
   // Stop scheduling frames (if not already stopped).
   // Idempotent.
-  stop(): void {
+  public stop(): void {
     this.animating = false;
   }
 
-  singleFrame() {
+  public singleFrame() {
     // Instantaneously start and stop, since that schedules a single frame iff
     // there is not already one scheduled.
     this.start();

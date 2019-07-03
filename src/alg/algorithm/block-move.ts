@@ -1,4 +1,4 @@
-import {Move} from "./alg-part"
+import {Move} from "./alg-part";
 
 export type MoveFamily = string; // TODO: Convert to an enum with string mappings.
 
@@ -9,7 +9,7 @@ export class BlockMove extends Move {
   // If `outerLayer` is set, `innerLayer` must also be set.
   public outerLayer?: number;
   public innerLayer?: number;
-  constructor(outerLayer: number | undefined, innerLayer: number | undefined, public family: MoveFamily, public amount: number=1) {
+  constructor(outerLayer: number | undefined, innerLayer: number | undefined, public family: MoveFamily, public amount: number= 1) {
     super();
     this.outerLayer = outerLayer;
     this.innerLayer = innerLayer;
@@ -25,6 +25,6 @@ export function LayerBlockMove(innerLayer: number, family: MoveFamily, amount?: 
   return new BlockMove(undefined, innerLayer, family, amount);
 }
 
-export function RangeBlockMove(outerLayer: number,innerLayer: number, family: MoveFamily, amount?: number): BlockMove {
+export function RangeBlockMove(outerLayer: number, innerLayer: number, family: MoveFamily, amount?: number): BlockMove {
   return new BlockMove(outerLayer, innerLayer, family, amount);
 }

@@ -1,12 +1,12 @@
-import {BlockMove, BareBlockMove} from "../alg/index"
-import {Transformation} from "../kpuzzle/index"
+import {BareBlockMove, BlockMove} from "../alg/index";
+import {Transformation} from "../kpuzzle/index";
 
-import {BluetoothConfig, BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle"
-import {debugLog} from "./debug"
+import {BluetoothConfig, BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle";
+import {debugLog} from "./debug";
 
 const UUIDs = {
   cubeService: "0000aadb-0000-1000-8000-00805f9b34fb",
-  cubeCharacteristic: "0000aadc-0000-1000-8000-00805f9b34fb"
+  cubeCharacteristic: "0000aadc-0000-1000-8000-00805f9b34fb",
 };
 
 // TODO: Move this into a factory?
@@ -14,16 +14,16 @@ export const giiKERConfig: BluetoothConfig = {
   filters: [
     {namePrefix: "GiC"},
     {namePrefix: "GiS"},
-    {namePrefix: "GiY"}
+    {namePrefix: "GiY"},
   ],
   optionalServices: [
     // "00001530-1212-efde-1523-785feabcd123",
     // "0000aaaa-0000-1000-8000-00805f9b34fb",
-    UUIDs.cubeService
+    UUIDs.cubeService,
     // "0000180f-0000-1000-8000-00805f9b34fb",
     // "0000180a-0000-1000-8000-00805f9b34fb"
-  ]
-}
+  ],
+};
 
 // TODO: Expose for testing.
 function giikerMoveToBlockMove(face: number, amount: number): BlockMove {
@@ -39,16 +39,16 @@ function giikerMoveToBlockMove(face: number, amount: number): BlockMove {
 
 export {giikerMoveToBlockMove as giikerMoveToBlockMoveForTesting};
 
-function giikerStateStr(giikerState: Array<number>): string {
-  var str = "";
+function giikerStateStr(giikerState: number[]): string {
+  let str = "";
   str += giikerState.slice(0, 8).join(".");
-  str += "\n"
+  str += "\n";
   str += giikerState.slice(8, 16).join(".");
-  str += "\n"
+  str += "\n";
   str += giikerState.slice(16, 28).join(".");
-  str += "\n"
+  str += "\n";
   str += giikerState.slice(28, 32).join(".");
-  str += "\n"
+  str += "\n";
   str += giikerState.slice(32, 40).join(".");
   return str;
 }
@@ -61,8 +61,8 @@ function giikerStateStr(giikerState: Array<number>): string {
 // };
 
 const Reid333SolvedCenters = {
-  "permutation": [0,1,2,3,4,5],
-  "orientation": [0,0,0,0,0,0]
+  permutation: [0, 1, 2, 3, 4, 5],
+  orientation: [0, 0, 0, 0, 0, 0],
 };
 
 const epGiiKERtoReid333: number[] = [4, 8, 0, 9, 5, 1, 3, 7, 6, 10, 2, 11];
@@ -80,6 +80,29 @@ const postCO: number[] = [2, 1, 2, 1, 1, 2, 1, 2];
 const coFlip: number[] = [-1, 1, -1, 1, 1, -1, 1, -1];
 
 export class GiiKERCube extends BluetoothPuzzle {
+
+  public static async connect(server: BluetoothRemoteGATTServer): Promise<GiiKERCube> {
+
+    const cubeService = await server.getPrimaryService(UUIDs.cubeService);
+    debugLog("Service:", cubeService);
+
+    const cubeCharacteristic = await cubeService.getCharacteristic(UUIDs.cubeCharacteristic);
+    debugLog("Characteristic:", cubeCharacteristic);
+
+    // TODO: Can we safely save the async promise instead of waiting for the response?
+
+    const originalValue = await cubeCharacteristic.readValue();
+    debugLog("Original value:", originalValue);
+    let cube = new GiiKERCube(server, cubeCharacteristic, originalValue);
+
+    await cubeCharacteristic.startNotifications();
+    cubeCharacteristic.addEventListener(
+      "characteristicvaluechanged",
+      cube.onCubeCharacteristicChanged.bind(cube),
+    );
+
+    return cube;
+  }
   private constructor(private server: BluetoothRemoteGATTServer, private cubeCharacteristic: BluetoothRemoteGATTCharacteristic, private originalValue: DataView | null | undefined = undefined) {
     super();
   }
@@ -88,27 +111,8 @@ export class GiiKERCube extends BluetoothPuzzle {
     return this.server.device.name;
   }
 
-  static async connect(server: BluetoothRemoteGATTServer): Promise<GiiKERCube> {
-
-    const cubeService = await server.getPrimaryService(UUIDs.cubeService);
-    debugLog("Service:", cubeService);
-    
-    const cubeCharacteristic = await cubeService.getCharacteristic(UUIDs.cubeCharacteristic);
-    debugLog("Characteristic:", cubeCharacteristic);
-
-    // TODO: Can we safely save the async promise instead of waiting for the response?
-
-    const originalValue = await cubeCharacteristic.readValue();
-    debugLog("Original value:", originalValue);
-    var cube = new GiiKERCube(server, cubeCharacteristic, originalValue);
-
-    await cubeCharacteristic.startNotifications();
-    cubeCharacteristic.addEventListener(
-      "characteristicvaluechanged",
-      cube.onCubeCharacteristicChanged.bind(cube)
-    );
-
-    return cube;
+  public async getState(): Promise<PuzzleState> {
+    return this.toReid333(await this.cubeCharacteristic.readValue());
   }
 
   private getNibble(val: DataView, i: number): number {
@@ -125,46 +129,42 @@ export class GiiKERCube extends BluetoothPuzzle {
   }
 
   private toReid333(val: DataView): Transformation {
-    var state = {
-      "EDGE": {
+    let state = {
+      EDGE: {
         permutation: new Array(12),
-        orientation: new Array(12)
+        orientation: new Array(12),
       },
-      "CORNER": {
+      CORNER: {
         permutation: new Array(8),
-        orientation: new Array(8)
+        orientation: new Array(8),
       },
-      "CENTER": Reid333SolvedCenters
-    }
+      CENTER: Reid333SolvedCenters,
+    };
 
-    for (var i = 0; i < 12; i++) {
+    for (let i = 0; i < 12; i++) {
       const gi = epReid333toGiiKER[i];
-      state["EDGE"].permutation[i] = epGiiKERtoReid333[this.getNibble(val, gi + 16) - 1];
-      state["EDGE"].orientation[i] = this.getBit(val, gi + 112) ^ preEO[state["EDGE"].permutation[i]] ^ postEO[i];
+      state.EDGE.permutation[i] = epGiiKERtoReid333[this.getNibble(val, gi + 16) - 1];
+      state.EDGE.orientation[i] = this.getBit(val, gi + 112) ^ preEO[state.EDGE.permutation[i]] ^ postEO[i];
     }
-    for (var i = 0; i < 8; i++) {
+    for (let i = 0; i < 8; i++) {
       const gi = cpReid333toGiiKER[i];
-      state["CORNER"].permutation[i] = cpGiiKERtoReid333[this.getNibble(val, gi) - 1];
-      state["CORNER"].orientation[i] = (this.getNibble(val, gi + 8) * coFlip[gi] + preCO[state["CORNER"].permutation[i]] + postCO[i]) % 3;
+      state.CORNER.permutation[i] = cpGiiKERtoReid333[this.getNibble(val, gi) - 1];
+      state.CORNER.orientation[i] = (this.getNibble(val, gi + 8) * coFlip[gi] + preCO[state.CORNER.permutation[i]] + postCO[i]) % 3;
     }
     return state;
   }
 
-  async getState(): Promise<PuzzleState> {
-    return this.toReid333(await this.cubeCharacteristic.readValue());
-  }
-
   private onCubeCharacteristicChanged(event: any): void {
-    var val = event.target.value;
+    let val = event.target.value;
     debugLog(val);
 
     if (this.isRepeatedInitialValue(val)) {
-        debugLog("Skipping repeated initial value.")
-      return;
+        debugLog("Skipping repeated initial value.");
+        return;
     }
 
-    var giikerState = [];
-    for (var i = 0; i < 20; i++) {
+    let giikerState = [];
+    for (let i = 0; i < 20; i++) {
       giikerState.push(Math.floor(val.getUint8(i) / 16));
       giikerState.push(val.getUint8(i) % 16);
     }
@@ -175,16 +175,16 @@ export class GiiKERCube extends BluetoothPuzzle {
       latestMove: giikerMoveToBlockMove(giikerState[32], giikerState[33]),
       timeStamp: event.timeStamp,
       debug: {
-        stateStr: str
+        stateStr: str,
       },
-      state: this.toReid333(val)
+      state: this.toReid333(val),
     });
   }
 
   private isRepeatedInitialValue(val: DataView): boolean {
     if (typeof (this.originalValue) === "undefined") {
       // TODO: Test this branch.
-      throw "GiiKERCube has uninitialized original value."
+      throw new Error("GiiKERCube has uninitialized original value.");
     }
 
     if (this.originalValue === null) {
@@ -195,8 +195,8 @@ export class GiiKERCube extends BluetoothPuzzle {
     // Reset the value here, so we can return early below.
     this.originalValue = null;
 
-    debugLog("Comparing against original value.")
-    for (var i = 0; i < 20; i++) {
+    debugLog("Comparing against original value.");
+    for (let i = 0; i < 20; i++) {
       if (originalValue.getUint8(i) != val.getUint8(i)) {
         debugLog("Different at index ", i);
         return false;

@@ -1,7 +1,7 @@
 export {
   KPuzzleDefinition,
   Transformation,
-} from "./spec"
+} from "./spec";
 
 export {
   Combine,
@@ -11,17 +11,17 @@ export {
   EquivalentTransformations,
   KPuzzle,
   EquivalentStates,
-  stateForBlockMove
-} from "./kpuzzle"
+  stateForBlockMove,
+} from "./kpuzzle";
 
 export {
-  Puzzles
-} from "./puzzle_definitions"
+  Puzzles,
+} from "./puzzle_definitions";
 
 export {
-  parse
- } from "./parser"
+  parse,
+ } from "./parser";
 
 export {
-  SVG
-} from "./svg"
+  SVG,
+} from "./svg";

@@ -12,50 +12,50 @@ import { Quat } from "./Quat" ;
 // This class is static.
 
 export class PlatonicGenerator {
-   static eps = 1e-9 ;
-   static cube():Array<Quat> {
-      var s5 = Math.sqrt(0.5) ;
+   public static eps = 1e-9 ;
+   public static cube(): Quat[] {
+      let s5 = Math.sqrt(0.5) ;
       return [new Quat(s5, s5, 0, 0), new Quat(s5, 0, s5, 0)] ;
    }
-   static tetrahedron():Array<Quat> {
+   public static tetrahedron(): Quat[] {
       return [new Quat(0.5, 0.5, 0.5, 0.5), new Quat(0.5, 0.5, 0.5, -0.5)] ;
    }
-   static dodecahedron():Array<Quat> {
-      var d36 = 2 * Math.PI / 10 ;
-      var dx = 0.5 + 0.3 * Math.sqrt(5) ;
-      var dy = 0.5 + 0.1 * Math.sqrt(5) ;
-      var dd = Math.sqrt(dx*dx+dy*dy) ;
+   public static dodecahedron(): Quat[] {
+      let d36 = 2 * Math.PI / 10 ;
+      let dx = 0.5 + 0.3 * Math.sqrt(5) ;
+      let dy = 0.5 + 0.1 * Math.sqrt(5) ;
+      let dd = Math.sqrt(dx * dx + dy * dy) ;
       dx /= dd ;
       dy /= dd ;
-      return [new Quat(Math.cos(d36), dx*Math.sin(d36), dy*Math.sin(d36), 0),
+      return [new Quat(Math.cos(d36), dx * Math.sin(d36), dy * Math.sin(d36), 0),
               new Quat(0.5, 0.5, 0.5, 0.5)] ;
    }
-   static icosahedron():Array<Quat> {
-      var dx = 1/6 + Math.sqrt(5)/6 ;
-      var dy = 2/3 + Math.sqrt(5)/3 ;
-      var dd = Math.sqrt(dx*dx+dy*dy) ;
+   public static icosahedron(): Quat[] {
+      let dx = 1 / 6 + Math.sqrt(5) / 6 ;
+      let dy = 2 / 3 + Math.sqrt(5) / 3 ;
+      let dd = Math.sqrt(dx * dx + dy * dy) ;
       dx /= dd ;
       dy /= dd ;
-      var ang = 2 * Math.PI / 6 ;
-      return [new Quat(Math.cos(ang), dx*Math.sin(ang), dy*Math.sin(ang), 0),
-              new Quat(Math.cos(ang), -dx*Math.sin(ang), dy*Math.sin(ang), 0)] ;
+      let ang = 2 * Math.PI / 6 ;
+      return [new Quat(Math.cos(ang), dx * Math.sin(ang), dy * Math.sin(ang), 0),
+              new Quat(Math.cos(ang), -dx * Math.sin(ang), dy * Math.sin(ang), 0)] ;
    }
-   static octahedron():Array<Quat> {
-      var s5 = Math.sqrt(0.5) ;
+   public static octahedron(): Quat[] {
+      let s5 = Math.sqrt(0.5) ;
       return [new Quat(0.5, 0.5, 0.5, 0.5), new Quat(s5, 0, 0, s5)] ;
    }
-   static closure(g:Array<Quat>):Array<Quat> {
+   public static closure(g: Quat[]): Quat[] {
    // compute the closure of a set of generators
    // This is quadratic in the result size.  Also, it has no protection
    // against you providing a bogus set of generators that would generate
    // an infinite group.
-      var q = [new Quat(1, 0, 0, 0)] ;
-      for (var i=0; i<q.length; i++) {
-         for (var j=0; j<g.length; j++) {
-            var ns = g[j].mul(q[i]) ;
-            var negns = ns.smul(-1) ;
-            var wasseen = false ;
-            for (var k=0; k<q.length; k++) {
+      let q = [new Quat(1, 0, 0, 0)] ;
+      for (let i = 0; i < q.length; i++) {
+         for (let j = 0; j < g.length; j++) {
+            let ns = g[j].mul(q[i]) ;
+            let negns = ns.smul(-1) ;
+            let wasseen = false ;
+            for (let k = 0; k < q.length; k++) {
                if (ns.dist(q[k]) < PlatonicGenerator.eps ||
                    negns.dist(q[k]) < PlatonicGenerator.eps) {
                   wasseen = true ;
@@ -69,16 +69,16 @@ export class PlatonicGenerator {
       }
       return q ;
    }
-   static uniqueplanes(p:Quat,g:Array<Quat>):Array<Quat> {
+   public static uniqueplanes(p: Quat, g: Quat[]): Quat[] {
    // compute unique plane rotations
    // given a rotation group and a plane, find the rotations that
    // generate unique planes.  This is quadratic in the return size.
-      var planes = [] ;
-      var planerot = [] ;
-      for (var i=0; i<g.length; i++) {
-         var p2 = p.rotateplane(g[i]) ;
-         var wasseen = false ;
-         for (var j=0; j<planes.length; j++) {
+      let planes = [] ;
+      let planerot = [] ;
+      for (let i = 0; i < g.length; i++) {
+         let p2 = p.rotateplane(g[i]) ;
+         let wasseen = false ;
+         for (let j = 0; j < planes.length; j++) {
             if (p2.dist(planes[j]) < PlatonicGenerator.eps) {
                wasseen = true ;
                break ;
@@ -91,42 +91,44 @@ export class PlatonicGenerator {
       }
       return planerot ;
    }
-   static getface(planes:Array<Quat>):Array<Quat> {
+   public static getface(planes: Quat[]): Quat[] {
    // compute a face given a set of planes
    // The face returned will be a set of points that lie in the first plane
    // in the given array, that are on the surface of the polytope defined
    // by all the planes, and will be returned in clockwise order.
    // This is O(planes^2 * return size + return_size^2).
-      var face = [] ;
-      for (var i=1; i<planes.length; i++) {
-         for (var j=i+1; j<planes.length; j++) {
-            var p = planes[0].solvethreeplanes(0, i, j, planes) ;
+      let face = [] ;
+      for (let i = 1; i < planes.length; i++) {
+         for (let j = i + 1; j < planes.length; j++) {
+            let p = planes[0].solvethreeplanes(0, i, j, planes) ;
             if (p) {
-               var wasseen = false ;
-               for (var k=0; k<face.length; k++) {
+               let wasseen = false ;
+               for (let k = 0; k < face.length; k++) {
                   if (p.dist(face[k]) < PlatonicGenerator.eps) {
                      wasseen = true ;
                      break ;
                   }
                }
-               if (!wasseen)
+               if (!wasseen) {
                   face.push(p) ;
+               }
             }
          }
       }
       while (true) {
-         var changed = false ;
-         for (var i=0; i<face.length; i++) {
-            var j = (i + 1) % face.length ;
+         let changed = false ;
+         for (let i = 0; i < face.length; i++) {
+            let j = (i + 1) % face.length ;
             if (planes[0].dot(face[i].cross(face[j])) < 0) {
-               var t:Quat = face[i] ;
+               let t: Quat = face[i] ;
                face[i] = face[j] ;
                face[j] = t ;
                changed = true ;
             }
          }
-         if (!changed)
+         if (!changed) {
             break ;
+         }
       }
       return face ;
    }

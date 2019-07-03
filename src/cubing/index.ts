@@ -1,9 +1,9 @@
 // TODO: `export * as ...`?
 import * as alg from "../alg/index";
-import * as kpuzzle from "../kpuzzle/index";
-import * as twisty from "../twisty/index";
 import * as bluetooth from "../bluetooth/index";
+import * as kpuzzle from "../kpuzzle/index";
 import * as puzzleGeometry from "../puzzle-geometry/index";
+import * as twisty from "../twisty/index";
 
 export {alg as alg};
 export {kpuzzle as kpuzzle};

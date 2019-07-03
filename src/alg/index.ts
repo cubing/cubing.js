@@ -17,7 +17,7 @@ export {
   Pause,
   NewLine,
   CommentShort,
-  CommentLong
+  CommentLong,
 } from "./algorithm/index";
 
 export {
@@ -27,40 +27,40 @@ export {
   expand,
   structureEquals,
   coalesceBaseMoves,
-  algToString
+  algToString,
 } from "./traversal";
 
 export {
-  Example
-} from "./example"
+  Example,
+} from "./example";
 
 export {
   AlgJSON,
-  fromJSON
-} from "./json"
+  fromJSON,
+} from "./json";
 
 export {
-  parse
- } from "./parser"
+  parse,
+ } from "./parser";
 
 export {
-  keyToMove
-} from "./keyboard"
+  keyToMove,
+} from "./keyboard";
 
 export {
   validateSiGNMoves,
   validateFlatAlg,
   validateSiGNAlg,
-  ValidationError
-} from "./validation"
+  ValidationError,
+} from "./validation";
 
 export {
   serializeURLParam,
   deserializeURLParam,
   algCubingNetLink,
-  getAlgURLParam
-} from "./url"
+  getAlgURLParam,
+} from "./url";
 
 export {
-  setAlgPartTypeMismatchReportingLevel
-} from "./debug"
+  setAlgPartTypeMismatchReportingLevel,
+} from "./debug";

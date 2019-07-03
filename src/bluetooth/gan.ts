@@ -1,8 +1,8 @@
-import {BareBlockMove, BlockMove} from "../alg/index"
-import {KPuzzle, Puzzles} from "../kpuzzle/index"
+import {BareBlockMove, BlockMove} from "../alg/index";
+import {KPuzzle, Puzzles} from "../kpuzzle/index";
 
-import {BluetoothConfig, BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle"
-import {debugLog} from "./debug"
+import {BluetoothConfig, BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle";
+import {debugLog} from "./debug";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
 const DEFAULT_INTERVAL_MS = 150;
@@ -21,10 +21,16 @@ const ganMoveToBlockMove: {[i: number]: BlockMove} = {
   0x0c: BareBlockMove("L"),
   0x0e: BareBlockMove("L", -1),
   0x0f: BareBlockMove("B"),
-  0x11: BareBlockMove("B", -1)
-}
+  0x11: BareBlockMove("B", -1),
+};
 
 class PhysicalState {
+
+  public static async read(characteristic: BluetoothRemoteGATTCharacteristic): Promise<PhysicalState> {
+    const value = await characteristic.readValue();
+    const timeStamp = Date.now();
+    return new PhysicalState(value, timeStamp);
+  }
   private arr: Uint8Array;
   private arrLen = 19;
   private quat: any;
@@ -33,55 +39,49 @@ class PhysicalState {
     const x = this.dataView.getInt16(0, true) / 16384;
     const y = this.dataView.getInt16(2, true) / 16384;
     const z = this.dataView.getInt16(4, true) / 16384;
-    const wSquared = 1 - x*x + y*y + z*z;
+    const wSquared = 1 - x * x + y * y + z * z;
     const w = wSquared > 0 ? Math.sqrt(wSquared) : 0;
     console.log(x, y, z);
     this.quat = {
       _x: x,
       _y: y,
       _z: z,
-      _w: w
+      _w: w,
     };
 
     this.arr = new Uint8Array(dataView.buffer);
     if (this.arr.length != this.arrLen) {
-      throw "Unexpected array length";
+      throw new Error("Unexpected array length");
     }
   }
 
-  public static async read(characteristic: BluetoothRemoteGATTCharacteristic): Promise<PhysicalState> {
-    const value = await characteristic.readValue();
-    const timeStamp = Date.now();
-    return new PhysicalState(value, timeStamp);
-  }
-
-  rotQuat(): any {
-    return this.quat
+  public rotQuat(): any {
+    return this.quat;
   }
 
   // Loops from 255 to 0.
-  moveCounter(): number {
+  public moveCounter(): number {
     return this.arr[12];
   }
 
-  numMovesSince(previousMoveCounter: number): number {
-    return (this.moveCounter() - previousMoveCounter) & 0xff
+  public numMovesSince(previousMoveCounter: number): number {
+    return (this.moveCounter() - previousMoveCounter) & 0xff;
   }
-  
+
   // Due to the design of the Gan356i protocol, it's common to query for the
   // latest physical state and find 0 moves have been performed since the last
   // query. Therefore, it's useful to allow 0 as an argument.
-  latestMoves(n: number): BlockMove[] {
+  public latestMoves(n: number): BlockMove[] {
     if (n < 0 || n > MAX_LATEST_MOVES) {
-      throw `Must ask for 0 to 6 latest moves. (Asked for ${n})`;
+      throw new Error(`Must ask for 0 to 6 latest moves. (Asked for ${n})`);
     }
     return Array.from(this.arr.slice(19 - n, 19)).map((i) => ganMoveToBlockMove[i]);
   }
 
-  debugInfo(): {arr: Uint8Array} {
+  public debugInfo(): {arr: Uint8Array} {
     return {
-      arr: this.arr
-    }
+      arr: this.arr,
+    };
   }
 }
 
@@ -95,57 +95,57 @@ const UUIDs = {
 };
 
 const commands: {[cmd: string]: BufferSource} = {
-  reset: new Uint8Array([0x00, 0x00, 0x24, 0x00, 0x49, 0x92, 0x24, 0x49, 0x6d, 0x92, 0xdb, 0xb6, 0x49, 0x92, 0xb6, 0x24, 0x6d, 0xdb])
-}
+  reset: new Uint8Array([0x00, 0x00, 0x24, 0x00, 0x49, 0x92, 0x24, 0x49, 0x6d, 0x92, 0xdb, 0xb6, 0x49, 0x92, 0xb6, 0x24, 0x6d, 0xdb]),
+};
 
 // // TODO: Move this into a factory?
 export const ganConfig: BluetoothConfig = {
   filters: [
-    {namePrefix: "GAN"}
+    {namePrefix: "GAN"},
   ],
   optionalServices: [
-    UUIDs.ganCubeService
-  ]
-}
+    UUIDs.ganCubeService,
+  ],
+};
 
 function buf2hex(buffer: ArrayBuffer) { // buffer is an ArrayBuffer
-  return Array.prototype.map.call(new Uint8Array(buffer), (x: number) => ('00' + x.toString(16)).slice(-2)).join(' ');
+  return Array.prototype.map.call(new Uint8Array(buffer), (x: number) => ("00" + x.toString(16)).slice(-2)).join(" ");
 }
 
 const reidEdgeOrder = "UF UR UB UL DF DR DB DL FR FL BR BL".split(" ");
 const reidCornerOrder = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
 
-type PieceInfo = {
-  piece: number,
-  orientation: number
+interface PieceInfo {
+  piece: number;
+  orientation: number;
 }
 
 function rotateLeft(s: string, i: number): string {
-  return s.slice(i) + s.slice(0, i)
+  return s.slice(i) + s.slice(0, i);
 }
 
-const pieceMap: {[s: string]: PieceInfo} = {}
+const pieceMap: {[s: string]: PieceInfo} = {};
 // TODO: Condense the for loops.
 reidEdgeOrder.forEach((edge, idx) => {
-  for (var i = 0; i < 2; i++) {
+  for (let i = 0; i < 2; i++) {
     pieceMap[rotateLeft(edge, i)] = {piece: idx, orientation: i};
   }
-})
+});
 reidCornerOrder.forEach((corner, idx) => {
-  for (var i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     pieceMap[rotateLeft(corner, i)] = {piece: idx, orientation: i};
   }
-})
+});
 
 const gan356iCornerMappings = [
   [ 0, 21, 15], [ 5, 13, 47], [ 7, 45, 39], [ 2, 37, 23],
-  [29, 10, 16], [31, 18, 32], [26, 34, 40], [24, 42,  8]
+  [29, 10, 16], [31, 18, 32], [26, 34, 40], [24, 42,  8],
 ];
 
 const gan356iEdgeMappings = [
   [ 1, 22], [ 3, 14], [ 6, 46], [ 4, 38],
   [30, 17], [27,  9], [25, 41], [28, 33],
-  [19, 12], [20, 35], [44, 11], [43, 36]
+  [19, 12], [20, 35], [44, 11], [43, 36],
 ];
 const faceOrder = "URFDLB";
 
@@ -160,12 +160,27 @@ const faceOrder = "URFDLB";
 
 export class GanCube extends BluetoothPuzzle {
 
-  INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
+  // We have to perform async operations before we call the constructor.
+  public static async connect(server: BluetoothRemoteGATTServer): Promise<GanCube> {
+
+    const ganCubeService = await server.getPrimaryService(UUIDs.ganCubeService);
+    debugLog("Service:", ganCubeService);
+
+    const physicalStateCharacteristic = await ganCubeService.getCharacteristic(UUIDs.physicalStateCharacteristic);
+    debugLog("Characteristic:", physicalStateCharacteristic);
+
+    const initialMoveCounter = (await PhysicalState.read(physicalStateCharacteristic)).moveCounter();
+    debugLog("Initial Move Counter:", initialMoveCounter);
+    let cube = new GanCube(ganCubeService, server, physicalStateCharacteristic, initialMoveCounter);
+    return cube;
+  }
+
+  public INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
   private intervalHandle: number | null = null;
   private kpuzzle: KPuzzle = new KPuzzle(Puzzles["333"]);
-  private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>
-  private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>
-  private cachedActualAngleAndBatteryCharacteristic: Promise<BluetoothRemoteGATTCharacteristic>
+  private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
+  private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
+  private cachedActualAngleAndBatteryCharacteristic: Promise<BluetoothRemoteGATTCharacteristic>;
   private constructor(private service: BluetoothRemoteGATTService, private server: BluetoothRemoteGATTServer, private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic, private lastMoveCounter: number) {
     super();
     this.startTrackingMoves();
@@ -175,42 +190,27 @@ export class GanCube extends BluetoothPuzzle {
     return this.server.device.name;
   }
 
-  // We have to perform async operations before we call the constructor.
-  static async connect(server: BluetoothRemoteGATTServer): Promise<GanCube> {
-
-    const ganCubeService = await server.getPrimaryService(UUIDs.ganCubeService);
-    debugLog("Service:", ganCubeService);
-    
-    const physicalStateCharacteristic = await ganCubeService.getCharacteristic(UUIDs.physicalStateCharacteristic);
-    debugLog("Characteristic:", physicalStateCharacteristic);
-
-    const initialMoveCounter = (await PhysicalState.read(physicalStateCharacteristic)).moveCounter();
-    debugLog("Initial Move Counter:", initialMoveCounter);
-    var cube = new GanCube(ganCubeService, server, physicalStateCharacteristic, initialMoveCounter);
-    return cube;
-  }
-
-  startTrackingMoves(): void {
+  public startTrackingMoves(): void {
     // `window.setInterval` instead of `setInterval`:
     // https://github.com/Microsoft/TypeScript/issues/842#issuecomment-252445883
     this.intervalHandle = window.setInterval(this.intervalHandler.bind(this), this.INTERVAL_MS);
   }
 
-  stopTrackingMoves(): void {
+  public stopTrackingMoves(): void {
     if (!this.intervalHandle) {
-      throw "Not tracking moves!";
+      throw new Error("Not tracking moves!");
     }
     clearInterval(this.intervalHandle);
     this.intervalHandle = null;
   }
 
   // TODO: Can we ever receive async responses out of order?
-  async intervalHandler(): Promise<void> {
+  public async intervalHandler(): Promise<void> {
     const physicalState = await PhysicalState.read(this.physicalStateCharacteristic);
-    var numInterveningMoves = physicalState.numMovesSince(this.lastMoveCounter);
+    let numInterveningMoves = physicalState.numMovesSince(this.lastMoveCounter);
     // console.log(numInterveningMoves);
     if (numInterveningMoves > MAX_LATEST_MOVES) {
-      debugLog(`Too many moves! Dropping ${numInterveningMoves - MAX_LATEST_MOVES} moves`)
+      debugLog(`Too many moves! Dropping ${numInterveningMoves - MAX_LATEST_MOVES} moves`);
       numInterveningMoves = MAX_LATEST_MOVES;
     }
     console.log(physicalState.rotQuat());
@@ -222,50 +222,50 @@ export class GanCube extends BluetoothPuzzle {
         timeStamp: physicalState.timeStamp,
         debug: physicalState.debugInfo(),
         state: this.kpuzzle.state,
-        quaternion: physicalState.rotQuat()
+        quaternion: physicalState.rotQuat(),
       });
     }
     this.lastMoveCounter = physicalState.moveCounter();
   }
 
-  async getBattery(): Promise<number> {
+  public async getBattery(): Promise<number> {
     return new Uint8Array(await this.readActualAngleAndBatteryCharacteristic())[7];
   }
 
-  async getState(): Promise<PuzzleState> {
+  public async getState(): Promise<PuzzleState> {
     const arr: Uint8Array = new Uint8Array((await this.readFaceletStatus1Characteristic()));
-    var stickers: number[] = [];
-    for (var i = 0; i < 18; i += 3) {
-      var v = (((arr[i ^ 1] << 8) + arr[(i + 1) ^ 1]) << 8) + arr[(i + 2) ^ 1];
-      for (var j = 0; j < 8; j++) {
+    let stickers: number[] = [];
+    for (let i = 0; i < 18; i += 3) {
+      let v = (((arr[i ^ 1] << 8) + arr[(i + 1) ^ 1]) << 8) + arr[(i + 2) ^ 1];
+      for (let j = 0; j < 8; j++) {
         stickers.push(v & 7);
-        v >>= 3
+        v >>= 3;
       }
     }
 
     const state: PuzzleState = {
       CORNER: {
         permutation: [],
-        orientation: []
+        orientation: [],
       },
       EDGE: {
         permutation: [],
-        orientation: []
+        orientation: [],
       },
       CENTER: {
         permutation: [0, 1, 2, 3, 4, 5],
-        orientation: [0, 0, 0, 0, 0, 0]
-      }
-    }
+        orientation: [0, 0, 0, 0, 0, 0],
+      },
+    };
 
     for (const cornerMapping of gan356iCornerMappings) {
-      const pieceInfo: PieceInfo = pieceMap[cornerMapping.map(i => faceOrder[stickers[i]]).join("")];
+      const pieceInfo: PieceInfo = pieceMap[cornerMapping.map((i) => faceOrder[stickers[i]]).join("")];
       state.CORNER.permutation.push(pieceInfo.piece);
       state.CORNER.orientation.push(pieceInfo.orientation);
     }
 
     for (const edgeMapping of gan356iEdgeMappings) {
-      const pieceInfo: PieceInfo = pieceMap[edgeMapping.map(i => faceOrder[stickers[i]]).join("")];
+      const pieceInfo: PieceInfo = pieceMap[edgeMapping.map((i) => faceOrder[stickers[i]]).join("")];
       state.EDGE.permutation.push(pieceInfo.piece);
       state.EDGE.orientation.push(pieceInfo.orientation);
     }
@@ -273,37 +273,37 @@ export class GanCube extends BluetoothPuzzle {
     return state;
   }
 
-  async faceletStatus1Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
+  public async faceletStatus1Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
     this.cachedFaceletStatus1Characteristic = this.cachedFaceletStatus1Characteristic || this.service.getCharacteristic(UUIDs.faceletStatus1Characteristic);
     return this.cachedFaceletStatus1Characteristic;
   }
 
-  async faceletStatus2Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
+  public async faceletStatus2Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
     this.cachedFaceletStatus2Characteristic = this.cachedFaceletStatus2Characteristic || this.service.getCharacteristic(UUIDs.faceletStatus2Characteristic);
     return this.cachedFaceletStatus2Characteristic;
   }
 
-  async actualAngleAndBatteryCharacteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
+  public async actualAngleAndBatteryCharacteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
     this.cachedActualAngleAndBatteryCharacteristic = this.cachedActualAngleAndBatteryCharacteristic || this.service.getCharacteristic(UUIDs.actualAngleAndBatteryCharacteristic);
     return this.cachedActualAngleAndBatteryCharacteristic;
   }
 
-  async reset() {
+  public async reset() {
     const faceletStatus1Characteristic = await this.faceletStatus1Characteristic();
     await faceletStatus1Characteristic.writeValue(commands.reset);
   }
 
-  async readFaceletStatus1Characteristic(): Promise<ArrayBuffer> {
+  public async readFaceletStatus1Characteristic(): Promise<ArrayBuffer> {
     const faceletStatus1Characteristic = await this.faceletStatus1Characteristic();
     return (await faceletStatus1Characteristic.readValue()).buffer;
   }
 
-  async readFaceletStatus2Characteristic() {
+  public async readFaceletStatus2Characteristic() {
     const faceletStatus2Characteristic = await this.faceletStatus2Characteristic();
     return buf2hex((await faceletStatus2Characteristic.readValue()).buffer);
   }
 
-  async readActualAngleAndBatteryCharacteristic(): Promise<ArrayBuffer> {
+  public async readActualAngleAndBatteryCharacteristic(): Promise<ArrayBuffer> {
     const actualAngleAndBatteryCharacteristic = await this.actualAngleAndBatteryCharacteristic();
     return (await actualAngleAndBatteryCharacteristic.readValue()).buffer;
   }

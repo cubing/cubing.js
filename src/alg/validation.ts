@@ -1,22 +1,22 @@
 import {
-  Sequence,
-  Group,
   BlockMove,
+  CommentLong,
+  CommentShort,
   Commutator,
   Conjugate,
-  Pause,
+  Group,
   NewLine,
-  CommentShort,
-  CommentLong
+  Pause,
+  Sequence,
 } from "./algorithm/index";
 
-import {TraversalUp} from "./traversal"
+import {TraversalUp} from "./traversal";
 
 export class ValidationError extends Error {}
 
 export abstract class ValidatorTraversal extends TraversalUp<void> {}
 
-type FamilyList = { [s: string]: boolean; }
+interface FamilyList { [s: string]: boolean; }
 
 function validateFamily(family: string, allowedFamilyLists: FamilyList[]): boolean {
   for (const list of allowedFamilyLists) {
@@ -28,41 +28,41 @@ function validateFamily(family: string, allowedFamilyLists: FamilyList[]): boole
 }
 
 // TODO: Switch to `Set`?
-var plainMoveFamilies: FamilyList = {
-  "x": true,
-  "y": true,
-  "z": true,
-  "M": true,
-  "E": true,
-  "S": true,
-  "m": true,
-  "e": true,
-  "s": true
-}
+let plainMoveFamilies: FamilyList = {
+  x: true,
+  y: true,
+  z: true,
+  M: true,
+  E: true,
+  S: true,
+  m: true,
+  e: true,
+  s: true,
+};
 
-var singleSliceMoveFamilies: FamilyList = {
-  "U": true,
-  "L": true,
-  "F": true,
-  "R": true,
-  "B": true,
-  "D": true
-}
+let singleSliceMoveFamilies: FamilyList = {
+  U: true,
+  L: true,
+  F: true,
+  R: true,
+  B: true,
+  D: true,
+};
 
-var wideMoveFamilies: FamilyList = {
-  "u": true,
-  "l": true,
-  "f": true,
-  "r": true,
-  "b": true,
-  "d": true,
-  "Uw": true,
-  "Lw": true,
-  "Fw": true,
-  "Rw": true,
-  "Bw": true,
-  "Dw": true
-}
+let wideMoveFamilies: FamilyList = {
+  u: true,
+  l: true,
+  f: true,
+  r: true,
+  b: true,
+  d: true,
+  Uw: true,
+  Lw: true,
+  Fw: true,
+  Rw: true,
+  Bw: true,
+  Dw: true,
+};
 
 abstract class BaseMoveValidator extends ValidatorTraversal {
   public traverseSequence(sequence: Sequence): void {
@@ -82,10 +82,10 @@ abstract class BaseMoveValidator extends ValidatorTraversal {
     this.traverse(conjugate.A);
     this.traverse(conjugate.B);
   }
-  public traversePause(pause: Pause):                      void { return; }
-  public traverseNewLine(newLine: NewLine):                void { return; }
+  public traversePause(pause: Pause): void { return; }
+  public traverseNewLine(newLine: NewLine): void { return; }
   public traverseCommentShort(commentShort: CommentShort): void { return; }
-  public traverseCommentLong(commentLong: CommentLong):    void { return; }
+  public traverseCommentLong(commentLong: CommentLong): void { return; }
 }
 
 // TODO: Export function instead?
@@ -145,22 +145,22 @@ export class FlatAlgValidator extends ValidatorTraversal {
   public traverseConjugate(conjugate: Conjugate): void {
     throw new ValidationError("A flat alg cannot contain a conjugate.");
   }
-  public traversePause(pause: Pause):                      void { return; }
-  public traverseNewLine(newLine: NewLine):                void { return; }
+  public traversePause(pause: Pause): void { return; }
+  public traverseNewLine(newLine: NewLine): void { return; }
   public traverseCommentShort(commentShort: CommentShort): void { return; }
-  public traverseCommentLong(commentLong: CommentLong):    void { return; }
+  public traverseCommentLong(commentLong: CommentLong): void { return; }
 }
 
 export type Validator = (a: Sequence) => void;
 
 const BlockMoveValidatorInstance = new BlockMoveValidator();
-export const validateSiGNMoves = <Validator>BlockMoveValidatorInstance.traverse.bind(BlockMoveValidatorInstance);
+export const validateSiGNMoves = BlockMoveValidatorInstance.traverse.bind(BlockMoveValidatorInstance) as Validator;
 
 const flatAlgValidatorInstance = new FlatAlgValidator();
-export const validateFlatAlg = <Validator>flatAlgValidatorInstance.traverse.bind(flatAlgValidatorInstance);
+export const validateFlatAlg = flatAlgValidatorInstance.traverse.bind(flatAlgValidatorInstance) as Validator;
 
 // TODO: Option for puzzle size?
 export const validateSiGNAlg = function(a: Sequence) {
   validateSiGNMoves(a);
   validateFlatAlg(a);
-}
+};

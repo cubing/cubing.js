@@ -1,4 +1,4 @@
-import pkg from "./package.json"
+// import pkg from "./package.json"
 import {terser} from "rollup-plugin-terser";
 import * as typescript from "typescript"
 import typescript2 from "rollup-plugin-typescript2"
@@ -24,7 +24,7 @@ export default {
     }
   ],
   plugins: [
-    // tslint({}),
+    tslint({}),
     typescript2({
       typescript: typescript,
     }),
