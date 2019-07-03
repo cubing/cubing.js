@@ -1,9 +1,12 @@
 {
   "name": "cubing",
-  "version": "0.1.0",
-  "description": "A wrapper for the webauthn API that adapts input/output values to plain JSON with base64.",
+  "version": "0.10.0",
+  "description": "A collection of Javascript cubing libraries.",
+  "author": "The js.cubing.net team",
   "main": "dist/esm/cubing.js",
   "types": "dist/esm/index.d.ts",
+  "license": "GPL-3.0-or-later",
+  "repository": "github:cubing/cubing.js",
   "dependencies": {
     "@types/three": "^0.103.2",
     "@types/web-bluetooth": "0.0.4",
@@ -29,17 +32,15 @@
     "setup": "npm install",
     "lint": "tslint --fix --project ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cubing/cubing.js.git"
-  },
   "keywords": [
-    "cubing"
-  ],
-  "author": "Lucas Garron <lgarron@github.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cubing/cubing.js/issues"
-  },
-  "homepage": "https://github.com/cubing/cubing.js#readme"
+    "cubing",
+    "speedcubing",
+    "puzzle",
+    "visualization",
+    "kpuzzle",
+    "cuble",
+    "bluetooth",
+    "rubik",
+    "rubik's"
+  ]
 }
