@@ -20,7 +20,9 @@ const plugins = [
 ]
 
 if (!process.env.ROLLUP_WATCH) {
-  plugins.push(terser())
+  plugins.push(terser({
+    keep_classnames: true
+  }))
 }
 
 const esm = {
