@@ -12,7 +12,7 @@ export class OrbitsDef {
                public movenames: string[],
                public moveops: Transformation[]) {}
    public toKsolve(name: string, forTwisty: boolean): string[] {
-      let result = [] ;
+      const result = [] ;
       result.push("Name " + name) ;
       result.push("") ;
       for (let i = 0; i < this.orbitnames.length; i++) {
@@ -23,7 +23,7 @@ export class OrbitsDef {
       result.push("Solved") ;
       for (let i = 0; i < this.orbitnames.length; i++) {
          result.push(this.orbitnames[i]) ;
-         let o = this.solved.orbits[i].toKsolveVS() ;
+         const o = this.solved.orbits[i].toKsolveVS() ;
          result.push(o[0]) ;
          result.push(o[1]) ;
       }
@@ -36,7 +36,7 @@ export class OrbitsDef {
                continue ;
             }
             result.push(this.orbitnames[j]) ;
-            let o = this.moveops[i].orbits[j].toKsolve() ;
+            const o = this.moveops[i].orbits[j].toKsolve() ;
             result.push(o[0]) ;
             result.push(o[1]) ;
          }
@@ -47,18 +47,18 @@ export class OrbitsDef {
       return result ;
    }
    public optimize(): OrbitsDef {
-      let neworbitnames: string[] = [] ;
-      let neworbitdefs: OrbitDef[] = [] ;
-      let newsolved: Orbit[] = [] ;
-      let newmoveops: Orbit[][] = [] ;
+      const neworbitnames: string[] = [] ;
+      const neworbitdefs: OrbitDef[] = [] ;
+      const newsolved: Orbit[] = [] ;
+      const newmoveops: Orbit[][] = [] ;
       for (let j = 0; j < this.moveops.length; j++) {
          newmoveops.push([]) ;
       }
       for (let i = 0; i < this.orbitdefs.length; i++) {
-         let om = this.orbitdefs[i].mod ;
-         let n = this.orbitdefs[i].size ;
-         let du = new DisjointUnion(n) ;
-         let changed = new Array<boolean>(this.orbitdefs[i].size) ;
+         const om = this.orbitdefs[i].mod ;
+         const n = this.orbitdefs[i].size ;
+         const du = new DisjointUnion(n) ;
+         const changed = new Array<boolean>(this.orbitdefs[i].size) ;
          for (let k = 0; k < n; k++) {
             changed[k] = false ;
          }
@@ -77,7 +77,7 @@ export class OrbitsDef {
          // we can perform.
          if (om > 1) {
             keepori = false ;
-            let duo = new DisjointUnion(this.orbitdefs[i].size * om) ;
+            const duo = new DisjointUnion(this.orbitdefs[i].size * om) ;
             for (let j = 0; j < this.moveops.length; j++) {
                for (let k = 0; k < n; k++) {
                   if (this.moveops[j].orbits[i].perm[k] != k ||
@@ -110,11 +110,10 @@ export class OrbitsDef {
          let multiple = false ;
          for (let j = 0; j < this.orbitdefs[i].size; j++) {
             if (changed[j]) {
-               let h = du.find(j) ;
+               const h = du.find(j) ;
                if (nontriv < 0) {
                   nontriv = h ;
-               }
-               else if (nontriv != h) {
+               } else if (nontriv != h) {
                   multiple = true ;
  }
             }
@@ -123,12 +122,12 @@ export class OrbitsDef {
             if (!changed[j]) {
                continue ;
             }
-            let h = du.find(j) ;
+            const h = du.find(j) ;
             if (h != j) {
                continue ;
             }
-            let no: number[] = [] ;
-            let on: number[] = [] ;
+            const no: number[] = [] ;
+            const on: number[] = [] ;
             let nv = 0 ;
             for (let k = 0; k < this.orbitdefs[i].size; k++) {
                if (du.find(k) == j) {
@@ -139,8 +138,7 @@ export class OrbitsDef {
             }
             if (multiple) {
                neworbitnames.push(this.orbitnames[i] + "_p" + j) ;
-            }
-            else {
+            } else {
                neworbitnames.push(this.orbitnames[i]) ;
             }
             if (keepori) {
@@ -167,13 +165,13 @@ export class OrbitsDef {
    // we use an algorithm that should be faster for large puzzles than
    // just picking random moves.
    public scramble(n: number): void {
-      let pool: Transformation[] = [] ;
+      const pool: Transformation[] = [] ;
       for (let i = 0; i < this.moveops.length; i++) {
          pool[i] = this.moveops[i] ;
       }
       for (let i = 0; i < pool.length; i++) {
-         let j = Math.floor(Math.random() * pool.length) ;
-         let t = pool[i] ;
+         const j = Math.floor(Math.random() * pool.length) ;
+         const t = pool[i] ;
          pool[i] = pool[j] ;
          pool[j] = t ;
       }
@@ -181,9 +179,9 @@ export class OrbitsDef {
          n = pool.length ;
       }
       for (let i = 0; i < n; i++) {
-         let ri = Math.floor(Math.random() * pool.length) ;
-         let rj = Math.floor(Math.random() * pool.length) ;
-         let rm = Math.floor(Math.random() * this.moveops.length) ;
+         const ri = Math.floor(Math.random() * pool.length) ;
+         const rj = Math.floor(Math.random() * pool.length) ;
+         const rm = Math.floor(Math.random() * this.moveops.length) ;
          pool[ri] = pool[ri].mul(pool[rj]).mul(this.moveops[rm]) ;
          if (Math.random() < 0.1) { // break up parity
             pool[ri] = pool[ri].mul(this.moveops[rm]) ;
@@ -210,9 +208,9 @@ export class Orbit {
    constructor(public perm: number[], public ori: number[],
                public orimod: number) {}
    public mul(b: Orbit): Orbit {
-      let n = this.perm.length ;
-      let newPerm = new Array<number>(n) ;
-      let newOri = new Array<number>(n) ;
+      const n = this.perm.length ;
+      const newPerm = new Array<number>(n) ;
+      const newOri = new Array<number>(n) ;
       for (let i = 0; i < n; i++) {
          newPerm[i] = this.perm[b.perm[i]] ;
          newOri[i] = (this.ori[b.perm[i]] + b.ori[i]) % this.orimod ;
@@ -220,9 +218,9 @@ export class Orbit {
       return new Orbit(newPerm, newOri, this.orimod) ;
    }
    public inv(): Orbit {
-      let n = this.perm.length ;
-      let newPerm = new Array<number>(n) ;
-      let newOri = new Array<number>(n) ;
+      const n = this.perm.length ;
+      const newPerm = new Array<number>(n) ;
+      const newOri = new Array<number>(n) ;
       for (let i = 0; i < n; i++) {
          newPerm[this.perm[i]] = i ;
          newOri[this.perm[i]] = (this.orimod - this.ori[i]) % this.orimod ;
@@ -230,7 +228,7 @@ export class Orbit {
       return new Orbit(newPerm, newOri, this.orimod) ;
    }
    public equal(b: Orbit): boolean {
-      let n = this.perm.length ;
+      const n = this.perm.length ;
       for (let i = 0; i < n; i++) {
          if (this.perm[i] != b.perm[i] || this.ori[i] != b.ori[i]) {
             return false ;
@@ -240,7 +238,7 @@ export class Orbit {
    }
    // in-place mutator
    public killOri(): this {
-      let n = this.perm.length ;
+      const n = this.perm.length ;
       for (let i = 0; i < n; i++) {
          this.ori[i] = 0 ;
       }
@@ -248,12 +246,12 @@ export class Orbit {
       return this ;
    }
    public toPerm(): Perm {
-      let o = this.orimod ;
+      const o = this.orimod ;
       if (o == 1) {
          return new Perm(this.perm) ;
       }
-      let n = this.perm.length ;
-      let newPerm = new Array<number>(n * o) ;
+      const n = this.perm.length ;
+      const newPerm = new Array<number>(n * o) ;
       for (let i = 0; i < n; i++) {
          for (let j = 0; j < o; j++) {
             newPerm[i * o + j] = o * this.perm[i] + (this.ori[i] + j) % o ;
@@ -263,13 +261,13 @@ export class Orbit {
    }
    // returns tuple of sets of identical pieces in this orbit
    public identicalPieces(): number[][] {
-      let done: boolean[] = [] ;
-      let n = this.perm.length ;
-      let r: number[][] = [] ;
+      const done: boolean[] = [] ;
+      const n = this.perm.length ;
+      const r: number[][] = [] ;
       for (let i = 0; i < n; i++) {
-         let v = this.perm[i] ;
+         const v = this.perm[i] ;
          if (done[v] == undefined) {
-            let s: number[] = [i] ;
+            const s: number[] = [i] ;
             done[v] = true ;
             for (let j = i + 1; j < n; j++) {
                if (this.perm[j] == v) {
@@ -285,7 +283,7 @@ export class Orbit {
       return this.toPerm().order() ;
    }
    public isIdentity(): boolean {
-      let n = this.perm.length ;
+      const n = this.perm.length ;
       for (let i = 0; i < n; i++) {
          if (this.perm[i] != i || this.ori[i] != 0) {
             return false ;
@@ -294,8 +292,8 @@ export class Orbit {
       return true ;
    }
    public remap(no: number[], on: number[], nv: number): Orbit {
-      let newPerm = new Array<number>(nv) ;
-      let newOri = new Array<number>(nv) ;
+      const newPerm = new Array<number>(nv) ;
+      const newOri = new Array<number>(nv) ;
       for (let i = 0; i < nv; i++) {
          newPerm[i] = on[this.perm[no[i]]] ;
          newOri[i] = this.ori[no[i]] ;
@@ -303,12 +301,12 @@ export class Orbit {
       return new Orbit(newPerm, newOri, this.orimod) ;
    }
    public remapVS(no: number[], nv: number): Orbit {
-      let newPerm = new Array<number>(nv) ;
-      let newOri = new Array<number>(nv) ;
+      const newPerm = new Array<number>(nv) ;
+      const newOri = new Array<number>(nv) ;
       let nextNew = 0 ;
-      let reassign = [] ;
+      const reassign = [] ;
       for (let i = 0; i < nv; i++) {
-         let ov = this.perm[no[i]] ;
+         const ov = this.perm[no[i]] ;
          if (reassign[ov] == undefined) {
             reassign[ov] = nextNew++ ;
          }
@@ -321,7 +319,7 @@ export class Orbit {
       return [this.perm.map((_: number) => _ + 1).join(" "), this.ori.join(" ")] ;
    }
    public toKsolve(): string[] {
-      let newori = new Array<number>(this.ori.length) ;
+      const newori = new Array<number>(this.ori.length) ;
       for (let i = 0; i < newori.length; i++) {
          newori[this.perm[i]] = this.ori[i] ;
       }
@@ -331,14 +329,14 @@ export class Orbit {
 export class TransformationBase {
    constructor(public orbits: Orbit[]) {}
    public internalMul(b: TransformationBase): Orbit[] {
-      let newOrbits: Orbit[] = [] ;
+      const newOrbits: Orbit[] = [] ;
       for (let i = 0; i < this.orbits.length; i++) {
          newOrbits.push(this.orbits[i].mul(b.orbits[i])) ;
       }
       return newOrbits ;
    }
    public internalInv(): Orbit[] {
-      let newOrbits: Orbit[] = [] ;
+      const newOrbits: Orbit[] = [] ;
       for (let i = 0; i < this.orbits.length; i++) {
          newOrbits.push(this.orbits[i].inv()) ;
       }
@@ -359,17 +357,17 @@ export class TransformationBase {
       return this ;
    }
    public toPerm(): Perm {
-      let perms = new Array<Perm>() ;
+      const perms = new Array<Perm>() ;
       let n = 0 ;
       for (let i = 0; i < this.orbits.length; i++) {
-         let p = this.orbits[i].toPerm() ;
+         const p = this.orbits[i].toPerm() ;
          perms.push(p) ;
          n += p.n ;
       }
-      let newPerm = new Array<number>(n) ;
+      const newPerm = new Array<number>(n) ;
       n = 0 ;
       for (let i = 0; i < this.orbits.length; i++) {
-         let p = perms[i] ;
+         const p = perms[i] ;
          for (let j = 0; j < p.n; j++) {
             newPerm[n + j] = n + p.p[j] ;
          }
@@ -378,11 +376,11 @@ export class TransformationBase {
       return new Perm(newPerm) ;
    }
    public identicalPieces(): number[][] {
-      let r: number[][] = [] ;
+      const r: number[][] = [] ;
       let n = 0 ;
       for (let i = 0; i < this.orbits.length; i++) {
-         let o = this.orbits[i].orimod ;
-         let s = this.orbits[i].identicalPieces() ;
+         const o = this.orbits[i].orimod ;
+         const s = this.orbits[i].identicalPieces() ;
          for (let j = 0; j < s.length; j++) {
             r.push(s[j].map((_) => _ * o + n)) ;
          }
@@ -469,8 +467,8 @@ class DisjointUnion {
       return h ;
    }
    public union(a: number, b: number): void {
-      let ah = this.find(a) ;
-      let bh = this.find(b) ;
+      const ah = this.find(a) ;
+      const bh = this.find(b) ;
       if (ah < bh) {
          this.heads[bh] = ah ;
       } else if (ah > bh) {
@@ -480,21 +478,21 @@ class DisjointUnion {
 }
 export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
    // show information for canonical move derivation
-   let n = g.moveops.length ;
+   const n = g.moveops.length ;
    if (n > 30) {
       throw new Error("Canon info too big for bitmask") ;
    }
-   let orders = [] ;
-   let commutes = [] ;
+   const orders = [] ;
+   const commutes = [] ;
    for (let i = 0; i < n; i++) {
-      let permA = g.moveops[i] ;
+      const permA = g.moveops[i] ;
       orders.push(permA.order()) ;
       let bits = 0 ;
       for (let j = 0; j < n; j++) {
          if (j == i) {
             continue ;
          }
-         let permB = g.moveops[j] ;
+         const permB = g.moveops[j] ;
          if (permA.mul(permB).equal(permB.mul(permA))) {
             bits |= 1 << j ;
          }
@@ -505,17 +503,17 @@ export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
    curlev[0] = 1 ;
    for (let d = 0; d < 100; d++) {
       let sum = 0 ;
-      let nextlev: any = {} ;
+      const nextlev: any = {} ;
       let uniq = 0 ;
-      for (let sti in curlev) {
-         let st = +sti ; // string to number
-         let cnt = curlev[st] ;
+      for (const sti in curlev) {
+         const st = +sti ; // string to number
+         const cnt = curlev[st] ;
          sum += cnt ;
          uniq++ ;
          for (let mv = 0; mv < orders.length; mv++) {
             if (((st >> mv) & 1) == 0 &&
                 (st & commutes[mv] & ((1 << mv) - 1)) == 0) {
-               let nst = (st & commutes[mv]) | (1 << mv) ;
+               const nst = (st & commutes[mv]) | (1 << mv) ;
                if (nextlev[nst] == undefined) {
                   nextlev[nst] = 0 ;
                }
@@ -531,21 +529,21 @@ export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
 // for the 3x3x3).  We include this only for comparison.
 export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
    // show information for canonical move derivation
-   let n = g.moveops.length ;
+   const n = g.moveops.length ;
    if (n > 30) {
       throw new Error("Canon info too big for bitmask") ;
    }
-   let orders = [] ;
-   let commutes = [] ;
+   const orders = [] ;
+   const commutes = [] ;
    for (let i = 0; i < n; i++) {
-      let permA = g.moveops[i] ;
+      const permA = g.moveops[i] ;
       orders.push(permA.order()) ;
       let bits = 0 ;
       for (let j = 0; j < n; j++) {
          if (j == i) {
             continue ;
          }
-         let permB = g.moveops[j] ;
+         const permB = g.moveops[j] ;
          if (permA.mul(permB).equal(permB.mul(permA))) {
             bits |= 1 << j ;
          }
@@ -559,11 +557,11 @@ export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
    }
    for (let d = 1; d < 100; d++) {
       let sum = 0 ;
-      let nextlev: any = {} ;
+      const nextlev: any = {} ;
       let uniq = 0 ;
-      for (let sti in curlev) {
-         let st = +sti ; // string to number
-         let cnt = curlev[st] ;
+      for (const sti in curlev) {
+         const st = +sti ; // string to number
+         const cnt = curlev[st] ;
          sum += cnt ;
          uniq++ ;
          for (let mv = 0; mv < orders.length; mv++) {

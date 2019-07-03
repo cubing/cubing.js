@@ -39,7 +39,7 @@ export interface AlgCubingNetOptions {
 
 // TODO: runtime validation?
 export function algCubingNetLink(options: AlgCubingNetOptions) {
-  let url = new URL("https://alg.cubing.net");
+  const url = new URL("https://alg.cubing.net");
   if (!options.alg) {
     throw new Error(("An alg parameter is required."));
   }

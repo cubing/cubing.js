@@ -152,7 +152,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
     if (def.name !== "333") {
       throw new Error("Invalid puzzle for this Cube3D implementation.");
     }
-    for (let orbit in pieceDefs) {
+    for (const orbit in pieceDefs) {
       this.pieces[orbit] = pieceDefs[orbit].map(this.createCubie.bind(this));
     }
     this.cube.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
@@ -161,7 +161,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
 
   protected updateScene(p: Cursor.Position<Puzzle>) {
     const reid333 = p.state as Transformation;
-    for (let orbit in pieceDefs) {
+    for (const orbit in pieceDefs) {
       const pieces = pieceDefs[orbit];
       for (let i = 0; i < pieces.length; i++) {
         const j = reid333[orbit].permutation[i];
@@ -206,7 +206,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
 
   private createSticker(posAxisInfo: AxisInfo, materialAxisInfo: AxisInfo, isHint: boolean): THREE.Mesh {
     const geo = new THREE.PlaneGeometry(cubieDimensions.stickerWidth, cubieDimensions.stickerWidth);
-    let stickerMesh = new THREE.Mesh(geo, isHint ? materialAxisInfo.hintStickerMaterial : materialAxisInfo.stickerMaterial);
+    const stickerMesh = new THREE.Mesh(geo, isHint ? materialAxisInfo.hintStickerMaterial : materialAxisInfo.stickerMaterial);
     stickerMesh.setRotationFromEuler(posAxisInfo.fromZ);
     stickerMesh.position.copy(posAxisInfo.vector);
     stickerMesh.position.multiplyScalar(isHint ? cubieDimensions.hintStickerElevation : cubieDimensions.stickerElevation);

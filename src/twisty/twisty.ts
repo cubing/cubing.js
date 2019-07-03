@@ -49,19 +49,19 @@ export class Twisty {
 }
 
 function paramsFromTwistyElem(elem: Element): TwistyParams {
-  let params = new TwistyParams();
+  const params = new TwistyParams();
 
-  let puzzle = elem.getAttribute("puzzle");
+  const puzzle = elem.getAttribute("puzzle");
   if (puzzle) {
     params.puzzle = Puzzles[puzzle];
   }
 
-  let algo = elem.getAttribute("alg");
+  const algo = elem.getAttribute("alg");
   if (algo) {
     params.alg = parse(algo); // TODO: parse
   }
 
-  let visualization = elem.getAttribute("visualization");
+  const visualization = elem.getAttribute("visualization");
   // TODO: Factor this code out for testing.
   if (visualization) {
     if (visualization === "2D" || visualization === "3D") {
@@ -78,7 +78,7 @@ function paramsFromTwistyElem(elem: Element): TwistyParams {
 // `initialization` attribute is set to `custom`.
 function autoInitialize(elem: Element) {
   const ini = elem.getAttribute("initialization");
-  let params = paramsFromTwistyElem(elem);
+  const params = paramsFromTwistyElem(elem);
   if (ini !== "custom") {
     new Twisty(elem, params);
   }

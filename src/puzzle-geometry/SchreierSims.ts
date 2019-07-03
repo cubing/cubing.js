@@ -9,8 +9,7 @@ class FactoredNumber {
          while (n % f == 0) {
             if (undefined != this.mult[f]) {
                this.mult[f]++ ;
-            }
-            else {
+            } else {
                this.mult[f] = 1 ;
             }
             n /= f ;
@@ -19,8 +18,7 @@ class FactoredNumber {
       if (n > 1) {
          if (undefined != this.mult[n]) {
             this.mult[n]++ ;
-         }
-         else {
+         } else {
             this.mult[n] = 1 ;
          }
       }
@@ -43,8 +41,8 @@ class FactoredNumber {
 }
 export class SchreierSims {
    public static schreiersims(g: Perm[], disp: (s: string) => void): number {
-      let n = g[0].p.length ;
-      let e = Perm.e(n) ;
+      const n = g[0].p.length ;
+      const e = Perm.e(n) ;
       let sgs: Perm[][] = [] ;
       let sgsi: Perm[][] = [] ;
       let sgslen: number[][] = [] ;
@@ -52,7 +50,7 @@ export class SchreierSims {
       let Tklen: number[][] = [] ;
       function resolve(p: Perm): boolean {
          for (let i = p.p.length - 1; i >= 0; i--) {
-            let j = p.p[i] ;
+            const j = p.p[i] ;
             if (j != i) {
                if (!sgs[i][j]) {
                   return false ;
@@ -72,7 +70,7 @@ export class SchreierSims {
          }
       }
       function knuthb(k: number, p: Perm, len: number): void {
-         let j = p.p[k] ;
+         const j = p.p[k] ;
          if (!sgs[k][j]) {
             sgs[k][j] = p ;
             sgsi[k][j] = p.inv() ;
@@ -82,7 +80,7 @@ export class SchreierSims {
             }
             return ;
          }
-         let p2 = p.mul(sgsi[k][j]) ;
+         const p2 = p.mul(sgsi[k][j]) ;
          if (!resolve(p2)) {
             knutha(k - 1, p2, len + sgslen[k][j]) ;
          }
@@ -110,8 +108,8 @@ export class SchreierSims {
             sz = 1 ;
             let tks = 0 ;
             let sollen = 0 ;
-            let avgs = [] ;
-            let mults = new FactoredNumber() ;
+            const avgs = [] ;
+            const mults = new FactoredNumber() ;
             for (let j = 0; j < n; j++) {
                let cnt = 0 ;
                let lensum = 0 ;
@@ -129,7 +127,7 @@ export class SchreierSims {
                if (cnt > 1) {
                   mults.multiply(cnt) ;
                }
-               let avg = lensum / cnt ;
+               const avg = lensum / cnt ;
                avgs.push(avg) ;
                sollen += avg ;
             }

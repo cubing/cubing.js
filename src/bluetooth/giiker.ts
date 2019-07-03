@@ -93,7 +93,7 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     const originalValue = await cubeCharacteristic.readValue();
     debugLog("Original value:", originalValue);
-    let cube = new GiiKERCube(server, cubeCharacteristic, originalValue);
+    const cube = new GiiKERCube(server, cubeCharacteristic, originalValue);
 
     await cubeCharacteristic.startNotifications();
     cubeCharacteristic.addEventListener(
@@ -129,7 +129,7 @@ export class GiiKERCube extends BluetoothPuzzle {
   }
 
   private toReid333(val: DataView): Transformation {
-    let state = {
+    const state = {
       EDGE: {
         permutation: new Array(12),
         orientation: new Array(12),
@@ -155,7 +155,7 @@ export class GiiKERCube extends BluetoothPuzzle {
   }
 
   private onCubeCharacteristicChanged(event: any): void {
-    let val = event.target.value;
+    const val = event.target.value;
     debugLog(val);
 
     if (this.isRepeatedInitialValue(val)) {
@@ -163,7 +163,7 @@ export class GiiKERCube extends BluetoothPuzzle {
         return;
     }
 
-    let giikerState = [];
+    const giikerState = [];
     for (let i = 0; i < 20; i++) {
       giikerState.push(Math.floor(val.getUint8(i) / 16));
       giikerState.push(val.getUint8(i) % 16);

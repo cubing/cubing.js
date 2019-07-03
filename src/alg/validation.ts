@@ -28,7 +28,7 @@ function validateFamily(family: string, allowedFamilyLists: FamilyList[]): boole
 }
 
 // TODO: Switch to `Set`?
-let plainMoveFamilies: FamilyList = {
+const plainMoveFamilies: FamilyList = {
   x: true,
   y: true,
   z: true,
@@ -40,7 +40,7 @@ let plainMoveFamilies: FamilyList = {
   s: true,
 };
 
-let singleSliceMoveFamilies: FamilyList = {
+const singleSliceMoveFamilies: FamilyList = {
   U: true,
   L: true,
   F: true,
@@ -49,7 +49,7 @@ let singleSliceMoveFamilies: FamilyList = {
   D: true,
 };
 
-let wideMoveFamilies: FamilyList = {
+const wideMoveFamilies: FamilyList = {
   u: true,
   l: true,
   f: true,

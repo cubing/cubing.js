@@ -14,17 +14,17 @@ import { Quat } from "./Quat" ;
 export class PlatonicGenerator {
    public static eps = 1e-9 ;
    public static cube(): Quat[] {
-      let s5 = Math.sqrt(0.5) ;
+      const s5 = Math.sqrt(0.5) ;
       return [new Quat(s5, s5, 0, 0), new Quat(s5, 0, s5, 0)] ;
    }
    public static tetrahedron(): Quat[] {
       return [new Quat(0.5, 0.5, 0.5, 0.5), new Quat(0.5, 0.5, 0.5, -0.5)] ;
    }
    public static dodecahedron(): Quat[] {
-      let d36 = 2 * Math.PI / 10 ;
+      const d36 = 2 * Math.PI / 10 ;
       let dx = 0.5 + 0.3 * Math.sqrt(5) ;
       let dy = 0.5 + 0.1 * Math.sqrt(5) ;
-      let dd = Math.sqrt(dx * dx + dy * dy) ;
+      const dd = Math.sqrt(dx * dx + dy * dy) ;
       dx /= dd ;
       dy /= dd ;
       return [new Quat(Math.cos(d36), dx * Math.sin(d36), dy * Math.sin(d36), 0),
@@ -33,15 +33,15 @@ export class PlatonicGenerator {
    public static icosahedron(): Quat[] {
       let dx = 1 / 6 + Math.sqrt(5) / 6 ;
       let dy = 2 / 3 + Math.sqrt(5) / 3 ;
-      let dd = Math.sqrt(dx * dx + dy * dy) ;
+      const dd = Math.sqrt(dx * dx + dy * dy) ;
       dx /= dd ;
       dy /= dd ;
-      let ang = 2 * Math.PI / 6 ;
+      const ang = 2 * Math.PI / 6 ;
       return [new Quat(Math.cos(ang), dx * Math.sin(ang), dy * Math.sin(ang), 0),
               new Quat(Math.cos(ang), -dx * Math.sin(ang), dy * Math.sin(ang), 0)] ;
    }
    public static octahedron(): Quat[] {
-      let s5 = Math.sqrt(0.5) ;
+      const s5 = Math.sqrt(0.5) ;
       return [new Quat(0.5, 0.5, 0.5, 0.5), new Quat(s5, 0, 0, s5)] ;
    }
    public static closure(g: Quat[]): Quat[] {
@@ -49,11 +49,11 @@ export class PlatonicGenerator {
    // This is quadratic in the result size.  Also, it has no protection
    // against you providing a bogus set of generators that would generate
    // an infinite group.
-      let q = [new Quat(1, 0, 0, 0)] ;
+      const q = [new Quat(1, 0, 0, 0)] ;
       for (let i = 0; i < q.length; i++) {
          for (let j = 0; j < g.length; j++) {
-            let ns = g[j].mul(q[i]) ;
-            let negns = ns.smul(-1) ;
+            const ns = g[j].mul(q[i]) ;
+            const negns = ns.smul(-1) ;
             let wasseen = false ;
             for (let k = 0; k < q.length; k++) {
                if (ns.dist(q[k]) < PlatonicGenerator.eps ||
@@ -73,10 +73,10 @@ export class PlatonicGenerator {
    // compute unique plane rotations
    // given a rotation group and a plane, find the rotations that
    // generate unique planes.  This is quadratic in the return size.
-      let planes = [] ;
-      let planerot = [] ;
+      const planes = [] ;
+      const planerot = [] ;
       for (let i = 0; i < g.length; i++) {
-         let p2 = p.rotateplane(g[i]) ;
+         const p2 = p.rotateplane(g[i]) ;
          let wasseen = false ;
          for (let j = 0; j < planes.length; j++) {
             if (p2.dist(planes[j]) < PlatonicGenerator.eps) {
@@ -97,10 +97,10 @@ export class PlatonicGenerator {
    // in the given array, that are on the surface of the polytope defined
    // by all the planes, and will be returned in clockwise order.
    // This is O(planes^2 * return size + return_size^2).
-      let face = [] ;
+      const face = [] ;
       for (let i = 1; i < planes.length; i++) {
          for (let j = i + 1; j < planes.length; j++) {
-            let p = planes[0].solvethreeplanes(0, i, j, planes) ;
+            const p = planes[0].solvethreeplanes(0, i, j, planes) ;
             if (p) {
                let wasseen = false ;
                for (let k = 0; k < face.length; k++) {
@@ -118,9 +118,9 @@ export class PlatonicGenerator {
       while (true) {
          let changed = false ;
          for (let i = 0; i < face.length; i++) {
-            let j: number = (i + 1) % face.length ;
+            const j: number = (i + 1) % face.length ;
             if (planes[0].dot(face[i].cross(face[j])) < 0) {
-               let t: Quat = face[i] ;
+               const t: Quat = face[i] ;
                face[i] = face[j] ;
                face[j] = t ;
                changed = true ;

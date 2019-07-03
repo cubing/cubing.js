@@ -1,6 +1,6 @@
 import {KPuzzleDefinition, Transformation} from "./spec";
 
-let xmlns = "http://www.w3.org/2000/svg";
+const xmlns = "http://www.w3.org/2000/svg";
 
 // Unique ID mechanism to keep SVG gradient element IDs unique. TODO: Is there
 // something more performant, and that can't be broken by other elements of the
@@ -29,7 +29,7 @@ export class SVG {
     // TODO: Sanitization.
     this.element.innerHTML = kPuzzleDefinition.svg;
 
-    let svgElem = this.element.querySelector("svg");
+    const svgElem = this.element.querySelector("svg");
     if (!svgElem) {
       throw new Error("Could not get SVG element");
     }
@@ -39,14 +39,14 @@ export class SVG {
     this.gradientDefs = document.createElementNS(xmlns, "defs") as SVGDefsElement;
     svgElem.insertBefore(this.gradientDefs, svgElem.firstChild);
 
-    for (let orbitName in kPuzzleDefinition.orbits) {
-      let orbitDefinition = kPuzzleDefinition.orbits[orbitName];
+    for (const orbitName in kPuzzleDefinition.orbits) {
+      const orbitDefinition = kPuzzleDefinition.orbits[orbitName];
 
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (let orientation = 0; orientation < orbitDefinition.orientations; orientation++) {
-          let id = this.elementID(orbitName, idx, orientation);
-          let elem = this.elementByID(id);
-          let originalColor = elem.style.fill as string;
+          const id = this.elementID(orbitName, idx, orientation);
+          const elem = this.elementByID(id);
+          const originalColor = elem.style.fill as string;
           this.originalColors[id] = originalColor;
           this.gradients[id] = this.newGradient(id, originalColor);
           this.gradientDefs.appendChild(this.gradients[id]);
@@ -58,22 +58,22 @@ export class SVG {
 
   // TODO: save definition in the constructor?
   public draw(definition: KPuzzleDefinition, state: Transformation, nextState?: Transformation, fraction?: number) {
-    for (let orbitName in definition.orbits) {
-      let orbitDefinition = definition.orbits[orbitName];
+    for (const orbitName in definition.orbits) {
+      const orbitDefinition = definition.orbits[orbitName];
 
-      let curOrbitState = state[orbitName];
-      let nextOrbitState = nextState ? (nextState as Transformation)[orbitName] : null;
+      const curOrbitState = state[orbitName];
+      const nextOrbitState = nextState ? (nextState as Transformation)[orbitName] : null;
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (let orientation = 0; orientation < orbitDefinition.orientations; orientation++) {
-          let id = this.elementID(orbitName, idx, orientation);
-          let fromCur = this.elementID(
+          const id = this.elementID(orbitName, idx, orientation);
+          const fromCur = this.elementID(
             orbitName,
             curOrbitState.permutation[idx],
             (orbitDefinition.orientations - curOrbitState.orientation[idx] + orientation) % orbitDefinition.orientations,
           );
           let singleColor = false;
           if (nextOrbitState) {
-            let fromNext = this.elementID(
+            const fromNext = this.elementID(
               orbitName,
               nextOrbitState.permutation[idx],
               (orbitDefinition.orientations - nextOrbitState.orientation[idx] + orientation) % orbitDefinition.orientations,
@@ -82,7 +82,7 @@ export class SVG {
               singleColor = true; // TODO: Avoid redundant work during move.
             }
             fraction = fraction || 0; // TODO Use the type system to tie this to nextState?
-            let easedBackwardsPercent = 100 * (1 - fraction * fraction * (2 - fraction * fraction)); // TODO: Move easing up the stack.
+            const easedBackwardsPercent = 100 * (1 - fraction * fraction * (2 - fraction * fraction)); // TODO: Move easing up the stack.
             this.gradients[id].children[0].setAttribute("stop-color", this.originalColors[fromCur]);
             this.gradients[id].children[1].setAttribute("stop-color", this.originalColors[fromCur]);
             this.gradients[id].children[1].setAttribute("offset", `${Math.max(easedBackwardsPercent - 5, 0)}%`);
@@ -110,10 +110,10 @@ export class SVG {
   }
 
   private newGradient(id: string, originalColor: string): SVGGradientElement {
-    let grad = document.createElementNS(xmlns, "radialGradient") as SVGGradientElement;
+    const grad = document.createElementNS(xmlns, "radialGradient") as SVGGradientElement;
     grad.setAttribute("id", `grad-${this.svgID}-${id}`);
     grad.setAttribute("r", `70.7107%`); // TODO: Adapt to puzzle.
-    let stopDefs = [
+    const stopDefs = [
       {offset: 0, color: originalColor},
       {offset: 0, color: originalColor},
       {offset: 0, color: "black"},
@@ -121,8 +121,8 @@ export class SVG {
       {offset: 0, color: originalColor},
       {offset: 100, color: originalColor},
     ];
-    for (let stopDef of stopDefs) {
-      let stop = document.createElementNS(xmlns,
+    for (const stopDef of stopDefs) {
+      const stop = document.createElementNS(xmlns,
         "stop") as SVGStopElement;
       stop.setAttribute("offset", `${stopDef.offset}%`);
       stop.setAttribute("stop-color", stopDef.color);

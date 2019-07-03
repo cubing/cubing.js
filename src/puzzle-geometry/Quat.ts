@@ -5,11 +5,11 @@ export class Quat {
    public static eps = 1e-9 ;
    public static expandfaces(rots: Quat[], faces: Quat[][]): Quat[][] {
       // given a set of faces, expand by rotation set
-      let nfaces = [] ;
+      const nfaces = [] ;
       for (let i = 0; i < rots.length; i++) {
          for (let k = 0; k < faces.length; k++) {
-            let face = faces[k] ;
-            let nface = [] ;
+            const face = faces[k] ;
+            const nface = [] ;
             for (let j = 0; j < face.length; j++) {
                nface.push(face[j].rotateplane(rots[i])) ;
             }
@@ -27,7 +27,7 @@ export class Quat {
       return s.smul(1.0 / face.length) ;
    }
    public static random(): Quat { // generate a random quat
-      let q = new Quat(Math.random() * 2 - 1, Math.random() * 2 - 1,
+      const q = new Quat(Math.random() * 2 - 1, Math.random() * 2 - 1,
                        Math.random() * 2 - 1, Math.random() * 2 - 1) ;
       return q.smul(1 / q.len()) ;
    }
@@ -59,14 +59,14 @@ export class Quat {
       return this.b * q.b + this.c * q.c + this.d * q.d ;
    }
    public normalize(): Quat { // make the magnitude be 1
-      let d = Math.sqrt(this.dot(this)) ;
+      const d = Math.sqrt(this.dot(this)) ;
       return new Quat(this.a / d, this.b / d, this.c / d, this.d / d) ;
    }
    public makenormal(): Quat { // make a normal vector from a plane or quat or point
       return new Quat(0, this.b, this.c, this.d).normalize() ;
    }
    public normalizeplane(): Quat { // normalize a plane
-      let d = Math.hypot(this.b, this.c, this.d) ;
+      const d = Math.hypot(this.b, this.c, this.d) ;
       return new Quat(this.a / d, this.b / d, this.c / d, this.d / d) ;
    }
    public smul(m: number): Quat { // scalar multiplication
@@ -85,14 +85,14 @@ export class Quat {
       return new Quat(this.a, -this.b, -this.c, -this.d) ;
    }
    public det3x3(a00: number, a01: number, a02: number, a10: number, a11: number,
-          a12: number, a20: number, a21: number, a22: number): number {
+                 a12: number, a20: number, a21: number, a22: number): number {
       // 3x3 determinant
       return a00 * (a11 * a22 - a12 * a21) +
              a01 * (a12 * a20 - a10 * a22) +
              a02 * (a10 * a21 - a11 * a20) ;
    }
    public rotateplane(q: Quat): Quat { // rotate a plane using a quaternion
-      let t = q.mul(new Quat(0, this.b, this.c, this.d)).mul(q.invrot()) ;
+      const t = q.mul(new Quat(0, this.b, this.c, this.d)).mul(q.invrot()) ;
       t.a = this.a ;
       return t ;
    }
@@ -100,15 +100,15 @@ export class Quat {
       return q.mul(this).mul(q.invrot()) ;
    }
    public rotateface(face: Quat[]): Quat[] { // rotate a face by this Q.
-      let that = this ;
+      const that = this ;
       return face.map((_: Quat) => _.rotatepoint(that)) ;
    }
    public rotatecubie(cubie: Quat[][]): Quat[][] { // rotate a cubie by this Q.
-      let that = this ;
+      const that = this ;
       return cubie.map((_: Quat[]) => that.rotateface(_)) ;
    }
    public intersect3(p2: Quat, p3: Quat) { // intersect three planes if there is one
-      let det = this.det3x3(this.b, this.c, this.d,
+      const det = this.det3x3(this.b, this.c, this.d,
                             p2.b, p2.c, p2.d,
                             p3.b, p3.c, p3.d) ;
       if (Math.abs(det) < Quat.eps) {
@@ -126,13 +126,13 @@ export class Quat {
    // find intersection of three planes but only if interior
    // Takes three indices into a plane array, and returns the point at the
    // intersection of all three, but only if it is internal to all planes.
-      let p = planes[p1].intersect3(planes[p2], planes[p3]) ;
+      const p = planes[p1].intersect3(planes[p2], planes[p3]) ;
       if (!p) {
          return p ;
       }
       for (let i = 0; i < planes.length; i++) {
          if (i != p1 && i != p2 && i != p3) {
-            let dt = planes[i].b * p.b + planes[i].c * p.c + planes[i].d * p.d ;
+            const dt = planes[i].b * p.b + planes[i].c * p.c + planes[i].d * p.d ;
             if ((planes[i].a > 0 && dt > planes[i].a) ||
                 (planes[i].a < 0 && dt < planes[i].a)) {
                return false ;
@@ -153,29 +153,29 @@ export class Quat {
    }
    public cutfaces(faces: Quat[][]): Quat[][] {
      // Cut a set of faces by a plane and return new set
-      let that = this ; // welcome to Javascript
-      let d = this.a ;
-      let nfaces = [] ;
+      const that = this ; // welcome to Javascript
+      const d = this.a ;
+      const nfaces = [] ;
       for (let j = 0; j < faces.length; j++) {
-         let face = faces[j] ;
-         let inout = face.map((_: Quat) => that.side(_.dot(that) - d)) ;
+         const face = faces[j] ;
+         const inout = face.map((_: Quat) => that.side(_.dot(that) - d)) ;
          let seen = 0 ;
          for (let i = 0; i < inout.length; i++) {
             seen |= 1 << (inout[i] + 1) ;
          }
          if ((seen & 5) == 5) { // saw both sides
             for (let s = -1; s <= 1; s += 2) {
-               let nface = [] ;
+               const nface = [] ;
                for (let k = 0; k < face.length; k++) {
                   if (inout[k] == s || inout[k] == 0) {
                      nface.push(face[k]) ;
                   }
-                  let kk = (k + 1) % face.length ;
+                  const kk = (k + 1) % face.length ;
                   if (inout[k] + inout[kk] == 0 && inout[k] != 0) {
-                     let vk = face[k].dot(this) - d ;
-                     let vkk = face[kk].dot(this) - d ;
-                     let r = vk / (vk - vkk) ;
-                     let pt = face[k].smul(1 - r).sum(face[kk].smul(r)) ;
+                     const vk = face[k].dot(this) - d ;
+                     const vkk = face[kk].dot(this) - d ;
+                     const r = vk / (vk - vkk) ;
+                     const pt = face[k].smul(1 - r).sum(face[kk].smul(r)) ;
                      nface.push(pt) ;
                   }
                }
@@ -188,9 +188,9 @@ export class Quat {
       return nfaces ;
    }
    public faceside(face: Quat[]): number { // which side of a plane is a face on?
-      let d = this.a ;
+      const d = this.a ;
       for (let i = 0; i < face.length; i++) {
-         let s = this.side(face[i].dot(this) - d) ;
+         const s = this.side(face[i].dot(this) - d) ;
          if (s != 0) {
             return s ;
          }
@@ -198,8 +198,8 @@ export class Quat {
       throw new Error("Could not determine side of plane in faceside") ;
    }
    public sameplane(p: Quat): boolean { // are two planes the same?
-      let a = this.normalize() ;
-      let b = p.normalize() ;
+      const a = this.normalize() ;
+      const b = p.normalize() ;
       return a.dist(b) < Quat.eps || a.dist(b.smul(-1)) < Quat.eps ;
    }
    public makecut(r: number): Quat { // make a cut from a normal vector

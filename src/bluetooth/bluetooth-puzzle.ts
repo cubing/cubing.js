@@ -37,7 +37,7 @@ export abstract class BluetoothPuzzle {
   }
 
   protected dispatchMove(moveEvent: MoveEvent): void {
-    for (let l of this.listeners) {
+    for (const l of this.listeners) {
       l(moveEvent);
     }
   }

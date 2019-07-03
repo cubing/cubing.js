@@ -20,9 +20,9 @@ export class MoveExpander {
      this.facenames = fn ;
   }
   public addGrip(grip1: string, grip2: string, nslices: number, def: KPuzzleDefinition) {
-     let slices = [] ;
-     let axes = this.gripStash ;
-     let moves = def.moves ;
+     const slices = [] ;
+     const axes = this.gripStash ;
+     const moves = def.moves ;
      for (let i = 1; i <= nslices; i++) {
         let t = (i == 1 && moves[grip1]) || moves["" + i + grip1] ;
         if (!t) {
@@ -38,12 +38,12 @@ export class MoveExpander {
         slices.push(t) ;
      }
      axes[grip1] = slices ;
-     let aprime = slices.map((_: Transformation) => Invert(def, _)) ;
+     const aprime = slices.map((_: Transformation) => Invert(def, _)) ;
      aprime.reverse() ;
      axes[grip2] = aprime ;
   }
   public splitByFaceNames(s: string, facenames: string[]) {
-      let r: string[] = [] ;
+      const r: string[] = [] ;
       let at = 0 ;
       while (at < s.length) {
          let found = false ;
@@ -66,8 +66,8 @@ export class MoveExpander {
      if (t) {
         return t ;
      }
-     let axes = this.gripStash ;
-     let family = blockMove.family ;
+     const axes = this.gripStash ;
+     const family = blockMove.family ;
      let grip = family ;
      let isBlock = false ;
      // the following "reparse" code is almost certainly wrong
@@ -81,7 +81,7 @@ export class MoveExpander {
      }
      let slices = axes[grip] ;
      if (!slices && this.facenames) {   // can we unswizzle this grip name?
-        let faceSplit = this.splitByFaceNames(grip, this.facenames) ;
+        const faceSplit = this.splitByFaceNames(grip, this.facenames) ;
         if (faceSplit) {
            for (let i = 1; i < faceSplit.length; i++) {
               let testGrip = "" ;
@@ -125,16 +125,16 @@ export class MoveExpander {
      return t ;
   }
   public expandSlicesByName(mv: string, def: KPuzzleDefinition) {
-     let t = this.moveStash[mv] ;
+     const t = this.moveStash[mv] ;
      if (t) {
         return t ;
      }
      try {
-        let alg = parse(mv) ;
+        const alg = parse(mv) ;
         if (alg.nestedUnits.length != 1) {
            return undefined ;
         }
-        let signmove = alg.nestedUnits[0] as BlockMove ; // need better way
+        const signmove = alg.nestedUnits[0] as BlockMove ; // need better way
         return this.expandSlices(mv, signmove, def) ;
      } catch (e) {
         return undefined ;

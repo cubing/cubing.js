@@ -171,7 +171,7 @@ export class GanCube extends BluetoothPuzzle {
 
     const initialMoveCounter = (await PhysicalState.read(physicalStateCharacteristic)).moveCounter();
     debugLog("Initial Move Counter:", initialMoveCounter);
-    let cube = new GanCube(ganCubeService, server, physicalStateCharacteristic, initialMoveCounter);
+    const cube = new GanCube(ganCubeService, server, physicalStateCharacteristic, initialMoveCounter);
     return cube;
   }
 
@@ -234,7 +234,7 @@ export class GanCube extends BluetoothPuzzle {
 
   public async getState(): Promise<PuzzleState> {
     const arr: Uint8Array = new Uint8Array((await this.readFaceletStatus1Characteristic()));
-    let stickers: number[] = [];
+    const stickers: number[] = [];
     for (let i = 0; i < 18; i += 3) {
       let v = (((arr[i ^ 1] << 8) + arr[(i + 1) ^ 1]) << 8) + arr[(i + 2) ^ 1];
       for (let j = 0; j < 8; j++) {

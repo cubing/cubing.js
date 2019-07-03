@@ -34,14 +34,14 @@ namespace FullscreenAPI {
            document.webkitFullscreenElement;
   }
   export function request(element: HTMLElement) {
-    let requestFullscreen = element.requestFullscreen ||
+    const requestFullscreen = element.requestFullscreen ||
                             (element as any).mozRequestFullScreen ||
                             (element as any).msRequestFullscreen ||
                             (element as any).webkitRequestFullscreen;
     requestFullscreen.call(element);
   }
   export function exit() {
-    let exitFullscreen = document.exitFullscreen ||
+    const exitFullscreen = document.exitFullscreen ||
                          (document as any).mozCancelFullScreen ||
                          (document as any).msExitFullscreen ||
                          (document as any).webkitExitFullscreen;
@@ -108,7 +108,7 @@ export namespace Button {
     }
     public animDirectionChanged(direction: Cursor.Direction): void {
       // TODO: Handle flash of pause button when pressed while the Twisty is already at the end.
-      let newClass = direction === Cursor.Direction.Paused ? "play" : "pause";
+      const newClass = direction === Cursor.Direction.Paused ? "play" : "pause";
       this.element.classList.remove("play", "pause");
       this.element.classList.add(newClass);
 
@@ -154,7 +154,7 @@ export class Scrubber implements CursorObserver {
   }
 
   public updateFromAnim() {
-    let bounds = this.anim.getBounds();
+    const bounds = this.anim.getBounds();
     this.element.min = String(bounds[0]);
     this.element.max = String(bounds[1]);
     this.element.value = String(this.anim.cursor.currentTimestamp());
@@ -173,10 +173,10 @@ export class Scrubber implements CursorObserver {
   private updateBackground() {
     // TODO: Figure out the most efficient way to do this.
     // TODO: Pad by the thumb radius at each end.
-    let min = parseInt(this.element.min);
-    let max = parseInt(this.element.max);
-    let value = parseInt(this.element.value);
-    let v = (value - min) / max * 100;
+    const min = parseInt(this.element.min);
+    const max = parseInt(this.element.max);
+    const value = parseInt(this.element.value);
+    const v = (value - min) / max * 100;
     this.element.style.background = `linear-gradient(to right, \
       rgb(204, 24, 30) 0%, \
       rgb(204, 24, 30) ${v}%, \
@@ -217,7 +217,7 @@ export class CursorTextMoveView implements CursorObserver {
   }
 
   public animCursorChanged(cursor: Cursor<Puzzle>) {
-    let pos = cursor.currentPosition();
+    const pos = cursor.currentPosition();
     let s = "" + Math.floor(cursor.currentTimestamp());
     if (pos.moves.length > 0) {
       // TODO: cache the name.
@@ -245,14 +245,14 @@ export class KSolveView implements CursorObserver, JumpObserver {
   }
 
   public animCursorChanged(cursor: Cursor<Puzzle>) {
-    let pos = cursor.currentPosition();
+    const pos = cursor.currentPosition();
     if (pos.moves.length > 0) {
 
-      let move = (pos.moves[0].move as BlockMove);
+      const move = (pos.moves[0].move as BlockMove);
 
-      let def = this.definition;
-      let partialMove = new BlockMove(move.outerLayer, move.innerLayer, move.family, move.amount * pos.moves[0].direction);
-      let newState = Combine(
+      const def = this.definition;
+      const partialMove = new BlockMove(move.outerLayer, move.innerLayer, move.family, move.amount * pos.moves[0].direction);
+      const newState = Combine(
         def,
         pos.state as Transformation,
         stateForBlockMove(def, partialMove),

@@ -85,12 +85,12 @@ export class Cursor<P extends Puzzle> {
   }
 
   public currentPosition(): Cursor.Position<P> {
-    let pos = {
+    const pos = {
       state: this.state,
       moves: [],
     } as Cursor.Position<P>;
-    let move = this.moves.nestedUnits[this.moveIdx];
-    let moveTS = this.algTimestamp - this.moveStartTimestamp;
+    const move = this.moves.nestedUnits[this.moveIdx];
+    const moveTS = this.algTimestamp - this.moveStartTimestamp;
     if (moveTS !== 0) {
       pos.moves.push({
         move,
@@ -121,11 +121,11 @@ export class Cursor<P extends Puzzle> {
     let remainingOffset = (this.algTimestamp - this.moveStartTimestamp) + duration;
 
     while (this.moveIdx < this.numMoves()) {
-      let move = this.moves.nestedUnits[this.moveIdx];
+      const move = this.moves.nestedUnits[this.moveIdx];
       if (move.type != "blockMove") {
         throw new Error("TODO — Only BlockMove supported for cursor.");
       }
-      let lengthOfMove = this.durationFn.traverse(move);
+      const lengthOfMove = this.durationFn.traverse(move);
       if (remainingOffset < lengthOfMove) {
         this.algTimestamp = this.moveStartTimestamp + remainingOffset;
         return false;
@@ -160,7 +160,7 @@ export class Cursor<P extends Puzzle> {
         return true; // TODO
       }
 
-      let prevMove = this.moves.nestedUnits[this.moveIdx - 1];
+      const prevMove = this.moves.nestedUnits[this.moveIdx - 1];
       if (prevMove.type != "blockMove") {
         throw new Error("TODO - only BlockMove supported");
       }
@@ -169,7 +169,7 @@ export class Cursor<P extends Puzzle> {
         this.state,
         this.puzzle.invert(this.puzzle.stateFromMove(prevMove as BlockMove)),
       );
-      let lengthOfMove = this.durationFn.traverse(prevMove);
+      const lengthOfMove = this.durationFn.traverse(prevMove);
       this.moveIdx -= 1;
       this.moveStartTimestamp -= lengthOfMove;
       this.algTimestamp = this.moveStartTimestamp;
@@ -179,7 +179,7 @@ export class Cursor<P extends Puzzle> {
   }
 
   private setMoves(alg: Sequence) {
-    let moves = expand(alg);
+    const moves = expand(alg);
     if (moves.type === "sequence") {
       this.moves = moves;
     } else {

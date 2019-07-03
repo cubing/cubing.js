@@ -15,7 +15,7 @@ const requestOptions = {
     filters: [] as BluetoothRequestDeviceFilter[],
     optionalServices: [] as BluetoothServiceUUID[],
 };
-for (let config of [
+for (const config of [
     giiKERConfig,
     ganConfig,
 ]) {

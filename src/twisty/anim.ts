@@ -175,7 +175,7 @@ export class AnimModel {
     if (elapsed < 0) {
       elapsed = 0;
     }
-    let reachedMoveBreakpoint = this.cursor.delta(elapsed * this.timeScaling(), this.breakpointType === Cursor.BreakpointType.Move);
+    const reachedMoveBreakpoint = this.cursor.delta(elapsed * this.timeScaling(), this.breakpointType === Cursor.BreakpointType.Move);
     if (reachedMoveBreakpoint) {
         this.setDirection(Cursor.Direction.Paused);
         this.scheduler.stop();

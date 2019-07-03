@@ -173,14 +173,14 @@ export class PuzzleGeometry {
       ] ;
    }
    public static parsedesc(s: string): any { // parse a text description
-      let a = s.split(/ /).filter(Boolean) ;
+      const a = s.split(/ /).filter(Boolean) ;
       if (a.length % 2 == 0) {
          return false ;
       }
       if (a[0] != "o" && a[0] != "c" && a[0] != "i" && a[0] != "d" && a[0] != "t") {
          return false ;
       }
-      let r = [] ;
+      const r = [] ;
       for (let i = 1; i < a.length; i += 2) {
          if (a[i] != "f" && a[i] != "v" && a[i] != "e") {
             return false ;
@@ -304,7 +304,7 @@ export class PuzzleGeometry {
    // split a geometrical element into face names.  The facenames must
    // be prefix-free.
    public splitByFaceNames(s: string, facenames: any[]): string[] {
-      let r: string[] = [] ;
+      const r: string[] = [] ;
       let at = 0 ;
       while (at < s.length) {
          let found = false ;
@@ -343,23 +343,23 @@ export class PuzzleGeometry {
       }
       this.rotations = PlatonicGenerator.closure(g) ;
       if (this.verbose) { console.log("# Rotations: " + this.rotations.length) ; }
-      let baseplane = g[0] ;
+      const baseplane = g[0] ;
       this.baseplanerot = PlatonicGenerator.uniqueplanes(baseplane, this.rotations) ;
-      let baseplanes = this.baseplanerot.map(
+      const baseplanes = this.baseplanerot.map(
                        function(_) { return baseplane.rotateplane(_); }) ;
       this.baseplanes = baseplanes ;
       this.basefacecount = baseplanes.length ;
-      let net = PuzzleGeometry.defaultnets[baseplanes.length] ;
+      const net = PuzzleGeometry.defaultnets[baseplanes.length] ;
       this.net = net ;
       this.colors = PuzzleGeometry.defaultcolors[baseplanes.length] ;
       this.faceorder = PuzzleGeometry.defaultfaceorders[baseplanes.length] ;
       if (this.verbose) { console.log("# Base planes: " + baseplanes.length) ; }
-      let baseface = PlatonicGenerator.getface(baseplanes) ;
+      const baseface = PlatonicGenerator.getface(baseplanes) ;
       if (this.verbose) { console.log("# Face vertices: " + baseface.length) ; }
-      let facenormal = baseplanes[0].makenormal() ;
-      let edgenormal = baseface[0].sum(baseface[1]).makenormal() ;
-      let vertexnormal = baseface[0].makenormal() ;
-      let cutplanes = [] ;
+      const facenormal = baseplanes[0].makenormal() ;
+      const edgenormal = baseface[0].sum(baseface[1]).makenormal() ;
+      const vertexnormal = baseface[0].makenormal() ;
+      const cutplanes = [] ;
       for (let i = 0; i < cuts.length; i++) {
          let normal = null ;
          switch (cuts[i][0]) {
@@ -370,10 +370,10 @@ export class PuzzleGeometry {
          }
          cutplanes.push(normal.makecut(cuts[i][1])) ;
       }
-      let boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d) ;
+      const boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d) ;
       if (this.verbose) { console.log("# Boundary is " + boundary) ; }
-      let planerot = PlatonicGenerator.uniqueplanes(boundary, this.rotations) ;
-      let planes = planerot.map(function(_) {return boundary.rotateplane(_); }) ;
+      const planerot = PlatonicGenerator.uniqueplanes(boundary, this.rotations) ;
+      const planes = planerot.map(function(_) {return boundary.rotateplane(_); }) ;
       let faces = [PlatonicGenerator.getface(planes)] ;
 //
 //   Determine names for edges, vertices, and planes.  Planes are defined
@@ -383,11 +383,11 @@ export class PuzzleGeometry {
 //   n planes meet at a vertex.  We arbitrarily choose the one that is
 //   alphabetically first (and we will probably want to change this).
 //
-      let facenames: any[] = [] ;
-      let faceplanes = [] ;
-      let vertexnames: any[] = [] ;
-      let edgenames: any[] = [] ;
-      let edgesperface = faces[0].length ;
+      const facenames: any[] = [] ;
+      const faceplanes = [] ;
+      const vertexnames: any[] = [] ;
+      const edgenames: any[] = [] ;
+      const edgesperface = faces[0].length ;
       function searchaddelement(a: any[], p: Quat, name: any) {
          for (let i = 0; i < a.length; i++) {
             if (a[i][0].dist(p) < PuzzleGeometry.eps) {
@@ -398,21 +398,21 @@ export class PuzzleGeometry {
          a.push([p, name]) ;
       }
       for (let i = 0; i < this.baseplanerot.length; i++) {
-         let face = this.baseplanerot[i].rotateface(faces[0]) ;
+         const face = this.baseplanerot[i].rotateface(faces[0]) ;
          for (let j = 0; j < face.length; j++) {
-            let jj = (j + 1) % face.length ;
-            let midpoint = face[j].sum(face[jj]).smul(0.5) ;
+            const jj = (j + 1) % face.length ;
+            const midpoint = face[j].sum(face[jj]).smul(0.5) ;
             searchaddelement(edgenames, midpoint, i) ;
          }
       }
-      let otherfaces = [] ;
+      const otherfaces = [] ;
       for (let i = 0; i < this.baseplanerot.length; i++) {
-         let face = this.baseplanerot[i].rotateface(faces[0]) ;
-         let facelist = [] ;
+         const face = this.baseplanerot[i].rotateface(faces[0]) ;
+         const facelist = [] ;
          for (let j = 0; j < face.length; j++) {
-            let jj = (j + 1) % face.length ;
-            let midpoint = face[j].sum(face[jj]).smul(0.5) ;
-            let el = edgenames[PuzzleGeometry.findelement(edgenames, midpoint)] ;
+            const jj = (j + 1) % face.length ;
+            const midpoint = face[j].sum(face[jj]).smul(0.5) ;
+            const el = edgenames[PuzzleGeometry.findelement(edgenames, midpoint)] ;
             if (i == el[1]) {
                facelist.push(el[2]) ;
             } else if (i == el[2]) {
@@ -423,21 +423,21 @@ export class PuzzleGeometry {
          }
          otherfaces.push(facelist) ;
       }
-      let facenametoindex: any = {} ;
-      let faceindextoname: any = [] ;
+      const facenametoindex: any = {} ;
+      const faceindextoname: any = [] ;
       faceindextoname.push(net[0][0]) ;
       facenametoindex[net[0][0]] = 0 ;
       faceindextoname[otherfaces[0][0]] = net[0][1] ;
       facenametoindex[net[0][1]] = otherfaces[0][0] ;
       for (let i = 0; i < net.length; i++) {
-         let f0 = net[i][0] ;
-         let fi = facenametoindex[f0] ;
+         const f0 = net[i][0] ;
+         const fi = facenametoindex[f0] ;
          if (fi == undefined) {
             throw new Error("Bad edge description; first edge not connected") ;
          }
          let ii = -1 ;
          for (let j = 0; j < otherfaces[fi].length; j++) {
-            let fn2 = faceindextoname[otherfaces[fi][j]] ;
+            const fn2 = faceindextoname[otherfaces[fi][j]] ;
             if (fn2 != undefined && fn2 == net[i][1]) {
                ii = j ;
                break ;
@@ -450,8 +450,8 @@ export class PuzzleGeometry {
             if (net[i][j] == "") {
                continue ;
             }
-            let of = otherfaces[fi][(j + ii - 1) % edgesperface] ;
-            let fn2 = faceindextoname[of] ;
+            const of = otherfaces[fi][(j + ii - 1) % edgesperface] ;
+            const fn2 = faceindextoname[of] ;
             if (fn2 != undefined && fn2 != net[i][j]) {
                throw new Error("Face mismatch in net") ;
             }
@@ -474,22 +474,22 @@ export class PuzzleGeometry {
          }
       }
       for (let i = 0; i < this.baseplanerot.length; i++) {
-         let face = this.baseplanerot[i].rotateface(faces[0]) ;
-         let faceplane = boundary.rotateplane(this.baseplanerot[i]) ;
-         let facename = faceindextoname[i] ;
+         const face = this.baseplanerot[i].rotateface(faces[0]) ;
+         const faceplane = boundary.rotateplane(this.baseplanerot[i]) ;
+         const facename = faceindextoname[i] ;
          facenames.push([face, facename]) ;
          faceplanes.push([faceplane, facename]) ;
       }
       for (let i = 0; i < this.baseplanerot.length; i++) {
-         let face = this.baseplanerot[i].rotateface(faces[0]) ;
-         let facename = faceindextoname[i] ;
+         const face = this.baseplanerot[i].rotateface(faces[0]) ;
+         const facename = faceindextoname[i] ;
          for (let j = 0; j < face.length; j++) {
-            let jj = (j + 1) % face.length ;
-            let midpoint = face[j].sum(face[jj]).smul(0.5) ;
-            let jjj = (j + 2) % face.length ;
-            let midpoint2 = face[jj].sum(face[jjj]).smul(0.5) ;
-            let e1 = PuzzleGeometry.findelement(edgenames, midpoint) ;
-            let e2 = PuzzleGeometry.findelement(edgenames, midpoint2) ;
+            const jj = (j + 1) % face.length ;
+            const midpoint = face[j].sum(face[jj]).smul(0.5) ;
+            const jjj = (j + 2) % face.length ;
+            const midpoint2 = face[jj].sum(face[jjj]).smul(0.5) ;
+            const e1 = PuzzleGeometry.findelement(edgenames, midpoint) ;
+            const e2 = PuzzleGeometry.findelement(edgenames, midpoint2) ;
             searchaddelement(vertexnames, face[jj], [facename, e2, e1]) ;
          }
       }
@@ -499,7 +499,7 @@ export class PuzzleGeometry {
             throw new Error("Bad length in edge names " + edgenames[i]) ;
          }
          let c1 = faceindextoname[edgenames[i][1]] ;
-         let c2 = faceindextoname[edgenames[i][2]] ;
+         const c2 = faceindextoname[edgenames[i][2]] ;
          if (this.faceprecedence[edgenames[i][1]] <
              this.faceprecedence[edgenames[i][2]]) {
             c1 = c1 + c2 ;
@@ -539,7 +539,7 @@ export class PuzzleGeometry {
          console.log("Edge names: " + edgenames.map((_: any) => _[1]).join(" ")) ;
          console.log("Vertex names: " + vertexnames.map((_: any) => _[1]).join(" ")) ;
       }
-      let geonormals = [] ;
+      const geonormals = [] ;
       for (let i = 0; i < faceplanes.length; i++) {
          geonormals.push(
                        [faceplanes[i][0].makenormal(), faceplanes[i][1], "f"]) ;
@@ -556,7 +556,7 @@ export class PuzzleGeometry {
       this.edgenames = edgenames ;
       this.vertexnames = vertexnames ;
       this.geonormals = geonormals ;
-      let zero = new Quat(0, 0, 0, 0) ;
+      const zero = new Quat(0, 0, 0, 0) ;
       this.edgedistance = faces[0][0].sum(faces[0][1]).smul(0.5).dist(zero) ;
       this.vertexdistance = faces[0][0].dist(zero) ;
       if (this.verbose) {
@@ -566,7 +566,7 @@ export class PuzzleGeometry {
       // expand cutplanes by rotations.  We only work with one face here.
       for (let c = 0; c < cutplanes.length; c++) {
          for (let i = 0; i < this.rotations.length; i++) {
-            let q = cutplanes[c].rotateplane(this.rotations[i]) ;
+            const q = cutplanes[c].rotateplane(this.rotations[i]) ;
             let wasseen = false ;
             for (let j = 0; j < this.moveplanes.length; j++) {
                if (q.sameplane(this.moveplanes[j])) {
@@ -588,8 +588,8 @@ export class PuzzleGeometry {
       let shortedge = 1e99 ;
       for (let i = 0; i < faces.length; i++) {
          for (let j = 0; j < faces[i].length; j++) {
-            let k = (j + 1) % faces[i].length ;
-            let t = faces[i][j].dist(faces[i][k]) ;
+            const k = (j + 1) % faces[i].length ;
+            const t = faces[i][j].dist(faces[i][k]) ;
             if (t < shortedge) {
                shortedge = t ;
             }
@@ -616,10 +616,10 @@ export class PuzzleGeometry {
       return this.facetocubies[this.findface(face)][0] ;
    }
    public findface(face: Quat[]): number {
-      let cm = Quat.centermassface(face) ;
-      let key = this.keyface(face) ;
+      const cm = Quat.centermassface(face) ;
+      const key = this.keyface(face) ;
       for (let i = 0; i < this.facelisthash[key].length; i++) {
-         let face2 = this.facelisthash[key][i] ;
+         const face2 = this.facelisthash[key][i] ;
          if (Math.abs(cm.dist(
                      Quat.centermassface(this.faces[face2]))) < PuzzleGeometry.eps) {
             return face2 ;
@@ -632,21 +632,21 @@ export class PuzzleGeometry {
    //  face to a given 2D vector.  The face is given as an index into the
    //  facenames/baseplane arrays, and the edge is given as an offset into
    //  the vertices.
-      let face = this.facenames[facen][0] ;
-      let edgen2 = (edgen + 1) % face.length ;
-      let plane = this.baseplanes[facen] ;
+      const face = this.facenames[facen][0] ;
+      const edgen2 = (edgen + 1) % face.length ;
+      const plane = this.baseplanes[facen] ;
       let x0 = face[edgen2].sub(face[edgen]) ;
-      let olen = x0.len() ;
+      const olen = x0.len() ;
       x0 = x0.normalize() ;
-      let y0 = x0.cross(plane).normalize() ;
+      const y0 = x0.cross(plane).normalize() ;
       let delta = targvec[1].sub(targvec[0]) ;
-      let len = delta.len() / olen ;
+      const len = delta.len() / olen ;
       delta = delta.normalize() ;
-      let cosr = delta.b ;
-      let sinr = delta.c ;
-      let x1 = x0.smul(cosr).sub(y0.smul(sinr)).smul(len) ;
-      let y1 = y0.smul(cosr).sum(x0.smul(sinr)).smul(len) ;
-      let off = new Quat(0, targvec[0].b - x1.dot(face[edgen]),
+      const cosr = delta.b ;
+      const sinr = delta.c ;
+      const x1 = x0.smul(cosr).sub(y0.smul(sinr)).smul(len) ;
+      const y1 = y0.smul(cosr).sum(x0.smul(sinr)).smul(len) ;
+      const off = new Quat(0, targvec[0].b - x1.dot(face[edgen]),
                         targvec[0].c - y1.dot(face[edgen]), 0) ;
       return [x1, y1, off] ;
    }
@@ -658,11 +658,11 @@ export class PuzzleGeometry {
       this.faces = Quat.expandfaces(this.baseplanerot, this.faces) ;
       if (this.verbose) { console.log("# Total stickers is now " + this.faces.length) ; }
       // Split moveplanes into a list of parallel planes.
-      let moveplanesets = [] ;
+      const moveplanesets = [] ;
       for (let i = 0; i < this.moveplanes.length; i++) {
          let wasseen = false ;
-         let q = this.moveplanes[i] ;
-         let qnormal = q.makenormal() ;
+         const q = this.moveplanes[i] ;
+         const qnormal = q.makenormal() ;
          for (let j = 0; j < moveplanesets.length; j++) {
             if (qnormal.sameplane(moveplanesets[j][0].makenormal())) {
                moveplanesets[j].push(q) ;
@@ -676,9 +676,9 @@ export class PuzzleGeometry {
       }
       // make the normals all face the same way in each set.
       for (let i = 0; i < moveplanesets.length; i++) {
-         let a: Quat[] = moveplanesets[i].map(
+         const a: Quat[] = moveplanesets[i].map(
                               function(_) { return _.normalizeplane(); }) ;
-         let goodnormal = a[0].makenormal() ;
+         const goodnormal = a[0].makenormal() ;
          for (let j = 0; j < a.length; j++) {
             if (a[j].makenormal().dist(goodnormal) > PuzzleGeometry.eps) {
                a[j] = a[j].smul(-1) ;
@@ -688,19 +688,19 @@ export class PuzzleGeometry {
          moveplanesets[i] = a ;
       }
       this.moveplanesets = moveplanesets ;
-      let sizes = moveplanesets.map(function(_) {return _.length; }) ;
+      const sizes = moveplanesets.map(function(_) {return _.length; }) ;
       if (this.verbose) { console.log("# Move plane sets: " + sizes) ; }
       // for each of the move planes, find the rotations that are relevant
-      let moverotations: Quat[][] = [] ;
+      const moverotations: Quat[][] = [] ;
       for (let i = 0; i < moveplanesets.length; i++) {
          moverotations.push([]) ;
       }
       for (let i = 0; i < this.rotations.length; i++) {
-         let q: Quat = this.rotations[i] ;
+         const q: Quat = this.rotations[i] ;
          if (Math.abs(Math.abs(q.a) - 1) < PuzzleGeometry.eps) {
             continue ;
          }
-         let qnormal = q.makenormal() ;
+         const qnormal = q.makenormal() ;
          for (let j = 0; j < moveplanesets.length; j++) {
             if (qnormal.sameplane(moveplanesets[j][0].makenormal())) {
                moverotations[j].push(q) ;
@@ -713,8 +713,8 @@ export class PuzzleGeometry {
       //  while the norms should be the same, they need not be.  So we start
       //  by making the norms the same, and then sorting.
       for (let i = 0; i < moverotations.length; i++) {
-         let a = moverotations[i] ;
-         let goodnormal = a[0].makenormal() ;
+         const a = moverotations[i] ;
+         const goodnormal = a[0].makenormal() ;
          for (let j = 0; j < a.length; j++) {
             if (goodnormal.dist(a[j].makenormal()) > PuzzleGeometry.eps) {
                a[j] = a[j].smul(-1) ;
@@ -725,15 +725,15 @@ export class PuzzleGeometry {
             a.reverse() ;
          }
       }
-      let sizes2 = moverotations.map(function(_) {return 1 + _.length; }) ;
+      const sizes2 = moverotations.map(function(_) {return 1 + _.length; }) ;
       this.movesetorders = sizes2 ;
-      let movesetgeos = [] ;
+      const movesetgeos = [] ;
       for (let i = 0; i < moveplanesets.length; i++) {
-         let p0 = moveplanesets[i][0].makenormal() ;
+         const p0 = moveplanesets[i][0].makenormal() ;
          let neg = null ;
          let pos = null ;
          for (let j = 0; j < this.geonormals.length; j++) {
-            let d = p0.dot(this.geonormals[j][0]) ;
+            const d = p0.dot(this.geonormals[j][0]) ;
             if (Math.abs(d - 1) < PuzzleGeometry.eps) {
                pos = [this.geonormals[j][1], this.geonormals[j][2]] ;
             } else if (Math.abs(d + 1) < PuzzleGeometry.eps) {
@@ -754,15 +754,15 @@ export class PuzzleGeometry {
       //  This also works for faces; no face should ever lie on a move
       //  plane.  This allows us to take a set of stickers and break
       //  them up into cubie sets.
-      let cubiehash: any = {} ;
-      let facelisthash: any = {} ;
-      let cubiekey: any = {} ;
-      let cubiekeys = [] ;
-      let cubies: Quat[][][] = [] ;
-      let faces = this.faces ;
+      const cubiehash: any = {} ;
+      const facelisthash: any = {} ;
+      const cubiekey: any = {} ;
+      const cubiekeys = [] ;
+      const cubies: Quat[][][] = [] ;
+      const faces = this.faces ;
       for (let i = 0; i < faces.length; i++) {
-         let face = faces[i] ;
-         let s = this.keyface(face) ;
+         const face = faces[i] ;
+         const s = this.keyface(face) ;
          if (!cubiehash[s]) {
             cubiekey[s] = cubies.length ;
             cubiekeys.push(s) ;
@@ -778,7 +778,7 @@ export class PuzzleGeometry {
          if (facelisthash[s].length == this.basefacecount) {
             if (this.verbose) { console.log("# Splitting core.") ; }
             for (let suff = 0; suff < this.basefacecount; suff++) {
-               let s2 = s + " " + suff ;
+               const s2 = s + " " + suff ;
                facelisthash[s2] = [facelisthash[s][suff]] ;
                cubiehash[s2] = [cubiehash[s][suff]] ;
                cubiekeys.push(s2) ;
@@ -793,9 +793,9 @@ export class PuzzleGeometry {
       this.facelisthash = facelisthash ;
       this.cubiekeys = cubiekeys ;
       if (this.verbose) { console.log("# Cubies: " + Object.keys(cubiehash).length) ; }
-      let that = this ;
+      const that = this ;
       function getfaceindex(facenum: number): number {
-         let divid = that.stickersperface ;
+         const divid = that.stickersperface ;
          return Math.floor(facenum / divid) ;
       }
       //  Sort the faces around each corner so they are clockwise.  Only
@@ -804,7 +804,7 @@ export class PuzzleGeometry {
       //  there are five faces on the corner cubies.
       this.cubies = cubies ;
       for (let k = 0; k < cubies.length; k++) {
-         let cubie = cubies[k] ;
+         const cubie = cubies[k] ;
          if (cubie.length < 2) {
             continue ;
          }
@@ -814,24 +814,24 @@ export class PuzzleGeometry {
          if (cubie.length > 5) {
             throw new Error("Bad math; too many faces on this cubie " + cubie.length) ;
          }
-         let s = this.keyface(cubie[0]) ;
-         let facelist = facelisthash[s] ;
-         let cm = cubie.map(
+         const s = this.keyface(cubie[0]) ;
+         const facelist = facelisthash[s] ;
+         const cm = cubie.map(
                        function(_) {return Quat.centermassface(_); }) ;
-         let cmall = Quat.centermassface(cm) ;
+         const cmall = Quat.centermassface(cm) ;
          for (let looplimit = 0; cubie.length > 2; looplimit++) {
             let changed = false ;
             for (let i = 0; i < cubie.length; i++) {
-               let j = (i + 1) % cubie.length ;
+               const j = (i + 1) % cubie.length ;
                // var ttt = cmall.dot(cm[i].cross(cm[j])) ; // TODO
                if (cmall.dot(cm[i].cross(cm[j])) < 0) {
-                  let t = cubie[i] ;
+                  const t = cubie[i] ;
                   cubie[i] = cubie[j] ;
                   cubie[j] = t ;
-                  let u = cm[i] ;
+                  const u = cm[i] ;
                   cm[i] = cm[j] ;
                   cm[j] = u ;
-                  let v = facelist[i] ;
+                  const v = facelist[i] ;
                   facelist[i] = facelist[j] ;
                   facelist[j] = v ;
                   changed = true ;
@@ -847,7 +847,7 @@ export class PuzzleGeometry {
          let mini = 0 ;
          let minf = this.findface(cubie[mini]) ;
          for (let i = 1; i < cubie.length; i++) {
-            let temp = this.findface(cubie[i]) ;
+            const temp = this.findface(cubie[i]) ;
             if (this.faceprecedence[getfaceindex(temp)] <
                 this.faceprecedence[getfaceindex(minf)]) {
                mini = i ;
@@ -855,8 +855,8 @@ export class PuzzleGeometry {
             }
          }
          if (mini != 0) {
-            let ocubie = cubie.slice() ;
-            let ofacelist = facelist.slice() ;
+            const ocubie = cubie.slice() ;
+            const ofacelist = facelist.slice() ;
             for (let i = 0; i < cubie.length; i++) {
                cubie[i] = ocubie[(mini + i) % cubie.length] ;
                facelist[i] = ofacelist[(mini + i) % cubie.length] ;
@@ -865,9 +865,9 @@ export class PuzzleGeometry {
       }
       //  Build an array that takes each face to a cubie ordinal and a
       //  face number.
-      let facetocubies = [] ;
+      const facetocubies = [] ;
       for (let i = 0; i < cubies.length; i++) {
-         let facelist = facelisthash[cubiekeys[i]] ;
+         const facelist = facelisthash[cubiekeys[i]] ;
          for (let j = 0; j < facelist.length; j++) {
             facetocubies[facelist[j]] = [i, j] ;
          }
@@ -875,38 +875,38 @@ export class PuzzleGeometry {
       this.facetocubies = facetocubies ;
       //  Calculate the orbits of each cubie.  Assumes we do all moves.
       //  Also calculates which cubies are identical.
-      let typenames = ["?", "CENTER", "EDGE", "CORNER", "C4RNER", "C5RNER"] ;
-      let cubiesetnames = [] ;
-      let cubietypecounts = [0, 0, 0, 0, 0, 0] ;
-      let orbitoris = [] ;
-      let seen = [] ;
+      const typenames = ["?", "CENTER", "EDGE", "CORNER", "C4RNER", "C5RNER"] ;
+      const cubiesetnames = [] ;
+      const cubietypecounts = [0, 0, 0, 0, 0, 0] ;
+      const orbitoris = [] ;
+      const seen = [] ;
       let cubiesetnum = 0 ;
-      let cubiesetnums = [] ;
-      let cubieordnums = [] ;
-      let cubieords = [] ;
+      const cubiesetnums = [] ;
+      const cubieordnums = [] ;
+      const cubieords = [] ;
       // var cubiesetnumhash = {} ; // TODO
-      let cubievaluemap = [] ;
+      const cubievaluemap = [] ;
       // Later we will make this smarter to use a get color for face function
       // so we support puzzles with multiple faces the same color
       function getcolorkey(cubienum: number): string {
          return cubies[cubienum].map(
                   (_) => getfaceindex(that.findface(_))).join(" ") ;
       }
-      let cubiesetcubies: any = [] ;
+      const cubiesetcubies: any = [] ;
       for (let i = 0; i < cubies.length; i++) {
          if (seen[i]) {
             continue ;
          }
-         let cubie = cubies[i] ;
+         const cubie = cubies[i] ;
          if (cubie.length == 0) {
             continue ;
          }
-         let cubiekeymap: any = {} ;
+         const cubiekeymap: any = {} ;
          let cubievalueid = 0 ;
          cubieords.push(0) ;
          cubiesetcubies.push([]) ;
-         let facecnt = cubie.length ;
-         let typectr = cubietypecounts[facecnt]++ ;
+         const facecnt = cubie.length ;
+         const typectr = cubietypecounts[facecnt]++ ;
          let typename = typenames[facecnt] ;
          if (typename == undefined || facecnt == this.basefacecount) {
             typename = "CORE" ;
@@ -914,12 +914,12 @@ export class PuzzleGeometry {
          typename = typename + (typectr == 0 ? "" : (typectr + 1)) ;
          cubiesetnames[cubiesetnum] = typename ;
          orbitoris[cubiesetnum] = facecnt ;
-         let queue = [i] ;
+         const queue = [i] ;
          let qg = 0 ;
          seen[i] = true ;
          while (qg < queue.length) {
-            let cind = queue[qg++] ;
-            let cubiecolorkey = getcolorkey(cind) ;
+            const cind = queue[qg++] ;
+            const cubiecolorkey = getcolorkey(cind) ;
             if (cubie.length > 1 || cubiekeymap[cubiecolorkey] == undefined) {
                cubiekeymap[cubiecolorkey] = cubievalueid++ ;
             }
@@ -928,7 +928,7 @@ export class PuzzleGeometry {
             cubiesetcubies[cubiesetnum].push(cind) ;
             cubieordnums[cind] = cubieords[cubiesetnum]++ ;
             for (let j = 0; j < moverotations.length; j++) {
-               let tq = this.findcubie(moverotations[j][0].rotateface(cubies[cind][0])) ;
+               const tq = this.findcubie(moverotations[j][0].rotateface(cubies[cind][0])) ;
                if (!seen[tq]) {
                   queue.push(tq) ;
                   seen[tq] = true ;
@@ -971,8 +971,8 @@ export class PuzzleGeometry {
          return false ;
       }
       try {
-         let e1 = this.splitByFaceNames(a, this.facenames) ;
-         let e2 = this.splitByFaceNames(b, this.facenames) ;
+         const e1 = this.splitByFaceNames(a, this.facenames) ;
+         const e2 = this.splitByFaceNames(b, this.facenames) ;
          if (e1.length != e2.length) {
             return false ;
          }
@@ -992,8 +992,8 @@ export class PuzzleGeometry {
       }
    }
    public parsemove(mv: string): any { // parse a move from the command line
-      let re = RegExp("^(([0-9]+)-)?([0-9]+)?([A-Za-z]+)([-'0-9]+)?$") ;
-      let p = mv.match(re) ;
+      const re = RegExp("^(([0-9]+)-)?([0-9]+)?([A-Za-z]+)([-'0-9]+)?$") ;
+      const p = mv.match(re) ;
       if (p == null) {
          throw new Error("Bad move passed " + mv) ;
       }
@@ -1008,10 +1008,10 @@ export class PuzzleGeometry {
       }
       let geo ;
       let msi = -1 ;
-      let upperCaseGrip = grip.toUpperCase() ;
+      const upperCaseGrip = grip.toUpperCase() ;
       let firstgrip = false ;
       for (let i = 0; i < this.movesetgeos.length; i++) {
-         let g = this.movesetgeos[i] ;
+         const g = this.movesetgeos[i] ;
          if (this.spinmatch(g[0], upperCaseGrip)) {
             firstgrip = true ;
             geo = g ;
@@ -1075,21 +1075,21 @@ export class PuzzleGeometry {
          }
          amount = parseInt(amountstr) ;
       }
-      let r = [mv, msi, loslice, hislice, firstgrip, amount] ;
+      const r = [mv, msi, loslice, hislice, firstgrip, amount] ;
       return r ;
    }
    public genperms(): void { // generate permutations for moves
       if (this.cmovesbyslice.length > 0) { // did this already?
          return ;
       }
-      let movesbyslice = [] ;
-      let cmovesbyslice = [] ;
+      const movesbyslice = [] ;
+      const cmovesbyslice = [] ;
       for (let k = 0; k < this.moveplanesets.length; k++) {
-         let moveplaneset = this.moveplanesets[k] ;
-         let slicenum = [] ;
-         let slicecnts = [] ;
+         const moveplaneset = this.moveplanesets[k] ;
+         const slicenum = [] ;
+         const slicecnts = [] ;
          for (let i = 0; i < this.faces.length; i++) {
-            let face = this.faces[i] ;
+            const face = this.faces[i] ;
             let t = 0 ;
             for (let j = 0; j < moveplaneset.length; j++) {
                if (moveplaneset[j].faceside(face) < 0) {
@@ -1102,23 +1102,23 @@ export class PuzzleGeometry {
             }
             slicecnts[t]++ ;
          }
-         let axismoves = [] ;
-         let axiscmoves = [] ;
+         const axismoves = [] ;
+         const axiscmoves = [] ;
          for (let sc = 0; sc < slicecnts.length; sc++) {
-            let slicemoves = [] ;
-            let slicecmoves = [] ;
-            let cubiedone = [] ;
+            const slicemoves = [] ;
+            const slicecmoves = [] ;
+            const cubiedone = [] ;
             for (let i = 0; i < this.faces.length; i++) {
                if (slicenum[i] != sc) {
                   continue ;
                }
-               let a = [i] ;
-               let b = this.facetocubies[i].slice() ;
+               const a = [i] ;
+               const b = this.facetocubies[i].slice() ;
                let face = this.faces[i] ;
                let fi2 = i ;
                while (true) {
                   slicenum[fi2] = -1 ;
-                  let face2 = this.moverotations[k][0].rotateface(face) ;
+                  const face2 = this.moverotations[k][0].rotateface(face) ;
                   fi2 = this.findface(face2) ;
                   if (slicenum[fi2] < 0) {
                      break ;
@@ -1127,7 +1127,7 @@ export class PuzzleGeometry {
                      throw new Error("Bad movement?") ;
                   }
                   a.push(fi2) ;
-                  let c = this.facetocubies[fi2] ;
+                  const c = this.facetocubies[fi2] ;
                   b.push(c[0], c[1]) ;
                   face = face2 ;
                }
@@ -1161,7 +1161,7 @@ export class PuzzleGeometry {
       this.movesbyslice = movesbyslice ;
       this.cmovesbyslice = cmovesbyslice ;
       if (this.movelist != undefined) {
-         let parsedmovelist: any[] = [] ;
+         const parsedmovelist: any[] = [] ;
          // make sure the movelist makes sense based on the geos.
          for (let i = 0; i < this.movelist.length; i++) {
             parsedmovelist.push(this.parsemove(this.movelist[i])) ;
@@ -1188,14 +1188,14 @@ export class PuzzleGeometry {
       // for even values we omit the middle "slice".  This isn't perfect
       // but it is what we do for now.
       // if there was a move list specified, pull values from that
-      let slices = this.moveplanesets[k].length ;
+      const slices = this.moveplanesets[k].length ;
       if (slices > 30) {
          throw new Error("Too many slices for getmovesets bitmasks") ;
       }
       let r = [] ;
       if (this.parsedmovelist != undefined) {
          for (let i = 0; i < this.parsedmovelist.length; i++) {
-            let parsedmove = this.parsedmovelist[i] ;
+            const parsedmove = this.parsedmovelist[i] ;
             if (parsedmove[1] != k) {
                continue ;
             }
@@ -1207,7 +1207,7 @@ export class PuzzleGeometry {
             r.push(parsedmove[5]) ;
          }
       } else if (this.vertexmoves && !this.allmoves) {
-         let msg = this.movesetgeos[k] ;
+         const msg = this.movesetgeos[k] ;
          if (msg[1] != msg[3]) {
             for (let i = 0; i < slices; i++) {
                if (msg[1] != "v") {
@@ -1245,8 +1245,8 @@ export class PuzzleGeometry {
          }
       }
       if (this.fixedCubie >= 0) {
-         let dep = 1 << +this.cubiekeys[this.fixedCubie].trim().split(" ")[k] ;
-         let newr = [] ;
+         const dep = 1 << +this.cubiekeys[this.fixedCubie].trim().split(" ")[k] ;
+         const newr = [] ;
          for (let i = 0; i < r.length; i += 2) {
             let o = r[i] ;
             if (o & dep) {
@@ -1285,14 +1285,14 @@ export class PuzzleGeometry {
       if (set.length == 0) {
          return true ;
       }
-      let fi = set[0] ;
+      const fi = set[0] ;
       return this.skipbyori(fi) ;
    }
    public skipset(set: number[]): boolean {
       if (set.length == 0) {
          return true ;
       }
-      let fi = set[0] ;
+      const fi = set[0] ;
       return this.skipbyori(this.facetocubies[fi][0]) ;
    }
    public header(comment: string): string {
@@ -1300,11 +1300,11 @@ export class PuzzleGeometry {
              comment + this.args + "\n" ;
    }
    public writegap(): string { // write out a gap set of generators
-      let os = this.getOrbitsDef(false) ;
-      let r = [] ;
-      let mvs = [] ;
+      const os = this.getOrbitsDef(false) ;
+      const r = [] ;
+      const mvs = [] ;
       for (let i = 0; i < os.moveops.length; i++) {
-         let movename = "M_" + os.movenames[i] ;
+         const movename = "M_" + os.movenames[i] ;
          // gap doesn't like angle brackets in IDs
          mvs.push(movename) ;
          r.push(movename + ":=" + os.moveops[i].toPerm().toGap() + ";") ;
@@ -1312,7 +1312,7 @@ export class PuzzleGeometry {
       r.push("Gen:=[") ;
       r.push(mvs.join(",")) ;
       r.push("];") ;
-      let ip = os.solved.identicalPieces() ;
+      const ip = os.solved.identicalPieces() ;
       r.push("ip:=[" + ip.map((_) => "[" + _.map((_) => _ + 1).join(",") + "]").
                                                         join(",") + "];") ;
       r.push("") ;
@@ -1361,7 +1361,7 @@ export class PuzzleGeometry {
       if (name == null) {
          name = "PuzzleGeometryPuzzle" ;
       }
-      let od = this.getOrbitsDef(fortwisty) ;
+      const od = this.getOrbitsDef(fortwisty) ;
       if (fortwisty) {
          return od.toKsolve(name, fortwisty).join("\n") ;
       } else {
@@ -1370,11 +1370,11 @@ export class PuzzleGeometry {
    }
    public getOrbitsDef(fortwisty: boolean): OrbitsDef {
       // generate a representation of the puzzle
-      let setmoves = [] ;
-      let setnames: string[] = [] ;
-      let setdefs: OrbitDef[] = [] ;
+      const setmoves = [] ;
+      const setnames: string[] = [] ;
+      const setdefs: OrbitDef[] = [] ;
       for (let k = 0; k < this.moveplanesets.length; k++) {
-         let moveset = this.getmovesets(k) ;
+         const moveset = this.getmovesets(k) ;
          // check there's no redundancy in moveset.
          for (let i = 0; i < moveset.length; i += 2) {
             for (let j = 0; j < i; j += 2) {
@@ -1387,17 +1387,17 @@ export class PuzzleGeometry {
          for (let i = 0; i < moveset.length; i += 2) {
             allbits |= moveset[i] ;
          }
-         let axiscmoves = this.cmovesbyslice[k] ;
+         const axiscmoves = this.cmovesbyslice[k] ;
          for (let i = 0; i < axiscmoves.length; i++) {
             if (((allbits >> i) & 1) == 0) {
                continue ;
             }
-            let slicecmoves = axiscmoves[i] ;
+            const slicecmoves = axiscmoves[i] ;
             for (let j = 0; j < slicecmoves.length; j++) {
                if (this.skipcubie(slicecmoves[j])) {
                   continue ;
                }
-               let ind = this.cubiesetnums[slicecmoves[j][0]] ;
+               const ind = this.cubiesetnums[slicecmoves[j][0]] ;
                setmoves[ind] = 1 ;
             }
          }
@@ -1410,18 +1410,18 @@ export class PuzzleGeometry {
          setdefs.push(new OrbitDef(this.cubieords[i],
                               this.killorientation ? 1 : this.orbitoris[i])) ;
       }
-      let solved: Orbit[] = [] ;
+      const solved: Orbit[] = [] ;
       for (let i = 0; i < this.cubiesetnames.length; i++) {
          if (!setmoves[i]) {
             continue ;
          }
-         let p = [] ;
-         let o = [] ;
+         const p = [] ;
+         const o = [] ;
          for (let j = 0; j < this.cubieords[i]; j++) {
             if (fortwisty) {
                p.push(j) ;
             } else {
-               let cubie = this.cubiesetcubies[i][j] ;
+               const cubie = this.cubiesetcubies[i][j] ;
                p.push(this.cubievaluemap[cubie]) ;
             }
             o.push(0) ;
@@ -1429,43 +1429,43 @@ export class PuzzleGeometry {
          solved.push(new Orbit(p, o,
                              this.killorientation ? 1 : this.orbitoris[i])) ;
       }
-      let movenames: string[] = [] ;
-      let moves: Transformation[] = [] ;
+      const movenames: string[] = [] ;
+      const moves: Transformation[] = [] ;
       for (let k = 0; k < this.moveplanesets.length; k++) {
-         let moveplaneset = this.moveplanesets[k] ;
-         let slices = moveplaneset.length ;
-         let moveset = this.getmovesets(k) ;
-         let movesetgeo = this.movesetgeos[k] ;
+         const moveplaneset = this.moveplanesets[k] ;
+         const slices = moveplaneset.length ;
+         const moveset = this.getmovesets(k) ;
+         const movesetgeo = this.movesetgeos[k] ;
          for (let i = 0; i < moveset.length; i += 2) {
-            let movebits = moveset[i] ;
-            let mna = this.getmovename(movesetgeo, movebits, slices) ;
-            let movename = mna[0] ;
-            let inverted = mna[1] ;
+            const movebits = moveset[i] ;
+            const mna = this.getmovename(movesetgeo, movebits, slices) ;
+            const movename = mna[0] ;
+            const inverted = mna[1] ;
             movenames.push(movename) ;
-            let moveorbits: Orbit[] = [] ;
-            let perms = [] ;
-            let oris = [] ;
+            const moveorbits: Orbit[] = [] ;
+            const perms = [] ;
+            const oris = [] ;
             for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
-               let p = [] ;
+               const p = [] ;
                for (let kk = 0; kk < this.cubieords[ii]; kk++) {
                   p.push(kk) ;
                }
                perms.push(p) ;
-               let o = [] ;
+               const o = [] ;
                for (let kk = 0; kk < this.cubieords[ii]; kk++) {
                   o.push(0) ;
                }
                oris.push(o) ;
             }
-            let axiscmoves = this.cmovesbyslice[k] ;
+            const axiscmoves = this.cmovesbyslice[k] ;
             for (let m = 0; m < axiscmoves.length; m++) {
                if (((movebits >> m) & 1) == 0) {
                   continue ;
                }
-               let slicecmoves = axiscmoves[m] ;
+               const slicecmoves = axiscmoves[m] ;
                for (let j = 0; j < slicecmoves.length; j++) {
-                  let mperm = slicecmoves[j].slice() ;
-                  let setnum = this.cubiesetnums[mperm[0]] ;
+                  const mperm = slicecmoves[j].slice() ;
+                  const setnum = this.cubiesetnums[mperm[0]] ;
                   for (let ii = 0; ii < mperm.length; ii += 2) {
                      mperm[ii] = this.cubieordnums[mperm[ii]] ;
                   }
@@ -1492,7 +1492,7 @@ export class PuzzleGeometry {
                if (!setmoves[ii]) {
                   continue ;
                }
-               let no = new Array<number>(oris[ii].length) ;
+               const no = new Array<number>(oris[ii].length) ;
                // convert ksolve oris to our internal ori rep
                for (let jj = 0; jj < perms[ii].length; jj++) {
                   no[jj] = oris[ii][perms[ii][jj]] ;
@@ -1527,7 +1527,7 @@ export class PuzzleGeometry {
       showcanon(this.getOrbitsDef(false), disp) ;
    }
    public getsolved(): Perm { // get a solved position
-      let r = [] ;
+      const r = [] ;
       for (let i = 0; i < this.basefacecount; i++) {
          for (let j = 0; j < this.stickersperface; j++) {
             r.push(i) ;
@@ -1536,7 +1536,7 @@ export class PuzzleGeometry {
       return new Perm(r) ;
    }
    public getInitial3DRotation() {
-      let basefacecount = this.basefacecount ;
+      const basefacecount = this.basefacecount ;
       if (basefacecount == 4) {
          return new Quat(0.7043069543230507, 0.0617237605829268,
                         0.4546068756768417, 0.5417328493446099) ;
@@ -1570,11 +1570,11 @@ export class PuzzleGeometry {
       function extendedges(a: number[][], n: number): void {
          let dx = a[1][0] - a[0][0] ;
          let dy = a[1][1] - a[0][1] ;
-         let ang = 2 * Math.PI / n ;
-         let cosa = Math.cos(ang) ;
-         let sina = Math.sin(ang) ;
+         const ang = 2 * Math.PI / n ;
+         const cosa = Math.cos(ang) ;
+         const sina = Math.sin(ang) ;
          for (let i = 2; i < n; i++) {
-            let ndx = dx * cosa + dy * sina ;
+            const ndx = dx * cosa + dy * sina ;
             dy = dy * cosa - dx * sina ;
             dx = ndx ;
             a.push([a[i - 1][0] + dx, a[i - 1][1] + dy]) ;
@@ -1597,7 +1597,7 @@ export class PuzzleGeometry {
       let neededgegrips = this.addrotations ;
       let needfacegrips = this.addrotations ;
       for (let i = 0; i < this.movesetgeos.length; i++) {
-         let msg = this.movesetgeos[i] ;
+         const msg = this.movesetgeos[i] ;
          for (let j = 1; j <= 3; j += 2) {
             if (msg[j] == "v") {
                needvertexgrips = true ;
@@ -1615,14 +1615,14 @@ export class PuzzleGeometry {
       // maximum vertex locations from this.  Then do a second walk, and
       // assign the actual geometry.
       this.genperms() ;
-      let boundarygeo = this.getboundarygeometry() ;
-      let face0 = boundarygeo.facenames[0][0] ;
-      let polyn = face0.length ; // number of vertices; 3, 4, or 5
-      let net = this.net ;
+      const boundarygeo = this.getboundarygeometry() ;
+      const face0 = boundarygeo.facenames[0][0] ;
+      const polyn = face0.length ; // number of vertices; 3, 4, or 5
+      const net = this.net ;
       if (net == null) {
          throw new Error("No net?") ;
       }
-      let edges: any = {} ;
+      const edges: any = {} ;
       let minx = 0 ;
       let miny = 0 ;
       let maxx = 1 ;
@@ -1630,12 +1630,12 @@ export class PuzzleGeometry {
       edges[net[0][0]] = [[1, 0], [0, 0]] ;
       extendedges(edges[net[0][0]], polyn) ;
       for (let i = 0; i < net.length; i++) {
-         let f0 = net[i][0] ;
+         const f0 = net[i][0] ;
          if (!edges[f0]) {
             throw new Error("Bad edge description; first edge not connected.") ;
          }
          for (let j = 1; j < net[i].length; j++) {
-            let f1 = net[i][j] ;
+            const f1 = net[i][j] ;
             if (f1 == "" || edges[f1]) {
                continue ;
             }
@@ -1643,8 +1643,8 @@ export class PuzzleGeometry {
             extendedges(edges[f1], polyn) ;
          }
       }
-      for (let f in edges) {
-         let es = edges[f] ;
+      for (const f in edges) {
+         const es = edges[f] ;
          for (let i = 0; i < es.length; i++) {
             minx = Math.min(minx, es[i][0]) ;
             maxx = Math.max(maxx, es[i][0]) ;
@@ -1652,22 +1652,22 @@ export class PuzzleGeometry {
             maxy = Math.max(maxy, es[i][1]) ;
          }
       }
-      let sc = Math.min(w / (maxx - minx), h / (maxy - miny)) ;
-      let xoff = 0.5 * (w - sc * (maxx + minx)) ;
-      let yoff = 0.5 * (h - sc * (maxy + miny)) ;
-      let geos: any = {} ;
-      let bg = this.getboundarygeometry() ;
-      let edges2: any = {} ;
-      let initv = [[sc + xoff, yoff], [xoff, yoff]] ;
+      const sc = Math.min(w / (maxx - minx), h / (maxy - miny)) ;
+      const xoff = 0.5 * (w - sc * (maxx + minx)) ;
+      const yoff = 0.5 * (h - sc * (maxy + miny)) ;
+      const geos: any = {} ;
+      const bg = this.getboundarygeometry() ;
+      const edges2: any = {} ;
+      const initv = [[sc + xoff, yoff], [xoff, yoff]] ;
       edges2[net[0][0]] = initv ;
       extendedges(edges2[net[0][0]], polyn) ;
       geos[this.facenames[0][1]] = this.project2d(0, 0,
                     [new Quat(0, initv[0][0], initv[0][1], 0),
                      new Quat(0, initv[1][0], initv[1][1], 0)]) ;
-      let connectat = [] ;
+      const connectat = [] ;
       connectat[0] = 0 ;
       for (let i = 0; i < net.length; i++) {
-         let f0 = net[i][0] ;
+         const f0 = net[i][0] ;
          if (!edges2[f0]) {
             throw new Error("Bad edge description; first edge not connected.") ;
          }
@@ -1681,21 +1681,21 @@ export class PuzzleGeometry {
          if (gfi < 0) {
             throw new Error("Could not find first face name " + f0) ;
          }
-         let thisface = bg.facenames[gfi][0] ;
+         const thisface = bg.facenames[gfi][0] ;
          for (let j = 1; j < net[i].length; j++) {
-            let f1 = net[i][j] ;
+            const f1 = net[i][j] ;
             if (f1 == "" || edges2[f1]) {
                continue ;
             }
             edges2[f1] = [edges2[f0][j % polyn], edges2[f0][(j + polyn - 1) % polyn]] ;
             extendedges(edges2[f1], polyn) ;
             // what edge are we at?
-            let caf0 = connectat[gfi] ;
-            let mp = thisface[(caf0 + j) % polyn].sum(thisface[(caf0 + j + polyn - 1) % polyn]).smul(0.5) ;
-            let epi = PuzzleGeometry.findelement(bg.edgenames, mp) ;
-            let edgename = bg.edgenames[epi][1] ;
-            let el = this.splitByFaceNames(edgename, this.facenames) ;
-            let gf1 = el[(f0 == el[0]) ? 1 : 0] ;
+            const caf0 = connectat[gfi] ;
+            const mp = thisface[(caf0 + j) % polyn].sum(thisface[(caf0 + j + polyn - 1) % polyn]).smul(0.5) ;
+            const epi = PuzzleGeometry.findelement(bg.edgenames, mp) ;
+            const edgename = bg.edgenames[epi][1] ;
+            const el = this.splitByFaceNames(edgename, this.facenames) ;
+            const gf1 = el[(f0 == el[0]) ? 1 : 0] ;
             let gf1i = -1 ;
             for (let k = 0; k < bg.facenames.length; k++) {
                if (gf1 == bg.facenames[k][1]) {
@@ -1706,12 +1706,12 @@ export class PuzzleGeometry {
             if (gf1i < 0) {
                throw new Error("Could not find second face name") ;
             }
-            let otherface = bg.facenames[gf1i][0] ;
+            const otherface = bg.facenames[gf1i][0] ;
             for (let k = 0; k < otherface.length; k++) {
-               let mp2 = otherface[k].sum(otherface[(k + 1) % polyn]).smul(0.5) ;
+               const mp2 = otherface[k].sum(otherface[(k + 1) % polyn]).smul(0.5) ;
                if (mp2.dist(mp) <= PuzzleGeometry.eps) {
-                  let p1 = edges2[f0][(j + polyn - 1) % polyn] ;
-                  let p2 = edges2[f0][j % polyn] ;
+                  const p1 = edges2[f0][(j + polyn - 1) % polyn] ;
+                  const p2 = edges2[f0][j % polyn] ;
                   connectat[gf1i] = k ;
                   geos[gf1] = this.project2d(gf1i, k,
                           [new Quat(0, p2[0], p2[1], 0), new Quat(0, p1[0], p1[1], 0)]) ;
@@ -1724,15 +1724,15 @@ export class PuzzleGeometry {
       // base face number to color, and we want to map from geo face number
       // to 2D geometry.  These can be reused as long as the puzzle overall
       // orientation and canvas size remains unchanged.
-      let pos = this.getsolved() ;
-      let colormap = [] ;
-      let facegeo = [] ;
+      const pos = this.getsolved() ;
+      const colormap = [] ;
+      const facegeo = [] ;
       for (let i = 0; i < this.basefacecount; i++) {
          colormap[i] = this.colors[this.facenames[i][1]] ;
       }
       let hix = 0 ;
       let hiy = 0 ;
-      let rot = this.getInitial3DRotation() ;
+      const rot = this.getInitial3DRotation() ;
       for (let i = 0; i < this.faces.length; i++) {
          let face = this.faces[i] ;
          face = rot.rotateface(face) ;
@@ -1741,38 +1741,38 @@ export class PuzzleGeometry {
             hiy = Math.max(hiy, Math.abs(face[j].c)) ;
          }
       }
-      let sc2 = Math.min(h / hiy / 2, (w - trim) / hix / 4) ;
-      let that = this ;
+      const sc2 = Math.min(h / hiy / 2, (w - trim) / hix / 4) ;
+      const that = this ;
       function mappt2d(fn: number, q: Quat): number[] {
          if (threed) {
-            let xoff = 0.5 * trim + 0.25 * w ;
-            let xmul = (that.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1) ;
+            const xoff = 0.5 * trim + 0.25 * w ;
+            const xmul = (that.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1) ;
             return [trim + w * 0.5 + xmul * (xoff - q.b * sc2), trim + h * 0.5 + q.c * sc2] ;
          } else {
-            let g = geos[that.facenames[fn][1]] ;
+            const g = geos[that.facenames[fn][1]] ;
             return [trim + q.dot(g[0]) + g[2].b, trim + h - q.dot(g[1]) - g[2].c] ;
          }
       }
       for (let i = 0; i < this.faces.length; i++) {
          let face = that.faces[i] ;
-         let facenum = Math.floor(i / that.stickersperface) ;
+         const facenum = Math.floor(i / that.stickersperface) ;
          if (threed) {
             face = rot.rotateface(face) ;
          }
          facegeo.push(face.map((_: Quat) => mappt2d(facenum, _))) ;
       }
-      let svg = [] ;
+      const svg = [] ;
       // group each base face so we can add a hover element
       for (let j = 0; j < this.basefacecount; j++) {
          svg.push("<g>") ;
          svg.push("<title>" + this.facenames[j][1] + "</title>\n") ;
          for (let ii = 0; ii < this.stickersperface; ii++) {
-            let i = j * this.stickersperface + ii ;
-            let cubie = this.facetocubies[i][0] ;
-            let cubieori = this.facetocubies[i][1] ;
-            let cubiesetnum = this.cubiesetnums[cubie] ;
-            let cubieord = this.cubieordnums[cubie] ;
-            let color = this.skipbyori(cubie) ? "#808080" : colormap[pos.p[i]] ;
+            const i = j * this.stickersperface + ii ;
+            const cubie = this.facetocubies[i][0] ;
+            const cubieori = this.facetocubies[i][1] ;
+            const cubiesetnum = this.cubiesetnums[cubie] ;
+            const cubieord = this.cubieordnums[cubie] ;
+            const color = this.skipbyori(cubie) ? "#808080" : colormap[pos.p[i]] ;
             let id = this.cubiesetnames[cubiesetnum] +
                                            "-l" + cubieord + "-o" + cubieori ;
             svg.push(drawedges(id, facegeo[i], color)) ;
@@ -1786,9 +1786,9 @@ export class PuzzleGeometry {
          }
          svg.push("</g>") ;
       }
-      let svggrips: any[] = [] ;
+      const svggrips: any[] = [] ;
       function addgrip(onface: number, name: string, pt: Quat, order: number): void {
-         let pt2 = mappt2d(onface, pt) ;
+         const pt2 = mappt2d(onface, pt) ;
          for (let i = 0; i < svggrips.length; i++) {
             if (Math.hypot(pt2[0] - svggrips[i][0], pt2[1] - svggrips[i][1]) < PuzzleGeometry.eps) {
                return ;
@@ -1797,7 +1797,7 @@ export class PuzzleGeometry {
          svggrips.push([pt2[0], pt2[1], name, order]) ;
       }
       for (let i = 0; i < this.faceplanes.length; i++) {
-         let baseface = this.facenames[i][0] ;
+         const baseface = this.facenames[i][0] ;
          let facecoords = baseface ;
          if (threed) {
             facecoords = rot.rotateface(facecoords) ;
@@ -1811,22 +1811,22 @@ export class PuzzleGeometry {
          }
          for (let j = 0; j < baseface.length; j++) {
             if (neededgegrips) {
-               let mp = baseface[j].sum(
+               const mp = baseface[j].sum(
                                  baseface[(j + 1) % baseface.length]).smul(0.5) ;
-               let ep = PuzzleGeometry.findelement(this.edgenames, mp) ;
-               let mpc = facecoords[j].sum(
+               const ep = PuzzleGeometry.findelement(this.edgenames, mp) ;
+               const mpc = facecoords[j].sum(
                                  facecoords[(j + 1) % baseface.length]).smul(0.5) ;
                addgrip(i, this.edgenames[ep][1], mpc, 2) ;
             }
             if (needvertexgrips) {
-               let vp = PuzzleGeometry.findelement(
+               const vp = PuzzleGeometry.findelement(
                                               this.vertexnames, baseface[j]) ;
                addgrip(i, this.vertexnames[vp][1], facecoords[j],
                        this.cornerfaces) ;
             }
          }
       }
-      let html = '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n' +
+      const html = '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n' +
       '<style type="text/css"><![CDATA[' +
       ".sticker { stroke: #000000; stroke-width: 1px; }" +
       "]]></style>\n" +
@@ -1838,29 +1838,29 @@ export class PuzzleGeometry {
       return [-q.b, -q.c, -q.d] ;
    }
    public toFaceCoords(q: Quat[]): number[][] {
-      let r = [] ;
-      let n = q.length ;
+      const r = [] ;
+      const n = q.length ;
       for (let i = 0; i < n; i++) {
          r[n - i - 1] = this.toCoords(q[i]) ;
       }
       return r ;
    }
    public trimEdges(face: Quat[], tr: number): Quat[] {
-      let r: Quat[] = [] ;
+      const r: Quat[] = [] ;
       for (let iter = 1; iter < 10; iter++) {
          for (let i = 0; i < face.length; i++) {
-            let pi = (i + face.length - 1) % face.length ;
-            let ni = (i + 1) % face.length ;
-            let A = face[pi].sub(face[i]).normalize() ;
-            let B = face[ni].sub(face[i]).normalize() ;
-            let d = A.dot(B) ;
-            let m = tr / Math.sqrt(1 - d * d) ;
+            const pi = (i + face.length - 1) % face.length ;
+            const ni = (i + 1) % face.length ;
+            const A = face[pi].sub(face[i]).normalize() ;
+            const B = face[ni].sub(face[i]).normalize() ;
+            const d = A.dot(B) ;
+            const m = tr / Math.sqrt(1 - d * d) ;
             r[i] = face[i].sum(A.sum(B).smul(m)) ;
          }
          let good = true ;
          for (let i = 0; good && i < r.length; i++) {
-            let pi = (i + face.length - 1) % face.length ;
-            let ni = (i + 1) % face.length ;
+            const pi = (i + face.length - 1) % face.length ;
+            const ni = (i + 1) % face.length ;
             if (r[pi].sub(r[i]).cross(r[ni].sub(r[i])).dot(r[i]) >= 0) {
                good = false ;
             }
@@ -1873,15 +1873,15 @@ export class PuzzleGeometry {
       return face ;
    }
    public get3d(trim?: number): any {
-      let stickers: any = [] ;
-      let rot = this.getInitial3DRotation() ;
+      const stickers: any = [] ;
+      const rot = this.getInitial3DRotation() ;
       for (let i = 0; i < this.faces.length; i++) {
-         let facenum = Math.floor(i / this.stickersperface) ;
-         let cubie = this.facetocubies[i][0] ;
-         let cubieori = this.facetocubies[i][1] ;
-         let cubiesetnum = this.cubiesetnums[cubie] ;
-         let cubieord = this.cubieordnums[cubie] ;
-         let color = this.skipbyori(cubie) ? "#808080" :
+         const facenum = Math.floor(i / this.stickersperface) ;
+         const cubie = this.facetocubies[i][0] ;
+         const cubieori = this.facetocubies[i][1] ;
+         const cubiesetnum = this.cubiesetnums[cubie] ;
+         const cubieord = this.cubieordnums[cubie] ;
+         const color = this.skipbyori(cubie) ? "#808080" :
                                   this.colors[this.facenames[facenum][1]] ;
          let coords = rot.rotateface(this.faces[i]) ;
          if (trim && trim > 0) {
@@ -1898,12 +1898,12 @@ export class PuzzleGeometry {
             }
          }
       }
-      let grips = [] ;
+      const grips = [] ;
       for (let i = 0; i < this.movesetgeos.length; i++) {
-         let msg = this.movesetgeos[i] ;
-         let order = this.movesetorders[i] ;
+         const msg = this.movesetgeos[i] ;
+         const order = this.movesetorders[i] ;
          for (let j = 0; j < this.geonormals.length; j++) {
-            let gn = this.geonormals[j] ;
+            const gn = this.geonormals[j] ;
             if (msg[0] == gn[1] && msg[1] == gn[2]) {
                grips.push([this.toCoords(gn[0].rotatepoint(rot)),
                                                              msg[0], order]) ;

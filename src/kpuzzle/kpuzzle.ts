@@ -2,13 +2,13 @@ import {algToString, BlockMove, expand, parse, Sequence} from "../alg/index";
 import {KPuzzleDefinition, Transformation} from "./spec";
 
 export function Combine(def: KPuzzleDefinition, t1: Transformation, t2: Transformation): Transformation {
-  let newTrans: Transformation = {} as Transformation;
-  for (let orbitName in def.orbits) {
-    let oDef = def.orbits[orbitName];
-    let o1 = t1[orbitName];
-    let o2 = t2[orbitName];
-    let newPerm = new Array(oDef.numPieces);
-    let newOri = new Array(oDef.numPieces);
+  const newTrans: Transformation = {} as Transformation;
+  for (const orbitName in def.orbits) {
+    const oDef = def.orbits[orbitName];
+    const o1 = t1[orbitName];
+    const o2 = t2[orbitName];
+    const newPerm = new Array(oDef.numPieces);
+    const newOri = new Array(oDef.numPieces);
     for (let idx = 0; idx < oDef.numPieces; idx++) {
       newOri[idx] = (o1.orientation[o2.permutation[idx]] + o2.orientation[idx])
         % oDef.orientations;
@@ -29,8 +29,8 @@ export function Multiply(def: KPuzzleDefinition, t: Transformation, amount: numb
   if (amount === 1) {
     return t;
   }
-  let halfish = Multiply(def, t, Math.floor(amount / 2));
-  let twiceHalfish = Combine(def, halfish, halfish);
+  const halfish = Multiply(def, t, Math.floor(amount / 2));
+  const twiceHalfish = Combine(def, halfish, halfish);
   if (amount % 2 === 0) {
     return twiceHalfish;
   } else {
@@ -38,30 +38,30 @@ export function Multiply(def: KPuzzleDefinition, t: Transformation, amount: numb
   }
 }
 export function IdentityTransformation(definition: KPuzzleDefinition): Transformation {
-  let transformation = {} as Transformation;
-  for (let orbitName in definition.orbits) {
-    let orbitDefinition = definition.orbits[orbitName];
-    let newPermutation = new Array(orbitDefinition.numPieces);
-    let newOrientation = new Array(orbitDefinition.numPieces);
+  const transformation = {} as Transformation;
+  for (const orbitName in definition.orbits) {
+    const orbitDefinition = definition.orbits[orbitName];
+    const newPermutation = new Array(orbitDefinition.numPieces);
+    const newOrientation = new Array(orbitDefinition.numPieces);
     for (let i = 0; i < orbitDefinition.numPieces; i++) {
       newPermutation[i] = i;
       newOrientation[i] = 0;
     }
-    let orbitTransformation = { permutation: newPermutation, orientation: newOrientation };
+    const orbitTransformation = { permutation: newPermutation, orientation: newOrientation };
     transformation[orbitName] = orbitTransformation;
   }
   return transformation;
 }
 
 export function Invert(def: KPuzzleDefinition, t: Transformation): Transformation {
-  let newTrans: Transformation = {} as Transformation;
-  for (let orbitName in def.orbits) {
-    let oDef = def.orbits[orbitName];
-    let o = t[orbitName];
-    let newPerm = new Array(oDef.numPieces);
-    let newOri = new Array(oDef.numPieces);
+  const newTrans: Transformation = {} as Transformation;
+  for (const orbitName in def.orbits) {
+    const oDef = def.orbits[orbitName];
+    const o = t[orbitName];
+    const newPerm = new Array(oDef.numPieces);
+    const newOri = new Array(oDef.numPieces);
     for (let idx = 0; idx < oDef.numPieces; idx++) {
-      let fromIdx = (o.permutation[idx] as number);
+      const fromIdx = (o.permutation[idx] as number);
       newPerm[fromIdx] = idx;
       newOri[fromIdx] = (oDef.orientations - o.orientation[idx] + oDef.orientations) % oDef.orientations;
     }
@@ -71,10 +71,10 @@ export function Invert(def: KPuzzleDefinition, t: Transformation): Transformatio
 }
 
 export function EquivalentTransformations(def: KPuzzleDefinition, t1: Transformation, t2: Transformation): boolean {
-  for (let orbitName in def.orbits) {
-    let oDef = def.orbits[orbitName];
-    let o1 = t1[orbitName];
-    let o2 = t2[orbitName];
+  for (const orbitName in def.orbits) {
+    const oDef = def.orbits[orbitName];
+    const o1 = t1[orbitName];
+    const o2 = t2[orbitName];
     for (let idx = 0; idx < oDef.numPieces; idx++) {
       if (o1.orientation[idx] !== o2.orientation[idx]) {
         return false;
@@ -96,7 +96,7 @@ export function EquivalentStates(def: KPuzzleDefinition, t1: Transformation, t2:
 // TODO: Move other helpers into the definition.
 export function stateForBlockMove(def: KPuzzleDefinition, blockMove: BlockMove) {
   // TODO: Optimize this.
-  let repMoveString = algToString(new Sequence([new BlockMove(blockMove.outerLayer, blockMove.innerLayer, blockMove.family, 1)]));
+  const repMoveString = algToString(new Sequence([new BlockMove(blockMove.outerLayer, blockMove.innerLayer, blockMove.family, 1)]));
   let move: Transformation | undefined = def.moves[repMoveString];
   if (!move) {
     move = new KPuzzle(def).expandSlices(repMoveString, blockMove);
@@ -115,7 +115,7 @@ export class KPuzzle {
 
   public serialize(): string {
     let output = "";
-    for (let orbitName in this.definition.orbits) {
+    for (const orbitName in this.definition.orbits) {
       output += orbitName + "\n";
       output += this.state[orbitName].permutation.join(" ") + "\n";
       output += this.state[orbitName].orientation.join(" ") + "\n";
@@ -130,7 +130,7 @@ export class KPuzzle {
 
   public applyAlg(a: Sequence): void {
     // TODO: Iterator instead of full expansion.
-    for (let move of (expand(a).nestedUnits) as BlockMove[]) {
+    for (const move of (expand(a).nestedUnits) as BlockMove[]) {
       this.applyBlockMove(move);
     }
   }
@@ -157,21 +157,21 @@ export class KPuzzle {
      return moveExpander ;
   }
   public setFaceNames(faceNames: string[]): void {
-     let me = this.getMoveExpander(true) ;
+     const me = this.getMoveExpander(true) ;
      if (me) {
         me.setFaceNames(faceNames) ;
      }
   }
   public addGrip(grip1: string, grip2: string, nslices: number): void {
-     let me = this.getMoveExpander(true) ;
+     const me = this.getMoveExpander(true) ;
      return me ? me.addGrip(grip1, grip2, nslices, this.definition) : undefined ;
   }
   public expandSlices(rep: string, blockMove: BlockMove): Transformation|undefined {
-     let me = this.getMoveExpander(false) ;
+     const me = this.getMoveExpander(false) ;
      return me ? me.expandSlices(rep, blockMove, this.definition) : undefined ;
   }
   public expandSlicesByName(mv: string): Transformation|undefined {
-     let me = this.getMoveExpander(false) ;
+     const me = this.getMoveExpander(false) ;
      return me ? me.expandSlicesByName(mv, this.definition) : undefined ;
   }
 
@@ -203,9 +203,9 @@ export class MoveExpander {
      this.facenames = fn ;
   }
   public addGrip(grip1: string, grip2: string, nslices: number, def: KPuzzleDefinition) {
-     let slices = [] ;
-     let axes = this.gripStash ;
-     let moves = def.moves ;
+     const slices = [] ;
+     const axes = this.gripStash ;
+     const moves = def.moves ;
      for (let i = 1; i <= nslices; i++) {
         let t = (i == 1 && moves[grip1]) || moves["" + i + grip1] ;
         if (!t) {
@@ -221,12 +221,12 @@ export class MoveExpander {
         slices.push(t) ;
      }
      axes[grip1] = slices ;
-     let aprime = slices.map((_: Transformation) => Invert(def, _)) ;
+     const aprime = slices.map((_: Transformation) => Invert(def, _)) ;
      aprime.reverse() ;
      axes[grip2] = aprime ;
   }
   public splitByFaceNames(s: string, facenames: string[]) {
-      let r: string[] = [] ;
+      const r: string[] = [] ;
       let at = 0 ;
       while (at < s.length) {
          let found = false ;
@@ -245,12 +245,12 @@ export class MoveExpander {
       return r ;
   }
   public expandSlices(rep: string, blockMove: BlockMove, def: KPuzzleDefinition) {
-     let t = this.moveStash[rep] ;
+     const t = this.moveStash[rep] ;
      if (t) {
         return t ;
      }
-     let axes = this.gripStash ;
-     let family = blockMove.family ;
+     const axes = this.gripStash ;
+     const family = blockMove.family ;
      let grip = family ;
      let isBlock = false ;
      // the following "reparse" code is almost certainly wrong
@@ -264,7 +264,7 @@ export class MoveExpander {
      }
      let slices = axes[grip] ;
      if (!slices && this.facenames) {   // can we unswizzle this grip name?
-        let faceSplit = this.splitByFaceNames(grip, this.facenames) ;
+        const faceSplit = this.splitByFaceNames(grip, this.facenames) ;
         if (faceSplit) {
            for (let i = 1; i < faceSplit.length; i++) {
               let testGrip = "" ;
@@ -308,16 +308,16 @@ export class MoveExpander {
      return t2 ;
   }
   public expandSlicesByName(mv: string, def: KPuzzleDefinition) {
-     let t = this.moveStash[mv] ;
+     const t = this.moveStash[mv] ;
      if (t) {
         return t ;
      }
      try {
-        let alg = parse(mv) ;
+        const alg = parse(mv) ;
         if (alg.nestedUnits.length != 1) {
            return undefined ;
         }
-        let signmove = alg.nestedUnits[0] as BlockMove ; // need better way
+        const signmove = alg.nestedUnits[0] as BlockMove ; // need better way
         return this.expandSlices(mv, signmove, def) ;
      } catch (e) {
         return undefined ;

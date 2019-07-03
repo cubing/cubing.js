@@ -127,8 +127,8 @@ export class Expand extends TraversalUp<AlgPart> {
     return blockMove;
   }
   public traverseCommutator(commutator: Commutator): AlgPart {
-    let expandedA = this.traverseSequence(commutator.A);
-    let expandedB = this.traverseSequence(commutator.B);
+    const expandedA = this.traverseSequence(commutator.A);
+    const expandedB = this.traverseSequence(commutator.B);
     let once: AlgPart[] = [];
     once = once.concat(
       expandedA,
@@ -139,8 +139,8 @@ export class Expand extends TraversalUp<AlgPart> {
     return this.repeat(this.flattenSequenceOneLevel(once), commutator);
   }
   public traverseConjugate(conjugate: Conjugate): AlgPart {
-    let expandedA = this.traverseSequence(conjugate.A);
-    let expandedB = this.traverseSequence(conjugate.B);
+    const expandedA = this.traverseSequence(conjugate.A);
+    const expandedB = this.traverseSequence(conjugate.B);
     let once: AlgPart[] = [];
     once = once.concat(
       expandedA,
@@ -168,8 +168,8 @@ export class Expand extends TraversalUp<AlgPart> {
   }
 
   private repeat(algList: Unit[], accordingTo: WithAmount): Sequence {
-    let amount = Math.abs(accordingTo.amount);
-    let amountDir = (accordingTo.amount > 0) ? 1 : -1; // Mutable
+    const amount = Math.abs(accordingTo.amount);
+    const amountDir = (accordingTo.amount > 0) ? 1 : -1; // Mutable
 
     // TODO: Cleaner inversion
     let once: Unit[];
@@ -245,16 +245,16 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
 
   // TODO: Handle
   public traverseSequence(sequence: Sequence): Sequence {
-    let coalesced: Unit[] = [];
+    const coalesced: Unit[] = [];
     for (const part of sequence.nestedUnits) {
       if (!matchesAlgType(part, "blockMove")) {
         coalesced.push(this.traverseIntoUnit(part));
       } else if (coalesced.length > 0) {
-        let last = coalesced[coalesced.length - 1];
+        const last = coalesced[coalesced.length - 1];
         if (matchesAlgType(last, "blockMove") &&
             this.sameBlock((last as BlockMove), (part as BlockMove))) {
           // TODO: This is cube-specific. Perhaps pass the modules as DataDown?
-          let amount = (last as BlockMove).amount + (part as BlockMove).amount;
+          const amount = (last as BlockMove).amount + (part as BlockMove).amount;
           coalesced.pop();
           if (amount !== 0) {
             // We could modify the last element instead of creating a new one,
@@ -343,7 +343,7 @@ export class ToString extends TraversalUp<string> {
     // TODO: Sanitize `*/`
   public traverseCommentLong(  commentLong: CommentLong ): string { return "/*" + commentLong.comment + "*/"; }
   private repetitionSuffix(amount: number): string {
-    let absAmount = Math.abs(amount);
+    const absAmount = Math.abs(amount);
     let s = "";
     if (absAmount !== 1) {
       s += String(absAmount);

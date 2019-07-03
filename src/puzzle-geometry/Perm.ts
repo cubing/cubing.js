@@ -1,13 +1,13 @@
 export class Perm {
    public static zeros(n: number): number[] {
-      let c = Array(n) ;
+      const c = Array(n) ;
       for (let i = 0; i < n; i++) {
          c[i] = 0 ;
       }
       return c ;
    }
    public static iota(n: number): number[] {
-      let c = Array(n) ;
+      const c = Array(n) ;
       for (let i = 0; i < n; i++) {
          c[i] = i ;
       }
@@ -17,13 +17,13 @@ export class Perm {
       return new Perm(Perm.iota(n)) ;
    }
    public static random(n: number) { // random
-      let c = Array(n) ;
+      const c = Array(n) ;
       for (let i = 0; i < n; i++) {
          c[i] = i ;
       }
       for (let i = 0; i < n; i++) {
-         let j = i + Math.floor((n - i) * Math.random()) ;
-         let t = c[i] ;
+         const j = i + Math.floor((n - i) * Math.random()) ;
+         const t = c[i] ;
          c[i] = c[j] ;
          c[j] = t ;
       }
@@ -39,12 +39,12 @@ export class Perm {
    }
    public static gcd(a: number, b: number): number {
       if (a > b) {
-         let t = a ;
+         const t = a ;
          a = b ;
          b = t ;
       }
       while (a > 0) {
-         let m = b % a ;
+         const m = b % a ;
          b = a ;
          a = m ;
       }
@@ -63,21 +63,21 @@ export class Perm {
       return "Perm[" + this.p.join(" ") + "]" ;
    }
    public mul(p2: Perm): Perm { // multiply
-      let c: number[] = Array(this.n) ;
+      const c: number[] = Array(this.n) ;
       for (let i = 0; i < this.n; i++) {
          c[i] = p2.p[this.p[i]] ;
       }
       return new Perm(c) ;
    }
    public rmul(p2: Perm): Perm { // multiply the other way
-      let c = Array(this.n) ;
+      const c = Array(this.n) ;
       for (let i = 0; i < this.n; i++) {
          c[i] = this.p[p2.p[i]] ;
       }
       return new Perm(c) ;
    }
    public inv(): Perm {
-      let c = Array(this.n) ;
+      const c = Array(this.n) ;
       for (let i = 0; i < this.n; i++) {
          c[this.p[i]] = i ;
       }
@@ -92,13 +92,13 @@ export class Perm {
       return 0 ;
    }
    public toGap(): string {
-      let cyc = new Array<string>() ;
-      let seen = new Array<boolean>(this.n) ;
+      const cyc = new Array<string>() ;
+      const seen = new Array<boolean>(this.n) ;
       for (let i = 0; i < this.p.length; i++) {
          if (seen[i] || this.p[i] == i) {
             continue ;
          }
-         let incyc = new Array<number>() ;
+         const incyc = new Array<number>() ;
          for (let j = i; !seen[j]; j = this.p[j]) {
             incyc.push(1 + j) ;
             seen[j] = true ;
@@ -109,7 +109,7 @@ export class Perm {
    }
    public order(): number {
       let r = 1 ;
-      let seen = new Array<boolean>(this.n) ;
+      const seen = new Array<boolean>(this.n) ;
       for (let i = 0; i < this.p.length; i++) {
          if (seen[i] || this.p[i] == i) {
             continue ;
