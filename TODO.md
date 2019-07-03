@@ -2,3 +2,4 @@
 - Externals: `three`.
 - Import folders instead of index files in folders? (Use node module resolution?)
 - Preserve class names and function arguments
+- Transpile to module format that can be used by node.
