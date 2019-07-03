@@ -6,8 +6,8 @@ class FactoredNumber {
    }
    public multiply(n: number): void {
       for (let f = 2; f * f <= n; f++) {
-         while (n % f == 0) {
-            if (undefined != this.mult[f]) {
+         while (n % f === 0) {
+            if (undefined !== this.mult[f]) {
                this.mult[f]++ ;
             } else {
                this.mult[f] = 1 ;
@@ -16,7 +16,7 @@ class FactoredNumber {
          }
       }
       if (n > 1) {
-         if (undefined != this.mult[n]) {
+         if (undefined !== this.mult[n]) {
             this.mult[n]++ ;
          } else {
             this.mult[n] = 1 ;
@@ -26,8 +26,8 @@ class FactoredNumber {
    public toString(): string {
       let r = "" ;
       for (let i = 0; i < this.mult.length; i++) {
-         if (undefined != this.mult[i]) {
-            if (r != "") {
+         if (undefined !== this.mult[i]) {
+            if (r !== "") {
                r += "*" ;
             }
             r += i ;
@@ -51,7 +51,7 @@ export class SchreierSims {
       function resolve(p: Perm): boolean {
          for (let i = p.p.length - 1; i >= 0; i--) {
             const j = p.p[i] ;
-            if (j != i) {
+            if (j !== i) {
                if (!sgs[i][j]) {
                   return false ;
                }
@@ -117,7 +117,7 @@ export class SchreierSims {
                   if (sgs[j][k]) {
                      cnt++ ;
                      lensum += sgslen[j][k] ;
-                     if (j != k) {
+                     if (j !== k) {
                         none++ ;
                      }
                   }

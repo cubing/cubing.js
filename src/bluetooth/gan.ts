@@ -1,3 +1,5 @@
+/* tslint:disable no-bitwise */
+
 import {BareBlockMove, BlockMove} from "../alg/index";
 import {KPuzzle, Puzzles} from "../kpuzzle/index";
 
@@ -50,7 +52,7 @@ class PhysicalState {
     };
 
     this.arr = new Uint8Array(dataView.buffer);
-    if (this.arr.length != this.arrLen) {
+    if (this.arr.length !== this.arrLen) {
       throw new Error("Unexpected array length");
     }
   }

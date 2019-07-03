@@ -1,3 +1,5 @@
+/* tslint:disable prefer-for-of */ // TODO
+
 import { Quat } from "./Quat" ;
 
 // Next we define a class that yields quaternion generators for each of

@@ -207,9 +207,9 @@ export class MoveExpander {
      const axes = this.gripStash ;
      const moves = def.moves ;
      for (let i = 1; i <= nslices; i++) {
-        let t = (i == 1 && moves[grip1]) || moves["" + i + grip1] ;
+        let t = (i === 1 && moves[grip1]) || moves["" + i + grip1] ;
         if (!t) {
-           t = (i == nslices && moves[grip2] || moves["" + (nslices + 1 - i) + grip2]) ;
+           t = (i === nslices && moves[grip2] || moves["" + (nslices + 1 - i) + grip2]) ;
            if (t) {
               t = Invert(def, t) ;
            }
@@ -230,10 +230,10 @@ export class MoveExpander {
       let at = 0 ;
       while (at < s.length) {
          let found = false ;
-         for (let i = 0; i < facenames.length; i++) {
-            if (s.substr(at).startsWith(facenames[i])) {
-               r.push(facenames[i]) ;
-               at += facenames[i].length ;
+         for (const facename of facenames) {
+            if (s.substr(at).startsWith(facename)) {
+               r.push(facename) ;
+               at += facename.length ;
                found = true ;
                break ;
             }
@@ -284,14 +284,14 @@ export class MoveExpander {
      } // don't throw here; let others catch it
      let outer = blockMove.outerLayer ;
      let inner = blockMove.innerLayer ;
-     if (inner == undefined) {
-        if (outer == undefined) {
+     if (inner === undefined) {
+        if (outer === undefined) {
            outer = 1 ;
            inner = (isBlock ? 2 : 1) ;
         } else {
            return undefined ;
         } // should never happen
-     } else if (outer == undefined) {
+     } else if (outer === undefined) {
         outer = (isBlock ? 1 : inner) ;
  }
      if (inner < outer) {
@@ -314,7 +314,7 @@ export class MoveExpander {
      }
      try {
         const alg = parse(mv) ;
-        if (alg.nestedUnits.length != 1) {
+        if (alg.nestedUnits.length !== 1) {
            return undefined ;
         }
         const signmove = alg.nestedUnits[0] as BlockMove ; // need better way

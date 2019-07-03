@@ -25,28 +25,26 @@ declare global {
   }
 }
 
-namespace FullscreenAPI {
-  export function element() {
-    return document.fullscreenElement ||
-           document.webkitFullscreenElement ||
-           (document as any).mozFullScreenElement ||
-           (document as any).msFullscreenElement ||
-           document.webkitFullscreenElement;
-  }
-  export function request(element: HTMLElement) {
-    const requestFullscreen = element.requestFullscreen ||
-                            (element as any).mozRequestFullScreen ||
-                            (element as any).msRequestFullscreen ||
-                            (element as any).webkitRequestFullscreen;
-    requestFullscreen.call(element);
-  }
-  export function exit() {
-    const exitFullscreen = document.exitFullscreen ||
-                         (document as any).mozCancelFullScreen ||
-                         (document as any).msExitFullscreen ||
-                         (document as any).webkitExitFullscreen;
-    exitFullscreen.call(document);
-  }
+export function currentFullscreenElement() {
+  return document.fullscreenElement ||
+         document.webkitFullscreenElement ||
+         (document as any).mozFullScreenElement ||
+         (document as any).msFullscreenElement ||
+         document.webkitFullscreenElement;
+}
+export function fullscreenRequest(element: HTMLElement) {
+  const requestFullscreen = element.requestFullscreen ||
+                          (element as any).mozRequestFullScreen ||
+                          (element as any).msRequestFullscreen ||
+                          (element as any).webkitRequestFullscreen;
+  requestFullscreen.call(element);
+}
+export function fullscreenExit() {
+  const exitFullscreen = document.exitFullscreen ||
+                       (document as any).mozCancelFullScreen ||
+                       (document as any).msExitFullscreen ||
+                       (document as any).webkitExitFullscreen;
+  exitFullscreen.call(document);
 }
 
 // TODO: Expose this as a config per instance.
@@ -69,6 +67,7 @@ export abstract class Button {
   public abstract onpress(): void;
 }
 
+// tslint:disable-next-line no-namespace // TODO: nested module?
 export namespace Button {
 
   export class Fullscreen extends Button {
@@ -77,10 +76,10 @@ export namespace Button {
     }
 
     public onpress(): void {
-      if (FullscreenAPI.element() === this.fullscreenElement) {
-        FullscreenAPI.exit();
+      if (currentFullscreenElement() === this.fullscreenElement) {
+        fullscreenExit();
       } else {
-        FullscreenAPI.request(this.fullscreenElement);
+        fullscreenRequest(this.fullscreenElement);
       }
     }
   }
@@ -173,9 +172,9 @@ export class Scrubber implements CursorObserver {
   private updateBackground() {
     // TODO: Figure out the most efficient way to do this.
     // TODO: Pad by the thumb radius at each end.
-    const min = parseInt(this.element.min);
-    const max = parseInt(this.element.max);
-    const value = parseInt(this.element.value);
+    const min = parseInt(this.element.min, 10);
+    const max = parseInt(this.element.max, 10);
+    const value = parseInt(this.element.value, 10);
     const v = (value - min) / max * 100;
     this.element.style.background = `linear-gradient(to right, \
       rgb(204, 24, 30) 0%, \
@@ -187,7 +186,7 @@ export class Scrubber implements CursorObserver {
 
   private oninput(): void {
     // TODO: Ideally, we should prevent this from firing back.
-    this.anim.skipAndPauseTo(parseInt(this.element.value));
+    this.anim.skipAndPauseTo(parseInt(this.element.value, 10));
     this.updateBackground();
   }
 }

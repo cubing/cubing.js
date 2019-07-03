@@ -11,7 +11,7 @@ export type PuzzleState = Transformation;
 export class MoveEvent {
   public latestMove: BlockMove;
   public timeStamp: number;
-  public debug?: Object;
+  public debug?: object;
   public state?: PuzzleState;
   public quaternion?: any;
 }

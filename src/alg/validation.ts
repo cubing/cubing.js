@@ -160,7 +160,7 @@ const flatAlgValidatorInstance = new FlatAlgValidator();
 export const validateFlatAlg = flatAlgValidatorInstance.traverse.bind(flatAlgValidatorInstance) as Validator;
 
 // TODO: Option for puzzle size?
-export const validateSiGNAlg = function(a: Sequence) {
+export function validateSiGNAlg(a: Sequence) {
   validateSiGNMoves(a);
   validateFlatAlg(a);
-};
+}

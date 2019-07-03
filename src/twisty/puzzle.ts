@@ -8,8 +8,8 @@ export interface MoveProgress {
   fraction: number;
 }
 
-export interface State<Puzzle> {
-}
+// tslint:disable-next-line no-empty-interface
+export interface State<T extends Puzzle> {}
 
 export abstract class Puzzle {
   public abstract startState(): State<Puzzle>;

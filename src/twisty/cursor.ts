@@ -14,8 +14,6 @@ import {
 import {TraversalUp} from "../alg/index";
 import {Puzzle, State} from "./puzzle";
 
-"use strict";
-
 // TODO: Include Pause.
 class CountAnimatedMoves extends TraversalUp<number> {
   public traverseSequence(sequence: Sequence): number {
@@ -122,7 +120,7 @@ export class Cursor<P extends Puzzle> {
 
     while (this.moveIdx < this.numMoves()) {
       const move = this.moves.nestedUnits[this.moveIdx];
-      if (move.type != "blockMove") {
+      if (move.type !== "blockMove") {
         throw new Error("TODO — Only BlockMove supported for cursor.");
       }
       const lengthOfMove = this.durationFn.traverse(move);
@@ -161,7 +159,7 @@ export class Cursor<P extends Puzzle> {
       }
 
       const prevMove = this.moves.nestedUnits[this.moveIdx - 1];
-      if (prevMove.type != "blockMove") {
+      if (prevMove.type !== "blockMove") {
         throw new Error("TODO - only BlockMove supported");
       }
 
@@ -203,6 +201,7 @@ export class Cursor<P extends Puzzle> {
   }
 }
 
+// tslint:disable-next-line no-namespace // TODO: nested module
 export namespace Cursor {
   export type Duration = number; // Duration in milliseconds
   // TODO: Extend `number`, introduce MoveSequenceTimestamp vs. EpochTimestamp,

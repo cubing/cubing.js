@@ -11,19 +11,19 @@ export interface BluetoothConfig {
 }
 
 function requestOptions(): RequestDeviceOptions {
-const requestOptions = {
-    filters: [] as BluetoothRequestDeviceFilter[],
-    optionalServices: [] as BluetoothServiceUUID[],
-};
-for (const config of [
-    giiKERConfig,
-    ganConfig,
-]) {
-    requestOptions.filters = requestOptions.filters.concat(config.filters);
-    requestOptions.optionalServices = requestOptions.optionalServices.concat(config.optionalServices);
-}
-debugLog({requestOptions});
-return requestOptions;
+  const options = {
+      filters: [] as BluetoothRequestDeviceFilter[],
+      optionalServices: [] as BluetoothServiceUUID[],
+  };
+  for (const config of [
+      giiKERConfig,
+      ganConfig,
+  ]) {
+      options.filters = options.filters.concat(config.filters);
+      options.optionalServices = options.optionalServices.concat(config.optionalServices);
+  }
+  debugLog({requestOptions: options});
+  return options;
 }
 
 /******** connect() ********/
@@ -42,7 +42,7 @@ export async function connect(): Promise<BluetoothPuzzle> {
   debugLog("Server:", server);
 
   // TODO by reading supported matched filters or provided services.
-  if (server.device!.name!.substring(0, 3) == "GAN") {
+  if (server.device!.name!.substring(0, 3) === "GAN") {
     return await GanCube.connect(server);
   } else {
     return await GiiKERCube.connect(server);

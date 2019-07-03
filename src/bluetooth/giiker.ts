@@ -1,3 +1,5 @@
+/* tslint:disable no-bitwise */
+
 import {BareBlockMove, BlockMove} from "../alg/index";
 import {Transformation} from "../kpuzzle/index";
 
@@ -27,7 +29,7 @@ export const giiKERConfig: BluetoothConfig = {
 
 // TODO: Expose for testing.
 function giikerMoveToBlockMove(face: number, amount: number): BlockMove {
-  if (amount == 9) {
+  if (amount === 9) {
     console.error("Encountered 9", face, amount);
     amount = 2;
   }
@@ -103,7 +105,7 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     return cube;
   }
-  private constructor(private server: BluetoothRemoteGATTServer, private cubeCharacteristic: BluetoothRemoteGATTCharacteristic, private originalValue: DataView | null | undefined = undefined) {
+  private constructor(private server: BluetoothRemoteGATTServer, private cubeCharacteristic: BluetoothRemoteGATTCharacteristic, private originalValue?: DataView | null) {
     super();
   }
 
@@ -116,7 +118,7 @@ export class GiiKERCube extends BluetoothPuzzle {
   }
 
   private getNibble(val: DataView, i: number): number {
-    if (i % 2 == 1) {
+    if (i % 2 === 1) {
       return val.getUint8((i / 2) | 0) % 16;
     }
     return 0 | (val.getUint8((i / 2) | 0) / 16);
@@ -197,7 +199,7 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     debugLog("Comparing against original value.");
     for (let i = 0; i < 20; i++) {
-      if (originalValue.getUint8(i) != val.getUint8(i)) {
+      if (originalValue.getUint8(i) !== val.getUint8(i)) {
         debugLog("Different at index ", i);
         return false;
       }

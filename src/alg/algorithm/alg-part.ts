@@ -8,7 +8,7 @@ export abstract class AlgPart {
 
 // type Constructor<T> = Function & { prototype: T }
 export function matchesAlgType<T extends AlgPart>(a: any, t: AlgPartType): boolean {
-  return a.type == t;
+  return a.type === t;
 }
 
 export function assertMatchesType<T extends AlgPart>(a: any, t: AlgPartType): T {

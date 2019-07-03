@@ -173,7 +173,7 @@ export class Expand extends TraversalUp<AlgPart> {
 
     // TODO: Cleaner inversion
     let once: Unit[];
-    if (amountDir == -1) {
+    if (amountDir === -1) {
       // TODO: Avoid casting to sequence.
       once = ((invert(new Sequence(algList))) as Sequence).nestedUnits;
     } else {
@@ -233,10 +233,10 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
     return matchesAlgType(dataDown, "newLine");
   }
   public traverseCommentShort(commentShort: CommentShort, dataDown: AlgPart): boolean {
-    return matchesAlgType(dataDown, "commentShort") && (commentShort.comment == (dataDown as CommentShort).comment);
+    return matchesAlgType(dataDown, "commentShort") && (commentShort.comment === (dataDown as CommentShort).comment);
   }
   public traverseCommentLong(commentLong: CommentLong, dataDown: AlgPart): boolean {
-    return matchesAlgType(dataDown, "commentLong") && (commentLong.comment == (dataDown as CommentLong).comment);
+    return matchesAlgType(dataDown, "commentLong") && (commentLong.comment === (dataDown as CommentLong).comment);
   }
 }
 

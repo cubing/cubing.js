@@ -71,7 +71,6 @@ export abstract class Twisty3D<P extends Puzzle> {
 
   private setRendererSize(renderer: THREE.Renderer, w: number, h: number): void {
     renderer.setSize(w * pixelRatio(), h * pixelRatio());
-    renderer.domElement.width;
     renderer.domElement.style.width = `${w}px`;
     renderer.domElement.style.height = `${h}px`;
     renderer.domElement.width = w * devicePixelRatio;

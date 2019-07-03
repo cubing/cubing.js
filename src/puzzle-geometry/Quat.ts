@@ -1,3 +1,6 @@
+/* tslint:disable no-bitwise */
+/* tslint:disable prefer-for-of */ // TODO
+
 // We need a quaternion class.  We use this to represent rotations,
 // planes, and points.
 
@@ -31,9 +34,7 @@ export class Quat {
                        Math.random() * 2 - 1, Math.random() * 2 - 1) ;
       return q.smul(1 / q.len()) ;
    }
-   public a: number; public b: number; public c: number; public d: number;
-   constructor(a_: number, b_: number, c_: number, d_: number) {
-      this.a = a_ ; this.b = b_ ; this.c = c_ ; this.d = d_ ;
+   constructor(public a: number, public b: number, public c: number, public d: number) {
    }
    public mul(q: Quat): Quat { // Quaternion multiplication
       return new Quat(
@@ -131,7 +132,7 @@ export class Quat {
          return p ;
       }
       for (let i = 0; i < planes.length; i++) {
-         if (i != p1 && i != p2 && i != p3) {
+         if (i !== p1 && i !== p2 && i !== p3) {
             const dt = planes[i].b * p.b + planes[i].c * p.c + planes[i].d * p.d ;
             if ((planes[i].a > 0 && dt > planes[i].a) ||
                 (planes[i].a < 0 && dt < planes[i].a)) {
@@ -163,15 +164,15 @@ export class Quat {
          for (let i = 0; i < inout.length; i++) {
             seen |= 1 << (inout[i] + 1) ;
          }
-         if ((seen & 5) == 5) { // saw both sides
+         if ((seen & 5) === 5) { // saw both sides
             for (let s = -1; s <= 1; s += 2) {
                const nface = [] ;
                for (let k = 0; k < face.length; k++) {
-                  if (inout[k] == s || inout[k] == 0) {
+                  if (inout[k] === s || inout[k] === 0) {
                      nface.push(face[k]) ;
                   }
                   const kk = (k + 1) % face.length ;
-                  if (inout[k] + inout[kk] == 0 && inout[k] != 0) {
+                  if (inout[k] + inout[kk] === 0 && inout[k] !== 0) {
                      const vk = face[k].dot(this) - d ;
                      const vkk = face[kk].dot(this) - d ;
                      const r = vk / (vk - vkk) ;
@@ -191,7 +192,7 @@ export class Quat {
       const d = this.a ;
       for (let i = 0; i < face.length; i++) {
          const s = this.side(face[i].dot(this) - d) ;
-         if (s != 0) {
+         if (s !== 0) {
             return s ;
          }
       }

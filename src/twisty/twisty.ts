@@ -6,8 +6,6 @@ import {Cursor} from "./cursor";
 import {KSolvePuzzle, Puzzle} from "./puzzle";
 import {Player, VisualizationFormat} from "./widget";
 
-"use strict";
-
 class TwistyParams {
   public alg?: Sequence;
   public puzzle?: KPuzzleDefinition;
@@ -76,21 +74,20 @@ function paramsFromTwistyElem(elem: Element): TwistyParams {
 
 // Initialize a Twisty for the given Element unless the element's
 // `initialization` attribute is set to `custom`.
-function autoInitialize(elem: Element) {
+function autoInitialize(elem: Element): Twisty | null {
   const ini = elem.getAttribute("initialization");
   const params = paramsFromTwistyElem(elem);
   if (ini !== "custom") {
-    new Twisty(elem, params);
+    return new Twisty(elem, params);
   }
+  return null;
 }
 
 function autoInitializePage() {
   const elems = document.querySelectorAll("twisty");
   console.log(`Found ${elems.length} twisty elem${elems.length === 1 ? "" : "s"} on page.`);
 
-  for (let i = 0; i < elems.length; i++) {
-    autoInitialize(elems[i]);
-  }
+  elems.forEach(autoInitialize);
 }
 
 if (typeof window !== "undefined") {

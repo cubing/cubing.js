@@ -19,10 +19,10 @@ export default {
       dir: "dist",
       format: "esm",
       name: "cubing",
-      sourcemap: true,
-      external: [ "three" ]
+      sourcemap: true
     }
   ],
+  external: [ "three" ],
   plugins: [
     tslint({}),
     typescript2({

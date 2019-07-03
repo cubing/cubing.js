@@ -1,3 +1,6 @@
+/* tslint:disable no-bitwise */
+/* tslint:disable prefer-for-of */ // TODO
+
 import { Perm } from "./Perm" ;
 export class OrbitDef {
    constructor(public size: number, public mod: number) {}
@@ -64,8 +67,8 @@ export class OrbitsDef {
          }
          for (let j = 0; j < this.moveops.length; j++) {
             for (let k = 0; k < n; k++) {
-               if (this.moveops[j].orbits[i].perm[k] != k ||
-                   this.moveops[j].orbits[i].ori[k] != 0) {
+               if (this.moveops[j].orbits[i].perm[k] !== k ||
+                   this.moveops[j].orbits[i].ori[k] !== 0) {
                   changed[k] = true ;
                   du.union(k, this.moveops[j].orbits[i].perm[k]) ;
                }
@@ -80,8 +83,8 @@ export class OrbitsDef {
             const duo = new DisjointUnion(this.orbitdefs[i].size * om) ;
             for (let j = 0; j < this.moveops.length; j++) {
                for (let k = 0; k < n; k++) {
-                  if (this.moveops[j].orbits[i].perm[k] != k ||
-                      this.moveops[j].orbits[i].ori[k] != 0) {
+                  if (this.moveops[j].orbits[i].perm[k] !== k ||
+                      this.moveops[j].orbits[i].ori[k] !== 0) {
                      for (let o = 0; o < om; o++) {
                         duo.union(k * om + o, this.moveops[j].orbits[i].perm[k] * om +
                                       (o + this.moveops[j].orbits[i].ori[k]) % om) ;
@@ -91,14 +94,14 @@ export class OrbitsDef {
             }
             for (let j = 0; !keepori && j < n; j++) {
                for (let o = 1; o < om; o++) {
-                  if (duo.find(j * om) == duo.find(j * om + o)) {
+                  if (duo.find(j * om) === duo.find(j * om + o)) {
                      keepori = true ;
                   }
                }
             }
             for (let j = 0; !keepori && j < n; j++) {
                for (let k = 0; k < j; k++) {
-                  if (this.solved.orbits[i].perm[j] ==
+                  if (this.solved.orbits[i].perm[j] ===
                       this.solved.orbits[i].perm[k]) {
                      keepori = true ;
                   }
@@ -113,7 +116,7 @@ export class OrbitsDef {
                const h = du.find(j) ;
                if (nontriv < 0) {
                   nontriv = h ;
-               } else if (nontriv != h) {
+               } else if (nontriv !== h) {
                   multiple = true ;
  }
             }
@@ -123,14 +126,14 @@ export class OrbitsDef {
                continue ;
             }
             const h = du.find(j) ;
-            if (h != j) {
+            if (h !== j) {
                continue ;
             }
             const no: number[] = [] ;
             const on: number[] = [] ;
             let nv = 0 ;
             for (let k = 0; k < this.orbitdefs[i].size; k++) {
-               if (du.find(k) == j) {
+               if (du.find(k) === j) {
                   no[nv] = k ;
                   on[k] = nv ;
                   nv++ ;
@@ -230,7 +233,7 @@ export class Orbit {
    public equal(b: Orbit): boolean {
       const n = this.perm.length ;
       for (let i = 0; i < n; i++) {
-         if (this.perm[i] != b.perm[i] || this.ori[i] != b.ori[i]) {
+         if (this.perm[i] !== b.perm[i] || this.ori[i] !== b.ori[i]) {
             return false ;
          }
       }
@@ -247,7 +250,7 @@ export class Orbit {
    }
    public toPerm(): Perm {
       const o = this.orimod ;
-      if (o == 1) {
+      if (o === 1) {
          return new Perm(this.perm) ;
       }
       const n = this.perm.length ;
@@ -266,11 +269,11 @@ export class Orbit {
       const r: number[][] = [] ;
       for (let i = 0; i < n; i++) {
          const v = this.perm[i] ;
-         if (done[v] == undefined) {
+         if (done[v] === undefined) {
             const s: number[] = [i] ;
             done[v] = true ;
             for (let j = i + 1; j < n; j++) {
-               if (this.perm[j] == v) {
+               if (this.perm[j] === v) {
                   s.push(j) ;
                }
             }
@@ -285,7 +288,7 @@ export class Orbit {
    public isIdentity(): boolean {
       const n = this.perm.length ;
       for (let i = 0; i < n; i++) {
-         if (this.perm[i] != i || this.ori[i] != 0) {
+         if (this.perm[i] !== i || this.ori[i] !== 0) {
             return false ;
          }
       }
@@ -307,7 +310,7 @@ export class Orbit {
       const reassign = [] ;
       for (let i = 0; i < nv; i++) {
          const ov = this.perm[no[i]] ;
-         if (reassign[ov] == undefined) {
+         if (reassign[ov] === undefined) {
             reassign[ov] = nextNew++ ;
          }
          newPerm[i] = reassign[ov] ;
@@ -404,7 +407,7 @@ export class Transformation extends TransformationBase {
       return new Transformation(this.internalMul(b)) ;
    }
    public mulScalar(n: number): Transformation {
-      if (n == 0) {
+      if (n === 0) {
          return this.e() ;
       }
       let t: Transformation = this ;
@@ -412,11 +415,11 @@ export class Transformation extends TransformationBase {
          t = t.inv() ;
          n = - n ;
       }
-      while ((n & 1) == 0) {
+      while ((n & 1) === 0) {
          t = t.mul(t) ;
          n >>= 1 ;
       }
-      if (n == 1) {
+      if (n === 1) {
          return t ;
       }
       let s = t ;
@@ -459,7 +462,7 @@ class DisjointUnion {
    }
    public find(v: number): number {
       let h = this.heads[v] ;
-      if (this.heads[h] == h) {
+      if (this.heads[h] === h) {
          return h ;
       }
       h = this.find(this.heads[h]) ;
@@ -489,7 +492,7 @@ export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
       orders.push(permA.order()) ;
       let bits = 0 ;
       for (let j = 0; j < n; j++) {
-         if (j == i) {
+         if (j === i) {
             continue ;
          }
          const permB = g.moveops[j] ;
@@ -511,10 +514,10 @@ export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
          sum += cnt ;
          uniq++ ;
          for (let mv = 0; mv < orders.length; mv++) {
-            if (((st >> mv) & 1) == 0 &&
-                (st & commutes[mv] & ((1 << mv) - 1)) == 0) {
+            if (((st >> mv) & 1) === 0 &&
+                (st & commutes[mv] & ((1 << mv) - 1)) === 0) {
                const nst = (st & commutes[mv]) | (1 << mv) ;
-               if (nextlev[nst] == undefined) {
+               if (nextlev[nst] === undefined) {
                   nextlev[nst] = 0 ;
                }
                nextlev[nst] += (orders[mv] - 1) * cnt ;
@@ -540,7 +543,7 @@ export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
       orders.push(permA.order()) ;
       let bits = 0 ;
       for (let j = 0; j < n; j++) {
-         if (j == i) {
+         if (j === i) {
             continue ;
          }
          const permB = g.moveops[j] ;
@@ -565,10 +568,10 @@ export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
          sum += cnt ;
          uniq++ ;
          for (let mv = 0; mv < orders.length; mv++) {
-            if (mv == st || ((commutes[mv] & (1 << st)) && mv < st)) {
+            if (mv === st || ((commutes[mv] & (1 << st)) && mv < st)) {
                continue ;
             }
-            if (nextlev[mv] == undefined) {
+            if (nextlev[mv] === undefined) {
                nextlev[mv] = 0 ;
             }
             nextlev[mv] += (orders[mv] - 1) * cnt ;

@@ -85,7 +85,7 @@ export class Perm {
    }
    public compareTo(p2: Perm): number { // comparison
       for (let i = 0; i < this.n; i++) {
-         if (this.p[i] != p2.p[i]) {
+         if (this.p[i] !== p2.p[i]) {
             return this.p[i] - p2.p[i] ;
          }
       }
@@ -95,7 +95,7 @@ export class Perm {
       const cyc = new Array<string>() ;
       const seen = new Array<boolean>(this.n) ;
       for (let i = 0; i < this.p.length; i++) {
-         if (seen[i] || this.p[i] == i) {
+         if (seen[i] || this.p[i] === i) {
             continue ;
          }
          const incyc = new Array<number>() ;
@@ -111,7 +111,7 @@ export class Perm {
       let r = 1 ;
       const seen = new Array<boolean>(this.n) ;
       for (let i = 0; i < this.p.length; i++) {
-         if (seen[i] || this.p[i] == i) {
+         if (seen[i] || this.p[i] === i) {
             continue ;
          }
          let cs = 0 ;

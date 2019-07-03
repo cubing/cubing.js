@@ -11,7 +11,7 @@ export function reportTypeMismatch(msg: string): void {
     case "warn":
       numWarned++;
       if (numWarned < MAX_NUMBER_OF_TIMES_TO_WARN) {
-        if (numWarned + 1 == MAX_NUMBER_OF_TIMES_TO_WARN) {
+        if (numWarned + 1 === MAX_NUMBER_OF_TIMES_TO_WARN) {
           console.warn(msg);
         }
       }

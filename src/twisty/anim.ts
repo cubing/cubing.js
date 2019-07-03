@@ -1,8 +1,6 @@
 import {Cursor} from "./cursor";
 import {Puzzle} from "./puzzle";
 
-"use strict";
-
 export interface CursorObserver {
   animCursorChanged: (cursor: Cursor<Puzzle>) => void; // TODO cursor.position?
 }
@@ -132,7 +130,7 @@ export class AnimModel {
   }
 
   public isAtEnd() {
-    return this.cursor.currentTimestamp() == this.cursor.endOfAlg();
+    return this.cursor.currentTimestamp() === this.cursor.endOfAlg();
   }
 
   public stepForward(): void {
