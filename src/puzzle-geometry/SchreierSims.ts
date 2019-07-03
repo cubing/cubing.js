@@ -103,7 +103,6 @@ export class SchreierSims {
             sgsi[i][i] = e ;
             sgslen[i][i] = 0 ;
          }
-         let avgs = [] ;
          let none = 0 ;
          let sz = 1 ;
          for (let i = 0; i < g.length; i++) {

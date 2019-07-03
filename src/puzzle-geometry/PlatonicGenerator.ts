@@ -118,7 +118,7 @@ export class PlatonicGenerator {
       while (true) {
          let changed = false ;
          for (let i = 0; i < face.length; i++) {
-            let j = (i + 1) % face.length ;
+            let j: number = (i + 1) % face.length ;
             if (planes[0].dot(face[i].cross(face[j])) < 0) {
                let t: Quat = face[i] ;
                face[i] = face[j] ;

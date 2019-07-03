@@ -4,6 +4,9 @@
         "tslint:recommended"
     ],
     "rules": {
-      "interface-name": [false]
+      "interface-name": false,
+      "max-classes-per-file": false,
+      "max-line-length": false,
+      "object-literal-sort-keys": false
     }
 }

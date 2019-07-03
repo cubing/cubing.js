@@ -180,7 +180,7 @@ export class Cursor<P extends Puzzle> {
 
   private setMoves(alg: Sequence) {
     let moves = expand(alg);
-    if (moves.type == "sequence") {
+    if (moves.type === "sequence") {
       this.moves = moves;
     } else {
       this.moves = new Sequence([moves]);

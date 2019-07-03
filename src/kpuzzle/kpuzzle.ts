@@ -300,12 +300,12 @@ export class MoveExpander {
      if (outer > axes[grip].length) {
         return undefined ;
      }
-     let t = slices[outer - 1] ;
+     let t2 = slices[outer - 1] ;
      for (let i = outer + 1; i <= inner; i++) {
-        t = Combine(def, t, slices[i - 1]) ;
+        t2 = Combine(def, t2, slices[i - 1]) ;
      }
-     this.moveStash[rep] = t ;
-     return t ;
+     this.moveStash[rep] = t2 ;
+     return t2 ;
   }
   public expandSlicesByName(mv: string, def: KPuzzleDefinition) {
      let t = this.moveStash[mv] ;

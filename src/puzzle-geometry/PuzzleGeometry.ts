@@ -725,8 +725,8 @@ export class PuzzleGeometry {
             a.reverse() ;
          }
       }
-      let sizes = moverotations.map(function(_) {return 1 + _.length; }) ;
-      this.movesetorders = sizes ;
+      let sizes2 = moverotations.map(function(_) {return 1 + _.length; }) ;
+      this.movesetorders = sizes2 ;
       let movesetgeos = [] ;
       for (let i = 0; i < moveplanesets.length; i++) {
          let p0 = moveplanesets[i][0].makenormal() ;
@@ -1374,8 +1374,6 @@ export class PuzzleGeometry {
       let setnames: string[] = [] ;
       let setdefs: OrbitDef[] = [] ;
       for (let k = 0; k < this.moveplanesets.length; k++) {
-         let moveplaneset = this.moveplanesets[k] ;
-         let slices = moveplaneset.length ;
          let moveset = this.getmovesets(k) ;
          // check there's no redundancy in moveset.
          for (let i = 0; i < moveset.length; i += 2) {
