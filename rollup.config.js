@@ -10,8 +10,8 @@ const plugins = [
   tslint({
     exclude: [
       "node_modules/**",
-      "src/alg/parser/index.js",
-      "src/alg/parser/parser-source.pegjs"
+      "src/**/parser/index.js",
+      "src/**/parser/parser-source.pegjs"
     ]
   }),
   typescript2({
@@ -40,7 +40,7 @@ export default [
         sourcemap: true
       }
     ],
-    external: ["three", "parser-source.pegjs"],
+    external: ["three"],
     plugins
   },
   {
@@ -55,7 +55,7 @@ export default [
     plugins: [
       ...plugins,
       resolve({
-        only: ["three", "parser-source.pegjs"]
+        only: ["three"]
       })
     ]
   }
