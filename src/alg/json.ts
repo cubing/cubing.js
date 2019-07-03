@@ -9,7 +9,7 @@ import {
   Pause,
   Sequence,
   Unit,
-} from "./algorithm/index";
+} from "./algorithm";
 
 // TODO: Turn this into a union.
 export interface AlgJSON {

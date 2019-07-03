@@ -1,4 +1,4 @@
-import {Sequence} from "./algorithm/index";
+import {Sequence} from "./algorithm";
 import {parse} from "./parser";
 import {algToString} from "./traversal";
 

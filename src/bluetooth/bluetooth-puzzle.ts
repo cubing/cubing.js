@@ -1,5 +1,5 @@
-import {BlockMove} from "../alg/index";
-import {Transformation} from "../kpuzzle/index";
+import {BlockMove} from "../alg";
+import {Transformation} from "../kpuzzle";
 
 /******** BluetoothPuzzle ********/
 

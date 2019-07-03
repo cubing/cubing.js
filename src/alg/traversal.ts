@@ -13,7 +13,7 @@ import {
   Sequence,
   Unit,
   WithAmount,
-} from "./algorithm/index";
+} from "./algorithm";
 
 function dispatch<DataDown, DataUp>(t: TraversalDownUp<DataDown, DataUp>, algPart: AlgPart, dataDown: DataDown): DataUp {
   switch (algPart.type) {

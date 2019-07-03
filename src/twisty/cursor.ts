@@ -10,8 +10,8 @@ import {
   NewLine,
   Pause,
   Sequence,
-} from "../alg/index";
-import {TraversalUp} from "../alg/index";
+  TraversalUp,
+} from "../alg";
 import {Puzzle, State} from "./puzzle";
 
 // TODO: Include Pause.

@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import {BlockMove} from "../../alg/index";
-import {KPuzzleDefinition, Puzzles, Transformation} from "../../kpuzzle/index";
+import {BlockMove} from "../../alg";
+import {KPuzzleDefinition, Puzzles, Transformation} from "../../kpuzzle";
 
 import {Cursor} from "../cursor";
 import {smootherStep} from "../easing";

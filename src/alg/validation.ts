@@ -8,7 +8,7 @@ import {
   NewLine,
   Pause,
   Sequence,
-} from "./algorithm/index";
+} from "./algorithm";
 
 import {TraversalUp} from "./traversal";
 

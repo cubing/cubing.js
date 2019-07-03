@@ -18,7 +18,7 @@ export {
   NewLine,
   CommentShort,
   CommentLong,
-} from "./algorithm/index";
+} from "./algorithm";
 
 export {
   TraversalDownUp,

@@ -9,7 +9,7 @@ import {
   NewLine,
   Pause,
   Sequence,
-} from "./algorithm/index";
+} from "./algorithm";
 
 // tslint:disable-next-line no-namespace // TODO: nested module
 export namespace Example {

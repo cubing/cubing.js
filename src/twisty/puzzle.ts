@@ -1,5 +1,5 @@
-import {BlockMove} from "../alg/index";
-import {Combine, EquivalentStates, Invert, KPuzzleDefinition, Puzzles, stateForBlockMove, Transformation} from "../kpuzzle/index";
+import {BlockMove} from "../alg";
+import {Combine, EquivalentStates, Invert, KPuzzleDefinition, Puzzles, stateForBlockMove, Transformation} from "../kpuzzle";
 
 export type MoveName = string;
 

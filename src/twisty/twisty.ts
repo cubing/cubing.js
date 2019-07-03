@@ -1,5 +1,5 @@
-import {Example, parse, Sequence} from "../alg/index";
-import {KPuzzleDefinition, Puzzles} from "../kpuzzle/index";
+import {Example, parse, Sequence} from "../alg";
+import {KPuzzleDefinition, Puzzles} from "../kpuzzle";
 
 import {AnimModel} from "./anim";
 import {Cursor} from "./cursor";

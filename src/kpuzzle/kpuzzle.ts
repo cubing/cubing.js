@@ -1,4 +1,4 @@
-import {algToString, BlockMove, expand, parse, Sequence} from "../alg/index";
+import {algToString, BlockMove, expand, parse, Sequence} from "../alg";
 import {KPuzzleDefinition, Transformation} from "./spec";
 
 export function Combine(def: KPuzzleDefinition, t1: Transformation, t2: Transformation): Transformation {

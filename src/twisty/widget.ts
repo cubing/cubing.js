@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
-import {algToString, BlockMove, Sequence} from "../alg/index";
-import {Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation} from "../kpuzzle/index";
+import {algToString, BlockMove, Sequence} from "../alg";
+import {Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation} from "../kpuzzle";
 
 import {Cube3D} from "./3D/cube3D";
 import {AnimModel, CursorObserver, DirectionObserver, JumpObserver} from "./anim";

@@ -1,7 +1,7 @@
 /* tslint:disable no-bitwise */
 
-import {BareBlockMove, BlockMove} from "../alg/index";
-import {KPuzzle, Puzzles} from "../kpuzzle/index";
+import {BareBlockMove, BlockMove} from "../alg";
+import {KPuzzle, Puzzles} from "../kpuzzle";
 
 import {BluetoothConfig, BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle";
 import {debugLog} from "./debug";

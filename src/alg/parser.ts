@@ -1,6 +1,6 @@
-import {Sequence} from "./algorithm/index";
+import {Sequence} from "./algorithm";
 import {fromJSON} from "./json";
-// import {parse as jison_parse} from "./jison_parser/index"; // TODO
+// import {parse as jison_parse} from "./jison_parser"; // TODO
 import {validateSiGNAlg, Validator} from "./validation";
 
 function jison_parse(s: string): Sequence {return new Sequence([]); } // TODO
