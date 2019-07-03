@@ -60,9 +60,9 @@ const umd = {
   ]
 }
 
-const configs = [esm]
+const configs = [umd]
 if (!process.env.ROLLUP_WATCH) {
-  configs.push(umd)
+  configs.push(esm)
 }
 
 export default configs;

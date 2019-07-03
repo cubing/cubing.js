@@ -1,168 +1,86 @@
+start = SEQUENCE
 
-/* lexical grammar */
-%lex
-/*
-%s timestamp
-*/
-%%
+NOTHING = ""
+WHITESPACE = characters:[ ]+ { return characters.join(""); }
+NEWLINE = [\n\r]
 
-/*
-"@"                               { this.begin("timestamp"); return 'AT' }
-<timestamp>[0-9]+("."[0-9]+)?     return 'FLOAT'
-<timestamp>"s"                    { this.popState(); return 'SECONDS' }
-*/
+NUMBER = characters:[0-9]+ { return characters.join(""); }
+DASH = "-"
 
-[^\S\r\n]+             return "WHITESPACE"
-[0-9]+                 return "NUMBER"
-"-"                    return "DASH"
+LONG_FAMILY = characters:[_A-Za-z]+ { return characters.join(""); }
 
-[_A-Za-z]+             return "LONG_FAMILY"
+PRIME = "'"
+PAUSE = "."
 
-
-"'"                    return "PRIME"
-"."                    return "PAUSE"
-
-
-"//"[^\n\r]*           return "COMMENT_SHORT"
-"/*"[^]*?"*/"          return "COMMENT_LONG"
-[\n\r]                 return "NEWLINE"
-
-"["                    return "OPEN_BRACKET"
-"]"                    return "CLOSE_BRACKET"
-"("                    return "OPEN_PARENTHESIS"
-")"                    return "CLOSE_PARENTHESIS"
-","                    return "COMMA"
-":"                    return "COLON"
-
-<<EOF>>                return "EOF"
-.                      return "INVALID"
-
-/lex
-
-%% /* language grammar */
-
-expressions
-    : TOP_LEVEL_ALG EOF
-        { return $TOP_LEVEL_ALG; }
-    ;
+COMMENT_SHORT_START = "//"
+COMMENT_SHORT_BODY = characters:[^\n\r]* { return characters.join(""); }
+// TODO: Split into start, comment, end
+COMMENT_LONG_START = "/\*"
+COMMENT_LONG_BODY = characters:[^\*]* { return characters.join(""); }
+COMMENT_LONG_END = "\*/"
+OPEN_BRACKET = "["
+CLOSE_BRACKET = "]"
+OPEN_PARENTHESIS = "("
+CLOSE_PARENTHESIS = ")"
+COMMA = ","
+COLON = ":"
 
 LAYER
-    : NUMBER
-        {$$ = parseInt($NUMBER);}
-    ;
+  = number:NUMBER { return parseInt(number); }
 
 REPETITION
-    : NUMBER
-        {$$ = parseInt($NUMBER);}
-    ;
+  = number:NUMBER { return parseInt(number); }
 
 AMOUNT
-    : REPETITION
-    | REPETITION PRIME
-        {$$ = -$REPETITION;}
-    | PRIME
-        {$$ = -1;}
-    ;
+  = REPETITION
+  / repetition:REPETITION PRIME { return -repetition; }
+  / PRIME { return -1; }
 
 COMMENT
-    : COMMENT_SHORT
-        {$$ = {type: "commentShort", comment: $COMMENT_SHORT.slice(2)};}
-    | COMMENT_LONG
-        {$$ = {type: "commentLong", comment: $COMMENT_LONG.slice(2, -2)};}
-    ;
+  = COMMENT_SHORT_START comment_short_body:COMMENT_SHORT_BODY { return {type: "commentShort", comment: comment_short_body}; }
+  / COMMENT_LONG_START comment_long_body:COMMENT_LONG_BODY COMMENT_LONG_END { return {type: "commentLong", comment: comment_long_body}; }
 
 FAMILY
-    : LONG_FAMILY
-    ;
+  = long_family:LONG_FAMILY { return long_family; }
 
 BLOCK_MOVE
-    : FAMILY
-        {$$ = {type: "blockMove", family: $1};}
-    | LAYER FAMILY
-        {$$ = {type: "blockMove", family: $2, innerLayer: $1};}
-    | LAYER DASH LAYER FAMILY
-        {$$ = {type: "blockMove", family: $4, outerLayer: $1, innerLayer: $3};}
-    ;
+  = family:FAMILY { return {type: "blockMove", family: family}; }
+  / innerLayer:LAYER family:FAMILY { return {type: "blockMove", family: family, innerLayer: innerLayer}; }
+  / innerLayer:LAYER DASH outerLayer:LAYER family:FAMILY { return {type: "blockMove", family: family, outerLayer: outerLayer, innerLayer: innerLayer}; }
 
-/*
-TIMESTAMP
-    : AT FLOAT SECONDS
-        {$$ = {type: "timestamp", time: parseFloat($2)};}
-    ;
-*/
+// TODO
+// TIMESTAMP
 
 OPTIONAL_WHITESPACE
-    : WHITESPACE OPTIONAL_WHITESPACE
-    | /* nothing */
-    ;
+    = WHITESPACE OPTIONAL_WHITESPACE
+    / NOTHING
 
 REPEATABLE_UNIT
-    : BLOCK_MOVE
-    | OPEN_BRACKET SEQUENCE COMMA SEQUENCE CLOSE_BRACKET
-        {$$ = {"type": "commutator", "A": $2, "B": $4};}
-    | OPEN_BRACKET SEQUENCE COLON SEQUENCE CLOSE_BRACKET
-        {$$ = {"type": "conjugate", "A": $2, "B": $4};}
-    | OPEN_PARENTHESIS SEQUENCE CLOSE_PARENTHESIS
-        {$$ = {"type": "group", "nestedSequence": $SEQUENCE};}
-    ;
-
-REPEATABLE_UNIT
-    : BLOCK_MOVE
-    | OPEN_BRACKET SEQUENCE COMMA SEQUENCE CLOSE_BRACKET
-        {$$ = {"type": "commutator", "A": $2, "B": $4};}
-    | OPEN_BRACKET SEQUENCE COLON SEQUENCE CLOSE_BRACKET
-        {$$ = {"type": "conjugate", "A": $2, "B": $4};}
-    | OPEN_PARENTHESIS SEQUENCE CLOSE_PARENTHESIS
-        {$$ = {"type": "group", "nestedSequence": $SEQUENCE};}
-    ;
+  = BLOCK_MOVE
+  / OPEN_BRACKET a:SEQUENCE COMMA b:SEQUENCE CLOSE_BRACKET { return {"type": "commutator", "A": a, "B": b}; }
+  / OPEN_BRACKET a:SEQUENCE COLON b:SEQUENCE CLOSE_BRACKET { return {"type": "conjugate", "A": a, "B": b}; }
+  / OPEN_PARENTHESIS nestedSequence:SEQUENCE CLOSE_PARENTHESIS { return {"type": "group", "nestedSequence": nestedSequence}; }
 
 REPEATED_UNIT
-    : REPEATABLE_UNIT
-        {$REPEATABLE_UNIT.amount = 1; $$ = $REPEATABLE_UNIT;}
-    | REPEATABLE_UNIT AMOUNT
-        {$REPEATABLE_UNIT.amount = $AMOUNT; $$ = $REPEATABLE_UNIT;}
-    ;
+  = repeatable_unit:REPEATABLE_UNIT amount:AMOUNT { repeatable_unit.amount = amount; return repeatable_unit; }
+  / repeatable_unit:REPEATABLE_UNIT { repeatable_unit.amount = 1; return repeatable_unit; }
 
 ANNOTATION
-    : NEWLINE
-        {$$ = {"type": "newLine"};}
-    | PAUSE
-        {$$ = {"type": "pause"};}
-    | COMMENT
-    ;
+  = NEWLINE { return {"type": "newLine"}; }
+  / PAUSE { return {"type": "pause"}; }
+  / COMMENT
 
 UNIT_LIST_WITHOUT_WHITESPACE
-    : REPEATED_UNIT
-        {$$ = [$1];}
-    | UNIT_LIST_WITHOUT_WHITESPACE ANNOTATION UNIT_LIST_WITHOUT_WHITESPACE
-        {$$ = $1.concat([$2]).concat($3);}
-    | ANNOTATION UNIT_LIST_WITHOUT_WHITESPACE
-        {$$ = [$1].concat($2);}
-    | UNIT_LIST_WITHOUT_WHITESPACE ANNOTATION
-        {$$ = $1.concat([$2]);}
-    | ANNOTATION
-        {$$ = [$1];}
-    ;
+  = repeated_unit:REPEATED_UNIT unit_list_without_whitespace:UNIT_LIST_WITHOUT_WHITESPACE { return [repeated_unit].concat(unit_list_without_whitespace); }
+  / annotation:ANNOTATION unit_list_without_whitespace:UNIT_LIST_WITHOUT_WHITESPACE { return [annotation].concat(unit_list_without_whitespace); }
+  / repeated_unit:REPEATED_UNIT { return [repeated_unit]; }
+  / annotation:ANNOTATION { return [annotation]; }
 
 UNIT_LIST
-    : UNIT_LIST_WITHOUT_WHITESPACE
-        {$$ = $UNIT_LIST_WITHOUT_WHITESPACE;}
-    | UNIT_LIST WHITESPACE UNIT_LIST_WITHOUT_WHITESPACE
-        {$$ = $UNIT_LIST.concat($UNIT_LIST_WITHOUT_WHITESPACE);}
-    ;
+    = unit_list_without_whitespace:UNIT_LIST_WITHOUT_WHITESPACE WHITESPACE unit_list:UNIT_LIST { return unit_list_without_whitespace.concat(unit_list); }
+    / UNIT_LIST_WITHOUT_WHITESPACE
 
 SEQUENCE
-    : OPTIONAL_WHITESPACE UNIT_LIST OPTIONAL_WHITESPACE
-        {$$ = {"type": "sequence", "nestedUnits": $UNIT_LIST};}
-    | OPTIONAL_WHITESPACE
-        {$$ = {"type": "sequence", "nestedUnits": []};}
-    ;
+    = OPTIONAL_WHITESPACE unit_list:UNIT_LIST OPTIONAL_WHITESPACE { return {"type": "sequence", "nestedUnits": unit_list}; }
+    / OPTIONAL_WHITESPACE { return {"type": "sequence", "nestedUnits": []}; }
 
-TOP_LEVEL_ALG
-    : SEQUENCE
-        {$$ = $1;}
-/*
-    | OPTIONAL_WHITESPACE TIMESTAMP OPTIONAL_WHITESPACE
-        {$$ = [$TIMESTAMP];}
-*/
-    ;
