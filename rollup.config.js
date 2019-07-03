@@ -10,8 +10,8 @@ const plugins = [
   tslint({
     exclude: [
       "node_modules/**",
-      "src/**/parser/index.js",
-      "src/**/parser/parser-source.pegjs"
+      "src/**/parser-source/parser-source.js",
+      "src/**/parser-source/parser-source.pegjs"
     ]
   }),
   typescript2({
@@ -26,12 +26,12 @@ if (!process.env.ROLLUP_WATCH) {
 export default [
   {
     input: {
-      "alg": "src/alg",
-      "bluetooth": "src/bluetooth",
-      "cubing": "src/cubing",
-      "kpuzzle": "src/kpuzzle",
-      "puzzle-geometry": "src/puzzle-geometry",
-      "twisty": "src/twisty"
+      "alg": "src/alg/index.ts",
+      "bluetooth": "src/bluetooth/index.ts",
+      "cubing": "src/cubing/index.ts",
+      "kpuzzle": "src/kpuzzle/index.ts",
+      "puzzle-geometry": "src/puzzle-geometry/index.ts",
+      "twisty": "src/twisty/index.ts"
     },
     output: [
       {
@@ -44,7 +44,7 @@ export default [
     plugins
   },
   {
-    input: "src/cubing",
+    input: "src/cubing/index.ts",
     output: [
       {
         file: "dist/umd/cubing.umd.js",
