@@ -3,5 +3,5 @@ node_js:
   - "node"
   - "lts/*"
 script:
-  - yarn install
-  - make test
+  - npm install
+  - npm test
