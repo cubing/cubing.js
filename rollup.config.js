@@ -8,7 +8,7 @@ import tslint from "rollup-plugin-tslint";
 const plugins = [
   pegjs(),
   tslint({
-    exclude: ["node_modules/**", "src/alg/parser-source.js"]
+    exclude: ["node_modules/**", "src/alg/parser-source.js", "src/alg/parser-source.pegjs"]
   }),
   typescript2({
     typescript: typescript,
@@ -36,7 +36,7 @@ export default [
         sourcemap: true
       }
     ],
-    external: ["three"],
+    external: ["three", "parser-source.pegjs"],
     plugins
   },
   {
@@ -51,7 +51,7 @@ export default [
     plugins: [
       ...plugins,
       resolve({
-        only: ["three"]
+        only: ["three", "parser-source.pegjs"]
       })
     ]
   }
