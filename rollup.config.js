@@ -1,11 +1,15 @@
 import {terser} from "rollup-plugin-terser";
 import * as typescript from "typescript"
+import pegjs from "rollup-plugin-pegjs";
 import resolve from "rollup-plugin-node-resolve";
 import typescript2 from "rollup-plugin-typescript2"
 import tslint from "rollup-plugin-tslint";
 
 const plugins = [
-  tslint({}),
+  pegjs(),
+  tslint({
+    exclude: ["node_modules/**", "src/alg/parser-source.js"]
+  }),
   typescript2({
     typescript: typescript,
   })
