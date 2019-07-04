@@ -12,8 +12,8 @@ BLOCK_MOVE = family:FAMILY { return {type: "blockMove", family: family}; }
            / innerLayer:NUMBER "-" outerLayer:NUMBER family:FAMILY { return {type: "blockMove", family: family, outerLayer: outerLayer, innerLayer: innerLayer}; }
 
 REPEATABLE_UNIT = BLOCK_MOVE
-                / "[" a:SEQUENCE "," b:SEQUENCE "," { return {"type": "commutator", "A": a, "B": b}; }
-                / "[" a:SEQUENCE ":" b:SEQUENCE "," { return {"type": "conjugate", "A": a, "B": b}; }
+                / "[" a:SEQUENCE "," b:SEQUENCE "]" { return {"type": "commutator", "A": a, "B": b}; }
+                / "[" a:SEQUENCE ":" b:SEQUENCE "]" { return {"type": "conjugate", "A": a, "B": b}; }
                 / "(" nestedSequence:SEQUENCE ")" { return {"type": "group", "nestedSequence": nestedSequence}; }
 
 REPEATED_UNIT = repeatable_unit:REPEATABLE_UNIT amount:AMOUNT { repeatable_unit.amount = amount; return repeatable_unit; }
