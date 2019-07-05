@@ -1,7 +1,5 @@
+import {parse as pegParse} from "./parser-source/parser-source"; // TODO
 import {KPuzzleDefinition} from "./spec";
-// import {parse as jison_parse} from "./jison_parser"; // TODO
-
-function jison_parse(s: string): any {return null; } // TODO
 
 function FixMoves(def: KPuzzleDefinition) {
    for (const moveName in def.moves) {
@@ -21,5 +19,5 @@ function FixMoves(def: KPuzzleDefinition) {
 }
 
 export function parse(s: string): KPuzzleDefinition {
-  return FixMoves(jison_parse(s) as KPuzzleDefinition);
+  return FixMoves(pegParse(s) as KPuzzleDefinition);
 }
