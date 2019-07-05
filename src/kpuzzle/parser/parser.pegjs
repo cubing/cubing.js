@@ -1,4 +1,23 @@
-start = DEFINITION_FILE
+{
+  function fixMoves(def) {
+    for (const moveName in def.moves) {
+      const move = def.moves[moveName] ;
+      for (const orbitName in def.orbits) {
+        const moveOrbit = move[orbitName] ;
+        const oldOrientation = moveOrbit.orientation ;
+        const perm = moveOrbit.permutation ;
+        const newOrientation = new Array(oldOrientation.length) ;
+        for (let i = 0; i < perm.length; i++) {
+          newOrientation[i] = oldOrientation[perm[i]] ;
+        }
+        moveOrbit.orientation = newOrientation ;
+      }
+    }
+    return def;
+  }
+}
+
+start = def:DEFINITION_FILE { return fixMoves(def); }
 
 IDENTIFIER = characters:([A-Za-z0-9<>]+) { return characters.join(""); }
 // IDENTIFIER = characters:(([1-9][0-9]*)(([1-9][0-9]*)*)?)*(([A-Za-z]+)|(\<[A-Za-z]+(_[A-Za-z]+)*\>)) { return characters.join(); }

@@ -1,7 +1,7 @@
-import {Sequence} from "./algorithm";
-import {fromJSON} from "./json";
-import {parse as pegParse} from "./parser-source/parser-source";
-import {validateSiGNAlg, Validator} from "./validation";
+import {Sequence} from "../algorithm";
+import {fromJSON} from "../json";
+import {validateSiGNAlg, Validator} from "../validation";
+import {parse as pegParse} from "./parser";
 
 export interface ParseOptions {
   validators?: Validator[];

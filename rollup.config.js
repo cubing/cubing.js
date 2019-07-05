@@ -10,8 +10,8 @@ const plugins = [
   tslint({
     exclude: [
       "node_modules/**",
-      "src/**/parser-source/parser-source.js",
-      "src/**/parser-source/parser-source.pegjs"
+      "src/**/parser/parser.js",
+      "src/**/parser/parser.pegjs"
     ]
   }),
   typescript2({
