@@ -1,4 +1,8 @@
 {
+  function fixPermutation(perm) {
+    return perms.map(x => x - 1);
+  }
+
   function fixMoves(def) {
     for (const moveName in def.moves) {
       const move = def.moves[moveName] ;
@@ -43,7 +47,7 @@ OPTIONAL_NEWLINES = "\n"*
 NUMBERS = num:NUMBER SPACE nums:NUMBERS { return [num].concat(nums); }
         / num:NUMBER { return [parseInt(num, 10)]; }
 
-PERMUTATION = nums:NUMBERS { return nums.map(x => x - 1); }
+PERMUTATION = nums:NUMBERS { return fixPermutation(nums) }
 
 DEFINITION  = set_identifier:SET_IDENTIFIER NEWLINE permutation:PERMUTATION NEWLINE nums:NUMBERS {
                 return [set_identifier, {permutation: permutation, orientation: nums}];
