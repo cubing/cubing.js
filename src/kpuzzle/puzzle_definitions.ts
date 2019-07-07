@@ -1,4 +1,4 @@
-import {KPuzzleDefinition} from "./spec";
+import {KPuzzleDefinition} from "./definition_types";
 
 export const Puzzles: {[key: string]: KPuzzleDefinition} = {
   222: {

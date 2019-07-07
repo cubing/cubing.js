@@ -1,7 +1,7 @@
 export {
   KPuzzleDefinition,
   Transformation,
-} from "./spec";
+} from "./definition_types";
 
 export {
   Combine,

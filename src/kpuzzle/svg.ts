@@ -1,4 +1,4 @@
-import {KPuzzleDefinition, Transformation} from "./spec";
+import {KPuzzleDefinition, Transformation} from "./definition_types";
 
 const xmlns = "http://www.w3.org/2000/svg";
 

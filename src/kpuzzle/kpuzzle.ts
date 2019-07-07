@@ -1,5 +1,5 @@
 import {algToString, BlockMove, expand, parse, Sequence} from "../alg";
-import {KPuzzleDefinition, Transformation} from "./spec";
+import {KPuzzleDefinition, Transformation} from "./definition_types";
 
 export function Combine(def: KPuzzleDefinition, t1: Transformation, t2: Transformation): Transformation {
   const newTrans: Transformation = {} as Transformation;
