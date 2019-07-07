@@ -45,7 +45,7 @@ NEWLINES = "\n"+
 OPTIONAL_NEWLINES = "\n"*
 
 NUMBERS = num:NUMBER SPACE nums:NUMBERS { return [num].concat(nums); }
-        / num:NUMBER { return [parseInt(num, 10)]; }
+        / num:NUMBER { return [num]; }
 
 PERMUTATION = nums:NUMBERS { return fixPermutation(nums) }
 
