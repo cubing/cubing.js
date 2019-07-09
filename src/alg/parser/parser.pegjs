@@ -9,7 +9,7 @@ AMOUNT = repetition:NUMBER "'" { return -repetition; }
 FAMILY = characters:[_A-Za-z]+ { return characters.join(""); }
 BLOCK_MOVE = family:FAMILY { return {type: "blockMove", family: family}; }
            / innerLayer:NUMBER family:FAMILY { return {type: "blockMove", family: family, innerLayer: innerLayer}; }
-           / innerLayer:NUMBER "-" outerLayer:NUMBER family:FAMILY { return {type: "blockMove", family: family, outerLayer: outerLayer, innerLayer: innerLayer}; }
+           / outerLayer:NUMBER "-" innerLayer:NUMBER family:FAMILY { return {type: "blockMove", family: family, outerLayer: outerLayer, innerLayer: innerLayer}; }
 
 REPEATABLE_UNIT = BLOCK_MOVE
                 // We parse commutators/conjugates together to reduce branching.
