@@ -3,6 +3,8 @@ module.exports = {
     "<rootDir>/src"
   ],
   "transform": {
-    "^.+\\.ts$": "ts-jest"
+    "^.+\\.js$": "babel-jest",
+    "^.+\\.ts$": "ts-jest",
+    "^.+\\.pegjs$": "pegjs-jest"
   },
 }

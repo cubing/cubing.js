@@ -13,8 +13,12 @@
     "three": "^0.106.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.0",
+    "@babel/preset-env": "^7.5.2",
     "@types/jest": "^24.0.15",
+    "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
+    "pegjs-jest": "0.0.2",
     "rollup": "^1.16.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-pegjs": "^2.1.3",
