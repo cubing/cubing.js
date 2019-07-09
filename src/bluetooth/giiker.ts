@@ -30,7 +30,7 @@ export const giiKERConfig: BluetoothConfig = {
 // TODO: Expose for testing.
 function giikerMoveToBlockMove(face: number, amount: number): BlockMove {
   if (amount === 9) {
-    console.error("Encountered 9", face, amount);
+    debugLog("Encountered 9", face, amount);
     amount = 2;
   }
   amount = [0, 1, 2, -1][amount];
