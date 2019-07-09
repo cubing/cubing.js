@@ -1,52 +1,51 @@
 {
   "name": "cubing",
-  "main": "./cubing.js",
-  "version": "0.9.18",
-  "description": "Meta-library containing multiple js.cubing.net projects.",
+  "version": "0.10.0",
+  "description": "A collection of Javascript cubing libraries.",
   "author": "The js.cubing.net team",
+  "main": "dist/esm/cubing.js",
+  "types": "dist/esm/index.d.ts",
   "license": "GPL-3.0-or-later",
   "repository": "github:cubing/cubing.js",
-  "bugs": {
-    "url": "https://github.com/cubing/cubing.js/issues"
-  },
-  "types": "./index.d.ts",
   "dependencies": {
-    "alg": "^0.9.18",
-    "cuble": "^0.9.18",
-    "kpuzzle": "^0.9.18",
-    "puzzle-geometry": "^0.9.17",
-    "twisty": "^0.9.18"
+    "@types/three": "^0.103.2",
+    "@types/web-bluetooth": "0.0.4",
+    "three": "^0.106.2"
   },
-  "externalsForWebpack": [],
   "devDependencies": {
-    "@types/jest": "^23.3.1",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "expose-loader": "^0.7.5",
-    "jest": "^23.5.0",
-    "ts-jest": "^23.1.3",
-    "ts-loader": "^4.4.2",
-    "ts-node": "^7.0.0",
-    "typescript": "^2.9.2",
-    "webpack": "^4.12.2",
-    "webpack-cli": "^3.0.8",
-    "webpack-notifier": "^1.6.0"
+    "@babel/core": "^7.5.0",
+    "@babel/preset-env": "^7.5.2",
+    "@types/jest": "^24.0.15",
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0",
+    "pegjs-jest": "0.0.2",
+    "rollup": "^1.16.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-pegjs": "^2.1.3",
+    "rollup-plugin-terser": "^5.0.0",
+    "rollup-plugin-tslint": "^0.2.2",
+    "rollup-plugin-typescript2": "^0.21.2",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.2"
   },
   "scripts": {
-    "test": "jest"
+    "build": "rollup -c",
+    "dev": "rollup -cw",
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "setup": "npm install",
+    "lint": "tslint --fix --project ."
   },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  }
+  "keywords": [
+    "cubing",
+    "speedcubing",
+    "puzzle",
+    "visualization",
+    "kpuzzle",
+    "cuble",
+    "bluetooth",
+    "rubik",
+    "rubik's"
+  ]
 }
