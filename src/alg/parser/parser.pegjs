@@ -26,13 +26,14 @@ ANNOTATION = [\n\r] { return {"type": "newLine"}; }
            / "." { return {"type": "pause"}; }
            / COMMENT
 
-UNIT_SEGMENT = repeated_unit:REPEATED_UNIT unit_segment:UNIT_SEGMENT { return [repeated_unit].concat(unit_segment); }
-             / annotation:ANNOTATION unit_segment:UNIT_SEGMENT { return [annotation].concat(unit_segment); }
-             / repeated_unit:REPEATED_UNIT { return [repeated_unit]; }
-             / annotation:ANNOTATION { return [annotation]; }
+SEGMENT_PART = REPEATED_UNIT
+             / ANNOTATION
 
-UNIT_LIST = unit_segment:UNIT_SEGMENT [ ]+ unit_list:UNIT_LIST { return unit_segment.concat(unit_list); }
-          / UNIT_SEGMENT
+SEGMENT = segment_part:SEGMENT_PART segment:SEGMENT { return [segment_part].concat(segment); }
+        / segment_part:SEGMENT_PART { return [segment_part]; }
+
+UNIT_LIST = segment:SEGMENT [ ]+ unit_list:UNIT_LIST { return segment.concat(unit_list); }
+          / SEGMENT
 
 SEQUENCE = [ ]* unit_list:UNIT_LIST [ ]* { return {"type": "sequence", "nestedUnits": unit_list}; }
          / [ ]* { return {"type": "sequence", "nestedUnits": []}; }
