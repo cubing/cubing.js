@@ -33,6 +33,7 @@ import {
   validateSiGNMoves,
   ValidationError,
 } from "../validation";
+import "./structure-equals";
 
 setAlgPartTypeMismatchReportingLevel("error");
 
@@ -100,7 +101,7 @@ describe("BlockMove", () => {
   });
 
   it("supports a default amount of 1.", () => {
-    e(new Sequence([BareBlockMove("U")]), new Sequence([BareBlockMove("U", 1)])).toBe(true);
+    expect(new Sequence([BareBlockMove("U")])).toStructureEqual(new Sequence([BareBlockMove("U", 1)]));
   });
 
   it("throws an error for an invalid family", () => {
@@ -199,26 +200,26 @@ describe("Traversal", () => {
 
 describe("invert()", () => {
   it("correctly inverts", () => {
-    e(invert(Ex.Sune), Ex.AntiSune).toBe(true);
-    e(invert(invert(Ex.Sune)), Ex.Sune).toBe(true);
+    expect(invert(Ex.Sune)).toStructureEqual(Ex.AntiSune);
+    expect(invert(invert(Ex.Sune))).toStructureEqual(Ex.Sune);
     e(invert(invert(Ex.Sune)), Ex.AntiSune).toBe(false);
   });
 });
 
 describe("expand()", () => {
   it("correctly expands", () => {
-    e(expand(Ex.FURURFCompact), Ex.FURURFMoves).toBe(true);
-    e(expand(Ex.Sune), Ex.Sune).toBe(true);
+    expect(expand(Ex.FURURFCompact)).toStructureEqual(Ex.FURURFMoves);
+    expect(expand(Ex.Sune)).toStructureEqual(Ex.Sune);
     e(expand(Ex.SuneCommutator), Ex.Sune).toBe(false);
     e(expand(Ex.FURURFCompact), expand(Ex.SuneCommutator)).toBe(false);
   });
 
   it("correctly expands a group with two units", () => {
-    e(expand(parse("(R U)2")), parse("R U R U")).toBe(true);
+    expect(expand(parse("(R U)2"))).toStructureEqual(parse("R U R U"));
   });
 
   it("correctly expands an E-Perm", () => {
-    e(expand(Ex.EPerm), parse("x' R U' R' D R U R' D' R U R' D R U' R' D' x")).toBe(true);
+    expect(expand(Ex.EPerm)).toStructureEqual(parse("x' R U' R' D R U R' D' R U R' D R U' R' D' x"));
   });
 });
 
@@ -226,19 +227,19 @@ describe("structureEquals", () => {
   it("correctly compares algs", () => {
     e(Ex.FURURFCompact, Ex.FURURFMoves).toBe(false);
     e(Ex.FURURFMoves, Ex.FURURFCompact).toBe(false);
-    e(Ex.FURURFMoves, Ex.FURURFMoves).toBe(true);
-    e(Ex.FURURFCompact, Ex.FURURFCompact).toBe(true);
+    expect(Ex.FURURFMoves).toStructureEqual(Ex.FURURFMoves);
+    expect(Ex.FURURFCompact).toStructureEqual(Ex.FURURFCompact);
   });
 });
 
 describe("coalesceBaseMoves()", () => {
   it("coalesces U U to U2", () => {
-    e(coalesceBaseMoves(UU), U2).toBe(true);
+    expect(coalesceBaseMoves(UU)).toStructureEqual(U2);
     expect(algToString(coalesceBaseMoves(UU))).toBe("U2");
   });
 
   it("coalesces expanded commutator Sune corectly", () => {
-    e(coalesceBaseMoves(expand(Ex.SuneCommutator)), Ex.Sune).toBe(true);
+    expect(coalesceBaseMoves(expand(Ex.SuneCommutator))).toStructureEqual(Ex.Sune);
   });
 });
 
@@ -277,12 +278,12 @@ describe("Object Freezing", () => {
 
 describe("Parser", () => {
   it("parses an empty sequence", () => {
-    e(parse(""), new Sequence([])).toBe(true);
-    e(parse("()"), new Sequence([new Group(new Sequence([]))])).toBe(true);
+    expect(parse("")).toStructureEqual(new Sequence([]));
+    expect(parse("()")).toStructureEqual(new Sequence([new Group(new Sequence([]))]));
   });
 
   it("parses a Sune", () => {
-    e(parse("R U R' U R U2' R'"), Ex.Sune).toBe(true);
+    expect(parse("R U R' U R U2' R'")).toStructureEqual(Ex.Sune);
   });
 
   it("parses U u Uw x 2U 2u 2Uw 2-3u 2-3Uw", () => {
@@ -292,29 +293,29 @@ describe("Parser", () => {
 
   it("parses ...", () => {
     const p = new Pause();
-    e(parse("..."), new Sequence([p, p, p])).toBe(true);
+    expect(parse("...")).toStructureEqual(new Sequence([p, p, p]));
   });
 
   // TODO: Should these be parsed differently?
   it("parses R and R1 as the same (for now)", () => {
-    e(parse("R"), parse("R1")).toBe(true);
+    expect(parse("R")).toStructureEqual(parse("R1"));
   });
 
   it("round-trips algs through a string", () => {
-    e(parse(algToString(Ex.SuneCommutator)), Ex.SuneCommutator).toBe(true);
-    e(parse(algToString(Ex.Niklas)), Ex.Niklas).toBe(true);
-    e(parse(algToString(Ex.FURURFCompact)), Ex.FURURFCompact).toBe(true);
-    e(parse(algToString(Ex.APermCompact)), Ex.APermCompact).toBe(true);
-    e(parse(algToString(Ex.TPerm)), Ex.TPerm).toBe(true);
-    e(parse(algToString(Ex.HeadlightSwaps)), Ex.HeadlightSwaps).toBe(true);
-    e(parse(algToString(Ex.TriplePause)), Ex.TriplePause).toBe(true);
+    expect(parse(algToString(Ex.SuneCommutator))).toStructureEqual(Ex.SuneCommutator);
+    expect(parse(algToString(Ex.Niklas))).toStructureEqual(Ex.Niklas);
+    expect(parse(algToString(Ex.FURURFCompact))).toStructureEqual(Ex.FURURFCompact);
+    expect(parse(algToString(Ex.APermCompact))).toStructureEqual(Ex.APermCompact);
+    expect(parse(algToString(Ex.TPerm))).toStructureEqual(Ex.TPerm);
+    expect(parse(algToString(Ex.HeadlightSwaps))).toStructureEqual(Ex.HeadlightSwaps);
+    expect(parse(algToString(Ex.TriplePause))).toStructureEqual(Ex.TriplePause);
   });
 
   it("round-trips all alg types through a string", () => {
     // Update this based on the length of AllAlgParts.
     for (const a of Ex.AllAlgParts) {
       const seq = (matchesAlgType(a, "sequence")) ? (a as Sequence) : new Sequence([a]);
-      e(parse(algToString(seq)), seq).toBe(true);
+      expect(parse(algToString(seq))).toStructureEqual(seq);
     }
   });
 });
