@@ -25,7 +25,7 @@ if (!process.env.ROLLUP_WATCH) {
   }));
 }
 
-const module = {
+const mod = {
   external: ["three"],
   input: {
     "alg": "src/alg/index.ts",
@@ -67,9 +67,9 @@ const umd = {
   ],
 };
 
-const configs = [umd];
+const configs = [mod];
 if (!process.env.ROLLUP_WATCH) {
-  configs.push(module);
+  configs.push(umd);
 }
 
 export default configs;
