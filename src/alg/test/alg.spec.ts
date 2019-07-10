@@ -40,7 +40,7 @@ const U2 = new Sequence([BareBlockMove("U", 2)]);
 
 function e(a1: Sequence, a2: Sequence) {
   return expect(structureEquals(a1, a2));
-};
+}
 
 describe("AlgPart", () => {
   class PauseSubClass extends Pause {

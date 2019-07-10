@@ -1,4 +1,4 @@
-import {Quat} from "./Quat"
+import {Quat} from "./Quat";
 
 describe("Quat", () => {
   it("should multiply", () => {

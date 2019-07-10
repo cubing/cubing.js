@@ -1,5 +1,5 @@
-import { Example } from "../alg"
-import { Cursor } from "./cursor"
+import { Example } from "../alg";
+import { Cursor } from "./cursor";
 
 // describe("applyBlockMove()", () => {
 //   it("should be able to apply a block move", () => {
@@ -14,7 +14,6 @@ describe("Durations", () => {
     expect(new Cursor.AlgDuration(Cursor.DefaultDurationForAmount).traverse(Example.Sune)).toBe(7500);
   });
 });
-
 
 // "use strict";
 
@@ -42,7 +41,6 @@ describe("Durations", () => {
 // //   twistyTest("Backwards from just before end", b1.breakpoint(Twisty.Cursor.Direction.Backwards, Twisty.Timeline.BreakpointType.Move, 1999) === 1500);
 // //   twistyTest("Backwards from end", b1.breakpoint(Twisty.Cursor.Direction.Backwards, Twisty.Timeline.BreakpointType.Move, 2000) === 1500);
 // // })();
-
 
 // (function TestDurations() {
 //   console.log(new Twisty.Cursor.AlgDuration(Twisty.Cursor.DefaultDurationForAmount).traverse(Alg.Example.Sune));
@@ -78,7 +76,6 @@ describe("Durations", () => {
 
 //       var expectedMove = expected.moves[i].move;
 //       var actualMove = pos.moves[i].move;
-
 
 //       if (expectedMove.type != "blockMove")) {
 //         return false;
@@ -250,7 +247,6 @@ describe("Durations", () => {
 //       "state": {"CORNERS":{"permutation":[1,2,3,4,5,6,7,8],"orientation":[0,0,0,0,0,0,0,0]},"EDGES":{"permutation":[1,2,3,4,5,6,7,8,9,10,11,12],"orientation":[0,0,0,0,0,0,0,0,0,0,0,0]}},
 //       "moves": [
 //   ]}));
-
 
 //   // c.backward(500, false);
 //   // console.log(c.currentTimestamp(), JSON.stringify(c.currentPosition()));

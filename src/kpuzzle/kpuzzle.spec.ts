@@ -1,6 +1,6 @@
-import {BareBlockMove} from "../alg"
-import {KPuzzle} from "./kpuzzle"
-import {Puzzles} from "./puzzle_definitions"
+import {BareBlockMove} from "../alg";
+import {KPuzzle} from "./kpuzzle";
+import {Puzzles} from "./puzzle_definitions";
 
 describe("applyBlockMove()", () => {
   it("should be able to apply a SiGN move", () => {
