@@ -11,8 +11,15 @@ export class BlockMove extends Move {
   public innerLayer?: number;
   constructor(outerLayer: number | undefined, innerLayer: number | undefined, public family: MoveFamily, public amount: number= 1) {
     super();
-    this.outerLayer = outerLayer;
-    this.innerLayer = innerLayer;
+    if (innerLayer) {
+      this.innerLayer = innerLayer;
+      if (outerLayer) {
+        this.outerLayer = outerLayer;
+      }
+    }
+    if (outerLayer && !innerLayer) {
+      throw new Error("Attempted to contruct block move with outer layer but no inner layer");
+    }
     Object.freeze(this);
   }
 }

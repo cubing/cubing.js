@@ -1,5 +1,6 @@
 import {
   BareBlockMove,
+  BlockMove,
   Commutator,
   Group,
   LayerBlockMove,
@@ -132,6 +133,10 @@ describe("BlockMove", () => {
     expect(() => parseSiGN("2-3UF")).toThrowError(/The provided SiGN move family is invalid/);
     expect(() => parseSiGN("4TEST_Hello")).toThrowError(/The provided SiGN move family is invalid/);
     expect(() => parseSiGN("_R")).toThrowError(/Invalid SiGN plain move family/);
+  });
+
+  it("should prevent cosntructing a move with only outer layer", () => {
+    expect(() => new BlockMove(4, undefined, "R")).toThrow();
   });
 });
 
