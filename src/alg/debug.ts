@@ -8,7 +8,7 @@ let numWarned = 0;
 export function reportTypeMismatch(msg: string): void {
   switch (currentReportingLevel) {
     case "error":
-      throw msg;
+      throw new Error(msg);
     case "warn":
       numWarned++;
       if (numWarned < MAX_NUMBER_OF_TIMES_TO_WARN) {
