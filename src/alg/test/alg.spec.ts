@@ -54,60 +54,60 @@ describe("AlgPart", () => {
 });
 
 describe("Sequence", () => {
-  it("should allow an empty sequence", () => {
+  it("allows an empty sequence", () => {
     expect(() => new Sequence([])).not.toThrow();
     expect(() => new Commutator(new Sequence([]), new Sequence([]))).not.toThrow();
   });
 
-  it("should throw an error for a nested sequence", () => {
+  it("throws an error for a nested sequence", () => {
     expect(() => new Sequence([new Sequence([BareBlockMove("R", 1)])])).toThrowError(/Expected unit, saw "sequence"/);
   });
 });
 
 describe("BlockMove", () => {
-  it("should allow constructing: x, U, u", () => {
+  it("allows constructing: x, U, u", () => {
     expect(algPartToStringForTesting(BareBlockMove("x", 1))).toBe("x");
     expect(algPartToStringForTesting(BareBlockMove("U", 1))).toBe("U");
     expect(algPartToStringForTesting(BareBlockMove("u", 1))).toBe("u");
   });
 
-  it("should allow constructing: 2U, 2u", () => {
+  it("allows constructing: 2U, 2u", () => {
     expect(algPartToStringForTesting(LayerBlockMove(2, "U", 1))).toBe("2U");
     expect(algPartToStringForTesting(LayerBlockMove(2, "u", 1))).toBe("2u");
   });
 
-  it("should prevent constructing: 2x, [-2]U, [-2]u", () => {
+  it("prevents constructing: 2x, [-2]U, [-2]u", () => {
     expect(() => validateSiGNMoves(new Sequence([LayerBlockMove(2, "x", 1)]))).toThrowError(/cannot have an inner slice/);
     expect(() => validateSiGNMoves(new Sequence([LayerBlockMove(-2, "U", 1)]))).toThrowError(/Cannot have an inner layer of 0 or less/);
     expect(() => validateSiGNMoves(new Sequence([LayerBlockMove(-2, "u", 1)]))).toThrowError(/Cannot have an inner layer of 0 or less/);
   });
 
-  it("should allow constructing: 2-3u", () => {
+  it("allows constructing: 2-3u", () => {
     expect(algPartToStringForTesting(RangeBlockMove(2, 3, "u", 1))).toBe("2-3u");
   });
 
-  it("should prevent constructing: 2-3x, 2-3U, [-2]-3u, 4-3u", () => {
+  it("prevents constructing: 2-3x, 2-3U, [-2]-3u, 4-3u", () => {
     expect(() => validateSiGNMoves(new Sequence([RangeBlockMove(2, 3, "x", 1)]))).toThrowError(/cannot have an outer and inner layer/);
     expect(() => validateSiGNMoves(new Sequence([RangeBlockMove(2, 3, "U", 1)]))).toThrowError(/cannot have an outer and inner layer/);
     expect(() => validateSiGNMoves(new Sequence([RangeBlockMove(-2, 3, "u", 1)]))).toThrowError(/Cannot have an outer layer of 0 or less/);
     expect(() => validateSiGNMoves(new Sequence([RangeBlockMove(4, 3, "u", 1)]))).toThrowError(/The outer layer must be less than the inner layer/);
   });
 
-  it("should prevent constructing: w, 2T, 2-3q", () => {
+  it("prevents constructing: w, 2T, 2-3q", () => {
     // expect(() =>algPartToStringForTesting(BareBlockMove("w", 1))).toThrowError(/Invalid SiGN plain move family: w/);
     // expect(() =>algPartToStringForTesting(LayerBlockMove(2, "T", 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an inner slice: T/);
     // expect(() =>algPartToStringForTesting(RangeBlockMove(2, 3, "q", 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an outer and inner layer: q/);
   });
 
-  it("should support a default amount of 1.", () => {
+  it("supports a default amount of 1.", () => {
     e(new Sequence([BareBlockMove("U")]), new Sequence([BareBlockMove("U", 1)])).toBe(true);
   });
 
-  it("should throw an error for an invalid family", () => {
+  it("throws an error for an invalid family", () => {
     // expect(() => BareBlockMove("Q", 1)).toThrowError(/Invalid SiGN plain move family/);
   });
 
-  it("should have a default amount of 1", () => {
+  it("has a default amount of 1", () => {
     expect(BareBlockMove("x").amount).toBe(1);
     expect(BareBlockMove("R").amount).toBe(1);
     expect(BareBlockMove("u").amount).toBe(1);
@@ -116,7 +116,7 @@ describe("BlockMove", () => {
     expect(RangeBlockMove(2, 3, "u").amount).toBe(1);
   });
 
-  it("should allow different amounts 1", () => {
+  it("allows different amounts 1", () => {
     expect(BareBlockMove("x", 2).amount).toBe(2);
     expect(BareBlockMove("R", 3).amount).toBe(3);
     expect(BareBlockMove("u", -5).amount).toBe(-5);
@@ -125,7 +125,7 @@ describe("BlockMove", () => {
     expect(RangeBlockMove(2, 12, "u", 15).amount).toBe(15);
   });
 
-  it("should catch invalid moves with parseSiGN().", () => {
+  it("catches invalid moves with parseSiGN().", () => {
     expect(() => parseSiGN("R")).not.toThrowError();
     expect(() => parseSiGN("g")).toThrowError(/Invalid SiGN plain move family/);
     expect(() => parseSiGN("2Ww")).toThrowError(/The provided SiGN move family is invalid/);
@@ -135,13 +135,13 @@ describe("BlockMove", () => {
     expect(() => parseSiGN("_R")).toThrowError(/Invalid SiGN plain move family/);
   });
 
-  it("should prevent cosntructing a move with only outer layer", () => {
+  it("prevents cosntructing a move with only outer layer", () => {
     expect(() => new BlockMove(4, undefined, "R")).toThrow();
   });
 });
 
 describe("algToString()", () => {
-  it("should convert all move types correctly", () => {
+  it("converts all move types correctly", () => {
     expect(algPartToStringForTesting(BareBlockMove("x", 2))).toBe("x2");
     expect(algPartToStringForTesting(BareBlockMove("R", 3))).toBe("R3");
     expect(algPartToStringForTesting(BareBlockMove("u", -5))).toBe("u5'");
@@ -150,12 +150,12 @@ describe("algToString()", () => {
     expect(algPartToStringForTesting(RangeBlockMove(2, 12, "u", 15))).toBe("2-12u15");
   });
 
-  it("should distinguish between 1R and R", () => {
+  it("distinguishes between 1R and R", () => {
     expect(algPartToStringForTesting(LayerBlockMove(1, "R"))).toBe("1R");
     expect(algPartToStringForTesting(BareBlockMove("R"))).toBe("R");
   });
 
-  it("should handle empty sequences", () => {
+  it("handles empty sequences", () => {
     expect(algToString(new Sequence([]))).toBe("");
     expect(algPartToStringForTesting(new Group(new Sequence([])))).toBe("()");
     // TODO: Should this be "[,]"
@@ -169,19 +169,19 @@ describe("algToString()", () => {
     )).toBe("[, ]");
   });
 
-  it("should convert Sune to string", () => {
+  it("converts Sune to string", () => {
     expect(algToString(Ex.Sune)).toBe("R U R' U R U2' R'");
   });
 
-  it("should convert U U to string", () => {
+  it("converts U U to string", () => {
     expect(algToString(UU)).toBe("U U");
   });
 
-  it("should convert E-Perm to string", () => {
+  it("converts E-Perm to string", () => {
    expect(algToString(Ex.EPerm)).toBe("x' [[R: U'], D] [[R: U], D] x");
  });
 
-  it("should convert triple pause to ... (without spaces)", () => {
+  it("converts triple pause to ... (without spaces)", () => {
     expect(algToString(Ex.TriplePause)).toBe("...");
   });
 });
@@ -198,7 +198,7 @@ describe("Traversal", () => {
 });
 
 describe("invert()", () => {
-  it("should correctly invert", () => {
+  it("correctly inverts", () => {
     e(invert(Ex.Sune), Ex.AntiSune).toBe(true);
     e(invert(invert(Ex.Sune)), Ex.Sune).toBe(true);
     e(invert(invert(Ex.Sune)), Ex.AntiSune).toBe(false);
@@ -206,24 +206,24 @@ describe("invert()", () => {
 });
 
 describe("expand()", () => {
-  it("should correctly expand", () => {
+  it("correctly expands", () => {
     e(expand(Ex.FURURFCompact), Ex.FURURFMoves).toBe(true);
     e(expand(Ex.Sune), Ex.Sune).toBe(true);
     e(expand(Ex.SuneCommutator), Ex.Sune).toBe(false);
     e(expand(Ex.FURURFCompact), expand(Ex.SuneCommutator)).toBe(false);
   });
 
-  it("should correctly expand a group with two units", () => {
+  it("correctly expands a group with two units", () => {
     e(expand(parse("(R U)2")), parse("R U R U")).toBe(true);
   });
 
-  it("should correctly expand an E-Perm", () => {
+  it("correctly expands an E-Perm", () => {
     e(expand(Ex.EPerm), parse("x' R U' R' D R U R' D' R U R' D R U' R' D' x")).toBe(true);
   });
 });
 
 describe("structureEquals", () => {
-  it("should correctly compare", () => {
+  it("correctly compares algs", () => {
     e(Ex.FURURFCompact, Ex.FURURFMoves).toBe(false);
     e(Ex.FURURFMoves, Ex.FURURFCompact).toBe(false);
     e(Ex.FURURFMoves, Ex.FURURFMoves).toBe(true);
@@ -232,25 +232,25 @@ describe("structureEquals", () => {
 });
 
 describe("coalesceBaseMoves()", () => {
-  it("should coalesce U U to U2", () => {
+  it("coalesces U U to U2", () => {
     e(coalesceBaseMoves(UU), U2).toBe(true);
     expect(algToString(coalesceBaseMoves(UU))).toBe("U2");
   });
 
-  it("should coalesce expanded commutator Sune corectly", () => {
+  it("coalesces expanded commutator Sune corectly", () => {
     e(coalesceBaseMoves(expand(Ex.SuneCommutator)), Ex.Sune).toBe(true);
   });
 });
 
 describe("JSON", () => {
-  it("should round-trip an alg through JSON stringification", () => {
+  it("round-trips an alg through JSON stringification", () => {
     e(fromJSON(JSON.parse(JSON.stringify(Ex.FURURFCompact))),
       Ex.FURURFCompact).toBe(true);
   });
 });
 
 describe("Object Freezing", () => {
-  it("should freeze all example alg types", () => {
+  it("freezes all example alg types", () => {
     // Update this based on the length of AllAlgParts.
     expect(Ex.AllAlgParts.length).toBe(9);
     for (const a of Ex.AllAlgParts) {
@@ -258,12 +258,12 @@ describe("Object Freezing", () => {
     }
   });
 
-  it("should freeze `nestedUnits` list on Sequence", () => {
+  it("freezes `nestedUnits` list on Sequence", () => {
     // Update this based on the length of AllAlgParts.
     expect(Object.isFrozen(new Sequence([BareBlockMove("R", 1)]).nestedUnits)).toBe(true);
   });
 
-  it("should not be possible to modify a BaseMove", () => {
+  it("makes it impossible to modify a BaseMove", () => {
       const b = BareBlockMove("R", 4);
       let caughtErr: Error | undefined;
       try {
@@ -276,31 +276,31 @@ describe("Object Freezing", () => {
 });
 
 describe("Parser", () => {
-  it("should parse an empty sequence", () => {
+  it("parses an empty sequence", () => {
     e(parse(""), new Sequence([])).toBe(true);
     e(parse("()"), new Sequence([new Group(new Sequence([]))])).toBe(true);
   });
 
-  it("should parse a Sune", () => {
+  it("parses a Sune", () => {
     e(parse("R U R' U R U2' R'"), Ex.Sune).toBe(true);
   });
 
-  it("should parse U u Uw x 2U 2u 2Uw 2-3u 2-3Uw", () => {
+  it("parses U u Uw x 2U 2u 2Uw 2-3u 2-3Uw", () => {
     const s = "U u Uw x 2U 2u 2Uw 2-3u 2-3Uw";
     expect(algToString(parse(s))).toBe(s);
   });
 
-  it("should parse ...", () => {
+  it("parses ...", () => {
     const p = new Pause();
     e(parse("..."), new Sequence([p, p, p])).toBe(true);
   });
 
   // TODO: Should these be parsed differently?
-  it("should parse R and R1 as the same (for now)", () => {
+  it("parses R and R1 as the same (for now)", () => {
     e(parse("R"), parse("R1")).toBe(true);
   });
 
-  it("should round-trip algs through a string", () => {
+  it("round-trips algs through a string", () => {
     e(parse(algToString(Ex.SuneCommutator)), Ex.SuneCommutator).toBe(true);
     e(parse(algToString(Ex.Niklas)), Ex.Niklas).toBe(true);
     e(parse(algToString(Ex.FURURFCompact)), Ex.FURURFCompact).toBe(true);
@@ -310,7 +310,7 @@ describe("Parser", () => {
     e(parse(algToString(Ex.TriplePause)), Ex.TriplePause).toBe(true);
   });
 
-  it("should round-trip all alg types through a string", () => {
+  it("round-trips all alg types through a string", () => {
     // Update this based on the length of AllAlgParts.
     for (const a of Ex.AllAlgParts) {
       const seq = (matchesAlgType(a, "sequence")) ? (a as Sequence) : new Sequence([a]);
