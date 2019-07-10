@@ -1,8 +1,8 @@
 import {terser} from "rollup-plugin-terser";
-import * as typescript from "typescript"
+import * as typescript from "typescript";
 import pegjs from "rollup-plugin-pegjs";
 import resolve from "rollup-plugin-node-resolve";
-import typescript2 from "rollup-plugin-typescript2"
+import typescript2 from "rollup-plugin-typescript2";
 import tslint from "rollup-plugin-tslint";
 
 const plugins = [
@@ -11,44 +11,44 @@ const plugins = [
     exclude: [
       "node_modules/**",
       "src/**/parser/parser.js",
-      "src/**/parser/parser.pegjs"
-    ]
+      "src/**/parser/parser.pegjs",
+    ],
   }),
   typescript2({
     typescript: typescript,
-  })
-]
+  }),
+];
 
 if (!process.env.ROLLUP_WATCH) {
   plugins.push(terser({
-    keep_classnames: true
-  }))
+    keep_classnames: true,
+  }));
 }
 
 const module = {
+  external: ["three"],
   input: {
     "alg": "src/alg/index.ts",
     "bluetooth": "src/bluetooth/index.ts",
     "cubing": "src/cubing/index.ts",
     "kpuzzle": "src/kpuzzle/index.ts",
     "puzzle-geometry": "src/puzzle-geometry/index.ts",
-    "twisty": "src/twisty/index.ts"
+    "twisty": "src/twisty/index.ts",
   },
   output: [
     {
       dir: "dist/esm",
       format: "esm",
-      sourcemap: true
+      sourcemap: true,
     },
     {
       dir: "dist/cjs",
       format: "cjs",
-      sourcemap: true
-    }
+      sourcemap: true,
+    },
   ],
-  external: ["three"],
-  plugins
-}
+  plugins,
+};
 
 const umd = {
   input: "src/cubing/index.ts",
@@ -56,20 +56,20 @@ const umd = {
     {
       file: "dist/umd/cubing.umd.js",
       format: "umd",
-      name: "cubing"
-    }
+      name: "cubing",
+    },
   ],
   plugins: [
     ...plugins,
     resolve({
-      only: ["three"]
-    })
-  ]
-}
+      only: ["three"],
+    }),
+  ],
+};
 
-const configs = [umd]
+const configs = [umd];
 if (!process.env.ROLLUP_WATCH) {
-  configs.push(module)
+  configs.push(module);
 }
 
 export default configs;

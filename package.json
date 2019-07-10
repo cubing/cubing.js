@@ -35,7 +35,7 @@
     "clean": "rm -rf dist",
     "test": "jest",
     "setup": "npm install",
-    "lint": "tslint --fix --project ."
+    "lint": "tslint --fix --project . ; tslint --fix rollup.config.js"
   },
   "keywords": [
     "cubing",
