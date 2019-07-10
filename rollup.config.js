@@ -25,7 +25,7 @@ if (!process.env.ROLLUP_WATCH) {
   }))
 }
 
-const esm = {
+const module = {
   input: {
     "alg": "src/alg/index.ts",
     "bluetooth": "src/bluetooth/index.ts",
@@ -38,6 +38,11 @@ const esm = {
     {
       dir: "dist/esm",
       format: "esm",
+      sourcemap: true
+    },
+    {
+      dir: "dist/cjs",
+      format: "cjs",
       sourcemap: true
     }
   ],
@@ -64,7 +69,7 @@ const umd = {
 
 const configs = [umd]
 if (!process.env.ROLLUP_WATCH) {
-  configs.push(esm)
+  configs.push(module)
 }
 
 export default configs;

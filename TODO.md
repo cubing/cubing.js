@@ -1,5 +1,2 @@
-- Externals: `three`.
 - Preserve class names and function arguments
-- Transpile to module format that can be used by node.
-- Keep function argument names.
-- Update tests
+  - `require(".").alg.parse("R").constructor.name`
