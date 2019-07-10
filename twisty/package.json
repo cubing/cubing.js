@@ -1,0 +1,6 @@
+{
+  "name": "twisty",
+  "version": "0.10.0",
+  "main": "../dist/cjs/twisty.js",
+  "types": "../dist/cjs/twisty.d.ts"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "kpuzzle",
+  "version": "0.10.0",
+  "main": "../dist/cjs/kpuzzle.js",
+  "types": "../dist/cjs/kpuzzle.d.ts"
+}

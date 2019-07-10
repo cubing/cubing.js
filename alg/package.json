@@ -1,0 +1,6 @@
+{
+  "name": "alg",
+  "version": "0.10.0",
+  "main": "../dist/cjs/alg.js",
+  "types": "../dist/cjs/alg.d.ts"
+}
