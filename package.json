@@ -4,7 +4,7 @@
   "description": "A collection of Javascript cubing libraries.",
   "author": "The js.cubing.net team",
   "main": "dist/cjs/cubing.js",
-  "types": "dist/cjs/index.d.ts",
+  "types": "dist/cjs/cubing/index.d.ts",
   "license": "GPL-3.0-or-later",
   "repository": "github:cubing/cubing.js",
   "dependencies": {

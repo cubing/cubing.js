@@ -3,6 +3,7 @@
     "alwaysStrict": true,
     "declaration": true,
     "declarationDir": "./dist",
+    "declarationMap": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
     "lib": ["es6", "dom", "es2015"],
