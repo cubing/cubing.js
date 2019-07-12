@@ -57,6 +57,7 @@ const umd = {
       file: "dist/umd/cubing.umd.js",
       format: "umd",
       name: "cubing",
+      sourcemap: true,
     },
   ],
   plugins: [
