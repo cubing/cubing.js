@@ -33,7 +33,7 @@
     "build": "rollup -c",
     "dev": "rollup -cw",
     "clean": "rm -rf dist",
-    "test": "jest && tslint --project .",
+    "test": "jest && npm run lint",
     "setup": "npm install",
     "lint": "tslint --fix --project . ; tslint --fix rollup.config.js"
   },
