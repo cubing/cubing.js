@@ -37,11 +37,6 @@ const mod = {
   },
   output: [
     {
-      dir: "dist/esm",
-      format: "esm",
-      sourcemap: true,
-    },
-    {
       dir: "dist/cjs",
       format: "cjs",
       sourcemap: true,
