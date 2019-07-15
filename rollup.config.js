@@ -4,6 +4,7 @@ import pegjs from "rollup-plugin-pegjs";
 import resolve from "rollup-plugin-node-resolve";
 import typescript2 from "rollup-plugin-typescript2";
 import tslint from "rollup-plugin-tslint";
+import notify from "rollup-plugin-notify";
 
 const plugins = [
   pegjs(),
@@ -16,6 +17,9 @@ const plugins = [
   }),
   typescript2({
     typescript: typescript,
+  }),
+  notify({
+    success: true,
   }),
 ];
 
