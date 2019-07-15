@@ -108,12 +108,12 @@ export class Quat {
       const that = this ;
       return cubie.map((_: Quat[]) => that.rotateface(_)) ;
    }
-   public intersect3(p2: Quat, p3: Quat) { // intersect three planes if there is one
+   public intersect3(p2: Quat, p3: Quat): Quat | false { // intersect three planes if there is one
       const det = this.det3x3(this.b, this.c, this.d,
                             p2.b, p2.c, p2.d,
                             p3.b, p3.c, p3.d) ;
       if (Math.abs(det) < Quat.eps) {
-         return false ;
+         return false ; // TODO: Change to `null` or `undefined`?
       }
       return new Quat(0,
                   this.det3x3(this.a, this.c, this.d,

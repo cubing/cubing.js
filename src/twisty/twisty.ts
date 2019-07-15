@@ -31,7 +31,7 @@ export class Twisty {
   }
 
   // Plays the full final move if there is one.
-  public experimentalSetAlg(alg: Sequence) {
+  public experimentalSetAlg(alg: Sequence): void {
     this.anim.skipToStart();
     this.alg = alg;
     this.cursor.experimentalSetMoves(alg);
@@ -83,7 +83,7 @@ function autoInitialize(elem: Element): Twisty | null {
   return null;
 }
 
-function autoInitializePage() {
+function autoInitializePage(): void {
   const elems = document.querySelectorAll("twisty");
   console.log(`Found ${elems.length} twisty elem${elems.length === 1 ? "" : "s"} on page.`);
 

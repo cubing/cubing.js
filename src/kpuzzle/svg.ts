@@ -57,7 +57,7 @@ export class SVG {
   }
 
   // TODO: save definition in the constructor?
-  public draw(definition: KPuzzleDefinition, state: Transformation, nextState?: Transformation, fraction?: number) {
+  public draw(definition: KPuzzleDefinition, state: Transformation, nextState?: Transformation, fraction?: number): void {
     for (const orbitName in definition.orbits) {
       const orbitDefinition = definition.orbits[orbitName];
 

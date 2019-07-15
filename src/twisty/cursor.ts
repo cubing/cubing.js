@@ -59,18 +59,18 @@ export class Cursor<P extends Puzzle> {
     this.durationFn = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount);
   }
 
-  public experimentalSetMoves(alg: Sequence) {
+  public experimentalSetMoves(alg: Sequence): void {
     this.setMoves(alg);
   }
 
-  public setPositionToStart() {
+  public setPositionToStart(): void {
     this.moveIdx = 0;
     this.moveStartTimestamp = 0;
     this.algTimestamp = 0;
     this.state = this.puzzle.startState();
   }
 
-  public setPositionToEnd() {
+  public setPositionToEnd(): void {
     this.setPositionToStart();
     this.forward(this.algDuration(), false);
   }
@@ -176,7 +176,7 @@ export class Cursor<P extends Puzzle> {
     return true;
   }
 
-  private setMoves(alg: Sequence) {
+  private setMoves(alg: Sequence): void {
     const moves = expand(alg);
     if (moves.type === "sequence") {
       this.moves = moves;
@@ -190,12 +190,12 @@ export class Cursor<P extends Puzzle> {
     // TODO: Avoid assuming all base moves are block moves.
   }
 
-  private algDuration() {
+  private algDuration(): Cursor.Duration {
     // TODO: Cache internally once performance matters.
     return this.durationFn.traverse(this.moves);
   }
 
-  private numMoves() {
+  private numMoves(): number {
     // TODO: Cache internally once performance matters.
     return countAnimatedMoves(this.moves);
   }
@@ -253,7 +253,7 @@ export namespace Cursor {
 
   export class AlgDuration extends TraversalUp<Duration> {
     // TODO: Pass durationForAmount as Down type instead?
-    constructor(public durationForAmount = DefaultDurationForAmount) {
+    constructor(public durationForAmount: (amount: number) => Duration = DefaultDurationForAmount) {
       super();
     }
 

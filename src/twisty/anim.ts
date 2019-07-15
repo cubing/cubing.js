@@ -25,42 +25,42 @@ export class Dispatcher implements CursorObserver, DirectionObserver {
   private directionObservers: Set<DirectionObserver> = new Set<DirectionObserver>();
   private jumpObservers: Set<JumpObserver> = new Set<JumpObserver>();
 
-  public registerCursorObserver(observer: CursorObserver) {
+  public registerCursorObserver(observer: CursorObserver): void {
     if (this.cursorObservers.has(observer)) {
       throw new Error("Duplicate cursor observer added.");
     }
     this.cursorObservers.add(observer);
   }
 
-  public registerDirectionObserver(observer: DirectionObserver) {
+  public registerDirectionObserver(observer: DirectionObserver): void {
     if (this.directionObservers.has(observer)) {
       throw new Error("Duplicate direction observer added.");
     }
     this.directionObservers.add(observer);
   }
 
-  public registerJumpObserver(observer: JumpObserver) {
+  public registerJumpObserver(observer: JumpObserver): void {
     if (this.jumpObservers.has(observer)) {
       throw new Error("Duplicate direction observer added.");
     }
     this.jumpObservers.add(observer);
   }
 
-  public animCursorChanged(cursor: Cursor<Puzzle>) {
+  public animCursorChanged(cursor: Cursor<Puzzle>): void {
     // TODO: guard against nested changes and test.
     for (const observer of this.cursorObservers) {
       observer.animCursorChanged(cursor);
     }
   }
 
-  public animDirectionChanged(direction: Cursor.Direction) {
+  public animDirectionChanged(direction: Cursor.Direction): void {
     // TODO: guard against nested changes and test.
     for (const observer of this.directionObservers) {
       observer.animDirectionChanged(direction);
     }
   }
 
-  public animCursorJumped() {
+  public animCursorJumped(): void {
     // TODO: guard against nested changes and test.
     for (const observer of this.jumpObservers) {
       observer.animCursorJumped();
@@ -91,7 +91,7 @@ export class AnimModel {
     ];
   }
 
-  public isPaused() {
+  public isPaused(): boolean {
     return this.direction === Cursor.Direction.Paused;
   }
 
@@ -129,7 +129,7 @@ export class AnimModel {
     this.dispatcher.animCursorJumped();
   }
 
-  public isAtEnd() {
+  public isAtEnd(): boolean {
     return this.cursor.currentTimestamp() === this.cursor.endOfAlg();
   }
 
@@ -159,7 +159,7 @@ export class AnimModel {
 
   // Update the cursor based on the time since lastCursorTime, and reset
   // lastCursorTime.
-  private updateCursor(timestamp: Cursor.Timestamp) {
+  private updateCursor(timestamp: Cursor.Timestamp): void {
     if (this.direction === Cursor.Direction.Paused) {
       this.lastCursorTime = timestamp;
       return;
@@ -180,20 +180,20 @@ export class AnimModel {
     }
   }
 
-  private setDirection(direction: Cursor.Direction) {
+  private setDirection(direction: Cursor.Direction): void {
     // TODO: Handle in frame for debouncing?
     // (Are there any use cases that need synchoronous observation?)
     this.direction = direction;
     this.dispatcher.animDirectionChanged(direction);
   }
 
-  private frame(timestamp: Cursor.Timestamp) {
+  private frame(timestamp: Cursor.Timestamp): void {
     this.updateCursor(timestamp);
     this.dispatcher.animCursorChanged(this.cursor);
   }
 
   // TODO: Push this into timeline.
-  private setBreakpointType(breakpointType: Cursor.BreakpointType) {
+  private setBreakpointType(breakpointType: Cursor.BreakpointType): void {
     this.breakpointType = breakpointType;
   }
 
@@ -221,7 +221,7 @@ class FrameScheduler {
   private animating: boolean = false;
   constructor(private callback: (timestamp: Cursor.Timestamp) => void) {}
 
-  public animFrame(timestamp: Cursor.Timestamp) {
+  public animFrame(timestamp: Cursor.Timestamp): void {
     this.callback(timestamp);
     if (this.animating) {
       // TODO: use same bound frame instead of creating a new binding each frame.
@@ -244,7 +244,7 @@ class FrameScheduler {
     this.animating = false;
   }
 
-  public singleFrame() {
+  public singleFrame(): void {
     // Instantaneously start and stop, since that schedules a single frame iff
     // there is not already one scheduled.
     this.start();

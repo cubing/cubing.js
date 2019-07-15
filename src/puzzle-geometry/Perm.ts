@@ -16,7 +16,7 @@ export class Perm {
    public static e(n: number): Perm {
       return new Perm(Perm.iota(n)) ;
    }
-   public static random(n: number) { // random
+   public static random(n: number): Perm { // random
       const c = Array(n) ;
       for (let i = 0; i < n; i++) {
          c[i] = i ;

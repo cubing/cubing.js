@@ -20,7 +20,7 @@ export const goCubeConfig: BluetoothConfig = {
 };
 
 // https://stackoverflow.com/a/40031979
-function buf2hex(buffer: ArrayBuffer) { // buffer is an ArrayBuffer
+function buf2hex(buffer: ArrayBuffer): string { // buffer is an ArrayBuffer
   return Array.prototype.map.call(new Uint8Array(buffer), (x: number) => ("00" + x.toString(16)).slice(-2)).join("");
 }
 
@@ -91,18 +91,18 @@ export class GoCube extends BluetoothPuzzle {
     (window as any).gocube = this;
   }
 
-  public reset() {
+  public reset(): void {
     this.resetAlg();
     this.resetOrientation();
   }
 
-  public resetAlg(algo?: Sequence) {
+  public resetAlg(algo?: Sequence): void {
     this.alg = algo || parse("");
     (window as any).tw.player.anim.scheduler.singleFrame();
     ((window as any).tw as Twisty).experimentalSetAlg(parse("x4'"));
   }
 
-  public resetOrientation() {
+  public resetOrientation(): void {
     this.homeQuatInverse = this.lastRawQuat.clone().inverse();
     this.currentQuat = new Quaternion(0, 0, 0, 1);
     this.lastTarget = new Quaternion(0, 0, 0, 1);
@@ -122,13 +122,13 @@ export class GoCube extends BluetoothPuzzle {
       const move = moveMap[buffer.getUint8(3)];
       this.alg = new Sequence(this.alg.nestedUnits.concat([move]));
       ((window as any).tw as Twisty).experimentalSetAlg(this.alg);
-      // this.dispatchMove({
-      //   latestMove: moveMap[buffer.getUint8(3)],
-      //   timeStamp: event.timeStamp,
-      //   debug: {
-      //     stateStr: buf2hex(buffer.buffer),
-      //   },
-      // });
+      this.dispatchMove({
+        latestMove: moveMap[buffer.getUint8(3)],
+        timeStamp: event.timeStamp,
+        debug: {
+          stateStr: buf2hex(buffer.buffer),
+        },
+      });
     } else {
       const coords = bufferToString(buffer.buffer.slice(3, buffer.byteLength - 3)).split("#").map((s) => parseInt(s, 10) / 16384);
       const quat = new Quaternion(coords[0], coords[1], coords[2], coords[3]);

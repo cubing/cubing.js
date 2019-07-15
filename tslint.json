@@ -9,6 +9,7 @@
       "max-classes-per-file": false,
       "max-line-length": false,
       "no-console": false,
-      "object-literal-sort-keys": false
+      "object-literal-sort-keys": false,
+      "typedef": [true, "call-signature", "parameter", "property-declaration"]
     }
 }

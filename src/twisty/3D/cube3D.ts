@@ -159,7 +159,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
     this.scene.add(this.cube);
   }
 
-  protected updateScene(p: Cursor.Position<Puzzle>) {
+  protected updateScene(p: Cursor.Position<Puzzle>): void {
     const reid333 = p.state as Transformation;
     for (const orbit in pieceDefs) {
       const pieces = pieceDefs[orbit];
@@ -213,7 +213,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
     return stickerMesh;
   }
 
-  private ease(fraction: number) {
+  private ease(fraction: number): number {
     return smootherStep(fraction);
   }
 }

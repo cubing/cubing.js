@@ -110,7 +110,7 @@ export const ganConfig: BluetoothConfig = {
   ],
 };
 
-function buf2hex(buffer: ArrayBuffer) { // buffer is an ArrayBuffer
+function buf2hex(buffer: ArrayBuffer): string { // buffer is an ArrayBuffer
   return Array.prototype.map.call(new Uint8Array(buffer), (x: number) => ("00" + x.toString(16)).slice(-2)).join(" ");
 }
 
@@ -290,7 +290,7 @@ export class GanCube extends BluetoothPuzzle {
     return this.cachedActualAngleAndBatteryCharacteristic;
   }
 
-  public async reset() {
+  public async reset(): Promise<void> {
     const faceletStatus1Characteristic = await this.faceletStatus1Characteristic();
     await faceletStatus1Characteristic.writeValue(commands.reset);
   }
@@ -300,7 +300,7 @@ export class GanCube extends BluetoothPuzzle {
     return (await faceletStatus1Characteristic.readValue()).buffer;
   }
 
-  public async readFaceletStatus2Characteristic() {
+  public async readFaceletStatus2Characteristic(): Promise<string> {
     const faceletStatus2Characteristic = await this.faceletStatus2Characteristic();
     return buf2hex((await faceletStatus2Characteristic.readValue()).buffer);
   }

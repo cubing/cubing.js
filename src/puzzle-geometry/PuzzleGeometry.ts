@@ -1,6 +1,7 @@
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ // TODO
 /* tslint:disable only-arrow-functions */ // TODO
+/* tslint:disable typedef */ // TODO
 
 import { Perm } from "./Perm" ;
 import { Orbit, OrbitDef, OrbitsDef, showcanon, Transformation, VisibleState } from "./PermOriSet" ;

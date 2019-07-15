@@ -25,21 +25,21 @@ declare global {
   }
 }
 
-export function currentFullscreenElement() {
+export function currentFullscreenElement(): Element {
   return document.fullscreenElement ||
          document.webkitFullscreenElement ||
          (document as any).mozFullScreenElement ||
          (document as any).msFullscreenElement ||
          document.webkitFullscreenElement;
 }
-export function fullscreenRequest(element: HTMLElement) {
+export function fullscreenRequest(element: HTMLElement): void {
   const requestFullscreen = element.requestFullscreen ||
                           (element as any).mozRequestFullScreen ||
                           (element as any).msRequestFullscreen ||
                           (element as any).webkitRequestFullscreen;
   requestFullscreen.call(element);
 }
-export function fullscreenExit() {
+export function fullscreenExit(): void {
   const exitFullscreen = document.exitFullscreen ||
                        (document as any).mozCancelFullScreen ||
                        (document as any).msExitFullscreen ||
@@ -152,7 +152,7 @@ export class Scrubber implements CursorObserver {
     this.anim.dispatcher.registerCursorObserver(this);
   }
 
-  public updateFromAnim() {
+  public updateFromAnim(): void {
     const bounds = this.anim.getBounds();
     this.element.min = String(bounds[0]);
     this.element.max = String(bounds[1]);
@@ -169,7 +169,7 @@ export class Scrubber implements CursorObserver {
     this.updateBackground();
   }
 
-  private updateBackground() {
+  private updateBackground(): void {
     // TODO: Figure out the most efficient way to do this.
     // TODO: Pad by the thumb radius at each end.
     const min = parseInt(this.element.min, 10);
@@ -199,7 +199,7 @@ export class CursorTextView implements CursorObserver {
     this.anim.dispatcher.registerCursorObserver(this);
   }
 
-  public animCursorChanged(cursor: Cursor<Puzzle>) {
+  public animCursorChanged(cursor: Cursor<Puzzle>): void {
     this.element.textContent = String(Math.floor(cursor.currentTimestamp()));
   }
 }
@@ -215,7 +215,7 @@ export class CursorTextMoveView implements CursorObserver {
     this.animCursorChanged(anim.cursor);
   }
 
-  public animCursorChanged(cursor: Cursor<Puzzle>) {
+  public animCursorChanged(cursor: Cursor<Puzzle>): void {
     const pos = cursor.currentPosition();
     let s = "" + Math.floor(cursor.currentTimestamp());
     if (pos.moves.length > 0) {
@@ -226,7 +226,7 @@ export class CursorTextMoveView implements CursorObserver {
     this.element.textContent = s;
   }
 
-  private formatFraction(k: number) {
+  private formatFraction(k: number): string {
     return (String(k) + (Math.floor(k) === k ? "." : "") + "000000").slice(0, 5);
   }
 }
@@ -243,7 +243,7 @@ export class KSolveView implements CursorObserver, JumpObserver {
     this.element.appendChild(this.svg.element);
   }
 
-  public animCursorChanged(cursor: Cursor<Puzzle>) {
+  public animCursorChanged(cursor: Cursor<Puzzle>): void {
     const pos = cursor.currentPosition();
     if (pos.moves.length > 0) {
 
@@ -262,7 +262,7 @@ export class KSolveView implements CursorObserver, JumpObserver {
     }
   }
 
-  public animCursorJumped() {
+  public animCursorJumped(): void {
     if (showJumpingFlash) {
       this.element.classList.add("flash");
       setTimeout(() => this.element.classList.remove("flash"), 0);
@@ -280,27 +280,27 @@ export class Cube3DView implements CursorObserver, JumpObserver {
 
     this.cube3D = new Cube3D(definition); // TODO: Dynamic puzzle
 
-    setTimeout(function() {
+    setTimeout(() => {
       this.cube3D.newVantage(this.element);
-    }.bind(this), 0);
+    }, 0);
 
     this.createBackViewForTesting();
   }
 
   // TODO: Remove
-  public createBackViewForTesting() {
+  public createBackViewForTesting(): void {
     const backWrapper = document.createElement("cube3d-back-wrapper");
     this.element.appendChild(backWrapper);
-    setTimeout(function() {
+    setTimeout(() => {
       this.cube3D.newVantage(backWrapper, {position: new THREE.Vector3(-1.25, -2.5, -2.5)});
-    }.bind(this), 0);
+    }, 0);
   }
 
-  public animCursorChanged(cursor: Cursor<Puzzle>) {
+  public animCursorChanged(cursor: Cursor<Puzzle>): void {
     this.cube3D.draw(cursor.currentPosition());
   }
 
-  public animCursorJumped() {
+  public animCursorJumped(): void {
     if (showJumpingFlash) {
       this.element.classList.add("flash");
       setTimeout(() => this.element.classList.remove("flash"), 0);

@@ -94,7 +94,7 @@ export function EquivalentStates(def: KPuzzleDefinition, t1: Transformation, t2:
 }
 
 // TODO: Move other helpers into the definition.
-export function stateForBlockMove(def: KPuzzleDefinition, blockMove: BlockMove) {
+export function stateForBlockMove(def: KPuzzleDefinition, blockMove: BlockMove): Transformation {
   // TODO: Optimize this.
   const repMoveString = algToString(new Sequence([new BlockMove(blockMove.outerLayer, blockMove.innerLayer, blockMove.family, 1)]));
   let move: Transformation | undefined = def.moves[repMoveString];
@@ -124,7 +124,7 @@ export class KPuzzle {
     return output;
   }
 
-  public applyBlockMove(blockMove: BlockMove) {
+  public applyBlockMove(blockMove: BlockMove): void {
     this.state = Combine(this.definition, this.state, stateForBlockMove(this.definition, blockMove));
   }
 
@@ -148,13 +148,13 @@ export class KPuzzle {
     return this;
   }
 
-  public getMoveExpander(create: boolean) {
+  public getMoveExpander(create: boolean): MoveExpander | undefined {
      let moveExpander = this.definition.moveExpander ;
      if (create && !moveExpander) {
         moveExpander = new MoveExpander() ;
         this.definition.moveExpander = moveExpander ;
      }
-     return moveExpander ;
+     return moveExpander;
   }
   public setFaceNames(faceNames: string[]): void {
      const me = this.getMoveExpander(true) ;
@@ -202,7 +202,7 @@ export class MoveExpander {
   public setFaceNames(fn: string[]): void {
      this.facenames = fn ;
   }
-  public addGrip(grip1: string, grip2: string, nslices: number, def: KPuzzleDefinition) {
+  public addGrip(grip1: string, grip2: string, nslices: number, def: KPuzzleDefinition): void {
      const slices = [] ;
      const axes = this.gripStash ;
      const moves = def.moves ;
@@ -225,7 +225,7 @@ export class MoveExpander {
      aprime.reverse() ;
      axes[grip2] = aprime ;
   }
-  public splitByFaceNames(s: string, facenames: string[]) {
+  public splitByFaceNames(s: string, facenames: string[]): string[] | undefined {
       const r: string[] = [] ;
       let at = 0 ;
       while (at < s.length) {
@@ -244,7 +244,7 @@ export class MoveExpander {
       }
       return r ;
   }
-  public expandSlices(rep: string, blockMove: BlockMove, def: KPuzzleDefinition) {
+  public expandSlices(rep: string, blockMove: BlockMove, def: KPuzzleDefinition): Transformation | undefined {
      const t = this.moveStash[rep] ;
      if (t) {
         return t ;
@@ -307,7 +307,7 @@ export class MoveExpander {
      this.moveStash[rep] = t2 ;
      return t2 ;
   }
-  public expandSlicesByName(mv: string, def: KPuzzleDefinition) {
+  public expandSlicesByName(mv: string, def: KPuzzleDefinition): Transformation | undefined {
      const t = this.moveStash[mv] ;
      if (t) {
         return t ;

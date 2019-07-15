@@ -4,7 +4,7 @@ export function enableDebugLogging(enable: boolean): void {
   DEBUG_LOGGING_ENABLED = enable;
 }
 
-export function debugLog(...args: any[]) {
+export function debugLog(...args: any[]): void {
   if (!DEBUG_LOGGING_ENABLED) {
     return;
   }

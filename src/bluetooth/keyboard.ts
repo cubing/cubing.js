@@ -21,7 +21,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
     return this.puzzle.state;
   }
 
-  private onKeyDown(e: KeyboardEvent) {
+  private onKeyDown(e: KeyboardEvent): void {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
       return;
     }
