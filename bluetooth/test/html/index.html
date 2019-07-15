@@ -1,0 +1,138 @@
+<html>
+  <title>CuBLE.js Test</title>
+  <script src="../../../dist/umd/cubing.umd.js"></script>
+  <link rel="stylesheet" href="/Users/lgarron/Code/cubing.js/src/twisty/twisty.css">
+  <style>
+    .svg-wrapper {
+      max-width: 100px
+    }
+    twisty {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+<body>
+<button onclick="connectBluetooth()">Connect</button>
+<button onclick="connectKeyboard()">Enable Keyboard Input</button>
+<button onclick="reset()">Reset</button>
+<span id="display"></span>
+<br>
+<span id="alg"></span>
+<br>
+<button onclick="getState()">Get State</button>
+<br>
+<textarea id="log" rows=20 style="font-family: monospace; width: 80%"></textarea>
+<script>
+const {Sequence, algToString} = cubing.alg;
+const {Puzzles, SVG} = cubing.kpuzzle;
+const {connect, debugKeyboardConnect, enableDebugLogging} = cubing.bluetooth;
+
+enableDebugLogging(true);
+
+const def = Puzzles["333"];
+const svg = new SVG(def);
+
+async function onMove(e) {
+  document.querySelector("#alg").textContent += " " + algToString(new Sequence([e.latestMove]));
+  // console.log("e", e.state);
+  // svg.draw(def, e.state);
+
+  // const l = document.querySelector("#log");
+  // var newStuff = "{\n"
+  // newStuff += "  \"state\": \"" + await puzzles[0].readFaceletStatus1Characteristic() + "\",\n";
+  // scramble = alg.algToString(alg.coalesceBaseMoves(alg.parse(document.querySelector("#alg").textContent)))
+  // newStuff += "  \"scramble\": \"" + scramble + "\",\n";
+  // newStuff += "  \"reidState\": " + JSON.stringify((await puzzles[0].getState())) + "\n";
+  // newStuff += "},"
+  // l.textContent = newStuff + l.textContent;
+
+  // getState()
+  // const state = await puzzles[0].getState();
+  // console.log("a", state);
+  // svg.draw(def, state);
+  
+  // console.log(e);
+}
+
+// var running = null;
+// function start() {
+//   running = setInterval(display.bind(display, puzzles[0]), 1000)
+// }
+
+// function pause() {
+//   clearInterval(running);
+//   running = null;
+// }
+
+// async function display(puzzle) {
+//   try {
+//     const state = await puzzle.getState();
+//     const l = document.querySelector("#log");
+//     l.textContent = state.substring(0, 1000) + "\n" + l.textContent;
+//   } catch(e) {
+//     console.error(e)
+//   }
+// }
+
+
+function f(a, b) {
+out = "";
+for (var i = 0; i < a.length; i++) {
+out = out + ( (a[i] == b[i]) ? " " : "•");
+}
+return out;}
+
+function t(x) {
+  return x.split(" ").map(v => parseInt(v, 16).toString(6).padStart(4, "0")).join(" ")
+}
+
+function binary(x) {
+  return x.split(" ").map(v => parseInt(v, 16).toString(2).padStart(8, "0")).join(" ")
+}
+
+function g(x) {
+  n = t(x)
+  c = " // "
+  m = f(t("00 00 24 00 49 92 24 49 6d 92 db b6 49 92 b6 24 6d db"), n)
+  return n + c + "\n" + m;
+}
+
+async function getState() {
+  const l = document.querySelector("#log");
+  // const c = await puzzles[0].getstate();
+  // l.value = c + " // \n" + f("00 00 24 00 49 92 24 49 6d 92 db b6 49 92 b6 24 6d db", c) + "\n" + l.value;
+  l.value = JSON.stringify(await puzzles[0].getState()) + "\n" + l.value;
+}
+
+const puzzles = [];
+async function connectBluetooth() {
+  const puzzle = await connect();
+  puzzle.addMoveListener(onMove);
+  puzzles.push(puzzle);
+  document.getElementById("display").appendChild(svg.element);
+}
+
+async function connectKeyboard() {
+  const puzzle = await debugKeyboardConnect();
+  puzzles.push(puzzle);
+  puzzle.addMoveListener(onMove);
+}
+
+function reset() {
+  document.querySelector("#alg").textContent = "";
+}
+</script>
+  <twisty id="custom-example" initialization="custom"></twisty>
+  <script>
+    const {Twisty} = cubing.twisty;
+    const {BareBlockMove} = cubing.alg;
+
+    var elem = document.querySelector("#custom-example");
+    window.tw = new Twisty(elem, {
+      puzzle: Puzzles["333"],
+      alg: cubing.alg.parse("R R'")
+    });
+  </script>
+</body>
+</html>
