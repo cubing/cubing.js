@@ -3,8 +3,10 @@
 import {BareBlockMove, BlockMove} from "../alg";
 import {KPuzzle, Puzzles} from "../kpuzzle";
 
+import { Quaternion } from "three";
 import {BluetoothConfig, BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle";
 import {debugLog} from "./debug";
+import { importKey, unsafeDecryptBlock } from "./unsafe-raw-aes";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
 const DEFAULT_INTERVAL_MS = 150;
@@ -26,30 +28,82 @@ const ganMoveToBlockMove: {[i: number]: BlockMove} = {
   0x11: BareBlockMove("B", -1),
 };
 
+let homeQuatInverse: Quaternion | null = null;
+
+let swap = (x: number, y: number, z: number) => {
+  return [-y, z, -x];
+};
+
+(window as any).setSwap = (fn: any) => {
+  swap = fn;
+  homeQuatInverse = null;
+};
+
+// Clean-room reverse-engineered
+async function decodeState(data: Uint8Array): Promise<Uint8Array> {
+  const key10 = new Uint8Array([198, 202, 21, 223, 79, 110, 19, 182, 119, 13, 230, 89, 58, 175, 186, 162]);
+  // const key11 = new Uint8Array([67, 226, 91, 214, 125, 220, 120, 216, 7, 96, 163, 218, 130, 60, 1, 241]);
+
+  const macAddress = [0x4c, 0x24, 0x98, 0x5a, 0x68, 0xc6];
+
+  const keyBuffer = new Uint8Array(key10);
+  for (let i = 0; i < macAddress.length; i++) {
+    keyBuffer[i] = (keyBuffer[i] + macAddress[i]) % 256;
+  }
+
+  const key = await importKey(new Uint8Array(keyBuffer));
+  data.set(new Uint8Array(await unsafeDecryptBlock(key, data.slice(3))), 3);
+  data.set(new Uint8Array(await unsafeDecryptBlock(key, data.slice(0, 16))), 0);
+  return data;
+}
+
 class PhysicalState {
 
   public static async read(characteristic: BluetoothRemoteGATTCharacteristic): Promise<PhysicalState> {
-    const value = await characteristic.readValue();
+    const value = await decodeState(new Uint8Array((await characteristic.readValue()).buffer));
     const timeStamp = Date.now();
-    return new PhysicalState(value, timeStamp);
+    return new PhysicalState(new DataView(value.buffer), timeStamp);
   }
   private arr: Uint8Array;
   private arrLen = 19;
   private quat: any;
   private constructor(private dataView: DataView, public timeStamp: number) {
 
-    const x = this.dataView.getInt16(0, true) / 16384;
-    const y = this.dataView.getInt16(2, true) / 16384;
-    const z = this.dataView.getInt16(4, true) / 16384;
-    const wSquared = 1 - x * x + y * y + z * z;
+    console.log([
+      this.dataView.getInt16(0, true),
+      this.dataView.getInt16(2, true),
+      this.dataView.getInt16(4, true),
+    ]);
+
+      // [168, 28, -12322]
+
+    let x = this.dataView.getInt16(0, true) / 16384;
+    let y = this.dataView.getInt16(2, true) / 16384;
+    let z = this.dataView.getInt16(4, true) / 16384;
+    [x, y, z] = swap(x, y, z);
+    const wSquared = 1 - (x * x + y * y + z * z);
     const w = wSquared > 0 ? Math.sqrt(wSquared) : 0;
-    console.log(x, y, z);
-    this.quat = {
-      _x: x,
-      _y: y,
-      _z: z,
-      _w: w,
-    };
+    const quat = new Quaternion(x, y, z, w);
+
+    if (!homeQuatInverse) {
+      homeQuatInverse = quat.clone().inverse();
+    }
+
+    const targetQuat = quat.clone().multiply(homeQuatInverse!.clone());
+
+    // z -> y
+    // x -> x'
+    // y -> z
+
+    ((window as any).tw.player.cube3DView.cube3D.cube.quaternion as Quaternion).copy(targetQuat);
+    (window as any).tw.player.anim.scheduler.singleFrame();
+    // console.log(x, y, z);
+    // this.quat = {
+    //   _x: x,
+    //   _y: y,
+    //   _z: z,
+    //   _w: w,
+    // };
 
     this.arr = new Uint8Array(dataView.buffer);
     if (this.arr.length !== this.arrLen) {
@@ -235,7 +289,7 @@ export class GanCube extends BluetoothPuzzle {
   }
 
   public async getState(): Promise<PuzzleState> {
-    const arr: Uint8Array = new Uint8Array((await this.readFaceletStatus1Characteristic()));
+    const arr: Uint8Array = await decodeState(new Uint8Array((await this.readFaceletStatus1Characteristic())));
     const stickers: number[] = [];
     for (let i = 0; i < 18; i += 3) {
       let v = (((arr[i ^ 1] << 8) + arr[(i + 1) ^ 1]) << 8) + arr[(i + 2) ^ 1];
