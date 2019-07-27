@@ -28,6 +28,7 @@ export {
   structureEquals,
   coalesceBaseMoves,
   algToString,
+  algPartToStringForTesting,
 } from "./traversal";
 
 export {

@@ -375,4 +375,8 @@ export const coalesceBaseMoves = coalesceBaseMovesInstance.traverseSequence.bind
 export const algToString       = algToStringInstance.traverseSequence.bind(algToStringInstance) as (a: Sequence) => string;
 
 export const algPartStructureEqualsForTesting = algToStringInstance.traverse.bind(algToStringInstance) as (a1: AlgPart, a2: AlgPart) => boolean;
-export const algPartToStringForTesting = algToStringInstance.traverse.bind(algToStringInstance) as (a: AlgPart) => Sequence;
+export const algPartToStringForTesting = algToStringInstance.traverse.bind(algToStringInstance) as (a: AlgPart) => string;
+
+export function experimentalBlockMoveQuarterName(move: BlockMove): string {
+  return algPartToStringForTesting(new BlockMove(move.outerLayer, move.innerLayer, move.family, 1));
+}

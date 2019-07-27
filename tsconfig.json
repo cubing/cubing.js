@@ -6,7 +6,7 @@
     "declarationMap": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "lib": ["es6", "dom", "es2015"],
+    "lib": ["esnext", "dom"],
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
