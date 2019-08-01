@@ -21,7 +21,7 @@ function pixelRatio(): number {
   return devicePixelRatio || 1;
 }
 
-const defaultVantagePosition = new THREE.Vector3(1.25, 2.5, 2.5);
+const defaultVantagePosition = new THREE.Vector3(-12.5, 20, 25);
 function createDefaultRenderer(): THREE.Renderer {
   return new THREE.WebGLRenderer({
     antialias: true,

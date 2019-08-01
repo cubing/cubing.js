@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import {BlockMove} from "../../alg";
-import {KPuzzleDefinition, Puzzles, Transformation} from "../../kpuzzle";
+import {BlockMove, parse} from "../../alg";
+import {KPuzzle, KPuzzleDefinition, Puzzles, Transformation} from "../../kpuzzle";
 
 import {Cursor} from "../cursor";
 import {smootherStep} from "../easing";
@@ -46,15 +46,15 @@ const familyToAxis: {[s: string]: number} = {
 };
 
 const cubieDimensions = {
-  stickerWidth: 0.85,
+  stickerWidth: 0.8,
   stickerElevation: 0.501,
-  foundationWidth: 1,
+  foundationWidth: 0.97,
   hintStickerElevation: 1.45,
 };
 
 const cubieConfig = {
   showMainStickers: true,
-  showHintStickers: true,
+  showHintStickers: false,
   showFoundation: true, // TODO: better name
 };
 
@@ -141,18 +141,33 @@ const pieceDefs: PieceIndexed<CubieDef> = {
   ],
 };
 
-const CUBE_SCALE = 1 / 3;
+const CUBE_SCALE = 1 / Math.PI;
+
+interface Spec {
+  alg: string;
+  translate: number[];
+  rotateY: number;
+}
 
 export class Cube3DScene extends Twisty3D<Puzzle> {
-  private cube3D: Cube3D;
   constructor(def: KPuzzleDefinition) {
     super();
-    this.cube3D = new Cube3D(def);
-    this.scene.add(this.cube3D.cube);
   }
 
   protected updateScene(p: Cursor.Position<Puzzle>): void {
-    this.cube3D.updateScene(p);
+    this.scene.dispose();
+
+    for (const spec of (p.state as Spec[])) {
+      const cube3Dalt = new Cube3D(Puzzles["333"]);
+      const kpuzzle = new KPuzzle(Puzzles["333"]);
+      kpuzzle.applyAlg(parse(spec.alg));
+      cube3Dalt.cube.translateX(spec.translate[0]);
+      cube3Dalt.cube.translateY(spec.translate[1]);
+      cube3Dalt.cube.translateZ(spec.translate[2]);
+      cube3Dalt.updateScene({state: kpuzzle.state, moves: []});
+      cube3Dalt.cube.rotateY(-spec.rotateY / 4 * Math.PI * 2);
+      this.scene.add(cube3Dalt.cube);
+    }
   }
 }
 

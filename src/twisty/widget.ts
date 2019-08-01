@@ -284,7 +284,7 @@ export class Cube3DView implements CursorObserver, JumpObserver {
       this.cube3D.newVantage(this.element);
     }, 0);
 
-    this.createBackViewForTesting();
+    // this.createBackViewForTesting();
   }
 
   // TODO: Remove

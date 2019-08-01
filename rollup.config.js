@@ -67,9 +67,9 @@ const umd = {
   ],
 };
 
-const configs = [mod];
+const configs = [umd];
 if (!process.env.ROLLUP_WATCH) {
-  configs.push(umd);
+  configs.push(mod);
 }
 
 export default configs;

@@ -9,13 +9,28 @@
   <script>
     window.addEventListener("load", function() {
       var elem = document.querySelector("#custom-example");
-      var tw = new cubing.twisty.Twisty(elem, {
-        puzzle: cubing.kpuzzle.Puzzles["333"],
-        alg: cubing.alg.parse("U M' U' R' U' R U M2' U' R' U r"),
-        player: {
-          experimental3D: true
+      window.t = new cubing.twisty.Twisty(elem);
+
+      function f(alg, t, rotateY) {
+        return {
+          alg,
+          translate: t,
+          rotateY,
         }
-      });
+      }
+
+      const yrrbyyr = "x2 y F2 L2 D2 L' R D2 L' F U' R U2 R' U F R2 z'";
+      const yyr_ = "x y B' F2 D' U R U' L2 D2 F2 U' R2 L D' U B'";
+      const yrr_ = "x B F2 D U' L' U R2 D2 F2 U L2 R' D U' B";
+      const ryyb = "x2 y B2 D2 F2 L R B2 U2 R' B2 F D R' D2 R D' F' R2 z'";
+      const brry = "y x B2 D2 F2 L R B2 U2 R' B2 F D R' D2 R D' F' R2 z";
+
+      window.t.player.cube3DView.cube3D.draw({state: [
+        f(ryyb, [0, 0, 0], 0),
+        f(yrr_, [0, 1, 0], 0),
+        f(brry, [1, 0, 0], 0),
+        f(yyr_, [1, 1, 0], 0),
+      ]})
     });
   </script>
 </head>
