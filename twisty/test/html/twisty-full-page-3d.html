@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Full-Page Test | twisty.js</title>
+  <script src="../../../dist/umd/cubing.umd.js"></script>
+
+  <link href="../../../src/twisty/twisty.css" rel="stylesheet" type="text/css">
+  <link href="twisty-full-page.css" rel="stylesheet" type="text/css">
+  <script>
+    window.addEventListener("load", function() {
+      var elem = document.querySelector("#custom-example");
+      var tw = new cubing.twisty.Twisty(elem, {
+        puzzle: cubing.kpuzzle.Puzzles["333"],
+        alg: cubing.alg.parse("U M' U' R' U' R U M2' U' R' U r"),
+        player: {
+          experimental3D: true
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <twisty id="custom-example" initialization="custom"></twisty>
+</body>
+</html>
