@@ -3,7 +3,7 @@ import * as THREE from "three";
 import {algToString, BlockMove, Sequence} from "../alg";
 import {Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation} from "../kpuzzle";
 
-import {Cube3D} from "./3D/cube3D";
+import {Cube3DScene} from "./3D/cube3D";
 import {AnimModel, CursorObserver, DirectionObserver, JumpObserver} from "./anim";
 import {Cursor} from "./cursor";
 import {Puzzle} from "./puzzle";
@@ -272,13 +272,13 @@ export class KSolveView implements CursorObserver, JumpObserver {
 
 export class Cube3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
-  private cube3D: Cube3D;
+  private cube3D: Cube3DScene;
   constructor(private anim: AnimModel, definition: KPuzzleDefinition) {
     this.element = document.createElement("cube3d-view");
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 
-    this.cube3D = new Cube3D(definition); // TODO: Dynamic puzzle
+    this.cube3D = new Cube3DScene(definition); // TODO: Dynamic puzzle
 
     setTimeout(() => {
       this.cube3D.newVantage(this.element);

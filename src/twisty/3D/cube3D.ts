@@ -143,12 +143,24 @@ const pieceDefs: PieceIndexed<CubieDef> = {
 
 const CUBE_SCALE = 1 / 3;
 
-// TODO: Split into "scene model" and "view".
-export class Cube3D extends Twisty3D<Puzzle> {
-  private cube: THREE.Group = new THREE.Group();
-  private pieces: PieceIndexed<THREE.Object3D> = {};
+export class Cube3DScene extends Twisty3D<Puzzle> {
+  private cube3D: Cube3D;
   constructor(def: KPuzzleDefinition) {
     super();
+    this.cube3D = new Cube3D(def);
+    this.scene.add(this.cube3D.cube);
+  }
+
+  protected updateScene(p: Cursor.Position<Puzzle>): void {
+    this.cube3D.updateScene(p);
+  }
+}
+
+// TODO: Split into "scene model" and "view".
+export class Cube3D {
+  public cube: THREE.Group = new THREE.Group();
+  private pieces: PieceIndexed<THREE.Object3D> = {};
+  constructor(def: KPuzzleDefinition) {
     if (def.name !== "333") {
       throw new Error("Invalid puzzle for this Cube3D implementation.");
     }
@@ -156,10 +168,9 @@ export class Cube3D extends Twisty3D<Puzzle> {
       this.pieces[orbit] = pieceDefs[orbit].map(this.createCubie.bind(this));
     }
     this.cube.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
-    this.scene.add(this.cube);
   }
 
-  protected updateScene(p: Cursor.Position<Puzzle>): void {
+  public updateScene(p: Cursor.Position<Puzzle>): void {
     const reid333 = p.state as Transformation;
     for (const orbit in pieceDefs) {
       const pieces = pieceDefs[orbit];
