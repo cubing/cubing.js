@@ -44,7 +44,7 @@ export abstract class Twisty3D<P extends Puzzle> {
   public newVantage(element: HTMLElement, options: VantageOptions = {}): Vantage {
     const camera = new THREE.PerspectiveCamera(30, element.offsetWidth / element.offsetHeight, 0.1, 1000);
     camera.position.copy(options.position ? options.position : defaultVantagePosition);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    camera.lookAt(new THREE.Vector3(0, -1, 0));
 
     const renderer = options.renderer ? options.renderer : createDefaultRenderer();
     this.setRendererSize(renderer, element.offsetWidth, element.offsetHeight);
@@ -62,6 +62,10 @@ export abstract class Twisty3D<P extends Puzzle> {
 
   public draw(p: Cursor.Position<P>): void {
     this.updateScene(p);
+    this.render();
+  }
+
+  public render(): void {
     for (const vantage of this.vantages) {
       vantage.renderer.render(this.scene, vantage.camera);
     }

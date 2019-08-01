@@ -6,15 +6,16 @@ import {Cursor} from "../cursor";
 import {smootherStep} from "../easing";
 import {Puzzle} from "../puzzle";
 
+import { Vector3 } from "three";
 import {TAU, Twisty3D} from "./twisty3D";
 
 class AxisInfo {
-  public stickerMaterial: THREE.MeshBasicMaterial;
-  public hintStickerMaterial: THREE.MeshBasicMaterial;
+  public stickerMaterial: THREE.MeshStandardMaterial;
+  public hintStickerMaterial: THREE.MeshStandardMaterial;
   constructor(public vector: THREE.Vector3, public fromZ: THREE.Euler, public color: number) {
     // TODO: Make sticker material single-sided when cubie base is rendered?
-    this.stickerMaterial = new THREE.MeshBasicMaterial({color, side: THREE.DoubleSide});
-    this.hintStickerMaterial = new THREE.MeshBasicMaterial({color, side: THREE.BackSide});
+    this.stickerMaterial = new THREE.MeshStandardMaterial({color, side: THREE.DoubleSide});
+    this.hintStickerMaterial = new THREE.MeshStandardMaterial({color, side: THREE.BackSide});
   }
 }
 
@@ -153,8 +154,21 @@ export class Cube3DScene extends Twisty3D<Puzzle> {
     super();
   }
 
+  public rotate(a: number): void {
+    this.scene.setRotationFromAxisAngle(new Vector3(0, 1, 0), a);
+    this.render();
+  }
+
   protected updateScene(p: Cursor.Position<Puzzle>): void {
     this.scene.dispose();
+
+    const light = new THREE.PointLight( 0xffffff, 15, 100 );
+    light.position.set( 50, 60, 40 );
+    this.scene.add( light );
+
+    const light2 = new THREE.PointLight( 0xffffff, 8, 100 );
+    light2.position.set( -50, 50, 20 );
+    this.scene.add( light2 );
 
     for (const spec of (p.state as Spec[])) {
       const cube3Dalt = new Cube3D(Puzzles["333"]);

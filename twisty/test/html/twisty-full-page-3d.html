@@ -38,6 +38,32 @@
           {alg: brry, transforms: [r*4/5, [ 1, 1, 0], [0, 0, 6]]},
           {alg: ryyb, transforms: [r*4/5, [ 2, 0, 0], [0, 0, 6]]},
           {alg: yrr_, transforms: [r*4/5, [ 2, 1, 0], [0, 0, 6]]},
+          {alg: "x",  transforms: [r*4/5, [-3, 0, 0], [0, 0, 5]]},
+          {alg: "x",  transforms: [r*4/5, [-2, 0, 0], [0, 0, 5]]},
+          {alg: "x",  transforms: [r*4/5, [-1, 0, 0], [0, 0, 5]]},
+          {alg: "x",  transforms: [r*4/5, [ 0, 0, 0], [0, 0, 5]]},
+          {alg: "x",  transforms: [r*4/5, [ 1, 0, 0], [0, 0, 5]]},
+          {alg: "x",  transforms: [r*4/5, [ 2, 0, 0], [0, 0, 5]]},
+          {alg: "x",  transforms: [r*4/5, [ 3, 0, 0], [0, 0, 5]]},
+          {alg: "x",  transforms: [r*4/5, [0.5, 0, 0], [-2, 0, 0], [0, 0, 4]]},
+          {alg: "x",  transforms: [r*4/5, [0.5, 0, 0], [-1, 0, 0], [0, 0, 4]]},
+          {alg: "x",  transforms: [r*4/5, [0.5, 0, 0], [ 0, 0, 0], [0, 0, 4]]},
+          {alg: "x",  transforms: [r*4/5, [0.5, 0, 0], [ 1, 0, 0], [0, 0, 4]]},
+          {alg: "x",  transforms: [r*4/5, [0.5, 0, 0], [ 2, 0, 0], [0, 0, 4]]},
+
+          {alg: "z y",  transforms: [r*4/5, [0.5, 1, 0], [-1, 0, 0], [0, 0, 4]]},
+          {alg: "z y",  transforms: [r*4/5, [0.5, 1, 0], [ 0, 0, 0], [0, 0, 4]]},
+          {alg: "z y",  transforms: [r*4/5, [0.5, 1, 0], [ 1, 0, 0], [0, 0, 4]]},
+
+          {alg: "x",  transforms: [r*4/5, [-1, 0, 0], [0, 0, 3]]},
+          {alg: "x",  transforms: [r*4/5, [ 0, 0, 0], [0, 0, 3]]},
+          {alg: "x",  transforms: [r*4/5, [ 1, 0, 0], [0, 0, 3]]},
+          {alg: "x",  transforms: [r*4/5, [ 2, 0, 0], [0, 0, 3]]},
+          {alg: "",  transforms: [r*4/5, [0.5, 0, 0], [-1, 0, 0], [0, 0, 2]]},
+          {alg: "",  transforms: [r*4/5, [0.5, 0, 0], [ 0, 0, 0], [0, 0, 2]]},
+          {alg: "",  transforms: [r*4/5, [0.5, 0, 0], [ 1, 0, 0], [0, 0, 2]]},
+          {alg: "x",  transforms: [r*4/5, [-1, 0, 0], [0, 0, 1]]},
+          {alg: "x",  transforms: [r*4/5, [ 0, 0, 0], [0, 0, 1]]},
         ]
       }
 
@@ -69,20 +95,45 @@
           {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [1, 0, -3], 1.9, [0, 0, 0.3]]},
           {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2, 0, -3], 1.9, [-0.05, 0, 0.5]]},
           {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [2, 0, -3], 1.9, [-0.05, 0, 0.5]]},
-          {alg: "x",      transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [1.1, 0, -1.1], 0]},
-          {alg: "x",      transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2.2, 0, -1.1], 0]},
-          {alg: "x",      transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [1.1, 0, -2.2], 0]},
-          {alg: "x",      transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2.2, 0, -2.2], 0]},
+          {alg: "x",     transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [1.1, 0, -1.1], 0]},
+          {alg: "x",     transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2.2, 0, -1.1], 0]},
+          {alg: "x",     transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [1.1, 0, -2.2], 0]},
+          {alg: "x",     transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2.2, 0, -2.2], 0]},
         ]
       }
 
+      const flag = [
+        {alg: "", transforms: [[0, 1, 3]]},
+        {alg: "", transforms: [[0, 2, 3]]},
+        {alg: "", transforms: [[0, 3, 3]]},
+        {alg: "", transforms: [[0, 4, 3]]},
+        {alg: "", transforms: [[0, 5, 3]]},
+        {alg: "x' E'", transforms: [[-0.5, 6, 3]]},
+        {alg: "x' E'", transforms: [[0.5, 6, 3]]},
+        {alg: "x2 D2 R D R B R'", transforms: [[-0.5, 7, 3]]},
+        {alg: "x' U D'", transforms: [[0.5, 7, 3]]},
+      ]
+
       const state = [
+        {alg: "x", transforms: []},
+        flag,
         wall(0), wall(1), wall(2), wall(3), wall(4),
         corner(0), corner(1), corner(2), corner(3), corner(4),
       ].flat();
       console.log(state.length);
       window.t.player.cube3DView.cube3D.draw({state})
     });
+
+// rot = 0;
+// function f() {
+//   rot += 0.01;
+//   window.t.player.cube3DView.cube3D.rotate(rot);
+//  requestAnimationFrame(f);
+// }
+// requestAnimationFrame(f);
+
+// img = document.querySelector("canvas").toDataURL("image/png");
+// document.write('<img src="'+img+'"/>');
   </script>
 </head>
 <body>
