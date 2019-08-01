@@ -11,26 +11,77 @@
       var elem = document.querySelector("#custom-example");
       window.t = new cubing.twisty.Twisty(elem);
 
-      function f(alg, t, rotateY) {
+      function f(alg, rotateLocal, translateLocal, rotateY, t2) {
         return {
           alg,
           translate: t,
           rotateY,
+          translate2: t2,
         }
       }
 
-      const yrrbyyr = "x2 y F2 L2 D2 L' R D2 L' F U' R U2 R' U F R2 z'";
-      const yyr_ = "x y B' F2 D' U R U' L2 D2 F2 U' R2 L D' U B'";
-      const yrr_ = "x B F2 D U' L' U R2 D2 F2 U L2 R' D U' B";
-      const ryyb = "x2 y B2 D2 F2 L R B2 U2 R' B2 F D R' D2 R D' F' R2 z'";
-      const brry = "y x B2 D2 F2 L R B2 U2 R' B2 F D R' D2 R D' F' R2 z";
+      const yrrbyyr = "x2 y x2 F2 L2 D2 L' R D2 L' F U' R U2 R' U F R2 z'";
+      const yyr_    = "x y  y2 B' F2 D' U R U' L2 D2 F2 U' R2 L D' U B'";
+      const yrr_    = "x    y2 B F2 D U' L' U R2 D2 F2 U L2 R' D U' B";
+      const ryyb    = "x2 y x2 B2 D2 F2 L R B2 U2 R' B2 F D R' D2 R D' F' R2 z'";
+      const brry    = "y x  x2 B2 D2 F2 L R B2 U2 R' B2 F D R' D2 R D' F' R2 z";
 
-      window.t.player.cube3DView.cube3D.draw({state: [
-        f(ryyb, [0, 0, 0], 0),
-        f(yrr_, [0, 1, 0], 0),
-        f(brry, [1, 0, 0], 0),
-        f(yyr_, [1, 1, 0], 0),
-      ]})
+      function wall(r) {
+        return [
+          {alg: ryyb, transforms: [r*4/5, [-2, 0, 0], [0, 0, 6]]},
+          {alg: yrr_, transforms: [r*4/5, [-2, 1, 0], [0, 0, 6]]},
+          {alg: brry, transforms: [r*4/5, [-1, 0, 0], [0, 0, 6]]},
+          {alg: yyr_, transforms: [r*4/5, [-1, 1, 0], [0, 0, 6]]},
+          {alg: yrr_, transforms: [r*4/5, [ 0, 0, 0], [0, 0, 6]]},
+          {alg: ryyb, transforms: [r*4/5, [ 0, 1, 0], [0, 0, 6]]},
+          {alg: yyr_, transforms: [r*4/5, [ 1, 0, 0], [0, 0, 6]]},
+          {alg: brry, transforms: [r*4/5, [ 1, 1, 0], [0, 0, 6]]},
+          {alg: ryyb, transforms: [r*4/5, [ 2, 0, 0], [0, 0, 6]]},
+          {alg: yrr_, transforms: [r*4/5, [ 2, 1, 0], [0, 0, 6]]},
+        ]
+      }
+
+      const cr = 10.5;
+
+      function corner(r) {
+        return [
+          {alg: yrrbyyr, transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5]},
+          {alg: yrrbyyr, transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [1, 0, 0]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [1, 0, 0]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2, 0, 0]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [2, 0, 0]]},
+          {alg: yrr_,   transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [2, 0, 0], 0]},
+          {alg: yrr_,   transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2, 0, 0], 0]},
+          {alg: yrrbyyr, transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [3, 0, 0], -0.9, [-0.05, 0, 0.1]]},
+          {alg: yrrbyyr, transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [3, 0, 0], -0.9, [-0.05, 0, 0.1]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [3, 0, -1], -0.9, [0, 0, 0.3]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [3, 0, -1], -0.9, [0, 0, 0.3]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [3, 0, -2], -0.9, [0.05, 0, 0.5]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [3, 0, -2], -0.9, [0.05, 0, 0.5]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [0, 0, -1], 1]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [0, 0, -1], 1]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [0, 0, -2], 1]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [0, 0, -2], 1]},
+          {alg: yrrbyyr, transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [0, 0, -3], 1.9, [0.05, 0, 0.1], -1]},
+          {alg: yrrbyyr, transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [0, 0, -3], 1.9, [0.05, 0, 0.1], -1]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [1, 0, -3], 1.9, [0, 0, 0.3]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [1, 0, -3], 1.9, [0, 0, 0.3]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2, 0, -3], 1.9, [-0.05, 0, 0.5]]},
+          {alg: yrr_,    transforms: [(r + 1/2) * 4/5, [0, 1, cr], -0.5, [2, 0, -3], 1.9, [-0.05, 0, 0.5]]},
+          {alg: "x",      transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [1.1, 0, -1.1], 0]},
+          {alg: "x",      transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2.2, 0, -1.1], 0]},
+          {alg: "x",      transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [1.1, 0, -2.2], 0]},
+          {alg: "x",      transforms: [(r + 1/2) * 4/5, [0, 0, cr], -0.5, [2.2, 0, -2.2], 0]},
+        ]
+      }
+
+      const state = [
+        wall(0), wall(1), wall(2), wall(3), wall(4),
+        corner(0), corner(1), corner(2), corner(3), corner(4),
+      ].flat();
+      console.log(state.length);
+      window.t.player.cube3DView.cube3D.draw({state})
     });
   </script>
 </head>

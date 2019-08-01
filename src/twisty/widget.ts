@@ -329,10 +329,10 @@ export class Player {
         this.element.appendChild((new KSolveView(this.anim, definition)).element);
       }
     }
-    this.scrubber = new Scrubber(this.anim);
-    this.element.appendChild(this.scrubber.element);
-    this.element.appendChild((new ControlBar(this.anim, this.element)).element);
-    this.element.appendChild((new CursorTextMoveView(this.anim)).element);
+    // this.scrubber = new Scrubber(this.anim);
+    // this.element.appendChild(this.scrubber.element);
+    // this.element.appendChild((new ControlBar(this.anim, this.element)).element);
+    // this.element.appendChild((new CursorTextMoveView(this.anim)).element);
   }
 
   public updateFromAnim(): void {

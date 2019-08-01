@@ -141,12 +141,11 @@ const pieceDefs: PieceIndexed<CubieDef> = {
   ],
 };
 
-const CUBE_SCALE = 1 / Math.PI;
+const CUBE_SCALE = 1 / 3.05;
 
 interface Spec {
   alg: string;
-  translate: number[];
-  rotateY: number;
+  transforms: Array<number | number[]>;
 }
 
 export class Cube3DScene extends Twisty3D<Puzzle> {
@@ -161,11 +160,16 @@ export class Cube3DScene extends Twisty3D<Puzzle> {
       const cube3Dalt = new Cube3D(Puzzles["333"]);
       const kpuzzle = new KPuzzle(Puzzles["333"]);
       kpuzzle.applyAlg(parse(spec.alg));
-      cube3Dalt.cube.translateX(spec.translate[0]);
-      cube3Dalt.cube.translateY(spec.translate[1]);
-      cube3Dalt.cube.translateZ(spec.translate[2]);
+      for (const transform of spec.transforms) {
+        if (typeof transform === "number") {
+        cube3Dalt.cube.rotateY(-transform / 4 * Math.PI * 2);
+        } else {
+          cube3Dalt.cube.translateX(transform[0]);
+          cube3Dalt.cube.translateY(transform[1]);
+          cube3Dalt.cube.translateZ(transform[2]);
+        }
+      }
       cube3Dalt.updateScene({state: kpuzzle.state, moves: []});
-      cube3Dalt.cube.rotateY(-spec.rotateY / 4 * Math.PI * 2);
       this.scene.add(cube3Dalt.cube);
     }
   }
