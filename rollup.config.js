@@ -1,4 +1,4 @@
-import {terser} from "rollup-plugin-terser";
+import { terser } from "rollup-plugin-terser";
 import * as typescript from "typescript";
 import pegjs from "rollup-plugin-pegjs";
 import resolve from "rollup-plugin-node-resolve";
@@ -67,9 +67,6 @@ const umd = {
   ],
 };
 
-const configs = [mod];
-if (!process.env.ROLLUP_WATCH) {
-  configs.push(umd);
-}
+const configs = [mod, umd];
 
 export default configs;
