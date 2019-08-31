@@ -182,20 +182,6 @@ export class Cursor<P extends Puzzle> {
     return false;
   }
 
-  private setMoves(alg: Sequence): void {
-    const moves = expand(alg);
-    if (moves.type === "sequence") {
-      this.moves = moves;
-    } else {
-      this.moves = new Sequence([moves]);
-    }
-
-    // if (this.moves.nestedUnits.length === 0) {
-    //   throw new Error("empty alg");
-    // }
-    // TODO: Avoid assuming all base moves are block moves.
-  }
-
   // TODO: Avoid assuming a single move at a time.
   public forward(duration: Cursor.Duration, stopAtEndOfMove: boolean): /* TODO: Remove this. Represents if move breakpoint was reached. */ boolean {
     return this.delta(duration, stopAtEndOfMove);
