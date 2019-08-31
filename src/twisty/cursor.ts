@@ -111,8 +111,6 @@ const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(countAnimate
 
 export class Cursor<P extends Puzzle> {
   private indexer: AlgorithmIndexer<P>;
-
-  private moveIdx: number;
   private algTimestamp: Cursor.Duration;
   constructor(public alg: Sequence, private puzzle: P) {
     this.setMoves(alg);
@@ -124,7 +122,6 @@ export class Cursor<P extends Puzzle> {
   }
 
   public setPositionToStart(): void {
-    this.moveIdx = 0;
     this.algTimestamp = 0;
   }
 
@@ -142,13 +139,14 @@ export class Cursor<P extends Puzzle> {
   }
 
   public currentPosition(): Cursor.Position<P> {
+    const moveIdx = this.indexer.timestampToIndex(this.algTimestamp);
     const pos = {
-      state: this.indexer.stateAtIndex(this.moveIdx),
+      state: this.indexer.stateAtIndex(moveIdx),
       moves: [],
     } as Cursor.Position<P>;
-    const move = this.indexer.getMove(this.moveIdx);
-    const moveTS = this.algTimestamp - this.indexer.indexToMoveStartTimestamp(this.moveIdx);
-    const moveDuration = this.indexer.indexToMoveStartTimestamp(this.moveIdx + 1) - this.indexer.indexToMoveStartTimestamp(this.moveIdx);
+    const move = this.indexer.getMove(moveIdx);
+    const moveTS = this.algTimestamp - this.indexer.indexToMoveStartTimestamp(moveIdx);
+    const moveDuration = this.indexer.indexToMoveStartTimestamp(moveIdx + 1) - this.indexer.indexToMoveStartTimestamp(moveIdx);
     if (moveTS !== 0) {
       pos.moves.push({
         move,
@@ -165,23 +163,22 @@ export class Cursor<P extends Puzzle> {
   }
 
   public delta(duration: Cursor.Duration, stopAtMoveBoundary: boolean): boolean {
+    const moveIdx = this.indexer.timestampToIndex(this.algTimestamp);
     const unclampedNewTimestamp = this.algTimestamp + duration;
-    const currentMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(this.moveIdx);
+    const currentMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(moveIdx);
     if (stopAtMoveBoundary) {
       if (unclampedNewTimestamp < currentMoveStartTimestamp) {
         this.algTimestamp = currentMoveStartTimestamp;
         return true;
       }
-      const nextMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(this.moveIdx + 1);
+      const nextMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(moveIdx + 1);
       if (unclampedNewTimestamp > nextMoveStartTimestamp) {
         this.algTimestamp = nextMoveStartTimestamp;
-        this.moveIdx += 1;
         return true;
       }
     }
 
     this.algTimestamp = Math.max(0, Math.min(this.indexer.algDuration(), unclampedNewTimestamp));
-    this.moveIdx = this.indexer.timestampToIndex(this.algTimestamp);
     return false;
   }
 
