@@ -1,4 +1,4 @@
-import {assertIsUnit, assertMatchesType, isUnit, matchesAlgType} from "./algorithm/alg-part";
+import { assertIsUnit, assertMatchesType, isUnit, matchesAlgType } from "./algorithm/alg-part";
 
 import {
   AlgPart,
@@ -28,7 +28,7 @@ function dispatch<DataDown, DataUp>(t: TraversalDownUp<DataDown, DataUp>, algPar
       return t.traverseBlockMove(algPart as BlockMove, dataDown);
     case "commutator":
       assertMatchesType(algPart, "commutator");
-      return t.traverseCommutator (algPart as Commutator, dataDown);
+      return t.traverseCommutator(algPart as Commutator, dataDown);
     case "conjugate":
       assertMatchesType(algPart, "conjugate");
       return t.traverseConjugate(algPart as Conjugate, dataDown);
@@ -40,10 +40,10 @@ function dispatch<DataDown, DataUp>(t: TraversalDownUp<DataDown, DataUp>, algPar
       return t.traverseNewLine(algPart as NewLine, dataDown);
     case "commentShort":
       assertMatchesType(algPart, "commentShort");
-      return t.traverseCommentShort (algPart as CommentShort, dataDown);
+      return t.traverseCommentShort(algPart as CommentShort, dataDown);
     case "commentLong":
       assertMatchesType(algPart, "commentLong");
-      return t.traverseCommentLong (algPart as CommentLong, dataDown);
+      return t.traverseCommentLong(algPart as CommentLong, dataDown);
     default:
       throw new Error(`Unknown AlgPart type: ${algPart.type}`);
   }
@@ -211,20 +211,20 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
   public traverseBlockMove(blockMove: BlockMove, dataDown: AlgPart): boolean {
     // TODO: Handle layers.
     return matchesAlgType(dataDown, "blockMove") &&
-           blockMove.outerLayer === (dataDown as BlockMove).outerLayer &&
-           blockMove.innerLayer === (dataDown as BlockMove).innerLayer &&
-           blockMove.family === (dataDown as BlockMove).family &&
-           blockMove.amount === (dataDown as BlockMove).amount;
+      blockMove.outerLayer === (dataDown as BlockMove).outerLayer &&
+      blockMove.innerLayer === (dataDown as BlockMove).innerLayer &&
+      blockMove.family === (dataDown as BlockMove).family &&
+      blockMove.amount === (dataDown as BlockMove).amount;
   }
   public traverseCommutator(commutator: Commutator, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "commutator") &&
-           this.traverse(commutator.A, (dataDown as Commutator).A) &&
-           this.traverse(commutator.B, (dataDown as Commutator).B);
+      this.traverse(commutator.A, (dataDown as Commutator).A) &&
+      this.traverse(commutator.B, (dataDown as Commutator).B);
   }
   public traverseConjugate(conjugate: Conjugate, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "conjugate") &&
-           this.traverse(conjugate.A, (dataDown as Conjugate).A) &&
-           this.traverse(conjugate.B, (dataDown as Conjugate).B);
+      this.traverse(conjugate.A, (dataDown as Conjugate).A) &&
+      this.traverse(conjugate.B, (dataDown as Conjugate).B);
   }
   public traversePause(pause: Pause, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "pause");
@@ -252,7 +252,7 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
       } else if (coalesced.length > 0) {
         const last = coalesced[coalesced.length - 1];
         if (matchesAlgType(last, "blockMove") &&
-            this.sameBlock((last as BlockMove), (part as BlockMove))) {
+          this.sameBlock((last as BlockMove), (part as BlockMove))) {
           // TODO: This is cube-specific. Perhaps pass the modules as DataDown?
           const amount = (last as BlockMove).amount + (part as BlockMove).amount;
           coalesced.pop();
@@ -283,8 +283,8 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
   private sameBlock(moveA: BlockMove, moveB: BlockMove): boolean {
     // TODO: Handle layers
     return moveA.outerLayer === moveB.outerLayer &&
-           moveA.innerLayer === moveB.innerLayer &&
-           moveA.family === moveB.family;
+      moveA.innerLayer === moveB.innerLayer &&
+      moveA.family === moveB.family;
   }
 }
 
@@ -322,8 +322,8 @@ export class ToString extends TraversalUp<string> {
     }
     return output;
   }
-  public traverseGroup(        group: Group       ): string { return "(" + this.traverse(group.nestedSequence) + ")" + this.repetitionSuffix(group.amount); }
-  public traverseBlockMove(     blockMove: BlockMove    ): string {
+  public traverseGroup(group: Group): string { return "(" + this.traverse(group.nestedSequence) + ")" + this.repetitionSuffix(group.amount); }
+  public traverseBlockMove(blockMove: BlockMove): string {
     let out = blockMove.family + this.repetitionSuffix(blockMove.amount);
     if (typeof blockMove.innerLayer !== "undefined") {
       out = String(blockMove.innerLayer) + out;
@@ -333,15 +333,15 @@ export class ToString extends TraversalUp<string> {
     }
     return out;
   }
-  public traverseCommutator(   commutator: Commutator  ): string { return "[" + this.traverse(commutator.A) + ", " + this.traverse(commutator.B) + "]" + this.repetitionSuffix(commutator.amount); }
-  public traverseConjugate(    conjugate: Conjugate   ): string { return "[" + this.traverse(conjugate.A) + ": " + this.traverse(conjugate.B) + "]" + this.repetitionSuffix(conjugate.amount); }
+  public traverseCommutator(commutator: Commutator): string { return "[" + this.traverse(commutator.A) + ", " + this.traverse(commutator.B) + "]" + this.repetitionSuffix(commutator.amount); }
+  public traverseConjugate(conjugate: Conjugate): string { return "[" + this.traverse(conjugate.A) + ": " + this.traverse(conjugate.B) + "]" + this.repetitionSuffix(conjugate.amount); }
   // TODO: Remove spaces between repeated pauses (in traverseSequence)
-  public traversePause(        pause: Pause       ): string { return "."; }
-  public traverseNewLine(      newLine: NewLine     ): string { return "\n"; }
+  public traversePause(pause: Pause): string { return "."; }
+  public traverseNewLine(newLine: NewLine): string { return "\n"; }
   // TODO: Enforce being followed by a newline (or the end of the alg)?
-  public traverseCommentShort( commentShort: CommentShort): string { return "//" + commentShort.comment; }
-    // TODO: Sanitize `*/`
-  public traverseCommentLong(  commentLong: CommentLong ): string { return "/*" + commentLong.comment + "*/"; }
+  public traverseCommentShort(commentShort: CommentShort): string { return "//" + commentShort.comment; }
+  // TODO: Sanitize `*/`
+  public traverseCommentLong(commentLong: CommentLong): string { return "/*" + commentLong.comment + "*/"; }
   private repetitionSuffix(amount: number): string {
     const absAmount = Math.abs(amount);
     let s = "";
@@ -368,11 +368,15 @@ const structureEqualsInstance = new StructureEquals();
 const coalesceBaseMovesInstance = new CoalesceBaseMoves();
 const algToStringInstance = new ToString();
 
-export const invert            = invertInstance.traverseSequence.bind(invertInstance) as (a: Sequence) => Sequence;
-export const expand            = expandInstance.traverseSequence.bind(expandInstance) as (a: Sequence) => Sequence;
-export const structureEquals   = structureEqualsInstance.traverseSequence.bind(structureEqualsInstance) as (a1: Sequence, a2: Sequence) => boolean;
+export const invert = invertInstance.traverseSequence.bind(invertInstance) as (a: Sequence) => Sequence;
+export const expand = expandInstance.traverseSequence.bind(expandInstance) as (a: Sequence) => Sequence;
+export const structureEquals = structureEqualsInstance.traverseSequence.bind(structureEqualsInstance) as (a1: Sequence, a2: Sequence) => boolean;
 export const coalesceBaseMoves = coalesceBaseMovesInstance.traverseSequence.bind(coalesceBaseMovesInstance) as (a: Sequence) => Sequence;
-export const algToString       = algToStringInstance.traverseSequence.bind(algToStringInstance) as (a: Sequence) => string;
+export const algToString = algToStringInstance.traverseSequence.bind(algToStringInstance) as (a: Sequence) => string;
 
 export const algPartStructureEqualsForTesting = algToStringInstance.traverse.bind(algToStringInstance) as (a1: AlgPart, a2: AlgPart) => boolean;
-export const algPartToStringForTesting = algToStringInstance.traverse.bind(algToStringInstance) as (a: AlgPart) => Sequence;
+export const algPartToStringForTesting = algToStringInstance.traverse.bind(algToStringInstance) as (a: AlgPart) => string;
+
+export function experimentalBlockMoveQuantumName(move: BlockMove): string {
+  return algPartToStringForTesting(new BlockMove(move.outerLayer, move.innerLayer, move.family, 1));
+}

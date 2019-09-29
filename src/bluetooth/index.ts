@@ -1,4 +1,4 @@
-export {GiiKERCube} from "./giiker";
+export {GiiKERCube, giikerMoveToBlockMoveForTesting} from "./giiker";
 export {BluetoothPuzzle, MoveEvent} from "./bluetooth-puzzle";
 export {KeyboardPuzzle, debugKeyboardConnect} from "./keyboard";
 export {enableDebugLogging} from "./debug";
