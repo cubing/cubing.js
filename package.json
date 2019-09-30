@@ -10,6 +10,7 @@
   "dependencies": {
     "@types/three": "^0.103.2",
     "@types/web-bluetooth": "0.0.4",
+    "babel-polyfill": "^6.26.0",
     "three": "^0.106.2"
   },
   "devDependencies": {
@@ -18,6 +19,7 @@
     "@types/jest": "^24.0.15",
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
+    "parcel": "^1.12.3",
     "pegjs-jest": "0.0.2",
     "rollup": "^1.16.3",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -37,7 +39,8 @@
     "test": "jest && npm run lint",
     "setup": "npm install",
     "lint": "tslint --fix --project . ; tslint --fix rollup.config.js",
-    "prepack": "npm run clean && npm run build"
+    "prepack": "npm run clean && npm run build",
+    "parcel": "parcel serve parcel/index.html"
   },
   "keywords": [
     "cubing",

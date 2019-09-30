@@ -1,5 +1,5 @@
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build dev test lint setup print-schemas clean
+NPM_COMMANDS = build dev test lint setup print-schemas clean parcel
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
