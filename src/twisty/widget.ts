@@ -275,6 +275,8 @@ export class Cube3DView implements CursorObserver, JumpObserver {
   private cube3D: Cube3D;
   constructor(private anim: AnimModel, definition: KPuzzleDefinition) {
     this.element = document.createElement("cube3d-view");
+
+    this.element.tabIndex = 0; // TODO: Use this to capture keyboard input.
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 

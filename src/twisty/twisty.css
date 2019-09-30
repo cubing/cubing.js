@@ -20,6 +20,10 @@ twisty player {
   background-position: 0 0, 16px 16px;
 }
 
+twisty player:focus {
+  outline: 1px auto blue;
+}
+
 twisty player cursor-text-view {
   flex: 1 0 0;
 }
