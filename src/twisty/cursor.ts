@@ -184,9 +184,9 @@ export class Cursor<P extends Puzzle> {
       this.moves = new Sequence([moves]);
     }
 
-    if (this.moves.nestedUnits.length === 0) {
-      throw new Error("empty alg");
-    }
+    // if (this.moves.nestedUnits.length === 0) {
+    //   throw new Error("empty alg");
+    // }
     // TODO: Avoid assuming all base moves are block moves.
   }
 

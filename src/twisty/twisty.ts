@@ -1,4 +1,4 @@
-import {Example, parse, Sequence} from "../alg";
+import {BlockMove, Example, parse, Sequence} from "../alg";
 import {KPuzzleDefinition, Puzzles} from "../kpuzzle";
 
 import {AnimModel} from "./anim";
@@ -43,6 +43,11 @@ export class Twisty {
       this.cursor.backward(100000, true); // TODO: Give this API to `Cursor`/`AnimModel`.
       this.anim.stepForward();
     }
+  }
+
+  public experimentalAddMove(move: BlockMove): void {
+    const newAlg = new Sequence(this.alg.nestedUnits.concat([move]));
+    this.experimentalSetAlg(newAlg);
   }
 }
 
