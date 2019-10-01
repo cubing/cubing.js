@@ -177,8 +177,8 @@ export class Scrubber implements CursorObserver {
     const value = parseInt(this.element.value, 10);
     const v = (value - min) / max * 100;
     this.element.style.background = `linear-gradient(to right, \
-      rgb(204, 24, 30) 0%, \
-      rgb(204, 24, 30) ${v}%, \
+      rgb(0, 63, 255) 0%, \
+      rgb(0, 63, 255) ${v}%, \
       rgba(0, 0, 0, 0.25) ${v}%, \
       rgba(0, 0, 0, 0.25) 100%\
       )`;

@@ -21,11 +21,15 @@ twisty player {
 }
 
 twisty player:focus {
-  outline: 1px auto blue;
+  /* outline: 1px auto blue; */
+  background-image: linear-gradient(45deg, #DDD 25%, rgba(255, 255, 255, 0.5) 25%, rgba(255, 255, 255, 0.5) 75%, #DDD 75%, #DDD),
+    linear-gradient(45deg, #DDD 25%, rgba(255, 255, 255, 0.5) 25%, rgba(255, 255, 255, 0.5) 75%, #DDD 75%, #DDD);
 }
 
 twisty player cursor-text-view {
-  flex: 1 0 0;
+  flex: 2em 0 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  background-color: rgba(195, 195, 195, 0.5);
 }
 
 twisty player twisty-control-bar {

@@ -4,11 +4,13 @@ import {algToString, invert, parse, Sequence} from "../alg";
 import {BluetoothPuzzle, connect, debugKeyboardConnect, KeyboardPuzzle, MoveEvent} from "../bluetooth";
 import {Twisty} from "../twisty";
 
-function asyncSetup(twisty: Twisty): void {
+async function asyncSetup(twisty: Twisty): Promise<void> {
   console.log("asyncSetup");
-  debugKeyboardConnect(twisty.element).then((keyboard: KeyboardPuzzle): void => {
-    console.log("keyboard", twisty, keyboard);
-    keyboard.addMoveListener(console.log);
+  const keyboard = await debugKeyboardConnect((twisty as any).player.cube3DView.element);
+  console.log("keyboard", twisty, keyboard);
+  keyboard.addMoveListener((e: MoveEvent) => {
+    console.log("listener", e);
+    twisty.experimentalAddMove(e.latestMove);
   });
 }
 
@@ -33,11 +35,11 @@ window.addEventListener("load", async () => {
   // debug?: object;
   // state?: PuzzleState;
   // quaternion?: any;
-  // document.querySelector("#connect").addEventListener("click", async () => {
-  window.puzzle = await debugKeyboardConnect();
-  window.puzzle.addMoveListener((e: MoveEvent) => {
-    console.log("listener", e);
-    twisty.experimentalAddMove(e.latestMove);
+  document.querySelector("#connect").addEventListener("click", async () => {
+    window.puzzle = await connect();
+    window.puzzle.addMoveListener((e: MoveEvent) => {
+      console.log("listener", e);
+      twisty.experimentalAddMove(e.latestMove);
+    });
   });
-  // });
 });
