@@ -6,10 +6,14 @@ import { connect, MoveEvent } from "../../src/bluetooth";
 import { Puzzles } from "../../src/kpuzzle";
 import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
+import {TAU} from "../../src/twisty/3d/twisty3D";
 
-import { Group, WebGLRenderer } from "three";
+import { Group, PlaneGeometry, WebGLRenderer } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
+
+const cubeCenter = new THREE.Vector3(0, 1, 0);
+const twisty = new Twisty(document.createElement("twisty"), {alg: new Sequence([])});
 
 let camera;
 let scene;
@@ -29,6 +33,25 @@ const clock = new THREE.Clock();
 init();
 animate();
 
+// From `cube3D.ts`
+class AxisInfo {
+  public stickerMaterial: THREE.MeshBasicMaterial;
+  constructor(public vector: THREE.Vector3, public fromZ: THREE.Euler, public color: number) {
+    // TODO: Make sticker material single-sided when cubie base is rendered?
+    this.stickerMaterial = new THREE.MeshBasicMaterial({color, side: THREE.DoubleSide});
+    this.stickerMaterial.transparent = true;
+    this.stickerMaterial.opacity = 0.1;
+  }
+}
+const axesInfo: AxisInfo[] = [
+  new AxisInfo(new THREE.Vector3( 0,  1,  0), new THREE.Euler(-TAU / 4,  0,  0), 0xffffff),
+  new AxisInfo(new THREE.Vector3(-1,  0,  0), new THREE.Euler( 0, -TAU / 4,  0), 0xff8800),
+  new AxisInfo(new THREE.Vector3( 0,  0,  1), new THREE.Euler( 0,  0,      0), 0x00ff00),
+  new AxisInfo(new THREE.Vector3( 1,  0,  0), new THREE.Euler( 0,  TAU / 4,  0), 0xff0000),
+  new AxisInfo(new THREE.Vector3( 0,  0, -1), new THREE.Euler( 0,  TAU / 2,  0), 0x0000ff),
+  new AxisInfo(new THREE.Vector3( 0, -1,  0), new THREE.Euler( TAU / 4,  0,  0), 0xffff00),
+];
+
 function init(): void {
 
   scene = new THREE.Scene();
@@ -42,11 +65,10 @@ function init(): void {
   // cube3D.experimentalGetCube().scale.setScalar(0.03);
   // scene.add(cube3D.experimentalGetCube());
 
-  const twisty = new Twisty(document.createElement("twisty"), {alg: new Sequence([])});
   const cube3D = twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
   // const cube3D = new Cube3D(Puzzles["333"]);
   console.log(cube3D);
-  cube3D.experimentalGetCube().translateY(0.8);
+  cube3D.experimentalGetCube().position.copy(cubeCenter);
   // cube3D.experimentalGetCube().translateZ(-0.5);
   cube3D.experimentalGetCube().scale.setScalar(1);
   scene.add(cube3D.experimentalGetCube());
@@ -58,6 +80,25 @@ function init(): void {
   //     twisty.experimentalAddMove(e.latestMove);
   //   });
   // });
+
+  // for (const axis of axesInfo) {
+  //   // const plane = new THREE.Mesh( new THREE.PlaneGeometry(1, 1), axis.stickerMaterial );
+  //   // plane.setRotationFromEuler(axis.fromZ);
+  //   // plane.position.copy(axis.vector);
+  //   // plane.position.multiplyScalar(1.5001);
+  //   // scene.add(plane);
+  // }
+
+  // const sideGeometry = new THREE.PlaneGeometry(1, 1, 3, 3);
+  // const sideMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
+  // sideMaterial.transparent = true;
+  // sideMaterial.opacity = 0.1;
+
+  // const planeR = new THREE.Mesh( sideGeometry, sideMaterial );
+  // planeR.scale.setScalar(3);
+  // planeR.position.copy(cubeCenter);
+  // planeR.translateZ(-1.505);
+  // scene.add(planeR);
 
   room = new THREE.LineSegments(
     new BoxLineGeometry( 6, 6, 6, 10, 10, 10 ),
@@ -115,24 +156,20 @@ function init(): void {
 
   }
 
-  function onSelectStart0(): void {
-    twisty.experimentalAddMove(BareBlockMove("R"));
-  }
-
-  function onSelectStart1(): void {
-    twisty.experimentalAddMove(BareBlockMove("U"));
-  }
-
   controller1 = renderer.vr.getController( 0 );
-  controller1.addEventListener( "selectstart", onSelectStart1 );
   controller1.addEventListener( "selectstart", onSelectStart );
   controller1.addEventListener( "selectend", onSelectEnd );
+  controller1.userData.direction = 1;
+  controller1.userData.lastIsSelecting = false;
+  controller1.userData.lastSide = "";
   scene.add( controller1 );
 
   controller2 = renderer.vr.getController( 1 );
-  controller2.addEventListener( "selectstart", onSelectStart0 );
+  controller2.userData.direction = -1;
   controller2.addEventListener( "selectstart", onSelectStart );
   controller2.addEventListener( "selectend", onSelectEnd );
+  controller2.userData.lastIsSelecting = false;
+  controller2.userData.lastSide = "";
   scene.add( controller2 );
 
   // helpers
@@ -162,8 +199,25 @@ function onWindowResize(): void {
 }
 
 function handleController( controller: Group ): void {
-
   if ( controller.userData.isSelecting ) {
+    // controller.quaternion.setFromAxisAngle
+    const euler = new THREE.Euler().setFromQuaternion(controller.quaternion);
+    const x = euler.x;
+    const y = euler.y;
+    const z = euler.z;
+    const max = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
+    let side = "";
+    if (max === x) { side = "R"; }
+    if (max === -x) { side = "L"; }
+    if (max === y) { side = "U"; }
+    if (max === -y) { side = "D"; }
+    if (max === z) { side = "F"; }
+    if (max === -z) { side = "B"; }
+    if (controller.userData.isSelecting !== controller.userData.lastIsSelecting || side !== controller.userData.lastSide) {
+      console.log(max, x, y, z);
+      twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
+    }
+    controller.userData.lastSide = side;
 
     const object = room.children[ count ++ ];
 
@@ -176,6 +230,7 @@ function handleController( controller: Group ): void {
     if ( count === room.children.length ) { count = 0; }
 
   }
+  controller.userData.lastIsSelecting = controller.userData.isSelecting;
 
 }
 
