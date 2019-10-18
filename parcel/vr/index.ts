@@ -30,27 +30,27 @@ const relativeVelocity = new THREE.Vector3();
 
 const clock = new THREE.Clock();
 
-init();
-animate();
-
 // From `cube3D.ts`
 class AxisInfo {
   public stickerMaterial: THREE.MeshBasicMaterial;
-  constructor(public vector: THREE.Vector3, public fromZ: THREE.Euler, public color: number) {
+  constructor(public side: string, public vector: THREE.Vector3, public fromZ: THREE.Euler, public color: number) {
     // TODO: Make sticker material single-sided when cubie base is rendered?
     this.stickerMaterial = new THREE.MeshBasicMaterial({color, side: THREE.DoubleSide});
     this.stickerMaterial.transparent = true;
-    this.stickerMaterial.opacity = 0.1;
+    this.stickerMaterial.opacity = 0.4;
   }
 }
 const axesInfo: AxisInfo[] = [
-  new AxisInfo(new THREE.Vector3( 0,  1,  0), new THREE.Euler(-TAU / 4,  0,  0), 0xffffff),
-  new AxisInfo(new THREE.Vector3(-1,  0,  0), new THREE.Euler( 0, -TAU / 4,  0), 0xff8800),
-  new AxisInfo(new THREE.Vector3( 0,  0,  1), new THREE.Euler( 0,  0,      0), 0x00ff00),
-  new AxisInfo(new THREE.Vector3( 1,  0,  0), new THREE.Euler( 0,  TAU / 4,  0), 0xff0000),
-  new AxisInfo(new THREE.Vector3( 0,  0, -1), new THREE.Euler( 0,  TAU / 2,  0), 0x0000ff),
-  new AxisInfo(new THREE.Vector3( 0, -1,  0), new THREE.Euler( TAU / 4,  0,  0), 0xffff00),
+  new AxisInfo("U", new THREE.Vector3( 0,  1,  0), new THREE.Euler(-TAU / 4,  0,  0), 0xffffff),
+  new AxisInfo("L", new THREE.Vector3(-1,  0,  0), new THREE.Euler( 0, -TAU / 4,  0), 0xff8800),
+  new AxisInfo("F", new THREE.Vector3( 0,  0,  1), new THREE.Euler( 0,  0,      0), 0x00ff00),
+  new AxisInfo("R", new THREE.Vector3( 1,  0,  0), new THREE.Euler( 0,  TAU / 4,  0), 0xff0000),
+  new AxisInfo("B", new THREE.Vector3( 0,  0, -1), new THREE.Euler( 0,  TAU / 2,  0), 0x0000ff),
+  new AxisInfo("D", new THREE.Vector3( 0, -1,  0), new THREE.Euler( TAU / 4,  0,  0), 0xffff00),
 ];
+
+init();
+animate();
 
 function init(): void {
 
@@ -81,13 +81,15 @@ function init(): void {
   //   });
   // });
 
-  // for (const axis of axesInfo) {
-  //   // const plane = new THREE.Mesh( new THREE.PlaneGeometry(1, 1), axis.stickerMaterial );
-  //   // plane.setRotationFromEuler(axis.fromZ);
-  //   // plane.position.copy(axis.vector);
-  //   // plane.position.multiplyScalar(1.5001);
-  //   // scene.add(plane);
-  // }
+  for (const axis of axesInfo) {
+    const plane = new THREE.Mesh( new THREE.PlaneGeometry(1, 1), axis.stickerMaterial );
+    plane.position.add(axis.vector);
+    plane.position.multiplyScalar(1.5001);
+    plane.position.add(cubeCenter);
+    plane.setRotationFromEuler(axis.fromZ);
+    plane.scale.setScalar(3);
+    scene.add(plane);
+  }
 
   // const sideGeometry = new THREE.PlaneGeometry(1, 1, 3, 3);
   // const sideMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
