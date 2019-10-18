@@ -8,18 +8,19 @@ import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 import {TAU} from "../../src/twisty/3d/twisty3D";
 
-import { Group, PlaneGeometry, WebGLRenderer } from "three";
+import { Group, Intersection, Material, Mesh, PlaneGeometry, Raycaster, WebGLRenderer } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
 
 const cubeCenter = new THREE.Vector3(0, 1, 0);
 const twisty = new Twisty(document.createElement("twisty"), {alg: new Sequence([])});
+const controlPlanes = [];
 
 let camera;
 let scene;
 let renderer: WebGLRenderer;
+let controller0;
 let controller1;
-let controller2;
 
 let room;
 
@@ -30,14 +31,21 @@ const relativeVelocity = new THREE.Vector3();
 
 const clock = new THREE.Clock();
 
+enum Status {
+  Untargeted,
+  Targeted,
+  Pressed,
+}
+
 // From `cube3D.ts`
 class AxisInfo {
   public stickerMaterial: THREE.MeshBasicMaterial;
   constructor(public side: string, public vector: THREE.Vector3, public fromZ: THREE.Euler, public color: number) {
     // TODO: Make sticker material single-sided when cubie base is rendered?
+    color = 0xffffff; // override
     this.stickerMaterial = new THREE.MeshBasicMaterial({color, side: THREE.DoubleSide});
     this.stickerMaterial.transparent = true;
-    this.stickerMaterial.opacity = 0.4;
+    this.stickerMaterial.opacity = 0;
   }
 }
 const axesInfo: AxisInfo[] = [
@@ -67,7 +75,6 @@ function init(): void {
 
   const cube3D = twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
   // const cube3D = new Cube3D(Puzzles["333"]);
-  console.log(cube3D);
   cube3D.experimentalGetCube().position.copy(cubeCenter);
   // cube3D.experimentalGetCube().translateZ(-0.5);
   cube3D.experimentalGetCube().scale.setScalar(1);
@@ -84,10 +91,16 @@ function init(): void {
   for (const axis of axesInfo) {
     const plane = new THREE.Mesh( new THREE.PlaneGeometry(1, 1), axis.stickerMaterial );
     plane.position.add(axis.vector);
-    plane.position.multiplyScalar(1.5001);
+    plane.position.multiplyScalar(1.502);
     plane.position.add(cubeCenter);
     plane.setRotationFromEuler(axis.fromZ);
     plane.scale.setScalar(3);
+
+    plane.userData.side = axis.side;
+    plane.userData.status = [Status.Untargeted, Status.Untargeted];
+
+    controlPlanes.push(plane);
+
     scene.add(plane);
   }
 
@@ -158,21 +171,23 @@ function init(): void {
 
   }
 
-  controller1 = renderer.vr.getController( 0 );
+  controller0 = renderer.vr.getController( 0 );
+  controller0.addEventListener( "selectstart", onSelectStart );
+  controller0.addEventListener( "selectend", onSelectEnd );
+  controller0.userData.controllerNumber = 0;
+  controller0.userData.direction = 1;
+  controller0.userData.lastIsSelecting = false;
+  controller0.userData.lastSide = "";
+  scene.add( controller0 );
+
+  controller1 = renderer.vr.getController( 1 );
   controller1.addEventListener( "selectstart", onSelectStart );
   controller1.addEventListener( "selectend", onSelectEnd );
-  controller1.userData.direction = 1;
+  controller1.userData.controllerNumber = 1;
+  controller1.userData.direction = -1;
   controller1.userData.lastIsSelecting = false;
   controller1.userData.lastSide = "";
   scene.add( controller1 );
-
-  controller2 = renderer.vr.getController( 1 );
-  controller2.userData.direction = -1;
-  controller2.addEventListener( "selectstart", onSelectStart );
-  controller2.addEventListener( "selectend", onSelectEnd );
-  controller2.userData.lastIsSelecting = false;
-  controller2.userData.lastSide = "";
-  scene.add( controller2 );
 
   // helpers
 
@@ -182,8 +197,8 @@ function init(): void {
 
   const material = new THREE.LineBasicMaterial( { /*vertexColors: true,*/ blending: THREE.AdditiveBlending } );
 
+  controller0.add( new THREE.Line( geometry2, material ) );
   controller1.add( new THREE.Line( geometry2, material ) );
-  controller2.add( new THREE.Line( geometry2, material ) );
 
   //
 
@@ -201,25 +216,31 @@ function onWindowResize(): void {
 }
 
 function handleController( controller: Group ): void {
+  const euler = new THREE.Euler().setFromQuaternion(controller.quaternion);
+  const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(controller.quaternion);
+  const raycaster = new Raycaster(controller.position, direction);
+  const closestIntersection: Intersection | null = ((l) => l.length > 0 ? l[0] : null)(raycaster.intersectObjects(controlPlanes));
+  for (const controlPlane of controlPlanes) {
+    controlPlane.userData.status[controller.userData.controllerNumber] = Status.Untargeted;
+  }
+
+  if (closestIntersection) {
+    (closestIntersection.object as Mesh).userData.status[controller.userData.controllerNumber] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
+  }
+
   if ( controller.userData.isSelecting ) {
-    // controller.quaternion.setFromAxisAngle
-    const euler = new THREE.Euler().setFromQuaternion(controller.quaternion);
-    const x = euler.x;
-    const y = euler.y;
-    const z = euler.z;
-    const max = Math.max(Math.abs(x), Math.abs(y), Math.abs(z));
-    let side = "";
-    if (max === x) { side = "R"; }
-    if (max === -x) { side = "L"; }
-    if (max === y) { side = "U"; }
-    if (max === -y) { side = "D"; }
-    if (max === z) { side = "F"; }
-    if (max === -z) { side = "B"; }
-    if (controller.userData.isSelecting !== controller.userData.lastIsSelecting || side !== controller.userData.lastSide) {
-      console.log(max, x, y, z);
-      twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
+    if (closestIntersection) {
+      const side = closestIntersection.object.userData.side;
+      if (controller.userData.isSelecting !== controller.userData.lastIsSelecting || side !== controller.userData.lastSide) {
+        twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
+      }
+      controller.userData.lastSide = side;
     }
-    controller.userData.lastSide = side;
+    // if () {
+    //   console.log(max, x, y, z);
+    //   twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
+    // }
+    // controller.userData.lastSide = side;
 
     const object = room.children[ count ++ ];
 
@@ -246,8 +267,18 @@ function animate(): void {
 
 function render(): void {
 
+  handleController( controller0 );
   handleController( controller1 );
-  handleController( controller2 );
+
+  for (const controlPlane of controlPlanes) {
+    if (controlPlane.userData.status[0] === Status.Pressed || controlPlane.userData.status[1] === Status.Pressed) {
+      controlPlane.material.opacity = 0.2;
+    } else if (controlPlane.userData.status[0] === Status.Targeted || controlPlane.userData.status[1] === Status.Targeted) {
+      controlPlane.material.opacity = 0.1;
+    } else {
+      controlPlane.material.opacity = 0;
+    }
+  }
 
   //
 
