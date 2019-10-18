@@ -159,6 +159,10 @@ export class Cube3D extends Twisty3D<Puzzle> {
     this.scene.add(this.cube);
   }
 
+  public experimentalGetCube(): THREE.Group {
+    return this.cube;
+  }
+
   protected updateScene(p: Cursor.Position<Puzzle>): void {
     const reid333 = p.state as Transformation;
     for (const orbit in pieceDefs) {
