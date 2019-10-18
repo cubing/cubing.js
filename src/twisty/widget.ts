@@ -280,7 +280,7 @@ export class Cube3DView implements CursorObserver, JumpObserver {
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 
-    this.cube3D = new Cube3D(definition); // TODO: Dynamic puzzle
+    this.cube3D = new Cube3D(definition, {showFoundation: false}); // TODO: Dynamic puzzle
 
     setTimeout(() => {
       this.cube3D.newVantage(this.element);

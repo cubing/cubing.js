@@ -1,7 +1,11 @@
+import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 import * as THREE from "three";
 
-// import { Puzzles } from "../../src/kpuzzle";
-// import {Cube3D} from "../../src/twisty/3d/cube3D";
+import { BareBlockMove, BlockMove, Sequence } from "../../src/alg";
+import { connect, MoveEvent } from "../../src/bluetooth";
+import { Puzzles } from "../../src/kpuzzle";
+import { Twisty } from "../../src/twisty";
+import { Cube3D } from "../../src/twisty/3d/cube3D";
 
 import { Group, WebGLRenderer } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
@@ -33,10 +37,27 @@ function init(): void {
   camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10 );
 
   // const cube3D = new Cube3D(Puzzles["333"]);
-  // cube3D.cube.translateY(0.8);
-  // cube3D.cube.translateZ(-0.5);
-  // cube3D.cube.scale.setScalar(0.03);
-  // scene.add(cube3D.cube);
+  // cube3D.experimentalGetCube().translateY(0.8);
+  // cube3D.experimentalGetCube().translateZ(-0.5);
+  // cube3D.experimentalGetCube().scale.setScalar(0.03);
+  // scene.add(cube3D.experimentalGetCube());
+
+  const twisty = new Twisty(document.createElement("twisty"), {alg: new Sequence([])});
+  const cube3D = twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
+  // const cube3D = new Cube3D(Puzzles["333"]);
+  console.log(cube3D);
+  cube3D.experimentalGetCube().translateY(0.8);
+  // cube3D.experimentalGetCube().translateZ(-0.5);
+  cube3D.experimentalGetCube().scale.setScalar(1);
+  scene.add(cube3D.experimentalGetCube());
+  // document.getElementById("connect").addEventListener("click", async () => {
+  //   const bluetoothPuzzle = await connect();
+  //   console.log(bluetoothPuzzle);
+  //   bluetoothPuzzle.addMoveListener((e: MoveEvent) => {
+  //     console.log("listener", e);
+  //     twisty.experimentalAddMove(e.latestMove);
+  //   });
+  // });
 
   room = new THREE.LineSegments(
     new BoxLineGeometry( 6, 6, 6, 10, 10, 10 ),
@@ -94,12 +115,22 @@ function init(): void {
 
   }
 
+  function onSelectStart0(): void {
+    twisty.experimentalAddMove(BareBlockMove("R"));
+  }
+
+  function onSelectStart1(): void {
+    twisty.experimentalAddMove(BareBlockMove("U"));
+  }
+
   controller1 = renderer.vr.getController( 0 );
+  controller1.addEventListener( "selectstart", onSelectStart1 );
   controller1.addEventListener( "selectstart", onSelectStart );
   controller1.addEventListener( "selectend", onSelectEnd );
   scene.add( controller1 );
 
   controller2 = renderer.vr.getController( 1 );
+  controller2.addEventListener( "selectstart", onSelectStart0 );
   controller2.addEventListener( "selectstart", onSelectStart );
   controller2.addEventListener( "selectend", onSelectEnd );
   scene.add( controller2 );
