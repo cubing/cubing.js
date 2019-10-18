@@ -77,7 +77,7 @@ function init(): void {
   scene = new THREE.Scene();
   scene.background = new THREE.Color( 0x505050 );
 
-  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10 );
+  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 1000);
 
   // const cube3D = new Cube3D(Puzzles["333"]);
   // cube3D.experimentalGetCube().translateY(0.8);
@@ -238,7 +238,7 @@ function handleController( controller: Group ): void {
   }
 
   if ( controller.userData.isSelecting ) {
-    if (closestIntersection) {
+    if (closestIntersection && !areBothControllersSelecting()) {
       const side = closestIntersection.object.userData.side;
       if (controller.userData.isSelecting !== controller.userData.lastIsSelecting || side !== controller.userData.lastSide) {
         twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
@@ -295,6 +295,10 @@ function setScale(scale: number): void {
   }
 }
 
+function areBothControllersSelecting(): boolean {
+  return controller0.userData.isSelecting && controller1.userData.isSelecting;
+}
+
 (window as any).setScale = setScale;
 
 let lastSelectingBoth = false;
@@ -307,7 +311,7 @@ function render(): void {
   handleController( controller0 );
   handleController( controller1 );
 
-  if (controller0.userData.isSelecting && controller1.userData.isSelecting) {
+  if (areBothControllersSelecting()) {
     if (lastSelectingBoth === false) {
       selectingBothInitialDistance = controller0.position.distanceTo(controller1.position);
       selectingBothInitialScale = currentScale;
