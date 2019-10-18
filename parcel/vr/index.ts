@@ -12,19 +12,20 @@ import { Group, Intersection, Material, Mesh, PlaneGeometry, Raycaster, WebGLRen
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
 
-let height = parseFloat(new URL(location.href).searchParams.get("height") || "1");
-if (isNaN(height)) {
-  height = 1;
+let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
+if (isNaN(initialHeight)) {
+  initialHeight = 1;
 }
 
-let scale = parseFloat(new URL(location.href).searchParams.get("scale") || "1");
-if (isNaN(scale)) {
-  scale = 1;
+let initialScale = parseFloat(new URL(location.href).searchParams.get("scale") || "1");
+if (isNaN(initialScale)) {
+  initialScale = 1;
 }
 
-const cubeCenter = new THREE.Vector3(0, height, 0);
+const cubeCenter = new THREE.Vector3(0, initialHeight, 0);
 const twisty = new Twisty(document.createElement("twisty"), {alg: new Sequence([])});
 const controlPlanes = [];
+let cube3D: Cube3D;
 
 let camera;
 let scene;
@@ -84,11 +85,11 @@ function init(): void {
   // cube3D.experimentalGetCube().scale.setScalar(0.03);
   // scene.add(cube3D.experimentalGetCube());
 
-  const cube3D = twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
+  cube3D = twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
   // const cube3D = new Cube3D(Puzzles["333"]);
   cube3D.experimentalGetCube().position.copy(cubeCenter);
   // cube3D.experimentalGetCube().translateZ(-0.5);
-  cube3D.experimentalGetCube().scale.setScalar(scale);
+  setCubeScale(cube3D, initialScale);
   scene.add(cube3D.experimentalGetCube());
   // document.getElementById("connect").addEventListener("click", async () => {
   //   const bluetoothPuzzle = await connect();
@@ -101,11 +102,8 @@ function init(): void {
 
   for (const axis of axesInfo) {
     const plane = new THREE.Mesh( new THREE.PlaneGeometry(1, 1), axis.stickerMaterial );
-    plane.position.add(axis.vector);
-    plane.position.multiplyScalar(1.502 * scale);
-    plane.position.add(cubeCenter);
-    plane.setRotationFromEuler(axis.fromZ);
-    plane.scale.setScalar(3 * scale);
+    plane.userData.axis = axis;
+    setControlPlaneScale(plane, initialScale);
 
     plane.userData.side = axis.side;
     plane.userData.status = [Status.Untargeted, Status.Untargeted];
@@ -277,6 +275,29 @@ function animate(): void {
   renderer.setAnimationLoop( render );
 
 }
+
+function setControlPlaneScale(controlPlane: Mesh, scale: number): void {
+  controlPlane.position.add(controlPlane.userData.axis.vector);
+  controlPlane.position.multiplyScalar(1.502 * scale);
+  controlPlane.position.add(cubeCenter);
+  controlPlane.setRotationFromEuler(controlPlane.userData.axis.fromZ);
+  controlPlane.scale.setScalar(3 * scale);
+}
+
+function setCubeScale(cube: Cube3D, scale: number): void {
+  cube.experimentalGetCube().scale.setScalar(scale);
+}
+
+function setScale(scale: number): void {
+  for (const controlPlane of controlPlanes) {
+    setControlPlaneScale(controlPlane, scale);
+  }
+  if (cube3D) {
+    setCubeScale(cube3D, scale);
+  }
+}
+
+(window as any).setScale = setScale;
 
 function render(): void {
 
