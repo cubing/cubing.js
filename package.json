@@ -11,7 +11,7 @@
     "@types/three": "^0.103.2",
     "@types/web-bluetooth": "0.0.4",
     "babel-polyfill": "^6.26.0",
-    "three": "^0.106.2"
+    "three": "^0.109.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
