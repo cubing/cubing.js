@@ -12,7 +12,17 @@ import { Group, Intersection, Material, Mesh, PlaneGeometry, Raycaster, WebGLRen
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
 
-const cubeCenter = new THREE.Vector3(0, 1, 0);
+let height = parseFloat(new URL(location.href).searchParams.get("height") || "1");
+if (isNaN(height)) {
+  height = 1;
+}
+
+let scale = parseFloat(new URL(location.href).searchParams.get("scale") || "1");
+if (isNaN(scale)) {
+  scale = 1;
+}
+
+const cubeCenter = new THREE.Vector3(0, height, 0);
 const twisty = new Twisty(document.createElement("twisty"), {alg: new Sequence([])});
 const controlPlanes = [];
 
@@ -23,6 +33,7 @@ let controller0;
 let controller1;
 
 let room;
+const numBouncies = 0;
 
 let count = 0;
 const radius = 0.08;
@@ -77,7 +88,7 @@ function init(): void {
   // const cube3D = new Cube3D(Puzzles["333"]);
   cube3D.experimentalGetCube().position.copy(cubeCenter);
   // cube3D.experimentalGetCube().translateZ(-0.5);
-  cube3D.experimentalGetCube().scale.setScalar(1);
+  cube3D.experimentalGetCube().scale.setScalar(scale);
   scene.add(cube3D.experimentalGetCube());
   // document.getElementById("connect").addEventListener("click", async () => {
   //   const bluetoothPuzzle = await connect();
@@ -91,10 +102,10 @@ function init(): void {
   for (const axis of axesInfo) {
     const plane = new THREE.Mesh( new THREE.PlaneGeometry(1, 1), axis.stickerMaterial );
     plane.position.add(axis.vector);
-    plane.position.multiplyScalar(1.502);
+    plane.position.multiplyScalar(1.502 * scale);
     plane.position.add(cubeCenter);
     plane.setRotationFromEuler(axis.fromZ);
-    plane.scale.setScalar(3);
+    plane.scale.setScalar(3 * scale);
 
     plane.userData.side = axis.side;
     plane.userData.status = [Status.Untargeted, Status.Untargeted];
@@ -128,7 +139,7 @@ function init(): void {
 
   const geometry = new THREE.IcosahedronBufferGeometry( radius, 2 );
 
-  for ( let i = 0; i < 200; i ++ ) {
+  for ( let i = 0; i < numBouncies; i ++ ) {
 
     const object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 
@@ -242,15 +253,17 @@ function handleController( controller: Group ): void {
     // }
     // controller.userData.lastSide = side;
 
-    const object = room.children[ count ++ ];
+    if (room.children.length > 0) {
+      const object = room.children[ count ++ ];
 
-    object.position.copy( controller.position );
-    object.userData.velocity.x = ( Math.random() - 0.5 ) * 3;
-    object.userData.velocity.y = ( Math.random() - 0.5 ) * 3;
-    object.userData.velocity.z = ( Math.random() - 9 );
-    object.userData.velocity.applyQuaternion( controller.quaternion );
+      object.position.copy( controller.position );
+      object.userData.velocity.x = ( Math.random() - 0.5 ) * 3;
+      object.userData.velocity.y = ( Math.random() - 0.5 ) * 3;
+      object.userData.velocity.z = ( Math.random() - 9 );
+      object.userData.velocity.applyQuaternion( controller.quaternion );
 
-    if ( count === room.children.length ) { count = 0; }
+      if ( count === room.children.length ) { count = 0; }
+    }
 
   }
   controller.userData.lastIsSelecting = controller.userData.isSelecting;
