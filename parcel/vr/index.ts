@@ -204,7 +204,7 @@ function init(): void {
   geometry2.addAttribute( "position", new THREE.Float32BufferAttribute( [ 0, 0, 0, 0, 0, - 1 ], 3 ) );
   geometry2.addAttribute( "color", new THREE.Float32BufferAttribute( [ 0.5, 0.5, 0.5, 0, 0, 0 ], 3 ) );
 
-  const material = new THREE.LineBasicMaterial( { /*vertexColors: true,*/ blending: THREE.AdditiveBlending } );
+  const material = new THREE.LineBasicMaterial( { /*vertexColors: true,*/ blending: THREE.AdditiveBlending, linewidth: 10, transparent: true, opacity: 0.5 } );
 
   controller0.add( new THREE.Line( geometry2, material ) );
   controller1.add( new THREE.Line( geometry2, material ) );
@@ -271,13 +271,11 @@ function handleController( controller: Group ): void {
 //
 
 function animate(): void {
-
   renderer.setAnimationLoop( render );
-
 }
 
 function setControlPlaneScale(controlPlane: Mesh, scale: number): void {
-  controlPlane.position.add(controlPlane.userData.axis.vector);
+  controlPlane.position.copy(controlPlane.userData.axis.vector);
   controlPlane.position.multiplyScalar(1.502 * scale);
   controlPlane.position.add(cubeCenter);
   controlPlane.setRotationFromEuler(controlPlane.userData.axis.fromZ);
@@ -299,16 +297,35 @@ function setScale(scale: number): void {
 
 (window as any).setScale = setScale;
 
+let lastSelectingBoth = false;
+let selectingBothInitialDistance = 1;
+let selectingBothInitialScale = 1;
+let currentScale = 1;
+
 function render(): void {
 
   handleController( controller0 );
   handleController( controller1 );
 
+  if (controller0.userData.isSelecting && controller1.userData.isSelecting) {
+    if (lastSelectingBoth === false) {
+      selectingBothInitialDistance = controller0.position.distanceTo(controller1.position);
+      selectingBothInitialScale = currentScale;
+    } else {
+      const newDistance = controller0.position.distanceTo(controller1.position);
+      currentScale = selectingBothInitialScale * newDistance / selectingBothInitialDistance;
+      setScale(currentScale);
+    }
+    lastSelectingBoth = true;
+  } else {
+    lastSelectingBoth = false;
+  }
+
   for (const controlPlane of controlPlanes) {
     if (controlPlane.userData.status[0] === Status.Pressed || controlPlane.userData.status[1] === Status.Pressed) {
-      controlPlane.material.opacity = 0.2;
+      controlPlane.material.opacity = 0.4;
     } else if (controlPlane.userData.status[0] === Status.Targeted || controlPlane.userData.status[1] === Status.Targeted) {
-      controlPlane.material.opacity = 0.1;
+      controlPlane.material.opacity = 0.2;
     } else {
       controlPlane.material.opacity = 0;
     }
