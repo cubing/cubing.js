@@ -10,6 +10,7 @@ import { Cube3D } from "../../src/twisty/3d/cube3D";
 import { Color, Group, Intersection, Material, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, Scene, WebGLRenderer, WebVRManager } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
+import { VRGamepad } from "./gamepad";
 
 class VRCubeDemo {
   private camera: PerspectiveCamera;
@@ -17,8 +18,7 @@ class VRCubeDemo {
 
   private room: Room;
 
-  private controller0: Group;
-  private controller1: Group;
+  private gamepads: VRGamepad[] = [];
 
   constructor() {
     this.camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -28,7 +28,10 @@ class VRCubeDemo {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.vr.enabled = true;
 
-    this.room = new Room();
+    this.gamepads.push(new VRGamepad(this.renderer, 0));
+    this.gamepads.push(new VRGamepad(this.renderer, 1));
+
+    this.room = new Room(this.gamepads);
     document.body.appendChild(this.renderer.domElement);
     document.body.appendChild(WEBVR.createButton(this.renderer));
 

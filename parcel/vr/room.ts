@@ -1,15 +1,14 @@
+import { VRGamepad } from "./gamepad";
+import { VRCube } from "./vrcube";
+
 import { Color, Group, HemisphereLight, LineBasicMaterial, LineSegments, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry";
-import { VRCube } from "./vrcube";
 
 export class Room {
   public scene: Scene;
-
-  private controller0: Group;
-  private controller1: Group;
-
+  private gamepadSabers: Group[] = [];
   private box: LineSegments;
-  constructor() {
+  constructor(gamepads: VRGamepad[]) {
     this.scene = new Scene();
     this.scene.background = new Color( 0x505050 );
 
@@ -25,5 +24,9 @@ export class Room {
     const light = new HemisphereLight( 0xffffff, 0x444444 );
     light.position.set( 1, 1, 1 );
     this.scene.add( light );
+
+    for (const gamepad of gamepads) {
+      this.gamepadSabers.push(gamepad.group);
+    }
   }
 }
