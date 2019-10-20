@@ -8,7 +8,7 @@ import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 import {TAU} from "../../src/twisty/3d/twisty3D";
 
-import { Group, Intersection, Material, Mesh, PlaneGeometry, Raycaster, WebGLRenderer } from "three";
+import { Group, Intersection, Material, Mesh, PlaneGeometry, Raycaster, WebGLRenderer, WebVRManager } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
 
@@ -79,27 +79,12 @@ function init(): void {
 
   camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-  // const cube3D = new Cube3D(Puzzles["333"]);
-  // cube3D.experimentalGetCube().translateY(0.8);
-  // cube3D.experimentalGetCube().translateZ(-0.5);
-  // cube3D.experimentalGetCube().scale.setScalar(0.03);
-  // scene.add(cube3D.experimentalGetCube());
-
   cube3D = twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
-  // const cube3D = new Cube3D(Puzzles["333"]);
   cube3D.experimentalGetCube().position.copy(cubeCenter);
   cube3D.experimentalUpdateOptions({showFoundation: false, showHintStickers: false});
-  // cube3D.experimentalGetCube().translateZ(-0.5);
   setCubeScale(cube3D, initialScale);
   scene.add(cube3D.experimentalGetCube());
-  // document.getElementById("connect").addEventListener("click", async () => {
-  //   const bluetoothPuzzle = await connect();
-  //   console.log(bluetoothPuzzle);
-  //   bluetoothPuzzle.addMoveListener((e: MoveEvent) => {
-  //     console.log("listener", e);
-  //     twisty.experimentalAddMove(e.latestMove);
-  //   });
-  // });
+
 
   for (const axis of axesInfo) {
     const plane = new THREE.Mesh( new THREE.PlaneGeometry(1, 1), axis.stickerMaterial );
@@ -114,17 +99,6 @@ function init(): void {
     scene.add(plane);
   }
 
-  // const sideGeometry = new THREE.PlaneGeometry(1, 1, 3, 3);
-  // const sideMaterial = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
-  // sideMaterial.transparent = true;
-  // sideMaterial.opacity = 0.1;
-
-  // const planeR = new THREE.Mesh( sideGeometry, sideMaterial );
-  // planeR.scale.setScalar(3);
-  // planeR.position.copy(cubeCenter);
-  // planeR.translateZ(-1.505);
-  // scene.add(planeR);
-
   room = new THREE.LineSegments(
     new BoxLineGeometry( 6, 6, 6, 10, 10, 10 ),
     new THREE.LineBasicMaterial( { color: 0x808080 } ),
@@ -135,25 +109,6 @@ function init(): void {
   const light = new THREE.HemisphereLight( 0xffffff, 0x444444 );
   light.position.set( 1, 1, 1 );
   scene.add( light );
-
-  const geometry = new THREE.IcosahedronBufferGeometry( radius, 2 );
-
-  for ( let i = 0; i < numBouncies; i ++ ) {
-
-    const object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-
-    object.position.x = Math.random() * 4 - 2;
-    object.position.y = Math.random() * 4;
-    object.position.z = Math.random() * 4 - 2;
-
-    object.userData.velocity = new THREE.Vector3();
-    object.userData.velocity.x = Math.random() * 0.01 - 0.005;
-    object.userData.velocity.y = Math.random() * 0.01 - 0.005;
-    object.userData.velocity.z = Math.random() * 0.01 - 0.005;
-
-    room.add( object );
-
-  }
 
   //
 
@@ -243,6 +198,7 @@ function handleController( controller: Group ): void {
       const side = closestIntersection.object.userData.side;
       if (controller.userData.isSelecting !== controller.userData.lastIsSelecting || side !== controller.userData.lastSide) {
         twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
+        navigator.getGamepads()[controller.userData.controllerNumber].hapticActuators[0].pulse(0.2, 100);
       }
       controller.userData.lastSide = side;
     }
@@ -251,18 +207,6 @@ function handleController( controller: Group ): void {
     //   twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
     // }
     // controller.userData.lastSide = side;
-
-    if (room.children.length > 0) {
-      const object = room.children[ count ++ ];
-
-      object.position.copy( controller.position );
-      object.userData.velocity.x = ( Math.random() - 0.5 ) * 3;
-      object.userData.velocity.y = ( Math.random() - 0.5 ) * 3;
-      object.userData.velocity.z = ( Math.random() - 9 );
-      object.userData.velocity.applyQuaternion( controller.quaternion );
-
-      if ( count === room.children.length ) { count = 0; }
-    }
 
   }
   controller.userData.lastIsSelecting = controller.userData.isSelecting;
@@ -334,78 +278,6 @@ function render(): void {
     } else {
       controlPlane.material.opacity = 0;
     }
-  }
-
-  //
-
-  const delta = clock.getDelta() * 0.8; // slow down simulation
-
-  const range = 3 - radius;
-
-  for ( let i = 0; i < room.children.length; i ++ ) {
-
-    const object = room.children[ i ];
-
-    object.position.x += object.userData.velocity.x * delta;
-    object.position.y += object.userData.velocity.y * delta;
-    object.position.z += object.userData.velocity.z * delta;
-
-    // keep objects inside room
-
-    if ( object.position.x < - range || object.position.x > range ) {
-
-      object.position.x = THREE.Math.clamp( object.position.x, - range, range );
-      object.userData.velocity.x = - object.userData.velocity.x;
-
-    }
-
-    if ( object.position.y < radius || object.position.y > 6 ) {
-
-      object.position.y = Math.max( object.position.y, radius );
-
-      object.userData.velocity.x *= 0.98;
-      object.userData.velocity.y = - object.userData.velocity.y * 0.8;
-      object.userData.velocity.z *= 0.98;
-
-    }
-
-    if ( object.position.z < - range || object.position.z > range ) {
-
-      object.position.z = THREE.Math.clamp( object.position.z, - range, range );
-      object.userData.velocity.z = - object.userData.velocity.z;
-
-    }
-
-    for ( let j = i + 1; j < room.children.length; j ++ ) {
-
-      const object2 = room.children[ j ];
-
-      normal.copy( object.position ).sub( object2.position );
-
-      const distance = normal.length();
-
-      if ( distance < 2 * radius ) {
-
-        normal.multiplyScalar( 0.5 * distance - radius );
-
-        object.position.sub( normal );
-        object2.position.add( normal );
-
-        normal.normalize();
-
-        relativeVelocity.copy( object.userData.velocity ).sub( object2.userData.velocity );
-
-        normal = normal.multiplyScalar( relativeVelocity.dot( normal ) );
-
-        object.userData.velocity.sub( normal );
-        object2.userData.velocity.add( normal );
-
-      }
-
-    }
-
-    object.userData.velocity.y -= 9.8 * delta;
-
   }
 
   renderer.render( scene, camera );

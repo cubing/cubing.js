@@ -232,12 +232,10 @@ export class Cube3D extends Twisty3D<Puzzle> {
   // or (better) support creating puzzle parts on demand.
   private createCubie(edge: CubieDef): THREE.Object3D {
     const cubie = new THREE.Group();
-    console.log(this.options);
     if (this.options.showFoundation) {
       const foundation = this.createCubieFoundation();
       cubie.add(foundation);
       this.experimentalFoundationMeshes.push(foundation);
-      console.log(foundation);
     }
     for (let i = 0; i < edge.stickerFaces.length; i++) {
       cubie.add(this.createSticker(axesInfo[cubieStickerOrder[i]], axesInfo[edge.stickerFaces[i]], false));
