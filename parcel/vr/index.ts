@@ -10,105 +10,142 @@ import { Color, Group, Intersection, Material, Mesh, PerspectiveCamera, PlaneGeo
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
 
-let camera;
-let scene;
-let renderer: WebGLRenderer;
-let controller0;
-let controller1;
+class VRCubeDemo {
+  private camera: THREE.PerspectiveCamera;
+  private scene: THREE.Scene;
 
-let room;
+  private renderer: WebGLRenderer;
+  private controller0: THREE.Group;
 
-init();
-animate();
+  private controller1: THREE.Group;
+  private room: THREE.LineSegments;
 
-function init(): void {
+  constructor() {
 
-  scene = new Scene();
-  scene.background = new Color( 0x505050 );
+    this.scene = new Scene();
+    this.scene.background = new Color( 0x505050 );
 
-  camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-  const vrCube = new VRCube();
-  scene.add(vrCube.group);
-  room = new THREE.LineSegments(
-    new BoxLineGeometry( 6, 6, 6, 10, 10, 10 ),
-    new THREE.LineBasicMaterial( { color: 0x808080 } ),
-  );
-  room.geometry.translate( 0, 3, 0 );
-  scene.add( room );
+    const vrCube = new VRCube();
+    this.scene.add(vrCube.group);
+    this.room = new THREE.LineSegments(
+      new BoxLineGeometry( 6, 6, 6, 10, 10, 10 ),
+      new THREE.LineBasicMaterial( { color: 0x808080 } ),
+    );
+    this.room.geometry.translate( 0, 3, 0 );
+    this.scene.add( this.room );
 
-  const light = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-  light.position.set( 1, 1, 1 );
-  scene.add( light );
+    const light = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+    light.position.set( 1, 1, 1 );
+    this.scene.add( light );
 
-  //
+    //
 
-  renderer = new THREE.WebGLRenderer( { antialias: true } );
-  renderer.setPixelRatio( window.devicePixelRatio );
-  renderer.setSize( window.innerWidth, window.innerHeight );
-  renderer.vr.enabled = true;
-  document.body.appendChild( renderer.domElement );
+    this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+    this.renderer.setPixelRatio( window.devicePixelRatio );
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    this.renderer.vr.enabled = true;
+    document.body.appendChild( this.renderer.domElement );
 
-  //
+    //
 
-  document.body.appendChild( WEBVR.createButton( renderer ) );
+    document.body.appendChild( WEBVR.createButton( this.renderer ) );
 
-  // controllers
+    // controllers
 
-  function onSelectStart(): void {
+    function onSelectStart(): void {
 
-    this.userData.isSelecting = true;
+      this.userData.isSelecting = true;
 
+    }
+
+    function onSelectEnd(): void {
+
+      this.userData.isSelecting = false;
+
+    }
+
+    this.controller0 = this.renderer.vr.getController( 0 );
+    this.controller0.addEventListener( "selectstart", onSelectStart );
+    this.controller0.addEventListener( "selectend", onSelectEnd );
+    this.controller0.userData.controllerNumber = 0;
+    this.controller0.userData.direction = 1;
+    this.controller0.userData.lastIsSelecting = false;
+    this.controller0.userData.lastSide = "";
+    this.scene.add( this.controller0 );
+
+    this.controller1 = this.renderer.vr.getController( 1 );
+    this.controller1.addEventListener( "selectstart", onSelectStart );
+    this.controller1.addEventListener( "selectend", onSelectEnd );
+    this.controller1.userData.controllerNumber = 1;
+    this.controller1.userData.direction = -1;
+    this.controller1.userData.lastIsSelecting = false;
+    this.controller1.userData.lastSide = "";
+    this.scene.add( this.controller1 );
+
+    // helpers
+
+    const geometry2 = new THREE.BufferGeometry();
+    geometry2.addAttribute( "position", new THREE.Float32BufferAttribute( [ 0, 0, 0, 0, 0, - 1 ], 3 ) );
+    geometry2.addAttribute( "color", new THREE.Float32BufferAttribute( [ 0.5, 0.5, 0.5, 0, 0, 0 ], 3 ) );
+
+    const material = new THREE.LineBasicMaterial( { /*vertexColors: true,*/ blending: THREE.AdditiveBlending, linewidth: 10, transparent: true, opacity: 0.5 } );
+
+    this.controller0.add( new THREE.Line( geometry2, material ) );
+    this.controller1.add( new THREE.Line( geometry2, material ) );
+
+    //
+
+    window.addEventListener( "resize", this.onWindowResize.bind(this), false );
+
+    this.animate();
   }
 
-  function onSelectEnd(): void {
+  public render(): void {
 
-    this.userData.isSelecting = false;
+    // handleController( controller0 );
+    // handleController( controller1 );
 
+    // if (areBothControllersSelecting()) {
+    //   if (lastSelectingBoth === false) {
+    //     selectingBothInitialDistance = controller0.position.distanceTo(controller1.position);
+    //     selectingBothInitialScale = currentScale;
+    //   } else {
+    //     const newDistance = controller0.position.distanceTo(controller1.position);
+    //     currentScale = selectingBothInitialScale * newDistance / selectingBothInitialDistance;
+    //     setScale(currentScale);
+    //   }
+    //   lastSelectingBoth = true;
+    // } else {
+    //   lastSelectingBoth = false;
+    // }
+
+    // for (const controlPlane of controlPlanes) {
+    //   if (controlPlane.userData.status[0] === Status.Pressed || controlPlane.userData.status[1] === Status.Pressed) {
+    //     controlPlane.material.opacity = 0.4;
+    //   } else if (controlPlane.userData.status[0] === Status.Targeted || controlPlane.userData.status[1] === Status.Targeted) {
+    //     controlPlane.material.opacity = 0.2;
+    //   } else {
+    //     controlPlane.material.opacity = 0;
+    //   }
+    // }
+
+    this.renderer.render( this.scene, this.camera );
   }
 
-  controller0 = renderer.vr.getController( 0 );
-  controller0.addEventListener( "selectstart", onSelectStart );
-  controller0.addEventListener( "selectend", onSelectEnd );
-  controller0.userData.controllerNumber = 0;
-  controller0.userData.direction = 1;
-  controller0.userData.lastIsSelecting = false;
-  controller0.userData.lastSide = "";
-  scene.add( controller0 );
+  private animate(): void {
+    this.renderer.setAnimationLoop(this.render.bind(this));
+  }
 
-  controller1 = renderer.vr.getController( 1 );
-  controller1.addEventListener( "selectstart", onSelectStart );
-  controller1.addEventListener( "selectend", onSelectEnd );
-  controller1.userData.controllerNumber = 1;
-  controller1.userData.direction = -1;
-  controller1.userData.lastIsSelecting = false;
-  controller1.userData.lastSide = "";
-  scene.add( controller1 );
+  private onWindowResize(): void {
 
-  // helpers
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
 
-  const geometry2 = new THREE.BufferGeometry();
-  geometry2.addAttribute( "position", new THREE.Float32BufferAttribute( [ 0, 0, 0, 0, 0, - 1 ], 3 ) );
-  geometry2.addAttribute( "color", new THREE.Float32BufferAttribute( [ 0.5, 0.5, 0.5, 0, 0, 0 ], 3 ) );
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
 
-  const material = new THREE.LineBasicMaterial( { /*vertexColors: true,*/ blending: THREE.AdditiveBlending, linewidth: 10, transparent: true, opacity: 0.5 } );
-
-  controller0.add( new THREE.Line( geometry2, material ) );
-  controller1.add( new THREE.Line( geometry2, material ) );
-
-  //
-
-  window.addEventListener( "resize", onWindowResize, false );
-
-}
-
-function onWindowResize(): void {
-
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-
-  renderer.setSize( window.innerWidth, window.innerHeight );
-
+  }
 }
 
 // function handleController( controller: Group ): void {
@@ -146,10 +183,6 @@ function onWindowResize(): void {
 
 // //
 
-function animate(): void {
-  renderer.setAnimationLoop( render );
-}
-
 // function areBothControllersSelecting(): boolean {
 //   return controller0.userData.isSelecting && controller1.userData.isSelecting;
 // }
@@ -161,35 +194,4 @@ function animate(): void {
 // let selectingBothInitialScale = 1;
 // let currentScale = 1;
 
-function render(): void {
-
-  // handleController( controller0 );
-  // handleController( controller1 );
-
-  // if (areBothControllersSelecting()) {
-  //   if (lastSelectingBoth === false) {
-  //     selectingBothInitialDistance = controller0.position.distanceTo(controller1.position);
-  //     selectingBothInitialScale = currentScale;
-  //   } else {
-  //     const newDistance = controller0.position.distanceTo(controller1.position);
-  //     currentScale = selectingBothInitialScale * newDistance / selectingBothInitialDistance;
-  //     setScale(currentScale);
-  //   }
-  //   lastSelectingBoth = true;
-  // } else {
-  //   lastSelectingBoth = false;
-  // }
-
-  // for (const controlPlane of controlPlanes) {
-  //   if (controlPlane.userData.status[0] === Status.Pressed || controlPlane.userData.status[1] === Status.Pressed) {
-  //     controlPlane.material.opacity = 0.4;
-  //   } else if (controlPlane.userData.status[0] === Status.Targeted || controlPlane.userData.status[1] === Status.Targeted) {
-  //     controlPlane.material.opacity = 0.2;
-  //   } else {
-  //     controlPlane.material.opacity = 0;
-  //   }
-  // }
-
-  renderer.render( scene, camera );
-
-}
+(window as any).vrCubeDemo = new VRCubeDemo();
