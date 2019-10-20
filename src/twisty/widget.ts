@@ -308,6 +308,10 @@ export class Cube3DView implements CursorObserver, JumpObserver {
       setTimeout(() => this.element.classList.remove("flash"), 0);
     }
   }
+
+  public experimentalGetCube3D(): Cube3D {
+    return this.cube3D;
+  }
 }
 
 export class Player {

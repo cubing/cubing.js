@@ -52,10 +52,18 @@ const cubieDimensions = {
   hintStickerElevation: 1.45,
 };
 
-const cubieConfig = {
+type OptionKey = "showMainStickers" | "showHintStickers" | "showFoundation";
+
+interface Cube3DOptions {
+  showMainStickers?: boolean;
+  showHintStickers?: boolean;
+  showFoundation?: boolean; // TODO: better name
+}
+
+const cube3DOptionsDefaults: Cube3DOptions = {
   showMainStickers: true,
   showHintStickers: true,
-  showFoundation: true, // TODO: better name
+  showFoundation: true,
 };
 
 const blackMesh = new THREE.MeshBasicMaterial({color: 0x000000});
@@ -147,8 +155,19 @@ const CUBE_SCALE = 1 / 3;
 export class Cube3D extends Twisty3D<Puzzle> {
   private cube: THREE.Group = new THREE.Group();
   private pieces: PieceIndexed<THREE.Object3D> = {};
-  constructor(def: KPuzzleDefinition) {
+  private options: Cube3DOptions;
+  // TODO: Keep track of option-based meshes better.
+  private experimentalHintStickerMeshes: THREE.Mesh[] = [];
+  private experimentalFoundationMeshes: THREE.Mesh[] = [];
+  constructor(def: KPuzzleDefinition, options: Cube3DOptions = {}) {
     super();
+
+    this.options = {};
+    for (const key in cube3DOptionsDefaults) {
+      // TODO:Don't use `any`.
+      this.options[key as OptionKey] = (key in options) ? (options as any)[key] : (cube3DOptionsDefaults as any)[key];
+    }
+
     if (def.name !== "333") {
       throw new Error("Invalid puzzle for this Cube3D implementation.");
     }
@@ -157,6 +176,32 @@ export class Cube3D extends Twisty3D<Puzzle> {
     }
     this.cube.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
     this.scene.add(this.cube);
+  }
+
+  public experimentalGetCube(): THREE.Group {
+    return this.cube;
+  }
+
+  public experimentalUpdateOptions(options: Cube3DOptions): void {
+    if ("showMainStickers" in options) {
+      throw new Error("Unimplemented");
+    }
+
+    const showFoundation = options.showFoundation;
+    if (typeof showFoundation !== "undefined" && this.options.showFoundation !== showFoundation) {
+      this.options.showFoundation = showFoundation;
+      for (const foundation of this.experimentalFoundationMeshes) {
+        foundation.visible = showFoundation;
+      }
+    }
+
+    const showHintStickers = options.showHintStickers;
+    if (typeof showHintStickers !== "undefined" && this.options.showHintStickers !== showHintStickers) {
+      this.options.showHintStickers = showHintStickers;
+      for (const hintSticker of this.experimentalHintStickerMeshes) {
+        hintSticker.visible = showHintStickers;
+      }
+    }
   }
 
   protected updateScene(p: Cursor.Position<Puzzle>): void {
@@ -183,13 +228,23 @@ export class Cube3D extends Twisty3D<Puzzle> {
     }
   }
 
+  // TODO: Always create (but sometimes hide parts) so we can show them later,
+  // or (better) support creating puzzle parts on demand.
   private createCubie(edge: CubieDef): THREE.Object3D {
     const cubie = new THREE.Group();
-    cubie.add(this.createCubieFoundation());
+    console.log(this.options);
+    if (this.options.showFoundation) {
+      const foundation = this.createCubieFoundation();
+      cubie.add(foundation);
+      this.experimentalFoundationMeshes.push(foundation);
+      console.log(foundation);
+    }
     for (let i = 0; i < edge.stickerFaces.length; i++) {
       cubie.add(this.createSticker(axesInfo[cubieStickerOrder[i]], axesInfo[edge.stickerFaces[i]], false));
-      if (cubieConfig.showHintStickers) {
-        cubie.add(this.createSticker(axesInfo[cubieStickerOrder[i]], axesInfo[edge.stickerFaces[i]], true));
+      if (this.options.showHintStickers) {
+        const hintSticker = this.createSticker(axesInfo[cubieStickerOrder[i]], axesInfo[edge.stickerFaces[i]], true);
+        cubie.add(hintSticker);
+        this.experimentalHintStickerMeshes.push(hintSticker);
       }
     }
     cubie.matrix.copy(edge.matrix);

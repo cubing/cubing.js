@@ -49,6 +49,10 @@ export class Twisty {
     const newAlg = new Sequence(this.alg.nestedUnits.concat([move]));
     this.experimentalSetAlg(newAlg);
   }
+
+  public experimentalGetPlayer(): Player {
+    return this.player;
+  }
 }
 
 function paramsFromTwistyElem(elem: Element): TwistyParams {
