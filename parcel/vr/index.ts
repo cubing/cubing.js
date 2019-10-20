@@ -88,6 +88,7 @@ function init(): void {
   cube3D = twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
   // const cube3D = new Cube3D(Puzzles["333"]);
   cube3D.experimentalGetCube().position.copy(cubeCenter);
+  cube3D.experimentalUpdateOptions({showFoundation: false, showHintStickers: false});
   // cube3D.experimentalGetCube().translateZ(-0.5);
   setCubeScale(cube3D, initialScale);
   scene.add(cube3D.experimentalGetCube());
