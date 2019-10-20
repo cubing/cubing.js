@@ -7,6 +7,7 @@ import {VRCube} from "./vrcube";
 import { BareBlockMove, BlockMove, Sequence } from "../../src/alg";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 
+import { tsThisType } from "@babel/types";
 import { Color, Group, Intersection, Material, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, Scene, WebGLRenderer, WebVRManager } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
@@ -21,6 +22,7 @@ class VRCubeDemo {
   private gamepads: VRGamepad[] = [];
 
   constructor() {
+    console.log("Constructing demo");
     this.camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     this.renderer = new WebGLRenderer({ antialias: true });
@@ -41,6 +43,9 @@ class VRCubeDemo {
   }
 
   public render(): void {
+    for (const gamepad of this.gamepads) {
+      gamepad.updatePose();
+    }
     this.renderer.render(this.room.scene, this.camera);
 
     // handleController(controller0);
@@ -76,12 +81,10 @@ class VRCubeDemo {
   }
 
   private onWindowResize(): void {
-
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-
   }
 }
 
@@ -132,3 +135,5 @@ class VRCubeDemo {
 // let currentScale = 1;
 
 (window as any).vrCubeDemo = new VRCubeDemo();
+
+console.log("VR loaded");

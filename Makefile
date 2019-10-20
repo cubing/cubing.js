@@ -13,3 +13,9 @@ DYNAMIC_NPM_COMMANDS = $(shell cat package.json | npx jq --raw-output ".scripts 
 .PHONY: update-Makefile
 update-Makefile:
 	sed -i "" "s/^NPM_COMMANDS = .*$$/NPM_COMMANDS = ${DYNAMIC_NPM_COMMANDS}/" Makefile
+
+.PHONY: setup-vr
+setup-vr:
+	adb tcpip 5555
+	adb reverse tcp:1234 tcp:1234
+	adb reverse tcp:51785 tcp:51785
