@@ -23,7 +23,7 @@ export class VRGamepad {
       0.5,
     });
 
-    this.group.add(new Line( cursorGeometry, material));
+    this.group.add(new Line(cursorGeometry, material));
   }
 
   public updatePose(): void {
@@ -35,6 +35,12 @@ export class VRGamepad {
     if (pose === null) {
       return;
     }
+
+    this.group.position.fromArray(pose.position);
+    this.group.quaternion.fromArray( pose.orientation);
+    this.group.matrixWorldNeedsUpdate = true;
+    this.group.visible = true;
+
     console.log(this.gamepadIndex, pose);
   }
 

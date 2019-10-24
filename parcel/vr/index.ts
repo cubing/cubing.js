@@ -8,7 +8,7 @@ import { BareBlockMove, BlockMove, Sequence } from "../../src/alg";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 
 import { tsThisType } from "@babel/types";
-import { Color, Group, Intersection, Material, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, Scene, WebGLRenderer, WebVRManager } from "three";
+import { Color, Group, Intersection, Material, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, Scene, WebGLRenderer, WebVRManager, Vector3 } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
 import { VRGamepad } from "./gamepad";
