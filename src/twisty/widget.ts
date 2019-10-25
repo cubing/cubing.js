@@ -314,14 +314,18 @@ export class Cube3DView implements CursorObserver, JumpObserver {
   }
 }
 
+interface PlayerOptions {
+  visualizationFormat?: VisualizationFormat;
+}
+
 export class Player {
   public element: HTMLElement;
   public cube3DView: Cube3DView; // TODO
   private scrubber: Scrubber;
-  constructor(private anim: AnimModel, definition: KPuzzleDefinition, visualizationFormat?: VisualizationFormat) {
+  constructor(private anim: AnimModel, definition: KPuzzleDefinition, private config: PlayerOptions = {}) {
     this.element = document.createElement("player");
 
-    if (visualizationFormat === "3D") {
+    if (this.config.visualizationFormat === "3D") {
       if (definition.name === "333") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition)).element);
       } else {
@@ -329,7 +333,7 @@ export class Player {
         this.element.appendChild((new KSolveView(this.anim, definition)).element);
       }
     } else {
-      if (!visualizationFormat && definition.name === "333") {
+      if (!this.config.visualizationFormat && definition.name === "333") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition)).element);
       } else {
         this.element.appendChild((new KSolveView(this.anim, definition)).element);

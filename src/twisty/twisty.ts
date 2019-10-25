@@ -26,7 +26,7 @@ export class Twisty {
     // this.timeline = new Timeline(Example.HeadlightSwaps);
     this.anim = new AnimModel(this.cursor);
 
-    this.player = new Player(this.anim, this.puzzleDef, config.visualization);
+    this.player = new Player(this.anim, this.puzzleDef, {visualizationFormat: config.visualization});
     this.element.appendChild((this.player).element);
   }
 

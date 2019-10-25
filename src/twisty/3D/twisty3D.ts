@@ -1,14 +1,36 @@
 import * as THREE from "three";
 
-import {Cursor} from "../cursor";
-import {Puzzle} from "../puzzle";
+import { Cursor } from "../cursor";
+import { Puzzle } from "../puzzle";
+
+import { Scene } from "three";
 
 export const TAU = Math.PI * 2;
 
 // TODO: Turn into class?
-export interface Vantage {
-  camera: THREE.Camera;
-  renderer: THREE.Renderer;
+export class Vantage {
+  public camera: THREE.Camera;
+  public renderer: THREE.Renderer;
+  constructor(public element: HTMLElement, scene: Scene, options: VantageOptions = {}) {
+    const camera = new THREE.PerspectiveCamera(30, element.offsetWidth / element.offsetHeight, 0.1, 1000);
+    camera.position.copy(options.position ? options.position : defaultVantagePosition);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    const renderer = options.renderer ? options.renderer : createDefaultRenderer();
+    this.setRendererSize(renderer, element.offsetWidth, element.offsetHeight);
+
+    renderer.render(scene, camera);
+
+    element.appendChild(renderer.domElement);
+  }
+
+  private setRendererSize(renderer: THREE.Renderer, w: number, h: number): void {
+    renderer.setSize(w * pixelRatio(), h * pixelRatio());
+    renderer.domElement.style.width = `${w}px`;
+    renderer.domElement.style.height = `${h}px`;
+    renderer.domElement.width = w * devicePixelRatio;
+    renderer.domElement.height = h * devicePixelRatio;
+  }
 }
 
 export interface VantageOptions {
@@ -41,21 +63,8 @@ export abstract class Twisty3D<P extends Puzzle> {
     this.scene = new THREE.Scene();
   }
 
-  public newVantage(element: HTMLElement, options: VantageOptions = {}): Vantage {
-    const camera = new THREE.PerspectiveCamera(30, element.offsetWidth / element.offsetHeight, 0.1, 1000);
-    camera.position.copy(options.position ? options.position : defaultVantagePosition);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-    const renderer = options.renderer ? options.renderer : createDefaultRenderer();
-    this.setRendererSize(renderer, element.offsetWidth, element.offsetHeight);
-
-    renderer.render(this.scene, camera);
-
-    element.appendChild(renderer.domElement);
-    const vantage = {
-      camera,
-      renderer,
-    };
+  public newVantage(element: HTMLElement, options?: VantageOptions): Vantage {
+    const vantage = new Vantage(element, this.scene, options);
     this.vantages.push(vantage);
     return vantage;
   }
@@ -68,12 +77,4 @@ export abstract class Twisty3D<P extends Puzzle> {
   }
 
   protected abstract updateScene(p: Cursor.Position<P>): void;
-
-  private setRendererSize(renderer: THREE.Renderer, w: number, h: number): void {
-    renderer.setSize(w * pixelRatio(), h * pixelRatio());
-    renderer.domElement.style.width = `${w}px`;
-    renderer.domElement.style.height = `${h}px`;
-    renderer.domElement.width = w * devicePixelRatio;
-    renderer.domElement.height = h * devicePixelRatio;
-  }
 }
