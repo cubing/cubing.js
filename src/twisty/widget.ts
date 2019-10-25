@@ -314,7 +314,7 @@ export class Cube3DView implements CursorObserver, JumpObserver {
   }
 }
 
-interface PlayerOptions {
+export interface PlayerConfig {
   visualizationFormat?: VisualizationFormat;
 }
 
@@ -322,7 +322,7 @@ export class Player {
   public element: HTMLElement;
   public cube3DView: Cube3DView; // TODO
   private scrubber: Scrubber;
-  constructor(private anim: AnimModel, definition: KPuzzleDefinition, private config: PlayerOptions = {}) {
+  constructor(private anim: AnimModel, definition: KPuzzleDefinition, private config: PlayerConfig = {}) {
     this.element = document.createElement("player");
 
     if (this.config.visualizationFormat === "3D") {
