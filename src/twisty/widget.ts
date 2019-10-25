@@ -5,6 +5,7 @@ import {Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation} from
 
 import {Cube3D} from "./3D/cube3D";
 import {AnimModel, CursorObserver, DirectionObserver, JumpObserver} from "./anim";
+import { getConfigWithDefault } from "./config";
 import {Cursor} from "./cursor";
 import {Puzzle} from "./puzzle";
 
@@ -270,10 +271,14 @@ export class KSolveView implements CursorObserver, JumpObserver {
   }
 }
 
+interface Cube3DViewConfig {
+  experimentalShowBackView?: boolean;
+}
+
 export class Cube3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private cube3D: Cube3D;
-  constructor(private anim: AnimModel, definition: KPuzzleDefinition) {
+  constructor(private anim: AnimModel, definition: KPuzzleDefinition, private config: Cube3DViewConfig = {}) {
     this.element = document.createElement("cube3d-view");
 
     this.element.tabIndex = 0; // TODO: Use this to capture keyboard input.
@@ -286,7 +291,9 @@ export class Cube3DView implements CursorObserver, JumpObserver {
       this.cube3D.newVantage(this.element);
     }, 0);
 
-    this.createBackViewForTesting();
+    if (getConfigWithDefault(this.config.experimentalShowBackView, false)) {
+      this.createBackViewForTesting();
+    }
   }
 
   // TODO: Remove
@@ -316,6 +323,8 @@ export class Cube3DView implements CursorObserver, JumpObserver {
 
 export interface PlayerConfig {
   visualizationFormat?: VisualizationFormat;
+  experimentalShowControls?: boolean;
+  experimentalCube3DViewConfig?: Cube3DViewConfig;
 }
 
 export class Player {
@@ -327,22 +336,24 @@ export class Player {
 
     if (this.config.visualizationFormat === "3D") {
       if (definition.name === "333") {
-        this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition)).element);
+        this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
       } else {
         console.warn(`3D visualization specified for unsupported puzzle: ${definition.name}. Falling back to 2D.`);
         this.element.appendChild((new KSolveView(this.anim, definition)).element);
       }
     } else {
       if (!this.config.visualizationFormat && definition.name === "333") {
-        this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition)).element);
+        this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
       } else {
         this.element.appendChild((new KSolveView(this.anim, definition)).element);
       }
     }
     this.scrubber = new Scrubber(this.anim);
-    this.element.appendChild(this.scrubber.element);
-    this.element.appendChild((new ControlBar(this.anim, this.element)).element);
-    this.element.appendChild((new CursorTextMoveView(this.anim)).element);
+    if (getConfigWithDefault(this.config.experimentalShowControls, true)) {
+      this.element.appendChild(this.scrubber.element);
+      this.element.appendChild((new ControlBar(this.anim, this.element)).element);
+      this.element.appendChild((new CursorTextMoveView(this.anim)).element);
+    }
   }
 
   public updateFromAnim(): void {

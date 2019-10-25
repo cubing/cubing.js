@@ -9,7 +9,7 @@ import {Player, PlayerConfig} from "./widget";
 class TwistyParams {
   public alg?: Sequence;
   public puzzle?: KPuzzleDefinition;
-  public player?: PlayerConfig;
+  public playerConfig?: PlayerConfig;
 }
 
 // TODO: Turn Twisty into a module and move Twisty.Twisty into Twisty proper.
@@ -26,7 +26,7 @@ export class Twisty {
     // this.timeline = new Timeline(Example.HeadlightSwaps);
     this.anim = new AnimModel(this.cursor);
 
-    this.player = new Player(this.anim, this.puzzleDef, config.player);
+    this.player = new Player(this.anim, this.puzzleDef, config.playerConfig);
     this.element.appendChild((this.player).element);
   }
 
@@ -72,7 +72,7 @@ function paramsFromTwistyElem(elem: Element): TwistyParams {
   // TODO: Factor this code out for testing.
   if (visualization) {
     if (visualization === "2D" || visualization === "3D") {
-      params.player = {visualizationFormat: visualization};
+      params.playerConfig = {visualizationFormat: visualization};
     } else {
       console.warn(`Invalid visualization: ${visualization}`);
     }
