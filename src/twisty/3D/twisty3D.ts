@@ -7,29 +7,51 @@ import { Scene } from "three";
 
 export const TAU = Math.PI * 2;
 
+const useResizeObserver = window && "ResizeObserver" in window;
+
 // TODO: Turn into class?
 export class Vantage {
-  public camera: THREE.Camera;
-  public renderer: THREE.Renderer;
-  constructor(public element: HTMLElement, scene: Scene, options: VantageOptions = {}) {
-    const camera = new THREE.PerspectiveCamera(30, element.offsetWidth / element.offsetHeight, 0.1, 1000);
-    camera.position.copy(options.position ? options.position : defaultVantagePosition);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+  public camera: THREE.PerspectiveCamera;
+  public renderer: THREE.WebGLRenderer;
+  private rafID: number | null = null;
+  constructor(public element: HTMLElement, private scene: Scene, options: VantageOptions = {}) {
+    this.camera = new THREE.PerspectiveCamera(30, element.offsetWidth / element.offsetHeight, 0.1, 1000);
+    this.camera.position.copy(options.position ? options.position : defaultVantagePosition);
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    const renderer = options.renderer ? options.renderer : createDefaultRenderer();
-    this.setRendererSize(renderer, element.offsetWidth, element.offsetHeight);
+    this.renderer = /*options.renderer ? options.renderer : */createDefaultRenderer();
+    this.resize();
 
-    renderer.render(scene, camera);
+    this.renderer.render(this.scene, this.camera);
 
-    element.appendChild(renderer.domElement);
+    // TODO: Handle Safari (use a polyfill?)
+    if (useResizeObserver) {
+      const observer = new window.ResizeObserver(this.resize.bind(this));
+      observer.observe(this.element);
+    }
+    element.appendChild(this.renderer.domElement);
   }
 
-  private setRendererSize(renderer: THREE.Renderer, w: number, h: number): void {
-    renderer.setSize(w * pixelRatio(), h * pixelRatio());
-    renderer.domElement.style.width = `${w}px`;
-    renderer.domElement.style.height = `${h}px`;
-    renderer.domElement.width = w * devicePixelRatio;
-    renderer.domElement.height = h * devicePixelRatio;
+  // TODO: Use a coarser debounce?
+  public resize(): void {
+    if (this.rafID !== null) {
+      return;
+    }
+    this.rafID = requestAnimationFrame(this.scheduledResize.bind(this));
+  }
+
+  private scheduledResize(): void {
+    const w = this.element.offsetWidth;
+    const h = this.element.offsetHeight;
+
+    this.camera.aspect = w / h;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer.setPixelRatio(pixelRatio());
+    this.renderer.setSize(w, h);
+    this.renderer.render(this.scene, this.camera);
+
+    this.rafID = null;
   }
 }
 
@@ -44,7 +66,7 @@ function pixelRatio(): number {
 }
 
 const defaultVantagePosition = new THREE.Vector3(1.25, 2.5, 2.5);
-function createDefaultRenderer(): THREE.Renderer {
+function createDefaultRenderer(): THREE.WebGLRenderer {
   return new THREE.WebGLRenderer({
     antialias: true,
     alpha: true,

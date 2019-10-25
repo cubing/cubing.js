@@ -100,6 +100,8 @@ twisty player cube3d-view {
   opacity: 1;
   transition: opacity 0.4s;
 
+  overflow: hidden;
+
   /* TODO: dynamic fitting */
 }
 
@@ -112,6 +114,10 @@ twisty player cube3d-view.flash {
 
 twisty player cube3d-view {
   position: relative;
+  object-fit: contain;
+  display: grid;
+  align-items: center;
+  justify-content: center;
 }
 
 twisty player cube3d-view cube3d-back-wrapper {
@@ -120,6 +126,10 @@ twisty player cube3d-view cube3d-back-wrapper {
   top: 0;
   width: 25%;
   height: 25%;
+
+  display: grid;
+  align-items: center;
+  justify-content: center
 }
 
 twisty player ksolve-svg-view .svg-wrapper,
