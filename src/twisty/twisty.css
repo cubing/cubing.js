@@ -27,7 +27,7 @@ twisty player:focus {
 }
 
 twisty player cursor-text-view {
-  flex: 0 0 1fr;
+  flex: 0 0 2em;
   border-top: 1px solid rgba(0, 0, 0, 0.25);
   background-color: rgba(195, 195, 195, 0.5);
 }
@@ -93,8 +93,7 @@ twisty player cursor-text-view {
 
 twisty player ksolve-svg-view,
 twisty player cube3d-view {
-  flex: 4 0 100px;
-  display: flex;
+  flex: 4 1 100px;
 
   /*For Flash*/
   opacity: 1;
@@ -115,9 +114,11 @@ twisty player cube3d-view.flash {
 twisty player cube3d-view {
   position: relative;
   object-fit: contain;
-  display: grid;
-  align-items: center;
-  justify-content: center;
+}
+
+twisty player cube3d-view > canvas {
+  width: 100%;
+  height: 100%;
 }
 
 twisty player cube3d-view cube3d-back-wrapper {
@@ -130,6 +131,11 @@ twisty player cube3d-view cube3d-back-wrapper {
   display: grid;
   align-items: center;
   justify-content: center
+}
+
+twisty player cube3d-view cube3d-back-wrapper > canvas {
+  width: 100%;
+  height: 100%;
 }
 
 twisty player ksolve-svg-view .svg-wrapper,

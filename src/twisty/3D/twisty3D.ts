@@ -48,7 +48,8 @@ export class Vantage {
     this.camera.updateProjectionMatrix();
 
     this.renderer.setPixelRatio(pixelRatio());
-    this.renderer.setSize(w, h);
+    // TODO: Add a canvas wrapping class to handle sizing.
+    this.renderer.setSize(w, h, false);
     this.renderer.render(this.scene, this.camera);
 
     this.rafID = null;
