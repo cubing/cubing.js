@@ -6,7 +6,7 @@ import { Cube3D } from "../../src/twisty/3d/cube3D";
 import { TAU } from "../../src/twisty/3d/twisty3D";
 
 import { DoubleSide, Euler, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3 } from "three";
-import { Status } from "./gamepad";
+import { Status } from "./vr-input";
 
 let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
 if (isNaN(initialHeight)) {

@@ -1,4 +1,4 @@
-import { VRGamepad } from "./gamepad";
+import { VRInput as VRInput } from "./vr-input";
 import { VRCube } from "./vrcube";
 
 import { Color, Group, HemisphereLight, LineBasicMaterial, LineSegments, PerspectiveCamera, Scene, WebGLRenderer } from "three";
@@ -6,9 +6,8 @@ import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry";
 
 export class Room {
   public scene: Scene;
-  private gamepadSabers: Group[] = [];
   private box: LineSegments;
-  constructor(gamepads: VRGamepad[]) {
+  constructor(private vrInput: VRInput) {
     this.scene = new Scene();
     this.scene.background = new Color( 0x505050 );
 
@@ -25,8 +24,8 @@ export class Room {
     light.position.set( 1, 1, 1 );
     this.scene.add( light );
 
-    for (const gamepad of gamepads) {
-      this.gamepadSabers.push(gamepad.group);
+    for (const controller of vrInput.controllers) {
+      this.scene.add(controller);
     }
   }
 }

@@ -2,16 +2,16 @@ import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. h
 import * as THREE from "three";
 
 import {Room} from "./room";
+import {VRGamepad, VRInput} from "./vr-input";
 import {VRCube} from "./vrcube";
 
 import { BareBlockMove, BlockMove, Sequence } from "../../src/alg";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 
 import { tsThisType } from "@babel/types";
-import { Color, Group, Intersection, Material, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, Scene, WebGLRenderer, WebVRManager, Vector3 } from "three";
+import { Color, Group, Intersection, Material, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, Scene, Vector3, WebGLRenderer, WebVRManager } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
-import { VRGamepad } from "./gamepad";
 
 class VRCubeDemo {
   private camera: PerspectiveCamera;
@@ -19,7 +19,7 @@ class VRCubeDemo {
 
   private room: Room;
 
-  private gamepads: VRGamepad[] = [];
+  private vrInput: VRInput;
 
   constructor() {
     console.log("Constructing demo");
@@ -30,10 +30,9 @@ class VRCubeDemo {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.vr.enabled = true;
 
-    this.gamepads.push(new VRGamepad(this.renderer, 0));
-    this.gamepads.push(new VRGamepad(this.renderer, 1));
+    this.vrInput = new VRInput(this.renderer);
 
-    this.room = new Room(this.gamepads);
+    this.room = new Room(this.vrInput);
     document.body.appendChild(this.renderer.domElement);
     document.body.appendChild(WEBVR.createButton(this.renderer));
 
@@ -43,9 +42,7 @@ class VRCubeDemo {
   }
 
   public render(): void {
-    for (const gamepad of this.gamepads) {
-      gamepad.updatePose();
-    }
+    this.vrInput.update();
     this.renderer.render(this.room.scene, this.camera);
 
     // handleController(controller0);
