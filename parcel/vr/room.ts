@@ -1,7 +1,7 @@
 import { Color, HemisphereLight, LineBasicMaterial, LineSegments, Scene } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry";
+import { VRCube } from "./vr-cube";
 import { VRInput as VRInput } from "./vr-input";
-import { VRCube } from "./vrcube";
 
 export class Room {
   public scene: Scene;
