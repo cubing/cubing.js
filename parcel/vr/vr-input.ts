@@ -1,4 +1,4 @@
-import { AdditiveBlending, BufferGeometry, Float32BufferAttribute, Group, Line, LineBasicMaterial, Sphere, Vector3, WebGLRenderer, WebVRManager } from "three";
+import { AdditiveBlending, BufferGeometry, Float32BufferAttribute, Group, Line, LineBasicMaterial, WebGLRenderer } from "three";
 
 export enum Status {
   Untargeted,

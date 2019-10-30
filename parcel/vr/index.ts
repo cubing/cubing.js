@@ -1,17 +1,8 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
-import * as THREE from "three";
-
-import {Room} from "./room";
-import {VRGamepad, VRInput} from "./vr-input";
-import {VRCube} from "./vrcube";
-
-import { BareBlockMove, BlockMove, Sequence } from "../../src/alg";
-import { Cube3D } from "../../src/twisty/3d/cube3D";
-
-import { tsThisType } from "@babel/types";
-import { Color, Group, Intersection, Material, Mesh, PerspectiveCamera, PlaneGeometry, Raycaster, Scene, Vector3, WebGLRenderer, WebVRManager } from "three";
-import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
+import { PerspectiveCamera, WebGLRenderer } from "three";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
+import { Room } from "./room";
+import { VRInput } from "./vr-input";
 
 class VRCubeDemo {
   private camera: PerspectiveCamera;
@@ -44,33 +35,6 @@ class VRCubeDemo {
   public render(): void {
     this.vrInput.update();
     this.renderer.render(this.room.scene, this.camera);
-
-    // handleController(controller0);
-    // handleController(controller1);
-
-    // if (areBothControllersSelecting()) {
-    //   if (lastSelectingBoth === false) {
-    //     selectingBothInitialDistance = controller0.position.distanceTo(controller1.position);
-    //     selectingBothInitialScale = currentScale;
-    //   } else {
-    //     const newDistance = controller0.position.distanceTo(controller1.position);
-    //     currentScale = selectingBothInitialScale * newDistance / selectingBothInitialDistance;
-    //     setScale(currentScale);
-    //   }
-    //   lastSelectingBoth = true;
-    // } else {
-    //   lastSelectingBoth = false;
-    // }
-
-    // for (const controlPlane of controlPlanes) {
-    //   if (controlPlane.userData.status[0] === Status.Pressed || controlPlane.userData.status[1] === Status.Pressed) {
-    //     controlPlane.material.opacity = 0.4;
-    //   } else if (controlPlane.userData.status[0] === Status.Targeted || controlPlane.userData.status[1] === Status.Targeted) {
-    //     controlPlane.material.opacity = 0.2;
-    //   } else {
-    //     controlPlane.material.opacity = 0;
-    //   }
-    // }
   }
 
   private animate(): void {
@@ -84,52 +48,6 @@ class VRCubeDemo {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 }
-
-// function handleController(controller: Group): void {
-//   const euler = new THREE.Euler().setFromQuaternion(controller.quaternion);
-//   const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(controller.quaternion);
-//   const raycaster = new Raycaster(controller.position, direction);
-//   const closestIntersection: Intersection | null = ((l) => l.length > 0 ? l[0] : null)(raycaster.intersectObjects(controlPlanes));
-//   for (const controlPlane of controlPlanes) {
-//     controlPlane.userData.status[controller.userData.controllerNumber] = Status.Untargeted;
-//   }
-
-//   if (closestIntersection) {
-//     (closestIntersection.object as Mesh).userData.status[controller.userData.controllerNumber] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
-//   }
-
-//   if (controller.userData.isSelecting) {
-//     if (closestIntersection && !areBothControllersSelecting()) {
-//       const side = closestIntersection.object.userData.side;
-//       if (controller.userData.isSelecting !== controller.userData.lastIsSelecting || side !== controller.userData.lastSide) {
-//         twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
-//         navigator.getGamepads()[controller.userData.controllerNumber].hapticActuators[0].pulse(0.2, 100);
-//       }
-//       controller.userData.lastSide = side;
-//     }
-//     // if () {
-//     //   console.log(max, x, y, z);
-//     //   twisty.experimentalAddMove(BareBlockMove(side, controller.userData.direction));
-//     // }
-//     // controller.userData.lastSide = side;
-
-//   }
-//   controller.userData.lastIsSelecting = controller.userData.isSelecting;
-
-// }
-
-// //
-
-// function areBothControllersSelecting(): boolean {
-//   return controller0.userData.isSelecting && controller1.userData.isSelecting;
-// }
-
-// (window as any).setScale = setScale;
-
-// let lastSelectingBoth = false;
-// let selectingBothInitialDistance = 1;
-// let selectingBothInitialScale = 1;
-// let currentScale = 1;
 
 (window as any).vrCubeDemo = new VRCubeDemo();
 
