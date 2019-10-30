@@ -33,7 +33,7 @@ class VRCubeDemo {
   }
 
   public render(): void {
-    this.vrInput.update();
+    this.room.update();
     this.renderer.render(this.room.scene, this.camera);
   }
 

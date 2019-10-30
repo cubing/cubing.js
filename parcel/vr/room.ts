@@ -6,12 +6,13 @@ import { VRInput as VRInput } from "./vr-input";
 export class Room {
   public scene: Scene;
   private box: LineSegments;
+  private vrCube: VRCube;
   constructor(private vrInput: VRInput) {
     this.scene = new Scene();
     this.scene.background = new Color(0x505050);
 
-    const vrCube = new VRCube();
-    this.scene.add(vrCube.group);
+    this.vrCube = new VRCube(vrInput);
+    this.scene.add(this.vrCube.group);
     this.box = new LineSegments(
       new BoxLineGeometry(6, 6, 6, 10, 10, 10),
       new LineBasicMaterial({ color: 0x808080 }),
@@ -26,5 +27,9 @@ export class Room {
     for (const controller of vrInput.controllers) {
       this.scene.add(controller);
     }
+  }
+
+  public update(): void {
+    this.vrCube.update();
   }
 }

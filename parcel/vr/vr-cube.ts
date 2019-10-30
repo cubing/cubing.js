@@ -1,9 +1,9 @@
-import { DoubleSide, Euler, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3 } from "three";
-import { Sequence } from "../../src/alg";
+import { DoubleSide, Euler, Group, Intersection, Material, Mesh, MeshBasicMaterial, PlaneGeometry, Raycaster, Vector3 } from "three";
+import { BareBlockMove, Sequence } from "../../src/alg";
 import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 import { TAU } from "../../src/twisty/3d/twisty3D";
-import { Status } from "./vr-input";
+import { controllerDirection, Status, VRInput } from "./vr-input";
 
 let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
 if (isNaN(initialHeight)) {
@@ -40,7 +40,8 @@ export class VRCube {
   private twisty: Twisty;
   private cachedCube3D: Cube3D;
   private controlPlanes: Mesh[] = [];
-  constructor() {
+  private lastIsSelecting = false;
+  constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
     this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
     this.cachedCube3D.experimentalUpdateOptions({ showFoundation: false, showHintStickers: false });
@@ -64,4 +65,39 @@ export class VRCube {
     this.group.scale.setScalar(initialScale);
   }
 
+  public update(): void {
+    const gamepads = navigator.getGamepads();
+    if (!gamepads) {
+      return;
+    }
+    const gamepad = gamepads[0];
+    console.log(gamepad);
+    if (!gamepad) {
+      return;
+    }
+    const selecting = gamepad.buttons[1].pressed;
+    const controller = this.vrInput.controllers[0];
+
+    const direction = new Vector3().copy(controllerDirection);
+    direction.applyQuaternion(controller.quaternion);
+    const raycaster = new Raycaster(controller.position, direction);
+    const closestIntersection: Intersection | null = ((l) => l.length > 0 ? l[0] : null)(raycaster.intersectObjects(this.controlPlanes));
+
+    if (closestIntersection) {
+      ((closestIntersection.object as Mesh).material as Material).opacity = 0.2;
+    }
+
+    for (const controlPlane of this.controlPlanes) {
+      if (!closestIntersection || controlPlane !== closestIntersection.object) {
+        ((controlPlane as Mesh).material as Material).opacity = 0;
+      }
+    }
+
+    if (selecting && closestIntersection && !this.lastIsSelecting) {
+      (closestIntersection.object as Mesh).userData.status[controller.userData.controllerNumber] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
+      const side = closestIntersection.object.userData.side;
+      this.twisty.experimentalAddMove(BareBlockMove(side, -1));
+    }
+    this.lastIsSelecting = selecting;
+  }
 }
