@@ -41,6 +41,8 @@ export class VRCube {
   private cachedCube3D: Cube3D;
   private controlPlanes: Mesh[] = [];
 
+  private lastAngle: number;
+
   // TODO: Separate tracker abstraction for this?
   private resizeInitialDistance: number;
   private resizeInitialScale: number;
@@ -78,6 +80,9 @@ export class VRCube {
     this.group.position.copy(new Vector3(0, initialHeight, 0));
     this.setScale(initialScale);
 
+    // TODO: Better abstraction over controllers.
+    this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Grip }, this.gripStart.bind(this, 1), this.gripContinued.bind(this, 1));
+
     this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: OculusButton.Trigger }, this.onPress.bind(this, 0));
     this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Trigger }, this.onPress.bind(this, 1));
     // TODO: Generalize this to multiple platforms.
@@ -94,6 +99,22 @@ export class VRCube {
       this.moveVelocity.setScalar(0);
       // TODO: Set a flag to indicate that the puzzle is not moving?
     }
+  }
+
+  private yAngle(point: Vector3): number {
+    return point.projectOnPlane(new Vector3(0, 1, 0)).angleTo(new Vector3(0, 0, -1));
+  }
+
+  private gripStart(controllerIdx: number): void {
+    navigator.getGamepads()[controllerIdx].hapticActuators[0].pulse(0.1, 400);
+    this.lastAngle = this.yAngle(this.vrInput.controllers[controllerIdx].position);
+  }
+
+  private gripContinued(controllerIdx: number): void {
+    const angle = this.yAngle(this.vrInput.controllers[controllerIdx].position);
+    const deltaAngleQuat = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), angle - this.lastAngle);
+    this.group.quaternion.multiply(deltaAngleQuat);
+    this.lastAngle = angle;
   }
 
   private setScale(scale: number): void {
