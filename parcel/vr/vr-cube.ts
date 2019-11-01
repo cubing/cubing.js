@@ -3,7 +3,7 @@ import { BareBlockMove, Sequence } from "../../src/alg";
 import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 import { TAU } from "../../src/twisty/3d/twisty3D";
-import { ButtonGrouping, controllerDirection, Status, VRInput } from "./vr-input";
+import { ButtonGrouping, controllerDirection, OculusButton, Status, VRInput } from "./vr-input";
 
 let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
 if (isNaN(initialHeight)) {
@@ -78,15 +78,13 @@ export class VRCube {
     this.group.position.copy(new Vector3(0, initialHeight, 0));
     this.setScale(initialScale);
 
-    this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: 1 }, this.onPress.bind(this, 0));
-    this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: 1 }, this.onPress.bind(this, 1));
-    // Button 3 is A/X on the Oculus Touch controllers.
+    this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: OculusButton.Trigger }, this.onPress.bind(this, 0));
+    this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Trigger }, this.onPress.bind(this, 1));
     // TODO: Generalize this to multiple platforms.
-    // TODO: Implement single-button press.
-    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3, invert: true }], this.onMoveStart.bind(this, 0), this.onMoveContinued.bind(this, 0));
-    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3, invert: true }, { controllerIdx: 1, buttonIdx: 3 }], this.onMoveStart.bind(this, 1), this.onMoveContinued.bind(this, 1));
-    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this), this.onResizeEnd.bind(this));
-    this.vrInput.addButtonListener(ButtonGrouping.None, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.moveButtonClear.bind(this));
+    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA, invert: true }], this.onMoveStart.bind(this, 0), this.onMoveContinued.bind(this, 0));
+    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA, invert: true }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.onMoveStart.bind(this, 1), this.onMoveContinued.bind(this, 1));
+    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this), this.onResizeEnd.bind(this));
+    this.vrInput.addButtonListener(ButtonGrouping.None, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.moveButtonClear.bind(this));
   }
 
   public update(): void {

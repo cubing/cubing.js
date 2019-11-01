@@ -8,6 +8,14 @@ export enum Status {
 
 const NUM_CONTROLLERS = 2;
 
+export enum OculusButton {
+  Trackpad = 0,
+  Trigger = 1,
+  Grip = 2,
+  XorA = 3,
+  YorB = 4,
+}
+
 export const controllerDirection: Vector3 = new Vector3(0, 0, -1);
 
 const geometry = new BufferGeometry();
