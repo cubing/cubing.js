@@ -30,6 +30,6 @@ export class Room {
   }
 
   public update(): void {
-    this.vrCube.update();
+    // TODO?
   }
 }

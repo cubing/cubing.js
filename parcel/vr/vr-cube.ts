@@ -40,7 +40,6 @@ export class VRCube {
   private twisty: Twisty;
   private cachedCube3D: Cube3D;
   private controlPlanes: Mesh[] = [];
-  private lastIsSelecting = false;
   constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
     this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
@@ -63,19 +62,29 @@ export class VRCube {
 
     this.group.position.copy(new Vector3(0, initialHeight, 0));
     this.group.scale.setScalar(initialScale);
+
+    this.vrInput.addButtonListener({
+      buttons: [
+        { controllerIdx: 0, buttonIdx: 1 },
+      ],
+    }, this.onPress.bind(this, 0));
+
+    this.vrInput.addButtonListener({
+      buttons: [
+        { controllerIdx: 1, buttonIdx: 1 },
+      ],
+    }, this.onPress.bind(this, 1));
   }
 
-  public update(): void {
+  private onPress(controllerIdx: number): void {
     const gamepads = navigator.getGamepads();
     if (!gamepads) {
       return;
     }
-    const gamepad = gamepads[0];
-    console.log(gamepad);
+    const gamepad = gamepads[controllerIdx];
     if (!gamepad) {
       return;
     }
-    const selecting = gamepad.buttons[1].pressed;
     const controller = this.vrInput.controllers[0];
 
     const direction = new Vector3().copy(controllerDirection);
@@ -93,11 +102,10 @@ export class VRCube {
       }
     }
 
-    if (selecting && closestIntersection && !this.lastIsSelecting) {
+    if (closestIntersection) {
       (closestIntersection.object as Mesh).userData.status[controller.userData.controllerNumber] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
       const side = closestIntersection.object.userData.side;
-      this.twisty.experimentalAddMove(BareBlockMove(side, -1));
+      this.twisty.experimentalAddMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
     }
-    this.lastIsSelecting = selecting;
   }
 }
