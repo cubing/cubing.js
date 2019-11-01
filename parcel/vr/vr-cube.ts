@@ -3,7 +3,7 @@ import { BareBlockMove, Sequence } from "../../src/alg";
 import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 import { TAU } from "../../src/twisty/3d/twisty3D";
-import { controllerDirection, Status, VRInput } from "./vr-input";
+import { ButtonGrouping, controllerDirection, Status, VRInput } from "./vr-input";
 
 let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
 if (isNaN(initialHeight)) {
@@ -40,6 +40,11 @@ export class VRCube {
   private twisty: Twisty;
   private cachedCube3D: Cube3D;
   private controlPlanes: Mesh[] = [];
+
+  // TODO: Separate tracker abstraction for this?
+  private resizeInitialDistance: number = 1;
+  private resizeInitialScale: number = 1;
+  private currentScale: number = 1;
   constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
     this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
@@ -61,10 +66,33 @@ export class VRCube {
     }
 
     this.group.position.copy(new Vector3(0, initialHeight, 0));
-    this.group.scale.setScalar(initialScale);
+    this.setScale(initialScale);
 
     this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: 1 }, this.onPress.bind(this, 0));
     this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: 1 }, this.onPress.bind(this, 1));
+    // Button 3 is A/X on the Oculus Touch controllers.
+    // TODO: Generalize this to multiple platforms.
+    // TODO: Implement single-button press.
+    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this));
+  }
+
+  private setScale(scale: number): void {
+    this.currentScale = scale;
+    this.group.scale.setScalar(scale);
+  }
+
+  private controllerDistance(): number {
+    return this.vrInput.controllers[0].position.distanceTo(this.vrInput.controllers[1].position);
+  }
+
+  private onResizeStart(): void {
+    this.resizeInitialDistance = this.controllerDistance();
+    this.resizeInitialScale = this.currentScale;
+  }
+
+  private onResizeContinued(): void {
+    const newDistance = this.controllerDistance();
+    this.setScale(this.resizeInitialScale * newDistance / this.resizeInitialDistance);
   }
 
   private onPress(controllerIdx: number): void {

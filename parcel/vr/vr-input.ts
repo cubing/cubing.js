@@ -30,6 +30,7 @@ const material = new LineBasicMaterial({
 export enum ButtonGrouping {
   All = "all",
   Any = "any",
+  Single = "single",
   None = "none",
 }
 
@@ -43,12 +44,18 @@ export interface ButtonSpec {
 class ButtonListener {
   // TODO: Calculate if the initial status is actually active.
   private activeLastTime: boolean = false;
-  constructor(private grouping: ButtonGrouping, private buttonSpecs: ButtonSpec[], public activatedCallback: ButtonListenerCallback, public deactivatedCallback?: ButtonListenerCallback) { }
+  constructor(private grouping: ButtonGrouping, private buttonSpecs: ButtonSpec[], private activatedCallback: ButtonListenerCallback, private continuedActiveCallback?: ButtonListenerCallback, private deactivatedCallback?: ButtonListenerCallback) { }
 
   public update(buttonStates: ButtonStates): void {
     const active = this.currentlyActive(buttonStates);
-    if (!this.activeLastTime && active) {
-      this.activatedCallback();
+    if (active) {
+      if (!this.activeLastTime) {
+        this.activatedCallback();
+      } else {
+        if (this.continuedActiveCallback) {
+          this.continuedActiveCallback();
+        }
+      }
     }
     if (this.activeLastTime && !active && this.deactivatedCallback) {
       this.deactivatedCallback();
@@ -59,45 +66,35 @@ class ButtonListener {
   private currentlyActive(buttonStates: ButtonStates): boolean {
     switch (this.grouping) {
       case ButtonGrouping.All:
-        return this.allActive(buttonStates);
+        return this.numberPressed(buttonStates) === this.buttonSpecs.length;
         break;
       case ButtonGrouping.Any:
-        return this.anyActive(buttonStates);
+        return this.numberPressed(buttonStates, true) > 0;
+        break;
+      case ButtonGrouping.Single:
+        return this.numberPressed(buttonStates) === 1;
         break;
       case ButtonGrouping.None:
-        return this.noneActive(buttonStates);
+        return this.numberPressed(buttonStates, true) === 0;
         break;
       default:
         throw new Error("Unknown grouping");
     }
   }
 
-  private noneActive(buttonStates: ButtonStates): boolean {
+  // Short-circuit: return count of 1 if count is > 0.
+  // TODO: Is the small performance gain from short-circuiting worth the extra code?
+  private numberPressed(buttonStates: ButtonStates, shortCircuit: boolean = false): number {
+    let count = 0;
     for (const button of this.buttonSpecs) {
       if (this.isButtonPressed(buttonStates, button)) {
-        return false;
+        if (shortCircuit) {
+          return 1;
+        }
+        count++;
       }
     }
-    return true;
-  }
-
-  private anyActive(buttonStates: ButtonStates): boolean {
-    for (const button of this.buttonSpecs) {
-      if (this.isButtonPressed(buttonStates, button)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // TODO: Combine implementation with "any"?
-  private allActive(buttonStates: ButtonStates): boolean {
-    for (const button of this.buttonSpecs) {
-      if (!this.isButtonPressed(buttonStates, button)) {
-        return false;
-      }
-    }
-    return true;
+    return count;
   }
 
   private isButtonPressed(buttonStates: ButtonStates, buttonSpec: ButtonSpec): boolean {
@@ -143,11 +140,11 @@ export class VRInput {
     this.previousButtonStates = buttonStates;
   }
 
-  public addButtonListener(grouping: ButtonGrouping, buttonSpecs: ButtonSpec[], activatedCallback: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
-    this.buttonListeners.push(new ButtonListener(grouping, buttonSpecs, activatedCallback, deactivatedCallback));
+  public addButtonListener(grouping: ButtonGrouping, buttonSpecs: ButtonSpec[], activatedCallback: ButtonListenerCallback, continuedActiveCallback?: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
+    this.buttonListeners.push(new ButtonListener(grouping, buttonSpecs, activatedCallback, continuedActiveCallback, deactivatedCallback));
   }
 
-  public addSingleButtonListener(buttonSpec: ButtonSpec, activatedCallback: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
-    this.addButtonListener(ButtonGrouping.All, [buttonSpec], activatedCallback, deactivatedCallback);
+  public addSingleButtonListener(buttonSpec: ButtonSpec, activatedCallback: ButtonListenerCallback, continuedActiveCallback?: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
+    this.addButtonListener(ButtonGrouping.All, [buttonSpec], activatedCallback, continuedActiveCallback, deactivatedCallback);
   }
 }
