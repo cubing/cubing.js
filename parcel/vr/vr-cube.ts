@@ -45,10 +45,11 @@ export class VRCube {
   private resizeInitialDistance: number;
   private resizeInitialScale: number;
 
-  private moveInitialPuzzlePosition: Vector3 = new Vector3();
   private moveInitialPuzzleQuaternion: Quaternion = new Quaternion();
-  private moveInitialControllerPosition: Vector3 = new Vector3();
   private moveInitialControllerQuaternion: Quaternion = new Quaternion();
+
+  private moveLastControllerPosition: Vector3 = new Vector3();
+  private moveVelocity: Vector3 = new Vector3(); // TODO: Track elapsed time since last update?
 
   constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
@@ -83,6 +84,15 @@ export class VRCube {
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this));
   }
 
+  public update(): void {
+    this.group.position.add(this.moveVelocity);
+    this.moveVelocity.multiplyScalar(0.99);
+    if (this.moveVelocity.length() < 0.001) {
+      this.moveVelocity.setScalar(0);
+      // TODO: Set a flag to indicate that the puzzle is not moving?
+    }
+  }
+
   private setScale(scale: number): void {
     this.group.scale.setScalar(scale);
   }
@@ -102,19 +112,18 @@ export class VRCube {
   }
 
   private onMoveStart(controllerIdx: number): void {
-    this.moveInitialPuzzlePosition.copy(this.group.position);
     this.moveInitialPuzzleQuaternion.copy(this.group.quaternion);
 
     const controller = this.vrInput.controllers[controllerIdx];
-    this.moveInitialControllerPosition.copy(controller.position);
+    this.moveLastControllerPosition.copy(controller.position);
     this.moveInitialControllerQuaternion.copy(controller.quaternion);
   }
 
   private onMoveContinued(controllerIdx: number): void {
     const controller = this.vrInput.controllers[controllerIdx];
 
-    const newPuzzlePosition = controller.position.clone().sub(this.moveInitialControllerPosition).add(this.moveInitialPuzzlePosition);
-    this.group.position.copy(newPuzzlePosition);
+    this.moveVelocity.copy(controller.position).sub(this.moveLastControllerPosition);
+    this.moveLastControllerPosition.copy(controller.position);
 
     this.group.quaternion.
       copy(this.moveInitialControllerQuaternion).
