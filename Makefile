@@ -31,3 +31,8 @@ deploy-vr: clean parcel-build-vr
 		./dist/vr/ \
 		${VR_SFTP_PATH}
 	echo "\nDone deploying. Go to ${VR_URL}\n"
+
+.PHONY: restart-oculus-browser
+restart-oculus-browser:
+	adb shell am force-stop com.oculus.browser
+	adb shell am start -n com.oculus.browser/.WebVRActivity
