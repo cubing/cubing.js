@@ -63,17 +63,8 @@ export class VRCube {
     this.group.position.copy(new Vector3(0, initialHeight, 0));
     this.group.scale.setScalar(initialScale);
 
-    this.vrInput.addButtonListener({
-      buttons: [
-        { controllerIdx: 0, buttonIdx: 1 },
-      ],
-    }, this.onPress.bind(this, 0));
-
-    this.vrInput.addButtonListener({
-      buttons: [
-        { controllerIdx: 1, buttonIdx: 1 },
-      ],
-    }, this.onPress.bind(this, 1));
+    this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: 1 }, this.onPress.bind(this, 0));
+    this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: 1 }, this.onPress.bind(this, 1));
   }
 
   private onPress(controllerIdx: number): void {

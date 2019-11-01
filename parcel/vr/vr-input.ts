@@ -27,20 +27,10 @@ const material = new LineBasicMaterial({
   opacity: 0.5,
 });
 
-// TODO: Handle touched vs. pressed.
-export enum ButtonTransitionDirection {
-  Pressed = "pressed",
-  Release = "released",
-}
-
 export enum ButtonGrouping {
-  Any = "any",
   All = "all",
-}
-
-export enum ButtonListenerStatus {
-  Inactive = "inactive",
-  Active = "active",
+  Any = "any",
+  None = "none",
 }
 
 export type ButtonListenerCallback = () => void;
@@ -50,60 +40,64 @@ export interface ButtonSpec {
   buttonIdx: number;
 }
 
-// TODO: Simplify
-export interface ButtonListenerSpec {
-  grouping?: ButtonGrouping;
-  direction?: ButtonTransitionDirection;
-  buttons: ButtonSpec[];
-}
-
 class ButtonListener {
   // TODO: Calculate if the initial status is actually active.
-  private lastStatus: ButtonListenerStatus = ButtonListenerStatus.Inactive;
-  constructor(private spec: ButtonListenerSpec, public activatedCallback: ButtonListenerCallback, public deactivatedCallback?: ButtonListenerCallback) { }
+  private activeLastTime: boolean = false;
+  constructor(private grouping: ButtonGrouping, private buttonSpecs: ButtonSpec[], public activatedCallback: ButtonListenerCallback, public deactivatedCallback?: ButtonListenerCallback) { }
 
   public update(buttonStates: ButtonStates): void {
-    const direction = this.spec.direction || ButtonTransitionDirection.Pressed;
-    const status = this.currentStatus(buttonStates, direction === ButtonTransitionDirection.Pressed);
-    if (this.lastStatus === ButtonListenerStatus.Inactive && status === ButtonListenerStatus.Active) {
+    const active = this.currentlyActive(buttonStates);
+    if (!this.activeLastTime && active) {
       this.activatedCallback();
     }
-    if (this.lastStatus === ButtonListenerStatus.Active && status === ButtonListenerStatus.Inactive && this.deactivatedCallback) {
+    if (this.activeLastTime && !active && this.deactivatedCallback) {
       this.deactivatedCallback();
     }
-    this.lastStatus = status;
+    this.activeLastTime = active;
   }
 
-  private currentStatus(buttonStates: ButtonStates, activeMeansPressed: boolean): ButtonListenerStatus {
-    switch (this.spec.grouping || ButtonGrouping.All) {
-      case ButtonGrouping.Any:
-        return this.anyActive(buttonStates, activeMeansPressed);
-        break;
+  private currentlyActive(buttonStates: ButtonStates): boolean {
+    switch (this.grouping) {
       case ButtonGrouping.All:
-        return this.allActive(buttonStates, activeMeansPressed);
+        return this.allActive(buttonStates);
+        break;
+      case ButtonGrouping.Any:
+        return this.anyActive(buttonStates);
+        break;
+      case ButtonGrouping.None:
+        return this.noneActive(buttonStates);
         break;
       default:
         throw new Error("Unknown grouping");
     }
   }
 
-  private anyActive(buttonStates: ButtonStates, activeMeansPressed: boolean): ButtonListenerStatus {
-    for (const button of this.spec.buttons) {
-      if (this.isButtonPressed(buttonStates, button) === activeMeansPressed) {
-        return ButtonListenerStatus.Active;
+  private noneActive(buttonStates: ButtonStates): boolean {
+    for (const button of this.buttonSpecs) {
+      if (this.isButtonPressed(buttonStates, button)) {
+        return false;
       }
     }
-    return ButtonListenerStatus.Inactive;
+    return true;
+  }
+
+  private anyActive(buttonStates: ButtonStates): boolean {
+    for (const button of this.buttonSpecs) {
+      if (this.isButtonPressed(buttonStates, button)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // TODO: Combine implementation with "any"?
-  private allActive(buttonStates: ButtonStates, activeMeansPressed: boolean): ButtonListenerStatus {
-    for (const button of this.spec.buttons) {
-      if (this.isButtonPressed(buttonStates, button) !== activeMeansPressed) {
-        return ButtonListenerStatus.Inactive;
+  private allActive(buttonStates: ButtonStates): boolean {
+    for (const button of this.buttonSpecs) {
+      if (!this.isButtonPressed(buttonStates, button)) {
+        return false;
       }
     }
-    return ButtonListenerStatus.Active;
+    return true;
   }
 
   private isButtonPressed(buttonStates: ButtonStates, buttonSpec: ButtonSpec): boolean {
@@ -149,8 +143,11 @@ export class VRInput {
     this.previousButtonStates = buttonStates;
   }
 
-  // TODO: Single-button convenience.
-  public addButtonListener(spec: ButtonListenerSpec, activatedCallback: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
-    this.buttonListeners.push(new ButtonListener(spec, activatedCallback, deactivatedCallback));
+  public addButtonListener(grouping: ButtonGrouping, buttonSpecs: ButtonSpec[], activatedCallback: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
+    this.buttonListeners.push(new ButtonListener(grouping, buttonSpecs, activatedCallback, deactivatedCallback));
+  }
+
+  public addSingleButtonListener(buttonSpec: ButtonSpec, activatedCallback: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
+    this.addButtonListener(ButtonGrouping.All, [buttonSpec], activatedCallback, deactivatedCallback);
   }
 }
