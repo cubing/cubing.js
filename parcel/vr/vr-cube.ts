@@ -113,7 +113,7 @@ export class VRCube {
   private onMoveContinued(controllerIdx: number): void {
     const controller = this.vrInput.controllers[controllerIdx];
 
-    const newPuzzlePosition = controller.position.sub(this.moveInitialControllerPosition).add(this.moveInitialPuzzlePosition);
+    const newPuzzlePosition = controller.position.clone().sub(this.moveInitialControllerPosition).add(this.moveInitialPuzzlePosition);
     this.group.position.copy(newPuzzlePosition);
 
     this.group.quaternion.
