@@ -81,7 +81,7 @@ export class VRCube {
     // TODO: Implement single-button press.
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3, invert: true }], this.onMoveStart.bind(this, 0), this.onMoveContinued.bind(this, 0));
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3, invert: true }, { controllerIdx: 1, buttonIdx: 3 }], this.onMoveStart.bind(this, 1), this.onMoveContinued.bind(this, 1));
-    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this));
+    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this), this.onResizeEnd.bind(this));
   }
 
   public update(): void {
@@ -102,6 +102,8 @@ export class VRCube {
   }
 
   private onResizeStart(): void {
+    navigator.getGamepads()[0].hapticActuators[0].pulse(0.2, 75);
+    navigator.getGamepads()[1].hapticActuators[0].pulse(0.2, 75);
     this.resizeInitialDistance = this.controllerDistance();
     this.resizeInitialScale = this.group.scale.x;
   }
@@ -111,7 +113,13 @@ export class VRCube {
     this.setScale(this.resizeInitialScale * newDistance / this.resizeInitialDistance);
   }
 
+  private onResizeEnd(): void {
+    navigator.getGamepads()[0].hapticActuators[0].pulse(0.1, 75);
+    navigator.getGamepads()[1].hapticActuators[0].pulse(0.1, 75);
+  }
+
   private onMoveStart(controllerIdx: number): void {
+    navigator.getGamepads()[controllerIdx].hapticActuators[0].pulse(0.2, 50);
     this.moveInitialPuzzleQuaternion.copy(this.group.quaternion);
 
     const controller = this.vrInput.controllers[controllerIdx];
@@ -154,6 +162,7 @@ export class VRCube {
       (closestIntersection.object as Mesh).userData.status[controller.userData.controllerNumber] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
       const side = closestIntersection.object.userData.side;
       this.twisty.experimentalAddMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
+      navigator.getGamepads()[controllerIdx].hapticActuators[0].pulse(0.1, 75);
     }
   }
 }
