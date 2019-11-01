@@ -51,6 +51,10 @@ export class VRCube {
   private moveLastControllerPosition: Vector3 = new Vector3();
   private moveVelocity: Vector3 = new Vector3(); // TODO: Track elapsed time since last update?
 
+  // Wait for both move buttons to be released before allowing moves.
+  // This "locks" the input into resizing.
+  private waitForMoveButtonClear = false;
+
   constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
     this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
@@ -82,6 +86,7 @@ export class VRCube {
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3, invert: true }], this.onMoveStart.bind(this, 0), this.onMoveContinued.bind(this, 0));
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3, invert: true }, { controllerIdx: 1, buttonIdx: 3 }], this.onMoveStart.bind(this, 1), this.onMoveContinued.bind(this, 1));
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this), this.onResizeEnd.bind(this));
+    this.vrInput.addButtonListener(ButtonGrouping.None, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.moveButtonClear.bind(this));
   }
 
   public update(): void {
@@ -102,12 +107,13 @@ export class VRCube {
   }
 
   private onResizeStart(): void {
+    this.waitForMoveButtonClear = true;
+    this.moveVelocity.setScalar(0);
     navigator.getGamepads()[0].hapticActuators[0].pulse(0.2, 75);
     navigator.getGamepads()[1].hapticActuators[0].pulse(0.2, 75);
     this.resizeInitialDistance = this.controllerDistance();
     this.resizeInitialScale = this.group.scale.x;
   }
-
   private onResizeContinued(): void {
     const newDistance = this.controllerDistance();
     this.setScale(this.resizeInitialScale * newDistance / this.resizeInitialDistance);
@@ -118,7 +124,14 @@ export class VRCube {
     navigator.getGamepads()[1].hapticActuators[0].pulse(0.1, 75);
   }
 
+  private moveButtonClear(): void {
+    this.waitForMoveButtonClear = false;
+  }
+
   private onMoveStart(controllerIdx: number): void {
+    if (this.waitForMoveButtonClear) {
+      return;
+    }
     navigator.getGamepads()[controllerIdx].hapticActuators[0].pulse(0.2, 50);
     this.moveInitialPuzzleQuaternion.copy(this.group.quaternion);
 
@@ -128,6 +141,9 @@ export class VRCube {
   }
 
   private onMoveContinued(controllerIdx: number): void {
+    if (this.waitForMoveButtonClear) {
+      return;
+    }
     const controller = this.vrInput.controllers[controllerIdx];
 
     this.moveVelocity.copy(controller.position).sub(this.moveLastControllerPosition);
