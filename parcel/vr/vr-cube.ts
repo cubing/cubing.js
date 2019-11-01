@@ -1,4 +1,4 @@
-import { DoubleSide, Euler, Group, Intersection, Material, Mesh, MeshBasicMaterial, PlaneGeometry, Raycaster, Vector3 } from "three";
+import { DoubleSide, Euler, Group, Intersection, Material, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Raycaster, Vector3 } from "three";
 import { BareBlockMove, Sequence } from "../../src/alg";
 import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
@@ -42,9 +42,14 @@ export class VRCube {
   private controlPlanes: Mesh[] = [];
 
   // TODO: Separate tracker abstraction for this?
-  private resizeInitialDistance: number = 1;
-  private resizeInitialScale: number = 1;
-  private currentScale: number = 1;
+  private resizeInitialDistance: number;
+  private resizeInitialScale: number;
+
+  private moveInitialPuzzlePosition: Vector3 = new Vector3();
+  private moveInitialPuzzleQuaternion: Quaternion = new Quaternion();
+  private moveInitialControllerPosition: Vector3 = new Vector3();
+  private moveInitialControllerQuaternion: Quaternion = new Quaternion();
+
   constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
     this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
@@ -73,11 +78,12 @@ export class VRCube {
     // Button 3 is A/X on the Oculus Touch controllers.
     // TODO: Generalize this to multiple platforms.
     // TODO: Implement single-button press.
+    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3, invert: true }], this.onMoveStart.bind(this, 0), this.onMoveContinued.bind(this, 0));
+    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3, invert: true }, { controllerIdx: 1, buttonIdx: 3 }], this.onMoveStart.bind(this, 1), this.onMoveContinued.bind(this, 1));
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: 3 }, { controllerIdx: 1, buttonIdx: 3 }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this));
   }
 
   private setScale(scale: number): void {
-    this.currentScale = scale;
     this.group.scale.setScalar(scale);
   }
 
@@ -87,7 +93,7 @@ export class VRCube {
 
   private onResizeStart(): void {
     this.resizeInitialDistance = this.controllerDistance();
-    this.resizeInitialScale = this.currentScale;
+    this.resizeInitialScale = this.group.scale.x;
   }
 
   private onResizeContinued(): void {
@@ -95,16 +101,29 @@ export class VRCube {
     this.setScale(this.resizeInitialScale * newDistance / this.resizeInitialDistance);
   }
 
+  private onMoveStart(controllerIdx: number): void {
+    this.moveInitialPuzzlePosition.copy(this.group.position);
+    this.moveInitialPuzzleQuaternion.copy(this.group.quaternion);
+
+    const controller = this.vrInput.controllers[controllerIdx];
+    this.moveInitialControllerPosition.copy(controller.position);
+    this.moveInitialControllerQuaternion.copy(controller.quaternion);
+  }
+
+  private onMoveContinued(controllerIdx: number): void {
+    const controller = this.vrInput.controllers[controllerIdx];
+
+    const newPuzzlePosition = controller.position.sub(this.moveInitialControllerPosition).add(this.moveInitialPuzzlePosition);
+    this.group.position.copy(newPuzzlePosition);
+
+    const newPuzzleQuaternion = new Quaternion().copy(this.moveInitialPuzzleQuaternion);
+    const localTransform = new Quaternion().copy(controller.quaternion);
+    localTransform.multiply(new Quaternion().copy(this.moveInitialControllerQuaternion).inverse());
+    this.group.quaternion.copy(localTransform.multiply(newPuzzleQuaternion));
+  }
+
   private onPress(controllerIdx: number): void {
-    const gamepads = navigator.getGamepads();
-    if (!gamepads) {
-      return;
-    }
-    const gamepad = gamepads[controllerIdx];
-    if (!gamepad) {
-      return;
-    }
-    const controller = this.vrInput.controllers[0];
+    const controller = this.vrInput.controllers[controllerIdx];
 
     const direction = new Vector3().copy(controllerDirection);
     direction.applyQuaternion(controller.quaternion);

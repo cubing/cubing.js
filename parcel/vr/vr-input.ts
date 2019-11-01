@@ -39,6 +39,7 @@ export type ButtonListenerCallback = () => void;
 export interface ButtonSpec {
   controllerIdx: number;
   buttonIdx: number;
+  invert?: boolean;
 }
 
 class ButtonListener {
@@ -100,7 +101,7 @@ class ButtonListener {
   private isButtonPressed(buttonStates: ButtonStates, buttonSpec: ButtonSpec): boolean {
     const controllerStates = buttonStates[buttonSpec.controllerIdx] || [];
     // Undefined (== missing) means "not pressed";
-    return !!controllerStates[buttonSpec.buttonIdx]; // TODO
+    return !buttonSpec.invert === !!controllerStates[buttonSpec.buttonIdx]; // TODO
   }
 }
 
