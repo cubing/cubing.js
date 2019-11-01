@@ -116,10 +116,11 @@ export class VRCube {
     const newPuzzlePosition = controller.position.sub(this.moveInitialControllerPosition).add(this.moveInitialPuzzlePosition);
     this.group.position.copy(newPuzzlePosition);
 
-    const newPuzzleQuaternion = new Quaternion().copy(this.moveInitialPuzzleQuaternion);
-    const localTransform = new Quaternion().copy(controller.quaternion);
-    localTransform.multiply(new Quaternion().copy(this.moveInitialControllerQuaternion).inverse());
-    this.group.quaternion.copy(localTransform.multiply(newPuzzleQuaternion));
+    this.group.quaternion.
+      copy(this.moveInitialControllerQuaternion).
+      inverse().
+      premultiply(controller.quaternion).
+      multiply(this.moveInitialPuzzleQuaternion);
   }
 
   private onPress(controllerIdx: number): void {
