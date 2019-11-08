@@ -4,6 +4,7 @@ import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. h
 import { ProxySender } from "./websocket-proxy";
 
 import { BluetoothPuzzle, connect, debugKeyboardConnect } from "../../../src/bluetooth";
+import { GoCube } from "../../../src/bluetooth/gocube";
 
 class App {
   private proxySender = new ProxySender();
@@ -13,6 +14,7 @@ class App {
     document.querySelector("#connect-bluetooth").addEventListener("click", async () => {
       this.puzzle = await connect();
       this.puzzle.addMoveListener(this.proxySender.onMove.bind(this.proxySender));
+      this.puzzle.addOrientationListener(this.proxySender.onOrientation.bind(this.proxySender));
       console.log("Puzzle connected!", this.puzzle);
     });
 
@@ -24,6 +26,9 @@ class App {
 
     document.querySelector("#reset").addEventListener("click", async () => {
       this.proxySender.sendReset();
+      if ("reset" in this.puzzle) {
+        (this.puzzle as GoCube).reset();
+      }
     });
   }
 

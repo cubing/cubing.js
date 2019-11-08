@@ -1,4 +1,5 @@
 import { MoveEvent } from "../../../src/bluetooth";
+import { OrientationEvent } from "../../../src/bluetooth/bluetooth-puzzle";
 
 const socketOrigin: string = new URL(location.href).searchParams.get("socketOrigin") || "ws://mirzakhani.local:8888";
 
@@ -7,11 +8,16 @@ export interface ProxyMoveEvent {
   data: MoveEvent;
 }
 
+export interface ProxyOrientationEvent {
+  event: "orientation";
+  data: OrientationEvent;
+}
+
 export interface ProxyResetEvent {
   event: "reset";
 }
 
-export type ProxyEvent = ProxyMoveEvent | ProxyResetEvent;
+export type ProxyEvent = ProxyMoveEvent | ProxyOrientationEvent | ProxyResetEvent;
 
 export class ProxySender {
   private websocket: WebSocket;
@@ -28,6 +34,13 @@ export class ProxySender {
   public onMove(e: MoveEvent): void {
     this.sendEvent({
       event: "move",
+      data: e,
+    });
+  }
+
+  public onOrientation(e: OrientationEvent): void {
+    this.sendEvent({
+      event: "orientation",
       data: e,
     });
   }

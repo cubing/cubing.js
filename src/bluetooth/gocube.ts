@@ -1,7 +1,8 @@
-import { Quaternion } from "three";
+import { Quaternion, Euler, QuadraticBezierCurve } from "three";
 import { BareBlockMove, BlockMove, parse, Sequence } from "../alg";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { debugLog } from "./debug";
+import { TAU } from "../twisty/3D/twisty3D";
 
 const UUIDs = {
   goCubeService: "6e400001-b5a3-f393-e0a9-e50e24dcca9e",
@@ -94,7 +95,7 @@ export class GoCube extends BluetoothPuzzle {
   }
 
   public resetAlg(algo?: Sequence): void {
-    this.alg = algo || parse("");
+    this.alg = algo || new Sequence([]);
   }
 
   public resetOrientation(): void {
@@ -122,7 +123,11 @@ export class GoCube extends BluetoothPuzzle {
       });
     } else {
       const coords = bufferToString(buffer.buffer.slice(3, buffer.byteLength - 3)).split("#").map((s) => parseInt(s, 10) / 16384);
-      const quat = new Quaternion(coords[0], coords[1], coords[2], coords[3]);
+
+      const quat = new Quaternion(coords[0], -coords[1], coords[2], coords[3]);
+      const adjustment = new Quaternion().setFromEuler(new Euler(TAU / 4, -TAU / 4));
+      quat.premultiply(adjustment);
+
       this.lastRawQuat = quat.clone();
 
       if (!this.homeQuatInverse) {
@@ -133,6 +138,12 @@ export class GoCube extends BluetoothPuzzle {
 
       this.lastTarget.slerp(targetQuat, 0.5);
       this.currentQuat.rotateTowards(this.lastTarget, rotateTowardsRate);
+
+      const {x, y, z, w} = this.currentQuat;
+      this.dispatchOrientation({
+        quaternion: {x, y, z, w},
+        timeStamp: event.timeStamp,
+      });
     }
   }
 }
