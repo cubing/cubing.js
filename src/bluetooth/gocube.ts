@@ -1,8 +1,8 @@
-import { Quaternion, Euler, QuadraticBezierCurve } from "three";
-import { BareBlockMove, BlockMove, parse, Sequence } from "../alg";
+import { Euler, Quaternion } from "three";
+import { BareBlockMove, BlockMove, Sequence } from "../alg";
+import { TAU } from "../twisty/3D/twisty3D";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { debugLog } from "./debug";
-import { TAU } from "../twisty/3D/twisty3D";
 
 const UUIDs = {
   goCubeService: "6e400001-b5a3-f393-e0a9-e50e24dcca9e",
@@ -124,9 +124,10 @@ export class GoCube extends BluetoothPuzzle {
     } else {
       const coords = bufferToString(buffer.buffer.slice(3, buffer.byteLength - 3)).split("#").map((s) => parseInt(s, 10) / 16384);
 
-      const quat = new Quaternion(coords[0], -coords[1], coords[2], coords[3]);
-      const adjustment = new Quaternion().setFromEuler(new Euler(TAU / 4, -TAU / 4));
-      quat.premultiply(adjustment);
+      const quat1 = new Quaternion(coords[0], -coords[1], coords[2], coords[3]);
+      const adjustment = new Quaternion().setFromEuler(new Euler(TAU / 2, -TAU / 4, 0));
+      quat1.premultiply(adjustment);
+      const quat = new Quaternion(quat1.y, quat1.z, quat1.x, quat1.w);
 
       this.lastRawQuat = quat.clone();
 

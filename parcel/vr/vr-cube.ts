@@ -17,6 +17,8 @@ if (isNaN(initialScale)) {
   initialScale = 1;
 }
 
+const showControlPlanes = "true" === (new URL(location.href).searchParams.get("showControlPlanes") || "true");
+
 // From `cube3D.ts`
 class AxisInfo {
   public stickerMaterial: THREE.MeshBasicMaterial;
@@ -25,7 +27,7 @@ class AxisInfo {
     color = 0xffffff; // override
     this.stickerMaterial = new MeshBasicMaterial({ color, side: DoubleSide });
     this.stickerMaterial.transparent = true;
-    this.stickerMaterial.opacity = 0.4;
+    this.stickerMaterial.opacity = showControlPlanes ? 0.4 : 0;
   }
 }
 const axesInfo: AxisInfo[] = [
@@ -191,7 +193,7 @@ export class VRCube {
     const raycaster = new Raycaster(controller.position, direction);
     const closestIntersection: Intersection | null = ((l) => l.length > 0 ? l[0] : null)(raycaster.intersectObjects(this.controlPlanes));
 
-    if (closestIntersection) {
+    if (closestIntersection && showControlPlanes) {
       ((closestIntersection.object as Mesh).material as Material).opacity = 0.2;
     }
 
