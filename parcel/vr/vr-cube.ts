@@ -3,6 +3,8 @@ import { BareBlockMove, Sequence } from "../../src/alg";
 import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 import { TAU } from "../../src/twisty/3d/twisty3D";
+
+import { ProxyEvent, ProxyReceiver } from "./proxy/websocket-proxy";
 import { ButtonGrouping, controllerDirection, OculusButton, Status, VRInput } from "./vr-input";
 
 let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
@@ -57,6 +59,8 @@ export class VRCube {
   // This "locks" the input into resizing.
   private waitForMoveButtonClear = false;
 
+  private proxyReceiver: ProxyReceiver;
+
   constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
     this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
@@ -90,6 +94,8 @@ export class VRCube {
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA, invert: true }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.onMoveStart.bind(this, 1), this.onMoveContinued.bind(this, 1));
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this), this.onResizeEnd.bind(this));
     this.vrInput.addButtonListener(ButtonGrouping.None, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.moveButtonClear.bind(this));
+
+    this.proxyReceiver = new ProxyReceiver(this.onProxyEvent.bind(this));
   }
 
   public update(): void {
@@ -198,6 +204,21 @@ export class VRCube {
       const side = closestIntersection.object.userData.side;
       this.twisty.experimentalAddMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
       navigator.getGamepads()[controllerIdx].hapticActuators[0].pulse(0.1, 75);
+    }
+  }
+
+  private onProxyEvent(e: ProxyEvent): void {
+    switch (e.event) {
+      case "reset":
+        this.twisty.experimentalSetAlg(new Sequence([]));
+        break;
+      case "move":
+        this.twisty.experimentalAddMove(e.data.latestMove);
+        break;
+      default:
+        // The "as any" appeases the type checker, which (correctly) deduces
+        // that the `event` field can't have a valid value.
+        console.error("Unknown event:", (e as any).event);
     }
   }
 }

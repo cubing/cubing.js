@@ -40,7 +40,7 @@
     "setup": "npm install",
     "lint": "tslint --fix --project . ; tslint --fix rollup.config.js",
     "prepack": "npm run clean && npm run build",
-    "parcel": "parcel serve parcel/index.html parcel/vr/index.html",
+    "parcel": "parcel serve parcel/index.html parcel/vr/index.html parcel/vr/proxy/proxy.html",
     "parcel-build-vr": "parcel build --public-url ./ --out-dir dist/vr parcel/vr/index.html"
   },
   "keywords": [
