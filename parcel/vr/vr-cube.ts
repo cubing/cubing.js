@@ -63,6 +63,8 @@ export class VRCube {
 
   constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
+    this.twisty.experimentalGetCursor().experimentalSetDurationScale(0.25);
+
     this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
     this.cachedCube3D.experimentalUpdateOptions({ showFoundation: false, showHintStickers: false });
     this.group.add(this.cachedCube3D.experimentalGetCube());

@@ -176,6 +176,10 @@ export class Cursor<P extends Puzzle> {
     return true;
   }
 
+  public experimentalSetDurationScale(scale: number): void {
+    this.durationFn = new Cursor.AlgDuration(Cursor.ExperimentalScaledDefaultDurationForAmount.bind(Cursor.ExperimentalScaledDefaultDurationForAmount, scale));
+  }
+
   private setMoves(alg: Sequence): void {
     const moves = expand(alg);
     if (moves.type === "sequence") {
@@ -248,6 +252,19 @@ export namespace Cursor {
         return 1500;
       default:
         return 2000;
+    }
+  }
+
+  export function ExperimentalScaledDefaultDurationForAmount(scale: number, amount: number): Duration {
+    switch (Math.abs(amount)) {
+      case 0:
+        return 0;
+      case 1:
+        return scale * 1000;
+      case 2:
+        return scale * 1500;
+      default:
+        return scale * 2000;
     }
   }
 
