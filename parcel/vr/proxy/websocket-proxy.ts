@@ -89,7 +89,7 @@ export class ProxyReceiver {
   }
 
   private onmessage(e: MessageEvent): void {
-    console.log("Message:", e.data);
+    // console.log("Message:", e.data);
     this.callback(JSON.parse(e.data));
   }
 }
