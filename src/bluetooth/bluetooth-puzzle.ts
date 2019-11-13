@@ -1,5 +1,5 @@
-import {BlockMove} from "../alg";
-import {Transformation} from "../kpuzzle";
+import { BlockMove } from "../alg";
+import { Transformation } from "../kpuzzle";
 
 /******** BluetoothPuzzle ********/
 
@@ -18,7 +18,7 @@ export class MoveEvent {
 
 // TODO: Only use the `quaternion` field in the `MoveEvent`?
 export class OrientationEvent {
-  public quaternion: {x: number, y: number, z: number, w: number};
+  public quaternion: { x: number, y: number, z: number, w: number };
   public timeStamp: number;
   public debug?: object;
 }
@@ -56,6 +56,7 @@ export abstract class BluetoothPuzzle {
 
   protected dispatchOrientation(orientationEvent: OrientationEvent): void {
     for (const l of this.orientationListeners) {
+      // TODO: Convert quaternion.
       l(orientationEvent);
     }
   }

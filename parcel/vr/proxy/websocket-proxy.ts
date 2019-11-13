@@ -46,7 +46,7 @@ export class ProxySender {
   }
 
   public sendReset(): void {
-    this.sendEvent({event: "reset"});
+    this.sendEvent({ event: "reset" });
   }
 
   private onopen(): void {
@@ -89,7 +89,7 @@ export class ProxyReceiver {
   }
 
   private onmessage(e: MessageEvent): void {
-    // console.log("Message:", e.data);
+    console.log("Message:", e.data);
     this.callback(JSON.parse(e.data));
   }
 }
