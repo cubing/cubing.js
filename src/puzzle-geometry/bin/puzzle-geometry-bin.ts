@@ -15,7 +15,7 @@ if (typeof (process) !== "undefined" &&
 Options:
 --ksolve: write ksolve (tws) file
 --svg: write SVG (default is flat; --3d makes it 3D)
---gap: write gap 
+--gap: write gap
 --ss: execute Schrier-Sims calculation
 --3d: use 3D format for SVG file
 --canon: write canonical string analysis
