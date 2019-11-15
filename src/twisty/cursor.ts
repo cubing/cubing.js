@@ -1,17 +1,4 @@
-import {
-  AlgPart,
-  BlockMove,
-  CommentLong,
-  CommentShort,
-  Commutator,
-  Conjugate,
-  expand,
-  Group,
-  NewLine,
-  Pause,
-  Sequence,
-  TraversalUp,
-} from "../alg";
+import { AlgPart, BlockMove, CommentLong, CommentShort, Commutator, Conjugate, expand, Group, NewLine, Pause, Sequence, TraversalUp } from "../alg";
 import { Puzzle, State } from "./puzzle";
 
 // TODO: Include Pause.
@@ -182,6 +169,7 @@ export class Cursor<P extends Puzzle> {
     return false;
   }
 
+  // TODO: Avoid assuming a single move at a time.
   public forward(duration: Cursor.Duration, stopAtEndOfMove: boolean): /* TODO: Remove this. Represents if move breakpoint was reached. */ boolean {
     return this.delta(duration, stopAtEndOfMove);
   }

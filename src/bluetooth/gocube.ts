@@ -1,6 +1,5 @@
 import { Quaternion } from "three";
 import { BareBlockMove, BlockMove, parse, Sequence } from "../alg";
-import { experimentalShowJumpingFlash, Twisty } from "../twisty";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { debugLog } from "./debug";
 
@@ -87,8 +86,6 @@ export class GoCube extends BluetoothPuzzle {
 
   private constructor(private server: BluetoothRemoteGATTServer, public goCubeStateCharacteristic: BluetoothRemoteGATTCharacteristic) {
     super();
-
-    (window as any).gocube = this;
   }
 
   public reset(): void {
@@ -98,16 +95,12 @@ export class GoCube extends BluetoothPuzzle {
 
   public resetAlg(algo?: Sequence): void {
     this.alg = algo || parse("");
-    (window as any).tw.player.anim.scheduler.singleFrame();
-    ((window as any).tw as Twisty).experimentalSetAlg(parse("x4'"));
   }
 
   public resetOrientation(): void {
     this.homeQuatInverse = this.lastRawQuat.clone().inverse();
     this.currentQuat = new Quaternion(0, 0, 0, 1);
     this.lastTarget = new Quaternion(0, 0, 0, 1);
-    ((window as any).tw.player.cube3DView.cube3D.cube.quaternion as Quaternion).copy(this.currentQuat);
-    (window as any).tw.player.anim.scheduler.singleFrame();
   }
 
   public name(): string | undefined {
@@ -116,12 +109,10 @@ export class GoCube extends BluetoothPuzzle {
 
   private onCubeCharacteristicChanged(event: any): void {
     const buffer: DataView = event.target.value;
-    // console.log([event.timeStamp, buf2hex(buffer.buffer)]);
     this.recorded.push([event.timeStamp, buf2hex(buffer.buffer)]);
     if (buffer.byteLength === 8) {
       const move = moveMap[buffer.getUint8(3)];
       this.alg = new Sequence(this.alg.nestedUnits.concat([move]));
-      ((window as any).tw as Twisty).experimentalSetAlg(this.alg);
       this.dispatchMove({
         latestMove: moveMap[buffer.getUint8(3)],
         timeStamp: event.timeStamp,
@@ -142,11 +133,8 @@ export class GoCube extends BluetoothPuzzle {
 
       this.lastTarget.slerp(targetQuat, 0.5);
       this.currentQuat.rotateTowards(this.lastTarget, rotateTowardsRate);
-      ((window as any).tw.player.cube3DView.cube3D.cube.quaternion as Quaternion).copy(this.currentQuat);
-      (window as any).tw.player.anim.scheduler.singleFrame();
     }
   }
 }
 
 const rotateTowardsRate = 0.5;
-experimentalShowJumpingFlash(false);

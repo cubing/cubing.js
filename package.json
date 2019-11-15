@@ -8,9 +8,11 @@
   "license": "GPL-3.0-or-later",
   "repository": "github:cubing/cubing.js",
   "dependencies": {
+    "@types/resize-observer-browser": "^0.1.2",
     "@types/three": "^0.103.2",
     "@types/web-bluetooth": "0.0.4",
-    "three": "^0.106.2"
+    "babel-polyfill": "^6.26.0",
+    "three": "^0.109.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
@@ -18,6 +20,7 @@
     "@types/jest": "^24.0.15",
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
+    "parcel": "^1.12.3",
     "pegjs-jest": "0.0.2",
     "rollup": "^1.16.3",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -38,7 +41,9 @@
     "test": "jest && npm run lint",
     "setup": "npm install",
     "lint": "tslint --fix --project . ; tslint --fix rollup.config.js",
-    "prepack": "npm run clean && npm run build"
+    "prepack": "npm run clean && npm run build",
+    "parcel": "parcel serve parcel/index.html parcel/vr/index.html",
+    "parcel-build-vr": "parcel build --public-url ./ --out-dir dist/vr parcel/vr/index.html"
   },
   "bin": {
     "puzzle-geometry": "./dist/bin/puzzle-geometry.js"

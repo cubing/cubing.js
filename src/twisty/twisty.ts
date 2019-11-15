@@ -1,15 +1,15 @@
-import {Example, parse, Sequence} from "../alg";
+import {BlockMove, Example, parse, Sequence} from "../alg";
 import {KPuzzleDefinition, Puzzles} from "../kpuzzle";
 
 import {AnimModel} from "./anim";
 import {Cursor} from "./cursor";
 import {KSolvePuzzle, Puzzle} from "./puzzle";
-import {Player, VisualizationFormat} from "./widget";
+import {Player, PlayerConfig} from "./widget";
 
 class TwistyParams {
   public alg?: Sequence;
   public puzzle?: KPuzzleDefinition;
-  public visualization?: VisualizationFormat;
+  public playerConfig?: PlayerConfig;
 }
 
 // TODO: Turn Twisty into a module and move Twisty.Twisty into Twisty proper.
@@ -26,7 +26,7 @@ export class Twisty {
     // this.timeline = new Timeline(Example.HeadlightSwaps);
     this.anim = new AnimModel(this.cursor);
 
-    this.player = new Player(this.anim, this.puzzleDef, config.visualization);
+    this.player = new Player(this.anim, this.puzzleDef, config.playerConfig);
     this.element.appendChild((this.player).element);
   }
 
@@ -43,6 +43,15 @@ export class Twisty {
       this.cursor.backward(100000, true); // TODO: Give this API to `Cursor`/`AnimModel`.
       this.anim.stepForward();
     }
+  }
+
+  public experimentalAddMove(move: BlockMove): void {
+    const newAlg = new Sequence(this.alg.nestedUnits.concat([move]));
+    this.experimentalSetAlg(newAlg);
+  }
+
+  public experimentalGetPlayer(): Player {
+    return this.player;
   }
 }
 
@@ -63,7 +72,7 @@ function paramsFromTwistyElem(elem: Element): TwistyParams {
   // TODO: Factor this code out for testing.
   if (visualization) {
     if (visualization === "2D" || visualization === "3D") {
-      params.visualization = visualization;
+      params.playerConfig = {visualizationFormat: visualization};
     } else {
       console.warn(`Invalid visualization: ${visualization}`);
     }
