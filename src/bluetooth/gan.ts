@@ -7,8 +7,6 @@ import { BluetoothConfig, BluetoothPuzzle, PuzzleState } from "./bluetooth-puzzl
 import { debugLog } from "./debug";
 import { importKey, unsafeDecryptBlock } from "./unsafe-raw-aes";
 
-const DECODE = false;
-
 // This needs to be short enough to capture 6 moves (OBQTM).
 const DEFAULT_INTERVAL_MS = 150;
 // Number of latest moves provided by the Gan 356i.
@@ -40,26 +38,43 @@ let swap = (x: number, y: number, z: number) => {
   homeQuatInverse = null;
 };
 
+function probablyDecodedCorrectly(data: Uint8Array): boolean {
+  return data[13] < 0x12 && data[14] < 0x12 && data[15] < 0x12 && data[16] < 0x12 && data[17] < 0x12 && data[18] < 0x12;
+}
+
+const key10 = new Uint8Array([198, 202, 21, 223, 79, 110, 19, 182, 119, 13, 230, 89, 58, 175, 186, 162]);
+const key11 = new Uint8Array([67, 226, 91, 214, 125, 220, 120, 216, 7, 96, 163, 218, 130, 60, 1, 241]);
+
 // Clean-room reverse-engineered
+async function decryptState(data: Uint8Array, key: Uint8Array): Promise<Uint8Array> {
+  // TODO: Read from puzzle.
+  const macAddress = [0x4c, 0x24, 0x98, 0x5a, 0x68, 0xc6];
+
+  const keyBuffer = new Uint8Array(key10);
+  for (let i = 0; i < macAddress.length; i++) {
+    keyBuffer[i] = (keyBuffer[i] + macAddress[i]) % 256;
+  }
+
+  const aesKey = await importKey(new Uint8Array(keyBuffer));
+  data.set(new Uint8Array(await unsafeDecryptBlock(aesKey, data.slice(3))), 3);
+  data.set(new Uint8Array(await unsafeDecryptBlock(aesKey, data.slice(0, 16))), 0);
+  return data;
+}
+
+// TODO: Support caching which decoding strategy worked last time.
 async function decodeState(data: Uint8Array): Promise<Uint8Array> {
-  if (!DECODE) {
-    return data;
-  } else {
-    const key10 = new Uint8Array([198, 202, 21, 223, 79, 110, 19, 182, 119, 13, 230, 89, 58, 175, 186, 162]);
-    // const key11 = new Uint8Array([67, 226, 91, 214, 125, 220, 120, 216, 7, 96, 163, 218, 130, 60, 1, 241]);
-
-    const macAddress = [0x4c, 0x24, 0x98, 0x5a, 0x68, 0xc6];
-
-    const keyBuffer = new Uint8Array(key10);
-    for (let i = 0; i < macAddress.length; i++) {
-      keyBuffer[i] = (keyBuffer[i] + macAddress[i]) % 256;
-    }
-
-    const key = await importKey(new Uint8Array(keyBuffer));
-    data.set(new Uint8Array(await unsafeDecryptBlock(key, data.slice(3))), 3);
-    data.set(new Uint8Array(await unsafeDecryptBlock(key, data.slice(0, 16))), 0);
+  if (probablyDecodedCorrectly(data)) {
     return data;
   }
+  const decrypted10 = await decryptState(data, key10);
+  if (probablyDecodedCorrectly(decrypted10)) {
+    return decrypted10;
+  }
+  const decrypted11 = await decryptState(data, key11);
+  if (probablyDecodedCorrectly(decrypted11)) {
+    return decrypted11;
+  }
+  throw new Error("Unable to decode");
 }
 
 class PhysicalState {
