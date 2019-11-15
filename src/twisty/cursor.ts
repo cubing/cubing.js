@@ -1,18 +1,5 @@
-import {
-  AlgPart,
-  BlockMove,
-  CommentLong,
-  CommentShort,
-  Commutator,
-  Conjugate,
-  expand,
-  Group,
-  NewLine,
-  Pause,
-  Sequence,
-  TraversalUp,
-} from "../alg";
-import {Puzzle, State} from "./puzzle";
+import { AlgPart, BlockMove, CommentLong, CommentShort, Commutator, Conjugate, expand, Group, NewLine, Pause, Sequence, TraversalUp } from "../alg";
+import { Puzzle, State } from "./puzzle";
 
 // TODO: Include Pause.
 class CountAnimatedMoves extends TraversalUp<number> {
@@ -41,146 +28,20 @@ class CountAnimatedMoves extends TraversalUp<number> {
   public traverseCommentLong(commentLong: CommentLong): number { return 0; }
 }
 
-const countAnimatedMovesInstance = new CountAnimatedMoves();
-const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(countAnimatedMovesInstance);
+interface AlgorithmIndexer<P extends Puzzle> {
+  getMove(index: number): BlockMove;
+  indexToMoveStartTimestamp(index: number): Cursor.Timestamp;
+  stateAtIndex(index: number): State<P>;
+  numMoves(): number;
+  timestampToIndex(timestamp: Cursor.Timestamp): number;
+  algDuration(): Cursor.Duration;
+}
 
-export class Cursor<P extends Puzzle> {
+class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
   private moves: Sequence;
-  private durationFn: TraversalUp<Cursor.Duration>;
-
-  private state: State<P>;
-  private moveIdx: number;
-  private moveStartTimestamp: Cursor.Duration;
-  private algTimestamp: Cursor.Duration;
-  constructor(public alg: Sequence, private puzzle: P) {
-    this.setMoves(alg);
-    this.setPositionToStart();
-
-    this.durationFn = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount);
-  }
-
-  public experimentalSetMoves(alg: Sequence): void {
-    this.setMoves(alg);
-  }
-
-  public setPositionToStart(): void {
-    this.moveIdx = 0;
-    this.moveStartTimestamp = 0;
-    this.algTimestamp = 0;
-    this.state = this.puzzle.startState();
-  }
-
-  public setPositionToEnd(): void {
-    this.setPositionToStart();
-    this.forward(this.algDuration(), false);
-  }
-
-  public startOfAlg(): Cursor.Duration {
-    return 0;
-  }
-  public endOfAlg(): Cursor.Duration {
-    return this.algDuration();
-  }
-
-  public currentPosition(): Cursor.Position<P> {
-    const pos = {
-      state: this.state,
-      moves: [],
-    } as Cursor.Position<P>;
-    const move = this.moves.nestedUnits[this.moveIdx];
-    const moveTS = this.algTimestamp - this.moveStartTimestamp;
-    if (moveTS !== 0) {
-      pos.moves.push({
-        move,
-        direction: Cursor.Direction.Forwards,
-        // TODO: Expose a way to traverse `Unit`s directly?
-        fraction: moveTS / this.durationFn.traverse(new Sequence([move])),
-      });
-    }
-    return pos;
-  }
-  public currentTimestamp(): Cursor.Duration {
-    return this.algTimestamp;
-  }
-  public delta(duration: Cursor.Duration, stopAtMoveBoundary: boolean): boolean {
-    // TODO: Unify forward and backward?
-    if (duration > 0) {
-      return this.forward(duration, stopAtMoveBoundary);
-    } else {
-      return this.backward(-duration, stopAtMoveBoundary);
-    }
-  }
-
-  // TODO: Avoid assuming a single move at a time.
-  public forward(duration: Cursor.Duration, stopAtEndOfMove: boolean): /* TODO: Remove this. Represents if move breakpoint was reached. */ boolean {
-    if (duration < 0) {
-      throw new Error("negative");
-    }
-    let remainingOffset = (this.algTimestamp - this.moveStartTimestamp) + duration;
-
-    while (this.moveIdx < this.numMoves()) {
-      const move = this.moves.nestedUnits[this.moveIdx];
-      if (move.type !== "blockMove") {
-        throw new Error("TODO — Only BlockMove supported for cursor.");
-      }
-      const lengthOfMove = this.durationFn.traverse(move);
-      if (remainingOffset < lengthOfMove) {
-        this.algTimestamp = this.moveStartTimestamp + remainingOffset;
-        return false;
-      }
-      this.state = this.puzzle.combine(
-        this.state,
-        this.puzzle.stateFromMove(move as BlockMove),
-      );
-      this.moveIdx += 1;
-      this.moveStartTimestamp += lengthOfMove;
-      this.algTimestamp = this.moveStartTimestamp;
-      remainingOffset -= lengthOfMove;
-      if (stopAtEndOfMove) {
-        return (remainingOffset > 0);
-      }
-    }
-    return true;
-  }
-  public backward(duration: Cursor.Duration, stopAtStartOfMove: boolean): /* TODO: Remove this. Represents of move breakpoint was reached. */ boolean {
-    if (duration < 0) {
-      throw new Error("negative");
-    }
-    let remainingOffset = (this.algTimestamp - this.moveStartTimestamp) - duration;
-
-    while (this.moveIdx >= 0) {
-      if (remainingOffset >= 0) {
-        this.algTimestamp = this.moveStartTimestamp + remainingOffset;
-        return false;
-      }
-      if (stopAtStartOfMove || this.moveIdx === 0) {
-        this.algTimestamp = this.moveStartTimestamp;
-        return true; // TODO
-      }
-
-      const prevMove = this.moves.nestedUnits[this.moveIdx - 1];
-      if (prevMove.type !== "blockMove") {
-        throw new Error("TODO - only BlockMove supported");
-      }
-
-      this.state = this.puzzle.combine(
-        this.state,
-        this.puzzle.invert(this.puzzle.stateFromMove(prevMove as BlockMove)),
-      );
-      const lengthOfMove = this.durationFn.traverse(prevMove);
-      this.moveIdx -= 1;
-      this.moveStartTimestamp -= lengthOfMove;
-      this.algTimestamp = this.moveStartTimestamp;
-      remainingOffset += lengthOfMove;
-    }
-    return true;
-  }
-
-  public experimentalSetDurationScale(scale: number): void {
-    this.durationFn = new Cursor.AlgDuration(Cursor.ExperimentalScaledDefaultDurationForAmount.bind(Cursor.ExperimentalScaledDefaultDurationForAmount, scale));
-  }
-
-  private setMoves(alg: Sequence): void {
+  // TODO: Allow custom `durationFn`.
+  private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount);
+  constructor(private puzzle: P, alg: Sequence) {
     const moves = expand(alg);
     if (moves.type === "sequence") {
       this.moves = moves;
@@ -188,20 +49,142 @@ export class Cursor<P extends Puzzle> {
       this.moves = new Sequence([moves]);
     }
 
-    // if (this.moves.nestedUnits.length === 0) {
-    //   throw new Error("empty alg");
-    // }
+    if (this.moves.nestedUnits.length === 0) {
+      throw new Error("empty alg");
+    }
     // TODO: Avoid assuming all base moves are block moves.
   }
+  public getMove(index: number): BlockMove {
+    return this.moves.nestedUnits[index] as BlockMove;
+  }
 
-  private algDuration(): Cursor.Duration {
-    // TODO: Cache internally once performance matters.
+  public indexToMoveStartTimestamp(index: number): Cursor.Timestamp {
+    const seq = new Sequence(this.moves.nestedUnits.slice(0, index));
+    return this.durationFn.traverse(seq);
+  }
+
+  public timestampToIndex(timestamp: Cursor.Timestamp): number {
+    let cumulativeTime = 0;
+    let i;
+    for (i = 0; i < this.numMoves(); i++) {
+      cumulativeTime += this.durationFn.traverseBlockMove(this.getMove(i));
+      if (cumulativeTime >= timestamp) {
+        return i;
+      }
+    }
+    return i;
+  }
+
+  public stateAtIndex(index: number): State<P> {
+    let state = this.puzzle.startState();
+    for (const move of this.moves.nestedUnits.slice(0, index)) {
+      state = this.puzzle.combine(state, this.puzzle.stateFromMove(move as BlockMove));
+    }
+    return state;
+  }
+
+  public algDuration(): Cursor.Duration {
     return this.durationFn.traverse(this.moves);
   }
 
-  private numMoves(): number {
+  public numMoves(): number {
     // TODO: Cache internally once performance matters.
     return countAnimatedMoves(this.moves);
+  }
+}
+
+const countAnimatedMovesInstance = new CountAnimatedMoves();
+const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(countAnimatedMovesInstance);
+
+export class Cursor<P extends Puzzle> {
+  private indexer: AlgorithmIndexer<P>;
+  private algTimestamp: Cursor.Duration;
+  constructor(public alg: Sequence, private puzzle: P) {
+    this.setMoves(alg);
+    this.setPositionToStart();
+  }
+
+  public experimentalSetMoves(alg: Sequence): void {
+    this.setMoves(alg);
+  }
+
+  public setPositionToStart(): void {
+    this.algTimestamp = 0;
+  }
+
+  public setPositionToEnd(): void {
+    this.setPositionToStart();
+    this.forward(this.endOfAlg(), false);
+  }
+
+  public startOfAlg(): Cursor.Duration {
+    return 0;
+  }
+
+  public endOfAlg(): Cursor.Duration {
+    return this.indexer.algDuration();
+  }
+
+  public currentPosition(): Cursor.Position<P> {
+    const moveIdx = this.indexer.timestampToIndex(this.algTimestamp);
+    const pos = {
+      state: this.indexer.stateAtIndex(moveIdx),
+      moves: [],
+    } as Cursor.Position<P>;
+    const move = this.indexer.getMove(moveIdx);
+    const moveTS = this.algTimestamp - this.indexer.indexToMoveStartTimestamp(moveIdx);
+    const moveDuration = this.indexer.indexToMoveStartTimestamp(moveIdx + 1) - this.indexer.indexToMoveStartTimestamp(moveIdx);
+    if (moveTS !== 0) {
+      pos.moves.push({
+        move,
+        direction: Cursor.Direction.Forwards,
+        // TODO: Expose a way to traverse `Unit`s directly?
+        fraction: moveTS / moveDuration,
+      });
+    }
+    return pos;
+  }
+
+  public currentTimestamp(): Cursor.Duration {
+    return this.algTimestamp;
+  }
+
+  public delta(duration: Cursor.Duration, stopAtMoveBoundary: boolean): boolean {
+    const moveIdx = this.indexer.timestampToIndex(this.algTimestamp);
+    const unclampedNewTimestamp = this.algTimestamp + duration;
+    const currentMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(moveIdx);
+    if (stopAtMoveBoundary) {
+      if (unclampedNewTimestamp < currentMoveStartTimestamp) {
+        this.algTimestamp = currentMoveStartTimestamp;
+        return true;
+      }
+      const nextMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(moveIdx + 1);
+      if (unclampedNewTimestamp > nextMoveStartTimestamp) {
+        this.algTimestamp = nextMoveStartTimestamp;
+        return true;
+      }
+    }
+
+    this.algTimestamp = Math.max(0, Math.min(this.indexer.algDuration(), unclampedNewTimestamp));
+    return false;
+  }
+
+  // TODO
+  public experimentalSetDurationScale(scale: number): void {
+  //   this.durationFn = new Cursor.AlgDuration(Cursor.ExperimentalScaledDefaultDurationForAmount.bind(Cursor.ExperimentalScaledDefaultDurationForAmount, scale));
+  }
+
+  // TODO: Avoid assuming a single move at a time.
+  public forward(duration: Cursor.Duration, stopAtEndOfMove: boolean): /* TODO: Remove this. Represents if move breakpoint was reached. */ boolean {
+    return this.delta(duration, stopAtEndOfMove);
+  }
+
+  public backward(duration: Cursor.Duration, stopAtStartOfMove: boolean): /* TODO: Remove this. Represents of move breakpoint was reached. */ boolean {
+    return this.delta(duration, stopAtStartOfMove);
+  }
+
+  private setMoves(alg: Sequence): void {
+    this.indexer = new SimpleAlgorithmIndexer(this.puzzle, alg);
   }
 }
 

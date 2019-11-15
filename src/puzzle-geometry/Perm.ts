@@ -1,126 +1,126 @@
 export class Perm {
    public static zeros(n: number): number[] {
-      const c = Array(n) ;
+      const c = Array(n);
       for (let i = 0; i < n; i++) {
-         c[i] = 0 ;
+         c[i] = 0;
       }
-      return c ;
+      return c;
    }
    public static iota(n: number): number[] {
-      const c = Array(n) ;
+      const c = Array(n);
       for (let i = 0; i < n; i++) {
-         c[i] = i ;
+         c[i] = i;
       }
-      return c ;
+      return c;
    }
    public static e(n: number): Perm {
-      return new Perm(Perm.iota(n)) ;
+      return new Perm(Perm.iota(n));
    }
    public static random(n: number): Perm { // random
-      const c = Array(n) ;
+      const c = Array(n);
       for (let i = 0; i < n; i++) {
-         c[i] = i ;
+         c[i] = i;
       }
       for (let i = 0; i < n; i++) {
-         const j = i + Math.floor((n - i) * Math.random()) ;
-         const t = c[i] ;
-         c[i] = c[j] ;
-         c[j] = t ;
+         const j = i + Math.floor((n - i) * Math.random());
+         const t = c[i];
+         c[i] = c[j];
+         c[j] = t;
       }
-      return new Perm(c) ;
+      return new Perm(c);
    }
    public static factorial(a: number): number {
-      let r = 1 ;
+      let r = 1;
       while (a > 1) {
-         r *= a ;
-         a-- ;
+         r *= a;
+         a--;
       }
-      return r ;
+      return r;
    }
    public static gcd(a: number, b: number): number {
       if (a > b) {
-         const t = a ;
-         a = b ;
-         b = t ;
+         const t = a;
+         a = b;
+         b = t;
       }
       while (a > 0) {
-         const m = b % a ;
-         b = a ;
-         a = m ;
+         const m = b % a;
+         b = a;
+         a = m;
       }
-      return b ;
+      return b;
    }
    public static lcm(a: number, b: number): number {
-      return a / Perm.gcd(a, b) * b ;
+      return a / Perm.gcd(a, b) * b;
    }
-   public n: number ;        // length
-   public p: number[] ; // The permutation itself
+   public n: number;        // length
+   public p: number[]; // The permutation itself
    constructor(a: number[]) {
-      this.n = a.length ;
-      this.p = a ;
+      this.n = a.length;
+      this.p = a;
    }
    public toString(): string { // stringify
-      return "Perm[" + this.p.join(" ") + "]" ;
+      return "Perm[" + this.p.join(" ") + "]";
    }
    public mul(p2: Perm): Perm { // multiply
-      const c: number[] = Array(this.n) ;
+      const c: number[] = Array(this.n);
       for (let i = 0; i < this.n; i++) {
-         c[i] = p2.p[this.p[i]] ;
+         c[i] = p2.p[this.p[i]];
       }
-      return new Perm(c) ;
+      return new Perm(c);
    }
    public rmul(p2: Perm): Perm { // multiply the other way
-      const c = Array(this.n) ;
+      const c = Array(this.n);
       for (let i = 0; i < this.n; i++) {
-         c[i] = this.p[p2.p[i]] ;
+         c[i] = this.p[p2.p[i]];
       }
-      return new Perm(c) ;
+      return new Perm(c);
    }
    public inv(): Perm {
-      const c = Array(this.n) ;
+      const c = Array(this.n);
       for (let i = 0; i < this.n; i++) {
-         c[this.p[i]] = i ;
+         c[this.p[i]] = i;
       }
-      return new Perm(c) ;
+      return new Perm(c);
    }
    public compareTo(p2: Perm): number { // comparison
       for (let i = 0; i < this.n; i++) {
          if (this.p[i] !== p2.p[i]) {
-            return this.p[i] - p2.p[i] ;
+            return this.p[i] - p2.p[i];
          }
       }
-      return 0 ;
+      return 0;
    }
    public toGap(): string {
-      const cyc = new Array<string>() ;
-      const seen = new Array<boolean>(this.n) ;
+      const cyc = new Array<string>();
+      const seen = new Array<boolean>(this.n);
       for (let i = 0; i < this.p.length; i++) {
          if (seen[i] || this.p[i] === i) {
-            continue ;
+            continue;
          }
-         const incyc = new Array<number>() ;
+         const incyc = new Array<number>();
          for (let j = i; !seen[j]; j = this.p[j]) {
-            incyc.push(1 + j) ;
-            seen[j] = true ;
+            incyc.push(1 + j);
+            seen[j] = true;
          }
-         cyc.push("(" + incyc.join(",") + ")") ;
+         cyc.push("(" + incyc.join(",") + ")");
       }
-      return cyc.join("") ;
+      return cyc.join("");
    }
    public order(): number {
-      let r = 1 ;
-      const seen = new Array<boolean>(this.n) ;
+      let r = 1;
+      const seen = new Array<boolean>(this.n);
       for (let i = 0; i < this.p.length; i++) {
          if (seen[i] || this.p[i] === i) {
-            continue ;
+            continue;
          }
-         let cs = 0 ;
+         let cs = 0;
          for (let j = i; !seen[j]; j = this.p[j]) {
-            cs++ ;
-            seen[j] = true ;
+            cs++;
+            seen[j] = true;
          }
-         r = Perm.lcm(r, cs) ;
+         r = Perm.lcm(r, cs);
       }
-      return r ;
+      return r;
    }
 }

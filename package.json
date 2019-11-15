@@ -30,6 +30,7 @@
     "rollup-plugin-tslint": "^0.2.2",
     "rollup-plugin-typescript2": "^0.21.2",
     "ts-jest": "^24.0.2",
+    "ts-node": "^8.5.2",
     "tslint": "^5.18.0",
     "typescript": "^3.5.2"
   },
@@ -43,6 +44,9 @@
     "prepack": "npm run clean && npm run build",
     "parcel": "parcel serve parcel/index.html parcel/vr/index.html parcel/vr/proxy/proxy.html",
     "parcel-build-vr": "parcel build --public-url ./ --out-dir dist/vr parcel/vr/index.html"
+  },
+  "bin": {
+    "puzzle-geometry": "./dist/bin/puzzle-geometry.js"
   },
   "keywords": [
     "cubing",
