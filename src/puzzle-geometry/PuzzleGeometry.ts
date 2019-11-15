@@ -3,10 +3,10 @@
 /* tslint:disable only-arrow-functions */ // TODO
 /* tslint:disable typedef */ // TODO
 
-import { Perm } from "./Perm" ;
-import { Orbit, OrbitDef, OrbitsDef, showcanon, Transformation, VisibleState } from "./PermOriSet" ;
-import { PlatonicGenerator } from "./PlatonicGenerator" ;
-import { Quat } from "./Quat" ;
+import { Perm } from "./Perm";
+import { Orbit, OrbitDef, OrbitsDef, showcanon, Transformation, VisibleState } from "./PermOriSet";
+import { PlatonicGenerator } from "./PlatonicGenerator";
+import { Quat } from "./Quat";
 
 //  Now we have a geometry class that does the 3D goemetry to calculate
 //  individual sticker information from a Platonic solid and a set of
@@ -1361,10 +1361,7 @@ export class PuzzleGeometry {
       }
       return [movenamePrefix + movenameFamily, inverted] ;
    }
-   public writeksolve(name: string, fortwisty: boolean): string {
-      if (name === null) {
-         name = "PuzzleGeometryPuzzle" ;
-      }
+   public writeksolve(name: string = "PuzzleGeometryPuzzle", fortwisty: boolean = false): string {
       const od = this.getOrbitsDef(fortwisty) ;
       if (fortwisty) {
          return od.toKsolve(name, fortwisty).join("\n") ;
@@ -1560,15 +1557,8 @@ export class PuzzleGeometry {
          throw new Error("Wrong base face count") ;
       }
    }
-   public generatesvg(w: number, h: number, trim: number, threed: boolean): string {
+   public generatesvg(w: number = 800, h: number = 500, trim: number = 10, threed: boolean = false): string {
    // generate svg to interoperate with Lucas twistysim
-      if (w === undefined || h === undefined) {
-         w = 800 ;
-         h = 500 ;
-      }
-      if (trim === undefined) {
-         trim = 10 ;
-      }
       w -= 2 * trim ;
       h -= 2 * trim ;
       function extendedges(a: number[][], n: number): void {

@@ -1,10 +1,10 @@
-import { terser } from "rollup-plugin-terser";
-import * as typescript from "typescript";
-import pegjs from "rollup-plugin-pegjs";
 import resolve from "rollup-plugin-node-resolve";
-import typescript2 from "rollup-plugin-typescript2";
-import tslint from "rollup-plugin-tslint";
 import notify from "rollup-plugin-notify";
+import pegjs from "rollup-plugin-pegjs";
+import { terser } from "rollup-plugin-terser";
+import tslint from "rollup-plugin-tslint";
+import typescript2 from "rollup-plugin-typescript2";
+import * as typescript from "typescript";
 
 const plugins = [
   pegjs(),
@@ -67,6 +67,23 @@ const umd = {
   ],
 };
 
-const configs = [mod, umd];
+const puzzleGeometryBin = {
+  input: "src/puzzle-geometry/bin/puzzle-geometry-bin.ts",
+  output: [
+    {
+      file: "dist/bin/puzzle-geometry-bin.js",
+      format: "cjs",
+      sourcemap: true,
+    },
+  ],
+  plugins: [
+    ...plugins,
+    resolve({
+      only: ["three"],
+    }),
+  ],
+};
+
+const configs = [mod, umd, puzzleGeometryBin];
 
 export default configs;
