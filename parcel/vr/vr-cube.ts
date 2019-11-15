@@ -3,7 +3,6 @@ import { BareBlockMove, Sequence } from "../../src/alg";
 import { Twisty } from "../../src/twisty";
 import { Cube3D } from "../../src/twisty/3d/cube3D";
 import { TAU } from "../../src/twisty/3d/twisty3D";
-
 import { ProxyEvent, ProxyReceiver } from "./proxy/websocket-proxy";
 import { ButtonGrouping, controllerDirection, OculusButton, Status, VRInput } from "./vr-input";
 
@@ -18,6 +17,8 @@ if (isNaN(initialScale)) {
 }
 
 const showControlPlanes = "true" === (new URL(location.href).searchParams.get("showControlPlanes") || "true");
+
+const daydream = "true" === (new URL(location.href).searchParams.get("daydream") || "true");
 
 // From `cube3D.ts`
 class AxisInfo {
@@ -91,15 +92,20 @@ export class VRCube {
     // TODO: Better abstraction over controllers.
     this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Grip }, this.gripStart.bind(this, 1), this.gripContinued.bind(this, 1));
 
-    this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: OculusButton.Trigger }, this.onPress.bind(this, 0));
-    this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Trigger }, this.onPress.bind(this, 1));
+    console.log({daydream})
+    this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 0));
+    this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 1));
     // TODO: Generalize this to multiple platforms.
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA, invert: true }], this.onMoveStart.bind(this, 0), this.onMoveContinued.bind(this, 0));
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA, invert: true }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.onMoveStart.bind(this, 1), this.onMoveContinued.bind(this, 1));
     this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this), this.onResizeEnd.bind(this));
     this.vrInput.addButtonListener(ButtonGrouping.None, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.moveButtonClear.bind(this));
 
-    this.proxyReceiver = new ProxyReceiver(this.onProxyEvent.bind(this));
+    try {
+      this.proxyReceiver = new ProxyReceiver(this.onProxyEvent.bind(this));
+    } catch (e) {
+      console.error("Unable to register proxy receiver", e);
+    }
   }
 
   public update(): void {
@@ -116,7 +122,7 @@ export class VRCube {
   }
 
   private gripStart(controllerIdx: number): void {
-    navigator.getGamepads()[controllerIdx].hapticActuators[0].pulse(0.1, 400);
+    this.hapticPulse(controllerIdx, 0.1, 400);
     this.lastAngle = this.yAngle(this.vrInput.controllers[controllerIdx].position);
   }
 
@@ -135,11 +141,18 @@ export class VRCube {
     return this.vrInput.controllers[0].position.distanceTo(this.vrInput.controllers[1].position);
   }
 
+  private hapticPulse(gamepadId: number, value: number, duration: number): void {
+    const gamepad = navigator.getGamepads()[gamepadId];
+    if (gamepad && gamepad.hapticActuators) {
+      gamepad.hapticActuators[0].pulse(value, duration);
+    }
+  }
+
   private onResizeStart(): void {
     this.waitForMoveButtonClear = true;
     this.moveVelocity.setScalar(0);
-    navigator.getGamepads()[0].hapticActuators[0].pulse(0.2, 75);
-    navigator.getGamepads()[1].hapticActuators[0].pulse(0.2, 75);
+    this.hapticPulse(0, 0.2, 75);
+    this.hapticPulse(1, 0.2, 75);
     this.resizeInitialDistance = this.controllerDistance();
     this.resizeInitialScale = this.group.scale.x;
   }
@@ -149,8 +162,8 @@ export class VRCube {
   }
 
   private onResizeEnd(): void {
-    navigator.getGamepads()[0].hapticActuators[0].pulse(0.1, 75);
-    navigator.getGamepads()[1].hapticActuators[0].pulse(0.1, 75);
+    this.hapticPulse(0, 0.1, 75);
+    this.hapticPulse(1, 0.1, 75);
   }
 
   private moveButtonClear(): void {
@@ -161,7 +174,7 @@ export class VRCube {
     if (this.waitForMoveButtonClear) {
       return;
     }
-    navigator.getGamepads()[controllerIdx].hapticActuators[0].pulse(0.2, 50);
+    this.hapticPulse(controllerIdx, 0.2, 50);
     this.moveInitialPuzzleQuaternion.copy(this.group.quaternion);
 
     const controller = this.vrInput.controllers[controllerIdx];
@@ -207,7 +220,7 @@ export class VRCube {
       (closestIntersection.object as Mesh).userData.status[controller.userData.controllerNumber] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
       const side = closestIntersection.object.userData.side;
       this.twisty.experimentalAddMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
-      navigator.getGamepads()[controllerIdx].hapticActuators[0].pulse(0.1, 75);
+      this.hapticPulse(controllerIdx, 0.1, 75);
     }
   }
 
@@ -216,14 +229,14 @@ export class VRCube {
       case "reset":
         this.twisty.experimentalSetAlg(new Sequence([]));
         break;
-        case "move":
-          this.twisty.experimentalAddMove(e.data.latestMove);
-          break;
-        case "orientation":
-          const {x, y, z, w} = e.data.quaternion;
-          const quat = new Quaternion(x, y, z, w);
-          this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D().experimentalGetCube().quaternion.copy(quat);
-          break;
+      case "move":
+        this.twisty.experimentalAddMove(e.data.latestMove);
+        break;
+      case "orientation":
+        const { x, y, z, w } = e.data.quaternion;
+        const quat = new Quaternion(x, y, z, w);
+        this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D().experimentalGetCube().quaternion.copy(quat);
+        break;
       default:
         // The "as any" appeases the type checker, which (correctly) deduces
         // that the `event` field can't have a valid value.
