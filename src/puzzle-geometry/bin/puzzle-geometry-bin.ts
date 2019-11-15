@@ -2,15 +2,67 @@
 
 import { PuzzleGeometry, SchreierSims } from "..";
 
-//  Global epsilon; any difference less than this is ignored.
-// const eps = 1e-9;
-
 let dosvg = false;
 let doss = false;
 let doksolve = false;
 let dogap = false;
 let docanon = false;
 let do3d = false;
+if (typeof (process) !== "undefined" &&
+   process.argv && process.argv.length <= 2) {
+   console.log(`Usage:  puzzle-geometry [options] [puzzle]
+
+Options:
+--ksolve: write ksolve (tws) file
+--svg: write SVG (default is flat; --3d makes it 3D)
+--gap: write gap 
+--ss: execute Schrier-Sims calculation
+--3d: use 3D format for SVG file
+--canon: write canonical string analysis
+--rotations: include full-puzzle rotations as moves
+--allmoves: includes all moves (i.e., slice moves for 3x3x3)
+--outerblockmoves: use outer block moves rather than slice moves
+--vertexmoves: for tetrahedral puzzles, prefer vertex moves to face moves
+--nocorners: ignore all corners
+--noedges: ignore all edges
+--nocenters: ignore all centers
+--noorientation: ignore orientations
+--orientcenters: give centers an orientation
+--moves movenames: restrict moves to this list (e.g, U2,F,r)
+--optimize: optimize tws/ksolve/gap output
+--scramble: scramble solved position
+--fixcorner: choose moves to keep one corner fixed
+--fixedge: choose moves to keep one edge fixed
+--fixcenter: choose moves to keep one center fixed
+--verbose (-v): make verbose
+
+The puzzle can be given as a geometric description or by name.
+The geometric description starts with c (cube), t (tetrahedron),
+d (dodecahedron), i (icosahedron), or o (octahedron), then a
+space, then a series of cuts.  Each cut begins with f (for a
+cut parallel to faces), v (for a cut perpendicular to a ray
+from the center through a corner), or e (for a cut perpendicular
+to a ray from the center through an edge) followed by a decimal
+number giving a distance, where 1 is the distance between the
+center of the puzzle and the center of a face.
+
+The puzzle names recognized are 2x2x2 through 13x13x13, 20x20x20,
+master skewb, professor skewb, compy cube, helicopter, dino,
+little chop, pyramorphix, mastermorphix, pyraminx, Jing pyraminx,
+master paramorphix, megaminx, gigaminx, pentultimate, starminx,
+starminx 2, pyraminx crystal, chopasaurus, big chop, skewb diamond,
+FTO, Christopher's jewel, octastar, Trajber's octahedron, radio chop,
+icosamate, icosahedron 2, icosahedron 3, icosahedron static faces,
+icosahedron moving faces, and Eitan's star.
+
+Examples:
+   puzzlegeometry --ss 2x2x2
+   puzzlegeometry --ss --fixcorner 2x2x2
+   puzzlegeometry --ss --moves U,F2,r 4x4x4
+   puzzlegeometry --ksolve --optimize --moves U,F,R megaminx
+   puzzlegeometry --gap kilominx
+`) ;
+}
 if (typeof (process) !== "undefined" &&
    process.argv && process.argv.length >= 3) {
    let desc;
