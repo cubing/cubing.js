@@ -53,6 +53,10 @@ export class Twisty {
   public experimentalGetPlayer(): Player {
     return this.player;
   }
+
+  public experimentalGetCursor(): Cursor<Puzzle> {
+    return this.cursor;
+  }
 }
 
 function paramsFromTwistyElem(elem: Element): TwistyParams {

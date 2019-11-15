@@ -26,7 +26,8 @@ export class Vantage {
 
     // TODO: Handle Safari (use a polyfill?)
     if (useResizeObserver) {
-      const observer = new window.ResizeObserver(this.resize.bind(this));
+      // TODO: Don't cast `window` to `any`.
+      const observer = new (window as any).ResizeObserver(this.resize.bind(this));
       observer.observe(this.element);
     }
     element.appendChild(this.renderer.domElement);

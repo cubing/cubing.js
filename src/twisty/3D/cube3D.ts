@@ -66,7 +66,8 @@ const cube3DOptionsDefaults: Cube3DOptions = {
   showFoundation: true,
 };
 
-const blackMesh = new THREE.MeshBasicMaterial({color: 0x000000});
+// TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
+const blackMesh = new THREE.MeshBasicMaterial({color: 0x000000, opacity: 0.3, transparent: true});
 
 class CubieDef {
   public matrix: THREE.Matrix4;

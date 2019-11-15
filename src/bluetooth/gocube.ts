@@ -1,5 +1,5 @@
 import { Quaternion } from "three";
-import { BareBlockMove, BlockMove, parse, Sequence } from "../alg";
+import { BareBlockMove, BlockMove, Sequence } from "../alg";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { debugLog } from "./debug";
 
@@ -11,7 +11,7 @@ const UUIDs = {
 // TODO: Move this into a factory?
 export const goCubeConfig: BluetoothConfig = {
   filters: [
-    {namePrefix: "GoCube"},
+    { namePrefix: "GoCube" },
   ],
   optionalServices: [
     UUIDs.goCubeService,
@@ -52,9 +52,9 @@ export class GoCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
   public static async connect(server: BluetoothRemoteGATTServer): Promise<GoCube> {
     const service = await server.getPrimaryService(UUIDs.goCubeService);
-    debugLog({service});
+    debugLog({ service });
     const goCubeStateCharacteristic = await service.getCharacteristic(UUIDs.goCubeStateCharacteristic);
-    debugLog({goCubeStateCharacteristic});
+    debugLog({ goCubeStateCharacteristic });
 
     const cube = new GoCube(server, goCubeStateCharacteristic);
 
@@ -94,7 +94,7 @@ export class GoCube extends BluetoothPuzzle {
   }
 
   public resetAlg(algo?: Sequence): void {
-    this.alg = algo || parse("");
+    this.alg = algo || new Sequence([]);
   }
 
   public resetOrientation(): void {
@@ -122,7 +122,12 @@ export class GoCube extends BluetoothPuzzle {
       });
     } else {
       const coords = bufferToString(buffer.buffer.slice(3, buffer.byteLength - 3)).split("#").map((s) => parseInt(s, 10) / 16384);
-      const quat = new Quaternion(coords[0], coords[1], coords[2], coords[3]);
+
+      const quat1 = new Quaternion(coords[0], -coords[1], coords[2], coords[3]);
+      // const adjustment = new Quaternion().setFromEuler(new Euler(TAU / 2, -TAU / 4, 0));
+      // quat1.premultiply(adjustment);
+      const quat = new Quaternion(quat1.y, quat1.z, quat1.x, quat1.w);
+
       this.lastRawQuat = quat.clone();
 
       if (!this.homeQuatInverse) {
@@ -133,6 +138,12 @@ export class GoCube extends BluetoothPuzzle {
 
       this.lastTarget.slerp(targetQuat, 0.5);
       this.currentQuat.rotateTowards(this.lastTarget, rotateTowardsRate);
+
+      const { x, y, z, w } = this.currentQuat;
+      this.dispatchOrientation({
+        quaternion: { x, y, z, w },
+        timeStamp: event.timeStamp,
+      });
     }
   }
 }
