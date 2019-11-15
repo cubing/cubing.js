@@ -42,16 +42,7 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
   // TODO: Allow custom `durationFn`.
   private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount);
   constructor(private puzzle: P, alg: Sequence) {
-    const moves = expand(alg);
-    if (moves.type === "sequence") {
-      this.moves = moves;
-    } else {
-      this.moves = new Sequence([moves]);
-    }
-
-    if (this.moves.nestedUnits.length === 0) {
-      throw new Error("empty alg");
-    }
+    this.moves = expand(alg);
     // TODO: Avoid assuming all base moves are block moves.
   }
   public getMove(index: number): BlockMove {
