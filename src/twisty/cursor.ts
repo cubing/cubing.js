@@ -486,7 +486,7 @@ export class Cursor<P extends Puzzle> {
   }
 
   public backward(duration: Cursor.Duration, stopAtStartOfMove: boolean): /* TODO: Remove this. Represents of move breakpoint was reached. */ boolean {
-    return this.delta(duration, stopAtStartOfMove);
+    return this.delta(-duration, stopAtStartOfMove);
   }
 
   private setMoves(alg: Sequence): void {
