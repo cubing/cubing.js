@@ -1,6 +1,6 @@
 {
-  function fixPermutation(perm) {
-    return perms.map(x => x - 1);
+  function fixPermutation(permutation) {
+    return permutation.map(x => x - 1);
   }
 
   function fixMoves(def) {
