@@ -1,6 +1,6 @@
 {
-  function fixPermutation(perm) {
-    return perms.map(x => x - 1);
+  function fixPermutation(permutation) {
+    return permutation.map(x => x - 1);
   }
 
   function fixMoves(def) {
@@ -36,9 +36,9 @@ ORBIT= "Set" SPACE set_identifier:SET_IDENTIFIER SPACE num_pieces:NUMBER SPACE n
        }
 
 ORBITS
-  = orbit:ORBIT { const orbits = {}; orbits[orbit[0]] = orbit[1]; return orbits;  }
+  = orbit:ORBIT NEWLINE orbits:ORBITS { orbits[orbit[0]] = orbit[1]; return orbits; }
   // TODO: Can we make sure orbits are added in order? (Most JS engines preserve map order.)
-  / orbit:ORBIT NEWLINE orbits:ORBITS { orbits[orbit[0]] = orbit[1]; return orbits; }
+  / orbit:ORBIT { const orbits = {}; orbits[orbit[0]] = orbit[1]; return orbits;  }
 
 NEWLINE = "\n"
 NEWLINES = "\n"+
