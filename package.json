@@ -46,7 +46,7 @@
     "parcel-build-vr": "parcel build --public-url ./ --out-dir dist/vr parcel/vr/index.html"
   },
   "bin": {
-    "puzzle-geometry": "./dist/bin/puzzle-geometry.js"
+    "puzzle-geometry": "./dist/bin/puzzle-geometry-bin.js"
   },
   "keywords": [
     "cubing",
