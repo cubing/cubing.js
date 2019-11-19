@@ -140,7 +140,7 @@ export class AnimModel {
   }
 
   public stepBackward(): void {
-    this.cursor.backward(0.1, false); // TODO
+    this.cursor.backward(-0.1, false); // TODO
     this.setBreakpointType(Cursor.BreakpointType.Move);
     this.animateDirection(Cursor.Direction.Backwards);
   }
