@@ -93,7 +93,7 @@ class AlgPartDecoration<P extends Puzzle> {
                public duration: number = 0,
                public forward: State<P> = puz.startState(),
                public backward: State<P> = puz.startState(),
-               public children?: Array<AlgPartDecoration<P>>) {
+               public children: Array<AlgPartDecoration<P>> = []) {
    }
 }
 class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecoration<P>> {
@@ -228,14 +228,14 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       if (wd.back) {
          for (let i = sequence.nestedUnits.length - 1; i >= 0; i--) {
             const part = sequence.nestedUnits[i] ;
-            if (this.traverse(part, new WalkerDown(wd.apd.children![i], wd.back))) {
+            if (this.traverse(part, new WalkerDown(wd.apd.children[i], wd.back))) {
                return true ;
             }
          }
       } else {
          for (let i = 0; i < sequence.nestedUnits.length; i++) {
             const part = sequence.nestedUnits[i] ;
-            if (this.traverse(part, new WalkerDown(wd.apd.children![i], wd.back))) {
+            if (this.traverse(part, new WalkerDown(wd.apd.children[i], wd.back))) {
                return true ;
             }
          }
@@ -247,7 +247,7 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
          return false ;
       }
       const back = this.domult(wd, group.amount) ;
-      return this.traverse(group.nestedSequence, new WalkerDown(wd.apd.children![0], back)) ;
+      return this.traverse(group.nestedSequence, new WalkerDown(wd.apd.children[0], back)) ;
    }
    public traverseBlockMove(blockMove: BlockMove, wd: WalkerDown<P>): boolean {
       if (!this.firstcheck(wd)) {
@@ -264,15 +264,15 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       }
       const back = this.domult(wd, commutator.amount) ;
       if (back) {
-         return this.traverse(commutator.B, new WalkerDown(wd.apd.children![2], back)) ||
-             this.traverse(commutator.A, new WalkerDown(wd.apd.children![1], back)) ||
-             this.traverse(commutator.B, new WalkerDown(wd.apd.children![2], !back)) ||
-             this.traverse(commutator.A, new WalkerDown(wd.apd.children![1], !back)) ;
+         return this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], back)) ||
+             this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back)) ||
+             this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], !back)) ||
+             this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], !back)) ;
       } else {
-         return this.traverse(commutator.A, new WalkerDown(wd.apd.children![1], back)) ||
-             this.traverse(commutator.B, new WalkerDown(wd.apd.children![2], back)) ||
-             this.traverse(commutator.A, new WalkerDown(wd.apd.children![1], !back)) ||
-             this.traverse(commutator.B, new WalkerDown(wd.apd.children![2], !back)) ;
+         return this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back)) ||
+             this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], back)) ||
+             this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], !back)) ||
+             this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], !back)) ;
       }
    }
    public traverseConjugate(conjugate: Conjugate, wd: WalkerDown<P>): boolean {
@@ -281,13 +281,13 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       }
       const back = this.domult(wd, conjugate.amount) ;
       if (back) {
-         return this.traverse(conjugate.A, new WalkerDown(wd.apd.children![1], back)) ||
-             this.traverse(conjugate.B, new WalkerDown(wd.apd.children![2], !back)) ||
-             this.traverse(conjugate.A, new WalkerDown(wd.apd.children![1], !back)) ;
+         return this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back)) ||
+             this.traverse(conjugate.B, new WalkerDown(wd.apd.children[2], !back)) ||
+             this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], !back)) ;
       } else {
-         return this.traverse(conjugate.A, new WalkerDown(wd.apd.children![1], back)) ||
-             this.traverse(conjugate.B, new WalkerDown(wd.apd.children![2], back)) ||
-             this.traverse(conjugate.A, new WalkerDown(wd.apd.children![1], !back)) ;
+         return this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back)) ||
+             this.traverse(conjugate.B, new WalkerDown(wd.apd.children[2], back)) ||
+             this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], !back)) ;
       }
    }
    public traversePause(pause: Pause, wd: WalkerDown<P>): boolean {
@@ -323,7 +323,7 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
          back = !back ;
          amount = - amount ;
       }
-      const base = wd.apd.children![0] ;
+      const base = wd.apd.children[0] ;
       const full = Math.floor(Math.min((this.goali - this.i) / base.moveCount,
                                        (this.goaldur - this.dur - 1) / base.duration)) ;
       if (full > 0) {
