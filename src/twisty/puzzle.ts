@@ -21,8 +21,12 @@ export abstract class Puzzle {
     }
 
     let newState = this.startState();
-    for (let i = 0; i < amount; i++) {
-      newState = this.combine(newState, state);
+    while (amount > 0) {
+       if (amount % 2 === 1) {
+          newState = this.combine(newState, state) ;
+       }
+       amount = Math.floor(amount / 2) ;
+       state = this.combine(state, state) ;
     }
     return newState;
   }
