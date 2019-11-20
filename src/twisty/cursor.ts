@@ -264,10 +264,10 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       }
       const back = this.domult(wd, commutator.amount) ;
       if (back) {
-         return this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], back)) ||
-             this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back)) ||
-             this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], !back)) ||
-             this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], !back)) ;
+         return this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], !back)) ||
+             this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], !back)) ||
+             this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], back)) ||
+             this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back)) ;
       } else {
          return this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back)) ||
              this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], back)) ||
@@ -281,9 +281,9 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       }
       const back = this.domult(wd, conjugate.amount) ;
       if (back) {
-         return this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back)) ||
-             this.traverse(conjugate.B, new WalkerDown(wd.apd.children[2], !back)) ||
-             this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], !back)) ;
+         return this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], !back)) ||
+             this.traverse(conjugate.B, new WalkerDown(wd.apd.children[2], back)) ||
+             this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back)) ;
       } else {
          return this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back)) ||
              this.traverse(conjugate.B, new WalkerDown(wd.apd.children[2], back)) ||
@@ -315,10 +315,10 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       return true ;
    }
    private domult(wd: WalkerDown<P>, amount: number): boolean {
-      if (amount === 0) {
-         return false ;
-      }
       let back = wd.back ;
+      if (amount === 0) { // I don't believe this will ever happen
+         return back ;
+      }
       if (amount < 0) {
          back = !back ;
          amount = - amount ;
