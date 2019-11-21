@@ -1,4 +1,4 @@
-import {BlockMove} from "../alg";
+import {BlockMove, blockMoveToString} from "../alg";
 import {Combine, EquivalentStates, Invert, KPuzzleDefinition, Puzzles, stateForBlockMove, Transformation} from "../kpuzzle";
 
 export type MoveName = string;
@@ -38,10 +38,11 @@ interface KSolvePuzzleState extends Transformation, State<KSolvePuzzle> {
 }
 
 export class KSolvePuzzle extends Puzzle {
-
+  // don't work the underlying kdefinition/multiply so hard
   public static fromID(id: string): KSolvePuzzle {
     return new KSolvePuzzle(Puzzles[id]);
   }
+  public moveStash: {[key: string]: Transformation} = {} ;
   constructor(private definition: KPuzzleDefinition) {
     super();
   }
@@ -56,7 +57,11 @@ export class KSolvePuzzle extends Puzzle {
     return Combine(this.definition, s1, s2);
   }
   public stateFromMove(blockMove: BlockMove): KSolvePuzzleState {
-    return stateForBlockMove(this.definition, blockMove);
+    const key = blockMoveToString(blockMove) ;
+    if (!this.moveStash[key]) {
+       this.moveStash[key] = stateForBlockMove(this.definition, blockMove);
+    }
+    return this.moveStash[key] ;
   }
   public equivalent(s1: KSolvePuzzleState, s2: KSolvePuzzleState): boolean {
     return EquivalentStates(this.definition, s1, s2);
