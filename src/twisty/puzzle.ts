@@ -20,7 +20,7 @@ export abstract class Puzzle {
       return this.invert(this.multiply(state, -amount));
     }
 
-    let newState = this.startState();
+    let newState = this.identity();
     while (amount > 0) {
        if (amount % 2 === 1) {
           newState = this.combine(newState, state) ;
