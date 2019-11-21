@@ -481,7 +481,7 @@ export class Cursor<P extends Puzzle> {
     }
 
     this.algTimestamp = Math.max(0, Math.min(this.indexer.algDuration(), unclampedNewTimestamp));
-    return false;
+    return this.algTimestamp === this.indexer.algDuration() ;
   }
 
   // TODO
