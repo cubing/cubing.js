@@ -150,7 +150,7 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
     return this.mult(dec, conjugate.amount, [dec, decA, decB]) ;
   }
   public traversePause(pause: Pause): AlgPartDecoration<P> {
-     return new AlgPartDecoration<P>(this.puz, 0, this.durationFn.traverse(pause)) ;
+     return new AlgPartDecoration<P>(this.puz, 1, this.durationFn.traverse(pause)) ;
   }
   public traverseNewLine(newLine: NewLine): AlgPartDecoration<P> {
      return this.dummyLeaf ;
