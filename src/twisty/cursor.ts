@@ -89,24 +89,26 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
 }
 
 class AlgPartDecoration<P extends Puzzle> {
-   constructor(puz: Puzzle, public moveCount: number = 0,
-               public duration: number = 0,
-               public forward: State<P> = puz.startState(),
-               public backward: State<P> = puz.startState(),
+   constructor(puz: Puzzle, public moveCount: number,
+               public duration: number,
+               public forward: State<P>, public backward: State<P>,
                public children: Array<AlgPartDecoration<P>> = []) {
    }
 }
 class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecoration<P>> {
+  private identity: State<P> ;
   private dummyLeaf: AlgPartDecoration<P> ;
   private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount);
   constructor(private puz: Puzzle) {
      super() ;
-     this.dummyLeaf = new AlgPartDecoration<P>(puz) ;
+     this.identity = puz.identity() ;
+     this.dummyLeaf = new AlgPartDecoration<P>(puz, 0, 0, this.identity,
+                                               this.identity, []) ;
   }
   public traverseSequence(sequence: Sequence): AlgPartDecoration<P> {
      let moveCount = 0 ;
      let duration = 0 ;
-     let state = this.puz.startState() ;
+     let state = this.identity ;
      const child: Array<AlgPartDecoration<P>> = [] ;
      for (const part of sequence.nestedUnits) {
         const apd = this.traverse(part) ;
@@ -150,7 +152,7 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
     return this.mult(dec, conjugate.amount, [dec, decA, decB]) ;
   }
   public traversePause(pause: Pause): AlgPartDecoration<P> {
-     return new AlgPartDecoration<P>(this.puz, 1, this.durationFn.traverse(pause)) ;
+     return new AlgPartDecoration<P>(this.puz, 1, this.durationFn.traverse(pause), this.identity, this.identity) ;
   }
   public traverseNewLine(newLine: NewLine): AlgPartDecoration<P> {
      return this.dummyLeaf ;
@@ -193,7 +195,7 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       this.mv = undefined ;
       this.back = false ;
       this.moveDur = 0 ;
-      this.st = this.puz.startState() ;
+      this.st = this.puz.identity() ;
       this.root = new WalkerDown(this.apd, false) ;
    }
    public moveByIndex(loc: number): boolean {
@@ -217,8 +219,9 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       this.mv = undefined ;
       this.moveDur = 0 ;
       this.back = false ;
-      this.st = this.puz.startState() ;
+      this.st = this.puz.identity() ;
       const r = this.traverse(this.alg, this.root) ;
+      console.log("Asked for " + loc + " " + dur + " got " + this.i + " " + this.dur + " result is " + r) ;
       return r ;
    }
    public traverseSequence(sequence: Sequence, wd: WalkerDown<P>): boolean {
@@ -324,8 +327,8 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
          amount = - amount ;
       }
       const base = wd.apd.children[0] ;
-      const full = Math.floor(Math.min((this.goali - this.i) / base.moveCount,
-                                       (this.goaldur - this.dur - 1) / base.duration)) ;
+      const full = Math.min(Math.floor((this.goali - this.i) / base.moveCount),
+                            Math.ceil((this.goaldur - this.dur) / base.duration - 1)) ;
       if (full > 0) {
          this.keepgoing(new WalkerDown<P>(base, back), full) ;
       }
@@ -372,17 +375,17 @@ export class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<
         }
         return bm ;
      }
-     throw new Error("Out of algorithm") ;
+     throw new Error("Out of algorithm: index " + index) ;
   }
   public indexToMoveStartTimestamp(index: number): Cursor.Timestamp {
      if (this.walker.moveByIndex(index) || this.walker.i === index) {
         return this.walker.dur ;
      }
-     throw new Error("Out of algorithm") ;
+     throw new Error("Out of algorithm: index " + index) ;
   }
   public stateAtIndex(index: number): State<P> {
      this.walker.moveByIndex(index) ;
-     return this.walker.st ;
+     return this.puzzle.combine(this.puzzle.startState(), this.walker.st) ;
   }
   public numMoves(): number {
      return this.decoration.moveCount ;

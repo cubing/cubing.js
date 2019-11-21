@@ -1,5 +1,5 @@
 import {BlockMove, blockMoveToString} from "../alg";
-import {Combine, EquivalentStates, Invert, KPuzzleDefinition, Puzzles, stateForBlockMove, Transformation} from "../kpuzzle";
+import {Combine, EquivalentStates, IdentityTransformation, Invert, KPuzzleDefinition, Puzzles, stateForBlockMove, Transformation} from "../kpuzzle";
 
 export type MoveName = string;
 
@@ -31,6 +31,7 @@ export abstract class Puzzle {
     return newState;
   }
   public abstract stateFromMove(blockMove: BlockMove): State<Puzzle>;
+  public abstract identity(): State<Puzzle>;
   public abstract equivalent(s1: State<Puzzle>, s2: State<Puzzle>): boolean;
 }
 
@@ -63,6 +64,9 @@ export class KSolvePuzzle extends Puzzle {
     }
     return this.moveStash[key] ;
   }
+  public identity(): KSolvePuzzleState {
+    return IdentityTransformation(this.definition) ;
+  }
   public equivalent(s1: KSolvePuzzleState, s2: KSolvePuzzleState): boolean {
     return EquivalentStates(this.definition, s1, s2);
   }
@@ -84,6 +88,9 @@ export class QTMCounterPuzzle extends Puzzle {
   }
   public stateFromMove(blockMove: BlockMove): QTMCounterState {
     return new QTMCounterState(Math.abs(blockMove.amount));
+  }
+  public identity(): QTMCounterState {
+    return new QTMCounterState(0);
   }
   public equivalent(s1: QTMCounterState, s2: QTMCounterState): boolean {
     return s1.value === s2.value;
