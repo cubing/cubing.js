@@ -126,7 +126,7 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
      return new AlgPartDecoration<P>(
        this.puz, 1, this.durationFn.traverse(blockMove),
        this.puz.stateFromMove(blockMove),
-       this.puz.invert(this.puz.stateFromMove(blockMove))) ;
+       this.puz.stateFromMove(invertBlockMove(blockMove))) ;
   }
   public traverseCommutator(commutator: Commutator): AlgPartDecoration<P> {
     const decA = this.traverseSequence(commutator.A) ;
@@ -351,7 +351,10 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       return false ;
    }
 }
-class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
+export function invertBlockMove(bm: BlockMove): BlockMove {
+   return new BlockMove(bm.outerLayer, bm.innerLayer, bm.family, -bm.amount) ;
+}
+export class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
   private decoration: AlgPartDecoration<P> ;
   private walker: AlgWalker<P> ;
   constructor(private puzzle: P, alg: Sequence) {
@@ -365,7 +368,7 @@ class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
         const bm = this.walker.mv! as BlockMove ;
         // TODO: this type of negation needs to be in alg
         if (this.walker.back) {
-           return new BlockMove(bm.outerLayer, bm.innerLayer, bm.family, -bm.amount);
+           return invertBlockMove(bm) ;
         }
         return bm ;
      }
