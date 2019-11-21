@@ -309,8 +309,29 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
 //   public traverseCommentLong(  commentLong:  CommentLong,  dataDown: Algorithm): Sequence {return this.concatIntoSequence([commentLong]    , dataDown); }
 // }
 
-export class ToString extends TraversalUp<string> {
+function repetitionSuffix(amount: number): string {
+   const absAmount = Math.abs(amount);
+   let s = "";
+   if (absAmount !== 1) {
+     s += String(absAmount);
+   }
+   if (absAmount !== amount) {
+     s += "'";
+   }
+   return s;
+}
+export function blockMoveToString(blockMove: BlockMove): string {
+   let out = blockMove.family + repetitionSuffix(blockMove.amount);
+   if (typeof blockMove.innerLayer !== "undefined") {
+     out = String(blockMove.innerLayer) + out;
+     if (typeof blockMove.outerLayer !== "undefined") {
+       out = String(blockMove.outerLayer) + "-" + out;
+     }
+   }
+   return out;
+}
 
+export class ToString extends TraversalUp<string> {
   public traverseSequence(sequence: Sequence): string {
     let output = "";
     if (sequence.nestedUnits.length > 0) {
@@ -322,19 +343,12 @@ export class ToString extends TraversalUp<string> {
     }
     return output;
   }
-  public traverseGroup(group: Group): string { return "(" + this.traverse(group.nestedSequence) + ")" + this.repetitionSuffix(group.amount); }
+  public traverseGroup(group: Group): string { return "(" + this.traverse(group.nestedSequence) + ")" + repetitionSuffix(group.amount); }
   public traverseBlockMove(blockMove: BlockMove): string {
-    let out = blockMove.family + this.repetitionSuffix(blockMove.amount);
-    if (typeof blockMove.innerLayer !== "undefined") {
-      out = String(blockMove.innerLayer) + out;
-      if (typeof blockMove.outerLayer !== "undefined") {
-        out = String(blockMove.outerLayer) + "-" + out;
-      }
-    }
-    return out;
+    return blockMoveToString(blockMove) ;
   }
-  public traverseCommutator(commutator: Commutator): string { return "[" + this.traverse(commutator.A) + ", " + this.traverse(commutator.B) + "]" + this.repetitionSuffix(commutator.amount); }
-  public traverseConjugate(conjugate: Conjugate): string { return "[" + this.traverse(conjugate.A) + ": " + this.traverse(conjugate.B) + "]" + this.repetitionSuffix(conjugate.amount); }
+  public traverseCommutator(commutator: Commutator): string { return "[" + this.traverse(commutator.A) + ", " + this.traverse(commutator.B) + "]" + repetitionSuffix(commutator.amount); }
+  public traverseConjugate(conjugate: Conjugate): string { return "[" + this.traverse(conjugate.A) + ": " + this.traverse(conjugate.B) + "]" + repetitionSuffix(conjugate.amount); }
   // TODO: Remove spaces between repeated pauses (in traverseSequence)
   public traversePause(pause: Pause): string { return "."; }
   public traverseNewLine(newLine: NewLine): string { return "\n"; }
@@ -342,18 +356,6 @@ export class ToString extends TraversalUp<string> {
   public traverseCommentShort(commentShort: CommentShort): string { return "//" + commentShort.comment; }
   // TODO: Sanitize `*/`
   public traverseCommentLong(commentLong: CommentLong): string { return "/*" + commentLong.comment + "*/"; }
-  private repetitionSuffix(amount: number): string {
-    const absAmount = Math.abs(amount);
-    let s = "";
-    if (absAmount !== 1) {
-      s += String(absAmount);
-    }
-    if (absAmount !== amount) {
-      s += "'";
-    }
-    return s;
-  }
-
   private spaceBetween(u1: Unit, u2: Unit): string {
     if (matchesAlgType(u1, "pause") && matchesAlgType(u2, "pause")) {
       return "";

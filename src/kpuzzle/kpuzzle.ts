@@ -1,4 +1,4 @@
-import {algToString, BlockMove, expand, parse, Sequence} from "../alg";
+import {BlockMove, blockMoveToString, expand, parse, Sequence} from "../alg";
 import {KPuzzleDefinition, Transformation} from "./definition_types";
 
 export function Combine(def: KPuzzleDefinition, t1: Transformation, t2: Transformation): Transformation {
@@ -96,7 +96,7 @@ export function EquivalentStates(def: KPuzzleDefinition, t1: Transformation, t2:
 // TODO: Move other helpers into the definition.
 export function stateForBlockMove(def: KPuzzleDefinition, blockMove: BlockMove): Transformation {
   // TODO: Optimize this.
-  const repMoveString = algToString(new Sequence([new BlockMove(blockMove.outerLayer, blockMove.innerLayer, blockMove.family, 1)]));
+  const repMoveString = blockMoveToString(new BlockMove(blockMove.outerLayer, blockMove.innerLayer, blockMove.family, 1)) ;
   let move: Transformation | undefined = def.moves[repMoveString];
   if (!move) {
     move = new KPuzzle(def).expandSlices(repMoveString, blockMove);

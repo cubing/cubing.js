@@ -29,6 +29,7 @@ export {
   coalesceBaseMoves,
   algToString,
   algPartToStringForTesting,
+  blockMoveToString,
 } from "./traversal";
 
 export {

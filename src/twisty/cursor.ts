@@ -439,7 +439,7 @@ export class Cursor<P extends Puzzle> {
       moves: [],
     } as Cursor.Position<P>;
     // handle empty sequence.
-    if (this.indexer.numMoves() == 0) {
+    if (this.indexer.numMoves() === 0) {
        return pos ;
     }
     const move = this.indexer.getMove(moveIdx);
