@@ -438,6 +438,10 @@ export class Cursor<P extends Puzzle> {
       state: this.indexer.stateAtIndex(moveIdx),
       moves: [],
     } as Cursor.Position<P>;
+    // handle empty sequence.
+    if (this.indexer.numMoves() == 0) {
+       return pos ;
+    }
     const move = this.indexer.getMove(moveIdx);
     const moveTS = this.algTimestamp - this.indexer.indexToMoveStartTimestamp(moveIdx);
     // TODO: this should be done just by asking the indexer for this move's
