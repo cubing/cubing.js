@@ -221,7 +221,6 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       this.back = false ;
       this.st = this.puz.identity() ;
       const r = this.traverse(this.alg, this.root) ;
-      console.log("Asked for " + loc + " " + dur + " got " + this.i + " " + this.dur + " result is " + r) ;
       return r ;
    }
    public traverseSequence(sequence: Sequence, wd: WalkerDown<P>): boolean {
