@@ -100,9 +100,9 @@ export class PuzzleGeometry {
          B: "#9121ab", L: "#b27814", M: "#0d35ad", N: "#eb126b",
       },
       12: {
-         U: "#ffffff", F: "#ff0000", R: "#0000ff", C: "#ff66cc",
-         A: "#ffffd0", L: "#006633", E: "#99ff00", BF: "#ff6633",
-         BR: "#ffff00", BL: "#660099", I: "#3399ff", D: "#999999",
+         U: "#ffffff", F: "#006633", R: "#ff0000", C: "#ffffd0",
+         A: "#3399ff", L: "#660099", E: "#ff66cc", BF: "#99ff00",
+         BR: "#0000ff", BL: "#ffff00", I: "#ff6633", D: "#999999",
       },
       20: {
          R: "#db69f0", C: "#178fde", F: "#23238b", E: "#9cc726",
