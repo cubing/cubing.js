@@ -1,9 +1,9 @@
+import * as THREE from "three" ;
 import {BlockMove} from "../../alg" ;
 import {KPuzzleDefinition, stateForBlockMove, Transformation} from "../../kpuzzle" ;
 import {Cursor} from "../cursor" ;
 import {smootherStep} from "../easing" ;
 import {Puzzle} from "../puzzle" ;
-import * as THREE from "three" ;
 import {TAU, Twisty3D} from "./twisty3D" ;
 
 class StickerDef {
@@ -24,8 +24,8 @@ class StickerDef {
     this.geo = new THREE.Geometry() ;
     const coords = stickerDat.coords as number[][] ;
     const vertind: number[] = [] ;
-    for (const coord in coords) {
-       const v = new THREE.Vector3(coord[0], coord[1], coord[2]) ;
+    for (const coord of coords) {
+       const v = new THREE.Vector3(coord[0]!, coord[1]!, coord[2]!) ;
        vertind.push(this.geo.vertices.length) ;
        this.geo.vertices.push(v) ;
     }
@@ -59,7 +59,7 @@ const PG_SCALE = 0.5 ;
 
 // TODO: Split into "scene model" and "view".
 export class PG3D extends Twisty3D<Puzzle> {
-  private cube: THREE.Mesh ;
+// private cube: THREE.Mesh ;
   private stickers: {[key: string]: StickerDef[][]} ;
   private axesInfo: {[key: string]: AxisInfo} ;
 
@@ -67,12 +67,12 @@ export class PG3D extends Twisty3D<Puzzle> {
     super();
     this.axesInfo = {} ;
     const axesDef = pgdat.axis as any[] ;
-    for (const axis in axesDef) {
-       this.axesInfo[axi[1]] = new AxisInfo(axi) ;
+    for (const axis of axesDef) {
+       this.axesInfo[axis[1]] = new AxisInfo(axis) ;
     }
     const stickers = pgdat.stickers as any[] ;
     this.stickers = {} ;
-    for (const sticker in stickers) {
+    for (const sticker of stickers) {
       const orbit = sticker.orbit as number ;
       const ord = sticker.ord as number ;
       const ori = sticker.ori as number ;
@@ -125,7 +125,7 @@ export class PG3D extends Twisty3D<Puzzle> {
       }
     }
   }
-  private ease(fraction: number): void {
+  private ease(fraction: number): number {
     return smootherStep(fraction) ;
   }
 
