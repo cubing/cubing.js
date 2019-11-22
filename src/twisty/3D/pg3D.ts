@@ -85,7 +85,7 @@ export class PG3D extends Twisty3D<Puzzle> {
       const stickerdef = new StickerDef(sticker) ;
       stickerdef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE) ;
       this.stickers[orbit][ori][ord] = stickerdef ;
-      this.scene.add(sticker.cubie) ;
+      this.scene.add(stickerdef.cubie) ;
     }
   }
 
