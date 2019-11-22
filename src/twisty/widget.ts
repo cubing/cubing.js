@@ -323,7 +323,7 @@ export class Cube3DView implements CursorObserver, JumpObserver {
 }
 
 export class PG3DView implements CursorObserver, JumpObserver {
-  private readonly element: HTMLElement;
+  public readonly element: HTMLElement;
   private pg3D: PG3D;
   constructor(private anim: AnimModel, private definition: KPuzzleDefinition,
               stickerDat: any) {
@@ -376,7 +376,7 @@ export class Player {
     this.element = document.createElement("player");
 
     if (this.config.visualizationFormat === "PG3D") {
-       this.element.appendChild((new PG3DView(this.anim, definition, config.experimentalPG3DStickerDat).element);
+       this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DStickerDat)).element) ;
     } else if (this.config.visualizationFormat === "3D") {
       if (definition.name === "333") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
