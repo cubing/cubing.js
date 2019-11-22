@@ -4,12 +4,13 @@ import {algToString, BlockMove, Sequence} from "../alg";
 import {Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation} from "../kpuzzle";
 
 import {Cube3D} from "./3D/cube3D";
+import {PG3D} from "./3D/pg3D";
 import {AnimModel, CursorObserver, DirectionObserver, JumpObserver} from "./anim";
 import { getConfigWithDefault } from "./config";
 import {Cursor} from "./cursor";
 import {Puzzle} from "./puzzle";
 
-export type VisualizationFormat = "2D" | "3D";
+export type VisualizationFormat = "2D" | "3D" | "PG3D" ;
 
 declare global {
   interface Document {
@@ -321,6 +322,44 @@ export class Cube3DView implements CursorObserver, JumpObserver {
   }
 }
 
+export class PG3DView implements CursorObserver, JumpObserver {
+  private readonly element: HTMLElement;
+  private pg3D: PG3D;
+  constructor(private anim: AnimModel, private definition: KPuzzleDefinition,
+              stickerDat: any) {
+    this.element = document.createElement("cube3d-view");
+    this.anim.dispatcher.registerCursorObserver(this);
+    this.anim.dispatcher.registerJumpObserver(this);
+
+    this.pg3D = new PG3D(this.definition, stickerDat); // TODO: Dynamic puzzle
+
+    setTimeout(function(): void {
+      this.pg3D.newVantage(this.element, {position: new THREE.Vector3(0, 0, -3.75)}) ;
+    }.bind(this), 0);
+
+    this.createBackViewForTesting();
+  }
+
+  public animCursorChanged(cursor: Cursor<Puzzle>): void {
+    this.pg3D.draw(cursor.currentPosition());
+  }
+
+  public animCursorJumped(): void {
+    console.log("jumped KSolve");
+    this.element.classList.add("flash");
+    setTimeout(() => this.element.classList.remove("flash"), 0);
+  }
+
+  // TODO: Remove
+  private createBackViewForTesting(): void {
+    const backWrapper = document.createElement("cube3d-back-wrapper");
+    this.element.appendChild(backWrapper);
+    setTimeout(function(): void {
+      this.pg3D.newVantage(backWrapper, {position: new THREE.Vector3(0, 0, 3.75)}) ;
+    }.bind(this), 0);
+  }
+}
+
 export interface PlayerConfig {
   visualizationFormat?: VisualizationFormat;
   experimentalShowControls?: boolean;
@@ -330,11 +369,14 @@ export interface PlayerConfig {
 export class Player {
   public element: HTMLElement;
   public cube3DView: Cube3DView; // TODO
+  public pg3DView: PG3DView; // TODO
   private scrubber: Scrubber;
   constructor(private anim: AnimModel, definition: KPuzzleDefinition, private config: PlayerConfig = {}) {
     this.element = document.createElement("player");
 
-    if (this.config.visualizationFormat === "3D") {
+    if (this.config.visualizationFormat === "PG3D") {
+       /**/
+    } else if (this.config.visualizationFormat === "3D") {
       if (definition.name === "333") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
       } else {
