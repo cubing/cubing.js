@@ -21,6 +21,11 @@ export {
 } from "./algorithm";
 
 export {
+  modifiedBlockMove,
+  experimentalAppendBlockMove,
+} from "./operation";
+
+export {
   TraversalDownUp,
   TraversalUp,
   invert,
