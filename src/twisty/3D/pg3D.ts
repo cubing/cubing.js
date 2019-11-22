@@ -1,4 +1,4 @@
-import * as THREE from "three" ;
+import {Color, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Vector3} from "three" ;
 import {BlockMove} from "../../alg" ;
 import {KPuzzleDefinition, stateForBlockMove, Transformation} from "../../kpuzzle" ;
 import {Cursor} from "../cursor" ;
@@ -7,44 +7,44 @@ import {Puzzle} from "../puzzle" ;
 import {TAU, Twisty3D} from "./twisty3D" ;
 
 class StickerDef {
-  public origColor: THREE.Color ;
-  public faceColor: THREE.Color ;
-  public cubie: THREE.Group ;
-  protected geo: THREE.Geometry ;
+  public origColor: Color ;
+  public faceColor: Color ;
+  public cubie: Group ;
+  protected geo: Geometry ;
   constructor(stickerDat: any) {
-    this.origColor = new THREE.Color(stickerDat.color) ;
-    this.faceColor = new THREE.Color(stickerDat.color) ;
-    this.cubie = new THREE.Group() ;
-    this.geo = new THREE.Geometry() ;
+    this.origColor = new Color(stickerDat.color) ;
+    this.faceColor = new Color(stickerDat.color) ;
+    this.cubie = new Group() ;
+    this.geo = new Geometry() ;
     const coords = stickerDat.coords as number[][] ;
     const vertind: number[] = [] ;
     for (const coord of coords) {
-       const v = new THREE.Vector3(coord[0]!, coord[1]!, coord[2]!) ;
+       const v = new Vector3(coord[0]!, coord[1]!, coord[2]!) ;
        vertind.push(this.geo.vertices.length) ;
        this.geo.vertices.push(v) ;
     }
     for (let g = 1; g + 1 < vertind.length; g++) {
-       const face = new THREE.Face3(vertind[0], vertind[g], vertind[g + 1]) ;
+       const face = new Face3(vertind[0], vertind[g], vertind[g + 1]) ;
        face.color = this.faceColor ;
        this.geo.faces.push(face) ;
     }
     this.geo.computeFaceNormals() ;
-    const obj = new THREE.Mesh(this.geo,
-               new THREE.MeshBasicMaterial({vertexColors: THREE.FaceColors})) ;
+    const obj = new Mesh(this.geo,
+               new MeshBasicMaterial({vertexColors: FaceColors})) ;
     this.cubie.add(obj) ;
   }
-  public setColor(c: THREE.Color): void {
+  public setColor(c: Color): void {
     this.geo.colorsNeedUpdate = true ;
     this.faceColor.copy(c) ;
   }
 }
 
 class AxisInfo {
-  public axis: THREE.Vector3 ;
+  public axis: Vector3 ;
   public order: number ;
   constructor(axisDat: any) {
     const vec = axisDat[0] as number[] ;
-    this.axis = new THREE.Vector3(vec[0], vec[1], vec[2]) ;
+    this.axis = new Vector3(vec[0], vec[1], vec[2]) ;
     this.order = axisDat[2] ;
   }
 }
@@ -84,7 +84,7 @@ export class PG3D extends Twisty3D<Puzzle> {
 
   protected updateScene(p: Cursor.Position<Puzzle>): void {
     const pos = p.state as Transformation ;
-    const noRotation = new THREE.Euler() ;
+    const noRotation = new Euler() ;
     for (const orbit in this.stickers) {
       const pieces = this.stickers[orbit];
       const pos2 = pos[orbit] ;
