@@ -22,7 +22,7 @@ class StickerDef {
 //  this.perm = stickerDat.perm ;
     this.cubie = new THREE.Group() ;
     this.geo = new THREE.Geometry() ;
-    const coords: = stickerDat.coords as number[][] ;
+    const coords = stickerDat.coords as number[][] ;
     const vertind: number[] = [] ;
     for (const coord in coords) {
        const v = new THREE.Vector3(coord[0], coord[1], coord[2]) ;
