@@ -11,15 +11,9 @@ class StickerDef {
   public faceColor: THREE.Color ;
   public cubie: THREE.Group ;
   protected geo: THREE.Geometry ;
-// private ori: number ;
-// private perm: number ;
-// private orbit: string ;
   constructor(stickerDat: any) {
     this.origColor = new THREE.Color(stickerDat.color) ;
     this.faceColor = new THREE.Color(stickerDat.color) ;
-//  this.orbit = stickerDat.orbit ;
-//  this.ori = stickerDat.ori ;
-//  this.perm = stickerDat.perm ;
     this.cubie = new THREE.Group() ;
     this.geo = new THREE.Geometry() ;
     const coords = stickerDat.coords as number[][] ;
@@ -59,7 +53,6 @@ const PG_SCALE = 0.5 ;
 
 // TODO: Split into "scene model" and "view".
 export class PG3D extends Twisty3D<Puzzle> {
-// private cube: THREE.Mesh ;
   private stickers: {[key: string]: StickerDef[][]} ;
   private axesInfo: {[key: string]: AxisInfo} ;
 
