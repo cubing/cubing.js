@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import { BackSide, BoxGeometry, DoubleSide, Euler, Group, Matrix4, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Quaternion, Vector3 } from "three";
 import {BlockMove} from "../../alg";
 import {KPuzzleDefinition, Puzzles, Transformation} from "../../kpuzzle";
 
@@ -9,22 +9,22 @@ import {Puzzle} from "../puzzle";
 import {TAU, Twisty3D} from "./twisty3D";
 
 class AxisInfo {
-  public stickerMaterial: THREE.MeshBasicMaterial;
-  public hintStickerMaterial: THREE.MeshBasicMaterial;
-  constructor(public vector: THREE.Vector3, public fromZ: THREE.Euler, public color: number) {
+  public stickerMaterial: MeshBasicMaterial;
+  public hintStickerMaterial: MeshBasicMaterial;
+  constructor(public vector: Vector3, public fromZ: Euler, public color: number) {
     // TODO: Make sticker material single-sided when cubie base is rendered?
-    this.stickerMaterial = new THREE.MeshBasicMaterial({color, side: THREE.DoubleSide});
-    this.hintStickerMaterial = new THREE.MeshBasicMaterial({color, side: THREE.BackSide});
+    this.stickerMaterial = new MeshBasicMaterial({color, side: DoubleSide});
+    this.hintStickerMaterial = new MeshBasicMaterial({color, side: BackSide});
   }
 }
 
 const axesInfo: AxisInfo[] = [
-  new AxisInfo(new THREE.Vector3( 0,  1,  0), new THREE.Euler(-TAU / 4,  0,  0), 0xffffff),
-  new AxisInfo(new THREE.Vector3(-1,  0,  0), new THREE.Euler( 0, -TAU / 4,  0), 0xff8800),
-  new AxisInfo(new THREE.Vector3( 0,  0,  1), new THREE.Euler( 0,  0,      0), 0x00ff00),
-  new AxisInfo(new THREE.Vector3( 1,  0,  0), new THREE.Euler( 0,  TAU / 4,  0), 0xff0000),
-  new AxisInfo(new THREE.Vector3( 0,  0, -1), new THREE.Euler( 0,  TAU / 2,  0), 0x0000ff),
-  new AxisInfo(new THREE.Vector3( 0, -1,  0), new THREE.Euler( TAU / 4,  0,  0), 0xffff00),
+  new AxisInfo(new Vector3( 0,  1,  0), new Euler(-TAU / 4,  0,  0), 0xffffff),
+  new AxisInfo(new Vector3(-1,  0,  0), new Euler( 0, -TAU / 4,  0), 0xff8800),
+  new AxisInfo(new Vector3( 0,  0,  1), new Euler( 0,  0,      0), 0x00ff00),
+  new AxisInfo(new Vector3( 1,  0,  0), new Euler( 0,  TAU / 4,  0), 0xff0000),
+  new AxisInfo(new Vector3( 0,  0, -1), new Euler( 0,  TAU / 2,  0), 0x0000ff),
+  new AxisInfo(new Vector3( 0, -1,  0), new Euler( TAU / 4,  0,  0), 0xffff00),
 ];
 
 const face: {[s: string]: number} = {
@@ -67,47 +67,47 @@ const cube3DOptionsDefaults: Cube3DOptions = {
 };
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
-const blackMesh = new THREE.MeshBasicMaterial({color: 0x000000, opacity: 0.3, transparent: true});
+const blackMesh = new MeshBasicMaterial({color: 0x000000, opacity: 0.3, transparent: true});
 
 class CubieDef {
-  public matrix: THREE.Matrix4;
+  public matrix: Matrix4;
   public stickerFaces: number[];
   // stickerFaceNames can be e.g. ["U", "F", "R"], "UFR" if every face is a single letter.
-  constructor(public orbit: string, stickerFaceNames: string[] | string, q: THREE.Quaternion) {
+  constructor(public orbit: string, stickerFaceNames: string[] | string, q: Quaternion) {
     const individualStickerFaceNames = typeof stickerFaceNames === "string" ? stickerFaceNames.split("") : stickerFaceNames;
     this.stickerFaces = individualStickerFaceNames.map((s) => face[s]);
-    this.matrix = new THREE.Matrix4();
+    this.matrix = new Matrix4();
     this.matrix.setPosition(firstPiecePosition[orbit]);
-    this.matrix.premultiply(new THREE.Matrix4().makeRotationFromQuaternion(q));
+    this.matrix.premultiply(new Matrix4().makeRotationFromQuaternion(q));
   }
 }
 
-function t(v: THREE.Vector3, t4: number): THREE.Quaternion {
-  return new THREE.Quaternion().setFromAxisAngle(v, TAU * t4 / 4);
+function t(v: Vector3, t4: number): Quaternion {
+  return new Quaternion().setFromAxisAngle(v, TAU * t4 / 4);
 }
 
 const r = {
-  O: new THREE.Vector3( 0,  0,  0),
-  U: new THREE.Vector3( 0, -1,  0),
-  L: new THREE.Vector3( 1,  0,  0),
-  F: new THREE.Vector3( 0,  0, -1),
-  R: new THREE.Vector3(-1,  0,  0),
-  B: new THREE.Vector3( 0,  0,  1),
-  D: new THREE.Vector3( 0,  1,  0),
+  O: new Vector3( 0,  0,  0),
+  U: new Vector3( 0, -1,  0),
+  L: new Vector3( 1,  0,  0),
+  F: new Vector3( 0,  0, -1),
+  R: new Vector3(-1,  0,  0),
+  B: new Vector3( 0,  0,  1),
+  D: new Vector3( 0,  1,  0),
 };
 
 interface OrbitIndexed<T> {[s: string]: T; }
 interface PieceIndexed<T> extends OrbitIndexed<T[]> {}
 
-const firstPiecePosition: OrbitIndexed<THREE.Vector3> = {
-  EDGE: new THREE.Vector3(0, 1, 1),
-  CORNER: new THREE.Vector3(1, 1, 1),
-  CENTER: new THREE.Vector3(0, 1, 0),
+const firstPiecePosition: OrbitIndexed<Vector3> = {
+  EDGE: new Vector3(0, 1, 1),
+  CORNER: new Vector3(1, 1, 1),
+  CENTER: new Vector3(0, 1, 0),
 };
-const orientationRotation: OrbitIndexed<THREE.Matrix4[]> = {
-  EDGE: [0, 1].map((i) => new THREE.Matrix4().makeRotationAxis(firstPiecePosition.EDGE.clone().normalize(), -i * TAU / 2)),
-  CORNER: [0, 1, 2].map((i) => new THREE.Matrix4().makeRotationAxis(firstPiecePosition.CORNER.clone().normalize(), -i * TAU / 3)),
-  CENTER: [0, 1, 2, 3].map((i) => new THREE.Matrix4().makeRotationAxis(firstPiecePosition.CENTER.clone().normalize(), -i * TAU / 4)),
+const orientationRotation: OrbitIndexed<Matrix4[]> = {
+  EDGE: [0, 1].map((i) => new Matrix4().makeRotationAxis(firstPiecePosition.EDGE.clone().normalize(), -i * TAU / 2)),
+  CORNER: [0, 1, 2].map((i) => new Matrix4().makeRotationAxis(firstPiecePosition.CORNER.clone().normalize(), -i * TAU / 3)),
+  CENTER: [0, 1, 2, 3].map((i) => new Matrix4().makeRotationAxis(firstPiecePosition.CENTER.clone().normalize(), -i * TAU / 4)),
 };
 const cubieStickerOrder = [
   face.U,
@@ -154,12 +154,12 @@ const CUBE_SCALE = 1 / 3;
 
 // TODO: Split into "scene model" and "view".
 export class Cube3D extends Twisty3D<Puzzle> {
-  private cube: THREE.Group = new THREE.Group();
-  private pieces: PieceIndexed<THREE.Object3D> = {};
+  private cube: Group = new Group();
+  private pieces: PieceIndexed<Object3D> = {};
   private options: Cube3DOptions;
   // TODO: Keep track of option-based meshes better.
-  private experimentalHintStickerMeshes: THREE.Mesh[] = [];
-  private experimentalFoundationMeshes: THREE.Mesh[] = [];
+  private experimentalHintStickerMeshes: Mesh[] = [];
+  private experimentalFoundationMeshes: Mesh[] = [];
   constructor(def: KPuzzleDefinition, options: Cube3DOptions = {}) {
     super();
 
@@ -179,7 +179,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
     this.scene.add(this.cube);
   }
 
-  public experimentalGetCube(): THREE.Group {
+  public experimentalGetCube(): Group {
     return this.cube;
   }
 
@@ -217,7 +217,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
       for (const moveProgress of p.moves) {
         const blockMove = moveProgress.move as BlockMove;
         const turnNormal = axesInfo[familyToAxis[blockMove.family]].vector;
-        const moveMatrix = new THREE.Matrix4().makeRotationAxis(turnNormal, - this.ease(moveProgress.fraction) * moveProgress.direction * blockMove.amount * TAU / 4);
+        const moveMatrix = new Matrix4().makeRotationAxis(turnNormal, - this.ease(moveProgress.fraction) * moveProgress.direction * blockMove.amount * TAU / 4);
         for (let i = 0; i < pieces.length; i++) {
           const k = Puzzles["333"].moves[blockMove.family][orbit].permutation[i];
           if (i !== k || Puzzles["333"].moves[blockMove.family][orbit].orientation[i] !== 0) {
@@ -231,8 +231,8 @@ export class Cube3D extends Twisty3D<Puzzle> {
 
   // TODO: Always create (but sometimes hide parts) so we can show them later,
   // or (better) support creating puzzle parts on demand.
-  private createCubie(edge: CubieDef): THREE.Object3D {
-    const cubie = new THREE.Group();
+  private createCubie(edge: CubieDef): Object3D {
+    const cubie = new Group();
     if (this.options.showFoundation) {
       const foundation = this.createCubieFoundation();
       cubie.add(foundation);
@@ -253,14 +253,14 @@ export class Cube3D extends Twisty3D<Puzzle> {
   }
 
   // TODO: Support creating only the outward-facing parts?
-  private createCubieFoundation(): THREE.Mesh {
-    const box = new THREE.BoxGeometry(cubieDimensions.foundationWidth, cubieDimensions.foundationWidth, cubieDimensions.foundationWidth);
-    return new THREE.Mesh(box, blackMesh);
+  private createCubieFoundation(): Mesh {
+    const box = new BoxGeometry(cubieDimensions.foundationWidth, cubieDimensions.foundationWidth, cubieDimensions.foundationWidth);
+    return new Mesh(box, blackMesh);
   }
 
-  private createSticker(posAxisInfo: AxisInfo, materialAxisInfo: AxisInfo, isHint: boolean): THREE.Mesh {
-    const geo = new THREE.PlaneGeometry(cubieDimensions.stickerWidth, cubieDimensions.stickerWidth);
-    const stickerMesh = new THREE.Mesh(geo, isHint ? materialAxisInfo.hintStickerMaterial : materialAxisInfo.stickerMaterial);
+  private createSticker(posAxisInfo: AxisInfo, materialAxisInfo: AxisInfo, isHint: boolean): Mesh {
+    const geo = new PlaneGeometry(cubieDimensions.stickerWidth, cubieDimensions.stickerWidth);
+    const stickerMesh = new Mesh(geo, isHint ? materialAxisInfo.hintStickerMaterial : materialAxisInfo.stickerMaterial);
     stickerMesh.setRotationFromEuler(posAxisInfo.fromZ);
     stickerMesh.position.copy(posAxisInfo.vector);
     stickerMesh.position.multiplyScalar(isHint ? cubieDimensions.hintStickerElevation : cubieDimensions.stickerElevation);
