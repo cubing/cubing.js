@@ -375,7 +375,7 @@ export class Player {
     this.element = document.createElement("player");
 
     if (this.config.visualizationFormat === "PG3D") {
-       /**/
+       this.element.appendChild((new PG3DView(this.anim, definition, stickerDat)).element);
     } else if (this.config.visualizationFormat === "3D") {
       if (definition.name === "333") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
