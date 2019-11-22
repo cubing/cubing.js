@@ -34,3 +34,14 @@ export function experimentalAppendBlockMove(s: Sequence, newMove: BlockMove, coa
     return new Sequence([...oldNestedUnits, newMove]);
   }
 }
+
+// This purposely takes sequences as individual arguments, instead of a lsit of sequences, because:
+//
+// 1. This matches Javascript's built-in `Array.concat()` functionality.
+// 2. It encourages avoiding lists of sequences (which might lead to coding mistakes).
+//
+// TODO: Now useful is it to coalesce at alg boundaries (rather than coalescing the whole result)?
+// Should that be a separate function, or should we change this to accept coalescing option arg like `experimentalAppendBlockMove()`?
+export function experimentalConcatAlgs(...args: Sequence[]): Sequence {
+  return new Sequence(Array.prototype.concat.apply([], [...args].map((s) => s.nestedUnits)));
+}

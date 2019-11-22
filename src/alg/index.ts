@@ -23,6 +23,7 @@ export {
 export {
   modifiedBlockMove,
   experimentalAppendBlockMove,
+  experimentalConcatAlgs,
 } from "./operation";
 
 export {
