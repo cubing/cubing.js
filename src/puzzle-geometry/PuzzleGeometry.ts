@@ -214,7 +214,8 @@ export class PuzzleGeometry {
    public moveplanesets: any[]; // the move planes, in parallel sets
    public movesetorders: any[]; // the order of rotations for each move set
    public movesetgeos: any[];   // geometric feature information for move sets
-   public faces: Quat[][]; // all the stickers
+   public basefaces: Quat[][];  // polytope faces before cuts
+   public faces: Quat[][];      // all the stickers
    public basefacecount: number;      // number of base faces
    public stickersperface: number;    // number of stickers per face
    public cornerfaces: number;        // number of faces that meet at a corner
@@ -386,6 +387,11 @@ export class PuzzleGeometry {
       const planerot = PlatonicGenerator.uniqueplanes(boundary, this.rotations);
       const planes = planerot.map(function(_) { return boundary.rotateplane(_); });
       let faces = [PlatonicGenerator.getface(planes)];
+      this.basefaces = [] ;
+      for (let i = 0; i < this.baseplanerot.length; i++) {
+         const face = this.baseplanerot[i].rotateface(faces[0]);
+         this.basefaces.push(face) ;
+      }
       //
       //   Determine names for edges, vertices, and planes.  Planes are defined
       //   by the plane normal/distance; edges are defined by the midpoint;
@@ -1876,6 +1882,11 @@ export class PuzzleGeometry {
    public get3d(trim?: number): any {
       const stickers: any = [];
       const rot = this.getInitial3DRotation();
+      const faces: any = [] ;
+      for (let i = 0; i < this.basefaces.length; i++) {
+         const coords = rot.rotateface(this.basefaces[i]) ;
+         faces.push(this.toFaceCoords(coords)) ;
+      }
       for (let i = 0; i < this.faces.length; i++) {
          const facenum = Math.floor(i / this.stickersperface);
          const cubie = this.facetocubies[i][0];
@@ -1917,6 +1928,6 @@ export class PuzzleGeometry {
             }
          }
       }
-      return { stickers, axis: grips };
+      return { stickers, faces, axis: grips };
    }
 }

@@ -39,6 +39,30 @@ class StickerDef {
   }
 }
 
+class HitPlaneDef {
+  public cubie: Group ;
+  protected geo: Geometry ;
+  constructor(hitface: any) {
+    this.cubie = new Group() ;
+    this.geo = new Geometry() ;
+    const coords = hitface as number[][] ;
+    const vertind: number[] = [] ;
+    for (const coord of coords) {
+       const v = new Vector3(coord[0]!, coord[1]!, coord[2]!) ;
+       vertind.push(this.geo.vertices.length) ;
+       this.geo.vertices.push(v) ;
+    }
+    for (let g = 1; g + 1 < vertind.length; g++) {
+       const face = new Face3(vertind[0], vertind[g], vertind[g + 1]) ;
+       this.geo.faces.push(face) ;
+    }
+    this.geo.computeFaceNormals() ;
+    const obj = new Mesh(this.geo,
+               new MeshBasicMaterial({transparent: true, opacity: 0})) ;
+    this.cubie.add(obj) ;
+  }
+}
+
 class AxisInfo {
   public axis: Vector3 ;
   public order: number ;
@@ -79,6 +103,12 @@ export class PG3D extends Twisty3D<Puzzle> {
       stickerdef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE) ;
       this.stickers[orbit][ori][ord] = stickerdef ;
       this.scene.add(stickerdef.cubie) ;
+    }
+    const hitfaces = pgdat.faces as any[] ;
+    for (const hitface of hitfaces) {
+       const facedef = new HitPlaneDef(hitface) ;
+       facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE) ;
+       this.scene.add(facedef.cubie) ;
     }
   }
 
@@ -121,5 +151,4 @@ export class PG3D extends Twisty3D<Puzzle> {
   private ease(fraction: number): number {
     return smootherStep(fraction) ;
   }
-
 }
