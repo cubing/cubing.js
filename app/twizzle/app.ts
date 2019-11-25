@@ -1,6 +1,6 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 import { Mesh, MeshBasicMaterial, Raycaster, Vector2 } from "three";
-import { algToString, BlockMove, experimentalAppendBlockMove, getAlgURLParam, parse as algparse, Sequence } from "../../alg";
+import { algToString, BlockMove, experimentalAppendBlockMove, getAlgURLParam, parse as algparse, Sequence, BareBlockMove } from "../../alg";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../bluetooth";
 import { KPuzzle, KPuzzleDefinition, parse } from "../../kpuzzle";
 import { PuzzleGeometry, SchreierSims } from "../../puzzle-geometry";
@@ -468,10 +468,20 @@ function onMouseMove(event: MouseEvent): void {
   render();
 }
 
+function onMouseClick(event: MouseEvent): void {
+  // calculate mouse position in normalized device coordinates
+  // (-1 to +1) for both components
+
+  const canvas: HTMLCanvasElement = twisty.experimentalGetPlayer().element.querySelector("cube3d-view > canvas");
+
+  mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
+  mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
+  render(true);
+}
 /*
  *   Need camera, scene, renderer
  */
-function render(): void {
+function render(clicked: boolean = false): void {
 
   // update the picking ray with the camera and mouse position
   if (!twisty) {
@@ -485,7 +495,6 @@ function render(): void {
 
   // calculate objects intersecting the picking ray
   const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
-  console.log(controlTargets);
   const intersects = raycaster.intersectObjects(controlTargets);
   for (const intersect of intersects) {
     const material = ((intersect.object as Mesh).material as MeshBasicMaterial);
@@ -498,6 +507,9 @@ function render(): void {
       // material.color.set(material.userData.originalColor);
       material.opacity = 0;
     }, 100);
+    if (clicked) {
+      twisty.experimentalAddMove(BareBlockMove("R"));
+    }
   }
   renderer.render(scene, camera);
 }
@@ -552,4 +564,5 @@ export function setup(): void {
   setInterval(checkchange, 0.5);
 
   window.addEventListener("mousemove", onMouseMove, false);
+  window.addEventListener("click", onMouseClick, false);
 }
