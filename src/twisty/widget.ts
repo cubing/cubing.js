@@ -350,6 +350,10 @@ export class PG3DView implements CursorObserver, JumpObserver {
     setTimeout(() => this.element.classList.remove("flash"), 0);
   }
 
+  public experimentalGetPG3D(): PG3D {
+    return this.pg3D;
+  }
+
   // TODO: Remove
   private createBackViewForTesting(): void {
     const backWrapper = document.createElement("cube3d-back-wrapper");

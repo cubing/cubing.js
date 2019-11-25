@@ -97,5 +97,13 @@ export abstract class Twisty3D<P extends Puzzle> {
     }
   }
 
+  public experimentalGetScene(): Scene {
+    return this.scene;
+  }
+
+  public experimentalGetVantages(): Vantage[] {
+    return this.vantages;
+  }
+
   protected abstract updateScene(p: Cursor.Position<P>): void;
 }
