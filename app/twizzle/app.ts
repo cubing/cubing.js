@@ -461,8 +461,10 @@ function onMouseMove(event: MouseEvent): void {
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
 
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+  const canvas: HTMLCanvasElement = twisty.experimentalGetPlayer().element.querySelector("cube3d-view > canvas");
+
+  mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
+  mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
   render();
 }
 
@@ -482,11 +484,15 @@ function render(): void {
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  for (const grp of scene.children) {
-    const intersects = raycaster.intersectObjects(grp.children);
-    for (const intersect of intersects) {
-      ((intersect.object as Mesh).material as MeshBasicMaterial).color.set(0xff0000);
+  const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetStickerTargets();
+  const intersects = raycaster.intersectObjects(controlTargets);
+  for (const intersect of intersects) {
+    const material = ((intersect.object as Mesh).material as MeshBasicMaterial);
+    if (!material.userData.originalColor) {
+      material.userData.originalColor = material.color.clone();
     }
+    material.color.set(0xff0000);
+    setTimeout(() => material.color.set(material.userData.originalColor), 100);
   }
   renderer.render(scene, camera);
 }

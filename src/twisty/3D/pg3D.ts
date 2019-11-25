@@ -1,4 +1,4 @@
-import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Vector3 } from "three";
+import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Vector3, Object3D } from "three";
 import { BlockMove } from "../../alg";
 import { KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
 import { Cursor } from "../cursor";
@@ -67,7 +67,7 @@ class HitPlaneDef {
     }
     this.geo.computeFaceNormals() ;
     const obj = new Mesh(this.geo,
-               new MeshBasicMaterial({transparent: true, opacity: 0})) ;
+               new MeshBasicMaterial({transparent: true, opacity: 0, color: 0x000000})) ;
     this.cubie.add(obj) ;
   }
 }
@@ -88,6 +88,9 @@ const PG_SCALE = 0.5 ;
 export class PG3D extends Twisty3D<Puzzle> {
   private stickers: {[key: string]: StickerDef[][]} ;
   private axesInfo: {[key: string]: AxisInfo} ;
+
+  private stickerTargets: Object3D[] = [];
+  private controlTargets: Group[] = [];
 
   constructor(private definition: KPuzzleDefinition, pgdat: any) {
     super();
@@ -112,13 +115,23 @@ export class PG3D extends Twisty3D<Puzzle> {
       stickerdef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE) ;
       this.stickers[orbit][ori][ord] = stickerdef ;
       this.scene.add(stickerdef.cubie) ;
+      this.stickerTargets.push(stickerdef.cubie.children[0]);
     }
     const hitfaces = pgdat.faces as any[] ;
     for (const hitface of hitfaces) {
        const facedef = new HitPlaneDef(hitface) ;
        facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE) ;
        this.scene.add(facedef.cubie) ;
+       this.controlTargets.push(facedef.cubie);
     }
+  }
+
+  public experimentalGetStickerTargets(): Object3D[] {
+    return this.stickerTargets;
+  }
+
+  public experimentalGetControlTargets(): Group[] {
+    return this.controlTargets;
   }
 
   protected updateScene(p: Cursor.Position<Puzzle>): void {
