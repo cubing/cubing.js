@@ -1,8 +1,8 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 
-import {algToString, invert, parse, Sequence} from "../alg";
-import {BluetoothPuzzle, connect, debugKeyboardConnect, KeyboardPuzzle, MoveEvent} from "../bluetooth";
-import {Twisty} from "../twisty";
+import {algToString, invert, parse, Sequence} from "../../alg";
+import {BluetoothPuzzle, connect, debugKeyboardConnect, KeyboardPuzzle, MoveEvent} from "../../bluetooth";
+import {Twisty} from "../../twisty";
 
 async function asyncSetup(twisty: Twisty): Promise<void> {
   console.log("asyncSetup");
