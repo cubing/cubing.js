@@ -122,11 +122,7 @@ export class GoCube extends BluetoothPuzzle {
       });
     } else {
       const coords = bufferToString(buffer.buffer.slice(3, buffer.byteLength - 3)).split("#").map((s) => parseInt(s, 10) / 16384);
-
-      const quat1 = new Quaternion(coords[0], -coords[1], coords[2], coords[3]);
-      // const adjustment = new Quaternion().setFromEuler(new Euler(TAU / 2, -TAU / 4, 0));
-      // quat1.premultiply(adjustment);
-      const quat = new Quaternion(quat1.y, quat1.z, quat1.x, quat1.w);
+      const quat = new Quaternion(coords[0], coords[1], coords[2], coords[3]);
 
       this.lastRawQuat = quat.clone();
 
@@ -135,6 +131,7 @@ export class GoCube extends BluetoothPuzzle {
       }
 
       const targetQuat = quat.clone().multiply(this.homeQuatInverse!.clone());
+      targetQuat.y = -targetQuat.y; // GoCube axis fix.
 
       this.lastTarget.slerp(targetQuat, 0.5);
       this.currentQuat.rotateTowards(this.lastTarget, rotateTowardsRate);
