@@ -235,10 +235,7 @@ function dowork(cmd: string): void {
     (async () => {
       const inputPuzzle = await (cmd === "bluetooth" ? connect : debugKeyboardConnect)();
       inputPuzzle.addMoveListener((e: MoveEvent) => {
-        const currentAlg = algparse(algoinput.value);
-        const newAlg = experimentalAppendBlockMove(currentAlg, e.latestMove, true);
-        // TODO: Avoid round-trip through string?
-        setAlgo(algToString(newAlg), true);
+        addMove(e.latestMove)
       });
     })();
     return;
@@ -477,10 +474,18 @@ function render(event: MouseEvent, clicked: boolean = false, rightClick: boolean
     const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
     const intersects = raycaster.intersectObjects(controlTargets);
     if (intersects.length > 0) {
-      twisty.experimentalAddMove(intersectionToMove(intersects[0].point, event, rightClick));
+      addMove(intersectionToMove(intersects[0].point, event, rightClick));
     }
   }
   renderer.render(scene, camera);
+}
+
+// TODO: Animate latest move but cancel algorithm moves.
+function addMove(move: BlockMove): void {
+  const currentAlg = algparse(algoinput.value);
+  const newAlg = experimentalAppendBlockMove(currentAlg, move, true);
+  // TODO: Avoid round-trip through string?
+  setAlgo(algToString(newAlg), true);
 }
 
 export function setup(): void {
