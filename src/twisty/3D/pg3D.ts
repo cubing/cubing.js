@@ -1,4 +1,4 @@
-import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Vector3, Object3D } from "three";
+import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Object3D, Vector3 } from "three";
 import { BlockMove } from "../../alg";
 import { KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
 import { Cursor } from "../cursor";
