@@ -1,5 +1,5 @@
 import { BlockMove } from "../../alg";
-import { algPartToStringForTesting, experimentalBlockMoveQuantumName } from "../../alg/traversal";
+import { experimentalBlockMoveQuantumName } from "../../alg/traversal";
 import { Cursor } from "../cursor";
 
 interface Event {
@@ -43,9 +43,9 @@ export function toAxes(events: Event[], diameterMs: Cursor.Duration): TimelineEn
     };
     if (isSameAxis(lastEntry.event.move, event.move)) {
       const quarterName = experimentalBlockMoveQuantumName(newEntry.event.move);
-      console.log(quarterName);
+      // console.log(quarterName);
       const prev = axisMoveTracker.get(quarterName);
-      console.log("prev", prev);
+      // console.log("prev", prev);
       if (prev && prev.end > newEntry.start && Math.sign(prev.event.move.amount) === Math.sign(newEntry.event.move.amount)) {
         prev.event.move = new BlockMove(prev.event.move.outerLayer, prev.event.move.innerLayer, prev.event.move.family, prev.event.move.amount + newEntry.event.move.amount);
       } else {
@@ -53,7 +53,7 @@ export function toAxes(events: Event[], diameterMs: Cursor.Duration): TimelineEn
         axisMoveTracker.set(quarterName, newEntry);
       }
     } else {
-      console.log("--", algPartToStringForTesting(newEntry.event.move));
+      // console.log("--", algPartToStringForTesting(newEntry.event.move));
       axes.push([newEntry]);
       axisMoveTracker.clear();
       axisMoveTracker.set(experimentalBlockMoveQuantumName(newEntry.event.move), newEntry);
@@ -73,7 +73,7 @@ const defaultDiameterMs: Cursor.Duration = 200;
 
 export function toTimeline(events: Event[], diameterMs: number = defaultDiameterMs): Timeline {
   const axes: TimelineEntry[][] = toAxes(events, diameterMs);
-  console.log(axes);
+  // console.log(axes);
   return axes.flat();
 }
 
