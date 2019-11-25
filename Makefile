@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build dev clean test setup lint prepack parcel parcel-build-vr
+NPM_COMMANDS = build dev clean test setup lint prepack parcel parcel-dev-twizzle parcel-build-vr
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
