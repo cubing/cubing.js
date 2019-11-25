@@ -346,8 +346,10 @@ export class PG3DView implements CursorObserver, JumpObserver {
 
   public animCursorJumped(): void {
     console.log("jumped KSolve");
-    this.element.classList.add("flash");
-    setTimeout(() => this.element.classList.remove("flash"), 0);
+    if (showJumpingFlash) {
+      this.element.classList.add("flash");
+      setTimeout(() => this.element.classList.remove("flash"), 0);
+    }
   }
 
   public experimentalGetPG3D(): PG3D {
