@@ -100,9 +100,6 @@ function domove(mv: string, mod: number): void {
 }
 
 function intersectionToMove(point: Vector3, event: MouseEvent): BlockMove {
-  // let dist = 1000000;
-  // let gripind;
-  console.log(stickerDat);
   let bestGrip: MoveFamily;
   let bestProduct: number = 0;
   for (const axis of stickerDat.axis) {
@@ -122,18 +119,6 @@ function intersectionToMove(point: Vector3, event: MouseEvent): BlockMove {
       }
     }
   }
-  //     if (e.shiftKey) {
-  //       if (getCheckbox("blockmoves")) {
-  //         gripname = gripname.toLowerCase();
-  //       } else {
-  //         gripname = "2" + gripname;
-  //       }
-  //     } else if ((e.ctrlKey || e.metaKey) && gripdepth[gripname]) {
-  //       gripname = "" + gripdepth[gripname] + gripname.toLowerCase();
-  //     }
-  //     domove(gripname + (e.which === 3 ? "" : "'"), grips[gripind][3]);
-  //   }
-  // }
   return move;
 }
 
