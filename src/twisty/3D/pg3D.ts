@@ -1,10 +1,14 @@
-import {Color, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Vector3} from "three" ;
-import {BlockMove} from "../../alg" ;
-import {KPuzzleDefinition, stateForBlockMove, Transformation} from "../../kpuzzle" ;
-import {Cursor} from "../cursor" ;
-import {smootherStep} from "../easing" ;
-import {Puzzle} from "../puzzle" ;
-import {TAU, Twisty3D} from "./twisty3D" ;
+import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Vector3 } from "three";
+import { BlockMove } from "../../alg";
+import { KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
+import { Cursor } from "../cursor";
+import { smootherStep } from "../easing";
+import { Puzzle } from "../puzzle";
+import { TAU, Twisty3D } from "./twisty3D";
+
+const SHOW_FOUNDATION = true;
+
+const foundationMaterial = new MeshBasicMaterial({side: DoubleSide, color: 0x000000});
 
 class StickerDef {
   public origColor: Color ;
@@ -32,6 +36,11 @@ class StickerDef {
     const obj = new Mesh(this.geo,
                new MeshBasicMaterial({vertexColors: FaceColors})) ;
     this.cubie.add(obj) ;
+    if (SHOW_FOUNDATION) {
+      const foundation = new Mesh(this.geo, foundationMaterial) ;
+      foundation.scale.setScalar(0.99); // TODO: hacky
+      this.cubie.add(foundation);
+    }
   }
   public setColor(c: Color): void {
     this.geo.colorsNeedUpdate = true ;
