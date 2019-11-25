@@ -42,9 +42,9 @@
     "setup": "npm install",
     "lint": "tslint --fix --project . ; tslint --fix rollup.config.js",
     "prepack": "npm run clean && npm run build",
-    "parcel": "parcel serve parcel/bluetooth/index.html parcel/twizzle/index.html parcel/vr/index.html parcel/vr/proxy/proxy.html",
-    "parcel-dev-twizzle": "parcel serve parcel/twizzle/index.html",
-    "parcel-build-vr": "parcel build --public-url ./ --out-dir dist/vr parcel/vr/index.html"
+    "parcel": "parcel serve app/bluetooth/index.html app/twizzle/index.html app/vr/index.html app/vr/proxy/proxy.html",
+    "parcel-dev-twizzle": "parcel serve app/twizzle/index.html",
+    "parcel-build-vr": "parcel build --public-url ./ --out-dir dist/vr app/vr/index.html"
   },
   "bin": {
     "puzzle-geometry": "./dist/bin/puzzle-geometry-bin.js"
