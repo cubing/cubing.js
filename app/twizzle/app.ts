@@ -484,15 +484,20 @@ function render(): void {
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetStickerTargets();
+  const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
+  console.log(controlTargets);
   const intersects = raycaster.intersectObjects(controlTargets);
   for (const intersect of intersects) {
     const material = ((intersect.object as Mesh).material as MeshBasicMaterial);
-    if (!material.userData.originalColor) {
-      material.userData.originalColor = material.color.clone();
-    }
-    material.color.set(0xff0000);
-    setTimeout(() => material.color.set(material.userData.originalColor), 100);
+    // if (!material.userData.originalColor) {
+    //   material.userData.originalColor = material.color.clone();
+    // }
+    // material.color.set(0xff0000);
+    material.opacity = 0.5;
+    setTimeout(() => {
+      // material.color.set(material.userData.originalColor);
+      material.opacity = 0;
+    }, 100);
   }
   renderer.render(scene, camera);
 }

@@ -68,6 +68,7 @@ class HitPlaneDef {
     this.geo.computeFaceNormals() ;
     const obj = new Mesh(this.geo,
                new MeshBasicMaterial({transparent: true, opacity: 0, color: 0x000000})) ;
+    this.cubie.scale.setScalar(0.99);
     this.cubie.add(obj) ;
   }
 }
@@ -90,7 +91,7 @@ export class PG3D extends Twisty3D<Puzzle> {
   private axesInfo: {[key: string]: AxisInfo} ;
 
   private stickerTargets: Object3D[] = [];
-  private controlTargets: Group[] = [];
+  private controlTargets: Object3D[] = [];
 
   constructor(private definition: KPuzzleDefinition, pgdat: any) {
     super();
@@ -122,7 +123,7 @@ export class PG3D extends Twisty3D<Puzzle> {
        const facedef = new HitPlaneDef(hitface) ;
        facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE) ;
        this.scene.add(facedef.cubie) ;
-       this.controlTargets.push(facedef.cubie);
+       this.controlTargets.push(facedef.cubie.children[0]);
     }
   }
 
@@ -130,7 +131,7 @@ export class PG3D extends Twisty3D<Puzzle> {
     return this.stickerTargets;
   }
 
-  public experimentalGetControlTargets(): Group[] {
+  public experimentalGetControlTargets(): Object3D[] {
     return this.controlTargets;
   }
 
