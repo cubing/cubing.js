@@ -235,7 +235,7 @@ function dowork(cmd: string): void {
     (async () => {
       const inputPuzzle = await (cmd === "bluetooth" ? connect : debugKeyboardConnect)();
       inputPuzzle.addMoveListener((e: MoveEvent) => {
-        addMove(e.latestMove)
+        addMove(e.latestMove);
       });
     })();
     return;
