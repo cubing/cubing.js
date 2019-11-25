@@ -496,7 +496,8 @@ function render(clicked: boolean = false): void {
   // calculate objects intersecting the picking ray
   const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
-  for (const intersect of intersects) {
+  if (intersects.length > 0) {
+    const intersect = intersects[0];
     const material = ((intersect.object as Mesh).material as MeshBasicMaterial);
     // if (!material.userData.originalColor) {
     //   material.userData.originalColor = material.color.clone();
