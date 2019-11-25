@@ -1,6 +1,6 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
-import { Mesh, MeshBasicMaterial, Raycaster, Vector2 } from "three";
-import { algToString, BlockMove, experimentalAppendBlockMove, getAlgURLParam, parse as algparse, Sequence, BareBlockMove } from "../../alg";
+import { Mesh, MeshBasicMaterial, Raycaster, Vector2, Vector3 } from "three";
+import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../alg";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../bluetooth";
 import { KPuzzle, KPuzzleDefinition, parse } from "../../kpuzzle";
 import { PuzzleGeometry, SchreierSims } from "../../puzzle-geometry";
@@ -99,50 +99,42 @@ function domove(mv: string, mod: number): void {
   checkchange();
 }
 
-function noticeClick(e: any): boolean {
-  const svg: any = document.getElementById("svg");
-  if (!svg || !e) {
-    return false;
-  }
-  e.stopPropagation();
-  e.preventDefault();
-  let pt = svg.createSVGPoint();
-  pt.x = e.clientX;
-  pt.y = e.clientY;
-  pt = pt.matrixTransform(svg.getScreenCTM().inverse());
-  let dist = 1000000;
-  let gripind;
-  for (let i = 0; i < grips.length; i++) {
-    const d = Math.hypot(grips[i][0] - pt.x, grips[i][1] - pt.y);
-    if (d < dist) {
-      dist = d;
-      gripind = i;
+function intersectionToMove(point: Vector3, event: MouseEvent): BlockMove {
+  // let dist = 1000000;
+  // let gripind;
+  console.log(stickerDat);
+  let bestGrip: MoveFamily;
+  let bestProduct: number = 0;
+  for (const axis of stickerDat.axis) {
+    const product = point.dot(new Vector3(...axis[0]));
+    if (product > bestProduct) {
+      bestProduct = product;
+      bestGrip = axis[1];
     }
   }
-  if (gripind !== undefined) {
-    let gripname = grips[gripind][2];
-    if (e.shiftKey) {
+  let move = BareBlockMove(bestGrip);
+  if (bestProduct > 0) {
+    if (event.shiftKey) {
       if (getCheckbox("blockmoves")) {
-        gripname = gripname.toLowerCase();
+        move = modifiedBlockMove(move, {family: bestGrip.toLowerCase()});
       } else {
-        gripname = "2" + gripname;
+        move = modifiedBlockMove(move, {innerLayer: 2});
       }
-    } else if ((e.ctrlKey || e.metaKey) && gripdepth[gripname]) {
-      gripname = "" + gripdepth[gripname] + gripname.toLowerCase();
     }
-    domove(gripname + (e.which === 3 ? "" : "'"), grips[gripind][3]);
   }
-  return false;
-}
-
-function addClickMoves(): void {
-  const svg = document.getElementById("svg");
-  if (svg && !svg.onclick) {
-    svg.onclick = noticeClick;
-  }
-  if (svg && !svg.oncontextmenu) {
-    svg.oncontextmenu = noticeClick;
-  }
+  //     if (e.shiftKey) {
+  //       if (getCheckbox("blockmoves")) {
+  //         gripname = gripname.toLowerCase();
+  //       } else {
+  //         gripname = "2" + gripname;
+  //       }
+  //     } else if ((e.ctrlKey || e.metaKey) && gripdepth[gripname]) {
+  //       gripname = "" + gripdepth[gripname] + gripname.toLowerCase();
+  //     }
+  //     domove(gripname + (e.which === 3 ? "" : "'"), grips[gripind][3]);
+  //   }
+  // }
+  return move;
 }
 
 function LucasSetup(pg: PuzzleGeometry, ksolve: string, newStickerDat: any, savealgo: boolean): void {
@@ -167,7 +159,6 @@ function LucasSetup(pg: PuzzleGeometry, ksolve: string, newStickerDat: any, save
   } else {
     setAlgo("", true);
   }
-  addClickMoves();
 }
 
 function trimEq(a: string, b: string): boolean {
@@ -335,7 +326,6 @@ function dowork(cmd: string): void {
 
 function checkchange(): void {
   // for some reason we need to do this repeatedly
-  addClickMoves();
   const descarg = descinput.value;
   if (descarg === null) {
     return;
@@ -465,7 +455,7 @@ function onMouseMove(event: MouseEvent): void {
 
   mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
   mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
-  render();
+  render(event);
 }
 
 function onMouseClick(event: MouseEvent): void {
@@ -476,12 +466,12 @@ function onMouseClick(event: MouseEvent): void {
 
   mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
   mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
-  render(true);
+  render(event, true);
 }
 /*
  *   Need camera, scene, renderer
  */
-function render(clicked: boolean = false): void {
+function render(event: MouseEvent, clicked: boolean = false): void {
 
   // update the picking ray with the camera and mouse position
   if (!twisty) {
@@ -494,22 +484,11 @@ function render(clicked: boolean = false): void {
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
-  const intersects = raycaster.intersectObjects(controlTargets);
-  if (intersects.length > 0) {
-    const intersect = intersects[0];
-    const material = ((intersect.object as Mesh).material as MeshBasicMaterial);
-    // if (!material.userData.originalColor) {
-    //   material.userData.originalColor = material.color.clone();
-    // }
-    // material.color.set(0xff0000);
-    material.opacity = 0.5;
-    setTimeout(() => {
-      // material.color.set(material.userData.originalColor);
-      material.opacity = 0;
-    }, 100);
-    if (clicked) {
-      twisty.experimentalAddMove(BareBlockMove("R"));
+  if (clicked) {
+    const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
+    const intersects = raycaster.intersectObjects(controlTargets);
+    if (intersects.length > 0) {
+      twisty.experimentalAddMove(intersectionToMove(intersects[0].point, event));
     }
   }
   renderer.render(scene, camera);
