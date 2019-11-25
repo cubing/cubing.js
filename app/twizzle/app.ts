@@ -99,7 +99,7 @@ function domove(mv: string, mod: number): void {
   checkchange();
 }
 
-function intersectionToMove(point: Vector3, event: MouseEvent): BlockMove {
+function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boolean): BlockMove {
   let bestGrip: MoveFamily;
   let bestProduct: number = 0;
   for (const axis of stickerDat.axis) {
@@ -118,6 +118,9 @@ function intersectionToMove(point: Vector3, event: MouseEvent): BlockMove {
         move = modifiedBlockMove(move, {innerLayer: 2});
       }
     }
+  }
+  if (!rightClick) {
+    move = modifiedBlockMove(move, {amount: -move.amount});
   }
   return move;
 }
@@ -443,7 +446,7 @@ function onMouseMove(event: MouseEvent): void {
   render(event);
 }
 
-function onMouseClick(event: MouseEvent): void {
+function onMouseClick(rightClick: boolean, event: MouseEvent): void {
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
 
@@ -451,12 +454,12 @@ function onMouseClick(event: MouseEvent): void {
 
   mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
   mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
-  render(event, true);
+  render(event, true, rightClick);
 }
 /*
  *   Need camera, scene, renderer
  */
-function render(event: MouseEvent, clicked: boolean = false): void {
+function render(event: MouseEvent, clicked: boolean = false, rightClick: boolean = false): void {
 
   // update the picking ray with the camera and mouse position
   if (!twisty) {
@@ -470,10 +473,11 @@ function render(event: MouseEvent, clicked: boolean = false): void {
 
   // calculate objects intersecting the picking ray
   if (clicked) {
+    event.preventDefault();
     const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
     const intersects = raycaster.intersectObjects(controlTargets);
     if (intersects.length > 0) {
-      twisty.experimentalAddMove(intersectionToMove(intersects[0].point, event));
+      twisty.experimentalAddMove(intersectionToMove(intersects[0].point, event, rightClick));
     }
   }
   renderer.render(scene, camera);
@@ -529,5 +533,6 @@ export function setup(): void {
   setInterval(checkchange, 0.5);
 
   window.addEventListener("mousemove", onMouseMove, false);
-  window.addEventListener("click", onMouseClick, false);
+  window.addEventListener("click", onMouseClick.bind(onMouseClick, false), false);
+  window.addEventListener("contextmenu", onMouseClick.bind(onMouseClick, true), false);
 }
