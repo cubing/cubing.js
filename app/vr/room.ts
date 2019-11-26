@@ -1,18 +1,17 @@
 import { Color, HemisphereLight, LineBasicMaterial, LineSegments, Scene } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry";
-import { VRCube } from "./vr-cube";
 import { VRInput as VRInput } from "./vr-input";
+import { VRPuzzle } from "./vr-puzzle";
 
 export class Room {
   public scene: Scene;
   private box: LineSegments;
-  private vrCube: VRCube;
-  constructor(private vrInput: VRInput) {
+  constructor(private vrInput: VRInput, private vrPuzzle: VRPuzzle) {
     this.scene = new Scene();
     this.scene.background = new Color(0x505050);
 
-    this.vrCube = new VRCube(vrInput);
-    this.scene.add(this.vrCube.group);
+    console.log(this.vrPuzzle.group);
+    this.scene.add(this.vrPuzzle.group);
     this.box = new LineSegments(
       new BoxLineGeometry(6, 6, 6, 10, 10, 10),
       new LineBasicMaterial({ color: 0x808080 }),
@@ -30,6 +29,6 @@ export class Room {
   }
 
   public update(): void {
-    this.vrCube.update();
+    this.vrPuzzle.update();
   }
 }
