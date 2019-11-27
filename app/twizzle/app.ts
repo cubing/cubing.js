@@ -454,7 +454,6 @@ function render(event: MouseEvent, clicked: boolean = false, rightClick: boolean
   const scene = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetScene();
   for (const vantage of (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetVantages()) {
      const canvas: HTMLCanvasElement = vantage.renderer.domElement ;
-     console.log(canvas) ;
      // calculate mouse position in normalized device coordinates
      // (-1 to +1) for both components
      mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
