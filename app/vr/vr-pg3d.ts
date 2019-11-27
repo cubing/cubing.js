@@ -1,11 +1,14 @@
 import { DoubleSide, Euler, Group, Mesh, MeshBasicMaterial, Quaternion, Vector3 } from "three";
-import { getPuzzleGeometryByName } from "../../puzzle-geometry";
-import { Sequence } from "../../src/alg";
-import { Twisty } from "../../src/twisty";
-import { PG3D } from "../../src/twisty/3D/pg3D";
-import { TAU } from "../../src/twisty/3d/twisty3D";
 import { ProxyReceiver } from "./proxy/websocket-proxy";
 import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
+
+// Import index files from source.
+// This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
+import { getPuzzleGeometryByName } from "../../puzzle-geometry/index";
+import { Sequence } from "../../src/alg/index";
+import { PG3D } from "../../src/twisty/3D/pg3D"; // TODO: Don't use module-internal export.
+import { TAU } from "../../src/twisty/3d/twisty3D"; // TODO: Don't use module-internal export.
+import { Twisty } from "../../src/twisty/index";
 
 let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
 if (isNaN(initialHeight)) {

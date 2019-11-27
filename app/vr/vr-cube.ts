@@ -1,10 +1,14 @@
 import { DoubleSide, Euler, Group, Intersection, Material, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Raycaster, Vector3 } from "three";
-import { BareBlockMove, Sequence } from "../../src/alg";
-import { Twisty } from "../../src/twisty";
-import { Cube3D } from "../../src/twisty/3d/cube3D";
-import { TAU } from "../../src/twisty/3d/twisty3D";
+
 import { ProxyEvent, ProxyReceiver } from "./proxy/websocket-proxy";
 import { ButtonGrouping, controllerDirection, OculusButton, Status, VRInput } from "./vr-input";
+
+// Import index files from source.
+// This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
+import { BareBlockMove, Sequence } from "../../src/alg/index";
+import { Cube3D } from "../../src/twisty/3d/cube3D"; // TODO: Don't use module-internal export.
+import { TAU } from "../../src/twisty/3d/twisty3D"; // TODO: Don't use module-internal export.
+import { Twisty } from "../../src/twisty/index";
 
 let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
 if (isNaN(initialHeight)) {
@@ -92,7 +96,7 @@ export class VRCube {
     // TODO: Better abstraction over controllers.
     this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Grip }, this.gripStart.bind(this, 1), this.gripContinued.bind(this, 1));
 
-    console.log({daydream});
+    console.log({ daydream });
     this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 0));
     this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 1));
     // TODO: Generalize this to multiple platforms.

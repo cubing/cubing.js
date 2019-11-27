@@ -1,10 +1,13 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
-import { Mesh, MeshBasicMaterial, Raycaster, Vector2, Vector3 } from "three";
-import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../alg";
-import { connect, debugKeyboardConnect, MoveEvent } from "../../bluetooth";
-import { KPuzzle, KPuzzleDefinition, parse } from "../../kpuzzle";
-import { PuzzleGeometry, SchreierSims } from "../../puzzle-geometry";
-import { experimentalShowJumpingFlash, Twisty } from "../../twisty";
+import { Raycaster, Vector2, Vector3 } from "three";
+
+// Import index files from source.
+// This allows Parcel to be faster while only using values exported in the final distribution.
+import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
+import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
+import { KPuzzle, KPuzzleDefinition, parse } from "../../src/kpuzzle/index";
+import { PuzzleGeometry, SchreierSims } from "../../src/puzzle-geometry/index";
+import { experimentalShowJumpingFlash, Twisty } from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
 
@@ -113,14 +116,14 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
   if (bestProduct > 0) {
     if (event.shiftKey) {
       if (getCheckbox("blockmoves")) {
-        move = modifiedBlockMove(move, {family: bestGrip.toLowerCase()});
+        move = modifiedBlockMove(move, { family: bestGrip.toLowerCase() });
       } else {
-        move = modifiedBlockMove(move, {innerLayer: 2});
+        move = modifiedBlockMove(move, { innerLayer: 2 });
       }
     }
   }
   if (!rightClick) {
-    move = modifiedBlockMove(move, {amount: -move.amount});
+    move = modifiedBlockMove(move, { amount: -move.amount });
   }
   return move;
 }

@@ -3,8 +3,10 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 import { ProxySender } from "./websocket-proxy";
 
-import { BluetoothPuzzle, connect, debugKeyboardConnect } from "../../../src/bluetooth";
-import { GoCube } from "../../../src/bluetooth/gocube";
+// Import index files from source.
+// This allows Parcel to be faster while only using values exported in the final distribution.
+import { BluetoothPuzzle, connect, debugKeyboardConnect } from "../../../src/bluetooth/index";
+import { GoCube } from "../../../src/bluetooth/index";
 
 class App {
   private proxySender = new ProxySender();
