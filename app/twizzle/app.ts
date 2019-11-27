@@ -5,13 +5,9 @@ import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, get
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
-import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
+import { KPuzzle, KPuzzleDefinition, parse } from "../../src/kpuzzle/index";
 import { PuzzleGeometry, SchreierSims } from "../../src/puzzle-geometry/index";
 import { experimentalShowJumpingFlash, Twisty } from "../../src/twisty/index";
-
-// Exception: Import KPuzzle parser from the distribution build.
-// This means that the distribution will need to be rebuilt for KPuzzle parser changes.
-import { parse } from "../../kpuzzle";
 
 experimentalShowJumpingFlash(false);
 
