@@ -1,3 +1,6 @@
+
+<img src="cubing.js.jpg" width="100%">
+
 # `cubing.js`
 
 `cubing.js` is a collection of Javascript libraries, still under development.
