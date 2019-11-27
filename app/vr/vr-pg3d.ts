@@ -4,8 +4,8 @@ import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
 
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
-import { getPuzzleGeometryByName } from "../../puzzle-geometry/index";
 import { Sequence } from "../../src/alg/index";
+import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
 import { PG3D } from "../../src/twisty/3D/pg3D"; // TODO: Don't use module-internal export.
 import { TAU } from "../../src/twisty/3d/twisty3D"; // TODO: Don't use module-internal export.
 import { Twisty } from "../../src/twisty/index";
