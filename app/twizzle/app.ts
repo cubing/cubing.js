@@ -433,24 +433,10 @@ function encodealg(s:string) {
 const raycaster = new Raycaster();
 const mouse = new Vector2();
 function onMouseMove(event: MouseEvent): void {
-  // calculate mouse position in normalized device coordinates
-  // (-1 to +1) for both components
-
-  const canvas: HTMLCanvasElement = twisty.experimentalGetPlayer().element.querySelector("cube3d-view > canvas");
-
-  mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
-  mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
   render(event);
 }
 
 function onMouseClick(rightClick: boolean, event: MouseEvent): void {
-  // calculate mouse position in normalized device coordinates
-  // (-1 to +1) for both components
-
-  const canvas: HTMLCanvasElement = twisty.experimentalGetPlayer().element.querySelector("cube3d-view > canvas");
-
-  mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
-  mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
   render(event, true, rightClick);
 }
 /*
@@ -462,28 +448,35 @@ function render(event: MouseEvent, clicked: boolean = false, rightClick: boolean
   if (!twisty) {
     return;
   }
-  const vantage = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetVantages()[0];
   const scene = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetScene();
-  const camera = vantage.camera;
-  const renderer = vantage.renderer;
-  raycaster.setFromCamera(mouse, camera);
+  for (const vantage of (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetVantages()) {
+     const canvas: HTMLCanvasElement = vantage.element ;
+     // calculate mouse position in normalized device coordinates
+     // (-1 to +1) for both components
+     mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
+     mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
+     const camera = vantage.camera;
+     const renderer = vantage.renderer;
+     raycaster.setFromCamera(mouse, camera);
 
-  // calculate objects intersecting the picking ray
-  if (clicked) {
-    event.preventDefault();
-    const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
-    const intersects = raycaster.intersectObjects(controlTargets);
-    if (intersects.length > 0) {
-      addMove(intersectionToMove(intersects[0].point, event, rightClick));
-    }
-  }
-  renderer.render(scene, camera);
+     // calculate objects intersecting the picking ray
+     if (clicked) {
+       event.preventDefault();
+       const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
+       const intersects = raycaster.intersectObjects(controlTargets);
+       if (intersects.length > 0) {
+         addMove(intersectionToMove(intersects[0].point, event, rightClick));
+         renderer.render(scene, camera);
+         return ;
+       }
+     }
+   }
 }
 
 // TODO: Animate latest move but cancel algorithm moves.
 function addMove(move: BlockMove): void {
   const currentAlg = algparse(algoinput.value);
-  const newAlg = experimentalAppendBlockMove(currentAlg, move, true);
+  const newAlg = experimentalAppendBlockMove(currentAlg, move, false);
   // TODO: Avoid round-trip through string?
   setAlgo(algToString(newAlg), true);
 }
