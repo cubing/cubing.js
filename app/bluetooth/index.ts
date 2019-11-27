@@ -4,7 +4,9 @@ import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. h
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { algToString, invert, parse, Sequence } from "../../src/alg/index";
 import { BluetoothPuzzle, connect, debugKeyboardConnect, KeyboardPuzzle, MoveEvent } from "../../src/bluetooth/index";
-import { Twisty } from "../../src/twisty/index";
+import { experimentalShowJumpingFlash, Twisty } from "../../src/twisty/index";
+
+experimentalShowJumpingFlash(false);
 
 async function asyncSetup(twisty: Twisty): Promise<void> {
   console.log("asyncSetup");
