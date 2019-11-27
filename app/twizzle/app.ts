@@ -1,9 +1,9 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 import { Raycaster, Vector2, Vector3 } from "three";
-import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../alg";
 
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
+import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
 import { KPuzzle, KPuzzleDefinition, parse } from "../../src/kpuzzle/index";
 import { PuzzleGeometry, SchreierSims } from "../../src/puzzle-geometry/index";
