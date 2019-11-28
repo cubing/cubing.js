@@ -7,7 +7,7 @@ import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, get
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
 import { KPuzzle, KPuzzleDefinition, parse } from "../../src/kpuzzle/index";
 import { PuzzleGeometry, SchreierSims } from "../../src/puzzle-geometry/index";
-import { experimentalShowJumpingFlash, Twisty } from "../../src/twisty/index";
+import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
 
@@ -172,6 +172,18 @@ function setAlgo(str: string, writeback: boolean): void {
           experimentalPG3DStickerDat: stickerDat,
         },
       });
+
+      const vantages: Vantage[] = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetVantages();
+      // TODO: This is a hack.
+      // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
+      // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
+      setTimeout(() => {
+        for (const vantage of vantages) {
+          vantage.renderer.domElement.addEventListener("click", onMouseClick.bind(onMouseClick, vantage, false), false);
+          vantage.renderer.domElement.addEventListener("contextmenu", onMouseClick.bind(onMouseClick, vantage, true), false);
+        }
+      }, 1);
+
       puzzleSelected = false;
     }
     str = str.trim();
@@ -433,47 +445,27 @@ function encodealg(s:string) {
    return s.replace(/ /g, "_").replace(/'/g, "-") ;
 }
  */
-const raycaster = new Raycaster();
-const mouse = new Vector2();
-function onMouseMove(event: MouseEvent): void {
-  render(event);
-}
 
-function onMouseClick(rightClick: boolean, event: MouseEvent): void {
-  render(event, true, rightClick);
-}
-/*
- *   Need camera, scene, renderer
- */
-function render(event: MouseEvent, clicked: boolean = false, rightClick: boolean = false): void {
-
-  // update the picking ray with the camera and mouse position
-  if (!twisty) {
-    return;
-  }
+function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent): void {
+  const raycaster = new Raycaster();
+  const mouse = new Vector2();
   const scene = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetScene();
-  for (const vantage of (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetVantages()) {
-     const canvas: HTMLCanvasElement = vantage.renderer.domElement ;
-     // calculate mouse position in normalized device coordinates
-     // (-1 to +1) for both components
-     mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
-     mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
-     const camera = vantage.camera;
-     const renderer = vantage.renderer;
-     raycaster.setFromCamera(mouse, camera);
+  const canvas: HTMLCanvasElement = vantage.renderer.domElement;
+  // calculate mouse position in normalized device coordinates
+  // (-1 to +1) for both components
+  mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
+  mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
+  const camera = vantage.camera;
+  const renderer = vantage.renderer;
+  raycaster.setFromCamera(mouse, camera);
 
-     // calculate objects intersecting the picking ray
-     if (clicked) {
-       event.preventDefault();
-       const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
-       const intersects = raycaster.intersectObjects(controlTargets);
-       if (intersects.length > 0) {
-         addMove(intersectionToMove(intersects[0].point, event, rightClick));
-         renderer.render(scene, camera);
-         return ;
-       }
-     }
-   }
+  // calculate objects intersecting the picking ray
+  const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
+  const intersects = raycaster.intersectObjects(controlTargets);
+  if (intersects.length > 0) {
+    event.preventDefault();
+    addMove(intersectionToMove(intersects[0].point, event, rightClick));
+  }
 }
 
 // TODO: Animate latest move but cancel algorithm moves.
@@ -532,8 +524,4 @@ export function setup(): void {
   }
   checkchange();
   setInterval(checkchange, 0.5);
-
-  window.addEventListener("mousemove", onMouseMove, false);
-  window.addEventListener("click", onMouseClick.bind(onMouseClick, false), false);
-  window.addEventListener("contextmenu", onMouseClick.bind(onMouseClick, true), false);
 }
