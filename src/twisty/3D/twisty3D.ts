@@ -3,7 +3,7 @@ import Stats from "three/examples/jsm/libs/stats.module";
 import { Cursor } from "../cursor";
 import { Puzzle } from "../puzzle";
 
-const SHOW_STATS = false;
+const SHOW_STATS = true;
 
 export const TAU = Math.PI * 2;
 
@@ -48,9 +48,12 @@ export class Vantage {
   }
 
   public render(): void {
+    if (this.stats) {
+      this.stats.begin();
+    }
     this.renderer.render(this.scene, this.camera);
     if (this.stats) {
-      this.stats.update();
+      this.stats.end();
     }
   }
 
