@@ -294,6 +294,7 @@ export class PuzzleGeometry {
     }
     this.create(shape, cuts);
   }
+
   // split a geometrical element into face names.  The facenames must
   // be prefix-free.
   public splitByFaceNames(s: string, facenames: any[]): string[] {
@@ -315,6 +316,7 @@ export class PuzzleGeometry {
     }
     return r;
   }
+
   public create(shape: string, cuts: any[]): void {
     // create the shape, doing all the essential geometry
     // create only goes far enough to figure out how many stickers per
@@ -595,6 +597,7 @@ export class PuzzleGeometry {
     this.shortedge = shortedge;
     if (this.verbose) { console.log("# Short edge is " + shortedge); }
   }
+
   public keyface(face: Quat[]): string {
     // take a face and figure out the sides of each move plane
     let s = "";
@@ -609,9 +612,11 @@ export class PuzzleGeometry {
     }
     return s;
   }
+
   public findcubie(face: Quat[]): number {
     return this.facetocubies[this.findface(face)][0];
   }
+
   public findface(face: Quat[]): number {
     const cm = Quat.centermassface(face);
     const key = this.keyface(face);
@@ -624,6 +629,7 @@ export class PuzzleGeometry {
     }
     throw new Error("Could not find face.");
   }
+
   public project2d(facen: number, edgen: number, targvec: Quat[]): any {
     // calculate geometry to map a particular edge of a particular
     //  face to a given 2D vector.  The face is given as an index into the
@@ -647,6 +653,7 @@ export class PuzzleGeometry {
       targvec[0].c - y1.dot(face[edgen]), 0);
     return [x1, y1, off];
   }
+
   public allstickers(): void {
     // next step is to calculate all the stickers and orbits
     // We do enough work here to display the cube on the screen.
@@ -957,6 +964,7 @@ export class PuzzleGeometry {
     // show the orbits
     if (this.verbose) { console.log("# Cubie orbit sizes " + cubieords); }
   }
+
   public spinmatch(a: string, b: string): boolean {
     // are these the same rotationally?
     if (a === b) {
@@ -986,6 +994,7 @@ export class PuzzleGeometry {
       return false;
     }
   }
+
   public parsemove(mv: string): any { // parse a move from the command line
     const re = RegExp("^(([0-9]+)-)?([0-9]+)?([A-Za-z]+)([-'0-9]+)?$");
     const p = mv.match(re);
@@ -1073,6 +1082,7 @@ export class PuzzleGeometry {
     const r = [mv, msi, loslice, hislice, firstgrip, amount];
     return r;
   }
+
   public genperms(): void { // generate permutations for moves
     if (this.cmovesbyslice.length > 0) { // did this already?
       return;
@@ -1164,11 +1174,13 @@ export class PuzzleGeometry {
       this.parsedmovelist = parsedmovelist;
     }
   }
+
   public getfaces(): number[][][] { // get the faces for 3d.
     return this.faces.map((_) => {
       return _.map((__) => [__.b, __.c, __.d]);
     });
   }
+
   public getboundarygeometry(): any { // get the boundary geometry
     return {
       baseplanes: this.baseplanes,
@@ -1179,6 +1191,7 @@ export class PuzzleGeometry {
       geonormals: this.geonormals,
     };
   }
+
   public getmovesets(k: number): any {
     // get the move sets we support based on slices
     // for even values we omit the middle "slice".  This isn't perfect
@@ -1268,6 +1281,7 @@ export class PuzzleGeometry {
     }
     return r;
   }
+
   public skipbyori(cubie: number): boolean {
     let ori = this.cubies[cubie].length;
     if (this.duplicatedCubies[cubie]) {
@@ -1277,6 +1291,7 @@ export class PuzzleGeometry {
       (ori === 2 && !this.edgesets) ||
       (ori > 2 && !this.cornersets));
   }
+
   public skipcubie(set: number[]): boolean {
     if (set.length === 0) {
       return true;
@@ -1284,6 +1299,7 @@ export class PuzzleGeometry {
     const fi = set[0];
     return this.skipbyori(fi);
   }
+
   public skipset(set: number[]): boolean {
     if (set.length === 0) {
       return true;
@@ -1291,10 +1307,12 @@ export class PuzzleGeometry {
     const fi = set[0];
     return this.skipbyori(this.facetocubies[fi][0]);
   }
+
   public header(comment: string): string {
     return comment + copyright + "\n" +
       comment + this.args + "\n";
   }
+
   public writegap(): string { // write out a gap set of generators
     const os = this.getOrbitsDef(false);
     const r = [];
@@ -1314,6 +1332,7 @@ export class PuzzleGeometry {
     r.push("");
     return this.header("# ") + r.join("\n");
   }
+
   public getmovename(geo: any, bits: number, slices: number): any {
     // generate a move name based on bits, slice, and geo
     // if the move name is from the opposite face, say so.
@@ -1353,6 +1372,7 @@ export class PuzzleGeometry {
     }
     return [movenamePrefix + movenameFamily, inverted];
   }
+
   public writeksolve(name: string = "PuzzleGeometryPuzzle", fortwisty: boolean = false): string {
     const od = this.getOrbitsDef(fortwisty);
     if (fortwisty) {
@@ -1361,6 +1381,7 @@ export class PuzzleGeometry {
       return this.header("# ") + od.toKsolve(name, fortwisty).join("\n");
     }
   }
+
   public getOrbitsDef(fortwisty: boolean): OrbitsDef {
     // generate a representation of the puzzle
     const setmoves = [];
@@ -1511,14 +1532,17 @@ export class PuzzleGeometry {
     }
     return r;
   }
+
   public getMovesAsPerms(): Perm[] {
     return this.getOrbitsDef(false).moveops.
       map((_: Transformation) => _.toPerm());
   }
+
   public showcanon(disp: (s: string) => void): void {
     // show information for canonical move derivation
     showcanon(this.getOrbitsDef(false), disp);
   }
+
   public getsolved(): Perm { // get a solved position
     const r = [];
     for (let i = 0; i < this.basefacecount; i++) {
@@ -1528,6 +1552,7 @@ export class PuzzleGeometry {
     }
     return new Perm(r);
   }
+
   public getInitial3DRotation() {
     const basefacecount = this.basefacecount;
     if (basefacecount === 4) {
@@ -1549,6 +1574,7 @@ export class PuzzleGeometry {
       throw new Error("Wrong base face count");
     }
   }
+
   public generatesvg(w: number = 800, h: number = 500, trim: number = 10, threed: boolean = false): string {
     // generate svg to interoperate with Lucas twistysim
     w -= 2 * trim;
@@ -1820,9 +1846,11 @@ export class PuzzleGeometry {
     this.svggrips = svggrips;
     return html;
   }
+
   public toCoords(q: Quat): number[] {
     return [-q.b, -q.c, -q.d];
   }
+
   public toFaceCoords(q: Quat[]): number[][] {
     const r = [];
     const n = q.length;
@@ -1831,6 +1859,7 @@ export class PuzzleGeometry {
     }
     return r;
   }
+
   public trimEdges(face: Quat[], tr: number): Quat[] {
     const r: Quat[] = [];
     for (let iter = 1; iter < 10; iter++) {
@@ -1858,6 +1887,7 @@ export class PuzzleGeometry {
     }
     return face;
   }
+
   public get3d(trim?: number): any {
     const stickers: any = [];
     const rot = this.getInitial3DRotation();
