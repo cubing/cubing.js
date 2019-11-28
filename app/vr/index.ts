@@ -1,12 +1,11 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 import { PerspectiveCamera, WebGLRenderer } from "three";
 import { WEBVR } from "../../src/vendor/three/examples/jsm/vr/WebVR";
+import { usePG3D } from "./config";
 import { Room } from "./room";
 import { VRCube } from "./vr-cube";
 import { VRInput } from "./vr-input";
 import { VRPG3D } from "./vr-pg3d";
-
-const VR_PUZZLE = VRPG3D;
 
 class VRCubeDemo {
   private camera: PerspectiveCamera;
@@ -27,7 +26,8 @@ class VRCubeDemo {
 
     this.vrInput = new VRInput(this.renderer);
 
-    const vrPuzzle = new VR_PUZZLE(this.vrInput);
+    const puzzleConstructor = usePG3D ? VRPG3D : VRCube;
+    const vrPuzzle = new puzzleConstructor(this.vrInput);
     this.room = new Room(this.vrInput, vrPuzzle);
     document.body.appendChild(this.renderer.domElement);
     document.body.appendChild(WEBVR.createButton(this.renderer));
