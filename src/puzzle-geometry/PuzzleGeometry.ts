@@ -181,6 +181,72 @@ export function getPuzzleGeometryByName(puzzleName: PuzzleName): PuzzleGeometry 
   return getPuzzleGeometryByDesc(Puzzles[puzzleName]);
 }
 
+function getmovename(geo: any, bits: number, slices: number): any {
+  // generate a move name based on bits, slice, and geo
+  // if the move name is from the opposite face, say so.
+  // find the face that's turned.
+  let nbits = 0;
+  let inverted = false;
+  for (let i = 0; i <= slices; i++) {
+    if ((bits >> i) & 1) {
+      nbits |= 1 << (slices - i);
+    }
+  }
+  if (nbits < bits) { // flip if most of the move is on the other side
+    geo = [geo[2], geo[3], geo[0], geo[1]];
+    bits = nbits;
+    inverted = true;
+  }
+  let movenameFamily = geo[0];
+  let movenamePrefix = "";
+  let hibit = 0;
+  while (bits >> (1 + hibit)) {
+    hibit++;
+  }
+  if (bits === (2 << slices) - 1) {
+    movenameFamily = movenameFamily + "p";
+  } else if (bits === (1 << hibit)) {
+    if (hibit > 0) {
+      movenamePrefix = String(hibit + 1);
+    }
+  } else if (bits === ((2 << hibit) - 1)) {
+    movenameFamily = movenameFamily.toLowerCase();
+    if (hibit > 1) {
+      movenamePrefix = String(hibit + 1);
+    }
+  } else {
+    movenamePrefix = "_" + bits + "_";
+    //       throw "We only support slice and outer block moves right now. " + bits ;
+  }
+  return [movenamePrefix + movenameFamily, inverted];
+}
+
+// split a geometrical element into face names.  The facenames must
+// be prefix-free.
+function splitByFaceNames(s: string, facenames: any[]): string[] {
+  const r: string[] = [];
+  let at = 0;
+  while (at < s.length) {
+    let found = false;
+    for (let i = 0; i < facenames.length; i++) {
+      if (s.substr(at).startsWith(facenames[i][1])) {
+        r.push(facenames[i][1]);
+        at += facenames[i][1].length;
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      throw new Error(("Could not split " + s + " into face names."));
+    }
+  }
+  return r;
+}
+
+function toCoords(q: Quat): number[] {
+  return [-q.b, -q.c, -q.d];
+}
+
 export class PuzzleGeometry {
   public args: string = "";
   public rotations: Quat[];    // all members of the rotation group
@@ -293,28 +359,6 @@ export class PuzzleGeometry {
       console.log(this.header("# "));
     }
     this.create(shape, cuts);
-  }
-
-  // split a geometrical element into face names.  The facenames must
-  // be prefix-free.
-  public splitByFaceNames(s: string, facenames: any[]): string[] {
-    const r: string[] = [];
-    let at = 0;
-    while (at < s.length) {
-      let found = false;
-      for (let i = 0; i < facenames.length; i++) {
-        if (s.substr(at).startsWith(facenames[i][1])) {
-          r.push(facenames[i][1]);
-          at += facenames[i][1].length;
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        throw new Error(("Could not split " + s + " into face names."));
-      }
-    }
-    return r;
   }
 
   public create(shape: string, cuts: any[]): void {
@@ -974,8 +1018,8 @@ export class PuzzleGeometry {
       return false;
     }
     try {
-      const e1 = this.splitByFaceNames(a, this.facenames);
-      const e2 = this.splitByFaceNames(b, this.facenames);
+      const e1 = splitByFaceNames(a, this.facenames);
+      const e2 = splitByFaceNames(b, this.facenames);
       if (e1.length !== e2.length) {
         return false;
       }
@@ -1333,46 +1377,6 @@ export class PuzzleGeometry {
     return this.header("# ") + r.join("\n");
   }
 
-  public getmovename(geo: any, bits: number, slices: number): any {
-    // generate a move name based on bits, slice, and geo
-    // if the move name is from the opposite face, say so.
-    // find the face that's turned.
-    let nbits = 0;
-    let inverted = false;
-    for (let i = 0; i <= slices; i++) {
-      if ((bits >> i) & 1) {
-        nbits |= 1 << (slices - i);
-      }
-    }
-    if (nbits < bits) { // flip if most of the move is on the other side
-      geo = [geo[2], geo[3], geo[0], geo[1]];
-      bits = nbits;
-      inverted = true;
-    }
-    let movenameFamily = geo[0];
-    let movenamePrefix = "";
-    let hibit = 0;
-    while (bits >> (1 + hibit)) {
-      hibit++;
-    }
-    if (bits === (2 << slices) - 1) {
-      movenameFamily = movenameFamily + "p";
-    } else if (bits === (1 << hibit)) {
-      if (hibit > 0) {
-        movenamePrefix = String(hibit + 1);
-      }
-    } else if (bits === ((2 << hibit) - 1)) {
-      movenameFamily = movenameFamily.toLowerCase();
-      if (hibit > 1) {
-        movenamePrefix = String(hibit + 1);
-      }
-    } else {
-      movenamePrefix = "_" + bits + "_";
-      //       throw "We only support slice and outer block moves right now. " + bits ;
-    }
-    return [movenamePrefix + movenameFamily, inverted];
-  }
-
   public writeksolve(name: string = "PuzzleGeometryPuzzle", fortwisty: boolean = false): string {
     const od = this.getOrbitsDef(fortwisty);
     if (fortwisty) {
@@ -1452,7 +1456,7 @@ export class PuzzleGeometry {
       const movesetgeo = this.movesetgeos[k];
       for (let i = 0; i < moveset.length; i += 2) {
         const movebits = moveset[i];
-        const mna = this.getmovename(movesetgeo, movebits, slices);
+        const mna = getmovename(movesetgeo, movebits, slices);
         const movename = mna[0];
         const inverted = mna[1];
         movenames.push(movename);
@@ -1706,7 +1710,7 @@ export class PuzzleGeometry {
         const mp = thisface[(caf0 + j) % polyn].sum(thisface[(caf0 + j + polyn - 1) % polyn]).smul(0.5);
         const epi = findelement(bg.edgenames, mp);
         const edgename = bg.edgenames[epi][1];
-        const el = this.splitByFaceNames(edgename, this.facenames);
+        const el = splitByFaceNames(edgename, this.facenames);
         const gf1 = el[(f0 === el[0]) ? 1 : 0];
         let gf1i = -1;
         for (let k = 0; k < bg.facenames.length; k++) {
@@ -1847,15 +1851,11 @@ export class PuzzleGeometry {
     return html;
   }
 
-  public toCoords(q: Quat): number[] {
-    return [-q.b, -q.c, -q.d];
-  }
-
   public toFaceCoords(q: Quat[]): number[][] {
     const r = [];
     const n = q.length;
     for (let i = 0; i < n; i++) {
-      r[n - i - 1] = this.toCoords(q[i]);
+      r[n - i - 1] = toCoords(q[i]);
     }
     return r;
   }
@@ -1930,9 +1930,9 @@ export class PuzzleGeometry {
       for (let j = 0; j < this.geonormals.length; j++) {
         const gn = this.geonormals[j];
         if (msg[0] === gn[1] && msg[1] === gn[2]) {
-          grips.push([this.toCoords(gn[0].rotatepoint(rot)),
+          grips.push([toCoords(gn[0].rotatepoint(rot)),
           msg[0], order]);
-          grips.push([this.toCoords(gn[0].rotatepoint(rot).smul(-1)),
+          grips.push([toCoords(gn[0].rotatepoint(rot).smul(-1)),
           msg[2], order]);
         }
       }
