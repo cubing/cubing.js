@@ -19,8 +19,4 @@
     npm install
     make parcel
 
-Then open one of:
-
-- http://localhost:1234/bluetooth/index.html
-- http://localhost:1234/twizzle/index.html
-- http://localhost:1234/vr/index.html
+This should open http://localhost:1234/ automatically.
