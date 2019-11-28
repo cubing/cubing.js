@@ -42,6 +42,7 @@
     "dev": "rollup -cw",
     "clean": "rm -rf dist .cache .rpt2_cache",
     "test": "jest && npm run lint",
+    "format": "tslint --fix --project .",
     "setup": "npm install",
     "lint": "tslint --fix --project . ; tslint --fix rollup.config.js",
     "prepack": "npm run clean && npm run build",
