@@ -7,7 +7,7 @@ import { Perm } from "./Perm";
 import { Orbit, OrbitDef, OrbitsDef, showcanon, Transformation, VisibleState } from "./PermOriSet";
 import { closure, cube, dodecahedron, getface, icosahedron, octahedron, tetrahedron, uniqueplanes } from "./PlatonicGenerator";
 import { PuzzleDescriptionString, Puzzles } from "./Puzzles";
-import { Quat } from "./Quat";
+import { centermassface, expandfaces, Quat } from "./Quat";
 
 //  Now we have a geometry class that does the 3D goemetry to calculate
 //  individual sticker information from a Platonic solid and a set of
@@ -699,12 +699,12 @@ export class PuzzleGeometry {
   }
 
   public findface(face: Quat[]): number {
-    const cm = Quat.centermassface(face);
+    const cm = centermassface(face);
     const key = this.keyface(face);
     for (let i = 0; i < this.facelisthash[key].length; i++) {
       const face2 = this.facelisthash[key][i];
       if (Math.abs(cm.dist(
-        Quat.centermassface(this.faces[face2]))) < eps) {
+        centermassface(this.faces[face2]))) < eps) {
         return face2;
       }
     }
@@ -740,7 +740,7 @@ export class PuzzleGeometry {
     // We do enough work here to display the cube on the screen.
     // take our newly split base face and expand it by the rotation matrix.
     // this generates our full set of "stickers".
-    this.faces = Quat.expandfaces(this.baseplanerot, this.faces);
+    this.faces = expandfaces(this.baseplanerot, this.faces);
     if (this.verbose) { console.log("# Total stickers is now " + this.faces.length); }
     // Split moveplanes into a list of parallel planes.
     const moveplanesets = [];
@@ -900,8 +900,8 @@ export class PuzzleGeometry {
       }
       const s = this.keyface(cubie[0]);
       const facelist = facelisthash[s];
-      const cm = cubie.map((_) => Quat.centermassface(_));
-      const cmall = Quat.centermassface(cm);
+      const cm = cubie.map((_) => centermassface(_));
+      const cmall = centermassface(cm);
       for (let looplimit = 0; cubie.length > 2; looplimit++) {
         let changed = false;
         for (let i = 0; i < cubie.length; i++) {

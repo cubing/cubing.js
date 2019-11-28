@@ -4,36 +4,60 @@
 // We need a quaternion class.  We use this to represent rotations,
 // planes, and points.
 
-export class Quat {
-  public static eps = 1e-9;
-  public static expandfaces(rots: Quat[], faces: Quat[][]): Quat[][] {
-    // given a set of faces, expand by rotation set
-    const nfaces = [];
-    for (let i = 0; i < rots.length; i++) {
-      for (let k = 0; k < faces.length; k++) {
-        const face = faces[k];
-        const nface = [];
-        for (let j = 0; j < face.length; j++) {
-          nface.push(face[j].rotateplane(rots[i]));
-        }
-        nfaces.push(nface);
+const eps = 1e-9; // TODO: Deduplicate with `PuzzleGeometry`?
+
+export function expandfaces(rots: Quat[], faces: Quat[][]): Quat[][] {
+  // given a set of faces, expand by rotation set
+  const nfaces = [];
+  for (let i = 0; i < rots.length; i++) {
+    for (let k = 0; k < faces.length; k++) {
+      const face = faces[k];
+      const nface = [];
+      for (let j = 0; j < face.length; j++) {
+        nface.push(face[j].rotateplane(rots[i]));
+      }
+      nfaces.push(nface);
+    }
+  }
+  return nfaces;
+}
+
+export function centermassface(face: Quat[]): Quat {
+  // calculate a center of a face by averaging points
+  let s = new Quat(0, 0, 0, 0);
+  for (let i = 0; i < face.length; i++) {
+    s = s.sum(face[i]);
+  }
+  return s.smul(1.0 / face.length);
+}
+
+export function random(): Quat { // generate a random quat
+  const q = new Quat(Math.random() * 2 - 1, Math.random() * 2 - 1,
+    Math.random() * 2 - 1, Math.random() * 2 - 1);
+  return q.smul(1 / q.len());
+}
+
+export function solvethreeplanes(p1: number, p2: number, p3: number, planes: Quat[]): any {
+  // find intersection of three planes but only if interior
+  // Takes three indices into a plane array, and returns the point at the
+  // intersection of all three, but only if it is internal to all planes.
+  const p = planes[p1].intersect3(planes[p2], planes[p3]);
+  if (!p) {
+    return p;
+  }
+  for (let i = 0; i < planes.length; i++) {
+    if (i !== p1 && i !== p2 && i !== p3) {
+      const dt = planes[i].b * p.b + planes[i].c * p.c + planes[i].d * p.d;
+      if ((planes[i].a > 0 && dt > planes[i].a) ||
+        (planes[i].a < 0 && dt < planes[i].a)) {
+        return false;
       }
     }
-    return nfaces;
   }
-  public static centermassface(face: Quat[]): Quat {
-    // calculate a center of a face by averaging points
-    let s = new Quat(0, 0, 0, 0);
-    for (let i = 0; i < face.length; i++) {
-      s = s.sum(face[i]);
-    }
-    return s.smul(1.0 / face.length);
-  }
-  public static random(): Quat { // generate a random quat
-    const q = new Quat(Math.random() * 2 - 1, Math.random() * 2 - 1,
-      Math.random() * 2 - 1, Math.random() * 2 - 1);
-    return q.smul(1 / q.len());
-  }
+  return p;
+}
+
+export class Quat {
   constructor(public a: number, public b: number, public c: number, public d: number) {
   }
   public mul(q: Quat): Quat { // Quaternion multiplication
@@ -114,7 +138,7 @@ export class Quat {
     const det = this.det3x3(this.b, this.c, this.d,
       p2.b, p2.c, p2.d,
       p3.b, p3.c, p3.d);
-    if (Math.abs(det) < Quat.eps) {
+    if (Math.abs(det) < eps) {
       return false; // TODO: Change to `null` or `undefined`?
     }
     return new Quat(0,
@@ -125,31 +149,12 @@ export class Quat {
       this.det3x3(this.b, this.c, this.a,
         p2.b, p2.c, p2.a, p3.b, p3.c, p3.a) / det);
   }
-  public solvethreeplanes(p1: number, p2: number, p3: number, planes: Quat[]): any {
-    // find intersection of three planes but only if interior
-    // Takes three indices into a plane array, and returns the point at the
-    // intersection of all three, but only if it is internal to all planes.
-    const p = planes[p1].intersect3(planes[p2], planes[p3]);
-    if (!p) {
-      return p;
-    }
-    for (let i = 0; i < planes.length; i++) {
-      if (i !== p1 && i !== p2 && i !== p3) {
-        const dt = planes[i].b * p.b + planes[i].c * p.c + planes[i].d * p.d;
-        if ((planes[i].a > 0 && dt > planes[i].a) ||
-          (planes[i].a < 0 && dt < planes[i].a)) {
-          return false;
-        }
-      }
-    }
-    return p;
-  }
   public side(x: number): number {
     // is this point close to the origin, or on one or the other side?
-    if (x > Quat.eps) {
+    if (x > eps) {
       return 1;
     }
-    if (x < -Quat.eps) {
+    if (x < -eps) {
       return -1;
     }
     return 0;
@@ -203,7 +208,7 @@ export class Quat {
   public sameplane(p: Quat): boolean { // are two planes the same?
     const a = this.normalize();
     const b = p.normalize();
-    return a.dist(b) < Quat.eps || a.dist(b.smul(-1)) < Quat.eps;
+    return a.dist(b) < eps || a.dist(b.smul(-1)) < eps;
   }
   public makecut(r: number): Quat { // make a cut from a normal vector
     return new Quat(r, this.b, this.c, this.d);
