@@ -1,6 +1,6 @@
 /* tslint:disable prefer-for-of */ // TODO
 
-import { Quat } from "./Quat";
+import { Quat, solvethreeplanes } from "./Quat";
 
 // Next we define a class that yields quaternion generators for each of
 // the five platonic solids.  The quaternion generators chosen are
@@ -109,7 +109,7 @@ export function getface(planes: Quat[]): Quat[] {
   const face = [];
   for (let i = 1; i < planes.length; i++) {
     for (let j = i + 1; j < planes.length; j++) {
-      const p = planes[0].solvethreeplanes(0, i, j, planes);
+      const p = solvethreeplanes(0, i, j, planes);
       if (p) {
         let wasseen = false;
         for (let k = 0; k < face.length; k++) {
