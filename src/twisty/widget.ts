@@ -1,8 +1,6 @@
 import { Vector3 } from "three";
-
 import { algToString, BlockMove, Sequence } from "../alg";
 import { Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation } from "../kpuzzle";
-
 import { Cube3D } from "./3D/cube3D";
 import { PG3D } from "./3D/pg3D";
 import { AnimModel, CursorObserver, DirectionObserver, JumpObserver } from "./anim";
@@ -52,7 +50,6 @@ export function fullscreenExit(): void {
 // TODO: Expose this as a config per instance.
 let showJumpingFlash = true;
 export function experimentalShowJumpingFlash(show: boolean): void {
-  console.log("show jumping flash:", show);
   showJumpingFlash = show;
 }
 
