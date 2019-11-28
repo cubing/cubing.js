@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Inline Test | twisty.js</title>
+  <link href="../../src/twisty/twisty.css" rel="stylesheet" type="text/css">
+  <link href="./twisty-inline.css" rel="stylesheet" type="text/css">
+  <script src="./twisty-inline.ts"></script>
+</head>
+
+<body>
+
+  <div class="content">
+    <p>
+      This should be automatically initialized:
+    </p>
+    <twisty puzzle="333" alg="U R U' R' U' R U' r2' u r U r2' u' r2 U' r' U r' U2 r"></twisty>
+    <p>
+      This should be 2D:
+    </p>
+    <twisty puzzle="333" alg="R U R' U' R' F R2 U' R' U' R U R' F'" visualization="2D"></twisty>
+    <p>
+      This should be automatically initialized, too:
+    </p>
+    <twisty puzzle="pyram" alg="R U R' U R U R'"></twisty>
+    <p>
+      But this should <strong>not</strong> be initialized:
+    </p>
+    <twisty initialization="custom"></twisty>
+    <p>
+      This should become initialized via JS:
+    </p>
+    <twisty id="custom-example" initialization="custom"></twisty>
+    <p>
+      Tempor tempor aliqua in commodo cillum Lorem magna dolore proident Lorem.
+    </p>
+  </div>
+
+</body>
+
+</html>
