@@ -12,6 +12,7 @@ interface BlockMoveModifications {
 }
 
 export function modifiedBlockMove(original: BlockMove, modifications: BlockMoveModifications): BlockMove {
+  // TODO: use the nullish coalescing operator once it becomes available to us.
   return new BlockMove(
     typeof modifications.outerLayer === "undefined" ? original.outerLayer : modifications.outerLayer,
     typeof modifications.innerLayer === "undefined" ? original.innerLayer : modifications.innerLayer,
