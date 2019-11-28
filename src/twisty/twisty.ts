@@ -98,7 +98,9 @@ function autoInitialize(elem: Element): Twisty | null {
 
 function autoInitializePage(): void {
   const elems = document.querySelectorAll("twisty");
-  console.log(`Found ${elems.length} twisty elem${elems.length === 1 ? "" : "s"} on page.`);
+  if (elems.length > 0) {
+    console.log(`Found ${elems.length} twisty elem${elems.length === 1 ? "" : "s"} on page.`);
+  }
 
   elems.forEach(autoInitialize);
 }
