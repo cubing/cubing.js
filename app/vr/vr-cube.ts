@@ -83,7 +83,6 @@ export class VRCube {
     // TODO: Better abstraction over controllers.
     this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Grip }, this.gripStart.bind(this, 1), this.gripContinued.bind(this, 1));
 
-    console.log({ daydream });
     this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 0));
     this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 1));
     // TODO: Generalize this to multiple platforms.

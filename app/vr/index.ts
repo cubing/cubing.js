@@ -16,7 +16,6 @@ class VRCubeDemo {
   private vrInput: VRInput;
 
   constructor() {
-    console.log("Constructing demo");
     this.camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     this.renderer = new WebGLRenderer({ antialias: true });
@@ -56,5 +55,3 @@ class VRCubeDemo {
 }
 
 (window as any).vrCubeDemo = new VRCubeDemo();
-
-console.log("VR loaded");

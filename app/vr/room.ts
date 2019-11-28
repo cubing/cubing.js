@@ -10,7 +10,6 @@ export class Room {
     this.scene = new Scene();
     this.scene.background = new Color(0x505050);
 
-    console.log(this.vrPuzzle.group);
     this.scene.add(this.vrPuzzle.group);
     this.box = new LineSegments(
       new BoxLineGeometry(6, 6, 6, 10, 10, 10),
