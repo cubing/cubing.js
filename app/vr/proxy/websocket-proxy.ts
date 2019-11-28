@@ -1,7 +1,7 @@
 import { MoveEvent } from "../../../src/bluetooth";
 import { OrientationEvent } from "../../../src/bluetooth/bluetooth-puzzle";
 
-const socketOrigin: string = new URL(location.href).searchParams.get("socketOrigin") || "ws://mirzakhani.local:8888";
+const socketOrigin: string | null = new URL(location.href).searchParams.get("socketOrigin") || null;
 
 export interface ProxyMoveEvent {
   event: "move";
@@ -71,6 +71,10 @@ export class ProxySender {
 export class ProxyReceiver {
   private websocket: WebSocket;
   constructor(private callback: (e: ProxyEvent) => void) {
+    if (!socketOrigin) {
+      console.log("No socket origin specified. Will not attempt to connect.");
+      return;
+    }
     const url = new URL(socketOrigin);
     url.pathname = "/register-receiver";
     this.websocket = new WebSocket(url.toString());
