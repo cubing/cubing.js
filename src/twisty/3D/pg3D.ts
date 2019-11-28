@@ -1,4 +1,4 @@
-import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Object3D, Vector3 } from "three";
+import {  Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Object3D, Vector3 } from "three";
 import { BlockMove } from "../../alg";
 import { KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
 import { Cursor } from "../cursor";
@@ -6,9 +6,13 @@ import { smootherStep } from "../easing";
 import { Puzzle } from "../puzzle";
 import { TAU, Twisty3D } from "./twisty3D";
 
-const SHOW_FOUNDATION = true;
+const SHOW_FOUNDATION = false;
 
 const foundationMaterial = new MeshBasicMaterial({ side: DoubleSide, color: 0x000000, transparent: true, opacity: 0.75 });
+const stickerMaterial = new MeshBasicMaterial({ vertexColors: FaceColors,
+  //    side: DoubleSide,
+}) ;
+const polyMaterial = new MeshBasicMaterial({ transparent: true, opacity: 0, color: 0x000000 });
 
 class StickerDef {
   public origColor: Color;
@@ -33,11 +37,7 @@ class StickerDef {
       this.geo.faces.push(face);
     }
     this.geo.computeFaceNormals();
-    const obj = new Mesh(this.geo,
-      new MeshBasicMaterial({
-        vertexColors: FaceColors,
-        side: DoubleSide,
-      }));
+    const obj = new Mesh(this.geo, stickerMaterial) ;
     this.cubie.add(obj);
     if (SHOW_FOUNDATION) {
       const foundation = new Mesh(this.geo, foundationMaterial);
@@ -69,8 +69,7 @@ class HitPlaneDef {
       this.geo.faces.push(face);
     }
     this.geo.computeFaceNormals();
-    const obj = new Mesh(this.geo,
-      new MeshBasicMaterial({ transparent: true, opacity: 0, color: 0x000000 }));
+    const obj = new Mesh(this.geo, polyMaterial) ;
     this.cubie.scale.setScalar(0.99);
     this.cubie.add(obj);
   }
@@ -162,13 +161,18 @@ export class PG3D extends Twisty3D<Puzzle> {
           pieces2[i].setColor(pieces[nori][ni].origColor);
         }
       }
-      for (const moveProgress of p.moves) {
-        const blockMove = moveProgress.move as BlockMove;
-        const fullMove = stateForBlockMove(this.definition, blockMove);
-        const ax = this.axesInfo[blockMove.family.toUpperCase()];
-        const turnNormal = ax.axis;
-        const angle = - this.ease(moveProgress.fraction) *
+   }
+   for (const moveProgress of p.moves) {
+     const blockMove = moveProgress.move as BlockMove;
+     const fullMove = stateForBlockMove(this.definition, blockMove);
+     const ax = this.axesInfo[blockMove.family.toUpperCase()];
+     const turnNormal = ax.axis;
+     const angle = - this.ease(moveProgress.fraction) *
           moveProgress.direction * blockMove.amount * TAU / ax.order;
+     for (const orbit in this.stickers) {
+        const pieces = this.stickers[orbit];
+        const pos2 = pos[orbit];
+        const orin = pieces.length;
         const mv = fullMove[orbit];
         for (let ori = 0; ori < orin; ori++) {
           const pieces2 = pieces[ori];
