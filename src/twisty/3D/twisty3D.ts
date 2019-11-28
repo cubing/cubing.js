@@ -1,7 +1,10 @@
 import { PerspectiveCamera, Renderer, Scene, Vector3, WebGLRenderer } from "three";
-
+import Stats from "three/examples/jsm/libs/stats.module";
 import { Cursor } from "../cursor";
 import { Puzzle } from "../puzzle";
+import "./three-stats";
+
+const SHOW_STATS = true;
 
 export const TAU = Math.PI * 2;
 
@@ -12,6 +15,7 @@ export class Vantage {
   public camera: PerspectiveCamera;
   public renderer: WebGLRenderer;
   private rafID: number | null = null;
+  private stats: Stats | null = null;
   constructor(public element: HTMLElement, private scene: Scene, options: VantageOptions = {}) {
     this.camera = new PerspectiveCamera(30, element.offsetWidth / element.offsetHeight, 0.1, 1000);
     this.camera.position.copy(options.position ? options.position : defaultVantagePosition);
@@ -20,7 +24,13 @@ export class Vantage {
     this.renderer = /*options.renderer ? options.renderer : */createDefaultRenderer();
     this.resize();
 
-    this.renderer.render(this.scene, this.camera);
+    this.render();
+
+    if (SHOW_STATS) {
+      this.stats = new Stats();
+      this.stats.dom.style.position = "absolute";
+      element.appendChild(this.stats.dom);
+    }
 
     // TODO: Handle Safari (use a polyfill?)
     if (useResizeObserver) {
@@ -38,6 +48,13 @@ export class Vantage {
     this.rafID = requestAnimationFrame(this.scheduledResize.bind(this));
   }
 
+  public render(): void {
+    this.renderer.render(this.scene, this.camera);
+    if (this.stats) {
+      this.stats.update();
+    }
+  }
+
   private scheduledResize(): void {
     const w = this.element.offsetWidth;
     const h = this.element.offsetHeight;
@@ -48,7 +65,7 @@ export class Vantage {
     this.renderer.setPixelRatio(pixelRatio());
     // TODO: Add a canvas wrapping class to handle sizing.
     this.renderer.setSize(w, h, false);
-    this.renderer.render(this.scene, this.camera);
+    this.render();
 
     this.rafID = null;
   }
@@ -89,7 +106,7 @@ export abstract class Twisty3D<P extends Puzzle> {
   public draw(p: Cursor.Position<P>): void {
     this.updateScene(p);
     for (const vantage of this.vantages) {
-      vantage.renderer.render(this.scene, vantage.camera);
+      vantage.render(this.scene);
     }
   }
 
