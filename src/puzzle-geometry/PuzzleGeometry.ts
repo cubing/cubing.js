@@ -239,7 +239,7 @@ export class PuzzleGeometry {
   public movesbyslice: any[];  // move as perms by slice
   public cmovesbyslice: any[] = []; // cmoves as perms by slice
   // options
-  public verbose: number = 1;         // verbosity (console.log)
+  public verbose: number = 0;         // verbosity (console.log)
   public allmoves: boolean = false; // generate all slice moves in ksolve
   public outerblockmoves: boolean;  // generate outer block moves
   public vertexmoves: boolean;      // generate vertex moves
