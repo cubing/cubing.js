@@ -357,8 +357,7 @@ export class PuzzleGeometry {
     if (this.verbose) { console.log("# Rotations: " + this.rotations.length); }
     const baseplane = g[0];
     this.baseplanerot = PlatonicGenerator.uniqueplanes(baseplane, this.rotations);
-    const baseplanes = this.baseplanerot.map(
-      function(_) { return baseplane.rotateplane(_); });
+    const baseplanes = this.baseplanerot.map((_) => baseplane.rotateplane(_));
     this.baseplanes = baseplanes;
     this.basefacecount = baseplanes.length;
     const net = PuzzleGeometry.defaultnets[baseplanes.length];
@@ -385,7 +384,7 @@ export class PuzzleGeometry {
     const boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d);
     if (this.verbose) { console.log("# Boundary is " + boundary); }
     const planerot = PlatonicGenerator.uniqueplanes(boundary, this.rotations);
-    const planes = planerot.map(function(_) { return boundary.rotateplane(_); });
+    const planes = planerot.map((_) => boundary.rotateplane(_));
     let faces = [PlatonicGenerator.getface(planes)];
     this.basefaces = [];
     for (let i = 0; i < this.baseplanerot.length; i++) {
@@ -693,19 +692,18 @@ export class PuzzleGeometry {
     }
     // make the normals all face the same way in each set.
     for (let i = 0; i < moveplanesets.length; i++) {
-      const q: Quat[] = moveplanesets[i].map(
-        function(_) { return _.normalizeplane(); });
+      const q: Quat[] = moveplanesets[i].map((_) => _.normalizeplane());
       const goodnormal = q[0].makenormal();
       for (let j = 0; j < q.length; j++) {
         if (q[j].makenormal().dist(goodnormal) > PuzzleGeometry.eps) {
           q[j] = q[j].smul(-1);
         }
       }
-      q.sort(function(a, b) { return a.a - b.a; });
+      q.sort((a, b) => a.a - b.a);
       moveplanesets[i] = q;
     }
     this.moveplanesets = moveplanesets;
-    const sizes = moveplanesets.map(function(_) { return _.length; });
+    const sizes = moveplanesets.map((_) => _.length);
     if (this.verbose) { console.log("# Move plane sets: " + sizes); }
     // for each of the move planes, find the rotations that are relevant
     const moverotations: Quat[][] = [];
@@ -737,12 +735,12 @@ export class PuzzleGeometry {
           r[j] = r[j].smul(-1);
         }
       }
-      r.sort(function(a, b) { return a.angle() - b.angle(); });
+      r.sort((a, b) => a.angle() - b.angle());
       if (moverotations[i][0].dot(moveplanesets[i][0]) < 0) {
         r.reverse();
       }
     }
-    const sizes2 = moverotations.map(function(_) { return 1 + _.length; });
+    const sizes2 = moverotations.map((_) => 1 + _.length);
     this.movesetorders = sizes2;
     const movesetgeos = [];
     for (let i = 0; i < moveplanesets.length; i++) {
@@ -833,8 +831,7 @@ export class PuzzleGeometry {
       }
       const s = this.keyface(cubie[0]);
       const facelist = facelisthash[s];
-      const cm = cubie.map(
-        function(_) { return Quat.centermassface(_); });
+      const cm = cubie.map((_) => Quat.centermassface(_));
       const cmall = Quat.centermassface(cm);
       for (let looplimit = 0; cubie.length > 2; looplimit++) {
         let changed = false;
@@ -1187,8 +1184,9 @@ export class PuzzleGeometry {
     }
   }
   public getfaces(): number[][][] { // get the faces for 3d.
-    return this.faces.map(
-      function(_) { return _.map(function(__) { return [__.b, __.c, __.d]; }); });
+    return this.faces.map((_) => {
+      return _.map((__) => [__.b, __.c, __.d]);
+    });
   }
   public getboundarygeometry(): any { // get the boundary geometry
     return {
@@ -1596,7 +1594,7 @@ export class PuzzleGeometry {
       : string {
       return "<polygon id=\"" + id + "\" class=\"sticker\" style=\"fill: " + color +
         "\" points=\"" +
-        pts.map(function(p) { return noise(p[0]) + " " + noise(p[1]); }).join(" ") +
+        pts.map((p) => noise(p[0]) + " " + noise(p[1])).join(" ") +
         "\"/>\n";
     }
     // What grips do we need?  if rotations, add all grips.
