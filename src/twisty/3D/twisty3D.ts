@@ -3,7 +3,7 @@ import Stats from "three/examples/jsm/libs/stats.module";
 import { Cursor } from "../cursor";
 import { Puzzle } from "../puzzle";
 
-const SHOW_STATS = true;
+const SHOW_STATS = false;
 
 export const TAU = Math.PI * 2;
 
