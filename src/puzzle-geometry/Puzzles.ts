@@ -46,6 +46,10 @@ export const Puzzles: { [name: string]: PuzzleDescriptionString } = {
   "icosahedron static faces": "i v 0.84",
   "icosahedron moving faces": "i v 0.73",
   "Eitan's star": "i f 0.61803398874989",
+  "2x2x2 + dino": "c f 0 v 0.577350269189626",
+  "2x2x2 + little chop": "c f 0 e 0",
+  "dino + little chop": "c v 0.577350269189626 e 0",
+  "2x2x2 + dino + little chop": "c f 0 v 0.577350269189626 e 0",
 };
 
 export type PuzzleName = keyof typeof Puzzles;
