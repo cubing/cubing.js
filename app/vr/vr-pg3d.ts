@@ -1,16 +1,12 @@
 import { DoubleSide, Euler, Group, Mesh, MeshBasicMaterial, Quaternion, Vector3 } from "three";
-
-import { daydream, showControlPlanes } from "./config";
-import { ProxyReceiver } from "./proxy/websocket-proxy";
-import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
-
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
 import { Sequence } from "../../src/alg/index";
 import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
-import { PG3D } from "../../src/twisty/3D/pg3D"; // TODO: Don't use module-internal export.
-import { TAU } from "../../src/twisty/3d/twisty3D"; // TODO: Don't use module-internal export.
-import { Twisty } from "../../src/twisty/index";
+import { PG3D, TAU, Twisty } from "../../src/twisty/index";
+import { showControlPlanes } from "./config";
+import { ProxyReceiver } from "./proxy/websocket-proxy";
+import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
 
 // From `cube3D.ts`
 class AxisInfo {
