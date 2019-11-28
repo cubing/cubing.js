@@ -5,7 +5,7 @@
 
 import { Perm } from "./Perm";
 import { Orbit, OrbitDef, OrbitsDef, showcanon, Transformation, VisibleState } from "./PermOriSet";
-import { PlatonicGenerator } from "./PlatonicGenerator";
+import { closure, cube, dodecahedron, getface, icosahedron, octahedron, tetrahedron, uniqueplanes } from "./PlatonicGenerator";
 import { PuzzleDescriptionString, Puzzles } from "./Puzzles";
 import { Quat } from "./Quat";
 
@@ -247,6 +247,43 @@ function toCoords(q: Quat): number[] {
   return [-q.b, -q.c, -q.d];
 }
 
+function toFaceCoords(q: Quat[]): number[][] {
+  const r = [];
+  const n = q.length;
+  for (let i = 0; i < n; i++) {
+    r[n - i - 1] = toCoords(q[i]);
+  }
+  return r;
+}
+
+function trimEdges(face: Quat[], tr: number): Quat[] {
+  const r: Quat[] = [];
+  for (let iter = 1; iter < 10; iter++) {
+    for (let i = 0; i < face.length; i++) {
+      const pi = (i + face.length - 1) % face.length;
+      const ni = (i + 1) % face.length;
+      const A = face[pi].sub(face[i]).normalize();
+      const B = face[ni].sub(face[i]).normalize();
+      const d = A.dot(B);
+      const m = tr / Math.sqrt(1 - d * d);
+      r[i] = face[i].sum(A.sum(B).smul(m));
+    }
+    let good = true;
+    for (let i = 0; good && i < r.length; i++) {
+      const pi = (i + face.length - 1) % face.length;
+      const ni = (i + 1) % face.length;
+      if (r[pi].sub(r[i]).cross(r[ni].sub(r[i])).dot(r[i]) >= 0) {
+        good = false;
+      }
+    }
+    if (good) {
+      return r;
+    }
+    tr /= 2;
+  }
+  return face;
+}
+
 export class PuzzleGeometry {
   public args: string = "";
   public rotations: Quat[];    // all members of the rotation group
@@ -373,17 +410,17 @@ export class PuzzleGeometry {
     this.cubies = [];
     let g = null;
     switch (shape) {
-      case "c": g = PlatonicGenerator.cube(); break;
-      case "o": g = PlatonicGenerator.octahedron(); break;
-      case "i": g = PlatonicGenerator.icosahedron(); break;
-      case "t": g = PlatonicGenerator.tetrahedron(); break;
-      case "d": g = PlatonicGenerator.dodecahedron(); break;
+      case "c": g = cube(); break;
+      case "o": g = octahedron(); break;
+      case "i": g = icosahedron(); break;
+      case "t": g = tetrahedron(); break;
+      case "d": g = dodecahedron(); break;
       default: throw new Error("Bad shape argument: " + shape);
     }
-    this.rotations = PlatonicGenerator.closure(g);
+    this.rotations = closure(g);
     if (this.verbose) { console.log("# Rotations: " + this.rotations.length); }
     const baseplane = g[0];
-    this.baseplanerot = PlatonicGenerator.uniqueplanes(baseplane, this.rotations);
+    this.baseplanerot = uniqueplanes(baseplane, this.rotations);
     const baseplanes = this.baseplanerot.map((_) => baseplane.rotateplane(_));
     this.baseplanes = baseplanes;
     this.basefacecount = baseplanes.length;
@@ -392,7 +429,7 @@ export class PuzzleGeometry {
     this.colors = defaultcolors[baseplanes.length];
     this.faceorder = defaultfaceorders[baseplanes.length];
     if (this.verbose) { console.log("# Base planes: " + baseplanes.length); }
-    const baseface = PlatonicGenerator.getface(baseplanes);
+    const baseface = getface(baseplanes);
     if (this.verbose) { console.log("# Face vertices: " + baseface.length); }
     const facenormal = baseplanes[0].makenormal();
     const edgenormal = baseface[0].sum(baseface[1]).makenormal();
@@ -410,9 +447,9 @@ export class PuzzleGeometry {
     }
     const boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d);
     if (this.verbose) { console.log("# Boundary is " + boundary); }
-    const planerot = PlatonicGenerator.uniqueplanes(boundary, this.rotations);
+    const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
-    let faces = [PlatonicGenerator.getface(planes)];
+    let faces = [getface(planes)];
     this.basefaces = [];
     for (let i = 0; i < this.baseplanerot.length; i++) {
       const face = this.baseplanerot[i].rotateface(faces[0]);
@@ -1851,50 +1888,13 @@ export class PuzzleGeometry {
     return html;
   }
 
-  public toFaceCoords(q: Quat[]): number[][] {
-    const r = [];
-    const n = q.length;
-    for (let i = 0; i < n; i++) {
-      r[n - i - 1] = toCoords(q[i]);
-    }
-    return r;
-  }
-
-  public trimEdges(face: Quat[], tr: number): Quat[] {
-    const r: Quat[] = [];
-    for (let iter = 1; iter < 10; iter++) {
-      for (let i = 0; i < face.length; i++) {
-        const pi = (i + face.length - 1) % face.length;
-        const ni = (i + 1) % face.length;
-        const A = face[pi].sub(face[i]).normalize();
-        const B = face[ni].sub(face[i]).normalize();
-        const d = A.dot(B);
-        const m = tr / Math.sqrt(1 - d * d);
-        r[i] = face[i].sum(A.sum(B).smul(m));
-      }
-      let good = true;
-      for (let i = 0; good && i < r.length; i++) {
-        const pi = (i + face.length - 1) % face.length;
-        const ni = (i + 1) % face.length;
-        if (r[pi].sub(r[i]).cross(r[ni].sub(r[i])).dot(r[i]) >= 0) {
-          good = false;
-        }
-      }
-      if (good) {
-        return r;
-      }
-      tr /= 2;
-    }
-    return face;
-  }
-
   public get3d(trim?: number): any {
     const stickers: any = [];
     const rot = this.getInitial3DRotation();
     const faces: any = [];
     for (let i = 0; i < this.basefaces.length; i++) {
       const coords = rot.rotateface(this.basefaces[i]);
-      faces.push(this.toFaceCoords(coords));
+      faces.push(toFaceCoords(coords));
     }
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);
@@ -1906,17 +1906,17 @@ export class PuzzleGeometry {
         this.colors[this.facenames[facenum][1]];
       let coords = rot.rotateface(this.faces[i]);
       if (trim && trim > 0) {
-        coords = this.trimEdges(coords, trim);
+        coords = trimEdges(coords, trim);
       }
       stickers.push({
-        coords: this.toFaceCoords(coords),
+        coords: toFaceCoords(coords),
         color, orbit: this.cubiesetnames[cubiesetnum],
         ord: cubieord, ori: cubieori,
       });
       if (this.duplicatedFaces[i]) {
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
           stickers.push({
-            coords: this.toFaceCoords(coords),
+            coords: toFaceCoords(coords),
             color, orbit: this.cubiesetnames[cubiesetnum],
             ord: cubieord, ori: jj,
           });
