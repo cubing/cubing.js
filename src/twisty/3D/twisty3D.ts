@@ -2,7 +2,6 @@ import { PerspectiveCamera, Renderer, Scene, Vector3, WebGLRenderer } from "thre
 import Stats from "three/examples/jsm/libs/stats.module";
 import { Cursor } from "../cursor";
 import { Puzzle } from "../puzzle";
-import "./three-stats";
 
 const SHOW_STATS = true;
 
@@ -27,7 +26,7 @@ export class Vantage {
     this.render();
 
     if (SHOW_STATS) {
-      this.stats = new Stats();
+      this.stats = Stats();
       this.stats.dom.style.position = "absolute";
       element.appendChild(this.stats.dom);
     }
