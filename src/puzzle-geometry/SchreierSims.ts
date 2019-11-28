@@ -1,4 +1,4 @@
-import { Perm } from "./Perm";
+import { identity, Perm } from "./Perm";
 class FactoredNumber {
   public mult: number[];
   constructor() {
@@ -42,7 +42,7 @@ class FactoredNumber {
 export class SchreierSims {
   public static schreiersims(g: Perm[], disp: (s: string) => void): number {
     const n = g[0].p.length;
-    const e = Perm.e(n);
+    const e = identity(n);
     let sgs: Perm[][] = [];
     let sgsi: Perm[][] = [];
     let sgslen: number[][] = [];

@@ -1,11 +1,11 @@
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ // TODO
 
-import { Perm } from "./Perm";
+import { factorial, iota, lcm, Perm, zeros } from "./Perm";
 export class OrbitDef {
   constructor(public size: number, public mod: number) { }
   public reassemblySize(): number {
-    return Perm.factorial(this.size) * Math.pow(this.mod, this.size);
+    return factorial(this.size) * Math.pow(this.mod, this.size);
   }
 }
 export class OrbitsDef {
@@ -207,7 +207,7 @@ export class OrbitsDef {
 }
 export class Orbit {
   public static e(n: number, mod: number): Orbit {
-    return new Orbit(Perm.iota(n), Perm.zeros(n), mod);
+    return new Orbit(iota(n), zeros(n), mod);
   }
   constructor(
     public perm: number[],
@@ -397,7 +397,7 @@ export class TransformationBase {
   public order(): number {
     let r = 1;
     for (let i = 0; i < this.orbits.length; i++) {
-      r = Perm.lcm(r, this.orbits[i].order());
+      r = lcm(r, this.orbits[i].order());
     }
     return r;
   }

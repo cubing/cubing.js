@@ -1,58 +1,65 @@
+export function zeros(n: number): number[] {
+  const c = Array(n);
+  for (let i = 0; i < n; i++) {
+    c[i] = 0;
+  }
+  return c;
+}
+
+export function iota(n: number): number[] {
+  const c = Array(n);
+  for (let i = 0; i < n; i++) {
+    c[i] = i;
+  }
+  return c;
+}
+
+export function identity(n: number): Perm {
+  return new Perm(iota(n));
+}
+
+export function random(n: number): Perm { // random
+  const c = Array(n);
+  for (let i = 0; i < n; i++) {
+    c[i] = i;
+  }
+  for (let i = 0; i < n; i++) {
+    const j = i + Math.floor((n - i) * Math.random());
+    const t = c[i];
+    c[i] = c[j];
+    c[j] = t;
+  }
+  return new Perm(c);
+}
+
+export function factorial(a: number): number {
+  let r = 1;
+  while (a > 1) {
+    r *= a;
+    a--;
+  }
+  return r;
+}
+
+function gcd(a: number, b: number): number {
+  if (a > b) {
+    const t = a;
+    a = b;
+    b = t;
+  }
+  while (a > 0) {
+    const m = b % a;
+    b = a;
+    a = m;
+  }
+  return b;
+}
+
+export function lcm(a: number, b: number): number {
+  return a / gcd(a, b) * b;
+}
+
 export class Perm {
-  public static zeros(n: number): number[] {
-    const c = Array(n);
-    for (let i = 0; i < n; i++) {
-      c[i] = 0;
-    }
-    return c;
-  }
-  public static iota(n: number): number[] {
-    const c = Array(n);
-    for (let i = 0; i < n; i++) {
-      c[i] = i;
-    }
-    return c;
-  }
-  public static e(n: number): Perm {
-    return new Perm(Perm.iota(n));
-  }
-  public static random(n: number): Perm { // random
-    const c = Array(n);
-    for (let i = 0; i < n; i++) {
-      c[i] = i;
-    }
-    for (let i = 0; i < n; i++) {
-      const j = i + Math.floor((n - i) * Math.random());
-      const t = c[i];
-      c[i] = c[j];
-      c[j] = t;
-    }
-    return new Perm(c);
-  }
-  public static factorial(a: number): number {
-    let r = 1;
-    while (a > 1) {
-      r *= a;
-      a--;
-    }
-    return r;
-  }
-  public static gcd(a: number, b: number): number {
-    if (a > b) {
-      const t = a;
-      a = b;
-      b = t;
-    }
-    while (a > 0) {
-      const m = b % a;
-      b = a;
-      a = m;
-    }
-    return b;
-  }
-  public static lcm(a: number, b: number): number {
-    return a / Perm.gcd(a, b) * b;
-  }
   public n: number;        // length
   public p: number[]; // The permutation itself
   constructor(a: number[]) {
@@ -119,7 +126,7 @@ export class Perm {
         cs++;
         seen[j] = true;
       }
-      r = Perm.lcm(r, cs);
+      r = lcm(r, cs);
     }
     return r;
   }
