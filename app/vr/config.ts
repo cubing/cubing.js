@@ -13,3 +13,12 @@ export const showControlPlanes = getBoolean("showControlPlanes", true);
 export const daydream = getBoolean("daydream", false);
 export const usePG3D = getBoolean("pg3d", false);
 export const socketOrigin: string | null = new URL(location.href).searchParams.get("socketOrigin") || null;
+
+console.log({
+  initialHeight,
+  initialScale,
+  showControlPlanes,
+  daydream,
+  usePG3D,
+  socketOrigin,
+});
