@@ -5,7 +5,7 @@ import { Raycaster, Vector2, Vector3 } from "three";
 import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
 import { KPuzzle, KPuzzleDefinition, parse } from "../../src/kpuzzle/index";
-import { PuzzleGeometry, SchreierSims } from "../../src/puzzle-geometry/index";
+import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, SchreierSims } from "../../src/puzzle-geometry/index";
 import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
@@ -298,7 +298,7 @@ function dowork(cmd: string): void {
   if (checkboxes.killori) {
     options.push("killorientation", true);
   }
-  const p = PuzzleGeometry.parsedesc(descinput.value);
+  const p = parsedesc(descinput.value);
   const pg = new PuzzleGeometry(p[0], p[1], options);
   pg.allstickers();
   pg.genperms();
@@ -344,7 +344,7 @@ function checkchange(): void {
     let savealg = true;
     lastval = descarg;
     lastRender = newRender;
-    const p = PuzzleGeometry.parsedesc(descarg);
+    const p = parsedesc(descarg);
     if (p) {
       const options: Array<string | number | boolean> =
         ["allmoves", true, "orientcenters", true];
@@ -479,7 +479,7 @@ export function setup(): void {
   const select = document.getElementById("puzzleoptions") as HTMLSelectElement;
   descinput = document.getElementById("desc") as HTMLInputElement;
   algoinput = document.getElementById("algorithm") as HTMLInputElement;
-  const puzzles = PuzzleGeometry.getpuzzles();
+  const puzzles = getpuzzles();
   lastRender = getCheckboxes(renderOptions);
   const puz = getQueryParam("puzzle");
   const puzdesc = getQueryParam("puzzlegeometry");
@@ -505,7 +505,7 @@ export function setup(): void {
     descinput.value = puzdesc;
   } else if (!found) {
     optionFor3x3x3.selected = true;
-    descinput.value = PuzzleGeometry.getpuzzle("3x3x3");
+    descinput.value = getpuzzle("3x3x3");
   }
   select.onchange = doselection;
   actions = document.getElementById("action") as HTMLSelectElement;

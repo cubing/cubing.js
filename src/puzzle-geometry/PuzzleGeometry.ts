@@ -26,140 +26,162 @@ import { Quat } from "./Quat";
 
 //  Everything except a very few methods should be considered private.
 
+const eps: number = 1e-9;
+const copyright = "PuzzleGeometry 0.1 Copyright 2018 Tomas Rokicki.";
+
+// This is a description of the nets and the external names we give each
+// face.  The names should be a set of prefix-free upper-case alphabetics
+// so
+// we can easily also name and distinguish vertices and edges, but we
+// may change this in the future.  The nets consist of a list of lists.
+// Each list gives the name of a face, and then the names of the
+// faces connected to that face (in the net) in clockwise order.
+// The length of each list should be one more than the number of
+// edges in the regular polygon for that face.  All polygons must
+// have the same number of edges.
+// The first two faces in the first list must describe a horizontal edge
+// that is at the bottom of a regular polygon.  The first two faces in
+// every subsequent list for a given polytope must describe a edge that
+// is directly connected in the net and has already been described (this
+// sets the location and orientation of the polygon for that face.
+// Any edge that is not directly connected in the net should be given
+// the empty string as the other face.  All faces do not need to have
+// a list starting with that face; just enough to describe the full
+// connectivity of the net.
+//
+const defaultnets: any = {
+  4: // four faces: tetrahedron
+    [
+      ["F", "D", "L", "R"],
+    ],
+  6: // six faces: cube
+    [
+      ["F", "D", "L", "U", "R"],
+      ["R", "F", "", "B", ""],
+    ],
+  8: // eight faces: octahedron
+    [
+      ["F", "D", "L", "R"],
+      ["D", "F", "N", ""],
+      ["N", "D", "", "B"],
+      ["B", "N", "U", "M"],
+    ],
+  12: // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
+    [
+      ["U", "F", "", "", "", ""],
+      ["F", "U", "R", "C", "A", "L"],
+      ["R", "F", "", "", "E", ""],
+      ["E", "R", "", "BF", "", ""],
+      ["BF", "E", "BR", "BL", "I", "D"],
+    ],
+  20: // twenty faces: icosahedron
+    [
+      ["R", "C", "F", "E"],
+      ["F", "R", "L", "U"],
+      ["L", "F", "A", ""],
+      ["E", "R", "G", "I"],
+      ["I", "E", "S", "H"],
+      ["S", "I", "J", "B"],
+      ["B", "S", "K", "D"],
+      ["K", "B", "M", "O"],
+      ["O", "K", "P", "N"],
+      ["P", "O", "Q", ""],
+    ],
+};
+
+const defaultcolors: any = {
+  // the colors should use the same naming convention as the nets, above.
+  4: { F: "#00ff00", D: "#ffff00", L: "#ff0000", R: "#0000ff" },
+  6: {
+    U: "#ffffff", F: "#00ff00", R: "#ff0000",
+    D: "#ffff00", B: "#0000ff", L: "#ff8000",
+  },
+  8: {
+    U: "#e085b9", F: "#080d99", R: "#c1e35c", D: "#22955e",
+    B: "#9121ab", L: "#b27814", M: "#0d35ad", N: "#eb126b",
+  },
+  12: {
+    U: "#ffffff", F: "#006633", R: "#ff0000", C: "#ffffd0",
+    A: "#3399ff", L: "#660099", E: "#ff66cc", BF: "#99ff00",
+    BR: "#0000ff", BL: "#ffff00", I: "#ff6633", D: "#999999",
+  },
+  20: {
+    R: "#db69f0", C: "#178fde", F: "#23238b", E: "#9cc726",
+    L: "#2c212d", U: "#177fa7", A: "#e0de7f", G: "#2b57c0",
+    I: "#41126b", S: "#4b8c28", H: "#7c098d", J: "#7fe7b4",
+    B: "#85fb74", K: "#3f4bc3", D: "#0ff555", M: "#f1c2c8",
+    O: "#58d340", P: "#c514f2", N: "#14494e", Q: "#8b1be1",
+  },
+};
+
+// the default precedence of the faces is given here.  This permits
+// the orientations to be reasonably predictable.  There are tradeoffs;
+// some face precedence orders do better things to the edge orientations
+// than the corner orientations and some are the opposite.
+const defaultfaceorders: any = {
+  4: ["F", "D", "L", "R"],
+  6: ["U", "D", "F", "B", "L", "R"],
+  8: ["F", "B", "D", "U", "N", "L", "R", "M"],
+  12: ["L", "E", "F", "BF", "R", "I",
+    "U", "D", "BR", "A", "BL", "C"],
+  20: ["L", "S", "E", "O", "F", "B", "I", "P", "R", "K",
+    "U", "D", "J", "A", "Q", "H", "G", "N", "M", "C"],
+};
+
+function findelement(a: any[], p: Quat): number {
+  // find something in facenames, vertexnames, edgenames
+  for (let i = 0; i < a.length; i++) {
+    if (a[i][0].dist(p) < eps) {
+      return i;
+    }
+  }
+  throw new Error("Element not found");
+}
+
+export function getpuzzles(): { [s: string]: PuzzleDescriptionString } {
+  // get some simple definitions of basic puzzles
+  return Puzzles;
+}
+
+export function getpuzzle(puzzleName: PuzzleName): PuzzleDescriptionString {
+  // get some simple definitions of basic puzzles
+  return Puzzles[puzzleName];
+}
+
+export function parsedesc(s: string): any { // parse a text description
+  const a = s.split(/ /).filter(Boolean);
+  if (a.length % 2 === 0) {
+    return false;
+  }
+  if (a[0] !== "o" && a[0] !== "c" && a[0] !== "i" && a[0] !== "d" && a[0] !== "t") {
+    return false;
+  }
+  const r = [];
+  for (let i = 1; i < a.length; i += 2) {
+    if (a[i] !== "f" && a[i] !== "v" && a[i] !== "e") {
+      return false;
+    }
+    r.push([a[i], a[i + 1]]);
+  }
+  return [a[0], r];
+}
+
+// TODO: Automatically associate this with the source list.
+type PuzzleName = "2x2x2" | "3x3x3" | "4x4x4" | "5x5x5" | "6x6x6" | "7x7x7" | "8x8x8" | "9x9x9" | "10x10x10" | "11x11x11" | "12x12x12" | "13x13x13" | "20x20x20" | "skewb" | "master skewb" | "professor skewb" | "compy cube" | "helicopter" | "dino" | "little chop" | "pyramorphix" | "mastermorphix" | "pyraminx" | "Jing pyraminx" | "master paramorphix" | "megaminx" | "gigaminx" | "pentultimate" | "starminx" | "starminx 2" | "pyraminx crystal" | "chopasaurus" | "big chop" | "skewb diamond" | "FTO" | "Christopher's jewel" | "octastar" | "Trajber's octahedron" | "radio chop" | "icosamate" | "icosahedron 2" | "icosahedron 3" | "icosahedron static faces" | "icosahedron moving faces" | "Eita";
+
+export function getPuzzleGeometryByDesc(desc: string): PuzzleGeometry {
+  const [shape, cuts] = parsedesc(desc);
+  const pg = new PuzzleGeometry(shape, cuts, ["allmoves", "true"]);
+  pg.allstickers();
+  pg.genperms();
+  return pg;
+}
+
+export function getPuzzleGeometryByName(puzzleName: PuzzleName): PuzzleGeometry {
+  return getPuzzleGeometryByDesc(Puzzles[puzzleName]);
+}
+
 export class PuzzleGeometry {
-  public static eps: number = 1e-9;
-  public static copyright = "PuzzleGeometry 0.1 Copyright 2018 Tomas Rokicki.";
-  //
-  // This is a description of the nets and the external names we give each
-  // face.  The names should be a set of prefix-free upper-case alphabetics
-  // so
-  // we can easily also name and distinguish vertices and edges, but we
-  // may change this in the future.  The nets consist of a list of lists.
-  // Each list gives the name of a face, and then the names of the
-  // faces connected to that face (in the net) in clockwise order.
-  // The length of each list should be one more than the number of
-  // edges in the regular polygon for that face.  All polygons must
-  // have the same number of edges.
-  // The first two faces in the first list must describe a horizontal edge
-  // that is at the bottom of a regular polygon.  The first two faces in
-  // every subsequent list for a given polytope must describe a edge that
-  // is directly connected in the net and has already been described (this
-  // sets the location and orientation of the polygon for that face.
-  // Any edge that is not directly connected in the net should be given
-  // the empty string as the other face.  All faces do not need to have
-  // a list starting with that face; just enough to describe the full
-  // connectivity of the net.
-  //
-  public static defaultnets: any = {
-    4: // four faces: tetrahedron
-      [
-        ["F", "D", "L", "R"],
-      ],
-    6: // six faces: cube
-      [
-        ["F", "D", "L", "U", "R"],
-        ["R", "F", "", "B", ""],
-      ],
-    8: // eight faces: octahedron
-      [
-        ["F", "D", "L", "R"],
-        ["D", "F", "N", ""],
-        ["N", "D", "", "B"],
-        ["B", "N", "U", "M"],
-      ],
-    12: // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
-      [
-        ["U", "F", "", "", "", ""],
-        ["F", "U", "R", "C", "A", "L"],
-        ["R", "F", "", "", "E", ""],
-        ["E", "R", "", "BF", "", ""],
-        ["BF", "E", "BR", "BL", "I", "D"],
-      ],
-    20: // twenty faces: icosahedron
-      [
-        ["R", "C", "F", "E"],
-        ["F", "R", "L", "U"],
-        ["L", "F", "A", ""],
-        ["E", "R", "G", "I"],
-        ["I", "E", "S", "H"],
-        ["S", "I", "J", "B"],
-        ["B", "S", "K", "D"],
-        ["K", "B", "M", "O"],
-        ["O", "K", "P", "N"],
-        ["P", "O", "Q", ""],
-      ],
-  };
-  public static defaultcolors: any = {
-    // the colors should use the same naming convention as the nets, above.
-    4: { F: "#00ff00", D: "#ffff00", L: "#ff0000", R: "#0000ff" },
-    6: {
-      U: "#ffffff", F: "#00ff00", R: "#ff0000",
-      D: "#ffff00", B: "#0000ff", L: "#ff8000",
-    },
-    8: {
-      U: "#e085b9", F: "#080d99", R: "#c1e35c", D: "#22955e",
-      B: "#9121ab", L: "#b27814", M: "#0d35ad", N: "#eb126b",
-    },
-    12: {
-      U: "#ffffff", F: "#006633", R: "#ff0000", C: "#ffffd0",
-      A: "#3399ff", L: "#660099", E: "#ff66cc", BF: "#99ff00",
-      BR: "#0000ff", BL: "#ffff00", I: "#ff6633", D: "#999999",
-    },
-    20: {
-      R: "#db69f0", C: "#178fde", F: "#23238b", E: "#9cc726",
-      L: "#2c212d", U: "#177fa7", A: "#e0de7f", G: "#2b57c0",
-      I: "#41126b", S: "#4b8c28", H: "#7c098d", J: "#7fe7b4",
-      B: "#85fb74", K: "#3f4bc3", D: "#0ff555", M: "#f1c2c8",
-      O: "#58d340", P: "#c514f2", N: "#14494e", Q: "#8b1be1",
-    },
-  };
-  // the default precedence of the faces is given here.  This permits
-  // the orientations to be reasonably predictable.  There are tradeoffs;
-  // some face precedence orders do better things to the edge orientations
-  // than the corner orientations and some are the opposite.
-  public static defaultfaceorders: any = {
-    4: ["F", "D", "L", "R"],
-    6: ["U", "D", "F", "B", "L", "R"],
-    8: ["F", "B", "D", "U", "N", "L", "R", "M"],
-    12: ["L", "E", "F", "BF", "R", "I",
-      "U", "D", "BR", "A", "BL", "C"],
-    20: ["L", "S", "E", "O", "F", "B", "I", "P", "R", "K",
-      "U", "D", "J", "A", "Q", "H", "G", "N", "M", "C"],
-  };
-  public static findelement(a: any[], p: Quat): number {
-    // find something in facenames, vertexnames, edgenames
-    for (let i = 0; i < a.length; i++) {
-      if (a[i][0].dist(p) < PuzzleGeometry.eps) {
-        return i;
-      }
-    }
-    throw new Error("Element not found");
-  }
-  public static getpuzzles(): { [s: string]: PuzzleDescriptionString } {
-    // get some simple definitions of basic puzzles
-    return Puzzles;
-  }
-  public static getpuzzle(puzzleName: PuzzleName): PuzzleDescriptionString {
-    // get some simple definitions of basic puzzles
-    return Puzzles[puzzleName];
-  }
-  public static parsedesc(s: string): any { // parse a text description
-    const a = s.split(/ /).filter(Boolean);
-    if (a.length % 2 === 0) {
-      return false;
-    }
-    if (a[0] !== "o" && a[0] !== "c" && a[0] !== "i" && a[0] !== "d" && a[0] !== "t") {
-      return false;
-    }
-    const r = [];
-    for (let i = 1; i < a.length; i += 2) {
-      if (a[i] !== "f" && a[i] !== "v" && a[i] !== "e") {
-        return false;
-      }
-      r.push([a[i], a[i + 1]]);
-    }
-    return [a[0], r];
-  }
   public args: string = "";
   public rotations: Quat[];    // all members of the rotation group
   public baseplanerot: Quat[]; // unique rotations of the baseplane
@@ -319,10 +341,10 @@ export class PuzzleGeometry {
     const baseplanes = this.baseplanerot.map((_) => baseplane.rotateplane(_));
     this.baseplanes = baseplanes;
     this.basefacecount = baseplanes.length;
-    const net = PuzzleGeometry.defaultnets[baseplanes.length];
+    const net = defaultnets[baseplanes.length];
     this.net = net;
-    this.colors = PuzzleGeometry.defaultcolors[baseplanes.length];
-    this.faceorder = PuzzleGeometry.defaultfaceorders[baseplanes.length];
+    this.colors = defaultcolors[baseplanes.length];
+    this.faceorder = defaultfaceorders[baseplanes.length];
     if (this.verbose) { console.log("# Base planes: " + baseplanes.length); }
     const baseface = PlatonicGenerator.getface(baseplanes);
     if (this.verbose) { console.log("# Face vertices: " + baseface.length); }
@@ -365,7 +387,7 @@ export class PuzzleGeometry {
     const edgesperface = faces[0].length;
     function searchaddelement(a: any[], p: Quat, name: any) {
       for (let i = 0; i < a.length; i++) {
-        if (a[i][0].dist(p) < PuzzleGeometry.eps) {
+        if (a[i][0].dist(p) < eps) {
           a[i].push(name);
           return;
         }
@@ -387,7 +409,7 @@ export class PuzzleGeometry {
       for (let j = 0; j < face.length; j++) {
         const jj = (j + 1) % face.length;
         const midpoint = face[j].sum(face[jj]).smul(0.5);
-        const el = edgenames[PuzzleGeometry.findelement(edgenames, midpoint)];
+        const el = edgenames[findelement(edgenames, midpoint)];
         if (i === el[1]) {
           facelist.push(el[2]);
         } else if (i === el[2]) {
@@ -463,8 +485,8 @@ export class PuzzleGeometry {
         const midpoint = face[j].sum(face[jj]).smul(0.5);
         const jjj = (j + 2) % face.length;
         const midpoint2 = face[jj].sum(face[jjj]).smul(0.5);
-        const e1 = PuzzleGeometry.findelement(edgenames, midpoint);
-        const e2 = PuzzleGeometry.findelement(edgenames, midpoint2);
+        const e1 = findelement(edgenames, midpoint);
+        const e2 = findelement(edgenames, midpoint2);
         searchaddelement(vertexnames, face[jj], [facename, e2, e1]);
       }
     }
@@ -596,7 +618,7 @@ export class PuzzleGeometry {
     for (let i = 0; i < this.facelisthash[key].length; i++) {
       const face2 = this.facelisthash[key][i];
       if (Math.abs(cm.dist(
-        Quat.centermassface(this.faces[face2]))) < PuzzleGeometry.eps) {
+        Quat.centermassface(this.faces[face2]))) < eps) {
         return face2;
       }
     }
@@ -654,7 +676,7 @@ export class PuzzleGeometry {
       const q: Quat[] = moveplanesets[i].map((_) => _.normalizeplane());
       const goodnormal = q[0].makenormal();
       for (let j = 0; j < q.length; j++) {
-        if (q[j].makenormal().dist(goodnormal) > PuzzleGeometry.eps) {
+        if (q[j].makenormal().dist(goodnormal) > eps) {
           q[j] = q[j].smul(-1);
         }
       }
@@ -671,7 +693,7 @@ export class PuzzleGeometry {
     }
     for (let i = 0; i < this.rotations.length; i++) {
       const q: Quat = this.rotations[i];
-      if (Math.abs(Math.abs(q.a) - 1) < PuzzleGeometry.eps) {
+      if (Math.abs(Math.abs(q.a) - 1) < eps) {
         continue;
       }
       const qnormal = q.makenormal();
@@ -690,7 +712,7 @@ export class PuzzleGeometry {
       const r = moverotations[i];
       const goodnormal = r[0].makenormal();
       for (let j = 0; j < r.length; j++) {
-        if (goodnormal.dist(r[j].makenormal()) > PuzzleGeometry.eps) {
+        if (goodnormal.dist(r[j].makenormal()) > eps) {
           r[j] = r[j].smul(-1);
         }
       }
@@ -708,9 +730,9 @@ export class PuzzleGeometry {
       let pos = null;
       for (let j = 0; j < this.geonormals.length; j++) {
         const d = p0.dot(this.geonormals[j][0]);
-        if (Math.abs(d - 1) < PuzzleGeometry.eps) {
+        if (Math.abs(d - 1) < eps) {
           pos = [this.geonormals[j][1], this.geonormals[j][2]];
-        } else if (Math.abs(d + 1) < PuzzleGeometry.eps) {
+        } else if (Math.abs(d + 1) < eps) {
           neg = [this.geonormals[j][1], this.geonormals[j][2]];
         }
       }
@@ -1270,7 +1292,7 @@ export class PuzzleGeometry {
     return this.skipbyori(this.facetocubies[fi][0]);
   }
   public header(comment: string): string {
-    return comment + PuzzleGeometry.copyright + "\n" +
+    return comment + copyright + "\n" +
       comment + this.args + "\n";
   }
   public writegap(): string { // write out a gap set of generators
@@ -1656,7 +1678,7 @@ export class PuzzleGeometry {
         // what edge are we at?
         const caf0 = connectat[gfi];
         const mp = thisface[(caf0 + j) % polyn].sum(thisface[(caf0 + j + polyn - 1) % polyn]).smul(0.5);
-        const epi = PuzzleGeometry.findelement(bg.edgenames, mp);
+        const epi = findelement(bg.edgenames, mp);
         const edgename = bg.edgenames[epi][1];
         const el = this.splitByFaceNames(edgename, this.facenames);
         const gf1 = el[(f0 === el[0]) ? 1 : 0];
@@ -1673,7 +1695,7 @@ export class PuzzleGeometry {
         const otherface = bg.facenames[gf1i][0];
         for (let k = 0; k < otherface.length; k++) {
           const mp2 = otherface[k].sum(otherface[(k + 1) % polyn]).smul(0.5);
-          if (mp2.dist(mp) <= PuzzleGeometry.eps) {
+          if (mp2.dist(mp) <= eps) {
             const p1 = edges2[f0][(j + polyn - 1) % polyn];
             const p2 = edges2[f0][j % polyn];
             connectat[gf1i] = k;
@@ -1754,7 +1776,7 @@ export class PuzzleGeometry {
     function addgrip(onface: number, name: string, pt: Quat, order: number): void {
       const pt2 = mappt2d(onface, pt);
       for (let i = 0; i < svggrips.length; i++) {
-        if (Math.hypot(pt2[0] - svggrips[i][0], pt2[1] - svggrips[i][1]) < PuzzleGeometry.eps) {
+        if (Math.hypot(pt2[0] - svggrips[i][0], pt2[1] - svggrips[i][1]) < eps) {
           return;
         }
       }
@@ -1777,13 +1799,13 @@ export class PuzzleGeometry {
         if (neededgegrips) {
           const mp = baseface[j].sum(
             baseface[(j + 1) % baseface.length]).smul(0.5);
-          const ep = PuzzleGeometry.findelement(this.edgenames, mp);
+          const ep = findelement(this.edgenames, mp);
           const mpc = facecoords[j].sum(
             facecoords[(j + 1) % baseface.length]).smul(0.5);
           addgrip(i, this.edgenames[ep][1], mpc, 2);
         }
         if (needvertexgrips) {
-          const vp = PuzzleGeometry.findelement(
+          const vp = findelement(
             this.vertexnames, baseface[j]);
           addgrip(i, this.vertexnames[vp][1], facecoords[j],
             this.cornerfaces);
@@ -1887,19 +1909,4 @@ export class PuzzleGeometry {
     }
     return { stickers, faces, axis: grips };
   }
-}
-
-// TODO: Automatically associate this with the source list.
-type PuzzleName = "2x2x2" | "3x3x3" | "4x4x4" | "5x5x5" | "6x6x6" | "7x7x7" | "8x8x8" | "9x9x9" | "10x10x10" | "11x11x11" | "12x12x12" | "13x13x13" | "20x20x20" | "skewb" | "master skewb" | "professor skewb" | "compy cube" | "helicopter" | "dino" | "little chop" | "pyramorphix" | "mastermorphix" | "pyraminx" | "Jing pyraminx" | "master paramorphix" | "megaminx" | "gigaminx" | "pentultimate" | "starminx" | "starminx 2" | "pyraminx crystal" | "chopasaurus" | "big chop" | "skewb diamond" | "FTO" | "Christopher's jewel" | "octastar" | "Trajber's octahedron" | "radio chop" | "icosamate" | "icosahedron 2" | "icosahedron 3" | "icosahedron static faces" | "icosahedron moving faces" | "Eita";
-
-export function getPuzzleGeometryByDesc(desc: string): PuzzleGeometry {
-  const [shape, cuts] = PuzzleGeometry.parsedesc(desc);
-  const pg = new PuzzleGeometry(shape, cuts, ["allmoves", "true"]);
-  pg.allstickers();
-  pg.genperms();
-  return pg;
-}
-
-export function getPuzzleGeometryByName(puzzleName: PuzzleName): PuzzleGeometry {
-  return getPuzzleGeometryByDesc(Puzzles[puzzleName]);
 }

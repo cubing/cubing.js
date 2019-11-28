@@ -1,6 +1,7 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
 import { PuzzleGeometry, SchreierSims } from "..";
+import { getpuzzles, parsedesc } from "../PuzzleGeometry";
 
 let dosvg = false;
 let doss = false;
@@ -66,7 +67,7 @@ Examples:
 if (typeof (process) !== "undefined" &&
   process.argv && process.argv.length >= 3) {
   let desc;
-  const puzzleList = PuzzleGeometry.getpuzzles();
+  const puzzleList = getpuzzles();
   let argp = 2;
   const optionlist = [];
   let showargs = true;
@@ -137,7 +138,7 @@ if (typeof (process) !== "undefined" &&
     console.log("# " + process.argv.join(" "));
   }
   if (desc !== undefined) {
-    createargs = PuzzleGeometry.parsedesc(desc);
+    createargs = parsedesc(desc);
     argp++;
   } else {
     const cuts = [];
