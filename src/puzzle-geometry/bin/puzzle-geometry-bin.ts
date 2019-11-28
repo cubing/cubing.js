@@ -1,7 +1,8 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
-import { PuzzleGeometry, SchreierSims } from "..";
+import { PuzzleGeometry } from "..";
 import { getpuzzles, parsedesc } from "../PuzzleGeometry";
+import { schreierSims } from "../SchreierSims";
 
 let dosvg = false;
 let doss = false;
@@ -173,7 +174,7 @@ if (typeof (process) !== "undefined" &&
     const os = pg.getOrbitsDef(false);
     const as = os.reassemblySize();
     console.log("Reassembly size is " + as);
-    const ss = SchreierSims.schreiersims(os.moveops.map((_) => _.toPerm()),
+    const ss = schreierSims(os.moveops.map((_) => _.toPerm()),
       (_) => console.log(_));
     const r = as / ss;
     console.log("Ratio is " + r);
