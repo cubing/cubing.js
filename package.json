@@ -47,8 +47,8 @@
     "lint": "tslint --fix --project . ; tslint --fix rollup.config.js",
     "prepack": "npm run clean && npm run build",
     "parcel": "parcel serve app/index.html --open",
-    "parcel-dev-twizzle": "parcel serve app/twizzle/index.html",
-    "parcel-build-vr": "parcel build --public-url ./ --out-dir dist/vr app/vr/index.html"
+    "parcel-build-for-vr-cubing-net": "parcel build --public-url ./ --out-dir dist/vr app/vr/index.html",
+    "parcel-build-for-experiments-cubing-net": "parcel build --public-url /cubing.js/ app/index.html"
   },
   "bin": {
     "puzzle-geometry": "./dist/bin/puzzle-geometry-bin.js"
