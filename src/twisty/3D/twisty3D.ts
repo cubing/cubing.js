@@ -1,4 +1,4 @@
-import {PerspectiveCamera, Renderer, Scene, Vector3, WebGLRenderer} from "three";
+import { PerspectiveCamera, Renderer, Scene, Vector3, WebGLRenderer } from "three";
 
 import { Cursor } from "../cursor";
 import { Puzzle } from "../puzzle";
@@ -69,10 +69,6 @@ function createDefaultRenderer(): WebGLRenderer {
   return new WebGLRenderer({
     antialias: true,
     alpha: true,
-    // TODO: We're using this so we can save pictures of WebGL canvases.
-    // Investigate if there's a significant performance penalty.
-    // Better yet, allow rendering to a CanvasRenderer view separately.
-    preserveDrawingBuffer: true,
   });
 }
 
