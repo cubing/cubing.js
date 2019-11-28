@@ -126,9 +126,9 @@ if (typeof (process) !== "undefined" &&
       throw new Error("Bad option: " + option);
     }
   }
-  for (let i = 0; i < puzzleList.length; i += 2) {
-    if (puzzleList[i + 1] === process.argv[argp]) {
-      desc = puzzleList[i];
+  for (const [name, curDesc] of Object.entries(puzzleList)) {
+    if (name === process.argv[argp]) {
+      desc = curDesc;
       break;
     }
   }

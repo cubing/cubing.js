@@ -1,6 +1,5 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 import { Raycaster, Vector2, Vector3 } from "three";
-
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
@@ -480,19 +479,24 @@ export function setup(): void {
   const select = document.getElementById("puzzleoptions") as HTMLSelectElement;
   descinput = document.getElementById("desc") as HTMLInputElement;
   algoinput = document.getElementById("algorithm") as HTMLInputElement;
-  const puzzledesc = PuzzleGeometry.getpuzzles();
+  const puzzles = PuzzleGeometry.getpuzzles();
   lastRender = getCheckboxes(renderOptions);
   const puz = getQueryParam("puzzle");
   const puzdesc = getQueryParam("puzzlegeometry");
   let found = false;
-  for (let i = 0; i < puzzledesc.length; i += 2) {
+  let optionFor3x3x3: HTMLOptionElement;
+
+  for (const [name, desc] of Object.entries(puzzles)) {
     const opt = document.createElement("option") as HTMLOptionElement;
-    opt.value = puzzledesc[i];
-    opt.innerHTML = puzzledesc[i + 1];
-    if (puzdesc === "" && puz === puzzledesc[i + 1]) {
+    opt.value = desc;
+    opt.innerHTML = name;
+    if (puzdesc === "" && puz === name) {
       opt.selected = true;
-      descinput.value = puzzledesc[i];
+      descinput.value = desc;
       found = true;
+    }
+    if ("3x3x3" === name) {
+      optionFor3x3x3 = opt;
     }
     select.add(opt);
   }
@@ -500,12 +504,8 @@ export function setup(): void {
     select.selectedIndex = 0;
     descinput.value = puzdesc;
   } else if (!found) {
-    for (let i = 0; i < puzzledesc.length; i += 2) {
-      if (puzzledesc[i + 1] === "3x3x3") {
-        select.selectedIndex = 1 + i / 2;
-        descinput.value = puzzledesc[i];
-      }
-    }
+    optionFor3x3x3.selected = true;
+    descinput.value = PuzzleGeometry.getpuzzle("3x3x3");
   }
   select.onchange = doselection;
   actions = document.getElementById("action") as HTMLSelectElement;
