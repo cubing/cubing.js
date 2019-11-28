@@ -1,6 +1,5 @@
 import { BlockMove, Example, parse, Sequence } from "../alg";
 import { KPuzzleDefinition, Puzzles } from "../kpuzzle";
-
 import { AnimModel } from "./anim";
 import { Cursor } from "./cursor";
 import { KSolvePuzzle, Puzzle } from "./puzzle";
@@ -75,7 +74,7 @@ function paramsFromTwistyElem(elem: Element): TwistyParams {
   const visualization = elem.getAttribute("visualization");
   // TODO: Factor this code out for testing.
   if (visualization) {
-    if (visualization === "2D" || visualization === "3D") {
+    if (visualization === "2D" || visualization === "3D" || visualization === "PG3D") {
       params.playerConfig = { visualizationFormat: visualization };
     } else {
       console.warn(`Invalid visualization: ${visualization}`);
