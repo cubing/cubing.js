@@ -1,4 +1,6 @@
 import { DoubleSide, Euler, Group, Mesh, MeshBasicMaterial, Quaternion, Vector3 } from "three";
+
+import { daydream, showControlPlanes } from "./config";
 import { ProxyReceiver } from "./proxy/websocket-proxy";
 import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
 
@@ -9,20 +11,6 @@ import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
 import { PG3D } from "../../src/twisty/3D/pg3D"; // TODO: Don't use module-internal export.
 import { TAU } from "../../src/twisty/3d/twisty3D"; // TODO: Don't use module-internal export.
 import { Twisty } from "../../src/twisty/index";
-
-let initialHeight = parseFloat(new URL(location.href).searchParams.get("height") || "1");
-if (isNaN(initialHeight)) {
-  initialHeight = 1;
-}
-
-let initialScale = parseFloat(new URL(location.href).searchParams.get("scale") || "1");
-if (isNaN(initialScale)) {
-  initialScale = 1;
-}
-
-const showControlPlanes = "true" === (new URL(location.href).searchParams.get("showControlPlanes") || "true");
-
-const daydream = "true" === (new URL(location.href).searchParams.get("daydream") || "true");
 
 // From `cube3D.ts`
 class AxisInfo {

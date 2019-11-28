@@ -1,7 +1,6 @@
 import { MoveEvent } from "../../../src/bluetooth";
 import { OrientationEvent } from "../../../src/bluetooth/bluetooth-puzzle";
-
-const socketOrigin: string | null = new URL(location.href).searchParams.get("socketOrigin") || null;
+import { socketOrigin } from "../config";
 
 export interface ProxyMoveEvent {
   event: "move";
