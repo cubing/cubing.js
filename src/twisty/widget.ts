@@ -330,14 +330,14 @@ export class PG3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private pg3D: PG3D;
   constructor(private anim: AnimModel, private definition: KPuzzleDefinition,
-    stickerDat: any) {
+              stickerDat: any) {
     this.element = document.createElement("cube3d-view");
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 
     this.pg3D = new PG3D(this.definition, stickerDat); // TODO: Dynamic puzzle
 
-    setTimeout(function (): void {
+    setTimeout(function(): void {
       this.pg3D.newVantage(this.element, { position: new Vector3(0, 0, -3.75) });
     }.bind(this), 0);
 
@@ -364,7 +364,7 @@ export class PG3DView implements CursorObserver, JumpObserver {
   private createBackViewForTesting(): void {
     const backWrapper = document.createElement("cube3d-back-wrapper");
     this.element.appendChild(backWrapper);
-    setTimeout(function (): void {
+    setTimeout(function(): void {
       this.pg3D.newVantage(backWrapper, { position: new Vector3(0, 0, 3.75) });
     }.bind(this), 0);
   }

@@ -90,9 +90,9 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
 
 class AlgPartDecoration<P extends Puzzle> {
   constructor(puz: Puzzle, public moveCount: number,
-    public duration: number,
-    public forward: State<P>, public backward: State<P>,
-    public children: Array<AlgPartDecoration<P>> = []) {
+              public duration: number,
+              public forward: State<P>, public backward: State<P>,
+              public children: Array<AlgPartDecoration<P>> = []) {
   }
 }
 class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecoration<P>> {
