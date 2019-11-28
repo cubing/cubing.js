@@ -22,7 +22,7 @@ if (isNaN(initialScale)) {
 
 const showControlPlanes = "true" === (new URL(location.href).searchParams.get("showControlPlanes") || "true");
 
-const daydream = "true" === (new URL(location.href).searchParams.get("daydream") || "true");
+const daydream = "true" === (new URL(location.href).searchParams.get("daydream") || "false");
 
 // From `cube3D.ts`
 class AxisInfo {
