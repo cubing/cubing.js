@@ -1,51 +1,61 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+  <meta charset="utf8">
   <title>Twizzle</title>
- <style>
- twisty { width: 800px; height: 500px; display:block; }
- </style>
+  <style>
+    twisty {
+      width: 800px;
+      height: 500px;
+      display: block;
+    }
+  </style>
   <script src="./index.ts"></script>
   <link href="../../src/twisty/twisty.css" rel="stylesheet" type="text/css">
-   <style>
-     twisty player cursor-text-view { display: none ; }
-   </style>
+  <style>
+    twisty player cursor-text-view {
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
-<select id="puzzleoptions">
-<option value="">custom</option>
-</select>
-<span style="display:none;" id="data">Desc
-<input type=text id=desc value="" size="50"></span>
-<input type=button id="scramble" value="Scramble">
-<input type=button id="reset" value="Reset">
-<input type=button id="options" value="Options">
-<select id="action">
-<option value="">Actions</option>
-<option value="ksolve">KSolve</option>
-<option value="export">Get Scramble</option>
-<option value="ss">Schreier-Sims</option>
-<option value="canon">Canon Seq</option>
-<option value="gap">GAP</option>
-<option value="svgcmd">SVG</option>
-</select>
-<select id="move-input">
-<option value="">Input</option>
-<option value="bluetooth">Bluetooth</option>
-<option value="keyboard">Keyboard</option>
-</select>
-<input type=button id="help" value="Help"><br>
-<span id="optionsspan" style="display:none;">
-<input type=checkbox checked id="threed"> 3D
-<input type=checkbox checked id="corners"> Corners
-<input type=checkbox checked id="edges"> Edges
-<input type=checkbox checked id="centers"> Centers
-<input type=checkbox id="blockmoves"> Block Moves
-<input type=checkbox checked id="optimize"> Optimize
-<input type=checkbox id="allmoves"> All Moves
-<input type=checkbox id="killori"> No Ori
-<input type=checkbox id="vertexmoves"> Vertex Moves<br></span>
-Moves <input type=text id=algorithm value="" size=140><br>
-<twisty id="custom-example" initialization="custom"></twisty><br>
+  <select id="puzzleoptions">
+    <option value="">custom</option>
+  </select>
+  <span style="display:none;" id="data">Desc
+    <input type=text id=desc value="" size="50"></span>
+  <input type=button id="scramble" value="Scramble">
+  <input type=button id="reset" value="Reset">
+  <input type=button id="options" value="Options">
+  <select id="action">
+    <option value="">Actions</option>
+    <option value="ksolve">KSolve</option>
+    <option value="export">Get Scramble</option>
+    <option value="ss">Schreier-Sims</option>
+    <option value="canon">Canon Seq</option>
+    <option value="gap">GAP</option>
+    <option value="svgcmd">SVG</option>
+  </select>
+  <select id="move-input">
+    <option value="">Input</option>
+    <option value="bluetooth">Bluetooth</option>
+    <option value="keyboard">Keyboard</option>
+  </select>
+  <input type=button id="help" value="Help"><br>
+  <span id="optionsspan" style="display:none;">
+    <input type=checkbox checked id="threed"> 3D
+    <input type=checkbox checked id="corners"> Corners
+    <input type=checkbox checked id="edges"> Edges
+    <input type=checkbox checked id="centers"> Centers
+    <input type=checkbox id="blockmoves"> Block Moves
+    <input type=checkbox checked id="optimize"> Optimize
+    <input type=checkbox id="allmoves"> All Moves
+    <input type=checkbox id="killori"> No Ori
+    <input type=checkbox id="vertexmoves"> Vertex Moves<br></span>
+  Moves <input type=text id=algorithm value="" size=140><br>
+  <twisty id="custom-example" initialization="custom"></twisty><br>
 </body>
+
 </html>
