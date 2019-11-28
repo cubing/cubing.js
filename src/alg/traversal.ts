@@ -310,25 +310,25 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
 // }
 
 function repetitionSuffix(amount: number): string {
-   const absAmount = Math.abs(amount);
-   let s = "";
-   if (absAmount !== 1) {
-     s += String(absAmount);
-   }
-   if (absAmount !== amount) {
-     s += "'";
-   }
-   return s;
+  const absAmount = Math.abs(amount);
+  let s = "";
+  if (absAmount !== 1) {
+    s += String(absAmount);
+  }
+  if (absAmount !== amount) {
+    s += "'";
+  }
+  return s;
 }
 export function blockMoveToString(blockMove: BlockMove): string {
-   let out = blockMove.family + repetitionSuffix(blockMove.amount);
-   if (typeof blockMove.innerLayer !== "undefined") {
-     out = String(blockMove.innerLayer) + out;
-     if (typeof blockMove.outerLayer !== "undefined") {
-       out = String(blockMove.outerLayer) + "-" + out;
-     }
-   }
-   return out;
+  let out = blockMove.family + repetitionSuffix(blockMove.amount);
+  if (typeof blockMove.innerLayer !== "undefined") {
+    out = String(blockMove.innerLayer) + out;
+    if (typeof blockMove.outerLayer !== "undefined") {
+      out = String(blockMove.outerLayer) + "-" + out;
+    }
+  }
+  return out;
 }
 
 export class ToString extends TraversalUp<string> {
@@ -345,7 +345,7 @@ export class ToString extends TraversalUp<string> {
   }
   public traverseGroup(group: Group): string { return "(" + this.traverse(group.nestedSequence) + ")" + repetitionSuffix(group.amount); }
   public traverseBlockMove(blockMove: BlockMove): string {
-    return blockMoveToString(blockMove) ;
+    return blockMoveToString(blockMove);
   }
   public traverseCommutator(commutator: Commutator): string { return "[" + this.traverse(commutator.A) + ", " + this.traverse(commutator.B) + "]" + repetitionSuffix(commutator.amount); }
   public traverseConjugate(conjugate: Conjugate): string { return "[" + this.traverse(conjugate.A) + ": " + this.traverse(conjugate.B) + "]" + repetitionSuffix(conjugate.amount); }

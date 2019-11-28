@@ -1,4 +1,4 @@
-import {KPuzzleDefinition, Transformation} from "./definition_types";
+import { KPuzzleDefinition, Transformation } from "./definition_types";
 
 const xmlns = "http://www.w3.org/2000/svg";
 
@@ -14,8 +14,8 @@ function nextSVGID(): string {
 export class SVG {
   public element: HTMLElement;
   public gradientDefs: SVGDefsElement;
-  private originalColors: {[type: string]: string} = {};
-  private gradients: {[type: string]: SVGGradientElement} = {};
+  private originalColors: { [type: string]: string } = {};
+  private gradients: { [type: string]: SVGGradientElement } = {};
   private svgID: string;
   constructor(public kPuzzleDefinition: KPuzzleDefinition) {
     if (!kPuzzleDefinition.svg) {
@@ -114,12 +114,12 @@ export class SVG {
     grad.setAttribute("id", `grad-${this.svgID}-${id}`);
     grad.setAttribute("r", `70.7107%`); // TODO: Adapt to puzzle.
     const stopDefs = [
-      {offset: 0, color: originalColor},
-      {offset: 0, color: originalColor},
-      {offset: 0, color: "black"},
-      {offset: 0, color: "black"},
-      {offset: 0, color: originalColor},
-      {offset: 100, color: originalColor},
+      { offset: 0, color: originalColor },
+      { offset: 0, color: originalColor },
+      { offset: 0, color: "black" },
+      { offset: 0, color: "black" },
+      { offset: 0, color: originalColor },
+      { offset: 100, color: originalColor },
     ];
     for (const stopDef of stopDefs) {
       const stop = document.createElementNS(xmlns,

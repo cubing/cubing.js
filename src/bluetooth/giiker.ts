@@ -1,10 +1,10 @@
 /* tslint:disable no-bitwise */
 
-import {BareBlockMove, BlockMove} from "../alg";
-import {Transformation} from "../kpuzzle";
+import { BareBlockMove, BlockMove } from "../alg";
+import { Transformation } from "../kpuzzle";
 
-import {BluetoothConfig, BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle";
-import {debugLog} from "./debug";
+import { BluetoothConfig, BluetoothPuzzle, PuzzleState } from "./bluetooth-puzzle";
+import { debugLog } from "./debug";
 
 const UUIDs = {
   cubeService: "0000aadb-0000-1000-8000-00805f9b34fb",
@@ -14,10 +14,10 @@ const UUIDs = {
 // TODO: Move this into a factory?
 export const giiKERConfig: BluetoothConfig = {
   filters: [
-    {namePrefix: "GiC"},
-    {namePrefix: "GiS"},
-    {namePrefix: "GiY"},
-    {namePrefix: "Gi2"},
+    { namePrefix: "GiC" },
+    { namePrefix: "GiS" },
+    { namePrefix: "GiY" },
+    { namePrefix: "Gi2" },
   ],
   optionalServices: [
     // "00001530-1212-efde-1523-785feabcd123",
@@ -40,7 +40,7 @@ function giikerMoveToBlockMove(face: number, amount: number): BlockMove {
   return BareBlockMove(family, amount);
 }
 
-export {giikerMoveToBlockMove as giikerMoveToBlockMoveForTesting};
+export { giikerMoveToBlockMove as giikerMoveToBlockMoveForTesting };
 
 function giikerStateStr(giikerState: number[]): string {
   let str = "";
@@ -162,8 +162,8 @@ export class GiiKERCube extends BluetoothPuzzle {
     debugLog(val);
 
     if (this.isRepeatedInitialValue(val)) {
-        debugLog("Skipping repeated initial value.");
-        return;
+      debugLog("Skipping repeated initial value.");
+      return;
     }
 
     const giikerState = [];

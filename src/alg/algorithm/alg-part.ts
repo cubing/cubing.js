@@ -1,4 +1,4 @@
-import {reportTypeMismatch} from "../debug";
+import { reportTypeMismatch } from "../debug";
 
 export type AlgPartType = string;
 
@@ -36,11 +36,11 @@ export function assertIsUnit(a: AlgPart): Unit {
   return a;
 }
 
-export abstract class Unit extends AlgPart {}
+export abstract class Unit extends AlgPart { }
 
-export abstract class Move extends Unit {}
-export abstract class Annotation extends Unit {}
-export abstract class Container extends Unit {}
+export abstract class Move extends Unit { }
+export abstract class Annotation extends Unit { }
+export abstract class Container extends Unit { }
 
 // TODO: Reintroduce an Algorithm class, and allow a mutable sequence too?
 export class Sequence extends AlgPart {
@@ -61,21 +61,21 @@ export interface WithAmount {
 }
 export class Group extends Container implements WithAmount {
   public type: string = "group";
-  constructor(public nestedSequence: Sequence, public amount: number= 1) {
+  constructor(public nestedSequence: Sequence, public amount: number = 1) {
     super();
     Object.freeze(this);
   }
 }
 export class Commutator extends Container implements WithAmount {
   public type: string = "commutator";
-  constructor(public A: Sequence, public B: Sequence, public amount: number= 1) {
+  constructor(public A: Sequence, public B: Sequence, public amount: number = 1) {
     super();
     Object.freeze(this);
   }
 }
 export class Conjugate extends Container implements WithAmount {
   public type: string = "conjugate";
-  constructor(public A: Sequence, public B: Sequence, public amount: number= 1) {
+  constructor(public A: Sequence, public B: Sequence, public amount: number = 1) {
     super();
     Object.freeze(this);
   }

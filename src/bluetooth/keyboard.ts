@@ -1,6 +1,6 @@
-import {keyToMove} from "../alg";
-import {KPuzzle, Puzzles} from "../kpuzzle";
-import {BluetoothPuzzle, PuzzleState} from "./bluetooth-puzzle";
+import { keyToMove } from "../alg";
+import { KPuzzle, Puzzles } from "../kpuzzle";
+import { BluetoothPuzzle, PuzzleState } from "./bluetooth-puzzle";
 
 const def = Puzzles["333"];
 

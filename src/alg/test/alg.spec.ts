@@ -13,8 +13,8 @@ import { matchesAlgType } from "../algorithm/alg-part";
 import {
   setAlgPartTypeMismatchReportingLevel,
 } from "../debug";
-import {Example as Ex} from "../example";
-import {fromJSON} from "../json";
+import { Example as Ex } from "../example";
+import { fromJSON } from "../json";
 import {
   parse,
   parseSiGN,
@@ -179,8 +179,8 @@ describe("algToString()", () => {
   });
 
   it("converts E-Perm to string", () => {
-   expect(algToString(Ex.EPerm)).toBe("x' [[R: U'], D] [[R: U], D] x");
- });
+    expect(algToString(Ex.EPerm)).toBe("x' [[R: U'], D] [[R: U], D] x");
+  });
 
   it("converts triple pause to ... (without spaces)", () => {
     expect(algToString(Ex.TriplePause)).toBe("...");
@@ -265,14 +265,14 @@ describe("Object Freezing", () => {
   });
 
   it("makes it impossible to modify a BaseMove", () => {
-      const b = BareBlockMove("R", 4);
-      let caughtErr: Error | undefined;
-      try {
-        b.amount = 2;
-      } catch (err) {
-        caughtErr = err;
-      }
-      expect(caughtErr instanceof TypeError).toBe(true);
+    const b = BareBlockMove("R", 4);
+    let caughtErr: Error | undefined;
+    try {
+      b.amount = 2;
+    } catch (err) {
+      caughtErr = err;
+    }
+    expect(caughtErr instanceof TypeError).toBe(true);
   });
 });
 
@@ -322,21 +322,21 @@ describe("Parser", () => {
 
 describe("Validator", () => {
   it("can validate flat algs", () => {
-    expect(() => parse("(R)",  {validators: [validateFlatAlg]})).toThrowError(/cannot contain a group/); // toThrowError(ValidationError, /cannot contain a group/);
-    expect(() => parse("Qw",   {validators: [validateFlatAlg]})).not.toThrow(); // not.toThrowError();
-    expect(() => parse("(Qw)", {validators: [validateFlatAlg]})).toThrowError(/cannot contain a group/); // toThrowError(ValidationError, );
+    expect(() => parse("(R)", { validators: [validateFlatAlg] })).toThrowError(/cannot contain a group/); // toThrowError(ValidationError, /cannot contain a group/);
+    expect(() => parse("Qw", { validators: [validateFlatAlg] })).not.toThrow(); // not.toThrowError();
+    expect(() => parse("(Qw)", { validators: [validateFlatAlg] })).toThrowError(/cannot contain a group/); // toThrowError(ValidationError, );
   });
   it("can validate cube base moves alg", () => {
-    expect(() => parse("(R)",  {validators: [validateSiGNMoves]})).not.toThrowError();
-    expect(() => parse("Qw",   {validators: [validateSiGNMoves]})).toThrowError(/Invalid SiGN plain move family/);
-    expect(() => parse("(Qw)", {validators: [validateSiGNMoves]})).toThrowError(/Invalid SiGN plain move family/);
+    expect(() => parse("(R)", { validators: [validateSiGNMoves] })).not.toThrowError();
+    expect(() => parse("Qw", { validators: [validateSiGNMoves] })).toThrowError(/Invalid SiGN plain move family/);
+    expect(() => parse("(Qw)", { validators: [validateSiGNMoves] })).toThrowError(/Invalid SiGN plain move family/);
   });
   it("can validate cube algs", () => {
-    expect(() => parse("(R)",  {validators: [validateSiGNAlg]})).toThrowError(/cannot contain a group/);
-    expect(() => parse("Qw",   {validators: [validateSiGNAlg]})).toThrowError(/Invalid SiGN plain move family/);
-    expect(() => parse("(Qw)", {validators: [validateSiGNAlg]})).toThrowError(ValidationError);
+    expect(() => parse("(R)", { validators: [validateSiGNAlg] })).toThrowError(/cannot contain a group/);
+    expect(() => parse("Qw", { validators: [validateSiGNAlg] })).toThrowError(/Invalid SiGN plain move family/);
+    expect(() => parse("(Qw)", { validators: [validateSiGNAlg] })).toThrowError(ValidationError);
   });
   it("throws ValidationError", () => {
-    expect(() => parse("(R)",  {validators: [validateFlatAlg]})).toThrowError(ValidationError);
+    expect(() => parse("(R)", { validators: [validateFlatAlg] })).toThrowError(ValidationError);
   });
 });

@@ -1,10 +1,10 @@
-import {BlockMove, Example, parse, Sequence} from "../alg";
-import {KPuzzleDefinition, Puzzles} from "../kpuzzle";
+import { BlockMove, Example, parse, Sequence } from "../alg";
+import { KPuzzleDefinition, Puzzles } from "../kpuzzle";
 
-import {AnimModel} from "./anim";
-import {Cursor} from "./cursor";
-import {KSolvePuzzle, Puzzle} from "./puzzle";
-import {Player, PlayerConfig} from "./widget";
+import { AnimModel } from "./anim";
+import { Cursor } from "./cursor";
+import { KSolvePuzzle, Puzzle } from "./puzzle";
+import { Player, PlayerConfig } from "./widget";
 
 class TwistyParams {
   public alg?: Sequence;
@@ -76,7 +76,7 @@ function paramsFromTwistyElem(elem: Element): TwistyParams {
   // TODO: Factor this code out for testing.
   if (visualization) {
     if (visualization === "2D" || visualization === "3D") {
-      params.playerConfig = {visualizationFormat: visualization};
+      params.playerConfig = { visualizationFormat: visualization };
     } else {
       console.warn(`Invalid visualization: ${visualization}`);
     }

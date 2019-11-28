@@ -1,33 +1,33 @@
 import { BackSide, BoxGeometry, DoubleSide, Euler, Group, Matrix4, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Quaternion, Vector3 } from "three";
-import {BlockMove} from "../../alg";
-import {KPuzzleDefinition, Puzzles, Transformation} from "../../kpuzzle";
+import { BlockMove } from "../../alg";
+import { KPuzzleDefinition, Puzzles, Transformation } from "../../kpuzzle";
 
-import {Cursor} from "../cursor";
-import {smootherStep} from "../easing";
-import {Puzzle} from "../puzzle";
+import { Cursor } from "../cursor";
+import { smootherStep } from "../easing";
+import { Puzzle } from "../puzzle";
 
-import {TAU, Twisty3D} from "./twisty3D";
+import { TAU, Twisty3D } from "./twisty3D";
 
 class AxisInfo {
   public stickerMaterial: MeshBasicMaterial;
   public hintStickerMaterial: MeshBasicMaterial;
   constructor(public vector: Vector3, public fromZ: Euler, public color: number) {
     // TODO: Make sticker material single-sided when cubie base is rendered?
-    this.stickerMaterial = new MeshBasicMaterial({color, side: DoubleSide});
-    this.hintStickerMaterial = new MeshBasicMaterial({color, side: BackSide});
+    this.stickerMaterial = new MeshBasicMaterial({ color, side: DoubleSide });
+    this.hintStickerMaterial = new MeshBasicMaterial({ color, side: BackSide });
   }
 }
 
 const axesInfo: AxisInfo[] = [
-  new AxisInfo(new Vector3( 0,  1,  0), new Euler(-TAU / 4,  0,  0), 0xffffff),
-  new AxisInfo(new Vector3(-1,  0,  0), new Euler( 0, -TAU / 4,  0), 0xff8800),
-  new AxisInfo(new Vector3( 0,  0,  1), new Euler( 0,  0,      0), 0x00ff00),
-  new AxisInfo(new Vector3( 1,  0,  0), new Euler( 0,  TAU / 4,  0), 0xff0000),
-  new AxisInfo(new Vector3( 0,  0, -1), new Euler( 0,  TAU / 2,  0), 0x0000ff),
-  new AxisInfo(new Vector3( 0, -1,  0), new Euler( TAU / 4,  0,  0), 0xffff00),
+  new AxisInfo(new Vector3(0, 1, 0), new Euler(-TAU / 4, 0, 0), 0xffffff),
+  new AxisInfo(new Vector3(-1, 0, 0), new Euler(0, -TAU / 4, 0), 0xff8800),
+  new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ff00),
+  new AxisInfo(new Vector3(1, 0, 0), new Euler(0, TAU / 4, 0), 0xff0000),
+  new AxisInfo(new Vector3(0, 0, -1), new Euler(0, TAU / 2, 0), 0x0000ff),
+  new AxisInfo(new Vector3(0, -1, 0), new Euler(TAU / 4, 0, 0), 0xffff00),
 ];
 
-const face: {[s: string]: number} = {
+const face: { [s: string]: number } = {
   U: 0,
   L: 1,
   F: 2,
@@ -36,7 +36,7 @@ const face: {[s: string]: number} = {
   D: 5,
 };
 
-const familyToAxis: {[s: string]: number} = {
+const familyToAxis: { [s: string]: number } = {
   U: face.U, u: face.U, y: face.U,
   L: face.L, l: face.L, M: face.L,
   F: face.F, f: face.F, S: face.F, z: face.F,
@@ -67,7 +67,7 @@ const cube3DOptionsDefaults: Cube3DOptions = {
 };
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
-const blackMesh = new MeshBasicMaterial({color: 0x000000, opacity: 0.3, transparent: true});
+const blackMesh = new MeshBasicMaterial({ color: 0x000000, opacity: 0.3, transparent: true });
 
 class CubieDef {
   public matrix: Matrix4;
@@ -87,17 +87,17 @@ function t(v: Vector3, t4: number): Quaternion {
 }
 
 const r = {
-  O: new Vector3( 0,  0,  0),
-  U: new Vector3( 0, -1,  0),
-  L: new Vector3( 1,  0,  0),
-  F: new Vector3( 0,  0, -1),
-  R: new Vector3(-1,  0,  0),
-  B: new Vector3( 0,  0,  1),
-  D: new Vector3( 0,  1,  0),
+  O: new Vector3(0, 0, 0),
+  U: new Vector3(0, -1, 0),
+  L: new Vector3(1, 0, 0),
+  F: new Vector3(0, 0, -1),
+  R: new Vector3(-1, 0, 0),
+  B: new Vector3(0, 0, 1),
+  D: new Vector3(0, 1, 0),
 };
 
-interface OrbitIndexed<T> {[s: string]: T; }
-interface PieceIndexed<T> extends OrbitIndexed<T[]> {}
+interface OrbitIndexed<T> { [s: string]: T; }
+interface PieceIndexed<T> extends OrbitIndexed<T[]> { }
 
 const firstPiecePosition: OrbitIndexed<Vector3> = {
   EDGE: new Vector3(0, 1, 1),

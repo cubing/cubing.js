@@ -5,8 +5,8 @@ import { algPartToStringForTesting, algToString } from "./traversal";
 
 describe("operation", () => {
   it("can modify BlockMove", () => {
-    expect(algPartToStringForTesting(modifiedBlockMove(BareBlockMove("R"), {amount: 2}))).toBe("R2");
-    expect(algPartToStringForTesting(modifiedBlockMove(LayerBlockMove(4, "r", 3), {family: "u", outerLayer: 2}))).toBe("2-4u3");
+    expect(algPartToStringForTesting(modifiedBlockMove(BareBlockMove("R"), { amount: 2 }))).toBe("R2");
+    expect(algPartToStringForTesting(modifiedBlockMove(LayerBlockMove(4, "r", 3), { family: "u", outerLayer: 2 }))).toBe("2-4u3");
   });
 
   it("can append moves", () => {

@@ -1,6 +1,6 @@
-import {parse, Sequence, structureEquals} from "../alg";
+import { parse, Sequence, structureEquals } from "../alg";
 
-import {giikerMoveToBlockMoveForTesting} from "./giiker";
+import { giikerMoveToBlockMoveForTesting } from "./giiker";
 
 describe("GiiKerCube", () => {
   // it("should be possible to construct", () => {

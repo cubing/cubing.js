@@ -1,6 +1,6 @@
-import {Sequence} from "./algorithm";
-import {parse} from "./parser";
-import {algToString} from "./traversal";
+import { Sequence } from "./algorithm";
+import { parse } from "./parser";
+import { algToString } from "./traversal";
 
 // This is not the most sophisticated scheme, but it has been used in production
 // at alg.cubing.net for years.

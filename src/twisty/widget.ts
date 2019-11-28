@@ -1,51 +1,51 @@
 import { Vector3 } from "three";
 
-import {algToString, BlockMove, Sequence} from "../alg";
-import {Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation} from "../kpuzzle";
+import { algToString, BlockMove, Sequence } from "../alg";
+import { Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation } from "../kpuzzle";
 
-import {Cube3D} from "./3D/cube3D";
-import {PG3D} from "./3D/pg3D";
-import {AnimModel, CursorObserver, DirectionObserver, JumpObserver} from "./anim";
+import { Cube3D } from "./3D/cube3D";
+import { PG3D } from "./3D/pg3D";
+import { AnimModel, CursorObserver, DirectionObserver, JumpObserver } from "./anim";
 import { getConfigWithDefault } from "./config";
-import {Cursor} from "./cursor";
-import {Puzzle} from "./puzzle";
+import { Cursor } from "./cursor";
+import { Puzzle } from "./puzzle";
 
-export type VisualizationFormat = "2D" | "3D" | "PG3D" ;
+export type VisualizationFormat = "2D" | "3D" | "PG3D";
 
 declare global {
   interface Document {
-      mozCancelFullScreen: () => void;
-      msExitFullscreen: () => void;
-      mozFullScreenElement: HTMLElement;
-      msFullscreenElement: HTMLElement;
-      webkitFullscreenElement: HTMLElement;
+    mozCancelFullScreen: () => void;
+    msExitFullscreen: () => void;
+    mozFullScreenElement: HTMLElement;
+    msFullscreenElement: HTMLElement;
+    webkitFullscreenElement: HTMLElement;
   }
 
   interface Element {
-      mozRequestFullScreen: () => void;
-      msRequestFullscreen: () => void;
+    mozRequestFullScreen: () => void;
+    msRequestFullscreen: () => void;
   }
 }
 
 export function currentFullscreenElement(): Element {
   return document.fullscreenElement ||
-         document.webkitFullscreenElement ||
-         (document as any).mozFullScreenElement ||
-         (document as any).msFullscreenElement ||
-         document.webkitFullscreenElement;
+    document.webkitFullscreenElement ||
+    (document as any).mozFullScreenElement ||
+    (document as any).msFullscreenElement ||
+    document.webkitFullscreenElement;
 }
 export function fullscreenRequest(element: HTMLElement): void {
   const requestFullscreen = element.requestFullscreen ||
-                          (element as any).mozRequestFullScreen ||
-                          (element as any).msRequestFullscreen ||
-                          (element as any).webkitRequestFullscreen;
+    (element as any).mozRequestFullScreen ||
+    (element as any).msRequestFullscreen ||
+    (element as any).webkitRequestFullscreen;
   requestFullscreen.call(element);
 }
 export function fullscreenExit(): void {
   const exitFullscreen = document.exitFullscreen ||
-                       (document as any).mozCancelFullScreen ||
-                       (document as any).msExitFullscreen ||
-                       (document as any).webkitExitFullscreen;
+    (document as any).mozCancelFullScreen ||
+    (document as any).msExitFullscreen ||
+    (document as any).webkitExitFullscreen;
   exitFullscreen.call(document);
 }
 
@@ -88,12 +88,14 @@ export namespace Button {
 
   export class SkipToStart extends Button {
     constructor(private anim: AnimModel) {
-      super("Skip To Start", "skip-to-start"); }
+      super("Skip To Start", "skip-to-start");
+    }
     public onpress(): void { this.anim.skipToStart(); }
   }
   export class SkipToEnd extends Button {
     constructor(private anim: AnimModel) {
-      super("Skip To End", "skip-to-end"); }
+      super("Skip To End", "skip-to-end");
+    }
     public onpress(): void { this.anim.skipToEnd(); }
   }
   export class PlayPause extends Button implements DirectionObserver {
@@ -118,12 +120,14 @@ export namespace Button {
   }
   export class StepForward extends Button {
     constructor(private anim: AnimModel) {
-      super("Step forward", "step-forward"); }
+      super("Step forward", "step-forward");
+    }
     public onpress(): void { this.anim.stepForward(); }
   }
   export class StepBackward extends Button {
     constructor(private anim: AnimModel) {
-      super("Step backward", "step-backward"); }
+      super("Step backward", "step-backward");
+    }
     public onpress(): void { this.anim.stepBackward(); }
   }
 }
@@ -302,7 +306,7 @@ export class Cube3DView implements CursorObserver, JumpObserver {
     const backWrapper = document.createElement("cube3d-back-wrapper");
     this.element.appendChild(backWrapper);
     setTimeout(() => {
-      this.cube3D.newVantage(backWrapper, {position: new Vector3(-1.25, -2.5, -2.5)});
+      this.cube3D.newVantage(backWrapper, { position: new Vector3(-1.25, -2.5, -2.5) });
     }, 0);
   }
 
@@ -326,15 +330,15 @@ export class PG3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private pg3D: PG3D;
   constructor(private anim: AnimModel, private definition: KPuzzleDefinition,
-              stickerDat: any) {
+    stickerDat: any) {
     this.element = document.createElement("cube3d-view");
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 
     this.pg3D = new PG3D(this.definition, stickerDat); // TODO: Dynamic puzzle
 
-    setTimeout(function(): void {
-      this.pg3D.newVantage(this.element, {position: new Vector3(0, 0, -3.75)}) ;
+    setTimeout(function (): void {
+      this.pg3D.newVantage(this.element, { position: new Vector3(0, 0, -3.75) });
     }.bind(this), 0);
 
     this.createBackViewForTesting();
@@ -360,8 +364,8 @@ export class PG3DView implements CursorObserver, JumpObserver {
   private createBackViewForTesting(): void {
     const backWrapper = document.createElement("cube3d-back-wrapper");
     this.element.appendChild(backWrapper);
-    setTimeout(function(): void {
-      this.pg3D.newVantage(backWrapper, {position: new Vector3(0, 0, 3.75)}) ;
+    setTimeout(function (): void {
+      this.pg3D.newVantage(backWrapper, { position: new Vector3(0, 0, 3.75) });
     }.bind(this), 0);
   }
 }
@@ -382,7 +386,7 @@ export class Player {
     this.element = document.createElement("player");
 
     if (this.config.visualizationFormat === "PG3D") {
-       this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DStickerDat)).element) ;
+      this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DStickerDat)).element);
     } else if (this.config.visualizationFormat === "3D") {
       if (definition.name === "333") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);

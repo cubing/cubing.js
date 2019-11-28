@@ -49,7 +49,7 @@ export {
 
 export {
   parse,
- } from "./parser";
+} from "./parser";
 
 export {
   keyToMove,

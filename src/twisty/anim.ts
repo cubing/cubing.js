@@ -1,5 +1,5 @@
-import {Cursor} from "./cursor";
-import {Puzzle} from "./puzzle";
+import { Cursor } from "./cursor";
+import { Puzzle } from "./puzzle";
 
 export interface CursorObserver {
   animCursorChanged: (cursor: Cursor<Puzzle>) => void; // TODO cursor.position?
@@ -175,8 +175,8 @@ export class AnimModel {
     }
     const reachedMoveBreakpoint = this.cursor.delta(elapsed * this.timeScaling(), this.breakpointType === Cursor.BreakpointType.Move);
     if (reachedMoveBreakpoint) {
-        this.setDirection(Cursor.Direction.Paused);
-        this.scheduler.stop();
+      this.setDirection(Cursor.Direction.Paused);
+      this.scheduler.stop();
     }
   }
 
@@ -219,7 +219,7 @@ export class AnimModel {
 
 class FrameScheduler {
   private animating: boolean = false;
-  constructor(private callback: (timestamp: Cursor.Timestamp) => void) {}
+  constructor(private callback: (timestamp: Cursor.Timestamp) => void) { }
 
   public animFrame(timestamp: Cursor.Timestamp): void {
     this.callback(timestamp);

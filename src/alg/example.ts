@@ -15,46 +15,46 @@ import {
 export namespace Example {
 
   export const Sune: Sequence = new Sequence([
-    BareBlockMove("R",  1),
-    BareBlockMove("U",  1),
+    BareBlockMove("R", 1),
+    BareBlockMove("U", 1),
     BareBlockMove("R", -1),
-    BareBlockMove("U",  1),
-    BareBlockMove("R",  1),
+    BareBlockMove("U", 1),
+    BareBlockMove("R", 1),
     BareBlockMove("U", -2),
     BareBlockMove("R", -1),
   ]);
 
   export const AntiSune: Sequence = new Sequence([
-    BareBlockMove("R",  1),
-    BareBlockMove("U",  2),
+    BareBlockMove("R", 1),
+    BareBlockMove("U", 2),
     BareBlockMove("R", -1),
     BareBlockMove("U", -1),
-    BareBlockMove("R",  1),
+    BareBlockMove("R", 1),
     BareBlockMove("U", -1),
     BareBlockMove("R", -1),
   ]);
 
   export const SuneCommutator: Sequence = new Sequence([new Commutator(
     new Sequence([
-      BareBlockMove("R",  1),
-      BareBlockMove("U",  1),
+      BareBlockMove("R", 1),
+      BareBlockMove("U", 1),
       BareBlockMove("R", -2),
     ]),
     new Sequence([new Conjugate(
-      new Sequence([BareBlockMove("R",  1)]),
-      new Sequence([BareBlockMove("U",  1)]),
+      new Sequence([BareBlockMove("R", 1)]),
+      new Sequence([BareBlockMove("U", 1)]),
       1,
     )]),
     1,
   )]);
 
   export const Niklas: Sequence = new Sequence([
-    BareBlockMove("R",  1),
-    BareBlockMove("U",  -1),
+    BareBlockMove("R", 1),
+    BareBlockMove("U", -1),
     BareBlockMove("L", -1),
     BareBlockMove("U", 1),
-    BareBlockMove("R",  -1),
-    BareBlockMove("U",  -1),
+    BareBlockMove("R", -1),
+    BareBlockMove("U", -1),
     BareBlockMove("L", 1),
     BareBlockMove("U", 1),
   ]);
@@ -81,10 +81,10 @@ export namespace Example {
   ]);
 
   export const FURURFCompact: Sequence = new Sequence([new Conjugate(
-    new Sequence([BareBlockMove("F",  1)]),
+    new Sequence([BareBlockMove("F", 1)]),
     new Sequence([new Commutator(
-      new Sequence([BareBlockMove("U",  1)]),
-      new Sequence([BareBlockMove("R",  1)]),
+      new Sequence([BareBlockMove("U", 1)]),
+      new Sequence([BareBlockMove("R", 1)]),
       1,
     )]),
     1,
@@ -105,27 +105,27 @@ export namespace Example {
   )]);
 
   export const FURURFMoves: Sequence = new Sequence([
-    BareBlockMove("F",  1),
-    BareBlockMove("U",  1),
-    BareBlockMove("R",  1),
+    BareBlockMove("F", 1),
+    BareBlockMove("U", 1),
+    BareBlockMove("R", 1),
     BareBlockMove("U", -1),
     BareBlockMove("R", -1),
     BareBlockMove("F", -1),
   ]);
 
   export const TPerm: Sequence = new Sequence([
-    BareBlockMove("R",  1),
-    BareBlockMove("U",  1),
+    BareBlockMove("R", 1),
+    BareBlockMove("U", 1),
     BareBlockMove("R", -1),
     BareBlockMove("U", -1),
     BareBlockMove("R", -1),
-    BareBlockMove("F",  1),
-    BareBlockMove("R",  2),
+    BareBlockMove("F", 1),
+    BareBlockMove("R", 2),
     BareBlockMove("U", -1),
     BareBlockMove("R", -1),
     BareBlockMove("U", -1),
-    BareBlockMove("R",  1),
-    BareBlockMove("U",  1),
+    BareBlockMove("R", 1),
+    BareBlockMove("U", 1),
     BareBlockMove("R", -1),
     BareBlockMove("F", -1),
   ]);
@@ -141,10 +141,10 @@ export namespace Example {
   )]);
 
   export const TriplePause: Sequence = new Sequence([
-      new Pause(),
-      new Pause(),
-      new Pause(),
-    ],
+    new Pause(),
+    new Pause(),
+    new Pause(),
+  ],
   );
 
   export const AllAlgParts: AlgPart[] = [

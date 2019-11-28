@@ -1,4 +1,4 @@
-import {BlockMove, Sequence} from "./algorithm";
+import { BlockMove, Sequence } from "./algorithm";
 
 function canCoalesce(m1: BlockMove, m2: BlockMove): boolean {
   return m1.family === m2.family && m1.innerLayer === m2.innerLayer && m1.outerLayer === m2.outerLayer;
@@ -27,7 +27,7 @@ export function experimentalAppendBlockMove(s: Sequence, newMove: BlockMove, coa
     const newNestedUnits = s.nestedUnits.slice(0, oldNestedUnits.length - 1);
     const newAmount = oldLastMove.amount + newMove.amount;
     if (newAmount !== 0) {
-      newNestedUnits.push(modifiedBlockMove(oldLastMove, {amount: newAmount}));
+      newNestedUnits.push(modifiedBlockMove(oldLastMove, { amount: newAmount }));
     }
     return new Sequence(newNestedUnits);
   } else {

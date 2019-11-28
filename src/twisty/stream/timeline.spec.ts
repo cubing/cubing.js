@@ -3,15 +3,15 @@ import { algPartToStringForTesting } from "../../alg/traversal";
 import { toTimeline } from "./timeline";
 
 const moves = [
-  { timeStamp: 4356, move: BareBlockMove("L")},
-  { timeStamp: 4358, move: BareBlockMove("R", -1)},
-  { timeStamp: 4360, move: BareBlockMove("L")},
-  { timeStamp: 4417, move: BareBlockMove("R", -1)},
-  { timeStamp: 4777, move: BareBlockMove("D", -1)},
-  { timeStamp: 4836, move: BareBlockMove("R", -1)},
-  { timeStamp: 4837, move: BareBlockMove("L")},
-  { timeStamp: 4838, move: BareBlockMove("L")},
-  { timeStamp: 4897, move: BareBlockMove("R", -1)},
+  { timeStamp: 4356, move: BareBlockMove("L") },
+  { timeStamp: 4358, move: BareBlockMove("R", -1) },
+  { timeStamp: 4360, move: BareBlockMove("L") },
+  { timeStamp: 4417, move: BareBlockMove("R", -1) },
+  { timeStamp: 4777, move: BareBlockMove("D", -1) },
+  { timeStamp: 4836, move: BareBlockMove("R", -1) },
+  { timeStamp: 4837, move: BareBlockMove("L") },
+  { timeStamp: 4838, move: BareBlockMove("L") },
+  { timeStamp: 4897, move: BareBlockMove("R", -1) },
 ];
 
 // 0   1   2   3   4   5   6   7   8   9
@@ -22,13 +22,13 @@ const moves = [
 //                            ---R--R--
 
 const moves2 = [
-  { timeStamp: 100, move: BareBlockMove("R")},
-  { timeStamp: 300, move: BareBlockMove("U")},
-  { timeStamp: 450, move: BareBlockMove("R", -1)},
-  { timeStamp: 550, move: BareBlockMove("U", -1)},
-  { timeStamp: 575, move: BareBlockMove("D")},
-  { timeStamp: 750, move: BareBlockMove("R")},
-  { timeStamp: 800, move: BareBlockMove("R")},
+  { timeStamp: 100, move: BareBlockMove("R") },
+  { timeStamp: 300, move: BareBlockMove("U") },
+  { timeStamp: 450, move: BareBlockMove("R", -1) },
+  { timeStamp: 550, move: BareBlockMove("U", -1) },
+  { timeStamp: 575, move: BareBlockMove("D") },
+  { timeStamp: 750, move: BareBlockMove("R") },
+  { timeStamp: 800, move: BareBlockMove("R") },
 ];
 
 describe("Timeline", () => {

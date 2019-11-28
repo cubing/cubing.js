@@ -10,11 +10,11 @@ import {
   Sequence,
 } from "./algorithm";
 
-import {TraversalUp} from "./traversal";
+import { TraversalUp } from "./traversal";
 
-export class ValidationError extends Error {}
+export class ValidationError extends Error { }
 
-export abstract class ValidatorTraversal extends TraversalUp<void> {}
+export abstract class ValidatorTraversal extends TraversalUp<void> { }
 
 interface FamilyList { [s: string]: boolean; }
 
@@ -116,7 +116,7 @@ export class BlockMoveValidator extends BaseMoveValidator {
       return;
     } else {
       if (!validateFamily(blockMove.family, [wideMoveFamilies, singleSliceMoveFamilies, plainMoveFamilies])) {
-          throw new ValidationError(`Invalid SiGN plain move family: ${blockMove.family}`);
+        throw new ValidationError(`Invalid SiGN plain move family: ${blockMove.family}`);
       }
       return;
     }

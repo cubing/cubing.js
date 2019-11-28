@@ -1,6 +1,6 @@
-import {BareBlockMove, BlockMove} from "./algorithm";
+import { BareBlockMove, BlockMove } from "./algorithm";
 
-const cubeKeyMapping: {[key: number]: BlockMove} = {
+const cubeKeyMapping: { [key: number]: BlockMove } = {
   73: BareBlockMove("R"), 75: BareBlockMove("R", -1),
   87: BareBlockMove("B"), 79: BareBlockMove("B", -1),
   83: BareBlockMove("D"), 76: BareBlockMove("D", -1),

@@ -1,7 +1,7 @@
-import {Sequence} from "../algorithm";
-import {fromJSON} from "../json";
-import {validateSiGNAlg, Validator} from "../validation";
-import {parse as pegParse} from "./parser";
+import { Sequence } from "../algorithm";
+import { fromJSON } from "../json";
+import { validateSiGNAlg, Validator } from "../validation";
+import { parse as pegParse } from "./parser";
 
 export interface ParseOptions {
   validators?: Validator[];
@@ -9,7 +9,7 @@ export interface ParseOptions {
 
 // TODO: Include token location info.
 // TODO: Take validators in a way that allows optimizing parsing.
-export function parse(s: string, options: ParseOptions = {validators: []}): Sequence {
+export function parse(s: string, options: ParseOptions = { validators: [] }): Sequence {
   options.validators = options.validators || [];
 
   const algo = fromJSON(pegParse(s));
@@ -20,5 +20,5 @@ export function parse(s: string, options: ParseOptions = {validators: []}): Sequ
 }
 
 export function parseSiGN(s: string): Sequence {
-  return parse(s, {validators: [validateSiGNAlg]});
+  return parse(s, { validators: [validateSiGNAlg] });
 }

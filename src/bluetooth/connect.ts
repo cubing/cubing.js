@@ -1,14 +1,14 @@
-import {BluetoothPuzzle} from "./bluetooth-puzzle";
-import {debugLog} from "./debug";
-import {ganConfig, GanCube} from "./gan";
-import {giiKERConfig, GiiKERCube} from "./giiker";
+import { BluetoothPuzzle } from "./bluetooth-puzzle";
+import { debugLog } from "./debug";
+import { ganConfig, GanCube } from "./gan";
+import { giiKERConfig, GiiKERCube } from "./giiker";
 import { GoCube, goCubeConfig } from "./gocube";
 
 /******** requestOptions ********/
 
 export interface BluetoothConfig {
-    filters: BluetoothRequestDeviceFilter[];
-    optionalServices: BluetoothServiceUUID[];
+  filters: BluetoothRequestDeviceFilter[];
+  optionalServices: BluetoothServiceUUID[];
 }
 
 function requestOptions(): RequestDeviceOptions {
@@ -24,7 +24,7 @@ function requestOptions(): RequestDeviceOptions {
     options.filters = options.filters.concat(config.filters);
     options.optionalServices = options.optionalServices.concat(config.optionalServices);
   }
-  debugLog({requestOptions: options});
+  debugLog({ requestOptions: options });
   return options;
 }
 
@@ -37,7 +37,7 @@ export async function connect(): Promise<BluetoothPuzzle> {
   debugLog("Device:", device);
 
   if (typeof device.gatt === "undefined") {
-      return Promise.reject("Device did not have a GATT server.");
+    return Promise.reject("Device did not have a GATT server.");
   }
 
   const server = await device.gatt.connect();
