@@ -4,7 +4,7 @@ import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
 import { Twisty } from "../../src/twisty/index";
 
 window.addEventListener("load", () => {
-  const pg = getPuzzleGeometryByName("megaminx");
+  const pg = getPuzzleGeometryByName]("megaminx", ["orientcenters", "true"]);
   const stickerDat = pg.get3d(0.0131);
 
   const kpuzzle = kpuzzleParse(pg.writeksolve("TwizzlePuzzle", true));

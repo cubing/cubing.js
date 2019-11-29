@@ -161,17 +161,16 @@ export class PG3D extends Twisty3D<Puzzle> {
           pieces2[i].setColor(pieces[nori][ni].origColor);
         }
       }
-   }
-   for (const moveProgress of p.moves) {
-     const blockMove = moveProgress.move as BlockMove;
-     const fullMove = stateForBlockMove(this.definition, blockMove);
-     const ax = this.axesInfo[blockMove.family.toUpperCase()];
-     const turnNormal = ax.axis;
-     const angle = - this.ease(moveProgress.fraction) *
-          moveProgress.direction * blockMove.amount * TAU / ax.order;
-     for (const orbit in this.stickers) {
+    }
+    for (const moveProgress of p.moves) {
+      const blockMove = moveProgress.move as BlockMove;
+      const fullMove = stateForBlockMove(this.definition, blockMove);
+      const ax = this.axesInfo[blockMove.family.toUpperCase()];
+      const turnNormal = ax.axis;
+      const angle = - this.ease(moveProgress.fraction) *
+           moveProgress.direction * blockMove.amount * TAU / ax.order;
+      for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
-        const pos2 = pos[orbit];
         const orin = pieces.length;
         const mv = fullMove[orbit];
         for (let ori = 0; ori < orin; ori++) {
