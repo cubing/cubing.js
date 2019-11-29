@@ -119,6 +119,8 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
       } else {
         move = modifiedBlockMove(move, { innerLayer: 2 });
       }
+    } else if ((event.ctrlKey || event.metaKey) && gripdepth[bestGrip]) {
+      move = modifiedBlockMove(move, { innerLayer: gripdepth[bestGrip], family: bestGrip.toLowerCase() }) ;
     }
   }
   if (!rightClick) {
