@@ -5,7 +5,7 @@ import { Raycaster, Vector2, Vector3 } from "three";
 import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
 import { KPuzzle, KPuzzleDefinition, parse } from "../../src/kpuzzle/index";
-import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, SchreierSims } from "../../src/puzzle-geometry/index";
+import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims } from "../../src/puzzle-geometry/index";
 import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
@@ -311,7 +311,7 @@ function dowork(cmd: string): void {
     const os = pg.getOrbitsDef(false);
     const as = os.reassemblySize();
     gtw("Reassembly size is " + as);
-    const ss = SchreierSims.schreiersims(pg.getMovesAsPerms(), gtw);
+    const ss = schreierSims(pg.getMovesAsPerms(), gtw);
     const r = as / ss;
     gtw("Ratio is " + r);
   } else if (cmd === "canon") {
