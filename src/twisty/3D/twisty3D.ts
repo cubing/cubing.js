@@ -15,12 +15,14 @@ export class Vantage {
   public renderer: WebGLRenderer;
   private rafID: number | null = null;
   private stats: Stats | null = null;
+  private shift: number = 0 ;
   constructor(public element: HTMLElement, private scene: Scene, options: VantageOptions = {}) {
     this.camera = new PerspectiveCamera(30, element.offsetWidth / element.offsetHeight, 0.1, 1000);
     this.camera.position.copy(options.position ? options.position : defaultVantagePosition);
     this.camera.lookAt(new Vector3(0, 0, 0));
 
     this.renderer = /*options.renderer ? options.renderer : */createDefaultRenderer();
+    this.shift = options.shift ? options.shift : 0 ;
     this.resize();
 
     this.render();
@@ -60,8 +62,14 @@ export class Vantage {
   private scheduledResize(): void {
     const w = this.element.offsetWidth;
     const h = this.element.offsetHeight;
-
-    this.camera.aspect = w / h;
+    let off = 0 ;
+    this.camera.aspect = w / h ;
+    if (this.shift > 0) {
+       off = Math.max(0, Math.floor((w - h) * 0.5)) ;
+    } else if (this.shift < 0) {
+       off = - Math.max(0, Math.floor((w - h) * 0.5)) ;
+    }
+    this.camera.setViewOffset(w, h, off, 0, w, h) ;
     this.camera.updateProjectionMatrix();
 
     this.renderer.setPixelRatio(pixelRatio());
@@ -76,6 +84,7 @@ export class Vantage {
 export interface VantageOptions {
   position?: Vector3;
   renderer?: Renderer;
+  shift?: number;
 }
 
 // TODO: Handle if you move across screens?
