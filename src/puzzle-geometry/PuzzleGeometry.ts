@@ -243,15 +243,15 @@ function splitByFaceNames(s: string, facenames: any[]): string[] {
   return r;
 }
 
-function toCoords(q: Quat): number[] {
-  return [-q.b, -q.c, -q.d];
+function toCoords(q: Quat, maxdist: number): number[] {
+  return [-q.b/maxdist, -q.c/maxdist, -q.d/maxdist];
 }
 
-function toFaceCoords(q: Quat[]): number[][] {
+function toFaceCoords(q: Quat[], maxdist: number): number[][] {
   const r = [];
   const n = q.length;
   for (let i = 0; i < n; i++) {
-    r[n - i - 1] = toCoords(q[i]);
+    r[n - i - 1] = toCoords(q[i], maxdist);
   }
   return r;
 }
@@ -1892,9 +1892,10 @@ export class PuzzleGeometry {
     const stickers: any = [];
     const rot = this.getInitial3DRotation();
     const faces: any = [];
+    const maxdist: number = 0.52 * this.basefaces[0][0].len() ;
     for (let i = 0; i < this.basefaces.length; i++) {
       const coords = rot.rotateface(this.basefaces[i]);
-      faces.push(toFaceCoords(coords));
+      faces.push(toFaceCoords(coords, maxdist));
     }
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);
@@ -1909,14 +1910,14 @@ export class PuzzleGeometry {
         coords = trimEdges(coords, trim);
       }
       stickers.push({
-        coords: toFaceCoords(coords),
+        coords: toFaceCoords(coords, maxdist),
         color, orbit: this.cubiesetnames[cubiesetnum],
         ord: cubieord, ori: cubieori,
       });
       if (this.duplicatedFaces[i]) {
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
           stickers.push({
-            coords: toFaceCoords(coords),
+            coords: toFaceCoords(coords, maxdist),
             color, orbit: this.cubiesetnames[cubiesetnum],
             ord: cubieord, ori: jj,
           });
@@ -1930,9 +1931,9 @@ export class PuzzleGeometry {
       for (let j = 0; j < this.geonormals.length; j++) {
         const gn = this.geonormals[j];
         if (msg[0] === gn[1] && msg[1] === gn[2]) {
-          grips.push([toCoords(gn[0].rotatepoint(rot)),
+          grips.push([toCoords(gn[0].rotatepoint(rot), 1),
           msg[0], order]);
-          grips.push([toCoords(gn[0].rotatepoint(rot).smul(-1)),
+          grips.push([toCoords(gn[0].rotatepoint(rot).smul(-1), 1),
           msg[2], order]);
         }
       }
