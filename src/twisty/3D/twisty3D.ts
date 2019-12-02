@@ -63,13 +63,19 @@ export class Vantage {
     const w = this.element.offsetWidth;
     const h = this.element.offsetHeight;
     let off = 0 ;
-    this.camera.aspect = w / h ;
     if (this.shift > 0) {
        off = Math.max(0, Math.floor((w - h) * 0.5)) ;
     } else if (this.shift < 0) {
        off = - Math.max(0, Math.floor((w - h) * 0.5)) ;
     }
-    this.camera.setViewOffset(w, h, off, 0, w, h) ;
+    let yoff = 0 ;
+    let excess = 0 ;
+    if (h > w) {
+       excess = h - w ;
+       yoff = -Math.floor(0.5 * excess) ;
+    }
+    this.camera.aspect = w / h ;
+    this.camera.setViewOffset(w, h-excess, off, yoff, w, h) ;
     this.camera.updateProjectionMatrix();
 
     this.renderer.setPixelRatio(pixelRatio());
