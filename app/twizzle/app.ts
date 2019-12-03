@@ -491,7 +491,6 @@ function onMouseMove(vantage: Vantage, event: MouseEvent): void {
   const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
   if (intersects.length > 0) {
-    console.log(intersects[0]) ;
     canvas.title = intersects[0].object.userData.name ;
   } else {
     canvas.title = "" ;

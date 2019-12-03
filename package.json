@@ -12,7 +12,8 @@
     "@types/three": "^0.103.2",
     "@types/web-bluetooth": "0.0.4",
     "babel-polyfill": "^6.26.0",
-    "three": "^0.111.0"
+    "three": "^0.111.0",
+    "three-orbit-controls": "^82.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.0",
