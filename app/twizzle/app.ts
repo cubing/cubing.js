@@ -25,9 +25,8 @@ let lastval: string = "";
 let lastalgo: string = "";
 let scramble: number = 0;
 let stickerDat: any;
-const renderOptions = ["threed", "centers", "edges", "corners",
-  "centers", "edges", "corners", "blockmoves", "vertexmoves", "sidebyside", "showfoundation"];
-const workOptions = ["centers", "edges", "corners", "optimize", "blockmoves",
+const renderOptions = ["centers", "edges", "corners", "blockmoves", "vertexmoves", "sidebyside", "showfoundation"];
+const workOptions = ["threed", "centers", "edges", "corners", "optimize", "blockmoves",
   "allmoves", "vertexmoves", "killori"];
 let lastRender: any;
 let gripdepth: any;
