@@ -370,7 +370,7 @@ function checkchange(): void {
         }
         scramble = 0;
         algo = "";
-        safeKsolve = "";
+        safeKpuzzle = undefined ;
         savealg = false;
       }
       const pg = new PuzzleGeometry(p[0], p[1], options);
