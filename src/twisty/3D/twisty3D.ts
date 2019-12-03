@@ -75,7 +75,7 @@ export class Vantage {
        yoff = -Math.floor(0.5 * excess) ;
     }
     this.camera.aspect = w / h ;
-    this.camera.setViewOffset(w, h-excess, off, yoff, w, h) ;
+    this.camera.setViewOffset(w, h - excess, off, yoff, w, h) ;
     this.camera.updateProjectionMatrix();
 
     this.renderer.setPixelRatio(pixelRatio());

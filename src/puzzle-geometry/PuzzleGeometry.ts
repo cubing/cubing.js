@@ -244,7 +244,7 @@ function splitByFaceNames(s: string, facenames: any[]): string[] {
 }
 
 function toCoords(q: Quat, maxdist: number): number[] {
-  return [-q.b/maxdist, -q.c/maxdist, -q.d/maxdist];
+  return [- q.b / maxdist, - q.c / maxdist, - q.d / maxdist];
 }
 
 function toFaceCoords(q: Quat[], maxdist: number): number[][] {
