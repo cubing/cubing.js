@@ -1,9 +1,8 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
-
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { algToString, invert, parse, Sequence } from "../../src/alg/index";
-import { BluetoothPuzzle, connect, debugKeyboardConnect, KeyboardPuzzle, MoveEvent } from "../../src/bluetooth/index";
+import { BluetoothPuzzle, connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
 import { experimentalShowJumpingFlash, Twisty } from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
@@ -40,7 +39,8 @@ window.addEventListener("load", async () => {
   // state?: PuzzleState;
   // quaternion?: any;
   document.querySelector("#connect").addEventListener("click", async () => {
-    window.puzzle = await connect();
+    const acceptAllDevices = (document.querySelector("#acceptAllDevices") as HTMLInputElement).checked;
+    window.puzzle = await connect({acceptAllDevices});
     window.puzzle.addMoveListener((e: MoveEvent) => {
       console.log("listener", e);
       twisty.experimentalAddMove(e.latestMove);

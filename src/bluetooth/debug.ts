@@ -1,4 +1,4 @@
-let DEBUG_LOGGING_ENABLED = false;
+let DEBUG_LOGGING_ENABLED = true;
 
 export function enableDebugLogging(enable: boolean): void {
   DEBUG_LOGGING_ENABLED = enable;

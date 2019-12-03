@@ -2,9 +2,10 @@
 
 import { BareBlockMove, BlockMove } from "../alg";
 import { Transformation } from "../kpuzzle";
-
 import { BluetoothConfig, BluetoothPuzzle, PuzzleState } from "./bluetooth-puzzle";
 import { debugLog } from "./debug";
+
+const MESSAGE_LENGTH = 20;
 
 const UUIDs = {
   cubeService: "0000aadb-0000-1000-8000-00805f9b34fb",
@@ -82,6 +83,38 @@ const postCO: number[] = [2, 1, 2, 1, 1, 2, 1, 2];
 
 const coFlip: number[] = [-1, 1, -1, 1, 1, -1, 1, -1];
 
+function getNibble(val: Uint8Array, i: number): number {
+  if (i % 2 === 1) {
+    return val[(i / 2) | 0] % 16;
+  }
+  return 0 | (val[(i / 2) | 0] / 16);
+}
+
+function probablyEncrypted(data: Uint8Array): boolean {
+  return data[18] === 0xa7;
+}
+
+const lookup = [ 176, 81, 104, 224, 86, 137, 237, 119, 38, 26, 193, 161, 210, 126, 150, 81, 93, 13, 236, 249, 89, 235, 88, 24, 113, 81, 214, 131, 130, 199, 2, 169, 39, 165, 171, 41 ];
+
+function decryptState(data: Uint8Array): Uint8Array {
+  const offset1 = getNibble(data, 38);
+  const offset2 = getNibble(data, 39);
+  const output = new Uint8Array(MESSAGE_LENGTH);
+  for (let i = 0; i < MESSAGE_LENGTH; i++) {
+    output[i] = data[i] + lookup[offset1 + i] + lookup[offset2 + i];
+  }
+  return output;
+}
+
+// TODO: Support caching which decoding strategy worked last time.
+async function decodeState(data: Uint8Array): Promise<Uint8Array> {
+  if (!probablyEncrypted(data)) {
+    return data;
+  }
+  return await decryptState(data);
+  // TODO: Check that the decrypted state is a valid staet.
+}
+
 export class GiiKERCube extends BluetoothPuzzle {
 
   public static async connect(server: BluetoothRemoteGATTServer): Promise<GiiKERCube> {
@@ -94,7 +127,7 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     // TODO: Can we safely save the async promise instead of waiting for the response?
 
-    const originalValue = await cubeCharacteristic.readValue();
+    const originalValue = await decodeState(new Uint8Array((await cubeCharacteristic.readValue()).buffer));
     debugLog("Original value:", originalValue);
     const cube = new GiiKERCube(server, cubeCharacteristic, originalValue);
 
@@ -106,7 +139,7 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     return cube;
   }
-  private constructor(private server: BluetoothRemoteGATTServer, private cubeCharacteristic: BluetoothRemoteGATTCharacteristic, private originalValue?: DataView | null) {
+  private constructor(private server: BluetoothRemoteGATTServer, private cubeCharacteristic: BluetoothRemoteGATTCharacteristic, private originalValue?: Uint8Array | null) {
     super();
   }
 
@@ -115,23 +148,16 @@ export class GiiKERCube extends BluetoothPuzzle {
   }
 
   public async getState(): Promise<PuzzleState> {
-    return this.toReid333(await this.cubeCharacteristic.readValue());
+    return this.toReid333(new Uint8Array((await this.cubeCharacteristic.readValue()).buffer));
   }
 
-  private getNibble(val: DataView, i: number): number {
-    if (i % 2 === 1) {
-      return val.getUint8((i / 2) | 0) % 16;
-    }
-    return 0 | (val.getUint8((i / 2) | 0) / 16);
-  }
-
-  private getBit(val: DataView, i: number): number {
+  private getBit(val: Uint8Array, i: number): number {
     const n = ((i / 8) | 0);
     const shift = 7 - (i % 8);
-    return (val.getUint8(n) >> shift) & 1;
+    return (val[n] >> shift) & 1;
   }
 
-  private toReid333(val: DataView): Transformation {
+  private toReid333(val: Uint8Array): Transformation {
     const state = {
       EDGE: {
         permutation: new Array(12),
@@ -146,19 +172,20 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     for (let i = 0; i < 12; i++) {
       const gi = epReid333toGiiKER[i];
-      state.EDGE.permutation[i] = epGiiKERtoReid333[this.getNibble(val, gi + 16) - 1];
+      state.EDGE.permutation[i] = epGiiKERtoReid333[getNibble(val, gi + 16) - 1];
       state.EDGE.orientation[i] = this.getBit(val, gi + 112) ^ preEO[state.EDGE.permutation[i]] ^ postEO[i];
     }
     for (let i = 0; i < 8; i++) {
       const gi = cpReid333toGiiKER[i];
-      state.CORNER.permutation[i] = cpGiiKERtoReid333[this.getNibble(val, gi) - 1];
-      state.CORNER.orientation[i] = (this.getNibble(val, gi + 8) * coFlip[gi] + preCO[state.CORNER.permutation[i]] + postCO[i]) % 3;
+      state.CORNER.permutation[i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
+      state.CORNER.orientation[i] = (getNibble(val, gi + 8) * coFlip[gi] + preCO[state.CORNER.permutation[i]] + postCO[i]) % 3;
     }
     return state;
   }
 
-  private onCubeCharacteristicChanged(event: any): void {
-    const val = event.target.value;
+  private async onCubeCharacteristicChanged(event: any): Promise<void> {
+    const val = await decodeState(new Uint8Array(event.target.value.buffer));
+    debugLog(val);
     debugLog(val);
 
     if (this.isRepeatedInitialValue(val)) {
@@ -167,10 +194,11 @@ export class GiiKERCube extends BluetoothPuzzle {
     }
 
     const giikerState = [];
-    for (let i = 0; i < 20; i++) {
-      giikerState.push(Math.floor(val.getUint8(i) / 16));
-      giikerState.push(val.getUint8(i) % 16);
+    for (let i = 0; i < MESSAGE_LENGTH; i++) {
+      giikerState.push(Math.floor(val[i] / 16));
+      giikerState.push(val[i] % 16);
     }
+    debugLog(giikerState);
     const str = giikerStateStr(giikerState);
     debugLog(str);
 
@@ -184,7 +212,7 @@ export class GiiKERCube extends BluetoothPuzzle {
     });
   }
 
-  private isRepeatedInitialValue(val: DataView): boolean {
+  private isRepeatedInitialValue(val: Uint8Array): boolean {
     if (typeof (this.originalValue) === "undefined") {
       // TODO: Test this branch.
       throw new Error("GiiKERCube has uninitialized original value.");
@@ -199,8 +227,8 @@ export class GiiKERCube extends BluetoothPuzzle {
     this.originalValue = null;
 
     debugLog("Comparing against original value.");
-    for (let i = 0; i < 20; i++) {
-      if (originalValue.getUint8(i) !== val.getUint8(i)) {
+    for (let i = 0; i < MESSAGE_LENGTH - 2; i++) {
+      if (originalValue[i] !== val[i]) {
         debugLog("Different at index ", i);
         return false;
       }

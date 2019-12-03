@@ -11,8 +11,11 @@ export interface BluetoothConfig {
   optionalServices: BluetoothServiceUUID[];
 }
 
-function requestOptions(): RequestDeviceOptions {
-  const options = {
+function requestOptions(acceptAllDevices: boolean = false): RequestDeviceOptions {
+  const options = acceptAllDevices ? {
+    acceptAllDevices: true,
+    optionalServices: [] as BluetoothServiceUUID[],
+  } : {
     filters: [] as BluetoothRequestDeviceFilter[],
     optionalServices: [] as BluetoothServiceUUID[],
   };
@@ -21,7 +24,9 @@ function requestOptions(): RequestDeviceOptions {
     giiKERConfig,
     goCubeConfig,
   ]) {
-    options.filters = options.filters.concat(config.filters);
+    if (!acceptAllDevices) {
+      options.filters = options.filters!.concat(config.filters);
+    }
     options.optionalServices = options.optionalServices.concat(config.optionalServices);
   }
   debugLog({ requestOptions: options });
@@ -30,10 +35,14 @@ function requestOptions(): RequestDeviceOptions {
 
 /******** connect() ********/
 
+interface BluetoothConnectOptions {
+  acceptAllDevices?: boolean;
+}
+
 // TODO: Debug options to allow connecting to any device?
-export async function connect(): Promise<BluetoothPuzzle> {
+export async function connect(options: BluetoothConnectOptions = {}): Promise<BluetoothPuzzle> {
   debugLog("Attempting to pair.");
-  const device = await navigator.bluetooth.requestDevice(requestOptions());
+  const device = await navigator.bluetooth.requestDevice(requestOptions(options.acceptAllDevices));
   debugLog("Device:", device);
 
   if (typeof device.gatt === "undefined") {
@@ -43,10 +52,12 @@ export async function connect(): Promise<BluetoothPuzzle> {
   const server = await device.gatt.connect();
   debugLog("Server:", server);
 
+  const name = server.device!.name || "";
+
   // TODO by reading supported matched filters or provided services.
-  if (server.device!.name!.startsWith("GAN")) {
+  if (name && name.startsWith("GAN")) {
     return await GanCube.connect(server);
-  } else if (server.device!.name!.startsWith("GoCube")) {
+  } else if (name && name.startsWith("GoCube")) {
     return await GoCube.connect(server);
   } else {
     return await GiiKERCube.connect(server);
