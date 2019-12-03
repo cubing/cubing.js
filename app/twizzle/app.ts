@@ -170,7 +170,10 @@ function setAlgo(str: string, writeback: boolean): void {
         alg: new Sequence([]),
         playerConfig: {
           visualizationFormat: "PG3D",
-          experimentalPG3DStickerDat: stickerDat,
+          experimentalPG3DViewConfig: {
+            sideBySide: true,
+            stickerDat,
+          },
         },
       });
 

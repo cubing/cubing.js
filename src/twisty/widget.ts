@@ -289,8 +289,11 @@ export class Cube3DView implements CursorObserver, JumpObserver {
 
     this.cube3D = new Cube3D(definition); // TODO: Dynamic puzzle
 
+    const wrapper = document.createElement("cube3d-wrapper");
+    wrapper.classList.add("front");
+    this.element.appendChild(wrapper);
     setTimeout(() => {
-      this.cube3D.newVantage(this.element);
+      this.cube3D.newVantage(wrapper);
     }, 0);
 
     if (getConfigWithDefault(this.config.experimentalShowBackView, false)) {
@@ -300,10 +303,11 @@ export class Cube3DView implements CursorObserver, JumpObserver {
 
   // TODO: Remove
   public createBackViewForTesting(): void {
-    const backWrapper = document.createElement("cube3d-back-wrapper");
-    this.element.appendChild(backWrapper);
+    const wrapper = document.createElement("cube3d-wrapper");
+    wrapper.classList.add("back");
+    this.element.appendChild(wrapper);
     setTimeout(() => {
-      this.cube3D.newVantage(backWrapper, { position: new Vector3(-1.25, -2.5, -2.5) });
+      this.cube3D.newVantage(wrapper, { position: new Vector3(-1.25, -2.5, -2.5) });
     }, 0);
   }
 
@@ -323,21 +327,32 @@ export class Cube3DView implements CursorObserver, JumpObserver {
   }
 }
 
+interface PG3DViewConfig {
+  sideBySide: boolean;
+  stickerDat: any;
+  sideBySide?: boolean;
+  showFoundation?: boolean;
+}
+
 export class PG3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private pg3D: PG3D;
   constructor(private anim: AnimModel, private definition: KPuzzleDefinition,
-              stickerDat: any) {
+              private config: PG3DViewConfig) {
     this.element = document.createElement("cube3d-view");
-    const frontWrapper = document.createElement("cube3d-front-wrapper");
-    this.element.appendChild(frontWrapper);
+    if (getConfigWithDefault(this.config.sideBySide, false)) {
+      this.element.classList.add("side-by-side");
+    }
+    const wrapper = document.createElement("cube3d-wrapper");
+    wrapper.classList.add("front");
+    this.element.appendChild(wrapper);
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 
-    this.pg3D = new PG3D(this.definition, stickerDat); // TODO: Dynamic puzzle
+    this.pg3D = new PG3D(this.definition, this.config.stickerDat, this.config.showFoundation); // TODO: Dynamic puzzle
 
     setTimeout(function(): void {
-      this.pg3D.newVantage(frontWrapper, { position: new Vector3(0, 0, -3.75), shift: -1 });
+      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, -3.75), shift: this.config.sideBySide ? -1 : 0 });
     }.bind(this), 0);
 
     this.createBackViewForTesting();
@@ -361,10 +376,11 @@ export class PG3DView implements CursorObserver, JumpObserver {
 
   // TODO: Remove
   private createBackViewForTesting(): void {
-    const backWrapper = document.createElement("cube3d-back-wrapper");
-    this.element.appendChild(backWrapper);
+    const wrapper = document.createElement("cube3d-wrapper");
+    wrapper.classList.add("back");
+    this.element.appendChild(wrapper);
     setTimeout(function(): void {
-      this.pg3D.newVantage(backWrapper, { position: new Vector3(0, 0, 3.75), shift: 1 });
+      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, 3.75), shift: this.config.sideBySide ? 1 : 0 });
     }.bind(this), 0);
   }
 }
@@ -373,7 +389,7 @@ export interface PlayerConfig {
   visualizationFormat?: VisualizationFormat;
   experimentalShowControls?: boolean;
   experimentalCube3DViewConfig?: Cube3DViewConfig;
-  experimentalPG3DStickerDat?: any;
+  experimentalPG3DViewConfig?: PG3DViewConfig;
 }
 
 export class Player {
@@ -385,7 +401,7 @@ export class Player {
     this.element = document.createElement("player");
 
     if (this.config.visualizationFormat === "PG3D") {
-      this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DStickerDat)).element);
+      this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DViewConfig!)).element);
     } else if (this.config.visualizationFormat === "3D") {
       if (definition.name === "333") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);

@@ -15,7 +15,9 @@ window.addEventListener("load", () => {
     puzzle: kpuzzle,
     playerConfig: {
       visualizationFormat: "PG3D",
-      experimentalPG3DStickerDat: stickerDat,
+      experimentalPG3DViewConfig: {
+        stickerDat,
+      },
     },
   });
 });

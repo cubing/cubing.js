@@ -114,39 +114,30 @@ twisty player cube3d-view.flash {
 twisty player cube3d-view {
   position: relative;
   object-fit: contain;
+
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
 }
 
-twisty player cube3d-view cube3d-front-wrapper {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 50%;
-  height: 100%;
-
-  align-items: center;
-  justify-content: center
+twisty player cube3d-view:not(.side-by-side) {
+  grid-template-columns: 1fr;
 }
 
+twisty player cube3d-view cube3d-wrapper {
+  overflow: hidden;
+}
 
-twisty player cube3d-view cube3d-front-wrapper > canvas {
+twisty player cube3d-view cube3d-wrapper canvas {
   width: 100%;
-  height: 100%;
+  height: 100%
 }
 
-twisty player cube3d-view cube3d-back-wrapper {
+twisty player cube3d-view:not(.side-by-side) cube3d-wrapper.back {
   position: absolute;
   right: 0;
   top: 0;
-  width: 50%;
-  height: 100%;
-
-  align-items: center;
-  justify-content: center
-}
-
-twisty player cube3d-view cube3d-back-wrapper > canvas {
-  width: 100%;
-  height: 100%;
+  width: 25%;
+  height: 25%;
 }
 
 twisty player ksolve-svg-view .svg-wrapper,
