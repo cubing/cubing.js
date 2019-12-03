@@ -333,6 +333,9 @@ export class PuzzleGeometry {
   public cornersets: boolean = true; // include corner sets
   public centersets: boolean = true; // include center sets
   public edgesets: boolean = true;   // include edge sets
+  public graycorners: boolean = false; // make corner sets gray
+  public graycenters: boolean = false; // make center sets gray
+  public grayedges: boolean = false;   // make edge sets gray
   public killorientation: boolean = false; // eliminate any orientations
   public optimize: boolean = false;  // optimize PermOri
   public scramble: number = 0;       // scramble?
@@ -371,6 +374,12 @@ export class PuzzleGeometry {
           this.centersets = optionlist[i + 1];
         } else if (optionlist[i] === "edgesets") {
           this.edgesets = optionlist[i + 1];
+        } else if (optionlist[i] === "graycorners") {
+          this.graycorners = optionlist[i + 1];
+        } else if (optionlist[i] === "graycenters") {
+          this.graycenters = optionlist[i + 1];
+        } else if (optionlist[i] === "grayedges") {
+          this.grayedges = optionlist[i + 1];
         } else if (optionlist[i] === "movelist") {
           this.movelist = optionlist[i + 1];
         } else if (optionlist[i] === "killorientation") {
@@ -1363,6 +1372,16 @@ export class PuzzleGeometry {
     return r;
   }
 
+  public graybyori(cubie: number): boolean {
+    let ori = this.cubies[cubie].length;
+    if (this.duplicatedCubies[cubie]) {
+      ori = 1;
+    }
+    return ((ori === 1 && (this.graycenters || !this.centersets)) ||
+      (ori === 2 && (this.grayedges || !this.edgesets)) ||
+      (ori > 2 && (this.graycorners || !this.cornersets)));
+  }
+
   public skipbyori(cubie: number): boolean {
     let ori = this.cubies[cubie].length;
     if (this.duplicatedCubies[cubie]) {
@@ -1825,7 +1844,7 @@ export class PuzzleGeometry {
         const cubieori = this.facetocubies[i][1];
         const cubiesetnum = this.cubiesetnums[cubie];
         const cubieord = this.cubieordnums[cubie];
-        const color = this.skipbyori(cubie) ? "#808080" : colormap[pos.p[i]];
+        const color = this.graybyori(cubie) ? "#808080" : colormap[pos.p[i]];
         let id = this.cubiesetnames[cubiesetnum] +
           "-l" + cubieord + "-o" + cubieori;
         svg.push(drawedges(id, facegeo[i], color));
@@ -1903,7 +1922,7 @@ export class PuzzleGeometry {
       const cubieori = this.facetocubies[i][1];
       const cubiesetnum = this.cubiesetnums[cubie];
       const cubieord = this.cubieordnums[cubie];
-      const color = this.skipbyori(cubie) ? "#808080" :
+      const color = this.graybyori(cubie) ? "#808080" :
         this.colors[this.facenames[facenum][1]];
       let coords = rot.rotateface(this.faces[i]);
       if (trim && trim > 0) {

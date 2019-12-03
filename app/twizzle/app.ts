@@ -355,13 +355,13 @@ function checkchange(): void {
       const options: Array<string | number | boolean> =
         ["allmoves", true, "orientcenters", true];
       if (!lastRender.corners) {
-        options.push("cornersets", false);
+        options.push("graycorners", true);
       }
       if (!lastRender.edges) {
-        options.push("edgesets", false);
+        options.push("grayedges", true);
       }
       if (!lastRender.centers) {
-        options.push("centersets", false);
+        options.push("graycenters", true);
       }
       if (scramble !== 0) {
         if (scramble > 0) {
