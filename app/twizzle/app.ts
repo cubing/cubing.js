@@ -26,7 +26,7 @@ let lastalgo: string = "";
 let scramble: number = 0;
 let stickerDat: any;
 const renderOptions = ["threed", "centers", "edges", "corners",
-  "centers", "edges", "corners", "blockmoves", "vertexmoves"];
+  "centers", "edges", "corners", "blockmoves", "vertexmoves", "sidebyside", "showfoundation"];
 const workOptions = ["centers", "edges", "corners", "optimize", "blockmoves",
   "allmoves", "vertexmoves", "killori"];
 let lastRender: any;
@@ -171,8 +171,9 @@ function setAlgo(str: string, writeback: boolean): void {
         playerConfig: {
           visualizationFormat: "PG3D",
           experimentalPG3DViewConfig: {
-            sideBySide: true,
             stickerDat,
+            sideBySide: getCheckbox("sidebyside"),
+            showFoundation: getCheckbox("showfoundation"),
           },
         },
       });
