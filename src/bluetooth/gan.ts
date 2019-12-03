@@ -46,10 +46,8 @@ const key10 = new Uint8Array([198, 202, 21, 223, 79, 110, 19, 182, 119, 13, 230,
 const key11 = new Uint8Array([67, 226, 91, 214, 125, 220, 120, 216, 7, 96, 163, 218, 130, 60, 1, 241]);
 
 // Clean-room reverse-engineered
-async function decryptState(data: Uint8Array, key: Uint8Array): Promise<Uint8Array> {
+async function decryptState(data: Uint8Array, key: Uint8Array, macAddress: Uint8Array): Promise<Uint8Array> {
   // TODO: Read from puzzle.
-  const macAddress = [0x4c, 0x24, 0x98, 0x5a, 0x68, 0xc6];
-
   const keyBuffer = new Uint8Array(key10);
   for (let i = 0; i < macAddress.length; i++) {
     keyBuffer[i] = (keyBuffer[i] + macAddress[i]) % 256;
@@ -62,15 +60,15 @@ async function decryptState(data: Uint8Array, key: Uint8Array): Promise<Uint8Arr
 }
 
 // TODO: Support caching which decoding strategy worked last time.
-async function decodeState(data: Uint8Array): Promise<Uint8Array> {
+async function decodeState(data: Uint8Array, macAddress: Uint8Array): Promise<Uint8Array> {
   if (probablyDecodedCorrectly(data)) {
     return data;
   }
-  const decrypted10 = await decryptState(data, key10);
+  const decrypted10 = await decryptState(data, key10, macAddress);
   if (probablyDecodedCorrectly(decrypted10)) {
     return decrypted10;
   }
-  const decrypted11 = await decryptState(data, key11);
+  const decrypted11 = await decryptState(data, key11, macAddress);
   if (probablyDecodedCorrectly(decrypted11)) {
     return decrypted11;
   }
@@ -79,8 +77,8 @@ async function decodeState(data: Uint8Array): Promise<Uint8Array> {
 
 class PhysicalState {
 
-  public static async read(characteristic: BluetoothRemoteGATTCharacteristic): Promise<PhysicalState> {
-    const value = await decodeState(new Uint8Array((await characteristic.readValue()).buffer));
+  public static async read(characteristic: BluetoothRemoteGATTCharacteristic, macAddress: Uint8Array): Promise<PhysicalState> {
+    const value = await decodeState(new Uint8Array((await characteristic.readValue()).buffer), macAddress);
     const timeStamp = Date.now();
     return new PhysicalState(new DataView(value.buffer), timeStamp);
   }
@@ -208,10 +206,21 @@ const faceOrder = "URFDLB";
 //   // get()
 // }
 
-export class GanCube extends BluetoothPuzzle {
+function getMacAddress(name: string): Uint8Array {
+  const macAddress = new Uint8Array([0x4c, 0x24, 0x98, 0x00, 0x00, 0x00]);
+  if (name.length !== 10 || !name.startsWith("GAN-")) {
+      console.warn("Unexpected puzzle name.");
+    }
+  macAddress[3] = parseInt(name.slice(4, 6), 16);
+  macAddress[4] = parseInt(name.slice(6, 8), 16);
+  macAddress[5] = parseInt(name.slice(8, 10), 16);
+  return macAddress;
+}
 
+export class GanCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
   public static async connect(server: BluetoothRemoteGATTServer): Promise<GanCube> {
+    const macAddress = getMacAddress(server.device!.name!);
 
     const ganCubeService = await server.getPrimaryService(UUIDs.ganCubeService);
     debugLog("Service:", ganCubeService);
@@ -219,9 +228,9 @@ export class GanCube extends BluetoothPuzzle {
     const physicalStateCharacteristic = await ganCubeService.getCharacteristic(UUIDs.physicalStateCharacteristic);
     debugLog("Characteristic:", physicalStateCharacteristic);
 
-    const initialMoveCounter = (await PhysicalState.read(physicalStateCharacteristic)).moveCounter();
+    const initialMoveCounter = (await PhysicalState.read(physicalStateCharacteristic, macAddress)).moveCounter();
     debugLog("Initial Move Counter:", initialMoveCounter);
-    const cube = new GanCube(ganCubeService, server, physicalStateCharacteristic, initialMoveCounter);
+    const cube = new GanCube(ganCubeService, server, physicalStateCharacteristic, initialMoveCounter, macAddress);
     return cube;
   }
 
@@ -231,7 +240,7 @@ export class GanCube extends BluetoothPuzzle {
   private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
   private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
   private cachedActualAngleAndBatteryCharacteristic: Promise<BluetoothRemoteGATTCharacteristic>;
-  private constructor(private service: BluetoothRemoteGATTService, private server: BluetoothRemoteGATTServer, private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic, private lastMoveCounter: number) {
+  private constructor(private service: BluetoothRemoteGATTService, private server: BluetoothRemoteGATTServer, private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic, private lastMoveCounter: number, private macAddress: Uint8Array) {
     super();
     this.startTrackingMoves();
   }
@@ -256,14 +265,13 @@ export class GanCube extends BluetoothPuzzle {
 
   // TODO: Can we ever receive async responses out of order?
   public async intervalHandler(): Promise<void> {
-    const physicalState = await PhysicalState.read(this.physicalStateCharacteristic);
+    const physicalState = await PhysicalState.read(this.physicalStateCharacteristic, this.macAddress);
     let numInterveningMoves = physicalState.numMovesSince(this.lastMoveCounter);
     // console.log(numInterveningMoves);
     if (numInterveningMoves > MAX_LATEST_MOVES) {
       debugLog(`Too many moves! Dropping ${numInterveningMoves - MAX_LATEST_MOVES} moves`);
       numInterveningMoves = MAX_LATEST_MOVES;
     }
-    console.log(physicalState.rotQuat());
     for (const move of physicalState.latestMoves(numInterveningMoves)) {
       // console.log(move);
       this.kpuzzle.applyBlockMove(move);
@@ -288,7 +296,7 @@ export class GanCube extends BluetoothPuzzle {
   }
 
   public async getState(): Promise<PuzzleState> {
-    const arr: Uint8Array = await decodeState(new Uint8Array((await this.readFaceletStatus1Characteristic())));
+    const arr: Uint8Array = await decodeState(new Uint8Array((await this.readFaceletStatus1Characteristic())), this.macAddress);
     const stickers: number[] = [];
     for (let i = 0; i < 18; i += 3) {
       let v = (((arr[i ^ 1] << 8) + arr[(i + 1) ^ 1]) << 8) + arr[(i + 2) ^ 1];
