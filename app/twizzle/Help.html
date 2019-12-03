@@ -100,8 +100,8 @@ SVG, and three-dimensional descriptions</li>
 <p>It is not presently possible to do (for instance) a x, y, or z single rotation on a skewb.</p>
 <p>Below the puzzle representation are a set of control widgets. The horizontal bar has a scrubber knob that you can use to advance the algorithm to any particular point. Below this is a widget to turn on and off full-screen display (although doing a move with full-screen on currently kills full-screen), rewind, go back a move, animate or stop the animation, go forward a move, and go to the end. Any move made on the puzzle with the mouse automatically resets the puzzle display to the end (the only way to insert a move other than at the end or to do any other sort of editing is textually in the text input box).</p>
 <h2 id="puzzlegeometry-command-line">PuzzleGeometry Command Line</h2>
-<p>Puzzlegeometry can also be used from the command line if you download the JavaScript and the alg.js command line driver. Usage is as follows:</p>
-<pre><code>node pg.js [options] [puzzle]</code></pre>
+<p>Puzzlegeometry can also be used from the command line.  Usage is as follows:</p>
+<pre><code>node dist/bin/puzzle-geometry-bin.js [options] [puzzle]</code></pre>
 <p>where puzzle is either the name of the one of the predefined puzzles (see the dropdown in twizzle) or a puzzle geometry description such as c f 0.3333. The options are as follows:</p>
 <pre><code>-q, --quiet:  be less verbose
 -v, --verbose:  be more verbose
