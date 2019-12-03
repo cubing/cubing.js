@@ -55,7 +55,7 @@ class HitPlaneDef {
   constructor(hitface: any) {
     this.cubie = new Group();
     this.geo = new Geometry();
-    const coords = hitface as number[][];
+    const coords = hitface.coords as number[][];
     const vertind: number[] = [];
     for (const coord of coords) {
       const v = new Vector3(coord[0]!, coord[1]!, coord[2]!);
@@ -68,6 +68,7 @@ class HitPlaneDef {
     }
     this.geo.computeFaceNormals();
     const obj = new Mesh(this.geo, polyMaterial) ;
+    obj.userData.name = hitface.name ;
     this.cubie.scale.setScalar(0.99);
     this.cubie.add(obj);
   }

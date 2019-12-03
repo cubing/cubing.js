@@ -1917,7 +1917,8 @@ export class PuzzleGeometry {
     const maxdist: number = 0.52 * this.basefaces[0][0].len() ;
     for (let i = 0; i < this.basefaces.length; i++) {
       const coords = rot.rotateface(this.basefaces[i]);
-      faces.push(toFaceCoords(coords, maxdist));
+      const name = this.facenames[i][1] ;
+      faces.push({coords: toFaceCoords(coords, maxdist), name});
     }
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);

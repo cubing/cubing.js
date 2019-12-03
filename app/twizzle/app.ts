@@ -186,6 +186,7 @@ function setAlgo(str: string, writeback: boolean): void {
         for (const vantage of vantages) {
           vantage.renderer.domElement.addEventListener("click", onMouseClick.bind(onMouseClick, vantage, false), false);
           vantage.renderer.domElement.addEventListener("contextmenu", onMouseClick.bind(onMouseClick, vantage, true), false);
+          vantage.renderer.domElement.addEventListener("mousemove", onMouseMove.bind(onMouseMove, vantage), false);
         }
       }, 1);
 
@@ -470,6 +471,30 @@ function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent):
   if (intersects.length > 0) {
     event.preventDefault();
     addMove(intersectionToMove(intersects[0].point, event, rightClick));
+  }
+}
+
+function onMouseMove(vantage: Vantage, event: MouseEvent): void {
+  const raycaster = new Raycaster();
+  const mouse = new Vector2();
+  const scene = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetScene();
+  const canvas: HTMLCanvasElement = vantage.renderer.domElement;
+  // calculate mouse position in normalized device coordinates
+  // (-1 to +1) for both components
+  mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
+  mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
+  const camera = vantage.camera;
+  const renderer = vantage.renderer;
+  raycaster.setFromCamera(mouse, camera);
+
+  // calculate objects intersecting the picking ray
+  const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
+  const intersects = raycaster.intersectObjects(controlTargets);
+  if (intersects.length > 0) {
+    console.log(intersects[0]) ;
+    canvas.title = intersects[0].object.userData.name ;
+  } else {
+    canvas.title = "" ;
   }
 }
 
