@@ -6,8 +6,6 @@ import { smootherStep } from "../easing";
 import { Puzzle } from "../puzzle";
 import { TAU, Twisty3D } from "./twisty3D";
 
-const SHOW_FOUNDATION = false;
-
 const foundationMaterial = new MeshBasicMaterial({ side: DoubleSide, color: 0x000000, transparent: true, opacity: 0.75 });
 const stickerMaterial = new MeshBasicMaterial({ vertexColors: FaceColors,
   //    side: DoubleSide,
@@ -19,7 +17,7 @@ class StickerDef {
   public faceColor: Color;
   public cubie: Group;
   protected geo: Geometry;
-  constructor(stickerDat: any) {
+  constructor(stickerDat: any, showFoundation: boolean) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
     this.cubie = new Group();
@@ -39,7 +37,7 @@ class StickerDef {
     this.geo.computeFaceNormals();
     const obj = new Mesh(this.geo, stickerMaterial) ;
     this.cubie.add(obj);
-    if (SHOW_FOUNDATION) {
+    if (showFoundation) {
       const foundation = new Mesh(this.geo, foundationMaterial);
       foundation.scale.setScalar(0.99); // TODO: hacky
       this.cubie.add(foundation);
@@ -97,7 +95,7 @@ export class PG3D extends Twisty3D<Puzzle> {
   private stickerTargets: Object3D[] = [];
   private controlTargets: Object3D[] = [];
 
-  constructor(private definition: KPuzzleDefinition, pgdat: any) {
+  constructor(private definition: KPuzzleDefinition, pgdat: any, showFoundation: boolean = false) {
     super();
     this.axesInfo = {};
     const axesDef = pgdat.axis as any[];
@@ -116,7 +114,7 @@ export class PG3D extends Twisty3D<Puzzle> {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const stickerdef = new StickerDef(sticker);
+      const stickerdef = new StickerDef(sticker, showFoundation);
       stickerdef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
       this.stickers[orbit][ori][ord] = stickerdef;
       this.group.add(stickerdef.cubie);

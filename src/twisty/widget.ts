@@ -328,7 +328,6 @@ export class Cube3DView implements CursorObserver, JumpObserver {
 }
 
 interface PG3DViewConfig {
-  sideBySide: boolean;
   stickerDat: any;
   sideBySide?: boolean;
   showFoundation?: boolean;
@@ -349,7 +348,7 @@ export class PG3DView implements CursorObserver, JumpObserver {
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 
-    this.pg3D = new PG3D(this.definition, this.config.stickerDat, this.config.showFoundation); // TODO: Dynamic puzzle
+    this.pg3D = new PG3D(this.definition, this.config.stickerDat, getConfigWithDefault(this.config.showFoundation, false)); // TODO: Dynamic puzzle
 
     setTimeout(function(): void {
       this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, -3.75), shift: this.config.sideBySide ? -1 : 0 });

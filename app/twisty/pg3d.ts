@@ -17,6 +17,7 @@ window.addEventListener("load", () => {
       visualizationFormat: "PG3D",
       experimentalPG3DViewConfig: {
         stickerDat,
+        showFoundation: true,
       },
     },
   });
