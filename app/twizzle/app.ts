@@ -458,8 +458,8 @@ function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent):
   const canvas: HTMLCanvasElement = vantage.renderer.domElement;
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
-  mouse.x = ((event.offsetX - canvas.offsetLeft) / canvas.offsetWidth) * 2 - 1;
-  mouse.y = -(((event.offsetY - canvas.offsetTop) / canvas.offsetHeight) * 2 - 1);
+  mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
+  mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
   const camera = vantage.camera;
   const renderer = vantage.renderer;
   raycaster.setFromCamera(mouse, camera);
