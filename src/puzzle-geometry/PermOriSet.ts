@@ -50,6 +50,25 @@ export class OrbitsDef {
     // extra blank line on end lets us use join("\n") to terminate all
     return result;
   }
+  public toKpuzzle(): Object {
+    const orbits = {} ;
+    const start = {} ;
+    for (let i = 0; i < this.orbitnames.length; i++) {
+      orbits[this.orbitnames[i]] =
+         { numPieces: this.orbitdefs[i].size, 
+           orientations: this.orbitdefs[i].mod } ;
+      start[this.orbitnames[i]] = this.solved.orbits[i].toKpuzzle() ;
+    }
+    const moves = {} ;
+    for (let i = 0; i < this.movenames.length; i++) {
+      const mp = {} ;
+      for (let j = 0; j < this.orbitnames.length; j++) {
+        mp[this.orbitnames[j]] = this.moveops[i].orbits[j].toKpuzzle() ;
+      }
+      moves[this.movenames[i]] = mp ;
+    }
+    return { orbits, startPieces: start, moves } ;
+  }
   public optimize(): OrbitsDef {
     const neworbitnames: string[] = [];
     const neworbitdefs: OrbitDef[] = [];
@@ -330,6 +349,9 @@ export class Orbit {
       newori[this.perm[i]] = this.ori[i];
     }
     return [this.perm.map((_: number) => _ + 1).join(" "), newori.join(" ")];
+  }
+  public toKpuzzle(): Object {
+    return { permutation: this.perm, orientation: this.ori } ;
   }
 }
 export class TransformationBase {

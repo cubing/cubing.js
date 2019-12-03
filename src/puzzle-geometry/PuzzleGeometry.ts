@@ -1441,6 +1441,9 @@ export class PuzzleGeometry {
       return this.header("# ") + od.toKsolve(name, fortwisty).join("\n");
     }
   }
+  public writekpuzzle(): any {
+     return this.getOrbitsDef(true).toKpuzzle() ;
+  }
 
   public getOrbitsDef(fortwisty: boolean): OrbitsDef {
     // generate a representation of the puzzle

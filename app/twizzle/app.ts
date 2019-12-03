@@ -14,7 +14,7 @@ let twisty: Twisty;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
 const lastPuzzleName = "";
-let safeKsolve: string = "";
+let safeKpuzzle: KPuzzleDefinition;
 let movenames: string[];
 let grips: any[];
 let descinput: HTMLInputElement;
@@ -129,9 +129,9 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
   return move;
 }
 
-function LucasSetup(pg: PuzzleGeometry, ksolve: string, newStickerDat: any, savealgo: boolean): void {
-  safeKsolve = ksolve; // this holds the scrambled position
-  puzzle = parse(ksolve);
+function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newStickerDat: any, savealgo: boolean): void {
+  safeKpuzzle = kpuzzledef ; // this holds the scrambled position
+  puzzle = kpuzzledef as KPuzzleDefinition ;
   const mps = pg.movesetgeos;
   const worker = new KPuzzle(puzzle);
   worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
@@ -387,16 +387,16 @@ function checkchange(): void {
       if (el) {
         el.title = text;
       }
-      let ksolvetext: string;
-      if (renderSame && safeKsolve !== "") {
-        ksolvetext = safeKsolve;
+      let kpuzzledef: KPuzzleDefinition ;
+      if (renderSame && safeKpuzzle) {
+        kpuzzledef = safeKpuzzle ;
       } else {
-        ksolvetext = pg.writeksolve("TwizzlePuzzle", true);
+        kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition ;
         movenames = pg.ksolvemovenames;
       }
       const newStickerDat = pg.get3d(0.0131);
       grips = pg.svggrips;
-      LucasSetup(pg, ksolvetext, newStickerDat, savealg);
+      LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
     }
     if (!savealg) {
       lastalgo = "";
