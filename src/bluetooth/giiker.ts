@@ -19,6 +19,9 @@ export const giiKERConfig: BluetoothConfig = {
     { namePrefix: "GiS" },
     { namePrefix: "GiY" },
     { namePrefix: "Gi2" },
+    { services: ["0000aadb-0000-1000-8000-00805f9b34fb"] },
+    { services: ["0000aaaa-0000-1000-8000-00805f9b34fb"] },
+    { services: ["0000fe95-0000-1000-8000-00805f9b34fb"] },
   ],
   optionalServices: [
     // "00001530-1212-efde-1523-785feabcd123",
