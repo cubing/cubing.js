@@ -9,7 +9,8 @@ body {
 
 body {
   display: grid;
-  grid-template-rows: auto auto 4fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-columns: 3fr;
   background: #EAEAEA;
 }
 
@@ -45,12 +46,21 @@ body {
 }
 
 twisty {
-  width: 100%;
+  width: 65%;
   height: 100%;
   border-top: 1px solid #DDD;
   box-sizing: border-box;
+  grid-column: 1 / 3;
+  grid-row: 3 / 4;
 }
 
 twisty player cursor-text-view {
   display: none;
+}
+
+textarea {
+  width: 34%;
+  height: 100%;
+  grid-column: 3 ;
+  grid-row: 3 / 4;
 }
