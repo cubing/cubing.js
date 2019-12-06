@@ -9,8 +9,6 @@ body {
 
 body {
   display: grid;
-  grid-template-rows: auto auto 1fr;
-  grid-template-columns: 3fr;
   background: #EAEAEA;
 }
 
@@ -46,21 +44,32 @@ body {
 }
 
 twisty {
-  width: 65%;
   height: 100%;
   border-top: 1px solid #DDD;
   box-sizing: border-box;
-  grid-column: 1 / 3;
-  grid-row: 3 / 4;
 }
 
 twisty player cursor-text-view {
   display: none;
 }
 
-textarea {
-  width: 34%;
+/* Layout */
+
+body {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr;
+}
+
+body > .controls-wrapper {
+  grid-column: 2/4;
+}
+
+body > twisty {
+  grid-column: 1 / 3;
+  width: 100%;
   height: 100%;
-  grid-column: 3 ;
-  grid-row: 3 / 4;
+}
+
+body > textarea {
+  grid-column: 3 / 4;
 }
