@@ -51,7 +51,7 @@ export const Puzzles: { [name: string]: PuzzleDescriptionString } = {
   "2x2x2 + little chop": "c f 0 e 0",
   "dino + little chop": "c v 0.577350269189626 e 0",
   "2x2x2 + dino + little chop": "c f 0 v 0.577350269189626 e 0",
-  "megaminx + chopasaurus": "d f 0.7 v 0",
+  "megaminx + chopasaurus": "d f 0.61803398875 v 0",
   "starminx combo": "d f 0.23606797749979 v 0.93796236956",
 };
 
