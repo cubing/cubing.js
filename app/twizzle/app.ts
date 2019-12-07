@@ -58,48 +58,6 @@ function focusRight(): void {
   algoinput.selectionStart = algoinput.selectionEnd = 100000000;
 }
 
-function domove(mv: string, mod: number): void {
-  try { // try to merge this move
-    const oldalg = algparse((algoinput.value));
-    const newmv = algparse((mv));
-    if (oldalg instanceof Sequence && newmv instanceof Sequence &&
-      newmv.nestedUnits.length === 1 && oldalg.nestedUnits.length > 0) {
-      const lastmv = oldalg.nestedUnits[oldalg.nestedUnits.length - 1];
-      const thismv = newmv.nestedUnits[0];
-      if (lastmv instanceof BlockMove && thismv instanceof BlockMove &&
-        lastmv.family === thismv.family &&
-        lastmv.outerLayer === thismv.outerLayer &&
-        lastmv.innerLayer === thismv.innerLayer) {
-        let newAmount = thismv.amount + lastmv.amount;
-        const newArr = oldalg.nestedUnits.slice();
-        if (newAmount === 0 || (mod > 0 && newAmount % mod === 0)) {
-          newArr.length -= 1;
-        } else {
-          // canonicalize the representation
-          while (newAmount + newAmount > mod) {
-            newAmount -= mod;
-          }
-          while (newAmount + newAmount <= -mod) {
-            newAmount += mod;
-          }
-          newArr[oldalg.nestedUnits.length - 1] =
-            new BlockMove(lastmv.outerLayer, lastmv.innerLayer,
-              lastmv.family, newAmount);
-        }
-        algoinput.value = (algToString(new Sequence(newArr)));
-        focusRight();
-        checkchange();
-        return;
-      }
-    }
-  } catch (e) {
-    // Ignore
-  }
-  algoinput.value += " " + (mv);
-  focusRight();
-  checkchange();
-}
-
 function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boolean): BlockMove {
   let bestGrip: MoveFamily;
   let bestProduct: number = 0;
@@ -497,7 +455,13 @@ function addMove(move: BlockMove): void {
   const currentAlg = algparse(algoinput.value);
   const newAlg = experimentalAppendBlockMove(currentAlg, move, false);
   // TODO: Avoid round-trip through string?
-  setAlgo(algToString(newAlg), true);
+  if (!twisty || puzzleSelected) {
+    setAlgo(algToString(newAlg), true);
+  } else {
+    lastalgo = algToString(newAlg) ;
+    twisty.experimentalAddMove(move) ;
+    algoinput.value = lastalgo ;
+  }
 }
 
 export function setup(): void {

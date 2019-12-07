@@ -30,26 +30,23 @@ export class Twisty {
   }
 
   // Plays the full final move if there is one.
-  public experimentalSetAlg(alg: Sequence): void {
-    if (this.cursor.experimentalSetMoves(alg)) {
-      this.anim.skipToStart();
-      this.alg = alg;
-      this.anim.skipToEnd();
-      this.player.updateFromAnim();
-      if (this.anim.cursor.currentTimestamp() > 0) {
+  public experimentalSetAlg(alg: Sequence, allowAnimation: boolean = false): void {
+    this.anim.skipToStart() ;
+    this.alg = alg;
+    this.cursor.experimentalSetMoves(alg) ;
+    this.anim.skipToEnd();
+    this.player.updateFromAnim();
+    if (allowAnimation && this.anim.cursor.currentTimestamp() > 0) {
       // TODO: This is a hack.
-        this.cursor.backward(0.01, false); // TODO: Give this API to `Cursor`/`AnimModel`.
-        this.cursor.backward(100000, true); // TODO: Give this API to `Cursor`/`AnimModel`.
-        this.anim.stepForward();
-      }
-    } else {
-      this.alg = alg ;
+      this.cursor.backward(0.01, false); // TODO: Give this API to `Cursor`/`AnimModel`.
+      this.cursor.backward(100000, true); // TODO: Give this API to `Cursor`/`AnimModel`.
+      this.anim.stepForward();
     }
   }
 
   public experimentalAddMove(move: BlockMove): void {
     const newAlg = new Sequence(this.alg.nestedUnits.concat([move]));
-    this.experimentalSetAlg(newAlg);
+    this.experimentalSetAlg(newAlg, true);
   }
 
   public experimentalGetPlayer(): Player {
