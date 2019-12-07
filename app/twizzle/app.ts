@@ -260,10 +260,6 @@ function dowork(cmd: string): void {
     })();
     return;
   }
-  if (cmd === "help") {
-    window.open("Help.html", "Twizzle Help");
-    return;
-  }
   if (cmd === "options") {
     const el = document.getElementById("optionsspan");
     const el2 = document.getElementById("data");
@@ -541,7 +537,7 @@ export function setup(): void {
   actions.onchange = doaction;
   moveInput = document.getElementById("move-input") as HTMLSelectElement;
   moveInput.onchange = doMoveInputSelection;
-  const commands = ["scramble", "help", "reset", "options"];
+  const commands = ["scramble", "reset", "options"];
   for (const command of commands) {
     (document.getElementById(command) as HTMLInputElement).onclick =
       () => { dowork(command); };
