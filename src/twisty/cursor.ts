@@ -413,8 +413,8 @@ export class Cursor<P extends Puzzle> {
     this.setPositionToStart();
   }
 
-  public experimentalSetMoves(alg: Sequence): void {
-    this.setMoves(alg);
+  public experimentalSetMoves(alg: Sequence): boolean {
+    return this.setMoves(alg);
   }
 
   public setPositionToStart(): void {
@@ -498,12 +498,21 @@ export class Cursor<P extends Puzzle> {
     return this.delta(-duration, stopAtStartOfMove);
   }
 
-  private setMoves(alg: Sequence): void {
+  private setMoves(alg: Sequence): boolean {
+    let oldState: State<P> | undefined ;
+    if (this.indexer) {
+      oldState = this.indexer.stateAtIndex(this.indexer.numMoves()) ;
+    }
     if (false) {
       this.indexer = new SimpleAlgorithmIndexer(this.puzzle, alg);
     } else {
       this.indexer = new TreeAlgorithmIndexer(this.puzzle, alg);
     }
+    if (oldState) {
+      const newState = this.indexer.stateAtIndex(this.indexer.numMoves()) ;
+      return !this.puzzle.equivalent(oldState, newState) ;
+    }
+    return true ;
   }
 }
 
