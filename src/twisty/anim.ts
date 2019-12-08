@@ -219,10 +219,14 @@ export class AnimModel {
 
 class FrameScheduler {
   private animating: boolean = false;
+  private lastRender: Cursor.Timestamp = -1 ;
   constructor(private callback: (timestamp: Cursor.Timestamp) => void) { }
 
   public animFrame(timestamp: Cursor.Timestamp): void {
-    this.callback(timestamp);
+    if (timestamp !== this.lastRender) {
+      this.lastRender = timestamp ;
+      this.callback(timestamp);
+    }
     if (this.animating) {
       // TODO: use same bound frame instead of creating a new binding each frame.
       requestAnimationFrame(this.animFrame.bind(this));
