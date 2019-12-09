@@ -151,18 +151,13 @@ function setAlgo(str: string, writeback: boolean): void {
     }
     str = str.trim();
     algoinput.style.backgroundColor = "";
-    // without the true, type U then erase it, the cube won't
-    // go back to solved, so without the setAlg() the state isn't
-    // consistently being updated.  TOFIX
-    if (true || str.length !== 0) {
-      try {
-        seq = algparse(str);
-        str = algToString(seq);
-        twisty.experimentalSetAlg(seq);
-      } catch (e) {
-        algoinput.style.backgroundColor = "#ff8080";
-        console.log("Could not parse " + str);
-      }
+    try {
+      seq = algparse(str);
+      str = algToString(seq);
+      twisty.experimentalSetAlg(seq);
+    } catch (e) {
+      algoinput.style.backgroundColor = "#ff8080";
+      console.log("Could not parse " + str);
     }
     if (writeback) {
       algoinput.value = (str);

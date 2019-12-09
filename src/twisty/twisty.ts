@@ -31,9 +31,9 @@ export class Twisty {
 
   // Plays the full final move if there is one.
   public experimentalSetAlg(alg: Sequence, allowAnimation: boolean = false): void {
+    this.cursor.experimentalSetMoves(alg) ;
     this.anim.skipToStart() ;
     this.alg = alg;
-    this.cursor.experimentalSetMoves(alg) ;
     this.anim.skipToEnd();
     this.player.updateFromAnim();
     if (allowAnimation && this.anim.cursor.currentTimestamp() > 0) {
