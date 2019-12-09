@@ -360,6 +360,13 @@ export class ToString extends TraversalUp<string> {
     if (matchesAlgType(u1, "pause") && matchesAlgType(u2, "pause")) {
       return "";
     }
+    // this is a series of hacks to work around not preserving whitespace in algorithm trees.
+    if (matchesAlgType(u1, "newLine") || matchesAlgType(u2, "newLine")) {
+      return "" ;
+    }
+    if (matchesAlgType(u1, "commentShort") && !matchesAlgType(u2, "newLine")) {
+      return "\n" ;
+    }
     return " ";
   }
 }
