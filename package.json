@@ -21,7 +21,7 @@
     "@types/jest": "^24.0.15",
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
-    "parcel": "^1.12.3",
+    "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-pegjs": "0.0.2",
     "pegjs": "^0.11.0-master.b7b87ea",
