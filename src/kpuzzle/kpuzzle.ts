@@ -174,6 +174,10 @@ export class KPuzzle {
     const me = this.getMoveExpander(false);
     return me ? me.expandSlicesByName(mv, this.definition) : undefined;
   }
+  public unswizzle(grip: string): string {
+    const me = this.getMoveExpander(true);
+    return me ? me.unswizzle(grip) : grip ;
+  }
 
   // TODO: Implement
   // parseState(): this {}
@@ -192,12 +196,14 @@ export class KPuzzle {
 //   so we can unswizzle swizzled grip names.
 
 export class MoveExpander {
-  public gripStash: { [key: string]: Transformation[] };
-  public moveStash: { [key: string]: Transformation };
-  public facenames?: string[];
+  private gripStash: { [key: string]: Transformation[] };
+  private moveStash: { [key: string]: Transformation };
+  private facenames?: string[];
+  private regrip: { [key: string]: string };
   constructor() {
     this.gripStash = {};
     this.moveStash = {};
+    this.regrip = {};
   }
   public setFaceNames(fn: string[]): void {
     this.facenames = fn;
@@ -225,24 +231,43 @@ export class MoveExpander {
     aprime.reverse();
     axes[grip2] = aprime;
   }
-  public splitByFaceNames(s: string, facenames: string[]): string[] | undefined {
-    const r: string[] = [];
-    let at = 0;
-    while (at < s.length) {
-      let found = false;
-      for (const facename of facenames) {
-        if (s.substr(at).startsWith(facename)) {
-          r.push(facename);
-          at += facename.length;
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
+  public expandSlicesByName(mv: string, def: KPuzzleDefinition): Transformation | undefined {
+    const t = this.moveStash[mv];
+    if (t) {
+      return t;
+    }
+    try {
+      const alg = parse(mv);
+      if (alg.nestedUnits.length !== 1) {
         return undefined;
       }
+      const signmove = alg.nestedUnits[0] as BlockMove; // need better way
+      return this.expandSlices(mv, signmove, def);
+    } catch (e) {
+      return undefined;
     }
-    return r;
+  }
+  public unswizzle(grip: string): string {
+    if (this.regrip[grip]) {
+      return this.regrip[grip] ;
+    }
+    if (!this.facenames) {
+      return grip ;
+    }
+    const faceSplit = this.splitByFaceNames(grip, this.facenames);
+    if (faceSplit) {
+      for (let i = 1; i < faceSplit.length; i++) {
+        let testGrip = "";
+        for (let j = 0; j < faceSplit.length; j++) {
+          testGrip += faceSplit[(i + j) % faceSplit.length];
+        }
+        if (this.gripStash[testGrip]) {
+          this.regrip[grip] = testGrip;
+          return testGrip ;
+        }
+      }
+    }
+    return grip ;
   }
   public expandSlices(rep: string, blockMove: BlockMove, def: KPuzzleDefinition): Transformation | undefined {
     const t = this.moveStash[rep];
@@ -263,21 +288,9 @@ export class MoveExpander {
       grip = family.substring(0, family.length - 1);
     }
     let slices = axes[grip];
-    if (!slices && this.facenames) {   // can we unswizzle this grip name?
-      const faceSplit = this.splitByFaceNames(grip, this.facenames);
-      if (faceSplit) {
-        for (let i = 1; i < faceSplit.length; i++) {
-          let testGrip = "";
-          for (let j = 0; j < faceSplit.length; j++) {
-            testGrip += faceSplit[(i + j) % faceSplit.length];
-          }
-          slices = axes[testGrip];
-          if (slices) {
-            grip = testGrip;
-            break;
-          }
-        }
-      }
+    if (!slices && this.facenames) {
+      grip = this.unswizzle(grip) ;
+      slices = axes[grip] ;
     }
     if (!slices) {
       return undefined;
@@ -307,20 +320,23 @@ export class MoveExpander {
     this.moveStash[rep] = t2;
     return t2;
   }
-  public expandSlicesByName(mv: string, def: KPuzzleDefinition): Transformation | undefined {
-    const t = this.moveStash[mv];
-    if (t) {
-      return t;
-    }
-    try {
-      const alg = parse(mv);
-      if (alg.nestedUnits.length !== 1) {
+  private splitByFaceNames(s: string, facenames: string[]): string[] | undefined {
+    const r: string[] = [];
+    let at = 0;
+    while (at < s.length) {
+      let found = false;
+      for (const facename of facenames) {
+        if (s.substr(at).startsWith(facename)) {
+          r.push(facename);
+          at += facename.length;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
         return undefined;
       }
-      const signmove = alg.nestedUnits[0] as BlockMove; // need better way
-      return this.expandSlices(mv, signmove, def);
-    } catch (e) {
-      return undefined;
     }
+    return r;
   }
 }

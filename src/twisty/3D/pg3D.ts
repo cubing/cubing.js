@@ -1,6 +1,6 @@
 import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Object3D, Vector3 } from "three";
 import { BlockMove } from "../../alg";
-import { KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
+import { KPuzzle, KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
 import { Cursor } from "../cursor";
 import { smootherStep } from "../easing";
 import { Puzzle } from "../puzzle";
@@ -161,10 +161,12 @@ export class PG3D extends Twisty3D<Puzzle> {
         }
       }
     }
+    const kp = new KPuzzle(this.definition);
     for (const moveProgress of p.moves) {
       const blockMove = moveProgress.move as BlockMove;
+      const unswizzled = kp.unswizzle(blockMove.family.toUpperCase()) ;
       const fullMove = stateForBlockMove(this.definition, blockMove);
-      const ax = this.axesInfo[blockMove.family.toUpperCase()];
+      const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
       const angle = - this.ease(moveProgress.fraction) *
            moveProgress.direction * blockMove.amount * TAU / ax.order;
