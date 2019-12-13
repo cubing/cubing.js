@@ -67,6 +67,19 @@ const umd = {
   ],
 };
 
+const umdNoTwisty = {
+  input: "src/cubing/no-twisty.ts",
+  output: [
+    {
+      file: "dist/umd/cubing.no-twisty.umd.js",
+      format: "umd",
+      name: "cubing",
+      sourcemap: true,
+    },
+  ],
+  plugins: plugins,
+};
+
 const puzzleGeometryBin = {
   input: "src/puzzle-geometry/bin/puzzle-geometry-bin.ts",
   output: [
@@ -85,5 +98,9 @@ const puzzleGeometryBin = {
 };
 
 const configs = [mod, umd, puzzleGeometryBin];
+
+if (!process.env.ROLLUP_WATCH) {
+  configs.push(umdNoTwisty)
+}
 
 export default configs;
