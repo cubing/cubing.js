@@ -351,7 +351,7 @@ export class PG3DView implements CursorObserver, JumpObserver {
     this.pg3D = new PG3D(this.definition, this.config.stickerDat, getConfigWithDefault(this.config.showFoundation, false)); // TODO: Dynamic puzzle
 
     setTimeout(function(): void {
-      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, -3.75), shift: this.config.sideBySide ? -1 : 0 });
+      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, -8), shift: this.config.sideBySide ? -1 : 0 });
     }.bind(this), 0);
 
     this.createBackViewForTesting();
@@ -379,7 +379,7 @@ export class PG3DView implements CursorObserver, JumpObserver {
     wrapper.classList.add("back");
     this.element.appendChild(wrapper);
     setTimeout(function(): void {
-      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, 3.75), shift: this.config.sideBySide ? 1 : 0 });
+      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, 8), shift: this.config.sideBySide ? 1 : 0 });
     }.bind(this), 0);
   }
 }

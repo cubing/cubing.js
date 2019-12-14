@@ -17,7 +17,7 @@ export class Vantage {
   private stats: Stats | null = null;
   private shift: number = 0 ;
   constructor(public element: HTMLElement, private scene: Scene, options: VantageOptions = {}) {
-    this.camera = new PerspectiveCamera(30, element.offsetWidth / element.offsetHeight, 0.1, 1000);
+    this.camera = new PerspectiveCamera(15, element.offsetWidth / element.offsetHeight, 0.1, 1000);
     this.camera.position.copy(options.position ? options.position : defaultVantagePosition);
     this.camera.lookAt(new Vector3(0, 0, 0));
 
