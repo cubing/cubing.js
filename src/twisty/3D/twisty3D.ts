@@ -98,7 +98,7 @@ function pixelRatio(): number {
   return devicePixelRatio || 1;
 }
 
-const defaultVantagePosition = new Vector3(1.25, 2.5, 2.5);
+const defaultVantagePosition = new Vector3(2, 4, 4);
 function createDefaultRenderer(): WebGLRenderer {
   return new WebGLRenderer({
     antialias: true,
