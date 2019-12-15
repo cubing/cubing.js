@@ -219,12 +219,12 @@ export class AnimModel {
 
 class FrameScheduler {
   private animating: boolean = false;
-  private lastRender: Cursor.Timestamp = -1;
+  private lastRenderTimestamp: Cursor.Timestamp = -1;
   constructor(private callback: (timestamp: Cursor.Timestamp) => void) { }
 
   public animFrame(timestamp: Cursor.Timestamp): void {
-    if (timestamp !== this.lastRender) {
-      this.lastRender = timestamp;
+    if (timestamp !== this.lastRenderTimestamp) {
+      this.lastRenderTimestamp = timestamp;
       this.callback(timestamp);
     }
     if (this.animating) {
