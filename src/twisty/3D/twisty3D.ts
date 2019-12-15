@@ -15,14 +15,14 @@ export class Vantage {
   public renderer: WebGLRenderer;
   private rafID: number | null = null;
   private stats: Stats | null = null;
-  private shift: number = 0 ;
+  private shift: number = 0;
   constructor(public element: HTMLElement, private scene: Scene, options: VantageOptions = {}) {
-    this.camera = new PerspectiveCamera(15, element.offsetWidth / element.offsetHeight, 0.1, 1000);
+    this.camera = new PerspectiveCamera(20, element.offsetWidth / element.offsetHeight, 0.1, 1000);
     this.camera.position.copy(options.position ? options.position : defaultVantagePosition);
     this.camera.lookAt(new Vector3(0, 0, 0));
 
     this.renderer = /*options.renderer ? options.renderer : */createDefaultRenderer();
-    this.shift = options.shift ? options.shift : 0 ;
+    this.shift = options.shift ? options.shift : 0;
     this.resize();
 
     this.render();
@@ -62,20 +62,20 @@ export class Vantage {
   private scheduledResize(): void {
     const w = this.element.offsetWidth;
     const h = this.element.offsetHeight;
-    let off = 0 ;
+    let off = 0;
     if (this.shift > 0) {
-       off = Math.max(0, Math.floor((w - h) * 0.5)) ;
+      off = Math.max(0, Math.floor((w - h) * 0.5));
     } else if (this.shift < 0) {
-       off = - Math.max(0, Math.floor((w - h) * 0.5)) ;
+      off = - Math.max(0, Math.floor((w - h) * 0.5));
     }
-    let yoff = 0 ;
-    let excess = 0 ;
+    let yoff = 0;
+    let excess = 0;
     if (h > w) {
-       excess = h - w ;
-       yoff = -Math.floor(0.5 * excess) ;
+      excess = h - w;
+      yoff = -Math.floor(0.5 * excess);
     }
-    this.camera.aspect = w / h ;
-    this.camera.setViewOffset(w, h - excess, off, yoff, w, h) ;
+    this.camera.aspect = w / h;
+    this.camera.setViewOffset(w, h - excess, off, yoff, w, h);
     this.camera.updateProjectionMatrix();
 
     this.renderer.setPixelRatio(pixelRatio());

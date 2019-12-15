@@ -8,6 +8,8 @@ import { getConfigWithDefault } from "./config";
 import { Cursor } from "./cursor";
 import { Puzzle } from "./puzzle";
 
+const CAMERA_DISTANCE = 7.5;
+
 export type VisualizationFormat = "2D" | "3D" | "PG3D";
 
 declare global {
@@ -337,7 +339,7 @@ export class PG3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private pg3D: PG3D;
   constructor(private anim: AnimModel, private definition: KPuzzleDefinition,
-              private config: PG3DViewConfig) {
+    private config: PG3DViewConfig) {
     this.element = document.createElement("cube3d-view");
     if (getConfigWithDefault(this.config.sideBySide, false)) {
       this.element.classList.add("side-by-side");
@@ -350,9 +352,9 @@ export class PG3DView implements CursorObserver, JumpObserver {
 
     this.pg3D = new PG3D(this.definition, this.config.stickerDat, getConfigWithDefault(this.config.showFoundation, false)); // TODO: Dynamic puzzle
 
-    setTimeout(function(): void {
-      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, -8), shift: this.config.sideBySide ? -1 : 0 });
-    }.bind(this), 0);
+    setTimeout(() => {
+      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, -CAMERA_DISTANCE), shift: this.config.sideBySide ? -1 : 0 });
+    }, 0);
 
     this.createBackViewForTesting();
   }
@@ -378,9 +380,9 @@ export class PG3DView implements CursorObserver, JumpObserver {
     const wrapper = document.createElement("cube3d-wrapper");
     wrapper.classList.add("back");
     this.element.appendChild(wrapper);
-    setTimeout(function(): void {
-      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, 8), shift: this.config.sideBySide ? 1 : 0 });
-    }.bind(this), 0);
+    setTimeout(() => {
+      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, CAMERA_DISTANCE), shift: this.config.sideBySide ? 1 : 0 });
+    }, 0);
   }
 }
 
