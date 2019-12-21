@@ -31,8 +31,8 @@ export class Twisty {
 
   // Plays the full final move if there is one.
   public experimentalSetAlg(alg: Sequence, allowAnimation: boolean = false): void {
-    this.cursor.experimentalSetMoves(alg) ;
-    this.anim.skipToStart() ;
+    this.cursor.experimentalSetMoves(alg);
+    this.anim.skipToStart();
     this.alg = alg;
     this.anim.skipToEnd();
     this.player.updateFromAnim();
@@ -47,6 +47,10 @@ export class Twisty {
   public experimentalAddMove(move: BlockMove): void {
     const newAlg = new Sequence(this.alg.nestedUnits.concat([move]));
     this.experimentalSetAlg(newAlg, true);
+  }
+
+  public experimentalGetAnim(): AnimModel {
+    return this.anim;
   }
 
   public experimentalGetPlayer(): Player {

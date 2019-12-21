@@ -84,6 +84,10 @@ export class AnimModel {
   //   return this.cursor;
   // }
 
+  public experimentalGetScheduler(): FrameScheduler {
+    return this.scheduler;
+  }
+
   public getBounds(): Cursor.Duration[] {
     return [
       this.cursor.startOfAlg(),
