@@ -1,5 +1,6 @@
 import { BlockMove } from "../alg";
 import { Transformation } from "../kpuzzle";
+import { BasicRotationTransformer, StreamTransformer } from "./transformer";
 
 /******** BluetoothPuzzle ********/
 
@@ -30,6 +31,7 @@ export interface BluetoothConfig {
 
 // TODO: Expose device name (and/or globally unique identifier)?
 export abstract class BluetoothPuzzle {
+  public transformers: StreamTransformer[] = [];
   protected listeners: Array<(e: MoveEvent) => void> = []; // TODO: type
   protected orientationListeners: Array<(e: OrientationEvent) => void> = []; // TODO: type
 
@@ -48,16 +50,27 @@ export abstract class BluetoothPuzzle {
     this.orientationListeners.push(listener);
   }
 
+  public experimentalAddBasicRotationTransformer(): void {
+    this.transformers.push(new BasicRotationTransformer());
+  }
+
   protected dispatchMove(moveEvent: MoveEvent): void {
+    for (const transformer of this.transformers) {
+      transformer.transformMove(moveEvent);
+    }
     for (const l of this.listeners) {
       l(moveEvent);
     }
   }
 
   protected dispatchOrientation(orientationEvent: OrientationEvent): void {
+    for (const transformer of this.transformers) {
+      transformer.transformOrientation(orientationEvent);
+    }
     for (const l of this.orientationListeners) {
       // TODO: Convert quaternion.
       l(orientationEvent);
     }
   }
+
 }
