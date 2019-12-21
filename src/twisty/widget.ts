@@ -4,7 +4,6 @@ import { Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation } fr
 import { Cube3D } from "./3D/cube3D";
 import { PG3D } from "./3D/pg3D";
 import { AnimModel, CursorObserver, DirectionObserver, JumpObserver } from "./anim";
-import { getConfigWithDefault } from "./config";
 import { Cursor } from "./cursor";
 import { Puzzle } from "./puzzle";
 
@@ -298,7 +297,7 @@ export class Cube3DView implements CursorObserver, JumpObserver {
       this.cube3D.newVantage(wrapper);
     }, 0);
 
-    if (getConfigWithDefault(this.config.experimentalShowBackView, false)) {
+    if (this.config.experimentalShowBackView ?? false) {
       this.createBackViewForTesting();
     }
   }
@@ -339,9 +338,9 @@ export class PG3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private pg3D: PG3D;
   constructor(private anim: AnimModel, private definition: KPuzzleDefinition,
-    private config: PG3DViewConfig) {
+              private config: PG3DViewConfig) {
     this.element = document.createElement("cube3d-view");
-    if (getConfigWithDefault(this.config.sideBySide, false)) {
+    if (this.config.sideBySide ?? false) {
       this.element.classList.add("side-by-side");
     }
     const wrapper = document.createElement("cube3d-wrapper");
@@ -350,7 +349,7 @@ export class PG3DView implements CursorObserver, JumpObserver {
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 
-    this.pg3D = new PG3D(this.definition, this.config.stickerDat, getConfigWithDefault(this.config.showFoundation, false)); // TODO: Dynamic puzzle
+    this.pg3D = new PG3D(this.definition, this.config.stickerDat, this.config.showFoundation ?? false); // TODO: Dynamic puzzle
 
     setTimeout(() => {
       this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, -CAMERA_DISTANCE), shift: this.config.sideBySide ? -1 : 0 });
@@ -418,7 +417,7 @@ export class Player {
       }
     }
     this.scrubber = new Scrubber(this.anim);
-    if (getConfigWithDefault(this.config.experimentalShowControls, true)) {
+    if (this.config.experimentalShowControls ?? true) {
       this.element.appendChild(this.scrubber.element);
       this.element.appendChild((new ControlBar(this.anim, this.element)).element);
       this.element.appendChild((new CursorTextMoveView(this.anim)).element);
