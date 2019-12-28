@@ -80,7 +80,7 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
       move = modifiedBlockMove(move, { innerLayer: gripdepth[bestGrip], family: bestGrip.toLowerCase() }) ;
     }
   }
-  if (!rightClick) {
+  if (rightClick) {
     move = modifiedBlockMove(move, { amount: -move.amount });
   }
   return move;
@@ -110,6 +110,16 @@ function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newSticke
   }
 }
 
+function getModValueForMove(move: BlockMove): number {
+  const family = move.family ;
+  for (const axis of stickerDat.axis) {
+    if (family === axis[1]) {
+       return axis[2] as number ;
+    }
+  }
+  return 1 ;
+}
+
 function trimEq(a: string, b: string): boolean {
   return a.trim() === b.trim();
 }
@@ -134,6 +144,7 @@ function setAlgo(str: string, writeback: boolean): void {
           },
         },
       });
+      twisty.setCoalesceModFunc(getModValueForMove);
 
       const vantages: Vantage[] = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetVantages();
       // TODO: This is a hack.
@@ -208,7 +219,7 @@ function dowork(cmd: string): void {
     (async () => {
       const inputPuzzle = await (cmd === "bluetooth" ? connect : debugKeyboardConnect)();
       inputPuzzle.addMoveListener((e: MoveEvent) => {
-        addMove(e.latestMove);
+        addMove(e.latestMove, getModValueForMove(e.latestMove));
       });
     })();
     return;
@@ -448,7 +459,7 @@ function onMouseMove(vantage: Vantage, event: MouseEvent): void {
 // TODO: Animate latest move but cancel algorithm moves.
 function addMove(move: BlockMove): void {
   const currentAlg = algparse(algoinput.value);
-  const newAlg = experimentalAppendBlockMove(currentAlg, move, false);
+  const newAlg = experimentalAppendBlockMove(currentAlg, move, true, getModValueForMove(move);
   // TODO: Avoid round-trip through string?
   if (!twisty || puzzleSelected) {
     setAlgo(algToString(newAlg), true);

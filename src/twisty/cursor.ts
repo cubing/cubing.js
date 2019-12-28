@@ -405,9 +405,27 @@ export class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<
 const countAnimatedMovesInstance = new CountAnimatedMoves();
 const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(countAnimatedMovesInstance);
 
+class SingleAnimatedMove<P extends Puzzle> {
+  public algTimestamp: Cursor.Duration ;
+  public moveDuration: Cursor.Duration ;
+  constructor(public priorState: State<P>, public move: BlockMove) {
+    this.moveDuration = Cursor.DefaultDurationForAmount(this.move.amount) ;
+    this.algTimestamp = 0 ;
+  }
+  // return value is: do we kill off the animated move.
+  public doLastMoveDelta(duration: Cursor.Duration): boolean {
+    this.algTimestamp += duration ;
+    if (this.algTimestamp < 0 || this.algTimestamp >= this.moveDuration) {
+      return true ;
+    }
+    return false ;
+  }
+}
+
 export class Cursor<P extends Puzzle> {
   private indexer: AlgorithmIndexer<P>;
   private algTimestamp: Cursor.Duration;
+  private lastMoveData?: SingleAnimatedMove<P>;
   constructor(public alg: Sequence, private puzzle: P) {
     this.setMoves(alg);
     this.setPositionToStart();
@@ -417,11 +435,19 @@ export class Cursor<P extends Puzzle> {
     return this.setMoves(alg);
   }
 
+  public experimentalUpdateAlgAnimate(alg: Sequence, move: BlockMove): void {
+     const priorState = this.indexer.stateAtIndex(this.indexer.numMoves()) ;
+     this.setMoves(alg) ;
+     this.lastMoveData = new SingleAnimatedMove(priorState, move) ;
+  }
+
   public setPositionToStart(): void {
+    this.lastMoveData = undefined;
     this.algTimestamp = 0;
   }
 
   public setPositionToEnd(): void {
+    this.lastMoveData = undefined;
     this.setPositionToStart();
     this.forward(this.endOfAlg(), false);
   }
@@ -435,6 +461,23 @@ export class Cursor<P extends Puzzle> {
   }
 
   public currentPosition(): Cursor.Position<P> {
+    if (this.lastMoveData) {
+      const lmpos = {
+        state: this.lastMoveData.priorState,
+        moves: [],
+      } as Cursor.Position<P>;
+      const lmmove = this.lastMoveData.move;
+      const lmmoveTS = this.lastMoveData.algTimestamp;
+      if (lmmoveTS !== 0) {
+        lmpos.moves.push({
+          move: lmmove,
+          direction: Cursor.Direction.Forwards,
+          fraction: lmmoveTS / this.lastMoveData.moveDuration,
+        });
+      }
+      return lmpos;
+    }
+
     const moveIdx = this.indexer.timestampToIndex(this.algTimestamp);
     const pos = {
       state: this.indexer.stateAtIndex(moveIdx),
@@ -465,6 +508,17 @@ export class Cursor<P extends Puzzle> {
   }
 
   public delta(duration: Cursor.Duration, stopAtMoveBoundary: boolean): boolean {
+    if (this.lastMoveData) {
+      if (this.lastMoveData.doLastMoveDelta(duration)) {
+        // finished faking the last move; now skip to end
+        this.lastMoveData = undefined;
+        duration = 1e30;
+        this.algTimestamp = this.indexer.algDuration();
+        // fall through to skip to end
+      } else {
+        return false;
+      }
+    }
     const moveIdx = this.indexer.timestampToIndex(this.algTimestamp);
     const unclampedNewTimestamp = this.algTimestamp + duration;
     const currentMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(moveIdx);
@@ -499,6 +553,7 @@ export class Cursor<P extends Puzzle> {
   }
 
   private setMoves(alg: Sequence): void {
+    this.lastMoveData = undefined;
     if (false) {
       this.indexer = new SimpleAlgorithmIndexer(this.puzzle, alg);
     } else {
