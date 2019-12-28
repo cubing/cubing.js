@@ -7,7 +7,7 @@ import { AnimModel, CursorObserver, DirectionObserver, JumpObserver } from "./an
 import { Cursor } from "./cursor";
 import { Puzzle } from "./puzzle";
 
-const CAMERA_DISTANCE = 7.5;
+const CAMERA_DISTANCE = 5.5;
 
 export type VisualizationFormat = "2D" | "3D" | "PG3D";
 
