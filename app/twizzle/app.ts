@@ -91,7 +91,7 @@ function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newSticke
   puzzle = kpuzzledef as KPuzzleDefinition ;
   const mps = pg.movesetgeos;
   const worker = new KPuzzle(puzzle);
-  worker.setFaceNames(pg.facenames.map((_:any)=>_[1])) ;
+  worker.setFaceNames(pg.facenames.map((_: any) => _[1])) ;
   gripdepth = {};
   for (const mp of mps) {
     const grip1 = mp[0] as string;
