@@ -4,7 +4,7 @@ import { Raycaster, Vector2, Vector3 } from "three";
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
-import { KPuzzle, KPuzzleDefinition, parse } from "../../src/kpuzzle/index";
+import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
 import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims } from "../../src/puzzle-geometry/index";
 import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
 
@@ -13,10 +13,7 @@ experimentalShowJumpingFlash(false);
 let twisty: Twisty;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
-const lastPuzzleName = "";
-let safeKpuzzle: KPuzzleDefinition;
-let movenames: string[];
-let grips: any[];
+let safeKpuzzle: KPuzzleDefinition | undefined;
 let descinput: HTMLInputElement;
 let algoinput: HTMLInputElement;
 let actions: HTMLSelectElement;
@@ -51,15 +48,8 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
   return true;
 }
 
-function focusRight(): void {
-  return;
-  algoinput.scrollLeft = algoinput.scrollWidth;
-  algoinput.focus();
-  algoinput.selectionStart = algoinput.selectionEnd = 100000000;
-}
-
 function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boolean): BlockMove {
-  let bestGrip: MoveFamily;
+  let bestGrip: MoveFamily = stickerDat.axis[0][1];
   let bestProduct: number = 0;
   for (const axis of stickerDat.axis) {
     const product = point.dot(new Vector3(...axis[0]));
@@ -219,7 +209,7 @@ function dowork(cmd: string): void {
     (async () => {
       const inputPuzzle = await (cmd === "bluetooth" ? connect : debugKeyboardConnect)();
       inputPuzzle.addMoveListener((e: MoveEvent) => {
-        addMove(e.latestMove, getModValueForMove(e.latestMove));
+        addMove(e.latestMove);
       });
     })();
     return;
@@ -352,10 +342,8 @@ function checkchange(): void {
         kpuzzledef = safeKpuzzle ;
       } else {
         kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition ;
-        movenames = pg.ksolvemovenames;
       }
       const newStickerDat = pg.get3d(0.0131);
-      grips = pg.svggrips;
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
     }
     if (!savealg) {
@@ -414,14 +402,12 @@ function encodealg(s:string) {
 function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent): void {
   const raycaster = new Raycaster();
   const mouse = new Vector2();
-  const scene = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetScene();
   const canvas: HTMLCanvasElement = vantage.renderer.domElement;
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
   mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
   const camera = vantage.camera;
-  const renderer = vantage.renderer;
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
@@ -436,14 +422,12 @@ function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent):
 function onMouseMove(vantage: Vantage, event: MouseEvent): void {
   const raycaster = new Raycaster();
   const mouse = new Vector2();
-  const scene = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetScene();
   const canvas: HTMLCanvasElement = vantage.renderer.domElement;
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
   mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
   const camera = vantage.camera;
-  const renderer = vantage.renderer;
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
@@ -499,7 +483,7 @@ export function setup(): void {
     select.selectedIndex = 0;
     descinput.value = puzdesc;
   } else if (!found) {
-    optionFor3x3x3.selected = true;
+    optionFor3x3x3!.selected = true;
     descinput.value = getpuzzle("3x3x3");
   }
   select.onchange = doselection;
