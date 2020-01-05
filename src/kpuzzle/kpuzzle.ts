@@ -254,9 +254,16 @@ export class MoveExpander {
     if (!this.facenames) {
       return grip ;
     }
+    // permit unswizzle to strip w and p suffixes for callers
+    // other than the internal move expander below.
+    if (grip.length > 1) {
+      if (grip[0] <= "Z" && (grip[grip.length - 1] === "w" || grip[grip.length - 1] === "p")) {
+        grip = grip.substr(0, grip.length - 1);
+      }
+    }
     const faceSplit = this.splitByFaceNames(grip, this.facenames);
     if (faceSplit) {
-      for (let i = 1; i < faceSplit.length; i++) {
+      for (let i = 0; i < faceSplit.length; i++) {
         let testGrip = "";
         for (let j = 0; j < faceSplit.length; j++) {
           testGrip += faceSplit[(i + j) % faceSplit.length];
@@ -278,6 +285,7 @@ export class MoveExpander {
     const family = blockMove.family;
     let grip = family;
     let isBlock = false;
+    let isPuzzle = false;
     // the following "reparse" code is almost certainly wrong
     if (/[a-z]/.test(family)) {
       isBlock = true;
@@ -285,6 +293,10 @@ export class MoveExpander {
     }
     if (family.length > 1 && family.endsWith("w")) {
       isBlock = true;
+      grip = family.substring(0, family.length - 1);
+    }
+    if (family.length > 1 && family.endsWith("p")) {
+      isPuzzle = true;
       grip = family.substring(0, family.length - 1);
     }
     let slices = axes[grip];
@@ -301,6 +313,9 @@ export class MoveExpander {
       if (outer === undefined) {
         outer = 1;
         inner = (isBlock ? 2 : 1);
+        if (isPuzzle) {
+          inner = axes[grip].length;
+        }
       } else {
         return undefined;
       } // should never happen
@@ -323,6 +338,8 @@ export class MoveExpander {
   private splitByFaceNames(s: string, facenames: string[]): string[] | undefined {
     const r: string[] = [];
     let at = 0;
+    // we permit lowercase arguments, but face names are always upper case
+    s = s.toUpperCase();
     while (at < s.length) {
       let found = false;
       for (const facename of facenames) {

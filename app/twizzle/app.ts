@@ -4,7 +4,7 @@ import { Raycaster, Vector2, Vector3 } from "three";
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
-import { KPuzzle, KPuzzleDefinition, parse } from "../../src/kpuzzle/index";
+import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
 import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims } from "../../src/puzzle-geometry/index";
 import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
 
@@ -13,10 +13,7 @@ experimentalShowJumpingFlash(false);
 let twisty: Twisty;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
-const lastPuzzleName = "";
-let safeKpuzzle: KPuzzleDefinition;
-let movenames: string[];
-let grips: any[];
+let safeKpuzzle: KPuzzleDefinition | undefined;
 let descinput: HTMLInputElement;
 let algoinput: HTMLInputElement;
 let actions: HTMLSelectElement;
@@ -51,15 +48,8 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
   return true;
 }
 
-function focusRight(): void {
-  return;
-  algoinput.scrollLeft = algoinput.scrollWidth;
-  algoinput.focus();
-  algoinput.selectionStart = algoinput.selectionEnd = 100000000;
-}
-
 function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boolean): BlockMove {
-  let bestGrip: MoveFamily;
+  let bestGrip: MoveFamily = stickerDat.axis[0][1];
   let bestProduct: number = 0;
   for (const axis of stickerDat.axis) {
     const product = point.dot(new Vector3(...axis[0]));
@@ -80,7 +70,7 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
       move = modifiedBlockMove(move, { innerLayer: gripdepth[bestGrip], family: bestGrip.toLowerCase() }) ;
     }
   }
-  if (!rightClick) {
+  if (rightClick) {
     move = modifiedBlockMove(move, { amount: -move.amount });
   }
   return move;
@@ -91,7 +81,7 @@ function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newSticke
   puzzle = kpuzzledef as KPuzzleDefinition ;
   const mps = pg.movesetgeos;
   const worker = new KPuzzle(puzzle);
-  worker.setFaceNames(pg.facenames.map((_:any)=>_[1])) ;
+  worker.setFaceNames(pg.facenames.map((_: any) => _[1])) ;
   gripdepth = {};
   for (const mp of mps) {
     const grip1 = mp[0] as string;
@@ -108,6 +98,16 @@ function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newSticke
   } else {
     setAlgo("", true);
   }
+}
+
+function getModValueForMove(move: BlockMove): number {
+  const family = move.family ;
+  for (const axis of stickerDat.axis) {
+    if (family === axis[1]) {
+       return axis[2] as number ;
+    }
+  }
+  return 1 ;
 }
 
 function trimEq(a: string, b: string): boolean {
@@ -134,6 +134,7 @@ function setAlgo(str: string, writeback: boolean): void {
           },
         },
       });
+      twisty.setCoalesceModFunc(getModValueForMove);
 
       const vantages: Vantage[] = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetVantages();
       // TODO: This is a hack.
@@ -341,10 +342,8 @@ function checkchange(): void {
         kpuzzledef = safeKpuzzle ;
       } else {
         kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition ;
-        movenames = pg.ksolvemovenames;
       }
       const newStickerDat = pg.get3d(0.0131);
-      grips = pg.svggrips;
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
     }
     if (!savealg) {
@@ -403,14 +402,12 @@ function encodealg(s:string) {
 function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent): void {
   const raycaster = new Raycaster();
   const mouse = new Vector2();
-  const scene = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetScene();
   const canvas: HTMLCanvasElement = vantage.renderer.domElement;
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
   mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
   const camera = vantage.camera;
-  const renderer = vantage.renderer;
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
@@ -425,14 +422,12 @@ function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent):
 function onMouseMove(vantage: Vantage, event: MouseEvent): void {
   const raycaster = new Raycaster();
   const mouse = new Vector2();
-  const scene = (twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D()).experimentalGetScene();
   const canvas: HTMLCanvasElement = vantage.renderer.domElement;
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
   mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
   const camera = vantage.camera;
-  const renderer = vantage.renderer;
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
@@ -448,7 +443,7 @@ function onMouseMove(vantage: Vantage, event: MouseEvent): void {
 // TODO: Animate latest move but cancel algorithm moves.
 function addMove(move: BlockMove): void {
   const currentAlg = algparse(algoinput.value);
-  const newAlg = experimentalAppendBlockMove(currentAlg, move, false);
+  const newAlg = experimentalAppendBlockMove(currentAlg, move, true, getModValueForMove(move));
   // TODO: Avoid round-trip through string?
   if (!twisty || puzzleSelected) {
     setAlgo(algToString(newAlg), true);
@@ -488,7 +483,7 @@ export function setup(): void {
     select.selectedIndex = 0;
     descinput.value = puzdesc;
   } else if (!found) {
-    optionFor3x3x3.selected = true;
+    optionFor3x3x3!.selected = true;
     descinput.value = getpuzzle("3x3x3");
   }
   select.onchange = doselection;

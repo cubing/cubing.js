@@ -164,7 +164,7 @@ export class PG3D extends Twisty3D<Puzzle> {
     const kp = new KPuzzle(this.definition);
     for (const moveProgress of p.moves) {
       const blockMove = moveProgress.move as BlockMove;
-      const unswizzled = kp.unswizzle(blockMove.family.toUpperCase()) ;
+      const unswizzled = kp.unswizzle(blockMove.family);
       const fullMove = stateForBlockMove(this.definition, blockMove);
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;

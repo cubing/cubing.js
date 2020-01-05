@@ -21,12 +21,18 @@ export function modifiedBlockMove(original: BlockMove, modifications: BlockMoveM
   );
 }
 
-export function experimentalAppendBlockMove(s: Sequence, newMove: BlockMove, coalesceLastMove: boolean = false): Sequence {
+export function experimentalAppendBlockMove(s: Sequence, newMove: BlockMove, coalesceLastMove: boolean = false, mod: number = 0): Sequence {
   const oldNestedUnits = s.nestedUnits;
   const oldLastMove = oldNestedUnits[oldNestedUnits.length - 1] as (BlockMove | null);
   if (coalesceLastMove && oldLastMove && canCoalesce(oldLastMove, newMove)) {
     const newNestedUnits = s.nestedUnits.slice(0, oldNestedUnits.length - 1);
-    const newAmount = oldLastMove.amount + newMove.amount;
+    let newAmount = oldLastMove.amount + newMove.amount;
+    if (mod > 1) {
+      newAmount = (newAmount % mod + mod) % mod ;
+      if (newAmount * 2 > mod) {
+        newAmount -= mod ;
+      }
+    }
     if (newAmount !== 0) {
       newNestedUnits.push(modifiedBlockMove(oldLastMove, { amount: newAmount }));
     }

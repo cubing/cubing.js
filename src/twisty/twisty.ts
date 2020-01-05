@@ -1,4 +1,4 @@
-import { BlockMove, Example, parse, Sequence } from "../alg";
+import { BlockMove, Example, experimentalAppendBlockMove, parse, Sequence } from "../alg";
 import { KPuzzleDefinition, Puzzles } from "../kpuzzle";
 import { AnimModel } from "./anim";
 import { Cursor } from "./cursor";
@@ -18,6 +18,7 @@ export class Twisty {
   private cursor: Cursor<Puzzle>;
   private puzzleDef: KPuzzleDefinition; // TODO: Replace this with a Puzzle instance.
   private player: Player;
+  private coalesceModFunc: (mv: BlockMove) => number ;
   constructor(public element: Element, config: TwistyParams = {}) {
     this.alg = config.alg || Example.Niklas;
     this.puzzleDef = config.puzzle || Puzzles["333"];
@@ -27,6 +28,12 @@ export class Twisty {
 
     this.player = new Player(this.anim, this.puzzleDef, config.playerConfig);
     this.element.appendChild((this.player).element);
+    this.coalesceModFunc = (mv) => 0;
+  }
+
+  // Set the callback function to get the modulo for coalescing from a BlockMove.
+  public setCoalesceModFunc(f: (mv: BlockMove) => number): void {
+    this.coalesceModFunc = f ;
   }
 
   // Plays the full final move if there is one.
@@ -43,10 +50,21 @@ export class Twisty {
       this.anim.stepForward();
     }
   }
+  // We append a move as normal, except we animate *just* the last move *even* if
+  // the last move was merged with a previous one.
+  public experimentalSetAlgAnimateBlockMove(alg: Sequence, move: BlockMove): void {
+    this.anim.skipToStart();
+    this.alg = alg;
+    this.anim.skipToEnd();
+    this.cursor.experimentalUpdateAlgAnimate(alg, move);
+    this.player.updateFromAnim();
+    this.anim.stepForward();
+  }
 
   public experimentalAddMove(move: BlockMove): void {
-    const newAlg = new Sequence(this.alg.nestedUnits.concat([move]));
-    this.experimentalSetAlg(newAlg, true);
+    const coalesceMod = this.coalesceModFunc(move);
+    const newAlg = experimentalAppendBlockMove(this.alg, move, true, coalesceMod);
+    this.experimentalSetAlgAnimateBlockMove(newAlg, move);
   }
 
   public experimentalGetAnim(): AnimModel {
