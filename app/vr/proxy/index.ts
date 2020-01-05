@@ -13,20 +13,20 @@ class App {
   // private debugProxyReceiver = new ProxyReceiver();
   private puzzle: BluetoothPuzzle;
   constructor() {
-    document.querySelector("#connect-bluetooth").addEventListener("click", async () => {
+    document.querySelector("#connect-bluetooth")!.addEventListener("click", async () => {
       this.puzzle = await connect();
       this.puzzle.addMoveListener(this.proxySender.onMove.bind(this.proxySender));
       this.puzzle.addOrientationListener(this.proxySender.onOrientation.bind(this.proxySender));
       console.log("Puzzle connected!", this.puzzle);
     });
 
-    document.querySelector("#connect-keyboard").addEventListener("click", async () => {
+    document.querySelector("#connect-keyboard")!.addEventListener("click", async () => {
       this.puzzle = await debugKeyboardConnect();
       this.puzzle.addMoveListener(this.proxySender.onMove.bind(this.proxySender));
       console.log("Keyboard connected!", this.puzzle);
     });
 
-    document.querySelector("#reset").addEventListener("click", async () => {
+    document.querySelector("#reset")!.addEventListener("click", async () => {
       this.proxySender.sendReset();
       if ("reset" in this.puzzle) {
         (this.puzzle as GoCube).reset();

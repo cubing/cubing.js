@@ -10,7 +10,8 @@ window.addEventListener("load", () => {
   const kpuzzle = kpuzzleParse(pg.writeksolve("TwizzlePuzzle", true));
 
   const elem = document.querySelector("#custom-pg3d");
-  const twisty = new Twisty(elem, {
+  // tslint:disable-next-line: no-unused-expression
+  new Twisty(elem!, {
     alg: parse("[[U', R], [U, R']]"),
     puzzle: kpuzzle,
     playerConfig: {

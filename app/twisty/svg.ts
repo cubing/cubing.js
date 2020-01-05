@@ -3,8 +3,9 @@ import { Puzzles } from "../../src/kpuzzle/index";
 import { Twisty } from "../../src/twisty/index";
 
 window.addEventListener("load", () => {
-  const elem = document.querySelector("#custom-example");
-  const tw = new Twisty(elem, {
+  const elem = document.querySelector("#custom-example")!;
+  // tslint:disable-next-line: no-unused-expression
+  new Twisty(elem, {
     puzzle: Puzzles["333"],
     alg: parse("U M' U' R' U' R U M2' U' R' U r"),
     playerConfig: {

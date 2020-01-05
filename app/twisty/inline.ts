@@ -4,8 +4,9 @@ import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
 import { Twisty } from "../../src/twisty/index";
 
 window.addEventListener("load", () => {
-  const elem = document.querySelector("#custom-example");
-  const twisty = new Twisty(elem, {
+  const elem = document.querySelector("#custom-example")!;
+  // tslint:disable-next-line: no-unused-expression
+  new Twisty(elem, {
     puzzle: Puzzles["222"],
     alg: new Sequence([
       BareBlockMove("R", 2),
@@ -22,8 +23,9 @@ window.addEventListener("load", () => {
 
   const kpuzzle = kpuzzleParse(pg.writeksolve("TwizzlePuzzle", true));
 
-  const elem = document.querySelector("#custom-pg3d");
-  const twisty = new Twisty(elem, {
+  const elem = document.querySelector("#custom-pg3d")!;
+  // tslint:disable-next-line: no-unused-expression
+  new Twisty(elem, {
     alg: parse("[[U', R], [U, R']]"),
     puzzle: kpuzzle,
     playerConfig: {

@@ -3,7 +3,7 @@ import { Puzzles } from "../../src/kpuzzle/index";
 import { Twisty } from "../../src/twisty/index";
 
 window.addEventListener("load", () => {
-  const elem = document.querySelector("#custom-example");
+  const elem = document.querySelector("#custom-example")!;
   (window as any).tw = new Twisty(elem, {
     puzzle: Puzzles.pyram,
     alg: parse("R U R' U R U R' U"),

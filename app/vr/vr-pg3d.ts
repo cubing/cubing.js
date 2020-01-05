@@ -1,40 +1,15 @@
-import { DoubleSide, Euler, Group, Mesh, MeshBasicMaterial, Quaternion, Vector3 } from "three";
+import { Group, Quaternion, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
 import { Sequence } from "../../src/alg/index";
 import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
-import { PG3D, TAU, Twisty } from "../../src/twisty/index";
-import { showControlPlanes } from "./config";
-import { ProxyReceiver } from "./proxy/websocket-proxy";
+import { PG3D, Twisty } from "../../src/twisty/index";
 import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
-
-// From `cube3D.ts`
-class AxisInfo {
-  public stickerMaterial: THREE.MeshBasicMaterial;
-  constructor(public side: string, public vector: Vector3, public fromZ: THREE.Euler, public color: number) {
-    // TODO: Make sticker material single-sided when cubie base is rendered?
-    color = 0xffffff; // override
-    this.stickerMaterial = new MeshBasicMaterial({ color, side: DoubleSide });
-    this.stickerMaterial.transparent = true;
-    this.stickerMaterial.opacity = showControlPlanes ? 0.4 : 0;
-  }
-}
-const axesInfo: AxisInfo[] = [
-  new AxisInfo("U", new Vector3(0, 1, 0), new Euler(-TAU / 4, 0, 0), 0xffffff),
-  new AxisInfo("L", new Vector3(-1, 0, 0), new Euler(0, -TAU / 4, 0), 0xff8800),
-  new AxisInfo("F", new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ff00),
-  new AxisInfo("R", new Vector3(1, 0, 0), new Euler(0, TAU / 4, 0), 0xff0000),
-  new AxisInfo("B", new Vector3(0, 0, -1), new Euler(0, TAU / 2, 0), 0x0000ff),
-  new AxisInfo("D", new Vector3(0, -1, 0), new Euler(TAU / 4, 0, 0), 0xffff00),
-];
 
 export class VRPG3D {
   public group: Group = new Group();
   private twisty: Twisty;
   private cachedPG3D: PG3D;
-  private controlPlanes: Mesh[] = [];
-
-  private lastAngle: number;
 
   // TODO: Separate tracker abstraction for this?
   private resizeInitialDistance: number;
@@ -50,8 +25,6 @@ export class VRPG3D {
   // This "locks" the input into resizing.
   private waitForMoveButtonClear = false;
 
-  private proxyReceiver: ProxyReceiver;
-
   constructor(private vrInput: VRInput) {
     // const p = PuzzleGeometry.parsedesc(descinput.value);
     const pg = getPuzzleGeometryByName("megaminx");
@@ -61,7 +34,9 @@ export class VRPG3D {
       alg: new Sequence([]),
       playerConfig: {
         visualizationFormat: "PG3D",
-        experimentalPG3DStickerDat: stickerDat,
+        experimentalPG3DViewConfig: {
+          stickerDat,
+        },
       },
     });
 

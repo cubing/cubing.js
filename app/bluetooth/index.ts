@@ -40,7 +40,7 @@ window.addEventListener("load", async () => {
   // debug?: object;
   // state?: PuzzleState;
   // quaternion?: any;
-  document.querySelector("#connect").addEventListener("click", async () => {
+  document.querySelector("#connect")!.addEventListener("click", async () => {
     const acceptAllDevices = (document.querySelector("#acceptAllDevices") as HTMLInputElement).checked;
     window.puzzle = await connect({ acceptAllDevices });
     window.puzzle.addMoveListener((e: MoveEvent) => {

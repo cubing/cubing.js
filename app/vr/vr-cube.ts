@@ -49,8 +49,6 @@ export class VRCube {
   // This "locks" the input into resizing.
   private waitForMoveButtonClear = false;
 
-  private proxyReceiver: ProxyReceiver;
-
   constructor(private vrInput: VRInput) {
     this.twisty = new Twisty(document.createElement("twisty"), { alg: new Sequence([]) });
     this.twisty.experimentalGetCursor().experimentalSetDurationScale(0.25);
@@ -88,7 +86,8 @@ export class VRCube {
     this.vrInput.addButtonListener(ButtonGrouping.None, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.moveButtonClear.bind(this));
 
     try {
-      this.proxyReceiver = new ProxyReceiver(this.onProxyEvent.bind(this));
+      // tslint:disable-next-line: no-unused-expression
+      new ProxyReceiver(this.onProxyEvent.bind(this));
     } catch (e) {
       console.error("Unable to register proxy receiver", e);
     }

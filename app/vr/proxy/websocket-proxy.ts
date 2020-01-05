@@ -21,6 +21,9 @@ export type ProxyEvent = ProxyMoveEvent | ProxyOrientationEvent | ProxyResetEven
 export class ProxySender {
   private websocket: WebSocket;
   constructor() {
+    if (!socketOrigin) {
+      throw new Error("Must specify socket origin in the URL.");
+    }
     const url = new URL(socketOrigin);
     url.pathname = "/register-sender";
     this.websocket = new WebSocket(url.toString());

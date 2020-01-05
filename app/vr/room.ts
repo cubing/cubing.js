@@ -22,7 +22,7 @@ export class Room {
     light.position.set(1, 1, 1);
     this.scene.add(light);
 
-    for (const controller of vrInput.controllers) {
+    for (const controller of this.vrInput.controllers) {
       this.scene.add(controller);
     }
   }
