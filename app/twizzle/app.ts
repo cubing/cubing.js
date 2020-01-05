@@ -48,6 +48,16 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
   return true;
 }
 
+function getModValueForMove(move: BlockMove): number {
+  const family = move.family ;
+  for (const axis of stickerDat.axis) {
+    if (family === axis[1]) {
+       return axis[2] as number ;
+    }
+  }
+  return 1 ;
+}
+
 function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boolean): BlockMove {
   let bestGrip: MoveFamily = stickerDat.axis[0][1];
   let bestProduct: number = 0;
@@ -70,7 +80,7 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
       move = modifiedBlockMove(move, { innerLayer: gripdepth[bestGrip], family: bestGrip.toLowerCase() }) ;
     }
   }
-  if (rightClick) {
+  if (getModValueForMove(move) != 2 && !rightClick) {
     move = modifiedBlockMove(move, { amount: -move.amount });
   }
   return move;
@@ -98,16 +108,6 @@ function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newSticke
   } else {
     setAlgo("", true);
   }
-}
-
-function getModValueForMove(move: BlockMove): number {
-  const family = move.family ;
-  for (const axis of stickerDat.axis) {
-    if (family === axis[1]) {
-       return axis[2] as number ;
-    }
-  }
-  return 1 ;
 }
 
 function trimEq(a: string, b: string): boolean {
