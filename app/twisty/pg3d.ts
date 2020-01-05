@@ -1,7 +1,7 @@
-import { parse } from "../../src/alg/index";
-import { parse as kpuzzleParse } from "../../src/kpuzzle/index";
-import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
-import { Twisty } from "../../src/twisty/index";
+import {parse} from "../../src/alg/index";
+import {parse as kpuzzleParse} from "../../src/kpuzzle/index";
+import {getPuzzleGeometryByName} from "../../src/puzzle-geometry/index";
+import {Twisty} from "../../src/twisty/index";
 
 window.addEventListener("load", () => {
   const pg = getPuzzleGeometryByName("megaminx", ["orientcenters", "true"]);

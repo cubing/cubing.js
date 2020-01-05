@@ -3,11 +3,32 @@
 /* tslint:disable only-arrow-functions */ // TODO
 /* tslint:disable typedef */ // TODO
 
-import { Perm } from "./Perm";
-import { Orbit, OrbitDef, OrbitsDef, showcanon, Transformation, VisibleState } from "./PermOriSet";
-import { closure, cube, dodecahedron, getface, icosahedron, octahedron, tetrahedron, uniqueplanes } from "./PlatonicGenerator";
-import { PuzzleDescriptionString, Puzzles } from "./Puzzles";
-import { centermassface, expandfaces, Quat } from "./Quat";
+import {Perm} from "./Perm";
+import {Orbit, OrbitDef, OrbitsDef, showcanon, Transformation, VisibleState} from "./PermOriSet";
+import {closure, cube, dodecahedron, getface, icosahedron, octahedron, tetrahedron, uniqueplanes} from "./PlatonicGenerator";
+import {PuzzleDescriptionString, Puzzles} from "./Puzzles";
+import {centermassface, expandfaces, Quat} from "./Quat";
+
+export interface StickerDatSticker {
+  coords: number[][];
+  color: string;
+  orbit: string;
+  ord: number;
+  ori: number;
+}
+
+export interface StickerDatFace {
+  coords: number[][];
+  name: string;
+}
+
+export type StickerDatAxis = [number[], string, number];
+
+export interface StickerDat {
+  stickers: StickerDatSticker[];
+  faces: StickerDatFace[];
+  axis: StickerDatAxis[];
+}
 
 //  Now we have a geometry class that does the 3D goemetry to calculate
 //  individual sticker information from a Platonic solid and a set of
@@ -91,7 +112,7 @@ const defaultnets: any = {
 
 const defaultcolors: any = {
   // the colors should use the same naming convention as the nets, above.
-  4: { F: "#00ff00", D: "#ffff00", L: "#ff0000", R: "#0000ff" },
+  4: {F: "#00ff00", D: "#ffff00", L: "#ff0000", R: "#0000ff"},
   6: {
     U: "#ffffff", F: "#00ff00", R: "#ff0000",
     D: "#ffff00", B: "#0000ff", L: "#ff8000",
@@ -138,7 +159,7 @@ function findelement(a: any[], p: Quat): number {
   throw new Error("Element not found");
 }
 
-export function getpuzzles(): { [s: string]: PuzzleDescriptionString } {
+export function getpuzzles(): {[s: string]: PuzzleDescriptionString} {
   // get some simple definitions of basic puzzles
   return Puzzles;
 }
@@ -427,7 +448,7 @@ export class PuzzleGeometry {
       default: throw new Error("Bad shape argument: " + shape);
     }
     this.rotations = closure(g);
-    if (this.verbose) { console.log("# Rotations: " + this.rotations.length); }
+    if (this.verbose) {console.log("# Rotations: " + this.rotations.length);}
     const baseplane = g[0];
     this.baseplanerot = uniqueplanes(baseplane, this.rotations);
     const baseplanes = this.baseplanerot.map((_) => baseplane.rotateplane(_));
@@ -437,9 +458,9 @@ export class PuzzleGeometry {
     this.net = net;
     this.colors = defaultcolors[baseplanes.length];
     this.faceorder = defaultfaceorders[baseplanes.length];
-    if (this.verbose) { console.log("# Base planes: " + baseplanes.length); }
+    if (this.verbose) {console.log("# Base planes: " + baseplanes.length);}
     const baseface = getface(baseplanes);
-    if (this.verbose) { console.log("# Face vertices: " + baseface.length); }
+    if (this.verbose) {console.log("# Face vertices: " + baseface.length);}
     const facenormal = baseplanes[0].makenormal();
     const edgenormal = baseface[0].sum(baseface[1]).makenormal();
     const vertexnormal = baseface[0].makenormal();
@@ -455,7 +476,7 @@ export class PuzzleGeometry {
       cutplanes.push(normal.makecut(cuts[i][1]));
     }
     const boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d);
-    if (this.verbose) { console.log("# Boundary is " + boundary); }
+    if (this.verbose) {console.log("# Boundary is " + boundary);}
     const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
     let faces = [getface(planes)];
@@ -670,7 +691,7 @@ export class PuzzleGeometry {
       }
     }
     this.faces = faces;
-    if (this.verbose) { console.log("# Faces is now " + faces.length); }
+    if (this.verbose) {console.log("# Faces is now " + faces.length);}
     this.stickersperface = faces.length;
     //  Find and report the shortest edge in any of the faces.  If this
     //  is small the puzzle is probably not practical or displayable.
@@ -685,7 +706,7 @@ export class PuzzleGeometry {
       }
     }
     this.shortedge = shortedge;
-    if (this.verbose) { console.log("# Short edge is " + shortedge); }
+    if (this.verbose) {console.log("# Short edge is " + shortedge);}
   }
 
   public keyface(face: Quat[]): string {
@@ -750,7 +771,7 @@ export class PuzzleGeometry {
     // take our newly split base face and expand it by the rotation matrix.
     // this generates our full set of "stickers".
     this.faces = expandfaces(this.baseplanerot, this.faces);
-    if (this.verbose) { console.log("# Total stickers is now " + this.faces.length); }
+    if (this.verbose) {console.log("# Total stickers is now " + this.faces.length);}
     // Split moveplanes into a list of parallel planes.
     const moveplanesets = [];
     for (let i = 0; i < this.moveplanes.length; i++) {
@@ -782,7 +803,7 @@ export class PuzzleGeometry {
     }
     this.moveplanesets = moveplanesets;
     const sizes = moveplanesets.map((_) => _.length);
-    if (this.verbose) { console.log("# Move plane sets: " + sizes); }
+    if (this.verbose) {console.log("# Move plane sets: " + sizes);}
     // for each of the move planes, find the rotations that are relevant
     const moverotations: Quat[][] = [];
     for (let i = 0; i < moveplanesets.length; i++) {
@@ -869,7 +890,7 @@ export class PuzzleGeometry {
       //  because ksolve doesn't handle orientations that are not
       //  cyclic, and the rotation group of the core is not cyclic.
       if (facelisthash[s].length === this.basefacecount) {
-        if (this.verbose) { console.log("# Splitting core."); }
+        if (this.verbose) {console.log("# Splitting core.");}
         for (let suff = 0; suff < this.basefacecount; suff++) {
           const s2 = s + " " + suff;
           facelisthash[s2] = [facelisthash[s][suff]];
@@ -885,7 +906,7 @@ export class PuzzleGeometry {
     this.cubiekey = cubiekey;
     this.facelisthash = facelisthash;
     this.cubiekeys = cubiekeys;
-    if (this.verbose) { console.log("# Cubies: " + Object.keys(cubiehash).length); }
+    if (this.verbose) {console.log("# Cubies: " + Object.keys(cubiehash).length);}
     const that = this;
     function getfaceindex(facenum: number): number {
       const divid = that.stickersperface;
@@ -1052,7 +1073,7 @@ export class PuzzleGeometry {
       }
     }
     // show the orbits
-    if (this.verbose) { console.log("# Cubie orbit sizes " + cubieords); }
+    if (this.verbose) {console.log("# Cubie orbit sizes " + cubieords);}
   }
 
   public spinmatch(a: string, b: string): boolean {
@@ -1442,7 +1463,7 @@ export class PuzzleGeometry {
     }
   }
   public writekpuzzle(): any {
-     return this.getOrbitsDef(true).toKpuzzle() ;
+    return this.getOrbitsDef(true).toKpuzzle();
   }
 
   public getOrbitsDef(fortwisty: boolean): OrbitsDef {
@@ -1910,14 +1931,14 @@ export class PuzzleGeometry {
     return html;
   }
 
-  public get3d(trim?: number): any {
+  public get3d(trim?: number): StickerDat {
     const stickers: any = [];
     const rot = this.getInitial3DRotation();
     const faces: any = [];
-    const maxdist: number = 0.52 * this.basefaces[0][0].len() ;
+    const maxdist: number = 0.52 * this.basefaces[0][0].len();
     for (let i = 0; i < this.basefaces.length; i++) {
       const coords = rot.rotateface(this.basefaces[i]);
-      const name = this.facenames[i][1] ;
+      const name = this.facenames[i][1];
       faces.push({coords: toFaceCoords(coords, maxdist), name});
     }
     for (let i = 0; i < this.faces.length; i++) {
@@ -1947,7 +1968,7 @@ export class PuzzleGeometry {
         }
       }
     }
-    const grips = [];
+    const grips: StickerDatAxis[] = [];
     for (let i = 0; i < this.movesetgeos.length; i++) {
       const msg = this.movesetgeos[i];
       const order = this.movesetorders[i];
@@ -1961,6 +1982,6 @@ export class PuzzleGeometry {
         }
       }
     }
-    return { stickers, faces, axis: grips };
+    return {stickers, faces, axis: grips};
   }
 }

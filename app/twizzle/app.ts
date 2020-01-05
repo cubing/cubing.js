@@ -5,7 +5,7 @@ import { Raycaster, Vector2, Vector3 } from "three";
 import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
 import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
-import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims } from "../../src/puzzle-geometry/index";
+import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims, StickerDat } from "../../src/puzzle-geometry/index";
 import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
@@ -21,7 +21,7 @@ let moveInput: HTMLSelectElement;
 let lastval: string = "";
 let lastalgo: string = "";
 let scramble: number = 0;
-let stickerDat: any;
+let stickerDat: StickerDat;
 const renderOptions = ["centers", "edges", "corners", "blockmoves", "vertexmoves", "sidebyside", "showfoundation"];
 const workOptions = ["threed", "centers", "edges", "corners", "optimize", "blockmoves",
   "allmoves", "vertexmoves", "killori"];
@@ -76,7 +76,7 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
   return move;
 }
 
-function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newStickerDat: any, savealgo: boolean): void {
+function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newStickerDat: StickerDat, savealgo: boolean): void {
   safeKpuzzle = kpuzzledef ; // this holds the scrambled position
   puzzle = kpuzzledef as KPuzzleDefinition ;
   const mps = pg.movesetgeos;

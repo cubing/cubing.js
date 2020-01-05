@@ -1,6 +1,7 @@
 import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Object3D, Vector3 } from "three";
 import { BlockMove } from "../../alg";
 import { KPuzzle, KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
+import { StickerDatSticker } from "../../puzzle-geometry";
 import { Cursor } from "../cursor";
 import { smootherStep } from "../easing";
 import { Puzzle } from "../puzzle";
@@ -17,7 +18,7 @@ class StickerDef {
   public faceColor: Color;
   public cubie: Group;
   protected geo: Geometry;
-  constructor(stickerDat: any, showFoundation: boolean) {
+  constructor(stickerDat: StickerDatSticker, showFoundation: boolean) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
     this.cubie = new Group();
