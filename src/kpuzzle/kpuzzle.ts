@@ -257,7 +257,7 @@ export class MoveExpander {
     // permit unswizzle to strip w and p suffixes for callers
     // other than the internal move expander below.
     if (grip.length > 1) {
-      if (grip[0] <= "Z" && (grip[grip.length - 1] === "w" || grip[grip.length - 1] === "p")) {
+      if (grip[0] <= "Z" && (grip[grip.length - 1] === "w" || grip[grip.length - 1] === "v")) {
         grip = grip.substr(0, grip.length - 1);
       }
     }
@@ -295,7 +295,7 @@ export class MoveExpander {
       isBlock = true;
       grip = family.substring(0, family.length - 1);
     }
-    if (family.length > 1 && family.endsWith("p")) {
+    if (family.length > 1 && family.endsWith("v")) {
       isPuzzle = true;
       grip = family.substring(0, family.length - 1);
     }

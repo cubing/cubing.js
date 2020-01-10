@@ -225,7 +225,7 @@ function getmovename(geo: any, bits: number, slices: number): any {
     hibit++;
   }
   if (bits === (2 << slices) - 1) {
-    movenameFamily = movenameFamily + "p";
+    movenameFamily = movenameFamily + "v";
   } else if (bits === (1 << hibit)) {
     if (hibit > 0) {
       movenamePrefix = String(hibit + 1);
@@ -1114,7 +1114,7 @@ export class PuzzleGeometry {
     }
     let grip = p[4];
     let fullrotation = false;
-    if (grip.endsWith("p") && grip[0] <= "Z") {
+    if (grip.endsWith("v") && grip[0] <= "Z") {
       if (p[2] !== undefined || p[3] !== undefined) {
         throw new Error("Cannot use a prefix with full cube rotations");
       }
