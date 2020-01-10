@@ -40,7 +40,7 @@ setAlgPartTypeMismatchReportingLevel("error");
 const UU = new Sequence([BareBlockMove("U", 1), BareBlockMove("U", 1)]);
 const U2 = new Sequence([BareBlockMove("U", 2)]);
 
-function e(a1: Sequence, a2: Sequence): jest.Matchers<boolean> {
+function e(a1: Sequence, a2: Sequence): jest.Matchers<void, boolean> {
   return expect(structureEquals(a1, a2));
 }
 
