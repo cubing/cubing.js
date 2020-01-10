@@ -1,3 +1,7 @@
+twisty {
+  contain: size;
+}
+
 /* Main Definitions */
 twisty player {
   width: 100%;
@@ -117,6 +121,7 @@ twisty player cube3d-view {
 
   display: grid;
   grid-template-columns: repeat(2, 50%);
+  contain: size;
 }
 
 twisty player cube3d-view:not(.side-by-side) {
