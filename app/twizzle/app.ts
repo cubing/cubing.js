@@ -80,7 +80,7 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
       move = modifiedBlockMove(move, { innerLayer: gripdepth[bestGrip], family: bestGrip.toLowerCase() }) ;
     }
   }
-  if (getModValueForMove(move) != 2 && !rightClick) {
+  if (getModValueForMove(move) !== 2 && !rightClick) {
     move = modifiedBlockMove(move, { amount: -move.amount });
   }
   return move;

@@ -100,7 +100,7 @@ const puzzleGeometryBin = {
 const configs = [mod, umd, puzzleGeometryBin];
 
 if (!process.env.ROLLUP_WATCH) {
-  configs.push(umdNoTwisty)
+  configs.push(umdNoTwisty);
 }
 
 export default configs;
