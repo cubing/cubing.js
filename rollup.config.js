@@ -29,7 +29,7 @@ if (!process.env.ROLLUP_WATCH) {
   }));
 }
 
-const mod = {
+const cjs = {
   external: ["three"],
   input: {
     "alg": "src/alg/index.ts",
@@ -43,6 +43,26 @@ const mod = {
     {
       dir: "dist/cjs",
       format: "cjs",
+      sourcemap: true,
+    },
+  ],
+  plugins,
+};
+
+const esm = {
+  external: ["three"],
+  input: {
+    "alg": "src/alg/index.ts",
+    "bluetooth": "src/bluetooth/index.ts",
+    "cubing": "src/cubing/index.ts",
+    "kpuzzle": "src/kpuzzle/index.ts",
+    "puzzle-geometry": "src/puzzle-geometry/index.ts",
+    "twisty": "src/twisty/index.ts",
+  },
+  output: [
+    {
+      dir: "dist/esm",
+      format: "esm",
       sourcemap: true,
     },
   ],
@@ -97,7 +117,7 @@ const puzzleGeometryBin = {
   ],
 };
 
-const configs = [mod, umd, puzzleGeometryBin];
+const configs = [cjs, esm, umd, puzzleGeometryBin];
 
 if (!process.env.ROLLUP_WATCH) {
   configs.push(umdNoTwisty);
