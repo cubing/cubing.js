@@ -2,5 +2,6 @@
   "name": "puzzle-geometry",
   "version": "0.10.0",
   "main": "../dist/cjs/puzzle-geometry.js",
-  "types": "../dist/cjs/puzzle-geometry/index.d.ts"
+  "module": "../dist/esm/puzzle-geometry.js",
+  "types": "../dist/esm/puzzle-geometry/index.d.ts"
 }

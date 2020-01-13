@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build dev clean test format setup lint prepack parcel parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
+NPM_COMMANDS = build dev clean test format setup lint prepack parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
@@ -33,7 +33,7 @@ deploy-vr: clean parcel-build-for-vr-cubing-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/vr/ \
+		./dist/experiments.cubing.net/vr/ \
 		${VR_SFTP_PATH}
 	echo "\nDone deploying. Go to ${VR_URL}\n"
 
@@ -45,6 +45,6 @@ deploy: clean parcel-build-for-experiments-cubing-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/ \
+		./dist/experiments.cubing.net/cubing.js/ \
 		${SFTP_PATH}
 	echo "\nDone deploying. Go to ${URL}\n"

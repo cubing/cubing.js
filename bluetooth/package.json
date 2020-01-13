@@ -2,5 +2,6 @@
   "name": "bluetooth",
   "version": "0.10.0",
   "main": "../dist/cjs/bluetooth.js",
-  "types": "../dist/cjs/bluetooth/index.d.ts"
+  "module": "../dist/esm/bluetooth.js",
+  "types": "../dist/esm/bluetooth/index.d.ts"
 }

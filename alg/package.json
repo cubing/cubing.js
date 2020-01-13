@@ -2,5 +2,6 @@
   "name": "alg",
   "version": "0.10.0",
   "main": "../dist/cjs/alg.js",
-  "types": "../dist/cjs/alg/index.d.ts"
+  "module": "../dist/esm/alg.js",
+  "types": "../dist/esm/alg/index.d.ts"
 }

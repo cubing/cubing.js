@@ -2,5 +2,6 @@
   "name": "kpuzzle",
   "version": "0.10.0",
   "main": "../dist/cjs/kpuzzle.js",
-  "types": "../dist/cjs/kpuzzle/index.d.ts"
+  "module": "../dist/esm/kpuzzle.js",
+  "types": "../dist/esm/kpuzzle/index.d.ts"
 }
