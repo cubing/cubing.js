@@ -1,5 +1,5 @@
 import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Object3D, Vector3 } from "three";
-import { BlockMove } from "../../alg";
+import { BlockMove, modifiedBlockMove } from "../../alg";
 import { KPuzzle, KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
 import { StickerDatSticker } from "../../puzzle-geometry";
 import { Cursor } from "../cursor";
@@ -165,8 +165,9 @@ export class PG3D extends Twisty3D<Puzzle> {
     const kp = new KPuzzle(this.definition);
     for (const moveProgress of p.moves) {
       const blockMove = moveProgress.move as BlockMove;
+      const simpleMove = modifiedBlockMove(blockMove, { amount: 1 });
       const unswizzled = kp.unswizzle(blockMove.family);
-      const fullMove = stateForBlockMove(this.definition, blockMove);
+      const baseMove = stateForBlockMove(this.definition, simpleMove);
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
       const angle = - this.ease(moveProgress.fraction) *
@@ -174,12 +175,12 @@ export class PG3D extends Twisty3D<Puzzle> {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
         const orin = pieces.length;
-        const mv = fullMove[orbit];
+        const bmv = baseMove[orbit];
         for (let ori = 0; ori < orin; ori++) {
           const pieces2 = pieces[ori];
           for (let i = 0; i < pieces2.length; i++) {
-            const ni = mv.permutation[i];
-            if (ni !== i || mv.orientation[i] !== 0) {
+            const ni = bmv.permutation[i];
+            if (ni !== i || bmv.orientation[i] !== 0) {
               pieces2[i].cubie.rotateOnAxis(turnNormal, angle);
             }
           }
