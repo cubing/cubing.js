@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Ubuntu";
+  src: url("../../src/vendor/fonts/ubuntu/Ubuntu-Regular.ttf")
+}
+
 html,
 body {
   margin: 0;
@@ -37,6 +42,11 @@ body {
 .controls input, .controls select, .controls input[type="button"], .algarea {
   font-size: 1.25rem;
   border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.algarea {
+  font-family: "Ubuntu";
+  padding: 0.5em;
 }
 
 .controls #algorithm {
