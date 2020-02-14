@@ -7,7 +7,7 @@ const SHOW_STATS = false;
 
 export const TAU = Math.PI * 2;
 
-const useResizeObserver = window && "ResizeObserver" in window;
+const useResizeObserver = typeof window !== "undefined" && "ResizeObserver" in window;
 
 // TODO: Turn into class?
 export class Vantage {
