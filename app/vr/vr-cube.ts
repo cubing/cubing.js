@@ -54,7 +54,7 @@ export class VRCube {
     this.twisty.experimentalGetCursor().experimentalSetDurationScale(0.25);
 
     this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
-    this.cachedCube3D.experimentalUpdateOptions({ showFoundation: true, showHintStickers: false });
+    this.cachedCube3D.experimentalUpdateOptions({ showFoundation: false, showHintStickers: false });
     this.group.add(this.cachedCube3D.experimentalGetCube());
 
     for (const axis of axesInfo) {

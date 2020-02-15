@@ -7,8 +7,8 @@ function getBoolean(configName: string, defaultValue: boolean): boolean {
   return "true" === (new URL(location.href).searchParams.get(configName) || (defaultValue ? "true" : "false"));
 }
 
-export const initialHeight = getNumber("height", 1);
-export const initialScale = getNumber("scale", 1);
+export const initialHeight = getNumber("height", 1.5);
+export const initialScale = getNumber("scale", 10);
 export const showControlPlanes = getBoolean("showControlPlanes", true);
 export const daydream = getBoolean("daydream", false);
 export const usePG3D = getBoolean("pg3d", false);
