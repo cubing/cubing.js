@@ -70,6 +70,43 @@ export function Invert(def: KPuzzleDefinition, t: Transformation): Transformatio
   return newTrans;
 }
 
+function gcd(a: number, b: number): number {
+  if (b) {
+     return gcd(b, a % b);
+  }
+  return a;
+}
+/* calculate the order of a particular transformation. */
+export function Order(def: KPuzzleDefinition, t: Transformation): number {
+  let r: number = 1;
+  for (const orbitName in def.orbits) {
+    const oDef = def.orbits[orbitName];
+    const o = t[orbitName];
+    const d = new Array(oDef.numPieces);
+    for (let idx = 0; idx < oDef.numPieces; idx++) {
+      if (!d[idx]) {
+        let w = idx;
+        let om = 0;
+        let pm = 0 ;
+        while (true) {
+          d[w] = true ;
+          om = om + o.orientation[w];
+          pm = pm + 1 ;
+          w = o.permutation[w];
+          if (w === idx) {
+            break ;
+          }
+        }
+        if (om !== 0) {
+          pm = pm * oDef.orientations / gcd(oDef.orientations, om) ;
+        }
+        r = r * pm / gcd(r, pm);
+      }
+    }
+  }
+  return r;
+}
+
 export function EquivalentTransformations(def: KPuzzleDefinition, t1: Transformation, t2: Transformation): boolean {
   for (const orbitName in def.orbits) {
     const oDef = def.orbits[orbitName];

@@ -12,6 +12,7 @@ export {
   KPuzzle,
   EquivalentStates,
   stateForBlockMove,
+  Order,
 } from "./kpuzzle";
 
 export {
