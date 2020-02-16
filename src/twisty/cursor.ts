@@ -32,6 +32,7 @@ interface AlgorithmIndexer<P extends Puzzle> {
   getMove(index: number): BlockMove;
   indexToMoveStartTimestamp(index: number): Cursor.Timestamp;
   stateAtIndex(index: number): State<P>;
+  transformAtIndex(index: number): State<P>;
   numMoves(): number;
   timestampToIndex(timestamp: Cursor.Timestamp): number;
   algDuration(): Cursor.Duration;
@@ -68,7 +69,11 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
   }
 
   public stateAtIndex(index: number): State<P> {
-    let state = this.puzzle.startState();
+    return this.puzzle.combine(this.puzzle.startState(), this.transformAtIndex(index)) ;
+  }
+
+  public transformAtIndex(index: number): State<P> {
+    let state = this.puzzle.identity();
     for (const move of this.moves.nestedUnits.slice(0, index)) {
       state = this.puzzle.combine(state, this.puzzle.stateFromMove(move as BlockMove));
     }
@@ -385,6 +390,10 @@ export class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<
   public stateAtIndex(index: number): State<P> {
     this.walker.moveByIndex(index);
     return this.puzzle.combine(this.puzzle.startState(), this.walker.st);
+  }
+  public transformAtIndex(index: number): State<P> {
+    this.walker.moveByIndex(index);
+    return this.walker.st;
   }
   public numMoves(): number {
     return this.decoration.moveCount;
