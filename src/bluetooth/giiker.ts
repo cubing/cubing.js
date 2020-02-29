@@ -15,10 +15,9 @@ const UUIDs = {
 // TODO: Move this into a factory?
 export const giiKERConfig: BluetoothConfig = {
   filters: [
-    { namePrefix: "GiC" },
-    { namePrefix: "GiS" },
-    { namePrefix: "GiY" },
-    { namePrefix: "Gi2" },
+    // Known prefixes: GiC, GiS (3x3x3), Gi2 (2x2x2)
+    // Suspected prefixes GiY, Gi3
+    { namePrefix: "Gi" },
     { services: ["0000aadb-0000-1000-8000-00805f9b34fb"] },
     { services: ["0000aaaa-0000-1000-8000-00805f9b34fb"] },
     { services: ["0000fe95-0000-1000-8000-00805f9b34fb"] },
@@ -97,7 +96,7 @@ function probablyEncrypted(data: Uint8Array): boolean {
   return data[18] === 0xa7;
 }
 
-const lookup = [ 176, 81, 104, 224, 86, 137, 237, 119, 38, 26, 193, 161, 210, 126, 150, 81, 93, 13, 236, 249, 89, 235, 88, 24, 113, 81, 214, 131, 130, 199, 2, 169, 39, 165, 171, 41 ];
+const lookup = [176, 81, 104, 224, 86, 137, 237, 119, 38, 26, 193, 161, 210, 126, 150, 81, 93, 13, 236, 249, 89, 235, 88, 24, 113, 81, 214, 131, 130, 199, 2, 169, 39, 165, 171, 41];
 
 function decryptState(data: Uint8Array): Uint8Array {
   const offset1 = getNibble(data, 38);
