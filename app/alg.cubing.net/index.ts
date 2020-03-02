@@ -5,6 +5,9 @@ import { App } from "./app";
 import { getURLParam } from "./url-params";
 
 window.addEventListener("load", () => {
+  if (!getURLParam("debug-js")) {
+    return;
+  }
   const appElement = document.querySelector("app")!;
   let alg: Sequence;
   try {
