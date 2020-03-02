@@ -1,0 +1,38 @@
+.spinner {
+	width: 4em;
+	height: 4em;
+	border-radius: 2.5em;
+	border: 0.5em solid rgba(0, 0, 0, 0);
+	border-top: 0.5em solid rgba(0, 0, 0, 0.7);
+	border-right: 0.5em solid rgba(0, 0, 0, 0.7);
+	animation: spinnerRotate 1s linear infinite;
+}
+
+@keyframes spinnerRotate{
+	from { transform:rotate(0deg); }
+	to { transform:rotate(360deg); }
+}
+
+/* 
+.spinner {
+	width: 8em;
+	height: 8em;
+	border-radius: 1em;
+	border: 1em solid rgba(0, 0, 0, 0.7);
+  animation: spinnerRotate 3s linear infinite;
+  animation-timing-function: ease;
+
+}
+
+@keyframes spinnerRotate{
+	0% { transform:rotate(0deg); }
+	5% { transform:rotate(0deg); }
+	20% { transform:rotate(90deg); }
+	30% { transform:rotate(90deg); }
+	45% { transform:rotate(180deg); }
+	55% { transform:rotate(180deg); }
+	70% { transform:rotate(270deg); }
+	80% { transform:rotate(270deg); }
+	95% { transform:rotate(360deg); }
+	100% { transform:rotate(360deg); }
+} */

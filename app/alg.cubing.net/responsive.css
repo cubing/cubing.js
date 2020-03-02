@@ -1,0 +1,22 @@
+
+/* Horizontal Layout (default) */
+app {
+  grid-template: "puzzle control";
+  grid-template-columns: 1fr 1fr;
+}
+
+control-pane {
+  border-left: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Vertical Layout */ 
+@media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
+  app {
+    grid-template: "puzzle" "control";
+    grid-template-columns: 1fr;
+  }
+  
+  control-pane {
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+  }
+}
