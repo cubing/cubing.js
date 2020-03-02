@@ -33,7 +33,7 @@ class DisplayablePG3D {
   }
 
   public kpuzzleDefinition(): KPuzzleDefinition {
-    const pg = getPuzzleGeometryByName(this.pg3dName as any);
+    const pg = getPuzzleGeometryByName(this.pg3dName as any, ["orientcenters", "true"]);
     const kpuzzleDef = pg.writekpuzzle();
     const worker = new KPuzzle(kpuzzleDef);
 
@@ -51,7 +51,7 @@ class DisplayablePG3D {
 
   public stickerDat(): StickerDat {
     // TODO: Remove `as` cast.
-    const pg = getPuzzleGeometryByName(this.pg3dName as any);
+    const pg = getPuzzleGeometryByName(this.pg3dName as any, ["orientcenters", "true"]);
     return pg.get3d(0.0131);
   }
 }
