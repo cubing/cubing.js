@@ -3,6 +3,7 @@ import { KPuzzleDefinition } from "../../src/kpuzzle";
 import { Twisty } from "../../src/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
+import { setURLParams } from "./url-params";
 
 export interface AppData {
   puzzle: KPuzzleDefinition;
@@ -34,6 +35,7 @@ export class App {
 
   private onAlgChange(alg: Sequence): void {
     this.twisty.experimentalSetAlg(alg);
+    setURLParams({ alg });
   }
 }
 

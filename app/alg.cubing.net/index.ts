@@ -1,12 +1,19 @@
-import { parse } from "../../src/alg/index";
+import { Sequence } from "../../src/alg";
 import { Puzzles } from "../../src/kpuzzle";
 import "../../src/twisty";
 import { App } from "./app";
+import { getURLParam } from "./url-params";
 
 window.addEventListener("load", () => {
   const appElement = document.querySelector("app")!;
+  let alg: Sequence;
+  try {
+    alg = getURLParam("alg");
+  } catch (e) {
+    alg = new Sequence([]);
+  }
   (window as any).app = new App(appElement, {
-    puzzle: Puzzles["333"],
-    alg: parse(""),
+    puzzle: Puzzles[getURLParam("puzzle")],
+    alg,
   });
 });
