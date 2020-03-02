@@ -49,13 +49,13 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
 }
 
 function getModValueForMove(move: BlockMove): number {
-  const family = move.family ;
+  const family = move.family;
   for (const axis of stickerDat.axis) {
     if (family === axis[1]) {
-       return axis[2] as number ;
+      return axis[2] as number;
     }
   }
-  return 1 ;
+  return 1;
 }
 
 function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boolean): BlockMove {
@@ -77,7 +77,7 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
         move = modifiedBlockMove(move, { innerLayer: 2 });
       }
     } else if ((event.ctrlKey || event.metaKey) && gripdepth[bestGrip]) {
-      move = modifiedBlockMove(move, { innerLayer: gripdepth[bestGrip], family: bestGrip.toLowerCase() }) ;
+      move = modifiedBlockMove(move, { innerLayer: gripdepth[bestGrip], family: bestGrip.toLowerCase() });
     }
   }
   if (getModValueForMove(move) !== 2 && !rightClick) {
@@ -87,11 +87,11 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
 }
 
 function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newStickerDat: StickerDat, savealgo: boolean): void {
-  safeKpuzzle = kpuzzledef ; // this holds the scrambled position
-  puzzle = kpuzzledef as KPuzzleDefinition ;
+  safeKpuzzle = kpuzzledef; // this holds the scrambled position
+  puzzle = kpuzzledef as KPuzzleDefinition;
   const mps = pg.movesetgeos;
   const worker = new KPuzzle(puzzle);
-  worker.setFaceNames(pg.facenames.map((_: any) => _[1])) ;
+  worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
   gripdepth = {};
   for (const mp of mps) {
     const grip1 = mp[0] as string;
@@ -129,6 +129,7 @@ function setAlgo(str: string, writeback: boolean): void {
           visualizationFormat: "PG3D",
           experimentalPG3DViewConfig: {
             stickerDat,
+            experimentalPolarVantages: true,
             sideBySide: getCheckbox("sidebyside"),
             showFoundation: getCheckbox("showfoundation"),
           },
@@ -319,7 +320,7 @@ function checkchange(): void {
         }
         scramble = 0;
         algo = "";
-        safeKpuzzle = undefined ;
+        safeKpuzzle = undefined;
         savealg = false;
       }
       const pg = new PuzzleGeometry(p[0], p[1], options);
@@ -337,11 +338,11 @@ function checkchange(): void {
       if (el) {
         el.title = text;
       }
-      let kpuzzledef: KPuzzleDefinition ;
+      let kpuzzledef: KPuzzleDefinition;
       if (renderSame && safeKpuzzle) {
-        kpuzzledef = safeKpuzzle ;
+        kpuzzledef = safeKpuzzle;
       } else {
-        kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition ;
+        kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition;
       }
       const newStickerDat = pg.get3d(0.0131);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
@@ -434,9 +435,9 @@ function onMouseMove(vantage: Vantage, event: MouseEvent): void {
   const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
   if (intersects.length > 0) {
-    canvas.title = intersects[0].object.userData.name ;
+    canvas.title = intersects[0].object.userData.name;
   } else {
-    canvas.title = "" ;
+    canvas.title = "";
   }
 }
 
@@ -448,9 +449,9 @@ function addMove(move: BlockMove): void {
   if (!twisty || puzzleSelected) {
     setAlgo(algToString(newAlg), true);
   } else {
-    lastalgo = algToString(newAlg) ;
-    twisty.experimentalAddMove(move) ;
-    algoinput.value = lastalgo ;
+    lastalgo = algToString(newAlg);
+    twisty.experimentalAddMove(move);
+    algoinput.value = lastalgo;
   }
 }
 
