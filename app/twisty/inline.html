@@ -25,6 +25,17 @@
     </p>
     <twisty puzzle="pyram" alg="R U R' U R U R'"></twisty>
     <p>
+      Square-1 parity:
+    </p>
+    <div style="display: flex; flex-direction: row; justify-content: space-around;">
+      <twisty puzzle="sq1" style="height: 400px; width: 45%; margin: 0"
+        alg="SLICE U3' SLICE D3 SLICE D3' SLICE D3 SLICE U2 SLICE D2 SLICE U2' SLICE U4 SLICE D2' SLICE D2 SLICE U1' D4 SLICE D3' SLICE D3">
+      </twisty>
+      <twisty puzzle="sq1" style="height: 400px; width: 45%; margin: 0"
+        alg="SLICE U3 D3 SLICE U1 SLICE U2' D2' SLICE U2 SLICE U2 D2 SLICE U1' SLICE U3' D3' SLICE U2' SLICE U3 D3 SLICE U3 SLICE U1' D1' SLICE U3' SLICE U1 D1 SLICE U4' D3'">
+      </twisty>
+    </div>
+    <p>
       But this should <strong>not</strong> be initialized:
     </p>
     <twisty initialization="custom"></twisty>

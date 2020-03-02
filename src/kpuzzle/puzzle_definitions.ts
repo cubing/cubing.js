@@ -1,4 +1,5 @@
 import { KPuzzleDefinition } from "./definition_types";
+import { sq1SVG } from "./definitions/svg";
 
 export const Puzzles: { [key: string]: KPuzzleDefinition } = {
   222: {
@@ -192,5 +193,28 @@ export const Puzzles: { [key: string]: KPuzzleDefinition } = {
       },
     },
     svg: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\"\n       \"http://www.w3.org/TR/2001/REC-SVG-20050904/DTD/svg11.dtd\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 490 420.69219392\" preserveAspectRatio=\"xMidYMid meet\">\n  <defs>\n  </defs>\n  <title>222</title>\n  <defs>\n    <g id=\"stickerA\" transform=\"scale(1, 0.577350269)\">\n      <path\n         d=\"m 0,1.732050808 1,-1.732050808 1,1.732050808 z\"\n         stroke=\"black\" stroke-width=\"0.04px\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"\n      />\n    </g>\n    <g id=\"stickerV\" transform=\"scale(1, 0.577350269)\">\n      <path\n         d=\"m 0,0 1,1.732050808 1,-1.732050808 z\"\n         stroke=\"black\" stroke-width=\"0.04px\" stroke-linecap=\"butt\" stroke-linejoin=\"round\"\n      />\n    </g>\n  </defs>\n\n<!--        0 1 2 3 4 5 6 7 8 9 10   -->\n<!--        | | | | | | | | | | |    -->\n<!--    0 - L L L L L F R R R R R    -->\n<!--    1 -   L L L F F F R R R      -->\n<!--    2 -     L F F F F F R        -->\n<!--    3 -       D D D D D          -->\n<!--    4 -         D D D            -->\n<!--    5 -           D              -->\n\n  <g id=\"puzzle\" transform=\"translate(5, 5) scale(40, 69.28203232)\">\n    <!-- CENTERS -->\n    <use id=\"CENTERS-l0-o0\" xlink:href=\"#stickerV\" transform=\"translate(5, 1)\" style=\"fill: yellow\"/>\n    <use id=\"CENTERS-l0-o1\" xlink:href=\"#stickerA\" transform=\"translate(3, 0)\" style=\"fill: blue\"/>\n    <use id=\"CENTERS-l0-o2\" xlink:href=\"#stickerA\" transform=\"translate(7, 0)\" style=\"fill: red\"/>\n\n    <use id=\"CENTERS-l1-o0\" xlink:href=\"#stickerV\" transform=\"translate(4, 2)\" style=\"fill: yellow\"/>\n    <use id=\"CENTERS-l1-o1\" xlink:href=\"#stickerA\" transform=\"translate(4, 3)\" style=\"fill: green\"/>\n    <use id=\"CENTERS-l1-o2\" xlink:href=\"#stickerA\" transform=\"translate(2, 1)\" style=\"fill: blue\"/>\n\n    <use id=\"CENTERS-l2-o0\" xlink:href=\"#stickerV\" transform=\"translate(6, 2)\" style=\"fill: yellow\"/>\n    <use id=\"CENTERS-l2-o1\" xlink:href=\"#stickerA\" transform=\"translate(8, 1)\" style=\"fill: red\"/>\n    <use id=\"CENTERS-l2-o2\" xlink:href=\"#stickerA\" transform=\"translate(6, 3)\" style=\"fill: green\"/>\n\n    <use id=\"CENTERS-l3-o0\" xlink:href=\"#stickerA\" transform=\"translate(9, 0)\" style=\"fill: red\"/>\n    <use id=\"CENTERS-l3-o1\" xlink:href=\"#stickerA\" transform=\"translate(1, 0)\" style=\"fill: blue\"/>\n    <use id=\"CENTERS-l3-o2\" xlink:href=\"#stickerA\" transform=\"translate(5, 4)\" style=\"fill: green\"/>\n\n    <!-- TIPS -->\n    <use id=\"TIPS-l0-o0\" xlink:href=\"#stickerA\" transform=\"translate(5, 0)\" style=\"fill: yellow\"/>\n    <use id=\"TIPS-l0-o1\" xlink:href=\"#stickerV\" transform=\"translate(4, 0)\" style=\"fill: blue\"/>\n    <use id=\"TIPS-l0-o2\" xlink:href=\"#stickerV\" transform=\"translate(6, 0)\" style=\"fill: red\"/>\n\n    <use id=\"TIPS-l1-o0\" xlink:href=\"#stickerA\" transform=\"translate(3, 2)\" style=\"fill: yellow\"/>\n    <use id=\"TIPS-l1-o1\" xlink:href=\"#stickerV\" transform=\"translate(3, 3)\" style=\"fill: green\"/>\n    <use id=\"TIPS-l1-o2\" xlink:href=\"#stickerV\" transform=\"translate(2, 2)\" style=\"fill: blue\"/>\n\n    <use id=\"TIPS-l2-o0\" xlink:href=\"#stickerV\" transform=\"translate(8, 2)\" style=\"fill: red\"/>\n    <use id=\"TIPS-l2-o1\" xlink:href=\"#stickerV\" transform=\"translate(7, 3)\" style=\"fill: green\"/>\n    <use id=\"TIPS-l2-o2\" xlink:href=\"#stickerA\" transform=\"translate(7, 2)\" style=\"fill: yellow\"/>\n\n    <use id=\"TIPS-l3-o0\" xlink:href=\"#stickerV\" transform=\"translate(10,0)\" style=\"fill: red\"/>\n    <use id=\"TIPS-l3-o1\" xlink:href=\"#stickerV\" transform=\"translate(0, 0)\" style=\"fill: blue\"/>\n    <use id=\"TIPS-l3-o2\" xlink:href=\"#stickerV\" transform=\"translate(5, 5)\" style=\"fill: green\"/>\n\n    <!-- EDGES -->\n    <use id=\"EDGES-l0-o0\" xlink:href=\"#stickerA\" transform=\"translate(4, 1)\" style=\"fill: yellow\"/>\n    <use id=\"EDGES-l0-o1\" xlink:href=\"#stickerV\" transform=\"translate(3, 1)\" style=\"fill: blue\"/>\n\n    <use id=\"EDGES-l1-o0\" xlink:href=\"#stickerA\" transform=\"translate(6, 1)\" style=\"fill: yellow\"/>\n    <use id=\"EDGES-l1-o1\" xlink:href=\"#stickerV\" transform=\"translate(7, 1)\" style=\"fill: red\"/>\n\n    <use id=\"EDGES-l2-o0\" xlink:href=\"#stickerV\" transform=\"translate(8, 0)\" style=\"fill: red\"/>\n    <use id=\"EDGES-l2-o1\" xlink:href=\"#stickerV\" transform=\"translate(2, 0)\" style=\"fill: blue\"/>\n\n    <use id=\"EDGES-l3-o0\" xlink:href=\"#stickerV\" transform=\"translate(5, 3)\" style=\"fill: green\"/>\n    <use id=\"EDGES-l3-o1\" xlink:href=\"#stickerA\" transform=\"translate(5, 2)\" style=\"fill: yellow\"/>\n\n    <use id=\"EDGES-l4-o0\" xlink:href=\"#stickerV\" transform=\"translate(6, 4)\" style=\"fill: green\"/>\n    <use id=\"EDGES-l4-o1\" xlink:href=\"#stickerV\" transform=\"translate(9, 1)\" style=\"fill: red\"/>\n\n    <use id=\"EDGES-l5-o0\" xlink:href=\"#stickerV\" transform=\"translate(4, 4)\" style=\"fill: green\"/>\n    <use id=\"EDGES-l5-o1\" xlink:href=\"#stickerV\" transform=\"translate(1, 1)\" style=\"fill: blue\"/>\n  </g>\n\n</svg>",
+  },
+  sq1: {
+    name: "sq1",
+    orbits: { WEDGE: { numPieces: 24, orientations: 2 }, EQUATOR: { numPieces: 2, orientations: 2 } },
+    startPieces: {
+      WEDGE: { permutation: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+      EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
+    },
+    moves: {
+      U: {
+        WEDGE: { permutation: [11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
+      },
+      D: {
+        WEDGE: { permutation: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 23, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22], orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
+      },
+      SLICE: {
+        WEDGE: { permutation: [0, 1, 2, 3, 4, 5, 12, 13, 14, 15, 16, 17, 6, 7, 8, 9, 10, 11, 18, 19, 20, 21, 22, 23], orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+        EQUATOR: { permutation: [0, 1], orientation: [0, 1] },
+      },
+    },
+    svg: sq1SVG,
   },
 };
