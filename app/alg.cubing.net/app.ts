@@ -141,7 +141,7 @@ class ControlPane {
     for (const puzzleName in puzzles) {
       const option = document.createElement("option");
       option.value = puzzleName;
-      option.textContent = puzzleName;
+      option.textContent = puzzles[puzzleName].displayName();
       this.puzzleSelect.appendChild(option);
       if (puzzleName === initialPuzzleName) {
         option.selected = true;
