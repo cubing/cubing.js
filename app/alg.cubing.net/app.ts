@@ -24,18 +24,25 @@ export class App {
     const twistyElem = document.createElement("twisty");
     this.twisty = new Twisty(twistyElem, {
       puzzle: initialData.puzzle,
-      alg: initialData.alg,
+      alg: new Sequence([]),
     });
+    this.setAlg(initialData.alg);
     puzzlePane.appendChild(twistyElem);
 
     const controlPaneElem = findOrCreateChild(this.element, "control-pane", "control-pane");
     controlPaneElem.classList.remove("loading");
-    this.controlPane = new ControlPane(controlPaneElem, initialData, this.onAlgChange.bind(this));
+    this.controlPane = new ControlPane(controlPaneElem, initialData, this.setAlg.bind(this));
   }
 
-  private onAlgChange(alg: Sequence): void {
-    this.twisty.experimentalSetAlg(alg);
-    setURLParams({ alg });
+  // Boolean indicates success (e.g. alg is valid).
+  private setAlg(alg: Sequence): boolean {
+    try {
+      this.twisty.experimentalSetAlg(alg);
+      setURLParams({ alg });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
 
@@ -45,7 +52,7 @@ const algElemStatusClasses: AlgElemStatusClass[] = ["status-warning", "status-ba
 
 class ControlPane {
   public algInput: HTMLTextAreaElement;
-  constructor(public element: Element, initialData: AppData, private algChangeCallback: (alg: Sequence) => void) {
+  constructor(public element: Element, initialData: AppData, private algChangeCallback: (alg: Sequence) => boolean) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
 
@@ -73,11 +80,14 @@ class ControlPane {
       if (canonicalize && !algIsCanonical) {
         this.algInput.value = restringifiedAlg;
       }
+      // Set status before passing to the `Twisty`.
       this.setAlgElemStatus(canonicalize || algIsCanonical ? null : "status-warning");
 
-      // TODO: cche last alg to avoid unnecessary updates?
+      // TODO: cache last alg to avoid unnecessary updates?
       // Or should that be in the `Twisty` layer?
-      this.algChangeCallback(parsedAlg);
+      if (!this.algChangeCallback(parsedAlg)) {
+        this.setAlgElemStatus("status-bad");
+      }
     } catch (e) {
       this.setAlgElemStatus("status-bad");
     }
