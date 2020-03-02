@@ -5,7 +5,7 @@ import { Cursor } from "./cursor";
 import { KSolvePuzzle, Puzzle } from "./puzzle";
 import { Player, PlayerConfig } from "./widget";
 
-class TwistyParams {
+export class TwistyParams {
   public alg?: Sequence;
   public puzzle?: KPuzzleDefinition;
   public playerConfig?: PlayerConfig;

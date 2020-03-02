@@ -1,5 +1,4 @@
 import { Sequence } from "../../src/alg";
-import { Puzzles } from "../../src/kpuzzle";
 import "../../src/twisty";
 import { App } from "./app";
 import { getURLParam } from "./url-params";
@@ -16,7 +15,7 @@ window.addEventListener("load", () => {
     alg = new Sequence([]);
   }
   (window as any).app = new App(appElement, {
-    puzzle: Puzzles[getURLParam("puzzle")],
+    puzzleName: getURLParam("puzzle"),
     alg,
   });
 });

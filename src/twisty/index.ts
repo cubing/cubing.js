@@ -4,5 +4,5 @@ export { TAU, Vantage } from "./3D/twisty3D";
 export { TreeAlgorithmIndexer } from "./cursor";
 export { KSolvePuzzle } from "./puzzle";
 export { toTimeline } from "./stream/timeline";
-export { Twisty } from "./twisty";
+export { Twisty, TwistyParams } from "./twisty";
 export { experimentalShowJumpingFlash } from "./widget";

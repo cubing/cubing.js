@@ -1,37 +1,60 @@
 import { algToString, parse, Sequence } from "../../src/alg";
-import { KPuzzleDefinition, Puzzles } from "../../src/kpuzzle";
-import { Twisty } from "../../src/twisty";
+import { Twisty, TwistyParams } from "../../src/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
+import { puzzles } from "./puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
 import { setURLParams } from "./url-params";
 
 export interface AppData {
-  puzzle: KPuzzleDefinition;
+  puzzleName: string;
   alg: Sequence;
 }
 
 export class App {
   public twisty: Twisty;
-  public controlPane: ControlPane; // TODO: Not public?
+  private puzzlePane: HTMLElement;
   constructor(public element: Element, initialData: AppData) {
-    const puzzlePane = findOrCreateChild(this.element, "puzzle-pane", "puzzle-pane");
-    puzzlePane.classList.remove("loading");
-    const spinner = puzzlePane.querySelector(".spinner");
+    this.puzzlePane = findOrCreateChild(this.element, "puzzle-pane", "puzzle-pane");
+    this.puzzlePane.classList.remove("loading");
+    const spinner = this.puzzlePane.querySelector(".spinner");
     if (spinner) {
-      puzzlePane.removeChild(spinner);
+      this.puzzlePane.removeChild(spinner);
     }
 
-    const twistyElem = document.createElement("twisty");
-    this.twisty = new Twisty(twistyElem, {
-      puzzle: initialData.puzzle,
-      alg: new Sequence([]),
-    });
-    this.setAlg(initialData.alg);
-    puzzlePane.appendChild(twistyElem);
+    this.initializeTwisty(initialData);
 
     const controlPaneElem = findOrCreateChild(this.element, "control-pane", "control-pane");
     controlPaneElem.classList.remove("loading");
-    this.controlPane = new ControlPane(controlPaneElem, initialData, this.setAlg.bind(this), this.setPuzzle.bind(this));
+    // tslint:disable-next-line: no-unused-expression
+    new ControlPane(controlPaneElem, initialData, this.setAlg.bind(this), this.setPuzzle.bind(this));
+  }
+
+  private initializeTwisty(initialData: AppData): void {
+    const twistyElem = document.createElement("twisty");
+    const twistyParams: TwistyParams = {
+      alg: new Sequence([]),
+    };
+    const displayablePuzzle = puzzles[initialData.puzzleName];
+    twistyParams.puzzle = displayablePuzzle.kpuzzleDefinition();
+    switch (displayablePuzzle.type) {
+      case "kpuzzle":
+        break;
+      case "pg3d":
+        // twistyParams.puzzle = displayablePuzzle.d
+        twistyParams.playerConfig = {
+          visualizationFormat: "PG3D",
+          experimentalPG3DViewConfig: {
+            stickerDat: displayablePuzzle.stickerDat(),
+            showFoundation: true,
+          },
+        };
+        break;
+      default:
+        throw new Error("Not a displayable puzzle type.");
+    }
+    this.twisty = new Twisty(twistyElem, twistyParams);
+    this.setAlg(initialData.alg);
+    this.puzzlePane.appendChild(twistyElem);
   }
 
   // Boolean indicates success (e.g. alg is valid).
@@ -69,7 +92,7 @@ class ControlPane {
     this.setAlgElemStatus(null);
 
     this.puzzleSelect = findOrCreateChildWithClass(this.element, "puzzle", "select");
-    this.initializePuzzleSelect(initialData.puzzle.name);
+    this.initializePuzzleSelect(initialData.puzzleName);
 
     this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));
     this.algInput.addEventListener("change", this.onAlgInput.bind(this, true));
@@ -115,7 +138,7 @@ class ControlPane {
 
   private initializePuzzleSelect(initialPuzzleName: string): void {
     this.puzzleSelect.textContent = "";
-    for (const puzzleName in Puzzles) {
+    for (const puzzleName in puzzles) {
       const option = document.createElement("option");
       option.value = puzzleName;
       option.textContent = puzzleName;
