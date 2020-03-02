@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Inline Test | twisty.js</title>
   <script src="../../../dist/umd/cubing.umd.js"></script>
@@ -8,50 +9,52 @@
   <link href="twisty-inline-mvld.css" rel="stylesheet" type="text/css">
   <link href="twisty-inline.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
 
-<div class="ribbon"></div>
-<div class="content">
-  <p>
-    This should be automatically initialized:
-  </p>
-  <twisty puzzle="333" alg="U R U' R' U' R U' r2' u r U r2' u' r2 U' r' U r' U2 r"></twisty>
-  <p>
-    This should be 2D:
-  </p>
-  <twisty puzzle="333" alg="R U R' U' R' F R2 U' R' U' R U R' F'" visualization="2D"></twisty>
-  <p>
-    This should be automatically initialized, too:
-  </p>
-  <twisty puzzle="pyram" alg="R U R' U R U R'"></twisty>
-  <p>
-    But this should <strong>not</strong> be initialized:
-  </p>
-  <twisty initialization="custom"></twisty>
-  <p>
-    This should become initialized via JS:
-  </p>
-  <twisty id="custom-example" initialization="custom"></twisty>
-  <script>
-    const {Twisty} = cubing.twisty;
-    const {Puzzles} = cubing.kpuzzle;
-    const {Sequence, BareBlockMove} = cubing.alg;
+  <div class="ribbon"></div>
+  <div class="content">
+    <p>
+      This should be automatically initialized:
+    </p>
+    <twisty puzzle="3x3x3" alg="U R U' R' U' R U' r2' u r U r2' u' r2 U' r' U r' U2 r"></twisty>
+    <p>
+      This should be 2D:
+    </p>
+    <twisty puzzle="3x3x3" alg="R U R' U' R' F R2 U' R' U' R U R' F'" visualization="2D"></twisty>
+    <p>
+      This should be automatically initialized, too:
+    </p>
+    <twisty puzzle="pyram" alg="R U R' U R U R'"></twisty>
+    <p>
+      But this should <strong>not</strong> be initialized:
+    </p>
+    <twisty initialization="custom"></twisty>
+    <p>
+      This should become initialized via JS:
+    </p>
+    <twisty id="custom-example" initialization="custom"></twisty>
+    <script>
+      const { Twisty } = cubing.twisty;
+      const { Puzzles } = cubing.kpuzzle;
+      const { Sequence, BareBlockMove } = cubing.alg;
 
-    var elem = document.querySelector("#custom-example");
-    var twisty = new Twisty(elem, {
-      puzzle: Puzzles["222"],
-      alg: new Sequence([
-        BareBlockMove("R", 2),
-        BareBlockMove("F", 2),
-        BareBlockMove("U", 2),
-        BareBlockMove("R", 2)
-      ])
-    });
-  </script>
-  <p>
-    Tempor tempor aliqua in commodo cillum Lorem magna dolore proident Lorem.
-  </p>
-</div>
+      var elem = document.querySelector("#custom-example");
+      var twisty = new Twisty(elem, {
+        puzzle: Puzzles["2x2x2"],
+        alg: new Sequence([
+          BareBlockMove("R", 2),
+          BareBlockMove("F", 2),
+          BareBlockMove("U", 2),
+          BareBlockMove("R", 2)
+        ])
+      });
+    </script>
+    <p>
+      Tempor tempor aliqua in commodo cillum Lorem magna dolore proident Lorem.
+    </p>
+  </div>
 
 </body>
+
 </html>

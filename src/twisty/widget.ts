@@ -1,12 +1,12 @@
-import {Vector3} from "three";
-import {algToString, BlockMove, Sequence} from "../alg";
-import {Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation} from "../kpuzzle";
-import {StickerDat} from "../puzzle-geometry";
-import {Cube3D} from "./3D/cube3D";
-import {PG3D} from "./3D/pg3D";
-import {AnimModel, CursorObserver, DirectionObserver, JumpObserver} from "./anim";
-import {Cursor} from "./cursor";
-import {Puzzle} from "./puzzle";
+import { Vector3 } from "three";
+import { algToString, BlockMove, Sequence } from "../alg";
+import { Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation } from "../kpuzzle";
+import { StickerDat } from "../puzzle-geometry";
+import { Cube3D } from "./3D/cube3D";
+import { PG3D } from "./3D/pg3D";
+import { AnimModel, CursorObserver, DirectionObserver, JumpObserver } from "./anim";
+import { Cursor } from "./cursor";
+import { Puzzle } from "./puzzle";
 
 const CAMERA_DISTANCE = 5.5;
 
@@ -89,13 +89,13 @@ export namespace Button {
     constructor(private anim: AnimModel) {
       super("Skip To Start", "skip-to-start");
     }
-    public onpress(): void {this.anim.skipToStart(); }
+    public onpress(): void { this.anim.skipToStart(); }
   }
   export class SkipToEnd extends Button {
     constructor(private anim: AnimModel) {
       super("Skip To End", "skip-to-end");
     }
-    public onpress(): void {this.anim.skipToEnd(); }
+    public onpress(): void { this.anim.skipToEnd(); }
   }
   export class PlayPause extends Button implements DirectionObserver {
     constructor(private anim: AnimModel) {
@@ -121,13 +121,13 @@ export namespace Button {
     constructor(private anim: AnimModel) {
       super("Step forward", "step-forward");
     }
-    public onpress(): void {this.anim.stepForward(); }
+    public onpress(): void { this.anim.stepForward(); }
   }
   export class StepBackward extends Button {
     constructor(private anim: AnimModel) {
       super("Step backward", "step-backward");
     }
-    public onpress(): void {this.anim.stepBackward(); }
+    public onpress(): void { this.anim.stepBackward(); }
   }
 }
 
@@ -309,7 +309,7 @@ export class Cube3DView implements CursorObserver, JumpObserver {
     wrapper.classList.add("back");
     this.element.appendChild(wrapper);
     setTimeout(() => {
-      this.cube3D.newVantage(wrapper, {position: new Vector3(-1.25, -2.5, -2.5)});
+      this.cube3D.newVantage(wrapper, { position: new Vector3(-1.25, -2.5, -2.5) });
     }, 0);
   }
 
@@ -338,8 +338,7 @@ interface PG3DViewConfig {
 export class PG3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private pg3D: PG3D;
-  constructor(private anim: AnimModel, private definition: KPuzzleDefinition,
-              private config: PG3DViewConfig) {
+  constructor(private anim: AnimModel, private definition: KPuzzleDefinition, private config: PG3DViewConfig) {
     this.element = document.createElement("cube3d-view");
     if (this.config.sideBySide ?? false) {
       this.element.classList.add("side-by-side");
@@ -353,7 +352,7 @@ export class PG3DView implements CursorObserver, JumpObserver {
     this.pg3D = new PG3D(this.definition, this.config.stickerDat, this.config.showFoundation ?? false); // TODO: Dynamic puzzle
 
     setTimeout(() => {
-      this.pg3D.newVantage(wrapper, {position: new Vector3(0, 0, -CAMERA_DISTANCE), shift: this.config.sideBySide ? -1 : 0});
+      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, -CAMERA_DISTANCE), shift: this.config.sideBySide ? -1 : 0 });
     }, 0);
 
     this.createBackViewForTesting();
@@ -381,7 +380,7 @@ export class PG3DView implements CursorObserver, JumpObserver {
     wrapper.classList.add("back");
     this.element.appendChild(wrapper);
     setTimeout(() => {
-      this.pg3D.newVantage(wrapper, {position: new Vector3(0, 0, CAMERA_DISTANCE), shift: this.config.sideBySide ? 1 : 0});
+      this.pg3D.newVantage(wrapper, { position: new Vector3(0, 0, CAMERA_DISTANCE), shift: this.config.sideBySide ? 1 : 0 });
     }, 0);
   }
 }
@@ -404,14 +403,14 @@ export class Player {
     if (this.config.visualizationFormat === "PG3D") {
       this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DViewConfig!)).element);
     } else if (this.config.visualizationFormat === "3D") {
-      if (definition.name === "333") {
+      if (definition.name === "3x3x3") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
       } else {
         console.warn(`3D visualization specified for unsupported puzzle: ${definition.name}. Falling back to 2D.`);
         this.element.appendChild((new KSolveView(this.anim, definition)).element);
       }
     } else {
-      if (!this.config.visualizationFormat && definition.name === "333") {
+      if (!this.config.visualizationFormat && definition.name === "3x3x3") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
       } else {
         this.element.appendChild((new KSolveView(this.anim, definition)).element);

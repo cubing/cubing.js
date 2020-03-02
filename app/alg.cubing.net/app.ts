@@ -2,7 +2,6 @@ import { algToString, parse, Sequence } from "../../src/alg";
 import { KPuzzleDefinition, Puzzles } from "../../src/kpuzzle";
 import { Twisty } from "../../src/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
-import { kPuzzleToAcnName } from "./puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
 import { setURLParams } from "./url-params";
 
@@ -119,7 +118,7 @@ class ControlPane {
     for (const puzzleName in Puzzles) {
       const option = document.createElement("option");
       option.value = puzzleName;
-      option.textContent = kPuzzleToAcnName(puzzleName);
+      option.textContent = puzzleName;
       this.puzzleSelect.appendChild(option);
       if (puzzleName === initialPuzzleName) {
         option.selected = true;

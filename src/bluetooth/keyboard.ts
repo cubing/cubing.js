@@ -2,7 +2,7 @@ import { keyToMove } from "../alg";
 import { KPuzzle, Puzzles } from "../kpuzzle";
 import { BluetoothPuzzle, PuzzleState } from "./bluetooth-puzzle";
 
-const def = Puzzles["333"];
+const def = Puzzles["3x3x3"];
 
 export class KeyboardPuzzle extends BluetoothPuzzle {
   public puzzle: KPuzzle = new KPuzzle(def);

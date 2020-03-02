@@ -18,10 +18,10 @@ export class Twisty {
   private cursor: Cursor<Puzzle>;
   private puzzleDef: KPuzzleDefinition; // TODO: Replace this with a Puzzle instance.
   private player: Player;
-  private coalesceModFunc: (mv: BlockMove) => number ;
+  private coalesceModFunc: (mv: BlockMove) => number;
   constructor(public element: Element, config: TwistyParams = {}) {
     this.alg = config.alg || Example.Niklas;
-    this.puzzleDef = config.puzzle || Puzzles["333"];
+    this.puzzleDef = config.puzzle || Puzzles["3x3x3"];
     this.cursor = new Cursor(this.alg, new KSolvePuzzle(this.puzzleDef));
     // this.timeline = new Timeline(Example.HeadlightSwaps);
     this.anim = new AnimModel(this.cursor);
@@ -33,7 +33,7 @@ export class Twisty {
 
   // Set the callback function to get the modulo for coalescing from a BlockMove.
   public setCoalesceModFunc(f: (mv: BlockMove) => number): void {
-    this.coalesceModFunc = f ;
+    this.coalesceModFunc = f;
   }
 
   // Plays the full final move if there is one.

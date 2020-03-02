@@ -209,8 +209,8 @@ const faceOrder = "URFDLB";
 function getMacAddress(name: string): Uint8Array {
   const macAddress = new Uint8Array([0x4c, 0x24, 0x98, 0x00, 0x00, 0x00]);
   if (name.length !== 10 || !name.startsWith("GAN-")) {
-      console.warn("Unexpected puzzle name.");
-    }
+    console.warn("Unexpected puzzle name.");
+  }
   macAddress[3] = parseInt(name.slice(4, 6), 16);
   macAddress[4] = parseInt(name.slice(6, 8), 16);
   macAddress[5] = parseInt(name.slice(8, 10), 16);
@@ -236,7 +236,7 @@ export class GanCube extends BluetoothPuzzle {
 
   public INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
   private intervalHandle: number | null = null;
-  private kpuzzle: KPuzzle = new KPuzzle(Puzzles["333"]);
+  private kpuzzle: KPuzzle = new KPuzzle(Puzzles["3x3x3"]);
   private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
   private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
   private cachedActualAngleAndBatteryCharacteristic: Promise<BluetoothRemoteGATTCharacteristic>;

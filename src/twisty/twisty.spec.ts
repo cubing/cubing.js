@@ -3,7 +3,7 @@ import { Cursor } from "./cursor";
 
 // describe("applyBlockMove()", () => {
 //   it("should be able to apply a block move", () => {
-//     const p = new KPuzzle(Puzzles["333"]);
+//     const p = new KPuzzle(Puzzles["3x3x3"]);
 //     p.applyBlockMove(new BlockMove("R", 6));
 //     expect(p.serialize()).to.equal("CORNERS\n7 1 2 4 3 5 6 0\n0 0 0 0 0 0 0 0\nEDGES\n0 1 2 11 7 5 6 4 8 9 10 3\n0 0 0 0 0 0 0 0 0 0 0 0");
 //   });
@@ -100,7 +100,7 @@ describe("Durations", () => {
 
 // (function TestCursorValues() {
 
-//   var puz = Twisty.KSolvePuzzle.fromID("333");
+//   var puz = Twisty.KSolvePuzzle.fromID("3x3x3");
 //   var a = new Alg.Sequence([
 //     new Alg.Conjugate(
 //       new Alg.BlockMove("R", 1),

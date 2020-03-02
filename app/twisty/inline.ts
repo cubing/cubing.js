@@ -7,7 +7,7 @@ window.addEventListener("load", () => {
   const elem = document.querySelector("#custom-example")!;
   // tslint:disable-next-line: no-unused-expression
   new Twisty(elem, {
-    puzzle: Puzzles["222"],
+    puzzle: Puzzles["2x2x2"],
     alg: new Sequence([
       BareBlockMove("R", 2),
       BareBlockMove("F", 2),

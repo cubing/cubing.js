@@ -169,7 +169,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
       this.options[key as OptionKey] = (key in options) ? (options as any)[key] : (cube3DOptionsDefaults as any)[key];
     }
 
-    if (def.name !== "333") {
+    if (def.name !== "3x3x3") {
       throw new Error("Invalid puzzle for this Cube3D implementation.");
     }
     for (const orbit in pieceDefs) {
@@ -219,8 +219,8 @@ export class Cube3D extends Twisty3D<Puzzle> {
         const turnNormal = axesInfo[familyToAxis[blockMove.family]].vector;
         const moveMatrix = new Matrix4().makeRotationAxis(turnNormal, - this.ease(moveProgress.fraction) * moveProgress.direction * blockMove.amount * TAU / 4);
         for (let i = 0; i < pieces.length; i++) {
-          const k = Puzzles["333"].moves[blockMove.family][orbit].permutation[i];
-          if (i !== k || Puzzles["333"].moves[blockMove.family][orbit].orientation[i] !== 0) {
+          const k = Puzzles["3x3x3"].moves[blockMove.family][orbit].permutation[i];
+          if (i !== k || Puzzles["3x3x3"].moves[blockMove.family][orbit].orientation[i] !== 0) {
             const j = reid333[orbit].permutation[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);
           }

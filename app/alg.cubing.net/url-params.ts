@@ -1,11 +1,10 @@
 import { deserializeURLParam, Sequence, serializeURLParam } from "../../src/alg";
-import { acnToKPuzzleName, KPuzzleName, kPuzzleToAcnName } from "./puzzles";
 
 // TODO: implement URL listener.
 
 export interface PartialURLParamValues {
   alg?: Sequence;
-  puzzle?: KPuzzleName;
+  puzzle?: string;
   "debug-js"?: boolean;
 }
 export type ParamName = keyof typeof paramDefaults;
@@ -18,7 +17,7 @@ interface CompleteURLParamValues extends PartialURLParamValues {
 
 const paramDefaults: CompleteURLParamValues = {
   "alg": new Sequence([]),
-  "puzzle": "333",
+  "puzzle": "3x3x3",
   "debug-js": true,
 };
 
@@ -40,7 +39,7 @@ export function getURLParam<K extends ParamName>(paramName: K): CompleteURLParam
       return deserializeURLParam(str) as CompleteURLParamValues[K];
     case "puzzle":
       // TODO: can we avoid the `as` cast?
-      return acnToKPuzzleName(str) as CompleteURLParamValues[K];
+      return str as CompleteURLParamValues[K];
     case "debug-js":
       // TODO: can we avoid the `as` cast?
       return (str !== "false" as unknown) as CompleteURLParamValues[K];
@@ -68,7 +67,7 @@ export function setURLParams(newParams: PartialURLParamValues): void {
         setParam(key, serializeURLParam(value));
         break;
       case "puzzle":
-        setParam(key, kPuzzleToAcnName(value));
+        setParam(key, value);
         break;
       case "debug-js":
         setParam(key, value.toString());
