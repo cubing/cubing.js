@@ -15,6 +15,7 @@ window.addEventListener("load", () => {
   } catch (e) {
     alg = new Sequence([]);
   }
+  console.log(getURLParam("puzzle"));
   (window as any).app = new App(appElement, {
     puzzle: Puzzles[getURLParam("puzzle")],
     alg,

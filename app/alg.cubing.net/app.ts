@@ -1,7 +1,8 @@
 import { algToString, parse, Sequence } from "../../src/alg";
-import { KPuzzleDefinition } from "../../src/kpuzzle";
+import { KPuzzleDefinition, Puzzles } from "../../src/kpuzzle";
 import { Twisty } from "../../src/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
+import { kPuzzleToAcnName } from "./puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
 import { setURLParams } from "./url-params";
 
@@ -31,7 +32,7 @@ export class App {
 
     const controlPaneElem = findOrCreateChild(this.element, "control-pane", "control-pane");
     controlPaneElem.classList.remove("loading");
-    this.controlPane = new ControlPane(controlPaneElem, initialData, this.setAlg.bind(this));
+    this.controlPane = new ControlPane(controlPaneElem, initialData, this.setAlg.bind(this), this.setPuzzle.bind(this));
   }
 
   // Boolean indicates success (e.g. alg is valid).
@@ -44,6 +45,12 @@ export class App {
       return false;
     }
   }
+
+  private setPuzzle(puzzleName: string): boolean {
+    setURLParams({ puzzle: puzzleName });
+    location.reload();
+    return true;
+  }
 }
 
 // TODO: Generate type from list.
@@ -52,7 +59,8 @@ const algElemStatusClasses: AlgElemStatusClass[] = ["status-warning", "status-ba
 
 class ControlPane {
   public algInput: HTMLTextAreaElement;
-  constructor(public element: Element, initialData: AppData, private algChangeCallback: (alg: Sequence) => boolean) {
+  public puzzleSelect: HTMLSelectElement;
+  constructor(public element: Element, initialData: AppData, private algChangeCallback: (alg: Sequence) => boolean, private setPuzzleCallback: (puzzleName: string) => boolean) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
 
@@ -60,7 +68,9 @@ class ControlPane {
     this.algInput.placeholder = ALG_INPUT_PLACEHOLDER;
     this.algInput.value = algToString(initialData.alg);
     this.setAlgElemStatus(null);
-    this.element.appendChild(this.algInput);
+
+    this.puzzleSelect = findOrCreateChildWithClass(this.element, "puzzle", "select");
+    this.initializePuzzleSelect(initialData.puzzle.name);
 
     this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));
     this.algInput.addEventListener("change", this.onAlgInput.bind(this, true));
@@ -102,5 +112,24 @@ class ControlPane {
         this.algInput.classList.remove(statusClass);
       }
     }
+  }
+
+  private initializePuzzleSelect(initialPuzzleName: string): void {
+    this.puzzleSelect.textContent = "";
+    for (const puzzleName in Puzzles) {
+      const option = document.createElement("option");
+      option.value = puzzleName;
+      option.textContent = kPuzzleToAcnName(puzzleName);
+      this.puzzleSelect.appendChild(option);
+      if (puzzleName === initialPuzzleName) {
+        option.selected = true;
+      }
+    }
+    this.puzzleSelect.addEventListener("change", this.puzzleSelectChanged.bind(this));
+  }
+
+  private puzzleSelectChanged(): void {
+    const option = this.puzzleSelect.selectedOptions[0];
+    this.setPuzzleCallback(option.value);
   }
 }

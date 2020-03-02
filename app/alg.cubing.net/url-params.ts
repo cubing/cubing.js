@@ -1,20 +1,7 @@
 import { deserializeURLParam, Sequence, serializeURLParam } from "../../src/alg";
-import { Puzzles } from "../../src/kpuzzle";
+import { acnToKPuzzleName, KPuzzleName, kPuzzleToAcnName } from "./puzzles";
 
 // TODO: implement URL listener.
-
-type KPuzzleName = keyof typeof Puzzles;
-
-const acnToKPuzzleNameMap: { [s: string]: KPuzzleName } = {
-  "3x3x3": "333",
-  "2x2x2": "222",
-};
-
-// TODO: stricter key type.
-const kPuzzleToAcnNameMap: { [s: string]: string } = {};
-for (const [key, value] of Object.entries(acnToKPuzzleNameMap)) {
-  kPuzzleToAcnNameMap[value] = key;
-}
 
 export interface PartialURLParamValues {
   alg?: Sequence;
@@ -38,7 +25,7 @@ const paramDefaults: CompleteURLParamValues = {
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
   "alg": "",
-  "puzzle": "333",
+  "puzzle": "3x3x3",
   "debug-js": "true",
 };
 
@@ -53,7 +40,7 @@ export function getURLParam<K extends ParamName>(paramName: K): CompleteURLParam
       return deserializeURLParam(str) as CompleteURLParamValues[K];
     case "puzzle":
       // TODO: can we avoid the `as` cast?
-      return (acnToKPuzzleNameMap[str] ?? str) as CompleteURLParamValues[K];
+      return acnToKPuzzleName(str) as CompleteURLParamValues[K];
     case "debug-js":
       // TODO: can we avoid the `as` cast?
       return (str !== "false" as unknown) as CompleteURLParamValues[K];
@@ -81,7 +68,7 @@ export function setURLParams(newParams: PartialURLParamValues): void {
         setParam(key, serializeURLParam(value));
         break;
       case "puzzle":
-        setParam(key, (kPuzzleToAcnNameMap[value] ?? value));
+        setParam(key, kPuzzleToAcnName(value));
         break;
       case "debug-js":
         setParam(key, value.toString());

@@ -13,7 +13,6 @@ control-pane.loading {
 
 control-pane .title {
   font-size: 2em;
-  margin-bottom: 0.5em;
   font-weight: bold;
 }
 
@@ -21,6 +20,7 @@ control-pane textarea {
   width: 100%;
   font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
   font-size: 1.5rem;
+  margin-top: 0.5em;
   padding: 0.25em;
   background: rgb(255, 253, 251);
   border: 1px solid rgba(0, 0, 0, 0.25);
@@ -36,4 +36,12 @@ control-pane textarea.status-warning {
 control-pane textarea.status-bad {
   background: rgba(255, 0, 0, 0.2);
   border: 1px solid rgba(255, 0, 0, 0.5)
+}
+
+control-pane select.puzzle {
+  font-size: 1.5em;
+  background: rgba(255, 250, 245, 1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin-top: 0.5em;
+  padding: 8px;
 }
