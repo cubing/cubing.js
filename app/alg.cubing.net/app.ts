@@ -44,6 +44,7 @@ export class App {
         twistyParams.playerConfig = {
           visualizationFormat: "PG3D",
           experimentalPG3DViewConfig: {
+            experimentalPolarVantages: displayablePuzzle.polarVantages,
             stickerDat: displayablePuzzle.stickerDat(),
             showFoundation: true,
           },

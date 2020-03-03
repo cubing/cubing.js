@@ -1,6 +1,6 @@
-import { KPuzzle, KPuzzleDefinition, Puzzles } from "../../src/kpuzzle";
-import { getPuzzleGeometryByName, StickerDat } from "../../src/puzzle-geometry";
-import { PuzzleName } from "../../src/puzzle-geometry/Puzzles";
+import { KPuzzle, KPuzzleDefinition, Puzzles as KPuzzles } from "../../src/kpuzzle";
+import { getPuzzleGeometryByDesc, getPuzzleGeometryByName, StickerDat } from "../../src/puzzle-geometry";
+import { PuzzleName, Puzzles as PGPuzzles } from "../../src/puzzle-geometry/Puzzles";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";
@@ -8,7 +8,7 @@ class DisplayableKPuzzle {
   constructor(private kpuzzleName: string) { }
 
   public displayName(): string {
-    return Puzzles[this.kpuzzleName].name;
+    return KPuzzles[this.kpuzzleName].name;
   }
 
   public puzzleName(): string {
@@ -16,24 +16,24 @@ class DisplayableKPuzzle {
   }
 
   public kpuzzleDefinition(): KPuzzleDefinition {
-    return Puzzles[this.kpuzzleName];
+    return KPuzzles[this.kpuzzleName];
   }
 }
 
 class DisplayablePG3D {
   public type: "pg3d" = "pg3d";
-  constructor(private displayNameStr: string, private pg3dName: PuzzleName) { }
+  constructor(private displayNameStr: string, private name: PuzzleName, private desc: string, public polarVantages: boolean) { }
 
   public displayName(): string {
     return this.displayNameStr;
   }
 
   public puzzleName(): string {
-    return this.pg3dName as string;
+    return this.name as string;
   }
 
   public kpuzzleDefinition(): KPuzzleDefinition {
-    const pg = getPuzzleGeometryByName(this.pg3dName as any, ["orientcenters", "true"]);
+    const pg = getPuzzleGeometryByDesc(this.desc, ["orientcenters", "true"]);
     const kpuzzleDef = pg.writekpuzzle();
     const worker = new KPuzzle(kpuzzleDef);
 
@@ -51,7 +51,7 @@ class DisplayablePG3D {
 
   public stickerDat(): StickerDat {
     // TODO: Remove `as` cast.
-    const pg = getPuzzleGeometryByName(this.pg3dName as any, ["orientcenters", "true"]);
+    const pg = getPuzzleGeometryByDesc(this.desc, ["orientcenters", "true"]);
     return pg.get3d(0.0131);
   }
 }
@@ -59,10 +59,10 @@ class DisplayablePG3D {
 export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 
 const puzzles: { [s: string]: DisplayablePuzzle } = {};
-for (const key in Puzzles) {
+for (const key in KPuzzles) {
   puzzles[key as any] = new DisplayableKPuzzle(key);
 }
-puzzles.megaminx = new DisplayablePG3D("Megaminx", "megaminx");
-puzzles.megaminx = new DisplayablePG3D("FTO", "FTO");
+puzzles.megaminx = new DisplayablePG3D("Megaminx", "megaminx", PGPuzzles.megaminx, false);
+puzzles.fto = new DisplayablePG3D("FTO", "FTO", "o f 0.333333333333333 v -2", true);
 
 export { puzzles };
