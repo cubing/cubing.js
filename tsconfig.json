@@ -6,7 +6,10 @@
     "declarationMap": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -14,7 +17,8 @@
     "outDir": "dist",
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "es6"
+    "target": "es6",
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*",
