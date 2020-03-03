@@ -1,1 +1,0 @@
-{"version":3,"file":"structure-equals.d.ts","sourceRoot":"","sources":["structure-equals.ts"],"names":[],"mappings":";AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,cAAc,CAAC;AAYxC,OAAO,CAAC,MAAM,CAAC;IACb,UAAU,IAAI,CAAC;QACb,UAAU,QAAQ,CAAC,CAAC,EAAE,CAAC;YACrB,gBAAgB,CAAC,QAAQ,EAAE,QAAQ,GAAG,mBAAmB,CAAC;SAC3D;KACF;CACF;AAGD,OAAO,EAAG,CAAC"}

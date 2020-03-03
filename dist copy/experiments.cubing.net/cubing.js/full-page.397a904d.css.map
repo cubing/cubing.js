@@ -1,1 +1,0 @@
-{"version":3,"sources":["full-page.css"],"names":[],"mappings":"AAAA,UACE,UAAW,CACX,WAAY,CACZ,QAAS,CACT,SACF","file":"full-page.397a904d.css","sourceRoot":"../../../app","sourcesContent":["html, body {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\n"]}

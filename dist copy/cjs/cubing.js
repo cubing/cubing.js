@@ -1,2 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("./index-3df29a49.js"),r=require("./index-25757155.js");require("three");var i=require("./index-3d2ac941.js");require("fs");var s=require("./index-9e066b27.js"),t=require("./index-7e411523.js");exports.alg=e.index,exports.bluetooth=r.index,exports.kpuzzle=i.index,exports.puzzleGeometry=s.index,exports.twisty=t.index;
-//# sourceMappingURL=cubing.js.map

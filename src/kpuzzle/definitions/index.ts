@@ -17,9 +17,9 @@ import cube333JSON from "./3x3x3.kpuzzle.json";
 export const Cube333: KPuzzleDefinition = cube333JSON;
 Cube333.svg = readFileSync(__dirname + "/svg/3x3x3.kpuzzle.svg", "utf-8");
 
-import PyraminxJSON from "./pyram.kpuzzle.json";
+import PyraminxJSON from "./pyraminx.kpuzzle.json";
 export const Pyraminx: KPuzzleDefinition = PyraminxJSON;
-Pyraminx.svg = readFileSync(__dirname + "/svg/pyram.kpuzzle.svg", "utf-8");
+Pyraminx.svg = readFileSync(__dirname + "/svg/pyraminx.kpuzzle.svg", "utf-8");
 
 import square1JSON from "./sq1-hyperorbit.kpuzzle.json";
 export const Square1: KPuzzleDefinition = square1JSON;

@@ -1,1 +1,0 @@
-{"version":3,"sources":["twisty/full-page.css"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA","file":"full-page.28ed0514.css","sourceRoot":"../../app","sourcesContent":["html, body {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\n"]}

@@ -61,7 +61,7 @@ export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 const puzzles: { [s: string]: DisplayablePuzzle } = {};
 const displayNames: { [s: string]: string } = {
   sq1: "Square-1",
-  pyram: "Pyraminx",
+  pyraminx: "Pyraminx",
 };
 for (const key in Puzzles) {
   puzzles[key as any] = new DisplayableKPuzzle(displayNames[key] ?? key, key);
