@@ -5,10 +5,10 @@ import { PuzzleName } from "../../src/puzzle-geometry/Puzzles";
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";
   // TODO: push display name into the KSolve defition.
-  constructor(private displayNameStr: string, private kpuzzleName: string) { }
+  constructor(private kpuzzleName: string) { }
 
   public displayName(): string {
-    return this.displayNameStr;
+    return Puzzles[this.kpuzzleName].name;
   }
 
   public puzzleName(): string {
@@ -59,12 +59,8 @@ class DisplayablePG3D {
 export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 
 const puzzles: { [s: string]: DisplayablePuzzle } = {};
-const displayNames: { [s: string]: string } = {
-  sq1: "Square-1",
-  pyraminx: "Pyraminx",
-};
 for (const key in Puzzles) {
-  puzzles[key as any] = new DisplayableKPuzzle(displayNames[key] ?? key, key);
+  puzzles[key as any] = new DisplayableKPuzzle(key);
 }
 puzzles.megaminx = new DisplayablePG3D("Megaminx", "megaminx");
 

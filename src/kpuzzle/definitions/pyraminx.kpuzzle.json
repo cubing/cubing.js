@@ -1,5 +1,5 @@
 {
-  "name": "pyraminx",
+  "name": "Pyraminx",
   "orbits": {
     "CENTERS": { "numPieces": 4, "orientations": 3 },
     "TIPS": { "numPieces": 4, "orientations": 3 },
