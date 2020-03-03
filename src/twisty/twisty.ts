@@ -13,21 +13,24 @@ export class TwistyParams {
 
 // TODO: Turn Twisty into a module and move Twisty.Twisty into Twisty proper.
 export class Twisty {
+  // tslint:disable-next-line: member-access // TODO: Remove once we have a linter that understands private fields.
+  #anim: AnimModel;
+  // tslint:disable-next-line: member-access // TODO: Remove once we have a linter that understands private fields.
+  #cursor: Cursor<Puzzle>;
+  // tslint:disable-next-line: member-access // TODO: Remove once we have a linter that understands private fields.
+  #player: Player;
   private alg: Sequence;
-  private anim: AnimModel;
-  private cursor: Cursor<Puzzle>;
   private puzzleDef: KPuzzleDefinition; // TODO: Replace this with a Puzzle instance.
-  private player: Player;
   private coalesceModFunc: (mv: BlockMove) => number;
   constructor(public element: Element, config: TwistyParams = {}) {
     this.alg = config.alg || Example.Niklas;
     this.puzzleDef = config.puzzle || Puzzles["3x3x3"];
-    this.cursor = new Cursor(this.alg, new KSolvePuzzle(this.puzzleDef));
+    this.#cursor = new Cursor(this.alg, new KSolvePuzzle(this.puzzleDef));
     // this.timeline = new Timeline(Example.HeadlightSwaps);
-    this.anim = new AnimModel(this.cursor);
+    this.#anim = new AnimModel(this.#cursor);
 
-    this.player = new Player(this.anim, this.puzzleDef, config.playerConfig);
-    this.element.appendChild((this.player).element);
+    this.#player = new Player(this.#anim, this.puzzleDef, config.playerConfig);
+    this.element.appendChild((this.#player).element);
     this.coalesceModFunc = (mv) => 0;
   }
 
@@ -38,27 +41,27 @@ export class Twisty {
 
   // Plays the full final move if there is one.
   public experimentalSetAlg(alg: Sequence, allowAnimation: boolean = false): void {
-    this.cursor.experimentalSetMoves(alg);
-    this.anim.skipToStart();
+    this.#cursor.experimentalSetMoves(alg);
+    this.#anim.skipToStart();
     this.alg = alg;
-    this.anim.skipToEnd();
-    this.player.updateFromAnim();
-    if (allowAnimation && this.anim.cursor.currentTimestamp() > 0) {
+    this.#anim.skipToEnd();
+    this.#player.updateFromAnim();
+    if (allowAnimation && this.#anim.cursor.currentTimestamp() > 0) {
       // TODO: This is a hack.
-      this.cursor.backward(0.01, false); // TODO: Give this API to `Cursor`/`AnimModel`.
-      this.cursor.backward(100000, true); // TODO: Give this API to `Cursor`/`AnimModel`.
-      this.anim.stepForward();
+      this.#cursor.backward(0.01, false); // TODO: Give this API to `Cursor`/`AnimModel`.
+      this.#cursor.backward(100000, true); // TODO: Give this API to `Cursor`/`AnimModel`.
+      this.#anim.stepForward();
     }
   }
   // We append a move as normal, except we animate *just* the last move *even* if
   // the last move was merged with a previous one.
   public experimentalSetAlgAnimateBlockMove(alg: Sequence, move: BlockMove): void {
-    this.anim.skipToStart();
+    this.#anim.skipToStart();
     this.alg = alg;
-    this.anim.skipToEnd();
-    this.cursor.experimentalUpdateAlgAnimate(alg, move);
-    this.player.updateFromAnim();
-    this.anim.stepForward();
+    this.#anim.skipToEnd();
+    this.#cursor.experimentalUpdateAlgAnimate(alg, move);
+    this.#player.updateFromAnim();
+    this.#anim.stepForward();
   }
 
   public experimentalAddMove(move: BlockMove): void {
@@ -68,15 +71,15 @@ export class Twisty {
   }
 
   public experimentalGetAnim(): AnimModel {
-    return this.anim;
+    return this.#anim;
   }
 
   public experimentalGetPlayer(): Player {
-    return this.player;
+    return this.#player;
   }
 
   public experimentalGetCursor(): Cursor<Puzzle> {
-    return this.cursor;
+    return this.#cursor;
   }
 }
 
