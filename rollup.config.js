@@ -5,6 +5,7 @@ import { terser } from "rollup-plugin-terser";
 import tslint from "rollup-plugin-tslint";
 import typescript2 from "rollup-plugin-typescript2";
 import * as typescript from "typescript";
+import json from '@rollup/plugin-json';
 
 const plugins = [
   pegjs(),
@@ -21,6 +22,7 @@ const plugins = [
   notify({
     success: true,
   }),
+  json(),
 ];
 
 if (!process.env.ROLLUP_WATCH) {
