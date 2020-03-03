@@ -63,5 +63,6 @@ for (const key in Puzzles) {
   puzzles[key as any] = new DisplayableKPuzzle(key);
 }
 puzzles.megaminx = new DisplayablePG3D("Megaminx", "megaminx");
+puzzles.megaminx = new DisplayablePG3D("FTO", "FTO");
 
 export { puzzles };
