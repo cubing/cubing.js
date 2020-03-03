@@ -83,9 +83,9 @@ const defaultnets: any = {
   8: // eight faces: octahedron
     [
       ["F", "D", "L", "R"],
-      ["D", "F", "N", ""],
-      ["N", "D", "", "B"],
-      ["B", "N", "U", "M"],
+      ["D", "F", "BR", ""],
+      ["BR", "D", "", "BB"],
+      ["BB", "BR", "U", "BL"],
     ],
   12: // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
     [
@@ -119,7 +119,7 @@ const defaultcolors: any = {
   },
   8: {
     U: "#e085b9", F: "#080d99", R: "#c1e35c", D: "#22955e",
-    B: "#9121ab", L: "#b27814", M: "#0d35ad", N: "#eb126b",
+    BB: "#9121ab", L: "#b27814", BL: "#0d35ad", BR: "#eb126b",
   },
   12: {
     U: "#ffffff", F: "#006633", R: "#ff0000", C: "#ffffd0",
@@ -142,7 +142,7 @@ const defaultcolors: any = {
 const defaultfaceorders: any = {
   4: ["F", "D", "L", "R"],
   6: ["U", "D", "F", "B", "L", "R"],
-  8: ["F", "B", "D", "U", "N", "L", "R", "M"],
+  8: ["F", "BB", "D", "U", "BR", "L", "R", "BL"],
   12: ["L", "E", "F", "BF", "R", "I",
     "U", "D", "BR", "A", "BL", "C"],
   20: ["L", "S", "E", "O", "F", "B", "I", "P", "R", "K",
