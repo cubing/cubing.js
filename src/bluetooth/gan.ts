@@ -29,15 +29,6 @@ const ganMoveToBlockMove: { [i: number]: BlockMove } = {
 
 let homeQuatInverse: Quaternion | null = null;
 
-let swap = (x: number, y: number, z: number) => {
-  return [-y, z, -x];
-};
-
-(window as any).setSwap = (fn: any) => {
-  swap = fn;
-  homeQuatInverse = null;
-};
-
 function probablyDecodedCorrectly(data: Uint8Array): boolean {
   return data[13] < 0x12 && data[14] < 0x12 && data[15] < 0x12 && data[16] < 0x12 && data[17] < 0x12 && data[18] < 0x12;
 }
@@ -95,7 +86,7 @@ class PhysicalState {
     let x = this.dataView.getInt16(0, true) / 16384;
     let y = this.dataView.getInt16(2, true) / 16384;
     let z = this.dataView.getInt16(4, true) / 16384;
-    [x, y, z] = swap(x, y, z);
+    [x, y, z] = [-y, z, -x];
     const wSquared = 1 - (x * x + y * y + z * z);
     const w = wSquared > 0 ? Math.sqrt(wSquared) : 0;
     const quat = new Quaternion(x, y, z, w);
