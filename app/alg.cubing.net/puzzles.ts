@@ -1,5 +1,5 @@
 import { KPuzzle, KPuzzleDefinition, Puzzles as KPuzzles } from "../../src/kpuzzle";
-import { getPuzzleGeometryByDesc, getPuzzleGeometryByName, StickerDat } from "../../src/puzzle-geometry";
+import { getPuzzleGeometryByDesc, StickerDat } from "../../src/puzzle-geometry";
 import { PuzzleName, Puzzles as PGPuzzles } from "../../src/puzzle-geometry/Puzzles";
 
 class DisplayableKPuzzle {

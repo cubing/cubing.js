@@ -5,7 +5,7 @@ import { terser } from "rollup-plugin-terser";
 import tslint from "rollup-plugin-tslint";
 import typescript2 from "rollup-plugin-typescript2";
 import * as typescript from "typescript";
-import json from '@rollup/plugin-json';
+import json from "@rollup/plugin-json";
 
 const plugins = [
   pegjs(),
