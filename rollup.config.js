@@ -6,6 +6,7 @@ import tslint from "rollup-plugin-tslint";
 import typescript2 from "rollup-plugin-typescript2";
 import * as typescript from "typescript";
 import json from "@rollup/plugin-json";
+import copy from "rollup-plugin-copy";
 
 const plugins = [
   pegjs(),
@@ -14,6 +15,8 @@ const plugins = [
       "node_modules/**",
       "src/**/parser/parser.js",
       "src/**/parser/parser.pegjs",
+      "src/kpuzzle/definitions/*.json",
+      "src/kpuzzle/definitions/svg/*.svg",
     ],
   }),
   typescript2({
@@ -68,7 +71,14 @@ const esm = {
       sourcemap: true,
     },
   ],
-  plugins,
+  plugins: [
+    ...plugins,
+    copy({
+      targets: [
+        { src: "src/kpuzzle/definitions/svg/*.svg", dest: "dist/cjs/svg/" },
+      ],
+    }),
+  ],
 };
 
 const umd = {

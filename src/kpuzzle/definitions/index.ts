@@ -8,6 +8,9 @@ import { KPuzzleDefinition } from "../definition_types";
 //     reference it by URL, you can use the Node.js `fs.readFileSync` API to do
 //     that. The URL must be statically analyzable, meaning it cannot have any
 //     variables in it (other than `__dirname` and `__filename`).
+//
+// This doesn't work for `rollup`. We're currently using `rollup.config.js` to
+// copy the SVG files to the `cjs` output directory for now.
 
 import cube222JSON from "./2x2x2.kpuzzle.json";
 export const Cube222: KPuzzleDefinition = cube222JSON;
