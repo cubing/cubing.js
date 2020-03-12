@@ -45,15 +45,15 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "dev": "parcel serve app/index.html --open --out-dir dist/parcel",
+    "dev": "parcel serve --no-autoinstall app/index.html --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
     "test": "jest && npm run lint",
     "format": "tslint --fix --project .",
     "setup": "npm install",
     "lint": "tslint --fix --project . ; tslint --fix rollup.config.js",
     "prepack": "npm run clean && npm run build",
-    "parcel-build-for-vr-cubing-net": "parcel build --public-url ./ --out-dir dist/experiments.cubing.net/vr app/vr/index.html",
-    "parcel-build-for-experiments-cubing-net": "parcel build --public-url /cubing.js/ --out-dir dist/experiments.cubing.net/cubing.js app/index.html"
+    "parcel-build-for-vr-cubing-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/experiments.cubing.net/vr app/vr/index.html",
+    "parcel-build-for-experiments-cubing-net": "parcel build --no-autoinstall --public-url /cubing.js/ --out-dir dist/experiments.cubing.net/cubing.js app/index.html"
   },
   "bin": {
     "puzzle-geometry": "./dist/bin/puzzle-geometry-bin.js"
