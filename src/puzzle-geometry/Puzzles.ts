@@ -28,7 +28,7 @@ export const Puzzles: { [name: string]: PuzzleDescriptionString } = {
   "master pyraminx": "t v 0 v 1 v 2",
   "professor pyraminx": "t v -0.2 v 0.6 v 1.4 v 2.2",
   "Jing pyraminx": "t f 0",
-  "master paramorphix": "t e 0.866025403784437",
+  "master pyramorphix": "t e 0.866025403784437",
   "megaminx": "d f 0.7",
   "gigaminx": "d f 0.64 f 0.82",
   "pentultimate": "d f 0",
