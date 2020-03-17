@@ -3,5 +3,5 @@
   "version": "0.10.0",
   "main": "../dist/cjs/twisty.js",
   "module": "../dist/esm/twisty.js",
-  "types": "../dist/esm/twisty/index.d.ts"
+  "types": "../dist/esm/src/twisty/index.d.ts"
 }

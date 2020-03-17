@@ -3,5 +3,5 @@
   "version": "0.10.0",
   "main": "../dist/cjs/alg.js",
   "module": "../dist/esm/alg.js",
-  "types": "../dist/esm/alg/index.d.ts"
+  "types": "../dist/esm/src/alg/index.d.ts"
 }
