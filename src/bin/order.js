@@ -20,6 +20,8 @@ pg = puzg.getPuzzleGeometryByName(puzname, ['allmoves', true]) ;
 puzzle = pg.writekpuzzle() ;
 /*
  *   Turn the KPuzzleDefinition into an actual operable puzzle.
+ *   This returns an object that can decorate the definition with
+ *   things like a move expander.
  */
 worker = new kpuz.KPuzzle(puzzle) ;
 /*
