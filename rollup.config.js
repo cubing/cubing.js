@@ -76,6 +76,7 @@ const esm = {
     copy({
       targets: [
         { src: "src/kpuzzle/definitions/svg/*.svg", dest: "dist/cjs/svg/" },
+        { src: "src/kpuzzle/definitions/svg/*.svg", dest: "dist/esm/svg/" },
       ],
     }),
   ],
