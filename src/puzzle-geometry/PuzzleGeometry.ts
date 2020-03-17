@@ -188,7 +188,7 @@ export function parsedesc(s: string): any { // parse a text description
 }
 
 // TODO: Automatically associate this with the source list.
-type PuzzleName = "2x2x2" | "3x3x3" | "4x4x4" | "5x5x5" | "6x6x6" | "7x7x7" | "8x8x8" | "9x9x9" | "10x10x10" | "11x11x11" | "12x12x12" | "13x13x13" | "20x20x20" | "skewb" | "master skewb" | "professor skewb" | "compy cube" | "helicopter" | "dino" | "little chop" | "pyramorphix" | "mastermorphix" | "pyraminx" | "Jing pyraminx" | "master paramorphix" | "megaminx" | "gigaminx" | "pentultimate" | "starminx" | "starminx 2" | "pyraminx crystal" | "chopasaurus" | "big chop" | "skewb diamond" | "FTO" | "Christopher's jewel" | "octastar" | "Trajber's octahedron" | "radio chop" | "icosamate" | "icosahedron 2" | "icosahedron 3" | "icosahedron static faces" | "icosahedron moving faces" | "Eita";
+type PuzzleName = "2x2x2" | "3x3x3" | "4x4x4" | "5x5x5" | "6x6x6" | "7x7x7" | "8x8x8" | "9x9x9" | "10x10x10" | "11x11x11" | "12x12x12" | "13x13x13" | "20x20x20" | "skewb" | "master skewb" | "professor skewb" | "compy cube" | "helicopter" | "dino" | "little chop" | "pyramorphix" | "mastermorphix" | "pyraminx" | "master pyraminx" | "professor pyraminx" | "Jing pyraminx" | "master pyramorphix" | "megaminx" | "gigaminx" | "pentultimate" | "starminx" | "starminx 2" | "pyraminx crystal" | "chopasaurus" | "big chop" | "skewb diamond" | "FTO" | "Christopher's jewel" | "octastar" | "Trajber's octahedron" | "radio chop" | "icosamate" | "icosahedron 2" | "icosahedron 3" | "icosahedron static faces" | "icosahedron moving faces" | "Eita";
 
 export function getPuzzleGeometryByDesc(desc: string, options: string[] = []): PuzzleGeometry {
   const [shape, cuts] = parsedesc(desc);
