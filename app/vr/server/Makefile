@@ -1,6 +1,6 @@
 # From https://medium.com/@olebedev/live-code-reloading-for-golang-web-projects-in-19-lines-8b2e8777b1ea
 
-PID      = /tmp/awesome-golang-project.pid
+PID      = /tmp/cubing-js-vr.pid
 GO_FILES = $(wildcard *.go)
 APP      = ./app
 serve: restart
