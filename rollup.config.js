@@ -16,6 +16,7 @@ const plugins = [
       "src/**/parser/parser.js",
       "src/**/parser/parser.pegjs",
       "src/kpuzzle/definitions/*.json",
+      "src/kpuzzle/definitions/svg/index.json",
       "src/kpuzzle/definitions/svg/*.svg",
     ],
   }),

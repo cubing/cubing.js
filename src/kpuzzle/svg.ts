@@ -36,6 +36,8 @@ export class SVG {
     if (xmlns !== svgElem.namespaceURI) {
       throw new Error("Unexpected XML namespace");
     }
+    svgElem.style.maxWidth = "100%";
+    svgElem.style.maxHeight = "100%";
     this.gradientDefs = document.createElementNS(xmlns, "defs") as SVGDefsElement;
     svgElem.insertBefore(this.gradientDefs, svgElem.firstChild);
 
