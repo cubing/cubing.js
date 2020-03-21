@@ -6,7 +6,7 @@ import tslint from "rollup-plugin-tslint";
 import typescript2 from "rollup-plugin-typescript2";
 import * as typescript from "typescript";
 import json from "@rollup/plugin-json";
-import copy from "rollup-plugin-copy";
+import { string } from "rollup-plugin-string";
 
 const plugins = [
   pegjs(),
@@ -27,6 +27,9 @@ const plugins = [
     success: true,
   }),
   json(),
+  string({
+    include: "src/kpuzzle/definitions/svg/*.svg",
+  }),
 ];
 
 if (!process.env.ROLLUP_WATCH) {
@@ -74,12 +77,6 @@ const esm = {
   ],
   plugins: [
     ...plugins,
-    copy({
-      targets: [
-        { src: "src/kpuzzle/definitions/svg/*.svg", dest: "dist/cjs/svg/" },
-        { src: "src/kpuzzle/definitions/svg/*.svg", dest: "dist/esm/svg/" },
-      ],
-    }),
   ],
 };
 
