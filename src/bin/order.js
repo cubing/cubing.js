@@ -11,8 +11,6 @@ twisty = require('../../twisty') ;
 puzname = process.argv[2] ;
 algo = process.argv[3] ;
 
-console.log(puzname, algo)
-
 /*
  *   Turn a name into a geometry.
  */
