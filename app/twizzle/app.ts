@@ -391,7 +391,7 @@ function doselection(el: any): void {
 }
 
 function getQueryParam(name: string): string {
-  return new URLSearchParams(window.location.search).get(name) || "";
+  return new URLSearchParams(window.location.search).get(name) ?? "";
 }
 // encode ' as -, and ' ' as _, in algorithms
 /* not used yet
