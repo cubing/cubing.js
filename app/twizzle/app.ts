@@ -497,7 +497,7 @@ export function setup(): void {
     (document.getElementById(command) as HTMLInputElement).onclick =
       () => { dowork(command); };
   }
-  const qalg = algToString(getQueryParam("alg"));
+  const qalg = getQueryParam("alg");
   if (qalg !== "") {
     algoinput.value = qalg;
     lastalgo = qalg;
