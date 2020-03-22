@@ -2,7 +2,7 @@ import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. h
 import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, getAlgURLParam, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
+import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
 import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
 import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
 import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims, StickerDat } from "../../src/puzzle-geometry/index";
@@ -497,7 +497,7 @@ export function setup(): void {
     (document.getElementById(command) as HTMLInputElement).onclick =
       () => { dowork(command); };
   }
-  const qalg = algToString(getAlgURLParam("alg"));
+  const qalg = algToString(getQueryParam("alg"));
   if (qalg !== "") {
     algoinput.value = qalg;
     lastalgo = qalg;
