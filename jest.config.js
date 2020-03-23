@@ -5,6 +5,7 @@ module.exports = {
   "transform": {
     "^.+\\.js$": "babel-jest",
     "^.+\\.ts$": "ts-jest",
-    "^.+\\.pegjs$": "pegjs-jest"
+    "^.+\\.pegjs$": "pegjs-jest",
+    "\\.svg$": "jest-raw-loader"
   },
 }
