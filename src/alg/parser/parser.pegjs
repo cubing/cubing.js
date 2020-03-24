@@ -20,7 +20,6 @@ REPEATED_UNIT = repeatable_unit:REPEATABLE_UNIT amount:AMOUNT { repeatable_unit.
               / repeatable_unit:REPEATABLE_UNIT { repeatable_unit.amount = 1; return repeatable_unit; }
 
 COMMENT = "//" body:[^\n\r]* { return {type: "commentShort", comment: body.join("")}; }
-        / "/\*" body:[^\*]* "\*/" { return {type: "commentLong", comment: body.join("")}; }
 
 ANNOTATION = [\n\r] { return {"type": "newLine"}; }
            / "." { return {"type": "pause"}; }

@@ -3,7 +3,6 @@ import { assertIsUnit, assertMatchesType, isUnit, matchesAlgType } from "./algor
 import {
   AlgPart,
   BlockMove,
-  CommentLong,
   CommentShort,
   Commutator,
   Conjugate,
@@ -41,9 +40,6 @@ function dispatch<DataDown, DataUp>(t: TraversalDownUp<DataDown, DataUp>, algPar
     case "commentShort":
       assertMatchesType(algPart, "commentShort");
       return t.traverseCommentShort(algPart as CommentShort, dataDown);
-    case "commentLong":
-      assertMatchesType(algPart, "commentLong");
-      return t.traverseCommentLong(algPart as CommentLong, dataDown);
     default:
       throw new Error(`Unknown AlgPart type: ${algPart.type}`);
   }
@@ -67,7 +63,6 @@ export abstract class TraversalDownUp<DataDown, DataUp> {
   public abstract traversePause(pause: Pause, dataDown: DataDown): DataUp;
   public abstract traverseNewLine(newLine: NewLine, dataDown: DataDown): DataUp;
   public abstract traverseCommentShort(commentShort: CommentShort, dataDown: DataDown): DataUp;
-  public abstract traverseCommentLong(commentLong: CommentLong, dataDown: DataDown): DataUp;
 }
 
 export abstract class TraversalUp<DataUp> extends TraversalDownUp<undefined, DataUp> {
@@ -87,7 +82,6 @@ export abstract class TraversalUp<DataUp> extends TraversalDownUp<undefined, Dat
   public abstract traversePause(pause: Pause): DataUp;
   public abstract traverseNewLine(newLine: NewLine): DataUp;
   public abstract traverseCommentShort(commentShort: CommentShort): DataUp;
-  public abstract traverseCommentLong(commentLong: CommentLong): DataUp;
 }
 
 // TODO: Test that inverses are bijections.
@@ -111,7 +105,6 @@ export class Invert extends TraversalUp<AlgPart> {
   public traversePause(pause: Pause): AlgPart { return pause; }
   public traverseNewLine(newLine: NewLine): AlgPart { return newLine; }
   public traverseCommentShort(commentShort: CommentShort): AlgPart { return commentShort; }
-  public traverseCommentLong(commentLong: CommentLong): AlgPart { return commentLong; }
 }
 
 export class Expand extends TraversalUp<AlgPart> {
@@ -152,7 +145,6 @@ export class Expand extends TraversalUp<AlgPart> {
   public traversePause(pause: Pause): AlgPart { return pause; }
   public traverseNewLine(newLine: NewLine): AlgPart { return newLine; }
   public traverseCommentShort(commentShort: CommentShort): AlgPart { return commentShort; }
-  public traverseCommentLong(commentLong: CommentLong): AlgPart { return commentLong; }
   private flattenSequenceOneLevel(algList: AlgPart[]): Unit[] {
     let flattened: Unit[] = [];
     for (const part of algList) {
@@ -235,9 +227,6 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
   public traverseCommentShort(commentShort: CommentShort, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "commentShort") && (commentShort.comment === (dataDown as CommentShort).comment);
   }
-  public traverseCommentLong(commentLong: CommentLong, dataDown: AlgPart): boolean {
-    return matchesAlgType(dataDown, "commentLong") && (commentLong.comment === (dataDown as CommentLong).comment);
-  }
 }
 
 // TODO: Test that inverses are bijections.
@@ -279,7 +268,6 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
   public traversePause(pause: Pause): AlgPart { return pause; }
   public traverseNewLine(newLine: NewLine): AlgPart { return newLine; }
   public traverseCommentShort(commentShort: CommentShort): AlgPart { return commentShort; }
-  public traverseCommentLong(commentLong: CommentLong): AlgPart { return commentLong; }
   private sameBlock(moveA: BlockMove, moveB: BlockMove): boolean {
     // TODO: Handle layers
     return moveA.outerLayer === moveB.outerLayer &&
@@ -306,7 +294,6 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
 //   public traversePause(        pause:        Pause,        dataDown: Algorithm): Sequence {return this.concatIntoSequence([pause]          , dataDown); }
 //   public traverseNewLine(      newLine:      NewLine,      dataDown: Algorithm): Sequence {return this.concatIntoSequence([newLine]        , dataDown); }
 //   public traverseCommentShort( commentShort: CommentShort, dataDown: Algorithm): Sequence {return this.concatIntoSequence([commentShort]   , dataDown); }
-//   public traverseCommentLong(  commentLong:  CommentLong,  dataDown: Algorithm): Sequence {return this.concatIntoSequence([commentLong]    , dataDown); }
 // }
 
 function repetitionSuffix(amount: number): string {
@@ -355,7 +342,6 @@ export class ToString extends TraversalUp<string> {
   // TODO: Enforce being followed by a newline (or the end of the alg)?
   public traverseCommentShort(commentShort: CommentShort): string { return "//" + commentShort.comment; }
   // TODO: Sanitize `*/`
-  public traverseCommentLong(commentLong: CommentLong): string { return "/*" + commentLong.comment + "*/"; }
   private spaceBetween(u1: Unit, u2: Unit): string {
     if (matchesAlgType(u1, "pause") && matchesAlgType(u2, "pause")) {
       return "";

@@ -13,7 +13,6 @@ export {
   Pause,
   NewLine,
   CommentShort,
-  CommentLong,
 } from "./alg-part";
 
 export {

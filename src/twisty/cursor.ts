@@ -1,4 +1,4 @@
-import { AlgPart, BlockMove, CommentLong, CommentShort, Commutator, Conjugate, expand, Group, NewLine, Pause, Sequence, TraversalDownUp, TraversalUp, Unit } from "../alg";
+import { AlgPart, BlockMove, CommentShort, Commutator, Conjugate, expand, Group, NewLine, Pause, Sequence, TraversalDownUp, TraversalUp, Unit } from "../alg";
 import { Puzzle, State } from "./puzzle";
 
 // TODO: Include Pause.
@@ -25,7 +25,6 @@ class CountAnimatedMoves extends TraversalUp<number> {
   public traversePause(pause: Pause): number { return 0; }
   public traverseNewLine(newLine: NewLine): number { return 0; }
   public traverseCommentShort(commentShort: CommentShort): number { return 0; }
-  public traverseCommentLong(commentLong: CommentLong): number { return 0; }
 }
 
 interface AlgorithmIndexer<P extends Puzzle> {
@@ -163,9 +162,6 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
     return this.dummyLeaf;
   }
   public traverseCommentShort(commentShort: CommentShort): AlgPartDecoration<P> {
-    return this.dummyLeaf;
-  }
-  public traverseCommentLong(commentLong: CommentLong): AlgPartDecoration<P> {
     return this.dummyLeaf;
   }
   private mult(apd: AlgPartDecoration<P>, n: number, child: Array<AlgPartDecoration<P>>): AlgPartDecoration<P> {
@@ -310,9 +306,6 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
     return false;
   }
   public traverseCommentShort(commentShort: CommentShort, wd: WalkerDown<P>): boolean {
-    return false;
-  }
-  public traverseCommentLong(commentLong: CommentLong, wd: WalkerDown<P>): boolean {
     return false;
   }
   private firstcheck(wd: WalkerDown<P>): boolean {
@@ -654,7 +647,6 @@ export namespace Cursor {
     public traversePause(pause: Pause): Duration { return this.durationForAmount(1); }
     public traverseNewLine(newLine: NewLine): Duration { return this.durationForAmount(1); }
     public traverseCommentShort(commentShort: CommentShort): Duration { return this.durationForAmount(0); }
-    public traverseCommentLong(commentLong: CommentLong): Duration { return this.durationForAmount(0); }
   }
 }
 

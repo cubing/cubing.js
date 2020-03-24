@@ -103,13 +103,6 @@ export class CommentShort extends Annotation {
     Object.freeze(this);
   }
 }
-export class CommentLong extends Annotation {
-  public type: string = "commentLong";
-  constructor(public comment: string) {
-    super();
-    Object.freeze(this);
-  }
-}
 
 // TODO
 // export class TimeStamp extends AlgPart implements AlgPart
