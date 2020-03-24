@@ -1,4 +1,4 @@
-import { deserializeURLParam, Sequence, serializeURLParam } from "../../src/alg";
+import { parse, Sequence, serializeURLParam, algToString } from "../../src/alg";
 
 // TODO: implement URL listener.
 
@@ -36,7 +36,7 @@ export function getURLParam<K extends ParamName>(paramName: K): CompleteURLParam
   switch (paramName) {
     case "alg":
       // TODO: can we avoid the `as` cast?
-      return deserializeURLParam(str) as CompleteURLParamValues[K];
+      return parse(str) as CompleteURLParamValues[K];
     case "puzzle":
       // TODO: can we avoid the `as` cast?
       return str as CompleteURLParamValues[K];
@@ -64,7 +64,7 @@ export function setURLParams(newParams: PartialURLParamValues): void {
   for (const [key, value] of Object.entries(newParams)) {
     switch (key) {
       case "alg":
-        setParam(key, serializeURLParam(value));
+        setParam(key, algToString(value));
         break;
       case "puzzle":
         setParam(key, value);
