@@ -1,5 +1,4 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
-import { getURLParam, setURLParams } from "./url-params" ;
 import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
@@ -8,6 +7,7 @@ import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/in
 import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
 import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims, StickerDat } from "../../src/puzzle-geometry/index";
 import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
+import { getURLParam, setURLParams } from "./url-params" ;
 
 experimentalShowJumpingFlash(false);
 
@@ -385,7 +385,7 @@ function doMoveInputSelection(el: any): void {
   }
 }
 
-function setpuzzleparams(desc : string): void {
+function setpuzzleparams(desc: string): void {
    const puzzles = getpuzzles() ;
    for (const [name, s] of Object.entries(puzzles)) {
       if (s == desc) {

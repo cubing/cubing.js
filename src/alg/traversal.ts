@@ -3,7 +3,7 @@ import { assertIsUnit, assertMatchesType, isUnit, matchesAlgType } from "./algor
 import {
   AlgPart,
   BlockMove,
-  CommentShort,
+  Comment,
   Commutator,
   Conjugate,
   Group,
@@ -37,9 +37,9 @@ function dispatch<DataDown, DataUp>(t: TraversalDownUp<DataDown, DataUp>, algPar
     case "newLine":
       assertMatchesType(algPart, "newLine");
       return t.traverseNewLine(algPart as NewLine, dataDown);
-    case "commentShort":
-      assertMatchesType(algPart, "commentShort");
-      return t.traverseCommentShort(algPart as CommentShort, dataDown);
+    case "comment":
+      assertMatchesType(algPart, "comment");
+      return t.traverseComment(algPart as Comment, dataDown);
     default:
       throw new Error(`Unknown AlgPart type: ${algPart.type}`);
   }
@@ -62,7 +62,7 @@ export abstract class TraversalDownUp<DataDown, DataUp> {
   public abstract traverseConjugate(conjugate: Conjugate, dataDown: DataDown): DataUp;
   public abstract traversePause(pause: Pause, dataDown: DataDown): DataUp;
   public abstract traverseNewLine(newLine: NewLine, dataDown: DataDown): DataUp;
-  public abstract traverseCommentShort(commentShort: CommentShort, dataDown: DataDown): DataUp;
+  public abstract traverseComment(comment: Comment, dataDown: DataDown): DataUp;
 }
 
 export abstract class TraversalUp<DataUp> extends TraversalDownUp<undefined, DataUp> {
@@ -81,7 +81,7 @@ export abstract class TraversalUp<DataUp> extends TraversalDownUp<undefined, Dat
   public abstract traverseConjugate(conjugate: Conjugate): DataUp;
   public abstract traversePause(pause: Pause): DataUp;
   public abstract traverseNewLine(newLine: NewLine): DataUp;
-  public abstract traverseCommentShort(commentShort: CommentShort): DataUp;
+  public abstract traverseComment(comment: Comment): DataUp;
 }
 
 // TODO: Test that inverses are bijections.
@@ -104,7 +104,7 @@ export class Invert extends TraversalUp<AlgPart> {
   }
   public traversePause(pause: Pause): AlgPart { return pause; }
   public traverseNewLine(newLine: NewLine): AlgPart { return newLine; }
-  public traverseCommentShort(commentShort: CommentShort): AlgPart { return commentShort; }
+  public traverseComment(comment: Comment): AlgPart { return comment; }
 }
 
 export class Expand extends TraversalUp<AlgPart> {
@@ -144,7 +144,7 @@ export class Expand extends TraversalUp<AlgPart> {
   }
   public traversePause(pause: Pause): AlgPart { return pause; }
   public traverseNewLine(newLine: NewLine): AlgPart { return newLine; }
-  public traverseCommentShort(commentShort: CommentShort): AlgPart { return commentShort; }
+  public traverseComment(comment: Comment): AlgPart { return comment; }
   private flattenSequenceOneLevel(algList: AlgPart[]): Unit[] {
     let flattened: Unit[] = [];
     for (const part of algList) {
@@ -224,8 +224,8 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
   public traverseNewLine(newLine: NewLine, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "newLine");
   }
-  public traverseCommentShort(commentShort: CommentShort, dataDown: AlgPart): boolean {
-    return matchesAlgType(dataDown, "commentShort") && (commentShort.comment === (dataDown as CommentShort).comment);
+  public traverseComment(comment: Comment, dataDown: AlgPart): boolean {
+    return matchesAlgType(dataDown, "comment") && (comment.comment === (dataDown as Comment).comment);
   }
 }
 
@@ -267,7 +267,7 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
   public traverseConjugate(conjugate: Conjugate): AlgPart { return conjugate; }
   public traversePause(pause: Pause): AlgPart { return pause; }
   public traverseNewLine(newLine: NewLine): AlgPart { return newLine; }
-  public traverseCommentShort(commentShort: CommentShort): AlgPart { return commentShort; }
+  public traverseComment(comment: Comment): AlgPart { return comment; }
   private sameBlock(moveA: BlockMove, moveB: BlockMove): boolean {
     // TODO: Handle layers
     return moveA.outerLayer === moveB.outerLayer &&
@@ -293,7 +293,7 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
 //   public traverseConjugate(    conjugate:    Conjugate,    dataDown: Algorithm): Sequence {return this.concatIntoSequence([conjugate]      , dataDown); }
 //   public traversePause(        pause:        Pause,        dataDown: Algorithm): Sequence {return this.concatIntoSequence([pause]          , dataDown); }
 //   public traverseNewLine(      newLine:      NewLine,      dataDown: Algorithm): Sequence {return this.concatIntoSequence([newLine]        , dataDown); }
-//   public traverseCommentShort( commentShort: CommentShort, dataDown: Algorithm): Sequence {return this.concatIntoSequence([commentShort]   , dataDown); }
+//   public traverseComment( comment: Comment, dataDown: Algorithm): Sequence {return this.concatIntoSequence([comment]   , dataDown); }
 // }
 
 function repetitionSuffix(amount: number): string {
@@ -340,7 +340,7 @@ export class ToString extends TraversalUp<string> {
   public traversePause(pause: Pause): string { return "."; }
   public traverseNewLine(newLine: NewLine): string { return "\n"; }
   // TODO: Enforce being followed by a newline (or the end of the alg)?
-  public traverseCommentShort(commentShort: CommentShort): string { return "//" + commentShort.comment; }
+  public traverseComment(comment: Comment): string { return "//" + comment.comment; }
   // TODO: Sanitize `*/`
   private spaceBetween(u1: Unit, u2: Unit): string {
     if (matchesAlgType(u1, "pause") && matchesAlgType(u2, "pause")) {
@@ -349,7 +349,7 @@ export class ToString extends TraversalUp<string> {
     if (matchesAlgType(u1, "newLine") || matchesAlgType(u2, "newLine")) {
       return "";
     }
-    if (matchesAlgType(u1, "commentShort") && !matchesAlgType(u2, "newLine")) {
+    if (matchesAlgType(u1, "comment") && !matchesAlgType(u2, "newLine")) {
       return "\n";
     }
     return " ";

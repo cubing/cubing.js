@@ -16,16 +16,16 @@ interface CompleteURLParamValues extends PartialURLParamValues {
 }
 
 const paramDefaults: CompleteURLParamValues = {
-  "alg": new Sequence([]),
-  "puzzle": "",
-  "puzzlegeometry": "",
+  alg: new Sequence([]),
+  puzzle: "",
+  puzzlegeometry: "",
 };
 
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
-  "alg": "",
-  "puzzle": "",
-  "puzzlegeometry": "",
+  alg: "",
+  puzzle: "",
+  puzzlegeometry: "",
 };
 
 export function getURLParam<K extends ParamName>(paramName: K): CompleteURLParamValues[K] {

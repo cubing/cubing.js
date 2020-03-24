@@ -12,7 +12,7 @@ export {
   Conjugate,
   Pause,
   NewLine,
-  CommentShort,
+  Comment,
 } from "./alg-part";
 
 export {

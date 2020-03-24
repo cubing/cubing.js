@@ -16,7 +16,7 @@ export {
   Conjugate,
   Pause,
   NewLine,
-  CommentShort,
+  Comment,
 } from "./algorithm";
 
 export {
