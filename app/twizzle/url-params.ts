@@ -1,4 +1,4 @@
-import { algToString, parse, Sequence, serializeURLParam } from "../../src/alg";
+import { algToString, parse, Sequence } from "../../src/alg";
 
 // TODO: implement URL listener.
 
