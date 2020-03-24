@@ -1,4 +1,4 @@
-import { AlgPart, BlockMove, CommentShort, Commutator, Conjugate, expand, Group, NewLine, Pause, Sequence, TraversalDownUp, TraversalUp, Unit } from "../alg";
+import { AlgPart, BlockMove, Comment, Commutator, Conjugate, expand, Group, NewLine, Pause, Sequence, TraversalDownUp, TraversalUp, Unit } from "../alg";
 import { Puzzle, State } from "./puzzle";
 
 // TODO: Include Pause.
@@ -24,7 +24,7 @@ class CountAnimatedMoves extends TraversalUp<number> {
   }
   public traversePause(pause: Pause): number { return 0; }
   public traverseNewLine(newLine: NewLine): number { return 0; }
-  public traverseCommentShort(commentShort: CommentShort): number { return 0; }
+  public traverseComment(comment: Comment): number { return 0; }
 }
 
 interface AlgorithmIndexer<P extends Puzzle> {
@@ -161,7 +161,7 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
   public traverseNewLine(newLine: NewLine): AlgPartDecoration<P> {
     return this.dummyLeaf;
   }
-  public traverseCommentShort(commentShort: CommentShort): AlgPartDecoration<P> {
+  public traverseComment(comment: Comment): AlgPartDecoration<P> {
     return this.dummyLeaf;
   }
   private mult(apd: AlgPartDecoration<P>, n: number, child: Array<AlgPartDecoration<P>>): AlgPartDecoration<P> {
@@ -305,7 +305,7 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
   public traverseNewLine(newLine: NewLine, wd: WalkerDown<P>): boolean {
     return false;
   }
-  public traverseCommentShort(commentShort: CommentShort, wd: WalkerDown<P>): boolean {
+  public traverseComment(comment: Comment, wd: WalkerDown<P>): boolean {
     return false;
   }
   private firstcheck(wd: WalkerDown<P>): boolean {
@@ -646,7 +646,7 @@ export namespace Cursor {
     public traverseConjugate(conjugate: Conjugate): Duration { return conjugate.amount * (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B)); }
     public traversePause(pause: Pause): Duration { return this.durationForAmount(1); }
     public traverseNewLine(newLine: NewLine): Duration { return this.durationForAmount(1); }
-    public traverseCommentShort(commentShort: CommentShort): Duration { return this.durationForAmount(0); }
+    public traverseComment(comment: Comment): Duration { return this.durationForAmount(0); }
   }
 }
 

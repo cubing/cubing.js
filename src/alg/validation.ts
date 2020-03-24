@@ -1,6 +1,6 @@
 import {
   BlockMove,
-  CommentShort,
+  Comment,
   Commutator,
   Conjugate,
   Group,
@@ -83,7 +83,7 @@ abstract class BaseMoveValidator extends ValidatorTraversal {
   }
   public traversePause(pause: Pause): void { return; }
   public traverseNewLine(newLine: NewLine): void { return; }
-  public traverseCommentShort(commentShort: CommentShort): void { return; }
+  public traverseComment(comment: Comment): void { return; }
 }
 
 // TODO: Export function instead?
@@ -145,7 +145,7 @@ export class FlatAlgValidator extends ValidatorTraversal {
   }
   public traversePause(pause: Pause): void { return; }
   public traverseNewLine(newLine: NewLine): void { return; }
-  public traverseCommentShort(commentShort: CommentShort): void { return; }
+  public traverseComment(comment: Comment): void { return; }
 }
 
 export type Validator = (a: Sequence) => void;

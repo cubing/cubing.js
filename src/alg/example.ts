@@ -1,7 +1,7 @@
 import {
   AlgPart,
   BareBlockMove,
-  CommentShort,
+  Comment,
   Commutator,
   Conjugate,
   Group,
@@ -155,7 +155,7 @@ export namespace Example {
     new Conjugate(new Sequence([BareBlockMove("L", 2)]), new Sequence([BareBlockMove("D", -1)]), 2),
     new Pause(),
     new NewLine(),
-    new CommentShort("short comment"),
+    new Comment("short comment"),
   ];
 
 }

@@ -1,6 +1,6 @@
 import {
   BlockMove,
-  CommentShort,
+  Comment,
   Commutator,
   Conjugate,
   Group,
@@ -59,10 +59,10 @@ function unitFromJSON(json: AlgJSON): Unit {
       return new Pause();
     case "newLine":
       return new NewLine();
-    case "commentShort":
+    case "comment":
       // The empty string is nullish, so we check for it separately.
       if (!json.comment && json.comment !== "") { throw new Error("Missing comment"); }
-      return new CommentShort(json.comment);
+      return new Comment(json.comment);
     default:
       throw new Error(`Unknown alg type: ${json.type}`);
   }

@@ -96,8 +96,8 @@ export class NewLine extends Annotation {
 }
 
 // TODO: must be followed by a newline, unless at the end of an alg?
-export class CommentShort extends Annotation {
-  public type: string = "commentShort";
+export class Comment extends Annotation {
+  public type: string = "comment";
   constructor(public comment: string) {
     super();
     Object.freeze(this);

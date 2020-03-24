@@ -19,7 +19,7 @@ REPEATABLE_UNIT = BLOCK_MOVE
 REPEATED_UNIT = repeatable_unit:REPEATABLE_UNIT amount:AMOUNT { repeatable_unit.amount = amount; return repeatable_unit; }
               / repeatable_unit:REPEATABLE_UNIT { repeatable_unit.amount = 1; return repeatable_unit; }
 
-COMMENT = "//" body:[^\n\r]* { return {type: "commentShort", comment: body.join("")}; }
+COMMENT = "//" body:[^\n\r]* { return {type: "comment", comment: body.join("")}; }
 
 ANNOTATION = [\n\r] { return {"type": "newLine"}; }
            / "." { return {"type": "pause"}; }
