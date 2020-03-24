@@ -1,25 +1,20 @@
-import { deserializeURLParam, Sequence, serializeURLParam } from "../../src/alg";
+import { algToString, parse, Sequence } from "../../src/alg";
 
 // TODO: implement URL listener.
 
-export interface PartialURLParamValues {
-  alg?: Sequence;
-  puzzle?: string;
-  "debug-js"?: boolean;
-}
-export type ParamName = keyof typeof paramDefaults;
-
-interface CompleteURLParamValues extends PartialURLParamValues {
+interface URLParamValues {
   alg: Sequence;
   puzzle: string;
   "debug-js": boolean;
 }
 
-const paramDefaults: CompleteURLParamValues = {
+const paramDefaults: URLParamValues = {
   "alg": new Sequence([]),
   "puzzle": "3x3x3",
   "debug-js": true,
 };
+
+export type ParamName = keyof typeof paramDefaults;
 
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
@@ -28,7 +23,7 @@ const paramDefaultStrings: { [s: string]: string } = {
   "debug-js": "true",
 };
 
-export function getURLParam<K extends ParamName>(paramName: K): CompleteURLParamValues[K] {
+export function getURLParam<K extends ParamName>(paramName: K): URLParamValues[K] {
   const str: string | null = new URLSearchParams(window.location.search).get(paramName);
   if (!str) {
     return paramDefaults[paramName];
@@ -36,20 +31,20 @@ export function getURLParam<K extends ParamName>(paramName: K): CompleteURLParam
   switch (paramName) {
     case "alg":
       // TODO: can we avoid the `as` cast?
-      return deserializeURLParam(str) as CompleteURLParamValues[K];
+      return parse(str) as URLParamValues[K];
     case "puzzle":
       // TODO: can we avoid the `as` cast?
-      return str as CompleteURLParamValues[K];
+      return str as URLParamValues[K];
     case "debug-js":
       // TODO: can we avoid the `as` cast?
-      return (str !== "false" as unknown) as CompleteURLParamValues[K];
+      return (str !== "false" as unknown) as URLParamValues[K];
     default:
       // TODO: can we avoid the `as` cast?
-      return str as CompleteURLParamValues[K];
+      return str as URLParamValues[K];
   }
 }
 
-export function setURLParams(newParams: PartialURLParamValues): void {
+export function setURLParams(newParams: Partial<URLParamValues>): void {
   const url = new URL(window.location.href);
   const params = url.searchParams;
 
@@ -64,13 +59,13 @@ export function setURLParams(newParams: PartialURLParamValues): void {
   for (const [key, value] of Object.entries(newParams)) {
     switch (key) {
       case "alg":
-        setParam(key, serializeURLParam(value));
+        setParam(key, algToString(value as Sequence));
         break;
       case "puzzle":
-        setParam(key, value);
+        setParam(key, value as string);
         break;
       case "debug-js":
-        setParam(key, value.toString());
+        setParam(key, (value as boolean).toString());
         break;
       default:
         console.warn("Unknown param", key, value);
