@@ -1,4 +1,5 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
+import { getURLParam, setURLParams } from "./url-params" ;
 import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
@@ -157,6 +158,7 @@ function setAlgo(str: string, writeback: boolean): void {
       seq = algparse(str);
       str = algToString(seq);
       twisty.experimentalSetAlg(seq);
+      setURLParams({alg: seq});
     } catch (e) {
       algoinput.style.backgroundColor = "#ff8080";
       console.log("Could not parse " + str);
@@ -346,6 +348,7 @@ function checkchange(): void {
       }
       const newStickerDat = pg.get3d(0.0131);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
+      setpuzzleparams(descarg) ;
     }
     if (!savealg) {
       lastalgo = "";
@@ -382,6 +385,17 @@ function doMoveInputSelection(el: any): void {
   }
 }
 
+function setpuzzleparams(desc : string): void {
+   const puzzles = getpuzzles() ;
+   for (const [name, s] of Object.entries(puzzles)) {
+      if (s == desc) {
+         setURLParams({puzzle: name, puzzlegeometry: ""}) ;
+         return ;
+      }
+   }
+   setURLParams({puzzle: "", puzzlegeometry: desc}) ;
+}
+
 function doselection(el: any): void {
   if (el.target.value !== "") {
     puzzleSelected = true;
@@ -389,16 +403,6 @@ function doselection(el: any): void {
     checkchange();
   }
 }
-
-function getQueryParam(name: string): string {
-  return new URLSearchParams(window.location.search).get(name) ?? "";
-}
-// encode ' as -, and ' ' as _, in algorithms
-/* not used yet
-function encodealg(s:string) {
-   return s.replace(/ /g, "_").replace(/'/g, "-") ;
-}
- */
 
 function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent): void {
   const raycaster = new Raycaster();
@@ -452,6 +456,7 @@ function addMove(move: BlockMove): void {
     lastalgo = algToString(newAlg);
     twisty.experimentalAddMove(move);
     algoinput.value = lastalgo;
+    setURLParams({alg: newAlg});
   }
 }
 
@@ -461,8 +466,8 @@ export function setup(): void {
   algoinput = document.getElementById("algorithm") as HTMLInputElement;
   const puzzles = getpuzzles();
   lastRender = getCheckboxes(renderOptions);
-  const puz = getQueryParam("puzzle");
-  const puzdesc = getQueryParam("puzzlegeometry");
+  const puz = getURLParam("puzzle");
+  const puzdesc = getURLParam("puzzlegeometry");
   let found = false;
   let optionFor3x3x3: HTMLOptionElement;
 
@@ -482,7 +487,7 @@ export function setup(): void {
   }
   if (puzdesc !== "") {
     select.selectedIndex = 0;
-    descinput.value = puzdesc;
+    descinput.value = puzdesc ?? "";
   } else if (!found) {
     optionFor3x3x3!.selected = true;
     descinput.value = getpuzzle("3x3x3");
@@ -497,7 +502,7 @@ export function setup(): void {
     (document.getElementById(command) as HTMLInputElement).onclick =
       () => { dowork(command); };
   }
-  const qalg = getQueryParam("alg");
+  const qalg = algToString(getURLParam("alg"));
   if (qalg !== "") {
     algoinput.value = qalg;
     lastalgo = qalg;
