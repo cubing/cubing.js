@@ -1,6 +1,5 @@
 import {
   BlockMove,
-  CommentLong,
   CommentShort,
   Commutator,
   Conjugate,
@@ -63,9 +62,6 @@ function unitFromJSON(json: AlgJSON): Unit {
     case "commentShort":
       if (!json.comment) { throw new Error("Missing comment"); }
       return new CommentShort(json.comment);
-    case "commentLong":
-      if (!json.comment) { throw new Error("Missing comment"); }
-      return new CommentLong(json.comment);
     default:
       throw new Error(`Unknown alg type: ${json.type}`);
   }

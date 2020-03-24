@@ -253,7 +253,7 @@ describe("JSON", () => {
 describe("Object Freezing", () => {
   it("freezes all example alg types", () => {
     // Update this based on the length of AllAlgParts.
-    expect(Ex.AllAlgParts.length).toBe(9);
+    expect(Ex.AllAlgParts.length).toBe(8);
     for (const a of Ex.AllAlgParts) {
       expect(Object.isFrozen(a)).toBe(true);
     }

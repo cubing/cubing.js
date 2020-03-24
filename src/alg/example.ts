@@ -1,7 +1,6 @@
 import {
   AlgPart,
   BareBlockMove,
-  CommentLong,
   CommentShort,
   Commutator,
   Conjugate,
@@ -157,7 +156,6 @@ export namespace Example {
     new Pause(),
     new NewLine(),
     new CommentShort("short comment"),
-    new CommentLong("long comment"),
   ];
 
 }

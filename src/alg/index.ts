@@ -17,7 +17,6 @@ export {
   Pause,
   NewLine,
   CommentShort,
-  CommentLong,
 } from "./algorithm";
 
 export {
