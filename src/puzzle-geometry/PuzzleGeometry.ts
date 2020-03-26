@@ -311,7 +311,7 @@ export class PuzzleGeometry {
   public baseplanerot: Quat[]; // unique rotations of the baseplane
   public baseplanes: Quat[];   // planes, corresponding to faces
   public facenames: any[];     // face names
-  public faceplanes: any;           // face planes
+  public faceplanes: any;      // face planes
   public edgenames: any[];     // edge names
   public vertexnames: any[];   // vertexnames
   public geonormals: any[];    // all geometric directions, with names and types
@@ -765,7 +765,7 @@ export class PuzzleGeometry {
     return [x1, y1, off];
   }
 
-  public allstickers(): void {
+public allstickers(): void {
     // next step is to calculate all the stickers and orbits
     // We do enough work here to display the cube on the screen.
     // take our newly split base face and expand it by the rotation matrix.
@@ -908,10 +908,6 @@ export class PuzzleGeometry {
     this.cubiekeys = cubiekeys;
     if (this.verbose) { console.log("# Cubies: " + Object.keys(cubiehash).length); }
     const that = this;
-    function getfaceindex(facenum: number): number {
-      const divid = that.stickersperface;
-      return Math.floor(facenum / divid);
-    }
     //  Sort the faces around each corner so they are clockwise.  Only
     //  relevant for cubies that actually are corners (three or more
     //  faces).  In general cubies might have many faces; for icosohedrons
@@ -961,8 +957,8 @@ export class PuzzleGeometry {
       let minf = this.findface(cubie[mini]);
       for (let i = 1; i < cubie.length; i++) {
         const temp = this.findface(cubie[i]);
-        if (this.faceprecedence[getfaceindex(temp)] <
-          this.faceprecedence[getfaceindex(minf)]) {
+        if (this.faceprecedence[this.getfaceindex(temp)] <
+          this.faceprecedence[this.getfaceindex(minf)]) {
           mini = i;
           minf = temp;
         }
@@ -1003,7 +999,7 @@ export class PuzzleGeometry {
     // so we support puzzles with multiple faces the same color
     function getcolorkey(cubienum: number): string {
       return cubies[cubienum].map(
-        (_) => getfaceindex(that.findface(_))).join(" ");
+        (_) => that.getfaceindex(that.findface(_))).join(" ");
     }
     const cubiesetcubies: any = [];
     for (let i = 0; i < cubies.length; i++) {
@@ -1247,11 +1243,61 @@ export class PuzzleGeometry {
             b.push(c[0], c[1]);
             face = face2;
           }
+          // If an oriented center is moving, we need to figure out
+          // the appropriate new orientation.  Normally we use the cubie
+          // sticker identity to locate, but this doesn't work here.
+          // Instead we need to redo the geometry of the sticker itself
+          // rotating and figure out how that maps to the destination
+          // sticker.
+          //
+          // We only need to do this for central center stickers: those
+          // where the face vertex goes through the center.  The others
+          // don't actually need orientation because they can only be
+          // in one orientation by physical constraints.  (You can't spin
+          // a point or cross sticker on the 5x5x5, for example.)
+          //
+          // This also simplifies things because it means the actual
+          // remapping has the same order as the moves themselves.
+          //
+          // The center may or may not have been duplicated at this point.
+          //
+          // The move moving the center might not be the same modulo as the
+          // center itself.
+          if (a.length > 1 && this.orientCenters &&
+              (this.cubies[b[0]].length === 1 ||
+               this.cubies[b[0]][0] === this.cubies[b[0]][1])) {
+             // is this a real center cubie, around an axis?
+             if (centermassface(this.faces[i]).dist(centermassface(this.basefaces[this.getfaceindex(i)])) < eps) {
+               // how does remapping of the face/point set map to the original?
+               let face1 = this.faces[a[0]] ;
+               for (let ii = 0; ii < a.length; ii++) {
+                 const face0 = this.faces[a[ii]] ;
+                 let o = -1 ;
+                 for (let jj = 0; jj < face1.length; jj++) {
+                   if (face0[jj].dist(face1[0]) < eps) {
+                     o = jj ;
+                     break ;
+                   }
+                 }
+                 if (o < 0) {
+                   throw new Error("Couldn't find rotation of center faces.") ;
+                 }
+                 b[2 * ii + 1] = o ;
+                 face1 = this.moverotations[k][0].rotateface(face1) ;
+               }
+             }
+          }
+          // a.length == 1 means a sticker is spinning in place.
+          // in this case we add duplicate stickers and fake the orientation
+          // so that we can make it animate properly in a 3D world.
           if (a.length === 1 && this.orientCenters) {
             for (let ii = 1; ii < this.movesetorders[k]; ii++) {
               a.push(a[0]);
-              b.push(b[0], ii);
-              // <><>
+              if (sc === 0) {
+                b.push(b[0], ii);
+              } else {
+                b.push(b[0], (this.movesetorders[k] - ii) % this.movesetorders[k]);
+              }
               this.cubies[b[0]].push(this.cubies[b[0]][0]);
             }
             this.duplicatedFaces[a[0]] = this.movesetorders[k];
@@ -1983,5 +2029,10 @@ export class PuzzleGeometry {
       }
     }
     return { stickers, faces, axis: grips };
+  }
+
+  private getfaceindex(facenum: number): number {
+    const divid = this.stickersperface;
+    return Math.floor(facenum / divid);
   }
 }
