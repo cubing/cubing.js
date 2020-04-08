@@ -1,7 +1,7 @@
+export { BluetoothConfig, BluetoothPuzzle, MoveEvent, OrientationEvent } from "./bluetooth-puzzle";
+export { connect } from "./connect";
+export { enableDebugLogging } from "./debug";
 export { GanCube } from "./gan";
 export { GiiKERCube, giikerMoveToBlockMoveForTesting } from "./giiker";
 export { GoCube } from "./gocube";
-export { BluetoothPuzzle, MoveEvent } from "./bluetooth-puzzle";
-export { KeyboardPuzzle, debugKeyboardConnect } from "./keyboard";
-export { enableDebugLogging } from "./debug";
-export { connect } from "./connect";
+export { debugKeyboardConnect, KeyboardPuzzle } from "./keyboard";

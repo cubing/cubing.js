@@ -9,19 +9,19 @@ export type PuzzleState = Transformation;
 
 // TODO: Use actual `CustomEvent`s?
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
-export class MoveEvent {
-  public latestMove: BlockMove;
-  public timeStamp: number;
-  public debug?: object;
-  public state?: PuzzleState;
-  public quaternion?: any; // TODO: Unused
+export interface MoveEvent {
+  latestMove: BlockMove;
+  timeStamp: number;
+  debug?: object;
+  state?: PuzzleState;
+  quaternion?: any; // TODO: Unused
 }
 
 // TODO: Only use the `quaternion` field in the `MoveEvent`?
-export class OrientationEvent {
-  public quaternion: { x: number, y: number, z: number, w: number };
-  public timeStamp: number;
-  public debug?: object;
+export interface OrientationEvent {
+  quaternion: { x: number, y: number, z: number, w: number };
+  timeStamp: number;
+  debug?: object;
 }
 
 export interface BluetoothConfig {
