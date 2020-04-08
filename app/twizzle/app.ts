@@ -7,7 +7,7 @@ import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/in
 import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
 import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims, StickerDat } from "../../src/puzzle-geometry/index";
 import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
-import { getURLParam, setURLParams } from "./url-params" ;
+import { getURLParam, setURLParams } from "./url-params";
 
 experimentalShowJumpingFlash(false);
 
@@ -158,7 +158,7 @@ function setAlgo(str: string, writeback: boolean): void {
       seq = algparse(str);
       str = algToString(seq);
       twisty.experimentalSetAlg(seq);
-      setURLParams({alg: seq});
+      setURLParams({ alg: seq });
     } catch (e) {
       algoinput.style.backgroundColor = "#ff8080";
       console.log("Could not parse " + str);
@@ -348,7 +348,7 @@ function checkchange(): void {
       }
       const newStickerDat = pg.get3d(0.0131);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
-      setpuzzleparams(descarg) ;
+      setpuzzleparams(descarg);
     }
     if (!savealg) {
       lastalgo = "";
@@ -386,14 +386,14 @@ function doMoveInputSelection(el: any): void {
 }
 
 function setpuzzleparams(desc: string): void {
-   const puzzles = getpuzzles() ;
-   for (const [name, s] of Object.entries(puzzles)) {
-      if (s == desc) {
-         setURLParams({puzzle: name, puzzlegeometry: ""}) ;
-         return ;
-      }
-   }
-   setURLParams({puzzle: "", puzzlegeometry: desc}) ;
+  const puzzles = getpuzzles();
+  for (const [name, s] of Object.entries(puzzles)) {
+    if (s === desc) {
+      setURLParams({ puzzle: name, puzzlegeometry: "" });
+      return;
+    }
+  }
+  setURLParams({ puzzle: "", puzzlegeometry: desc });
 }
 
 function doselection(el: any): void {
@@ -456,7 +456,7 @@ function addMove(move: BlockMove): void {
     lastalgo = algToString(newAlg);
     twisty.experimentalAddMove(move);
     algoinput.value = lastalgo;
-    setURLParams({alg: newAlg});
+    setURLParams({ alg: newAlg });
   }
 }
 
