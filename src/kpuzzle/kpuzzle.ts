@@ -150,6 +150,10 @@ export class KPuzzle {
     this.state = IdentityTransformation(definition);
   }
 
+  public reset(): void {
+    this.state = IdentityTransformation(this.definition);
+  }
+
   public serialize(): string {
     let output = "";
     for (const orbitName in this.definition.orbits) {
