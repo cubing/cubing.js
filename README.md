@@ -17,6 +17,6 @@
 
     git clone https://github.com/cubing/cubing.js && cd cubing.js
     npm install
-    make parcel
+    make dev
 
 This should open http://localhost:1234/ automatically.
