@@ -72,7 +72,7 @@ export function Invert(def: KPuzzleDefinition, t: Transformation): Transformatio
 
 function gcd(a: number, b: number): number {
   if (b) {
-     return gcd(b, a % b);
+    return gcd(b, a % b);
   }
   return a;
 }
@@ -87,18 +87,18 @@ export function Order(def: KPuzzleDefinition, t: Transformation): number {
       if (!d[idx]) {
         let w = idx;
         let om = 0;
-        let pm = 0 ;
+        let pm = 0;
         while (true) {
-          d[w] = true ;
+          d[w] = true;
           om = om + o.orientation[w];
-          pm = pm + 1 ;
+          pm = pm + 1;
           w = o.permutation[w];
           if (w === idx) {
-            break ;
+            break;
           }
         }
         if (om !== 0) {
-          pm = pm * oDef.orientations / gcd(oDef.orientations, om) ;
+          pm = pm * oDef.orientations / gcd(oDef.orientations, om);
         }
         r = r * pm / gcd(r, pm);
       }
@@ -217,7 +217,7 @@ export class KPuzzle {
   }
   public unswizzle(grip: string): string {
     const me = this.getMoveExpander(true);
-    return me ? me.unswizzle(grip) : grip ;
+    return me ? me.unswizzle(grip) : grip;
   }
 
   // TODO: Implement
@@ -290,10 +290,10 @@ export class MoveExpander {
   }
   public unswizzle(grip: string): string {
     if (this.regrip[grip]) {
-      return this.regrip[grip] ;
+      return this.regrip[grip];
     }
     if (!this.facenames) {
-      return grip ;
+      return grip;
     }
     // permit unswizzle to strip w and p suffixes for callers
     // other than the internal move expander below.
@@ -311,11 +311,11 @@ export class MoveExpander {
         }
         if (this.gripStash[testGrip]) {
           this.regrip[grip] = testGrip;
-          return testGrip ;
+          return testGrip;
         }
       }
     }
-    return grip ;
+    return grip;
   }
   public expandSlices(rep: string, blockMove: BlockMove, def: KPuzzleDefinition): Transformation | undefined {
     const t = this.moveStash[rep];
@@ -342,8 +342,8 @@ export class MoveExpander {
     }
     let slices = axes[grip];
     if (!slices && this.facenames) {
-      grip = this.unswizzle(grip) ;
-      slices = axes[grip] ;
+      grip = this.unswizzle(grip);
+      slices = axes[grip];
     }
     if (!slices) {
       return undefined;
