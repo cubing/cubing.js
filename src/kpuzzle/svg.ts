@@ -1,4 +1,5 @@
 import { KPuzzleDefinition, Transformation } from "./definition_types";
+import { KPuzzle } from "./kpuzzle";
 
 const xmlns = "http://www.w3.org/2000/svg";
 
@@ -56,6 +57,10 @@ export class SVG {
         }
       }
     }
+  }
+
+  public drawKPuzzle(kpuzzle: KPuzzle, nextState?: Transformation, fraction?: number): void {
+    this.draw(kpuzzle.definition, kpuzzle.state, nextState, fraction);
   }
 
   // TODO: save definition in the constructor?
