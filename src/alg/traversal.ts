@@ -88,7 +88,7 @@ export abstract class TraversalUp<DataUp> extends TraversalDownUp<undefined, Dat
 export class Invert extends TraversalUp<AlgPart> {
   public traverseSequence(sequence: Sequence): Sequence {
     // TODO: Handle newLines and comments correctly
-    return new Sequence(sequence.nestedUnits.slice().reverse().map((a) => this.traverseIntoUnit(a)));
+    return new Sequence(sequence.nestedUnits.map((a) => this.traverseIntoUnit(a)).reverse());
   }
   public traverseGroup(group: Group): AlgPart {
     return new Group(this.traverseSequence(group.nestedSequence), group.amount);
