@@ -2,24 +2,15 @@ import resolve from "rollup-plugin-node-resolve";
 import notify from "rollup-plugin-notify";
 import pegjs from "rollup-plugin-pegjs";
 import { terser } from "rollup-plugin-terser";
-import tslint from "rollup-plugin-tslint";
 import typescript2 from "rollup-plugin-typescript2";
 import * as typescript from "typescript";
 import json from "@rollup/plugin-json";
 import { string } from "rollup-plugin-string";
+import { eslint } from "rollup-plugin-eslint";
 
 const plugins = [
   pegjs(),
-  tslint({
-    exclude: [
-      "node_modules/**",
-      "src/**/parser/parser.js",
-      "src/**/parser/parser.pegjs",
-      "src/kpuzzle/definitions/*.json",
-      "src/kpuzzle/definitions/svg/index.json",
-      "src/kpuzzle/definitions/svg/*.svg",
-    ],
-  }),
+  eslint({}),
   typescript2({
     typescript: typescript,
   }),
@@ -33,20 +24,23 @@ const plugins = [
 ];
 
 if (!process.env.ROLLUP_WATCH) {
-  plugins.push(terser({
-    keep_classnames: true,
-  }));
+  plugins.push(
+    terser({
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      keep_classnames: true,
+    }),
+  );
 }
 
 const cjs = {
   external: ["three"],
   input: {
-    "alg": "src/alg/index.ts",
-    "bluetooth": "src/bluetooth/index.ts",
-    "cubing": "src/cubing/index.ts",
-    "kpuzzle": "src/kpuzzle/index.ts",
+    alg: "src/alg/index.ts",
+    bluetooth: "src/bluetooth/index.ts",
+    cubing: "src/cubing/index.ts",
+    kpuzzle: "src/kpuzzle/index.ts",
     "puzzle-geometry": "src/puzzle-geometry/index.ts",
-    "twisty": "src/twisty/index.ts",
+    twisty: "src/twisty/index.ts",
   },
   output: [
     {
@@ -61,12 +55,12 @@ const cjs = {
 const esm = {
   external: ["three"],
   input: {
-    "alg": "src/alg/index.ts",
-    "bluetooth": "src/bluetooth/index.ts",
-    "cubing": "src/cubing/index.ts",
-    "kpuzzle": "src/kpuzzle/index.ts",
+    alg: "src/alg/index.ts",
+    bluetooth: "src/bluetooth/index.ts",
+    cubing: "src/cubing/index.ts",
+    kpuzzle: "src/kpuzzle/index.ts",
     "puzzle-geometry": "src/puzzle-geometry/index.ts",
-    "twisty": "src/twisty/index.ts",
+    twisty: "src/twisty/index.ts",
   },
   output: [
     {
@@ -75,9 +69,7 @@ const esm = {
       sourcemap: true,
     },
   ],
-  plugins: [
-    ...plugins,
-  ],
+  plugins: [...plugins],
 };
 
 const umd = {

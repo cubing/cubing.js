@@ -4,8 +4,24 @@
 /* tslint:disable typedef */ // TODO
 
 import { Perm } from "./Perm";
-import { Orbit, OrbitDef, OrbitsDef, showcanon, Transformation, VisibleState } from "./PermOriSet";
-import { closure, cube, dodecahedron, getface, icosahedron, octahedron, tetrahedron, uniqueplanes } from "./PlatonicGenerator";
+import {
+  Orbit,
+  OrbitDef,
+  OrbitsDef,
+  showcanon,
+  Transformation,
+  VisibleState,
+} from "./PermOriSet";
+import {
+  closure,
+  cube,
+  dodecahedron,
+  getface,
+  icosahedron,
+  octahedron,
+  tetrahedron,
+  uniqueplanes,
+} from "./PlatonicGenerator";
 import { PuzzleDescriptionString, Puzzles } from "./Puzzles";
 import { centermassface, expandfaces, Quat } from "./Quat";
 
@@ -71,67 +87,99 @@ const copyright = "PuzzleGeometry 0.1 Copyright 2018 Tomas Rokicki.";
 // connectivity of the net.
 //
 const defaultnets: any = {
-  4: // four faces: tetrahedron
-    [
-      ["F", "D", "L", "R"],
-    ],
-  6: // six faces: cube
-    [
-      ["F", "D", "L", "U", "R"],
-      ["R", "F", "", "B", ""],
-    ],
-  8: // eight faces: octahedron
-    [
-      ["F", "D", "L", "R"],
-      ["D", "F", "BR", ""],
-      ["BR", "D", "", "BB"],
-      ["BB", "BR", "U", "BL"],
-    ],
-  12: // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
-    [
-      ["U", "F", "", "", "", ""],
-      ["F", "U", "R", "C", "A", "L"],
-      ["R", "F", "", "", "E", ""],
-      ["E", "R", "", "BF", "", ""],
-      ["BF", "E", "BR", "BL", "I", "D"],
-    ],
-  20: // twenty faces: icosahedron
-    [
-      ["R", "C", "F", "E"],
-      ["F", "R", "L", "U"],
-      ["L", "F", "A", ""],
-      ["E", "R", "G", "I"],
-      ["I", "E", "S", "H"],
-      ["S", "I", "J", "B"],
-      ["B", "S", "K", "D"],
-      ["K", "B", "M", "O"],
-      ["O", "K", "P", "N"],
-      ["P", "O", "Q", ""],
-    ],
+  // four faces: tetrahedron
+  4: [["F", "D", "L", "R"]],
+  // six faces: cube
+  6: [
+    ["F", "D", "L", "U", "R"],
+    ["R", "F", "", "B", ""],
+  ],
+  // eight faces: octahedron
+  8: [
+    ["F", "D", "L", "R"],
+    ["D", "F", "BR", ""],
+    ["BR", "D", "", "BB"],
+    ["BB", "BR", "U", "BL"],
+  ],
+  // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
+  12: [
+    ["U", "F", "", "", "", ""],
+    ["F", "U", "R", "C", "A", "L"],
+    ["R", "F", "", "", "E", ""],
+    ["E", "R", "", "BF", "", ""],
+    ["BF", "E", "BR", "BL", "I", "D"],
+  ],
+  // twenty faces: icosahedron
+  20: [
+    ["R", "C", "F", "E"],
+    ["F", "R", "L", "U"],
+    ["L", "F", "A", ""],
+    ["E", "R", "G", "I"],
+    ["I", "E", "S", "H"],
+    ["S", "I", "J", "B"],
+    ["B", "S", "K", "D"],
+    ["K", "B", "M", "O"],
+    ["O", "K", "P", "N"],
+    ["P", "O", "Q", ""],
+  ],
 };
 
 const defaultcolors: any = {
   // the colors should use the same naming convention as the nets, above.
   4: { F: "#00ff00", D: "#ffff00", L: "#ff0000", R: "#0000ff" },
   6: {
-    U: "#ffffff", F: "#00ff00", R: "#ff0000",
-    D: "#ffff00", B: "#0000ff", L: "#ff8000",
+    U: "#ffffff",
+    F: "#00ff00",
+    R: "#ff0000",
+    D: "#ffff00",
+    B: "#0000ff",
+    L: "#ff8000",
   },
   8: {
-    U: "#e085b9", F: "#080d99", R: "#c1e35c", D: "#22955e",
-    BB: "#9121ab", L: "#b27814", BL: "#0d35ad", BR: "#eb126b",
+    U: "#e085b9",
+    F: "#080d99",
+    R: "#c1e35c",
+    D: "#22955e",
+    BB: "#9121ab",
+    L: "#b27814",
+    BL: "#0d35ad",
+    BR: "#eb126b",
   },
   12: {
-    U: "#ffffff", F: "#006633", R: "#ff0000", C: "#ffffd0",
-    A: "#3399ff", L: "#660099", E: "#ff66cc", BF: "#99ff00",
-    BR: "#0000ff", BL: "#ffff00", I: "#ff6633", D: "#999999",
+    U: "#ffffff",
+    F: "#006633",
+    R: "#ff0000",
+    C: "#ffffd0",
+    A: "#3399ff",
+    L: "#660099",
+    E: "#ff66cc",
+    BF: "#99ff00",
+    BR: "#0000ff",
+    BL: "#ffff00",
+    I: "#ff6633",
+    D: "#999999",
   },
   20: {
-    R: "#db69f0", C: "#178fde", F: "#23238b", E: "#9cc726",
-    L: "#2c212d", U: "#177fa7", A: "#e0de7f", G: "#2b57c0",
-    I: "#41126b", S: "#4b8c28", H: "#7c098d", J: "#7fe7b4",
-    B: "#85fb74", K: "#3f4bc3", D: "#0ff555", M: "#f1c2c8",
-    O: "#58d340", P: "#c514f2", N: "#14494e", Q: "#8b1be1",
+    R: "#db69f0",
+    C: "#178fde",
+    F: "#23238b",
+    E: "#9cc726",
+    L: "#2c212d",
+    U: "#177fa7",
+    A: "#e0de7f",
+    G: "#2b57c0",
+    I: "#41126b",
+    S: "#4b8c28",
+    H: "#7c098d",
+    J: "#7fe7b4",
+    B: "#85fb74",
+    K: "#3f4bc3",
+    D: "#0ff555",
+    M: "#f1c2c8",
+    O: "#58d340",
+    P: "#c514f2",
+    N: "#14494e",
+    Q: "#8b1be1",
   },
 };
 
@@ -143,10 +191,29 @@ const defaultfaceorders: any = {
   4: ["F", "D", "L", "R"],
   6: ["U", "D", "F", "B", "L", "R"],
   8: ["F", "BB", "D", "U", "BR", "L", "R", "BL"],
-  12: ["L", "E", "F", "BF", "R", "I",
-    "U", "D", "BR", "A", "BL", "C"],
-  20: ["L", "S", "E", "O", "F", "B", "I", "P", "R", "K",
-    "U", "D", "J", "A", "Q", "H", "G", "N", "M", "C"],
+  12: ["L", "E", "F", "BF", "R", "I", "U", "D", "BR", "A", "BL", "C"],
+  20: [
+    "L",
+    "S",
+    "E",
+    "O",
+    "F",
+    "B",
+    "I",
+    "P",
+    "R",
+    "K",
+    "U",
+    "D",
+    "J",
+    "A",
+    "Q",
+    "H",
+    "G",
+    "N",
+    "M",
+    "C",
+  ],
 };
 
 function findelement(a: any[], p: Quat): number {
@@ -169,12 +236,19 @@ export function getpuzzle(puzzleName: PuzzleName): PuzzleDescriptionString {
   return Puzzles[puzzleName];
 }
 
-export function parsedesc(s: string): any { // parse a text description
+export function parsedesc(s: string): any {
+  // parse a text description
   const a = s.split(/ /).filter(Boolean);
   if (a.length % 2 === 0) {
     return false;
   }
-  if (a[0] !== "o" && a[0] !== "c" && a[0] !== "i" && a[0] !== "d" && a[0] !== "t") {
+  if (
+    a[0] !== "o" &&
+    a[0] !== "c" &&
+    a[0] !== "i" &&
+    a[0] !== "d" &&
+    a[0] !== "t"
+  ) {
     return false;
   }
   const r = [];
@@ -188,17 +262,74 @@ export function parsedesc(s: string): any { // parse a text description
 }
 
 // TODO: Automatically associate this with the source list.
-type PuzzleName = "2x2x2" | "3x3x3" | "4x4x4" | "5x5x5" | "6x6x6" | "7x7x7" | "8x8x8" | "9x9x9" | "10x10x10" | "11x11x11" | "12x12x12" | "13x13x13" | "20x20x20" | "skewb" | "master skewb" | "professor skewb" | "compy cube" | "helicopter" | "dino" | "little chop" | "pyramorphix" | "mastermorphix" | "pyraminx" | "master pyraminx" | "professor pyraminx" | "Jing pyraminx" | "master pyramorphix" | "megaminx" | "gigaminx" | "pentultimate" | "starminx" | "starminx 2" | "pyraminx crystal" | "chopasaurus" | "big chop" | "skewb diamond" | "FTO" | "Christopher's jewel" | "octastar" | "Trajber's octahedron" | "radio chop" | "icosamate" | "icosahedron 2" | "icosahedron 3" | "icosahedron static faces" | "icosahedron moving faces" | "Eita";
+type PuzzleName =
+  | "2x2x2"
+  | "3x3x3"
+  | "4x4x4"
+  | "5x5x5"
+  | "6x6x6"
+  | "7x7x7"
+  | "8x8x8"
+  | "9x9x9"
+  | "10x10x10"
+  | "11x11x11"
+  | "12x12x12"
+  | "13x13x13"
+  | "20x20x20"
+  | "skewb"
+  | "master skewb"
+  | "professor skewb"
+  | "compy cube"
+  | "helicopter"
+  | "dino"
+  | "little chop"
+  | "pyramorphix"
+  | "mastermorphix"
+  | "pyraminx"
+  | "master pyraminx"
+  | "professor pyraminx"
+  | "Jing pyraminx"
+  | "master pyramorphix"
+  | "megaminx"
+  | "gigaminx"
+  | "pentultimate"
+  | "starminx"
+  | "starminx 2"
+  | "pyraminx crystal"
+  | "chopasaurus"
+  | "big chop"
+  | "skewb diamond"
+  | "FTO"
+  | "Christopher's jewel"
+  | "octastar"
+  | "Trajber's octahedron"
+  | "radio chop"
+  | "icosamate"
+  | "icosahedron 2"
+  | "icosahedron 3"
+  | "icosahedron static faces"
+  | "icosahedron moving faces"
+  | "Eita";
 
-export function getPuzzleGeometryByDesc(desc: string, options: string[] = []): PuzzleGeometry {
+export function getPuzzleGeometryByDesc(
+  desc: string,
+  options: string[] = [],
+): PuzzleGeometry {
   const [shape, cuts] = parsedesc(desc);
-  const pg = new PuzzleGeometry(shape, cuts, ["allmoves", "true"].concat(options));
+  const pg = new PuzzleGeometry(
+    shape,
+    cuts,
+    ["allmoves", "true"].concat(options),
+  );
   pg.allstickers();
   pg.genperms();
   return pg;
 }
 
-export function getPuzzleGeometryByName(puzzleName: PuzzleName, options: string[] = []): PuzzleGeometry {
+export function getPuzzleGeometryByName(
+  puzzleName: PuzzleName,
+  options: string[] = [],
+): PuzzleGeometry {
   return getPuzzleGeometryByDesc(Puzzles[puzzleName], options);
 }
 
@@ -213,7 +344,8 @@ function getmovename(geo: any, bits: number, slices: number): any {
       nbits |= 1 << (slices - i);
     }
   }
-  if (nbits < bits) { // flip if most of the move is on the other side
+  if (nbits < bits) {
+    // flip if most of the move is on the other side
     geo = [geo[2], geo[3], geo[0], geo[1]];
     bits = nbits;
     inverted = true;
@@ -226,11 +358,11 @@ function getmovename(geo: any, bits: number, slices: number): any {
   }
   if (bits === (2 << slices) - 1) {
     movenameFamily = movenameFamily + "v";
-  } else if (bits === (1 << hibit)) {
+  } else if (bits === 1 << hibit) {
     if (hibit > 0) {
       movenamePrefix = String(hibit + 1);
     }
-  } else if (bits === ((2 << hibit) - 1)) {
+  } else if (bits === (2 << hibit) - 1) {
     movenameFamily = movenameFamily.toLowerCase();
     if (hibit > 1) {
       movenamePrefix = String(hibit + 1);
@@ -258,14 +390,14 @@ function splitByFaceNames(s: string, facenames: any[]): string[] {
       }
     }
     if (!found) {
-      throw new Error(("Could not split " + s + " into face names."));
+      throw new Error("Could not split " + s + " into face names.");
     }
   }
   return r;
 }
 
 function toCoords(q: Quat, maxdist: number): number[] {
-  return [- q.b / maxdist, - q.c / maxdist, - q.d / maxdist];
+  return [-q.b / maxdist, -q.c / maxdist, -q.d / maxdist];
 }
 
 function toFaceCoords(q: Quat[], maxdist: number): number[][] {
@@ -307,66 +439,66 @@ function trimEdges(face: Quat[], tr: number): Quat[] {
 
 export class PuzzleGeometry {
   public args: string = "";
-  public rotations: Quat[];    // all members of the rotation group
+  public rotations: Quat[]; // all members of the rotation group
   public baseplanerot: Quat[]; // unique rotations of the baseplane
-  public baseplanes: Quat[];   // planes, corresponding to faces
-  public facenames: any[];     // face names
-  public faceplanes: any;      // face planes
-  public edgenames: any[];     // edge names
-  public vertexnames: any[];   // vertexnames
-  public geonormals: any[];    // all geometric directions, with names and types
-  public moveplanes: Quat[];   // the planes that split moves
+  public baseplanes: Quat[]; // planes, corresponding to faces
+  public facenames: any[]; // face names
+  public faceplanes: any; // face planes
+  public edgenames: any[]; // edge names
+  public vertexnames: any[]; // vertexnames
+  public geonormals: any[]; // all geometric directions, with names and types
+  public moveplanes: Quat[]; // the planes that split moves
   public moveplanesets: any[]; // the move planes, in parallel sets
   public movesetorders: any[]; // the order of rotations for each move set
-  public movesetgeos: any[];   // geometric feature information for move sets
-  public basefaces: Quat[][];  // polytope faces before cuts
-  public faces: Quat[][];      // all the stickers
-  public basefacecount: number;      // number of base faces
-  public stickersperface: number;    // number of stickers per face
-  public cornerfaces: number;        // number of faces that meet at a corner
-  public cubies: any[];        // the cubies
-  public shortedge: number;         // shortest edge
-  public vertexdistance: number;    // vertex distance
-  public edgedistance: number;      // edge distance
-  public orbits: number;            // count of cubie orbits
-  public facetocubies: any[];  // map a face to a cubie index and offset
+  public movesetgeos: any[]; // geometric feature information for move sets
+  public basefaces: Quat[][]; // polytope faces before cuts
+  public faces: Quat[][]; // all the stickers
+  public basefacecount: number; // number of base faces
+  public stickersperface: number; // number of stickers per face
+  public cornerfaces: number; // number of faces that meet at a corner
+  public cubies: any[]; // the cubies
+  public shortedge: number; // shortest edge
+  public vertexdistance: number; // vertex distance
+  public edgedistance: number; // edge distance
+  public orbits: number; // count of cubie orbits
+  public facetocubies: any[]; // map a face to a cubie index and offset
   public moverotations: Quat[][]; // move rotations
-  public cubiekey: any;             // cubie locator
-  public cubiekeys: string[];  // cubie keys
-  public facelisthash: any;         // face list by key
+  public cubiekey: any; // cubie locator
+  public cubiekeys: string[]; // cubie keys
+  public facelisthash: any; // face list by key
   public cubiesetnames: any[]; // cubie set names
-  public cubieords: number[];  // the size of each orbit
+  public cubieords: number[]; // the size of each orbit
   public cubiesetnums: number[];
   public cubieordnums: number[];
-  public orbitoris: number[];  // the orientation size of each orbit
+  public orbitoris: number[]; // the orientation size of each orbit
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
-  public movesbyslice: any[];  // move as perms by slice
+  public movesbyslice: any[]; // move as perms by slice
   public cmovesbyslice: any[] = []; // cmoves as perms by slice
   // options
-  public verbose: number = 0;         // verbosity (console.log)
+  public verbose: number = 0; // verbosity (console.log)
   public allmoves: boolean = false; // generate all slice moves in ksolve
-  public outerblockmoves: boolean;  // generate outer block moves
-  public vertexmoves: boolean;      // generate vertex moves
-  public addrotations: boolean;     // add symmetry information to ksolve output
-  public movelist: any;             // move list to generate
-  public parsedmovelist: any;       // parsed move list
+  public outerblockmoves: boolean; // generate outer block moves
+  public vertexmoves: boolean; // generate vertex moves
+  public addrotations: boolean; // add symmetry information to ksolve output
+  public movelist: any; // move list to generate
+  public parsedmovelist: any; // parsed move list
   public cornersets: boolean = true; // include corner sets
   public centersets: boolean = true; // include center sets
-  public edgesets: boolean = true;   // include edge sets
+  public edgesets: boolean = true; // include edge sets
   public graycorners: boolean = false; // make corner sets gray
   public graycenters: boolean = false; // make center sets gray
-  public grayedges: boolean = false;   // make edge sets gray
+  public grayedges: boolean = false; // make edge sets gray
   public killorientation: boolean = false; // eliminate any orientations
-  public optimize: boolean = false;  // optimize PermOri
-  public scramble: number = 0;       // scramble?
+  public optimize: boolean = false; // optimize PermOri
+  public scramble: number = 0; // scramble?
   public ksolvemovenames: string[]; // move names from ksolve
-  public fixPiece: string = "";      // fix a piece?
+  public fixPiece: string = ""; // fix a piece?
   public orientCenters: boolean = false; // orient centers?
   public duplicatedFaces: number[] = []; // which faces are duplicated
   public duplicatedCubies: number[] = []; // which cubies are duplicated
-  public fixedCubie: number = -1;    // fixed cubie, if any
-  public svggrips: any[];       // grips from svg generation by svg coordinate
+  public fixedCubie: number = -1; // fixed cubie, if any
+  public svggrips: any[]; // grips from svg generation by svg coordinate
   public net: any = [];
   public colors: any = [];
   public faceorder: any = [];
@@ -414,11 +546,13 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "orientcenters") {
           this.orientCenters = optionlist[i + 1];
         } else {
-          throw new Error("Bad option while processing option list " + optionlist[i]);
+          throw new Error(
+            "Bad option while processing option list " + optionlist[i],
+          );
         }
       }
     }
-    this.args = shape + " " + (cuts.map((_) => _.join(" ")).join(" "));
+    this.args = shape + " " + cuts.map((_) => _.join(" ")).join(" ");
     if (optionlist) {
       this.args += " " + optionlist.join(" ");
     }
@@ -440,15 +574,28 @@ export class PuzzleGeometry {
     this.cubies = [];
     let g = null;
     switch (shape) {
-      case "c": g = cube(); break;
-      case "o": g = octahedron(); break;
-      case "i": g = icosahedron(); break;
-      case "t": g = tetrahedron(); break;
-      case "d": g = dodecahedron(); break;
-      default: throw new Error("Bad shape argument: " + shape);
+      case "c":
+        g = cube();
+        break;
+      case "o":
+        g = octahedron();
+        break;
+      case "i":
+        g = icosahedron();
+        break;
+      case "t":
+        g = tetrahedron();
+        break;
+      case "d":
+        g = dodecahedron();
+        break;
+      default:
+        throw new Error("Bad shape argument: " + shape);
     }
     this.rotations = closure(g);
-    if (this.verbose) { console.log("# Rotations: " + this.rotations.length); }
+    if (this.verbose) {
+      console.log("# Rotations: " + this.rotations.length);
+    }
     const baseplane = g[0];
     this.baseplanerot = uniqueplanes(baseplane, this.rotations);
     const baseplanes = this.baseplanerot.map((_) => baseplane.rotateplane(_));
@@ -458,9 +605,13 @@ export class PuzzleGeometry {
     this.net = net;
     this.colors = defaultcolors[baseplanes.length];
     this.faceorder = defaultfaceorders[baseplanes.length];
-    if (this.verbose) { console.log("# Base planes: " + baseplanes.length); }
+    if (this.verbose) {
+      console.log("# Base planes: " + baseplanes.length);
+    }
     const baseface = getface(baseplanes);
-    if (this.verbose) { console.log("# Face vertices: " + baseface.length); }
+    if (this.verbose) {
+      console.log("# Face vertices: " + baseface.length);
+    }
     const facenormal = baseplanes[0].makenormal();
     const edgenormal = baseface[0].sum(baseface[1]).makenormal();
     const vertexnormal = baseface[0].makenormal();
@@ -468,15 +619,24 @@ export class PuzzleGeometry {
     for (let i = 0; i < cuts.length; i++) {
       let normal = null;
       switch (cuts[i][0]) {
-        case "f": normal = facenormal; break;
-        case "v": normal = vertexnormal; break;
-        case "e": normal = edgenormal; break;
-        default: throw new Error("Bad cut argument: " + cuts[i][0]);
+        case "f":
+          normal = facenormal;
+          break;
+        case "v":
+          normal = vertexnormal;
+          break;
+        case "e":
+          normal = edgenormal;
+          break;
+        default:
+          throw new Error("Bad cut argument: " + cuts[i][0]);
       }
       cutplanes.push(normal.makecut(cuts[i][1]));
     }
     const boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d);
-    if (this.verbose) { console.log("# Boundary is " + boundary); }
+    if (this.verbose) {
+      console.log("# Boundary is " + boundary);
+    }
     const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
     let faces = [getface(planes)];
@@ -498,7 +658,7 @@ export class PuzzleGeometry {
     const vertexnames: any[] = [];
     const edgenames: any[] = [];
     const edgesperface = faces[0].length;
-    function searchaddelement(a: any[], p: Quat, name: any) {
+    function searchaddelement(a: any[], p: Quat, name: any): void {
       for (let i = 0; i < a.length; i++) {
         if (a[i][0].dist(p) < eps) {
           a[i].push(name);
@@ -579,8 +739,12 @@ export class PuzzleGeometry {
         }
       }
       if (!found) {
-        throw new Error("Could not find face " + faceindextoname[i] +
-          " in face order list " + this.faceorder);
+        throw new Error(
+          "Could not find face " +
+            faceindextoname[i] +
+            " in face order list " +
+            this.faceorder,
+        );
       }
     }
     for (let i = 0; i < this.baseplanerot.length; i++) {
@@ -610,8 +774,10 @@ export class PuzzleGeometry {
       }
       let c1 = faceindextoname[edgenames[i][1]];
       const c2 = faceindextoname[edgenames[i][2]];
-      if (this.faceprecedence[edgenames[i][1]] <
-        this.faceprecedence[edgenames[i][2]]) {
+      if (
+        this.faceprecedence[edgenames[i][1]] <
+        this.faceprecedence[edgenames[i][2]]
+      ) {
         c1 = c1 + c2;
       } else {
         c1 = c2 + c1;
@@ -626,8 +792,10 @@ export class PuzzleGeometry {
       }
       let st = 1;
       for (let j = 2; j < vertexnames[i].length; j++) {
-        if (this.faceprecedence[facenametoindex[vertexnames[i][j][0]]] <
-          this.faceprecedence[facenametoindex[vertexnames[i][st][0]]]) {
+        if (
+          this.faceprecedence[facenametoindex[vertexnames[i][j][0]]] <
+          this.faceprecedence[facenametoindex[vertexnames[i][st][0]]]
+        ) {
           st = j;
         }
       }
@@ -647,19 +815,19 @@ export class PuzzleGeometry {
       console.log("Face precedence list: " + this.faceorder.join(" "));
       console.log("Face names: " + facenames.map((_: any) => _[1]).join(" "));
       console.log("Edge names: " + edgenames.map((_: any) => _[1]).join(" "));
-      console.log("Vertex names: " + vertexnames.map((_: any) => _[1]).join(" "));
+      console.log(
+        "Vertex names: " + vertexnames.map((_: any) => _[1]).join(" "),
+      );
     }
     const geonormals = [];
     for (let i = 0; i < faceplanes.length; i++) {
-      geonormals.push(
-        [faceplanes[i][0].makenormal(), faceplanes[i][1], "f"]);
+      geonormals.push([faceplanes[i][0].makenormal(), faceplanes[i][1], "f"]);
     }
     for (let i = 0; i < edgenames.length; i++) {
       geonormals.push([edgenames[i][0].makenormal(), edgenames[i][1], "e"]);
     }
     for (let i = 0; i < vertexnames.length; i++) {
-      geonormals.push(
-        [vertexnames[i][0].makenormal(), vertexnames[i][1], "v"]);
+      geonormals.push([vertexnames[i][0].makenormal(), vertexnames[i][1], "v"]);
     }
     this.facenames = facenames;
     this.faceplanes = faceplanes;
@@ -670,8 +838,14 @@ export class PuzzleGeometry {
     this.edgedistance = faces[0][0].sum(faces[0][1]).smul(0.5).dist(zero);
     this.vertexdistance = faces[0][0].dist(zero);
     if (this.verbose) {
-      console.log("# Distances: face " + 1 + " edge " + this.edgedistance +
-        " vertex " + this.vertexdistance);
+      console.log(
+        "# Distances: face " +
+          1 +
+          " edge " +
+          this.edgedistance +
+          " vertex " +
+          this.vertexdistance,
+      );
     }
     // expand cutplanes by rotations.  We only work with one face here.
     for (let c = 0; c < cutplanes.length; c++) {
@@ -691,7 +865,9 @@ export class PuzzleGeometry {
       }
     }
     this.faces = faces;
-    if (this.verbose) { console.log("# Faces is now " + faces.length); }
+    if (this.verbose) {
+      console.log("# Faces is now " + faces.length);
+    }
     this.stickersperface = faces.length;
     //  Find and report the shortest edge in any of the faces.  If this
     //  is small the puzzle is probably not practical or displayable.
@@ -706,7 +882,9 @@ export class PuzzleGeometry {
       }
     }
     this.shortedge = shortedge;
-    if (this.verbose) { console.log("# Short edge is " + shortedge); }
+    if (this.verbose) {
+      console.log("# Short edge is " + shortedge);
+    }
   }
 
   public keyface(face: Quat[]): string {
@@ -733,8 +911,7 @@ export class PuzzleGeometry {
     const key = this.keyface(face);
     for (let i = 0; i < this.facelisthash[key].length; i++) {
       const face2 = this.facelisthash[key][i];
-      if (Math.abs(cm.dist(
-        centermassface(this.faces[face2]))) < eps) {
+      if (Math.abs(cm.dist(centermassface(this.faces[face2]))) < eps) {
         return face2;
       }
     }
@@ -760,18 +937,24 @@ export class PuzzleGeometry {
     const sinr = delta.c;
     const x1 = x0.smul(cosr).sub(y0.smul(sinr)).smul(len);
     const y1 = y0.smul(cosr).sum(x0.smul(sinr)).smul(len);
-    const off = new Quat(0, targvec[0].b - x1.dot(face[edgen]),
-      targvec[0].c - y1.dot(face[edgen]), 0);
+    const off = new Quat(
+      0,
+      targvec[0].b - x1.dot(face[edgen]),
+      targvec[0].c - y1.dot(face[edgen]),
+      0,
+    );
     return [x1, y1, off];
   }
 
-public allstickers(): void {
+  public allstickers(): void {
     // next step is to calculate all the stickers and orbits
     // We do enough work here to display the cube on the screen.
     // take our newly split base face and expand it by the rotation matrix.
     // this generates our full set of "stickers".
     this.faces = expandfaces(this.baseplanerot, this.faces);
-    if (this.verbose) { console.log("# Total stickers is now " + this.faces.length); }
+    if (this.verbose) {
+      console.log("# Total stickers is now " + this.faces.length);
+    }
     // Split moveplanes into a list of parallel planes.
     const moveplanesets = [];
     for (let i = 0; i < this.moveplanes.length; i++) {
@@ -803,7 +986,9 @@ public allstickers(): void {
     }
     this.moveplanesets = moveplanesets;
     const sizes = moveplanesets.map((_) => _.length);
-    if (this.verbose) { console.log("# Move plane sets: " + sizes); }
+    if (this.verbose) {
+      console.log("# Move plane sets: " + sizes);
+    }
     // for each of the move planes, find the rotations that are relevant
     const moverotations: Quat[][] = [];
     for (let i = 0; i < moveplanesets.length; i++) {
@@ -857,8 +1042,13 @@ public allstickers(): void {
       if (pos === null || neg === null) {
         throw new Error("Saw positive or negative sides as null");
       }
-      movesetgeos.push([pos[0], pos[1], neg[0], neg[1],
-      1 + moveplanesets[i].length]);
+      movesetgeos.push([
+        pos[0],
+        pos[1],
+        neg[0],
+        neg[1],
+        1 + moveplanesets[i].length,
+      ]);
     }
     this.movesetgeos = movesetgeos;
     //  Cubies are split by move plane sets.  For each cubie we can
@@ -890,7 +1080,9 @@ public allstickers(): void {
       //  because ksolve doesn't handle orientations that are not
       //  cyclic, and the rotation group of the core is not cyclic.
       if (facelisthash[s].length === this.basefacecount) {
-        if (this.verbose) { console.log("# Splitting core."); }
+        if (this.verbose) {
+          console.log("# Splitting core.");
+        }
         for (let suff = 0; suff < this.basefacecount; suff++) {
           const s2 = s + " " + suff;
           facelisthash[s2] = [facelisthash[s][suff]];
@@ -906,8 +1098,9 @@ public allstickers(): void {
     this.cubiekey = cubiekey;
     this.facelisthash = facelisthash;
     this.cubiekeys = cubiekeys;
-    if (this.verbose) { console.log("# Cubies: " + Object.keys(cubiehash).length); }
-    const that = this;
+    if (this.verbose) {
+      console.log("# Cubies: " + Object.keys(cubiehash).length);
+    }
     //  Sort the faces around each corner so they are clockwise.  Only
     //  relevant for cubies that actually are corners (three or more
     //  faces).  In general cubies might have many faces; for icosohedrons
@@ -918,11 +1111,14 @@ public allstickers(): void {
       if (cubie.length < 2) {
         continue;
       }
-      if (cubie.length === this.basefacecount) { // looks like core?  don't sort
+      if (cubie.length === this.basefacecount) {
+        // looks like core?  don't sort
         continue;
       }
       if (cubie.length > 5) {
-        throw new Error("Bad math; too many faces on this cubie " + cubie.length);
+        throw new Error(
+          "Bad math; too many faces on this cubie " + cubie.length,
+        );
       }
       const s = this.keyface(cubie[0]);
       const facelist = facelisthash[s];
@@ -950,15 +1146,17 @@ public allstickers(): void {
           break;
         }
         if (looplimit > 1000) {
-          throw new Error(("Bad epsilon math; too close to border"));
+          throw new Error("Bad epsilon math; too close to border");
         }
       }
       let mini = 0;
       let minf = this.findface(cubie[mini]);
       for (let i = 1; i < cubie.length; i++) {
         const temp = this.findface(cubie[i]);
-        if (this.faceprecedence[this.getfaceindex(temp)] <
-          this.faceprecedence[this.getfaceindex(minf)]) {
+        if (
+          this.faceprecedence[this.getfaceindex(temp)] <
+          this.faceprecedence[this.getfaceindex(minf)]
+        ) {
           mini = i;
           minf = temp;
         }
@@ -997,10 +1195,11 @@ public allstickers(): void {
     const cubievaluemap = [];
     // Later we will make this smarter to use a get color for face function
     // so we support puzzles with multiple faces the same color
-    function getcolorkey(cubienum: number): string {
-      return cubies[cubienum].map(
-        (_) => that.getfaceindex(that.findface(_))).join(" ");
-    }
+    const getcolorkey = (cubienum: number): string => {
+      return cubies[cubienum]
+        .map((_) => this.getfaceindex(this.findface(_)))
+        .join(" ");
+    };
     const cubiesetcubies: any = [];
     for (let i = 0; i < cubies.length; i++) {
       if (seen[i]) {
@@ -1020,7 +1219,7 @@ public allstickers(): void {
       if (typename === undefined || facecnt === this.basefacecount) {
         typename = "CORE";
       }
-      typename = typename + (typectr === 0 ? "" : (typectr + 1));
+      typename = typename + (typectr === 0 ? "" : typectr + 1);
       cubiesetnames[cubiesetnum] = typename;
       orbitoris[cubiesetnum] = facecnt;
       const queue = [i];
@@ -1037,7 +1236,9 @@ public allstickers(): void {
         cubiesetcubies[cubiesetnum].push(cind);
         cubieordnums[cind] = cubieords[cubiesetnum]++;
         for (let j = 0; j < moverotations.length; j++) {
-          const tq = this.findcubie(moverotations[j][0].rotateface(cubies[cind][0]));
+          const tq = this.findcubie(
+            moverotations[j][0].rotateface(cubies[cind][0]),
+          );
           if (!seen[tq]) {
             queue.push(tq);
             seen[tq] = true;
@@ -1057,19 +1258,25 @@ public allstickers(): void {
     // if we fix a cubie, find a cubie to fix
     if (this.fixPiece !== "") {
       for (let i = 0; i < cubies.length; i++) {
-        if ((this.fixPiece === "v" && cubies[i].length > 2) ||
+        if (
+          (this.fixPiece === "v" && cubies[i].length > 2) ||
           (this.fixPiece === "e" && cubies[i].length === 2) ||
-          (this.fixPiece === "f" && cubies[i].length === 1)) {
+          (this.fixPiece === "f" && cubies[i].length === 1)
+        ) {
           this.fixedCubie = i;
           break;
         }
       }
       if (this.fixedCubie < 0) {
-        throw new Error("Could not find a cubie of type " + this.fixPiece + " to fix.");
+        throw new Error(
+          "Could not find a cubie of type " + this.fixPiece + " to fix.",
+        );
       }
     }
     // show the orbits
-    if (this.verbose) { console.log("# Cubie orbit sizes " + cubieords); }
+    if (this.verbose) {
+      console.log("# Cubie orbit sizes " + cubieords);
+    }
   }
 
   public spinmatch(a: string, b: string): boolean {
@@ -1102,7 +1309,8 @@ public allstickers(): void {
     }
   }
 
-  public parsemove(mv: string): any { // parse a move from the command line
+  public parsemove(mv: string): any {
+    // parse a move from the command line
     const re = RegExp("^(([0-9]+)-)?([0-9]+)?([A-Za-z]+)([-'0-9]+)?$");
     const p = mv.match(re);
     if (p === null) {
@@ -1166,8 +1374,12 @@ public allstickers(): void {
       loslice = 0;
       hislice = this.moveplanesets[msi].length;
     }
-    if (loslice < 0 || loslice > this.moveplanesets[msi].length ||
-      hislice < 0 || hislice > this.moveplanesets[msi].length) {
+    if (
+      loslice < 0 ||
+      loslice > this.moveplanesets[msi].length ||
+      hislice < 0 ||
+      hislice > this.moveplanesets[msi].length
+    ) {
       throw new Error("Bad slice spec " + loslice + " " + hislice);
     }
     let amountstr = "1";
@@ -1190,8 +1402,10 @@ public allstickers(): void {
     return r;
   }
 
-  public genperms(): void { // generate permutations for moves
-    if (this.cmovesbyslice.length > 0) { // did this already?
+  public genperms(): void {
+    // generate permutations for moves
+    if (this.cmovesbyslice.length > 0) {
+      // did this already?
       return;
     }
     const movesbyslice = [];
@@ -1228,7 +1442,7 @@ public allstickers(): void {
           const b = this.facetocubies[i].slice();
           let face = this.faces[i];
           let fi2 = i;
-          while (true) {
+          for (;;) {
             slicenum[fi2] = -1;
             const face2 = this.moverotations[k][0].rotateface(face);
             fi2 = this.findface(face2);
@@ -1263,29 +1477,36 @@ public allstickers(): void {
           //
           // The move moving the center might not be the same modulo as the
           // center itself.
-          if (a.length > 1 && this.orientCenters &&
-              (this.cubies[b[0]].length === 1 ||
-               this.cubies[b[0]][0] === this.cubies[b[0]][1])) {
-             // is this a real center cubie, around an axis?
-             if (centermassface(this.faces[i]).dist(centermassface(this.basefaces[this.getfaceindex(i)])) < eps) {
-               // how does remapping of the face/point set map to the original?
-               let face1 = this.faces[a[0]] ;
-               for (let ii = 0; ii < a.length; ii++) {
-                 const face0 = this.faces[a[ii]] ;
-                 let o = -1 ;
-                 for (let jj = 0; jj < face1.length; jj++) {
-                   if (face0[jj].dist(face1[0]) < eps) {
-                     o = jj ;
-                     break ;
-                   }
-                 }
-                 if (o < 0) {
-                   throw new Error("Couldn't find rotation of center faces.") ;
-                 }
-                 b[2 * ii + 1] = o ;
-                 face1 = this.moverotations[k][0].rotateface(face1) ;
-               }
-             }
+          if (
+            a.length > 1 &&
+            this.orientCenters &&
+            (this.cubies[b[0]].length === 1 ||
+              this.cubies[b[0]][0] === this.cubies[b[0]][1])
+          ) {
+            // is this a real center cubie, around an axis?
+            if (
+              centermassface(this.faces[i]).dist(
+                centermassface(this.basefaces[this.getfaceindex(i)]),
+              ) < eps
+            ) {
+              // how does remapping of the face/point set map to the original?
+              let face1 = this.faces[a[0]];
+              for (let ii = 0; ii < a.length; ii++) {
+                const face0 = this.faces[a[ii]];
+                let o = -1;
+                for (let jj = 0; jj < face1.length; jj++) {
+                  if (face0[jj].dist(face1[0]) < eps) {
+                    o = jj;
+                    break;
+                  }
+                }
+                if (o < 0) {
+                  throw new Error("Couldn't find rotation of center faces.");
+                }
+                b[2 * ii + 1] = o;
+                face1 = this.moverotations[k][0].rotateface(face1);
+              }
+            }
           }
           // a.length == 1 means a sticker is spinning in place.
           // in this case we add duplicate stickers and fake the orientation
@@ -1296,7 +1517,10 @@ public allstickers(): void {
               if (sc === 0) {
                 b.push(b[0], ii);
               } else {
-                b.push(b[0], (this.movesetorders[k] - ii) % this.movesetorders[k]);
+                b.push(
+                  b[0],
+                  (this.movesetorders[k] - ii) % this.movesetorders[k],
+                );
               }
               this.cubies[b[0]].push(this.cubies[b[0]][0]);
             }
@@ -1332,13 +1556,15 @@ public allstickers(): void {
     }
   }
 
-  public getfaces(): number[][][] { // get the faces for 3d.
+  public getfaces(): number[][][] {
+    // get the faces for 3d.
     return this.faces.map((_) => {
       return _.map((__) => [__.b, __.c, __.d]);
     });
   }
 
-  public getboundarygeometry(): any { // get the boundary geometry
+  public getboundarygeometry(): any {
+    // get the boundary geometry
     return {
       baseplanes: this.baseplanes,
       facenames: this.facenames,
@@ -1368,7 +1594,9 @@ public allstickers(): void {
         if (parsedmove[4]) {
           r.push((2 << parsedmove[3]) - (1 << parsedmove[2]));
         } else {
-          r.push((2 << (slices - parsedmove[2])) - (1 << (slices - parsedmove[3])));
+          r.push(
+            (2 << (slices - parsedmove[2])) - (1 << (slices - parsedmove[3])),
+          );
         }
         r.push(parsedmove[5]);
       }
@@ -1444,9 +1672,11 @@ public allstickers(): void {
     if (this.duplicatedCubies[cubie]) {
       ori = 1;
     }
-    return ((ori === 1 && (this.graycenters || !this.centersets)) ||
+    return (
+      (ori === 1 && (this.graycenters || !this.centersets)) ||
       (ori === 2 && (this.grayedges || !this.edgesets)) ||
-      (ori > 2 && (this.graycorners || !this.cornersets)));
+      (ori > 2 && (this.graycorners || !this.cornersets))
+    );
   }
 
   public skipbyori(cubie: number): boolean {
@@ -1454,9 +1684,11 @@ public allstickers(): void {
     if (this.duplicatedCubies[cubie]) {
       ori = 1;
     }
-    return ((ori === 1 && !this.centersets) ||
+    return (
+      (ori === 1 && !this.centersets) ||
       (ori === 2 && !this.edgesets) ||
-      (ori > 2 && !this.cornersets));
+      (ori > 2 && !this.cornersets)
+    );
   }
 
   public skipcubie(set: number[]): boolean {
@@ -1476,11 +1708,11 @@ public allstickers(): void {
   }
 
   public header(comment: string): string {
-    return comment + copyright + "\n" +
-      comment + this.args + "\n";
+    return comment + copyright + "\n" + comment + this.args + "\n";
   }
 
-  public writegap(): string { // write out a gap set of generators
+  public writegap(): string {
+    // write out a gap set of generators
     const os = this.getOrbitsDef(false);
     const r = [];
     const mvs = [];
@@ -1494,13 +1726,19 @@ public allstickers(): void {
     r.push(mvs.join(","));
     r.push("];");
     const ip = os.solved.identicalPieces();
-    r.push("ip:=[" + ip.map((_) => "[" + _.map((__) => __ + 1).join(",") + "]").
-      join(",") + "];");
+    r.push(
+      "ip:=[" +
+        ip.map((_) => "[" + _.map((__) => __ + 1).join(",") + "]").join(",") +
+        "];",
+    );
     r.push("");
     return this.header("# ") + r.join("\n");
   }
 
-  public writeksolve(name: string = "PuzzleGeometryPuzzle", fortwisty: boolean = false): string {
+  public writeksolve(
+    name: string = "PuzzleGeometryPuzzle",
+    fortwisty: boolean = false,
+  ): string {
     const od = this.getOrbitsDef(fortwisty);
     if (fortwisty) {
       return od.toKsolve(name, fortwisty).join("\n");
@@ -1551,8 +1789,12 @@ public allstickers(): void {
         continue;
       }
       setnames.push(this.cubiesetnames[i]);
-      setdefs.push(new OrbitDef(this.cubieords[i],
-        this.killorientation ? 1 : this.orbitoris[i]));
+      setdefs.push(
+        new OrbitDef(
+          this.cubieords[i],
+          this.killorientation ? 1 : this.orbitoris[i],
+        ),
+      );
     }
     const solved: Orbit[] = [];
     for (let i = 0; i < this.cubiesetnames.length; i++) {
@@ -1570,8 +1812,9 @@ public allstickers(): void {
         }
         o.push(0);
       }
-      solved.push(new Orbit(p, o,
-        this.killorientation ? 1 : this.orbitoris[i]));
+      solved.push(
+        new Orbit(p, o, this.killorientation ? 1 : this.orbitoris[i]),
+      );
     }
     const movenames: string[] = [];
     const moves: Transformation[] = [];
@@ -1627,7 +1870,8 @@ public allstickers(): void {
                 oris[setnum][mperm[ii]] =
                   (mperm[(ii + oinc) % mperm.length] -
                     mperm[(ii + 1) % mperm.length] +
-                    this.orbitoris[setnum]) % this.orbitoris[setnum];
+                    this.orbitoris[setnum]) %
+                  this.orbitoris[setnum];
               }
             }
           }
@@ -1641,8 +1885,13 @@ public allstickers(): void {
           for (let jj = 0; jj < perms[ii].length; jj++) {
             no[jj] = oris[ii][perms[ii][jj]];
           }
-          moveorbits.push(new Orbit(perms[ii], no,
-            this.killorientation ? 1 : this.orbitoris[ii]));
+          moveorbits.push(
+            new Orbit(
+              perms[ii],
+              no,
+              this.killorientation ? 1 : this.orbitoris[ii],
+            ),
+          );
         }
         let mv = new Transformation(moveorbits);
         if (moveset[i + 1] !== 1) {
@@ -1652,8 +1901,13 @@ public allstickers(): void {
       }
     }
     this.ksolvemovenames = movenames; // hack!
-    let r = new OrbitsDef(setnames, setdefs, new VisibleState(solved),
-      movenames, moves);
+    let r = new OrbitsDef(
+      setnames,
+      setdefs,
+      new VisibleState(solved),
+      movenames,
+      moves,
+    );
     if (this.optimize) {
       r = r.optimize();
     }
@@ -1664,8 +1918,9 @@ public allstickers(): void {
   }
 
   public getMovesAsPerms(): Perm[] {
-    return this.getOrbitsDef(false).moveops.
-      map((_: Transformation) => _.toPerm());
+    return this.getOrbitsDef(false).moveops.map((_: Transformation) =>
+      _.toPerm(),
+    );
   }
 
   public showcanon(disp: (s: string) => void): void {
@@ -1673,7 +1928,8 @@ public allstickers(): void {
     showcanon(this.getOrbitsDef(false), disp);
   }
 
-  public getsolved(): Perm { // get a solved position
+  public getsolved(): Perm {
+    // get a solved position
     const r = [];
     for (let i = 0; i < this.basefacecount; i++) {
       for (let j = 0; j < this.stickersperface; j++) {
@@ -1683,36 +1939,61 @@ public allstickers(): void {
     return new Perm(r);
   }
 
-  public getInitial3DRotation() {
+  public getInitial3DRotation(): Quat {
     const basefacecount = this.basefacecount;
     if (basefacecount === 4) {
-      return new Quat(0.7043069543230507, 0.0617237605829268,
-        0.4546068756768417, 0.5417328493446099);
+      return new Quat(
+        0.7043069543230507,
+        0.0617237605829268,
+        0.4546068756768417,
+        0.5417328493446099,
+      );
     } else if (basefacecount === 6) {
-      return new Quat(0.3419476009844782, 0.17612448544695208,
-        -0.42284908551877964, 0.8205185279339757);
+      return new Quat(
+        0.3419476009844782,
+        0.17612448544695208,
+        -0.42284908551877964,
+        0.8205185279339757,
+      );
     } else if (basefacecount === 8) {
-      return new Quat(-0.6523285484575103, 0.2707374015470506,
-        0.6537994145576647, 0.27150515611112014);
+      return new Quat(
+        -0.6523285484575103,
+        0.2707374015470506,
+        0.6537994145576647,
+        0.27150515611112014,
+      );
     } else if (basefacecount === 12) {
-      return new Quat(-0.5856747836703331, 0.02634133605619232,
-        0.7075560342412421, 0.39453217891103587);
+      return new Quat(
+        -0.5856747836703331,
+        0.02634133605619232,
+        0.7075560342412421,
+        0.39453217891103587,
+      );
     } else if (basefacecount === 20) {
-      return new Quat(0.7052782621769977, 0.6377976252204238,
-        0.30390357803973855, 0.05864620549043545);
+      return new Quat(
+        0.7052782621769977,
+        0.6377976252204238,
+        0.30390357803973855,
+        0.05864620549043545,
+      );
     } else {
       throw new Error("Wrong base face count");
     }
   }
 
-  public generatesvg(w: number = 800, h: number = 500, trim: number = 10, threed: boolean = false): string {
+  public generatesvg(
+    w: number = 800,
+    h: number = 500,
+    trim: number = 10,
+    threed: boolean = false,
+  ): string {
     // generate svg to interoperate with Lucas twistysim
     w -= 2 * trim;
     h -= 2 * trim;
     function extendedges(a: number[][], n: number): void {
       let dx = a[1][0] - a[0][0];
       let dy = a[1][1] - a[0][1];
-      const ang = 2 * Math.PI / n;
+      const ang = (2 * Math.PI) / n;
       const cosa = Math.cos(ang);
       const sina = Math.sin(ang);
       for (let i = 2; i < n; i++) {
@@ -1727,12 +2008,16 @@ public allstickers(): void {
     function noise(c: number): number {
       return c + 0 * (Math.random() - 0.5);
     }
-    function drawedges(id: string, pts: number[][], color: string)
-      : string {
-      return "<polygon id=\"" + id + "\" class=\"sticker\" style=\"fill: " + color +
-        "\" points=\"" +
+    function drawedges(id: string, pts: number[][], color: string): string {
+      return (
+        '<polygon id="' +
+        id +
+        '" class="sticker" style="fill: ' +
+        color +
+        '" points="' +
         pts.map((p) => noise(p[0]) + " " + noise(p[1])).join(" ") +
-        "\"/>\n";
+        '"/>\n'
+      );
     }
     // What grips do we need?  if rotations, add all grips.
     let needvertexgrips = this.addrotations;
@@ -1769,7 +2054,10 @@ public allstickers(): void {
     let miny = 0;
     let maxx = 1;
     let maxy = 0;
-    edges[net[0][0]] = [[1, 0], [0, 0]];
+    edges[net[0][0]] = [
+      [1, 0],
+      [0, 0],
+    ];
     extendedges(edges[net[0][0]], polyn);
     for (let i = 0; i < net.length; i++) {
       const f0 = net[i][0];
@@ -1800,12 +2088,16 @@ public allstickers(): void {
     const geos: any = {};
     const bg = this.getboundarygeometry();
     const edges2: any = {};
-    const initv = [[sc + xoff, yoff], [xoff, yoff]];
+    const initv = [
+      [sc + xoff, yoff],
+      [xoff, yoff],
+    ];
     edges2[net[0][0]] = initv;
     extendedges(edges2[net[0][0]], polyn);
-    geos[this.facenames[0][1]] = this.project2d(0, 0,
-      [new Quat(0, initv[0][0], initv[0][1], 0),
-      new Quat(0, initv[1][0], initv[1][1], 0)]);
+    geos[this.facenames[0][1]] = this.project2d(0, 0, [
+      new Quat(0, initv[0][0], initv[0][1], 0),
+      new Quat(0, initv[1][0], initv[1][1], 0),
+    ]);
     const connectat = [];
     connectat[0] = 0;
     for (let i = 0; i < net.length; i++) {
@@ -1829,15 +2121,20 @@ public allstickers(): void {
         if (f1 === "" || edges2[f1]) {
           continue;
         }
-        edges2[f1] = [edges2[f0][j % polyn], edges2[f0][(j + polyn - 1) % polyn]];
+        edges2[f1] = [
+          edges2[f0][j % polyn],
+          edges2[f0][(j + polyn - 1) % polyn],
+        ];
         extendedges(edges2[f1], polyn);
         // what edge are we at?
         const caf0 = connectat[gfi];
-        const mp = thisface[(caf0 + j) % polyn].sum(thisface[(caf0 + j + polyn - 1) % polyn]).smul(0.5);
+        const mp = thisface[(caf0 + j) % polyn]
+          .sum(thisface[(caf0 + j + polyn - 1) % polyn])
+          .smul(0.5);
         const epi = findelement(bg.edgenames, mp);
         const edgename = bg.edgenames[epi][1];
         const el = splitByFaceNames(edgename, this.facenames);
-        const gf1 = el[(f0 === el[0]) ? 1 : 0];
+        const gf1 = el[f0 === el[0] ? 1 : 0];
         let gf1i = -1;
         for (let k = 0; k < bg.facenames.length; k++) {
           if (gf1 === bg.facenames[k][1]) {
@@ -1855,8 +2152,10 @@ public allstickers(): void {
             const p1 = edges2[f0][(j + polyn - 1) % polyn];
             const p2 = edges2[f0][j % polyn];
             connectat[gf1i] = k;
-            geos[gf1] = this.project2d(gf1i, k,
-              [new Quat(0, p2[0], p2[1], 0), new Quat(0, p1[0], p1[1], 0)]);
+            geos[gf1] = this.project2d(gf1i, k, [
+              new Quat(0, p2[0], p2[1], 0),
+              new Quat(0, p1[0], p1[1], 0),
+            ]);
             break;
           }
         }
@@ -1884,20 +2183,22 @@ public allstickers(): void {
       }
     }
     const sc2 = Math.min(h / hiy / 2, (w - trim) / hix / 4);
-    const that = this;
-    function mappt2d(fn: number, q: Quat): number[] {
+    const mappt2d = (fn: number, q: Quat): number[] => {
       if (threed) {
         const xoff2 = 0.5 * trim + 0.25 * w;
-        const xmul = (that.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1);
-        return [trim + w * 0.5 + xmul * (xoff2 - q.b * sc2), trim + h * 0.5 + q.c * sc2];
+        const xmul = this.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1;
+        return [
+          trim + w * 0.5 + xmul * (xoff2 - q.b * sc2),
+          trim + h * 0.5 + q.c * sc2,
+        ];
       } else {
-        const g = geos[that.facenames[fn][1]];
+        const g = geos[this.facenames[fn][1]];
         return [trim + q.dot(g[0]) + g[2].b, trim + h - q.dot(g[1]) - g[2].c];
       }
-    }
+    };
     for (let i = 0; i < this.faces.length; i++) {
-      let face = that.faces[i];
-      const facenum = Math.floor(i / that.stickersperface);
+      let face = this.faces[i];
+      const facenum = Math.floor(i / this.stickersperface);
       if (threed) {
         face = rot.rotateface(face);
       }
@@ -1915,13 +2216,12 @@ public allstickers(): void {
         const cubiesetnum = this.cubiesetnums[cubie];
         const cubieord = this.cubieordnums[cubie];
         const color = this.graybyori(cubie) ? "#808080" : colormap[pos.p[i]];
-        let id = this.cubiesetnames[cubiesetnum] +
-          "-l" + cubieord + "-o" + cubieori;
+        let id =
+          this.cubiesetnames[cubiesetnum] + "-l" + cubieord + "-o" + cubieori;
         svg.push(drawedges(id, facegeo[i], color));
         if (this.duplicatedFaces[i]) {
           for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
-            id = this.cubiesetnames[cubiesetnum] +
-              "-l" + cubieord + "-o" + jj;
+            id = this.cubiesetnames[cubiesetnum] + "-l" + cubieord + "-o" + jj;
             svg.push(drawedges(id, facegeo[i], color));
           }
         }
@@ -1929,10 +2229,17 @@ public allstickers(): void {
       svg.push("</g>");
     }
     const svggrips: any[] = [];
-    function addgrip(onface: number, name: string, pt: Quat, order: number): void {
+    function addgrip(
+      onface: number,
+      name: string,
+      pt: Quat,
+      order: number,
+    ): void {
       const pt2 = mappt2d(onface, pt);
       for (let i = 0; i < svggrips.length; i++) {
-        if (Math.hypot(pt2[0] - svggrips[i][0], pt2[1] - svggrips[i][1]) < eps) {
+        if (
+          Math.hypot(pt2[0] - svggrips[i][0], pt2[1] - svggrips[i][1]) < eps
+        ) {
           return;
         }
       }
@@ -1953,26 +2260,28 @@ public allstickers(): void {
       }
       for (let j = 0; j < baseface.length; j++) {
         if (neededgegrips) {
-          const mp = baseface[j].sum(
-            baseface[(j + 1) % baseface.length]).smul(0.5);
+          const mp = baseface[j]
+            .sum(baseface[(j + 1) % baseface.length])
+            .smul(0.5);
           const ep = findelement(this.edgenames, mp);
-          const mpc = facecoords[j].sum(
-            facecoords[(j + 1) % baseface.length]).smul(0.5);
+          const mpc = facecoords[j]
+            .sum(facecoords[(j + 1) % baseface.length])
+            .smul(0.5);
           addgrip(i, this.edgenames[ep][1], mpc, 2);
         }
         if (needvertexgrips) {
-          const vp = findelement(
-            this.vertexnames, baseface[j]);
-          addgrip(i, this.vertexnames[vp][1], facecoords[j],
-            this.cornerfaces);
+          const vp = findelement(this.vertexnames, baseface[j]);
+          addgrip(i, this.vertexnames[vp][1], facecoords[j], this.cornerfaces);
         }
       }
     }
-    const html = '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n' +
+    const html =
+      '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n' +
       '<style type="text/css"><![CDATA[' +
       ".sticker { stroke: #000000; stroke-width: 1px; }" +
       "]]></style>\n" +
-      svg.join("") + "</svg>";
+      svg.join("") +
+      "</svg>";
     this.svggrips = svggrips;
     return html;
   }
@@ -1993,23 +2302,28 @@ public allstickers(): void {
       const cubieori = this.facetocubies[i][1];
       const cubiesetnum = this.cubiesetnums[cubie];
       const cubieord = this.cubieordnums[cubie];
-      const color = this.graybyori(cubie) ? "#808080" :
-        this.colors[this.facenames[facenum][1]];
+      const color = this.graybyori(cubie)
+        ? "#808080"
+        : this.colors[this.facenames[facenum][1]];
       let coords = rot.rotateface(this.faces[i]);
       if (trim && trim > 0) {
         coords = trimEdges(coords, trim);
       }
       stickers.push({
         coords: toFaceCoords(coords, maxdist),
-        color, orbit: this.cubiesetnames[cubiesetnum],
-        ord: cubieord, ori: cubieori,
+        color,
+        orbit: this.cubiesetnames[cubiesetnum],
+        ord: cubieord,
+        ori: cubieori,
       });
       if (this.duplicatedFaces[i]) {
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
           stickers.push({
             coords: toFaceCoords(coords, maxdist),
-            color, orbit: this.cubiesetnames[cubiesetnum],
-            ord: cubieord, ori: jj,
+            color,
+            orbit: this.cubiesetnames[cubiesetnum],
+            ord: cubieord,
+            ori: jj,
           });
         }
       }
@@ -2021,10 +2335,12 @@ public allstickers(): void {
       for (let j = 0; j < this.geonormals.length; j++) {
         const gn = this.geonormals[j];
         if (msg[0] === gn[1] && msg[1] === gn[2]) {
-          grips.push([toCoords(gn[0].rotatepoint(rot), 1),
-          msg[0], order]);
-          grips.push([toCoords(gn[0].rotatepoint(rot).smul(-1), 1),
-          msg[2], order]);
+          grips.push([toCoords(gn[0].rotatepoint(rot), 1), msg[0], order]);
+          grips.push([
+            toCoords(gn[0].rotatepoint(rot).smul(-1), 1),
+            msg[2],
+            order,
+          ]);
         }
       }
     }

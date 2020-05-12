@@ -2,11 +2,35 @@ import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. h
 import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import { algToString, BareBlockMove, BlockMove, experimentalAppendBlockMove, modifiedBlockMove, MoveFamily, parse as algparse, Sequence } from "../../src/alg/index";
-import { connect, debugKeyboardConnect, MoveEvent } from "../../src/bluetooth/index";
+import {
+  algToString,
+  BareBlockMove,
+  BlockMove,
+  experimentalAppendBlockMove,
+  modifiedBlockMove,
+  MoveFamily,
+  parse as algparse,
+  Sequence,
+} from "../../src/alg/index";
+import {
+  connect,
+  debugKeyboardConnect,
+  MoveEvent,
+} from "../../src/bluetooth/index";
 import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
-import { getpuzzle, getpuzzles, parsedesc, PuzzleGeometry, schreierSims, StickerDat } from "../../src/puzzle-geometry/index";
-import { experimentalShowJumpingFlash, Twisty, Vantage } from "../../src/twisty/index";
+import {
+  getpuzzle,
+  getpuzzles,
+  parsedesc,
+  PuzzleGeometry,
+  schreierSims,
+  StickerDat,
+} from "../../src/puzzle-geometry/index";
+import {
+  experimentalShowJumpingFlash,
+  Twisty,
+  Vantage,
+} from "../../src/twisty/index";
 import { getURLParam, setURLParams } from "./url-params";
 
 experimentalShowJumpingFlash(false);
@@ -23,9 +47,26 @@ let lastval: string = "";
 let lastalgo: string = "";
 let scramble: number = 0;
 let stickerDat: StickerDat;
-const renderOptions = ["centers", "edges", "corners", "blockmoves", "vertexmoves", "sidebyside", "showfoundation"];
-const workOptions = ["threed", "centers", "edges", "corners", "optimize", "blockmoves",
-  "allmoves", "vertexmoves", "killori"];
+const renderOptions = [
+  "centers",
+  "edges",
+  "corners",
+  "blockmoves",
+  "vertexmoves",
+  "sidebyside",
+  "showfoundation",
+];
+const workOptions = [
+  "threed",
+  "centers",
+  "edges",
+  "corners",
+  "optimize",
+  "blockmoves",
+  "allmoves",
+  "vertexmoves",
+  "killori",
+];
 let lastRender: any;
 let gripdepth: any;
 function getCheckbox(a: string): boolean {
@@ -59,7 +100,11 @@ function getModValueForMove(move: BlockMove): number {
   return 1;
 }
 
-function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boolean): BlockMove {
+function intersectionToMove(
+  point: Vector3,
+  event: MouseEvent,
+  rightClick: boolean,
+): BlockMove {
   let bestGrip: MoveFamily = stickerDat.axis[0][1];
   let bestProduct: number = 0;
   for (const axis of stickerDat.axis) {
@@ -87,7 +132,12 @@ function intersectionToMove(point: Vector3, event: MouseEvent, rightClick: boole
   return move;
 }
 
-function LucasSetup(pg: PuzzleGeometry, kpuzzledef: KPuzzleDefinition, newStickerDat: StickerDat, savealgo: boolean): void {
+function LucasSetup(
+  pg: PuzzleGeometry,
+  kpuzzledef: KPuzzleDefinition,
+  newStickerDat: StickerDat,
+  savealgo: boolean,
+): void {
   safeKpuzzle = kpuzzledef; // this holds the scrambled position
   puzzle = kpuzzledef as KPuzzleDefinition;
   const mps = pg.movesetgeos;
@@ -138,15 +188,30 @@ function setAlgo(str: string, writeback: boolean): void {
       });
       twisty.setCoalesceModFunc(getModValueForMove);
 
-      const vantages: Vantage[] = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetVantages();
+      const vantages: Vantage[] = twisty
+        .experimentalGetPlayer()
+        .pg3DView.experimentalGetPG3D()
+        .experimentalGetVantages();
       // TODO: This is a hack.
       // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
       // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
       setTimeout(() => {
         for (const vantage of vantages) {
-          vantage.renderer.domElement.addEventListener("click", onMouseClick.bind(onMouseClick, vantage, false), false);
-          vantage.renderer.domElement.addEventListener("contextmenu", onMouseClick.bind(onMouseClick, vantage, true), false);
-          vantage.renderer.domElement.addEventListener("mousemove", onMouseMove.bind(onMouseMove, vantage), false);
+          vantage.renderer.domElement.addEventListener(
+            "click",
+            onMouseClick.bind(onMouseClick, vantage, false),
+            false,
+          );
+          vantage.renderer.domElement.addEventListener(
+            "contextmenu",
+            onMouseClick.bind(onMouseClick, vantage, true),
+            false,
+          );
+          vantage.renderer.domElement.addEventListener(
+            "mousemove",
+            onMouseMove.bind(onMouseMove, vantage),
+            false,
+          );
         }
       }, 1);
 
@@ -164,7 +229,7 @@ function setAlgo(str: string, writeback: boolean): void {
       console.log("Could not parse " + str);
     }
     if (writeback) {
-      algoinput.value = (str);
+      algoinput.value = str;
       lastalgo = str;
     }
   }
@@ -187,7 +252,7 @@ function gettextwriter(): (s: string) => void {
   if (wnd) {
     wnd.document.open("text/plain", "replace");
     wnd.document.write("<pre>");
-    return (s: string) => {
+    return (s: string): void => {
       s = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       if (wnd && wnd.document) {
         wnd.document.write(s + "\n");
@@ -209,8 +274,10 @@ function dowork(cmd: string): void {
     return;
   }
   if (cmd === "bluetooth" || cmd === "keyboard") {
-    (async () => {
-      const inputPuzzle = await (cmd === "bluetooth" ? connect : debugKeyboardConnect)();
+    (async (): Promise<void> => {
+      const inputPuzzle = await (cmd === "bluetooth"
+        ? connect
+        : debugKeyboardConnect)();
       inputPuzzle.addMoveListener((e: MoveEvent) => {
         addMove(e.latestMove);
       });
@@ -288,12 +355,13 @@ function checkchange(): void {
   if (descarg === null) {
     return;
   }
-  let algo = (algoinput.value);
+  let algo = algoinput.value;
   if (algo === null) {
     return;
   }
   const newRender = getCheckboxes(renderOptions);
-  const renderSame = trimEq(descarg, lastval) &&
+  const renderSame =
+    trimEq(descarg, lastval) &&
     equalCheckboxes(renderOptions, lastRender, newRender);
   if (scramble === 0 && trimEq(algo, lastalgo) && renderSame) {
     return;
@@ -305,8 +373,12 @@ function checkchange(): void {
     lastRender = newRender;
     const p = parsedesc(descarg);
     if (p) {
-      const options: Array<string | number | boolean> =
-        ["allmoves", true, "orientcenters", true];
+      const options: Array<string | number | boolean> = [
+        "allmoves",
+        true,
+        "orientcenters",
+        true,
+      ];
       if (!lastRender.corners) {
         options.push("graycorners", true);
       }
@@ -330,12 +402,23 @@ function checkchange(): void {
       pg.genperms();
       const sep = "\n";
       const text =
-        "Faces " + pg.baseplanerot.length + sep +
-        "Stickers per face " + pg.stickersperface + sep +
-        "Cubies " + pg.cubies.length + sep +
-        "Short edge " + pg.shortedge + sep +
-        "Edge distance " + pg.edgedistance + sep +
-        "Vertex distance " + pg.vertexdistance;
+        "Faces " +
+        pg.baseplanerot.length +
+        sep +
+        "Stickers per face " +
+        pg.stickersperface +
+        sep +
+        "Cubies " +
+        pg.cubies.length +
+        sep +
+        "Short edge " +
+        pg.shortedge +
+        sep +
+        "Edge distance " +
+        pg.edgedistance +
+        sep +
+        "Vertex distance " +
+        pg.vertexdistance;
       const el = document.getElementById("data");
       if (el) {
         el.title = text;
@@ -352,7 +435,7 @@ function checkchange(): void {
     }
     if (!savealg) {
       lastalgo = "";
-      algo = (algoinput.value);
+      algo = algoinput.value;
     }
   }
   if (!trimEq(lastalgo, algo)) {
@@ -404,7 +487,11 @@ function doselection(el: any): void {
   }
 }
 
-function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent): void {
+function onMouseClick(
+  vantage: Vantage,
+  rightClick: boolean,
+  event: MouseEvent,
+): void {
   const raycaster = new Raycaster();
   const mouse = new Vector2();
   const canvas: HTMLCanvasElement = vantage.renderer.domElement;
@@ -416,7 +503,10 @@ function onMouseClick(vantage: Vantage, rightClick: boolean, event: MouseEvent):
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
+  const controlTargets = twisty
+    .experimentalGetPlayer()
+    .pg3DView.experimentalGetPG3D()
+    .experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
   if (intersects.length > 0) {
     event.preventDefault();
@@ -436,7 +526,10 @@ function onMouseMove(vantage: Vantage, event: MouseEvent): void {
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const controlTargets = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D().experimentalGetControlTargets();
+  const controlTargets = twisty
+    .experimentalGetPlayer()
+    .pg3DView.experimentalGetPG3D()
+    .experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
   if (intersects.length > 0) {
     canvas.title = intersects[0].object.userData.name;
@@ -448,7 +541,12 @@ function onMouseMove(vantage: Vantage, event: MouseEvent): void {
 // TODO: Animate latest move but cancel algorithm moves.
 function addMove(move: BlockMove): void {
   const currentAlg = algparse(algoinput.value);
-  const newAlg = experimentalAppendBlockMove(currentAlg, move, true, getModValueForMove(move));
+  const newAlg = experimentalAppendBlockMove(
+    currentAlg,
+    move,
+    true,
+    getModValueForMove(move),
+  );
   // TODO: Avoid round-trip through string?
   if (!twisty || puzzleSelected) {
     setAlgo(algToString(newAlg), true);
@@ -489,6 +587,7 @@ export function setup(): void {
     select.selectedIndex = 0;
     descinput.value = puzdesc ?? "";
   } else if (!found) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     optionFor3x3x3!.selected = true;
     descinput.value = getpuzzle("3x3x3");
   }
@@ -499,8 +598,11 @@ export function setup(): void {
   moveInput.onchange = doMoveInputSelection;
   const commands = ["scramble", "reset", "options"];
   for (const command of commands) {
-    (document.getElementById(command) as HTMLInputElement).onclick =
-      () => { dowork(command); };
+    (document.getElementById(
+      command,
+    ) as HTMLInputElement).onclick = (): void => {
+      dowork(command);
+    };
   }
   const qalg = algToString(getURLParam("alg"));
   if (qalg !== "") {

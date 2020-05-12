@@ -11,7 +11,11 @@ import { Cursor } from "./cursor";
 
 describe("Durations", () => {
   it("should calculate the duration of a Sune", () => {
-    expect(new Cursor.AlgDuration(Cursor.DefaultDurationForAmount).traverse(Example.Sune)).toBe(7500);
+    expect(
+      new Cursor.AlgDuration(Cursor.DefaultDurationForAmount).traverse(
+        Example.Sune,
+      ),
+    ).toBe(7500);
   });
 });
 

@@ -28,8 +28,12 @@ const paramDefaultStrings: { [s: string]: string } = {
   puzzlegeometry: "",
 };
 
-export function getURLParam<K extends ParamName>(paramName: K): CompleteURLParamValues[K] {
-  const str: string | null = new URLSearchParams(window.location.search).get(paramName);
+export function getURLParam<K extends ParamName>(
+  paramName: K,
+): CompleteURLParamValues[K] {
+  const str: string | null = new URLSearchParams(window.location.search).get(
+    paramName,
+  );
   if (!str) {
     return paramDefaults[paramName];
   }

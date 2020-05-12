@@ -1,13 +1,14 @@
 @font-face {
   font-family: "Ubuntu";
-  src: url("../../src/vendor/fonts/ubuntu/Ubuntu-Regular.ttf")
+  src: url("../../src/vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
 }
 
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -26,9 +27,23 @@ app {
 
 puzzle-pane {
   grid-area: "puzzle";
-  background-color: #EAEAEA;
-  background-image: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
-    linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
+  background-color: #eaeaea;
+  background-image: linear-gradient(
+      45deg,
+      #ddd 25%,
+      transparent 25%,
+      transparent 75%,
+      #ddd 75%,
+      #ddd
+    ),
+    linear-gradient(
+      45deg,
+      #ddd 25%,
+      transparent 25%,
+      transparent 75%,
+      #ddd 75%,
+      #ddd
+    );
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
 
@@ -42,4 +57,3 @@ puzzle-pane.loading {
 @import "../../src/twisty/twisty.css";
 
 @import "./control-pane.css";
-

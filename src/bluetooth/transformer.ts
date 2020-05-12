@@ -42,7 +42,7 @@ const m: { [s: string]: Quaternion } = {
 export class BasicRotationTransformer implements StreamTransformer {
   // private reorientQuat = new Quaternion();
 
-  public transformMove(moveEvent: MoveEvent): void {
+  public transformMove(_moveEvent: MoveEvent): void {
     // Nothing to do.
   }
   public transformOrientation(orientationEvent: OrientationEvent): void {

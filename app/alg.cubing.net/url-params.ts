@@ -9,8 +9,8 @@ interface URLParamValues {
 }
 
 const paramDefaults: URLParamValues = {
-  "alg": new Sequence([]),
-  "puzzle": "3x3x3",
+  alg: new Sequence([]),
+  puzzle: "3x3x3",
   "debug-js": true,
 };
 
@@ -18,13 +18,17 @@ export type ParamName = keyof typeof paramDefaults;
 
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
-  "alg": "",
-  "puzzle": "3x3x3",
+  alg: "",
+  puzzle: "3x3x3",
   "debug-js": "true",
 };
 
-export function getURLParam<K extends ParamName>(paramName: K): URLParamValues[K] {
-  const str: string | null = new URLSearchParams(window.location.search).get(paramName);
+export function getURLParam<K extends ParamName>(
+  paramName: K,
+): URLParamValues[K] {
+  const str: string | null = new URLSearchParams(window.location.search).get(
+    paramName,
+  );
   if (!str) {
     return paramDefaults[paramName];
   }
@@ -37,7 +41,7 @@ export function getURLParam<K extends ParamName>(paramName: K): URLParamValues[K
       return str as URLParamValues[K];
     case "debug-js":
       // TODO: can we avoid the `as` cast?
-      return (str !== "false" as unknown) as URLParamValues[K];
+      return (str !== ("false" as unknown)) as URLParamValues[K];
     default:
       // TODO: can we avoid the `as` cast?
       return str as URLParamValues[K];

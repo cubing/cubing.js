@@ -1,4 +1,4 @@
-declare module 'three/examples/jsm/libs/stats.module' {
+declare module "three/examples/jsm/libs/stats.module" {
   interface Stats {
     REVISION: number;
     dom: HTMLDivElement;
@@ -22,5 +22,5 @@ declare module 'three/examples/jsm/libs/stats.module' {
     function Panel(): Panel;
   }
 
-  export default Stats
+  export default Stats;
 }

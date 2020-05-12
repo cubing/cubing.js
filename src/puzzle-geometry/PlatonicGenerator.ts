@@ -25,14 +25,16 @@ export function tetrahedron(): Quat[] {
 }
 
 export function dodecahedron(): Quat[] {
-  const d36 = 2 * Math.PI / 10;
+  const d36 = (2 * Math.PI) / 10;
   let dx = 0.5 + 0.3 * Math.sqrt(5);
   let dy = 0.5 + 0.1 * Math.sqrt(5);
   const dd = Math.sqrt(dx * dx + dy * dy);
   dx /= dd;
   dy /= dd;
-  return [new Quat(Math.cos(d36), dx * Math.sin(d36), dy * Math.sin(d36), 0),
-  new Quat(0.5, 0.5, 0.5, 0.5)];
+  return [
+    new Quat(Math.cos(d36), dx * Math.sin(d36), dy * Math.sin(d36), 0),
+    new Quat(0.5, 0.5, 0.5, 0.5),
+  ];
 }
 
 export function icosahedron(): Quat[] {
@@ -41,9 +43,11 @@ export function icosahedron(): Quat[] {
   const dd = Math.sqrt(dx * dx + dy * dy);
   dx /= dd;
   dy /= dd;
-  const ang = 2 * Math.PI / 6;
-  return [new Quat(Math.cos(ang), dx * Math.sin(ang), dy * Math.sin(ang), 0),
-  new Quat(Math.cos(ang), -dx * Math.sin(ang), dy * Math.sin(ang), 0)];
+  const ang = (2 * Math.PI) / 6;
+  return [
+    new Quat(Math.cos(ang), dx * Math.sin(ang), dy * Math.sin(ang), 0),
+    new Quat(Math.cos(ang), -dx * Math.sin(ang), dy * Math.sin(ang), 0),
+  ];
 }
 
 export function octahedron(): Quat[] {
@@ -63,8 +67,7 @@ export function closure(g: Quat[]): Quat[] {
       const negns = ns.smul(-1);
       let wasseen = false;
       for (let k = 0; k < q.length; k++) {
-        if (ns.dist(q[k]) < eps ||
-          negns.dist(q[k]) < eps) {
+        if (ns.dist(q[k]) < eps || negns.dist(q[k]) < eps) {
           wasseen = true;
           break;
         }
@@ -124,7 +127,7 @@ export function getface(planes: Quat[]): Quat[] {
       }
     }
   }
-  while (true) {
+  for (;;) {
     let changed = false;
     for (let i = 0; i < face.length; i++) {
       const j: number = (i + 1) % face.length;

@@ -40,7 +40,9 @@ export class VRPG3D {
       },
     });
 
-    this.cachedPG3D = this.twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D();
+    this.cachedPG3D = this.twisty
+      .experimentalGetPlayer()
+      .pg3DView.experimentalGetPG3D();
     this.group.add(this.cachedPG3D.experimentalGetGroup());
 
     // this.twisty.experimentalGetCursor().experimentalSetDurationScale(0.25);
@@ -72,10 +74,42 @@ export class VRPG3D {
     // this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 0));
     // this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 1));
     // TODO: Generalize this to multiple platforms.
-    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA, invert: true }], this.onMoveStart.bind(this, 0), this.onMoveContinued.bind(this, 0));
-    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA, invert: true }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.onMoveStart.bind(this, 1), this.onMoveContinued.bind(this, 1));
-    this.vrInput.addButtonListener(ButtonGrouping.All, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.onResizeStart.bind(this), this.onResizeContinued.bind(this), this.onResizeEnd.bind(this));
-    this.vrInput.addButtonListener(ButtonGrouping.None, [{ controllerIdx: 0, buttonIdx: OculusButton.XorA }, { controllerIdx: 1, buttonIdx: OculusButton.XorA }], this.moveButtonClear.bind(this));
+    this.vrInput.addButtonListener(
+      ButtonGrouping.All,
+      [
+        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+        { controllerIdx: 1, buttonIdx: OculusButton.XorA, invert: true },
+      ],
+      this.onMoveStart.bind(this, 0),
+      this.onMoveContinued.bind(this, 0),
+    );
+    this.vrInput.addButtonListener(
+      ButtonGrouping.All,
+      [
+        { controllerIdx: 0, buttonIdx: OculusButton.XorA, invert: true },
+        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
+      ],
+      this.onMoveStart.bind(this, 1),
+      this.onMoveContinued.bind(this, 1),
+    );
+    this.vrInput.addButtonListener(
+      ButtonGrouping.All,
+      [
+        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
+      ],
+      this.onResizeStart.bind(this),
+      this.onResizeContinued.bind(this),
+      this.onResizeEnd.bind(this),
+    );
+    this.vrInput.addButtonListener(
+      ButtonGrouping.None,
+      [
+        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
+      ],
+      this.moveButtonClear.bind(this),
+    );
 
     // try {
     //   this.proxyReceiver = new ProxyReceiver(this.onProxyEvent.bind(this));
@@ -114,10 +148,16 @@ export class VRPG3D {
   }
 
   private controllerDistance(): number {
-    return this.vrInput.controllers[0].position.distanceTo(this.vrInput.controllers[1].position);
+    return this.vrInput.controllers[0].position.distanceTo(
+      this.vrInput.controllers[1].position,
+    );
   }
 
-  private hapticPulse(gamepadId: number, value: number, duration: number): void {
+  private hapticPulse(
+    gamepadId: number,
+    value: number,
+    duration: number,
+  ): void {
     const gamepad = navigator.getGamepads()[gamepadId];
     if (gamepad && gamepad.hapticActuators) {
       gamepad.hapticActuators[0].pulse(value, duration);
@@ -134,7 +174,9 @@ export class VRPG3D {
   }
   private onResizeContinued(): void {
     const newDistance = this.controllerDistance();
-    this.setScale(this.resizeInitialScale * newDistance / this.resizeInitialDistance);
+    this.setScale(
+      (this.resizeInitialScale * newDistance) / this.resizeInitialDistance,
+    );
   }
 
   private onResizeEnd(): void {
@@ -164,14 +206,16 @@ export class VRPG3D {
     }
     const controller = this.vrInput.controllers[controllerIdx];
 
-    this.moveVelocity.copy(controller.position).sub(this.moveLastControllerPosition);
+    this.moveVelocity
+      .copy(controller.position)
+      .sub(this.moveLastControllerPosition);
     this.moveLastControllerPosition.copy(controller.position);
 
-    this.group.quaternion.
-      copy(this.moveInitialControllerQuaternion).
-      inverse().
-      premultiply(controller.quaternion).
-      multiply(this.moveInitialPuzzleQuaternion);
+    this.group.quaternion
+      .copy(this.moveInitialControllerQuaternion)
+      .inverse()
+      .premultiply(controller.quaternion)
+      .multiply(this.moveInitialPuzzleQuaternion);
   }
 
   // private onPress(controllerIdx: number): void {

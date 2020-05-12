@@ -1,4 +1,13 @@
-import { AdditiveBlending, BufferGeometry, Float32BufferAttribute, Group, Line, LineBasicMaterial, Vector3, WebGLRenderer } from "three";
+import {
+  AdditiveBlending,
+  BufferGeometry,
+  Float32BufferAttribute,
+  Group,
+  Line,
+  LineBasicMaterial,
+  Vector3,
+  WebGLRenderer,
+} from "three";
 
 export enum Status {
   Untargeted,
@@ -19,14 +28,24 @@ export enum OculusButton {
 export const controllerDirection: Vector3 = new Vector3(0, 0, -1);
 
 const geometry = new BufferGeometry();
-geometry.setAttribute("position", new Float32BufferAttribute([
-  0, 0, 0,
-  controllerDirection.x, controllerDirection.y, controllerDirection.z,
-], 3));
-geometry.setAttribute("color", new Float32BufferAttribute([
-  0.5, 0.5, 0.5,
-  0, 0, 0,
-], 3));
+geometry.setAttribute(
+  "position",
+  new Float32BufferAttribute(
+    [
+      0,
+      0,
+      0,
+      controllerDirection.x,
+      controllerDirection.y,
+      controllerDirection.z,
+    ],
+    3,
+  ),
+);
+geometry.setAttribute(
+  "color",
+  new Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3),
+);
 
 const material = new LineBasicMaterial({
   blending: AdditiveBlending,
@@ -53,7 +72,13 @@ export interface ButtonSpec {
 class ButtonListener {
   // TODO: Calculate if the initial status is actually active.
   private activeLastTime: boolean = false;
-  constructor(private grouping: ButtonGrouping, private buttonSpecs: ButtonSpec[], private activatedCallback: ButtonListenerCallback, private continuedActiveCallback?: ButtonListenerCallback, private deactivatedCallback?: ButtonListenerCallback) { }
+  constructor(
+    private grouping: ButtonGrouping,
+    private buttonSpecs: ButtonSpec[],
+    private activatedCallback: ButtonListenerCallback,
+    private continuedActiveCallback?: ButtonListenerCallback,
+    private deactivatedCallback?: ButtonListenerCallback,
+  ) {}
 
   public update(buttonStates: ButtonStates): void {
     const active = this.currentlyActive(buttonStates);
@@ -93,7 +118,10 @@ class ButtonListener {
 
   // Short-circuit: return count of 1 if count is > 0.
   // TODO: Is the small performance gain from short-circuiting worth the extra code?
-  private numberPressed(buttonStates: ButtonStates, shortCircuit: boolean = false): number {
+  private numberPressed(
+    buttonStates: ButtonStates,
+    shortCircuit: boolean = false,
+  ): number {
     let count = 0;
     for (const button of this.buttonSpecs) {
       if (this.isButtonPressed(buttonStates, button)) {
@@ -106,19 +134,23 @@ class ButtonListener {
     return count;
   }
 
-  private isButtonPressed(buttonStates: ButtonStates, buttonSpec: ButtonSpec): boolean {
+  private isButtonPressed(
+    buttonStates: ButtonStates,
+    buttonSpec: ButtonSpec,
+  ): boolean {
     const controllerStates = buttonStates[buttonSpec.controllerIdx] || [];
     // Undefined (== missing) means "not pressed";
     return !buttonSpec.invert === !!controllerStates[buttonSpec.buttonIdx]; // TODO
   }
 }
 
-interface ButtonStates { [idx: number]: boolean[]; }
+interface ButtonStates {
+  [idx: number]: boolean[];
+}
 
 export class VRInput {
   public controllers: Group[] = [];
   private buttonListeners: ButtonListener[] = [];
-  private previousButtonStates: ButtonStates;
   constructor(renderer: WebGLRenderer) {
     for (let i = 0; i < NUM_CONTROLLERS; i++) {
       const controller = renderer.vr.getController(i);
@@ -146,14 +178,38 @@ export class VRInput {
     for (const buttonListener of this.buttonListeners) {
       buttonListener.update(buttonStates);
     }
-    this.previousButtonStates = buttonStates;
   }
 
-  public addButtonListener(grouping: ButtonGrouping, buttonSpecs: ButtonSpec[], activatedCallback: ButtonListenerCallback, continuedActiveCallback?: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
-    this.buttonListeners.push(new ButtonListener(grouping, buttonSpecs, activatedCallback, continuedActiveCallback, deactivatedCallback));
+  public addButtonListener(
+    grouping: ButtonGrouping,
+    buttonSpecs: ButtonSpec[],
+    activatedCallback: ButtonListenerCallback,
+    continuedActiveCallback?: ButtonListenerCallback,
+    deactivatedCallback?: ButtonListenerCallback,
+  ): void {
+    this.buttonListeners.push(
+      new ButtonListener(
+        grouping,
+        buttonSpecs,
+        activatedCallback,
+        continuedActiveCallback,
+        deactivatedCallback,
+      ),
+    );
   }
 
-  public addSingleButtonListener(buttonSpec: ButtonSpec, activatedCallback: ButtonListenerCallback, continuedActiveCallback?: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {
-    this.addButtonListener(ButtonGrouping.All, [buttonSpec], activatedCallback, continuedActiveCallback, deactivatedCallback);
+  public addSingleButtonListener(
+    buttonSpec: ButtonSpec,
+    activatedCallback: ButtonListenerCallback,
+    continuedActiveCallback?: ButtonListenerCallback,
+    deactivatedCallback?: ButtonListenerCallback,
+  ): void {
+    this.addButtonListener(
+      ButtonGrouping.All,
+      [buttonSpec],
+      activatedCallback,
+      continuedActiveCallback,
+      deactivatedCallback,
+    );
   }
 }

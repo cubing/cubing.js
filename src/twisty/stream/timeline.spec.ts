@@ -33,7 +33,25 @@ const moves2 = [
 
 describe("Timeline", () => {
   it("should convert", () => {
-    expect(toTimeline(moves2).map((t) => `@${t.start}-${t.end} ${algPartToStringForTesting(t.event.move)}`).join("\n")).toBe("@0-200 R\n@200-375 U\n@375-500 R'\n@500-650 U'\n@475-662.5 D\n@662.5-850 R2");
-    expect(toTimeline(moves).map((t) => `@${t.start}-${t.end} ${algPartToStringForTesting(t.event.move)}`).join("\n")).toBe("@4256-4456 L2\n@4258-4458 R2'\n@4677-4806.5 D'\n@4806.5-4936 R2'\n@4737-4937 L2");
+    expect(
+      toTimeline(moves2)
+        .map(
+          (t) =>
+            `@${t.start}-${t.end} ${algPartToStringForTesting(t.event.move)}`,
+        )
+        .join("\n"),
+    ).toBe(
+      "@0-200 R\n@200-375 U\n@375-500 R'\n@500-650 U'\n@475-662.5 D\n@662.5-850 R2",
+    );
+    expect(
+      toTimeline(moves)
+        .map(
+          (t) =>
+            `@${t.start}-${t.end} ${algPartToStringForTesting(t.event.move)}`,
+        )
+        .join("\n"),
+    ).toBe(
+      "@4256-4456 L2\n@4258-4458 R2'\n@4677-4806.5 D'\n@4806.5-4936 R2'\n@4737-4937 L2",
+    );
   });
 });

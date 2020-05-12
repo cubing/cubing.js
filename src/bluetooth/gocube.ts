@@ -10,17 +10,18 @@ const UUIDs = {
 
 // TODO: Move this into a factory?
 export const goCubeConfig: BluetoothConfig = {
-  filters: [
-    { namePrefix: "GoCube" },
-  ],
-  optionalServices: [
-    UUIDs.goCubeService,
-  ],
+  filters: [{ namePrefix: "GoCube" }],
+  optionalServices: [UUIDs.goCubeService],
 };
 
 // https://stackoverflow.com/a/40031979
-function buf2hex(buffer: ArrayBuffer): string { // buffer is an ArrayBuffer
-  return Array.prototype.map.call(new Uint8Array(buffer), (x: number) => ("00" + x.toString(16)).slice(-2)).join("");
+function buf2hex(buffer: ArrayBuffer): string {
+  // buffer is an ArrayBuffer
+  return Array.prototype.map
+    .call(new Uint8Array(buffer), (x: number) =>
+      ("00" + x.toString(16)).slice(-2),
+    )
+    .join("");
 }
 
 function bufferToString(buffer: ArrayBuffer): string {
@@ -48,12 +49,15 @@ const moveMap: BlockMove[] = [
 ];
 
 export class GoCube extends BluetoothPuzzle {
-
   // We have to perform async operations before we call the constructor.
-  public static async connect(server: BluetoothRemoteGATTServer): Promise<GoCube> {
+  public static async connect(
+    server: BluetoothRemoteGATTServer,
+  ): Promise<GoCube> {
     const service = await server.getPrimaryService(UUIDs.goCubeService);
     debugLog({ service });
-    const goCubeStateCharacteristic = await service.getCharacteristic(UUIDs.goCubeStateCharacteristic);
+    const goCubeStateCharacteristic = await service.getCharacteristic(
+      UUIDs.goCubeStateCharacteristic,
+    );
     debugLog({ goCubeStateCharacteristic });
 
     const cube = new GoCube(server, goCubeStateCharacteristic);
@@ -84,7 +88,10 @@ export class GoCube extends BluetoothPuzzle {
   private lastTarget: Quaternion = new Quaternion(0, 0, 0, 1);
   private alg: Sequence = new Sequence([]);
 
-  private constructor(private server: BluetoothRemoteGATTServer, public goCubeStateCharacteristic: BluetoothRemoteGATTCharacteristic) {
+  private constructor(
+    private server: BluetoothRemoteGATTServer,
+    public goCubeStateCharacteristic: BluetoothRemoteGATTCharacteristic,
+  ) {
     super();
   }
 
@@ -121,7 +128,11 @@ export class GoCube extends BluetoothPuzzle {
         },
       });
     } else {
-      const coords = bufferToString(buffer.buffer.slice(3, buffer.byteLength - 3)).split("#").map((s) => parseInt(s, 10) / 16384);
+      const coords = bufferToString(
+        buffer.buffer.slice(3, buffer.byteLength - 3),
+      )
+        .split("#")
+        .map((s) => parseInt(s, 10) / 16384);
       const quat = new Quaternion(coords[0], coords[1], coords[2], coords[3]);
 
       this.lastRawQuat = quat.clone();
@@ -130,7 +141,7 @@ export class GoCube extends BluetoothPuzzle {
         this.homeQuatInverse = quat.clone().inverse();
       }
 
-      const targetQuat = quat.clone().multiply(this.homeQuatInverse!.clone());
+      const targetQuat = quat.clone().multiply(this.homeQuatInverse.clone());
       targetQuat.y = -targetQuat.y; // GoCube axis fix.
 
       this.lastTarget.slerp(targetQuat, 0.5);

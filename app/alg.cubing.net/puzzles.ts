@@ -1,11 +1,18 @@
-import { KPuzzle, KPuzzleDefinition, Puzzles as KPuzzles } from "../../src/kpuzzle";
+import {
+  KPuzzle,
+  KPuzzleDefinition,
+  Puzzles as KPuzzles,
+} from "../../src/kpuzzle";
 import { getPuzzleGeometryByDesc, StickerDat } from "../../src/puzzle-geometry";
-import { PuzzleName, Puzzles as PGPuzzles } from "../../src/puzzle-geometry/Puzzles";
+import {
+  PuzzleName,
+  Puzzles as PGPuzzles,
+} from "../../src/puzzle-geometry/Puzzles";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";
   // TODO: push display name into the KSolve defition.
-  constructor(private kpuzzleName: string) { }
+  constructor(private kpuzzleName: string) {}
 
   public displayName(): string {
     return KPuzzles[this.kpuzzleName].name;
@@ -22,7 +29,12 @@ class DisplayableKPuzzle {
 
 class DisplayablePG3D {
   public type: "pg3d" = "pg3d";
-  constructor(private displayNameStr: string, private name: PuzzleName, private desc: string, public polarVantages: boolean) { }
+  constructor(
+    private displayNameStr: string,
+    private name: PuzzleName,
+    private desc: string,
+    public polarVantages: boolean,
+  ) {}
 
   public displayName(): string {
     return this.displayNameStr;
@@ -62,8 +74,18 @@ const puzzles: { [s: string]: DisplayablePuzzle } = {};
 for (const key in KPuzzles) {
   puzzles[key as any] = new DisplayableKPuzzle(key);
 }
-puzzles.megaminx = new DisplayablePG3D("Megaminx", "megaminx", PGPuzzles.megaminx, false);
+puzzles.megaminx = new DisplayablePG3D(
+  "Megaminx",
+  "megaminx",
+  PGPuzzles.megaminx,
+  false,
+);
 puzzles.skewb = new DisplayablePG3D("Skewb", "skewb", PGPuzzles.skewb, false);
-puzzles.fto = new DisplayablePG3D("FTO", "FTO", "o f 0.333333333333333 v -2", true);
+puzzles.fto = new DisplayablePG3D(
+  "FTO",
+  "FTO",
+  "o f 0.333333333333333 v -2",
+  true,
+);
 
 export { puzzles };

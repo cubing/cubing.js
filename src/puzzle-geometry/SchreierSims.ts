@@ -134,7 +134,20 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): number {
         avgs.push(avg);
         sollen += avg;
       }
-      disp("" + i + ": sz " + sz + " T " + tks + " sol " + sollen + " none " + none + " mults " + mults);
+      disp(
+        "" +
+          i +
+          ": sz " +
+          sz +
+          " T " +
+          tks +
+          " sol " +
+          sollen +
+          " none " +
+          none +
+          " mults " +
+          mults,
+      );
     }
     return sz;
   }

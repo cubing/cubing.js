@@ -4,6 +4,7 @@ import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
 import { Twisty } from "../../src/twisty/index";
 
 window.addEventListener("load", () => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const elem = document.querySelector("#custom-example")!;
   // tslint:disable-next-line: no-unused-expression
   new Twisty(elem, {
@@ -23,6 +24,7 @@ window.addEventListener("load", () => {
 
   const kpuzzle = kpuzzleParse(pg.writeksolve("TwizzlePuzzle", true));
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const elem = document.querySelector("#custom-pg3d")!;
   // tslint:disable-next-line: no-unused-expression
   new Twisty(elem, {

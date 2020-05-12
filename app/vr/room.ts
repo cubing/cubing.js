@@ -1,6 +1,12 @@
-import { Color, HemisphereLight, LineBasicMaterial, LineSegments, Scene } from "three";
+import {
+  Color,
+  HemisphereLight,
+  LineBasicMaterial,
+  LineSegments,
+  Scene,
+} from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry";
-import { VRInput as VRInput } from "./vr-input";
+import { VRInput } from "./vr-input";
 import { VRPuzzle } from "./vr-puzzle";
 
 export class Room {

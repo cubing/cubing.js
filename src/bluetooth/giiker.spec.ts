@@ -8,18 +8,24 @@ describe("GiiKerCube", () => {
   // });
 
   it("should calculate giikerMoveToAlgMove() correctly", () => {
-    expect(structureEquals(
-      new Sequence([giikerMoveToBlockMoveForTesting(1, 1)]),
-      parse("B"),
-    )).toBe(true);
-    expect(structureEquals(
-      new Sequence([giikerMoveToBlockMoveForTesting(2, 3)]),
-      parse("D'"),
-    )).toBe(true);
-    expect(structureEquals(
-      new Sequence([giikerMoveToBlockMoveForTesting(3, 9)]),
-      parse("L2"),
-    )).toBe(true);
+    expect(
+      structureEquals(
+        new Sequence([giikerMoveToBlockMoveForTesting(1, 1)]),
+        parse("B"),
+      ),
+    ).toBe(true);
+    expect(
+      structureEquals(
+        new Sequence([giikerMoveToBlockMoveForTesting(2, 3)]),
+        parse("D'"),
+      ),
+    ).toBe(true);
+    expect(
+      structureEquals(
+        new Sequence([giikerMoveToBlockMoveForTesting(3, 9)]),
+        parse("L2"),
+      ),
+    ).toBe(true);
   });
 });
 

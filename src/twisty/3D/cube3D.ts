@@ -1,4 +1,17 @@
-import { BackSide, BoxGeometry, DoubleSide, Euler, Group, Matrix4, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Quaternion, Vector3 } from "three";
+import {
+  BackSide,
+  BoxGeometry,
+  DoubleSide,
+  Euler,
+  Group,
+  Matrix4,
+  Mesh,
+  MeshBasicMaterial,
+  Object3D,
+  PlaneGeometry,
+  Quaternion,
+  Vector3,
+} from "three";
 import { BlockMove } from "../../alg";
 import { KPuzzleDefinition, Puzzles, Transformation } from "../../kpuzzle";
 
@@ -11,7 +24,11 @@ import { TAU, Twisty3D } from "./twisty3D";
 class AxisInfo {
   public stickerMaterial: MeshBasicMaterial;
   public hintStickerMaterial: MeshBasicMaterial;
-  constructor(public vector: Vector3, public fromZ: Euler, public color: number) {
+  constructor(
+    public vector: Vector3,
+    public fromZ: Euler,
+    public color: number,
+  ) {
     // TODO: Make sticker material single-sided when cubie base is rendered?
     this.stickerMaterial = new MeshBasicMaterial({ color, side: DoubleSide });
     this.hintStickerMaterial = new MeshBasicMaterial({ color, side: BackSide });
@@ -37,12 +54,24 @@ const face: { [s: string]: number } = {
 };
 
 const familyToAxis: { [s: string]: number } = {
-  U: face.U, u: face.U, y: face.U,
-  L: face.L, l: face.L, M: face.L,
-  F: face.F, f: face.F, S: face.F, z: face.F,
-  R: face.R, r: face.R, x: face.R,
-  B: face.B, b: face.B,
-  D: face.D, d: face.D, E: face.D,
+  U: face.U,
+  u: face.U,
+  y: face.U,
+  L: face.L,
+  l: face.L,
+  M: face.L,
+  F: face.F,
+  f: face.F,
+  S: face.F,
+  z: face.F,
+  R: face.R,
+  r: face.R,
+  x: face.R,
+  B: face.B,
+  b: face.B,
+  D: face.D,
+  d: face.D,
+  E: face.D,
 };
 
 const cubieDimensions = {
@@ -67,14 +96,25 @@ const cube3DOptionsDefaults: Cube3DOptions = {
 };
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
-const blackMesh = new MeshBasicMaterial({ color: 0x000000, opacity: 0.3, transparent: true });
+const blackMesh = new MeshBasicMaterial({
+  color: 0x000000,
+  opacity: 0.3,
+  transparent: true,
+});
 
 class CubieDef {
   public matrix: Matrix4;
   public stickerFaces: number[];
   // stickerFaceNames can be e.g. ["U", "F", "R"], "UFR" if every face is a single letter.
-  constructor(public orbit: string, stickerFaceNames: string[] | string, q: Quaternion) {
-    const individualStickerFaceNames = typeof stickerFaceNames === "string" ? stickerFaceNames.split("") : stickerFaceNames;
+  constructor(
+    public orbit: string,
+    stickerFaceNames: string[] | string,
+    q: Quaternion,
+  ) {
+    const individualStickerFaceNames =
+      typeof stickerFaceNames === "string"
+        ? stickerFaceNames.split("")
+        : stickerFaceNames;
     this.stickerFaces = individualStickerFaceNames.map((s) => face[s]);
     this.matrix = new Matrix4();
     this.matrix.setPosition(firstPiecePosition[orbit]);
@@ -83,7 +123,7 @@ class CubieDef {
 }
 
 function t(v: Vector3, t4: number): Quaternion {
-  return new Quaternion().setFromAxisAngle(v, TAU * t4 / 4);
+  return new Quaternion().setFromAxisAngle(v, (TAU * t4) / 4);
 }
 
 const r = {
@@ -96,8 +136,10 @@ const r = {
   D: new Vector3(0, 1, 0),
 };
 
-interface OrbitIndexed<T> { [s: string]: T; }
-interface PieceIndexed<T> extends OrbitIndexed<T[]> { }
+interface OrbitIndexed<T> {
+  [s: string]: T;
+}
+type PieceIndexed<T> = OrbitIndexed<T[]>;
 
 const firstPiecePosition: OrbitIndexed<Vector3> = {
   EDGE: new Vector3(0, 1, 1),
@@ -105,15 +147,26 @@ const firstPiecePosition: OrbitIndexed<Vector3> = {
   CENTER: new Vector3(0, 1, 0),
 };
 const orientationRotation: OrbitIndexed<Matrix4[]> = {
-  EDGE: [0, 1].map((i) => new Matrix4().makeRotationAxis(firstPiecePosition.EDGE.clone().normalize(), -i * TAU / 2)),
-  CORNER: [0, 1, 2].map((i) => new Matrix4().makeRotationAxis(firstPiecePosition.CORNER.clone().normalize(), -i * TAU / 3)),
-  CENTER: [0, 1, 2, 3].map((i) => new Matrix4().makeRotationAxis(firstPiecePosition.CENTER.clone().normalize(), -i * TAU / 4)),
+  EDGE: [0, 1].map((i) =>
+    new Matrix4().makeRotationAxis(
+      firstPiecePosition.EDGE.clone().normalize(),
+      (-i * TAU) / 2,
+    ),
+  ),
+  CORNER: [0, 1, 2].map((i) =>
+    new Matrix4().makeRotationAxis(
+      firstPiecePosition.CORNER.clone().normalize(),
+      (-i * TAU) / 3,
+    ),
+  ),
+  CENTER: [0, 1, 2, 3].map((i) =>
+    new Matrix4().makeRotationAxis(
+      firstPiecePosition.CENTER.clone().normalize(),
+      (-i * TAU) / 4,
+    ),
+  ),
 };
-const cubieStickerOrder = [
-  face.U,
-  face.F,
-  face.R,
-];
+const cubieStickerOrder = [face.U, face.F, face.R];
 
 const pieceDefs: PieceIndexed<CubieDef> = {
   EDGE: [
@@ -166,7 +219,10 @@ export class Cube3D extends Twisty3D<Puzzle> {
     this.options = {};
     for (const key in cube3DOptionsDefaults) {
       // TODO:Don't use `any`.
-      this.options[key as OptionKey] = (key in options) ? (options as any)[key] : (cube3DOptionsDefaults as any)[key];
+      this.options[key as OptionKey] =
+        key in options
+          ? (options as any)[key]
+          : (cube3DOptionsDefaults as any)[key];
     }
 
     if (def.name !== "3x3x3") {
@@ -189,7 +245,10 @@ export class Cube3D extends Twisty3D<Puzzle> {
     }
 
     const showFoundation = options.showFoundation;
-    if (typeof showFoundation !== "undefined" && this.options.showFoundation !== showFoundation) {
+    if (
+      typeof showFoundation !== "undefined" &&
+      this.options.showFoundation !== showFoundation
+    ) {
       this.options.showFoundation = showFoundation;
       for (const foundation of this.experimentalFoundationMeshes) {
         foundation.visible = showFoundation;
@@ -197,7 +256,10 @@ export class Cube3D extends Twisty3D<Puzzle> {
     }
 
     const showHintStickers = options.showHintStickers;
-    if (typeof showHintStickers !== "undefined" && this.options.showHintStickers !== showHintStickers) {
+    if (
+      typeof showHintStickers !== "undefined" &&
+      this.options.showHintStickers !== showHintStickers
+    ) {
       this.options.showHintStickers = showHintStickers;
       for (const hintSticker of this.experimentalHintStickerMeshes) {
         hintSticker.visible = showHintStickers;
@@ -212,15 +274,28 @@ export class Cube3D extends Twisty3D<Puzzle> {
       for (let i = 0; i < pieces.length; i++) {
         const j = reid333[orbit].permutation[i];
         this.pieces[orbit][j].matrix.copy(pieceDefs[orbit][i].matrix);
-        this.pieces[orbit][j].matrix.multiply(orientationRotation[orbit][reid333[orbit].orientation[i]]);
+        this.pieces[orbit][j].matrix.multiply(
+          orientationRotation[orbit][reid333[orbit].orientation[i]],
+        );
       }
       for (const moveProgress of p.moves) {
         const blockMove = moveProgress.move as BlockMove;
         const turnNormal = axesInfo[familyToAxis[blockMove.family]].vector;
-        const moveMatrix = new Matrix4().makeRotationAxis(turnNormal, - this.ease(moveProgress.fraction) * moveProgress.direction * blockMove.amount * TAU / 4);
+        const moveMatrix = new Matrix4().makeRotationAxis(
+          turnNormal,
+          (-this.ease(moveProgress.fraction) *
+            moveProgress.direction *
+            blockMove.amount *
+            TAU) /
+            4,
+        );
         for (let i = 0; i < pieces.length; i++) {
-          const k = Puzzles["3x3x3"].moves[blockMove.family][orbit].permutation[i];
-          if (i !== k || Puzzles["3x3x3"].moves[blockMove.family][orbit].orientation[i] !== 0) {
+          const k =
+            Puzzles["3x3x3"].moves[blockMove.family][orbit].permutation[i];
+          if (
+            i !== k ||
+            Puzzles["3x3x3"].moves[blockMove.family][orbit].orientation[i] !== 0
+          ) {
             const j = reid333[orbit].permutation[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);
           }
@@ -239,9 +314,19 @@ export class Cube3D extends Twisty3D<Puzzle> {
       this.experimentalFoundationMeshes.push(foundation);
     }
     for (let i = 0; i < edge.stickerFaces.length; i++) {
-      cubie.add(this.createSticker(axesInfo[cubieStickerOrder[i]], axesInfo[edge.stickerFaces[i]], false));
+      cubie.add(
+        this.createSticker(
+          axesInfo[cubieStickerOrder[i]],
+          axesInfo[edge.stickerFaces[i]],
+          false,
+        ),
+      );
       if (this.options.showHintStickers) {
-        const hintSticker = this.createSticker(axesInfo[cubieStickerOrder[i]], axesInfo[edge.stickerFaces[i]], true);
+        const hintSticker = this.createSticker(
+          axesInfo[cubieStickerOrder[i]],
+          axesInfo[edge.stickerFaces[i]],
+          true,
+        );
         cubie.add(hintSticker);
         this.experimentalHintStickerMeshes.push(hintSticker);
       }
@@ -254,16 +339,36 @@ export class Cube3D extends Twisty3D<Puzzle> {
 
   // TODO: Support creating only the outward-facing parts?
   private createCubieFoundation(): Mesh {
-    const box = new BoxGeometry(cubieDimensions.foundationWidth, cubieDimensions.foundationWidth, cubieDimensions.foundationWidth);
+    const box = new BoxGeometry(
+      cubieDimensions.foundationWidth,
+      cubieDimensions.foundationWidth,
+      cubieDimensions.foundationWidth,
+    );
     return new Mesh(box, blackMesh);
   }
 
-  private createSticker(posAxisInfo: AxisInfo, materialAxisInfo: AxisInfo, isHint: boolean): Mesh {
-    const geo = new PlaneGeometry(cubieDimensions.stickerWidth, cubieDimensions.stickerWidth);
-    const stickerMesh = new Mesh(geo, isHint ? materialAxisInfo.hintStickerMaterial : materialAxisInfo.stickerMaterial);
+  private createSticker(
+    posAxisInfo: AxisInfo,
+    materialAxisInfo: AxisInfo,
+    isHint: boolean,
+  ): Mesh {
+    const geo = new PlaneGeometry(
+      cubieDimensions.stickerWidth,
+      cubieDimensions.stickerWidth,
+    );
+    const stickerMesh = new Mesh(
+      geo,
+      isHint
+        ? materialAxisInfo.hintStickerMaterial
+        : materialAxisInfo.stickerMaterial,
+    );
     stickerMesh.setRotationFromEuler(posAxisInfo.fromZ);
     stickerMesh.position.copy(posAxisInfo.vector);
-    stickerMesh.position.multiplyScalar(isHint ? cubieDimensions.hintStickerElevation : cubieDimensions.stickerElevation);
+    stickerMesh.position.multiplyScalar(
+      isHint
+        ? cubieDimensions.hintStickerElevation
+        : cubieDimensions.stickerElevation,
+    );
     return stickerMesh;
   }
 

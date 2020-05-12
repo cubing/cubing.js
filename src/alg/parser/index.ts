@@ -9,7 +9,10 @@ export interface ParseOptions {
 
 // TODO: Include token location info.
 // TODO: Take validators in a way that allows optimizing parsing.
-export function parse(s: string, options: ParseOptions = { validators: [] }): Sequence {
+export function parse(
+  s: string,
+  options: ParseOptions = { validators: [] },
+): Sequence {
   options.validators = options.validators || [];
 
   const algo = fromJSON(pegParse(s));

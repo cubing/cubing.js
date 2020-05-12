@@ -19,7 +19,7 @@ export interface MoveEvent {
 
 // TODO: Only use the `quaternion` field in the `MoveEvent`?
 export interface OrientationEvent {
-  quaternion: { x: number, y: number, z: number, w: number };
+  quaternion: { x: number; y: number; z: number; w: number };
   timeStamp: number;
   debug?: object;
 }
@@ -72,5 +72,4 @@ export abstract class BluetoothPuzzle {
       l(orientationEvent);
     }
   }
-
 }

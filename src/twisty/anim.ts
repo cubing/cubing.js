@@ -22,7 +22,9 @@ export interface JumpObserver {
 // TODO: Use generics to unify handling the types of observers.
 export class Dispatcher implements CursorObserver, DirectionObserver {
   private cursorObservers: Set<CursorObserver> = new Set<CursorObserver>();
-  private directionObservers: Set<DirectionObserver> = new Set<DirectionObserver>();
+  private directionObservers: Set<DirectionObserver> = new Set<
+    DirectionObserver
+  >();
   private jumpObservers: Set<JumpObserver> = new Set<JumpObserver>();
 
   public registerCursorObserver(observer: CursorObserver): void {
@@ -72,7 +74,8 @@ export class AnimModel {
   public dispatcher: Dispatcher = new Dispatcher();
   private lastCursorTime: Cursor.Timestamp = 0;
   private direction: Cursor.Direction = Cursor.Direction.Paused;
-  private breakpointType: Cursor.BreakpointType = Cursor.BreakpointType.EntireMoveSequence;
+  private breakpointType: Cursor.BreakpointType =
+    Cursor.BreakpointType.EntireMoveSequence;
   private scheduler: FrameScheduler;
   private tempo: number = 1.5; // TODO: Support setting tempo.
   // TODO: cache breakpoints instead of re-querying the model constantly.
@@ -89,10 +92,7 @@ export class AnimModel {
   }
 
   public getBounds(): Cursor.Duration[] {
-    return [
-      this.cursor.startOfAlg(),
-      this.cursor.endOfAlg(),
-    ];
+    return [this.cursor.startOfAlg(), this.cursor.endOfAlg()];
   }
 
   public isPaused(): boolean {
@@ -177,7 +177,10 @@ export class AnimModel {
     if (elapsed < 0) {
       elapsed = 0;
     }
-    const reachedMoveBreakpoint = this.cursor.delta(elapsed * this.timeScaling(), this.breakpointType === Cursor.BreakpointType.Move);
+    const reachedMoveBreakpoint = this.cursor.delta(
+      elapsed * this.timeScaling(),
+      this.breakpointType === Cursor.BreakpointType.Move,
+    );
     if (reachedMoveBreakpoint) {
       this.setDirection(Cursor.Direction.Paused);
       this.scheduler.stop();
@@ -224,7 +227,7 @@ export class AnimModel {
 class FrameScheduler {
   private animating: boolean = false;
   private lastRenderTimestamp: Cursor.Timestamp = -1;
-  constructor(private callback: (timestamp: Cursor.Timestamp) => void) { }
+  constructor(private callback: (timestamp: Cursor.Timestamp) => void) {}
 
   public animFrame(timestamp: Cursor.Timestamp): void {
     if (timestamp !== this.lastRenderTimestamp) {

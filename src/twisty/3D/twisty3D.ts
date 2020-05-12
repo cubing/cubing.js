@@ -1,4 +1,10 @@
-import { PerspectiveCamera, Renderer, Scene, Vector3, WebGLRenderer } from "three";
+import {
+  PerspectiveCamera,
+  Renderer,
+  Scene,
+  Vector3,
+  WebGLRenderer,
+} from "three";
 import Stats from "three/examples/jsm/libs/stats.module";
 import { Cursor } from "../cursor";
 import { Puzzle } from "../puzzle";
@@ -7,7 +13,8 @@ const SHOW_STATS = false;
 
 export const TAU = Math.PI * 2;
 
-const useResizeObserver = typeof window !== "undefined" && "ResizeObserver" in window;
+const useResizeObserver =
+  typeof window !== "undefined" && "ResizeObserver" in window;
 
 // TODO: Turn into class?
 export class Vantage {
@@ -16,12 +23,23 @@ export class Vantage {
   private rafID: number | null = null;
   private stats: Stats | null = null;
   private shift: number = 0;
-  constructor(public element: HTMLElement, private scene: Scene, options: VantageOptions = {}) {
-    this.camera = new PerspectiveCamera(20, element.offsetWidth / element.offsetHeight, 0.1, 1000);
-    this.camera.position.copy(options.position ? options.position : defaultVantagePosition);
+  constructor(
+    public element: HTMLElement,
+    private scene: Scene,
+    options: VantageOptions = {},
+  ) {
+    this.camera = new PerspectiveCamera(
+      20,
+      element.offsetWidth / element.offsetHeight,
+      0.1,
+      1000,
+    );
+    this.camera.position.copy(
+      options.position ? options.position : defaultVantagePosition,
+    );
     this.camera.lookAt(new Vector3(0, 0, 0));
 
-    this.renderer = /*options.renderer ? options.renderer : */createDefaultRenderer();
+    this.renderer = /*options.renderer ? options.renderer : */ createDefaultRenderer();
     this.shift = options.shift ? options.shift : 0;
     this.resize();
 
@@ -66,7 +84,7 @@ export class Vantage {
     if (this.shift > 0) {
       off = Math.max(0, Math.floor((w - h) * 0.5));
     } else if (this.shift < 0) {
-      off = - Math.max(0, Math.floor((w - h) * 0.5));
+      off = -Math.max(0, Math.floor((w - h) * 0.5));
     }
     let yoff = 0;
     let excess = 0;

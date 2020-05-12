@@ -1,4 +1,10 @@
-import { BlockMove, Example, experimentalAppendBlockMove, parse, Sequence } from "../alg";
+import {
+  BlockMove,
+  Example,
+  experimentalAppendBlockMove,
+  parse,
+  Sequence,
+} from "../alg";
 import { KPuzzleDefinition, Puzzles } from "../kpuzzle";
 import { AnimModel } from "./anim";
 import { Cursor } from "./cursor";
@@ -30,8 +36,8 @@ export class Twisty {
     this.#anim = new AnimModel(this.#cursor);
 
     this.#player = new Player(this.#anim, this.puzzleDef, config.playerConfig);
-    this.element.appendChild((this.#player).element);
-    this.coalesceModFunc = (mv) => 0;
+    this.element.appendChild(this.#player.element);
+    this.coalesceModFunc = (_mv: BlockMove): number => 0;
   }
 
   // Set the callback function to get the modulo for coalescing from a BlockMove.
@@ -40,7 +46,10 @@ export class Twisty {
   }
 
   // Plays the full final move if there is one.
-  public experimentalSetAlg(alg: Sequence, allowAnimation: boolean = false): void {
+  public experimentalSetAlg(
+    alg: Sequence,
+    allowAnimation: boolean = false,
+  ): void {
     this.#cursor.experimentalSetMoves(alg);
     this.#anim.skipToStart();
     this.alg = alg;
@@ -55,7 +64,10 @@ export class Twisty {
   }
   // We append a move as normal, except we animate *just* the last move *even* if
   // the last move was merged with a previous one.
-  public experimentalSetAlgAnimateBlockMove(alg: Sequence, move: BlockMove): void {
+  public experimentalSetAlgAnimateBlockMove(
+    alg: Sequence,
+    move: BlockMove,
+  ): void {
     this.#anim.skipToStart();
     this.alg = alg;
     this.#anim.skipToEnd();
@@ -66,7 +78,12 @@ export class Twisty {
 
   public experimentalAddMove(move: BlockMove): void {
     const coalesceMod = this.coalesceModFunc(move);
-    const newAlg = experimentalAppendBlockMove(this.alg, move, true, coalesceMod);
+    const newAlg = experimentalAppendBlockMove(
+      this.alg,
+      move,
+      true,
+      coalesceMod,
+    );
     this.experimentalSetAlgAnimateBlockMove(newAlg, move);
   }
 
@@ -99,7 +116,11 @@ function paramsFromTwistyElem(elem: Element): TwistyParams {
   const visualization = elem.getAttribute("visualization");
   // TODO: Factor this code out for testing.
   if (visualization) {
-    if (visualization === "2D" || visualization === "3D" || visualization === "PG3D") {
+    if (
+      visualization === "2D" ||
+      visualization === "3D" ||
+      visualization === "PG3D"
+    ) {
       params.playerConfig = { visualizationFormat: visualization };
     } else {
       console.warn(`Invalid visualization: ${visualization}`);
@@ -123,7 +144,11 @@ function autoInitialize(elem: Element): Twisty | null {
 function autoInitializePage(): void {
   const elems = document.querySelectorAll("twisty");
   if (elems.length > 0) {
-    console.log(`Found ${elems.length} twisty elem${elems.length === 1 ? "" : "s"} on page.`);
+    console.log(
+      `Found ${elems.length} twisty elem${
+        elems.length === 1 ? "" : "s"
+      } on page.`,
+    );
   }
 
   elems.forEach(autoInitialize);

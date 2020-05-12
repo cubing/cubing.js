@@ -10,8 +10,11 @@ let doksolve = false;
 let dogap = false;
 let docanon = false;
 let do3d = false;
-if (typeof (process) !== "undefined" &&
-  process.argv && process.argv.length <= 2) {
+if (
+  typeof process !== "undefined" &&
+  process.argv &&
+  process.argv.length <= 2
+) {
   console.log(`Usage:  puzzle-geometry [options] [puzzle]
 
 Options:
@@ -65,8 +68,11 @@ Examples:
    puzzlegeometry --gap kilominx
 `);
 }
-if (typeof (process) !== "undefined" &&
-  process.argv && process.argv.length >= 3) {
+if (
+  typeof process !== "undefined" &&
+  process.argv &&
+  process.argv.length >= 3
+) {
   let desc;
   const puzzleList = getpuzzles();
   let argp = 2;
@@ -174,8 +180,10 @@ if (typeof (process) !== "undefined" &&
     const os = pg.getOrbitsDef(false);
     const as = os.reassemblySize();
     console.log("Reassembly size is " + as);
-    const ss = schreierSims(os.moveops.map((_) => _.toPerm()),
-      (_) => console.log(_));
+    const ss = schreierSims(
+      os.moveops.map((_) => _.toPerm()),
+      (_) => console.log(_),
+    );
     const r = as / ss;
     console.log("Ratio is " + r);
   } else if (docanon) {

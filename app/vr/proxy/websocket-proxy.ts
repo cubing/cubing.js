@@ -16,7 +16,10 @@ export interface ProxyResetEvent {
   event: "reset";
 }
 
-export type ProxyEvent = ProxyMoveEvent | ProxyOrientationEvent | ProxyResetEvent;
+export type ProxyEvent =
+  | ProxyMoveEvent
+  | ProxyOrientationEvent
+  | ProxyResetEvent;
 
 export class ProxySender {
   private websocket: WebSocket;

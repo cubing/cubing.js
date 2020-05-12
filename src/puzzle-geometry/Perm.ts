@@ -18,7 +18,8 @@ export function identity(n: number): Perm {
   return new Perm(iota(n));
 }
 
-export function random(n: number): Perm { // random
+export function random(n: number): Perm {
+  // random
   const c = Array(n);
   for (let i = 0; i < n; i++) {
     c[i] = i;
@@ -56,27 +57,30 @@ function gcd(a: number, b: number): number {
 }
 
 export function lcm(a: number, b: number): number {
-  return a / gcd(a, b) * b;
+  return (a / gcd(a, b)) * b;
 }
 
 export class Perm {
-  public n: number;        // length
+  public n: number; // length
   public p: number[]; // The permutation itself
   constructor(a: number[]) {
     this.n = a.length;
     this.p = a;
   }
-  public toString(): string { // stringify
+  public toString(): string {
+    // stringify
     return "Perm[" + this.p.join(" ") + "]";
   }
-  public mul(p2: Perm): Perm { // multiply
+  public mul(p2: Perm): Perm {
+    // multiply
     const c: number[] = Array(this.n);
     for (let i = 0; i < this.n; i++) {
       c[i] = p2.p[this.p[i]];
     }
     return new Perm(c);
   }
-  public rmul(p2: Perm): Perm { // multiply the other way
+  public rmul(p2: Perm): Perm {
+    // multiply the other way
     const c = Array(this.n);
     for (let i = 0; i < this.n; i++) {
       c[i] = this.p[p2.p[i]];
@@ -90,7 +94,8 @@ export class Perm {
     }
     return new Perm(c);
   }
-  public compareTo(p2: Perm): number { // comparison
+  public compareTo(p2: Perm): number {
+    // comparison
     for (let i = 0; i < this.n; i++) {
       if (this.p[i] !== p2.p[i]) {
         return this.p[i] - p2.p[i];
