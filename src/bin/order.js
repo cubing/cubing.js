@@ -33,7 +33,7 @@ worker = new kpuz.KPuzzle(puzzle) ;
  */
 worker.setFaceNames(pg.facenames.map(function(_){ return _[1] })) ;
 mps = pg.movesetgeos ;
-for (var i=0; i<mps.length; i++) {
+for (let i=0; i<mps.length; i++) {
    worker.addGrip(mps[i][0], mps[i][2], mps[i][4]) ;
 }
 /*
@@ -46,14 +46,14 @@ ksp = new twisty.KSolvePuzzle(puzzle) ;
  *   We parse the algorithm and get an indexer.
  */
 var algo = alg.parse(algo) ;
-var tai = new twisty.TreeAlgorithmIndexer(ksp, algo) ;
+const tai = new twisty.TreeAlgorithmIndexer(ksp, algo) ;
 /*
  *   Then, we get the transform (not the state!) at the end of the
  *   algorithm.
  */
-var tr = tai.transformAtIndex(tai.numMoves()) ;
+const tr = tai.transformAtIndex(tai.numMoves()) ;
 /*
  *   We calculate its order and display it.
  */
-var o = kpuz.Order(puzzle, tr) ;
+const o = kpuz.Order(puzzle, tr) ;
 console.log(o) ;

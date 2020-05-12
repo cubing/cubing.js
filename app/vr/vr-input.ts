@@ -113,7 +113,7 @@ class ButtonListener {
   }
 }
 
-interface ButtonStates { [idx: number]: boolean[]; }
+interface ButtonStates { [idx: number]: boolean[] }
 
 export class VRInput {
   public controllers: Group[] = [];

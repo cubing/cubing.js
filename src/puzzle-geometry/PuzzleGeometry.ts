@@ -1727,8 +1727,7 @@ public allstickers(): void {
     function noise(c: number): number {
       return c + 0 * (Math.random() - 0.5);
     }
-    function drawedges(id: string, pts: number[][], color: string)
-      : string {
+    function drawedges(id: string, pts: number[][], color: string): string {
       return "<polygon id=\"" + id + "\" class=\"sticker\" style=\"fill: " + color +
         "\" points=\"" +
         pts.map((p) => noise(p[0]) + " " + noise(p[1])).join(" ") +

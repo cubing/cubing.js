@@ -15,7 +15,7 @@ export class ValidationError extends Error { }
 
 export abstract class ValidatorTraversal extends TraversalUp<void> { }
 
-interface FamilyList { [s: string]: boolean; }
+interface FamilyList { [s: string]: boolean }
 
 function validateFamily(family: string, allowedFamilyLists: FamilyList[]): boolean {
   for (const list of allowedFamilyLists) {

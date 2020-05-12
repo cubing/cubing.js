@@ -96,8 +96,8 @@ const r = {
   D: new Vector3(0, 1, 0),
 };
 
-interface OrbitIndexed<T> { [s: string]: T; }
-interface PieceIndexed<T> extends OrbitIndexed<T[]> { }
+interface OrbitIndexed<T> { [s: string]: T }
+type PieceIndexed<T> = OrbitIndexed<T[]>
 
 const firstPiecePosition: OrbitIndexed<Vector3> = {
   EDGE: new Vector3(0, 1, 1),
