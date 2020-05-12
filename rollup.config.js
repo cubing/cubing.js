@@ -35,12 +35,12 @@ if (!process.env.ROLLUP_WATCH) {
 const cjs = {
   external: ["three"],
   input: {
-    alg: "src/alg/index.ts",
-    bluetooth: "src/bluetooth/index.ts",
-    cubing: "src/cubing/index.ts",
-    kpuzzle: "src/kpuzzle/index.ts",
+    "alg": "src/alg/index.ts",
+    "bluetooth": "src/bluetooth/index.ts",
+    "cubing": "src/cubing/index.ts",
+    "kpuzzle": "src/kpuzzle/index.ts",
     "puzzle-geometry": "src/puzzle-geometry/index.ts",
-    twisty: "src/twisty/index.ts",
+    "twisty": "src/twisty/index.ts",
   },
   output: [
     {
@@ -55,12 +55,12 @@ const cjs = {
 const esm = {
   external: ["three"],
   input: {
-    alg: "src/alg/index.ts",
-    bluetooth: "src/bluetooth/index.ts",
-    cubing: "src/cubing/index.ts",
-    kpuzzle: "src/kpuzzle/index.ts",
+    "alg": "src/alg/index.ts",
+    "bluetooth": "src/bluetooth/index.ts",
+    "cubing": "src/cubing/index.ts",
+    "kpuzzle": "src/kpuzzle/index.ts",
     "puzzle-geometry": "src/puzzle-geometry/index.ts",
-    twisty: "src/twisty/index.ts",
+    "twisty": "src/twisty/index.ts",
   },
   output: [
     {

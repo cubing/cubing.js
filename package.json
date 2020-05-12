@@ -98,7 +98,11 @@
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars-experimental": "error",
-      "eqeqeq": "error"
+      "eqeqeq": "error",
+      "quote-props": [
+        "error",
+        "consistent-as-needed"
+      ]
     },
     "ignorePatterns": [
       "/dist",
@@ -113,6 +117,7 @@
   "prettier": {
     "semi": true,
     "trailingComma": "all",
-    "tabWidth": 2
+    "tabWidth": 2,
+    "quoteProps": "consistent"
   }
 }

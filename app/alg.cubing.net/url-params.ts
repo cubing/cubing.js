@@ -3,14 +3,14 @@ import { algToString, parse, Sequence } from "../../src/alg";
 // TODO: implement URL listener.
 
 interface URLParamValues {
-  alg: Sequence;
-  puzzle: string;
+  "alg": Sequence;
+  "puzzle": string;
   "debug-js": boolean;
 }
 
 const paramDefaults: URLParamValues = {
-  alg: new Sequence([]),
-  puzzle: "3x3x3",
+  "alg": new Sequence([]),
+  "puzzle": "3x3x3",
   "debug-js": true,
 };
 
@@ -18,8 +18,8 @@ export type ParamName = keyof typeof paramDefaults;
 
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
-  alg: "",
-  puzzle: "3x3x3",
+  "alg": "",
+  "puzzle": "3x3x3",
   "debug-js": "true",
 };
 
