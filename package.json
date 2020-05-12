@@ -53,7 +53,7 @@
     "dev": "parcel serve --no-autoinstall app/index.html --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
     "test": "jest && npm run lint",
-    "format": "npx eslint --fix .",
+    "format": "npx eslint --fix .; npx prettier --write src app *.config.js */index.js */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint .",
     "prepack": "npm run clean && npm run build",
