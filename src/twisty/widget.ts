@@ -69,6 +69,7 @@ export abstract class Button {
 }
 
 // tslint:disable-next-line no-namespace // TODO: nested module?
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Button {
 
   export class Fullscreen extends Button {
