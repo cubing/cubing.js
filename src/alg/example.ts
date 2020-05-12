@@ -11,6 +11,7 @@ import {
 } from "./algorithm";
 
 // tslint:disable-next-line no-namespace // TODO: nested module
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Example {
 
   export const Sune: Sequence = new Sequence([

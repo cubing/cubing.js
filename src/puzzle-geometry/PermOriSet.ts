@@ -51,22 +51,24 @@ export class OrbitsDef {
     return result;
   }
   public toKpuzzle(): object {
-    const orbits: { [orbitName: string]: any } = {} ;
-    const start: { [orbitName: string]: any } = {} ;
+    const orbits: { [orbitName: string]: any } = {};
+    const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
-      orbits[this.orbitnames[i]] = { numPieces: this.orbitdefs[i].size,
-                        orientations: this.orbitdefs[i].mod } ;
-      start[this.orbitnames[i]] = this.solved.orbits[i].toKpuzzle() ;
+      orbits[this.orbitnames[i]] = {
+        numPieces: this.orbitdefs[i].size,
+        orientations: this.orbitdefs[i].mod
+      };
+      start[this.orbitnames[i]] = this.solved.orbits[i].toKpuzzle();
     }
-    const moves: { [moveName: string]: any } = {} ;
+    const moves: { [moveName: string]: any } = {};
     for (let i = 0; i < this.movenames.length; i++) {
-      const mp: { [orbitName: string]: any } = {} ;
+      const mp: { [orbitName: string]: any } = {};
       for (let j = 0; j < this.orbitnames.length; j++) {
-        mp[this.orbitnames[j]] = this.moveops[i].orbits[j].toKpuzzle() ;
+        mp[this.orbitnames[j]] = this.moveops[i].orbits[j].toKpuzzle();
       }
-      moves[this.movenames[i]] = mp ;
+      moves[this.movenames[i]] = mp;
     }
-    return { orbits, startPieces: start, moves } ;
+    return { orbits, startPieces: start, moves };
   }
   public optimize(): OrbitsDef {
     const neworbitnames: string[] = [];
@@ -350,7 +352,7 @@ export class Orbit {
     return [this.perm.map((_: number) => _ + 1).join(" "), newori.join(" ")];
   }
   public toKpuzzle(): object {
-    return { permutation: this.perm, orientation: this.ori } ;
+    return { permutation: this.perm, orientation: this.ori };
   }
 }
 export class TransformationBase {
@@ -434,6 +436,7 @@ export class Transformation extends TransformationBase {
     if (n === 0) {
       return this.e();
     }
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let t: Transformation = this;
     if (n < 0) {
       t = t.inv();

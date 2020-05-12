@@ -127,12 +127,10 @@ export class Quat {
     return q.mul(this).mul(q.invrot());
   }
   public rotateface(face: Quat[]): Quat[] { // rotate a face by this Q.
-    const that = this;
-    return face.map((_: Quat) => _.rotatepoint(that));
+    return face.map((_: Quat) => _.rotatepoint(this));
   }
   public rotatecubie(cubie: Quat[][]): Quat[][] { // rotate a cubie by this Q.
-    const that = this;
-    return cubie.map((_: Quat[]) => that.rotateface(_));
+    return cubie.map((_: Quat[]) => this.rotateface(_));
   }
   public intersect3(p2: Quat, p3: Quat): Quat | false { // intersect three planes if there is one
     const det = this.det3x3(this.b, this.c, this.d,
@@ -161,12 +159,11 @@ export class Quat {
   }
   public cutfaces(faces: Quat[][]): Quat[][] {
     // Cut a set of faces by a plane and return new set
-    const that = this; // welcome to Javascript
     const d = this.a;
     const nfaces = [];
     for (let j = 0; j < faces.length; j++) {
       const face = faces[j];
-      const inout = face.map((_: Quat) => that.side(_.dot(that) - d));
+      const inout = face.map((_: Quat) => this.side(_.dot(this) - d));
       let seen = 0;
       for (let i = 0; i < inout.length; i++) {
         seen |= 1 << (inout[i] + 1);

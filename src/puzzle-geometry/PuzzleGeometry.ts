@@ -765,7 +765,7 @@ export class PuzzleGeometry {
     return [x1, y1, off];
   }
 
-public allstickers(): void {
+  public allstickers(): void {
     // next step is to calculate all the stickers and orbits
     // We do enough work here to display the cube on the screen.
     // take our newly split base face and expand it by the rotation matrix.
@@ -907,7 +907,6 @@ public allstickers(): void {
     this.facelisthash = facelisthash;
     this.cubiekeys = cubiekeys;
     if (this.verbose) { console.log("# Cubies: " + Object.keys(cubiehash).length); }
-    const that = this;
     //  Sort the faces around each corner so they are clockwise.  Only
     //  relevant for cubies that actually are corners (three or more
     //  faces).  In general cubies might have many faces; for icosohedrons
@@ -997,9 +996,9 @@ public allstickers(): void {
     const cubievaluemap = [];
     // Later we will make this smarter to use a get color for face function
     // so we support puzzles with multiple faces the same color
-    function getcolorkey(cubienum: number): string {
+    const getcolorkey = (cubienum: number): string => {
       return cubies[cubienum].map(
-        (_) => that.getfaceindex(that.findface(_))).join(" ");
+        (_) => this.getfaceindex(this.findface(_))).join(" ");
     }
     const cubiesetcubies: any = [];
     for (let i = 0; i < cubies.length; i++) {
@@ -1264,28 +1263,28 @@ public allstickers(): void {
           // The move moving the center might not be the same modulo as the
           // center itself.
           if (a.length > 1 && this.orientCenters &&
-              (this.cubies[b[0]].length === 1 ||
-               this.cubies[b[0]][0] === this.cubies[b[0]][1])) {
-             // is this a real center cubie, around an axis?
-             if (centermassface(this.faces[i]).dist(centermassface(this.basefaces[this.getfaceindex(i)])) < eps) {
-               // how does remapping of the face/point set map to the original?
-               let face1 = this.faces[a[0]] ;
-               for (let ii = 0; ii < a.length; ii++) {
-                 const face0 = this.faces[a[ii]] ;
-                 let o = -1 ;
-                 for (let jj = 0; jj < face1.length; jj++) {
-                   if (face0[jj].dist(face1[0]) < eps) {
-                     o = jj ;
-                     break ;
-                   }
-                 }
-                 if (o < 0) {
-                   throw new Error("Couldn't find rotation of center faces.") ;
-                 }
-                 b[2 * ii + 1] = o ;
-                 face1 = this.moverotations[k][0].rotateface(face1) ;
-               }
-             }
+            (this.cubies[b[0]].length === 1 ||
+              this.cubies[b[0]][0] === this.cubies[b[0]][1])) {
+            // is this a real center cubie, around an axis?
+            if (centermassface(this.faces[i]).dist(centermassface(this.basefaces[this.getfaceindex(i)])) < eps) {
+              // how does remapping of the face/point set map to the original?
+              let face1 = this.faces[a[0]];
+              for (let ii = 0; ii < a.length; ii++) {
+                const face0 = this.faces[a[ii]];
+                let o = -1;
+                for (let jj = 0; jj < face1.length; jj++) {
+                  if (face0[jj].dist(face1[0]) < eps) {
+                    o = jj;
+                    break;
+                  }
+                }
+                if (o < 0) {
+                  throw new Error("Couldn't find rotation of center faces.");
+                }
+                b[2 * ii + 1] = o;
+                face1 = this.moverotations[k][0].rotateface(face1);
+              }
+            }
           }
           // a.length == 1 means a sticker is spinning in place.
           // in this case we add duplicate stickers and fake the orientation
@@ -1883,20 +1882,19 @@ public allstickers(): void {
       }
     }
     const sc2 = Math.min(h / hiy / 2, (w - trim) / hix / 4);
-    const that = this;
-    function mappt2d(fn: number, q: Quat): number[] {
+    const mappt2d = (fn: number, q: Quat): number[] => {
       if (threed) {
         const xoff2 = 0.5 * trim + 0.25 * w;
-        const xmul = (that.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1);
+        const xmul = (this.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1);
         return [trim + w * 0.5 + xmul * (xoff2 - q.b * sc2), trim + h * 0.5 + q.c * sc2];
       } else {
-        const g = geos[that.facenames[fn][1]];
+        const g = geos[this.facenames[fn][1]];
         return [trim + q.dot(g[0]) + g[2].b, trim + h - q.dot(g[1]) - g[2].c];
       }
     }
     for (let i = 0; i < this.faces.length; i++) {
-      let face = that.faces[i];
-      const facenum = Math.floor(i / that.stickersperface);
+      let face = this.faces[i];
+      const facenum = Math.floor(i / this.stickersperface);
       if (threed) {
         face = rot.rotateface(face);
       }

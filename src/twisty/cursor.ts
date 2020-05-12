@@ -68,7 +68,7 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
   }
 
   public stateAtIndex(index: number): State<P> {
-    return this.puzzle.combine(this.puzzle.startState(), this.transformAtIndex(index)) ;
+    return this.puzzle.combine(this.puzzle.startState(), this.transformAtIndex(index));
   }
 
   public transformAtIndex(index: number): State<P> {
@@ -94,9 +94,9 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
 
 class AlgPartDecoration<P extends Puzzle> {
   constructor(puz: Puzzle, public moveCount: number,
-              public duration: number,
-              public forward: State<P>, public backward: State<P>,
-              public children: Array<AlgPartDecoration<P>> = []) {
+    public duration: number,
+    public forward: State<P>, public backward: State<P>,
+    public children: Array<AlgPartDecoration<P>> = []) {
   }
 }
 class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecoration<P>> {
@@ -408,19 +408,19 @@ const countAnimatedMovesInstance = new CountAnimatedMoves();
 const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(countAnimatedMovesInstance);
 
 class SingleAnimatedMove<P extends Puzzle> {
-  public algTimestamp: Cursor.Duration ;
-  public moveDuration: Cursor.Duration ;
+  public algTimestamp: Cursor.Duration;
+  public moveDuration: Cursor.Duration;
   constructor(public priorState: State<P>, public move: BlockMove) {
-    this.moveDuration = Cursor.DefaultDurationForAmount(this.move.amount) ;
-    this.algTimestamp = 0 ;
+    this.moveDuration = Cursor.DefaultDurationForAmount(this.move.amount);
+    this.algTimestamp = 0;
   }
   // return value is: do we kill off the animated move.
   public doLastMoveDelta(duration: Cursor.Duration): boolean {
-    this.algTimestamp += duration ;
+    this.algTimestamp += duration;
     if (this.algTimestamp < 0 || this.algTimestamp >= this.moveDuration) {
-      return true ;
+      return true;
     }
-    return false ;
+    return false;
   }
 }
 
@@ -438,9 +438,9 @@ export class Cursor<P extends Puzzle> {
   }
 
   public experimentalUpdateAlgAnimate(alg: Sequence, move: BlockMove): void {
-     const priorState = this.indexer.stateAtIndex(this.indexer.numMoves()) ;
-     this.setMoves(alg) ;
-     this.lastMoveData = new SingleAnimatedMove(priorState, move) ;
+    const priorState = this.indexer.stateAtIndex(this.indexer.numMoves());
+    this.setMoves(alg);
+    this.lastMoveData = new SingleAnimatedMove(priorState, move);
   }
 
   public setPositionToStart(): void {
@@ -565,6 +565,7 @@ export class Cursor<P extends Puzzle> {
 }
 
 // tslint:disable-next-line no-namespace // TODO: nested module
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Cursor {
   export type Duration = number; // Duration in milliseconds
   // TODO: Extend `number`, introduce MoveSequenceTimestamp vs. EpochTimestamp,

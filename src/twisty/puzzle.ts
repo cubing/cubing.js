@@ -9,6 +9,7 @@ export interface MoveProgress {
 }
 
 // tslint:disable-next-line no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface State<T extends Puzzle> { }
 
 export abstract class Puzzle {
