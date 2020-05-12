@@ -34,6 +34,7 @@ const plugins = [
 
 if (!process.env.ROLLUP_WATCH) {
   plugins.push(terser({
+    // eslint-disable-next-line @typescript-eslint/camelcase
     keep_classnames: true,
   }));
 }

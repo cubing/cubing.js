@@ -217,11 +217,12 @@ export class VRCube {
       case "move":
         this.twisty.experimentalAddMove(e.data.latestMove);
         break;
-      case "orientation":
+      case "orientation": {
         const { x, y, z, w } = e.data.quaternion;
         const quat = new Quaternion(x, y, z, w);
         this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D().experimentalGetCube().quaternion.copy(quat);
         break;
+      }
       default:
         // The "as any" appeases the type checker, which (correctly) deduces
         // that the `event` field can't have a valid value.

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 /*
  *   Given a puzzle name and an algorithm, calculate the order of that
  *   algorithm (how many repetitions are needed for the algorithm to be

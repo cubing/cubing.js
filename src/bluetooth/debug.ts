@@ -10,8 +10,8 @@ export function debugLog(...args: any[]): void {
   }
 
   if (console.info) {
-    console.info.apply(console, args);
+    console.info(...args);
   } else {
-    console.log.apply(console, args);
+    console.log(...args);
   }
 }

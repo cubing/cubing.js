@@ -13,7 +13,7 @@ export function matchesAlgType<T extends AlgPart>(a: any, t: AlgPartType): boole
 
 export function assertMatchesType<T extends AlgPart>(a: any, t: AlgPartType): T {
   if (!matchesAlgType(a, t)) {
-    reportTypeMismatch(`Expected "type": "${t}", saw "type": \"${a.type}\".`);
+    reportTypeMismatch(`Expected "type": "${t}", saw "type": "${a.type}".`);
   }
   return a;
 }
