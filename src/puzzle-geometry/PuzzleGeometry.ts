@@ -498,7 +498,7 @@ export class PuzzleGeometry {
     const vertexnames: any[] = [];
     const edgenames: any[] = [];
     const edgesperface = faces[0].length;
-    function searchaddelement(a: any[], p: Quat, name: any) {
+    function searchaddelement(a: any[], p: Quat, name: any): void {
       for (let i = 0; i < a.length; i++) {
         if (a[i][0].dist(p) < eps) {
           a[i].push(name);
@@ -1682,7 +1682,7 @@ export class PuzzleGeometry {
     return new Perm(r);
   }
 
-  public getInitial3DRotation() {
+  public getInitial3DRotation(): Quat {
     const basefacecount = this.basefacecount;
     if (basefacecount === 4) {
       return new Quat(0.7043069543230507, 0.0617237605829268,

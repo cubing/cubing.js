@@ -218,10 +218,10 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
       this.traverse(conjugate.A, (dataDown as Conjugate).A) &&
       this.traverse(conjugate.B, (dataDown as Conjugate).B);
   }
-  public traversePause(pause: Pause, dataDown: AlgPart): boolean {
+  public traversePause(_pause: Pause, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "pause");
   }
-  public traverseNewLine(newLine: NewLine, dataDown: AlgPart): boolean {
+  public traverseNewLine(_newLine: NewLine, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "newLine");
   }
   public traverseComment(comment: Comment, dataDown: AlgPart): boolean {
@@ -337,8 +337,8 @@ export class ToString extends TraversalUp<string> {
   public traverseCommutator(commutator: Commutator): string { return "[" + this.traverse(commutator.A) + ", " + this.traverse(commutator.B) + "]" + repetitionSuffix(commutator.amount); }
   public traverseConjugate(conjugate: Conjugate): string { return "[" + this.traverse(conjugate.A) + ": " + this.traverse(conjugate.B) + "]" + repetitionSuffix(conjugate.amount); }
   // TODO: Remove spaces between repeated pauses (in traverseSequence)
-  public traversePause(pause: Pause): string { return "."; }
-  public traverseNewLine(newLine: NewLine): string { return "\n"; }
+  public traversePause(_pause: Pause): string { return "."; }
+  public traverseNewLine(_newLine: NewLine): string { return "\n"; }
   // TODO: Enforce being followed by a newline (or the end of the alg)?
   public traverseComment(comment: Comment): string { return "//" + comment.comment; }
   // TODO: Sanitize `*/`

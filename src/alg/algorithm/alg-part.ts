@@ -7,7 +7,7 @@ export abstract class AlgPart {
 }
 
 // type Constructor<T> = Function & { prototype: T }
-export function matchesAlgType<T extends AlgPart>(a: any, t: AlgPartType): boolean {
+export function matchesAlgType(a: any, t: AlgPartType): boolean {
   return a.type === t;
 }
 

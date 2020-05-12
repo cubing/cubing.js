@@ -130,7 +130,7 @@ export class GoCube extends BluetoothPuzzle {
         this.homeQuatInverse = quat.clone().inverse();
       }
 
-      const targetQuat = quat.clone().multiply(this.homeQuatInverse!.clone());
+      const targetQuat = quat.clone().multiply(this.homeQuatInverse.clone());
       targetQuat.y = -targetQuat.y; // GoCube axis fix.
 
       this.lastTarget.slerp(targetQuat, 0.5);

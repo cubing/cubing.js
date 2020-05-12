@@ -409,7 +409,10 @@ export class Player {
     this.element = document.createElement("player");
 
     if (this.config.visualizationFormat === "PG3D") {
-      this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DViewConfig!)).element);
+      if (!config.experimentalPG3DViewConfig) {
+        throw new Error("`experimentalPG3DViewConfig` is currently required for PG3D.");
+      }
+      this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DViewConfig)).element);
     } else if (this.config.visualizationFormat === "3D") {
       if (definition.name === "3x3x3") {
         this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);

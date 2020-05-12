@@ -187,7 +187,7 @@ function gettextwriter(): (s: string) => void {
   if (wnd) {
     wnd.document.open("text/plain", "replace");
     wnd.document.write("<pre>");
-    return (s: string) => {
+    return (s: string): void => {
       s = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       if (wnd && wnd.document) {
         wnd.document.write(s + "\n");
@@ -209,7 +209,7 @@ function dowork(cmd: string): void {
     return;
   }
   if (cmd === "bluetooth" || cmd === "keyboard") {
-    (async () => {
+    (async (): Promise<void> => {
       const inputPuzzle = await (cmd === "bluetooth" ? connect : debugKeyboardConnect)();
       inputPuzzle.addMoveListener((e: MoveEvent) => {
         addMove(e.latestMove);
@@ -489,6 +489,7 @@ export function setup(): void {
     select.selectedIndex = 0;
     descinput.value = puzdesc ?? "";
   } else if (!found) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     optionFor3x3x3!.selected = true;
     descinput.value = getpuzzle("3x3x3");
   }
@@ -500,7 +501,7 @@ export function setup(): void {
   const commands = ["scramble", "reset", "options"];
   for (const command of commands) {
     (document.getElementById(command) as HTMLInputElement).onclick =
-      () => { dowork(command); };
+      (): void => { dowork(command); };
   }
   const qalg = algToString(getURLParam("alg"));
   if (qalg !== "") {

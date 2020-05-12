@@ -8,8 +8,8 @@ export interface MoveProgress {
   fraction: number;
 }
 
-// tslint:disable-next-line no-empty-interface
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// tslint:disable-next-line no-empty-interfaces
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars-experimental
 export interface State<T extends Puzzle> { }
 
 export abstract class Puzzle {

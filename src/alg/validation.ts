@@ -81,9 +81,9 @@ abstract class BaseMoveValidator extends ValidatorTraversal {
     this.traverse(conjugate.A);
     this.traverse(conjugate.B);
   }
-  public traversePause(pause: Pause): void { return; }
-  public traverseNewLine(newLine: NewLine): void { return; }
-  public traverseComment(comment: Comment): void { return; }
+  public traversePause(_pause: Pause): void { return; }
+  public traverseNewLine(_newLine: NewLine): void { return; }
+  public traverseComment(_comment: Comment): void { return; }
 }
 
 // TODO: Export function instead?
@@ -131,21 +131,21 @@ export class FlatAlgValidator extends ValidatorTraversal {
     }
     return;
   }
-  public traverseGroup(group: Group): void {
+  public traverseGroup(_group: Group): void {
     throw new ValidationError("A flat alg cannot contain a group.");
   }
-  public traverseBlockMove(blockMove: BlockMove): void {
+  public traverseBlockMove(_blockMove: BlockMove): void {
     return;
   }
-  public traverseCommutator(commutator: Commutator): void {
+  public traverseCommutator(_commutator: Commutator): void {
     throw new ValidationError("A flat alg cannot contain a commutator.");
   }
-  public traverseConjugate(conjugate: Conjugate): void {
+  public traverseConjugate(_conjugate: Conjugate): void {
     throw new ValidationError("A flat alg cannot contain a conjugate.");
   }
-  public traversePause(pause: Pause): void { return; }
-  public traverseNewLine(newLine: NewLine): void { return; }
-  public traverseComment(comment: Comment): void { return; }
+  public traversePause(_pause: Pause): void { return; }
+  public traverseNewLine(_newLine: NewLine): void { return; }
+  public traverseComment(_comment: Comment): void { return; }
 }
 
 export type Validator = (a: Sequence) => void;

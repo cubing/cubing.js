@@ -15,7 +15,7 @@ class CountAnimatedMoves extends TraversalUp<number> {
   public traverseGroup(group: Group): number {
     return this.traverseSequence(group.nestedSequence);
   }
-  public traverseBlockMove(blockMove: BlockMove): number {
+  public traverseBlockMove(_blockMove: BlockMove): number {
     return 1;
   }
   public traverseCommutator(commutator: Commutator): number {
@@ -24,9 +24,9 @@ class CountAnimatedMoves extends TraversalUp<number> {
   public traverseConjugate(conjugate: Conjugate): number {
     return 2 * (this.traverseSequence(conjugate.A)) + this.traverseSequence(conjugate.B);
   }
-  public traversePause(pause: Pause): number { return 0; }
-  public traverseNewLine(newLine: NewLine): number { return 0; }
-  public traverseComment(comment: Comment): number { return 0; }
+  public traversePause(_pause: Pause): number { return 0; }
+  public traverseNewLine(_newLine: NewLine): number { return 0; }
+  public traverseComment(_comment: Comment): number { return 0; }
 }
 
 interface AlgorithmIndexer<P extends Puzzle> {
@@ -95,7 +95,7 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
 }
 
 class AlgPartDecoration<P extends Puzzle> {
-  constructor(puz: Puzzle, public moveCount: number,
+  constructor(_puz: Puzzle, public moveCount: number,
     public duration: number,
     public forward: State<P>, public backward: State<P>,
     public children: Array<AlgPartDecoration<P>> = []) {
@@ -160,10 +160,10 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
   public traversePause(pause: Pause): AlgPartDecoration<P> {
     return new AlgPartDecoration<P>(this.puz, 1, this.durationFn.traverse(pause), this.identity, this.identity);
   }
-  public traverseNewLine(newLine: NewLine): AlgPartDecoration<P> {
+  public traverseNewLine(_newLine: NewLine): AlgPartDecoration<P> {
     return this.dummyLeaf;
   }
-  public traverseComment(comment: Comment): AlgPartDecoration<P> {
+  public traverseComment(_comment: Comment): AlgPartDecoration<P> {
     return this.dummyLeaf;
   }
   private mult(apd: AlgPartDecoration<P>, n: number, child: Array<AlgPartDecoration<P>>): AlgPartDecoration<P> {
@@ -304,10 +304,10 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
     this.back = wd.back;
     return true;
   }
-  public traverseNewLine(newLine: NewLine, wd: WalkerDown<P>): boolean {
+  public traverseNewLine(_newLine: NewLine, _wd: WalkerDown<P>): boolean {
     return false;
   }
-  public traverseComment(comment: Comment, wd: WalkerDown<P>): boolean {
+  public traverseComment(_comment: Comment, _wd: WalkerDown<P>): boolean {
     return false;
   }
   private firstcheck(wd: WalkerDown<P>): boolean {
@@ -367,7 +367,10 @@ export class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<
   public getMove(index: number): BlockMove {
     // FIXME need to support Pause
     if (this.walker.moveByIndex(index)) {
-      const bm = this.walker.mv! as BlockMove;
+      if (!this.walker.mv) {
+        throw new Error("`this.walker.mv` missing");
+      }
+      const bm = this.walker.mv as BlockMove;
       // TODO: this type of negation needs to be in alg
       if (this.walker.back) {
         return invertBlockMove(bm);
@@ -543,7 +546,7 @@ export class Cursor<P extends Puzzle> {
   }
 
   // TODO
-  public experimentalSetDurationScale(scale: number): void {
+  public experimentalSetDurationScale(_scale: number): void {
     //   this.durationFn = new Cursor.AlgDuration(Cursor.ExperimentalScaledDefaultDurationForAmount.bind(Cursor.ExperimentalScaledDefaultDurationForAmount, scale));
   }
 
@@ -600,7 +603,7 @@ export namespace Cursor {
 
   export type DurationForAmount = (amount: number) => Duration;
 
-  export function ConstantDurationForAmount(amount: number): Duration {
+  export function ConstantDurationForAmount(_amount: number): Duration {
     return 1000;
   }
 
@@ -647,9 +650,9 @@ export namespace Cursor {
     public traverseBlockMove(blockMove: BlockMove): Duration { return this.durationForAmount(blockMove.amount); }
     public traverseCommutator(commutator: Commutator): Duration { return commutator.amount * 2 * (this.traverse(commutator.A) + this.traverse(commutator.B)); }
     public traverseConjugate(conjugate: Conjugate): Duration { return conjugate.amount * (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B)); }
-    public traversePause(pause: Pause): Duration { return this.durationForAmount(1); }
-    public traverseNewLine(newLine: NewLine): Duration { return this.durationForAmount(1); }
-    public traverseComment(comment: Comment): Duration { return this.durationForAmount(0); }
+    public traversePause(_pause: Pause): Duration { return this.durationForAmount(1); }
+    public traverseNewLine(_newLine: NewLine): Duration { return this.durationForAmount(1); }
+    public traverseComment(_comment: Comment): Duration { return this.durationForAmount(0); }
   }
 }
 

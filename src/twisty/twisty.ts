@@ -31,7 +31,7 @@ export class Twisty {
 
     this.#player = new Player(this.#anim, this.puzzleDef, config.playerConfig);
     this.element.appendChild((this.#player).element);
-    this.coalesceModFunc = (mv) => 0;
+    this.coalesceModFunc = (_mv: BlockMove): number => 0;
   }
 
   // Set the callback function to get the modulo for coalescing from a BlockMove.

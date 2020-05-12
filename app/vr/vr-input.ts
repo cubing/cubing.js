@@ -118,7 +118,6 @@ interface ButtonStates { [idx: number]: boolean[] }
 export class VRInput {
   public controllers: Group[] = [];
   private buttonListeners: ButtonListener[] = [];
-  private previousButtonStates: ButtonStates;
   constructor(renderer: WebGLRenderer) {
     for (let i = 0; i < NUM_CONTROLLERS; i++) {
       const controller = renderer.vr.getController(i);
@@ -146,7 +145,6 @@ export class VRInput {
     for (const buttonListener of this.buttonListeners) {
       buttonListener.update(buttonStates);
     }
-    this.previousButtonStates = buttonStates;
   }
 
   public addButtonListener(grouping: ButtonGrouping, buttonSpecs: ButtonSpec[], activatedCallback: ButtonListenerCallback, continuedActiveCallback?: ButtonListenerCallback, deactivatedCallback?: ButtonListenerCallback): void {

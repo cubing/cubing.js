@@ -8,9 +8,10 @@ import { Puzzle } from "../puzzle";
 import { TAU, Twisty3D } from "./twisty3D";
 
 const foundationMaterial = new MeshBasicMaterial({ side: DoubleSide, color: 0x000000, transparent: true, opacity: 0.75 });
-const stickerMaterial = new MeshBasicMaterial({ vertexColors: FaceColors,
+const stickerMaterial = new MeshBasicMaterial({
+  vertexColors: FaceColors,
   //    side: DoubleSide,
-}) ;
+});
 const polyMaterial = new MeshBasicMaterial({ transparent: true, opacity: 0, color: 0x000000 });
 
 class StickerDef {
@@ -26,7 +27,7 @@ class StickerDef {
     const coords = stickerDat.coords as number[][];
     const vertind: number[] = [];
     for (const coord of coords) {
-      const v = new Vector3(coord[0]!, coord[1]!, coord[2]!);
+      const v = new Vector3(coord[0], coord[1], coord[2]);
       vertind.push(this.geo.vertices.length);
       this.geo.vertices.push(v);
     }
@@ -36,7 +37,7 @@ class StickerDef {
       this.geo.faces.push(face);
     }
     this.geo.computeFaceNormals();
-    const obj = new Mesh(this.geo, stickerMaterial) ;
+    const obj = new Mesh(this.geo, stickerMaterial);
     this.cubie.add(obj);
     if (showFoundation) {
       const foundation = new Mesh(this.geo, foundationMaterial);
@@ -59,7 +60,7 @@ class HitPlaneDef {
     const coords = hitface.coords as number[][];
     const vertind: number[] = [];
     for (const coord of coords) {
-      const v = new Vector3(coord[0]!, coord[1]!, coord[2]!);
+      const v = new Vector3(coord[0], coord[1], coord[2]);
       vertind.push(this.geo.vertices.length);
       this.geo.vertices.push(v);
     }
@@ -68,8 +69,8 @@ class HitPlaneDef {
       this.geo.faces.push(face);
     }
     this.geo.computeFaceNormals();
-    const obj = new Mesh(this.geo, polyMaterial) ;
-    obj.userData.name = hitface.name ;
+    const obj = new Mesh(this.geo, polyMaterial);
+    obj.userData.name = hitface.name;
     this.cubie.scale.setScalar(0.99);
     this.cubie.add(obj);
   }
@@ -171,7 +172,7 @@ export class PG3D extends Twisty3D<Puzzle> {
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
       const angle = - this.ease(moveProgress.fraction) *
-           moveProgress.direction * blockMove.amount * TAU / ax.order;
+        moveProgress.direction * blockMove.amount * TAU / ax.order;
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
         const orin = pieces.length;

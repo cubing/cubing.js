@@ -95,7 +95,7 @@ class PhysicalState {
       homeQuatInverse = quat.clone().inverse();
     }
 
-    return quat.clone().multiply(homeQuatInverse!.clone());
+    return quat.clone().multiply(homeQuatInverse.clone());
   }
 
   // Loops from 255 to 0.
@@ -211,6 +211,7 @@ function getMacAddress(name: string): Uint8Array {
 export class GanCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
   public static async connect(server: BluetoothRemoteGATTServer): Promise<GanCube> {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const macAddress = getMacAddress(server.device!.name!);
 
     const ganCubeService = await server.getPrimaryService(UUIDs.ganCubeService);

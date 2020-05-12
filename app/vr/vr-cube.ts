@@ -189,7 +189,7 @@ export class VRCube {
     const direction = new Vector3().copy(controllerDirection);
     direction.applyQuaternion(controller.quaternion);
     const raycaster = new Raycaster(controller.position, direction);
-    const closestIntersection: Intersection | null = ((l) => l.length > 0 ? l[0] : null)(raycaster.intersectObjects(this.controlPlanes));
+    const closestIntersection: Intersection | null = ((l: Intersection[]): Intersection | null => l.length > 0 ? l[0] : null)(raycaster.intersectObjects(this.controlPlanes));
 
     if (closestIntersection && showControlPlanes) {
       ((closestIntersection.object as Mesh).material as Material).opacity = 0.2;

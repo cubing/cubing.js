@@ -25,6 +25,7 @@ function requestOptions(acceptAllDevices: boolean = false): RequestDeviceOptions
     goCubeConfig,
   ]) {
     if (!acceptAllDevices) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       options.filters = options.filters!.concat(config.filters);
     }
     options.optionalServices = options.optionalServices.concat(config.optionalServices);
@@ -71,7 +72,7 @@ export async function connect(options: BluetoothConnectOptions = {}): Promise<Bl
   const server = await device.gatt.connect();
   debugLog("Server:", server);
 
-  const name = server.device!.name || "";
+  const name = server.device?.name || "";
 
   // TODO by reading supported matched filters or provided services.
   if (name && name.startsWith("GAN")) {

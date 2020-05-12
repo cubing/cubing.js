@@ -13,6 +13,7 @@ class App {
   // private debugProxyReceiver = new ProxyReceiver();
   private puzzle: BluetoothPuzzle;
   constructor() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.querySelector("#connect-bluetooth")!.addEventListener("click", async () => {
       this.puzzle = await connect();
       this.puzzle.addMoveListener(this.proxySender.onMove.bind(this.proxySender));
@@ -20,12 +21,14 @@ class App {
       console.log("Puzzle connected!", this.puzzle);
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.querySelector("#connect-keyboard")!.addEventListener("click", async () => {
       this.puzzle = await debugKeyboardConnect();
       this.puzzle.addMoveListener(this.proxySender.onMove.bind(this.proxySender));
       console.log("Keyboard connected!", this.puzzle);
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.querySelector("#reset")!.addEventListener("click", async () => {
       this.proxySender.sendReset();
       if ("reset" in this.puzzle) {

@@ -4,7 +4,7 @@ import { structureEquals } from "../traversal";
 expect.extend({
   toStructureEqual(expected: Sequence, observed: Sequence): jest.CustomMatcherResult {
     return {
-      message: () => "Expected the same alg structure.",
+      message: (): string => "Expected the same alg structure.",
       pass: structureEquals(expected, observed),
     };
   },

@@ -7,6 +7,7 @@ window.addEventListener("load", () => {
   if (!getURLParam("debug-js")) {
     return;
   }
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const appElement = document.querySelector("app")!;
   let alg: Sequence;
   try {
