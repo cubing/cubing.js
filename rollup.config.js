@@ -2,24 +2,15 @@ import resolve from "rollup-plugin-node-resolve";
 import notify from "rollup-plugin-notify";
 import pegjs from "rollup-plugin-pegjs";
 import { terser } from "rollup-plugin-terser";
-import tslint from "rollup-plugin-tslint";
 import typescript2 from "rollup-plugin-typescript2";
 import * as typescript from "typescript";
 import json from "@rollup/plugin-json";
 import { string } from "rollup-plugin-string";
+import { eslint } from "rollup-plugin-eslint";
 
 const plugins = [
   pegjs(),
-  tslint({
-    exclude: [
-      "node_modules/**",
-      "src/**/parser/parser.js",
-      "src/**/parser/parser.pegjs",
-      "src/kpuzzle/definitions/*.json",
-      "src/kpuzzle/definitions/svg/index.json",
-      "src/kpuzzle/definitions/svg/*.svg",
-    ],
-  }),
+  eslint({}),
   typescript2({
     typescript: typescript,
   }),
