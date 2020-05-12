@@ -92,6 +92,9 @@
     "ignorePatterns": [
       "/dist",
       "/node_modules"
-    ]
+    ],
+    "env": {
+      "commonjs": true
+    }
   }
 }
