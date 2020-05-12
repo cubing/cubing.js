@@ -87,14 +87,18 @@
       "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
-      "@typescript-eslint/no-inferrable-types": "off"
+      "@typescript-eslint/no-inferrable-types": "off",
+      "@typescript-eslint/no-use-before-define": "off",
+      "@typescript-eslint/no-explicit-any": "off"
     },
     "ignorePatterns": [
       "/dist",
       "/node_modules"
     ],
     "env": {
-      "commonjs": true
+      "commonjs": true,
+      "browser": true,
+      "node": true
     }
   }
 }
