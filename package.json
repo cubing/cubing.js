@@ -49,9 +49,9 @@
     "dev": "parcel serve --no-autoinstall app/index.html --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
     "test": "jest && npm run lint",
-    "format": "npx eslint --fix . --ext .js,.ts",
+    "format": "npx eslint --fix .",
     "setup": "npm install",
-    "lint": "npx eslint . --ext .js,.ts",
+    "lint": "npx eslint .",
     "prepack": "npm run clean && npm run build",
     "parcel-build-for-vr-cubing-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/experiments.cubing.net/vr app/vr/index.html",
     "parcel-build-for-experiments-cubing-net": "parcel build --no-autoinstall --public-url /cubing.js/ --out-dir dist/experiments.cubing.net/cubing.js app/index.html"
