@@ -39,7 +39,7 @@ const key11 = new Uint8Array([67, 226, 91, 214, 125, 220, 120, 216, 7, 96, 163, 
 // Clean-room reverse-engineered
 async function decryptState(data: Uint8Array, key: Uint8Array, macAddress: Uint8Array): Promise<Uint8Array> {
   // TODO: Read from puzzle.
-  const keyBuffer = new Uint8Array(key10);
+  const keyBuffer = new Uint8Array(key);
   for (let i = 0; i < macAddress.length; i++) {
     keyBuffer[i] = (keyBuffer[i] + macAddress[i]) % 256;
   }
