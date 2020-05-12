@@ -88,7 +88,7 @@ export function Order(def: KPuzzleDefinition, t: Transformation): number {
         let w = idx;
         let om = 0;
         let pm = 0;
-        while (true) {
+        for (; ;) {
           d[w] = true;
           om = om + o.orientation[w];
           pm = pm + 1;

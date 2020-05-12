@@ -1,6 +1,8 @@
 import { AlgPart, BlockMove, Comment, Commutator, Conjugate, expand, Group, NewLine, Pause, Sequence, TraversalDownUp, TraversalUp, Unit } from "../alg";
 import { Puzzle, State } from "./puzzle";
 
+const USE_SIMPLE_ALGORITHM_INDEXER = false;
+
 // TODO: Include Pause.
 class CountAnimatedMoves extends TraversalUp<number> {
   public traverseSequence(sequence: Sequence): number {
@@ -556,7 +558,7 @@ export class Cursor<P extends Puzzle> {
 
   private setMoves(alg: Sequence): void {
     this.lastMoveData = undefined;
-    if (false) {
+    if (USE_SIMPLE_ALGORITHM_INDEXER) {
       this.indexer = new SimpleAlgorithmIndexer(this.puzzle, alg);
     } else {
       this.indexer = new TreeAlgorithmIndexer(this.puzzle, alg);

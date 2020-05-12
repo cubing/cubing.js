@@ -1227,7 +1227,7 @@ export class PuzzleGeometry {
           const b = this.facetocubies[i].slice();
           let face = this.faces[i];
           let fi2 = i;
-          while (true) {
+          for (; ;) {
             slicenum[fi2] = -1;
             const face2 = this.moverotations[k][0].rotateface(face);
             fi2 = this.findface(face2);

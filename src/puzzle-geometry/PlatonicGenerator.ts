@@ -124,7 +124,7 @@ export function getface(planes: Quat[]): Quat[] {
       }
     }
   }
-  while (true) {
+  for (; ;) {
     let changed = false;
     for (let i = 0; i < face.length; i++) {
       const j: number = (i + 1) % face.length;
