@@ -74,5 +74,24 @@
     "extensions": [
       "svg"
     ]
+  },
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/no-inferrable-types": "off"
+    },
+    "ignorePatterns": [
+      "/dist",
+      "/node_modules"
+    ]
   }
 }
