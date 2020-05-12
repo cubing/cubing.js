@@ -40,6 +40,8 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
 }
 
 // TODO: Type
-export async function debugKeyboardConnect(target: any = window): Promise<KeyboardPuzzle> {
+export async function debugKeyboardConnect(
+  target: any = window,
+): Promise<KeyboardPuzzle> {
   return new KeyboardPuzzle(target);
 }

@@ -37,22 +37,13 @@ export {
   blockMoveToString,
 } from "./traversal";
 
-export {
-  Example,
-} from "./example";
+export { Example } from "./example";
 
-export {
-  AlgJSON,
-  fromJSON,
-} from "./json";
+export { AlgJSON, fromJSON } from "./json";
 
-export {
-  parse,
-} from "./parser";
+export { parse } from "./parser";
 
-export {
-  keyToMove,
-} from "./keyboard";
+export { keyToMove } from "./keyboard";
 
 export {
   validateSiGNMoves,
@@ -68,6 +59,4 @@ export {
   getAlgURLParam,
 } from "./url";
 
-export {
-  setAlgPartTypeMismatchReportingLevel,
-} from "./debug";
+export { setAlgPartTypeMismatchReportingLevel } from "./debug";

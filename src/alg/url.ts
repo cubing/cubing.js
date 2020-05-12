@@ -31,8 +31,37 @@ export interface AlgCubingNetOptions {
   alg?: Sequence;
   setup?: Sequence;
   title?: string;
-  puzzle?: "1x1x1" | "2x2x2" | "3x3x3" | "4x4x4" | "5x5x5" | "6x6x6" | "7x7x7" | "8x8x8" | "9x9x9" | "10x10x10" | "11x11x11" | "12x12x12" | "13x13x13" | "14x14x14" | "16x16x16" | "17x17x17";
-  stage?: "full" | "cross" | "F2L" | "LL" | "OLL" | "PLL" | "CLS" | "ELS" | "L6E" | "CMLL" | "WV" | "ZBLL" | "void";
+  puzzle?:
+    | "1x1x1"
+    | "2x2x2"
+    | "3x3x3"
+    | "4x4x4"
+    | "5x5x5"
+    | "6x6x6"
+    | "7x7x7"
+    | "8x8x8"
+    | "9x9x9"
+    | "10x10x10"
+    | "11x11x11"
+    | "12x12x12"
+    | "13x13x13"
+    | "14x14x14"
+    | "16x16x16"
+    | "17x17x17";
+  stage?:
+    | "full"
+    | "cross"
+    | "F2L"
+    | "LL"
+    | "OLL"
+    | "PLL"
+    | "CLS"
+    | "ELS"
+    | "L6E"
+    | "CMLL"
+    | "WV"
+    | "ZBLL"
+    | "void";
   view?: "editor" | "playback" | "fullscreen";
   type?: "moves" | "reconstruction" | "alg" | "reconstruction-end-with-setup";
 }
@@ -41,7 +70,7 @@ export interface AlgCubingNetOptions {
 export function algCubingNetLink(options: AlgCubingNetOptions): string {
   const url = new URL("https://alg.cubing.net");
   if (!options.alg) {
-    throw new Error(("An alg parameter is required."));
+    throw new Error("An alg parameter is required.");
   }
   url.searchParams.set("alg", serializeURLParam(options.alg));
 
@@ -52,13 +81,48 @@ export function algCubingNetLink(options: AlgCubingNetOptions): string {
     url.searchParams.set("title", options.title);
   }
   if (options.puzzle) {
-    if (["1x1x1", "2x2x2", "3x3x3", "4x4x4", "5x5x5", "6x6x6", "7x7x7", "8x8x8", "9x9x9", "10x10x10", "11x11x11", "12x12x12", "13x13x13", "14x14x14", "16x16x16", "17x17x17"].indexOf(options.puzzle) === -1) {
+    if (
+      [
+        "1x1x1",
+        "2x2x2",
+        "3x3x3",
+        "4x4x4",
+        "5x5x5",
+        "6x6x6",
+        "7x7x7",
+        "8x8x8",
+        "9x9x9",
+        "10x10x10",
+        "11x11x11",
+        "12x12x12",
+        "13x13x13",
+        "14x14x14",
+        "16x16x16",
+        "17x17x17",
+      ].indexOf(options.puzzle) === -1
+    ) {
       throw new Error(`Invalid puzzle parameter: ${options.puzzle}`);
     }
     url.searchParams.set("puzzle", options.puzzle);
   }
   if (options.stage) {
-    if (["full", "cross", "F2L", "LL", "OLL", "PLL", "CLS", "ELS", "L6E", "CMLL", "WV", "ZBLL", "void"].indexOf(options.stage) === -1) {
+    if (
+      [
+        "full",
+        "cross",
+        "F2L",
+        "LL",
+        "OLL",
+        "PLL",
+        "CLS",
+        "ELS",
+        "L6E",
+        "CMLL",
+        "WV",
+        "ZBLL",
+        "void",
+      ].indexOf(options.stage) === -1
+    ) {
       throw new Error(`Invalid stage parameter: ${options.stage}`);
     }
     url.searchParams.set("stage", options.stage);
@@ -70,7 +134,14 @@ export function algCubingNetLink(options: AlgCubingNetOptions): string {
     url.searchParams.set("view", options.view);
   }
   if (options.type) {
-    if (["moves", "reconstruction", "alg", "reconstruction-end-with-setup"].indexOf(options.type) === -1) {
+    if (
+      [
+        "moves",
+        "reconstruction",
+        "alg",
+        "reconstruction-end-with-setup",
+      ].indexOf(options.type) === -1
+    ) {
       throw new Error(`Invalid type parameter: ${options.type}`);
     }
     url.searchParams.set("type", options.type);

@@ -1,5 +1,14 @@
 import { BlockMove, blockMoveToString } from "../alg";
-import { Combine, EquivalentStates, IdentityTransformation, Invert, KPuzzleDefinition, Puzzles, stateForBlockMove, Transformation } from "../kpuzzle";
+import {
+  Combine,
+  EquivalentStates,
+  IdentityTransformation,
+  Invert,
+  KPuzzleDefinition,
+  Puzzles,
+  stateForBlockMove,
+  Transformation,
+} from "../kpuzzle";
 
 export type MoveName = string;
 
@@ -10,7 +19,7 @@ export interface MoveProgress {
 
 // tslint:disable-next-line no-empty-interfaces
 // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars-experimental
-export interface State<T extends Puzzle> { }
+export interface State<T extends Puzzle> {}
 
 export abstract class Puzzle {
   public abstract startState(): State<Puzzle>;
@@ -36,8 +45,7 @@ export abstract class Puzzle {
   public abstract equivalent(s1: State<Puzzle>, s2: State<Puzzle>): boolean;
 }
 
-interface KSolvePuzzleState extends Transformation, State<KSolvePuzzle> {
-}
+interface KSolvePuzzleState extends Transformation, State<KSolvePuzzle> {}
 
 export class KSolvePuzzle extends Puzzle {
   // don't work the underlying kdefinition/multiply so hard
@@ -55,7 +63,10 @@ export class KSolvePuzzle extends Puzzle {
   public invert(state: KSolvePuzzleState): KSolvePuzzleState {
     return Invert(this.definition, state);
   }
-  public combine(s1: KSolvePuzzleState, s2: KSolvePuzzleState): KSolvePuzzleState {
+  public combine(
+    s1: KSolvePuzzleState,
+    s2: KSolvePuzzleState,
+  ): KSolvePuzzleState {
     return Combine(this.definition, s1, s2);
   }
   public stateFromMove(blockMove: BlockMove): KSolvePuzzleState {
@@ -74,7 +85,7 @@ export class KSolvePuzzle extends Puzzle {
 }
 
 class QTMCounterState implements State<QTMCounterPuzzle> {
-  constructor(public value: number) { }
+  constructor(public value: number) {}
 }
 
 export class QTMCounterPuzzle extends Puzzle {

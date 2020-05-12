@@ -72,5 +72,4 @@ export abstract class BluetoothPuzzle {
       l(orientationEvent);
     }
   }
-
 }

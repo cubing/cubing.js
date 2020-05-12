@@ -1,10 +1,21 @@
 import { Vector3 } from "three";
 import { algToString, BlockMove, Sequence } from "../alg";
-import { Combine, KPuzzleDefinition, stateForBlockMove, SVG, Transformation } from "../kpuzzle";
+import {
+  Combine,
+  KPuzzleDefinition,
+  stateForBlockMove,
+  SVG,
+  Transformation,
+} from "../kpuzzle";
 import { StickerDat } from "../puzzle-geometry";
 import { Cube3D } from "./3D/cube3D";
 import { PG3D } from "./3D/pg3D";
-import { AnimModel, CursorObserver, DirectionObserver, JumpObserver } from "./anim";
+import {
+  AnimModel,
+  CursorObserver,
+  DirectionObserver,
+  JumpObserver,
+} from "./anim";
 import { Cursor } from "./cursor";
 import { Puzzle } from "./puzzle";
 
@@ -28,21 +39,25 @@ declare global {
 }
 
 export function currentFullscreenElement(): Element {
-  return document.fullscreenElement ||
+  return (
+    document.fullscreenElement ||
     document.webkitFullscreenElement ||
     (document as any).mozFullScreenElement ||
     (document as any).msFullscreenElement ||
-    document.webkitFullscreenElement;
+    document.webkitFullscreenElement
+  );
 }
 export function fullscreenRequest(element: HTMLElement): void {
-  const requestFullscreen = element.requestFullscreen ||
+  const requestFullscreen =
+    element.requestFullscreen ||
     (element as any).mozRequestFullScreen ||
     (element as any).msRequestFullscreen ||
     (element as any).webkitRequestFullscreen;
   requestFullscreen.call(element);
 }
 export function fullscreenExit(): void {
-  const exitFullscreen = document.exitFullscreen ||
+  const exitFullscreen =
+    document.exitFullscreen ||
     (document as any).mozCancelFullScreen ||
     (document as any).msExitFullscreen ||
     (document as any).webkitExitFullscreen;
@@ -71,7 +86,6 @@ export abstract class Button {
 // tslint:disable-next-line no-namespace // TODO: nested module?
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Button {
-
   export class Fullscreen extends Button {
     constructor(private fullscreenElement: HTMLElement) {
       super("Full Screen", "fullscreen");
@@ -90,13 +104,17 @@ export namespace Button {
     constructor(private anim: AnimModel) {
       super("Skip To Start", "skip-to-start");
     }
-    public onpress(): void { this.anim.skipToStart(); }
+    public onpress(): void {
+      this.anim.skipToStart();
+    }
   }
   export class SkipToEnd extends Button {
     constructor(private anim: AnimModel) {
       super("Skip To End", "skip-to-end");
     }
-    public onpress(): void { this.anim.skipToEnd(); }
+    public onpress(): void {
+      this.anim.skipToEnd();
+    }
   }
   export class PlayPause extends Button implements DirectionObserver {
     constructor(private anim: AnimModel) {
@@ -115,20 +133,25 @@ export namespace Button {
       this.element.classList.remove("play", "pause");
       this.element.classList.add(newClass);
 
-      this.element.title = direction === Cursor.Direction.Paused ? "Play" : "Pause";
+      this.element.title =
+        direction === Cursor.Direction.Paused ? "Play" : "Pause";
     }
   }
   export class StepForward extends Button {
     constructor(private anim: AnimModel) {
       super("Step forward", "step-forward");
     }
-    public onpress(): void { this.anim.stepForward(); }
+    public onpress(): void {
+      this.anim.stepForward();
+    }
   }
   export class StepBackward extends Button {
     constructor(private anim: AnimModel) {
       super("Step backward", "step-backward");
     }
-    public onpress(): void { this.anim.stepBackward(); }
+    public onpress(): void {
+      this.anim.stepBackward();
+    }
   }
 }
 
@@ -137,12 +160,12 @@ export class ControlBar {
   constructor(anim: AnimModel, twistyElement: HTMLElement) {
     this.element = document.createElement("twisty-control-bar");
 
-    this.element.appendChild((new Button.Fullscreen(twistyElement)).element);
-    this.element.appendChild((new Button.SkipToStart(anim)).element);
-    this.element.appendChild((new Button.StepBackward(anim)).element);
-    this.element.appendChild((new Button.PlayPause(anim)).element);
-    this.element.appendChild((new Button.StepForward(anim)).element);
-    this.element.appendChild((new Button.SkipToEnd(anim)).element);
+    this.element.appendChild(new Button.Fullscreen(twistyElement).element);
+    this.element.appendChild(new Button.SkipToStart(anim).element);
+    this.element.appendChild(new Button.StepBackward(anim).element);
+    this.element.appendChild(new Button.PlayPause(anim).element);
+    this.element.appendChild(new Button.StepForward(anim).element);
+    this.element.appendChild(new Button.SkipToEnd(anim).element);
   }
 }
 
@@ -181,7 +204,7 @@ export class Scrubber implements CursorObserver {
     const min = parseInt(this.element.min, 10);
     const max = parseInt(this.element.max, 10);
     const value = parseInt(this.element.value, 10);
-    const v = (value - min) / max * 100;
+    const v = ((value - min) / max) * 100;
     this.element.style.background = `linear-gradient(to right, \
       rgb(0, 63, 255) 0%, \
       rgb(0, 63, 255) ${v}%, \
@@ -227,13 +250,20 @@ export class CursorTextMoveView implements CursorObserver {
     if (pos.moves.length > 0) {
       // TODO: cache the name.
       // TODO: Don't wrap in Sequence if we can add toString() to AlgPart interface?
-      s += " " + algToString(new Sequence([pos.moves[0].move])) + " " + this.formatFraction(pos.moves[0].fraction);
+      s +=
+        " " +
+        algToString(new Sequence([pos.moves[0].move])) +
+        " " +
+        this.formatFraction(pos.moves[0].fraction);
     }
     this.element.textContent = s;
   }
 
   private formatFraction(k: number): string {
-    return (String(k) + (Math.floor(k) === k ? "." : "") + "000000").slice(0, 5);
+    return (String(k) + (Math.floor(k) === k ? "." : "") + "000000").slice(
+      0,
+      5,
+    );
   }
 }
 
@@ -252,17 +282,26 @@ export class KSolveView implements CursorObserver, JumpObserver {
   public animCursorChanged(cursor: Cursor<Puzzle>): void {
     const pos = cursor.currentPosition();
     if (pos.moves.length > 0) {
-
-      const move = (pos.moves[0].move as BlockMove);
+      const move = pos.moves[0].move as BlockMove;
 
       const def = this.definition;
-      const partialMove = new BlockMove(move.outerLayer, move.innerLayer, move.family, move.amount * pos.moves[0].direction);
+      const partialMove = new BlockMove(
+        move.outerLayer,
+        move.innerLayer,
+        move.family,
+        move.amount * pos.moves[0].direction,
+      );
       const newState = Combine(
         def,
         pos.state as Transformation,
         stateForBlockMove(def, partialMove),
       );
-      this.svg.draw(this.definition, pos.state as Transformation, newState, pos.moves[0].fraction);
+      this.svg.draw(
+        this.definition,
+        pos.state as Transformation,
+        newState,
+        pos.moves[0].fraction,
+      );
     } else {
       this.svg.draw(this.definition, pos.state as Transformation);
     }
@@ -283,7 +322,11 @@ interface Cube3DViewConfig {
 export class Cube3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private cube3D: Cube3D;
-  constructor(private anim: AnimModel, definition: KPuzzleDefinition, private config: Cube3DViewConfig = {}) {
+  constructor(
+    private anim: AnimModel,
+    definition: KPuzzleDefinition,
+    private config: Cube3DViewConfig = {},
+  ) {
     this.element = document.createElement("cube3d-view");
 
     this.element.tabIndex = 0; // TODO: Use this to capture keyboard input.
@@ -310,7 +353,9 @@ export class Cube3DView implements CursorObserver, JumpObserver {
     wrapper.classList.add("back");
     this.element.appendChild(wrapper);
     setTimeout(() => {
-      this.cube3D.newVantage(wrapper, { position: new Vector3(-1.25, -2.5, -2.5) });
+      this.cube3D.newVantage(wrapper, {
+        position: new Vector3(-1.25, -2.5, -2.5),
+      });
     }, 0);
   }
 
@@ -340,7 +385,11 @@ interface PG3DViewConfig {
 export class PG3DView implements CursorObserver, JumpObserver {
   public readonly element: HTMLElement;
   private pg3D: PG3D;
-  constructor(private anim: AnimModel, private definition: KPuzzleDefinition, private config: PG3DViewConfig) {
+  constructor(
+    private anim: AnimModel,
+    private definition: KPuzzleDefinition,
+    private config: PG3DViewConfig,
+  ) {
     this.element = document.createElement("cube3d-view");
     if (this.config.sideBySide ?? false) {
       this.element.classList.add("side-by-side");
@@ -351,13 +400,22 @@ export class PG3DView implements CursorObserver, JumpObserver {
     this.anim.dispatcher.registerCursorObserver(this);
     this.anim.dispatcher.registerJumpObserver(this);
 
-    this.pg3D = new PG3D(this.definition, this.config.stickerDat, this.config.showFoundation ?? false); // TODO: Dynamic puzzle
+    this.pg3D = new PG3D(
+      this.definition,
+      this.config.stickerDat,
+      this.config.showFoundation ?? false,
+    ); // TODO: Dynamic puzzle
 
     setTimeout(() => {
       // TODO: Orient all puzzles so that the vertical axis matches the system coordinates.
       // This config option is currently an alignment hack for Megaminx.
-      const position: Vector3 = this.config.experimentalPolarVantages ? new Vector3(0, 0, -CAMERA_DISTANCE) : new Vector3(0, -CAMERA_DISTANCE * 0.8, -CAMERA_DISTANCE * 0.8);
-      this.pg3D.newVantage(wrapper, { position, shift: this.config.sideBySide ? -1 : 0 });
+      const position: Vector3 = this.config.experimentalPolarVantages
+        ? new Vector3(0, 0, -CAMERA_DISTANCE)
+        : new Vector3(0, -CAMERA_DISTANCE * 0.8, -CAMERA_DISTANCE * 0.8);
+      this.pg3D.newVantage(wrapper, {
+        position,
+        shift: this.config.sideBySide ? -1 : 0,
+      });
     }, 0);
 
     this.createBackViewForTesting();
@@ -387,8 +445,13 @@ export class PG3DView implements CursorObserver, JumpObserver {
     setTimeout(() => {
       // TODO: Orient all puzzles so that the vertical axis matches the system coordinates.
       // This config option is currently an alignment hack for Megaminx.
-      const position: Vector3 = this.config.experimentalPolarVantages ? new Vector3(0, 0, CAMERA_DISTANCE) : new Vector3(0, CAMERA_DISTANCE * 0.8, CAMERA_DISTANCE * 0.8);
-      this.pg3D.newVantage(wrapper, { position, shift: this.config.sideBySide ? 1 : 0 });
+      const position: Vector3 = this.config.experimentalPolarVantages
+        ? new Vector3(0, 0, CAMERA_DISTANCE)
+        : new Vector3(0, CAMERA_DISTANCE * 0.8, CAMERA_DISTANCE * 0.8);
+      this.pg3D.newVantage(wrapper, {
+        position,
+        shift: this.config.sideBySide ? 1 : 0,
+      });
     }, 0);
   }
 }
@@ -405,33 +468,59 @@ export class Player {
   public cube3DView: Cube3DView; // TODO
   public pg3DView: PG3DView; // TODO
   private scrubber: Scrubber;
-  constructor(private anim: AnimModel, definition: KPuzzleDefinition, private config: PlayerConfig = {}) {
+  constructor(
+    private anim: AnimModel,
+    definition: KPuzzleDefinition,
+    private config: PlayerConfig = {},
+  ) {
     this.element = document.createElement("player");
 
     if (this.config.visualizationFormat === "PG3D") {
       if (!config.experimentalPG3DViewConfig) {
-        throw new Error("`experimentalPG3DViewConfig` is currently required for PG3D.");
+        throw new Error(
+          "`experimentalPG3DViewConfig` is currently required for PG3D.",
+        );
       }
-      this.element.appendChild((this.pg3DView = new PG3DView(this.anim, definition, config.experimentalPG3DViewConfig)).element);
+      this.element.appendChild(
+        (this.pg3DView = new PG3DView(
+          this.anim,
+          definition,
+          config.experimentalPG3DViewConfig,
+        )).element,
+      );
     } else if (this.config.visualizationFormat === "3D") {
       if (definition.name === "3x3x3") {
-        this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
+        this.element.appendChild(
+          (this.cube3DView = new Cube3DView(
+            this.anim,
+            definition,
+            this.config.experimentalCube3DViewConfig,
+          )).element,
+        );
       } else {
-        console.warn(`3D visualization specified for unsupported puzzle: ${definition.name}. Falling back to 2D.`);
-        this.element.appendChild((new KSolveView(this.anim, definition)).element);
+        console.warn(
+          `3D visualization specified for unsupported puzzle: ${definition.name}. Falling back to 2D.`,
+        );
+        this.element.appendChild(new KSolveView(this.anim, definition).element);
       }
     } else {
       if (!this.config.visualizationFormat && definition.name === "3x3x3") {
-        this.element.appendChild((this.cube3DView = new Cube3DView(this.anim, definition, this.config.experimentalCube3DViewConfig)).element);
+        this.element.appendChild(
+          (this.cube3DView = new Cube3DView(
+            this.anim,
+            definition,
+            this.config.experimentalCube3DViewConfig,
+          )).element,
+        );
       } else {
-        this.element.appendChild((new KSolveView(this.anim, definition)).element);
+        this.element.appendChild(new KSolveView(this.anim, definition).element);
       }
     }
     this.scrubber = new Scrubber(this.anim);
     if (this.config.experimentalShowControls ?? true) {
       this.element.appendChild(this.scrubber.element);
-      this.element.appendChild((new ControlBar(this.anim, this.element)).element);
-      this.element.appendChild((new CursorTextMoveView(this.anim)).element);
+      this.element.appendChild(new ControlBar(this.anim, this.element).element);
+      this.element.appendChild(new CursorTextMoveView(this.anim).element);
     }
   }
 

@@ -11,24 +11,26 @@ export interface BluetoothConfig {
   optionalServices: BluetoothServiceUUID[];
 }
 
-function requestOptions(acceptAllDevices: boolean = false): RequestDeviceOptions {
-  const options = acceptAllDevices ? {
-    acceptAllDevices: true,
-    optionalServices: [] as BluetoothServiceUUID[],
-  } : {
-      filters: [] as BluetoothRequestDeviceFilter[],
-      optionalServices: [] as BluetoothServiceUUID[],
-    };
-  for (const config of [
-    ganConfig,
-    giiKERConfig,
-    goCubeConfig,
-  ]) {
+function requestOptions(
+  acceptAllDevices: boolean = false,
+): RequestDeviceOptions {
+  const options = acceptAllDevices
+    ? {
+        acceptAllDevices: true,
+        optionalServices: [] as BluetoothServiceUUID[],
+      }
+    : {
+        filters: [] as BluetoothRequestDeviceFilter[],
+        optionalServices: [] as BluetoothServiceUUID[],
+      };
+  for (const config of [ganConfig, giiKERConfig, goCubeConfig]) {
     if (!acceptAllDevices) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       options.filters = options.filters!.concat(config.filters);
     }
-    options.optionalServices = options.optionalServices.concat(config.optionalServices);
+    options.optionalServices = options.optionalServices.concat(
+      config.optionalServices,
+    );
   }
   debugLog({ requestOptions: options });
   return options;
@@ -48,16 +50,25 @@ let consecutiveFailures = 0;
 const MAX_FAILURES_BEFORE_ACCEPT_ALL_FALLBACK = 2;
 
 // TODO: Debug options to allow connecting to any device?
-export async function connect(options: BluetoothConnectOptions = {}): Promise<BluetoothPuzzle> {
+export async function connect(
+  options: BluetoothConnectOptions = {},
+): Promise<BluetoothPuzzle> {
   debugLog("Attempting to pair.");
   let device;
   try {
     let acceptAllDevices = options.acceptAllDevices;
-    if (!acceptAllDevices && consecutiveFailures >= MAX_FAILURES_BEFORE_ACCEPT_ALL_FALLBACK) {
-      console.info(`The last ${MAX_FAILURES_BEFORE_ACCEPT_ALL_FALLBACK} Bluetooth puzzle connection attempts failed. This time, the Bluetooth prompt will show all possible devices.`);
+    if (
+      !acceptAllDevices &&
+      consecutiveFailures >= MAX_FAILURES_BEFORE_ACCEPT_ALL_FALLBACK
+    ) {
+      console.info(
+        `The last ${MAX_FAILURES_BEFORE_ACCEPT_ALL_FALLBACK} Bluetooth puzzle connection attempts failed. This time, the Bluetooth prompt will show all possible devices.`,
+      );
       acceptAllDevices = true;
     }
-    device = await navigator.bluetooth.requestDevice(requestOptions(acceptAllDevices));
+    device = await navigator.bluetooth.requestDevice(
+      requestOptions(acceptAllDevices),
+    );
     consecutiveFailures = 0;
   } catch (e) {
     consecutiveFailures++;

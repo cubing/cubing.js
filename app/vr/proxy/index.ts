@@ -5,7 +5,11 @@ import { ProxySender } from "./websocket-proxy";
 
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import { BluetoothPuzzle, connect, debugKeyboardConnect } from "../../../src/bluetooth/index";
+import {
+  BluetoothPuzzle,
+  connect,
+  debugKeyboardConnect,
+} from "../../../src/bluetooth/index";
 import { GoCube } from "../../../src/bluetooth/index";
 
 class App {
@@ -14,19 +18,29 @@ class App {
   private puzzle: BluetoothPuzzle;
   constructor() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    document.querySelector("#connect-bluetooth")!.addEventListener("click", async () => {
-      this.puzzle = await connect();
-      this.puzzle.addMoveListener(this.proxySender.onMove.bind(this.proxySender));
-      this.puzzle.addOrientationListener(this.proxySender.onOrientation.bind(this.proxySender));
-      console.log("Puzzle connected!", this.puzzle);
-    });
+    document
+      .querySelector("#connect-bluetooth")!
+      .addEventListener("click", async () => {
+        this.puzzle = await connect();
+        this.puzzle.addMoveListener(
+          this.proxySender.onMove.bind(this.proxySender),
+        );
+        this.puzzle.addOrientationListener(
+          this.proxySender.onOrientation.bind(this.proxySender),
+        );
+        console.log("Puzzle connected!", this.puzzle);
+      });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    document.querySelector("#connect-keyboard")!.addEventListener("click", async () => {
-      this.puzzle = await debugKeyboardConnect();
-      this.puzzle.addMoveListener(this.proxySender.onMove.bind(this.proxySender));
-      console.log("Keyboard connected!", this.puzzle);
-    });
+    document
+      .querySelector("#connect-keyboard")!
+      .addEventListener("click", async () => {
+        this.puzzle = await debugKeyboardConnect();
+        this.puzzle.addMoveListener(
+          this.proxySender.onMove.bind(this.proxySender),
+        );
+        console.log("Keyboard connected!", this.puzzle);
+      });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.querySelector("#reset")!.addEventListener("click", async () => {
@@ -36,7 +50,6 @@ class App {
       }
     });
   }
-
 }
 
 window.addEventListener("load", () => {

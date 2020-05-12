@@ -11,7 +11,10 @@ export function matchesAlgType(a: any, t: AlgPartType): boolean {
   return a.type === t;
 }
 
-export function assertMatchesType<T extends AlgPart>(a: any, t: AlgPartType): T {
+export function assertMatchesType<T extends AlgPart>(
+  a: any,
+  t: AlgPartType,
+): T {
   if (!matchesAlgType(a, t)) {
     reportTypeMismatch(`Expected "type": "${t}", saw "type": "${a.type}".`);
   }
@@ -36,11 +39,11 @@ export function assertIsUnit(a: AlgPart): Unit {
   return a;
 }
 
-export abstract class Unit extends AlgPart { }
+export abstract class Unit extends AlgPart {}
 
-export abstract class Move extends Unit { }
-export abstract class Annotation extends Unit { }
-export abstract class Container extends Unit { }
+export abstract class Move extends Unit {}
+export abstract class Annotation extends Unit {}
+export abstract class Container extends Unit {}
 
 // TODO: Reintroduce an Algorithm class, and allow a mutable sequence too?
 export class Sequence extends AlgPart {
@@ -68,14 +71,22 @@ export class Group extends Container implements WithAmount {
 }
 export class Commutator extends Container implements WithAmount {
   public type: string = "commutator";
-  constructor(public A: Sequence, public B: Sequence, public amount: number = 1) {
+  constructor(
+    public A: Sequence,
+    public B: Sequence,
+    public amount: number = 1,
+  ) {
     super();
     Object.freeze(this);
   }
 }
 export class Conjugate extends Container implements WithAmount {
   public type: string = "conjugate";
-  constructor(public A: Sequence, public B: Sequence, public amount: number = 1) {
+  constructor(
+    public A: Sequence,
+    public B: Sequence,
+    public amount: number = 1,
+  ) {
     super();
     Object.freeze(this);
   }

@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta name="viewport" content="initial-scale=0.8" />
+    <title>alg.cubing.net v2</title>
+    <link href="./index.css" rel="stylesheet" type="text/css" />
+    <script src="./index.ts" defer></script>
+  </head>
 
-<head>
-  <meta name="viewport" content="initial-scale=0.8">
-  <title>alg.cubing.net v2</title>
-  <link href="./index.css" rel="stylesheet" type="text/css">
-  <script src="./index.ts" defer></script>
-</head>
-
-<body>
-  <app>
-    <puzzle-pane class="loading">
-      <div class="spinner"></div>
-    </puzzle-pane>
-    <control-pane class="loading">
-      <div class="title">alg.cubing.net [v2 beta]</div>
-      <p style="margin-top: 1.5em; color: red;">Note: everything here is super-experimental. Puzzles and notation will
-        change.</p>
-      <textarea class="alg" placeholder="[Click here to add moves.]"></textarea>
-      <select class="puzzle">
-        <option>Puzzle</option>
-      </select>
-    </control-pane>
-  </app>
-
-</body>
-
+  <body>
+    <app>
+      <puzzle-pane class="loading">
+        <div class="spinner"></div>
+      </puzzle-pane>
+      <control-pane class="loading">
+        <div class="title">alg.cubing.net [v2 beta]</div>
+        <p style="margin-top: 1.5em; color: red;">
+          Note: everything here is super-experimental. Puzzles and notation will
+          change.
+        </p>
+        <textarea
+          class="alg"
+          placeholder="[Click here to add moves.]"
+        ></textarea>
+        <select class="puzzle">
+          <option>Puzzle</option>
+        </select>
+      </control-pane>
+    </app>
+  </body>
 </html>

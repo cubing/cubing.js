@@ -1,4 +1,18 @@
-import { AlgPart, BlockMove, Comment, Commutator, Conjugate, expand, Group, NewLine, Pause, Sequence, TraversalDownUp, TraversalUp, Unit } from "../alg";
+import {
+  AlgPart,
+  BlockMove,
+  Comment,
+  Commutator,
+  Conjugate,
+  expand,
+  Group,
+  NewLine,
+  Pause,
+  Sequence,
+  TraversalDownUp,
+  TraversalUp,
+  Unit,
+} from "../alg";
 import { Puzzle, State } from "./puzzle";
 
 const USE_SIMPLE_ALGORITHM_INDEXER = false;
@@ -19,14 +33,27 @@ class CountAnimatedMoves extends TraversalUp<number> {
     return 1;
   }
   public traverseCommutator(commutator: Commutator): number {
-    return 2 * (this.traverseSequence(commutator.A) + this.traverseSequence(commutator.B));
+    return (
+      2 *
+      (this.traverseSequence(commutator.A) +
+        this.traverseSequence(commutator.B))
+    );
   }
   public traverseConjugate(conjugate: Conjugate): number {
-    return 2 * (this.traverseSequence(conjugate.A)) + this.traverseSequence(conjugate.B);
+    return (
+      2 * this.traverseSequence(conjugate.A) +
+      this.traverseSequence(conjugate.B)
+    );
   }
-  public traversePause(_pause: Pause): number { return 0; }
-  public traverseNewLine(_newLine: NewLine): number { return 0; }
-  public traverseComment(_comment: Comment): number { return 0; }
+  public traversePause(_pause: Pause): number {
+    return 0;
+  }
+  public traverseNewLine(_newLine: NewLine): number {
+    return 0;
+  }
+  public traverseComment(_comment: Comment): number {
+    return 0;
+  }
 }
 
 interface AlgorithmIndexer<P extends Puzzle> {
@@ -43,7 +70,9 @@ interface AlgorithmIndexer<P extends Puzzle> {
 class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
   private moves: Sequence;
   // TODO: Allow custom `durationFn`.
-  private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount);
+  private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(
+    Cursor.DefaultDurationForAmount,
+  );
   constructor(private puzzle: P, alg: Sequence) {
     this.moves = expand(alg);
     // TODO: Avoid assuming all base moves are block moves.
@@ -70,13 +99,19 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
   }
 
   public stateAtIndex(index: number): State<P> {
-    return this.puzzle.combine(this.puzzle.startState(), this.transformAtIndex(index));
+    return this.puzzle.combine(
+      this.puzzle.startState(),
+      this.transformAtIndex(index),
+    );
   }
 
   public transformAtIndex(index: number): State<P> {
     let state = this.puzzle.identity();
     for (const move of this.moves.nestedUnits.slice(0, index)) {
-      state = this.puzzle.combine(state, this.puzzle.stateFromMove(move as BlockMove));
+      state = this.puzzle.combine(
+        state,
+        this.puzzle.stateFromMove(move as BlockMove),
+      );
     }
     return state;
   }
@@ -95,21 +130,34 @@ class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
 }
 
 class AlgPartDecoration<P extends Puzzle> {
-  constructor(_puz: Puzzle, public moveCount: number,
+  constructor(
+    _puz: Puzzle,
+    public moveCount: number,
     public duration: number,
-    public forward: State<P>, public backward: State<P>,
-    public children: Array<AlgPartDecoration<P>> = []) {
-  }
+    public forward: State<P>,
+    public backward: State<P>,
+    public children: Array<AlgPartDecoration<P>> = [],
+  ) {}
 }
-class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecoration<P>> {
+class DecoratorConstructor<P extends Puzzle> extends TraversalUp<
+  AlgPartDecoration<P>
+> {
   private identity: State<P>;
   private dummyLeaf: AlgPartDecoration<P>;
-  private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(Cursor.DefaultDurationForAmount);
+  private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(
+    Cursor.DefaultDurationForAmount,
+  );
   constructor(private puz: Puzzle) {
     super();
     this.identity = puz.identity();
-    this.dummyLeaf = new AlgPartDecoration<P>(puz, 0, 0, this.identity,
-      this.identity, []);
+    this.dummyLeaf = new AlgPartDecoration<P>(
+      puz,
+      0,
+      0,
+      this.identity,
+      this.identity,
+      [],
+    );
   }
   public traverseSequence(sequence: Sequence): AlgPartDecoration<P> {
     let moveCount = 0;
@@ -124,7 +172,13 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
       child.push(apd);
     }
     return new AlgPartDecoration<P>(
-      this.puz, moveCount, duration, state, this.puz.invert(state), child);
+      this.puz,
+      moveCount,
+      duration,
+      state,
+      this.puz.invert(state),
+      child,
+    );
   }
   public traverseGroup(group: Group): AlgPartDecoration<P> {
     const dec = this.traverseSequence(group.nestedSequence);
@@ -132,9 +186,12 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
   }
   public traverseBlockMove(blockMove: BlockMove): AlgPartDecoration<P> {
     return new AlgPartDecoration<P>(
-      this.puz, 1, this.durationFn.traverse(blockMove),
+      this.puz,
+      1,
+      this.durationFn.traverse(blockMove),
       this.puz.stateFromMove(blockMove),
-      this.puz.stateFromMove(invertBlockMove(blockMove)));
+      this.puz.stateFromMove(invertBlockMove(blockMove)),
+    );
   }
   public traverseCommutator(commutator: Commutator): AlgPartDecoration<P> {
     const decA = this.traverseSequence(commutator.A);
@@ -142,9 +199,14 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
     const AB = this.puz.combine(decA.forward, decB.forward);
     const ApBp = this.puz.combine(decA.backward, decB.backward);
     const ABApBp = this.puz.combine(AB, ApBp);
-    const dec = new AlgPartDecoration<P>(this.puz,
-      2 * (decA.moveCount + decB.moveCount), 2 * (decA.duration + decB.duration),
-      ABApBp, this.puz.invert(ABApBp), [decA, decB]);
+    const dec = new AlgPartDecoration<P>(
+      this.puz,
+      2 * (decA.moveCount + decB.moveCount),
+      2 * (decA.duration + decB.duration),
+      ABApBp,
+      this.puz.invert(ABApBp),
+      [decA, decB],
+    );
     return this.mult(dec, commutator.amount, [dec, decA, decB]);
   }
   public traverseConjugate(conjugate: Conjugate): AlgPartDecoration<P> {
@@ -152,13 +214,24 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
     const decB = this.traverseSequence(conjugate.B);
     const AB = this.puz.combine(decA.forward, decB.forward);
     const ABAp = this.puz.combine(AB, decA.backward);
-    const dec = new AlgPartDecoration<P>(this.puz,
-      2 * decA.moveCount + decB.moveCount, 2 * decA.duration + decB.duration,
-      ABAp, this.puz.invert(ABAp), [decA, decB]);
+    const dec = new AlgPartDecoration<P>(
+      this.puz,
+      2 * decA.moveCount + decB.moveCount,
+      2 * decA.duration + decB.duration,
+      ABAp,
+      this.puz.invert(ABAp),
+      [decA, decB],
+    );
     return this.mult(dec, conjugate.amount, [dec, decA, decB]);
   }
   public traversePause(pause: Pause): AlgPartDecoration<P> {
-    return new AlgPartDecoration<P>(this.puz, 1, this.durationFn.traverse(pause), this.identity, this.identity);
+    return new AlgPartDecoration<P>(
+      this.puz,
+      1,
+      this.durationFn.traverse(pause),
+      this.identity,
+      this.identity,
+    );
   }
   public traverseNewLine(_newLine: NewLine): AlgPartDecoration<P> {
     return this.dummyLeaf;
@@ -166,12 +239,21 @@ class DecoratorConstructor<P extends Puzzle> extends TraversalUp<AlgPartDecorati
   public traverseComment(_comment: Comment): AlgPartDecoration<P> {
     return this.dummyLeaf;
   }
-  private mult(apd: AlgPartDecoration<P>, n: number, child: Array<AlgPartDecoration<P>>): AlgPartDecoration<P> {
+  private mult(
+    apd: AlgPartDecoration<P>,
+    n: number,
+    child: Array<AlgPartDecoration<P>>,
+  ): AlgPartDecoration<P> {
     const absn = Math.abs(n);
     const st = this.puz.multiply(apd.forward, n);
     return new AlgPartDecoration<P>(
-      this.puz, apd.moveCount * absn, apd.duration * absn, st,
-      this.puz.invert(st), child);
+      this.puz,
+      apd.moveCount * absn,
+      apd.duration * absn,
+      st,
+      this.puz.invert(st),
+      child,
+    );
   }
 }
 class WalkerDown<P extends Puzzle> {
@@ -179,7 +261,10 @@ class WalkerDown<P extends Puzzle> {
     /**/
   }
 }
-class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean> {
+class AlgWalker<P extends Puzzle> extends TraversalDownUp<
+  WalkerDown<P>,
+  boolean
+> {
   public mv?: Unit;
   public moveDur: number;
   public back: boolean;
@@ -189,7 +274,11 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
   public dur: number;
   private goali: number;
   private goaldur: number;
-  constructor(public puz: P, public alg: AlgPart, public apd: AlgPartDecoration<P>) {
+  constructor(
+    public puz: P,
+    public alg: AlgPart,
+    public apd: AlgPartDecoration<P>,
+  ) {
     super();
     this.i = -1;
     this.dur = -1;
@@ -208,8 +297,7 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
     return this.dosearch(loc, Infinity);
   }
   public moveByDuration(dur: number): boolean {
-    if (this.dur >= 0 && this.dur < dur &&
-      this.dur + this.moveDur >= dur) {
+    if (this.dur >= 0 && this.dur < dur && this.dur + this.moveDur >= dur) {
       return this.mv !== undefined;
     }
     return this.dosearch(Infinity, dur);
@@ -252,7 +340,10 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
       return false;
     }
     const back = this.domult(wd, group.amount);
-    return this.traverse(group.nestedSequence, new WalkerDown(wd.apd.children[0], back));
+    return this.traverse(
+      group.nestedSequence,
+      new WalkerDown(wd.apd.children[0], back),
+    );
   }
   public traverseBlockMove(blockMove: BlockMove, wd: WalkerDown<P>): boolean {
     if (!this.firstcheck(wd)) {
@@ -263,21 +354,37 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
     this.back = wd.back;
     return true;
   }
-  public traverseCommutator(commutator: Commutator, wd: WalkerDown<P>): boolean {
+  public traverseCommutator(
+    commutator: Commutator,
+    wd: WalkerDown<P>,
+  ): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
     const back = this.domult(wd, commutator.amount);
     if (back) {
-      return this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], !back)) ||
-        this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], !back)) ||
+      return (
+        this.traverse(
+          commutator.B,
+          new WalkerDown(wd.apd.children[2], !back),
+        ) ||
+        this.traverse(
+          commutator.A,
+          new WalkerDown(wd.apd.children[1], !back),
+        ) ||
         this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], back)) ||
-        this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back));
+        this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back))
+      );
     } else {
-      return this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back)) ||
+      return (
+        this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], back)) ||
         this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], back)) ||
-        this.traverse(commutator.A, new WalkerDown(wd.apd.children[1], !back)) ||
-        this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], !back));
+        this.traverse(
+          commutator.A,
+          new WalkerDown(wd.apd.children[1], !back),
+        ) ||
+        this.traverse(commutator.B, new WalkerDown(wd.apd.children[2], !back))
+      );
     }
   }
   public traverseConjugate(conjugate: Conjugate, wd: WalkerDown<P>): boolean {
@@ -286,13 +393,17 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
     }
     const back = this.domult(wd, conjugate.amount);
     if (back) {
-      return this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], !back)) ||
+      return (
+        this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], !back)) ||
         this.traverse(conjugate.B, new WalkerDown(wd.apd.children[2], back)) ||
-        this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back));
+        this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back))
+      );
     } else {
-      return this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back)) ||
+      return (
+        this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], back)) ||
         this.traverse(conjugate.B, new WalkerDown(wd.apd.children[2], back)) ||
-        this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], !back));
+        this.traverse(conjugate.A, new WalkerDown(wd.apd.children[1], !back))
+      );
     }
   }
   public traversePause(pause: Pause, wd: WalkerDown<P>): boolean {
@@ -311,23 +422,29 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
     return false;
   }
   private firstcheck(wd: WalkerDown<P>): boolean {
-    if (wd.apd.moveCount + this.i <= this.goali && wd.apd.duration + this.dur < this.goaldur) {
+    if (
+      wd.apd.moveCount + this.i <= this.goali &&
+      wd.apd.duration + this.dur < this.goaldur
+    ) {
       return this.keepgoing(wd);
     }
     return true;
   }
   private domult(wd: WalkerDown<P>, amount: number): boolean {
     let back = wd.back;
-    if (amount === 0) { // I don't believe this will ever happen
+    if (amount === 0) {
+      // I don't believe this will ever happen
       return back;
     }
     if (amount < 0) {
       back = !back;
-      amount = - amount;
+      amount = -amount;
     }
     const base = wd.apd.children[0];
-    const full = Math.min(Math.floor((this.goali - this.i) / base.moveCount),
-      Math.ceil((this.goaldur - this.dur) / base.duration - 1));
+    const full = Math.min(
+      Math.floor((this.goali - this.i) / base.moveCount),
+      Math.ceil((this.goaldur - this.dur) / base.duration - 1),
+    );
     if (full > 0) {
       this.keepgoing(new WalkerDown<P>(base, back), full);
     }
@@ -338,11 +455,16 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
     this.dur += mul * wd.apd.duration;
     if (mul !== 1) {
       if (wd.back) {
-        this.st = this.puz.combine(this.st, this.puz.multiply(wd.apd.backward, mul));
+        this.st = this.puz.combine(
+          this.st,
+          this.puz.multiply(wd.apd.backward, mul),
+        );
       } else {
-        this.st = this.puz.combine(this.st, this.puz.multiply(wd.apd.forward, mul));
+        this.st = this.puz.combine(
+          this.st,
+          this.puz.multiply(wd.apd.forward, mul),
+        );
       }
-
     } else {
       if (wd.back) {
         this.st = this.puz.combine(this.st, wd.apd.backward);
@@ -356,7 +478,8 @@ class AlgWalker<P extends Puzzle> extends TraversalDownUp<WalkerDown<P>, boolean
 export function invertBlockMove(bm: BlockMove): BlockMove {
   return new BlockMove(bm.outerLayer, bm.innerLayer, bm.family, -bm.amount);
 }
-export class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
+export class TreeAlgorithmIndexer<P extends Puzzle>
+  implements AlgorithmIndexer<P> {
   private decoration: AlgPartDecoration<P>;
   private walker: AlgWalker<P>;
   constructor(private puzzle: P, alg: Sequence) {
@@ -410,7 +533,9 @@ export class TreeAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<
 }
 
 const countAnimatedMovesInstance = new CountAnimatedMoves();
-const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(countAnimatedMovesInstance);
+const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(
+  countAnimatedMovesInstance,
+);
 
 class SingleAnimatedMove<P extends Puzzle> {
   public algTimestamp: Cursor.Duration;
@@ -495,10 +620,13 @@ export class Cursor<P extends Puzzle> {
       return pos;
     }
     const move = this.indexer.getMove(moveIdx);
-    const moveTS = this.algTimestamp - this.indexer.indexToMoveStartTimestamp(moveIdx);
+    const moveTS =
+      this.algTimestamp - this.indexer.indexToMoveStartTimestamp(moveIdx);
     // TODO: this should be done just by asking the indexer for this move's
     // duration; this will avoid thrashing the tree indexer
-    const moveDuration = this.indexer.indexToMoveStartTimestamp(moveIdx + 1) - this.indexer.indexToMoveStartTimestamp(moveIdx);
+    const moveDuration =
+      this.indexer.indexToMoveStartTimestamp(moveIdx + 1) -
+      this.indexer.indexToMoveStartTimestamp(moveIdx);
     if (moveTS !== 0) {
       pos.moves.push({
         move,
@@ -514,7 +642,10 @@ export class Cursor<P extends Puzzle> {
     return this.algTimestamp;
   }
 
-  public delta(duration: Cursor.Duration, stopAtMoveBoundary: boolean): boolean {
+  public delta(
+    duration: Cursor.Duration,
+    stopAtMoveBoundary: boolean,
+  ): boolean {
     if (this.lastMoveData) {
       if (this.lastMoveData.doLastMoveDelta(duration)) {
         // finished faking the last move; now skip to end
@@ -528,20 +659,26 @@ export class Cursor<P extends Puzzle> {
     }
     const moveIdx = this.indexer.timestampToIndex(this.algTimestamp);
     const unclampedNewTimestamp = this.algTimestamp + duration;
-    const currentMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(moveIdx);
+    const currentMoveStartTimestamp = this.indexer.indexToMoveStartTimestamp(
+      moveIdx,
+    );
     if (stopAtMoveBoundary) {
       if (unclampedNewTimestamp < currentMoveStartTimestamp) {
         this.algTimestamp = currentMoveStartTimestamp;
         return true;
       }
-      const nextMoveStartTimestamp = currentMoveStartTimestamp + this.indexer.moveDuration(moveIdx);
+      const nextMoveStartTimestamp =
+        currentMoveStartTimestamp + this.indexer.moveDuration(moveIdx);
       if (unclampedNewTimestamp > nextMoveStartTimestamp) {
         this.algTimestamp = nextMoveStartTimestamp;
         return true;
       }
     }
 
-    this.algTimestamp = Math.max(0, Math.min(this.indexer.algDuration(), unclampedNewTimestamp));
+    this.algTimestamp = Math.max(
+      0,
+      Math.min(this.indexer.algDuration(), unclampedNewTimestamp),
+    );
     return this.algTimestamp === this.indexer.algDuration();
   }
 
@@ -551,11 +688,17 @@ export class Cursor<P extends Puzzle> {
   }
 
   // TODO: Avoid assuming a single move at a time.
-  public forward(duration: Cursor.Duration, stopAtEndOfMove: boolean): /* TODO: Remove this. Represents if move breakpoint was reached. */ boolean {
+  public forward(
+    duration: Cursor.Duration,
+    stopAtEndOfMove: boolean,
+  ): /* TODO: Remove this. Represents if move breakpoint was reached. */ boolean {
     return this.delta(duration, stopAtEndOfMove);
   }
 
-  public backward(duration: Cursor.Duration, stopAtStartOfMove: boolean): /* TODO: Remove this. Represents of move breakpoint was reached. */ boolean {
+  public backward(
+    duration: Cursor.Duration,
+    stopAtStartOfMove: boolean,
+  ): /* TODO: Remove this. Represents of move breakpoint was reached. */ boolean {
     return this.delta(-duration, stopAtStartOfMove);
   }
 
@@ -620,7 +763,10 @@ export namespace Cursor {
     }
   }
 
-  export function ExperimentalScaledDefaultDurationForAmount(scale: number, amount: number): Duration {
+  export function ExperimentalScaledDefaultDurationForAmount(
+    scale: number,
+    amount: number,
+  ): Duration {
     switch (Math.abs(amount)) {
       case 0:
         return 0;
@@ -635,7 +781,11 @@ export namespace Cursor {
 
   export class AlgDuration extends TraversalUp<Duration> {
     // TODO: Pass durationForAmount as Down type instead?
-    constructor(public durationForAmount: (amount: number) => Duration = DefaultDurationForAmount) {
+    constructor(
+      public durationForAmount: (
+        amount: number,
+      ) => Duration = DefaultDurationForAmount,
+    ) {
       super();
     }
 
@@ -646,13 +796,34 @@ export namespace Cursor {
       }
       return total;
     }
-    public traverseGroup(group: Group): Duration { return group.amount * this.traverse(group.nestedSequence); }
-    public traverseBlockMove(blockMove: BlockMove): Duration { return this.durationForAmount(blockMove.amount); }
-    public traverseCommutator(commutator: Commutator): Duration { return commutator.amount * 2 * (this.traverse(commutator.A) + this.traverse(commutator.B)); }
-    public traverseConjugate(conjugate: Conjugate): Duration { return conjugate.amount * (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B)); }
-    public traversePause(_pause: Pause): Duration { return this.durationForAmount(1); }
-    public traverseNewLine(_newLine: NewLine): Duration { return this.durationForAmount(1); }
-    public traverseComment(_comment: Comment): Duration { return this.durationForAmount(0); }
+    public traverseGroup(group: Group): Duration {
+      return group.amount * this.traverse(group.nestedSequence);
+    }
+    public traverseBlockMove(blockMove: BlockMove): Duration {
+      return this.durationForAmount(blockMove.amount);
+    }
+    public traverseCommutator(commutator: Commutator): Duration {
+      return (
+        commutator.amount *
+        2 *
+        (this.traverse(commutator.A) + this.traverse(commutator.B))
+      );
+    }
+    public traverseConjugate(conjugate: Conjugate): Duration {
+      return (
+        conjugate.amount *
+        (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B))
+      );
+    }
+    public traversePause(_pause: Pause): Duration {
+      return this.durationForAmount(1);
+    }
+    public traverseNewLine(_newLine: NewLine): Duration {
+      return this.durationForAmount(1);
+    }
+    public traverseComment(_comment: Comment): Duration {
+      return this.durationForAmount(0);
+    }
   }
 }
 

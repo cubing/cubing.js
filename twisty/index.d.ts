@@ -1,1 +1,1 @@
-export * from "../dist/cjs/src/twisty/index"
+export * from "../dist/cjs/src/twisty/index";

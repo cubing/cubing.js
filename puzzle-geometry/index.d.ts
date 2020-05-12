@@ -1,1 +1,1 @@
-export * from "../dist/cjs/src/puzzle-geometry/index"
+export * from "../dist/cjs/src/puzzle-geometry/index";

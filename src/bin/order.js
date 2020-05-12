@@ -5,10 +5,10 @@
  *   algorithm (how many repetitions are needed for the algorithm to be
  *   the no-op).
  */
-const alg = require('../../alg');
-const kpuz = require('../../kpuzzle');
-const puzg = require('../../puzzle-geometry');
-const twisty = require('../../twisty');
+const alg = require("../../alg");
+const kpuz = require("../../kpuzzle");
+const puzg = require("../../puzzle-geometry");
+const twisty = require("../../twisty");
 
 const puzname = process.argv[2];
 const algo = process.argv[3];
@@ -16,7 +16,7 @@ const algo = process.argv[3];
 /*
  *   Turn a name into a geometry.
  */
-const pg = puzg.getPuzzleGeometryByName(puzname, ['allmoves', true]);
+const pg = puzg.getPuzzleGeometryByName(puzname, ["allmoves", true]);
 /*
  *   Turn the puzzle geometry into a KPuzzleDefinition.
  */
@@ -33,10 +33,14 @@ const worker = new kpuz.KPuzzle(puzzle);
  *   but by making these calls, a move like 2-3U will operate
  *   correctly.
  */
-worker.setFaceNames(pg.facenames.map(function (_) { return _[1] }));
+worker.setFaceNames(
+  pg.facenames.map(function (_) {
+    return _[1];
+  }),
+);
 const mps = pg.movesetgeos;
 for (let i = 0; i < mps.length; i++) {
-   worker.addGrip(mps[i][0], mps[i][2], mps[i][4]);
+  worker.addGrip(mps[i][0], mps[i][2], mps[i][4]);
 }
 /*
  *   From the operable puzzle, make a twisty.  The twisty gives us

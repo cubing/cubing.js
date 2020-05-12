@@ -3,7 +3,7 @@
 
 import { factorial, iota, lcm, Perm, zeros } from "./Perm";
 export class OrbitDef {
-  constructor(public size: number, public mod: number) { }
+  constructor(public size: number, public mod: number) {}
   public reassemblySize(): number {
     return factorial(this.size) * Math.pow(this.mod, this.size);
   }
@@ -14,14 +14,21 @@ export class OrbitsDef {
     public orbitdefs: OrbitDef[],
     public solved: VisibleState,
     public movenames: string[],
-    public moveops: Transformation[]) { }
+    public moveops: Transformation[],
+  ) {}
   public toKsolve(name: string, forTwisty: boolean): string[] {
     const result = [];
     result.push("Name " + name);
     result.push("");
     for (let i = 0; i < this.orbitnames.length; i++) {
-      result.push("Set " + this.orbitnames[i] + " " +
-        this.orbitdefs[i].size + " " + this.orbitdefs[i].mod);
+      result.push(
+        "Set " +
+          this.orbitnames[i] +
+          " " +
+          this.orbitdefs[i].size +
+          " " +
+          this.orbitdefs[i].mod,
+      );
     }
     result.push("");
     result.push("Solved");
@@ -56,7 +63,7 @@ export class OrbitsDef {
     for (let i = 0; i < this.orbitnames.length; i++) {
       orbits[this.orbitnames[i]] = {
         numPieces: this.orbitdefs[i].size,
-        orientations: this.orbitdefs[i].mod
+        orientations: this.orbitdefs[i].mod,
       };
       start[this.orbitnames[i]] = this.solved.orbits[i].toKpuzzle();
     }
@@ -88,8 +95,10 @@ export class OrbitsDef {
       }
       for (let j = 0; j < this.moveops.length; j++) {
         for (let k = 0; k < n; k++) {
-          if (this.moveops[j].orbits[i].perm[k] !== k ||
-            this.moveops[j].orbits[i].ori[k] !== 0) {
+          if (
+            this.moveops[j].orbits[i].perm[k] !== k ||
+            this.moveops[j].orbits[i].ori[k] !== 0
+          ) {
             changed[k] = true;
             du.union(k, this.moveops[j].orbits[i].perm[k]);
           }
@@ -104,11 +113,16 @@ export class OrbitsDef {
         const duo = new DisjointUnion(this.orbitdefs[i].size * om);
         for (let j = 0; j < this.moveops.length; j++) {
           for (let k = 0; k < n; k++) {
-            if (this.moveops[j].orbits[i].perm[k] !== k ||
-              this.moveops[j].orbits[i].ori[k] !== 0) {
+            if (
+              this.moveops[j].orbits[i].perm[k] !== k ||
+              this.moveops[j].orbits[i].ori[k] !== 0
+            ) {
               for (let o = 0; o < om; o++) {
-                duo.union(k * om + o, this.moveops[j].orbits[i].perm[k] * om +
-                  (o + this.moveops[j].orbits[i].ori[k]) % om);
+                duo.union(
+                  k * om + o,
+                  this.moveops[j].orbits[i].perm[k] * om +
+                    ((o + this.moveops[j].orbits[i].ori[k]) % om),
+                );
               }
             }
           }
@@ -122,8 +136,9 @@ export class OrbitsDef {
         }
         for (let j = 0; !keepori && j < n; j++) {
           for (let k = 0; k < j; k++) {
-            if (this.solved.orbits[i].perm[j] ===
-              this.solved.orbits[i].perm[k]) {
+            if (
+              this.solved.orbits[i].perm[j] === this.solved.orbits[i].perm[k]
+            ) {
               keepori = true;
             }
           }
@@ -175,15 +190,20 @@ export class OrbitsDef {
           neworbitdefs.push(new OrbitDef(nv, 1));
           newsolved.push(this.solved.orbits[i].remapVS(no, nv).killOri());
           for (let k = 0; k < this.moveops.length; k++) {
-            newmoveops[k].push(this.moveops[k].orbits[i].
-              remap(no, on, nv).killOri());
+            newmoveops[k].push(
+              this.moveops[k].orbits[i].remap(no, on, nv).killOri(),
+            );
           }
         }
       }
     }
-    return new OrbitsDef(neworbitnames, neworbitdefs,
-      new VisibleState(newsolved), this.movenames,
-      newmoveops.map((_) => new Transformation(_)));
+    return new OrbitsDef(
+      neworbitnames,
+      neworbitdefs,
+      new VisibleState(newsolved),
+      this.movenames,
+      newmoveops.map((_) => new Transformation(_)),
+    );
   }
   // generate a new "solved" position based on scrambling
   // we use an algorithm that should be faster for large puzzles than
@@ -207,7 +227,8 @@ export class OrbitsDef {
       const rj = Math.floor(Math.random() * pool.length);
       const rm = Math.floor(Math.random() * this.moveops.length);
       pool[ri] = pool[ri].mul(pool[rj]).mul(this.moveops[rm]);
-      if (Math.random() < 0.1) { // break up parity
+      if (Math.random() < 0.1) {
+        // break up parity
         pool[ri] = pool[ri].mul(this.moveops[rm]);
       }
     }
@@ -232,7 +253,8 @@ export class Orbit {
   constructor(
     public perm: number[],
     public ori: number[],
-    public orimod: number) { }
+    public orimod: number,
+  ) {}
   public mul(b: Orbit): Orbit {
     const n = this.perm.length;
     const newPerm = new Array<number>(n);
@@ -280,7 +302,7 @@ export class Orbit {
     const newPerm = new Array<number>(n * o);
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < o; j++) {
-        newPerm[i * o + j] = o * this.perm[i] + (this.ori[i] + j) % o;
+        newPerm[i * o + j] = o * this.perm[i] + ((this.ori[i] + j) % o);
       }
     }
     return new Perm(newPerm);
@@ -305,7 +327,8 @@ export class Orbit {
     }
     return r;
   }
-  public order(): number { // can be made more efficient
+  public order(): number {
+    // can be made more efficient
     return this.toPerm().order();
   }
   public isIdentity(): boolean {
@@ -356,7 +379,7 @@ export class Orbit {
   }
 }
 export class TransformationBase {
-  constructor(public orbits: Orbit[]) { }
+  constructor(public orbits: Orbit[]) {}
   public internalMul(b: TransformationBase): Orbit[] {
     const newOrbits: Orbit[] = [];
     for (let i = 0; i < this.orbits.length; i++) {
@@ -440,7 +463,7 @@ export class Transformation extends TransformationBase {
     let t: Transformation = this;
     if (n < 0) {
       t = t.inv();
-      n = - n;
+      n = -n;
     }
     while ((n & 1) === 0) {
       t = t.mul(t);
@@ -466,8 +489,9 @@ export class Transformation extends TransformationBase {
     return new Transformation(this.internalInv());
   }
   public e(): Transformation {
-    return new Transformation(this.orbits.map(
-      (_: Orbit) => Orbit.e(_.perm.length, _.orimod)));
+    return new Transformation(
+      this.orbits.map((_: Orbit) => Orbit.e(_.perm.length, _.orimod)),
+    );
   }
 }
 export class VisibleState extends TransformationBase {
@@ -541,8 +565,10 @@ export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
       sum += cnt;
       uniq++;
       for (let mv = 0; mv < orders.length; mv++) {
-        if (((st >> mv) & 1) === 0 &&
-          (st & commutes[mv] & ((1 << mv) - 1)) === 0) {
+        if (
+          ((st >> mv) & 1) === 0 &&
+          (st & commutes[mv] & ((1 << mv) - 1)) === 0
+        ) {
           const nst = (st & commutes[mv]) | (1 << mv);
           if (nextlev[nst] === undefined) {
             nextlev[nst] = 0;
@@ -595,7 +621,7 @@ export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
       sum += cnt;
       uniq++;
       for (let mv = 0; mv < orders.length; mv++) {
-        if (mv === st || ((commutes[mv] & (1 << st)) && mv < st)) {
+        if (mv === st || (commutes[mv] & (1 << st) && mv < st)) {
           continue;
         }
         if (nextlev[mv] === undefined) {

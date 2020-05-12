@@ -1,18 +1,44 @@
-import { Color, DoubleSide, Euler, Face3, FaceColors, Geometry, Group, Mesh, MeshBasicMaterial, Object3D, Vector3 } from "three";
+import {
+  Color,
+  DoubleSide,
+  Euler,
+  Face3,
+  FaceColors,
+  Geometry,
+  Group,
+  Mesh,
+  MeshBasicMaterial,
+  Object3D,
+  Vector3,
+} from "three";
 import { BlockMove, modifiedBlockMove } from "../../alg";
-import { KPuzzle, KPuzzleDefinition, stateForBlockMove, Transformation } from "../../kpuzzle";
+import {
+  KPuzzle,
+  KPuzzleDefinition,
+  stateForBlockMove,
+  Transformation,
+} from "../../kpuzzle";
 import { StickerDatSticker } from "../../puzzle-geometry";
 import { Cursor } from "../cursor";
 import { smootherStep } from "../easing";
 import { Puzzle } from "../puzzle";
 import { TAU, Twisty3D } from "./twisty3D";
 
-const foundationMaterial = new MeshBasicMaterial({ side: DoubleSide, color: 0x000000, transparent: true, opacity: 0.75 });
+const foundationMaterial = new MeshBasicMaterial({
+  side: DoubleSide,
+  color: 0x000000,
+  transparent: true,
+  opacity: 0.75,
+});
 const stickerMaterial = new MeshBasicMaterial({
   vertexColors: FaceColors,
   //    side: DoubleSide,
 });
-const polyMaterial = new MeshBasicMaterial({ transparent: true, opacity: 0, color: 0x000000 });
+const polyMaterial = new MeshBasicMaterial({
+  transparent: true,
+  opacity: 0,
+  color: 0x000000,
+});
 
 class StickerDef {
   public origColor: Color;
@@ -98,7 +124,11 @@ export class PG3D extends Twisty3D<Puzzle> {
   private stickerTargets: Object3D[] = [];
   private controlTargets: Object3D[] = [];
 
-  constructor(private definition: KPuzzleDefinition, pgdat: any, showFoundation: boolean = false) {
+  constructor(
+    private definition: KPuzzleDefinition,
+    pgdat: any,
+    showFoundation: boolean = false,
+  ) {
     super();
     this.axesInfo = {};
     const axesDef = pgdat.axis as any[];
@@ -138,8 +168,7 @@ export class PG3D extends Twisty3D<Puzzle> {
   }
 
   public experimentalGetControlTargets(): Object3D[] {
-    return this.controlTargets
-      ;
+    return this.controlTargets;
   }
 
   public experimentalGetGroup(): Group {
@@ -171,8 +200,12 @@ export class PG3D extends Twisty3D<Puzzle> {
       const baseMove = stateForBlockMove(this.definition, simpleMove);
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
-      const angle = - this.ease(moveProgress.fraction) *
-        moveProgress.direction * blockMove.amount * TAU / ax.order;
+      const angle =
+        (-this.ease(moveProgress.fraction) *
+          moveProgress.direction *
+          blockMove.amount *
+          TAU) /
+        ax.order;
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
         const orin = pieces.length;

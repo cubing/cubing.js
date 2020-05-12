@@ -20,6 +20,8 @@ export function reportTypeMismatch(msg: string): void {
   }
 }
 
-export function setAlgPartTypeMismatchReportingLevel(level: ReportingLevel): void {
+export function setAlgPartTypeMismatchReportingLevel(
+  level: ReportingLevel,
+): void {
   currentReportingLevel = level;
 }

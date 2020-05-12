@@ -1,7 +1,4 @@
-export {
-  KPuzzleDefinition,
-  Transformation,
-} from "./definition_types";
+export { KPuzzleDefinition, Transformation } from "./definition_types";
 
 export {
   Combine,
@@ -15,14 +12,8 @@ export {
   Order,
 } from "./kpuzzle";
 
-export {
-  Puzzles,
-} from "./puzzle_definitions";
+export { Puzzles } from "./puzzle_definitions";
 
-export {
-  parse,
-} from "./parser";
+export { parse } from "./parser";
 
-export {
-  SVG,
-} from "./svg";
+export { SVG } from "./svg";

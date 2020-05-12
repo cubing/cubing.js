@@ -14,7 +14,11 @@ export class App {
   public twisty: Twisty;
   private puzzlePane: HTMLElement;
   constructor(public element: Element, initialData: AppData) {
-    this.puzzlePane = findOrCreateChild(this.element, "puzzle-pane", "puzzle-pane");
+    this.puzzlePane = findOrCreateChild(
+      this.element,
+      "puzzle-pane",
+      "puzzle-pane",
+    );
     this.puzzlePane.classList.remove("loading");
     const spinner = this.puzzlePane.querySelector(".spinner");
     if (spinner) {
@@ -23,10 +27,19 @@ export class App {
 
     this.initializeTwisty(initialData);
 
-    const controlPaneElem = findOrCreateChild(this.element, "control-pane", "control-pane");
+    const controlPaneElem = findOrCreateChild(
+      this.element,
+      "control-pane",
+      "control-pane",
+    );
     controlPaneElem.classList.remove("loading");
     // tslint:disable-next-line: no-unused-expression
-    new ControlPane(controlPaneElem, initialData, this.setAlg.bind(this), this.setPuzzle.bind(this));
+    new ControlPane(
+      controlPaneElem,
+      initialData,
+      this.setAlg.bind(this),
+      this.setPuzzle.bind(this),
+    );
   }
 
   private initializeTwisty(initialData: AppData): void {
@@ -78,12 +91,20 @@ export class App {
 
 // TODO: Generate type from list.
 type AlgElemStatusClass = "status-warning" | "status-bad";
-const algElemStatusClasses: AlgElemStatusClass[] = ["status-warning", "status-bad"];
+const algElemStatusClasses: AlgElemStatusClass[] = [
+  "status-warning",
+  "status-bad",
+];
 
 class ControlPane {
   public algInput: HTMLTextAreaElement;
   public puzzleSelect: HTMLSelectElement;
-  constructor(public element: Element, initialData: AppData, private algChangeCallback: (alg: Sequence) => boolean, private setPuzzleCallback: (puzzleName: string) => boolean) {
+  constructor(
+    public element: Element,
+    initialData: AppData,
+    private algChangeCallback: (alg: Sequence) => boolean,
+    private setPuzzleCallback: (puzzleName: string) => boolean,
+  ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
 
@@ -92,7 +113,11 @@ class ControlPane {
     this.algInput.value = algToString(initialData.alg);
     this.setAlgElemStatus(null);
 
-    this.puzzleSelect = findOrCreateChildWithClass(this.element, "puzzle", "select");
+    this.puzzleSelect = findOrCreateChildWithClass(
+      this.element,
+      "puzzle",
+      "select",
+    );
     this.initializePuzzleSelect(initialData.puzzleName);
 
     this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));
@@ -114,7 +139,9 @@ class ControlPane {
         this.algInput.value = restringifiedAlg;
       }
       // Set status before passing to the `Twisty`.
-      this.setAlgElemStatus(canonicalize || algIsCanonical ? null : "status-warning");
+      this.setAlgElemStatus(
+        canonicalize || algIsCanonical ? null : "status-warning",
+      );
 
       // TODO: cache last alg to avoid unnecessary updates?
       // Or should that be in the `Twisty` layer?
@@ -148,7 +175,10 @@ class ControlPane {
         option.selected = true;
       }
     }
-    this.puzzleSelect.addEventListener("change", this.puzzleSelectChanged.bind(this));
+    this.puzzleSelect.addEventListener(
+      "change",
+      this.puzzleSelectChanged.bind(this),
+    );
   }
 
   private puzzleSelectChanged(): void {

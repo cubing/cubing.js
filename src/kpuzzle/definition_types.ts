@@ -7,7 +7,7 @@ export interface OrbitTransformation {
 }
 // TODO: Use a list instead of an object for performance?
 export interface Transformation {
-  [/* orbit name */key: string]: OrbitTransformation;
+  [/* orbit name */ key: string]: OrbitTransformation;
 }
 
 export interface OrbitDefinition {
@@ -17,9 +17,9 @@ export interface OrbitDefinition {
 
 export interface KPuzzleDefinition {
   name: string;
-  orbits: { [/* orbit name */key: string]: OrbitDefinition };
+  orbits: { [/* orbit name */ key: string]: OrbitDefinition };
   startPieces: Transformation; // TODO: Expose a way to get the transformed start pieces.
-  moves: { [/* move name */key: string]: Transformation };
+  moves: { [/* move name */ key: string]: Transformation };
   svg?: string;
   moveExpander?: MoveExpander;
 }

@@ -1,1 +1,1 @@
-module.exports = require("../dist/cjs/bluetooth.js")
+module.exports = require("../dist/cjs/bluetooth.js");
