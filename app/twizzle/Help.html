@@ -304,6 +304,14 @@
 --nocenters:  disable centers
 --moves movelist:  only include moves listed; moves separated by commas</code></pre>
     <p>
+      The GAP output consists of a set of move definitions (all starting with
+      M_) followed by a definition of Gen that is a list of all moves, and a
+      variable ip which contains a set of tuples of identical pieces.  To
+      calculate the size of the supergroup (that is, not taking into account
+      full-puzzle rotations or identical pieces), use the GAP command
+      Size(Group(Gen));.  To calculate how much this is reduced by identical
+      pieces, use the GAP command Size(Stabilizer(Group(Gen), ip, OnTuplesSets));.
+    <p>
       Twizzle is being developed by Tomas Rokicki and Lucas Garron. You can
       follow our progress at
       <a href="https:github.com/cubing/cubing.js" class="uri"
