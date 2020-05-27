@@ -93,9 +93,10 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
 function getModValueForMove(move: BlockMove): number {
   let family = move.family;
   if (family.length > 1) {
-    if (family[0] <= "Z" &&
-        (family[family.length - 1] === "w" ||
-         family[family.length - 1] === "v")) {
+    if (
+      family[0] <= "Z" &&
+      (family[family.length - 1] === "w" || family[family.length - 1] === "v")
+    ) {
       family = family.substr(0, family.length - 1);
     }
   }
