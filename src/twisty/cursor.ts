@@ -746,10 +746,12 @@ export namespace Cursor {
 
   export type DurationForAmount = (amount: number) => Duration;
 
+  // eslint-disable-next-line no-inner-declarations
   export function ConstantDurationForAmount(_amount: number): Duration {
     return 1000;
   }
 
+  // eslint-disable-next-line no-inner-declarations
   export function DefaultDurationForAmount(amount: number): Duration {
     switch (Math.abs(amount)) {
       case 0:
@@ -763,6 +765,7 @@ export namespace Cursor {
     }
   }
 
+  // eslint-disable-next-line no-inner-declarations
   export function ExperimentalScaledDefaultDurationForAmount(
     scale: number,
     amount: number,
