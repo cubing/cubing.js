@@ -1480,7 +1480,7 @@ export class PuzzleGeometry {
           if (
             a.length > 1 &&
             this.orientCenters &&
-            (this.cubies[b[0]].length === 1 ||
+            (this.cubies[b[0]].length === 2 ||
               this.cubies[b[0]][0] === this.cubies[b[0]][1])
           ) {
             // is this a real center cubie, around an axis?
@@ -1501,10 +1501,13 @@ export class PuzzleGeometry {
                   }
                 }
                 if (o < 0) {
-                  throw new Error("Couldn't find rotation of center faces.");
+                  throw new Error(
+                    "Couldn't find rotation of center faces; ignoring for now.",
+                  );
+                } else {
+                  b[2 * ii + 1] = o;
+                  face1 = this.moverotations[k][0].rotateface(face1);
                 }
-                b[2 * ii + 1] = o;
-                face1 = this.moverotations[k][0].rotateface(face1);
               }
             }
           }
@@ -1870,7 +1873,7 @@ export class PuzzleGeometry {
                 oris[setnum][mperm[ii]] =
                   (mperm[(ii + oinc) % mperm.length] -
                     mperm[(ii + 1) % mperm.length] +
-                    this.orbitoris[setnum]) %
+                    2 * this.orbitoris[setnum]) %
                   this.orbitoris[setnum];
               }
             }
