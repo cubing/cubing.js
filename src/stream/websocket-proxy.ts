@@ -12,26 +12,25 @@ export class WebSocketProxySender {
     this.websocket.onmessage = this.onmessage.bind(this);
   }
 
-  public onMove(e: MoveEvent): void {
-    this.sendMoveEvent({
+  protected sendMoveEvent(e: MoveEvent): void {
+    this.sendProxyEvent({
       event: "move",
       data: e,
     });
   }
 
   public sendOrientationEvent(e: OrientationEvent): void {
-    this.sendMoveEvent({
+    this.sendProxyEvent({
       event: "orientation",
       data: e,
     });
   }
 
   public sendResetEvent(): void {
-    this.sendMoveEvent({ event: "reset" });
+    this.sendProxyEvent({ event: "reset" });
   }
 
-  protected sendMoveEvent(proxyEvent: ProxyEvent): void {
-    console.log(proxyEvent);
+  protected sendProxyEvent(proxyEvent: ProxyEvent): void {
     this.websocket.send(JSON.stringify(proxyEvent));
   }
 
