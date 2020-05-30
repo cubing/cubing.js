@@ -20,8 +20,9 @@ import {
   initialHeight,
   initialScale,
   showControlPlanes,
+  socketOrigin,
 } from "./config";
-import { ProxyEvent, ProxyReceiver } from "./proxy/websocket-proxy";
+import { WebSocketProxyReceiver, ProxyEvent } from "../../src/stream";
 import {
   ButtonGrouping,
   controllerDirection,
@@ -29,6 +30,7 @@ import {
   Status,
   VRInput,
 } from "./vr-input";
+import { MoveEvent } from "../../src/bluetooth";
 
 // From `cube3D.ts`
 class AxisInfo {
@@ -54,6 +56,16 @@ const axesInfo: AxisInfo[] = [
   new AxisInfo("B", new Vector3(0, 0, -1), new Euler(0, TAU / 2, 0), 0x0000ff),
   new AxisInfo("D", new Vector3(0, -1, 0), new Euler(TAU / 4, 0, 0), 0xffff00),
 ];
+
+class CalllbackProxyReceiver extends WebSocketProxyReceiver {
+  constructor(url: string, private callback: (e: MoveEvent) => void) {
+    super(url);
+  }
+
+  onProxyEvent(e: MoveEvent): void {
+    this.callback(e);
+  }
+}
 
 export class VRCube {
   public group: Group = new Group();
@@ -166,8 +178,13 @@ export class VRCube {
     );
 
     try {
+      if (!socketOrigin) {
+        throw new Error("Must specify socket origin in the URL.");
+      }
+      const url = new URL(socketOrigin);
+      url.pathname = "/register-receiver";
       // tslint:disable-next-line: no-unused-expression
-      new ProxyReceiver(this.onProxyEvent.bind(this));
+      new CalllbackProxyReceiver(url.toString(), this.onProxyEvent.bind(this));
     } catch (e) {
       console.error("Unable to register proxy receiver", e);
     }
