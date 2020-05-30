@@ -60,6 +60,7 @@ const esm = {
     "cubing": "src/cubing/index.ts",
     "kpuzzle": "src/kpuzzle/index.ts",
     "puzzle-geometry": "src/puzzle-geometry/index.ts",
+    "stream": "src/stream/index.ts",
     "twisty": "src/twisty/index.ts",
   },
   output: [

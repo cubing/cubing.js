@@ -1,0 +1,7 @@
+{
+  "name": "stream",
+  "version": "0.10.0",
+  "main": "../dist/cjs/stream.js",
+  "module": "../dist/esm/stream.js",
+  "types": "../dist/esm/src/stream/index.d.ts"
+}
