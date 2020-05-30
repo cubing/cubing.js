@@ -6,11 +6,13 @@ import typescript2 from "rollup-plugin-typescript2";
 import * as typescript from "typescript";
 import json from "@rollup/plugin-json";
 import { string } from "rollup-plugin-string";
-// import { eslint } from "rollup-plugin-eslint";
+import { eslint } from "rollup-plugin-eslint";
 
 const plugins = [
   pegjs(),
-  // eslint({}),
+  eslint({
+    exclude: ["**/*.json", "**/*.pegjs", "**/*.svg"],
+  }),
   typescript2({
     typescript: typescript,
   }),
