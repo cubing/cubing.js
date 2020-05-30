@@ -12,7 +12,7 @@ export class WebSocketProxySender {
     this.websocket.onmessage = this.onmessage.bind(this);
   }
 
-  protected sendMoveEvent(e: MoveEvent): void {
+  public sendMoveEvent(e: MoveEvent): void {
     this.sendProxyEvent({
       event: "move",
       data: e,

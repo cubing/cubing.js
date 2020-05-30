@@ -30,7 +30,7 @@ class App {
       .addEventListener("click", async () => {
         this.puzzle = await connect();
         this.puzzle.addMoveListener(
-          this.proxySender.onMove.bind(this.proxySender),
+          this.proxySender.sendMoveEvent.bind(this.proxySender),
         );
         this.puzzle.addOrientationListener(
           this.proxySender.sendOrientationEvent.bind(this.proxySender),
@@ -44,7 +44,7 @@ class App {
       .addEventListener("click", async () => {
         this.puzzle = await debugKeyboardConnect();
         this.puzzle.addMoveListener(
-          this.proxySender.onMove.bind(this.proxySender),
+          this.proxySender.sendMoveEvent.bind(this.proxySender),
         );
         console.log("Keyboard connected!", this.puzzle);
       });
