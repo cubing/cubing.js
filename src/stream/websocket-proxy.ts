@@ -4,7 +4,7 @@ import { socketOrigin } from "../../app/vr/config";
 import { ProxyEvent } from "./proxy-event";
 
 export class WebSocketProxySender {
-  private websocket: WebSocket;
+  protected websocket: WebSocket;
   constructor(url: string) {
     this.websocket = new WebSocket(url);
     this.websocket.onopen = this.onopen.bind(this);
@@ -48,7 +48,7 @@ export class WebSocketProxySender {
 }
 
 export abstract class WebSocketProxyReceiver {
-  private websocket: WebSocket;
+  protected websocket: WebSocket;
   constructor(url: string) {
     if (!socketOrigin) {
       console.log("No socket origin specified. Will not attempt to connect.");
