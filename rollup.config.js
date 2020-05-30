@@ -32,16 +32,19 @@ if (!process.env.ROLLUP_WATCH) {
   );
 }
 
+const submoduleInputs = {
+  "alg": "src/alg/index.ts",
+  "bluetooth": "src/bluetooth/index.ts",
+  "cubing": "src/cubing/index.ts",
+  "kpuzzle": "src/kpuzzle/index.ts",
+  "puzzle-geometry": "src/puzzle-geometry/index.ts",
+  "stream": "src/stream/index.ts",
+  "twisty": "src/twisty/index.ts",
+};
+
 const cjs = {
   external: ["three"],
-  input: {
-    "alg": "src/alg/index.ts",
-    "bluetooth": "src/bluetooth/index.ts",
-    "cubing": "src/cubing/index.ts",
-    "kpuzzle": "src/kpuzzle/index.ts",
-    "puzzle-geometry": "src/puzzle-geometry/index.ts",
-    "twisty": "src/twisty/index.ts",
-  },
+  input: submoduleInputs,
   output: [
     {
       dir: "dist/cjs",
@@ -54,15 +57,7 @@ const cjs = {
 
 const esm = {
   external: ["three"],
-  input: {
-    "alg": "src/alg/index.ts",
-    "bluetooth": "src/bluetooth/index.ts",
-    "cubing": "src/cubing/index.ts",
-    "kpuzzle": "src/kpuzzle/index.ts",
-    "puzzle-geometry": "src/puzzle-geometry/index.ts",
-    "stream": "src/stream/index.ts",
-    "twisty": "src/twisty/index.ts",
-  },
+  input: submoduleInputs,
   output: [
     {
       dir: "dist/esm",
