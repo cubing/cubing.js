@@ -57,7 +57,7 @@ const axesInfo: AxisInfo[] = [
   new AxisInfo("D", new Vector3(0, -1, 0), new Euler(TAU / 4, 0, 0), 0xffff00),
 ];
 
-class CalllbackProxyReceiver extends WebSocketProxyReceiver {
+class CallbackProxyReceiver extends WebSocketProxyReceiver {
   constructor(url: string, private callback: (e: MoveEvent) => void) {
     super(url);
   }
@@ -184,7 +184,7 @@ export class VRCube {
       const url = new URL(socketOrigin);
       url.pathname = "/register-receiver";
       // tslint:disable-next-line: no-unused-expression
-      new CalllbackProxyReceiver(url.toString(), this.onProxyEvent.bind(this));
+      new CallbackProxyReceiver(url.toString(), this.onProxyEvent.bind(this));
     } catch (e) {
       console.error("Unable to register proxy receiver", e);
     }

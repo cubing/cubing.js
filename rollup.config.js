@@ -10,7 +10,7 @@ import { eslint } from "rollup-plugin-eslint";
 
 const plugins = [
   pegjs(),
-  eslint({}),
+  // eslint({}),
   typescript2({
     typescript: typescript,
   }),
