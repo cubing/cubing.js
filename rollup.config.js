@@ -1,3 +1,6 @@
+// We need to tell `eslint` to ignore TS errors, because it tries to apply TS linting to JS. 🤷‍♀️
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import resolve from "rollup-plugin-node-resolve";
 import notify from "rollup-plugin-notify";
 import pegjs from "rollup-plugin-pegjs";
@@ -7,6 +10,12 @@ import * as typescript from "typescript";
 import json from "@rollup/plugin-json";
 import { string } from "rollup-plugin-string";
 import { eslint } from "rollup-plugin-eslint";
+
+// Due to our toolchain, `rollup` normally emits some warnings that don't
+// actually indicate anything wrong with our code. We can suppress known
+// warnings per target, although this would also suppress the warning if it
+// appears for a new reason.
+const SUPPRESS_KNOWN_WARNINGS = true;
 
 const plugins = [
   pegjs(),
@@ -44,6 +53,20 @@ const submoduleInputs = {
   "twisty": "src/twisty/index.ts",
 };
 
+// From https://github.com/rollup/rollup/issues/794#issuecomment-260694288
+// Format from: https://github.com/rollup/rollup/issues/408#issuecomment-446998462
+function onwarn(ignoredErrorCodes) {
+  return function (warning, warn) {
+    if (
+      SUPPRESS_KNOWN_WARNINGS &&
+      ignoredErrorCodes.indexOf(warning.code) !== -1
+    ) {
+      return;
+    }
+    warn(warning);
+  };
+}
+
 const cjs = {
   external: ["three"],
   input: submoduleInputs,
@@ -55,6 +78,7 @@ const cjs = {
     },
   ],
   plugins,
+  onwarn: onwarn(["THIS_IS_UNDEFINED"]),
 };
 
 const esm = {
@@ -68,6 +92,7 @@ const esm = {
     },
   ],
   plugins: [...plugins],
+  onwarn: onwarn(["THIS_IS_UNDEFINED"]),
 };
 
 const umd = {
@@ -86,6 +111,7 @@ const umd = {
       only: ["three"],
     }),
   ],
+  onwarn: onwarn(["THIS_IS_UNDEFINED"]),
 };
 
 const umdNoTwisty = {
@@ -99,6 +125,7 @@ const umdNoTwisty = {
     },
   ],
   plugins: plugins,
+  onwarn: onwarn(["UNRESOLVED_IMPORT", "MISSING_GLOBAL_NAME"]),
 };
 
 const puzzleGeometryBin = {
@@ -116,6 +143,7 @@ const puzzleGeometryBin = {
       only: ["three"],
     }),
   ],
+  onwarn: onwarn([]),
 };
 
 const configs = [cjs, esm, umd, puzzleGeometryBin];
