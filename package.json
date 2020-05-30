@@ -22,7 +22,7 @@
     "@typescript-eslint/eslint-plugin": "^2.32.0",
     "@typescript-eslint/parser": "^2.32.0",
     "babel-jest": "^24.9.0",
-    "eslint": "^7.0.0",
+    "eslint": "^7.1.0",
     "eslint-config-mdcs": "^5.0.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-html": "^6.0.2",
