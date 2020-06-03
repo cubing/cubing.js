@@ -56,7 +56,7 @@ class CountAnimatedMoves extends TraversalUp<number> {
   }
 }
 
-interface AlgorithmIndexer<P extends Puzzle> {
+export interface AlgorithmIndexer<P extends Puzzle> {
   getMove(index: number): BlockMove;
   indexToMoveStartTimestamp(index: number): Cursor.Timestamp;
   stateAtIndex(index: number): State<P>;
@@ -67,7 +67,8 @@ interface AlgorithmIndexer<P extends Puzzle> {
   moveDuration(index: number): number;
 }
 
-class SimpleAlgorithmIndexer<P extends Puzzle> implements AlgorithmIndexer<P> {
+export class SimpleAlgorithmIndexer<P extends Puzzle>
+  implements AlgorithmIndexer<P> {
   private moves: Sequence;
   // TODO: Allow custom `durationFn`.
   private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(
