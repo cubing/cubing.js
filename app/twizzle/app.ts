@@ -6,11 +6,18 @@ import {
   algToString,
   BareBlockMove,
   BlockMove,
+  Commutator,
+  Conjugate,
   experimentalAppendBlockMove,
   modifiedBlockMove,
   MoveFamily,
+  Pause,
+  Group,
+  NewLine,
+  Comment,
   parse as algparse,
   Sequence,
+  TraversalUp,
 } from "../../src/alg/index";
 import {
   connect,
@@ -32,6 +39,63 @@ import {
   Vantage,
 } from "../../src/twisty/index";
 import { getURLParam, setURLParams } from "./url-params";
+import { parse } from "../../src/alg/parser/parser";
+
+/*
+ *   For movecount, that understands puzzle rotations.  This code
+ *   should be moved to the alg class, probably.
+ */
+class Accumulate extends TraversalUp<number> {
+  constructor(private metric: (move: BlockMove) => number) {
+    super();
+  }
+  public traverseSequence(sequence: Sequence): number {
+    let r = 0;
+    for (let i = 0; i < sequence.nestedUnits.length; i++) {
+      r += this.traverse(sequence.nestedUnits[i]);
+    }
+    return r;
+  }
+  public traverseGroup(group: Group): number {
+    return this.traverse(group.nestedSequence) * group.amount;
+  }
+  public traverseBlockMove(move: BlockMove): number {
+    return this.metric(move);
+  }
+  public traverseCommutator(commutator: Commutator): number {
+    return (
+      commutator.amount *
+      2 *
+      (this.traverse(commutator.A) + this.traverse(commutator.B))
+    );
+  }
+  public traverseConjugate(conjugate: Conjugate): number {
+    return (
+      conjugate.amount *
+      (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B))
+    );
+  }
+  // TODO: Remove spaces between repeated pauses (in traverseSequence)
+  public traversePause(_pause: Pause): number {
+    return 0;
+  }
+  public traverseNewLine(_newLine: NewLine): number {
+    return 0;
+  }
+  // TODO: Enforce being followed by a newline (or the end of the alg)?
+  public traverseComment(_comment: Comment): number {
+    return 0;
+  }
+}
+function baseMetric(move: BlockMove): number {
+  const fam = move.family;
+  if (fam[0] <= "Z" && fam[fam.length - 1] === "v") {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+const accumulate = new Accumulate(baseMetric);
 
 experimentalShowJumpingFlash(false);
 
@@ -173,9 +237,8 @@ function trimEq(a: string, b: string): boolean {
   return a.trim() === b.trim();
 }
 
-function updateMoveCount(): void {
-  const curs = twisty.experimentalGetCursor();
-  const len = curs.countMoves();
+function updateMoveCount(alg?: Sequence): void {
+  const len = accumulate.traverse(alg ? alg : parse(lastalgo));
   const mc = document.getElementById("movecount");
   if (mc) {
     mc.innerText = "Moves: " + len;
@@ -240,7 +303,7 @@ function setAlgo(str: string, writeback: boolean): void {
       seq = algparse(str);
       str = algToString(seq);
       twisty.experimentalSetAlg(seq);
-      updateMoveCount();
+      updateMoveCount(seq);
       setURLParams({ alg: seq });
     } catch (e) {
       algoinput.style.backgroundColor = "#ff8080";
@@ -574,7 +637,7 @@ function addMove(move: BlockMove): void {
     lastalgo = algToString(newAlg);
     twisty.experimentalAddMove(move);
     algoinput.value = lastalgo;
-    updateMoveCount();
+    updateMoveCount(newAlg);
     setURLParams({ alg: newAlg });
   }
 }
