@@ -57,7 +57,7 @@ const submoduleInputs = {
 // Format from: https://github.com/rollup/rollup/issues/408#issuecomment-446998462
 function onwarn(ignoredErrorCodes) {
   return function (warning, warn) {
-    if (SUPPRESS_KNOWN_WARNINGS && !ignoredErrorCodes.includes(warning.code)) {
+    if (SUPPRESS_KNOWN_WARNINGS && ignoredErrorCodes.includes(warning.code)) {
       return;
     }
     warn(warning);
