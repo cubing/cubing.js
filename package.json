@@ -48,10 +48,10 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "build": "rollup -c",
-    "dev": "parcel serve --no-autoinstall app/index.html --open --out-dir dist/parcel",
+    "build": "npx rollup -c",
+    "dev": "npx parcel serve --no-autoinstall app/index.html --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
-    "test": "jest && npm run lint",
+    "test": "npx jest && npm run lint",
     "format": "npx eslint --fix .; npx prettier --write src app *.config.js */index.js */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint .",
