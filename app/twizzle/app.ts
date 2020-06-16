@@ -547,11 +547,11 @@ function onMouseMove(vantage: Vantage, event: MouseEvent): void {
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const controlTargets = twisty
-    .experimentalGetPlayer()
-    .pg3DView.experimentalGetPG3D()
-    .experimentalGetControlTargets();
-  const intersects = raycaster.intersectObjects(controlTargets);
+  const pg3d = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D();
+  const targets = event.shiftKey
+    ? pg3d.experimentalGetStickerTargets()
+    : pg3d.experimentalGetControlTargets();
+  const intersects = raycaster.intersectObjects(targets);
   if (intersects.length > 0) {
     canvas.title = intersects[0].object.userData.name;
   } else {

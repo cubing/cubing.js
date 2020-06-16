@@ -64,6 +64,8 @@ class StickerDef {
     }
     this.geo.computeFaceNormals();
     const obj = new Mesh(this.geo, stickerMaterial);
+    obj.userData.name =
+      stickerDat.orbit + " " + (1 + stickerDat.ord) + " " + stickerDat.ori;
     this.cubie.add(obj);
     if (showFoundation) {
       const foundation = new Mesh(this.geo, foundationMaterial);
