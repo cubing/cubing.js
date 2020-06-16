@@ -504,6 +504,16 @@ export class PuzzleGeometry {
   public faceorder: any = [];
   public faceprecedence: number[] = [];
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
+    function asboolean(v: any): boolean {
+      if (typeof v === "string") {
+        if (v === "false") {
+          return false;
+        }
+        return true;
+      } else {
+        return v ? true : false;
+      }
+    }
     if (optionlist !== undefined) {
       if (optionlist.length % 2 !== 0) {
         throw new Error("Odd length in option list?");
@@ -514,37 +524,37 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "quiet") {
           this.verbose = 0;
         } else if (optionlist[i] === "allmoves") {
-          this.allmoves = optionlist[i + 1];
+          this.allmoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "outerblockmoves") {
-          this.outerblockmoves = optionlist[i + 1];
+          this.outerblockmoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "vertexmoves") {
-          this.vertexmoves = optionlist[i + 1];
+          this.vertexmoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "rotations") {
-          this.addrotations = optionlist[i + 1];
+          this.addrotations = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "cornersets") {
-          this.cornersets = optionlist[i + 1];
+          this.cornersets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "centersets") {
-          this.centersets = optionlist[i + 1];
+          this.centersets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "edgesets") {
-          this.edgesets = optionlist[i + 1];
+          this.edgesets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "graycorners") {
-          this.graycorners = optionlist[i + 1];
+          this.graycorners = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "graycenters") {
-          this.graycenters = optionlist[i + 1];
+          this.graycenters = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "grayedges") {
-          this.grayedges = optionlist[i + 1];
+          this.grayedges = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "movelist") {
           this.movelist = optionlist[i + 1];
         } else if (optionlist[i] === "killorientation") {
-          this.killorientation = optionlist[i + 1];
+          this.killorientation = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "optimize") {
-          this.optimize = optionlist[i + 1];
+          this.optimize = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "scramble") {
           this.scramble = optionlist[i + 1];
         } else if (optionlist[i] === "fix") {
           this.fixPiece = optionlist[i + 1];
         } else if (optionlist[i] === "orientcenters") {
-          this.orientCenters = optionlist[i + 1];
+          this.orientCenters = asboolean(optionlist[i + 1]);
         } else {
           throw new Error(
             "Bad option while processing option list " + optionlist[i],
