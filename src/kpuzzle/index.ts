@@ -1,16 +1,16 @@
 export { KPuzzleDefinition, Transformation } from "./definition_types";
 
+export { KPuzzle, stateForBlockMove } from "./kpuzzle";
+
 export {
   Combine,
   Multiply,
   IdentityTransformation,
   Invert,
   EquivalentTransformations,
-  KPuzzle,
   EquivalentStates,
-  stateForBlockMove,
   Order,
-} from "./kpuzzle";
+} from "./transformations";
 
 export { Puzzles } from "./puzzle_definitions";
 
