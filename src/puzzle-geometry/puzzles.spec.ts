@@ -66,7 +66,7 @@ const expectedData: { [nam: string]: string } = {
   "megaminx + chopasaurus": "megaminx + chopasaurus, 12, 11, 92, 3, 38, 9828",
   "starminx combo": "starminx combo, 12, 11, 102, 3, 48, 78960",
 };
-describe("Quat", () => {
+describe("PuzzleGeometry-Puzzles", () => {
   it("testpuzzles", () => {
     for (const [name, desc] of Object.entries(Puzzles)) {
       const options: string[] = [];
