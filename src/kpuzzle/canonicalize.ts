@@ -249,30 +249,31 @@ export class CanonicalSequenceIterator {
     this.ss = new SearchSequence(canon, state);
     this.targetLength = 0;
   }
+  public nextState(base: number, canonstate: number[]): null | number[] {
+    const newstate: number[] = [];
+    for (const prevbase of canonstate) {
+      if (prevbase === base) {
+        return null;
+      } else if (!this.canon.commutes[prevbase][base]) {
+        // don't do anything in this case
+      } else if (base < prevbase) {
+        return null;
+      } else {
+        newstate.push(prevbase);
+      }
+    }
+    return newstate;
+  }
   public *genSequence(
     togo: number,
     canonstate: number[],
-  ): Generator<SearchSequence, void, void> {
+  ): Generator<SearchSequence, null, void> {
     if (togo === 0) {
       yield this.ss;
     } else {
       for (let base = 0; base < this.canon.baseMoveCount; base++) {
-        const newstate: number[] = [];
-        let stillgood = true;
-        for (const prevbase of canonstate) {
-          if (prevbase === base) {
-            stillgood = false;
-            break;
-          } else if (!this.canon.commutes[prevbase][base]) {
-            // don't do anything in this case
-          } else if (base < prevbase) {
-            stillgood = false;
-            break;
-          } else {
-            newstate.push(prevbase);
-          }
-        }
-        if (stillgood) {
+        const newstate = this.nextState(base, canonstate);
+        if (newstate) {
           newstate.push(base);
           for (let tw = 1; tw < this.canon.moveorder[base]; tw++) {
             this.ss.appendOneMove(new InternalMove(base, tw));
@@ -282,10 +283,31 @@ export class CanonicalSequenceIterator {
         }
       }
     }
+    return null;
   }
   public *generator(): Generator<SearchSequence, SearchSequence, void> {
     for (let d = 0; ; d++) {
       yield* this.genSequence(d, []);
     }
+  }
+  public *genSequenceTree(
+    canonstate: number[],
+  ): Generator<SearchSequence, null, number> {
+    const r = yield this.ss;
+    if (r > 0) {
+      return null;
+    }
+    for (let base = 0; base < this.canon.baseMoveCount; base++) {
+      const newstate = this.nextState(base, canonstate);
+      if (newstate) {
+        newstate.push(base);
+        for (let tw = 1; tw < this.canon.moveorder[base]; tw++) {
+          this.ss.appendOneMove(new InternalMove(base, tw));
+          yield* this.genSequenceTree(newstate);
+          this.ss.popMove();
+        }
+      }
+    }
+    return null;
   }
 }
