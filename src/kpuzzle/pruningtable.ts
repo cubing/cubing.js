@@ -1,5 +1,6 @@
 import { Canonicalize, CanonicalSequenceIterator } from "./canonicalize";
 import { KPuzzleDefinition, Transformation } from ".";
+import { EquivalentStates } from "./transformations";
 const mask = 0x7fffffff;
 function hash(def: KPuzzleDefinition, s: Transformation): number {
   let r = 0;
@@ -50,7 +51,10 @@ export class PruningTable {
           break;
         }
         const dep = this.lookup(t.value.trans);
-        if (dep === 0) {
+        if (
+          dep === 0 &&
+          EquivalentStates(this.def, t.value.trans, this.def.startPieces)
+        ) {
           console.log("Lookups " + this.lookups + " pop " + this.population);
           return t.value.getSequenceAsString();
         }
@@ -64,10 +68,10 @@ export class PruningTable {
   }
   private filllevel(): void {
     this.filled++;
-    const gen = new CanonicalSequenceIterator(this.canon).genSequence(
-      this.filled,
-      [],
-    );
+    const gen = new CanonicalSequenceIterator(
+      this.canon,
+      this.def.startPieces,
+    ).genSequence(this.filled, []);
     // eslint-disable-next-line no-constant-condition
     while (true) {
       const t = gen.next();
