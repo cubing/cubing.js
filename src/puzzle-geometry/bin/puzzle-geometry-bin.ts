@@ -159,7 +159,7 @@ if (
   const pg = new PuzzleGeometry(createargs[0], createargs[1], optionlist);
   pg.allstickers();
   pg.genperms();
-  // TODO: if (optionlist.indexOf("verbose") !== -1)
+  // TODO: if (!optionlist.includes("verbose"))
   // if (this.verbose) {
   //    console.log("# Stickers " + pg.stickersperface + " cubies " +
   //       pg.cubies.length + " orbits " + pg.orbits +

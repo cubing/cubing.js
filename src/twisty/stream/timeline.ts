@@ -19,22 +19,20 @@ function isSameAxis(move1: BlockMove, move2: BlockMove): boolean {
   const familyRoots =
     move1.family[0].toLowerCase() + move2.family[0].toLowerCase();
   // console.log(familyRoots);
-  return (
-    [
-      "uu",
-      "ud",
-      "du",
-      "dd",
-      "ll",
-      "lr",
-      "rl",
-      "rr",
-      "ff",
-      "fb",
-      "bf",
-      "bb",
-    ].indexOf(familyRoots) !== -1
-  );
+  return ![
+    "uu",
+    "ud",
+    "du",
+    "dd",
+    "ll",
+    "lr",
+    "rl",
+    "rr",
+    "ff",
+    "fb",
+    "bf",
+    "bb",
+  ].includes(familyRoots);
 }
 
 export function toAxes(
