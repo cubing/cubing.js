@@ -25,7 +25,7 @@
     <!-- CORNER -->
     <use id="CORNER-l0-o0" xlink:href="#sticker" transform="translate(5,  2)" style="fill: white"/>
     <use id="CORNER-l0-o1" xlink:href="#sticker" transform="translate(6,  3)" style="fill: red"/>
-    <use id="CORNER-l0-o2" xlink:href="#sticker" transform="translate(5,  3)" style="fill: green"/>
+    <use id="CORNER-l0-o2" xlink:href="#sticker" transform="translate(5,  3)" style="fill: limegreen"/>
 
     <use id="CORNER-l1-o0" xlink:href="#sticker" transform="translate(5,  0)" style="fill: white"/>
     <use id="CORNER-l1-o1" xlink:href="#sticker" transform="translate(9,  3)" style="fill: blue"/>
@@ -36,16 +36,16 @@
     <use id="CORNER-l2-o2" xlink:href="#sticker" transform="translate(11, 3)" style="fill: blue"/>
 
     <use id="CORNER-l3-o0" xlink:href="#sticker" transform="translate(3,  2)" style="fill: white"/>
-    <use id="CORNER-l3-o1" xlink:href="#sticker" transform="translate(3,  3)" style="fill: green"/>
+    <use id="CORNER-l3-o1" xlink:href="#sticker" transform="translate(3,  3)" style="fill: limegreen"/>
     <use id="CORNER-l3-o2" xlink:href="#sticker" transform="translate(2,  3)" style="fill: orange"/>
 
     <use id="CORNER-l4-o0" xlink:href="#sticker" transform="translate(5,  6)" style="fill: yellow"/>
-    <use id="CORNER-l4-o1" xlink:href="#sticker" transform="translate(5,  5)" style="fill: green"/>
+    <use id="CORNER-l4-o1" xlink:href="#sticker" transform="translate(5,  5)" style="fill: limegreen"/>
     <use id="CORNER-l4-o2" xlink:href="#sticker" transform="translate(6,  5)" style="fill: red"/>
 
     <use id="CORNER-l5-o0" xlink:href="#sticker" transform="translate(3,  6)" style="fill: yellow"/>
     <use id="CORNER-l5-o1" xlink:href="#sticker" transform="translate(2,  5)" style="fill: orange"/>
-    <use id="CORNER-l5-o2" xlink:href="#sticker" transform="translate(3,  5)" style="fill: green"/>
+    <use id="CORNER-l5-o2" xlink:href="#sticker" transform="translate(3,  5)" style="fill: limegreen"/>
 
     <use id="CORNER-l6-o0" xlink:href="#sticker" transform="translate(3,  8)" style="fill: yellow"/>
     <use id="CORNER-l6-o1" xlink:href="#sticker" transform="translate(11, 5)" style="fill: blue"/>
@@ -57,7 +57,7 @@
 
     <!-- EDGE -->
     <use id="EDGE-l0-o0"  xlink:href="#sticker" transform="translate(4,  2)" style="fill: white"/>
-    <use id="EDGE-l0-o1"  xlink:href="#sticker" transform="translate(4,  3)" style="fill: green"/>
+    <use id="EDGE-l0-o1"  xlink:href="#sticker" transform="translate(4,  3)" style="fill: limegreen"/>
 
     <use id="EDGE-l1-o0"  xlink:href="#sticker" transform="translate(5,  1)" style="fill: white"/>
     <use id="EDGE-l1-o1"  xlink:href="#sticker" transform="translate(7,  3)" style="fill: red"/>
@@ -69,7 +69,7 @@
     <use id="EDGE-l3-o1"  xlink:href="#sticker" transform="translate(1,  3)" style="fill: orange"/>
 
     <use id="EDGE-l4-o0"  xlink:href="#sticker" transform="translate(4,  6)" style="fill: yellow"/>
-    <use id="EDGE-l4-o1"  xlink:href="#sticker" transform="translate(4,  5)" style="fill: green"/>
+    <use id="EDGE-l4-o1"  xlink:href="#sticker" transform="translate(4,  5)" style="fill: limegreen"/>
 
     <use id="EDGE-l5-o0" xlink:href="#sticker" transform="translate(5,  7)" style="fill: yellow"/>
     <use id="EDGE-l5-o1" xlink:href="#sticker" transform="translate(7,  5)" style="fill: red"/>
@@ -80,10 +80,10 @@
     <use id="EDGE-l7-o0"  xlink:href="#sticker" transform="translate(3,  7)" style="fill: yellow"/>
     <use id="EDGE-l7-o1"  xlink:href="#sticker" transform="translate(1,  5)" style="fill: orange"/>
 
-    <use id="EDGE-l8-o0"  xlink:href="#sticker" transform="translate(5,  4)" style="fill: green"/>
+    <use id="EDGE-l8-o0"  xlink:href="#sticker" transform="translate(5,  4)" style="fill: limegreen"/>
     <use id="EDGE-l8-o1"  xlink:href="#sticker" transform="translate(6,  4)" style="fill: red"/>
 
-    <use id="EDGE-l9-o0"  xlink:href="#sticker" transform="translate(3,  4)" style="fill: green"/>
+    <use id="EDGE-l9-o0"  xlink:href="#sticker" transform="translate(3,  4)" style="fill: limegreen"/>
     <use id="EDGE-l9-o1"  xlink:href="#sticker" transform="translate(2,  4)" style="fill: orange"/>
 
     <use id="EDGE-l10-o0" xlink:href="#sticker" transform="translate(9,  4)" style="fill: blue"/>
@@ -104,10 +104,10 @@
     <use id="CENTER-l1-o2" xlink:href="#sticker" transform="translate(1,  4)" style="fill: orange"/>
     <use id="CENTER-l1-o3" xlink:href="#sticker" transform="translate(1,  4)" style="fill: orange"/>
 
-    <use id="CENTER-l2-o0" xlink:href="#sticker" transform="translate(4,  4)" style="fill: green"/>
-    <use id="CENTER-l2-o1" xlink:href="#sticker" transform="translate(4,  4)" style="fill: green"/>
-    <use id="CENTER-l2-o2" xlink:href="#sticker" transform="translate(4,  4)" style="fill: green"/>
-    <use id="CENTER-l2-o3" xlink:href="#sticker" transform="translate(4,  4)" style="fill: green"/>
+    <use id="CENTER-l2-o0" xlink:href="#sticker" transform="translate(4,  4)" style="fill: limegreen"/>
+    <use id="CENTER-l2-o1" xlink:href="#sticker" transform="translate(4,  4)" style="fill: limegreen"/>
+    <use id="CENTER-l2-o2" xlink:href="#sticker" transform="translate(4,  4)" style="fill: limegreen"/>
+    <use id="CENTER-l2-o3" xlink:href="#sticker" transform="translate(4,  4)" style="fill: limegreen"/>
 
     <use id="CENTER-l3-o0" xlink:href="#sticker" transform="translate(7,  4)" style="fill: red"/>
     <use id="CENTER-l3-o1" xlink:href="#sticker" transform="translate(7,  4)" style="fill: red"/>
