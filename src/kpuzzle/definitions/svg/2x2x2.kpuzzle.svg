@@ -9,37 +9,37 @@
     </g>
   </defs>
   <g id="puzzle" transform="translate(5, 5) scale(60)">
-    <use id="CORNER-l0-o0" xlink:href="#sticker" transform="translate(2, 0)" style="fill: white"/>
-    <use id="CORNER-l0-o1" xlink:href="#sticker" transform="translate(7, 2)" style="fill: blue"/>
-    <use id="CORNER-l0-o2" xlink:href="#sticker" transform="translate(0, 2)" style="fill: orange"/>
+    <use id="CORNER-l0-o0" xlink:href="#sticker" transform="translate(3, 1)" style="fill: white"/>
+    <use id="CORNER-l0-o1" xlink:href="#sticker" transform="translate(4, 2)" style="fill: red"/>
+    <use id="CORNER-l0-o2" xlink:href="#sticker" transform="translate(3, 2)" style="fill: limegreen"/>
 
     <use id="CORNER-l1-o0" xlink:href="#sticker" transform="translate(3, 0)" style="fill: white"/>
-    <use id="CORNER-l1-o1" xlink:href="#sticker" transform="translate(5, 2)" style="fill: red"/>
-    <use id="CORNER-l1-o2" xlink:href="#sticker" transform="translate(6, 2)" style="fill: blue"/>
+    <use id="CORNER-l1-o1" xlink:href="#sticker" transform="translate(6, 2)" style="fill: blue"/>
+    <use id="CORNER-l1-o2" xlink:href="#sticker" transform="translate(5, 2)" style="fill: red"/>
 
-    <use id="CORNER-l2-o0" xlink:href="#sticker" transform="translate(3, 1)" style="fill: white"/>
-    <use id="CORNER-l2-o1" xlink:href="#sticker" transform="translate(3, 2)" style="fill: limegreen"/>
-    <use id="CORNER-l2-o2" xlink:href="#sticker" transform="translate(4, 2)" style="fill: red"/>
+    <use id="CORNER-l2-o0" xlink:href="#sticker" transform="translate(2, 0)" style="fill: white"/>
+    <use id="CORNER-l2-o1" xlink:href="#sticker" transform="translate(0, 2)" style="fill: orange"/>
+    <use id="CORNER-l2-o2" xlink:href="#sticker" transform="translate(7, 2)" style="fill: blue"/>
 
     <use id="CORNER-l3-o0" xlink:href="#sticker" transform="translate(2, 1)" style="fill: white"/>
-    <use id="CORNER-l3-o1" xlink:href="#sticker" transform="translate(1, 2)" style="fill: orange"/>
-    <use id="CORNER-l3-o2" xlink:href="#sticker" transform="translate(2, 2)" style="fill: limegreen"/>
+    <use id="CORNER-l3-o1" xlink:href="#sticker" transform="translate(2, 2)" style="fill: limegreen"/>
+    <use id="CORNER-l3-o2" xlink:href="#sticker" transform="translate(1, 2)" style="fill: orange"/>
 
-    <use id="CORNER-l4-o0" xlink:href="#sticker" transform="translate(3, 5)" style="fill: yellow"/>
-    <use id="CORNER-l4-o1" xlink:href="#sticker" transform="translate(6, 3)" style="fill: blue"/>
-    <use id="CORNER-l4-o2" xlink:href="#sticker" transform="translate(5, 3)" style="fill: red"/>
+    <use id="CORNER-l4-o0" xlink:href="#sticker" transform="translate(3, 4)" style="fill: yellow"/>
+    <use id="CORNER-l4-o1" xlink:href="#sticker" transform="translate(3, 3)" style="fill: limegreen"/>
+    <use id="CORNER-l4-o2" xlink:href="#sticker" transform="translate(4, 3)" style="fill: red"/>
 
-    <use id="CORNER-l5-o0" xlink:href="#sticker" transform="translate(3, 4)" style="fill: yellow"/>
-    <use id="CORNER-l5-o1" xlink:href="#sticker" transform="translate(4, 3)" style="fill: red"/>
-    <use id="CORNER-l5-o2" xlink:href="#sticker" transform="translate(3, 3)" style="fill: limegreen"/>
+    <use id="CORNER-l5-o0" xlink:href="#sticker" transform="translate(2, 4)" style="fill: yellow"/>
+    <use id="CORNER-l5-o1" xlink:href="#sticker" transform="translate(1, 3)" style="fill: orange"/>
+    <use id="CORNER-l5-o2" xlink:href="#sticker" transform="translate(2, 3)" style="fill: limegreen"/>
 
-    <use id="CORNER-l6-o0" xlink:href="#sticker" transform="translate(2, 4)" style="fill: yellow"/>
-    <use id="CORNER-l6-o1" xlink:href="#sticker" transform="translate(2, 3)" style="fill: limegreen"/>
-    <use id="CORNER-l6-o2" xlink:href="#sticker" transform="translate(1, 3)" style="fill: orange"/>
+    <use id="CORNER-l6-o0" xlink:href="#sticker" transform="translate(2, 5)" style="fill: yellow"/>
+    <use id="CORNER-l6-o1" xlink:href="#sticker" transform="translate(7, 3)" style="fill: blue"/>
+    <use id="CORNER-l6-o2" xlink:href="#sticker" transform="translate(0, 3)"  style="fill: orange"/>
 
-    <use                    xlink:href="#sticker" transform="translate(2, 5)" style="fill: yellow"/>
-    <use                    xlink:href="#sticker" transform="translate(0, 3)" style="fill: orange"/>
-    <use                    xlink:href="#sticker" transform="translate(7, 3)" style="fill: blue"/>
+    <use id="CORNER-l7-o0" xlink:href="#sticker" transform="translate(3, 5)" style="fill: yellow"/>
+    <use id="CORNER-l7-o1" xlink:href="#sticker" transform="translate(5, 3)" style="fill: red"/>
+    <use id="CORNER-l7-o2" xlink:href="#sticker" transform="translate(6, 3)" style="fill: blue"/>
   </g>
 
 </svg>

@@ -1,29 +1,67 @@
 {
   "name": "2x2x2",
-  "orbits": { "CORNER": { "numPieces": 7, "orientations": 3 } },
+  "orbits": {
+    "CORNER": { "numPieces": 8, "orientations": 3 }
+  },
   "startPieces": {
     "CORNER": {
-      "permutation": [0, 1, 2, 3, 4, 5, 6],
-      "orientation": [0, 0, 0, 0, 0, 0, 0]
+      "permutation": [0, 1, 2, 3, 4, 5, 6, 7],
+      "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
     }
   },
   "moves": {
     "U": {
       "CORNER": {
-        "permutation": [3, 0, 1, 2, 4, 5, 6],
-        "orientation": [0, 0, 0, 0, 0, 0, 0]
+        "permutation": [1, 2, 3, 0, 4, 5, 6, 7],
+        "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
       }
     },
-    "R": {
+    "y": {
       "CORNER": {
-        "permutation": [0, 2, 5, 3, 1, 4, 6],
-        "orientation": [0, 2, 1, 0, 1, 2, 0]
+        "permutation": [1, 2, 3, 0, 7, 4, 5, 6],
+        "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    "x": {
+      "CORNER": {
+        "permutation": [4, 0, 3, 5, 7, 6, 2, 1],
+        "orientation": [2, 1, 2, 1, 1, 2, 1, 2]
+      }
+    },
+    "L": {
+      "CORNER": {
+        "permutation": [0, 1, 6, 2, 4, 3, 5, 7],
+        "orientation": [0, 0, 2, 1, 0, 2, 1, 0]
       }
     },
     "F": {
       "CORNER": {
-        "permutation": [0, 1, 3, 6, 4, 2, 5],
-        "orientation": [0, 0, 0, 0, 0, 0, 0]
+        "permutation": [3, 1, 2, 5, 0, 4, 6, 7],
+        "orientation": [1, 0, 0, 2, 2, 1, 0, 0]
+      }
+    },
+    "R": {
+      "CORNER": {
+        "permutation": [4, 0, 2, 3, 7, 5, 6, 1],
+        "orientation": [2, 1, 0, 0, 1, 0, 0, 2]
+      }
+    },
+    "B": {
+      "CORNER": {
+        "permutation": [0, 7, 1, 3, 4, 5, 2, 6],
+        "orientation": [0, 2, 1, 0, 0, 0, 2, 1]
+      }
+    },
+    "D": {
+      "CORNER": {
+        "permutation": [0, 1, 2, 3, 5, 6, 7, 4],
+        "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    "z": {
+      "CORNER": {
+        "permutation": [3, 2, 6, 5, 0, 4, 7, 1],
+        "orientation": [1, 2, 1, 2, 2, 1, 2, 1]
       }
     }
   }
