@@ -30,58 +30,58 @@
 <!--    5 -           D              -->
 
   <g id="puzzle" transform="translate(5, 5) scale(40, 69.28203232)">
-    <!-- CENTERS -->
-    <use id="CENTERS-l0-o0" xlink:href="#stickerV" transform="translate(5, 1)" style="fill: limegreen"/>
-    <use id="CENTERS-l0-o1" xlink:href="#stickerA" transform="translate(3, 0)" style="fill: red"/>
-    <use id="CENTERS-l0-o2" xlink:href="#stickerA" transform="translate(7, 0)" style="fill: blue"/>
+    <!-- CENTER -->
+    <use id="CENTER-l0-o0" xlink:href="#stickerV" transform="translate(5, 1)" style="fill: limegreen"/>
+    <use id="CENTER-l0-o1" xlink:href="#stickerA" transform="translate(3, 0)" style="fill: red"/>
+    <use id="CENTER-l0-o2" xlink:href="#stickerA" transform="translate(7, 0)" style="fill: blue"/>
 
-    <use id="CENTERS-l1-o0" xlink:href="#stickerV" transform="translate(4, 2)" style="fill: limegreen"/>
-    <use id="CENTERS-l1-o1" xlink:href="#stickerA" transform="translate(4, 3)" style="fill: yellow"/>
-    <use id="CENTERS-l1-o2" xlink:href="#stickerA" transform="translate(2, 1)" style="fill: red"/>
+    <use id="CENTER-l1-o0" xlink:href="#stickerV" transform="translate(4, 2)" style="fill: limegreen"/>
+    <use id="CENTER-l1-o1" xlink:href="#stickerA" transform="translate(4, 3)" style="fill: yellow"/>
+    <use id="CENTER-l1-o2" xlink:href="#stickerA" transform="translate(2, 1)" style="fill: red"/>
 
-    <use id="CENTERS-l2-o0" xlink:href="#stickerV" transform="translate(6, 2)" style="fill: limegreen"/>
-    <use id="CENTERS-l2-o1" xlink:href="#stickerA" transform="translate(8, 1)" style="fill: blue"/>
-    <use id="CENTERS-l2-o2" xlink:href="#stickerA" transform="translate(6, 3)" style="fill: yellow"/>
+    <use id="CENTER-l2-o0" xlink:href="#stickerV" transform="translate(6, 2)" style="fill: limegreen"/>
+    <use id="CENTER-l2-o1" xlink:href="#stickerA" transform="translate(8, 1)" style="fill: blue"/>
+    <use id="CENTER-l2-o2" xlink:href="#stickerA" transform="translate(6, 3)" style="fill: yellow"/>
 
-    <use id="CENTERS-l3-o0" xlink:href="#stickerA" transform="translate(9, 0)" style="fill: blue"/>
-    <use id="CENTERS-l3-o1" xlink:href="#stickerA" transform="translate(1, 0)" style="fill: red"/>
-    <use id="CENTERS-l3-o2" xlink:href="#stickerA" transform="translate(5, 4)" style="fill: yellow"/>
+    <use id="CENTER-l3-o0" xlink:href="#stickerA" transform="translate(9, 0)" style="fill: blue"/>
+    <use id="CENTER-l3-o1" xlink:href="#stickerA" transform="translate(1, 0)" style="fill: red"/>
+    <use id="CENTER-l3-o2" xlink:href="#stickerA" transform="translate(5, 4)" style="fill: yellow"/>
 
-    <!-- TIPS -->
-    <use id="TIPS-l0-o0" xlink:href="#stickerA" transform="translate(5, 0)" style="fill: limegreen"/>
-    <use id="TIPS-l0-o1" xlink:href="#stickerV" transform="translate(4, 0)" style="fill: red"/>
-    <use id="TIPS-l0-o2" xlink:href="#stickerV" transform="translate(6, 0)" style="fill: blue"/>
+    <!-- TIP -->
+    <use id="TIP-l0-o0" xlink:href="#stickerA" transform="translate(5, 0)" style="fill: limegreen"/>
+    <use id="TIP-l0-o1" xlink:href="#stickerV" transform="translate(4, 0)" style="fill: red"/>
+    <use id="TIP-l0-o2" xlink:href="#stickerV" transform="translate(6, 0)" style="fill: blue"/>
 
-    <use id="TIPS-l1-o0" xlink:href="#stickerA" transform="translate(3, 2)" style="fill: limegreen"/>
-    <use id="TIPS-l1-o1" xlink:href="#stickerV" transform="translate(3, 3)" style="fill: yellow"/>
-    <use id="TIPS-l1-o2" xlink:href="#stickerV" transform="translate(2, 2)" style="fill: red"/>
+    <use id="TIP-l1-o0" xlink:href="#stickerA" transform="translate(3, 2)" style="fill: limegreen"/>
+    <use id="TIP-l1-o1" xlink:href="#stickerV" transform="translate(3, 3)" style="fill: yellow"/>
+    <use id="TIP-l1-o2" xlink:href="#stickerV" transform="translate(2, 2)" style="fill: red"/>
 
-    <use id="TIPS-l2-o0" xlink:href="#stickerV" transform="translate(8, 2)" style="fill: blue"/>
-    <use id="TIPS-l2-o1" xlink:href="#stickerV" transform="translate(7, 3)" style="fill: yellow"/>
-    <use id="TIPS-l2-o2" xlink:href="#stickerA" transform="translate(7, 2)" style="fill: limegreen"/>
+    <use id="TIP-l2-o0" xlink:href="#stickerV" transform="translate(8, 2)" style="fill: blue"/>
+    <use id="TIP-l2-o1" xlink:href="#stickerV" transform="translate(7, 3)" style="fill: yellow"/>
+    <use id="TIP-l2-o2" xlink:href="#stickerA" transform="translate(7, 2)" style="fill: limegreen"/>
 
-    <use id="TIPS-l3-o0" xlink:href="#stickerV" transform="translate(10,0)" style="fill: blue"/>
-    <use id="TIPS-l3-o1" xlink:href="#stickerV" transform="translate(0, 0)" style="fill: red"/>
-    <use id="TIPS-l3-o2" xlink:href="#stickerV" transform="translate(5, 5)" style="fill: yellow"/>
+    <use id="TIP-l3-o0" xlink:href="#stickerV" transform="translate(10,0)" style="fill: blue"/>
+    <use id="TIP-l3-o1" xlink:href="#stickerV" transform="translate(0, 0)" style="fill: red"/>
+    <use id="TIP-l3-o2" xlink:href="#stickerV" transform="translate(5, 5)" style="fill: yellow"/>
 
-    <!-- EDGES -->
-    <use id="EDGES-l0-o0" xlink:href="#stickerA" transform="translate(4, 1)" style="fill: limegreen"/>
-    <use id="EDGES-l0-o1" xlink:href="#stickerV" transform="translate(3, 1)" style="fill: red"/>
+    <!-- EDGE -->
+    <use id="EDGE-l0-o0" xlink:href="#stickerA" transform="translate(4, 1)" style="fill: limegreen"/>
+    <use id="EDGE-l0-o1" xlink:href="#stickerV" transform="translate(3, 1)" style="fill: red"/>
 
-    <use id="EDGES-l1-o0" xlink:href="#stickerA" transform="translate(6, 1)" style="fill: limegreen"/>
-    <use id="EDGES-l1-o1" xlink:href="#stickerV" transform="translate(7, 1)" style="fill: blue"/>
+    <use id="EDGE-l1-o0" xlink:href="#stickerA" transform="translate(6, 1)" style="fill: limegreen"/>
+    <use id="EDGE-l1-o1" xlink:href="#stickerV" transform="translate(7, 1)" style="fill: blue"/>
 
-    <use id="EDGES-l2-o0" xlink:href="#stickerV" transform="translate(8, 0)" style="fill: blue"/>
-    <use id="EDGES-l2-o1" xlink:href="#stickerV" transform="translate(2, 0)" style="fill: red"/>
+    <use id="EDGE-l2-o0" xlink:href="#stickerV" transform="translate(8, 0)" style="fill: blue"/>
+    <use id="EDGE-l2-o1" xlink:href="#stickerV" transform="translate(2, 0)" style="fill: red"/>
 
-    <use id="EDGES-l3-o0" xlink:href="#stickerV" transform="translate(5, 3)" style="fill: yellow"/>
-    <use id="EDGES-l3-o1" xlink:href="#stickerA" transform="translate(5, 2)" style="fill: limegreen"/>
+    <use id="EDGE-l3-o0" xlink:href="#stickerV" transform="translate(5, 3)" style="fill: yellow"/>
+    <use id="EDGE-l3-o1" xlink:href="#stickerA" transform="translate(5, 2)" style="fill: limegreen"/>
 
-    <use id="EDGES-l4-o0" xlink:href="#stickerV" transform="translate(6, 4)" style="fill: yellow"/>
-    <use id="EDGES-l4-o1" xlink:href="#stickerV" transform="translate(9, 1)" style="fill: blue"/>
+    <use id="EDGE-l4-o0" xlink:href="#stickerV" transform="translate(6, 4)" style="fill: yellow"/>
+    <use id="EDGE-l4-o1" xlink:href="#stickerV" transform="translate(9, 1)" style="fill: blue"/>
 
-    <use id="EDGES-l5-o0" xlink:href="#stickerV" transform="translate(4, 4)" style="fill: yellow"/>
-    <use id="EDGES-l5-o1" xlink:href="#stickerV" transform="translate(1, 1)" style="fill: red"/>
+    <use id="EDGE-l5-o0" xlink:href="#stickerV" transform="translate(4, 4)" style="fill: yellow"/>
+    <use id="EDGE-l5-o1" xlink:href="#stickerV" transform="translate(1, 1)" style="fill: red"/>
   </g>
 
 </svg>
