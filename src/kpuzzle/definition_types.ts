@@ -1,4 +1,4 @@
-import { MoveExpander } from "./kpuzzle";
+import { MoveExpander } from "./move_expander";
 
 // TODO: Properly handle freezing
 export interface OrbitTransformation {
