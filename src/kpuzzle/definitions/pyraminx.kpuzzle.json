@@ -27,7 +27,7 @@
       "TIP": { "permutation": [0, 1, 2, 3], "orientation": [0, 1, 0, 0] },
       "EDGE": {
         "permutation": [5, 1, 2, 0, 4, 3],
-        "orentation": [1, 0, 0, 0, 0, 1]
+        "orientation": [1, 0, 0, 0, 0, 1]
       }
     },
     "R": {
