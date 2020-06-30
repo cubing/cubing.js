@@ -29,6 +29,7 @@ const expectedData: { [nam: string]: string } = {
   "professor skewb": "professor skewb, 6, 25, 110, 11, 16, 360",
   "compy cube": "compy cube, 6, 9, 27, 4, 12, 42",
   "helicopter": "helicopter, 6, 8, 32, 2, 18, 18",
+  "curvy copter": "curvy copter, 6, 13, 51, 4, 18, 18",
   "dino": "dino, 6, 4, 12, 1, 12, 7",
   "little chop": "little chop, 6, 4, 24, 1, 12, 5",
   "pyramorphix": "pyramorphix, 4, 4, 8, 2, 6, 3",

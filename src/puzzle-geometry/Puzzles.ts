@@ -25,6 +25,7 @@ export const Puzzles: { [name: string]: PuzzleDescriptionString } = {
   "professor skewb": "c v 0 v 0.38",
   "compy cube": "c v 0.915641442663986",
   "helicopter": "c e 0.707106781186547",
+  "curvy copter": "c e 0.83",
   "dino": "c v 0.577350269189626",
   "little chop": "c e 0",
   "pyramorphix": "t e 0",
