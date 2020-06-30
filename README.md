@@ -1,17 +1,18 @@
-
 <img src="cubing.js.jpg" width="100%">
 
 # `cubing.js`
 
+![Node.js CI](https://github.com/cubing/cubing.js/workflows/Node.js%20CI/badge.svg)
+
 `cubing.js` is a collection of Javascript libraries, still under development.
 
-| Library | Purpose |
-|---------|---------|
-| `cubing/alg` | Parse and transform twisty puzzle algorithms ("algs"). |
-| `cubing/bluetooth` | Connect to bluetooth twisty puzzles. |
-| `cubing/kpuzzle` | Represent and transform twisty puzzles. |
-| `cubing/twisty` | Animate and interact with twisty puzzles. |
-| `cubing/puzzle-geometry` | Generate new twisty puzzle geometries. |
+| Library                  | Purpose                                                |
+| ------------------------ | ------------------------------------------------------ |
+| `cubing/alg`             | Parse and transform twisty puzzle algorithms ("algs"). |
+| `cubing/bluetooth`       | Connect to bluetooth twisty puzzles.                   |
+| `cubing/kpuzzle`         | Represent and transform twisty puzzles.                |
+| `cubing/twisty`          | Animate and interact with twisty puzzles.              |
+| `cubing/puzzle-geometry` | Generate new twisty puzzle geometries.                 |
 
 ## Development
 
