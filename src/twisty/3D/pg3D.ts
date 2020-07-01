@@ -3,7 +3,6 @@ import {
   DoubleSide,
   Euler,
   Face3,
-  FaceColors,
   Geometry,
   Group,
   Mesh,
@@ -31,7 +30,7 @@ const foundationMaterial = new MeshBasicMaterial({
   opacity: 0.75,
 });
 const stickerMaterial = new MeshBasicMaterial({
-  vertexColors: FaceColors,
+  vertexColors: true,
   //    side: DoubleSide,
 });
 const polyMaterial = new MeshBasicMaterial({
