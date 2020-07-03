@@ -63,12 +63,7 @@ export class BasicRotationTransformer implements StreamTransformer {
     // console.log(maxAxis(U.applyQuaternion(quat)), maxAxis(F.applyQuaternion(quat)));
     console.log(q2);
 
-    orientationEvent.quaternion = {
-      x: q2.x,
-      y: q2.y,
-      z: q2.z,
-      w: q2.w,
-    };
+    orientationEvent.quaternion = quat;
 
     console.log(orientationEvent.quaternion);
   }

@@ -1,6 +1,7 @@
 import { BlockMove } from "../alg";
 import { Transformation } from "../kpuzzle";
 import { BasicRotationTransformer, StreamTransformer } from "./transformer";
+import { Quaternion } from "three";
 
 /******** BluetoothPuzzle ********/
 
@@ -19,7 +20,7 @@ export interface MoveEvent {
 
 // TODO: Only use the `quaternion` field in the `MoveEvent`?
 export interface OrientationEvent {
-  quaternion: { x: number; y: number; z: number; w: number };
+  quaternion: Quaternion;
   timeStamp: number;
   debug?: object;
 }

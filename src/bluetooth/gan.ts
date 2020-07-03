@@ -406,10 +406,9 @@ export class GanCube extends BluetoothPuzzle {
         // quaternion: physicalState.rotQuat(),
       });
     }
-    const { x, y, z, w } = physicalState.rotQuat();
     this.dispatchOrientation({
       timeStamp: physicalState.timeStamp,
-      quaternion: { x, y, z, w },
+      quaternion: physicalState.rotQuat(),
     });
     this.lastMoveCounter = physicalState.moveCounter();
   }

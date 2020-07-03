@@ -147,9 +147,8 @@ export class GoCube extends BluetoothPuzzle {
       this.lastTarget.slerp(targetQuat, 0.5);
       this.currentQuat.rotateTowards(this.lastTarget, rotateTowardsRate);
 
-      const { x, y, z, w } = this.currentQuat;
       this.dispatchOrientation({
-        quaternion: { x, y, z, w },
+        quaternion: this.currentQuat,
         timeStamp: event.timeStamp,
       });
     }
