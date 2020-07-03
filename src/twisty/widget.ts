@@ -317,6 +317,7 @@ export class KSolveView implements CursorObserver, JumpObserver {
 
 interface Cube3DViewConfig {
   experimentalShowBackView?: boolean;
+  experimentalInitialVantagePosition?: Vector3;
 }
 
 export class Cube3DView implements CursorObserver, JumpObserver {
@@ -339,7 +340,9 @@ export class Cube3DView implements CursorObserver, JumpObserver {
     wrapper.classList.add("front");
     this.element.appendChild(wrapper);
     setTimeout(() => {
-      this.cube3D.newVantage(wrapper);
+      this.cube3D.newVantage(wrapper, {
+        position: this.config.experimentalInitialVantagePosition,
+      });
     }, 0);
 
     if (this.config.experimentalShowBackView ?? false) {
@@ -353,8 +356,11 @@ export class Cube3DView implements CursorObserver, JumpObserver {
     wrapper.classList.add("back");
     this.element.appendChild(wrapper);
     setTimeout(() => {
+      const position = this.config.experimentalInitialVantagePosition
+        ? this.config.experimentalInitialVantagePosition.multiplyScalar(-1)
+        : new Vector3(-1.25, -2.5, -2.5);
       this.cube3D.newVantage(wrapper, {
-        position: new Vector3(-1.25, -2.5, -2.5),
+        position,
       });
     }, 0);
   }
