@@ -54,6 +54,9 @@ puzzle-pane.loading {
   place-content: center;
 }
 
-@import "../../src/twisty/twisty.css";
+puzzle-pane twisty-player {
+  width: 100%;
+  height: 100%;
+}
 
 @import "./control-pane.css";
