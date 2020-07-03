@@ -75,7 +75,7 @@ const cjs = {
     },
   ],
   plugins,
-  onwarn: onwarn(["THIS_IS_UNDEFINED"]),
+  onwarn: onwarn(["UNRESOLVED_IMPORT", "THIS_IS_UNDEFINED"]),
 };
 
 const esm = {
@@ -89,7 +89,7 @@ const esm = {
     },
   ],
   plugins: [...plugins],
-  onwarn: onwarn(["THIS_IS_UNDEFINED"]),
+  onwarn: onwarn(["UNRESOLVED_IMPORT", "THIS_IS_UNDEFINED"]),
 };
 
 const umd = {
