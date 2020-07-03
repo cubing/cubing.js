@@ -1,7 +1,7 @@
 import { parse } from "../../src/alg/index";
 import { parse as kpuzzleParse } from "../../src/kpuzzle/index";
 import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
-import { Twisty } from "../../src/twisty/index";
+import { TwistyPlayer } from "../../src/twisty/index";
 
 window.addEventListener("load", () => {
   const pg = getPuzzleGeometryByName("megaminx", ["orientcenters", "true"]);
@@ -9,10 +9,7 @@ window.addEventListener("load", () => {
 
   const kpuzzle = kpuzzleParse(pg.writeksolve("TwizzlePuzzle", true));
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const elem = document.querySelector("#custom-pg3d")!;
-  // tslint:disable-next-line: no-unused-expression
-  new Twisty(elem, {
+  const twistyPlayer = new TwistyPlayer({
     alg: parse("[[U', R], [U, R']]"),
     puzzle: kpuzzle,
     playerConfig: {
@@ -23,4 +20,6 @@ window.addEventListener("load", () => {
       },
     },
   });
+
+  document.body.appendChild(twistyPlayer);
 });

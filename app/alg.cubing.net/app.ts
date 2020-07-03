@@ -1,10 +1,9 @@
 import { algToString, parse, Sequence } from "../../src/alg";
-import { Twisty, TwistyParams } from "../../src/twisty";
+import { TwistyPlayer, TwistyParams } from "../../src/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
 import { setURLParams } from "./url-params";
-import { TwistyPlayer } from "../../src/twisty/twisty";
 
 export interface AppData {
   puzzleName: string;
@@ -12,7 +11,7 @@ export interface AppData {
 }
 
 export class App {
-  public twisty: Twisty;
+  public twistyPlayer: TwistyPlayer;
   private puzzlePane: HTMLElement;
   constructor(public element: Element, initialData: AppData) {
     this.puzzlePane = findOrCreateChild(
@@ -66,15 +65,15 @@ export class App {
       default:
         throw new Error("Not a displayable puzzle type.");
     }
-    this.twisty = new TwistyPlayer(twistyParams);
+    this.twistyPlayer = new TwistyPlayer(twistyParams);
     this.setAlg(initialData.alg);
-    this.puzzlePane.appendChild(this.twisty);
+    this.puzzlePane.appendChild(this.twistyPlayer);
   }
 
   // Boolean indicates success (e.g. alg is valid).
   private setAlg(alg: Sequence): boolean {
     try {
-      this.twisty.experimentalSetAlg(alg);
+      this.twistyPlayer.experimentalSetAlg(alg);
       setURLParams({ alg });
       return true;
     } catch (e) {

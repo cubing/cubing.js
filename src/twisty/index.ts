@@ -10,5 +10,5 @@ export {
 } from "./cursor";
 export { KSolvePuzzle } from "./puzzle";
 export { toTimeline } from "./stream/timeline";
-export { Twisty, TwistyParams } from "./twisty";
+export { TwistyPlayer, TwistyParams } from "./TwistyPlayer";
 export { experimentalShowJumpingFlash } from "./widget";

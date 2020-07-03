@@ -1,4 +1,17 @@
-export const mainStyleText = `twisty {
+export const mainStyleText = `
+:host {
+  width: 512px;
+  height: 384px;
+  contain: content;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  place-content: center;
+}
+
+twisty {
   contain: size;
 }
 

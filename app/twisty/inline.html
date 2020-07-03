@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf8" />
     <title>Inline Test | twisty.js</title>
-    <link href="../../src/twisty/twisty.css" rel="stylesheet" type="text/css" />
     <link href="./inline.css" rel="stylesheet" type="text/css" />
     <script src="./inline.ts"></script>
   </head>
@@ -13,22 +12,22 @@
       <p>
         This should be automatically initialized:
       </p>
-      <twisty
+      <twisty-player
         puzzle="3x3x3"
         alg="U R U' R' U' R U' r2' u r U r2' u' r2 U' r' U r' U2 r"
-      ></twisty>
+      ></twisty-player>
       <p>
         This should be 2D:
       </p>
-      <twisty
+      <twisty-player
         puzzle="3x3x3"
         alg="R U R' U' R' F R2 U' R' U' R U R' F'"
         visualization="2D"
-      ></twisty>
+      ></twisty-player>
       <p>
         This should be automatically initialized, too:
       </p>
-      <twisty puzzle="pyraminx" alg="R U R' U R U R'"></twisty>
+      <twisty-player puzzle="pyraminx" alg="R U R' U R U R'"></twisty-player>
       <p>
         Square-1 parity:
       </p>
@@ -39,33 +38,27 @@
           justify-content: space-around;
         "
       >
-        <twisty
+        <twisty-player
           puzzle="sq1"
           style="height: 400px; width: 45%; margin: 0;"
           alg="SLICE U3' SLICE D3 SLICE D3' SLICE D3 SLICE U2 SLICE D2 SLICE U2' SLICE U4 SLICE D2' SLICE D2 SLICE U1' D4 SLICE D3' SLICE D3"
         >
-        </twisty>
-        <twisty
+        </twisty-player>
+        <twisty-player
           puzzle="sq1"
           style="height: 400px; width: 45%; margin: 0;"
           alg="SLICE U3 D3 SLICE U1 SLICE U2' D2' SLICE U2 SLICE U2 D2 SLICE U1' SLICE U3' D3' SLICE U2' SLICE U3 D3 SLICE U3 SLICE U1' D1' SLICE U3' SLICE U1 D1 SLICE U4' D3'"
         >
-        </twisty>
+        </twisty-player>
       </div>
-      <p>But this should <strong>not</strong> be initialized:</p>
-      <twisty initialization="custom"></twisty>
       <p>
         This should become initialized via JS:
       </p>
-      <twisty id="custom-example" initialization="custom"></twisty>
+      <div id="js-init-example"></div>
       <p>
         Custom PG3D:
       </p>
-      <twisty
-        id="custom-pg3d"
-        initialization="custom"
-        style="height: 400px;"
-      ></twisty>
+      <div id="custom-pg3d"></div>
     </div>
   </body>
 </html>

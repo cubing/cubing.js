@@ -1,10 +1,15 @@
-import { BlockMove, experimentalAppendBlockMove, Sequence } from "../alg";
+import {
+  BlockMove,
+  experimentalAppendBlockMove,
+  parse,
+  Sequence,
+} from "../alg";
 import { KPuzzleDefinition, Puzzles } from "../kpuzzle";
 import { AnimModel } from "./anim";
+import { mainStyleText } from "./css";
 import { Cursor } from "./cursor";
 import { KSolvePuzzle, Puzzle } from "./puzzle";
 import { Player, PlayerConfig } from "./widget";
-import { mainStyleText } from "./css";
 
 export class TwistyParams {
   public alg?: Sequence;
@@ -18,6 +23,8 @@ export class TwistyPlayer extends HTMLElement {
   #wrapper: HTMLDivElement = document.createElement("div");
   #styleElem: HTMLStyleElement;
 
+  #cachedParams: TwistyParams | undefined;
+
   // tslint:disable-next-line: member-access // TODO: Remove once we have a linter that understands private fields.
   #anim: AnimModel;
   // tslint:disable-next-line: member-access // TODO: Remove once we have a linter that understands private fields.
@@ -27,8 +34,10 @@ export class TwistyPlayer extends HTMLElement {
   private alg: Sequence;
   private puzzleDef: KPuzzleDefinition; // TODO: Replace this with a Puzzle instance.
   private coalesceModFunc: (mv: BlockMove) => number;
-  constructor(config: TwistyParams = {}) {
+  constructor(cachedParams?: TwistyParams) {
     super();
+
+    this.#cachedParams = cachedParams;
 
     this.#shadow = this.attachShadow({ mode: "closed" });
     this.#wrapper.classList.add("wrapper");
@@ -37,14 +46,31 @@ export class TwistyPlayer extends HTMLElement {
     this.#styleElem = document.createElement("style");
     this.#styleElem.textContent = mainStyleText;
     this.#shadow.appendChild(this.#styleElem);
+  }
 
-    this.alg = config.alg ?? new Sequence([]);
-    this.puzzleDef = config.puzzle ?? Puzzles["3x3x3"];
+  protected connectedCallback(): void {
+    // TODO: unify config storage
+    let params = this.#cachedParams;
+    console.log("ADsd", params, this.#cachedParams);
+    if (!params) {
+      params = {
+        alg: parse(this.getAttribute("alg") ?? ""),
+        puzzle: Puzzles[this.getAttribute("puzzle") ?? "3x3x3"],
+        playerConfig: {
+          visualizationFormat: (this.getAttribute("visualization") ??
+            undefined) as any, // TODO
+        },
+      };
+    }
+    console.log("gdfg", params, this.#cachedParams);
+
+    this.alg = params.alg ?? new Sequence([]);
+    this.puzzleDef = params.puzzle ?? Puzzles["3x3x3"];
     this.#cursor = new Cursor(this.alg, new KSolvePuzzle(this.puzzleDef));
     // this.timeline = new Timeline(Example.HeadlightSwaps);
     this.#anim = new AnimModel(this.#cursor);
 
-    this.#player = new Player(this.#anim, this.puzzleDef, config.playerConfig);
+    this.#player = new Player(this.#anim, this.puzzleDef, params.playerConfig);
     this.#wrapper.appendChild(this.#player.element);
     this.coalesceModFunc = (_mv: BlockMove): number => 0;
   }
@@ -109,64 +135,6 @@ export class TwistyPlayer extends HTMLElement {
   }
 }
 
-// function paramsFromTwistyElem(elem: Element): TwistyParams {
-//   const params = new TwistyParams();
-
-//   const puzzle = elem.getAttribute("puzzle");
-//   if (puzzle) {
-//     params.puzzle = Puzzles[puzzle];
-//   }
-
-//   const algo = elem.getAttribute("alg");
-//   if (algo) {
-//     params.alg = parse(algo); // TODO: parse
-//   }
-
-//   const visualization = elem.getAttribute("visualization");
-//   // TODO: Factor this code out for testing.
-//   if (visualization) {
-//     if (
-//       visualization === "2D" ||
-//       visualization === "3D" ||
-//       visualization === "PG3D"
-//     ) {
-//       params.playerConfig = { visualizationFormat: visualization };
-//     } else {
-//       console.warn(`Invalid visualization: ${visualization}`);
-//     }
-//   }
-
-//   return params;
-// }
-
 if (typeof customElements !== "undefined") {
   customElements.define("twisty-player", TwistyPlayer);
 }
-
-// // Initialize a Twisty for the given Element unless the element's
-// // `initialization` attribute is set to `custom`.
-// function autoInitialize(elem: Element): Twisty | null {
-//   const ini = elem.getAttribute("initialization");
-//   const params = paramsFromTwistyElem(elem);
-//   if (ini !== "custom") {
-//     return new Twisty(elem, params);
-//   }
-//   return null;
-// }
-
-// function autoInitializePage(): void {
-//   const elems = document.querySelectorAll("twisty");
-//   if (elems.length > 0) {
-//     console.log(
-//       `Found ${elems.length} twisty elem${
-//         elems.length === 1 ? "" : "s"
-//       } on page.`,
-//     );
-//   }
-
-//   elems.forEach(autoInitialize);
-// }
-
-// if (typeof window !== "undefined") {
-//   window.addEventListener("load", autoInitializePage);
-// }

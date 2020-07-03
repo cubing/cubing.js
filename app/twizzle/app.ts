@@ -28,8 +28,8 @@ import {
 } from "../../src/puzzle-geometry/index";
 import {
   experimentalShowJumpingFlash,
-  Twisty,
   Vantage,
+  TwistyPlayer,
 } from "../../src/twisty/index";
 import { getURLParam, setURLParams } from "./url-params";
 import { parse } from "../../src/alg/parser/parser";
@@ -37,7 +37,7 @@ import { countMoves } from "./move-counter";
 
 experimentalShowJumpingFlash(false);
 
-let twisty: Twisty;
+let twisty: TwistyPlayer;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
 let safeKpuzzle: KPuzzleDefinition | undefined;
@@ -185,13 +185,13 @@ function updateMoveCount(alg?: Sequence): void {
 
 function setAlgo(str: string, writeback: boolean): void {
   let seq: Sequence = algparse("");
-  const elem = document.querySelector("#custom-example");
+  const elem = document.querySelector("#twisty-wrapper");
   if (elem) {
     // this part should never throw, and we should not need to do
     // it again.  But for now we always do.
     if (!twisty || puzzleSelected) {
       elem.textContent = "";
-      twisty = new Twisty(elem, {
+      twisty = new TwistyPlayer({
         puzzle,
         alg: new Sequence([]),
         playerConfig: {
@@ -204,6 +204,7 @@ function setAlgo(str: string, writeback: boolean): void {
           },
         },
       });
+      elem.appendChild(twisty);
       twisty.setCoalesceModFunc(getModValueForMove);
 
       const vantages: Vantage[] = twisty

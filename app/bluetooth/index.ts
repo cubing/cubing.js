@@ -10,19 +10,22 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../src/bluetooth/index";
-import { experimentalShowJumpingFlash, Twisty } from "../../src/twisty/index";
+import {
+  experimentalShowJumpingFlash,
+  TwistyPlayer,
+} from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
 
-async function asyncSetup(twisty: Twisty): Promise<void> {
+async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
   console.log("asyncSetup");
   const keyboard = await debugKeyboardConnect(
-    (twisty as any).player.cube3DView.element,
+    twistyPlayer.experimentalGetPlayer().cube3DView.element,
   );
-  console.log("keyboard", twisty, keyboard);
+  console.log("keyboard", twistyPlayer, keyboard);
   keyboard.addMoveListener((e: MoveEvent) => {
     console.log("listener", e);
-    twisty.experimentalAddMove(e.latestMove);
+    twistyPlayer.experimentalAddMove(e.latestMove);
   });
 }
 
@@ -36,11 +39,10 @@ window.puzzle = null;
 
 console.log(algToString(invert(parse("R U R' F D"))));
 window.addEventListener("load", async () => {
-  const twistyElem = document.createElement("twisty");
-  const twisty = new Twisty(twistyElem, { alg: new Sequence([]) });
-  document.body.appendChild(twisty.element);
+  const twistyPlayer = new TwistyPlayer({ alg: new Sequence([]) });
+  document.body.appendChild(twistyPlayer);
 
-  asyncSetup(twisty);
+  asyncSetup(twistyPlayer);
 
   // latestMove: BlockMove;
   // timeStamp: number;
@@ -53,16 +55,19 @@ window.addEventListener("load", async () => {
     ) as HTMLInputElement).checked;
     window.puzzle = await connect({ acceptAllDevices });
     window.puzzle.addMoveListener((e: MoveEvent) => {
-      twisty.experimentalAddMove(e.latestMove);
+      twistyPlayer.experimentalAddMove(e.latestMove);
     });
     window.puzzle.addOrientationListener((e: OrientationEvent) => {
       const { x, y, z, w } = e.quaternion;
-      twisty
+      twistyPlayer
         .experimentalGetPlayer()
         .cube3DView.experimentalGetCube3D()
         .experimentalGetCube()
         .quaternion.copy(new Quaternion(x, y, z, w));
-      twisty.experimentalGetAnim().experimentalGetScheduler().singleFrame();
+      twistyPlayer
+        .experimentalGetAnim()
+        .experimentalGetScheduler()
+        .singleFrame();
     });
   });
 });
