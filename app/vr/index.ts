@@ -27,7 +27,7 @@ class VRCubeDemo {
     this.renderer = new WebGLRenderer({ antialias: true });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.vr.enabled = true;
+    // this.renderer.vr.enabled = true; // TODO
 
     this.vrInput = new VRInput(this.renderer);
 
