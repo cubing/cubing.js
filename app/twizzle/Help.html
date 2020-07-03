@@ -180,9 +180,9 @@
       The alg parser also supports sequences of moves, grouping with
       parentheses, conjugating by enclosing in brackets with the two components
       separated by a comma, commutation by enclosing in brackets with the two
-      components separated by a colon, and negation and repetition by appending a
-      number and/or a prime character to any group, commutator, or conjugation.
-      Thus, the following are legal sequences on the 3x3x3:
+      components separated by a colon, and negation and repetition by appending
+      a number and/or a prime character to any group, commutator, or
+      conjugation. Thus, the following are legal sequences on the 3x3x3:
     </p>
     <pre><code>R U R&#39; U R U2 R&#39;
 [R&#39; D R F D F&#39;, U2]
@@ -306,11 +306,14 @@
     <p>
       The GAP output consists of a set of move definitions (all starting with
       M_) followed by a definition of Gen that is a list of all moves, and a
-      variable ip which contains a set of tuples of identical pieces.  To
+      variable ip which contains a set of tuples of identical pieces. To
       calculate the size of the supergroup (that is, not taking into account
       full-puzzle rotations or identical pieces), use the GAP command
-      Size(Group(Gen));.  To calculate how much this is reduced by identical
-      pieces, use the GAP command Size(Stabilizer(Group(Gen), ip, OnTuplesSets));.
+      Size(Group(Gen));. To calculate how much this is reduced by identical
+      pieces, use the GAP command Size(Stabilizer(Group(Gen), ip,
+      OnTuplesSets));.
+    </p>
+
     <p>
       Twizzle is being developed by Tomas Rokicki and Lucas Garron. You can
       follow our progress at
