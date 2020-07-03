@@ -51,7 +51,6 @@ export class TwistyPlayer extends HTMLElement {
   protected connectedCallback(): void {
     // TODO: unify config storage
     let params = this.#cachedParams;
-    console.log("ADsd", params, this.#cachedParams);
     if (!params) {
       params = {
         alg: parse(this.getAttribute("alg") ?? ""),
@@ -62,7 +61,6 @@ export class TwistyPlayer extends HTMLElement {
         },
       };
     }
-    console.log("gdfg", params, this.#cachedParams);
 
     this.alg = params.alg ?? new Sequence([]);
     this.puzzleDef = params.puzzle ?? Puzzles["3x3x3"];
