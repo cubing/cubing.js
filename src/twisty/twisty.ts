@@ -1,15 +1,10 @@
-import {
-  BlockMove,
-  Example,
-  experimentalAppendBlockMove,
-  parse,
-  Sequence,
-} from "../alg";
+import { BlockMove, experimentalAppendBlockMove, Sequence } from "../alg";
 import { KPuzzleDefinition, Puzzles } from "../kpuzzle";
 import { AnimModel } from "./anim";
 import { Cursor } from "./cursor";
 import { KSolvePuzzle, Puzzle } from "./puzzle";
 import { Player, PlayerConfig } from "./widget";
+import { mainStyleText } from "./css";
 
 export class TwistyParams {
   public alg?: Sequence;
@@ -18,7 +13,11 @@ export class TwistyParams {
 }
 
 // TODO: Turn Twisty into a module and move Twisty.Twisty into Twisty proper.
-export class Twisty {
+export class TwistyPlayer extends HTMLElement {
+  #shadow: ShadowRoot;
+  #wrapper: HTMLDivElement = document.createElement("div");
+  #styleElem: HTMLStyleElement;
+
   // tslint:disable-next-line: member-access // TODO: Remove once we have a linter that understands private fields.
   #anim: AnimModel;
   // tslint:disable-next-line: member-access // TODO: Remove once we have a linter that understands private fields.
@@ -28,15 +27,25 @@ export class Twisty {
   private alg: Sequence;
   private puzzleDef: KPuzzleDefinition; // TODO: Replace this with a Puzzle instance.
   private coalesceModFunc: (mv: BlockMove) => number;
-  constructor(public element: Element, config: TwistyParams = {}) {
-    this.alg = config.alg || Example.Niklas;
-    this.puzzleDef = config.puzzle || Puzzles["3x3x3"];
+  constructor(config: TwistyParams = {}) {
+    super();
+
+    this.#shadow = this.attachShadow({ mode: "closed" });
+    this.#wrapper.classList.add("wrapper");
+    this.#shadow.appendChild(this.#wrapper);
+
+    this.#styleElem = document.createElement("style");
+    this.#styleElem.textContent = mainStyleText;
+    this.#shadow.appendChild(this.#styleElem);
+
+    this.alg = config.alg ?? new Sequence([]);
+    this.puzzleDef = config.puzzle ?? Puzzles["3x3x3"];
     this.#cursor = new Cursor(this.alg, new KSolvePuzzle(this.puzzleDef));
     // this.timeline = new Timeline(Example.HeadlightSwaps);
     this.#anim = new AnimModel(this.#cursor);
 
     this.#player = new Player(this.#anim, this.puzzleDef, config.playerConfig);
-    this.element.appendChild(this.#player.element);
+    this.#wrapper.appendChild(this.#player.element);
     this.coalesceModFunc = (_mv: BlockMove): number => 0;
   }
 
@@ -100,60 +109,64 @@ export class Twisty {
   }
 }
 
-function paramsFromTwistyElem(elem: Element): TwistyParams {
-  const params = new TwistyParams();
+// function paramsFromTwistyElem(elem: Element): TwistyParams {
+//   const params = new TwistyParams();
 
-  const puzzle = elem.getAttribute("puzzle");
-  if (puzzle) {
-    params.puzzle = Puzzles[puzzle];
-  }
+//   const puzzle = elem.getAttribute("puzzle");
+//   if (puzzle) {
+//     params.puzzle = Puzzles[puzzle];
+//   }
 
-  const algo = elem.getAttribute("alg");
-  if (algo) {
-    params.alg = parse(algo); // TODO: parse
-  }
+//   const algo = elem.getAttribute("alg");
+//   if (algo) {
+//     params.alg = parse(algo); // TODO: parse
+//   }
 
-  const visualization = elem.getAttribute("visualization");
-  // TODO: Factor this code out for testing.
-  if (visualization) {
-    if (
-      visualization === "2D" ||
-      visualization === "3D" ||
-      visualization === "PG3D"
-    ) {
-      params.playerConfig = { visualizationFormat: visualization };
-    } else {
-      console.warn(`Invalid visualization: ${visualization}`);
-    }
-  }
+//   const visualization = elem.getAttribute("visualization");
+//   // TODO: Factor this code out for testing.
+//   if (visualization) {
+//     if (
+//       visualization === "2D" ||
+//       visualization === "3D" ||
+//       visualization === "PG3D"
+//     ) {
+//       params.playerConfig = { visualizationFormat: visualization };
+//     } else {
+//       console.warn(`Invalid visualization: ${visualization}`);
+//     }
+//   }
 
-  return params;
+//   return params;
+// }
+
+if (typeof customElements !== "undefined") {
+  customElements.define("twisty-player", TwistyPlayer);
 }
 
-// Initialize a Twisty for the given Element unless the element's
-// `initialization` attribute is set to `custom`.
-function autoInitialize(elem: Element): Twisty | null {
-  const ini = elem.getAttribute("initialization");
-  const params = paramsFromTwistyElem(elem);
-  if (ini !== "custom") {
-    return new Twisty(elem, params);
-  }
-  return null;
-}
+// // Initialize a Twisty for the given Element unless the element's
+// // `initialization` attribute is set to `custom`.
+// function autoInitialize(elem: Element): Twisty | null {
+//   const ini = elem.getAttribute("initialization");
+//   const params = paramsFromTwistyElem(elem);
+//   if (ini !== "custom") {
+//     return new Twisty(elem, params);
+//   }
+//   return null;
+// }
 
-function autoInitializePage(): void {
-  const elems = document.querySelectorAll("twisty");
-  if (elems.length > 0) {
-    console.log(
-      `Found ${elems.length} twisty elem${
-        elems.length === 1 ? "" : "s"
-      } on page.`,
-    );
-  }
+// function autoInitializePage(): void {
+//   const elems = document.querySelectorAll("twisty");
+//   if (elems.length > 0) {
+//     console.log(
+//       `Found ${elems.length} twisty elem${
+//         elems.length === 1 ? "" : "s"
+//       } on page.`,
+//     );
+//   }
 
-  elems.forEach(autoInitialize);
-}
+//   elems.forEach(autoInitialize);
+// }
 
-if (typeof window !== "undefined") {
-  window.addEventListener("load", autoInitializePage);
-}
+// if (typeof window !== "undefined") {
+//   window.addEventListener("load", autoInitializePage);
+// }

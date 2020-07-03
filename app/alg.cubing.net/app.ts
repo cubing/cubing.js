@@ -4,6 +4,7 @@ import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
 import { setURLParams } from "./url-params";
+import { TwistyPlayer } from "../../src/twisty/twisty";
 
 export interface AppData {
   puzzleName: string;
@@ -43,7 +44,6 @@ export class App {
   }
 
   private initializeTwisty(initialData: AppData): void {
-    const twistyElem = document.createElement("twisty");
     const twistyParams: TwistyParams = {
       alg: new Sequence([]),
     };
@@ -66,9 +66,9 @@ export class App {
       default:
         throw new Error("Not a displayable puzzle type.");
     }
-    this.twisty = new Twisty(twistyElem, twistyParams);
+    this.twisty = new TwistyPlayer(twistyParams);
     this.setAlg(initialData.alg);
-    this.puzzlePane.appendChild(twistyElem);
+    this.puzzlePane.appendChild(this.twisty);
   }
 
   // Boolean indicates success (e.g. alg is valid).
