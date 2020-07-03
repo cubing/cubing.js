@@ -520,7 +520,7 @@ export class Player {
     if (this.config.experimentalShowControls ?? true) {
       this.element.appendChild(this.scrubber.element);
       this.element.appendChild(new ControlBar(this.anim, this.element).element);
-      this.element.appendChild(new CursorTextMoveView(this.anim).element);
+      // this.element.appendChild(new CursorTextMoveView(this.anim).element);
     }
   }
 
