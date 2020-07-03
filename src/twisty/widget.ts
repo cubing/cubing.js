@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import { Vector3, Quaternion } from "three";
 import { algToString, BlockMove, Sequence } from "../alg";
 import {
   Combine,
@@ -379,6 +379,13 @@ export class Cube3DView implements CursorObserver, JumpObserver {
   public experimentalGetCube3D(): Cube3D {
     return this.cube3D;
   }
+
+  public experimentalSetOrientation(quat: Quaternion): void {
+    this.cube3D.experimentalGetCube().quaternion.copy(quat);
+    for (const vantage of this.cube3D.experimentalGetVantages()) {
+      vantage.render();
+    }
+  }
 }
 
 interface PG3DViewConfig {
@@ -459,6 +466,13 @@ export class PG3DView implements CursorObserver, JumpObserver {
         shift: this.config.sideBySide ? 1 : 0,
       });
     }, 0);
+  }
+
+  public experimentalSetOrientation(quat: Quaternion): void {
+    this.pg3D.experimentalGetGroup().quaternion.copy(quat);
+    for (const vantage of this.pg3D.experimentalGetVantages()) {
+      vantage.render();
+    }
   }
 }
 
