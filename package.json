@@ -105,7 +105,8 @@
       "quote-props": [
         "error",
         "consistent-as-needed"
-      ]
+      ],
+      "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }]
     },
     "ignorePatterns": [
       "/dist",
