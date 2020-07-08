@@ -1841,7 +1841,11 @@ export class PuzzleGeometry {
         const mna = getmovename(movesetgeo, movebits, slices);
         const movename = mna[0];
         const inverted = mna[1];
-        movenames.push(movename);
+        if (moveset[i + 1] === 1) {
+          movenames.push(movename);
+        } else {
+          movenames.push(movename + moveset[i + 1]);
+        }
         const moveorbits: Orbit[] = [];
         const perms = [];
         const oris = [];
