@@ -10,7 +10,7 @@ import { Timeline } from "../animation/Timeline";
 import { Twisty3DScene, Twisty3DPuzzle } from "../3D/3D";
 
 // <twisty-player>
-export class TwistyPlayer extends HTMLElement {
+export class TwistyPlayerTest extends HTMLElement {
   viewers: TwistyViewerElement[];
   controls: TwistyControlElement[];
   // TODO: support config from DOM.
@@ -44,7 +44,7 @@ export class TwistyPlayer extends HTMLElement {
         const twisty3DScene = new Twisty3DScene();
         const twisty3DPuzzle = new Twisty3DPuzzle(twisty3DScene, cursor);
         twisty3DScene.addTwisty3DPuzzle(twisty3DPuzzle);
-        return new Twisty3DCanvas(twisty3DScene);
+        return new Twisty3DCanvas();
       }
     }
   }
@@ -55,5 +55,5 @@ export class TwistyPlayer extends HTMLElement {
 }
 
 if (typeof customElements !== "undefined") {
-  customElements.define("twisty-player", TwistyPlayer);
+  customElements.define("twisty-player-test", TwistyPlayerTest);
 }
