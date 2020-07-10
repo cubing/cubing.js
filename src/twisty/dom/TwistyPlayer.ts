@@ -4,7 +4,7 @@ import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { TwistyControlButtonGrid } from "./controls/buttons";
-import { Scrubber } from "./controls/Scrubber";
+import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { Timeline } from "../animation/Timeline";
 import { Twisty3DScene, Twisty3DPuzzle } from "../3D/3D";
@@ -18,13 +18,10 @@ export class TwistyPlayerTest extends HTMLElement {
     super();
     const timeline = new Timeline();
     const viewer = this.createViewer(timeline, alg, "3D");
-    const scrubber = new Scrubber(timeline);
+    const scrubber = new TwistyScrubber(timeline);
     const controlButtonGrid = new TwistyControlButtonGrid(timeline, this);
     this.viewers = [viewer];
     this.controls = [scrubber, controlButtonGrid];
-    this.appendChild(viewer);
-    this.appendChild(scrubber);
-    this.appendChild(controlButtonGrid);
   }
 
   fullscreen(): void {
@@ -50,7 +47,9 @@ export class TwistyPlayerTest extends HTMLElement {
   }
 
   protected connectedCallback(): void {
-    /*...*/
+    this.appendChild(this.viewers[0]);
+    this.appendChild(this.controls[0]);
+    this.appendChild(this.controls[1]);
   }
 }
 

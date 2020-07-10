@@ -95,6 +95,7 @@ export class TwistyPlayer extends HTMLElement {
       this.#anim.stepForward();
     }
   }
+
   // We append a move as normal, except we animate *just* the last move *even* if
   // the last move was merged with a previous one.
   public experimentalSetAlgAnimateBlockMove(

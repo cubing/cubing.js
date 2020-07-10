@@ -8,12 +8,12 @@ import {
 import { TwistyControlElement } from "./TwistyControlElement.ts";
 
 // Usually a horizontal line.
-export class Scrubber extends HTMLElement
+export class TwistyScrubber extends HTMLElement
   implements TwistyControlElement, TimelineTimestampListener {
   range: HTMLInputElement; // type="range"
-  constructor(private timeline: Timeline) {
+  constructor(private timeline?: Timeline) {
     super();
-    this.timeline.addTimestampListener(this);
+    this.timeline!.addTimestampListener(this);
     /*...*/
   }
 
@@ -22,4 +22,8 @@ export class Scrubber extends HTMLElement
     // Update slider position.
     /*...*/
   }
+}
+
+if (customElements) {
+  customElements.define("twisty-scrubber", TwistyScrubber);
 }

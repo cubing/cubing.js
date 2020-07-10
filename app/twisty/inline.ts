@@ -2,6 +2,7 @@ import { BareBlockMove, parse, Sequence } from "../../src/alg/index";
 import { parse as kpuzzleParse, Puzzles } from "../../src/kpuzzle/index";
 import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
 import { TwistyPlayer } from "../../src/twisty/index";
+import "../../src/twisty/dom/TwistyPlayer";
 
 window.addEventListener("load", () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

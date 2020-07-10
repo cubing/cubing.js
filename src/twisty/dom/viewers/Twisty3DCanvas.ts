@@ -20,3 +20,7 @@ export class Twisty3DCanvas extends HTMLElement implements TwistyViewerElement {
   //   /*...*/
   // }
 }
+
+if (customElements) {
+  customElements.define("twisty-3d-canvas", Twisty3DCanvas);
+}

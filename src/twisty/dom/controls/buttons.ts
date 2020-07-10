@@ -18,40 +18,52 @@ abstract class TwistyControlButton extends HTMLButtonElement
 // Usually a horizontal line.
 export class TwistyControlButtonGrid extends HTMLElement
   implements TwistyControlElement {
-  constructor(timeline: Timeline, fullscreenElement: Element) {
+  constructor(timeline?: Timeline, fullscreenElement?: Element) {
     super();
     this.appendChild(
-      new TwistyControlButtonFullscreen(timeline, fullscreenElement),
+      new TwistyControlButtonFullscreen(timeline!, fullscreenElement!),
     );
-    this.appendChild(new TwistyControlButtonJumpToStart(timeline));
+    this.appendChild(new TwistyControlButtonJumpToStart(timeline!));
     /*...*/
   }
 }
 
-export class TwistyControlButtonFullscreen extends TwistyControlButton {
+if (customElements) {
+  customElements.define("twisty-control-button-grid", TwistyControlButtonGrid);
+}
+
+export class TwistyControlButtonFullscreen extends HTMLButtonElement {
   constructor(
-    protected timeline: Timeline,
-    private fullscreenElement: Element,
+    protected timeline?: Timeline,
+    private fullscreenElement?: Element,
   ) {
     super();
     /*...*/
   }
 
   onPress(): void {
-    this.fullscreenElement.requestFullscreen();
+    this.fullscreenElement!.requestFullscreen();
   }
+}
+
+if (customElements) {
+  customElements.define(
+    "twisty-control-button-fullscreen",
+    TwistyControlButtonFullscreen,
+    { extends: "button" },
+  );
 }
 
 export class TwistyControlButtonJumpToStart extends TwistyControlButton
   implements TimelineActionListener {
-  constructor(protected timeline: Timeline) {
+  constructor(protected timeline?: Timeline) {
     super();
     /*...*/
-    timeline.addActionListener(this);
+    this.timeline!.addActionListener(this);
   }
 
   onPress(): void {
-    this.timeline.setTimestamp(0);
+    this.timeline!.setTimestamp(0);
   }
 
   onTimelineAction(actionEvent: TimelineActionEvent): void {
@@ -60,18 +72,32 @@ export class TwistyControlButtonJumpToStart extends TwistyControlButton
   }
 }
 
+if (customElements) {
+  customElements.define(
+    "twisty-control-button-jump-to-start",
+    TwistyControlButtonJumpToStart,
+    { extends: "button" },
+  );
+}
+
 export class TwistyControlButtonPlay extends TwistyControlButton {
-  constructor(protected timeline: Timeline) {
+  constructor(protected timeline?: Timeline) {
     super();
     /*...*/
-    timeline.addActionListener(this);
+    this.timeline!.addActionListener(this);
   }
 
   onPress(): void {
-    this.timeline.setTimestamp(0);
+    this.timeline!.setTimestamp(0);
   }
 
   onTimelineAction(actionEvent: TimelineActionEvent): void {
     this.disabled = actionEvent.action === TimelineAction.Pausing;
   }
+}
+
+if (customElements) {
+  customElements.define("twisty-control-button-play", TwistyControlButtonPlay, {
+    extends: "button",
+  });
 }
