@@ -502,9 +502,9 @@ export class Player {
   ) {
     this.element = document.createElement("player");
 
-    if (this.config.experimentalBackgroundCheckered ?? true) {
-      this.element.classList.add("checkered");
-    }
+    this.experimentalSetCheckered(
+      this.config.experimentalBackgroundCheckered ?? true,
+    );
 
     if (this.config.visualizationFormat === "PG3D") {
       if (!config.experimentalPG3DViewConfig) {
@@ -557,5 +557,9 @@ export class Player {
 
   public updateFromAnim(): void {
     this.scrubber.updateFromAnim();
+  }
+
+  public experimentalSetCheckered(checkered: boolean): void {
+    this.element.classList.toggle("checkered", checkered);
   }
 }
