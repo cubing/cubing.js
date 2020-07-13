@@ -35,7 +35,7 @@ player:-moz-full-screen {
 }
 
 /* Checkerboard background */
-player {
+player.checkered {
   background-color: #eaeaea;
   background-image: linear-gradient(
       45deg,

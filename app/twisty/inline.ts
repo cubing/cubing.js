@@ -16,6 +16,9 @@ window.addEventListener("load", () => {
         BareBlockMove("U", 2),
         BareBlockMove("R", 2),
       ]),
+      playerConfig: {
+        experimentalBackgroundCheckered: false,
+      },
     }),
   );
 });

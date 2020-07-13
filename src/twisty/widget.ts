@@ -104,6 +104,7 @@ export namespace Button {
     constructor(private anim: AnimModel) {
       super("Skip To Start", "skip-to-start");
     }
+
     public onpress(): void {
       this.anim.skipToStart();
     }
@@ -112,6 +113,7 @@ export namespace Button {
     constructor(private anim: AnimModel) {
       super("Skip To End", "skip-to-end");
     }
+
     public onpress(): void {
       this.anim.skipToEnd();
     }
@@ -121,12 +123,14 @@ export namespace Button {
       super("Play", "play");
       this.anim.dispatcher.registerDirectionObserver(this);
     }
+
     public onpress(): void {
       if (this.anim.isPaused() && this.anim.isAtEnd()) {
         this.anim.skipToStart();
       }
       this.anim.togglePausePlayForward();
     }
+
     public animDirectionChanged(direction: Cursor.Direction): void {
       // TODO: Handle flash of pause button when pressed while the Twisty is already at the end.
       const newClass = direction === Cursor.Direction.Paused ? "play" : "pause";
@@ -141,6 +145,7 @@ export namespace Button {
     constructor(private anim: AnimModel) {
       super("Step forward", "step-forward");
     }
+
     public onpress(): void {
       this.anim.stepForward();
     }
@@ -149,6 +154,7 @@ export namespace Button {
     constructor(private anim: AnimModel) {
       super("Step backward", "step-backward");
     }
+
     public onpress(): void {
       this.anim.stepBackward();
     }
@@ -481,6 +487,7 @@ export interface PlayerConfig {
   experimentalShowControls?: boolean;
   experimentalCube3DViewConfig?: Cube3DViewConfig;
   experimentalPG3DViewConfig?: PG3DViewConfig;
+  experimentalBackgroundCheckered?: boolean;
 }
 
 export class Player {
@@ -494,6 +501,10 @@ export class Player {
     private config: PlayerConfig = {},
   ) {
     this.element = document.createElement("player");
+
+    if (this.config.experimentalBackgroundCheckered ?? true) {
+      this.element.classList.add("checkered");
+    }
 
     if (this.config.visualizationFormat === "PG3D") {
       if (!config.experimentalPG3DViewConfig) {
