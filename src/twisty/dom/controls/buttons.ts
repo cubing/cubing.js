@@ -39,10 +39,16 @@ export class TwistyControlButtonFullscreen extends HTMLButtonElement {
   ) {
     super();
     /*...*/
+    this.textContent = "🖥";
+    this.addEventListener("click", this.onPress.bind(this));
   }
 
   onPress(): void {
-    this.fullscreenElement!.requestFullscreen();
+    if (document.fullscreenElement === this.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      this.fullscreenElement!.requestFullscreen();
+    }
   }
 }
 
@@ -54,12 +60,13 @@ if (customElements) {
   );
 }
 
-export class TwistyControlButtonJumpToStart extends TwistyControlButton
+export class TwistyControlButtonJumpToStart extends HTMLButtonElement
   implements TimelineActionListener {
   constructor(protected timeline?: Timeline) {
     super();
     /*...*/
     this.timeline!.addActionListener(this);
+    this.textContent = "⏮";
   }
 
   onPress(): void {
@@ -85,6 +92,7 @@ export class TwistyControlButtonPlay extends TwistyControlButton {
     super();
     /*...*/
     this.timeline!.addActionListener(this);
+    this.textContent = "▶️";
   }
 
   onPress(): void {

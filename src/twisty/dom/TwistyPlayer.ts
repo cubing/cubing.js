@@ -8,16 +8,27 @@ import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { Timeline } from "../animation/Timeline";
 import { Twisty3DScene, Twisty3DPuzzle } from "../3D/3D";
+import { CSSManager } from "./CSSManager";
+import { testCSS } from "./css";
 
 // <twisty-player>
 export class TwistyPlayerTest extends HTMLElement {
+  #shadow: ShadowRoot;
+  #wrapper: HTMLDivElement = document.createElement("div");
+  #cssManager: CSSManager;
+
   viewers: TwistyViewerElement[];
   controls: TwistyControlElement[];
   // TODO: support config from DOM.
   constructor(alg: Sequence = new Sequence([])) {
     super();
+
+    this.#shadow = this.attachShadow({ mode: "closed" });
+    this.#wrapper.classList.add("wrapper");
+    this.#cssManager = new CSSManager(this.#shadow);
+
     const timeline = new Timeline();
-    const viewer = this.createViewer(timeline, alg, "3D");
+    const viewer = this.createViewer(timeline, alg, "2D"); // TODO
     const scrubber = new TwistyScrubber(timeline);
     const controlButtonGrid = new TwistyControlButtonGrid(timeline, this);
     this.viewers = [viewer];
@@ -47,9 +58,14 @@ export class TwistyPlayerTest extends HTMLElement {
   }
 
   protected connectedCallback(): void {
-    this.appendChild(this.viewers[0]);
-    this.appendChild(this.controls[0]);
-    this.appendChild(this.controls[1]);
+    this.appendChild(this.#shadow);
+    this.#shadow.appendChild(this.#wrapper);
+
+    this.#wrapper.appendChild(this.viewers[0]);
+    this.#wrapper.appendChild(this.controls[0]);
+    this.#wrapper.appendChild(this.controls[1]);
+
+    this.#cssManager.addSource(testCSS);
   }
 }
 
