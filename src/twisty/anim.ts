@@ -91,6 +91,10 @@ export class AnimModel {
     return this.scheduler;
   }
 
+  public experimentalSetTempoScale(scale: number): void {
+    this.tempo = scale * 1.5; // TODO
+  }
+
   public getBounds(): Cursor.Duration[] {
     return [this.cursor.startOfAlg(), this.cursor.endOfAlg()];
   }
