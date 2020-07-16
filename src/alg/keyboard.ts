@@ -12,24 +12,27 @@ const cubeKeyMapping: { [key: number]: BlockMove } = {
   74: BareBlockMove("U"),
   70: BareBlockMove("U", -1),
   72: BareBlockMove("F"),
-  71: BareBlockMove("F", -1), // Heise
-  78: BareBlockMove("F"),
-  86: BareBlockMove("F", -1), // Kirjava
+  71: BareBlockMove("F", -1),
 
-  67: BareBlockMove("l"),
+  78: BareBlockMove("x", -1),
+  86: BareBlockMove("l"),
   82: BareBlockMove("l", -1),
   85: BareBlockMove("r"),
   77: BareBlockMove("r", -1),
 
+  67: BareBlockMove("d", 1),
+  188: BareBlockMove("d", -1),
+
   84: BareBlockMove("x"),
   89: BareBlockMove("x"),
-  66: BareBlockMove("x", -1), // 84 (T) and 89 (Y) are alternatives.
+  66: BareBlockMove("x", -1),
   186: BareBlockMove("y"),
   59: BareBlockMove("y"),
   65: BareBlockMove("y", -1), // 186 is WebKit, 59 is Mozilla; see http://unixpapa.com/js/key.html
   80: BareBlockMove("z"),
   81: BareBlockMove("z", -1),
 
+  88: BareBlockMove("M", -1),
   190: BareBlockMove("M", -1),
 };
 
