@@ -15,12 +15,12 @@ const cubeKeyMapping: { [key: number]: BlockMove } = {
   71: BareBlockMove("F", -1),
 
   78: BareBlockMove("x", -1),
-  86: BareBlockMove("l"),
+  67: BareBlockMove("l"),
   82: BareBlockMove("l", -1),
   85: BareBlockMove("r"),
   77: BareBlockMove("r", -1),
 
-  67: BareBlockMove("d", 1),
+  88: BareBlockMove("d", 1),
   188: BareBlockMove("d", -1),
 
   84: BareBlockMove("x"),
@@ -32,7 +32,7 @@ const cubeKeyMapping: { [key: number]: BlockMove } = {
   80: BareBlockMove("z"),
   81: BareBlockMove("z", -1),
 
-  88: BareBlockMove("M", -1),
+  90: BareBlockMove("M", -1),
   190: BareBlockMove("M", -1),
 };
 
