@@ -16,6 +16,7 @@ export class OrbitsDef {
     public movenames: string[],
     public moveops: Transformation[],
   ) {}
+
   public toKsolve(name: string, forTwisty: boolean): string[] {
     const result = [];
     result.push("Name " + name);
@@ -57,6 +58,7 @@ export class OrbitsDef {
     // extra blank line on end lets us use join("\n") to terminate all
     return result;
   }
+
   public toKpuzzle(): object {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
@@ -77,6 +79,7 @@ export class OrbitsDef {
     }
     return { orbits, startPieces: start, moves };
   }
+
   public optimize(): OrbitsDef {
     const neworbitnames: string[] = [];
     const neworbitdefs: OrbitDef[] = [];
@@ -205,6 +208,7 @@ export class OrbitsDef {
       newmoveops.map((_) => new Transformation(_)),
     );
   }
+
   // generate a new "solved" position based on scrambling
   // we use an algorithm that should be faster for large puzzles than
   // just picking random moves.
@@ -238,6 +242,7 @@ export class OrbitsDef {
     }
     this.solved = this.solved.mul(s);
   }
+
   public reassemblySize(): number {
     let n = 1;
     for (let i = 0; i < this.orbitdefs.length; i++) {
@@ -250,11 +255,13 @@ export class Orbit {
   public static e(n: number, mod: number): Orbit {
     return new Orbit(iota(n), zeros(n), mod);
   }
+
   constructor(
     public perm: number[],
     public ori: number[],
     public orimod: number,
   ) {}
+
   public mul(b: Orbit): Orbit {
     const n = this.perm.length;
     const newPerm = new Array<number>(n);
@@ -265,6 +272,7 @@ export class Orbit {
     }
     return new Orbit(newPerm, newOri, this.orimod);
   }
+
   public inv(): Orbit {
     const n = this.perm.length;
     const newPerm = new Array<number>(n);
@@ -275,6 +283,7 @@ export class Orbit {
     }
     return new Orbit(newPerm, newOri, this.orimod);
   }
+
   public equal(b: Orbit): boolean {
     const n = this.perm.length;
     for (let i = 0; i < n; i++) {
@@ -284,6 +293,7 @@ export class Orbit {
     }
     return true;
   }
+
   // in-place mutator
   public killOri(): this {
     const n = this.perm.length;
@@ -293,6 +303,7 @@ export class Orbit {
     this.orimod = 1;
     return this;
   }
+
   public toPerm(): Perm {
     const o = this.orimod;
     if (o === 1) {
@@ -307,6 +318,7 @@ export class Orbit {
     }
     return new Perm(newPerm);
   }
+
   // returns tuple of sets of identical pieces in this orbit
   public identicalPieces(): number[][] {
     const done: boolean[] = [];
@@ -327,10 +339,12 @@ export class Orbit {
     }
     return r;
   }
+
   public order(): number {
     // can be made more efficient
     return this.toPerm().order();
   }
+
   public isIdentity(): boolean {
     const n = this.perm.length;
     for (let i = 0; i < n; i++) {
@@ -340,6 +354,7 @@ export class Orbit {
     }
     return true;
   }
+
   public remap(no: number[], on: number[], nv: number): Orbit {
     const newPerm = new Array<number>(nv);
     const newOri = new Array<number>(nv);
@@ -349,6 +364,7 @@ export class Orbit {
     }
     return new Orbit(newPerm, newOri, this.orimod);
   }
+
   public remapVS(no: number[], nv: number): Orbit {
     const newPerm = new Array<number>(nv);
     const newOri = new Array<number>(nv);
@@ -364,9 +380,11 @@ export class Orbit {
     }
     return new Orbit(newPerm, newOri, this.orimod);
   }
+
   public toKsolveVS(): string[] {
     return [this.perm.map((_: number) => _ + 1).join(" "), this.ori.join(" ")];
   }
+
   public toKsolve(): string[] {
     const newori = new Array<number>(this.ori.length);
     for (let i = 0; i < newori.length; i++) {
@@ -374,6 +392,7 @@ export class Orbit {
     }
     return [this.perm.map((_: number) => _ + 1).join(" "), newori.join(" ")];
   }
+
   public toKpuzzle(): object {
     return { permutation: this.perm, orientation: this.ori };
   }
@@ -387,6 +406,7 @@ export class TransformationBase {
     }
     return newOrbits;
   }
+
   public internalInv(): Orbit[] {
     const newOrbits: Orbit[] = [];
     for (let i = 0; i < this.orbits.length; i++) {
@@ -394,6 +414,7 @@ export class TransformationBase {
     }
     return newOrbits;
   }
+
   public equal(b: TransformationBase): boolean {
     for (let i = 0; i < this.orbits.length; i++) {
       if (!this.orbits[i].equal(b.orbits[i])) {
@@ -402,12 +423,14 @@ export class TransformationBase {
     }
     return true;
   }
+
   public killOri(): this {
     for (let i = 0; i < this.orbits.length; i++) {
       this.orbits[i].killOri();
     }
     return this;
   }
+
   public toPerm(): Perm {
     const perms = new Array<Perm>();
     let n = 0;
@@ -427,6 +450,7 @@ export class TransformationBase {
     }
     return new Perm(newPerm);
   }
+
   public identicalPieces(): number[][] {
     const r: number[][] = [];
     let n = 0;
@@ -440,6 +464,7 @@ export class TransformationBase {
     }
     return r;
   }
+
   public order(): number {
     let r = 1;
     for (let i = 0; i < this.orbits.length; i++) {
@@ -452,9 +477,11 @@ export class Transformation extends TransformationBase {
   constructor(orbits: Orbit[]) {
     super(orbits);
   }
+
   public mul(b: Transformation): Transformation {
     return new Transformation(this.internalMul(b));
   }
+
   public mulScalar(n: number): Transformation {
     if (n === 0) {
       return this.e();
@@ -485,9 +512,11 @@ export class Transformation extends TransformationBase {
     }
     return r;
   }
+
   public inv(): Transformation {
     return new Transformation(this.internalInv());
   }
+
   public e(): Transformation {
     return new Transformation(
       this.orbits.map((_: Orbit) => Orbit.e(_.perm.length, _.orimod)),
@@ -498,6 +527,7 @@ export class VisibleState extends TransformationBase {
   constructor(orbits: Orbit[]) {
     super(orbits);
   }
+
   public mul(b: Transformation): VisibleState {
     return new VisibleState(this.internalMul(b));
   }
@@ -511,6 +541,7 @@ class DisjointUnion {
       this.heads[i] = i;
     }
   }
+
   public find(v: number): number {
     let h = this.heads[v];
     if (this.heads[h] === h) {
@@ -520,6 +551,7 @@ class DisjointUnion {
     this.heads[v] = h;
     return h;
   }
+
   public union(a: number, b: number): void {
     const ah = this.find(a);
     const bh = this.find(b);

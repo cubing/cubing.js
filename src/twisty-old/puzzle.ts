@@ -40,6 +40,7 @@ export abstract class Puzzle {
     }
     return newState;
   }
+
   public abstract stateFromMove(blockMove: BlockMove): State<Puzzle>;
   public abstract identity(): State<Puzzle>;
   public abstract equivalent(s1: State<Puzzle>, s2: State<Puzzle>): boolean;
@@ -52,6 +53,7 @@ export class KSolvePuzzle extends Puzzle {
   public static fromID(id: string): KSolvePuzzle {
     return new KSolvePuzzle(Puzzles[id]);
   }
+
   public moveStash: { [key: string]: Transformation } = {};
   constructor(private definition: KPuzzleDefinition) {
     super();
@@ -60,15 +62,18 @@ export class KSolvePuzzle extends Puzzle {
   public startState(): KSolvePuzzleState {
     return this.definition.startPieces;
   }
+
   public invert(state: KSolvePuzzleState): KSolvePuzzleState {
     return Invert(this.definition, state);
   }
+
   public combine(
     s1: KSolvePuzzleState,
     s2: KSolvePuzzleState,
   ): KSolvePuzzleState {
     return Combine(this.definition, s1, s2);
   }
+
   public stateFromMove(blockMove: BlockMove): KSolvePuzzleState {
     const key = blockMoveToString(blockMove);
     if (!this.moveStash[key]) {
@@ -76,9 +81,11 @@ export class KSolvePuzzle extends Puzzle {
     }
     return this.moveStash[key];
   }
+
   public identity(): KSolvePuzzleState {
     return IdentityTransformation(this.definition);
   }
+
   public equivalent(s1: KSolvePuzzleState, s2: KSolvePuzzleState): boolean {
     return EquivalentStates(this.definition, s1, s2);
   }
@@ -92,18 +99,23 @@ export class QTMCounterPuzzle extends Puzzle {
   public startState(): QTMCounterState {
     return new QTMCounterState(0);
   }
+
   public invert(state: QTMCounterState): QTMCounterState {
     return new QTMCounterState(-state.value);
   }
+
   public combine(s1: QTMCounterState, s2: QTMCounterState): QTMCounterState {
     return new QTMCounterState(s1.value + s2.value);
   }
+
   public stateFromMove(blockMove: BlockMove): QTMCounterState {
     return new QTMCounterState(Math.abs(blockMove.amount));
   }
+
   public identity(): QTMCounterState {
     return new QTMCounterState(0);
   }
+
   public equivalent(s1: QTMCounterState, s2: QTMCounterState): boolean {
     return s1.value === s2.value;
   }

@@ -21,6 +21,7 @@ class InternalMove {
   public getTransformation(canon: Canonicalize): Transformation {
     return canon.transforms[this.base][this.twist];
   }
+
   public asString(canon: Canonicalize): string {
     const mod = canon.moveorder[this.base];
     let tw = this.twist % mod;
@@ -84,6 +85,7 @@ export class Canonicalize {
       this.moveorder[i] = order;
     }
   }
+
   public blockMoveToInternalMove(mv: BlockMove): InternalMove {
     const basemove = modifiedBlockMove(mv, { amount: 1 });
     const s = blockMoveToString(basemove);
@@ -98,6 +100,7 @@ export class Canonicalize {
     }
     return new InternalMove(ind, tw);
   }
+
   // Sequence must be simple sequence of block moves
   // this one does not attempt to merge.
   public sequenceToSearchSequence(
@@ -110,6 +113,7 @@ export class Canonicalize {
     }
     return ss;
   }
+
   // Sequence to simple sequence, with merging.
   public mergeSequenceToSearchSequence(
     s: Sequence,
@@ -135,6 +139,7 @@ export class SearchSequence {
       this.trans = IdentityTransformation(canon.def);
     }
   }
+
   /*
    *  A common use for search sequences is to extend them, but
    *  sometimes we shouldn't modify the returned one.  This
@@ -145,6 +150,7 @@ export class SearchSequence {
     r.moveseq = [...this.moveseq];
     return r;
   }
+
   // returns 1 if the move is added, 0 if it is merged, -1 if it cancels a move
   public mergeOneMove(mv: InternalMove): number {
     const r = this.onlyMergeOneMove(mv);
@@ -155,6 +161,7 @@ export class SearchSequence {
     );
     return r;
   }
+
   // does not do merge work; just slaps the new move on
   public appendOneMove(mv: InternalMove): number {
     this.moveseq.push(mv);
@@ -165,6 +172,7 @@ export class SearchSequence {
     );
     return 1;
   }
+
   // pop a move off.
   public popMove(): number {
     const mv = this.moveseq.pop();
@@ -178,6 +186,7 @@ export class SearchSequence {
     );
     return 1;
   }
+
   // do one more twist of the last move
   public oneMoreTwist(): number {
     const lastmv = this.moveseq[this.moveseq.length - 1];
@@ -192,6 +201,7 @@ export class SearchSequence {
     );
     return 0;
   }
+
   private onlyMergeOneMove(mv: InternalMove): number {
     let j = this.moveseq.length - 1;
     while (j >= 0) {
@@ -219,6 +229,7 @@ export class SearchSequence {
     this.moveseq.push(mv);
     return 1;
   }
+
   // returns the length of the merged sequence.
   public mergeSequence(seq: SearchSequence): number {
     let r = this.moveseq.length;
@@ -230,6 +241,7 @@ export class SearchSequence {
     this.trans = Combine(this.canon.def, this.trans, seq.trans);
     return r;
   }
+
   public getSequenceAsString(): string {
     const r: string[] = [];
     for (const mv of this.moveseq) {
@@ -249,6 +261,7 @@ export class CanonicalSequenceIterator {
     this.ss = new SearchSequence(canon, state);
     this.targetLength = 0;
   }
+
   public nextState(base: number, canonstate: number[]): null | number[] {
     const newstate: number[] = [];
     for (const prevbase of canonstate) {
@@ -264,6 +277,7 @@ export class CanonicalSequenceIterator {
     }
     return newstate;
   }
+
   public *genSequence(
     togo: number,
     canonstate: number[],
@@ -285,11 +299,13 @@ export class CanonicalSequenceIterator {
     }
     return null;
   }
+
   public *generator(): Generator<SearchSequence, SearchSequence, void> {
     for (let d = 0; ; d++) {
       yield* this.genSequence(d, []);
     }
   }
+
   public *genSequenceTree(
     canonstate: number[],
   ): Generator<SearchSequence, null, number> {

@@ -68,19 +68,23 @@ export abstract class TraversalDownUp<DataDown, DataUp> {
     sequence: Sequence,
     dataDown: DataDown,
   ): DataUp;
+
   public abstract traverseGroup(group: Group, dataDown: DataDown): DataUp;
   public abstract traverseBlockMove(
     blockMove: BlockMove,
     dataDown: DataDown,
   ): DataUp;
+
   public abstract traverseCommutator(
     commutator: Commutator,
     dataDown: DataDown,
   ): DataUp;
+
   public abstract traverseConjugate(
     conjugate: Conjugate,
     dataDown: DataDown,
   ): DataUp;
+
   public abstract traversePause(pause: Pause, dataDown: DataDown): DataUp;
   public abstract traverseNewLine(newLine: NewLine, dataDown: DataDown): DataUp;
   public abstract traverseComment(comment: Comment, dataDown: DataDown): DataUp;
@@ -116,9 +120,11 @@ export class Invert extends TraversalUp<AlgPart> {
       sequence.nestedUnits.map((a) => this.traverseIntoUnit(a)).reverse(),
     );
   }
+
   public traverseGroup(group: Group): AlgPart {
     return new Group(this.traverseSequence(group.nestedSequence), group.amount);
   }
+
   public traverseBlockMove(blockMove: BlockMove): AlgPart {
     return new BlockMove(
       blockMove.outerLayer,
@@ -127,9 +133,11 @@ export class Invert extends TraversalUp<AlgPart> {
       -blockMove.amount,
     );
   }
+
   public traverseCommutator(commutator: Commutator): AlgPart {
     return new Commutator(commutator.B, commutator.A, commutator.amount);
   }
+
   public traverseConjugate(conjugate: Conjugate): AlgPart {
     return new Conjugate(
       conjugate.A,
@@ -137,12 +145,15 @@ export class Invert extends TraversalUp<AlgPart> {
       conjugate.amount,
     );
   }
+
   public traversePause(pause: Pause): AlgPart {
     return pause;
   }
+
   public traverseNewLine(newLine: NewLine): AlgPart {
     return newLine;
   }
+
   public traverseComment(comment: Comment): AlgPart {
     return comment;
   }
@@ -156,6 +167,7 @@ export class Expand extends TraversalUp<AlgPart> {
       ),
     );
   }
+
   public traverseGroup(group: Group): AlgPart {
     // TODO: Pass raw AlgPart[] to sequence.
     return this.repeat(
@@ -163,9 +175,11 @@ export class Expand extends TraversalUp<AlgPart> {
       group,
     );
   }
+
   public traverseBlockMove(blockMove: BlockMove): AlgPart {
     return blockMove;
   }
+
   public traverseCommutator(commutator: Commutator): AlgPart {
     const expandedA = this.traverseSequence(commutator.A);
     const expandedB = this.traverseSequence(commutator.B);
@@ -178,6 +192,7 @@ export class Expand extends TraversalUp<AlgPart> {
     );
     return this.repeat(this.flattenSequenceOneLevel(once), commutator);
   }
+
   public traverseConjugate(conjugate: Conjugate): AlgPart {
     const expandedA = this.traverseSequence(conjugate.A);
     const expandedB = this.traverseSequence(conjugate.B);
@@ -185,15 +200,19 @@ export class Expand extends TraversalUp<AlgPart> {
     once = once.concat(expandedA, expandedB, invert(expandedA));
     return this.repeat(this.flattenSequenceOneLevel(once), conjugate);
   }
+
   public traversePause(pause: Pause): AlgPart {
     return pause;
   }
+
   public traverseNewLine(newLine: NewLine): AlgPart {
     return newLine;
   }
+
   public traverseComment(comment: Comment): AlgPart {
     return comment;
   }
+
   private flattenSequenceOneLevel(algList: AlgPart[]): Unit[] {
     let flattened: Unit[] = [];
     for (const part of algList) {
@@ -248,12 +267,14 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
     }
     return true;
   }
+
   public traverseGroup(group: Group, dataDown: AlgPart): boolean {
     return (
       matchesAlgType(dataDown, "group") &&
       this.traverse(group.nestedSequence, (dataDown as Group).nestedSequence)
     );
   }
+
   public traverseBlockMove(blockMove: BlockMove, dataDown: AlgPart): boolean {
     // TODO: Handle layers.
     return (
@@ -264,6 +285,7 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
       blockMove.amount === (dataDown as BlockMove).amount
     );
   }
+
   public traverseCommutator(
     commutator: Commutator,
     dataDown: AlgPart,
@@ -274,6 +296,7 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
       this.traverse(commutator.B, (dataDown as Commutator).B)
     );
   }
+
   public traverseConjugate(conjugate: Conjugate, dataDown: AlgPart): boolean {
     return (
       matchesAlgType(dataDown, "conjugate") &&
@@ -281,12 +304,15 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
       this.traverse(conjugate.B, (dataDown as Conjugate).B)
     );
   }
+
   public traversePause(_pause: Pause, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "pause");
   }
+
   public traverseNewLine(_newLine: NewLine, dataDown: AlgPart): boolean {
     return matchesAlgType(dataDown, "newLine");
   }
+
   public traverseComment(comment: Comment, dataDown: AlgPart): boolean {
     return (
       matchesAlgType(dataDown, "comment") &&
@@ -336,27 +362,35 @@ export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
     }
     return new Sequence(coalesced);
   }
+
   public traverseGroup(group: Group): AlgPart {
     return group;
   }
+
   public traverseBlockMove(blockMove: BlockMove): AlgPart {
     return blockMove;
   }
+
   public traverseCommutator(commutator: Commutator): AlgPart {
     return commutator;
   }
+
   public traverseConjugate(conjugate: Conjugate): AlgPart {
     return conjugate;
   }
+
   public traversePause(pause: Pause): AlgPart {
     return pause;
   }
+
   public traverseNewLine(newLine: NewLine): AlgPart {
     return newLine;
   }
+
   public traverseComment(comment: Comment): AlgPart {
     return comment;
   }
+
   private sameBlock(moveA: BlockMove, moveB: BlockMove): boolean {
     // TODO: Handle layers
     return (
@@ -424,6 +458,7 @@ export class ToString extends TraversalUp<string> {
     }
     return output;
   }
+
   public traverseGroup(group: Group): string {
     return (
       "(" +
@@ -432,9 +467,11 @@ export class ToString extends TraversalUp<string> {
       repetitionSuffix(group.amount)
     );
   }
+
   public traverseBlockMove(blockMove: BlockMove): string {
     return blockMoveToString(blockMove);
   }
+
   public traverseCommutator(commutator: Commutator): string {
     return (
       "[" +
@@ -445,6 +482,7 @@ export class ToString extends TraversalUp<string> {
       repetitionSuffix(commutator.amount)
     );
   }
+
   public traverseConjugate(conjugate: Conjugate): string {
     return (
       "[" +
@@ -455,17 +493,21 @@ export class ToString extends TraversalUp<string> {
       repetitionSuffix(conjugate.amount)
     );
   }
+
   // TODO: Remove spaces between repeated pauses (in traverseSequence)
   public traversePause(_pause: Pause): string {
     return ".";
   }
+
   public traverseNewLine(_newLine: NewLine): string {
     return "\n";
   }
+
   // TODO: Enforce being followed by a newline (or the end of the alg)?
   public traverseComment(comment: Comment): string {
     return "//" + comment.comment;
   }
+
   // TODO: Sanitize `*/`
   private spaceBetween(u1: Unit, u2: Unit): string {
     if (matchesAlgType(u1, "pause") && matchesAlgType(u2, "pause")) {

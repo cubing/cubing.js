@@ -72,6 +72,7 @@ class StickerDef {
       this.cubie.add(foundation);
     }
   }
+
   public setColor(c: Color): void {
     this.geo.colorsNeedUpdate = true;
     this.faceColor.copy(c);
@@ -223,6 +224,7 @@ export class PG3D extends Twisty3D<Puzzle> {
       }
     }
   }
+
   private ease(fraction: number): number {
     return smootherStep(fraction);
   }

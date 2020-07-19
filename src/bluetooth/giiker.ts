@@ -186,6 +186,7 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     return cube;
   }
+
   private constructor(
     private server: BluetoothRemoteGATTServer,
     private cubeCharacteristic: BluetoothRemoteGATTCharacteristic,

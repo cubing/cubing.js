@@ -84,16 +84,19 @@ export class KPuzzle {
     }
     return moveExpander;
   }
+
   public setFaceNames(faceNames: string[]): void {
     const me = this.getMoveExpander(true);
     if (me) {
       me.setFaceNames(faceNames);
     }
   }
+
   public addGrip(grip1: string, grip2: string, nslices: number): void {
     const me = this.getMoveExpander(true);
     return me ? me.addGrip(grip1, grip2, nslices, this.definition) : undefined;
   }
+
   public expandSlices(
     rep: string,
     blockMove: BlockMove,
@@ -101,10 +104,12 @@ export class KPuzzle {
     const me = this.getMoveExpander(false);
     return me ? me.expandSlices(rep, blockMove, this.definition) : undefined;
   }
+
   public expandSlicesByName(mv: string): Transformation | undefined {
     const me = this.getMoveExpander(false);
     return me ? me.expandSlicesByName(mv, this.definition) : undefined;
   }
+
   public unswizzle(grip: string): string {
     const me = this.getMoveExpander(true);
     return me ? me.unswizzle(grip) : grip;

@@ -32,6 +32,7 @@ export class PruningTable {
     }
     this.filllevel();
   }
+
   public solve(s: Transformation): string {
     for (let d = 0; ; d++) {
       if (
@@ -66,6 +67,7 @@ export class PruningTable {
       }
     }
   }
+
   private filllevel(): void {
     this.filled++;
     const gen = new CanonicalSequenceIterator(
@@ -85,6 +87,7 @@ export class PruningTable {
       }
     }
   }
+
   private lookup(s: Transformation): number {
     this.lookups++;
     const v = this.tab[hash(this.def, s) % this.memsize];

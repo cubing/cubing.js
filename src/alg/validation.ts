@@ -75,23 +75,29 @@ abstract class BaseMoveValidator extends ValidatorTraversal {
       this.traverse(unit);
     }
   }
+
   public traverseGroup(group: Group): void {
     return this.traverse(group.nestedSequence);
   }
+
   public traverseCommutator(commutator: Commutator): void {
     this.traverse(commutator.A);
     this.traverse(commutator.B);
   }
+
   public traverseConjugate(conjugate: Conjugate): void {
     this.traverse(conjugate.A);
     this.traverse(conjugate.B);
   }
+
   public traversePause(_pause: Pause): void {
     return;
   }
+
   public traverseNewLine(_newLine: NewLine): void {
     return;
   }
+
   public traverseComment(_comment: Comment): void {
     return;
   }
@@ -162,24 +168,31 @@ export class FlatAlgValidator extends ValidatorTraversal {
     }
     return;
   }
+
   public traverseGroup(_group: Group): void {
     throw new ValidationError("A flat alg cannot contain a group.");
   }
+
   public traverseBlockMove(_blockMove: BlockMove): void {
     return;
   }
+
   public traverseCommutator(_commutator: Commutator): void {
     throw new ValidationError("A flat alg cannot contain a commutator.");
   }
+
   public traverseConjugate(_conjugate: Conjugate): void {
     throw new ValidationError("A flat alg cannot contain a conjugate.");
   }
+
   public traversePause(_pause: Pause): void {
     return;
   }
+
   public traverseNewLine(_newLine: NewLine): void {
     return;
   }
+
   public traverseComment(_comment: Comment): void {
     return;
   }
