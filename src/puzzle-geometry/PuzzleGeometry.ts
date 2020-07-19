@@ -1908,7 +1908,7 @@ export class PuzzleGeometry {
 
   public getInitial3DRotation(): Quat {
     const basefacecount = this.basefacecount;
-    let r:Quat ;
+    let r: Quat;
     if (basefacecount === 4) {
       r = new Quat(
         0.7043069543230507,
