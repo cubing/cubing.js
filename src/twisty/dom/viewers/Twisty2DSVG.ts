@@ -17,7 +17,7 @@ export class Twisty2DSVG extends HTMLElement
     cursor!.addPositionListener(this);
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     const svg = new SVG(Puzzles["3x3x3"]);
     this.appendChild(svg.element);
   }
