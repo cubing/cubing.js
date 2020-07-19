@@ -4,7 +4,7 @@ import { TwistyPlayer } from "../../src/twisty";
 import { parse } from "../../src/alg/";
 import { Vector3 } from "three";
 
-const pg = getPuzzleGeometryByName("megaminx", ["orientcenters", "true"]);
+const pg = getPuzzleGeometryByName("4x4x4", ["orientcenters", "true"]);
 const stickerDat = pg.get3d(0.0131);
 
 const kpuzzle = kpuzzleParse(pg.writeksolve("TwizzlePuzzle", true));

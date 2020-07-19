@@ -347,7 +347,7 @@ function splitByFaceNames(s: string, facenames: any[]): string[] {
 }
 
 function toCoords(q: Quat, maxdist: number): number[] {
-  return [-q.b / maxdist, -q.c / maxdist, -q.d / maxdist];
+  return [q.b / maxdist, -q.c / maxdist, q.d / maxdist];
 }
 
 function toFaceCoords(q: Quat[], maxdist: number): number[][] {
@@ -1908,36 +1908,37 @@ export class PuzzleGeometry {
 
   public getInitial3DRotation(): Quat {
     const basefacecount = this.basefacecount;
+    let r:Quat ;
     if (basefacecount === 4) {
-      return new Quat(
+      r = new Quat(
         0.7043069543230507,
         0.0617237605829268,
         0.4546068756768417,
         0.5417328493446099,
       );
     } else if (basefacecount === 6) {
-      return new Quat(
+      r = new Quat(
         0.3419476009844782,
         0.17612448544695208,
         -0.42284908551877964,
         0.8205185279339757,
       );
     } else if (basefacecount === 8) {
-      return new Quat(
+      r = new Quat(
         -0.6523285484575103,
         0.2707374015470506,
         0.6537994145576647,
         0.27150515611112014,
       );
     } else if (basefacecount === 12) {
-      return new Quat(
+      r = new Quat(
         -0.5856747836703331,
         0.02634133605619232,
         0.7075560342412421,
         0.39453217891103587,
       );
     } else if (basefacecount === 20) {
-      return new Quat(
+      r = new Quat(
         0.7052782621769977,
         0.6377976252204238,
         0.30390357803973855,
@@ -1946,6 +1947,7 @@ export class PuzzleGeometry {
     } else {
       throw new Error("Wrong base face count");
     }
+    return r;
   }
 
   public generatesvg(

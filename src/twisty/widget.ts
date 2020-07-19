@@ -429,8 +429,8 @@ export class PG3DView implements CursorObserver, JumpObserver {
       // TODO: Orient all puzzles so that the vertical axis matches the system coordinates.
       // This config option is currently an alignment hack for Megaminx.
       const position: Vector3 = this.config.experimentalPolarVantages
-        ? new Vector3(0, 0, -CAMERA_DISTANCE)
-        : new Vector3(0, -CAMERA_DISTANCE * 0.8, -CAMERA_DISTANCE * 0.8);
+        ? new Vector3(0, 0, CAMERA_DISTANCE)
+        : new Vector3(0, CAMERA_DISTANCE * 0.8, CAMERA_DISTANCE * 0.8);
       this.pg3D.newVantage(wrapper, {
         position,
         shift: this.config.sideBySide ? -1 : 0,
@@ -465,8 +465,8 @@ export class PG3DView implements CursorObserver, JumpObserver {
       // TODO: Orient all puzzles so that the vertical axis matches the system coordinates.
       // This config option is currently an alignment hack for Megaminx.
       const position: Vector3 = this.config.experimentalPolarVantages
-        ? new Vector3(0, 0, CAMERA_DISTANCE)
-        : new Vector3(0, CAMERA_DISTANCE * 0.8, CAMERA_DISTANCE * 0.8);
+        ? new Vector3(0, 0, -CAMERA_DISTANCE)
+        : new Vector3(0, -CAMERA_DISTANCE * 0.8, -CAMERA_DISTANCE * 0.8);
       this.pg3D.newVantage(wrapper, {
         position,
         shift: this.config.sideBySide ? 1 : 0,
