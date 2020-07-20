@@ -1,4 +1,4 @@
-import { CSSSource } from "./CSSManager";
+import { CSSSource } from "./ManagedCustomElement";
 
 export const testCSS = new CSSSource(`
 :host(twisty-player-test) {

@@ -5,27 +5,24 @@ import {
   Timeline,
   TimelineTimestampListener,
 } from "../../animation/Timeline";
+import { CustomElementManager } from "../ManagedCustomElement";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
-import { CSSManager } from "../CSSManager";
 import { twistyScrubberCSS } from "./TwistyScrubber.css";
 
 // Usually a horizontal line.
 export class TwistyScrubber extends HTMLElement
   implements TwistyControlElement, TimelineTimestampListener {
-  #shadow: ShadowRoot;
-  #wrapper: HTMLDivElement = document.createElement("div");
-  #cssManager: CSSManager;
-
+  #manager: CustomElementManager;
   range: HTMLInputElement = document.createElement("input"); // type="range"
   constructor(private timeline?: Timeline) {
     super();
+    this.#manager = new CustomElementManager(
+      this.attachShadow.call(this, {
+        mode: "closed",
+      }),
+    ); // TODO: open???);
 
-    this.#shadow = this.attachShadow({ mode: "closed" });
-    this.#wrapper.classList.add("wrapper");
-    this.#shadow.appendChild(this.#wrapper);
-
-    this.#cssManager = new CSSManager(this.#shadow);
-    this.#cssManager.addSource(twistyScrubberCSS);
+    this.#manager.addCSS(twistyScrubberCSS);
 
     this.timeline!.addTimestampListener(this);
     this.range.type = "range";
@@ -34,7 +31,7 @@ export class TwistyScrubber extends HTMLElement
     this.range.min = this.timeline!.minTimeStamp().toString();
     this.range.max = this.timeline!.maxTimeStamp().toString();
 
-    this.#wrapper.appendChild(this.range);
+    this.#manager.addElement(this.range);
   }
 
   connectedCallback(): void {

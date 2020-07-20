@@ -1,31 +1,29 @@
 import { Sequence } from "../../alg";
-import { PositionDispatcher, AlgCursor } from "../animation/alg/AlgCursor";
-import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
-import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
-import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
-import { TwistyControlButtonGrid } from "./controls/buttons";
-import { TwistyScrubber } from "./controls/TwistyScrubber";
-import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
+import { Twisty3DPuzzle, Twisty3DScene } from "../3D/3D";
+import { AlgCursor, PositionDispatcher } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
-import { Twisty3DScene, Twisty3DPuzzle } from "../3D/3D";
-import { CSSManager } from "./CSSManager";
+import { TwistyControlButtonGrid } from "./controls/buttons";
+import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
+import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { testCSS } from "./css";
+import { CustomElementManager } from "./ManagedCustomElement";
+import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
+import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
+import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 
 // <twisty-player>
 export class TwistyPlayerTest extends HTMLElement {
-  #shadow: ShadowRoot;
-  #wrapper: HTMLDivElement = document.createElement("div");
-  #cssManager: CSSManager;
-
+  #manager: CustomElementManager;
   viewers: TwistyViewerElement[];
   controls: TwistyControlElement[];
   // TODO: support config from DOM.
   constructor(alg: Sequence = new Sequence([])) {
     super();
-
-    this.#shadow = this.attachShadow({ mode: "closed" });
-    this.#wrapper.classList.add("wrapper");
-    this.#cssManager = new CSSManager(this.#shadow);
+    this.#manager = new CustomElementManager(
+      this.attachShadow.call(this, {
+        mode: "closed",
+      }),
+    ); // TODO: open???);
 
     const timeline = new Timeline();
     const viewer = this.createViewer(timeline, alg, "2D"); // TODO
@@ -58,14 +56,11 @@ export class TwistyPlayerTest extends HTMLElement {
   }
 
   protected connectedCallback(): void {
-    this.appendChild(this.#shadow);
-    this.#shadow.appendChild(this.#wrapper);
+    this.#manager.addElement(this.viewers[0]);
+    this.#manager.addElement(this.controls[0]);
+    this.#manager.addElement(this.controls[1]);
 
-    this.#wrapper.appendChild(this.viewers[0]);
-    this.#wrapper.appendChild(this.controls[0]);
-    this.#wrapper.appendChild(this.controls[1]);
-
-    this.#cssManager.addSource(testCSS);
+    this.#manager.addCSS(testCSS);
   }
 }
 

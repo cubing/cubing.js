@@ -1,4 +1,4 @@
-import { CSSSource } from "../CSSManager";
+import { CSSSource } from "../ManagedCustomElement";
 
 export const twistyScrubberCSS = new CSSSource(`
 :host(twisty-scrubber) {

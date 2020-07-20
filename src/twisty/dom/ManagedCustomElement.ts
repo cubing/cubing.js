@@ -12,12 +12,24 @@ export class CSSSource {
   }
 }
 
-export class CSSManager {
+// - Wrapped element
+//   - Shadow root
+//     - Content wrapper
+export class CustomElementManager {
+  public shadow: ShadowRoot;
+  public contentWrapper: HTMLDivElement; // TODO: can we get rid of this wrapper?
+
   private map: Map<CSSSource, HTMLStyleElement> = new Map();
-  constructor(private managedElem: ShadowRoot) {}
+  constructor(shadow: ShadowRoot) {
+    this.shadow = shadow;
+
+    this.contentWrapper = document.createElement("div");
+    this.contentWrapper.classList.add("wrapper");
+    this.shadow.appendChild(this.contentWrapper);
+  }
 
   // Add the source, if not already added.
-  addSource(cssSource: CSSSource): void {
+  public addCSS(cssSource: CSSSource): void {
     if (this.map.get(cssSource)) {
       return;
     }
@@ -26,16 +38,20 @@ export class CSSManager {
     cssElem.textContent = cssSource.getAsString();
 
     this.map.set(cssSource, cssElem);
-    this.managedElem.appendChild(cssElem);
+    this.shadow.appendChild(cssElem);
   }
 
-  // Add the source, unless already .
-  removeSource(cssSource: CSSSource): void {
+  // Remove the source, if it's currently added.
+  public removeCSS(cssSource: CSSSource): void {
     const cssElem = this.map.get(cssSource);
     if (!cssElem) {
       return;
     }
-    this.managedElem.removeChild(cssElem);
+    this.shadow.removeChild(cssElem);
     this.map.delete(cssSource);
+  }
+
+  public addElement<T extends Node>(element: T): T {
+    return this.contentWrapper.appendChild(element);
   }
 }
