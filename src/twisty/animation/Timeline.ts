@@ -78,6 +78,14 @@ export class Timeline
     this.scheduler = new RenderScheduler(animFrame);
   }
 
+  minTimeStamp(): MillisecondTimestamp {
+    return 0;
+  }
+
+  maxTimeStamp(): MillisecondTimestamp {
+    return 1000;
+  }
+
   addTimestampListener(timestampListener: TimelineTimestampListener): void {
     this.timestampListeners.add(timestampListener);
   }
