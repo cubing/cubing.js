@@ -28,6 +28,7 @@ export class TwistyControlButtonGrid extends ManagedCustomElement
       new TwistyControlButtonFullscreen(timeline!, fullscreenElement!),
     );
     this.addElement(new TwistyControlButtonJumpToStart(timeline!));
+    this.addElement(new TwistyControlButtonPlay(timeline!));
     /*...*/
   }
 }
@@ -74,12 +75,13 @@ export class TwistyControlButtonJumpToStart extends ManagedCustomElement
     this.addCSS(buttonCSS);
     /*...*/
     this.timeline!.addActionListener(this);
+
     this.button.textContent = "⏮";
+    this.button.addEventListener("click", this.onPress.bind(this));
     this.addElement(this.button);
   }
 
   connectedCallback(): void {
-    console.log(this, this.contentWrapper);
     this.contentWrapper.appendChild(this.button);
   }
 
@@ -108,12 +110,13 @@ export class TwistyControlButtonPlay extends TwistyControlButton {
     this.addCSS(buttonCSS);
     /*...*/
     this.timeline!.addActionListener(this);
+
     this.button.textContent = "▶️";
+    this.addElement(this.button);
     this.addElement(this.button);
   }
 
   connectedCallback(): void {
-    console.log("sdfsdfsdf");
     this.addElement(this.button);
   }
 
