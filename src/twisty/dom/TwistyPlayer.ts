@@ -6,24 +6,18 @@ import { TwistyControlButtonGrid } from "./controls/buttons";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { testCSS } from "./css";
-import { CustomElementManager } from "./ManagedCustomElement";
+import { ManagedCustomElement } from "./ManagedCustomElement";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 
 // <twisty-player>
-export class TwistyPlayerTest extends HTMLElement {
-  #manager: CustomElementManager;
+export class TwistyPlayerTest extends ManagedCustomElement {
   viewers: TwistyViewerElement[];
   controls: TwistyControlElement[];
   // TODO: support config from DOM.
   constructor(alg: Sequence = new Sequence([])) {
     super();
-    this.#manager = new CustomElementManager(
-      this.attachShadow.call(this, {
-        mode: "closed",
-      }),
-    ); // TODO: open???);
 
     const timeline = new Timeline();
     const viewer = this.createViewer(timeline, alg, "2D"); // TODO
@@ -56,11 +50,11 @@ export class TwistyPlayerTest extends HTMLElement {
   }
 
   protected connectedCallback(): void {
-    this.#manager.addElement(this.viewers[0]);
-    this.#manager.addElement(this.controls[0]);
-    this.#manager.addElement(this.controls[1]);
+    this.addElement(this.viewers[0]);
+    this.addElement(this.controls[0]);
+    this.addElement(this.controls[1]);
 
-    this.#manager.addCSS(testCSS);
+    this.addCSS(testCSS);
   }
 }
 

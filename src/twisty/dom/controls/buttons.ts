@@ -5,10 +5,11 @@ import {
   TimelineActionListener,
   TimestampLocationType,
 } from "../../animation/Timeline";
-import { CustomElementManager } from "../ManagedCustomElement";
+import { ManagedCustomElement } from "../ManagedCustomElement";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
+import { buttonGridCSS, buttonCSS } from "./buttons.css";
 
-abstract class TwistyControlButton extends HTMLButtonElement
+abstract class TwistyControlButton extends ManagedCustomElement
   implements TwistyControlElement {
   constructor() {
     super();
@@ -17,21 +18,16 @@ abstract class TwistyControlButton extends HTMLButtonElement
 
 // <twisty-control-button-grid>
 // Usually a horizontal line.
-export class TwistyControlButtonGrid extends HTMLElement
+export class TwistyControlButtonGrid extends ManagedCustomElement
   implements TwistyControlElement {
-  #manager: CustomElementManager;
   constructor(timeline?: Timeline, fullscreenElement?: Element) {
     super();
-    this.#manager = new CustomElementManager(
-      this.attachShadow.call(this, {
-        mode: "closed",
-      }),
-    ); // TODO: open???);
+    this.addCSS(buttonGridCSS);
 
-    this.appendChild(
+    this.addElement(
       new TwistyControlButtonFullscreen(timeline!, fullscreenElement!),
     );
-    this.appendChild(new TwistyControlButtonJumpToStart(timeline!));
+    this.addElement(new TwistyControlButtonJumpToStart(timeline!));
     /*...*/
   }
 }
@@ -40,21 +36,17 @@ if (customElements) {
   customElements.define("twisty-control-button-grid", TwistyControlButtonGrid);
 }
 
-export class TwistyControlButtonFullscreen extends HTMLElement {
-  #manager: CustomElementManager;
+export class TwistyControlButtonFullscreen extends ManagedCustomElement {
+  private button: HTMLButtonElement = document.createElement("button");
   constructor(
     protected timeline?: Timeline,
     private fullscreenElement?: Element,
   ) {
     super();
-    this.#manager = new CustomElementManager(
-      this.attachShadow.call(this, {
-        mode: "closed",
-      }),
-    ); // TODO: open???);
-
+    this.addCSS(buttonCSS);
     /*...*/
-    this.textContent = "🖥";
+    this.button.textContent = "🖥";
+    this.addElement(this.button);
     this.addEventListener("click", this.onPress.bind(this));
   }
 
@@ -74,26 +66,21 @@ if (customElements) {
   );
 }
 
-export class TwistyControlButtonJumpToStart extends HTMLElement
+export class TwistyControlButtonJumpToStart extends ManagedCustomElement
   implements TimelineActionListener {
-  #shadow: ShadowRoot;
-  #wrapper: HTMLDivElement = document.createElement("div");
-  // #cssManager: CSSManager;
   private button: HTMLButtonElement = document.createElement("button");
   constructor(protected timeline?: Timeline) {
     super();
-
-    this.#shadow = this.attachShadow({ mode: "closed" });
-    this.#wrapper.classList.add("wrapper");
-    this.#shadow.appendChild(this.#wrapper);
+    this.addCSS(buttonCSS);
     /*...*/
     this.timeline!.addActionListener(this);
-    this.textContent = "⏮";
+    this.button.textContent = "⏮";
+    this.addElement(this.button);
   }
 
   connectedCallback(): void {
-    console.log(this, this.#wrapper);
-    this.#wrapper.appendChild(this.button);
+    console.log(this, this.contentWrapper);
+    this.contentWrapper.appendChild(this.button);
   }
 
   onPress(): void {
@@ -115,11 +102,19 @@ if (customElements) {
 }
 
 export class TwistyControlButtonPlay extends TwistyControlButton {
+  button: HTMLButtonElement = document.createElement("button");
   constructor(protected timeline?: Timeline) {
     super();
+    this.addCSS(buttonCSS);
     /*...*/
     this.timeline!.addActionListener(this);
-    this.textContent = "▶️";
+    this.button.textContent = "▶️";
+    this.addElement(this.button);
+  }
+
+  connectedCallback(): void {
+    console.log("sdfsdfsdf");
+    this.addElement(this.button);
   }
 
   onPress(): void {
@@ -127,7 +122,7 @@ export class TwistyControlButtonPlay extends TwistyControlButton {
   }
 
   onTimelineAction(actionEvent: TimelineActionEvent): void {
-    this.disabled = actionEvent.action === TimelineAction.Pausing;
+    this.button.disabled = actionEvent.action === TimelineAction.Pausing;
   }
 }
 

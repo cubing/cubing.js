@@ -24,10 +24,4 @@ svg {
 * {
   background: rgba(255, 0, 0, 0.1);
 }
-
-twisty-control-button-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-
 `);
