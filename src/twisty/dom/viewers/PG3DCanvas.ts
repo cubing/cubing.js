@@ -1,13 +1,15 @@
 import { TwistyViewerElement } from "./TwistyViewerElement";
 import { Cube3D } from "../../../twisty-old/3D/cube3D";
-import { Puzzles } from "../../../kpuzzle";
+import { Puzzles, KPuzzle } from "../../../kpuzzle";
 import { ManagedCustomElement } from "../ManagedCustomElement";
-import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
+import { pg3DCanvasCSS } from "./PG3DCanvas.css";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import {
   PositionDispatcher,
   PuzzlePosition,
 } from "../../animation/alg/AlgCursor";
+import { getPuzzleGeometryByName } from "../../../puzzle-geometry";
+import { PuzzleName } from "../../../puzzle-geometry/Puzzles";
 
 // <twisty-3d-canvas>
 export class Twisty3DCanvas extends ManagedCustomElement
@@ -16,9 +18,26 @@ export class Twisty3DCanvas extends ManagedCustomElement
   // renderer: Renderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
   private scheduler = new RenderScheduler(this.render.bind(this));
   private cube3D: Cube3D;
-  constructor(cursor?: PositionDispatcher) {
+  constructor(cursor?: PositionDispatcher, name?: PuzzleName) {
     super();
-    this.addCSS(twisty3DCanvasCSS);
+    this.addCSS(pg3DCanvasCSS);
+
+    const pg = getPuzzleGeometryByName(name!, ["orientcenters", "true"]);
+    const kpuzzleDef = pg.writekpuzzle();
+    const worker = new KPuzzle(kpuzzleDef);
+
+    // Wide move / rotation hack
+    worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
+    const mps = pg.movesetgeos;
+    for (const mp of mps) {
+      const grip1 = mp[0] as string;
+      const grip2 = mp[2] as string;
+      // angle compatibility hack
+      worker.addGrip(grip1, grip2, mp[4] as number);
+    }
+
+    const stickerDat = pg.get3d(0.0131);
+
     // console.log("fooly");
     // /*...*/
     // this.twisty3DScene.addRenderTarget(this);

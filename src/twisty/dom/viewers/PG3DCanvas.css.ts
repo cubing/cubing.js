@@ -1,6 +1,6 @@
 import { CSSSource } from "../ManagedCustomElement";
 
-export const twisty3DCanvasCSS = new CSSSource(`
+export const pg3DCanvasCSS = new CSSSource(`
 :host(twisty-3d-canvas) {
   contain: content;
   display: grid;
