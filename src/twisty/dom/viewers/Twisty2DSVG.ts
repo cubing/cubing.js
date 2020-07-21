@@ -50,6 +50,7 @@ export class Twisty2DSVG extends ManagedCustomElement
         position.state as Transformation,
         stateForBlockMove(def, partialMove),
       );
+      // TODO: move to render()
       this.svg.draw(
         this.definition,
         position.state as Transformation,

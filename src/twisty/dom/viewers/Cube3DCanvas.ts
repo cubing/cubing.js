@@ -2,15 +2,15 @@ import { TwistyViewerElement } from "./TwistyViewerElement";
 import { Cube3D } from "../../../twisty-old/3D/cube3D";
 import { Puzzles } from "../../../kpuzzle";
 import { ManagedCustomElement } from "../ManagedCustomElement";
-import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
+import { cube3DCanvasCSS } from "./Cube3DCanvas.css";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import {
   PositionDispatcher,
   PuzzlePosition,
 } from "../../animation/alg/AlgCursor";
 
-// <twisty-3d-canvas>
-export class Twisty3DCanvas extends ManagedCustomElement
+// <cube-3d-canvas>
+export class Cube3DCanvas extends ManagedCustomElement
   implements TwistyViewerElement {
   // camera: Camera;
   // renderer: Renderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
@@ -18,7 +18,7 @@ export class Twisty3DCanvas extends ManagedCustomElement
   private cube3D: Cube3D;
   constructor(cursor?: PositionDispatcher) {
     super();
-    this.addCSS(twisty3DCanvasCSS);
+    this.addCSS(cube3DCanvasCSS);
     // console.log("fooly");
     // /*...*/
     // this.twisty3DScene.addRenderTarget(this);
@@ -48,5 +48,5 @@ export class Twisty3DCanvas extends ManagedCustomElement
 }
 
 if (customElements) {
-  customElements.define("twisty-3d-canvas", Twisty3DCanvas);
+  customElements.define("cube-3d-canvas", Cube3DCanvas);
 }

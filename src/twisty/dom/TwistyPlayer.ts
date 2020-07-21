@@ -1,5 +1,5 @@
-import { Sequence, Example } from "../../alg";
-import { Twisty3DPuzzle, Twisty3DScene } from "../3D/3D";
+import { Example, Sequence } from "../../alg";
+import { Puzzles } from "../../kpuzzle";
 import { AlgCursor, PositionDispatcher } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
@@ -7,10 +7,9 @@ import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
+import { Cube3DCanvas } from "./viewers/Cube3DCanvas";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
-import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
-import { Puzzles } from "../../kpuzzle";
 
 // <twisty-player>
 export class TwistyPlayerTest extends ManagedCustomElement {
@@ -23,7 +22,7 @@ export class TwistyPlayerTest extends ManagedCustomElement {
     alg = Example.Sune; // TODO
 
     const timeline = new Timeline();
-    const viewer = this.createViewer(timeline, alg, "2D"); // TODO
+    const viewer = this.createViewer(timeline, alg, "3D"); // TODO
     const scrubber = new TwistyScrubber(timeline);
     const controlButtonGrid = new TwistyControlButtonPanel(timeline, this);
     this.viewers = [viewer];
@@ -48,10 +47,10 @@ export class TwistyPlayerTest extends ManagedCustomElement {
       case "2D":
         return new Twisty2DSVG(cursor);
       case "3D": {
-        const twisty3DScene = new Twisty3DScene();
-        const twisty3DPuzzle = new Twisty3DPuzzle(twisty3DScene, cursor);
-        twisty3DScene.addTwisty3DPuzzle(twisty3DPuzzle);
-        return new Twisty3DCanvas();
+        // const twisty3DScene = new Twisty3DScene();
+        // const twisty3DPuzzle = new Twisty3DPuzzle(twisty3DScene, cursor);
+        // twisty3DScene.addTwisty3DPuzzle(twisty3DPuzzle);
+        return new Cube3DCanvas(cursor);
       }
     }
   }
