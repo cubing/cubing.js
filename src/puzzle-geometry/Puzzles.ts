@@ -38,7 +38,8 @@ export const Puzzles: { [name: string]: PuzzleDescriptionString } = {
   "megaminx": "d f 0.7",
   "gigaminx": "d f 0.64 f 0.82",
   "pentultimate": "d f 0",
-  "starminx": "d v 0.93796236956",
+  // exact value for starminx is sqrt(5(5-2 sqrt(5))/3)
+  "starminx": "d v 0.937962370425399",
   "starminx 2": "d f 0.23606797749979",
   "pyraminx crystal": "d f 0.447213595499989",
   "chopasaurus": "d v 0",
@@ -60,7 +61,7 @@ export const Puzzles: { [name: string]: PuzzleDescriptionString } = {
   "dino + little chop": "c v 0.577350269189626 e 0",
   "2x2x2 + dino + little chop": "c f 0 v 0.577350269189626 e 0",
   "megaminx + chopasaurus": "d f 0.61803398875 v 0",
-  "starminx combo": "d f 0.23606797749979 v 0.93796236956",
+  "starminx combo": "d f 0.23606797749979 v 0.937962370425399",
 };
 
 export type PuzzleName = keyof typeof Puzzles;
