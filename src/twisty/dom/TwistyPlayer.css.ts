@@ -1,6 +1,6 @@
 import { CSSSource } from "./ManagedCustomElement";
 
-export const testCSS = new CSSSource(`
+export const twistyPlayerCSS = new CSSSource(`
 :host(twisty-player-test) {
   width: 384px;
   height: 256px;
@@ -12,16 +12,10 @@ export const testCSS = new CSSSource(`
   display: grid;
   grid-template-rows: 1fr 1em 2em;
   height: 100%;
-}
-
-.svg-wrapper,
-svg {
-  width: 100%;
-  height: 100%;
-  display: grid;
+  overflow: hidden;
 }
 
 * {
-  background: rgba(255, 0, 0, 0.1);
+  background: rgba(0, 128, 255, 0.1);
 }
 `);

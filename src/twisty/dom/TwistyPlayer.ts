@@ -1,15 +1,16 @@
-import { Sequence } from "../../alg";
+import { Sequence, Example } from "../../alg";
 import { Twisty3DPuzzle, Twisty3DScene } from "../3D/3D";
 import { AlgCursor, PositionDispatcher } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
-import { TwistyControlButtonGrid } from "./controls/buttons";
+import { TwistyControlButtonPanel } from "./controls/buttons";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
-import { testCSS } from "./css";
 import { ManagedCustomElement } from "./ManagedCustomElement";
+import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
+import { Puzzles } from "../../kpuzzle";
 
 // <twisty-player>
 export class TwistyPlayerTest extends ManagedCustomElement {
@@ -19,10 +20,12 @@ export class TwistyPlayerTest extends ManagedCustomElement {
   constructor(alg: Sequence = new Sequence([])) {
     super();
 
+    alg = Example.Sune; // TODO
+
     const timeline = new Timeline();
     const viewer = this.createViewer(timeline, alg, "2D"); // TODO
     const scrubber = new TwistyScrubber(timeline);
-    const controlButtonGrid = new TwistyControlButtonGrid(timeline, this);
+    const controlButtonGrid = new TwistyControlButtonPanel(timeline, this);
     this.viewers = [viewer];
     this.controls = [scrubber, controlButtonGrid];
   }
@@ -36,7 +39,11 @@ export class TwistyPlayerTest extends ManagedCustomElement {
     alg: Sequence,
     visualization: "2D" | "3D",
   ): TwistyViewerElement {
-    const cursor: PositionDispatcher = new AlgCursor(timeline, alg);
+    const cursor: PositionDispatcher = new AlgCursor(
+      timeline,
+      Puzzles["3x3x3"],
+      alg,
+    );
     switch (visualization) {
       case "2D":
         return new Twisty2DSVG(cursor);
@@ -54,7 +61,7 @@ export class TwistyPlayerTest extends ManagedCustomElement {
     this.addElement(this.controls[0]);
     this.addElement(this.controls[1]);
 
-    this.addCSS(testCSS);
+    this.addCSS(twistyPlayerCSS);
   }
 }
 

@@ -12,9 +12,11 @@ import { twistyScrubberCSS } from "./TwistyScrubber.css";
 // Usually a horizontal line.
 export class TwistyScrubber extends ManagedCustomElement
   implements TwistyControlElement, TimelineTimestampListener {
+  private timeline: Timeline;
   range: HTMLInputElement = document.createElement("input"); // type="range"
-  constructor(private timeline?: Timeline) {
+  constructor(timeline?: Timeline) {
     super();
+    this.timeline = timeline!; // TODO
 
     this.addCSS(twistyScrubberCSS);
 
@@ -24,18 +26,18 @@ export class TwistyScrubber extends ManagedCustomElement
     this.range.step = (1).toString();
     this.range.min = this.timeline!.minTimeStamp().toString();
     this.range.max = this.timeline!.maxTimeStamp().toString();
+    this.range.value = this.timeline.timestamp.toString();
+    this.range.addEventListener("input", this.onInput.bind(this));
 
     this.addElement(this.range);
   }
 
-  connectedCallback(): void {
-    //
+  onTimelineTimestampChange(timestamp: MillisecondTimestamp): void {
+    this.range.value = timestamp.toString();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-  onTimelineTimestampChange(timestamp: MillisecondTimestamp): void {
-    // Update slider position.
-    /*...*/
+  onInput(): void {
+    this.timeline!.setTimestamp(parseInt(this.range.value, 10));
   }
 }
 

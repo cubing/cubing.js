@@ -52,23 +52,41 @@ export interface TimelineActionDispatcher {
   addActionListener(actionListener: TimelineActionListener): void;
 }
 
+// `performance.now()` is rounded for security concerns, so it's usually not
+// accurate to the millisecond. So we round it, which lets us work with whole ms
+// everywhere.
+function getNow(): MillisecondTimestamp {
+  return Math.round(performance.now());
+}
+
 export class Timeline
   implements TimelineTimestampDispatcher, TimelineActionDispatcher {
   animating: boolean = false;
   private timestampListeners: Set<TimelineTimestampListener> = new Set();
   private actionListeners: Set<TimelineActionListener> = new Set();
   timestamp: number = 0;
-  lastAnimFrameTimestamp: DOMHighResTimeStamp = 0;
+  lastAnimFrameNow: DOMHighResTimeStamp = 0;
+  lastAnimFrameTimestamp: MillisecondTimestamp;
   private scheduler: RenderScheduler;
   constructor() {
-    /*...*/
+    const animFrame = (_now: MillisecondTimestamp): void => {
+      if (this.animating) {
+        const now = getNow(); // TODO: See if we can use the rAF value without monotonicity issues.;
+        this.timestamp = this.timestamp + (now - this.lastAnimFrameNow);
+        this.lastAnimFrameNow = now;
+      }
 
-    const animFrame = (): void => {
-      this.timestamp =
-        this.timestamp + (Date.now() - this.lastAnimFrameTimestamp);
+      if (this.timestamp >= this.maxTimeStamp()) {
+        this.timestamp = this.maxTimeStamp();
+        if (this.animating) {
+          this.animating = false;
+          this.dispatchAction(TimelineAction.Pausing);
+        }
+      }
 
-      for (const listener of this.timestampListeners) {
-        listener.onTimelineTimestampChange(this.timestamp);
+      if (this.timestamp !== this.lastAnimFrameTimestamp) {
+        this.dispatchTimestamp();
+        this.lastAnimFrameTimestamp = this.timestamp;
       }
 
       if (this.animating) {
@@ -83,7 +101,14 @@ export class Timeline
   }
 
   maxTimeStamp(): MillisecondTimestamp {
-    return 1000;
+    return 7500; // TODO: get from cursors
+  }
+
+  dispatchTimestamp(): void {
+    for (const listener of this.timestampListeners) {
+      // TODO: dedup in case the timestamp hasn't changed sine last time.
+      listener.onTimelineTimestampChange(this.timestamp);
+    }
   }
 
   addTimestampListener(timestampListener: TimelineTimestampListener): void {
@@ -97,7 +122,7 @@ export class Timeline
   play(): void {
     if (!this.animating) {
       this.animating = true;
-      this.lastAnimFrameTimestamp = Date.now();
+      this.lastAnimFrameNow = getNow();
       this.dispatchAction(TimelineAction.StartingToPlay);
       this.scheduler.requestAnimFrame();
     }
@@ -113,12 +138,21 @@ export class Timeline
     }
   }
 
+  playPause(): void {
+    if (this.animating) {
+      this.pause();
+    } else {
+      if (this.timestamp >= this.maxTimeStamp()) {
+        this.timestamp = 0;
+      }
+      this.play();
+    }
+  }
+
   setTimestamp(timestamp: MillisecondTimestamp): void {
     const oldTimestamp = this.timestamp;
     this.timestamp = timestamp;
-    if (this.animating) {
-      this.lastAnimFrameTimestamp = Date.now();
-    }
+    this.lastAnimFrameNow = getNow();
 
     if (oldTimestamp !== timestamp) {
       this.dispatchAction(TimelineAction.Jumping);
@@ -126,10 +160,25 @@ export class Timeline
     }
   }
 
+  jumpToEnd(): void {
+    this.setTimestamp(this.maxTimeStamp());
+  }
+
   private dispatchAction(event: TimelineAction): void {
-    const locationType = TimestampLocationType.StartOfTimeline; // TODO
+    let locationType = TimestampLocationType.MiddleOfMove; // TODO
+    switch (this.timestamp) {
+      // TODO
+      case this.minTimeStamp():
+        locationType = TimestampLocationType.StartOfTimeline;
+        break;
+      case this.maxTimeStamp():
+        locationType = TimestampLocationType.EndOfTimeline;
+        break;
+    }
+
+    const actionEvent: TimelineActionEvent = { action: event, locationType };
     for (const listener of this.actionListeners) {
-      listener.onTimelineAction({ action: event, locationType });
+      listener.onTimelineAction(actionEvent);
     }
   }
 }

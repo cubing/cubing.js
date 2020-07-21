@@ -7,13 +7,17 @@
 
 // start of imports
 import { AlgPart, Sequence } from "../../../alg";
-import { Transformation as KPuzzleState } from "../../../kpuzzle";
 import {
-  TimelineTimestampListener,
-  Timeline,
+  KPuzzleDefinition,
+  Transformation as KPuzzleState,
+} from "../../../kpuzzle";
+import { TreeAlgorithmIndexer } from "../../../twisty-old/cursor";
+import { KSolvePuzzle } from "../../../twisty-old/puzzle";
+import {
   MillisecondTimestamp,
+  Timeline,
+  TimelineTimestampListener,
 } from "../Timeline";
-import { AlgIndexer } from "./AlgIndexer";
 // end of imports
 
 // Model
@@ -24,16 +28,16 @@ export enum Direction {
   Paused = 0,
   Backwards = -1,
 }
-export interface MoveProgress {
+export interface MoveInProgress {
   move: AlgPart;
   direction: Direction;
   fraction: number;
 }
-export interface MoveInProgress {
+
+export type PuzzlePosition = {
   state: KPuzzleState;
-  moves: MoveProgress[];
-}
-export type PuzzlePosition = [KPuzzleState, MoveInProgress[]];
+  movesInProgress: MoveInProgress[];
+};
 
 export interface PositionListener {
   onPositionChange(position: PuzzlePosition): void;
@@ -45,11 +49,12 @@ export interface PositionDispatcher {
 
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
-  private indexer: AlgIndexer;
+  private todoIndexer: TreeAlgorithmIndexer<KSolvePuzzle>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
-  constructor(timeline: Timeline, alg: Sequence) {
+  constructor(timeline: Timeline, def: KPuzzleDefinition, alg: Sequence) {
     timeline.addTimestampListener(this);
-    this.indexer = new AlgIndexer(alg);
+    const kp = new KSolvePuzzle(def);
+    this.todoIndexer = new TreeAlgorithmIndexer(kp, alg);
     /*...*/
   }
 
@@ -58,7 +63,20 @@ export class AlgCursor
   }
 
   onTimelineTimestampChange(timestamp: MillisecondTimestamp): void {
-    const position = this.indexer.getPosition(timestamp);
+    const idx = this.todoIndexer.timestampToIndex(timestamp);
+    const state = this.todoIndexer.stateAtIndex(idx) as any; // TODO
+    const position: PuzzlePosition = {
+      state,
+      movesInProgress: [
+        {
+          move: this.todoIndexer.getMove(idx),
+          direction: Direction.Forwards,
+          fraction:
+            (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
+            this.todoIndexer.moveDuration(idx),
+        },
+      ],
+    };
     for (const listener of this.positionListeners) {
       listener.onPositionChange(position);
     }

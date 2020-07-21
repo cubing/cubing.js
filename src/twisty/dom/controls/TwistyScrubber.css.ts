@@ -8,10 +8,6 @@ export const twistyScrubberCSS = new CSSSource(`
   display: grid;
 }
 
-.wrapper {
-  background: rgba(255, 0, 0, 0.2);
-}
-
 input {
   margin: 0; width: 100%;
 }
