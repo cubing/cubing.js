@@ -167,6 +167,44 @@ export class Quat {
     t.a = this.a;
     return t;
   }
+  // return any vector orthogonal to the given one.  Find the smallest
+  // component (in absolute value) and return the cross product of that
+  // axis with the given vector.
+  public orthogonal(): Quat {
+    const ab = Math.abs(this.b);
+    const ac = Math.abs(this.c);
+    const ad = Math.abs(this.d);
+    if (ab < ac && ab < ad) {
+      return this.cross(new Quat(0, 1, 0, 0)).normalize();
+    } else if (ac < ab && ac < ad) {
+      return this.cross(new Quat(0, 0, 1, 0)).normalize();
+    } else {
+      return this.cross(new Quat(0, 0, 0, 1)).normalize();
+    }
+  }
+  // return the Quaternion that will rotate the this vector
+  // to the b vector through rotatepoint.
+  public pointrotation(b: Quat): Quat {
+    const a = this.normalize();
+    b = b.normalize();
+    if (a.sub(b).len() < eps) {
+      return new Quat(1, 0, 0, 0);
+    }
+    let h = a.sum(b);
+    if (h.len() < eps) {
+      h = h.orthogonal();
+    } else {
+      h = h.normalize();
+    }
+    const r = a.cross(h);
+    r.a = a.dot(h);
+    return r;
+  }
+  // given two vectors, return the portion of the first that
+  // is not in the direction of the second.
+  public unproject(b: Quat): Quat {
+    return this.sum(b.smul(-this.dot(b) / (this.len() * b.len())));
+  }
   public rotatepoint(q: Quat): Quat {
     // rotate a point
     return q.mul(this).mul(q.invrot());

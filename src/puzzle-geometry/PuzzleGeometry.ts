@@ -216,6 +216,20 @@ const defaultfaceorders: any = {
   ],
 };
 
+/*
+ *  Default orientations for the puzzles in 3D space.  Can be overridden
+ *  by puzzleOrientation or puzzleOrientations options.
+ *
+ *  These are good defaults for twizzle.
+ */
+const defaultOrientations: any = {
+  4: ["FLR", [0, 0, 1], "RLD", [0, 1, 0]],
+  6: ["URF", [0, 0, 1], "ULB", [0, 1, 0]],
+  8: ["FLUR", [0, 0, 1], "UBB", [0, 1, 0]],
+  12: ["U", [0, 0, 1], "BRBLBF", [0, 1, 0]],
+  20: ["F", [0, 0, 1], "GUQMJ", [0, 1, 0]],
+};
+
 function findelement(a: any[], p: Quat): number {
   // find something in facenames, vertexnames, edgenames
   for (let i = 0; i < a.length; i++) {
@@ -347,7 +361,7 @@ function splitByFaceNames(s: string, facenames: any[]): string[] {
 }
 
 function toCoords(q: Quat, maxdist: number): number[] {
-  return [-q.b / maxdist, -q.c / maxdist, -q.d / maxdist];
+  return [q.b / maxdist, -q.c / maxdist, q.d / maxdist];
 }
 
 function toFaceCoords(q: Quat[], maxdist: number): number[][] {
@@ -433,6 +447,8 @@ export class PuzzleGeometry {
   public addrotations: boolean; // add symmetry information to ksolve output
   public movelist: any; // move list to generate
   public parsedmovelist: any; // parsed move list
+  public puzzleOrientation: any; // single puzzle orientation from options
+  public puzzleOrientations: any; // puzzle orientation override list from options
   public cornersets: boolean = true; // include corner sets
   public centersets: boolean = true; // include center sets
   public edgesets: boolean = true; // include edge sets
@@ -454,6 +470,12 @@ export class PuzzleGeometry {
   public faceorder: any = [];
   public faceprecedence: number[] = [];
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
+    function asstructured(v: any): any {
+      if (typeof v === "string") {
+        return JSON.parse(v);
+      }
+      return v;
+    }
     function asboolean(v: any): boolean {
       if (typeof v === "string") {
         if (v === "false") {
@@ -505,6 +527,10 @@ export class PuzzleGeometry {
           this.fixPiece = optionlist[i + 1];
         } else if (optionlist[i] === "orientcenters") {
           this.orientCenters = asboolean(optionlist[i + 1]);
+        } else if (optionlist[i] === "puzzleorientation") {
+          this.puzzleOrientation = asstructured(optionlist[i + 1]);
+        } else if (optionlist[i] === "puzzleorientations") {
+          this.puzzleOrientations = asstructured(optionlist[i + 1]);
         } else {
           throw new Error(
             "Bad option while processing option list " + optionlist[i],
@@ -1905,47 +1931,66 @@ export class PuzzleGeometry {
     }
     return new Perm(r);
   }
+  // Given a rotation description that says to align feature1
+  // with a given vector, and then as much as possible feature2
+  // with another given vector, return a Quaternion that
+  // performs this rotation.
+  public getOrientationRotation(desiredRotation: any[]): Quat {
+    const feature1name = desiredRotation[0];
+    const direction1 = new Quat(
+      0,
+      desiredRotation[1][0],
+      -desiredRotation[1][1],
+      desiredRotation[1][2],
+    );
+    const feature2name = desiredRotation[2];
+    const direction2 = new Quat(
+      0,
+      desiredRotation[3][0],
+      -desiredRotation[3][1],
+      desiredRotation[3][2],
+    );
+    let feature1: Quat | null = null;
+    let feature2: Quat | null = null;
+    for (const gn of this.geonormals) {
+      if (this.spinmatch(gn[1], feature1name)) {
+        feature1 = gn[0];
+      }
+      if (this.spinmatch(gn[1], feature2name)) {
+        feature2 = gn[0];
+      }
+    }
+    if (!feature1) {
+      throw new Error("Could not find feature " + feature1name);
+    }
+    if (!feature2) {
+      throw new Error("Could not find feature " + feature2name);
+    }
+    const r1 = feature1.pointrotation(direction1);
+    const feature2rot = feature2.rotatepoint(r1);
+    const r2 = feature2rot
+      .unproject(direction1)
+      .pointrotation(direction2.unproject(direction1));
+    return r2.mul(r1);
+  }
 
   public getInitial3DRotation(): Quat {
     const basefacecount = this.basefacecount;
-    if (basefacecount === 4) {
-      return new Quat(
-        0.7043069543230507,
-        0.0617237605829268,
-        0.4546068756768417,
-        0.5417328493446099,
-      );
-    } else if (basefacecount === 6) {
-      return new Quat(
-        0.3419476009844782,
-        0.17612448544695208,
-        -0.42284908551877964,
-        0.8205185279339757,
-      );
-    } else if (basefacecount === 8) {
-      return new Quat(
-        -0.6523285484575103,
-        0.2707374015470506,
-        0.6537994145576647,
-        0.27150515611112014,
-      );
-    } else if (basefacecount === 12) {
-      return new Quat(
-        -0.5856747836703331,
-        0.02634133605619232,
-        0.7075560342412421,
-        0.39453217891103587,
-      );
-    } else if (basefacecount === 20) {
-      return new Quat(
-        0.7052782621769977,
-        0.6377976252204238,
-        0.30390357803973855,
-        0.05864620549043545,
-      );
-    } else {
-      throw new Error("Wrong base face count");
+    let rotDesc: any = null;
+    if (this.puzzleOrientation) {
+      rotDesc = this.puzzleOrientation;
+    } else if (this.puzzleOrientations) {
+      rotDesc = this.puzzleOrientations[basefacecount];
     }
+    // either no option specified or no matching key in
+    // puzzleOrientations.
+    if (!rotDesc) {
+      rotDesc = defaultOrientations[basefacecount];
+    }
+    if (!rotDesc) {
+      throw new Error("No default orientation?");
+    }
+    return this.getOrientationRotation(rotDesc);
   }
 
   public generatesvg(
