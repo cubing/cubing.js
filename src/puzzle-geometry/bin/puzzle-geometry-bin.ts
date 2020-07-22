@@ -33,6 +33,7 @@ Options:
 --nocenters: ignore all centers
 --noorientation: ignore orientations
 --orientcenters: give centers an orientation
+--puzzleorientation:  for 3D formats, give puzzle orientation
 --moves movenames: restrict moves to this list (e.g, U2,F,r)
 --optimize: optimize tws/ksolve/gap output
 --scramble: scramble solved position
@@ -130,6 +131,9 @@ if (
       optionlist.push("fix", "f");
     } else if (option === "--orientcenters") {
       optionlist.push("orientcenters", true);
+    } else if (option === "--puzzleorientation") {
+      optionlist.push("puzzleorientation", process.argv[argp]);
+      argp++;
     } else {
       throw new Error("Bad option: " + option);
     }
@@ -173,7 +177,7 @@ if (
   } else if (doksolve) {
     console.log(pg.writeksolve()); // TODO: Update arguments
   } else if (dosvg) {
-    console.log(pg.generatesvg()); // TODO: Update arguments
+    console.log(pg.generatesvg(undefined, undefined, undefined, do3d));
   } else if (do3d) {
     console.log(JSON.stringify(pg.get3d()));
   } else if (doss) {
