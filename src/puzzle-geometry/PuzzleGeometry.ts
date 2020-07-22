@@ -516,7 +516,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "grayedges") {
           this.grayedges = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "movelist") {
-          this.movelist = optionlist[i + 1];
+          this.movelist = asstructured(optionlist[i + 1]);
         } else if (optionlist[i] === "killorientation") {
           this.killorientation = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "optimize") {
@@ -1396,6 +1396,30 @@ export class PuzzleGeometry {
     }
     const movesbyslice = [];
     const cmovesbyslice = [];
+    // if orientCenters is set, we find all cubies that have only one
+    // sticker and that sticker is in the center of a face, and we
+    // introduce duplicate stickers so we can orient them properly.
+    if (this.orientCenters) {
+      for (let k = 0; k < this.cubies.length; k++) {
+        if (this.cubies[k].length === 1) {
+          const kk = this.findface(this.cubies[k][0]);
+          const i = this.getfaceindex(kk);
+          if (
+            centermassface(this.basefaces[i]).dist(
+              centermassface(this.faces[kk]),
+            ) < eps
+          ) {
+            const o = this.basefaces[i].length;
+            for (let m = 0; m < o; m++) {
+              this.cubies[k].push(this.cubies[k][0]);
+            }
+            this.duplicatedFaces[kk] = o;
+            this.duplicatedCubies[k] = o;
+            this.orbitoris[this.cubiesetnums[k]] = o;
+          }
+        }
+      }
+    }
     for (let k = 0; k < this.moveplanesets.length; k++) {
       const moveplaneset = this.moveplanesets[k];
       const slicenum = [];
@@ -1466,7 +1490,7 @@ export class PuzzleGeometry {
           if (
             a.length > 1 &&
             this.orientCenters &&
-            (this.cubies[b[0]].length === 2 ||
+            (this.cubies[b[0]].length === 1 ||
               this.cubies[b[0]][0] === this.cubies[b[0]][1])
           ) {
             // is this a real center cubie, around an axis?
@@ -1498,7 +1522,7 @@ export class PuzzleGeometry {
             }
           }
           // a.length == 1 means a sticker is spinning in place.
-          // in this case we add duplicate stickers and fake the orientation
+          // in this case we add duplicate stickers
           // so that we can make it animate properly in a 3D world.
           if (a.length === 1 && this.orientCenters) {
             for (let ii = 1; ii < this.movesetorders[k]; ii++) {
@@ -1511,11 +1535,7 @@ export class PuzzleGeometry {
                   (this.movesetorders[k] - ii) % this.movesetorders[k],
                 );
               }
-              this.cubies[b[0]].push(this.cubies[b[0]][0]);
             }
-            this.duplicatedFaces[a[0]] = this.movesetorders[k];
-            this.duplicatedCubies[b[0]] = this.movesetorders[k];
-            this.orbitoris[this.cubiesetnums[b[0]]] = this.movesetorders[k];
           }
           if (a.length > 1) {
             slicemoves.push(a);
