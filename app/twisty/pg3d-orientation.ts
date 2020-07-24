@@ -14,9 +14,7 @@ const stickerDat = pg.get3d(0.0131);
 
 const kpuzzle = kpuzzleParse(pg.writeksolve("TwizzlePuzzle", true));
 
-// const cameraPosition = new Vector3(1.25, 2.5, 2.5);
-const cameraPosition = new Vector3(0, 0, 4);
-const cameraLookAt = new Vector3(0, 0, 0);
+const cameraPosition = new Vector3(2, 4, 4);
 
 const cube3DPlayer = new TwistyPlayer();
 document.body.appendChild(cube3DPlayer);
@@ -29,31 +27,8 @@ const pg3dPlayer = new TwistyPlayer({
     experimentalPG3DViewConfig: {
       stickerDat,
       showFoundation: true,
+      experimentalInitialVantagePosition: cameraPosition,
     },
   },
 });
 document.body.appendChild(pg3dPlayer);
-
-setTimeout(() => {
-  cube3DPlayer
-    .experimentalGetPlayer()
-    .cube3DView.experimentalGetCube3D()
-    .experimentalGetVantages()[0]
-    .camera.position.copy(cameraPosition);
-  cube3DPlayer
-    .experimentalGetPlayer()
-    .cube3DView.experimentalGetCube3D()
-    .experimentalGetVantages()[0]
-    .camera.lookAt(cameraLookAt);
-
-  pg3dPlayer
-    .experimentalGetPlayer()
-    .pg3DView.experimentalGetPG3D()
-    .experimentalGetVantages()[0]
-    .camera.position.copy(cameraPosition);
-  pg3dPlayer
-    .experimentalGetPlayer()
-    .pg3DView.experimentalGetPG3D()
-    .experimentalGetVantages()[0]
-    .camera.lookAt(cameraLookAt);
-}, 100);
