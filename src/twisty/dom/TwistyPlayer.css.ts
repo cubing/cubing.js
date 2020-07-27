@@ -15,6 +15,10 @@ export const twistyPlayerCSS = new CSSSource(`
   overflow: hidden;
 }
 
+twisty-scrubber {
+  width: 100%;
+}
+
 * {
   background: rgba(0, 128, 255, 0.1);
 }
