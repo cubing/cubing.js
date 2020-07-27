@@ -18,10 +18,22 @@ type TimelineCommand =
   | "play-step-backwards"
   | "jump-to-end";
 
+// TODO: combine this with disabled status and label in a state machine?
+type ButtonIconName =
+  | "skip-to-start"
+  | "skip-to-end"
+  | "step-forward"
+  | "step-backward"
+  | "pause"
+  | "play"
+  | "enter-fullscreen"
+  | "exit-fullscreen";
+
 class TwistyControlButton extends ManagedCustomElement
   implements TwistyControlElement {
   private timeline: Timeline;
   private timelineCommand: TimelineCommand;
+  private currentIconName: string | null = null;
   protected button: HTMLButtonElement = document.createElement("button");
   constructor(
     timeline?: Timeline,
@@ -40,11 +52,18 @@ class TwistyControlButton extends ManagedCustomElement
     this.timelineCommand = timelineCommand!;
 
     this.addCSS(buttonCSS);
-    this.button.textContent = this.label();
+    this.setIcon(this.initialIcon());
+    this.button.title = this.hoverTitle();
     this.addElement(this.button);
     this.addEventListener("click", this.onPress.bind(this));
 
     switch (this.timelineCommand!) {
+      case "fullscreen":
+        if (!document.fullscreenEnabled) {
+          this.button.disabled = true;
+        }
+        break;
+      case "jump-to-start":
       case "play-step":
       case "play-step-backwards":
         this.button.disabled = true;
@@ -54,14 +73,37 @@ class TwistyControlButton extends ManagedCustomElement
     this.timeline!.addActionListener(this);
   }
 
-  private label(): string {
+  setIcon(buttonIconName: ButtonIconName): void {
+    if (this.currentIconName === buttonIconName) {
+      return;
+    }
+    if (this.currentIconName) {
+      this.button.classList.remove(`svg-${this.currentIconName}`);
+    }
+    this.button.classList.add(`svg-${buttonIconName}`);
+    this.currentIconName = buttonIconName;
+  }
+
+  private initialIcon(): ButtonIconName {
+    const map: Record<TimelineCommand, ButtonIconName> = {
+      "jump-to-start": "skip-to-start",
+      "play-pause": "play",
+      "play-step": "step-forward",
+      "play-step-backwards": "step-backward",
+      "jump-to-end": "skip-to-end",
+      "fullscreen": "enter-fullscreen",
+    };
+    return map[this.timelineCommand];
+  }
+
+  private hoverTitle(): string {
     const map: Record<TimelineCommand, string> = {
-      "jump-to-start": "⏮",
-      "play-pause": "▶️",
-      "play-step": "⃕",
-      "play-step-backwards": "⃔",
-      "jump-to-end": "⏭",
-      "fullscreen": "🖥",
+      "jump-to-start": "Restart",
+      "play-pause": "Play",
+      "play-step": "Step forward",
+      "play-step-backwards": "Step backward",
+      "jump-to-end": "Skip to End",
+      "fullscreen": "Enter fullscreen",
     };
     return map[this.timelineCommand];
   }
@@ -71,8 +113,18 @@ class TwistyControlButton extends ManagedCustomElement
       case "fullscreen":
         if (document.fullscreenElement === this.fullscreenElement) {
           document.exitFullscreen();
+          // this.setIcon("enter-fullscreen");
         } else {
-          this.fullscreenElement!.requestFullscreen();
+          this.setIcon("exit-fullscreen");
+          this.fullscreenElement!.requestFullscreen().then(() => {
+            const onFullscreen = (): void => {
+              if (document.fullscreenElement !== this.fullscreenElement) {
+                this.setIcon("enter-fullscreen");
+                window.removeEventListener("fullscreenchange", onFullscreen);
+              }
+            };
+            window.addEventListener("fullscreenchange", onFullscreen);
+          });
         }
         break;
       case "jump-to-start":
@@ -94,6 +146,7 @@ class TwistyControlButton extends ManagedCustomElement
   onTimelineAction(actionEvent: TimelineActionEvent): void {
     switch (this.timelineCommand!) {
       case "jump-to-start":
+        // TODO: what if you're already playing?
         this.button.disabled =
           actionEvent.locationType === TimestampLocationType.StartOfTimeline &&
           actionEvent.action !== TimelineAction.StartingToPlay;
@@ -106,10 +159,10 @@ class TwistyControlButton extends ManagedCustomElement
         // Always enabled, since we will jump to the start if needed.
         switch (actionEvent.action) {
           case TimelineAction.Pausing:
-            this.button.textContent = "▶️";
+            this.setIcon("play");
             break;
           case TimelineAction.StartingToPlay:
-            this.button.textContent = "⏸";
+            this.setIcon("pause");
             break;
           // TODO: does jumping mean pause?
         }

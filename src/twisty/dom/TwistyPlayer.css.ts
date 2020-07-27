@@ -1,5 +1,6 @@
 import { CSSSource } from "./ManagedCustomElement";
 
+// TODO: figure out why `:host(twisty-player-test):fullscreen { background-color: white }` doesn't work.
 export const twistyPlayerCSS = new CSSSource(`
 :host(twisty-player-test) {
   width: 384px;
