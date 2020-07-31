@@ -1,4 +1,5 @@
 import { RenderScheduler } from "./RenderScheduler";
+import { AlgCursor, TimeRange } from "./alg/AlgCursor";
 
 export type MillisecondTimestamp = number;
 
@@ -31,6 +32,7 @@ export interface TimelineActionEvent {
 // reliable callback telling you when to schedule a new render.
 export interface TimelineTimestampListener {
   onTimelineTimestampChange(timestamp: MillisecondTimestamp): void;
+  onTimeRangeChange(timeRange: TimeRange): void;
 }
 
 // This should be used by classes that (directly or indirectly) update UI (e.g.
@@ -62,6 +64,7 @@ function getNow(): MillisecondTimestamp {
 export class Timeline
   implements TimelineTimestampDispatcher, TimelineActionDispatcher {
   animating: boolean = false;
+  private cursors: Set<AlgCursor> = new Set();
   private timestampListeners: Set<TimelineTimestampListener> = new Set();
   private actionListeners: Set<TimelineActionListener> = new Set();
   timestamp: number = 0;
@@ -76,8 +79,8 @@ export class Timeline
         this.lastAnimFrameNow = now;
       }
 
-      if (this.timestamp >= this.maxTimeStamp()) {
-        this.timestamp = this.maxTimeStamp();
+      if (this.timestamp >= this.maxTimestamp()) {
+        this.timestamp = this.maxTimestamp();
         if (this.animating) {
           this.animating = false;
           this.dispatchAction(TimelineAction.Pausing);
@@ -96,15 +99,52 @@ export class Timeline
     this.scheduler = new RenderScheduler(animFrame);
   }
 
-  minTimeStamp(): MillisecondTimestamp {
-    return 0;
+  public addCursor(cursor: AlgCursor): void {
+    this.cursors.add(cursor);
+    this.dispatchTimeRange();
   }
 
-  maxTimeStamp(): MillisecondTimestamp {
-    return 7500; // TODO: get from cursors
+  timeRange(): TimeRange {
+    let start = 0;
+    let end = 0;
+    for (const cursor of this.cursors) {
+      const cursorTimeRange = cursor.timeRange();
+      start = Math.min(start, cursorTimeRange.start);
+      end = Math.max(end, cursorTimeRange.end);
+    }
+
+    return { start, end };
+  }
+
+  minTimestamp(): number {
+    // TODO: Calculate and cache this value every time there's a new cursor.
+    return this.timeRange().start;
+  }
+
+  maxTimestamp(): number {
+    // TODO: Calculate and cache this value every time there's a new cursor.
+    return this.timeRange().end;
+  }
+
+  dispatchTimeRange(): void {
+    const timeRange = this.timeRange();
+    for (const listener of this.cursors) {
+      // TODO: dedup in case the timestamp hasn't changed sine last time.
+      listener.onTimeRangeChange(timeRange);
+    }
+    // TODO: Combine loops without extra memory?
+    for (const listener of this.timestampListeners) {
+      // TODO: dedup in case the timestamp hasn't changed sine last time.
+      listener.onTimeRangeChange(timeRange);
+    }
   }
 
   dispatchTimestamp(): void {
+    for (const listener of this.cursors) {
+      // TODO: dedup in case the timestamp hasn't changed sine last time.
+      listener.onTimelineTimestampChange(this.timestamp);
+    }
+    // TODO: Combine loops without extra memory?
     for (const listener of this.timestampListeners) {
       // TODO: dedup in case the timestamp hasn't changed sine last time.
       listener.onTimelineTimestampChange(this.timestamp);
@@ -142,7 +182,7 @@ export class Timeline
     if (this.animating) {
       this.pause();
     } else {
-      if (this.timestamp >= this.maxTimeStamp()) {
+      if (this.timestamp >= this.maxTimestamp()) {
         this.timestamp = 0;
       }
       this.play();
@@ -161,17 +201,17 @@ export class Timeline
   }
 
   jumpToEnd(): void {
-    this.setTimestamp(this.maxTimeStamp());
+    this.setTimestamp(this.maxTimestamp());
   }
 
   private dispatchAction(event: TimelineAction): void {
     let locationType = TimestampLocationType.MiddleOfMove; // TODO
     switch (this.timestamp) {
       // TODO
-      case this.minTimeStamp():
+      case this.minTimestamp():
         locationType = TimestampLocationType.StartOfTimeline;
         break;
-      case this.maxTimeStamp():
+      case this.maxTimestamp():
         locationType = TimestampLocationType.EndOfTimeline;
         break;
     }

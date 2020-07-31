@@ -8,6 +8,7 @@ import {
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
 import { twistyScrubberCSS } from "./TwistyScrubber.css";
+import { TimeRange } from "../../animation/alg/AlgCursor";
 
 // Usually a horizontal line.
 export class TwistyScrubber extends ManagedCustomElement
@@ -24,8 +25,8 @@ export class TwistyScrubber extends ManagedCustomElement
     this.range.type = "range";
 
     this.range.step = (1).toString();
-    this.range.min = this.timeline!.minTimeStamp().toString();
-    this.range.max = this.timeline!.maxTimeStamp().toString();
+    this.range.min = this.timeline!.minTimestamp().toString();
+    this.range.max = this.timeline!.maxTimestamp().toString();
     this.range.value = this.timeline.timestamp.toString();
     this.range.addEventListener("input", this.onInput.bind(this));
 
@@ -34,6 +35,11 @@ export class TwistyScrubber extends ManagedCustomElement
 
   onTimelineTimestampChange(timestamp: MillisecondTimestamp): void {
     this.range.value = timestamp.toString();
+  }
+
+  onTimeRangeChange(timeRange: TimeRange): void {
+    this.range.min = timeRange.start.toString();
+    this.range.max = timeRange.end.toString();
   }
 
   onInput(): void {

@@ -47,6 +47,11 @@ export interface PositionDispatcher {
   addPositionListener(positionListener: PositionListener): void;
 }
 
+export interface TimeRange {
+  start: MillisecondTimestamp;
+  end: MillisecondTimestamp;
+}
+
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
   private todoIndexer: TreeAlgorithmIndexer<KSolvePuzzle>;
@@ -56,6 +61,13 @@ export class AlgCursor
     const kp = new KSolvePuzzle(def);
     this.todoIndexer = new TreeAlgorithmIndexer(kp, alg);
     /*...*/
+  }
+
+  timeRange(): TimeRange {
+    return {
+      start: 0,
+      end: this.todoIndexer.algDuration(),
+    };
   }
 
   addPositionListener(positionListener: PositionListener): void {
@@ -80,5 +92,9 @@ export class AlgCursor
     for (const listener of this.positionListeners) {
       listener.onPositionChange(position);
     }
+  }
+
+  onTimeRangeChange(_timeRange: TimeRange): void {
+    // nothing to do
   }
 }
