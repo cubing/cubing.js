@@ -7,7 +7,7 @@ import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
-import { Cube3DCanvas } from "./viewers/Cube3DCanvas";
+import { PG3DCanvas } from "./viewers/PG3DCanvas";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 
@@ -87,7 +87,7 @@ export class TwistyPlayerTest extends ManagedCustomElement {
         // const twisty3DScene = new Twisty3DScene();
         // const twisty3DPuzzle = new Twisty3DPuzzle(twisty3DScene, this.#cursor);
         // twisty3DScene.addTwisty3DPuzzle(twisty3DPuzzle);
-        return new Cube3DCanvas(this.#cursor);
+        return new PG3DCanvas(this.#cursor, "3x3x3");
       }
     }
   }

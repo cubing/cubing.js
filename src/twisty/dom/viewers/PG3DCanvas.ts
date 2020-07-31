@@ -1,24 +1,25 @@
-import { TwistyViewerElement } from "./TwistyViewerElement";
-import { Cube3D } from "../../../twisty-old/3D/cube3D";
-import { Puzzles, KPuzzle } from "../../../kpuzzle";
-import { ManagedCustomElement } from "../ManagedCustomElement";
-import { pg3DCanvasCSS } from "./PG3DCanvas.css";
-import { RenderScheduler } from "../../animation/RenderScheduler";
+import { KPuzzle } from "../../../kpuzzle";
+import { getPuzzleGeometryByName } from "../../../puzzle-geometry";
+import { PuzzleName } from "../../../puzzle-geometry/Puzzles";
+import { PG3D } from "../../../twisty-old/3D/pg3D";
 import {
   PositionDispatcher,
   PuzzlePosition,
 } from "../../animation/alg/AlgCursor";
-import { getPuzzleGeometryByName } from "../../../puzzle-geometry";
-import { PuzzleName } from "../../../puzzle-geometry/Puzzles";
+import { RenderScheduler } from "../../animation/RenderScheduler";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { pg3DCanvasCSS } from "./PG3DCanvas.css";
+import { TwistyViewerElement } from "./TwistyViewerElement";
+import { Vector3 } from "three";
 
-// <twisty-3d-canvas>
-export class Twisty3DCanvas extends ManagedCustomElement
+// <twisty-pg3d-canvas>
+export class PG3DCanvas extends ManagedCustomElement
   implements TwistyViewerElement {
   // camera: Camera;
   // renderer: Renderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
   private scheduler = new RenderScheduler(this.render.bind(this));
-  private cube3D: Cube3D;
-  constructor(cursor?: PositionDispatcher, name?: PuzzleName) {
+  private pg3D: PG3D;
+  constructor(cursor?: PositionDispatcher, name: PuzzleName = "Megaminx") {
     super();
     this.addCSS(pg3DCanvasCSS);
 
@@ -38,12 +39,15 @@ export class Twisty3DCanvas extends ManagedCustomElement
 
     const stickerDat = pg.get3d(0.0131);
 
-    // console.log("fooly");
-    // /*...*/
-    // this.twisty3DScene.addRenderTarget(this);
+    this.pg3D = new PG3D(
+      kpuzzleDef,
+      stickerDat,
+      true, // TODO
+    );
 
-    this.cube3D = new Cube3D(Puzzles["3x3x3"]); // TODO: Dynamic puzzle
-    this.cube3D.newVantage(this.contentWrapper);
+    this.pg3D.newVantage(this.contentWrapper, {
+      position: new Vector3(2, 4, 4),
+    });
     cursor!.addPositionListener(this);
   }
 
@@ -53,7 +57,7 @@ export class Twisty3DCanvas extends ManagedCustomElement
       moves: position.movesInProgress,
     };
 
-    this.cube3D.draw(oldPos);
+    this.pg3D.draw(oldPos);
   }
 
   scheduleRender(): void {
@@ -67,5 +71,5 @@ export class Twisty3DCanvas extends ManagedCustomElement
 }
 
 if (customElements) {
-  customElements.define("twisty-3d-canvas", Twisty3DCanvas);
+  customElements.define("twisty-pg3d-canvas", PG3DCanvas);
 }

@@ -1,7 +1,7 @@
 import { CSSSource } from "../ManagedCustomElement";
 
 export const pg3DCanvasCSS = new CSSSource(`
-:host(twisty-3d-canvas) {
+:host(twisty-pg3d-canvas) {
   contain: content;
   display: grid;
   overflow: hidden;
