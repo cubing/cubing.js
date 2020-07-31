@@ -23,7 +23,12 @@ export class PG3DCanvas extends ManagedCustomElement
     super();
     this.addCSS(pg3DCanvasCSS);
 
-    const pg = getPuzzleGeometryByName(name!, ["orientcenters", "true"]);
+    const pg = getPuzzleGeometryByName(name, [
+      "orientcenters",
+      "true",
+      "puzzleorientation",
+      JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
+    ]);
     const kpuzzleDef = pg.writekpuzzle();
     const worker = new KPuzzle(kpuzzleDef);
 
