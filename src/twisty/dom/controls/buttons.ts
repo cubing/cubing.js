@@ -53,7 +53,7 @@ class TwistyControlButton extends ManagedCustomElement
 
     this.addCSS(buttonCSS);
     this.setIcon(this.initialIcon());
-    this.button.title = this.hoverTitle();
+    this.setHoverTitle(this.initialHoverTitle());
     this.addElement(this.button);
     this.addEventListener("click", this.onPress.bind(this));
 
@@ -96,7 +96,7 @@ class TwistyControlButton extends ManagedCustomElement
     return map[this.timelineCommand];
   }
 
-  private hoverTitle(): string {
+  private initialHoverTitle(): string {
     const map: Record<TimelineCommand, string> = {
       "jump-to-start": "Restart",
       "play-pause": "Play",
@@ -106,6 +106,10 @@ class TwistyControlButton extends ManagedCustomElement
       "fullscreen": "Enter fullscreen",
     };
     return map[this.timelineCommand];
+  }
+
+  private setHoverTitle(title: string): void {
+    this.button.title = title;
   }
 
   onPress(): void {
@@ -160,9 +164,11 @@ class TwistyControlButton extends ManagedCustomElement
         switch (actionEvent.action) {
           case TimelineAction.Pausing:
             this.setIcon("play");
+            this.setHoverTitle("Play");
             break;
           case TimelineAction.StartingToPlay:
             this.setIcon("pause");
+            this.setHoverTitle("Pause");
             break;
           // TODO: does jumping mean pause?
         }
