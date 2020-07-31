@@ -1,5 +1,4 @@
 import { Example, parse, Sequence } from "../../alg";
-import { Puzzles } from "../../kpuzzle";
 import { AlgCursor } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
@@ -7,7 +6,7 @@ import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
-import { PG3DCanvas } from "./viewers/PG3DCanvas";
+import { getPG3DCanvasDefinition, PG3DCanvas } from "./viewers/PG3DCanvas";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 
@@ -42,6 +41,7 @@ export class TwistyPlayerTest extends ManagedCustomElement {
       this.#timeline,
       this.#currentConfig.alg,
       "3D",
+      "3x3x3",
     ); // TODO
     const scrubber = new TwistyScrubber(this.#timeline);
     const controlButtonGrid = new TwistyControlButtonPanel(
@@ -77,8 +77,8 @@ export class TwistyPlayerTest extends ManagedCustomElement {
     timeline: Timeline,
     alg: Sequence,
     visualization: "2D" | "3D",
+    puzzleName: string,
   ): TwistyViewerElement {
-    this.#cursor = new AlgCursor(timeline, Puzzles["3x3x3"], alg);
     switch (visualization) {
       case "2D":
         return new Twisty2DSVG(this.#cursor);
@@ -87,7 +87,13 @@ export class TwistyPlayerTest extends ManagedCustomElement {
         // const twisty3DScene = new Twisty3DScene();
         // const twisty3DPuzzle = new Twisty3DPuzzle(twisty3DScene, this.#cursor);
         // twisty3DScene.addTwisty3DPuzzle(twisty3DPuzzle);
-        return new PG3DCanvas(this.#cursor, "3x3x3");
+        this.#cursor = new AlgCursor(
+          timeline,
+          getPG3DCanvasDefinition(puzzleName),
+          alg,
+        );
+        const pg3dCanvas = new PG3DCanvas(this.#cursor, puzzleName);
+        return pg3dCanvas;
       }
     }
   }

@@ -1,5 +1,8 @@
-import { KPuzzle } from "../../../kpuzzle";
-import { getPuzzleGeometryByName } from "../../../puzzle-geometry";
+import { KPuzzle, KPuzzleDefinition } from "../../../kpuzzle";
+import {
+  getPuzzleGeometryByName,
+  PuzzleGeometry,
+} from "../../../puzzle-geometry";
 import { PuzzleName } from "../../../puzzle-geometry/Puzzles";
 import { PG3D } from "../../../twisty-old/3D/pg3D";
 import {
@@ -12,6 +15,21 @@ import { pg3DCanvasCSS } from "./PG3DCanvas.css";
 import { TwistyViewerElement } from "./TwistyViewerElement";
 import { Vector3 } from "three";
 
+const DEFAULT_PUZZLE_NAME = "3x3x3";
+
+function getPG3DCanvasPG(name: PuzzleName): PuzzleGeometry {
+  return getPuzzleGeometryByName(name, [
+    "orientcenters",
+    "true",
+    "puzzleorientation",
+    JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
+  ]);
+}
+
+export function getPG3DCanvasDefinition(name: PuzzleName): KPuzzleDefinition {
+  return getPG3DCanvasPG(name).writekpuzzle();
+}
+
 // <twisty-pg3d-canvas>
 export class PG3DCanvas extends ManagedCustomElement
   implements TwistyViewerElement {
@@ -19,16 +37,14 @@ export class PG3DCanvas extends ManagedCustomElement
   // renderer: Renderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
   private scheduler = new RenderScheduler(this.render.bind(this));
   private pg3D: PG3D;
-  constructor(cursor?: PositionDispatcher, name: PuzzleName = "Megaminx") {
+  constructor(
+    cursor?: PositionDispatcher,
+    name: PuzzleName = DEFAULT_PUZZLE_NAME,
+  ) {
     super();
     this.addCSS(pg3DCanvasCSS);
 
-    const pg = getPuzzleGeometryByName(name, [
-      "orientcenters",
-      "true",
-      "puzzleorientation",
-      JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
-    ]);
+    const pg = getPG3DCanvasPG(name);
     const kpuzzleDef = pg.writekpuzzle();
     const worker = new KPuzzle(kpuzzleDef);
 
