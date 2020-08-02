@@ -10,10 +10,9 @@
   <body>
     <div class="content">
       <p>
-        This should be automatically initialized:
+        Default puzzle should be 3x3x3:
       </p>
       <twisty-player
-        puzzle="3x3x3"
         alg="U R U' R' U' R U' r2' u r U r2' u' r2 U' r' U r' U2 r"
       ></twisty-player>
       <p>
@@ -25,9 +24,13 @@
         visualization="2D"
       ></twisty-player>
       <p>
-        This should be automatically initialized, too:
+        Pyraminx 2D:
       </p>
-      <twisty-player puzzle="pyraminx" alg="R U R' U R U R'"></twisty-player>
+      <twisty-player
+        puzzle="pyraminx"
+        visualization="2D"
+        alg="R U R' U R U R'"
+      ></twisty-player>
       <p>
         Square-1 parity:
       </p>
@@ -62,7 +65,13 @@
         Custom PG3D:
       </p>
       <div id="custom-pg3d"></div>
-      <twisty-player></twisty-player>
+
+      PG3D 3x3x3:
+
+      <twisty-player
+        alg="[R U R2', R U2 R2']"
+        visualization="PG3D"
+      ></twisty-player>
     </div>
   </body>
 </html>
