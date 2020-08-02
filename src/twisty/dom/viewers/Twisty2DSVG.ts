@@ -23,11 +23,14 @@ export class Twisty2DSVG extends ManagedCustomElement
   private definition: KPuzzleDefinition;
   private svg: SVG;
   private scheduler = new RenderScheduler(this.render.bind(this));
-  constructor(cursor?: PositionDispatcher) {
+  constructor(
+    cursor?: PositionDispatcher,
+    def: KPuzzleDefinition = Puzzles["3x3x3"],
+  ) {
     super();
     this.addCSS(twisty2DSVGCSS);
 
-    this.definition = Puzzles["3x3x3"]; // TODO
+    this.definition = def;
     this.svg = new SVG(this.definition);
     this.addElement(this.svg.element);
     cursor!.addPositionListener(this);

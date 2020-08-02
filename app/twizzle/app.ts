@@ -29,7 +29,7 @@ import {
 import {
   experimentalShowJumpingFlash,
   Vantage,
-  TwistyPlayer,
+  TwistyPlayerOld,
 } from "../../src/twisty/index";
 import { getURLParam, setURLParams } from "./url-params";
 import { parse } from "../../src/alg/parser/parser";
@@ -37,7 +37,7 @@ import { countMoves } from "./move-counter";
 
 experimentalShowJumpingFlash(false);
 
-let twisty: TwistyPlayer;
+let twisty: TwistyPlayerOld;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
 let safeKpuzzle: KPuzzleDefinition | undefined;
@@ -191,7 +191,7 @@ function setAlgo(str: string, writeback: boolean): void {
     // it again.  But for now we always do.
     if (!twisty || puzzleSelected) {
       elem.textContent = "";
-      twisty = new TwistyPlayer({
+      twisty = new TwistyPlayerOld({
         puzzle,
         alg: new Sequence([]),
         playerConfig: {

@@ -33,7 +33,7 @@ class TwistyPlayerConfig {
 }
 
 // <twisty-player>
-export class TwistyPlayerTest extends ManagedCustomElement {
+export class TwistyPlayer extends ManagedCustomElement {
   viewers: TwistyViewerElement[];
   controls: TwistyControlElement[];
   #timeline: Timeline;
@@ -86,7 +86,7 @@ export class TwistyPlayerTest extends ManagedCustomElement {
         this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
         this.#timeline.addCursor(this.#cursor);
         this.#timeline.jumpToEnd();
-        return new Twisty2DSVG(this.#cursor);
+        return new Twisty2DSVG(this.#cursor, Puzzles[puzzleName]);
       case "3D":
         console.log("3D", puzzleName);
         if (puzzleName === "3x3x3") {
@@ -136,5 +136,5 @@ export class TwistyPlayerTest extends ManagedCustomElement {
 }
 
 if (typeof customElements !== "undefined") {
-  customElements.define("twisty-player-test", TwistyPlayerTest);
+  customElements.define("twisty-player", TwistyPlayer);
 }

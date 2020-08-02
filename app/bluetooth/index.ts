@@ -12,20 +12,20 @@ import {
 } from "../../src/bluetooth/index";
 import {
   experimentalShowJumpingFlash,
-  TwistyPlayer,
+  TwistyPlayerOld,
 } from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
 
-async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
+async function asyncSetup(twistyPlayerOld: TwistyPlayerOld): Promise<void> {
   console.log("asyncSetup");
   const keyboard = await debugKeyboardConnect(
-    twistyPlayer.experimentalGetPlayer().cube3DView.element,
+    twistyPlayerOld.experimentalGetPlayer().cube3DView.element,
   );
-  console.log("keyboard", twistyPlayer, keyboard);
+  console.log("keyboard", twistyPlayerOld, keyboard);
   keyboard.addMoveListener((e: MoveEvent) => {
     console.log("listener", e);
-    twistyPlayer.experimentalAddMove(e.latestMove);
+    twistyPlayerOld.experimentalAddMove(e.latestMove);
   });
 }
 
@@ -39,10 +39,10 @@ window.puzzle = null;
 
 console.log(algToString(invert(parse("R U R' F D"))));
 window.addEventListener("load", async () => {
-  const twistyPlayer = new TwistyPlayer({ alg: new Sequence([]) });
-  document.body.appendChild(twistyPlayer);
+  const twistyPlayerOld = new TwistyPlayerOld({ alg: new Sequence([]) });
+  document.body.appendChild(twistyPlayerOld);
 
-  asyncSetup(twistyPlayer);
+  asyncSetup(twistyPlayerOld);
 
   // latestMove: BlockMove;
   // timeStamp: number;
@@ -55,16 +55,16 @@ window.addEventListener("load", async () => {
     ) as HTMLInputElement).checked;
     window.puzzle = await connect({ acceptAllDevices });
     window.puzzle.addMoveListener((e: MoveEvent) => {
-      twistyPlayer.experimentalAddMove(e.latestMove);
+      twistyPlayerOld.experimentalAddMove(e.latestMove);
     });
     window.puzzle.addOrientationListener((e: OrientationEvent) => {
       const { x, y, z, w } = e.quaternion;
-      twistyPlayer
+      twistyPlayerOld
         .experimentalGetPlayer()
         .cube3DView.experimentalGetCube3D()
         .experimentalGetCube()
         .quaternion.copy(new Quaternion(x, y, z, w));
-      twistyPlayer
+      twistyPlayerOld
         .experimentalGetAnim()
         .experimentalGetScheduler()
         .singleFrame();

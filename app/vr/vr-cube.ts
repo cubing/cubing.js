@@ -14,7 +14,7 @@ import {
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
 import { BareBlockMove, Sequence } from "../../src/alg/index";
-import { Cube3D, TAU, TwistyPlayer } from "../../src/twisty/index";
+import { Cube3D, TAU, TwistyPlayerOld } from "../../src/twisty/index";
 import {
   daydream,
   initialHeight,
@@ -69,7 +69,7 @@ class CallbackProxyReceiver extends WebSocketProxyReceiver {
 
 export class VRCube {
   public group: Group = new Group();
-  private twistyPlayer: TwistyPlayer;
+  private twistyPlayerOld: TwistyPlayerOld;
   private cachedCube3D: Cube3D;
   private controlPlanes: Mesh[] = [];
 
@@ -90,16 +90,16 @@ export class VRCube {
   private waitForMoveButtonClear = false;
 
   constructor(private vrInput: VRInput) {
-    this.twistyPlayer = new TwistyPlayer({
+    this.twistyPlayerOld = new TwistyPlayerOld({
       alg: new Sequence([]),
     });
-    throw new Error("requires async TwistyPlayer access!"); // TODO
+    throw new Error("requires async TwistyPlayerOld access!"); // TODO
 
-    this.twistyPlayer
+    this.twistyPlayerOld
       .experimentalGetCursor()
       .experimentalSetDurationScale(0.25);
 
-    this.cachedCube3D = this.twistyPlayer
+    this.cachedCube3D = this.twistyPlayerOld
       .experimentalGetPlayer()
       .cube3DView.experimentalGetCube3D();
     this.cachedCube3D.experimentalUpdateOptions({
@@ -329,7 +329,7 @@ export class VRCube {
         controller.userData.controllerNumber
       ] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
       const side = closestIntersection.object.userData.side;
-      this.twistyPlayer.experimentalAddMove(
+      this.twistyPlayerOld.experimentalAddMove(
         BareBlockMove(side, controllerIdx === 0 ? -1 : 1),
       );
       this.hapticPulse(controllerIdx, 0.1, 75);
@@ -339,15 +339,15 @@ export class VRCube {
   private onProxyEvent(e: ProxyEvent): void {
     switch (e.event) {
       case "reset":
-        this.twistyPlayer.experimentalSetAlg(new Sequence([]));
+        this.twistyPlayerOld.experimentalSetAlg(new Sequence([]));
         break;
       case "move":
-        this.twistyPlayer.experimentalAddMove(e.data.latestMove);
+        this.twistyPlayerOld.experimentalAddMove(e.data.latestMove);
         break;
       case "orientation": {
         const { x, y, z, w } = e.data.quaternion;
         const quat = new Quaternion(x, y, z, w);
-        this.twistyPlayer
+        this.twistyPlayerOld
           .experimentalGetPlayer()
           .cube3DView.experimentalGetCube3D()
           .experimentalGetCube()

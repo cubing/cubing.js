@@ -141,10 +141,10 @@
     </script>
     <div id="twisty-wrapper"></div>
     <script>
-      const { TwistyPlayer } = cubing.twisty;
+      const { TwistyPlayerOld } = cubing.twisty;
       const { BareBlockMove } = cubing.alg;
 
-      window.tw = new TwistyPlayer({
+      window.tw = new TwistyPlayerOld({
         puzzle: Puzzles["3x3x3"],
         alg: cubing.alg.parse("R R'"),
       });
