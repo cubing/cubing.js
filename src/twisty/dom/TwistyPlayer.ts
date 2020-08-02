@@ -1,4 +1,4 @@
-import { Example, parse, Sequence } from "../../alg";
+import { parse, Sequence } from "../../alg";
 import { AlgCursor } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
@@ -6,18 +6,29 @@ import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
+import { Cube3DCanvas } from "./viewers/Cube3DCanvas";
 import { getPG3DCanvasDefinition, PG3DCanvas } from "./viewers/PG3DCanvas";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
+import { Puzzles } from "../../kpuzzle";
+
+export type VisualizationFormat = "2D" | "3D" | "PG3D";
+const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
 
 interface TwistyPlayerInitialConfig {
   alg?: Sequence;
+  puzzle?: string;
+  visualization?: VisualizationFormat;
 }
 
 class TwistyPlayerConfig {
   alg: Sequence;
+  puzzle: string;
+  visualization: VisualizationFormat;
   constructor(initialConfig: TwistyPlayerInitialConfig) {
-    this.alg = initialConfig.alg ?? Example.Sune; // TODO: change back to empty sequence
+    this.alg = initialConfig.alg ?? new Sequence([]);
+    this.puzzle = initialConfig.puzzle ?? "3x3x3";
+    this.visualization = initialConfig.visualization ?? "3D";
   }
 }
 
@@ -31,23 +42,28 @@ export class TwistyPlayerTest extends ManagedCustomElement {
   // TODO: support config from DOM.
   constructor(initialConfig: TwistyPlayerInitialConfig = {}) {
     super();
-
-    console.log(this.getAttribute("alg"));
-
     this.#currentConfig = new TwistyPlayerConfig(initialConfig);
+  }
+
+  protected connectedCallback(): void {
+    this.processAttributes();
 
     this.#timeline = new Timeline();
+
     const viewer = this.createViewer(
       this.#timeline,
       this.#currentConfig.alg,
-      "3D",
-      "3x3x3",
-    ); // TODO
+      this.#currentConfig.visualization,
+      this.#currentConfig.puzzle,
+    );
     const scrubber = new TwistyScrubber(this.#timeline);
     const controlButtonGrid = new TwistyControlButtonPanel(
       this.#timeline,
       this,
     );
+
+    console.log("viewer", viewer);
+
     this.viewers = [viewer];
     this.controls = [scrubber, controlButtonGrid];
 
@@ -58,14 +74,37 @@ export class TwistyPlayerTest extends ManagedCustomElement {
     this.addCSS(twistyPlayerCSS);
   }
 
-  protected connectedCallback(): void {
-    const algAttribute = this.getAttribute("alg");
-    console.log(this);
-    if (algAttribute) {
-      this.#currentConfig.alg = parse(algAttribute);
-      console.log(this.#currentConfig);
-      this.#timeline.addCursor(this.#cursor);
-      // TODO
+  createViewer(
+    timeline: Timeline,
+    alg: Sequence,
+    visualization: VisualizationFormat,
+    puzzleName: string,
+  ): TwistyViewerElement {
+    switch (visualization) {
+      case "2D":
+        console.log("2D", puzzleName);
+        this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
+        this.#timeline.addCursor(this.#cursor);
+        return new Twisty2DSVG(this.#cursor);
+      case "3D":
+        console.log("3D", puzzleName);
+        if (puzzleName === "3x3x3") {
+          this.#cursor = new AlgCursor(timeline, Puzzles["3x3x3"], alg);
+          this.#timeline.addCursor(this.#cursor);
+          return new Cube3DCanvas(this.#cursor);
+        }
+      // fallthrough for 3D when not 3x3x3
+      case "PG3D": {
+        console.log("PG3D", puzzleName);
+        this.#cursor = new AlgCursor(
+          timeline,
+          getPG3DCanvasDefinition(puzzleName),
+          alg,
+        );
+        this.#timeline.addCursor(this.#cursor);
+        const pg3dCanvas = new PG3DCanvas(this.#cursor, puzzleName);
+        return pg3dCanvas;
+      }
     }
   }
 
@@ -73,28 +112,22 @@ export class TwistyPlayerTest extends ManagedCustomElement {
     this.requestFullscreen();
   }
 
-  createViewer(
-    timeline: Timeline,
-    alg: Sequence,
-    visualization: "2D" | "3D",
-    puzzleName: string,
-  ): TwistyViewerElement {
-    switch (visualization) {
-      case "2D":
-        return new Twisty2DSVG(this.#cursor);
-      case "3D": {
-        // if ()
-        // const twisty3DScene = new Twisty3DScene();
-        // const twisty3DPuzzle = new Twisty3DPuzzle(twisty3DScene, this.#cursor);
-        // twisty3DScene.addTwisty3DPuzzle(twisty3DPuzzle);
-        this.#cursor = new AlgCursor(
-          timeline,
-          getPG3DCanvasDefinition(puzzleName),
-          alg,
-        );
-        const pg3dCanvas = new PG3DCanvas(this.#cursor, puzzleName);
-        return pg3dCanvas;
-      }
+  private processAttributes(): void {
+    const config = this.#currentConfig;
+
+    const algAttribute = this.getAttribute("alg");
+    if (algAttribute) {
+      config.alg = parse(algAttribute);
+    }
+
+    config.puzzle = this.getAttribute("puzzle") ?? config.puzzle;
+
+    const visualizationAttribute = this.getAttribute("visualization");
+    if (
+      visualizationAttribute &&
+      (visualizationFormats as string[]).includes(visualizationAttribute)
+    ) {
+      config.visualization = visualizationAttribute as VisualizationFormat;
     }
   }
 }

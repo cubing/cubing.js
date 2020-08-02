@@ -18,12 +18,28 @@ import { Vector3 } from "three";
 const DEFAULT_PUZZLE_NAME = "3x3x3";
 
 function getPG3DCanvasPG(name: PuzzleName): PuzzleGeometry {
-  return getPuzzleGeometryByName(name, [
+  const pg = getPuzzleGeometryByName(name, [
+    "allmoves",
+    "true",
     "orientcenters",
     "true",
     "puzzleorientation",
     JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
   ]);
+  const kpuzzleDef = pg.writekpuzzle();
+  const worker = new KPuzzle(kpuzzleDef);
+
+  // Wide move / rotation hack
+  worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
+  const mps = pg.movesetgeos;
+  for (const mp of mps) {
+    const grip1 = mp[0] as string;
+    const grip2 = mp[2] as string;
+    // angle compatibility hack
+    worker.addGrip(grip1, grip2, mp[4] as number);
+  }
+
+  return pg;
 }
 
 export function getPG3DCanvasDefinition(name: PuzzleName): KPuzzleDefinition {
@@ -48,6 +64,7 @@ export class PG3DCanvas extends ManagedCustomElement
     const kpuzzleDef = pg.writekpuzzle();
     const worker = new KPuzzle(kpuzzleDef);
 
+    // TODO: are these hacks working here?
     // Wide move / rotation hack
     worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
     const mps = pg.movesetgeos;
