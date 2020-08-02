@@ -1755,6 +1755,7 @@ export class PuzzleGeometry {
       return this.header("# ") + od.toKsolve(name, fortwisty).join("\n");
     }
   }
+
   public writekpuzzle(fortwisty: boolean = true): any {
     return this.getOrbitsDef(fortwisty).toKpuzzle();
   }
@@ -1951,6 +1952,7 @@ export class PuzzleGeometry {
     }
     return new Perm(r);
   }
+
   // Given a rotation description that says to align feature1
   // with a given vector, and then as much as possible feature2
   // with another given vector, return a Quaternion that

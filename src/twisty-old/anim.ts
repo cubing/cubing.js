@@ -25,6 +25,7 @@ export class Dispatcher implements CursorObserver, DirectionObserver {
   private directionObservers: Set<DirectionObserver> = new Set<
     DirectionObserver
   >();
+
   private jumpObservers: Set<JumpObserver> = new Set<JumpObserver>();
 
   public registerCursorObserver(observer: CursorObserver): void {
@@ -76,6 +77,7 @@ export class AnimModel {
   private direction: Cursor.Direction = Cursor.Direction.Paused;
   private breakpointType: Cursor.BreakpointType =
     Cursor.BreakpointType.EntireMoveSequence;
+
   private scheduler: FrameScheduler;
   private tempo: number = 1.5; // TODO: Support setting tempo.
   // TODO: cache breakpoints instead of re-querying the model constantly.

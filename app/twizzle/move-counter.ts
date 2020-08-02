@@ -18,6 +18,7 @@ class MoveCounter extends TraversalUp<number> {
   constructor(private metric: (move: BlockMove) => number) {
     super();
   }
+
   public traverseSequence(sequence: Sequence): number {
     let r = 0;
     for (let i = 0; i < sequence.nestedUnits.length; i++) {
@@ -25,12 +26,15 @@ class MoveCounter extends TraversalUp<number> {
     }
     return r;
   }
+
   public traverseGroup(group: Group): number {
     return this.traverse(group.nestedSequence) * group.amount;
   }
+
   public traverseBlockMove(move: BlockMove): number {
     return this.metric(move);
   }
+
   public traverseCommutator(commutator: Commutator): number {
     return (
       commutator.amount *
@@ -38,19 +42,23 @@ class MoveCounter extends TraversalUp<number> {
       (this.traverse(commutator.A) + this.traverse(commutator.B))
     );
   }
+
   public traverseConjugate(conjugate: Conjugate): number {
     return (
       conjugate.amount *
       (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B))
     );
   }
+
   // TODO: Remove spaces between repeated pauses (in traverseSequence)
   public traversePause(_pause: Pause): number {
     return 0;
   }
+
   public traverseNewLine(_newLine: NewLine): number {
     return 0;
   }
+
   // TODO: Enforce being followed by a newline (or the end of the alg)?
   public traverseComment(_comment: Comment): number {
     return 0;

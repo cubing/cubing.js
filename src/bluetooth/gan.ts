@@ -133,6 +133,7 @@ class PhysicalState {
     const timeStamp = Date.now();
     return new PhysicalState(new DataView(value.buffer), timeStamp);
   }
+
   private arr: Uint8Array;
   private arrLen = 19;
   private constructor(private dataView: DataView, public timeStamp: number) {
@@ -341,12 +342,15 @@ export class GanCube extends BluetoothPuzzle {
   private cachedFaceletStatus1Characteristic: Promise<
     BluetoothRemoteGATTCharacteristic
   >;
+
   private cachedFaceletStatus2Characteristic: Promise<
     BluetoothRemoteGATTCharacteristic
   >;
+
   private cachedActualAngleAndBatteryCharacteristic: Promise<
     BluetoothRemoteGATTCharacteristic
   >;
+
   private constructor(
     private service: BluetoothRemoteGATTService,
     private server: BluetoothRemoteGATTServer,

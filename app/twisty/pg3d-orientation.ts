@@ -1,6 +1,6 @@
 import { getPuzzleGeometryByName } from "../../src/puzzle-geometry";
 import { parse as kpuzzleParse } from "../../src/kpuzzle/";
-import { TwistyPlayer } from "../../src/twisty";
+import { TwistyPlayerOld } from "../../src/twisty";
 import { parse } from "../../src/alg/";
 import { Vector3 } from "three";
 
@@ -16,10 +16,10 @@ const kpuzzle = kpuzzleParse(pg.writeksolve("TwizzlePuzzle", true));
 
 const cameraPosition = new Vector3(2, 4, 4);
 
-const cube3DPlayer = new TwistyPlayer();
+const cube3DPlayer = new TwistyPlayerOld();
 document.body.appendChild(cube3DPlayer);
 
-const pg3dPlayer = new TwistyPlayer({
+const pg3dPlayer = new TwistyPlayerOld({
   alg: parse("U F R"),
   puzzle: kpuzzle,
   playerConfig: {

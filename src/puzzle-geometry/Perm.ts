@@ -67,10 +67,12 @@ export class Perm {
     this.n = a.length;
     this.p = a;
   }
+
   public toString(): string {
     // stringify
     return "Perm[" + this.p.join(" ") + "]";
   }
+
   public mul(p2: Perm): Perm {
     // multiply
     const c: number[] = Array(this.n);
@@ -79,6 +81,7 @@ export class Perm {
     }
     return new Perm(c);
   }
+
   public rmul(p2: Perm): Perm {
     // multiply the other way
     const c = Array(this.n);
@@ -87,6 +90,7 @@ export class Perm {
     }
     return new Perm(c);
   }
+
   public inv(): Perm {
     const c = Array(this.n);
     for (let i = 0; i < this.n; i++) {
@@ -94,6 +98,7 @@ export class Perm {
     }
     return new Perm(c);
   }
+
   public compareTo(p2: Perm): number {
     // comparison
     for (let i = 0; i < this.n; i++) {
@@ -103,6 +108,7 @@ export class Perm {
     }
     return 0;
   }
+
   public toGap(): string {
     const cyc = new Array<string>();
     const seen = new Array<boolean>(this.n);
@@ -119,6 +125,7 @@ export class Perm {
     }
     return cyc.join("");
   }
+
   public order(): number {
     let r = 1;
     const seen = new Array<boolean>(this.n);

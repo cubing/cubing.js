@@ -45,6 +45,7 @@ export class BasicRotationTransformer implements StreamTransformer {
   public transformMove(_moveEvent: MoveEvent): void {
     // Nothing to do.
   }
+
   public transformOrientation(orientationEvent: OrientationEvent): void {
     const { x, y, z, w } = orientationEvent.quaternion;
     const quat = new Quaternion(x, y, z, w);

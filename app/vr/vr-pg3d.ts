@@ -172,6 +172,7 @@ export class VRPG3D {
     this.resizeInitialDistance = this.controllerDistance();
     this.resizeInitialScale = this.group.scale.x;
   }
+
   private onResizeContinued(): void {
     const newDistance = this.controllerDistance();
     this.setScale(

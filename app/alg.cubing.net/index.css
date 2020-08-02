@@ -54,7 +54,7 @@ puzzle-pane.loading {
   place-content: center;
 }
 
-puzzle-pane twisty-player {
+puzzle-pane twisty-player-old {
   width: 100%;
   height: 100%;
 }

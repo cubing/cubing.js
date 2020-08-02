@@ -101,10 +101,18 @@
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars-experimental": "error",
+      "@typescript-eslint/no-non-null-assertion": "off",
       "eqeqeq": "error",
       "quote-props": [
         "error",
         "consistent-as-needed"
+      ],
+      "lines-between-class-members": [
+        "error",
+        "always",
+        {
+          "exceptAfterSingleLine": true
+        }
       ]
     },
     "ignorePatterns": [

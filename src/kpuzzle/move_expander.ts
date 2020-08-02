@@ -19,9 +19,11 @@ export class MoveExpander {
     this.moveStash = {};
     this.regrip = {};
   }
+
   public setFaceNames(fn: string[]): void {
     this.facenames = fn;
   }
+
   public addGrip(
     grip1: string,
     grip2: string,
@@ -58,6 +60,7 @@ export class MoveExpander {
     aprime.reverse();
     axes[grip2] = aprime;
   }
+
   public expandSlicesByName(
     mv: string,
     def: KPuzzleDefinition,
@@ -77,6 +80,7 @@ export class MoveExpander {
       return undefined;
     }
   }
+
   public unswizzle(grip: string): string {
     if (this.regrip[grip]) {
       return this.regrip[grip];
@@ -109,6 +113,7 @@ export class MoveExpander {
     }
     return grip;
   }
+
   public expandSlices(
     rep: string,
     blockMove: BlockMove,
@@ -172,6 +177,7 @@ export class MoveExpander {
     this.moveStash[rep] = t2;
     return t2;
   }
+
   private splitByFaceNames(
     s: string,
     facenames: string[],
