@@ -1,14 +1,11 @@
 import { parse } from "../../src/alg/index";
-import { Puzzles } from "../../src/kpuzzle/index";
-import { TwistyPlayerOld } from "../../src/twisty/index";
+import { TwistyPlayer } from "../../src/twisty/index";
 
 window.addEventListener("load", () => {
-  const twistyPlayerOld = new TwistyPlayerOld({
-    puzzle: Puzzles["3x3x3"],
+  const twistyPlayer = new TwistyPlayer({
+    puzzle: "3x3x3",
+    visualization: "2D",
     alg: parse("U M' U' R' U' R U M2' U' R' U r"),
-    playerConfig: {
-      visualizationFormat: "2D",
-    },
   });
-  document.body.appendChild(twistyPlayerOld);
+  document.body.appendChild(twistyPlayer);
 });
