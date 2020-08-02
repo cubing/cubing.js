@@ -19,6 +19,7 @@ import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import { StickerDat } from "../../puzzle-geometry";
 import { Vector3 } from "three";
 import { PG3D } from "../../twisty-old/3D/pg3D";
+import { countMoves } from "../../../app/twizzle/move-counter";
 
 export type VisualizationFormat = "2D" | "3D" | "PG3D";
 const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
@@ -165,6 +166,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   // TODO: Handle playing the new move vs. just modying the alg.
   experimentalAddMove(move: BlockMove): void {
+    const oldNumMoves = countMoves(this.#currentConfig.alg); // TODO
     const newAlg = experimentalAppendBlockMove(
       this.#currentConfig.alg,
       move,
@@ -172,8 +174,13 @@ export class TwistyPlayer extends ManagedCustomElement {
       this.legacyExperimentalCoalesceModFunc(move),
     );
 
-    this.timeline.jumpToEnd();
     this.setAlg(newAlg);
+    // TODO
+    if (oldNumMoves <= countMoves(newAlg)) {
+      this.timeline.experimentalJumpToLastMove();
+    } else {
+      this.timeline.jumpToEnd();
+    }
     this.timeline.play();
   }
 

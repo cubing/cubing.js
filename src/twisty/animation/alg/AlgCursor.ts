@@ -75,6 +75,14 @@ export class AlgCursor
     };
   }
 
+  experimentalTimestampForStartOfLastMove(): MillisecondTimestamp {
+    const numMoves = this.todoIndexer.numMoves();
+    if (numMoves > 0) {
+      return this.todoIndexer.indexToMoveStartTimestamp(numMoves - 1);
+    }
+    return 0;
+  }
+
   addPositionListener(positionListener: PositionListener): void {
     this.positionListeners.add(positionListener);
   }

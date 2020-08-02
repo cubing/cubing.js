@@ -212,6 +212,17 @@ export class Timeline
     this.setTimestamp(this.maxTimestamp());
   }
 
+  experimentalJumpToLastMove(): void {
+    let max: MillisecondTimestamp = 0;
+    for (const cursor of this.cursors) {
+      max = Math.max(
+        max,
+        cursor.experimentalTimestampForStartOfLastMove() ?? 0,
+      );
+    }
+    this.setTimestamp(max);
+  }
+
   private dispatchAction(event: TimelineAction): void {
     let locationType = TimestampLocationType.MiddleOfMove; // TODO
     switch (this.timestamp) {
@@ -224,7 +235,10 @@ export class Timeline
         break;
     }
 
-    const actionEvent: TimelineActionEvent = { action: event, locationType };
+    const actionEvent: TimelineActionEvent = {
+      action: event,
+      locationType,
+    };
     for (const listener of this.actionListeners) {
       listener.onTimelineAction(actionEvent);
     }
