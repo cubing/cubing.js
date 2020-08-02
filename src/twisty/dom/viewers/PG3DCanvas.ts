@@ -14,6 +14,7 @@ import { ManagedCustomElement } from "../ManagedCustomElement";
 import { pg3DCanvasCSS } from "./PG3DCanvas.css";
 import { TwistyViewerElement } from "./TwistyViewerElement";
 import { Vector3 } from "three";
+import { LegacyExperimentalPG3DViewConfig } from "../TwistyPlayer";
 
 const DEFAULT_PUZZLE_NAME = "3x3x3";
 
@@ -56,35 +57,39 @@ export class PG3DCanvas extends ManagedCustomElement
   constructor(
     cursor?: PositionDispatcher,
     name: PuzzleName = DEFAULT_PUZZLE_NAME,
+    legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig | null,
   ) {
     super();
     this.addCSS(pg3DCanvasCSS);
 
-    const pg = getPG3DCanvasPG(name);
-    const kpuzzleDef = pg.writekpuzzle();
-    const worker = new KPuzzle(kpuzzleDef);
+    if (legacyExperimentalPG3DViewConfig) {
+      this.pg3D = new PG3D(
+        legacyExperimentalPG3DViewConfig.def,
+        legacyExperimentalPG3DViewConfig.stickerDat,
+        legacyExperimentalPG3DViewConfig?.showFoundation ?? true, // TODO
+      );
+    } else {
+      const pg = getPG3DCanvasPG(name);
+      const kpuzzleDef = pg.writekpuzzle();
+      const worker = new KPuzzle(kpuzzleDef);
 
-    // TODO: are these hacks working here?
-    // Wide move / rotation hack
-    worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
-    const mps = pg.movesetgeos;
-    for (const mp of mps) {
-      const grip1 = mp[0] as string;
-      const grip2 = mp[2] as string;
-      // angle compatibility hack
-      worker.addGrip(grip1, grip2, mp[4] as number);
+      // TODO: are these hacks working here?
+      // Wide move / rotation hack
+      worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
+      const mps = pg.movesetgeos;
+      for (const mp of mps) {
+        const grip1 = mp[0] as string;
+        const grip2 = mp[2] as string;
+        // angle compatibility hack
+        worker.addGrip(grip1, grip2, mp[4] as number);
+      }
+      const stickerDat = pg.get3d(0.0131);
+
+      this.pg3D = new PG3D(kpuzzleDef, stickerDat, true);
     }
 
-    const stickerDat = pg.get3d(0.0131);
-
-    this.pg3D = new PG3D(
-      kpuzzleDef,
-      stickerDat,
-      true, // TODO
-    );
-
     this.pg3D.newVantage(this.contentWrapper, {
-      position: new Vector3(2, 4, 4),
+      position: new Vector3(0, 0, 6),
     });
     cursor!.addPositionListener(this);
   }
@@ -105,6 +110,10 @@ export class PG3DCanvas extends ManagedCustomElement
 
   private render(): void {
     /*...*/
+  }
+
+  public legacyExperimentalPG3D(): PG3D {
+    return this.pg3D;
   }
 }
 

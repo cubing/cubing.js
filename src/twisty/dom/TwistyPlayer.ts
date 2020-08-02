@@ -4,7 +4,7 @@ import {
   parse,
   Sequence,
 } from "../../alg";
-import { Puzzles } from "../../kpuzzle";
+import { Puzzles, KPuzzleDefinition } from "../../kpuzzle";
 import { AlgCursor } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
@@ -16,14 +16,28 @@ import { Cube3DCanvas } from "./viewers/Cube3DCanvas";
 import { getPG3DCanvasDefinition, PG3DCanvas } from "./viewers/PG3DCanvas";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
+import { StickerDat } from "../../puzzle-geometry";
+import { Vector3 } from "three";
+import { PG3D } from "../../twisty-old/3D/pg3D";
 
 export type VisualizationFormat = "2D" | "3D" | "PG3D";
 const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
+
+export interface LegacyExperimentalPG3DViewConfig {
+  def: KPuzzleDefinition;
+  stickerDat: StickerDat;
+  experimentalPolarVantages?: boolean;
+  sideBySide?: boolean;
+  showFoundation?: boolean;
+  experimentalInitialVantagePosition?: Vector3;
+}
 
 export interface TwistyPlayerInitialConfig {
   alg?: Sequence;
   puzzle?: string;
   visualization?: VisualizationFormat;
+
+  legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig;
 }
 
 class TwistyPlayerConfig {
@@ -44,11 +58,19 @@ export class TwistyPlayer extends ManagedCustomElement {
   timeline: Timeline;
   #cursor: AlgCursor;
   #currentConfig: TwistyPlayerConfig;
-  #coalesceModFunc: (mv: BlockMove) => number = (_mv: BlockMove): number => 0;
+  private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null;
+  public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
+    _mv: BlockMove,
+  ): number => 0;
+
+  public legacyExperimentalPG3D: PG3D | null = null;
   // TODO: support config from DOM.
   constructor(initialConfig: TwistyPlayerInitialConfig = {}) {
     super();
     this.#currentConfig = new TwistyPlayerConfig(initialConfig);
+
+    this.legacyExperimentalPG3DViewConfig =
+      initialConfig.legacyExperimentalPG3DViewConfig ?? null;
   }
 
   protected connectedCallback(): void {
@@ -116,23 +138,23 @@ export class TwistyPlayer extends ManagedCustomElement {
         }
       // fallthrough for 3D when not 3x3x3
       case "PG3D": {
+        const def =
+          this.legacyExperimentalPG3DViewConfig?.def ??
+          getPG3DCanvasDefinition(puzzleName);
         try {
-          this.#cursor = new AlgCursor(
-            timeline,
-            getPG3DCanvasDefinition(puzzleName),
-            alg,
-          );
+          this.#cursor = new AlgCursor(timeline, def, alg);
         } catch (e) {
           // TODO: Deduplicate fallback.
-          this.#cursor = new AlgCursor(
-            timeline,
-            getPG3DCanvasDefinition(puzzleName),
-            new Sequence([]),
-          );
+          this.#cursor = new AlgCursor(timeline, def, new Sequence([]));
         }
         this.timeline.addCursor(this.#cursor);
         this.timeline.jumpToEnd();
-        const pg3dCanvas = new PG3DCanvas(this.#cursor, puzzleName);
+        const pg3dCanvas = new PG3DCanvas(
+          this.#cursor,
+          puzzleName,
+          this.legacyExperimentalPG3DViewConfig,
+        );
+        this.legacyExperimentalPG3D = pg3dCanvas.legacyExperimentalPG3D();
         return pg3dCanvas;
       }
     }
@@ -149,7 +171,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       this.#currentConfig.alg,
       move,
       true,
-      this.#coalesceModFunc(move),
+      this.legacyExperimentalCoalesceModFunc(move),
     );
 
     this.timeline.jumpToEnd();

@@ -13,5 +13,4 @@ export {
 } from "../twisty-old/cursor";
 export { KSolvePuzzle } from "../twisty-old/puzzle";
 export { toTimeline } from "../twisty-old/stream/timeline";
-export { TwistyPlayerOld, TwistyParams } from "../twisty-old/TwistyPlayerOld";
 export { experimentalShowJumpingFlash } from "../twisty-old/widget";

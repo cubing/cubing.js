@@ -29,7 +29,7 @@ import {
 import {
   experimentalShowJumpingFlash,
   Vantage,
-  TwistyPlayerOld,
+  TwistyPlayer,
 } from "../../src/twisty/index";
 import { getURLParam, setURLParams } from "./url-params";
 import { parse } from "../../src/alg/parser/parser";
@@ -37,7 +37,7 @@ import { countMoves } from "./move-counter";
 
 experimentalShowJumpingFlash(false);
 
-let twisty: TwistyPlayerOld;
+let twisty: TwistyPlayer;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
 let safeKpuzzle: KPuzzleDefinition | undefined;
@@ -191,26 +191,21 @@ function setAlgo(str: string, writeback: boolean): void {
     // it again.  But for now we always do.
     if (!twisty || puzzleSelected) {
       elem.textContent = "";
-      twisty = new TwistyPlayerOld({
-        puzzle,
+      twisty = new TwistyPlayer({
         alg: new Sequence([]),
-        playerConfig: {
-          visualizationFormat: "PG3D",
-          experimentalPG3DViewConfig: {
-            stickerDat,
-            experimentalPolarVantages: true,
-            sideBySide: getCheckbox("sidebyside"),
-            showFoundation: getCheckbox("showfoundation"),
-          },
+        visualization: "PG3D",
+        legacyExperimentalPG3DViewConfig: {
+          def: puzzle,
+          stickerDat,
+          experimentalPolarVantages: true,
+          sideBySide: getCheckbox("sidebyside"),
+          showFoundation: getCheckbox("showfoundation"),
         },
       });
       elem.appendChild(twisty);
-      twisty.setCoalesceModFunc(getModValueForMove);
+      twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
 
-      const vantages: Vantage[] = twisty
-        .experimentalGetPlayer()
-        .pg3DView.experimentalGetPG3D()
-        .experimentalGetVantages();
+      const vantages: Vantage[] = twisty.legacyExperimentalPG3D!.experimentalGetVantages();
       // TODO: This is a hack.
       // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
       // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
@@ -241,7 +236,8 @@ function setAlgo(str: string, writeback: boolean): void {
     try {
       seq = algparse(str);
       str = algToString(seq);
-      twisty.experimentalSetAlg(seq);
+      twisty.setAlg(seq);
+      twisty.timeline.jumpToEnd();
       updateMoveCount(seq);
       setURLParams({ alg: seq });
     } catch (e) {
@@ -525,10 +521,7 @@ function onMouseClick(
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const controlTargets = twisty
-    .experimentalGetPlayer()
-    .pg3DView.experimentalGetPG3D()
-    .experimentalGetControlTargets();
+  const controlTargets = twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
   if (intersects.length > 0) {
     event.preventDefault();
@@ -548,7 +541,7 @@ function onMouseMove(vantage: Vantage, event: MouseEvent): void {
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const pg3d = twisty.experimentalGetPlayer().pg3DView.experimentalGetPG3D();
+  const pg3d = twisty.legacyExperimentalPG3D!;
   const targets = event.shiftKey
     ? pg3d.experimentalGetStickerTargets()
     : pg3d.experimentalGetControlTargets();
