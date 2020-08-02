@@ -85,12 +85,14 @@ export class TwistyPlayerTest extends ManagedCustomElement {
         console.log("2D", puzzleName);
         this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
         this.#timeline.addCursor(this.#cursor);
+        this.#timeline.jumpToEnd();
         return new Twisty2DSVG(this.#cursor);
       case "3D":
         console.log("3D", puzzleName);
         if (puzzleName === "3x3x3") {
           this.#cursor = new AlgCursor(timeline, Puzzles["3x3x3"], alg);
           this.#timeline.addCursor(this.#cursor);
+          this.#timeline.jumpToEnd();
           return new Cube3DCanvas(this.#cursor);
         }
       // fallthrough for 3D when not 3x3x3
@@ -102,6 +104,7 @@ export class TwistyPlayerTest extends ManagedCustomElement {
           alg,
         );
         this.#timeline.addCursor(this.#cursor);
+        this.#timeline.jumpToEnd();
         const pg3dCanvas = new PG3DCanvas(this.#cursor, puzzleName);
         return pg3dCanvas;
       }
