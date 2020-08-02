@@ -72,14 +72,14 @@ class TwistyControlButton extends ManagedCustomElement
         break;
     }
 
-    this.autoSetTimelineBasedDisabled();
-
     this.timeline!.addActionListener(this);
     switch (this.timelineCommand!) {
       case "play-pause":
         this.timeline!.addTimestampListener(this);
         break;
     }
+
+    this.autoSetTimelineBasedDisabled();
   }
 
   // TODO: Can we avoid duplicate calculations?
@@ -96,15 +96,18 @@ class TwistyControlButton extends ManagedCustomElement
           return;
         }
         switch (this.timelineCommand!) {
-          // case "play-step":
           case "jump-to-start":
-            this.timeline.timestamp < this.timeline.maxTimestamp();
+            this.button.disabled =
+              this.timeline.timestamp < this.timeline.maxTimestamp();
             break;
-          // case "play-step-backwards":
           case "jump-to-end":
-            this.timeline.timestamp > this.timeline.minTimestamp();
+            this.button.disabled =
+              this.timeline.timestamp > this.timeline.minTimestamp();
             break;
-          case "play-pause":
+          case "play-step":
+          case "play-step-backwards":
+            this.button.disabled = true; // TODO
+            break;
           default:
             this.button.disabled = false;
         }
