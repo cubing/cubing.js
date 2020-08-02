@@ -3,10 +3,12 @@ import {
   TimelineActionEvent,
   TimestampLocationType,
   TimelineAction,
+  MillisecondTimestamp,
 } from "../../animation/Timeline";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { buttonCSS, buttonGridCSS } from "./buttons.css";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
+import { TimeRange } from "../../animation/alg/AlgCursor";
 
 type TimelineCommand =
   | "fullscreen"
@@ -70,7 +72,45 @@ class TwistyControlButton extends ManagedCustomElement
         break;
     }
 
+    this.autoSetTimelineBasedDisabled();
+
     this.timeline!.addActionListener(this);
+    switch (this.timelineCommand!) {
+      case "play-pause":
+        this.timeline!.addTimestampListener(this);
+        break;
+    }
+  }
+
+  // TODO: Can we avoid duplicate calculations?
+  private autoSetTimelineBasedDisabled(): void {
+    switch (this.timelineCommand!) {
+      case "jump-to-start":
+      case "play-pause":
+      case "play-step":
+      case "play-step-backwards":
+      case "jump-to-end": {
+        const timeRange = this.timeline.timeRange();
+        if (timeRange.start === timeRange.end) {
+          this.button.disabled = true;
+          return;
+        }
+        switch (this.timelineCommand!) {
+          // case "play-step":
+          case "jump-to-start":
+            this.timeline.timestamp < this.timeline.maxTimestamp();
+            break;
+          // case "play-step-backwards":
+          case "jump-to-end":
+            this.timeline.timestamp > this.timeline.minTimestamp();
+            break;
+          case "play-pause":
+          default:
+            this.button.disabled = false;
+        }
+        break;
+      }
+    }
   }
 
   setIcon(buttonIconName: ButtonIconName): void {
@@ -185,6 +225,15 @@ class TwistyControlButton extends ManagedCustomElement
         //   actionEvent.action !== TimelineAction.StartingToPlay;
         break;
     }
+  }
+
+  onTimelineTimestampChange(_timestamp: MillisecondTimestamp): void {
+    // Nothing
+  }
+
+  onTimeRangeChange(_timeRange: TimeRange): void {
+    // TODO
+    this.autoSetTimelineBasedDisabled();
   }
 }
 
