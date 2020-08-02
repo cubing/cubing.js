@@ -26,16 +26,12 @@ import {
   schreierSims,
   StickerDat,
 } from "../../src/puzzle-geometry/index";
-import {
-  experimentalShowJumpingFlash,
-  Vantage,
-  TwistyPlayer,
-} from "../../src/twisty/index";
+import { Vantage, TwistyPlayer } from "../../src/twisty/index";
 import { getURLParam, setURLParams } from "./url-params";
 import { parse } from "../../src/alg/parser/parser";
 import { countMoves } from "./move-counter";
 
-experimentalShowJumpingFlash(false);
+//experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
 let twisty: TwistyPlayer;
 let puzzle: KPuzzleDefinition;
