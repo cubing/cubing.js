@@ -8,11 +8,12 @@ import {
   PuzzleName,
   Puzzles as PGPuzzles,
 } from "../../src/puzzle-geometry/Puzzles";
+import { VisualizationFormat } from "../../src/twisty/dom/TwistyPlayer";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";
   // TODO: push display name into the KSolve defition.
-  constructor(private kpuzzleName: string) {}
+  constructor(private kpuzzleName: string, public viz: VisualizationFormat) {}
 
   public displayName(): string {
     return KPuzzles[this.kpuzzleName].name;
@@ -29,6 +30,7 @@ class DisplayableKPuzzle {
 
 class DisplayablePG3D {
   public type: "pg3d" = "pg3d";
+  public viz: VisualizationFormat = "PG3D";
   constructor(
     private displayNameStr: string,
     private name: PuzzleName,
@@ -72,7 +74,10 @@ export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 
 const puzzles: { [s: string]: DisplayablePuzzle } = {};
 for (const key in KPuzzles) {
-  puzzles[key as any] = new DisplayableKPuzzle(key);
+  puzzles[key as any] = new DisplayableKPuzzle(
+    key,
+    ["2x2x2", "3x3x3"].includes(key) ? "3D" : "2D",
+  );
 }
 puzzles.megaminx = new DisplayablePG3D(
   "Megaminx",

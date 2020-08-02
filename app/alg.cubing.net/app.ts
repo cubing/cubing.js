@@ -1,5 +1,5 @@
 import { algToString, parse, Sequence } from "../../src/alg";
-import { TwistyPlayerOld, TwistyParams } from "../../src/twisty";
+import { TwistyPlayer, TwistyPlayerInitialConfig } from "../../src/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
@@ -11,7 +11,7 @@ export interface AppData {
 }
 
 export class App {
-  public twistyPlayerOld: TwistyPlayerOld;
+  public twistyPlayer: TwistyPlayer;
   private puzzlePane: HTMLElement;
   constructor(public element: Element, initialData: AppData) {
     this.puzzlePane = findOrCreateChild(
@@ -43,37 +43,21 @@ export class App {
   }
 
   private initializeTwisty(initialData: AppData): void {
-    const twistyParams: TwistyParams = {
+    const twistyConfig: TwistyPlayerInitialConfig = {
       alg: new Sequence([]),
     };
     const displayablePuzzle = puzzles[initialData.puzzleName];
-    twistyParams.puzzle = displayablePuzzle.kpuzzleDefinition();
-    switch (displayablePuzzle.type) {
-      case "kpuzzle":
-        break;
-      case "pg3d":
-        // twistyParams.puzzle = displayablePuzzle.d
-        twistyParams.playerConfig = {
-          visualizationFormat: "PG3D",
-          experimentalPG3DViewConfig: {
-            experimentalPolarVantages: displayablePuzzle.polarVantages,
-            stickerDat: displayablePuzzle.stickerDat(),
-            showFoundation: true,
-          },
-        };
-        break;
-      default:
-        throw new Error("Not a displayable puzzle type.");
-    }
-    this.twistyPlayerOld = new TwistyPlayerOld(twistyParams);
+    twistyConfig.puzzle = initialData.puzzleName;
+    twistyConfig.visualization = displayablePuzzle.viz;
+    this.twistyPlayer = new TwistyPlayer(twistyConfig);
     this.setAlg(initialData.alg);
-    this.puzzlePane.appendChild(this.twistyPlayerOld);
+    this.puzzlePane.appendChild(this.twistyPlayer);
   }
 
   // Boolean indicates success (e.g. alg is valid).
   private setAlg(alg: Sequence): boolean {
     try {
-      this.twistyPlayerOld.experimentalSetAlg(alg);
+      this.twistyPlayer.setAlg(alg);
       setURLParams({ alg });
       return true;
     } catch (e) {

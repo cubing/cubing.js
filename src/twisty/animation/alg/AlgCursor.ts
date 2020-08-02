@@ -56,10 +56,15 @@ export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
   private todoIndexer: TreeAlgorithmIndexer<KSolvePuzzle>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
-  constructor(timeline: Timeline, def: KPuzzleDefinition, alg: Sequence) {
+  private ksolvePuzzle: KSolvePuzzle;
+  constructor(
+    private timeline: Timeline,
+    def: KPuzzleDefinition,
+    alg: Sequence,
+  ) {
     timeline.addTimestampListener(this);
-    const kp = new KSolvePuzzle(def);
-    this.todoIndexer = new TreeAlgorithmIndexer(kp, alg);
+    this.ksolvePuzzle = new KSolvePuzzle(def);
+    this.todoIndexer = new TreeAlgorithmIndexer(this.ksolvePuzzle, alg);
     /*...*/
   }
 
@@ -75,6 +80,10 @@ export class AlgCursor
   }
 
   onTimelineTimestampChange(timestamp: MillisecondTimestamp): void {
+    this.dispatchPositionForTimestamp(timestamp);
+  }
+
+  dispatchPositionForTimestamp(timestamp: MillisecondTimestamp): void {
     const idx = this.todoIndexer.timestampToIndex(timestamp);
     const state = this.todoIndexer.stateAtIndex(idx) as any; // TODO
     const position: PuzzlePosition = {
@@ -96,5 +105,12 @@ export class AlgCursor
 
   onTimeRangeChange(_timeRange: TimeRange): void {
     // nothing to do
+  }
+
+  setAlg(alg: Sequence): void {
+    this.todoIndexer = new TreeAlgorithmIndexer(this.ksolvePuzzle, alg);
+    this.timeline.onCursorChange(this);
+    this.dispatchPositionForTimestamp(this.timeline.timestamp);
+    // TODO: Handle state change.
   }
 }

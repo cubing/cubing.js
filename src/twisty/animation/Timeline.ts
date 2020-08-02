@@ -104,6 +104,11 @@ export class Timeline
     this.dispatchTimeRange();
   }
 
+  // In the future, this might do some calculations or caching.
+  public onCursorChange(_cursor: AlgCursor): void {
+    this.dispatchTimeRange();
+  }
+
   timeRange(): TimeRange {
     let start = 0;
     let end = 0;

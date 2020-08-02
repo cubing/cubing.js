@@ -15,7 +15,7 @@ import { Puzzles } from "../../kpuzzle";
 export type VisualizationFormat = "2D" | "3D" | "PG3D";
 const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
 
-interface TwistyPlayerInitialConfig {
+export interface TwistyPlayerInitialConfig {
   alg?: Sequence;
   puzzle?: string;
   visualization?: VisualizationFormat;
@@ -74,7 +74,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addCSS(twistyPlayerCSS);
   }
 
-  createViewer(
+  protected createViewer(
     timeline: Timeline,
     alg: Sequence,
     visualization: VisualizationFormat,
@@ -109,6 +109,10 @@ export class TwistyPlayer extends ManagedCustomElement {
         return pg3dCanvas;
       }
     }
+  }
+
+  setAlg(alg: Sequence): void {
+    this.#cursor.setAlg(alg);
   }
 
   fullscreen(): void {

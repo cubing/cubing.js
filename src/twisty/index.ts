@@ -1,6 +1,6 @@
 import "regenerator-runtime/runtime"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 
-export { TwistyPlayer } from "./dom/TwistyPlayer";
+export { TwistyPlayer, TwistyPlayerInitialConfig } from "./dom/TwistyPlayer";
 
 // Old
 export { Cube3D } from "../twisty-old/3D/cube3D";
