@@ -88,16 +88,19 @@ export class AlgCursor
     const state = this.todoIndexer.stateAtIndex(idx) as any; // TODO
     const position: PuzzlePosition = {
       state,
-      movesInProgress: [
-        {
-          move: this.todoIndexer.getMove(idx),
-          direction: Direction.Forwards,
-          fraction:
-            (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
-            this.todoIndexer.moveDuration(idx),
-        },
-      ],
+      movesInProgress: [],
     };
+
+    if (this.todoIndexer.numMoves() > 0) {
+      position.movesInProgress.push({
+        move: this.todoIndexer.getMove(idx),
+        direction: Direction.Forwards,
+        fraction:
+          (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
+          this.todoIndexer.moveDuration(idx),
+      });
+    }
+
     for (const listener of this.positionListeners) {
       listener.onPositionChange(position);
     }

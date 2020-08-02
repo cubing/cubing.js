@@ -41,7 +41,7 @@ class TwistyPlayerConfig {
 export class TwistyPlayer extends ManagedCustomElement {
   viewers: TwistyViewerElement[];
   controls: TwistyControlElement[];
-  #timeline: Timeline;
+  timeline: Timeline;
   #cursor: AlgCursor;
   #currentConfig: TwistyPlayerConfig;
   #coalesceModFunc: (mv: BlockMove) => number = (_mv: BlockMove): number => 0;
@@ -54,19 +54,16 @@ export class TwistyPlayer extends ManagedCustomElement {
   protected connectedCallback(): void {
     this.processAttributes();
 
-    this.#timeline = new Timeline();
+    this.timeline = new Timeline();
 
     const viewer = this.createViewer(
-      this.#timeline,
+      this.timeline,
       this.#currentConfig.alg,
       this.#currentConfig.visualization,
       this.#currentConfig.puzzle,
     );
-    const scrubber = new TwistyScrubber(this.#timeline);
-    const controlButtonGrid = new TwistyControlButtonPanel(
-      this.#timeline,
-      this,
-    );
+    const scrubber = new TwistyScrubber(this.timeline);
+    const controlButtonGrid = new TwistyControlButtonPanel(this.timeline, this);
 
     console.log("viewer", viewer);
 
@@ -89,28 +86,55 @@ export class TwistyPlayer extends ManagedCustomElement {
     switch (visualization) {
       case "2D":
         console.log("2D", puzzleName);
-        this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
-        this.#timeline.addCursor(this.#cursor);
-        this.#timeline.jumpToEnd();
+        try {
+          this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
+        } catch (e) {
+          // TODO: Deduplicate fallback.
+          this.#cursor = new AlgCursor(
+            timeline,
+            Puzzles[puzzleName],
+            new Sequence([]),
+          );
+        }
+        this.timeline.addCursor(this.#cursor);
+        this.timeline.jumpToEnd();
         return new Twisty2DSVG(this.#cursor, Puzzles[puzzleName]);
       case "3D":
         console.log("3D", puzzleName);
         if (puzzleName === "3x3x3") {
-          this.#cursor = new AlgCursor(timeline, Puzzles["3x3x3"], alg);
-          this.#timeline.addCursor(this.#cursor);
-          this.#timeline.jumpToEnd();
+          try {
+            this.#cursor = new AlgCursor(timeline, Puzzles["3x3x3"], alg);
+          } catch (e) {
+            // TODO: Deduplicate fallback.
+            this.#cursor = new AlgCursor(
+              timeline,
+              Puzzles["3x3x3"],
+              new Sequence([]),
+            );
+          }
+          this.timeline.addCursor(this.#cursor);
+          this.timeline.jumpToEnd();
           return new Cube3DCanvas(this.#cursor);
         }
       // fallthrough for 3D when not 3x3x3
       case "PG3D": {
         console.log("PG3D", puzzleName);
-        this.#cursor = new AlgCursor(
-          timeline,
-          getPG3DCanvasDefinition(puzzleName),
-          alg,
-        );
-        this.#timeline.addCursor(this.#cursor);
-        this.#timeline.jumpToEnd();
+        try {
+          this.#cursor = new AlgCursor(
+            timeline,
+            getPG3DCanvasDefinition(puzzleName),
+            alg,
+          );
+        } catch (e) {
+          // TODO: Deduplicate fallback.
+          this.#cursor = new AlgCursor(
+            timeline,
+            getPG3DCanvasDefinition(puzzleName),
+            new Sequence([]),
+          );
+        }
+        this.timeline.addCursor(this.#cursor);
+        this.timeline.jumpToEnd();
         const pg3dCanvas = new PG3DCanvas(this.#cursor, puzzleName);
         return pg3dCanvas;
       }
@@ -131,9 +155,9 @@ export class TwistyPlayer extends ManagedCustomElement {
       this.#coalesceModFunc(move),
     );
 
-    this.#timeline.jumpToEnd();
+    this.timeline.jumpToEnd();
     this.setAlg(newAlg);
-    this.#timeline.play();
+    this.timeline.play();
   }
 
   fullscreen(): void {
@@ -145,7 +169,11 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     const algAttribute = this.getAttribute("alg");
     if (algAttribute) {
-      config.alg = parse(algAttribute);
+      try {
+        config.alg = parse(algAttribute);
+      } catch (e) {
+        console.log("Invalid initial alg:", e);
+      }
     }
 
     config.puzzle = this.getAttribute("puzzle") ?? config.puzzle;
