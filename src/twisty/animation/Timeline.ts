@@ -106,6 +106,9 @@ export class Timeline
 
   // In the future, this might do some calculations or caching.
   public onCursorChange(_cursor: AlgCursor): void {
+    if (this.timestamp > this.maxTimestamp()) {
+      this.timestamp = this.maxTimestamp();
+    }
     this.dispatchTimeRange();
   }
 

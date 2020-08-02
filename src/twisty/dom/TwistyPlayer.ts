@@ -1,4 +1,10 @@
-import { parse, Sequence } from "../../alg";
+import {
+  BlockMove,
+  experimentalAppendBlockMove,
+  parse,
+  Sequence,
+} from "../../alg";
+import { Puzzles } from "../../kpuzzle";
 import { AlgCursor } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
@@ -10,7 +16,6 @@ import { Cube3DCanvas } from "./viewers/Cube3DCanvas";
 import { getPG3DCanvasDefinition, PG3DCanvas } from "./viewers/PG3DCanvas";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
-import { Puzzles } from "../../kpuzzle";
 
 export type VisualizationFormat = "2D" | "3D" | "PG3D";
 const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
@@ -39,6 +44,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   #timeline: Timeline;
   #cursor: AlgCursor;
   #currentConfig: TwistyPlayerConfig;
+  #coalesceModFunc: (mv: BlockMove) => number = (_mv: BlockMove): number => 0;
   // TODO: support config from DOM.
   constructor(initialConfig: TwistyPlayerInitialConfig = {}) {
     super();
@@ -112,7 +118,22 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   setAlg(alg: Sequence): void {
-    this.#cursor.setAlg(alg);
+    this.#currentConfig.alg = alg;
+    this.#cursor.setAlg(this.#currentConfig.alg);
+  }
+
+  // TODO: Handle playing the new move vs. just modying the alg.
+  experimentalAddMove(move: BlockMove): void {
+    const newAlg = experimentalAppendBlockMove(
+      this.#currentConfig.alg,
+      move,
+      true,
+      this.#coalesceModFunc(move),
+    );
+
+    this.#timeline.jumpToEnd();
+    this.setAlg(newAlg);
+    this.#timeline.play();
   }
 
   fullscreen(): void {

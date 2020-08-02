@@ -1,5 +1,4 @@
 import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
-import { Quaternion } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { algToString, invert, parse, Sequence } from "../../src/alg/index";
@@ -12,20 +11,18 @@ import {
 } from "../../src/bluetooth/index";
 import {
   experimentalShowJumpingFlash,
-  TwistyPlayerOld,
+  TwistyPlayer,
 } from "../../src/twisty/index";
 
 experimentalShowJumpingFlash(false);
 
-async function asyncSetup(twistyPlayerOld: TwistyPlayerOld): Promise<void> {
+async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
   console.log("asyncSetup");
-  const keyboard = await debugKeyboardConnect(
-    twistyPlayerOld.experimentalGetPlayer().cube3DView.element,
-  );
-  console.log("keyboard", twistyPlayerOld, keyboard);
+  const keyboard = await debugKeyboardConnect(twistyPlayer); // TODO: attach to viewer only?
+  console.log("keyboard", twistyPlayer, keyboard);
   keyboard.addMoveListener((e: MoveEvent) => {
     console.log("listener", e);
-    twistyPlayerOld.experimentalAddMove(e.latestMove);
+    twistyPlayer.experimentalAddMove(e.latestMove);
   });
 }
 
@@ -39,10 +36,10 @@ window.puzzle = null;
 
 console.log(algToString(invert(parse("R U R' F D"))));
 window.addEventListener("load", async () => {
-  const twistyPlayerOld = new TwistyPlayerOld({ alg: new Sequence([]) });
-  document.body.appendChild(twistyPlayerOld);
+  const twistyPlayer = new TwistyPlayer({ alg: new Sequence([]) });
+  document.body.appendChild(twistyPlayer);
 
-  asyncSetup(twistyPlayerOld);
+  asyncSetup(twistyPlayer);
 
   // latestMove: BlockMove;
   // timeStamp: number;
@@ -55,19 +52,20 @@ window.addEventListener("load", async () => {
     ) as HTMLInputElement).checked;
     window.puzzle = await connect({ acceptAllDevices });
     window.puzzle.addMoveListener((e: MoveEvent) => {
-      twistyPlayerOld.experimentalAddMove(e.latestMove);
+      twistyPlayer.experimentalAddMove(e.latestMove);
     });
-    window.puzzle.addOrientationListener((e: OrientationEvent) => {
-      const { x, y, z, w } = e.quaternion;
-      twistyPlayerOld
-        .experimentalGetPlayer()
-        .cube3DView.experimentalGetCube3D()
-        .experimentalGetCube()
-        .quaternion.copy(new Quaternion(x, y, z, w));
-      twistyPlayerOld
-        .experimentalGetAnim()
-        .experimentalGetScheduler()
-        .singleFrame();
+    window.puzzle.addOrientationListener((_e: OrientationEvent) => {
+      // TODO
+      // const { x, y, z, w } = e.quaternion;
+      // twistyPlayer
+      //   .experimentalGetPlayer()
+      //   .cube3DView.experimentalGetCube3D()
+      //   .experimentalGetCube()
+      //   .quaternion.copy(new Quaternion(x, y, z, w));
+      // twistyPlayer
+      //   .experimentalGetAnim()
+      //   .experimentalGetScheduler()
+      //   .singleFrame();
     });
   });
 });
