@@ -65,8 +65,6 @@ export class TwistyPlayer extends ManagedCustomElement {
     const scrubber = new TwistyScrubber(this.timeline);
     const controlButtonGrid = new TwistyControlButtonPanel(this.timeline, this);
 
-    console.log("viewer", viewer);
-
     this.viewers = [viewer];
     this.controls = [scrubber, controlButtonGrid];
 
@@ -118,7 +116,6 @@ export class TwistyPlayer extends ManagedCustomElement {
         }
       // fallthrough for 3D when not 3x3x3
       case "PG3D": {
-        console.log("PG3D", puzzleName);
         try {
           this.#cursor = new AlgCursor(
             timeline,
