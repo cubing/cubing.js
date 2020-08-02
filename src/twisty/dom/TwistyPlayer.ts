@@ -105,7 +105,6 @@ export class TwistyPlayer extends ManagedCustomElement {
   ): TwistyViewerElement {
     switch (visualization) {
       case "2D":
-        console.log("2D", puzzleName);
         try {
           this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
         } catch (e) {
@@ -120,7 +119,6 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.timeline.jumpToEnd();
         return new Twisty2DSVG(this.#cursor, Puzzles[puzzleName]);
       case "3D":
-        console.log("3D", puzzleName);
         if (puzzleName === "3x3x3") {
           try {
             this.#cursor = new AlgCursor(timeline, Puzzles["3x3x3"], alg);
