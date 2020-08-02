@@ -9,12 +9,9 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../src/bluetooth/index";
-import {
-  experimentalShowJumpingFlash,
-  TwistyPlayer,
-} from "../../src/twisty/index";
+import { TwistyPlayer } from "../../src/twisty/index";
 
-experimentalShowJumpingFlash(false);
+// experimentalShowJumpingFlash(false); // TODO
 
 async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
   console.log("asyncSetup");
