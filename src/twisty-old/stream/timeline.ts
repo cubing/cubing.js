@@ -1,16 +1,16 @@
 import { BlockMove } from "../../alg";
 import { experimentalBlockMoveQuantumName } from "../../alg/traversal";
-import { Cursor } from "../cursor";
+import { Timestamp, Duration } from "../../twisty/animation/alg/CursorTypes";
 
 interface Event {
-  timeStamp: Cursor.Timestamp;
+  timeStamp: Timestamp;
   move: BlockMove;
 }
 
 export interface TimelineEntry {
   event: Event;
-  start: Cursor.Timestamp;
-  end: Cursor.Timestamp;
+  start: Timestamp;
+  end: Timestamp;
 }
 
 type Timeline = TimelineEntry[];
@@ -37,7 +37,7 @@ function isSameAxis(move1: BlockMove, move2: BlockMove): boolean {
 
 export function toAxes(
   events: Event[],
-  diameterMs: Cursor.Duration,
+  diameterMs: Duration,
 ): TimelineEntry[][] {
   const axes: TimelineEntry[][] = [];
   const axisMoveTracker = new Map();
@@ -102,7 +102,7 @@ export function toAxes(
 }
 
 // TODO: turn into an optional param
-const defaultDiameterMs: Cursor.Duration = 200;
+const defaultDiameterMs: Duration = 200;
 
 export function toTimeline(
   events: Event[],

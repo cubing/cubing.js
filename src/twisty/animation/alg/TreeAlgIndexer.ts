@@ -6,8 +6,8 @@ import {
   AlgWalker,
   DecoratorConstructor,
   invertBlockMove,
-  Cursor,
 } from "./AlgIndexer";
+import { Timestamp, Duration } from "./CursorTypes";
 
 export class TreeAlgIndexer<P extends Puzzle> implements AlgIndexer<P> {
   private decoration: AlgPartDecoration<P>;
@@ -34,7 +34,7 @@ export class TreeAlgIndexer<P extends Puzzle> implements AlgIndexer<P> {
     throw new Error("Out of algorithm: index " + index);
   }
 
-  public indexToMoveStartTimestamp(index: number): Cursor.Timestamp {
+  public indexToMoveStartTimestamp(index: number): Timestamp {
     if (this.walker.moveByIndex(index) || this.walker.i === index) {
       return this.walker.dur;
     }
@@ -55,12 +55,12 @@ export class TreeAlgIndexer<P extends Puzzle> implements AlgIndexer<P> {
     return this.decoration.moveCount;
   }
 
-  public timestampToIndex(timestamp: Cursor.Timestamp): number {
+  public timestampToIndex(timestamp: Timestamp): number {
     this.walker.moveByDuration(timestamp);
     return this.walker.i;
   }
 
-  public algDuration(): Cursor.Duration {
+  public algDuration(): Duration {
     return this.decoration.duration;
   }
 

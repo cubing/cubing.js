@@ -1,12 +1,18 @@
 import { BlockMove, expand, Sequence, TraversalUp } from "../../../alg";
 import { Puzzle, State } from "../../../twisty-old/puzzle";
-import { AlgIndexer, Cursor, countAnimatedMoves } from "./AlgIndexer";
+import { AlgIndexer, countAnimatedMoves } from "./AlgIndexer";
+import {
+  Duration,
+  AlgDuration,
+  Timestamp,
+  DefaultDurationForAmount,
+} from "./CursorTypes";
 
 export class SimpleAlgIndexer<P extends Puzzle> implements AlgIndexer<P> {
   private moves: Sequence;
   // TODO: Allow custom `durationFn`.
-  private durationFn: TraversalUp<Cursor.Duration> = new Cursor.AlgDuration(
-    Cursor.DefaultDurationForAmount,
+  private durationFn: TraversalUp<Duration> = new AlgDuration(
+    DefaultDurationForAmount,
   );
 
   constructor(private puzzle: P, alg: Sequence) {
@@ -18,12 +24,12 @@ export class SimpleAlgIndexer<P extends Puzzle> implements AlgIndexer<P> {
     return this.moves.nestedUnits[index] as BlockMove;
   }
 
-  public indexToMoveStartTimestamp(index: number): Cursor.Timestamp {
+  public indexToMoveStartTimestamp(index: number): Timestamp {
     const seq = new Sequence(this.moves.nestedUnits.slice(0, index));
     return this.durationFn.traverse(seq);
   }
 
-  public timestampToIndex(timestamp: Cursor.Timestamp): number {
+  public timestampToIndex(timestamp: Timestamp): number {
     let cumulativeTime = 0;
     let i;
     for (i = 0; i < this.numMoves(); i++) {
@@ -53,7 +59,7 @@ export class SimpleAlgIndexer<P extends Puzzle> implements AlgIndexer<P> {
     return state;
   }
 
-  public algDuration(): Cursor.Duration {
+  public algDuration(): Duration {
     return this.durationFn.traverse(this.moves);
   }
 
