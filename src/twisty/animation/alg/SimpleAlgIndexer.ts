@@ -1,5 +1,5 @@
 import { BlockMove, expand, Sequence, TraversalUp } from "../../../alg";
-import { Puzzle, State } from "../../../twisty-old/puzzle";
+import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import { AlgIndexer, countAnimatedMoves } from "./AlgIndexer";
 import {
   Duration,
@@ -8,7 +8,8 @@ import {
   DefaultDurationForAmount,
 } from "./CursorTypes";
 
-export class SimpleAlgIndexer<P extends Puzzle> implements AlgIndexer<P> {
+export class SimpleAlgIndexer<P extends PuzzleWrapper>
+  implements AlgIndexer<P> {
   private moves: Sequence;
   // TODO: Allow custom `durationFn`.
   private durationFn: TraversalUp<Duration> = new AlgDuration(

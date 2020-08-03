@@ -1,4 +1,4 @@
-import { BlockMove, blockMoveToString } from "../alg";
+import { BlockMove, blockMoveToString } from "../../../alg";
 import {
   Combine,
   EquivalentStates,
@@ -8,7 +8,7 @@ import {
   Puzzles,
   stateForBlockMove,
   Transformation,
-} from "../kpuzzle";
+} from "../../../kpuzzle";
 
 export type MoveName = string;
 
@@ -19,13 +19,20 @@ export interface MoveProgress {
 
 // tslint:disable-next-line no-empty-interfaces
 // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars-experimental
-export interface State<T extends Puzzle> {}
+export interface State<T extends PuzzleWrapper> {}
 
-export abstract class Puzzle {
-  public abstract startState(): State<Puzzle>;
-  public abstract invert(state: State<Puzzle>): State<Puzzle>;
-  public abstract combine(s1: State<Puzzle>, s2: State<Puzzle>): State<Puzzle>;
-  public multiply(state: State<Puzzle>, amount: number): State<Puzzle> {
+export abstract class PuzzleWrapper {
+  public abstract startState(): State<PuzzleWrapper>;
+  public abstract invert(state: State<PuzzleWrapper>): State<PuzzleWrapper>;
+  public abstract combine(
+    s1: State<PuzzleWrapper>,
+    s2: State<PuzzleWrapper>,
+  ): State<PuzzleWrapper>;
+
+  public multiply(
+    state: State<PuzzleWrapper>,
+    amount: number,
+  ): State<PuzzleWrapper> {
     if (amount < 0) {
       return this.invert(this.multiply(state, -amount));
     }
@@ -41,17 +48,20 @@ export abstract class Puzzle {
     return newState;
   }
 
-  public abstract stateFromMove(blockMove: BlockMove): State<Puzzle>;
-  public abstract identity(): State<Puzzle>;
-  public abstract equivalent(s1: State<Puzzle>, s2: State<Puzzle>): boolean;
+  public abstract stateFromMove(blockMove: BlockMove): State<PuzzleWrapper>;
+  public abstract identity(): State<PuzzleWrapper>;
+  public abstract equivalent(
+    s1: State<PuzzleWrapper>,
+    s2: State<PuzzleWrapper>,
+  ): boolean;
 }
 
-interface KSolvePuzzleState extends Transformation, State<KSolvePuzzle> {}
+interface KSolvePuzzleState extends Transformation, State<KPuzzleWrapper> {}
 
-export class KSolvePuzzle extends Puzzle {
+export class KPuzzleWrapper extends PuzzleWrapper {
   // don't work the underlying kdefinition/multiply so hard
-  public static fromID(id: string): KSolvePuzzle {
-    return new KSolvePuzzle(Puzzles[id]);
+  public static fromID(id: string): KPuzzleWrapper {
+    return new KPuzzleWrapper(Puzzles[id]);
   }
 
   public moveStash: { [key: string]: Transformation } = {};
@@ -95,7 +105,7 @@ class QTMCounterState implements State<QTMCounterPuzzle> {
   constructor(public value: number) {}
 }
 
-export class QTMCounterPuzzle extends Puzzle {
+export class QTMCounterPuzzle extends PuzzleWrapper {
   public startState(): QTMCounterState {
     return new QTMCounterState(0);
   }

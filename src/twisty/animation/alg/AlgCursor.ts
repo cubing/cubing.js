@@ -12,7 +12,7 @@ import {
   Transformation as KPuzzleState,
 } from "../../../kpuzzle";
 import { TreeAlgIndexer } from "./TreeAlgIndexer";
-import { KSolvePuzzle } from "../../../twisty-old/puzzle";
+import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
 import {
   MillisecondTimestamp,
   Timeline,
@@ -54,16 +54,16 @@ export interface TimeRange {
 
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
-  private todoIndexer: TreeAlgIndexer<KSolvePuzzle>;
+  private todoIndexer: TreeAlgIndexer<KPuzzleWrapper>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
-  private ksolvePuzzle: KSolvePuzzle;
+  private ksolvePuzzle: KPuzzleWrapper;
   constructor(
     private timeline: Timeline,
     def: KPuzzleDefinition,
     alg: Sequence,
   ) {
     timeline.addTimestampListener(this);
-    this.ksolvePuzzle = new KSolvePuzzle(def);
+    this.ksolvePuzzle = new KPuzzleWrapper(def);
     this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
     /*...*/
   }

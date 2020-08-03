@@ -1,5 +1,5 @@
 import { BlockMove, Sequence } from "../../../alg";
-import { Puzzle, State } from "../../../twisty-old/puzzle";
+import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import {
   AlgIndexer,
   AlgPartDecoration,
@@ -9,7 +9,7 @@ import {
 } from "./AlgIndexer";
 import { Timestamp, Duration } from "./CursorTypes";
 
-export class TreeAlgIndexer<P extends Puzzle> implements AlgIndexer<P> {
+export class TreeAlgIndexer<P extends PuzzleWrapper> implements AlgIndexer<P> {
   private decoration: AlgPartDecoration<P>;
   private walker: AlgWalker<P>;
   constructor(private puzzle: P, alg: Sequence) {

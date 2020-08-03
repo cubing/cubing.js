@@ -12,7 +12,7 @@ import {
   TraversalUp,
   Unit,
 } from "../../../alg";
-import { Puzzle, State } from "../../../twisty-old/puzzle";
+import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import {
   Timestamp,
   Duration,
@@ -66,7 +66,7 @@ class CountAnimatedMoves extends TraversalUp<number> {
   }
 }
 
-export interface AlgIndexer<P extends Puzzle> {
+export interface AlgIndexer<P extends PuzzleWrapper> {
   getMove(index: number): BlockMove;
   indexToMoveStartTimestamp(index: number): Timestamp;
   stateAtIndex(index: number): State<P>;
@@ -77,9 +77,9 @@ export interface AlgIndexer<P extends Puzzle> {
   moveDuration(index: number): number;
 }
 
-export class AlgPartDecoration<P extends Puzzle> {
+export class AlgPartDecoration<P extends PuzzleWrapper> {
   constructor(
-    _puz: Puzzle,
+    _puz: PuzzleWrapper,
     public moveCount: number,
     public duration: number,
     public forward: State<P>,
@@ -87,7 +87,7 @@ export class AlgPartDecoration<P extends Puzzle> {
     public children: Array<AlgPartDecoration<P>> = [],
   ) {}
 }
-export class DecoratorConstructor<P extends Puzzle> extends TraversalUp<
+export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
   AlgPartDecoration<P>
 > {
   private identity: State<P>;
@@ -96,7 +96,7 @@ export class DecoratorConstructor<P extends Puzzle> extends TraversalUp<
     DefaultDurationForAmount,
   );
 
-  constructor(private puz: Puzzle) {
+  constructor(private puz: PuzzleWrapper) {
     super();
     this.identity = puz.identity();
     this.dummyLeaf = new AlgPartDecoration<P>(
@@ -214,12 +214,12 @@ export class DecoratorConstructor<P extends Puzzle> extends TraversalUp<
     );
   }
 }
-class WalkerDown<P extends Puzzle> {
+class WalkerDown<P extends PuzzleWrapper> {
   constructor(public apd: AlgPartDecoration<P>, public back: boolean) {
     /**/
   }
 }
-export class AlgWalker<P extends Puzzle> extends TraversalDownUp<
+export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
   WalkerDown<P>,
   boolean
 > {

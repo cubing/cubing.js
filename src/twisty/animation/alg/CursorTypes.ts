@@ -10,7 +10,7 @@ import {
   Sequence,
   TraversalUp,
 } from "../../../alg";
-import { Puzzle, State } from "../../../twisty-old/puzzle";
+import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import { MillisecondTimestamp } from "../Timeline";
 
 // TODO: unify duration/timstamp types
@@ -30,7 +30,7 @@ export interface MoveProgress {
   direction: Direction;
   fraction: number;
 }
-export interface Position<P extends Puzzle> {
+export interface Position<P extends PuzzleWrapper> {
   state: State<P>;
   moves: MoveProgress[];
 }
