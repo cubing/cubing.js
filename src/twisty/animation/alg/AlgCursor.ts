@@ -11,7 +11,7 @@ import {
   KPuzzleDefinition,
   Transformation as KPuzzleState,
 } from "../../../kpuzzle";
-import { TreeAlgorithmIndexer } from "../../../twisty-old/cursor";
+import { TreeAlgIndexer } from "./TreeAlgIndexer";
 import { KSolvePuzzle } from "../../../twisty-old/puzzle";
 import {
   MillisecondTimestamp,
@@ -54,7 +54,7 @@ export interface TimeRange {
 
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
-  private todoIndexer: TreeAlgorithmIndexer<KSolvePuzzle>;
+  private todoIndexer: TreeAlgIndexer<KSolvePuzzle>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
   private ksolvePuzzle: KSolvePuzzle;
   constructor(
@@ -64,7 +64,7 @@ export class AlgCursor
   ) {
     timeline.addTimestampListener(this);
     this.ksolvePuzzle = new KSolvePuzzle(def);
-    this.todoIndexer = new TreeAlgorithmIndexer(this.ksolvePuzzle, alg);
+    this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
     /*...*/
   }
 
@@ -119,7 +119,7 @@ export class AlgCursor
   }
 
   setAlg(alg: Sequence): void {
-    this.todoIndexer = new TreeAlgorithmIndexer(this.ksolvePuzzle, alg);
+    this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
     this.timeline.onCursorChange(this);
     this.dispatchPositionForTimestamp(this.timeline.timestamp);
     // TODO: Handle state change.
