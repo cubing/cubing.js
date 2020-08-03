@@ -4,8 +4,7 @@ export { TwistyPlayer, TwistyPlayerInitialConfig } from "./dom/TwistyPlayer";
 
 // Old
 export { Cube3D } from "./3D/puzzles/Cube3D";
-export { PG3D } from "../twisty-old/3D/pg3D";
-export { TAU, Vantage } from "../twisty-old/3D/twisty3D";
+export { PG3D } from "./3D/puzzles/PG3D";
 export {
   SimpleAlgorithmIndexer,
   AlgorithmIndexer,

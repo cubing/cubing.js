@@ -10,18 +10,18 @@ import {
   Object3D,
   Vector3,
 } from "three";
-import { BlockMove, modifiedBlockMove } from "../../alg";
+import { BlockMove, modifiedBlockMove } from "../../../alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
   stateForBlockMove,
   Transformation,
-} from "../../kpuzzle";
-import { StickerDatSticker } from "../../puzzle-geometry";
-import { Cursor } from "../cursor";
-import { smootherStep } from "../easing";
-import { Puzzle } from "../puzzle";
-import { TAU, Twisty3D } from "./twisty3D";
+} from "../../../kpuzzle";
+import { StickerDatSticker } from "../../../puzzle-geometry";
+import { smootherStep } from "../../../twisty-old/easing";
+import { PuzzlePosition, AlgCursor } from "../../animation/alg/AlgCursor";
+import { TAU } from "../TAU";
+import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,
@@ -117,9 +117,7 @@ class AxisInfo {
 const PG_SCALE = 0.5;
 
 // TODO: Split into "scene model" and "view".
-export class PG3D extends Twisty3D<Puzzle> {
-  private group: Group = new Group();
-
+export class PG3D extends Object3D implements Twisty3DPuzzle {
   private stickers: { [key: string]: StickerDef[][] };
   private axesInfo: { [key: string]: AxisInfo };
 
@@ -127,11 +125,15 @@ export class PG3D extends Twisty3D<Puzzle> {
   private controlTargets: Object3D[] = [];
 
   constructor(
+    cursor: AlgCursor,
+    private scheduleRenderCallback: () => void,
     private definition: KPuzzleDefinition,
     pgdat: any,
     showFoundation: boolean = false,
   ) {
     super();
+    cursor!.addPositionListener(this);
+
     this.axesInfo = {};
     const axesDef = pgdat.axis as any[];
     for (const axis of axesDef) {
@@ -152,17 +154,16 @@ export class PG3D extends Twisty3D<Puzzle> {
       const stickerdef = new StickerDef(sticker, showFoundation);
       stickerdef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
       this.stickers[orbit][ori][ord] = stickerdef;
-      this.group.add(stickerdef.cubie);
+      this.add(stickerdef.cubie);
       this.stickerTargets.push(stickerdef.cubie.children[0]);
     }
     const hitfaces = pgdat.faces as any[];
     for (const hitface of hitfaces) {
       const facedef = new HitPlaneDef(hitface);
       facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
-      this.group.add(facedef.cubie);
+      this.add(facedef.cubie);
       this.controlTargets.push(facedef.cubie.children[0]);
     }
-    this.scene.add(this.group);
   }
 
   public experimentalGetStickerTargets(): Object3D[] {
@@ -173,11 +174,7 @@ export class PG3D extends Twisty3D<Puzzle> {
     return this.controlTargets;
   }
 
-  public experimentalGetGroup(): Group {
-    return this.group;
-  }
-
-  protected updateScene(p: Cursor.Position<Puzzle>): void {
+  public onPositionChange(p: PuzzlePosition): void {
     const pos = p.state as Transformation;
     const noRotation = new Euler();
     for (const orbit in this.stickers) {
@@ -195,7 +192,7 @@ export class PG3D extends Twisty3D<Puzzle> {
       }
     }
     const kp = new KPuzzle(this.definition);
-    for (const moveProgress of p.moves) {
+    for (const moveProgress of p.movesInProgress) {
       const blockMove = moveProgress.move as BlockMove;
       const simpleMove = modifiedBlockMove(blockMove, { amount: 1 });
       const unswizzled = kp.unswizzle(blockMove.family);
@@ -223,6 +220,7 @@ export class PG3D extends Twisty3D<Puzzle> {
         }
       }
     }
+    this.scheduleRenderCallback!();
   }
 
   private ease(fraction: number): number {

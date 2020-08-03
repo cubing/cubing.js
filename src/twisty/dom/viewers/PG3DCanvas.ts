@@ -4,7 +4,7 @@ import {
   PuzzleGeometry,
 } from "../../../puzzle-geometry";
 import { PuzzleName } from "../../../puzzle-geometry/Puzzles";
-import { PG3D } from "../../../twisty-old/3D/pg3D";
+import { PG3D } from "../../3D/puzzles/PG3D";
 import {
   PositionDispatcher,
   PuzzlePosition,
