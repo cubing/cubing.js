@@ -9,4 +9,4 @@ export { AlgIndexer } from "./animation/alg/AlgIndexer";
 export { SimpleAlgIndexer } from "./animation/alg/SimpleAlgIndexer";
 export { TreeAlgIndexer } from "./animation/alg/TreeAlgIndexer";
 export { KPuzzleWrapper as KSolvePuzzle } from "./3D/puzzles/KPuzzleWrapper";
-export { toTimeline } from "../twisty-old/stream/timeline";
+export { toTimeline } from "./animation/stream/timeline-move-calculation-draft";

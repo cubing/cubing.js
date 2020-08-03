@@ -1,6 +1,6 @@
-import { BlockMove } from "../../alg";
-import { experimentalBlockMoveQuantumName } from "../../alg/traversal";
-import { Timestamp, Duration } from "../../twisty/animation/alg/CursorTypes";
+import { BlockMove } from "../../../alg";
+import { experimentalBlockMoveQuantumName } from "../../../alg/traversal";
+import { Timestamp, Duration } from "../alg/CursorTypes";
 
 interface Event {
   timeStamp: Timestamp;
