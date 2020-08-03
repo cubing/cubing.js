@@ -14,10 +14,10 @@ import {
 } from "three";
 import { BlockMove } from "../../../alg";
 import { Puzzles, Transformation } from "../../../kpuzzle";
-import { smootherStep } from "../../../twisty-old/easing";
 import { AlgCursor, PuzzlePosition } from "../../animation/alg/AlgCursor";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { TAU } from "../TAU";
+import { smootherStep } from "../../animation/easing";
 
 class AxisInfo {
   public stickerMaterial: MeshBasicMaterial;
