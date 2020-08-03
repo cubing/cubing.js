@@ -12,6 +12,7 @@ import {
   parse as algparse,
   Sequence,
 } from "../../src/alg/index";
+import { parse } from "../../src/alg/parser/parser";
 import {
   connect,
   debugKeyboardConnect,
@@ -26,10 +27,10 @@ import {
   schreierSims,
   StickerDat,
 } from "../../src/puzzle-geometry/index";
-import { Vantage, TwistyPlayer } from "../../src/twisty/index";
-import { getURLParam, setURLParams } from "./url-params";
-import { parse } from "../../src/alg/parser/parser";
+import { Twisty3DCanvas } from "../../src/twisty/dom/viewers/Twisty3DCanvas";
+import { TwistyPlayer } from "../../src/twisty/index";
 import { countMoves } from "./move-counter";
+import { getURLParam, setURLParams } from "./url-params";
 
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
@@ -196,30 +197,31 @@ function setAlgo(str: string, writeback: boolean): void {
           experimentalPolarVantages: true,
           sideBySide: getCheckbox("sidebyside"),
           showFoundation: getCheckbox("showfoundation"),
+          experimentalInitialVantagePosition: new Vector3(3.5, 3.5, 3.5),
         },
       });
       elem.appendChild(twisty);
       twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
 
-      const vantages: Vantage[] = twisty.legacyExperimentalPG3D!.experimentalGetVantages();
+      const twisty3DCanvases: Twisty3DCanvas[] = twisty.viewers as Twisty3DCanvas[];
       // TODO: This is a hack.
       // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
       // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
       setTimeout(() => {
-        for (const vantage of vantages) {
-          vantage.renderer.domElement.addEventListener(
+        for (const twisty3DCanvas of twisty3DCanvases) {
+          twisty3DCanvas.canvas.addEventListener(
             "click",
-            onMouseClick.bind(onMouseClick, vantage, false),
+            onMouseClick.bind(onMouseClick, twisty3DCanvas, false),
             false,
           );
-          vantage.renderer.domElement.addEventListener(
+          twisty3DCanvas.canvas.addEventListener(
             "contextmenu",
-            onMouseClick.bind(onMouseClick, vantage, true),
+            onMouseClick.bind(onMouseClick, twisty3DCanvas, true),
             false,
           );
-          vantage.renderer.domElement.addEventListener(
+          twisty3DCanvas.canvas.addEventListener(
             "mousemove",
-            onMouseMove.bind(onMouseMove, vantage),
+            onMouseMove.bind(onMouseMove, twisty3DCanvas),
             false,
           );
         }
@@ -409,6 +411,12 @@ function checkchange(): void {
         safeKpuzzle = undefined;
         savealg = false;
       }
+      options.push(
+        "puzzleorientation",
+        p[0].startsWith("t")
+          ? JSON.stringify(["D", [0, -1, 0], "F", [0, 0, 1]])
+          : JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
+      );
       const pg = new PuzzleGeometry(p[0], p[1], options);
       pg.allstickers();
       pg.genperms();
@@ -502,18 +510,18 @@ function doselection(el: any): void {
 }
 
 function onMouseClick(
-  vantage: Vantage,
+  twisty3DCanvas: Twisty3DCanvas,
   rightClick: boolean,
   event: MouseEvent,
 ): void {
   const raycaster = new Raycaster();
   const mouse = new Vector2();
-  const canvas: HTMLCanvasElement = vantage.renderer.domElement;
+  const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
   mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
-  const camera = vantage.camera;
+  const camera = twisty3DCanvas.camera;
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
@@ -525,15 +533,15 @@ function onMouseClick(
   }
 }
 
-function onMouseMove(vantage: Vantage, event: MouseEvent): void {
+function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
   const raycaster = new Raycaster();
   const mouse = new Vector2();
-  const canvas: HTMLCanvasElement = vantage.renderer.domElement;
+  const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
   mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
-  const camera = vantage.camera;
+  const camera = twisty3DCanvas.camera;
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray

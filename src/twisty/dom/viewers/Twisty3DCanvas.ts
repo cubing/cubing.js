@@ -2,21 +2,24 @@ import { PerspectiveCamera, Vector3, WebGLRenderer } from "three";
 import { Twisty3DScene } from "../../3D/Twisty3DScene";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../ManagedCustomElement";
+import { pixelRatio } from "./canvas";
 import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
 import { TwistyViewerElement } from "./TwistyViewerElement";
-import { pixelRatio } from "./canvas";
 
 // <twisty-3d-canvas>
 export class Twisty3DCanvas extends ManagedCustomElement
   implements TwistyViewerElement {
   private scene: Twisty3DScene;
-  private canvas: HTMLCanvasElement;
-  camera: PerspectiveCamera;
+  public canvas: HTMLCanvasElement;
+  public camera: PerspectiveCamera;
   private legacyExperimentalShift: number = 0;
   renderer: WebGLRenderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
   private scheduler = new RenderScheduler(this.render.bind(this));
   private resizePending: boolean = false;
-  constructor(scene?: Twisty3DScene) {
+  constructor(
+    scene?: Twisty3DScene,
+    options: { cameraPosition?: Vector3 } = {},
+  ) {
     super();
     this.addCSS(twisty3DCanvasCSS);
 
@@ -36,7 +39,8 @@ export class Twisty3DCanvas extends ManagedCustomElement
       0.1,
       1000,
     );
-    this.camera.position.set(2, 4, 4);
+    this.camera.position.copy(options.cameraPosition ?? new Vector3(2, 4, 4));
+    console.log(options);
     this.camera.lookAt(new Vector3(0, 0, 0));
 
     this.canvas = this.renderer.domElement;

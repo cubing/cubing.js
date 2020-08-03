@@ -1,3 +1,4 @@
+import { Vector3 } from "three";
 import { countMoves } from "../../../app/twizzle/move-counter";
 import {
   BlockMove,
@@ -5,8 +6,8 @@ import {
   parse,
   Sequence,
 } from "../../alg";
-import { KPuzzle, Puzzles } from "../../kpuzzle";
-import { getPuzzleGeometryByName } from "../../puzzle-geometry";
+import { KPuzzle, KPuzzleDefinition, Puzzles } from "../../kpuzzle";
+import { getPuzzleGeometryByName, StickerDat } from "../../puzzle-geometry";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D } from "../3D/puzzles/PG3D";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
@@ -24,10 +25,21 @@ import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 export type VisualizationFormat = "2D" | "3D" | "PG3D"; // Remove `Twisty3D`
 const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
 
+export interface LegacyExperimentalPG3DViewConfig {
+  def: KPuzzleDefinition;
+  stickerDat: StickerDat;
+  experimentalPolarVantages?: boolean;
+  sideBySide?: boolean;
+  showFoundation?: boolean;
+  experimentalInitialVantagePosition?: Vector3;
+}
+
 export interface TwistyPlayerInitialConfig {
   alg?: Sequence;
   puzzle?: string;
   visualization?: VisualizationFormat;
+
+  legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig;
 }
 
 class TwistyPlayerConfig {
@@ -48,6 +60,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   timeline: Timeline;
   #cursor: AlgCursor;
   #currentConfig: TwistyPlayerConfig;
+  private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null;
   public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
     _mv: BlockMove,
   ): number => 0;
@@ -57,6 +70,9 @@ export class TwistyPlayer extends ManagedCustomElement {
   constructor(initialConfig: TwistyPlayerInitialConfig = {}) {
     super();
     this.#currentConfig = new TwistyPlayerConfig(initialConfig);
+
+    this.legacyExperimentalPG3DViewConfig =
+      initialConfig.legacyExperimentalPG3DViewConfig ?? null;
   }
 
   protected connectedCallback(): void {
@@ -130,26 +146,40 @@ export class TwistyPlayer extends ManagedCustomElement {
         }
       // fallthrough for 3D when not 3x3x3
       case "PG3D": {
-        const pg = getPuzzleGeometryByName(puzzleName, [
-          "allmoves",
-          "true",
-          "orientcenters",
-          "true",
-          "puzzleorientation",
-          JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
-        ]);
-        const kpuzzleDef = pg.writekpuzzle();
-        const worker = new KPuzzle(kpuzzleDef);
-        const stickerDat = pg.get3d(0.0131);
+        let kpuzzleDef: KPuzzleDefinition;
+        let stickerDat: StickerDat;
+        let cameraPosition: Vector3 | undefined = undefined;
 
-        // Wide move / rotation hack
-        worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
-        const mps = pg.movesetgeos;
-        for (const mp of mps) {
-          const grip1 = mp[0] as string;
-          const grip2 = mp[2] as string;
-          // angle compatibility hack
-          worker.addGrip(grip1, grip2, mp[4] as number);
+        if (this.legacyExperimentalPG3DViewConfig) {
+          kpuzzleDef = this.legacyExperimentalPG3DViewConfig.def;
+          stickerDat = this.legacyExperimentalPG3DViewConfig.stickerDat;
+          // experimentalPolarVantages ?: boolean;
+          // sideBySide ?: boolean;
+          // showFoundation ?: boolean;
+          cameraPosition = this.legacyExperimentalPG3DViewConfig
+            .experimentalInitialVantagePosition;
+        } else {
+          const pg = getPuzzleGeometryByName(puzzleName, [
+            "allmoves",
+            "true",
+            "orientcenters",
+            "true",
+            "puzzleorientation",
+            JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
+          ]);
+          kpuzzleDef = pg.writekpuzzle();
+          const worker = new KPuzzle(kpuzzleDef);
+          stickerDat = pg.get3d(0.0131);
+
+          // Wide move / rotation hack
+          worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
+          const mps = pg.movesetgeos;
+          for (const mp of mps) {
+            const grip1 = mp[0] as string;
+            const grip2 = mp[2] as string;
+            // angle compatibility hack
+            worker.addGrip(grip1, grip2, mp[4] as number);
+          }
         }
 
         try {
@@ -167,8 +197,9 @@ export class TwistyPlayer extends ManagedCustomElement {
           stickerDat,
           true, // TODO: foundation
         );
+        this.legacyExperimentalPG3D = pg3d;
         scene.addTwisty3DPuzzle(pg3d);
-        const canvas = new Twisty3DCanvas(scene);
+        const canvas = new Twisty3DCanvas(scene, { cameraPosition });
         this.timeline.addCursor(this.#cursor);
         this.timeline.jumpToEnd();
         return canvas;
