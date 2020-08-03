@@ -12,14 +12,12 @@ import {
   Quaternion,
   Vector3,
 } from "three";
-import { BlockMove } from "../../alg";
-import { KPuzzleDefinition, Puzzles, Transformation } from "../../kpuzzle";
-
-import { Cursor } from "../cursor";
-import { smootherStep } from "../easing";
-import { Puzzle } from "../puzzle";
-
-import { TAU, Twisty3D } from "./twisty3D";
+import { BlockMove } from "../../../alg";
+import { Puzzles, Transformation } from "../../../kpuzzle";
+import { TAU } from "../../../twisty-old/3D/twisty3D";
+import { smootherStep } from "../../../twisty-old/easing";
+import { AlgCursor, PuzzlePosition } from "../../animation/alg/AlgCursor";
+import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 class AxisInfo {
   public stickerMaterial: MeshBasicMaterial;
@@ -206,15 +204,22 @@ const pieceDefs: PieceIndexed<CubieDef> = {
 const CUBE_SCALE = 1 / 3;
 
 // TODO: Split into "scene model" and "view".
-export class Cube3D extends Twisty3D<Puzzle> {
-  private cube: Group = new Group();
+export class Cube3D extends Object3D implements Twisty3DPuzzle {
   private pieces: PieceIndexed<Object3D> = {};
   private options: Cube3DOptions;
   // TODO: Keep track of option-based meshes better.
   private experimentalHintStickerMeshes: Mesh[] = [];
   private experimentalFoundationMeshes: Mesh[] = [];
-  constructor(def: KPuzzleDefinition, options: Cube3DOptions = {}) {
+  constructor(
+    cursor?: AlgCursor,
+    private scheduleRenderCallback?: () => void,
+    options: Cube3DOptions = {},
+  ) {
     super();
+
+    cursor!.addPositionListener(this);
+
+    const def = Puzzles["3x3x3"];
 
     this.options = {};
     for (const key in cube3DOptionsDefaults) {
@@ -231,12 +236,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
     for (const orbit in pieceDefs) {
       this.pieces[orbit] = pieceDefs[orbit].map(this.createCubie.bind(this));
     }
-    this.cube.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
-    this.scene.add(this.cube);
-  }
-
-  public experimentalGetCube(): Group {
-    return this.cube;
+    this.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
   }
 
   public experimentalUpdateOptions(options: Cube3DOptions): void {
@@ -267,7 +267,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
     }
   }
 
-  protected updateScene(p: Cursor.Position<Puzzle>): void {
+  public onPositionChange(p: PuzzlePosition): void {
     const reid333 = p.state as Transformation;
     for (const orbit in pieceDefs) {
       const pieces = pieceDefs[orbit];
@@ -278,7 +278,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
           orientationRotation[orbit][reid333[orbit].orientation[i]],
         );
       }
-      for (const moveProgress of p.moves) {
+      for (const moveProgress of p.movesInProgress) {
         const blockMove = moveProgress.move as BlockMove;
         const turnNormal = axesInfo[familyToAxis[blockMove.family]].vector;
         const moveMatrix = new Matrix4().makeRotationAxis(
@@ -302,6 +302,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
         }
       }
     }
+    this.scheduleRenderCallback!();
   }
 
   // TODO: Always create (but sometimes hide parts) so we can show them later,
@@ -333,7 +334,7 @@ export class Cube3D extends Twisty3D<Puzzle> {
     }
     cubie.matrix.copy(edge.matrix);
     cubie.matrixAutoUpdate = false;
-    this.cube.add(cubie);
+    this.add(cubie);
     return cubie;
   }
 

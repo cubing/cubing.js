@@ -1,10 +1,16 @@
+import { Vector3 } from "three";
+import { countMoves } from "../../../app/twizzle/move-counter";
 import {
   BlockMove,
   experimentalAppendBlockMove,
   parse,
   Sequence,
 } from "../../alg";
-import { Puzzles, KPuzzleDefinition } from "../../kpuzzle";
+import { KPuzzleDefinition, Puzzles } from "../../kpuzzle";
+import { StickerDat } from "../../puzzle-geometry";
+import { PG3D } from "../../twisty-old/3D/pg3D";
+import { Cube3D } from "../3D/puzzles/Cube3D";
+import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
@@ -12,16 +18,12 @@ import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
-import { Cube3DCanvas } from "./viewers/Cube3DCanvas";
 import { getPG3DCanvasDefinition, PG3DCanvas } from "./viewers/PG3DCanvas";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
+import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
-import { StickerDat } from "../../puzzle-geometry";
-import { Vector3 } from "three";
-import { PG3D } from "../../twisty-old/3D/pg3D";
-import { countMoves } from "../../../app/twizzle/move-counter";
 
-export type VisualizationFormat = "2D" | "3D" | "PG3D";
+export type VisualizationFormat = "2D" | "3D" | "PG3D"; // Remove `Twisty3D`
 const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
 
 export interface LegacyExperimentalPG3DViewConfig {
@@ -121,19 +123,27 @@ export class TwistyPlayer extends ManagedCustomElement {
         return new Twisty2DSVG(this.#cursor, Puzzles[puzzleName]);
       case "3D":
         if (puzzleName === "3x3x3") {
+          // TODO: fold 3D and PG3D into this.
           try {
-            this.#cursor = new AlgCursor(timeline, Puzzles["3x3x3"], alg);
+            this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
           } catch (e) {
             // TODO: Deduplicate fallback.
             this.#cursor = new AlgCursor(
               timeline,
-              Puzzles["3x3x3"],
+              Puzzles[puzzleName],
               new Sequence([]),
             );
           }
+          const scene = new Twisty3DScene();
+          const cube3d = new Cube3D(
+            this.#cursor,
+            scene.scheduleRender.bind(scene),
+          );
+          scene.addTwisty3DPuzzle(cube3d);
+          const canvas = new Twisty3DCanvas(scene);
           this.timeline.addCursor(this.#cursor);
           this.timeline.jumpToEnd();
-          return new Cube3DCanvas(this.#cursor);
+          return canvas;
         }
       // fallthrough for 3D when not 3x3x3
       case "PG3D": {

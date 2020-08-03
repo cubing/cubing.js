@@ -1,4 +1,4 @@
-import { Twisty3DRenderTarget } from "../../3D/3D";
+import { Twisty3DRenderTarget } from "../../3D/Twisty3DRenderTarget";
 
 export interface TwistyViewerElement extends Element, Twisty3DRenderTarget {
   /*...*/
