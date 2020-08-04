@@ -51,7 +51,9 @@ export class Twisty3DCanvas extends ManagedCustomElement
   }
 
   protected connectedCallback(): void {
-    // Nothing to do, since we can rely on the resize observer.
+    // Resize as soon as we're in the DOM, to avoid a flash of incorrectly sized content.
+    this.resize();
+    this.render();
   }
 
   scheduleRender(): void {
