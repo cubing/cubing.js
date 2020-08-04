@@ -40,7 +40,6 @@ export class Twisty3DCanvas extends ManagedCustomElement
       1000,
     );
     this.camera.position.copy(options.cameraPosition ?? new Vector3(2, 4, 4));
-    console.log(options);
     this.camera.lookAt(new Vector3(0, 0, 0));
 
     this.canvas = this.renderer.domElement;
