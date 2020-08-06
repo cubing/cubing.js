@@ -18,7 +18,7 @@ export class Twisty3DCanvas extends ManagedCustomElement
   private resizePending: boolean = false;
   constructor(
     scene?: Twisty3DScene,
-    options: { cameraPosition?: Vector3 } = {},
+    options: { cameraPosition?: Vector3; negateCameraPosition?: boolean } = {},
   ) {
     super();
     this.addCSS(twisty3DCanvasCSS);
@@ -40,7 +40,10 @@ export class Twisty3DCanvas extends ManagedCustomElement
       1000,
     );
     this.camera.position.copy(options.cameraPosition ?? new Vector3(2, 4, 4));
-    this.camera.lookAt(new Vector3(0, 0, 0));
+    if (options.negateCameraPosition) {
+      this.camera.position.multiplyScalar(-1);
+    }
+    this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
 
     this.canvas = this.renderer.domElement;
     this.addElement(this.canvas);

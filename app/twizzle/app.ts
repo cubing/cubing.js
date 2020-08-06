@@ -199,6 +199,7 @@ function setAlgo(str: string, writeback: boolean): void {
           showFoundation: getCheckbox("showfoundation"),
           experimentalInitialVantagePosition: new Vector3(3.5, 3.5, 3.5),
         },
+        experimentalBackView: "side-by-side",
       });
       elem.appendChild(twisty);
       twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
