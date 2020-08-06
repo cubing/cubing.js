@@ -114,7 +114,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.timeline = new Timeline();
 
-    const viewers = this.createMainViewer(
+    const viewers = this.createViewers(
       this.timeline,
       this.#currentConfig.alg,
       this.#currentConfig.visualization,
@@ -141,7 +141,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addCSS(twistyPlayerCSS);
   }
 
-  protected createMainViewer(
+  protected createViewers(
     timeline: Timeline,
     alg: Sequence,
     visualization: VisualizationFormat,
