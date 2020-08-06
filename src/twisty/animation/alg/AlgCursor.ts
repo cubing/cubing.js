@@ -6,38 +6,19 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 // start of imports
-import { AlgPart, Sequence } from "../../../alg";
-import {
-  KPuzzleDefinition,
-  Transformation as KPuzzleState,
-} from "../../../kpuzzle";
-import { TreeAlgIndexer } from "./TreeAlgIndexer";
+import { Sequence } from "../../../alg";
+import { KPuzzleDefinition } from "../../../kpuzzle";
 import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
 import {
   MillisecondTimestamp,
   Timeline,
   TimelineTimestampListener,
 } from "../Timeline";
+import { TreeAlgIndexer } from "./TreeAlgIndexer";
+import { PuzzlePosition, Direction, directionScalar } from "./CursorTypes";
 // end of imports
 
 // Model
-
-export type Fraction = number; // Value from 0 to 1.
-export enum Direction {
-  Forwards = 1,
-  Paused = 0,
-  Backwards = -1,
-}
-export interface MoveInProgress {
-  move: AlgPart;
-  direction: Direction;
-  fraction: number;
-}
-
-export type PuzzlePosition = {
-  state: KPuzzleState;
-  movesInProgress: MoveInProgress[];
-};
 
 export interface PositionListener {
   onPositionChange(position: PuzzlePosition): void;
@@ -123,5 +104,25 @@ export class AlgCursor
     this.timeline.onCursorChange(this);
     this.dispatchPositionForTimestamp(this.timeline.timestamp);
     // TODO: Handle state change.
+  }
+
+  moveBoundary(
+    timestamp: MillisecondTimestamp,
+    direction: Direction.Backwards | Direction.Forwards,
+  ): MillisecondTimestamp | null {
+    if (this.todoIndexer.numMoves() === 0) {
+      return null;
+    }
+    // TODO: define semantics of indexing edge cases and remove this hack.
+    const offsetHack = directionScalar(direction) * 0.001;
+    const idx = this.todoIndexer.timestampToIndex(timestamp + offsetHack);
+    const moveStart = this.todoIndexer.indexToMoveStartTimestamp(idx);
+
+    if (direction === Direction.Backwards) {
+      return timestamp >= moveStart ? moveStart : null;
+    } else {
+      const moveEnd = moveStart + this.todoIndexer.moveDuration(idx);
+      return timestamp <= moveEnd ? moveEnd : null;
+    }
   }
 }

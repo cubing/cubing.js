@@ -1,5 +1,6 @@
 import { RenderScheduler } from "./RenderScheduler";
 import { AlgCursor, TimeRange } from "./alg/AlgCursor";
+import { BoundaryType, Direction, directionScalar } from "./alg/CursorTypes";
 
 export type MillisecondTimestamp = number;
 
@@ -71,19 +72,30 @@ export class Timeline
   lastAnimFrameNow: DOMHighResTimeStamp = 0;
   lastAnimFrameTimestamp: MillisecondTimestamp;
   private scheduler: RenderScheduler;
+
+  direction: Direction.Backwards | Direction.Forwards = Direction.Forwards; // TODO: handle pausing here?
+  boundaryType: BoundaryType = BoundaryType.EntireTimeline;
+  cachedNextBoundary: MillisecondTimestamp;
+
   constructor() {
     const animFrame = (_now: MillisecondTimestamp): void => {
       if (this.animating) {
         const now = getNow(); // TODO: See if we can use the rAF value without monotonicity issues.;
-        this.timestamp = this.timestamp + (now - this.lastAnimFrameNow);
+        this.timestamp =
+          this.timestamp +
+          directionScalar(this.direction) * (now - this.lastAnimFrameNow);
         this.lastAnimFrameNow = now;
-      }
 
-      if (this.timestamp >= this.maxTimestamp()) {
-        this.timestamp = this.maxTimestamp();
-        if (this.animating) {
-          this.animating = false;
-          this.dispatchAction(TimelineAction.Pausing);
+        const atOrPastBoundary =
+          this.direction === Direction.Backwards
+            ? this.timestamp <= this.cachedNextBoundary
+            : this.timestamp >= this.cachedNextBoundary;
+        if (atOrPastBoundary) {
+          this.timestamp = this.cachedNextBoundary;
+          if (this.animating) {
+            this.animating = false;
+            this.dispatchAction(TimelineAction.Pausing);
+          }
         }
       }
 
@@ -168,11 +180,82 @@ export class Timeline
   }
 
   play(): void {
+    this.experimentalPlay(Direction.Forwards, BoundaryType.EntireTimeline);
+  }
+
+  experimentalPlay(
+    direction: Direction.Backwards | Direction.Forwards,
+    boundaryType: BoundaryType = BoundaryType.EntireTimeline,
+  ): void {
+    this.direction = direction;
+    this.boundaryType = boundaryType;
+    const nextBoundary = this.nextBoundary(
+      this.timestamp,
+      direction,
+      this.boundaryType,
+    );
+    if (nextBoundary === null) {
+      return; // Nowhere to end, so we don't animate.
+    }
+    this.cachedNextBoundary = nextBoundary;
     if (!this.animating) {
       this.animating = true;
       this.lastAnimFrameNow = getNow();
       this.dispatchAction(TimelineAction.StartingToPlay);
       this.scheduler.requestAnimFrame();
+    }
+  }
+
+  // Non-inclusive
+  private nextBoundary(
+    timestamp: MillisecondTimestamp,
+    direction: Direction.Backwards | Direction.Forwards,
+    boundaryType: BoundaryType = BoundaryType.EntireTimeline,
+  ): MillisecondTimestamp | null {
+    switch (boundaryType) {
+      case BoundaryType.EntireTimeline: {
+        switch (direction) {
+          case Direction.Backwards:
+            return timestamp <= this.minTimestamp()
+              ? null
+              : this.minTimestamp();
+          case Direction.Forwards:
+            return timestamp >= this.maxTimestamp()
+              ? null
+              : this.maxTimestamp();
+          default:
+            throw new Error("invalid direction");
+        }
+      }
+      case BoundaryType.Move: {
+        let result: null | MillisecondTimestamp = null;
+        for (const cursor of this.cursors) {
+          const boundaryTimestamp = cursor.moveBoundary(timestamp, direction);
+          if (boundaryTimestamp !== null) {
+            switch (direction) {
+              case Direction.Backwards: {
+                result = Math.min(
+                  result ?? boundaryTimestamp,
+                  boundaryTimestamp,
+                );
+                break;
+              }
+              case Direction.Forwards: {
+                result = Math.max(
+                  result ?? boundaryTimestamp,
+                  boundaryTimestamp,
+                );
+                break;
+              }
+              default:
+                throw new Error("invalid direction");
+            }
+          }
+        }
+        return result;
+      }
+      default:
+        throw new Error("invalid boundary type");
     }
   }
 
@@ -193,11 +276,12 @@ export class Timeline
       if (this.timestamp >= this.maxTimestamp()) {
         this.timestamp = 0;
       }
-      this.play();
+      this.experimentalPlay(Direction.Forwards, BoundaryType.EntireTimeline);
     }
   }
 
   setTimestamp(timestamp: MillisecondTimestamp): void {
+    this.animating = false;
     const oldTimestamp = this.timestamp;
     this.timestamp = timestamp;
     this.lastAnimFrameNow = getNow();

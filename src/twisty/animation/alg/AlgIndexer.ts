@@ -13,12 +13,8 @@ import {
   Unit,
 } from "../../../alg";
 import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
-import {
-  Timestamp,
-  Duration,
-  AlgDuration,
-  DefaultDurationForAmount,
-} from "./CursorTypes";
+import { Timestamp, Duration, DefaultDurationForAmount } from "./CursorTypes";
+import { AlgDuration } from "./AlgDuration";
 
 // TODO: Include Pause.
 class CountAnimatedMoves extends TraversalUp<number> {

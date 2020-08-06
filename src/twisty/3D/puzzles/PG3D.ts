@@ -18,10 +18,11 @@ import {
   Transformation,
 } from "../../../kpuzzle";
 import { StickerDatSticker } from "../../../puzzle-geometry";
-import { PuzzlePosition, AlgCursor } from "../../animation/alg/AlgCursor";
+import { AlgCursor } from "../../animation/alg/AlgCursor";
 import { TAU } from "../TAU";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { smootherStep } from "../../animation/easing";
+import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,

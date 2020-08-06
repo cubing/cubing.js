@@ -9,6 +9,7 @@ import { ManagedCustomElement } from "../ManagedCustomElement";
 import { buttonCSS, buttonGridCSS } from "./buttons.css";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
 import { TimeRange } from "../../animation/alg/AlgCursor";
+import { Direction, BoundaryType } from "../../animation/alg/CursorTypes";
 
 type TimelineCommand =
   | "fullscreen"
@@ -16,8 +17,8 @@ type TimelineCommand =
   | "play-pause" // TODO: toggle-play?
   // | "play"
   // | "play-backwards"
-  | "play-step"
   | "play-step-backwards"
+  | "play-step"
   | "jump-to-end";
 
 // TODO: combine this with disabled status and label in a state machine?
@@ -66,7 +67,6 @@ class TwistyControlButton extends ManagedCustomElement
         }
         break;
       case "jump-to-start":
-      case "play-step":
       case "play-step-backwards":
         this.button.disabled = true;
         break;
@@ -75,6 +75,8 @@ class TwistyControlButton extends ManagedCustomElement
     this.timeline!.addActionListener(this);
     switch (this.timelineCommand!) {
       case "play-pause":
+      case "play-step-backwards":
+      case "play-step":
         this.timeline!.addTimestampListener(this);
         break;
     }
@@ -84,11 +86,17 @@ class TwistyControlButton extends ManagedCustomElement
 
   // TODO: Can we avoid duplicate calculations?
   private autoSetTimelineBasedDisabled(): void {
+    console.log(
+      "this.timelineCommand",
+      this.timelineCommand,
+      this.timeline.timestamp,
+      this.timeline.maxTimestamp(),
+    );
     switch (this.timelineCommand!) {
       case "jump-to-start":
       case "play-pause":
-      case "play-step":
       case "play-step-backwards":
+      case "play-step":
       case "jump-to-end": {
         const timeRange = this.timeline.timeRange();
         if (timeRange.start === timeRange.end) {
@@ -97,16 +105,14 @@ class TwistyControlButton extends ManagedCustomElement
         }
         switch (this.timelineCommand!) {
           case "jump-to-start":
+          case "play-step-backwards":
             this.button.disabled =
               this.timeline.timestamp < this.timeline.maxTimestamp();
             break;
           case "jump-to-end":
+          case "play-step":
             this.button.disabled =
               this.timeline.timestamp > this.timeline.minTimestamp();
-            break;
-          case "play-step":
-          case "play-step-backwards":
-            this.button.disabled = true; // TODO
             break;
           default:
             this.button.disabled = false;
@@ -184,9 +190,11 @@ class TwistyControlButton extends ManagedCustomElement
         this.timeline.playPause();
         break;
       case "play-step":
-        throw new Error("Unimplemented");
+        this.timeline.experimentalPlay(Direction.Forwards, BoundaryType.Move);
+        break;
       case "play-step-backwards":
-        throw new Error("Unimplemented");
+        this.timeline.experimentalPlay(Direction.Backwards, BoundaryType.Move);
+        break;
     }
   }
 
@@ -200,7 +208,8 @@ class TwistyControlButton extends ManagedCustomElement
         break;
       case "jump-to-end":
         this.button.disabled =
-          actionEvent.locationType === TimestampLocationType.EndOfTimeline;
+          actionEvent.locationType === TimestampLocationType.EndOfTimeline &&
+          actionEvent.action !== TimelineAction.StartingToPlay;
         break;
       case "play-pause":
         // Always enabled, since we will jump to the start if needed.
@@ -217,15 +226,16 @@ class TwistyControlButton extends ManagedCustomElement
         }
         break;
       case "play-step":
-        // TODO
-        // this.button.disabled =
-        //   actionEvent.locationType === TimestampLocationType.EndOfTimeline;
+        // TODO: refine this
+        this.button.disabled =
+          actionEvent.locationType === TimestampLocationType.EndOfTimeline &&
+          actionEvent.action !== TimelineAction.StartingToPlay;
         break;
       case "play-step-backwards":
-        // TODO
-        // this.button.disabled =
-        //   actionEvent.locationType === TimestampLocationType.StartOfTimeline &&
-        //   actionEvent.action !== TimelineAction.StartingToPlay;
+        // TODO: refine this
+        this.button.disabled =
+          actionEvent.locationType === TimestampLocationType.StartOfTimeline &&
+          actionEvent.action !== TimelineAction.StartingToPlay;
         break;
     }
   }
