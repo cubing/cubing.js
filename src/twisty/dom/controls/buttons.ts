@@ -86,12 +86,6 @@ class TwistyControlButton extends ManagedCustomElement
 
   // TODO: Can we avoid duplicate calculations?
   private autoSetTimelineBasedDisabled(): void {
-    console.log(
-      "this.timelineCommand",
-      this.timelineCommand,
-      this.timeline.timestamp,
-      this.timeline.maxTimestamp(),
-    );
     switch (this.timelineCommand!) {
       case "jump-to-start":
       case "play-pause":

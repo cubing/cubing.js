@@ -1,21 +1,21 @@
-import { TwistyViewerElement } from "./TwistyViewerElement";
+import { BlockMove } from "../../../alg";
 import {
-  PositionListener,
+  Combine,
+  KPuzzleDefinition,
+  Puzzles,
+  stateForBlockMove,
+  SVG,
+  Transformation,
+} from "../../../kpuzzle";
+import {
   PositionDispatcher,
-  PuzzlePosition,
+  PositionListener,
 } from "../../animation/alg/AlgCursor";
 import { RenderScheduler } from "../../animation/RenderScheduler";
-import {
-  SVG,
-  Puzzles,
-  KPuzzleDefinition,
-  Combine,
-  Transformation,
-  stateForBlockMove,
-} from "../../../kpuzzle";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { twisty2DSVGCSS } from "./Twisty2DSVGView.css";
-import { BlockMove } from "../../../alg";
+import { TwistyViewerElement } from "./TwistyViewerElement";
+import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 
 // <twisty-2d-svg>
 export class Twisty2DSVG extends ManagedCustomElement
