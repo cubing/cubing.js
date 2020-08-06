@@ -74,6 +74,7 @@ export class Timeline
   private scheduler: RenderScheduler;
 
   direction: Direction.Backwards | Direction.Forwards = Direction.Forwards; // TODO: handle pausing here?
+
   boundaryType: BoundaryType = BoundaryType.EntireTimeline;
   cachedNextBoundary: MillisecondTimestamp;
 
@@ -114,6 +115,23 @@ export class Timeline
   public addCursor(cursor: AlgCursor): void {
     this.cursors.add(cursor);
     this.dispatchTimeRange();
+  }
+
+  removeCursor(cursor: AlgCursor): void {
+    this.cursors.delete(cursor);
+    this.clampTimestampToRange();
+    this.dispatchTimeRange();
+  }
+
+  // TODO: test
+  private clampTimestampToRange(): void {
+    const timeRange = this.timeRange();
+    if (this.timestamp < timeRange.start) {
+      this.setTimestamp(timeRange.start);
+    }
+    if (this.timestamp > timeRange.end) {
+      this.setTimestamp(timeRange.end);
+    }
   }
 
   // In the future, this might do some calculations or caching.
@@ -175,8 +193,16 @@ export class Timeline
     this.timestampListeners.add(timestampListener);
   }
 
+  removeTimestampListener(timestampListener: TimelineTimestampListener): void {
+    this.timestampListeners.delete(timestampListener);
+  }
+
   addActionListener(actionListener: TimelineActionListener): void {
     this.actionListeners.add(actionListener);
+  }
+
+  removeActionListener(actionListener: TimelineActionListener): void {
+    this.actionListeners.delete(actionListener);
   }
 
   play(): void {

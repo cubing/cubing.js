@@ -9,8 +9,8 @@ import {
 import { KPuzzle, KPuzzleDefinition, Puzzles } from "../../kpuzzle";
 import {
   getPuzzleGeometryByName,
-  StickerDat,
   PuzzleGeometry,
+  StickerDat,
 } from "../../puzzle-geometry";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D } from "../3D/puzzles/PG3D";
@@ -25,6 +25,7 @@ import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
+import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 
 export type VisualizationFormat = "2D" | "3D" | "PG3D"; // Remove `Twisty3D`
 const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
@@ -94,6 +95,8 @@ export class TwistyPlayer extends ManagedCustomElement {
   timeline: Timeline;
   #cursor: AlgCursor;
   #currentConfig: TwistyPlayerConfig;
+  #cachedTwisty3DScene: Twisty3DScene | null = null;
+  #cachedTwisty3DPuzzle: Twisty3DPuzzle | null = null;
   private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null;
   public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
     _mv: BlockMove,
@@ -197,23 +200,9 @@ export class TwistyPlayer extends ManagedCustomElement {
         }
       // fallthrough for 3D when not 3x3x3
       case "PG3D": {
-        let kpuzzleDef: KPuzzleDefinition;
-        let stickerDat: StickerDat;
-        let cameraPosition: Vector3 | undefined = undefined;
-
-        if (this.legacyExperimentalPG3DViewConfig) {
-          kpuzzleDef = this.legacyExperimentalPG3DViewConfig.def;
-          stickerDat = this.legacyExperimentalPG3DViewConfig.stickerDat;
-          // experimentalPolarVantages ?: boolean;
-          // sideBySide ?: boolean;
-          // showFoundation ?: boolean;
-          cameraPosition = this.legacyExperimentalPG3DViewConfig
-            .experimentalInitialVantagePosition;
-        } else {
-          const pg = createPG(puzzleName);
-          stickerDat = pg.get3d(0.0131);
-          kpuzzleDef = pg.writekpuzzle();
-        }
+        const [kpuzzleDef, stickerDat, cameraPosition] = this.pgHelper(
+          puzzleName,
+        );
 
         try {
           this.#cursor = new AlgCursor(timeline, kpuzzleDef, alg);
@@ -222,20 +211,25 @@ export class TwistyPlayer extends ManagedCustomElement {
           this.#cursor = new AlgCursor(timeline, kpuzzleDef, new Sequence([]));
         }
 
-        const scene = new Twisty3DScene();
+        this.#cachedTwisty3DScene = new Twisty3DScene();
         const pg3d = new PG3D(
           this.#cursor,
-          scene.scheduleRender.bind(scene),
+          this.#cachedTwisty3DScene.scheduleRender.bind(
+            this.#cachedTwisty3DScene,
+          ),
           kpuzzleDef,
           stickerDat,
           this.legacyExperimentalPG3DViewConfig?.showFoundation,
         );
+        this.#cachedTwisty3DPuzzle = pg3d;
         this.legacyExperimentalPG3D = pg3d;
-        scene.addTwisty3DPuzzle(pg3d);
-        const viewers = [new Twisty3DCanvas(scene, { cameraPosition })];
+        this.#cachedTwisty3DScene.addTwisty3DPuzzle(this.#cachedTwisty3DPuzzle);
+        const viewers = [
+          new Twisty3DCanvas(this.#cachedTwisty3DScene, { cameraPosition }),
+        ];
         if (backView) {
           viewers.push(
-            new Twisty3DCanvas(scene, {
+            new Twisty3DCanvas(this.#cachedTwisty3DScene, {
               cameraPosition,
               negateCameraPosition: true,
             }),
@@ -248,9 +242,87 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
+  // TODO: Distribute this code better.
+  private pgHelper(
+    puzzleName: string,
+  ): [KPuzzleDefinition, StickerDat, Vector3 | undefined] {
+    let kpuzzleDef: KPuzzleDefinition;
+    let stickerDat: StickerDat;
+    let cameraPosition: Vector3 | undefined = undefined;
+    if (this.legacyExperimentalPG3DViewConfig) {
+      kpuzzleDef = this.legacyExperimentalPG3DViewConfig.def;
+      stickerDat = this.legacyExperimentalPG3DViewConfig.stickerDat;
+      // experimentalPolarVantages ?: boolean;
+      // sideBySide ?: boolean;
+      // showFoundation ?: boolean;
+      cameraPosition = this.legacyExperimentalPG3DViewConfig
+        .experimentalInitialVantagePosition;
+    } else {
+      const pg = createPG(puzzleName);
+      stickerDat = pg.get3d(0.0131);
+      kpuzzleDef = pg.writekpuzzle();
+    }
+    return [kpuzzleDef, stickerDat, cameraPosition];
+  }
+
   setAlg(alg: Sequence): void {
     this.#currentConfig.alg = alg;
     this.#cursor.setAlg(this.#currentConfig.alg);
+  }
+
+  setPuzzle(
+    puzzleName: string,
+    legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig,
+  ): void {
+    this.#currentConfig.puzzle = puzzleName;
+    this.legacyExperimentalPG3DViewConfig =
+      legacyExperimentalPG3DViewConfig ?? null;
+    switch (this.#currentConfig.visualization) {
+      // TODO: Swap out both 3D implementations with each other.
+      case "PG3D": {
+        console.log("pg3d");
+        const scene = this.#cachedTwisty3DScene!;
+        scene.remove(this.#cachedTwisty3DPuzzle!);
+        this.#cursor.removePositionListener(this.#cachedTwisty3DPuzzle!);
+        const [def, dat /*, _*/] = this.pgHelper(this.#currentConfig.puzzle);
+        const pg3d = new PG3D(
+          this.#cursor,
+          scene.scheduleRender.bind(scene),
+          def,
+          dat,
+          this.legacyExperimentalPG3DViewConfig?.showFoundation,
+        );
+        scene.addTwisty3DPuzzle(pg3d);
+        this.#cursor.setPuzzle(def);
+        this.#cachedTwisty3DPuzzle = pg3d;
+        for (const viewer of this.viewers) {
+          viewer.scheduleRender();
+        }
+        return;
+      }
+
+      // this.#cursor.set
+      // return;
+    }
+
+    // Fallback
+    const oldCursor = this.#cursor;
+    const viewers = this.createViewers(
+      this.timeline,
+      this.#currentConfig.alg,
+      this.#currentConfig.visualization,
+      puzzleName,
+      this.#currentConfig.experimentalBackView !== "none",
+    );
+    this.timeline.removeCursor(oldCursor);
+    this.timeline.removeTimestampListener(oldCursor);
+    for (const oldViewer of this.viewers) {
+      this.removeElement(oldViewer);
+    }
+    for (const viewer of viewers.reverse()) {
+      this.prependElement(viewer);
+    }
+    this.viewers = viewers;
   }
 
   // TODO: Handle playing the new move vs. just modying the alg.

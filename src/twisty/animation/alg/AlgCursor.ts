@@ -14,8 +14,8 @@ import {
   Timeline,
   TimelineTimestampListener,
 } from "../Timeline";
+import { Direction, directionScalar, PuzzlePosition } from "./CursorTypes";
 import { TreeAlgIndexer } from "./TreeAlgIndexer";
-import { PuzzlePosition, Direction, directionScalar } from "./CursorTypes";
 // end of imports
 
 // Model
@@ -41,7 +41,7 @@ export class AlgCursor
   constructor(
     private timeline: Timeline,
     def: KPuzzleDefinition,
-    alg: Sequence,
+    private alg: Sequence,
   ) {
     timeline.addTimestampListener(this);
     this.ksolvePuzzle = new KPuzzleWrapper(def);
@@ -66,6 +66,10 @@ export class AlgCursor
 
   addPositionListener(positionListener: PositionListener): void {
     this.positionListeners.add(positionListener);
+  }
+
+  removePositionListener(positionListener: PositionListener): void {
+    this.positionListeners.delete(positionListener);
   }
 
   onTimelineTimestampChange(timestamp: MillisecondTimestamp): void {
@@ -124,5 +128,14 @@ export class AlgCursor
       const moveEnd = moveStart + this.todoIndexer.moveDuration(idx);
       return timestamp <= moveEnd ? moveEnd : null;
     }
+  }
+
+  setPuzzle(def: KPuzzleDefinition, alg: Sequence = this.alg): void {
+    this.ksolvePuzzle = new KPuzzleWrapper(def);
+    this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
+    if (alg !== this.alg) {
+      this.timeline.onCursorChange(this);
+    }
+    this.alg = alg;
   }
 }

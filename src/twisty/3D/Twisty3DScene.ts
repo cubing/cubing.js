@@ -37,4 +37,9 @@ export class Twisty3DScene extends ThreeScene implements Twisty3DRenderTarget {
     this.twisty3Ds.add(twisty3DPuzzle);
     this.add(twisty3DPuzzle);
   }
+
+  removeTwisty3DPuzzle(twisty3DPuzzle: Twisty3DPuzzle): void {
+    this.twisty3Ds.delete(twisty3DPuzzle);
+    this.remove(twisty3DPuzzle);
+  }
 }

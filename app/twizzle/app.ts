@@ -31,6 +31,7 @@ import { Twisty3DCanvas } from "../../src/twisty/dom/viewers/Twisty3DCanvas";
 import { TwistyPlayer } from "../../src/twisty/index";
 import { countMoves } from "./move-counter";
 import { getURLParam, setURLParams } from "./url-params";
+import { LegacyExperimentalPG3DViewConfig } from "../../src/twisty/dom/TwistyPlayer";
 
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
@@ -180,25 +181,29 @@ function updateMoveCount(alg?: Sequence): void {
   }
 }
 
+function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
+  return {
+    def: puzzle,
+    stickerDat,
+    experimentalPolarVantages: true,
+    sideBySide: getCheckbox("sidebyside"),
+    showFoundation: getCheckbox("showfoundation"),
+    experimentalInitialVantagePosition: new Vector3(3.5, 3.5, 3.5),
+  };
+}
+
 function setAlgo(str: string, writeback: boolean): void {
   let seq: Sequence = algparse("");
   const elem = document.querySelector("#twisty-wrapper");
   if (elem) {
     // this part should never throw, and we should not need to do
     // it again.  But for now we always do.
-    if (!twisty || puzzleSelected) {
+    if (!twisty) {
       elem.textContent = "";
       twisty = new TwistyPlayer({
         alg: new Sequence([]),
         visualization: "PG3D",
-        legacyExperimentalPG3DViewConfig: {
-          def: puzzle,
-          stickerDat,
-          experimentalPolarVantages: true,
-          sideBySide: getCheckbox("sidebyside"),
-          showFoundation: getCheckbox("showfoundation"),
-          experimentalInitialVantagePosition: new Vector3(3.5, 3.5, 3.5),
-        },
+        legacyExperimentalPG3DViewConfig: legacyExperimentalPG3DViewConfig(),
         experimentalBackView: "side-by-side",
       });
       elem.appendChild(twisty);
@@ -229,6 +234,8 @@ function setAlgo(str: string, writeback: boolean): void {
       }, 1);
 
       puzzleSelected = false;
+    } else if (puzzleSelected) {
+      twisty.setPuzzle("", legacyExperimentalPG3DViewConfig());
     }
     str = str.trim();
     algoinput.style.backgroundColor = "";
@@ -236,7 +243,9 @@ function setAlgo(str: string, writeback: boolean): void {
       seq = algparse(str);
       str = algToString(seq);
       twisty.setAlg(seq);
-      twisty.timeline.jumpToEnd();
+      if (!writeback) {
+        twisty.timeline.jumpToEnd();
+      }
       updateMoveCount(seq);
       setURLParams({ alg: seq });
     } catch (e) {

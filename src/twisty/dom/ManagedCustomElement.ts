@@ -99,6 +99,14 @@ export class ManagedCustomElement extends HTMLElement {
   public addElement<T extends Node>(element: T): T {
     return this.contentWrapper.appendChild(element);
   }
+
+  public prependElement<T extends Node>(element: T): void {
+    this.contentWrapper.prepend(element);
+  }
+
+  public removeElement<T extends Node>(element: T): T {
+    return this.contentWrapper.removeChild(element);
+  }
 }
 
 if (customElements) {
