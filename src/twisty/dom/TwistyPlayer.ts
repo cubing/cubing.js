@@ -195,7 +195,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           scene.scheduleRender.bind(scene),
           kpuzzleDef,
           stickerDat,
-          true, // TODO: foundation
+          this.legacyExperimentalPG3DViewConfig?.showFoundation,
         );
         this.legacyExperimentalPG3D = pg3d;
         scene.addTwisty3DPuzzle(pg3d);
