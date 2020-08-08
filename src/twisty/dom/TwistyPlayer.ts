@@ -65,7 +65,7 @@ class TwistyPlayerConfig {
     this.puzzle = initialConfig.puzzle ?? "3x3x3";
     this.visualization = initialConfig.visualization ?? "3D";
     this.experimentalBackView = initialConfig.backView ?? "none";
-    this.checkered = initialConfig.checkered ?? false;
+    this.checkered = initialConfig.checkered ?? true;
   }
 }
 
