@@ -67,6 +67,10 @@ export class Twisty3DCanvas extends ManagedCustomElement
       this.resize();
     }
     this.renderer.render(this.scene, this.camera);
+
+    // Cancel any scheduled frame, since we've just rendered.
+    // We don't need to re-render until something schedules again.
+    this.scheduler.cancelAnimFrame();
   }
 
   private onResize(): void {
