@@ -232,7 +232,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           ),
           kpuzzleDef,
           stickerDat,
-          this.legacyExperimentalPG3DViewConfig?.showFoundation,
+          this.legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
         );
         this.#cachedTwisty3DPuzzle = pg3d;
         this.legacyExperimentalPG3D = pg3d;
