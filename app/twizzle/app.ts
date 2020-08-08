@@ -204,7 +204,7 @@ function setAlgo(str: string, writeback: boolean): void {
         alg: new Sequence([]),
         visualization: "PG3D",
         legacyExperimentalPG3DViewConfig: legacyExperimentalPG3DViewConfig(),
-        experimentalBackView: "side-by-side",
+        backView: "side-by-side",
       });
       elem.appendChild(twisty);
       twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;

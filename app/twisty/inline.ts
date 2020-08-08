@@ -32,6 +32,8 @@ window.addEventListener("load", () => {
       alg: parse("[[U', R], [U, R']]"),
       puzzle: "megaminx",
       visualization: "PG3D",
+      backView: "upper-right",
+      checkered: true,
       // playerConfig: {
       //   showFoundation: true,
       // },

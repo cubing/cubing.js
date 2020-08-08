@@ -26,12 +26,14 @@ import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
+import {
+  TwistyViewerWrapper,
+  BackViewLayout,
+  backViewLayouts,
+} from "./viewers/TwistyViewerWrapper";
 
 export type VisualizationFormat = "2D" | "3D" | "PG3D"; // Remove `Twisty3D`
 const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
-
-export type BackViewLayout = "none" | "side-by-side" | "upper-right";
-const backViewLayouts = ["none", "side-by-side", "upper-right"];
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;
@@ -46,9 +48,10 @@ export interface TwistyPlayerInitialConfig {
   alg?: Sequence;
   puzzle?: string;
   visualization?: VisualizationFormat;
+  checkered?: boolean;
 
   legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig;
-  experimentalBackView?: BackViewLayout;
+  backView?: BackViewLayout;
 }
 
 class TwistyPlayerConfig {
@@ -56,11 +59,13 @@ class TwistyPlayerConfig {
   puzzle: string;
   visualization: VisualizationFormat;
   experimentalBackView: BackViewLayout;
+  checkered: boolean;
   constructor(initialConfig: TwistyPlayerInitialConfig) {
     this.alg = initialConfig.alg ?? new Sequence([]);
     this.puzzle = initialConfig.puzzle ?? "3x3x3";
     this.visualization = initialConfig.visualization ?? "3D";
-    this.experimentalBackView = initialConfig.experimentalBackView ?? "none";
+    this.experimentalBackView = initialConfig.backView ?? "none";
+    this.checkered = initialConfig.checkered ?? false;
   }
 }
 
@@ -93,6 +98,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   viewers: TwistyViewerElement[];
   controls: TwistyControlElement[];
   timeline: Timeline;
+  #viewerWrapper: TwistyViewerWrapper;
   #cursor: AlgCursor;
   #currentConfig: TwistyPlayerConfig;
   #cachedTwisty3DScene: Twisty3DScene | null = null;
@@ -130,17 +136,24 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.viewers = viewers;
     this.controls = [scrubber, controlButtonGrid];
 
-    this.viewers.map((el) => this.addElement(el));
+    // TODO: specify exactly when back views are possible.
+    // TODO: Are there any SVGs where we'd want a separate back view?
+    const setBackView: boolean =
+      this.#currentConfig.experimentalBackView &&
+      this.#currentConfig.visualization !== "2D";
+    const backView = setBackView
+      ? this.#currentConfig.experimentalBackView
+      : "none";
+    this.#viewerWrapper = new TwistyViewerWrapper({
+      checkered: this.#currentConfig.checkered,
+      backView,
+    });
+    this.addElement(this.#viewerWrapper);
+
+    this.viewers.map((el) => this.#viewerWrapper.addElement(el));
     this.addElement(this.controls[0]);
     this.addElement(this.controls[1]);
 
-    // TODO: specify exactly when back views are possible.
-    // TODO: Are there any SVGs where we'd want a separate back view?
-    if (this.#currentConfig.visualization !== "2D") {
-      this.contentWrapper.classList.add(
-        `back-view-${this.#currentConfig.experimentalBackView}`,
-      );
-    }
     this.addCSS(twistyPlayerCSS);
   }
 
@@ -317,10 +330,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.timeline.removeCursor(oldCursor);
     this.timeline.removeTimestampListener(oldCursor);
     for (const oldViewer of this.viewers) {
-      this.removeElement(oldViewer);
+      this.#viewerWrapper.removeElement(oldViewer);
     }
     for (const viewer of viewers.reverse()) {
-      this.prependElement(viewer);
+      this.#viewerWrapper.prependElement(viewer);
     }
     this.viewers = viewers;
   }
