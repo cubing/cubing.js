@@ -14,6 +14,7 @@ import {
 } from "../../puzzle-geometry";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D } from "../3D/puzzles/PG3D";
+import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor } from "../animation/alg/AlgCursor";
 import { Timeline } from "../animation/Timeline";
@@ -25,11 +26,10 @@ import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
-import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import {
-  TwistyViewerWrapper,
   BackViewLayout,
   backViewLayouts,
+  TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
 
 export type VisualizationFormat = "2D" | "3D" | "PG3D"; // Remove `Twisty3D`
@@ -44,11 +44,14 @@ export interface LegacyExperimentalPG3DViewConfig {
   experimentalInitialVantagePosition?: Vector3;
 }
 
+export type BackgroundTheme = "none" | "checkered";
+const backgroundThemes: BackgroundTheme[] = ["none", "checkered"];
+
 export interface TwistyPlayerInitialConfig {
   alg?: Sequence;
   puzzle?: string;
   visualization?: VisualizationFormat;
-  checkered?: boolean;
+  background?: BackgroundTheme;
 
   legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig;
   backView?: BackViewLayout;
@@ -59,13 +62,13 @@ class TwistyPlayerConfig {
   puzzle: string;
   visualization: VisualizationFormat;
   experimentalBackView: BackViewLayout;
-  checkered: boolean;
+  background: BackgroundTheme;
   constructor(initialConfig: TwistyPlayerInitialConfig) {
     this.alg = initialConfig.alg ?? new Sequence([]);
     this.puzzle = initialConfig.puzzle ?? "3x3x3";
     this.visualization = initialConfig.visualization ?? "3D";
     this.experimentalBackView = initialConfig.backView ?? "none";
-    this.checkered = initialConfig.checkered ?? true;
+    this.background = initialConfig.background ?? "checkered";
   }
 }
 
@@ -145,7 +148,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       ? this.#currentConfig.experimentalBackView
       : "none";
     this.#viewerWrapper = new TwistyViewerWrapper({
-      checkered: this.#currentConfig.checkered,
+      checkered: this.#currentConfig.background === "checkered",
       backView,
     });
     this.addElement(this.#viewerWrapper);
@@ -390,6 +393,14 @@ export class TwistyPlayer extends ManagedCustomElement {
       (backViewLayouts as string[]).includes(backViewAttribute)
     ) {
       config.experimentalBackView = backViewAttribute as BackViewLayout;
+    }
+
+    const backgroundAttribute = this.getAttribute("background"); // TODO: does this conflict with an HTML attribute?
+    if (
+      backgroundAttribute &&
+      (backgroundThemes as string[]).includes(backgroundAttribute)
+    ) {
+      config.background = backgroundAttribute as BackgroundTheme;
     }
   }
 }

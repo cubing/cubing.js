@@ -33,7 +33,7 @@ window.addEventListener("load", () => {
       puzzle: "megaminx",
       visualization: "PG3D",
       backView: "upper-right",
-      checkered: true,
+      background: "none",
       // playerConfig: {
       //   showFoundation: true,
       // },
