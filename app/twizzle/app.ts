@@ -181,14 +181,35 @@ function updateMoveCount(alg?: Sequence): void {
   }
 }
 
+function cameraPos(): Vector3 {
+  if (descinput.value.startsWith("c")) {
+    return new Vector3(2, 4, 4);
+  }
+
+  if (descinput.value.startsWith("d")) {
+    return new Vector3(0, 3, 6);
+  }
+
+  if (descinput.value.startsWith("t")) {
+    return new Vector3(0, 6, 1);
+  }
+
+  if (descinput.value.startsWith("i")) {
+    return new Vector3(0, 6, 6);
+  }
+
+  return new Vector3(3.5, 3.5, 3.5);
+}
+
 function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
+  console.log(descinput.value);
   return {
     def: puzzle,
     stickerDat,
     experimentalPolarVantages: true,
     sideBySide: getCheckbox("sidebyside"),
     showFoundation: getCheckbox("showfoundation"),
-    experimentalInitialVantagePosition: new Vector3(3.5, 3.5, 3.5),
+    experimentalInitialVantagePosition: cameraPos(),
   };
 }
 
@@ -236,6 +257,14 @@ function setAlgo(str: string, writeback: boolean): void {
       puzzleSelected = false;
     } else if (puzzleSelected) {
       twisty.setPuzzle("", legacyExperimentalPG3DViewConfig());
+      (twisty.viewers[0] as Twisty3DCanvas).camera.position.copy(cameraPos());
+      (twisty.viewers[0] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
+      (twisty.viewers[1] as Twisty3DCanvas)?.camera.position.copy(
+        cameraPos().multiplyScalar(-1),
+      );
+      (twisty.viewers[1] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
+      twisty.viewers[0].scheduleRender();
+      twisty.viewers[1]?.scheduleRender();
     }
     str = str.trim();
     algoinput.style.backgroundColor = "";
