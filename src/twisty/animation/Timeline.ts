@@ -65,6 +65,7 @@ function getNow(): MillisecondTimestamp {
 export class Timeline
   implements TimelineTimestampDispatcher, TimelineActionDispatcher {
   animating: boolean = false;
+  tempoScale: number = 1;
   private cursors: Set<AlgCursor> = new Set();
   private timestampListeners: Set<TimelineTimestampListener> = new Set();
   private actionListeners: Set<TimelineActionListener> = new Set();
@@ -84,7 +85,9 @@ export class Timeline
         const now = getNow(); // TODO: See if we can use the rAF value without monotonicity issues.;
         this.timestamp =
           this.timestamp +
-          directionScalar(this.direction) * (now - this.lastAnimFrameNow);
+          this.tempoScale *
+            directionScalar(this.direction) *
+            (now - this.lastAnimFrameNow);
         this.lastAnimFrameNow = now;
 
         const atOrPastBoundary =
