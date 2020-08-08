@@ -296,6 +296,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#cursor.setAlg(this.#currentConfig.alg);
   }
 
+  getAlg(): Sequence {
+    return this.#currentConfig.alg;
+  }
+
   setPuzzle(
     puzzleName: string,
     legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig,
