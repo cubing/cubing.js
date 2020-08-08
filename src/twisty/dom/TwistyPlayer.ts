@@ -47,11 +47,15 @@ export interface LegacyExperimentalPG3DViewConfig {
 export type BackgroundTheme = "none" | "checkered";
 const backgroundThemes: BackgroundTheme[] = ["none", "checkered"];
 
+export type ControlsLocation = "none" | "bottom-row";
+const controlsLocations: ControlsLocation[] = ["none", "bottom-row"];
+
 export interface TwistyPlayerInitialConfig {
   alg?: Sequence;
   puzzle?: string;
   visualization?: VisualizationFormat;
   background?: BackgroundTheme;
+  controls?: ControlsLocation;
 
   legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig;
   backView?: BackViewLayout;
@@ -63,12 +67,14 @@ class TwistyPlayerConfig {
   visualization: VisualizationFormat;
   experimentalBackView: BackViewLayout;
   background: BackgroundTheme;
+  controls: ControlsLocation;
   constructor(initialConfig: TwistyPlayerInitialConfig) {
     this.alg = initialConfig.alg ?? new Sequence([]);
     this.puzzle = initialConfig.puzzle ?? "3x3x3";
     this.visualization = initialConfig.visualization ?? "3D";
     this.experimentalBackView = initialConfig.backView ?? "none";
     this.background = initialConfig.background ?? "checkered";
+    this.controls = initialConfig.controls ?? "bottom-row";
   }
 }
 
@@ -152,6 +158,10 @@ export class TwistyPlayer extends ManagedCustomElement {
       backView,
     });
     this.addElement(this.#viewerWrapper);
+
+    this.contentWrapper.classList.add(
+      `controls-${this.#currentConfig.controls}`,
+    );
 
     this.viewers.map((el) => this.#viewerWrapper.addElement(el));
     this.addElement(this.controls[0]);
@@ -401,6 +411,14 @@ export class TwistyPlayer extends ManagedCustomElement {
       (backgroundThemes as string[]).includes(backgroundAttribute)
     ) {
       config.background = backgroundAttribute as BackgroundTheme;
+    }
+
+    const controlsAttribute = this.getAttribute("controls"); // TODO: does this conflict with an HTML attribute?
+    if (
+      controlsAttribute &&
+      (controlsLocations as string[]).includes(controlsAttribute)
+    ) {
+      config.controls = controlsAttribute as ControlsLocation;
     }
   }
 }

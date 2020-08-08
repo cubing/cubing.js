@@ -18,6 +18,15 @@ export const twistyPlayerCSS = new CSSSource(`
   overflow: hidden;
 }
 
+.wrapper.controls-none {
+  grid-template-rows: 7fr;
+}
+
+.wrapper.controls-none twisty-scrubber,
+.wrapper.controls-none twisty-control-button-panel {
+  display: none;
+}
+
 twisty-viewer-wrapper {
   overflow: hidden;
 }
