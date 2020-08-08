@@ -37,7 +37,8 @@ button:disabled {
 }
 
 button:enabled:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 1em rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
 
