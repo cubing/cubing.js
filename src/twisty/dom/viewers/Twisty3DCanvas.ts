@@ -102,6 +102,32 @@ export class Twisty3DCanvas extends ManagedCustomElement
     this.renderer.setSize(w, h, false);
     this.scheduleRender();
   }
+
+  // Square crop is useful for rending icons.
+  renderToDataURL(options: { squareCrop?: boolean } = {}): string {
+    // We don't preserve the drawing buffer, so we have to render again and then immediately read the canvas data.
+    // https://stackoverflow.com/a/30647502
+    this.render();
+
+    // TODO: can we assume that a central crop is similar enough to how a square canvas render would loook?
+    if (!options.squareCrop || this.canvas.width === this.canvas.height) {
+      // TODO: is this such an uncommon path taht we can skip it?
+      return this.canvas.toDataURL();
+    } else {
+      const tempCanvas = document.createElement("canvas");
+      const squareSize = Math.min(this.canvas.width, this.canvas.height);
+      tempCanvas.width = squareSize;
+      tempCanvas.height = squareSize;
+      const tempCtx = tempCanvas.getContext("2d")!; // TODO: can we assume this is always availab?E
+      tempCtx.drawImage(
+        this.canvas,
+        -(this.canvas.width - squareSize) / 2,
+        -(this.canvas.height - squareSize) / 2,
+      );
+      console.log(tempCanvas);
+      return tempCanvas.toDataURL();
+    }
+  }
 }
 
 if (customElements) {
