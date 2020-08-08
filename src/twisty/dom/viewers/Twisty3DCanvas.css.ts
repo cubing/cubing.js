@@ -15,8 +15,4 @@ canvas {
   height: 100%;
   overflow: hidden;
 }
-
-* {
-  background: rgba(0, 128, 255, 0.1);
-}
 `);

@@ -7,6 +7,9 @@ export const twistyPlayerCSS = new CSSSource(`
   height: 256px;
   contain: content;
   display: grid;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.025);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .wrapper {
@@ -22,9 +25,5 @@ twisty-viewer-wrapper {
 
 twisty-scrubber {
   width: 100%;
-}
-
-* {
-  background: rgba(0, 128, 255, 0.1);
 }
 `);
