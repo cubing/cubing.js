@@ -606,15 +606,11 @@ function addMove(move: BlockMove): void {
     getModValueForMove(move),
   );
   // TODO: Avoid round-trip through string?
-  if (!twisty || puzzleSelected) {
-    setAlgo(algToString(newAlg), true);
-  } else {
-    lastalgo = algToString(newAlg);
-    twisty.experimentalAddMove(move);
-    algoinput.value = lastalgo;
-    updateMoveCount(newAlg);
-    setURLParams({ alg: newAlg });
-  }
+  lastalgo = algToString(newAlg);
+  twisty.experimentalAddMove(move);
+  algoinput.value = lastalgo;
+  updateMoveCount(newAlg);
+  setURLParams({ alg: newAlg });
 }
 
 export function setup(): void {
