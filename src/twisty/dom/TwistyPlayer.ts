@@ -342,12 +342,12 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   // TODO: Handle playing the new move vs. just modying the alg.
-  experimentalAddMove(move: BlockMove): void {
+  experimentalAddMove(move: BlockMove, coalesce: boolean = false): void {
     const oldNumMoves = countMoves(this.#currentConfig.alg); // TODO
     const newAlg = experimentalAppendBlockMove(
       this.#currentConfig.alg,
       move,
-      true,
+      coalesce,
       this.legacyExperimentalCoalesceModFunc(move),
     );
 
