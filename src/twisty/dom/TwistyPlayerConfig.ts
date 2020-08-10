@@ -23,7 +23,10 @@ export type PuzzleID =
   | "4x4x4"
   | "megaminx"
   | "pyraminx"
-  | "sq1";
+  | "sq1"
+  | "clock"
+  | "skewb"
+  | "FTO";
 const puzzleIDs = [
   "3x3x3",
   "custom",
@@ -34,6 +37,7 @@ const puzzleIDs = [
   "sq1",
   "clock",
   "skewb",
+  "FTO",
 ];
 
 // TODO: templatize
