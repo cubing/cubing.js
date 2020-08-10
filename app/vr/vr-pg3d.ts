@@ -1,267 +1,277 @@
-import { Group, Quaternion, Vector3 } from "three";
-// Import index files from source.
-// This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
-import { Sequence } from "../../src/alg/index";
-import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
-import { PG3D, Twisty } from "../../src/twisty/index";
-import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
+// import { Group, Quaternion, Vector3 } from "three";
+// // Import index files from source.
+// // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
+// import { Sequence, parse } from "../../src/alg/index";
+// import { getPuzzleGeometryByName } from "../../src/puzzle-geometry/index";
+// import { PG3D, Cube3D } from "../../src/twisty/index";
+// import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
+// import { Twisty3DPuzzle } from "../../src/twisty";
+// import { Twisty3DScene } from "../../src/twisty/3D/Twisty3DScene";
+// import { Timeline } from "../../src/twisty/animation/Timeline";
+// import { AlgCursor } from "../../src/twisty/animation/alg/AlgCursor";
+// import { Puzzles } from "../../src/kpuzzle";
 
-export class VRPG3D {
-  public group: Group = new Group();
-  private twisty: Twisty;
-  private cachedPG3D: PG3D;
+// export class VRPG3D {
+//   public group: Group = new Group();
+//   private twisty: Twisty3DPuzzle;
+//   private cachedPG3D: PG3D;
 
-  // TODO: Separate tracker abstraction for this?
-  private resizeInitialDistance: number;
-  private resizeInitialScale: number;
+//   // TODO: Separate tracker abstraction for this?
+//   private resizeInitialDistance: number;
+//   private resizeInitialScale: number;
 
-  private moveInitialPuzzleQuaternion: Quaternion = new Quaternion();
-  private moveInitialControllerQuaternion: Quaternion = new Quaternion();
+//   private moveInitialPuzzleQuaternion: Quaternion = new Quaternion();
+//   private moveInitialControllerQuaternion: Quaternion = new Quaternion();
 
-  private moveLastControllerPosition: Vector3 = new Vector3();
-  private moveVelocity: Vector3 = new Vector3(); // TODO: Track elapsed time since last update?
+//   private moveLastControllerPosition: Vector3 = new Vector3();
+//   private moveVelocity: Vector3 = new Vector3(); // TODO: Track elapsed time since last update?
 
-  // Wait for both move buttons to be released before allowing moves.
-  // This "locks" the input into resizing.
-  private waitForMoveButtonClear = false;
+//   // Wait for both move buttons to be released before allowing moves.
+//   // This "locks" the input into resizing.
+//   private waitForMoveButtonClear = false;
 
-  constructor(private vrInput: VRInput) {
-    // const p = PuzzleGeometry.parsedesc(descinput.value);
-    const pg = getPuzzleGeometryByName("megaminx");
-    const stickerDat = pg.get3d(0.0131);
+//   constructor(private vrInput: VRInput) {
+//     // const p = PuzzleGeometry.parsedesc(descinput.value);
+//     const pg = getPuzzleGeometryByName("megaminx");
+//     const stickerDat = pg.get3d(0.0131);
 
-    this.twisty = new Twisty(document.createElement("twisty"), {
-      alg: new Sequence([]),
-      playerConfig: {
-        visualizationFormat: "PG3D",
-        experimentalPG3DViewConfig: {
-          stickerDat,
-        },
-      },
-    });
+//     const scene = new Twisty3DScene();
+//     const timeline = new Timeline();
+//     const cursor = new AlgCursor(timeline, Puzzles["3x3x3"], parse("R U R'"));
+//     const cube3D = new Cube3D(cursor);
 
-    this.cachedPG3D = this.twisty
-      .experimentalGetPlayer()
-      .pg3DView.experimentalGetPG3D();
-    this.group.add(this.cachedPG3D.experimentalGetGroup());
+//     this.twisty = new Twisty(document.createElement("twisty"), {
+//       alg: new Sequence([]),
+//       playerConfig: {
+//         visualizationFormat: "PG3D",
+//         experimentalPG3DViewConfig: {
+//           stickerDat,
+//         },
+//       },
+//     });
 
-    // this.twisty.experimentalGetCursor().experimentalSetDurationScale(0.25);
+//     this.cachedPG3D = this.twisty
+//       .experimentalGetPlayer()
+//       .pg3DView.experimentalGetPG3D();
+//     this.group.add(this.cachedPG3D.experimentalGetGroup());
 
-    // this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
-    // this.cachedCube3D.experimentalUpdateOptions({ showFoundation: true, showHintStickers: false });
-    // this.group.add(this.cachedCube3D.experimentalGetCube());
+//     // this.twisty.experimentalGetCursor().experimentalSetDurationScale(0.25);
 
-    // for (const axis of axesInfo) {
-    //   const controlPlane = new Mesh(new PlaneGeometry(1, 1), axis.stickerMaterial);
-    //   controlPlane.userData.axis = axis;
-    //   controlPlane.position.copy(controlPlane.userData.axis.vector);
-    //   controlPlane.position.multiplyScalar(0.501);
-    //   controlPlane.setRotationFromEuler(controlPlane.userData.axis.fromZ);
+//     // this.cachedCube3D = this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D();
+//     // this.cachedCube3D.experimentalUpdateOptions({ showFoundation: true, showHintStickers: false });
+//     // this.group.add(this.cachedCube3D.experimentalGetCube());
 
-    //   controlPlane.userData.side = axis.side;
-    //   controlPlane.userData.status = [Status.Untargeted, Status.Untargeted];
+//     // for (const axis of axesInfo) {
+//     //   const controlPlane = new Mesh(new PlaneGeometry(1, 1), axis.stickerMaterial);
+//     //   controlPlane.userData.axis = axis;
+//     //   controlPlane.position.copy(controlPlane.userData.axis.vector);
+//     //   controlPlane.position.multiplyScalar(0.501);
+//     //   controlPlane.setRotationFromEuler(controlPlane.userData.axis.fromZ);
 
-    //   this.controlPlanes.push(controlPlane);
-    //   this.group.add(controlPlane);
-    // }
+//     //   controlPlane.userData.side = axis.side;
+//     //   controlPlane.userData.status = [Status.Untargeted, Status.Untargeted];
 
-    // this.group.position.copy(new Vector3(0, initialHeight, 0));
-    // this.setScale(initialScale);
+//     //   this.controlPlanes.push(controlPlane);
+//     //   this.group.add(controlPlane);
+//     // }
 
-    // TODO: Better abstraction over controllers.
-    // this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Grip }, this.gripStart.bind(this, 1), this.gripContinued.bind(this, 1));
+//     // this.group.position.copy(new Vector3(0, initialHeight, 0));
+//     // this.setScale(initialScale);
 
-    // this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 0));
-    // this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 1));
-    // TODO: Generalize this to multiple platforms.
-    this.vrInput.addButtonListener(
-      ButtonGrouping.All,
-      [
-        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
-        { controllerIdx: 1, buttonIdx: OculusButton.XorA, invert: true },
-      ],
-      this.onMoveStart.bind(this, 0),
-      this.onMoveContinued.bind(this, 0),
-    );
-    this.vrInput.addButtonListener(
-      ButtonGrouping.All,
-      [
-        { controllerIdx: 0, buttonIdx: OculusButton.XorA, invert: true },
-        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
-      ],
-      this.onMoveStart.bind(this, 1),
-      this.onMoveContinued.bind(this, 1),
-    );
-    this.vrInput.addButtonListener(
-      ButtonGrouping.All,
-      [
-        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
-        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
-      ],
-      this.onResizeStart.bind(this),
-      this.onResizeContinued.bind(this),
-      this.onResizeEnd.bind(this),
-    );
-    this.vrInput.addButtonListener(
-      ButtonGrouping.None,
-      [
-        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
-        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
-      ],
-      this.moveButtonClear.bind(this),
-    );
+//     // TODO: Better abstraction over controllers.
+//     // this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: OculusButton.Grip }, this.gripStart.bind(this, 1), this.gripContinued.bind(this, 1));
 
-    // try {
-    //   this.proxyReceiver = new ProxyReceiver(this.onProxyEvent.bind(this));
-    // } catch (e) {
-    //   console.error("Unable to register proxy receiver", e);
-    // }
-  }
+//     // this.vrInput.addSingleButtonListener({ controllerIdx: 0, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 0));
+//     // this.vrInput.addSingleButtonListener({ controllerIdx: 1, buttonIdx: daydream ? 0 : OculusButton.Trigger }, this.onPress.bind(this, 1));
+//     // TODO: Generalize this to multiple platforms.
+//     this.vrInput.addButtonListener(
+//       ButtonGrouping.All,
+//       [
+//         { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+//         { controllerIdx: 1, buttonIdx: OculusButton.XorA, invert: true },
+//       ],
+//       this.onMoveStart.bind(this, 0),
+//       this.onMoveContinued.bind(this, 0),
+//     );
+//     this.vrInput.addButtonListener(
+//       ButtonGrouping.All,
+//       [
+//         { controllerIdx: 0, buttonIdx: OculusButton.XorA, invert: true },
+//         { controllerIdx: 1, buttonIdx: OculusButton.XorA },
+//       ],
+//       this.onMoveStart.bind(this, 1),
+//       this.onMoveContinued.bind(this, 1),
+//     );
+//     this.vrInput.addButtonListener(
+//       ButtonGrouping.All,
+//       [
+//         { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+//         { controllerIdx: 1, buttonIdx: OculusButton.XorA },
+//       ],
+//       this.onResizeStart.bind(this),
+//       this.onResizeContinued.bind(this),
+//       this.onResizeEnd.bind(this),
+//     );
+//     this.vrInput.addButtonListener(
+//       ButtonGrouping.None,
+//       [
+//         { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+//         { controllerIdx: 1, buttonIdx: OculusButton.XorA },
+//       ],
+//       this.moveButtonClear.bind(this),
+//     );
 
-  public update(): void {
-    this.group.position.add(this.moveVelocity);
-    this.moveVelocity.multiplyScalar(0.99);
-    if (this.moveVelocity.length() < 0.001) {
-      this.moveVelocity.setScalar(0);
-      // TODO: Set a flag to indicate that the puzzle is not moving?
-    }
-  }
+//     // try {
+//     //   this.proxyReceiver = new ProxyReceiver(this.onProxyEvent.bind(this));
+//     // } catch (e) {
+//     //   console.error("Unable to register proxy receiver", e);
+//     // }
+//   }
 
-  // private yAngle(point: Vector3): number {
-  //   return point.projectOnPlane(new Vector3(0, 1, 0)).angleTo(new Vector3(0, 0, -1));
-  // }
+//   public update(): void {
+//     this.group.position.add(this.moveVelocity);
+//     this.moveVelocity.multiplyScalar(0.99);
+//     if (this.moveVelocity.length() < 0.001) {
+//       this.moveVelocity.setScalar(0);
+//       // TODO: Set a flag to indicate that the puzzle is not moving?
+//     }
+//   }
 
-  // private gripStart(controllerIdx: number): void {
-  //   this.hapticPulse(controllerIdx, 0.1, 400);
-  //   this.lastAngle = this.yAngle(this.vrInput.controllers[controllerIdx].position);
-  // }
+//   // private yAngle(point: Vector3): number {
+//   //   return point.projectOnPlane(new Vector3(0, 1, 0)).angleTo(new Vector3(0, 0, -1));
+//   // }
 
-  // private gripContinued(controllerIdx: number): void {
-  //   const angle = this.yAngle(this.vrInput.controllers[controllerIdx].position);
-  //   const deltaAngleQuat = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), angle - this.lastAngle);
-  //   this.group.quaternion.multiply(deltaAngleQuat);
-  //   this.lastAngle = angle;
-  // }
+//   // private gripStart(controllerIdx: number): void {
+//   //   this.hapticPulse(controllerIdx, 0.1, 400);
+//   //   this.lastAngle = this.yAngle(this.vrInput.controllers[controllerIdx].position);
+//   // }
 
-  private setScale(scale: number): void {
-    this.group.scale.setScalar(scale);
-  }
+//   // private gripContinued(controllerIdx: number): void {
+//   //   const angle = this.yAngle(this.vrInput.controllers[controllerIdx].position);
+//   //   const deltaAngleQuat = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), angle - this.lastAngle);
+//   //   this.group.quaternion.multiply(deltaAngleQuat);
+//   //   this.lastAngle = angle;
+//   // }
 
-  private controllerDistance(): number {
-    return this.vrInput.controllers[0].position.distanceTo(
-      this.vrInput.controllers[1].position,
-    );
-  }
+//   private setScale(scale: number): void {
+//     this.group.scale.setScalar(scale);
+//   }
 
-  private hapticPulse(
-    gamepadId: number,
-    value: number,
-    duration: number,
-  ): void {
-    const gamepad = navigator.getGamepads()[gamepadId];
-    if (gamepad && gamepad.hapticActuators) {
-      gamepad.hapticActuators[0].pulse(value, duration);
-    }
-  }
+//   private controllerDistance(): number {
+//     return this.vrInput.controllers[0].position.distanceTo(
+//       this.vrInput.controllers[1].position,
+//     );
+//   }
 
-  private onResizeStart(): void {
-    this.waitForMoveButtonClear = true;
-    this.moveVelocity.setScalar(0);
-    this.hapticPulse(0, 0.2, 75);
-    this.hapticPulse(1, 0.2, 75);
-    this.resizeInitialDistance = this.controllerDistance();
-    this.resizeInitialScale = this.group.scale.x;
-  }
+//   private hapticPulse(
+//     gamepadId: number,
+//     value: number,
+//     duration: number,
+//   ): void {
+//     const gamepad = navigator.getGamepads()[gamepadId];
+//     if (gamepad && gamepad.hapticActuators) {
+//       gamepad.hapticActuators[0].pulse(value, duration);
+//     }
+//   }
 
-  private onResizeContinued(): void {
-    const newDistance = this.controllerDistance();
-    this.setScale(
-      (this.resizeInitialScale * newDistance) / this.resizeInitialDistance,
-    );
-  }
+//   private onResizeStart(): void {
+//     this.waitForMoveButtonClear = true;
+//     this.moveVelocity.setScalar(0);
+//     this.hapticPulse(0, 0.2, 75);
+//     this.hapticPulse(1, 0.2, 75);
+//     this.resizeInitialDistance = this.controllerDistance();
+//     this.resizeInitialScale = this.group.scale.x;
+//   }
 
-  private onResizeEnd(): void {
-    this.hapticPulse(0, 0.1, 75);
-    this.hapticPulse(1, 0.1, 75);
-  }
+//   private onResizeContinued(): void {
+//     const newDistance = this.controllerDistance();
+//     this.setScale(
+//       (this.resizeInitialScale * newDistance) / this.resizeInitialDistance,
+//     );
+//   }
 
-  private moveButtonClear(): void {
-    this.waitForMoveButtonClear = false;
-  }
+//   private onResizeEnd(): void {
+//     this.hapticPulse(0, 0.1, 75);
+//     this.hapticPulse(1, 0.1, 75);
+//   }
 
-  private onMoveStart(controllerIdx: number): void {
-    if (this.waitForMoveButtonClear) {
-      return;
-    }
-    this.hapticPulse(controllerIdx, 0.2, 50);
-    this.moveInitialPuzzleQuaternion.copy(this.group.quaternion);
+//   private moveButtonClear(): void {
+//     this.waitForMoveButtonClear = false;
+//   }
 
-    const controller = this.vrInput.controllers[controllerIdx];
-    this.moveLastControllerPosition.copy(controller.position);
-    this.moveInitialControllerQuaternion.copy(controller.quaternion);
-  }
+//   private onMoveStart(controllerIdx: number): void {
+//     if (this.waitForMoveButtonClear) {
+//       return;
+//     }
+//     this.hapticPulse(controllerIdx, 0.2, 50);
+//     this.moveInitialPuzzleQuaternion.copy(this.group.quaternion);
 
-  private onMoveContinued(controllerIdx: number): void {
-    if (this.waitForMoveButtonClear) {
-      return;
-    }
-    const controller = this.vrInput.controllers[controllerIdx];
+//     const controller = this.vrInput.controllers[controllerIdx];
+//     this.moveLastControllerPosition.copy(controller.position);
+//     this.moveInitialControllerQuaternion.copy(controller.quaternion);
+//   }
 
-    this.moveVelocity
-      .copy(controller.position)
-      .sub(this.moveLastControllerPosition);
-    this.moveLastControllerPosition.copy(controller.position);
+//   private onMoveContinued(controllerIdx: number): void {
+//     if (this.waitForMoveButtonClear) {
+//       return;
+//     }
+//     const controller = this.vrInput.controllers[controllerIdx];
 
-    this.group.quaternion
-      .copy(this.moveInitialControllerQuaternion)
-      .inverse()
-      .premultiply(controller.quaternion)
-      .multiply(this.moveInitialPuzzleQuaternion);
-  }
+//     this.moveVelocity
+//       .copy(controller.position)
+//       .sub(this.moveLastControllerPosition);
+//     this.moveLastControllerPosition.copy(controller.position);
 
-  // private onPress(controllerIdx: number): void {
-  //   const controller = this.vrInput.controllers[controllerIdx];
+//     this.group.quaternion
+//       .copy(this.moveInitialControllerQuaternion)
+//       .inverse()
+//       .premultiply(controller.quaternion)
+//       .multiply(this.moveInitialPuzzleQuaternion);
+//   }
 
-  //   const direction = new Vector3().copy(controllerDirection);
-  //   direction.applyQuaternion(controller.quaternion);
-  //   const raycaster = new Raycaster(controller.position, direction);
-  //   const closestIntersection: Intersection | null = ((l) => l.length > 0 ? l[0] : null)(raycaster.intersectObjects(this.controlPlanes));
+//   // private onPress(controllerIdx: number): void {
+//   //   const controller = this.vrInput.controllers[controllerIdx];
 
-  //   if (closestIntersection && showControlPlanes) {
-  //     ((closestIntersection.object as Mesh).material as Material).opacity = 0.2;
-  //   }
+//   //   const direction = new Vector3().copy(controllerDirection);
+//   //   direction.applyQuaternion(controller.quaternion);
+//   //   const raycaster = new Raycaster(controller.position, direction);
+//   //   const closestIntersection: Intersection | null = ((l) => l.length > 0 ? l[0] : null)(raycaster.intersectObjects(this.controlPlanes));
 
-  //   for (const controlPlane of this.controlPlanes) {
-  //     if (!closestIntersection || controlPlane !== closestIntersection.object) {
-  //       ((controlPlane as Mesh).material as Material).opacity = 0;
-  //     }
-  //   }
+//   //   if (closestIntersection && showControlPlanes) {
+//   //     ((closestIntersection.object as Mesh).material as Material).opacity = 0.2;
+//   //   }
 
-  //   if (closestIntersection) {
-  //     (closestIntersection.object as Mesh).userData.status[controller.userData.controllerNumber] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
-  //     const side = closestIntersection.object.userData.side;
-  //     this.twisty.experimentalAddMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
-  //     this.hapticPulse(controllerIdx, 0.1, 75);
-  //   }
-  // }
+//   //   for (const controlPlane of this.controlPlanes) {
+//   //     if (!closestIntersection || controlPlane !== closestIntersection.object) {
+//   //       ((controlPlane as Mesh).material as Material).opacity = 0;
+//   //     }
+//   //   }
 
-  // private onProxyEvent(e: ProxyEvent): void {
-  //   switch (e.event) {
-  //     case "reset":
-  //       this.twisty.experimentalSetAlg(new Sequence([]));
-  //       break;
-  //     case "move":
-  //       this.twisty.experimentalAddMove(e.data.latestMove);
-  //       break;
-  //     case "orientation":
-  //       const { x, y, z, w } = e.data.quaternion;
-  //       const quat = new Quaternion(x, y, z, w);
-  //       this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D().experimentalGetCube().quaternion.copy(quat);
-  //       break;
-  //     default:
-  //       // The "as any" appeases the type checker, which (correctly) deduces
-  //       // that the `event` field can't have a valid value.
-  //       console.error("Unknown event:", (e as any).event);
-  //   }
-  // }
-}
+//   //   if (closestIntersection) {
+//   //     (closestIntersection.object as Mesh).userData.status[controller.userData.controllerNumber] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
+//   //     const side = closestIntersection.object.userData.side;
+//   //     this.twisty.experimentalAddMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
+//   //     this.hapticPulse(controllerIdx, 0.1, 75);
+//   //   }
+//   // }
+
+//   // private onProxyEvent(e: ProxyEvent): void {
+//   //   switch (e.event) {
+//   //     case "reset":
+//   //       this.twisty.experimentalSetAlg(new Sequence([]));
+//   //       break;
+//   //     case "move":
+//   //       this.twisty.experimentalAddMove(e.data.latestMove);
+//   //       break;
+//   //     case "orientation":
+//   //       const { x, y, z, w } = e.data.quaternion;
+//   //       const quat = new Quaternion(x, y, z, w);
+//   //       this.twisty.experimentalGetPlayer().cube3DView.experimentalGetCube3D().experimentalGetCube().quaternion.copy(quat);
+//   //       break;
+//   //     default:
+//   //       // The "as any" appeases the type checker, which (correctly) deduces
+//   //       // that the `event` field can't have a valid value.
+//   //       console.error("Unknown event:", (e as any).event);
+//   //   }
+//   // }
+// }

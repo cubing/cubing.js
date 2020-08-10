@@ -153,7 +153,7 @@ export class VRInput {
   private buttonListeners: ButtonListener[] = [];
   constructor(renderer: WebGLRenderer) {
     for (let i = 0; i < NUM_CONTROLLERS; i++) {
-      const controller = renderer.vr.getController(i);
+      const controller = renderer.xr.getController(i);
       controller.add(new Line(geometry, material));
       this.controllers.push(controller);
     }
