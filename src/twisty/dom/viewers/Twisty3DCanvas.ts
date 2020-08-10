@@ -48,8 +48,11 @@ export class Twisty3DCanvas extends ManagedCustomElement
     this.canvas = this.renderer.domElement;
     this.addElement(this.canvas);
 
-    const observer = new window.ResizeObserver(this.onResize.bind(this));
-    observer.observe(this);
+    // TODO: Remove this when enough Safari users have `ResizeObserver`.
+    if (window.ResizeObserver) {
+      const observer = new window.ResizeObserver(this.onResize.bind(this));
+      observer.observe(this);
+    }
   }
 
   protected connectedCallback(): void {
