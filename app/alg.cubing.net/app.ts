@@ -57,11 +57,12 @@ export class App {
   // Boolean indicates success (e.g. alg is valid).
   private setAlg(alg: Sequence): boolean {
     try {
-      this.twistyPlayer.setAlg(alg);
+      this.twistyPlayer.alg = alg;
       this.twistyPlayer.timeline.jumpToEnd();
       setURLParams({ alg });
       return true;
     } catch (e) {
+      this.twistyPlayer.alg = parse("");
       return false;
     }
   }

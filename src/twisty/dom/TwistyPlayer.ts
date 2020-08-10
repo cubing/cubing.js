@@ -89,29 +89,37 @@ export class TwistyPlayer extends ManagedCustomElement {
     private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
   ) {
     super();
-    this.#config = new TwistyPlayerConfig(initialConfig);
+    this.#config = new TwistyPlayerConfig(this, initialConfig);
 
     this.legacyExperimentalPG3DViewConfig = legacyExperimentalPG3DViewConfig;
   }
 
-  set alg(v: Sequence) {
-    this.#config.attributes["alg"].setValue(v);
+  set alg(seq: Sequence) {
+    // TODO: do validation for other algs as well.
+    if (seq?.type !== "sequence") {
+      // TODO: document `.setAttribute("alg", "R U R'")` as a workaround.
+      throw new Error("Must set `alg` using a `Sequence`!");
+    }
+    this.#config.attributes["alg"].setValue(seq);
+    this.#cursor?.setAlg(seq); // TODO: can we ensure the cursor already exists?
   }
 
   get alg(): Sequence {
     return this.#config.attributes["alg"].value;
   }
 
-  set puzzle(v: PuzzleID) {
-    this.#config.attributes["puzzle"].setValue(v);
+  set puzzle(puzzle: PuzzleID) {
+    if (this.#config.attributes["puzzle"].setValue(puzzle)) {
+      this.setPuzzle(puzzle);
+    }
   }
 
   get puzzle(): PuzzleID {
     return this.#config.attributes["puzzle"].value as PuzzleID;
   }
 
-  set visualization(v: VisualizationFormat) {
-    this.#config.attributes["visualization"].setValue(v);
+  set visualization(visualization: VisualizationFormat) {
+    this.#config.attributes["visualization"].setValue(visualization);
   }
 
   get visualization(): VisualizationFormat {
@@ -119,41 +127,52 @@ export class TwistyPlayer extends ManagedCustomElement {
       .value as VisualizationFormat;
   }
 
-  set background(v: BackgroundTheme) {
-    this.#config.attributes["background"].setValue(v);
+  set background(background: BackgroundTheme) {
+    this.#config.attributes["background"].setValue(background);
   }
 
   get background(): BackgroundTheme {
     return this.#config.attributes["background"].value as BackgroundTheme;
   }
 
-  set controls(v: ControlsLocation) {
-    this.#config.attributes["controls"].setValue(v);
+  set controls(controls: ControlsLocation) {
+    this.#config.attributes["controls"].setValue(controls);
   }
 
   get controls(): ControlsLocation {
     return this.#config.attributes["controls"].value as ControlsLocation;
   }
 
-  set backView(v: BackViewLayout) {
-    this.#config.attributes["back-view"].setValue(v);
+  set backView(backView: BackViewLayout) {
+    this.#config.attributes["back-view"].setValue(backView);
   }
 
   get backView(): BackViewLayout {
     return this.#config.attributes["back-view"].value as BackViewLayout;
   }
 
-  set cameraPosition(v: Vector3) {
-    this.#config.attributes["camera-position"].setValue(v);
+  set cameraPosition(cameraPosition: Vector3) {
+    this.#config.attributes["camera-position"].setValue(cameraPosition);
   }
 
   get cameraPosition(): Vector3 {
     return this.#config.attributes["camera-position"].value;
   }
 
-  protected connectedCallback(): void {
-    this.processAttributes();
+  static get observedAttributes(): string[] {
+    return TwistyPlayerConfig.observedAttributes;
+  }
 
+  attributeChangedCallback(
+    attributeName: string,
+    oldValue: string,
+    newValue: string,
+  ): void {
+    this.#config.attributeChangedCallback(attributeName, oldValue, newValue);
+  }
+
+  // TODO: It seems this called after the `attributeChangedCallback`s for initial values. Can we rely on this?
+  protected connectedCallback(): void {
     this.timeline = new Timeline();
 
     const viewers = this.createViewers(
@@ -309,16 +328,6 @@ export class TwistyPlayer extends ManagedCustomElement {
     return [kpuzzleDef, stickerDat, cameraPosition];
   }
 
-  // TODO: combine with alg setter? Or tie to callback from setter?
-  setAlg(alg: Sequence): void {
-    this.alg = alg;
-    this.#cursor.setAlg(this.alg);
-  }
-
-  getAlg(): Sequence {
-    return this.alg;
-  }
-
   setPuzzle(
     puzzleName: string,
     legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig,
@@ -384,7 +393,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       this.legacyExperimentalCoalesceModFunc(move),
     );
 
-    this.setAlg(newAlg);
+    this.alg = newAlg;
     // TODO
     if (oldNumMoves <= countMoves(newAlg)) {
       this.timeline.experimentalJumpToLastMove();
@@ -396,10 +405,6 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   fullscreen(): void {
     this.requestFullscreen();
-  }
-
-  private processAttributes(): void {
-    this.#config.processAttributes(this);
   }
 }
 

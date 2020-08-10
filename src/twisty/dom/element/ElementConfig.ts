@@ -44,11 +44,12 @@ export class AlgAttribute {
   }
 }
 
-export class StringEnumAttribute {
+// TODO: subset of string rather than `extends`
+export class StringEnumAttribute<E extends string> {
   string: string;
-  value: string;
+  value: E;
   valid: boolean;
-  constructor(private validStrings: string[], initialValue?: string) {
+  constructor(private validStrings: string[], initialValue?: E) {
     this.setString(initialValue ?? this.defaultValue());
   }
 
@@ -58,7 +59,7 @@ export class StringEnumAttribute {
       return false;
     }
     if (!this.validStrings.includes(str)) {
-      throw new Error("TODO!");
+      throw new Error(`Invalid string for attribute!: ${str}`);
     }
     this.string = str;
     this.value = this.toValue(str);
@@ -74,8 +75,8 @@ export class StringEnumAttribute {
     return this.validStrings[0];
   }
 
-  private toValue(s: string): string {
-    return s;
+  private toValue(s: string): E {
+    return s as E;
   }
 
   // private toString(s: string): string {

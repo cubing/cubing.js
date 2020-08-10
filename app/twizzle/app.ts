@@ -276,7 +276,7 @@ function setAlgo(str: string, writeback: boolean): void {
     try {
       seq = algparse(str);
       str = algToString(seq);
-      twisty.setAlg(seq);
+      twisty.alg = seq;
       if (!writeback) {
         twisty.timeline.jumpToEnd();
       }
