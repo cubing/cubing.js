@@ -1,4 +1,4 @@
-import { CSSSource } from "../ManagedCustomElement";
+import { CSSSource } from "../element/ManagedCustomElement";
 
 export const twistyViewerWrapperCSS = new CSSSource(`
 .wrapper {

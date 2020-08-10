@@ -12,7 +12,7 @@ import {
   PositionListener,
 } from "../../animation/alg/AlgCursor";
 import { RenderScheduler } from "../../animation/RenderScheduler";
-import { ManagedCustomElement } from "../ManagedCustomElement";
+import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { twisty2DSVGCSS } from "./Twisty2DSVGView.css";
 import { TwistyViewerElement } from "./TwistyViewerElement";
 import { PuzzlePosition } from "../../animation/alg/CursorTypes";

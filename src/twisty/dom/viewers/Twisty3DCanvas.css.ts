@@ -1,4 +1,4 @@
-import { CSSSource } from "../ManagedCustomElement";
+import { CSSSource } from "../element/ManagedCustomElement";
 
 export const twisty3DCanvasCSS = new CSSSource(`
 :host(twisty-3d-canvas) {

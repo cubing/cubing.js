@@ -5,7 +5,7 @@ import {
   Timeline,
   TimelineTimestampListener,
 } from "../../animation/Timeline";
-import { ManagedCustomElement } from "../ManagedCustomElement";
+import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
 import { twistyScrubberCSS } from "./TwistyScrubber.css";
 import { TimeRange } from "../../animation/alg/AlgCursor";

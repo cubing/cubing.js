@@ -21,7 +21,7 @@ import { Timeline } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
-import { ManagedCustomElement } from "./ManagedCustomElement";
+import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";

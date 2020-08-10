@@ -1,4 +1,4 @@
-import { ManagedCustomElement } from "../ManagedCustomElement";
+import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
 
 export type BackViewLayout = "none" | "side-by-side" | "upper-right";

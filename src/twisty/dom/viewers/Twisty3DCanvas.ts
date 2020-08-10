@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Vector3, WebGLRenderer } from "three";
 import { Twisty3DScene } from "../../3D/Twisty3DScene";
 import { RenderScheduler } from "../../animation/RenderScheduler";
-import { ManagedCustomElement } from "../ManagedCustomElement";
+import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { pixelRatio } from "./canvas";
 import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
 import { TwistyViewerElement } from "./TwistyViewerElement";
