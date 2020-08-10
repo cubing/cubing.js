@@ -13,22 +13,8 @@ import {
 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../src/alg";
-import {
-  BareBlockMove,
-  BlockMove,
-  experimentalAppendBlockMove,
-  parse,
-  Sequence,
-  coalesceBaseMoves,
-} from "../../src/alg/index";
-import { MoveEvent } from "../../src/bluetooth";
-import { Puzzles } from "../../src/kpuzzle";
-import { ProxyEvent, WebSocketProxyReceiver } from "../../src/stream";
-import { TAU } from "../../src/twisty/3D/TAU";
-import { AlgCursor } from "../../src/twisty/animation/alg/AlgCursor";
-import { Timeline } from "../../src/twisty/animation/Timeline";
-import { Cube3D } from "../../src/twisty/index";
-import { countMoves } from "../twizzle/move-counter";
+import { BareBlockMove, Sequence } from "../../src/alg/index";
+import { Cube3D, TAU, TwistyPlayerOld } from "../../src/twisty/index";
 import {
   daydream,
   initialHeight,
@@ -36,6 +22,7 @@ import {
   showControlPlanes,
   socketOrigin,
 } from "./config";
+import { WebSocketProxyReceiver, ProxyEvent } from "../../src/stream";
 import {
   ButtonGrouping,
   controllerDirection,
@@ -43,6 +30,7 @@ import {
   Status,
   VRInput,
 } from "./vr-input";
+import { MoveEvent } from "../../src/bluetooth";
 
 // From `cube3D.ts`
 class AxisInfo {
@@ -81,10 +69,8 @@ class CallbackProxyReceiver extends WebSocketProxyReceiver {
 
 export class VRCube {
   public group: Group = new Group();
-  private timeline: Timeline;
-  private alg: Sequence = new Sequence([]);
-  private cube3D: Cube3D;
-  private cursor: AlgCursor;
+  private twistyPlayerOld: TwistyPlayerOld;
+  private cachedCube3D: Cube3D;
   private controlPlanes: Mesh[] = [];
 
   private lastAngle: number;
@@ -104,27 +90,23 @@ export class VRCube {
   private waitForMoveButtonClear = false;
 
   constructor(private vrInput: VRInput) {
-    this.timeline = new Timeline();
-    this.timeline.tempoScale = 4;
-    this.cursor = new AlgCursor(
-      this.timeline,
-      Puzzles["3x3x3"],
-      parse("R U R'"),
-    );
+    this.twistyPlayerOld = new TwistyPlayerOld({
+      alg: new Sequence([]),
+    });
+    throw new Error("requires async TwistyPlayerOld access!"); // TODO
 
-    this.timeline.addCursor(this.cursor);
+    this.twistyPlayerOld
+      .experimentalGetCursor()
+      .experimentalSetDurationScale(0.25);
 
-    this.cube3D = new Cube3D(
-      this.cursor,
-      () => {
-        /**/
-      },
-      {
-        showFoundation: false,
-        showHintStickers: false,
-      },
-    );
-    this.group.add(this.cube3D);
+    this.cachedCube3D = this.twistyPlayerOld
+      .experimentalGetPlayer()
+      .cube3DView.experimentalGetCube3D();
+    this.cachedCube3D.experimentalUpdateOptions({
+      showFoundation: false,
+      showHintStickers: false,
+    });
+    this.group.add(this.cachedCube3D.experimentalGetCube());
 
     for (const axis of axesInfo) {
       const controlPlane = new Mesh(
@@ -148,41 +130,25 @@ export class VRCube {
 
     // TODO: Better abstraction over controllers.
     this.vrInput.addSingleButtonListener(
-      {
-        controllerIdx: 1,
-        buttonIdx: OculusButton.Grip,
-      },
+      { controllerIdx: 1, buttonIdx: OculusButton.Grip },
       this.gripStart.bind(this, 1),
       this.gripContinued.bind(this, 1),
     );
 
     this.vrInput.addSingleButtonListener(
-      {
-        controllerIdx: 0,
-        buttonIdx: daydream ? 0 : OculusButton.Trigger,
-      },
+      { controllerIdx: 0, buttonIdx: daydream ? 0 : OculusButton.Trigger },
       this.onPress.bind(this, 0),
     );
     this.vrInput.addSingleButtonListener(
-      {
-        controllerIdx: 1,
-        buttonIdx: daydream ? 0 : OculusButton.Trigger,
-      },
+      { controllerIdx: 1, buttonIdx: daydream ? 0 : OculusButton.Trigger },
       this.onPress.bind(this, 1),
     );
     // TODO: Generalize this to multiple platforms.
     this.vrInput.addButtonListener(
       ButtonGrouping.All,
       [
-        {
-          controllerIdx: 0,
-          buttonIdx: OculusButton.XorA,
-        },
-        {
-          controllerIdx: 1,
-          buttonIdx: OculusButton.XorA,
-          invert: true,
-        },
+        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+        { controllerIdx: 1, buttonIdx: OculusButton.XorA, invert: true },
       ],
       this.onMoveStart.bind(this, 0),
       this.onMoveContinued.bind(this, 0),
@@ -190,15 +156,8 @@ export class VRCube {
     this.vrInput.addButtonListener(
       ButtonGrouping.All,
       [
-        {
-          controllerIdx: 0,
-          buttonIdx: OculusButton.XorA,
-          invert: true,
-        },
-        {
-          controllerIdx: 1,
-          buttonIdx: OculusButton.XorA,
-        },
+        { controllerIdx: 0, buttonIdx: OculusButton.XorA, invert: true },
+        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
       ],
       this.onMoveStart.bind(this, 1),
       this.onMoveContinued.bind(this, 1),
@@ -206,14 +165,8 @@ export class VRCube {
     this.vrInput.addButtonListener(
       ButtonGrouping.All,
       [
-        {
-          controllerIdx: 0,
-          buttonIdx: OculusButton.XorA,
-        },
-        {
-          controllerIdx: 1,
-          buttonIdx: OculusButton.XorA,
-        },
+        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
       ],
       this.onResizeStart.bind(this),
       this.onResizeContinued.bind(this),
@@ -222,14 +175,8 @@ export class VRCube {
     this.vrInput.addButtonListener(
       ButtonGrouping.None,
       [
-        {
-          controllerIdx: 0,
-          buttonIdx: OculusButton.XorA,
-        },
-        {
-          controllerIdx: 1,
-          buttonIdx: OculusButton.XorA,
-        },
+        { controllerIdx: 0, buttonIdx: OculusButton.XorA },
+        { controllerIdx: 1, buttonIdx: OculusButton.XorA },
       ],
       this.moveButtonClear.bind(this),
     );
@@ -382,47 +329,29 @@ export class VRCube {
         controller.userData.controllerNumber
       ] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
       const side = closestIntersection.object.userData.side;
-      this.addMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
+      this.twistyPlayerOld.experimentalAddMove(
+        BareBlockMove(side, controllerIdx === 0 ? -1 : 1),
+      );
       this.hapticPulse(controllerIdx, 0.1, 75);
     }
-  }
-
-  setAlg(alg: Sequence): void {
-    this.alg = alg;
-    this.cursor.setAlg(alg);
-  }
-
-  addMove(move: BlockMove, coalesce: boolean = false): void {
-    const oldNumMoves = countMoves(this.alg); // TODO
-    const newAlg = experimentalAppendBlockMove(
-      coalesceBaseMoves(this.alg),
-      move,
-      coalesce,
-      0,
-    );
-    this.setAlg(newAlg);
-
-    // TODO
-    if (oldNumMoves <= countMoves(newAlg)) {
-      this.timeline.experimentalJumpToLastMove();
-    } else {
-      this.timeline.jumpToEnd();
-    }
-    this.timeline.play();
   }
 
   private onProxyEvent(e: ProxyEvent): void {
     switch (e.event) {
       case "reset":
-        this.setAlg(new Sequence([]));
+        this.twistyPlayerOld.experimentalSetAlg(new Sequence([]));
         break;
       case "move":
-        this.addMove(e.data.latestMove);
+        this.twistyPlayerOld.experimentalAddMove(e.data.latestMove);
         break;
       case "orientation": {
         const { x, y, z, w } = e.data.quaternion;
         const quat = new Quaternion(x, y, z, w);
-        this.cube3D.quaternion.copy(quat);
+        this.twistyPlayerOld
+          .experimentalGetPlayer()
+          .cube3DView.experimentalGetCube3D()
+          .experimentalGetCube()
+          .quaternion.copy(quat);
         break;
       }
       default:

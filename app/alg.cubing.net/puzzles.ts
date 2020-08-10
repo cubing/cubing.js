@@ -8,7 +8,7 @@ import {
   PuzzleName,
   Puzzles as PGPuzzles,
 } from "../../src/puzzle-geometry/Puzzles";
-import { VisualizationFormat } from "../../src/twisty/dom/TwistyPlayerConfig";
+import { VisualizationFormat } from "../../src/twisty/dom/TwistyPlayer";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";

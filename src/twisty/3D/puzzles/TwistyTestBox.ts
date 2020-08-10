@@ -1,7 +1,6 @@
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { BoxGeometry, MeshBasicMaterial, Object3D, Mesh } from "three";
-import { AlgCursor } from "../../animation/alg/AlgCursor";
-import { PuzzlePosition } from "../../animation/alg/CursorTypes";
+import { AlgCursor, PuzzlePosition } from "../../animation/alg/AlgCursor";
 
 export class TwistyTestBox extends Object3D implements Twisty3DPuzzle {
   constructor(cursor: AlgCursor) {
