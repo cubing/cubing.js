@@ -49,6 +49,46 @@ export class StringEnumAttribute<E extends string> {
   string: string;
   value: E;
   valid: boolean;
+  constructor(private enumVal: { [key: string]: string }, initialValue?: E) {
+    this.setString(initialValue ?? this.defaultValue());
+  }
+
+  // Return value indicates if the attribute changed.
+  setString(str: string): boolean {
+    if (this.string === str) {
+      return false;
+    }
+    if (!(str in this.enumVal)) {
+      throw new Error(`Invalid string for attribute!: ${str}`);
+    }
+    this.string = str;
+    this.value = this.toValue(str);
+    return true;
+  }
+
+  // Return value indicates if the attribute changed.
+  setValue(val: string): boolean {
+    return this.setString(val);
+  }
+
+  private defaultValue(): string {
+    return Object.keys(this.enumVal)[0]; // TODO
+  }
+
+  private toValue(s: string): E {
+    return s as E;
+  }
+
+  // private toString(s: string): string {
+  //   return s;
+  // }
+}
+
+// TODO: subset of string rather than `extends`
+export class StringFakeEnumAttribute<E extends string> {
+  string: string;
+  value: E;
+  valid: boolean;
   constructor(private validStrings: string[], initialValue?: E) {
     this.setString(initialValue ?? this.defaultValue());
   }

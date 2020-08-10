@@ -119,7 +119,9 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set visualization(visualization: VisualizationFormat) {
-    this.#config.attributes["visualization"].setValue(visualization);
+    if (this.#config.attributes["visualization"].setValue(visualization)) {
+      this.setPuzzle(this.puzzle);
+    }
   }
 
   get visualization(): VisualizationFormat {
@@ -191,7 +193,9 @@ export class TwistyPlayer extends ManagedCustomElement {
     // TODO: specify exactly when back views are possible.
     // TODO: Are there any SVGs where we'd want a separate back view?
     const setBackView: boolean = this.backView && this.visualization !== "2D";
-    const backView = setBackView ? this.backView : "none";
+    const backView: BackViewLayout = setBackView
+      ? (this.backView as BackViewLayout)
+      : BackViewLayout.none; // TODO
     this.#viewerWrapper = new TwistyViewerWrapper({
       checkered: this.background === "checkered",
       backView,
@@ -302,6 +306,8 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.timeline.jumpToEnd();
         return viewers;
       }
+      default:
+        throw new Error("fdsfkjsdlkfjsdklfjdslkf");
     }
   }
 

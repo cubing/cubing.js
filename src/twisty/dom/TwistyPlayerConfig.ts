@@ -5,40 +5,37 @@ import {
   StringEnumAttribute,
   Vector3Attribute,
 } from "./element/ElementConfig";
-import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
+import { BackViewLayout } from "./viewers/TwistyViewerWrapper";
 
-export type VisualizationFormat = "3D" | "2D" | "PG3D"; // Remove `Twisty3D`
-const visualizationFormats: VisualizationFormat[] = ["3D", "2D", "PG3D"];
+export enum VisualizationFormat {
+  "3D" = "3D", // default
+  "2D" = "2D",
+  "PG3D" = "PG3D",
+}
 
-export type BackgroundTheme = "checkered" | "none";
-const backgroundThemes: BackgroundTheme[] = ["checkered", "none"];
+export enum BackgroundTheme {
+  "checkered" = "checkered", // default
+  "none" = "none",
+  "PG3D" = "PG3D",
+}
 
-export type ControlsLocation = "none" | "bottom-row";
-const controlsLocations: ControlsLocation[] = ["bottom-row", "none"];
+export enum ControlsLocation {
+  "bottom-row" = "bottom-row", // default
+  "none" = "none",
+}
 
-export type PuzzleID =
-  | "3x3x3"
-  | "custom"
-  | "2x2x2"
-  | "4x4x4"
-  | "megaminx"
-  | "pyraminx"
-  | "sq1"
-  | "clock"
-  | "skewb"
-  | "FTO";
-const puzzleIDs = [
-  "3x3x3",
-  "custom",
-  "2x2x2",
-  "4x4x4",
-  "megaminx",
-  "pyraminx",
-  "sq1",
-  "clock",
-  "skewb",
-  "FTO",
-];
+export enum PuzzleID {
+  "3x3x3" = "3x3x3", // default
+  "custom" = "custom",
+  "2x2x2" = "2x2x2",
+  "4x4x4" = "4x4x4",
+  "megaminx" = "megaminx",
+  "pyraminx" = "pyraminx",
+  "sq1" = "sq1",
+  "clock" = "clock",
+  "skewb" = "skewb",
+  "FTO" = "FTO",
+}
 
 // TODO: templatize
 export interface ManagedAttribute<K> {
@@ -108,23 +105,23 @@ export class TwistyPlayerConfig {
     this.attributes = {
       "alg": new AlgAttribute(initialValues.alg),
 
-      "puzzle": new StringEnumAttribute(puzzleIDs, initialValues.puzzle),
+      "puzzle": new StringEnumAttribute(PuzzleID, initialValues.puzzle),
       "visualization": new StringEnumAttribute(
-        visualizationFormats,
+        VisualizationFormat,
         initialValues.visualization,
       ),
 
       "background": new StringEnumAttribute(
-        backgroundThemes,
+        BackgroundTheme,
         initialValues.background,
       ),
       "controls": new StringEnumAttribute(
-        controlsLocations,
+        ControlsLocation,
         initialValues.controls,
       ),
 
       "back-view": new StringEnumAttribute(
-        backViewLayouts,
+        BackViewLayout,
         initialValues["backView"],
       ),
       "camera-position": new Vector3Attribute(
