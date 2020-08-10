@@ -80,7 +80,7 @@ export interface TwistyPlayerConfigValues {
   cameraPosition: Vector3;
 }
 
-export type TwistyPlayerConfigInitialValues = Partial<TwistyPlayerConfigValues>;
+export type TwistyPlayerInitialConfig = Partial<TwistyPlayerConfigValues>;
 
 const twistyPlayerAttributeMap: Record<
   keyof TwistyPlayerAttributes,
@@ -103,7 +103,7 @@ export class TwistyPlayerConfig {
   attributes: TwistyPlayerAttributes;
   constructor(
     private twistyPlayer: any, // TODO
-    initialValues: TwistyPlayerConfigInitialValues,
+    initialValues: TwistyPlayerInitialConfig,
   ) {
     this.attributes = {
       "alg": new AlgAttribute(initialValues.alg),

@@ -47,7 +47,7 @@ export class App {
       alg: new Sequence([]),
     };
     const displayablePuzzle = puzzles[initialData.puzzleName];
-    twistyConfig.puzzle = displayablePuzzle.puzzleName();
+    twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
     this.twistyPlayer = new TwistyPlayer(twistyConfig);
     this.setAlg(initialData.alg);

@@ -23,7 +23,7 @@ import {
   ControlsLocation,
   PuzzleID,
   TwistyPlayerConfig,
-  TwistyPlayerConfigInitialValues,
+  TwistyPlayerInitialConfig,
   VisualizationFormat,
 } from "./TwistyPlayerConfig";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
@@ -85,7 +85,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   public legacyExperimentalPG3D: PG3D | null = null;
   // TODO: support config from DOM.
   constructor(
-    initialConfig: TwistyPlayerConfigInitialValues = {},
+    initialConfig: TwistyPlayerInitialConfig = {},
     private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
   ) {
     super();
