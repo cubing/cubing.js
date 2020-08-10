@@ -1,6 +1,7 @@
 import { AlgPart } from "../../../alg";
 import { Transformation as KPuzzleState } from "../../../kpuzzle";
-import { MillisecondTimestamp } from "../Timeline";
+
+export type MillisecondTimestamp = number;
 
 // TODO: unify duration/timstamp types
 export type Duration = MillisecondTimestamp; // Duration in milliseconds

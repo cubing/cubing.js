@@ -1,16 +1,19 @@
+import { TimeRange } from "../../animation/alg/AlgCursor";
+import {
+  BoundaryType,
+  Direction,
+  MillisecondTimestamp,
+} from "../../animation/alg/CursorTypes";
 import {
   Timeline,
+  TimelineAction,
   TimelineActionEvent,
   TimestampLocationType,
-  TimelineAction,
-  MillisecondTimestamp,
 } from "../../animation/Timeline";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
+import { customElementsShim } from "../element/node-custom-element-shims";
 import { buttonCSS, buttonGridCSS } from "./buttons.css";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
-import { TimeRange } from "../../animation/alg/AlgCursor";
-import { Direction, BoundaryType } from "../../animation/alg/CursorTypes";
-import { customElementsShim } from "../element/node-custom-element-shims";
 
 type TimelineCommand =
   | "fullscreen"

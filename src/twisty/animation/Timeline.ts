@@ -1,8 +1,11 @@
 import { RenderScheduler } from "./RenderScheduler";
 import { AlgCursor, TimeRange } from "./alg/AlgCursor";
-import { BoundaryType, Direction, directionScalar } from "./alg/CursorTypes";
-
-export type MillisecondTimestamp = number;
+import {
+  BoundaryType,
+  Direction,
+  directionScalar,
+  MillisecondTimestamp,
+} from "./alg/CursorTypes";
 
 // TODO: We use symbols to avoid exposing `number` values. Is this performant enough? Should/can we use symbols?
 export enum TimelineAction {
