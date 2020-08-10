@@ -221,16 +221,19 @@ function setAlgo(str: string, writeback: boolean): void {
     // it again.  But for now we always do.
     if (!twisty) {
       elem.textContent = "";
-      twisty = new TwistyPlayer({
-        alg: new Sequence([]),
-        visualization: "PG3D",
-        legacyExperimentalPG3DViewConfig: legacyExperimentalPG3DViewConfig(),
-        backView: "side-by-side",
-      });
+      twisty = new TwistyPlayer(
+        {
+          puzzle: "custom",
+          alg: new Sequence([]),
+          visualization: "PG3D",
+          backView: "side-by-side",
+        },
+        legacyExperimentalPG3DViewConfig(),
+      );
       elem.appendChild(twisty);
       twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
 
-      const twisty3DCanvases: Twisty3DCanvas[] = twisty.viewers as Twisty3DCanvas[];
+      const twisty3DCanvases: Twisty3DCanvas[] = twisty.viewerElems as Twisty3DCanvas[];
       // TODO: This is a hack.
       // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
       // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
@@ -256,15 +259,17 @@ function setAlgo(str: string, writeback: boolean): void {
 
       puzzleSelected = false;
     } else if (puzzleSelected) {
-      twisty.setPuzzle("", legacyExperimentalPG3DViewConfig());
-      (twisty.viewers[0] as Twisty3DCanvas).camera.position.copy(cameraPos());
-      (twisty.viewers[0] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
-      (twisty.viewers[1] as Twisty3DCanvas)?.camera.position.copy(
+      twisty.setPuzzle("custom", legacyExperimentalPG3DViewConfig());
+      (twisty.viewerElems[0] as Twisty3DCanvas).camera.position.copy(
+        cameraPos(),
+      );
+      (twisty.viewerElems[0] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
+      (twisty.viewerElems[1] as Twisty3DCanvas)?.camera.position.copy(
         cameraPos().multiplyScalar(-1),
       );
-      (twisty.viewers[1] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
-      twisty.viewers[0].scheduleRender();
-      twisty.viewers[1]?.scheduleRender();
+      (twisty.viewerElems[1] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
+      twisty.viewerElems[0].scheduleRender();
+      twisty.viewerElems[1]?.scheduleRender();
     }
     str = str.trim();
     algoinput.style.backgroundColor = "";

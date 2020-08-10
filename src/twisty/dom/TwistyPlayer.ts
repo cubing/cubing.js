@@ -1,11 +1,6 @@
 import { Vector3 } from "three";
 import { countMoves } from "../../../app/twizzle/move-counter";
-import {
-  BlockMove,
-  experimentalAppendBlockMove,
-  parse,
-  Sequence,
-} from "../../alg";
+import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
 import { KPuzzle, KPuzzleDefinition, Puzzles } from "../../kpuzzle";
 import {
   getPuzzleGeometryByName,
@@ -23,17 +18,21 @@ import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
+import {
+  BackgroundTheme,
+  ControlsLocation,
+  PuzzleID,
+  TwistyPlayerConfig,
+  TwistyPlayerConfigInitialValues,
+  VisualizationFormat,
+} from "./TwistyPlayerConfig";
 import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import {
   BackViewLayout,
-  backViewLayouts,
   TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
-
-export type VisualizationFormat = "2D" | "3D" | "PG3D"; // Remove `Twisty3D`
-const visualizationFormats: VisualizationFormat[] = ["2D", "3D", "PG3D"];
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;
@@ -42,40 +41,6 @@ export interface LegacyExperimentalPG3DViewConfig {
   sideBySide?: boolean;
   showFoundation?: boolean;
   experimentalInitialVantagePosition?: Vector3;
-}
-
-export type BackgroundTheme = "none" | "checkered";
-const backgroundThemes: BackgroundTheme[] = ["none", "checkered"];
-
-export type ControlsLocation = "none" | "bottom-row";
-const controlsLocations: ControlsLocation[] = ["none", "bottom-row"];
-
-export interface TwistyPlayerInitialConfig {
-  alg?: Sequence;
-  puzzle?: string;
-  visualization?: VisualizationFormat;
-  background?: BackgroundTheme;
-  controls?: ControlsLocation;
-
-  legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig;
-  backView?: BackViewLayout;
-}
-
-class TwistyPlayerConfig {
-  alg: Sequence;
-  puzzle: string;
-  visualization: VisualizationFormat;
-  experimentalBackView: BackViewLayout;
-  background: BackgroundTheme;
-  controls: ControlsLocation;
-  constructor(initialConfig: TwistyPlayerInitialConfig) {
-    this.alg = initialConfig.alg ?? new Sequence([]);
-    this.puzzle = initialConfig.puzzle ?? "3x3x3";
-    this.visualization = initialConfig.visualization ?? "3D";
-    this.experimentalBackView = initialConfig.backView ?? "none";
-    this.background = initialConfig.background ?? "checkered";
-    this.controls = initialConfig.controls ?? "bottom-row";
-  }
 }
 
 function createPG(puzzleName: string): PuzzleGeometry {
@@ -104,27 +69,86 @@ function createPG(puzzleName: string): PuzzleGeometry {
 
 // <twisty-player>
 export class TwistyPlayer extends ManagedCustomElement {
-  viewers: TwistyViewerElement[];
-  controls: TwistyControlElement[];
+  #config: TwistyPlayerConfig;
+
+  viewerElems: TwistyViewerElement[];
+  controlElems: TwistyControlElement[];
   timeline: Timeline;
   #viewerWrapper: TwistyViewerWrapper;
   #cursor: AlgCursor;
-  #currentConfig: TwistyPlayerConfig;
   #cachedTwisty3DScene: Twisty3DScene | null = null;
   #cachedTwisty3DPuzzle: Twisty3DPuzzle | null = null;
-  private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null;
   public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
     _mv: BlockMove,
   ): number => 0;
 
   public legacyExperimentalPG3D: PG3D | null = null;
   // TODO: support config from DOM.
-  constructor(initialConfig: TwistyPlayerInitialConfig = {}) {
+  constructor(
+    initialConfig: TwistyPlayerConfigInitialValues = {},
+    private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
+  ) {
     super();
-    this.#currentConfig = new TwistyPlayerConfig(initialConfig);
+    this.#config = new TwistyPlayerConfig(initialConfig);
 
-    this.legacyExperimentalPG3DViewConfig =
-      initialConfig.legacyExperimentalPG3DViewConfig ?? null;
+    this.legacyExperimentalPG3DViewConfig = legacyExperimentalPG3DViewConfig;
+  }
+
+  set alg(v: Sequence) {
+    this.#config.attributes["alg"].setValue(v);
+  }
+
+  get alg(): Sequence {
+    return this.#config.attributes["alg"].value;
+  }
+
+  set puzzle(v: PuzzleID) {
+    this.#config.attributes["puzzle"].setValue(v);
+  }
+
+  get puzzle(): PuzzleID {
+    return this.#config.attributes["puzzle"].value as PuzzleID;
+  }
+
+  set visualization(v: VisualizationFormat) {
+    this.#config.attributes["visualization"].setValue(v);
+  }
+
+  get visualization(): VisualizationFormat {
+    return this.#config.attributes["visualization"]
+      .value as VisualizationFormat;
+  }
+
+  set background(v: BackgroundTheme) {
+    this.#config.attributes["background"].setValue(v);
+  }
+
+  get background(): BackgroundTheme {
+    return this.#config.attributes["background"].value as BackgroundTheme;
+  }
+
+  set controls(v: ControlsLocation) {
+    this.#config.attributes["controls"].setValue(v);
+  }
+
+  get controls(): ControlsLocation {
+    return this.#config.attributes["controls"].value as ControlsLocation;
+  }
+
+  set backView(v: BackViewLayout) {
+    this.#config.attributes["back-view"].setValue(v);
+  }
+
+  get backView(): BackViewLayout {
+    return this.#config.attributes["back-view"].value as BackViewLayout;
+  }
+
+  set cameraPosition(v: Vector3) {
+    this.#config.attributes["camera-position"].setValue(v);
+  }
+
+  get cameraPosition(): Vector3 {
+    return this.#config.attributes["camera-position"].value;
   }
 
   protected connectedCallback(): void {
@@ -134,38 +158,32 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     const viewers = this.createViewers(
       this.timeline,
-      this.#currentConfig.alg,
-      this.#currentConfig.visualization,
-      this.#currentConfig.puzzle,
-      this.#currentConfig.experimentalBackView !== "none",
+      this.alg,
+      this.visualization,
+      this.puzzle,
+      this.backView !== "none",
     );
     const scrubber = new TwistyScrubber(this.timeline);
     const controlButtonGrid = new TwistyControlButtonPanel(this.timeline, this);
 
-    this.viewers = viewers;
-    this.controls = [scrubber, controlButtonGrid];
+    this.viewerElems = viewers;
+    this.controlElems = [scrubber, controlButtonGrid];
 
     // TODO: specify exactly when back views are possible.
     // TODO: Are there any SVGs where we'd want a separate back view?
-    const setBackView: boolean =
-      this.#currentConfig.experimentalBackView &&
-      this.#currentConfig.visualization !== "2D";
-    const backView = setBackView
-      ? this.#currentConfig.experimentalBackView
-      : "none";
+    const setBackView: boolean = this.backView && this.visualization !== "2D";
+    const backView = setBackView ? this.backView : "none";
     this.#viewerWrapper = new TwistyViewerWrapper({
-      checkered: this.#currentConfig.background === "checkered",
+      checkered: this.background === "checkered",
       backView,
     });
     this.addElement(this.#viewerWrapper);
 
-    this.contentWrapper.classList.add(
-      `controls-${this.#currentConfig.controls}`,
-    );
+    this.contentWrapper.classList.add(`controls-${this.controls}`);
 
-    this.viewers.map((el) => this.#viewerWrapper.addElement(el));
-    this.addElement(this.controls[0]);
-    this.addElement(this.controls[1]);
+    this.viewerElems.map((el) => this.#viewerWrapper.addElement(el));
+    this.addElement(this.controlElems[0]);
+    this.addElement(this.controlElems[1]);
 
     this.addCSS(twistyPlayerCSS);
   }
@@ -291,30 +309,31 @@ export class TwistyPlayer extends ManagedCustomElement {
     return [kpuzzleDef, stickerDat, cameraPosition];
   }
 
+  // TODO: combine with alg setter? Or tie to callback from setter?
   setAlg(alg: Sequence): void {
-    this.#currentConfig.alg = alg;
-    this.#cursor.setAlg(this.#currentConfig.alg);
+    this.alg = alg;
+    this.#cursor.setAlg(this.alg);
   }
 
   getAlg(): Sequence {
-    return this.#currentConfig.alg;
+    return this.alg;
   }
 
   setPuzzle(
     puzzleName: string,
     legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig,
   ): void {
-    this.#currentConfig.puzzle = puzzleName;
+    this.puzzle = puzzleName as PuzzleID;
     this.legacyExperimentalPG3DViewConfig =
       legacyExperimentalPG3DViewConfig ?? null;
-    switch (this.#currentConfig.visualization) {
+    switch (this.visualization) {
       // TODO: Swap out both 3D implementations with each other.
       case "PG3D": {
         console.log("pg3d");
         const scene = this.#cachedTwisty3DScene!;
         scene.remove(this.#cachedTwisty3DPuzzle!);
         this.#cursor.removePositionListener(this.#cachedTwisty3DPuzzle!);
-        const [def, dat /*, _*/] = this.pgHelper(this.#currentConfig.puzzle);
+        const [def, dat /*, _*/] = this.pgHelper(this.puzzle);
         const pg3d = new PG3D(
           this.#cursor,
           scene.scheduleRender.bind(scene),
@@ -325,7 +344,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         scene.addTwisty3DPuzzle(pg3d);
         this.#cursor.setPuzzle(def);
         this.#cachedTwisty3DPuzzle = pg3d;
-        for (const viewer of this.viewers) {
+        for (const viewer of this.viewerElems) {
           viewer.scheduleRender();
         }
         return;
@@ -339,27 +358,27 @@ export class TwistyPlayer extends ManagedCustomElement {
     const oldCursor = this.#cursor;
     const viewers = this.createViewers(
       this.timeline,
-      this.#currentConfig.alg,
-      this.#currentConfig.visualization,
+      this.alg,
+      this.visualization,
       puzzleName,
-      this.#currentConfig.experimentalBackView !== "none",
+      this.backView !== "none",
     );
     this.timeline.removeCursor(oldCursor);
     this.timeline.removeTimestampListener(oldCursor);
-    for (const oldViewer of this.viewers) {
+    for (const oldViewer of this.viewerElems) {
       this.#viewerWrapper.removeElement(oldViewer);
     }
     for (const viewer of viewers.reverse()) {
       this.#viewerWrapper.prependElement(viewer);
     }
-    this.viewers = viewers;
+    this.viewerElems = viewers;
   }
 
   // TODO: Handle playing the new move vs. just modying the alg.
   experimentalAddMove(move: BlockMove, coalesce: boolean = false): void {
-    const oldNumMoves = countMoves(this.#currentConfig.alg); // TODO
+    const oldNumMoves = countMoves(this.alg); // TODO
     const newAlg = experimentalAppendBlockMove(
-      this.#currentConfig.alg,
+      this.alg,
       move,
       coalesce,
       this.legacyExperimentalCoalesceModFunc(move),
@@ -380,50 +399,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private processAttributes(): void {
-    const config = this.#currentConfig;
-
-    const algAttribute = this.getAttribute("alg");
-    if (algAttribute) {
-      try {
-        config.alg = parse(algAttribute);
-      } catch (e) {
-        console.log("Invalid initial alg:", e);
-      }
-    }
-
-    config.puzzle = this.getAttribute("puzzle") ?? config.puzzle;
-
-    const visualizationAttribute = this.getAttribute("visualization");
-    if (
-      visualizationAttribute &&
-      (visualizationFormats as string[]).includes(visualizationAttribute)
-    ) {
-      config.visualization = visualizationAttribute as VisualizationFormat;
-    }
-
-    const backViewAttribute = this.getAttribute("back-view");
-    if (
-      backViewAttribute &&
-      (backViewLayouts as string[]).includes(backViewAttribute)
-    ) {
-      config.experimentalBackView = backViewAttribute as BackViewLayout;
-    }
-
-    const backgroundAttribute = this.getAttribute("background"); // TODO: does this conflict with an HTML attribute?
-    if (
-      backgroundAttribute &&
-      (backgroundThemes as string[]).includes(backgroundAttribute)
-    ) {
-      config.background = backgroundAttribute as BackgroundTheme;
-    }
-
-    const controlsAttribute = this.getAttribute("controls"); // TODO: does this conflict with an HTML attribute?
-    if (
-      controlsAttribute &&
-      (controlsLocations as string[]).includes(controlsAttribute)
-    ) {
-      config.controls = controlsAttribute as ControlsLocation;
-    }
+    this.#config.processAttributes(this);
   }
 }
 
