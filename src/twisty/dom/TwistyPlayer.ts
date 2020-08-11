@@ -359,6 +359,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         scene.addTwisty3DPuzzle(pg3d);
         this.#cursor.setPuzzle(def);
         this.#cachedTwisty3DPuzzle = pg3d;
+        this.legacyExperimentalPG3D = pg3d;
         for (const viewer of this.viewerElems) {
           viewer.scheduleRender();
         }
