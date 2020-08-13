@@ -49,8 +49,6 @@ function createPG(puzzleName: string): PuzzleGeometry {
     "true",
     "orientcenters",
     "true",
-    "puzzleorientation",
-    JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
   ]);
   const kpuzzleDef = pg.writekpuzzle();
   const worker = new KPuzzle(kpuzzleDef);

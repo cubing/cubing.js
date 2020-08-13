@@ -220,14 +220,17 @@ const defaultfaceorders: any = {
  *  Default orientations for the puzzles in 3D space.  Can be overridden
  *  by puzzleOrientation or puzzleOrientations options.
  *
- *  These are good defaults for twizzle.
+ *  These are defined to have a strong intuitive vertical (y) direction
+ *  since 3D orbital controls need this.  In comments, we list the
+ *  preferred initial camera orientation for each puzzle for twizzle;
+ *  this information is explicitly given in the twizzle app file.
  */
 const defaultOrientations: any = {
-  4: ["FLR", [0, 0, 1], "RLD", [0, 1, 0]],
-  6: ["URF", [0, 0, 1], "ULB", [0, 1, 0]],
-  8: ["FLUR", [0, 0, 1], "UBB", [0, 1, 0]],
-  12: ["U", [0, 0, 1], "BRBLBF", [0, 1, 0]],
-  20: ["F", [0, 0, 1], "GUQMJ", [0, 1, 0]],
+  4: ["FLR", [0, 1, 0], "F", [0, 0, 1]], // FLR towards viewer
+  6: ["U", [0, 1, 0], "F", [0, 0, 1]], // URF towards viewer
+  8: ["U", [0, 1, 0], "F", [0, 0, 1]], // FLUR towards viewer
+  12: ["U", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
+  20: ["GUQMJ", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
 };
 
 function findelement(a: any[], p: Quat): number {
@@ -2379,6 +2382,34 @@ export class PuzzleGeometry {
       }
     }
     return { stickers, faces, axis: grips };
+  }
+
+  //  From the name of a geometric element (face, vertex, edge), get a
+  //  normal vector respecting the default orientation.  This is useful
+  //  to define the initial position of the camera in a 3D scene.  The
+  //  return value is normalized, so multiply it by the camera distance.
+  //  Returns undefined if no such geometric element.
+  public getGeoNormal(geoname: string): number[] | undefined {
+    const rot = this.getInitial3DRotation();
+    for (let j = 0; j < this.geonormals.length; j++) {
+      const gn = this.geonormals[j];
+      if (this.spinmatch(gn[1], geoname)) {
+        const r = toCoords(gn[0].rotatepoint(rot), 1);
+        //  This routine is intended to use for the camera location.
+        //  If the camera location is vertical, and we give some
+        //  near-zero values for x and z, then the rotation in the
+        //  X/Z plane will be somewhat arbitrary.  So we clean up the
+        //  returned vector here.  We are relying on some default
+        //  behavior of three.js that might not be reliable.
+        for (let k = 0; k < 3; k++) {
+          if (Math.abs(r[k]) < eps) {
+            r[k] = 0;
+          }
+        }
+        return r;
+      }
+    }
+    return undefined;
   }
 
   private getfaceindex(facenum: number): number {

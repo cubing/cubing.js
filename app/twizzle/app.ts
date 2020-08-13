@@ -47,6 +47,8 @@ let lastval: string = "";
 let lastalgo: string = "";
 let scramble: number = 0;
 let stickerDat: StickerDat;
+const DEFAULT_CAMERA_DISTANCE = 5.5;
+let initialCameraPos: number[] = [0.0, 0.0, DEFAULT_CAMERA_DISTANCE];
 const renderOptions = [
   "centers",
   "edges",
@@ -181,24 +183,27 @@ function updateMoveCount(alg?: Sequence): void {
   }
 }
 
-function cameraPos(): Vector3 {
-  if (descinput.value.startsWith("c")) {
-    return new Vector3(2, 4, 4);
+function cameraPos(pg: PuzzleGeometry): Vector3 {
+  const faceCount = pg.baseplanerot.length;
+  let geoTowardsViewer = "?";
+  if (faceCount === 4) {
+    geoTowardsViewer = "FLR";
+  } else if (faceCount === 6) {
+    geoTowardsViewer = "URF";
+  } else if (faceCount === 8) {
+    geoTowardsViewer = "FLUR";
+  } else if (faceCount === 12) {
+    geoTowardsViewer = "F";
+  } else if (faceCount === 20) {
+    geoTowardsViewer = "F";
   }
-
-  if (descinput.value.startsWith("d")) {
-    return new Vector3(0, 3, 6);
+  console.log(geoTowardsViewer);
+  const norm = pg.getGeoNormal(geoTowardsViewer);
+  console.log(norm);
+  if (norm === undefined) {
+    return new Vector3(0, 0, DEFAULT_CAMERA_DISTANCE);
   }
-
-  if (descinput.value.startsWith("t")) {
-    return new Vector3(0, 6, 1);
-  }
-
-  if (descinput.value.startsWith("i")) {
-    return new Vector3(0, 6, 6);
-  }
-
-  return new Vector3(3.5, 3.5, 3.5);
+  return new Vector3(...norm).multiplyScalar(DEFAULT_CAMERA_DISTANCE);
 }
 
 function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
@@ -209,7 +214,7 @@ function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
     experimentalPolarVantages: true,
     sideBySide: getCheckbox("sidebyside"),
     showFoundation: getCheckbox("showfoundation"),
-    experimentalInitialVantagePosition: cameraPos(),
+    experimentalInitialVantagePosition: initialCameraPos,
   };
 }
 
@@ -261,11 +266,11 @@ function setAlgo(str: string, writeback: boolean): void {
     } else if (puzzleSelected) {
       twisty.setPuzzle("custom", legacyExperimentalPG3DViewConfig());
       (twisty.viewerElems[0] as Twisty3DCanvas).camera.position.copy(
-        cameraPos(),
+        initialCameraPos,
       );
       (twisty.viewerElems[0] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
       (twisty.viewerElems[1] as Twisty3DCanvas)?.camera.position.copy(
-        cameraPos().multiplyScalar(-1),
+        initialCameraPos.clone().multiplyScalar(-1),
       );
       (twisty.viewerElems[1] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
       twisty.viewerElems[0].scheduleRender();
@@ -455,12 +460,6 @@ function checkchange(): void {
         safeKpuzzle = undefined;
         savealg = false;
       }
-      options.push(
-        "puzzleorientation",
-        p[0].startsWith("t")
-          ? JSON.stringify(["D", [0, -1, 0], "F", [0, 0, 1]])
-          : JSON.stringify(["U", [0, 1, 0], "F", [0, 0, 1]]),
-      );
       const pg = new PuzzleGeometry(p[0], p[1], options);
       pg.allstickers();
       pg.genperms();
@@ -494,6 +493,7 @@ function checkchange(): void {
         kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition;
       }
       const newStickerDat = pg.get3d(0.0131);
+      initialCameraPos = cameraPos(pg);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
       setpuzzleparams(descarg);
     }
