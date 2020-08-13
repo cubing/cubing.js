@@ -4,6 +4,7 @@ import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { pixelRatio } from "./canvas";
 import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
+import { TwistyOrbitControls } from "./TwistyOrbitControls";
 import { TwistyViewerElement } from "./TwistyViewerElement";
 
 // <twisty-3d-canvas>
@@ -13,6 +14,7 @@ export class Twisty3DCanvas extends ManagedCustomElement
   public canvas: HTMLCanvasElement;
   public camera: PerspectiveCamera;
   private legacyExperimentalShift: number = 0;
+  private orbitControls: TwistyOrbitControls;
   renderer: WebGLRenderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
   private scheduler = new RenderScheduler(this.render.bind(this));
   private resizePending: boolean = false;
@@ -44,6 +46,11 @@ export class Twisty3DCanvas extends ManagedCustomElement
       this.camera.position.multiplyScalar(-1);
     }
     this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
+    this.orbitControls = new TwistyOrbitControls(
+      this.camera,
+      this.renderer,
+      this.scheduleRender.bind(this),
+    );
 
     this.canvas = this.renderer.domElement;
     this.addElement(this.canvas);
@@ -66,14 +73,14 @@ export class Twisty3DCanvas extends ManagedCustomElement
   }
 
   private render(): void {
+    // Cancel any scheduled frame, since we're rendering right now.
+    // We don't need to re-render until something schedules again.
+    this.scheduler.cancelAnimFrame();
     if (this.resizePending) {
       this.resize();
     }
+    this.orbitControls.updateAndSchedule();
     this.renderer.render(this.scene, this.camera);
-
-    // Cancel any scheduled frame, since we've just rendered.
-    // We don't need to re-render until something schedules again.
-    this.scheduler.cancelAnimFrame();
   }
 
   private onResize(): void {
