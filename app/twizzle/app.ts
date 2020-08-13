@@ -245,18 +245,23 @@ function setAlgo(str: string, writeback: boolean): void {
       setTimeout(() => {
         for (const twisty3DCanvas of twisty3DCanvases) {
           twisty3DCanvas.canvas.addEventListener(
-            "click",
-            onMouseClick.bind(onMouseClick, twisty3DCanvas, false),
+            "mouseup",
+            onMouseClick.bind(onMouseClick, twisty3DCanvas, "U"),
+            false,
+          );
+          twisty3DCanvas.canvas.addEventListener(
+            "mousedown",
+            onMouseClick.bind(onMouseClick, twisty3DCanvas, "D"),
             false,
           );
           twisty3DCanvas.canvas.addEventListener(
             "contextmenu",
-            onMouseClick.bind(onMouseClick, twisty3DCanvas, true),
+            onMouseClick.bind(onMouseClick, twisty3DCanvas, "C"),
             false,
           );
           twisty3DCanvas.canvas.addEventListener(
             "mousemove",
-            onMouseMove.bind(onMouseMove, twisty3DCanvas),
+            onMouseMove.bind(onMouseMove, "M"),
             false,
           );
         }
@@ -553,11 +558,34 @@ function doselection(el: any): void {
   }
 }
 
+let dragX = -1;
+let dragY = -1;
+let dragMoved = false;
+
 function onMouseClick(
   twisty3DCanvas: Twisty3DCanvas,
-  rightClick: boolean,
+  eventType: string,
   event: MouseEvent,
 ): void {
+  if (eventType === "C") {
+    event.preventDefault();
+    return;
+  }
+  if (eventType === "D") {
+    dragMoved = false;
+    dragX = -1;
+    dragY = -1;
+    return;
+  }
+  // at this point event must be U
+  if (dragMoved) {
+    return;
+  }
+  if (event.button === 1) {
+    // ignore middle mouse button
+    return;
+  }
+  const rightClick = event.button === 2;
   const raycaster = new Raycaster();
   const mouse = new Vector2();
   const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
@@ -581,6 +609,13 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
   const raycaster = new Raycaster();
   const mouse = new Vector2();
   const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
+  // notice drags, since we don't want drags to do click moves
+  if (dragX === -1 && dragY === -1) {
+    dragX = event.offsetX;
+    dragY = event.offsetY;
+  } else if (dragX !== event.offsetX || dragY !== event.offsetY) {
+    dragMoved = true;
+  }
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
