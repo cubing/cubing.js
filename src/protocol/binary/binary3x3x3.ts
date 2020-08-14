@@ -76,6 +76,7 @@ function reverseOrientPuzzle(
   return Combine(Puzzles["3x3x3"], s, orientationTransformation);
 }
 
+// These fields are sorted by the order in which they appear in the binary format.
 interface Binary3x3x3Components {
   edgePermutationIdx: number; // 29 bits
   puzzleOrientationIdxU: number; // 3 bits
