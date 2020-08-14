@@ -36,30 +36,30 @@ export function maskToOrientationRange(
 }
 
 // From https://www.jaapsch.net/puzzles/compindx.htm#perm
-export function permutationToLexIdx(permutation: number[]): number {
+export function permutationTolexicographicIdx(permutation: number[]): number {
   const n = permutation.length;
-  let lexIdx = 0;
+  let lexicographicIdx = 0;
   for (let i = 0; i < n - 1; i++) {
-    lexIdx = lexIdx * (n - i);
+    lexicographicIdx = lexicographicIdx * (n - i);
     for (let j = i + 1; j < n; j++) {
       if (permutation[i] > permutation[j]) {
-        lexIdx += 1;
+        lexicographicIdx += 1;
       }
     }
   }
-  return lexIdx;
+  return lexicographicIdx;
 }
 
 // From https://www.jaapsch.net/puzzles/compindx.htm#perm
-export function lexIdxToPermutation(
+export function lexicographicIdxToPermutation(
   numPieces: number,
-  lexIdx: number,
+  lexicographicIdx: number,
 ): number[] {
   const permutation: number[] = new Array(numPieces);
   permutation[numPieces - 1] = 0;
   for (let i = numPieces - 2; i >= 0; i--) {
-    permutation[i] = lexIdx % (numPieces - i);
-    lexIdx = Math.floor(lexIdx / (numPieces - i));
+    permutation[i] = lexicographicIdx % (numPieces - i);
+    lexicographicIdx = Math.floor(lexicographicIdx / (numPieces - i));
     for (let j = i + 1; j < numPieces; j++) {
       if (permutation[j] >= permutation[i]) {
         permutation[j] = permutation[j] + 1;

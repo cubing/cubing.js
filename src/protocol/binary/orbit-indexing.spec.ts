@@ -1,25 +1,25 @@
 import {
-  permutationToLexIdx,
-  lexIdxToPermutation,
+  permutationTolexicographicIdx,
+  lexicographicIdxToPermutation,
   orientationRangeToMask,
   maskToOrientationRange,
 } from "./orbit-indexing";
 
 describe("orbit indexing", () => {
   it("indexes", () => {
-    expect(permutationToLexIdx([0, 1, 2])).toBe(0);
-    expect(permutationToLexIdx([0, 2, 1])).toBe(1);
-    expect(permutationToLexIdx([2, 0, 1])).toBe(4);
-    expect(permutationToLexIdx([0, 1, 2, 3, 4, 5])).toBe(0);
-    expect(permutationToLexIdx([5, 4, 3, 2, 1, 0])).toBe(719);
+    expect(permutationTolexicographicIdx([0, 1, 2])).toBe(0);
+    expect(permutationTolexicographicIdx([0, 2, 1])).toBe(1);
+    expect(permutationTolexicographicIdx([2, 0, 1])).toBe(4);
+    expect(permutationTolexicographicIdx([0, 1, 2, 3, 4, 5])).toBe(0);
+    expect(permutationTolexicographicIdx([5, 4, 3, 2, 1, 0])).toBe(719);
   });
 
   it("un-indexes", () => {
-    expect(lexIdxToPermutation(3, 0)).toEqual([0, 1, 2]);
-    expect(lexIdxToPermutation(3, 1)).toEqual([0, 2, 1]);
-    expect(lexIdxToPermutation(3, 4)).toEqual([2, 0, 1]);
-    expect(lexIdxToPermutation(6, 0)).toEqual([0, 1, 2, 3, 4, 5]);
-    expect(lexIdxToPermutation(6, 719)).toEqual([5, 4, 3, 2, 1, 0]);
+    expect(lexicographicIdxToPermutation(3, 0)).toEqual([0, 1, 2]);
+    expect(lexicographicIdxToPermutation(3, 1)).toEqual([0, 2, 1]);
+    expect(lexicographicIdxToPermutation(3, 4)).toEqual([2, 0, 1]);
+    expect(lexicographicIdxToPermutation(6, 0)).toEqual([0, 1, 2, 3, 4, 5]);
+    expect(lexicographicIdxToPermutation(6, 719)).toEqual([5, 4, 3, 2, 1, 0]);
   });
 
   it("orients", () => {

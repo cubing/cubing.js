@@ -8,10 +8,10 @@ import {
 } from "../../kpuzzle";
 import {
   identityPermutation,
-  lexIdxToPermutation,
+  lexicographicIdxToPermutation,
   maskToOrientationRange,
   orientationRangeToMask,
-  permutationToLexIdx,
+  permutationTolexicographicIdx,
 } from "./orbit-indexing";
 
 type Binary3x3x3State = ArrayBuffer;
@@ -101,7 +101,7 @@ function reid3x3x3ToBinaryComponents(
 ): Binary3x3x3Components {
   const normalizedOrientationState = orientPuzzle(state);
 
-  const edgePermutationIdx = permutationToLexIdx(
+  const edgePermutationIdx = permutationTolexicographicIdx(
     normalizedOrientationState["EDGE"].permutation,
   );
 
@@ -130,7 +130,7 @@ function reid3x3x3ToBinaryComponents(
     8,
   );
 
-  const cornerPermutationIdx = permutationToLexIdx(
+  const cornerPermutationIdx = permutationTolexicographicIdx(
     normalizedOrientationState["CORNER"].permutation,
   );
 
@@ -231,7 +231,10 @@ export function binaryComponentsToReid3x3x3(
 
   const normalizedOrientationState = {
     EDGE: {
-      permutation: lexIdxToPermutation(12, components.edgePermutationIdx),
+      permutation: lexicographicIdxToPermutation(
+        12,
+        components.edgePermutationIdx,
+      ),
       orientation: maskToOrientationRange(
         2,
         12,
@@ -239,7 +242,10 @@ export function binaryComponentsToReid3x3x3(
       ),
     },
     CORNER: {
-      permutation: lexIdxToPermutation(8, components.cornerPermutationIdx),
+      permutation: lexicographicIdxToPermutation(
+        8,
+        components.cornerPermutationIdx,
+      ),
       orientation: maskToOrientationRange(
         3,
         3,
