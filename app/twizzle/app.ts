@@ -277,6 +277,7 @@ function setAlgo(str: string, writeback: boolean): void {
       (twisty.viewerElems[1] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
       twisty.viewerElems[0].scheduleRender();
       twisty.viewerElems[1]?.scheduleRender();
+      puzzleSelected = false;
     }
     str = str.trim();
     algoinput.style.backgroundColor = "";
