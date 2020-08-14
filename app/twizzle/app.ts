@@ -49,6 +49,8 @@ let scramble: number = 0;
 let stickerDat: StickerDat;
 const DEFAULT_CAMERA_DISTANCE = 5.5;
 let initialCameraPos: number[] = [0.0, 0.0, DEFAULT_CAMERA_DISTANCE];
+let savedCameraPos: Vector3 = new Vector3(0.0, 0.0, 0.0);
+let haveSavedCamera = false;
 const renderOptions = [
   "centers",
   "edges",
@@ -183,7 +185,20 @@ function updateMoveCount(alg?: Sequence): void {
   }
 }
 
+function saveCamera(): void {
+  if (!twisty || !twisty.viewerElems || !twisty.viewerElems[0]) {
+    return;
+  }
+  savedCameraPos = twisty.viewerElems[0].camera.position.clone();
+  haveSavedCamera = true;
+}
+//  This function is *not* idempotent when we save the
+//  camera position.
 function cameraPos(pg: PuzzleGeometry): Vector3 {
+  if (haveSavedCamera) {
+    haveSavedCamera = false;
+    return savedCameraPos;
+  }
   const faceCount = pg.baseplanerot.length;
   let geoTowardsViewer = "?";
   if (faceCount === 4) {
@@ -462,6 +477,7 @@ function checkchange(): void {
         algo = "";
         safeKpuzzle = undefined;
         savealg = false;
+        saveCamera();
       }
       const pg = new PuzzleGeometry(p[0], p[1], options);
       pg.allstickers();
