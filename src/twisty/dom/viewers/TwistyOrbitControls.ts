@@ -7,7 +7,7 @@ import { OrbitControls as ThreeOrbitControls } from "three/examples/jsm/controls
 // TODO: Implement an orbit control paired to an opposing camera.
 export class TwistyOrbitControls {
   threeOrbitControls: ThreeOrbitControls;
-  mirrored?: TwistyOrbitControls;
+  mirrorControls?: TwistyOrbitControls;
   constructor(
     private camera: Camera,
     renderer: Renderer,
@@ -21,21 +21,19 @@ export class TwistyOrbitControls {
     this.threeOrbitControls.enablePan = false;
 
     // Note we can get a `change` event after `end` due to dampening.
-    const eventHandler = this.noteChange.bind(this);
+    const eventHandler = this.onOrbitControlEvent.bind(this);
     this.threeOrbitControls.addEventListener("start", eventHandler);
     this.threeOrbitControls.addEventListener("change", eventHandler);
     this.threeOrbitControls.addEventListener("end", eventHandler);
   }
 
-  public noteChange(): void {
+  public onOrbitControlEvent(): void {
     this.scheduleRender();
-    if (this.mirrored) {
-      this.mirrored.updateMirroredCamera(this.camera);
-    }
+    this.mirrorControls?.updateMirroredCamera(this.camera);
   }
 
   public setMirror(m: TwistyOrbitControls): void {
-    this.mirrored = m;
+    this.mirrorControls = m;
   }
 
   updateMirroredCamera(c: Camera): void {

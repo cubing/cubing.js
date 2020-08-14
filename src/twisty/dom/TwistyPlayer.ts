@@ -258,7 +258,7 @@ export class TwistyPlayer extends ManagedCustomElement {
               negateCameraPosition: true,
             });
             viewers.push(partner);
-            mainViewer.setMirroredView(partner);
+            mainViewer.setMirror(partner);
           }
           this.timeline.addCursor(this.#cursor);
           this.timeline.jumpToEnd();
@@ -299,7 +299,7 @@ export class TwistyPlayer extends ManagedCustomElement {
             cameraPosition,
             negateCameraPosition: true,
           });
-          mainView.setMirroredView(partner);
+          mainView.setMirror(partner);
           viewers.push(partner);
         }
         this.timeline.addCursor(this.#cursor);
