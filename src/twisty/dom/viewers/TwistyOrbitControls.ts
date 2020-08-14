@@ -1,6 +1,8 @@
 import { Camera, Renderer } from "three";
 import { OrbitControls as ThreeOrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+const INERTIA_DEFAULT: boolean = true;
+
 // TODO: Support limiting altitudinal angle, similar to alg.cubing.net v1.
 // TODO: Allow locking vertical rotation if the mouse/touch hasn't moved much, similar to alg.cubing.net v1.
 // TODO: Use more damping during drag, and less damping after letting go.
@@ -17,6 +19,7 @@ export class TwistyOrbitControls {
       camera,
       renderer.domElement,
     );
+    this.threeOrbitControls.enableDamping = INERTIA_DEFAULT;
     this.threeOrbitControls.rotateSpeed = 0.5;
     this.threeOrbitControls.enablePan = false;
 
@@ -25,6 +28,10 @@ export class TwistyOrbitControls {
     this.threeOrbitControls.addEventListener("start", eventHandler);
     this.threeOrbitControls.addEventListener("change", eventHandler);
     this.threeOrbitControls.addEventListener("end", eventHandler);
+  }
+
+  public setInertia(enabled: boolean): void {
+    this.threeOrbitControls.enableDamping = enabled;
   }
 
   public onOrbitControlEvent(): void {
