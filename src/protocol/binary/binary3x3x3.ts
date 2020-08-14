@@ -227,7 +227,7 @@ export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
 ): Transformation {
   if (components.centerOrientationSupport !== 1) {
-    throw new Error("Must support orientation center.");
+    throw new Error("Must support center orientation.");
   }
 
   const normalizedOrientationState = {
