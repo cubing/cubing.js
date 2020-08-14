@@ -49,7 +49,7 @@ export class StringEnumAttribute<E extends string> {
   string: string;
   value: E;
   valid: boolean;
-  constructor(private enumVal: { [key: string]: string }, initialValue?: E) {
+  constructor(private enumVal: { [key: string]: boolean }, initialValue?: E) {
     this.setString(initialValue ?? this.defaultValue());
   }
 

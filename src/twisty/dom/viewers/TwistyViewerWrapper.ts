@@ -1,11 +1,12 @@
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
 
-export enum BackViewLayout {
-  "none" = "none", // default
-  "side-by-side" = "side-by-side",
-  "upper-right" = "upper-right",
-}
+export const backViewLayouts = {
+  "none": true, // default
+  "side-by-side": true,
+  "upper-right": true,
+};
+export type BackViewLayout = keyof typeof backViewLayouts;
 
 export interface TwistyViewerWrapperConfig {
   checkered?: boolean;
@@ -20,7 +21,7 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
       "checkered",
       config.checkered ?? false,
     );
-    if (config.backView && config.backView in BackViewLayout) {
+    if (config.backView && config.backView in backViewLayouts) {
       this.contentWrapper.classList.add(`back-view-${config.backView}`);
     }
   }

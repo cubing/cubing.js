@@ -193,7 +193,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     const setBackView: boolean = this.backView && this.visualization !== "2D";
     const backView: BackViewLayout = setBackView
       ? (this.backView as BackViewLayout)
-      : BackViewLayout.none; // TODO
+      : "none";
     this.#viewerWrapper = new TwistyViewerWrapper({
       checkered: this.background === "checkered",
       backView,

@@ -5,37 +5,42 @@ import {
   StringEnumAttribute,
   Vector3Attribute,
 } from "./element/ElementConfig";
-import { BackViewLayout } from "./viewers/TwistyViewerWrapper";
+import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
-export enum VisualizationFormat {
-  "3D" = "3D", // default
-  "2D" = "2D",
-  "PG3D" = "PG3D",
-}
+// TODO: turn these maps into lists?
+export const visualizationFormats = {
+  "3D": true, // default
+  "2D": true,
+  "PG3D": true,
+};
+export type VisualizationFormat = keyof typeof visualizationFormats;
 
-export enum BackgroundTheme {
-  "checkered" = "checkered", // default
-  "none" = "none",
-  "PG3D" = "PG3D",
-}
+export const backgroundThemes = {
+  checkered: true, // default
+  none: true,
+  PG3D: true,
+};
+export type BackgroundTheme = keyof typeof backgroundThemes;
 
-export enum ControlsLocation {
-  "bottom-row" = "bottom-row", // default
-  "none" = "none",
-}
+export const controlsLocations = {
+  "bottom-row": true, // default
+  "none": true,
+};
+export type ControlsLocation = keyof typeof controlsLocations;
 
-export enum PuzzleID {
-  "3x3x3" = "3x3x3", // default
-  "custom" = "custom",
-  "2x2x2" = "2x2x2",
-  "4x4x4" = "4x4x4",
-  "megaminx" = "megaminx",
-  "pyraminx" = "pyraminx",
-  "sq1" = "sq1",
-  "clock" = "clock",
-  "skewb" = "skewb",
-  "FTO" = "FTO",
-}
+export const puzzleIDs = {
+  "3x3x3": true, // default
+  "custom": true,
+  "2x2x2": true,
+  "4x4x4": true,
+  "megaminx": true,
+  "pyraminx": true,
+  "sq1": true,
+  "clock": true,
+  "skewb": true,
+  "FTO": true,
+};
+export type PuzzleID = keyof typeof puzzleIDs;
 
 // TODO: templatize
 export interface ManagedAttribute<K> {
@@ -105,23 +110,23 @@ export class TwistyPlayerConfig {
     this.attributes = {
       "alg": new AlgAttribute(initialValues.alg),
 
-      "puzzle": new StringEnumAttribute(PuzzleID, initialValues.puzzle),
+      "puzzle": new StringEnumAttribute(puzzleIDs, initialValues.puzzle),
       "visualization": new StringEnumAttribute(
-        VisualizationFormat,
+        visualizationFormats,
         initialValues.visualization,
       ),
 
       "background": new StringEnumAttribute(
-        BackgroundTheme,
+        backgroundThemes,
         initialValues.background,
       ),
       "controls": new StringEnumAttribute(
-        ControlsLocation,
+        controlsLocations,
         initialValues.controls,
       ),
 
       "back-view": new StringEnumAttribute(
-        BackViewLayout,
+        backViewLayouts,
         initialValues["backView"],
       ),
       "camera-position": new Vector3Attribute(
