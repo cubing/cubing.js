@@ -50,6 +50,7 @@ const submoduleInputs = {
   "kpuzzle": "src/kpuzzle/index.ts",
   "puzzle-geometry": "src/puzzle-geometry/index.ts",
   "stream": "src/stream/index.ts",
+  "protocol": "src/protocol/index.ts",
   "twisty": "src/twisty/index.ts",
 };
 
