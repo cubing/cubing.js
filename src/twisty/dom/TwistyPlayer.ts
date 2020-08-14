@@ -250,14 +250,15 @@ export class TwistyPlayer extends ManagedCustomElement {
             scene.scheduleRender.bind(scene),
           );
           scene.addTwisty3DPuzzle(cube3d);
-          const viewers = [new Twisty3DCanvas(scene)];
+          const mainViewer = new Twisty3DCanvas(scene);
+          const viewers = [mainViewer];
           if (backView) {
-            viewers.push(
-              new Twisty3DCanvas(scene, {
-                // cameraPosition, // TODO
-                negateCameraPosition: true,
-              }),
-            );
+            const partner = new Twisty3DCanvas(scene, {
+              // cameraPosition, // TODO
+              negateCameraPosition: true,
+            });
+            viewers.push(partner);
+            mainViewer.setMirroredView(partner);
           }
           this.timeline.addCursor(this.#cursor);
           this.timeline.jumpToEnd();
@@ -289,16 +290,17 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.#cachedTwisty3DPuzzle = pg3d;
         this.legacyExperimentalPG3D = pg3d;
         this.#cachedTwisty3DScene.addTwisty3DPuzzle(this.#cachedTwisty3DPuzzle);
-        const viewers = [
-          new Twisty3DCanvas(this.#cachedTwisty3DScene, { cameraPosition }),
-        ];
+        const mainView = new Twisty3DCanvas(this.#cachedTwisty3DScene, {
+          cameraPosition,
+        });
+        const viewers = [mainView];
         if (backView) {
-          viewers.push(
-            new Twisty3DCanvas(this.#cachedTwisty3DScene, {
-              cameraPosition,
-              negateCameraPosition: true,
-            }),
-          );
+          const partner = new Twisty3DCanvas(this.#cachedTwisty3DScene, {
+            cameraPosition,
+            negateCameraPosition: true,
+          });
+          mainView.setMirroredView(partner);
+          viewers.push(partner);
         }
         this.timeline.addCursor(this.#cursor);
         this.timeline.jumpToEnd();

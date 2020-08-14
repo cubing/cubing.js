@@ -62,6 +62,11 @@ export class Twisty3DCanvas extends ManagedCustomElement
     }
   }
 
+  public setMirroredView(partner: Twisty3DCanvas): void {
+    this.orbitControls.setMirror(partner.orbitControls);
+    partner.orbitControls.setMirror(this.orbitControls);
+  }
+
   protected connectedCallback(): void {
     // Resize as soon as we're in the DOM, to avoid a flash of incorrectly sized content.
     this.resize();
