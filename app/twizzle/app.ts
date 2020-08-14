@@ -449,11 +449,15 @@ function checkchange(): void {
   }
   if (scramble !== 0 || lastval !== descarg || !renderSame) {
     puzzleSelected = true;
+    const savecam = lastval === descarg;
     let savealg = true;
     lastval = descarg;
     lastRender = newRender;
     const p = parsedesc(descarg);
     if (p) {
+      if (savecam) {
+        saveCamera();
+      }
       const options: Array<string | number | boolean> = [
         "allmoves",
         true,
@@ -477,7 +481,6 @@ function checkchange(): void {
         algo = "";
         safeKpuzzle = undefined;
         savealg = false;
-        saveCamera();
       }
       const pg = new PuzzleGeometry(p[0], p[1], options);
       pg.allstickers();
