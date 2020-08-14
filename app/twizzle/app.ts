@@ -258,7 +258,7 @@ function setAlgo(str: string, writeback: boolean): void {
           );
           twisty3DCanvas.canvas.addEventListener(
             "mousemove",
-            onMouseMove.bind(onMouseMove, "M"),
+            onMouseMove.bind(onMouseMove, twisty3DCanvas),
             false,
           );
         }
