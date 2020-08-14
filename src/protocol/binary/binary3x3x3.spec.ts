@@ -95,6 +95,33 @@ describe("Binary 3x3x3", () => {
       state,
     );
   });
+
+  it("round-trips 7.08 WR scramble with extra orientation", () => {
+    const state = stateForAlg(
+      "x D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R y",
+    );
+    expect(state["CENTER"].permutation).toEqual([2, 5, 3, 0, 1, 4]);
+    expect(twizzleBinaryToReid3x3x3(reid3x3x3ToTwizzleBinary(state))).toEqual(
+      state,
+    );
+  });
+});
+
+describe("puzzle orientation", () => {
+  it("doesn't affect encoded permutation (relative to centers)", () => {
+    const state = stateForAlg(
+      "D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R",
+    );
+    expect(state["CENTER"].permutation).toEqual([0, 1, 2, 3, 4, 5]);
+    const rotatedState = stateForAlg(
+      "D' R2 D L2 B2 L2 D' R2 F' L2 R' F D F' D' L' U2 F' R x y",
+    );
+    expect(rotatedState["CENTER"].permutation).toEqual([2, 5, 3, 0, 1, 4]);
+    const buffy = new Uint8Array(reid3x3x3ToTwizzleBinary(rotatedState));
+    buffy[3] ^= 0b00000010;
+    buffy[4] ^= 0b11000000;
+    expect(twizzleBinaryToReid3x3x3(buffy)).toEqual(state);
+  });
 });
 
 describe("Hex", () => {
