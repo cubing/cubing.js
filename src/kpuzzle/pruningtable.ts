@@ -56,7 +56,6 @@ export class PruningTable {
           dep === 0 &&
           EquivalentStates(this.def, t.value.trans, this.def.startPieces)
         ) {
-          console.log("Lookups " + this.lookups + " pop " + this.population);
           return t.value.getSequenceAsString();
         }
         if (t.value.moveseq.length + dep > d) {
