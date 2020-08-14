@@ -62,7 +62,7 @@ describe("Binary 3x3x3", () => {
       twizzleBinaryToReid3x3x3(
         new Uint8Array([0, 0, 0, 7, 32, 0, 0, 0, 255, 240, 0]),
       );
-    }).toThrow("idxPuzzleOrientationU (7) out of range");
+    }).toThrow("puzzleOrientationIdxU (7) out of range");
 
     expect(() => {
       // 0x111 (idxU) + 0x11 (idxL)
@@ -76,7 +76,7 @@ describe("Binary 3x3x3", () => {
         new Uint8Array([255, 0, 0, 7, 32, 0, 0, 0, 255, 240, 0]),
       );
     }).toThrow(
-      "edgePermutationIdx (534773760) out of range, idxPuzzleOrientationU (7) out of range",
+      "edgePermutationIdx (534773760) out of range, puzzleOrientationIdxU (7) out of range",
     );
   });
 

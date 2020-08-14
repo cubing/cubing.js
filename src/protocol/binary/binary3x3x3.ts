@@ -78,8 +78,8 @@ function reverseOrientPuzzle(
 
 interface Binary3x3x3Components {
   edgePermutationIdx: number; // 29 bits
-  idxPuzzleOrientationU: number; // 3 bits
-  idxPuzzleOrientationL: number; // 2 bits
+  puzzleOrientationIdxU: number; // 3 bits
+  puzzleOrientationIdxL: number; // 2 bits
   centerOrientationSupport: number; // 1 bits
   cornerOrientationFirst3Mask: number; // 5 bits
   cornerOrientationLast5Mask: number; // 8 bits
@@ -91,8 +91,8 @@ interface Binary3x3x3Components {
 // 0x111 (for idxU) + 0x11 (for idxL) means "not supported"
 function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
   return !(
-    components.idxPuzzleOrientationU === 7 &&
-    components.idxPuzzleOrientationL === 3
+    components.puzzleOrientationIdxU === 7 &&
+    components.puzzleOrientationIdxL === 3
   );
 }
 
@@ -108,7 +108,7 @@ function reid3x3x3ToBinaryComponents(
   // Represents the spatial orientation of the puzzle. This is useful for smart puzzles, which don't
   // track orientations using center permutation, but instead convey the overall
   // orientation of the entire puzzle
-  const [idxPuzzleOrientationU, idxPuzzleOrientationL] = puzzleOrientationIdx(
+  const [puzzleOrientationIdxU, puzzleOrientationIdxL] = puzzleOrientationIdx(
     state,
   );
 
@@ -153,8 +153,8 @@ function reid3x3x3ToBinaryComponents(
 
   return {
     edgePermutationIdx,
-    idxPuzzleOrientationU,
-    idxPuzzleOrientationL,
+    puzzleOrientationIdxU,
+    puzzleOrientationIdxL,
     centerOrientationSupport,
     cornerOrientationFirst3Mask,
     cornerOrientationLast5Mask,
@@ -174,8 +174,8 @@ export function binaryComponentsToTwizzleBinary(
   buffy[2] |= components.edgePermutationIdx >> 5; // (29 - 8 * 3)
   buffy[3] |= components.edgePermutationIdx << 3;
 
-  buffy[3] |= components.idxPuzzleOrientationU;
-  buffy[4] |= components.idxPuzzleOrientationL << 6;
+  buffy[3] |= components.puzzleOrientationIdxU;
+  buffy[4] |= components.puzzleOrientationIdxL << 6;
 
   buffy[4] |= components.centerOrientationSupport << 5;
 
@@ -211,8 +211,8 @@ export function twizzleBinaryToBinaryComponents(
       (u8buffer[1] << 13) +
       (u8buffer[2] << 5) +
       (u8buffer[3] >> 3),
-    idxPuzzleOrientationU: u8buffer[3] & 0b00000111,
-    idxPuzzleOrientationL: (u8buffer[4] & 0b11000000) >> 6,
+    puzzleOrientationIdxU: u8buffer[3] & 0b00000111,
+    puzzleOrientationIdxL: (u8buffer[4] & 0b11000000) >> 6,
     centerOrientationSupport: (u8buffer[4] & 0b00100000) >> 5,
     cornerOrientationFirst3Mask: u8buffer[4] & 0b00011111,
     cornerOrientationLast5Mask: u8buffer[5],
@@ -270,8 +270,8 @@ export function binaryComponentsToReid3x3x3(
 
   return reverseOrientPuzzle(
     normalizedOrientationState,
-    components.idxPuzzleOrientationU,
-    components.idxPuzzleOrientationL,
+    components.puzzleOrientationIdxU,
+    components.puzzleOrientationIdxL,
   );
 }
 
@@ -312,13 +312,13 @@ function validateComponents(components: Binary3x3x3Components): string[] {
     );
   }
   if (
-    components.idxPuzzleOrientationU < 0 ||
-    components.idxPuzzleOrientationU >= 6
+    components.puzzleOrientationIdxU < 0 ||
+    components.puzzleOrientationIdxU >= 6
   ) {
     // 0x111 (for idxU) + 0x11 (for idxL) means "not supported"
     if (supportsPuzzleOrientation(components)) {
       errors.push(
-        `idxPuzzleOrientationU (${components.idxPuzzleOrientationU}) out of range`,
+        `puzzleOrientationIdxU (${components.puzzleOrientationIdxU}) out of range`,
       );
     }
   }
@@ -340,11 +340,11 @@ function validateComponents(components: Binary3x3x3Components): string[] {
     );
   }
   if (
-    components.idxPuzzleOrientationL < 0 ||
-    components.idxPuzzleOrientationL >= 4
+    components.puzzleOrientationIdxL < 0 ||
+    components.puzzleOrientationIdxL >= 4
   ) {
     errors.push(
-      `idxPuzzleOrientationL (${components.idxPuzzleOrientationL}) out of range`,
+      `puzzleOrientationIdxL (${components.puzzleOrientationIdxL}) out of range`,
     );
   }
   if (
