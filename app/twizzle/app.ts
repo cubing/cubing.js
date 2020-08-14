@@ -197,9 +197,7 @@ function cameraPos(pg: PuzzleGeometry): Vector3 {
   } else if (faceCount === 20) {
     geoTowardsViewer = "F";
   }
-  console.log(geoTowardsViewer);
   const norm = pg.getGeoNormal(geoTowardsViewer);
-  console.log(norm);
   if (norm === undefined) {
     return new Vector3(0, 0, DEFAULT_CAMERA_DISTANCE);
   }
@@ -207,7 +205,6 @@ function cameraPos(pg: PuzzleGeometry): Vector3 {
 }
 
 function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
-  console.log(descinput.value);
   return {
     def: puzzle,
     stickerDat,
