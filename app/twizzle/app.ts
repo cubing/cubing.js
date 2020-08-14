@@ -606,15 +606,19 @@ function onMouseClick(
 }
 
 function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
-  const raycaster = new Raycaster();
-  const mouse = new Vector2();
-  const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
   // notice drags, since we don't want drags to do click moves
   if (dragX === -1 && dragY === -1) {
     dragX = event.offsetX;
     dragY = event.offsetY;
   } else if (dragX !== event.offsetX || dragY !== event.offsetY) {
     dragMoved = true;
+  }
+  //
+  const raycaster = new Raycaster();
+  const mouse = new Vector2();
+  const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
+  if (!canvas) {
+    return;
   }
   // calculate mouse position in normalized device coordinates
   // (-1 to +1) for both components
