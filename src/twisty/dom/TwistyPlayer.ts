@@ -138,7 +138,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set controls(controls: ControlsLocation) {
-    this.#config.attributes["controls"].setValue(controls);
+    const oldControls = this.#config.attributes["controls"].value;
+    if (this.#config.attributes["controls"].setValue(controls)) {
+      this.contentWrapper.classList.remove(`controls-${oldControls}`);
+      this.contentWrapper.classList.add(`controls-${controls}`);
+    }
   }
 
   get controls(): ControlsLocation {

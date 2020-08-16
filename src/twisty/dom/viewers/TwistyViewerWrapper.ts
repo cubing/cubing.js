@@ -14,7 +14,7 @@ export interface TwistyViewerWrapperConfig {
 }
 
 export class TwistyViewerWrapper extends ManagedCustomElement {
-  constructor(config: TwistyViewerWrapperConfig = {}) {
+  constructor(private config: TwistyViewerWrapperConfig = {}) {
     super();
     this.addCSS(twistyViewerWrapperCSS);
     this.contentWrapper.classList.toggle(
@@ -27,6 +27,7 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
   }
 
   set checkered(checkered: boolean) {
+    this.config.checkered = checkered;
     this.contentWrapper.classList.toggle("checkered", checkered);
   }
 }
