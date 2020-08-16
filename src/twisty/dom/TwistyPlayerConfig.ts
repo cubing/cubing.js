@@ -18,7 +18,6 @@ export type VisualizationFormat = keyof typeof visualizationFormats;
 export const backgroundThemes = {
   checkered: true, // default
   none: true,
-  PG3D: true,
 };
 export type BackgroundTheme = keyof typeof backgroundThemes;
 

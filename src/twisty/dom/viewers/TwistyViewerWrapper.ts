@@ -25,6 +25,10 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
       this.contentWrapper.classList.add(`back-view-${config.backView}`);
     }
   }
+
+  set checkered(checkered: boolean) {
+    this.contentWrapper.classList.toggle("checkered", checkered);
+  }
 }
 
 if (customElements) {

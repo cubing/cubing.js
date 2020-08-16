@@ -130,6 +130,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   set background(background: BackgroundTheme) {
     this.#config.attributes["background"].setValue(background);
+    this.#viewerWrapper.checkered = background === "checkered";
   }
 
   get background(): BackgroundTheme {
