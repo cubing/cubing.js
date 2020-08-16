@@ -48,7 +48,7 @@ let lastalgo: string = "";
 let scramble: number = 0;
 let stickerDat: StickerDat;
 const DEFAULT_CAMERA_DISTANCE = 5.5;
-let initialCameraPos: number[] = [0.0, 0.0, DEFAULT_CAMERA_DISTANCE];
+let initialCameraPos: Vector3 = new Vector3(0.0, 0.0, DEFAULT_CAMERA_DISTANCE);
 let savedCameraPos: Vector3 = new Vector3(0.0, 0.0, 0.0);
 let haveSavedCamera = false;
 const renderOptions = [
@@ -226,7 +226,6 @@ function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
     experimentalPolarVantages: true,
     sideBySide: getCheckbox("sidebyside"),
     showFoundation: getCheckbox("showfoundation"),
-    experimentalInitialVantagePosition: initialCameraPos,
   };
 }
 
@@ -244,6 +243,7 @@ function setAlgo(str: string, writeback: boolean): void {
           alg: new Sequence([]),
           visualization: "PG3D",
           backView: "side-by-side",
+          cameraPosition: initialCameraPos,
         },
         legacyExperimentalPG3DViewConfig(),
       );

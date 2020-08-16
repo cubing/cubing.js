@@ -40,7 +40,6 @@ export interface LegacyExperimentalPG3DViewConfig {
   experimentalPolarVantages?: boolean;
   sideBySide?: boolean;
   showFoundation?: boolean;
-  experimentalInitialVantagePosition?: Vector3;
 }
 
 function createPG(puzzleName: string): PuzzleGeometry {
@@ -317,15 +316,13 @@ export class TwistyPlayer extends ManagedCustomElement {
   ): [KPuzzleDefinition, StickerDat, Vector3 | undefined] {
     let kpuzzleDef: KPuzzleDefinition;
     let stickerDat: StickerDat;
-    let cameraPosition: Vector3 | undefined = undefined;
+    const cameraPosition: Vector3 | undefined = undefined;
     if (this.legacyExperimentalPG3DViewConfig) {
       kpuzzleDef = this.legacyExperimentalPG3DViewConfig.def;
       stickerDat = this.legacyExperimentalPG3DViewConfig.stickerDat;
       // experimentalPolarVantages ?: boolean;
       // sideBySide ?: boolean;
-      // showFoundation ?: boolean;
-      cameraPosition = this.legacyExperimentalPG3DViewConfig
-        .experimentalInitialVantagePosition;
+      // showFoundation ?: boolean;;
     } else {
       const pg = createPG(puzzleName);
       stickerDat = pg.get3d(0.0131);
