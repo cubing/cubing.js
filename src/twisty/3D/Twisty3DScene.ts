@@ -4,7 +4,7 @@ import { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 
 export class Twisty3DScene extends ThreeScene implements Twisty3DRenderTarget {
   private renderTargets: Set<Twisty3DRenderTarget> = new Set();
-  private twisty3Ds: Set<Twisty3DPuzzle> = new Set();
+  public twisty3Ds: Set<Twisty3DPuzzle> = new Set();
 
   constructor() {
     super();

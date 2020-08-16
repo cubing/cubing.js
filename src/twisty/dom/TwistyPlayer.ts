@@ -68,13 +68,15 @@ function createPG(puzzleName: string): PuzzleGeometry {
 export class TwistyPlayer extends ManagedCustomElement {
   #config: TwistyPlayerConfig;
 
+  timeline: Timeline;
+  cursor: AlgCursor;
+  scene: Twisty3DScene | null = null;
+  twisty3D: Twisty3DPuzzle | null = null;
+
   viewerElems: TwistyViewerElement[];
   controlElems: TwistyControlElement[];
-  timeline: Timeline;
+
   #viewerWrapper: TwistyViewerWrapper;
-  #cursor: AlgCursor;
-  #cachedTwisty3DScene: Twisty3DScene | null = null;
-  #cachedTwisty3DPuzzle: Twisty3DPuzzle | null = null;
   public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
     _mv: BlockMove,
   ): number => 0;
@@ -98,7 +100,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       throw new Error("Must set `alg` using a `Sequence`!");
     }
     this.#config.attributes["alg"].setValue(seq);
-    this.#cursor?.setAlg(seq); // TODO: can we ensure the cursor already exists?
+    this.cursor?.setAlg(seq); // TODO: can we ensure the cursor already exists?
   }
 
   get alg(): Sequence {
@@ -218,48 +220,48 @@ export class TwistyPlayer extends ManagedCustomElement {
     switch (visualization) {
       case "2D":
         try {
-          this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
+          this.cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
         } catch (e) {
           // TODO: Deduplicate fallback.
-          this.#cursor = new AlgCursor(
+          this.cursor = new AlgCursor(
             timeline,
             Puzzles[puzzleName],
             new Sequence([]),
           );
         }
-        this.timeline.addCursor(this.#cursor);
+        this.timeline.addCursor(this.cursor);
         this.timeline.jumpToEnd();
-        return [new Twisty2DSVG(this.#cursor, Puzzles[puzzleName])];
+        return [new Twisty2DSVG(this.cursor, Puzzles[puzzleName])];
       case "3D":
         if (puzzleName === "3x3x3") {
           // TODO: fold 3D and PG3D into this.
           try {
-            this.#cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
+            this.cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
           } catch (e) {
             // TODO: Deduplicate fallback.
-            this.#cursor = new AlgCursor(
+            this.cursor = new AlgCursor(
               timeline,
               Puzzles[puzzleName],
               new Sequence([]),
             );
           }
-          const scene = new Twisty3DScene();
+          this.scene = new Twisty3DScene();
           const cube3d = new Cube3D(
-            this.#cursor,
-            scene.scheduleRender.bind(scene),
+            this.cursor,
+            this.scene.scheduleRender.bind(this.scene),
           );
-          scene.addTwisty3DPuzzle(cube3d);
-          const mainViewer = new Twisty3DCanvas(scene);
+          this.scene.addTwisty3DPuzzle(cube3d);
+          const mainViewer = new Twisty3DCanvas(this.scene);
           const viewers = [mainViewer];
           if (backView) {
-            const partner = new Twisty3DCanvas(scene, {
+            const partner = new Twisty3DCanvas(this.scene, {
               // cameraPosition, // TODO
               negateCameraPosition: true,
             });
             viewers.push(partner);
             mainViewer.setMirror(partner);
           }
-          this.timeline.addCursor(this.#cursor);
+          this.timeline.addCursor(this.cursor);
           this.timeline.jumpToEnd();
           return viewers;
         }
@@ -270,38 +272,36 @@ export class TwistyPlayer extends ManagedCustomElement {
         );
 
         try {
-          this.#cursor = new AlgCursor(timeline, kpuzzleDef, alg);
+          this.cursor = new AlgCursor(timeline, kpuzzleDef, alg);
         } catch (e) {
           // TODO: Deduplicate fallback.
-          this.#cursor = new AlgCursor(timeline, kpuzzleDef, new Sequence([]));
+          this.cursor = new AlgCursor(timeline, kpuzzleDef, new Sequence([]));
         }
 
-        this.#cachedTwisty3DScene = new Twisty3DScene();
+        this.scene = new Twisty3DScene();
         const pg3d = new PG3D(
-          this.#cursor,
-          this.#cachedTwisty3DScene.scheduleRender.bind(
-            this.#cachedTwisty3DScene,
-          ),
+          this.cursor,
+          this.scene.scheduleRender.bind(this.scene),
           kpuzzleDef,
           stickerDat,
           this.legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
         );
-        this.#cachedTwisty3DPuzzle = pg3d;
+        this.twisty3D = pg3d;
         this.legacyExperimentalPG3D = pg3d;
-        this.#cachedTwisty3DScene.addTwisty3DPuzzle(this.#cachedTwisty3DPuzzle);
-        const mainView = new Twisty3DCanvas(this.#cachedTwisty3DScene, {
+        this.scene.addTwisty3DPuzzle(this.twisty3D);
+        const mainView = new Twisty3DCanvas(this.scene, {
           cameraPosition,
         });
         const viewers = [mainView];
         if (backView) {
-          const partner = new Twisty3DCanvas(this.#cachedTwisty3DScene, {
+          const partner = new Twisty3DCanvas(this.scene, {
             cameraPosition,
             negateCameraPosition: true,
           });
           mainView.setMirror(partner);
           viewers.push(partner);
         }
-        this.timeline.addCursor(this.#cursor);
+        this.timeline.addCursor(this.cursor);
         this.timeline.jumpToEnd();
         return viewers;
       }
@@ -342,20 +342,20 @@ export class TwistyPlayer extends ManagedCustomElement {
       // TODO: Swap out both 3D implementations with each other.
       case "PG3D": {
         console.log("pg3d");
-        const scene = this.#cachedTwisty3DScene!;
-        scene.remove(this.#cachedTwisty3DPuzzle!);
-        this.#cursor.removePositionListener(this.#cachedTwisty3DPuzzle!);
+        const scene = this.scene!;
+        scene.remove(this.twisty3D!);
+        this.cursor.removePositionListener(this.twisty3D!);
         const [def, dat /*, _*/] = this.pgHelper(this.puzzle);
         const pg3d = new PG3D(
-          this.#cursor,
+          this.cursor,
           scene.scheduleRender.bind(scene),
           def,
           dat,
           this.legacyExperimentalPG3DViewConfig?.showFoundation,
         );
         scene.addTwisty3DPuzzle(pg3d);
-        this.#cursor.setPuzzle(def);
-        this.#cachedTwisty3DPuzzle = pg3d;
+        this.cursor.setPuzzle(def);
+        this.twisty3D = pg3d;
         this.legacyExperimentalPG3D = pg3d;
         for (const viewer of this.viewerElems) {
           viewer.scheduleRender();
@@ -368,7 +368,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
 
     // Fallback
-    const oldCursor = this.#cursor;
+    const oldCursor = this.cursor;
     const viewers = this.createViewers(
       this.timeline,
       this.alg,
