@@ -1,0 +1,96 @@
+html {
+  font-family: sans-serif;
+}
+
+body {
+  max-width: 40em;
+  margin: 2em auto;
+}
+
+section {
+  padding: 0.25rem 1rem 0.5rem;
+}
+
+:target {
+  background: rgba(255, 255, 0, 0.1);
+}
+
+.componentName {
+  padding: 0em 0.2em;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  line-height: 150%;
+}
+
+code {
+  font-size: 125%;
+}
+
+table {
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%;
+}
+
+thead,
+tbody {
+  border: 2px solid black;
+}
+
+td {
+  width: 1.5em;
+  height: 1.5em;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  padding: 0.2em 0.1em;
+  white-space: nowrap;
+}
+
+thead td {
+  height: 0.75em;
+}
+
+thead td:nth-child(1),
+thead td:nth-child(9),
+thead td:nth-child(17),
+thead td:nth-child(25) {
+  border-left: 2px solid black;
+}
+
+thead td:nth-child(32) {
+  border-right: 2px solid black;
+}
+
+.perm {
+  background: rgba(128, 192, 255, 0.5);
+}
+
+.ori {
+  background: rgba(128, 255, 128, 0.75);
+}
+
+.puzzOri {
+  background: rgba(255, 160, 160);
+}
+
+.centerOri {
+  background: rgba(255, 255, 0, 0.5);
+}
+
+.blank {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.format-indicator {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+table,
+thead,
+thead td {
+  border-top: none;
+}
+
+.optional {
+  opacity: 0.5;
+}

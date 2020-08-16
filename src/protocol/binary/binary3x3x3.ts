@@ -96,7 +96,7 @@ function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
   );
 }
 
-function reid3x3x3ToBinaryComponents(
+export function reid3x3x3ToBinaryComponents(
   state: Transformation,
 ): Binary3x3x3Components {
   const normalizedOrientationState = orientPuzzle(state);
@@ -348,3 +348,11 @@ export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): Transformation {
   }
   return binaryComponentsToReid3x3x3(components);
 }
+
+function stateForAlg(alg: string): Transformation {
+  const kpuzzle = new KPuzzle(Puzzles["3x3x3"]);
+  kpuzzle.applyAlg(parse(alg));
+  return kpuzzle.state;
+}
+
+console.table(reid3x3x3ToBinaryComponents(stateForAlg("z y'")));
