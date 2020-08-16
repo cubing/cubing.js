@@ -39,6 +39,13 @@ describe("Binary 3x3x3", () => {
     expect(reid3x3x3ToTwizzleBinary(stateForAlg("(R' U' R U')5"))).toEqual(
       new Uint8Array([0, 0, 0, 0, 32, 0, 0, 0, 0, 8, 0]),
     );
+
+    // CO
+    expect(
+      reid3x3x3ToTwizzleBinary(
+        stateForAlg("(L U L' U L U2 L' R' U' R U' R' U2' R z)4"),
+      ),
+    ).toEqual(new Uint8Array([0, 0, 0, 0, 32 + 16, 160, 0, 0, 0, 0, 0]));
   });
 
   it("handles rotations", () => {
@@ -125,7 +132,7 @@ describe("puzzle orientation", () => {
 });
 
 describe("Hex", () => {
-  it("conversion works.", () => {
+  it("conversion works", () => {
     expect(bufferToSpacedHex(reid3x3x3ToTwizzleBinary(stateForAlg("")))).toBe(
       "00 00 00 00 20 00 00 00 00 00 00",
     );

@@ -82,8 +82,7 @@ interface Binary3x3x3Components {
   puzzleOrientationIdxU: number; // 3 bits
   puzzleOrientationIdxL: number; // 2 bits
   centerOrientationSupport: number; // 1 bits
-  cornerOrientationFirst3Mask: number; // 5 bits
-  cornerOrientationLast5Mask: number; // 8 bits
+  cornerOrientationMask: number; // 13 bits
   cornerPermutationIdx: number; // 16 bits
   edgeOrientationMask: number; // 12 bits
   centerOrientationMask: number; // 12 bits
@@ -118,16 +117,10 @@ function reid3x3x3ToBinaryComponents(
   // round-trip).
   const centerOrientationSupport = 1;
 
-  const cornerOrientationFirst3Mask = orientationRangeToMask(
+  const cornerOrientationMask = orientationRangeToMask(
     3,
     normalizedOrientationState["CORNER"].orientation,
     0,
-    3,
-  );
-  const cornerOrientationLast5Mask = orientationRangeToMask(
-    3,
-    normalizedOrientationState["CORNER"].orientation,
-    3,
     8,
   );
 
@@ -157,8 +150,7 @@ function reid3x3x3ToBinaryComponents(
     puzzleOrientationIdxU,
     puzzleOrientationIdxL,
     centerOrientationSupport,
-    cornerOrientationFirst3Mask,
-    cornerOrientationLast5Mask,
+    cornerOrientationMask,
     cornerPermutationIdx,
     edgeOrientationMask,
     centerOrientationMask,
@@ -180,8 +172,8 @@ export function binaryComponentsToTwizzleBinary(
 
   buffy[4] |= components.centerOrientationSupport << 5;
 
-  buffy[4] |= components.cornerOrientationFirst3Mask;
-  buffy[5] |= components.cornerOrientationLast5Mask;
+  buffy[4] |= components.cornerOrientationMask >> 8;
+  buffy[5] |= components.cornerOrientationMask;
 
   buffy[6] |= components.cornerPermutationIdx >> 8;
   buffy[7] |= components.cornerPermutationIdx;
@@ -215,8 +207,7 @@ export function twizzleBinaryToBinaryComponents(
     puzzleOrientationIdxU: u8buffer[3] & 0b00000111,
     puzzleOrientationIdxL: (u8buffer[4] & 0b11000000) >> 6,
     centerOrientationSupport: (u8buffer[4] & 0b00100000) >> 5,
-    cornerOrientationFirst3Mask: u8buffer[4] & 0b00011111,
-    cornerOrientationLast5Mask: u8buffer[5],
+    cornerOrientationMask: ((u8buffer[4] & 0b00011111) << 8) + u8buffer[5],
     cornerPermutationIdx: (u8buffer[6] << 8) + u8buffer[7],
     edgeOrientationMask: (u8buffer[8] << 4) + (u8buffer[9] >> 4),
     centerOrientationMask: ((u8buffer[9] & 0b00001111) << 8) + u8buffer[10],
@@ -249,10 +240,8 @@ export function binaryComponentsToReid3x3x3(
       ),
       orientation: maskToOrientationRange(
         3,
-        3,
-        components.cornerOrientationFirst3Mask,
-      ).concat(
-        maskToOrientationRange(3, 5, components.cornerOrientationLast5Mask),
+        8,
+        components.cornerOrientationMask,
       ),
     },
     CENTER: {
@@ -297,19 +286,11 @@ function validateComponents(components: Binary3x3x3Components): string[] {
     );
   }
   if (
-    components.cornerOrientationFirst3Mask < 0 ||
-    components.cornerOrientationFirst3Mask >= 27
+    components.cornerOrientationMask < 0 ||
+    components.cornerOrientationMask >= 6561
   ) {
     errors.push(
-      `cornerOrientationFirst3Mask (${components.cornerOrientationFirst3Mask}) out of range`,
-    );
-  }
-  if (
-    components.cornerOrientationLast5Mask < 0 ||
-    components.cornerOrientationLast5Mask >= 243
-  ) {
-    errors.push(
-      `cornerOrientationLast5Mask (${components.cornerOrientationLast5Mask}) out of range`,
+      `cornerOrientationMask (${components.cornerOrientationMask}) out of range`,
     );
   }
   if (
