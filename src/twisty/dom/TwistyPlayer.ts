@@ -159,6 +159,19 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   set cameraPosition(cameraPosition: Vector3) {
     this.#config.attributes["camera-position"].setValue(cameraPosition);
+    if (
+      ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
+    ) {
+      (this.viewerElems[0] as Twisty3DCanvas)?.camera.position.copy(
+        cameraPosition,
+      );
+      this.viewerElems[0]?.scheduleRender();
+      // Back view may or may not exist.
+      (this.viewerElems[1] as Twisty3DCanvas)?.camera.position
+        .copy(cameraPosition)
+        .multiplyScalar(-1);
+      this.viewerElems[1]?.scheduleRender();
+    }
   }
 
   get cameraPosition(): Vector3 {
