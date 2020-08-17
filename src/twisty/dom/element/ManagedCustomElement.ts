@@ -19,7 +19,7 @@ export class ManagedCustomElement extends HTMLElement {
   public shadow: ShadowRoot;
   public contentWrapper: HTMLDivElement; // TODO: can we get rid of this wrapper?
 
-  private map: Map<CSSSource, HTMLStyleElement> = new Map();
+  private cssSourceMap: Map<CSSSource, HTMLStyleElement> = new Map();
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "closed" });
@@ -31,25 +31,25 @@ export class ManagedCustomElement extends HTMLElement {
 
   // Add the source, if not already added.
   public addCSS(cssSource: CSSSource): void {
-    if (this.map.get(cssSource)) {
+    if (this.cssSourceMap.get(cssSource)) {
       return;
     }
 
     const cssElem: HTMLStyleElement = document.createElement("style");
     cssElem.textContent = cssSource.getAsString();
 
-    this.map.set(cssSource, cssElem);
+    this.cssSourceMap.set(cssSource, cssElem);
     this.shadow.appendChild(cssElem);
   }
 
   // Remove the source, if it's currently added.
   public removeCSS(cssSource: CSSSource): void {
-    const cssElem = this.map.get(cssSource);
+    const cssElem = this.cssSourceMap.get(cssSource);
     if (!cssElem) {
       return;
     }
     this.shadow.removeChild(cssElem);
-    this.map.delete(cssSource);
+    this.cssSourceMap.delete(cssSource);
   }
 
   public addElement<T extends Node>(element: T): T {
