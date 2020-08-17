@@ -50,7 +50,7 @@
   },
   "scripts": {
     "build": "npx rollup -c",
-    "dev": "npx parcel serve --no-autoinstall app/index.html --open --out-dir dist/parcel",
+    "dev": "npx parcel serve --no-autoinstall app/index.html --port 333 --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
     "test": "npx jest && npm run lint",
     "format": "npx eslint --fix .; npx prettier --write src app *.config.js */index.js */index.d.ts",
