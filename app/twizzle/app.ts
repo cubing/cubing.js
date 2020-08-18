@@ -189,7 +189,8 @@ function saveCamera(): void {
   if (!twisty || !twisty.viewerElems || !twisty.viewerElems[0]) {
     return;
   }
-  savedCameraPos = twisty.viewerElems[0].camera.position.clone();
+  savedCameraPos = (twisty
+    .viewerElems[0] as Twisty3DCanvas).camera.position.clone();
   haveSavedCamera = true;
 }
 //  This function is *not* idempotent when we save the
