@@ -448,6 +448,7 @@ function checkchange(): void {
   if (scramble === 0 && trimEq(algo, lastalgo) && renderSame) {
     return;
   }
+  const firstLoad = !twisty;
   if (scramble !== 0 || lastval !== descarg || !renderSame) {
     puzzleSelected = true;
     const savecam = lastval === descarg;
@@ -518,6 +519,11 @@ function checkchange(): void {
       const newStickerDat = pg.get3d(0.0131);
       initialCameraPos = cameraPos(pg);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
+      // Twisty constructor currently ignores initial camera position
+      if (firstLoad) {
+        twisty.cameraPosition = initialCameraPos;
+        twisty.timeline.jumpToEnd();
+      }
       setpuzzleparams(descarg);
     }
     if (!savealg) {
