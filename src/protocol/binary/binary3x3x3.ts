@@ -49,16 +49,16 @@ function splitBinary(bitLengths: number[], buffy: ArrayBuffer): number[] {
   let at = 0;
   let bits = 0;
   let accum = 0;
-  const r: number[] = [];
+  const values: number[] = [];
   for (const bitLength of bitLengths) {
     while (bits < bitLength) {
       accum = (accum << 8) | u8buffy[at++];
       bits += 8;
     }
-    r.push((accum >> (bits - bitLength)) & ((1 << bitLength) - 1));
+    values.push((accum >> (bits - bitLength)) & ((1 << bitLength) - 1));
     bits -= bitLength;
   }
-  return r;
+  return values;
 }
 
 // See above for safety notes.
