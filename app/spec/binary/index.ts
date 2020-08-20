@@ -36,21 +36,21 @@ function entry(
   h1.textContent = "Full Format (11 bytes)";
 
   const [, tbody] = newTable(section);
-
   const tr4 = tbody.appendChild(document.createElement("tr"));
   entry(tr4, "CP", "perm", 16);
+
+  const tr3 = tbody.appendChild(document.createElement("tr"));
+
+  entry(tr3, "CO", "ori", 13);
+  entry(tr3, "PO_U", "puzzOri", 3);
 
   const tr1 = tbody.appendChild(document.createElement("tr"));
   entry(tr1, "EP", "perm", 16);
 
   const tr2 = tbody.appendChild(document.createElement("tr"));
   entry(tr2, "EP (continued)", "perm", 13);
-  entry(tr2, "PO_U", "puzzOri", 3);
-
-  const tr3 = tbody.appendChild(document.createElement("tr"));
-  entry(tr3, "CO", "ori", 13);
-  entry(tr3, "PO_L", "puzzOri", 2);
-  entry(tr3, "MO?", "centerOri", 1);
+  entry(tr2, "PO_L", "puzzOri", 2);
+  entry(tr2, "MO?", "centerOri", 1);
 
   const tr5 = tbody.appendChild(document.createElement("tr"));
   entry(tr5, "EO", "ori", 12);
@@ -93,11 +93,10 @@ If <span class="componentName">MO?</span> is set to <code>0b0</code>, decoders m
 <ul>
   <li>This format is indicated with the value <code>0b110</code> in the former <span class="componentName">PO_U</span> slot.</li>
   <li>Puzzle orientation and center orientation are not encoded</li>
-  <li><span class="componentName">EO</span> is broken into parts
+  <li><span class="componentName">EO</span> changes:
     <ul>
-      <li>The first 8 bites remain in the same place.</li>
-      <li>The next 3 bits are moved to the end of the 4th byte.</li>
-      <li>The final bit is <i>not</i> encoded, and is equal to the parity of the other 11 bits.</li>
+      <li>The location has moved forward by 3 bits, making space for 11 bits total.</li>
+      <li>The final (12th) bit is <i>not</i> encoded, and is equal to the parity of the other 11 bits.</li>
     </ul>
   </li>
 </ul>`;
@@ -111,19 +110,19 @@ If <span class="componentName">MO?</span> is set to <code>0b0</code>, decoders m
   const tr4 = tbody.appendChild(document.createElement("tr"));
   entry(tr4, "CP", "perm", 16);
 
-  const tr1 = tbody.appendChild(document.createElement("tr"));
-  entry(tr1, "EP", "perm", 16);
-
   const tr2 = tbody.appendChild(document.createElement("tr"));
-  entry(tr2, "EP (continued)", "perm", 13);
+  entry(tr2, "CO", "ori", 13);
   entry(tr2, "1", "format-indicator", 1);
   entry(tr2, "1", "format-indicator", 1);
   entry(tr2, "0", "format-indicator", 1);
 
+  const tr1 = tbody.appendChild(document.createElement("tr"));
+  entry(tr1, "EP", "perm", 16);
+
   const tr3 = tbody.appendChild(document.createElement("tr"));
-  entry(tr3, "CO", "ori", 13);
-  entry(tr3, "EO (bits #8-10)", "ori", 3);
+  entry(tr3, "EP (continued)", "perm", 13);
+  entry(tr3, "EO", "ori", 3);
 
   const tr5 = tbody.appendChild(document.createElement("tr"));
-  entry(tr5, "EO (bits #0-7)", "ori", 8);
+  entry(tr5, "EO (continued)", "ori", 8);
 }

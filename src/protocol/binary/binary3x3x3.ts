@@ -88,12 +88,9 @@ interface Binary3x3x3Components {
   centerOrientationMask: number; // 12 bits
 }
 
-// 0x111 (for idxU) + 0x11 (for idxL) means "not supported"
+// 0x111 (for idxU) means "not supported"
 function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
-  return !(
-    components.puzzleOrientationIdxU === 7 &&
-    components.puzzleOrientationIdxL === 3
-  );
+  return components.puzzleOrientationIdxU !== 7;
 }
 
 export function reid3x3x3ToBinaryComponents(
@@ -162,21 +159,21 @@ export function binaryComponentsToTwizzleBinary(
 ): Binary3x3x3State {
   const buffy = new Uint8Array(11);
 
-  buffy[0] |= components.edgePermutationIdx >> 21; // (29 - 8 * 1)
-  buffy[1] |= components.edgePermutationIdx >> 13; // (29 - 8 * 2)
-  buffy[2] |= components.edgePermutationIdx >> 5; // (29 - 8 * 3)
-  buffy[3] |= components.edgePermutationIdx << 3;
+  buffy[0] |= components.cornerPermutationIdx >> 8;
+  buffy[1] |= components.cornerPermutationIdx;
+
+  buffy[2] |= components.cornerOrientationMask >> 5;
+  buffy[3] |= components.cornerOrientationMask << 3;
 
   buffy[3] |= components.puzzleOrientationIdxU;
-  buffy[4] |= components.puzzleOrientationIdxL << 6;
 
-  buffy[4] |= components.centerOrientationSupport << 5;
+  buffy[4] |= components.edgePermutationIdx >> 21; // (29 - 8 * 1)
+  buffy[5] |= components.edgePermutationIdx >> 13; // (29 - 8 * 2)
+  buffy[6] |= components.edgePermutationIdx >> 5; // (29 - 8 * 3)
+  buffy[7] |= components.edgePermutationIdx << 3;
 
-  buffy[4] |= components.cornerOrientationMask >> 8;
-  buffy[5] |= components.cornerOrientationMask;
-
-  buffy[6] |= components.cornerPermutationIdx >> 8;
-  buffy[7] |= components.cornerPermutationIdx;
+  buffy[7] |= components.puzzleOrientationIdxL << 1;
+  buffy[7] |= components.centerOrientationSupport;
 
   buffy[8] |= components.edgeOrientationMask >> 4;
   buffy[9] |= components.edgeOrientationMask << 4;
@@ -199,16 +196,16 @@ export function twizzleBinaryToBinaryComponents(
 ): Binary3x3x3Components {
   const u8buffer = new Uint8Array(buffer);
   return {
-    edgePermutationIdx:
-      (u8buffer[0] << 21) +
-      (u8buffer[1] << 13) +
-      (u8buffer[2] << 5) +
-      (u8buffer[3] >> 3),
+    cornerPermutationIdx: (u8buffer[0] << 8) + u8buffer[1],
+    cornerOrientationMask: (u8buffer[2] << 5) + (u8buffer[3] >> 3),
     puzzleOrientationIdxU: u8buffer[3] & 0b00000111,
-    puzzleOrientationIdxL: (u8buffer[4] & 0b11000000) >> 6,
-    centerOrientationSupport: (u8buffer[4] & 0b00100000) >> 5,
-    cornerOrientationMask: ((u8buffer[4] & 0b00011111) << 8) + u8buffer[5],
-    cornerPermutationIdx: (u8buffer[6] << 8) + u8buffer[7],
+    edgePermutationIdx:
+      (u8buffer[4] << 21) +
+      (u8buffer[5] << 13) +
+      (u8buffer[6] << 5) +
+      (u8buffer[7] >> 3),
+    puzzleOrientationIdxL: (u8buffer[7] & 0b00000110) >> 1,
+    centerOrientationSupport: u8buffer[7] & 0b00000001,
     edgeOrientationMask: (u8buffer[8] << 4) + (u8buffer[9] >> 4),
     centerOrientationMask: ((u8buffer[9] & 0b00001111) << 8) + u8buffer[10],
   };
@@ -297,7 +294,7 @@ function validateComponents(components: Binary3x3x3Components): string[] {
     components.puzzleOrientationIdxU < 0 ||
     components.puzzleOrientationIdxU >= 6
   ) {
-    // 0x111 (for idxU) + 0x11 (for idxL) means "not supported"
+    // 0x111 (for idxU) means "not supported"
     if (supportsPuzzleOrientation(components)) {
       errors.push(
         `puzzleOrientationIdxU (${components.puzzleOrientationIdxU}) out of range`,
@@ -348,11 +345,3 @@ export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): Transformation {
   }
   return binaryComponentsToReid3x3x3(components);
 }
-
-function stateForAlg(alg: string): Transformation {
-  const kpuzzle = new KPuzzle(Puzzles["3x3x3"]);
-  kpuzzle.applyAlg(parse(alg));
-  return kpuzzle.state;
-}
-
-console.table(reid3x3x3ToBinaryComponents(stateForAlg("z y'")));
