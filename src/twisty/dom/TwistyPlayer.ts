@@ -396,7 +396,6 @@ export class TwistyPlayer extends ManagedCustomElement {
     switch (this.visualization) {
       // TODO: Swap out both 3D implementations with each other.
       case "PG3D": {
-        console.log("pg3d");
         const scene = this.scene!;
         scene.remove(this.twisty3D!);
         this.cursor.removePositionListener(this.twisty3D!);
