@@ -8,7 +8,6 @@ export const twistyPlayerCSS = new CSSSource(`
   contain: content;
   display: grid;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.025);
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
