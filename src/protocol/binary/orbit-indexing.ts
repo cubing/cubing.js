@@ -34,7 +34,7 @@ export function maskToOrientations(
 }
 
 // From https://www.jaapsch.net/puzzles/compindx.htm#perm
-export function permutationTolexicographicIdx(permutation: number[]): number {
+export function permutationToLex(permutation: number[]): number {
   const n = permutation.length;
   let lexicographicIdx = 0;
   for (let i = 0; i < n - 1; i++) {
@@ -49,7 +49,7 @@ export function permutationTolexicographicIdx(permutation: number[]): number {
 }
 
 // From https://www.jaapsch.net/puzzles/compindx.htm#perm
-export function lexicographicIdxToPermutation(
+export function lexToPermutation(
   numPieces: number,
   lexicographicIdx: number,
 ): number[] {

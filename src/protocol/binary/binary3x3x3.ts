@@ -8,10 +8,10 @@ import {
 } from "../../kpuzzle";
 import {
   identityPermutation,
-  lexicographicIdxToPermutation,
+  lexToPermutation,
   maskToOrientations,
   orientationsToMask,
-  permutationTolexicographicIdx,
+  permutationToLex,
 } from "./orbit-indexing";
 
 type Binary3x3x3State = ArrayBuffer;
@@ -122,14 +122,14 @@ const puzzleOrientationCache: Transformation[][] = new Array(6)
   }
 }
 
-function orientPuzzle(s: Transformation): Transformation {
+function normalizePuzzleOrientation(s: Transformation): Transformation {
   const [idxU, idxL] = puzzleOrientationIdx(s);
   const orientationTransformation = puzzleOrientationCache[idxU][idxL];
   return Combine(Puzzles["3x3x3"], s, orientationTransformation);
 }
 
 // TODO: combine with `orientPuzzle`?
-function reverseOrientPuzzle(
+function reorientPuzzle(
   s: Transformation,
   idxU: number,
   idxL: number,
@@ -148,43 +148,15 @@ function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
 export function reid3x3x3ToBinaryComponents(
   state: Transformation,
 ): Binary3x3x3Components {
-  const normalizedOrientationState = orientPuzzle(state);
+  const normedState = normalizePuzzleOrientation(state);
 
-  const epLex = permutationTolexicographicIdx(
-    normalizedOrientationState["EDGE"].permutation,
-  );
-
-  // Represents the spatial orientation of the puzzle. This is useful for smart puzzles, which don't
-  // track orientations using center permutation, but instead convey the overall
-  // orientation of the entire puzzle
+  const epLex = permutationToLex(normedState["EDGE"].permutation);
   const [poIdxU, poIdxL] = puzzleOrientationIdx(state);
-
-  // We always mark as supported, since we don't support 3x3x3 states without
-  // center info yet. (note: this means that we always set this as true in a
-  // round-trip).
-  const moSupport = 1;
-
-  const coMask = orientationsToMask(
-    3,
-    normalizedOrientationState["CORNER"].orientation,
-  );
-
-  const cpLex = permutationTolexicographicIdx(
-    normalizedOrientationState["CORNER"].permutation,
-  );
-
-  const eoMask = orientationsToMask(
-    2,
-    normalizedOrientationState["EDGE"].orientation,
-  );
-
-  // This is at the end because it allows trimming 12 bits at the end (without
-  // affecting how the earlier bits are interpreted) for applications that don't
-  // support center orientation and are *super* space constrained.
-  const moMask = orientationsToMask(
-    4,
-    normalizedOrientationState["CENTER"].orientation,
-  );
+  const moSupport = 1; // Required for now.
+  const coMask = orientationsToMask(3, normedState["CORNER"].orientation);
+  const cpLex = permutationToLex(normedState["CORNER"].permutation);
+  const eoMask = orientationsToMask(2, normedState["EDGE"].orientation);
+  const moMask = orientationsToMask(4, normedState["CENTER"].orientation);
 
   return {
     cpLex,
@@ -264,13 +236,13 @@ export function binaryComponentsToReid3x3x3(
     throw new Error("Must support center orientation.");
   }
 
-  const normalizedOrientationState = {
+  const normedState = {
     EDGE: {
-      permutation: lexicographicIdxToPermutation(12, components.epLex),
+      permutation: lexToPermutation(12, components.epLex),
       orientation: maskToOrientations(2, 12, components.eoMask),
     },
     CORNER: {
-      permutation: lexicographicIdxToPermutation(8, components.cpLex),
+      permutation: lexToPermutation(8, components.cpLex),
       orientation: maskToOrientations(3, 8, components.coMask),
     },
     CENTER: {
@@ -280,14 +252,10 @@ export function binaryComponentsToReid3x3x3(
   };
 
   if (!supportsPuzzleOrientation(components)) {
-    return normalizedOrientationState;
+    return normedState;
   }
 
-  return reverseOrientPuzzle(
-    normalizedOrientationState,
-    components.poIdxU,
-    components.poIdxL,
-  );
+  return reorientPuzzle(normedState, components.poIdxU, components.poIdxL);
 }
 
 // Returns a list of error string.
