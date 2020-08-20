@@ -1,5 +1,6 @@
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
+import { ClassListManager } from "../element/ClassListManager";
 
 export const backViewLayouts = {
   "none": true, // default
@@ -14,16 +15,30 @@ export interface TwistyViewerWrapperConfig {
 }
 
 export class TwistyViewerWrapper extends ManagedCustomElement {
+  #backViewClassListManager: ClassListManager<
+    BackViewLayout
+  > = new ClassListManager(this, "back-view-", [
+    "none",
+    "side-by-side",
+    "upper-right",
+  ]);
+
   constructor(private config: TwistyViewerWrapperConfig = {}) {
     super();
+
     this.addCSS(twistyViewerWrapperCSS);
     this.contentWrapper.classList.toggle(
       "checkered",
       config.checkered ?? false,
     );
     if (config.backView && config.backView in backViewLayouts) {
-      this.contentWrapper.classList.add(`back-view-${config.backView}`);
+      this.#backViewClassListManager.setValue(config.backView);
     }
+  }
+
+  // Returns if the value changed
+  setBackView(backView: BackViewLayout): boolean {
+    return this.#backViewClassListManager.setValue(backView);
   }
 
   set checkered(checkered: boolean) {

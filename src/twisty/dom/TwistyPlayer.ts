@@ -38,7 +38,6 @@ export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;
   stickerDat: StickerDat;
   experimentalPolarVantages?: boolean;
-  sideBySide?: boolean;
   showFoundation?: boolean;
 }
 
@@ -62,6 +61,10 @@ function createPG(puzzleName: string): PuzzleGeometry {
     worker.addGrip(grip1, grip2, mp[4] as number);
   }
   return pg;
+}
+
+function is3DVisualization(visualizationFormat: VisualizationFormat): boolean {
+  return ["3D", "PG3D"].includes(visualizationFormat);
 }
 
 // <twisty-player>
@@ -152,7 +155,17 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set backView(backView: BackViewLayout) {
-    this.#config.attributes["back-view"].setValue(backView);
+    if (backView !== "none" && this.viewerElems.length < 2) {
+      this.createBackViewer();
+    }
+    if (backView === "none" && this.viewerElems.length > 1) {
+      this.removeBackViewerElem();
+    }
+    if (this.#viewerWrapper.setBackView(backView)) {
+      for (const viewer of this.viewerElems as Twisty3DCanvas[]) {
+        viewer.makeInvisibleUntilRender(); // TODO: can we do this more elegantly?
+      }
+    }
   }
 
   get backView(): BackViewLayout {
@@ -196,19 +209,6 @@ export class TwistyPlayer extends ManagedCustomElement {
   protected connectedCallback(): void {
     this.timeline = new Timeline();
 
-    const viewers = this.createViewers(
-      this.timeline,
-      this.alg,
-      this.visualization,
-      this.puzzle,
-      this.backView !== "none",
-    );
-    const scrubber = new TwistyScrubber(this.timeline);
-    const controlButtonGrid = new TwistyControlButtonPanel(this.timeline, this);
-
-    this.viewerElems = viewers;
-    this.controlElems = [scrubber, controlButtonGrid];
-
     // TODO: specify exactly when back views are possible.
     // TODO: Are there any SVGs where we'd want a separate back view?
     const setBackView: boolean = this.backView && this.visualization !== "2D";
@@ -221,9 +221,20 @@ export class TwistyPlayer extends ManagedCustomElement {
     });
     this.addElement(this.#viewerWrapper);
 
+    this.createViewers(
+      this.timeline,
+      this.alg,
+      this.visualization,
+      this.puzzle,
+      this.backView !== "none",
+    );
+    const scrubber = new TwistyScrubber(this.timeline);
+    const controlButtonGrid = new TwistyControlButtonPanel(this.timeline, this);
+
+    this.controlElems = [scrubber, controlButtonGrid];
+
     this.contentWrapper.classList.add(`controls-${this.controls}`);
 
-    this.viewerElems.map((el) => this.#viewerWrapper.addElement(el));
     this.addElement(this.controlElems[0]);
     this.addElement(this.controlElems[1]);
 
@@ -236,9 +247,9 @@ export class TwistyPlayer extends ManagedCustomElement {
     visualization: VisualizationFormat,
     puzzleName: string,
     backView: boolean,
-  ): TwistyViewerElement[] {
+  ): void {
     switch (visualization) {
-      case "2D":
+      case "2D": {
         try {
           this.cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
         } catch (e) {
@@ -251,7 +262,11 @@ export class TwistyPlayer extends ManagedCustomElement {
         }
         this.timeline.addCursor(this.cursor);
         this.timeline.jumpToEnd();
-        return [new Twisty2DSVG(this.cursor, Puzzles[puzzleName])];
+        const mainViewer = new Twisty2DSVG(this.cursor, Puzzles[puzzleName]);
+        this.viewerElems = [mainViewer];
+        this.#viewerWrapper.addElement(mainViewer);
+        return;
+      }
       case "3D":
         if (puzzleName === "3x3x3") {
           // TODO: fold 3D and PG3D into this.
@@ -272,18 +287,20 @@ export class TwistyPlayer extends ManagedCustomElement {
           );
           this.scene.addTwisty3DPuzzle(cube3d);
           const mainViewer = new Twisty3DCanvas(this.scene);
-          const viewers = [mainViewer];
+          this.viewerElems = [mainViewer];
           if (backView) {
             const partner = new Twisty3DCanvas(this.scene, {
               // cameraPosition, // TODO
               negateCameraPosition: true,
             });
-            viewers.push(partner);
+            this.viewerElems.push(partner);
             mainViewer.setMirror(partner);
           }
           this.timeline.addCursor(this.cursor);
           this.timeline.jumpToEnd();
-          return viewers;
+          this.viewerElems = [mainViewer];
+          this.#viewerWrapper.addElement(mainViewer);
+          return;
         }
       // fallthrough for 3D when not 3x3x3
       case "PG3D": {
@@ -309,21 +326,17 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.twisty3D = pg3d;
         this.legacyExperimentalPG3D = pg3d;
         this.scene.addTwisty3DPuzzle(this.twisty3D);
-        const mainView = new Twisty3DCanvas(this.scene, {
+        const mainViewer = new Twisty3DCanvas(this.scene, {
           cameraPosition,
         });
-        const viewers = [mainView];
+        this.viewerElems = [mainViewer];
+        this.#viewerWrapper.addElement(mainViewer);
         if (backView) {
-          const partner = new Twisty3DCanvas(this.scene, {
-            cameraPosition,
-            negateCameraPosition: true,
-          });
-          mainView.setMirror(partner);
-          viewers.push(partner);
+          this.createBackViewer();
         }
         this.timeline.addCursor(this.cursor);
         this.timeline.jumpToEnd();
-        return viewers;
+        return;
       }
       default:
         throw new Error("fdsfkjsdlkfjsdklfjdslkf");
@@ -349,6 +362,28 @@ export class TwistyPlayer extends ManagedCustomElement {
       kpuzzleDef = pg.writekpuzzle();
     }
     return [kpuzzleDef, stickerDat, cameraPosition];
+  }
+
+  private createBackViewer(): void {
+    if (!is3DVisualization(this.visualization)) {
+      throw new Error("Back viewer requires a 3D visualization");
+    }
+
+    const backViewer = new Twisty3DCanvas(this.scene!, {
+      // cameraPosition, // TODO
+      negateCameraPosition: true,
+    });
+    this.viewerElems.push(backViewer);
+    (this.viewerElems[0] as Twisty3DCanvas).setMirror(backViewer);
+    this.#viewerWrapper.addElement(backViewer);
+  }
+
+  private removeBackViewerElem(): void {
+    // TODO: Validate visualization.
+    if (this.viewerElems.length !== 2) {
+      throw new Error("Tried to remove non-existent back view!");
+    }
+    this.#viewerWrapper.removeElement(this.viewerElems.pop()!);
   }
 
   setPuzzle(
@@ -389,7 +424,10 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     // Fallback
     const oldCursor = this.cursor;
-    const viewers = this.createViewers(
+    for (const oldViewer of this.viewerElems) {
+      this.#viewerWrapper.removeElement(oldViewer);
+    }
+    this.createViewers(
       this.timeline,
       this.alg,
       this.visualization,
@@ -398,13 +436,6 @@ export class TwistyPlayer extends ManagedCustomElement {
     );
     this.timeline.removeCursor(oldCursor);
     this.timeline.removeTimestampListener(oldCursor);
-    for (const oldViewer of this.viewerElems) {
-      this.#viewerWrapper.removeElement(oldViewer);
-    }
-    for (const viewer of viewers.reverse()) {
-      this.#viewerWrapper.prependElement(viewer);
-    }
-    this.viewerElems = viewers;
   }
 
   // TODO: Handle playing the new move vs. just modying the alg.

@@ -22,5 +22,11 @@ export const twisty3DCanvasCSS = new CSSSource(`
 
 canvas {
   position: absolute;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.wrapper.invisible {
+  opacity: 0;
 }
 `);

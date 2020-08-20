@@ -18,6 +18,8 @@ export class Twisty3DCanvas extends ManagedCustomElement
   renderer: WebGLRenderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
   private scheduler = new RenderScheduler(this.render.bind(this));
   private resizePending: boolean = false;
+  // TODO: Are there any render duration performance concerns with removing this?
+  #invisible: boolean = false;
   constructor(
     scene?: Twisty3DScene,
     options: { cameraPosition?: Vector3; negateCameraPosition?: boolean } = {},
@@ -77,6 +79,13 @@ export class Twisty3DCanvas extends ManagedCustomElement
     this.scheduler.requestAnimFrame();
   }
 
+  // If the current size/state is incorrect, it may be preferable to hide it
+  // briefly, rather than flashing an incorrect version for one frame.
+  makeInvisibleUntilRender(): void {
+    this.contentWrapper.classList.add("invisible");
+    this.#invisible = true;
+  }
+
   private render(): void {
     // Cancel any scheduled frame, since we're rendering right now.
     // We don't need to re-render until something schedules again.
@@ -86,6 +95,9 @@ export class Twisty3DCanvas extends ManagedCustomElement
     }
     this.orbitControls.updateAndSchedule();
     this.renderer.render(this.scene, this.camera);
+    if (this.#invisible) {
+      this.contentWrapper.classList.remove("invisible");
+    }
   }
 
   private onResize(): void {
