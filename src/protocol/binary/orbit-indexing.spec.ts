@@ -1,8 +1,8 @@
 import {
   permutationTolexicographicIdx,
   lexicographicIdxToPermutation,
-  orientationRangeToMask,
-  maskToOrientationRange,
+  orientationsToMask,
+  maskToOrientations,
 } from "./orbit-indexing";
 
 describe("orbit indexing", () => {
@@ -23,20 +23,18 @@ describe("orbit indexing", () => {
   });
 
   it("orients", () => {
-    expect(orientationRangeToMask(2, [1, 0, 0, 1, 0, 1, 1, 0], 0, 8)).toEqual(
-      0b10010110,
-    );
+    expect(orientationsToMask(2, [1, 0, 0, 1, 0, 1, 1, 0])).toEqual(0b10010110);
   });
 });
 
 describe("orientationRangeToMask", () => {
   it("converts to mask correctly", () => {
-    expect(
-      orientationRangeToMask(2, [0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1], 0, 12),
-    ).toBe(1217);
+    expect(orientationsToMask(2, [0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1])).toBe(
+      1217,
+    );
   });
   it("converts from mask correctly", () => {
-    expect(maskToOrientationRange(2, 12, 1217)).toEqual([
+    expect(maskToOrientations(2, 12, 1217)).toEqual([
       0,
       1,
       0,
@@ -53,18 +51,10 @@ describe("orientationRangeToMask", () => {
   });
   it("round-trips", () => {
     expect(
-      maskToOrientationRange(
-        3,
-        4,
-        orientationRangeToMask(3, [2, 0, 2, 1], 0, 4),
-      ),
+      maskToOrientations(3, 4, orientationsToMask(3, [2, 0, 2, 1])),
     ).toEqual([2, 0, 2, 1]);
     expect(
-      maskToOrientationRange(
-        4,
-        6,
-        orientationRangeToMask(4, [2, 1, 0, 3, 2, 2], 0, 6),
-      ),
+      maskToOrientations(4, 6, orientationsToMask(4, [2, 1, 0, 3, 2, 2])),
     ).toEqual([2, 1, 0, 3, 2, 2]);
   });
 });

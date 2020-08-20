@@ -7,22 +7,20 @@ export function identityPermutation(numElems: number): number[] {
 }
 
 // Inclusive start, exclusive end (similar to `Array.prototype.slice`)
-export function orientationRangeToMask(
+export function orientationsToMask(
   radix: number,
-  orientation: number[],
-  start: number,
-  end: number,
+  orientations: number[],
 ): number {
   let val = 0;
-  for (let i = start; i < end; i++) {
+  for (const orientation of orientations) {
     val *= radix;
-    val += orientation[i];
+    val += orientation;
   }
   return val;
 }
 
 // Inclusive start, exclusive end (similar to `Array.prototype.slice`)
-export function maskToOrientationRange(
+export function maskToOrientations(
   radix: number,
   numElems: number,
   mask: number,

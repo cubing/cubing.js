@@ -9,8 +9,8 @@ import {
 import {
   identityPermutation,
   lexicographicIdxToPermutation,
-  maskToOrientationRange,
-  orientationRangeToMask,
+  maskToOrientations,
+  orientationsToMask,
   permutationTolexicographicIdx,
 } from "./orbit-indexing";
 
@@ -164,32 +164,26 @@ export function reid3x3x3ToBinaryComponents(
   // round-trip).
   const moSupport = 1;
 
-  const coMask = orientationRangeToMask(
+  const coMask = orientationsToMask(
     3,
     normalizedOrientationState["CORNER"].orientation,
-    0,
-    8,
   );
 
   const cpLex = permutationTolexicographicIdx(
     normalizedOrientationState["CORNER"].permutation,
   );
 
-  const eoMask = orientationRangeToMask(
+  const eoMask = orientationsToMask(
     2,
     normalizedOrientationState["EDGE"].orientation,
-    0,
-    12,
   );
 
   // This is at the end because it allows trimming 12 bits at the end (without
   // affecting how the earlier bits are interpreted) for applications that don't
   // support center orientation and are *super* space constrained.
-  const moMask = orientationRangeToMask(
+  const moMask = orientationsToMask(
     4,
     normalizedOrientationState["CENTER"].orientation,
-    0,
-    6,
   );
 
   return {
@@ -273,15 +267,15 @@ export function binaryComponentsToReid3x3x3(
   const normalizedOrientationState = {
     EDGE: {
       permutation: lexicographicIdxToPermutation(12, components.epLex),
-      orientation: maskToOrientationRange(2, 12, components.eoMask),
+      orientation: maskToOrientations(2, 12, components.eoMask),
     },
     CORNER: {
       permutation: lexicographicIdxToPermutation(8, components.cpLex),
-      orientation: maskToOrientationRange(3, 8, components.coMask),
+      orientation: maskToOrientations(3, 8, components.coMask),
     },
     CENTER: {
       permutation: identityPermutation(6),
-      orientation: maskToOrientationRange(4, 6, components.moMask),
+      orientation: maskToOrientations(4, 6, components.moMask),
     },
   };
 
