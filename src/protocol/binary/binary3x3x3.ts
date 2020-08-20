@@ -16,6 +16,59 @@ import {
 
 type Binary3x3x3State = ArrayBuffer;
 
+// Bit lengths of the encoded components, in order.
+const BIT_LENGTHS = [16, 13, 3, 29, 2, 1, 12, 12];
+
+// There are various clever ways to do this, but this is simple and efficient.
+function arraySum(arr: number[]): number {
+  let total = 0;
+  for (const entry of arr) {
+    total += entry;
+  }
+  return total;
+}
+
+// Due to limitations in JS bit operations, this is unsafe if any of the bit lengths span across the contents of more than 4 bytes.
+// - Safe: [8, 32]
+// - Unsafe: [4, 32, 4]
+// - Unsafe: [40, 4]
+function splitBinary(bitLengths: number[], buffy: ArrayBuffer): number[] {
+  const u8buffy = new Uint8Array(buffy);
+  let at = 0;
+  let bits = 0;
+  let accum = 0;
+  const r: number[] = [];
+  for (const bitLength of bitLengths) {
+    while (bits < bitLength) {
+      accum = (accum << 8) | u8buffy[at++];
+      bits += 8;
+    }
+    r.push((accum >> (bits - bitLength)) & ((1 << bitLength) - 1));
+    bits -= bitLength;
+  }
+  return r;
+}
+
+// See above for safety notes.
+function concatBinary(bitLengths: number[], values: number[]): ArrayBuffer {
+  const buffy = new Uint8Array(Math.ceil(arraySum(bitLengths) / 8));
+  let at = 0;
+  let bits = 0;
+  let accum = 0;
+  for (let i = 0; i < bitLengths.length; i++) {
+    accum = (accum << bitLengths[i]) | values[i];
+    bits += bitLengths[i];
+    while (bits >= 8) {
+      buffy[at++] = accum >> (bits - 8);
+      bits -= 8;
+    }
+  }
+  if (bits > 0) {
+    buffy[at++] = accum << (8 - bits);
+  }
+  return buffy;
+}
+
 function puzzleOrientationIdx(state: Transformation): [number, number] {
   const idxU = state["CENTER"].permutation[0];
   const idxD = state["CENTER"].permutation[5];
@@ -143,12 +196,12 @@ export function reid3x3x3ToBinaryComponents(
   );
 
   return {
-    edgePermutationIdx,
+    cornerPermutationIdx,
+    cornerOrientationMask,
     puzzleOrientationIdxU,
+    edgePermutationIdx,
     puzzleOrientationIdxL,
     centerOrientationSupport,
-    cornerOrientationMask,
-    cornerPermutationIdx,
     edgeOrientationMask,
     centerOrientationMask,
   };
@@ -157,31 +210,27 @@ export function reid3x3x3ToBinaryComponents(
 export function binaryComponentsToTwizzleBinary(
   components: Binary3x3x3Components,
 ): Binary3x3x3State {
-  const buffy = new Uint8Array(11);
+  const {
+    cornerPermutationIdx,
+    cornerOrientationMask,
+    puzzleOrientationIdxU,
+    edgePermutationIdx,
+    puzzleOrientationIdxL,
+    centerOrientationSupport,
+    edgeOrientationMask,
+    centerOrientationMask,
+  } = components;
 
-  buffy[0] |= components.cornerPermutationIdx >> 8;
-  buffy[1] |= components.cornerPermutationIdx;
-
-  buffy[2] |= components.cornerOrientationMask >> 5;
-  buffy[3] |= components.cornerOrientationMask << 3;
-
-  buffy[3] |= components.puzzleOrientationIdxU;
-
-  buffy[4] |= components.edgePermutationIdx >> 21; // (29 - 8 * 1)
-  buffy[5] |= components.edgePermutationIdx >> 13; // (29 - 8 * 2)
-  buffy[6] |= components.edgePermutationIdx >> 5; // (29 - 8 * 3)
-  buffy[7] |= components.edgePermutationIdx << 3;
-
-  buffy[7] |= components.puzzleOrientationIdxL << 1;
-  buffy[7] |= components.centerOrientationSupport;
-
-  buffy[8] |= components.edgeOrientationMask >> 4;
-  buffy[9] |= components.edgeOrientationMask << 4;
-
-  buffy[9] |= components.centerOrientationMask >> 8;
-  buffy[10] |= components.centerOrientationMask;
-
-  return buffy;
+  return concatBinary(BIT_LENGTHS, [
+    cornerPermutationIdx,
+    cornerOrientationMask,
+    puzzleOrientationIdxU,
+    edgePermutationIdx,
+    puzzleOrientationIdxL,
+    centerOrientationSupport,
+    edgeOrientationMask,
+    centerOrientationMask,
+  ]);
 }
 
 export function reid3x3x3ToTwizzleBinary(
@@ -194,20 +243,26 @@ export function reid3x3x3ToTwizzleBinary(
 export function twizzleBinaryToBinaryComponents(
   buffer: ArrayBuffer,
 ): Binary3x3x3Components {
-  const u8buffer = new Uint8Array(buffer);
+  const [
+    cornerPermutationIdx,
+    cornerOrientationMask,
+    puzzleOrientationIdxU,
+    edgePermutationIdx,
+    puzzleOrientationIdxL,
+    centerOrientationSupport,
+    edgeOrientationMask,
+    centerOrientationMask,
+  ] = splitBinary(BIT_LENGTHS, buffer);
+
   return {
-    cornerPermutationIdx: (u8buffer[0] << 8) + u8buffer[1],
-    cornerOrientationMask: (u8buffer[2] << 5) + (u8buffer[3] >> 3),
-    puzzleOrientationIdxU: u8buffer[3] & 0b00000111,
-    edgePermutationIdx:
-      (u8buffer[4] << 21) +
-      (u8buffer[5] << 13) +
-      (u8buffer[6] << 5) +
-      (u8buffer[7] >> 3),
-    puzzleOrientationIdxL: (u8buffer[7] & 0b00000110) >> 1,
-    centerOrientationSupport: u8buffer[7] & 0b00000001,
-    edgeOrientationMask: (u8buffer[8] << 4) + (u8buffer[9] >> 4),
-    centerOrientationMask: ((u8buffer[9] & 0b00001111) << 8) + u8buffer[10],
+    cornerPermutationIdx,
+    cornerOrientationMask,
+    puzzleOrientationIdxU,
+    edgePermutationIdx,
+    puzzleOrientationIdxL,
+    centerOrientationSupport,
+    edgeOrientationMask,
+    centerOrientationMask,
   };
 }
 
