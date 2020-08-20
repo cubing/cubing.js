@@ -162,7 +162,7 @@ export function reid3x3x3ToBinaryComponents(
     cpLex,
     coMask,
     poIdxU,
-    epLex: epLex,
+    epLex,
     poIdxL,
     moSupport,
     eoMask,
