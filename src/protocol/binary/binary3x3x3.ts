@@ -19,6 +19,18 @@ type Binary3x3x3State = ArrayBuffer;
 // Bit lengths of the encoded components, in order.
 const BIT_LENGTHS = [16, 13, 3, 29, 2, 1, 12, 12];
 
+// These fields are sorted by the order in which they appear in the binary format.
+interface Binary3x3x3Components {
+  cpLex: number; // 16 bits, corner permutation
+  coMask: number; // 13 bits, corner orientation
+  poIdxU: number; // 3 bits, puzzle orientation (U face)
+  epLex: number; // 29 bits, edge permutation
+  poIdxL: number; // 2 bits, puzzle orientation (L face)
+  moSupport: number; // 1 bit, center orientation support
+  eoMask: number; // 12 bits, edge orientation
+  moMask: number; // 12 bits, center orientation
+}
+
 // There are various clever ways to do this, but this is simple and efficient.
 function arraySum(arr: number[]): number {
   let total = 0;
@@ -128,22 +140,9 @@ function reverseOrientPuzzle(
   );
   return Combine(Puzzles["3x3x3"], s, orientationTransformation);
 }
-
-// These fields are sorted by the order in which they appear in the binary format.
-interface Binary3x3x3Components {
-  edgePermutationIdx: number; // 29 bits
-  puzzleOrientationIdxU: number; // 3 bits
-  puzzleOrientationIdxL: number; // 2 bits
-  centerOrientationSupport: number; // 1 bits
-  cornerOrientationMask: number; // 13 bits
-  cornerPermutationIdx: number; // 16 bits
-  edgeOrientationMask: number; // 12 bits
-  centerOrientationMask: number; // 12 bits
-}
-
 // 0x111 (for idxU) means "not supported"
 function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
-  return components.puzzleOrientationIdxU !== 7;
+  return components.poIdxU !== 7;
 }
 
 export function reid3x3x3ToBinaryComponents(
@@ -151,34 +150,32 @@ export function reid3x3x3ToBinaryComponents(
 ): Binary3x3x3Components {
   const normalizedOrientationState = orientPuzzle(state);
 
-  const edgePermutationIdx = permutationTolexicographicIdx(
+  const epLex = permutationTolexicographicIdx(
     normalizedOrientationState["EDGE"].permutation,
   );
 
   // Represents the spatial orientation of the puzzle. This is useful for smart puzzles, which don't
   // track orientations using center permutation, but instead convey the overall
   // orientation of the entire puzzle
-  const [puzzleOrientationIdxU, puzzleOrientationIdxL] = puzzleOrientationIdx(
-    state,
-  );
+  const [poIdxU, poIdxL] = puzzleOrientationIdx(state);
 
   // We always mark as supported, since we don't support 3x3x3 states without
   // center info yet. (note: this means that we always set this as true in a
   // round-trip).
-  const centerOrientationSupport = 1;
+  const moSupport = 1;
 
-  const cornerOrientationMask = orientationRangeToMask(
+  const coMask = orientationRangeToMask(
     3,
     normalizedOrientationState["CORNER"].orientation,
     0,
     8,
   );
 
-  const cornerPermutationIdx = permutationTolexicographicIdx(
+  const cpLex = permutationTolexicographicIdx(
     normalizedOrientationState["CORNER"].permutation,
   );
 
-  const edgeOrientationMask = orientationRangeToMask(
+  const eoMask = orientationRangeToMask(
     2,
     normalizedOrientationState["EDGE"].orientation,
     0,
@@ -188,7 +185,7 @@ export function reid3x3x3ToBinaryComponents(
   // This is at the end because it allows trimming 12 bits at the end (without
   // affecting how the earlier bits are interpreted) for applications that don't
   // support center orientation and are *super* space constrained.
-  const centerOrientationMask = orientationRangeToMask(
+  const moMask = orientationRangeToMask(
     4,
     normalizedOrientationState["CENTER"].orientation,
     0,
@@ -196,14 +193,14 @@ export function reid3x3x3ToBinaryComponents(
   );
 
   return {
-    cornerPermutationIdx,
-    cornerOrientationMask,
-    puzzleOrientationIdxU,
-    edgePermutationIdx,
-    puzzleOrientationIdxL,
-    centerOrientationSupport,
-    edgeOrientationMask,
-    centerOrientationMask,
+    cpLex,
+    coMask,
+    poIdxU,
+    epLex: epLex,
+    poIdxL,
+    moSupport,
+    eoMask,
+    moMask,
   };
 }
 
@@ -211,25 +208,25 @@ export function binaryComponentsToTwizzleBinary(
   components: Binary3x3x3Components,
 ): Binary3x3x3State {
   const {
-    cornerPermutationIdx,
-    cornerOrientationMask,
-    puzzleOrientationIdxU,
-    edgePermutationIdx,
-    puzzleOrientationIdxL,
-    centerOrientationSupport,
-    edgeOrientationMask,
-    centerOrientationMask,
+    cpLex,
+    coMask,
+    poIdxU,
+    epLex,
+    poIdxL,
+    moSupport,
+    eoMask,
+    moMask,
   } = components;
 
   return concatBinary(BIT_LENGTHS, [
-    cornerPermutationIdx,
-    cornerOrientationMask,
-    puzzleOrientationIdxU,
-    edgePermutationIdx,
-    puzzleOrientationIdxL,
-    centerOrientationSupport,
-    edgeOrientationMask,
-    centerOrientationMask,
+    cpLex,
+    coMask,
+    poIdxU,
+    epLex,
+    poIdxL,
+    moSupport,
+    eoMask,
+    moMask,
   ]);
 }
 
@@ -244,65 +241,47 @@ export function twizzleBinaryToBinaryComponents(
   buffer: ArrayBuffer,
 ): Binary3x3x3Components {
   const [
-    cornerPermutationIdx,
-    cornerOrientationMask,
-    puzzleOrientationIdxU,
-    edgePermutationIdx,
-    puzzleOrientationIdxL,
-    centerOrientationSupport,
-    edgeOrientationMask,
-    centerOrientationMask,
+    cpLex,
+    coMask,
+    poIdxU,
+    epLex,
+    poIdxL,
+    moSupport,
+    eoMask,
+    moMask,
   ] = splitBinary(BIT_LENGTHS, buffer);
 
   return {
-    cornerPermutationIdx,
-    cornerOrientationMask,
-    puzzleOrientationIdxU,
-    edgePermutationIdx,
-    puzzleOrientationIdxL,
-    centerOrientationSupport,
-    edgeOrientationMask,
-    centerOrientationMask,
+    cpLex,
+    coMask,
+    poIdxU,
+    epLex,
+    poIdxL,
+    moSupport,
+    eoMask,
+    moMask,
   };
 }
 
 export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
 ): Transformation {
-  if (components.centerOrientationSupport !== 1) {
+  if (components.moSupport !== 1) {
     throw new Error("Must support center orientation.");
   }
 
   const normalizedOrientationState = {
     EDGE: {
-      permutation: lexicographicIdxToPermutation(
-        12,
-        components.edgePermutationIdx,
-      ),
-      orientation: maskToOrientationRange(
-        2,
-        12,
-        components.edgeOrientationMask,
-      ),
+      permutation: lexicographicIdxToPermutation(12, components.epLex),
+      orientation: maskToOrientationRange(2, 12, components.eoMask),
     },
     CORNER: {
-      permutation: lexicographicIdxToPermutation(
-        8,
-        components.cornerPermutationIdx,
-      ),
-      orientation: maskToOrientationRange(
-        3,
-        8,
-        components.cornerOrientationMask,
-      ),
+      permutation: lexicographicIdxToPermutation(8, components.cpLex),
+      orientation: maskToOrientationRange(3, 8, components.coMask),
     },
     CENTER: {
       permutation: identityPermutation(6),
-      orientation: maskToOrientationRange(
-        4,
-        6,
-        components.centerOrientationMask,
-      ),
+      orientation: maskToOrientationRange(4, 6, components.moMask),
     },
   };
 
@@ -312,8 +291,8 @@ export function binaryComponentsToReid3x3x3(
 
   return reverseOrientPuzzle(
     normalizedOrientationState,
-    components.puzzleOrientationIdxU,
-    components.puzzleOrientationIdxL,
+    components.poIdxU,
+    components.poIdxL,
   );
 }
 
@@ -321,73 +300,33 @@ export function binaryComponentsToReid3x3x3(
 // An empty list means validation success.
 function validateComponents(components: Binary3x3x3Components): string[] {
   const errors = [];
-  if (
-    components.edgePermutationIdx < 0 ||
-    components.edgePermutationIdx >= 479001600
-  ) {
-    errors.push(
-      `edgePermutationIdx (${components.edgePermutationIdx}) out of range`,
-    );
+  if (components.epLex < 0 || components.epLex >= 479001600) {
+    errors.push(`epLex (${components.epLex}) out of range`);
   }
-  if (
-    components.cornerPermutationIdx < 0 ||
-    components.cornerPermutationIdx >= 40320
-  ) {
-    errors.push(
-      `cornerPermutationIdx (${components.cornerPermutationIdx}) out of range`,
-    );
+  if (components.cpLex < 0 || components.cpLex >= 40320) {
+    errors.push(`cpLex (${components.cpLex}) out of range`);
   }
-  if (
-    components.cornerOrientationMask < 0 ||
-    components.cornerOrientationMask >= 6561
-  ) {
-    errors.push(
-      `cornerOrientationMask (${components.cornerOrientationMask}) out of range`,
-    );
+  if (components.coMask < 0 || components.coMask >= 6561) {
+    errors.push(`coMask (${components.coMask}) out of range`);
   }
-  if (
-    components.puzzleOrientationIdxU < 0 ||
-    components.puzzleOrientationIdxU >= 6
-  ) {
+  if (components.poIdxU < 0 || components.poIdxU >= 6) {
     // 0x111 (for idxU) means "not supported"
     if (supportsPuzzleOrientation(components)) {
-      errors.push(
-        `puzzleOrientationIdxU (${components.puzzleOrientationIdxU}) out of range`,
-      );
+      errors.push(`poIdxU (${components.poIdxU}) out of range`);
     }
   }
   // The following cannot be (f decoded from binary properl) out of rangey.
-  if (
-    components.edgeOrientationMask < 0 ||
-    components.edgeOrientationMask >= 4096
-  ) {
-    errors.push(
-      `edgeOrientationMask (${components.edgeOrientationMask}) out of range`,
-    );
+  if (components.eoMask < 0 || components.eoMask >= 4096) {
+    errors.push(`eoMask (${components.eoMask}) out of range`);
   }
-  if (
-    components.centerOrientationMask < 0 ||
-    components.centerOrientationMask >= 4096
-  ) {
-    errors.push(
-      `centerOrientationMask (${components.centerOrientationMask}) out of range`,
-    );
+  if (components.moMask < 0 || components.moMask >= 4096) {
+    errors.push(`moMask (${components.moMask}) out of range`);
   }
-  if (
-    components.puzzleOrientationIdxL < 0 ||
-    components.puzzleOrientationIdxL >= 4
-  ) {
-    errors.push(
-      `puzzleOrientationIdxL (${components.puzzleOrientationIdxL}) out of range`,
-    );
+  if (components.poIdxL < 0 || components.poIdxL >= 4) {
+    errors.push(`poIdxL (${components.poIdxL}) out of range`);
   }
-  if (
-    components.centerOrientationSupport < 0 ||
-    components.centerOrientationSupport >= 2
-  ) {
-    errors.push(
-      `centerOrientationSupport (${components.centerOrientationSupport}) out of range`,
-    );
+  if (components.moSupport < 0 || components.moSupport >= 2) {
+    errors.push(`moSupport (${components.moSupport}) out of range`);
   }
   return errors;
 }

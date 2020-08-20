@@ -63,7 +63,7 @@ describe("Binary 3x3x3", () => {
       twizzleBinaryToReid3x3x3(
         new Uint8Array([0, 0, 0, 0, 255, 0, 0, 1, 255, 240, 0]),
       );
-    }).toThrow("edgePermutationIdx (534773760) out of range");
+    }).toThrow("epLex (534773760) out of range");
 
     expect(() => {
       // 0x111 (idxU)
@@ -76,9 +76,7 @@ describe("Binary 3x3x3", () => {
       twizzleBinaryToReid3x3x3(
         new Uint8Array([255, 255, 0, 0, 255, 0, 0, 1, 255, 240, 0]),
       );
-    }).toThrow(
-      "edgePermutationIdx (534773760) out of range, cornerPermutationIdx (65535) out of range",
-    );
+    }).toThrow("epLex (534773760) out of range, cpLex (65535) out of range");
   });
 
   it("round-trips 3.47 WR scramble", () => {
