@@ -95,6 +95,7 @@ export class Twisty3DCanvas extends ManagedCustomElement
 
   private resize(): void {
     this.resizePending = false;
+
     const w = this.contentWrapper.offsetWidth;
     const h = this.contentWrapper.offsetHeight;
     let off = 0;
@@ -114,7 +115,8 @@ export class Twisty3DCanvas extends ManagedCustomElement
     this.camera.updateProjectionMatrix(); // TODO
 
     this.renderer.setPixelRatio(pixelRatio());
-    this.renderer.setSize(w, h, false);
+    this.renderer.setSize(w, h, true);
+
     this.scheduleRender();
   }
 
