@@ -84,53 +84,37 @@ const key11 = new Uint8Array([
 // Clean-room reverse-engineered
 async function decryptState(
   data: Uint8Array,
-  key: Uint8Array,
-  macAddress: Uint8Array,
+  aesKey: CryptoKey | null,
 ): Promise<Uint8Array> {
-  // TODO: Read from puzzle.
-  const keyBuffer = new Uint8Array(key);
-  for (let i = 0; i < macAddress.length; i++) {
-    keyBuffer[i] = (keyBuffer[i] + macAddress[i]) % 256;
-  }
-
-  const aesKey = await importKey(new Uint8Array(keyBuffer));
-  data.set(new Uint8Array(await unsafeDecryptBlock(aesKey, data.slice(3))), 3);
-  data.set(
-    new Uint8Array(await unsafeDecryptBlock(aesKey, data.slice(0, 16))),
-    0,
-  );
-  return data;
-}
-
-// TODO: Support caching which decoding strategy worked last time.
-async function decodeState(
-  data: Uint8Array,
-  macAddress: Uint8Array,
-): Promise<Uint8Array> {
-  if (probablyDecodedCorrectly(data)) {
+  if (aesKey === null) {
     return data;
   }
-  const decrypted10 = await decryptState(data, key10, macAddress);
-  if (probablyDecodedCorrectly(decrypted10)) {
-    return decrypted10;
+
+  const copy = new Uint8Array(data);
+  copy.set(new Uint8Array(await unsafeDecryptBlock(aesKey, copy.slice(3))), 3);
+  copy.set(
+    new Uint8Array(await unsafeDecryptBlock(aesKey, copy.slice(0, 16))),
+    0,
+  );
+
+  if (probablyDecodedCorrectly(copy)) {
+    return copy;
   }
-  const decrypted11 = await decryptState(data, key11, macAddress);
-  if (probablyDecodedCorrectly(decrypted11)) {
-    return decrypted11;
-  }
-  throw new Error("Unable to decode");
+
+  throw new Error("fooly");
 }
 
 class PhysicalState {
   public static async read(
     characteristic: BluetoothRemoteGATTCharacteristic,
-    macAddress: Uint8Array,
+    aesKey: CryptoKey | null,
   ): Promise<PhysicalState> {
-    const value = await decodeState(
+    const value = await decryptState(
       new Uint8Array((await characteristic.readValue()).buffer),
-      macAddress,
+      aesKey,
     );
     const timeStamp = Date.now();
+    // console.log(value);
     return new PhysicalState(new DataView(value.buffer), timeStamp);
   }
 
@@ -194,6 +178,9 @@ const UUIDs = {
   actualAngleAndBatteryCharacteristic: "0000fff7-0000-1000-8000-00805f9b34fb",
   faceletStatus1Characteristic: "0000fff2-0000-1000-8000-00805f9b34fb",
   faceletStatus2Characteristic: "0000fff3-0000-1000-8000-00805f9b34fb",
+  infoService: "0000180a-0000-1000-8000-00805f9b34fb",
+  systemIDCharacteristic: "00002a23-0000-1000-8000-00805f9b34fb",
+  versionCharacteristic: "00002a28-0000-1000-8000-00805f9b34fb",
 };
 
 const commands: { [cmd: string]: BufferSource } = {
@@ -222,7 +209,7 @@ const commands: { [cmd: string]: BufferSource } = {
 // // TODO: Move this into a factory?
 export const ganConfig: BluetoothConfig = {
   filters: [{ namePrefix: "GAN" }],
-  optionalServices: [UUIDs.ganCubeService],
+  optionalServices: [UUIDs.ganCubeService, UUIDs.infoService],
 };
 
 function buf2hex(buffer: ArrayBuffer): string {
@@ -286,24 +273,39 @@ const gan356iEdgeMappings = [
 ];
 const faceOrder = "URFDLB";
 
-// TODO
-// class CharacteristicGetter {
-//   characteristics: {[s: string]: Promise<BluetoothRemoteGATTCharacteristic> | null}
-//   constructor(private service: BluetoothRemoteGATTService) {
-//   }
+async function getKey(
+  server: BluetoothRemoteGATTServer,
+): Promise<CryptoKey | null> {
+  const infoService = await server.getPrimaryService(UUIDs.infoService);
 
-//   // get()
-// }
+  const versionCharacteristic = await infoService.getCharacteristic(
+    UUIDs.versionCharacteristic,
+  );
+  const versionBuffer = new Uint8Array(
+    (await versionCharacteristic.readValue()).buffer,
+  );
 
-function getMacAddress(name: string): Uint8Array {
-  const macAddress = new Uint8Array([0x4c, 0x24, 0x98, 0x00, 0x00, 0x00]);
-  if (name.length !== 10 || !name.startsWith("GAN-")) {
-    console.warn("Unexpected puzzle name.");
+  const versionValue =
+    (((versionBuffer[0] << 8) + versionBuffer[1]) << 8) + versionBuffer[2];
+  if (versionValue < 0x01_00_08) {
+    return null;
   }
-  macAddress[3] = parseInt(name.slice(4, 6), 16);
-  macAddress[4] = parseInt(name.slice(6, 8), 16);
-  macAddress[5] = parseInt(name.slice(8, 10), 16);
-  return macAddress;
+
+  const keyXor = versionValue < 0x01_01_01 ? key10 : key11;
+
+  const systemIDCharacteristic = await infoService.getCharacteristic(
+    UUIDs.systemIDCharacteristic,
+  );
+  const systemID = new Uint8Array(
+    (await systemIDCharacteristic.readValue()).buffer,
+  ).reverse();
+
+  const key = new Uint8Array(keyXor);
+  for (let i = 0; i < systemID.length; i++) {
+    key[i] = (key[i] + systemID[i]) % 256;
+  }
+
+  return importKey(key);
 }
 
 export class GanCube extends BluetoothPuzzle {
@@ -311,9 +313,6 @@ export class GanCube extends BluetoothPuzzle {
   public static async connect(
     server: BluetoothRemoteGATTServer,
   ): Promise<GanCube> {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const macAddress = getMacAddress(server.device!.name!);
-
     const ganCubeService = await server.getPrimaryService(UUIDs.ganCubeService);
     debugLog("Service:", ganCubeService);
 
@@ -322,8 +321,10 @@ export class GanCube extends BluetoothPuzzle {
     );
     debugLog("Characteristic:", physicalStateCharacteristic);
 
+    const aesKey = await getKey(server);
+
     const initialMoveCounter = (
-      await PhysicalState.read(physicalStateCharacteristic, macAddress)
+      await PhysicalState.read(physicalStateCharacteristic, aesKey)
     ).moveCounter();
     debugLog("Initial Move Counter:", initialMoveCounter);
     const cube = new GanCube(
@@ -331,7 +332,7 @@ export class GanCube extends BluetoothPuzzle {
       server,
       physicalStateCharacteristic,
       initialMoveCounter,
-      macAddress,
+      aesKey,
     );
     return cube;
   }
@@ -356,7 +357,7 @@ export class GanCube extends BluetoothPuzzle {
     private server: BluetoothRemoteGATTServer,
     private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic,
     private lastMoveCounter: number,
-    private macAddress: Uint8Array,
+    private aesKey: CryptoKey | null,
   ) {
     super();
     this.startTrackingMoves();
@@ -387,7 +388,7 @@ export class GanCube extends BluetoothPuzzle {
   public async intervalHandler(): Promise<void> {
     const physicalState = await PhysicalState.read(
       this.physicalStateCharacteristic,
-      this.macAddress,
+      this.aesKey,
     );
     let numInterveningMoves = physicalState.numMovesSince(this.lastMoveCounter);
     // console.log(numInterveningMoves);
@@ -424,9 +425,9 @@ export class GanCube extends BluetoothPuzzle {
   }
 
   public async getState(): Promise<PuzzleState> {
-    const arr: Uint8Array = await decodeState(
+    const arr: Uint8Array = await decryptState(
       new Uint8Array(await this.readFaceletStatus1Characteristic()),
-      this.macAddress,
+      this.aesKey,
     );
     const stickers: number[] = [];
     for (let i = 0; i < 18; i += 3) {
