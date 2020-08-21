@@ -25,8 +25,8 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
 
   constructor(private config: TwistyViewerWrapperConfig = {}) {
     super();
-
     this.addCSS(twistyViewerWrapperCSS);
+
     this.contentWrapper.classList.toggle(
       "checkered",
       config.checkered ?? false,

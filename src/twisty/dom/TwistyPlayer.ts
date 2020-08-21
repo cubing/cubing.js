@@ -91,6 +91,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
   ) {
     super();
+    this.addCSS(twistyPlayerCSS);
     this.#config = new TwistyPlayerConfig(this, initialConfig);
 
     this.legacyExperimentalPG3DViewConfig = legacyExperimentalPG3DViewConfig;
@@ -237,8 +238,6 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.addElement(this.controlElems[0]);
     this.addElement(this.controlElems[1]);
-
-    this.addCSS(twistyPlayerCSS);
   }
 
   protected createViewers(

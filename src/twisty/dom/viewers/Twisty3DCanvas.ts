@@ -7,6 +7,8 @@ import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
 import { TwistyOrbitControls } from "./TwistyOrbitControls";
 import { TwistyViewerElement } from "./TwistyViewerElement";
 
+let resizeObserverWarningShown = false;
+
 // <twisty-3d-canvas>
 export class Twisty3DCanvas extends ManagedCustomElement
   implements TwistyViewerElement {
@@ -60,7 +62,15 @@ export class Twisty3DCanvas extends ManagedCustomElement
     // TODO: Remove this when enough Safari users have `ResizeObserver`.
     if (window.ResizeObserver) {
       const observer = new window.ResizeObserver(this.onResize.bind(this));
-      observer.observe(this);
+      observer.observe(this.contentWrapper);
+    } else {
+      this.scheduleRender();
+      if (!resizeObserverWarningShown) {
+        console.warn(
+          "You are using an older browser that does not support `ResizeObserver`. Displayed puzzles will not be rescaled.",
+        );
+        resizeObserverWarningShown = true;
+      }
     }
   }
 
@@ -108,8 +118,8 @@ export class Twisty3DCanvas extends ManagedCustomElement
   private resize(): void {
     this.resizePending = false;
 
-    const w = this.contentWrapper.offsetWidth;
-    const h = this.contentWrapper.offsetHeight;
+    const w = this.contentWrapper.clientWidth;
+    const h = this.contentWrapper.clientHeight;
     let off = 0;
     if (this.legacyExperimentalShift > 0) {
       off = Math.max(0, Math.floor((w - h) * 0.5));
