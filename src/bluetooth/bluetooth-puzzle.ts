@@ -13,7 +13,7 @@ export type PuzzleState = Transformation;
 export interface MoveEvent {
   latestMove: BlockMove;
   timeStamp: number;
-  debug?: object;
+  debug?: Record<string, unknown>;
   state?: PuzzleState;
   quaternion?: any; // TODO: Unused
 }
@@ -22,7 +22,7 @@ export interface MoveEvent {
 export interface OrientationEvent {
   quaternion: Quaternion;
   timeStamp: number;
-  debug?: object;
+  debug?: Record<string, unknown>;
 }
 
 export interface BluetoothConfig {
