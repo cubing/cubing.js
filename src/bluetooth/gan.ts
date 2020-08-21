@@ -291,7 +291,7 @@ async function getKey(
     return null;
   }
 
-  const keyXor = versionValue < 0x01_01_01 ? key10 : key11;
+  const keyXor = versionValue < 0x01_01_00 ? key10 : key11;
 
   const systemIDCharacteristic = await infoService.getCharacteristic(
     UUIDs.systemIDCharacteristic,
