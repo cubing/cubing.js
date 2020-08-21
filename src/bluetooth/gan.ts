@@ -101,7 +101,7 @@ async function decryptState(
     return copy;
   }
 
-  throw new Error("fooly");
+  throw new Error("Invalid Gan cube state");
 }
 
 class PhysicalState {
