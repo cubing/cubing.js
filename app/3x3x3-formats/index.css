@@ -1,5 +1,21 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: sans-serif;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+}
+
+.panel {
+  min-width: 400px;
+  padding: 1em;
 }
 
 .svg-wrapper {
