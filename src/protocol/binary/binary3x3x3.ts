@@ -20,7 +20,7 @@ type Binary3x3x3State = ArrayBuffer;
 const BIT_LENGTHS = [16, 13, 3, 29, 2, 1, 12, 12];
 
 // These fields are sorted by the order in which they appear in the binary format.
-interface Binary3x3x3Components {
+export interface Binary3x3x3Components {
   cpLex: number; // 16 bits, corner permutation
   coMask: number; // 13 bits, corner orientation
   poIdxU: number; // 3 bits, puzzle orientation (U face)
