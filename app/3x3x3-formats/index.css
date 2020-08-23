@@ -1,0 +1,11 @@
+body {
+  font-family: sans-serif;
+}
+
+.svg-wrapper {
+  max-width: 30em;
+}
+
+button {
+  font-size: 1em;
+}
