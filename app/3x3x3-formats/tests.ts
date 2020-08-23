@@ -13,8 +13,8 @@ const tests: {
   name: string;
   alg: string;
   kpuzzle: Transformation;
-  binary: Binary3x3x3Components;
-  binaryComponents: number[];
+  binaryComponents: Binary3x3x3Components;
+  binaryBytes: number[];
   reidString: string;
   stickers: number[];
 }[] = [];
@@ -26,8 +26,8 @@ function addTest(name: string, alg: string): void {
     name: name,
     alg: alg,
     kpuzzle: kpuzzle.state,
-    binary: reid3x3x3ToBinaryComponents(kpuzzle.state),
-    binaryComponents: Array.from(
+    binaryComponents: reid3x3x3ToBinaryComponents(kpuzzle.state),
+    binaryBytes: Array.from(
       new Uint8Array(reid3x3x3ToTwizzleBinary(kpuzzle.state)),
     ),
     reidString: kpuzzleToReidString(kpuzzle.state),
@@ -44,7 +44,8 @@ for (const face of "ULFRBDxyz".split("")) {
 }
 addTest("K Trigger", "R U R'");
 addTest("Sune", "R U R' U R U2 R'");
-addTest("Pure epLex (Pons Asinorum)", "M2 E2 S2");
+addTest("Pons Asinorum", "M2 E2 S2");
+addTest("Pure epLex (4 3-cycles)", "(R2 U' R' U' R2 U R U R U2' R z)4");
 addTest("Pure eoMask (superflip)", "((M' U')4 [U2, M' E2 M] x y)3");
 addTest("Pure coMask (4cw, 4 ccw", "(L U L' U L U2 L' R' U' R U' R' U2' R z)4");
 addTest("Pure cpLex (4 2-swaps)", "([[R: B'], F] [[R: B], F] z2)2");
