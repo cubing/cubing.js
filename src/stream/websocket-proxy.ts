@@ -1,6 +1,5 @@
 import { MoveEvent } from "../bluetooth";
 import { OrientationEvent } from "../bluetooth/bluetooth-puzzle";
-import { socketOrigin } from "../../app/vr/config";
 import { ProxyEvent } from "./proxy-event";
 
 export class WebSocketProxySender {
@@ -48,7 +47,7 @@ export class WebSocketProxySender {
 
 export abstract class WebSocketProxyReceiver {
   protected websocket: WebSocket;
-  constructor(url: string) {
+  constructor(url: string, socketOrigin?: string) {
     if (!socketOrigin) {
       console.log("No socket origin specified. Will not attempt to connect.");
       return;

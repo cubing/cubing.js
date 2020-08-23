@@ -71,7 +71,7 @@ const axesInfo: AxisInfo[] = [
 
 class CallbackProxyReceiver extends WebSocketProxyReceiver {
   constructor(url: string, private callback: (e: MoveEvent) => void) {
-    super(url);
+    super(url, socketOrigin ?? undefined);
   }
 
   onProxyEvent(e: MoveEvent): void {
