@@ -6,9 +6,7 @@ export interface OrbitTransformation {
   orientation: number[];
 }
 // TODO: Use a list instead of an object for performance?
-export interface Transformation {
-  [/* orbit name */ key: string]: OrbitTransformation;
-}
+export type Transformation = Record<string, OrbitTransformation>;
 
 export interface OrbitDefinition {
   numPieces: number;
