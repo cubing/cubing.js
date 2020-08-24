@@ -52,7 +52,7 @@
     "build": "npx rollup -c",
     "dev": "npx parcel serve --no-autoinstall app/index.html --port 333 --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
-    "test": "npx jest && npm run lint",
+    "test": "npx jest && npm run lint && node -e \"console.log(require(\\\".\\\"))\"",
     "format": "npx eslint --fix .; npx prettier --write src app *.config.js */index.js */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint .",
