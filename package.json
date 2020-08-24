@@ -58,7 +58,7 @@
     "format": "npx eslint --fix .; npx prettier --write src app *.config.js */index.js */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint .",
-    "prepack": "npm run clean && npm run build",
+    "prepack": "npm run clean && npm run build && npm run test-node-require",
     "parcel-build-for-vr-cubing-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/experiments.cubing.net/vr app/vr/index.html",
     "parcel-build-for-experiments-cubing-net": "parcel build --no-autoinstall --public-url /cubing.js/ --out-dir dist/experiments.cubing.net/cubing.js app/index.html"
   },
