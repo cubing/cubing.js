@@ -39,6 +39,8 @@ if (!process.env.ROLLUP_WATCH) {
     terser({
       // eslint-disable-next-line @typescript-eslint/camelcase
       keep_classnames: true,
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      keep_fnames: true,
     }),
   );
 }
