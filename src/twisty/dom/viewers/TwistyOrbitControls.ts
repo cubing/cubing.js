@@ -1,5 +1,5 @@
 import { Camera, Renderer } from "three";
-import { OrbitControls as ThreeOrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls as ThreeOrbitControls } from "./vendor/OrbitControls";
 
 const INERTIA_DEFAULT: boolean = true;
 

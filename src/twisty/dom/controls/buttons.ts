@@ -10,6 +10,7 @@ import { buttonCSS, buttonGridCSS } from "./buttons.css";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
 import { TimeRange } from "../../animation/alg/AlgCursor";
 import { Direction, BoundaryType } from "../../animation/alg/CursorTypes";
+import { customElementsShim } from "../element/node-custom-element-shims";
 
 type TimelineCommand =
   | "fullscreen"
@@ -244,9 +245,7 @@ class TwistyControlButton extends ManagedCustomElement
   }
 }
 
-if (customElements) {
-  customElements.define("twisty-control-button", TwistyControlButton);
-}
+customElementsShim.define("twisty-control-button", TwistyControlButton);
 
 // <twisty-control-button-grid>
 // Usually a horizontal line.
@@ -269,9 +268,7 @@ export class TwistyControlButtonPanel extends ManagedCustomElement
   }
 }
 
-if (customElements) {
-  customElements.define(
-    "twisty-control-button-panel",
-    TwistyControlButtonPanel,
-  );
-}
+customElementsShim.define(
+  "twisty-control-button-panel",
+  TwistyControlButtonPanel,
+);

@@ -16,6 +16,7 @@ import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { twisty2DSVGCSS } from "./Twisty2DSVGView.css";
 import { TwistyViewerElement } from "./TwistyViewerElement";
 import { PuzzlePosition } from "../../animation/alg/CursorTypes";
+import { customElementsShim } from "../element/node-custom-element-shims";
 
 // <twisty-2d-svg>
 export class Twisty2DSVG extends ManagedCustomElement
@@ -74,6 +75,4 @@ export class Twisty2DSVG extends ManagedCustomElement
   }
 }
 
-if (customElements) {
-  customElements.define("twisty-2d-svg", Twisty2DSVG);
-}
+customElementsShim.define("twisty-2d-svg", Twisty2DSVG);

@@ -33,6 +33,7 @@ import {
   BackViewLayout,
   TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
+import { customElementsShim } from "./element/node-custom-element-shims";
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;
@@ -461,6 +462,4 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 }
 
-if (typeof customElements !== "undefined") {
-  customElements.define("twisty-player", TwistyPlayer);
-}
+customElementsShim.define("twisty-player", TwistyPlayer);

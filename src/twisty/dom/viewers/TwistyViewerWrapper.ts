@@ -1,6 +1,7 @@
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
 import { ClassListManager } from "../element/ClassListManager";
+import { customElementsShim } from "../element/node-custom-element-shims";
 
 export const backViewLayouts = {
   "none": true, // default
@@ -47,6 +48,4 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
   }
 }
 
-if (customElements) {
-  customElements.define("twisty-viewer-wrapper", TwistyViewerWrapper);
-}
+customElementsShim.define("twisty-viewer-wrapper", TwistyViewerWrapper);

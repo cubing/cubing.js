@@ -1,3 +1,8 @@
+import {
+  HTMLElementShim,
+  customElementsShim,
+} from "./node-custom-element-shims";
+
 export class CSSSource {
   constructor(private sourceText: string) {
     // TODO: Replace with adopted style sheets some day if we can.
@@ -15,7 +20,7 @@ export class CSSSource {
 // - Wrapped element
 //   - Shadow root
 //     - Content wrapper
-export class ManagedCustomElement extends HTMLElement {
+export class ManagedCustomElement extends HTMLElementShim {
   public shadow: ShadowRoot;
   public contentWrapper: HTMLDivElement; // TODO: can we get rid of this wrapper?
 
@@ -65,6 +70,7 @@ export class ManagedCustomElement extends HTMLElement {
   }
 }
 
-if (customElements) {
-  customElements.define("twisty-managed-custom-element", ManagedCustomElement);
-}
+customElementsShim.define(
+  "twisty-managed-custom-element",
+  ManagedCustomElement,
+);

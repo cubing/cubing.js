@@ -6,6 +6,7 @@ import { pixelRatio } from "./canvas";
 import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
 import { TwistyOrbitControls } from "./TwistyOrbitControls";
 import { TwistyViewerElement } from "./TwistyViewerElement";
+import { customElementsShim } from "../element/node-custom-element-shims";
 
 let resizeObserverWarningShown = false;
 
@@ -169,6 +170,4 @@ export class Twisty3DCanvas extends ManagedCustomElement
   }
 }
 
-if (customElements) {
-  customElements.define("twisty-3d-canvas", Twisty3DCanvas);
-}
+customElementsShim.define("twisty-3d-canvas", Twisty3DCanvas);

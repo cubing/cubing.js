@@ -9,6 +9,7 @@ import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
 import { twistyScrubberCSS } from "./TwistyScrubber.css";
 import { TimeRange } from "../../animation/alg/AlgCursor";
+import { customElementsShim } from "../element/node-custom-element-shims";
 
 // Usually a horizontal line.
 export class TwistyScrubber extends ManagedCustomElement
@@ -47,6 +48,4 @@ export class TwistyScrubber extends ManagedCustomElement
   }
 }
 
-if (customElements) {
-  customElements.define("twisty-scrubber", TwistyScrubber);
-}
+customElementsShim.define("twisty-scrubber", TwistyScrubber);
