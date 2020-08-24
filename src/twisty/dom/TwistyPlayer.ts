@@ -177,6 +177,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   set cameraPosition(cameraPosition: Vector3) {
     this.#config.attributes["camera-position"].setValue(cameraPosition);
     if (
+      this.viewerElems &&
       ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
     ) {
       (this.viewerElems[0] as Twisty3DCanvas)?.camera.position.copy(
@@ -304,9 +305,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         }
       // fallthrough for 3D when not 3x3x3
       case "PG3D": {
-        const [kpuzzleDef, stickerDat, cameraPosition] = this.pgHelper(
-          puzzleName,
-        );
+        const [kpuzzleDef, stickerDat] = this.pgHelper(puzzleName);
 
         try {
           this.cursor = new AlgCursor(timeline, kpuzzleDef, alg);
@@ -327,7 +326,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.legacyExperimentalPG3D = pg3d;
         this.scene.addTwisty3DPuzzle(this.twisty3D);
         const mainViewer = new Twisty3DCanvas(this.scene, {
-          cameraPosition,
+          cameraPosition: this.cameraPosition,
         });
         this.viewerElems = [mainViewer];
         this.#viewerWrapper.addElement(mainViewer);
@@ -344,12 +343,9 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   // TODO: Distribute this code better.
-  private pgHelper(
-    puzzleName: string,
-  ): [KPuzzleDefinition, StickerDat, Vector3 | undefined] {
+  private pgHelper(puzzleName: string): [KPuzzleDefinition, StickerDat] {
     let kpuzzleDef: KPuzzleDefinition;
     let stickerDat: StickerDat;
-    const cameraPosition: Vector3 | undefined = undefined;
     if (this.legacyExperimentalPG3DViewConfig) {
       kpuzzleDef = this.legacyExperimentalPG3DViewConfig.def;
       stickerDat = this.legacyExperimentalPG3DViewConfig.stickerDat;
@@ -361,7 +357,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       stickerDat = pg.get3d(0.0131);
       kpuzzleDef = pg.writekpuzzle();
     }
-    return [kpuzzleDef, stickerDat, cameraPosition];
+    return [kpuzzleDef, stickerDat];
   }
 
   private createBackViewer(): void {

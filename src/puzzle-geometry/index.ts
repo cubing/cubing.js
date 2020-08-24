@@ -19,6 +19,7 @@ export {
   StickerDatAxis,
   StickerDatFace,
   StickerDatSticker,
+  useNewFaceNames,
 } from "./PuzzleGeometry";
 export { Quat } from "./Quat";
 export { schreierSims } from "./SchreierSims";

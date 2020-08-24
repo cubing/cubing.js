@@ -2,6 +2,9 @@ import { Sequence } from "../../src/alg";
 import "../../src/twisty";
 import { App } from "./app";
 import { getURLParam } from "./url-params";
+import { useNewFaceNames } from "../../src/puzzle-geometry";
+
+useNewFaceNames(true);
 
 window.addEventListener("load", () => {
   if (!getURLParam("debug-js")) {

@@ -184,7 +184,7 @@ const defaultcolors: any = {
         R: "#ff0000",
         FR: "#ffffd0",
         FL: "#3399ff",
-        L: "#660099",
+        L: "#7700aa",
         DR: "#ff66cc",
         B: "#99ff00",
         BR: "#0000ff",

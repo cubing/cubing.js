@@ -4,6 +4,7 @@ import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
 import { setURLParams } from "./url-params";
+import { Vector3 } from "three";
 
 export interface AppData {
   puzzleName: string;
@@ -46,6 +47,9 @@ export class App {
     const twistyConfig: TwistyPlayerInitialConfig = {
       alg: new Sequence([]),
     };
+    if (initialData.puzzleName === "megaminx") {
+      twistyConfig.cameraPosition = new Vector3(0, 3.09, 5);
+    }
     const displayablePuzzle = puzzles[initialData.puzzleName];
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
@@ -69,6 +73,8 @@ export class App {
 
   private setPuzzle(puzzleName: string): boolean {
     setURLParams({ puzzle: puzzleName });
+    // TODO: Handle 2D/3D transitions
+    // this.twistyPlayer.setPuzzle(puzzleName);
     location.reload();
     return true;
   }
