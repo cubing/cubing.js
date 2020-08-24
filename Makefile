@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build dev clean test format setup lint prepack parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
+NPM_COMMANDS = build dev clean test test-jest test-node-require format setup lint prepack parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
