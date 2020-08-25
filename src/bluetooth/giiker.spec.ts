@@ -23,7 +23,7 @@ describe("GiiKerCube", () => {
     expect(
       structureEquals(
         new Sequence([giikerMoveToBlockMoveForTesting(3, 9)]),
-        parse("L2"),
+        parse("L2'"),
       ),
     ).toBe(true);
   });

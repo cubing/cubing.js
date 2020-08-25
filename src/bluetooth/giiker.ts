@@ -37,12 +37,15 @@ export const giiKERConfig: BluetoothConfig = {
 
 // TODO: Expose for testing.
 function giikerMoveToBlockMove(face: number, amount: number): BlockMove {
-  // Sometimes we receive 9 = 3 * 3 for two counter-clockwise moves in quick succession.
-  if (amount === 9) {
-    debugLog("Encountered 9", face, amount);
-    amount = -2;
+  switch (amount) {
+    case 3:
+      amount = -1;
+      break;
+    case 9:
+      debugLog("Encountered 9", face, amount);
+      amount = -2;
+      break;
   }
-  amount = [0, 1, 2, -1][amount];
 
   const family = ["?", "B", "D", "L", "U", "R", "F"][face];
   return BareBlockMove(family, amount);

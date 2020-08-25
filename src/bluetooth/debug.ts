@@ -4,6 +4,7 @@ export function enableDebugLogging(enable: boolean): void {
   DEBUG_LOGGING_ENABLED = enable;
 }
 
+// TODO: Remove this.
 export function debugLog(...args: any[]): void {
   if (!DEBUG_LOGGING_ENABLED) {
     return;
