@@ -16,12 +16,11 @@ import {
 import {
   BareBlockMove,
   BlockMove,
+  coalesceBaseMoves,
   experimentalAppendBlockMove,
   parse,
   Sequence,
-  coalesceBaseMoves,
 } from "../../src/alg/index";
-import { MoveEvent } from "../../src/bluetooth";
 import { Puzzles } from "../../src/kpuzzle";
 import { ProxyEvent, WebSocketProxyReceiver } from "../../src/stream";
 import { TAU } from "../../src/twisty/3D/TAU";

@@ -1,7 +1,6 @@
 import { BlockMove } from "../alg";
 import { Transformation } from "../kpuzzle";
 import { BasicRotationTransformer, StreamTransformer } from "./transformer";
-import { Quaternion } from "three";
 
 /******** BluetoothPuzzle ********/
 
@@ -20,7 +19,12 @@ export interface MoveEvent {
 
 // TODO: Only use the `quaternion` field in the `MoveEvent`?
 export interface OrientationEvent {
-  quaternion: Quaternion;
+  quaternion: {
+    x: number;
+    y: number;
+    z: number;
+    w: number;
+  };
   timeStamp: number;
   debug?: Record<string, unknown>;
 }
@@ -68,6 +72,14 @@ export abstract class BluetoothPuzzle {
     for (const transformer of this.transformers) {
       transformer.transformOrientation(orientationEvent);
     }
+    const { x, y, z, w } = orientationEvent.quaternion;
+    // TODO: can we avoid mutating the source event?
+    orientationEvent.quaternion = {
+      x,
+      y,
+      z,
+      w,
+    };
     for (const l of this.orientationListeners) {
       // TODO: Convert quaternion.
       l(orientationEvent);
