@@ -3,7 +3,7 @@ html {
 }
 
 body {
-  max-width: 40em;
+  max-width: 50em;
   margin: 2em auto;
 }
 
@@ -60,11 +60,11 @@ thead td:nth-child(32) {
   border-right: 2px solid black;
 }
 
-.perm {
+.edge {
   background: rgba(128, 192, 255, 0.5);
 }
 
-.ori {
+.corner {
   background: rgba(128, 255, 128, 0.75);
 }
 

@@ -17,17 +17,17 @@ import {
 type Binary3x3x3State = ArrayBuffer;
 
 // Bit lengths of the encoded components, in order.
-const BIT_LENGTHS = [16, 13, 3, 29, 2, 1, 12, 12];
+const BIT_LENGTHS = [29, 12, 16, 13, 3, 2, 1, 12];
 
 // These fields are sorted by the order in which they appear in the binary format.
 export interface Binary3x3x3Components {
+  epLex: number; // 29 bits, edge permutation
+  eoMask: number; // 12 bits, edge orientation
   cpLex: number; // 16 bits, corner permutation
   coMask: number; // 13 bits, corner orientation
   poIdxU: number; // 3 bits, puzzle orientation (U face)
-  epLex: number; // 29 bits, edge permutation
   poIdxL: number; // 2 bits, puzzle orientation (L face)
   moSupport: number; // 1 bit, center orientation support
-  eoMask: number; // 12 bits, edge orientation
   moMask: number; // 12 bits, center orientation
 }
 
@@ -151,21 +151,21 @@ export function reid3x3x3ToBinaryComponents(
   const normedState = normalizePuzzleOrientation(state);
 
   const epLex = permutationToLex(normedState["EDGE"].permutation);
+  const eoMask = orientationsToMask(2, normedState["EDGE"].orientation);
+  const cpLex = permutationToLex(normedState["CORNER"].permutation);
+  const coMask = orientationsToMask(3, normedState["CORNER"].orientation);
   const [poIdxU, poIdxL] = puzzleOrientationIdx(state);
   const moSupport = 1; // Required for now.
-  const coMask = orientationsToMask(3, normedState["CORNER"].orientation);
-  const cpLex = permutationToLex(normedState["CORNER"].permutation);
-  const eoMask = orientationsToMask(2, normedState["EDGE"].orientation);
   const moMask = orientationsToMask(4, normedState["CENTER"].orientation);
 
   return {
+    epLex,
+    eoMask,
     cpLex,
     coMask,
     poIdxU,
-    epLex,
     poIdxL,
     moSupport,
-    eoMask,
     moMask,
   };
 }
@@ -174,24 +174,24 @@ export function binaryComponentsToTwizzleBinary(
   components: Binary3x3x3Components,
 ): Binary3x3x3State {
   const {
+    epLex,
+    eoMask,
     cpLex,
     coMask,
     poIdxU,
-    epLex,
     poIdxL,
     moSupport,
-    eoMask,
     moMask,
   } = components;
 
   return concatBinary(BIT_LENGTHS, [
+    epLex,
+    eoMask,
     cpLex,
     coMask,
     poIdxU,
-    epLex,
     poIdxL,
     moSupport,
-    eoMask,
     moMask,
   ]);
 }
@@ -207,24 +207,24 @@ export function twizzleBinaryToBinaryComponents(
   buffer: ArrayBuffer,
 ): Binary3x3x3Components {
   const [
+    epLex,
+    eoMask,
     cpLex,
     coMask,
     poIdxU,
-    epLex,
     poIdxL,
     moSupport,
-    eoMask,
     moMask,
   ] = splitBinary(BIT_LENGTHS, buffer);
 
   return {
+    epLex,
+    eoMask,
     cpLex,
     coMask,
     poIdxU,
-    epLex,
     poIdxL,
     moSupport,
-    eoMask,
     moMask,
   };
 }
