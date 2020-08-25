@@ -72,5 +72,5 @@ export abstract class WebSocketProxyReceiver {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-  abstract onProxyEvent(e: MoveEvent): void;
+  abstract onProxyEvent(e: ProxyEvent): void;
 }
