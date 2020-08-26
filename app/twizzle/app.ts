@@ -282,6 +282,16 @@ function setAlgo(str: string, writeback: boolean): void {
       puzzleSelected = false;
     } else if (puzzleSelected) {
       twisty.setPuzzle("custom", legacyExperimentalPG3DViewConfig());
+      (twisty.viewerElems[0] as Twisty3DCanvas).camera.position.copy(
+        initialCameraPos,
+      );
+      (twisty.viewerElems[0] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
+      (twisty.viewerElems[1] as Twisty3DCanvas)?.camera.position.copy(
+        initialCameraPos.clone().multiplyScalar(-1),
+      );
+      (twisty.viewerElems[1] as Twisty3DCanvas)?.camera.lookAt(0, 0, 0);
+      twisty.viewerElems[0].scheduleRender();
+      twisty.viewerElems[1]?.scheduleRender();
       puzzleSelected = false;
     }
     twisty.backView = getCheckbox("sidebyside")
