@@ -186,11 +186,7 @@ function updateMoveCount(alg?: Sequence): void {
 }
 
 function saveCamera(): void {
-  if (!twisty || !twisty.viewerElems || !twisty.viewerElems[0]) {
-    return;
-  }
-  savedCameraPos = (twisty
-    .viewerElems[0] as Twisty3DCanvas).camera.position.clone();
+  savedCameraPos = twisty.cameraPosition.clone();
   haveSavedCamera = true;
 }
 //  This function is *not* idempotent when we save the
@@ -282,16 +278,7 @@ function setAlgo(str: string, writeback: boolean): void {
       puzzleSelected = false;
     } else if (puzzleSelected) {
       twisty.setPuzzle("custom", legacyExperimentalPG3DViewConfig());
-      (twisty.viewerElems[0] as Twisty3DCanvas).camera.position.copy(
-        initialCameraPos,
-      );
-      (twisty.viewerElems[0] as Twisty3DCanvas).camera.lookAt(0, 0, 0);
-      (twisty.viewerElems[1] as Twisty3DCanvas)?.camera.position.copy(
-        initialCameraPos.clone().multiplyScalar(-1),
-      );
-      (twisty.viewerElems[1] as Twisty3DCanvas)?.camera.lookAt(0, 0, 0);
-      twisty.viewerElems[0].scheduleRender();
-      twisty.viewerElems[1]?.scheduleRender();
+      twisty.cameraPosition = initialCameraPos;
       puzzleSelected = false;
     }
     twisty.backView = getCheckbox("sidebyside")
