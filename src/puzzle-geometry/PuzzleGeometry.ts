@@ -394,22 +394,28 @@ function getmovename(geo: any, bits: number, slices: number): any {
   return [movenamePrefix + movenameFamily, inverted];
 }
 
-// split a geometrical element into face names.  The facenames must
-// be prefix-free.
+// split a geometrical element into face names.  Do greedy match.
+// Permit underscores between names.
 function splitByFaceNames(s: string, facenames: any[]): string[] {
   const r: string[] = [];
   let at = 0;
   while (at < s.length) {
-    let found = false;
+    if (at > 0 && at < s.length && s[at] === "_") {
+      at++;
+    }
+    let currentMatch = "";
     for (let i = 0; i < facenames.length; i++) {
-      if (s.substr(at).startsWith(facenames[i][1])) {
-        r.push(facenames[i][1]);
-        at += facenames[i][1].length;
-        found = true;
-        break;
+      if (
+        s.substr(at).startsWith(facenames[i][1]) &&
+        facenames[i][1].length > currentMatch.length
+      ) {
+        currentMatch = facenames[i][1];
       }
     }
-    if (!found) {
+    if (currentMatch !== "") {
+      r.push(currentMatch);
+      at += currentMatch.length;
+    } else {
       throw new Error("Could not split " + s + " into face names.");
     }
   }
@@ -820,9 +826,9 @@ export class PuzzleGeometry {
         this.faceprecedence[edgenames[i][1]] <
         this.faceprecedence[edgenames[i][2]]
       ) {
-        c1 = c1 + c2;
+        c1 = c1 + "_" + c2;
       } else {
-        c1 = c2 + c1;
+        c1 = c2 + "_" + c1;
       }
       edgenames[i] = [edgenames[i][0], c1];
     }
@@ -843,7 +849,11 @@ export class PuzzleGeometry {
       }
       let r = "";
       for (let j = 1; j < vertexnames[i].length; j++) {
-        r = r + vertexnames[i][st][0];
+        if (j === 1) {
+          r = vertexnames[i][st][0];
+        } else {
+          r = r + "_" + vertexnames[i][st][0];
+        }
         for (let k = 1; k < vertexnames[i].length; k++) {
           if (vertexnames[i][st][2] === vertexnames[i][k][1]) {
             st = k;
@@ -1321,31 +1331,68 @@ export class PuzzleGeometry {
     }
   }
 
-  public spinmatch(a: string, b: string): boolean {
+  /*
+   *   Try to match something the user gave us with some geometric
+   *   feature.  We used to have strict requirements:
+   *
+   *      a)  The set of face names are prefix free
+   *      b)  When specifying a corner, all coincident planes were
+   *          specified
+   *
+   *   But, to allow megaminx to have more reasonable and
+   *   conventional names, and to permit shorter canonical
+   *   names, we are relaxing these requirements and adding
+   *   new syntax.  Now:
+   *
+   *      a)  Face names need not be syntax free.
+   *      b)  When parsing a geometric name, we use greedy
+   *          matching, so the longest name that matches the
+   *          user string at the current position is the one
+   *          assumed to match.
+   *      c)  Underscores are permitted to separate face names
+   *          (both in user input and in geometric
+   *          descriptions).
+   *      d)  Default names of corner moves where corners have
+   *          more than three corners, need only include three
+   *          of the corners.
+   *
+   *   This code is not performance-sensitive so we can do it a
+   *   slow and simple way.
+   */
+  public spinmatch(userinput: string, longname: string): boolean {
     // are these the same rotationally?
-    if (a === b) {
+    if (userinput === longname) {
       return true;
     }
-    if (a.length !== b.length) {
-      return false;
-    }
     try {
-      const e1 = splitByFaceNames(a, this.facenames);
-      const e2 = splitByFaceNames(b, this.facenames);
-      if (e1.length !== e2.length) {
+      const e1 = splitByFaceNames(userinput, this.facenames);
+      const e2 = splitByFaceNames(longname, this.facenames);
+      // All elements of userinput need to be in the longname.
+      // There should be no duplicate elements in the userinput.
+      // if both have length 1 or length 2, the sets must be equal.
+      // if both have length 3 or more, then the first set must be
+      // a subset of the second.  Order doesn't matter.
+      if (e1.length !== e2.length && e1.length < 3) {
         return false;
       }
       for (let i = 0; i < e1.length; i++) {
-        if (e1[i] === e2[0]) {
-          for (let j = 0; j < e2.length; j++) {
-            if (e1[(i + j) % e1.length] !== e2[j]) {
-              return false;
-            }
+        for (let j = 0; j < i; j++) {
+          if (e1[i] === e1[j]) {
+            return false;
           }
-          return true;
+        }
+        let found = false;
+        for (let j = 0; j < e2.length; j++) {
+          if (e1[i] === e2[j]) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          return false;
         }
       }
-      return false;
+      return true;
     } catch (e) {
       return false;
     }
@@ -1353,7 +1400,7 @@ export class PuzzleGeometry {
 
   public parsemove(mv: string): any {
     // parse a move from the command line
-    const re = RegExp("^(([0-9]+)-)?([0-9]+)?([A-Za-z]+)([-'0-9]+)?$");
+    const re = RegExp("^(([0-9]+)-)?([0-9]+)?([A-Za-z_]+)([-'0-9]+)?$");
     const p = mv.match(re);
     if (p === null) {
       throw new Error("Bad move passed " + mv);
@@ -1373,12 +1420,12 @@ export class PuzzleGeometry {
     let firstgrip = false;
     for (let i = 0; i < this.movesetgeos.length; i++) {
       const g = this.movesetgeos[i];
-      if (this.spinmatch(g[0], upperCaseGrip)) {
+      if (this.spinmatch(upperCaseGrip, g[0])) {
         firstgrip = true;
         geo = g;
         msi = i;
       }
-      if (this.spinmatch(g[2], upperCaseGrip)) {
+      if (this.spinmatch(upperCaseGrip, g[2])) {
         firstgrip = false;
         geo = g;
         msi = i;
@@ -2031,10 +2078,10 @@ export class PuzzleGeometry {
     let feature1: Quat | null = null;
     let feature2: Quat | null = null;
     for (const gn of this.geonormals) {
-      if (this.spinmatch(gn[1], feature1name)) {
+      if (this.spinmatch(feature1name, gn[1])) {
         feature1 = gn[0];
       }
-      if (this.spinmatch(gn[1], feature2name)) {
+      if (this.spinmatch(feature2name, gn[1])) {
         feature2 = gn[0];
       }
     }
@@ -2446,7 +2493,7 @@ export class PuzzleGeometry {
     const rot = this.getInitial3DRotation();
     for (let j = 0; j < this.geonormals.length; j++) {
       const gn = this.geonormals[j];
-      if (this.spinmatch(gn[1], geoname)) {
+      if (this.spinmatch(geoname, gn[1])) {
         const r = toCoords(gn[0].rotatepoint(rot), 1);
         //  This routine is intended to use for the camera location.
         //  If the camera location is vertical, and we give some
