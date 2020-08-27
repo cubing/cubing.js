@@ -92,180 +92,189 @@ const copyright = "PuzzleGeometry 0.1 Copyright 2018 Tomas Rokicki.";
 // a list starting with that face; just enough to describe the full
 // connectivity of the net.
 //
-const defaultnets: any = {
-  // four faces: tetrahedron
-  4: [["F", "D", "L", "R"]],
-  // six faces: cube
-  6: [
-    ["F", "D", "L", "U", "R"],
-    ["R", "F", "", "B", ""],
-  ],
-  // eight faces: octahedron
-  8: NEW_FACE_NAMES
-    ? [
-        ["F", "D", "L", "R"],
-        ["D", "F", "BR", ""],
-        ["BR", "D", "", "B"],
-        ["B", "BR", "U", "BL"],
-      ]
-    : [
-        ["F", "D", "L", "R"],
-        ["D", "F", "BR", ""],
-        ["BR", "D", "", "BB"],
-        ["BB", "BR", "U", "BL"],
-      ],
-  // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
-  12: NEW_FACE_NAMES
-    ? [
-        ["U", "F", "", "", "", ""],
-        ["F", "U", "R", "FR", "FL", "L"],
-        ["R", "F", "", "", "DR", ""],
-        ["DR", "R", "", "B", "", ""],
-        ["B", "DR", "BR", "BL", "DL", "D"],
-      ]
-    : [
-        ["U", "F", "", "", "", ""],
-        ["F", "U", "R", "C", "A", "L"],
-        ["R", "F", "", "", "E", ""],
-        ["E", "R", "", "BF", "", ""],
-        ["BF", "E", "BR", "BL", "I", "D"],
-      ],
-  // twenty faces: icosahedron
-  20: [
-    ["R", "C", "F", "E"],
-    ["F", "R", "L", "U"],
-    ["L", "F", "A", ""],
-    ["E", "R", "G", "I"],
-    ["I", "E", "S", "H"],
-    ["S", "I", "J", "B"],
-    ["B", "S", "K", "D"],
-    ["K", "B", "M", "O"],
-    ["O", "K", "P", "N"],
-    ["P", "O", "Q", ""],
-  ],
-};
+// TODO: change this back to a const JSON definition.
+function defaultnets(): any {
+  return {
+    // four faces: tetrahedron
+    4: [["F", "D", "L", "R"]],
+    // six faces: cube
+    6: [
+      ["F", "D", "L", "U", "R"],
+      ["R", "F", "", "B", ""],
+    ],
+    // eight faces: octahedron
+    8: NEW_FACE_NAMES
+      ? [
+          ["F", "D", "L", "R"],
+          ["D", "F", "BR", ""],
+          ["BR", "D", "", "B"],
+          ["B", "BR", "U", "BL"],
+        ]
+      : [
+          ["F", "D", "L", "R"],
+          ["D", "F", "BR", ""],
+          ["BR", "D", "", "BB"],
+          ["BB", "BR", "U", "BL"],
+        ],
+    // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
+    12: NEW_FACE_NAMES
+      ? [
+          ["U", "F", "", "", "", ""],
+          ["F", "U", "R", "FR", "FL", "L"],
+          ["R", "F", "", "", "DR", ""],
+          ["DR", "R", "", "B", "", ""],
+          ["B", "DR", "BR", "BL", "DL", "D"],
+        ]
+      : [
+          ["U", "F", "", "", "", ""],
+          ["F", "U", "R", "C", "A", "L"],
+          ["R", "F", "", "", "E", ""],
+          ["E", "R", "", "BF", "", ""],
+          ["BF", "E", "BR", "BL", "I", "D"],
+        ],
+    // twenty faces: icosahedron
+    20: [
+      ["R", "C", "F", "E"],
+      ["F", "R", "L", "U"],
+      ["L", "F", "A", ""],
+      ["E", "R", "G", "I"],
+      ["I", "E", "S", "H"],
+      ["S", "I", "J", "B"],
+      ["B", "S", "K", "D"],
+      ["K", "B", "M", "O"],
+      ["O", "K", "P", "N"],
+      ["P", "O", "Q", ""],
+    ],
+  };
+}
 
-const defaultcolors: any = {
-  // the colors should use the same naming convention as the nets, above.
-  4: { F: "#00ff00", D: "#ffff00", L: "#ff0000", R: "#0000ff" },
-  6: {
-    U: "#ffffff",
-    F: "#00ff00",
-    R: "#ff0000",
-    D: "#ffff00",
-    B: "#0000ff",
-    L: "#ff8000",
-  },
-  8: NEW_FACE_NAMES
-    ? {
-        U: "#e085b9",
-        F: "#080d99",
-        R: "#c1e35c",
-        D: "#22955e",
-        B: "#9121ab",
-        L: "#b27814",
-        BL: "#0d35ad",
-        BR: "#eb126b",
-      }
-    : {
-        U: "#e085b9",
-        F: "#080d99",
-        R: "#c1e35c",
-        D: "#22955e",
-        B: "#9121ab",
-        L: "#b27814",
-        BL: "#0d35ad",
-        BR: "#eb126b",
-      },
-  12: NEW_FACE_NAMES
-    ? {
-        U: "#ffffff",
-        F: "#006633",
-        R: "#ff0000",
-        FR: "#ffffd0",
-        FL: "#3399ff",
-        L: "#7700aa",
-        DR: "#ff66cc",
-        B: "#99ff00",
-        BR: "#0000ff",
-        BL: "#ffff00",
-        DL: "#ff6633",
-        D: "#999999",
-      }
-    : {
-        U: "#ffffff",
-        F: "#006633",
-        R: "#ff0000",
-        C: "#ffffd0",
-        A: "#3399ff",
-        L: "#660099",
-        E: "#ff66cc",
-        BF: "#99ff00",
-        BR: "#0000ff",
-        BL: "#ffff00",
-        I: "#ff6633",
-        D: "#999999",
-      },
-  20: {
-    R: "#db69f0",
-    C: "#178fde",
-    F: "#23238b",
-    E: "#9cc726",
-    L: "#2c212d",
-    U: "#177fa7",
-    A: "#e0de7f",
-    G: "#2b57c0",
-    I: "#41126b",
-    S: "#4b8c28",
-    H: "#7c098d",
-    J: "#7fe7b4",
-    B: "#85fb74",
-    K: "#3f4bc3",
-    D: "#0ff555",
-    M: "#f1c2c8",
-    O: "#58d340",
-    P: "#c514f2",
-    N: "#14494e",
-    Q: "#8b1be1",
-  },
-};
+// TODO: change this back to a const JSON definition.
+function defaultcolors(): any {
+  return {
+    // the colors should use the same naming convention as the nets, above.
+    4: { F: "#00ff00", D: "#ffff00", L: "#ff0000", R: "#0000ff" },
+    6: {
+      U: "#ffffff",
+      F: "#00ff00",
+      R: "#ff0000",
+      D: "#ffff00",
+      B: "#0000ff",
+      L: "#ff8000",
+    },
+    8: NEW_FACE_NAMES
+      ? {
+          U: "#e085b9",
+          F: "#080d99",
+          R: "#c1e35c",
+          D: "#22955e",
+          B: "#9121ab",
+          L: "#b27814",
+          BL: "#0d35ad",
+          BR: "#eb126b",
+        }
+      : {
+          U: "#e085b9",
+          F: "#080d99",
+          R: "#c1e35c",
+          D: "#22955e",
+          B: "#9121ab",
+          L: "#b27814",
+          BL: "#0d35ad",
+          BR: "#eb126b",
+        },
+    12: NEW_FACE_NAMES
+      ? {
+          U: "#ffffff",
+          F: "#006633",
+          R: "#ff0000",
+          FR: "#ffffd0",
+          FL: "#3399ff",
+          L: "#7700aa",
+          DR: "#ff66cc",
+          B: "#99ff00",
+          BR: "#0000ff",
+          BL: "#ffff00",
+          DL: "#ff6633",
+          D: "#999999",
+        }
+      : {
+          U: "#ffffff",
+          F: "#006633",
+          R: "#ff0000",
+          C: "#ffffd0",
+          A: "#3399ff",
+          L: "#660099",
+          E: "#ff66cc",
+          BF: "#99ff00",
+          BR: "#0000ff",
+          BL: "#ffff00",
+          I: "#ff6633",
+          D: "#999999",
+        },
+    20: {
+      R: "#db69f0",
+      C: "#178fde",
+      F: "#23238b",
+      E: "#9cc726",
+      L: "#2c212d",
+      U: "#177fa7",
+      A: "#e0de7f",
+      G: "#2b57c0",
+      I: "#41126b",
+      S: "#4b8c28",
+      H: "#7c098d",
+      J: "#7fe7b4",
+      B: "#85fb74",
+      K: "#3f4bc3",
+      D: "#0ff555",
+      M: "#f1c2c8",
+      O: "#58d340",
+      P: "#c514f2",
+      N: "#14494e",
+      Q: "#8b1be1",
+    },
+  };
+}
 
 // the default precedence of the faces is given here.  This permits
 // the orientations to be reasonably predictable.  There are tradeoffs;
 // some face precedence orders do better things to the edge orientations
 // than the corner orientations and some are the opposite.
-const defaultfaceorders: any = {
-  4: ["F", "D", "L", "R"],
-  6: ["U", "D", "F", "B", "L", "R"],
-  8: NEW_FACE_NAMES
-    ? ["F", "B", "D", "U", "BR", "L", "R", "BL"]
-    : ["F", "BB", "D", "U", "BR", "L", "R", "BL"],
-  12: NEW_FACE_NAMES
-    ? ["L", "DR", "F", "B", "R", "DL", "U", "D", "BR", "FL", "BL", "FR"]
-    : ["L", "E", "F", "BF", "R", "I", "U", "D", "BR", "A", "BL", "C"],
-  20: [
-    "L",
-    "S",
-    "E",
-    "O",
-    "F",
-    "B",
-    "I",
-    "P",
-    "R",
-    "K",
-    "U",
-    "D",
-    "J",
-    "A",
-    "Q",
-    "H",
-    "G",
-    "N",
-    "M",
-    "C",
-  ],
-};
+// TODO: change this back to a const JSON definition.
+function defaultfaceorders(): any {
+  return {
+    4: ["F", "D", "L", "R"],
+    6: ["U", "D", "F", "B", "L", "R"],
+    8: NEW_FACE_NAMES
+      ? ["F", "B", "D", "U", "BR", "L", "R", "BL"]
+      : ["F", "BB", "D", "U", "BR", "L", "R", "BL"],
+    12: NEW_FACE_NAMES
+      ? ["L", "DR", "F", "B", "R", "DL", "U", "D", "BR", "FL", "BL", "FR"]
+      : ["L", "E", "F", "BF", "R", "I", "U", "D", "BR", "A", "BL", "C"],
+    20: [
+      "L",
+      "S",
+      "E",
+      "O",
+      "F",
+      "B",
+      "I",
+      "P",
+      "R",
+      "K",
+      "U",
+      "D",
+      "J",
+      "A",
+      "Q",
+      "H",
+      "G",
+      "N",
+      "M",
+      "C",
+    ],
+  };
+}
 
 /*
  *  Default orientations for the puzzles in 3D space.  Can be overridden
@@ -276,15 +285,18 @@ const defaultfaceorders: any = {
  *  preferred initial camera orientation for each puzzle for twizzle;
  *  this information is explicitly given in the twizzle app file.
  */
-const defaultOrientations: any = {
-  4: ["FLR", [0, 1, 0], "F", [0, 0, 1]], // FLR towards viewer
-  6: ["U", [0, 1, 0], "F", [0, 0, 1]], // URF towards viewer
-  8: ["U", [0, 1, 0], "F", [0, 0, 1]], // FLUR towards viewer
-  12: NEW_FACE_NAMES
-    ? ["U", [0, 1, 0], "F", [0, 0, 1]]
-    : ["U", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
-  20: ["GUQMJ", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
-};
+// TODO: change this back to a const JSON definition.
+function defaultOrientations(): any {
+  return {
+    4: ["FLR", [0, 1, 0], "F", [0, 0, 1]], // FLR towards viewer
+    6: ["U", [0, 1, 0], "F", [0, 0, 1]], // URF towards viewer
+    8: ["U", [0, 1, 0], "F", [0, 0, 1]], // FLUR towards viewer
+    12: NEW_FACE_NAMES
+      ? ["U", [0, 1, 0], "F", [0, 0, 1]]
+      : ["U", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
+    20: ["GUQMJ", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
+  };
+}
 
 function findelement(a: any[], p: Quat): number {
   // find something in facenames, vertexnames, edgenames
@@ -643,10 +655,10 @@ export class PuzzleGeometry {
     const baseplanes = this.baseplanerot.map((_) => baseplane.rotateplane(_));
     this.baseplanes = baseplanes;
     this.basefacecount = baseplanes.length;
-    const net = defaultnets[baseplanes.length];
+    const net = defaultnets()[baseplanes.length];
     this.net = net;
-    this.colors = defaultcolors[baseplanes.length];
-    this.faceorder = defaultfaceorders[baseplanes.length];
+    this.colors = defaultcolors()[baseplanes.length];
+    this.faceorder = defaultfaceorders()[baseplanes.length];
     if (this.verbose) {
       console.log("# Base planes: " + baseplanes.length);
     }
@@ -2063,7 +2075,7 @@ export class PuzzleGeometry {
     // either no option specified or no matching key in
     // puzzleOrientations.
     if (!rotDesc) {
-      rotDesc = defaultOrientations[basefacecount];
+      rotDesc = defaultOrientations()[basefacecount];
     }
     if (!rotDesc) {
       throw new Error("No default orientation?");
