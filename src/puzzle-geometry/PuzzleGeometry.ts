@@ -47,7 +47,7 @@ export interface StickerDat {
 }
 
 // TODO: Remove this once we no longer have prefix restrictions.
-let NEW_FACE_NAMES = false;
+let NEW_FACE_NAMES = true;
 export function useNewFaceNames(use: boolean): void {
   NEW_FACE_NAMES = use;
 }
@@ -501,6 +501,7 @@ export class PuzzleGeometry {
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public movesbyslice: any[]; // move as perms by slice
   public cmovesbyslice: any[] = []; // cmoves as perms by slice
+  public facenamesPrefixfree: boolean = true; // are facenames prefix-free?
   // options
   public verbose: number = 0; // verbosity (console.log)
   public allmoves: boolean = false; // generate all slice moves in ksolve
@@ -815,6 +816,17 @@ export class PuzzleGeometry {
         searchaddelement(vertexnames, face[jj], [facename, e2, e1]);
       }
     }
+    // Are the facenames prefix-free?  Select a separator if they are
+    // not.
+    this.facenamesPrefixfree = true;
+    for (let i = 0; i < facenames.length; i++) {
+      for (let j = 0; j < facenames.length; j++) {
+        if (i !== j && facenames[i][1].startsWith(facenames[j][1])) {
+          this.facenamesPrefixfree = false;
+        }
+      }
+    }
+    const sep = this.facenamesPrefixfree ? "" : "_";
     // fix the edge names; use face precedence order
     for (let i = 0; i < edgenames.length; i++) {
       if (edgenames[i].length !== 3) {
@@ -826,9 +838,9 @@ export class PuzzleGeometry {
         this.faceprecedence[edgenames[i][1]] <
         this.faceprecedence[edgenames[i][2]]
       ) {
-        c1 = c1 + "_" + c2;
+        c1 = c1 + sep + c2;
       } else {
-        c1 = c2 + "_" + c1;
+        c1 = c2 + sep + c1;
       }
       edgenames[i] = [edgenames[i][0], c1];
     }
@@ -852,7 +864,7 @@ export class PuzzleGeometry {
         if (j === 1) {
           r = vertexnames[i][st][0];
         } else {
-          r = r + "_" + vertexnames[i][st][0];
+          r = r + sep + vertexnames[i][st][0];
         }
         for (let k = 1; k < vertexnames[i].length; k++) {
           if (vertexnames[i][st][2] === vertexnames[i][k][1]) {
