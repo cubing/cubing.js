@@ -14,6 +14,7 @@ export class MoveExpander {
   private moveStash: { [key: string]: Transformation };
   private facenames?: string[];
   private regrip: { [key: string]: string };
+  private gripList: string[] = [];
   constructor() {
     this.gripStash = {};
     this.moveStash = {};
@@ -59,6 +60,8 @@ export class MoveExpander {
     const aprime = slices.map((_: Transformation) => Invert(def, _));
     aprime.reverse();
     axes[grip2] = aprime;
+    this.gripList.push(grip1);
+    this.gripList.push(grip2);
   }
 
   public expandSlicesByName(
@@ -98,18 +101,41 @@ export class MoveExpander {
         grip = grip.substr(0, grip.length - 1);
       }
     }
-    const faceSplit = this.splitByFaceNames(grip, this.facenames);
-    if (faceSplit) {
-      for (let i = 0; i < faceSplit.length; i++) {
-        let testGrip = "";
-        for (let j = 0; j < faceSplit.length; j++) {
-          testGrip += faceSplit[(i + j) % faceSplit.length];
-        }
-        if (this.gripStash[testGrip]) {
-          this.regrip[grip] = testGrip;
-          return testGrip;
+    const e1 = this.splitByFaceNames(grip, this.facenames);
+    if (!e1) {
+      return grip;
+    }
+    for (let i = 0; i < e1.length; i++) {
+      for (let j = 0; j < i; j++) {
+        if (e1[i] === e1[j]) {
+          return grip;
         }
       }
+    }
+    for (const tgrip of this.gripList) {
+      const e2 = this.splitByFaceNames(tgrip, this.facenames);
+      if (!e2 || (e1.length !== e2.length && e1.length < 3)) {
+        continue;
+      }
+      let good = true;
+      for (let i = 0; i < e1.length; i++) {
+        let found = false;
+        for (let j = 0; j < e2.length; j++) {
+          if (e1[i] === e2[j]) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          good = false;
+          break;
+        }
+      }
+      if (!good) {
+        continue;
+      }
+      this.regrip[grip] = tgrip;
+      return tgrip;
     }
     return grip;
   }
@@ -187,16 +213,22 @@ export class MoveExpander {
     // we permit lowercase arguments, but face names are always upper case
     s = s.toUpperCase();
     while (at < s.length) {
-      let found = false;
+      let currentMatch = "";
+      if (at > 0 && at < s.length && s[at] === "_") {
+        at++;
+      }
       for (const facename of facenames) {
-        if (s.substr(at).startsWith(facename)) {
-          r.push(facename);
-          at += facename.length;
-          found = true;
-          break;
+        if (
+          s.substr(at).startsWith(facename) &&
+          facename.length > currentMatch.length
+        ) {
+          currentMatch = facename;
         }
       }
-      if (!found) {
+      if (currentMatch !== "") {
+        r.push(currentMatch);
+        at += currentMatch.length;
+      } else {
         return undefined;
       }
     }
