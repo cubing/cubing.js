@@ -282,11 +282,11 @@ export class TwistyPlayer extends ManagedCustomElement {
             );
           }
           this.scene = new Twisty3DScene();
-          const cube3d = new Cube3D(
+          this.twisty3D = new Cube3D(
             this.cursor,
             this.scene.scheduleRender.bind(this.scene),
           );
-          this.scene.addTwisty3DPuzzle(cube3d);
+          this.scene.addTwisty3DPuzzle(this.twisty3D);
           const mainViewer = new Twisty3DCanvas(this.scene);
           this.viewerElems = [mainViewer];
           if (backView) {
