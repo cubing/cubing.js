@@ -14,6 +14,7 @@ export class ClassListManager<SuffixType extends string> {
     if (this.#currentClassName) {
       this.elem.contentWrapper.classList.remove(this.#currentClassName);
     }
+    this.#currentClassName = null; // TODO: add test for this behaviour.
   }
 
   // Returns if the value changed
