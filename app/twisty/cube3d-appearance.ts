@@ -119,7 +119,7 @@ addAlg("ZBLL", "R' F R U' R' U' R U R' F' R U R' U' R' F R F' R").setAppearance(
   {
     orbits: {
       EDGES: {
-        pieces: [r, r, r, r, s, s, s, s, s, s, s, s],
+        pieces: [p, p, p, p, s, s, s, s, s, s, s, s],
       },
       CORNERS: {
         pieces: [r, r, r, r, s, s, s, s],
