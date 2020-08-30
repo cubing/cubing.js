@@ -20,27 +20,97 @@ import { TAU } from "../TAU";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 
+type stickerMask = "regular" | "dim" | "ignored" | "invisible";
+
+const ignoredMaterial = new MeshBasicMaterial({
+  color: 0x444444,
+  side: DoubleSide,
+});
+const ignoredMaterialHint = new MeshBasicMaterial({
+  color: 0x444444,
+  side: BackSide,
+});
+const invisibleMaterial = new MeshBasicMaterial({
+  visible: false,
+});
+
+interface MaterialMap extends Record<stickerMask, MeshBasicMaterial> {
+  regular: MeshBasicMaterial;
+  dim: MeshBasicMaterial;
+  ignored: MeshBasicMaterial;
+  invisible: MeshBasicMaterial;
+}
+
 class AxisInfo {
-  public stickerMaterial: MeshBasicMaterial;
-  public hintStickerMaterial: MeshBasicMaterial;
+  public stickerMaterial: MaterialMap;
+  public hintStickerMaterial: MaterialMap;
   constructor(
     public vector: Vector3,
     public fromZ: Euler,
     public color: number,
+    public dimColor: number,
   ) {
-    // TODO: Make sticker material single-sided when cubie base is rendered?
-    this.stickerMaterial = new MeshBasicMaterial({ color, side: DoubleSide });
-    this.hintStickerMaterial = new MeshBasicMaterial({ color, side: BackSide });
+    // TODO: Make sticker material single-sided when cubie foundation is opaque?
+    this.stickerMaterial = {
+      regular: new MeshBasicMaterial({
+        color,
+        side: DoubleSide,
+      }),
+      dim: new MeshBasicMaterial({
+        color: dimColor,
+        side: DoubleSide,
+      }),
+      ignored: ignoredMaterial,
+      invisible: invisibleMaterial,
+    };
+    this.hintStickerMaterial = {
+      regular: new MeshBasicMaterial({
+        color,
+        side: BackSide,
+      }),
+      dim: new MeshBasicMaterial({
+        color: dimColor,
+        side: BackSide,
+        opacity: 0.5,
+      }),
+      ignored: ignoredMaterialHint,
+      invisible: invisibleMaterial,
+    };
   }
 }
 
 const axesInfo: AxisInfo[] = [
-  new AxisInfo(new Vector3(0, 1, 0), new Euler(-TAU / 4, 0, 0), 0xffffff),
-  new AxisInfo(new Vector3(-1, 0, 0), new Euler(0, -TAU / 4, 0), 0xff8800),
-  new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ff00),
-  new AxisInfo(new Vector3(1, 0, 0), new Euler(0, TAU / 4, 0), 0xff0000),
-  new AxisInfo(new Vector3(0, 0, -1), new Euler(0, TAU / 2, 0), 0x0000ff),
-  new AxisInfo(new Vector3(0, -1, 0), new Euler(TAU / 4, 0, 0), 0xffff00),
+  new AxisInfo(
+    new Vector3(0, 1, 0),
+    new Euler(-TAU / 4, 0, 0),
+    0xffffff,
+    0xcccccc,
+  ),
+  new AxisInfo(
+    new Vector3(-1, 0, 0),
+    new Euler(0, -TAU / 4, 0),
+    0xff8800,
+    0x884400,
+  ),
+  new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ff00, 0x008800),
+  new AxisInfo(
+    new Vector3(1, 0, 0),
+    new Euler(0, TAU / 4, 0),
+    0xff0000,
+    0x660000,
+  ),
+  new AxisInfo(
+    new Vector3(0, 0, -1),
+    new Euler(0, TAU / 2, 0),
+    0x0000ff,
+    0x000088,
+  ),
+  new AxisInfo(
+    new Vector3(0, -1, 0),
+    new Euler(TAU / 4, 0, 0),
+    0xffff00,
+    0x888800,
+  ),
 ];
 
 const face: { [s: string]: number } = {
@@ -204,8 +274,15 @@ const pieceDefs: PieceIndexed<CubieDef> = {
 
 const CUBE_SCALE = 1 / 3;
 
+interface FaceletInfo {
+  faceIdx: number;
+  facelet: Mesh;
+  hintFacelet?: Mesh;
+}
+
 // TODO: Split into "scene model" and "view".
 export class Cube3D extends Object3D implements Twisty3DPuzzle {
+  kpuzzleFaceletInfo: Record<string, FaceletInfo[][]>;
   private pieces: PieceIndexed<Object3D> = {};
   private options: Cube3DOptions;
   // TODO: Keep track of option-based meshes better.
@@ -234,10 +311,17 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     if (def.name !== "3x3x3") {
       throw new Error("Invalid puzzle for this Cube3D implementation.");
     }
+    this.kpuzzleFaceletInfo = {};
     for (const orbit in pieceDefs) {
-      this.pieces[orbit] = pieceDefs[orbit].map(this.createCubie.bind(this));
+      const orbitFaceletInfo: FaceletInfo[][] = [];
+      this.kpuzzleFaceletInfo[orbit] = orbitFaceletInfo;
+      this.pieces[orbit] = pieceDefs[orbit].map(
+        this.createCubie.bind(this, orbitFaceletInfo),
+      );
     }
     this.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
+
+    this.test();
   }
 
   public experimentalUpdateOptions(options: Cube3DOptions): void {
@@ -308,32 +392,43 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
   // TODO: Always create (but sometimes hide parts) so we can show them later,
   // or (better) support creating puzzle parts on demand.
-  private createCubie(edge: CubieDef): Object3D {
+  private createCubie(
+    orbitFacelets: FaceletInfo[][],
+    piece: CubieDef,
+  ): Object3D {
+    const cubieFaceletInfo: FaceletInfo[] = [];
+    orbitFacelets.push(cubieFaceletInfo);
     const cubie = new Group();
     if (this.options.showFoundation) {
       const foundation = this.createCubieFoundation();
       cubie.add(foundation);
       this.experimentalFoundationMeshes.push(foundation);
     }
-    for (let i = 0; i < edge.stickerFaces.length; i++) {
-      cubie.add(
-        this.createSticker(
-          axesInfo[cubieStickerOrder[i]],
-          axesInfo[edge.stickerFaces[i]],
-          false,
-        ),
+    for (let i = 0; i < piece.stickerFaces.length; i++) {
+      const sticker = this.createSticker(
+        axesInfo[cubieStickerOrder[i]],
+        axesInfo[piece.stickerFaces[i]],
+        false,
       );
+      const faceletInfo: FaceletInfo = {
+        faceIdx: piece.stickerFaces[i],
+        facelet: sticker,
+      };
+      cubie.add(sticker);
       if (this.options.showHintStickers) {
         const hintSticker = this.createSticker(
           axesInfo[cubieStickerOrder[i]],
-          axesInfo[edge.stickerFaces[i]],
+          axesInfo[piece.stickerFaces[i]],
           true,
         );
         cubie.add(hintSticker);
+        faceletInfo.hintFacelet = hintSticker;
         this.experimentalHintStickerMeshes.push(hintSticker);
       }
+
+      cubieFaceletInfo.push(faceletInfo);
     }
-    cubie.matrix.copy(edge.matrix);
+    cubie.matrix.copy(piece.matrix);
     cubie.matrixAutoUpdate = false;
     this.add(cubie);
     return cubie;
@@ -361,8 +456,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     const stickerMesh = new Mesh(
       geo,
       isHint
-        ? materialAxisInfo.hintStickerMaterial
-        : materialAxisInfo.stickerMaterial,
+        ? materialAxisInfo.hintStickerMaterial.regular
+        : materialAxisInfo.stickerMaterial.regular,
     );
     stickerMesh.setRotationFromEuler(posAxisInfo.fromZ);
     stickerMesh.position.copy(posAxisInfo.vector);
@@ -376,5 +471,89 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
   private ease(fraction: number): number {
     return smootherStep(fraction);
+  }
+
+  test(): void {
+    const grayMaterial = new MeshBasicMaterial({
+      color: 0x888888,
+      side: DoubleSide,
+    });
+    const grayMaterialSingleSide = new MeshBasicMaterial({
+      color: 0x000000,
+      side: BackSide,
+      opacity: 0.2,
+    });
+    {
+      const orbit = "EDGES";
+      const orbitPieces = this.kpuzzleFaceletInfo[orbit];
+      for (const i of [0, 1, 2, 3]) {
+        orbitPieces[i][1].facelet.material = grayMaterial;
+        orbitPieces[i][1].hintFacelet!.material = grayMaterialSingleSide;
+      }
+    }
+    {
+      const orbit = "EDGES";
+      const orbitPieces = this.kpuzzleFaceletInfo[orbit];
+      for (const i of [0, 1, 2, 3]) {
+        const faceletInfo = orbitPieces[i][0];
+        faceletInfo.facelet.material =
+          axesInfo[faceletInfo.faceIdx].stickerMaterial.dim;
+        faceletInfo.hintFacelet!.material =
+          axesInfo[faceletInfo.faceIdx].hintStickerMaterial.dim;
+      }
+    }
+    {
+      const orbit = "EDGES";
+      const orbitPieces = this.kpuzzleFaceletInfo[orbit];
+      for (const i of [4, 5, 6, 7, 8, 9, 10, 11]) {
+        for (const j of [0, 1]) {
+          const faceletInfo = orbitPieces[i][j];
+          faceletInfo.facelet.material =
+            axesInfo[faceletInfo.faceIdx].stickerMaterial.dim;
+          faceletInfo.hintFacelet!.material =
+            axesInfo[faceletInfo.faceIdx].hintStickerMaterial.dim;
+        }
+      }
+    }
+    {
+      const orbit = "CORNERS";
+      const orbitPieces = this.kpuzzleFaceletInfo[orbit];
+      for (const i of [0, 1, 2, 3]) {
+        orbitPieces[i][1].facelet.material = grayMaterial;
+        orbitPieces[i][1].hintFacelet!.material = grayMaterialSingleSide;
+        orbitPieces[i][2].facelet.material = grayMaterial;
+        orbitPieces[i][2].hintFacelet!.material = grayMaterialSingleSide;
+      }
+    }
+    {
+      const orbit = "CORNERS";
+      const orbitPieces = this.kpuzzleFaceletInfo[orbit];
+      for (const i of [5, 6, 7]) {
+        for (const j of [0, 1, 2]) {
+          const faceletInfo = orbitPieces[i][j];
+          faceletInfo.facelet.material =
+            axesInfo[faceletInfo.faceIdx].stickerMaterial.dim;
+          faceletInfo.hintFacelet!.material =
+            axesInfo[faceletInfo.faceIdx].hintStickerMaterial.dim;
+        }
+      }
+      {
+        const orbit = "CENTERS";
+        const orbitPieces = this.kpuzzleFaceletInfo[orbit];
+        for (const i of [1, 2, 3, 4, 5]) {
+          for (const j of [0]) {
+            const faceletInfo = orbitPieces[i][j];
+            faceletInfo.facelet.material =
+              axesInfo[faceletInfo.faceIdx].stickerMaterial.invisible;
+            faceletInfo.hintFacelet!.material =
+              axesInfo[faceletInfo.faceIdx].hintStickerMaterial.dim;
+          }
+        }
+      }
+    }
+
+    if (this.scheduleRenderCallback) {
+      this.scheduleRenderCallback();
+    }
   }
 }
