@@ -34,6 +34,7 @@ import {
   TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
 import { customElementsShim } from "./element/node-custom-element-shims";
+import { ClassListManager } from "./element/ClassListManager";
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;
@@ -84,6 +85,10 @@ export class TwistyPlayer extends ManagedCustomElement {
   public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
     _mv: BlockMove,
   ): number => 0;
+
+  #controlsClassListManager: ClassListManager<
+    ControlsLocation
+  > = new ClassListManager(this, "controls-", ["none", "bottom-row"]);
 
   public legacyExperimentalPG3D: PG3D | null = null;
   // TODO: support config from DOM.
@@ -145,11 +150,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set controls(controls: ControlsLocation) {
-    const oldControls = this.#config.attributes["controls"].value;
-    if (this.#config.attributes["controls"].setValue(controls)) {
-      this.contentWrapper.classList.remove(`controls-${oldControls}`);
-      this.contentWrapper.classList.add(`controls-${controls}`);
-    }
+    this.#controlsClassListManager.setValue(controls);
   }
 
   get controls(): ControlsLocation {
@@ -236,7 +237,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.controlElems = [scrubber, controlButtonGrid];
 
-    this.contentWrapper.classList.add(`controls-${this.controls}`);
+    this.#controlsClassListManager.setValue(this.controls);
 
     this.addElement(this.controlElems[0]);
     this.addElement(this.controlElems[1]);
