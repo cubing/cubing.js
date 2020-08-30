@@ -69,9 +69,9 @@ function giikerStateStr(giikerState: number[]): string {
 
 // TODO
 // const Reid333Orbits = {
-//   "EDGE":   {"numPieces": 12, "orientations": 2},
-//   "CORNER": {"numPieces": 8,  "orientations": 3},
-//   "CENTER": {"numPieces": 6,  "orientations": 4}
+//   "EDGES":   {"numPieces": 12, "orientations": 2},
+//   "CORNERS": {"numPieces": 8,  "orientations": 3},
+//   "CENTERS": {"numPieces": 6,  "orientations": 4}
 // };
 
 const Reid333SolvedCenters = {
@@ -217,32 +217,32 @@ export class GiiKERCube extends BluetoothPuzzle {
 
   private toReid333(val: Uint8Array): Transformation {
     const state = {
-      EDGE: {
+      EDGES: {
         permutation: new Array(12),
         orientation: new Array(12),
       },
-      CORNER: {
+      CORNERS: {
         permutation: new Array(8),
         orientation: new Array(8),
       },
-      CENTER: Reid333SolvedCenters,
+      CENTERS: Reid333SolvedCenters,
     };
 
     for (let i = 0; i < 12; i++) {
       const gi = epReid333toGiiKER[i];
-      state.EDGE.permutation[i] =
+      state.EDGES.permutation[i] =
         epGiiKERtoReid333[getNibble(val, gi + 16) - 1];
-      state.EDGE.orientation[i] =
+      state.EDGES.orientation[i] =
         this.getBit(val, gi + 112) ^
-        preEO[state.EDGE.permutation[i]] ^
+        preEO[state.EDGES.permutation[i]] ^
         postEO[i];
     }
     for (let i = 0; i < 8; i++) {
       const gi = cpReid333toGiiKER[i];
-      state.CORNER.permutation[i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
-      state.CORNER.orientation[i] =
+      state.CORNERS.permutation[i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
+      state.CORNERS.orientation[i] =
         (getNibble(val, gi + 8) * coFlip[gi] +
-          preCO[state.CORNER.permutation[i]] +
+          preCO[state.CORNERS.permutation[i]] +
           postCO[i]) %
         3;
     }

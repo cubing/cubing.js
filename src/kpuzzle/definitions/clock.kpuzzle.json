@@ -1,12 +1,12 @@
 {
   "name": "Clock",
   "orbits": {
-    "DIAL": { "numPieces": 18, "orientations": 12 },
-    "FACE": { "numPieces": 18, "orientations": 1 },
+    "DIALS": { "numPieces": 18, "orientations": 12 },
+    "FACES": { "numPieces": 18, "orientations": 1 },
     "FRAME": { "numPieces": 1, "orientations": 2 }
   },
   "startPieces": {
-    "DIAL": {
+    "DIALS": {
       "permutation": [
         0,
         1,
@@ -29,7 +29,7 @@
       ],
       "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
-    "FACE": {
+    "FACES": {
       "permutation": [
         0,
         1,
@@ -56,7 +56,7 @@
   },
   "moves": {
     "UR": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -79,7 +79,7 @@
         ],
         "orientation": [0, 1, 1, 0, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -105,7 +105,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "DR": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -128,7 +128,7 @@
         ],
         "orientation": [0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -154,7 +154,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "DL": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -177,7 +177,7 @@
         ],
         "orientation": [0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -203,7 +203,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "UL": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -226,7 +226,7 @@
         ],
         "orientation": [1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -252,7 +252,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "U": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -275,7 +275,7 @@
         ],
         "orientation": [1, 1, 1, 1, 1, 1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -301,7 +301,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "R": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -324,7 +324,7 @@
         ],
         "orientation": [0, 1, 1, 0, 1, 1, 0, 1, 1, -1, 0, 0, 0, 0, 0, -1, 0, 0]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -350,7 +350,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "D": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -373,7 +373,7 @@
         ],
         "orientation": [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, -1]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -399,7 +399,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "L": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -422,7 +422,7 @@
         ],
         "orientation": [1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -448,7 +448,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "ALL": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           0,
           1,
@@ -490,7 +490,7 @@
           -1
         ]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           0,
           1,
@@ -516,7 +516,7 @@
       "FRAME": { "permutation": [0], "orientation": [0] }
     },
     "FLIP": {
-      "DIAL": {
+      "DIALS": {
         "permutation": [
           9,
           10,
@@ -539,7 +539,7 @@
         ],
         "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       },
-      "FACE": {
+      "FACES": {
         "permutation": [
           9,
           10,

@@ -13,9 +13,9 @@ export function kpuzzleToString(state: Transformation): string {
 const def = Puzzles["3x3x3"];
 
 const pieceNames: Record<string, string[]> = {
-  EDGE: "UF UR UB UL DF DR DB DL FR FL BR BL".split(" "),
-  CORNER: "UFR URB UBL ULF DRF DFL DLB DBR".split(" "),
-  CENTER: "ULFRBD".split(""),
+  EDGES: "UF UR UB UL DF DR DB DL FR FL BR BL".split(" "),
+  CORNERS: "UFR URB UBL ULF DRF DFL DLB DBR".split(" "),
+  CENTERS: "ULFRBD".split(""),
 };
 
 interface PieceInfo {
@@ -33,7 +33,7 @@ const pieceMap: { [s: string]: PieceInfo } = {};
 const orbits = Object.keys(def.orbits);
 for (const orbit of orbits) {
   pieceNames[orbit].forEach((piece, idx) => {
-    const numOri = orbit === "CENTER" ? 1 : def.orbits[orbit].orientations;
+    const numOri = orbit === "CENTERS" ? 1 : def.orbits[orbit].orientations;
     for (let i = 0; i < numOri; i++) {
       const name = rotateLeft(piece, i);
       pieceMap[name] = { piece: idx, orientation: i };
@@ -79,7 +79,7 @@ export function reidStringToStickers(s: string): number[] {
   const arr: number[] = [];
   for (let i = 0; i < reidStringStickerIdx.length; i++) {
     const stickerColorFaceName = s[reidStringStickerIdx[i]];
-    const stickerColorIdx = pieceNames["CENTER"].indexOf(stickerColorFaceName);
+    const stickerColorIdx = pieceNames["CENTERS"].indexOf(stickerColorFaceName);
     arr.push(stickerColorIdx);
   }
   return arr;
@@ -91,7 +91,7 @@ export function stickersToReidString(stickers: number[]): string {
   for (let i = 0; i < reidStringStickerIdx.length; i++) {
     const stickerColorIdx = stickers[i];
     reidStringChars[reidStringStickerIdx[i]] =
-      pieceNames["CENTER"][stickerColorIdx];
+      pieceNames["CENTERS"][stickerColorIdx];
   }
   return reidStringChars.join("");
 }
@@ -120,9 +120,9 @@ export function reidStringToKPuzzle(s: string): Transformation {
   };
 
   const x = {
-    EDGE: orbit(pieces.slice(0, 12)),
-    CORNER: orbit(pieces.slice(12, 20)),
-    CENTER: orbit(pieces.slice(20, 26)),
+    EDGES: orbit(pieces.slice(0, 12)),
+    CORNERS: orbit(pieces.slice(12, 20)),
+    CENTERS: orbit(pieces.slice(20, 26)),
   };
   return x;
 }

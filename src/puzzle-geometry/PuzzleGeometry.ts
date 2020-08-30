@@ -1236,7 +1236,7 @@ export class PuzzleGeometry {
     this.facetocubies = facetocubies;
     //  Calculate the orbits of each cubie.  Assumes we do all moves.
     //  Also calculates which cubies are identical.
-    const typenames = ["?", "CENTER", "EDGE", "CORNER", "C4RNER", "C5RNER"];
+    const typenames = ["?", "CENTERS", "EDGES", "CORNERS", "C4RNER", "C5RNER"];
     const cubiesetnames = [];
     const cubietypecounts = [0, 0, 0, 0, 0, 0];
     const orbitoris = [];

@@ -1,79 +1,79 @@
 {
   "name": "Pyraminx",
   "orbits": {
-    "CENTER": { "numPieces": 4, "orientations": 3 },
-    "TIP": { "numPieces": 4, "orientations": 3 },
-    "EDGE": { "numPieces": 6, "orientations": 2 }
+    "CENTERS": { "numPieces": 4, "orientations": 3 },
+    "TIPS": { "numPieces": 4, "orientations": 3 },
+    "EDGES": { "numPieces": 6, "orientations": 2 }
   },
   "startPieces": {
-    "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
-    "TIP": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
-    "EDGE": {
+    "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
+    "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
+    "EDGES": {
       "permutation": [0, 1, 2, 3, 4, 5],
       "orientation": [0, 0, 0, 0, 0, 0]
     }
   },
   "moves": {
     "U": {
-      "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [1, 0, 0, 0] },
-      "TIP": { "permutation": [0, 1, 2, 3], "orientation": [1, 0, 0, 0] },
-      "EDGE": {
+      "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [1, 0, 0, 0] },
+      "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [1, 0, 0, 0] },
+      "EDGES": {
         "permutation": [1, 2, 0, 3, 4, 5],
         "orientation": [1, 0, 1, 0, 0, 0]
       }
     },
     "L": {
-      "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [0, 1, 0, 0] },
-      "TIP": { "permutation": [0, 1, 2, 3], "orientation": [0, 1, 0, 0] },
-      "EDGE": {
+      "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [0, 1, 0, 0] },
+      "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [0, 1, 0, 0] },
+      "EDGES": {
         "permutation": [5, 1, 2, 0, 4, 3],
         "orientation": [1, 0, 0, 0, 0, 1]
       }
     },
     "R": {
-      "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 1, 0] },
-      "TIP": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 1, 0] },
-      "EDGE": {
+      "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 1, 0] },
+      "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 1, 0] },
+      "EDGES": {
         "permutation": [0, 3, 2, 4, 1, 5],
         "orientation": [0, 0, 0, 1, 1, 0]
       }
     },
     "B": {
-      "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 1] },
-      "TIP": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 1] },
-      "EDGE": {
+      "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 1] },
+      "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 1] },
+      "EDGES": {
         "permutation": [0, 1, 4, 3, 5, 2],
         "orientation": [0, 0, 0, 0, 1, 1]
       }
     },
     "u": {
-      "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
-      "TIP": { "permutation": [0, 1, 2, 3], "orientation": [1, 0, 0, 0] },
-      "EDGE": {
+      "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
+      "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [1, 0, 0, 0] },
+      "EDGES": {
         "permutation": [0, 1, 2, 3, 4, 5],
         "orientation": [0, 0, 0, 0, 0, 0]
       }
     },
     "l": {
-      "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
-      "TIP": { "permutation": [0, 1, 2, 3], "orientation": [0, 1, 0, 0] },
-      "EDGE": {
+      "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
+      "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [0, 1, 0, 0] },
+      "EDGES": {
         "permutation": [0, 1, 2, 3, 4, 5],
         "orientation": [0, 0, 0, 0, 0, 0]
       }
     },
     "r": {
-      "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
-      "TIP": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 1, 0] },
-      "EDGE": {
+      "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
+      "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 1, 0] },
+      "EDGES": {
         "permutation": [0, 1, 2, 3, 4, 5],
         "orientation": [0, 0, 0, 0, 0, 0]
       }
     },
     "b": {
-      "CENTER": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
-      "TIP": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 1] },
-      "EDGE": {
+      "CENTERS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 0] },
+      "TIPS": { "permutation": [0, 1, 2, 3], "orientation": [0, 0, 0, 1] },
+      "EDGES": {
         "permutation": [0, 1, 2, 3, 4, 5],
         "orientation": [0, 0, 0, 0, 0, 0]
       }

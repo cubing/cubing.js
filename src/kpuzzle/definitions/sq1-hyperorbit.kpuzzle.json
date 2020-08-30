@@ -1,11 +1,11 @@
 {
   "name": "Square-1",
   "orbits": {
-    "WEDGE": { "numPieces": 24, "orientations": 9 },
+    "WEDGES": { "numPieces": 24, "orientations": 9 },
     "EQUATOR": { "numPieces": 2, "orientations": 6 }
   },
   "startPieces": {
-    "WEDGE": {
+    "WEDGES": {
       "permutation": [
         0,
         1,
@@ -63,7 +63,7 @@
   },
   "moves": {
     "U": {
-      "WEDGE": {
+      "WEDGES": {
         "permutation": [
           11,
           0,
@@ -120,7 +120,7 @@
       "EQUATOR": { "permutation": [0, 1], "orientation": [0, 0] }
     },
     "D": {
-      "WEDGE": {
+      "WEDGES": {
         "permutation": [
           0,
           1,
@@ -177,7 +177,7 @@
       "EQUATOR": { "permutation": [0, 1], "orientation": [0, 0] }
     },
     "SLICE": {
-      "WEDGE": {
+      "WEDGES": {
         "permutation": [
           0,
           1,

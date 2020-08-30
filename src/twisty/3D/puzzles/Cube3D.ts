@@ -141,26 +141,26 @@ interface OrbitIndexed<T> {
 type PieceIndexed<T> = OrbitIndexed<T[]>;
 
 const firstPiecePosition: OrbitIndexed<Vector3> = {
-  EDGE: new Vector3(0, 1, 1),
-  CORNER: new Vector3(1, 1, 1),
-  CENTER: new Vector3(0, 1, 0),
+  EDGES: new Vector3(0, 1, 1),
+  CORNERS: new Vector3(1, 1, 1),
+  CENTERS: new Vector3(0, 1, 0),
 };
 const orientationRotation: OrbitIndexed<Matrix4[]> = {
-  EDGE: [0, 1].map((i) =>
+  EDGES: [0, 1].map((i) =>
     new Matrix4().makeRotationAxis(
-      firstPiecePosition.EDGE.clone().normalize(),
+      firstPiecePosition.EDGES.clone().normalize(),
       (-i * TAU) / 2,
     ),
   ),
-  CORNER: [0, 1, 2].map((i) =>
+  CORNERS: [0, 1, 2].map((i) =>
     new Matrix4().makeRotationAxis(
-      firstPiecePosition.CORNER.clone().normalize(),
+      firstPiecePosition.CORNERS.clone().normalize(),
       (-i * TAU) / 3,
     ),
   ),
-  CENTER: [0, 1, 2, 3].map((i) =>
+  CENTERS: [0, 1, 2, 3].map((i) =>
     new Matrix4().makeRotationAxis(
-      firstPiecePosition.CENTER.clone().normalize(),
+      firstPiecePosition.CENTERS.clone().normalize(),
       (-i * TAU) / 4,
     ),
   ),
@@ -168,37 +168,37 @@ const orientationRotation: OrbitIndexed<Matrix4[]> = {
 const cubieStickerOrder = [face.U, face.F, face.R];
 
 const pieceDefs: PieceIndexed<CubieDef> = {
-  EDGE: [
-    new CubieDef("EDGE", "UF", t(r.O, 0)),
-    new CubieDef("EDGE", "UR", t(r.U, 3)),
-    new CubieDef("EDGE", "UB", t(r.U, 2)),
-    new CubieDef("EDGE", "UL", t(r.U, 1)),
-    new CubieDef("EDGE", "DF", t(r.F, 2)),
-    new CubieDef("EDGE", "DR", t(r.F, 2).premultiply(t(r.D, 1))),
-    new CubieDef("EDGE", "DB", t(r.F, 2).premultiply(t(r.D, 2))),
-    new CubieDef("EDGE", "DL", t(r.F, 2).premultiply(t(r.D, 3))),
-    new CubieDef("EDGE", "FR", t(r.U, 3).premultiply(t(r.R, 3))),
-    new CubieDef("EDGE", "FL", t(r.U, 1).premultiply(t(r.R, 3))),
-    new CubieDef("EDGE", "BR", t(r.U, 3).premultiply(t(r.R, 1))),
-    new CubieDef("EDGE", "BL", t(r.U, 1).premultiply(t(r.R, 1))),
+  EDGES: [
+    new CubieDef("EDGES", "UF", t(r.O, 0)),
+    new CubieDef("EDGES", "UR", t(r.U, 3)),
+    new CubieDef("EDGES", "UB", t(r.U, 2)),
+    new CubieDef("EDGES", "UL", t(r.U, 1)),
+    new CubieDef("EDGES", "DF", t(r.F, 2)),
+    new CubieDef("EDGES", "DR", t(r.F, 2).premultiply(t(r.D, 1))),
+    new CubieDef("EDGES", "DB", t(r.F, 2).premultiply(t(r.D, 2))),
+    new CubieDef("EDGES", "DL", t(r.F, 2).premultiply(t(r.D, 3))),
+    new CubieDef("EDGES", "FR", t(r.U, 3).premultiply(t(r.R, 3))),
+    new CubieDef("EDGES", "FL", t(r.U, 1).premultiply(t(r.R, 3))),
+    new CubieDef("EDGES", "BR", t(r.U, 3).premultiply(t(r.R, 1))),
+    new CubieDef("EDGES", "BL", t(r.U, 1).premultiply(t(r.R, 1))),
   ],
-  CORNER: [
-    new CubieDef("CORNER", "UFR", t(r.O, 0)),
-    new CubieDef("CORNER", "URB", t(r.U, 3)),
-    new CubieDef("CORNER", "UBL", t(r.U, 2)),
-    new CubieDef("CORNER", "ULF", t(r.U, 1)),
-    new CubieDef("CORNER", "DRF", t(r.F, 2).premultiply(t(r.D, 1))),
-    new CubieDef("CORNER", "DFL", t(r.F, 2).premultiply(t(r.D, 0))),
-    new CubieDef("CORNER", "DLB", t(r.F, 2).premultiply(t(r.D, 3))),
-    new CubieDef("CORNER", "DBR", t(r.F, 2).premultiply(t(r.D, 2))),
+  CORNERS: [
+    new CubieDef("CORNERS", "UFR", t(r.O, 0)),
+    new CubieDef("CORNERS", "URB", t(r.U, 3)),
+    new CubieDef("CORNERS", "UBL", t(r.U, 2)),
+    new CubieDef("CORNERS", "ULF", t(r.U, 1)),
+    new CubieDef("CORNERS", "DRF", t(r.F, 2).premultiply(t(r.D, 1))),
+    new CubieDef("CORNERS", "DFL", t(r.F, 2).premultiply(t(r.D, 0))),
+    new CubieDef("CORNERS", "DLB", t(r.F, 2).premultiply(t(r.D, 3))),
+    new CubieDef("CORNERS", "DBR", t(r.F, 2).premultiply(t(r.D, 2))),
   ],
-  CENTER: [
-    new CubieDef("CENTER", "U", t(r.O, 0)),
-    new CubieDef("CENTER", "L", t(r.R, 3).premultiply(t(r.U, 1))),
-    new CubieDef("CENTER", "F", t(r.R, 3)),
-    new CubieDef("CENTER", "R", t(r.R, 3).premultiply(t(r.D, 1))),
-    new CubieDef("CENTER", "B", t(r.R, 3).premultiply(t(r.D, 2))),
-    new CubieDef("CENTER", "D", t(r.R, 2)),
+  CENTERS: [
+    new CubieDef("CENTERS", "U", t(r.O, 0)),
+    new CubieDef("CENTERS", "L", t(r.R, 3).premultiply(t(r.U, 1))),
+    new CubieDef("CENTERS", "F", t(r.R, 3)),
+    new CubieDef("CENTERS", "R", t(r.R, 3).premultiply(t(r.D, 1))),
+    new CubieDef("CENTERS", "B", t(r.R, 3).premultiply(t(r.D, 2))),
+    new CubieDef("CENTERS", "D", t(r.R, 2)),
   ],
 };
 

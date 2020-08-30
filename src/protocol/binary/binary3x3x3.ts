@@ -82,9 +82,9 @@ function concatBinary(bitLengths: number[], values: number[]): ArrayBuffer {
 }
 
 function puzzleOrientationIdx(state: Transformation): [number, number] {
-  const idxU = state["CENTER"].permutation[0];
-  const idxD = state["CENTER"].permutation[5];
-  const unadjustedIdxL = state["CENTER"].permutation[1];
+  const idxU = state["CENTERS"].permutation[0];
+  const idxD = state["CENTERS"].permutation[5];
+  const unadjustedIdxL = state["CENTERS"].permutation[1];
   let idxL = unadjustedIdxL;
   if (idxU < unadjustedIdxL) {
     idxL--;
@@ -150,13 +150,13 @@ export function reid3x3x3ToBinaryComponents(
 ): Binary3x3x3Components {
   const normedState = normalizePuzzleOrientation(state);
 
-  const epLex = permutationToLex(normedState["EDGE"].permutation);
-  const eoMask = orientationsToMask(2, normedState["EDGE"].orientation);
-  const cpLex = permutationToLex(normedState["CORNER"].permutation);
-  const coMask = orientationsToMask(3, normedState["CORNER"].orientation);
+  const epLex = permutationToLex(normedState["EDGES"].permutation);
+  const eoMask = orientationsToMask(2, normedState["EDGES"].orientation);
+  const cpLex = permutationToLex(normedState["CORNERS"].permutation);
+  const coMask = orientationsToMask(3, normedState["CORNERS"].orientation);
   const [poIdxU, poIdxL] = puzzleOrientationIdx(state);
   const moSupport = 1; // Required for now.
-  const moMask = orientationsToMask(4, normedState["CENTER"].orientation);
+  const moMask = orientationsToMask(4, normedState["CENTERS"].orientation);
 
   return {
     epLex,
@@ -237,15 +237,15 @@ export function binaryComponentsToReid3x3x3(
   }
 
   const normedState = {
-    EDGE: {
+    EDGES: {
       permutation: lexToPermutation(12, components.epLex),
       orientation: maskToOrientations(2, 12, components.eoMask),
     },
-    CORNER: {
+    CORNERS: {
       permutation: lexToPermutation(8, components.cpLex),
       orientation: maskToOrientations(3, 8, components.coMask),
     },
-    CENTER: {
+    CENTERS: {
       permutation: identityPermutation(6),
       orientation: maskToOrientations(4, 6, components.moMask),
     },

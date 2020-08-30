@@ -439,15 +439,15 @@ export class GanCube extends BluetoothPuzzle {
     }
 
     const state: PuzzleState = {
-      CORNER: {
+      CORNERS: {
         permutation: [],
         orientation: [],
       },
-      EDGE: {
+      EDGES: {
         permutation: [],
         orientation: [],
       },
-      CENTER: {
+      CENTERS: {
         permutation: [0, 1, 2, 3, 4, 5],
         orientation: [0, 0, 0, 0, 0, 0],
       },
@@ -456,15 +456,15 @@ export class GanCube extends BluetoothPuzzle {
     for (const cornerMapping of gan356iCornerMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[cornerMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      state.CORNER.permutation.push(pieceInfo.piece);
-      state.CORNER.orientation.push(pieceInfo.orientation);
+      state.CORNERS.permutation.push(pieceInfo.piece);
+      state.CORNERS.orientation.push(pieceInfo.orientation);
     }
 
     for (const edgeMapping of gan356iEdgeMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[edgeMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      state.EDGE.permutation.push(pieceInfo.piece);
-      state.EDGE.orientation.push(pieceInfo.orientation);
+      state.EDGES.permutation.push(pieceInfo.piece);
+      state.EDGES.orientation.push(pieceInfo.orientation);
     }
 
     return state;
