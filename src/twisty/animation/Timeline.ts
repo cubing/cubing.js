@@ -321,6 +321,10 @@ export class Timeline
     }
   }
 
+  jumpToStart(): void {
+    this.setTimestamp(this.minTimestamp());
+  }
+
   jumpToEnd(): void {
     this.setTimestamp(this.maxTimestamp());
   }
