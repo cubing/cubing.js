@@ -15,15 +15,11 @@ import {
 import { BlockMove } from "../../../alg";
 import { Puzzles, Transformation } from "../../../kpuzzle";
 import { AlgCursor } from "../../animation/alg/AlgCursor";
+import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 import { smootherStep } from "../../animation/easing";
 import { TAU } from "../TAU";
+import { FaceletMeshAppearance, PuzzleAppearance } from "./appearance";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
-import { PuzzlePosition } from "../../animation/alg/CursorTypes";
-import {
-  FaceletMeshAppearance,
-  PuzzleAppearance,
-  PieceAppearance,
-} from "./appearance";
 
 const ignoredMaterial = new MeshBasicMaterial({
   color: 0x444444,
@@ -101,7 +97,7 @@ const axesInfo: AxisInfo[] = [
     new Vector3(0, 1, 0),
     new Euler(-TAU / 4, 0, 0),
     0xffffff,
-    0xcccccc,
+    0xdddddd,
   ),
   new AxisInfo(
     new Vector3(-1, 0, 0),
@@ -337,38 +333,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       );
     }
     this.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
-
-    const edgeOLL: PieceAppearance = {
-      facelets: [
-        {
-          appearance: "regular",
-        },
-        {
-          appearance: "ignored",
-        },
-      ],
-    };
-    const cornerOLL: PieceAppearance = {
-      facelets: [
-        null,
-        {
-          appearance: "ignored",
-        },
-        {
-          appearance: "ignored",
-        },
-      ],
-    };
-    this.setAppearance({
-      orbits: {
-        EDGES: {
-          pieces: [edgeOLL, edgeOLL, edgeOLL, edgeOLL],
-        },
-        CORNERS: {
-          pieces: [cornerOLL, cornerOLL, cornerOLL, cornerOLL],
-        },
-      },
-    });
   }
 
   setAppearance(appearance: PuzzleAppearance): void {
@@ -382,23 +346,28 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       ) {
         const pieceAppearance = orbitAppearance.pieces[pieceIdx];
         if (pieceAppearance) {
+          const pieceInfo = this.kpuzzleFaceletInfo[orbitName][pieceIdx];
           for (
             let faceletIdx = 0;
-            faceletIdx < pieceAppearance.facelets.length;
+            faceletIdx < pieceInfo.length;
             faceletIdx++
           ) {
             const faceletAppearance = pieceAppearance.facelets[faceletIdx];
             if (faceletAppearance) {
-              const faceletInfo = this.kpuzzleFaceletInfo[orbitName][pieceIdx][
-                faceletIdx
-              ];
+              const faceletInfo = pieceInfo[faceletIdx];
+
+              const appearance =
+                typeof faceletAppearance === "string"
+                  ? faceletAppearance
+                  : faceletAppearance?.appearance;
+
               faceletInfo.facelet.material =
-                axesInfo[faceletInfo.faceIdx].stickerMaterial[
-                  faceletAppearance.appearance
-                ];
+                axesInfo[faceletInfo.faceIdx].stickerMaterial[appearance];
+              // TODO
               const hintAppearance =
-                faceletAppearance.hintAppearance ??
-                faceletAppearance.appearance;
+                typeof faceletAppearance === "string"
+                  ? appearance
+                  : faceletAppearance.hintAppearance ?? appearance;
               if (faceletInfo.hintFacelet) {
                 faceletInfo.hintFacelet.material =
                   axesInfo[faceletInfo.faceIdx].hintStickerMaterial[

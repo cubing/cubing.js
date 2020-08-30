@@ -1,0 +1,18 @@
+/* @import "./inline.css"; */
+body {
+  font-family: sans-serif;
+}
+
+.content {
+  width: 100%;
+  display: grid;
+  /* grid-template-columns: repeat(auto-fit, 1fr); */
+  grid-template-columns: repeat(auto-fill, 256px);
+  /* grid-auto-flow: column; */
+  gap: 1em;
+  place-content: center;
+}
+
+twisty-player {
+  width: 100%;
+}

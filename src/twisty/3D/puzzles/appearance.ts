@@ -12,7 +12,7 @@ export type FaceletAppearance = {
 
 export type PieceAppearance = {
   // TODO: foundation?
-  facelets: (FaceletAppearance | null)[];
+  facelets: (FaceletMeshAppearance | FaceletAppearance | null)[];
 };
 
 export type OrbitAppearance = {
