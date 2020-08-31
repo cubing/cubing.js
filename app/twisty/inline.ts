@@ -1,3 +1,7 @@
+import { useNewFaceNames } from "../../src/puzzle-geometry";
+
+useNewFaceNames(true);
+
 import { BareBlockMove, parse, Sequence } from "../../src/alg/index";
 import "../../src/twisty/dom/TwistyPlayer";
 import { TwistyPlayer } from "../../src/twisty/index";

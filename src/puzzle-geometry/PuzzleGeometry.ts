@@ -163,14 +163,14 @@ function defaultcolors(): any {
     },
     8: NEW_FACE_NAMES
       ? {
-          U: "#e085b9",
-          F: "#080d99",
-          R: "#c1e35c",
-          D: "#22955e",
-          B: "#9121ab",
-          L: "#b27814",
-          BL: "#0d35ad",
-          BR: "#eb126b",
+          U: "#ffffff", //"#e085b9",
+          F: "#ff0000",
+          R: "#00bb00",
+          D: "#ffff00",
+          B: "#1122ff",
+          L: "#9524c5",
+          BL: "#ff8800",
+          BR: "#aaaaaa",
         }
       : {
           U: "#e085b9",
