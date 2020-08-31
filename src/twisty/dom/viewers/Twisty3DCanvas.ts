@@ -164,7 +164,6 @@ export class Twisty3DCanvas extends ManagedCustomElement
         -(this.canvas.width - squareSize) / 2,
         -(this.canvas.height - squareSize) / 2,
       );
-      console.log(tempCanvas);
       return tempCanvas.toDataURL();
     }
   }
