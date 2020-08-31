@@ -7,6 +7,10 @@ import {
 } from "./element/ElementConfig";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
+const DEFAULT_CAMERA_Z = 5;
+// Golden ratio is perfect for FTO and Megaminx.
+const DEFAULT_CAMERA_Y = DEFAULT_CAMERA_Z * (2 / (1 + Math.sqrt(5)));
+
 // TODO: turn these maps into lists?
 export const visualizationFormats = {
   "3D": true, // default
@@ -129,7 +133,7 @@ export class TwistyPlayerConfig {
         initialValues["backView"],
       ),
       "camera-position": new Vector3Attribute(
-        new Vector3(0, 3.1, 5),
+        new Vector3(0, DEFAULT_CAMERA_Y, DEFAULT_CAMERA_Z),
         initialValues["cameraPosition"],
       ),
     };
