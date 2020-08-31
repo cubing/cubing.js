@@ -151,7 +151,7 @@ addAlg("WVLS", "R U R' U R U' R'").setAppearance({
       pieces: [o, o, o, o, s, s, s, s, r, s, s, s],
     },
     CORNERS: {
-      pieces: [i, i, i, i, r, s, s, s],
+      pieces: [o, o, o, o, r, s, s, s],
     },
     CENTERS: {
       pieces: [r, s, s, s, s, s],
