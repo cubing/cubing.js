@@ -20,8 +20,8 @@ const r: PieceAppearance = {
   facelets: ["regular", "regular", "regular"],
 };
 
-// (already) solved
-const s: PieceAppearance = {
+// dim / (already) solved
+const d: PieceAppearance = {
   facelets: ["dim", "dim", "dim"],
 };
 
@@ -48,13 +48,13 @@ const oi: PieceAppearance = {
 addAlg("PLL", "R U R' U' R' F R2 U' R' U' R U R' F'").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [p, p, p, p, s, s, s, s, s, s, s, s],
+      pieces: [p, p, p, p, d, d, d, d, d, d, d, d],
     },
     CORNERS: {
-      pieces: [p, p, p, p, s, s, s, s],
+      pieces: [p, p, p, p, d, d, d, d],
     },
     CENTERS: {
-      pieces: [p, s, s, s, s, s],
+      pieces: [p, d, d, d, d, d],
     },
   },
 });
@@ -62,13 +62,13 @@ addAlg("PLL", "R U R' U' R' F R2 U' R' U' R U R' F'").setAppearance({
 addAlg("CLS", "R U R' U' R U R' U R U' R'").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [s, s, s, s, s, s, s, s, s, s, s, s],
+      pieces: [d, d, d, d, d, d, d, d, d, d, d, d],
     },
     CORNERS: {
-      pieces: [o, o, o, o, r, s, s, s],
+      pieces: [o, o, o, o, r, d, d, d],
     },
     CENTERS: {
-      pieces: [s, s, s, s, s, s],
+      pieces: [d, d, d, d, d, d],
     },
   },
 });
@@ -76,13 +76,13 @@ addAlg("CLS", "R U R' U' R U R' U R U' R'").setAppearance({
 addAlg("OLL", "r U R' U R U2 r'").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [o, o, o, o, s, s, s, s, s, s, s, s],
+      pieces: [o, o, o, o, d, d, d, d, d, d, d, d],
     },
     CORNERS: {
-      pieces: [o, o, o, o, s, s, s, s],
+      pieces: [o, o, o, o, d, d, d, d],
     },
     CENTERS: {
-      pieces: [r, s, s, s, s, s],
+      pieces: [r, d, d, d, d, d],
     },
   },
 });
@@ -90,13 +90,13 @@ addAlg("OLL", "r U R' U R U2 r'").setAppearance({
 addAlg("ELS", "[r U' r': U]").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [o, o, o, o, s, s, s, s, r, s, s, s],
+      pieces: [o, o, o, o, d, d, d, d, r, d, d, d],
     },
     CORNERS: {
-      pieces: [i, i, i, i, i, s, s, s],
+      pieces: [i, i, i, i, i, d, d, d],
     },
     CENTERS: {
-      pieces: [r, s, s, s, s, s],
+      pieces: [r, d, d, d, d, d],
     },
   },
 });
@@ -104,13 +104,13 @@ addAlg("ELS", "[r U' r': U]").setAppearance({
 addAlg("LL", "R' F R F2' U F R U R' F' U' F").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [r, r, r, r, s, s, s, s, s, s, s, s],
+      pieces: [r, r, r, r, d, d, d, d, d, d, d, d],
     },
     CORNERS: {
-      pieces: [r, r, r, r, s, s, s, s],
+      pieces: [r, r, r, r, d, d, d, d],
     },
     CENTERS: {
-      pieces: [r, s, s, s, s, s],
+      pieces: [r, d, d, d, d, d],
     },
   },
 });
@@ -119,13 +119,13 @@ addAlg("ZBLL", "R' F R U' R' U' R U R' F' R U R' U' R' F R F' R").setAppearance(
   {
     orbits: {
       EDGES: {
-        pieces: [p, p, p, p, s, s, s, s, s, s, s, s],
+        pieces: [p, p, p, p, d, d, d, d, d, d, d, d],
       },
       CORNERS: {
-        pieces: [r, r, r, r, s, s, s, s],
+        pieces: [r, r, r, r, d, d, d, d],
       },
       CENTERS: {
-        pieces: [r, s, s, s, s, s],
+        pieces: [r, d, d, d, d, d],
       },
     },
   },
@@ -134,13 +134,13 @@ addAlg("ZBLL", "R' F R U' R' U' R U R' F' R U R' U' R' F R F' R").setAppearance(
 addAlg("ZBLS", "x' R2 U' R' U l'").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [o, o, o, o, s, s, s, s, r, s, s, s],
+      pieces: [o, o, o, o, d, d, d, d, r, d, d, d],
     },
     CORNERS: {
-      pieces: [i, i, i, i, r, s, s, s],
+      pieces: [i, i, i, i, r, d, d, d],
     },
     CENTERS: {
-      pieces: [r, s, s, s, s, s],
+      pieces: [r, d, d, d, d, d],
     },
   },
 });
@@ -148,13 +148,13 @@ addAlg("ZBLS", "x' R2 U' R' U l'").setAppearance({
 addAlg("WVLS", "R U R' U R U' R'").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [o, o, o, o, s, s, s, s, r, s, s, s],
+      pieces: [o, o, o, o, d, d, d, d, r, d, d, d],
     },
     CORNERS: {
-      pieces: [o, o, o, o, r, s, s, s],
+      pieces: [o, o, o, o, r, d, d, d],
     },
     CENTERS: {
-      pieces: [r, s, s, s, s, s],
+      pieces: [r, d, d, d, d, d],
     },
   },
 });
@@ -162,13 +162,13 @@ addAlg("WVLS", "R U R' U R U' R'").setAppearance({
 addAlg("VLS", "R' F2 R F2' L' U2 L").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [o, o, o, o, s, s, s, s, r, s, s, s],
+      pieces: [o, o, o, o, d, d, d, d, r, d, d, d],
     },
     CORNERS: {
-      pieces: [o, o, o, o, r, s, s, s],
+      pieces: [o, o, o, o, r, d, d, d],
     },
     CENTERS: {
-      pieces: [r, s, s, s, s, s],
+      pieces: [r, d, d, d, d, d],
     },
   },
 });
@@ -176,17 +176,16 @@ addAlg("VLS", "R' F2 R F2' L' U2 L").setAppearance({
 addAlg("LS", "R U' R'").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [i, i, i, i, s, s, s, s, r, s, s, s],
+      pieces: [i, i, i, i, d, d, d, d, r, d, d, d],
     },
     CORNERS: {
-      pieces: [i, i, i, i, r, s, s, s],
+      pieces: [i, i, i, i, r, d, d, d],
     },
     CENTERS: {
-      pieces: [s, s, s, s, s, s],
+      pieces: [d, d, d, d, d, d],
     },
   },
 });
-
 addAlg("EO", "").setAppearance({
   orbits: {
     EDGES: {
@@ -201,13 +200,69 @@ addAlg("EO", "").setAppearance({
 addAlg("L6EO", "(U' M U' M')2").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [oi, oi, oi, oi, oi, s, oi, s, s, s, s, s],
+      pieces: [oi, oi, oi, oi, oi, d, oi, d, d, d, d, d],
     },
     CORNERS: {
-      pieces: [s, s, s, s, s, s, s, s],
+      pieces: [d, d, d, d, d, d, d, d],
     },
     CENTERS: {
-      pieces: [oi, s, i, s, i, oi],
+      pieces: [oi, d, i, d, i, oi],
+    },
+  },
+});
+
+addAlg("Daisy", "S2 R2 L2").setAppearance({
+  orbits: {
+    EDGES: {
+      pieces: [o, o, o, o, i, i, i, i, i, i, i, i],
+    },
+    CORNERS: {
+      pieces: [i, i, i, i, i, i, i, i],
+    },
+    CENTERS: {
+      pieces: [d, d, d, d, d, o],
+    },
+  },
+});
+
+addAlg("2x2x2", "y2'").setAppearance({
+  orbits: {
+    EDGES: {
+      pieces: [i, i, i, i, i, i, r, r, i, i, i, r],
+    },
+    CORNERS: {
+      pieces: [i, i, i, i, i, i, r, i],
+    },
+    CENTERS: {
+      pieces: [d, r, d, d, r, r],
+    },
+  },
+});
+
+addAlg("2x2x3", "y'").setAppearance({
+  orbits: {
+    EDGES: {
+      pieces: [i, i, i, i, r, i, d, d, i, r, i, d],
+    },
+    CORNERS: {
+      pieces: [i, i, i, i, i, r, d, i],
+    },
+    CENTERS: {
+      pieces: [d, d, r, d, d, d],
+    },
+  },
+});
+
+addAlg("<R, U> EO", "").setAppearance({
+  orbits: {
+    EDGES: {
+      pieces: [oi, oi, oi, oi, d, oi, d, d, oi, d, oi, d],
+    },
+    CORNERS: {
+      pieces: [i, i, i, i, i, d, d, i],
+    },
+    CENTERS: {
+      pieces: [oi, d, d, d, d, d],
     },
   },
 });
