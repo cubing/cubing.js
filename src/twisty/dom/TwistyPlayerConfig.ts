@@ -129,7 +129,7 @@ export class TwistyPlayerConfig {
         initialValues["backView"],
       ),
       "camera-position": new Vector3Attribute(
-        new Vector3(0, 0, 5),
+        new Vector3(0, 3.1, 5),
         initialValues["cameraPosition"],
       ),
     };
