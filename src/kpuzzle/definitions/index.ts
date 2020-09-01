@@ -14,7 +14,13 @@ import cube333JSON from "./3x3x3.kpuzzle.json";
 export const Cube333: KPuzzleDefinition = cube333JSON;
 import cube333SVG from "./svg/3x3x3.kpuzzle.svg";
 Cube333.svg = cube333SVG;
-// Cube333.svg = svgJSON["3x3x3.kpuzzle.svg"];
+
+// TODO: is stringify/parse the best way to clone?
+export const Cube333LL: KPuzzleDefinition = JSON.parse(
+  JSON.stringify(cube333JSON),
+);
+import cube333LLSVG from "./svg/3x3x3-ll.kpuzzle.svg";
+Cube333LL.svg = cube333LLSVG;
 
 import PyraminxJSON from "./pyraminx.kpuzzle.json";
 export const Pyraminx: KPuzzleDefinition = PyraminxJSON;
