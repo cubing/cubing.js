@@ -44,6 +44,15 @@ export class MoveExpander {
           t = Invert(def, t);
         }
       }
+      if (!t && nslices === 1) {
+        t = moves[grip1 + "v"];
+        if (!t) {
+          t = moves[grip2 + "v"];
+          if (t) {
+            t = Invert(def, t);
+          }
+        }
+      }
       if (!t) {
         throw new Error(
           "Could not expand axis " +

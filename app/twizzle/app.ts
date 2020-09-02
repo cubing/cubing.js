@@ -117,11 +117,15 @@ function intersectionToMove(
   event: MouseEvent,
   rightClick: boolean,
 ): BlockMove {
+  const allowRotatingGrips = event.ctrlKey || event.metaKey;
   let bestGrip: MoveFamily = stickerDat.axis[0][1];
   let bestProduct: number = 0;
   for (const axis of stickerDat.axis) {
     const product = point.dot(new Vector3(...axis[0]));
-    if (product > bestProduct) {
+    if (
+      (gripdepth[axis[1]] > 1 || allowRotatingGrips) &&
+      product > bestProduct
+    ) {
       bestProduct = product;
       bestGrip = axis[1];
     }

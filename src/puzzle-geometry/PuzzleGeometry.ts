@@ -474,7 +474,9 @@ export class PuzzleGeometry {
   public vertexnames: any[]; // vertexnames
   public geonormals: any[]; // all geometric directions, with names and types
   public moveplanes: Quat[]; // the planes that split moves
+  public moveplanes2: Quat[]; // the planes that split moves, filtered
   public moveplanesets: any[]; // the move planes, in parallel sets
+  public moveplanenormals: Quat[]; // one move plane
   public movesetorders: any[]; // the order of rotations for each move set
   public movesetgeos: any[]; // geometric feature information for move sets
   public basefaces: Quat[][]; // polytope faces before cuts
@@ -619,6 +621,7 @@ export class PuzzleGeometry {
     // short is too short is hard to say.
     // var that = this ; // TODO
     this.moveplanes = [];
+    this.moveplanes2 = [];
     this.faces = [];
     this.cubies = [];
     let g = null;
@@ -658,30 +661,13 @@ export class PuzzleGeometry {
       console.log("# Base planes: " + baseplanes.length);
     }
     const baseface = getface(baseplanes);
+    const zero = new Quat(0, 0, 0, 0);
     if (this.verbose) {
       console.log("# Face vertices: " + baseface.length);
     }
     const facenormal = baseplanes[0].makenormal();
     const edgenormal = baseface[0].sum(baseface[1]).makenormal();
     const vertexnormal = baseface[0].makenormal();
-    const cutplanes = [];
-    for (let i = 0; i < cuts.length; i++) {
-      let normal = null;
-      switch (cuts[i][0]) {
-        case "f":
-          normal = facenormal;
-          break;
-        case "v":
-          normal = vertexnormal;
-          break;
-        case "e":
-          normal = edgenormal;
-          break;
-        default:
-          throw new Error("Bad cut argument: " + cuts[i][0]);
-      }
-      cutplanes.push(normal.makecut(cuts[i][1]));
-    }
     const boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d);
     if (this.verbose) {
       console.log("# Boundary is " + boundary);
@@ -689,6 +675,32 @@ export class PuzzleGeometry {
     const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
     let faces = [getface(planes)];
+    this.edgedistance = faces[0][0].sum(faces[0][1]).smul(0.5).dist(zero);
+    this.vertexdistance = faces[0][0].dist(zero);
+    const cutplanes = [];
+    const intersects = [];
+    for (let i = 0; i < cuts.length; i++) {
+      let normal = null;
+      let distance = 0;
+      switch (cuts[i][0]) {
+        case "f":
+          normal = facenormal;
+          distance = 1;
+          break;
+        case "v":
+          normal = vertexnormal;
+          distance = this.vertexdistance;
+          break;
+        case "e":
+          normal = edgenormal;
+          distance = this.edgedistance;
+          break;
+        default:
+          throw new Error("Bad cut argument: " + cuts[i][0]);
+      }
+      cutplanes.push(normal.makecut(cuts[i][1]));
+      intersects.push(cuts[i][1] < distance);
+    }
     this.basefaces = [];
     for (let i = 0; i < this.baseplanerot.length; i++) {
       const face = this.baseplanerot[i].rotateface(faces[0]);
@@ -898,9 +910,6 @@ export class PuzzleGeometry {
     this.edgenames = edgenames;
     this.vertexnames = vertexnames;
     this.geonormals = geonormals;
-    const zero = new Quat(0, 0, 0, 0);
-    this.edgedistance = faces[0][0].sum(faces[0][1]).smul(0.5).dist(zero);
-    this.vertexdistance = faces[0][0].dist(zero);
     if (this.verbose) {
       console.log(
         "# Distances: face " +
@@ -925,6 +934,9 @@ export class PuzzleGeometry {
         if (!wasseen) {
           this.moveplanes.push(q);
           faces = q.cutfaces(faces);
+          if (intersects[c]) {
+            this.moveplanes2.push(q);
+          }
         }
       }
     }
@@ -1020,26 +1032,37 @@ export class PuzzleGeometry {
       console.log("# Total stickers is now " + this.faces.length);
     }
     // Split moveplanes into a list of parallel planes.
-    const moveplanesets = [];
+    const moveplanesets: Quat[][] = [];
+    const moveplanenormals: Quat[] = [];
+    // get the normals, first, from unfiltered moveplanes.
     for (let i = 0; i < this.moveplanes.length; i++) {
-      let wasseen = false;
       const q = this.moveplanes[i];
       const qnormal = q.makenormal();
-      for (let j = 0; j < moveplanesets.length; j++) {
-        if (qnormal.sameplane(moveplanesets[j][0].makenormal())) {
-          moveplanesets[j].push(q);
+      let wasseen = false;
+      for (let j = 0; j < moveplanenormals.length; j++) {
+        if (qnormal.sameplane(moveplanenormals[j].makenormal())) {
           wasseen = true;
-          break;
         }
       }
       if (!wasseen) {
-        moveplanesets.push([q]);
+        moveplanenormals.push(qnormal);
+        moveplanesets.push([]);
+      }
+    }
+    for (let i = 0; i < this.moveplanes2.length; i++) {
+      const q = this.moveplanes2[i];
+      const qnormal = q.makenormal();
+      for (let j = 0; j < moveplanenormals.length; j++) {
+        if (qnormal.sameplane(moveplanenormals[j])) {
+          moveplanesets[j].push(q);
+          break;
+        }
       }
     }
     // make the normals all face the same way in each set.
     for (let i = 0; i < moveplanesets.length; i++) {
       const q: Quat[] = moveplanesets[i].map((_) => _.normalizeplane());
-      const goodnormal = q[0].makenormal();
+      const goodnormal = moveplanenormals[i];
       for (let j = 0; j < q.length; j++) {
         if (q[j].makenormal().dist(goodnormal) > eps) {
           q[j] = q[j].smul(-1);
@@ -1049,6 +1072,7 @@ export class PuzzleGeometry {
       moveplanesets[i] = q;
     }
     this.moveplanesets = moveplanesets;
+    this.moveplanenormals = moveplanenormals;
     const sizes = moveplanesets.map((_) => _.length);
     if (this.verbose) {
       console.log("# Move plane sets: " + sizes);
@@ -1065,7 +1089,7 @@ export class PuzzleGeometry {
       }
       const qnormal = q.makenormal();
       for (let j = 0; j < moveplanesets.length; j++) {
-        if (qnormal.sameplane(moveplanesets[j][0].makenormal())) {
+        if (qnormal.sameplane(moveplanenormals[j])) {
           moverotations[j].push(q);
           break;
         }
@@ -1084,7 +1108,7 @@ export class PuzzleGeometry {
         }
       }
       r.sort((a, b) => a.angle() - b.angle());
-      if (moverotations[i][0].dot(moveplanesets[i][0]) < 0) {
+      if (moverotations[i][0].dot(moveplanenormals[i]) < 0) {
         r.reverse();
       }
     }
@@ -1092,7 +1116,7 @@ export class PuzzleGeometry {
     this.movesetorders = sizes2;
     const movesetgeos = [];
     for (let i = 0; i < moveplanesets.length; i++) {
-      const p0 = moveplanesets[i][0].makenormal();
+      const p0 = moveplanenormals[i];
       let neg = null;
       let pos = null;
       for (let j = 0; j < this.geonormals.length; j++) {
