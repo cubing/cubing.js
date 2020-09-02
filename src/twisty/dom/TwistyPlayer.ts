@@ -90,11 +90,14 @@ export class TwistyPlayer extends ManagedCustomElement {
     ControlsLocation
   > = new ClassListManager(this, "controls-", ["none", "bottom-row"]);
 
+  /** @deprecated */
   public legacyExperimentalPG3D: PG3D | null = null;
+  /** @deprecated */
+  private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null;
   // TODO: support config from DOM.
   constructor(
     initialConfig: TwistyPlayerInitialConfig = {},
-    private legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
+    legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
   ) {
     super();
     this.addCSS(twistyPlayerCSS);
