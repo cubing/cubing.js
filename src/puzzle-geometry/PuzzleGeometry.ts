@@ -679,6 +679,9 @@ export class PuzzleGeometry {
     this.vertexdistance = faces[0][0].dist(zero);
     const cutplanes = [];
     const intersects = [];
+    let sawface = false; // what cuts did we see?
+    let sawedge = false;
+    let sawvertex = false;
     for (let i = 0; i < cuts.length; i++) {
       let normal = null;
       let distance = 0;
@@ -686,20 +689,34 @@ export class PuzzleGeometry {
         case "f":
           normal = facenormal;
           distance = 1;
+          sawface = true;
           break;
         case "v":
           normal = vertexnormal;
           distance = this.vertexdistance;
+          sawvertex = true;
           break;
         case "e":
           normal = edgenormal;
           distance = this.edgedistance;
+          sawedge = true;
           break;
         default:
           throw new Error("Bad cut argument: " + cuts[i][0]);
       }
       cutplanes.push(normal.makecut(cuts[i][1]));
       intersects.push(cuts[i][1] < distance);
+    }
+    if (this.addrotations) {
+      if (!sawface) {
+        cutplanes.push(facenormal.makecut(10));
+      }
+      if (!sawvertex) {
+        cutplanes.push(vertexnormal.makecut(10));
+      }
+      if (!sawedge) {
+        cutplanes.push(edgenormal.makecut(10));
+      }
     }
     this.basefaces = [];
     for (let i = 0; i < this.baseplanerot.length; i++) {
@@ -1808,10 +1825,6 @@ export class PuzzleGeometry {
       }
       r = newr;
     }
-    if (this.addrotations) {
-      r.push((2 << slices) - 1);
-      r.push(1);
-    }
     return r;
   }
 
@@ -2538,8 +2551,8 @@ export class PuzzleGeometry {
         //  returned vector here.  We give a very slight positive
         //  z value.
         if (Math.abs(r[0]) < eps && Math.abs(r[2]) < eps) {
-           r[0] = 0 ;
-           r[2] = 1e-6 ;
+          r[0] = 0.0;
+          r[2] = 1e-6;
         }
         return r;
       }
