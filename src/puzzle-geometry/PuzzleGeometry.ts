@@ -2535,12 +2535,11 @@ export class PuzzleGeometry {
         //  If the camera location is vertical, and we give some
         //  near-zero values for x and z, then the rotation in the
         //  X/Z plane will be somewhat arbitrary.  So we clean up the
-        //  returned vector here.  We are relying on some default
-        //  behavior of three.js that might not be reliable.
-        for (let k = 0; k < 3; k++) {
-          if (Math.abs(r[k]) < eps) {
-            r[k] = 0;
-          }
+        //  returned vector here.  We give a very slight positive
+        //  z value.
+        if (Math.abs(r[0]) < eps && Math.abs(r[2]) < eps) {
+           r[0] = 0 ;
+           r[2] = 1e-6 ;
         }
         return r;
       }

@@ -450,6 +450,7 @@ function checkchange(): void {
     lastRender = newRender;
     const p = parsedesc(descarg);
     if (p) {
+      console.log(initialCameraPos);
       if (savecam) {
         saveCamera();
       }
