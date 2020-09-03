@@ -22,6 +22,7 @@ export class TwistyOrbitControls {
     this.threeOrbitControls.enableDamping = INERTIA_DEFAULT;
     this.threeOrbitControls.rotateSpeed = 0.5;
     this.threeOrbitControls.enablePan = false;
+    this.threeOrbitControls.enableZoom = false;
 
     // Note we can get a `change` event after `end` due to dampening.
     const eventHandler = this.onOrbitControlEvent.bind(this);
