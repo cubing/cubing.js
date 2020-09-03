@@ -88,7 +88,7 @@ export async function connect(
   // TODO by reading supported matched filters or provided services.
   if (name && name.startsWith("GAN")) {
     return await GanCube.connect(server);
-  } else if (name && name.startsWith("GoCube")) {
+  } else if ((name && name.startsWith("GoCube")) || name.startsWith("Rubik")) {
     return await GoCube.connect(server);
   } else {
     return await GiiKERCube.connect(server);

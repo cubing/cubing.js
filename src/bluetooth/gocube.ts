@@ -10,7 +10,7 @@ const UUIDs = {
 
 // TODO: Move this into a factory?
 export const goCubeConfig: BluetoothConfig = {
-  filters: [{ namePrefix: "GoCube" }],
+  filters: [{ namePrefix: "GoCube" }, { namePrefix: "Rubik" }],
   optionalServices: [UUIDs.goCubeService],
 };
 
