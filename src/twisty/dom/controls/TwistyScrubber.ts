@@ -43,7 +43,7 @@ export class TwistyScrubber extends ManagedCustomElement
     this.range.max = timeRange.end.toString();
   }
 
-  onInput(): void {
+  private onInput(): void {
     this.timeline!.setTimestamp(parseInt(this.range.value, 10));
   }
 }

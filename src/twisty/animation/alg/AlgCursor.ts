@@ -56,6 +56,7 @@ export class AlgCursor
     };
   }
 
+  /** @deprecated */
   experimentalTimestampForStartOfLastMove(): MillisecondTimestamp {
     const numMoves = this.todoIndexer.numMoves();
     if (numMoves > 0) {
@@ -76,7 +77,7 @@ export class AlgCursor
     this.dispatchPositionForTimestamp(timestamp);
   }
 
-  dispatchPositionForTimestamp(timestamp: MillisecondTimestamp): void {
+  private dispatchPositionForTimestamp(timestamp: MillisecondTimestamp): void {
     const idx = this.todoIndexer.timestampToIndex(timestamp);
     const state = this.todoIndexer.stateAtIndex(idx) as any; // TODO
     const position: PuzzlePosition = {

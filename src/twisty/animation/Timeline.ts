@@ -167,7 +167,7 @@ export class Timeline
     return this.timeRange().end;
   }
 
-  dispatchTimeRange(): void {
+  private dispatchTimeRange(): void {
     const timeRange = this.timeRange();
     for (const listener of this.cursors) {
       // TODO: dedup in case the timestamp hasn't changed sine last time.
@@ -180,7 +180,7 @@ export class Timeline
     }
   }
 
-  dispatchTimestamp(): void {
+  private dispatchTimestamp(): void {
     for (const listener of this.cursors) {
       // TODO: dedup in case the timestamp hasn't changed sine last time.
       listener.onTimelineTimestampChange(this.timestamp);
@@ -329,6 +329,7 @@ export class Timeline
     this.setTimestamp(this.maxTimestamp());
   }
 
+  /** @deprecated */
   experimentalJumpToLastMove(): void {
     let max: MillisecondTimestamp = 0;
     for (const cursor of this.cursors) {

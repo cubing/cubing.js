@@ -38,6 +38,7 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
   }
 
   // Returns if the value changed
+  /** @deprecated */
   setBackView(backView: BackViewLayout): boolean {
     return this.#backViewClassListManager.setValue(backView);
   }
