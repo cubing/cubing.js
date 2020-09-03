@@ -6,7 +6,6 @@ const INERTIA_DEFAULT: boolean = true;
 // TODO: Support limiting altitudinal angle, similar to alg.cubing.net v1.
 // TODO: Allow locking vertical rotation if the mouse/touch hasn't moved much, similar to alg.cubing.net v1.
 // TODO: Use more damping during drag, and less damping after letting go.
-// TODO: Implement an orbit control paired to an opposing camera.
 export class TwistyOrbitControls {
   threeOrbitControls: ThreeOrbitControls;
   mirrorControls?: TwistyOrbitControls;
