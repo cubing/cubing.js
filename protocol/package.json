@@ -1,0 +1,6 @@
+{
+  "name": "protocol",
+  "main": "../dist/cjs/protocol.js",
+  "module": "../dist/esm/protocol.js",
+  "types": "../dist/esm/src/protocol/index.d.ts"
+}
