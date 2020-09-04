@@ -23,7 +23,7 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
     "upper-right",
   ]);
 
-  constructor(private config: TwistyViewerWrapperConfig = {}) {
+  constructor(config: TwistyViewerWrapperConfig = {}) {
     super();
     this.addCSS(twistyViewerWrapperCSS);
 

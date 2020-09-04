@@ -7,7 +7,6 @@ export const buttonGridCSS = new CSSSource(`
 
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 2px;
 }
 `);
 
@@ -25,10 +24,12 @@ button {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+
+  background-color: rgba(196, 196, 196, 0.75);
 }
 
 button:enabled {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(196, 196, 196, 0.75)
 }
 
 button:disabled {
@@ -37,7 +38,7 @@ button:disabled {
 }
 
 button:enabled:hover {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.75);
   box-shadow: 0 0 1em rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
