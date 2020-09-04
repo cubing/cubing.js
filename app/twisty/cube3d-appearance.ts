@@ -25,6 +25,11 @@ const d: PieceAppearance = {
   facelets: ["dim", "dim", "dim"],
 };
 
+// dim / (already) oriented
+const di: PieceAppearance = {
+  facelets: ["dim", "ignored", "ignored"],
+};
+
 // PLL
 const p: PieceAppearance = {
   facelets: ["dim", "regular", "regular"],
@@ -62,7 +67,7 @@ addAlg("PLL", "R U R' U' R' F R2 U' R' U' R U R' F'").setAppearance({
 addAlg("CLS", "R U R' U' R U R' U R U' R'").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [d, d, d, d, d, d, d, d, d, d, d, d],
+      pieces: [di, di, di, di, d, d, d, d, d, d, d, d],
     },
     CORNERS: {
       pieces: [o, o, o, o, r, d, d, d],
