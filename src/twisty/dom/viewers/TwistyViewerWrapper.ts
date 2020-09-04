@@ -1,7 +1,7 @@
-import { ManagedCustomElement } from "../element/ManagedCustomElement";
-import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
 import { ClassListManager } from "../element/ClassListManager";
+import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
+import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
 
 export const backViewLayouts = {
   "none": true, // default
@@ -11,7 +11,6 @@ export const backViewLayouts = {
 export type BackViewLayout = keyof typeof backViewLayouts;
 
 export interface TwistyViewerWrapperConfig {
-  checkered?: boolean;
   backView?: BackViewLayout;
 }
 
@@ -28,10 +27,6 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
     super();
     this.addCSS(twistyViewerWrapperCSS);
 
-    this.contentWrapper.classList.toggle(
-      "checkered",
-      config.checkered ?? false,
-    );
     if (config.backView && config.backView in backViewLayouts) {
       this.#backViewClassListManager.setValue(config.backView);
     }
@@ -41,11 +36,6 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
   /** @deprecated */
   setBackView(backView: BackViewLayout): boolean {
     return this.#backViewClassListManager.setValue(backView);
-  }
-
-  set checkered(checkered: boolean) {
-    this.config.checkered = checkered;
-    this.contentWrapper.classList.toggle("checkered", checkered);
   }
 }
 

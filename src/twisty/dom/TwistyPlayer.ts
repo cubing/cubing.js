@@ -103,6 +103,11 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addCSS(twistyPlayerCSS);
     this.#config = new TwistyPlayerConfig(this, initialConfig);
 
+    this.contentWrapper.classList.toggle(
+      "checkered",
+      this.background === "checkered",
+    );
+
     this.legacyExperimentalPG3DViewConfig = legacyExperimentalPG3DViewConfig;
   }
 
@@ -142,9 +147,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set background(background: BackgroundTheme) {
-    this.#config.attributes["background"].setValue(background);
-    if (this.#viewerWrapper) {
-      this.#viewerWrapper.checkered = background === "checkered";
+    if (this.#config.attributes["background"].setValue(background)) {
+      this.contentWrapper.classList.toggle(
+        "checkered",
+        background === "checkered",
+      );
     }
   }
 
@@ -223,7 +230,6 @@ export class TwistyPlayer extends ManagedCustomElement {
       ? (this.backView as BackViewLayout)
       : "none";
     this.#viewerWrapper = new TwistyViewerWrapper({
-      checkered: this.background === "checkered",
       backView,
     });
     this.addElement(this.#viewerWrapper);

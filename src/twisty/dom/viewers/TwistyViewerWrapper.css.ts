@@ -26,12 +26,4 @@ export const twistyViewerWrapperCSS = new CSSSource(`
   width: 25%;
   height: 25%;
 }
-
-.wrapper.checkered {
-  background-color: #EAEAEA;
-  background-image: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
-    linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
-  background-size: 32px 32px;
-  background-position: 0 0, 16px 16px;
-}
 `);
