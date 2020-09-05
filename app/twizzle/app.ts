@@ -459,6 +459,8 @@ function checkchange(): void {
         true,
         "orientcenters",
         true,
+        "rotations",
+        true,
       ];
       if (!lastRender.corners) {
         options.push("graycorners", true);
