@@ -63,19 +63,6 @@ export class KPuzzle {
     }
   }
 
-  public applyMove(moveName: string): this {
-    let move: Transformation | undefined = this.definition.moves[moveName];
-    if (!move) {
-      move = this.expandSlicesByName(moveName);
-    }
-    if (!move) {
-      throw new Error(`Unknown move: ${moveName}`);
-    }
-
-    this.state = Combine(this.definition, this.state, move);
-    return this;
-  }
-
   public getMoveExpander(create: boolean): MoveExpander | undefined {
     let moveExpander = this.definition.moveExpander;
     if (create && !moveExpander) {
