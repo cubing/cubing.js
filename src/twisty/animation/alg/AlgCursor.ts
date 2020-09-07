@@ -6,9 +6,9 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 // start of imports
-import { Sequence } from "../../../alg";
-import { KPuzzleDefinition } from "../../../kpuzzle";
-import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
+import { modifiedBlockMove, Sequence } from "../../../alg";
+import { Transformation, KPuzzleDefinition } from "../../../kpuzzle";
+import { KPuzzleWrapper, PuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
 import {
   MillisecondTimestamp,
   Timeline,
@@ -86,14 +86,25 @@ export class AlgCursor
     };
 
     if (this.todoIndexer.numMoves() > 0) {
-      position.movesInProgress.push({
-        move: this.todoIndexer.getMove(idx),
-        direction: Direction.Forwards,
-        fraction:
-          (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
-          this.todoIndexer.moveDuration(idx),
-      });
+      const fraction =
+        (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
+        this.todoIndexer.moveDuration(idx);
+      if (fraction === 1) {
+        // TODO: push this into the indexer
+        position.state = this.ksolvePuzzle.combine(
+          state,
+          this.ksolvePuzzle.stateFromMove(this.todoIndexer.getMove(idx)),
+        ) as Transformation;
+      } else if (fraction > 0) {
+        position.movesInProgress.push({
+          move: this.todoIndexer.getMove(idx),
+          direction: Direction.Forwards,
+          fraction,
+        });
+      }
     }
+
+    console.log(position);
 
     for (const listener of this.positionListeners) {
       listener.onPositionChange(position);
