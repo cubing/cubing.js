@@ -40,6 +40,8 @@ const invis: PieceAppearance = {
   facelets: ["invisible", "invisible", "invisible"],
 };
 
+// TODO: generalize stickerings by performing e.g. intersection on orbit selectors
+// Example: OLL is `LL: orient, !LL: dim`
 export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
   "full": {
     // TODO: Support elision for regular pieces.

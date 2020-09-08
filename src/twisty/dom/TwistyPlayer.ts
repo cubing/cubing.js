@@ -171,7 +171,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   // TODO: Implement for PG3D
   /** @deprecated */
   set experimentalStickering(experimentalStickering: ExperimentalStickering) {
-    // TODO: implement this for PG3D.
+    console.log("experimentalStickering", experimentalStickering);
     if (
       this.#config.attributes["experimentalStickering"].setValue(
         experimentalStickering,
