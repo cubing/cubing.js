@@ -17,6 +17,10 @@ import { Puzzles, Transformation } from "../../../kpuzzle";
 import { AlgCursor } from "../../animation/alg/AlgCursor";
 import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 import { smootherStep } from "../../animation/easing";
+import {
+  HintFaceletStyle,
+  hintFaceletStyles,
+} from "../../dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
 import { FaceletMeshAppearance, PuzzleAppearance } from "./appearance";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
@@ -163,17 +167,17 @@ const cubieDimensions = {
   hintStickerElevation: 1.45,
 };
 
-type OptionKey = "showMainStickers" | "showHintStickers" | "showFoundation";
+type OptionKey = "showMainStickers" | "hintFacelets" | "showFoundation";
 
 interface Cube3DOptions {
   showMainStickers?: boolean;
-  showHintStickers?: boolean;
+  hintFacelets?: HintFaceletStyle;
   showFoundation?: boolean; // TODO: better name
 }
 
 const cube3DOptionsDefaults: Cube3DOptions = {
   showMainStickers: true,
-  showHintStickers: true,
+  hintFacelets: "floating",
   showFoundation: true,
 };
 
@@ -384,6 +388,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     }
   }
 
+  /** @deprecated */
   public experimentalUpdateOptions(options: Cube3DOptions): void {
     if ("showMainStickers" in options) {
       throw new Error("Unimplemented");
@@ -400,15 +405,17 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       }
     }
 
-    const showHintStickers = options.showHintStickers;
+    const hintFacelets = options.hintFacelets;
     if (
-      typeof showHintStickers !== "undefined" &&
-      this.options.showHintStickers !== showHintStickers
+      typeof hintFacelets !== "undefined" &&
+      this.options.hintFacelets !== hintFacelets &&
+      hintFaceletStyles[hintFacelets] // TODO: test this
     ) {
-      this.options.showHintStickers = showHintStickers;
+      this.options.hintFacelets = hintFacelets;
       for (const hintSticker of this.experimentalHintStickerMeshes) {
-        hintSticker.visible = showHintStickers;
+        hintSticker.visible = hintFacelets === "floating";
       }
+      this.scheduleRenderCallback!(); // TODO
     }
   }
 
@@ -475,7 +482,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         facelet: sticker,
       };
       cubie.add(sticker);
-      if (this.options.showHintStickers) {
+      if (this.options.hintFacelets === "floating") {
         const hintSticker = this.createSticker(
           axesInfo[cubieStickerOrder[i]],
           axesInfo[piece.stickerFaces[i]],

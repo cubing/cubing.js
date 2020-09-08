@@ -21,6 +21,7 @@ import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import {
   BackgroundTheme,
   ControlsLocation,
+  HintFaceletStyle,
   PuzzleID,
   TwistyPlayerConfig,
   TwistyPlayerInitialConfig,
@@ -144,6 +145,19 @@ export class TwistyPlayer extends ManagedCustomElement {
   get visualization(): VisualizationFormat {
     return this.#config.attributes["visualization"]
       .value as VisualizationFormat;
+  }
+
+  set hintFacelets(hintFacelets: HintFaceletStyle) {
+    // TODO: implement this for PG3D.
+    if (this.#config.attributes["hintFacelets"].setValue(hintFacelets)) {
+      if (this.twisty3D instanceof Cube3D) {
+        this.twisty3D.experimentalUpdateOptions({ hintFacelets });
+      }
+    }
+  }
+
+  get hintFacelets(): HintFaceletStyle {
+    return this.#config.attributes["hintFacelets"].value as HintFaceletStyle;
   }
 
   set background(background: BackgroundTheme) {

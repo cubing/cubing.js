@@ -25,6 +25,13 @@ export const backgroundThemes = {
 };
 export type BackgroundTheme = keyof typeof backgroundThemes;
 
+// TODO: turn these maps into lists?
+export const hintFaceletStyles = {
+  floating: true, // default
+  none: true,
+};
+export type HintFaceletStyle = keyof typeof hintFaceletStyles;
+
 export const controlsLocations = {
   "bottom-row": true, // default
   "none": true,
@@ -59,6 +66,7 @@ const twistyPlayerAttributeList = [
   "alg",
   "puzzle",
   "visualization",
+  "hintFacelets",
   "background",
   "controls",
   "backView",
@@ -72,6 +80,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   // Puzzle
   puzzle: StringEnumAttribute<PuzzleID>;
   visualization: StringEnumAttribute<VisualizationFormat>;
+  hintFacelets: StringEnumAttribute<HintFaceletStyle>;
 
   // Background
   background: StringEnumAttribute<BackgroundTheme>;
@@ -87,6 +96,7 @@ export interface TwistyPlayerConfigValues {
 
   puzzle: PuzzleID;
   visualization: VisualizationFormat;
+  hintFacelets: HintFaceletStyle;
 
   background: BackgroundTheme;
   controls: ControlsLocation;
@@ -112,6 +122,10 @@ export class TwistyPlayerConfig {
         visualizationFormats,
         initialValues.visualization,
       ),
+      hintFacelets: new StringEnumAttribute(
+        hintFaceletStyles,
+        initialValues.hintFacelets,
+      ),
 
       background: new StringEnumAttribute(
         backgroundThemes,
@@ -121,7 +135,6 @@ export class TwistyPlayerConfig {
         controlsLocations,
         initialValues.controls,
       ),
-
       backView: new StringEnumAttribute(
         backViewLayouts,
         initialValues["backView"],
