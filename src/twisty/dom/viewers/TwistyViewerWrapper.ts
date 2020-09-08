@@ -17,7 +17,7 @@ export interface TwistyViewerWrapperConfig {
 export class TwistyViewerWrapper extends ManagedCustomElement {
   #backViewClassListManager: ClassListManager<
     BackViewLayout
-  > = new ClassListManager(this, "back-view-", [
+  > = new ClassListManager(this, "backView-", [
     "none",
     "side-by-side",
     "upper-right",

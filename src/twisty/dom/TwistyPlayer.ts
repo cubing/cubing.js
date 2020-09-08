@@ -182,11 +182,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   get backView(): BackViewLayout {
-    return this.#config.attributes["back-view"].value as BackViewLayout;
+    return this.#config.attributes["backView"].value as BackViewLayout;
   }
 
   set cameraPosition(cameraPosition: Vector3) {
-    this.#config.attributes["camera-position"].setValue(cameraPosition);
+    this.#config.attributes["cameraPosition"].setValue(cameraPosition);
     if (
       this.viewerElems &&
       ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
@@ -204,7 +204,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   get cameraPosition(): Vector3 {
-    return this.#config.attributes["camera-position"].value;
+    return this.#config.attributes["cameraPosition"].value;
   }
 
   static get observedAttributes(): string[] {

@@ -55,21 +55,31 @@ export interface ManagedAttribute<K> {
 
 type AnyManagedAttribute = ManagedAttribute<any>;
 
+const twistyPlayerAttributeList = [
+  "alg",
+  "puzzle",
+  "visualization",
+  "background",
+  "controls",
+  "backView",
+  "cameraPosition",
+];
+
 interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   // Alg
-  "alg": AlgAttribute;
+  alg: AlgAttribute;
 
   // Puzzle
-  "puzzle": StringEnumAttribute<PuzzleID>;
-  "visualization": StringEnumAttribute<VisualizationFormat>;
+  puzzle: StringEnumAttribute<PuzzleID>;
+  visualization: StringEnumAttribute<VisualizationFormat>;
 
   // Background
-  "background": StringEnumAttribute<BackgroundTheme>;
-  "controls": StringEnumAttribute<ControlsLocation>;
+  background: StringEnumAttribute<BackgroundTheme>;
+  controls: StringEnumAttribute<ControlsLocation>;
 
   // 3D config
-  "back-view": StringEnumAttribute<BackViewLayout>;
-  "camera-position": Vector3Attribute;
+  backView: StringEnumAttribute<BackViewLayout>;
+  cameraPosition: Vector3Attribute;
 }
 
 export interface TwistyPlayerConfigValues {
@@ -87,22 +97,6 @@ export interface TwistyPlayerConfigValues {
 
 export type TwistyPlayerInitialConfig = Partial<TwistyPlayerConfigValues>;
 
-const twistyPlayerAttributeMap: Record<
-  keyof TwistyPlayerAttributes,
-  keyof TwistyPlayerConfigValues
-> = {
-  "alg": "alg",
-
-  "puzzle": "puzzle",
-  "visualization": "visualization",
-
-  "background": "background",
-  "controls": "controls",
-
-  "back-view": "backView",
-  "camera-position": "cameraPosition",
-};
-
 // TODO: Can we avoid instantiating a new class for ech attribute, and would it help performance?
 export class TwistyPlayerConfig {
   attributes: TwistyPlayerAttributes;
@@ -111,28 +105,28 @@ export class TwistyPlayerConfig {
     initialValues: TwistyPlayerInitialConfig,
   ) {
     this.attributes = {
-      "alg": new AlgAttribute(initialValues.alg),
+      alg: new AlgAttribute(initialValues.alg),
 
-      "puzzle": new StringEnumAttribute(puzzleIDs, initialValues.puzzle),
-      "visualization": new StringEnumAttribute(
+      puzzle: new StringEnumAttribute(puzzleIDs, initialValues.puzzle),
+      visualization: new StringEnumAttribute(
         visualizationFormats,
         initialValues.visualization,
       ),
 
-      "background": new StringEnumAttribute(
+      background: new StringEnumAttribute(
         backgroundThemes,
         initialValues.background,
       ),
-      "controls": new StringEnumAttribute(
+      controls: new StringEnumAttribute(
         controlsLocations,
         initialValues.controls,
       ),
 
-      "back-view": new StringEnumAttribute(
+      backView: new StringEnumAttribute(
         backViewLayouts,
         initialValues["backView"],
       ),
-      "camera-position": new Vector3Attribute(
+      cameraPosition: new Vector3Attribute(
         new Vector3(0, DEFAULT_CAMERA_Y, DEFAULT_CAMERA_Z),
         initialValues["cameraPosition"],
       ),
@@ -140,7 +134,7 @@ export class TwistyPlayerConfig {
   }
 
   static get observedAttributes(): (keyof TwistyPlayerAttributes & string)[] {
-    return Object.keys(twistyPlayerAttributeMap);
+    return twistyPlayerAttributeList;
   }
 
   attributeChangedCallback(
@@ -163,8 +157,7 @@ export class TwistyPlayerConfig {
 
       // TODO: can we make this type-safe?
       // TODO: avoid double-setting in recursive calls
-      this.twistyPlayer[twistyPlayerAttributeMap[attributeName]] =
-        managedAttribute.value;
+      this.twistyPlayer[attributeName] = managedAttribute.value;
     }
   }
 }
