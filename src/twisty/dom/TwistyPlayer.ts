@@ -21,6 +21,7 @@ import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import {
   BackgroundTheme,
   ControlsLocation,
+  ExperimentalStickering,
   HintFaceletStyle,
   PuzzleID,
   TwistyPlayerConfig,
@@ -158,6 +159,30 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   get hintFacelets(): HintFaceletStyle {
     return this.#config.attributes["hintFacelets"].value as HintFaceletStyle;
+  }
+
+  // TODO: Implement for PG3D
+  /** @deprecated */
+  get experimentalStickering(): ExperimentalStickering {
+    return this.#config.attributes["experimentalStickering"]
+      .value as ExperimentalStickering;
+  }
+
+  // TODO: Implement for PG3D
+  /** @deprecated */
+  set experimentalStickering(experimentalStickering: ExperimentalStickering) {
+    // TODO: implement this for PG3D.
+    if (
+      this.#config.attributes["experimentalStickering"].setValue(
+        experimentalStickering,
+      )
+    ) {
+      if (this.twisty3D instanceof Cube3D) {
+        this.twisty3D.experimentalUpdateOptions({
+          experimentalStickering,
+        });
+      }
+    }
   }
 
   set background(background: BackgroundTheme) {

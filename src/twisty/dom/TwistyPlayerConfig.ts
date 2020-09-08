@@ -32,6 +32,30 @@ export const hintFaceletStyles = {
 };
 export type HintFaceletStyle = keyof typeof hintFaceletStyles;
 
+// TODO: turn these maps into lists?
+// TODO: alg.cubing.net parity
+export const experimentalStickerings = {
+  "full": true, // default
+  "centers-only": true, // TODO
+  "PLL": true,
+  "CLS": true,
+  "OLL": true,
+  "ELS": true,
+  "LL": true,
+  "F2L": true,
+  "ZBLL": true,
+  "ZBLS": true,
+  "WVLS": true,
+  "VLS": true,
+  "LS": true,
+  "EO": true,
+  "L6EO": true,
+  "Daisy": true,
+  "2x2x2": true,
+  "2x2x3": true,
+};
+export type ExperimentalStickering = keyof typeof experimentalStickerings;
+
 export const controlsLocations = {
   "bottom-row": true, // default
   "none": true,
@@ -81,6 +105,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   puzzle: StringEnumAttribute<PuzzleID>;
   visualization: StringEnumAttribute<VisualizationFormat>;
   hintFacelets: StringEnumAttribute<HintFaceletStyle>;
+  experimentalStickering: StringEnumAttribute<ExperimentalStickering>;
 
   // Background
   background: StringEnumAttribute<BackgroundTheme>;
@@ -97,6 +122,7 @@ export interface TwistyPlayerConfigValues {
   puzzle: PuzzleID;
   visualization: VisualizationFormat;
   hintFacelets: HintFaceletStyle;
+  experimentalStickering: ExperimentalStickering;
 
   background: BackgroundTheme;
   controls: ControlsLocation;
@@ -125,6 +151,10 @@ export class TwistyPlayerConfig {
       hintFacelets: new StringEnumAttribute(
         hintFaceletStyles,
         initialValues.hintFacelets,
+      ),
+      experimentalStickering: new StringEnumAttribute(
+        experimentalStickerings,
+        initialValues.experimentalStickering,
       ),
 
       background: new StringEnumAttribute(

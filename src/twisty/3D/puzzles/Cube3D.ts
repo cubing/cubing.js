@@ -18,11 +18,14 @@ import { AlgCursor } from "../../animation/alg/AlgCursor";
 import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 import { smootherStep } from "../../animation/easing";
 import {
+  ExperimentalStickering,
+  experimentalStickerings,
   HintFaceletStyle,
   hintFaceletStyles,
 } from "../../dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
 import { FaceletMeshAppearance, PuzzleAppearance } from "./appearance";
+import { stickerings } from "./stickerings";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const ignoredMaterial = new MeshBasicMaterial({
@@ -173,12 +176,14 @@ interface Cube3DOptions {
   showMainStickers?: boolean;
   hintFacelets?: HintFaceletStyle;
   showFoundation?: boolean; // TODO: better name
+  experimentalStickering?: ExperimentalStickering;
 }
 
 const cube3DOptionsDefaults: Cube3DOptions = {
   showMainStickers: true,
   hintFacelets: "floating",
   showFoundation: true,
+  experimentalStickering: "full",
 };
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
@@ -365,6 +370,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                   ? faceletAppearance
                   : faceletAppearance?.appearance;
 
+              console.log(faceletInfo, appearance);
+
               faceletInfo.facelet.material =
                 axesInfo[faceletInfo.faceIdx].stickerMaterial[appearance];
               // TODO
@@ -415,6 +422,17 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       for (const hintSticker of this.experimentalHintStickerMeshes) {
         hintSticker.visible = hintFacelets === "floating";
       }
+      this.scheduleRenderCallback!(); // TODO
+    }
+
+    const experimentalStickering = options.experimentalStickering;
+    if (
+      typeof experimentalStickering !== "undefined" &&
+      this.options.experimentalStickering !== experimentalStickering &&
+      experimentalStickerings[experimentalStickering] // TODO: test this
+    ) {
+      this.options.experimentalStickering = experimentalStickering;
+      this.setAppearance(stickerings[experimentalStickering]);
       this.scheduleRenderCallback!(); // TODO
     }
   }
