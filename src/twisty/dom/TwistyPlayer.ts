@@ -360,7 +360,6 @@ export class TwistyPlayer extends ManagedCustomElement {
           });
           this.#viewerWrapper.addElement(mainViewer);
           this.viewerElems = [mainViewer];
-          console.log("creating!", this.backView, backView);
           if (backView) {
             this.createBackViewer();
             // const partner = new Twisty3DCanvas(this.scene, {
