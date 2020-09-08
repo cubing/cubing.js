@@ -6,9 +6,9 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 // start of imports
-import { modifiedBlockMove, Sequence } from "../../../alg";
-import { Transformation, KPuzzleDefinition } from "../../../kpuzzle";
-import { KPuzzleWrapper, PuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
+import { Sequence } from "../../../alg";
+import { KPuzzleDefinition, Transformation } from "../../../kpuzzle";
+import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
 import {
   MillisecondTimestamp,
   Timeline,
