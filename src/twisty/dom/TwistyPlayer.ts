@@ -347,19 +347,20 @@ export class TwistyPlayer extends ManagedCustomElement {
           const mainViewer = new Twisty3DCanvas(this.scene, {
             cameraPosition: this.cameraPosition,
           });
+          this.#viewerWrapper.addElement(mainViewer);
           this.viewerElems = [mainViewer];
+          console.log("creating!", this.backView, backView);
           if (backView) {
-            const partner = new Twisty3DCanvas(this.scene, {
-              // cameraPosition, // TODO
-              negateCameraPosition: true,
-            });
-            this.viewerElems.push(partner);
-            mainViewer.setMirror(partner);
+            this.createBackViewer();
+            // const partner = new Twisty3DCanvas(this.scene, {
+            //   // cameraPosition, // TODO
+            //   negateCameraPosition: true,
+            // });
+            // this.viewerElems.push(partner);
+            // mainViewer.setMirror(partner);
           }
           this.timeline.addCursor(this.cursor);
           this.timeline.jumpToEnd();
-          this.viewerElems = [mainViewer];
-          this.#viewerWrapper.addElement(mainViewer);
           return;
         }
       // fallthrough for 3D when not 3x3x3
@@ -425,7 +426,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
 
     const backViewer = new Twisty3DCanvas(this.scene!, {
-      // cameraPosition, // TODO
+      cameraPosition: this.cameraPosition,
       negateCameraPosition: true,
     });
     this.viewerElems.push(backViewer);
