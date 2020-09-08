@@ -104,8 +104,6 @@ export class AlgCursor
       }
     }
 
-    console.log(position);
-
     for (const listener of this.positionListeners) {
       listener.onPositionChange(position);
     }
