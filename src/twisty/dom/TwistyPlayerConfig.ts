@@ -49,10 +49,14 @@ export const experimentalStickerings = {
   "VLS": true,
   "LS": true,
   "EO": true,
+  "CMLL": true,
+  "L6E": true,
   "L6EO": true,
   "Daisy": true,
+  "Cross": true,
   "2x2x2": true,
   "2x2x3": true,
+  "Void Cube": true,
 };
 export type ExperimentalStickering = keyof typeof experimentalStickerings;
 

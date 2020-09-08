@@ -36,6 +36,10 @@ const oi: PieceAppearance = {
   facelets: ["oriented", "ignored", "ignored"],
 };
 
+const invis: PieceAppearance = {
+  facelets: ["invisible", "invisible", "invisible"],
+};
+
 export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
   "full": {
     // TODO: Support elision for regular pieces.
@@ -219,6 +223,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
       },
     },
   },
+
   "EO": {
     orbits: {
       EDGES: {
@@ -226,6 +231,34 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
       },
       CORNERS: {
         pieces: [i, i, i, i, i, i, i, i],
+      },
+    },
+  },
+
+  "CMLL": {
+    orbits: {
+      EDGES: {
+        pieces: [i, i, i, i, i, d, i, d, d, d, d, d],
+      },
+      CORNERS: {
+        pieces: [r, r, r, r, d, d, d, d],
+      },
+      CENTERS: {
+        pieces: [i, d, i, d, i, i],
+      },
+    },
+  },
+
+  "L6E": {
+    orbits: {
+      EDGES: {
+        pieces: [r, r, r, r, r, d, r, d, d, d, d, d],
+      },
+      CORNERS: {
+        pieces: [d, d, d, d, d, d, d, d],
+      },
+      CENTERS: {
+        pieces: [r, d, r, d, r, r],
       },
     },
   },
@@ -258,6 +291,21 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
     },
   },
 
+  // TODO: U? This doesn't match daisy.
+  "Cross": {
+    orbits: {
+      EDGES: {
+        pieces: [i, i, i, i, r, r, r, r, i, i, i, i],
+      },
+      CORNERS: {
+        pieces: [i, i, i, i, i, i, i, i],
+      },
+      CENTERS: {
+        pieces: [d, d, d, d, d, r],
+      },
+    },
+  },
+
   "2x2x2": {
     orbits: {
       EDGES: {
@@ -282,6 +330,21 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
       },
       CENTERS: {
         pieces: [d, d, r, d, d, d],
+      },
+    },
+  },
+
+  // TODO: remove foundations
+  "Void Cube": {
+    orbits: {
+      EDGES: {
+        pieces: [r, r, r, r, r, r, r, r, r, r, r, r],
+      },
+      CORNERS: {
+        pieces: [r, r, r, r, r, r, r, r],
+      },
+      CENTERS: {
+        pieces: [invis, invis, invis, invis, invis, invis],
       },
     },
   },
