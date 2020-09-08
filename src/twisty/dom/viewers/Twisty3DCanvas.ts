@@ -14,6 +14,7 @@ let shareAllNewRenderers: boolean = false;
 
 // WARNING: The current shared renderer implementation is not every efficient.
 // Avoid using for players that are likely to have dimensions approaching 1 megapixel or higher.
+// TODO: use a dedicated renderer while fullscreen?
 export function experimentalSetShareAllNewRenderers(share: boolean): void {
   shareAllNewRenderers = share;
 }
