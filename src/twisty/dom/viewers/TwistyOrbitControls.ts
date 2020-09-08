@@ -1,4 +1,4 @@
-import { Camera, Renderer } from "three";
+import { Camera } from "three";
 import { OrbitControls as ThreeOrbitControls } from "./vendor/OrbitControls";
 
 const INERTIA_DEFAULT: boolean = true;
@@ -11,13 +11,10 @@ export class TwistyOrbitControls {
   mirrorControls?: TwistyOrbitControls;
   constructor(
     private camera: Camera,
-    renderer: Renderer,
+    canvas: HTMLCanvasElement,
     private scheduleRender: () => void,
   ) {
-    this.threeOrbitControls = new ThreeOrbitControls(
-      camera,
-      renderer.domElement,
-    );
+    this.threeOrbitControls = new ThreeOrbitControls(camera, canvas);
     this.threeOrbitControls.enableDamping = INERTIA_DEFAULT;
     this.threeOrbitControls.rotateSpeed = 0.5;
     this.threeOrbitControls.enablePan = false;

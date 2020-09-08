@@ -126,20 +126,20 @@ export class StringFakeEnumAttribute<E extends string> {
 
 export class Vector3Attribute {
   string: string;
-  value: Vector3;
-  #defaultValue: Vector3;
-  constructor(defaultValue: Vector3, initialValue?: Vector3) {
+  value: Vector3 | null;
+  #defaultValue: Vector3 | null;
+  constructor(defaultValue: Vector3 | null, initialValue?: Vector3 | null) {
     this.#defaultValue = defaultValue;
     this.setValue(initialValue ?? this.defaultValue());
   }
 
   // Return value indicates if the attribute changed.
   setString(str: string): boolean {
-    return this.setValue(this.toValue(str));
+    return this.setValue(str === "" ? null : this.toValue(str)); // TODO: test empty string
   }
 
   // Return value indicates if the attribute changed.
-  setValue(val: Vector3): boolean {
+  setValue(val: Vector3 | null): boolean {
     const str = this.toString(val);
     if (this.string === str) {
       return false;
@@ -149,11 +149,11 @@ export class Vector3Attribute {
     return true;
   }
 
-  private defaultValue(): Vector3 {
+  private defaultValue(): Vector3 | null {
     return this.#defaultValue;
   }
 
-  private toValue(s: string): Vector3 {
+  private toValue(s: string): Vector3 | null {
     if (!s.startsWith("[")) {
       throw new Error("TODO");
     }
@@ -168,7 +168,7 @@ export class Vector3Attribute {
     return new Vector3(x, y, z);
   }
 
-  private toString(v: Vector3): string {
-    return `[${v.x}, ${v.y}, ${v.z}]`;
+  private toString(v: Vector3 | null): string {
+    return v ? `[${v.x}, ${v.y}, ${v.z}]` : ""; // TODO: empty string is not null
   }
 }

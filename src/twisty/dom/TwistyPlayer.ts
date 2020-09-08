@@ -16,11 +16,15 @@ import { Timeline } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
+import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
+import { customElementsShim } from "./element/node-custom-element-shims";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import {
   BackgroundTheme,
+  centeredCameraPosition,
   ControlsLocation,
+  cubeCameraPosition,
   ExperimentalStickering,
   HintFaceletStyle,
   PuzzleID,
@@ -35,8 +39,6 @@ import {
   BackViewLayout,
   TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
-import { customElementsShim } from "./element/node-custom-element-shims";
-import { ClassListManager } from "./element/ClassListManager";
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;
@@ -80,8 +82,8 @@ export class TwistyPlayer extends ManagedCustomElement {
   scene: Twisty3DScene | null = null;
   twisty3D: Twisty3DPuzzle | null = null;
 
-  viewerElems: TwistyViewerElement[];
-  controlElems: TwistyControlElement[];
+  viewerElems: TwistyViewerElement[] = []; // TODO: can we represent the intermediate state better?
+  controlElems: TwistyControlElement[] = []; // TODO: can we represent the intermediate state better?
 
   #viewerWrapper: TwistyViewerWrapper;
   public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
@@ -206,13 +208,13 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set backView(backView: BackViewLayout) {
-    if (backView !== "none" && this.viewerElems.length < 2) {
+    if (backView !== "none" && this.viewerElems.length === 1) {
       this.createBackViewer();
     }
     if (backView === "none" && this.viewerElems.length > 1) {
       this.removeBackViewerElem();
     }
-    if (this.#viewerWrapper.setBackView(backView)) {
+    if (this.#viewerWrapper && this.#viewerWrapper.setBackView(backView)) {
       for (const viewer of this.viewerElems as Twisty3DCanvas[]) {
         viewer.makeInvisibleUntilRender(); // TODO: can we do this more elegantly?
       }
@@ -223,26 +225,35 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["back-view"].value as BackViewLayout;
   }
 
-  set cameraPosition(cameraPosition: Vector3) {
+  set cameraPosition(cameraPosition: Vector3 | null) {
     this.#config.attributes["camera-position"].setValue(cameraPosition);
     if (
       this.viewerElems &&
       ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
     ) {
       (this.viewerElems[0] as Twisty3DCanvas)?.camera.position.copy(
-        cameraPosition,
+        this.effectiveCameraPosition,
       );
       this.viewerElems[0]?.scheduleRender();
       // Back view may or may not exist.
       (this.viewerElems[1] as Twisty3DCanvas)?.camera.position
-        .copy(cameraPosition)
+        .copy(this.effectiveCameraPosition)
         .multiplyScalar(-1);
       this.viewerElems[1]?.scheduleRender();
     }
   }
 
-  get cameraPosition(): Vector3 {
+  get cameraPosition(): Vector3 | null {
     return this.#config.attributes["camera-position"].value;
+  }
+
+  get effectiveCameraPosition(): Vector3 {
+    return this.cameraPosition ?? this.defaultCameraPosition;
+  }
+
+  // TODO
+  get defaultCameraPosition(): Vector3 {
+    return this.puzzle[1] === "x" ? cubeCameraPosition : centeredCameraPosition;
   }
 
   static get observedAttributes(): string[] {
@@ -344,20 +355,22 @@ export class TwistyPlayer extends ManagedCustomElement {
             },
           );
           this.scene.addTwisty3DPuzzle(this.twisty3D);
-          const mainViewer = new Twisty3DCanvas(this.scene);
+          const mainViewer = new Twisty3DCanvas(this.scene, {
+            cameraPosition: this.effectiveCameraPosition,
+          });
+          this.#viewerWrapper.addElement(mainViewer);
           this.viewerElems = [mainViewer];
           if (backView) {
-            const partner = new Twisty3DCanvas(this.scene, {
-              // cameraPosition, // TODO
-              negateCameraPosition: true,
-            });
-            this.viewerElems.push(partner);
-            mainViewer.setMirror(partner);
+            this.createBackViewer();
+            // const partner = new Twisty3DCanvas(this.scene, {
+            //   // cameraPosition, // TODO
+            //   negateCameraPosition: true,
+            // });
+            // this.viewerElems.push(partner);
+            // mainViewer.setMirror(partner);
           }
           this.timeline.addCursor(this.cursor);
           this.timeline.jumpToEnd();
-          this.viewerElems = [mainViewer];
-          this.#viewerWrapper.addElement(mainViewer);
           return;
         }
       // fallthrough for 3D when not 3x3x3
@@ -383,7 +396,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.legacyExperimentalPG3D = pg3d;
         this.scene.addTwisty3DPuzzle(this.twisty3D);
         const mainViewer = new Twisty3DCanvas(this.scene, {
-          cameraPosition: this.cameraPosition,
+          cameraPosition: this.effectiveCameraPosition,
         });
         this.viewerElems = [mainViewer];
         this.#viewerWrapper.addElement(mainViewer);
@@ -423,7 +436,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
 
     const backViewer = new Twisty3DCanvas(this.scene!, {
-      // cameraPosition, // TODO
+      cameraPosition: this.effectiveCameraPosition,
       negateCameraPosition: true,
     });
     this.viewerElems.push(backViewer);
