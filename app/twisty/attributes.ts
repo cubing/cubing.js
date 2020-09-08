@@ -1,10 +1,12 @@
 import { Vector3 } from "three";
 import { parse } from "../../src/alg";
+import { useNewFaceNames } from "../../src/puzzle-geometry";
 import {
   experimentalSetShareAllNewRenderers,
   TwistyPlayer,
 } from "../../src/twisty";
 
+useNewFaceNames(true);
 experimentalSetShareAllNewRenderers(true);
 
 {
@@ -21,6 +23,19 @@ experimentalSetShareAllNewRenderers(true);
   document.querySelector("#alg")!.appendChild(tw);
   tw.alg = parse("R U R' U R U2' R'");
   tw.alg = parse("R U R'");
+}
+
+{
+  document.querySelector("#puzzle")!.appendChild(
+    new TwistyPlayer({
+      alg: parse("R U R' U R U2' R'"),
+      puzzle: "FTO",
+    }),
+  );
+  const tw = new TwistyPlayer();
+  document.querySelector("#puzzle")!.appendChild(tw);
+  tw.alg = parse("R U R' U R U2' R'");
+  tw.puzzle = "FTO";
 }
 
 {
