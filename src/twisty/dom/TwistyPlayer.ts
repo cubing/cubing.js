@@ -105,10 +105,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addCSS(twistyPlayerCSS);
     this.#config = new TwistyPlayerConfig(this, initialConfig);
 
-    this.contentWrapper.classList.toggle(
-      "checkered",
-      this.background === "checkered",
-    );
+    // We also do this in connectedCallback, but for now we also do it here so
+    // that there is some visual change even if the rest of construction or
+    // initialization fails.
+    this.contentWrapper.classList.add("checkered");
 
     this.legacyExperimentalPG3DViewConfig = legacyExperimentalPG3DViewConfig;
   }
@@ -150,7 +150,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   set hintFacelets(hintFacelets: HintFaceletStyle) {
     // TODO: implement this for PG3D.
-    if (this.#config.attributes["hintFacelets"].setValue(hintFacelets)) {
+    if (this.#config.attributes["hint-facelets"].setValue(hintFacelets)) {
       if (this.twisty3D instanceof Cube3D) {
         this.twisty3D.experimentalUpdateOptions({ hintFacelets });
       }
@@ -158,22 +158,21 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   get hintFacelets(): HintFaceletStyle {
-    return this.#config.attributes["hintFacelets"].value as HintFaceletStyle;
+    return this.#config.attributes["hint-facelets"].value as HintFaceletStyle;
   }
 
   // TODO: Implement for PG3D
   /** @deprecated */
   get experimentalStickering(): ExperimentalStickering {
-    return this.#config.attributes["experimentalStickering"]
+    return this.#config.attributes["experimental-stickering"]
       .value as ExperimentalStickering;
   }
 
   // TODO: Implement for PG3D
   /** @deprecated */
   set experimentalStickering(experimentalStickering: ExperimentalStickering) {
-    console.log("experimentalStickering", experimentalStickering);
     if (
-      this.#config.attributes["experimentalStickering"].setValue(
+      this.#config.attributes["experimental-stickering"].setValue(
         experimentalStickering,
       )
     ) {
@@ -221,11 +220,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   get backView(): BackViewLayout {
-    return this.#config.attributes["backView"].value as BackViewLayout;
+    return this.#config.attributes["back-view"].value as BackViewLayout;
   }
 
   set cameraPosition(cameraPosition: Vector3) {
-    this.#config.attributes["cameraPosition"].setValue(cameraPosition);
+    this.#config.attributes["camera-position"].setValue(cameraPosition);
     if (
       this.viewerElems &&
       ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
@@ -243,7 +242,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   get cameraPosition(): Vector3 {
-    return this.#config.attributes["cameraPosition"].value;
+    return this.#config.attributes["camera-position"].value;
   }
 
   static get observedAttributes(): string[] {
@@ -261,6 +260,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   // TODO: It seems this called after the `attributeChangedCallback`s for initial values. Can we rely on this?
   protected connectedCallback(): void {
     this.timeline = new Timeline();
+
+    this.contentWrapper.classList.toggle(
+      "checkered",
+      this.background === "checkered",
+    );
 
     // TODO: specify exactly when back views are possible.
     // TODO: Are there any SVGs where we'd want a separate back view?
@@ -334,6 +338,10 @@ export class TwistyPlayer extends ManagedCustomElement {
           this.twisty3D = new Cube3D(
             this.cursor,
             this.scene.scheduleRender.bind(this.scene),
+            {
+              hintFacelets: this.hintFacelets,
+              experimentalStickering: this.experimentalStickering,
+            },
           );
           this.scene.addTwisty3DPuzzle(this.twisty3D);
           const mainViewer = new Twisty3DCanvas(this.scene);

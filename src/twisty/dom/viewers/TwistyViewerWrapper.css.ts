@@ -9,7 +9,7 @@ export const twistyViewerWrapperCSS = new CSSSource(`
   overflow: hidden;
 }
 
-.wrapper.backView-side-by-side {
+.wrapper.back-view-side-by-side {
   grid-template-columns: 1fr 1fr;
 }
 
@@ -19,7 +19,7 @@ export const twistyViewerWrapperCSS = new CSSSource(`
   overflow: hidden;
 }
 
-.wrapper.backView-upper-right > :nth-child(2) {
+.wrapper.back-view-upper-right > :nth-child(2) {
   position: absolute;
   right: 0;
   top: 0;

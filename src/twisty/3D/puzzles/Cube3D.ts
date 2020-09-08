@@ -342,6 +342,11 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       );
     }
     this.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
+
+    // TODO: Can we construct this directly instead of applying it later? Would that be more code-efficient?
+    if (options.experimentalStickering) {
+      this.setAppearance(stickerings[options.experimentalStickering]);
+    }
   }
 
   setAppearance(appearance: PuzzleAppearance): void {
@@ -369,8 +374,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                 typeof faceletAppearance === "string"
                   ? faceletAppearance
                   : faceletAppearance?.appearance;
-
-              console.log(faceletInfo, appearance);
 
               faceletInfo.facelet.material =
                 axesInfo[faceletInfo.faceIdx].stickerMaterial[appearance];
