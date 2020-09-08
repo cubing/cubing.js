@@ -80,8 +80,8 @@ export class TwistyPlayer extends ManagedCustomElement {
   scene: Twisty3DScene | null = null;
   twisty3D: Twisty3DPuzzle | null = null;
 
-  viewerElems: TwistyViewerElement[];
-  controlElems: TwistyControlElement[];
+  viewerElems: TwistyViewerElement[] = []; // TODO: can we represent the intermediate state better?
+  controlElems: TwistyControlElement[] = []; // TODO: can we represent the intermediate state better?
 
   #viewerWrapper: TwistyViewerWrapper;
   public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
@@ -206,13 +206,13 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set backView(backView: BackViewLayout) {
-    if (backView !== "none" && this.viewerElems.length < 2) {
+    if (backView !== "none" && this.viewerElems.length === 1) {
       this.createBackViewer();
     }
     if (backView === "none" && this.viewerElems.length > 1) {
       this.removeBackViewerElem();
     }
-    if (this.#viewerWrapper.setBackView(backView)) {
+    if (this.#viewerWrapper && this.#viewerWrapper.setBackView(backView)) {
       for (const viewer of this.viewerElems as Twisty3DCanvas[]) {
         viewer.makeInvisibleUntilRender(); // TODO: can we do this more elegantly?
       }
@@ -277,6 +277,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     });
     this.addElement(this.#viewerWrapper);
 
+    console.log("backView", this.backView);
     this.createViewers(
       this.timeline,
       this.alg,
@@ -344,7 +345,9 @@ export class TwistyPlayer extends ManagedCustomElement {
             },
           );
           this.scene.addTwisty3DPuzzle(this.twisty3D);
-          const mainViewer = new Twisty3DCanvas(this.scene);
+          const mainViewer = new Twisty3DCanvas(this.scene, {
+            cameraPosition: this.cameraPosition,
+          });
           this.viewerElems = [mainViewer];
           if (backView) {
             const partner = new Twisty3DCanvas(this.scene, {
