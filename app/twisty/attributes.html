@@ -6,9 +6,15 @@
     <link href="./inline.css" rel="stylesheet" type="text/css" />
     <script src="./attributes.ts" defer></script>
     <style>
-      .double {
+      .multi {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5em;
+      }
+
+      twisty-player {
+        margin: 0;
+        width: 100%;
       }
     </style>
   </head>
@@ -17,44 +23,67 @@
     <div class="content">
       <h1><code>&lt;twisty-player&gt; Attributes</code></h1>
 
+      No attributes
+      <div class="multi" id="no-attributes">
+        <twisty-player></twisty-player>
+      </div>
+
       <code>alg=&quot;R U R'&quot;</code>
-      <div class="double" id="alg">
-        <twisty-player alg="R U R'"></twisty-player>
+      <div class="multi" id="alg">
+        <twisty-player alg="R U R' U R U2' R'"></twisty-player>
       </div>
 
       <code>visualization=&quot;2D&quot;</code>
-      <div class="double" id="visualization">
-        <twisty-player visualization="2D"></twisty-player>
+      <div class="multi" id="visualization">
+        <twisty-player
+          alg="R U R' U R U2' R'"
+          visualization="2D"
+        ></twisty-player>
       </div>
 
       <code>hint-facelets=&quot;none&quot;</code>
-      <div class="double" id="hint-facelets">
-        <twisty-player hint-facelets="none"></twisty-player>
+      <div class="multi" id="hint-facelets">
+        <twisty-player
+          alg="R U R' U R U2' R'"
+          hint-facelets="none"
+        ></twisty-player>
       </div>
 
       <code>experimental-stickering=&quot;PLL&quot;</code>
-      <div class="double" id="experimental-stickering">
-        <twisty-player experimental-stickering="PLL"></twisty-player>
+      <div class="multi" id="experimental-stickering">
+        <twisty-player
+          alg="R U R' U R U2' R'"
+          experimental-stickering="OLL"
+        ></twisty-player>
       </div>
 
       <code>background=&quot;none&quot;</code>
-      <div class="double" id="background">
-        <twisty-player background="none"></twisty-player>
+      <div class="multi" id="background">
+        <twisty-player
+          alg="R U R' U R U2' R'"
+          background="none"
+        ></twisty-player>
       </div>
 
       <code>controls=&quot;none&quot;</code>
-      <div class="double" id="controls">
-        <twisty-player controls="none"></twisty-player>
+      <div class="multi" id="controls">
+        <twisty-player alg="R U R' U R U2' R'" controls="none"></twisty-player>
       </div>
 
       <code>back-view=&quot;side-by-side&quot;</code>
-      <div class="double" id="back-view">
-        <twisty-player back-view="side-by-side"></twisty-player>
+      <div class="multi" id="back-view">
+        <twisty-player
+          alg="R U R' U R U2' R'"
+          back-view="side-by-side"
+        ></twisty-player>
       </div>
 
       <code>camera-position=&quot;[-3, 4, 5]&quot;</code>
-      <div class="double" id="camera-position">
-        <twisty-player camera-position="[-3, 4, 5]"></twisty-player>
+      <div class="multi" id="camera-position">
+        <twisty-player
+          alg="R U R' U R U2' R'"
+          camera-position="[-3, 4, 5]"
+        ></twisty-player>
       </div>
     </div>
   </body>

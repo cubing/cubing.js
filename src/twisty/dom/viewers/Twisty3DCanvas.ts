@@ -10,6 +10,27 @@ import { customElementsShim } from "../element/node-custom-element-shims";
 
 let resizeObserverWarningShown = false;
 
+let shareAllNewRenderers: boolean = false;
+
+// WARNING: The current shared renderer implementation is not every efficient.
+// Avoid using for players that are likely to have dimensions approaching 1 megapixel or higher.
+export function experimentalSetShareAllNewRenderers(share: boolean): void {
+  shareAllNewRenderers = share;
+}
+
+let sharedRenderer: WebGLRenderer | null = null;
+
+function newRenderer(): WebGLRenderer {
+  return new WebGLRenderer({
+    antialias: true,
+    alpha: true, // TODO
+  });
+}
+
+function newSharedRenderer(): WebGLRenderer {
+  return sharedRenderer ?? (sharedRenderer = newRenderer());
+}
+
 // <twisty-3d-canvas>
 export class Twisty3DCanvas extends ManagedCustomElement
   implements TwistyViewerElement {
@@ -18,9 +39,13 @@ export class Twisty3DCanvas extends ManagedCustomElement
   public camera: PerspectiveCamera;
   private legacyExperimentalShift: number = 0;
   private orbitControls: TwistyOrbitControls;
-  renderer: WebGLRenderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
   private scheduler = new RenderScheduler(this.render.bind(this));
   private resizePending: boolean = false;
+
+  private renderer: WebGLRenderer; // TODO: share renderers across elements? (issue: renderers are not designed to be constantly resized?)
+  private rendererIsShared: boolean;
+  private canvas2DContext: CanvasRenderingContext2D;
+
   // TODO: Are there any render duration performance concerns with removing this?
   #invisible: boolean = false;
   constructor(
@@ -33,12 +58,14 @@ export class Twisty3DCanvas extends ManagedCustomElement
     this.scene = scene!;
     this.scene.addRenderTarget(this);
 
-    // TODO: share a pool of renderers.
-    this.renderer = new WebGLRenderer({
-      antialias: true,
-      alpha: true, // TODO
-    });
     // We rely on the resize logic to handle renderer dimensions.
+    this.rendererIsShared = shareAllNewRenderers;
+    this.renderer = this.rendererIsShared ? newSharedRenderer() : newRenderer();
+    this.canvas = this.rendererIsShared
+      ? document.createElement("canvas")
+      : this.renderer.domElement;
+    this.canvas2DContext = this.canvas.getContext("2d")!; // TODO: avoid saving unneeded?
+    this.addElement(this.canvas);
 
     this.camera = new PerspectiveCamera(
       20,
@@ -53,12 +80,9 @@ export class Twisty3DCanvas extends ManagedCustomElement
     this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
     this.orbitControls = new TwistyOrbitControls(
       this.camera,
-      this.renderer,
+      this.canvas,
       this.scheduleRender.bind(this),
     );
-
-    this.canvas = this.renderer.domElement;
-    this.addElement(this.canvas);
 
     // TODO: Remove this when enough Safari users have `ResizeObserver`.
     if (window.ResizeObserver) {
@@ -105,7 +129,21 @@ export class Twisty3DCanvas extends ManagedCustomElement
       this.resize();
     }
     this.orbitControls.updateAndSchedule();
+
+    if (this.rendererIsShared) {
+      this.renderer.setSize(this.canvas.width, this.canvas.height, false);
+      this.canvas2DContext.clearRect(
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height,
+      );
+    }
     this.renderer.render(this.scene, this.camera);
+    if (this.rendererIsShared) {
+      this.canvas2DContext.drawImage(this.renderer.domElement, 0, 0);
+    }
+
     if (this.#invisible) {
       this.contentWrapper.classList.remove("invisible");
     }
@@ -137,8 +175,15 @@ export class Twisty3DCanvas extends ManagedCustomElement
     this.camera.setViewOffset(w, h - excess, off, yoff, w, h);
     this.camera.updateProjectionMatrix(); // TODO
 
-    this.renderer.setPixelRatio(pixelRatio());
-    this.renderer.setSize(w, h, true);
+    if (this.rendererIsShared) {
+      this.canvas.width = w * pixelRatio();
+      this.canvas.height = h * pixelRatio();
+      this.canvas.style.width = w.toString();
+      this.canvas.style.height = w.toString();
+    } else {
+      this.renderer.setPixelRatio(pixelRatio());
+      this.renderer.setSize(w, h, true);
+    }
 
     this.scheduleRender();
   }

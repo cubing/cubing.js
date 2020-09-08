@@ -277,7 +277,6 @@ export class TwistyPlayer extends ManagedCustomElement {
     });
     this.addElement(this.#viewerWrapper);
 
-    console.log("backView", this.backView);
     this.createViewers(
       this.timeline,
       this.alg,
