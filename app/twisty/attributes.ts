@@ -128,3 +128,20 @@ experimentalSetShareAllNewRenderers(true);
   tw.alg = parse("R U R' U R U2' R'");
   tw.cameraPosition = new Vector3(-3, 4, 5);
 }
+
+{
+  document.querySelector("#multiple-attributes")!.appendChild(
+    new TwistyPlayer({
+      alg: parse("R U R' U R U2' R'"),
+      experimentalStickering: "OLL",
+      background: "none",
+      controls: "none",
+    }),
+  );
+  const tw = new TwistyPlayer();
+  document.querySelector("#multiple-attributes")!.appendChild(tw);
+  tw.alg = parse("R U R' U R U2' R'");
+  tw.experimentalStickering = "OLL";
+  tw.background = "none";
+  tw.controls = "none";
+}
