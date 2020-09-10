@@ -37,7 +37,7 @@
     "pegjs": "^0.11.0-master.f69239d",
     "pegjs-jest": "0.0.2",
     "prettier": "^2.1.1",
-    "rollup": "^1.32.1",
+    "rollup": "^2.26.11",
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-notify": "^1.1.0",
