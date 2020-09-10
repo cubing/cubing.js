@@ -462,7 +462,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         return;
       }
       default:
-        throw new Error("fdsfkjsdlkfjsdklfjdslkf");
+        throw new Error("Unknown visualization");
     }
   }
 
