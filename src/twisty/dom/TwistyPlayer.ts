@@ -1,6 +1,7 @@
 import { Vector3 } from "three";
 import { countMoves } from "../../../app/twizzle/move-counter";
 import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
+import { parse } from "../../alg/parser/parser";
 import { KPuzzle, KPuzzleDefinition, Puzzles } from "../../kpuzzle";
 import {
   getPuzzleGeometryByName,
@@ -118,8 +119,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   set alg(seq: Sequence) {
     // TODO: do validation for other algs as well.
     if (seq?.type !== "sequence") {
-      // TODO: document `.setAttribute("alg", "R U R'")` as a workaround.
-      throw new Error("Must set `alg` using a `Sequence`!");
+      // TODO: document `.setAttribute("experimental-start-setup", "R U R'")` as a workaround.
+      console.warn(
+        "`alg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
+      );
+      seq = parse((seq as unknown) as string) as Sequence;
     }
     this.#config.attributes["alg"].setValue(seq);
     this.cursor?.setAlg(seq); // TODO: can we ensure the cursor already exists?
@@ -133,7 +137,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     // TODO: do validation for other algs as well.
     if (seq?.type !== "sequence") {
       // TODO: document `.setAttribute("experimental-start-setup", "R U R'")` as a workaround.
-      throw new Error("Must set `experimentalStartSetup` using a `Sequence`!");
+      console.warn(
+        "`experimentalStartSetup` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
+      );
+      seq = parse((seq as unknown) as string) as Sequence;
     }
     this.#config.attributes["experimental-start-setup"].setValue(seq);
     if (this.cursor) {
