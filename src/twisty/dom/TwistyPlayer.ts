@@ -129,6 +129,22 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["alg"].value;
   }
 
+  set experimentalStartSetup(seq: Sequence) {
+    // TODO: do validation for other algs as well.
+    if (seq?.type !== "sequence") {
+      // TODO: document `.setAttribute("experimental-start-setup", "R U R'")` as a workaround.
+      throw new Error("Must set `experimentalStartSetup` using a `Sequence`!");
+    }
+    this.#config.attributes["experimental-start-setup"].setValue(seq);
+    if (this.cursor) {
+      this.cursor.setStartState(this.cursor.algToState(seq)); // TODO
+    }
+  }
+
+  get experimentalStartSetup(): Sequence {
+    return this.#config.attributes["experimental-start-setup"].value;
+  }
+
   set puzzle(puzzle: PuzzleID) {
     if (this.#config.attributes["puzzle"].setValue(puzzle)) {
       this.setPuzzle(puzzle);
@@ -316,17 +332,30 @@ export class TwistyPlayer extends ManagedCustomElement {
     switch (visualization) {
       case "2D": {
         try {
-          this.cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
+          this.cursor = new AlgCursor(
+            timeline,
+            Puzzles[puzzleName],
+            alg,
+            this.experimentalStartSetup,
+          );
         } catch (e) {
           // TODO: Deduplicate fallback.
           this.cursor = new AlgCursor(
             timeline,
             Puzzles[puzzleName],
             new Sequence([]),
+            this.experimentalStartSetup,
           );
         }
+        this.cursor.setStartState(
+          this.cursor.algToState(this.experimentalStartSetup),
+        );
+
         this.timeline.addCursor(this.cursor);
-        this.timeline.jumpToEnd();
+        if (this.experimentalStartSetup.nestedUnits.length === 0) {
+          // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
+          this.timeline.jumpToEnd();
+        }
         const mainViewer = new Twisty2DSVG(this.cursor, Puzzles[puzzleName]);
         this.viewerElems = [mainViewer];
         this.#viewerWrapper.addElement(mainViewer);
@@ -336,15 +365,24 @@ export class TwistyPlayer extends ManagedCustomElement {
         if (puzzleName === "3x3x3") {
           // TODO: fold 3D and PG3D into this.
           try {
-            this.cursor = new AlgCursor(timeline, Puzzles[puzzleName], alg);
+            this.cursor = new AlgCursor(
+              timeline,
+              Puzzles[puzzleName],
+              alg,
+              this.experimentalStartSetup,
+            );
           } catch (e) {
             // TODO: Deduplicate fallback.
             this.cursor = new AlgCursor(
               timeline,
               Puzzles[puzzleName],
               new Sequence([]),
+              this.experimentalStartSetup,
             );
           }
+          this.cursor.setStartState(
+            this.cursor.algToState(this.experimentalStartSetup),
+          );
           this.scene = new Twisty3DScene();
           this.twisty3D = new Cube3D(
             this.cursor,
@@ -370,7 +408,10 @@ export class TwistyPlayer extends ManagedCustomElement {
             // mainViewer.setMirror(partner);
           }
           this.timeline.addCursor(this.cursor);
-          this.timeline.jumpToEnd();
+          if (this.experimentalStartSetup.nestedUnits.length === 0) {
+            // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
+            this.timeline.jumpToEnd();
+          }
           return;
         }
       // fallthrough for 3D when not 3x3x3
@@ -378,10 +419,20 @@ export class TwistyPlayer extends ManagedCustomElement {
         const [kpuzzleDef, stickerDat] = this.pgHelper(puzzleName);
 
         try {
-          this.cursor = new AlgCursor(timeline, kpuzzleDef, alg);
+          this.cursor = new AlgCursor(
+            timeline,
+            kpuzzleDef,
+            alg,
+            this.experimentalStartSetup,
+          );
         } catch (e) {
           // TODO: Deduplicate fallback.
-          this.cursor = new AlgCursor(timeline, kpuzzleDef, new Sequence([]));
+          this.cursor = new AlgCursor(
+            timeline,
+            kpuzzleDef,
+            new Sequence([]),
+            this.experimentalStartSetup,
+          );
         }
 
         this.scene = new Twisty3DScene();
@@ -404,7 +455,10 @@ export class TwistyPlayer extends ManagedCustomElement {
           this.createBackViewer();
         }
         this.timeline.addCursor(this.cursor);
-        this.timeline.jumpToEnd();
+        if (this.experimentalStartSetup.nestedUnits.length === 0) {
+          // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
+          this.timeline.jumpToEnd();
+        }
         return;
       }
       default:

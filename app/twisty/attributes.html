@@ -43,14 +43,28 @@
         <twisty-player></twisty-player>
       </div>
     </div>
-
     <div class="content">
-      <h2><code>alg=&quot;R U R'&quot;</code></h2>
+      <h2><code>alg=&quot;R U R' U R U2' R'&quot;</code></h2>
       <div class="multi" id="alg">
         <span>DOM attributes:</span>
         <span>Constructor config object:</span>
         <span>Dynamic property setter:</span>
         <twisty-player alg="R U R' U R U2' R'"></twisty-player>
+      </div>
+    </div>
+
+    <div class="content">
+      <h2>
+        <code>experimental-start-setup=&quot;(R U R' U R U2' R')'&quot;</code>
+      </h2>
+      <div class="multi" id="experimental-start-setup">
+        <span>DOM attributes:</span>
+        <span>Constructor config object:</span>
+        <span>Dynamic property setter:</span>
+        <twisty-player
+          alg="R U R' U R U2' R'"
+          experimental-start-setup="(R U R' U R U2' R')'"
+        ></twisty-player>
       </div>
     </div>
 
@@ -91,7 +105,7 @@
     </div>
 
     <div class="content">
-      <h2><code>experimental-stickering=&quot;PLL&quot;</code></h2>
+      <h2><code>experimental-stickering=&quot;OLL&quot;</code></h2>
       <div class="multi" id="experimental-stickering">
         <span>DOM attributes:</span>
         <span>Constructor config object:</span>
@@ -156,6 +170,7 @@
       <h2>
         <code
           >alg=&quot;R U R' U R U2' R'&quot;<br />
+          experimental-start-setup=&quot;(R U R' U R U2' R')'&quot;<br />
           experimental-stickering=&quot;OLL&quot;<br />
           background=&quot;none&quot;<br />
           controls=&quot;none&quot;</code
@@ -166,6 +181,7 @@
         <span>Dynamic property setter:</span>
         <twisty-player
           alg="R U R' U R U2' R'"
+          experimental-start-setup="(R U R' U R U2' R')'"
           experimental-stickering="OLL"
           background="none"
           controls="none"

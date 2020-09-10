@@ -317,8 +317,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   ) {
     super();
 
-    cursor!.addPositionListener(this);
-
     const def = Puzzles["3x3x3"];
 
     this.options = {};
@@ -347,6 +345,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     if (options.experimentalStickering) {
       this.setAppearance(stickerings[options.experimentalStickering]);
     }
+
+    cursor!.addPositionListener(this);
   }
 
   setAppearance(appearance: PuzzleAppearance): void {

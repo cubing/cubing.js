@@ -7,7 +7,7 @@
 
 // start of imports
 import { Sequence } from "../../../alg";
-import { KPuzzleDefinition, Transformation } from "../../../kpuzzle";
+import { KPuzzle, KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
 import {
   MillisecondTimestamp,
@@ -38,15 +38,31 @@ export class AlgCursor
   private todoIndexer: TreeAlgIndexer<KPuzzleWrapper>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
   private ksolvePuzzle: KPuzzleWrapper;
+  private startState: Transformation;
   constructor(
     private timeline: Timeline,
-    def: KPuzzleDefinition,
+    private def: KPuzzleDefinition,
     private alg: Sequence,
+    startStateSequence?: Sequence, // TODO: accept actual start state
   ) {
     timeline.addTimestampListener(this);
     this.ksolvePuzzle = new KPuzzleWrapper(def);
     this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
-    /*...*/
+    this.startState = startStateSequence
+      ? this.algToState(startStateSequence)
+      : this.ksolvePuzzle.startState();
+  }
+
+  setStartState(startState: Transformation): void {
+    this.startState = startState;
+    this.dispatchPositionForTimestamp(this.timeline.timestamp);
+  }
+
+  /** @deprecated */
+  algToState(s: Sequence): Transformation {
+    const kpuzzle = new KPuzzle(this.def);
+    kpuzzle.applyAlg(s);
+    return kpuzzle.state;
   }
 
   timeRange(): TimeRange {
@@ -67,6 +83,9 @@ export class AlgCursor
 
   addPositionListener(positionListener: PositionListener): void {
     this.positionListeners.add(positionListener);
+    this.dispatchPositionForTimestamp(this.timeline.timestamp, [
+      positionListener,
+    ]); // TODO: should this be a separate dispatch, or should the listener manually ask for the position?
   }
 
   removePositionListener(positionListener: PositionListener): void {
@@ -77,9 +96,13 @@ export class AlgCursor
     this.dispatchPositionForTimestamp(timestamp);
   }
 
-  private dispatchPositionForTimestamp(timestamp: MillisecondTimestamp): void {
+  private dispatchPositionForTimestamp(
+    timestamp: MillisecondTimestamp,
+    listeners: PositionListener[] | Set<PositionListener> = this
+      .positionListeners,
+  ): void {
     const idx = this.todoIndexer.timestampToIndex(timestamp);
-    const state = this.todoIndexer.stateAtIndex(idx) as any; // TODO
+    const state = this.todoIndexer.stateAtIndex(idx, this.startState) as any; // TODO
     const position: PuzzlePosition = {
       state,
       movesInProgress: [],
@@ -104,7 +127,7 @@ export class AlgCursor
       }
     }
 
-    for (const listener of this.positionListeners) {
+    for (const listener of listeners) {
       listener.onPositionChange(position);
     }
   }
