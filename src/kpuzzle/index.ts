@@ -26,6 +26,6 @@ export {
 
 export { Puzzles } from "./puzzle_definitions";
 
-export { parse } from "./parser";
+export { parseKPuzzle } from "./parser";
 
 export { SVG } from "./svg";

@@ -1,1 +1,1 @@
-export { parse } from "./parser";
+export { parseKPuzzle } from "./parser";
