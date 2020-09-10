@@ -17,7 +17,7 @@ import {
   stateForBlockMove,
   Transformation,
 } from "../../../kpuzzle";
-import { StickerDatSticker } from "../../../puzzle-geometry";
+import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
 import { AlgCursor } from "../../animation/alg/AlgCursor";
 import { TAU } from "../TAU";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
@@ -129,18 +129,18 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     cursor: AlgCursor,
     private scheduleRenderCallback: () => void,
     private definition: KPuzzleDefinition,
-    pgdat: any,
+    stickerDat: StickerDat,
     showFoundation: boolean = false,
   ) {
     super();
     cursor!.addPositionListener(this);
 
     this.axesInfo = {};
-    const axesDef = pgdat.axis as any[];
+    const axesDef = stickerDat.axis as any[];
     for (const axis of axesDef) {
       this.axesInfo[axis[1]] = new AxisInfo(axis);
     }
-    const stickers = pgdat.stickers as any[];
+    const stickers = stickerDat.stickers as any[];
     this.stickers = {};
     for (const sticker of stickers) {
       const orbit = sticker.orbit as number;
@@ -158,7 +158,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.add(stickerdef.cubie);
       this.stickerTargets.push(stickerdef.cubie.children[0]);
     }
-    const hitfaces = pgdat.faces as any[];
+    const hitfaces = stickerDat.faces as any[];
     for (const hitface of hitfaces) {
       const facedef = new HitPlaneDef(hitface);
       facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);

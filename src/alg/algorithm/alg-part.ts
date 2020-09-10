@@ -7,11 +7,13 @@ export abstract class AlgPart {
 }
 
 // type Constructor<T> = Function & { prototype: T }
-export function matchesAlgType(a: any, t: AlgPartType): boolean {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function matchesAlgType(a: { type: any }, t: AlgPartType): boolean {
   return a.type === t;
 }
 
 export function assertMatchesType<T extends AlgPart>(
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   a: any,
   t: AlgPartType,
 ): T {

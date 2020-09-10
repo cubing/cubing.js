@@ -7,7 +7,7 @@ const def = Puzzles["3x3x3"];
 export class KeyboardPuzzle extends BluetoothPuzzle {
   public puzzle: KPuzzle = new KPuzzle(def);
   // TODO: Decide on the right arguments.
-  constructor(target: any) {
+  constructor(target: Element) {
     super();
     // TODO: Filter out repeated keydown?
     target.addEventListener("keydown", this.onKeyDown.bind(this));

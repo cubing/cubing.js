@@ -5,6 +5,7 @@ import {
   StringEnumAttribute,
   Vector3Attribute,
 } from "./element/ElementConfig";
+import type { TwistyPlayer } from "./TwistyPlayer";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
 const DEFAULT_CAMERA_Z = 5;
@@ -157,7 +158,7 @@ const twistyPlayerAttributeMap: Record<
 export class TwistyPlayerConfig {
   attributes: TwistyPlayerAttributes;
   constructor(
-    private twistyPlayer: any, // TODO
+    private twistyPlayer: TwistyPlayer, // TODO
     initialValues: TwistyPlayerInitialConfig,
   ) {
     this.attributes = {
@@ -220,8 +221,11 @@ export class TwistyPlayerConfig {
 
       // TODO: can we make this type-safe?
       // TODO: avoid double-setting in recursive calls
-      this.twistyPlayer[twistyPlayerAttributeMap[attributeName]] =
-        managedAttribute.value;
+      const propertyName: keyof TwistyPlayerConfigValues =
+        twistyPlayerAttributeMap[attributeName];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.twistyPlayer[propertyName] = managedAttribute.value;
     }
   }
 }

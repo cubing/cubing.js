@@ -59,7 +59,8 @@ export class OrbitsDef {
     return result;
   }
 
-  public toKpuzzle(): object {
+  // TODO: return type.
+  public toKpuzzle(): Record<string, unknown> {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
@@ -393,7 +394,8 @@ export class Orbit {
     return [this.perm.map((_: number) => _ + 1).join(" "), newori.join(" ")];
   }
 
-  public toKpuzzle(): object {
+  // TODO: return type
+  public toKpuzzle(): Record<string, unknown> {
     return { permutation: this.perm, orientation: this.ori };
   }
 }
