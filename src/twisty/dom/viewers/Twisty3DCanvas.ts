@@ -33,7 +33,8 @@ function newSharedRenderer(): WebGLRenderer {
 }
 
 // <twisty-3d-canvas>
-export class Twisty3DCanvas extends ManagedCustomElement
+export class Twisty3DCanvas
+  extends ManagedCustomElement
   implements TwistyViewerElement {
   private scene: Twisty3DScene;
   public canvas: HTMLCanvasElement;

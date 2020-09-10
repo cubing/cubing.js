@@ -19,7 +19,8 @@ import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 import { customElementsShim } from "../element/node-custom-element-shims";
 
 // <twisty-2d-svg>
-export class Twisty2DSVG extends ManagedCustomElement
+export class Twisty2DSVG
+  extends ManagedCustomElement
   implements TwistyViewerElement, PositionListener {
   private definition: KPuzzleDefinition;
   private svg: SVG;

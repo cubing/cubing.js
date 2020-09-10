@@ -12,7 +12,8 @@ import { TimeRange } from "../../animation/alg/AlgCursor";
 import { customElementsShim } from "../element/node-custom-element-shims";
 
 // Usually a horizontal line.
-export class TwistyScrubber extends ManagedCustomElement
+export class TwistyScrubber
+  extends ManagedCustomElement
   implements TwistyControlElement, TimelineTimestampListener {
   private timeline: Timeline;
   range: HTMLInputElement = document.createElement("input"); // type="range"

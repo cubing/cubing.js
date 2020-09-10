@@ -33,7 +33,8 @@ type ButtonIconName =
   | "enter-fullscreen"
   | "exit-fullscreen";
 
-class TwistyControlButton extends ManagedCustomElement
+class TwistyControlButton
+  extends ManagedCustomElement
   implements TwistyControlElement {
   private timeline: Timeline;
   private timelineCommand: TimelineCommand;
@@ -249,7 +250,8 @@ customElementsShim.define("twisty-control-button", TwistyControlButton);
 
 // <twisty-control-button-grid>
 // Usually a horizontal line.
-export class TwistyControlButtonPanel extends ManagedCustomElement
+export class TwistyControlButtonPanel
+  extends ManagedCustomElement
   implements TwistyControlElement {
   constructor(timeline?: Timeline, fullscreenElement?: Element) {
     super();
