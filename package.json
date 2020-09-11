@@ -59,6 +59,7 @@
     "setup": "npm install",
     "lint": "npx eslint .",
     "prepack": "npm run clean && npm run build && npm run test-node-require",
+    "parcel-build-for-twizzle-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/twizzle.net/explore app/twizzle/index.html",
     "parcel-build-for-vr-cubing-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/experiments.cubing.net/vr app/vr/index.html",
     "parcel-build-for-experiments-cubing-net": "parcel build --no-autoinstall --public-url /cubing.js/ --out-dir dist/experiments.cubing.net/cubing.js app/index.html"
   },

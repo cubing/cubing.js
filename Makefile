@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build dev clean test test-jest test-node-require format setup lint prepack parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
+NPM_COMMANDS = build dev clean test test-jest test-node-require format setup lint prepack parcel-build-for-twizzle-net parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
@@ -41,14 +41,29 @@ deploy-vr: clean parcel-build-for-vr-cubing-net
 		${VR_SFTP_PATH}
 	echo "\nDone deploying. Go to ${VR_URL}\n"
 
-SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
-URL       = "https://experiments.cubing.net/cubing.js/"
+.PHONY: deploy-
+deploy: deploy-experiments deploy-twizzle
 
-.PHONY: deploy
-deploy: clean parcel-build-for-experiments-cubing-net
+EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
+EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
+
+.PHONY: deploy-experiments
+deploy-experiments: parcel-build-for-twizzle-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
 		./dist/experiments.cubing.net/cubing.js/ \
-		${SFTP_PATH}
-	echo "\nDone deploying. Go to ${URL}\n"
+		${EXPERIMENTS_SFTP_PATH}
+	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
+
+TWIZZLE_SFTP_PATH = "towns.dreamhost.com:~/twizzle.net/explore/"
+TWIZZLE_URL       = "https://twizzle.net/explore/"
+
+.PHONY: deploy-twizzle
+deploy-twizzle: parcel-build-for-twizzle-net
+	rsync -avz \
+		--exclude .DS_Store \
+		--exclude .git \
+		./dist/twizzle.net/explore/ \
+		${TWIZZLE_SFTP_PATH}
+	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
