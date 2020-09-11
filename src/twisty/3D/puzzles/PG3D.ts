@@ -27,8 +27,10 @@ import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,
   color: 0x000000,
-  transparent: true,
-  opacity: 0.75,
+// transparency doesn't work very well here
+// with duplicated center stickers
+//  transparent: true,
+//  opacity: 0.75,
 });
 const stickerMaterial = new MeshBasicMaterial({
   vertexColors: true,
@@ -40,36 +42,41 @@ const polyMaterial = new MeshBasicMaterial({
   color: 0x000000,
 });
 
+function makePoly(coords: number[][], color: Color): Geometry {
+  const geo = new Geometry();
+  const vertind: number[] = [];
+  for (const coord of coords) {
+    const v = new Vector3(coord[0], coord[1], coord[2]);
+    vertind.push(geo.vertices.length);
+    geo.vertices.push(v);
+  }
+  for (let g = 1; g + 1 < vertind.length; g++) {
+    const face = new Face3(vertind[0], vertind[g], vertind[g + 1]);
+    face.color = color;
+    geo.faces.push(face);
+  }
+  geo.computeFaceNormals();
+  return geo;
+}
+
 class StickerDef {
   public origColor: Color;
   public faceColor: Color;
   public cubie: Group;
   protected geo: Geometry;
-  constructor(stickerDat: StickerDatSticker, showFoundation: boolean) {
+  constructor(stickerDat: StickerDatSticker, foundationDat: StickerDatSticker | undefined) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
     this.cubie = new Group();
-    this.geo = new Geometry();
-    const coords = stickerDat.coords as number[][];
-    const vertind: number[] = [];
-    for (const coord of coords) {
-      const v = new Vector3(coord[0], coord[1], coord[2]);
-      vertind.push(this.geo.vertices.length);
-      this.geo.vertices.push(v);
-    }
-    for (let g = 1; g + 1 < vertind.length; g++) {
-      const face = new Face3(vertind[0], vertind[g], vertind[g + 1]);
-      face.color = this.faceColor;
-      this.geo.faces.push(face);
-    }
-    this.geo.computeFaceNormals();
+    this.geo = makePoly(stickerDat.coords as number[][], this.faceColor);
     const obj = new Mesh(this.geo, stickerMaterial);
     obj.userData.name =
       stickerDat.orbit + " " + (1 + stickerDat.ord) + " " + stickerDat.ori;
     this.cubie.add(obj);
-    if (showFoundation) {
-      const foundation = new Mesh(this.geo, foundationMaterial);
-      foundation.scale.setScalar(0.99); // TODO: hacky
+    if (foundationDat) {
+      const fgeo = makePoly(foundationDat.coords as number[][], this.faceColor);
+      const foundation = new Mesh(fgeo, foundationMaterial);
+      foundation.scale.setScalar(0.9999); // TODO: hacky
       this.cubie.add(foundation);
     }
   }
@@ -142,7 +149,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     const stickers = stickerDat.stickers as any[];
     this.stickers = {};
-    for (const sticker of stickers) {
+    for (let si = 0; si < stickers.length; si++) {
+      const sticker = stickers[si];
+      const foundation = showFoundation ? stickerDat.foundations[si] : undefined;
       const orbit = sticker.orbit as number;
       const ord = sticker.ord as number;
       const ori = sticker.ori as number;
@@ -152,7 +161,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const stickerdef = new StickerDef(sticker, showFoundation);
+      const stickerdef = new StickerDef(sticker, foundation);
       stickerdef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
       this.stickers[orbit][ori][ord] = stickerdef;
       this.add(stickerdef.cubie);

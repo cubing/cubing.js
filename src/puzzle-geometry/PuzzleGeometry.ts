@@ -2417,6 +2417,7 @@ export class PuzzleGeometry {
         ord: cubieord,
         ori: cubieori,
       });
+      const fcoords = coords;
       if (trim && trim > 0) {
         coords = trimEdges(coords, trim);
       }
@@ -2431,6 +2432,13 @@ export class PuzzleGeometry {
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
           stickers.push({
             coords: toFaceCoords(coords, maxdist),
+            color,
+            orbit: this.cubiesetnames[cubiesetnum],
+            ord: cubieord,
+            ori: jj,
+          });
+          foundations.push({
+            coords: toFaceCoords(fcoords, maxdist),
             color,
             orbit: this.cubiesetnames[cubiesetnum],
             ord: cubieord,
