@@ -78,7 +78,7 @@ class StickerDef {
     if (foundationDat) {
       const fgeo = makePoly(foundationDat.coords as number[][], this.faceColor);
       const foundation = new Mesh(fgeo, foundationMaterial);
-      foundation.scale.setScalar(0.9999); // TODO: hacky
+      foundation.scale.setScalar(0.999); // TODO: hacky
       this.cubie.add(foundation);
     }
   }
