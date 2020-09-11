@@ -24,6 +24,12 @@ import {
 } from "./PlatonicGenerator";
 import { PuzzleDescriptionString, Puzzles, PuzzleName } from "./Puzzles";
 import { centermassface, expandfaces, Quat } from "./Quat";
+import {
+  BlockMove,
+  KPuzzleDefinition,
+  MoveNotation,
+  Transformation as KTransformation,
+} from "./interfaces";
 
 export interface StickerDatSticker {
   coords: number[][];
@@ -44,6 +50,7 @@ export interface StickerDat {
   stickers: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
+  unswizzle(s: string): string;
 }
 
 // TODO: Remove this once we no longer have prefix restrictions.
@@ -1451,21 +1458,71 @@ export class PuzzleGeometry {
     }
   }
 
-  public parsemove(mv: string): any {
+  public unswizzle(s: string): string {
+    if ((s.endsWith("v") || s.endsWith("w")) && s[0] <= "Z") {
+      s = s.slice(0, s.length - 1);
+    }
+    const upperCaseGrip = s.toUpperCase();
+    for (let i = 0; i < this.movesetgeos.length; i++) {
+      const g = this.movesetgeos[i];
+      if (this.spinmatch(upperCaseGrip, g[0])) {
+        return g[0];
+      }
+      if (this.spinmatch(upperCaseGrip, g[2])) {
+        return g[2];
+      }
+    }
+    return s;
+  }
+
+  // We use an extremely permissive parse here; any character but
+  // digits are allowed in a family name.
+  public stringToBlockMove(mv: string): BlockMove {
     // parse a move from the command line
-    const re = RegExp("^(([0-9]+)-)?([0-9]+)?([A-Za-z_]+)([-'0-9]+)?$");
+    const re = RegExp("^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$");
     const p = mv.match(re);
     if (p === null) {
       throw new Error("Bad move passed " + mv);
     }
-    let grip = p[4];
+    const grip = p[4];
+    let loslice = undefined;
+    let hislice = undefined;
+    if (p[2] !== undefined) {
+      if (p[3] === undefined) {
+        throw new Error("Missing second number in range");
+      }
+      loslice = parseInt(p[2], 10);
+    }
+    if (p[3] !== undefined) {
+      hislice = parseInt(p[3], 10);
+    }
+    let amountstr = "1";
+    let amount = 1;
+    if (p[5] !== undefined) {
+      amountstr = p[5];
+      if (amountstr[0] === "'") {
+        amountstr = "-" + amountstr.substring(1);
+      }
+      amount = parseInt(amountstr, 10);
+    }
+    return new BlockMove(loslice, hislice, grip, amount);
+  }
+
+  public parseBlockMove(blockmove: BlockMove): any {
+    let grip = blockmove.family;
     let fullrotation = false;
     if (grip.endsWith("v") && grip[0] <= "Z") {
-      if (p[2] !== undefined || p[3] !== undefined) {
+      if (
+        blockmove.innerLayer !== undefined ||
+        blockmove.outerLayer !== undefined
+      ) {
         throw new Error("Cannot use a prefix with full cube rotations");
       }
       grip = grip.slice(0, -1);
       fullrotation = true;
+    }
+    if (grip.endsWith("w") && grip[0] <= "Z") {
+      grip = grip.slice(0, -1).toLowerCase();
     }
     let geo;
     let msi = -1;
@@ -1490,24 +1547,21 @@ export class PuzzleGeometry {
       hislice = 2;
     }
     if (geo === undefined) {
-      throw new Error("Bad grip in move " + mv);
+      throw new Error("Bad grip in move " + blockmove.family);
     }
-    if (p[2] !== undefined) {
-      if (p[3] === undefined) {
-        throw new Error("Missing second number in range");
-      }
-      loslice = parseInt(p[2], 10);
+    if (blockmove.outerLayer !== undefined) {
+      loslice = blockmove.outerLayer;
     }
-    if (p[3] !== undefined) {
-      if (p[2] === undefined) {
-        hislice = parseInt(p[3], 10);
+    if (blockmove.innerLayer !== undefined) {
+      if (blockmove.outerLayer === undefined) {
+        hislice = blockmove.innerLayer;
         if (upperCaseGrip === grip) {
           loslice = hislice;
         } else {
           loslice = 1;
         }
       } else {
-        hislice = parseInt(p[3], 10);
+        hislice = blockmove.innerLayer;
       }
     }
     loslice--;
@@ -1524,23 +1578,13 @@ export class PuzzleGeometry {
     ) {
       throw new Error("Bad slice spec " + loslice + " " + hislice);
     }
-    let amountstr = "1";
-    let amount = 1;
-    if (p[5] !== undefined) {
-      amountstr = p[5];
-      if (amountstr[0] === "'") {
-        amountstr = "-" + amountstr.substring(1);
-      }
-      if (amountstr[0] === "+") {
-        amountstr = amountstr.substring(1);
-      } else if (amountstr[0] === "-") {
-        if (amountstr === "-") {
-          amountstr = "-1";
-        }
-      }
-      amount = parseInt(amountstr, 10);
-    }
-    const r = [mv, msi, loslice, hislice, firstgrip, amount];
+    const r = [undefined, msi, loslice, hislice, firstgrip, blockmove.amount];
+    return r;
+  }
+
+  public parsemove(mv: string): any {
+    const r = this.parseBlockMove(this.stringToBlockMove(mv));
+    r[0] = mv;
     return r;
   }
 
@@ -1909,7 +1953,83 @@ export class PuzzleGeometry {
   }
 
   public writekpuzzle(fortwisty: boolean = true): any {
-    return this.getOrbitsDef(fortwisty).toKpuzzle();
+    const od = this.getOrbitsDef(fortwisty);
+    const r = od.toKpuzzle() as KPuzzleDefinition;
+    r.moveNotation = new PGNotation(this, od);
+    return r;
+  }
+
+  public getMoveFromBits(
+    movebits: number,
+    amount: number,
+    inverted: boolean,
+    axiscmoves: any,
+    setmoves: number[] | undefined,
+  ): Transformation {
+    const moveorbits: Orbit[] = [];
+    const perms = [];
+    const oris = [];
+    for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
+      const p = [];
+      for (let kk = 0; kk < this.cubieords[ii]; kk++) {
+        p.push(kk);
+      }
+      perms.push(p);
+      const o = [];
+      for (let kk = 0; kk < this.cubieords[ii]; kk++) {
+        o.push(0);
+      }
+      oris.push(o);
+    }
+    for (let m = 0; m < axiscmoves.length; m++) {
+      if (((movebits >> m) & 1) === 0) {
+        continue;
+      }
+      const slicecmoves = axiscmoves[m];
+      for (let j = 0; j < slicecmoves.length; j++) {
+        const mperm = slicecmoves[j].slice();
+        const setnum = this.cubiesetnums[mperm[0]];
+        for (let ii = 0; ii < mperm.length; ii += 2) {
+          mperm[ii] = this.cubieordnums[mperm[ii]];
+        }
+        let inc = 2;
+        let oinc = 3;
+        if (inverted) {
+          inc = mperm.length - 2;
+          oinc = mperm.length - 1;
+        }
+        for (let ii = 0; ii < mperm.length; ii += 2) {
+          perms[setnum][mperm[(ii + inc) % mperm.length]] = mperm[ii];
+          if (this.killorientation) {
+            oris[setnum][mperm[ii]] = 0;
+          } else {
+            oris[setnum][mperm[ii]] =
+              (mperm[(ii + oinc) % mperm.length] -
+                mperm[(ii + 1) % mperm.length] +
+                2 * this.orbitoris[setnum]) %
+              this.orbitoris[setnum];
+          }
+        }
+      }
+    }
+    for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
+      if (setmoves && !setmoves[ii]) {
+        continue;
+      }
+      const no = new Array<number>(oris[ii].length);
+      // convert ksolve oris to our internal ori rep
+      for (let jj = 0; jj < perms[ii].length; jj++) {
+        no[jj] = oris[ii][perms[ii][jj]];
+      }
+      moveorbits.push(
+        new Orbit(perms[ii], no, this.killorientation ? 1 : this.orbitoris[ii]),
+      );
+    }
+    let mv = new Transformation(moveorbits);
+    if (amount !== 1) {
+      mv = mv.mulScalar(amount);
+    }
+    return mv;
   }
 
   public getOrbitsDef(fortwisty: boolean): OrbitsDef {
@@ -1995,74 +2115,13 @@ export class PuzzleGeometry {
         } else {
           movenames.push(movename + moveset[i + 1]);
         }
-        const moveorbits: Orbit[] = [];
-        const perms = [];
-        const oris = [];
-        for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
-          const p = [];
-          for (let kk = 0; kk < this.cubieords[ii]; kk++) {
-            p.push(kk);
-          }
-          perms.push(p);
-          const o = [];
-          for (let kk = 0; kk < this.cubieords[ii]; kk++) {
-            o.push(0);
-          }
-          oris.push(o);
-        }
-        const axiscmoves = this.cmovesbyslice[k];
-        for (let m = 0; m < axiscmoves.length; m++) {
-          if (((movebits >> m) & 1) === 0) {
-            continue;
-          }
-          const slicecmoves = axiscmoves[m];
-          for (let j = 0; j < slicecmoves.length; j++) {
-            const mperm = slicecmoves[j].slice();
-            const setnum = this.cubiesetnums[mperm[0]];
-            for (let ii = 0; ii < mperm.length; ii += 2) {
-              mperm[ii] = this.cubieordnums[mperm[ii]];
-            }
-            let inc = 2;
-            let oinc = 3;
-            if (inverted) {
-              inc = mperm.length - 2;
-              oinc = mperm.length - 1;
-            }
-            for (let ii = 0; ii < mperm.length; ii += 2) {
-              perms[setnum][mperm[(ii + inc) % mperm.length]] = mperm[ii];
-              if (this.killorientation) {
-                oris[setnum][mperm[ii]] = 0;
-              } else {
-                oris[setnum][mperm[ii]] =
-                  (mperm[(ii + oinc) % mperm.length] -
-                    mperm[(ii + 1) % mperm.length] +
-                    2 * this.orbitoris[setnum]) %
-                  this.orbitoris[setnum];
-              }
-            }
-          }
-        }
-        for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
-          if (!setmoves[ii]) {
-            continue;
-          }
-          const no = new Array<number>(oris[ii].length);
-          // convert ksolve oris to our internal ori rep
-          for (let jj = 0; jj < perms[ii].length; jj++) {
-            no[jj] = oris[ii][perms[ii][jj]];
-          }
-          moveorbits.push(
-            new Orbit(
-              perms[ii],
-              no,
-              this.killorientation ? 1 : this.orbitoris[ii],
-            ),
-          );
-        }
-        let mv = new Transformation(moveorbits);
-        if (moveset[i + 1] !== 1) {
-          mv = mv.mulScalar(moveset[i + 1]);
-        }
+        const mv = this.getMoveFromBits(
+          movebits,
+          moveset[i + 1],
+          inverted,
+          this.cmovesbyslice[k],
+          setmoves,
+        );
         moves.push(mv);
       }
     }
@@ -2530,7 +2589,17 @@ export class PuzzleGeometry {
         }
       }
     }
-    return { stickers, faces, axis: grips };
+    const f = (function () {
+      return function (s: string): string {
+        return this.unswizzle(s);
+      };
+    })().bind(this);
+    return {
+      stickers,
+      faces,
+      axis: grips,
+      unswizzle: f,
+    };
   }
 
   //  From the name of a geometric element (face, vertex, edge), get a
@@ -2563,5 +2632,46 @@ export class PuzzleGeometry {
   private getfaceindex(facenum: number): number {
     const divid = this.stickersperface;
     return Math.floor(facenum / divid);
+  }
+}
+
+class PGNotation implements MoveNotation {
+  private cache: { [key: string]: KTransformation } = {};
+  constructor(public pg: PuzzleGeometry, public od: OrbitsDef) {}
+
+  public lookupMove(move: BlockMove): KTransformation | undefined {
+    const key = this.blockMoveToString(move);
+    if (key in this.cache) {
+      return this.cache[key];
+    }
+    const mv = this.pg.parseBlockMove(move);
+    let bits = (2 << mv[3]) - (1 << mv[2]);
+    if (!mv[4]) {
+      const slices = this.pg.moveplanesets[mv[1]].length;
+      bits = (2 << (slices - mv[2])) - (1 << (slices - mv[3]));
+    }
+    const pgmv = this.pg.getMoveFromBits(
+      bits,
+      move.amount,
+      !mv[4],
+      this.pg.cmovesbyslice[mv[1]],
+      undefined,
+    );
+    const r = this.od.transformToKPuzzle(pgmv);
+    this.cache[key] = r;
+    return r;
+  }
+
+  // This is only used to construct keys, so does not need to be beautiful.
+  private blockMoveToString(mv: BlockMove): string {
+    let r = "";
+    if (mv.outerLayer) {
+      r = r + mv.outerLayer + ",";
+    }
+    if (mv.innerLayer) {
+      r = r + mv.innerLayer + ",";
+    }
+    r = r + mv.family + "," + mv.amount;
+    return r;
   }
 }

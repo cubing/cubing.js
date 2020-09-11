@@ -18,7 +18,7 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../src/bluetooth/index";
-import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
+import { KPuzzleDefinition } from "../../src/kpuzzle/index";
 import {
   getpuzzle,
   getpuzzles,
@@ -157,14 +157,11 @@ function LucasSetup(
   safeKpuzzle = kpuzzledef; // this holds the scrambled position
   puzzle = kpuzzledef as KPuzzleDefinition;
   const mps = pg.movesetgeos;
-  const worker = new KPuzzle(puzzle);
-  worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
   gripdepth = {};
   for (const mp of mps) {
     const grip1 = mp[0] as string;
     const grip2 = mp[2] as string;
     // angle compatibility hack
-    worker.addGrip(grip1, grip2, mp[4] as number);
     gripdepth[grip1] = mp[4];
     gripdepth[grip2] = mp[4];
   }
@@ -450,7 +447,6 @@ function checkchange(): void {
     lastRender = newRender;
     const p = parsedesc(descarg);
     if (p) {
-      console.log(initialCameraPos);
       if (savecam) {
         saveCamera();
       }

@@ -8,6 +8,7 @@ export class OrbitDef {
     return factorial(this.size) * Math.pow(this.mod, this.size);
   }
 }
+
 export class OrbitsDef {
   constructor(
     public orbitnames: string[],
@@ -16,6 +17,14 @@ export class OrbitsDef {
     public movenames: string[],
     public moveops: Transformation[],
   ) {}
+
+  public transformToKPuzzle(t: Transformation): any {
+    const mp: { [orbitName: string]: any } = {};
+    for (let j = 0; j < this.orbitnames.length; j++) {
+      mp[this.orbitnames[j]] = t.orbits[j].toKpuzzle();
+    }
+    return mp;
+  }
 
   public toKsolve(name: string, forTwisty: boolean): string[] {
     const result = [];
@@ -71,11 +80,7 @@ export class OrbitsDef {
     }
     const moves: { [moveName: string]: any } = {};
     for (let i = 0; i < this.movenames.length; i++) {
-      const mp: { [orbitName: string]: any } = {};
-      for (let j = 0; j < this.orbitnames.length; j++) {
-        mp[this.orbitnames[j]] = this.moveops[i].orbits[j].toKpuzzle();
-      }
-      moves[this.movenames[i]] = mp;
+      moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
     }
     return { orbits, startPieces: start, moves };
   }

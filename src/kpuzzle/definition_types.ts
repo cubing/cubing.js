@@ -1,4 +1,4 @@
-import { MoveExpander } from "./move_expander";
+import { MoveNotation } from "./move_notation";
 
 // TODO: Properly handle freezing
 export interface OrbitTransformation {
@@ -19,5 +19,5 @@ export interface KPuzzleDefinition {
   startPieces: Transformation; // TODO: Expose a way to get the transformed start pieces.
   moves: { [/* move name */ key: string]: Transformation };
   svg?: string;
-  moveExpander?: MoveExpander;
+  moveNotation?: MoveNotation;
 }

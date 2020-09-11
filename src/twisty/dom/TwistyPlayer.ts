@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import { countMoves } from "../../../app/twizzle/move-counter";
 import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
-import { KPuzzle, KPuzzleDefinition, Puzzles } from "../../kpuzzle";
+import { KPuzzleDefinition, Puzzles } from "../../kpuzzle";
 import {
   getPuzzleGeometryByName,
   PuzzleGeometry,
@@ -49,18 +49,6 @@ function createPG(puzzleName: string): PuzzleGeometry {
     "orientcenters",
     "true",
   ]);
-  const kpuzzleDef = pg.writekpuzzle();
-  const worker = new KPuzzle(kpuzzleDef);
-
-  // Wide move / rotation hack
-  worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
-  const mps = pg.movesetgeos;
-  for (const mp of mps) {
-    const grip1 = mp[0] as string;
-    const grip2 = mp[2] as string;
-    // angle compatibility hack
-    worker.addGrip(grip1, grip2, mp[4] as number);
-  }
   return pg;
 }
 

@@ -12,12 +12,11 @@ import {
 } from "three";
 import { BlockMove, modifiedBlockMove } from "../../../alg";
 import {
-  KPuzzle,
   KPuzzleDefinition,
   stateForBlockMove,
   Transformation,
 } from "../../../kpuzzle";
-import { StickerDatSticker } from "../../../puzzle-geometry";
+import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
 import { AlgCursor } from "../../animation/alg/AlgCursor";
 import { TAU } from "../TAU";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
@@ -129,7 +128,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     cursor: AlgCursor,
     private scheduleRenderCallback: () => void,
     private definition: KPuzzleDefinition,
-    pgdat: any,
+    private pgdat: StickerDat,
     showFoundation: boolean = false,
   ) {
     super();
@@ -192,11 +191,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         }
       }
     }
-    const kp = new KPuzzle(this.definition);
+    // FIXME tgr const kp = new KPuzzle(this.definition);
     for (const moveProgress of p.movesInProgress) {
       const blockMove = moveProgress.move as BlockMove;
       const simpleMove = modifiedBlockMove(blockMove, { amount: 1 });
-      const unswizzled = kp.unswizzle(blockMove.family);
+      const unswizzled = this.pgdat.unswizzle(blockMove.family);
       const baseMove = stateForBlockMove(this.definition, simpleMove);
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
