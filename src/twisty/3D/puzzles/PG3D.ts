@@ -27,10 +27,10 @@ import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,
   color: 0x000000,
-// transparency doesn't work very well here
-// with duplicated center stickers
-//  transparent: true,
-//  opacity: 0.75,
+  // transparency doesn't work very well here
+  // with duplicated center stickers
+  //  transparent: true,
+  //  opacity: 0.75,
 });
 const stickerMaterial = new MeshBasicMaterial({
   vertexColors: true,
@@ -64,7 +64,10 @@ class StickerDef {
   public faceColor: Color;
   public cubie: Group;
   protected geo: Geometry;
-  constructor(stickerDat: StickerDatSticker, foundationDat: StickerDatSticker | undefined) {
+  constructor(
+    stickerDat: StickerDatSticker,
+    foundationDat: StickerDatSticker | undefined,
+  ) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
     this.cubie = new Group();
@@ -151,7 +154,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.stickers = {};
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
-      const foundation = showFoundation ? stickerDat.foundations[si] : undefined;
+      const foundation = showFoundation
+        ? stickerDat.foundations[si]
+        : undefined;
       const orbit = sticker.orbit as number;
       const ord = sticker.ord as number;
       const ori = sticker.ori as number;
