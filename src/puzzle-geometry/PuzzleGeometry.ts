@@ -42,6 +42,7 @@ export type StickerDatAxis = [number[], string, number];
 
 export interface StickerDat {
   stickers: StickerDatSticker[];
+  foundations: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
 }
@@ -2390,6 +2391,7 @@ export class PuzzleGeometry {
 
   public get3d(trim?: number): StickerDat {
     const stickers: any = [];
+    const foundations: any = [];
     const rot = this.getInitial3DRotation();
     const faces: any = [];
     const maxdist: number = 0.52 * this.basefaces[0][0].len();
@@ -2408,6 +2410,13 @@ export class PuzzleGeometry {
         ? "#808080"
         : this.colors[this.facenames[facenum][1]];
       let coords = rot.rotateface(this.faces[i]);
+      foundations.push({
+        coords: toFaceCoords(coords, maxdist),
+        color,
+        orbit: this.cubiesetnames[cubiesetnum],
+        ord: cubieord,
+        ori: cubieori,
+      });
       if (trim && trim > 0) {
         coords = trimEdges(coords, trim);
       }
@@ -2446,7 +2455,7 @@ export class PuzzleGeometry {
         }
       }
     }
-    return { stickers, faces, axis: grips };
+    return { stickers, foundations, faces, axis: grips };
   }
 
   //  From the name of a geometric element (face, vertex, edge), get a
