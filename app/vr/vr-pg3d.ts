@@ -33,7 +33,7 @@
 //   constructor(private vrInput: VRInput) {
 //     // const p = PuzzleGeometry.parsedesc(descinput.value);
 //     const pg = getPuzzleGeometryByName("megaminx");
-//     const stickerDat = pg.get3d(0.0131);
+//     const stickerDat = pg.get3d();
 
 //     const scene = new Twisty3DScene();
 //     const timeline = new Timeline();

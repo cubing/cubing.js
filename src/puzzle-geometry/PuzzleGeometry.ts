@@ -2544,17 +2544,48 @@ export class PuzzleGeometry {
     return html;
   }
 
-  public get3d(trim?: number): StickerDat {
+  public dist(a: number[], b: number[]): number {
+    return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+  }
+
+  public triarea(a: number[], b: number[], c: number[]): number {
+    const ab = this.dist(a, b);
+    const bc = this.dist(b, c);
+    const ac = this.dist(a, c);
+    const p = (ab + bc + ac) / 2;
+    return Math.sqrt(p * (p - ab) * (p - bc) * (p - ac));
+  }
+
+  public polyarea(coords: number[][]): number {
+    let sum = 0;
+    for (let i = 2; i < coords.length; i++) {
+      sum += this.triarea(coords[0], coords[1], coords[i]);
+    }
+    return sum;
+  }
+
+  // The colorfrac parameter says how much of the face should be
+  // colored (vs dividing lines); we default to 0.75 which seems
+  // to work pretty well.  It should be a number between probably
+  // 0.4 and 0.9.
+  public get3d(colorfrac?: number): StickerDat {
+    if (!colorfrac) {
+      colorfrac = 0.75;
+    }
     const stickers: any = [];
     const foundations: any = [];
     const rot = this.getInitial3DRotation();
     const faces: any = [];
     const maxdist: number = 0.52 * this.basefaces[0][0].len();
+    let avgstickerarea = 0;
     for (let i = 0; i < this.basefaces.length; i++) {
       const coords = rot.rotateface(this.basefaces[i]);
       const name = this.facenames[i][1];
       faces.push({ coords: toFaceCoords(coords, maxdist), name });
+      avgstickerarea += this.polyarea(faces[i].coords);
     }
+    avgstickerarea /= this.faces.length;
+    const trim = (Math.sqrt(avgstickerarea) * (1 - Math.sqrt(colorfrac))) / 2;
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);
       const cubie = this.facetocubies[i][0];

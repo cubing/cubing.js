@@ -66,7 +66,7 @@ class DisplayablePG3D {
   public stickerDat(): StickerDat {
     // TODO: Remove `as` cast.
     const pg = getPuzzleGeometryByDesc(this.desc, ["orientcenters", "true"]);
-    return pg.get3d(0.0131);
+    return pg.get3d();
   }
 }
 
