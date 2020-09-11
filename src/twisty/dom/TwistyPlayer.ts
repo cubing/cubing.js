@@ -473,7 +473,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       // showFoundation ?: boolean;;
     } else {
       const pg = createPG(puzzleName);
-      stickerDat = pg.get3d(0.0131);
+      stickerDat = pg.get3d(0.025);
       kpuzzleDef = pg.writekpuzzle();
     }
     return [kpuzzleDef, stickerDat];
