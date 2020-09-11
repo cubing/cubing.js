@@ -1,30 +1,51 @@
 import { BlockMove, blockMoveToString, expand, Sequence } from "../alg";
 import { KPuzzleDefinition, Transformation } from "./definition_types";
-import { MoveExpander } from "./move_expander";
 import { Multiply, IdentityTransformation, Combine } from "./transformations";
+import { MoveNotation } from "./move_notation";
 
 // TODO: Move other helpers into the definition.
 export function stateForBlockMove(
   def: KPuzzleDefinition,
   blockMove: BlockMove,
 ): Transformation {
-  // TODO: Optimize this.
-  const repMoveString = blockMoveToString(
-    new BlockMove(
-      blockMove.outerLayer,
-      blockMove.innerLayer,
-      blockMove.family,
+  const move = getNotationLayer(def).lookupMove(blockMove);
+  if (!move) {
+    throw new Error("Unknown move: " + blockMoveToString(blockMove));
+  }
+  return move;
+}
+
+export function getNotationLayer(def: KPuzzleDefinition): MoveNotation {
+  if (!def.moveNotation) {
+    def.moveNotation = new KPuzzleMoveNotation(def);
+  }
+  return def.moveNotation;
+}
+
+class KPuzzleMoveNotation implements MoveNotation {
+  private cache: { [key: string]: Transformation } = {};
+  constructor(public def: KPuzzleDefinition) {}
+
+  public lookupMove(move: BlockMove): Transformation | undefined {
+    const key = blockMoveToString(move);
+    let r: Transformation | undefined = this.cache[key];
+    if (r) {
+      return r;
+    }
+    const baseMove = new BlockMove(
+      move.outerLayer,
+      move.innerLayer,
+      move.family,
       1,
-    ),
-  );
-  let move: Transformation | undefined = def.moves[repMoveString];
-  if (!move) {
-    move = new KPuzzle(def).expandSlices(repMoveString, blockMove);
+    );
+    const baseKey = blockMoveToString(baseMove);
+    r = this.def.moves[baseKey];
+    if (r) {
+      r = Multiply(this.def, r, move.amount);
+      this.cache[key] = r;
+    }
+    return r;
   }
-  if (!move) {
-    throw new Error(`Unknown move family: ${blockMove.family}`);
-  }
-  return Multiply(def, move, blockMove.amount);
 }
 
 export class KPuzzle {
@@ -62,59 +83,6 @@ export class KPuzzle {
       this.applyBlockMove(move);
     }
   }
-
-  public applyMove(moveName: string): this {
-    let move: Transformation | undefined = this.definition.moves[moveName];
-    if (!move) {
-      move = this.expandSlicesByName(moveName);
-    }
-    if (!move) {
-      throw new Error(`Unknown move: ${moveName}`);
-    }
-
-    this.state = Combine(this.definition, this.state, move);
-    return this;
-  }
-
-  public getMoveExpander(create: boolean): MoveExpander | undefined {
-    let moveExpander = this.definition.moveExpander;
-    if (create && !moveExpander) {
-      moveExpander = new MoveExpander();
-      this.definition.moveExpander = moveExpander;
-    }
-    return moveExpander;
-  }
-
-  public setFaceNames(faceNames: string[]): void {
-    const me = this.getMoveExpander(true);
-    if (me) {
-      me.setFaceNames(faceNames);
-    }
-  }
-
-  public addGrip(grip1: string, grip2: string, nslices: number): void {
-    const me = this.getMoveExpander(true);
-    return me ? me.addGrip(grip1, grip2, nslices, this.definition) : undefined;
-  }
-
-  public expandSlices(
-    rep: string,
-    blockMove: BlockMove,
-  ): Transformation | undefined {
-    const me = this.getMoveExpander(false);
-    return me ? me.expandSlices(rep, blockMove, this.definition) : undefined;
-  }
-
-  public expandSlicesByName(mv: string): Transformation | undefined {
-    const me = this.getMoveExpander(false);
-    return me ? me.expandSlicesByName(mv, this.definition) : undefined;
-  }
-
-  public unswizzle(grip: string): string {
-    const me = this.getMoveExpander(true);
-    return me ? me.unswizzle(grip) : grip;
-  }
-
   // TODO: Implement
   // parseState(): this {}
 

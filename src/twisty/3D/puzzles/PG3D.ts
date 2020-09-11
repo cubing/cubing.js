@@ -12,7 +12,6 @@ import {
 } from "three";
 import { BlockMove, modifiedBlockMove } from "../../../alg";
 import {
-  KPuzzle,
   KPuzzleDefinition,
   stateForBlockMove,
   Transformation,
@@ -139,22 +138,22 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     cursor: AlgCursor,
     private scheduleRenderCallback: () => void,
     private definition: KPuzzleDefinition,
-    stickerDat: StickerDat,
+    private pgdat: StickerDat,
     showFoundation: boolean = false,
   ) {
     super();
 
     this.axesInfo = {};
-    const axesDef = stickerDat.axis as any[];
+    const axesDef = this.pgdat.axis as any[];
     for (const axis of axesDef) {
       this.axesInfo[axis[1]] = new AxisInfo(axis);
     }
-    const stickers = stickerDat.stickers as any[];
+    const stickers = this.pgdat.stickers as any[];
     this.stickers = {};
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
       const foundation = showFoundation
-        ? stickerDat.foundations[si]
+        ? this.pgdat.foundations[si]
         : undefined;
       const orbit = sticker.orbit as number;
       const ord = sticker.ord as number;
@@ -171,7 +170,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.add(stickerdef.cubie);
       this.stickerTargets.push(stickerdef.cubie.children[0]);
     }
-    const hitfaces = stickerDat.faces as any[];
+    const hitfaces = this.pgdat.faces as any[];
     for (const hitface of hitfaces) {
       const facedef = new HitPlaneDef(hitface);
       facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
@@ -207,11 +206,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         }
       }
     }
-    const kp = new KPuzzle(this.definition);
+    // FIXME tgr const kp = new KPuzzle(this.definition);
     for (const moveProgress of p.movesInProgress) {
       const blockMove = moveProgress.move as BlockMove;
       const simpleMove = modifiedBlockMove(blockMove, { amount: 1 });
-      const unswizzled = kp.unswizzle(blockMove.family);
+      const unswizzled = this.pgdat.unswizzle(blockMove.family);
       const baseMove = stateForBlockMove(this.definition, simpleMove);
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;

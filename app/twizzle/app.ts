@@ -18,7 +18,7 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../src/bluetooth/index";
-import { KPuzzle, KPuzzleDefinition } from "../../src/kpuzzle/index";
+import { KPuzzleDefinition } from "../../src/kpuzzle/index";
 import {
   getpuzzle,
   getpuzzles,
@@ -117,11 +117,15 @@ function intersectionToMove(
   event: MouseEvent,
   rightClick: boolean,
 ): BlockMove {
+  const allowRotatingGrips = event.ctrlKey || event.metaKey;
   let bestGrip: MoveFamily = stickerDat.axis[0][1];
   let bestProduct: number = 0;
   for (const axis of stickerDat.axis) {
     const product = point.dot(new Vector3(...axis[0]));
-    if (product > bestProduct) {
+    if (
+      (gripdepth[axis[1]] > 1 || allowRotatingGrips) &&
+      product > bestProduct
+    ) {
       bestProduct = product;
       bestGrip = axis[1];
     }
@@ -153,14 +157,11 @@ function LucasSetup(
   safeKpuzzle = kpuzzledef; // this holds the scrambled position
   puzzle = kpuzzledef as KPuzzleDefinition;
   const mps = pg.movesetgeos;
-  const worker = new KPuzzle(puzzle);
-  worker.setFaceNames(pg.facenames.map((_: any) => _[1]));
   gripdepth = {};
   for (const mp of mps) {
     const grip1 = mp[0] as string;
     const grip2 = mp[2] as string;
     // angle compatibility hack
-    worker.addGrip(grip1, grip2, mp[4] as number);
     gripdepth[grip1] = mp[4];
     gripdepth[grip2] = mp[4];
   }
@@ -453,6 +454,8 @@ function checkchange(): void {
         "allmoves",
         true,
         "orientcenters",
+        true,
+        "rotations",
         true,
       ];
       if (!lastRender.corners) {
