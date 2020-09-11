@@ -143,7 +143,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     showFoundation: boolean = false,
   ) {
     super();
-    cursor!.addPositionListener(this);
 
     this.axesInfo = {};
     const axesDef = stickerDat.axis as any[];
@@ -179,6 +178,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.add(facedef.cubie);
       this.controlTargets.push(facedef.cubie.children[0]);
     }
+
+    cursor!.addPositionListener(this);
   }
 
   public experimentalGetStickerTargets(): Object3D[] {

@@ -527,6 +527,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         scene.remove(this.twisty3D!);
         this.cursor.removePositionListener(this.twisty3D!);
         const [def, dat /*, _*/] = this.pgHelper(this.puzzle);
+        this.cursor.setPuzzle(def, undefined, this.experimentalStartSetup);
         const pg3d = new PG3D(
           this.cursor,
           scene.scheduleRender.bind(scene),
@@ -535,7 +536,6 @@ export class TwistyPlayer extends ManagedCustomElement {
           this.legacyExperimentalPG3DViewConfig?.showFoundation,
         );
         scene.addTwisty3DPuzzle(pg3d);
-        this.cursor.setPuzzle(def);
         this.twisty3D = pg3d;
         this.legacyExperimentalPG3D = pg3d;
         for (const viewer of this.viewerElems) {

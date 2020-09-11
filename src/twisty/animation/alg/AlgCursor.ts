@@ -163,12 +163,22 @@ export class AlgCursor
     }
   }
 
-  setPuzzle(def: KPuzzleDefinition, alg: Sequence = this.alg): void {
+  setPuzzle(
+    def: KPuzzleDefinition,
+    alg: Sequence = this.alg,
+    startStateSequence?: Sequence,
+  ): void {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
+    this.def = def;
     this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
     if (alg !== this.alg) {
       this.timeline.onCursorChange(this);
     }
+    this.setStartState(
+      startStateSequence
+        ? this.algToState(startStateSequence)
+        : this.ksolvePuzzle.startState(),
+    );
     this.alg = alg;
   }
 }
