@@ -2570,7 +2570,7 @@ export class PuzzleGeometry {
   // 0.4 and 0.9.
   public get3d(colorfrac?: number): StickerDat {
     if (!colorfrac) {
-      colorfrac = 0.75;
+      colorfrac = 0.77;
     }
     const stickers: any = [];
     const foundations: any = [];
