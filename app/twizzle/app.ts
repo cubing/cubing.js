@@ -508,7 +508,7 @@ function checkchange(): void {
       } else {
         kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition;
       }
-      const newStickerDat = pg.get3d(0.0131);
+      const newStickerDat = pg.get3d(0.025);
       initialCameraPos = cameraPos(pg);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
       // Twisty constructor currently ignores initial camera position
