@@ -1,7 +1,12 @@
+import { KPuzzleDefinition } from "./interfaces"; // TODO
 /* tslint:disable no-bitwise */
-/* tslint:disable prefer-for-of */ // TODO
-
-import { factorial, iota, lcm, Perm, zeros } from "./Perm";
+/* tslint:disable prefer-for-of */ import {
+  factorial,
+  iota,
+  lcm,
+  Perm,
+  zeros,
+} from "./Perm";
 export class OrbitDef {
   constructor(public size: number, public mod: number) {}
   public reassemblySize(): number {
@@ -69,7 +74,7 @@ export class OrbitsDef {
   }
 
   // TODO: return type.
-  public toKpuzzle(): Record<string, unknown> {
+  public toKpuzzle(): KPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
@@ -83,7 +88,7 @@ export class OrbitsDef {
     for (let i = 0; i < this.movenames.length; i++) {
       moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
     }
-    return { orbits, startPieces: start, moves };
+    return { name: "PG3D", orbits, startPieces: start, moves };
   }
 
   public optimize(): OrbitsDef {

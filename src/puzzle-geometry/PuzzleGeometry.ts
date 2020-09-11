@@ -522,7 +522,7 @@ export class PuzzleGeometry {
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public movesbyslice: any[]; // move as perms by slice
-  public cmovesbyslice: any[] = []; // cmoves as perms by slice
+  public cmovesbyslice: number[][][][] = []; // cmoves as perms by slice
   public facenamesPrefixfree: boolean = true; // are facenames prefix-free?
   // options
   public verbose: number = 0; // verbosity (console.log)
@@ -1976,7 +1976,7 @@ export class PuzzleGeometry {
     movebits: number,
     amount: number,
     inverted: boolean,
-    axiscmoves: any,
+    axiscmoves: number[][][],
     setmoves: number[] | undefined,
   ): Transformation {
     const moveorbits: Orbit[] = [];
