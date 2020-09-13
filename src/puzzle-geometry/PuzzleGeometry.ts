@@ -79,6 +79,7 @@ export function useNewFaceNames(use: boolean): void {
 
 const eps: number = 1e-9;
 const copyright = "PuzzleGeometry 0.1 Copyright 2018 Tomas Rokicki.";
+const permissivieMoveParsing = false;
 
 // This is a description of the nets and the external names we give each
 // face.  The names should be a set of prefix-free upper-case alphabetics
@@ -1592,6 +1593,7 @@ export class PuzzleGeometry {
       throw new Error("Bad slice spec " + loslice + " " + hislice);
     }
     if (
+      !permissivieMoveParsing &&
       loslice === 0 &&
       hislice === this.moveplanesets[msi].length &&
       !fullrotation
