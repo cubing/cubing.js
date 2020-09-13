@@ -1591,6 +1591,15 @@ export class PuzzleGeometry {
     ) {
       throw new Error("Bad slice spec " + loslice + " " + hislice);
     }
+    if (
+      loslice === 0 &&
+      hislice === this.moveplanesets[msi].length &&
+      !fullrotation
+    ) {
+      throw new Error(
+        "! full puzzle rotations must be specified with v suffix.",
+      );
+    }
     const r = [undefined, msi, loslice, hislice, firstgrip, blockmove.amount];
     return r;
   }
