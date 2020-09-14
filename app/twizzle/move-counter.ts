@@ -28,7 +28,7 @@ class MoveCounter extends TraversalUp<number> {
   }
 
   public traverseGroup(group: Group): number {
-    return this.traverse(group.nestedSequence) * group.amount;
+    return this.traverse(group.nestedSequence) * Math.abs(group.amount);
   }
 
   public traverseBlockMove(move: BlockMove): number {
@@ -37,7 +37,7 @@ class MoveCounter extends TraversalUp<number> {
 
   public traverseCommutator(commutator: Commutator): number {
     return (
-      commutator.amount *
+      Math.abs(commutator.amount) *
       2 *
       (this.traverse(commutator.A) + this.traverse(commutator.B))
     );
@@ -45,7 +45,7 @@ class MoveCounter extends TraversalUp<number> {
 
   public traverseConjugate(conjugate: Conjugate): number {
     return (
-      conjugate.amount *
+      Math.abs(conjugate.amount) *
       (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B))
     );
   }
