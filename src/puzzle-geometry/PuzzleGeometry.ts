@@ -30,7 +30,12 @@ import {
   MoveNotation,
   Transformation as KTransformation,
 } from "./interfaces";
-import { NotationMapper, NullMapper, NxNCubeMapper } from "./NotationMapper";
+import {
+  FaceRenamingMapper,
+  NotationMapper,
+  NullMapper,
+  NxNxNCubeMapper,
+} from "./NotationMapper";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
 
 export interface StickerDatSticker {
@@ -114,35 +119,20 @@ function defaultnets(): any {
       ["R", "F", "", "B", ""],
     ],
     // eight faces: octahedron
-    8: NEW_FACE_NAMES
-      ? [
-          ["F", "D", "L", "R"],
-          ["D", "F", "BR", ""],
-          ["BR", "D", "", "B"],
-          ["B", "BR", "U", "BL"],
-        ]
-      : [
-          ["F", "D", "L", "R"],
-          ["D", "F", "BR", ""],
-          ["BR", "D", "", "BB"],
-          ["BB", "BR", "U", "BL"],
-        ],
+    8: [
+      ["F", "D", "L", "R"],
+      ["D", "F", "BR", ""],
+      ["BR", "D", "", "BB"],
+      ["BB", "BR", "U", "BL"],
+    ],
     // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
-    12: NEW_FACE_NAMES
-      ? [
-          ["U", "F", "", "", "", ""],
-          ["F", "U", "R", "FR", "FL", "L"],
-          ["R", "F", "", "", "DR", ""],
-          ["DR", "R", "", "B", "", ""],
-          ["B", "DR", "BR", "BL", "DL", "D"],
-        ]
-      : [
-          ["U", "F", "", "", "", ""],
-          ["F", "U", "R", "C", "A", "L"],
-          ["R", "F", "", "", "E", ""],
-          ["E", "R", "", "BF", "", ""],
-          ["BF", "E", "BR", "BL", "I", "D"],
-        ],
+    12: [
+      ["U", "F", "", "", "", ""],
+      ["F", "U", "R", "C", "A", "L"],
+      ["R", "F", "", "", "E", ""],
+      ["E", "R", "", "BF", "", ""],
+      ["BF", "E", "BR", "BL", "I", "D"],
+    ],
     // twenty faces: icosahedron
     20: [
       ["R", "C", "F", "E"],
@@ -172,56 +162,30 @@ function defaultcolors(): any {
       B: "#0000ff",
       L: "#ff8000",
     },
-    8: NEW_FACE_NAMES
-      ? {
-          U: "#ffffff", //"#e085b9",
-          F: "#ff0000",
-          R: "#00bb00",
-          D: "#ffff00",
-          B: "#1122ff",
-          L: "#9524c5",
-          BL: "#ff8800",
-          BR: "#aaaaaa",
-        }
-      : {
-          U: "#e085b9",
-          F: "#080d99",
-          R: "#c1e35c",
-          D: "#22955e",
-          B: "#9121ab",
-          L: "#b27814",
-          BL: "#0d35ad",
-          BR: "#eb126b",
-        },
-    12: NEW_FACE_NAMES
-      ? {
-          U: "#ffffff",
-          F: "#006633",
-          R: "#ff0000",
-          FR: "#ffffd0",
-          FL: "#3399ff",
-          L: "#7700aa",
-          DR: "#ff66cc",
-          B: "#99ff00",
-          BR: "#0000ff",
-          BL: "#ffff00",
-          DL: "#ff6633",
-          D: "#999999",
-        }
-      : {
-          U: "#ffffff",
-          F: "#006633",
-          R: "#ff0000",
-          C: "#ffffd0",
-          A: "#3399ff",
-          L: "#660099",
-          E: "#ff66cc",
-          BF: "#99ff00",
-          BR: "#0000ff",
-          BL: "#ffff00",
-          I: "#ff6633",
-          D: "#999999",
-        },
+    8: {
+      U: "#e085b9",
+      F: "#080d99",
+      R: "#c1e35c",
+      D: "#22955e",
+      B: "#9121ab",
+      L: "#b27814",
+      BL: "#0d35ad",
+      BR: "#eb126b",
+    },
+    12: {
+      U: "#ffffff",
+      F: "#006633",
+      R: "#ff0000",
+      C: "#ffffd0",
+      A: "#3399ff",
+      L: "#660099",
+      E: "#ff66cc",
+      BF: "#99ff00",
+      BR: "#0000ff",
+      BL: "#ffff00",
+      I: "#ff6633",
+      D: "#999999",
+    },
     20: {
       R: "#db69f0",
       C: "#178fde",
@@ -256,12 +220,8 @@ function defaultfaceorders(): any {
   return {
     4: ["F", "D", "L", "R"],
     6: ["U", "D", "F", "B", "L", "R"],
-    8: NEW_FACE_NAMES
-      ? ["F", "B", "D", "U", "BR", "L", "R", "BL"]
-      : ["F", "BB", "D", "U", "BR", "L", "R", "BL"],
-    12: NEW_FACE_NAMES
-      ? ["L", "DR", "F", "B", "R", "DL", "U", "D", "BR", "FL", "BL", "FR"]
-      : ["L", "E", "F", "BF", "R", "I", "U", "D", "BR", "A", "BL", "C"],
+    8: ["F", "BB", "D", "U", "BR", "L", "R", "BL"],
+    12: ["L", "E", "F", "BF", "R", "I", "U", "D", "BR", "A", "BL", "C"],
     20: [
       "L",
       "S",
@@ -302,9 +262,7 @@ function defaultOrientations(): any {
     4: ["FLR", [0, 1, 0], "F", [0, 0, 1]], // FLR towards viewer
     6: ["U", [0, 1, 0], "F", [0, 0, 1]], // URF towards viewer
     8: ["U", [0, 1, 0], "F", [0, 0, 1]], // FLUR towards viewer
-    12: NEW_FACE_NAMES
-      ? ["U", [0, 1, 0], "F", [0, 0, 1]]
-      : ["U", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
+    12: ["U", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
     20: ["GUQMJ", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
   };
 }
@@ -558,7 +516,7 @@ export class PuzzleGeometry {
   public faceprecedence: number[] = [];
   public swizzler: FaceNameSwizzler;
   public notationMapper: NotationMapper = new NullMapper();
-  public addCubeNotationMapper: boolean = false;
+  public addNotationMapper: string = "";
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
     function asstructured(v: any): any {
       if (typeof v === "string") {
@@ -870,7 +828,7 @@ export class PuzzleGeometry {
         searchaddelement(vertexnames, face[jj], [facename, e2, e1]);
       }
     }
-    this.swizzler = new FaceNameSwizzler(facenames);
+    this.swizzler = new FaceNameSwizzler(facenames.map((_: any) => _[1]));
     const sep = this.swizzler.prefixFree ? "" : "_";
     // fix the edge names; use face precedence order
     for (let i = 0; i < edgenames.length; i++) {
@@ -998,8 +956,34 @@ export class PuzzleGeometry {
     }
     // add nxnxn cube notation if it has cube face moves
     if (shape === "c" && sawface) {
-      this.addCubeNotationMapper = true;
-      this.notationMapper = new NxNCubeMapper(3);
+      // In this case the mapper adding is deferred until we
+      // know the number of slices.
+      this.addNotationMapper = "NxNxNCubeMapper";
+    }
+    if (shape === "o" && sawface && NEW_FACE_NAMES) {
+      this.notationMapper = new FaceRenamingMapper(
+        this.swizzler,
+        new FaceNameSwizzler(["F", "D", "L", "BL", "R", "U", "BR", "B"]),
+      );
+    }
+    if (shape === "d" && sawface && NEW_FACE_NAMES) {
+      this.notationMapper = new FaceRenamingMapper(
+        this.swizzler,
+        new FaceNameSwizzler([
+          "U",
+          "F",
+          "L",
+          "BL",
+          "BR",
+          "R",
+          "FR",
+          "FL",
+          "DL",
+          "B",
+          "DR",
+          "D",
+        ]),
+      );
     }
   }
 
@@ -1180,9 +1164,9 @@ export class PuzzleGeometry {
         neg[1],
         1 + moveplanesets[i].length,
       ]);
-      if (this.addCubeNotationMapper && gtype === "f") {
-        this.notationMapper = new NxNCubeMapper(1 + moveplanesets[i].length);
-        this.addCubeNotationMapper = false;
+      if (this.addNotationMapper === "NxNxNCubeMapper" && gtype === "f") {
+        this.notationMapper = new NxNxNCubeMapper(1 + moveplanesets[i].length);
+        this.addNotationMapper = "";
       }
     }
     this.movesetgeos = movesetgeos;
@@ -1415,8 +1399,8 @@ export class PuzzleGeometry {
   }
 
   public unswizzle(mv: BlockMove): string {
-    mv = this.notationMapper.notationToInternal(mv);
-    return this.swizzler.unswizzle(mv.family);
+    const newmv = this.notationMapper.notationToInternal(mv);
+    return this.swizzler.unswizzle(newmv.family);
   }
 
   // We use an extremely permissive parse here; any character but

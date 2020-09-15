@@ -1,3 +1,4 @@
+import { FaceNameSwizzler } from "./FaceNameSwizzler";
 import { BlockMove } from "./interfaces";
 
 export interface NotationMapper {
@@ -15,7 +16,7 @@ export class NullMapper implements NotationMapper {
   }
 }
 
-export class NxNCubeMapper implements NotationMapper {
+export class NxNxNCubeMapper implements NotationMapper {
   constructor(public slices: number) {}
 
   public notationToInternal(mv: BlockMove): BlockMove {
@@ -83,16 +84,59 @@ export class NxNCubeMapper implements NotationMapper {
   }
 }
 
-// face renaming mapper.  Accepts two face name remappers.
+// face renaming mapper.  Accepts two face name remappers.  We
+// work between the two.
 
 export class FaceRenamingMapper implements NotationMapper {
-  constructor(public internalNames: string[], public externalNames: string[]) {}
+  constructor(
+    public internalNames: FaceNameSwizzler,
+    public externalNames: FaceNameSwizzler,
+  ) {}
+
+  // TODO:  consider putting a cache in front of this
+  public convertString(
+    grip: string,
+    a: FaceNameSwizzler,
+    b: FaceNameSwizzler,
+  ): string {
+    let suffix = "";
+    if ((grip.endsWith("v") || grip.endsWith("v")) && grip <= "_") {
+      suffix = grip.slice(grip.length - 1);
+      grip = grip.slice(0, grip.length - 1);
+    }
+    const upper = grip.toUpperCase();
+    let isLowerCase = false;
+    if (grip !== upper) {
+      isLowerCase = true;
+      grip = upper;
+    }
+    grip = b.joinByFaceIndices(a.splitByFaceNames(grip));
+    if (isLowerCase) {
+      grip = grip.toLowerCase();
+    }
+    return grip + suffix;
+  }
+
+  public convert(
+    mv: BlockMove,
+    a: FaceNameSwizzler,
+    b: FaceNameSwizzler,
+  ): BlockMove {
+    const grip = mv.family;
+    const ngrip = this.convertString(grip, a, b);
+    if (grip === ngrip) {
+      return mv;
+    } else {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, ngrip, mv.amount);
+    }
+  }
 
   public notationToInternal(mv: BlockMove): BlockMove {
-    return mv;
+    const r = this.convert(mv, this.externalNames, this.internalNames);
+    return r;
   }
 
   public notationToExternal(mv: BlockMove): BlockMove {
-    return mv;
+    return this.convert(mv, this.internalNames, this.externalNames);
   }
 }

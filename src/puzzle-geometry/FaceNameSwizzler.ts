@@ -4,18 +4,14 @@
 
 export class FaceNameSwizzler {
   public prefixFree: boolean = true;
-  public toOrdinal: { [key: string]: number } = {};
   public gripnames: string[] = [];
   constructor(public facenames: string[], gripnames_arg?: string[]) {
     if (gripnames_arg) {
       this.gripnames = gripnames_arg;
     }
-    for (let i = 0; i < facenames.length; i++) {
-      this.toOrdinal[facenames[i]] = i;
-    }
     for (let i = 0; this.prefixFree && i < facenames.length; i++) {
       for (let j = 0; this.prefixFree && j < facenames.length; j++) {
-        if (i !== j && facenames[i][1].startsWith(facenames[j][1])) {
+        if (i !== j && facenames[i].startsWith(facenames[j])) {
           this.prefixFree = false;
         }
       }
@@ -53,6 +49,20 @@ export class FaceNameSwizzler {
       }
     }
     return r;
+  }
+
+  // cons a grip from an array of numbers.
+  public joinByFaceIndices(list: number[]): string {
+    let sep = "";
+    const r = [];
+    for (let i = 0; i < list.length; i++) {
+      r.push(sep);
+      r.push(this.facenames[list[i]]);
+      if (!this.prefixFree) {
+        sep = "_";
+      }
+    }
+    return r.join("");
   }
 
   /*

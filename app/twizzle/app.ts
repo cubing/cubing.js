@@ -654,7 +654,16 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
     : pg3d.experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(targets);
   if (intersects.length > 0) {
-    canvas.title = intersects[0].object.userData.name;
+    if (pg) {
+      canvas.title = pg.notationMapper.notationToExternal(
+        new BlockMove(
+          undefined,
+          undefined,
+          intersects[0].object.userData.name,
+          1,
+        ),
+      ).family;
+    }
   } else {
     canvas.title = "";
   }

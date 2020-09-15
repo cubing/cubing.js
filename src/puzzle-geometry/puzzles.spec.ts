@@ -1,7 +1,7 @@
 import { getPuzzleGeometryByDesc } from "./index";
 import { Puzzles } from "./Puzzles";
 import { KPuzzleDefinition, Order, Transformation } from "../kpuzzle";
-import { parse } from "../alg";
+import { BlockMove, parse, Sequence } from "../alg";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
 /**
  *   Test basic things about puzzles created by puzzle
@@ -75,7 +75,14 @@ describe("PuzzleGeometry-Puzzles", () => {
       const kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition;
       const sep = ", ";
       const seq = Object.getOwnPropertyNames(kpuzzledef.moves).sort().join(" ");
-      const algo = parse(seq);
+      let algo = parse(seq);
+      // TODO:  likely a temporary hack until we resolve how notations are
+      // added or set in puzzle geometry.
+      const bms = [];
+      for (const bm of algo.nestedUnits) {
+        bms.push(pg.notationMapper.notationToExternal(bm as BlockMove));
+      }
+      algo = new Sequence(bms);
       const ksp = new KSolvePuzzle(kpuzzledef);
       const tai = new TreeAlgIndexer(ksp, algo);
       const tr = tai.transformAtIndex(tai.numMoves());
