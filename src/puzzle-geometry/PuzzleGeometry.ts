@@ -30,6 +30,7 @@ import {
   MoveNotation,
   Transformation as KTransformation,
 } from "./interfaces";
+import { NotationMapper, NullMapper, NxNCubeMapper } from "./NotationMapper";
 
 export interface StickerDatSticker {
   coords: number[][];
@@ -51,7 +52,7 @@ export interface StickerDat {
   foundations: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
-  unswizzle(s: string): string;
+  unswizzle(mv: BlockMove): string;
 }
 
 // TODO: Remove this once we no longer have prefix restrictions.
@@ -555,6 +556,8 @@ export class PuzzleGeometry {
   public colors: any = [];
   public faceorder: any = [];
   public faceprecedence: number[] = [];
+  public notationMapper: NotationMapper = new NullMapper();
+  public addCubeNotationMapper: boolean = false;
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
     function asstructured(v: any): any {
       if (typeof v === "string") {
@@ -999,6 +1002,11 @@ export class PuzzleGeometry {
     if (this.verbose) {
       console.log("# Short edge is " + shortedge);
     }
+    // add nxnxn cube notation if it has cube face moves
+    if (shape === "c" && sawface) {
+      this.addCubeNotationMapper = true;
+      this.notationMapper = new NxNCubeMapper(3);
+    }
   }
 
   public keyface(face: Quat[]): string {
@@ -1153,6 +1161,7 @@ export class PuzzleGeometry {
     const sizes2 = moverotations.map((_) => 1 + _.length);
     this.movesetorders = sizes2;
     const movesetgeos = [];
+    let gtype = "?";
     for (let i = 0; i < moveplanesets.length; i++) {
       const p0 = moveplanenormals[i];
       let neg = null;
@@ -1161,8 +1170,10 @@ export class PuzzleGeometry {
         const d = p0.dot(this.geonormals[j][0]);
         if (Math.abs(d - 1) < eps) {
           pos = [this.geonormals[j][1], this.geonormals[j][2]];
+          gtype = this.geonormals[j][2];
         } else if (Math.abs(d + 1) < eps) {
           neg = [this.geonormals[j][1], this.geonormals[j][2]];
+          gtype = this.geonormals[j][2];
         }
       }
       if (pos === null || neg === null) {
@@ -1175,6 +1186,10 @@ export class PuzzleGeometry {
         neg[1],
         1 + moveplanesets[i].length,
       ]);
+      if (this.addCubeNotationMapper && gtype === "f") {
+        this.notationMapper = new NxNCubeMapper(1 + moveplanesets[i].length);
+        this.addCubeNotationMapper = false;
+      }
     }
     this.movesetgeos = movesetgeos;
     //  Cubies are split by move plane sets.  For each cubie we can
@@ -1472,7 +1487,9 @@ export class PuzzleGeometry {
     }
   }
 
-  public unswizzle(s: string): string {
+  public unswizzle(mv: BlockMove): string {
+    mv = this.notationMapper.notationToInternal(mv);
+    let s = mv.family;
     if ((s.endsWith("v") || s.endsWith("w")) && s[0] <= "Z") {
       s = s.slice(0, s.length - 1);
     }
@@ -1523,6 +1540,7 @@ export class PuzzleGeometry {
   }
 
   public parseBlockMove(blockmove: BlockMove): any {
+    blockmove = this.notationMapper.notationToInternal(blockmove); // pluggable notation
     let grip = blockmove.family;
     let fullrotation = false;
     if (grip.endsWith("v") && grip[0] <= "Z") {
@@ -2661,8 +2679,8 @@ export class PuzzleGeometry {
       }
     }
     const f = (function () {
-      return function (s: string): string {
-        return this.unswizzle(s);
+      return function (mv: BlockMove): string {
+        return this.unswizzle(mv);
       };
     })().bind(this);
     return {

@@ -210,7 +210,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     for (const moveProgress of p.movesInProgress) {
       const blockMove = moveProgress.move as BlockMove;
       const simpleMove = modifiedBlockMove(blockMove, { amount: 1 });
-      const unswizzled = this.pgdat.unswizzle(blockMove.family);
+      const unswizzled = this.pgdat.unswizzle(blockMove);
       const baseMove = stateForBlockMove(this.definition, simpleMove);
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;

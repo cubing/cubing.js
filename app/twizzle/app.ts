@@ -36,6 +36,7 @@ import { LegacyExperimentalPG3DViewConfig } from "../../src/twisty/dom/TwistyPla
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
 let twisty: TwistyPlayer;
+let pg: PuzzleGeometry | undefined;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
 let safeKpuzzle: KPuzzleDefinition | undefined;
@@ -144,6 +145,9 @@ function intersectionToMove(
   }
   if (getModValueForMove(move) !== 2 && !rightClick) {
     move = modifiedBlockMove(move, { amount: -move.amount });
+  }
+  if (pg) {
+    move = pg.notationMapper.notationToExternal(move);
   }
   return move;
 }
@@ -476,7 +480,7 @@ function checkchange(): void {
         safeKpuzzle = undefined;
         savealg = false;
       }
-      const pg = new PuzzleGeometry(p[0], p[1], options);
+      pg = new PuzzleGeometry(p[0], p[1], options);
       pg.allstickers();
       pg.genperms();
       const sep = "\n";
