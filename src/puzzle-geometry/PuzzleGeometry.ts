@@ -902,7 +902,7 @@ export class PuzzleGeometry {
     this.edgenames = edgenames;
     this.vertexnames = vertexnames;
     this.geonormals = geonormals;
-    const geonormalnames = geonormals.map((_: any) => _[0]);
+    const geonormalnames = geonormals.map((_: any) => _[1]);
     this.swizzler.setGripNames(geonormalnames);
     if (this.verbose) {
       console.log(

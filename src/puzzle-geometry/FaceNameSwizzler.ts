@@ -139,11 +139,8 @@ export class FaceNameSwizzler {
     const upperCaseGrip = s.toUpperCase();
     for (let i = 0; i < this.gripnames.length; i++) {
       const g = this.gripnames[i];
-      if (this.spinmatch(upperCaseGrip, g[0])) {
-        return g[0];
-      }
-      if (this.spinmatch(upperCaseGrip, g[2])) {
-        return g[2];
+      if (this.spinmatch(upperCaseGrip, g)) {
+        return g;
       }
     }
     return s;
