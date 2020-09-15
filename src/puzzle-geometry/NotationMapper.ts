@@ -83,11 +83,7 @@ export class NxNCubeMapper implements NotationMapper {
   }
 }
 
-// face renaming mapper.  Accepts two lists of face names and
-// makes things use the external face names externally and the
-// internal face names internally.  Note that this does all
-// swizzling/unswizzling based on the face names and their
-// prefix-free-ness, and it handles all the underscores as well.
+// face renaming mapper.  Accepts two face name remappers.
 
 export class FaceRenamingMapper implements NotationMapper {
   constructor(public internalNames: string[], public externalNames: string[]) {}

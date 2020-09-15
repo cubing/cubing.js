@@ -22,6 +22,10 @@ export class FaceNameSwizzler {
     }
   }
 
+  public setGripNames(names: string[]): void {
+    this.gripnames = names;
+  }
+
   // split a string into face names and return a list of
   // indices.
   public splitByFaceNames(s: string): number[] {

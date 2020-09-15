@@ -526,7 +526,6 @@ export class PuzzleGeometry {
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public movesbyslice: any[]; // move as perms by slice
   public cmovesbyslice: number[][][][] = []; // cmoves as perms by slice
-  public facenamesPrefixfree: boolean = true; // are facenames prefix-free?
   // options
   public verbose: number = 0; // verbosity (console.log)
   public allmoves: boolean = false; // generate all slice moves in ksolve
@@ -871,17 +870,8 @@ export class PuzzleGeometry {
         searchaddelement(vertexnames, face[jj], [facename, e2, e1]);
       }
     }
-    // Are the facenames prefix-free?  Select a separator if they are
-    // not.
-    this.facenamesPrefixfree = true;
-    for (let i = 0; i < facenames.length; i++) {
-      for (let j = 0; j < facenames.length; j++) {
-        if (i !== j && facenames[i][1].startsWith(facenames[j][1])) {
-          this.facenamesPrefixfree = false;
-        }
-      }
-    }
-    const sep = this.facenamesPrefixfree ? "" : "_";
+    this.swizzler = new FaceNameSwizzler(facenames);
+    const sep = this.swizzler.prefixFree ? "" : "_";
     // fix the edge names; use face precedence order
     for (let i = 0; i < edgenames.length; i++) {
       if (edgenames[i].length !== 3) {
@@ -954,7 +944,7 @@ export class PuzzleGeometry {
     this.vertexnames = vertexnames;
     this.geonormals = geonormals;
     const geonormalnames = geonormals.map((_: any) => _[0]);
-    this.swizzler = new FaceNameSwizzler(this.facenames, geonormalnames);
+    this.swizzler.setGripNames(geonormalnames);
     if (this.verbose) {
       console.log(
         "# Distances: face " +
