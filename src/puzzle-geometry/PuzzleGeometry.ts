@@ -31,6 +31,7 @@ import {
   Transformation as KTransformation,
 } from "./interfaces";
 import { NotationMapper, NullMapper, NxNCubeMapper } from "./NotationMapper";
+import { FaceNameSwizzler } from "./FaceNameSwizzler";
 
 export interface StickerDatSticker {
   coords: number[][];
@@ -556,6 +557,7 @@ export class PuzzleGeometry {
   public colors: any = [];
   public faceorder: any = [];
   public faceprecedence: number[] = [];
+  public swizzler: FaceNameSwizzler;
   public notationMapper: NotationMapper = new NullMapper();
   public addCubeNotationMapper: boolean = false;
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
@@ -951,6 +953,8 @@ export class PuzzleGeometry {
     this.edgenames = edgenames;
     this.vertexnames = vertexnames;
     this.geonormals = geonormals;
+    const geonormalnames = geonormals.map((_: any) => _[0]);
+    this.swizzler = new FaceNameSwizzler(this.facenames, geonormalnames);
     if (this.verbose) {
       console.log(
         "# Distances: face " +
@@ -1420,90 +1424,9 @@ export class PuzzleGeometry {
     }
   }
 
-  /*
-   *   Try to match something the user gave us with some geometric
-   *   feature.  We used to have strict requirements:
-   *
-   *      a)  The set of face names are prefix free
-   *      b)  When specifying a corner, all coincident planes were
-   *          specified
-   *
-   *   But, to allow megaminx to have more reasonable and
-   *   conventional names, and to permit shorter canonical
-   *   names, we are relaxing these requirements and adding
-   *   new syntax.  Now:
-   *
-   *      a)  Face names need not be syntax free.
-   *      b)  When parsing a geometric name, we use greedy
-   *          matching, so the longest name that matches the
-   *          user string at the current position is the one
-   *          assumed to match.
-   *      c)  Underscores are permitted to separate face names
-   *          (both in user input and in geometric
-   *          descriptions).
-   *      d)  Default names of corner moves where corners have
-   *          more than three corners, need only include three
-   *          of the corners.
-   *
-   *   This code is not performance-sensitive so we can do it a
-   *   slow and simple way.
-   */
-  public spinmatch(userinput: string, longname: string): boolean {
-    // are these the same rotationally?
-    if (userinput === longname) {
-      return true;
-    }
-    try {
-      const e1 = splitByFaceNames(userinput, this.facenames);
-      const e2 = splitByFaceNames(longname, this.facenames);
-      // All elements of userinput need to be in the longname.
-      // There should be no duplicate elements in the userinput.
-      // if both have length 1 or length 2, the sets must be equal.
-      // if both have length 3 or more, then the first set must be
-      // a subset of the second.  Order doesn't matter.
-      if (e1.length !== e2.length && e1.length < 3) {
-        return false;
-      }
-      for (let i = 0; i < e1.length; i++) {
-        for (let j = 0; j < i; j++) {
-          if (e1[i] === e1[j]) {
-            return false;
-          }
-        }
-        let found = false;
-        for (let j = 0; j < e2.length; j++) {
-          if (e1[i] === e2[j]) {
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
-          return false;
-        }
-      }
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
   public unswizzle(mv: BlockMove): string {
     mv = this.notationMapper.notationToInternal(mv);
-    let s = mv.family;
-    if ((s.endsWith("v") || s.endsWith("w")) && s[0] <= "Z") {
-      s = s.slice(0, s.length - 1);
-    }
-    const upperCaseGrip = s.toUpperCase();
-    for (let i = 0; i < this.movesetgeos.length; i++) {
-      const g = this.movesetgeos[i];
-      if (this.spinmatch(upperCaseGrip, g[0])) {
-        return g[0];
-      }
-      if (this.spinmatch(upperCaseGrip, g[2])) {
-        return g[2];
-      }
-    }
-    return s;
+    return this.swizzler.unswizzle(mv.family);
   }
 
   // We use an extremely permissive parse here; any character but
@@ -1558,16 +1481,16 @@ export class PuzzleGeometry {
     }
     let geo;
     let msi = -1;
-    const upperCaseGrip = grip.toUpperCase();
+    const geoname = this.swizzler.unswizzle(grip);
     let firstgrip = false;
     for (let i = 0; i < this.movesetgeos.length; i++) {
       const g = this.movesetgeos[i];
-      if (this.spinmatch(upperCaseGrip, g[0])) {
+      if (geoname === g[0]) {
         firstgrip = true;
         geo = g;
         msi = i;
       }
-      if (this.spinmatch(upperCaseGrip, g[2])) {
+      if (geoname === g[2]) {
         firstgrip = false;
         geo = g;
         msi = i;
@@ -1575,7 +1498,7 @@ export class PuzzleGeometry {
     }
     let loslice = 1;
     let hislice = 1;
-    if (upperCaseGrip !== grip) {
+    if (grip.toUpperCase() !== grip) {
       hislice = 2;
     }
     if (geo === undefined) {
@@ -1587,7 +1510,7 @@ export class PuzzleGeometry {
     if (blockmove.innerLayer !== undefined) {
       if (blockmove.outerLayer === undefined) {
         hislice = blockmove.innerLayer;
-        if (upperCaseGrip === grip) {
+        if (geoname === grip) {
           loslice = hislice;
         } else {
           loslice = 1;
@@ -2227,11 +2150,13 @@ export class PuzzleGeometry {
     );
     let feature1: Quat | null = null;
     let feature2: Quat | null = null;
+    const feature1geoname = this.swizzler.unswizzle(feature1name);
+    const feature2geoname = this.swizzler.unswizzle(feature2name);
     for (const gn of this.geonormals) {
-      if (this.spinmatch(feature1name, gn[1])) {
+      if (feature1geoname === gn[1]) {
         feature1 = gn[0];
       }
-      if (this.spinmatch(feature2name, gn[1])) {
+      if (feature2geoname === gn[1]) {
         feature2 = gn[0];
       }
     }
@@ -2699,9 +2624,10 @@ export class PuzzleGeometry {
   //  Returns undefined if no such geometric element.
   public getGeoNormal(geoname: string): number[] | undefined {
     const rot = this.getInitial3DRotation();
+    const grip = this.swizzler.unswizzle(geoname);
     for (let j = 0; j < this.geonormals.length; j++) {
       const gn = this.geonormals[j];
-      if (this.spinmatch(geoname, gn[1])) {
+      if (grip === gn[1]) {
         const r = toCoords(gn[0].rotatepoint(rot), 1);
         //  This routine is intended to use for the camera location.
         //  If the camera location is vertical, and we give some

@@ -28,7 +28,6 @@ export class NxNCubeMapper implements NotationMapper {
       } else if (grip === "z") {
         mv = new BlockMove(undefined, undefined, "Fv", mv.amount);
       }
-      console.log("Looking at grip " + grip + " slices " + this.slices);
       if ((this.slices & 1) === 1) {
         if (grip === "E") {
           mv = new BlockMove(undefined, (this.slices + 1) / 2, "D", mv.amount);
@@ -81,5 +80,23 @@ export class NxNCubeMapper implements NotationMapper {
       v = -v;
     }
     return new BlockMove(undefined, undefined, family, v);
+  }
+}
+
+// face renaming mapper.  Accepts two lists of face names and
+// makes things use the external face names externally and the
+// internal face names internally.  Note that this does all
+// swizzling/unswizzling based on the face names and their
+// prefix-free-ness, and it handles all the underscores as well.
+
+export class FaceRenamingMapper implements NotationMapper {
+  constructor(public internalNames: string[], public externalNames: string[]) {}
+
+  public notationToInternal(mv: BlockMove): BlockMove {
+    return mv;
+  }
+
+  public notationToExternal(mv: BlockMove): BlockMove {
+    return mv;
   }
 }
