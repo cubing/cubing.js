@@ -32,6 +32,7 @@ import {
 } from "./interfaces";
 import {
   FaceRenamingMapper,
+  MegaminxScramblingNotationMapper,
   NotationMapper,
   NullMapper,
   NxNxNCubeMapper,
@@ -967,6 +968,7 @@ export class PuzzleGeometry {
       );
     }
     if (shape === "d" && sawface && NEW_FACE_NAMES) {
+      this.addNotationMapper = "Megaminx";
       this.notationMapper = new FaceRenamingMapper(
         this.swizzler,
         new FaceNameSwizzler([
@@ -1166,6 +1168,14 @@ export class PuzzleGeometry {
       ]);
       if (this.addNotationMapper === "NxNxNCubeMapper" && gtype === "f") {
         this.notationMapper = new NxNxNCubeMapper(1 + moveplanesets[i].length);
+        this.addNotationMapper = "";
+      }
+      if (this.addNotationMapper === "Megaminx" && gtype === "f") {
+        if (1 + moveplanesets[i].length === 3) {
+          this.notationMapper = new MegaminxScramblingNotationMapper(
+            this.notationMapper,
+          );
+        }
         this.addNotationMapper = "";
       }
     }

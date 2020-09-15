@@ -140,3 +140,33 @@ export class FaceRenamingMapper implements NotationMapper {
     return this.convert(mv, this.internalNames, this.externalNames);
   }
 }
+
+// Sits on top of a (possibly null) notation mapper, and
+// adds R++/R--/D++/D-- notation mapping.
+export class MegaminxScramblingNotationMapper implements NotationMapper {
+  constructor(private child: NotationMapper) {}
+
+  public notationToInternal(mv: BlockMove): BlockMove {
+    if (
+      mv.innerLayer === undefined &&
+      mv.outerLayer === undefined &&
+      mv.amount === 1
+    ) {
+      if (mv.family === "R++") {
+        return new BlockMove(2, 3, "L", -1);
+      } else if (mv.family === "R--") {
+        return new BlockMove(2, 3, "L", 1);
+      } else if (mv.family === "U++") {
+        return new BlockMove(2, 3, "U", -1);
+      } else if (mv.family === "U--") {
+        return new BlockMove(2, 3, "U", 1);
+      }
+    }
+    return this.child.notationToInternal(mv);
+  }
+
+  // we never rewrite click moves to these moves.
+  public notationToExternal(mv: BlockMove): BlockMove {
+    return this.child.notationToExternal(mv);
+  }
+}
