@@ -71,7 +71,12 @@ function isCharUppercase(c: string): boolean {
 
 function baseMetric(move: BlockMove): number {
   const fam = move.family;
-  if (isCharUppercase(fam[0]) && fam[fam.length - 1] === "v") {
+  if (
+    (isCharUppercase(fam[0]) && fam[fam.length - 1] === "v") ||
+    fam === "x" ||
+    fam === "y" ||
+    fam === "z"
+  ) {
     return 0;
   } else {
     return 1;
