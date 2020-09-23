@@ -65,7 +65,7 @@ class CountAnimatedMoves extends TraversalUp<number> {
 export interface AlgIndexer<P extends PuzzleWrapper> {
   getMove(index: number): BlockMove;
   indexToMoveStartTimestamp(index: number): Timestamp;
-  stateAtIndex(index: number, startTransforrmation?: State<P>): State<P>;
+  stateAtIndex(index: number, startTransformation?: State<P>): State<P>;
   transformAtIndex(index: number): State<P>;
   numMoves(): number;
   timestampToIndex(timestamp: Timestamp): number;
