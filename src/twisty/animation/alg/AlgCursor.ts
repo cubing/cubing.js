@@ -62,7 +62,7 @@ export class AlgCursor
   algToState(s: Sequence): Transformation {
     const kpuzzle = new KPuzzle(this.def);
     kpuzzle.applyAlg(s);
-    return kpuzzle.state;
+    return this.ksolvePuzzle.combine(this.def.startPieces, kpuzzle.state);
   }
 
   timeRange(): TimeRange {

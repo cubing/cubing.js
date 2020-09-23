@@ -49,13 +49,10 @@ export class TreeAlgIndexer<P extends PuzzleWrapper> implements AlgIndexer<P> {
     );
   }
 
-  public transformAtIndex(
-    index: number,
-    startTransformation?: State<P>,
-  ): State<P> {
-    if (startTransformation) {
-      return this.puzzle.combine(startTransformation, this.walker.st);
-    }
+  // TransformAtIndex does not reflect the start state; it only reflects
+  // the change from the start state to the current move index.  If you
+  // want the actual state, use stateAtIndex.
+  public transformAtIndex(index: number): State<P> {
     this.walker.moveByIndex(index);
     return this.walker.st;
   }
