@@ -20,7 +20,8 @@ export const twisty3DCanvasCSS = new CSSSource(`
   contain: content;
 }
 
-canvas {
+/* TODO: This is due to stats hack. Replace with \`canvas\`. */
+.wrapper > canvas {
   position: absolute;
   max-width: 100%;
   max-height: 100%;

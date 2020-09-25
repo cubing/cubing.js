@@ -7,6 +7,13 @@ import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
 import { TwistyOrbitControls } from "./TwistyOrbitControls";
 import { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
+import Stats from "three/examples/jsm/libs/stats.module";
+
+let SHOW_STATS = false;
+// Show render stats for newly contructed renderers.
+export function experimentalShowRenderStats(show: boolean): void {
+  SHOW_STATS = show;
+}
 
 let resizeObserverWarningShown = false;
 
@@ -48,6 +55,8 @@ export class Twisty3DCanvas
   private rendererIsShared: boolean;
   private canvas2DContext: CanvasRenderingContext2D;
 
+  private stats: Stats | null = null;
+
   // TODO: Are there any render duration performance concerns with removing this?
   #invisible: boolean = false;
   constructor(
@@ -59,6 +68,11 @@ export class Twisty3DCanvas
 
     this.scene = scene!;
     this.scene.addRenderTarget(this);
+    if (SHOW_STATS) {
+      this.stats = Stats();
+      this.stats.dom.style.position = "absolute";
+      this.addElement(this.stats.dom);
+    }
 
     // We rely on the resize logic to handle renderer dimensions.
     this.rendererIsShared = shareAllNewRenderers;
@@ -126,6 +140,7 @@ export class Twisty3DCanvas
   private render(): void {
     // Cancel any scheduled frame, since we're rendering right now.
     // We don't need to re-render until something schedules again.
+    this.stats?.begin();
     this.scheduler.cancelAnimFrame();
     if (this.resizePending) {
       this.resize();
@@ -149,6 +164,7 @@ export class Twisty3DCanvas
     if (this.#invisible) {
       this.contentWrapper.classList.remove("invisible");
     }
+    this.stats?.end();
   }
 
   private onResize(): void {
