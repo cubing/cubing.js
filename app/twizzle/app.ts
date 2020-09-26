@@ -197,7 +197,7 @@ function updateMoveCount(alg?: Sequence): void {
 }
 
 function saveCamera(): void {
-  savedCameraPos = twisty.cameraPosition.clone();
+  savedCameraPos = twisty.cameraPosition!.clone();
   haveSavedCamera = true;
 }
 //  This function is *not* idempotent when we save the
