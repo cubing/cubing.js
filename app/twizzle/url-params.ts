@@ -6,6 +6,7 @@ export interface PartialURLParamValues {
   alg?: Sequence;
   puzzle?: string;
   puzzlegeometry?: string;
+  debugShowRenderStats?: boolean;
 }
 export type ParamName = keyof typeof paramDefaults;
 
@@ -13,12 +14,14 @@ interface CompleteURLParamValues extends PartialURLParamValues {
   alg: Sequence;
   puzzle: string;
   puzzlegeometry?: string;
+  debugShowRenderStats?: boolean;
 }
 
 const paramDefaults: CompleteURLParamValues = {
   alg: new Sequence([]),
   puzzle: "",
   puzzlegeometry: "",
+  debugShowRenderStats: false,
 };
 
 // TODO: Encapsulate and deduplicate this.
@@ -26,6 +29,7 @@ const paramDefaultStrings: { [s: string]: string } = {
   alg: "",
   puzzle: "",
   puzzlegeometry: "",
+  debugShowRenderStats: "",
 };
 
 export function getURLParam<K extends ParamName>(
@@ -45,6 +49,9 @@ export function getURLParam<K extends ParamName>(
     case "puzzlegeometry":
       // TODO: can we avoid the `as` cast?
       return str as CompleteURLParamValues[K];
+    case "debugShowRenderStats":
+      // TODO: can we avoid the `as` cast?
+      return (str === "true") as CompleteURLParamValues[K];
     default:
       // TODO: can we avoid the `as` cast?
       return str as CompleteURLParamValues[K];
@@ -70,6 +77,9 @@ export function setURLParams(newParams: PartialURLParamValues): void {
       case "puzzle":
       case "puzzlegeometry":
         setParam(key, value);
+        break;
+      case "debugShowRenderStats":
+        setParam(key, value ? "true" : "");
         break;
       default:
         console.warn("Unknown param", key, value);

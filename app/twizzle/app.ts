@@ -27,12 +27,18 @@ import {
   schreierSims,
   StickerDat,
 } from "../../src/puzzle-geometry/index";
-import { Twisty3DCanvas } from "../../src/twisty/dom/viewers/Twisty3DCanvas";
+import {
+  experimentalShowRenderStats,
+  Twisty3DCanvas,
+} from "../../src/twisty/dom/viewers/Twisty3DCanvas";
 import { TwistyPlayer } from "../../src/twisty/index";
 import { countMoves } from "./move-counter";
 import { getURLParam, setURLParams } from "./url-params";
 import { LegacyExperimentalPG3DViewConfig } from "../../src/twisty/dom/TwistyPlayer";
 
+if (getURLParam("debugShowRenderStats")) {
+  experimentalShowRenderStats(true);
+}
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
 let twisty: TwistyPlayer;
