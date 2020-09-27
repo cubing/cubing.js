@@ -20,7 +20,12 @@ const SUPPRESS_KNOWN_WARNINGS = true;
 const plugins = [
   pegjs(),
   eslint({
-    exclude: ["**/*.json", "**/*.pegjs", "**/*.svg"],
+    exclude: [
+      "src/vendor/node_modules/three/examples/jsm/libs/stats.module.*",
+      "**/*.json",
+      "**/*.pegjs",
+      "**/*.svg",
+    ],
   }),
   typescript2({
     typescript: typescript,
