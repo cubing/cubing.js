@@ -119,14 +119,16 @@
     <p>
       PuzzleGeometry includes a default 2D net unfolding for each of the five
       Platonic solids, a default face naming scheme, a default color scheme, a
-      default face precedence order, and a default 3D rendering. The face names
-      must be prefix-free (that is, no face name can be the prefix of another
-      face name). Edges are named (non-uniquely) as the concatenation of two
+      default face precedence order, and a default 3D rendering.
+      Edges are named (non-uniquely) as the concatenation of two
       face names, and vertices are named (non-uniquely) as the concatenation of
-      three to five face names, depending on how many planes come together at
-      the vertex. The faces in a vertex name can start with any face, but they
-      must proceed clockwise around the vertex (so on the cube, URF is fine, but
-      UFR is not.)
+      three to five face names, in any order.  The face names
+      can be prefix-free (that is, no face name can be the prefix of another
+      face name); if they are prefix-free, edge and vertex names are
+      concatenated without an underscore separator.  Otherwise, the face
+      names are separated by an underscore.  When typing moves, the underscore
+      separator is always allowed, even if the set of face names is
+      prefix-free.
     </p>
     <p>
       Since all the cutting planes are aligned with faces, edges, or vertices,
