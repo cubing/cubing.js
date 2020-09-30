@@ -27,6 +27,7 @@ import {
   schreierSims,
   StickerDat,
 } from "../../src/puzzle-geometry/index";
+import { LegacyExperimentalPG3DViewConfig } from "../../src/twisty/dom/TwistyPlayer";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
@@ -34,7 +35,6 @@ import {
 import { TwistyPlayer } from "../../src/twisty/index";
 import { countMoves } from "./move-counter";
 import { getURLParam, setURLParams } from "./url-params";
-import { LegacyExperimentalPG3DViewConfig } from "../../src/twisty/dom/TwistyPlayer";
 
 if (getURLParam("debugShowRenderStats")) {
   experimentalShowRenderStats(true);
@@ -686,7 +686,8 @@ function addMove(move: BlockMove): void {
   );
   // TODO: Avoid round-trip through string?
   lastalgo = algToString(newAlg);
-  twisty.experimentalAddMove(move);
+  console.log("exp");
+  twisty.experimentalAddMove(move, true, true);
   algoinput.value = lastalgo;
   updateMoveCount(newAlg);
   setURLParams({ alg: newAlg });

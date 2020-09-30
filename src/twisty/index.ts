@@ -8,6 +8,7 @@ export {
 } from "./dom/viewers/Twisty3DCanvas";
 export { TwistyPlayer } from "./dom/TwistyPlayer";
 export { TwistyPlayerInitialConfig } from "./dom/TwistyPlayerConfig";
+export { TimelineActionEvent } from "./animation/Timeline";
 
 // Old
 export { Cube3D } from "./3D/puzzles/Cube3D";

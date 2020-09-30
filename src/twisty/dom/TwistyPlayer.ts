@@ -13,7 +13,12 @@ import { PG3D } from "../3D/puzzles/PG3D";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor } from "../animation/alg/AlgCursor";
-import { Timeline } from "../animation/Timeline";
+import {
+  Timeline,
+  TimelineAction,
+  TimelineActionEvent,
+  TimestampLocationType,
+} from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
@@ -73,6 +78,8 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   viewerElems: TwistyViewerElement[] = []; // TODO: can we represent the intermediate state better?
   controlElems: TwistyControlElement[] = []; // TODO: can we represent the intermediate state better?
+
+  #hackyPendingFinalMoveCoalesce: boolean = false;
 
   #viewerWrapper: TwistyViewerWrapper;
   public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
@@ -282,6 +289,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   // TODO: It seems this called after the `attributeChangedCallback`s for initial values. Can we rely on this?
   protected connectedCallback(): void {
     this.timeline = new Timeline();
+    this.timeline.addActionListener(this);
 
     this.contentWrapper.classList.toggle(
       "checkered",
@@ -553,14 +561,25 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   // TODO: Handle playing the new move vs. just modying the alg.
-  experimentalAddMove(move: BlockMove, coalesce: boolean = false): void {
+  // Note: setting `coalesce`
+  experimentalAddMove(
+    move: BlockMove,
+    coalesce: boolean = false,
+    coalesceDelayed: boolean = false,
+  ): void {
+    if (this.#hackyPendingFinalMoveCoalesce) {
+      this.hackyCoalescePending();
+    }
     const oldNumMoves = countMoves(this.alg); // TODO
     const newAlg = experimentalAppendBlockMove(
       this.alg,
       move,
-      coalesce,
+      coalesce && !coalesceDelayed,
       this.legacyExperimentalCoalesceModFunc(move),
     );
+    if (coalesce && coalesceDelayed) {
+      this.#hackyPendingFinalMoveCoalesce = true;
+    }
 
     this.alg = newAlg;
     // TODO
@@ -570,6 +589,34 @@ export class TwistyPlayer extends ManagedCustomElement {
       this.timeline.jumpToEnd();
     }
     this.timeline.play();
+  }
+
+  onTimelineAction(actionEvent: TimelineActionEvent): void {
+    if (
+      actionEvent.action === TimelineAction.Pausing &&
+      actionEvent.locationType === TimestampLocationType.EndOfTimeline &&
+      this.#hackyPendingFinalMoveCoalesce
+    ) {
+      this.hackyCoalescePending();
+      this.timeline.jumpToEnd();
+    }
+  }
+
+  private hackyCoalescePending(): void {
+    const units = this.alg.nestedUnits;
+    const length = units.length;
+    const pending = this.#hackyPendingFinalMoveCoalesce;
+    this.#hackyPendingFinalMoveCoalesce = false;
+    if (pending && length > 1 && units[length - 1].type === "blockMove") {
+      const finalMove = units[length - 1] as BlockMove;
+      const newAlg = experimentalAppendBlockMove(
+        new Sequence(units.slice(0, length - 1)),
+        finalMove,
+        true,
+        this.legacyExperimentalCoalesceModFunc(finalMove),
+      );
+      this.alg = newAlg;
+    }
   }
 
   fullscreen(): void {
