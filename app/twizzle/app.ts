@@ -102,6 +102,10 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
 }
 
 function getModValueForMove(move: BlockMove): number {
+  if (!pg) {
+    return 1;
+  }
+  move = pg.notationMapper.notationToInternal(move);
   let family = move.family;
   if (family.length > 1) {
     if (
@@ -149,11 +153,11 @@ function intersectionToMove(
       move = modifiedBlockMove(move, { family: bestGrip + "v" });
     }
   }
-  if (getModValueForMove(move) !== 2 && !rightClick) {
-    move = modifiedBlockMove(move, { amount: -move.amount });
-  }
   if (pg) {
     move = pg.notationMapper.notationToExternal(move);
+  }
+  if (getModValueForMove(move) !== 2 && !rightClick) {
+    move = modifiedBlockMove(move, { amount: -move.amount });
   }
   return move;
 }
@@ -686,7 +690,6 @@ function addMove(move: BlockMove): void {
   );
   // TODO: Avoid round-trip through string?
   lastalgo = algToString(newAlg);
-  console.log("exp");
   twisty.experimentalAddMove(move, true, true);
   algoinput.value = lastalgo;
   updateMoveCount(newAlg);

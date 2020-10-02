@@ -209,11 +209,13 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     // FIXME tgr const kp = new KPuzzle(this.definition);
     for (const moveProgress of p.movesInProgress) {
       const externalBlockMove = moveProgress.move as BlockMove;
+      // TODO: unswizzle goes external to internal, and so does the call after that
+      // and so does the stateForBlockMove call
+      const unswizzled = this.pgdat.unswizzle(externalBlockMove);
       const blockMove = this.pgdat.notationMapper.notationToInternal(
         externalBlockMove,
       );
-      const simpleMove = modifiedBlockMove(blockMove, { amount: 1 });
-      const unswizzled = this.pgdat.unswizzle(blockMove);
+      const simpleMove = modifiedBlockMove(externalBlockMove, { amount: 1 });
       const baseMove = stateForBlockMove(this.definition, simpleMove);
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
