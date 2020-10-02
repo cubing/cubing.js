@@ -150,16 +150,16 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
     if (
       mv.innerLayer === undefined &&
       mv.outerLayer === undefined &&
-      mv.amount === 1
+      Math.abs(mv.amount) === 1
     ) {
       if (mv.family === "R++") {
-        return new BlockMove(2, 3, "L", -1);
+        return new BlockMove(2, 3, "L", -2 * mv.amount);
       } else if (mv.family === "R--") {
-        return new BlockMove(2, 3, "L", 1);
-      } else if (mv.family === "U++") {
-        return new BlockMove(2, 3, "U", -1);
-      } else if (mv.family === "U--") {
-        return new BlockMove(2, 3, "U", 1);
+        return new BlockMove(2, 3, "L", 2 * mv.amount);
+      } else if (mv.family === "D++") {
+        return new BlockMove(2, 3, "U", -2 * mv.amount);
+      } else if (mv.family === "D--") {
+        return new BlockMove(2, 3, "U", 2 * mv.amount);
       }
     }
     return this.child.notationToInternal(mv);

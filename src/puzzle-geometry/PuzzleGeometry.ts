@@ -60,6 +60,7 @@ export interface StickerDat {
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
   unswizzle(mv: BlockMove): string;
+  notationMapper: NotationMapper;
 }
 
 // TODO: Remove this once we no longer have prefix restrictions.
@@ -2598,6 +2599,7 @@ export class PuzzleGeometry {
       faces,
       axis: grips,
       unswizzle: f,
+      notationMapper: this.notationMapper,
     };
   }
 
@@ -2652,7 +2654,7 @@ class PGNotation implements MoveNotation {
     }
     const pgmv = this.pg.getMoveFromBits(
       bits,
-      move.amount,
+      mv[5],
       !mv[4],
       this.pg.cmovesbyslice[mv[1]],
       undefined,
