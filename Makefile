@@ -21,7 +21,7 @@ publish:
 .PHONY: setup-vr
 setup-vr:
 	adb tcpip 5555
-	adb reverse tcp:1234 tcp:1234
+	adb reverse tcp:333 tcp:333
 	adb reverse tcp:51785 tcp:51785
 
 .PHONY: restart-oculus-browser

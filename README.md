@@ -21,7 +21,7 @@
     npm install
     make dev
 
-This should open http://localhost:1234/ automatically.
+This should open http://localhost:333/ automatically.
 
 ## License
 
