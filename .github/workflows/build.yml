@@ -19,3 +19,5 @@ jobs:
       - run: npm install
       - run: make build
       - run: make test-node-require
+      - run: make parcel-build-for-twizzle-net
+      - run: make parcel-build-for-experiments-cubing-net
