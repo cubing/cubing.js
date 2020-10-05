@@ -276,12 +276,19 @@ export class Orbit {
   public mul(b: Orbit): Orbit {
     const n = this.perm.length;
     const newPerm = new Array<number>(n);
-    const newOri = new Array<number>(n);
-    for (let i = 0; i < n; i++) {
-      newPerm[i] = this.perm[b.perm[i]];
-      newOri[i] = (this.ori[b.perm[i]] + b.ori[i]) % this.orimod;
+    if (this.orimod === 1) {
+      for (let i = 0; i < n; i++) {
+        newPerm[i] = this.perm[b.perm[i]];
+      }
+      return new Orbit(newPerm, this.ori, this.orimod);
+    } else {
+      const newOri = new Array<number>(n);
+      for (let i = 0; i < n; i++) {
+        newPerm[i] = this.perm[b.perm[i]];
+        newOri[i] = (this.ori[b.perm[i]] + b.ori[i]) % this.orimod;
+      }
+      return new Orbit(newPerm, newOri, this.orimod);
     }
-    return new Orbit(newPerm, newOri, this.orimod);
   }
 
   public inv(): Orbit {

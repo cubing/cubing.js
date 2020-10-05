@@ -484,7 +484,6 @@ export class PuzzleGeometry {
   public orbitoris: number[]; // the orientation size of each orbit
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
-  public movesbyslice: any[]; // move as perms by slice
   public cmovesbyslice: number[][][][] = []; // cmoves as perms by slice
   // options
   public verbose: number = 0; // verbosity (console.log)
@@ -1544,7 +1543,6 @@ export class PuzzleGeometry {
       // did this already?
       return;
     }
-    const movesbyslice = [];
     const cmovesbyslice = [];
     // if orientCenters is set, we find all cubies that have only one
     // sticker and that sticker is in the center of a face, and we
@@ -1588,10 +1586,8 @@ export class PuzzleGeometry {
         }
         slicecnts[t]++;
       }
-      const axismoves = [];
       const axiscmoves = [];
       for (let sc = 0; sc < slicecnts.length; sc++) {
-        const slicemoves = [];
         const slicecmoves = [];
         const cubiedone = [];
         for (let i = 0; i < this.faces.length; i++) {
@@ -1687,9 +1683,6 @@ export class PuzzleGeometry {
               }
             }
           }
-          if (a.length > 1) {
-            slicemoves.push(a);
-          }
           if (b.length > 2 && !cubiedone[b[0]]) {
             slicecmoves.push(b);
           }
@@ -1697,13 +1690,10 @@ export class PuzzleGeometry {
             cubiedone[b[j]] = true;
           }
         }
-        axismoves.push(slicemoves);
         axiscmoves.push(slicecmoves);
       }
-      movesbyslice.push(axismoves);
       cmovesbyslice.push(axiscmoves);
     }
-    this.movesbyslice = movesbyslice;
     this.cmovesbyslice = cmovesbyslice;
     if (this.movelist !== undefined) {
       const parsedmovelist: any[] = [];
