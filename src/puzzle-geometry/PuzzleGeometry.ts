@@ -484,7 +484,7 @@ export class PuzzleGeometry {
   public orbitoris: number[]; // the orientation size of each orbit
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
-  public cmovesbyslice: number[][][][] = []; // cmoves as perms by slice
+  public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
   // options
   public verbose: number = 0; // verbosity (console.log)
   public allmoves: boolean = false; // generate all slice moves in ksolve
@@ -1594,7 +1594,6 @@ export class PuzzleGeometry {
           if (slicenum[i] !== sc) {
             continue;
           }
-          const a = [i];
           const b = this.facetocubies[i].slice();
           let face = this.faces[i];
           let fi2 = i;
@@ -1608,7 +1607,6 @@ export class PuzzleGeometry {
             if (slicenum[fi2] !== sc) {
               throw new Error("Bad movement?");
             }
-            a.push(fi2);
             const c = this.facetocubies[fi2];
             b.push(c[0], c[1]);
             face = face2;
@@ -1634,7 +1632,7 @@ export class PuzzleGeometry {
           // The move moving the center might not be the same modulo as the
           // center itself.
           if (
-            a.length > 1 &&
+            b.length > 2 &&
             this.orientCenters &&
             (this.cubies[b[0]].length === 1 ||
               this.cubies[b[0]][0] === this.cubies[b[0]][1])
@@ -1646,9 +1644,9 @@ export class PuzzleGeometry {
               ) < eps
             ) {
               // how does remapping of the face/point set map to the original?
-              let face1 = this.faces[a[0]];
-              for (let ii = 0; ii < a.length; ii++) {
-                const face0 = this.faces[a[ii]];
+              let face1 = this.cubies[b[0]][0];
+              for (let ii = 0; ii < b.length; ii += 2) {
+                const face0 = this.cubies[b[ii]][0];
                 let o = -1;
                 for (let jj = 0; jj < face1.length; jj++) {
                   if (face0[jj].dist(face1[0]) < eps) {
@@ -1661,18 +1659,17 @@ export class PuzzleGeometry {
                     "Couldn't find rotation of center faces; ignoring for now.",
                   );
                 } else {
-                  b[2 * ii + 1] = o;
+                  b[ii + 1] = o;
                   face1 = this.moverotations[k][0].rotateface(face1);
                 }
               }
             }
           }
-          // a.length == 1 means a sticker is spinning in place.
+          // b.length == 2 means a sticker is spinning in place.
           // in this case we add duplicate stickers
           // so that we can make it animate properly in a 3D world.
-          if (a.length === 1 && this.orientCenters) {
+          if (b.length === 2 && this.orientCenters) {
             for (let ii = 1; ii < this.movesetorders[k]; ii++) {
-              a.push(a[0]);
               if (sc === 0) {
                 b.push(b[0], ii);
               } else {
@@ -1684,7 +1681,12 @@ export class PuzzleGeometry {
             }
           }
           if (b.length > 2 && !cubiedone[b[0]]) {
-            slicecmoves.push(b);
+            if (b.length !== 2 * this.movesetorders[k]) {
+              throw new Error("Bad length in perm gen");
+            }
+            for (let j = 0; j < b.length; j++) {
+              slicecmoves.push(b[j]);
+            }
           }
           for (let j = 0; j < b.length; j += 2) {
             cubiedone[b[j]] = true;
@@ -1836,11 +1838,7 @@ export class PuzzleGeometry {
     );
   }
 
-  public skipcubie(set: number[]): boolean {
-    if (set.length === 0) {
-      return true;
-    }
-    const fi = set[0];
+  public skipcubie(fi: number): boolean {
     return this.skipbyori(fi);
   }
 
@@ -1903,8 +1901,9 @@ export class PuzzleGeometry {
     movebits: number,
     amount: number,
     inverted: boolean,
-    axiscmoves: number[][][],
+    axiscmoves: number[][],
     setmoves: number[] | undefined,
+    movesetorder: number,
   ): Transformation {
     const moveorbits: Orbit[] = [];
     const perms = [];
@@ -1918,8 +1917,8 @@ export class PuzzleGeometry {
         continue;
       }
       const slicecmoves = axiscmoves[m];
-      for (let j = 0; j < slicecmoves.length; j++) {
-        const mperm = slicecmoves[j].slice();
+      for (let j = 0; j < slicecmoves.length; j += 2 * movesetorder) {
+        const mperm = slicecmoves.slice(j, j + 2 * movesetorder);
         const setnum = this.cubiesetnums[mperm[0]];
         for (let ii = 0; ii < mperm.length; ii += 2) {
           mperm[ii] = this.cubieordnums[mperm[ii]];
@@ -1977,6 +1976,7 @@ export class PuzzleGeometry {
     const setdefs: OrbitDef[] = [];
     for (let k = 0; k < this.moveplanesets.length; k++) {
       const moveset = this.getmovesets(k);
+      const movesetorder = this.movesetorders[k];
       // check there's no redundancy in moveset.
       for (let i = 0; i < moveset.length; i += 2) {
         for (let j = 0; j < i; j += 2) {
@@ -1995,11 +1995,11 @@ export class PuzzleGeometry {
           continue;
         }
         const slicecmoves = axiscmoves[i];
-        for (let j = 0; j < slicecmoves.length; j++) {
+        for (let j = 0; j < slicecmoves.length; j += 2 * movesetorder) {
           if (this.skipcubie(slicecmoves[j])) {
             continue;
           }
-          const ind = this.cubiesetnums[slicecmoves[j][0]];
+          const ind = this.cubiesetnums[slicecmoves[j]];
           setmoves[ind] = 1;
         }
       }
@@ -2059,6 +2059,7 @@ export class PuzzleGeometry {
           inverted,
           this.cmovesbyslice[k],
           setmoves,
+          this.movesetorders[k],
         );
         moves.push(mv);
       }
@@ -2646,6 +2647,7 @@ class PGNotation implements MoveNotation {
       !mv[4],
       this.pg.cmovesbyslice[mv[1]],
       undefined,
+      this.pg.movesetorders[mv[1]],
     );
     const r = this.od.transformToKPuzzle(pgmv);
     this.cache[key] = r;
