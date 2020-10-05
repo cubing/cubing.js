@@ -3,7 +3,7 @@
 /* tslint:disable only-arrow-functions */ // TODO
 /* tslint:disable typedef */ // TODO
 
-import { Perm } from "./Perm";
+import { iota, zeros, Perm } from "./Perm";
 import {
   Orbit,
   OrbitDef,
@@ -1910,16 +1910,8 @@ export class PuzzleGeometry {
     const perms = [];
     const oris = [];
     for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
-      const p = [];
-      for (let kk = 0; kk < this.cubieords[ii]; kk++) {
-        p.push(kk);
-      }
-      perms.push(p);
-      const o = [];
-      for (let kk = 0; kk < this.cubieords[ii]; kk++) {
-        o.push(0);
-      }
-      oris.push(o);
+      perms.push(iota(this.cubieords[ii]));
+      oris.push(zeros(this.cubieords[ii]));
     }
     for (let m = 0; m < axiscmoves.length; m++) {
       if (((movebits >> m) & 1) === 0) {
@@ -1938,11 +1930,15 @@ export class PuzzleGeometry {
           inc = mperm.length - 2;
           oinc = mperm.length - 1;
         }
+        if (perms[setnum] === iota(this.cubieords[setnum])) {
+          perms[setnum] = perms[setnum].slice();
+          if (this.orbitoris[setnum] > 1 && !this.killorientation) {
+            oris[setnum] = oris[setnum].slice();
+          }
+        }
         for (let ii = 0; ii < mperm.length; ii += 2) {
           perms[setnum][mperm[(ii + inc) % mperm.length]] = mperm[ii];
-          if (this.killorientation) {
-            oris[setnum][mperm[ii]] = 0;
-          } else {
+          if (this.orbitoris[setnum] > 1 && !this.killorientation) {
             oris[setnum][mperm[ii]] =
               (mperm[(ii + oinc) % mperm.length] -
                 mperm[(ii + 1) % mperm.length] +
@@ -1956,14 +1952,16 @@ export class PuzzleGeometry {
       if (setmoves && !setmoves[ii]) {
         continue;
       }
-      const no = new Array<number>(oris[ii].length);
-      // convert ksolve oris to our internal ori rep
-      for (let jj = 0; jj < perms[ii].length; jj++) {
-        no[jj] = oris[ii][perms[ii][jj]];
+      if (this.orbitoris[ii] === 1 || this.killorientation) {
+        moveorbits.push(new Orbit(perms[ii], oris[ii], 1));
+      } else {
+        const no = new Array<number>(oris[ii].length);
+        // convert ksolve oris to our internal ori rep
+        for (let jj = 0; jj < perms[ii].length; jj++) {
+          no[jj] = oris[ii][perms[ii][jj]];
+        }
+        moveorbits.push(new Orbit(perms[ii], no, this.orbitoris[ii]));
       }
-      moveorbits.push(
-        new Orbit(perms[ii], no, this.killorientation ? 1 : this.orbitoris[ii]),
-      );
     }
     let mv = new Transformation(moveorbits);
     if (amount !== 1) {

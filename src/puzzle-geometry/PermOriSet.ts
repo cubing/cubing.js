@@ -365,6 +365,9 @@ export class Orbit {
 
   public isIdentity(): boolean {
     const n = this.perm.length;
+    if (this.perm === iota(n) && this.ori === zeros(n)) {
+      return true;
+    }
     for (let i = 0; i < n; i++) {
       if (this.perm[i] !== i || this.ori[i] !== 0) {
         return false;
