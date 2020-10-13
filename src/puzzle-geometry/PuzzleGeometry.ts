@@ -39,6 +39,8 @@ import {
 } from "./NotationMapper";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
 
+const DEFAULT_COLOR_FRACTION = 0.77;
+
 export interface StickerDatSticker {
   coords: number[][];
   color: string;
@@ -2493,13 +2495,10 @@ export class PuzzleGeometry {
   }
 
   // The colorfrac parameter says how much of the face should be
-  // colored (vs dividing lines); we default to 0.75 which seems
+  // colored (vs dividing lines); we default to 0.77 which seems
   // to work pretty well.  It should be a number between probably
   // 0.4 and 0.9.
-  public get3d(colorfrac?: number): StickerDat {
-    if (!colorfrac) {
-      colorfrac = 0.77;
-    }
+  public get3d(colorfrac: number = DEFAULT_COLOR_FRACTION): StickerDat {
     const stickers: any = [];
     const foundations: any = [];
     const rot = this.getInitial3DRotation();
