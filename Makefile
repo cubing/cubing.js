@@ -48,7 +48,7 @@ EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/
 EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
 
 .PHONY: deploy-experiments
-deploy-experiments: parcel-build-for-twizzle-net
+deploy-experiments: parcel-build-for-experiments-cubing-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
