@@ -41,7 +41,7 @@ addAlg("CMLL", "F R U R' U' F'");
 addAlg("L6E", "U M2' U' M2'");
 addAlg("L6EO", "(U' M U' M')2");
 addAlg("Daisy", "S2 R2 L2");
-addAlg("Cross", "");
+addAlg("Cross", "(y' R)5 D");
 addAlg("2x2x2", "y2");
 addAlg("2x2x3", "y");
 addAlg("Void Cube", "");
