@@ -125,22 +125,34 @@ export function Order(def: KPuzzleDefinition, t: Transformation): number {
   return r;
 }
 
+export function EquivalentOrbitTransformations(
+  def: KPuzzleDefinition,
+  orbitName: string,
+  t1: Transformation,
+  t2: Transformation,
+): boolean {
+  const oDef = def.orbits[orbitName];
+  const o1 = t1[orbitName];
+  const o2 = t2[orbitName];
+  for (let idx = 0; idx < oDef.numPieces; idx++) {
+    if (o1.orientation[idx] !== o2.orientation[idx]) {
+      return false;
+    }
+    if (o1.permutation[idx] !== o2.permutation[idx]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export function EquivalentTransformations(
   def: KPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
 ): boolean {
   for (const orbitName in def.orbits) {
-    const oDef = def.orbits[orbitName];
-    const o1 = t1[orbitName];
-    const o2 = t2[orbitName];
-    for (let idx = 0; idx < oDef.numPieces; idx++) {
-      if (o1.orientation[idx] !== o2.orientation[idx]) {
-        return false;
-      }
-      if (o1.permutation[idx] !== o2.permutation[idx]) {
-        return false;
-      }
+    if (!EquivalentOrbitTransformations(def, orbitName, t1, t2)) {
+      return false;
     }
   }
   return true;

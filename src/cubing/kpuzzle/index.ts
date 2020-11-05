@@ -18,6 +18,7 @@ export {
   IdentityTransformation,
   Invert,
   EquivalentTransformations,
+  EquivalentOrbitTransformations,
   EquivalentStates,
   Order,
 } from "./transformations";
