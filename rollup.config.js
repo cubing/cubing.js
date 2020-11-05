@@ -10,6 +10,7 @@ import * as typescript from "typescript";
 import json from "@rollup/plugin-json";
 import { string } from "rollup-plugin-string";
 import { eslint } from "rollup-plugin-eslint";
+import copy from "rollup-plugin-copy";
 
 // Due to our toolchain, `rollup` normally emits some warnings that don't
 // actually indicate anything wrong with our code. We can suppress known
@@ -94,7 +95,12 @@ const esm = {
       sourcemap: true,
     },
   ],
-  plugins: [...plugins],
+  plugins: [
+    ...plugins,
+    copy({
+      targets: [{ src: "src/esm/package.json", dest: "dist/esm" }],
+    }),
+  ],
   onwarn: onwarn(["UNRESOLVED_IMPORT", "THIS_IS_UNDEFINED"]),
 };
 
