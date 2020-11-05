@@ -15,9 +15,9 @@ export interface OrbitDefinition {
 
 export interface KPuzzleDefinition {
   name: string;
-  orbits: { [/* orbit name */ key: string]: OrbitDefinition };
+  orbits: Record<string, OrbitDefinition>;
   startPieces: Transformation; // TODO: Expose a way to get the transformed start pieces.
-  moves: { [/* move name */ key: string]: Transformation };
+  moves: Record<string, Transformation>;
   svg?: string;
   moveNotation?: MoveNotation;
 }
