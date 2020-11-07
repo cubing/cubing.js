@@ -6,33 +6,33 @@ declare module "*.svg";
 
 import cube222JSON from "./2x2x2.kpuzzle.json";
 export const Cube222: KPuzzleDefinition = cube222JSON;
-// import cube222SVG from "bundle-text:./svg/2x2x2.kpuzzle.svg";
-// Cube222.svg = cube222SVG;
+import cube222SVG from "./svg-inlined/2x2x2.kpuzzle.svg";
+Cube222.svg = cube222SVG;
 // Cube222.svg = svgJSON["2x2x2.kpuzzle.svg"];
 
 import cube333JSON from "./3x3x3.kpuzzle.json";
 export const Cube333: KPuzzleDefinition = cube333JSON;
-// import cube333SVG from "bundle-text:./svg/3x3x3.kpuzzle.svg";
-// Cube333.svg = cube333SVG;
+import cube333SVG from "./svg-inlined/3x3x3.kpuzzle.svg";
+Cube333.svg = cube333SVG;
 
 // TODO: is stringify/parse the best way to clone?
 export const Cube333LL: KPuzzleDefinition = JSON.parse(
   JSON.stringify(cube333JSON),
 );
-// import cube333LLSVG from "bundle-text:./svg/3x3x3-ll.kpuzzle.svg";
-// Cube333LL.svg = cube333LLSVG;
+import cube333LLSVG from "./svg-inlined/3x3x3-ll.kpuzzle.svg";
+Cube333LL.svg = cube333LLSVG;
 
 import PyraminxJSON from "./pyraminx.kpuzzle.json";
 export const Pyraminx: KPuzzleDefinition = PyraminxJSON;
-// import pyraminxSVG from "bundle-text:./svg/pyraminx.kpuzzle.svg";
-// Pyraminx.svg = pyraminxSVG;
+import pyraminxSVG from "./svg-inlined/pyraminx.kpuzzle.svg";
+Pyraminx.svg = pyraminxSVG;
 
 import square1JSON from "./sq1-hyperorbit.kpuzzle.json";
 export const Square1: KPuzzleDefinition = square1JSON;
-// import square1SVG from "bundle-text:./svg/sq1-hyperorbit.kpuzzle.svg";
-// Square1.svg = square1SVG;
+import square1SVG from "./svg-inlined/sq1-hyperorbit.kpuzzle.svg";
+Square1.svg = square1SVG;
 
 import clockJSON from "./clock.kpuzzle.json";
 export const Clock: KPuzzleDefinition = clockJSON;
-// import clockSVG from "bundle-text:./svg/clock.kpuzzle.svg";
-// Clock.svg = clockSVG;
+import clockSVG from "./svg-inlined/clock.kpuzzle.svg";
+Clock.svg = clockSVG;
