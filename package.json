@@ -30,7 +30,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.4.2",
     "jest-raw-loader": "^1.0.1",
-    "parcel": "^2.0.0-nightly.438",
+    "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-pegjs": "0.0.2",
     "parcel-plugin-text": "^0.9.7",
