@@ -1,4 +1,3 @@
-import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 import { PerspectiveCamera, WebGLRenderer } from "three";
 import { VRButton } from "three/examples/jsm/webxr/VRButton";
 import { initialHeight } from "./config";
