@@ -1,0 +1,5 @@
+{
+  "name": "alg",
+  "main": "../dist/esm/alg/index.js",
+  "types": "../dist/types/alg/index.d.ts"
+}

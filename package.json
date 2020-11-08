@@ -133,35 +133,43 @@
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
+      "import": "./dist/esm/index.js",
+      "types": "./types/types/index.d.ts"
     },
     "./alg": {
       "require": "./dist/cjs/alg/index.js",
-      "import": "./dist/esm/alg/index.js"
+      "import": "./dist/esm/alg/index.js",
+      "types": "./dist/types/alg/index.d.ts"
     },
     "./bluetooth": {
       "require": "./dist/cjs/bluetooth/index.js",
-      "import": "./dist/esm/bluetooth/index.js"
+      "import": "./dist/esm/bluetooth/index.js",
+      "types": "./dist/types/bluetooth/index.d.ts"
     },
     "./kpuzzle": {
       "require": "./dist/cjs/kpuzzle/index.js",
-      "import": "./dist/esm/kpuzzle/index.js"
+      "import": "./dist/esm/kpuzzle/index.js",
+      "types": "./dist/types/kpuzzle/index.d.ts"
     },
     "./protocol": {
       "require": "./dist/cjs/protocol/index.js",
-      "import": "./dist/esm/protocol/index.js"
+      "import": "./dist/esm/protocol/index.js",
+      "types": "./dist/types/protocol/index.d.ts"
     },
     "./puzzle-geometry": {
       "require": "./dist/cjs/puzzle-geometry/index.js",
-      "import": "./dist/esm/puzzle-geometry/index.js"
+      "import": "./dist/esm/puzzle-geometry/index.js",
+      "types": "./dist/esm/types-geometry/index.d.ts"
     },
     "./stream": {
       "require": "./dist/cjs/stream/index.js",
-      "import": "./dist/esm/stream/index.js"
+      "import": "./dist/esm/stream/index.js",
+      "types": "./dist/types/stream/index.d.ts"
     },
     "./twisty": {
       "require": "./dist/cjs/twisty/index.js",
-      "import": "./dist/esm/twisty/index.js"
+      "import": "./dist/esm/twisty/index.js",
+      "types": "./dist/types/twisty/index.d.ts"
     }
   },
   "babel": {

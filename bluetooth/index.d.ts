@@ -1,1 +1,1 @@
-export * from "../dist/cjs/src/bluetooth/index";
+export * from "../dist/types/bluetooth";
