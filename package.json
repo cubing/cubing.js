@@ -50,12 +50,12 @@
     "typescript": "^4.0.2"
   },
   "scripts": {
-    "build": "npx rollup -c",
-    "esbuild": "npx esbuild --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esbuild src/cubing/index.ts src/alg/index.ts src/bluetooth/index.ts src/kpuzzle/index.ts src/protocol/index.ts src/puzzle-geometry/index.ts src/stream/index.ts src/twisty/index.ts",
-    "esbuild-bundle": "npx esbuild --bundle --format=esm --minify --sourcemap --outdir=dist/esbuild-bundle src/cubing/index.ts",
-    "esbuild-cjs": "npx esbuild --bundle --external:three --format=cjs --sourcemap --outdir=dist/esbuild-cjs src/cubing/index.ts",
+    "build": "npm run build-esm && npm run build-cjs && npm run build-global",
+    "build-esm": "npx esbuild --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/gen/esm src/cubing/index.ts src/alg/index.ts src/bluetooth/index.ts src/kpuzzle/index.ts src/protocol/index.ts src/puzzle-geometry/index.ts src/stream/index.ts src/twisty/index.ts",
+    "build-cjs": "npx esbuild --bundle --external:three --format=cjs --sourcemap --outdir=dist/gen/cjs src/cubing/index.ts",
+    "build-global": "npx esbuild --bundle --format=cjs --minify --outdir=dist/gen/global src/cubing/cubing.bundle.global.ts",
     "dev": "npx parcel serve --no-autoinstall app/index.html --port 333 --open --out-dir dist/parcel",
-    "clean": "rm -rf dist .cache .rpt2_cache",
+    "clean": "rm -rf dist/gen .cache .rpt2_cache",
     "test": "npm run test-jest && npm run lint",
     "test-jest": "npx jest",
     "test-node-require": "node dist-test/require.cjs",
@@ -142,36 +142,36 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/cjs/cubing.js",
-      "import": "./dist/esm/cubing.js"
+      "require": "./dist/static/cjs/cubing/index.js",
+      "import": "./dist/gen/esm/cubing/index.js"
     },
     "./alg": {
-      "require": "./dist/cjs/alg.js",
-      "import": "./dist/esm/alg.js"
+      "require": "./dist/static/cjs/cubing/alg/index.js",
+      "import": "./dist/gen/esm/cubing/alg/index.js"
     },
     "./bluetooth": {
-      "require": "./dist/cjs/bluetooth.js",
-      "import": "./dist/esm/bluetooth.js"
+      "require": "./dist/static/cjs/cubing/bluetooth/index.js",
+      "import": "./dist/gen/esm/cubing/bluetooth/index.js"
     },
     "./kpuzzle": {
-      "require": "./dist/cjs/kpuzzle.js",
-      "import": "./dist/esm/kpuzzle.js"
+      "require": "./dist/static/cjs/cubing/kpuzzle/index.js",
+      "import": "./dist/gen/esm/cubing/kpuzzle/index.js"
     },
     "./protocol": {
-      "require": "./dist/cjs/protocol.js",
-      "import": "./dist/esm/protocol.js"
+      "require": "./dist/static/cjs/cubing/protocol/index.js",
+      "import": "./dist/gen/esm/cubing/protocol/index.js"
     },
     "./puzzle-geometry": {
-      "require": "./dist/cjs/puzzle-geometry.js",
-      "import": "./dist/esm/puzzle-geometry.js"
+      "require": "./dist/static/cjs/cubing/puzzle-geometry/index.js",
+      "import": "./dist/gen/esm/cubing/puzzle-geometry/index.js"
     },
     "./stream": {
-      "require": "./dist/cjs/stream.js",
-      "import": "./dist/esm/stream.js"
+      "require": "./dist/static/cjs/cubing/stream/index.js",
+      "import": "./dist/gen/esm/cubing/stream/index.js"
     },
     "./twisty": {
-      "require": "./dist/cjs/twisty.js",
-      "import": "./dist/esm/twisty.js"
+      "require": "./dist/static/cjs/cubing/twisty/index.js",
+      "import": "./dist/gen/esm/cubing/twisty/index.js"
     }
   }
 }
