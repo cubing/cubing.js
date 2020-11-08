@@ -75,11 +75,6 @@
     "rubik",
     "rubik's"
   ],
-  "parcel-plugin-text": {
-    "extensions": [
-      "svg"
-    ]
-  },
   "eslintConfig": {
     "root": true,
     "parserOptions": {
