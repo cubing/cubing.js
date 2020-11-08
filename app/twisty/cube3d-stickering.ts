@@ -38,6 +38,7 @@ addAlg("VLS", "R' F2 R F2' L' U2 L");
 addAlg("LS", "U' R U' R' U R U R'");
 addAlg("EO", "R' F R");
 addAlg("CMLL", "F R U R' U' F'");
+addAlg("COLL", "L R' U' R U L' U2 R' U2 R");
 addAlg("L6E", "U M2' U' M2'");
 addAlg("L6EO", "(U' M U' M')2");
 addAlg("Daisy", "S2 R2 L2");
