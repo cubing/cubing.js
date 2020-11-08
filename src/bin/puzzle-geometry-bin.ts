@@ -1,8 +1,11 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
-import { PuzzleGeometry } from "..";
-import { getpuzzles, parsedesc } from "../PuzzleGeometry";
-import { schreierSims } from "../SchreierSims";
+import {
+  PuzzleGeometry,
+  getpuzzles,
+  parsedesc,
+  schreierSims,
+} from "../cubing/puzzle-geometry";
 
 let dosvg = false;
 let doss = false;
