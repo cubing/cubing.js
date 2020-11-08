@@ -34,8 +34,6 @@
     "npm": "^6.14.8",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
-    "parcel-plugin-pegjs": "0.0.2",
-    "parcel-plugin-text": "^0.9.7",
     "pegjs": "^0.11.0-master.f69239d",
     "pegjs-jest": "0.0.2",
     "prettier": "^2.1.1",
