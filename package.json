@@ -29,7 +29,6 @@
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.4.2",
     "jest-raw-loader": "^1.0.1",
-    "npm": "^6.14.8",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
     "pegjs": "^0.11.0-master.f69239d",
