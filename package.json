@@ -52,7 +52,7 @@
     "test-jest": "npx jest",
     "test-node-require": "node dist-test/require.cjs",
     "test-node-import": "node dist-test/import.mjs",
-    "format": "npx eslint --fix .; npx prettier --write src app *.config.js */index.js */index.d.ts",
+    "format": "npx eslint --fix .; npx prettier --write src *.config.js */index.js */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint .",
     "prepack": "npm run clean && npm run build && npm run test-node-require",
