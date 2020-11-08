@@ -26,11 +26,9 @@
     "eslint-plugin-html": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.4.2",
-    "jest-raw-loader": "^1.0.1",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
     "pegjs": "^0.11.0-master.f69239d",
-    "pegjs-jest": "0.0.2",
     "prettier": "^2.1.1",
     "ts-jest": "^26.3.0",
     "typescript": "^4.0.2"
