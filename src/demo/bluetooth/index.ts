@@ -1,4 +1,3 @@
-import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { algToString, invert, parse, Sequence } from "../../cubing/alg/index";

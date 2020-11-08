@@ -1,6 +1,5 @@
 // TODO: Generalize to WebRTC setup.
 
-import "babel-polyfill"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
 import { WebSocketProxySender } from "../../../cubing/stream/websocket-proxy";
 
 // Import index files from source.
