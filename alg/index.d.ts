@@ -1,1 +1,1 @@
-export * from "../dist/cjs/src/alg/index";
+export * from "../dist/types/alg";

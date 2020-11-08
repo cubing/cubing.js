@@ -1,13 +1,11 @@
-import "regenerator-runtime/runtime"; // Prevent `regeneratorRuntime is not defined` error. https://github.com/babel/babel/issues/5085
-
 // TODO: `export * as ...`?
-import * as alg from "../alg";
-import * as bluetooth from "../bluetooth";
-import * as kpuzzle from "../kpuzzle";
-import * as protocol from "../protocol";
-import * as puzzleGeometry from "../puzzle-geometry";
-import * as stream from "../stream";
-import * as twisty from "../twisty";
+import * as alg from "./alg";
+import * as bluetooth from "./bluetooth";
+import * as kpuzzle from "./kpuzzle";
+import * as protocol from "./protocol";
+import * as puzzleGeometry from "./puzzle-geometry";
+import * as stream from "./stream";
+import * as twisty from "./twisty";
 
 export { alg };
 export { bluetooth };

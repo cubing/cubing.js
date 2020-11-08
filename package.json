@@ -3,26 +3,25 @@
   "version": "0.12.19",
   "description": "A collection of Javascript cubing libraries.",
   "author": "The js.cubing.net team",
-  "main": "dist/cjs/cubing.js",
-  "module": "dist/esm/cubing.js",
-  "types": "dist/cjs/src/cubing/index.d.ts",
+  "type": "module",
+  "types": "dist/types/index.d.ts",
   "license": "GPL-3.0-or-later",
   "repository": "github:cubing/cubing.js",
   "dependencies": {
     "@types/resize-observer-browser": "^0.1.3",
     "@types/web-bluetooth": "0.0.4",
-    "regenerator-runtime": "^0.13.7",
     "three": "^0.118.3"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
+    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.11.5",
     "@rollup/plugin-json": "^4.1.0",
     "@types/jest": "^24.9.1",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "babel-jest": "^24.9.0",
-    "babel-polyfill": "^6.26.0",
+    "esbuild": "^0.8.5",
     "eslint": "^7.8.1",
     "eslint-config-mdcs": "^5.0.0",
     "eslint-config-prettier": "^6.11.0",
@@ -30,44 +29,39 @@
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.4.2",
     "jest-raw-loader": "^1.0.1",
+    "npm": "^6.14.8",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
-    "parcel-plugin-pegjs": "0.0.2",
-    "parcel-plugin-text": "^0.9.7",
     "pegjs": "^0.11.0-master.f69239d",
     "pegjs-jest": "0.0.2",
     "prettier": "^2.1.1",
-    "rollup": "^2.26.11",
-    "rollup-plugin-copy": "^3.3.0",
-    "rollup-plugin-eslint": "^7.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-notify": "^1.1.0",
-    "rollup-plugin-pegjs": "^2.1.3",
-    "rollup-plugin-string": "^3.0.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.27.2",
     "ts-jest": "^26.3.0",
     "typescript": "^4.0.2"
   },
   "scripts": {
-    "build": "npx rollup -c",
-    "dev": "npx parcel serve --no-autoinstall app/index.html --port 333 --open --out-dir dist/parcel",
+    "build": "npm run build-esm && npm run build-cjs && npm run build-bundle-global && npm run build-types",
+    "build-esm": "npx esbuild --target=es2015 --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/stream/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm",
+    "build-cjs": "npx esbuild --target=es2015 --bundle --external:three --format=cjs --sourcemap --outfile=dist/cjs/index.js src/cubing/index.ts && cp -R src/dist-static/cjs/* dist/cjs",
+    "build-bundle-global": "npx esbuild --target=es2015 --bundle --format=cjs --minify --outdir=dist/bundle-global src/cubing/cubing.bundle-global.ts",
+    "build-types": "npx tsc src/cubing/*.ts src/cubing/**/*.ts --declaration --emitDeclarationOnly --outDir dist/types --target es2015 --moduleResolution node --lib esnext,dom --resolveJsonModule --allowJs --allowSyntheticDefaultImports",
+    "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
+    "generate-js-parsers": "npx pegjs src/cubing/alg/parser/parser-pegjs.pegjs && npx pegjs src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
+    "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
+    "dev": "npx parcel serve --no-autoinstall src/demo/index.html --port 333 --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
     "test": "npm run test-jest && npm run lint",
     "test-jest": "npx jest",
     "test-node-require": "node dist-test/require.cjs",
     "test-node-import": "node dist-test/import.mjs",
-    "format": "npx eslint --fix .; npx prettier --write src app *.config.js */index.js */index.d.ts",
+    "format": "npx eslint --fix .; npx prettier --write src *.config.js */index.js */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint .",
     "prepack": "npm run clean && npm run build && npm run test-node-require",
-    "parcel-build-for-twizzle-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/twizzle.net/explore app/twizzle/index.html",
-    "parcel-build-for-vr-cubing-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/experiments.cubing.net/vr app/vr/index.html",
-    "parcel-build-for-experiments-cubing-net": "parcel build --no-autoinstall --public-url /cubing.js/ --out-dir dist/experiments.cubing.net/cubing.js app/index.html"
+    "parcel-build-for-twizzle-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/twizzle.net/explore src/demo/twizzle/index.html",
+    "parcel-build-for-vr-cubing-net": "parcel build --no-autoinstall --public-url ./ --out-dir dist/experiments.cubing.net/vr src/demo/vr/index.html",
+    "parcel-build-for-experiments-cubing-net": "parcel build --no-autoinstall --public-url /cubing.js/ --out-dir dist/experiments.cubing.net/cubing.js src/demo/index.html"
   },
-  "bin": {
-    "puzzle-geometry": "./dist/bin/puzzle-geometry-bin.js"
-  },
+  "bin": {},
   "keywords": [
     "cubing",
     "speedcubing",
@@ -79,11 +73,6 @@
     "rubik",
     "rubik's"
   ],
-  "parcel-plugin-text": {
-    "extensions": [
-      "svg"
-    ]
-  },
   "eslintConfig": {
     "root": true,
     "parserOptions": {
@@ -123,7 +112,9 @@
     "ignorePatterns": [
       "/dist",
       "/dist-test",
-      "/node_modules"
+      "/src/vendor/modules/three/examples/jsm/libs/stats.module.d.ts",
+      "/src/vendor/modules/three/examples/jsm/libs/stats.module.js",
+      "parser-pegjs.js"
     ],
     "env": {
       "commonjs": true,
@@ -139,36 +130,59 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/cjs/cubing.js",
-      "import": "./dist/esm/cubing.js"
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./types/types/index.d.ts"
     },
     "./alg": {
-      "require": "./dist/cjs/alg.js",
-      "import": "./dist/esm/alg.js"
+      "require": "./dist/cjs/alg/index.js",
+      "import": "./dist/esm/alg/index.js",
+      "types": "./dist/types/alg/index.d.ts"
     },
     "./bluetooth": {
-      "require": "./dist/cjs/bluetooth.js",
-      "import": "./dist/esm/bluetooth.js"
+      "require": "./dist/cjs/bluetooth/index.js",
+      "import": "./dist/esm/bluetooth/index.js",
+      "types": "./dist/types/bluetooth/index.d.ts"
     },
     "./kpuzzle": {
-      "require": "./dist/cjs/kpuzzle.js",
-      "import": "./dist/esm/kpuzzle.js"
+      "require": "./dist/cjs/kpuzzle/index.js",
+      "import": "./dist/esm/kpuzzle/index.js",
+      "types": "./dist/types/kpuzzle/index.d.ts"
     },
     "./protocol": {
-      "require": "./dist/cjs/protocol.js",
-      "import": "./dist/esm/protocol.js"
+      "require": "./dist/cjs/protocol/index.js",
+      "import": "./dist/esm/protocol/index.js",
+      "types": "./dist/types/protocol/index.d.ts"
     },
     "./puzzle-geometry": {
-      "require": "./dist/cjs/puzzle-geometry.js",
-      "import": "./dist/esm/puzzle-geometry.js"
+      "require": "./dist/cjs/puzzle-geometry/index.js",
+      "import": "./dist/esm/puzzle-geometry/index.js",
+      "types": "./dist/esm/types-geometry/index.d.ts"
     },
     "./stream": {
-      "require": "./dist/cjs/stream.js",
-      "import": "./dist/esm/stream.js"
+      "require": "./dist/cjs/stream/index.js",
+      "import": "./dist/esm/stream/index.js",
+      "types": "./dist/types/stream/index.d.ts"
     },
     "./twisty": {
-      "require": "./dist/cjs/twisty.js",
-      "import": "./dist/esm/twisty.js"
+      "require": "./dist/cjs/twisty/index.js",
+      "import": "./dist/esm/twisty/index.js",
+      "types": "./dist/types/twisty/index.d.ts"
     }
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ],
+    "plugins": [
+      "@babel/plugin-transform-runtime"
+    ]
   }
 }

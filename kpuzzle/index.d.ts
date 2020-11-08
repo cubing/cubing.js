@@ -1,1 +1,1 @@
-export * from "../dist/cjs/src/kpuzzle/index";
+export * from "../dist/types/kpuzzle";

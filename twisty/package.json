@@ -1,7 +1,6 @@
 {
   "name": "twisty",
-  "version": "0.10.0",
-  "main": "../dist/cjs/twisty.js",
-  "module": "../dist/esm/twisty.js",
-  "types": "../dist/esm/src/twisty/index.d.ts"
+  "type": "module",
+  "main": "../dist/esm/twisty/index.js",
+  "types": "../dist/types/twisty/index.d.ts"
 }
