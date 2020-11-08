@@ -119,7 +119,8 @@
     "ignorePatterns": [
       "/dist",
       "/dist-test",
-      "/node_modules"
+      "/node_modules",
+      "parser-pegjs.js"
     ],
     "env": {
       "commonjs": true,
