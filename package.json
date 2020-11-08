@@ -114,6 +114,8 @@
       "/dist",
       "/dist-test",
       "/node_modules",
+      "/src/vendor/modules/three/examples/jsm/libs/stats.module.d.ts",
+      "/src/vendor/modules/three/examples/jsm/libs/stats.module.js",
       "parser-pegjs.js"
     ],
     "env": {
