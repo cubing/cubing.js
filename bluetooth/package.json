@@ -1,5 +1,6 @@
 {
   "name": "bluetooth",
+  "type": "module",
   "main": "../dist/esm/bluetooth/index.js",
   "types": "../dist/types/bluetooth/index.d.ts"
 }
