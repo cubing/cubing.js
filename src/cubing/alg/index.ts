@@ -56,6 +56,7 @@ export {
   serializeURLParam,
   deserializeURLParam,
   algCubingNetLink,
+  AlgCubingNetOptions,
   getAlgURLParam,
 } from "./url";
 
