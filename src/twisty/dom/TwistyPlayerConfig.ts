@@ -50,6 +50,7 @@ export const experimentalStickerings = {
   "PLL": true,
   "CLS": true,
   "OLL": true,
+  "COLL": true,
   "ELS": true,
   "LL": true,
   "F2L": true,
