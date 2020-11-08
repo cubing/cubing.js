@@ -3,13 +3,13 @@ import {
   Canonicalize,
   Order,
   SearchSequence
-} from "../chunk.W26MVL2U.js";
+} from "../chunk.GS47C6I5.js";
 import {
   EquivalentStates,
   EquivalentTransformations,
   SVG
-} from "../chunk.JQRASIC7.js";
-import "../chunk.SBF4OERV.js";
+} from "../chunk.KZOQDBTJ.js";
+import "../chunk.MV324VXF.js";
 import {
   Combine,
   IdentityTransformation,
@@ -19,8 +19,8 @@ import {
   Puzzles,
   parseKPuzzle,
   stateForBlockMove
-} from "../chunk.OXN3TMHE.js";
-import "../chunk.KHJLFQEA.js";
+} from "../chunk.U525ORDT.js";
+import "../chunk.NQU6V6M5.js";
 export {
   CanonicalSequenceIterator,
   Canonicalize,

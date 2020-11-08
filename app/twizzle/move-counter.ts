@@ -8,7 +8,7 @@ import {
   Comment,
   Sequence,
   TraversalUp,
-} from "../../src/alg/index";
+} from "../../src/cubing/alg/index";
 
 /*
  *   For movecount, that understands puzzle rotations.  This code

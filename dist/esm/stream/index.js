@@ -1,7 +1,7 @@
 import {
   WebSocketProxyReceiver,
   WebSocketProxySender
-} from "../chunk.4SUE25JC.js";
+} from "../chunk.YBCDT4J7.js";
 export {
   WebSocketProxyReceiver,
   WebSocketProxySender

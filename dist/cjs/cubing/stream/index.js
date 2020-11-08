@@ -1,3 +1,3 @@
-const cubing = require("../../../../gen/cjs/index");
+const cubing = require("../index");
 
 module.exports = cubing.stream;

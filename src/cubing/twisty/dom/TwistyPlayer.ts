@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { countMoves } from "../../../app/twizzle/move-counter"; // TODO
+import { countMoves } from "../../../../app/twizzle/move-counter"; // TODO
 import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
 import { parse } from "../../alg/parser/parser";
 import { KPuzzleDefinition, Puzzles } from "../../kpuzzle";

@@ -7,20 +7,20 @@ import {
   getAlgURLParam,
   serializeURLParam,
   validateSiGNAlg
-} from "../chunk.WJTJUIXW.js";
+} from "../chunk.EOPH25U6.js";
 import {
   keyToMove
-} from "../chunk.6PTAQJTM.js";
+} from "../chunk.A5CWOBEV.js";
 import {
   experimentalAppendBlockMove
-} from "../chunk.JCC742NV.js";
+} from "../chunk.FCAVX2X5.js";
 import {
   modifiedBlockMove
-} from "../chunk.SBF4OERV.js";
+} from "../chunk.MV324VXF.js";
 import {
   fromJSON,
   parse
-} from "../chunk.RSTIVU2H.js";
+} from "../chunk.4SNBRXSY.js";
 import {
   AlgPart,
   Annotation,
@@ -50,7 +50,7 @@ import {
   structureEquals,
   validateFlatAlg,
   validateSiGNMoves
-} from "../chunk.KHJLFQEA.js";
+} from "../chunk.NQU6V6M5.js";
 export {
   AlgPart,
   Annotation,

@@ -2,7 +2,7 @@ import {
   getpuzzle,
   getpuzzles,
   schreierSims
-} from "../chunk.YRUGIKOA.js";
+} from "../chunk.AJSJUV4M.js";
 import {
   Orbit,
   OrbitDef,
@@ -16,7 +16,7 @@ import {
   getPuzzleGeometryByName,
   parsedesc,
   useNewFaceNames
-} from "../chunk.CPGT2QR7.js";
+} from "../chunk.OZFEYB7N.js";
 export {
   Orbit,
   OrbitDef,

@@ -32,7 +32,7 @@ var __toModule = (module2) => {
   return __exportStar(__defProp(__create(__getProtoOf(module2)), "default", {value: module2, enumerable: true}), module2);
 };
 
-// src/alg/parser/parser-pegjs.js
+// src/cubing/alg/parser/parser-pegjs.js
 var require_parser_pegjs = __commonJS((exports2, module2) => {
   "use strict";
   function peg$subclass(child, parent) {
@@ -997,7 +997,7 @@ var require_parser_pegjs = __commonJS((exports2, module2) => {
   };
 });
 
-// src/kpuzzle/parser/parser-pegjs.js
+// src/cubing/kpuzzle/parser/parser-pegjs.js
 var require_parser_pegjs2 = __commonJS((exports2, module2) => {
   "use strict";
   function peg$subclass(child, parent) {
@@ -2076,7 +2076,7 @@ __export(exports, {
   twisty: () => twisty_exports
 });
 
-// src/alg/index.ts
+// src/cubing/alg/index.ts
 const alg_exports = {};
 __export(alg_exports, {
   AlgPart: () => AlgPart,
@@ -2122,7 +2122,7 @@ __export(alg_exports, {
   validateSiGNMoves: () => validateSiGNMoves
 });
 
-// src/alg/debug.ts
+// src/cubing/alg/debug.ts
 let currentReportingLevel = "warn";
 const MAX_NUMBER_OF_TIMES_TO_WARN = 10;
 let numWarned = 0;
@@ -2144,7 +2144,7 @@ function setAlgPartTypeMismatchReportingLevel(level) {
   currentReportingLevel = level;
 }
 
-// src/alg/algorithm/alg-part.ts
+// src/cubing/alg/algorithm/alg-part.ts
 class AlgPart {
 }
 function matchesAlgType(a, t2) {
@@ -2243,7 +2243,7 @@ class Comment extends Annotation {
   }
 }
 
-// src/alg/algorithm/block-move.ts
+// src/cubing/alg/algorithm/block-move.ts
 class BlockMove extends Move {
   constructor(outerLayer, innerLayer, family, amount = 1) {
     super();
@@ -2272,7 +2272,7 @@ function RangeBlockMove(outerLayer, innerLayer, family, amount) {
   return new BlockMove(outerLayer, innerLayer, family, amount);
 }
 
-// src/alg/operation.ts
+// src/cubing/alg/operation.ts
 function canCoalesce(m1, m2) {
   return m1.family === m2.family && m1.innerLayer === m2.innerLayer && m1.outerLayer === m2.outerLayer;
 }
@@ -2303,7 +2303,7 @@ function experimentalConcatAlgs(...args) {
   return new Sequence(Array.prototype.concat.apply([], [...args].map((s) => s.nestedUnits)));
 }
 
-// src/alg/traversal.ts
+// src/cubing/alg/traversal.ts
 function dispatch(t2, algPart, dataDown) {
   switch (algPart.type) {
     case "sequence":
@@ -2607,7 +2607,7 @@ function experimentalBlockMoveQuantumName(move) {
   return algPartToStringForTesting(new BlockMove(move.outerLayer, move.innerLayer, move.family, 1));
 }
 
-// src/alg/example.ts
+// src/cubing/alg/example.ts
 const Example = {
   Sune: new Sequence([
     BareBlockMove("R", 1),
@@ -2712,7 +2712,7 @@ const Example = {
   ]
 };
 
-// src/alg/json.ts
+// src/cubing/alg/json.ts
 function fromJSON(json3) {
   if (json3.type !== "sequence") {
     throw new Error(`Expected Sequence while parsing, got: ${json3.type}`);
@@ -2778,7 +2778,7 @@ function unitFromJSON(json3) {
   }
 }
 
-// src/alg/validation.ts
+// src/cubing/alg/validation.ts
 class ValidationError extends Error {
 }
 class ValidatorTraversal extends TraversalUp {
@@ -2928,10 +2928,10 @@ function validateSiGNAlg(a) {
   validateFlatAlg(a);
 }
 
-// src/alg/parser/parser.js
+// src/cubing/alg/parser/parser.js
 const parser_pegjs = __toModule(require_parser_pegjs());
 
-// src/alg/parser/index.ts
+// src/cubing/alg/parser/index.ts
 function parse2(s, options = {validators: []}) {
   options.validators = options.validators || [];
   const algo = fromJSON(parser_pegjs.parse(s));
@@ -2941,7 +2941,7 @@ function parse2(s, options = {validators: []}) {
   return algo;
 }
 
-// src/alg/keyboard.ts
+// src/cubing/alg/keyboard.ts
 const cubeKeyMapping = {
   73: BareBlockMove("R"),
   75: BareBlockMove("R", -1),
@@ -2980,7 +2980,7 @@ function keyToMove(e) {
   return cubeKeyMapping[e.keyCode] || null;
 }
 
-// src/alg/url.ts
+// src/cubing/alg/url.ts
 function serializeURLParam(a) {
   let escaped = algToString(a);
   escaped = escaped.replace(/_/g, "&#95;").replace(/ /g, "_");
@@ -3074,7 +3074,7 @@ function algCubingNetLink(options) {
   return url2.toString();
 }
 
-// src/bluetooth/index.ts
+// src/cubing/bluetooth/index.ts
 const bluetooth_exports = {};
 __export(bluetooth_exports, {
   BluetoothPuzzle: () => BluetoothPuzzle,
@@ -3088,7 +3088,7 @@ __export(bluetooth_exports, {
   giikerMoveToBlockMoveForTesting: () => giikerMoveToBlockMove
 });
 
-// src/bluetooth/transformer.ts
+// src/cubing/bluetooth/transformer.ts
 const three = __toModule(require("three"));
 function maxAxis(v) {
   const maxVal = Math.max(Math.abs(v.x), Math.abs(v.y), Math.abs(v.z));
@@ -3136,7 +3136,7 @@ class BasicRotationTransformer {
   }
 }
 
-// src/bluetooth/bluetooth-puzzle.ts
+// src/cubing/bluetooth/bluetooth-puzzle.ts
 class BluetoothPuzzle {
   constructor() {
     this.transformers = [];
@@ -3180,7 +3180,7 @@ class BluetoothPuzzle {
   }
 }
 
-// src/bluetooth/debug.ts
+// src/cubing/bluetooth/debug.ts
 let DEBUG_LOGGING_ENABLED = false;
 function enableDebugLogging(enable) {
   DEBUG_LOGGING_ENABLED = enable;
@@ -3196,10 +3196,10 @@ function debugLog(...args) {
   }
 }
 
-// src/bluetooth/gan.ts
+// src/cubing/bluetooth/gan.ts
 const three2 = __toModule(require("three"));
 
-// src/kpuzzle/index.ts
+// src/cubing/kpuzzle/index.ts
 const kpuzzle_exports = {};
 __export(kpuzzle_exports, {
   CanonicalSequenceIterator: () => CanonicalSequenceIterator,
@@ -3219,7 +3219,7 @@ __export(kpuzzle_exports, {
   stateForBlockMove: () => stateForBlockMove
 });
 
-// src/kpuzzle/transformations.ts
+// src/cubing/kpuzzle/transformations.ts
 function Combine(def2, t1, t2) {
   const newTrans = {};
   for (const orbitName in def2.orbits) {
@@ -3343,7 +3343,7 @@ function EquivalentStates(def2, t1, t2) {
   return EquivalentTransformations(def2, Combine(def2, def2.startPieces, t1), Combine(def2, def2.startPieces, t2));
 }
 
-// src/kpuzzle/kpuzzle.ts
+// src/cubing/kpuzzle/kpuzzle.ts
 function stateForBlockMove(def2, blockMove) {
   const move = getNotationLayer(def2).lookupMove(blockMove);
   if (!move) {
@@ -3406,7 +3406,7 @@ class KPuzzle {
   }
 }
 
-// src/kpuzzle/canonicalize.ts
+// src/cubing/kpuzzle/canonicalize.ts
 class InternalMove {
   constructor(base, twist) {
     this.base = base;
@@ -3650,7 +3650,7 @@ class CanonicalSequenceIterator {
   }
 }
 
-// src/kpuzzle/definitions/2x2x2.kpuzzle.json
+// src/cubing/kpuzzle/definitions/2x2x2.kpuzzle.json
 var name = "2x2x2";
 var orbits = {
   CORNERS: {numPieces: 8, orientations: 3}
@@ -3724,7 +3724,7 @@ var x2x2_kpuzzle_default = {
   moves
 };
 
-// src/kpuzzle/definitions/svg-inlined/2x2x2.kpuzzle.svg.ts
+// src/cubing/kpuzzle/definitions/svg-inlined/2x2x2.kpuzzle.svg.ts
 var x2x2_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
        "http://www.w3.org/TR/2001/REC-SVG-20050904/DTD/svg11.dtd">
@@ -3771,7 +3771,7 @@ var x2x2_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 
 </svg>`;
 
-// src/kpuzzle/definitions/3x3x3.kpuzzle.json
+// src/cubing/kpuzzle/definitions/3x3x3.kpuzzle.json
 var name2 = "3x3x3";
 var orbits2 = {
   EDGES: {numPieces: 12, orientations: 2},
@@ -4053,7 +4053,7 @@ var x3x3_kpuzzle_default = {
   moves: moves2
 };
 
-// src/kpuzzle/definitions/svg-inlined/3x3x3.kpuzzle.svg.ts
+// src/cubing/kpuzzle/definitions/svg-inlined/3x3x3.kpuzzle.svg.ts
 var x3x3_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
        "http://www.w3.org/TR/2001/REC-SVG-20050904/DTD/svg11.dtd">
@@ -4183,7 +4183,7 @@ var x3x3_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 
 </svg>`;
 
-// src/kpuzzle/definitions/svg-inlined/3x3x3-ll.kpuzzle.svg.ts
+// src/cubing/kpuzzle/definitions/svg-inlined/3x3x3-ll.kpuzzle.svg.ts
 var x3x3_ll_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <title>3x3x3 LL</title>
@@ -4293,7 +4293,7 @@ var x3x3_ll_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
   </g>
 </svg>`;
 
-// src/kpuzzle/definitions/pyraminx.kpuzzle.json
+// src/cubing/kpuzzle/definitions/pyraminx.kpuzzle.json
 var name3 = "Pyraminx";
 var orbits3 = {
   CENTERS: {numPieces: 4, orientations: 3},
@@ -4381,7 +4381,7 @@ var pyraminx_kpuzzle_default = {
   moves: moves3
 };
 
-// src/kpuzzle/definitions/svg-inlined/pyraminx.kpuzzle.svg.ts
+// src/cubing/kpuzzle/definitions/svg-inlined/pyraminx.kpuzzle.svg.ts
 var pyraminx_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
        "http://www.w3.org/TR/2001/REC-SVG-20050904/DTD/svg11.dtd">
@@ -4470,7 +4470,7 @@ var pyraminx_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 
 </svg>`;
 
-// src/kpuzzle/definitions/sq1-hyperorbit.kpuzzle.json
+// src/cubing/kpuzzle/definitions/sq1-hyperorbit.kpuzzle.json
 var name4 = "Square-1";
 var orbits4 = {
   WEDGES: {numPieces: 24, orientations: 9},
@@ -4713,7 +4713,7 @@ var sq1_hyperorbit_kpuzzle_default = {
   moves: moves4
 };
 
-// src/kpuzzle/definitions/svg-inlined/sq1-hyperorbit.kpuzzle.svg.ts
+// src/cubing/kpuzzle/definitions/svg-inlined/sq1-hyperorbit.kpuzzle.svg.ts
 var sq1_hyperorbit_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="360px" height="552px" viewBox="0 0 360 552" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
@@ -5010,7 +5010,7 @@ var sq1_hyperorbit_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
     </g>
 </svg>`;
 
-// src/kpuzzle/definitions/clock.kpuzzle.json
+// src/cubing/kpuzzle/definitions/clock.kpuzzle.json
 var name5 = "Clock";
 var orbits5 = {
   DIALS: {numPieces: 18, orientations: 12},
@@ -5584,7 +5584,7 @@ var clock_kpuzzle_default = {
   moves: moves5
 };
 
-// src/kpuzzle/definitions/svg-inlined/clock.kpuzzle.svg.ts
+// src/cubing/kpuzzle/definitions/svg-inlined/clock.kpuzzle.svg.ts
 var clock_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 480 240" preserveAspectRatio="xMidYMid meet">
   <title>clock</title>
@@ -5955,7 +5955,7 @@ var clock_kpuzzle_svg_default = `<?xml version="1.0" encoding="UTF-8"?>
   </g>
 </svg>`;
 
-// src/kpuzzle/definitions/index.ts
+// src/cubing/kpuzzle/definitions/index.ts
 const Cube222 = x2x2_kpuzzle_default;
 Cube222.svg = x2x2_kpuzzle_svg_default;
 const Cube333 = x3x3_kpuzzle_default;
@@ -5969,7 +5969,7 @@ Square1.svg = sq1_hyperorbit_kpuzzle_svg_default;
 const Clock = clock_kpuzzle_default;
 Clock.svg = clock_kpuzzle_svg_default;
 
-// src/kpuzzle/puzzle_definitions.ts
+// src/cubing/kpuzzle/puzzle_definitions.ts
 const Puzzles = {
   "2x2x2": Cube222,
   "3x3x3": Cube333,
@@ -5979,13 +5979,13 @@ const Puzzles = {
   clock: Clock
 };
 
-// src/kpuzzle/parser/parser-shim.js
+// src/cubing/kpuzzle/parser/parser-shim.js
 const parser_pegjs2 = __toModule(require_parser_pegjs2());
 
-// src/kpuzzle/parser/parser.ts
+// src/cubing/kpuzzle/parser/parser.ts
 const parseKPuzzle = parser_pegjs2.parse;
 
-// src/kpuzzle/svg.ts
+// src/cubing/kpuzzle/svg.ts
 const xmlns = "http://www.w3.org/2000/svg";
 let svgCounter = 0;
 function nextSVGID() {
@@ -6102,7 +6102,7 @@ class SVG {
   }
 }
 
-// src/bluetooth/unsafe-raw-aes.ts
+// src/cubing/bluetooth/unsafe-raw-aes.ts
 const blockSize = 16;
 const zeros = new Uint8Array(blockSize);
 const paddingBlockPlaintext = new Uint8Array(new Array(blockSize).fill(blockSize));
@@ -6130,7 +6130,7 @@ async function unsafeDecryptBlock(key, ciphertextBlock) {
   }, key, cbcCiphertext)).slice(0, blockSize);
 }
 
-// src/bluetooth/gan.ts
+// src/cubing/bluetooth/gan.ts
 const DEFAULT_INTERVAL_MS = 150;
 const MAX_LATEST_MOVES = 6;
 const ganMoveToBlockMove = {
@@ -6470,7 +6470,7 @@ class GanCube extends BluetoothPuzzle {
   }
 }
 
-// src/bluetooth/giiker.ts
+// src/cubing/bluetooth/giiker.ts
 const MESSAGE_LENGTH = 20;
 const UUIDs2 = {
   cubeService: "0000aadb-0000-1000-8000-00805f9b34fb",
@@ -6687,7 +6687,7 @@ class GiiKERCube extends BluetoothPuzzle {
   }
 }
 
-// src/bluetooth/gocube.ts
+// src/cubing/bluetooth/gocube.ts
 const three3 = __toModule(require("three"));
 const UUIDs3 = {
   goCubeService: "6e400001-b5a3-f393-e0a9-e50e24dcca9e",
@@ -6792,7 +6792,7 @@ class GoCube extends BluetoothPuzzle {
 }
 const rotateTowardsRate = 0.5;
 
-// src/bluetooth/connect.ts
+// src/cubing/bluetooth/connect.ts
 function requestOptions(acceptAllDevices = false) {
   const options = acceptAllDevices ? {
     acceptAllDevices: true,
@@ -6843,7 +6843,7 @@ async function connect(options = {}) {
   }
 }
 
-// src/bluetooth/keyboard.ts
+// src/cubing/bluetooth/keyboard.ts
 const def = Puzzles["3x3x3"];
 class KeyboardPuzzle extends BluetoothPuzzle {
   constructor(target) {
@@ -6877,7 +6877,7 @@ async function debugKeyboardConnect(target = window) {
   return new KeyboardPuzzle(target);
 }
 
-// src/protocol/index.ts
+// src/cubing/protocol/index.ts
 const protocol_exports = {};
 __export(protocol_exports, {
   bufferToSpacedHex: () => bufferToSpacedHex,
@@ -6886,7 +6886,7 @@ __export(protocol_exports, {
   twizzleBinaryToReid3x3x3: () => twizzleBinaryToReid3x3x3
 });
 
-// src/protocol/binary/orbit-indexing.ts
+// src/cubing/protocol/binary/orbit-indexing.ts
 function identityPermutation(numElems) {
   const arr = new Array(numElems);
   for (let i2 = 0; i2 < numElems; i2++) {
@@ -6938,7 +6938,7 @@ function lexToPermutation(numPieces, lexicographicIdx) {
   return permutation;
 }
 
-// src/protocol/binary/binary3x3x3.ts
+// src/cubing/protocol/binary/binary3x3x3.ts
 const BIT_LENGTHS = [29, 12, 16, 13, 3, 2, 1, 12];
 function arraySum(arr) {
   let total = 0;
@@ -7153,7 +7153,7 @@ function twizzleBinaryToReid3x3x3(buffy) {
   return binaryComponentsToReid3x3x3(components);
 }
 
-// src/protocol/binary/hex.ts
+// src/cubing/protocol/binary/hex.ts
 function bufferToSpacedHex(buffer) {
   return Array.prototype.map.call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2)).join(" ");
 }
@@ -7161,7 +7161,7 @@ function spacedHexToBuffer(hex2) {
   return new Uint8Array(hex2.split(" ").map((c) => parseInt(c, 16)));
 }
 
-// src/puzzle-geometry/index.ts
+// src/cubing/puzzle-geometry/index.ts
 const puzzle_geometry_exports = {};
 __export(puzzle_geometry_exports, {
   Orbit: () => Orbit,
@@ -7181,7 +7181,7 @@ __export(puzzle_geometry_exports, {
   useNewFaceNames: () => useNewFaceNames
 });
 
-// src/puzzle-geometry/Perm.ts
+// src/cubing/puzzle-geometry/Perm.ts
 const zeroCache = [];
 const iotaCache = [];
 function zeros2(n) {
@@ -7302,7 +7302,7 @@ class Perm {
   }
 }
 
-// src/puzzle-geometry/PermOriSet.ts
+// src/cubing/puzzle-geometry/PermOriSet.ts
 class OrbitDef {
   constructor(size, mod) {
     this.size = size;
@@ -7854,7 +7854,7 @@ function showcanon(g, disp) {
   }
 }
 
-// src/puzzle-geometry/Quat.ts
+// src/cubing/puzzle-geometry/Quat.ts
 const eps = 1e-9;
 function expandfaces(rots, faces) {
   const nfaces = [];
@@ -8061,7 +8061,7 @@ class Quat {
   }
 }
 
-// src/puzzle-geometry/PlatonicGenerator.ts
+// src/cubing/puzzle-geometry/PlatonicGenerator.ts
 const eps2 = 1e-9;
 function cube() {
   const s5 = Math.sqrt(0.5);
@@ -8174,7 +8174,7 @@ function getface(planes) {
   return face2;
 }
 
-// src/puzzle-geometry/Puzzles.ts
+// src/cubing/puzzle-geometry/Puzzles.ts
 const Puzzles2 = {
   "2x2x2": "c f 0",
   "3x3x3": "c f 0.333333333333333",
@@ -8233,7 +8233,7 @@ const Puzzles2 = {
   "starminx combo": "d f 0.23606797749979 v 0.937962370425399"
 };
 
-// src/puzzle-geometry/interfaces.ts
+// src/cubing/puzzle-geometry/interfaces.ts
 class BlockMove7 {
   constructor(outerLayer, innerLayer, family, amount = 1) {
     this.family = family;
@@ -8251,7 +8251,7 @@ class BlockMove7 {
   }
 }
 
-// src/puzzle-geometry/NotationMapper.ts
+// src/cubing/puzzle-geometry/NotationMapper.ts
 class NullMapper {
   notationToInternal(mv) {
     return mv;
@@ -8388,7 +8388,7 @@ class MegaminxScramblingNotationMapper {
   }
 }
 
-// src/puzzle-geometry/FaceNameSwizzler.ts
+// src/cubing/puzzle-geometry/FaceNameSwizzler.ts
 class FaceNameSwizzler {
   constructor(facenames, gripnames_arg) {
     this.facenames = facenames;
@@ -8489,7 +8489,7 @@ class FaceNameSwizzler {
   }
 }
 
-// src/puzzle-geometry/PuzzleGeometry.ts
+// src/cubing/puzzle-geometry/PuzzleGeometry.ts
 const DEFAULT_COLOR_FRACTION = 0.77;
 let NEW_FACE_NAMES = true;
 function useNewFaceNames(use) {
@@ -10569,7 +10569,7 @@ class PGNotation {
   }
 }
 
-// src/puzzle-geometry/SchreierSims.ts
+// src/cubing/puzzle-geometry/SchreierSims.ts
 class FactoredNumber {
   constructor() {
     this.mult = [];
@@ -10707,14 +10707,14 @@ function schreierSims(g, disp) {
   return getsgs();
 }
 
-// src/stream/index.ts
+// src/cubing/stream/index.ts
 const stream_exports = {};
 __export(stream_exports, {
   WebSocketProxyReceiver: () => WebSocketProxyReceiver,
   WebSocketProxySender: () => WebSocketProxySender
 });
 
-// src/stream/websocket-proxy.ts
+// src/cubing/stream/websocket-proxy.ts
 class WebSocketProxySender {
   constructor(url2) {
     this.websocket = new WebSocket(url2);
@@ -10772,7 +10772,7 @@ class WebSocketProxyReceiver {
   }
 }
 
-// src/twisty/index.ts
+// src/cubing/twisty/index.ts
 const twisty_exports = {};
 __export(twisty_exports, {
   Cube3D: () => Cube3D,
@@ -10787,10 +10787,10 @@ __export(twisty_exports, {
   toTimeline: () => toTimeline
 });
 
-// src/twisty/dom/viewers/Twisty3DCanvas.ts
+// src/cubing/twisty/dom/viewers/Twisty3DCanvas.ts
 const three5 = __toModule(require("three"));
 
-// src/twisty/animation/RenderScheduler.ts
+// src/cubing/twisty/animation/RenderScheduler.ts
 class RenderScheduler {
   constructor(callback) {
     this.callback = callback;
@@ -10814,7 +10814,7 @@ class RenderScheduler {
   }
 }
 
-// src/twisty/dom/element/node-custom-element-shims.ts
+// src/cubing/twisty/dom/element/node-custom-element-shims.ts
 class HTMLElementStub {
 }
 let HTMLElementShim;
@@ -10834,7 +10834,7 @@ if (typeof customElements !== "undefined") {
   customElementsShim = new CustomElementsStub();
 }
 
-// src/twisty/dom/element/ManagedCustomElement.ts
+// src/cubing/twisty/dom/element/ManagedCustomElement.ts
 class CSSSource {
   constructor(sourceText) {
     this.sourceText = sourceText;
@@ -10881,12 +10881,12 @@ class ManagedCustomElement extends HTMLElementShim {
 }
 customElementsShim.define("twisty-managed-custom-element", ManagedCustomElement);
 
-// src/twisty/dom/viewers/canvas.ts
+// src/cubing/twisty/dom/viewers/canvas.ts
 function pixelRatio() {
   return devicePixelRatio || 1;
 }
 
-// src/twisty/dom/viewers/Twisty3DCanvas.css.ts
+// src/cubing/twisty/dom/viewers/Twisty3DCanvas.css.ts
 const twisty3DCanvasCSS = new CSSSource(`
 :host(twisty-3d-canvas) {
   contain: content;
@@ -10913,7 +10913,7 @@ const twisty3DCanvasCSS = new CSSSource(`
 }
 `);
 
-// src/twisty/dom/viewers/vendor/OrbitControls.js
+// src/cubing/twisty/dom/viewers/vendor/OrbitControls.js
 const three4 = __toModule(require("three"));
 const OrbitControls = function(object, domElement) {
   if (domElement === void 0)
@@ -11545,7 +11545,7 @@ const MapControls = function(object, domElement) {
 MapControls.prototype = Object.create(three4.EventDispatcher.prototype);
 MapControls.prototype.constructor = MapControls;
 
-// src/twisty/dom/viewers/TwistyOrbitControls.ts
+// src/cubing/twisty/dom/viewers/TwistyOrbitControls.ts
 const INERTIA_DEFAULT = true;
 class TwistyOrbitControls {
   constructor(camera, canvas2, scheduleRender) {
@@ -11678,7 +11678,7 @@ Stats.Panel = function(name6, fg, bg) {
 };
 var stats_module_default = Stats;
 
-// src/twisty/dom/viewers/Twisty3DCanvas.ts
+// src/cubing/twisty/dom/viewers/Twisty3DCanvas.ts
 let SHOW_STATS = false;
 function experimentalShowRenderStats(show) {
   SHOW_STATS = show;
@@ -11873,18 +11873,18 @@ function baseMetric(move) {
 const baseCounter = new MoveCounter(baseMetric);
 const countMoves = baseCounter.traverse.bind(baseCounter);
 
-// src/twisty/3D/puzzles/Cube3D.ts
+// src/cubing/twisty/3D/puzzles/Cube3D.ts
 const three8 = __toModule(require("three"));
 
-// src/twisty/animation/easing.ts
+// src/cubing/twisty/animation/easing.ts
 function smootherStep(x) {
   return x * x * x * (10 - x * (15 - 6 * x));
 }
 
-// src/twisty/dom/TwistyPlayerConfig.ts
+// src/cubing/twisty/dom/TwistyPlayerConfig.ts
 const three7 = __toModule(require("three"));
 
-// src/twisty/dom/element/ElementConfig.ts
+// src/cubing/twisty/dom/element/ElementConfig.ts
 const three6 = __toModule(require("three"));
 class AlgAttribute {
   constructor(initialValue) {
@@ -11983,7 +11983,7 @@ class Vector3Attribute {
   }
 }
 
-// src/twisty/dom/element/ClassListManager.ts
+// src/cubing/twisty/dom/element/ClassListManager.ts
 class ClassListManager {
   constructor(elem, prefix, validSuffixes) {
     this.elem = elem;
@@ -12013,7 +12013,7 @@ class ClassListManager {
   }
 }
 
-// src/twisty/dom/viewers/TwistyViewerWrapper.css.ts
+// src/cubing/twisty/dom/viewers/TwistyViewerWrapper.css.ts
 const twistyViewerWrapperCSS = new CSSSource(`
 .wrapper {
   display: grid;
@@ -12042,7 +12042,7 @@ const twistyViewerWrapperCSS = new CSSSource(`
 }
 `);
 
-// src/twisty/dom/viewers/TwistyViewerWrapper.ts
+// src/cubing/twisty/dom/viewers/TwistyViewerWrapper.ts
 const backViewLayouts = {
   none: true,
   "side-by-side": true,
@@ -12068,7 +12068,7 @@ class TwistyViewerWrapper2 extends ManagedCustomElement {
 }
 customElementsShim.define("twisty-viewer-wrapper", TwistyViewerWrapper2);
 
-// src/twisty/dom/TwistyPlayerConfig.ts
+// src/cubing/twisty/dom/TwistyPlayerConfig.ts
 const DEFAULT_CAMERA_Z = 5;
 const DEFAULT_CAMERA_Y = DEFAULT_CAMERA_Z * (2 / (1 + Math.sqrt(5)));
 const centeredCameraPosition = new three7.Vector3(0, DEFAULT_CAMERA_Y, DEFAULT_CAMERA_Z);
@@ -12173,10 +12173,10 @@ class TwistyPlayerConfig {
   }
 }
 
-// src/twisty/3D/TAU.ts
+// src/cubing/twisty/3D/TAU.ts
 const TAU = Math.PI * 2;
 
-// src/twisty/3D/puzzles/stickerings.ts
+// src/cubing/twisty/3D/puzzles/stickerings.ts
 const r = {
   facelets: ["regular", "regular", "regular"]
 };
@@ -12487,7 +12487,7 @@ const stickerings = {
   }
 };
 
-// src/twisty/3D/puzzles/Cube3D.ts
+// src/cubing/twisty/3D/puzzles/Cube3D.ts
 const ignoredMaterial = new three8.MeshBasicMaterial({
   color: 4473924,
   side: three8.DoubleSide
@@ -12811,7 +12811,7 @@ class Cube3D extends three8.Object3D {
   }
 }
 
-// src/twisty/3D/puzzles/PG3D.ts
+// src/cubing/twisty/3D/puzzles/PG3D.ts
 const three9 = __toModule(require("three"));
 const foundationMaterial = new three9.MeshBasicMaterial({
   side: three9.DoubleSide,
@@ -12988,7 +12988,7 @@ class PG3D extends three9.Object3D {
   }
 }
 
-// src/twisty/3D/Twisty3DScene.ts
+// src/cubing/twisty/3D/Twisty3DScene.ts
 const three10 = __toModule(require("three"));
 class Twisty3DScene extends three10.Scene {
   constructor() {
@@ -13024,7 +13024,7 @@ class Twisty3DScene extends three10.Scene {
   }
 }
 
-// src/twisty/3D/puzzles/KPuzzleWrapper.ts
+// src/cubing/twisty/3D/puzzles/KPuzzleWrapper.ts
 class PuzzleWrapper {
   multiply(state, amount) {
     if (amount < 0) {
@@ -13074,7 +13074,7 @@ class KPuzzleWrapper extends PuzzleWrapper {
   }
 }
 
-// src/twisty/animation/alg/CursorTypes.ts
+// src/cubing/twisty/animation/alg/CursorTypes.ts
 var Direction;
 (function(Direction2) {
   Direction2[Direction2["Forwards"] = 1] = "Forwards";
@@ -13102,7 +13102,7 @@ function DefaultDurationForAmount(amount) {
   }
 }
 
-// src/twisty/animation/alg/AlgDuration.ts
+// src/cubing/twisty/animation/alg/AlgDuration.ts
 class AlgDuration extends TraversalUp {
   constructor(durationForAmount = DefaultDurationForAmount) {
     super();
@@ -13138,7 +13138,7 @@ class AlgDuration extends TraversalUp {
   }
 }
 
-// src/twisty/animation/alg/AlgIndexer.ts
+// src/cubing/twisty/animation/alg/AlgIndexer.ts
 class CountAnimatedMoves extends TraversalUp {
   traverseSequence(sequence) {
     let total = 0;
@@ -13406,7 +13406,7 @@ function invertBlockMove(bm) {
 const countAnimatedMovesInstance = new CountAnimatedMoves();
 const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(countAnimatedMovesInstance);
 
-// src/twisty/animation/alg/TreeAlgIndexer.ts
+// src/cubing/twisty/animation/alg/TreeAlgIndexer.ts
 class TreeAlgIndexer {
   constructor(puzzle, alg18) {
     this.puzzle = puzzle;
@@ -13457,7 +13457,7 @@ class TreeAlgIndexer {
   }
 }
 
-// src/twisty/animation/alg/AlgCursor.ts
+// src/cubing/twisty/animation/alg/AlgCursor.ts
 class AlgCursor {
   constructor(timeline, def2, alg18, startStateSequence) {
     this.timeline = timeline;
@@ -13559,7 +13559,7 @@ class AlgCursor {
   }
 }
 
-// src/twisty/animation/Timeline.ts
+// src/cubing/twisty/animation/Timeline.ts
 var TimelineAction;
 (function(TimelineAction2) {
   TimelineAction2["StartingToPlay"] = "StartingToPlay";
@@ -13797,7 +13797,7 @@ class Timeline {
   }
 }
 
-// src/twisty/dom/controls/buttons.css.ts
+// src/cubing/twisty/dom/controls/buttons.css.ts
 const buttonGridCSS = new CSSSource(`
 .wrapper {
   width: 100%;
@@ -13874,7 +13874,7 @@ button.svg-exit-fullscreen {
 }
 `);
 
-// src/twisty/dom/controls/buttons.ts
+// src/cubing/twisty/dom/controls/buttons.ts
 class TwistyControlButton extends ManagedCustomElement {
   constructor(timeline, timelineCommand, fullscreenElement) {
     super();
@@ -14062,7 +14062,7 @@ class TwistyControlButtonPanel extends ManagedCustomElement {
 }
 customElementsShim.define("twisty-control-button-panel", TwistyControlButtonPanel);
 
-// src/twisty/dom/controls/TwistyScrubber.css.ts
+// src/cubing/twisty/dom/controls/TwistyScrubber.css.ts
 const twistyScrubberCSS = new CSSSource(`
 :host(twisty-scrubber) {
   width: 384px;
@@ -14078,7 +14078,7 @@ input {
 }
 `);
 
-// src/twisty/dom/controls/TwistyScrubber.ts
+// src/cubing/twisty/dom/controls/TwistyScrubber.ts
 class TwistyScrubber2 extends ManagedCustomElement {
   constructor(timeline) {
     super();
@@ -14107,7 +14107,7 @@ class TwistyScrubber2 extends ManagedCustomElement {
 }
 customElementsShim.define("twisty-scrubber", TwistyScrubber2);
 
-// src/twisty/dom/TwistyPlayer.css.ts
+// src/cubing/twisty/dom/TwistyPlayer.css.ts
 const twistyPlayerCSS = new CSSSource(`
 :host(twisty-player) {
   width: 384px;
@@ -14150,7 +14150,7 @@ twisty-scrubber {
 }
 `);
 
-// src/twisty/dom/viewers/Twisty2DSVGView.css.ts
+// src/cubing/twisty/dom/viewers/Twisty2DSVGView.css.ts
 const twisty2DSVGCSS = new CSSSource(`
 .wrapper,
 .svg-wrapper,
@@ -14163,7 +14163,7 @@ svg {
 }
 `);
 
-// src/twisty/dom/viewers/Twisty2DSVG.ts
+// src/cubing/twisty/dom/viewers/Twisty2DSVG.ts
 class Twisty2DSVG extends ManagedCustomElement {
   constructor(cursor, def2 = Puzzles["3x3x3"]) {
     super();
@@ -14193,7 +14193,7 @@ class Twisty2DSVG extends ManagedCustomElement {
 }
 customElementsShim.define("twisty-2d-svg", Twisty2DSVG);
 
-// src/twisty/dom/TwistyPlayer.ts
+// src/cubing/twisty/dom/TwistyPlayer.ts
 function createPG(puzzleName) {
   const pg = getPuzzleGeometryByName(puzzleName, [
     "allmoves",
@@ -14535,7 +14535,7 @@ class TwistyPlayer2 extends ManagedCustomElement {
 }
 customElementsShim.define("twisty-player", TwistyPlayer2);
 
-// src/twisty/animation/alg/SimpleAlgIndexer.ts
+// src/cubing/twisty/animation/alg/SimpleAlgIndexer.ts
 class SimpleAlgIndexer {
   constructor(puzzle, alg18) {
     this.puzzle = puzzle;
@@ -14581,7 +14581,7 @@ class SimpleAlgIndexer {
   }
 }
 
-// src/twisty/animation/stream/timeline-move-calculation-draft.ts
+// src/cubing/twisty/animation/stream/timeline-move-calculation-draft.ts
 function isSameAxis(move1, move2) {
   const familyRoots = move1.family[0].toLowerCase() + move2.family[0].toLowerCase();
   return ![

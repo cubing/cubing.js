@@ -1,3 +1,3 @@
-const cubing = require("../index");
+const cubing = require("../../../../gen/cjs/index");
 
 module.exports = cubing.alg;
