@@ -1,3 +1,4 @@
+// TODO: move this file somewhere permanent.
 import {
   BlockMove,
   Commutator,
@@ -8,7 +9,7 @@ import {
   Comment,
   Sequence,
   TraversalUp,
-} from "../../src/cubing/alg/index";
+} from "../../alg/index";
 
 /*
  *   For movecount, that understands puzzle rotations.  This code
