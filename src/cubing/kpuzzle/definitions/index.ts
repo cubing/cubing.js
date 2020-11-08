@@ -1,6 +1,6 @@
 import { KPuzzleDefinition } from "../definition_types";
 
-declare module "*.svg";
+// declare module "*.svg";
 
 // TODO: Figure out how to import SVGs directly, in a way that works with all our build systems.
 
