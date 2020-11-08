@@ -52,6 +52,7 @@
   "scripts": {
     "build": "npx rollup -c",
     "esbuild": "npx esbuild --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esbuild src/cubing/index.ts src/alg/index.ts src/bluetooth/index.ts src/kpuzzle/index.ts src/protocol/index.ts src/puzzle-geometry/index.ts src/stream/index.ts src/twisty/index.ts",
+    "esbuild-bundle": "npx esbuild --bundle --format=esm --minify --sourcemap --outdir=dist/esbuild-bundle src/cubing/index.ts",
     "esbuild-cjs": "npx esbuild --bundle --external:three --format=cjs --sourcemap --outdir=dist/esbuild-cjs src/cubing/index.ts",
     "dev": "npx parcel serve --no-autoinstall app/index.html --port 333 --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
