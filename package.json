@@ -53,7 +53,7 @@
     "build-esm": "npx esbuild --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/stream/index.ts src/cubing/twisty/index.ts",
     "build-cjs": "npx esbuild --bundle --external:three --format=cjs --sourcemap --outfile=dist/cjs/cubing/index.js src/cubing/index.ts && cp -R src/cjs/static/* dist/cjs",
     "build-bundle-global": "npx esbuild --bundle --format=cjs --minify --outdir=dist/bundle-global src/cubing/cubing.bundle-global.ts",
-    "dev": "npx parcel serve --no-autoinstall app/index.html --port 333 --open --out-dir dist/parcel",
+    "dev": "npx parcel serve --no-autoinstall src/demo/index.html --port 333 --open --out-dir dist/parcel",
     "clean": "rm -rf dist .cache .rpt2_cache",
     "test": "npm run test-jest && npm run lint",
     "test-jest": "npx jest",
@@ -172,5 +172,10 @@
       "require": "./dist/cjs/cubing/twisty/index.js",
       "import": "./dist/esm/twisty/index.js"
     }
+  },
+  "browserslist": {
+    "development": [
+      "last 1 Chrome versions"
+    ]
   }
 }
