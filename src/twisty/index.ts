@@ -7,7 +7,10 @@ export {
   Twisty3DCanvas,
 } from "./dom/viewers/Twisty3DCanvas";
 export { TwistyPlayer } from "./dom/TwistyPlayer";
-export { TwistyPlayerInitialConfig } from "./dom/TwistyPlayerConfig";
+export {
+  TwistyPlayerInitialConfig,
+  ExperimentalStickering,
+} from "./dom/TwistyPlayerConfig";
 export { TimelineActionEvent } from "./animation/Timeline";
 
 // Old

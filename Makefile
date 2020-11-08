@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build dev clean test test-jest test-node-require format setup lint prepack parcel-build-for-twizzle-net parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
+NPM_COMMANDS = build dev clean test test-jest test-node-require test-node-import format setup lint prepack parcel-build-for-twizzle-net parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
@@ -21,7 +21,7 @@ publish:
 .PHONY: setup-vr
 setup-vr:
 	adb tcpip 5555
-	adb reverse tcp:1234 tcp:1234
+	adb reverse tcp:333 tcp:333
 	adb reverse tcp:51785 tcp:51785
 
 .PHONY: restart-oculus-browser
@@ -48,7 +48,7 @@ EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/
 EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
 
 .PHONY: deploy-experiments
-deploy-experiments: parcel-build-for-twizzle-net
+deploy-experiments: parcel-build-for-experiments-cubing-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \

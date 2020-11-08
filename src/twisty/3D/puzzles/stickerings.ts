@@ -92,7 +92,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
         pieces: [di, di, di, di, d, d, d, d, d, d, d, d],
       },
       CORNERS: {
-        pieces: [o, o, o, o, r, d, d, d],
+        pieces: [o, o, o, o, o, d, d, d],
       },
       CENTERS: {
         pieces: [d, d, d, d, d, d],

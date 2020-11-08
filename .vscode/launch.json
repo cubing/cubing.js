@@ -7,8 +7,8 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Launch Chrome against localhost:1234 (Parcel)",
-      "url": "http://localhost:1234/twizzle/index.html",
+      "name": "Launch Chrome against localhost:333 (Parcel)",
+      "url": "http://localhost:333/twizzle/index.html",
       "webRoot": "${workspaceFolder}",
       "breakOnLoad": true,
       "sourceMapPathOverrides": {

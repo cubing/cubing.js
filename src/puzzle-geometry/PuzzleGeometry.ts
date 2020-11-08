@@ -3,7 +3,7 @@
 /* tslint:disable only-arrow-functions */ // TODO
 /* tslint:disable typedef */ // TODO
 
-import { Perm } from "./Perm";
+import { iota, zeros, Perm } from "./Perm";
 import {
   Orbit,
   OrbitDef,
@@ -38,6 +38,8 @@ import {
   NxNxNCubeMapper,
 } from "./NotationMapper";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
+
+const DEFAULT_COLOR_FRACTION = 0.77;
 
 export interface StickerDatSticker {
   coords: number[][];
@@ -484,8 +486,7 @@ export class PuzzleGeometry {
   public orbitoris: number[]; // the orientation size of each orbit
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
-  public movesbyslice: any[]; // move as perms by slice
-  public cmovesbyslice: number[][][][] = []; // cmoves as perms by slice
+  public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
   // options
   public verbose: number = 0; // verbosity (console.log)
   public allmoves: boolean = false; // generate all slice moves in ksolve
@@ -1544,7 +1545,6 @@ export class PuzzleGeometry {
       // did this already?
       return;
     }
-    const movesbyslice = [];
     const cmovesbyslice = [];
     // if orientCenters is set, we find all cubies that have only one
     // sticker and that sticker is in the center of a face, and we
@@ -1588,17 +1588,14 @@ export class PuzzleGeometry {
         }
         slicecnts[t]++;
       }
-      const axismoves = [];
       const axiscmoves = [];
       for (let sc = 0; sc < slicecnts.length; sc++) {
-        const slicemoves = [];
         const slicecmoves = [];
         const cubiedone = [];
         for (let i = 0; i < this.faces.length; i++) {
           if (slicenum[i] !== sc) {
             continue;
           }
-          const a = [i];
           const b = this.facetocubies[i].slice();
           let face = this.faces[i];
           let fi2 = i;
@@ -1612,7 +1609,6 @@ export class PuzzleGeometry {
             if (slicenum[fi2] !== sc) {
               throw new Error("Bad movement?");
             }
-            a.push(fi2);
             const c = this.facetocubies[fi2];
             b.push(c[0], c[1]);
             face = face2;
@@ -1638,7 +1634,7 @@ export class PuzzleGeometry {
           // The move moving the center might not be the same modulo as the
           // center itself.
           if (
-            a.length > 1 &&
+            b.length > 2 &&
             this.orientCenters &&
             (this.cubies[b[0]].length === 1 ||
               this.cubies[b[0]][0] === this.cubies[b[0]][1])
@@ -1650,9 +1646,9 @@ export class PuzzleGeometry {
               ) < eps
             ) {
               // how does remapping of the face/point set map to the original?
-              let face1 = this.faces[a[0]];
-              for (let ii = 0; ii < a.length; ii++) {
-                const face0 = this.faces[a[ii]];
+              let face1 = this.cubies[b[0]][0];
+              for (let ii = 0; ii < b.length; ii += 2) {
+                const face0 = this.cubies[b[ii]][0];
                 let o = -1;
                 for (let jj = 0; jj < face1.length; jj++) {
                   if (face0[jj].dist(face1[0]) < eps) {
@@ -1665,18 +1661,17 @@ export class PuzzleGeometry {
                     "Couldn't find rotation of center faces; ignoring for now.",
                   );
                 } else {
-                  b[2 * ii + 1] = o;
+                  b[ii + 1] = o;
                   face1 = this.moverotations[k][0].rotateface(face1);
                 }
               }
             }
           }
-          // a.length == 1 means a sticker is spinning in place.
+          // b.length == 2 means a sticker is spinning in place.
           // in this case we add duplicate stickers
           // so that we can make it animate properly in a 3D world.
-          if (a.length === 1 && this.orientCenters) {
+          if (b.length === 2 && this.orientCenters) {
             for (let ii = 1; ii < this.movesetorders[k]; ii++) {
-              a.push(a[0]);
               if (sc === 0) {
                 b.push(b[0], ii);
               } else {
@@ -1687,23 +1682,22 @@ export class PuzzleGeometry {
               }
             }
           }
-          if (a.length > 1) {
-            slicemoves.push(a);
-          }
           if (b.length > 2 && !cubiedone[b[0]]) {
-            slicecmoves.push(b);
+            if (b.length !== 2 * this.movesetorders[k]) {
+              throw new Error("Bad length in perm gen");
+            }
+            for (let j = 0; j < b.length; j++) {
+              slicecmoves.push(b[j]);
+            }
           }
           for (let j = 0; j < b.length; j += 2) {
             cubiedone[b[j]] = true;
           }
         }
-        axismoves.push(slicemoves);
         axiscmoves.push(slicecmoves);
       }
-      movesbyslice.push(axismoves);
       cmovesbyslice.push(axiscmoves);
     }
-    this.movesbyslice = movesbyslice;
     this.cmovesbyslice = cmovesbyslice;
     if (this.movelist !== undefined) {
       const parsedmovelist: any[] = [];
@@ -1846,11 +1840,7 @@ export class PuzzleGeometry {
     );
   }
 
-  public skipcubie(set: number[]): boolean {
-    if (set.length === 0) {
-      return true;
-    }
-    const fi = set[0];
+  public skipcubie(fi: number): boolean {
     return this.skipbyori(fi);
   }
 
@@ -1913,31 +1903,24 @@ export class PuzzleGeometry {
     movebits: number,
     amount: number,
     inverted: boolean,
-    axiscmoves: number[][][],
+    axiscmoves: number[][],
     setmoves: number[] | undefined,
+    movesetorder: number,
   ): Transformation {
     const moveorbits: Orbit[] = [];
     const perms = [];
     const oris = [];
     for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
-      const p = [];
-      for (let kk = 0; kk < this.cubieords[ii]; kk++) {
-        p.push(kk);
-      }
-      perms.push(p);
-      const o = [];
-      for (let kk = 0; kk < this.cubieords[ii]; kk++) {
-        o.push(0);
-      }
-      oris.push(o);
+      perms.push(iota(this.cubieords[ii]));
+      oris.push(zeros(this.cubieords[ii]));
     }
     for (let m = 0; m < axiscmoves.length; m++) {
       if (((movebits >> m) & 1) === 0) {
         continue;
       }
       const slicecmoves = axiscmoves[m];
-      for (let j = 0; j < slicecmoves.length; j++) {
-        const mperm = slicecmoves[j].slice();
+      for (let j = 0; j < slicecmoves.length; j += 2 * movesetorder) {
+        const mperm = slicecmoves.slice(j, j + 2 * movesetorder);
         const setnum = this.cubiesetnums[mperm[0]];
         for (let ii = 0; ii < mperm.length; ii += 2) {
           mperm[ii] = this.cubieordnums[mperm[ii]];
@@ -1948,11 +1931,15 @@ export class PuzzleGeometry {
           inc = mperm.length - 2;
           oinc = mperm.length - 1;
         }
+        if (perms[setnum] === iota(this.cubieords[setnum])) {
+          perms[setnum] = perms[setnum].slice();
+          if (this.orbitoris[setnum] > 1 && !this.killorientation) {
+            oris[setnum] = oris[setnum].slice();
+          }
+        }
         for (let ii = 0; ii < mperm.length; ii += 2) {
           perms[setnum][mperm[(ii + inc) % mperm.length]] = mperm[ii];
-          if (this.killorientation) {
-            oris[setnum][mperm[ii]] = 0;
-          } else {
+          if (this.orbitoris[setnum] > 1 && !this.killorientation) {
             oris[setnum][mperm[ii]] =
               (mperm[(ii + oinc) % mperm.length] -
                 mperm[(ii + 1) % mperm.length] +
@@ -1966,14 +1953,16 @@ export class PuzzleGeometry {
       if (setmoves && !setmoves[ii]) {
         continue;
       }
-      const no = new Array<number>(oris[ii].length);
-      // convert ksolve oris to our internal ori rep
-      for (let jj = 0; jj < perms[ii].length; jj++) {
-        no[jj] = oris[ii][perms[ii][jj]];
+      if (this.orbitoris[ii] === 1 || this.killorientation) {
+        moveorbits.push(new Orbit(perms[ii], oris[ii], 1));
+      } else {
+        const no = new Array<number>(oris[ii].length);
+        // convert ksolve oris to our internal ori rep
+        for (let jj = 0; jj < perms[ii].length; jj++) {
+          no[jj] = oris[ii][perms[ii][jj]];
+        }
+        moveorbits.push(new Orbit(perms[ii], no, this.orbitoris[ii]));
       }
-      moveorbits.push(
-        new Orbit(perms[ii], no, this.killorientation ? 1 : this.orbitoris[ii]),
-      );
     }
     let mv = new Transformation(moveorbits);
     if (amount !== 1) {
@@ -1989,6 +1978,7 @@ export class PuzzleGeometry {
     const setdefs: OrbitDef[] = [];
     for (let k = 0; k < this.moveplanesets.length; k++) {
       const moveset = this.getmovesets(k);
+      const movesetorder = this.movesetorders[k];
       // check there's no redundancy in moveset.
       for (let i = 0; i < moveset.length; i += 2) {
         for (let j = 0; j < i; j += 2) {
@@ -2007,11 +1997,11 @@ export class PuzzleGeometry {
           continue;
         }
         const slicecmoves = axiscmoves[i];
-        for (let j = 0; j < slicecmoves.length; j++) {
+        for (let j = 0; j < slicecmoves.length; j += 2 * movesetorder) {
           if (this.skipcubie(slicecmoves[j])) {
             continue;
           }
-          const ind = this.cubiesetnums[slicecmoves[j][0]];
+          const ind = this.cubiesetnums[slicecmoves[j]];
           setmoves[ind] = 1;
         }
       }
@@ -2071,6 +2061,7 @@ export class PuzzleGeometry {
           inverted,
           this.cmovesbyslice[k],
           setmoves,
+          this.movesetorders[k],
         );
         moves.push(mv);
       }
@@ -2504,13 +2495,10 @@ export class PuzzleGeometry {
   }
 
   // The colorfrac parameter says how much of the face should be
-  // colored (vs dividing lines); we default to 0.75 which seems
+  // colored (vs dividing lines); we default to 0.77 which seems
   // to work pretty well.  It should be a number between probably
   // 0.4 and 0.9.
-  public get3d(colorfrac?: number): StickerDat {
-    if (!colorfrac) {
-      colorfrac = 0.77;
-    }
+  public get3d(colorfrac: number = DEFAULT_COLOR_FRACTION): StickerDat {
     const stickers: any = [];
     const foundations: any = [];
     const rot = this.getInitial3DRotation();
@@ -2658,6 +2646,7 @@ class PGNotation implements MoveNotation {
       !mv[4],
       this.pg.cmovesbyslice[mv[1]],
       undefined,
+      this.pg.movesetorders[mv[1]],
     );
     const r = this.od.transformToKPuzzle(pgmv);
     this.cache[key] = r;

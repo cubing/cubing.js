@@ -6,7 +6,9 @@ AMOUNT = repetition:NUMBER "'" { return -repetition; }
        / NUMBER
        / "'" { return -1; }
 
-FAMILY = characters:( "R++" / "R--" / "D++" / "D--" / [_A-Za-z]+ ) { return typeof(characters) === "string" ? characters : characters.join(""); }
+FAMILY = megaminx_scramble_move:("R++" / "R--" / "D++" / "D--") { return megaminx_scramble_move }
+       / characters:[_A-Za-z]+ { return typeof(characters) === "string" ? characters : characters.join(""); }
+
 BLOCK_MOVE = family:FAMILY { return {type: "blockMove", family: family}; }
            / innerLayer:NUMBER family:FAMILY { return {type: "blockMove", family: family, innerLayer: innerLayer}; }
            / outerLayer:NUMBER "-" innerLayer:NUMBER family:FAMILY { return {type: "blockMove", family: family, outerLayer: outerLayer, innerLayer: innerLayer}; }

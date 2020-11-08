@@ -1,6 +1,6 @@
 {
   "name": "cubing",
-  "version": "0.12.16",
+  "version": "0.12.19",
   "description": "A collection of Javascript cubing libraries.",
   "author": "The js.cubing.net team",
   "main": "dist/cjs/cubing.js",
@@ -38,6 +38,7 @@
     "pegjs-jest": "0.0.2",
     "prettier": "^2.1.1",
     "rollup": "^2.26.11",
+    "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-notify": "^1.1.0",
@@ -54,7 +55,8 @@
     "clean": "rm -rf dist .cache .rpt2_cache",
     "test": "npm run test-jest && npm run lint",
     "test-jest": "npx jest",
-    "test-node-require": "node -e \"console.log(require(\\\".\\\"))\"",
+    "test-node-require": "node dist-test/require.cjs",
+    "test-node-import": "node dist-test/import.mjs",
     "format": "npx eslint --fix .; npx prettier --write src app *.config.js */index.js */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint .",
@@ -120,6 +122,7 @@
     },
     "ignorePatterns": [
       "/dist",
+      "/dist-test",
       "/node_modules"
     ],
     "env": {
@@ -133,5 +136,39 @@
     "trailingComma": "all",
     "tabWidth": 2,
     "quoteProps": "consistent"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/cubing.js",
+      "import": "./dist/esm/cubing.js"
+    },
+    "./alg": {
+      "require": "./dist/cjs/alg.js",
+      "import": "./dist/esm/alg.js"
+    },
+    "./bluetooth": {
+      "require": "./dist/cjs/bluetooth.js",
+      "import": "./dist/esm/bluetooth.js"
+    },
+    "./kpuzzle": {
+      "require": "./dist/cjs/kpuzzle.js",
+      "import": "./dist/esm/kpuzzle.js"
+    },
+    "./protocol": {
+      "require": "./dist/cjs/protocol.js",
+      "import": "./dist/esm/protocol.js"
+    },
+    "./puzzle-geometry": {
+      "require": "./dist/cjs/puzzle-geometry.js",
+      "import": "./dist/esm/puzzle-geometry.js"
+    },
+    "./stream": {
+      "require": "./dist/cjs/stream.js",
+      "import": "./dist/esm/stream.js"
+    },
+    "./twisty": {
+      "require": "./dist/cjs/twisty.js",
+      "import": "./dist/esm/twisty.js"
+    }
   }
 }

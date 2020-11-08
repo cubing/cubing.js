@@ -1,17 +1,26 @@
+const zeroCache: number[][] = [];
+const iotaCache: number[][] = [];
+
 export function zeros(n: number): number[] {
-  const c = Array(n);
-  for (let i = 0; i < n; i++) {
-    c[i] = 0;
+  if (!zeroCache[n]) {
+    const c = Array(n);
+    for (let i = 0; i < n; i++) {
+      c[i] = 0;
+    }
+    zeroCache[n] = c;
   }
-  return c;
+  return zeroCache[n];
 }
 
 export function iota(n: number): number[] {
-  const c = Array(n);
-  for (let i = 0; i < n; i++) {
-    c[i] = i;
+  if (!iotaCache[n]) {
+    const c = Array(n);
+    for (let i = 0; i < n; i++) {
+      c[i] = i;
+    }
+    iotaCache[n] = c;
   }
-  return c;
+  return iotaCache[n];
 }
 
 export function identity(n: number): Perm {
