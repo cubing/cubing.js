@@ -9,3 +9,12 @@ console.log(
 
 const alg = require("cubing/alg");
 console.log(alg.algToString(alg.invert(alg.parse("R U R'"))));
+
+console.log("Importing individual modules.");
+require("cubing/alg");
+require("cubing/bluetooth");
+require("cubing/kpuzzle");
+require("cubing/protocol");
+require("cubing/puzzle-geometry");
+require("cubing/stream");
+require("cubing/twisty");

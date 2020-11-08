@@ -170,8 +170,6 @@ const cubieDimensions = {
   hintStickerElevation: 1.45,
 };
 
-type OptionKey = "showMainStickers" | "hintFacelets" | "showFoundation";
-
 interface Cube3DOptions {
   showMainStickers?: boolean;
   hintFacelets?: HintFaceletStyle;
@@ -319,14 +317,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
     const def = Puzzles["3x3x3"];
 
-    this.options = {};
-    for (const key in cube3DOptionsDefaults) {
-      // TODO:Don't use `any`.
-      this.options[key as OptionKey] =
-        key in options
-          ? (options as any)[key]
-          : (cube3DOptionsDefaults as any)[key];
-    }
+    this.options = { ...cube3DOptionsDefaults };
+    Object.assign(this.options, cube3DOptionsDefaults); // TODO: check if this works
 
     if (def.name !== "3x3x3") {
       throw new Error("Invalid puzzle for this Cube3D implementation.");
