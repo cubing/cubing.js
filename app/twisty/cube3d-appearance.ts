@@ -50,17 +50,13 @@ const oi: PieceAppearance = {
   facelets: ["oriented", "ignored", "ignored"],
 };
 
-const invis: PieceAppearance = {
-  facelets: ["invisible", "invisible", "invisible"],
-};
-
-addAlg("COLL", "R' U' R U R' F R U R' U' R' F' R2").setAppearance({
+addAlg("PLL", "R U R' U' R' F R2 U' R' U' R U R' F'").setAppearance({
   orbits: {
     EDGES: {
-      pieces: [di, di, di, di, d, d, d, d, d, d, d, d],
+      pieces: [p, p, p, p, d, d, d, d, d, d, d, d],
     },
     CORNERS: {
-      pieces: [r, r, r, r, d, d, d, d],
+      pieces: [p, p, p, p, d, d, d, d],
     },
     CENTERS: {
       pieces: [p, d, d, d, d, d],
