@@ -3,5 +3,6 @@
 /.cache
 /.parcel-cache
 /.rpt2_cache
+/coverage
 /dist
 /node_modules

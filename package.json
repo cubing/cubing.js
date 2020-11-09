@@ -53,7 +53,7 @@
     "dev": "npx parcel serve --no-autoinstall src/demo/index.html --port 333 --open --dist-dir dist/parcel",
     "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache",
     "test": "npm run test-jest && npm run lint",
-    "test-jest": "npx jest",
+    "test-jest": "npx jest --collectCoverage",
     "test-node-require": "node src/dist-test/require.cjs",
     "test-node-import": "node src/dist-test/import.mjs",
     "format": "npx eslint --fix .; npx prettier --write src *.config.js */index.js */index.d.ts",
@@ -113,6 +113,7 @@
       ]
     },
     "ignorePatterns": [
+      "/coverage",
       "/dist",
       "/dist-test",
       "/src/vendor/modules/three/examples/jsm/libs/stats.module.d.ts",
