@@ -22,7 +22,6 @@
   },
   "include": [
     "src/**/*",
-    "app/**/*",
     "*/index.d.ts",
     "*/index.js",
     "*.config.js"
