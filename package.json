@@ -14,8 +14,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.1",
+    "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.12.1",
+    "@babel/runtime": "^7.12.5",
     "@types/jest": "^24.9.1",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
@@ -27,8 +33,7 @@
     "eslint-plugin-html": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.4.2",
-    "parcel": "^1.12.4",
-    "parcel-bundler": "^1.12.4",
+    "parcel": "^2.0.0-nightly.442",
     "pegjs": "^0.11.0-master.f69239d",
     "prettier": "^2.1.1",
     "ts-jest": "^26.3.0",
@@ -44,8 +49,8 @@
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx pegjs src/cubing/alg/parser/parser-pegjs.pegjs && npx pegjs src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
-    "dev": "npx parcel serve --no-autoinstall src/demo/index.html --port 333 --open --out-dir dist/parcel",
-    "clean": "rm -rf dist .cache .rpt2_cache",
+    "dev": "npx parcel serve --no-autoinstall src/demo/index.html --port 333 --open --dist-dir dist/parcel",
+    "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache",
     "test": "npm run test-jest && npm run lint",
     "test-jest": "npx jest",
     "test-node-require": "node dist-test/require.cjs",
@@ -170,7 +175,7 @@
   "babel": {
     "presets": [
       [
-        "@babel/preset-env",
+        "@babel/preset-typescript",
         {
           "targets": {
             "node": "current"
@@ -179,7 +184,11 @@
       ]
     ],
     "plugins": [
-      "@babel/plugin-transform-runtime"
+      "@babel/plugin-transform-runtime",
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-private-methods",
+      "@babel/plugin-proposal-optional-chaining",
+      "@babel/plugin-proposal-nullish-coalescing-operator"
     ]
   }
 }
