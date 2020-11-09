@@ -1,4 +1,4 @@
-import { parse, Sequence, structureEquals } from "../alg";
+import { parseAlg, Sequence, structureEquals } from "../alg";
 
 import { giikerMoveToBlockMoveForTesting } from "./giiker";
 
@@ -11,19 +11,19 @@ describe("GiiKerCube", () => {
     expect(
       structureEquals(
         new Sequence([giikerMoveToBlockMoveForTesting(1, 1)]),
-        parse("B"),
+        parseAlg("B"),
       ),
     ).toBe(true);
     expect(
       structureEquals(
         new Sequence([giikerMoveToBlockMoveForTesting(2, 3)]),
-        parse("D'"),
+        parseAlg("D'"),
       ),
     ).toBe(true);
     expect(
       structureEquals(
         new Sequence([giikerMoveToBlockMoveForTesting(3, 9)]),
-        parse("L2'"),
+        parseAlg("L2'"),
       ),
     ).toBe(true);
   });

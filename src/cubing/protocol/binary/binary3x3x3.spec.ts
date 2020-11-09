@@ -1,4 +1,4 @@
-import { parse } from "../../alg";
+import { parseAlg } from "../../alg";
 import { KPuzzle, Puzzles, Transformation } from "../../kpuzzle";
 import {
   reid3x3x3ToTwizzleBinary,
@@ -8,7 +8,7 @@ import { bufferToSpacedHex } from "./hex";
 
 function stateForAlg(alg: string): Transformation {
   const kpuzzle = new KPuzzle(Puzzles["3x3x3"]);
-  kpuzzle.applyAlg(parse(alg));
+  kpuzzle.applyAlg(parseAlg(alg));
   return kpuzzle.state;
 }
 

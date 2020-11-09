@@ -1,4 +1,4 @@
-import { algToString, parse, Sequence } from "../../cubing/alg";
+import { algToString, parseAlg, Sequence } from "../../cubing/alg";
 
 // TODO: implement URL listener.
 
@@ -35,7 +35,7 @@ export function getURLParam<K extends ParamName>(
   switch (paramName) {
     case "alg":
       // TODO: can we avoid the `as` cast?
-      return parse(str) as URLParamValues[K];
+      return parseAlg(str) as URLParamValues[K];
     case "puzzle":
       // TODO: can we avoid the `as` cast?
       return str as URLParamValues[K];

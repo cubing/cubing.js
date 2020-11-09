@@ -1,4 +1,4 @@
-import { algToString, parse, Sequence } from "../../cubing/alg";
+import { algToString, parseAlg, Sequence } from "../../cubing/alg";
 import { TwistyPlayer, TwistyPlayerInitialConfig } from "../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./puzzles";
@@ -66,7 +66,7 @@ export class App {
       setURLParams({ alg });
       return true;
     } catch (e) {
-      this.twistyPlayer.alg = parse("");
+      this.twistyPlayer.alg = parseAlg("");
       return false;
     }
   }
@@ -120,7 +120,7 @@ class ControlPane {
   private onAlgInput(canonicalize: boolean): void {
     try {
       const algString = this.algInput.value;
-      const parsedAlg = parse(algString);
+      const parsedAlg = parseAlg(algString);
       this.algChangeCallback(parsedAlg);
 
       const restringifiedAlg = algToString(parsedAlg);

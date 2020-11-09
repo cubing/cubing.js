@@ -2,7 +2,7 @@ import { useNewFaceNames } from "../../cubing/puzzle-geometry";
 
 useNewFaceNames(true);
 
-import { BareBlockMove, parse, Sequence } from "../../cubing/alg/index";
+import { BareBlockMove, parseAlg, Sequence } from "../../cubing/alg/index";
 import "../../cubing/twisty/dom/TwistyPlayer";
 import { TwistyPlayer } from "../../cubing/twisty/index";
 
@@ -33,7 +33,7 @@ window.addEventListener("load", () => {
   // tslint:disable-next-line: no-unused-expression
   elem.appendChild(
     new TwistyPlayer({
-      alg: parse("[[U', R], [U, R']]"),
+      alg: parseAlg("[[U', R], [U, R']]"),
       puzzle: "megaminx",
       visualization: "PG3D",
       backView: "upper-right",

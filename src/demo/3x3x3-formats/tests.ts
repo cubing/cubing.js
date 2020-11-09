@@ -1,5 +1,5 @@
 import { KPuzzle, Puzzles, Transformation } from "../../cubing/kpuzzle";
-import { parse } from "../../cubing/alg";
+import { parseAlg } from "../../cubing/alg";
 import { kpuzzleToStickers, kpuzzleToReidString } from "./convert";
 import { reid3x3x3ToTwizzleBinary } from "../../cubing/protocol";
 import {
@@ -21,7 +21,7 @@ const tests: {
 
 function addTest(name: string, alg: string): void {
   kpuzzle.reset();
-  kpuzzle.applyAlg(parse(alg));
+  kpuzzle.applyAlg(parseAlg(alg));
   tests.push({
     name: name,
     alg: alg,

@@ -1,4 +1,4 @@
-import { parse, Sequence } from "../../alg";
+import { parseAlg, Sequence } from "../../alg";
 import {
   Combine,
   Invert,
@@ -105,9 +105,9 @@ const puzzleOrientationCache: Transformation[][] = new Array(6)
 {
   const orientationKpuzzle = new KPuzzle(Puzzles["3x3x3"]);
   const uAlgs: Sequence[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
-    parse(s),
+    parseAlg(s),
   );
-  const yAlg = parse("y");
+  const yAlg = parseAlg("y");
   for (const uAlg of uAlgs) {
     orientationKpuzzle.reset();
     orientationKpuzzle.applyAlg(uAlg);

@@ -1,4 +1,4 @@
-import { parse } from "../../cubing/alg";
+import { parseAlg } from "../../cubing/alg";
 import { KPuzzle, Puzzles, SVG, Transformation } from "../../cubing/kpuzzle";
 import {
   binaryComponentsToReid3x3x3,
@@ -89,7 +89,7 @@ class App {
   }
 
   applyAlg(s: string): void {
-    this.kpuzzle.applyAlg(parse(s));
+    this.kpuzzle.applyAlg(parseAlg(s));
     this.setState(this.kpuzzle.state);
   }
 

@@ -1,6 +1,6 @@
 import { getPuzzleGeometryByName } from "../puzzle-geometry";
 import { KPuzzleDefinition, EquivalentStates, Combine } from ".";
-import { parse } from "../alg";
+import { parseAlg } from "../alg";
 import { Canonicalize, CanonicalSequenceIterator } from "./canonicalize";
 describe("CanonSequences", () => {
   it("should merge sequences (megaminx test)", () => {
@@ -10,11 +10,11 @@ describe("CanonSequences", () => {
     const canon = new Canonicalize(def);
     const a1 = "U F2 BL R3 L3";
     const a2 = "L2 BL2 F' U2";
-    const ss1 = canon.sequenceToSearchSequence(parse(a1));
+    const ss1 = canon.sequenceToSearchSequence(parseAlg(a1));
     expect(ss1.moveseq.length).toBe(5);
-    const ss2 = canon.sequenceToSearchSequence(parse(a2));
+    const ss2 = canon.sequenceToSearchSequence(parseAlg(a2));
     expect(ss2.moveseq.length).toBe(4);
-    const ss3 = canon.mergeSequenceToSearchSequence(parse(a1 + " " + a2));
+    const ss3 = canon.mergeSequenceToSearchSequence(parseAlg(a1 + " " + a2));
     expect(ss3.moveseq.length).toBe(6);
     expect(ss3.getSequenceAsString()).toBe("U F2 BL2' R2' F' U2");
     expect(

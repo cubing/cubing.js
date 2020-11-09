@@ -4,7 +4,7 @@ import {
   experimentalConcatAlgs,
   modifiedBlockMove,
 } from "./operation";
-import { parse } from "./parser";
+import { parseAlg } from "./parser";
 import { algPartToStringForTesting, algToString } from "./traversal";
 
 describe("operation", () => {
@@ -27,17 +27,17 @@ describe("operation", () => {
   it("can append moves", () => {
     expect(
       algToString(
-        experimentalAppendBlockMove(parse("R U R'"), BareBlockMove("U2")),
+        experimentalAppendBlockMove(parseAlg("R U R'"), BareBlockMove("U2")),
       ),
     ).toBe("R U R' U2");
     expect(
       algToString(
-        experimentalAppendBlockMove(parse("R U R'"), BareBlockMove("R", -2)),
+        experimentalAppendBlockMove(parseAlg("R U R'"), BareBlockMove("R", -2)),
       ),
     ).toBe("R U R' R2'");
     expect(
       algToString(
-        experimentalAppendBlockMove(parse("R U R'"), BareBlockMove("R")),
+        experimentalAppendBlockMove(parseAlg("R U R'"), BareBlockMove("R")),
       ),
     ).toBe("R U R' R");
   });
@@ -45,13 +45,17 @@ describe("operation", () => {
   it("can coalesce appended moves", () => {
     expect(
       algToString(
-        experimentalAppendBlockMove(parse("R U R'"), BareBlockMove("U2"), true),
+        experimentalAppendBlockMove(
+          parseAlg("R U R'"),
+          BareBlockMove("U2"),
+          true,
+        ),
       ),
     ).toBe("R U R' U2");
     expect(
       algToString(
         experimentalAppendBlockMove(
-          parse("R U R'"),
+          parseAlg("R U R'"),
           BareBlockMove("R", -2),
           true,
         ),
@@ -59,20 +63,25 @@ describe("operation", () => {
     ).toBe("R U R3'");
     expect(
       algToString(
-        experimentalAppendBlockMove(parse("R U R'"), BareBlockMove("R"), true),
+        experimentalAppendBlockMove(
+          parseAlg("R U R'"),
+          BareBlockMove("R"),
+          true,
+        ),
       ),
     ).toBe("R U");
   });
 
   it("can concat algs", () => {
     expect(
-      algToString(experimentalConcatAlgs(parse("R U2"), parse("F' D"))),
+      algToString(experimentalConcatAlgs(parseAlg("R U2"), parseAlg("F' D"))),
     ).toBe("R U2 F' D");
     expect(
-      experimentalConcatAlgs(parse("R U2"), parse("U R'")).nestedUnits.length,
+      experimentalConcatAlgs(parseAlg("R U2"), parseAlg("U R'")).nestedUnits
+        .length,
     ).toBe(4);
     expect(
-      algToString(experimentalConcatAlgs(parse("R U2"), parse("U R'"))),
+      algToString(experimentalConcatAlgs(parseAlg("R U2"), parseAlg("U R'"))),
     ).toBe("R U2 U R'");
   });
 });

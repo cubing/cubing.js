@@ -1,4 +1,4 @@
-import { invert, parse } from "../../cubing/alg";
+import { invert, parseAlg } from "../../cubing/alg";
 import {
   Cube3D,
   experimentalSetShareAllNewRenderers,
@@ -14,8 +14,8 @@ function addAlg(stickering: ExperimentalStickering, s: string): Cube3D {
   const div = content.appendChild(document.createElement("div"));
   div.classList.add("case");
   const twistyPlayer = new TwistyPlayer({
-    experimentalStartSetup: invert(parse(s)),
-    alg: parse(s),
+    experimentalStartSetup: invert(parseAlg(s)),
+    alg: parseAlg(s),
     experimentalStickering: stickering,
   });
   div.appendChild(document.createElement("h1")).textContent = stickering;

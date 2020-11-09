@@ -13,7 +13,7 @@ import { matchesAlgType } from "../algorithm/alg-part";
 import { setAlgPartTypeMismatchReportingLevel } from "../debug";
 import { Example as Ex } from "../example";
 import { fromJSON } from "../json";
-import { parse, parseSiGN } from "../parser";
+import { parseAlg, parseSiGN } from "../parser";
 import {
   algPartToStringForTesting,
   algToString,
@@ -243,12 +243,12 @@ describe("expand()", () => {
   });
 
   it("correctly expands a group with two units", () => {
-    expect(expand(parse("(R U)2"))).toStructureEqual(parse("R U R U"));
+    expect(expand(parseAlg("(R U)2"))).toStructureEqual(parseAlg("R U R U"));
   });
 
   it("correctly expands an E-Perm", () => {
     expect(expand(Ex.EPerm)).toStructureEqual(
-      parse("x' R U' R' D R U R' D' R U R' D R U' R' D' x"),
+      parseAlg("x' R U' R' D R U R' D' R U R' D R U' R' D' x"),
     );
   });
 });
@@ -314,47 +314,49 @@ describe("Object Freezing", () => {
 
 describe("Parser", () => {
   it("parses an empty sequence", () => {
-    expect(parse("")).toStructureEqual(new Sequence([]));
-    expect(parse("()")).toStructureEqual(
+    expect(parseAlg("")).toStructureEqual(new Sequence([]));
+    expect(parseAlg("()")).toStructureEqual(
       new Sequence([new Group(new Sequence([]))]),
     );
   });
 
   it("parses a Sune", () => {
-    expect(parse("R U R' U R U2' R'")).toStructureEqual(Ex.Sune);
+    expect(parseAlg("R U R' U R U2' R'")).toStructureEqual(Ex.Sune);
   });
 
   it("parses U u Uw x 2U 2u 2Uw 2-3u 2-3Uw", () => {
     const s = "U u Uw x 2U 2u 2Uw 2-3u 2-3Uw";
-    expect(algToString(parse(s))).toBe(s);
+    expect(algToString(parseAlg(s))).toBe(s);
   });
 
   it("parses ...", () => {
     const p = new Pause();
-    expect(parse("...")).toStructureEqual(new Sequence([p, p, p]));
+    expect(parseAlg("...")).toStructureEqual(new Sequence([p, p, p]));
   });
 
   // TODO: Should these be parsed differently?
   it("parses R and R1 as the same (for now)", () => {
-    expect(parse("R")).toStructureEqual(parse("R1"));
+    expect(parseAlg("R")).toStructureEqual(parseAlg("R1"));
   });
 
   it("round-trips algs through a string", () => {
-    expect(parse(algToString(Ex.SuneCommutator))).toStructureEqual(
+    expect(parseAlg(algToString(Ex.SuneCommutator))).toStructureEqual(
       Ex.SuneCommutator,
     );
-    expect(parse(algToString(Ex.Niklas))).toStructureEqual(Ex.Niklas);
-    expect(parse(algToString(Ex.FURURFCompact))).toStructureEqual(
+    expect(parseAlg(algToString(Ex.Niklas))).toStructureEqual(Ex.Niklas);
+    expect(parseAlg(algToString(Ex.FURURFCompact))).toStructureEqual(
       Ex.FURURFCompact,
     );
-    expect(parse(algToString(Ex.APermCompact))).toStructureEqual(
+    expect(parseAlg(algToString(Ex.APermCompact))).toStructureEqual(
       Ex.APermCompact,
     );
-    expect(parse(algToString(Ex.TPerm))).toStructureEqual(Ex.TPerm);
-    expect(parse(algToString(Ex.HeadlightSwaps))).toStructureEqual(
+    expect(parseAlg(algToString(Ex.TPerm))).toStructureEqual(Ex.TPerm);
+    expect(parseAlg(algToString(Ex.HeadlightSwaps))).toStructureEqual(
       Ex.HeadlightSwaps,
     );
-    expect(parse(algToString(Ex.TriplePause))).toStructureEqual(Ex.TriplePause);
+    expect(parseAlg(algToString(Ex.TriplePause))).toStructureEqual(
+      Ex.TriplePause,
+    );
   });
 
   it("round-trips all alg types through a string", () => {
@@ -363,46 +365,48 @@ describe("Parser", () => {
       const seq = matchesAlgType(a, "sequence")
         ? (a as Sequence)
         : new Sequence([a]);
-      expect(parse(algToString(seq))).toStructureEqual(seq);
+      expect(parseAlg(algToString(seq))).toStructureEqual(seq);
     }
   });
 });
 
 describe("Validator", () => {
   it("can validate flat algs", () => {
-    expect(() => parse("(R)", { validators: [validateFlatAlg] })).toThrowError(
-      /cannot contain a group/,
-    ); // toThrowError(ValidationError, /cannot contain a group/);
-    expect(() => parse("Qw", { validators: [validateFlatAlg] })).not.toThrow(); // not.toThrowError();
-    expect(() => parse("(Qw)", { validators: [validateFlatAlg] })).toThrowError(
-      /cannot contain a group/,
-    ); // toThrowError(ValidationError, );
+    expect(() =>
+      parseAlg("(R)", { validators: [validateFlatAlg] }),
+    ).toThrowError(/cannot contain a group/); // toThrowError(ValidationError, /cannot contain a group/);
+    expect(() =>
+      parseAlg("Qw", { validators: [validateFlatAlg] }),
+    ).not.toThrow(); // not.toThrowError();
+    expect(() =>
+      parseAlg("(Qw)", { validators: [validateFlatAlg] }),
+    ).toThrowError(/cannot contain a group/); // toThrowError(ValidationError, );
   });
   it("can validate cube base moves alg", () => {
     expect(() =>
-      parse("(R)", { validators: [validateSiGNMoves] }),
+      parseAlg("(R)", { validators: [validateSiGNMoves] }),
     ).not.toThrowError();
-    expect(() => parse("Qw", { validators: [validateSiGNMoves] })).toThrowError(
-      /Invalid SiGN plain move family/,
-    );
     expect(() =>
-      parse("(Qw)", { validators: [validateSiGNMoves] }),
+      parseAlg("Qw", { validators: [validateSiGNMoves] }),
+    ).toThrowError(/Invalid SiGN plain move family/);
+    expect(() =>
+      parseAlg("(Qw)", { validators: [validateSiGNMoves] }),
     ).toThrowError(/Invalid SiGN plain move family/);
   });
   it("can validate cube algs", () => {
-    expect(() => parse("(R)", { validators: [validateSiGNAlg] })).toThrowError(
-      /cannot contain a group/,
-    );
-    expect(() => parse("Qw", { validators: [validateSiGNAlg] })).toThrowError(
-      /Invalid SiGN plain move family/,
-    );
-    expect(() => parse("(Qw)", { validators: [validateSiGNAlg] })).toThrowError(
-      ValidationError,
-    );
+    expect(() =>
+      parseAlg("(R)", { validators: [validateSiGNAlg] }),
+    ).toThrowError(/cannot contain a group/);
+    expect(() =>
+      parseAlg("Qw", { validators: [validateSiGNAlg] }),
+    ).toThrowError(/Invalid SiGN plain move family/);
+    expect(() =>
+      parseAlg("(Qw)", { validators: [validateSiGNAlg] }),
+    ).toThrowError(ValidationError);
   });
   it("throws ValidationError", () => {
-    expect(() => parse("(R)", { validators: [validateFlatAlg] })).toThrowError(
-      ValidationError,
-    );
+    expect(() =>
+      parseAlg("(R)", { validators: [validateFlatAlg] }),
+    ).toThrowError(ValidationError);
   });
 });

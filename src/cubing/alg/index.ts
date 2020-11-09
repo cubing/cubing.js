@@ -41,7 +41,7 @@ export { Example } from "./example";
 
 export { AlgJSON, fromJSON } from "./json";
 
-export { parse } from "./parser";
+export { parse, parseAlg } from "./parser";
 
 export { keyToMove } from "./keyboard";
 

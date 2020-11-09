@@ -1,6 +1,11 @@
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import { algToString, invert, parse, Sequence } from "../../cubing/alg/index";
+import {
+  algToString,
+  invert,
+  parseAlg,
+  Sequence,
+} from "../../cubing/alg/index";
 import { OrientationEvent } from "../../cubing/bluetooth/bluetooth-puzzle";
 import {
   BluetoothPuzzle,
@@ -30,7 +35,7 @@ declare global {
 
 window.puzzle = null;
 
-console.log(algToString(invert(parse("R U R' F D"))));
+console.log(algToString(invert(parseAlg("R U R' F D"))));
 window.addEventListener("load", async () => {
   const twistyPlayer = new TwistyPlayer({ alg: new Sequence([]) });
   document.body.appendChild(twistyPlayer);

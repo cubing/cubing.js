@@ -8,10 +8,10 @@ import {
   experimentalAppendBlockMove,
   modifiedBlockMove,
   MoveFamily,
-  parse as algparse,
+  parseAlg as algparse,
   Sequence,
 } from "../../cubing/alg/index";
-import { parse } from "../../cubing/alg/parser";
+import { parseAlg } from "../../cubing/alg/parser";
 import {
   connect,
   debugKeyboardConnect,
@@ -192,7 +192,7 @@ function trimEq(a: string, b: string): boolean {
 }
 
 function updateMoveCount(alg?: Sequence): void {
-  const len = countMoves(alg ? alg : parse(lastalgo));
+  const len = countMoves(alg ? alg : parseAlg(lastalgo));
   const mc = document.getElementById("movecount");
   if (mc) {
     mc.innerText = "Moves: " + len;

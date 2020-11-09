@@ -1,7 +1,7 @@
 // // type ConfigAttributes = Record<string, any>;
 
 import { Vector3 } from "three";
-import { algToString, parse, Sequence } from "../../../alg";
+import { algToString, parseAlg, Sequence } from "../../../alg";
 
 export class AlgAttribute {
   string: string;
@@ -36,7 +36,7 @@ export class AlgAttribute {
   }
 
   private toValue(s: string): Sequence {
-    return parse(s);
+    return parseAlg(s);
   }
 
   private toString(s: Sequence): string {

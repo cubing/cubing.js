@@ -9,7 +9,7 @@ export interface ParseOptions {
 
 // TODO: Include token location info.
 // TODO: Take validators in a way that allows optimizing parsing.
-export function parse(
+export function parseAlg(
   s: string,
   options: ParseOptions = { validators: [] },
 ): Sequence {
@@ -23,5 +23,10 @@ export function parse(
 }
 
 export function parseSiGN(s: string): Sequence {
-  return parse(s, { validators: [validateSiGNAlg] });
+  return parseAlg(s, { validators: [validateSiGNAlg] });
+}
+
+/** @deprecated Please use `parseAlg`. */
+export function parse(s: string, options?: ParseOptions): Sequence {
+  return parseAlg(s, options);
 }

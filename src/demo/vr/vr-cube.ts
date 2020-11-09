@@ -18,7 +18,7 @@ import {
   BlockMove,
   coalesceBaseMoves,
   experimentalAppendBlockMove,
-  parse,
+  parseAlg,
   Sequence,
 } from "../../cubing/alg/index";
 import { Puzzles } from "../../cubing/kpuzzle";
@@ -108,7 +108,7 @@ export class VRCube {
     this.cursor = new AlgCursor(
       this.timeline,
       Puzzles["3x3x3"],
-      parse("R U R'"),
+      parseAlg("R U R'"),
     );
 
     this.timeline.addCursor(this.cursor);

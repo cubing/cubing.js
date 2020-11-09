@@ -1,5 +1,5 @@
 import { Sequence } from "./algorithm";
-import { parse } from "./parser";
+import { parseAlg } from "./parser";
 import { algToString } from "./traversal";
 
 // This is not the most sophisticated scheme, but it has been used in production
@@ -17,7 +17,7 @@ export function deserializeURLParam(a: string): Sequence {
   unescaped = unescaped.replace(/-/g, "'").replace(/&#45;/g, "-");
   unescaped = unescaped.replace(/\+/g, " ").replace(/&#2b;/g, "+"); // Recognize + as space. Many URL encodings will do this.
   unescaped = unescaped.replace(/_/g, " ").replace(/&#95;/g, "_");
-  return parse(unescaped);
+  return parseAlg(unescaped);
 }
 
 // Returns an empty sequence if the parameter is not present.

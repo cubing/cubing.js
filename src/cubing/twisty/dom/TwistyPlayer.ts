@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import { countMoves } from "../TODO-MOVE-ME/move-counter"; // TODO
 import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
-import { parse } from "../../alg/parser";
+import { parseAlg } from "../../alg/parser";
 import { KPuzzleDefinition, Puzzles } from "../../kpuzzle";
 import {
   getPuzzleGeometryByName,
@@ -118,7 +118,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       console.warn(
         "`alg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
-      seq = parse((seq as unknown) as string) as Sequence;
+      seq = parseAlg((seq as unknown) as string) as Sequence;
     }
     this.#config.attributes["alg"].setValue(seq);
     this.cursor?.setAlg(seq); // TODO: can we ensure the cursor already exists?
@@ -135,7 +135,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       console.warn(
         "`experimentalStartSetup` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
-      seq = parse((seq as unknown) as string) as Sequence;
+      seq = parseAlg((seq as unknown) as string) as Sequence;
     }
     this.#config.attributes["experimental-start-setup"].setValue(seq);
     if (this.cursor) {
