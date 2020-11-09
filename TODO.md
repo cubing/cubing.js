@@ -1,3 +1,0 @@
-- Preserve class names and function arguments
-  - `require(".").alg.parse("R").constructor.name`
-- Extend `expect` to test for alg equality.
