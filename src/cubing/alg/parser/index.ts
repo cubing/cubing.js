@@ -1,7 +1,7 @@
 import { Sequence } from "../algorithm";
 import { fromJSON } from "../json";
 import { validateSiGNAlg, Validator } from "../validation";
-import { parse as pegParse } from "./parser-pegjs";
+import { pegParseAlgJSON } from "./parser-shim";
 
 export interface ParseOptions {
   validators?: Validator[];
@@ -15,7 +15,7 @@ export function parse(
 ): Sequence {
   options.validators = options.validators || [];
 
-  const algo = fromJSON(pegParse(s));
+  const algo = fromJSON(pegParseAlgJSON(s));
   for (const validate of options.validators) {
     validate(algo);
   }
