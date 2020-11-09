@@ -69,7 +69,7 @@ Examples:
    puzzlegeometry --ss --fixcorner 2x2x2
    puzzlegeometry --ss --moves U,F2,r 4x4x4
    puzzlegeometry --ksolve --optimize --moves U,F,R megaminx
-   puzzlegeometry --gap kilominx
+   puzzlegeometry --gap --noedges megaminx
 `);
 }
 if (
