@@ -60,9 +60,14 @@
     "setup": "npm install",
     "lint": "npx eslint .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
-    "parcel-build-for-twizzle-net": "parcel build --public-url ./ --dist-dir dist/twizzle.net/explore src/demo/twizzle/index.html",
-    "parcel-build-for-vr-cubing-net": "parcel build --public-url ./ --dist-dir dist/experiments.cubing.net/vr src/demo/vr/index.html",
-    "parcel-build-for-experiments-cubing-net": "parcel build --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html"
+    "parcel-build-for-twizzle-net": "parcel build --target twizzle-net --public-url ./ --dist-dir dist/twizzle.net/explore src/demo/twizzle/index.html",
+    "parcel-build-for-vr-cubing-net": "parcel build --target vr-cubing-net --public-url ./ --dist-dir dist/experiments.cubing.net/vr src/demo/vr/index.html",
+    "parcel-build-for-experiments-cubing-net": "parcel build --target experiments-cubing-net --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html"
+  },
+  "targets": {
+    "twizzle-net": {},
+    "vr-cubing-net": {},
+    "experiments-cubing-net": {}
   },
   "bin": {},
   "keywords": [
