@@ -5,4 +5,5 @@
 !/package-lock.json
 !/dist/**/*
 !/src/**/*
-!/**/package.json
+!/*/package.json
+!/*/index.d.ts
