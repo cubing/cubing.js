@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import { countMoves } from "../TODO-MOVE-ME/move-counter"; // TODO
 import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
-import { parse } from "../../alg/parser/parser";
+import { parse } from "../../alg/parser";
 import { KPuzzleDefinition, Puzzles } from "../../kpuzzle";
 import {
   getPuzzleGeometryByName,

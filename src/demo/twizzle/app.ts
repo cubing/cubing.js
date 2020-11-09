@@ -11,7 +11,7 @@ import {
   parse as algparse,
   Sequence,
 } from "../../cubing/alg/index";
-import { parse } from "../../cubing/alg/parser/parser";
+import { parse } from "../../cubing/alg/parser";
 import {
   connect,
   debugKeyboardConnect,
