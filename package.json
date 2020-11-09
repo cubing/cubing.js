@@ -26,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "babel-jest": "^24.9.0",
+    "baretest": "^2.0.0",
     "esbuild": "^0.8.5",
     "eslint": "^7.8.1",
     "eslint-config-mdcs": "^5.0.0",
@@ -174,6 +175,14 @@
   },
   "babel": {
     "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
       "@babel/preset-typescript"
     ],
     "plugins": [
@@ -188,10 +197,6 @@
     "roots": [
       "<rootDir>/src"
     ],
-    "transform": {
-      "^.+\\.js$": "babel-jest",
-      "^.+\\.ts$": "ts-jest"
-    },
     "transformIgnorePatterns": [
       "node_modules/(?!(three/))"
     ]
