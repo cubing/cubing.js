@@ -36,7 +36,7 @@ type ButtonIconName =
   | "enter-fullscreen"
   | "exit-fullscreen";
 
-class TwistyControlButton
+export class TwistyControlButton
   extends ManagedCustomElement
   implements TwistyControlElement {
   private timeline: Timeline;
