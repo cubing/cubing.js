@@ -21,6 +21,7 @@ let scene: Scene,
 let width: number, height: number;
 
 const m = 60;
+const useStats = true;
 
 function init() {
   scene = new Scene();
@@ -31,8 +32,10 @@ function init() {
   initRenderer();
   initCube();
   document.body.appendChild(renderer.domElement);
-  stats = createStats();
-  document.body.appendChild(stats.domElement);
+  if (useStats) {
+    stats = createStats();
+    document.body.appendChild(stats.domElement);
+  }
   requestAnimationFrame(render);
 }
 function initCamera() {
@@ -159,7 +162,9 @@ function render() {
   requestAnimationFrame(render);
   rotateCube();
   renderer.render(scene, camera);
-  stats.update();
+  if (stats) {
+    stats.update();
+  }
 }
 function createStats() {
   stats = Stats();
