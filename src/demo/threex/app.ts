@@ -285,7 +285,7 @@ function initCube() {
   } else if (cubeType * 1 === 2) {
     cube = getCube2();
   } else {
-     cube = getCube3();
+    cube = getCube3();
   }
   scene.add(cube);
 }
