@@ -21,8 +21,8 @@ let scene: Scene,
 
 let width: number, height: number;
 
-const m = 30;
-const cubeType = 3;
+const m = 100;
+const cubeType = 1;
 const useStats = true;
 
 function init() {
@@ -288,13 +288,18 @@ function initCube() {
     cube = getCube3();
   }
   scene.add(cube);
+  const gr = new Group();
+  gr.add(cube.clone());
+  gr.translateX(1);
+  scene.add(gr);
+  cube = gr;
 }
 
 const speed = 0.01;
 function rotateCube() {
   cube.rotation.x -= speed;
-  cube.rotation.y -= speed;
-  cube.rotation.z -= speed;
+  cube.rotation.y -= speed * 1.6181;
+  cube.rotation.z -= speed * 2.6181;
 }
 function render() {
   requestAnimationFrame(render);
