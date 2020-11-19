@@ -41,27 +41,35 @@ const polyMaterial = new MeshBasicMaterial({
   color: 0x000000,
 });
 
-function makePoly(coords: number[][], color: Color): Geometry {
-  const geo = new Geometry();
+function makePoly(
+  geo: Geometry,
+  coords: number[][],
+  color: Color,
+  scale: number,
+  ind: number,
+): void {
   const vertind: number[] = [];
   for (const coord of coords) {
     const v = new Vector3(coord[0], coord[1], coord[2]);
+    if (scale !== 1) {
+      v.multiplyScalar(scale);
+    }
     vertind.push(geo.vertices.length);
     geo.vertices.push(v);
   }
   for (let g = 1; g + 1 < vertind.length; g++) {
     const face = new Face3(vertind[0], vertind[g], vertind[g + 1]);
+    face.materialIndex = ind;
     face.color = color;
     geo.faces.push(face);
   }
   geo.computeFaceNormals();
-  return geo;
 }
 
 class StickerDef {
   public origColor: Color;
   public faceColor: Color;
-  public cubie: Group;
+  public cubie: Object3D;
   protected geo: Geometry;
   constructor(
     stickerDat: StickerDatSticker,
@@ -69,18 +77,23 @@ class StickerDef {
   ) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
-    this.cubie = new Group();
-    this.geo = makePoly(stickerDat.coords as number[][], this.faceColor);
-    const obj = new Mesh(this.geo, stickerMaterial);
+    this.geo = new Geometry();
+    makePoly(this.geo, stickerDat.coords as number[][], this.faceColor, 1, 0);
+    const materialArray = [stickerMaterial];
+    if (foundationDat) {
+      materialArray.push(foundationMaterial);
+      makePoly(
+        this.geo,
+        foundationDat.coords as number[][],
+        this.faceColor,
+        0.999,
+        1,
+      );
+    }
+    const obj = new Mesh(this.geo, materialArray);
     obj.userData.name =
       stickerDat.orbit + " " + (1 + stickerDat.ord) + " " + stickerDat.ori;
-    this.cubie.add(obj);
-    if (foundationDat) {
-      const fgeo = makePoly(foundationDat.coords as number[][], this.faceColor);
-      const foundation = new Mesh(fgeo, foundationMaterial);
-      foundation.scale.setScalar(0.999); // TODO: hacky
-      this.cubie.add(foundation);
-    }
+    this.cubie = obj;
   }
 
   public setColor(c: Color): void {
