@@ -241,6 +241,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         }
       }
     }
+    this.movingObj.rotation.copy(noRotation);
     // FIXME tgr const kp = new KPuzzle(this.definition);
     for (const moveProgress of p.movesInProgress) {
       const externalBlockMove = moveProgress.move as BlockMove;
@@ -260,7 +261,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           blockMove.amount *
           TAU) /
         ax.order;
-      this.movingObj.rotation.copy(noRotation);
       this.movingObj.rotateOnAxis(turnNormal, angle);
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
