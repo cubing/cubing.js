@@ -9,7 +9,7 @@ import { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import Stats from "../../../../vendor/node_modules/three/examples/jsm/libs/stats.module";
 
-let SHOW_STATS = false;
+let SHOW_STATS = true;
 // Show render stats for newly contructed renderers.
 export function experimentalShowRenderStats(show: boolean): void {
   SHOW_STATS = show;

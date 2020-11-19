@@ -36,9 +36,7 @@ const stickerMaterial = new MeshBasicMaterial({
   //    side: DoubleSide,
 });
 const polyMaterial = new MeshBasicMaterial({
-  transparent: true,
-  opacity: 0,
-  color: 0x000000,
+  visible: false,
 });
 
 function makePoly(
@@ -47,6 +45,7 @@ function makePoly(
   color: Color,
   scale: number,
   ind: number,
+  facearray: Face3[],
 ): void {
   const vertind: number[] = [];
   for (const coord of coords) {
@@ -62,6 +61,7 @@ function makePoly(
     face.materialIndex = ind;
     face.color = color;
     geo.faces.push(face);
+    facearray.push(face);
   }
   geo.computeFaceNormals();
 }
@@ -69,35 +69,37 @@ function makePoly(
 class StickerDef {
   public origColor: Color;
   public faceColor: Color;
-  public cubie: Object3D;
-  protected geo: Geometry;
+  public facearray: Face3[] = [];
   constructor(
+    fixedGeo: Geometry,
     stickerDat: StickerDatSticker,
     foundationDat: StickerDatSticker | undefined,
   ) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
-    this.geo = new Geometry();
-    makePoly(this.geo, stickerDat.coords as number[][], this.faceColor, 1, 0);
-    const materialArray = [stickerMaterial];
+    makePoly(
+      fixedGeo,
+      stickerDat.coords as number[][],
+      this.faceColor,
+      1,
+      0,
+      this.facearray,
+    );
     if (foundationDat) {
-      materialArray.push(foundationMaterial);
       makePoly(
-        this.geo,
+        fixedGeo,
         foundationDat.coords as number[][],
         this.faceColor,
         0.999,
-        1,
+        2,
+        this.facearray,
       );
     }
-    const obj = new Mesh(this.geo, materialArray);
-    obj.userData.name =
-      stickerDat.orbit + " " + (1 + stickerDat.ord) + " " + stickerDat.ori;
-    this.cubie = obj;
+    // obj.userData.name =
+    //   stickerDat.orbit + " " + (1 + stickerDat.ord) + " " + stickerDat.ori;
   }
 
   public setColor(c: Color): void {
-    this.geo.colorsNeedUpdate = true;
     this.faceColor.copy(c);
   }
 }
@@ -147,6 +149,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private stickerTargets: Object3D[] = [];
   private controlTargets: Object3D[] = [];
 
+  protected movingObj: Object3D;
+  protected fixedGeo: Geometry;
+
   constructor(
     cursor: AlgCursor,
     private scheduleRenderCallback: () => void,
@@ -163,6 +168,19 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     const stickers = this.pgdat.stickers as any[];
     this.stickers = {};
+    const materialArray1 = [
+      stickerMaterial,
+      polyMaterial,
+      foundationMaterial,
+      polyMaterial,
+    ];
+    const materialArray2 = [
+      polyMaterial,
+      stickerMaterial,
+      polyMaterial,
+      foundationMaterial,
+    ];
+    const fixedGeo = new Geometry();
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
       const foundation = showFoundation
@@ -177,13 +195,18 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const stickerdef = new StickerDef(sticker, foundation);
-      stickerdef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
+      const stickerdef = new StickerDef(fixedGeo, sticker, foundation);
       this.stickers[orbit][ori][ord] = stickerdef;
-      this.add(stickerdef.cubie);
-      this.stickerTargets.push(stickerdef.cubie.children[0]);
     }
+    const obj = new Mesh(fixedGeo, materialArray1);
+    obj.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
+    this.add(obj);
+    const obj2 = new Mesh(fixedGeo, materialArray2);
+    obj2.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
+    this.add(obj2);
     const hitfaces = this.pgdat.faces as any[];
+    this.movingObj = obj2;
+    this.fixedGeo = fixedGeo;
     for (const hitface of hitfaces) {
       const facedef = new HitPlaneDef(hitface);
       facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
@@ -212,7 +235,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       for (let ori = 0; ori < orin; ori++) {
         const pieces2 = pieces[ori];
         for (let i = 0; i < pieces2.length; i++) {
-          pieces2[i].cubie.rotation.copy(noRotation);
           const nori = (ori + orin - pos2.orientation[i]) % orin;
           const ni = pos2.permutation[i];
           pieces2[i].setColor(pieces[nori][ni].origColor);
@@ -238,6 +260,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           blockMove.amount *
           TAU) /
         ax.order;
+      this.movingObj.rotation.copy(noRotation);
+      this.movingObj.rotateOnAxis(turnNormal, angle);
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
         const orin = pieces.length;
@@ -247,12 +271,20 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           for (let i = 0; i < pieces2.length; i++) {
             const ni = bmv.permutation[i];
             if (ni !== i || bmv.orientation[i] !== 0) {
-              pieces2[i].cubie.rotateOnAxis(turnNormal, angle);
+              for (const f of pieces2[i].facearray) {
+                f.materialIndex |= 1;
+              }
+            } else {
+              for (const f of pieces2[i].facearray) {
+                f.materialIndex &= ~1;
+              }
             }
           }
         }
       }
+      this.fixedGeo.groupsNeedUpdate = true;
     }
+    this.fixedGeo.colorsNeedUpdate = true;
     this.scheduleRenderCallback!();
   }
 

@@ -17,11 +17,12 @@ let scene: Scene,
   camera: PerspectiveCamera,
   renderer: WebGLRenderer,
   cube: Object3D,
+  cube2: Object3D,
   stats: Stats;
 
 let width: number, height: number;
 
-const m = 100;
+const m = 5;
 const cubeType = 1;
 const useStats = true;
 
@@ -287,19 +288,22 @@ function initCube() {
   } else {
     cube = getCube3();
   }
-  scene.add(cube);
+  cube2 = cube.clone();
   const gr = new Group();
-  gr.add(cube.clone());
-  gr.translateX(1);
+  gr.add(cube);
+  gr.add(cube2);
   scene.add(gr);
-  cube = gr;
 }
 
 const speed = 0.01;
+
 function rotateCube() {
   cube.rotation.x -= speed;
   cube.rotation.y -= speed * 1.6181;
   cube.rotation.z -= speed * 2.6181;
+  cube2.rotation.x -= speed * 1.31;
+  cube2.rotation.y -= speed * 1.009391;
+  cube2.rotation.z -= speed * 0.39391;
 }
 function render() {
   requestAnimationFrame(render);
