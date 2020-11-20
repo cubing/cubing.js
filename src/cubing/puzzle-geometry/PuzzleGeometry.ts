@@ -1017,13 +1017,13 @@ export class PuzzleGeometry {
       return arr[0];
     }
     const cm = centermassface(face);
-    for (let i = 0; i+1 < arr.length; i++) {
+    for (let i = 0; i + 1 < arr.length; i++) {
       const face2 = this.facelisthash[key][i];
       if (Math.abs(cm.dist(centermassface(this.faces[face2]))) < eps) {
         return face2;
       }
     }
-    return arr[arr.length-1];
+    return arr[arr.length - 1];
   }
 
   public project2d(facen: number, edgen: number, targvec: Quat[]): any {
