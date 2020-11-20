@@ -46,6 +46,7 @@ function makePoly(
   color: Color,
   scale: number,
   ind: number,
+  faceArray: Face3[],
 ): void {
   const vertind: number[] = [];
   for (const coord of coords) {
@@ -61,36 +62,41 @@ function makePoly(
     face.materialIndex = ind;
     face.color = color;
     geo.faces.push(face);
+    faceArray.push(face);
   }
 }
 
 class StickerDef {
   public origColor: Color;
   public faceColor: Color;
-  public firstface: number;
-  public lastface: number;
+  public faceArray: Face3[] = [];
   public twistVal: number = -1;
-  constructor(
-    fixedGeo: Geometry,
-    stickerDat: StickerDatSticker,
-    foundationDat: StickerDatSticker | undefined,
-  ) {
-    this.firstface = fixedGeo.faces.length;
+  constructor(fixedGeo: Geometry, stickerDat: StickerDatSticker) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
-    makePoly(fixedGeo, stickerDat.coords as number[][], this.faceColor, 1, 0);
-    if (foundationDat) {
-      makePoly(
-        fixedGeo,
-        foundationDat.coords as number[][],
-        this.faceColor,
-        0.999,
-        2,
-      );
-    }
-    this.lastface = fixedGeo.faces.length;
-    // obj.userData.name =
-    //   stickerDat.orbit + " " + (1 + stickerDat.ord) + " " + stickerDat.ori;
+    makePoly(
+      fixedGeo,
+      stickerDat.coords as number[][],
+      this.faceColor,
+      1,
+      0,
+      this.faceArray,
+    );
+  }
+
+  public addFoundation(
+    fixedGeo: Geometry,
+    foundationDat: StickerDatSticker,
+    black: Color,
+  ) {
+    makePoly(
+      fixedGeo,
+      foundationDat.coords as number[][],
+      black,
+      0.999,
+      2,
+      this.faceArray,
+    );
   }
 
   public setColor(c: Color): number {
@@ -210,11 +216,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       foundationMaterial,
     ];
     const fixedGeo = new Geometry();
+    const black = new Color(0);
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
-      const foundation = showFoundation
-        ? this.pgdat.foundations[si]
-        : undefined;
       const orbit = sticker.orbit as number;
       const ord = sticker.ord as number;
       const ori = sticker.ori as number;
@@ -224,8 +228,22 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const stickerdef = new StickerDef(fixedGeo, sticker, foundation);
+      const stickerdef = new StickerDef(fixedGeo, sticker);
       this.stickers[orbit][ori][ord] = stickerdef;
+    }
+    if (showFoundation) {
+      for (let si = 0; si < stickers.length; si++) {
+        const sticker = stickers[si];
+        const foundation = this.pgdat.foundations[si];
+        const orbit = sticker.orbit as number;
+        const ord = sticker.ord as number;
+        const ori = sticker.ori as number;
+        this.stickers[orbit][ori][ord].addFoundation(
+          fixedGeo,
+          foundation,
+          black,
+        );
+      }
     }
     fixedGeo.computeFaceNormals();
     const obj = new Mesh(fixedGeo, materialArray1);
@@ -315,20 +333,12 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               }
               if (tv !== pieces2[i].twistVal) {
                 if (tv) {
-                  for (
-                    let fi = pieces2[i].firstface;
-                    fi < pieces2[i].lastface;
-                    fi++
-                  ) {
-                    this.fixedGeo.faces[fi].materialIndex |= 1;
+                  for (const f of pieces2[i].faceArray) {
+                    f.materialIndex |= 1;
                   }
                 } else {
-                  for (
-                    let fi = pieces2[i].firstface;
-                    fi < pieces2[i].lastface;
-                    fi++
-                  ) {
-                    this.fixedGeo.faces[fi].materialIndex &= ~1;
+                  for (const f of pieces2[i].faceArray) {
+                    f.materialIndex &= ~1;
                   }
                 }
                 pieces2[i].twistVal = tv;
