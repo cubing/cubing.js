@@ -9,7 +9,7 @@ import { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import Stats from "../../../../vendor/node_modules/three/examples/jsm/libs/stats.module";
 
-let SHOW_STATS = true;
+let SHOW_STATS = false;
 // Show render stats for newly contructed renderers.
 export function experimentalShowRenderStats(show: boolean): void {
   SHOW_STATS = show;
@@ -165,6 +165,9 @@ export class Twisty3DCanvas
       this.contentWrapper.classList.remove("invisible");
     }
     this.stats?.end();
+    if (Math.random() < 0.003) {
+      console.log(this.renderer.info);
+    }
   }
 
   private onResize(): void {
