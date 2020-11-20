@@ -64,7 +64,6 @@ function makePoly(
     geo.faces.push(face);
     facearray.push(face);
   }
-  geo.computeFaceNormals();
 }
 
 class StickerDef {
@@ -207,6 +206,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const stickerdef = new StickerDef(fixedGeo, sticker, foundation);
       this.stickers[orbit][ori][ord] = stickerdef;
     }
+    fixedGeo.computeFaceNormals();
     const obj = new Mesh(fixedGeo, materialArray1);
     obj.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
     this.add(obj);
