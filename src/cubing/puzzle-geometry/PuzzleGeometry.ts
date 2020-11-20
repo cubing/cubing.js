@@ -1011,15 +1011,19 @@ export class PuzzleGeometry {
   }
 
   public findface(face: Quat[]): number {
-    const cm = centermassface(face);
     const key = this.keyface(face);
-    for (let i = 0; i < this.facelisthash[key].length; i++) {
+    const arr = this.facelisthash[key];
+    if (arr.length === 1) {
+      return arr[0];
+    }
+    const cm = centermassface(face);
+    for (let i = 0; i+1 < arr.length; i++) {
       const face2 = this.facelisthash[key][i];
       if (Math.abs(cm.dist(centermassface(this.faces[face2]))) < eps) {
         return face2;
       }
     }
-    throw new Error("Could not find face.");
+    return arr[arr.length-1];
   }
 
   public project2d(facen: number, edgen: number, targvec: Quat[]): any {
