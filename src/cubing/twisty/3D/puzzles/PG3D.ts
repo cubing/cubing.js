@@ -141,6 +141,34 @@ class AxisInfo {
 const PG_SCALE = 0.5;
 
 // TODO: Split into "scene model" and "view".
+/*
+ *  PG3D uses a single geometry for the puzzle, with all the faces for
+ *  each sticker (including the foundation stickers) in a single
+ *  geometry.  We use the materialIndex in the face to point to a
+ *  specific entry, which is either a colored sticker, invisible, or
+ *  black (foundation).
+ *
+ *  To support general twisting of a subset of the puzzle, we then
+ *  instantiate this same geometry in two different meshes with two
+ *  distinct material arrays.  One, the fixed mesh, has the material
+ *  array set up like:  [colored, invisible, black, invisible].
+ *  The twisting mesh has the material array set up as
+ *  [invisible, colored, invislble, black].  When not twisted, the
+ *  two meshes are directly coincident, and the (shared) materialIndex
+ *  in each face points to a non-invisible material in exactly one of
+ *  the two meshes.  When we decide to twist some cubies, we make
+ *  the cubies that move point to visible materials in the moving
+ *  mesh (which makes them point to invisible materials in the static
+ *  mesh).  This way, we only need to rotate the moving mesh as a
+ *  single object---this should be very fast, and occur entirely in
+ *  the GPU.  This seems to work in the small but it doesn't quiet work
+ *  that way in the full program, but it's still pretty fast.
+ *
+ *  When we decide to support multiple subsets moving at distinct
+ *  angular velocities, we will use more than two meshes, with
+ *  larger material arrays, maintaining the invariant that each cubie
+ *  is visible in only a single mesh.
+ */
 export class PG3D extends Object3D implements Twisty3DPuzzle {
   private stickers: { [key: string]: StickerDef[][] };
   private axesInfo: { [key: string]: AxisInfo };
