@@ -690,7 +690,7 @@ export class PuzzleGeometry {
         default:
           throw new Error("Bad cut argument: " + cuts[i][0]);
       }
-      cutplanes.push(normal.makecut(cuts[i][1]));
+      cutplanes.push(normal.makecut(Number(cuts[i][1])));
       intersects.push(cuts[i][1] < distance);
     }
     if (this.addrotations) {
