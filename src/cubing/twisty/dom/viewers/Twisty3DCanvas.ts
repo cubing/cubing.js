@@ -165,9 +165,6 @@ export class Twisty3DCanvas
       this.contentWrapper.classList.remove("invisible");
     }
     this.stats?.end();
-    if (Math.random() < 0.003) {
-      console.log(this.renderer.info);
-    }
   }
 
   private onResize(): void {
