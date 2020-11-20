@@ -167,8 +167,11 @@ const PG_SCALE = 0.5;
  *  mesh (which makes them point to invisible materials in the static
  *  mesh).  This way, we only need to rotate the moving mesh as a
  *  single object---this should be very fast, and occur entirely in
- *  the GPU.  This seems to work in the small but it doesn't quiet work
- *  that way in the full program, but it's still pretty fast.
+ *  the GPU.  Unfortunately this doesn't quite work as fast as we'd
+ *  like because three.js makes a draw call every time we have a change
+ *  in the material index.  By moving the foundation triangles separate
+ *  from the sticker triangles, we enhance the probability that many
+ *  triangles can be rendered in one call speeding up the render.
  *
  *  When we decide to support multiple subsets moving at distinct
  *  angular velocities, we will use more than two meshes, with
