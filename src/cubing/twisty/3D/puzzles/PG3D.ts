@@ -46,7 +46,6 @@ function makePoly(
   color: Color,
   scale: number,
   ind: number,
-  facearray: Face3[],
 ): void {
   const vertind: number[] = [];
   for (const coord of coords) {
@@ -62,30 +61,24 @@ function makePoly(
     face.materialIndex = ind;
     face.color = color;
     geo.faces.push(face);
-    facearray.push(face);
   }
 }
 
 class StickerDef {
   public origColor: Color;
   public faceColor: Color;
-  public facearray: Face3[] = [];
+  public firstface: number;
+  public lastface: number;
   public twistVal: number = -1;
   constructor(
     fixedGeo: Geometry,
     stickerDat: StickerDatSticker,
     foundationDat: StickerDatSticker | undefined,
   ) {
+    this.firstface = fixedGeo.faces.length;
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
-    makePoly(
-      fixedGeo,
-      stickerDat.coords as number[][],
-      this.faceColor,
-      1,
-      0,
-      this.facearray,
-    );
+    makePoly(fixedGeo, stickerDat.coords as number[][], this.faceColor, 1, 0);
     if (foundationDat) {
       makePoly(
         fixedGeo,
@@ -93,9 +86,9 @@ class StickerDef {
         this.faceColor,
         0.999,
         2,
-        this.facearray,
       );
     }
+    this.lastface = fixedGeo.faces.length;
     // obj.userData.name =
     //   stickerDat.orbit + " " + (1 + stickerDat.ord) + " " + stickerDat.ori;
   }
@@ -294,12 +287,20 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               }
               if (tv !== pieces2[i].twistVal) {
                 if (tv) {
-                  for (const f of pieces2[i].facearray) {
-                    f.materialIndex |= 1;
+                  for (
+                    let fi = pieces2[i].firstface;
+                    fi < pieces2[i].lastface;
+                    fi++
+                  ) {
+                    this.fixedGeo.faces[fi].materialIndex |= 1;
                   }
                 } else {
-                  for (const f of pieces2[i].facearray) {
-                    f.materialIndex &= ~1;
+                  for (
+                    let fi = pieces2[i].firstface;
+                    fi < pieces2[i].lastface;
+                    fi++
+                  ) {
+                    this.fixedGeo.faces[fi].materialIndex &= ~1;
                   }
                 }
                 pieces2[i].twistVal = tv;
