@@ -513,6 +513,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     puzzleName: string,
     legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig,
   ): void {
+    this.scene?.clearPuzzles();
     this.puzzle = puzzleName as PuzzleID;
     this.legacyExperimentalPG3DViewConfig =
       legacyExperimentalPG3DViewConfig ?? null;
