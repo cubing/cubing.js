@@ -12,6 +12,7 @@ import {
 } from "three";
 import { BlockMove, modifiedBlockMove } from "../../../alg";
 import {
+  EquivalentTransformations,
   KPuzzleDefinition,
   stateForBlockMove,
   Transformation,
@@ -70,6 +71,7 @@ class StickerDef {
   public origColor: Color;
   public faceColor: Color;
   public facearray: Face3[] = [];
+  public twistVal: number = -1;
   constructor(
     fixedGeo: Geometry,
     stickerDat: StickerDatSticker,
@@ -99,8 +101,13 @@ class StickerDef {
     //   stickerDat.orbit + " " + (1 + stickerDat.ord) + " " + stickerDat.ori;
   }
 
-  public setColor(c: Color): void {
-    this.faceColor.copy(c);
+  public setColor(c: Color): number {
+    if (!this.faceColor.equals(c)) {
+      this.faceColor.copy(c);
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }
 
@@ -151,6 +158,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   protected movingObj: Object3D;
   protected fixedGeo: Geometry;
+  protected lastPos: Transformation;
+  protected lastMove: Transformation;
 
   constructor(
     cursor: AlgCursor,
@@ -228,21 +237,29 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   public onPositionChange(p: PuzzlePosition): void {
     const pos = p.state as Transformation;
     const noRotation = new Euler();
-    for (const orbit in this.stickers) {
-      const pieces = this.stickers[orbit];
-      const pos2 = pos[orbit];
-      const orin = pieces.length;
-      for (let ori = 0; ori < orin; ori++) {
-        const pieces2 = pieces[ori];
-        for (let i = 0; i < pieces2.length; i++) {
-          const nori = (ori + orin - pos2.orientation[i]) % orin;
-          const ni = pos2.permutation[i];
-          pieces2[i].setColor(pieces[nori][ni].origColor);
+    this.movingObj.rotation.copy(noRotation);
+    let colormods = 0;
+    if (
+      !this.lastPos ||
+      !EquivalentTransformations(this.definition, this.lastPos, pos)
+    ) {
+      for (const orbit in this.stickers) {
+        const pieces = this.stickers[orbit];
+        const pos2 = pos[orbit];
+        const orin = pieces.length;
+        for (let ori = 0; ori < orin; ori++) {
+          const pieces2 = pieces[ori];
+          for (let i = 0; i < pieces2.length; i++) {
+            const nori = (ori + orin - pos2.orientation[i]) % orin;
+            const ni = pos2.permutation[i];
+            colormods += pieces2[i].setColor(pieces[nori][ni].origColor);
+          }
         }
       }
+      this.lastPos = pos;
     }
-    this.movingObj.rotation.copy(noRotation);
     // FIXME tgr const kp = new KPuzzle(this.definition);
+    let vismods = 0;
     for (const moveProgress of p.movesInProgress) {
       const externalBlockMove = moveProgress.move as BlockMove;
       // TODO: unswizzle goes external to internal, and so does the call after that
@@ -262,29 +279,44 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           TAU) /
         ax.order;
       this.movingObj.rotateOnAxis(turnNormal, angle);
-      for (const orbit in this.stickers) {
-        const pieces = this.stickers[orbit];
-        const orin = pieces.length;
-        const bmv = baseMove[orbit];
-        for (let ori = 0; ori < orin; ori++) {
-          const pieces2 = pieces[ori];
-          for (let i = 0; i < pieces2.length; i++) {
-            const ni = bmv.permutation[i];
-            if (ni !== i || bmv.orientation[i] !== 0) {
-              for (const f of pieces2[i].facearray) {
-                f.materialIndex |= 1;
+      if (this.lastMove !== baseMove) {
+        for (const orbit in this.stickers) {
+          const pieces = this.stickers[orbit];
+          const orin = pieces.length;
+          const bmv = baseMove[orbit];
+          for (let ori = 0; ori < orin; ori++) {
+            const pieces2 = pieces[ori];
+            for (let i = 0; i < pieces2.length; i++) {
+              const ni = bmv.permutation[i];
+              let tv = 0;
+              if (ni !== i || bmv.orientation[i] !== 0) {
+                tv = 1;
               }
-            } else {
-              for (const f of pieces2[i].facearray) {
-                f.materialIndex &= ~1;
+              if (tv !== pieces2[i].twistVal) {
+                if (tv) {
+                  for (const f of pieces2[i].facearray) {
+                    f.materialIndex |= 1;
+                  }
+                } else {
+                  for (const f of pieces2[i].facearray) {
+                    f.materialIndex &= ~1;
+                  }
+                }
+                pieces2[i].twistVal = tv;
+                vismods++;
               }
             }
           }
         }
+        this.lastMove = baseMove;
       }
+    }
+    if (vismods) {
       this.fixedGeo.groupsNeedUpdate = true;
     }
-    this.fixedGeo.colorsNeedUpdate = true;
+    if (colormods) {
+      this.fixedGeo.colorsNeedUpdate = true;
+    }
     this.scheduleRenderCallback!();
   }
 
