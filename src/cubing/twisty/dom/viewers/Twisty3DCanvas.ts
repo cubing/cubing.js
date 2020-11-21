@@ -121,8 +121,8 @@ export class Twisty3DCanvas
   }
 
   /** @deprecated */
-  public experimentalSetAltitudeLock(lock: boolean): void {
-    this.orbitControls.experimentalAltitudeLock = lock;
+  public experimentalSetLatitudeLimits(limits: boolean): void {
+    this.orbitControls.experimentalLatitudeLimits = limits;
   }
 
   protected connectedCallback(): void {

@@ -1,13 +1,13 @@
 import { Camera, Spherical, Vector3 } from "three";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 
-// Buffer at the end values of the altitude (phi), to prevent gymbal lock.
+// Buffer at the end values of the latitude (phi), to prevent gymbal lock.
 // Without this, the puzzle would flip every frame if you try to push past the
 // end, or snap to a standard longitude (theta).
 const EPSILON = 0.00000001;
 
 const INERTIA_DEFAULT: boolean = true;
-const ALTITUDE_LOCK_DEFAULT: boolean = true;
+const LATITUDE_LIMITS_DEFAULT: boolean = true;
 
 const INERTIA_DURATION_MS = 500;
 // If the first inertial render is this long after the last move, we assume the
@@ -72,7 +72,7 @@ export class TwistyOrbitControls {
   /** @deprecated */
   experimentalInertia: boolean = INERTIA_DEFAULT;
   /** @deprecated */
-  experimentalAltitudeLock: boolean = ALTITUDE_LOCK_DEFAULT;
+  experimentalLatitudeLimits: boolean = LATITUDE_LIMITS_DEFAULT;
   private mirrorControls?: TwistyOrbitControls;
   private lastTouchClientX: number = 0;
   private lastTouchClientY: number = 0;
@@ -215,7 +215,7 @@ export class TwistyOrbitControls {
 
     this.tempSpherical.theta += -3 * movementX;
     this.tempSpherical.phi += -3 * movementY;
-    if (this.experimentalAltitudeLock) {
+    if (this.experimentalLatitudeLimits) {
       this.tempSpherical.phi = Math.max(this.tempSpherical.phi, Math.PI * 0.3);
       this.tempSpherical.phi = Math.min(this.tempSpherical.phi, Math.PI * 0.7);
     } else {
