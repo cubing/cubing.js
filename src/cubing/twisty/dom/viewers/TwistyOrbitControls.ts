@@ -1,9 +1,68 @@
 import { Camera, Spherical, Vector3 } from "three";
+import { RenderScheduler } from "../../animation/RenderScheduler";
 
-// const INERTIA_DEFAULT: boolean = true;
+const INERTIA_DEFAULT: boolean = true;
 
-// TODO: Allow locking phi at the top/bottom if the mouse/touch hasn't moved much, similar to alg.cubing.net v1.
+const INERTIA_DURATION_MS = 500;
+// If the first inertial render is this long after the last move, we assume the
+// user has halted the cursor and we consider inertia to have "timed out". We
+// never begin animating the inertia.
+const INERTIA_TIMEOUT_MS = 50;
+
+// progress is from 0 to 1.
+function momentumScale(progress: number) {
+  // This is the exponential curve flipped so that
+  // - The slope at progress = 0 is 1 (this corresponds to "x = 1" on the normal
+  //   curve).
+  // - The scale exponentially "decays" until progress = 1.
+  // This means the scale at the end will be about 0.418
+  return (Math.exp(1 - progress) - (1 - progress)) / (1 - Math.E) + 1;
+}
+
+class Inertia {
+  private scheduler = new RenderScheduler(this.render.bind(this));
+  private lastTimestamp: number;
+  constructor(
+    private startTimestamp: number,
+    private momentumX: number,
+    private callback: (movementX: number, movementY: number) => void,
+  ) {
+    this.scheduler.requestAnimFrame();
+    this.lastTimestamp = startTimestamp;
+  }
+
+  private render(now: DOMHighResTimeStamp) {
+    const progressBefore =
+      (this.lastTimestamp - this.startTimestamp) / INERTIA_DURATION_MS;
+    const progressAfter = Math.min(
+      1,
+      (now - this.startTimestamp) / INERTIA_DURATION_MS,
+    );
+
+    if (
+      progressBefore === 0 &&
+      progressAfter > INERTIA_TIMEOUT_MS / INERTIA_DURATION_MS
+    ) {
+      // The user has already paused for a while. Don't start any inertia.
+      return;
+    }
+
+    const delta = momentumScale(progressAfter) - momentumScale(progressBefore);
+
+    // TODO: For now, we only carry horizontal momentum. If this should stay, we
+    // can remove the plumbing for the Y dimension.
+    this.callback(this.momentumX * delta * 1000, 0);
+
+    if (progressAfter < 1) {
+      this.scheduler.requestAnimFrame();
+    }
+    this.lastTimestamp = now;
+  }
+}
+
+// TODO: change mouse cursor while moving.
 export class TwistyOrbitControls {
+  inertia: boolean = INERTIA_DEFAULT;
   mirrorControls?: TwistyOrbitControls;
   lastTouchClientX: number = 0;
   lastTouchClientY: number = 0;
@@ -15,29 +74,60 @@ export class TwistyOrbitControls {
   onTouchEndBound = this.onTouchEnd.bind(this);
   // Variable for temporary use, to prevent reallocation.
   tempSpherical: Spherical = new Spherical();
+  lastTouchTimestamp: number = 0;
+  lastTouchMoveMomentumX: number = 0;
+  lastMouseTimestamp: number = 0;
+  lastMouseMoveMomentumX: number = 0;
   constructor(
     private camera: Camera,
-    canvas: HTMLCanvasElement,
+    private canvas: HTMLCanvasElement,
     private scheduleRender: () => void,
   ) {
     canvas.addEventListener("mousedown", this.onMouseStart.bind(this));
     canvas.addEventListener("touchstart", this.onTouchStart.bind(this));
   }
 
+  // f is the fraction of the canvas traversed per ms.
+  temperMovement(f: number): number {
+    // This is scaled to be linear for small values, but to reduce large values
+    // by a significant factor.
+    return (Math.sign(f) * Math.log(Math.abs(f * 10) + 1)) / 10;
+  }
+
   onMouseStart(e: MouseEvent): void {
     window.addEventListener("mousemove", this.onMouseMoveBound);
     window.addEventListener("mouseup", this.onMouseEndBound);
     this.onStart(e);
+
+    this.lastMouseTimestamp = e.timeStamp;
   }
 
   onMouseMove(e: MouseEvent): void {
-    this.onMove(e.movementX, e.movementY);
+    const movementX = this.temperMovement(
+      e.movementX / this.canvas.offsetWidth,
+    );
+    const movementY = this.temperMovement(
+      e.movementY / this.canvas.offsetHeight,
+    );
+    this.onMove(movementX, movementY);
+
+    this.lastMouseMoveMomentumX =
+      movementX / (e.timeStamp - this.lastMouseTimestamp);
+    this.lastMouseTimestamp = e.timeStamp;
   }
 
   onMouseEnd(e: MouseEvent): void {
     window.removeEventListener("mousemove", this.onMouseMoveBound);
     window.removeEventListener("mouseup", this.onMouseEndBound);
     this.onEnd(e);
+
+    if (this.inertia) {
+      new Inertia(
+        this.lastMouseTimestamp,
+        this.lastMouseMoveMomentumX,
+        this.onMoveBound,
+      );
+    }
   }
 
   onTouchStart(e: TouchEvent): void {
@@ -49,6 +139,8 @@ export class TwistyOrbitControls {
       window.addEventListener("touchend", this.onTouchEndBound);
       window.addEventListener("touchcanel", this.onTouchEndBound);
       this.onStart(e);
+
+      this.lastTouchTimestamp = e.timeStamp;
     }
   }
 
@@ -56,12 +148,19 @@ export class TwistyOrbitControls {
     for (let i = 0; i < e.changedTouches.length; i++) {
       const touch = e.changedTouches[i];
       if (touch.identifier === this.currentTouchID) {
-        this.onMove(
-          touch.clientX - this.lastTouchClientX,
-          touch.clientY - this.lastTouchClientY,
+        const movementX = this.temperMovement(
+          (touch.clientX - this.lastTouchClientX) / this.canvas.offsetWidth,
         );
+        const movementY = this.temperMovement(
+          (touch.clientY - this.lastTouchClientY) / this.canvas.offsetHeight,
+        );
+        this.onMove(movementX, movementY);
         this.lastTouchClientX = touch.clientX;
         this.lastTouchClientY = touch.clientY;
+
+        this.lastTouchMoveMomentumX =
+          movementX / (e.timeStamp - this.lastTouchTimestamp);
+        this.lastTouchTimestamp = e.timeStamp;
       }
     }
   }
@@ -77,6 +176,14 @@ export class TwistyOrbitControls {
         this.onEnd(e);
       }
     }
+
+    if (this.inertia) {
+      new Inertia(
+        this.lastTouchTimestamp,
+        this.lastTouchMoveMomentumX,
+        this.onMoveBound,
+      );
+    }
   }
 
   onStart(e: MouseEvent | TouchEvent): void {
@@ -88,8 +195,8 @@ export class TwistyOrbitControls {
     // directly if they are still fresh.
     this.tempSpherical.setFromVector3(this.camera.position);
 
-    this.tempSpherical.theta += -0.008 * movementX;
-    this.tempSpherical.phi += -0.008 * movementY;
+    this.tempSpherical.theta += -3 * movementX;
+    this.tempSpherical.phi += -3 * movementY;
     this.tempSpherical.phi = Math.max(this.tempSpherical.phi, Math.PI * 0.3);
     this.tempSpherical.phi = Math.min(this.tempSpherical.phi, Math.PI * 0.7);
 
@@ -107,8 +214,8 @@ export class TwistyOrbitControls {
     e.preventDefault();
   }
 
-  public setInertia(_enabled: boolean): void {
-    // TODO
+  public setInertia(enabled: boolean): void {
+    this.inertia = enabled;
   }
 
   public setMirror(m: TwistyOrbitControls): void {
