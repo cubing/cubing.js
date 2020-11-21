@@ -66,6 +66,7 @@ const renderOptions = [
   "blockmoves",
   "vertexmoves",
   "sidebyside",
+  "hintstickers",
   "showfoundation",
 ];
 const workOptions = [
@@ -238,6 +239,7 @@ function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
     stickerDat,
     experimentalPolarVantages: true,
     showFoundation: getCheckbox("showfoundation"),
+    hintStickers: getCheckbox("hintstickers"),
   };
 }
 

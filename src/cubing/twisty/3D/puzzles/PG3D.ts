@@ -25,8 +25,6 @@ import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { smootherStep } from "../../animation/easing";
 import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 
-const hintStickers: boolean = false;
-
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,
   color: 0x000000,
@@ -74,7 +72,11 @@ class StickerDef {
   public faceColor: Color;
   public faceArray: Face3[] = [];
   public twistVal: number = -1;
-  constructor(fixedGeo: Geometry, stickerDat: StickerDatSticker) {
+  constructor(
+    fixedGeo: Geometry,
+    stickerDat: StickerDatSticker,
+    hintStickers: boolean,
+  ) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
     const coords = stickerDat.coords as number[][];
@@ -222,6 +224,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private definition: KPuzzleDefinition,
     private pgdat: StickerDat,
     showFoundation: boolean = false,
+    hintStickers: boolean = false,
   ) {
     super();
 
@@ -257,7 +260,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const stickerdef = new StickerDef(fixedGeo, sticker);
+      const stickerdef = new StickerDef(fixedGeo, sticker, hintStickers);
       this.stickers[orbit][ori][ord] = stickerdef;
     }
     if (showFoundation) {
