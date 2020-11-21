@@ -31,6 +31,7 @@ class Inertia {
   constructor(
     private startTimestamp: number,
     private momentumX: number,
+    private momentumY: number,
     private callback: (movementX: number, movementY: number) => void,
   ) {
     this.scheduler.requestAnimFrame();
@@ -57,7 +58,7 @@ class Inertia {
 
     // TODO: For now, we only carry horizontal momentum. If this should stay, we
     // can remove the plumbing for the Y dimension.
-    this.callback(this.momentumX * delta * 1000, 0);
+    this.callback(this.momentumX * delta * 1000, this.momentumY * delta * 1000);
 
     if (progressAfter < 1) {
       this.scheduler.requestAnimFrame();
@@ -85,8 +86,10 @@ export class TwistyOrbitControls {
   private tempSpherical: Spherical = new Spherical();
   private lastTouchTimestamp: number = 0;
   private lastTouchMoveMomentumX: number = 0;
+  private lastTouchMoveMomentumY: number = 0;
   private lastMouseTimestamp: number = 0;
   private lastMouseMoveMomentumX: number = 0;
+  private lastMouseMoveMomentumY: number = 0;
   constructor(
     private camera: Camera,
     private canvas: HTMLCanvasElement,
@@ -122,6 +125,8 @@ export class TwistyOrbitControls {
 
     this.lastMouseMoveMomentumX =
       movementX / (e.timeStamp - this.lastMouseTimestamp);
+    this.lastMouseMoveMomentumY =
+      movementY / (e.timeStamp - this.lastMouseTimestamp);
     this.lastMouseTimestamp = e.timeStamp;
   }
 
@@ -134,6 +139,7 @@ export class TwistyOrbitControls {
       new Inertia(
         this.lastMouseTimestamp,
         this.lastMouseMoveMomentumX,
+        this.lastMouseMoveMomentumY,
         this.onMoveBound,
       );
     }
@@ -169,6 +175,8 @@ export class TwistyOrbitControls {
 
         this.lastTouchMoveMomentumX =
           movementX / (e.timeStamp - this.lastTouchTimestamp);
+        this.lastTouchMoveMomentumY =
+          movementY / (e.timeStamp - this.lastTouchTimestamp);
         this.lastTouchTimestamp = e.timeStamp;
       }
     }
@@ -190,6 +198,7 @@ export class TwistyOrbitControls {
       new Inertia(
         this.lastTouchTimestamp,
         this.lastTouchMoveMomentumX,
+        this.lastTouchMoveMomentumY,
         this.onMoveBound,
       );
     }
