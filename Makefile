@@ -52,7 +52,7 @@ deploy-experiments: parcel-build-for-experiments-cubing-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/experiments.cubing.net/cubing.js/ \
+		./dist/experiments.cubing.net/cubing.js/experiments-cubing-net/ \
 		${EXPERIMENTS_SFTP_PATH}
 	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
 
@@ -64,6 +64,6 @@ deploy-twizzle: parcel-build-for-twizzle-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/twizzle.net/explore/ \
+		./dist/twizzle.net/explore/twizzle-net/ \
 		${TWIZZLE_SFTP_PATH}
 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
