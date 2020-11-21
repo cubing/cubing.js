@@ -1,7 +1,13 @@
 import { Camera, Spherical, Vector3 } from "three";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 
+// Buffer at the end values of the altitude (phi), to prevent gymbal lock.
+// Without this, the puzzle would flip every frame if you try to push past the
+// end, or snap to a standard longitude (theta).
+const EPSILON = 0.00000001;
+
 const INERTIA_DEFAULT: boolean = true;
+const ALTITUDE_LOCK_DEFAULT: boolean = true;
 
 const INERTIA_DURATION_MS = 500;
 // If the first inertial render is this long after the last move, we assume the
@@ -62,22 +68,25 @@ class Inertia {
 
 // TODO: change mouse cursor while moving.
 export class TwistyOrbitControls {
-  inertia: boolean = INERTIA_DEFAULT;
-  mirrorControls?: TwistyOrbitControls;
-  lastTouchClientX: number = 0;
-  lastTouchClientY: number = 0;
-  currentTouchID: number | null = null; // TODO: support multiple touches?
-  onMoveBound = this.onMove.bind(this);
-  onMouseMoveBound = this.onMouseMove.bind(this);
-  onMouseEndBound = this.onMouseEnd.bind(this);
-  onTouchMoveBound = this.onTouchMove.bind(this);
-  onTouchEndBound = this.onTouchEnd.bind(this);
+  /** @deprecated */
+  experimentalInertia: boolean = INERTIA_DEFAULT;
+  /** @deprecated */
+  experimentalAltitudeLock: boolean = ALTITUDE_LOCK_DEFAULT;
+  private mirrorControls?: TwistyOrbitControls;
+  private lastTouchClientX: number = 0;
+  private lastTouchClientY: number = 0;
+  private currentTouchID: number | null = null; // TODO: support multiple touches?
+  private onMoveBound = this.onMove.bind(this);
+  private onMouseMoveBound = this.onMouseMove.bind(this);
+  private onMouseEndBound = this.onMouseEnd.bind(this);
+  private onTouchMoveBound = this.onTouchMove.bind(this);
+  private onTouchEndBound = this.onTouchEnd.bind(this);
   // Variable for temporary use, to prevent reallocation.
-  tempSpherical: Spherical = new Spherical();
-  lastTouchTimestamp: number = 0;
-  lastTouchMoveMomentumX: number = 0;
-  lastMouseTimestamp: number = 0;
-  lastMouseMoveMomentumX: number = 0;
+  private tempSpherical: Spherical = new Spherical();
+  private lastTouchTimestamp: number = 0;
+  private lastTouchMoveMomentumX: number = 0;
+  private lastMouseTimestamp: number = 0;
+  private lastMouseMoveMomentumX: number = 0;
   constructor(
     private camera: Camera,
     private canvas: HTMLCanvasElement,
@@ -121,7 +130,7 @@ export class TwistyOrbitControls {
     window.removeEventListener("mouseup", this.onMouseEndBound);
     this.onEnd(e);
 
-    if (this.inertia) {
+    if (this.experimentalInertia) {
       new Inertia(
         this.lastMouseTimestamp,
         this.lastMouseMoveMomentumX,
@@ -177,7 +186,7 @@ export class TwistyOrbitControls {
       }
     }
 
-    if (this.inertia) {
+    if (this.experimentalInertia) {
       new Inertia(
         this.lastTouchTimestamp,
         this.lastTouchMoveMomentumX,
@@ -197,8 +206,16 @@ export class TwistyOrbitControls {
 
     this.tempSpherical.theta += -3 * movementX;
     this.tempSpherical.phi += -3 * movementY;
-    this.tempSpherical.phi = Math.max(this.tempSpherical.phi, Math.PI * 0.3);
-    this.tempSpherical.phi = Math.min(this.tempSpherical.phi, Math.PI * 0.7);
+    if (this.experimentalAltitudeLock) {
+      this.tempSpherical.phi = Math.max(this.tempSpherical.phi, Math.PI * 0.3);
+      this.tempSpherical.phi = Math.min(this.tempSpherical.phi, Math.PI * 0.7);
+    } else {
+      this.tempSpherical.phi = Math.max(this.tempSpherical.phi, EPSILON);
+      this.tempSpherical.phi = Math.min(
+        this.tempSpherical.phi,
+        Math.PI - EPSILON,
+      );
+    }
 
     this.camera.position.setFromSpherical(this.tempSpherical);
     this.camera.lookAt(new Vector3(0, 0, 0));
@@ -212,10 +229,6 @@ export class TwistyOrbitControls {
 
   onEnd(e: MouseEvent | TouchEvent): void {
     e.preventDefault();
-  }
-
-  public setInertia(enabled: boolean): void {
-    this.inertia = enabled;
   }
 
   public setMirror(m: TwistyOrbitControls): void {

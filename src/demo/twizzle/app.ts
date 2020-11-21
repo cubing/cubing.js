@@ -266,6 +266,7 @@ function setAlgo(str: string, writeback: boolean): void {
       // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
       setTimeout(() => {
         for (const twisty3DCanvas of twisty3DCanvases) {
+          twisty3DCanvas.experimentalSetAltitudeLock(false);
           twisty3DCanvas.canvas.addEventListener(
             "mouseup",
             onMouseClick.bind(onMouseClick, twisty3DCanvas, "U"),

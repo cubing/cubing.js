@@ -120,6 +120,11 @@ export class Twisty3DCanvas
     partner.orbitControls.setMirror(this.orbitControls);
   }
 
+  /** @deprecated */
+  public experimentalSetAltitudeLock(lock: boolean): void {
+    this.orbitControls.experimentalAltitudeLock = lock;
+  }
+
   protected connectedCallback(): void {
     // Resize as soon as we're in the DOM, to avoid a flash of incorrectly sized content.
     this.resize();
