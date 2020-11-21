@@ -41,7 +41,7 @@ deploy-vr: clean parcel-build-for-vr-cubing-net
 		${VR_SFTP_PATH}
 	echo "\nDone deploying. Go to ${VR_URL}\n"
 
-.PHONY: deploy-
+.PHONY: deploy
 deploy: deploy-experiments deploy-twizzle
 
 EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
