@@ -15,6 +15,8 @@ const INERTIA_DURATION_MS = 500;
 // never begin animating the inertia.
 const INERTIA_TIMEOUT_MS = 50;
 
+const VERTICAL_MOVEMENT_BASE_SCALE = 0.5;
+
 // progress is from 0 to 1.
 function momentumScale(progress: number) {
   // This is the exponential curve flipped so that
@@ -117,7 +119,9 @@ export class TwistyOrbitControls {
   onMouseMove(e: MouseEvent): void {
     const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
     const movementX = this.temperMovement(e.movementX / minDim);
-    const movementY = this.temperMovement(e.movementY / minDim);
+    const movementY = this.temperMovement(
+      (e.movementY / minDim) * VERTICAL_MOVEMENT_BASE_SCALE,
+    );
     this.onMove(movementX, movementY);
 
     this.lastMouseMoveMomentumX =
@@ -168,7 +172,8 @@ export class TwistyOrbitControls {
           (touch.clientX - this.lastTouchClientX) / minDim,
         );
         const movementY = this.temperMovement(
-          (touch.clientY - this.lastTouchClientY) / minDim,
+          ((touch.clientY - this.lastTouchClientY) / minDim) *
+            VERTICAL_MOVEMENT_BASE_SCALE,
         );
         this.onMove(movementX, movementY);
         this.lastTouchClientX = touch.clientX;
