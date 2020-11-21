@@ -8,6 +8,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   Object3D,
+  Triangle,
   Vector3,
 } from "three";
 import { BlockMove, modifiedBlockMove } from "../../../alg";
@@ -23,6 +24,8 @@ import { TAU } from "../TAU";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { smootherStep } from "../../animation/easing";
 import { PuzzlePosition } from "../../animation/alg/CursorTypes";
+
+const hintStickers: boolean = false;
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,
@@ -74,14 +77,37 @@ class StickerDef {
   constructor(fixedGeo: Geometry, stickerDat: StickerDatSticker) {
     this.origColor = new Color(stickerDat.color);
     this.faceColor = new Color(stickerDat.color);
-    makePoly(
-      fixedGeo,
-      stickerDat.coords as number[][],
-      this.faceColor,
-      1,
-      0,
-      this.faceArray,
-    );
+    const coords = stickerDat.coords as number[][];
+    makePoly(fixedGeo, coords, this.faceColor, 1, 0, this.faceArray);
+    if (hintStickers) {
+      let highArea = 0;
+      let goodFace = null;
+      for (const f of this.faceArray) {
+        const t = new Triangle(
+          fixedGeo.vertices[f.a],
+          fixedGeo.vertices[f.b],
+          fixedGeo.vertices[f.c],
+        );
+        const a = t.getArea();
+        if (a > highArea) {
+          highArea = a;
+          goodFace = t;
+        }
+      }
+      const norm = new Vector3();
+      goodFace!.getNormal(norm);
+      norm.multiplyScalar(0.5);
+      const hintCoords = [];
+      for (let i = 0; i < coords.length; i++) {
+        const j = coords.length - 1 - i;
+        hintCoords.push([
+          coords[j][0] + norm.x,
+          coords[j][1] + norm.y,
+          coords[j][2] + norm.z,
+        ]);
+      }
+      makePoly(fixedGeo, hintCoords, this.faceColor, 1, 0, this.faceArray);
+    }
   }
 
   public addFoundation(
