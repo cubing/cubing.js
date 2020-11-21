@@ -252,11 +252,17 @@ export class TwistyPlayer extends ManagedCustomElement {
       (this.viewerElems[0] as Twisty3DCanvas)?.camera.position.copy(
         this.effectiveCameraPosition,
       );
+      (this.viewerElems[0] as Twisty3DCanvas)?.camera.lookAt(
+        new Vector3(0, 0, 0),
+      );
       this.viewerElems[0]?.scheduleRender();
       // Back view may or may not exist.
       (this.viewerElems[1] as Twisty3DCanvas)?.camera.position
         .copy(this.effectiveCameraPosition)
         .multiplyScalar(-1);
+      (this.viewerElems[1] as Twisty3DCanvas)?.camera.lookAt(
+        new Vector3(0, 0, 0),
+      );
       this.viewerElems[1]?.scheduleRender();
     }
   }

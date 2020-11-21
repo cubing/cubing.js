@@ -57,6 +57,8 @@ const DEFAULT_CAMERA_DISTANCE = 5.5;
 let initialCameraPos: Vector3 = new Vector3(0.0, 0.0, DEFAULT_CAMERA_DISTANCE);
 let savedCameraPos: Vector3 = new Vector3(0.0, 0.0, 0.0);
 let haveSavedCamera = false;
+let lastShape: string = "";
+let nextShape: string = "";
 const renderOptions = [
   "centers",
   "edges",
@@ -257,6 +259,7 @@ function setAlgo(str: string, writeback: boolean): void {
         },
         legacyExperimentalPG3DViewConfig(),
       );
+      lastShape = nextShape;
       elem.appendChild(twisty);
       twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
 
@@ -293,7 +296,10 @@ function setAlgo(str: string, writeback: boolean): void {
       puzzleSelected = false;
     } else if (puzzleSelected) {
       twisty.setPuzzle("custom", legacyExperimentalPG3DViewConfig());
-      twisty.cameraPosition = initialCameraPos;
+      if (nextShape !== lastShape) {
+        twisty.cameraPosition = initialCameraPos;
+        lastShape = nextShape;
+      }
       puzzleSelected = false;
     }
     twisty.backView = getCheckbox("sidebyside")
@@ -412,6 +418,7 @@ function dowork(cmd: string): void {
   }
   const p = parsedesc(descinput.value);
   const pg = new PuzzleGeometry(p[0], p[1], options);
+  nextShape = p[0];
   pg.allstickers();
   pg.genperms();
   if (cmd === "gap") {
@@ -491,6 +498,7 @@ function checkchange(): void {
         savealg = false;
       }
       pg = new PuzzleGeometry(p[0], p[1], options);
+      nextShape = p[0];
       pg.allstickers();
       pg.genperms();
       const sep = "\n";
@@ -523,6 +531,7 @@ function checkchange(): void {
         kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition;
       }
       const newStickerDat = pg.get3d();
+      nextShape = p[0];
       initialCameraPos = cameraPos(pg);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
       // Twisty constructor currently ignores initial camera position
