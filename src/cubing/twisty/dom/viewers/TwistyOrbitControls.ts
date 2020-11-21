@@ -115,12 +115,9 @@ export class TwistyOrbitControls {
   }
 
   onMouseMove(e: MouseEvent): void {
-    const movementX = this.temperMovement(
-      e.movementX / this.canvas.offsetWidth,
-    );
-    const movementY = this.temperMovement(
-      e.movementY / this.canvas.offsetHeight,
-    );
+    const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
+    const movementX = this.temperMovement(e.movementX / minDim);
+    const movementY = this.temperMovement(e.movementY / minDim);
     this.onMove(movementX, movementY);
 
     this.lastMouseMoveMomentumX =
@@ -163,11 +160,15 @@ export class TwistyOrbitControls {
     for (let i = 0; i < e.changedTouches.length; i++) {
       const touch = e.changedTouches[i];
       if (touch.identifier === this.currentTouchID) {
+        const minDim = Math.min(
+          this.canvas.offsetWidth,
+          this.canvas.offsetHeight,
+        );
         const movementX = this.temperMovement(
-          (touch.clientX - this.lastTouchClientX) / this.canvas.offsetWidth,
+          (touch.clientX - this.lastTouchClientX) / minDim,
         );
         const movementY = this.temperMovement(
-          (touch.clientY - this.lastTouchClientY) / this.canvas.offsetHeight,
+          (touch.clientY - this.lastTouchClientY) / minDim,
         );
         this.onMove(movementX, movementY);
         this.lastTouchClientX = touch.clientX;
@@ -213,8 +214,8 @@ export class TwistyOrbitControls {
     // directly if they are still fresh.
     this.tempSpherical.setFromVector3(this.camera.position);
 
-    this.tempSpherical.theta += -3 * movementX;
-    this.tempSpherical.phi += -3 * movementY;
+    this.tempSpherical.theta += -2 * movementX;
+    this.tempSpherical.phi += -2 * movementY;
     if (this.experimentalLatitudeLimits) {
       this.tempSpherical.phi = Math.max(this.tempSpherical.phi, Math.PI * 0.3);
       this.tempSpherical.phi = Math.min(this.tempSpherical.phi, Math.PI * 0.7);
