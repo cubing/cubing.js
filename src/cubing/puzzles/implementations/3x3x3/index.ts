@@ -5,7 +5,7 @@ export const cube3x3x3: PuzzleManager = {
   fullName: "3x3x3 Cube",
   inventedBy: ["Ernő Rubik"],
   inventionYear: 1974, // https://en.wikipedia.org/wiki/Rubik%27s_Cube#Conception_and_development
-  kPuzzle: async () => {
+  def: async () => {
     return await import("./3x3x3.kpuzzle.json");
   },
   svg: async () => {

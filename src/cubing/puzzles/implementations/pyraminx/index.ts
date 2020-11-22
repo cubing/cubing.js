@@ -5,7 +5,7 @@ export const pyraminx: PuzzleManager = {
   fullName: "Pyraminx",
   inventedBy: ["Uwe Meffert"],
   inventionYear: 1970, // https://en.wikipedia.org/wiki/Pyraminx#Description
-  kPuzzle: async () => {
+  def: async () => {
     return await import("./pyraminx.kpuzzle.json");
   },
   svg: async () => {

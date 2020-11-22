@@ -5,7 +5,7 @@ export const clock: PuzzleManager = {
   fullName: "Clock",
   inventedBy: ["Christopher C. Wiggs", "Christopher J. Taylor"],
   inventionYear: 1988, // Patent application year: https://www.jaapsch.net/puzzles/patents/us4869506.pdf
-  kPuzzle: async () => {
+  def: async () => {
     return await import("./clock.kpuzzle.json");
   },
   svg: async () => {

@@ -1,4 +1,5 @@
-import { KPuzzleDefinition } from "../puzzle-geometry/interfaces";
+import type { PuzzleGeometry } from "../puzzle-geometry";
+import type { KPuzzleDefinition } from "../kpuzzle";
 
 export interface PuzzleManager {
   id: string;
@@ -6,6 +7,7 @@ export interface PuzzleManager {
   fullName: string;
   inventedBy?: string[];
   inventionYear?: number; // TODO: date?
-  kPuzzle: () => Promise<KPuzzleDefinition>;
+  def: () => Promise<KPuzzleDefinition>;
   svg: () => Promise<string>;
+  pg3d?: () => Promise<PuzzleGeometry>;
 }

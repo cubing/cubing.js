@@ -343,7 +343,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     switch (visualization) {
       case "2D": {
         const puzzle = await puzzles[puzzleName];
-        const def: KPuzzleDefinition = await puzzle.kPuzzle();
+        const def: KPuzzleDefinition = await puzzle.def();
         try {
           this.cursor = new AlgCursor(
             timeline,
@@ -379,7 +379,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         return;
       }
       case "3D": {
-        const def: KPuzzleDefinition = await puzzles[puzzleName].kPuzzle();
+        const def: KPuzzleDefinition | null = await puzzles[puzzleName]?.def();
         if (puzzleName === "3x3x3") {
           // TODO: fold 3D and PG3D into this.
           try {
@@ -437,12 +437,22 @@ export class TwistyPlayer extends ManagedCustomElement {
       // fallthrough for 3D when not 3x3x3
       // eslint-disable-next-line no-fallthrough
       case "PG3D": {
-        const [kpuzzleDef, stickerDat] = this.pgHelper(puzzleName);
+        let def: KPuzzleDefinition;
+        let dat: StickerDat;
+
+        const pg3DGetter = puzzles[puzzleName]?.pg3d;
+        if (pg3DGetter) {
+          const pg = await pg3DGetter();
+          def = pg.writekpuzzle();
+          dat = pg.get3d();
+        } else {
+          [def, dat /*, _*/] = this.pgHelper(this.puzzle);
+        }
 
         try {
           this.cursor = new AlgCursor(
             timeline,
-            kpuzzleDef,
+            def,
             alg,
             this.experimentalStartSetup,
           );
@@ -450,7 +460,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           // TODO: Deduplicate fallback.
           this.cursor = new AlgCursor(
             timeline,
-            kpuzzleDef,
+            def,
             new Sequence([]),
             this.experimentalStartSetup,
           );
@@ -460,8 +470,8 @@ export class TwistyPlayer extends ManagedCustomElement {
         const pg3d = new PG3D(
           this.cursor,
           this.scene.scheduleRender.bind(this.scene),
-          kpuzzleDef,
-          stickerDat,
+          def,
+          dat,
           this.legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
           this.legacyExperimentalPG3DViewConfig?.hintStickers ?? false,
         );
@@ -528,10 +538,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#viewerWrapper.removeElement(this.viewerElems.pop()!);
   }
 
-  setPuzzle(
+  async setPuzzle(
     puzzleName: string,
     legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig,
-  ): void {
+  ): Promise<void> {
     this.scene?.clearPuzzles();
     this.puzzle = puzzleName as PuzzleID;
     this.legacyExperimentalPG3DViewConfig =
@@ -539,10 +549,21 @@ export class TwistyPlayer extends ManagedCustomElement {
     switch (this.visualization) {
       // TODO: Swap out both 3D implementations with each other.
       case "PG3D": {
+        let def: KPuzzleDefinition;
+        let dat: StickerDat;
+
+        const pg3DGetter = puzzles[puzzleName]?.pg3d;
+        if (pg3DGetter) {
+          const pg = await pg3DGetter();
+          def = pg.writekpuzzle();
+          dat = pg.get3d();
+        } else {
+          [def, dat /*, _*/] = this.pgHelper(this.puzzle);
+        }
+
         const scene = this.scene!;
         scene.remove(this.twisty3D!);
         this.cursor.removePositionListener(this.twisty3D!);
-        const [def, dat /*, _*/] = this.pgHelper(this.puzzle);
         this.cursor.setPuzzle(def, undefined, this.experimentalStartSetup);
         const pg3d = new PG3D(
           this.cursor,
