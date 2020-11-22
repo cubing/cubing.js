@@ -995,13 +995,22 @@ export class PuzzleGeometry {
     // take a face and figure out the sides of each move plane
     let s = "";
     for (let i = 0; i < this.moveplanesets.length; i++) {
-      let t = 0;
-      for (let j = 0; j < this.moveplanesets[i].length; j++) {
-        if (this.moveplanesets[i][j].faceside(face) > 0) {
-          t++;
+      if (this.moveplanesets[i].length > 0) {
+        let t = 0;
+        let b = 1;
+        while (b * 2 <= this.moveplanesets[i].length) {
+          b *= 2;
         }
+        for (; b > 0; b >>= 1) {
+          if (
+            t + b <= this.moveplanesets[i].length &&
+            this.moveplanesets[i][t + b - 1].faceside(face) > 0
+          ) {
+            t += b;
+          }
+        }
+        s = s + " " + t;
       }
-      s = s + " " + t;
     }
     return s;
   }
