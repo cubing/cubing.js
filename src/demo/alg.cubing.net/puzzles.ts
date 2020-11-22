@@ -55,10 +55,19 @@ class DisplayablePG3D {
 export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 
 const supportedPuzzle: { [s: string]: DisplayablePuzzle } = {};
-for (const key in puzzles) {
+for (const key of [
+  "2x2x2",
+  "3x3x3",
+  "pyraminx",
+  "square1",
+  "clock",
+  "megaminx",
+  "skewb",
+  "fto",
+]) {
   supportedPuzzle[key as any] = new DisplayableKPuzzle(
     key,
-    ["2x2x2", "3x3x3"].includes(key) ? "3D" : "2D",
+    ["2x2x2", "3x3x3", "megaminx", "skewb", "fto"].includes(key) ? "3D" : "2D",
   );
 }
 // supportedPuzzle.megaminx = new DisplayablePG3D(

@@ -1,12 +1,14 @@
 import { PuzzleManager } from "./PuzzleManager";
+import { asyncGetDef, asyncGetPuzzleGeometry } from "./async/async-pg3d";
 
 import { cube3x3x3 } from "./implementations/3x3x3";
 import { cube2x2x2 } from "./implementations/2x2x2";
-import { pyraminx } from "./implementations/pyraminx";
 import { clock } from "./implementations/clock";
+import { megaminx } from "./implementations/megaminx";
+import { pyraminx } from "./implementations/pyraminx";
+import { skewb } from "./implementations/skewb";
 import { square1 } from "./implementations/square1";
 import { fto } from "./implementations/fto";
-import { asyncGetDef, asyncGetPuzzleGeometry } from "./async/async-pg3d";
 
 export const puzzles: Record<string, PuzzleManager> = {
   /******** Start of WCA Puzzles *******/
@@ -20,9 +22,9 @@ export const puzzles: Record<string, PuzzleManager> = {
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
   clock,
-  // Megaminx
+  megaminx,
   pyraminx,
-  // Skewb
+  skewb,
   square1,
   // 4x4x4 Blindfolded
   // 5x5x5 Blindfolded
@@ -32,8 +34,8 @@ export const puzzles: Record<string, PuzzleManager> = {
 
 // TODO: find a better way to share these defs.
 for (const puzzleName of [
-  "2x2x2",
-  "3x3x3",
+  // "2x2x2",
+  // "3x3x3",
   "4x4x4",
   "5x5x5",
   "6x6x6",
@@ -46,7 +48,7 @@ for (const puzzleName of [
   "13x13x13",
   "20x20x20",
   "30x30x30",
-  "skewb",
+  // "skewb",
   "master skewb",
   "professor skewb",
   "compy cube",
@@ -61,7 +63,7 @@ for (const puzzleName of [
   "professor pyraminx",
   "Jing pyraminx",
   "master pyramorphix",
-  "megaminx",
+  // "megaminx",
   "gigaminx",
   "pentultimate",
   "starminx",
@@ -70,7 +72,7 @@ for (const puzzleName of [
   "chopasaurus",
   "big chop",
   "skewb diamond",
-  "FTO",
+  // "FTO",
   "Christopher's jewel",
   "octastar",
   "Trajber's octahedron",

@@ -1,5 +1,5 @@
 import { parseAlg } from "../../cubing/alg/index";
-import { KPuzzle, Puzzles, SVG } from "../../cubing/kpuzzle";
+import { KPuzzle, SVG } from "../../cubing/kpuzzle";
 import "../../cubing/twisty/dom/TwistyPlayer";
 
 window.addEventListener("load", () => {

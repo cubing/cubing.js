@@ -1,13 +1,9 @@
 import { Vector3 } from "three";
-import { countMoves } from "../TODO-MOVE-ME/move-counter"; // TODO
 import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
 import { parseAlg } from "../../alg/parser";
 import { KPuzzleDefinition } from "../../kpuzzle";
-import type {
-  getPuzzleGeometryByName,
-  PuzzleGeometry,
-  StickerDat,
-} from "../../puzzle-geometry";
+import type { PuzzleGeometry, StickerDat } from "../../puzzle-geometry";
+import { puzzles } from "../../puzzles";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D } from "../3D/puzzles/PG3D";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
@@ -19,6 +15,7 @@ import {
   TimelineActionEvent,
   TimestampLocationType,
 } from "../animation/Timeline";
+import { countMoves } from "../TODO-MOVE-ME/move-counter"; // TODO
 import { TwistyControlButtonPanel } from "./controls/buttons";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
@@ -45,7 +42,6 @@ import {
   BackViewLayout,
   TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
-import { puzzles } from "../../puzzles";
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;

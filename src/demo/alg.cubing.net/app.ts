@@ -51,6 +51,7 @@ export class App {
       twistyConfig.cameraPosition = new Vector3(0, 3.09, 5);
     }
     const displayablePuzzle = puzzles[initialData.puzzleName];
+    console.log(initialData.puzzleName, displayablePuzzle);
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
     this.twistyPlayer = new TwistyPlayer(twistyConfig);

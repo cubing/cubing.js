@@ -39,13 +39,13 @@ experimentalSetShareAllNewRenderers(true);
   document.querySelector("#puzzle")!.appendChild(
     new TwistyPlayer({
       alg: parseAlg("R U R' U R U2' R'"),
-      puzzle: "FTO",
+      puzzle: "fto",
     }),
   );
   const tw = new TwistyPlayer();
   document.querySelector("#puzzle")!.appendChild(tw);
   tw.alg = parseAlg("R U R' U R U2' R'");
-  tw.puzzle = "FTO";
+  tw.puzzle = "fto";
 }
 
 {
