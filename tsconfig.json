@@ -17,7 +17,8 @@
     "outDir": "dist",
     "sourceMap": true,
     "strictNullChecks": true,
-    "target": "es2015",
+    "target": "es2020",
+    "module": "es2020",
     "resolveJsonModule": true
   },
   "include": [
