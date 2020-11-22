@@ -1896,7 +1896,7 @@ export class PuzzleGeometry {
     }
   }
 
-  public writekpuzzle(fortwisty: boolean = true): any {
+  public writekpuzzle(fortwisty: boolean = true): KPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty);
     const r = od.toKpuzzle() as KPuzzleDefinition;
     r.moveNotation = new PGNotation(this, od);

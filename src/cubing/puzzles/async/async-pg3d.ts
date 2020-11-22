@@ -1,3 +1,4 @@
+import type { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 
 export async function asyncGetPuzzleGeometry(
@@ -10,4 +11,13 @@ export async function asyncGetPuzzleGeometry(
     "orientcenters",
     "true",
   ]);
+}
+
+// TODO: can we cache the puzzleGeometry to avoid duplicate calls, without
+// wasting memory? Maybe just save the latest one for successive calls about the
+// same puzzle?
+export async function asyncGetDef(
+  puzzleName: string,
+): Promise<KPuzzleDefinition> {
+  return (await asyncGetPuzzleGeometry(puzzleName)).writekpuzzle();
 }
