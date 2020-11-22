@@ -1,3 +1,4 @@
+import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { PuzzleManager } from "../../PuzzleManager";
 
 export const cube3x3x3: PuzzleManager = {
@@ -10,5 +11,8 @@ export const cube3x3x3: PuzzleManager = {
   },
   svg: async () => {
     return (await import("./3x3x3.kpuzzle.svg")).default;
+  },
+  pg3d: async () => {
+    return asyncGetPuzzleGeometry("3x3x3");
   },
 };
