@@ -35,6 +35,7 @@ button:enabled {
 button:disabled {
   background-color: rgba(0, 0, 0, 0.4);
   opacity: 0.25;
+  pointer-events: none;
 }
 
 button:enabled:hover {
