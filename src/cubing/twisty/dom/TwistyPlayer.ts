@@ -2,7 +2,7 @@ import { Vector3 } from "three";
 import { countMoves } from "../TODO-MOVE-ME/move-counter"; // TODO
 import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
 import { parseAlg } from "../../alg/parser";
-import { KPuzzleDefinition, Puzzles } from "../../kpuzzle";
+import { KPuzzleDefinition } from "../../kpuzzle";
 import {
   getPuzzleGeometryByName,
   PuzzleGeometry,
@@ -45,6 +45,7 @@ import {
   BackViewLayout,
   TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
+import { puzzles } from "../../puzzles";
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;
@@ -332,19 +333,20 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addElement(this.controlElems[1]);
   }
 
-  protected createViewers(
+  protected async createViewers(
     timeline: Timeline,
     alg: Sequence,
     visualization: VisualizationFormat,
     puzzleName: string,
     backView: boolean,
-  ): void {
+  ): Promise<void> {
+    const def: KPuzzleDefinition = await puzzles[puzzleName].kPuzzle();
     switch (visualization) {
       case "2D": {
         try {
           this.cursor = new AlgCursor(
             timeline,
-            Puzzles[puzzleName],
+            def,
             alg,
             this.experimentalStartSetup,
           );
@@ -352,7 +354,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           // TODO: Deduplicate fallback.
           this.cursor = new AlgCursor(
             timeline,
-            Puzzles[puzzleName],
+            def,
             new Sequence([]),
             this.experimentalStartSetup,
           );
@@ -366,7 +368,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
           this.timeline.jumpToEnd();
         }
-        const mainViewer = new Twisty2DSVG(this.cursor, Puzzles[puzzleName]);
+        const mainViewer = new Twisty2DSVG(this.cursor, def);
         this.viewerElems = [mainViewer];
         this.#viewerWrapper.addElement(mainViewer);
         return;
@@ -377,7 +379,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           try {
             this.cursor = new AlgCursor(
               timeline,
-              Puzzles[puzzleName],
+              def,
               alg,
               this.experimentalStartSetup,
             );
@@ -385,7 +387,7 @@ export class TwistyPlayer extends ManagedCustomElement {
             // TODO: Deduplicate fallback.
             this.cursor = new AlgCursor(
               timeline,
-              Puzzles[puzzleName],
+              def,
               new Sequence([]),
               this.experimentalStartSetup,
             );
@@ -394,7 +396,8 @@ export class TwistyPlayer extends ManagedCustomElement {
             this.cursor.algToState(this.experimentalStartSetup),
           );
           this.scene = new Twisty3DScene();
-          this.twisty3D = new Cube3D(
+          this.twisty3D = await new Cube3D(
+            def,
             this.cursor,
             this.scene.scheduleRender.bind(this.scene),
             {

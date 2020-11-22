@@ -1,6 +1,6 @@
-import { PuzzleGetter } from "../../Puzzle";
+import { PuzzleManager } from "../../PuzzleManager";
 
-export const square1: PuzzleGetter = {
+export const square1: PuzzleManager = {
   id: "square1",
   fullName: "Square-1",
   inventedBy: ["Karel Hrsel", "Vojtech Kopsky"],

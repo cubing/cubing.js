@@ -13,7 +13,8 @@ import {
   Vector3,
 } from "three";
 import { BlockMove } from "../../../alg";
-import { Puzzles, Transformation } from "../../../kpuzzle";
+import { Transformation } from "../../../kpuzzle";
+import { KPuzzleDefinition } from "../../../puzzle-geometry/interfaces";
 import { AlgCursor } from "../../animation/alg/AlgCursor";
 import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 import { smootherStep } from "../../animation/easing";
@@ -309,18 +310,17 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   private experimentalHintStickerMeshes: Mesh[] = [];
   private experimentalFoundationMeshes: Mesh[] = [];
   constructor(
+    private def: KPuzzleDefinition,
     cursor?: AlgCursor,
     private scheduleRenderCallback?: () => void,
     options: Cube3DOptions = {},
   ) {
     super();
 
-    const def = Puzzles["3x3x3"];
-
     this.options = { ...cube3DOptionsDefaults };
     Object.assign(this.options, cube3DOptionsDefaults); // TODO: check if this works
 
-    if (def.name !== "3x3x3") {
+    if (this.def.name !== "3x3x3") {
       throw new Error("Invalid puzzle for this Cube3D implementation.");
     }
     this.kpuzzleFaceletInfo = {};
@@ -455,11 +455,10 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
             4,
         );
         for (let i = 0; i < pieces.length; i++) {
-          const k =
-            Puzzles["3x3x3"].moves[blockMove.family][orbit].permutation[i];
+          const k = this.def.moves[blockMove.family][orbit].permutation[i];
           if (
             i !== k ||
-            Puzzles["3x3x3"].moves[blockMove.family][orbit].orientation[i] !== 0
+            this.def.moves[blockMove.family][orbit].orientation[i] !== 0
           ) {
             const j = reid333[orbit].permutation[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);

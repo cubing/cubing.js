@@ -1,6 +1,6 @@
-import { PuzzleGetter } from "../../Puzzle";
+import { PuzzleManager } from "../../PuzzleManager";
 
-export const cube3x3x3: PuzzleGetter = {
+export const cube3x3x3: PuzzleManager = {
   id: "3x3x3",
   fullName: "3x3x3 Cube",
   inventedBy: ["Ernő Rubik"],

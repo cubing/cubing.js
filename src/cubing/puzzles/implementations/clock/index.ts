@@ -1,6 +1,6 @@
-import { PuzzleGetter } from "../../Puzzle";
+import { PuzzleManager } from "../../PuzzleManager";
 
-export const clock: PuzzleGetter = {
+export const clock: PuzzleManager = {
   id: "clock",
   fullName: "Clock",
   inventedBy: ["Christopher C. Wiggs", "Christopher J. Taylor"],

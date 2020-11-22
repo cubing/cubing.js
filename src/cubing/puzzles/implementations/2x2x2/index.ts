@@ -1,6 +1,6 @@
-import { PuzzleGetter } from "../../Puzzle";
+import { PuzzleManager } from "../../PuzzleManager";
 
-export const cube2x2x2: PuzzleGetter = {
+export const cube2x2x2: PuzzleManager = {
   id: "2x2x2",
   fullName: "2x2x2 Cube",
   kPuzzle: async () => {
