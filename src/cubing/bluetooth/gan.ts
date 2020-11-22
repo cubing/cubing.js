@@ -2,7 +2,9 @@
 
 import { Quaternion } from "three";
 import { BareBlockMove, BlockMove } from "../alg";
-import { KPuzzle, Puzzles } from "../kpuzzle";
+import { KPuzzle } from "../kpuzzle";
+import { KPuzzleDefinition } from "../puzzle-geometry/interfaces";
+import { puzzles } from "../puzzles";
 import {
   BluetoothConfig,
   BluetoothPuzzle,
@@ -328,6 +330,7 @@ export class GanCube extends BluetoothPuzzle {
     ).moveCounter();
     debugLog("Initial Move Counter:", initialMoveCounter);
     const cube = new GanCube(
+      await puzzles["3x3x3"].def(),
       ganCubeService,
       server,
       physicalStateCharacteristic,
@@ -339,7 +342,7 @@ export class GanCube extends BluetoothPuzzle {
 
   public INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
   private intervalHandle: number | null = null;
-  private kpuzzle: KPuzzle = new KPuzzle(Puzzles["3x3x3"]);
+  private kpuzzle: KPuzzle;
   private cachedFaceletStatus1Characteristic: Promise<
     BluetoothRemoteGATTCharacteristic
   >;
@@ -353,6 +356,7 @@ export class GanCube extends BluetoothPuzzle {
   >;
 
   private constructor(
+    def: KPuzzleDefinition,
     private service: BluetoothRemoteGATTService,
     private server: BluetoothRemoteGATTServer,
     private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic,
@@ -360,6 +364,7 @@ export class GanCube extends BluetoothPuzzle {
     private aesKey: CryptoKey | null,
   ) {
     super();
+    this.kpuzzle = new KPuzzle(def);
     this.startTrackingMoves();
   }
 
