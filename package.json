@@ -26,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "babel-jest": "^24.9.0",
+    "babylonjs": "^4.2.0",
     "baretest": "^2.0.0",
     "esbuild": "^0.8.5",
     "eslint": "^7.8.1",
