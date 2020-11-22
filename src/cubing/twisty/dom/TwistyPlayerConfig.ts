@@ -90,7 +90,7 @@ export const puzzleIDs = {
   "sq1": true,
   "clock": true,
   "skewb": true,
-  "FTO": true,
+  "fto": true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 

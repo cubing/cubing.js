@@ -18,8 +18,8 @@ export class SVG {
   private originalColors: { [type: string]: string } = {};
   private gradients: { [type: string]: SVGGradientElement } = {};
   private svgID: string;
-  constructor(public kPuzzleDefinition: KPuzzleDefinition) {
-    if (!kPuzzleDefinition.svg) {
+  constructor(public kPuzzleDefinition: KPuzzleDefinition, svgSource: string) {
+    if (!svgSource) {
       throw new Error(
         `No SVG definition for puzzle type: ${kPuzzleDefinition.name}`,
       );
@@ -30,7 +30,7 @@ export class SVG {
     this.element = document.createElement("div");
     this.element.classList.add("svg-wrapper");
     // TODO: Sanitization.
-    this.element.innerHTML = kPuzzleDefinition.svg;
+    this.element.innerHTML = svgSource;
 
     const svgElem = this.element.querySelector("svg");
     if (!svgElem) {

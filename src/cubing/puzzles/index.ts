@@ -5,6 +5,7 @@ import { cube2x2x2 } from "./implementations/2x2x2";
 import { pyraminx } from "./implementations/pyraminx";
 import { clock } from "./implementations/clock";
 import { square1 } from "./implementations/square1";
+import { fto } from "./implementations/fto";
 
 export const puzzles: Record<string, PuzzleManager> = {
   /******** Start of WCA Puzzles *******/
@@ -25,4 +26,5 @@ export const puzzles: Record<string, PuzzleManager> = {
   // 4x4x4 Blindfolded
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
+  fto,
 };

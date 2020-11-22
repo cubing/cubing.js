@@ -340,9 +340,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     puzzleName: string,
     backView: boolean,
   ): Promise<void> {
-    const def: KPuzzleDefinition = await puzzles[puzzleName].kPuzzle();
     switch (visualization) {
       case "2D": {
+        const puzzle = await puzzles[puzzleName];
+        const def: KPuzzleDefinition = await puzzle.kPuzzle();
         try {
           this.cursor = new AlgCursor(
             timeline,
@@ -368,12 +369,17 @@ export class TwistyPlayer extends ManagedCustomElement {
           // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
           this.timeline.jumpToEnd();
         }
-        const mainViewer = new Twisty2DSVG(this.cursor, def);
+        const mainViewer = new Twisty2DSVG(
+          this.cursor,
+          def,
+          await puzzle.svg(),
+        );
         this.viewerElems = [mainViewer];
         this.#viewerWrapper.addElement(mainViewer);
         return;
       }
-      case "3D":
+      case "3D": {
+        const def: KPuzzleDefinition = await puzzles[puzzleName].kPuzzle();
         if (puzzleName === "3x3x3") {
           // TODO: fold 3D and PG3D into this.
           try {
@@ -427,7 +433,9 @@ export class TwistyPlayer extends ManagedCustomElement {
           }
           return;
         }
+      }
       // fallthrough for 3D when not 3x3x3
+      // eslint-disable-next-line no-fallthrough
       case "PG3D": {
         const [kpuzzleDef, stickerDat] = this.pgHelper(puzzleName);
 

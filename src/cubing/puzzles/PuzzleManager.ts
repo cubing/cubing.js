@@ -2,6 +2,7 @@ import { KPuzzleDefinition } from "../puzzle-geometry/interfaces";
 
 export interface PuzzleManager {
   id: string;
+  // shortname?: string;
   fullName: string;
   inventedBy?: string[];
   inventionYear?: number; // TODO: date?
