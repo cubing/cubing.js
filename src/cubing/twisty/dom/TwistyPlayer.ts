@@ -3,7 +3,7 @@ import { countMoves } from "../TODO-MOVE-ME/move-counter"; // TODO
 import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
 import { parseAlg } from "../../alg/parser";
 import { KPuzzleDefinition } from "../../kpuzzle";
-import {
+import type {
   getPuzzleGeometryByName,
   PuzzleGeometry,
   StickerDat,
@@ -55,14 +55,15 @@ export interface LegacyExperimentalPG3DViewConfig {
   hintStickers?: boolean;
 }
 
-function createPG(puzzleName: string): PuzzleGeometry {
-  const pg = getPuzzleGeometryByName(puzzleName, [
-    "allmoves",
-    "true",
-    "orientcenters",
-    "true",
-  ]);
-  return pg;
+function createPG(_puzzleName: string): PuzzleGeometry {
+  throw "createPG commented out";
+  // const pg = getPuzzleGeometryByName(puzzleName, [
+  //   "allmoves",
+  //   "true",
+  //   "orientcenters",
+  //   "true",
+  // ]);
+  // return pg;
 }
 
 function is3DVisualization(visualizationFormat: VisualizationFormat): boolean {
