@@ -1,5 +1,5 @@
 import { getPuzzleGeometryByDesc } from "./index";
-import { Puzzles } from "./Puzzles";
+import { PGPuzzles } from "./Puzzles";
 import { KPuzzleDefinition, Order, Transformation } from "../kpuzzle";
 import { BlockMove, parseAlg, Sequence } from "../alg";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
@@ -69,7 +69,7 @@ const expectedData: { [nam: string]: string } = {
 };
 describe("PuzzleGeometry-Puzzles", () => {
   it("testpuzzles", () => {
-    for (const [name, desc] of Object.entries(Puzzles)) {
+    for (const [name, desc] of Object.entries(PGPuzzles)) {
       const options: string[] = [];
       const pg = getPuzzleGeometryByDesc(desc, options);
       const kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition;

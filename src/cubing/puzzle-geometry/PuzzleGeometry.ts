@@ -22,7 +22,7 @@ import {
   tetrahedron,
   uniqueplanes,
 } from "./PlatonicGenerator";
-import { PuzzleDescriptionString, Puzzles, PuzzleName } from "./Puzzles";
+import { PuzzleDescriptionString, PGPuzzles, PuzzleName } from "./Puzzles";
 import { centermassface, expandfaces, Quat } from "./Quat";
 import {
   BlockMove,
@@ -283,12 +283,12 @@ function findelement(a: any[], p: Quat): number {
 
 export function getpuzzles(): { [s: string]: PuzzleDescriptionString } {
   // get some simple definitions of basic puzzles
-  return Puzzles;
+  return PGPuzzles;
 }
 
 export function getpuzzle(puzzleName: PuzzleName): PuzzleDescriptionString {
   // get some simple definitions of basic puzzles
-  return Puzzles[puzzleName];
+  return PGPuzzles[puzzleName];
 }
 
 export function parsedesc(s: string): any {
@@ -335,7 +335,7 @@ export function getPuzzleGeometryByName(
   puzzleName: PuzzleName,
   options: string[] = [],
 ): PuzzleGeometry {
-  return getPuzzleGeometryByDesc(Puzzles[puzzleName], options);
+  return getPuzzleGeometryByDesc(PGPuzzles[puzzleName], options);
 }
 
 function getmovename(geo: any, bits: number, slices: number): any {
