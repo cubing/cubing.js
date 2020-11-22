@@ -117,6 +117,13 @@ export class TwistyOrbitControls {
   }
 
   onMouseMove(e: MouseEvent): void {
+    if (e.buttons === 0) {
+      // Certain elements (e.g. disabled buttons) can capture the `mouseup`
+      // event. So if we notice that there are no mouse buttons pressed, we stop
+      // the movement.
+      this.onMouseEnd(e);
+      return;
+    }
     const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
     const movementX = this.temperMovement(e.movementX / minDim);
     const movementY = this.temperMovement(
