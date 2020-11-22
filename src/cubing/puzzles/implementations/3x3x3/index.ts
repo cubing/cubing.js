@@ -12,6 +12,9 @@ export const cube3x3x3: PuzzleManager = {
   svg: async () => {
     return (await import("./3x3x3.kpuzzle.svg")).default;
   },
+  llSVG: async () => {
+    return (await import("./3x3x3-ll.kpuzzle.svg")).default;
+  },
   pg3d: async () => {
     return asyncGetPuzzleGeometry("3x3x3"); // TODO: def compat
   },
