@@ -992,10 +992,15 @@ export class PuzzleGeometry {
   }
 
   public keyface(face: Quat[]): string {
+    return this.keyface2(centermassface(face));
+  }
+
+  public keyface2(cm: Quat): string {
     // take a face and figure out the sides of each move plane
     let s = "";
     for (let i = 0; i < this.moveplanesets.length; i++) {
       if (this.moveplanesets[i].length > 0) {
+        const dv = cm.dot(this.moveplanesets[i][0]);
         let t = 0;
         let b = 1;
         while (b * 2 <= this.moveplanesets[i].length) {
@@ -1004,7 +1009,7 @@ export class PuzzleGeometry {
         for (; b > 0; b >>= 1) {
           if (
             t + b <= this.moveplanesets[i].length &&
-            this.moveplanesets[i][t + b - 1].faceside(face) > 0
+            dv > this.moveplanesets[i][t + b - 1].a
           ) {
             t += b;
           }
@@ -1020,12 +1025,12 @@ export class PuzzleGeometry {
   }
 
   public findface(face: Quat[]): number {
-    const key = this.keyface(face);
+    const cm = centermassface(face);
+    const key = this.keyface2(cm);
     const arr = this.facelisthash[key];
     if (arr.length === 1) {
       return arr[0];
     }
-    const cm = centermassface(face);
     for (let i = 0; i + 1 < arr.length; i++) {
       const face2 = this.facelisthash[key][i];
       if (Math.abs(cm.dist(centermassface(this.faces[face2]))) < eps) {
@@ -1264,9 +1269,9 @@ export class PuzzleGeometry {
           "Bad math; too many faces on this cubie " + cubie.length,
         );
       }
-      const s = this.keyface(cubie[0]);
-      const facelist = facelisthash[s];
       const cm = cubie.map((_) => centermassface(_));
+      const s = this.keyface2(cm[0]);
+      const facelist = facelisthash[s];
       const cmall = centermassface(cm);
       for (let looplimit = 0; cubie.length > 2; looplimit++) {
         let changed = false;
