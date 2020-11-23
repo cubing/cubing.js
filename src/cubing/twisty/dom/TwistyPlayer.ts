@@ -491,7 +491,8 @@ export class TwistyPlayer extends ManagedCustomElement {
               def,
               stickerDat,
               this.#legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
-              this.#legacyExperimentalPG3DViewConfig?.hintStickers ?? true,
+              this.#legacyExperimentalPG3DViewConfig?.hintStickers ??
+                this.hintFacelets === "floating",
             );
             this.legacyExperimentalPG3D = pg3d;
             twisty3D = pg3d;
