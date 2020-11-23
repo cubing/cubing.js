@@ -470,7 +470,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           def,
           dat,
           this.legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
-          this.legacyExperimentalPG3DViewConfig?.hintStickers ?? false,
+          this.legacyExperimentalPG3DViewConfig?.hintStickers ?? true,
         );
         this.twisty3D = pg3d;
         this.legacyExperimentalPG3D = pg3d;
@@ -567,8 +567,8 @@ export class TwistyPlayer extends ManagedCustomElement {
           scene.scheduleRender.bind(scene),
           def,
           dat,
-          this.legacyExperimentalPG3DViewConfig?.showFoundation,
-          this.legacyExperimentalPG3DViewConfig?.hintStickers,
+          this.legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
+          this.legacyExperimentalPG3DViewConfig?.hintStickers ?? true,
         );
         scene.addTwisty3DPuzzle(pg3d);
         this.twisty3D = pg3d;
