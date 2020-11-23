@@ -1,7 +1,7 @@
 import {
   Transformation,
-  Puzzles,
   OrbitTransformation,
+  KPuzzleDefinition,
 } from "../../cubing/kpuzzle";
 
 export function kpuzzleToString(state: Transformation): string {
@@ -10,7 +10,8 @@ export function kpuzzleToString(state: Transformation): string {
     .replace(/\n +(\d+)\n +/g, "$1");
 }
 
-const def = Puzzles["3x3x3"];
+import defJSON from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json";
+const def: KPuzzleDefinition = defJSON;
 
 const pieceNames: Record<string, string[]> = {
   EDGES: "UF UR UB UL DF DR DB DL FR FL BR BL".split(" "),

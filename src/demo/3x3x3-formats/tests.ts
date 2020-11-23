@@ -1,13 +1,19 @@
-import { KPuzzle, Puzzles, Transformation } from "../../cubing/kpuzzle";
 import { parseAlg } from "../../cubing/alg";
-import { kpuzzleToStickers, kpuzzleToReidString } from "./convert";
+import {
+  KPuzzle,
+  KPuzzleDefinition,
+  Transformation,
+} from "../../cubing/kpuzzle";
 import { reid3x3x3ToTwizzleBinary } from "../../cubing/protocol";
 import {
-  reid3x3x3ToBinaryComponents,
   Binary3x3x3Components,
+  reid3x3x3ToBinaryComponents,
 } from "../../cubing/protocol/binary/binary3x3x3";
+import defJSON from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json";
+import { kpuzzleToReidString, kpuzzleToStickers } from "./convert";
 
-const kpuzzle = new KPuzzle(Puzzles["3x3x3"]);
+const def: KPuzzleDefinition = defJSON;
+const kpuzzle = new KPuzzle(def);
 
 const tests: {
   name: string;

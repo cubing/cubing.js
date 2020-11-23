@@ -1,5 +1,10 @@
 import { parseAlg } from "../../cubing/alg";
-import { KPuzzle, Puzzles, SVG, Transformation } from "../../cubing/kpuzzle";
+import {
+  KPuzzle,
+  KPuzzleDefinition,
+  SVG,
+  Transformation,
+} from "../../cubing/kpuzzle";
 import {
   binaryComponentsToReid3x3x3,
   reid3x3x3ToBinaryComponents,
@@ -14,6 +19,10 @@ import {
   stickersToKPuzzle,
 } from "./convert";
 
+import defJSON from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json";
+const def: KPuzzleDefinition = defJSON;
+import svgSource from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.svg";
+
 export function bufferToSpacedHex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
   return Array.prototype.map
@@ -27,11 +36,9 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
   return new Uint8Array(hex.split(" ").map((c) => parseInt(c, 16)));
 }
 
-const def = Puzzles["3x3x3"];
-
 class App {
   kpuzzle = new KPuzzle(def);
-  svg = new SVG(def);
+  svg = new SVG(def, svgSource);
   algTextarea = document.querySelector("#alg")! as HTMLTextAreaElement;
   kpuzzleTextarea = document.querySelector("#kpuzzle")! as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
