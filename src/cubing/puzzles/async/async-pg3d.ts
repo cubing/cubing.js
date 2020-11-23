@@ -1,6 +1,7 @@
 import type { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 
+// TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
   puzzleName: string,
 ): Promise<PuzzleGeometry> {

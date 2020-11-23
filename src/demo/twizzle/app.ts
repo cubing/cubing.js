@@ -297,7 +297,7 @@ function setAlgo(str: string, writeback: boolean): void {
 
       puzzleSelected = false;
     } else if (puzzleSelected) {
-      twisty.setPuzzle("custom", legacyExperimentalPG3DViewConfig());
+      twisty.setCustomPuzzleGeometry(legacyExperimentalPG3DViewConfig());
       if (nextShape !== lastShape) {
         twisty.cameraPosition = initialCameraPos;
         lastShape = nextShape;
