@@ -102,6 +102,9 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addCSS(twistyPlayerCSS);
     this.#config = new TwistyPlayerConfig(this, initialConfig);
 
+    this.timeline = new Timeline();
+    this.timeline.addActionListener(this);
+
     // We also do this in connectedCallback, but for now we also do it here so
     // that there is some visual change even if the rest of construction or
     // initialization fails.
@@ -293,9 +296,6 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   // TODO: It seems this called after the `attributeChangedCallback`s for initial values. Can we rely on this?
   protected connectedCallback(): void {
-    this.timeline = new Timeline();
-    this.timeline.addActionListener(this);
-
     this.contentWrapper.classList.toggle(
       "checkered",
       this.background === "checkered",
@@ -434,8 +434,19 @@ export class TwistyPlayer extends ManagedCustomElement {
       // fallthrough for 3D when not 3x3x3
       // eslint-disable-next-line no-fallthrough
       case "PG3D": {
+        this.scene = new Twisty3DScene();
+
         let def: KPuzzleDefinition;
         let dat: StickerDat;
+
+        const mainViewer = new Twisty3DCanvas(this.scene, {
+          cameraPosition: this.effectiveCameraPosition,
+        });
+        this.viewerElems = [mainViewer];
+        this.#viewerWrapper.addElement(mainViewer);
+        if (backView) {
+          this.createBackViewer();
+        }
 
         const pgGetter = puzzles[puzzleName]?.pg;
         if (pgGetter) {
@@ -462,8 +473,11 @@ export class TwistyPlayer extends ManagedCustomElement {
             this.experimentalStartSetup,
           );
         }
-
-        this.scene = new Twisty3DScene();
+        this.timeline.addCursor(this.cursor);
+        if (this.experimentalStartSetup.nestedUnits.length === 0) {
+          // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
+          this.timeline.jumpToEnd();
+        }
         const pg3d = new PG3D(
           this.cursor,
           this.scene.scheduleRender.bind(this.scene),
@@ -475,19 +489,6 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.twisty3D = pg3d;
         this.legacyExperimentalPG3D = pg3d;
         this.scene.addTwisty3DPuzzle(this.twisty3D);
-        const mainViewer = new Twisty3DCanvas(this.scene, {
-          cameraPosition: this.effectiveCameraPosition,
-        });
-        this.viewerElems = [mainViewer];
-        this.#viewerWrapper.addElement(mainViewer);
-        if (backView) {
-          this.createBackViewer();
-        }
-        this.timeline.addCursor(this.cursor);
-        if (this.experimentalStartSetup.nestedUnits.length === 0) {
-          // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
-          this.timeline.jumpToEnd();
-        }
         return;
       }
       default:
@@ -549,6 +550,12 @@ export class TwistyPlayer extends ManagedCustomElement {
         let def: KPuzzleDefinition;
         let dat: StickerDat;
 
+        const scene = this.scene!;
+        if (this.twisty3D) {
+          scene.remove(this.twisty3D);
+          this.cursor.removePositionListener(this.twisty3D);
+        }
+
         const pg3DGetter = puzzles[puzzleName]?.pg;
         if (pg3DGetter) {
           const pg = await pg3DGetter();
@@ -557,10 +564,6 @@ export class TwistyPlayer extends ManagedCustomElement {
         } else {
           [def, dat /*, _*/] = this.pgHelper(this.puzzle);
         }
-
-        const scene = this.scene!;
-        scene.remove(this.twisty3D!);
-        this.cursor.removePositionListener(this.twisty3D!);
         this.cursor.setPuzzle(def, undefined, this.experimentalStartSetup);
         const pg3d = new PG3D(
           this.cursor,
