@@ -243,7 +243,7 @@ function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
   };
 }
 
-function setAlgo(str: string, writeback: boolean): void {
+async function setAlgo(str: string, writeback: boolean): Promise<void> {
   let seq: Sequence = algparse("");
   const elem = document.querySelector("#twisty-wrapper");
   if (elem) {
@@ -260,6 +260,9 @@ function setAlgo(str: string, writeback: boolean): void {
           cameraPosition: initialCameraPos,
         },
         legacyExperimentalPG3DViewConfig(),
+        (alg: Sequence) => {
+          markInvalidAlg(algToString(alg));
+        },
       );
       lastShape = nextShape;
       elem.appendChild(twisty);
@@ -297,7 +300,7 @@ function setAlgo(str: string, writeback: boolean): void {
 
       puzzleSelected = false;
     } else if (puzzleSelected) {
-      twisty.setCustomPuzzleGeometry(legacyExperimentalPG3DViewConfig());
+      await twisty.setCustomPuzzleGeometry(legacyExperimentalPG3DViewConfig());
       if (nextShape !== lastShape) {
         twisty.cameraPosition = initialCameraPos;
         lastShape = nextShape;
@@ -319,14 +322,17 @@ function setAlgo(str: string, writeback: boolean): void {
       updateMoveCount(seq);
       setURLParams({ alg: seq });
     } catch (e) {
-      algoinput.style.backgroundColor = "#ff8080";
-      console.log("Could not parse " + str);
+      markInvalidAlg(str);
     }
     if (writeback) {
       algoinput.value = str;
       lastalgo = str;
     }
   }
+}
+function markInvalidAlg(str: string): void {
+  algoinput.style.backgroundColor = "#ff8080";
+  console.log("Could not parse " + str);
 }
 // this is so horrible.  there has to be a better way.
 function showtext(s: string): void {

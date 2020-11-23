@@ -92,6 +92,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   constructor(
     initialConfig: TwistyPlayerInitialConfig = {},
     legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
+    private experimentalInvalidInitialAlgCallback: (alg: Sequence) => void,
   ) {
     super();
     this.addCSS(twistyPlayerCSS);
@@ -319,7 +320,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addElement(this.controlElems[1]);
 
     this.#connected = true;
-    this.updatePuzzleDOM();
+    this.updatePuzzleDOM(true);
   }
 
   #pendingPuzzleUpdates: PendingPuzzleUpdate[] = [];
@@ -381,21 +382,17 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private setCursor(cursor: AlgCursor): void {
+    cursor.setStartState(cursor.algToState(this.experimentalStartSetup));
+    this.timeline.addCursor(cursor);
     if (this.cursor) {
       this.timeline.removeCursor(this.cursor);
+      this.timeline.removeTimestampListener(this.cursor);
     }
     this.cursor = cursor;
-    cursor.setStartState(cursor.algToState(this.experimentalStartSetup));
-    this.timeline.addCursor(this.cursor);
-
-    if (this.experimentalStartSetup.nestedUnits.length === 0) {
-      // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
-      this.timeline.jumpToEnd();
-    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-  async updatePuzzleDOM(): Promise<void> {
+  async updatePuzzleDOM(initial: boolean = false): Promise<void> {
     if (!this.#connected) {
       return;
     }
@@ -422,6 +419,9 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#pendingPuzzleUpdates.push(pendingPuzzleUpdate);
 
     const def: KPuzzleDefinition = await puzzleManager.def();
+    if (pendingPuzzleUpdate.cancelled) {
+      return;
+    }
 
     let cursor: AlgCursor;
     try {
@@ -432,6 +432,9 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.experimentalStartSetup,
       );
     } catch (e) {
+      if (initial) {
+        this.experimentalInvalidInitialAlgCallback(this.alg);
+      }
       cursor = new AlgCursor(
         this.timeline,
         def,
@@ -440,6 +443,9 @@ export class TwistyPlayer extends ManagedCustomElement {
       );
     }
     this.setCursor(cursor);
+    if (initial) {
+      this.timeline.jumpToEnd();
+    }
     switch (this.visualization) {
       case "2D":
         {
@@ -480,6 +486,9 @@ export class TwistyPlayer extends ManagedCustomElement {
               stickerDat = this.#legacyExperimentalPG3DViewConfig!.stickerDat;
             } else if (pgGetter) {
               const pg = await pgGetter();
+              if (pendingPuzzleUpdate.cancelled) {
+                return;
+              }
               def = pg.writekpuzzle();
               stickerDat = pg.get3d();
             } else {
