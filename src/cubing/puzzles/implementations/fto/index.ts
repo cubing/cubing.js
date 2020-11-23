@@ -12,7 +12,7 @@ export const fto: PuzzleManager = {
   svg: async () => {
     throw "Unimplemented!";
   },
-  pg3d: async () => {
+  pg: async () => {
     return asyncGetPuzzleGeometry("FTO"); // TODO: fix uppercase mismatch
   },
 };

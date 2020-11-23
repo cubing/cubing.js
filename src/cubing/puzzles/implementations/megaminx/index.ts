@@ -12,7 +12,7 @@ export const megaminx: PuzzleManager = {
   svg: async () => {
     throw "Unimplemented!";
   },
-  pg3d: async () => {
+  pg: async () => {
     return asyncGetPuzzleGeometry("megaminx"); // TODO: fix uppercase mismatch
   },
 };

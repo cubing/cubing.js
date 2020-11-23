@@ -12,7 +12,7 @@ export const skewb: PuzzleManager = {
   svg: async () => {
     throw "Unimplemented!";
   },
-  pg3d: async () => {
+  pg: async () => {
     return asyncGetPuzzleGeometry("skewb"); // TODO: fix uppercase mismatch
   },
 };

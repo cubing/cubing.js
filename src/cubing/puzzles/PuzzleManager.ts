@@ -10,5 +10,5 @@ export interface PuzzleManager {
   def: () => Promise<KPuzzleDefinition>;
   svg: () => Promise<string>;
   llSVG?: () => Promise<string>;
-  pg3d?: () => Promise<PuzzleGeometry>;
+  pg?: () => Promise<PuzzleGeometry>;
 }

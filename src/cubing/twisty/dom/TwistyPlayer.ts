@@ -437,9 +437,9 @@ export class TwistyPlayer extends ManagedCustomElement {
         let def: KPuzzleDefinition;
         let dat: StickerDat;
 
-        const pg3DGetter = puzzles[puzzleName]?.pg3d;
-        if (pg3DGetter) {
-          const pg = await pg3DGetter();
+        const pgGetter = puzzles[puzzleName]?.pg;
+        if (pgGetter) {
+          const pg = await pgGetter();
           def = pg.writekpuzzle();
           dat = pg.get3d();
         } else {
@@ -549,7 +549,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         let def: KPuzzleDefinition;
         let dat: StickerDat;
 
-        const pg3DGetter = puzzles[puzzleName]?.pg3d;
+        const pg3DGetter = puzzles[puzzleName]?.pg;
         if (pg3DGetter) {
           const pg = await pg3DGetter();
           def = pg.writekpuzzle();

@@ -10,7 +10,7 @@ export const cube2x2x2: PuzzleManager = {
   svg: async () => {
     return (await import("./2x2x2.kpuzzle.svg")).default;
   },
-  pg3d: async () => {
+  pg: async () => {
     return asyncGetPuzzleGeometry("2x2x2"); // TODO: def compat
   },
 };
