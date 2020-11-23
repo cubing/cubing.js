@@ -1,11 +1,7 @@
 import { parseAlg, Sequence } from "../../alg";
-import {
-  Combine,
-  Invert,
-  KPuzzle,
-  Puzzles,
-  Transformation,
-} from "../../kpuzzle";
+import { Combine, Invert, KPuzzle, Transformation } from "../../kpuzzle";
+// TODO: Should we expose this directly in the `puzzles` package for sync uses?
+import def from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json";
 import {
   identityPermutation,
   lexToPermutation,
@@ -103,7 +99,7 @@ const puzzleOrientationCache: Transformation[][] = new Array(6)
 
 // We use a new block to avoid keeping a reference to temporary vars.
 {
-  const orientationKpuzzle = new KPuzzle(Puzzles["3x3x3"]);
+  const orientationKpuzzle = new KPuzzle(def);
   const uAlgs: Sequence[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
     parseAlg(s),
   );
@@ -115,7 +111,7 @@ const puzzleOrientationCache: Transformation[][] = new Array(6)
       orientationKpuzzle.applyAlg(yAlg);
       const [idxU, idxL] = puzzleOrientationIdx(orientationKpuzzle.state);
       puzzleOrientationCache[idxU][idxL] = Invert(
-        Puzzles["3x3x3"],
+        def,
         orientationKpuzzle.state,
       );
     }
@@ -125,7 +121,7 @@ const puzzleOrientationCache: Transformation[][] = new Array(6)
 function normalizePuzzleOrientation(s: Transformation): Transformation {
   const [idxU, idxL] = puzzleOrientationIdx(s);
   const orientationTransformation = puzzleOrientationCache[idxU][idxL];
-  return Combine(Puzzles["3x3x3"], s, orientationTransformation);
+  return Combine(def, s, orientationTransformation);
 }
 
 // TODO: combine with `orientPuzzle`?
@@ -135,10 +131,10 @@ function reorientPuzzle(
   idxL: number,
 ): Transformation {
   const orientationTransformation = Invert(
-    Puzzles["3x3x3"],
+    def,
     puzzleOrientationCache[idxU][idxL],
   );
-  return Combine(Puzzles["3x3x3"], s, orientationTransformation);
+  return Combine(def, s, orientationTransformation);
 }
 // 0x111 (for idxU) means "not supported"
 function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {

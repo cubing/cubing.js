@@ -1,11 +1,12 @@
 import { keyToMove } from "../alg";
-import { KPuzzle, Puzzles } from "../kpuzzle";
+import { KPuzzle } from "../kpuzzle";
+import { puzzles } from "../puzzles";
 import { BluetoothPuzzle, PuzzleState } from "./bluetooth-puzzle";
 
-const def = Puzzles["3x3x3"];
-
 export class KeyboardPuzzle extends BluetoothPuzzle {
-  public puzzle: KPuzzle = new KPuzzle(def);
+  public puzzle: Promise<KPuzzle> = (async () =>
+    new KPuzzle(await puzzles["3x3x3"].def()))();
+
   // TODO: Decide on the right arguments.
   constructor(target: Element) {
     super();
@@ -18,21 +19,21 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
   }
 
   public async getState(): Promise<PuzzleState> {
-    return this.puzzle.state;
+    return (await this.puzzle).state;
   }
 
-  private onKeyDown(e: KeyboardEvent): void {
+  private async onKeyDown(e: KeyboardEvent): Promise<void> {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
       return;
     }
 
     const move = keyToMove(e);
     if (move) {
-      this.puzzle.applyBlockMove(move);
+      (await this.puzzle).applyBlockMove(move);
       this.dispatchMove({
         latestMove: move,
         timeStamp: e.timeStamp,
-        state: this.puzzle.state,
+        state: (await this.puzzle).state,
       });
       e.preventDefault();
     }

@@ -5,10 +5,10 @@ import {
   IdentityTransformation,
   Invert,
   KPuzzleDefinition,
-  Puzzles,
   stateForBlockMove,
   Transformation,
 } from "../../../kpuzzle";
+import { puzzles } from "../../../puzzles";
 
 export type MoveName = string;
 
@@ -60,8 +60,8 @@ interface KSolvePuzzleState extends Transformation, State<KPuzzleWrapper> {}
 
 export class KPuzzleWrapper extends PuzzleWrapper {
   // don't work the underlying kdefinition/multiply so hard
-  public static fromID(id: string): KPuzzleWrapper {
-    return new KPuzzleWrapper(Puzzles[id]);
+  public static async fromID(id: string): Promise<KPuzzleWrapper> {
+    return new KPuzzleWrapper(await puzzles[id].def());
   }
 
   public moveStash: { [key: string]: Transformation } = {};

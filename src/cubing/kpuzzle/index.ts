@@ -22,8 +22,6 @@ export {
   Order,
 } from "./transformations";
 
-export { Puzzles } from "./puzzle_definitions";
-
 export { parseKPuzzle } from "./parser";
 
 export { SVG } from "./svg";

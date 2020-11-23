@@ -2,7 +2,6 @@ import { BlockMove } from "../../../alg";
 import {
   Combine,
   KPuzzleDefinition,
-  Puzzles,
   stateForBlockMove,
   SVG,
   Transformation,
@@ -11,12 +10,12 @@ import {
   PositionDispatcher,
   PositionListener,
 } from "../../animation/alg/AlgCursor";
+import { PuzzlePosition } from "../../animation/alg/CursorTypes";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
+import { customElementsShim } from "../element/node-custom-element-shims";
 import { twisty2DSVGCSS } from "./Twisty2DSVGView.css";
 import { TwistyViewerElement } from "./TwistyViewerElement";
-import { PuzzlePosition } from "../../animation/alg/CursorTypes";
-import { customElementsShim } from "../element/node-custom-element-shims";
 
 // <twisty-2d-svg>
 export class Twisty2DSVG
@@ -27,13 +26,14 @@ export class Twisty2DSVG
   private scheduler = new RenderScheduler(this.render.bind(this));
   constructor(
     cursor?: PositionDispatcher,
-    def: KPuzzleDefinition = Puzzles["3x3x3"],
+    def?: KPuzzleDefinition,
+    svgSource?: string,
   ) {
     super();
     this.addCSS(twisty2DSVGCSS);
 
-    this.definition = def;
-    this.svg = new SVG(this.definition);
+    this.definition = def!;
+    this.svg = new SVG(this.definition, svgSource!); // TODO
     this.addElement(this.svg.element);
     cursor!.addPositionListener(this);
   }

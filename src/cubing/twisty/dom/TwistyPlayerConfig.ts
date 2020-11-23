@@ -87,10 +87,10 @@ export const puzzleIDs = {
   "7x7x7": true,
   "megaminx": true,
   "pyraminx": true,
-  "sq1": true,
+  "square1": true,
   "clock": true,
   "skewb": true,
-  "FTO": true,
+  "fto": true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 

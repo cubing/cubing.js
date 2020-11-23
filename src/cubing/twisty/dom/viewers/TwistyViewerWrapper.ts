@@ -37,6 +37,10 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
   setBackView(backView: BackViewLayout): boolean {
     return this.#backViewClassListManager.setValue(backView);
   }
+
+  clear(): void {
+    this.contentWrapper.innerHTML = "";
+  }
 }
 
 customElementsShim.define("twisty-viewer-wrapper", TwistyViewerWrapper);
