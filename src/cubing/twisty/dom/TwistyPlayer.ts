@@ -4,6 +4,7 @@ import { parseAlg } from "../../alg/parser";
 import { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry, StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
+import { PuzzleManager } from "../../puzzles/PuzzleManager";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D } from "../3D/puzzles/PG3D";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
@@ -64,6 +65,10 @@ function createPG(_puzzleName: string): PuzzleGeometry {
 
 function is3DVisualization(visualizationFormat: VisualizationFormat): boolean {
   return ["3D", "PG3D"].includes(visualizationFormat);
+}
+
+interface PendingPuzzleUpdate {
+  cancel: boolean;
 }
 
 // <twisty-player>
@@ -228,12 +233,14 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set backView(backView: BackViewLayout) {
-    if (backView !== "none" && this.viewerElems.length === 1) {
-      this.createBackViewer();
-    }
-    if (backView === "none" && this.viewerElems.length > 1) {
-      this.removeBackViewerElem();
-    }
+    this.#config.attributes["back-view"].setValue(backView);
+    this.updatePuzzle(puzzles[this.puzzle]);
+    // if (backView !== "none" && this.viewerElems.length === 1) {
+    //   this.createBackViewer();
+    // }
+    // if (backView === "none" && this.viewerElems.length > 1) {
+    //   this.removeBackViewerElem();
+    // }
     if (this.#viewerWrapper && this.#viewerWrapper.setBackView(backView)) {
       for (const viewer of this.viewerElems as Twisty3DCanvas[]) {
         viewer.makeInvisibleUntilRender(); // TODO: can we do this more elegantly?
@@ -330,170 +337,148 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addElement(this.controlElems[1]);
   }
 
-  protected async createViewers(
-    timeline: Timeline,
-    alg: Sequence,
-    visualization: VisualizationFormat,
-    puzzleName: string,
-    backView: boolean,
-  ): Promise<void> {
-    switch (visualization) {
-      case "2D": {
-        const puzzle = await puzzles[puzzleName];
-        const def: KPuzzleDefinition = await puzzle.def();
-        try {
-          this.cursor = new AlgCursor(
-            timeline,
-            def,
-            alg,
-            this.experimentalStartSetup,
-          );
-        } catch (e) {
-          // TODO: Deduplicate fallback.
-          this.cursor = new AlgCursor(
-            timeline,
-            def,
-            new Sequence([]),
-            this.experimentalStartSetup,
-          );
-        }
-        this.cursor.setStartState(
-          this.cursor.algToState(this.experimentalStartSetup),
-        );
+  pendingPuzzleUpdates: PendingPuzzleUpdate[] = [];
+  private replaceCurrentPuzzle(
+    pendingPuzzleUpdate: PendingPuzzleUpdate,
+    cursor: AlgCursor,
+    frontViewerElement: TwistyViewerElement,
+    backViewerElement: TwistyViewerElement | null,
+  ): void {
+    if (pendingPuzzleUpdate.cancel) {
+      console.log("canceled");
+      return;
+    }
+    console.log("flooey", backViewerElement);
 
-        this.timeline.addCursor(this.cursor);
-        if (this.experimentalStartSetup.nestedUnits.length === 0) {
-          // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
-          this.timeline.jumpToEnd();
+    this.viewerElems = [];
+    this.#viewerWrapper.innerHTML = "";
+    this.timeline.removeCursor(this.cursor);
+
+    this.viewerElems.push(frontViewerElement);
+    this.#viewerWrapper.addElement(frontViewerElement);
+    if (backViewerElement) {
+      this.viewerElems.push(backViewerElement);
+      this.#viewerWrapper.addElement(backViewerElement);
+    }
+    cursor.setStartState(cursor.algToState(this.experimentalStartSetup));
+    this.timeline.addCursor(cursor);
+    this.cursor = cursor;
+    if (this.experimentalStartSetup.nestedUnits.length === 0) {
+      // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
+      this.timeline.jumpToEnd();
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
+  private async updatePuzzle(puzzle: PuzzleManager): Promise<void> {
+    for (const pendingPuzzleUpdate of this.pendingPuzzleUpdates) {
+      pendingPuzzleUpdate.cancel = true;
+    }
+    this.pendingPuzzleUpdates = [];
+    const pendingPuzzleUpdate: PendingPuzzleUpdate = { cancel: false };
+    this.pendingPuzzleUpdates.push(pendingPuzzleUpdate);
+
+    const def: KPuzzleDefinition = await puzzle.def();
+
+    let cursor: AlgCursor;
+    try {
+      cursor = new AlgCursor(
+        this.timeline,
+        def,
+        this.alg,
+        this.experimentalStartSetup,
+      );
+    } catch (e) {
+      cursor = new AlgCursor(
+        this.timeline,
+        def,
+        new Sequence([]),
+        this.experimentalStartSetup,
+      );
+    }
+    switch (this.visualization) {
+      case "2D":
+        {
+          const mainViewer = new Twisty2DSVG(cursor, def, await puzzle.svg());
+
+          this.replaceCurrentPuzzle(
+            pendingPuzzleUpdate,
+            cursor,
+            mainViewer,
+            null,
+          );
         }
-        const mainViewer = new Twisty2DSVG(
-          this.cursor,
-          def,
-          await puzzle.svg(),
-        );
-        this.viewerElems = [mainViewer];
-        this.#viewerWrapper.addElement(mainViewer);
-        return;
-      }
-      case "3D": {
-        const def: KPuzzleDefinition | null = await puzzles[puzzleName]?.def();
-        if (puzzleName === "3x3x3") {
-          // TODO: fold 3D and PG3D into this.
-          try {
-            this.cursor = new AlgCursor(
-              timeline,
-              def,
-              alg,
-              this.experimentalStartSetup,
-            );
-          } catch (e) {
-            // TODO: Deduplicate fallback.
-            this.cursor = new AlgCursor(
-              timeline,
-              def,
-              new Sequence([]),
-              this.experimentalStartSetup,
-            );
-          }
-          this.cursor.setStartState(
-            this.cursor.algToState(this.experimentalStartSetup),
-          );
-          this.scene = new Twisty3DScene();
-          this.twisty3D = await new Cube3D(
-            def,
-            this.cursor,
-            this.scene.scheduleRender.bind(this.scene),
-            {
-              hintFacelets: this.hintFacelets,
-              experimentalStickering: this.experimentalStickering,
-            },
-          );
-          this.scene.addTwisty3DPuzzle(this.twisty3D);
-          const mainViewer = new Twisty3DCanvas(this.scene, {
+        break;
+      case "3D":
+      case "PG3D":
+        {
+          const scene = new Twisty3DScene();
+          const mainViewer = new Twisty3DCanvas(scene, {
             cameraPosition: this.effectiveCameraPosition,
           });
-          this.#viewerWrapper.addElement(mainViewer);
-          this.viewerElems = [mainViewer];
-          if (backView) {
-            this.createBackViewer();
-            // const partner = new Twisty3DCanvas(this.scene, {
-            //   // cameraPosition, // TODO
-            //   negateCameraPosition: true,
-            // });
-            // this.viewerElems.push(partner);
-            // mainViewer.setMirror(partner);
+
+          let backViewer: Twisty3DCanvas | null = null;
+          if (this.backView !== "none") {
+            backViewer = new Twisty3DCanvas(scene!, {
+              cameraPosition: this.effectiveCameraPosition,
+              negateCameraPosition: true,
+            });
+            mainViewer.setMirror(backViewer);
           }
-          this.timeline.addCursor(this.cursor);
-          if (this.experimentalStartSetup.nestedUnits.length === 0) {
-            // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
-            this.timeline.jumpToEnd();
+
+          let twisty3D: Twisty3DPuzzle;
+          if (this.visualization === "3D" && puzzle.id === "3x3x3") {
+            twisty3D = await new Cube3D(
+              def,
+              cursor,
+              scene.scheduleRender.bind(scene),
+              {
+                hintFacelets: this.hintFacelets,
+                experimentalStickering: this.experimentalStickering,
+              },
+            );
+          } else {
+            let def: KPuzzleDefinition;
+            let dat: StickerDat;
+            const pgGetter = puzzle?.pg;
+            if (pgGetter) {
+              const pg = await pgGetter();
+              def = pg.writekpuzzle();
+              dat = pg.get3d();
+            } else {
+              [def, dat /*, _*/] = this.pgHelper(this.puzzle);
+            }
+            twisty3D = new PG3D(
+              cursor,
+              scene.scheduleRender.bind(scene),
+              def,
+              dat,
+              this.legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
+              this.legacyExperimentalPG3DViewConfig?.hintStickers ?? true,
+            );
           }
-          return;
-        }
-      }
-      // fallthrough for 3D when not 3x3x3
-      // eslint-disable-next-line no-fallthrough
-      case "PG3D": {
-        this.scene = new Twisty3DScene();
+          scene.addTwisty3DPuzzle(twisty3D);
+          this.twisty3D = twisty3D;
 
-        let def: KPuzzleDefinition;
-        let dat: StickerDat;
-
-        const mainViewer = new Twisty3DCanvas(this.scene, {
-          cameraPosition: this.effectiveCameraPosition,
-        });
-        this.viewerElems = [mainViewer];
-        this.#viewerWrapper.addElement(mainViewer);
-        if (backView) {
-          this.createBackViewer();
-        }
-
-        const pgGetter = puzzles[puzzleName]?.pg;
-        if (pgGetter) {
-          const pg = await pgGetter();
-          def = pg.writekpuzzle();
-          dat = pg.get3d();
-        } else {
-          [def, dat /*, _*/] = this.pgHelper(this.puzzle);
-        }
-
-        try {
-          this.cursor = new AlgCursor(
-            timeline,
-            def,
-            alg,
-            this.experimentalStartSetup,
-          );
-        } catch (e) {
-          // TODO: Deduplicate fallback.
-          this.cursor = new AlgCursor(
-            timeline,
-            def,
-            new Sequence([]),
-            this.experimentalStartSetup,
+          this.replaceCurrentPuzzle(
+            pendingPuzzleUpdate,
+            cursor,
+            mainViewer,
+            backViewer,
           );
         }
-        this.timeline.addCursor(this.cursor);
-        if (this.experimentalStartSetup.nestedUnits.length === 0) {
-          // TODO: find better way to configure when to start where (e.g. initialTimestamp: "start" | "end" | "setup")
-          this.timeline.jumpToEnd();
-        }
-        const pg3d = new PG3D(
-          this.cursor,
-          this.scene.scheduleRender.bind(this.scene),
-          def,
-          dat,
-          this.legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
-          this.legacyExperimentalPG3DViewConfig?.hintStickers ?? true,
-        );
-        this.twisty3D = pg3d;
-        this.legacyExperimentalPG3D = pg3d;
-        this.scene.addTwisty3DPuzzle(this.twisty3D);
-        return;
-      }
-      default:
-        throw new Error("Unknown visualization");
+        break;
     }
+  }
+
+  protected async createViewers(
+    _timeline: Timeline,
+    _alg: Sequence,
+    _visualization: VisualizationFormat,
+    puzzleName: string,
+    _backView: boolean,
+  ): Promise<void> {
+    this.updatePuzzle(puzzles[puzzleName]);
   }
 
   // TODO: Distribute this code better.
@@ -540,66 +525,9 @@ export class TwistyPlayer extends ManagedCustomElement {
     puzzleName: string,
     legacyExperimentalPG3DViewConfig?: LegacyExperimentalPG3DViewConfig,
   ): Promise<void> {
-    this.scene?.clearPuzzles();
-    this.puzzle = puzzleName as PuzzleID;
     this.legacyExperimentalPG3DViewConfig =
-      legacyExperimentalPG3DViewConfig ?? null;
-    switch (this.visualization) {
-      // TODO: Swap out both 3D implementations with each other.
-      case "PG3D": {
-        let def: KPuzzleDefinition;
-        let dat: StickerDat;
-
-        const scene = this.scene!;
-        if (this.twisty3D) {
-          scene.remove(this.twisty3D);
-          this.cursor.removePositionListener(this.twisty3D);
-        }
-
-        const pg3DGetter = puzzles[puzzleName]?.pg;
-        if (pg3DGetter) {
-          const pg = await pg3DGetter();
-          def = pg.writekpuzzle();
-          dat = pg.get3d();
-        } else {
-          [def, dat /*, _*/] = this.pgHelper(this.puzzle);
-        }
-        this.cursor.setPuzzle(def, undefined, this.experimentalStartSetup);
-        const pg3d = new PG3D(
-          this.cursor,
-          scene.scheduleRender.bind(scene),
-          def,
-          dat,
-          this.legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
-          this.legacyExperimentalPG3DViewConfig?.hintStickers ?? true,
-        );
-        scene.addTwisty3DPuzzle(pg3d);
-        this.twisty3D = pg3d;
-        this.legacyExperimentalPG3D = pg3d;
-        for (const viewer of this.viewerElems) {
-          viewer.scheduleRender();
-        }
-        return;
-      }
-
-      // this.#cursor.set
-      // return;
-    }
-
-    // Fallback
-    const oldCursor = this.cursor;
-    for (const oldViewer of this.viewerElems) {
-      this.#viewerWrapper.removeElement(oldViewer);
-    }
-    this.createViewers(
-      this.timeline,
-      this.alg,
-      this.visualization,
-      puzzleName,
-      this.backView !== "none",
-    );
-    this.timeline.removeCursor(oldCursor);
-    this.timeline.removeTimestampListener(oldCursor);
+      legacyExperimentalPG3DViewConfig || null;
+    this.updatePuzzle(puzzles[puzzleName]);
   }
 
   // TODO: Handle playing the new move vs. just modying the alg.
