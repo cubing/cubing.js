@@ -22,7 +22,7 @@ import {
   tetrahedron,
   uniqueplanes,
 } from "./PlatonicGenerator";
-import { PuzzleDescriptionString, PGPuzzles, PuzzleName } from "./Puzzles";
+import { PuzzleDescriptionString, PGPuzzles, PuzzleName } from "./PGPuzzles";
 import { centermassface, expandfaces, Quat } from "./Quat";
 import {
   BlockMove,

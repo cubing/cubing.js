@@ -1,7 +1,7 @@
 import { algToString, parseAlg, Sequence } from "../../cubing/alg";
 import { TwistyPlayer, TwistyPlayerInitialConfig } from "../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
-import { puzzles } from "./puzzles";
+import { puzzles } from "./supported-puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
 import { setURLParams } from "./url-params";
 import { Vector3 } from "three";

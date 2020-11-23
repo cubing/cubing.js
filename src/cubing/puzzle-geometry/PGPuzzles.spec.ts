@@ -1,5 +1,5 @@
 import { getPuzzleGeometryByDesc } from "./index";
-import { PGPuzzles } from "./Puzzles";
+import { PGPuzzles } from "./PGPuzzles";
 import { KPuzzleDefinition, Order, Transformation } from "../kpuzzle";
 import { BlockMove, parseAlg, Sequence } from "../alg";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
