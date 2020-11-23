@@ -1,6 +1,7 @@
 import { parseAlg, Sequence } from "../../alg";
 import { Combine, Invert, KPuzzle, Transformation } from "../../kpuzzle";
-import { puzzles } from "../../puzzles";
+// TODO: Should we expose this directly in the `puzzles` package for sync uses?
+import def from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json";
 import {
   identityPermutation,
   lexToPermutation,
@@ -90,63 +91,60 @@ function puzzleOrientationIdx(state: Transformation): [number, number] {
   return [idxU, idxL];
 }
 
-const puzzleOrientationCache: Promise<Transformation[][]> = (async () => {
-  const cache: Transformation[][] = new Array(6).fill(0).map(() => {
+const puzzleOrientationCache: Transformation[][] = new Array(6)
+  .fill(0)
+  .map(() => {
     return new Array(6);
   });
 
-  // We use a new block to avoid keeping a reference to temporary vars.
-  {
-    const orientationKpuzzle = new KPuzzle(await puzzles["3x3x3"].def());
-    const uAlgs: Sequence[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
-      parseAlg(s),
-    );
-    const yAlg = parseAlg("y");
-    for (const uAlg of uAlgs) {
-      orientationKpuzzle.reset();
-      orientationKpuzzle.applyAlg(uAlg);
-      for (let i = 0; i < 4; i++) {
-        orientationKpuzzle.applyAlg(yAlg);
-        const [idxU, idxL] = puzzleOrientationIdx(orientationKpuzzle.state);
-        cache[idxU][idxL] = Invert(
-          await puzzles["3x3x3"].def(),
-          orientationKpuzzle.state,
-        );
-      }
+// We use a new block to avoid keeping a reference to temporary vars.
+{
+  const orientationKpuzzle = new KPuzzle(def);
+  const uAlgs: Sequence[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
+    parseAlg(s),
+  );
+  const yAlg = parseAlg("y");
+  for (const uAlg of uAlgs) {
+    orientationKpuzzle.reset();
+    orientationKpuzzle.applyAlg(uAlg);
+    for (let i = 0; i < 4; i++) {
+      orientationKpuzzle.applyAlg(yAlg);
+      const [idxU, idxL] = puzzleOrientationIdx(orientationKpuzzle.state);
+      puzzleOrientationCache[idxU][idxL] = Invert(
+        def,
+        orientationKpuzzle.state,
+      );
     }
   }
-  return cache;
-})();
+}
 
-async function normalizePuzzleOrientation(
-  s: Transformation,
-): Promise<Transformation> {
+function normalizePuzzleOrientation(s: Transformation): Transformation {
   const [idxU, idxL] = puzzleOrientationIdx(s);
-  const orientationTransformation = (await puzzleOrientationCache)[idxU][idxL];
-  return Combine(await puzzles["3x3x3"].def(), s, orientationTransformation);
+  const orientationTransformation = puzzleOrientationCache[idxU][idxL];
+  return Combine(def, s, orientationTransformation);
 }
 
 // TODO: combine with `orientPuzzle`?
-async function reorientPuzzle(
+function reorientPuzzle(
   s: Transformation,
   idxU: number,
   idxL: number,
-): Promise<Transformation> {
+): Transformation {
   const orientationTransformation = Invert(
-    await puzzles["3x3x3"].def(),
-    (await puzzleOrientationCache)[idxU][idxL],
+    def,
+    puzzleOrientationCache[idxU][idxL],
   );
-  return Combine(await puzzles["3x3x3"].def(), s, orientationTransformation);
+  return Combine(def, s, orientationTransformation);
 }
 // 0x111 (for idxU) means "not supported"
 function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
   return components.poIdxU !== 7;
 }
 
-export async function reid3x3x3ToBinaryComponents(
+export function reid3x3x3ToBinaryComponents(
   state: Transformation,
-): Promise<Binary3x3x3Components> {
-  const normedState = await normalizePuzzleOrientation(state);
+): Binary3x3x3Components {
+  const normedState = normalizePuzzleOrientation(state);
 
   const epLex = permutationToLex(normedState["EDGES"].permutation);
   const eoMask = orientationsToMask(2, normedState["EDGES"].orientation);
@@ -194,12 +192,10 @@ export function binaryComponentsToTwizzleBinary(
   ]);
 }
 
-export async function reid3x3x3ToTwizzleBinary(
+export function reid3x3x3ToTwizzleBinary(
   state: Transformation,
-): Promise<Binary3x3x3State> {
-  const components: Binary3x3x3Components = await reid3x3x3ToBinaryComponents(
-    state,
-  );
+): Binary3x3x3State {
+  const components: Binary3x3x3Components = reid3x3x3ToBinaryComponents(state);
   return binaryComponentsToTwizzleBinary(components);
 }
 
@@ -229,9 +225,9 @@ export function twizzleBinaryToBinaryComponents(
   };
 }
 
-export async function binaryComponentsToReid3x3x3(
+export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
-): Promise<Transformation> {
+): Transformation {
   if (components.moSupport !== 1) {
     throw new Error("Must support center orientation.");
   }
@@ -293,9 +289,7 @@ function validateComponents(components: Binary3x3x3Components): string[] {
   return errors;
 }
 
-export async function twizzleBinaryToReid3x3x3(
-  buffy: ArrayBuffer,
-): Promise<Transformation> {
+export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): Transformation {
   const components = twizzleBinaryToBinaryComponents(buffy);
   const errors = validateComponents(components);
   if (errors.length !== 0) {
