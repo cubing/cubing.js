@@ -430,7 +430,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         def,
         this.alg,
         this.experimentalStartSetup,
-      );
+      ); // TODO: validate more directly if the alg is okay for the puzzle.
     } catch (e) {
       if (initial) {
         this.experimentalInvalidInitialAlgCallback(this.alg);

@@ -46,12 +46,12 @@ export class AlgCursor
     private alg: Sequence,
     startStateSequence?: Sequence, // TODO: accept actual start state
   ) {
-    timeline.addTimestampListener(this);
     this.ksolvePuzzle = new KPuzzleWrapper(def);
     this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
     this.startState = startStateSequence
       ? this.algToState(startStateSequence)
       : this.ksolvePuzzle.startState();
+    timeline.addTimestampListener(this);
   }
 
   setStartState(startState: Transformation): void {
