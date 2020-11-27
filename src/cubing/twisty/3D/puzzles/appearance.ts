@@ -3,7 +3,8 @@ export type FaceletMeshAppearance =
   | "dim"
   | "oriented"
   | "ignored"
-  | "invisible";
+  | "invisible"
+  | "custom";
 
 export type FaceletAppearance = {
   appearance: FaceletMeshAppearance;

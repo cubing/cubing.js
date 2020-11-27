@@ -10,8 +10,13 @@ import {
   Object3D,
   PlaneGeometry,
   Quaternion,
+  Texture,
+  TextureLoader,
   Vector3,
 } from "three";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import mkbhd_sprite from "url:./mkbhd-sprite-red.png";
 import { BlockMove } from "../../../alg";
 import { Transformation } from "../../../kpuzzle";
 import { KPuzzleDefinition } from "../../../puzzle-geometry/interfaces";
@@ -28,6 +33,11 @@ import { TAU } from "../TAU";
 import { FaceletMeshAppearance, PuzzleAppearance } from "./appearance";
 import { stickerings } from "./stickerings";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
+
+const svgLoader = new TextureLoader();
+const p = new Promise((resolve) => {
+  svgLoader.load(mkbhd_sprite, resolve);
+});
 
 const ignoredMaterial = new MeshBasicMaterial({
   color: 0x444444,
@@ -81,6 +91,7 @@ class AxisInfo {
       oriented: orientedMaterial,
       ignored: ignoredMaterial,
       invisible: invisibleMaterial,
+      custom: invisibleMaterial,
     };
     this.hintStickerMaterial = {
       regular: new MeshBasicMaterial({
@@ -96,6 +107,7 @@ class AxisInfo {
       oriented: orientedMaterialHint,
       ignored: ignoredMaterialHint,
       invisible: invisibleMaterial,
+      custom: invisibleMaterial,
     };
   }
 }
@@ -188,7 +200,7 @@ const cube3DOptionsDefaults: Cube3DOptions = {
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
 const blackMesh = new MeshBasicMaterial({
   color: 0x000000,
-  opacity: 0.3,
+  opacity: 1,
   transparent: true,
 });
 
@@ -328,7 +340,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       const orbitFaceletInfo: FaceletInfo[][] = [];
       this.kpuzzleFaceletInfo[orbit] = orbitFaceletInfo;
       this.pieces[orbit] = pieceDefs[orbit].map(
-        this.createCubie.bind(this, orbitFaceletInfo),
+        this.createCubie.bind(this, orbit, orbitFaceletInfo),
       );
     }
     this.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
@@ -472,8 +484,10 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   // TODO: Always create (but sometimes hide parts) so we can show them later,
   // or (better) support creating puzzle parts on demand.
   private createCubie(
+    orbit: string,
     orbitFacelets: FaceletInfo[][],
     piece: CubieDef,
+    orbitPieceIdx: number,
   ): Object3D {
     const cubieFaceletInfo: FaceletInfo[] = [];
     orbitFacelets.push(cubieFaceletInfo);
@@ -503,6 +517,107 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         cubie.add(hintSticker);
         faceletInfo.hintFacelet = hintSticker;
         this.experimentalHintStickerMeshes.push(hintSticker);
+      }
+
+      const data: Record<string, number[][][]> = {
+        EDGES: [
+          [
+            [0, 4, 6],
+            [0, 4, 5],
+          ],
+          [
+            [3, 5, 7],
+            [0, 7, 5],
+          ],
+          [
+            [2, 4, 8],
+            [0, 10, 5],
+          ],
+          [
+            [1, 3, 7],
+            [0, 1, 5],
+          ],
+          [
+            [2, 4, 2],
+            [2, 4, 3],
+          ],
+          [
+            [3, 5, 1],
+            [2, 7, 3],
+          ],
+          [
+            [0, 4, 2],
+            [2, 10, 3],
+          ],
+          [
+            [1, 3, 1],
+            [2, 1, 3],
+          ],
+          [
+            [3, 5, 4],
+            [3, 6, 4],
+          ],
+          [
+            [1, 3, 4],
+            [1, 2, 4],
+          ],
+          [
+            [1, 9, 4],
+            [1, 8, 4],
+          ],
+          [
+            [3, 11, 4],
+            [3, 0, 4],
+          ],
+        ],
+      };
+
+      console.log(data[orbit], data[orbit] && data[orbit][orbitPieceIdx]);
+      if (
+        data[orbit] &&
+        data[orbit][orbitPieceIdx] &&
+        data[orbit][orbitPieceIdx][i]
+      ) {
+        const [rotate, offsetX, offsetY] = data[orbit][orbitPieceIdx][i];
+        (async () => {
+          const originalTexture: Texture = (await p) as any;
+          const texture: Texture = originalTexture.clone();
+
+          const mesh = this.createSticker(
+            axesInfo[cubieStickerOrder[i]],
+            axesInfo[piece.stickerFaces[i]],
+            false,
+          );
+          texture.rotation = (Math.PI / 2) * rotate;
+          texture.repeat.x = 1 / 12;
+          texture.repeat.y = 1 / 9;
+          switch (rotate) {
+            case 0:
+              texture.offset.x = offsetX / 12;
+              texture.offset.y = offsetY / 9;
+              break;
+            case 1:
+              texture.offset.x = offsetX / 12;
+              texture.offset.y = (offsetY + 1) / 9;
+              break;
+            case 2:
+              texture.offset.x = (offsetX + 1) / 12;
+              texture.offset.y = (offsetY + 1) / 9;
+              break;
+            case 3:
+              texture.offset.x = (offsetX + 1) / 12;
+              texture.offset.y = offsetY / 9;
+          }
+          const material = new MeshBasicMaterial({
+            map: texture.clone(),
+            side: DoubleSide,
+            transparent: true,
+          });
+          material.map!.needsUpdate = true;
+          mesh.material = material;
+
+          cubie.add(mesh);
+        })();
       }
 
       cubieFaceletInfo.push(faceletInfo);
