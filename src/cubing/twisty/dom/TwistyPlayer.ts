@@ -92,7 +92,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   constructor(
     initialConfig: TwistyPlayerInitialConfig = {},
     legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
-    private experimentalInvalidInitialAlgCallback: (alg: Sequence) => void,
+    private experimentalInvalidInitialAlgCallback: (
+      alg: Sequence,
+    ) => void = () => {
+      // stub
+    },
   ) {
     super();
     this.addCSS(twistyPlayerCSS);
