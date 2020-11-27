@@ -46,3 +46,4 @@ addAlg("Cross", "(y' R)5 D");
 addAlg("2x2x2", "y2");
 addAlg("2x2x3", "y");
 addAlg("Void Cube", "");
+addAlg("invisible", "");

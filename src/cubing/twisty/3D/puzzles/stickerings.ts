@@ -364,4 +364,32 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
       },
     },
   },
+
+  // TODO: remove foundations
+  "invisible": {
+    orbits: {
+      EDGES: {
+        pieces: [
+          invis,
+          invis,
+          invis,
+          invis,
+          invis,
+          invis,
+          invis,
+          invis,
+          invis,
+          invis,
+          invis,
+          invis,
+        ],
+      },
+      CORNERS: {
+        pieces: [invis, invis, invis, invis, invis, invis, invis, invis],
+      },
+      CENTERS: {
+        pieces: [invis, invis, invis, invis, invis, invis],
+      },
+    },
+  },
 };
