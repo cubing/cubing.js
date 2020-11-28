@@ -15,6 +15,11 @@ import {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import mkbhdSpriteURL from "url:./mkbhd-sprite-red.png";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import m12Cube from "url:./M12Cube.gif";
+
+(window as any).m12Cube = m12Cube;
 
 const spriteURL =
   new URL(location.href).searchParams.get("sprite") ?? mkbhdSpriteURL;
