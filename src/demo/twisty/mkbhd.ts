@@ -1,28 +1,38 @@
 import { parseAlg } from "../../cubing/alg";
-import { debugKeyboardConnect, MoveEvent } from "../../cubing/bluetooth";
+import {
+  connect,
+  debugKeyboardConnect,
+  MoveEvent,
+} from "../../cubing/bluetooth";
 import {
   TimelineActionEvent,
   TimestampLocationType,
   TwistyPlayer,
 } from "../../cubing/twisty";
 
+let haveHadMoveInput = false;
+
 const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
 twistyPlayer.timeline.play(); // TODO: add autoplay
 twistyPlayer.controls = "none";
 twistyPlayer.timeline.addActionListener({
   onTimelineAction: (actionEvent: TimelineActionEvent) => {
+    if (haveHadMoveInput) {
+      return;
+    }
     if (actionEvent.locationType === TimestampLocationType.EndOfTimeline)
       twistyPlayer.timeline.jumpToStart();
     twistyPlayer.timeline.play();
   },
 });
 
-const haveHadKeyboardInput = false;
 (async () => {
   const kb = await debugKeyboardConnect();
   kb.addMoveListener((e: MoveEvent) => {
-    if (!haveHadKeyboardInput) {
+    if (!haveHadMoveInput) {
+      twistyPlayer.timeline.pause();
       twistyPlayer.alg = parseAlg("");
+      haveHadMoveInput = true;
     }
     twistyPlayer.experimentalAddMove(e.latestMove);
   });
@@ -44,3 +54,19 @@ function rotate() {
   }
 }
 requestAnimationFrame(rotate);
+
+async function connectBluetooth(): Promise<void> {
+  const bluetoothPuzzle = await connect();
+  document.body.removeEventListener("click", connectBluetooth);
+  bluetoothPuzzle.addMoveListener((e: MoveEvent) => {
+    if (!haveHadMoveInput) {
+      twistyPlayer.timeline.pause();
+      twistyPlayer.alg = parseAlg("");
+      haveHadMoveInput = true;
+    }
+    twistyPlayer.experimentalAddMove(e.latestMove);
+  });
+}
+if (new URL(location.href).searchParams.get("bluetooth") === "true") {
+  document.body.addEventListener("click", connectBluetooth);
+}
