@@ -119,7 +119,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 
   // Background
   "background": StringEnumAttribute<BackgroundTheme>;
-  "controls": StringEnumAttribute<ControlsLocation>;
+  "control-panel": StringEnumAttribute<ControlsLocation>;
 
   // 3D config
   "back-view": StringEnumAttribute<BackViewLayout>;
@@ -136,7 +136,7 @@ export interface TwistyPlayerConfigValues {
   experimentalStickering: ExperimentalStickering;
 
   background: BackgroundTheme;
-  controls: ControlsLocation;
+  controlPanel: ControlsLocation;
 
   backView: BackViewLayout;
   cameraPosition: Vector3;
@@ -157,7 +157,7 @@ const twistyPlayerAttributeMap: Record<
   "experimental-stickering": "experimentalStickering",
 
   "background": "background",
-  "controls": "controls",
+  "control-panel": "controlPanel",
 
   "back-view": "backView",
   "camera-position": "cameraPosition",
@@ -194,9 +194,9 @@ export class TwistyPlayerConfig {
         backgroundThemes,
         initialValues.background,
       ),
-      "controls": new StringEnumAttribute(
+      "control-panel": new StringEnumAttribute(
         controlsLocations,
-        initialValues.controls,
+        initialValues.controlPanel,
       ),
       "back-view": new StringEnumAttribute(
         backViewLayouts,

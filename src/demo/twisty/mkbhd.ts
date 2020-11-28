@@ -34,7 +34,6 @@ let haveHadMoveInput = false;
 
 const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
 twistyPlayer.timeline.play(); // TODO: add autoplay
-twistyPlayer.controls = "none";
 twistyPlayer.timeline.addActionListener({
   onTimelineAction: (actionEvent: TimelineActionEvent) => {
     if (haveHadMoveInput) {

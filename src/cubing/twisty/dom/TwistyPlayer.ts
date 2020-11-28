@@ -219,12 +219,23 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["background"].value as BackgroundTheme;
   }
 
-  set controls(controls: ControlsLocation) {
-    this.#controlsClassListManager.setValue(controls);
+  set controlPanel(controlPanel: ControlsLocation) {
+    this.#config.attributes["control-panel"].setValue(controlPanel);
+    this.#controlsClassListManager.setValue(controlPanel);
   }
 
+  get controlPanel(): ControlsLocation {
+    return this.#config.attributes["control-panel"].value as ControlsLocation;
+  }
+
+  /** @deprecated use `controlPanel */
+  set controls(controls: ControlsLocation) {
+    this.controlPanel = controls;
+  }
+
+  /** @deprecated use `controlPanel */
   get controls(): ControlsLocation {
-    return this.#config.attributes["controls"].value as ControlsLocation;
+    return this.controlPanel;
   }
 
   set backView(backView: BackViewLayout) {
@@ -318,7 +329,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.controlElems = [scrubber, controlButtonGrid];
 
-    this.#controlsClassListManager.setValue(this.controls);
+    this.#controlsClassListManager.setValue(this.controlPanel);
 
     this.addElement(this.controlElems[0]);
     this.addElement(this.controlElems[1]);
