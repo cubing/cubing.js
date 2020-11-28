@@ -16,7 +16,6 @@ import {
 } from "three";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import stickerSprite from "url:./mkbhd-sprite-red.png";
 import { BlockMove } from "../../../alg";
 import { Transformation } from "../../../kpuzzle";
 import { KPuzzleDefinition } from "../../../puzzle-geometry/interfaces";
@@ -35,9 +34,6 @@ import { stickerings } from "./stickerings";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const svgLoader = new TextureLoader();
-const p = new Promise((resolve) => {
-  svgLoader.load(stickerSprite, resolve);
-});
 
 const ignoredMaterial = new MeshBasicMaterial({
   color: 0x444444,
@@ -422,6 +418,14 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   // TODO: Keep track of option-based meshes better.
   private experimentalHintStickerMeshes: Mesh[] = [];
   private experimentalFoundationMeshes: Mesh[] = [];
+
+  private setSpriteURL: (url: string) => void;
+  private sprite = new Promise((resolve) => {
+    this.setSpriteURL = (url: string): void => {
+      svgLoader.load(url, resolve);
+    };
+  });
+
   constructor(
     private def: KPuzzleDefinition,
     cursor?: AlgCursor,
@@ -452,6 +456,12 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     }
 
     cursor!.addPositionListener(this);
+  }
+
+  // Can only be called once.
+  /** @deprecated */
+  experimentalSetStickerSpriteURL(stickerSpriteURL: string): void {
+    this.setSpriteURL(stickerSpriteURL);
   }
 
   setAppearance(appearance: PuzzleAppearance): void {
@@ -630,7 +640,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
           orbitPieceIdx
         ][i];
         (async () => {
-          const originalTexture: Texture = (await p) as any;
+          const originalTexture: Texture = (await this.sprite) as any;
           const texture: Texture = originalTexture.clone();
           texture.rotation = (Math.PI / 2) * rotate;
           texture.repeat.x = 1 / 12;

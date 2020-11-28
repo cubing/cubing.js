@@ -5,10 +5,19 @@ import {
   MoveEvent,
 } from "../../cubing/bluetooth";
 import {
+  Cube3D,
   TimelineActionEvent,
   TimestampLocationType,
   TwistyPlayer,
 } from "../../cubing/twisty";
+
+// Parcel-ism.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import mkbhdSpriteURL from "url:./mkbhd-sprite-red.png";
+
+const spriteURL =
+  new URL(location.href).searchParams.get("sprite") ?? mkbhdSpriteURL;
 
 let haveHadMoveInput = false;
 
@@ -40,7 +49,15 @@ twistyPlayer.timeline.addActionListener({
 
 let lastTimestamp = performance.now();
 const ROTATION_RATE = (2 * Math.PI) / 15;
+let haveTriedToSetSpriteURL = false;
 function rotate() {
+  if (twistyPlayer.twisty3D && !haveTriedToSetSpriteURL) {
+    haveTriedToSetSpriteURL = true;
+    (twistyPlayer.twisty3D as Cube3D).experimentalSetStickerSpriteURL(
+      spriteURL,
+    );
+  }
+
   const newTimestamp = performance.now();
   twistyPlayer.twisty3D?.rotateY(
     ((newTimestamp - lastTimestamp) / 1000) * ROTATION_RATE,
