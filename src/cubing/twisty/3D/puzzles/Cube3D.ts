@@ -307,6 +307,8 @@ interface FaceletInfo {
   hintFacelet?: Mesh;
 }
 
+// TODO: Compatibility with Randelshofer or standard net layout? Offer a
+// conversion function?
 const pictureStickerCoords: Record<string, number[][][]> = {
   EDGES: [
     [
