@@ -177,6 +177,7 @@ const cubieDimensions = {
   foundationWidth: 1,
   hintStickerElevation: 1.45,
 };
+const EXPERIMENTAL_PICTURE_CUBE_HINT_ELEVATION = 2;
 
 interface Cube3DOptions {
   showMainStickers?: boolean;
@@ -423,8 +424,15 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   private experimentalFoundationMeshes: Mesh[] = [];
 
   private setSpriteURL: (url: string) => void;
-  private sprite = new Promise((resolve) => {
+  private sprite: Promise<Texture> = new Promise((resolve) => {
     this.setSpriteURL = (url: string): void => {
+      svgLoader.load(url, resolve);
+    };
+  });
+
+  private setHintSpriteURL: (url: string) => void;
+  private hintSprite: Promise<Texture> = new Promise((resolve) => {
+    this.setHintSpriteURL = (url: string): void => {
       svgLoader.load(url, resolve);
     };
   });
@@ -465,6 +473,12 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   /** @deprecated */
   experimentalSetStickerSpriteURL(stickerSpriteURL: string): void {
     this.setSpriteURL(stickerSpriteURL);
+  }
+
+  // Can only be called once.
+  /** @deprecated */
+  experimentalSetHintStickerSpriteURL(hintStickerSpriteURL: string): void {
+    this.setHintSpriteURL(hintStickerSpriteURL);
   }
 
   setAppearance(appearance: PuzzleAppearance): void {
@@ -643,9 +657,11 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
           orbitPieceIdx
         ][i];
         (async () => {
-          const texture: Texture = (await this.sprite) as any;
+          const addImageSticker = async (hint: boolean) => {
+            const texture: Texture = await (hint
+              ? this.hintSprite
+              : this.sprite);
 
-          const addImageSticker = (hint: boolean) => {
             const mesh = this.createSticker(
               axesInfo[cubieStickerOrder[i]],
               axesInfo[piece.stickerFaces[i]],
@@ -688,8 +704,26 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
             cubie.add(mesh);
           };
-          // addImageSticker(true);
+          // const delay: number = ({
+          //   CENTERS: 1000,
+          //   EDGES: 2000,
+          //   CORNERS: 3500,
+          // } as Record<string, number>)[orbit];
+          // if (orbit === "CENTERS" && orbitPieceIdx === 5) {
+          addImageSticker(true);
           addImageSticker(false);
+          // } else {
+          //   await this.sprite;
+          //   await this.hintSprite;
+          //   setTimeout(
+          //     () => addImageSticker(true),
+          //     delay + orbitPieceIdx * 100,
+          //   );
+          //   setTimeout(
+          //     () => addImageSticker(false),
+          //     delay + orbitPieceIdx * 100,
+          //   );
+          // }
         })();
       }
 
@@ -730,7 +764,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     stickerMesh.position.copy(posAxisInfo.vector);
     stickerMesh.position.multiplyScalar(
       isHint
-        ? cubieDimensions.hintStickerElevation
+        ? this.options.experimentalStickering === "picture"
+          ? EXPERIMENTAL_PICTURE_CUBE_HINT_ELEVATION
+          : cubieDimensions.hintStickerElevation
         : cubieDimensions.stickerElevation,
     );
     return stickerMesh;

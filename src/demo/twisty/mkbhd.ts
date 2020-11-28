@@ -17,12 +17,18 @@ import {
 import mkbhdSpriteURL from "url:./mkbhd-sprite-red.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+import mkbhdHintSpriteURL from "url:./mkbhd-sprite-red-hint.png";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import m12Cube from "url:./M12Cube.gif";
 
 (window as any).m12Cube = m12Cube;
 
 const spriteURL =
   new URL(location.href).searchParams.get("sprite") ?? mkbhdSpriteURL;
+
+const hintSpriteURL =
+  new URL(location.href).searchParams.get("hint-sprite") ?? mkbhdHintSpriteURL;
 
 let haveHadMoveInput = false;
 
@@ -60,6 +66,9 @@ function rotate() {
     haveTriedToSetSpriteURL = true;
     (twistyPlayer.twisty3D as Cube3D).experimentalSetStickerSpriteURL(
       spriteURL,
+    );
+    (twistyPlayer.twisty3D as Cube3D).experimentalSetHintStickerSpriteURL(
+      hintSpriteURL,
     );
   }
 
