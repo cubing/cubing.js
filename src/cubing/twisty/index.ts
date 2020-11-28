@@ -9,7 +9,10 @@ export {
   TwistyPlayerInitialConfig,
   ExperimentalStickering,
 } from "./dom/TwistyPlayerConfig";
-export { TimelineActionEvent } from "./animation/Timeline";
+export {
+  TimelineActionEvent,
+  TimestampLocationType,
+} from "./animation/Timeline";
 
 // Old
 export { Cube3D } from "./3D/puzzles/Cube3D";

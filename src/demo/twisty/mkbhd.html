@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf8" />
+  <meta name="theme-color" value="#141414">
   <title>Inline Test | MKBHD</title>
   <script src="../../cubing/twisty"></script>
   <style>
@@ -10,18 +11,33 @@
       margin: 0;
       height: 100%;
     }
+    body {
+      background-color: #303030;
+      background-image: url(mkbhd-background.png);
+      background-repeat: repeat;
+      box-shadow: inset 0 0 1em black;
+    }
     twisty-player {
       width: 100%;
       height: 100%;
     }
   </style>
+  <script src="./mkbhd.ts" defer></script>
 </head>
 
 <body>
 
   <twisty-player
-    alg="(R U R' U' R' F R2 U' R' U' R U R' F')4"
-    experimental-stickering="mkbhd"></twisty-player>
+    alg="(L F2 U2 R2 L' F U2 F D2 B2 U' R U2 R' D2 F2 // inspection
+U R2 U' F' L F' U' L' // XX-Cross + EO
+U' R U R' // 3rd slot
+R' U R U2' R' U R // 4th slot
+U R' U' R U' R' U2 R // OLL / ZBLL
+U // AUF
+)4"
+    controls="none"
+    background="none"
+    experimental-stickering="picture"></twisty-player>
 
 </body>
 

@@ -397,7 +397,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
     },
   },
 
-  "mkbhd": {
+  "picture": {
     // TODO: Support elision for regular pieces.
     orbits: {
       EDGES: {

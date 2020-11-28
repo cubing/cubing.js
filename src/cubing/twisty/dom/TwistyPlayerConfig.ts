@@ -69,7 +69,7 @@ export const experimentalStickerings = {
   "2x2x3": true,
   "Void Cube": true,
   "invisible": true,
-  "mkbhd": true,
+  "picture": true,
 };
 export type ExperimentalStickering = keyof typeof experimentalStickerings;
 

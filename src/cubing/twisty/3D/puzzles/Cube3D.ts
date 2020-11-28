@@ -16,7 +16,7 @@ import {
 } from "three";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import mkbhd_sprite from "url:./mkbhd-sprite-red.png";
+import stickerSprite from "url:./mkbhd-sprite-red.png";
 import { BlockMove } from "../../../alg";
 import { Transformation } from "../../../kpuzzle";
 import { KPuzzleDefinition } from "../../../puzzle-geometry/interfaces";
@@ -36,7 +36,7 @@ import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const svgLoader = new TextureLoader();
 const p = new Promise((resolve) => {
-  svgLoader.load(mkbhd_sprite, resolve);
+  svgLoader.load(stickerSprite, resolve);
 });
 
 const ignoredMaterial = new MeshBasicMaterial({
@@ -91,7 +91,6 @@ class AxisInfo {
       oriented: orientedMaterial,
       ignored: ignoredMaterial,
       invisible: invisibleMaterial,
-      custom: invisibleMaterial,
     };
     this.hintStickerMaterial = {
       regular: new MeshBasicMaterial({
@@ -107,7 +106,6 @@ class AxisInfo {
       oriented: orientedMaterialHint,
       ignored: ignoredMaterialHint,
       invisible: invisibleMaterial,
-      custom: invisibleMaterial,
     };
   }
 }
@@ -313,6 +311,109 @@ interface FaceletInfo {
   hintFacelet?: Mesh;
 }
 
+const pictureStickerCoords: Record<string, number[][][]> = {
+  EDGES: [
+    [
+      [0, 4, 6],
+      [0, 4, 5],
+    ],
+    [
+      [3, 5, 7],
+      [0, 7, 5],
+    ],
+    [
+      [2, 4, 8],
+      [0, 10, 5],
+    ],
+    [
+      [1, 3, 7],
+      [0, 1, 5],
+    ],
+    [
+      [2, 4, 2],
+      [2, 4, 3],
+    ],
+    [
+      [3, 5, 1],
+      [2, 7, 3],
+    ],
+    [
+      [2, 4, 2],
+      [2, 10, 3],
+    ],
+    [
+      [1, 3, 1],
+      [2, 1, 3],
+    ],
+    [
+      [3, 5, 4],
+      [3, 6, 4],
+    ],
+    [
+      [1, 3, 4],
+      [1, 2, 4],
+    ],
+    [
+      [1, 9, 4],
+      [1, 8, 4],
+    ],
+    [
+      [3, 11, 4],
+      [3, 0, 4],
+    ],
+  ],
+  CORNERS: [
+    [
+      [0, 5, 6],
+      [0, 5, 5],
+      [0, 6, 5],
+    ],
+    [
+      [3, 5, 8],
+      [0, 8, 5],
+      [0, 9, 5],
+    ],
+    [
+      [2, 3, 8],
+      [0, 11, 5],
+      [0, 0, 5],
+    ],
+    [
+      [1, 3, 6],
+      [0, 2, 5],
+      [0, 3, 5],
+    ],
+    [
+      [3, 5, 2],
+      [2, 6, 3],
+      [2, 5, 3],
+    ],
+    [
+      [2, 3, 2],
+      [2, 3, 3],
+      [2, 2, 3],
+    ],
+    [
+      [1, 3, 0],
+      [2, 0, 3],
+      [2, 11, 3],
+    ],
+    [
+      [0, 5, 0],
+      [2, 9, 3],
+      [2, 8, 3],
+    ],
+  ],
+  CENTERS: [
+    [[0, 4, 7]],
+    [[0, 1, 4]],
+    [[0, 4, 4]],
+    [[0, 7, 4]],
+    [[0, 10, 4]],
+    [[0, 4, 1]],
+  ],
+};
+
 // TODO: Split into "scene model" and "view".
 export class Cube3D extends Object3D implements Twisty3DPuzzle {
   kpuzzleFaceletInfo: Record<string, FaceletInfo[][]>;
@@ -330,7 +431,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     super();
 
     this.options = { ...cube3DOptionsDefaults };
-    Object.assign(this.options, cube3DOptionsDefaults); // TODO: check if this works
+    Object.assign(this.options, options); // TODO: check if this works
 
     if (this.def.name !== "3x3x3") {
       throw new Error("Invalid puzzle for this Cube3D implementation.");
@@ -346,8 +447,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     this.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
 
     // TODO: Can we construct this directly instead of applying it later? Would that be more code-efficient?
-    if (options.experimentalStickering) {
-      this.setAppearance(stickerings[options.experimentalStickering]);
+    if (this.options.experimentalStickering) {
+      this.setAppearance(stickerings[this.options.experimentalStickering]);
     }
 
     cursor!.addPositionListener(this);
@@ -519,75 +620,18 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         this.experimentalHintStickerMeshes.push(hintSticker);
       }
 
-      const data: Record<string, number[][][]> = {
-        EDGES: [
-          [
-            [0, 4, 6],
-            [0, 4, 5],
-          ],
-          [
-            [3, 5, 7],
-            [0, 7, 5],
-          ],
-          [
-            [2, 4, 8],
-            [0, 10, 5],
-          ],
-          [
-            [1, 3, 7],
-            [0, 1, 5],
-          ],
-          [
-            [2, 4, 2],
-            [2, 4, 3],
-          ],
-          [
-            [3, 5, 1],
-            [2, 7, 3],
-          ],
-          [
-            [0, 4, 2],
-            [2, 10, 3],
-          ],
-          [
-            [1, 3, 1],
-            [2, 1, 3],
-          ],
-          [
-            [3, 5, 4],
-            [3, 6, 4],
-          ],
-          [
-            [1, 3, 4],
-            [1, 2, 4],
-          ],
-          [
-            [1, 9, 4],
-            [1, 8, 4],
-          ],
-          [
-            [3, 11, 4],
-            [3, 0, 4],
-          ],
-        ],
-      };
-
-      console.log(data[orbit], data[orbit] && data[orbit][orbitPieceIdx]);
       if (
-        data[orbit] &&
-        data[orbit][orbitPieceIdx] &&
-        data[orbit][orbitPieceIdx][i]
+        this.options.experimentalStickering === "picture" &&
+        pictureStickerCoords[orbit] &&
+        pictureStickerCoords[orbit][orbitPieceIdx] &&
+        pictureStickerCoords[orbit][orbitPieceIdx][i]
       ) {
-        const [rotate, offsetX, offsetY] = data[orbit][orbitPieceIdx][i];
+        const [rotate, offsetX, offsetY] = pictureStickerCoords[orbit][
+          orbitPieceIdx
+        ][i];
         (async () => {
           const originalTexture: Texture = (await p) as any;
           const texture: Texture = originalTexture.clone();
-
-          const mesh = this.createSticker(
-            axesInfo[cubieStickerOrder[i]],
-            axesInfo[piece.stickerFaces[i]],
-            false,
-          );
           texture.rotation = (Math.PI / 2) * rotate;
           texture.repeat.x = 1 / 12;
           texture.repeat.y = 1 / 9;
@@ -608,15 +652,25 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
               texture.offset.x = (offsetX + 1) / 12;
               texture.offset.y = offsetY / 9;
           }
-          const material = new MeshBasicMaterial({
-            map: texture.clone(),
-            side: DoubleSide,
-            transparent: true,
-          });
-          material.map!.needsUpdate = true;
-          mesh.material = material;
 
-          cubie.add(mesh);
+          const addImageSticker = (hint: boolean) => {
+            const mesh = this.createSticker(
+              axesInfo[cubieStickerOrder[i]],
+              axesInfo[piece.stickerFaces[i]],
+              hint,
+            );
+            const material = new MeshBasicMaterial({
+              map: texture,
+              side: hint ? BackSide : DoubleSide,
+              transparent: true,
+            });
+            material.map!.needsUpdate = true;
+            mesh.material = material;
+
+            cubie.add(mesh);
+          };
+          // addImageSticker(true);
+          addImageSticker(false);
         })();
       }
 

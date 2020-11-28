@@ -92,6 +92,7 @@ export class TwistyOrbitControls {
   private lastMouseTimestamp: number = 0;
   private lastMouseMoveMomentumX: number = 0;
   private lastMouseMoveMomentumY: number = 0;
+  public experimentalHasBeenMoved: boolean = false;
   constructor(
     private camera: Camera,
     private canvas: HTMLCanvasElement,
@@ -241,6 +242,7 @@ export class TwistyOrbitControls {
 
     this.camera.position.setFromSpherical(this.tempSpherical);
     this.camera.lookAt(new Vector3(0, 0, 0));
+    this.experimentalHasBeenMoved = true;
 
     this.scheduleRender();
     this.mirrorControls?.updateMirroredCamera(this.camera);
