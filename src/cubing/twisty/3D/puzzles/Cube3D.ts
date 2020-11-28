@@ -12,6 +12,7 @@ import {
   Quaternion,
   Texture,
   TextureLoader,
+  Vector2,
   Vector3,
 } from "three";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -642,28 +643,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
           orbitPieceIdx
         ][i];
         (async () => {
-          const originalTexture: Texture = (await this.sprite) as any;
-          const texture: Texture = originalTexture.clone();
-          texture.rotation = (Math.PI / 2) * rotate;
-          texture.repeat.x = 1 / 12;
-          texture.repeat.y = 1 / 9;
-          switch (rotate) {
-            case 0:
-              texture.offset.x = offsetX / 12;
-              texture.offset.y = offsetY / 9;
-              break;
-            case 1:
-              texture.offset.x = offsetX / 12;
-              texture.offset.y = (offsetY + 1) / 9;
-              break;
-            case 2:
-              texture.offset.x = (offsetX + 1) / 12;
-              texture.offset.y = (offsetY + 1) / 9;
-              break;
-            case 3:
-              texture.offset.x = (offsetX + 1) / 12;
-              texture.offset.y = offsetY / 9;
-          }
+          const texture: Texture = (await this.sprite) as any;
 
           const addImageSticker = (hint: boolean) => {
             const mesh = this.createSticker(
@@ -671,13 +651,40 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
               axesInfo[piece.stickerFaces[i]],
               hint,
             );
-            const material = new MeshBasicMaterial({
+            mesh.material = new MeshBasicMaterial({
               map: texture,
               side: hint ? BackSide : DoubleSide,
               transparent: true,
             });
-            material.map!.needsUpdate = true;
-            mesh.material = material;
+
+            const x1 = offsetX / 12;
+            const x2 = (offsetX + 1) / 12;
+            const y1 = offsetY / 9;
+            const y2 = (offsetY + 1) / 9;
+
+            let v1 = new Vector2(x1, y1);
+            let v2 = new Vector2(x1, y2);
+            let v3 = new Vector2(x2, y2);
+            let v4 = new Vector2(x2, y1);
+
+            switch (rotate) {
+              case 1:
+                [v1, v2, v3, v4] = [v2, v3, v4, v1];
+                break;
+              case 2:
+                [v1, v2, v3, v4] = [v3, v4, v1, v2];
+                break;
+              case 3:
+                [v1, v2, v3, v4] = [v4, v1, v2, v3];
+                break;
+            }
+
+            (mesh.geometry as PlaneGeometry).faceVertexUvs = [
+              [
+                [v2, v1, v3],
+                [v1, v4, v3],
+              ],
+            ];
 
             cubie.add(mesh);
           };
