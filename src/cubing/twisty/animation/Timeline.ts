@@ -7,6 +7,12 @@ import {
   MillisecondTimestamp,
 } from "./alg/CursorTypes";
 
+// YouTube keeps playing on jump, but it also stays frozen while the cursor is
+// down. So I think it would be good for this to be false, but only if we
+// implement a "start jumping" event that pauses until "finish jumping" while
+// the scrubber is active.
+const PAUSE_ON_JUMP = true;
+
 // TODO: We use symbols to avoid exposing `number` values. Is this performant enough? Should/can we use symbols?
 export enum TimelineAction {
   StartingToPlay = "StartingToPlay", // TODO playing backwards.
@@ -313,7 +319,6 @@ export class Timeline
   }
 
   setTimestamp(timestamp: MillisecondTimestamp): void {
-    this.animating = false;
     const oldTimestamp = this.timestamp;
     this.timestamp = timestamp;
     this.lastAnimFrameNow = getNow();
@@ -321,6 +326,11 @@ export class Timeline
     if (oldTimestamp !== timestamp) {
       this.dispatchAction(TimelineAction.Jumping);
       this.scheduler.requestAnimFrame();
+    }
+
+    if (PAUSE_ON_JUMP) {
+      this.animating = false;
+      this.dispatchAction(TimelineAction.Pausing);
     }
   }
 
