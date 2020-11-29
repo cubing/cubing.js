@@ -420,6 +420,33 @@ const pictureStickerCoords: Record<string, number[][][]> = {
   ],
 };
 
+let sharedCubieFoundationGeometryCache: BoxGeometry | null = null;
+function sharedCubieFoundationGeometry(): BoxGeometry {
+  return (
+    sharedCubieFoundationGeometryCache ??
+    (sharedCubieFoundationGeometryCache = new BoxGeometry(
+      cubieDimensions.foundationWidth,
+      cubieDimensions.foundationWidth,
+      cubieDimensions.foundationWidth,
+    ))
+  );
+}
+
+function newStickerGeometry(): PlaneGeometry {
+  return new PlaneGeometry(
+    cubieDimensions.stickerWidth,
+    cubieDimensions.stickerWidth,
+  );
+}
+
+let sharedStickerGeometryCache: PlaneGeometry | null = null;
+function sharedStickerGeometry(): PlaneGeometry {
+  return (
+    sharedStickerGeometryCache ??
+    (sharedStickerGeometryCache = newStickerGeometry())
+  );
+}
+
 // TODO: Split into "scene model" and "view".
 export class Cube3D extends Object3D implements Twisty3DPuzzle {
   kpuzzleFaceletInfo: Record<string, FaceletInfo[][]>;
@@ -706,7 +733,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                 [v2, v1, v3],
                 [v1, v4, v3],
               ],
-            ];
+            ]; // TODO: Share the geometry for a given orientation.
 
             cubie.add(mesh);
           };
@@ -743,11 +770,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
   // TODO: Support creating only the outward-facing parts?
   private createCubieFoundation(): Mesh {
-    const box = new BoxGeometry(
-      cubieDimensions.foundationWidth,
-      cubieDimensions.foundationWidth,
-      cubieDimensions.foundationWidth,
-    );
+    const box = sharedCubieFoundationGeometry();
     return new Mesh(
       box,
       this.options.experimentalStickering === "picture"
@@ -761,10 +784,10 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     materialAxisInfo: AxisInfo,
     isHint: boolean,
   ): Mesh {
-    const geo = new PlaneGeometry(
-      cubieDimensions.stickerWidth,
-      cubieDimensions.stickerWidth,
-    );
+    const geo =
+      this.options.experimentalStickering === "picture"
+        ? newStickerGeometry()
+        : sharedStickerGeometry();
     const stickerMesh = new Mesh(
       geo,
       isHint
