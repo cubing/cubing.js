@@ -256,7 +256,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
           puzzle: "custom",
           alg: new Sequence([]),
           visualization: "PG3D",
-          backView: getCheckbox("sidebyside") ? "side-by-side" : "upper-right",
+          backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
           cameraPosition: initialCameraPos,
         },
         legacyExperimentalPG3DViewConfig(),
@@ -307,9 +307,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       }
       puzzleSelected = false;
     }
-    twisty.backView = getCheckbox("sidebyside")
-      ? "side-by-side"
-      : "upper-right";
+    twisty.backView = getCheckbox("sidebyside") ? "side-by-side" : "top-right";
     str = str.trim();
     algoinput.style.backgroundColor = "";
     try {

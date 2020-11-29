@@ -6,7 +6,7 @@ import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
 export const backViewLayouts = {
   "none": true, // default
   "side-by-side": true,
-  "upper-right": true,
+  "top-right": true,
 };
 export type BackViewLayout = keyof typeof backViewLayouts;
 
@@ -20,7 +20,7 @@ export class TwistyViewerWrapper extends ManagedCustomElement {
   > = new ClassListManager(this, "back-view-", [
     "none",
     "side-by-side",
-    "upper-right",
+    "top-right",
   ]);
 
   constructor(config: TwistyViewerWrapperConfig = {}) {

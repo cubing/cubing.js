@@ -19,7 +19,7 @@ export const twistyViewerWrapperCSS = new CSSSource(`
   overflow: hidden;
 }
 
-.wrapper.back-view-upper-right > :nth-child(2) {
+.wrapper.back-view-top-right > :nth-child(2) {
   position: absolute;
   right: 0;
   top: 0;
