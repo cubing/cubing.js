@@ -265,8 +265,4 @@ export class TwistyOrbitControls {
     this.camera.lookAt(new Vector3(0, 0, 0));
     this.scheduleRender();
   }
-
-  updateAndSchedule(): void {
-    this.scheduleRender();
-  }
 }

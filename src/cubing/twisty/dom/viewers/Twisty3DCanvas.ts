@@ -150,7 +150,6 @@ export class Twisty3DCanvas
     if (this.resizePending) {
       this.resize();
     }
-    this.orbitControls.updateAndSchedule();
 
     if (this.rendererIsShared) {
       this.renderer.setSize(this.canvas.width, this.canvas.height, false);
