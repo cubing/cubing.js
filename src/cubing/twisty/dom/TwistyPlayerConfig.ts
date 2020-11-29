@@ -163,7 +163,7 @@ const twistyPlayerAttributeMap: Record<
   "camera-position": "cameraPosition",
 };
 
-// TODO: Can we avoid instantiating a new class for ech attribute, and would it help performance?
+// TODO: Can we avoid instantiating a new class for each attribute, and would it help performance?
 export class TwistyPlayerConfig {
   attributes: TwistyPlayerAttributes;
   constructor(
