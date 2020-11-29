@@ -200,6 +200,12 @@ const blackMesh = new MeshBasicMaterial({
   transparent: true,
 });
 
+const blackTranslucentMesh = new MeshBasicMaterial({
+  color: 0x000000,
+  opacity: 0.3,
+  transparent: true,
+});
+
 class CubieDef {
   public matrix: Matrix4;
   public stickerFaces: number[];
@@ -742,7 +748,12 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       cubieDimensions.foundationWidth,
       cubieDimensions.foundationWidth,
     );
-    return new Mesh(box, blackMesh);
+    return new Mesh(
+      box,
+      this.options.experimentalStickering === "picture"
+        ? blackMesh
+        : blackTranslucentMesh,
+    );
   }
 
   private createSticker(
