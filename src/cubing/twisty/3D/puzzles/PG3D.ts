@@ -339,6 +339,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const blockMove = this.pgdat.notationMapper.notationToInternal(
         externalBlockMove,
       );
+      if (blockMove === null) {
+        throw Error("Bad blockmove " + externalBlockMove.family);
+      }
       const simpleMove = modifiedBlockMove(externalBlockMove, { amount: 1 });
       const baseMove = stateForBlockMove(this.definition, simpleMove);
       const ax = this.axesInfo[unswizzled];

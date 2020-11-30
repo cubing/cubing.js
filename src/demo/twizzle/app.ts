@@ -107,7 +107,11 @@ function getModValueForMove(move: BlockMove): number {
   if (!pg) {
     return 1;
   }
-  move = pg.notationMapper.notationToInternal(move);
+  const move2 = pg.notationMapper.notationToInternal(move);
+  if (move2 === null) {
+    return 1;
+  }
+  move = move2;
   let family = move.family;
   if (family.length > 1) {
     if (
@@ -129,7 +133,7 @@ function intersectionToMove(
   point: Vector3,
   event: MouseEvent,
   rightClick: boolean,
-): BlockMove {
+): BlockMove | null {
   const allowRotatingGrips = event.ctrlKey || event.metaKey;
   let bestGrip: MoveFamily = stickerDat.axis[0][1];
   let bestProduct: number = 0;
@@ -156,7 +160,11 @@ function intersectionToMove(
     }
   }
   if (pg) {
-    move = pg.notationMapper.notationToExternal(move);
+    const move2 = pg.notationMapper.notationToExternal(move);
+    if (move2 === null) {
+      return null;
+    }
+    move = move2;
   }
   if (getModValueForMove(move) !== 2 && !rightClick) {
     move = modifiedBlockMove(move, { amount: -move.amount });
@@ -646,7 +654,10 @@ function onMouseClick(
   const intersects = raycaster.intersectObjects(controlTargets);
   if (intersects.length > 0) {
     event.preventDefault();
-    addMove(intersectionToMove(intersects[0].point, event, rightClick));
+    const mv = intersectionToMove(intersects[0].point, event, rightClick);
+    if (mv !== null) {
+      addMove(mv);
+    }
   }
 }
 
@@ -680,14 +691,17 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
   const intersects = raycaster.intersectObjects(targets);
   if (intersects.length > 0) {
     if (pg) {
-      canvas.title = pg.notationMapper.notationToExternal(
+      const mv2 = pg.notationMapper.notationToExternal(
         new BlockMove(
           undefined,
           undefined,
           intersects[0].object.userData.name,
           1,
         ),
-      ).family;
+      );
+      if (mv2 !== null) {
+        canvas.title = mv2.family;
+      }
     }
   } else {
     canvas.title = "";

@@ -2,8 +2,8 @@ import { FaceNameSwizzler } from "./FaceNameSwizzler";
 import { BlockMove } from "./interfaces";
 
 export interface NotationMapper {
-  notationToInternal(mv: BlockMove): BlockMove;
-  notationToExternal(mv: BlockMove): BlockMove;
+  notationToInternal(mv: BlockMove): BlockMove | null;
+  notationToExternal(mv: BlockMove): BlockMove | null;
 }
 
 export class NullMapper implements NotationMapper {
@@ -146,7 +146,7 @@ export class FaceRenamingMapper implements NotationMapper {
 export class MegaminxScramblingNotationMapper implements NotationMapper {
   constructor(private child: NotationMapper) {}
 
-  public notationToInternal(mv: BlockMove): BlockMove {
+  public notationToInternal(mv: BlockMove): BlockMove | null {
     if (mv.innerLayer === undefined && mv.outerLayer === undefined) {
       if (Math.abs(mv.amount) === 1) {
         if (mv.family === "R++") {
@@ -167,7 +167,7 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
   }
 
   // we never rewrite click moves to these moves.
-  public notationToExternal(mv: BlockMove): BlockMove {
+  public notationToExternal(mv: BlockMove): BlockMove | null {
     if (mv.family === "Uv") {
       return new BlockMove(mv.innerLayer, mv.outerLayer, "y", mv.amount);
     }
@@ -175,5 +175,50 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
       return negate("y", mv.amount);
     }
     return this.child.notationToExternal(mv);
+  }
+}
+
+export class SkewbNotationMapper implements NotationMapper {
+  constructor(private child: FaceNameSwizzler) {}
+
+  public notationToInternal(mv: BlockMove): BlockMove | null {
+    if (mv.family === "F") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "DFR", mv.amount);
+    } else if (mv.family === "R") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "DBR", mv.amount);
+    } else if (mv.family === "L") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "DFL", mv.amount);
+    } else if (mv.family === "B") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "DBL", mv.amount);
+    } else if (mv.family === "x") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "Rv", mv.amount);
+    } else if (mv.family === "y") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "Uv", mv.amount);
+    } else if (mv.family === "z") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "Fv", mv.amount);
+    } else {
+      return null;
+    }
+  }
+
+  // we never rewrite click moves to these moves.
+  public notationToExternal(mv: BlockMove): BlockMove | null {
+    if (this.child.spinmatch(mv.family, "DFR")) {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "F", mv.amount);
+    } else if (this.child.spinmatch(mv.family, "DRB")) {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "R", mv.amount);
+    } else if (this.child.spinmatch(mv.family, "DFL")) {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "L", mv.amount);
+    } else if (this.child.spinmatch(mv.family, "DBL")) {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "B", mv.amount);
+    } else if (mv.family === "Rv") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "x", mv.amount);
+    } else if (mv.family === "Uv") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "y", mv.amount);
+    } else if (mv.family === "Fv") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "z", mv.amount);
+    } else {
+      return null;
+    }
   }
 }

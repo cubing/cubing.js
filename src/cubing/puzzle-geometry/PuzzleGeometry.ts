@@ -36,6 +36,7 @@ import {
   NotationMapper,
   NullMapper,
   NxNxNCubeMapper,
+  SkewbNotationMapper,
 } from "./NotationMapper";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
 
@@ -958,10 +959,13 @@ export class PuzzleGeometry {
       console.log("# Short edge is " + shortedge);
     }
     // add nxnxn cube notation if it has cube face moves
-    if (shape === "c" && sawface) {
+    if (shape === "c" && sawface && !sawedge && !sawvertex) {
       // In this case the mapper adding is deferred until we
       // know the number of slices.
       this.addNotationMapper = "NxNxNCubeMapper";
+    }
+    if (shape === "c" && sawvertex && !sawface && !sawedge) {
+      this.addNotationMapper = "SkewbMapper";
     }
     if (shape === "o" && sawface && NEW_FACE_NAMES) {
       this.notationMapper = new FaceRenamingMapper(
@@ -1188,6 +1192,13 @@ export class PuzzleGeometry {
       ]);
       if (this.addNotationMapper === "NxNxNCubeMapper" && gtype === "f") {
         this.notationMapper = new NxNxNCubeMapper(1 + moveplanesets[i].length);
+        this.addNotationMapper = "";
+      }
+      if (
+        this.addNotationMapper === "SkewbMapper--DISABLED" &&
+        moveplanesets[0].length === 1
+      ) {
+        this.notationMapper = new SkewbNotationMapper(this.swizzler);
         this.addNotationMapper = "";
       }
       if (this.addNotationMapper === "Megaminx" && gtype === "f") {
@@ -1430,6 +1441,9 @@ export class PuzzleGeometry {
 
   public unswizzle(mv: BlockMove): string {
     const newmv = this.notationMapper.notationToInternal(mv);
+    if (newmv === null) {
+      return "";
+    }
     return this.swizzler.unswizzle(newmv.family);
   }
 
@@ -1467,7 +1481,11 @@ export class PuzzleGeometry {
   }
 
   public parseBlockMove(blockmove: BlockMove): any {
-    blockmove = this.notationMapper.notationToInternal(blockmove); // pluggable notation
+    const bm = this.notationMapper.notationToInternal(blockmove); // pluggable notation
+    if (bm === null) {
+      throw new Error("Bad move " + blockmove.family);
+    }
+    blockmove = bm;
     let grip = blockmove.family;
     let fullrotation = false;
     if (grip.endsWith("v") && grip[0] <= "Z") {
