@@ -182,6 +182,9 @@ export class SkewbNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
   public notationToInternal(mv: BlockMove): BlockMove | null {
+    if (mv.innerLayer || mv.outerLayer) {
+      return null;
+    }
     if (mv.family === "F") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "DFR", mv.amount);
     } else if (mv.family === "R") {
@@ -217,6 +220,69 @@ export class SkewbNotationMapper implements NotationMapper {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "y", mv.amount);
     } else if (mv.family === "Fv") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "z", mv.amount);
+    } else {
+      return null;
+    }
+  }
+}
+
+export class PyraminxNotationMapper implements NotationMapper {
+  constructor(private child: FaceNameSwizzler) {}
+
+  public notationToInternal(mv: BlockMove): BlockMove | null {
+    if (mv.innerLayer || mv.outerLayer) {
+      return null;
+    }
+    if (mv.family === "U") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "flr", mv.amount);
+    } else if (mv.family === "R") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "fld", mv.amount);
+    } else if (mv.family === "L") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "frd", mv.amount);
+    } else if (mv.family === "B") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "dlr", mv.amount);
+    } else if (mv.family === "u") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "FLR", mv.amount);
+    } else if (mv.family === "r") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "FLD", mv.amount);
+    } else if (mv.family === "l") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "FRD", mv.amount);
+    } else if (mv.family === "b") {
+      return new BlockMove(mv.outerLayer, mv.innerLayer, "DLR", mv.amount);
+    } else if (mv.family === "y") {
+      return negate("Dv", mv.amount);
+    } else {
+      return null;
+    }
+  }
+
+  // we never rewrite click moves to these moves.
+  public notationToExternal(mv: BlockMove): BlockMove | null {
+    if (mv.family === mv.family.toLowerCase()) {
+      const fam = mv.family.toUpperCase();
+      if (this.child.spinmatch(fam, "FLR")) {
+        return new BlockMove(mv.outerLayer, mv.innerLayer, "U", mv.amount);
+      } else if (this.child.spinmatch(fam, "FLD")) {
+        return new BlockMove(mv.outerLayer, mv.innerLayer, "R", mv.amount);
+      } else if (this.child.spinmatch(fam, "FRD")) {
+        return new BlockMove(mv.outerLayer, mv.innerLayer, "L", mv.amount);
+      } else if (this.child.spinmatch(fam, "DLR")) {
+        return new BlockMove(mv.outerLayer, mv.innerLayer, "B", mv.amount);
+      }
+    }
+    if (mv.family === mv.family.toUpperCase()) {
+      if (this.child.spinmatch(mv.family, "FLR")) {
+        return new BlockMove(mv.outerLayer, mv.innerLayer, "u", mv.amount);
+      } else if (this.child.spinmatch(mv.family, "FLD")) {
+        return new BlockMove(mv.outerLayer, mv.innerLayer, "r", mv.amount);
+      } else if (this.child.spinmatch(mv.family, "FRD")) {
+        return new BlockMove(mv.outerLayer, mv.innerLayer, "l", mv.amount);
+      } else if (this.child.spinmatch(mv.family, "DLR")) {
+        return new BlockMove(mv.outerLayer, mv.innerLayer, "b", mv.amount);
+      }
+    }
+    if (mv.family === "Dv") {
+      return negate("y", mv.amount);
     } else {
       return null;
     }

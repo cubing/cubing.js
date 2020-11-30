@@ -36,6 +36,7 @@ import {
   NotationMapper,
   NullMapper,
   NxNxNCubeMapper,
+  PyraminxNotationMapper,
   SkewbNotationMapper,
 } from "./NotationMapper";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
@@ -967,6 +968,9 @@ export class PuzzleGeometry {
     if (shape === "c" && sawvertex && !sawface && !sawedge) {
       this.addNotationMapper = "SkewbMapper";
     }
+    if (shape === "t" && (sawvertex || sawface) && !sawedge) {
+      this.addNotationMapper = "PyraminxMapper";
+    }
     if (shape === "o" && sawface && NEW_FACE_NAMES) {
       this.notationMapper = new FaceRenamingMapper(
         this.swizzler,
@@ -1195,10 +1199,17 @@ export class PuzzleGeometry {
         this.addNotationMapper = "";
       }
       if (
-        this.addNotationMapper === "SkewbMapper--DISABLED" &&
+        this.addNotationMapper === "SkewbMapper---DISABLED" &&
         moveplanesets[0].length === 1
       ) {
         this.notationMapper = new SkewbNotationMapper(this.swizzler);
+        this.addNotationMapper = "";
+      }
+      if (
+        this.addNotationMapper === "PyraminxMapper---DISABLED" &&
+        moveplanesets[0].length === 2
+      ) {
+        this.notationMapper = new PyraminxNotationMapper(this.swizzler);
         this.addNotationMapper = "";
       }
       if (this.addNotationMapper === "Megaminx" && gtype === "f") {
