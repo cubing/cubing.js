@@ -16,6 +16,17 @@ export class NullMapper implements NotationMapper {
   }
 }
 
+function negate(family: string, v: number | undefined): BlockMove {
+  if (v === undefined) {
+    v = -1;
+  } else if (v === -1) {
+    v = undefined;
+  } else {
+    v = -v;
+  }
+  return new BlockMove(undefined, undefined, family, v);
+}
+
 export class NxNxNCubeMapper implements NotationMapper {
   constructor(public slices: number) {}
 
@@ -62,25 +73,14 @@ export class NxNxNCubeMapper implements NotationMapper {
       } else if (grip === "Fv") {
         return new BlockMove(undefined, undefined, "z", mv.amount);
       } else if (grip === "Lv") {
-        return this.negate("x", mv.amount);
+        return negate("x", mv.amount);
       } else if (grip === "Dv") {
-        return this.negate("y", mv.amount);
+        return negate("y", mv.amount);
       } else if (grip === "Bv") {
-        return this.negate("z", mv.amount);
+        return negate("z", mv.amount);
       }
     }
     return mv;
-  }
-
-  private negate(family: string, v: number | undefined): BlockMove {
-    if (v === undefined) {
-      v = -1;
-    } else if (v === -1) {
-      v = undefined;
-    } else {
-      v = -v;
-    }
-    return new BlockMove(undefined, undefined, family, v);
   }
 }
 
@@ -147,19 +147,20 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
   constructor(private child: NotationMapper) {}
 
   public notationToInternal(mv: BlockMove): BlockMove {
-    if (
-      mv.innerLayer === undefined &&
-      mv.outerLayer === undefined &&
-      Math.abs(mv.amount) === 1
-    ) {
-      if (mv.family === "R++") {
-        return new BlockMove(2, 3, "L", -2 * mv.amount);
-      } else if (mv.family === "R--") {
-        return new BlockMove(2, 3, "L", 2 * mv.amount);
-      } else if (mv.family === "D++") {
-        return new BlockMove(2, 3, "U", -2 * mv.amount);
-      } else if (mv.family === "D--") {
-        return new BlockMove(2, 3, "U", 2 * mv.amount);
+    if (mv.innerLayer === undefined && mv.outerLayer === undefined) {
+      if (Math.abs(mv.amount) === 1) {
+        if (mv.family === "R++") {
+          return new BlockMove(2, 3, "L", -2 * mv.amount);
+        } else if (mv.family === "R--") {
+          return new BlockMove(2, 3, "L", 2 * mv.amount);
+        } else if (mv.family === "D++") {
+          return new BlockMove(2, 3, "U", -2 * mv.amount);
+        } else if (mv.family === "D--") {
+          return new BlockMove(2, 3, "U", 2 * mv.amount);
+        }
+      }
+      if (mv.family === "y") {
+        return new BlockMove(undefined, undefined, "Uv", mv.amount);
       }
     }
     return this.child.notationToInternal(mv);
@@ -167,6 +168,12 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
 
   // we never rewrite click moves to these moves.
   public notationToExternal(mv: BlockMove): BlockMove {
+    if (mv.family === "Uv") {
+      return new BlockMove(mv.innerLayer, mv.outerLayer, "y", mv.amount);
+    }
+    if (mv.family === "Dv") {
+      return negate("y", mv.amount);
+    }
     return this.child.notationToExternal(mv);
   }
 }
