@@ -193,17 +193,17 @@ export class SkewbNotationMapper implements NotationMapper {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "DFL", mv.amount);
     } else if (mv.family === "B") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "DBL", mv.amount);
-/*
- *   (1) We are not including x/y/z in Skewb; they aren't WCA notation and
- *   it's unclear anyone needs them for reconstructions.
- *
+      /*
+       *   (1) We are not including x/y/z in Skewb; they aren't WCA notation and
+       *   it's unclear anyone needs them for reconstructions.
+       *
     } else if (mv.family === "x") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "Rv", mv.amount);
     } else if (mv.family === "y") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "Uv", mv.amount);
     } else if (mv.family === "z") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "Fv", mv.amount);
- */
+       */
     } else {
       return null;
     }
@@ -219,16 +219,16 @@ export class SkewbNotationMapper implements NotationMapper {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "L", mv.amount);
     } else if (this.child.spinmatch(mv.family, "DBL")) {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "B", mv.amount);
-/*
- *   See (1) above.
- *
+      /*
+       *   See (1) above.
+       *
     } else if (mv.family === "Rv") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "x", mv.amount);
     } else if (mv.family === "Uv") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "y", mv.amount);
     } else if (mv.family === "Fv") {
       return new BlockMove(mv.outerLayer, mv.innerLayer, "z", mv.amount);
- */
+       */
     } else {
       return null;
     }
