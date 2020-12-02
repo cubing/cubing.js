@@ -7,6 +7,7 @@ export interface PartialURLParamValues {
   puzzle?: string;
   puzzlegeometry?: string;
   debugShowRenderStats?: boolean;
+  tempo?: string;
 }
 export type ParamName = keyof typeof paramDefaults;
 
@@ -15,6 +16,7 @@ interface CompleteURLParamValues extends PartialURLParamValues {
   puzzle: string;
   puzzlegeometry?: string;
   debugShowRenderStats?: boolean;
+  tempo?: string;
 }
 
 const paramDefaults: CompleteURLParamValues = {
@@ -22,6 +24,7 @@ const paramDefaults: CompleteURLParamValues = {
   puzzle: "",
   puzzlegeometry: "",
   debugShowRenderStats: false,
+  tempo: "1",
 };
 
 // TODO: Encapsulate and deduplicate this.
@@ -30,6 +33,7 @@ const paramDefaultStrings: { [s: string]: string } = {
   puzzle: "",
   puzzlegeometry: "",
   debugShowRenderStats: "",
+  tempo: "1",
 };
 
 export function getURLParam<K extends ParamName>(
@@ -52,6 +56,8 @@ export function getURLParam<K extends ParamName>(
     case "debugShowRenderStats":
       // TODO: can we avoid the `as` cast?
       return (str === "true") as CompleteURLParamValues[K];
+    case "tempo":
+      return str as CompleteURLParamValues[K];
     default:
       // TODO: can we avoid the `as` cast?
       return str as CompleteURLParamValues[K];
@@ -80,6 +86,9 @@ export function setURLParams(newParams: PartialURLParamValues): void {
         break;
       case "debugShowRenderStats":
         setParam(key, value ? "true" : "");
+        break;
+      case "tempo":
+        setParam(key, value);
         break;
       default:
         console.warn("Unknown param", key, value);

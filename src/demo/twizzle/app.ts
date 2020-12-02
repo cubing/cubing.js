@@ -727,13 +727,35 @@ function addMove(move: BlockMove): void {
   setURLParams({ alg: newAlg });
 }
 
+function settempo(fromURL: any): void {
+  if (!fromURL) {
+    return;
+  }
+  const tempo = document.getElementById("tempo") as HTMLInputElement;
+  tempomult = +fromURL;
+  let sliderval = Math.floor(50 * (1 + Math.log10(tempomult)) + 0.5);
+  sliderval = Math.min(sliderval, 100);
+  sliderval = Math.max(sliderval, 0);
+  tempo.value = "" + sliderval;
+  const tempodisp = document.getElementById("tempodisplay");
+  if (tempodisp) {
+    tempodisp.innerHTML = "" + tempomult + "x";
+  }
+  if (twisty) {
+    twisty.timeline.tempoScale = tempomult;
+  }
+}
+
 function checktempo(): void {
   const tempo = document.getElementById("tempo") as HTMLInputElement;
   const val = tempo.value; // 0..100
-  tempomult = Math.pow(10, (val - 50) / 50);
+  tempomult = Math.pow(10, (+val - 50) / 50);
   tempomult = Math.floor(tempomult * 100 + 0.5) / 100;
+  setURLParams({ tempo: "" + tempomult });
   const tempodisp = document.getElementById("tempodisplay");
-  tempodisp.innerHTML = "" + tempomult + "x";
+  if (tempodisp) {
+    tempodisp.innerHTML = "" + tempomult + "x";
+  }
   if (twisty) {
     twisty.timeline.tempoScale = tempomult;
   }
@@ -792,7 +814,7 @@ export function setup(): void {
   }
   const tempo = document.getElementById("tempo") as HTMLInputElement;
   tempo.oninput = checktempo;
-  checktempo();
+  settempo(getURLParam("tempo"));
   checkchange();
   setInterval(checkchange, 0.5);
 }
