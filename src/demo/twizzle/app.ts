@@ -59,6 +59,7 @@ let savedCameraPos: Vector3 = new Vector3(0.0, 0.0, 0.0);
 let haveSavedCamera = false;
 let lastShape: string = "";
 let nextShape: string = "";
+let tempomult: number = 1.0;
 const renderOptions = [
   "centers",
   "edges",
@@ -272,6 +273,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
           markInvalidAlg(algToString(alg));
         },
       );
+      twisty.timeline.tempoScale = tempomult;
       lastShape = nextShape;
       elem.appendChild(twisty);
       twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
@@ -725,6 +727,18 @@ function addMove(move: BlockMove): void {
   setURLParams({ alg: newAlg });
 }
 
+function checktempo(): void {
+  const tempo = document.getElementById("tempo") as HTMLInputElement;
+  const val = tempo.value; // 0..100
+  tempomult = Math.pow(10, (val - 50) / 50);
+  tempomult = Math.floor(tempomult * 100 + 0.5) / 100;
+  const tempodisp = document.getElementById("tempodisplay");
+  tempodisp.innerHTML = "" + tempomult + "x";
+  if (twisty) {
+    twisty.timeline.tempoScale = tempomult;
+  }
+}
+
 export function setup(): void {
   const select = document.getElementById("puzzleoptions") as HTMLSelectElement;
   descinput = document.getElementById("desc") as HTMLInputElement;
@@ -776,6 +790,9 @@ export function setup(): void {
     algoinput.value = qalg;
     lastalgo = qalg;
   }
+  const tempo = document.getElementById("tempo") as HTMLInputElement;
+  tempo.oninput = checktempo;
+  checktempo();
   checkchange();
   setInterval(checkchange, 0.5);
 }
