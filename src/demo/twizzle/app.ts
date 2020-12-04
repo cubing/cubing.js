@@ -739,7 +739,7 @@ function settempo(fromURL: any): void {
   tempo.value = "" + sliderval;
   const tempodisp = document.getElementById("tempodisplay");
   if (tempodisp) {
-    tempodisp.innerHTML = "" + tempomult + "x";
+    tempodisp.textContent = "" + tempomult + "x";
   }
   if (twisty) {
     twisty.timeline.tempoScale = tempomult;
@@ -754,7 +754,7 @@ function checktempo(): void {
   setURLParams({ tempo: "" + tempomult });
   const tempodisp = document.getElementById("tempodisplay");
   if (tempodisp) {
-    tempodisp.innerHTML = "" + tempomult + "x";
+    tempodisp.textContent = "" + tempomult + "x";
   }
   if (twisty) {
     twisty.timeline.tempoScale = tempomult;
@@ -775,7 +775,7 @@ export function setup(): void {
   for (const [name, desc] of Object.entries(puzzles)) {
     const opt = document.createElement("option") as HTMLOptionElement;
     opt.value = desc;
-    opt.innerHTML = name;
+    opt.textContent = name;
     if (puzdesc === "" && puz === name) {
       opt.selected = true;
       descinput.value = desc;
