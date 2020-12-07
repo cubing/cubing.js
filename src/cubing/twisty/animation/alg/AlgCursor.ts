@@ -13,10 +13,10 @@ import { Timeline, TimelineTimestampListener } from "../Timeline";
 import {
   Direction,
   directionScalar,
-  PuzzlePosition,
   MillisecondTimestamp,
+  PuzzlePosition,
 } from "./CursorTypes";
-import { TreeAlgIndexer } from "./TreeAlgIndexer";
+import { SimultaneousMoveIndexer } from "./SimultaneousMoveIndexer";
 // end of imports
 
 // Model
@@ -36,7 +36,7 @@ export interface TimeRange {
 
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
-  private todoIndexer: TreeAlgIndexer<KPuzzleWrapper>;
+  private todoIndexer: SimultaneousMoveIndexer<KPuzzleWrapper>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
   private ksolvePuzzle: KPuzzleWrapper;
   private startState: Transformation;
@@ -47,7 +47,7 @@ export class AlgCursor
     startStateSequence?: Sequence, // TODO: accept actual start state
   ) {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
-    this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
+    this.todoIndexer = new SimultaneousMoveIndexer(this.ksolvePuzzle, alg);
     this.startState = startStateSequence
       ? this.algToState(startStateSequence)
       : this.ksolvePuzzle.startState();
@@ -102,29 +102,41 @@ export class AlgCursor
     listeners: PositionListener[] | Set<PositionListener> = this
       .positionListeners,
   ): void {
-    const idx = this.todoIndexer.timestampToIndex(timestamp);
-    const state = this.todoIndexer.stateAtIndex(idx, this.startState) as any; // TODO
-    const position: PuzzlePosition = {
-      state,
-      movesInProgress: [],
-    };
+    let position: PuzzlePosition;
+    if (this.todoIndexer.timestampToPosition) {
+      position = this.todoIndexer.timestampToPosition(timestamp);
+    } else {
+      const idx = this.todoIndexer.timestampToIndex(timestamp);
+      const state = this.todoIndexer.stateAtIndex(idx, this.startState) as any; // TODO
+      position = {
+        state,
+        movesInProgress: [],
+      };
 
-    if (this.todoIndexer.numMoves() > 0) {
-      const fraction =
-        (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
-        this.todoIndexer.moveDuration(idx);
-      if (fraction === 1) {
-        // TODO: push this into the indexer
-        position.state = this.ksolvePuzzle.combine(
-          state,
-          this.ksolvePuzzle.stateFromMove(this.todoIndexer.getMove(idx)),
-        ) as Transformation;
-      } else if (fraction > 0) {
-        position.movesInProgress.push({
-          move: this.todoIndexer.getMove(idx),
-          direction: Direction.Forwards,
+      if (this.todoIndexer.numMoves() > 0) {
+        const fraction =
+          (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
+          this.todoIndexer.moveDuration(idx);
+        console.log(
+          timestamp,
+          idx,
+          this.todoIndexer.indexToMoveStartTimestamp(idx),
+          this.todoIndexer.moveDuration(idx),
           fraction,
-        });
+        );
+        if (fraction === 1) {
+          // TODO: push this into the indexer
+          position.state = this.ksolvePuzzle.combine(
+            state,
+            this.ksolvePuzzle.stateFromMove(this.todoIndexer.getMove(idx)),
+          ) as Transformation;
+        } else if (fraction > 0) {
+          position.movesInProgress.push({
+            move: this.todoIndexer.getMove(idx),
+            direction: Direction.Forwards,
+            fraction,
+          });
+        }
       }
     }
 
@@ -138,7 +150,7 @@ export class AlgCursor
   }
 
   setAlg(alg: Sequence): void {
-    this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
+    this.todoIndexer = new SimultaneousMoveIndexer(this.ksolvePuzzle, alg);
     this.timeline.onCursorChange(this);
     this.dispatchPositionForTimestamp(this.timeline.timestamp);
     // TODO: Handle state change.
@@ -171,7 +183,7 @@ export class AlgCursor
   ): void {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
     this.def = def;
-    this.todoIndexer = new TreeAlgIndexer(this.ksolvePuzzle, alg);
+    this.todoIndexer = new SimultaneousMoveIndexer(this.ksolvePuzzle, alg);
     if (alg !== this.alg) {
       this.timeline.onCursorChange(this);
     }

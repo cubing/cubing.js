@@ -41,6 +41,13 @@ export class TreeAlgIndexer<P extends PuzzleWrapper> implements AlgIndexer<P> {
     throw new Error("Out of algorithm: index " + index);
   }
 
+  public indexToMovesInProgress(index: number): Timestamp {
+    if (this.walker.moveByIndex(index) || this.walker.i === index) {
+      return this.walker.dur;
+    }
+    throw new Error("Out of algorithm: index " + index);
+  }
+
   public stateAtIndex(index: number, startTransformation?: State<P>): State<P> {
     this.walker.moveByIndex(index);
     return this.puzzle.combine(
