@@ -67,8 +67,12 @@ export class AlgCursor
     this.dispatchPositionForTimestamp(this.timeline.timestamp);
   }
 
-  public setIndexer(indexerConstructor: IndexerConstructor): void {
+  /** @deprecated */
+  public experimentalSetIndexer(indexerConstructor: IndexerConstructor): void {
     this.indexerConstructor = indexerConstructor;
+    this.instantiateIndexer(this.alg);
+    this.timeline.onCursorChange(this);
+    this.dispatchPositionForTimestamp(this.timeline.timestamp);
   }
 
   private instantiateIndexer(alg: Sequence): void {
@@ -166,6 +170,7 @@ export class AlgCursor
   }
 
   setAlg(alg: Sequence): void {
+    this.alg = alg;
     this.instantiateIndexer(alg);
     this.timeline.onCursorChange(this);
     this.dispatchPositionForTimestamp(this.timeline.timestamp);

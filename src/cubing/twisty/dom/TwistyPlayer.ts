@@ -10,6 +10,9 @@ import { PG3D } from "../3D/puzzles/PG3D";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor } from "../animation/cursor/AlgCursor";
+import { SimpleAlgIndexer } from "../animation/indexer/SimpleAlgIndexer";
+import { SimultaneousMoveIndexer } from "../animation/indexer/SimultaneousMoveIndexer";
+import { TreeAlgIndexer } from "../animation/indexer/tree/TreeAlgIndexer";
 import {
   Timeline,
   TimelineAction,
@@ -304,6 +307,19 @@ export class TwistyPlayer extends ManagedCustomElement {
     newValue: string,
   ): void {
     this.#config.attributeChangedCallback(attributeName, oldValue, newValue);
+  }
+
+  /** @deprecated */
+  public experimentalSetCursor(
+    cursorName: "simple" | "tree" | "simultaneous",
+  ): void {
+    this.cursor?.experimentalSetIndexer(
+      {
+        simple: SimpleAlgIndexer,
+        tree: TreeAlgIndexer,
+        simultaneous: SimultaneousMoveIndexer,
+      }[cursorName],
+    );
   }
 
   // TODO: It seems this called after the `attributeChangedCallback`s for initial values. Can we rely on this?
