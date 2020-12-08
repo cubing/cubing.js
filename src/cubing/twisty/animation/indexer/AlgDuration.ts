@@ -9,7 +9,41 @@ import {
   Sequence,
   TraversalUp,
 } from "../../../alg";
-import { Duration, DefaultDurationForAmount } from "../cursor/CursorTypes";
+import { Duration } from "../cursor/CursorTypes";
+
+export function ConstantDurationForAmount(_amount: number): Duration {
+  return 1000;
+}
+
+// eslint-disable-next-line no-inner-declarations
+export function DefaultDurationForAmount(amount: number): Duration {
+  switch (Math.abs(amount)) {
+    case 0:
+      return 0;
+    case 1:
+      return 1000;
+    case 2:
+      return 1500;
+    default:
+      return 2000;
+  }
+}
+// eslint-disable-next-line no-inner-declarations
+export function ExperimentalScaledDefaultDurationForAmount(
+  scale: number,
+  amount: number,
+): Duration {
+  switch (Math.abs(amount)) {
+    case 0:
+      return 0;
+    case 1:
+      return scale * 1000;
+    case 2:
+      return scale * 1500;
+    default:
+      return scale * 2000;
+  }
+}
 
 export class AlgDuration extends TraversalUp<Duration> {
   // TODO: Pass durationForAmount as Down type instead?
