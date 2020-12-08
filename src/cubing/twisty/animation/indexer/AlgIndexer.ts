@@ -10,7 +10,7 @@ import {
   TraversalUp,
 } from "../../../alg";
 import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
-import { Duration, Timestamp } from "../cursor/CursorTypes";
+import { Duration, PuzzlePosition, Timestamp } from "../cursor/CursorTypes";
 
 // TODO: Include Pause.
 class CountAnimatedMoves extends TraversalUp<number> {
@@ -67,6 +67,7 @@ export interface AlgIndexer<P extends PuzzleWrapper> {
   timestampToIndex(timestamp: Timestamp): number;
   algDuration(): Duration;
   moveDuration(index: number): number;
+  timestampToPosition?: (timestamp: Timestamp) => PuzzlePosition;
 }
 
 export function invertBlockMove(bm: BlockMove): BlockMove {

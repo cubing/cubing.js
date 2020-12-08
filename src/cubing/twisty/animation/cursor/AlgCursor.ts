@@ -17,6 +17,7 @@ import {
   PuzzlePosition,
 } from "./CursorTypes";
 import { SimultaneousMoveIndexer } from "../indexer/SimultaneousMoveIndexer";
+import { AlgIndexer } from "../indexer/AlgIndexer";
 // end of imports
 
 // Model
@@ -36,7 +37,7 @@ export interface TimeRange {
 
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
-  private todoIndexer: SimultaneousMoveIndexer<KPuzzleWrapper>;
+  private todoIndexer: AlgIndexer<KPuzzleWrapper>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
   private ksolvePuzzle: KPuzzleWrapper;
   private startState: Transformation;
