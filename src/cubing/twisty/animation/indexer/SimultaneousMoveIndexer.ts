@@ -7,7 +7,7 @@ import {
   MillisecondTimestamp,
   PuzzlePosition,
   Timestamp,
-} from "./CursorTypes";
+} from "../cursor/CursorTypes";
 
 interface MoveWithRange {
   move: BlockMove;

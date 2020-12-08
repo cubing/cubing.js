@@ -9,7 +9,7 @@ import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D } from "../3D/puzzles/PG3D";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
-import { AlgCursor } from "../animation/alg/AlgCursor";
+import { AlgCursor } from "../animation/cursor/AlgCursor";
 import {
   Timeline,
   TimelineAction,

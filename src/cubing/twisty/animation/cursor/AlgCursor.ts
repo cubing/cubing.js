@@ -16,7 +16,7 @@ import {
   MillisecondTimestamp,
   PuzzlePosition,
 } from "./CursorTypes";
-import { SimultaneousMoveIndexer } from "./SimultaneousMoveIndexer";
+import { SimultaneousMoveIndexer } from "../indexer/SimultaneousMoveIndexer";
 // end of imports
 
 // Model

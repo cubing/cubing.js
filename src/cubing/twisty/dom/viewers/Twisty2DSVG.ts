@@ -9,8 +9,8 @@ import {
 import {
   PositionDispatcher,
   PositionListener,
-} from "../../animation/alg/AlgCursor";
-import { PuzzlePosition } from "../../animation/alg/CursorTypes";
+} from "../../animation/cursor/AlgCursor";
+import { PuzzlePosition } from "../../animation/indexer/CursorTypes";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";

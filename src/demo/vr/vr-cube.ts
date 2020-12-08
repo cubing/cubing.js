@@ -24,7 +24,7 @@ import {
 import { Puzzles } from "../../cubing/kpuzzle";
 import { ProxyEvent, WebSocketProxyReceiver } from "../../cubing/stream";
 import { TAU } from "../../cubing/twisty/3D/TAU";
-import { AlgCursor } from "../../cubing/twisty/animation/alg/AlgCursor";
+import { AlgCursor } from "../../cubing/twisty/animation/cursor/AlgCursor";
 import { Timeline } from "../../cubing/twisty/animation/Timeline";
 import { Cube3D } from "../../cubing/twisty/index";
 import { countMoves } from "../../cubing/twisty/TODO-MOVE-ME/move-counter";

@@ -1,11 +1,11 @@
 import { RenderScheduler } from "./RenderScheduler";
-import { AlgCursor, TimeRange } from "./alg/AlgCursor";
+import { AlgCursor, TimeRange } from "./cursor/AlgCursor";
 import {
   BoundaryType,
   Direction,
   directionScalar,
   MillisecondTimestamp,
-} from "./alg/CursorTypes";
+} from "./cursor/CursorTypes";
 
 // YouTube keeps playing on jump, but it also stays frozen while the cursor is
 // down. So I think it would be good for this to be false, but only if we

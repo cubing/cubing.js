@@ -7,7 +7,7 @@ import {
   DecoratorConstructor,
   invertBlockMove,
 } from "./AlgIndexer";
-import { Timestamp, Duration } from "./CursorTypes";
+import { Timestamp, Duration } from "../cursor/CursorTypes";
 
 export class TreeAlgIndexer<P extends PuzzleWrapper> implements AlgIndexer<P> {
   private decoration: AlgPartDecoration<P>;

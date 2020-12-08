@@ -1,6 +1,6 @@
 import { BlockMove } from "../../../alg";
 import { experimentalBlockMoveQuantumName } from "../../../alg/traversal";
-import { Timestamp, Duration } from "../alg/CursorTypes";
+import { Timestamp, Duration } from "../indexer/CursorTypes";
 
 interface Event {
   timeStamp: Timestamp;

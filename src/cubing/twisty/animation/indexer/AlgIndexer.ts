@@ -13,7 +13,11 @@ import {
   Unit,
 } from "../../../alg";
 import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
-import { Timestamp, Duration, DefaultDurationForAmount } from "./CursorTypes";
+import {
+  Timestamp,
+  Duration,
+  DefaultDurationForAmount,
+} from "../cursor/CursorTypes";
 import { AlgDuration } from "./AlgDuration";
 
 // TODO: Include Pause.
