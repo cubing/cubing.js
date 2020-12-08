@@ -1,13 +1,8 @@
-import { BlockMove, Sequence } from "../../../alg";
-import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
-import {
-  AlgIndexer,
-  AlgPartDecoration,
-  AlgWalker,
-  DecoratorConstructor,
-  invertBlockMove,
-} from "./AlgIndexer";
-import { Timestamp, Duration } from "../cursor/CursorTypes";
+import { BlockMove, Sequence } from "../../../../alg";
+import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
+import { Duration, Timestamp } from "../../cursor/CursorTypes";
+import { AlgIndexer, invertBlockMove } from "../AlgIndexer";
+import { AlgPartDecoration, AlgWalker, DecoratorConstructor } from "./walker";
 
 export class TreeAlgIndexer<P extends PuzzleWrapper> implements AlgIndexer<P> {
   private decoration: AlgPartDecoration<P>;
