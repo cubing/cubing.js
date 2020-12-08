@@ -67,7 +67,10 @@ export interface AlgIndexer<P extends PuzzleWrapper> {
   timestampToIndex(timestamp: Timestamp): number;
   algDuration(): Duration;
   moveDuration(index: number): number;
-  timestampToPosition?: (timestamp: Timestamp) => PuzzlePosition;
+  timestampToPosition?: (
+    timestamp: Timestamp,
+    startTransformation?: State<P>,
+  ) => PuzzlePosition;
 }
 
 export function invertBlockMove(bm: BlockMove): BlockMove {

@@ -124,7 +124,10 @@ export class AlgCursor
   ): void {
     let position: PuzzlePosition;
     if (this.todoIndexer.timestampToPosition) {
-      position = this.todoIndexer.timestampToPosition(timestamp);
+      position = this.todoIndexer.timestampToPosition(
+        timestamp,
+        this.startState,
+      );
     } else {
       const idx = this.todoIndexer.timestampToIndex(timestamp);
       const state = this.todoIndexer.stateAtIndex(idx, this.startState) as any; // TODO
@@ -137,13 +140,6 @@ export class AlgCursor
         const fraction =
           (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
           this.todoIndexer.moveDuration(idx);
-        console.log(
-          timestamp,
-          idx,
-          this.todoIndexer.indexToMoveStartTimestamp(idx),
-          this.todoIndexer.moveDuration(idx),
-          fraction,
-        );
         if (fraction === 1) {
           // TODO: push this into the indexer
           position.state = this.ksolvePuzzle.combine(

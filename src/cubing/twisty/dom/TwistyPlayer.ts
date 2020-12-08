@@ -309,10 +309,12 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#config.attributeChangedCallback(attributeName, oldValue, newValue);
   }
 
+  #cursorIndexerName: "simple" | "tree" | "simultaneous" = "tree";
   /** @deprecated */
-  public experimentalSetCursor(
+  public experimentalSetCursorIndexer(
     cursorName: "simple" | "tree" | "simultaneous",
   ): void {
+    this.#cursorIndexerName = cursorName;
     this.cursor?.experimentalSetIndexer(
       {
         simple: SimpleAlgIndexer,
@@ -420,6 +422,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       this.timeline.removeTimestampListener(this.cursor);
     }
     this.cursor = cursor;
+    this.experimentalSetCursorIndexer(this.#cursorIndexerName);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
