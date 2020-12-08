@@ -9,6 +9,9 @@
 import { Sequence } from "../../../alg";
 import { KPuzzle, KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
+import { AlgIndexer } from "../indexer/AlgIndexer";
+import { SimultaneousMoveIndexer } from "../indexer/SimultaneousMoveIndexer";
+import { TreeAlgIndexer } from "../indexer/tree/TreeAlgIndexer";
 import { Timeline, TimelineTimestampListener } from "../Timeline";
 import {
   Direction,
@@ -16,8 +19,6 @@ import {
   MillisecondTimestamp,
   PuzzlePosition,
 } from "./CursorTypes";
-import { SimultaneousMoveIndexer } from "../indexer/SimultaneousMoveIndexer";
-import { AlgIndexer } from "../indexer/AlgIndexer";
 // end of imports
 
 // Model
@@ -35,12 +36,18 @@ export interface TimeRange {
   end: MillisecondTimestamp;
 }
 
+type IndexerConstructor = new (
+  puzzle: KPuzzleWrapper,
+  alg: Sequence,
+) => AlgIndexer<KPuzzleWrapper>;
+
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
   private todoIndexer: AlgIndexer<KPuzzleWrapper>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
   private ksolvePuzzle: KPuzzleWrapper;
   private startState: Transformation;
+  private indexerConstructor: IndexerConstructor = TreeAlgIndexer;
   constructor(
     private timeline: Timeline,
     private def: KPuzzleDefinition,
@@ -48,7 +55,7 @@ export class AlgCursor
     startStateSequence?: Sequence, // TODO: accept actual start state
   ) {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
-    this.todoIndexer = new SimultaneousMoveIndexer(this.ksolvePuzzle, alg);
+    this.instantiateIndexer(alg);
     this.startState = startStateSequence
       ? this.algToState(startStateSequence)
       : this.ksolvePuzzle.startState();
@@ -58,6 +65,14 @@ export class AlgCursor
   setStartState(startState: Transformation): void {
     this.startState = startState;
     this.dispatchPositionForTimestamp(this.timeline.timestamp);
+  }
+
+  public setIndexer(indexerConstructor: IndexerConstructor): void {
+    this.indexerConstructor = indexerConstructor;
+  }
+
+  private instantiateIndexer(alg: Sequence): void {
+    this.todoIndexer = new this.indexerConstructor(this.ksolvePuzzle, alg);
   }
 
   /** @deprecated */
@@ -151,7 +166,7 @@ export class AlgCursor
   }
 
   setAlg(alg: Sequence): void {
-    this.todoIndexer = new SimultaneousMoveIndexer(this.ksolvePuzzle, alg);
+    this.instantiateIndexer(alg);
     this.timeline.onCursorChange(this);
     this.dispatchPositionForTimestamp(this.timeline.timestamp);
     // TODO: Handle state change.

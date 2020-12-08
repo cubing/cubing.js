@@ -4,13 +4,17 @@ import { Duration, Timestamp } from "../../cursor/CursorTypes";
 import { AlgIndexer, invertBlockMove } from "../AlgIndexer";
 import { AlgPartDecoration, AlgWalker, DecoratorConstructor } from "./walker";
 
-export class TreeAlgIndexer<P extends PuzzleWrapper> implements AlgIndexer<P> {
-  private decoration: AlgPartDecoration<P>;
-  private walker: AlgWalker<P>;
-  constructor(private puzzle: P, alg: Sequence) {
-    const deccon = new DecoratorConstructor<P>(this.puzzle);
+export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
+  private decoration: AlgPartDecoration<PuzzleWrapper>;
+  private walker: AlgWalker<PuzzleWrapper>;
+  constructor(private puzzle: PuzzleWrapper, alg: Sequence) {
+    const deccon = new DecoratorConstructor<PuzzleWrapper>(this.puzzle);
     this.decoration = deccon.traverse(alg);
-    this.walker = new AlgWalker<P>(this.puzzle, alg, this.decoration);
+    this.walker = new AlgWalker<PuzzleWrapper>(
+      this.puzzle,
+      alg,
+      this.decoration,
+    );
   }
 
   public getMove(index: number): BlockMove {
@@ -43,7 +47,10 @@ export class TreeAlgIndexer<P extends PuzzleWrapper> implements AlgIndexer<P> {
     throw new Error("Out of algorithm: index " + index);
   }
 
-  public stateAtIndex(index: number, startTransformation?: State<P>): State<P> {
+  public stateAtIndex(
+    index: number,
+    startTransformation?: State<PuzzleWrapper>,
+  ): State<PuzzleWrapper> {
     this.walker.moveByIndex(index);
     return this.puzzle.combine(
       startTransformation ?? this.puzzle.startState(),
@@ -54,7 +61,7 @@ export class TreeAlgIndexer<P extends PuzzleWrapper> implements AlgIndexer<P> {
   // TransformAtIndex does not reflect the start state; it only reflects
   // the change from the start state to the current move index.  If you
   // want the actual state, use stateAtIndex.
-  public transformAtIndex(index: number): State<P> {
+  public transformAtIndex(index: number): State<PuzzleWrapper> {
     this.walker.moveByIndex(index);
     return this.walker.st;
   }
