@@ -10,6 +10,7 @@ import {
   TraversalUp,
 } from "../../../alg";
 import { Duration, DefaultDurationForAmount } from "../cursor/CursorTypes";
+
 export class AlgDuration extends TraversalUp<Duration> {
   // TODO: Pass durationForAmount as Down type instead?
   constructor(
