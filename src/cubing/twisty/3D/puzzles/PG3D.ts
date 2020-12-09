@@ -23,7 +23,7 @@ import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { TAU } from "../TAU";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { smootherStep } from "../../animation/easing";
-import { PuzzlePosition } from "../../animation/indexer/CursorTypes";
+import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,

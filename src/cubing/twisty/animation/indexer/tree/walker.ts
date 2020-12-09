@@ -13,8 +13,8 @@ import {
   Unit,
 } from "../../../../alg";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
-import { DefaultDurationForAmount, Duration } from "../../cursor/CursorTypes";
-import { AlgDuration } from "../AlgDuration";
+import { Duration } from "../../cursor/CursorTypes";
+import { AlgDuration, DefaultDurationForAmount } from "../AlgDuration";
 import { invertBlockMove } from "../AlgIndexer";
 
 export class AlgPartDecoration<P extends PuzzleWrapper> {
