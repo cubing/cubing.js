@@ -19,11 +19,11 @@ import {
   Transformation,
 } from "../../../kpuzzle";
 import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
-import { AlgCursor } from "../../animation/alg/AlgCursor";
+import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { TAU } from "../TAU";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { smootherStep } from "../../animation/easing";
-import { PuzzlePosition } from "../../animation/alg/CursorTypes";
+import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,

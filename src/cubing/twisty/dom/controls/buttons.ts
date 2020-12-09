@@ -1,9 +1,9 @@
-import { TimeRange } from "../../animation/alg/AlgCursor";
+import { TimeRange } from "../../animation/cursor/AlgCursor";
 import {
   BoundaryType,
   Direction,
   MillisecondTimestamp,
-} from "../../animation/alg/CursorTypes";
+} from "../../animation/cursor/CursorTypes";
 import {
   Timeline,
   TimelineAction,

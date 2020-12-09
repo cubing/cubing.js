@@ -20,8 +20,8 @@ import {
 import { BlockMove } from "../../../alg";
 import { Transformation } from "../../../kpuzzle";
 import { KPuzzleDefinition } from "../../../puzzle-geometry/interfaces";
-import { AlgCursor } from "../../animation/alg/AlgCursor";
-import { PuzzlePosition } from "../../animation/alg/CursorTypes";
+import { AlgCursor } from "../../animation/cursor/AlgCursor";
+import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { smootherStep } from "../../animation/easing";
 import {
   ExperimentalStickering,

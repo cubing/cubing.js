@@ -1,7 +1,7 @@
 // <twisty-scrubber>
 
-import { TimeRange } from "../../animation/alg/AlgCursor";
-import { MillisecondTimestamp } from "../../animation/alg/CursorTypes";
+import { TimeRange } from "../../animation/cursor/AlgCursor";
+import { MillisecondTimestamp } from "../../animation/cursor/CursorTypes";
 import { Timeline, TimelineTimestampListener } from "../../animation/Timeline";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";

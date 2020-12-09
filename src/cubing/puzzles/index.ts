@@ -1,7 +1,6 @@
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
-// Include 3x3x3 in the main bundle for better performance.
-import "./implementations/3x3x3/3x3x3.kpuzzle.json";
+import { cube5x5x5 } from "./implementations/5x5x5";
 import { clock } from "./implementations/clock";
 import { fto } from "./implementations/fto";
 import { megaminx } from "./implementations/megaminx";
@@ -16,6 +15,7 @@ export const puzzles: Record<string, PuzzleManager> = {
   "2x2x2": cube2x2x2,
   // 4x4x4 Cube
   // 5x5x5 Cube
+  "5x5x5": cube5x5x5,
   // 6x6x6 Cube
   // 7x7x7 Cube
   // 3x3x3 Blindfolded
