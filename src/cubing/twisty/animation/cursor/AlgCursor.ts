@@ -10,7 +10,6 @@ import { Sequence } from "../../../alg";
 import { KPuzzle, KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
 import { AlgIndexer } from "../indexer/AlgIndexer";
-import { SimultaneousMoveIndexer } from "../indexer/SimultaneousMoveIndexer";
 import { TreeAlgIndexer } from "../indexer/tree/TreeAlgIndexer";
 import { Timeline, TimelineTimestampListener } from "../Timeline";
 import {
@@ -200,7 +199,7 @@ export class AlgCursor
   ): void {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
     this.def = def;
-    this.todoIndexer = new SimultaneousMoveIndexer(this.ksolvePuzzle, alg);
+    this.todoIndexer = new this.indexerConstructor(this.ksolvePuzzle, alg);
     if (alg !== this.alg) {
       this.timeline.onCursorChange(this);
     }
