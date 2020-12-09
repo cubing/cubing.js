@@ -11,6 +11,6 @@ export const cube5x5x5: PuzzleManager = {
     throw "Unimplemented!";
   },
   pg: async () => {
-    return asyncGetPuzzleGeometry("5x5x5"); // TODO: fix uppercase mismatch
+    return asyncGetPuzzleGeometry("5x5x5");
   },
 };
