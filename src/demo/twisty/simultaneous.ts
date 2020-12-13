@@ -30,7 +30,7 @@ import supercubeSprite from "url:./supercube-sprite.png";
 
 {
   const player = new TwistyPlayer({
-    alg: parseAlg("L R U2 L' R' U L R U2 L' R' U"),
+    alg: parseAlg("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     experimentalStickering: "picture",
   });
   player.experimentalSetCursorIndexer("simultaneous");
@@ -56,7 +56,7 @@ import supercubeSprite from "url:./supercube-sprite.png";
 
 {
   const player = new TwistyPlayer({
-    alg: parseAlg("L R U2 L' R' U L R U2 L' R' U"),
+    alg: parseAlg("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     puzzle: "5x5x5",
   });
   player.experimentalSetCursorIndexer("simultaneous");

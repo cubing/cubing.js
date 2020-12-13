@@ -8,17 +8,11 @@ import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import {
   Direction,
   Duration,
-  MillisecondTimestamp,
   PuzzlePosition,
   Timestamp,
 } from "../../cursor/CursorTypes";
 import { AlgIndexer } from "../AlgIndexer";
-
-interface MoveWithRange {
-  move: BlockMove;
-  start: MillisecondTimestamp;
-  end: MillisecondTimestamp;
-}
+import { MoveWithRange, simulMoves } from "./simul-moves";
 
 const demos: Record<string, MoveWithRange[]> = {
   "y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2": [
@@ -54,20 +48,6 @@ const demos: Record<string, MoveWithRange[]> = {
     { move: BareBlockMove("M"), start: 2000, end: 3000 },
     { move: BareBlockMove("R"), start: 2000, end: 3000 },
   ],
-  "L R U2 L' R' U L R U2 L' R' U": [
-    { move: BareBlockMove("L"), start: 0, end: 1000 },
-    { move: BareBlockMove("R"), start: 0, end: 1000 },
-    { move: BareBlockMove("U", 2), start: 1000, end: 2500 },
-    { move: BareBlockMove("L", -1), start: 2500, end: 3500 },
-    { move: BareBlockMove("R", -1), start: 2500, end: 3500 },
-    { move: BareBlockMove("U"), start: 3500, end: 4500 },
-    { move: BareBlockMove("L"), start: 4500, end: 5500 },
-    { move: BareBlockMove("R"), start: 4500, end: 5500 },
-    { move: BareBlockMove("U", 2), start: 5500, end: 7000 },
-    { move: BareBlockMove("L", -1), start: 7000, end: 8000 },
-    { move: BareBlockMove("R", -1), start: 7000, end: 8000 },
-    { move: BareBlockMove("U"), start: 8000, end: 9000 },
-  ],
   "U' E' r E r2' E r U E": [
     { move: BareBlockMove("U", -1), start: 0, end: 1000 },
     { move: BareBlockMove("E", -1), start: 0, end: 1000 },
@@ -87,7 +67,7 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
   // TODO: Allow custom `durationFn`.
 
   constructor(private puzzle: P, alg: Sequence) {
-    this.moves = demos[algToString(alg)] ?? [];
+    this.moves = demos[algToString(alg)] ?? simulMoves(alg);
     // TODO: Avoid assuming all base moves are block moves.
   }
 
