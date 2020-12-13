@@ -24,8 +24,7 @@
   "include": [
     "src/**/*",
     "*/index.d.ts",
-    "*/index.js",
-    "*.config.js"
+    "*/index.js"
   ],
   "exclude": [
     "/node_modules",
