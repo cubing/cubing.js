@@ -11,7 +11,7 @@ import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor } from "../animation/cursor/AlgCursor";
 import { SimpleAlgIndexer } from "../animation/indexer/SimpleAlgIndexer";
-import { SimultaneousMoveIndexer } from "../animation/indexer/SimultaneousMoveIndexer";
+import { SimultaneousMoveIndexer } from "../animation/indexer/simultaneous-moves/SimultaneousMoveIndexer";
 import { TreeAlgIndexer } from "../animation/indexer/tree/TreeAlgIndexer";
 import {
   Timeline,

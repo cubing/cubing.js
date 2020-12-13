@@ -1,13 +1,18 @@
-import { algToString, BareBlockMove, BlockMove, Sequence } from "../../../alg";
-import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
-import { AlgIndexer } from "./AlgIndexer";
+import {
+  algToString,
+  BareBlockMove,
+  BlockMove,
+  Sequence,
+} from "../../../../alg";
+import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import {
   Direction,
   Duration,
   MillisecondTimestamp,
   PuzzlePosition,
   Timestamp,
-} from "../cursor/CursorTypes";
+} from "../../cursor/CursorTypes";
+import { AlgIndexer } from "../AlgIndexer";
 
 interface MoveWithRange {
   move: BlockMove;
