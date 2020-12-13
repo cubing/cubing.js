@@ -6,12 +6,14 @@ interface URLParamValues {
   "alg": Sequence;
   "puzzle": string;
   "debug-js": boolean;
+  "debug-simultaneous": boolean;
 }
 
 const paramDefaults: URLParamValues = {
   "alg": new Sequence([]),
   "puzzle": "3x3x3",
   "debug-js": true,
+  "debug-simultaneous": false,
 };
 
 export type ParamName = keyof typeof paramDefaults;
@@ -21,6 +23,7 @@ const paramDefaultStrings: { [s: string]: string } = {
   "alg": "",
   "puzzle": "3x3x3",
   "debug-js": "true",
+  "debug-simultaneous": "false",
 };
 
 export function getURLParam<K extends ParamName>(
@@ -40,6 +43,9 @@ export function getURLParam<K extends ParamName>(
       // TODO: can we avoid the `as` cast?
       return str as URLParamValues[K];
     case "debug-js":
+      // TODO: can we avoid the `as` cast?
+      return (str !== ("false" as unknown)) as URLParamValues[K];
+    case "debug-simultaneous":
       // TODO: can we avoid the `as` cast?
       return (str !== ("false" as unknown)) as URLParamValues[K];
     default:
@@ -69,6 +75,9 @@ export function setURLParams(newParams: Partial<URLParamValues>): void {
         setParam(key, value as string);
         break;
       case "debug-js":
+        setParam(key, (value as boolean).toString());
+        break;
+      case "debug-simultaneous":
         setParam(key, (value as boolean).toString());
         break;
       default:

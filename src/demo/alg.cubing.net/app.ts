@@ -3,7 +3,7 @@ import { TwistyPlayer, TwistyPlayerInitialConfig } from "../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./supported-puzzles";
 import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
-import { setURLParams } from "./url-params";
+import { getURLParam, setURLParams } from "./url-params";
 import { Vector3 } from "three";
 
 export interface AppData {
@@ -55,6 +55,9 @@ export class App {
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
     this.twistyPlayer = new TwistyPlayer(twistyConfig);
+    if (getURLParam("debug-simultaneous")) {
+      this.twistyPlayer.experimentalSetCursorIndexer("simultaneous");
+    }
     this.setAlg(initialData.alg);
     this.puzzlePane.appendChild(this.twistyPlayer);
   }
