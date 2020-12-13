@@ -34,6 +34,7 @@ const hintSpriteURL =
 let haveHadMoveInput = false;
 
 const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
+twistyPlayer.experimentalSetCursorIndexer("simultaneous");
 twistyPlayer.timeline.jumpToStart();
 twistyPlayer.timeline.play(); // TODO: add autoplay
 twistyPlayer.timeline.addActionListener({
