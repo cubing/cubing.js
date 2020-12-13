@@ -11,12 +11,11 @@ import {
 } from "../../../alg";
 import { Duration } from "../cursor/CursorTypes";
 
-export function ConstantDurationForAmount(_amount: number): Duration {
+export function constantDurationForAmount(_amount: number): Duration {
   return 1000;
 }
 
-// eslint-disable-next-line no-inner-declarations
-export function DefaultDurationForAmount(amount: number): Duration {
+export function defaultDurationForAmount(amount: number): Duration {
   switch (Math.abs(amount)) {
     case 0:
       return 0;
@@ -50,7 +49,7 @@ export class AlgDuration extends TraversalUp<Duration> {
   constructor(
     public durationForAmount: (
       amount: number,
-    ) => Duration = DefaultDurationForAmount,
+    ) => Duration = defaultDurationForAmount,
   ) {
     super();
   }

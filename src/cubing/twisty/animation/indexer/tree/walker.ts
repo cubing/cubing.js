@@ -14,7 +14,7 @@ import {
 } from "../../../../alg";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration } from "../../cursor/CursorTypes";
-import { AlgDuration, DefaultDurationForAmount } from "../AlgDuration";
+import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
 import { invertBlockMove } from "../AlgIndexer";
 
 export class AlgPartDecoration<P extends PuzzleWrapper> {
@@ -33,7 +33,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
   private identity: State<P>;
   private dummyLeaf: AlgPartDecoration<P>;
   private durationFn: TraversalUp<Duration> = new AlgDuration(
-    DefaultDurationForAmount,
+    defaultDurationForAmount,
   );
 
   constructor(private puz: PuzzleWrapper) {
