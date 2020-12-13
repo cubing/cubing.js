@@ -482,7 +482,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     Object.assign(this.options, options); // TODO: check if this works
 
     if (this.def.name !== "3x3x3") {
-      throw new Error("Invalid puzzle for this Cube3D implementation.");
+      throw new Error(
+        `Invalid puzzle for this Cube3D implementation: ${this.def.name}`,
+      );
     }
     this.kpuzzleFaceletInfo = {};
     for (const orbit in pieceDefs) {
