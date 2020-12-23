@@ -6,4 +6,18 @@
     <script src="index.ts" defer></script>
     <link rel="stylesheet" href="./index.css" />
   </head>
+
+  <script type="module">
+    class DomainNameElement extends HTMLElement { 
+      connectedCallback() {
+        this.textContent = (new URL(location.href)).hostname
+      }
+    }
+    customElements.define('domain-name', DomainNameElement);
+  </script>
+  <domain-name></domain-name>
+
+
+
+  
 </html>
