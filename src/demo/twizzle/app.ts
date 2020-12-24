@@ -544,7 +544,7 @@ function checkchange(): void {
       if (renderSame && safeKpuzzle) {
         kpuzzledef = safeKpuzzle;
       } else {
-        kpuzzledef = pg.writekpuzzle() as KPuzzleDefinition;
+        kpuzzledef = pg.writekpuzzle(true) as KPuzzleDefinition;
       }
       const newStickerDat = pg.get3d();
       nextShape = p[0];
