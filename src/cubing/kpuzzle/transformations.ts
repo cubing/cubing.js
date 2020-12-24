@@ -130,15 +130,25 @@ export function EquivalentOrbitTransformations(
   orbitName: string,
   t1: Transformation,
   t2: Transformation,
+  options: {
+    ignoreOrientation?: boolean;
+    ignorePermutation?: boolean;
+  } = {},
 ): boolean {
   const oDef = def.orbits[orbitName];
   const o1 = t1[orbitName];
   const o2 = t2[orbitName];
   for (let idx = 0; idx < oDef.numPieces; idx++) {
-    if (o1.orientation[idx] !== o2.orientation[idx]) {
+    if (
+      !options?.ignoreOrientation &&
+      o1.orientation[idx] !== o2.orientation[idx]
+    ) {
       return false;
     }
-    if (o1.permutation[idx] !== o2.permutation[idx]) {
+    if (
+      !options?.ignorePermutation &&
+      o1.permutation[idx] !== o2.permutation[idx]
+    ) {
       return false;
     }
   }
