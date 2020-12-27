@@ -169,7 +169,7 @@
       "types": "./dist/esm/types/puzzle-geometry/index.d.ts"
     },
     "./puzzles": {
-      "require": "./dist/cjs/puzzle/index.js",
+      "require": "./dist/cjs/puzzles/index.js",
       "import": "./dist/esm/puzzles/index.js",
       "types": "./dist/esm/types-geometry/index.d.ts"
     },
