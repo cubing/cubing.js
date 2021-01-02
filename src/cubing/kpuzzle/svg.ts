@@ -1,3 +1,7 @@
+import type {
+  PuzzleAppearance,
+  FaceletMeshAppearance,
+} from "../twisty/3D/puzzles/appearance"; // TODO
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import { KPuzzle } from "./kpuzzle";
 
@@ -12,13 +16,55 @@ function nextSVGID(): string {
   return "svg" + svgCounter.toString();
 }
 
+const colorMap: Partial<Record<
+  FaceletMeshAppearance,
+  Record<string, string>
+>> = {
+  dim: {
+    "white": "#dddddd",
+    "orange": "#884400",
+    "limegreen": "#008800",
+    "red": "#660000",
+    "#26f": "#000088",
+    "yellow": "#888800",
+  },
+  oriented: {
+    "white": "#ff88ff",
+    "orange": "#ff88ff",
+    "limegreen": "#ff88ff",
+    "red": "#ff88ff",
+    "#26f": "#ff88ff",
+    "yellow": "#ff88ff",
+  },
+  ignored: {
+    "white": "#cccccc",
+    "orange": "#cccccc",
+    "limegreen": "#cccccc",
+    "red": "#cccccc",
+    "#26f": "#cccccc",
+    "yellow": "#cccccc",
+  },
+  invisible: {
+    "white": "#00000000",
+    "orange": "#00000000",
+    "limegreen": "#00000000",
+    "red": "#00000000",
+    "#26f": "#00000000",
+    "yellow": "#00000000",
+  },
+};
+
 export class SVG {
   public element: HTMLElement;
   public gradientDefs: SVGDefsElement;
   private originalColors: { [type: string]: string } = {};
   private gradients: { [type: string]: SVGGradientElement } = {};
   private svgID: string;
-  constructor(public kPuzzleDefinition: KPuzzleDefinition, svgSource: string) {
+  constructor(
+    public kPuzzleDefinition: KPuzzleDefinition,
+    svgSource: string,
+    experimentalAppearance?: PuzzleAppearance,
+  ) {
     if (!svgSource) {
       throw new Error(
         `No SVG definition for puzzle type: ${kPuzzleDefinition.name}`,
@@ -58,7 +104,20 @@ export class SVG {
         ) {
           const id = this.elementID(orbitName, idx, orientation);
           const elem = this.elementByID(id);
-          const originalColor = elem.style.fill as string;
+          let originalColor: string = elem.style.fill;
+          if (experimentalAppearance) {
+            const faceletMeshAppearance =
+              experimentalAppearance.orbits[orbitName].pieces[idx]?.facelets[
+                orientation
+              ];
+            switch (faceletMeshAppearance) {
+              case "dim":
+                originalColor = colorMap[faceletMeshAppearance]![originalColor];
+                break;
+            }
+          } else {
+            originalColor = elem.style.fill as string;
+          }
           this.originalColors[id] = originalColor;
           this.gradients[id] = this.newGradient(id, originalColor);
           this.gradientDefs.appendChild(this.gradients[id]);

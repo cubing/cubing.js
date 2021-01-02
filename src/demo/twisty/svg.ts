@@ -8,4 +8,5 @@ window.addEventListener("load", () => {
     alg: parseAlg("U M' U' R' U' R U M2' U' R' U r"),
   });
   document.body.appendChild(twistyPlayer);
+  twistyPlayer.experimentalStickering = "CLS";
 });

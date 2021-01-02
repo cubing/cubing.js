@@ -39,7 +39,7 @@ import {
   TwistyPlayerInitialConfig,
   VisualizationFormat,
 } from "./TwistyPlayerConfig";
-import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
+import { Twisty2DSVG, Twisty2DSVGOptions } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import {
@@ -205,6 +205,13 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.twisty3D.experimentalUpdateOptions({
           experimentalStickering,
         });
+      }
+      console.log("sdfds", this.viewerElems);
+      if (this.viewerElems[0] instanceof Twisty2DSVG) {
+        console.log("fsdfd", this.viewerElems[0]);
+        (this.viewerElems[0] as Twisty2DSVG).experimentalSetStickering(
+          this.experimentalStickering,
+        );
       }
     }
   }
@@ -382,8 +389,14 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private setTwisty2DSVG(twisty2DSVG: Twisty2DSVG): void {
+    if (this.#renderMode !== "2D") {
+      return;
+    }
+    this.clearRenderMode();
+
     this.#viewerWrapper.clear();
     this.#viewerWrapper.addElement(twisty2DSVG);
+    this.viewerElems.push(twisty2DSVG);
   }
 
   private setRenderMode3D(): void {
@@ -483,11 +496,17 @@ export class TwistyPlayer extends ManagedCustomElement {
     switch (this.visualization) {
       case "2D":
         {
+          const options: Twisty2DSVGOptions = {};
+          if (this.experimentalStickering) {
+            options.experimentalStickering = this.experimentalStickering;
+          }
+
           this.setRenderMode2D();
           const mainViewer = new Twisty2DSVG(
             cursor,
             def,
             await puzzleManager.svg(),
+            options,
           );
           if (!pendingPuzzleUpdate.cancelled) {
             this.setTwisty2DSVG(mainViewer);

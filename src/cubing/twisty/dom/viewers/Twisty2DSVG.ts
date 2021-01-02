@@ -6,6 +6,8 @@ import {
   SVG,
   Transformation,
 } from "../../../kpuzzle";
+import { PuzzleAppearance } from "../../3D/puzzles/appearance";
+import { stickerings } from "../../3D/puzzles/stickerings";
 import {
   PositionDispatcher,
   PositionListener,
@@ -14,8 +16,13 @@ import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
+import { ExperimentalStickering } from "../TwistyPlayerConfig";
 import { twisty2DSVGCSS } from "./Twisty2DSVGView.css";
 import { TwistyViewerElement } from "./TwistyViewerElement";
+
+export interface Twisty2DSVGOptions {
+  experimentalStickering?: ExperimentalStickering;
+}
 
 // <twisty-2d-svg>
 export class Twisty2DSVG
@@ -27,15 +34,19 @@ export class Twisty2DSVG
   constructor(
     cursor?: PositionDispatcher,
     def?: KPuzzleDefinition,
-    svgSource?: string,
+    private svgSource?: string,
+    private options?: Twisty2DSVGOptions,
   ) {
     super();
     this.addCSS(twisty2DSVGCSS);
 
     this.definition = def!;
-    this.svg = new SVG(this.definition, svgSource!); // TODO
-    this.addElement(this.svg.element);
+    this.resetSVG();
     cursor!.addPositionListener(this);
+
+    if (this.options?.experimentalStickering) {
+      this.experimentalSetStickering(this.options.experimentalStickering);
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
@@ -69,6 +80,22 @@ export class Twisty2DSVG
 
   scheduleRender(): void {
     this.scheduler.requestAnimFrame();
+  }
+
+  experimentalSetStickering(stickering: ExperimentalStickering): void {
+    console.log("experimentalSetStickering", stickering);
+    const appearance = stickerings[stickering];
+    console.log("appearance", appearance);
+    this.resetSVG(appearance);
+  }
+
+  // TODO: do this without constructing a new SVG.
+  private resetSVG(appearance: PuzzleAppearance): void {
+    if (this.svg) {
+      this.removeElement(this.svg.element);
+    }
+    this.svg = new SVG(this.definition, this.svgSource!, appearance); // TODO
+    this.addElement(this.svg.element);
   }
 
   private render(): void {
