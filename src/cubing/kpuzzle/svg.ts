@@ -27,7 +27,7 @@ const colorMaps: Partial<Record<
     "orange": "#884400",
     "limegreen": "#008800",
     "red": "#660000",
-    "#26f": "#000088",
+    "rgb(34, 102, 255)": "#000088", // TODO
     "yellow": "#888800",
   },
   oriented: {
@@ -35,7 +35,7 @@ const colorMaps: Partial<Record<
     "orange": "#ff88ff",
     "limegreen": "#ff88ff",
     "red": "#ff88ff",
-    "#26f": "#ff88ff",
+    "rgb(34, 102, 255)": "#ff88ff", // TODO
     "yellow": "#ff88ff",
   },
   ignored: {
@@ -43,7 +43,7 @@ const colorMaps: Partial<Record<
     "orange": "#cccccc",
     "limegreen": "#cccccc",
     "red": "#cccccc",
-    "#26f": "#cccccc",
+    "rgb(34, 102, 255)": "#cccccc", // TODO
     "yellow": "#cccccc",
   },
   invisible: {
@@ -51,7 +51,7 @@ const colorMaps: Partial<Record<
     "orange": "#00000000",
     "limegreen": "#00000000",
     "red": "#00000000",
-    "#26f": "#00000000",
+    "rgb(34, 102, 255)": "#00000000", // TODO
     "yellow": "#00000000",
   },
 };
