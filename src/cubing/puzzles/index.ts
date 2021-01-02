@@ -9,6 +9,13 @@ import { skewb } from "./implementations/skewb";
 import { square1 } from "./implementations/square1";
 import { PuzzleManager } from "./PuzzleManager";
 
+module.exports["222"] = cube2x2x2;
+module.exports["cube333"] = cube3x3x3;
+
+export const koob333 = cube3x3x3;
+
+export { cube2x2x2 as ads };
+
 export const puzzles: Record<string, PuzzleManager> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,

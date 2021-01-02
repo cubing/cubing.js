@@ -1,3 +1,7 @@
+import type {
+  FaceletMeshAppearance,
+  PuzzleAppearance,
+} from "../twisty/3D/puzzles/appearance"; // TODO
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import { KPuzzle } from "./kpuzzle";
 
@@ -12,13 +16,56 @@ function nextSVGID(): string {
   return "svg" + svgCounter.toString();
 }
 
+// TODO: This is hardcoded to 3x3x3 SVGs
+const colorMaps: Partial<Record<
+  FaceletMeshAppearance,
+  Record<string, string>
+>> = {
+  dim: {
+    "white": "#dddddd",
+    "orange": "#884400",
+    "limegreen": "#008800",
+    "red": "#660000",
+    "rgb(34, 102, 255)": "#000088", // TODO
+    "yellow": "#888800",
+  },
+  oriented: {
+    "white": "#ff88ff",
+    "orange": "#ff88ff",
+    "limegreen": "#ff88ff",
+    "red": "#ff88ff",
+    "rgb(34, 102, 255)": "#ff88ff", // TODO
+    "yellow": "#ff88ff",
+  },
+  ignored: {
+    "white": "#444444",
+    "orange": "#444444",
+    "limegreen": "#444444",
+    "red": "#444444",
+    "rgb(34, 102, 255)": "#444444", // TODO
+    "yellow": "#444444",
+  },
+  invisible: {
+    "white": "#00000000",
+    "orange": "#00000000",
+    "limegreen": "#00000000",
+    "red": "#00000000",
+    "rgb(34, 102, 255)": "#00000000", // TODO
+    "yellow": "#00000000",
+  },
+};
+
 export class SVG {
   public element: HTMLElement;
   public gradientDefs: SVGDefsElement;
   private originalColors: { [type: string]: string } = {};
   private gradients: { [type: string]: SVGGradientElement } = {};
   private svgID: string;
-  constructor(public kPuzzleDefinition: KPuzzleDefinition, svgSource: string) {
+  constructor(
+    public kPuzzleDefinition: KPuzzleDefinition,
+    svgSource: string,
+    experimentalAppearance?: PuzzleAppearance,
+  ) {
     if (!svgSource) {
       throw new Error(
         `No SVG definition for puzzle type: ${kPuzzleDefinition.name}`,
@@ -58,7 +105,39 @@ export class SVG {
         ) {
           const id = this.elementID(orbitName, idx, orientation);
           const elem = this.elementByID(id);
-          const originalColor = elem.style.fill as string;
+          let originalColor: string = elem.style.fill;
+          /// TODO: Allow setting appearance dynamically.
+          if (experimentalAppearance) {
+            (() => {
+              // TODO: dedup with Cube3D,,factor out fallback calculations
+              const a = experimentalAppearance.orbits;
+              if (!a) {
+                return;
+              }
+              const orbitAppearance = a[orbitName];
+              if (!orbitAppearance) {
+                return;
+              }
+              const pieceAppearance = orbitAppearance.pieces[idx];
+              if (!pieceAppearance) {
+                return;
+              }
+              const faceletAppearance = pieceAppearance.facelets[orientation];
+              if (!faceletAppearance) {
+                return;
+              }
+              const appearance =
+                typeof faceletAppearance === "string"
+                  ? faceletAppearance
+                  : faceletAppearance?.appearance;
+              const colorMap = colorMaps[appearance];
+              if (colorMap) {
+                originalColor = colorMap[originalColor];
+              }
+            })();
+          } else {
+            originalColor = elem.style.fill as string;
+          }
           this.originalColors[id] = originalColor;
           this.gradients[id] = this.newGradient(id, originalColor);
           this.gradientDefs.appendChild(this.gradients[id]);

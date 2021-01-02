@@ -37,7 +37,7 @@ const oi: PieceAppearance = {
 };
 
 const invis: PieceAppearance = {
-  facelets: ["invisible", "invisible", "invisible"],
+  facelets: ["invisible", "invisible", "invisible", "invisible"], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
 };
 
 const c: PieceAppearance = {
@@ -125,6 +125,34 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
       },
       CORNERS: {
         pieces: [r, r, r, r, d, d, d, d],
+      },
+      CENTERS: {
+        pieces: [p, d, d, d, d, d],
+      },
+    },
+  },
+
+  "OCLL": {
+    orbits: {
+      EDGES: {
+        pieces: [di, di, di, di, d, d, d, d, d, d, d, d],
+      },
+      CORNERS: {
+        pieces: [o, o, o, o, d, d, d, d],
+      },
+      CENTERS: {
+        pieces: [p, d, d, d, d, d],
+      },
+    },
+  },
+
+  "ELL": {
+    orbits: {
+      EDGES: {
+        pieces: [r, r, r, r, d, d, d, d, d, d, d, d],
+      },
+      CORNERS: {
+        pieces: [d, d, d, d, d, d, d, d],
       },
       CENTERS: {
         pieces: [p, d, d, d, d, d],

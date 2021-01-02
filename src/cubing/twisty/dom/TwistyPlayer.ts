@@ -39,7 +39,7 @@ import {
   TwistyPlayerInitialConfig,
   VisualizationFormat,
 } from "./TwistyPlayerConfig";
-import { Twisty2DSVG } from "./viewers/Twisty2DSVG";
+import { Twisty2DSVG, Twisty2DSVGOptions } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import {
@@ -206,6 +206,11 @@ export class TwistyPlayer extends ManagedCustomElement {
           experimentalStickering,
         });
       }
+      if (this.viewerElems[0] instanceof Twisty2DSVG) {
+        (this.viewerElems[0] as Twisty2DSVG).experimentalSetStickering(
+          this.experimentalStickering,
+        );
+      }
     }
   }
 
@@ -333,7 +338,8 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     // TODO: specify exactly when back views are possible.
     // TODO: Are there any SVGs where we'd want a separate back view?
-    const setBackView: boolean = this.backView && this.visualization !== "2D";
+    const setBackView: boolean =
+      this.backView && is3DVisualization(this.visualization);
     const backView: BackViewLayout = setBackView
       ? (this.backView as BackViewLayout)
       : "none";
@@ -382,8 +388,14 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private setTwisty2DSVG(twisty2DSVG: Twisty2DSVG): void {
+    if (this.#renderMode !== "2D") {
+      return;
+    }
+    this.clearRenderMode();
+
     this.#viewerWrapper.clear();
     this.#viewerWrapper.addElement(twisty2DSVG);
+    this.viewerElems.push(twisty2DSVG);
   }
 
   private setRenderMode3D(): void {
@@ -482,12 +494,23 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
     switch (this.visualization) {
       case "2D":
+      case "experimental-2D-LL":
         {
+          const options: Twisty2DSVGOptions = {};
+          if (this.experimentalStickering) {
+            options.experimentalStickering = this.experimentalStickering;
+          }
+
           this.setRenderMode2D();
+          const svgPromiseFn =
+            this.visualization === "2D"
+              ? puzzleManager.svg
+              : puzzleManager.llSVG ?? puzzleManager.svg;
           const mainViewer = new Twisty2DSVG(
             cursor,
             def,
-            await puzzleManager.svg(),
+            await svgPromiseFn(),
+            options,
           );
           if (!pendingPuzzleUpdate.cancelled) {
             this.setTwisty2DSVG(mainViewer);
