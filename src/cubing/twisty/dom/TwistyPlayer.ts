@@ -338,7 +338,8 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     // TODO: specify exactly when back views are possible.
     // TODO: Are there any SVGs where we'd want a separate back view?
-    const setBackView: boolean = this.backView && this.visualization !== "2D";
+    const setBackView: boolean =
+      this.backView && is3DVisualization(this.visualization);
     const backView: BackViewLayout = setBackView
       ? (this.backView as BackViewLayout)
       : "none";
@@ -493,6 +494,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
     switch (this.visualization) {
       case "2D":
+      case "experimental-2D-LL":
         {
           const options: Twisty2DSVGOptions = {};
           if (this.experimentalStickering) {
@@ -500,10 +502,14 @@ export class TwistyPlayer extends ManagedCustomElement {
           }
 
           this.setRenderMode2D();
+          const svgPromiseFn =
+            this.visualization === "2D"
+              ? puzzleManager.svg
+              : puzzleManager.llSVG ?? puzzleManager.svg;
           const mainViewer = new Twisty2DSVG(
             cursor,
             def,
-            await puzzleManager.svg(),
+            await svgPromiseFn(),
             options,
           );
           if (!pendingPuzzleUpdate.cancelled) {
