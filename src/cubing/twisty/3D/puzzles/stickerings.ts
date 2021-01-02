@@ -85,7 +85,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
         pieces: [p, p, p, p, d, d, d, d],
       },
       CENTERS: {
-        pieces: [p, d, d, d, d, d],
+        pieces: [d, d, d, d, d, d],
       },
     },
   },
@@ -127,7 +127,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
         pieces: [r, r, r, r, d, d, d, d],
       },
       CENTERS: {
-        pieces: [p, d, d, d, d, d],
+        pieces: [d, d, d, d, d, d],
       },
     },
   },
@@ -141,7 +141,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
         pieces: [o, o, o, o, d, d, d, d],
       },
       CENTERS: {
-        pieces: [p, d, d, d, d, d],
+        pieces: [d, d, d, d, d, d],
       },
     },
   },
@@ -155,7 +155,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
         pieces: [d, d, d, d, d, d, d, d],
       },
       CENTERS: {
-        pieces: [p, d, d, d, d, d],
+        pieces: [d, d, d, d, d, d],
       },
     },
   },
@@ -211,7 +211,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
         pieces: [r, r, r, r, d, d, d, d],
       },
       CENTERS: {
-        pieces: [r, d, d, d, d, d],
+        pieces: [d, d, d, d, d, d],
       },
     },
   },
@@ -233,13 +233,13 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
   "WVLS": {
     orbits: {
       EDGES: {
-        pieces: [o, o, o, o, d, d, d, d, r, d, d, d],
+        pieces: [d, d, d, d, d, d, d, d, r, d, d, d],
       },
       CORNERS: {
         pieces: [o, o, o, o, r, d, d, d],
       },
       CENTERS: {
-        pieces: [r, d, d, d, d, d],
+        pieces: [d, d, d, d, d, d],
       },
     },
   },
@@ -334,7 +334,7 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
         pieces: [i, i, i, i, i, i, i, i],
       },
       CENTERS: {
-        pieces: [d, d, d, d, d, o],
+        pieces: [d, d, d, d, d, r],
       },
     },
   },
