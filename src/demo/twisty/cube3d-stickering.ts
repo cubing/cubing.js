@@ -16,6 +16,7 @@ function addAlg(stickering: ExperimentalStickering, s: string): Cube3D {
   const twistyPlayer = new TwistyPlayer({
     experimentalStartSetup: invert(parseAlg(s)),
     alg: parseAlg(s),
+    visualization: "2D",
     experimentalStickering: stickering,
   });
   div.appendChild(document.createElement("h1")).textContent = stickering;

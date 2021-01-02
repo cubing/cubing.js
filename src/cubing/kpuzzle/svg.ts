@@ -16,6 +16,7 @@ function nextSVGID(): string {
   return "svg" + svgCounter.toString();
 }
 
+// TODO: This is hardcoded to 3x3x3 SVGs
 const colorMap: Partial<Record<
   FaceletMeshAppearance,
   Record<string, string>
