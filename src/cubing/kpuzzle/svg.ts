@@ -108,31 +108,33 @@ export class SVG {
           const elem = this.elementByID(id);
           let originalColor: string = elem.style.fill;
           if (experimentalAppearance) {
-            // TODO: dedup with Cube3D
-            const a = experimentalAppearance.orbits;
-            if (!a) {
-              continue;
-            }
-            const orbitAppearance = a[orbitName];
-            if (!orbitAppearance) {
-              continue;
-            }
-            const pieceAppearance = orbitAppearance.pieces[idx];
-            if (!pieceAppearance) {
-              continue;
-            }
-            const faceletAppearance = pieceAppearance.facelets[orientation];
-            if (!faceletAppearance) {
-              continue;
-            }
-            const appearance =
-              typeof faceletAppearance === "string"
-                ? faceletAppearance
-                : faceletAppearance?.appearance;
-            const colorMap = colorMaps[appearance];
-            if (colorMap) {
-              originalColor = colorMap[originalColor];
-            }
+            (() => {
+              // TODO: dedup with Cube3D
+              const a = experimentalAppearance.orbits;
+              if (!a) {
+                return;
+              }
+              const orbitAppearance = a[orbitName];
+              if (!orbitAppearance) {
+                return;
+              }
+              const pieceAppearance = orbitAppearance.pieces[idx];
+              if (!pieceAppearance) {
+                return;
+              }
+              const faceletAppearance = pieceAppearance.facelets[orientation];
+              if (!faceletAppearance) {
+                return;
+              }
+              const appearance =
+                typeof faceletAppearance === "string"
+                  ? faceletAppearance
+                  : faceletAppearance?.appearance;
+              const colorMap = colorMaps[appearance];
+              if (colorMap) {
+                originalColor = colorMap[originalColor];
+              }
+            })();
           } else {
             originalColor = elem.style.fill as string;
           }

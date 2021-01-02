@@ -16,7 +16,7 @@ function addAlg(stickering: ExperimentalStickering, s: string): Cube3D {
   const twistyPlayer = new TwistyPlayer({
     experimentalStartSetup: invert(parseAlg(s)),
     alg: parseAlg(s),
-    visualization: "2D",
+    // visualization: "2D",
     experimentalStickering: stickering,
   });
   div.appendChild(document.createElement("h1")).textContent = stickering;
@@ -46,5 +46,5 @@ addAlg("Daisy", "S2 R2 L2");
 addAlg("Cross", "(y' R)5 D");
 addAlg("2x2x2", "y2");
 addAlg("2x2x3", "y");
-addAlg("Void Cube", "");
+addAlg("Void Cube", "M' U M' U M' U' M' U' M' U2' M' U' M' U'");
 addAlg("invisible", "");

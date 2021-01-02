@@ -37,7 +37,7 @@ const oi: PieceAppearance = {
 };
 
 const invis: PieceAppearance = {
-  facelets: ["invisible", "invisible", "invisible"],
+  facelets: ["invisible", "invisible", "invisible", "invisible"], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
 };
 
 const c: PieceAppearance = {
