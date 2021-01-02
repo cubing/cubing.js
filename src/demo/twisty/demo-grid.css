@@ -3,6 +3,11 @@ body {
   font-family: sans-serif;
 }
 
+h1 {
+  text-align: center;
+  text-decoration: underline;
+}
+
 .content {
   width: 100%;
   display: grid;

@@ -21,7 +21,7 @@ export function demo(visualization: VisualizationFormat): void {
       visualization,
       experimentalStickering: stickering,
     });
-    div.appendChild(document.createElement("h1")).textContent = stickering;
+    div.appendChild(document.createElement("h2")).textContent = stickering;
     div.appendChild(twistyPlayer);
     return twistyPlayer.twisty3D as Cube3D;
   }
