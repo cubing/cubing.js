@@ -1,6 +1,7 @@
 import type {
   PuzzleAppearance,
   FaceletMeshAppearance,
+  FaceletAppearance,
 } from "../twisty/3D/puzzles/appearance"; // TODO
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import { KPuzzle } from "./kpuzzle";
@@ -17,7 +18,7 @@ function nextSVGID(): string {
 }
 
 // TODO: This is hardcoded to 3x3x3 SVGs
-const colorMap: Partial<Record<
+const colorMaps: Partial<Record<
   FaceletMeshAppearance,
   Record<string, string>
 >> = {
@@ -107,14 +108,30 @@ export class SVG {
           const elem = this.elementByID(id);
           let originalColor: string = elem.style.fill;
           if (experimentalAppearance) {
-            const faceletMeshAppearance =
-              experimentalAppearance.orbits[orbitName].pieces[idx]?.facelets[
-                orientation
-              ];
-            switch (faceletMeshAppearance) {
-              case "dim":
-                originalColor = colorMap[faceletMeshAppearance]![originalColor];
-                break;
+            // TODO: dedup with Cube3D
+            const a = experimentalAppearance.orbits;
+            if (!a) {
+              continue;
+            }
+            const orbitAppearance = a[orbitName];
+            if (!orbitAppearance) {
+              continue;
+            }
+            const pieceAppearance = orbitAppearance.pieces[idx];
+            if (!pieceAppearance) {
+              continue;
+            }
+            const faceletAppearance = pieceAppearance.facelets[orientation];
+            if (!faceletAppearance) {
+              continue;
+            }
+            const appearance =
+              typeof faceletAppearance === "string"
+                ? faceletAppearance
+                : faceletAppearance?.appearance;
+            const colorMap = colorMaps[appearance];
+            if (colorMap) {
+              originalColor = colorMap[originalColor];
             }
           } else {
             originalColor = elem.style.fill as string;
