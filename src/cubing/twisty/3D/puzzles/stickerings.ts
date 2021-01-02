@@ -3,12 +3,12 @@ import { PieceAppearance, PuzzleAppearance } from "./appearance";
 
 // regular
 const r: PieceAppearance = {
-  facelets: ["regular", "regular", "regular"],
+  facelets: ["regular", "regular", "regular", "regular"],
 };
 
 // dim / (already) solved
 const d: PieceAppearance = {
-  facelets: ["dim", "dim", "dim"],
+  facelets: ["dim", "dim", "dim", "dim"], // TODO: 4th entry is for centers. Should be handled properly for all stickerings.
 };
 
 // dim / (already) oriented
@@ -28,7 +28,7 @@ const o: PieceAppearance = {
 
 // ignored
 const i: PieceAppearance = {
-  facelets: ["ignored", "ignored", "ignored"],
+  facelets: ["ignored", "ignored", "ignored", "ignored"],
 };
 
 // oriented
@@ -41,7 +41,7 @@ const invis: PieceAppearance = {
 };
 
 const c: PieceAppearance = {
-  facelets: ["invisible", "invisible", "invisible"],
+  facelets: ["invisible", "invisible", "invisible", "invisible"],
 };
 
 // TODO: generalize stickerings by performing e.g. intersection on orbit selectors
