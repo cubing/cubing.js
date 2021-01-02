@@ -146,6 +146,20 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
     },
   },
 
+  "ELL": {
+    orbits: {
+      EDGES: {
+        pieces: [r, r, r, r, d, d, d, d, d, d, d, d],
+      },
+      CORNERS: {
+        pieces: [d, d, d, d, d, d, d, d],
+      },
+      CENTERS: {
+        pieces: [p, d, d, d, d, d],
+      },
+    },
+  },
+
   "ELS": {
     orbits: {
       EDGES: {

@@ -33,6 +33,7 @@ export function demo(visualization: VisualizationFormat): void {
   addAlg("OLL", "r U R' U R U2 r'");
   addAlg("COLL", "L R' U' R U L' U2 R' U2 R");
   addAlg("OCLL", "R U R' U R U2 R'");
+  addAlg("ELL", "M U' M' U2 M U' M'");
   addAlg("ELS", "[r U' r': U]");
   addAlg("LL", "R' F R F2' U F R U R' F' U' F");
   addAlg("F2L", "R2' u R2 u' R2'");
