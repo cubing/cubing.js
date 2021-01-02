@@ -109,7 +109,7 @@ export class SVG {
           let originalColor: string = elem.style.fill;
           if (experimentalAppearance) {
             (() => {
-              // TODO: dedup with Cube3D
+              // TODO: dedup with Cube3D,,factor out fallback calculations
               const a = experimentalAppearance.orbits;
               if (!a) {
                 return;
