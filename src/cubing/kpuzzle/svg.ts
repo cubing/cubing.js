@@ -39,12 +39,12 @@ const colorMaps: Partial<Record<
     "yellow": "#ff88ff",
   },
   ignored: {
-    "white": "#cccccc",
-    "orange": "#cccccc",
-    "limegreen": "#cccccc",
-    "red": "#cccccc",
-    "rgb(34, 102, 255)": "#cccccc", // TODO
-    "yellow": "#cccccc",
+    "white": "#444444",
+    "orange": "#444444",
+    "limegreen": "#444444",
+    "red": "#444444",
+    "rgb(34, 102, 255)": "#444444", // TODO
+    "yellow": "#444444",
   },
   invisible: {
     "white": "#00000000",

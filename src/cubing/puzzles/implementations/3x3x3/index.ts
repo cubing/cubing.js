@@ -14,7 +14,7 @@ export const cube3x3x3: PuzzleManager = {
     return kpuzzle3x3x3;
   },
   svg: async () => {
-    return (await import("./3x3x3.kpuzzle.svg")).default;
+    return (await import("./3x3x3-ll.kpuzzle.svg")).default;
   },
   llSVG: async () => {
     return (await import("./3x3x3-ll.kpuzzle.svg")).default;
