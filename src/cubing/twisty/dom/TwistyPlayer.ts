@@ -206,9 +206,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           experimentalStickering,
         });
       }
-      console.log("sdfds", this.viewerElems);
       if (this.viewerElems[0] instanceof Twisty2DSVG) {
-        console.log("fsdfd", this.viewerElems[0]);
         (this.viewerElems[0] as Twisty2DSVG).experimentalSetStickering(
           this.experimentalStickering,
         );

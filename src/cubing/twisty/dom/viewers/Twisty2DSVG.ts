@@ -31,6 +31,7 @@ export class Twisty2DSVG
   private definition: KPuzzleDefinition;
   private svg: SVG;
   private scheduler = new RenderScheduler(this.render.bind(this));
+  #cachedPosition: PuzzlePosition | null = null; // TODO: pull when needed.
   constructor(
     cursor?: PositionDispatcher,
     def?: KPuzzleDefinition,
@@ -75,6 +76,7 @@ export class Twisty2DSVG
       );
     } else {
       this.svg.draw(this.definition, position.state as Transformation);
+      this.#cachedPosition = position;
     }
   }
 
@@ -83,19 +85,20 @@ export class Twisty2DSVG
   }
 
   experimentalSetStickering(stickering: ExperimentalStickering): void {
-    console.log("experimentalSetStickering", stickering);
     const appearance = stickerings[stickering];
-    console.log("appearance", appearance);
     this.resetSVG(appearance);
   }
 
   // TODO: do this without constructing a new SVG.
-  private resetSVG(appearance: PuzzleAppearance): void {
+  private resetSVG(appearance?: PuzzleAppearance): void {
     if (this.svg) {
       this.removeElement(this.svg.element);
     }
     this.svg = new SVG(this.definition, this.svgSource!, appearance); // TODO
     this.addElement(this.svg.element);
+    if (this.#cachedPosition) {
+      this.onPositionChange(this.#cachedPosition);
+    }
   }
 
   private render(): void {

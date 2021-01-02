@@ -8,5 +8,4 @@ window.addEventListener("load", () => {
     alg: parseAlg("M' U M' U M' U' M' U' M' U2' M' U' M' U'"),
   });
   document.body.appendChild(twistyPlayer);
-  twistyPlayer.experimentalStickering = "Void Cube";
 });

@@ -1,7 +1,6 @@
 import type {
-  PuzzleAppearance,
   FaceletMeshAppearance,
-  FaceletAppearance,
+  PuzzleAppearance,
 } from "../twisty/3D/puzzles/appearance"; // TODO
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import { KPuzzle } from "./kpuzzle";
@@ -107,6 +106,7 @@ export class SVG {
           const id = this.elementID(orbitName, idx, orientation);
           const elem = this.elementByID(id);
           let originalColor: string = elem.style.fill;
+          /// TODO: Allow setting appearance dynamically.
           if (experimentalAppearance) {
             (() => {
               // TODO: dedup with Cube3D,,factor out fallback calculations
