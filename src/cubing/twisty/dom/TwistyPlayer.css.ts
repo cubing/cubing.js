@@ -31,6 +31,7 @@ twisty-viewer-wrapper {
 
 twisty-scrubber {
   width: 100%;
+  background: rgba(196, 196, 196, 0.5);
 }
 
 .wrapper.checkered {

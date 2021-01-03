@@ -6,8 +6,6 @@ export const twistyScrubberCSS = new CSSSource(`
   height: 16px;
   contain: content;
   display: grid;
-
-  background: rgba(196, 196, 196, 0.5);
 }
 
 input {
