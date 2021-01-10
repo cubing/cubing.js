@@ -375,6 +375,10 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.viewerElems = [];
         this.#viewerWrapper.clear();
         break;
+      case "2D":
+        this.viewerElems = [];
+        this.#viewerWrapper.clear();
+        break;
     }
     this.#renderMode = null;
   }
@@ -388,10 +392,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private setTwisty2DSVG(twisty2DSVG: Twisty2DSVG): void {
-    if (this.#renderMode !== "2D") {
-      return;
-    }
-    this.clearRenderMode();
+    this.setRenderMode2D();
 
     this.#viewerWrapper.clear();
     this.#viewerWrapper.addElement(twisty2DSVG);
