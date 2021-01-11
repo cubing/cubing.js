@@ -37,6 +37,7 @@ for (const [propName, attrName, alg] of algOptions) {
   };
   input.addEventListener("change", update);
   input.addEventListener("keyup", update);
+  update();
 }
 
 // // Puzzle
