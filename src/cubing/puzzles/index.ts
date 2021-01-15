@@ -1,6 +1,9 @@
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
+import { cube4x4x4 } from "./implementations/4x4x4";
 import { cube5x5x5 } from "./implementations/5x5x5";
+import { cube6x6x6 } from "./implementations/6x6x6";
+import { cube7x7x7 } from "./implementations/7x7x7";
 import { clock } from "./implementations/clock";
 import { fto } from "./implementations/fto";
 import { megaminx } from "./implementations/megaminx";
@@ -13,11 +16,10 @@ export const puzzles: Record<string, PuzzleManager> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,
-  // 4x4x4 Cube
-  // 5x5x5 Cube
+  "4x4x4": cube4x4x4,
   "5x5x5": cube5x5x5,
-  // 6x6x6 Cube
-  // 7x7x7 Cube
+  "6x6x6": cube6x6x6,
+  "7x7x7": cube7x7x7,
   // 3x3x3 Blindfolded
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
