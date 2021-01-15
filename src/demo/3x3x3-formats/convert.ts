@@ -10,7 +10,7 @@ export function kpuzzleToString(state: Transformation): string {
     .replace(/\n +(\d+)\n +/g, "$1");
 }
 
-import defJSON from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json";
+import { cube3x3x3KPuzzle as defJSON } from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 const def: KPuzzleDefinition = defJSON;
 
 const pieceNames: Record<string, string[]> = {

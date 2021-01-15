@@ -1,6 +1,9 @@
 // TODO: this would be a raw `.json` file, but Parcel runs into an error from
+
+import { KPuzzleDefinition } from "../../../kpuzzle";
+
 // using that as both a sync and async import. Probably https://github.com/parcel-bundler/parcel/issues/2546
-module.exports = {
+export const cube3x3x3KPuzzle: KPuzzleDefinition = {
   name: "3x3x3",
   orbits: {
     EDGES: { numPieces: 12, orientations: 2 },

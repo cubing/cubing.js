@@ -1,7 +1,7 @@
 import { parseAlg, Sequence } from "../../alg";
 import { Combine, Invert, KPuzzle, Transformation } from "../../kpuzzle";
 // TODO: Should we expose this directly in the `puzzles` package for sync uses?
-import def from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json";
+import { cube3x3x3KPuzzle as def } from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 import {
   identityPermutation,
   lexToPermutation,

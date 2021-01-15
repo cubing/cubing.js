@@ -9,7 +9,7 @@ import {
   Binary3x3x3Components,
   reid3x3x3ToBinaryComponents,
 } from "../../cubing/protocol/binary/binary3x3x3";
-import defJSON from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json";
+import { cube3x3x3KPuzzle as defJSON } from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 import { kpuzzleToReidString, kpuzzleToStickers } from "./convert";
 
 const def: KPuzzleDefinition = defJSON;
