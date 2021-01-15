@@ -21,7 +21,7 @@ function buf2hex(buffer: ArrayBuffer): string {
     .call(new Uint8Array(buffer), (x: number) =>
       ("00" + x.toString(16)).slice(-2),
     )
-    .join("");
+    .join(" ");
 }
 
 function bufferToString(buffer: ArrayBuffer): string {
@@ -117,16 +117,19 @@ export class GoCube extends BluetoothPuzzle {
   private onCubeCharacteristicChanged(event: any): void {
     const buffer: DataView = event.target.value;
     this.recorded.push([event.timeStamp, buf2hex(buffer.buffer)]);
-    if (buffer.byteLength === 8) {
-      const move = moveMap[buffer.getUint8(3)];
-      this.alg = new Sequence(this.alg.nestedUnits.concat([move]));
-      this.dispatchMove({
-        latestMove: moveMap[buffer.getUint8(3)],
-        timeStamp: event.timeStamp,
-        debug: {
-          stateStr: buf2hex(buffer.buffer),
-        },
-      });
+    // TODO: read bytes from buffer instead of guessing meaning based on length.
+    if (buffer.byteLength < 16) {
+      for (let i = 3; i < buffer.byteLength - 4; i += 2) {
+        const move = moveMap[buffer.getUint8(i)];
+        this.alg = new Sequence(this.alg.nestedUnits.concat([move]));
+        this.dispatchMove({
+          latestMove: moveMap[buffer.getUint8(i)],
+          timeStamp: event.timeStamp,
+          debug: {
+            stateStr: buf2hex(buffer.buffer),
+          },
+        });
+      }
     } else {
       const coords = bufferToString(
         buffer.buffer.slice(3, buffer.byteLength - 3),
