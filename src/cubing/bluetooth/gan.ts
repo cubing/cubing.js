@@ -4,7 +4,7 @@ import { Quaternion } from "three";
 import { BareBlockMove, BlockMove } from "../alg";
 import { KPuzzle } from "../kpuzzle";
 import { KPuzzleDefinition } from "../puzzle-geometry/interfaces";
-import * as puzzles from "../puzzles";
+import { puzzles } from "../puzzles";
 import {
   BluetoothConfig,
   BluetoothPuzzle,
@@ -330,7 +330,7 @@ export class GanCube extends BluetoothPuzzle {
     ).moveCounter();
     debugLog("Initial Move Counter:", initialMoveCounter);
     const cube = new GanCube(
-      await puzzles.koob333.def(),
+      await puzzles["3x3x3"].def(),
       ganCubeService,
       server,
       physicalStateCharacteristic,
