@@ -490,7 +490,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       );
     }
     this.setCursor(cursor);
-    if (initial) {
+    if (initial && this.experimentalStartSetup.nestedUnits.length === 0) {
       this.timeline.jumpToEnd();
     }
     switch (this.visualization) {
