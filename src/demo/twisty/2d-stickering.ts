@@ -16,7 +16,7 @@ function demo(visualization: VisualizationFormat): void {
     const div = content.appendChild(document.createElement("div"));
     div.classList.add("case");
     const twistyPlayer = new TwistyPlayer({
-      experimentalStartSetup: invert(parseAlg(s)),
+      setupAlg: invert(parseAlg(s)),
       alg: parseAlg(s),
       visualization,
       experimentalStickering: stickering,

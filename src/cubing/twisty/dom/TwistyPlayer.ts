@@ -119,7 +119,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   set alg(seq: Sequence) {
     // TODO: do validation for other algs as well.
     if (seq?.type !== "sequence") {
-      // TODO: document `.setAttribute("experimental-start-setup", "R U R'")` as a workaround.
+      // TODO: document `.setAttribute("setup-alg", "R U R'")` as a workaround.
       console.warn(
         "`alg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
@@ -133,23 +133,23 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["alg"].value;
   }
 
-  set experimentalStartSetup(seq: Sequence) {
+  set setupAlg(seq: Sequence) {
     // TODO: do validation for other algs as well.
     if (seq?.type !== "sequence") {
-      // TODO: document `.setAttribute("experimental-start-setup", "R U R'")` as a workaround.
+      // TODO: document `.setAttribute("setup-alg", "R U R'")` as a workaround.
       console.warn(
-        "`experimentalStartSetup` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
+        "`setupAlg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
       seq = parseAlg((seq as unknown) as string) as Sequence;
     }
-    this.#config.attributes["experimental-start-setup"].setValue(seq);
+    this.#config.attributes["setup-alg"].setValue(seq);
     if (this.cursor) {
       this.cursor.setStartState(this.cursor.algToState(seq)); // TODO
     }
   }
 
-  get experimentalStartSetup(): Sequence {
-    return this.#config.attributes["experimental-start-setup"].value;
+  get setupAlg(): Sequence {
+    return this.#config.attributes["setup-alg"].value;
   }
 
   set puzzle(puzzle: PuzzleID) {
@@ -428,7 +428,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private setCursor(cursor: AlgCursor): void {
-    cursor.setStartState(cursor.algToState(this.experimentalStartSetup));
+    cursor.setStartState(cursor.algToState(this.setupAlg));
     this.timeline.addCursor(cursor);
     if (this.cursor) {
       this.timeline.removeCursor(this.cursor);
@@ -472,12 +472,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     let cursor: AlgCursor;
     try {
-      cursor = new AlgCursor(
-        this.timeline,
-        def,
-        this.alg,
-        this.experimentalStartSetup,
-      ); // TODO: validate more directly if the alg is okay for the puzzle.
+      cursor = new AlgCursor(this.timeline, def, this.alg, this.setupAlg); // TODO: validate more directly if the alg is okay for the puzzle.
     } catch (e) {
       if (initial) {
         this.experimentalInvalidInitialAlgCallback(this.alg);
@@ -486,11 +481,11 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.timeline,
         def,
         new Sequence([]),
-        this.experimentalStartSetup,
+        this.setupAlg,
       );
     }
     this.setCursor(cursor);
-    if (initial && this.experimentalStartSetup.nestedUnits.length === 0) {
+    if (initial && this.setupAlg.nestedUnits.length === 0) {
       this.timeline.jumpToEnd();
     }
     switch (this.visualization) {
