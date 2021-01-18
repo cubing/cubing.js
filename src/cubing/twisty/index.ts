@@ -21,6 +21,5 @@ export { AlgIndexer } from "./animation/indexer/AlgIndexer";
 export { SimpleAlgIndexer } from "./animation/indexer/SimpleAlgIndexer";
 export { TreeAlgIndexer } from "./animation/indexer/tree/TreeAlgIndexer";
 export { KPuzzleWrapper as KSolvePuzzle } from "./3D/puzzles/KPuzzleWrapper";
-export { toTimeline } from "./animation/stream/timeline-move-calculation-draft";
 
 import "./dom/element/ElementConfig";
