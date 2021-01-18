@@ -267,6 +267,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
           visualization: "PG3D",
           backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
           cameraPosition: initialCameraPos,
+          viewerLink: "none",
         },
         legacyExperimentalPG3DViewConfig(),
         (alg: Sequence) => {

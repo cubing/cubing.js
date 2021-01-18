@@ -10,8 +10,10 @@ import {
   TimelineActionEvent,
   TimestampLocationType,
 } from "../../animation/Timeline";
+import { ClassListManager } from "../element/ClassListManager";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
+import { ViewerLinkPage } from "../TwistyPlayerConfig";
 import { buttonCSS, buttonGridCSS } from "./buttons.css";
 import { TwistyControlElement } from "./TwistyControlElement.ts";
 
@@ -23,7 +25,8 @@ type TimelineCommand =
   // | "play-backwards"
   | "play-step-backwards"
   | "play-step"
-  | "jump-to-end";
+  | "jump-to-end"
+  | "twizzle-link";
 
 // TODO: combine this with disabled status and label in a state machine?
 type ButtonIconName =
@@ -34,7 +37,8 @@ type ButtonIconName =
   | "pause"
   | "play"
   | "enter-fullscreen"
-  | "exit-fullscreen";
+  | "exit-fullscreen"
+  | "twizzle-tw";
 
 export class TwistyControlButton
   extends ManagedCustomElement
@@ -43,12 +47,20 @@ export class TwistyControlButton
   private timelineCommand: TimelineCommand;
   private currentIconName: string | null = null;
   protected button: HTMLButtonElement = document.createElement("button");
+  private fullscreenElement: Element | null = null;
+  private visitTwizzleLinkCallback: (() => void) | null = null;
   constructor(
     timeline?: Timeline,
     timelineCommand?: TimelineCommand,
-    private fullscreenElement?: Element, // TODO: reflect as an element attribute?
+    options?: {
+      fullscreenElement?: Element; // TODO: reflect as an element attribute?
+      visitTwizzleLinkCallback?: () => void;
+    },
   ) {
     super();
+
+    this.fullscreenElement = options?.fullscreenElement ?? null;
+    this.visitTwizzleLinkCallback = options?.visitTwizzleLinkCallback ?? null;
 
     if (!timeline) {
       console.log("Must have timeline!"); // TODO
@@ -140,6 +152,7 @@ export class TwistyControlButton
       "play-step-backwards": "step-backward",
       "jump-to-end": "skip-to-end",
       "fullscreen": "enter-fullscreen",
+      "twizzle-link": "twizzle-tw",
     };
     return map[this.timelineCommand];
   }
@@ -152,6 +165,7 @@ export class TwistyControlButton
       "play-step-backwards": "Step backward",
       "jump-to-end": "Skip to End",
       "fullscreen": "Enter fullscreen",
+      "twizzle-link": "View at Twizzle",
     };
     return map[this.timelineCommand];
   }
@@ -193,6 +207,11 @@ export class TwistyControlButton
         break;
       case "play-step-backwards":
         this.timeline.experimentalPlay(Direction.Backwards, BoundaryType.Move);
+        break;
+      case "twizzle-link":
+        if (this.visitTwizzleLinkCallback) {
+          this.visitTwizzleLinkCallback();
+        }
         break;
     }
   }
@@ -256,20 +275,44 @@ customElementsShim.define("twisty-control-button", TwistyControlButton);
 export class TwistyControlButtonPanel
   extends ManagedCustomElement
   implements TwistyControlElement {
-  constructor(timeline?: Timeline, fullscreenElement?: Element) {
+  #viewerLinkClassListManager: ClassListManager<
+    ViewerLinkPage
+  > = new ClassListManager(this, "viewer-link-", ["none", "twizzle"]);
+
+  constructor(
+    timeline?: Timeline,
+    options?: {
+      fullscreenElement?: Element;
+      viewerLinkCallback?: () => void;
+      viewerLink?: ViewerLinkPage;
+    },
+  ) {
     super();
     this.addCSS(buttonGridCSS);
 
+    this.#viewerLinkClassListManager.setValue(options?.viewerLink ?? "none");
+
     // this.addElement(new TwistyControlButton(timeline!, fullscreenElement!));
     this.addElement(
-      new TwistyControlButton(timeline!, "fullscreen", fullscreenElement),
+      new TwistyControlButton(timeline!, "fullscreen", {
+        fullscreenElement: options?.fullscreenElement,
+      }),
     );
     this.addElement(new TwistyControlButton(timeline!, "jump-to-start"));
     this.addElement(new TwistyControlButton(timeline!, "play-step-backwards"));
     this.addElement(new TwistyControlButton(timeline!, "play-pause"));
     this.addElement(new TwistyControlButton(timeline!, "play-step"));
     this.addElement(new TwistyControlButton(timeline!, "jump-to-end"));
+    this.addElement(
+      new TwistyControlButton(timeline!, "twizzle-link", {
+        visitTwizzleLinkCallback: options?.viewerLinkCallback,
+      }),
+    ).classList.add("twizzle-link-button");
     /*...*/
+  }
+
+  setViewerLink(viewerLink: ViewerLinkPage): void {
+    this.#viewerLinkClassListManager.setValue(viewerLink);
   }
 }
 

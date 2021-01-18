@@ -2,12 +2,17 @@ import { algToString, parseAlg, Sequence } from "../../cubing/alg";
 import { TwistyPlayer, TwistyPlayerInitialConfig } from "../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./supported-puzzles";
-import { ALG_INPUT_PLACEHOLDER, APP_TITLE } from "./strings";
+import {
+  ALG_INPUT_PLACEHOLDER,
+  ALG_SETUP_INPUT_PLACEHOLDER,
+  APP_TITLE,
+} from "./strings";
 import { getURLParam, setURLParams } from "./url-params";
 import { Vector3 } from "three";
 
 export interface AppData {
   puzzleName: string;
+  setupAlg: Sequence;
   alg: Sequence;
 }
 
@@ -38,6 +43,7 @@ export class App {
     new ControlPane(
       controlPaneElem,
       initialData,
+      this.setSetupAlg.bind(this),
       this.setAlg.bind(this),
       this.setPuzzle.bind(this),
     );
@@ -46,6 +52,7 @@ export class App {
   private initializeTwisty(initialData: AppData): void {
     const twistyConfig: TwistyPlayerInitialConfig = {
       alg: new Sequence([]),
+      viewerLink: "none",
     };
     if (initialData.puzzleName === "megaminx") {
       twistyConfig.cameraPosition = new Vector3(0, 3.09, 5);
@@ -58,8 +65,23 @@ export class App {
     if (getURLParam("debug-simultaneous")) {
       this.twistyPlayer.experimentalSetCursorIndexer("simultaneous");
     }
+    this.setSetupAlg(initialData.setupAlg);
     this.setAlg(initialData.alg);
     this.puzzlePane.appendChild(this.twistyPlayer);
+  }
+
+  // Boolean indicates success (e.g. alg is valid).
+  private setSetupAlg(setupAlg: Sequence): boolean {
+    console.log({ setupAlg });
+    try {
+      this.twistyPlayer.setupAlg = setupAlg;
+      this.twistyPlayer.timeline.jumpToStart();
+      setURLParams({ "setup-alg": setupAlg });
+      return true;
+    } catch (e) {
+      this.twistyPlayer.setupAlg = parseAlg("");
+      return false;
+    }
   }
 
   // Boolean indicates success (e.g. alg is valid).
@@ -92,16 +114,27 @@ const algElemStatusClasses: AlgElemStatusClass[] = [
 ];
 
 class ControlPane {
+  public setupAlgInput: HTMLTextAreaElement;
   public algInput: HTMLTextAreaElement;
   public puzzleSelect: HTMLSelectElement;
   constructor(
     public element: Element,
     initialData: AppData,
+    private setupAlgChangeCallback: (alg: Sequence) => boolean,
     private algChangeCallback: (alg: Sequence) => boolean,
     private setPuzzleCallback: (puzzleName: string) => boolean,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
+
+    this.setupAlgInput = findOrCreateChildWithClass(
+      this.element,
+      "setup-alg",
+      "textarea",
+    );
+    this.setupAlgInput.placeholder = ALG_SETUP_INPUT_PLACEHOLDER;
+    this.setupAlgInput.value = algToString(initialData.setupAlg);
+    this.setSetupAlgElemStatus(null);
 
     this.algInput = findOrCreateChildWithClass(this.element, "alg", "textarea");
     this.algInput.placeholder = ALG_INPUT_PLACEHOLDER;
@@ -118,7 +151,43 @@ class ControlPane {
     this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));
     this.algInput.addEventListener("change", this.onAlgInput.bind(this, true));
 
+    this.setupAlgInput.addEventListener(
+      "input",
+      this.onSetupAlgInput.bind(this, false),
+    );
+    this.setupAlgInput.addEventListener(
+      "change",
+      this.onSetupAlgInput.bind(this, true),
+    );
+
     this.onAlgInput(true);
+  }
+
+  private onSetupAlgInput(canonicalize: boolean): void {
+    try {
+      const setupAlgString = this.setupAlgInput.value;
+      const parsedSetupAlg = parseAlg(setupAlgString);
+      this.setupAlgChangeCallback(parsedSetupAlg);
+
+      const restringifiedSetupAlg = algToString(parsedSetupAlg);
+      const setupAlgIsCanonical = restringifiedSetupAlg === setupAlgString;
+
+      if (canonicalize && !setupAlgIsCanonical) {
+        this.setupAlgInput.value = restringifiedSetupAlg;
+      }
+      // Set status before passing to the `Twisty`.
+      this.setSetupAlgElemStatus(
+        canonicalize || setupAlgIsCanonical ? null : "status-warning",
+      );
+
+      // TODO: cache last alg to avoid unnecessary updates?
+      // Or should that be in the `Twisty` layer?
+      if (!this.setupAlgChangeCallback(parsedSetupAlg)) {
+        this.setSetupAlgElemStatus("status-bad");
+      }
+    } catch (e) {
+      this.setSetupAlgElemStatus("status-bad");
+    }
   }
 
   private onAlgInput(canonicalize: boolean): void {
@@ -145,6 +214,19 @@ class ControlPane {
       }
     } catch (e) {
       this.setAlgElemStatus("status-bad");
+    }
+  }
+
+  // Set to `null` to clear.
+  private setSetupAlgElemStatus(
+    latestStatusClass: AlgElemStatusClass | null,
+  ): void {
+    for (const statusClass of algElemStatusClasses) {
+      if (statusClass === latestStatusClass) {
+        this.setupAlgInput.classList.add(statusClass);
+      } else {
+        this.setupAlgInput.classList.remove(statusClass);
+      }
     }
   }
 

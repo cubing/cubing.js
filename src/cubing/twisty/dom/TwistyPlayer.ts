@@ -1,5 +1,10 @@
 import { Vector3 } from "three";
-import { BlockMove, experimentalAppendBlockMove, Sequence } from "../../alg";
+import {
+  algToString,
+  BlockMove,
+  experimentalAppendBlockMove,
+  Sequence,
+} from "../../alg";
 import { parseAlg } from "../../alg/parser";
 import { KPuzzleDefinition } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
@@ -37,6 +42,7 @@ import {
   PuzzleID,
   TwistyPlayerConfig,
   TwistyPlayerInitialConfig,
+  ViewerLinkPage,
   VisualizationFormat,
 } from "./TwistyPlayerConfig";
 import { Twisty2DSVG, Twisty2DSVGOptions } from "./viewers/Twisty2DSVG";
@@ -293,6 +299,20 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["camera-position"].value;
   }
 
+  set viewerLink(viewerLinkPage: ViewerLinkPage) {
+    this.#config.attributes["viewer-link"].setValue(viewerLinkPage);
+    const maybePanel = this.controlElems[1] as
+      | TwistyControlButtonPanel
+      | undefined;
+    if (maybePanel?.setViewerLink) {
+      maybePanel.setViewerLink(viewerLinkPage);
+    }
+  }
+
+  get viewerLink(): ViewerLinkPage {
+    return this.#config.attributes["viewer-link"].value;
+  }
+
   get effectiveCameraPosition(): Vector3 {
     return this.cameraPosition ?? this.defaultCameraPosition;
   }
@@ -349,7 +369,11 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addElement(this.#viewerWrapper);
 
     const scrubber = new TwistyScrubber(this.timeline);
-    const controlButtonGrid = new TwistyControlButtonPanel(this.timeline, this);
+    const controlButtonGrid = new TwistyControlButtonPanel(this.timeline, {
+      fullscreenElement: this,
+      viewerLinkCallback: this.visitTwizzleLink.bind(this),
+      viewerLink: this.viewerLink,
+    });
 
     this.controlElems = [scrubber, controlButtonGrid];
 
@@ -360,6 +384,30 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.#connected = true;
     this.updatePuzzleDOM(true);
+  }
+
+  public twizzleLink(): string {
+    const url = new URL(
+      "https://experiments.cubing.net/cubing.js/alg.cubing.net/index.html",
+    );
+    // const url = new URL("http://localhost:3333/alg.cubing.net/index.html");
+    if (this.alg.nestedUnits.length > 0) {
+      url.searchParams.set("alg", algToString(this.alg));
+    }
+    if (this.setupAlg.nestedUnits.length > 0) {
+      url.searchParams.set("setup-alg", algToString(this.setupAlg));
+    }
+    if (this.puzzle !== "3x3x3") {
+      url.searchParams.set("puzzle", this.puzzle);
+    }
+    return url.toString();
+  }
+
+  public visitTwizzleLink(): void {
+    const a = document.createElement("a");
+    a.href = this.twizzleLink();
+    a.target = "_blank";
+    a.click();
   }
 
   #pendingPuzzleUpdates: PendingPuzzleUpdate[] = [];

@@ -4,6 +4,7 @@ import {
   experimentalStickerings,
   hintFaceletStyles,
   puzzleIDs,
+  viewerLinkPages,
   visualizationFormats,
 } from "../../cubing/twisty/dom/TwistyPlayerConfig"; // TODO
 import { TwistyPlayer } from "../../cubing/twisty";
@@ -67,6 +68,8 @@ const enumOptions: [string, string, Record<string, any>][] = [
   ["controlPanel", "control-panel", controlsLocations],
 
   ["backView", "back-view", backViewLayouts],
+
+  ["viewerLink", "viewer-link", viewerLinkPages],
 ];
 
 for (const [propName, attrName, valueMap] of enumOptions) {

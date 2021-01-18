@@ -99,6 +99,12 @@ export const puzzleIDs = {
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 
+export const viewerLinkPages = {
+  twizzle: true, // default
+  none: true,
+};
+export type ViewerLinkPage = keyof typeof viewerLinkPages;
+
 // TODO: templatize
 export interface ManagedAttribute<K> {
   string: string;
@@ -127,6 +133,9 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   // 3D config
   "back-view": StringEnumAttribute<BackViewLayout>;
   "camera-position": Vector3Attribute;
+
+  // Interaction
+  "viewer-link": StringEnumAttribute<ViewerLinkPage>;
 }
 
 export interface TwistyPlayerConfigValues {
@@ -143,6 +152,8 @@ export interface TwistyPlayerConfigValues {
 
   backView: BackViewLayout;
   cameraPosition: Vector3;
+
+  viewerLink: ViewerLinkPage;
 }
 
 export type TwistyPlayerInitialConfig = Partial<TwistyPlayerConfigValues>;
@@ -164,6 +175,8 @@ const twistyPlayerAttributeMap: Record<
 
   "back-view": "backView",
   "camera-position": "cameraPosition",
+
+  "viewer-link": "viewerLink",
 };
 
 // TODO: Can we avoid instantiating a new class for each attribute, and would it help performance?
@@ -206,6 +219,10 @@ export class TwistyPlayerConfig {
       "camera-position": new Vector3Attribute(
         null,
         initialValues["cameraPosition"],
+      ),
+      "viewer-link": new StringEnumAttribute(
+        viewerLinkPages,
+        initialValues.viewerLink,
       ),
     };
   }
