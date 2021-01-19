@@ -25,7 +25,7 @@ describe("TwistyControlButton", () => {
     const twistyControlButton = new TwistyControlButton(
       timeline,
       "fullscreen",
-      mockFullscreenElement,
+      { fullscreenElement: mockFullscreenElement },
     );
     twistyControlButton.click();
     expect(mockFullscreenElement.fullscreenRequested).toBe(true);
