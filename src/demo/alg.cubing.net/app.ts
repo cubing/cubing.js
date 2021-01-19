@@ -58,7 +58,6 @@ export class App {
       twistyConfig.cameraPosition = new Vector3(0, 3.09, 5);
     }
     const displayablePuzzle = puzzles[initialData.puzzleName];
-    console.log(initialData.puzzleName, displayablePuzzle);
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
     this.twistyPlayer = new TwistyPlayer(twistyConfig);
@@ -72,7 +71,6 @@ export class App {
 
   // Boolean indicates success (e.g. alg is valid).
   private setSetupAlg(setupAlg: Sequence): boolean {
-    console.log({ setupAlg });
     try {
       this.twistyPlayer.setupAlg = setupAlg;
       this.twistyPlayer.timeline.jumpToStart();

@@ -58,6 +58,10 @@ const supportedPuzzle: { [s: string]: DisplayablePuzzle } = {};
 for (const key of [
   "2x2x2",
   "3x3x3",
+  "4x4x4",
+  "5x5x5",
+  "6x6x6",
+  "7x7x7",
   "pyraminx",
   "square1",
   "clock",
@@ -67,7 +71,19 @@ for (const key of [
 ]) {
   supportedPuzzle[key as any] = new DisplayableKPuzzle(
     key,
-    ["2x2x2", "3x3x3", "megaminx", "skewb", "fto"].includes(key) ? "3D" : "2D",
+    [
+      "2x2x2",
+      "3x3x3",
+      "4x4x4",
+      "5x5x5",
+      "6x6x6",
+      "7x7x7",
+      "megaminx",
+      "skewb",
+      "fto",
+    ].includes(key)
+      ? "3D"
+      : "2D",
   );
 }
 // supportedPuzzle.megaminx = new DisplayablePG3D(
