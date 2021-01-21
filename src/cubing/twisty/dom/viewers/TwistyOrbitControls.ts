@@ -15,7 +15,7 @@ const INERTIA_DURATION_MS = 500;
 // never begin animating the inertia.
 const INERTIA_TIMEOUT_MS = 50;
 
-const VERTICAL_MOVEMENT_BASE_SCALE = 0.5;
+const VERTICAL_MOVEMENT_BASE_SCALE = 0.75;
 
 // progress is from 0 to 1.
 function momentumScale(progress: number) {
@@ -106,7 +106,7 @@ export class TwistyOrbitControls {
   temperMovement(f: number): number {
     // This is scaled to be linear for small values, but to reduce large values
     // by a significant factor.
-    return (Math.sign(f) * Math.log(Math.abs(f * 10) + 1)) / 10;
+    return (Math.sign(f) * Math.log(Math.abs(f * 10) + 1)) / 6;
   }
 
   onMouseStart(e: MouseEvent): void {
