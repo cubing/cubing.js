@@ -501,7 +501,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       this.setAppearance(stickerings[this.options.experimentalStickering]);
     }
 
-    cursor!.addPositionListener(this);
+    cursor?.addPositionListener(this);
   }
 
   // Can only be called once.

@@ -17,7 +17,7 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     );
   }
 
-  public getMove(index: number): BlockMove {
+  public getMove(index: number): BlockMove | null {
     // FIXME need to support Pause
     if (this.walker.moveByIndex(index)) {
       if (!this.walker.mv) {
@@ -30,7 +30,7 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
       }
       return bm;
     }
-    throw new Error("Out of algorithm: index " + index);
+    return null;
   }
 
   public indexToMoveStartTimestamp(index: number): Timestamp {

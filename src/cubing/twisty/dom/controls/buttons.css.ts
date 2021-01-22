@@ -1,6 +1,12 @@
 import { CSSSource } from "../element/ManagedCustomElement";
 
 export const buttonGridCSS = new CSSSource(`
+:host(twisty-control-button-panel) {
+  width: 384px;
+  contain: content;
+  display: block;
+}
+
 .wrapper {
   width: 100%;
   height: 100%;

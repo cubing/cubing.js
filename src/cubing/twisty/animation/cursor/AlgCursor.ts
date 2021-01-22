@@ -143,14 +143,17 @@ export class AlgCursor
           // TODO: push this into the indexer
           position.state = this.ksolvePuzzle.combine(
             state,
-            this.ksolvePuzzle.stateFromMove(this.todoIndexer.getMove(idx)),
+            this.ksolvePuzzle.stateFromMove(this.todoIndexer.getMove(idx)!),
           ) as Transformation;
         } else if (fraction > 0) {
-          position.movesInProgress.push({
-            move: this.todoIndexer.getMove(idx),
-            direction: Direction.Forwards,
-            fraction,
-          });
+          const move = this.todoIndexer.getMove(idx);
+          if (move) {
+            position.movesInProgress.push({
+              move,
+              direction: Direction.Forwards,
+              fraction,
+            });
+          }
         }
       }
     }

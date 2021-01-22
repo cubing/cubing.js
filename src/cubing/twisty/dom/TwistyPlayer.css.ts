@@ -29,8 +29,13 @@ twisty-viewer-wrapper {
   overflow: hidden;
 }
 
-twisty-scrubber {
+
+twisty-scrubber,
+twisty-control-button-panel {
   width: 100%;
+}
+
+twisty-scrubber {
   background: rgba(196, 196, 196, 0.5);
 }
 
