@@ -33,6 +33,7 @@ twisty-viewer-wrapper {
 twisty-scrubber,
 twisty-control-button-panel {
   width: 100%;
+  height: unset;
 }
 
 twisty-scrubber {

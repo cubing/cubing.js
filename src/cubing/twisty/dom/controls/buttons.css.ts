@@ -3,6 +3,7 @@ import { CSSSource } from "../element/ManagedCustomElement";
 export const buttonGridCSS = new CSSSource(`
 :host(twisty-control-button-panel) {
   width: 384px;
+  height:24px;
   contain: content;
   display: block;
 }
