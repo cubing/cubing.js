@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build build-esm build-cjs build-bundle-global build-types build-bin generate-js generate-js-parsers generate-js-svg dev clean test test-jest test-node-require test-node-import format setup lint prepack parcel-build-for-twizzle-net parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net
+NPM_COMMANDS = build build-esm build-cjs build-bundle-global build-types build-bin generate-js generate-js-parsers generate-js-svg dev clean test test-jest test-node-require test-node-import format setup lint prepack parcel-build-for-twizzle-net parcel-build-for-vr-cubing-net parcel-build-for-experiments-cubing-net parcel-build-for-twizzle-diaries
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
@@ -55,6 +55,21 @@ deploy-experiments: parcel-build-for-experiments-cubing-net
 		./dist/experiments.cubing.net/cubing.js/experiments-cubing-net/ \
 		${EXPERIMENTS_SFTP_PATH}
 	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
+
+TWIZZLE_SFTP_PATH = "towns.dreamhost.com:~/twizzle.net/explore/"
+TWIZZLE_URL       = "https://twizzle.net/explore/"
+
+TWIZZLE_DIARIES_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/twizzle-diaries/"
+TWIZZLE_DIARIES_URL       = "https://experiments.cubing.net/twizzle-diaries/"
+
+.PHONY: deploy-twizzle-diaries
+deploy-twizzle-diaries: parcel-build-for-twizzle-diaries
+	rsync -avz \
+		--exclude .DS_Store \
+		--exclude .git \
+		./dist/experiments.cubing.net/twizzle-diaries/ \
+		${TWIZZLE_DIARIES_SFTP_PATH}
+	echo "\nDone deploying. Go to ${TWIZZLE_DIARIES_URL}\n"
 
 TWIZZLE_SFTP_PATH = "towns.dreamhost.com:~/twizzle.net/explore/"
 TWIZZLE_URL       = "https://twizzle.net/explore/"

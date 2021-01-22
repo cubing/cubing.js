@@ -35,6 +35,7 @@
     "eslint-plugin-html": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.4.2",
+    "jszip": "^3.5.0",
     "parcel": "^2.0.0-nightly.442",
     "pegjs": "^0.11.0-master.f69239d",
     "prettier": "^2.1.1",
@@ -63,12 +64,14 @@
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
     "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --public-url ./ --dist-dir dist/twizzle.net/explore src/demo/twizzle/index.html",
     "parcel-build-for-vr-cubing-net": "parcel build --no-scope-hoist --no-minify --target vr-cubing-net --public-url ./ --dist-dir dist/experiments.cubing.net/vr src/demo/vr/index.html",
-    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-minify --target experiments-cubing-net --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html"
+    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-minify --target experiments-cubing-net --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html",
+    "parcel-build-for-twizzle-diaries": "parcel build --no-scope-hoist --target twizzle-diaries --public-url /twizzle-diaries/ --dist-dir dist/experiments.cubing.net src/demo/twizzle-diaries/index.html"
   },
   "targets": {
     "twizzle-net": {},
     "vr-cubing-net": {},
-    "experiments-cubing-net": {}
+    "experiments-cubing-net": {},
+    "twizzle-diaries": {}
   },
   "keywords": [
     "cubing",

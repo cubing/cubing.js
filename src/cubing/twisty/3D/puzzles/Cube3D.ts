@@ -179,6 +179,13 @@ const cubieDimensions = {
 };
 const EXPERIMENTAL_PICTURE_CUBE_HINT_ELEVATION = 2;
 
+/** @deprecated */
+export function experimentalSetDefaultStickerElevation(
+  stickerElevation: number,
+): void {
+  cubieDimensions.stickerElevation = stickerElevation;
+}
+
 interface Cube3DOptions {
   showMainStickers?: boolean;
   hintFacelets?: HintFaceletStyle;
@@ -806,6 +813,42 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         : cubieDimensions.stickerElevation,
     );
     return stickerMesh;
+  }
+
+  /** @deprecated */
+  experimentalSetFoundationOpacity(opacity: number): void {
+    (this.experimentalFoundationMeshes[0]
+      .material as MeshBasicMaterial).opacity = opacity;
+  }
+
+  /** @deprecated */
+  experimentalSetStickerWidth(width: number): void {
+    for (const orbitInfo of Object.values(this.kpuzzleFaceletInfo)) {
+      for (const pieceInfo of orbitInfo) {
+        for (const faceletInfo of pieceInfo) {
+          faceletInfo.facelet.scale.setScalar(
+            width / cubieDimensions.stickerWidth,
+          );
+          // faceletInfo.facelet.setRotationFromAxisAngle(new Vector3(0, 1, 0), 0);
+          // faceletInfo.facelet.rotateOnAxis(new Vector3(1, 0, 1), TAU / 6);
+        }
+      }
+    }
+  }
+
+  /** @deprecated */
+  experimentalSetCenterStickerWidth(width: number): void {
+    for (const orbitInfo of [this.kpuzzleFaceletInfo["CENTERS"]]) {
+      for (const pieceInfo of orbitInfo) {
+        for (const faceletInfo of pieceInfo) {
+          faceletInfo.facelet.scale.setScalar(
+            width / cubieDimensions.stickerWidth,
+          );
+          // faceletInfo.facelet.setRotationFromAxisAngle(new Vector3(0, 1, 0), 0);
+          // faceletInfo.facelet.rotateOnAxis(new Vector3(1, 0, 1), TAU / 6);
+        }
+      }
+    }
   }
 
   private ease(fraction: number): number {

@@ -59,6 +59,7 @@ export class Twisty3DCanvas
 
   // TODO: Are there any render duration performance concerns with removing this?
   #invisible: boolean = false;
+  #onRenderFinish: null | (() => void) = null;
   constructor(
     scene?: Twisty3DScene,
     options: { cameraPosition?: Vector3; negateCameraPosition?: boolean } = {},
@@ -142,6 +143,11 @@ export class Twisty3DCanvas
     this.#invisible = true;
   }
 
+  /** @deprecated */
+  experimentalSetOnRenderFinish(f: null | (() => void)): void {
+    this.#onRenderFinish = f;
+  }
+
   private render(): void {
     // Cancel any scheduled frame, since we're rendering right now.
     // We don't need to re-render until something schedules again.
@@ -169,6 +175,10 @@ export class Twisty3DCanvas
       this.contentWrapper.classList.remove("invisible");
     }
     this.stats?.end();
+
+    if (this.#onRenderFinish) {
+      this.#onRenderFinish();
+    }
   }
 
   private onResize(): void {
