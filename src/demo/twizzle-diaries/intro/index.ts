@@ -1,3 +1,4 @@
+import { svgFiles } from "./svg";
 import JSZip from "jszip";
 import {
   Color,
@@ -11,31 +12,6 @@ import {
   Vector3,
 } from "three";
 import { SVGLoader, SVGResult } from "three/examples/jsm/loaders/SVGLoader";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import svgE from "url:./svg/e.svg";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import svgIStem from "url:./svg/i-stem.svg";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import svgI from "url:./svg/i.svg";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import svgLStem from "url:./svg/l-stem.svg";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import svgL from "url:./svg/l.svg";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import svgLine from "url:./svg/line.svg";
-// import svgFull from "url:./svg/twizzle-full.svg";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import svgTw from "url:./svg/tw.svg";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import svgZz from "url:./svg/zz.svg";
 import { parseAlg } from "../../../cubing/alg";
 import {
   Cube3D,
@@ -355,9 +331,10 @@ setTimeout(async () => {
     offsetX: number,
     offsetY: number,
   ) {
-    const data: SVGResult = await new Promise((resolve, _reject) => {
-      svgLoader.load(svgSrc, resolve);
-    });
+    // const data: SVGResult = await new Promise((resolve, _reject) => {
+    //   svgLoader.load(svgSrc, resolve);
+    // });
+    const data: SVGResult = svgLoader.parse(svgSrc);
     const paths = data.paths;
     const group = new Group();
     group.scale.setScalar(1 / 1024);
@@ -461,6 +438,20 @@ setTimeout(async () => {
       },
     };
   }
+
+  // function svgURL(s: keyof typeof svgFiles): string {
+  //   return URL.createObjectURL(new Blob([svgFiles[s], "text/svg"]));
+  // }
+
+  const svgTw = svgFiles["tw.svg"];
+  const svgZz = svgFiles["zz.svg"];
+  const svgE = svgFiles["e.svg"];
+  const svgIStem = svgFiles["i-stem.svg"];
+  const svgI = svgFiles["i.svg"];
+  const svgLStem = svgFiles["l-stem.svg"];
+  const svgL = svgFiles["l.svg"];
+  const svgLine = svgFiles["line.svg"];
+
   const svgMeshes = {
     tw: loadSVG(textGroup, svgTw, -1, -1),
     zz: loadSVG(textGroup, svgZz, -1, 1),
