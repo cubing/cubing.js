@@ -173,7 +173,7 @@ const familyToAxis: { [s: string]: number } = {
 
 const cubieDimensions = {
   stickerWidth: 0.85,
-  stickerElevation: 0.501,
+  stickerElevation: 0.503,
   foundationWidth: 1,
   hintStickerElevation: 1.45,
 };
