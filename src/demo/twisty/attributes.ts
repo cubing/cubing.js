@@ -140,6 +140,19 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
+  document.querySelector("#viewer-link")!.appendChild(
+    new TwistyPlayer({
+      alg: parseAlg("R U R' U R U2' R'"),
+      viewerLink: "none",
+    }),
+  );
+  const tw = new TwistyPlayer();
+  document.querySelector("#viewer-link")!.appendChild(tw);
+  tw.alg = parseAlg("R U R' U R U2' R'");
+  tw.viewerLink = "none";
+}
+
+{
   document.querySelector("#multiple-attributes")!.appendChild(
     new TwistyPlayer({
       alg: parseAlg("R U R' U R U2' R'"),
