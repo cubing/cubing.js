@@ -22,11 +22,11 @@ export const centeredCameraPosition = new Vector3(
 export const cubeCameraPosition = new Vector3(3, 4, 5);
 
 // TODO: turn these maps into lists?
-export const SetupToLocations = {
+export const setupToLocations = {
   start: true, // default // TODO: "beginning"
   end: true,
 };
-export type SetupToLocation = keyof typeof SetupToLocations;
+export type SetupToLocation = keyof typeof setupToLocations;
 
 // TODO: turn these maps into lists?
 export const visualizationFormats = {
@@ -200,7 +200,7 @@ export class TwistyPlayerConfig {
       "alg": new AlgAttribute(initialValues.alg),
       "setup-alg": new AlgAttribute(initialValues.setupAlg),
       "experimental-setup-to": new StringEnumAttribute(
-        SetupToLocations,
+        setupToLocations,
         initialValues.experimentalSetupTo,
       ),
 

@@ -4,6 +4,7 @@ import {
   experimentalStickerings,
   hintFaceletStyles,
   puzzleIDs,
+  setupToLocations,
   viewerLinkPages,
   visualizationFormats,
 } from "../../cubing/twisty/dom/TwistyPlayerConfig"; // TODO
@@ -55,6 +56,7 @@ for (const [propName, attrName, alg] of algOptions) {
 // "back-view": StringEnumAttribute<BackViewLayout>;
 // "camera-position": Vector3Attribute;
 const enumOptions: [string, string, Record<string, any>][] = [
+  ["experimentalSetupTo", "experimental-setup-to", setupToLocations],
   ["puzzle", "puzzle", puzzleIDs],
   ["visualization", "visualization", visualizationFormats],
   ["hintFacelets", "hint-facelets", hintFaceletStyles],
