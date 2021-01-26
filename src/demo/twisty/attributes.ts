@@ -36,17 +36,17 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
-  document.querySelector("#experimental-setup-to")!.appendChild(
+  document.querySelector("#experimental-setup-anchor")!.appendChild(
     new TwistyPlayer({
       alg: parseAlg("R U R' U R U2' R'"),
-      experimentalSetupTo: "end",
+      experimentalSetupAnchor: "end",
     }),
   );
   const tw = new TwistyPlayer({
     alg: parseAlg("R U R' U R U2' R'"),
   });
-  document.querySelector("#experimental-setup-to")!.appendChild(tw);
-  tw.experimentalSetupTo = "end";
+  document.querySelector("#experimental-setup-anchor")!.appendChild(tw);
+  tw.experimentalSetupAnchor = "end";
 }
 
 {
@@ -170,7 +170,7 @@ experimentalSetShareAllNewRenderers(true);
   document.querySelector("#multiple-attributes")!.appendChild(
     new TwistyPlayer({
       alg: parseAlg("R U R' U R U2' R'"),
-      experimentalSetupTo: "end",
+      experimentalSetupAnchor: "end",
       experimentalStickering: "OLL",
       background: "none",
       controlPanel: "none",
@@ -179,7 +179,7 @@ experimentalSetShareAllNewRenderers(true);
   const tw = new TwistyPlayer();
   document.querySelector("#multiple-attributes")!.appendChild(tw);
   tw.alg = parseAlg("R U R' U R U2' R'");
-  tw.experimentalSetupTo = "end";
+  tw.experimentalSetupAnchor = "end";
   tw.experimentalStickering = "OLL";
   tw.background = "none";
   tw.controlPanel = "none";

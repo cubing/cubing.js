@@ -167,21 +167,23 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   private cursorStartAlg(): Sequence {
     let seq = this.setupAlg;
-    if (this.experimentalSetupTo === "end") {
+    if (this.experimentalSetupAnchor === "end") {
       seq = new Sequence(seq.nestedUnits.concat(invert(this.alg).nestedUnits));
     }
     return seq; // TODO
   }
 
   /** @deprecated */
-  set experimentalSetupTo(setupToLocation: SetupToLocation) {
-    this.#config.attributes["experimental-setup-to"].setValue(setupToLocation);
+  set experimentalSetupAnchor(setupToLocation: SetupToLocation) {
+    this.#config.attributes["experimental-setup-anchor"].setValue(
+      setupToLocation,
+    );
     this.setCursorStartState();
   }
 
   /** @deprecated */
-  get experimentalSetupTo(): SetupToLocation {
-    return this.#config.attributes["experimental-setup-to"]
+  get experimentalSetupAnchor(): SetupToLocation {
+    return this.#config.attributes["experimental-setup-anchor"]
       .value as SetupToLocation;
   }
 
@@ -569,7 +571,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     if (
       initial &&
       this.setupAlg.nestedUnits.length === 0 &&
-      this.experimentalSetupTo !== "end"
+      this.experimentalSetupAnchor !== "end"
     ) {
       this.timeline.jumpToEnd();
     }

@@ -126,7 +126,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   // Alg
   "alg": AlgAttribute;
   "setup-alg": AlgAttribute;
-  "experimental-setup-to": StringEnumAttribute<SetupToLocation>;
+  "experimental-setup-anchor": StringEnumAttribute<SetupToLocation>;
 
   // Puzzle
   "puzzle": StringEnumAttribute<PuzzleID>;
@@ -149,7 +149,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 export interface TwistyPlayerConfigValues {
   alg: Sequence;
   setupAlg: Sequence;
-  experimentalSetupTo: SetupToLocation;
+  experimentalSetupAnchor: SetupToLocation;
 
   puzzle: PuzzleID;
   visualization: VisualizationFormat;
@@ -173,7 +173,7 @@ const twistyPlayerAttributeMap: Record<
 > = {
   "alg": "alg",
   "setup-alg": "setupAlg",
-  "experimental-setup-to": "experimentalSetupTo",
+  "experimental-setup-anchor": "experimentalSetupAnchor",
 
   "puzzle": "puzzle",
   "visualization": "visualization",
@@ -199,9 +199,9 @@ export class TwistyPlayerConfig {
     this.attributes = {
       "alg": new AlgAttribute(initialValues.alg),
       "setup-alg": new AlgAttribute(initialValues.setupAlg),
-      "experimental-setup-to": new StringEnumAttribute(
+      "experimental-setup-anchor": new StringEnumAttribute(
         setupToLocations,
-        initialValues.experimentalSetupTo,
+        initialValues.experimentalSetupAnchor,
       ),
 
       "puzzle": new StringEnumAttribute(puzzleIDs, initialValues.puzzle),
