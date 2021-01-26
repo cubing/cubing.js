@@ -36,6 +36,20 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
+  document.querySelector("#experimental-setup-to")!.appendChild(
+    new TwistyPlayer({
+      alg: parseAlg("R U R' U R U2' R'"),
+      experimentalSetupTo: "end",
+    }),
+  );
+  const tw = new TwistyPlayer({
+    alg: parseAlg("R U R' U R U2' R'"),
+  });
+  document.querySelector("#experimental-setup-to")!.appendChild(tw);
+  tw.experimentalSetupTo = "end";
+}
+
+{
   document.querySelector("#puzzle")!.appendChild(
     new TwistyPlayer({
       alg: parseAlg("R U R' U R U2' R'"),

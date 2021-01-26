@@ -22,6 +22,13 @@ export const centeredCameraPosition = new Vector3(
 export const cubeCameraPosition = new Vector3(3, 4, 5);
 
 // TODO: turn these maps into lists?
+export const SetupToLocations = {
+  start: true, // default // TODO: "beginning"
+  end: true,
+};
+export type SetupToLocation = keyof typeof SetupToLocations;
+
+// TODO: turn these maps into lists?
 export const visualizationFormats = {
   "3D": true, // default
   "2D": true,
@@ -119,6 +126,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   // Alg
   "alg": AlgAttribute;
   "setup-alg": AlgAttribute;
+  "experimental-setup-to": StringEnumAttribute<SetupToLocation>;
 
   // Puzzle
   "puzzle": StringEnumAttribute<PuzzleID>;
@@ -141,6 +149,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 export interface TwistyPlayerConfigValues {
   alg: Sequence;
   setupAlg: Sequence;
+  experimentalSetupTo: SetupToLocation;
 
   puzzle: PuzzleID;
   visualization: VisualizationFormat;
@@ -164,6 +173,7 @@ const twistyPlayerAttributeMap: Record<
 > = {
   "alg": "alg",
   "setup-alg": "setupAlg",
+  "experimental-setup-to": "experimentalSetupTo",
 
   "puzzle": "puzzle",
   "visualization": "visualization",
@@ -189,6 +199,10 @@ export class TwistyPlayerConfig {
     this.attributes = {
       "alg": new AlgAttribute(initialValues.alg),
       "setup-alg": new AlgAttribute(initialValues.setupAlg),
+      "experimental-setup-to": new StringEnumAttribute(
+        SetupToLocations,
+        initialValues.experimentalSetupTo,
+      ),
 
       "puzzle": new StringEnumAttribute(puzzleIDs, initialValues.puzzle),
       "visualization": new StringEnumAttribute(
