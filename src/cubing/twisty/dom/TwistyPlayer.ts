@@ -173,11 +173,13 @@ export class TwistyPlayer extends ManagedCustomElement {
     return seq; // TODO
   }
 
+  /** @deprecated */
   set experimentalSetupTo(setupToLocation: SetupToLocation) {
     this.#config.attributes["experimental-setup-to"].setValue(setupToLocation);
     this.setCursorStartState();
   }
 
+  /** @deprecated */
   get experimentalSetupTo(): SetupToLocation {
     return this.#config.attributes["experimental-setup-to"]
       .value as SetupToLocation;
