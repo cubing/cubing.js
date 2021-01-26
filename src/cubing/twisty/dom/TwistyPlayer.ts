@@ -564,7 +564,11 @@ export class TwistyPlayer extends ManagedCustomElement {
       );
     }
     this.setCursor(cursor);
-    if (initial && this.setupAlg.nestedUnits.length === 0) {
+    if (
+      initial &&
+      this.setupAlg.nestedUnits.length === 0 &&
+      this.experimentalSetupTo !== "end"
+    ) {
       this.timeline.jumpToEnd();
     }
     switch (this.visualization) {
