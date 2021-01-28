@@ -3,7 +3,7 @@ import { PuzzleManager } from "../../PuzzleManager";
 
 export const cube5x5x5: PuzzleManager = {
   id: "5x5x5",
-  fullName: "5x5x5",
+  fullName: "5×5×5 Cube",
   def: async () => {
     return asyncGetDef("5x5x5");
   },
