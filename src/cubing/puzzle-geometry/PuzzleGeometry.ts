@@ -1838,6 +1838,10 @@ export class PuzzleGeometry {
         r.push(1);
       }
     }
+    if (this.rotations && !this.allmoves) {
+      r.push((2 << slices) - 1);
+      r.push(1);
+    }
     if (this.fixedCubie >= 0) {
       const dep = 1 << +this.cubiekeys[this.fixedCubie].trim().split(" ")[k];
       const newr = [];
