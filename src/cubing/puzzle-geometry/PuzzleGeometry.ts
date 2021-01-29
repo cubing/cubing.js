@@ -1838,7 +1838,7 @@ export class PuzzleGeometry {
         r.push(1);
       }
     }
-    if (this.rotations && !this.allmoves) {
+    if (this.addrotations && !this.allmoves) {
       r.push((2 << slices) - 1);
       r.push(1);
     }
