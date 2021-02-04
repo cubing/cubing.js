@@ -7,7 +7,7 @@ import {
   Sequence,
 } from "../../alg";
 import { parseAlg } from "../../alg/parser";
-import { KPuzzleDefinition } from "../../kpuzzle";
+import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
 import { PuzzleManager } from "../../puzzles/PuzzleManager";
@@ -84,6 +84,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   #legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null;
   /** @deprecated */
   public legacyExperimentalPG3D: PG3D | null = null;
+  #experimentalStartStateOverride: Transformation | null = null;
 
   viewerElems: TwistyViewerElement[] = []; // TODO: can we represent the intermediate state better?
   controlElems: TwistyControlElement[] = []; // TODO: can we represent the intermediate state better?
@@ -161,7 +162,10 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   private setCursorStartState(): void {
     if (this.cursor) {
-      this.cursor.setStartState(this.cursor.algToState(this.cursorStartAlg())); // TODO
+      this.cursor.setStartState(
+        this.#experimentalStartStateOverride ??
+          this.cursor.algToState(this.cursorStartAlg()),
+      ); // TODO
     }
   }
 
@@ -363,6 +367,11 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#config.attributeChangedCallback(attributeName, oldValue, newValue);
   }
 
+  experimentalSetStartStateOverride(state: Transformation): void {
+    this.#experimentalStartStateOverride = state;
+    this.setCursorStartState();
+  }
+
   #cursorIndexerName: "simple" | "tree" | "simultaneous" = "tree";
   /** @deprecated */
   public experimentalSetCursorIndexer(
@@ -505,13 +514,14 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private setCursor(cursor: AlgCursor): void {
-    cursor.setStartState(cursor.algToState(this.cursorStartAlg()));
-    this.timeline.addCursor(cursor);
-    if (this.cursor) {
-      this.timeline.removeCursor(this.cursor);
-      this.timeline.removeTimestampListener(this.cursor);
-    }
+    const oldCursor = this.cursor;
     this.cursor = cursor;
+    this.setCursorStartState();
+    this.timeline.addCursor(cursor);
+    if (oldCursor) {
+      this.timeline.removeCursor(oldCursor);
+      this.timeline.removeTimestampListener(oldCursor);
+    }
     this.experimentalSetCursorIndexer(this.#cursorIndexerName);
   }
 
