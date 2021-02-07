@@ -54,7 +54,7 @@ for (const [propName, attrName, alg] of algOptions) {
 
 // // 3D config
 // "back-view": StringEnumAttribute<BackViewLayout>;
-// "camera-position": Vector3Attribute;
+// "experimental-camera-position": Vector3Attribute;
 const enumOptions: [string, string, Record<string, any>][] = [
   ["experimentalSetupAnchor", "experimental-setup-anchor", setupToLocations],
   ["puzzle", "puzzle", puzzleIDs],

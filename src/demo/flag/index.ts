@@ -15,7 +15,7 @@ const WOBBLE = 0.2;
 
 const scene = new Twisty3DScene();
 const canvas = new Twisty3DCanvas(scene, {
-  cameraPosition: new Vector3(0, 24, 0),
+  experimentalCameraPosition: new Vector3(0, 24, 0),
 });
 canvas.experimentalSetLatitudeLimits(false);
 document.body.appendChild(canvas);

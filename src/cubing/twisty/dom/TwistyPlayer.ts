@@ -304,8 +304,11 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["back-view"].value as BackViewLayout;
   }
 
-  set cameraPosition(cameraPosition: Vector3 | null) {
-    this.#config.attributes["camera-position"].setValue(cameraPosition);
+  set experimentalCameraPosition(cameraPosition: Vector3 | null) {
+    console.log("experimentalCameraPosition");
+    this.#config.attributes["experimental-camera-position"].setValue(
+      cameraPosition,
+    );
     if (
       this.viewerElems &&
       ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
@@ -328,8 +331,8 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
-  get cameraPosition(): Vector3 | null {
-    return this.#config.attributes["camera-position"].value;
+  get experimentalCameraPosition(): Vector3 | null {
+    return this.#config.attributes["experimental-camera-position"].value;
   }
 
   set viewerLink(viewerLinkPage: ViewerLinkPage) {
@@ -347,7 +350,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   get effectiveCameraPosition(): Vector3 {
-    return this.cameraPosition ?? this.defaultCameraPosition;
+    return this.experimentalCameraPosition ?? this.defaultCameraPosition;
   }
 
   // TODO
@@ -493,7 +496,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.scene = new Twisty3DScene();
     const mainViewer = new Twisty3DCanvas(this.scene, {
-      cameraPosition: this.effectiveCameraPosition,
+      experimentalCameraPosition: this.effectiveCameraPosition,
     });
     this.viewerElems.push(mainViewer);
     this.#viewerWrapper.addElement(mainViewer);
@@ -668,7 +671,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
 
     const backViewer = new Twisty3DCanvas(this.scene!, {
-      cameraPosition: this.effectiveCameraPosition,
+      experimentalCameraPosition: this.effectiveCameraPosition,
       negateCameraPosition: true,
     });
     this.viewerElems.push(backViewer);

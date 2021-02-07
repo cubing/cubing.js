@@ -212,7 +212,7 @@ function updateMoveCount(alg?: Sequence): void {
 }
 
 function saveCamera(): void {
-  savedCameraPos = twisty.cameraPosition!.clone();
+  savedCameraPos = twisty.experimentalCameraPosition!.clone();
   haveSavedCamera = true;
 }
 //  This function is *not* idempotent when we save the
@@ -266,7 +266,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
           alg: new Sequence([]),
           visualization: "PG3D",
           backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
-          cameraPosition: initialCameraPos,
+          experimentalCameraPosition: initialCameraPos,
           viewerLink: "none",
         },
         legacyExperimentalPG3DViewConfig(),
@@ -313,7 +313,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
     } else if (puzzleSelected) {
       await twisty.setCustomPuzzleGeometry(legacyExperimentalPG3DViewConfig());
       if (nextShape !== lastShape) {
-        twisty.cameraPosition = initialCameraPos;
+        twisty.experimentalCameraPosition = initialCameraPos;
         lastShape = nextShape;
       }
       puzzleSelected = false;
@@ -553,7 +553,7 @@ function checkchange(): void {
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
       // Twisty constructor currently ignores initial camera position
       if (firstLoad) {
-        twisty.cameraPosition = initialCameraPos;
+        twisty.experimentalCameraPosition = initialCameraPos;
         twisty.timeline.jumpToEnd();
       }
       setpuzzleparams(descarg);

@@ -140,7 +140,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 
   // 3D config
   "back-view": StringEnumAttribute<BackViewLayout>;
-  "camera-position": Vector3Attribute;
+  "experimental-camera-position": Vector3Attribute;
 
   // Interaction
   "viewer-link": StringEnumAttribute<ViewerLinkPage>;
@@ -160,7 +160,7 @@ export interface TwistyPlayerConfigValues {
   controlPanel: ControlsLocation;
 
   backView: BackViewLayout;
-  cameraPosition: Vector3;
+  experimentalCameraPosition: Vector3;
 
   viewerLink: ViewerLinkPage;
 }
@@ -184,7 +184,7 @@ const twistyPlayerAttributeMap: Record<
   "control-panel": "controlPanel",
 
   "back-view": "backView",
-  "camera-position": "cameraPosition",
+  "experimental-camera-position": "experimentalCameraPosition",
 
   "viewer-link": "viewerLink",
 };
@@ -230,9 +230,9 @@ export class TwistyPlayerConfig {
         backViewLayouts,
         initialValues["backView"],
       ),
-      "camera-position": new Vector3Attribute(
+      "experimental-camera-position": new Vector3Attribute(
         null,
-        initialValues["cameraPosition"],
+        initialValues["experimentalCameraPosition"],
       ),
       "viewer-link": new StringEnumAttribute(
         viewerLinkPages,

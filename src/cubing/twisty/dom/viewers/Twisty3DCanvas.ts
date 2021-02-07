@@ -62,7 +62,10 @@ export class Twisty3DCanvas
   #onRenderFinish: null | (() => void) = null;
   constructor(
     scene?: Twisty3DScene,
-    options: { cameraPosition?: Vector3; negateCameraPosition?: boolean } = {},
+    options: {
+      experimentalCameraPosition?: Vector3;
+      negateCameraPosition?: boolean;
+    } = {},
   ) {
     super();
     this.addCSS(twisty3DCanvasCSS);
@@ -90,7 +93,9 @@ export class Twisty3DCanvas
       0.1,
       1000,
     );
-    this.camera.position.copy(options.cameraPosition ?? new Vector3(2, 4, 4));
+    this.camera.position.copy(
+      options.experimentalCameraPosition ?? new Vector3(2, 4, 4),
+    );
     if (options.negateCameraPosition) {
       this.camera.position.multiplyScalar(-1);
     }

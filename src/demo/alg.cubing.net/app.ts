@@ -55,7 +55,7 @@ export class App {
       viewerLink: "none",
     };
     if (initialData.puzzleName === "megaminx") {
-      twistyConfig.cameraPosition = new Vector3(0, 3.09, 5);
+      twistyConfig.experimentalCameraPosition = new Vector3(0, 3.09, 5);
     }
     const displayablePuzzle = puzzles[initialData.puzzleName];
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO

@@ -141,16 +141,16 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
-  document.querySelector("#camera-position")!.appendChild(
+  document.querySelector("#experimental-camera-position")!.appendChild(
     new TwistyPlayer({
       alg: parseAlg("R U R' U R U2' R'"),
-      cameraPosition: new Vector3(-3, 4, 5),
+      experimentalCameraPosition: new Vector3(-4, 4, 0),
     }),
   );
   const tw = new TwistyPlayer();
-  document.querySelector("#camera-position")!.appendChild(tw);
+  document.querySelector("#experimental-camera-position")!.appendChild(tw);
   tw.alg = parseAlg("R U R' U R U2' R'");
-  tw.cameraPosition = new Vector3(-3, 4, 5);
+  tw.experimentalCameraPosition = new Vector3(-4, 4, 0);
 }
 
 {
