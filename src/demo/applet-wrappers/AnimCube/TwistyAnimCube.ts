@@ -4,7 +4,7 @@ import { TwistyPlayerInitialConfig } from "../../../cubing/twisty";
 import { TwistyPlayer } from "../../../cubing/twisty/index";
 import { invert, parseAlg, Sequence } from "../../../cubing/alg";
 
-const DEBUG = true;
+const DEBUG = false;
 
 const warned = new Set<string>();
 function warnOnce(warning: string) {
@@ -166,21 +166,16 @@ customElementsShim.define("twisty-anim-cube", TwistyAnimCube);
 
 window.addEventListener("load", () => {
   const applets = document.querySelectorAll("applet");
-  console.log(applets);
   for (const applet of Array.from(applets)) {
     const attributeContains = (attrName: string, substr: string): boolean => {
       return (
         (applet.getAttribute(attrName) ?? "").toLowerCase().indexOf(substr) !==
-        1
+        -1
       );
     };
 
     let twisty: Element;
-    if (
-      attributeContains("code", "animcube") ||
-      attributeContains("archive", "animcube")
-    ) {
-      // TODO: pass on width and height
+    if (attributeContains("code", "animcube")) {
       twisty = new TwistyAnimCube((twistyAnimCube: TwistyAnimCube) => {
         const width = applet.getAttribute("width");
         if (width) {
