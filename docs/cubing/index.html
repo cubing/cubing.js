@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8">
+  <title>cubing.js</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../main.css">
+  <script src="https://cdn.cubing.net/esm/cubing/twisty" type="module" defer></script>
+</head>
+<body>
+  <content>
+    <!-- Note: Avoid using specialized terminology (e.g. "element", "attribute") where possible. -->
+    <div id="heading">
+      <code><twisty-player
+      style="width: 2em; height: 2em; display: inline-grid; vertical-align:
+      middle; border-radius: 0.5em;"
+        control-panel="none"
+        background="none"
+        ></twisty-player>cubing.js</code>
+    </div>
+    <section class="no-header">
+      <p>
+        <code>cubing.js</code> is a library for showing and playing with twisty
+        puzzles.
+      </p>
+    </section>
+
+    <section id="show-alg">
+      <h1><a href="#show-alg">Show an alg (no JavaScript required!)</a></h1>
+      <p>
+        If you want to display an alg on a webpage, include code like this:
+      </p>
+      <code class="sample">
+        <span>&lt;script
+          src=&quot;https://cdn.cubing.net/esm/cubing/twisty&quot;
+          type=&quot;module&quot; defer&gt;&lt;/script&gt;
+        </span>
+        <span>&lt;twisty-player alg=&quot;R U R&#x27; U R U2&#x27; R&#x27;&quot;&gt;&lt;/twisty-player&gt;</span>
+      </code>
+      <p>You only have to include the first line once, and you can include as many
+      <code>twisty-player</code>s as you want. The example above will show this:</p>
+      <twisty-player alg="R U R' U R U2' R'">
+      </twisty-player>
+
+    </section>
+
+    <section id="parameters">
+      <h1><a href="#parameters">Parameters</a></h1>
+      <p>The example above sets ony the <code>alg</code> parameter. Here is an
+      example that uses a variety of parameters:</p>
+      <code class="sample">
+        <span>&lt;twisty-player<br>
+          &nbsp;&nbsp;puzzle=&quot;4x4x4&quot;<br>
+          &nbsp;&nbsp;alg=&quot;r U2 x r U2 r U2 r&#x27; U2 l U2 r&#x27; U2 r U2 r&#x27; U2 r&#x27;&quot;<br>
+          &nbsp;&nbsp;hint-facelets=&quot;none&quot;<br>
+          &nbsp;&nbsp;back-view=&quot;top-right&quot;<br>
+          &nbsp;&nbsp;background=&quot;none&quot;<br>
+          &gt;&lt;/twisty-player&gt;
+        </span>
+      </code>
+      <twisty-player
+        puzzle="4x4x4"
+        alg="r U2 x r U2 r U2 r' U2 l U2 r' U2 r U2 r' U2 r'"
+        background="none"
+        hint-facelets="none"
+        back-view="top-right"
+      ></twisty-player>
+      <p>
+        You can view and try out more options <a
+        href="https://experiments.cubing.net/cubing.js/twisty/twisty-player.html">here</a>.
+      </p>
+    </section>
+
+    <section id="styling">
+      <h1><a href="#styling">Size, background, and other styling</a></h1>
+      <p>Use CSS to set the style of a <code>twisty-player</code>:</p>
+      <code class="sample">
+        <span>&lt;twisty-player<br>
+          &nbsp;&nbsp;style=&quot;width: 256px;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height: 192px;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;margin: auto;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;background: #0088ff22;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;border: 4px double #00000044;&quot;<br>
+          &nbsp;&nbsp;puzzle=&quot;fto&quot;<br>
+          &nbsp;&nbsp;alg=&quot;[bl: [R, B&#x27;] [L&#x27;, B]]&quot;<br>
+          &nbsp;&nbsp;hint-facelets=&quot;none&quot;<br>
+          &nbsp;&nbsp;back-view=&quot;side-by-side&quot;<br>
+          &nbsp;&nbsp;background=&quot;none&quot;<br>
+          &gt;&lt;/twisty-player&gt;
+        </span>
+      </code>
+      <p>This results in:</p>
+      <twisty-player
+        style="width: 256px; height: 192px; margin: auto; background: #0088ff22; border: 4px
+      double #00000044;"
+        puzzle="fto"
+        alg="[bl: [R, B'] [L', B]]"
+        hint-facelets="none"
+        back-view="side-by-side"
+        background="none"
+      ></twisty-player>
+    </section>
+
+    <section id="javascript">
+      <h1><a href="#javascript">JavaScript features</a></h1>
+      <p>
+        If you have a more advanced use case, you can create a
+        <code>twisty-player</code> using JavaScript:
+      </p>
+      <code class="sample">
+        <span>
+&lt;script type=&quot;module&quot;&gt;<br>
+&nbsp;&nbsp;import { parseAlg } from &quot;https://cdn.cubing.net/esm/cubing/alg&quot;;<br>
+&nbsp;&nbsp;import { TwistyPlayer } from &quot;https://cdn.cubing.net/esm/cubing/twisty&quot;;<br>
+<br>
+&nbsp;&nbsp;const player = new TwistyPlayer({<br>
+&nbsp;&nbsp;&nbsp;&nbsp;puzzle: &quot;4x4x4&quot;,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alg: parseAlg(&quot;R U R'&quot;),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;hintFacelets: &quot;none&quot;,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;backView: &quot;top-right&quot;,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;background: &quot;none&quot;<br>
+&nbsp;&nbsp;});<br>
+&nbsp;&nbsp;document.body.appendChild(player);<br>
+<br>
+&nbsp;&nbsp;// You can also change parameters after you've constructed the player:<br>
+&nbsp;&nbsp;player.backView = &quot;side-by-side&quot;;<br>
+&lt;/script&gt;
+        </span>
+      </code>
+
+      <h3>Using <code>npm</code></h3>
+      Install the package:
+      <code class="sample">
+        <span>npm install cubing</span>
+      </code>
+      Then you can use:
+      <code class="sample">
+        <span>
+import { parseAlg } from &quot;https://cubing/alg&quot;;<br>
+import { TwistyPlayer } from &quot;https://cubing/twisty&quot;;
+        </span>
+      </code>
+      <p>This should work with most tools. We recommend using <a
+      href="https://parceljs.org/">Parcel</a> to build your web apps, if you
+      haven't picked a tool yet.</p>
+    </section>
+    <section id="contribute">
+      <h1><a href="#contribute">Contribute</a></h1>
+      <p>If you have any questions or ideas, please visit the
+      project source on GitHub:</p>
+      <div style="display: grid; font-size: 1.25em; padding: auto 1rem;">
+        <a
+        href="https://github.com/cubing/cubing.js">https://github.com/cubing/cubing.js</a>
+      </div>
+    </section>
+  </content>
+</body>
+</html>
