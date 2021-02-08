@@ -131,7 +131,9 @@ class ControlPane {
       "textarea",
     );
     this.experimentalSetupAlgInput.placeholder = ALG_SETUP_INPUT_PLACEHOLDER;
-    this.experimentalSetupAlgInput.value = algToString(initialData.experimentalSetupAlg);
+    this.experimentalSetupAlgInput.value = algToString(
+      initialData.experimentalSetupAlg,
+    );
     this.setexperimentalSetupAlgElemStatus(null);
 
     this.algInput = findOrCreateChildWithClass(this.element, "alg", "textarea");
@@ -167,20 +169,27 @@ class ControlPane {
       const parsedexperimentalSetupAlg = parseAlg(experimentalSetupAlgString);
       this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg);
 
-      const restringifiedexperimentalSetupAlg = algToString(parsedexperimentalSetupAlg);
-      const experimentalSetupAlgIsCanonical = restringifiedexperimentalSetupAlg === experimentalSetupAlgString;
+      const restringifiedexperimentalSetupAlg = algToString(
+        parsedexperimentalSetupAlg,
+      );
+      const experimentalSetupAlgIsCanonical =
+        restringifiedexperimentalSetupAlg === experimentalSetupAlgString;
 
       if (canonicalize && !experimentalSetupAlgIsCanonical) {
         this.experimentalSetupAlgInput.value = restringifiedexperimentalSetupAlg;
       }
       // Set status before passing to the `Twisty`.
       this.setexperimentalSetupAlgElemStatus(
-        canonicalize || experimentalSetupAlgIsCanonical ? null : "status-warning",
+        canonicalize || experimentalSetupAlgIsCanonical
+          ? null
+          : "status-warning",
       );
 
       // TODO: cache last alg to avoid unnecessary updates?
       // Or should that be in the `Twisty` layer?
-      if (!this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg)) {
+      if (
+        !this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg)
+      ) {
         this.setexperimentalSetupAlgElemStatus("status-bad");
       }
     } catch (e) {

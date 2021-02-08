@@ -198,7 +198,9 @@ export class TwistyPlayerConfig {
   ) {
     this.attributes = {
       "alg": new AlgAttribute(initialValues.alg),
-      "experimental-setup-alg": new AlgAttribute(initialValues.experimentalSetupAlg),
+      "experimental-setup-alg": new AlgAttribute(
+        initialValues.experimentalSetupAlg,
+      ),
       "experimental-setup-anchor": new StringEnumAttribute(
         setupToLocations,
         initialValues.experimentalSetupAnchor,
