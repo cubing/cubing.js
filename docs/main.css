@@ -87,6 +87,7 @@ code.sample {
   margin: 0.5rem 0;
   background: #4285f422;
   line-height: 1.25em;
+  overflow: hidden;
   overflow-x: auto;
 }
 

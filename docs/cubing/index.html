@@ -27,7 +27,7 @@
     </section>
 
     <section id="show-alg">
-      <h1><a href="#show-alg">Show an alg (no JavaScript required!)</a></h1>
+      <h1><a href="#show-alg">Show an alg (no custom JavaScript!)</a></h1>
       <p>
         If you want to display an alg on a webpage, include code like this:
       </p>
@@ -42,12 +42,14 @@
       <code>twisty-player</code>s as you want. The example above will show this:</p>
       <twisty-player alg="R U R' U R U2' R'">
       </twisty-player>
-
+      <p>
+        <a href="https://codepen.io/cubing/pen/gOLMYqK">Try it</a>.
+      </p>
     </section>
 
     <section id="parameters">
       <h1><a href="#parameters">Parameters</a></h1>
-      <p>The example above sets ony the <code>alg</code> parameter. Here is an
+      <p>The example above uses only the <code>alg</code> parameter. Here is an
       example that uses a variety of parameters:</p>
       <code class="sample">
         <span>&lt;twisty-player<br>
@@ -67,8 +69,13 @@
         back-view="top-right"
       ></twisty-player>
       <p>
+        <a href="https://codepen.io/cubing/pen/MWbegxW">Try it</a>.
+      </p>
+      <p>
         You can view and try out more options <a
         href="https://experiments.cubing.net/cubing.js/twisty/twisty-player.html">here</a>.
+        Note that some combinations are not supported yet (for example, most
+        puzzles do not work with <code>visualization="2D"</code> yet).
       </p>
     </section>
 
@@ -94,7 +101,7 @@
       the <code>twisty-player</code> to remove
       the default background if you want
       a different one.)</p>
-      <p>This results in:</p>
+      <p>Here's how the example code looks:</p>
       <twisty-player
         style="width: 256px; height: 192px; margin: auto; background: #0088ff22; border: 4px
       double #00000044;"
@@ -104,6 +111,9 @@
         back-view="side-by-side"
         background="none"
       ></twisty-player>
+      <p>
+        <a href="https://codepen.io/cubing/pen/xxROKBR">Try it</a>.
+      </p>
     </section>
 
     <section id="javascript">
@@ -132,6 +142,13 @@
 &lt;/script&gt;
         </span>
       </code>
+      <p>
+        <a href="https://codepen.io/cubing/pen/vYyKBMd">Try it</a>.
+      </p>
+      <p>There are more experimental features available &mdash; such as
+      <code>player.timeline.play()</code> &mdash; but many of them will change before
+      version <code>1.0</code> of <code>cubing.js</code>. Please consider <a
+      href="#contribute">contributing</a> to help make these features stable.</p>
 
       <h3>Using <code>npm</code></h3>
       Install the package:
@@ -141,8 +158,8 @@
       Then you can use:
       <code class="sample">
         <span>
-import { parseAlg } from &quot;https://cubing/alg&quot;;<br>
-import { TwistyPlayer } from &quot;https://cubing/twisty&quot;;
+import { parseAlg } from &quot;cubing/alg&quot;;<br>
+import { TwistyPlayer } from &quot;cubing/twisty&quot;;
         </span>
       </code>
       <p>This should work with most tools. We recommend using <a
@@ -153,7 +170,7 @@ import { TwistyPlayer } from &quot;https://cubing/twisty&quot;;
       <h1><a href="#contribute">Contribute</a></h1>
       <p>If you have any questions or ideas, please visit the
       project source on GitHub:</p>
-      <div style="display: grid; font-size: 1.25em; padding: auto 1rem;">
+      <div style="font-size: 1.25em; word-break: break-all;">
         <a
         href="https://github.com/cubing/cubing.js">https://github.com/cubing/cubing.js</a>
       </div>
