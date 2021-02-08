@@ -222,7 +222,7 @@
       <div class="code-demo">
         <code class="sample">
                 &lt;twisty-player<br>
-                &nbsp;&nbsp;alg=&quot;r U R&quot; U R U2 r&quot;&quot;<br>
+                &nbsp;&nbsp;alg=&quot;r U R&#x27; U R U2 r&#x27;&quot;<br>
                  &nbsp;&nbsp;experimental-setup-anchor=&quot;end&quot;<br>
                 &nbsp;&nbsp;<b><u>experimental-stickering</u></b>=&quot;OLL&quot;<br>
                 &gt;&lt;/twisty-player&gt;
@@ -231,6 +231,21 @@
           alg="r U R' U R U2 r'"
           experimental-setup-anchor="end"
           experimental-stickering="OLL"
+        ></twisty-player>
+      </div>
+      <p>Cross is currently only supported on the default D face (yellow):</p>
+      <div class="code-demo">
+        <code class="sample">
+                &lt;twisty-player<br>
+                &nbsp;&nbsp;alg=&quot;y&#x27; R&#x27; D2 R&#x27; y&#x27; R&#x27; U L2&#x27;&quot;<br>
+                 &nbsp;&nbsp;experimental-setup-alg=&quot;D U2 B D2 U2 L2 B D2 R2 F R2 B U2 D B2 F U B&quot; R&quot; B2 D&quot;<br>
+                &nbsp;&nbsp;<b><u>experimental-stickering</u></b>=&quot;Cross&quot;<br>
+                &gt;&lt;/twisty-player&gt;
+              </code>
+        <twisty-player
+          alg="y' R' D2 R' y' R' U L2'"
+          experimental-setup-alg="D U2 B D2 U2 L2 B D2 R2 F R2 B U2 D B2 F U B' R' B2 D'"
+          experimental-stickering="Cross"
         ></twisty-player>
       </div>
     </section>
