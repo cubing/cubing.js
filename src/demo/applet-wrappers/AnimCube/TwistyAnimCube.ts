@@ -79,18 +79,24 @@ export class TwistyAnimCube extends ManagedCustomElement {
 
       process("initmove", (value: string) => {
         if (value === "#") {
-          twistyPlayerConfig.setupAlg = invert(twistyPlayerConfig.alg!);
+          twistyPlayerConfig.experimentalSetupAlg = invert(
+            twistyPlayerConfig.alg!,
+          );
         } else {
-          twistyPlayerConfig.setupAlg = parseAlg(value ?? "");
+          twistyPlayerConfig.experimentalSetupAlg = parseAlg(value ?? "");
         }
       });
 
       // Takes precedenve over `initmove`
       process("initrevmove", (value: string) => {
         if (value === "#") {
-          twistyPlayerConfig.setupAlg = invert(twistyPlayerConfig.alg!);
+          twistyPlayerConfig.experimentalSetupAlg = invert(
+            twistyPlayerConfig.alg!,
+          );
         } else {
-          twistyPlayerConfig.setupAlg = invert(parseAlg(value ?? ""));
+          twistyPlayerConfig.experimentalSetupAlg = invert(
+            parseAlg(value ?? ""),
+          );
         }
       });
 

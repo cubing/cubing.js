@@ -18,7 +18,7 @@ import supercubeSprite from "url:./supercube-sprite.png";
 {
   const player = new TwistyPlayer({
     alg: parseAlg("M' R' U' D' M R"),
-    setupAlg: parseAlg("(M' R' U' D' M R)'"),
+    experimentalSetupAlg: parseAlg("(M' R' U' D' M R)'"),
   });
   player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo2")!.appendChild(player);

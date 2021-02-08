@@ -12,11 +12,11 @@ window.addEventListener("load", () => {
   }
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const appElement = document.querySelector("app")!;
-  let setupAlg: Sequence;
+  let experimentalSetupAlg: Sequence;
   try {
-    setupAlg = getURLParam("setup-alg");
+    experimentalSetupAlg = getURLParam("experimental-setup-alg");
   } catch (e) {
-    setupAlg = new Sequence([]);
+    experimentalSetupAlg = new Sequence([]);
   }
   let alg: Sequence;
   try {
@@ -26,7 +26,7 @@ window.addEventListener("load", () => {
   }
   (window as any).app = new App(appElement, {
     puzzleName: getURLParam("puzzle"),
-    setupAlg,
+    experimentalSetupAlg,
     alg,
   });
 });

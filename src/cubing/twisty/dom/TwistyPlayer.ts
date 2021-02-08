@@ -128,7 +128,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   set alg(seq: Sequence) {
     // TODO: do validation for other algs as well.
     if (seq?.type !== "sequence") {
-      // TODO: document `.setAttribute("setup-alg", "R U R'")` as a workaround.
+      // TODO: document `.setAttribute("experimental-setup-alg", "R U R'")` as a workaround.
       console.warn(
         "`alg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
@@ -143,21 +143,23 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["alg"].value;
   }
 
-  set setupAlg(seq: Sequence) {
+  /** @deprecated */
+  set experimentalSetupAlg(seq: Sequence) {
     // TODO: do validation for other algs as well.
     if (seq?.type !== "sequence") {
-      // TODO: document `.setAttribute("setup-alg", "R U R'")` as a workaround.
+      // TODO: document `.setAttribute("experimental-setup-alg", "R U R'")` as a workaround.
       console.warn(
-        "`setupAlg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
+        "`experimentalSetupAlg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
       seq = parseAlg((seq as unknown) as string) as Sequence;
     }
-    this.#config.attributes["setup-alg"].setValue(seq);
+    this.#config.attributes["experimental-setup-alg"].setValue(seq);
     this.setCursorStartState();
   }
 
-  get setupAlg(): Sequence {
-    return this.#config.attributes["setup-alg"].value;
+  /** @deprecated */
+  get experimentalSetupAlg(): Sequence {
+    return this.#config.attributes["experimental-setup-alg"].value;
   }
 
   private setCursorStartState(): void {
@@ -170,7 +172,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private cursorStartAlg(): Sequence {
-    let seq = this.setupAlg;
+    let seq = this.experimentalSetupAlg;
     if (this.experimentalSetupAnchor === "end") {
       seq = new Sequence(seq.nestedUnits.concat(invert(this.alg).nestedUnits));
     }
@@ -435,8 +437,11 @@ export class TwistyPlayer extends ManagedCustomElement {
     if (this.alg.nestedUnits.length > 0) {
       url.searchParams.set("alg", algToString(this.alg));
     }
-    if (this.setupAlg.nestedUnits.length > 0) {
-      url.searchParams.set("setup-alg", algToString(this.setupAlg));
+    if (this.experimentalSetupAlg.nestedUnits.length > 0) {
+      url.searchParams.set(
+        "experimental-setup-alg",
+        algToString(this.experimentalSetupAlg),
+      );
     }
     if (this.puzzle !== "3x3x3") {
       url.searchParams.set("puzzle", this.puzzle);
@@ -583,7 +588,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.setCursor(cursor);
     if (
       initial &&
-      this.setupAlg.nestedUnits.length === 0 &&
+      this.experimentalSetupAlg.nestedUnits.length === 0 &&
       this.experimentalSetupAnchor !== "end"
     ) {
       this.timeline.jumpToEnd();

@@ -21,7 +21,7 @@ const table = contentElem.appendChild(document.createElement("table"));
 
 const algOptions: [string, string, Sequence][] = [
   ["alg", "alg", parseAlg("R U R'")],
-  ["setupAlg", "setup-alg", parseAlg("")],
+  ["experimentalSetupAlg", "experimental-setup-alg", parseAlg("")],
 ];
 
 for (const [propName, attrName, alg] of algOptions) {

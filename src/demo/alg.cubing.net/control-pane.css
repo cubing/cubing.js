@@ -29,7 +29,7 @@ control-pane textarea {
   min-height: 5em;
 }
 
-control-pane textarea.setup-alg {
+control-pane textarea.experimental-setup-alg {
   min-height: 2em;
 }
 

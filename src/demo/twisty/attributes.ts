@@ -25,14 +25,14 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
-  document.querySelector("#setup-alg")!.appendChild(
+  document.querySelector("#experimental-setup-alg")!.appendChild(
     new TwistyPlayer({
-      setupAlg: parseAlg("L' U R U' L U R'"),
+      experimentalSetupAlg: parseAlg("L' U R U' L U R'"),
     }),
   );
   const tw = new TwistyPlayer();
-  document.querySelector("#setup-alg")!.appendChild(tw);
-  tw.setupAlg = parseAlg("L' U R U' L U R'");
+  document.querySelector("#experimental-setup-alg")!.appendChild(tw);
+  tw.experimentalSetupAlg = parseAlg("L' U R U' L U R'");
 }
 
 {

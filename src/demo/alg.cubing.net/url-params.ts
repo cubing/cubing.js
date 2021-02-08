@@ -3,7 +3,7 @@ import { algToString, parseAlg, Sequence } from "../../cubing/alg";
 // TODO: implement URL listener.
 
 interface URLParamValues {
-  "setup-alg": Sequence;
+  "experimental-setup-alg": Sequence;
   "alg": Sequence;
   "puzzle": string;
   "debug-js": boolean;
@@ -11,7 +11,7 @@ interface URLParamValues {
 }
 
 const paramDefaults: URLParamValues = {
-  "setup-alg": new Sequence([]),
+  "experimental-setup-alg": new Sequence([]),
   "alg": new Sequence([]),
   "puzzle": "3x3x3",
   "debug-js": true,
@@ -22,7 +22,7 @@ export type ParamName = keyof typeof paramDefaults;
 
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
-  "setup-alg": "",
+  "experimental-setup-alg": "",
   "alg": "",
   "puzzle": "3x3x3",
   "debug-js": "true",
@@ -42,7 +42,7 @@ export function getURLParam<K extends ParamName>(
     case "alg":
       // TODO: can we avoid the `as` cast?
       return parseAlg(str) as URLParamValues[K];
-    case "setup-alg":
+    case "experimental-setup-alg":
       // TODO: can we avoid the `as` cast?
       return parseAlg(str) as URLParamValues[K];
     case "puzzle":
@@ -74,7 +74,7 @@ export function setURLParams(newParams: Partial<URLParamValues>): void {
 
   for (const [key, value] of Object.entries(newParams)) {
     switch (key) {
-      case "setup-alg":
+      case "experimental-setup-alg":
         setParam(key, algToString(value as Sequence));
         break;
       case "alg":

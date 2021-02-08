@@ -12,7 +12,7 @@ import { Vector3 } from "three";
 
 export interface AppData {
   puzzleName: string;
-  setupAlg: Sequence;
+  experimentalSetupAlg: Sequence;
   alg: Sequence;
 }
 
@@ -43,7 +43,7 @@ export class App {
     new ControlPane(
       controlPaneElem,
       initialData,
-      this.setSetupAlg.bind(this),
+      this.setexperimentalSetupAlg.bind(this),
       this.setAlg.bind(this),
       this.setPuzzle.bind(this),
     );
@@ -64,20 +64,20 @@ export class App {
     if (getURLParam("debug-simultaneous")) {
       this.twistyPlayer.experimentalSetCursorIndexer("simultaneous");
     }
-    this.setSetupAlg(initialData.setupAlg);
+    this.setexperimentalSetupAlg(initialData.experimentalSetupAlg);
     this.setAlg(initialData.alg);
     this.puzzlePane.appendChild(this.twistyPlayer);
   }
 
   // Boolean indicates success (e.g. alg is valid).
-  private setSetupAlg(setupAlg: Sequence): boolean {
+  private setexperimentalSetupAlg(experimentalSetupAlg: Sequence): boolean {
     try {
-      this.twistyPlayer.setupAlg = setupAlg;
+      this.twistyPlayer.experimentalSetupAlg = experimentalSetupAlg;
       this.twistyPlayer.timeline.jumpToStart();
-      setURLParams({ "setup-alg": setupAlg });
+      setURLParams({ "experimental-setup-alg": experimentalSetupAlg });
       return true;
     } catch (e) {
-      this.twistyPlayer.setupAlg = parseAlg("");
+      this.twistyPlayer.experimentalSetupAlg = parseAlg("");
       return false;
     }
   }
@@ -112,27 +112,27 @@ const algElemStatusClasses: AlgElemStatusClass[] = [
 ];
 
 class ControlPane {
-  public setupAlgInput: HTMLTextAreaElement;
+  public experimentalSetupAlgInput: HTMLTextAreaElement;
   public algInput: HTMLTextAreaElement;
   public puzzleSelect: HTMLSelectElement;
   constructor(
     public element: Element,
     initialData: AppData,
-    private setupAlgChangeCallback: (alg: Sequence) => boolean,
+    private experimentalSetupAlgChangeCallback: (alg: Sequence) => boolean,
     private algChangeCallback: (alg: Sequence) => boolean,
     private setPuzzleCallback: (puzzleName: string) => boolean,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
 
-    this.setupAlgInput = findOrCreateChildWithClass(
+    this.experimentalSetupAlgInput = findOrCreateChildWithClass(
       this.element,
-      "setup-alg",
+      "experimental-setup-alg",
       "textarea",
     );
-    this.setupAlgInput.placeholder = ALG_SETUP_INPUT_PLACEHOLDER;
-    this.setupAlgInput.value = algToString(initialData.setupAlg);
-    this.setSetupAlgElemStatus(null);
+    this.experimentalSetupAlgInput.placeholder = ALG_SETUP_INPUT_PLACEHOLDER;
+    this.experimentalSetupAlgInput.value = algToString(initialData.experimentalSetupAlg);
+    this.setexperimentalSetupAlgElemStatus(null);
 
     this.algInput = findOrCreateChildWithClass(this.element, "alg", "textarea");
     this.algInput.placeholder = ALG_INPUT_PLACEHOLDER;
@@ -149,42 +149,42 @@ class ControlPane {
     this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));
     this.algInput.addEventListener("change", this.onAlgInput.bind(this, true));
 
-    this.setupAlgInput.addEventListener(
+    this.experimentalSetupAlgInput.addEventListener(
       "input",
-      this.onSetupAlgInput.bind(this, false),
+      this.onexperimentalSetupAlgInput.bind(this, false),
     );
-    this.setupAlgInput.addEventListener(
+    this.experimentalSetupAlgInput.addEventListener(
       "change",
-      this.onSetupAlgInput.bind(this, true),
+      this.onexperimentalSetupAlgInput.bind(this, true),
     );
 
     this.onAlgInput(true);
   }
 
-  private onSetupAlgInput(canonicalize: boolean): void {
+  private onexperimentalSetupAlgInput(canonicalize: boolean): void {
     try {
-      const setupAlgString = this.setupAlgInput.value;
-      const parsedSetupAlg = parseAlg(setupAlgString);
-      this.setupAlgChangeCallback(parsedSetupAlg);
+      const experimentalSetupAlgString = this.experimentalSetupAlgInput.value;
+      const parsedexperimentalSetupAlg = parseAlg(experimentalSetupAlgString);
+      this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg);
 
-      const restringifiedSetupAlg = algToString(parsedSetupAlg);
-      const setupAlgIsCanonical = restringifiedSetupAlg === setupAlgString;
+      const restringifiedexperimentalSetupAlg = algToString(parsedexperimentalSetupAlg);
+      const experimentalSetupAlgIsCanonical = restringifiedexperimentalSetupAlg === experimentalSetupAlgString;
 
-      if (canonicalize && !setupAlgIsCanonical) {
-        this.setupAlgInput.value = restringifiedSetupAlg;
+      if (canonicalize && !experimentalSetupAlgIsCanonical) {
+        this.experimentalSetupAlgInput.value = restringifiedexperimentalSetupAlg;
       }
       // Set status before passing to the `Twisty`.
-      this.setSetupAlgElemStatus(
-        canonicalize || setupAlgIsCanonical ? null : "status-warning",
+      this.setexperimentalSetupAlgElemStatus(
+        canonicalize || experimentalSetupAlgIsCanonical ? null : "status-warning",
       );
 
       // TODO: cache last alg to avoid unnecessary updates?
       // Or should that be in the `Twisty` layer?
-      if (!this.setupAlgChangeCallback(parsedSetupAlg)) {
-        this.setSetupAlgElemStatus("status-bad");
+      if (!this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg)) {
+        this.setexperimentalSetupAlgElemStatus("status-bad");
       }
     } catch (e) {
-      this.setSetupAlgElemStatus("status-bad");
+      this.setexperimentalSetupAlgElemStatus("status-bad");
     }
   }
 
@@ -216,14 +216,14 @@ class ControlPane {
   }
 
   // Set to `null` to clear.
-  private setSetupAlgElemStatus(
+  private setexperimentalSetupAlgElemStatus(
     latestStatusClass: AlgElemStatusClass | null,
   ): void {
     for (const statusClass of algElemStatusClasses) {
       if (statusClass === latestStatusClass) {
-        this.setupAlgInput.classList.add(statusClass);
+        this.experimentalSetupAlgInput.classList.add(statusClass);
       } else {
-        this.setupAlgInput.classList.remove(statusClass);
+        this.experimentalSetupAlgInput.classList.remove(statusClass);
       }
     }
   }
