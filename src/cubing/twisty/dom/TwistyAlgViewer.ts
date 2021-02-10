@@ -5,7 +5,6 @@ import {
   Conjugate,
   Group,
   NewLine,
-  parseAlg,
   Pause,
   Sequence,
   TraversalDownUp,
@@ -13,15 +12,9 @@ import {
 import { BlockMove } from "../../puzzle-geometry/interfaces";
 import { TwistyPlayer } from "../../twisty";
 import {
-  CSSSource,
-  ManagedCustomElement,
-} from "./element/ManagedCustomElement";
-import { customElementsShim } from "./element/node-custom-element-shims";
-
-const commonCSS = new CSSSource(".wrapper { display: inherit }");
-const leafCSS = new CSSSource(
-  ".wrapper { cursor: pointer; } .wrapper:hover { background: rgba(0, 0, 0, 0.1) } ",
-);
+  customElementsShim,
+  HTMLElementShim,
+} from "./element/node-custom-element-shims";
 
 class DataDown {
   earliestMoveIndex: number;
@@ -33,13 +26,11 @@ class DataUp {
   element: Element;
 }
 
-class TwistyAlgLeafElem extends ManagedCustomElement {
-  constructor(text: string, dataDown: DataDown) {
-    super({ mode: "open" });
-    this.addCSS(commonCSS);
-    this.addCSS(leafCSS);
-
-    this.contentWrapper.textContent = text;
+class TwistyAlgLeafElem extends HTMLElementShim {
+  constructor(className: string, text: string, dataDown: DataDown) {
+    super();
+    this.textContent = text;
+    this.classList.add(className);
 
     this.addEventListener("click", () => {
       dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex);
@@ -49,19 +40,18 @@ class TwistyAlgLeafElem extends ManagedCustomElement {
 
 customElementsShim.define("twisty-alg-leaf-elem", TwistyAlgLeafElem);
 
-class TwistyAlgWrapperElem extends ManagedCustomElement {
+class TwistyAlgWrapperElem extends HTMLElementShim {
   constructor(className: string) {
-    super({ mode: "open" });
-    this.addCSS(commonCSS);
+    super();
     this.classList.add(className);
   }
 
   addString(str: string) {
-    this.contentWrapper.append(str);
+    this.append(str);
   }
 
   addElem(dataUp: DataUp): number {
-    this.contentWrapper.append(dataUp.element);
+    this.append(dataUp.element);
     return dataUp.moveCount;
   }
 }
@@ -88,7 +78,6 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
     const element = new TwistyAlgWrapperElem("sequence");
     let first = true;
     for (const unit of sequence.nestedUnits) {
-      console.log(first, { unit });
       if (!first) {
         element.addString(" ");
       }
@@ -126,7 +115,11 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
   public traverseBlockMove(blockMove: BlockMove, dataDown: DataDown): DataUp {
     return {
       moveCount: 1,
-      element: new TwistyAlgLeafElem(blockMoveToString(blockMove), dataDown),
+      element: new TwistyAlgLeafElem(
+        "blockMove",
+        blockMoveToString(blockMove),
+        dataDown,
+      ),
     };
   }
 
@@ -184,8 +177,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
 
   public traversePause(_pause: Pause, dataDown: DataDown): DataUp {
     return {
-      moveCount: dataDown.earliestMoveIndex + 1,
-      element: new TwistyAlgLeafElem(".", dataDown),
+      moveCount: 1,
+      element: new TwistyAlgLeafElem("pause", ".", dataDown),
     };
   }
 
@@ -199,7 +192,11 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
   public traverseComment(comment: Comment, dataDown: DataDown): DataUp {
     return {
       moveCount: 0,
-      element: new TwistyAlgLeafElem(`// ${comment.comment}`, dataDown),
+      element: new TwistyAlgLeafElem(
+        "comment",
+        `// ${comment.comment}`,
+        dataDown,
+      ),
     };
   }
 }
@@ -209,13 +206,11 @@ const algToDOMTree = algToDOMTreeInstance.traverse.bind(
   algToDOMTreeInstance,
 ) as (alg: Sequence, dataDown: DataDown) => DataUp;
 
-export class ExperimentalTwistyAlgViewer extends ManagedCustomElement {
-  #alg: Sequence;
+export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
   #domTree: Element;
   twistyPlayer: TwistyPlayer | null = null;
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
-    super({ mode: "open" });
-    this.addCSS(commonCSS);
+    super();
     if (options?.twistyPlayer) {
       this.setTwistyPlayer(options?.twistyPlayer);
     }
@@ -226,13 +221,12 @@ export class ExperimentalTwistyAlgViewer extends ManagedCustomElement {
   }
 
   private setAlg(alg: Sequence): void {
-    this.#alg = alg;
     this.#domTree = algToDOMTree(alg, {
       earliestMoveIndex: 0,
       twistyAlgViewer: this,
     }).element;
-    this.contentWrapper.textContent = "";
-    this.contentWrapper.appendChild(this.#domTree);
+    this.textContent = "";
+    this.appendChild(this.#domTree);
   }
 
   setTwistyPlayer(twistyPlayer: TwistyPlayer): void {
@@ -245,12 +239,9 @@ export class ExperimentalTwistyAlgViewer extends ManagedCustomElement {
   }
 
   jumpToIndex(index: number): void {
-    console.log(index);
     if (this.twistyPlayer && this.twistyPlayer.cursor) {
-      console.log(this.twistyPlayer, index);
       const timestamp =
         this.twistyPlayer.cursor.experimentalTimestampFromIndex(index) ?? 0;
-      console.log(timestamp);
       this.twistyPlayer?.timeline.setTimestamp(timestamp);
     }
   }
