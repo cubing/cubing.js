@@ -32,8 +32,8 @@ class TwistyAlgLeafElem extends HTMLElementShim {
     this.textContent = text;
     this.classList.add(className);
 
-    this.addEventListener("click", () => {
-      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex);
+    this.addEventListener("click", (e: MouseEvent) => {
+      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex, e);
     });
   }
 }
@@ -208,6 +208,7 @@ const algToDOMTree = algToDOMTreeInstance.traverse.bind(
 export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
   #domTree: Element;
   twistyPlayer: TwistyPlayer | null = null;
+  lastClickIndex: number = -1;
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
     super();
     if (options?.twistyPlayer) {
@@ -237,11 +238,19 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
     this.setAlg(this.twistyPlayer.alg);
   }
 
-  jumpToIndex(index: number): void {
+  jumpToIndex(index: number, e: Event): void {
     if (this.twistyPlayer && this.twistyPlayer.cursor) {
       const timestamp =
         this.twistyPlayer.cursor.experimentalTimestampFromIndex(index) ?? 0;
       this.twistyPlayer?.timeline.setTimestamp(timestamp);
+      if (this.lastClickIndex === index) {
+        this.twistyPlayer.timeline.play();
+        console.log("redo");
+        e.preventDefault();
+        this.lastClickIndex = -1;
+      } else {
+        this.lastClickIndex = index;
+      }
     }
   }
 
