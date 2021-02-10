@@ -73,7 +73,6 @@ function repetitionSuffix(amount: number): string {
 
 class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
   public traverseSequence(sequence: Sequence, dataDown: DataDown): DataUp {
-    console.log("trav", sequence);
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("sequence");
     let first = true;
