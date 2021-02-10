@@ -25,7 +25,7 @@ class DataDown {
 
 class DataUp {
   moveCount: number;
-  element: Element;
+  element: TwistyAlgWrapperElem | TwistyAlgLeafElem;
 }
 
 class TwistyAlgLeafElem extends HTMLElementShim {
@@ -37,6 +37,10 @@ class TwistyAlgLeafElem extends HTMLElementShim {
     this.addEventListener("click", () => {
       dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex);
     });
+  }
+
+  pathToIndex(_index: number): (TwistyAlgWrapperElem | TwistyAlgLeafElem)[] {
+    return [];
   }
 }
 
@@ -55,6 +59,10 @@ class TwistyAlgWrapperElem extends HTMLElementShim {
   addElem(dataUp: DataUp): number {
     this.append(dataUp.element);
     return dataUp.moveCount;
+  }
+
+  pathToIndex(_index: number): (TwistyAlgWrapperElem | TwistyAlgLeafElem)[] {
+    return [];
   }
 }
 
@@ -76,7 +84,7 @@ function repetitionSuffix(amount: number): string {
 class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
   public traverseSequence(sequence: Sequence, dataDown: DataDown): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("sequence");
+    const element = new TwistyAlgWrapperElem("twisty-alg-sequence");
     let first = true;
     for (const unit of sequence.nestedUnits) {
       if (!first) {
@@ -98,7 +106,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
 
   public traverseGroup(group: Group, dataDown: DataDown): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("group");
+    const element = new TwistyAlgWrapperElem("twisty-alg-group");
     element.addString("(");
     moveCount += element.addElem(
       this.traverse(group.nestedSequence, {
@@ -117,7 +125,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
     return {
       moveCount: 1,
       element: new TwistyAlgLeafElem(
-        "blockMove",
+        "twisty-alg-blockMove",
         blockMoveToString(blockMove),
         dataDown,
       ),
@@ -129,7 +137,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
     dataDown: DataDown,
   ): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("commutator");
+    const element = new TwistyAlgWrapperElem("twisty-alg-commutator");
     element.addString("[");
     moveCount += element.addElem(
       this.traverse(commutator.A, {
@@ -153,7 +161,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
 
   public traverseConjugate(conjugate: Conjugate, dataDown: DataDown): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("conjugate");
+    const element = new TwistyAlgWrapperElem("twisty-alg-conjugate");
     element.addString("[");
     const aLen = element.addElem(
       this.traverse(conjugate.A, {
@@ -179,14 +187,16 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
   public traversePause(_pause: Pause, dataDown: DataDown): DataUp {
     return {
       moveCount: 1,
-      element: new TwistyAlgLeafElem("pause", ".", dataDown),
+      element: new TwistyAlgLeafElem("twisty-alg-pause", ".", dataDown),
     };
   }
 
   public traverseNewLine(_newLine: NewLine, _dataDown: DataDown): DataUp {
+    const element = new TwistyAlgWrapperElem("twisty-alg-newLine");
+    element.append(document.createElement("br"));
     return {
       moveCount: 0,
-      element: document.createElement("br"),
+      element,
     };
   }
 
@@ -194,7 +204,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
     return {
       moveCount: 0,
       element: new TwistyAlgLeafElem(
-        "comment",
+        "twisty-alg-comment",
         `// ${comment.comment}`,
         dataDown,
       ),
@@ -208,7 +218,7 @@ const algToDOMTree = algToDOMTreeInstance.traverse.bind(
 ) as (alg: Sequence, dataDown: DataDown) => DataUp;
 
 export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
-  #domTree: Element;
+  #domTree: TwistyAlgWrapperElem | TwistyAlgLeafElem;
   twistyPlayer: TwistyPlayer | null = null;
   lastClickTimestamp: number | null = null;
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
@@ -243,6 +253,11 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
         if (timestamp !== this.lastClickTimestamp) {
           this.lastClickTimestamp = null;
         }
+        // const index = this.twistyPlayer?.cursor?.experimentalIndexFromTimestamp(
+        //   timestamp,
+        // );
+        // console.log(index);
+        // this.#domTree.pathTo;
       },
       onTimeRangeChange: (_timeRange: TimeRange) => {
         // TODO

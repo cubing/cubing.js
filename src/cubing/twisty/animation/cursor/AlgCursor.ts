@@ -218,4 +218,9 @@ export class AlgCursor
   experimentalTimestampFromIndex(index: number): MillisecondTimestamp {
     return this.todoIndexer.indexToMoveStartTimestamp(index);
   }
+
+  /** @deprecated */
+  experimentalIndexFromTimestamp(timestamp: MillisecondTimestamp): number {
+    return this.todoIndexer.timestampToIndex(timestamp);
+  }
 }
