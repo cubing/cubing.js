@@ -25,9 +25,9 @@ export class ManagedCustomElement extends HTMLElementShim {
   public contentWrapper: HTMLDivElement; // TODO: can we get rid of this wrapper?
 
   private cssSourceMap: Map<CSSSource, HTMLStyleElement> = new Map();
-  constructor() {
+  constructor(options?: { mode: "open" | "closed" }) {
     super();
-    this.shadow = this.attachShadow({ mode: "closed" });
+    this.shadow = this.attachShadow({ mode: options?.mode ?? "closed" });
 
     this.contentWrapper = document.createElement("div");
     this.contentWrapper.classList.add("wrapper");
