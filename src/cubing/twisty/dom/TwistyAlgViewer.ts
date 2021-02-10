@@ -11,6 +11,8 @@ import {
 } from "../../alg";
 import { BlockMove } from "../../puzzle-geometry/interfaces";
 import { TwistyPlayer } from "../../twisty";
+import { TimeRange } from "../animation/cursor/AlgCursor";
+import { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
 import {
   customElementsShim,
   HTMLElementShim,
@@ -32,8 +34,8 @@ class TwistyAlgLeafElem extends HTMLElementShim {
     this.textContent = text;
     this.classList.add(className);
 
-    this.addEventListener("click", (e: MouseEvent) => {
-      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex, e);
+    this.addEventListener("click", () => {
+      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex);
     });
   }
 }
@@ -208,7 +210,7 @@ const algToDOMTree = algToDOMTreeInstance.traverse.bind(
 export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
   #domTree: Element;
   twistyPlayer: TwistyPlayer | null = null;
-  lastClickIndex: number = -1;
+  lastClickTimestamp: number | null = null;
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
     super();
     if (options?.twistyPlayer) {
@@ -236,20 +238,28 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
     }
     this.twistyPlayer = twistyPlayer;
     this.setAlg(this.twistyPlayer.alg);
+    twistyPlayer.timeline.addTimestampListener({
+      onTimelineTimestampChange: (timestamp: MillisecondTimestamp) => {
+        if (timestamp !== this.lastClickTimestamp) {
+          this.lastClickTimestamp = null;
+        }
+      },
+      onTimeRangeChange: (_timeRange: TimeRange) => {
+        // TODO
+      },
+    });
   }
 
-  jumpToIndex(index: number, e: Event): void {
+  jumpToIndex(index: number): void {
     if (this.twistyPlayer && this.twistyPlayer.cursor) {
       const timestamp =
         this.twistyPlayer.cursor.experimentalTimestampFromIndex(index) ?? 0;
       this.twistyPlayer?.timeline.setTimestamp(timestamp);
-      if (this.lastClickIndex === index) {
+      if (this.lastClickTimestamp === timestamp) {
         this.twistyPlayer.timeline.play();
-        console.log("redo");
-        e.preventDefault();
-        this.lastClickIndex = -1;
+        this.lastClickTimestamp = null;
       } else {
-        this.lastClickIndex = index;
+        this.lastClickTimestamp = timestamp;
       }
     }
   }
