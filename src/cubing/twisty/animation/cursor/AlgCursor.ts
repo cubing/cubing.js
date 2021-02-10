@@ -213,4 +213,9 @@ export class AlgCursor
     );
     this.alg = alg;
   }
+
+  /** @deprecated */
+  experimentalTimestampFromIndex(index: number): MillisecondTimestamp {
+    return this.todoIndexer.indexToMoveStartTimestamp(index);
+  }
 }
