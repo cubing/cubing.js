@@ -236,6 +236,10 @@ export class ExperimentalTwistyAlgViewer extends ManagedCustomElement {
   }
 
   setTwistyPlayer(twistyPlayer: TwistyPlayer): void {
+    if (this.twistyPlayer) {
+      console.warn("twisty-player reassignment is not supported");
+      return;
+    }
     this.twistyPlayer = twistyPlayer;
     this.setAlg(this.twistyPlayer.alg);
   }
@@ -257,10 +261,6 @@ export class ExperimentalTwistyAlgViewer extends ManagedCustomElement {
     newValue: string,
   ): void {
     if (attributeName === "for") {
-      if (this.twistyPlayer) {
-        console.warn("for= reassignment is not supported");
-        return;
-      }
       const elem = document.getElementById(newValue);
       if (!elem) {
         console.warn("for= elem does not exist");
@@ -283,20 +283,3 @@ customElementsShim.define(
   "experimental-twisty-alg-viewer",
   ExperimentalTwistyAlgViewer,
 );
-
-// const alg = parseAlg("R U R'");
-const alg = parseAlg(
-  "y x' // inspection\nU R2 U' F' L F' U' L' // XX-Cross + EO\nU' R U R' // 3rd slot\nR' U R U2' R' U R // 4th slot\nU R' U' R U' R' U2 R // OLL / ZBLL\nU // AUF",
-);
-
-// from http://cubesolv.es/solve/5757");
-const twistyPlayer = new TwistyPlayer({
-  experimentalSetupAlg: parseAlg("F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2"),
-  alg,
-});
-twistyPlayer.id = "hello-there";
-
-document.body.appendChild(twistyPlayer);
-const twistyAlgViewer = new ExperimentalTwistyAlgViewer({ twistyPlayer });
-// twistyAlgViewer.setAlg(alg);
-document.body.appendChild(twistyAlgViewer);
