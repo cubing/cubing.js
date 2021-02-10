@@ -12,15 +12,21 @@ import {
 import { BlockMove } from "../../puzzle-geometry/interfaces";
 import { TwistyPlayer } from "../../twisty";
 import { TimeRange } from "../animation/cursor/AlgCursor";
-import { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
+import {
+  Direction,
+  MillisecondTimestamp,
+} from "../animation/cursor/CursorTypes";
 import {
   customElementsShim,
   HTMLElementShim,
 } from "./element/node-custom-element-shims";
 
+type DefiniteDirection = Direction.Forwards | Direction.Backwards;
+
 class DataDown {
   earliestMoveIndex: number;
   twistyAlgViewer: ExperimentalTwistyAlgViewer;
+  direction: DefiniteDirection;
 }
 
 class DataUp {
@@ -47,18 +53,27 @@ class TwistyAlgLeafElem extends HTMLElementShim {
 customElementsShim.define("twisty-alg-leaf-elem", TwistyAlgLeafElem);
 
 class TwistyAlgWrapperElem extends HTMLElementShim {
+  private queue: (Element | Text)[] = [];
+
   constructor(className: string) {
     super();
     this.classList.add(className);
   }
 
   addString(str: string) {
-    this.append(str);
+    this.queue.push(document.createTextNode(str));
   }
 
   addElem(dataUp: DataUp): number {
-    this.append(dataUp.element);
+    this.queue.push(dataUp.element);
     return dataUp.moveCount;
+  }
+
+  flushQueue(direction: DefiniteDirection = Direction.Forwards): void {
+    for (const node of maybeReverseList(this.queue, direction)) {
+      this.append(node);
+    }
+    this.queue = [];
   }
 
   pathToIndex(_index: number): (TwistyAlgWrapperElem | TwistyAlgLeafElem)[] {
@@ -81,12 +96,39 @@ function repetitionSuffix(amount: number): string {
   return s;
 }
 
+function oppositeDirection(direction: DefiniteDirection): DefiniteDirection {
+  return direction === Direction.Forwards
+    ? Direction.Backwards
+    : Direction.Forwards;
+}
+
+function updateDirectionByAmount(
+  currentDirection: DefiniteDirection,
+  amount: number,
+): DefiniteDirection {
+  return amount < 0 ? oppositeDirection(currentDirection) : currentDirection;
+}
+
+function maybeReverseList<T>(l: T[], direction: DefiniteDirection): T[] {
+  if (direction === Direction.Forwards) {
+    return l;
+  }
+  // console.log("rev", Array.from(l).reverse());
+  // return Array.from(l).reverse();
+  const copy = Array.from(l);
+  copy.reverse();
+  return copy;
+}
+
 class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
   public traverseSequence(sequence: Sequence, dataDown: DataDown): DataUp {
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-sequence");
     let first = true;
-    for (const unit of sequence.nestedUnits) {
+    for (const unit of maybeReverseList(
+      sequence.nestedUnits,
+      dataDown.direction,
+    )) {
       if (!first) {
         element.addString(" ");
       }
@@ -95,9 +137,11 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
         this.traverse(unit, {
           earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
           twistyAlgViewer: dataDown.twistyAlgViewer,
+          direction: dataDown.direction,
         }),
       );
     }
+    element.flushQueue(dataDown.direction);
     return {
       moveCount: moveCount,
       element,
@@ -105,6 +149,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
   }
 
   public traverseGroup(group: Group, dataDown: DataDown): DataUp {
+    const direction = updateDirectionByAmount(dataDown.direction, group.amount);
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-group");
     element.addString("(");
@@ -112,11 +157,13 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
       this.traverse(group.nestedSequence, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
+        direction,
       }),
     );
     element.addString(")" + repetitionSuffix(group.amount));
+    element.flushQueue();
     return {
-      moveCount: moveCount * group.amount,
+      moveCount: moveCount * Math.abs(group.amount),
       element,
     };
   }
@@ -139,22 +186,35 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-commutator");
     element.addString("[");
+    element.flushQueue();
+    const direction = updateDirectionByAmount(
+      dataDown.direction,
+      commutator.amount,
+    );
+    const [first, second]: Sequence[] = maybeReverseList(
+      [commutator.A, commutator.B],
+      direction,
+    );
     moveCount += element.addElem(
-      this.traverse(commutator.A, {
+      this.traverse(first, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
+        direction,
       }),
     );
     element.addString(", ");
     moveCount += element.addElem(
-      this.traverse(commutator.B, {
+      this.traverse(second, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
+        direction,
       }),
     );
+    element.flushQueue(direction);
     element.addString("]" + repetitionSuffix(commutator.amount));
+    element.flushQueue();
     return {
-      moveCount: moveCount * 2 * commutator.amount,
+      moveCount: moveCount * 2 * Math.abs(commutator.amount),
       element,
     };
   }
@@ -163,10 +223,15 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-conjugate");
     element.addString("[");
+    const direction = updateDirectionByAmount(
+      dataDown.direction,
+      conjugate.amount,
+    );
     const aLen = element.addElem(
       this.traverse(conjugate.A, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
+        direction,
       }),
     );
     moveCount += aLen;
@@ -175,11 +240,13 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
       this.traverse(conjugate.B, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
+        direction,
       }),
     );
     element.addString("]" + repetitionSuffix(conjugate.amount));
+    element.flushQueue();
     return {
-      moveCount: (moveCount + aLen) * conjugate.amount,
+      moveCount: (moveCount + aLen) * Math.abs(conjugate.amount),
       element,
     };
   }
@@ -236,6 +303,7 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
     this.#domTree = algToDOMTree(alg, {
       earliestMoveIndex: 0,
       twistyAlgViewer: this,
+      direction: Direction.Forwards,
     }).element;
     this.textContent = "";
     this.appendChild(this.#domTree);
@@ -253,11 +321,14 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
         if (timestamp !== this.lastClickTimestamp) {
           this.lastClickTimestamp = null;
         }
-        // const index = this.twistyPlayer?.cursor?.experimentalIndexFromTimestamp(
-        //   timestamp,
-        // );
-        // console.log(index);
-        // this.#domTree.pathTo;
+        const index =
+          this.twistyPlayer?.cursor?.experimentalIndexFromTimestamp(
+            timestamp,
+          ) ?? null;
+        if (index !== null) {
+          // console.log(index);
+          // console.log(this.#domTree.pathToIndex(index));
+        }
       },
       onTimeRangeChange: (_timeRange: TimeRange) => {
         // TODO
