@@ -253,7 +253,8 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
   jumpToIndex(index: number): void {
     if (this.twistyPlayer && this.twistyPlayer.cursor) {
       const timestamp =
-        this.twistyPlayer.cursor.experimentalTimestampFromIndex(index) ?? 0;
+        (this.twistyPlayer.cursor.experimentalTimestampFromIndex(index) ??
+          -250) + 250;
       this.twistyPlayer?.timeline.setTimestamp(timestamp);
       if (this.lastClickTimestamp === timestamp) {
         this.twistyPlayer.timeline.play();
