@@ -205,7 +205,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp> {
       moveCount: 0,
       element: new TwistyAlgLeafElem(
         "twisty-alg-comment",
-        `// ${comment.comment}`,
+        `//${comment.comment}`,
         dataDown,
       ),
     };
