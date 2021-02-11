@@ -91,7 +91,7 @@ export class Twisty3DCanvas
       20,
       1, // We rely on the resize logic to handle this.
       0.1,
-      1000,
+      20,
     );
     this.camera.position.copy(
       options.experimentalCameraPosition ?? new Vector3(2, 4, 4),
