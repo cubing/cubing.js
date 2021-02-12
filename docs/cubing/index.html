@@ -28,6 +28,9 @@
         <code>cubing.js</code> is a library for showing and playing with twisty
         puzzles.
       </p>
+      <p>You may use it for free in any website or app, for any personal use or if you <a
+      href="https://github.com/cubing/cubing.js/blob/main/LICENSE.md">publicly
+      share any code that uses it</a>.</p>
     </section>
 
     <section id="show-alg">
@@ -36,27 +39,31 @@
         If you want to display an alg on a webpage, include code like this:
       </p>
       <div class="code-demo">
-        <code class="sample">
-          <span>&lt;script
-            src=&quot;https://cdn.cubing.net/esm/cubing/twisty&quot;
-            type=&quot;module&quot; defer&gt;&lt;/script&gt;
-          </span>
-          <span>&lt;twisty-player alg=&quot;R U R&#x27; U R U2&#x27; R&#x27;&quot;&gt;&lt;/twisty-player&gt;</span>
-        </code>
+        <div>
+          <p>Include this once on your page:</p>
+          <code class="sample">
+            <span>&lt;script
+              src=&quot;https://cdn.cubing.net/esm/cubing/twisty&quot;
+              type=&quot;module&quot; defer&gt;&lt;/script&gt;
+            </span>
+          </code>
+          <p>Create any number of players, like this:</p>
+          <code class="sample">
+            <span>&lt;twisty-player alg=&quot;R U R&#x27; U R U2&#x27; R&#x27;&quot;&gt;&lt;/twisty-player&gt;</span>
+          </code>
+        </div>
         <twisty-player alg="R U R' U R U2' R'">
         </twisty-player>
       </div>
       <p>
         <a href="https://codepen.io/cubing/pen/gOLMYqK">Try it</a>.
       </p>
-      <p>Tip: You only have to include the first line once, and you can include as many
-      <code>twisty-player</code>s as you want.</p>
     </section>
 
     <section id="parameters">
       <h1><a href="#parameters">Parameters</a></h1>
-      <p>The example above uses only the <code>alg</code> parameter. Here is an
-      example that uses a variety of parameters:</p>
+      <p>The example above uses only the <code>alg</code> parameter; there are
+      many more. Here is a player that uses a variety of parameters:</p>
       <div class="code-demo">
         <code class="sample">
           <span>&lt;twisty-player<br>
