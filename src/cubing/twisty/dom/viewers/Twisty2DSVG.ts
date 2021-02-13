@@ -7,7 +7,7 @@ import {
   Transformation,
 } from "../../../kpuzzle";
 import { PuzzleAppearance } from "../../3D/puzzles/appearance";
-import { stickerings } from "../../3D/puzzles/stickerings";
+import { appearances3x3x3 } from "../../3D/puzzles/stickerings";
 import {
   PositionDispatcher,
   PositionListener,
@@ -85,7 +85,7 @@ export class Twisty2DSVG
   }
 
   experimentalSetStickering(stickering: ExperimentalStickering): void {
-    const appearance = stickerings[stickering];
+    const appearance = appearances3x3x3[stickering];
     this.resetSVG(appearance);
   }
 

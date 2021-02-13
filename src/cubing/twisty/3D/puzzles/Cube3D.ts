@@ -31,7 +31,7 @@ import {
 } from "../../dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
 import { FaceletMeshAppearance, PuzzleAppearance } from "./appearance";
-import { stickerings } from "./stickerings";
+import { appearances3x3x3 } from "./stickerings";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const svgLoader = new TextureLoader();
@@ -505,7 +505,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
     // TODO: Can we construct this directly instead of applying it later? Would that be more code-efficient?
     if (this.options.experimentalStickering) {
-      this.setAppearance(stickerings[this.options.experimentalStickering]);
+      this.setAppearance(appearances3x3x3[this.options.experimentalStickering]);
     }
 
     cursor?.addPositionListener(this);
@@ -609,7 +609,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       experimentalStickerings[experimentalStickering] // TODO: test this
     ) {
       this.options.experimentalStickering = experimentalStickering;
-      this.setAppearance(stickerings[experimentalStickering]);
+      this.setAppearance(appearances3x3x3[experimentalStickering]);
       this.scheduleRenderCallback!(); // TODO
     }
   }

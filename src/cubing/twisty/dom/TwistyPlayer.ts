@@ -11,8 +11,10 @@ import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
 import { PuzzleManager } from "../../puzzles/PuzzleManager";
+import { PuzzleAppearance } from "../3D/puzzles/appearance";
 import { Cube3D } from "../3D/puzzles/Cube3D";
-import { PG3D } from "../3D/puzzles/PG3D";
+import { PG3D, PG3DOptions } from "../3D/puzzles/PG3D";
+import { appearances4x4x4 } from "../3D/puzzles/stickerings";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor } from "../animation/cursor/AlgCursor";
@@ -246,6 +248,9 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.twisty3D.experimentalUpdateOptions({
           experimentalStickering,
         });
+      }
+      if (this.twisty3D instanceof PG3D) {
+        this.twisty3D.experimentalSetAppearance(this.getPG3DAppearance()!); // TODO
       }
       if (this.viewerElems[0] instanceof Twisty2DSVG) {
         (this.viewerElems[0] as Twisty2DSVG).experimentalSetStickering(
@@ -652,6 +657,11 @@ export class TwistyPlayer extends ManagedCustomElement {
             } else {
               throw "Unimplemented!";
             }
+            const options: PG3DOptions = {};
+            const appearance = this.getPG3DAppearance();
+            if (appearance) {
+              options.appearance = appearance;
+            }
             const pg3d = new PG3D(
               cursor,
               scene.scheduleRender.bind(scene),
@@ -660,6 +670,7 @@ export class TwistyPlayer extends ManagedCustomElement {
               this.#legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
               this.#legacyExperimentalPG3DViewConfig?.hintStickers ??
                 this.hintFacelets === "floating",
+              options,
             );
             this.legacyExperimentalPG3D = pg3d;
             twisty3D = pg3d;
@@ -668,6 +679,16 @@ export class TwistyPlayer extends ManagedCustomElement {
         }
         break;
     }
+  }
+
+  private getPG3DAppearance(): PuzzleAppearance | null {
+    if (this.puzzle === "4x4x4") {
+      return (
+        appearances4x4x4[this.experimentalStickering ?? "full"] ??
+        appearances4x4x4["full"]
+      );
+    }
+    return null;
   }
 
   private createBackViewer(): void {

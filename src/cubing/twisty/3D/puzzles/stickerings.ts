@@ -44,9 +44,20 @@ const c: PieceAppearance = {
   facelets: ["invisible", "invisible", "invisible", "invisible"],
 };
 
+function replace<T>(l: T[], indices: number[], value: T): T[] {
+  const arr = Array.from(l);
+  for (const idx of indices) {
+    arr[idx] = value;
+  }
+  return arr;
+}
+
 // TODO: generalize stickerings by performing e.g. intersection on orbit selectors
 // Example: OLL is `LL: orient, !LL: dim`
-export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
+export const appearances3x3x3: Partial<Record<
+  ExperimentalStickering,
+  PuzzleAppearance
+>> = {
   "full": {
     // TODO: Support elision for regular pieces.
     orbits: {
@@ -437,6 +448,114 @@ export const stickerings: Record<ExperimentalStickering, PuzzleAppearance> = {
       CENTERS: {
         pieces: [c, c, c, c, c, c],
       },
+    },
+  },
+};
+
+export const appearances4x4x4: Record<
+  string, // TODO: ExperimentalStickering,
+  PuzzleAppearance
+> = {
+  "full": {
+    orbits: {
+      EDGES: {
+        pieces: new Array(24).fill(r),
+      },
+      CORNERS: {
+        pieces: new Array(8).fill(r),
+      },
+      CENTERS: {
+        pieces: new Array(24).fill(r),
+      },
+    },
+  },
+  "OLL": {
+    orbits: {
+      EDGES: {
+        pieces: replace(
+          new Array(24).fill(d),
+          [18, 19, 22, 23, 8, 11, 16, 21],
+          o,
+        ),
+      },
+      CORNERS: {
+        pieces: [o, d, o, d, d, o, o, d],
+      },
+      CENTERS: {
+        pieces: replace(new Array(24).fill(d), [18, 19, 22, 23], r),
+      },
+    },
+  },
+  "PLL": {
+    orbits: {
+      EDGES: {
+        pieces: replace(
+          new Array(24).fill(d),
+          [18, 19, 22, 23, 8, 11, 16, 21],
+          p,
+        ),
+      },
+      CORNERS: {
+        pieces: [p, d, p, d, d, p, p, d],
+      },
+      CENTERS: {
+        pieces: new Array(24).fill(d),
+      },
+    },
+  },
+  "experimental-centers-U": {
+    orbits: {
+      EDGES: { pieces: new Array(24).fill(i) },
+      CORNERS: { pieces: new Array(8).fill(i) },
+      CENTERS: {
+        pieces: replace(new Array(24).fill(i), [18, 19, 22, 23], r),
+      },
+    },
+  },
+  "experimental-centers-U-D": {
+    orbits: {
+      EDGES: { pieces: new Array(24).fill(i) },
+      CORNERS: { pieces: new Array(8).fill(i) },
+      CENTERS: {
+        pieces: replace(
+          new Array(24).fill(i),
+          [18, 19, 22, 23, 3, 6, 13, 20],
+          r,
+        ),
+      },
+    },
+  },
+  "experimental-centers-U-L-D": {
+    orbits: {
+      EDGES: { pieces: new Array(24).fill(i) },
+      CORNERS: { pieces: new Array(8).fill(i) },
+      CENTERS: {
+        pieces: replace(
+          new Array(24).fill(i),
+          [18, 19, 22, 23, 3, 6, 13, 20, 9, 15, 17, 21],
+          r,
+        ),
+      },
+    },
+  },
+  "experimental-centers-U-L-B-D": {
+    orbits: {
+      EDGES: { pieces: new Array(24).fill(i) },
+      CORNERS: { pieces: new Array(8).fill(i) },
+      CENTERS: {
+        pieces: replace(
+          new Array(24).fill(i),
+          [18, 19, 22, 23, 3, 6, 13, 20, 9, 15, 17, 21, 7, 10, 14, 16],
+          r,
+        ),
+      },
+    },
+  },
+  "experimental-centers": {
+    orbits: {
+      EDGES: { pieces: new Array(24).fill(i) },
+      CORNERS: { pieces: new Array(8).fill(i) },
+      CENTERS: { pieces: new Array(24).fill(r) },
     },
   },
 };

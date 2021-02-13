@@ -80,6 +80,11 @@ export const experimentalStickerings = {
   "Void Cube": true,
   "invisible": true,
   "picture": true,
+  "experimental-centers-U": true,
+  "experimental-centers-U-D": true,
+  "experimental-centers-U-L-D": true,
+  "experimental-centers-U-L-B-D": true,
+  "experimental-centers": true,
 };
 export type ExperimentalStickering = keyof typeof experimentalStickerings;
 

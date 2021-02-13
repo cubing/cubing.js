@@ -24,6 +24,11 @@ import { TAU } from "../TAU";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { smootherStep } from "../../animation/easing";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
+import {
+  FaceletMeshAppearance,
+  getFaceletAppearance,
+  PuzzleAppearance,
+} from "./appearance";
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,
@@ -69,6 +74,7 @@ function makePoly(
 
 class StickerDef {
   public origColor: Color;
+  public origColorAppearance: Color;
   public faceColor: Color;
   public faceArray: Face3[] = [];
   public twistVal: number = -1;
@@ -76,8 +82,15 @@ class StickerDef {
     fixedGeo: Geometry,
     stickerDat: StickerDatSticker,
     hintStickers: boolean,
+    options?: {
+      appearance?: FaceletMeshAppearance;
+    },
   ) {
     this.origColor = new Color(stickerDat.color);
+    this.origColorAppearance = new Color(stickerDat.color);
+    if (options?.appearance) {
+      this.setAppearance(options.appearance);
+    }
     this.faceColor = new Color(stickerDat.color);
     const coords = stickerDat.coords as number[][];
     makePoly(fixedGeo, coords, this.faceColor, 1, 0, this.faceArray);
@@ -127,6 +140,30 @@ class StickerDef {
     );
   }
 
+  public setAppearance(faceletMeshAppearance: FaceletMeshAppearance): void {
+    switch (faceletMeshAppearance) {
+      case "regular":
+        this.origColorAppearance.copy(this.origColor);
+        break;
+      case "dim":
+        if (this.origColor.getHex() === 0xffffff) {
+          this.origColorAppearance.setHex(0xdddddd);
+        } else {
+          this.origColorAppearance.copy(this.origColor);
+          this.origColorAppearance.multiplyScalar(0.5); // TODO: this is an approximation.
+        }
+        break;
+      case "oriented":
+        this.origColorAppearance.set("#ff00ff");
+        break;
+      case "ignored":
+        this.origColorAppearance.set("#444444");
+        break;
+      case "invisible":
+        throw new Error("unimplemented");
+    }
+  }
+
   public setColor(c: Color): number {
     if (!this.faceColor.equals(c)) {
       this.faceColor.copy(c);
@@ -170,6 +207,10 @@ class AxisInfo {
     this.axis = new Vector3(vec[0], vec[1], vec[2]);
     this.order = axisDat[2];
   }
+}
+
+export interface PG3DOptions {
+  appearance?: PuzzleAppearance;
 }
 
 const PG_SCALE = 0.5;
@@ -225,6 +266,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private pgdat: StickerDat,
     showFoundation: boolean = false,
     hintStickers: boolean = false,
+    private params: PG3DOptions = {},
   ) {
     super();
 
@@ -251,7 +293,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     const black = new Color(0);
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
-      const orbit = sticker.orbit as number;
+      const orbit = sticker.orbit as string;
       const ord = sticker.ord as number;
       const ori = sticker.ori as number;
       if (!this.stickers[orbit]) {
@@ -260,7 +302,23 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const stickerdef = new StickerDef(fixedGeo, sticker, hintStickers);
+      const options: { appearance?: FaceletMeshAppearance } = {};
+      if (params.appearance) {
+        options.appearance = getFaceletAppearance(
+          params.appearance,
+          orbit,
+          ord,
+          ori,
+          false,
+        );
+      }
+      const stickerdef = new StickerDef(
+        fixedGeo,
+        sticker,
+        hintStickers,
+        options,
+      );
+
       this.stickers[orbit][ori][ord] = stickerdef;
     }
     if (showFoundation) {
@@ -305,6 +363,30 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return this.controlTargets;
   }
 
+  experimentalSetAppearance(appearance: PuzzleAppearance): void {
+    this.params.appearance = appearance;
+    for (const orbitName in this.definition.orbits) {
+      const { numPieces, orientations } = this.definition.orbits[orbitName];
+      for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
+        for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {
+          const faceletAppearance = getFaceletAppearance(
+            appearance,
+            orbitName,
+            pieceIdx,
+            faceletIdx,
+            false,
+          );
+          const stickerDef = this.stickers[orbitName][faceletIdx][pieceIdx];
+          stickerDef.setAppearance(faceletAppearance);
+        }
+      }
+    }
+    if (this.scheduleRenderCallback) {
+      // Doesn't seem to work?
+      this.scheduleRenderCallback();
+    }
+  }
+
   public onPositionChange(p: PuzzlePosition): void {
     const pos = p.state as Transformation;
     const noRotation = new Euler();
@@ -323,7 +405,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           for (let i = 0; i < pieces2.length; i++) {
             const nori = (ori + orin - pos2.orientation[i]) % orin;
             const ni = pos2.permutation[i];
-            colormods += pieces2[i].setColor(pieces[nori][ni].origColor);
+            colormods += pieces2[i].setColor(
+              pieces[nori][ni].origColorAppearance,
+            );
           }
         }
       }
