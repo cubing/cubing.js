@@ -71,7 +71,7 @@ export class Twisty3DCanvas
     this.addCSS(twisty3DCanvasCSS);
 
     this.scene = scene!;
-    this.scene.addRenderTarget(this);
+    this.scene?.addRenderTarget(this); // TODO
     if (SHOW_STATS) {
       this.stats = Stats();
       this.stats.dom.style.position = "absolute";
@@ -171,7 +171,9 @@ export class Twisty3DCanvas
         this.canvas.height,
       );
     }
-    this.renderer.render(this.scene, this.camera);
+    if (this.scene) {
+      this.renderer.render(this.scene, this.camera); // TODO
+    }
     if (this.rendererIsShared) {
       this.canvas2DContext.drawImage(this.renderer.domElement, 0, 0);
     }

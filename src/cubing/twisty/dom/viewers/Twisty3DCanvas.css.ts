@@ -7,17 +7,17 @@ import { CSSSource } from "../element/ManagedCustomElement";
 // support it soon. https://developer.mozilla.org/en-US/docs/Web/CSS/contain
 
 export const twisty3DCanvasCSS = new CSSSource(`
-:host(twisty-3d-canvas) {
-  contain: content;
-  overflow: hidden;
+:host {
+  width: 384px;
+  height: 256px;
+  display: grid;
 }
 
 .wrapper {
-  position: relative;
   width: 100%;
   height: 100%;
+  display: grid;
   overflow: hidden;
-  contain: content;
 }
 
 /* TODO: This is due to stats hack. Replace with \`canvas\`. */

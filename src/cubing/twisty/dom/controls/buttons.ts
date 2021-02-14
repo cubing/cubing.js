@@ -63,11 +63,11 @@ export class TwistyControlButton
     this.visitTwizzleLinkCallback = options?.visitTwizzleLinkCallback ?? null;
 
     if (!timeline) {
-      console.log("Must have timeline!"); // TODO
+      console.warn("Must have timeline!"); // TODO
     }
     this.timeline = timeline!;
     if (!timelineCommand) {
-      console.log("Must have timelineCommand!"); // TODO
+      console.warn("Must have timelineCommand!"); // TODO
     }
     this.timelineCommand = timelineCommand!;
 
@@ -89,16 +89,19 @@ export class TwistyControlButton
         break;
     }
 
-    this.timeline!.addActionListener(this);
-    switch (this.timelineCommand!) {
-      case "play-pause":
-      case "play-step-backwards":
-      case "play-step":
-        this.timeline!.addTimestampListener(this);
-        break;
-    }
+    if (this.timeline) {
+      // TODO
+      this.timeline.addActionListener(this);
+      switch (this.timelineCommand!) {
+        case "play-pause":
+        case "play-step-backwards":
+        case "play-step":
+          this.timeline.addTimestampListener(this);
+          break;
+      }
 
-    this.autoSetTimelineBasedDisabled();
+      this.autoSetTimelineBasedDisabled();
+    }
   }
 
   // TODO: Can we avoid duplicate calculations?

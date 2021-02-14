@@ -42,8 +42,8 @@ export class Twisty2DSVG
     this.addCSS(twisty2DSVGCSS);
 
     this.definition = def!;
-    this.resetSVG();
-    cursor!.addPositionListener(this);
+    this.resetSVG(); // TODO
+    cursor?.addPositionListener(this); // TODO
 
     if (this.options?.experimentalStickering) {
       this.experimentalSetStickering(this.options.experimentalStickering);
@@ -93,6 +93,9 @@ export class Twisty2DSVG
   private resetSVG(appearance?: PuzzleAppearance): void {
     if (this.svg) {
       this.removeElement(this.svg.element);
+    }
+    if (!this.definition) {
+      return; // TODO
     }
     this.svg = new SVG(this.definition, this.svgSource!, appearance); // TODO
     this.addElement(this.svg.element);

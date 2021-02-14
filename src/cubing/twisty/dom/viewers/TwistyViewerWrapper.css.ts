@@ -1,16 +1,17 @@
 import { CSSSource } from "../element/ManagedCustomElement";
 
 export const twistyViewerWrapperCSS = new CSSSource(`
-.wrapper {
+:host {
+  width: 384px;
+  height: 256px;
   display: grid;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
 }
 
-.wrapper.back-view-side-by-side {
-  grid-template-columns: 1fr 1fr;
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  overflow: hidden;
 }
 
 .wrapper > * {
@@ -19,11 +20,22 @@ export const twistyViewerWrapperCSS = new CSSSource(`
   overflow: hidden;
 }
 
+.wrapper.back-view-side-by-side {
+  grid-template-columns: 1fr 1fr;
+}
+
+.wrapper.back-view-top-right {
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr 3fr;
+}
+
+.wrapper.back-view-top-right > :nth-child(1) {
+  grid-row: 1 / 3;
+  grid-column: 1 / 3;
+}
+
 .wrapper.back-view-top-right > :nth-child(2) {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 25%;
-  height: 25%;
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
 }
 `);

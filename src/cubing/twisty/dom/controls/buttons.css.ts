@@ -1,27 +1,40 @@
 import { CSSSource } from "../element/ManagedCustomElement";
 
 export const buttonGridCSS = new CSSSource(`
-:host(twisty-control-button-panel) {
+:host {
   width: 384px;
-  height:24px;
-  contain: content;
-  display: block;
+  height: 24px;
+  display: grid;
 }
 
 .wrapper {
   width: 100%;
   height: 100%;
-
   display: grid;
+  overflow: hidden;
+}
+
+.wrapper {
   grid-auto-flow: column;
 }
 
 .viewer-link-none .twizzle-link-button {
   display: none;
 }
+
+.wrapper twisty-control-button {
+  width: inherit;
+  height: inherit;
+}
 `);
 
 export const buttonCSS = new CSSSource(`
+:host {
+  width: 48px;
+  height: 24px;
+  display: grid;
+}
+
 .wrapper {
   width: 100%;
   height: 100%;
