@@ -1,11 +1,17 @@
 import { CSSSource } from "../element/ManagedCustomElement";
 
 export const twistyScrubberCSS = new CSSSource(`
-:host(twisty-scrubber) {
+:host {
   width: 384px;
   height: 16px;
-  contain: content;
   display: grid;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  overflow: hidden;
 }
 
 input {

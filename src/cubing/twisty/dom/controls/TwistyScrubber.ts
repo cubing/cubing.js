@@ -20,13 +20,13 @@ export class TwistyScrubber
 
     this.addCSS(twistyScrubberCSS);
 
-    this.timeline!.addTimestampListener(this);
+    this.timeline?.addTimestampListener(this); // TODO
     this.range.type = "range";
 
     this.range.step = (1).toString();
-    this.range.min = this.timeline!.minTimestamp().toString();
-    this.range.max = this.timeline!.maxTimestamp().toString();
-    this.range.value = this.timeline.timestamp.toString();
+    this.range.min = this.timeline?.minTimestamp().toString(); // TODO
+    this.range.max = this.timeline?.maxTimestamp().toString(); // TODO
+    this.range.value = this.timeline?.timestamp.toString(); // TODO
     this.range.addEventListener("input", this.onInput.bind(this));
 
     this.addElement(this.range);
