@@ -90,7 +90,7 @@ for (const [propName, attrName, valueMap] of enumOptions) {
     optionElem.value = value;
   }
   select.addEventListener("change", () => {
-    console.log("", select.value);
+    console.log(attrName, select.value);
     (twistyPlayer as any)[propName] = select.value as any;
   });
   contentElem.append(document.createElement("br"));
