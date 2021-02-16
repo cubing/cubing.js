@@ -25,9 +25,9 @@ import {
 import { PuzzleDescriptionString, PGPuzzles, PuzzleName } from "./PGPuzzles";
 import { centermassface, expandfaces, Quat } from "./Quat";
 import {
-  BlockMove,
-  KPuzzleDefinition,
-  MoveNotation,
+  PGVendoredBlockMove,
+  PGVendoredKPuzzleDefinition,
+  PGVendoredMoveNotation,
   Transformation as KTransformation,
 } from "./interfaces";
 import {
@@ -63,7 +63,7 @@ export interface StickerDat {
   foundations: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
-  unswizzle(mv: BlockMove): string;
+  unswizzle(mv: PGVendoredBlockMove): string;
   notationMapper: NotationMapper;
 }
 
@@ -1450,7 +1450,7 @@ export class PuzzleGeometry {
     }
   }
 
-  public unswizzle(mv: BlockMove): string {
+  public unswizzle(mv: PGVendoredBlockMove): string {
     const newmv = this.notationMapper.notationToInternal(mv);
     if (newmv === null) {
       return "";
@@ -1460,7 +1460,7 @@ export class PuzzleGeometry {
 
   // We use an extremely permissive parse here; any character but
   // digits are allowed in a family name.
-  public stringToBlockMove(mv: string): BlockMove {
+  public stringToBlockMove(mv: string): PGVendoredBlockMove {
     // parse a move from the command line
     const re = RegExp("^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$");
     const p = mv.match(re);
@@ -1488,10 +1488,10 @@ export class PuzzleGeometry {
       }
       amount = parseInt(amountstr, 10);
     }
-    return new BlockMove(loslice, hislice, grip, amount);
+    return new PGVendoredBlockMove(loslice, hislice, grip, amount);
   }
 
-  public parseBlockMove(blockmove: BlockMove): any {
+  public parseBlockMove(blockmove: PGVendoredBlockMove): any {
     const bm = this.notationMapper.notationToInternal(blockmove); // pluggable notation
     if (bm === null) {
       throw new Error("Bad move " + blockmove.family);
@@ -1943,9 +1943,9 @@ export class PuzzleGeometry {
     }
   }
 
-  public writekpuzzle(fortwisty: boolean = true): KPuzzleDefinition {
+  public writekpuzzle(fortwisty: boolean = true): PGVendoredKPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty);
-    const r = od.toKpuzzle() as KPuzzleDefinition;
+    const r = od.toKpuzzle() as PGVendoredKPuzzleDefinition;
     r.moveNotation = new PGNotation(this, od);
     return r;
   }
@@ -2636,7 +2636,7 @@ export class PuzzleGeometry {
       }
     }
     const f = (function () {
-      return function (mv: BlockMove): string {
+      return function (mv: PGVendoredBlockMove): string {
         return this.unswizzle(mv);
       };
     })().bind(this);
@@ -2684,11 +2684,11 @@ export class PuzzleGeometry {
   }
 }
 
-class PGNotation implements MoveNotation {
+class PGNotation implements PGVendoredMoveNotation {
   private cache: { [key: string]: KTransformation } = {};
   constructor(public pg: PuzzleGeometry, public od: OrbitsDef) {}
 
-  public lookupMove(move: BlockMove): KTransformation | undefined {
+  public lookupMove(move: PGVendoredBlockMove): KTransformation | undefined {
     const key = this.blockMoveToString(move);
     if (key in this.cache) {
       return this.cache[key];
@@ -2713,7 +2713,7 @@ class PGNotation implements MoveNotation {
   }
 
   // This is only used to construct keys, so does not need to be beautiful.
-  private blockMoveToString(mv: BlockMove): string {
+  private blockMoveToString(mv: PGVendoredBlockMove): string {
     let r = "";
     if (mv.outerLayer) {
       r = r + mv.outerLayer + ",";

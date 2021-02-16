@@ -1,4 +1,5 @@
 import {
+  BlockMove,
   blockMoveToString,
   Comment,
   Commutator,
@@ -9,7 +10,6 @@ import {
   Sequence,
   TraversalDownUp,
 } from "../../alg";
-import { BlockMove } from "../../puzzle-geometry/interfaces";
 import { TwistyPlayer } from "../../twisty";
 import { TimeRange } from "../animation/cursor/AlgCursor";
 import {

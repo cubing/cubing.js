@@ -2,8 +2,7 @@
 
 import { Quaternion } from "three";
 import { BareBlockMove, BlockMove } from "../alg";
-import { KPuzzle } from "../kpuzzle";
-import { KPuzzleDefinition } from "../puzzle-geometry/interfaces";
+import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
 import { puzzles } from "../puzzles";
 import {
   BluetoothConfig,

@@ -19,7 +19,7 @@ import {
 // @ts-ignore
 import { BlockMove } from "../../../alg";
 import { Transformation } from "../../../kpuzzle";
-import { KPuzzleDefinition } from "../../../puzzle-geometry/interfaces";
+import { PGVendoredKPuzzleDefinition } from "../../../puzzle-geometry/interfaces";
 import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { smootherStep } from "../../animation/easing";
@@ -478,7 +478,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   });
 
   constructor(
-    private def: KPuzzleDefinition,
+    private def: PGVendoredKPuzzleDefinition,
     cursor?: AlgCursor,
     private scheduleRenderCallback?: () => void,
     options: Cube3DOptions = {},

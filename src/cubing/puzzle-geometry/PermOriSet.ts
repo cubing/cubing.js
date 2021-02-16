@@ -1,4 +1,4 @@
-import { KPuzzleDefinition } from "./interfaces"; // TODO
+import { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
   factorial,
@@ -74,7 +74,7 @@ export class OrbitsDef {
   }
 
   // TODO: return type.
-  public toKpuzzle(): KPuzzleDefinition {
+  public toKpuzzle(): PGVendoredKPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {

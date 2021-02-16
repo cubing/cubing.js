@@ -4,7 +4,7 @@
 //   use interoperably.  These definitions are not identical to those in
 //   the corresponding classes but they are interoperable.
 
-export class BlockMove {
+export class PGVendoredBlockMove {
   public type: string = "blockMove";
   public outerLayer?: number;
   public innerLayer?: number;
@@ -28,27 +28,27 @@ export class BlockMove {
   }
 }
 
-export interface MoveNotation {
-  lookupMove(move: BlockMove): Transformation | undefined;
+export interface PGVendoredMoveNotation {
+  lookupMove(move: PGVendoredBlockMove): Transformation | undefined;
 }
 
-export interface OrbitTransformation {
+export interface PGVendoredOrbitTransformation {
   permutation: number[];
   orientation: number[];
 }
 
-export type Transformation = Record<string, OrbitTransformation>;
+export type Transformation = Record<string, PGVendoredOrbitTransformation>;
 
-export interface OrbitDefinition {
+export interface PGVendoredOrbitDefinition {
   numPieces: number;
   orientations: number;
 }
 
-export interface KPuzzleDefinition {
+export interface PGVendoredKPuzzleDefinition {
   name: string;
-  orbits: { [key: string]: OrbitDefinition };
+  orbits: { [key: string]: PGVendoredOrbitDefinition };
   startPieces: Transformation;
   moves: { [key: string]: Transformation };
   svg?: string;
-  moveNotation?: MoveNotation;
+  moveNotation?: PGVendoredMoveNotation;
 }
