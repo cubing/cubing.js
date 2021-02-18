@@ -1,6 +1,10 @@
 import { BlockMove, blockMoveToString, expand, Sequence } from "../alg";
 import { KPuzzleDefinition, Transformation } from "./definition_types";
-import { Multiply, IdentityTransformation, Combine } from "./transformations";
+import {
+  multiplyTransformations,
+  identityTransformation,
+  combineTransformations,
+} from "./transformations";
 import { MoveNotation } from "./move_notation";
 
 // TODO: Move other helpers into the definition.
@@ -41,7 +45,7 @@ class KPuzzleMoveNotation implements MoveNotation {
     const baseKey = blockMoveToString(baseMove);
     r = this.def.moves[baseKey];
     if (r) {
-      r = Multiply(this.def, r, move.amount);
+      r = multiplyTransformations(this.def, r, move.amount);
       this.cache[key] = r;
     }
     return r;
@@ -51,11 +55,11 @@ class KPuzzleMoveNotation implements MoveNotation {
 export class KPuzzle {
   public state: Transformation;
   constructor(public definition: KPuzzleDefinition) {
-    this.state = IdentityTransformation(definition);
+    this.state = identityTransformation(definition);
   }
 
   public reset(): void {
-    this.state = IdentityTransformation(this.definition);
+    this.state = identityTransformation(this.definition);
   }
 
   public serialize(): string {
@@ -70,7 +74,7 @@ export class KPuzzle {
   }
 
   public applyBlockMove(blockMove: BlockMove): void {
-    this.state = Combine(
+    this.state = combineTransformations(
       this.definition,
       this.state,
       stateForBlockMove(this.definition, blockMove),

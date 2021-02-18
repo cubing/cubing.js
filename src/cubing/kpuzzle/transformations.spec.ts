@@ -4,8 +4,8 @@ import { puzzles } from "../puzzles";
 import { Transformation } from "./definition_types";
 import { KPuzzle } from "./kpuzzle";
 import {
-  EquivalentOrbitTransformations,
-  EquivalentTransformations,
+  areOrbitTransformationsEquivalent,
+  areTransformationsEquivalent,
 } from "./transformations";
 
 function isEquivalentTranformationIgnoringOrientationForCENTERS(
@@ -15,7 +15,7 @@ function isEquivalentTranformationIgnoringOrientationForCENTERS(
 ): boolean {
   for (const orbitName in def.orbits) {
     if (
-      !EquivalentOrbitTransformations(def, orbitName, t1, t2, {
+      !areOrbitTransformationsEquivalent(def, orbitName, t1, t2, {
         ignoreOrientation: orbitName === "CENTERS",
       })
     ) {
@@ -34,7 +34,7 @@ describe("tranformations", () => {
     kpuzzle2.applyAlg(parseAlg("(R' U' R U')5"));
 
     expect(
-      EquivalentOrbitTransformations(
+      areOrbitTransformationsEquivalent(
         def,
         "CENTERS",
         kpuzzle1.state,
@@ -43,7 +43,7 @@ describe("tranformations", () => {
     ).toBe(false);
 
     expect(
-      EquivalentOrbitTransformations(
+      areOrbitTransformationsEquivalent(
         def,
         "CENTERS",
         kpuzzle1.state,
@@ -60,9 +60,9 @@ describe("tranformations", () => {
     const kpuzzle2 = new KPuzzle(def);
     kpuzzle2.applyAlg(parseAlg("(R' U' R U')5"));
 
-    expect(EquivalentTransformations(def, kpuzzle1.state, kpuzzle2.state)).toBe(
-      false,
-    );
+    expect(
+      areTransformationsEquivalent(def, kpuzzle1.state, kpuzzle2.state),
+    ).toBe(false);
 
     expect(
       isEquivalentTranformationIgnoringOrientationForCENTERS(

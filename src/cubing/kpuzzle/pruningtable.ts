@@ -1,6 +1,6 @@
-import { Canonicalize, CanonicalSequenceIterator } from "./canonicalize";
+import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
 import { KPuzzleDefinition, Transformation } from ".";
-import { EquivalentStates } from "./transformations";
+import { areStatesEquivalient } from "./transformations";
 const mask = 0x7fffffff;
 function hash(def: KPuzzleDefinition, s: Transformation): number {
   let r = 0;
@@ -22,7 +22,7 @@ export class PruningTable {
   private def: KPuzzleDefinition;
   private filled: number = -1;
   constructor(
-    public canon: Canonicalize,
+    public canon: Canonicalizer,
     public memsize: number = 16 * 1024 * 1024,
   ) {
     this.def = canon.def;
@@ -54,7 +54,7 @@ export class PruningTable {
         const dep = this.lookup(t.value.trans);
         if (
           dep === 0 &&
-          EquivalentStates(this.def, t.value.trans, this.def.startPieces)
+          areStatesEquivalient(this.def, t.value.trans, this.def.startPieces)
         ) {
           return t.value.getSequenceAsString();
         }

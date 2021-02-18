@@ -1,6 +1,10 @@
 import { getPuzzleGeometryByDesc } from "./index";
 import { PGPuzzles } from "./PGPuzzles";
-import { KPuzzleDefinition, Order, Transformation } from "../kpuzzle";
+import {
+  KPuzzleDefinition,
+  transformationOrder,
+  Transformation,
+} from "../kpuzzle";
 import { BlockMove, parseAlg, Sequence } from "../alg";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
 /**
@@ -86,7 +90,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       const ksp = new KSolvePuzzle(kpuzzledef);
       const tai = new TreeAlgIndexer(ksp, algo);
       const tr = tai.transformAtIndex(tai.numMoves());
-      const o = Order(kpuzzledef, tr as Transformation);
+      const o = transformationOrder(kpuzzledef, tr as Transformation);
       let dat =
         name +
         sep +

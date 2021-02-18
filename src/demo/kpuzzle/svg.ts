@@ -1,12 +1,16 @@
 import { parseAlg, Sequence } from "../../cubing/alg";
-import { KPuzzle, KPuzzleDefinition, SVG } from "../../cubing/kpuzzle";
+import {
+  KPuzzle,
+  KPuzzleDefinition,
+  KPuzzleSVGWrapper,
+} from "../../cubing/kpuzzle";
 import { puzzles } from "../../cubing/puzzles";
 
 class SVGDisplay {
-  private svg: SVG;
+  private svg: KPuzzleSVGWrapper;
   private kpuzzle: KPuzzle;
   constructor(private def: KPuzzleDefinition, svg: string) {
-    this.svg = new SVG(def, svg);
+    this.svg = new KPuzzleSVGWrapper(def, svg);
     this.kpuzzle = new KPuzzle(this.def);
   }
 

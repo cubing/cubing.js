@@ -1,1 +1,1 @@
-export { pegParseKPuzzleDefinition as parseKPuzzle } from "./parser-shim";
+export { pegParseKPuzzleDefinition as parseKPuzzleDefinition } from "./parser-shim";

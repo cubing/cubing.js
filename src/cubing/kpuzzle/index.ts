@@ -7,22 +7,25 @@ export {
 export { KPuzzle, stateForBlockMove } from "./kpuzzle";
 
 export {
-  Canonicalize,
+  Canonicalizer,
   SearchSequence,
   CanonicalSequenceIterator,
 } from "./canonicalize";
 
 export {
-  Combine,
-  Multiply,
-  IdentityTransformation,
-  Invert,
-  EquivalentTransformations,
-  EquivalentOrbitTransformations,
-  EquivalentStates,
-  Order,
+  combineTransformations,
+  multiplyTransformations,
+  identityTransformation,
+  invertTransformation,
+  areTransformationsEquivalent,
+  areOrbitTransformationsEquivalent,
+  areStatesEquivalient,
+  transformationOrder,
 } from "./transformations";
 
-export { parseKPuzzle } from "./parser";
+export { parseKPuzzleDefinition } from "./parser";
 
-export { SVG } from "./svg";
+export { KPuzzleSVGWrapper } from "./svg";
+
+// Legacy exports
+export * from "./index-legacy";

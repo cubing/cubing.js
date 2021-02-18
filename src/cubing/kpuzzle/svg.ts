@@ -55,7 +55,7 @@ const colorMaps: Partial<Record<
   },
 };
 
-export class SVG {
+export class KPuzzleSVGWrapper {
   public element: HTMLElement;
   public gradientDefs: SVGDefsElement;
   private originalColors: { [type: string]: string } = {};

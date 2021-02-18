@@ -1,9 +1,9 @@
 import { BlockMove } from "../../../alg";
 import {
-  Combine,
+  combineTransformations,
   KPuzzleDefinition,
   stateForBlockMove,
-  SVG,
+  KPuzzleSVGWrapper,
   Transformation,
 } from "../../../kpuzzle";
 import { PuzzleAppearance } from "../../3D/puzzles/appearance";
@@ -29,7 +29,7 @@ export class Twisty2DSVG
   extends ManagedCustomElement
   implements TwistyViewerElement, PositionListener {
   private definition: KPuzzleDefinition;
-  private svg: SVG;
+  private svg: KPuzzleSVGWrapper;
   private scheduler = new RenderScheduler(this.render.bind(this));
   #cachedPosition: PuzzlePosition | null = null; // TODO: pull when needed.
   constructor(
@@ -62,7 +62,7 @@ export class Twisty2DSVG
         move.family,
         move.amount * position.movesInProgress[0].direction,
       );
-      const newState = Combine(
+      const newState = combineTransformations(
         def,
         position.state as Transformation,
         stateForBlockMove(def, partialMove),
@@ -97,7 +97,11 @@ export class Twisty2DSVG
     if (!this.definition) {
       return; // TODO
     }
-    this.svg = new SVG(this.definition, this.svgSource!, appearance); // TODO
+    this.svg = new KPuzzleSVGWrapper(
+      this.definition,
+      this.svgSource!,
+      appearance,
+    ); // TODO
     this.addElement(this.svg.element);
     if (this.#cachedPosition) {
       this.onPositionChange(this.#cachedPosition);

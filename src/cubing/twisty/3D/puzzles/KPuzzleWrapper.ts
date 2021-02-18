@@ -1,9 +1,9 @@
 import { BlockMove, blockMoveToString } from "../../../alg";
 import {
-  Combine,
-  EquivalentStates,
-  IdentityTransformation,
-  Invert,
+  combineTransformations,
+  areStatesEquivalient,
+  identityTransformation,
+  invertTransformation,
   KPuzzleDefinition,
   stateForBlockMove,
   Transformation,
@@ -74,14 +74,14 @@ export class KPuzzleWrapper extends PuzzleWrapper {
   }
 
   public invert(state: KSolvePuzzleState): KSolvePuzzleState {
-    return Invert(this.definition, state);
+    return invertTransformation(this.definition, state);
   }
 
   public combine(
     s1: KSolvePuzzleState,
     s2: KSolvePuzzleState,
   ): KSolvePuzzleState {
-    return Combine(this.definition, s1, s2);
+    return combineTransformations(this.definition, s1, s2);
   }
 
   public stateFromMove(blockMove: BlockMove): KSolvePuzzleState {
@@ -93,11 +93,11 @@ export class KPuzzleWrapper extends PuzzleWrapper {
   }
 
   public identity(): KSolvePuzzleState {
-    return IdentityTransformation(this.definition);
+    return identityTransformation(this.definition);
   }
 
   public equivalent(s1: KSolvePuzzleState, s2: KSolvePuzzleState): boolean {
-    return EquivalentStates(this.definition, s1, s2);
+    return areStatesEquivalient(this.definition, s1, s2);
   }
 }
 

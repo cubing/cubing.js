@@ -5,9 +5,9 @@
  */
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import {
-  EquivalentTransformations,
-  Combine,
-  IdentityTransformation,
+  areTransformationsEquivalent,
+  combineTransformations,
+  identityTransformation,
 } from "./transformations";
 import {
   modifiedBlockMove,
@@ -18,11 +18,11 @@ import {
 
 class InternalMove {
   constructor(public base: number, public twist: number) {}
-  public getTransformation(canon: Canonicalize): Transformation {
+  public getTransformation(canon: Canonicalizer): Transformation {
     return canon.transforms[this.base][this.twist];
   }
 
-  public asString(canon: Canonicalize): string {
+  public asString(canon: Canonicalizer): string {
     const mod = canon.moveorder[this.base];
     let tw = this.twist % mod;
     while (tw + tw > mod) {
@@ -47,7 +47,7 @@ class InternalMove {
 }
 
 // represents puzzle move data and its commuting structure
-export class Canonicalize {
+export class Canonicalizer {
   public commutes: boolean[][] = [];
   public moveorder: number[] = [];
   public movenames: string[] = [];
@@ -56,7 +56,7 @@ export class Canonicalize {
   public baseMoveCount: number;
   constructor(public def: KPuzzleDefinition) {
     const basemoves = def.moves;
-    const id = IdentityTransformation(def);
+    const id = identityTransformation(def);
     for (const mv1 in basemoves) {
       this.moveindex[mv1] = this.movenames.length;
       this.movenames.push(mv1);
@@ -68,18 +68,18 @@ export class Canonicalize {
       const t1 = this.transforms[i][1];
       for (let j = 0; j < this.baseMoveCount; j++) {
         const t2 = this.transforms[j][1];
-        const ab = Combine(def, t1, t2);
-        const ba = Combine(def, t2, t1);
-        this.commutes[i][j] = EquivalentTransformations(def, ab, ba);
+        const ab = combineTransformations(def, t1, t2);
+        const ba = combineTransformations(def, t2, t1);
+        this.commutes[i][j] = areTransformationsEquivalent(def, ab, ba);
       }
     }
     for (let i = 0; i < this.baseMoveCount; i++) {
       const t1 = this.transforms[i][1];
       let ct = t1;
       let order = 1;
-      for (let mult = 2; !EquivalentTransformations(def, id, ct); mult++) {
+      for (let mult = 2; !areTransformationsEquivalent(def, id, ct); mult++) {
         order++;
-        ct = Combine(def, ct, t1);
+        ct = combineTransformations(def, ct, t1);
         this.transforms[i].push(ct);
       }
       this.moveorder[i] = order;
@@ -126,17 +126,18 @@ export class Canonicalize {
     return ss;
   }
 }
+
 // represents a single sequence we are working on
 // this can be a search sequence, or it can be a
 // "cooked" sequence that we want to use efficiently.
 export class SearchSequence {
   public moveseq: InternalMove[] = [];
   public trans: Transformation;
-  constructor(private canon: Canonicalize, tr?: Transformation) {
+  constructor(private canon: Canonicalizer, tr?: Transformation) {
     if (tr) {
       this.trans = tr;
     } else {
-      this.trans = IdentityTransformation(canon.def);
+      this.trans = identityTransformation(canon.def);
     }
   }
 
@@ -154,7 +155,7 @@ export class SearchSequence {
   // returns 1 if the move is added, 0 if it is merged, -1 if it cancels a move
   public mergeOneMove(mv: InternalMove): number {
     const r = this.onlyMergeOneMove(mv);
-    this.trans = Combine(
+    this.trans = combineTransformations(
       this.canon.def,
       this.trans,
       mv.getTransformation(this.canon),
@@ -165,7 +166,7 @@ export class SearchSequence {
   // does not do merge work; just slaps the new move on
   public appendOneMove(mv: InternalMove): number {
     this.moveseq.push(mv);
-    this.trans = Combine(
+    this.trans = combineTransformations(
       this.canon.def,
       this.trans,
       mv.getTransformation(this.canon),
@@ -179,7 +180,7 @@ export class SearchSequence {
     if (!mv) {
       throw new Error("Can't pop an empty sequence");
     }
-    this.trans = Combine(
+    this.trans = combineTransformations(
       this.canon.def,
       this.trans,
       this.canon.transforms[mv.base][this.canon.moveorder[mv.base] - mv.twist],
@@ -190,7 +191,7 @@ export class SearchSequence {
   // do one more twist of the last move
   public oneMoreTwist(): number {
     const lastmv = this.moveseq[this.moveseq.length - 1];
-    this.trans = Combine(
+    this.trans = combineTransformations(
       this.canon.def,
       this.trans,
       this.canon.transforms[lastmv.base][1],
@@ -238,7 +239,7 @@ export class SearchSequence {
       const d = this.onlyMergeOneMove(mv);
       r += d;
     }
-    this.trans = Combine(this.canon.def, this.trans, seq.trans);
+    this.trans = combineTransformations(this.canon.def, this.trans, seq.trans);
     return r;
   }
 
@@ -250,6 +251,7 @@ export class SearchSequence {
     return r.join(" ");
   }
 }
+
 /*
  *   Iterate through canonical sequences by length.  This version
  *   uses generators.
@@ -257,7 +259,7 @@ export class SearchSequence {
 export class CanonicalSequenceIterator {
   public ss: SearchSequence;
   public targetLength: number;
-  constructor(public canon: Canonicalize, state?: Transformation) {
+  constructor(public canon: Canonicalizer, state?: Transformation) {
     this.ss = new SearchSequence(canon, state);
     this.targetLength = 0;
   }

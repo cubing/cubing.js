@@ -1,14 +1,14 @@
 import { getPuzzleGeometryByName } from "../puzzle-geometry";
 import { KPuzzleDefinition } from ".";
 import { parseAlg } from "../alg";
-import { Canonicalize } from "./canonicalize";
+import { Canonicalizer } from "./canonicalize";
 import { PruningTable } from "./pruningtable";
 describe("PruneTable", () => {
   it("solve 2x2x2", () => {
     const options: string[] = [];
     const pg = getPuzzleGeometryByName("2x2x2", options);
     const def = pg.writekpuzzle(false) as KPuzzleDefinition;
-    const canon = new Canonicalize(def);
+    const canon = new Canonicalizer(def);
     const a1 = "L' D L2 D' L2 F R' F R' L' F D L2 F2 R' F U B'";
     const ss1 = canon.sequenceToSearchSequence(parseAlg(a1), def.startPieces);
     const pt = new PruningTable(canon);

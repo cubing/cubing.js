@@ -13,7 +13,7 @@ import {
 } from "three";
 import { BlockMove, modifiedBlockMove } from "../../../alg";
 import {
-  EquivalentTransformations,
+  areTransformationsEquivalent,
   KPuzzleDefinition,
   stateForBlockMove,
   Transformation,
@@ -394,7 +394,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     let colormods = 0;
     if (
       !this.lastPos ||
-      !EquivalentTransformations(this.definition, this.lastPos, pos)
+      !areTransformationsEquivalent(this.definition, this.lastPos, pos)
     ) {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];

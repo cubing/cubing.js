@@ -1,13 +1,17 @@
 import { getPuzzleGeometryByName } from "../puzzle-geometry";
-import { KPuzzleDefinition, EquivalentStates, Combine } from ".";
+import {
+  KPuzzleDefinition,
+  areStatesEquivalient,
+  combineTransformations,
+} from ".";
 import { parseAlg } from "../alg";
-import { Canonicalize, CanonicalSequenceIterator } from "./canonicalize";
+import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
 describe("CanonSequences", () => {
   it("should merge sequences (megaminx test)", () => {
     const options: string[] = [];
     const pg = getPuzzleGeometryByName("megaminx", options);
     const def = pg.writekpuzzle(false) as KPuzzleDefinition;
-    const canon = new Canonicalize(def);
+    const canon = new Canonicalizer(def);
     const a1 = "U F2 BL R3 L3";
     const a2 = "L2 BL2 F' U2";
     const ss1 = canon.sequenceToSearchSequence(parseAlg(a1));
@@ -18,14 +22,18 @@ describe("CanonSequences", () => {
     expect(ss3.moveseq.length).toBe(6);
     expect(ss3.getSequenceAsString()).toBe("U F2 BL2' R2' F' U2");
     expect(
-      EquivalentStates(def, ss3.trans, Combine(def, ss1.trans, ss2.trans)),
+      areStatesEquivalient(
+        def,
+        ss3.trans,
+        combineTransformations(def, ss1.trans, ss2.trans),
+      ),
     ).toBeTruthy();
   });
   it("should generate canonical sequences (3x3x3 test)", () => {
     const options: string[] = ["allmoves", "false"];
     const pg = getPuzzleGeometryByName("3x3x3", options);
     const def = pg.writekpuzzle(false) as KPuzzleDefinition;
-    const canon = new Canonicalize(def);
+    const canon = new Canonicalizer(def);
     const cnts = [0, 0, 0, 0];
     const csi = new CanonicalSequenceIterator(canon);
     const gen = csi.generator();

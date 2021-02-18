@@ -1,6 +1,6 @@
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 
-export function Combine(
+export function combineTransformations(
   def: KPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
@@ -23,29 +23,29 @@ export function Combine(
   return newTrans;
 }
 
-export function Multiply(
+export function multiplyTransformations(
   def: KPuzzleDefinition,
   t: Transformation,
   amount: number,
 ): Transformation {
   if (amount < 0) {
-    return Multiply(def, Invert(def, t), -amount);
+    return multiplyTransformations(def, invertTransformation(def, t), -amount);
   }
   if (amount === 0) {
-    return IdentityTransformation(def);
+    return identityTransformation(def);
   }
   if (amount === 1) {
     return t;
   }
-  const halfish = Multiply(def, t, Math.floor(amount / 2));
-  const twiceHalfish = Combine(def, halfish, halfish);
+  const halfish = multiplyTransformations(def, t, Math.floor(amount / 2));
+  const twiceHalfish = combineTransformations(def, halfish, halfish);
   if (amount % 2 === 0) {
     return twiceHalfish;
   } else {
-    return Combine(def, t, twiceHalfish);
+    return combineTransformations(def, t, twiceHalfish);
   }
 }
-export function IdentityTransformation(
+export function identityTransformation(
   definition: KPuzzleDefinition,
 ): Transformation {
   const transformation = {} as Transformation;
@@ -66,7 +66,7 @@ export function IdentityTransformation(
   return transformation;
 }
 
-export function Invert(
+export function invertTransformation(
   def: KPuzzleDefinition,
   t: Transformation,
 ): Transformation {
@@ -94,8 +94,12 @@ function gcd(a: number, b: number): number {
   }
   return a;
 }
+
 /* calculate the order of a particular transformation. */
-export function Order(def: KPuzzleDefinition, t: Transformation): number {
+export function transformationOrder(
+  def: KPuzzleDefinition,
+  t: Transformation,
+): number {
   let r: number = 1;
   for (const orbitName in def.orbits) {
     const oDef = def.orbits[orbitName];
@@ -125,7 +129,7 @@ export function Order(def: KPuzzleDefinition, t: Transformation): number {
   return r;
 }
 
-export function EquivalentOrbitTransformations(
+export function areOrbitTransformationsEquivalent(
   def: KPuzzleDefinition,
   orbitName: string,
   t1: Transformation,
@@ -155,29 +159,29 @@ export function EquivalentOrbitTransformations(
   return true;
 }
 
-export function EquivalentTransformations(
+export function areTransformationsEquivalent(
   def: KPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
 ): boolean {
   for (const orbitName in def.orbits) {
-    if (!EquivalentOrbitTransformations(def, orbitName, t1, t2)) {
+    if (!areOrbitTransformationsEquivalent(def, orbitName, t1, t2)) {
       return false;
     }
   }
   return true;
 }
 
-export function EquivalentStates(
+export function areStatesEquivalient(
   def: KPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
 ): boolean {
   // Turn transformations into states.
   // This accounts for indistinguishable pieces.
-  return EquivalentTransformations(
+  return areTransformationsEquivalent(
     def,
-    Combine(def, def.startPieces, t1),
-    Combine(def, def.startPieces, t2),
+    combineTransformations(def, def.startPieces, t1),
+    combineTransformations(def, def.startPieces, t2),
   );
 }

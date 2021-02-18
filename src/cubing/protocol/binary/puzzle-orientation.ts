@@ -1,5 +1,10 @@
 import { parseAlg, Sequence } from "../../alg";
-import { Combine, Invert, KPuzzle, Transformation } from "../../kpuzzle";
+import {
+  combineTransformations,
+  invertTransformation,
+  KPuzzle,
+  Transformation,
+} from "../../kpuzzle";
 // TODO: Should we expose this directly in the `puzzles` package for sync uses?
 import { cube3x3x3KPuzzle as def } from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 
@@ -36,7 +41,7 @@ const puzzleOrientationCache: Transformation[][] = new Array(6)
     for (let i = 0; i < 4; i++) {
       orientationKpuzzle.applyAlg(yAlg);
       const [idxU, idxL] = puzzleOrientationIdx(orientationKpuzzle.state);
-      puzzleOrientationCache[idxU][idxL] = Invert(
+      puzzleOrientationCache[idxU][idxL] = invertTransformation(
         def,
         orientationKpuzzle.state,
       );
@@ -47,7 +52,7 @@ const puzzleOrientationCache: Transformation[][] = new Array(6)
 export function normalizePuzzleOrientation(s: Transformation): Transformation {
   const [idxU, idxL] = puzzleOrientationIdx(s);
   const orientationTransformation = puzzleOrientationCache[idxU][idxL];
-  return Combine(def, s, orientationTransformation);
+  return combineTransformations(def, s, orientationTransformation);
 }
 
 // TODO: combine with `orientPuzzle`?
@@ -56,9 +61,9 @@ export function reorientPuzzle(
   idxU: number,
   idxL: number,
 ): Transformation {
-  const orientationTransformation = Invert(
+  const orientationTransformation = invertTransformation(
     def,
     puzzleOrientationCache[idxU][idxL],
   );
-  return Combine(def, s, orientationTransformation);
+  return combineTransformations(def, s, orientationTransformation);
 }

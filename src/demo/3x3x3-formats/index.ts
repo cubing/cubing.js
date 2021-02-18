@@ -2,7 +2,7 @@ import { parseAlg } from "../../cubing/alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
-  SVG,
+  KPuzzleSVGWrapper,
   Transformation,
 } from "../../cubing/kpuzzle";
 import {
@@ -38,7 +38,7 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
 
 class App {
   kpuzzle = new KPuzzle(def);
-  svg = new SVG(def, svgSource);
+  svg = new KPuzzleSVGWrapper(def, svgSource);
   algTextarea = document.querySelector("#alg")! as HTMLTextAreaElement;
   kpuzzleTextarea = document.querySelector("#kpuzzle")! as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
