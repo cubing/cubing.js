@@ -235,7 +235,7 @@ export class Twisty3DCanvas
 
     // TODO: can we assume that a central crop is similar enough to how a square canvas render would loook?
     if (!options.squareCrop || this.canvas.width === this.canvas.height) {
-      // TODO: is this such an uncommon path taht we can skip it?
+      // TODO: is this such an uncommon path that we can skip it?
       return this.canvas.toDataURL();
     } else {
       const tempCanvas = document.createElement("canvas");
