@@ -61,14 +61,14 @@ document.querySelector("#download")?.addEventListener("click", () => {
     name: string;
   }[] = [];
   for (const unit of allAlgs.nestedUnits) {
-    if (unit.type === "blockMove") {
-      currentAlg = new Sequence(currentAlg.nestedUnits.concat([unit]));
-    } else if (unit.type === "comment") {
+    if (unit.type === "comment") {
       algList.push({
         alg: currentAlg,
         name: (unit as Comment).comment.trim(),
       });
       currentAlg = new Sequence([]);
+    } else {
+      currentAlg = new Sequence(currentAlg.nestedUnits.concat([unit]));
     }
   }
 
