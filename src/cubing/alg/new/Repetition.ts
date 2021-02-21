@@ -1,3 +1,4 @@
+import { Comparable } from "./common";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
 
 export type RepetitionInfo =
@@ -6,7 +7,7 @@ export type RepetitionInfo =
   | null
   | [/* absolute amount */ number | null, /* prime */ boolean];
 
-export class Repetition<Q> {
+export class Repetition<Q extends Comparable> {
   readonly quantum: Q;
   readonly absAmount: number | null = null;
   readonly prime: boolean = false;
@@ -52,5 +53,13 @@ export class Repetition<Q> {
       s += "'";
     }
     return s;
+  }
+
+  isIdentical(other: Repetition<Q>): boolean {
+    return (
+      this.quantum.isIdentical(other.quantum) &&
+      this.absAmount === other.absAmount &&
+      this.prime === other.prime
+    );
   }
 }

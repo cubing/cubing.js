@@ -1,23 +1,23 @@
-import {
-  assertIsUnit,
-  assertMatchesType,
-  isUnit,
-  matchesAlgType,
-} from "./algorithm/alg-part";
+// import {
+//   assertIsUnit,
+//   assertMatchesType,
+//   isUnit,
+//   matchesAlgType,
+// } from "./algorithm/alg-part";
 
-import {
-  AlgPart,
-  BlockMove,
-  Comment,
-  Commutator,
-  Conjugate,
-  Group,
-  NewLine,
-  Pause,
-  Sequence,
-  OldUnit,
-  WithAmount,
-} from "./algorithm";
+// import {
+//   AlgPart,
+//   BlockMove,
+//   Comment,
+//   Commutator,
+//   Conjugate,
+//   Group,
+//   NewLine,
+//   Pause,
+//   Sequence,
+//   OldUnit,
+//   WithAmount,
+// } from "./algorithm";
 
 function dispatch<DataDown, DataUp>(
   t: TraversalDownUp<DataDown, DataUp>,

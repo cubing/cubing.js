@@ -1,16 +1,26 @@
-import { BlockMove } from "../algorithm";
-import { Repetition, RepetitionInfo } from "./Repetition";
-import { Serializable } from "./Serializable";
-import { warnOnce } from "./warnOnce";
-import { parseMove } from "./parse";
+import { AlgCommon, Comparable } from "./common";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
+import { parseMove } from "./parse";
+import { Repetition, RepetitionInfo } from "./Repetition";
+import { warnOnce } from "./warnOnce";
 
-export class MoveQuantum {
+interface MoveQuantumModifications {
+  outerLayer?: number;
+  innerLayer?: number;
+  family?: string;
+}
+
+export class MoveQuantum extends Comparable {
   readonly #family: string;
   readonly #innerLayer: number | null;
   readonly #outerLayer: number | null;
 
-  constructor(family: string, innerLayer?: number, outerLayer?: number) {
+  constructor(
+    family: string,
+    innerLayer?: number | null,
+    outerLayer?: number | null,
+  ) {
+    super();
     this.#family = family;
     this.#innerLayer = innerLayer ?? null;
     this.#outerLayer = outerLayer ?? null;
@@ -55,6 +65,24 @@ export class MoveQuantum {
     }
   }
 
+  modified(modifications: MoveQuantumModifications): MoveQuantum {
+    return new MoveQuantum(
+      modifications.family ?? this.#family,
+      modifications.innerLayer ?? this.#innerLayer,
+      modifications.outerLayer ?? this.#outerLayer,
+    );
+  }
+
+  isIdentical(other: Comparable): boolean {
+    const otherAsMoveQuantum = other as MoveQuantum;
+    return (
+      other.is(MoveQuantum) &&
+      this.#family === otherAsMoveQuantum.#family &&
+      this.#innerLayer === otherAsMoveQuantum.#innerLayer &&
+      this.#outerLayer === otherAsMoveQuantum.#outerLayer
+    );
+  }
+
   // TODO: provide something more useful on average.
   /** @deprecated */
   get experimentalRawFamily(): string {
@@ -88,16 +116,49 @@ export class MoveQuantum {
   }
 }
 
-export class Move implements BlockMove, Serializable {
+interface MoveModifications {
+  outerLayer?: number;
+  innerLayer?: number;
+  family?: string;
+  repetition?: RepetitionInfo;
+}
+
+export class Move extends AlgCommon {
   readonly #repetition: Repetition<MoveQuantum>;
 
   constructor(
     ...args: [MoveQuantum] | [MoveQuantum, RepetitionInfo] | [string]
   ) {
+    super();
     if (typeof args[0] === "string") {
       return Move.fromString(args[0]); // TODO: can we return here?
     }
     this.#repetition = new Repetition<MoveQuantum>(args[0], args[1]);
+  }
+
+  isIdentical(other: Comparable): boolean {
+    const otherAsMove = other as Move;
+    return (
+      other.is(Move) && this.#repetition.isIdentical(otherAsMove.#repetition)
+    );
+  }
+
+  get quantum(): MoveQuantum {
+    return this.#repetition.quantum;
+  }
+
+  equals(other: Move): boolean {
+    return (
+      this.quantum.isIdentical(other.quantum) &&
+      this.#repetition.isIdentical(other.#repetition)
+    );
+  }
+
+  modified(modifications: MoveModifications): Move {
+    return new Move(
+      this.#repetition.quantum.modified(modifications),
+      modifications.repetition,
+    );
   }
 
   static fromString(s: string): Move {

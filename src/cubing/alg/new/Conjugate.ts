@@ -1,9 +1,20 @@
 import { Alg } from "./Alg";
+import { AlgCommon, Comparable } from "./common";
 import { Repetition, RepetitionInfo } from "./Repetition";
 
-export class ConjugateQuantum {
+export class ConjugateQuantum extends Comparable {
   constructor(public A: Alg, public B: Alg) {
+    super();
     Object.freeze(this);
+  }
+
+  isIdentical(other: Comparable): boolean {
+    const otherAsConjugateQuantum = other as ConjugateQuantum;
+    return (
+      other.is(ConjugateQuantum) &&
+      this.A.isIdentical(otherAsConjugateQuantum.A) &&
+      this.B.isIdentical(otherAsConjugateQuantum.B)
+    );
   }
 
   toString(): string {
@@ -11,13 +22,22 @@ export class ConjugateQuantum {
   }
 }
 
-export class Conjugate {
+export class Conjugate extends AlgCommon {
   readonly #repetition: Repetition<ConjugateQuantum>;
 
   constructor(A: Alg, B: Alg, repetitionInfo: RepetitionInfo) {
+    super();
     this.#repetition = new Repetition<ConjugateQuantum>(
       new ConjugateQuantum(A, B),
       repetitionInfo,
+    );
+  }
+
+  isIdentical(other: Comparable): boolean {
+    const otherAsConjugate = other as Conjugate;
+    return (
+      other.is(Conjugate) &&
+      this.#repetition.isIdentical(otherAsConjugate.#repetition)
     );
   }
 
@@ -25,9 +45,9 @@ export class Conjugate {
     return `${this.#repetition.quantum.toString()}${this.#repetition.suffix()}`;
   }
 
-  // toJSON(): CommutatorJSON {
+  // toJSON(): ConjugateJSON {
   //   return {
-  //     type: "commutator",
+  //     type: "conjugate",
   //     A: this.#quanta.quantum.A.toJSON(),
   //     B: this.#quanta.quantum.B.toJSON(),
   //     amount: this.a

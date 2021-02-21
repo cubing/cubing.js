@@ -1,15 +1,14 @@
-import { Sequence } from "../algorithm";
+import { AlgCommon, Comparable } from "./common";
 import { Newline } from "./Newline";
 import { parseAlg } from "./parse";
 import { Pause } from "./Pause";
-import { Serializable } from "./Serializable";
 import { Unit } from "./Unit";
 import { warnOnce } from "./warnOnce";
 
+export type FlexibleAlgInput = string | Iterable<Unit> | Alg;
+
 // TODO: validate
-function toIterable(
-  inputUnits?: string | Sequence | Iterable<Unit>,
-): Iterable<Unit> {
+function toIterable(inputUnits?: FlexibleAlgInput): Iterable<Unit> {
   if (!inputUnits) {
     return [];
   }
@@ -19,11 +18,11 @@ function toIterable(
     // return parseAlg(inputUnits).nestedUnits;
   }
 
-  const seq = inputUnits as Sequence;
-  if (seq.type === "sequence" && seq.nestedUnits) {
-    throw new Error("unimplemented");
-    // return seq.nestedUnits;
-  }
+  // const seq = inputUnits as Sequence;
+  // if (seq.type === "sequence" && seq.nestedUnits) {
+  //   throw new Error("unimplemented");
+  //   // return seq.nestedUnits;
+  // }
 
   const iter = inputUnits as Iterable<Unit>;
   if (typeof iter[Symbol.iterator] === "function") {
@@ -33,10 +32,37 @@ function toIterable(
   throw "Invalid unit";
 }
 
-export class Alg implements Serializable {
+export class Alg extends AlgCommon {
   #units: Iterable<Unit>; // TODO: freeze?
-  constructor(alg?: string | Sequence | Iterable<Unit>) {
+  constructor(alg?: string | Iterable<Unit>) {
+    super();
     this.#units = toIterable(alg);
+  }
+
+  isIdentical(other: Comparable): boolean {
+    const otherAsAlg = other as Alg;
+    if (!other.is(Alg)) {
+      return false;
+    }
+
+    // TODO: avoid converting to array
+    const l1 = Array.from(this.#units);
+    const l2 = Array.from(otherAsAlg.#units);
+    if (l1.length !== l2.length) {
+      return false;
+    }
+    for (let i = 0; i < l1.length; i++) {
+      if (!l1[i].isIdentical(l2[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  concat(input: FlexibleAlgInput): Alg {
+    return new Alg(
+      Array.from(this.#units).concat(Array.from(toIterable(input))),
+    );
   }
 
   static fromString(s: string): Alg {

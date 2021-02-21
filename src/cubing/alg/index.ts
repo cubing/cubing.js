@@ -1,5 +1,4 @@
 export {
-  modifiedBlockMove,
   experimentalAppendBlockMove,
   experimentalConcatAlgs,
 } from "./operation";
@@ -19,8 +18,6 @@ export {
 export { Example } from "./example";
 
 export { OldAlgJSON, fromJSON } from "./json";
-
-export { parse, parseAlg } from "./parser";
 
 export { keyToMove } from "./keyboard";
 

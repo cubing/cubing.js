@@ -1,30 +1,10 @@
-import { BlockMove, Sequence } from "./algorithm";
+import { Move, MoveQuantum } from "./new/Move";
 
-function canCoalesce(m1: BlockMove, m2: BlockMove): boolean {
+function canCoalesce(m1: Move, m2: Move): boolean {
   return (
     m1.family === m2.family &&
     m1.innerLayer === m2.innerLayer &&
     m1.outerLayer === m2.outerLayer
-  );
-}
-
-interface BlockMoveModifications {
-  outerLayer?: number;
-  innerLayer?: number;
-  family?: string;
-  amount?: number;
-}
-
-export function modifiedBlockMove(
-  original: BlockMove,
-  modifications: BlockMoveModifications,
-): BlockMove {
-  // TODO: use the nullish coalescing operator once it becomes available to us.
-  return new BlockMove(
-    modifications.outerLayer ?? original.outerLayer,
-    modifications.innerLayer ?? original.innerLayer,
-    modifications.family ?? original.family,
-    modifications.amount ?? original.amount,
   );
 }
 

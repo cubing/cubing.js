@@ -1,9 +1,20 @@
 import { Alg } from "./Alg";
-import { RepetitionInfo, Repetition } from "./Repetition";
+import { AlgCommon, Comparable } from "./common";
+import { Repetition, RepetitionInfo } from "./Repetition";
 
-export class CommutatorQuantum {
+export class CommutatorQuantum extends Comparable {
   constructor(public A: Alg, public B: Alg) {
+    super();
     Object.freeze(this);
+  }
+
+  isIdentical(other: Comparable): boolean {
+    const otherAsCommutatorQuantum = other as CommutatorQuantum;
+    return (
+      other.is(CommutatorQuantum) &&
+      this.A.isIdentical(otherAsCommutatorQuantum.A) &&
+      this.B.isIdentical(otherAsCommutatorQuantum.B)
+    );
   }
 
   toString(): string {
@@ -11,7 +22,7 @@ export class CommutatorQuantum {
   }
 }
 
-export class Commutator {
+export class Commutator extends AlgCommon {
   readonly #repetition: Repetition<CommutatorQuantum>;
 
   constructor(
@@ -19,9 +30,18 @@ export class Commutator {
     public readonly B: Alg,
     repetitionInfo: RepetitionInfo,
   ) {
+    super();
     this.#repetition = new Repetition<CommutatorQuantum>(
       new CommutatorQuantum(A, B),
       repetitionInfo,
+    );
+  }
+
+  isIdentical(other: Comparable): boolean {
+    const otherAsCommutator = other as Commutator;
+    return (
+      other.is(Commutator) &&
+      this.#repetition.isIdentical(otherAsCommutator.#repetition)
     );
   }
 

@@ -50,3 +50,5 @@ console.log(b.toString());
 console.log(b.toString());
 
 console.log(Alg.fromString("R U R' U' R' F R2 U' R' U' R U R' F'"));
+
+console.log(Alg.fromString("R U R'").isIdentical(Alg.fromString(" R U  R'")));
