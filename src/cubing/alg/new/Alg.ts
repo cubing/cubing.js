@@ -1,7 +1,7 @@
-import { Sequence, Unit } from "../algorithm";
-import { parseAlg } from "../parser";
+import { Sequence } from "../algorithm";
 import { algToString } from "../traversal";
 import { AlgJSON, Serializable, UnitJSON } from "./Serializable";
+import { Unit } from "./Unit";
 import { warnOnce } from "./warnOnce";
 
 // TODO: validate
@@ -13,12 +13,14 @@ function toIterable(
   }
 
   if (typeof inputUnits === "string") {
-    return parseAlg(inputUnits).nestedUnits;
+    throw new Error("unimplemented");
+    // return parseAlg(inputUnits).nestedUnits;
   }
 
   const seq = inputUnits as Sequence;
   if (seq.type === "sequence" && seq.nestedUnits) {
-    return seq.nestedUnits;
+    throw new Error("unimplemented");
+    // return seq.nestedUnits;
   }
 
   const iter = inputUnits as Iterable<Unit>;

@@ -31,7 +31,7 @@ export function isUnit(a: AlgPart): boolean {
   return !matchesAlgType(a, "sequence");
 }
 
-export function assertIsUnit(a: AlgPart): Unit {
+export function assertIsUnit(a: AlgPart): OldUnit {
   if (!("type" in a)) {
     reportTypeMismatch(`Expected "unit", saw a value that was not an AlgPart.`);
   }
@@ -41,16 +41,16 @@ export function assertIsUnit(a: AlgPart): Unit {
   return a;
 }
 
-export abstract class Unit extends AlgPart {}
+export abstract class OldUnit extends AlgPart {}
 
-export abstract class Move extends Unit {}
-export abstract class Annotation extends Unit {}
-export abstract class Container extends Unit {}
+export abstract class Move extends OldUnit {}
+export abstract class Annotation extends OldUnit {}
+export abstract class Container extends OldUnit {}
 
 // TODO: Reintroduce an Algorithm class, and allow a mutable sequence too?
 export class Sequence extends AlgPart {
   public type: string = "sequence";
-  constructor(public nestedUnits: Unit[]) {
+  constructor(public nestedUnits: OldUnit[]) {
     super();
     for (const n of nestedUnits) {
       assertIsUnit(n);

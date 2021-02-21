@@ -1,50 +1,98 @@
 import { BlockMove } from "../algorithm";
-import { MoveQuantum } from "./MoveQuantum";
+import { Quanta, QuantaArgs } from "./Quanta";
 import { MoveJSON, Serializable } from "./Serializable";
 import { warnOnce } from "./warnOnce";
+
+export class MoveQuantum {
+  readonly #family: string;
+  readonly #outerLayer: number | null;
+  readonly #innerLayer: number | null;
+
+  constructor(family: string, innerLayer?: number, outerLayer?: number) {
+    this.#family = family;
+
+    this.#outerLayer = outerLayer ?? null;
+    const hasOuterLayer = this.#outerLayer !== null;
+
+    this.#innerLayer = innerLayer ?? null;
+    const hasInnerLayer = this.#innerLayer !== null;
+
+    if (
+      hasInnerLayer &&
+      (!Number.isInteger(this.#outerLayer) || this.#outerLayer! < 1)
+    ) {
+      throw new Error("MoveQuantum inner layer must be a positive integer.");
+    }
+
+    if (
+      hasInnerLayer &&
+      (!Number.isInteger(this.#innerLayer) || this.#innerLayer! < 1)
+    ) {
+      throw new Error("MoveQuantum outer layer must be a positive integer.");
+    }
+
+    if (
+      hasInnerLayer &&
+      hasOuterLayer &&
+      this.#innerLayer! >= this.#outerLayer!
+    ) {
+      throw new Error(
+        "MoveQuantum outer layer must be smaller than inner layer.",
+      );
+    }
+
+    if (hasOuterLayer && !hasInnerLayer) {
+      throw new Error(
+        "MoveQuantum with an outer layer must have an inner layer",
+      ); // TODO: test
+    }
+  }
+
+  // TODO: provide something more useful on average.
+  /** @deprecated */
+  get experimentalRawFamily(): string {
+    warnOnce("deprecated: experimentalRawFamily");
+    return this.#family;
+  }
+
+  // TODO: provide something more useful on average.
+  /** @deprecated */
+  get experimentalRawOuterLayer(): number | null {
+    warnOnce("deprecated: experimentalRawOuterLayer");
+    return this.#outerLayer;
+  }
+
+  // TODO: provide something more useful on average.
+  /** @deprecated */
+  get experimentalRawInnerLayer(): number | null {
+    warnOnce("deprecated: experimentalRawInnerLayer");
+    return this.#innerLayer;
+  }
+
+  toString(): string {
+    let s = this.#family;
+    if (this.#innerLayer !== null) {
+      s = String(this.#innerLayer) + s;
+      if (this.#outerLayer !== null) {
+        s = String(this.#outerLayer) + "-" + s;
+      }
+    }
+    return s;
+  }
+}
 
 export const moveRegex = /((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])(\d*)?(')?/;
 
 export class Move implements BlockMove, Serializable {
-  readonly #quantum: MoveQuantum;
-  readonly #absAmount: number | null;
-  readonly #prime: boolean;
+  readonly #quanta: Quanta<MoveQuantum>;
 
-  constructor(
-    ...args:
-      | [MoveQuantum]
-      | [MoveQuantum, /* amount */ /* amount */ number | null]
-      | [
-          MoveQuantum,
-          /* absolute amount */ /* absolute amount */ number | null,
-          /* prime */ boolean,
-        ]
-      | [string]
-  ) {
+  constructor(...args: QuantaArgs<MoveQuantum> | [string]) {
     if (typeof args[0] === "string") {
       return Move.fromString(args[0]); // TODO: can we return here?
     }
-    // TODO: validate.
-    this.#quantum = args[0];
-    if (typeof args[1] !== "undefined") {
-      if (typeof args[2] !== "undefined") {
-        this.#absAmount = args[1] === null ? null : Math.abs(args[1]);
-        this.#prime = args[2];
-      } else {
-        this.#absAmount = args[1] === null ? null : args[1];
-        this.#prime = args[1] === null ? false : args[1] < 0;
-      }
-    }
-
-    if (this.#absAmount !== null) {
-      if (!Number.isInteger(this.#absAmount) || this.#absAmount! < 0) {
-        throw new Error(`Invalid absolute amount: ${this.#absAmount}`);
-      }
-    }
-
-    if (this.#prime !== false && this.#prime !== true) {
-      throw new Error("Invalid prime boolean.");
-    }
+    this.#quanta = new Quanta<MoveQuantum>(
+      ...(args as QuantaArgs<MoveQuantum>),
+    );
   }
 
   static fromString(s: string): Move {
@@ -76,7 +124,7 @@ export class Move implements BlockMove, Serializable {
 
   /** @deprecated */
   get amount(): number {
-    return (this.#absAmount ?? 1) * (this.#prime ? -1 : 1);
+    return (this.#quanta.absAmount ?? 1) * (this.#quanta.prime ? -1 : 1);
   }
 
   /** @deprecated */
@@ -88,30 +136,23 @@ export class Move implements BlockMove, Serializable {
   /** @deprecated */
   get family(): string {
     warnOnce("deprecated: family");
-    return this.#quantum.experimentalRawFamily ?? undefined;
+    return this.#quanta.quantum.experimentalRawFamily ?? undefined;
   }
 
   /** @deprecated */
   get outerLayer(): number | undefined {
     warnOnce("deprecated: outerLayer");
-    return this.#quantum.experimentalRawOuterLayer ?? undefined;
+    return this.#quanta.quantum.experimentalRawOuterLayer ?? undefined;
   }
 
   /** @deprecated */
   get innerLayer(): number | undefined {
     warnOnce("deprecated: innerLayer");
-    return this.#quantum.experimentalRawInnerLayer ?? undefined;
+    return this.#quanta.quantum.experimentalRawInnerLayer ?? undefined;
   }
 
   toString(): string {
-    let s = this.#quantum.toString();
-    if (this.#absAmount !== null) {
-      s += this.#absAmount;
-    }
-    if (this.#prime) {
-      s += "'";
-    }
-    return s;
+    return this.#quanta.quantum.toString() + this.#quanta.amountSuffix();
   }
 
   // TODO: Serialize as a string?
