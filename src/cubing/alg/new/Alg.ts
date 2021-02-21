@@ -1,5 +1,5 @@
 import { Sequence } from "../algorithm";
-import { algToString } from "../traversal";
+import { parseAlg } from "./parse";
 import { Serializable } from "./Serializable";
 import { Unit } from "./Unit";
 import { warnOnce } from "./warnOnce";
@@ -31,21 +31,21 @@ function toIterable(
   throw "Invalid unit";
 }
 
-export class Alg implements Sequence, Serializable {
+export class Alg implements Serializable {
   #units: Iterable<Unit>;
   constructor(alg?: string | Sequence | Iterable<Unit>) {
     this.#units = toIterable(alg);
   }
 
-  static fromString(alg: string): Alg {
-    return new Alg(alg);
+  static fromString(s: string): Alg {
+    return parseAlg(s);
   }
 
-  /** @deprecated */
-  get nestedUnits(): Unit[] {
-    warnOnce("deprecated: nestedUnits");
-    return Array.from(this.#units);
-  }
+  // /** @deprecated */
+  // get nestedUnits(): Unit[] {
+  //   warnOnce("deprecated: nestedUnits");
+  //   return Array.from(this.#units);
+  // }
 
   *units(): Generator<Unit> {
     for (const unit of this.#units) {
@@ -67,6 +67,7 @@ export class Alg implements Sequence, Serializable {
   // }
 
   toString(): string {
-    return algToString(new Sequence(this.nestedUnits));
+    // TODO: handle edge cases
+    return Array.from(this.#units).join(" "); // TODO: don't construct an array
   }
 }

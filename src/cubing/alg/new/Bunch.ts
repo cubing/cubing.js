@@ -1,11 +1,11 @@
 import { Alg } from "./Alg";
-import { Quanta, QuantaArgs } from "./Quanta";
+import { Repetition, RepetitionInfo } from "./Repetition";
 
 export class Bunch {
-  readonly #quanta: Quanta<Alg>;
+  readonly #repetition: Repetition<Alg>;
 
-  constructor(...args: QuantaArgs<Alg>) {
-    this.#quanta = new Quanta<Alg>(...args);
+  constructor(alg: Alg, repetitionInfo: RepetitionInfo) {
+    this.#repetition = new Repetition(alg, repetitionInfo);
   }
 
   static fromString(): Bunch {
@@ -13,7 +13,7 @@ export class Bunch {
   }
 
   toString(): string {
-    return `(${this.#quanta.quantum.toString()})${this.#quanta.amountSuffix()}`;
+    return `(${this.#repetition.quantum.toString()})${this.#repetition.suffix()}`;
   }
 
   // toJSON(): BunchJSON {

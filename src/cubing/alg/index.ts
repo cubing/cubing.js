@@ -1,6 +1,6 @@
 export {
   AlgPart,
-  Unit,
+  OldUnit as Unit,
   WithAmount,
   Move,
   Container,

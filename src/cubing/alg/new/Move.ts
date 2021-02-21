@@ -1,5 +1,5 @@
 import { BlockMove } from "../algorithm";
-import { Quanta, QuantaArgs } from "./Quanta";
+import { Repetition, RepetitionInfo } from "./Repetition";
 import { Serializable } from "./Serializable";
 import { warnOnce } from "./warnOnce";
 
@@ -81,50 +81,27 @@ export class MoveQuantum {
   }
 }
 
-export const moveRegex = /((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])(\d*)?(')?/;
-
 export class Move implements BlockMove, Serializable {
-  readonly #quanta: Quanta<MoveQuantum>;
+  readonly #repetition: Repetition<MoveQuantum>;
 
-  constructor(...args: QuantaArgs<MoveQuantum> | [string]) {
+  constructor(
+    ...args: [MoveQuantum] | [MoveQuantum, RepetitionInfo] | [string]
+  ) {
     if (typeof args[0] === "string") {
       return Move.fromString(args[0]); // TODO: can we return here?
     }
-    this.#quanta = new Quanta<MoveQuantum>(
-      ...(args as QuantaArgs<MoveQuantum>),
-    );
+    this.#repetition = new Repetition<MoveQuantum>(args[0], args[1]);
   }
 
-  static fromString(s: string): Move {
-    const [
-      ,
-      ,
-      ,
-      outerLayerStr,
-      innerLayerStr,
-      family,
-      absAmount,
-      primeStr,
-    ] = moveRegex.exec(s) as string[];
-
-    function parseOrNull(n: string): number | null {
-      return n ? parseInt(n) : null;
-    }
-
-    return new Move(
-      new MoveQuantum(
-        family,
-        parseOrNull(innerLayerStr) ?? undefined,
-        parseOrNull(outerLayerStr) ?? undefined,
-      ),
-      parseOrNull(absAmount),
-      primeStr === "'",
-    );
+  static fromString(_s: string): Move {
+    throw "unimplemented";
   }
 
   /** @deprecated */
   get amount(): number {
-    return (this.#quanta.absAmount ?? 1) * (this.#quanta.prime ? -1 : 1);
+    return (
+      (this.#repetition.absAmount ?? 1) * (this.#repetition.prime ? -1 : 1)
+    );
   }
 
   /** @deprecated */
@@ -136,23 +113,23 @@ export class Move implements BlockMove, Serializable {
   /** @deprecated */
   get family(): string {
     warnOnce("deprecated: family");
-    return this.#quanta.quantum.experimentalRawFamily ?? undefined;
+    return this.#repetition.quantum.experimentalRawFamily ?? undefined;
   }
 
   /** @deprecated */
   get outerLayer(): number | undefined {
     warnOnce("deprecated: outerLayer");
-    return this.#quanta.quantum.experimentalRawOuterLayer ?? undefined;
+    return this.#repetition.quantum.experimentalRawOuterLayer ?? undefined;
   }
 
   /** @deprecated */
   get innerLayer(): number | undefined {
     warnOnce("deprecated: innerLayer");
-    return this.#quanta.quantum.experimentalRawInnerLayer ?? undefined;
+    return this.#repetition.quantum.experimentalRawInnerLayer ?? undefined;
   }
 
   toString(): string {
-    return this.#quanta.quantum.toString() + this.#quanta.amountSuffix();
+    return this.#repetition.quantum.toString() + this.#repetition.suffix();
   }
 
   // // TODO: Serialize as a string?

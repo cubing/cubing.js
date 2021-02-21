@@ -1,7 +1,7 @@
 import { Alg } from "./Alg";
-import { RepetitionInfo, Repetition } from "./Repetition";
+import { Repetition, RepetitionInfo } from "./Repetition";
 
-export class CommutatorQuantum {
+export class ConjugateQuantum {
   constructor(public A: Alg, public B: Alg) {}
 
   toString(): string {
@@ -9,12 +9,12 @@ export class CommutatorQuantum {
   }
 }
 
-export class Commutator {
-  readonly #repetition: Repetition<CommutatorQuantum>;
+export class Conjugate {
+  readonly #repetition: Repetition<ConjugateQuantum>;
 
   constructor(A: Alg, B: Alg, repetitionInfo: RepetitionInfo) {
-    this.#repetition = new Repetition<CommutatorQuantum>(
-      new CommutatorQuantum(A, B),
+    this.#repetition = new Repetition<ConjugateQuantum>(
+      new ConjugateQuantum(A, B),
       repetitionInfo,
     );
   }
