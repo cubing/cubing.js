@@ -1,6 +1,6 @@
 import { AlgCommon, Comparable } from "./common";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
-import { parseMove } from "./parse";
+import { parseMove, parseMoveQuantum } from "./parse";
 import { Repetition, RepetitionInfo } from "./Repetition";
 import { warnOnce } from "./warnOnce";
 
@@ -65,6 +65,10 @@ export class MoveQuantum extends Comparable {
     }
   }
 
+  static fromString(s: string): MoveQuantum {
+    return parseMoveQuantum(s);
+  }
+
   modified(modifications: MoveQuantumModifications): MoveQuantum {
     return new MoveQuantum(
       modifications.family ?? this.#family,
@@ -127,11 +131,23 @@ export class Move extends AlgCommon {
   readonly #repetition: Repetition<MoveQuantum>;
 
   constructor(
-    ...args: [MoveQuantum] | [MoveQuantum, RepetitionInfo] | [string]
+    ...args:
+      | [MoveQuantum]
+      | [MoveQuantum, RepetitionInfo]
+      | [string]
+      | [string, RepetitionInfo]
   ) {
     super();
     if (typeof args[0] === "string") {
-      return Move.fromString(args[0]); // TODO: can we return here?
+      if (args[1] ?? null) {
+        this.#repetition = new Repetition(
+          MoveQuantum.fromString(args[0]),
+          args[1],
+        );
+        return;
+      } else {
+        return Move.fromString(args[0]); // TODO: can we return here?
+      }
     }
     this.#repetition = new Repetition<MoveQuantum>(args[0], args[1]);
   }

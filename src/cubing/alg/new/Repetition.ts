@@ -17,7 +17,8 @@ export class Repetition<Q extends Comparable> {
     if (typeof repetitionInfo === "undefined" || repetitionInfo === null) {
       // nothing
     } else if (typeof repetitionInfo === "number") {
-      repetitionInfo === null ? null : Math.abs(repetitionInfo);
+      this.absAmount =
+        repetitionInfo === null ? null : Math.abs(repetitionInfo);
       this.prime = repetitionInfo === null ? false : repetitionInfo < 0;
       return;
     } else if (repetitionInfo instanceof Array) {

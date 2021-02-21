@@ -9,6 +9,7 @@ console.log(Alg.fromString("[R2 (F),U]").toString());
 
 import { Bunch } from "../../cubing/alg/new/Bunch";
 import { Move } from "../../cubing/alg/new/Move";
+import { experimentalAppendMove } from "../../cubing/alg/operation";
 
 console.log("" + Move.fromString("R"));
 console.log("" + Move.fromString("R'"));
@@ -52,3 +53,20 @@ console.log(b.toString());
 console.log(Alg.fromString("R U R' U' R' F R2 U' R' U' R U R' F'"));
 
 console.log(Alg.fromString("R U R'").isIdentical(Alg.fromString(" R U  R'")));
+console.log(
+  experimentalAppendMove(
+    Alg.fromString("R U R'"),
+    Move.fromString("F2"),
+  ).toString(),
+);
+console.log(
+  experimentalAppendMove(Alg.fromString("R U R'"), Move.fromString("R'"), {
+    coalesce: false,
+  }).toString(),
+);
+
+console.log(
+  experimentalAppendMove(Alg.fromString("R U R'"), Move.fromString("R'"), {
+    coalesce: true,
+  }).toString(),
+);

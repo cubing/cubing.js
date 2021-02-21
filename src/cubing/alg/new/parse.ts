@@ -16,7 +16,7 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
 
 const repetitionRegex = /^(\d+)?('?)/;
 const moveStartRegex = /^[_\dA-Za-z]/;
-const moveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
+const moveQuantumRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
 
 export function parseAlg(s: string): Alg {
   return new AlgParser().parseAlg(s);
@@ -24,6 +24,10 @@ export function parseAlg(s: string): Alg {
 
 export function parseMove(s: string): Move {
   return new AlgParser().parseMove(s);
+}
+
+export function parseMoveQuantum(s: string): MoveQuantum {
+  return new AlgParser().parseMoveQuantum(s);
 }
 
 // TODO: support recording string locations for moves.
@@ -45,6 +49,14 @@ class AlgParser {
     const move = this.parseMoveImpl();
     this.mustBeAtEndOfInput();
     return move;
+  }
+
+  parseMoveQuantum(input: string): MoveQuantum {
+    this.#input = input;
+    this.#idx = 0;
+    const moveQuantum = this.parseMoveQuantumImpl();
+    this.mustBeAtEndOfInput();
+    return moveQuantum;
   }
 
   private mustBeAtEndOfInput() {
@@ -133,20 +145,23 @@ class AlgParser {
     return algBuilder.toAlg();
   }
 
-  private parseMoveImpl(): Move {
+  private parseMoveQuantumImpl(): MoveQuantum {
     const [, , , outerLayerStr, innerLayerStr, family] = this.parseRegex(
-      moveRegex,
+      moveQuantumRegex,
     );
+
+    return new MoveQuantum(
+      family,
+      parseIntWithEmptyFallback(innerLayerStr, undefined),
+      parseIntWithEmptyFallback(outerLayerStr, undefined),
+    );
+  }
+
+  private parseMoveImpl(): Move {
+    const moveQuantum = this.parseMoveQuantumImpl();
     const repetitionInfo = this.parseRepetition();
 
-    const move = new Move(
-      new MoveQuantum(
-        family,
-        parseIntWithEmptyFallback(innerLayerStr, undefined),
-        parseIntWithEmptyFallback(outerLayerStr, undefined),
-      ),
-      repetitionInfo,
-    );
+    const move = new Move(moveQuantum, repetitionInfo);
     return move;
   }
 

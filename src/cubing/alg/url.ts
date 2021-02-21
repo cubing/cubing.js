@@ -1,10 +1,9 @@
-import { Sequence } from "./algorithm";
-import { parseAlg } from "./parser";
+import { Alg } from "./new/Alg";
 import { algToString } from "./traversal";
 
 // This is not the most sophisticated scheme, but it has been used in production
 // at alg.cubing.net for years.
-export function serializeURLParam(a: Sequence): string {
+export function serializeURLParam(a: Alg): string {
   let escaped = algToString(a);
   escaped = escaped.replace(/_/g, "&#95;").replace(/ /g, "_");
   escaped = escaped.replace(/\+/g, "&#2b;");
@@ -12,24 +11,24 @@ export function serializeURLParam(a: Sequence): string {
   return escaped;
 }
 
-export function deserializeURLParam(a: string): Sequence {
+export function deserializeURLParam(a: string): Alg {
   let unescaped = a;
   unescaped = unescaped.replace(/-/g, "'").replace(/&#45;/g, "-");
   unescaped = unescaped.replace(/\+/g, " ").replace(/&#2b;/g, "+"); // Recognize + as space. Many URL encodings will do this.
   unescaped = unescaped.replace(/_/g, " ").replace(/&#95;/g, "_");
-  return parseAlg(unescaped);
+  return Alg.fromString(unescaped);
 }
 
 // Returns an empty sequence if the parameter is not present.
 // Throws an error if an alg is present but not valid.
-export function getAlgURLParam(name: string): Sequence {
+export function getAlgURLParam(name: string): Alg {
   const s = new URLSearchParams(window.location.search).get(name) || "";
   return deserializeURLParam(s);
 }
 
 export interface AlgCubingNetOptions {
-  alg?: Sequence;
-  setup?: Sequence;
+  alg?: Alg;
+  setup?: Alg;
   title?: string;
   puzzle?:
     | "1x1x1"

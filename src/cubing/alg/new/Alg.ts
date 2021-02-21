@@ -5,10 +5,10 @@ import { Pause } from "./Pause";
 import { Unit } from "./Unit";
 import { warnOnce } from "./warnOnce";
 
-export type FlexibleAlgInput = string | Iterable<Unit> | Alg;
+export type FlexibleAlgSource = string | Iterable<Unit> | Alg;
 
 // TODO: validate
-function toIterable(inputUnits?: FlexibleAlgInput): Iterable<Unit> {
+function toIterable(inputUnits?: FlexibleAlgSource): Iterable<Unit> {
   if (!inputUnits) {
     return [];
   }
@@ -59,7 +59,7 @@ export class Alg extends AlgCommon {
     return true;
   }
 
-  concat(input: FlexibleAlgInput): Alg {
+  concat(input: FlexibleAlgSource): Alg {
     return new Alg(
       Array.from(this.#units).concat(Array.from(toIterable(input))),
     );
