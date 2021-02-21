@@ -202,8 +202,10 @@ export class Alg implements Sequence {
     return Array.from(this.#units);
   }
 
-  get units(): Iterable<Unit> {
-    return this.#units;
+  *units(): Generator<Unit> {
+    for (const unit of this.#units) {
+      yield unit;
+    }
   }
 
   /** @deprecated */
