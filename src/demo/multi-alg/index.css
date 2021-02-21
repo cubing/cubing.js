@@ -6,20 +6,23 @@ html, body {
   overflow: hidden;
 }
 
+body, body > div {
+  display: grid;
+  box-sizing: border-box;
+  gap: 1em;
+}
+
 body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 1rem;
-  box-sizing: border-box;
 }
 
 body > div:first-child {
-  display: grid;
-  grid-template-rows: 1fr 5fr;
+  grid-template-rows: 2em 5fr;
 }
 
 body > div:nth-child(2) {
-  display: grid;
   grid-template-rows: 2em 5fr;
 }
 
