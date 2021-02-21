@@ -24,6 +24,7 @@ function parseRepetition(s: string, idx: number): [RepetitionInfo, number] {
 export const moveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])?/;
 
 function parseMove(s: string, idx: number): [Move, number] {
+  console.log("parseMove", s, idx);
   const [fullMatch, , , outerLayerStr, innerLayerStr, family] = moveRegex.exec(
     s.slice(idx),
   ) as string[]; // TODO: can we be more efficient than `.slice()`?
@@ -48,11 +49,16 @@ function parseAlgWithStopping(
   idx: number,
   stopBefore: StoppingChar[],
 ): [Alg, number] {
+  // TODO: Implement an alg builder.
+  console.log(s, idx, stopBefore);
   const units: Unit[] = [];
   let readyForMove = true;
   while (idx < s.length) {
     if ((stopBefore as string[]).includes(s[idx])) {
-      return [new Alg(), idx];
+      console.log(Alg);
+      const alg = new Alg(units);
+      console.log(alg);
+      return [alg, idx];
     }
     if (s[idx] === "[") {
       let A: Alg;
@@ -65,6 +71,7 @@ function parseAlgWithStopping(
       let repetitionInfo: RepetitionInfo;
       [repetitionInfo, idx] = parseRepetition(s, idx);
 
+      console.log("separator", separator);
       switch (separator) {
         case ":":
           units.push(new Conjugate(A, B, repetitionInfo));
@@ -103,9 +110,14 @@ function parseAlgWithStopping(
   if (idx !== s.length) {
     throw new Error("did not finish parsing?");
   }
-  console.log({ units }, units.length);
+  if (stopBefore.length > 0) {
+    throw new Error("expected stopping");
+  }
+  console.log({ units }, units.length, units[0].toString());
   return [new Alg(units), idx];
 }
+
+console.log(parseAlgWithStopping("[R, U]", 3, ["]"]));
 
 export function parseAlg(s: string): Alg {
   const [alg, idx] = parseAlgWithStopping(s, 0, []);

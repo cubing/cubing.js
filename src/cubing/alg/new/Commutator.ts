@@ -5,7 +5,7 @@ export class CommutatorQuantum {
   constructor(public A: Alg, public B: Alg) {}
 
   toString(): string {
-    return `[${this.A}: ${this.B}]`;
+    return `[${this.A}, ${this.B}]`;
   }
 }
 

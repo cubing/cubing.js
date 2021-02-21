@@ -25,7 +25,7 @@ function toIterable(
 
   const iter = inputUnits as Iterable<Unit>;
   if (typeof iter[Symbol.iterator] === "function") {
-    return iter;
+    return Array.from(iter); // TODO: avoid allocations
   }
 
   throw "Invalid unit";
