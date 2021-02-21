@@ -2,6 +2,7 @@ import { BlockMove } from "../algorithm";
 import { Repetition, RepetitionInfo } from "./Repetition";
 import { Serializable } from "./Serializable";
 import { warnOnce } from "./warnOnce";
+import { parseMove } from "./parse";
 
 export class MoveQuantum {
   readonly #family: string;
@@ -93,8 +94,8 @@ export class Move implements BlockMove, Serializable {
     this.#repetition = new Repetition<MoveQuantum>(args[0], args[1]);
   }
 
-  static fromString(_s: string): Move {
-    throw "unimplemented";
+  static fromString(s: string): Move {
+    return parseMove(s);
   }
 
   /** @deprecated */

@@ -16,25 +16,44 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
 
 const repetitionRegex = /^(\d+)?('?)/;
 const moveStartRegex = /^[_\dA-Za-z]/;
-const moveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])?/;
+const moveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
 
 export function parseAlg(s: string): Alg {
-  return new ParsedAlg(s).alg;
+  return new AlgParser().parseAlg(s);
+}
+
+export function parseMove(s: string): Move {
+  return new AlgParser().parseMove(s);
 }
 
 // TODO: support recording string locations for moves.
-class ParsedAlg {
+class AlgParser {
+  #input: string = "";
   #idx: number = 0;
-  readonly alg: Alg;
 
-  constructor(public readonly input: string) {
-    this.alg = this.parseAlgWithStopping([]);
-    if (this.#idx !== this.input.length) {
+  parseAlg(input: string): Alg {
+    this.#input = input;
+    this.#idx = 0;
+    const alg = this.parseAlgWithStopping([]);
+    this.mustBeAtEndOfInput();
+    return alg;
+  }
+
+  parseMove(input: string): Move {
+    this.#input = input;
+    this.#idx = 0;
+    const move = this.parseMoveImpl();
+    this.mustBeAtEndOfInput();
+    return move;
+  }
+
+  private mustBeAtEndOfInput() {
+    if (this.#idx !== this.#input.length) {
       throw new Error("parsing unexpectedly ended early");
     }
   }
 
-  parseAlgWithStopping(stopBefore: StoppingChar[]): Alg {
+  private parseAlgWithStopping(stopBefore: StoppingChar[]): Alg {
     const algBuilder = new AlgBuilder();
 
     // We're "crowded" if there was not a space or newline since the last unit.
@@ -48,16 +67,16 @@ class ParsedAlg {
       }
     };
 
-    mainLoop: while (this.#idx < this.input.length) {
-      if ((stopBefore as string[]).includes(this.input[this.#idx])) {
+    mainLoop: while (this.#idx < this.#input.length) {
+      if ((stopBefore as string[]).includes(this.#input[this.#idx])) {
         return algBuilder.toAlg();
       }
       if (this.tryConsumeNext(" ")) {
         crowded = false;
         continue mainLoop;
-      } else if (moveStartRegex.test(this.input[this.#idx])) {
+      } else if (moveStartRegex.test(this.#input[this.#idx])) {
         mustNotBeCrowded();
-        const move = this.parseMove();
+        const move = this.parseMoveImpl();
         algBuilder.push(move);
         crowded = true;
         continue mainLoop;
@@ -105,7 +124,7 @@ class ParsedAlg {
       }
     }
 
-    if (this.#idx !== this.input.length) {
+    if (this.#idx !== this.#input.length) {
       throw new Error("did not finish parsing?");
     }
     if (stopBefore.length > 0) {
@@ -114,7 +133,7 @@ class ParsedAlg {
     return algBuilder.toAlg();
   }
 
-  parseMove(): Move {
+  private parseMoveImpl(): Move {
     const [, , , outerLayerStr, innerLayerStr, family] = this.parseRegex(
       moveRegex,
     );
@@ -131,12 +150,12 @@ class ParsedAlg {
     return move;
   }
 
-  parseRepetition(): RepetitionInfo {
+  private parseRepetition(): RepetitionInfo {
     const [, absAmountStr, primeStr] = this.parseRegex(repetitionRegex);
     return [parseIntWithEmptyFallback(absAmountStr, null), primeStr === "'"];
   }
 
-  parseRegex(regex: RegExp): RegExpExecArray {
+  private parseRegex(regex: RegExp): RegExpExecArray {
     const arr = regex.exec(this.remaining());
     if (arr === null) {
       throw new Error("internal parsing error"); // TODO
@@ -145,18 +164,18 @@ class ParsedAlg {
     return arr;
   }
 
-  remaining(): string {
-    return this.input.slice(this.#idx);
+  private remaining(): string {
+    return this.#input.slice(this.#idx);
   }
 
   private popNext(): string {
-    const next = this.input[this.#idx];
+    const next = this.#input[this.#idx];
     this.#idx++;
     return next;
   }
 
   private tryConsumeNext(expected: string): boolean {
-    if (this.input[this.#idx] === expected) {
+    if (this.#input[this.#idx] === expected) {
       this.#idx++;
       return true;
     }
