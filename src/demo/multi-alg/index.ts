@@ -1,4 +1,4 @@
-import { Comment, parseAlg, Sequence } from "../../cubing/alg";
+import { Comment, expand, parseAlg, Sequence } from "../../cubing/alg";
 import { Twisty3DCanvas, TwistyPlayer } from "../../cubing/twisty";
 import {
   experimentalStickerings,
@@ -73,6 +73,6 @@ document.querySelector("#download")?.addEventListener("click", () => {
   }
 
   for (const { alg, name } of algList) {
-    downloadAlg(alg, `${stickeringSelect.value} — ${name}`);
+    downloadAlg(expand(alg), `${stickeringSelect.value} — ${name}`);
   }
 });
