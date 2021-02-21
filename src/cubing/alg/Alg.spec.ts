@@ -1,9 +1,9 @@
 import { Alg } from "./Alg";
 import { BareBlockMove, Sequence } from "./algorithm";
-import {} from "./test/structure-equals";
+import "./test/structure-equals";
 
 describe("operation", () => {
-  it("can be constructed from a string ", () => {
+  it("can be constructed from a string", () => {
     expect(new Alg("R U R'").toJSON()).toStructureEqual(
       new Sequence([
         BareBlockMove("R", 1),

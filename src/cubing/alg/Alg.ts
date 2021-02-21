@@ -1,4 +1,4 @@
-import { Sequence, Unit } from "./algorithm";
+import { BlockMove, Sequence, Unit } from "./algorithm";
 import { AlgJSON } from "./json";
 import { parseAlg } from "./parser";
 import { algToString } from "./traversal";
@@ -79,6 +79,18 @@ export class MoveQuantum {
     }
   }
 
+  // TODO: provide something more useful on average.
+  /** @deprecated */
+  get experimentalRawOuterLayer(): number | null {
+    return this.#outerLayer;
+  }
+
+  // TODO: provide something more useful on average.
+  /** @deprecated */
+  get experimentalRawInnerLayer(): number | null {
+    return this.#innerLayer;
+  }
+
   toString(): string {
     // Copied from `algToString` traversal.
     let s = this.#family;
@@ -96,10 +108,6 @@ interface Repeatable<_T> {
   readonly amount: number;
 }
 
-interface FakeDeprecatedJSON {
-  readonly type: string;
-}
-
 function repetitionSuffix(amount: number): string {
   const absAmount = Math.abs(amount);
   let s = "";
@@ -112,14 +120,42 @@ function repetitionSuffix(amount: number): string {
   return s;
 }
 
-export class Move implements Repeatable<MoveQuantum>, FakeDeprecatedJSON {
+const moveRegex = /((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])(\d*)?(')?/;
+
+export class Move implements Repeatable<MoveQuantum>, BlockMove {
   readonly #quantum: MoveQuantum;
   readonly #amount: number;
+
+  /** @deprecated */
+  readonly _: string; // TODO
 
   constructor(quantum: MoveQuantum, amount: number = 1) {
     // TODO: validate.
     this.#quantum = quantum;
     this.#amount = amount;
+
+    this._ = this.toString();
+  }
+
+  static fromString(s: string): Move {
+    const [
+      ,
+      ,
+      ,
+      outerLayer,
+      innerLayer,
+      family,
+      absAmount,
+      prime,
+    ] = moveRegex.exec(s) as string[];
+
+    return new Move(
+      new MoveQuantum(family, {
+        outerLayer: outerLayer ? parseInt(outerLayer) : undefined,
+        innerLayer: innerLayer ? parseInt(innerLayer) : undefined,
+      }),
+      parseInt(absAmount ?? 1) * (prime === "'" ? -1 : 1),
+    );
   }
 
   get amount(): number {
@@ -131,12 +167,27 @@ export class Move implements Repeatable<MoveQuantum>, FakeDeprecatedJSON {
     return "blockMove";
   }
 
+  /** @deprecated */
+  get family(): string {
+    return "sequence";
+  }
+
+  /** @deprecated */
+  get outerLayer(): number | undefined {
+    return this.#quantum.experimentalRawOuterLayer ?? undefined;
+  }
+
+  /** @deprecated */
+  get innerLayer(): number | undefined {
+    return this.#quantum.experimentalRawInnerLayer ?? undefined;
+  }
+
   toString(): string {
     return this.#quantum.toString() + repetitionSuffix(this.#amount);
   }
 }
 
-export class Alg implements FakeDeprecatedJSON {
+export class Alg implements Sequence {
   #units: Iterable<Unit>;
   constructor(alg?: string | Sequence | Iterable<Unit>) {
     this.#units = units(alg);
@@ -155,6 +206,7 @@ export class Alg implements FakeDeprecatedJSON {
     return this.#units;
   }
 
+  /** @deprecated */
   get type(): string {
     return "sequence";
   }

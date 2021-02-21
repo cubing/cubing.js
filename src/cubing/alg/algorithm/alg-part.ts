@@ -3,7 +3,7 @@ import { reportTypeMismatch } from "../debug";
 export type AlgPartType = string;
 
 export abstract class AlgPart {
-  public abstract type: AlgPartType;
+  public abstract readonly type: AlgPartType;
 }
 
 // type Constructor<T> = Function & { prototype: T }

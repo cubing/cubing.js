@@ -7,8 +7,8 @@ export class BlockMove extends Move {
   public type: string = "blockMove";
 
   // If `outerLayer` is set, `innerLayer` must also be set.
-  public outerLayer?: number;
-  public innerLayer?: number;
+  public readonly outerLayer?: number;
+  public readonly innerLayer?: number;
   constructor(
     outerLayer: number | undefined,
     innerLayer: number | undefined,
