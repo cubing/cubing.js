@@ -1,5 +1,7 @@
 import { Sequence } from "../algorithm";
+import { Newline } from "./Newline";
 import { parseAlg } from "./parse";
+import { Pause } from "./Pause";
 import { Serializable } from "./Serializable";
 import { Unit } from "./Unit";
 import { warnOnce } from "./warnOnce";
@@ -67,7 +69,29 @@ export class Alg implements Serializable {
   // }
 
   toString(): string {
-    // TODO: handle edge cases
-    return Array.from(this.#units).join(" "); // TODO: don't construct an array
+    let output = "";
+    let previousUnit: Unit | null = null;
+    for (const unit of this.#units) {
+      if (previousUnit) {
+        output += spaceBetween(previousUnit, unit);
+        // console.log("l", previousUnit.toString(), unit.toString(), output);
+      }
+      output += unit.toString();
+      previousUnit = unit;
+    }
+    return output;
   }
+}
+
+function spaceBetween(u1: Unit, u2: Unit): string {
+  if (u1 instanceof Pause && u2 instanceof Pause) {
+    return "";
+  }
+  if (u1 instanceof Newline || u2 instanceof Newline) {
+    return "";
+  }
+  if (u1 instanceof Comment && !(u2 instanceof Newline)) {
+    return "\n"; /// TODO
+  }
+  return " ";
 }

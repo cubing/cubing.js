@@ -3,8 +3,9 @@
 
 import { Alg } from "../../cubing/alg/new/Alg";
 
-// console.log(Alg.fromString("R U R'").toString());
-console.log(Alg.fromString("[R, U]").toString());
+console.log(Alg.fromString("R U R'").toString());
+console.log(Alg.fromString("R U .. . R'").toString());
+console.log(Alg.fromString("[R2 (F), U]").toString());
 
 // import { Bunch } from "../../cubing/alg/new/Bunch";
 // import { Move } from "../../cubing/alg/new/Move";

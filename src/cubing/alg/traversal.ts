@@ -15,7 +15,7 @@ import {
   NewLine,
   Pause,
   Sequence,
-  Unit,
+  OldUnit,
   WithAmount,
 } from "./algorithm";
 
@@ -60,7 +60,7 @@ export abstract class TraversalDownUp<DataDown, DataUp> {
     return dispatch(this, algPart, dataDown);
   }
 
-  public traverseIntoUnit(algPart: AlgPart, dataDown: DataDown): Unit {
+  public traverseIntoUnit(algPart: AlgPart, dataDown: DataDown): OldUnit {
     return assertIsUnit(this.traverse(algPart, dataDown) as any);
   }
 
@@ -98,7 +98,7 @@ export abstract class TraversalUp<DataUp> extends TraversalDownUp<
     return dispatch<undefined, DataUp>(this, algPart, undefined);
   }
 
-  public traverseIntoUnit(algPart: AlgPart): Unit {
+  public traverseIntoUnit(algPart: AlgPart): OldUnit {
     return assertIsUnit(this.traverse(algPart) as any);
   }
 
@@ -213,8 +213,8 @@ export class Expand extends TraversalUp<AlgPart> {
     return comment;
   }
 
-  private flattenSequenceOneLevel(algList: AlgPart[]): Unit[] {
-    let flattened: Unit[] = [];
+  private flattenSequenceOneLevel(algList: AlgPart[]): OldUnit[] {
+    let flattened: OldUnit[] = [];
     for (const part of algList) {
       if (matchesAlgType(part, "sequence")) {
         flattened = flattened.concat((part as Sequence).nestedUnits);
@@ -229,12 +229,12 @@ export class Expand extends TraversalUp<AlgPart> {
     return flattened;
   }
 
-  private repeat(algList: Unit[], accordingTo: WithAmount): Sequence {
+  private repeat(algList: OldUnit[], accordingTo: WithAmount): Sequence {
     const amount = Math.abs(accordingTo.amount);
     const amountDir = accordingTo.amount > 0 ? 1 : -1; // Mutable
 
     // TODO: Cleaner inversion
-    let once: Unit[];
+    let once: OldUnit[];
     if (amountDir === -1) {
       // TODO: Avoid casting to sequence.
       once = (invert(new Sequence(algList)) as Sequence).nestedUnits;
@@ -242,7 +242,7 @@ export class Expand extends TraversalUp<AlgPart> {
       once = algList;
     }
 
-    let repeated: Unit[] = [];
+    let repeated: OldUnit[] = [];
     for (let i = 0; i < amount; i++) {
       repeated = repeated.concat(once);
     }
@@ -325,7 +325,7 @@ export class StructureEquals extends TraversalDownUp<AlgPart, boolean> {
 export class CoalesceBaseMoves extends TraversalUp<AlgPart> {
   // TODO: Handle
   public traverseSequence(sequence: Sequence): Sequence {
-    const coalesced: Unit[] = [];
+    const coalesced: OldUnit[] = [];
     for (const part of sequence.nestedUnits) {
       if (!matchesAlgType(part, "blockMove")) {
         coalesced.push(this.traverseIntoUnit(part));
@@ -509,7 +509,7 @@ export class ToString extends TraversalUp<string> {
   }
 
   // TODO: Sanitize `*/`
-  private spaceBetween(u1: Unit, u2: Unit): string {
+  private spaceBetween(u1: OldUnit, u2: OldUnit): string {
     if (matchesAlgType(u1, "pause") && matchesAlgType(u2, "pause")) {
       return "";
     }
