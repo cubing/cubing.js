@@ -34,8 +34,21 @@ for (const stickering of Object.keys(experimentalStickerings)) {
   option.value = stickering;
   option.textContent = stickering;
 }
+const stickering = new URL(location.href).searchParams.get("stickering");
+if (stickering && stickering in experimentalStickerings) {
+  player.experimentalStickering = stickering as ExperimentalStickering;
+  stickeringSelect.value = stickering;
+} else {
+  console.error("Invalid stickering:", stickering);
+}
+
 stickeringSelect?.addEventListener("change", () => {
-  player.experimentalStickering = stickeringSelect.value as ExperimentalStickering;
+  const stickering = stickeringSelect.value as ExperimentalStickering;
+  player.experimentalStickering = stickering;
+
+  const url = new URL(location.href);
+  url.searchParams.set("stickering", stickering);
+  window.history.replaceState("", "", url.toString());
 });
 
 document.querySelector("#download")?.addEventListener("click", () => {
