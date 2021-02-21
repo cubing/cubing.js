@@ -67,6 +67,8 @@ document.querySelector("#download")?.addEventListener("click", () => {
         name: (unit as Comment).comment.trim(),
       });
       currentAlg = new Sequence([]);
+    } else if (unit.type === "newLine") {
+      // skip
     } else {
       currentAlg = new Sequence(currentAlg.nestedUnits.concat([unit]));
     }
