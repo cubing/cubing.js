@@ -3,6 +3,14 @@ import { AlgJSON } from "./json";
 import { parseAlg } from "./parser";
 import { algToString } from "./traversal";
 
+const warned = new Set<string>();
+function warnOnce(s: string): void {
+  if (!warned.has(s)) {
+    console.warn(s);
+    warned.add(s);
+  }
+}
+
 // TODO: validate
 function units(
   inputUnits?: string | Sequence | Iterable<Unit>,
@@ -28,18 +36,17 @@ function units(
   throw "Invalid unit";
 }
 
+interface LayerInfo {
+  outerLayer?: number;
+  innerLayer?: number;
+}
+
 export class MoveQuantum {
   readonly #family: string;
   readonly #outerLayer: number | null;
   readonly #innerLayer: number | null;
 
-  constructor(
-    family: string,
-    options?: {
-      outerLayer?: number;
-      innerLayer?: number;
-    },
-  ) {
+  constructor(family: string, options?: LayerInfo) {
     this.#family = family;
 
     this.#outerLayer = options?.outerLayer ?? null;
@@ -82,17 +89,18 @@ export class MoveQuantum {
   // TODO: provide something more useful on average.
   /** @deprecated */
   get experimentalRawOuterLayer(): number | null {
+    warnOnce("deprecated: experimentalRawOuterLayer");
     return this.#outerLayer;
   }
 
   // TODO: provide something more useful on average.
   /** @deprecated */
   get experimentalRawInnerLayer(): number | null {
+    warnOnce("deprecated: experimentalRawInnerLayer");
     return this.#innerLayer;
   }
 
   toString(): string {
-    // Copied from `algToString` traversal.
     let s = this.#family;
     if (this.#innerLayer !== null) {
       s = String(this.#innerLayer) + s;
@@ -104,37 +112,44 @@ export class MoveQuantum {
   }
 }
 
-interface Repeatable<_T> {
-  readonly amount: number;
-}
-
-function repetitionSuffix(amount: number): string {
-  const absAmount = Math.abs(amount);
-  let s = "";
-  if (absAmount !== 1) {
-    s += String(absAmount);
-  }
-  if (absAmount !== amount) {
-    s += "'";
-  }
-  return s;
-}
-
 const moveRegex = /((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])(\d*)?(')?/;
 
-export class Move implements Repeatable<MoveQuantum>, BlockMove {
+export class Move implements BlockMove {
   readonly #quantum: MoveQuantum;
-  readonly #amount: number;
+  readonly #absAmount: number | null;
+  readonly #prime: boolean;
 
-  /** @deprecated */
-  readonly _: string; // TODO
-
-  constructor(quantum: MoveQuantum, amount: number = 1) {
+  constructor(
+    ...args:
+      | [MoveQuantum]
+      | [MoveQuantum, number | null]
+      | [MoveQuantum, number | null, boolean]
+      | [string]
+  ) {
+    if (typeof args[0] === "string") {
+      return Move.fromString(args[0]); // TODO: can we return here?
+    }
     // TODO: validate.
-    this.#quantum = quantum;
-    this.#amount = amount;
+    this.#quantum = args[0];
+    if (typeof args[1] !== "undefined") {
+      if (typeof args[2] !== "undefined") {
+        this.#absAmount = args[1] === null ? null : Math.abs(args[1]);
+        this.#prime = args[2];
+      } else {
+        this.#absAmount = args[1] === null ? null : args[1];
+        this.#prime = args[1] === null ? false : args[1] < 0;
+      }
+    }
 
-    this._ = this.toString();
+    if (this.#absAmount !== null) {
+      if (!Number.isInteger(this.#absAmount) || this.#absAmount! < 0) {
+        throw new Error(`Invalid absolute amount: ${this.#absAmount}`);
+      }
+    }
+
+    if (this.#prime !== false && this.#prime !== true) {
+      throw new Error("Invalid prime boolean.");
+    }
   }
 
   static fromString(s: string): Move {
@@ -142,48 +157,68 @@ export class Move implements Repeatable<MoveQuantum>, BlockMove {
       ,
       ,
       ,
-      outerLayer,
-      innerLayer,
+      outerLayerStr,
+      innerLayerStr,
       family,
       absAmount,
-      prime,
+      primeStr,
     ] = moveRegex.exec(s) as string[];
 
+    const amount: number | null = absAmount ? parseInt(absAmount) : null;
+
+    const layerInfo: LayerInfo = {};
+    if (outerLayerStr) {
+      layerInfo.outerLayer = parseInt(outerLayerStr);
+    }
+    if (innerLayerStr) {
+      layerInfo.innerLayer = parseInt(innerLayerStr);
+    }
+
     return new Move(
-      new MoveQuantum(family, {
-        outerLayer: outerLayer ? parseInt(outerLayer) : undefined,
-        innerLayer: innerLayer ? parseInt(innerLayer) : undefined,
-      }),
-      parseInt(absAmount ?? 1) * (prime === "'" ? -1 : 1),
+      new MoveQuantum(family, layerInfo),
+      amount,
+      primeStr === "'",
     );
   }
 
+  /** @deprecated */
   get amount(): number {
-    return this.#amount;
+    return (this.#absAmount ?? 1) * (this.#prime ? -1 : 1);
   }
 
   /** @deprecated */
   get type(): string {
+    warnOnce("deprecated: type");
     return "blockMove";
   }
 
   /** @deprecated */
   get family(): string {
+    warnOnce("deprecated: family");
     return "sequence";
   }
 
   /** @deprecated */
   get outerLayer(): number | undefined {
+    warnOnce("deprecated: outerLayer");
     return this.#quantum.experimentalRawOuterLayer ?? undefined;
   }
 
   /** @deprecated */
   get innerLayer(): number | undefined {
+    warnOnce("deprecated: innerLayer");
     return this.#quantum.experimentalRawInnerLayer ?? undefined;
   }
 
   toString(): string {
-    return this.#quantum.toString() + repetitionSuffix(this.#amount);
+    let s = this.#quantum.toString();
+    if (this.#absAmount !== null) {
+      s += this.#absAmount;
+    }
+    if (this.#prime) {
+      s += "'";
+    }
+    return s;
   }
 }
 
@@ -199,6 +234,7 @@ export class Alg implements Sequence {
 
   /** @deprecated */
   get nestedUnits(): Unit[] {
+    warnOnce("deprecated: nestedUnits");
     return Array.from(this.#units);
   }
 
@@ -210,6 +246,7 @@ export class Alg implements Sequence {
 
   /** @deprecated */
   get type(): string {
+    warnOnce("deprecated: type");
     return "sequence";
   }
 
