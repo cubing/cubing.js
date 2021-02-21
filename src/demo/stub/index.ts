@@ -21,6 +21,12 @@ console.log(new Alg([Move.fromString("R")]));
 
 const alg = new Alg([Move.fromString("R"), Move.fromString("U")]);
 
+try {
+  Move.fromString("R2' ");
+} catch (e) {
+  console.info(e.toString());
+}
+
 console.log(alg);
 
 new Move("R");
