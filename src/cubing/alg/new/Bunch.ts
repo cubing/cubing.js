@@ -1,6 +1,5 @@
 import { Alg } from "./Alg";
 import { Quanta, QuantaArgs } from "./Quanta";
-import { BunchJSON } from "./Serializable";
 
 export class Bunch {
   readonly #quanta: Quanta<Alg>;
@@ -17,10 +16,10 @@ export class Bunch {
     return `(${this.#quanta.quantum.toString()})${this.#quanta.amountSuffix()}`;
   }
 
-  toJSON(): BunchJSON {
-    return {
-      type: "bunch",
-      alg: this.#quanta.quantum.toJSON(),
-    };
-  }
+  // toJSON(): BunchJSON {
+  //   return {
+  //     type: "bunch",
+  //     alg: this.#quanta.quantum.toJSON(),
+  //   };
+  // }
 }

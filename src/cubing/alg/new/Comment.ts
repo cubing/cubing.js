@@ -1,5 +1,3 @@
-import { CommentJSON } from "./Serializable";
-
 // TODO: hash
 export class Comment {
   readonly #text: string;
@@ -15,10 +13,10 @@ export class Comment {
     return `//${this.#text}`;
   }
 
-  toJSON(): CommentJSON {
-    return {
-      type: "comment",
-      text: this.#text,
-    };
-  }
+  // toJSON(): CommentJSON {
+  //   return {
+  //     type: "comment",
+  //     text: this.#text,
+  //   };
+  // }
 }

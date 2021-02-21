@@ -1,6 +1,6 @@
 import { BlockMove } from "../algorithm";
 import { Quanta, QuantaArgs } from "./Quanta";
-import { MoveJSON, Serializable } from "./Serializable";
+import { Serializable } from "./Serializable";
 import { warnOnce } from "./warnOnce";
 
 export class MoveQuantum {
@@ -155,13 +155,13 @@ export class Move implements BlockMove, Serializable {
     return this.#quanta.quantum.toString() + this.#quanta.amountSuffix();
   }
 
-  // TODO: Serialize as a string?
-  toJSON(): MoveJSON {
-    return {
-      type: "move",
-      family: this.family,
-      innerLayer: this.innerLayer,
-      outerLayer: this.outerLayer,
-    };
-  }
+  // // TODO: Serialize as a string?
+  // toJSON(): MoveJSON {
+  //   return {
+  //     type: "move",
+  //     family: this.family,
+  //     innerLayer: this.innerLayer,
+  //     outerLayer: this.outerLayer,
+  //   };
+  // }
 }

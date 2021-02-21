@@ -1,6 +1,6 @@
 import { Sequence } from "../algorithm";
 import { algToString } from "../traversal";
-import { AlgJSON, Serializable, UnitJSON } from "./Serializable";
+import { Serializable } from "./Serializable";
 import { Unit } from "./Unit";
 import { warnOnce } from "./warnOnce";
 
@@ -59,12 +59,12 @@ export class Alg implements Sequence, Serializable {
     return "sequence";
   }
 
-  toJSON(): AlgJSON {
-    return {
-      type: "alg",
-      units: Array.from(this.#units) as UnitJSON[],
-    };
-  }
+  // toJSON(): AlgJSON {
+  //   return {
+  //     type: "alg",
+  //     units: Array.from(this.#units) as UnitJSON[],
+  //   };
+  // }
 
   toString(): string {
     return algToString(new Sequence(this.nestedUnits));
