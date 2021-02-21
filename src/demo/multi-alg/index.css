@@ -19,7 +19,7 @@ body {
 }
 
 body > div:first-child {
-  grid-template-rows: 2em 5fr;
+  grid-template-rows: 2em 2em 5fr;
 }
 
 body > div:nth-child(2) {
@@ -33,6 +33,10 @@ body > div:nth-child(2) {
 
 textarea {
   font-family: "Ubuntu";
+}
+
+.saved {
+  background: #0f03;
 }
 
 twisty-player {

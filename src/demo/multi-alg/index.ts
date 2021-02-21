@@ -5,6 +5,16 @@ import {
   ExperimentalStickering,
 } from "../../cubing/twisty/dom/TwistyPlayerConfig";
 
+const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
+if (localStorage["multi-alg-textarea"]) {
+  algsTextarea.value = localStorage["multi-alg-textarea"];
+  algsTextarea.classList.add("saved");
+}
+
+algsTextarea.addEventListener("input", () => {
+  algsTextarea.classList.remove("saved");
+});
+
 const player = new TwistyPlayer({});
 document.querySelector("#display")!.appendChild(player);
 
@@ -52,7 +62,6 @@ stickeringSelect?.addEventListener("change", () => {
 });
 
 document.querySelector("#download")?.addEventListener("click", () => {
-  const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
   const allAlgs = parseAlg(algsTextarea.value);
 
   let currentAlg = new Sequence([]);
@@ -74,7 +83,16 @@ document.querySelector("#download")?.addEventListener("click", () => {
     }
   }
 
+  save();
+
   for (const { alg, name } of algList) {
     downloadAlg(expand(alg), `${stickeringSelect.value} — ${name}`);
   }
 });
+
+function save() {
+  localStorage["multi-alg-textarea"] = algsTextarea.value;
+  algsTextarea.classList.add("saved");
+}
+
+document.querySelector("#save")?.addEventListener("click", save);
