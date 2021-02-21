@@ -2,6 +2,7 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { Alg } from "../../cubing/alg/new/Alg";
+import { Bunch } from "../../cubing/alg/new/Bunch";
 import { Move } from "../../cubing/alg/new/Move";
 
 console.log("" + Move.fromString("R"));
@@ -21,3 +22,7 @@ new Move("R");
 for (const unit of alg.units()) {
   console.log({ unit });
 }
+
+const b = new Bunch(new Alg([Move.fromString("R'")]), -2);
+console.log(b.toString());
+console.log(b.toString());

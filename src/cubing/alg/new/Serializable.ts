@@ -5,7 +5,12 @@ export interface MoveJSON {
   outerLayer?: number;
 }
 
-export type UnitJSON = MoveJSON;
+export interface BunchJSON {
+  type: "bunch";
+  alg: AlgJSON;
+}
+
+export type UnitJSON = MoveJSON | BunchJSON;
 
 export interface AlgJSON {
   type: "alg";
