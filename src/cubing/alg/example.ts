@@ -1,10 +1,16 @@
 // tslint:disable-next-line no-namespace // TODO: nested module
 
+import { Alg } from "./new/Alg";
+import { Bunch } from "./new/Bunch";
+import { Commutator } from "./new/Commutator";
+import { Conjugate } from "./new/Conjugate";
 import { Move } from "./new/Move";
+import { Newline } from "./new/Newline";
+import { Pause } from "./new/Pause";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export const Example = {
-  Sune: new Sequence([
+  Sune: new Alg([
     new Move("R", 1),
     new Move("U", 1),
     new Move("R", -1),
@@ -14,7 +20,7 @@ export const Example = {
     new Move("R", -1),
   ]),
 
-  AntiSune: new Sequence([
+  AntiSune: new Alg([
     new Move("R", 1),
     new Move("U", 2),
     new Move("R", -1),
@@ -24,13 +30,13 @@ export const Example = {
     new Move("R", -1),
   ]),
 
-  SuneCommutator: new Sequence([
+  SuneCommutator: new Alg([
     new Commutator(
-      new Sequence([new Move("R", 1), new Move("U", 1), new Move("R", -2)]),
-      new Sequence([
+      new Alg([new Move("R", 1), new Move("U", 1), new Move("R", -2)]),
+      new Alg([
         new Conjugate(
-          new Sequence([new Move("R", 1)]),
-          new Sequence([new Move("U", 1)]),
+          new Alg([new Move("R", 1)]),
+          new Alg([new Move("U", 1)]),
           1,
         ),
       ]),
@@ -38,7 +44,7 @@ export const Example = {
     ),
   ]),
 
-  Niklas: new Sequence([
+  Niklas: new Alg([
     new Move("R", 1),
     new Move("U", -1),
     new Move("L", -1),
@@ -49,38 +55,35 @@ export const Example = {
     new Move("U", 1),
   ]),
 
-  EPerm: new Sequence([
+  EPerm: new Alg([
     new Move("x", -1),
     new Commutator(
-      new Sequence([
+      new Alg([
         new Conjugate(
-          new Sequence([new Move("R", 1)]),
-          new Sequence([new Move("U", -1)]),
+          new Alg([new Move("R", 1)]),
+          new Alg([new Move("U", -1)]),
         ),
       ]),
-      new Sequence([new Move("D", 1)]),
+      new Alg([new Move("D", 1)]),
       1,
     ),
     new Commutator(
-      new Sequence([
-        new Conjugate(
-          new Sequence([new Move("R", 1)]),
-          new Sequence([new Move("U", 1)]),
-        ),
+      new Alg([
+        new Conjugate(new Alg([new Move("R", 1)]), new Alg([new Move("U", 1)])),
       ]),
-      new Sequence([new Move("D", 1)]),
+      new Alg([new Move("D", 1)]),
       1,
     ),
     new Move("x", 1),
   ]),
 
-  FURURFCompact: new Sequence([
+  FURURFCompact: new Alg([
     new Conjugate(
-      new Sequence([new Move("F", 1)]),
-      new Sequence([
+      new Alg([new Move("F", 1)]),
+      new Alg([
         new Commutator(
-          new Sequence([new Move("U", 1)]),
-          new Sequence([new Move("R", 1)]),
+          new Alg([new Move("U", 1)]),
+          new Alg([new Move("R", 1)]),
           1,
         ),
       ]),
@@ -88,17 +91,13 @@ export const Example = {
     ),
   ]),
 
-  APermCompact: new Sequence([
+  APermCompact: new Alg([
     new Conjugate(
-      new Sequence([new Move("R", 2)]),
-      new Sequence([
+      new Alg([new Move("R", 2)]),
+      new Alg([
         new Commutator(
-          new Sequence([new Move("F", 2)]),
-          new Sequence([
-            new Move("R", -1),
-            new Move("B", -1),
-            new Move("R", 1),
-          ]),
+          new Alg([new Move("F", 2)]),
+          new Alg([new Move("R", -1), new Move("B", -1), new Move("R", 1)]),
           1,
         ),
       ]),
@@ -106,7 +105,7 @@ export const Example = {
     ),
   ]),
 
-  FURURFMoves: new Sequence([
+  FURURFMoves: new Alg([
     new Move("F", 1),
     new Move("U", 1),
     new Move("R", 1),
@@ -115,7 +114,7 @@ export const Example = {
     new Move("F", -1),
   ]),
 
-  TPerm: new Sequence([
+  TPerm: new Alg([
     new Move("R", 1),
     new Move("U", 1),
     new Move("R", -1),
@@ -132,13 +131,13 @@ export const Example = {
     new Move("F", -1),
   ]),
 
-  HeadlightSwaps: new Sequence([
+  HeadlightSwaps: new Alg([
     new Conjugate(
-      new Sequence([new Move("F", 1)]),
-      new Sequence([
+      new Alg([new Move("F", 1)]),
+      new Alg([
         new Commutator(
-          new Sequence([new Move("R", 1)]),
-          new Sequence([new Move("U", 1)]),
+          new Alg([new Move("R", 1)]),
+          new Alg([new Move("U", 1)]),
           3,
         ),
       ]),
@@ -146,25 +145,17 @@ export const Example = {
     ),
   ]),
 
-  TriplePause: new Sequence([new Pause(), new Pause(), new Pause()]),
+  TriplePause: new Alg([new Pause(), new Pause(), new Pause()]),
 
   AllAlgParts: [
-    new Sequence([new Move("R", 1), new Move("U", -1)]),
-    new Group(new Sequence([new Move("F", 1)]), 2),
+    new Alg([new Move("R", 1), new Move("U", -1)]),
+    new Bunch(new Alg([new Move("F", 1)]), 2),
     // new Rotation("y", -1),
     new Move("R", 2),
-    new Commutator(
-      new Sequence([new Move("R", 2)]),
-      new Sequence([new Move("U", 2)]),
-      2,
-    ),
-    new Conjugate(
-      new Sequence([new Move("L", 2)]),
-      new Sequence([new Move("D", -1)]),
-      2,
-    ),
+    new Commutator(new Alg([new Move("R", 2)]), new Alg([new Move("U", 2)]), 2),
+    new Conjugate(new Alg([new Move("L", 2)]), new Alg([new Move("D", -1)]), 2),
     new Pause(),
-    new NewLine(),
+    new Newline(),
     new Comment("short comment"),
   ],
 };

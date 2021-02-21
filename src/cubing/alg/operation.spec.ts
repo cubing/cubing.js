@@ -1,18 +1,10 @@
-import { BareBlockMove, LayerBlockMove } from "./algorithm";
-import {
-  experimentalAppendBlockMove,
-  experimentalConcatAlgs,
-  modifiedBlockMove,
-} from "./operation";
-import { parseAlg } from "./parser";
+import { Move } from "./new/Move";
 import { algPartToStringForTesting, algToString } from "./traversal";
 
 describe("operation", () => {
   it("can modify BlockMove", () => {
     expect(
-      algPartToStringForTesting(
-        modifiedBlockMove(BareBlockMove("R"), { amount: 2 }),
-      ),
+      algPartToStringForTesting(new Move("R").modified({ repetition: 2 })),
     ).toBe("R2");
     expect(
       algPartToStringForTesting(

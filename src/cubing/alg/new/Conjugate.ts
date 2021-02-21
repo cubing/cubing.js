@@ -25,7 +25,7 @@ export class ConjugateQuantum extends Comparable {
 export class Conjugate extends AlgCommon {
   readonly #repetition: Repetition<ConjugateQuantum>;
 
-  constructor(A: Alg, B: Alg, repetitionInfo: RepetitionInfo) {
+  constructor(A: Alg, B: Alg, repetitionInfo?: RepetitionInfo) {
     super();
     this.#repetition = new Repetition<ConjugateQuantum>(
       new ConjugateQuantum(A, B),
