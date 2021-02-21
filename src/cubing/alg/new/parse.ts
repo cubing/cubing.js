@@ -15,40 +15,9 @@ function parseOrNull(n: string): number | null {
 }
 
 const repetitionRegex = /^(\d+)?('?)/;
-function parseRepetition(s: string, idx: number): [RepetitionInfo, number] {
-  const [fullMatch, absAmountStr, primeStr] = repetitionRegex.exec(
-    s.slice(idx),
-  ) as string[]; // TODO: can we be more efficient than `.slice()`?
-  idx += fullMatch.length;
-
-  return [[parseOrNull(absAmountStr), primeStr === "'"], idx];
-}
 
 export const moveStartRegex = /^[_\dA-Za-z]/;
 export const moveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])?/;
-
-function parseMove(s: string, idx: number): [Move, number] {
-  // console.log("parseMove", s, idx);
-  const [fullMatch, , , outerLayerStr, innerLayerStr, family] = moveRegex.exec(
-    s.slice(idx),
-  ) as string[]; // TODO: can we be more efficient than `.slice()`?
-  idx += fullMatch.length;
-
-  let repetitionInfo: RepetitionInfo;
-  [repetitionInfo, idx] = parseRepetition(s, idx);
-
-  // console.log(s, idx, repetitionInfo);
-
-  const move = new Move(
-    new MoveQuantum(
-      family,
-      parseOrNull(innerLayerStr) ?? undefined,
-      parseOrNull(outerLayerStr) ?? undefined,
-    ),
-    repetitionInfo,
-  );
-  return [move, idx];
-}
 
 export function parseAlg(s: string): Alg {
   return new ParsedAlg(s).alg;
@@ -81,16 +50,14 @@ class ParsedAlg {
         this;
         const alg = this.parseAlgWithStopping([")"]);
         this.idx++;
-        let repetitionInfo: RepetitionInfo;
-        [repetitionInfo, this.idx] = parseRepetition(this.input, this.idx);
+        const repetitionInfo = this.parseRepetition();
         units.push(new Bunch(alg, repetitionInfo));
       } else if (this.tryConsumeNext("[")) {
         const A = this.parseAlgWithStopping([",", ":"]);
         const separator = this.popNext();
         const B = this.parseAlgWithStopping(["]"]);
         this.mustConsumeNext("]");
-        let repetitionInfo: RepetitionInfo;
-        [repetitionInfo, this.idx] = parseRepetition(this.input, this.idx);
+        const repetitionInfo = this.parseRepetition();
 
         // console.log("separator", separator);
         switch (separator) {
@@ -113,8 +80,7 @@ class ParsedAlg {
             `Unexpected move at idx ${this.idx}. Are you missing a space?`,
           ); // TODO better error message
         }
-        let move: Move;
-        [move, this.idx] = parseMove(this.input, this.idx);
+        const move = this.parseMove();
         // console.log(move, move.toString());
         units.push(move);
         readyForMove = false;
@@ -146,6 +112,42 @@ class ParsedAlg {
     }
     // console.log({ units }, units.length, units[0].toString());
     return new Alg(units);
+  }
+
+  parseMove(): Move {
+    // console.log("parseMove", s, idx);
+    const [
+      fullMatch,
+      ,
+      ,
+      outerLayerStr,
+      innerLayerStr,
+      family,
+    ] = moveRegex.exec(this.input.slice(this.idx)) as string[]; // TODO: can we be more efficient than `.slice()`?
+    this.idx += fullMatch.length;
+
+    const repetitionInfo = this.parseRepetition();
+
+    // console.log(s, idx, repetitionInfo);
+
+    const move = new Move(
+      new MoveQuantum(
+        family,
+        parseOrNull(innerLayerStr) ?? undefined,
+        parseOrNull(outerLayerStr) ?? undefined,
+      ),
+      repetitionInfo,
+    );
+    return move;
+  }
+
+  parseRepetition(): RepetitionInfo {
+    const [fullMatch, absAmountStr, primeStr] = repetitionRegex.exec(
+      this.input.slice(this.idx),
+    ) as string[]; // TODO: can we be more efficient than `.slice()`?
+    this.idx += fullMatch.length;
+
+    return [parseOrNull(absAmountStr), primeStr === "'"];
   }
 
   // private peekNext(): string {
