@@ -73,6 +73,6 @@ document.querySelector("#download")?.addEventListener("click", () => {
   }
 
   for (const { alg, name } of algList) {
-    downloadAlg(alg, name);
+    downloadAlg(alg, `${stickeringSelect.value} — ${name}`);
   }
 });
