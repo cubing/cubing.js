@@ -1,5 +1,5 @@
 import { Alg } from "./Alg";
-import { BareBlockMove, Sequence } from "./algorithm";
+import { BareBlockMove, Sequence } from "../algorithm";
 import "./test/structure-equals";
 
 describe("operation", () => {
