@@ -26,6 +26,15 @@ body > div:nth-child(2) {
   grid-template-rows: 2em 5fr;
 }
 
+@font-face {
+  font-family: "Ubuntu";
+  src: url("../../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
+}
+
+textarea {
+  font-family: "Ubuntu";
+}
+
 twisty-player {
   width: 100%;
   height: 100%;
