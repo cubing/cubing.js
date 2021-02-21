@@ -26,6 +26,16 @@ try {
 } catch (e) {
   console.info(e.toString());
 }
+try {
+  Move.fromString("2342342343242423423432432R2'");
+} catch (e) {
+  console.info(e.toString());
+}
+try {
+  Move.fromString("23R234234234234234234234'");
+} catch (e) {
+  console.info(e.toString());
+}
 
 console.log(alg);
 

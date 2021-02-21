@@ -1,3 +1,5 @@
+import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
+
 export type RepetitionInfo =
   | undefined
   | number
@@ -25,8 +27,14 @@ export class Repetition<Q> {
     }
 
     if (this.absAmount !== null) {
-      if (!Number.isInteger(this.absAmount) || this.absAmount! < 0) {
-        throw new Error(`Invalid absolute amount: ${this.absAmount}`);
+      if (
+        !Number.isInteger(this.absAmount) ||
+        this.absAmount! < 0 ||
+        this.absAmount > MAX_INT
+      ) {
+        throw new Error(
+          `Unit amount absolute value must be a non-negative integer no larger than ${MAX_INT_DESCRIPTION}.`,
+        );
       }
     }
 

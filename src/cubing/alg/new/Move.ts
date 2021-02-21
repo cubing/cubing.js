@@ -3,38 +3,44 @@ import { Repetition, RepetitionInfo } from "./Repetition";
 import { Serializable } from "./Serializable";
 import { warnOnce } from "./warnOnce";
 import { parseMove } from "./parse";
+import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
 
 export class MoveQuantum {
   readonly #family: string;
-  readonly #outerLayer: number | null;
   readonly #innerLayer: number | null;
+  readonly #outerLayer: number | null;
 
   constructor(family: string, innerLayer?: number, outerLayer?: number) {
     this.#family = family;
 
-    this.#outerLayer = outerLayer ?? null;
-    const hasOuterLayer = this.#outerLayer !== null;
-
     this.#innerLayer = innerLayer ?? null;
-    const hasInnerLayer = this.#innerLayer !== null;
+    this.#outerLayer = outerLayer ?? null;
 
     if (
-      hasInnerLayer &&
-      (!Number.isInteger(this.#outerLayer) || this.#outerLayer! < 1)
+      this.#innerLayer !== null &&
+      (!Number.isInteger(this.#innerLayer) ||
+        this.#innerLayer! < 1 ||
+        this.#innerLayer! > MAX_INT)
     ) {
-      throw new Error("MoveQuantum inner layer must be a positive integer.");
+      throw new Error(
+        `MoveQuantum inner layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
+      );
     }
 
     if (
-      hasInnerLayer &&
-      (!Number.isInteger(this.#innerLayer) || this.#innerLayer! < 1)
+      this.#outerLayer !== null &&
+      (!Number.isInteger(this.#outerLayer) ||
+        this.#outerLayer < 1 ||
+        this.#outerLayer > MAX_INT)
     ) {
-      throw new Error("MoveQuantum outer layer must be a positive integer.");
+      throw new Error(
+        `MoveQuantum outer layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
+      );
     }
 
     if (
-      hasInnerLayer &&
-      hasOuterLayer &&
+      this.#outerLayer !== null &&
+      this.#innerLayer !== null &&
       this.#innerLayer! >= this.#outerLayer!
     ) {
       throw new Error(
@@ -42,7 +48,7 @@ export class MoveQuantum {
       );
     }
 
-    if (hasOuterLayer && !hasInnerLayer) {
+    if (this.#outerLayer !== null && this.#innerLayer === null) {
       throw new Error(
         "MoveQuantum with an outer layer must have an inner layer",
       ); // TODO: test

@@ -1,25 +1,4 @@
 export {
-  AlgPart,
-  OldUnit as Unit,
-  WithAmount,
-  Move,
-  Container,
-  Annotation,
-  Sequence,
-  Group,
-  MoveFamily,
-  BlockMove,
-  BareBlockMove,
-  LayerBlockMove,
-  RangeBlockMove,
-  Commutator,
-  Conjugate,
-  Pause,
-  NewLine,
-  Comment,
-} from "./algorithm";
-
-export {
   modifiedBlockMove,
   experimentalAppendBlockMove,
   experimentalConcatAlgs,
