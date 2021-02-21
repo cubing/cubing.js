@@ -1,140 +1,130 @@
-import { Conjugate } from "./Conjugate";
-import { Commutator } from "./Commutator";
 import { Alg } from "./Alg";
-import { Move, MoveQuantum } from "./Move";
-import { RepetitionInfo } from "./Repetition";
-import { Unit } from "./Unit";
+import { AlgBuilder } from "./AlgBuilder";
 import { Bunch } from "./Bunch";
+import { Commutator } from "./Commutator";
+import { Conjugate } from "./Conjugate";
+import { Move, MoveQuantum } from "./Move";
 import { Newline } from "./Newline";
 import { Pause } from "./Pause";
+import { RepetitionInfo } from "./Repetition";
 
 type StoppingChar = "," | ":" | "]" | ")";
 
-function parseOrNull(n: string): number | null {
-  return n ? parseInt(n) : null;
+function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
+  return n ? parseInt(n) : emptyFallback;
 }
 
 const repetitionRegex = /^(\d+)?('?)/;
-
-export const moveStartRegex = /^[_\dA-Za-z]/;
-export const moveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])?/;
+const moveStartRegex = /^[_\dA-Za-z]/;
+const moveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])?/;
 
 export function parseAlg(s: string): Alg {
   return new ParsedAlg(s).alg;
 }
 
+// TODO: support recording string locations for moves.
 class ParsedAlg {
-  idx: number = 0;
-  alg: Alg;
+  #idx: number = 0;
+  readonly alg: Alg;
 
   constructor(public readonly input: string) {
     this.alg = this.parseAlgWithStopping([]);
-    if (this.idx !== this.input.length) {
+    if (this.#idx !== this.input.length) {
       throw new Error("parsing unexpectedly ended early");
     }
   }
 
   parseAlgWithStopping(stopBefore: StoppingChar[]): Alg {
-    // TODO: Implement an alg builder.
-    // console.log(s, idx, stopBefore);
-    const units: Unit[] = [];
-    let readyForMove = true;
-    while (this.idx < this.input.length) {
-      if ((stopBefore as string[]).includes(this.input[this.idx])) {
-        // console.log(Alg);
-        const alg = new Alg(units);
-        // console.log(alg);
-        return alg;
+    const algBuilder = new AlgBuilder();
+
+    // We're "crowded" if there was not a space or newline since the last unit.
+    let crowded = false;
+
+    const mustNotBeCrowded = (): void => {
+      if (crowded) {
+        throw new Error(
+          `Unexpected unit at idx ${this.#idx}. Are you missing a space?`,
+        ); // TODO better error message
       }
-      if (this.tryConsumeNext("(")) {
-        this;
+    };
+
+    mainLoop: while (this.#idx < this.input.length) {
+      if ((stopBefore as string[]).includes(this.input[this.#idx])) {
+        return algBuilder.toAlg();
+      }
+      if (this.tryConsumeNext(" ")) {
+        crowded = false;
+        continue mainLoop;
+      } else if (moveStartRegex.test(this.input[this.#idx])) {
+        mustNotBeCrowded();
+        const move = this.parseMove();
+        algBuilder.push(move);
+        crowded = true;
+        continue mainLoop;
+      } else if (this.tryConsumeNext("(")) {
+        mustNotBeCrowded();
         const alg = this.parseAlgWithStopping([")"]);
-        this.idx++;
+        this.mustConsumeNext(")");
         const repetitionInfo = this.parseRepetition();
-        units.push(new Bunch(alg, repetitionInfo));
+        algBuilder.push(new Bunch(alg, repetitionInfo));
+        crowded = true;
+        continue mainLoop;
       } else if (this.tryConsumeNext("[")) {
+        mustNotBeCrowded();
         const A = this.parseAlgWithStopping([",", ":"]);
         const separator = this.popNext();
         const B = this.parseAlgWithStopping(["]"]);
         this.mustConsumeNext("]");
         const repetitionInfo = this.parseRepetition();
-
-        // console.log("separator", separator);
         switch (separator) {
           case ":":
-            units.push(new Conjugate(A, B, repetitionInfo));
-            // console.log(units, A, B);
-            readyForMove = false;
-            continue;
+            algBuilder.push(new Conjugate(A, B, repetitionInfo));
+            crowded = true;
+            continue mainLoop;
           case ",":
-            units.push(new Commutator(A, B, repetitionInfo));
-            // console.log(units, A, B);
-            readyForMove = false;
-            continue;
+            algBuilder.push(new Commutator(A, B, repetitionInfo));
+            crowded = true;
+            continue mainLoop;
           default:
             throw "unexpected parsing error";
         }
-      } else if (moveStartRegex.test(this.input[this.idx])) {
-        if (!readyForMove) {
-          throw new Error(
-            `Unexpected move at idx ${this.idx}. Are you missing a space?`,
-          ); // TODO better error message
-        }
-        const move = this.parseMove();
-        // console.log(move, move.toString());
-        units.push(move);
-        readyForMove = false;
-        continue;
-      } else if (this.tryConsumeNext(" ")) {
-        readyForMove = true;
-        continue;
       } else if (this.tryConsumeNext("\n")) {
-        units.push(new Newline());
-        readyForMove = true;
-        continue;
+        algBuilder.push(new Newline());
+        crowded = false;
+        continue mainLoop;
       } else if (this.tryConsumeNext(".")) {
-        units.push(new Pause());
+        mustNotBeCrowded();
+        algBuilder.push(new Pause());
         while (this.tryConsumeNext(".")) {
-          units.push(new Pause());
+          algBuilder.push(new Pause());
         }
-        readyForMove = true;
-        continue;
+        crowded = true;
+        continue mainLoop;
       } else {
-        throw new Error("TODO");
+        throw new Error(`Unexpected character: ${this.popNext()}`);
       }
     }
 
-    if (this.idx !== this.input.length) {
+    if (this.#idx !== this.input.length) {
       throw new Error("did not finish parsing?");
     }
     if (stopBefore.length > 0) {
       throw new Error("expected stopping");
     }
-    // console.log({ units }, units.length, units[0].toString());
-    return new Alg(units);
+    return algBuilder.toAlg();
   }
 
   parseMove(): Move {
-    // console.log("parseMove", s, idx);
-    const [
-      fullMatch,
-      ,
-      ,
-      outerLayerStr,
-      innerLayerStr,
-      family,
-    ] = moveRegex.exec(this.input.slice(this.idx)) as string[]; // TODO: can we be more efficient than `.slice()`?
-    this.idx += fullMatch.length;
-
+    const [, , , outerLayerStr, innerLayerStr, family] = this.parseRegex(
+      moveRegex,
+    );
     const repetitionInfo = this.parseRepetition();
-
-    // console.log(s, idx, repetitionInfo);
 
     const move = new Move(
       new MoveQuantum(
         family,
-        parseOrNull(innerLayerStr) ?? undefined,
-        parseOrNull(outerLayerStr) ?? undefined,
+        parseIntWithEmptyFallback(innerLayerStr, undefined),
+        parseIntWithEmptyFallback(outerLayerStr, undefined),
       ),
       repetitionInfo,
     );
@@ -142,27 +132,32 @@ class ParsedAlg {
   }
 
   parseRepetition(): RepetitionInfo {
-    const [fullMatch, absAmountStr, primeStr] = repetitionRegex.exec(
-      this.input.slice(this.idx),
-    ) as string[]; // TODO: can we be more efficient than `.slice()`?
-    this.idx += fullMatch.length;
-
-    return [parseOrNull(absAmountStr), primeStr === "'"];
+    const [, absAmountStr, primeStr] = this.parseRegex(repetitionRegex);
+    return [parseIntWithEmptyFallback(absAmountStr, null), primeStr === "'"];
   }
 
-  // private peekNext(): string {
-  //   return this.input[this.idx];
-  // }
+  parseRegex(regex: RegExp): RegExpExecArray {
+    const arr = regex.exec(this.remaining());
+    if (arr === null) {
+      throw new Error("internal parsing error"); // TODO
+    }
+    this.#idx += arr[0].length;
+    return arr;
+  }
+
+  remaining(): string {
+    return this.input.slice(this.#idx);
+  }
 
   private popNext(): string {
-    const next = this.input[this.idx];
-    this.idx++;
+    const next = this.input[this.#idx];
+    this.#idx++;
     return next;
   }
 
   private tryConsumeNext(expected: string): boolean {
-    if (this.input[this.idx] === expected) {
-      this.idx++;
+    if (this.input[this.#idx] === expected) {
+      this.#idx++;
       return true;
     }
     return false;

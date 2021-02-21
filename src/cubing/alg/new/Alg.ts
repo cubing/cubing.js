@@ -34,7 +34,7 @@ function toIterable(
 }
 
 export class Alg implements Serializable {
-  #units: Iterable<Unit>;
+  #units: Iterable<Unit>; // TODO: freeze?
   constructor(alg?: string | Sequence | Iterable<Unit>) {
     this.#units = toIterable(alg);
   }
