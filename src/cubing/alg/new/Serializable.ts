@@ -10,6 +10,11 @@ export interface BunchJSON {
   alg: AlgJSON;
 }
 
+export interface CommentJSON {
+  type: "comment";
+  text: string;
+}
+
 export type UnitJSON = MoveJSON | BunchJSON;
 
 export interface AlgJSON {
