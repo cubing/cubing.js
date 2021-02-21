@@ -52,21 +52,17 @@ stickeringSelect?.addEventListener("change", () => {
 });
 
 document.querySelector("#download")?.addEventListener("click", () => {
-  const algsTextarea = document.querySelector("#algs")!;
-
-  const allAlgs = parseAlg(algsTextarea.textContent!);
+  const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
+  const allAlgs = parseAlg(algsTextarea.value);
 
   let currentAlg = new Sequence([]);
-
   const algList: {
     alg: Sequence;
     name: string;
   }[] = [];
-
   for (const unit of allAlgs.nestedUnits) {
     if (unit.type === "blockMove") {
       currentAlg = new Sequence(currentAlg.nestedUnits.concat([unit]));
-      console.log(currentAlg);
     } else if (unit.type === "comment") {
       algList.push({
         alg: currentAlg,
