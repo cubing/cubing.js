@@ -12,9 +12,9 @@ export class MoveQuantum {
 
   constructor(family: string, innerLayer?: number, outerLayer?: number) {
     this.#family = family;
-
     this.#innerLayer = innerLayer ?? null;
     this.#outerLayer = outerLayer ?? null;
+    Object.freeze(this);
 
     if (
       this.#innerLayer !== null &&

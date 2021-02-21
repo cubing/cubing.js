@@ -2,7 +2,9 @@ import { Alg } from "./Alg";
 import { Repetition, RepetitionInfo } from "./Repetition";
 
 export class ConjugateQuantum {
-  constructor(public A: Alg, public B: Alg) {}
+  constructor(public A: Alg, public B: Alg) {
+    Object.freeze(this);
+  }
 
   toString(): string {
     return `[${this.A}: ${this.B}]`;
