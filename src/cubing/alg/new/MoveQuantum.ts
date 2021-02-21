@@ -47,6 +47,13 @@ export class MoveQuantum {
 
   // TODO: provide something more useful on average.
   /** @deprecated */
+  get experimentalRawFamily(): string {
+    warnOnce("deprecated: experimentalRawFamily");
+    return this.#family;
+  }
+
+  // TODO: provide something more useful on average.
+  /** @deprecated */
   get experimentalRawOuterLayer(): number | null {
     warnOnce("deprecated: experimentalRawOuterLayer");
     return this.#outerLayer;

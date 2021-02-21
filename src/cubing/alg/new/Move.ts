@@ -1,10 +1,11 @@
 import { BlockMove } from "../algorithm";
 import { MoveQuantum } from "./MoveQuantum";
+import { MoveJSON, Serializable } from "./Serializable";
 import { warnOnce } from "./warnOnce";
 
 export const moveRegex = /((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z])(\d*)?(')?/;
 
-export class Move implements BlockMove {
+export class Move implements BlockMove, Serializable {
   readonly #quantum: MoveQuantum;
   readonly #absAmount: number | null;
   readonly #prime: boolean;
@@ -87,7 +88,7 @@ export class Move implements BlockMove {
   /** @deprecated */
   get family(): string {
     warnOnce("deprecated: family");
-    return "sequence";
+    return this.#quantum.experimentalRawFamily ?? undefined;
   }
 
   /** @deprecated */
@@ -111,5 +112,15 @@ export class Move implements BlockMove {
       s += "'";
     }
     return s;
+  }
+
+  // TODO: Serialize as a string?
+  toJSON(): MoveJSON {
+    return {
+      type: "move",
+      family: this.family,
+      innerLayer: this.innerLayer,
+      outerLayer: this.outerLayer,
+    };
   }
 }

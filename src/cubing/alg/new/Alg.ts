@@ -1,7 +1,7 @@
 import { Sequence, Unit } from "../algorithm";
-import { AlgJSON } from "../json";
 import { parseAlg } from "../parser";
 import { algToString } from "../traversal";
+import { AlgJSON, Serializable, UnitJSON } from "./Serializable";
 import { warnOnce } from "./warnOnce";
 
 // TODO: validate
@@ -29,7 +29,7 @@ function toIterable(
   throw "Invalid unit";
 }
 
-export class Alg implements Sequence {
+export class Alg implements Sequence, Serializable {
   #units: Iterable<Unit>;
   constructor(alg?: string | Sequence | Iterable<Unit>) {
     this.#units = toIterable(alg);
@@ -58,7 +58,10 @@ export class Alg implements Sequence {
   }
 
   toJSON(): AlgJSON {
-    return new Sequence(this.nestedUnits);
+    return {
+      type: "alg",
+      units: Array.from(this.#units) as UnitJSON[],
+    };
   }
 
   toString(): string {

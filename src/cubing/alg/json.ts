@@ -11,20 +11,20 @@ import {
 } from "./algorithm";
 
 // TODO: Turn this into a union.
-export interface AlgJSON {
+export interface OldAlgJSON {
   type: string;
-  nestedSequence?: AlgJSON;
-  nestedUnits?: AlgJSON[];
+  nestedSequence?: OldAlgJSON;
+  nestedUnits?: OldAlgJSON[];
   innerLayer?: number;
   outerLayer?: number;
   family?: string;
   amount?: number;
-  A?: AlgJSON;
-  B?: AlgJSON;
+  A?: OldAlgJSON;
+  B?: OldAlgJSON;
   comment?: string;
 }
 
-export function fromJSON(json: AlgJSON): Sequence {
+export function fromJSON(json: OldAlgJSON): Sequence {
   if (json.type !== "sequence") {
     throw new Error(`Expected Sequence while parsing, got: ${json.type}`);
   }
@@ -34,7 +34,7 @@ export function fromJSON(json: AlgJSON): Sequence {
   return new Sequence(json.nestedUnits.map((j) => unitFromJSON(j)));
 }
 
-function unitFromJSON(json: AlgJSON): Unit {
+function unitFromJSON(json: OldAlgJSON): Unit {
   switch (json.type) {
     case "sequence":
       throw new Error(`Expected AlgPart while parsing, got \`Sequence\`.`);

@@ -39,7 +39,7 @@ export {
 
 export { Example } from "./example";
 
-export { AlgJSON, fromJSON } from "./json";
+export { OldAlgJSON, fromJSON } from "./json";
 
 export { parse, parseAlg } from "./parser";
 
