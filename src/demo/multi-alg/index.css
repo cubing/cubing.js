@@ -3,19 +3,27 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 body {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-body > div {
+body > div:first-child {
   display: grid;
   grid-template-rows: 1fr 5fr;
 }
 
-body > twisty-player {
+body > div:nth-child(2) {
+  display: grid;
+  grid-template-rows: 2em 5fr;
+}
+
+twisty-player {
   width: 100%;
   height: 100%;
 }

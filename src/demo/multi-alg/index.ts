@@ -1,10 +1,12 @@
 import { Comment, parseAlg, Sequence } from "../../cubing/alg";
 import { Twisty3DCanvas, TwistyPlayer } from "../../cubing/twisty";
+import {
+  experimentalStickerings,
+  ExperimentalStickering,
+} from "../../cubing/twisty/dom/TwistyPlayerConfig";
 
 const player = new TwistyPlayer({});
-document.body.appendChild(player);
-
-player.experimentalStickering = "PLL";
+document.querySelector("#display")!.appendChild(player);
 
 function downloadURL(url: string, name: string): void {
   const a = document.createElement("a");
@@ -21,6 +23,20 @@ function downloadAlg(s: Sequence, name: string) {
   const dataURL = canvas.renderToDataURL();
   downloadURL(dataURL, name);
 }
+
+const stickeringSelect = document.querySelector(
+  "#stickering",
+)! as HTMLSelectElement;
+for (const stickering of Object.keys(experimentalStickerings)) {
+  const option: HTMLOptionElement = stickeringSelect!.appendChild(
+    document.createElement("option"),
+  )! as HTMLOptionElement;
+  option.value = stickering;
+  option.textContent = stickering;
+}
+stickeringSelect?.addEventListener("change", () => {
+  player.experimentalStickering = stickeringSelect.value as ExperimentalStickering;
+});
 
 document.querySelector("#download")?.addEventListener("click", () => {
   const algsTextarea = document.querySelector("#algs")!;
@@ -50,7 +66,4 @@ document.querySelector("#download")?.addEventListener("click", () => {
   for (const { alg, name } of algList) {
     downloadAlg(alg, name);
   }
-
-  // drawAlg(parseAlg("R2 U R U R' U' R' U' R' U R'"));
-  // drawAlg(parseAlg("R U R' U' R' F R2 U' R' U' R U R' F'"));
 });
