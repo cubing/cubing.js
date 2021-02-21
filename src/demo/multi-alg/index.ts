@@ -30,7 +30,7 @@ function downloadAlg(s: Sequence, name: string) {
   player.experimentalSetupAnchor = "end";
 
   const canvas = player.viewerElems[0] as Twisty3DCanvas;
-  const dataURL = canvas.renderToDataURL();
+  const dataURL = canvas.renderToDataURL({ squareCrop: true });
   downloadURL(dataURL, name);
 }
 
