@@ -24,6 +24,7 @@ body > div:first-child {
 
 body > div:nth-child(2) {
   grid-template-rows: 2em 5fr;
+  overflow: hidden;
 }
 
 @font-face {
