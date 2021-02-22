@@ -3,31 +3,12 @@
 /* tslint:disable only-arrow-functions */ // TODO
 /* tslint:disable typedef */ // TODO
 
-import { iota, zeros, Perm } from "./Perm";
+import { FaceNameSwizzler } from "./FaceNameSwizzler";
 import {
-  Orbit,
-  OrbitDef,
-  OrbitsDef,
-  showcanon,
-  Transformation,
-  VisibleState,
-} from "./PermOriSet";
-import {
-  closure,
-  cube,
-  dodecahedron,
-  getface,
-  icosahedron,
-  octahedron,
-  tetrahedron,
-  uniqueplanes,
-} from "./PlatonicGenerator";
-import { PuzzleDescriptionString, PGPuzzles, PuzzleName } from "./PGPuzzles";
-import { centermassface, expandfaces, Quat } from "./Quat";
-import {
-  PGVendoredBlockMove,
   PGVendoredKPuzzleDefinition,
+  PGVendoredMove,
   PGVendoredMoveNotation,
+  PGVendoredMoveQuantum,
   Transformation as KTransformation,
 } from "./interfaces";
 import {
@@ -39,7 +20,27 @@ import {
   PyraminxNotationMapper,
   SkewbNotationMapper,
 } from "./NotationMapper";
-import { FaceNameSwizzler } from "./FaceNameSwizzler";
+import { iota, Perm, zeros } from "./Perm";
+import {
+  Orbit,
+  OrbitDef,
+  OrbitsDef,
+  showcanon,
+  Transformation,
+  VisibleState,
+} from "./PermOriSet";
+import { PGPuzzles, PuzzleDescriptionString, PuzzleName } from "./PGPuzzles";
+import {
+  closure,
+  cube,
+  dodecahedron,
+  getface,
+  icosahedron,
+  octahedron,
+  tetrahedron,
+  uniqueplanes,
+} from "./PlatonicGenerator";
+import { centermassface, expandfaces, Quat } from "./Quat";
 
 const DEFAULT_COLOR_FRACTION = 0.77;
 
@@ -63,7 +64,7 @@ export interface StickerDat {
   foundations: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
-  unswizzle(mv: PGVendoredBlockMove): string;
+  unswizzle(mv: PGVendoredMove): string;
   notationMapper: NotationMapper;
 }
 
@@ -1450,7 +1451,7 @@ export class PuzzleGeometry {
     }
   }
 
-  public unswizzle(mv: PGVendoredBlockMove): string {
+  public unswizzle(mv: PGVendoredMove): string {
     const newmv = this.notationMapper.notationToInternal(mv);
     if (newmv === null) {
       return "";
@@ -1460,7 +1461,7 @@ export class PuzzleGeometry {
 
   // We use an extremely permissive parse here; any character but
   // digits are allowed in a family name.
-  public stringToBlockMove(mv: string): PGVendoredBlockMove {
+  public stringToBlockMove(mv: string): PGVendoredMove {
     // parse a move from the command line
     const re = RegExp("^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$");
     const p = mv.match(re);
@@ -1488,22 +1489,22 @@ export class PuzzleGeometry {
       }
       amount = parseInt(amountstr, 10);
     }
-    return new PGVendoredBlockMove(loslice, hislice, grip, amount);
+    return new PGVendoredMove(
+      new PGVendoredMoveQuantum(grip, hislice, loslice),
+      amount,
+    );
   }
 
-  public parseBlockMove(blockmove: PGVendoredBlockMove): any {
-    const bm = this.notationMapper.notationToInternal(blockmove); // pluggable notation
+  public parseMove(move: PGVendoredMove): any {
+    const bm = this.notationMapper.notationToInternal(move); // pluggable notation
     if (bm === null) {
-      throw new Error("Bad move " + blockmove.family);
+      throw new Error("Bad move " + move.family);
     }
-    blockmove = bm;
-    let grip = blockmove.family;
+    move = bm;
+    let grip = move.family;
     let fullrotation = false;
     if (grip.endsWith("v") && grip[0] <= "Z") {
-      if (
-        blockmove.innerLayer !== undefined ||
-        blockmove.outerLayer !== undefined
-      ) {
+      if (move.innerLayer !== undefined || move.outerLayer !== undefined) {
         throw new Error("Cannot use a prefix with full cube rotations");
       }
       grip = grip.slice(0, -1);
@@ -1535,21 +1536,21 @@ export class PuzzleGeometry {
       hislice = 2;
     }
     if (geo === undefined) {
-      throw new Error("Bad grip in move " + blockmove.family);
+      throw new Error("Bad grip in move " + move.family);
     }
-    if (blockmove.outerLayer !== undefined) {
-      loslice = blockmove.outerLayer;
+    if (move.outerLayer !== undefined) {
+      loslice = move.outerLayer;
     }
-    if (blockmove.innerLayer !== undefined) {
-      if (blockmove.outerLayer === undefined) {
-        hislice = blockmove.innerLayer;
+    if (move.innerLayer !== undefined) {
+      if (move.outerLayer === undefined) {
+        hislice = move.innerLayer;
         if (geoname === grip) {
           loslice = hislice;
         } else {
           loslice = 1;
         }
       } else {
-        hislice = blockmove.innerLayer;
+        hislice = move.innerLayer;
       }
     }
     loslice--;
@@ -1576,12 +1577,19 @@ export class PuzzleGeometry {
         "! full puzzle rotations must be specified with v suffix.",
       );
     }
-    const r = [undefined, msi, loslice, hislice, firstgrip, blockmove.amount];
+    const r = [
+      undefined,
+      msi,
+      loslice,
+      hislice,
+      firstgrip,
+      move.effectiveAmount,
+    ];
     return r;
   }
 
   public parsemove(mv: string): any {
-    const r = this.parseBlockMove(this.stringToBlockMove(mv));
+    const r = this.parseMove(this.stringToBlockMove(mv));
     r[0] = mv;
     return r;
   }
@@ -2636,7 +2644,7 @@ export class PuzzleGeometry {
       }
     }
     const f = (function () {
-      return function (mv: PGVendoredBlockMove): string {
+      return function (mv: PGVendoredMove): string {
         return this.unswizzle(mv);
       };
     })().bind(this);
@@ -2688,12 +2696,12 @@ class PGNotation implements PGVendoredMoveNotation {
   private cache: { [key: string]: KTransformation } = {};
   constructor(public pg: PuzzleGeometry, public od: OrbitsDef) {}
 
-  public lookupMove(move: PGVendoredBlockMove): KTransformation | undefined {
-    const key = this.blockMoveToString(move);
+  public lookupMove(move: PGVendoredMove): KTransformation | undefined {
+    const key = this.moveToKeyString(move);
     if (key in this.cache) {
       return this.cache[key];
     }
-    const mv = this.pg.parseBlockMove(move);
+    const mv = this.pg.parseMove(move);
     let bits = (2 << mv[3]) - (1 << mv[2]);
     if (!mv[4]) {
       const slices = this.pg.moveplanesets[mv[1]].length;
@@ -2713,15 +2721,15 @@ class PGNotation implements PGVendoredMoveNotation {
   }
 
   // This is only used to construct keys, so does not need to be beautiful.
-  private blockMoveToString(mv: PGVendoredBlockMove): string {
+  private moveToKeyString(move: PGVendoredMove): string {
     let r = "";
-    if (mv.outerLayer) {
-      r = r + mv.outerLayer + ",";
+    if (move.outerLayer) {
+      r = r + move.outerLayer + ",";
     }
-    if (mv.innerLayer) {
-      r = r + mv.innerLayer + ",";
+    if (move.innerLayer) {
+      r = r + move.innerLayer + ",";
     }
-    r = r + mv.family + "," + mv.amount;
+    r = r + move.family + "," + move.effectiveAmount;
     return r;
   }
 }

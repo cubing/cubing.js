@@ -1,4 +1,5 @@
 import { Alg, Move } from "../alg";
+import { MoveQuantum } from "../alg/new/units/leaves/Move";
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import { MoveNotation } from "./move_notation";
 import {
@@ -8,7 +9,21 @@ import {
 } from "./transformations";
 
 // TODO: Move other helpers into the definition.
-export function stateForMove(
+export function transformationForMoveQuantum(
+  def: KPuzzleDefinition,
+  moveQuantum: MoveQuantum,
+): Transformation {
+  const transformation = getNotationLayer(def).lookupMove(
+    new Move(moveQuantum), // TODO
+  );
+  if (!transformation) {
+    throw new Error("Unknown move: " + moveQuantum.toString());
+  }
+  return transformation;
+}
+
+// TODO: Move other helpers into the definition.
+export function transformationForMove(
   def: KPuzzleDefinition,
   move: Move,
 ): Transformation {
@@ -71,7 +86,7 @@ export class KPuzzle {
     this.state = combineTransformations(
       this.definition,
       this.state,
-      stateForMove(this.definition, move),
+      transformationForMove(this.definition, move),
     );
   }
 

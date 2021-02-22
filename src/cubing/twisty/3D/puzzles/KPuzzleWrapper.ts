@@ -5,7 +5,7 @@ import {
   identityTransformation,
   invertTransformation,
   KPuzzleDefinition,
-  stateForMove,
+  transformationForMove,
   Transformation,
 } from "../../../kpuzzle";
 import { puzzles } from "../../../puzzles";
@@ -87,7 +87,7 @@ export class KPuzzleWrapper extends PuzzleWrapper {
   public stateFromMove(move: Move): KSolvePuzzleState {
     const key = move.toString();
     if (!this.moveStash[key]) {
-      this.moveStash[key] = stateForMove(this.definition, move);
+      this.moveStash[key] = transformationForMove(this.definition, move);
     }
     return this.moveStash[key];
   }

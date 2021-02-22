@@ -11,24 +11,23 @@ import {
   Triangle,
   Vector3,
 } from "three";
-import { BlockMove, modifiedBlockMove } from "../../../alg";
 import {
   areTransformationsEquivalent,
   KPuzzleDefinition,
-  stateForBlockMove,
   Transformation,
 } from "../../../kpuzzle";
+import { transformationForMoveQuantum } from "../../../kpuzzle/kpuzzle";
 import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
 import { AlgCursor } from "../../animation/cursor/AlgCursor";
-import { TAU } from "../TAU";
-import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
-import { smootherStep } from "../../animation/easing";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
+import { smootherStep } from "../../animation/easing";
+import { TAU } from "../TAU";
 import {
   FaceletMeshAppearance,
   getFaceletAppearance,
   PuzzleAppearance,
 } from "./appearance";
+import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,
@@ -416,32 +415,32 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     // FIXME tgr const kp = new KPuzzle(this.definition);
     let vismods = 0;
     for (const moveProgress of p.movesInProgress) {
-      const externalBlockMove = moveProgress.move as BlockMove;
+      const externalMove = moveProgress.move;
       // TODO: unswizzle goes external to internal, and so does the call after that
       // and so does the stateForBlockMove call
-      const unswizzled = this.pgdat.unswizzle(externalBlockMove);
-      const blockMove = this.pgdat.notationMapper.notationToInternal(
-        externalBlockMove,
-      );
-      if (blockMove === null) {
-        throw Error("Bad blockmove " + externalBlockMove.family);
+      const unswizzled = this.pgdat.unswizzle(externalMove);
+      const move = this.pgdat.notationMapper.notationToInternal(externalMove);
+      if (move === null) {
+        throw Error("Bad blockmove " + externalMove.family);
       }
-      const simpleMove = modifiedBlockMove(externalBlockMove, { amount: 1 });
-      const baseMove = stateForBlockMove(this.definition, simpleMove);
+      const quantumTransformation = transformationForMoveQuantum(
+        this.definition,
+        externalMove.quantum,
+      );
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
       const angle =
         (-this.ease(moveProgress.fraction) *
           moveProgress.direction *
-          blockMove.amount *
+          move.effectiveAmount *
           TAU) /
         ax.order;
       this.movingObj.rotateOnAxis(turnNormal, angle);
-      if (this.lastMove !== baseMove) {
+      if (this.lastMove !== quantumTransformation) {
         for (const orbit in this.stickers) {
           const pieces = this.stickers[orbit];
           const orin = pieces.length;
-          const bmv = baseMove[orbit];
+          const bmv = quantumTransformation[orbit];
           for (let ori = 0; ori < orin; ori++) {
             const pieces2 = pieces[ori];
             for (let i = 0; i < pieces2.length; i++) {
@@ -466,7 +465,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
             }
           }
         }
-        this.lastMove = baseMove;
+        this.lastMove = quantumTransformation;
       }
     }
     if (vismods) {
