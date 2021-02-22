@@ -131,7 +131,6 @@ export class TwistyPlayer extends ManagedCustomElement {
       newAlg = new Alg((newAlg as unknown) as string);
     }
     this.#config.attributes["alg"].setValue(newAlg);
-    console.log("set alg cursor", this.cursor);
     this.cursor?.setAlg(newAlg); // TODO: can we ensure the cursor already exists?
     this.setCursorStartState();
   }

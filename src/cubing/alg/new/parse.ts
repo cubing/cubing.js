@@ -7,6 +7,7 @@ import { Move, MoveQuantum } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
 import { RepetitionInfo } from "./units/Repetition";
+import { LineComment } from "./units/leaves/LineComment";
 
 type StoppingChar = "," | ":" | "]" | ")";
 
@@ -17,6 +18,7 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
 const repetitionRegex = /^(\d+)?('?)/;
 const moveStartRegex = /^[_\dA-Za-z]/;
 const moveQuantumRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
+const commentTextRegex = /[^\n]*/;
 
 export function parseAlg(s: string): Alg {
   return new AlgParser().parseAlg(s);
@@ -123,6 +125,12 @@ class AlgParser {
         algBuilder.push(new Newline());
         crowded = false;
         continue mainLoop;
+      } else if (this.tryConsumeNext("/")) {
+        this.mustConsumeNext("/");
+        const [text] = this.parseRegex(commentTextRegex);
+        algBuilder.push(new LineComment(text));
+        crowded = false;
+        continue mainLoop;
       } else if (this.tryConsumeNext(".")) {
         mustNotBeCrowded();
         algBuilder.push(new Pause());
@@ -132,6 +140,7 @@ class AlgParser {
         crowded = true;
         continue mainLoop;
       } else {
+        console.log(this.#input, this.#idx);
         throw new Error(`Unexpected character: ${this.popNext()}`);
       }
     }

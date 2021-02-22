@@ -1,6 +1,6 @@
 import {
   BlockMove,
-  Comment,
+  LineComment,
   Commutator,
   Conjugate,
   Group,
@@ -166,7 +166,7 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return [];
   }
 
-  public traverseComment(_comment: Comment): LocalMoveWithRange[] {
+  public traverseLineComment(_comment: LineComment): LocalMoveWithRange[] {
     return [];
   }
 }

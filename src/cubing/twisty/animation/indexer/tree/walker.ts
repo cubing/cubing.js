@@ -1,7 +1,7 @@
 import {
   Alg,
   Grouping,
-  Comment,
+  LineComment,
   Commutator,
   Conjugate,
   Move,
@@ -143,7 +143,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     return this.dummyLeaf;
   }
 
-  public traverseComment(_comment: Comment): AlgPartDecoration<P> {
+  public traverseLineComment(_comment: LineComment): AlgPartDecoration<P> {
     return this.dummyLeaf;
   }
 
@@ -363,7 +363,10 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     return false;
   }
 
-  public traverseComment(_comment: Comment, _wd: WalkerDown<P>): boolean {
+  public traverseLineComment(
+    _lineComment: LineComment,
+    _wd: WalkerDown<P>,
+  ): boolean {
     return false;
   }
 

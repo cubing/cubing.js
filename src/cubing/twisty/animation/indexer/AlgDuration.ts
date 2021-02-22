@@ -1,7 +1,7 @@
 import {
   Alg,
   Grouping,
-  Comment,
+  LineComment,
   Commutator,
   Conjugate,
   Move,
@@ -96,7 +96,7 @@ export class AlgDuration extends TraversalUp<Duration> {
     return this.durationForAmount(1);
   }
 
-  public traverseComment(_comment: Comment): Duration {
+  public traverseLineComment(_comment: LineComment): Duration {
     return this.durationForAmount(0);
   }
 }

@@ -17,7 +17,7 @@ function demo(visualization: VisualizationFormat): void {
     div.classList.add("case");
     const twistyPlayer = new TwistyPlayer({
       alg: Alg.fromString(s),
-      // experimentalSetupAnchor: "end",
+      experimentalSetupAnchor: "end",
       visualization,
       experimentalStickering: stickering,
     });

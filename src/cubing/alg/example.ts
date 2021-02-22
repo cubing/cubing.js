@@ -7,6 +7,7 @@ import { Conjugate } from "./new/units/containers/Conjugate";
 import { Move } from "./new/units/leaves/Move";
 import { Newline } from "./new/units/leaves/Newline";
 import { Pause } from "./new/units/leaves/Pause";
+import { LineComment } from "./new/units/leaves/LineComment";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export const Example = {
@@ -156,6 +157,6 @@ export const Example = {
     new Conjugate(new Alg([new Move("L", 2)]), new Alg([new Move("D", -1)]), 2),
     new Pause(),
     new Newline(),
-    new Comment("short comment"),
+    new LineComment("line comment"),
   ],
 };

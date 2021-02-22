@@ -2,7 +2,7 @@
 import {
   Alg,
   Grouping,
-  Comment,
+  LineComment,
   Commutator,
   Conjugate,
   Move,
@@ -64,7 +64,7 @@ class MoveCounter extends TraversalUp<number> {
   }
 
   // TODO: Enforce being followed by a newline (or the end of the alg)?
-  public traverseComment(_comment: Comment): number {
+  public traverseLineComment(_comment: LineComment): number {
     return 0;
   }
 }

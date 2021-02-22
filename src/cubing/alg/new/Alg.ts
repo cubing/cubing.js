@@ -153,7 +153,7 @@ function spaceBetween(u1: Unit, u2: Unit): string {
   if (u1.is(Newline) || u2.is(Newline)) {
     return "";
   }
-  if (u1.is(Comment) && !u2.is(Newline)) {
+  if (u1.is(LineComment) && !u2.is(Newline)) {
     return "\n"; /// TODO
   }
   return " ";

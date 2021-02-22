@@ -6,7 +6,7 @@ import { Move } from "./new/units/leaves/Move";
 import { Newline } from "./new/units/leaves/Newline";
 import { Pause } from "./new/units/leaves/Pause";
 import { Conjugate } from "./new/units/containers/Conjugate";
-import { Comment } from "./new/units/leaves/Comment";
+import { LineComment } from "./new/units/leaves/LineComment";
 import { Unit } from "./new/units/Unit";
 
 function dispatch<DataDown, DataAlgUp, DataUnitUp>(
@@ -33,8 +33,8 @@ function dispatch<DataDown, DataAlgUp, DataUnitUp>(
   if (unit.is(Newline)) {
     return t.traverseNewline(unit as Newline, dataDown);
   }
-  if (unit.is(Comment)) {
-    return t.traverseComment(unit as Comment, dataDown);
+  if (unit.is(LineComment)) {
+    return t.traverseLineComment(unit as LineComment, dataDown);
   }
   throw new Error(`unknown unit`);
 }
@@ -47,7 +47,7 @@ function assertIsUnit(t: Comparable): Unit {
     t.is(Conjugate) ||
     t.is(Pause) ||
     t.is(Newline) ||
-    t.is(Comment)
+    t.is(LineComment)
   ) {
     return t as Unit;
   }
@@ -93,8 +93,8 @@ export abstract class TraversalDownUp<
     dataDown: DataDown,
   ): DataUnitUp;
 
-  public abstract traverseComment(
-    comment: Comment,
+  public abstract traverseLineComment(
+    comment: LineComment,
     dataDown: DataDown,
   ): DataUnitUp;
 }
@@ -118,7 +118,7 @@ export abstract class TraversalUp<
   public abstract traverseConjugate(conjugate: Conjugate): DataUnitUp;
   public abstract traversePause(pause: Pause): DataUnitUp;
   public abstract traverseNewline(newline: Newline): DataUnitUp;
-  public abstract traverseComment(comment: Comment): DataUnitUp;
+  public abstract traverseLineComment(comment: LineComment): DataUnitUp;
 }
 
 // // TODO: Test that inverses are bijections.
@@ -186,7 +186,7 @@ export abstract class TraversalUp<
 //     return newline;
 //   }
 
-//   public traverseComment(comment: Comment): Unit {
+//   public traverseLineComment(comment: LineComment): Unit {
 //     return comment;
 //   }
 

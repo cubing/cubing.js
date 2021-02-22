@@ -64,7 +64,7 @@ export class KPuzzleWrapper extends PuzzleWrapper {
     return new KPuzzleWrapper(await puzzles[id].def());
   }
 
-  public moveStash: { [key: string]: Transformation } = {};
+  public moveCache: { [key: string]: Transformation } = {};
   constructor(private definition: KPuzzleDefinition) {
     super();
   }
@@ -86,10 +86,10 @@ export class KPuzzleWrapper extends PuzzleWrapper {
 
   public stateFromMove(move: Move): KSolvePuzzleState {
     const key = move.toString();
-    if (!this.moveStash[key]) {
-      this.moveStash[key] = transformationForMove(this.definition, move);
+    if (!this.moveCache[key]) {
+      this.moveCache[key] = transformationForMove(this.definition, move);
     }
-    return this.moveStash[key];
+    return this.moveCache[key];
   }
 
   public identity(): KSolvePuzzleState {

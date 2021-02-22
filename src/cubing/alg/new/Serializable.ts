@@ -10,7 +10,7 @@
 //   alg: AlgJSON;
 // }
 
-// export interface CommentJSON {
+// export interface LineCommentJSON {
 //   type: "comment";
 //   text: string;
 // }

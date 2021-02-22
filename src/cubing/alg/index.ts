@@ -1,6 +1,6 @@
 export { Alg } from "./new/Alg";
 export { Grouping } from "./new/units/containers/Grouping";
-export { Comment } from "./new/units/leaves/Comment";
+export { LineComment } from "./new/units/leaves/LineComment";
 export { Commutator } from "./new/units/containers/Commutator";
 export { Conjugate } from "./new/units/containers/Conjugate";
 export { Move, MoveQuantum } from "./new/units/leaves/Move";

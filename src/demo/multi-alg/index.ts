@@ -1,4 +1,4 @@
-import { Comment, expand, parseAlg, Sequence } from "../../cubing/alg";
+import { LineComment, expand, parseAlg, Sequence } from "../../cubing/alg";
 import { Twisty3DCanvas, TwistyPlayer } from "../../cubing/twisty";
 import {
   experimentalStickerings,
@@ -73,7 +73,7 @@ document.querySelector("#download")?.addEventListener("click", () => {
     if (unit.type === "comment") {
       algList.push({
         alg: currentAlg,
-        name: (unit as Comment).comment.trim(),
+        name: (unit as LineComment).comment.trim(),
       });
       currentAlg = new Sequence([]);
     } else if (unit.type === "newLine") {

@@ -121,7 +121,6 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
         continue;
       }
     }
-    console.log(position);
     return position;
   }
 

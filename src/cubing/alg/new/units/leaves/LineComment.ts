@@ -3,13 +3,14 @@ import { IterationDirection } from "../../iteration";
 import { LeafUnit } from "../Unit";
 
 // TODO: hash
-export class Comment extends AlgCommon<Comment> {
+// TODO: this conflicts with the HTML `LineComment` class
+export class LineComment extends AlgCommon<LineComment> {
   readonly #text: string;
 
   constructor(commentText: string) {
     super();
     if (commentText.includes("\n") || commentText.includes("\r")) {
-      throw new Error("Comment cannot contain newline");
+      throw new Error("LineComment cannot contain newline");
     }
     this.#text = commentText;
   }
@@ -19,11 +20,11 @@ export class Comment extends AlgCommon<Comment> {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsComment = other as Comment;
-    return other.is(Comment) && this.#text === otherAsComment.#text;
+    const otherAsLineComment = other as LineComment;
+    return other.is(LineComment) && this.#text === otherAsLineComment.#text;
   }
 
-  inverse(): Comment {
+  inverse(): LineComment {
     return this;
   }
 
@@ -37,7 +38,7 @@ export class Comment extends AlgCommon<Comment> {
     return `//${this.#text}`;
   }
 
-  // toJSON(): CommentJSON {
+  // toJSON(): LineCommentJSON {
   //   return {
   //     type: "comment",
   //     text: this.#text,

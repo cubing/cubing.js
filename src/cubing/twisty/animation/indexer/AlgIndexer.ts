@@ -46,7 +46,7 @@ import { Duration, PuzzlePosition, Timestamp } from "../cursor/CursorTypes";
 //     return 0;
 //   }
 
-//   public traverseComment(_comment: Comment): number {
+//   public traverseLineComment(_comment: LineComment): number {
 //     return 0;
 //   }
 // }
