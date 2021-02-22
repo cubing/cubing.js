@@ -2,7 +2,7 @@ import { ManagedCustomElement } from "../../../cubing/twisty/dom/element/Managed
 import { customElementsShim } from "../../../cubing/twisty/dom/element/node-custom-element-shims";
 import { TwistyPlayerInitialConfig } from "../../../cubing/twisty";
 import { TwistyPlayer } from "../../../cubing/twisty/index";
-import { invert, parseAlg, Sequence } from "../../../cubing/alg";
+import { Alg } from "../../../cubing/alg";
 
 const DEBUG = false;
 
@@ -53,7 +53,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
     // We set timeout so that we can access the children.
     setTimeout(() => {
       const twistyPlayerConfig: TwistyPlayerInitialConfig = {
-        alg: new Sequence([]),
+        alg: new Alg(),
       };
 
       const process = (
@@ -74,29 +74,25 @@ export class TwistyAnimCube extends ManagedCustomElement {
       };
 
       process("move", (value: string) => {
-        twistyPlayerConfig.alg = parseAlg(value ?? "");
+        twistyPlayerConfig.alg = new Alg(value ?? "");
       });
 
       process("initmove", (value: string) => {
         if (value === "#") {
-          twistyPlayerConfig.experimentalSetupAlg = invert(
-            twistyPlayerConfig.alg!,
-          );
+          twistyPlayerConfig.experimentalSetupAlg = twistyPlayerConfig.alg!.inverse();
         } else {
-          twistyPlayerConfig.experimentalSetupAlg = parseAlg(value ?? "");
+          twistyPlayerConfig.experimentalSetupAlg = Alg.fromString(value ?? "");
         }
       });
 
       // Takes precedenve over `initmove`
       process("initrevmove", (value: string) => {
         if (value === "#") {
-          twistyPlayerConfig.experimentalSetupAlg = invert(
-            twistyPlayerConfig.alg!,
-          );
+          twistyPlayerConfig.experimentalSetupAlg = twistyPlayerConfig.alg!.inverse();
         } else {
-          twistyPlayerConfig.experimentalSetupAlg = invert(
-            parseAlg(value ?? ""),
-          );
+          twistyPlayerConfig.experimentalSetupAlg = Alg.fromString(
+            value ?? "",
+          ).inverse();
         }
       });
 

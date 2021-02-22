@@ -12,7 +12,6 @@ import {
   Vector3,
 } from "three";
 import { SVGLoader, SVGResult } from "three/examples/jsm/loaders/SVGLoader";
-import { parseAlg } from "../../../cubing/alg";
 import {
   Cube3D,
   TimelineActionEvent,
@@ -30,6 +29,7 @@ import { TwistyScrubber } from "../../../cubing/twisty/dom/controls/TwistyScrubb
 // @ts-ignore
 import checkeredBackground from "url:./checkered-background.png";
 import { experimentalSetDefaultStickerElevation } from "../../../cubing/twisty/3D/puzzles/Cube3D";
+import { Alg } from "../../../cubing/alg";
 
 experimentalSetDefaultStickerElevation(0.51);
 
@@ -45,7 +45,7 @@ if (MAX_QUALITY) {
 }
 
 const twistyPlayer = new TwistyPlayer({
-  alg: parseAlg("(y y')6"),
+  alg: Alg.fromString("(y y')6"),
   controlPanel: "none",
   hintFacelets: "none",
   // experimentalStickering: "picture",

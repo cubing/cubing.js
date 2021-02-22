@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { parseAlg } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 import { puzzles } from "../../cubing/puzzles";
@@ -17,6 +17,7 @@ const scene = new Twisty3DScene();
 const canvas = new Twisty3DCanvas(scene, {
   experimentalCameraPosition: new Vector3(0, 24, 0),
 });
+canvas.camera.far = 100; // Document this for others.
 canvas.experimentalSetLatitudeLimits(false);
 document.body.appendChild(canvas);
 
@@ -64,7 +65,7 @@ function randomChoice<T>(l: T[]): T {
       algStr += randomChoice([" ", " E", " E2", " E'"]);
     }
 
-    const cursor = new AlgCursor(timeline, def, parseAlg(algStr));
+    const cursor = new AlgCursor(timeline, def, Alg.fromString(algStr));
     timeline.addCursor(cursor);
     const cube3D = new Cube3D(def, cursor, scene.scheduleRender.bind(scene), {
       hintFacelets: "none",

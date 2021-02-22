@@ -1,4 +1,4 @@
-import { LineComment, expand, parseAlg, Sequence } from "../../cubing/alg";
+import { Alg, LineComment, Newline } from "../../cubing/alg";
 import { Twisty3DCanvas, TwistyPlayer } from "../../cubing/twisty";
 import {
   experimentalStickerings,
@@ -25,8 +25,8 @@ function downloadURL(url: string, name: string): void {
   a.click();
 }
 
-function downloadAlg(s: Sequence, name: string) {
-  player.alg = s;
+function downloadAlg(alg: Alg, name: string) {
+  player.alg = alg;
   player.experimentalSetupAnchor = "end";
 
   const canvas = player.viewerElems[0] as Twisty3DCanvas;
@@ -45,11 +45,13 @@ for (const stickering of Object.keys(experimentalStickerings)) {
   option.textContent = stickering;
 }
 const stickering = new URL(location.href).searchParams.get("stickering");
-if (stickering && stickering in experimentalStickerings) {
-  player.experimentalStickering = stickering as ExperimentalStickering;
-  stickeringSelect.value = stickering;
-} else {
-  console.error("Invalid stickering:", stickering);
+if (stickering) {
+  if (stickering in experimentalStickerings) {
+    player.experimentalStickering = stickering as ExperimentalStickering;
+    stickeringSelect.value = stickering;
+  } else {
+    console.error("Invalid stickering:", stickering);
+  }
 }
 
 stickeringSelect?.addEventListener("change", () => {
@@ -62,31 +64,34 @@ stickeringSelect?.addEventListener("change", () => {
 });
 
 document.querySelector("#download")?.addEventListener("click", () => {
-  const allAlgs = parseAlg(algsTextarea.value);
+  const allAlgs = Alg.fromString(algsTextarea.value);
 
-  let currentAlg = new Sequence([]);
+  let currentAlg = new Alg();
   const algList: {
-    alg: Sequence;
+    alg: Alg;
     name: string;
   }[] = [];
-  for (const unit of allAlgs.nestedUnits) {
-    if (unit.type === "comment") {
+  for (const unit of allAlgs.units()) {
+    if (unit.is(LineComment)) {
       algList.push({
         alg: currentAlg,
-        name: (unit as LineComment).comment.trim(),
+        name: (unit as LineComment).text.trim(),
       });
-      currentAlg = new Sequence([]);
-    } else if (unit.type === "newLine") {
+      currentAlg = new Alg();
+    } else if (unit.is(Newline)) {
       // skip
     } else {
-      currentAlg = new Sequence(currentAlg.nestedUnits.concat([unit]));
+      currentAlg = currentAlg.concat([unit]);
     }
   }
 
   save();
 
   for (const { alg, name } of algList) {
-    downloadAlg(expand(alg), `${stickeringSelect.value} — ${name}`);
+    downloadAlg(
+      new Alg(alg.experimentalLeafUnits()),
+      `${stickeringSelect.value} — ${name}`,
+    );
   }
 });
 
