@@ -1,4 +1,3 @@
-import { algToString, parseAlg, Sequence } from "../../cubing/alg";
 import { TwistyPlayer, TwistyPlayerInitialConfig } from "../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./supported-puzzles";
@@ -9,11 +8,12 @@ import {
 } from "./strings";
 import { getURLParam, setURLParams } from "./url-params";
 import { Vector3 } from "three";
+import { Alg } from "../../cubing/alg";
 
 export interface AppData {
   puzzleName: string;
-  experimentalSetupAlg: Sequence;
-  alg: Sequence;
+  experimentalSetupAlg: Alg;
+  alg: Alg;
 }
 
 export class App {
@@ -51,7 +51,7 @@ export class App {
 
   private initializeTwisty(initialData: AppData): void {
     const twistyConfig: TwistyPlayerInitialConfig = {
-      alg: new Sequence([]),
+      alg: new Alg(),
       viewerLink: "none",
     };
     if (initialData.puzzleName === "megaminx") {
@@ -70,27 +70,27 @@ export class App {
   }
 
   // Boolean indicates success (e.g. alg is valid).
-  private setexperimentalSetupAlg(experimentalSetupAlg: Sequence): boolean {
+  private setexperimentalSetupAlg(experimentalSetupAlg: Alg): boolean {
     try {
       this.twistyPlayer.experimentalSetupAlg = experimentalSetupAlg;
       this.twistyPlayer.timeline.jumpToStart();
       setURLParams({ "experimental-setup-alg": experimentalSetupAlg });
       return true;
     } catch (e) {
-      this.twistyPlayer.experimentalSetupAlg = parseAlg("");
+      this.twistyPlayer.experimentalSetupAlg = new Alg();
       return false;
     }
   }
 
   // Boolean indicates success (e.g. alg is valid).
-  private setAlg(alg: Sequence): boolean {
+  private setAlg(alg: Alg): boolean {
     try {
       this.twistyPlayer.alg = alg;
       this.twistyPlayer.timeline.jumpToEnd();
       setURLParams({ alg });
       return true;
     } catch (e) {
-      this.twistyPlayer.alg = parseAlg("");
+      this.twistyPlayer.alg = new Alg();
       return false;
     }
   }
@@ -118,8 +118,8 @@ class ControlPane {
   constructor(
     public element: Element,
     initialData: AppData,
-    private experimentalSetupAlgChangeCallback: (alg: Sequence) => boolean,
-    private algChangeCallback: (alg: Sequence) => boolean,
+    private experimentalSetupAlgChangeCallback: (alg: Alg) => boolean,
+    private algChangeCallback: (alg: Alg) => boolean,
     private setPuzzleCallback: (puzzleName: string) => boolean,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
@@ -131,14 +131,12 @@ class ControlPane {
       "textarea",
     );
     this.experimentalSetupAlgInput.placeholder = ALG_SETUP_INPUT_PLACEHOLDER;
-    this.experimentalSetupAlgInput.value = algToString(
-      initialData.experimentalSetupAlg,
-    );
+    this.experimentalSetupAlgInput.value = initialData.experimentalSetupAlg.toString();
     this.setexperimentalSetupAlgElemStatus(null);
 
     this.algInput = findOrCreateChildWithClass(this.element, "alg", "textarea");
     this.algInput.placeholder = ALG_INPUT_PLACEHOLDER;
-    this.algInput.value = algToString(initialData.alg);
+    this.algInput.value = initialData.alg.toString();
     this.setAlgElemStatus(null);
 
     this.puzzleSelect = findOrCreateChildWithClass(
@@ -166,12 +164,12 @@ class ControlPane {
   private onexperimentalSetupAlgInput(canonicalize: boolean): void {
     try {
       const experimentalSetupAlgString = this.experimentalSetupAlgInput.value;
-      const parsedexperimentalSetupAlg = parseAlg(experimentalSetupAlgString);
+      const parsedexperimentalSetupAlg = Alg.fromString(
+        experimentalSetupAlgString,
+      );
       this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg);
 
-      const restringifiedexperimentalSetupAlg = algToString(
-        parsedexperimentalSetupAlg,
-      );
+      const restringifiedexperimentalSetupAlg = parsedexperimentalSetupAlg.toString();
       const experimentalSetupAlgIsCanonical =
         restringifiedexperimentalSetupAlg === experimentalSetupAlgString;
 
@@ -200,10 +198,10 @@ class ControlPane {
   private onAlgInput(canonicalize: boolean): void {
     try {
       const algString = this.algInput.value;
-      const parsedAlg = parseAlg(algString);
+      const parsedAlg = Alg.fromString(algString);
       this.algChangeCallback(parsedAlg);
 
-      const restringifiedAlg = algToString(parsedAlg);
+      const restringifiedAlg = parsedAlg.toString();
       const algIsCanonical = restringifiedAlg === algString;
 
       if (canonicalize && !algIsCanonical) {

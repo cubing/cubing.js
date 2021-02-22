@@ -631,10 +631,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         );
       }
       for (const moveProgress of p.movesInProgress) {
-        console.log(moveProgress);
         const move = moveProgress.move;
         const turnNormal = axesInfo[familyToAxis[move.family]].vector;
-        console.log(turnNormal);
         const moveMatrix = new Matrix4().makeRotationAxis(
           turnNormal,
           (-this.ease(moveProgress.fraction) *

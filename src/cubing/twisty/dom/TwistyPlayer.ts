@@ -120,7 +120,6 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set alg(newAlg: Alg) {
-    console.log("setting", newAlg.toString());
     // TODO: do validation for other algs as well.
     if (typeof newAlg === "string") {
       console.warn(

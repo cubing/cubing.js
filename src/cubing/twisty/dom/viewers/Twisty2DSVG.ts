@@ -1,10 +1,9 @@
-import { BlockMove } from "../../../alg";
 import {
   combineTransformations,
   KPuzzleDefinition,
-  stateForBlockMove,
   KPuzzleSVGWrapper,
   Transformation,
+  transformationForMove,
 } from "../../../kpuzzle";
 import { PuzzleAppearance } from "../../3D/puzzles/appearance";
 import { appearances3x3x3 } from "../../3D/puzzles/stickerings";
@@ -12,7 +11,7 @@ import {
   PositionDispatcher,
   PositionListener,
 } from "../../animation/cursor/AlgCursor";
-import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
+import { Direction, PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
@@ -53,19 +52,17 @@ export class Twisty2DSVG
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   onPositionChange(position: PuzzlePosition): void {
     if (position.movesInProgress.length > 0) {
-      const move = position.movesInProgress[0].move as BlockMove;
+      const move = position.movesInProgress[0].move;
 
       const def = this.definition;
-      const partialMove = new BlockMove(
-        move.outerLayer,
-        move.innerLayer,
-        move.family,
-        move.amount * position.movesInProgress[0].direction,
-      );
+      let partialMove = move;
+      if (position.movesInProgress[0].direction === Direction.Backwards) {
+        partialMove = move.inverse();
+      }
       const newState = combineTransformations(
         def,
         position.state as Transformation,
-        stateForBlockMove(def, partialMove),
+        transformationForMove(def, partialMove),
       );
       // TODO: move to render()
       this.svg.draw(
