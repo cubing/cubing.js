@@ -653,7 +653,6 @@ export class TwistyPlayer extends ManagedCustomElement {
             if (appearance) {
               options.appearance = appearance;
             }
-            console.log("init");
             const pg3d = new PG3D(
               cursor,
               scene.scheduleRender.bind(scene),
@@ -664,7 +663,6 @@ export class TwistyPlayer extends ManagedCustomElement {
                 this.hintFacelets === "floating",
               options,
             );
-            console.log("spinit");
             this.legacyExperimentalPG3D = pg3d;
             twisty3D = pg3d;
           }
