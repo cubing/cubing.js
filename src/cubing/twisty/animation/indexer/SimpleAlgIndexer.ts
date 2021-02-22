@@ -8,7 +8,7 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
   implements AlgIndexer<P> {
   private moves: Alg;
   // TODO: Allow custom `durationFn`.
-  private durationFn: TraversalUp<Duration, Duration> = new AlgDuration(
+  private durationFn: TraversalUp<Duration> = new AlgDuration(
     defaultDurationForAmount,
   );
 

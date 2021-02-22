@@ -45,7 +45,7 @@ export function ExperimentalScaledDefaultDurationForAmount(
   }
 }
 
-export class AlgDuration extends TraversalUp<Duration, Duration> {
+export class AlgDuration extends TraversalUp<Duration> {
   // TODO: Pass durationForAmount as Down type instead?
   constructor(
     public durationForAmount: (

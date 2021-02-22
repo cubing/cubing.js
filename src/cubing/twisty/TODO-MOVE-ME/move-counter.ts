@@ -15,7 +15,7 @@ import {
  *   For movecount, that understands puzzle rotations.  This code
  *   should be moved to the alg class, probably.
  */
-class MoveCounter extends TraversalUp<number, number> {
+class MoveCounter extends TraversalUp<number> {
   constructor(private metric: (move: Move) => number) {
     super();
   }

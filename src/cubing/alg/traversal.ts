@@ -54,7 +54,11 @@ function assertIsUnit(t: Comparable): Unit {
   throw "internal error: expected unit"; // TODO: Make more helpful, add tests
 }
 
-export abstract class TraversalDownUp<DataDown, DataAlgUp, DataUnitUp> {
+export abstract class TraversalDownUp<
+  DataDown,
+  DataAlgUp,
+  DataUnitUp = DataAlgUp
+> {
   // Immediate subclasses should overwrite this.
   public traverseUnit(unit: Unit, dataDown: DataDown): DataUnitUp {
     return dispatch(this, unit, dataDown);
@@ -93,7 +97,7 @@ export abstract class TraversalDownUp<DataDown, DataAlgUp, DataUnitUp> {
 
 export abstract class TraversalUp<
   DataAlgUp,
-  DataUnitUp
+  DataUnitUp = DataAlgUp
 > extends TraversalDownUp<undefined, DataAlgUp, DataUnitUp> {
   public traverseUnit(unit: Unit): DataUnitUp {
     return dispatch<unknown, DataAlgUp, DataUnitUp>(this, unit, undefined);
