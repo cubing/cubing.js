@@ -1,11 +1,11 @@
 import { Alg } from "./Alg";
 import { AlgBuilder } from "./AlgBuilder";
-import { Bunch } from "./Bunch";
-import { Commutator } from "./Commutator";
+import { Bunch } from "./units/containers/Bunch";
+import { Commutator } from "./units/containers/Commutator";
 import { Conjugate } from "./units/containers/Conjugate";
-import { Move, MoveQuantum } from "./Move";
-import { Newline } from "./Newline";
-import { Pause } from "./Pause";
+import { Move, MoveQuantum } from "./units/leaves/Move";
+import { Newline } from "./units/leaves/Newline";
+import { Pause } from "./units/leaves/Pause";
 import { RepetitionInfo } from "./units/Repetition";
 
 type StoppingChar = "," | ":" | "]" | ")";

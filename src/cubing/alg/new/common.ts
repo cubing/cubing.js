@@ -1,4 +1,5 @@
 import { Alg } from "./Alg";
+import { IterationDirection } from "./iteration";
 import { LeafUnit, Unit } from "./units/Unit";
 
 export abstract class Comparable {
@@ -11,10 +12,10 @@ export abstract class Comparable {
 }
 
 export interface Repeatable extends Comparable {
-  experimentalLeafUnits(): Generator<LeafUnit>;
+  experimentalLeafUnits(iterDir: IterationDirection): Generator<LeafUnit>;
 }
 
-// Common to algs or  unis
+// Common to algs or units
 export abstract class AlgCommon<T extends Alg | Unit>
   extends Comparable
   implements Repeatable {
@@ -22,18 +23,7 @@ export abstract class AlgCommon<T extends Alg | Unit>
 
   abstract inverse(): T;
 
-  abstract experimentalLeafUnits(): Generator<LeafUnit>;
+  abstract experimentalLeafUnits(
+    iterDir: IterationDirection,
+  ): Generator<LeafUnit>;
 }
-
-export function direct<T>(g: Iterable<T>, backwards: boolean): Iterable<T> {
-  return backwards ? Array.from(g).reverse() : g;
-}
-
-export function reverse<T>(g: Iterable<T>): Iterable<T> {
-  return Array.from(g).reverse();
-}
-
-// export type AlgContainerInfo = { alg: Alg; backwards: boolean }[];
-// export interface AlgContainer {
-//   containedAlgs(): AlgContainerInfo;
-// }

@@ -1,5 +1,5 @@
 import { Alg } from "./new/Alg";
-import { Move } from "./new/Move";
+import { Move } from "./new/units/leaves/Move";
 
 export function experimentalAppendMove(
   alg: Alg,
@@ -9,7 +9,7 @@ export function experimentalAppendMove(
     mod?: number;
   },
 ): Alg {
-  const oldUnits = Array.from(alg.units());
+  const oldUnits = Array.from(alg.childUnits());
   const oldLastMove = oldUnits[oldUnits.length - 1] as Move | undefined;
   if (
     options?.coalesce &&

@@ -1,5 +1,6 @@
 import { Alg } from "../../Alg";
-import { AlgCommon, Comparable, reverse } from "../../common";
+import { AlgCommon, Comparable } from "../../common";
+import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 
@@ -23,18 +24,19 @@ export class CommutatorQuantum extends Comparable {
   }
 
   // TODO: use a common composite iterator helper.
-  *experimentalLeafUnits(): Generator<LeafUnit> {
-    for (const leafUnit of this.A.units()) {
-      yield leafUnit;
-    }
-    for (const leafUnit of this.B.units()) {
-      yield leafUnit;
-    }
-    for (const leafUnit of reverse(this.A.units())) {
-      yield leafUnit;
-    }
-    for (const leafUnit of reverse(this.B.units())) {
-      yield leafUnit;
+  *experimentalLeafUnits(
+    iterDir: IterationDirection = IterationDirection.Forwards,
+  ): Generator<LeafUnit> {
+    if (iterDir === IterationDirection.Forwards) {
+      yield* this.A.experimentalLeafUnits(IterationDirection.Forwards);
+      yield* this.B.experimentalLeafUnits(IterationDirection.Forwards);
+      yield* this.A.experimentalLeafUnits(IterationDirection.Backwards);
+      yield* this.B.experimentalLeafUnits(IterationDirection.Backwards);
+    } else {
+      yield* this.B.experimentalLeafUnits(IterationDirection.Forwards);
+      yield* this.A.experimentalLeafUnits(IterationDirection.Forwards);
+      yield* this.B.experimentalLeafUnits(IterationDirection.Backwards);
+      yield* this.A.experimentalLeafUnits(IterationDirection.Backwards);
     }
   }
 }
@@ -70,8 +72,10 @@ export class Commutator extends AlgCommon<Commutator> {
     );
   }
 
-  *experimentalLeafUnits(): Generator<LeafUnit> {
-    yield* this.#repetition.experimentalLeafUnits();
+  *experimentalLeafUnits(
+    iterDir: IterationDirection = IterationDirection.Forwards,
+  ): Generator<LeafUnit> {
+    yield* this.#repetition.experimentalLeafUnits(iterDir);
   }
 
   toString(): string {

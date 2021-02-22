@@ -2,14 +2,13 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { Alg } from "../../cubing/alg/new/Alg";
+import { Bunch } from "../../cubing/alg/new/units/containers/Bunch";
+import { Move } from "../../cubing/alg/new/units/leaves/Move";
+import { experimentalAppendMove } from "../../cubing/alg/operation";
 
 console.log(Alg.fromString("R U R'").toString());
 console.log(Alg.fromString("R U .. . R'").toString());
 console.log(Alg.fromString("[R2 (F),U]").toString());
-
-import { Bunch } from "../../cubing/alg/new/Bunch";
-import { Move } from "../../cubing/alg/new/Move";
-import { experimentalAppendMove } from "../../cubing/alg/operation";
 
 console.log("" + Move.fromString("R"));
 console.log("" + Move.fromString("R'"));
@@ -42,7 +41,7 @@ console.log(alg);
 
 new Move("R");
 
-for (const unit of alg.units()) {
+for (const unit of alg.childUnits()) {
   console.log({ unit }, unit.toString());
 }
 
@@ -71,6 +70,18 @@ console.log(
   }).toString(),
 );
 
+const c = Alg.fromString("[(F): [R, (U')']]");
 console.log(
-  Array.from(Alg.fromString("[(F): [R: (U')']]").experimentalLeafUnits()),
+  c.toString(),
+  c,
+  Array.from(c.experimentalLeafUnits()),
+  new Alg(Array.from(c.experimentalLeafUnits())).toString(),
+);
+
+const c2 = Alg.fromString("(U')'");
+console.log(
+  c2.toString(),
+  c2,
+  Array.from(c2.experimentalLeafUnits()),
+  new Alg(Array.from(c2.experimentalLeafUnits())).toString(),
 );

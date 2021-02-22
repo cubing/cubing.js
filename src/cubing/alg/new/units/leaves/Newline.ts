@@ -1,4 +1,5 @@
 import { AlgCommon, Comparable } from "../../common";
+import { IterationDirection } from "../../iteration";
 import { LeafUnit } from "../Unit";
 
 export class Newline extends AlgCommon<Newline> {
@@ -14,7 +15,9 @@ export class Newline extends AlgCommon<Newline> {
     return this;
   }
 
-  *experimentalLeafUnits(): Generator<LeafUnit> {
+  *experimentalLeafUnits(
+    _iterDir: IterationDirection = IterationDirection.Forwards,
+  ): Generator<LeafUnit> {
     yield this;
   }
 }

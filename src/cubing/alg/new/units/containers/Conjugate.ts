@@ -1,5 +1,6 @@
 import { Alg } from "../../Alg";
-import { AlgCommon, Comparable, reverse } from "../../common";
+import { AlgCommon, Comparable } from "../../common";
+import { IterationDirection, toggleDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 
@@ -19,16 +20,12 @@ export class ConjugateQuantum extends Comparable {
   }
 
   // TODO: use a common composite iterator helper.
-  *experimentalLeafUnits(): Generator<LeafUnit> {
-    for (const leafUnit of this.A.units()) {
-      yield leafUnit;
-    }
-    for (const leafUnit of this.B.units()) {
-      yield leafUnit;
-    }
-    for (const leafUnit of reverse(this.A.units())) {
-      yield leafUnit;
-    }
+  *experimentalLeafUnits(
+    iterDir: IterationDirection = IterationDirection.Forwards,
+  ): Generator<LeafUnit> {
+    yield* this.A.experimentalLeafUnits(IterationDirection.Forwards);
+    yield* this.B.experimentalLeafUnits(iterDir);
+    yield* this.A.experimentalLeafUnits(toggleDirection(iterDir));
   }
 
   toString(): string {
@@ -63,8 +60,8 @@ export class Conjugate extends AlgCommon<Conjugate> {
     );
   }
 
-  *experimentalLeafUnits(): Generator<LeafUnit> {
-    yield* this.#repetition.experimentalLeafUnits();
+  *experimentalLeafUnits(iterDir: IterationDirection): Generator<LeafUnit> {
+    yield* this.#repetition.experimentalLeafUnits(iterDir);
   }
 
   toString(): string {

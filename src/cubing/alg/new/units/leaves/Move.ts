@@ -4,6 +4,7 @@ import { parseMove, parseMoveQuantum } from "../../parse";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 import { warnOnce } from "../../warnOnce";
+import { IterationDirection } from "../../iteration";
 
 interface MoveQuantumModifications {
   outerLayer?: number;
@@ -173,8 +174,14 @@ export class Move extends AlgCommon<Move> {
     );
   }
 
-  *experimentalLeafUnits(): Generator<LeafUnit> {
-    yield this;
+  *experimentalLeafUnits(
+    iterDir: IterationDirection = IterationDirection.Forwards,
+  ): Generator<LeafUnit> {
+    if (iterDir === IterationDirection.Forwards) {
+      yield this;
+    } else {
+      yield this.modified({ repetition: this.#repetition.inverse().info() });
+    }
   }
 
   get quantum(): MoveQuantum {

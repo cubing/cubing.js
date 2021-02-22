@@ -1,5 +1,6 @@
 import { Alg } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
+import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 
@@ -25,8 +26,10 @@ export class Bunch extends AlgCommon<Bunch> {
     );
   }
 
-  experimentalLeafUnits(): Generator<LeafUnit> {
-    return this.#repetition.experimentalLeafUnits();
+  *experimentalLeafUnits(
+    iterDir: IterationDirection = IterationDirection.Forwards,
+  ): Generator<LeafUnit> {
+    yield* this.#repetition.experimentalLeafUnits(iterDir);
   }
 
   static fromString(): Bunch {

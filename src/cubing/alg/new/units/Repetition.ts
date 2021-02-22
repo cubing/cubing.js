@@ -1,4 +1,5 @@
-import { direct, Repeatable } from "../common";
+import { Repeatable } from "../common";
+import { IterationDirection, toggleDirection } from "../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../limits";
 import { LeafUnit } from "./Unit";
 
@@ -73,15 +74,12 @@ export class Repetition<Q extends Repeatable> {
     return [this.absAmount, this.prime];
   }
 
-  *experimentalLeafUnits(): Generator<LeafUnit> {
+  *experimentalLeafUnits(iterDir: IterationDirection): Generator<LeafUnit> {
     const amount = this.absAmount ?? 1;
     for (let i = 0; i < amount; i++) {
-      for (const e of direct(
-        this.quantum.experimentalLeafUnits(),
-        this.prime,
-      )) {
-        yield e;
-      }
+      console.log(this.quantum, this.quantum.toString(), amount, this.prime);
+      const newIterDir = toggleDirection(iterDir, this.prime);
+      yield* this.quantum.experimentalLeafUnits(newIterDir);
     }
   }
 }

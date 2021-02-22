@@ -1,4 +1,5 @@
 import { AlgCommon, Comparable } from "../../common";
+import { IterationDirection } from "../../iteration";
 import { LeafUnit } from "../Unit";
 
 // TODO: hash
@@ -22,7 +23,9 @@ export class Comment extends AlgCommon<Comment> {
     return this;
   }
 
-  *experimentalLeafUnits(): Generator<LeafUnit> {
+  *experimentalLeafUnits(
+    _iterDir: IterationDirection = IterationDirection.Forwards,
+  ): Generator<LeafUnit> {
     yield this;
   }
 

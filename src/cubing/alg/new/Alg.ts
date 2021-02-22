@@ -1,6 +1,7 @@
-import { AlgCommon, Comparable, reverse } from "./common";
-import { Newline } from "./units/leaves/Newline";
+import { AlgCommon, Comparable } from "./common";
+import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
+import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
 import { LeafUnit, Unit } from "./units/Unit";
 import { warnOnce } from "./warnOnce";
@@ -64,9 +65,11 @@ export class Alg extends AlgCommon<Alg> {
     return new Alg(reverse(Array.from(this.#units)));
   }
 
-  *experimentalLeafUnits(): Generator<LeafUnit> {
-    for (const unit of this.#units) {
-      yield unit;
+  *experimentalLeafUnits(
+    iterDir: IterationDirection = IterationDirection.Forwards,
+  ): Generator<LeafUnit> {
+    for (const unit of direct(this.#units, iterDir)) {
+      yield* unit.experimentalLeafUnits(iterDir);
     }
   }
 
@@ -86,7 +89,7 @@ export class Alg extends AlgCommon<Alg> {
   //   return Array.from(this.#units);
   // }
 
-  *units(): Generator<Unit> {
+  *childUnits(): Generator<Unit> {
     for (const unit of this.#units) {
       yield unit;
     }
