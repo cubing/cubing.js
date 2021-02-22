@@ -1,5 +1,6 @@
-import { Comparable } from "./common";
+import { direct, Repeatable } from "./common";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
+import { LeafUnit } from "./Unit";
 
 export type RepetitionInfo =
   | undefined
@@ -7,7 +8,7 @@ export type RepetitionInfo =
   | null
   | [/* absolute amount */ number | null, /* prime */ boolean];
 
-export class Repetition<Q extends Comparable> {
+export class Repetition<Q extends Repeatable> {
   readonly quantum: Q;
   readonly absAmount: number | null = null;
   readonly prime: boolean = false;
@@ -70,5 +71,17 @@ export class Repetition<Q extends Comparable> {
 
   info(): RepetitionInfo {
     return [this.absAmount, this.prime];
+  }
+
+  *experimentalLeafUnits(): Generator<LeafUnit> {
+    const amount = this.absAmount ?? 1;
+    for (let i = 0; i < amount; i++) {
+      for (const e of direct(
+        this.quantum.experimentalLeafUnits(),
+        this.prime,
+      )) {
+        yield e;
+      }
+    }
   }
 }

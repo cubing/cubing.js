@@ -1,4 +1,5 @@
 import { AlgCommon, Comparable } from "./common";
+import { LeafUnit } from "./Unit";
 
 // TODO: hash
 export class Comment extends AlgCommon<Comment> {
@@ -19,6 +20,10 @@ export class Comment extends AlgCommon<Comment> {
 
   inverse(): Comment {
     return this;
+  }
+
+  *experimentalLeafUnits(): Generator<LeafUnit> {
+    yield this;
   }
 
   toString(): string {

@@ -2,6 +2,7 @@ import { AlgCommon, Comparable } from "./common";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
 import { parseMove, parseMoveQuantum } from "./parse";
 import { Repetition, RepetitionInfo } from "./Repetition";
+import { LeafUnit } from "./Unit";
 import { warnOnce } from "./warnOnce";
 
 interface MoveQuantumModifications {
@@ -108,6 +109,12 @@ export class MoveQuantum extends Comparable {
     return this.#innerLayer;
   }
 
+  experimentalLeafUnits(): Generator<LeafUnit> {
+    throw new Error(
+      "experimentalLeafUnits() cannot be called on a `MoveQuantum` directly.",
+    );
+  }
+
   toString(): string {
     let s = this.#family;
     if (this.#innerLayer !== null) {
@@ -164,6 +171,10 @@ export class Move extends AlgCommon<Move> {
       this.#repetition.quantum,
       this.#repetition.inverse().info(),
     );
+  }
+
+  *experimentalLeafUnits(): Generator<LeafUnit> {
+    yield this;
   }
 
   get quantum(): MoveQuantum {

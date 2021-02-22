@@ -2,7 +2,7 @@ import { AlgCommon, Comparable, reverse } from "./common";
 import { Newline } from "./Newline";
 import { parseAlg } from "./parse";
 import { Pause } from "./Pause";
-import { Unit } from "./Unit";
+import { LeafUnit, Unit } from "./Unit";
 import { warnOnce } from "./warnOnce";
 
 export type FlexibleAlgSource = string | Iterable<Unit> | Alg;
@@ -62,6 +62,12 @@ export class Alg extends AlgCommon<Alg> {
   inverse(): Alg {
     // TODO: Handle newLines and comments correctly
     return new Alg(reverse(Array.from(this.#units)));
+  }
+
+  *experimentalLeafUnits(): Generator<LeafUnit> {
+    for (const unit of this.#units) {
+      yield unit;
+    }
   }
 
   concat(input: FlexibleAlgSource): Alg {

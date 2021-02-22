@@ -70,3 +70,7 @@ console.log(
     coalesce: true,
   }).toString(),
 );
+
+console.log(
+  Array.from(Alg.fromString("[(F): [R: (U')']]").experimentalLeafUnits()),
+);

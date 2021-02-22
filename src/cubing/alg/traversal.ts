@@ -113,53 +113,6 @@ export abstract class TraversalUp<
   public abstract traverseComment(comment: Comment): DataUnitUp;
 }
 
-// TODO: Test that inverses are bijections.
-export class Invert extends TraversalUp<Alg, Unit> {
-  public traverseAlg(alg: Alg): Alg {
-    // TODO: Handle newlines and comments correctly
-    return new Alg(
-      reverse(Array.from(alg.units(), (a) => this.traverseIntoUnit(a))),
-    );
-  }
-
-  public traverseBunch(bunch: Bunch): Unit {
-    return new Bunch(this.traverseAlg(bunch.nestedAlg), bunch.amount);
-  }
-
-  public traverseMove(move: Move): Unit {
-    return new Move(
-      move.outerLayer,
-      move.innerLayer,
-      move.family,
-      -move.amount,
-    );
-  }
-
-  public traverseCommutator(commutator: Commutator): Unit {
-    return new Commutator(commutator.B, commutator.A, commutator.amount);
-  }
-
-  public traverseConjugate(conjugate: Conjugate): Unit {
-    return new Conjugate(
-      conjugate.A,
-      this.traverseAlg(conjugate.B),
-      conjugate.amount,
-    );
-  }
-
-  public traversePause(pause: Pause): Unit {
-    return pause;
-  }
-
-  public traverseNewline(newline: Newline): Unit {
-    return newline;
-  }
-
-  public traverseComment(comment: Comment): Unit {
-    return comment;
-  }
-}
-
 export class Expand extends TraversalUp<Unit> {
   public traverseAlg(alg: Alg): Alg {
     return new Alg(
@@ -247,73 +200,6 @@ export class Expand extends TraversalUp<Unit> {
     }
 
     return new Alg(repeated);
-  }
-}
-
-export class StructureEquals extends TraversalDownUp<Unit, boolean> {
-  public traverseAlg(alg: Alg, dataDown: Unit): boolean {
-    if (isUnit(dataDown)) {
-      return false;
-    }
-    const dataDownSeq = dataDown as Alg;
-    if (alg.nestedUnits.length !== dataDownSeq.nestedUnits.length) {
-      return false;
-    }
-    for (let i = 0; i < alg.nestedUnits.length; i++) {
-      if (!this.traverseUnit(alg.nestedUnits[i], dataDownSeq.nestedUnits[i])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public traverseBunch(bunch: Bunch, dataDown: Unit): boolean {
-    return (
-      matchesAlgType(dataDown, "bunch") &&
-      this.traverseUnit(bunch.nestedAlg, (dataDown as Bunch).nestedAlg)
-    );
-  }
-
-  public traverseMove(move: Move, dataDown: Unit): boolean {
-    // TODO: Handle layers.
-    return (
-      matchesAlgType(dataDown, "move") &&
-      move.outerLayer === (dataDown as Move).outerLayer &&
-      move.innerLayer === (dataDown as Move).innerLayer &&
-      move.family === (dataDown as Move).family &&
-      move.amount === (dataDown as Move).amount
-    );
-  }
-
-  public traverseCommutator(commutator: Commutator, dataDown: Unit): boolean {
-    return (
-      matchesAlgType(dataDown, "commutator") &&
-      this.traverseUnit(commutator.A, (dataDown as Commutator).A) &&
-      this.traverseUnit(commutator.B, (dataDown as Commutator).B)
-    );
-  }
-
-  public traverseConjugate(conjugate: Conjugate, dataDown: Unit): boolean {
-    return (
-      matchesAlgType(dataDown, "conjugate") &&
-      this.traverseUnit(conjugate.A, (dataDown as Conjugate).A) &&
-      this.traverseUnit(conjugate.B, (dataDown as Conjugate).B)
-    );
-  }
-
-  public traversePause(_pause: Pause, dataDown: Unit): boolean {
-    return matchesAlgType(dataDown, "pause");
-  }
-
-  public traverseNewline(_newline: Newline, dataDown: Unit): boolean {
-    return matchesAlgType(dataDown, "newline");
-  }
-
-  public traverseComment(comment: Comment, dataDown: Unit): boolean {
-    return (
-      matchesAlgType(dataDown, "comment") &&
-      comment.comment === (dataDown as Comment).comment
-    );
   }
 }
 

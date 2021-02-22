@@ -1,6 +1,7 @@
 import { Alg } from "./Alg";
-import { AlgCommon, Comparable } from "./common";
+import { AlgCommon, Comparable, reverse } from "./common";
 import { Repetition, RepetitionInfo } from "./Repetition";
+import { LeafUnit } from "./Unit";
 
 export class CommutatorQuantum extends Comparable {
   constructor(public A: Alg, public B: Alg) {
@@ -19,6 +20,22 @@ export class CommutatorQuantum extends Comparable {
 
   toString(): string {
     return `[${this.A}, ${this.B}]`;
+  }
+
+  // TODO: use a common composite iterator helper.
+  *experimentalLeafUnits(): Generator<LeafUnit> {
+    for (const leafUnit of this.A.units()) {
+      yield leafUnit;
+    }
+    for (const leafUnit of this.B.units()) {
+      yield leafUnit;
+    }
+    for (const leafUnit of reverse(this.A.units())) {
+      yield leafUnit;
+    }
+    for (const leafUnit of reverse(this.B.units())) {
+      yield leafUnit;
+    }
   }
 }
 
@@ -51,6 +68,10 @@ export class Commutator extends AlgCommon<Commutator> {
       this.#repetition.quantum.A,
       this.#repetition.info(),
     );
+  }
+
+  *experimentalLeafUnits(): Generator<LeafUnit> {
+    yield* this.#repetition.experimentalLeafUnits();
   }
 
   toString(): string {

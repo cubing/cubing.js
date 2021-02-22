@@ -1,4 +1,5 @@
 import { AlgCommon, Comparable } from "./common";
+import { LeafUnit } from "./Unit";
 
 export class Pause extends AlgCommon<Pause> {
   toString(): string {
@@ -11,5 +12,9 @@ export class Pause extends AlgCommon<Pause> {
 
   inverse(): Pause {
     return this;
+  }
+
+  *experimentalLeafUnits(): Generator<LeafUnit> {
+    yield this;
   }
 }

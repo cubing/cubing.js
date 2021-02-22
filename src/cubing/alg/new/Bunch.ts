@@ -1,6 +1,7 @@
 import { Alg } from "./Alg";
 import { AlgCommon, Comparable } from "./common";
 import { Repetition, RepetitionInfo } from "./Repetition";
+import { LeafUnit } from "./Unit";
 
 export class Bunch extends AlgCommon<Bunch> {
   readonly #repetition: Repetition<Alg>;
@@ -22,6 +23,10 @@ export class Bunch extends AlgCommon<Bunch> {
       this.#repetition.quantum,
       this.#repetition.inverse().info(),
     );
+  }
+
+  experimentalLeafUnits(): Generator<LeafUnit> {
+    return this.#repetition.experimentalLeafUnits();
   }
 
   static fromString(): Bunch {

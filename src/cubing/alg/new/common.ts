@@ -1,5 +1,5 @@
 import { Alg } from "./Alg";
-import { Unit } from "./Unit";
+import { LeafUnit, Unit } from "./Unit";
 
 export abstract class Comparable {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -10,11 +10,23 @@ export abstract class Comparable {
   abstract isIdentical(other: Comparable): boolean;
 }
 
+export interface Repeatable extends Comparable {
+  experimentalLeafUnits(): Generator<LeafUnit>;
+}
+
 // Common to algs or  unis
-export abstract class AlgCommon<T extends Alg | Unit> extends Comparable {
+export abstract class AlgCommon<T extends Alg | Unit>
+  extends Comparable
+  implements Repeatable {
   abstract toString(): string;
 
   abstract inverse(): T;
+
+  abstract experimentalLeafUnits(): Generator<LeafUnit>;
+}
+
+export function direct<T>(g: Iterable<T>, backwards: boolean): Iterable<T> {
+  return backwards ? Array.from(g).reverse() : g;
 }
 
 export function reverse<T>(g: Iterable<T>): Iterable<T> {

@@ -27,8 +27,3 @@
 //   type: "alg";
 //   units: UnitJSON[];
 // }
-
-export interface Serializable {
-  toString(): string;
-  // toJSON(): AlgJSON | UnitJSON; // TODO
-}

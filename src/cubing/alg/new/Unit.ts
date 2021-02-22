@@ -6,11 +6,6 @@ import { Move } from "./Move";
 import { Newline } from "./Newline";
 import { Pause } from "./Pause";
 
-export type Unit =
-  | Move
-  | Bunch
-  | Conjugate
-  | Commutator
-  | Comment
-  | Newline
-  | Pause;
+export type LeafUnit = Move | Comment | Newline | Pause;
+
+export type Unit = LeafUnit | Bunch | Conjugate | Commutator;
