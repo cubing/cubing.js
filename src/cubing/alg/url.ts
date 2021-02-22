@@ -1,10 +1,9 @@
 import { Alg } from "./new/Alg";
-import { algToString } from "./traversal";
 
 // This is not the most sophisticated scheme, but it has been used in production
 // at alg.cubing.net for years.
 export function serializeURLParam(a: Alg): string {
-  let escaped = algToString(a);
+  let escaped = a.toString();
   escaped = escaped.replace(/_/g, "&#95;").replace(/ /g, "_");
   escaped = escaped.replace(/\+/g, "&#2b;");
   escaped = escaped.replace(/-/g, "&#45;").replace(/'/g, "-");

@@ -1,4 +1,4 @@
-import { Alg, TraversalUp } from "../../../alg";
+import { Alg, Move, TraversalUp } from "../../../alg";
 import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import { Duration, Timestamp } from "../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
@@ -12,25 +12,25 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
     defaultDurationForAmount,
   );
 
-  constructor(private puzzle: P, alg: Sequence) {
-    this.moves = expand(alg);
+  constructor(private puzzle: P, alg: Alg) {
     // TODO: Avoid assuming all base moves are block moves.
+    this.moves = new Alg(alg.experimentalLeafUnits());
   }
 
-  public getMove(index: number): BlockMove {
-    return this.moves.nestedUnits[index] as BlockMove;
+  public getMove(index: number): Move {
+    return Array.from(this.moves.units())[index] as Move; // TODO: perf
   }
 
   public indexToMoveStartTimestamp(index: number): Timestamp {
-    const seq = new Sequence(this.moves.nestedUnits.slice(0, index));
-    return this.durationFn.traverse(seq);
+    const alg = new Alg(Array.from(this.moves.units()).slice(0, index)); // TODO
+    return this.durationFn.traverseAlg(alg);
   }
 
   public timestampToIndex(timestamp: Timestamp): number {
     let cumulativeTime = 0;
     let i;
     for (i = 0; i < this.numMoves(); i++) {
-      cumulativeTime += this.durationFn.traverseBlockMove(this.getMove(i));
+      cumulativeTime += this.durationFn.traverseMove(this.getMove(i));
       if (cumulativeTime >= timestamp) {
         return i;
       }
@@ -47,17 +47,17 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
 
   public transformAtIndex(index: number): State<P> {
     let state = this.puzzle.identity();
-    for (const move of this.moves.nestedUnits.slice(0, index)) {
+    for (const move of Array.from(this.moves.units()).slice(0, index)) {
       state = this.puzzle.combine(
         state,
-        this.puzzle.stateFromMove(move as BlockMove),
+        this.puzzle.stateFromMove(move as Move),
       );
     }
     return state;
   }
 
   public algDuration(): Duration {
-    return this.durationFn.traverse(this.moves);
+    return this.durationFn.traverseAlg(this.moves);
   }
 
   public numMoves(): number {
@@ -66,6 +66,6 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
   }
 
   public moveDuration(index: number): number {
-    return this.durationFn.traverseBlockMove(this.getMove(index));
+    return this.durationFn.traverseMove(this.getMove(index));
   }
 }

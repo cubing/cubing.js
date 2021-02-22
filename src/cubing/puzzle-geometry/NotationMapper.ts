@@ -1,18 +1,18 @@
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
-import { PGVendoredMove } from "./interfaces";
+import { PGVendoredMove, PGVendoredMoveQuantum } from "./interfaces";
 
 export interface NotationMapper {
-  notationToInternal(mv: PGVendoredMove): PGVendoredMove | null;
-  notationToExternal(mv: PGVendoredMove): PGVendoredMove | null;
+  notationToInternal(move: PGVendoredMove): PGVendoredMove | null;
+  notationToExternal(move: PGVendoredMove): PGVendoredMove | null;
 }
 
 export class NullMapper implements NotationMapper {
-  public notationToInternal(mv: PGVendoredMove): PGVendoredMove {
-    return mv;
+  public notationToInternal(move: PGVendoredMove): PGVendoredMove {
+    return move;
   }
 
-  public notationToExternal(mv: PGVendoredMove): PGVendoredMove {
-    return mv;
+  public notationToExternal(move: PGVendoredMove): PGVendoredMove {
+    return move;
   }
 }
 
@@ -24,78 +24,81 @@ function negate(family: string, v: number | undefined): PGVendoredMove {
   } else {
     v = -v;
   }
-  return new PGVendoredMove(undefined, undefined, family, v);
+  return new PGVendoredMove(family, v);
 }
 
 export class NxNxNCubeMapper implements NotationMapper {
   constructor(public slices: number) {}
 
-  public notationToInternal(mv: PGVendoredMove): PGVendoredMove {
-    const grip = mv.family;
-    if (!mv.innerLayer && !mv.outerLayer) {
+  public notationToInternal(move: PGVendoredMove): PGVendoredMove {
+    const grip = move.family;
+    if (!move.innerLayer && !move.outerLayer) {
       if (grip === "x") {
-        mv = new PGVendoredMove(undefined, undefined, "Rv", mv.amount);
+        move = new PGVendoredMove("Rv", move.effectiveAmount);
       } else if (grip === "y") {
-        mv = new PGVendoredMove(undefined, undefined, "Uv", mv.amount);
+        move = new PGVendoredMove("Uv", move.effectiveAmount);
       } else if (grip === "z") {
-        mv = new PGVendoredMove(undefined, undefined, "Fv", mv.amount);
+        move = new PGVendoredMove("Fv", move.effectiveAmount);
       }
       if ((this.slices & 1) === 1) {
         if (grip === "E") {
-          mv = new PGVendoredMove(
-            undefined,
-            (this.slices + 1) / 2,
-            "D",
-            mv.amount,
+          move = new PGVendoredMove(
+            new PGVendoredMoveQuantum("D", (this.slices + 1) / 2),
+            move.effectiveAmount,
           );
         } else if (grip === "M") {
-          mv = new PGVendoredMove(
-            undefined,
-            (this.slices + 1) / 2,
-            "L",
-            mv.amount,
+          move = new PGVendoredMove(
+            new PGVendoredMoveQuantum("L", (this.slices + 1) / 2),
+            move.effectiveAmount,
           );
         } else if (grip === "S") {
-          mv = new PGVendoredMove(
-            undefined,
-            (this.slices + 1) / 2,
-            "F",
-            mv.amount,
+          move = new PGVendoredMove(
+            new PGVendoredMoveQuantum("F", (this.slices + 1) / 2),
+            move.effectiveAmount,
           );
         }
       }
       if (this.slices > 2) {
         if (grip === "e") {
-          mv = new PGVendoredMove(2, this.slices - 1, "D", mv.amount);
+          move = new PGVendoredMove(
+            new PGVendoredMoveQuantum("D", this.slices - 1, 2),
+            move.effectiveAmount,
+          );
         } else if (grip === "m") {
-          mv = new PGVendoredMove(2, this.slices - 1, "L", mv.amount);
+          move = new PGVendoredMove(
+            new PGVendoredMoveQuantum("L", this.slices - 1, 2),
+            move.effectiveAmount,
+          );
         } else if (grip === "s") {
-          mv = new PGVendoredMove(2, this.slices - 1, "F", mv.amount);
+          move = new PGVendoredMove(
+            new PGVendoredMoveQuantum("F", this.slices - 1, 2),
+            move.effectiveAmount,
+          );
         }
       }
     }
-    return mv;
+    return move;
   }
 
   // do we want to map slice moves to E/M/S instead of 2U/etc.?
-  public notationToExternal(mv: PGVendoredMove): PGVendoredMove {
-    const grip = mv.family;
-    if (!mv.innerLayer && !mv.outerLayer) {
+  public notationToExternal(move: PGVendoredMove): PGVendoredMove {
+    const grip = move.family;
+    if (!move.innerLayer && !move.outerLayer) {
       if (grip === "Rv") {
-        return new PGVendoredMove(undefined, undefined, "x", mv.amount);
+        return new PGVendoredMove("x", move.effectiveAmount);
       } else if (grip === "Uv") {
-        return new PGVendoredMove(undefined, undefined, "y", mv.amount);
+        return new PGVendoredMove("y", move.effectiveAmount);
       } else if (grip === "Fv") {
-        return new PGVendoredMove(undefined, undefined, "z", mv.amount);
+        return new PGVendoredMove("z", move.effectiveAmount);
       } else if (grip === "Lv") {
-        return negate("x", mv.amount);
+        return negate("x", move.effectiveAmount);
       } else if (grip === "Dv") {
-        return negate("y", mv.amount);
+        return negate("y", move.effectiveAmount);
       } else if (grip === "Bv") {
-        return negate("z", mv.amount);
+        return negate("z", move.effectiveAmount);
       }
     }
-    return mv;
+    return move;
   }
 }
 
@@ -133,26 +136,29 @@ export class FaceRenamingMapper implements NotationMapper {
   }
 
   public convert(
-    mv: PGVendoredMove,
+    move: PGVendoredMove,
     a: FaceNameSwizzler,
     b: FaceNameSwizzler,
   ): PGVendoredMove {
-    const grip = mv.family;
+    const grip = move.family;
     const ngrip = this.convertString(grip, a, b);
     if (grip === ngrip) {
-      return mv;
+      return move;
     } else {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, ngrip, mv.amount);
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum(ngrip, move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
     }
   }
 
-  public notationToInternal(mv: PGVendoredMove): PGVendoredMove {
-    const r = this.convert(mv, this.externalNames, this.internalNames);
+  public notationToInternal(move: PGVendoredMove): PGVendoredMove {
+    const r = this.convert(move, this.externalNames, this.internalNames);
     return r;
   }
 
-  public notationToExternal(mv: PGVendoredMove): PGVendoredMove {
-    return this.convert(mv, this.internalNames, this.externalNames);
+  public notationToExternal(move: PGVendoredMove): PGVendoredMove {
+    return this.convert(move, this.internalNames, this.externalNames);
   }
 }
 
@@ -161,63 +167,90 @@ export class FaceRenamingMapper implements NotationMapper {
 export class MegaminxScramblingNotationMapper implements NotationMapper {
   constructor(private child: NotationMapper) {}
 
-  public notationToInternal(mv: PGVendoredMove): PGVendoredMove | null {
-    if (mv.innerLayer === undefined && mv.outerLayer === undefined) {
-      if (Math.abs(mv.amount) === 1) {
-        if (mv.family === "R++") {
-          return new PGVendoredMove(2, 3, "L", -2 * mv.amount);
-        } else if (mv.family === "R--") {
-          return new PGVendoredMove(2, 3, "L", 2 * mv.amount);
-        } else if (mv.family === "D++") {
-          return new PGVendoredMove(2, 3, "U", -2 * mv.amount);
-        } else if (mv.family === "D--") {
-          return new PGVendoredMove(2, 3, "U", 2 * mv.amount);
+  public notationToInternal(move: PGVendoredMove): PGVendoredMove | null {
+    if (move.innerLayer === undefined && move.outerLayer === undefined) {
+      if (Math.abs(move.effectiveAmount) === 1) {
+        if (move.family === "R++") {
+          return new PGVendoredMove(
+            new PGVendoredMoveQuantum("L", 3, 2),
+            -2 * move.effectiveAmount,
+          );
+        } else if (move.family === "R--") {
+          return new PGVendoredMove(
+            new PGVendoredMoveQuantum("L", 3, 2),
+            2 * move.effectiveAmount,
+          );
+        } else if (move.family === "D++") {
+          return new PGVendoredMove(
+            new PGVendoredMoveQuantum("U", 3, 2),
+            -2 * move.effectiveAmount,
+          );
+        } else if (move.family === "D--") {
+          return new PGVendoredMove(
+            new PGVendoredMoveQuantum("U", 3, 2),
+            2 * move.effectiveAmount,
+          );
         }
       }
-      if (mv.family === "y") {
-        return new PGVendoredMove(undefined, undefined, "Uv", mv.amount);
+      if (move.family === "y") {
+        return new PGVendoredMove("Uv", move.effectiveAmount);
       }
     }
-    return this.child.notationToInternal(mv);
+    return this.child.notationToInternal(move);
   }
 
   // we never rewrite click moves to these moves.
-  public notationToExternal(mv: PGVendoredMove): PGVendoredMove | null {
-    if (mv.family === "Uv") {
-      return new PGVendoredMove(mv.innerLayer, mv.outerLayer, "y", mv.amount);
+  public notationToExternal(move: PGVendoredMove): PGVendoredMove | null {
+    if (move.family === "Uv") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("y", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
     }
-    if (mv.family === "Dv") {
-      return negate("y", mv.amount);
+    if (move.family === "Dv") {
+      return negate("y", move.effectiveAmount);
     }
-    return this.child.notationToExternal(mv);
+    return this.child.notationToExternal(move);
   }
 }
 
 export class SkewbNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
-  public notationToInternal(mv: PGVendoredMove): PGVendoredMove | null {
-    if (mv.innerLayer || mv.outerLayer) {
+  public notationToInternal(move: PGVendoredMove): PGVendoredMove | null {
+    if (move.innerLayer || move.outerLayer) {
       return null;
     }
-    if (mv.family === "F") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "DFR", mv.amount);
-    } else if (mv.family === "R") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "DBR", mv.amount);
-    } else if (mv.family === "L") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "DFL", mv.amount);
-    } else if (mv.family === "B") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "DBL", mv.amount);
+    if (move.family === "F") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("DFR", move.outerLayer, move.innerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "R") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("DBR", move.outerLayer, move.innerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "L") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("DFL", move.outerLayer, move.innerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "B") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("DBL", move.outerLayer, move.innerLayer),
+        move.effectiveAmount,
+      );
       /*
        *   (1) We are not including x/y/z in Skewb; they aren't WCA notation and
        *   it's unclear anyone needs them for reconstructions.
        *
-    } else if (mv.family === "x") {
-      return new BlockMove(mv.outerLayer, mv.innerLayer, "Rv", mv.amount);
-    } else if (mv.family === "y") {
-      return new BlockMove(mv.outerLayer, mv.innerLayer, "Uv", mv.amount);
-    } else if (mv.family === "z") {
-      return new BlockMove(mv.outerLayer, mv.innerLayer, "Fv", mv.amount);
+    } else if (move.family === "x") {
+      return new BlockMove(move.outerLayer, move.innerLayer, "Rv", move.amount);
+    } else if (move.family === "y") {
+      return new BlockMove(move.outerLayer, move.innerLayer, "Uv", move.amount);
+    } else if (move.family === "z") {
+      return new BlockMove(move.outerLayer, move.innerLayer, "Fv", move.amount);
        */
     } else {
       return null;
@@ -225,24 +258,36 @@ export class SkewbNotationMapper implements NotationMapper {
   }
 
   // we never rewrite click moves to these moves.
-  public notationToExternal(mv: PGVendoredMove): PGVendoredMove | null {
-    if (this.child.spinmatch(mv.family, "DFR")) {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "F", mv.amount);
-    } else if (this.child.spinmatch(mv.family, "DRB")) {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "R", mv.amount);
-    } else if (this.child.spinmatch(mv.family, "DFL")) {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "L", mv.amount);
-    } else if (this.child.spinmatch(mv.family, "DBL")) {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "B", mv.amount);
+  public notationToExternal(move: PGVendoredMove): PGVendoredMove | null {
+    if (this.child.spinmatch(move.family, "DFR")) {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("F", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (this.child.spinmatch(move.family, "DRB")) {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("R", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (this.child.spinmatch(move.family, "DFL")) {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("L", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (this.child.spinmatch(move.family, "DBL")) {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("B", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
       /*
        *   See (1) above.
        *
-    } else if (mv.family === "Rv") {
-      return new BlockMove(mv.outerLayer, mv.innerLayer, "x", mv.amount);
-    } else if (mv.family === "Uv") {
-      return new BlockMove(mv.outerLayer, mv.innerLayer, "y", mv.amount);
-    } else if (mv.family === "Fv") {
-      return new BlockMove(mv.outerLayer, mv.innerLayer, "z", mv.amount);
+    } else if (move.family === "Rv") {
+      return new BlockMove(move.outerLayer, move.innerLayer, "x", move.amount);
+    } else if (move.family === "Uv") {
+      return new BlockMove(move.outerLayer, move.innerLayer, "y", move.amount);
+    } else if (move.family === "Fv") {
+      return new BlockMove(move.outerLayer, move.innerLayer, "z", move.amount);
        */
     } else {
       return null;
@@ -253,60 +298,108 @@ export class SkewbNotationMapper implements NotationMapper {
 export class PyraminxNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
-  public notationToInternal(mv: PGVendoredMove): PGVendoredMove | null {
-    if (mv.innerLayer || mv.outerLayer) {
+  public notationToInternal(move: PGVendoredMove): PGVendoredMove | null {
+    if (move.innerLayer || move.outerLayer) {
       return null;
     }
-    if (mv.family === "U") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "flr", mv.amount);
-    } else if (mv.family === "R") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "fld", mv.amount);
-    } else if (mv.family === "L") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "frd", mv.amount);
-    } else if (mv.family === "B") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "dlr", mv.amount);
-    } else if (mv.family === "u") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "FLR", mv.amount);
-    } else if (mv.family === "r") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "FLD", mv.amount);
-    } else if (mv.family === "l") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "FRD", mv.amount);
-    } else if (mv.family === "b") {
-      return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "DLR", mv.amount);
-    } else if (mv.family === "y") {
-      return negate("Dv", mv.amount);
+    if (move.family === "U") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("flr", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "R") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("fld", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "L") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("frd", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "B") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("dlr", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "u") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("FLR", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "r") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("FLD", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "l") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("FRD", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "b") {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("DLR", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else if (move.family === "y") {
+      return negate("Dv", move.effectiveAmount);
     } else {
       return null;
     }
   }
 
   // we never rewrite click moves to these moves.
-  public notationToExternal(mv: PGVendoredMove): PGVendoredMove | null {
-    if (mv.family === mv.family.toLowerCase()) {
-      const fam = mv.family.toUpperCase();
+  public notationToExternal(move: PGVendoredMove): PGVendoredMove | null {
+    if (move.family === move.family.toLowerCase()) {
+      const fam = move.family.toUpperCase();
       if (this.child.spinmatch(fam, "FLR")) {
-        return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "U", mv.amount);
+        return new PGVendoredMove(
+          new PGVendoredMoveQuantum("U", move.innerLayer, move.outerLayer),
+          move.effectiveAmount,
+        );
       } else if (this.child.spinmatch(fam, "FLD")) {
-        return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "R", mv.amount);
+        return new PGVendoredMove(
+          new PGVendoredMoveQuantum("R", move.innerLayer, move.outerLayer),
+          move.effectiveAmount,
+        );
       } else if (this.child.spinmatch(fam, "FRD")) {
-        return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "L", mv.amount);
+        return new PGVendoredMove(
+          new PGVendoredMoveQuantum("L", move.innerLayer, move.outerLayer),
+          move.effectiveAmount,
+        );
       } else if (this.child.spinmatch(fam, "DLR")) {
-        return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "B", mv.amount);
+        return new PGVendoredMove(
+          new PGVendoredMoveQuantum("B", move.innerLayer, move.outerLayer),
+          move.effectiveAmount,
+        );
       }
     }
-    if (mv.family === mv.family.toUpperCase()) {
-      if (this.child.spinmatch(mv.family, "FLR")) {
-        return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "u", mv.amount);
-      } else if (this.child.spinmatch(mv.family, "FLD")) {
-        return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "r", mv.amount);
-      } else if (this.child.spinmatch(mv.family, "FRD")) {
-        return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "l", mv.amount);
-      } else if (this.child.spinmatch(mv.family, "DLR")) {
-        return new PGVendoredMove(mv.outerLayer, mv.innerLayer, "b", mv.amount);
+    if (move.family === move.family.toUpperCase()) {
+      if (this.child.spinmatch(move.family, "FLR")) {
+        return new PGVendoredMove(
+          new PGVendoredMoveQuantum("u", move.innerLayer, move.outerLayer),
+          move.effectiveAmount,
+        );
+      } else if (this.child.spinmatch(move.family, "FLD")) {
+        return new PGVendoredMove(
+          new PGVendoredMoveQuantum("r", move.innerLayer, move.outerLayer),
+          move.effectiveAmount,
+        );
+      } else if (this.child.spinmatch(move.family, "FRD")) {
+        return new PGVendoredMove(
+          new PGVendoredMoveQuantum("l", move.innerLayer, move.outerLayer),
+          move.effectiveAmount,
+        );
+      } else if (this.child.spinmatch(move.family, "DLR")) {
+        return new PGVendoredMove(
+          new PGVendoredMoveQuantum("b", move.innerLayer, move.outerLayer),
+          move.effectiveAmount,
+        );
       }
     }
-    if (mv.family === "Dv") {
-      return negate("y", mv.amount);
+    if (move.family === "Dv") {
+      return negate("y", move.effectiveAmount);
     } else {
       return null;
     }

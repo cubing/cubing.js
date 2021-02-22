@@ -1,4 +1,4 @@
-import { AlgCommon, Comparable, is } from "./common";
+import { AlgCommon, Comparable, experimentalIs } from "./common";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
 import { LineComment } from "./units/leaves/LineComment";
@@ -16,7 +16,7 @@ function toIterable(input?: FlexibleAlgSource): Iterable<Unit> {
     return [];
   }
 
-  if (is(input, Alg)) {
+  if (experimentalIs(input, Alg)) {
     return (input as Alg).units();
   }
 
