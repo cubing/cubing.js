@@ -77,7 +77,6 @@ export class Repetition<Q extends Repeatable> {
   *experimentalLeafUnits(iterDir: IterationDirection): Generator<LeafUnit> {
     const amount = this.absAmount ?? 1;
     for (let i = 0; i < amount; i++) {
-      console.log(this.quantum, this.quantum.toString(), amount, this.prime);
       const newIterDir = toggleDirection(iterDir, this.prime);
       yield* this.quantum.experimentalLeafUnits(newIterDir);
     }

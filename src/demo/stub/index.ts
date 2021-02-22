@@ -1,6 +1,9 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
+import { setDebug } from "../../cubing/alg/new/common";
+setDebug(true);
+
 import { Alg } from "../../cubing/alg/new/Alg";
 import { Bunch } from "../../cubing/alg/new/units/containers/Bunch";
 import { Move } from "../../cubing/alg/new/units/leaves/Move";
