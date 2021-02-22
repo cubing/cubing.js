@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 // start of imports
-import { Sequence } from "../../../alg";
+import { Alg } from "../../../alg";
 import { KPuzzle, KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
 import { AlgIndexer } from "../indexer/AlgIndexer";
@@ -35,10 +35,9 @@ export interface TimeRange {
   end: MillisecondTimestamp;
 }
 
-type IndexerConstructor = new (
-  puzzle: KPuzzleWrapper,
-  alg: Sequence,
-) => AlgIndexer<KPuzzleWrapper>;
+type IndexerConstructor = new (puzzle: KPuzzleWrapper, alg: Alg) => AlgIndexer<
+  KPuzzleWrapper
+>;
 
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
@@ -50,13 +49,13 @@ export class AlgCursor
   constructor(
     private timeline: Timeline,
     private def: KPuzzleDefinition,
-    private alg: Sequence,
-    startStateSequence?: Sequence, // TODO: accept actual start state
+    private alg: Alg,
+    startStateAlg?: Alg, // TODO: accept actual start state
   ) {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
     this.instantiateIndexer(alg);
-    this.startState = startStateSequence
-      ? this.algToState(startStateSequence)
+    this.startState = startStateAlg
+      ? this.algToState(startStateAlg)
       : this.ksolvePuzzle.startState();
     timeline.addTimestampListener(this);
   }
@@ -74,12 +73,12 @@ export class AlgCursor
     this.dispatchPositionForTimestamp(this.timeline.timestamp);
   }
 
-  private instantiateIndexer(alg: Sequence): void {
+  private instantiateIndexer(alg: Alg): void {
     this.todoIndexer = new this.indexerConstructor(this.ksolvePuzzle, alg);
   }
 
   /** @deprecated */
-  algToState(s: Sequence): Transformation {
+  algToState(s: Alg): Transformation {
     const kpuzzle = new KPuzzle(this.def);
     kpuzzle.applyAlg(s);
     return this.ksolvePuzzle.combine(this.def.startPieces, kpuzzle.state);
@@ -167,7 +166,7 @@ export class AlgCursor
     // nothing to do
   }
 
-  setAlg(alg: Sequence): void {
+  setAlg(alg: Alg): void {
     this.alg = alg;
     this.instantiateIndexer(alg);
     this.timeline.onCursorChange(this);
@@ -197,8 +196,8 @@ export class AlgCursor
 
   setPuzzle(
     def: KPuzzleDefinition,
-    alg: Sequence = this.alg,
-    startStateSequence?: Sequence,
+    alg: Alg = this.alg,
+    startStateAlg?: Alg,
   ): void {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
     this.def = def;
@@ -207,8 +206,8 @@ export class AlgCursor
       this.timeline.onCursorChange(this);
     }
     this.setStartState(
-      startStateSequence
-        ? this.algToState(startStateSequence)
+      startStateAlg
+        ? this.algToState(startStateAlg)
         : this.ksolvePuzzle.startState(),
     );
     this.alg = alg;

@@ -1,11 +1,11 @@
-import { BlockMove, blockMoveToString } from "../../../alg";
+import { Move } from "../../../alg";
 import {
   combineTransformations,
   areStatesEquivalient,
   identityTransformation,
   invertTransformation,
   KPuzzleDefinition,
-  stateForBlockMove,
+  stateForMove,
   Transformation,
 } from "../../../kpuzzle";
 import { puzzles } from "../../../puzzles";
@@ -13,7 +13,7 @@ import { puzzles } from "../../../puzzles";
 export type MoveName = string;
 
 export interface MoveProgress {
-  blockMove: BlockMove;
+  move: Move;
   fraction: number;
 }
 
@@ -48,7 +48,7 @@ export abstract class PuzzleWrapper {
     return newState;
   }
 
-  public abstract stateFromMove(blockMove: BlockMove): State<PuzzleWrapper>;
+  public abstract stateFromMove(move: Move): State<PuzzleWrapper>;
   public abstract identity(): State<PuzzleWrapper>;
   public abstract equivalent(
     s1: State<PuzzleWrapper>,
@@ -84,10 +84,10 @@ export class KPuzzleWrapper extends PuzzleWrapper {
     return combineTransformations(this.definition, s1, s2);
   }
 
-  public stateFromMove(blockMove: BlockMove): KSolvePuzzleState {
-    const key = blockMoveToString(blockMove);
+  public stateFromMove(move: Move): KSolvePuzzleState {
+    const key = move.toString();
     if (!this.moveStash[key]) {
-      this.moveStash[key] = stateForBlockMove(this.definition, blockMove);
+      this.moveStash[key] = stateForMove(this.definition, move);
     }
     return this.moveStash[key];
   }
@@ -118,8 +118,8 @@ export class QTMCounterPuzzle extends PuzzleWrapper {
     return new QTMCounterState(s1.value + s2.value);
   }
 
-  public stateFromMove(blockMove: BlockMove): QTMCounterState {
-    return new QTMCounterState(Math.abs(blockMove.amount));
+  public stateFromMove(move: Move): QTMCounterState {
+    return new QTMCounterState(Math.abs(move.effectiveAmount));
   }
 
   public identity(): QTMCounterState {

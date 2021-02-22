@@ -9,12 +9,12 @@ import {
   Pause,
   TraversalDownUp,
   TraversalUp,
+  Unit,
 } from "../../../../alg";
 import {
   directedGenerator,
   IterationDirection,
 } from "../../../../alg/new/iteration";
-import { Unit } from "../../../../alg/new/units/Unit";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration } from "../../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";

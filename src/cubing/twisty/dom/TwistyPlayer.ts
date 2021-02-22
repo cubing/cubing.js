@@ -120,6 +120,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set alg(newAlg: Alg) {
+    console.log("setting", newAlg.toString());
     // TODO: do validation for other algs as well.
     if (typeof newAlg === "string") {
       console.warn(
@@ -573,7 +574,12 @@ export class TwistyPlayer extends ManagedCustomElement {
         // TODO: also take into account setup alg.
         this.experimentalInvalidInitialAlgCallback(this.alg);
       }
-      cursor = new AlgCursor(this.timeline, def, new Alg(), new Alg());
+      cursor = new AlgCursor(
+        this.timeline,
+        def,
+        this.alg,
+        this.cursorStartAlg(),
+      );
     }
     this.setCursor(cursor);
     if (

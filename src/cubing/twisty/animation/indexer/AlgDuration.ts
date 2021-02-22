@@ -1,13 +1,12 @@
 import {
   Alg,
-  BlockMove,
+  Bunch,
   Comment,
   Commutator,
   Conjugate,
-  Group,
-  NewLine,
+  Move,
+  Newline,
   Pause,
-  Sequence,
   TraversalUp,
 } from "../../../alg";
 import { Duration } from "../cursor/CursorTypes";
@@ -63,26 +62,29 @@ export class AlgDuration extends TraversalUp<Duration> {
     return total;
   }
 
-  public traverseGroup(group: Group): Duration {
-    return group.amount * this.traverseUnit(group.nestedSequence);
+  public traverseBunch(bunch: Bunch): Duration {
+    return (
+      bunch.experimentalEffectiveAmount *
+      this.traverseAlg(bunch.experimentalAlg)
+    );
   }
 
-  public traverseBlockMove(blockMove: BlockMove): Duration {
-    return this.durationForAmount(blockMove.amount);
+  public traverseMove(move: Move): Duration {
+    return this.durationForAmount(move.effectiveAmount);
   }
 
   public traverseCommutator(commutator: Commutator): Duration {
     return (
-      commutator.amount *
+      commutator.experimentalEffectiveAmount *
       2 *
-      (this.traverse(commutator.A) + this.traverse(commutator.B))
+      (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
     );
   }
 
   public traverseConjugate(conjugate: Conjugate): Duration {
     return (
-      conjugate.amount *
-      (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B))
+      conjugate.experimentalEffectiveAmount *
+      (2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B))
     );
   }
 
@@ -90,7 +92,7 @@ export class AlgDuration extends TraversalUp<Duration> {
     return this.durationForAmount(1);
   }
 
-  public traverseNewLine(_newLine: NewLine): Duration {
+  public traverseNewline(_newline: Newline): Duration {
     return this.durationForAmount(1);
   }
 

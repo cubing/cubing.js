@@ -10,6 +10,7 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
   constructor(private puzzle: PuzzleWrapper, alg: Alg) {
     const deccon = new DecoratorConstructor<PuzzleWrapper>(this.puzzle);
     this.decoration = deccon.traverseAlg(alg);
+    console.log("indexer", alg.toString());
     this.walker = new AlgWalker<PuzzleWrapper>(
       this.puzzle,
       alg,
