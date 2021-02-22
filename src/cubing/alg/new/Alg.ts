@@ -1,4 +1,4 @@
-import { AlgCommon, Comparable } from "./common";
+import { AlgCommon, Comparable, is } from "./common";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
 import { Move } from "./units/leaves/Move";
@@ -10,13 +10,17 @@ import { warnOnce } from "./warnOnce";
 export type FlexibleAlgSource = string | Iterable<Unit> | Alg;
 
 // TODO: validate
-function toIterable(inputUnits?: FlexibleAlgSource): Iterable<Unit> {
-  if (!inputUnits) {
+function toIterable(input?: FlexibleAlgSource): Iterable<Unit> {
+  if (!input) {
     return [];
   }
 
-  if (typeof inputUnits === "string") {
-    return parseAlg(inputUnits).units(); // TODO: something more direct?
+  if (is(input, Alg)) {
+    return (input as Alg).units();
+  }
+
+  if (typeof input === "string") {
+    return Array.from(parseAlg(input).units()); // TODO: something more direct?
   }
 
   // const seq = inputUnits as Sequence;
@@ -25,7 +29,7 @@ function toIterable(inputUnits?: FlexibleAlgSource): Iterable<Unit> {
   //   // return seq.nestedUnits;
   // }
 
-  const iter = inputUnits as Iterable<Unit>;
+  const iter = input as Iterable<Unit>;
   if (typeof iter[Symbol.iterator] === "function") {
     return Array.from(iter); // TODO: avoid allocations
   }
@@ -62,7 +66,8 @@ export class Alg extends AlgCommon<Alg> {
 
   inverse(): Alg {
     // TODO: Handle newLines and comments correctly
-    return new Alg(reverse(Array.from(this.#units)));
+    // TODO: Make more efficient.
+    return new Alg(reverse(Array.from(this.#units).map((u) => u.inverse())));
   }
 
   /** @deprecated */

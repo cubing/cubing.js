@@ -2,9 +2,13 @@ import { Alg } from "./Alg";
 import { IterationDirection } from "./iteration";
 import { LeafUnit, Unit } from "./units/Unit";
 
-let debugAlgs = false;
-export function setDebug(debug: boolean): void {
-  debugAlgs = debug;
+let writeAlgDebugField = false;
+export function setAlgDebugField(debug: boolean): void {
+  writeAlgDebugField = debug;
+}
+
+export function is(v: any, c: typeof Comparable) {
+  return v instanceof c;
 }
 
 export abstract class Comparable {
@@ -26,7 +30,7 @@ export abstract class AlgCommon<T extends Alg | Unit>
   implements Repeatable {
   constructor() {
     super();
-    if (debugAlgs) {
+    if (writeAlgDebugField) {
       Object.defineProperty(this, "_debugStr", {
         get: function () {
           return this.toString();

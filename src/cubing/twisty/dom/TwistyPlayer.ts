@@ -109,7 +109,6 @@ export class TwistyPlayer extends ManagedCustomElement {
   ) {
     super();
     this.addCSS(twistyPlayerCSS);
-    console.log(initialConfig);
     this.#config = new TwistyPlayerConfig(this, initialConfig);
 
     this.timeline = new Timeline();
@@ -132,6 +131,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       newAlg = new Alg((newAlg as unknown) as string);
     }
     this.#config.attributes["alg"].setValue(newAlg);
+    console.log("set alg cursor", this.cursor);
     this.cursor?.setAlg(newAlg); // TODO: can we ensure the cursor already exists?
     this.setCursorStartState();
   }
@@ -168,11 +168,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private cursorStartAlg(): Alg {
-    let alg = this.experimentalSetupAlg;
+    let startAlg = this.experimentalSetupAlg;
     if (this.experimentalSetupAnchor === "end") {
-      alg = alg.inverse();
+      startAlg = startAlg.concat(this.alg.inverse());
     }
-    return alg; // TODO
+    return startAlg; // TODO
   }
 
   /** @deprecated */
@@ -523,6 +523,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   private setCursor(cursor: AlgCursor): void {
     const oldCursor = this.cursor;
     this.cursor = cursor;
+    this.cursor.setAlg(this.alg);
     this.setCursorStartState();
     this.timeline.addCursor(cursor);
     if (oldCursor) {

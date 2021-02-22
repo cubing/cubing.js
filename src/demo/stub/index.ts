@@ -6,6 +6,12 @@ import { TwistyPlayer } from "../../cubing/twisty";
 
 const player = new TwistyPlayer({
   alg: new Alg("R U R'"),
+  experimentalSetupAnchor: "end",
 });
+
+// player.alg = new Alg("R U R'");
+
+const a = new Alg("R D F");
+console.log(a.toString(), a.toString());
 
 document.body.appendChild(player);
