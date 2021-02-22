@@ -4,7 +4,7 @@ import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 
-export class Bunch extends AlgCommon<Bunch> {
+export class Grouping extends AlgCommon<Grouping> {
   readonly #repetition: Repetition<Alg>;
 
   constructor(alg: Alg, repetitionInfo: RepetitionInfo) {
@@ -13,9 +13,10 @@ export class Bunch extends AlgCommon<Bunch> {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsBunch = other as Bunch;
+    const otherAsGrouping = other as Grouping;
     return (
-      other.is(Bunch) && this.#repetition.isIdentical(otherAsBunch.#repetition)
+      other.is(Grouping) &&
+      this.#repetition.isIdentical(otherAsGrouping.#repetition)
     );
   }
 
@@ -34,8 +35,8 @@ export class Bunch extends AlgCommon<Bunch> {
     return this.#repetition.suffix();
   }
 
-  inverse(): Bunch {
-    return new Bunch(
+  inverse(): Grouping {
+    return new Grouping(
       this.#repetition.quantum,
       this.#repetition.inverse().info(),
     );
@@ -47,7 +48,7 @@ export class Bunch extends AlgCommon<Bunch> {
     yield* this.#repetition.experimentalLeafUnits(iterDir);
   }
 
-  static fromString(): Bunch {
+  static fromString(): Grouping {
     throw new Error("unimplemented");
   }
 
@@ -55,9 +56,9 @@ export class Bunch extends AlgCommon<Bunch> {
     return `(${this.#repetition.quantum.toString()})${this.#repetition.suffix()}`;
   }
 
-  // toJSON(): BunchJSON {
+  // toJSON(): GroupingJSON {
   //   return {
-  //     type: "bunch",
+  //     type: "grouping",
   //     alg: this.#quanta.quantum.toJSON(),
   //   };
   // }

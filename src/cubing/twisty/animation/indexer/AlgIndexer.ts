@@ -12,10 +12,10 @@ import { Duration, PuzzlePosition, Timestamp } from "../cursor/CursorTypes";
 //     return total;
 //   }
 
-//   public traverseGroup(bunch: Bunch): number {
+//   public traverseGroup(grouping: Grouping): number {
 //     return (
-//       this.traverseAlg(bunch.experimentalAlg) *
-//       Math.abs(bunch.experimentalEffectiveAmount)
+//       this.traverseAlg(grouping.experimentalAlg) *
+//       Math.abs(grouping.experimentalEffectiveAmount)
 //     );
 //   }
 

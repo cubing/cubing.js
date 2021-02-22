@@ -5,8 +5,8 @@
 //   outerLayer?: number;
 // }
 
-// export interface BunchJSON {
-//   type: "bunch";
+// export interface GroupingJSON {
+//   type: "grouping";
 //   alg: AlgJSON;
 // }
 
@@ -21,7 +21,7 @@
 //   B: AlgJSON;
 // }
 
-// export type UnitJSON = MoveJSON | BunchJSON;
+// export type UnitJSON = MoveJSON | GroupingJSON;
 
 // export interface AlgJSON {
 //   type: "alg";

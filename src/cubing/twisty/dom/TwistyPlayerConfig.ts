@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { Sequence } from "../../alg";
+import { Alg } from "../../alg";
 import {
   AlgAttribute,
   StringEnumAttribute,
@@ -152,8 +152,8 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 }
 
 export interface TwistyPlayerConfigValues {
-  alg: Sequence;
-  experimentalSetupAlg: Sequence;
+  alg: Alg;
+  experimentalSetupAlg: Alg;
   experimentalSetupAnchor: SetupToLocation;
 
   puzzle: PuzzleID;

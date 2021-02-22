@@ -1,6 +1,6 @@
 import { Alg } from "./Alg";
 import { AlgBuilder } from "./AlgBuilder";
-import { Bunch } from "./units/containers/Bunch";
+import { Grouping } from "./units/containers/Grouping";
 import { Commutator } from "./units/containers/Commutator";
 import { Conjugate } from "./units/containers/Conjugate";
 import { Move, MoveQuantum } from "./units/leaves/Move";
@@ -97,7 +97,7 @@ class AlgParser {
         const alg = this.parseAlgWithStopping([")"]);
         this.mustConsumeNext(")");
         const repetitionInfo = this.parseRepetition();
-        algBuilder.push(new Bunch(alg, repetitionInfo));
+        algBuilder.push(new Grouping(alg, repetitionInfo));
         crowded = true;
         continue mainLoop;
       } else if (this.tryConsumeNext("[")) {

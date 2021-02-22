@@ -1,5 +1,5 @@
 import { Alg } from "./new/Alg";
-import { Bunch } from "./new/units/containers/Bunch";
+import { Grouping } from "./new/units/containers/Grouping";
 import { Comparable } from "./new/common";
 import { Commutator } from "./new/units/containers/Commutator";
 import { Move } from "./new/units/leaves/Move";
@@ -15,8 +15,8 @@ function dispatch<DataDown, DataAlgUp, DataUnitUp>(
   dataDown: DataDown,
 ): DataUnitUp {
   // TODO: Can we turn this back into a `switch` or something more efficiently?
-  if (unit.is(Bunch)) {
-    return t.traverseBunch(unit as Bunch, dataDown);
+  if (unit.is(Grouping)) {
+    return t.traverseGrouping(unit as Grouping, dataDown);
   }
   if (unit.is(Move)) {
     return t.traverseMove(unit as Move, dataDown);
@@ -41,7 +41,7 @@ function dispatch<DataDown, DataAlgUp, DataUnitUp>(
 
 function assertIsUnit(t: Comparable): Unit {
   if (
-    t.is(Bunch) ||
+    t.is(Grouping) ||
     t.is(Move) ||
     t.is(Commutator) ||
     t.is(Conjugate) ||
@@ -70,7 +70,11 @@ export abstract class TraversalDownUp<
 
   public abstract traverseAlg(alg: Alg, dataDown: DataDown): DataAlgUp;
 
-  public abstract traverseBunch(bunch: Bunch, dataDown: DataDown): DataUnitUp;
+  public abstract traverseGrouping(
+    grouping: Grouping,
+    dataDown: DataDown,
+  ): DataUnitUp;
+
   public abstract traverseMove(move: Move, dataDown: DataDown): DataUnitUp;
 
   public abstract traverseCommutator(
@@ -108,7 +112,7 @@ export abstract class TraversalUp<
   }
 
   public abstract traverseAlg(alg: Alg): DataAlgUp;
-  public abstract traverseBunch(bunch: Bunch): DataUnitUp;
+  public abstract traverseGrouping(grouping: Grouping): DataUnitUp;
   public abstract traverseMove(move: Move): DataUnitUp;
   public abstract traverseCommutator(commutator: Commutator): DataUnitUp;
   public abstract traverseConjugate(conjugate: Conjugate): DataUnitUp;
@@ -158,8 +162,8 @@ export abstract class TraversalUp<
 //     return new Alg(coalesced);
 //   }
 
-//   public traverseBunch(bunch: Bunch): Unit {
-//     return bunch;
+//   public traverseGrouping(grouping: Grouping): Unit {
+//     return grouping;
 //   }
 
 //   public traverseMove(move: Move): Unit {

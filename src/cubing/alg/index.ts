@@ -1,5 +1,5 @@
 export { Alg } from "./new/Alg";
-export { Bunch } from "./new/units/containers/Bunch";
+export { Grouping } from "./new/units/containers/Grouping";
 export { Comment } from "./new/units/leaves/Comment";
 export { Commutator } from "./new/units/containers/Commutator";
 export { Conjugate } from "./new/units/containers/Conjugate";

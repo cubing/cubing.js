@@ -1,6 +1,6 @@
 import {
   Alg,
-  Bunch,
+  Grouping,
   Comment,
   Commutator,
   Conjugate,
@@ -62,10 +62,10 @@ export class AlgDuration extends TraversalUp<Duration> {
     return total;
   }
 
-  public traverseBunch(bunch: Bunch): Duration {
+  public traverseGrouping(grouping: Grouping): Duration {
     return (
-      bunch.experimentalEffectiveAmount *
-      this.traverseAlg(bunch.experimentalAlg)
+      grouping.experimentalEffectiveAmount *
+      this.traverseAlg(grouping.experimentalAlg)
     );
   }
 

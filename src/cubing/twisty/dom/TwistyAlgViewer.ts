@@ -1,6 +1,6 @@
 import {
   Alg,
-  Bunch,
+  Grouping,
   Comment,
   Commutator,
   Conjugate,
@@ -129,25 +129,25 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     };
   }
 
-  public traverseBunch(bunch: Bunch, dataDown: DataDown): DataUp {
+  public traverseGrouping(grouping: Grouping, dataDown: DataDown): DataUp {
     const direction = updateDirectionByAmount(
       dataDown.direction,
-      bunch.experimentalEffectiveAmount,
+      grouping.experimentalEffectiveAmount,
     );
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-group");
     element.addString("(");
     moveCount += element.addElem(
-      this.traverseAlg(bunch.experimentalAlg, {
+      this.traverseAlg(grouping.experimentalAlg, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction,
       }),
     );
-    element.addString(")" + bunch.experimentalRepetitionSuffix);
+    element.addString(")" + grouping.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount: moveCount * Math.abs(bunch.experimentalEffectiveAmount),
+      moveCount: moveCount * Math.abs(grouping.experimentalEffectiveAmount),
       element,
     };
   }

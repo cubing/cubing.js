@@ -1,7 +1,7 @@
 // TODO: move this file somewhere permanent.
 import {
   Alg,
-  Bunch,
+  Grouping,
   Comment,
   Commutator,
   Conjugate,
@@ -28,10 +28,10 @@ class MoveCounter extends TraversalUp<number> {
     return r;
   }
 
-  public traverseBunch(bunch: Bunch): number {
+  public traverseGrouping(grouping: Grouping): number {
     return (
-      this.traverseUnit(bunch.experimentalAlg) *
-      Math.abs(bunch.experimentalEffectiveAmount)
+      this.traverseUnit(grouping.experimentalAlg) *
+      Math.abs(grouping.experimentalEffectiveAmount)
     );
   }
 

@@ -1,4 +1,4 @@
-import { invert, parseAlg } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
 import {
   Cube3D,
   experimentalSetShareAllNewRenderers,
@@ -16,8 +16,8 @@ function demo(visualization: VisualizationFormat): void {
     const div = content.appendChild(document.createElement("div"));
     div.classList.add("case");
     const twistyPlayer = new TwistyPlayer({
-      experimentalSetupAlg: invert(parseAlg(s)),
-      alg: parseAlg(s),
+      alg: Alg.fromString(s),
+      experimentalSetupAnchor: "end",
       visualization,
       experimentalStickering: stickering,
     });

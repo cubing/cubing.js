@@ -1,4 +1,4 @@
-import { Bunch } from "./containers/Bunch";
+import { Grouping } from "./containers/Grouping";
 import { Comment } from "./leaves/Comment";
 import { Commutator } from "./containers/Commutator";
 import { Conjugate } from "./containers/Conjugate";
@@ -8,4 +8,4 @@ import { Pause } from "./leaves/Pause";
 
 export type LeafUnit = Move | Comment | Newline | Pause;
 
-export type Unit = LeafUnit | Bunch | Conjugate | Commutator;
+export type Unit = LeafUnit | Grouping | Conjugate | Commutator;

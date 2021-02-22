@@ -1,6 +1,6 @@
 import {
   Alg,
-  Bunch,
+  Grouping,
   Comment,
   Commutator,
   Conjugate,
@@ -73,9 +73,9 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     );
   }
 
-  public traverseBunch(bunch: Bunch): AlgPartDecoration<P> {
-    const dec = this.traverseAlg(bunch.experimentalAlg);
-    return this.mult(dec, bunch.experimentalEffectiveAmount, [dec]);
+  public traverseGrouping(grouping: Grouping): AlgPartDecoration<P> {
+    const dec = this.traverseAlg(grouping.experimentalAlg);
+    return this.mult(dec, grouping.experimentalEffectiveAmount, [dec]);
   }
 
   public traverseMove(move: Move): AlgPartDecoration<P> {
@@ -250,13 +250,13 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     return false;
   }
 
-  public traverseBunch(bunch: Bunch, wd: WalkerDown<P>): boolean {
+  public traverseGrouping(grouping: Grouping, wd: WalkerDown<P>): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
-    const back = this.domult(wd, bunch.experimentalEffectiveAmount);
+    const back = this.domult(wd, grouping.experimentalEffectiveAmount);
     return this.traverseAlg(
-      bunch.experimentalAlg,
+      grouping.experimentalAlg,
       new WalkerDown(wd.apd.children[0], back),
     );
   }

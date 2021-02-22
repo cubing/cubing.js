@@ -1,4 +1,4 @@
-import { AlgPart, Move } from "../../../alg";
+import { Move } from "../../../alg";
 import { Transformation as KPuzzleState } from "../../../kpuzzle";
 
 export type MillisecondTimestamp = number;

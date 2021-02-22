@@ -7,6 +7,7 @@ export class AlgAttribute {
   string: string;
   value: Alg;
   constructor(initialValue?: Alg) {
+    console.log("attr", initialValue?.toString());
     this.setValue(initialValue ?? this.defaultValue());
   }
 
@@ -22,6 +23,7 @@ export class AlgAttribute {
 
   // Return value indicates if the attribute changed.
   setValue(val: Alg): boolean {
+    console.log("setting", val.toString());
     const str = this.toString(val);
     if (this.string === str) {
       return false;

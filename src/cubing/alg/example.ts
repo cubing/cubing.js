@@ -1,7 +1,7 @@
 // tslint:disable-next-line no-namespace // TODO: nested module
 
 import { Alg } from "./new/Alg";
-import { Bunch } from "./new/units/containers/Bunch";
+import { Grouping } from "./new/units/containers/Grouping";
 import { Commutator } from "./new/units/containers/Commutator";
 import { Conjugate } from "./new/units/containers/Conjugate";
 import { Move } from "./new/units/leaves/Move";
@@ -149,7 +149,7 @@ export const Example = {
 
   AllAlgParts: [
     new Alg([new Move("R", 1), new Move("U", -1)]),
-    new Bunch(new Alg([new Move("F", 1)]), 2),
+    new Grouping(new Alg([new Move("F", 1)]), 2),
     // new Rotation("y", -1),
     new Move("R", 2),
     new Commutator(new Alg([new Move("R", 2)]), new Alg([new Move("U", 2)]), 2),
