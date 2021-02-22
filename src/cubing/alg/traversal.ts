@@ -1,13 +1,13 @@
 import { Alg } from "./new/Alg";
 import { Bunch } from "./new/Bunch";
-import { Comment } from "./new/Comment";
+import { Comment } from "./new/units/leaves/Comment";
 import { Comparable, reverse } from "./new/common";
 import { Commutator } from "./new/Commutator";
-import { Conjugate } from "./new/Conjugate";
+import { Conjugate } from "./new/units/containers/Conjugate";
 import { Move } from "./new/Move";
 import { Newline } from "./new/Newline";
 import { Pause } from "./new/Pause";
-import { Unit } from "./new/Unit";
+import { Unit } from "./new/units/Unit";
 
 function dispatch<DataDown, DataUp>(
   t: TraversalDownUp<DataDown, DataUp>,

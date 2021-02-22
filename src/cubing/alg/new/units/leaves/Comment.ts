@@ -1,5 +1,5 @@
-import { AlgCommon, Comparable } from "./common";
-import { LeafUnit } from "./Unit";
+import { AlgCommon, Comparable } from "../../common";
+import { LeafUnit } from "../Unit";
 
 // TODO: hash
 export class Comment extends AlgCommon<Comment> {

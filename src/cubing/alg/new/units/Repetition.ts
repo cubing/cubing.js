@@ -1,5 +1,5 @@
-import { direct, Repeatable } from "./common";
-import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
+import { direct, Repeatable } from "../common";
+import { MAX_INT, MAX_INT_DESCRIPTION } from "../limits";
 import { LeafUnit } from "./Unit";
 
 export type RepetitionInfo =

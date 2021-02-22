@@ -1,5 +1,5 @@
 import { Alg } from "./Alg";
-import { LeafUnit, Unit } from "./Unit";
+import { LeafUnit, Unit } from "./units/Unit";
 
 export abstract class Comparable {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

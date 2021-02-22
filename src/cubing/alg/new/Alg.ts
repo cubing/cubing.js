@@ -1,8 +1,8 @@
 import { AlgCommon, Comparable, reverse } from "./common";
-import { Newline } from "./Newline";
+import { Newline } from "./units/leaves/Newline";
 import { parseAlg } from "./parse";
-import { Pause } from "./Pause";
-import { LeafUnit, Unit } from "./Unit";
+import { Pause } from "./units/leaves/Pause";
+import { LeafUnit, Unit } from "./units/Unit";
 import { warnOnce } from "./warnOnce";
 
 export type FlexibleAlgSource = string | Iterable<Unit> | Alg;

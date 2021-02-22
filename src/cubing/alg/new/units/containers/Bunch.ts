@@ -1,7 +1,7 @@
-import { Alg } from "./Alg";
-import { AlgCommon, Comparable } from "./common";
-import { Repetition, RepetitionInfo } from "./Repetition";
-import { LeafUnit } from "./Unit";
+import { Alg } from "../../Alg";
+import { AlgCommon, Comparable } from "../../common";
+import { Repetition, RepetitionInfo } from "../Repetition";
+import { LeafUnit } from "../Unit";
 
 export class Bunch extends AlgCommon<Bunch> {
   readonly #repetition: Repetition<Alg>;

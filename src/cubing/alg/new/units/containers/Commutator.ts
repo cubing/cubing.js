@@ -1,7 +1,7 @@
-import { Alg } from "./Alg";
-import { AlgCommon, Comparable, reverse } from "./common";
-import { Repetition, RepetitionInfo } from "./Repetition";
-import { LeafUnit } from "./Unit";
+import { Alg } from "../../Alg";
+import { AlgCommon, Comparable, reverse } from "../../common";
+import { Repetition, RepetitionInfo } from "../Repetition";
+import { LeafUnit } from "../Unit";
 
 export class CommutatorQuantum extends Comparable {
   constructor(public A: Alg, public B: Alg) {

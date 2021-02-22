@@ -2,11 +2,11 @@ import { Alg } from "./Alg";
 import { AlgBuilder } from "./AlgBuilder";
 import { Bunch } from "./Bunch";
 import { Commutator } from "./Commutator";
-import { Conjugate } from "./Conjugate";
+import { Conjugate } from "./units/containers/Conjugate";
 import { Move, MoveQuantum } from "./Move";
 import { Newline } from "./Newline";
 import { Pause } from "./Pause";
-import { RepetitionInfo } from "./Repetition";
+import { RepetitionInfo } from "./units/Repetition";
 
 type StoppingChar = "," | ":" | "]" | ")";
 

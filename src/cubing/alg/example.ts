@@ -3,7 +3,7 @@
 import { Alg } from "./new/Alg";
 import { Bunch } from "./new/Bunch";
 import { Commutator } from "./new/Commutator";
-import { Conjugate } from "./new/Conjugate";
+import { Conjugate } from "./new/units/containers/Conjugate";
 import { Move } from "./new/Move";
 import { Newline } from "./new/Newline";
 import { Pause } from "./new/Pause";

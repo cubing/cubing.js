@@ -1,5 +1,5 @@
-import { AlgCommon, Comparable } from "./common";
-import { LeafUnit } from "./Unit";
+import { AlgCommon, Comparable } from "../../common";
+import { LeafUnit } from "../Unit";
 
 export class Newline extends AlgCommon<Newline> {
   toString(): string {

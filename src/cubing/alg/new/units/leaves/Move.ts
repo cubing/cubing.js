@@ -1,9 +1,9 @@
-import { AlgCommon, Comparable } from "./common";
-import { MAX_INT, MAX_INT_DESCRIPTION } from "./limits";
-import { parseMove, parseMoveQuantum } from "./parse";
-import { Repetition, RepetitionInfo } from "./Repetition";
-import { LeafUnit } from "./Unit";
-import { warnOnce } from "./warnOnce";
+import { AlgCommon, Comparable } from "../../common";
+import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
+import { parseMove, parseMoveQuantum } from "../../parse";
+import { Repetition, RepetitionInfo } from "../Repetition";
+import { LeafUnit } from "../Unit";
+import { warnOnce } from "../../warnOnce";
 
 interface MoveQuantumModifications {
   outerLayer?: number;
