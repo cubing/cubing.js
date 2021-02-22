@@ -9,7 +9,7 @@ import {
   Pause,
   TraversalDownUp,
 } from "../../alg";
-import { direct, IterationDirection } from "../../alg/new/iteration";
+import { direct, IterationDirection } from "../../alg/iteration";
 import { TwistyPlayer } from "../../twisty";
 import { TimeRange } from "../animation/cursor/AlgCursor";
 import { MillisecondTimestamp } from "../animation/cursor/CursorTypes";

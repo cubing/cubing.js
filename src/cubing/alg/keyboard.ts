@@ -1,4 +1,4 @@
-import { Move } from "./new/units/leaves/Move";
+import { Move } from "./units/leaves/Move";
 
 const cubeKeyMapping: { [key: number]: Move } = {
   73: new Move("R"),

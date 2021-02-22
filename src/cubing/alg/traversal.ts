@@ -1,13 +1,13 @@
-import { Alg } from "./new/Alg";
-import { Grouping } from "./new/units/containers/Grouping";
-import { Comparable } from "./new/common";
-import { Commutator } from "./new/units/containers/Commutator";
-import { Move } from "./new/units/leaves/Move";
-import { Newline } from "./new/units/leaves/Newline";
-import { Pause } from "./new/units/leaves/Pause";
-import { Conjugate } from "./new/units/containers/Conjugate";
-import { LineComment } from "./new/units/leaves/LineComment";
-import { Unit } from "./new/units/Unit";
+import { Alg } from "./Alg";
+import { Grouping } from "./units/containers/Grouping";
+import { Comparable } from "./common";
+import { Commutator } from "./units/containers/Commutator";
+import { Move } from "./units/leaves/Move";
+import { Newline } from "./units/leaves/Newline";
+import { Pause } from "./units/leaves/Pause";
+import { Conjugate } from "./units/containers/Conjugate";
+import { LineComment } from "./units/leaves/LineComment";
+import { Unit } from "./units/Unit";
 
 function dispatch<DataDown, DataAlgUp, DataUnitUp>(
   t: TraversalDownUp<DataDown, DataAlgUp, DataUnitUp>,

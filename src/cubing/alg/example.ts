@@ -1,13 +1,13 @@
 // tslint:disable-next-line no-namespace // TODO: nested module
 
-import { Alg } from "./new/Alg";
-import { Grouping } from "./new/units/containers/Grouping";
-import { Commutator } from "./new/units/containers/Commutator";
-import { Conjugate } from "./new/units/containers/Conjugate";
-import { Move } from "./new/units/leaves/Move";
-import { Newline } from "./new/units/leaves/Newline";
-import { Pause } from "./new/units/leaves/Pause";
-import { LineComment } from "./new/units/leaves/LineComment";
+import { Alg } from "./Alg";
+import { Grouping } from "./units/containers/Grouping";
+import { Commutator } from "./units/containers/Commutator";
+import { Conjugate } from "./units/containers/Conjugate";
+import { Move } from "./units/leaves/Move";
+import { Newline } from "./units/leaves/Newline";
+import { Pause } from "./units/leaves/Pause";
+import { LineComment } from "./units/leaves/LineComment";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export const Example = {

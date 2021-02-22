@@ -1,4 +1,4 @@
-import { Alg } from "./new/Alg";
+import { Alg } from "./Alg";
 import { algCubingNetLink } from "./url";
 
 describe("algCubingNetLink", () => {

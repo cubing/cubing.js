@@ -1,4 +1,4 @@
-import { Move } from "./new/Move";
+import { Move } from "./Move";
 import { algPartToStringForTesting, algToString } from "./traversal";
 
 describe("operation", () => {

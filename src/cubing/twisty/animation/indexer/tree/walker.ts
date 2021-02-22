@@ -14,7 +14,7 @@ import {
 import {
   directedGenerator,
   IterationDirection,
-} from "../../../../alg/new/iteration";
+} from "../../../../alg/iteration";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration } from "../../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
