@@ -1,7 +1,7 @@
 import { AlgCommon, Comparable } from "./common";
 
 // TODO: hash
-export class Comment extends AlgCommon {
+export class Comment extends AlgCommon<Comment> {
   readonly #text: string;
 
   constructor(commentText: string) {
@@ -15,6 +15,10 @@ export class Comment extends AlgCommon {
   isIdentical(other: Comparable): boolean {
     const otherAsComment = other as Comment;
     return other.is(Comment) && this.#text === otherAsComment.#text;
+  }
+
+  inverse(): Comment {
+    return this;
   }
 
   toString(): string {

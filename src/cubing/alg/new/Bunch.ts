@@ -2,7 +2,7 @@ import { Alg } from "./Alg";
 import { AlgCommon, Comparable } from "./common";
 import { Repetition, RepetitionInfo } from "./Repetition";
 
-export class Bunch extends AlgCommon {
+export class Bunch extends AlgCommon<Bunch> {
   readonly #repetition: Repetition<Alg>;
 
   constructor(alg: Alg, repetitionInfo: RepetitionInfo) {
@@ -14,6 +14,13 @@ export class Bunch extends AlgCommon {
     const otherAsBunch = other as Bunch;
     return (
       other.is(Bunch) && this.#repetition.isIdentical(otherAsBunch.#repetition)
+    );
+  }
+
+  inverse(): Bunch {
+    return new Bunch(
+      this.#repetition.quantum,
+      this.#repetition.inverse().info(),
     );
   }
 

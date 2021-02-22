@@ -63,4 +63,12 @@ export class Repetition<Q extends Comparable> {
       this.prime === other.prime
     );
   }
+
+  inverse(): Repetition<Q> {
+    return new Repetition<Q>(this.quantum, [this.absAmount, !this.prime]);
+  }
+
+  info(): RepetitionInfo {
+    return [this.absAmount, this.prime];
+  }
 }

@@ -127,7 +127,7 @@ interface MoveModifications {
   repetition?: RepetitionInfo;
 }
 
-export class Move extends AlgCommon {
+export class Move extends AlgCommon<Move> {
   readonly #repetition: Repetition<MoveQuantum>;
 
   constructor(
@@ -156,6 +156,13 @@ export class Move extends AlgCommon {
     const otherAsMove = other as Move;
     return (
       other.is(Move) && this.#repetition.isIdentical(otherAsMove.#repetition)
+    );
+  }
+
+  inverse(): Move {
+    return new Move(
+      this.#repetition.quantum,
+      this.#repetition.inverse().info(),
     );
   }
 

@@ -1,4 +1,4 @@
-import { AlgCommon, Comparable } from "./common";
+import { AlgCommon, Comparable, reverse } from "./common";
 import { Newline } from "./Newline";
 import { parseAlg } from "./parse";
 import { Pause } from "./Pause";
@@ -32,7 +32,7 @@ function toIterable(inputUnits?: FlexibleAlgSource): Iterable<Unit> {
   throw "Invalid unit";
 }
 
-export class Alg extends AlgCommon {
+export class Alg extends AlgCommon<Alg> {
   #units: Iterable<Unit>; // TODO: freeze?
   constructor(alg?: string | Iterable<Unit>) {
     super();
@@ -57,6 +57,11 @@ export class Alg extends AlgCommon {
       }
     }
     return true;
+  }
+
+  inverse(): Alg {
+    // TODO: Handle newLines and comments correctly
+    return new Alg(reverse(Array.from(this.#units)));
   }
 
   concat(input: FlexibleAlgSource): Alg {
@@ -110,13 +115,13 @@ export class Alg extends AlgCommon {
 }
 
 function spaceBetween(u1: Unit, u2: Unit): string {
-  if (u1 instanceof Pause && u2 instanceof Pause) {
+  if (u1.is(Pause) && u2.is(Pause)) {
     return "";
   }
-  if (u1 instanceof Newline || u2 instanceof Newline) {
+  if (u1.is(Newline) || u2.is(Newline)) {
     return "";
   }
-  if (u1 instanceof Comment && !(u2 instanceof Newline)) {
+  if (u1.is(Comment) && !u2.is(Newline)) {
     return "\n"; /// TODO
   }
   return " ";

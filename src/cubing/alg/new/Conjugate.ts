@@ -22,7 +22,7 @@ export class ConjugateQuantum extends Comparable {
   }
 }
 
-export class Conjugate extends AlgCommon {
+export class Conjugate extends AlgCommon<Conjugate> {
   readonly #repetition: Repetition<ConjugateQuantum>;
 
   constructor(A: Alg, B: Alg, repetitionInfo?: RepetitionInfo) {
@@ -38,6 +38,14 @@ export class Conjugate extends AlgCommon {
     return (
       other.is(Conjugate) &&
       this.#repetition.isIdentical(otherAsConjugate.#repetition)
+    );
+  }
+
+  inverse(): Conjugate {
+    return new Conjugate(
+      this.#repetition.quantum.A,
+      this.#repetition.quantum.B.inverse(),
+      this.#repetition.info(),
     );
   }
 

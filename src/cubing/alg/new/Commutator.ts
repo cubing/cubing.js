@@ -22,7 +22,7 @@ export class CommutatorQuantum extends Comparable {
   }
 }
 
-export class Commutator extends AlgCommon {
+export class Commutator extends AlgCommon<Commutator> {
   readonly #repetition: Repetition<CommutatorQuantum>;
 
   constructor(
@@ -42,6 +42,14 @@ export class Commutator extends AlgCommon {
     return (
       other.is(Commutator) &&
       this.#repetition.isIdentical(otherAsCommutator.#repetition)
+    );
+  }
+
+  inverse(): Commutator {
+    return new Commutator(
+      this.#repetition.quantum.B,
+      this.#repetition.quantum.A,
+      this.#repetition.info(),
     );
   }
 
