@@ -1,6 +1,7 @@
 import { AlgCommon, Comparable } from "./common";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
+import { Move } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
 import { LeafUnit, Unit } from "./units/Unit";
@@ -15,8 +16,7 @@ function toIterable(inputUnits?: FlexibleAlgSource): Iterable<Unit> {
   }
 
   if (typeof inputUnits === "string") {
-    throw new Error("unimplemented");
-    // return parseAlg(inputUnits).nestedUnits;
+    return parseAlg(inputUnits).childUnits(); // TODO: something more direct?
   }
 
   // const seq = inputUnits as Sequence;
@@ -65,11 +65,21 @@ export class Alg extends AlgCommon<Alg> {
     return new Alg(reverse(Array.from(this.#units)));
   }
 
+  /** @deprecated */
   *experimentalLeafUnits(
     iterDir: IterationDirection = IterationDirection.Forwards,
   ): Generator<LeafUnit> {
     for (const unit of direct(this.#units, iterDir)) {
       yield* unit.experimentalLeafUnits(iterDir);
+    }
+  }
+
+  /** @deprecated */
+  *experimentalLeafMoves(): Generator<Move> {
+    for (const leaf of this.experimentalLeafUnits()) {
+      if (leaf.is(Move)) {
+        yield leaf as Move;
+      }
     }
   }
 

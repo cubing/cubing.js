@@ -1,32 +1,17 @@
-export {
-  experimentalAppendBlockMove,
-  experimentalConcatAlgs,
-} from "./operation";
+export { Alg } from "./new/Alg";
+export { Bunch } from "./new/units/containers/Bunch";
+export { Comment } from "./new/units/leaves/Comment";
+export { Commutator } from "./new/units/containers/Commutator";
+export { Conjugate } from "./new/units/containers/Conjugate";
+export { Move } from "./new/units/leaves/Move";
+export { Newline } from "./new/units/leaves/Newline";
+export { Pause } from "./new/units/leaves/Pause";
 
-export {
-  TraversalDownUp,
-  TraversalUp,
-  invert,
-  expand,
-  structureEquals,
-  coalesceBaseMoves,
-  algToString,
-  algPartToStringForTesting,
-  blockMoveToString,
-} from "./traversal";
+export { TraversalDownUp, TraversalUp } from "./traversal";
 
 export { Example } from "./example";
 
-export { OldAlgJSON, fromJSON } from "./json";
-
 export { keyToMove } from "./keyboard";
-
-export {
-  validateSiGNMoves,
-  validateFlatAlg,
-  validateSiGNAlg,
-  ValidationError,
-} from "./validation";
 
 export {
   serializeURLParam,
@@ -35,5 +20,3 @@ export {
   AlgCubingNetOptions,
   getAlgURLParam,
 } from "./url";
-
-export { setAlgPartTypeMismatchReportingLevel } from "./debug";

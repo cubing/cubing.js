@@ -2,8 +2,8 @@
 //  Transformations.
 
 import { Transformation } from "./definition_types";
-import { BlockMove } from "../alg";
+import { Move } from "../alg";
 
 export interface MoveNotation {
-  lookupMove(move: BlockMove): Transformation | undefined;
+  lookupMove(move: Move): Transformation | undefined;
 }

@@ -1,22 +1,22 @@
-import { BlockMove, blockMoveToString, expand, Sequence } from "../alg";
+import { Alg, Move } from "../alg";
 import { KPuzzleDefinition, Transformation } from "./definition_types";
-import {
-  multiplyTransformations,
-  identityTransformation,
-  combineTransformations,
-} from "./transformations";
 import { MoveNotation } from "./move_notation";
+import {
+  combineTransformations,
+  identityTransformation,
+  multiplyTransformations,
+} from "./transformations";
 
 // TODO: Move other helpers into the definition.
-export function stateForBlockMove(
+export function stateForMove(
   def: KPuzzleDefinition,
-  blockMove: BlockMove,
+  move: Move,
 ): Transformation {
-  const move = getNotationLayer(def).lookupMove(blockMove);
-  if (!move) {
-    throw new Error("Unknown move: " + blockMoveToString(blockMove));
+  const transformation = getNotationLayer(def).lookupMove(move);
+  if (!transformation) {
+    throw new Error("Unknown move: " + move.toString());
   }
-  return move;
+  return transformation;
 }
 
 export function getNotationLayer(def: KPuzzleDefinition): MoveNotation {
@@ -30,22 +30,16 @@ class KPuzzleMoveNotation implements MoveNotation {
   private cache: { [key: string]: Transformation } = {};
   constructor(public def: KPuzzleDefinition) {}
 
-  public lookupMove(move: BlockMove): Transformation | undefined {
-    const key = blockMoveToString(move);
+  public lookupMove(move: Move): Transformation | undefined {
+    const key = move.toString();
     let r: Transformation | undefined = this.cache[key];
     if (r) {
       return r;
     }
-    const baseMove = new BlockMove(
-      move.outerLayer,
-      move.innerLayer,
-      move.family,
-      1,
-    );
-    const baseKey = blockMoveToString(baseMove);
-    r = this.def.moves[baseKey];
+    const quantumKey = move.quantum.toString();
+    r = this.def.moves[quantumKey];
     if (r) {
-      r = multiplyTransformations(this.def, r, move.amount);
+      r = multiplyTransformations(this.def, r, move.effectiveAmount);
       this.cache[key] = r;
     }
     return r;
@@ -73,18 +67,18 @@ export class KPuzzle {
     return output;
   }
 
-  public applyBlockMove(blockMove: BlockMove): void {
+  public applyMove(move: Move): void {
     this.state = combineTransformations(
       this.definition,
       this.state,
-      stateForBlockMove(this.definition, blockMove),
+      stateForMove(this.definition, move),
     );
   }
 
-  public applyAlg(a: Sequence): void {
-    // TODO: Iterator instead of full expansion.
-    for (const move of expand(a).nestedUnits as BlockMove[]) {
-      this.applyBlockMove(move);
+  public applyAlg(alg: Alg): void {
+    // TODO: use indexer instead of full expansion.
+    for (const move of alg.experimentalLeafMoves()) {
+      this.applyMove(move);
     }
   }
   // TODO: Implement

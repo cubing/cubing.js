@@ -4,7 +4,7 @@ export {
   Transformation,
 } from "./definition_types";
 
-export { KPuzzle, stateForBlockMove } from "./kpuzzle";
+export { KPuzzle, stateForMove } from "./kpuzzle";
 
 export {
   Canonicalizer,

@@ -8,6 +8,8 @@ import { Alg } from "../../cubing/alg/new/Alg";
 import { Bunch } from "../../cubing/alg/new/units/containers/Bunch";
 import { Move } from "../../cubing/alg/new/units/leaves/Move";
 import { experimentalAppendMove } from "../../cubing/alg/operation";
+import { KPuzzle, KPuzzleSVGWrapper } from "../../cubing/kpuzzle";
+import { puzzles } from "../../cubing/puzzles";
 
 console.log(Alg.fromString("R U R'").toString());
 console.log(Alg.fromString("R U .. . R'").toString());
@@ -88,3 +90,13 @@ console.log(
   Array.from(c2.experimentalLeafUnits()),
   new Alg(Array.from(c2.experimentalLeafUnits())).toString(),
 );
+
+(async () => {
+  const def = await puzzles["3x3x3"].def();
+  const svg = await puzzles["3x3x3"].svg();
+  const svgWrapper = new KPuzzleSVGWrapper(def, svg);
+  document.body.appendChild(svgWrapper.element);
+  const kpuzzle = new KPuzzle(def);
+  kpuzzle.applyAlg(new Alg("R U R'"));
+  svgWrapper.draw(def, kpuzzle.state);
+})();

@@ -207,7 +207,7 @@ export class Move extends AlgCommon<Move> {
   }
 
   /** @deprecated */
-  get amount(): number {
+  get effectiveAmount(): number {
     return (
       (this.#repetition.absAmount ?? 1) * (this.#repetition.prime ? -1 : 1)
     );
