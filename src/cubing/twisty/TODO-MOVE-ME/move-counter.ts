@@ -1,13 +1,13 @@
 // TODO: move this file somewhere permanent.
 import {
-  BlockMove,
+  Alg,
+  Bunch,
+  Comment,
   Commutator,
   Conjugate,
+  Move,
+  Newline,
   Pause,
-  Group,
-  NewLine,
-  Comment,
-  Sequence,
   TraversalUp,
 } from "../../alg/index";
 
@@ -15,39 +15,42 @@ import {
  *   For movecount, that understands puzzle rotations.  This code
  *   should be moved to the alg class, probably.
  */
-class MoveCounter extends TraversalUp<number> {
-  constructor(private metric: (move: BlockMove) => number) {
+class MoveCounter extends TraversalUp<number, number> {
+  constructor(private metric: (move: Move) => number) {
     super();
   }
 
-  public traverseSequence(sequence: Sequence): number {
+  public traverseAlg(alg: Alg): number {
     let r = 0;
-    for (let i = 0; i < sequence.nestedUnits.length; i++) {
-      r += this.traverse(sequence.nestedUnits[i]);
+    for (const unit of alg.units()) {
+      r += this.traverseUnit(unit);
     }
     return r;
   }
 
-  public traverseGroup(group: Group): number {
-    return this.traverse(group.nestedSequence) * Math.abs(group.amount);
+  public traverseBunch(bunch: Bunch): number {
+    return (
+      this.traverseUnit(bunch.experimentalAlg) *
+      Math.abs(bunch.experimentalEffectiveAmount)
+    );
   }
 
-  public traverseBlockMove(move: BlockMove): number {
+  public traverseMove(move: Move): number {
     return this.metric(move);
   }
 
   public traverseCommutator(commutator: Commutator): number {
     return (
-      Math.abs(commutator.amount) *
+      Math.abs(commutator.experimentalEffectiveAmount) *
       2 *
-      (this.traverse(commutator.A) + this.traverse(commutator.B))
+      (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
     );
   }
 
   public traverseConjugate(conjugate: Conjugate): number {
     return (
-      Math.abs(conjugate.amount) *
-      (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B))
+      Math.abs(conjugate.experimentalEffectiveAmount) *
+      (2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B))
     );
   }
 
@@ -56,7 +59,7 @@ class MoveCounter extends TraversalUp<number> {
     return 0;
   }
 
-  public traverseNewLine(_newLine: NewLine): number {
+  public traverseNewline(_newLine: Newline): number {
     return 0;
   }
 
@@ -70,7 +73,7 @@ function isCharUppercase(c: string): boolean {
   return "A" <= c && c <= "Z";
 }
 
-function baseMetric(move: BlockMove): number {
+function baseMetric(move: Move): number {
   const fam = move.family;
   if (
     (isCharUppercase(fam[0]) && fam[fam.length - 1] === "v") ||
@@ -85,4 +88,4 @@ function baseMetric(move: BlockMove): number {
 }
 
 const baseCounter = new MoveCounter(baseMetric);
-export const countMoves = baseCounter.traverse.bind(baseCounter);
+export const countMoves = baseCounter.traverseAlg.bind(baseCounter);

@@ -14,6 +14,10 @@ export class Comment extends AlgCommon<Comment> {
     this.#text = commentText;
   }
 
+  get text(): string {
+    return this.#text;
+  }
+
   isIdentical(other: Comparable): boolean {
     const otherAsComment = other as Comment;
     return other.is(Comment) && this.#text === otherAsComment.#text;

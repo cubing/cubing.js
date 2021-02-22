@@ -1,12 +1,12 @@
 // // type ConfigAttributes = Record<string, any>;
 
 import { Vector3 } from "three";
-import { algToString, parseAlg, Sequence } from "../../../alg";
+import { Alg } from "../../../alg";
 
 export class AlgAttribute {
   string: string;
-  value: Sequence;
-  constructor(initialValue?: Sequence) {
+  value: Alg;
+  constructor(initialValue?: Alg) {
     this.setValue(initialValue ?? this.defaultValue());
   }
 
@@ -21,7 +21,7 @@ export class AlgAttribute {
   }
 
   // Return value indicates if the attribute changed.
-  setValue(val: Sequence): boolean {
+  setValue(val: Alg): boolean {
     const str = this.toString(val);
     if (this.string === str) {
       return false;
@@ -31,16 +31,16 @@ export class AlgAttribute {
     return true;
   }
 
-  private defaultValue(): Sequence {
-    return new Sequence([]);
+  private defaultValue(): Alg {
+    return new Alg([]);
   }
 
-  private toValue(s: string): Sequence {
-    return parseAlg(s);
+  private toValue(s: string): Alg {
+    return Alg.fromString(s);
   }
 
-  private toString(s: Sequence): string {
-    return algToString(s);
+  private toString(s: Alg): string {
+    return s.toString();
   }
 }
 

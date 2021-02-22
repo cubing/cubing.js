@@ -56,6 +56,16 @@ export class Commutator extends AlgCommon<Commutator> {
     );
   }
 
+  /** @deprecated */
+  get experimentalEffectiveAmount(): number {
+    return this.#repetition.experimentalEffectiveAmount();
+  }
+
+  /** @deprecated */
+  get experimentalRepetitionSuffix(): string {
+    return this.#repetition.suffix();
+  }
+
   isIdentical(other: Comparable): boolean {
     const otherAsCommutator = other as Commutator;
     return (

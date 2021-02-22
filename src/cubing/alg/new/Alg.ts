@@ -16,7 +16,7 @@ function toIterable(inputUnits?: FlexibleAlgSource): Iterable<Unit> {
   }
 
   if (typeof inputUnits === "string") {
-    return parseAlg(inputUnits).childUnits(); // TODO: something more direct?
+    return parseAlg(inputUnits).units(); // TODO: something more direct?
   }
 
   // const seq = inputUnits as Sequence;
@@ -89,6 +89,14 @@ export class Alg extends AlgCommon<Alg> {
     );
   }
 
+  /** @deprecated */
+  experimentalIsEmpty(): boolean {
+    for (const _ of this.#units) {
+      return false;
+    }
+    return true;
+  }
+
   static fromString(s: string): Alg {
     return parseAlg(s);
   }
@@ -99,7 +107,7 @@ export class Alg extends AlgCommon<Alg> {
   //   return Array.from(this.#units);
   // }
 
-  *childUnits(): Generator<Unit> {
+  *units(): Generator<Unit> {
     for (const unit of this.#units) {
       yield unit;
     }

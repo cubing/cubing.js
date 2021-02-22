@@ -36,12 +36,26 @@ export class ConjugateQuantum extends Comparable {
 export class Conjugate extends AlgCommon<Conjugate> {
   readonly #repetition: Repetition<ConjugateQuantum>;
 
-  constructor(A: Alg, B: Alg, repetitionInfo?: RepetitionInfo) {
+  constructor(
+    public readonly A: Alg,
+    public readonly B: Alg,
+    repetitionInfo?: RepetitionInfo,
+  ) {
     super();
     this.#repetition = new Repetition<ConjugateQuantum>(
       new ConjugateQuantum(A, B),
       repetitionInfo,
     );
+  }
+
+  /** @deprecated */
+  get experimentalEffectiveAmount(): number {
+    return this.#repetition.experimentalEffectiveAmount();
+  }
+
+  /** @deprecated */
+  get experimentalRepetitionSuffix(): string {
+    return this.#repetition.suffix();
   }
 
   isIdentical(other: Comparable): boolean {

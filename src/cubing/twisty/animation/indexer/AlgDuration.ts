@@ -1,4 +1,5 @@
 import {
+  Alg,
   BlockMove,
   Comment,
   Commutator,
@@ -44,7 +45,7 @@ export function ExperimentalScaledDefaultDurationForAmount(
   }
 }
 
-export class AlgDuration extends TraversalUp<Duration> {
+export class AlgDuration extends TraversalUp<Duration, Duration> {
   // TODO: Pass durationForAmount as Down type instead?
   constructor(
     public durationForAmount: (
@@ -54,16 +55,16 @@ export class AlgDuration extends TraversalUp<Duration> {
     super();
   }
 
-  public traverseSequence(sequence: Sequence): Duration {
+  public traverseAlg(alg: Alg): Duration {
     let total = 0;
-    for (const alg of sequence.nestedUnits) {
-      total += this.traverse(alg);
+    for (const unit of alg.units()) {
+      total += this.traverseUnit(unit);
     }
     return total;
   }
 
   public traverseGroup(group: Group): Duration {
-    return group.amount * this.traverse(group.nestedSequence);
+    return group.amount * this.traverseUnit(group.nestedSequence);
   }
 
   public traverseBlockMove(blockMove: BlockMove): Duration {

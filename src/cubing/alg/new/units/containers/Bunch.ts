@@ -19,6 +19,21 @@ export class Bunch extends AlgCommon<Bunch> {
     );
   }
 
+  /** @deprecated */
+  get experimentalAlg(): Alg {
+    return this.#repetition.quantum;
+  }
+
+  /** @deprecated */
+  get experimentalEffectiveAmount(): number {
+    return this.#repetition.experimentalEffectiveAmount();
+  }
+
+  /** @deprecated */
+  get experimentalRepetitionSuffix(): string {
+    return this.#repetition.suffix();
+  }
+
   inverse(): Bunch {
     return new Bunch(
       this.#repetition.quantum,

@@ -46,7 +46,7 @@ console.log(alg);
 
 new Move("R");
 
-for (const unit of alg.childUnits()) {
+for (const unit of alg.units()) {
   console.log({ unit }, unit.toString());
 }
 

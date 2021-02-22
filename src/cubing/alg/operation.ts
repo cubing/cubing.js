@@ -9,7 +9,7 @@ export function experimentalAppendMove(
     mod?: number;
   },
 ): Alg {
-  const oldUnits = Array.from(alg.childUnits());
+  const oldUnits = Array.from(alg.units());
   const oldLastMove = oldUnits[oldUnits.length - 1] as Move | undefined;
   if (
     options?.coalesce &&
@@ -17,7 +17,7 @@ export function experimentalAppendMove(
     oldLastMove.quantum.isIdentical(newMove.quantum)
   ) {
     const newUnits = oldUnits.slice(0, oldUnits.length - 1);
-    let newAmount = oldLastMove.amount + newMove.amount;
+    let newAmount = oldLastMove.effectiveAmount + newMove.effectiveAmount;
     const mod = options?.mod;
     if (mod) {
       newAmount = ((newAmount % mod) + mod) % mod;

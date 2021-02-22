@@ -1,65 +1,58 @@
-import {
-  BlockMove,
-  Comment,
-  Commutator,
-  Conjugate,
-  Group,
-  NewLine,
-  Pause,
-  Sequence,
-  TraversalUp,
-} from "../../../alg";
+import { Move } from "../../../alg";
 import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import { Duration, PuzzlePosition, Timestamp } from "../cursor/CursorTypes";
 
-// TODO: Include Pause.
-class CountAnimatedMoves extends TraversalUp<number> {
-  public traverseSequence(sequence: Sequence): number {
-    let total = 0;
-    for (const part of sequence.nestedUnits) {
-      total += this.traverse(part);
-    }
-    return total;
-  }
+// // TODO: Include Pause, include amounts
+// class CountAnimatedMoves extends TraversalUp<number, number> {
+//   public traverseSequence(sequence: Alg): number {
+//     let total = 0;
+//     for (const part of sequence.childUnits()) {
+//       total += this.traverseUnit(part);
+//     }
+//     return total;
+//   }
 
-  public traverseGroup(group: Group): number {
-    return this.traverseSequence(group.nestedSequence);
-  }
+//   public traverseGroup(bunch: Bunch): number {
+//     return (
+//       this.traverseAlg(bunch.experimentalAlg) *
+//       Math.abs(bunch.experimentalEffectiveAmount)
+//     );
+//   }
 
-  public traverseBlockMove(_blockMove: BlockMove): number {
-    return 1;
-  }
+//   public traverseBlockMove(_blockMove: Move): number {
+//     return 1;
+//   }
 
-  public traverseCommutator(commutator: Commutator): number {
-    return (
-      2 *
-      (this.traverseSequence(commutator.A) +
-        this.traverseSequence(commutator.B))
-    );
-  }
+//   public traverseCommutator(commutator: Commutator): number {
+//     return (
+//       2 *
+//       (this.traverseSequence(commutator.A) +
+//         this.traverseSequence(commutator.B))
+//     );
+//   }
 
-  public traverseConjugate(conjugate: Conjugate): number {
-    return (
-      2 * this.traverseSequence(conjugate.A) +
-      this.traverseSequence(conjugate.B)
-    );
-  }
+//   public traverseConjugate(conjugate: Conjugate): number {
+//     return (
+//       2 * this.traverseSequence(conjugate.A) +
+//       this.traverseSequence(conjugate.B)
+//     );
+//   }
 
-  public traversePause(_pause: Pause): number {
-    return 0;
-  }
+//   public traversePause(_pause: Pause): number {
+//     return 0;
+//   }
 
-  public traverseNewLine(_newLine: NewLine): number {
-    return 0;
-  }
+//   public traverseNewLine(_newLine: Newline): number {
+//     return 0;
+//   }
 
-  public traverseComment(_comment: Comment): number {
-    return 0;
-  }
-}
+//   public traverseComment(_comment: Comment): number {
+//     return 0;
+//   }
+// }
 
 export interface AlgIndexer<P extends PuzzleWrapper> {
-  getMove(index: number): BlockMove | null;
+  getMove(index: number): Move | null;
   indexToMoveStartTimestamp(index: number): Timestamp;
   stateAtIndex(index: number, startTransformation?: State<P>): State<P>;
   transformAtIndex(index: number): State<P>;
@@ -73,10 +66,7 @@ export interface AlgIndexer<P extends PuzzleWrapper> {
   ) => PuzzlePosition;
 }
 
-export function invertBlockMove(bm: BlockMove): BlockMove {
-  return new BlockMove(bm.outerLayer, bm.innerLayer, bm.family, -bm.amount);
-}
-const countAnimatedMovesInstance = new CountAnimatedMoves();
-export const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(
-  countAnimatedMovesInstance,
-);
+// const countAnimatedMovesInstance = new CountAnimatedMoves();
+// export const countAnimatedMoves = countAnimatedMovesInstance.traverse.bind(
+//   countAnimatedMovesInstance,
+// );

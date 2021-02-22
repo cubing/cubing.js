@@ -1,14 +1,14 @@
-import { BlockMove, expand, Sequence, TraversalUp } from "../../../alg";
+import { Alg, TraversalUp } from "../../../alg";
 import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
-import { AlgIndexer, countAnimatedMoves } from "./AlgIndexer";
 import { Duration, Timestamp } from "../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
+import { AlgIndexer } from "./AlgIndexer";
 
 export class SimpleAlgIndexer<P extends PuzzleWrapper>
   implements AlgIndexer<P> {
-  private moves: Sequence;
+  private moves: Alg;
   // TODO: Allow custom `durationFn`.
-  private durationFn: TraversalUp<Duration> = new AlgDuration(
+  private durationFn: TraversalUp<Duration, Duration> = new AlgDuration(
     defaultDurationForAmount,
   );
 

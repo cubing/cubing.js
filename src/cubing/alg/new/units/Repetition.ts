@@ -47,6 +47,11 @@ export class Repetition<Q extends Repeatable> {
     }
   }
 
+  /** @deprecated */
+  experimentalEffectiveAmount(): number {
+    return (this.absAmount ?? 1) * (this.prime ? -1 : 1);
+  }
+
   suffix(): string {
     let s: string = "";
     if (this.absAmount !== null) {
