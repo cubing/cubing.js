@@ -135,14 +135,43 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
       return;
     }
 
+    const newUnits: Unit[] = [];
+    let lastUnit: Unit | null = null;
+    const collapseMoves = options?.collapseMoves ?? true;
+    function appendCollapsed(newUnit: Unit) {
+      if (collapseMoves && lastUnit?.is(Move) && newUnit.is(Move)) {
+        const lastMove = lastUnit as Move;
+        const newMove = newUnit as Move;
+        if (lastMove.quantum.isIdentical(newMove.quantum)) {
+          newUnits.pop();
+          const newAmount = lastMove.effectiveAmount + newMove.effectiveAmount;
+          if (newAmount !== 0) {
+            const coalescedMove = new Move(lastMove.quantum, newAmount);
+            newUnits.push(coalescedMove);
+            lastUnit = coalescedMove;
+          } else {
+            lastUnit = newUnits.slice(-1)[0];
+          }
+        } else {
+          newUnits.push(newUnit);
+          lastUnit = newUnit;
+        }
+      } else {
+        newUnits.push(newUnit);
+        lastUnit = newUnit;
+      }
+    }
+
     const newOptions = {
       depth: options.depth ? options.depth - 1 : null,
     }; // TODO: avoid allocations?
-
     for (const unit of alg.units()) {
       for (const ancestorUnit of this.traverseUnit(unit, newOptions)) {
-        yield ancestorUnit;
+        appendCollapsed(ancestorUnit);
       }
+    }
+    for (const unit of newUnits) {
+      yield unit;
     }
   }
 

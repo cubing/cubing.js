@@ -16,10 +16,12 @@ import { Alg } from "../../cubing/alg";
 // console.log(new Alg("R U U' R").simplify().toString());
 
 console.log(new Alg("R U R2' R U R' R2 U' R' R U' R'").simplify().toString());
+console.log(new Alg("R U R'").simplify().toString());
 
-// const c = new Alg("[R U R2', R U R']");
-// console.log(c.expand().simplify().toString());
-// console.log(c.toString());
+const c = new Alg("[R U R2', R U R']");
+console.log(c.expand().toString());
+console.log(c.expand().simplify().toString());
+console.log(c.toString());
 
 // console.log(new Alg("(R U')2'").expand({ depth: 0 }).toString());
 // // console.log(new Alg("[(R U)2, F]").expand({ depth: 0 }).toString());
