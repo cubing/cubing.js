@@ -7,21 +7,20 @@
 
 `cubing.js` is a collection of Javascript libraries, still under development.
 
-| Library                  | Purpose                                                |
-| ------------------------ | ------------------------------------------------------ |
-| `cubing/alg`             | Parse and transform twisty puzzle algorithms ("algs"). |
-| `cubing/bluetooth`       | Connect to bluetooth twisty puzzles.                   |
-| `cubing/kpuzzle`         | Represent and transform twisty puzzles.                |
-| `cubing/twisty`          | Animate and interact with twisty puzzles.              |
-| `cubing/puzzle-geometry` | Generate new twisty puzzle geometries.                 |
+## Documentation
+
+Documentation is at [`js.cubing.net/cubing/`](https://js.cubing.net/cubing>).  
+The source for the documentation site is currently inside the [`docs`](./docs/) folder of this repository.
 
 ## Development
 
-    git clone https://github.com/cubing/cubing.js && cd cubing.js
-    npm install
-    make dev
+```shell
+git clone https://github.com/cubing/cubing.js && cd cubing.js
+npm install
+make dev
+```
 
-This should open http://localhost:333/ automatically.
+This should open http://localhost:3333/ automatically.
 
 ## License
 
