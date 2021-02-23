@@ -121,87 +121,133 @@ export abstract class TraversalUp<
   public abstract traverseLineComment(comment: LineComment): DataUnitUp;
 }
 
-// // TODO: Test that inverses are bijections.
-// export class CoalesceBaseMoves extends TraversalUp<Unit> {
-//   // TODO: Handle
-//   public traverseAlg(alg: Alg): Alg {
-//     const coalesced: Unit[] = [];
-//     for (const part of alg.nestedUnits) {
-//       if (!matchesAlgType(part, "move")) {
-//         coalesced.push(this.traverseIntoUnit(part));
-//       } else if (coalesced.length > 0) {
-//         const last = coalesced[coalesced.length - 1];
-//         if (
-//           matchesAlgType(last, "move") &&
-//           this.sameBlock(last as Move, part as Move)
-//         ) {
-//           // TODO: This is cube-specific. Perhaps pass the modules as DataDown?
-//           const amount = (last as Move).amount + (part as Move).amount;
-//           coalesced.pop();
-//           if (amount !== 0) {
-//             // We could modify the last element instead of creating a new one,
-//             // but this is safe against shifting coding practices.
-//             // TODO: Figure out if the shoot-in-the-foot risk
-//             // modification is worth the speed.
-//             coalesced.push(
-//               new Move(
-//                 (part as Move).outerLayer,
-//                 (part as Move).innerLayer,
-//                 (part as Move).family,
-//                 amount,
-//               ),
-//             );
-//           }
-//         } else {
-//           coalesced.push(part);
-//         }
-//       } else {
-//         coalesced.push(part);
-//       }
-//     }
-//     return new Alg(coalesced);
-//   }
-
-//   public traverseGrouping(grouping: Grouping): Unit {
-//     return grouping;
-//   }
-
-//   public traverseMove(move: Move): Unit {
-//     return move;
-//   }
-
-//   public traverseCommutator(commutator: Commutator): Unit {
-//     return commutator;
-//   }
-
-//   public traverseConjugate(conjugate: Conjugate): Unit {
-//     return conjugate;
-//   }
-
-//   public traversePause(pause: Pause): Unit {
-//     return pause;
-//   }
-
-//   public traverseNewline(newline: Newline): Unit {
-//     return newline;
-//   }
-
-//   public traverseLineComment(comment: LineComment): Unit {
-//     return comment;
-//   }
-
-//   private sameBlock(moveA: Move, moveB: Move): boolean {
-//     // TODO: Handle layers
-//     return (
-//       moveA.outerLayer === moveB.outerLayer &&
-//       moveA.innerLayer === moveB.innerLayer &&
-//       moveA.family === moveB.family
-//     );
-//   }
+// export interface ExperimentalExpandOptions {
+//   depth?: number | null;
 // }
+export interface SimplifyOptions {
+  collapseMoves?: boolean;
+  depth?: number | null;
+}
 
-// const coalesceBaseMovesInstance = new CoalesceBaseMoves();
+// TODO: Test that inverses are bijections.
+class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
+  // TODO: Handle
+  public *traverseAlg(alg: Alg, options: SimplifyOptions): Generator<Unit> {
+    const collapseMoves = options?.collapseMoves ?? true;
+    if (options.depth === 0) {
+      yield* alg.units();
+      return;
+    }
+    const newUnits: Unit[] = [];
 
-// export const coalesceBaseMoves = coalesceBaseMovesInstance.traverseAlg.bind(
-//   coalesceBaseMovesInstance,
-// ) as (a: Alg) => Alg;
+    let lastUnit: Unit | null = null;
+    function appendCollapsed(newUnit: Unit) {
+      if (collapseMoves && lastUnit?.is(Move) && newUnit.is(Move)) {
+        const lastMove = lastUnit as Move;
+        const newMove = newUnit as Move;
+        if (lastMove.quantum.isIdentical(newMove.quantum)) {
+          newUnits.pop();
+          const newAmount = lastMove.effectiveAmount + newMove.effectiveAmount;
+          if (newAmount !== 0) {
+            newUnits.push(new Move(lastMove.quantum, newAmount));
+          }
+        }
+      } else {
+        newUnits.push(newUnit);
+        lastUnit = newUnit;
+      }
+    }
+
+    const newOptions = {
+      depth: options.depth ? options.depth - 1 : null,
+    }; // TODO: avoid allocations?
+    for (const unit of alg.units()) {
+      for (const ancestorUnit of this.traverseUnit(unit, newOptions)) {
+        appendCollapsed(ancestorUnit);
+      }
+    }
+    for (const unit of newUnits) {
+      yield unit;
+    }
+  }
+
+  public *traverseGrouping(
+    grouping: Grouping,
+    options: SimplifyOptions,
+  ): Generator<Unit> {
+    if (options.depth === 0) {
+      yield grouping;
+      return;
+    }
+    const newOptions = {
+      depth: options.depth ? options.depth - 1 : null,
+    }; // TODO: avoid allocations?
+    yield new Grouping(this.traverseAlg(grouping.experimentalAlg, newOptions));
+  }
+
+  public *traverseMove(move: Move, _options: SimplifyOptions): Generator<Unit> {
+    yield move;
+  }
+
+  public *traverseCommutator(
+    commutator: Commutator,
+    options: SimplifyOptions,
+  ): Generator<Unit> {
+    if (options.depth === 0) {
+      yield commutator;
+      return;
+    }
+    const newOptions = {
+      depth: options.depth ? options.depth - 1 : null,
+    }; // TODO: avoid allocations?
+    yield new Commutator(
+      this.traverseAlg(commutator.A, newOptions),
+      this.traverseAlg(commutator.B, newOptions),
+    );
+  }
+
+  public *traverseConjugate(
+    conjugate: Conjugate,
+    options: SimplifyOptions,
+  ): Generator<Unit> {
+    if (options.depth === 0) {
+      yield conjugate;
+      return;
+    }
+    const newOptions = {
+      depth: options.depth ? options.depth - 1 : null,
+    }; // TODO: avoid allocations?
+    yield new Conjugate(
+      this.traverseAlg(conjugate.A, newOptions),
+      this.traverseAlg(conjugate.B, newOptions),
+    );
+  }
+
+  public *traversePause(
+    pause: Pause,
+    _options: SimplifyOptions,
+  ): Generator<Unit> {
+    yield pause;
+  }
+
+  public *traverseNewline(
+    newline: Newline,
+    _options: SimplifyOptions,
+  ): Generator<Unit> {
+    yield newline;
+  }
+
+  public *traverseLineComment(
+    comment: LineComment,
+    _options: SimplifyOptions,
+  ): Generator<Unit> {
+    yield comment;
+  }
+}
+
+const simplifyInstance = new Simplify();
+
+export const simplify = simplifyInstance.traverseAlg.bind(simplifyInstance) as (
+  alg: Alg,
+  options: SimplifyOptions,
+) => Generator<Unit>;

@@ -1,4 +1,4 @@
-import { Alg } from "../../Alg";
+import { Alg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection, toggleDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
@@ -37,15 +37,23 @@ export class Conjugate extends AlgCommon<Conjugate> {
   readonly #repetition: Repetition<ConjugateQuantum>;
 
   constructor(
-    public readonly A: Alg,
-    public readonly B: Alg,
+    aSource: FlexibleAlgSource,
+    bSource: FlexibleAlgSource,
     repetitionInfo?: RepetitionInfo,
   ) {
     super();
     this.#repetition = new Repetition<ConjugateQuantum>(
-      new ConjugateQuantum(A, B),
+      new ConjugateQuantum(new Alg(aSource), new Alg(bSource)), // TODO
       repetitionInfo,
     );
+  }
+
+  get A(): Alg {
+    return this.#repetition.quantum.A;
+  }
+
+  get B(): Alg {
+    return this.#repetition.quantum.B;
   }
 
   /** @deprecated */

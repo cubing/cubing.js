@@ -1,4 +1,4 @@
-import { Alg } from "../../Alg";
+import { Alg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
@@ -45,15 +45,23 @@ export class Commutator extends AlgCommon<Commutator> {
   readonly #repetition: Repetition<CommutatorQuantum>;
 
   constructor(
-    public readonly A: Alg,
-    public readonly B: Alg,
-    repetitionInfo: RepetitionInfo,
+    aSource: FlexibleAlgSource,
+    bSource: FlexibleAlgSource,
+    repetitionInfo?: RepetitionInfo,
   ) {
     super();
     this.#repetition = new Repetition<CommutatorQuantum>(
-      new CommutatorQuantum(A, B),
+      new CommutatorQuantum(new Alg(aSource), new Alg(bSource)), // TODO
       repetitionInfo,
     );
+  }
+
+  get A(): Alg {
+    return this.#repetition.quantum.A;
+  }
+
+  get B(): Alg {
+    return this.#repetition.quantum.B;
   }
 
   /** @deprecated */

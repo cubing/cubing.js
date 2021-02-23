@@ -1,6 +1,7 @@
 import { AlgCommon, Comparable, experimentalIs } from "./common";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
+import { SimplifyOptions, simplify } from "./traversal";
 import { LineComment } from "./units/leaves/LineComment";
 import { Move } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
@@ -40,7 +41,7 @@ function toIterable(input?: FlexibleAlgSource): Iterable<Unit> {
 
 export class Alg extends AlgCommon<Alg> {
   #units: Iterable<Unit>; // TODO: freeze?
-  constructor(alg?: string | Iterable<Unit>) {
+  constructor(alg?: FlexibleAlgSource) {
     super();
     this.#units = toIterable(alg);
   }
@@ -144,6 +145,23 @@ export class Alg extends AlgCommon<Alg> {
       previousUnit = unit;
     }
     return output;
+  }
+
+  // *experimentalExpand(options: ExperimentalExpandOptions): Generator<Unit> {
+  //   // if (options.depth === 0) {
+  //   //   yield* this.units();
+  //   //   return;
+  //   // }
+  //   // const newOptions = {
+  //   //   depth: options.depth ? options.depth - 1 : null,
+  //   // }; // TODO: avoid allocations?
+  //   // for (const unit of this.#units) {
+  //   //   yield* unit.experimentalExpandIntoAlg(newOptions);
+  //   // }
+  // }
+
+  simplified(options?: SimplifyOptions): Alg {
+    return new Alg(simplify(this, options ?? {}));
   }
 }
 

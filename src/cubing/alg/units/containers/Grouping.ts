@@ -1,4 +1,4 @@
-import { Alg } from "../../Alg";
+import { Alg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
@@ -7,8 +7,9 @@ import { LeafUnit } from "../Unit";
 export class Grouping extends AlgCommon<Grouping> {
   readonly #repetition: Repetition<Alg>;
 
-  constructor(alg: Alg, repetitionInfo: RepetitionInfo) {
+  constructor(algSource: FlexibleAlgSource, repetitionInfo?: RepetitionInfo) {
     super();
+    const alg = new Alg(algSource);
     this.#repetition = new Repetition(alg, repetitionInfo);
   }
 
