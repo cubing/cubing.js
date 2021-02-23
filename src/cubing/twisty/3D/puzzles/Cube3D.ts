@@ -18,8 +18,7 @@ import {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { BlockMove } from "../../../alg";
-import { Transformation } from "../../../kpuzzle";
-import { PGVendoredKPuzzleDefinition } from "../../../puzzle-geometry/interfaces";
+import { KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { smootherStep } from "../../animation/easing";
@@ -478,7 +477,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   });
 
   constructor(
-    private def: PGVendoredKPuzzleDefinition,
+    private def: KPuzzleDefinition,
     cursor?: AlgCursor,
     private scheduleRenderCallback?: () => void,
     options: Cube3DOptions = {},
@@ -505,6 +504,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
     // TODO: Can we construct this directly instead of applying it later? Would that be more code-efficient?
     if (this.options.experimentalStickering) {
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.setAppearance(appearances3x3x3[this.options.experimentalStickering]);
     }
 
@@ -609,6 +611,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       experimentalStickerings[experimentalStickering] // TODO: test this
     ) {
       this.options.experimentalStickering = experimentalStickering;
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.setAppearance(appearances3x3x3[experimentalStickering]);
       this.scheduleRenderCallback!(); // TODO
     }
@@ -626,21 +631,21 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         );
       }
       for (const moveProgress of p.movesInProgress) {
-        const blockMove = moveProgress.move as BlockMove;
-        const turnNormal = axesInfo[familyToAxis[blockMove.family]].vector;
+        const move = moveProgress.move;
+        const turnNormal = axesInfo[familyToAxis[move.family]].vector;
         const moveMatrix = new Matrix4().makeRotationAxis(
           turnNormal,
           (-this.ease(moveProgress.fraction) *
             moveProgress.direction *
-            blockMove.amount *
+            move.effectiveAmount *
             TAU) /
             4,
         );
         for (let i = 0; i < pieces.length; i++) {
-          const k = this.def.moves[blockMove.family][orbit].permutation[i];
+          const k = this.def.moves[move.family][orbit].permutation[i];
           if (
             i !== k ||
-            this.def.moves[blockMove.family][orbit].orientation[i] !== 0
+            this.def.moves[move.family][orbit].orientation[i] !== 0
           ) {
             const j = reid333[orbit].permutation[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);

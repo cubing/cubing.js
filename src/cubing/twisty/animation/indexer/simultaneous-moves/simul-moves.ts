@@ -1,26 +1,25 @@
 import {
-  BlockMove,
-  Comment,
+  LineComment,
   Commutator,
   Conjugate,
-  Group,
-  invert,
-  NewLine,
   Pause,
-  Sequence,
   TraversalUp,
+  Move,
+  Alg,
+  Grouping,
+  Newline,
 } from "../../../../alg";
 import { MillisecondTimestamp } from "../../cursor/CursorTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
 export interface LocalMoveWithRange {
-  move: BlockMove;
+  move: Move;
   msUntilNext: MillisecondTimestamp;
   duration: MillisecondTimestamp;
 }
 
 export interface MoveWithRange {
-  move: BlockMove;
+  move: Move;
   start: MillisecondTimestamp;
   end: MillisecondTimestamp;
 }
@@ -40,7 +39,7 @@ const axisLookup: Record<string, "x" | "y" | "z"> = {
   z: "z",
 };
 
-function isSameAxis(move1: BlockMove, move2: BlockMove): boolean {
+function isSameAxis(move1: Move, move2: Move): boolean {
   return (
     axisLookup[move1.family[0].toLowerCase()] ===
     axisLookup[move2.family[0].toLowerCase()]
@@ -50,40 +49,40 @@ function isSameAxis(move1: BlockMove, move2: BlockMove): boolean {
 // TODO: Replace this with an optimized implementation.
 // TODO: Consider `(x U)` and `(U x F)` to be simultaneous.
 export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
-  public traverseSequence(sequence: Sequence): LocalMoveWithRange[] {
+  public traverseAlg(alg: Alg): LocalMoveWithRange[] {
     const processed: LocalMoveWithRange[][] = [];
-    for (const nestedUnit of sequence.nestedUnits) {
-      processed.push(this.traverse(nestedUnit));
+    for (const nestedUnit of alg.units()) {
+      processed.push(this.traverseUnit(nestedUnit));
     }
     return Array.prototype.concat(...processed);
   }
 
-  public traverseGroupOnce(sequence: Sequence): LocalMoveWithRange[] {
-    if (sequence.nestedUnits.length === 0) {
+  public traverseGroupingOnce(alg: Alg): LocalMoveWithRange[] {
+    if (alg.experimentalIsEmpty()) {
       return [];
     }
 
-    for (const unit of sequence.nestedUnits) {
-      if (unit.type !== "blockMove")
+    for (const unit of alg.units()) {
+      if (!unit.is(Move))
         // TODO: define the type statically on the class?
-        return this.traverse(sequence);
+        return this.traverseAlg(alg);
     }
 
-    const blockMoves = sequence.nestedUnits as BlockMove[];
-    let maxSimulDur = defaultDurationForAmount(blockMoves[0].amount);
-    for (let i = 0; i < blockMoves.length - 1; i++) {
-      for (let j = 1; j < blockMoves.length; j++) {
-        if (!isSameAxis(blockMoves[i], blockMoves[j])) {
-          return this.traverse(sequence);
+    const moves = Array.from(alg.units()) as Move[];
+    let maxSimulDur = defaultDurationForAmount(moves[0].effectiveAmount);
+    for (let i = 0; i < moves.length - 1; i++) {
+      for (let j = 1; j < moves.length; j++) {
+        if (!isSameAxis(moves[i], moves[j])) {
+          return this.traverseAlg(alg);
         }
       }
       maxSimulDur = Math.max(
         maxSimulDur,
-        defaultDurationForAmount(blockMoves[i].amount),
+        defaultDurationForAmount(moves[i].effectiveAmount),
       );
     }
 
-    const localMovesWithRange: LocalMoveWithRange[] = blockMoves.map(
+    const localMovesWithRange: LocalMoveWithRange[] = moves.map(
       (blockMove): LocalMoveWithRange => {
         return {
           move: blockMove,
@@ -98,22 +97,24 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return localMovesWithRange;
   }
 
-  public traverseGroup(group: Group): LocalMoveWithRange[] {
+  public traverseGrouping(grouping: Grouping): LocalMoveWithRange[] {
     const processed: LocalMoveWithRange[][] = [];
 
-    const segmentOnce: Sequence =
-      group.amount > 0 ? group.nestedSequence : invert(group.nestedSequence);
-    for (let i = 0; i < Math.abs(group.amount); i++) {
-      processed.push(this.traverseGroupOnce(segmentOnce));
+    const segmentOnce: Alg =
+      grouping.experimentalEffectiveAmount > 0
+        ? grouping.experimentalAlg
+        : grouping.experimentalAlg.inverse();
+    for (let i = 0; i < Math.abs(grouping.experimentalEffectiveAmount); i++) {
+      processed.push(this.traverseGroupingOnce(segmentOnce));
     }
     return Array.prototype.concat(...processed);
   }
 
-  public traverseBlockMove(blockMove: BlockMove): LocalMoveWithRange[] {
-    const duration = defaultDurationForAmount(blockMove.amount);
+  public traverseMove(move: Move): LocalMoveWithRange[] {
+    const duration = defaultDurationForAmount(move.effectiveAmount);
     return [
       {
-        move: blockMove,
+        move: move,
         msUntilNext: duration,
         duration,
       },
@@ -122,23 +123,23 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
 
   public traverseCommutator(commutator: Commutator): LocalMoveWithRange[] {
     const processed: LocalMoveWithRange[][] = [];
-    const segmentsOnce: Sequence[] =
-      commutator.amount > 0
+    const segmentsOnce: Alg[] =
+      commutator.experimentalEffectiveAmount > 0
         ? [
             commutator.A,
             commutator.B,
-            invert(commutator.A),
-            invert(commutator.B),
+            commutator.A.inverse(),
+            commutator.B.inverse(),
           ]
         : [
             commutator.B,
             commutator.A,
-            invert(commutator.B),
-            invert(commutator.A),
+            commutator.B.inverse(),
+            commutator.A.inverse(),
           ];
-    for (let i = 0; i < Math.abs(commutator.amount); i++) {
+    for (let i = 0; i < Math.abs(commutator.experimentalEffectiveAmount); i++) {
       for (const segment of segmentsOnce) {
-        processed.push(this.traverseGroupOnce(segment));
+        processed.push(this.traverseGroupingOnce(segment));
       }
     }
     return Array.prototype.concat(...processed);
@@ -146,13 +147,13 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
 
   public traverseConjugate(conjugate: Conjugate): LocalMoveWithRange[] {
     const processed: LocalMoveWithRange[][] = [];
-    const segmentsOnce: Sequence[] =
-      conjugate.amount > 0
-        ? [conjugate.A, conjugate.B, invert(conjugate.A)]
-        : [conjugate.A, invert(conjugate.B), invert(conjugate.A)];
-    for (let i = 0; i < Math.abs(conjugate.amount); i++) {
+    const segmentsOnce: Alg[] =
+      conjugate.experimentalEffectiveAmount > 0
+        ? [conjugate.A, conjugate.B, conjugate.A.inverse()]
+        : [conjugate.A, conjugate.B.inverse(), conjugate.A.inverse()];
+    for (let i = 0; i < Math.abs(conjugate.experimentalEffectiveAmount); i++) {
       for (const segment of segmentsOnce) {
-        processed.push(this.traverseGroupOnce(segment));
+        processed.push(this.traverseGroupingOnce(segment));
       }
     }
     return Array.prototype.concat(...processed);
@@ -162,22 +163,22 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return [];
   }
 
-  public traverseNewLine(_newLine: NewLine): LocalMoveWithRange[] {
+  public traverseNewline(_newline: Newline): LocalMoveWithRange[] {
     return [];
   }
 
-  public traverseComment(_comment: Comment): LocalMoveWithRange[] {
+  public traverseLineComment(_comment: LineComment): LocalMoveWithRange[] {
     return [];
   }
 }
 
 const localSimulMovesInstance = new LocalSimulMoves();
 
-const localSimulMoves = localSimulMovesInstance.traverseSequence.bind(
+const localSimulMoves = localSimulMovesInstance.traverseAlg.bind(
   localSimulMovesInstance,
-) as (a: Sequence) => LocalMoveWithRange[];
+) as (a: Alg) => LocalMoveWithRange[];
 
-export function simulMoves(a: Sequence): MoveWithRange[] {
+export function simulMoves(a: Alg): MoveWithRange[] {
   let timestamp = 0;
   const l = localSimulMoves(a).map(
     (localSimulMove: LocalMoveWithRange): MoveWithRange => {

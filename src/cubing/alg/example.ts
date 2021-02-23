@@ -1,48 +1,43 @@
-import {
-  BareBlockMove,
-  Comment,
-  Commutator,
-  Conjugate,
-  Group,
-  NewLine,
-  Pause,
-  Sequence,
-} from "./algorithm";
-
 // tslint:disable-next-line no-namespace // TODO: nested module
+
+import { Alg } from "./Alg";
+import { Grouping } from "./units/containers/Grouping";
+import { Commutator } from "./units/containers/Commutator";
+import { Conjugate } from "./units/containers/Conjugate";
+import { Move } from "./units/leaves/Move";
+import { Newline } from "./units/leaves/Newline";
+import { Pause } from "./units/leaves/Pause";
+import { LineComment } from "./units/leaves/LineComment";
+
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export const Example = {
-  Sune: new Sequence([
-    BareBlockMove("R", 1),
-    BareBlockMove("U", 1),
-    BareBlockMove("R", -1),
-    BareBlockMove("U", 1),
-    BareBlockMove("R", 1),
-    BareBlockMove("U", -2),
-    BareBlockMove("R", -1),
+  Sune: new Alg([
+    new Move("R", 1),
+    new Move("U", 1),
+    new Move("R", -1),
+    new Move("U", 1),
+    new Move("R", 1),
+    new Move("U", -2),
+    new Move("R", -1),
   ]),
 
-  AntiSune: new Sequence([
-    BareBlockMove("R", 1),
-    BareBlockMove("U", 2),
-    BareBlockMove("R", -1),
-    BareBlockMove("U", -1),
-    BareBlockMove("R", 1),
-    BareBlockMove("U", -1),
-    BareBlockMove("R", -1),
+  AntiSune: new Alg([
+    new Move("R", 1),
+    new Move("U", 2),
+    new Move("R", -1),
+    new Move("U", -1),
+    new Move("R", 1),
+    new Move("U", -1),
+    new Move("R", -1),
   ]),
 
-  SuneCommutator: new Sequence([
+  SuneCommutator: new Alg([
     new Commutator(
-      new Sequence([
-        BareBlockMove("R", 1),
-        BareBlockMove("U", 1),
-        BareBlockMove("R", -2),
-      ]),
-      new Sequence([
+      new Alg([new Move("R", 1), new Move("U", 1), new Move("R", -2)]),
+      new Alg([
         new Conjugate(
-          new Sequence([BareBlockMove("R", 1)]),
-          new Sequence([BareBlockMove("U", 1)]),
+          new Alg([new Move("R", 1)]),
+          new Alg([new Move("U", 1)]),
           1,
         ),
       ]),
@@ -50,49 +45,46 @@ export const Example = {
     ),
   ]),
 
-  Niklas: new Sequence([
-    BareBlockMove("R", 1),
-    BareBlockMove("U", -1),
-    BareBlockMove("L", -1),
-    BareBlockMove("U", 1),
-    BareBlockMove("R", -1),
-    BareBlockMove("U", -1),
-    BareBlockMove("L", 1),
-    BareBlockMove("U", 1),
+  Niklas: new Alg([
+    new Move("R", 1),
+    new Move("U", -1),
+    new Move("L", -1),
+    new Move("U", 1),
+    new Move("R", -1),
+    new Move("U", -1),
+    new Move("L", 1),
+    new Move("U", 1),
   ]),
 
-  EPerm: new Sequence([
-    BareBlockMove("x", -1),
+  EPerm: new Alg([
+    new Move("x", -1),
     new Commutator(
-      new Sequence([
+      new Alg([
         new Conjugate(
-          new Sequence([BareBlockMove("R", 1)]),
-          new Sequence([BareBlockMove("U", -1)]),
+          new Alg([new Move("R", 1)]),
+          new Alg([new Move("U", -1)]),
         ),
       ]),
-      new Sequence([BareBlockMove("D", 1)]),
+      new Alg([new Move("D", 1)]),
       1,
     ),
     new Commutator(
-      new Sequence([
-        new Conjugate(
-          new Sequence([BareBlockMove("R", 1)]),
-          new Sequence([BareBlockMove("U", 1)]),
-        ),
+      new Alg([
+        new Conjugate(new Alg([new Move("R", 1)]), new Alg([new Move("U", 1)])),
       ]),
-      new Sequence([BareBlockMove("D", 1)]),
+      new Alg([new Move("D", 1)]),
       1,
     ),
-    BareBlockMove("x", 1),
+    new Move("x", 1),
   ]),
 
-  FURURFCompact: new Sequence([
+  FURURFCompact: new Alg([
     new Conjugate(
-      new Sequence([BareBlockMove("F", 1)]),
-      new Sequence([
+      new Alg([new Move("F", 1)]),
+      new Alg([
         new Commutator(
-          new Sequence([BareBlockMove("U", 1)]),
-          new Sequence([BareBlockMove("R", 1)]),
+          new Alg([new Move("U", 1)]),
+          new Alg([new Move("R", 1)]),
           1,
         ),
       ]),
@@ -100,17 +92,13 @@ export const Example = {
     ),
   ]),
 
-  APermCompact: new Sequence([
+  APermCompact: new Alg([
     new Conjugate(
-      new Sequence([BareBlockMove("R", 2)]),
-      new Sequence([
+      new Alg([new Move("R", 2)]),
+      new Alg([
         new Commutator(
-          new Sequence([BareBlockMove("F", 2)]),
-          new Sequence([
-            BareBlockMove("R", -1),
-            BareBlockMove("B", -1),
-            BareBlockMove("R", 1),
-          ]),
+          new Alg([new Move("F", 2)]),
+          new Alg([new Move("R", -1), new Move("B", -1), new Move("R", 1)]),
           1,
         ),
       ]),
@@ -118,39 +106,39 @@ export const Example = {
     ),
   ]),
 
-  FURURFMoves: new Sequence([
-    BareBlockMove("F", 1),
-    BareBlockMove("U", 1),
-    BareBlockMove("R", 1),
-    BareBlockMove("U", -1),
-    BareBlockMove("R", -1),
-    BareBlockMove("F", -1),
+  FURURFMoves: new Alg([
+    new Move("F", 1),
+    new Move("U", 1),
+    new Move("R", 1),
+    new Move("U", -1),
+    new Move("R", -1),
+    new Move("F", -1),
   ]),
 
-  TPerm: new Sequence([
-    BareBlockMove("R", 1),
-    BareBlockMove("U", 1),
-    BareBlockMove("R", -1),
-    BareBlockMove("U", -1),
-    BareBlockMove("R", -1),
-    BareBlockMove("F", 1),
-    BareBlockMove("R", 2),
-    BareBlockMove("U", -1),
-    BareBlockMove("R", -1),
-    BareBlockMove("U", -1),
-    BareBlockMove("R", 1),
-    BareBlockMove("U", 1),
-    BareBlockMove("R", -1),
-    BareBlockMove("F", -1),
+  TPerm: new Alg([
+    new Move("R", 1),
+    new Move("U", 1),
+    new Move("R", -1),
+    new Move("U", -1),
+    new Move("R", -1),
+    new Move("F", 1),
+    new Move("R", 2),
+    new Move("U", -1),
+    new Move("R", -1),
+    new Move("U", -1),
+    new Move("R", 1),
+    new Move("U", 1),
+    new Move("R", -1),
+    new Move("F", -1),
   ]),
 
-  HeadlightSwaps: new Sequence([
+  HeadlightSwaps: new Alg([
     new Conjugate(
-      new Sequence([BareBlockMove("F", 1)]),
-      new Sequence([
+      new Alg([new Move("F", 1)]),
+      new Alg([
         new Commutator(
-          new Sequence([BareBlockMove("R", 1)]),
-          new Sequence([BareBlockMove("U", 1)]),
+          new Alg([new Move("R", 1)]),
+          new Alg([new Move("U", 1)]),
           3,
         ),
       ]),
@@ -158,25 +146,17 @@ export const Example = {
     ),
   ]),
 
-  TriplePause: new Sequence([new Pause(), new Pause(), new Pause()]),
+  TriplePause: new Alg([new Pause(), new Pause(), new Pause()]),
 
   AllAlgParts: [
-    new Sequence([BareBlockMove("R", 1), BareBlockMove("U", -1)]),
-    new Group(new Sequence([BareBlockMove("F", 1)]), 2),
+    new Alg([new Move("R", 1), new Move("U", -1)]),
+    new Grouping(new Alg([new Move("F", 1)]), 2),
     // new Rotation("y", -1),
-    BareBlockMove("R", 2),
-    new Commutator(
-      new Sequence([BareBlockMove("R", 2)]),
-      new Sequence([BareBlockMove("U", 2)]),
-      2,
-    ),
-    new Conjugate(
-      new Sequence([BareBlockMove("L", 2)]),
-      new Sequence([BareBlockMove("D", -1)]),
-      2,
-    ),
+    new Move("R", 2),
+    new Commutator(new Alg([new Move("R", 2)]), new Alg([new Move("U", 2)]), 2),
+    new Conjugate(new Alg([new Move("L", 2)]), new Alg([new Move("D", -1)]), 2),
     new Pause(),
-    new NewLine(),
-    new Comment("short comment"),
+    new Newline(),
+    new LineComment("line comment"),
   ],
 };

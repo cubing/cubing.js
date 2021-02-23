@@ -1,45 +1,45 @@
-import { BareBlockMove, BlockMove } from "./algorithm";
+import { Move } from "./units/leaves/Move";
 
-const cubeKeyMapping: { [key: number]: BlockMove } = {
-  73: BareBlockMove("R"),
-  75: BareBlockMove("R", -1),
-  87: BareBlockMove("B"),
-  79: BareBlockMove("B", -1),
-  83: BareBlockMove("D"),
-  76: BareBlockMove("D", -1),
-  68: BareBlockMove("L"),
-  69: BareBlockMove("L", -1),
-  74: BareBlockMove("U"),
-  70: BareBlockMove("U", -1),
-  72: BareBlockMove("F"),
-  71: BareBlockMove("F", -1),
+const cubeKeyMapping: { [key: number]: Move } = {
+  73: new Move("R"),
+  75: new Move("R'"),
+  87: new Move("B"),
+  79: new Move("B'"),
+  83: new Move("D"),
+  76: new Move("D'"),
+  68: new Move("L"),
+  69: new Move("L'"),
+  74: new Move("U"),
+  70: new Move("U'"),
+  72: new Move("F"),
+  71: new Move("F'"),
 
-  78: BareBlockMove("x", -1),
-  67: BareBlockMove("l"),
-  82: BareBlockMove("l", -1),
-  85: BareBlockMove("r"),
-  77: BareBlockMove("r", -1),
+  78: new Move("x'"),
+  67: new Move("l"),
+  82: new Move("l'"),
+  85: new Move("r"),
+  77: new Move("r'"),
 
-  88: BareBlockMove("d", 1),
-  188: BareBlockMove("d", -1),
+  88: new Move("d"),
+  188: new Move("d'"),
 
-  84: BareBlockMove("x"),
-  89: BareBlockMove("x"),
-  66: BareBlockMove("x", -1),
-  186: BareBlockMove("y"),
-  59: BareBlockMove("y"),
-  65: BareBlockMove("y", -1), // 186 is WebKit, 59 is Mozilla; see http://unixpapa.com/js/key.html
-  80: BareBlockMove("z"),
-  81: BareBlockMove("z", -1),
+  84: new Move("x"),
+  89: new Move("x"),
+  66: new Move("x'"),
+  186: new Move("y"),
+  59: new Move("y"),
+  65: new Move("y'"), // 186 is WebKit, 59 is Mozilla; see http://unixpapa.com/js/key.html
+  80: new Move("z"),
+  81: new Move("z'"),
 
-  90: BareBlockMove("M", -1),
-  190: BareBlockMove("M", -1),
+  90: new Move("M'"),
+  190: new Move("M'"),
 };
 
 // TODO: options about whether to ignore modifier keys (e.g. alt, ctrl).
 // TODO: Support different mappings.
 // TODO: Return BaseMove instead?
-export function keyToMove(e: KeyboardEvent): BlockMove | null {
+export function keyToMove(e: KeyboardEvent): Move | null {
   if (e.altKey || e.ctrlKey) {
     return null;
   }

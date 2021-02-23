@@ -1,4 +1,4 @@
-import { parseAlg, Sequence } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
@@ -18,9 +18,9 @@ class SVGDisplay {
     return this.svg.element;
   }
 
-  public setAlg(s: Sequence): void {
+  public setAlg(alg: Alg): void {
     this.kpuzzle.reset();
-    this.kpuzzle.applyAlg(s);
+    this.kpuzzle.applyAlg(alg);
     this.svg.drawKPuzzle(this.kpuzzle);
   }
 }
@@ -29,5 +29,5 @@ class SVGDisplay {
   const puzzle = puzzles["3x3x3"];
   const svgDisplay = new SVGDisplay(await puzzle.def(), await puzzle.svg());
   document.body.appendChild(svgDisplay.element());
-  svgDisplay.setAlg(parseAlg("R U R'"));
+  svgDisplay.setAlg(Alg.fromString("R U R'"));
 })();

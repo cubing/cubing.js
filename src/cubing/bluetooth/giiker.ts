@@ -1,6 +1,6 @@
 /* tslint:disable no-bitwise */
 
-import { BareBlockMove, BlockMove } from "../alg";
+import { Move } from "../alg";
 import { Transformation } from "../kpuzzle";
 import {
   BluetoothConfig,
@@ -36,7 +36,7 @@ export const giiKERConfig: BluetoothConfig = {
 };
 
 // TODO: Expose for testing.
-function giikerMoveToBlockMove(face: number, amount: number): BlockMove {
+function giikerMoveToAlgMove(face: number, amount: number): Move {
   switch (amount) {
     case 3:
       amount = -1;
@@ -48,10 +48,10 @@ function giikerMoveToBlockMove(face: number, amount: number): BlockMove {
   }
 
   const family = ["?", "B", "D", "L", "U", "R", "F"][face];
-  return BareBlockMove(family, amount);
+  return new Move(family, amount);
 }
 
-export { giikerMoveToBlockMove as giikerMoveToBlockMoveForTesting };
+export { giikerMoveToAlgMove as giikerMoveToBlockMoveForTesting };
 
 function giikerStateStr(giikerState: number[]): string {
   let str = "";
@@ -269,7 +269,7 @@ export class GiiKERCube extends BluetoothPuzzle {
     debugLog(str);
 
     this.dispatchMove({
-      latestMove: giikerMoveToBlockMove(giikerState[32], giikerState[33]),
+      latestMove: giikerMoveToAlgMove(giikerState[32], giikerState[33]),
       timeStamp: event.timeStamp,
       debug: {
         stateStr: str,

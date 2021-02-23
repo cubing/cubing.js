@@ -4,32 +4,37 @@
 //   use interoperably.  These definitions are not identical to those in
 //   the corresponding classes but they are interoperable.
 
-export class PGVendoredBlockMove {
-  public type: string = "blockMove";
-  public outerLayer?: number;
-  public innerLayer?: number;
-  constructor(
-    outerLayer: number | undefined,
-    innerLayer: number | undefined,
-    public family: string,
-    public amount: number = 1,
-  ) {
-    if (innerLayer) {
-      this.innerLayer = innerLayer;
-      if (outerLayer) {
-        this.outerLayer = outerLayer;
-      }
-    }
-    if (outerLayer && !innerLayer) {
-      throw new Error(
-        "Attempted to contruct block move with outer layer but no inner layer",
-      );
-    }
-  }
-}
+import { Move, MoveQuantum } from "../alg";
+
+export class PGVendoredMove extends Move {}
+export class PGVendoredMoveQuantum extends MoveQuantum {}
+
+// export class PGVendoredMove {
+//   public type: string = "blockMove";
+//   public outerLayer?: number;
+//   public innerLayer?: number;
+//   constructor(
+//     outerLayer: number | undefined,
+//     innerLayer: number | undefined,
+//     public family: string,
+//     public amount: number = 1,
+//   ) {
+//     if (innerLayer) {
+//       this.innerLayer = innerLayer;
+//       if (outerLayer) {
+//         this.outerLayer = outerLayer;
+//       }
+//     }
+//     if (outerLayer && !innerLayer) {
+//       throw new Error(
+//         "Attempted to contruct block move with outer layer but no inner layer",
+//       );
+//     }
+//   }
+// }
 
 export interface PGVendoredMoveNotation {
-  lookupMove(move: PGVendoredBlockMove): Transformation | undefined;
+  lookupMove(move: PGVendoredMove): Transformation | undefined;
 }
 
 export interface PGVendoredOrbitTransformation {

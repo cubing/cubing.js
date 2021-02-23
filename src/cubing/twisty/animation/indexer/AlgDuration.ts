@@ -1,12 +1,12 @@
 import {
-  BlockMove,
-  Comment,
+  Alg,
+  Grouping,
+  LineComment,
   Commutator,
   Conjugate,
-  Group,
-  NewLine,
+  Move,
+  Newline,
   Pause,
-  Sequence,
   TraversalUp,
 } from "../../../alg";
 import { Duration } from "../cursor/CursorTypes";
@@ -54,34 +54,37 @@ export class AlgDuration extends TraversalUp<Duration> {
     super();
   }
 
-  public traverseSequence(sequence: Sequence): Duration {
+  public traverseAlg(alg: Alg): Duration {
     let total = 0;
-    for (const alg of sequence.nestedUnits) {
-      total += this.traverse(alg);
+    for (const unit of alg.units()) {
+      total += this.traverseUnit(unit);
     }
     return total;
   }
 
-  public traverseGroup(group: Group): Duration {
-    return group.amount * this.traverse(group.nestedSequence);
+  public traverseGrouping(grouping: Grouping): Duration {
+    return (
+      grouping.experimentalEffectiveAmount *
+      this.traverseAlg(grouping.experimentalAlg)
+    );
   }
 
-  public traverseBlockMove(blockMove: BlockMove): Duration {
-    return this.durationForAmount(blockMove.amount);
+  public traverseMove(move: Move): Duration {
+    return this.durationForAmount(move.effectiveAmount);
   }
 
   public traverseCommutator(commutator: Commutator): Duration {
     return (
-      commutator.amount *
+      commutator.experimentalEffectiveAmount *
       2 *
-      (this.traverse(commutator.A) + this.traverse(commutator.B))
+      (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
     );
   }
 
   public traverseConjugate(conjugate: Conjugate): Duration {
     return (
-      conjugate.amount *
-      (2 * this.traverse(conjugate.A) + this.traverse(conjugate.B))
+      conjugate.experimentalEffectiveAmount *
+      (2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B))
     );
   }
 
@@ -89,11 +92,11 @@ export class AlgDuration extends TraversalUp<Duration> {
     return this.durationForAmount(1);
   }
 
-  public traverseNewLine(_newLine: NewLine): Duration {
+  public traverseNewline(_newline: Newline): Duration {
     return this.durationForAmount(1);
   }
 
-  public traverseComment(_comment: Comment): Duration {
+  public traverseLineComment(_comment: LineComment): Duration {
     return this.durationForAmount(0);
   }
 }

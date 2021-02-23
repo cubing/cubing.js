@@ -10,7 +10,7 @@ import {
 } from "../../cubing/twisty/dom/TwistyPlayerConfig"; // TODO
 import { TwistyPlayer } from "../../cubing/twisty";
 import { backViewLayouts } from "../../cubing/twisty/dom/viewers/TwistyViewerWrapper";
-import { algToString, parseAlg, Sequence } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
 
 const contentElem = document.querySelector(".content")!;
 
@@ -19,9 +19,9 @@ contentElem.appendChild(twistyPlayer);
 
 const table = contentElem.appendChild(document.createElement("table"));
 
-const algOptions: [string, string, Sequence][] = [
-  ["alg", "alg", parseAlg("R U R'")],
-  ["experimentalSetupAlg", "experimental-setup-alg", parseAlg("")],
+const algOptions: [string, string, Alg][] = [
+  ["alg", "alg", Alg.fromString("R U R'")],
+  ["experimentalSetupAlg", "experimental-setup-alg", Alg.fromString("")],
 ];
 
 for (const [propName, attrName, alg] of algOptions) {
@@ -32,10 +32,10 @@ for (const [propName, attrName, alg] of algOptions) {
 
   const td2 = tr.appendChild(document.createElement("td"));
   const input = td2.appendChild(document.createElement("input"));
-  input.value = algToString(alg);
+  input.value = alg.toString();
   input.placeholder = "(none)";
   const update = () => {
-    (twistyPlayer as any)[propName] = parseAlg(input.value);
+    (twistyPlayer as any)[propName] = Alg.fromString(input.value);
   };
   input.addEventListener("change", update);
   input.addEventListener("keyup", update);

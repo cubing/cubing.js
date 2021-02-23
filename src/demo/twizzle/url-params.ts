@@ -1,9 +1,9 @@
-import { algToString, parseAlg, Sequence } from "../../cubing/alg";
-
 // TODO: implement URL listener.
 
+import { Alg } from "../../cubing/alg";
+
 export interface PartialURLParamValues {
-  alg?: Sequence;
+  alg?: Alg;
   puzzle?: string;
   puzzlegeometry?: string;
   debugShowRenderStats?: boolean;
@@ -12,7 +12,7 @@ export interface PartialURLParamValues {
 export type ParamName = keyof typeof paramDefaults;
 
 interface CompleteURLParamValues extends PartialURLParamValues {
-  alg: Sequence;
+  alg: Alg;
   puzzle: string;
   puzzlegeometry?: string;
   debugShowRenderStats?: boolean;
@@ -20,7 +20,7 @@ interface CompleteURLParamValues extends PartialURLParamValues {
 }
 
 const paramDefaults: CompleteURLParamValues = {
-  alg: new Sequence([]),
+  alg: new Alg(),
   puzzle: "",
   puzzlegeometry: "",
   debugShowRenderStats: false,
@@ -48,7 +48,7 @@ export function getURLParam<K extends ParamName>(
   switch (paramName) {
     case "alg":
       // TODO: can we avoid the `as` cast?
-      return parseAlg(str) as CompleteURLParamValues[K];
+      return Alg.fromString(str) as CompleteURLParamValues[K];
     case "puzzle":
     case "puzzlegeometry":
       // TODO: can we avoid the `as` cast?
@@ -78,7 +78,7 @@ export function setURLParams(newParams: PartialURLParamValues): void {
   for (const [key, value] of Object.entries(newParams)) {
     switch (key) {
       case "alg":
-        setParam(key, algToString(value));
+        setParam(key, value.toString());
         break;
       case "puzzle":
       case "puzzlegeometry":

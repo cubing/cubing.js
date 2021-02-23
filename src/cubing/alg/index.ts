@@ -1,56 +1,18 @@
-export {
-  AlgPart,
-  Unit,
-  WithAmount,
-  Move,
-  Container,
-  Annotation,
-  Sequence,
-  Group,
-  MoveFamily,
-  BlockMove,
-  BareBlockMove,
-  LayerBlockMove,
-  RangeBlockMove,
-  Commutator,
-  Conjugate,
-  Pause,
-  NewLine,
-  Comment,
-} from "./algorithm";
+export { Alg } from "./Alg";
+export { Grouping } from "./units/containers/Grouping";
+export { LineComment } from "./units/leaves/LineComment";
+export { Commutator } from "./units/containers/Commutator";
+export { Conjugate } from "./units/containers/Conjugate";
+export { Move, MoveQuantum } from "./units/leaves/Move";
+export { Newline } from "./units/leaves/Newline";
+export { Pause } from "./units/leaves/Pause";
+export { Unit } from "./units/Unit";
 
-export {
-  modifiedBlockMove,
-  experimentalAppendBlockMove,
-  experimentalConcatAlgs,
-} from "./operation";
-
-export {
-  TraversalDownUp,
-  TraversalUp,
-  invert,
-  expand,
-  structureEquals,
-  coalesceBaseMoves,
-  algToString,
-  algPartToStringForTesting,
-  blockMoveToString,
-} from "./traversal";
+export { TraversalDownUp, TraversalUp } from "./traversal";
 
 export { Example } from "./example";
 
-export { AlgJSON, fromJSON } from "./json";
-
-export { parse, parseAlg } from "./parser";
-
 export { keyToMove } from "./keyboard";
-
-export {
-  validateSiGNMoves,
-  validateFlatAlg,
-  validateSiGNAlg,
-  ValidationError,
-} from "./validation";
 
 export {
   serializeURLParam,
@@ -59,5 +21,3 @@ export {
   AlgCubingNetOptions,
   getAlgURLParam,
 } from "./url";
-
-export { setAlgPartTypeMismatchReportingLevel } from "./debug";

@@ -1,7 +1,7 @@
 /* tslint:disable no-bitwise */
 
 import { Quaternion } from "three";
-import { BareBlockMove, BlockMove } from "../alg";
+import { Move } from "../alg";
 import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
 import { puzzles } from "../puzzles";
 import {
@@ -17,19 +17,19 @@ const DEFAULT_INTERVAL_MS = 150;
 // Number of latest moves provided by the Gan 356i.
 const MAX_LATEST_MOVES = 6;
 
-const ganMoveToBlockMove: { [i: number]: BlockMove } = {
-  0x00: BareBlockMove("U"),
-  0x02: BareBlockMove("U", -1),
-  0x03: BareBlockMove("R"),
-  0x05: BareBlockMove("R", -1),
-  0x06: BareBlockMove("F"),
-  0x08: BareBlockMove("F", -1),
-  0x09: BareBlockMove("D"),
-  0x0b: BareBlockMove("D", -1),
-  0x0c: BareBlockMove("L"),
-  0x0e: BareBlockMove("L", -1),
-  0x0f: BareBlockMove("B"),
-  0x11: BareBlockMove("B", -1),
+const ganMoveToBlockMove: { [i: number]: Move } = {
+  0x00: new Move("U"),
+  0x02: new Move("U", -1),
+  0x03: new Move("R"),
+  0x05: new Move("R", -1),
+  0x06: new Move("F"),
+  0x08: new Move("F", -1),
+  0x09: new Move("D"),
+  0x0b: new Move("D", -1),
+  0x0c: new Move("L"),
+  0x0e: new Move("L", -1),
+  0x0f: new Move("B"),
+  0x11: new Move("B", -1),
 };
 
 let homeQuatInverse: Quaternion | null = null;
@@ -156,7 +156,7 @@ class PhysicalState {
   // Due to the design of the Gan356i protocol, it's common to query for the
   // latest physical state and find 0 moves have been performed since the last
   // query. Therefore, it's useful to allow 0 as an argument.
-  public latestMoves(n: number): BlockMove[] {
+  public latestMoves(n: number): Move[] {
     if (n < 0 || n > MAX_LATEST_MOVES) {
       throw new Error(`Must ask for 0 to 6 latest moves. (Asked for ${n})`);
     }
@@ -406,7 +406,7 @@ export class GanCube extends BluetoothPuzzle {
     }
     for (const move of physicalState.latestMoves(numInterveningMoves)) {
       // console.log(move);
-      this.kpuzzle.applyBlockMove(move);
+      this.kpuzzle.applyMove(move);
       this.dispatchMove({
         latestMove: move,
         timeStamp: physicalState.timeStamp,

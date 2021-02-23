@@ -1,15 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&family=Ubuntu:ital,wght@0,400;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&family=Ubuntu:ital,wght@0,400;0,700;1,400&display=swap");
 
-html, body {
+html,
+body {
   margin: 0;
   font-family: Ubuntu, Tahoma, sans-serif;
   line-height: 1.25em;
 }
 
 body {
-  background-color: #EAEAEA;
-  background-image: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
-    linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
+  background-color: #eaeaea;
+  background-image: linear-gradient(
+      45deg,
+      #ddd 25%,
+      transparent 25%,
+      transparent 75%,
+      #ddd 75%,
+      #ddd
+    ),
+    linear-gradient(
+      45deg,
+      #ddd 25%,
+      transparent 25%,
+      transparent 75%,
+      #ddd 75%,
+      #ddd
+    );
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
 }
@@ -44,6 +59,10 @@ content {
   background: #4285f4;
   color: white;
   font-size: 2em;
+}
+
+#heading a {
+  color: currentColor;
 }
 
 #heading.heading-with-player {
@@ -94,6 +113,28 @@ code.sample {
   line-height: 1.25em;
   overflow: hidden;
   overflow-x: auto;
+}
+
+code.output {
+  display: block;
+  padding: 1em;
+  margin: 0.5rem 0;
+  background: #4285f422;
+  line-height: 1.25em;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+code.sample.output {
+  background: #4285f4;
+  color: white;
+}
+
+code.sample.output span::before {
+  content: "⇒ ";
+  opacity: 0.3;
+  font-size: 2em;
+  vertical-align: -20%;
 }
 
 code.sample span {

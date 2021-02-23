@@ -1,17 +1,8 @@
 import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import {
-  algToString,
-  BareBlockMove,
-  BlockMove,
-  experimentalAppendBlockMove,
-  modifiedBlockMove,
-  MoveFamily,
-  parseAlg as algparse,
-  Sequence,
-} from "../../cubing/alg/index";
-import { parseAlg } from "../../cubing/alg/parser";
+import { Alg, Move } from "../../cubing/alg/index";
+import { experimentalAppendMove } from "../../cubing/alg/operation";
 import {
   connect,
   debugKeyboardConnect,
@@ -104,7 +95,7 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
   return true;
 }
 
-function getModValueForMove(move: BlockMove): number {
+function getModValueForMove(move: Move): number {
   if (!pg) {
     return 1;
   }
@@ -134,9 +125,9 @@ function intersectionToMove(
   point: Vector3,
   event: MouseEvent,
   rightClick: boolean,
-): BlockMove | null {
+): Move | null {
   const allowRotatingGrips = event.ctrlKey || event.metaKey;
-  let bestGrip: MoveFamily = stickerDat.axis[0][1];
+  let bestGrip: string = stickerDat.axis[0][1];
   let bestProduct: number = 0;
   for (const axis of stickerDat.axis) {
     const product = point.dot(new Vector3(...axis[0]));
@@ -148,16 +139,16 @@ function intersectionToMove(
       bestGrip = axis[1];
     }
   }
-  let move = BareBlockMove(bestGrip);
+  let move = new Move(bestGrip);
   if (bestProduct > 0) {
     if (event.shiftKey) {
       if (getCheckbox("blockmoves")) {
-        move = modifiedBlockMove(move, { family: bestGrip.toLowerCase() });
+        move = move.modified({ family: bestGrip.toLowerCase() });
       } else {
-        move = modifiedBlockMove(move, { innerLayer: 2 });
+        move = move.modified({ innerLayer: 2 });
       }
     } else if ((event.ctrlKey || event.metaKey) && gripdepth[bestGrip]) {
-      move = modifiedBlockMove(move, { family: bestGrip + "v" });
+      move = move.modified({ family: bestGrip + "v" });
     }
   }
   if (pg) {
@@ -168,7 +159,7 @@ function intersectionToMove(
     move = move2;
   }
   if (getModValueForMove(move) !== 2 && !rightClick) {
-    move = modifiedBlockMove(move, { amount: -move.amount });
+    move = move.inverse();
   }
   return move;
 }
@@ -203,8 +194,8 @@ function trimEq(a: string, b: string): boolean {
   return a.trim() === b.trim();
 }
 
-function updateMoveCount(alg?: Sequence): void {
-  const len = countMoves(alg ? alg : parseAlg(lastalgo));
+function updateMoveCount(alg?: Alg): void {
+  const len = countMoves(alg ? alg : Alg.fromString(lastalgo));
   const mc = document.getElementById("movecount");
   if (mc) {
     mc.innerText = "Moves: " + len;
@@ -253,7 +244,7 @@ function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
 }
 
 async function setAlgo(str: string, writeback: boolean): Promise<void> {
-  let seq: Sequence = algparse("");
+  let alg: Alg = new Alg();
   const elem = document.querySelector("#twisty-wrapper");
   if (elem) {
     // this part should never throw, and we should not need to do
@@ -263,15 +254,15 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       twisty = new TwistyPlayer(
         {
           puzzle: "custom",
-          alg: new Sequence([]),
+          alg: new Alg(),
           visualization: "PG3D",
           backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
           experimentalCameraPosition: initialCameraPos,
           viewerLink: "none",
         },
         legacyExperimentalPG3DViewConfig(),
-        (alg: Sequence) => {
-          markInvalidAlg(algToString(alg));
+        (alg: Alg) => {
+          markInvalidAlg(alg.toString());
         },
       );
       twisty.timeline.tempoScale = tempomult;
@@ -322,14 +313,14 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
     str = str.trim();
     algoinput.style.backgroundColor = "";
     try {
-      seq = algparse(str);
-      str = algToString(seq);
-      twisty.alg = seq;
+      alg = Alg.fromString(str);
+      str = alg.toString();
+      twisty.alg = alg;
       if (!writeback) {
         twisty.timeline.jumpToEnd();
       }
-      updateMoveCount(seq);
-      setURLParams({ alg: seq });
+      updateMoveCount(alg);
+      setURLParams({ alg: alg });
     } catch (e) {
       markInvalidAlg(str);
     }
@@ -695,12 +686,7 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
   if (intersects.length > 0) {
     if (pg) {
       const mv2 = pg.notationMapper.notationToExternal(
-        new BlockMove(
-          undefined,
-          undefined,
-          intersects[0].object.userData.name,
-          1,
-        ),
+        new Move(intersects[0].object.userData.name),
       );
       if (mv2 !== null) {
         canvas.title = mv2.family;
@@ -712,16 +698,14 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
 }
 
 // TODO: Animate latest move but cancel algorithm moves.
-function addMove(move: BlockMove): void {
-  const currentAlg = algparse(algoinput.value);
-  const newAlg = experimentalAppendBlockMove(
-    currentAlg,
-    move,
-    true,
-    getModValueForMove(move),
-  );
+function addMove(move: Move): void {
+  const currentAlg = Alg.fromString(algoinput.value);
+  const newAlg = experimentalAppendMove(currentAlg, move, {
+    coalesce: true,
+    mod: getModValueForMove(move),
+  });
   // TODO: Avoid round-trip through string?
-  lastalgo = algToString(newAlg);
+  lastalgo = newAlg.toString();
   twisty.experimentalAddMove(move, true, true);
   algoinput.value = lastalgo;
   updateMoveCount(newAlg);
@@ -808,7 +792,7 @@ export function setup(): void {
       dowork(command);
     };
   }
-  const qalg = algToString(getURLParam("alg"));
+  const qalg = getURLParam("alg").toString();
   if (qalg !== "") {
     algoinput.value = qalg;
     lastalgo = qalg;

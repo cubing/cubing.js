@@ -1,4 +1,4 @@
-import { parseAlg, Sequence } from "../../alg";
+import { Alg } from "../../alg";
 import {
   combineTransformations,
   invertTransformation,
@@ -31,10 +31,10 @@ const puzzleOrientationCache: Transformation[][] = new Array(6)
 // We use a new block to avoid keeping a reference to temporary vars.
 {
   const orientationKpuzzle = new KPuzzle(def);
-  const uAlgs: Sequence[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
-    parseAlg(s),
+  const uAlgs: Alg[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
+    Alg.fromString(s),
   );
-  const yAlg = parseAlg("y");
+  const yAlg = new Alg("y");
   for (const uAlg of uAlgs) {
     orientationKpuzzle.reset();
     orientationKpuzzle.applyAlg(uAlg);

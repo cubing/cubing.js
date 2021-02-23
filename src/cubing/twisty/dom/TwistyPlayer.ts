@@ -1,12 +1,6 @@
 import { Vector3 } from "three";
-import {
-  algToString,
-  BlockMove,
-  experimentalAppendBlockMove,
-  invert,
-  Sequence,
-} from "../../alg";
-import { parseAlg } from "../../alg/parser";
+import { Alg, Move } from "../../alg";
+import { experimentalAppendMove } from "../../alg/operation";
 import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
@@ -76,6 +70,9 @@ interface PendingPuzzleUpdate {
 // <twisty-player>
 export class TwistyPlayer extends ManagedCustomElement {
   #config: TwistyPlayerConfig;
+  get _________config(): TwistyPlayerConfig {
+    return this.#config;
+  }
 
   timeline: Timeline;
   cursor: AlgCursor | null;
@@ -94,8 +91,8 @@ export class TwistyPlayer extends ManagedCustomElement {
   #hackyPendingFinalMoveCoalesce: boolean = false;
 
   #viewerWrapper: TwistyViewerWrapper;
-  public legacyExperimentalCoalesceModFunc: (mv: BlockMove) => number = (
-    _mv: BlockMove,
+  public legacyExperimentalCoalesceModFunc: (move: Move) => number = (
+    _move: Move,
   ): number => 0;
 
   #controlsClassListManager: ClassListManager<
@@ -106,9 +103,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   constructor(
     initialConfig: TwistyPlayerInitialConfig = {},
     legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
-    private experimentalInvalidInitialAlgCallback: (
-      alg: Sequence,
-    ) => void = () => {
+    private experimentalInvalidInitialAlgCallback: (alg: Alg) => void = () => {
       // stub
     },
   ) {
@@ -127,40 +122,38 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#legacyExperimentalPG3DViewConfig = legacyExperimentalPG3DViewConfig;
   }
 
-  set alg(seq: Sequence) {
+  set alg(newAlg: Alg) {
     // TODO: do validation for other algs as well.
-    if (seq?.type !== "sequence") {
-      // TODO: document `.setAttribute("experimental-setup-alg", "R U R'")` as a workaround.
+    if (typeof newAlg === "string") {
       console.warn(
         "`alg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
-      seq = parseAlg((seq as unknown) as string) as Sequence;
+      newAlg = new Alg((newAlg as unknown) as string);
     }
-    this.#config.attributes["alg"].setValue(seq);
-    this.cursor?.setAlg(seq); // TODO: can we ensure the cursor already exists?
+    this.#config.attributes["alg"].setValue(newAlg);
+    this.cursor?.setAlg(newAlg); // TODO: can we ensure the cursor already exists?
     this.setCursorStartState();
   }
 
-  get alg(): Sequence {
+  get alg(): Alg {
     return this.#config.attributes["alg"].value;
   }
 
   /** @deprecated */
-  set experimentalSetupAlg(seq: Sequence) {
+  set experimentalSetupAlg(newAlg: Alg) {
     // TODO: do validation for other algs as well.
-    if (seq?.type !== "sequence") {
-      // TODO: document `.setAttribute("experimental-setup-alg", "R U R'")` as a workaround.
+    if (typeof newAlg === "string") {
       console.warn(
         "`experimentalSetupAlg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
-      seq = parseAlg((seq as unknown) as string) as Sequence;
+      newAlg = new Alg((newAlg as unknown) as string);
     }
-    this.#config.attributes["experimental-setup-alg"].setValue(seq);
+    this.#config.attributes["experimental-setup-alg"].setValue(newAlg);
     this.setCursorStartState();
   }
 
   /** @deprecated */
-  get experimentalSetupAlg(): Sequence {
+  get experimentalSetupAlg(): Alg {
     return this.#config.attributes["experimental-setup-alg"].value;
   }
 
@@ -173,12 +166,12 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
-  private cursorStartAlg(): Sequence {
-    let seq = this.experimentalSetupAlg;
+  private cursorStartAlg(): Alg {
+    let startAlg = this.experimentalSetupAlg;
     if (this.experimentalSetupAnchor === "end") {
-      seq = new Sequence(seq.nestedUnits.concat(invert(this.alg).nestedUnits));
+      startAlg = startAlg.concat(this.alg.inverse());
     }
-    return seq; // TODO
+    return startAlg; // TODO
   }
 
   /** @deprecated */
@@ -439,13 +432,13 @@ export class TwistyPlayer extends ManagedCustomElement {
       "https://experiments.cubing.net/cubing.js/alg.cubing.net/index.html",
     );
     // const url = new URL("http://localhost:3333/alg.cubing.net/index.html");
-    if (this.alg.nestedUnits.length > 0) {
-      url.searchParams.set("alg", algToString(this.alg));
+    if (!this.alg.experimentalIsEmpty()) {
+      url.searchParams.set("alg", this.alg.toString());
     }
-    if (this.experimentalSetupAlg.nestedUnits.length > 0) {
+    if (!this.experimentalSetupAlg.experimentalIsEmpty()) {
       url.searchParams.set(
         "experimental-setup-alg",
-        algToString(this.experimentalSetupAlg),
+        this.experimentalSetupAlg.toString(),
       );
     }
     if (this.puzzle !== "3x3x3") {
@@ -529,6 +522,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   private setCursor(cursor: AlgCursor): void {
     const oldCursor = this.cursor;
     this.cursor = cursor;
+    this.cursor.setAlg(this.alg);
     this.setCursorStartState();
     this.timeline.addCursor(cursor);
     if (oldCursor) {
@@ -586,14 +580,14 @@ export class TwistyPlayer extends ManagedCustomElement {
       cursor = new AlgCursor(
         this.timeline,
         def,
-        new Sequence([]),
-        new Sequence([]),
+        this.alg,
+        this.cursorStartAlg(),
       );
     }
     this.setCursor(cursor);
     if (
       initial &&
-      this.experimentalSetupAlg.nestedUnits.length === 0 &&
+      this.experimentalSetupAlg.experimentalIsEmpty() &&
       this.experimentalSetupAnchor !== "end"
     ) {
       this.timeline.jumpToEnd();
@@ -652,7 +646,7 @@ export class TwistyPlayer extends ManagedCustomElement {
               if (pendingPuzzleUpdate.cancelled) {
                 return;
               }
-              def = pg.writekpuzzle(true);
+              def = pg.writekpuzzle(true) as KPuzzleDefinition; // TODO
               stickerDat = pg.get3d();
             } else {
               throw "Unimplemented!";
@@ -724,7 +718,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   // TODO: Handle playing the new move vs. just modying the alg.
   // Note: setting `coalesce`
   experimentalAddMove(
-    move: BlockMove,
+    move: Move,
     coalesce: boolean = false,
     coalesceDelayed: boolean = false,
   ): void {
@@ -732,12 +726,16 @@ export class TwistyPlayer extends ManagedCustomElement {
       this.hackyCoalescePending();
     }
     const oldNumMoves = countMoves(this.alg); // TODO
-    const newAlg = experimentalAppendBlockMove(
-      this.alg,
-      move,
-      coalesce && !coalesceDelayed,
-      this.legacyExperimentalCoalesceModFunc(move),
-    );
+    const newAlg = experimentalAppendMove(this.alg, move, {
+      coalesce: coalesce && !coalesceDelayed,
+      mod: this.legacyExperimentalCoalesceModFunc(move),
+    });
+    // const newAlg = experimentalAppendBlockMove(
+    //   this.alg,
+    //   move,
+    //   coalesce && !coalesceDelayed,
+    //   this.legacyExperimentalCoalesceModFunc(move),
+    // );
     if (coalesce && coalesceDelayed) {
       this.#hackyPendingFinalMoveCoalesce = true;
     }
@@ -764,17 +762,19 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private hackyCoalescePending(): void {
-    const units = this.alg.nestedUnits;
+    const units = Array.from(this.alg.units());
     const length = units.length;
     const pending = this.#hackyPendingFinalMoveCoalesce;
     this.#hackyPendingFinalMoveCoalesce = false;
-    if (pending && length > 1 && units[length - 1].type === "blockMove") {
-      const finalMove = units[length - 1] as BlockMove;
-      const newAlg = experimentalAppendBlockMove(
-        new Sequence(units.slice(0, length - 1)),
+    if (pending && length > 1 && units[length - 1].is(Move)) {
+      const finalMove = units[length - 1] as Move;
+      const newAlg = experimentalAppendMove(
+        new Alg(units.slice(0, length - 1)),
         finalMove,
-        true,
-        this.legacyExperimentalCoalesceModFunc(finalMove),
+        {
+          coalesce: true,
+          mod: this.legacyExperimentalCoalesceModFunc(finalMove),
+        },
       );
       this.alg = newAlg;
     }

@@ -3,18 +3,13 @@
  *  combining moves (fully respecting commuting moves), and you can
  *  generate canonical sequences efficiently.
  */
+import { Alg, Move } from "../alg";
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import {
   areTransformationsEquivalent,
   combineTransformations,
   identityTransformation,
 } from "./transformations";
-import {
-  modifiedBlockMove,
-  blockMoveToString,
-  BlockMove,
-  Sequence,
-} from "../alg";
 
 class InternalMove {
   constructor(public base: number, public twist: number) {}
@@ -86,15 +81,14 @@ export class Canonicalizer {
     }
   }
 
-  public blockMoveToInternalMove(mv: BlockMove): InternalMove {
-    const basemove = modifiedBlockMove(mv, { amount: 1 });
-    const s = blockMoveToString(basemove);
-    if (!(s in this.def.moves)) {
-      throw new Error("! move " + s + " not in def.");
+  public blockMoveToInternalMove(move: Move): InternalMove {
+    const quantumMoveStr = move.quantum.toString();
+    if (!(quantumMoveStr in this.def.moves)) {
+      throw new Error("! move " + quantumMoveStr + " not in def.");
     }
-    const ind = this.moveindex[s];
+    const ind = this.moveindex[quantumMoveStr];
     const mod = this.moveorder[ind];
-    let tw = mv.amount % mod;
+    let tw = move.effectiveAmount % mod; // TODO
     if (tw < 0) {
       tw = (tw + mod) % mod;
     }
@@ -104,24 +98,24 @@ export class Canonicalizer {
   // Sequence must be simple sequence of block moves
   // this one does not attempt to merge.
   public sequenceToSearchSequence(
-    s: Sequence,
+    alg: Alg,
     tr?: Transformation,
   ): SearchSequence {
     const ss = new SearchSequence(this, tr);
-    for (const mv of s.nestedUnits) {
-      ss.appendOneMove(this.blockMoveToInternalMove(mv as BlockMove));
+    for (const move of alg.experimentalLeafMoves()) {
+      ss.appendOneMove(this.blockMoveToInternalMove(move as Move));
     }
     return ss;
   }
 
   // Sequence to simple sequence, with merging.
   public mergeSequenceToSearchSequence(
-    s: Sequence,
+    alg: Alg,
     tr?: Transformation,
   ): SearchSequence {
     const ss = new SearchSequence(this, tr);
-    for (const mv of s.nestedUnits) {
-      ss.mergeOneMove(this.blockMoveToInternalMove(mv as BlockMove));
+    for (const move of alg.experimentalLeafMoves()) {
+      ss.mergeOneMove(this.blockMoveToInternalMove(move));
     }
     return ss;
   }

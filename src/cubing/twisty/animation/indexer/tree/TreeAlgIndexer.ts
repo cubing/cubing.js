@@ -1,15 +1,15 @@
-import { BlockMove, Sequence } from "../../../../alg";
+import { Alg, Move } from "../../../../alg";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration, Timestamp } from "../../cursor/CursorTypes";
-import { AlgIndexer, invertBlockMove } from "../AlgIndexer";
+import { AlgIndexer } from "../AlgIndexer";
 import { AlgPartDecoration, AlgWalker, DecoratorConstructor } from "./walker";
 
 export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
   private decoration: AlgPartDecoration<PuzzleWrapper>;
   private walker: AlgWalker<PuzzleWrapper>;
-  constructor(private puzzle: PuzzleWrapper, alg: Sequence) {
+  constructor(private puzzle: PuzzleWrapper, alg: Alg) {
     const deccon = new DecoratorConstructor<PuzzleWrapper>(this.puzzle);
-    this.decoration = deccon.traverse(alg);
+    this.decoration = deccon.traverseAlg(alg);
     this.walker = new AlgWalker<PuzzleWrapper>(
       this.puzzle,
       alg,
@@ -17,18 +17,18 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     );
   }
 
-  public getMove(index: number): BlockMove | null {
+  public getMove(index: number): Move | null {
     // FIXME need to support Pause
     if (this.walker.moveByIndex(index)) {
-      if (!this.walker.mv) {
+      if (!this.walker.move) {
         throw new Error("`this.walker.mv` missing");
       }
-      const bm = this.walker.mv as BlockMove;
+      const move = this.walker.move as Move;
       // TODO: this type of negation needs to be in alg
       if (this.walker.back) {
-        return invertBlockMove(bm);
+        return move.inverse();
       }
-      return bm;
+      return move;
     }
     return null;
   }
@@ -81,6 +81,6 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
 
   public moveDuration(index: number): number {
     this.walker.moveByIndex(index);
-    return this.walker.moveDur;
+    return this.walker.moveDuration;
   }
 }

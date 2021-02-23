@@ -1,5 +1,6 @@
 import { Quaternion } from "three";
-import { BareBlockMove, BlockMove, Sequence } from "../alg";
+import { Alg, Move } from "../alg";
+import { experimentalAppendMove } from "../alg/operation";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { debugLog } from "./debug";
 
@@ -33,19 +34,19 @@ function bufferToString(buffer: ArrayBuffer): string {
   return str;
 }
 
-const moveMap: BlockMove[] = [
-  BareBlockMove("B", 1),
-  BareBlockMove("B", -1),
-  BareBlockMove("F", 1),
-  BareBlockMove("F", -1),
-  BareBlockMove("U", 1),
-  BareBlockMove("U", -1),
-  BareBlockMove("D", 1),
-  BareBlockMove("D", -1),
-  BareBlockMove("R", 1),
-  BareBlockMove("R", -1),
-  BareBlockMove("L", 1),
-  BareBlockMove("L", -1),
+const moveMap: Move[] = [
+  new Move("B", 1),
+  new Move("B", -1),
+  new Move("F", 1),
+  new Move("F", -1),
+  new Move("U", 1),
+  new Move("U", -1),
+  new Move("D", 1),
+  new Move("D", -1),
+  new Move("R", 1),
+  new Move("R", -1),
+  new Move("L", 1),
+  new Move("L", -1),
 ];
 
 export class GoCube extends BluetoothPuzzle {
@@ -86,7 +87,7 @@ export class GoCube extends BluetoothPuzzle {
   private lastRawQuat: Quaternion = new Quaternion(0, 0, 0, 1);
   private currentQuat: Quaternion = new Quaternion(0, 0, 0, 1);
   private lastTarget: Quaternion = new Quaternion(0, 0, 0, 1);
-  private alg: Sequence = new Sequence([]);
+  private alg: Alg = new Alg();
 
   private constructor(
     private server: BluetoothRemoteGATTServer,
@@ -100,8 +101,8 @@ export class GoCube extends BluetoothPuzzle {
     this.resetOrientation();
   }
 
-  public resetAlg(algo?: Sequence): void {
-    this.alg = algo || new Sequence([]);
+  public resetAlg(alg?: Alg): void {
+    this.alg = alg || new Alg();
   }
 
   public resetOrientation(): void {
@@ -121,7 +122,7 @@ export class GoCube extends BluetoothPuzzle {
     if (buffer.byteLength < 16) {
       for (let i = 3; i < buffer.byteLength - 4; i += 2) {
         const move = moveMap[buffer.getUint8(i)];
-        this.alg = new Sequence(this.alg.nestedUnits.concat([move]));
+        this.alg = experimentalAppendMove(this.alg, move);
         this.dispatchMove({
           latestMove: moveMap[buffer.getUint8(i)],
           timeStamp: event.timeStamp,
