@@ -15,8 +15,9 @@ export class Newline extends AlgCommon<Newline> {
     return this;
   }
 
-  *experimentalLeafUnits(
+  *experimentalExpand(
     _iterDir: IterationDirection = IterationDirection.Forwards,
+    _depth: number = Infinity,
   ): Generator<LeafUnit> {
     yield this;
   }

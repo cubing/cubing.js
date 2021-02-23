@@ -39,14 +39,19 @@ export class Grouping extends AlgCommon<Grouping> {
   inverse(): Grouping {
     return new Grouping(
       this.#repetition.quantum,
-      this.#repetition.inverse().info(),
+      this.#repetition.inverseInfo(),
     );
   }
 
-  *experimentalLeafUnits(
+  *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
+    depth: number = Infinity,
   ): Generator<LeafUnit> {
-    yield* this.#repetition.experimentalLeafUnits(iterDir);
+    if (depth === 0) {
+      yield iterDir === IterationDirection.Forwards ? this : this.inverse();
+    } else {
+      yield* this.#repetition.experimentalExpand(iterDir, depth);
+    }
   }
 
   static fromString(): Grouping {

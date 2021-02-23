@@ -121,9 +121,6 @@ export abstract class TraversalUp<
   public abstract traverseLineComment(comment: LineComment): DataUnitUp;
 }
 
-// export interface ExperimentalExpandOptions {
-//   depth?: number | null;
-// }
 export interface SimplifyOptions {
   collapseMoves?: boolean;
   depth?: number | null;
@@ -133,41 +130,19 @@ export interface SimplifyOptions {
 class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   // TODO: Handle
   public *traverseAlg(alg: Alg, options: SimplifyOptions): Generator<Unit> {
-    const collapseMoves = options?.collapseMoves ?? true;
     if (options.depth === 0) {
       yield* alg.units();
       return;
-    }
-    const newUnits: Unit[] = [];
-
-    let lastUnit: Unit | null = null;
-    function appendCollapsed(newUnit: Unit) {
-      if (collapseMoves && lastUnit?.is(Move) && newUnit.is(Move)) {
-        const lastMove = lastUnit as Move;
-        const newMove = newUnit as Move;
-        if (lastMove.quantum.isIdentical(newMove.quantum)) {
-          newUnits.pop();
-          const newAmount = lastMove.effectiveAmount + newMove.effectiveAmount;
-          if (newAmount !== 0) {
-            newUnits.push(new Move(lastMove.quantum, newAmount));
-          }
-        }
-      } else {
-        newUnits.push(newUnit);
-        lastUnit = newUnit;
-      }
     }
 
     const newOptions = {
       depth: options.depth ? options.depth - 1 : null,
     }; // TODO: avoid allocations?
+
     for (const unit of alg.units()) {
       for (const ancestorUnit of this.traverseUnit(unit, newOptions)) {
-        appendCollapsed(ancestorUnit);
+        yield ancestorUnit;
       }
-    }
-    for (const unit of newUnits) {
-      yield unit;
     }
   }
 
@@ -246,7 +221,6 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
 }
 
 const simplifyInstance = new Simplify();
-
 export const simplify = simplifyInstance.traverseAlg.bind(simplifyInstance) as (
   alg: Alg,
   options: SimplifyOptions,

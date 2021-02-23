@@ -1,6 +1,6 @@
 export enum IterationDirection {
-  Forwards,
-  Backwards,
+  Forwards = 1,
+  Backwards = -1,
 }
 
 export function toggleDirection(

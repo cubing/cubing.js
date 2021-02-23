@@ -110,9 +110,9 @@ export class MoveQuantum extends Comparable {
     return this.#innerLayer;
   }
 
-  experimentalLeafUnits(): Generator<LeafUnit> {
+  experimentalExpand(): Generator<LeafUnit> {
     throw new Error(
-      "experimentalLeafUnits() cannot be called on a `MoveQuantum` directly.",
+      "experimentalExpand() cannot be called on a `MoveQuantum` directly.",
     );
   }
 
@@ -168,19 +168,16 @@ export class Move extends AlgCommon<Move> {
   }
 
   inverse(): Move {
-    return new Move(
-      this.#repetition.quantum,
-      this.#repetition.inverse().info(),
-    );
+    return new Move(this.#repetition.quantum, this.#repetition.inverseInfo());
   }
 
-  *experimentalLeafUnits(
+  *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
   ): Generator<LeafUnit> {
     if (iterDir === IterationDirection.Forwards) {
       yield this;
     } else {
-      yield this.modified({ repetition: this.#repetition.inverse().info() });
+      yield this.modified({ repetition: this.#repetition.inverseInfo() });
     }
   }
 

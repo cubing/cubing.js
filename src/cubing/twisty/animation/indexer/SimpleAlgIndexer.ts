@@ -14,7 +14,7 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
 
   constructor(private puzzle: P, alg: Alg) {
     // TODO: Avoid assuming all base moves are block moves.
-    this.moves = new Alg(alg.experimentalLeafUnits());
+    this.moves = new Alg(alg.experimentalExpand());
   }
 
   public getMove(index: number): Move {

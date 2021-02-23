@@ -22,7 +22,10 @@ export abstract class Comparable {
 }
 
 export interface Repeatable extends Comparable {
-  experimentalLeafUnits(iterDir: IterationDirection): Generator<LeafUnit>;
+  experimentalExpand(
+    iterDir?: IterationDirection,
+    depth?: number,
+  ): Generator<LeafUnit>;
 }
 
 // Common to algs or units
@@ -44,7 +47,5 @@ export abstract class AlgCommon<T extends Alg | Unit>
 
   abstract inverse(): T;
 
-  abstract experimentalLeafUnits(
-    iterDir: IterationDirection,
-  ): Generator<LeafUnit>;
+  abstract experimentalExpand(iterDir: IterationDirection): Generator<LeafUnit>;
 }

@@ -22,7 +22,7 @@ function toIterable(input?: FlexibleAlgSource): Iterable<Unit> {
   }
 
   if (typeof input === "string") {
-    return Array.from(parseAlg(input).units()); // TODO: something more direct?
+    return parseAlg(input).units(); // TODO: something more direct?
   }
 
   // const seq = inputUnits as Sequence;
@@ -33,7 +33,7 @@ function toIterable(input?: FlexibleAlgSource): Iterable<Unit> {
 
   const iter = input as Iterable<Unit>;
   if (typeof iter[Symbol.iterator] === "function") {
-    return Array.from(iter); // TODO: avoid allocations
+    return iter; // TODO: avoid allocations
   }
 
   throw "Invalid unit";
@@ -43,7 +43,7 @@ export class Alg extends AlgCommon<Alg> {
   #units: Iterable<Unit>; // TODO: freeze?
   constructor(alg?: FlexibleAlgSource) {
     super();
-    this.#units = toIterable(alg);
+    this.#units = Array.from(toIterable(alg)); // TODO: can we avoid array-casting?
   }
 
   isIdentical(other: Comparable): boolean {
@@ -73,17 +73,31 @@ export class Alg extends AlgCommon<Alg> {
   }
 
   /** @deprecated */
-  *experimentalLeafUnits(
+  *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
+    depth: number = Infinity,
   ): Generator<LeafUnit> {
-    for (const unit of direct(this.#units, iterDir)) {
-      yield* unit.experimentalLeafUnits(iterDir);
+    if (depth === 0) {
+      yield iterDir === IterationDirection.Forwards ? this : this.inverse();
+    } else {
+      for (const unit of direct(this.#units, iterDir)) {
+        yield* unit.experimentalExpand(iterDir, depth);
+      }
     }
+  }
+
+  expand(options?: { depth?: number }): Alg {
+    return new Alg(
+      this.experimentalExpand(
+        IterationDirection.Forwards,
+        options?.depth ?? Infinity,
+      ),
+    );
   }
 
   /** @deprecated */
   *experimentalLeafMoves(): Generator<Move> {
-    for (const leaf of this.experimentalLeafUnits()) {
+    for (const leaf of this.experimentalExpand()) {
       if (leaf.is(Move)) {
         yield leaf as Move;
       }
@@ -160,7 +174,7 @@ export class Alg extends AlgCommon<Alg> {
   //   // }
   // }
 
-  simplified(options?: SimplifyOptions): Alg {
+  simplify(options?: SimplifyOptions): Alg {
     return new Alg(simplify(this, options ?? {}));
   }
 }

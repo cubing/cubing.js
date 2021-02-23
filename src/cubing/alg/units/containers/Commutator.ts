@@ -24,19 +24,19 @@ export class CommutatorQuantum extends Comparable {
   }
 
   // TODO: use a common composite iterator helper.
-  *experimentalLeafUnits(
+  *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
   ): Generator<LeafUnit> {
     if (iterDir === IterationDirection.Forwards) {
-      yield* this.A.experimentalLeafUnits(IterationDirection.Forwards);
-      yield* this.B.experimentalLeafUnits(IterationDirection.Forwards);
-      yield* this.A.experimentalLeafUnits(IterationDirection.Backwards);
-      yield* this.B.experimentalLeafUnits(IterationDirection.Backwards);
+      yield* this.A.experimentalExpand(IterationDirection.Forwards);
+      yield* this.B.experimentalExpand(IterationDirection.Forwards);
+      yield* this.A.experimentalExpand(IterationDirection.Backwards);
+      yield* this.B.experimentalExpand(IterationDirection.Backwards);
     } else {
-      yield* this.B.experimentalLeafUnits(IterationDirection.Forwards);
-      yield* this.A.experimentalLeafUnits(IterationDirection.Forwards);
-      yield* this.B.experimentalLeafUnits(IterationDirection.Backwards);
-      yield* this.A.experimentalLeafUnits(IterationDirection.Backwards);
+      yield* this.B.experimentalExpand(IterationDirection.Forwards);
+      yield* this.A.experimentalExpand(IterationDirection.Forwards);
+      yield* this.B.experimentalExpand(IterationDirection.Backwards);
+      yield* this.A.experimentalExpand(IterationDirection.Backwards);
     }
   }
 }
@@ -86,14 +86,19 @@ export class Commutator extends AlgCommon<Commutator> {
     return new Commutator(
       this.#repetition.quantum.B,
       this.#repetition.quantum.A,
-      this.#repetition.info(),
+      this.#repetition.inverseInfo(),
     );
   }
 
-  *experimentalLeafUnits(
+  *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
+    depth: number = Infinity,
   ): Generator<LeafUnit> {
-    yield* this.#repetition.experimentalLeafUnits(iterDir);
+    if (depth === 0) {
+      yield iterDir === IterationDirection.Forwards ? this : this.inverse();
+    } else {
+      yield* this.#repetition.experimentalExpand(iterDir, depth);
+    }
   }
 
   toString(): string {

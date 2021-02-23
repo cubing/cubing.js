@@ -28,8 +28,9 @@ export class LineComment extends AlgCommon<LineComment> {
     return this;
   }
 
-  *experimentalLeafUnits(
+  *experimentalExpand(
     _iterDir: IterationDirection = IterationDirection.Forwards,
+    _depth: number = Infinity,
   ): Generator<LeafUnit> {
     yield this;
   }

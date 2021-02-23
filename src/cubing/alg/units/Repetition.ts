@@ -71,19 +71,23 @@ export class Repetition<Q extends Repeatable> {
     );
   }
 
-  inverse(): Repetition<Q> {
-    return new Repetition<Q>(this.quantum, [this.absAmount, !this.prime]);
+  inverseInfo(): RepetitionInfo {
+    return [this.absAmount, !this.prime];
   }
 
-  info(): RepetitionInfo {
-    return [this.absAmount, this.prime];
-  }
+  *experimentalExpand(
+    iterDir: IterationDirection,
+    depth: number,
+  ): Generator<LeafUnit> {
+    if (depth === 0) {
+      throw new Error("expand error!"); // TODO
+    }
 
-  *experimentalLeafUnits(iterDir: IterationDirection): Generator<LeafUnit> {
-    const amount = this.absAmount ?? 1;
-    for (let i = 0; i < amount; i++) {
-      const newIterDir = toggleDirection(iterDir, this.prime);
-      yield* this.quantum.experimentalLeafUnits(newIterDir);
+    const absAmount = this.absAmount ?? 1;
+    const newIterDir = toggleDirection(iterDir, this.prime);
+    console.log(newIterDir);
+    for (let i = 0; i < absAmount; i++) {
+      yield* this.quantum.experimentalExpand(newIterDir, depth - 1);
     }
   }
 }

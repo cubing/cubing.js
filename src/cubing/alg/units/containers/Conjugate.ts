@@ -20,12 +20,12 @@ export class ConjugateQuantum extends Comparable {
   }
 
   // TODO: use a common composite iterator helper.
-  *experimentalLeafUnits(
+  *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
   ): Generator<LeafUnit> {
-    yield* this.A.experimentalLeafUnits(IterationDirection.Forwards);
-    yield* this.B.experimentalLeafUnits(iterDir);
-    yield* this.A.experimentalLeafUnits(toggleDirection(iterDir));
+    yield* this.A.experimentalExpand(IterationDirection.Forwards);
+    yield* this.B.experimentalExpand(iterDir);
+    yield* this.A.experimentalExpand(toggleDirection(iterDir));
   }
 
   toString(): string {
@@ -78,12 +78,19 @@ export class Conjugate extends AlgCommon<Conjugate> {
     return new Conjugate(
       this.#repetition.quantum.A,
       this.#repetition.quantum.B.inverse(),
-      this.#repetition.info(),
+      this.#repetition.inverseInfo(),
     );
   }
 
-  *experimentalLeafUnits(iterDir: IterationDirection): Generator<LeafUnit> {
-    yield* this.#repetition.experimentalLeafUnits(iterDir);
+  *experimentalExpand(
+    iterDir: IterationDirection,
+    depth: number = Infinity,
+  ): Generator<LeafUnit> {
+    if (depth === 0) {
+      yield iterDir === IterationDirection.Forwards ? this : this.inverse();
+    } else {
+      yield* this.#repetition.experimentalExpand(iterDir, depth);
+    }
   }
 
   toString(): string {
