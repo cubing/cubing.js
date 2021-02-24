@@ -1,5 +1,6 @@
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
+import { cube40x40x40 } from "./implementations/40x40x40";
 import { cube4x4x4 } from "./implementations/4x4x4";
 import { cube5x5x5 } from "./implementations/5x5x5";
 import { cube6x6x6 } from "./implementations/6x6x6";
@@ -20,6 +21,7 @@ export const puzzles: Record<string, PuzzleManager> = {
   "5x5x5": cube5x5x5,
   "6x6x6": cube6x6x6,
   "7x7x7": cube7x7x7,
+  "40x40x40": cube40x40x40,
   // 3x3x3 Blindfolded
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed

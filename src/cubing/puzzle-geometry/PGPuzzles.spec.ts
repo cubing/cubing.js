@@ -29,6 +29,7 @@ const expectedData: { [nam: string]: string } = {
   "13x13x13": "13x13x13, 6, 169, 866, 38, 39, 840",
   "20x20x20": "20x20x20, 6, 400, 2168, 91, 60, 420",
   "30x30x30": "30x30x30, 6, 900, 5048, 211, 90, 420",
+  "40x40x40": "40x40x40, 6, 1600, 9128, 381, 120, 420",
   "skewb": "skewb, 6, 5, 14, 3, 8, 9",
   "master skewb": "master skewb, 6, 13, 50, 6, 12, 630",
   "professor skewb": "professor skewb, 6, 25, 110, 11, 16, 360",
