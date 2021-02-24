@@ -70,9 +70,6 @@ interface PendingPuzzleUpdate {
 // <twisty-player>
 export class TwistyPlayer extends ManagedCustomElement {
   #config: TwistyPlayerConfig;
-  get _________config(): TwistyPlayerConfig {
-    return this.#config;
-  }
 
   timeline: Timeline;
   cursor: AlgCursor | null;
