@@ -159,7 +159,7 @@ function peg$parse(input, options) {
   var peg$c3 = "\n";
   var peg$c4 = "Solved";
   var peg$c5 = "End";
-  var peg$c6 = "Move";
+  var peg$c6 = "Turn";
 
   var peg$r0 = /^[A-Za-z0-9<>]/;
   var peg$r1 = /^[A-Za-z]/;
@@ -195,7 +195,7 @@ function peg$parse(input, options) {
   var peg$e7 = peg$literalExpectation("\n", false);
   var peg$e8 = peg$literalExpectation("Solved", false);
   var peg$e9 = peg$literalExpectation("End", false);
-  var peg$e10 = peg$literalExpectation("Move", false);
+  var peg$e10 = peg$literalExpectation("Turn", false);
 
   var peg$f0 = function (def) {
     return fixMoves(def);

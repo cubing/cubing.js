@@ -1130,7 +1130,7 @@ export class PuzzleGeometry {
     this.moveplanenormals = moveplanenormals;
     const sizes = moveplanesets.map((_) => _.length);
     if (this.verbose) {
-      console.log("# Move plane sets: " + sizes);
+      console.log("# Turn plane sets: " + sizes);
     }
     // for each of the move planes, find the rotations that are relevant
     const moverotations: Quat[][] = [];

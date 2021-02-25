@@ -10,12 +10,12 @@ Descriptor: `Angle and Battery`
 | ---------------- | ------------------- | ---------------------------------------------------------------------- |
 | Cube Orientation | `96 fe 05 fe 46 ce` |                                                                        |
 | Face Alignment   | `00 00 00 fa 00 00` | Order: URFDLB<br>Range:<br>`00`-`06`: 0-45° CW<br>`fa`-`ff`: 0-45° CCW |
-| Move Count       | `82`                | # of quarter turns, loops from 255 to 0                                |
+| Turn Count       | `82`                | # of quarter turns, loops from 255 to 0                                |
 | Last 6 moves     | `02 03 05 0f 11 09` | see below                                                              |
 
 ## Moves
 
-| Code | Move |
+| Code | Turn |
 | ---- | ---- |
 | `00` | U    |
 | `02` | U'   |
@@ -98,7 +98,7 @@ Sample values:
 | Section    | Sample Bytes                                            | Notes                                   |
 | ---------- | ------------------------------------------------------- | --------------------------------------- |
 | Unknown    | `18 08 20 28 49 92 24 41 6d 92 db b6 49 82 a2 24 6d db` |
-| Move Count | `52`                                                    | # of quarter turns, loops from 255 to 0 |
+| Turn Count | `52`                                                    | # of quarter turns, loops from 255 to 0 |
 
 solved
 18 08 20 28 49 92 24 41 6d 92 db b6 49 82 a2 24 6d db 52

@@ -62,7 +62,7 @@ DEFINITIONS
 
 START_PIECES = "Solved" NEWLINE definitions:DEFINITIONS NEWLINE "End" { return definitions; }
 
-MOVE = "Move" SPACE identifier:IDENTIFIER NEWLINE definitions:DEFINITIONS NEWLINE "End" { return [identifier, definitions]; }
+MOVE = "Turn" SPACE identifier:IDENTIFIER NEWLINE definitions:DEFINITIONS NEWLINE "End" { return [identifier, definitions]; }
 
 MOVES = move:MOVE NEWLINES moves:MOVES { moves[move[0]] = move[1]; return moves; }
       / move:MOVE { const moves = {}; moves[move[0]] = move[1]; return moves; }

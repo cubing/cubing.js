@@ -206,10 +206,10 @@ export class TwistyControlButton
         this.timeline.playPause();
         break;
       case "play-step":
-        this.timeline.experimentalPlay(Direction.Forwards, BoundaryType.Move);
+        this.timeline.experimentalPlay(Direction.Forwards, BoundaryType.Turn);
         break;
       case "play-step-backwards":
-        this.timeline.experimentalPlay(Direction.Backwards, BoundaryType.Move);
+        this.timeline.experimentalPlay(Direction.Backwards, BoundaryType.Turn);
         break;
       case "twizzle-link":
         if (this.visitTwizzleLinkCallback) {

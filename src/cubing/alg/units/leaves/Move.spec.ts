@@ -1,6 +1,6 @@
 import { Turn } from "./Turn";
 
-describe("Move", () => {
+describe("Turn", () => {
   it("can be modified", () => {
     expect(new Turn("R").modified({ repetition: 2 }).toString()).toBe("R2");
     expect(

@@ -45,7 +45,7 @@ addTest("Solved", "");
 for (const face of "ULFRBDxyz".split("")) {
   for (const suffix of ["", "'", "2"]) {
     const move = face + suffix;
-    addTest(`${move} Move`, move);
+    addTest(`${move} Turn`, move);
   }
 }
 addTest("K Trigger", "R U R'");

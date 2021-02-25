@@ -34,7 +34,7 @@ export type PuzzlePosition = {
 };
 
 export enum BoundaryType {
-  Move,
+  Turn,
   EntireTimeline,
 }
 

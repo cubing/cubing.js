@@ -199,7 +199,7 @@ export class KPuzzleSVGWrapper {
             }
             fraction = fraction || 0; // TODO Use the type system to tie this to nextState?
             const easedBackwardsPercent =
-              100 * (1 - fraction * fraction * (2 - fraction * fraction)); // TODO: Move easing up the stack.
+              100 * (1 - fraction * fraction * (2 - fraction * fraction)); // TODO: Turn easing up the stack.
             this.gradients[id].children[0].setAttribute(
               "stop-color",
               this.originalColors[fromCur],

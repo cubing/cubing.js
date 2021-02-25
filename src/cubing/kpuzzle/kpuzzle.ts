@@ -8,7 +8,7 @@ import {
   multiplyTransformations,
 } from "./transformations";
 
-// TODO: Move other helpers into the definition.
+// TODO: Turn other helpers into the definition.
 export function transformationForMoveQuantum(
   def: KPuzzleDefinition,
   moveQuantum: QuantumTurn,
@@ -22,7 +22,7 @@ export function transformationForMoveQuantum(
   return transformation;
 }
 
-// TODO: Move other helpers into the definition.
+// TODO: Turn other helpers into the definition.
 export function transformationForMove(
   def: KPuzzleDefinition,
   move: Turn,

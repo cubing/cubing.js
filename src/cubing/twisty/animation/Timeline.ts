@@ -265,7 +265,7 @@ export class Timeline
             throw new Error("invalid direction");
         }
       }
-      case BoundaryType.Move: {
+      case BoundaryType.Turn: {
         let result: null | MillisecondTimestamp = null;
         for (const cursor of this.cursors) {
           const boundaryTimestamp = cursor.moveBoundary(timestamp, direction);

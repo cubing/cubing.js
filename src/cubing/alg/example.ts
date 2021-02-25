@@ -146,12 +146,12 @@ export const Example = {
   TriplePause: new Alg([new Pause(), new Pause(), new Pause()]),
 
   // AllAlgParts: [
-  //   new Alg([new Move("R", 1), new Move("U", -1)]),
-  //   new Grouping(new Alg([new Move("F", 1)]), 2),
+  //   new Alg([new Turn("R", 1), new Turn("U", -1)]),
+  //   new Grouping(new Alg([new Turn("F", 1)]), 2),
   //   // new Rotation("y", -1),
-  //   new Move("R", 2),
-  //   new Commutator(new Alg([new Move("R", 2)]), new Alg([new Move("U", 2)]), 2),
-  //   new Conjugate(new Alg([new Move("L", 2)]), new Alg([new Move("D", -1)]), 2),
+  //   new Turn("R", 2),
+  //   new Commutator(new Alg([new Turn("R", 2)]), new Alg([new Turn("U", 2)]), 2),
+  //   new Conjugate(new Alg([new Turn("L", 2)]), new Alg([new Turn("D", -1)]), 2),
   //   new Pause(),
   //   new Newline(),
   //   new LineComment("line comment"),

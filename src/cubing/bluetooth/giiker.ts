@@ -16,7 +16,7 @@ const UUIDs = {
   cubeCharacteristic: "0000aadc-0000-1000-8000-00805f9b34fb",
 };
 
-// TODO: Move this into a factory?
+// TODO: Turn this into a factory?
 export const giiKERConfig: BluetoothConfig = {
   filters: [
     // Known prefixes: GiC, GiS (3x3x3), Gi2 (2x2x2)

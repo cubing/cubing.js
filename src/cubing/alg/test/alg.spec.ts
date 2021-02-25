@@ -49,23 +49,23 @@ describe("BlockMove", () => {
 
   it("prevents constructing: 2-3x, 2-3U, [-2]-3u, 4-3u", () => {
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Move(new MoveQuantum("x",  3, 2, 1)])),
+    //   validateSiGNMoves(new Alg([new Turn(new MoveQuantum("x",  3, 2, 1)])),
     // ).toThrowError(/cannot have an outer and inner layer/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Move(new MoveQuantum("U",  3, 2, 1)])),
+    //   validateSiGNMoves(new Alg([new Turn(new MoveQuantum("U",  3, 2, 1)])),
     // ).toThrowError(/cannot have an outer and inner layer/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Move(new MoveQuantum("u", 3, -2), 1)])),
+    //   validateSiGNMoves(new Alg([new Turn(new MoveQuantum("u", 3, -2), 1)])),
     // ).toThrowError(/Cannot have an outer layer of 0 or less/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Move(new MoveQuantum("u", 3, 4), 1)])),
+    //   validateSiGNMoves(new Alg([new Turn(new MoveQuantum("u", 3, 4), 1)])),
     // ).toThrowError(/The outer layer must be less than the inner layer/);
   });
 
   it("prevents constructing: w, 2T, 2-3q", () => {
-    // expect(() =>algPartToStringForTesting(new Move("w", 1))).toThrowError(/Invalid SiGN plain move family: w/);
-    // expect(() =>algPartToStringForTesting(new Move(new MoveQuantum("T", 2), 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an inner slice: T/);
-    // expect(() =>algPartToStringForTesting(new Move(new MoveQuantum("q",  3, 2, 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an outer and inner layer: q/);
+    // expect(() =>algPartToStringForTesting(new Turn("w", 1))).toThrowError(/Invalid SiGN plain move family: w/);
+    // expect(() =>algPartToStringForTesting(new Turn(new MoveQuantum("T", 2), 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an inner slice: T/);
+    // expect(() =>algPartToStringForTesting(new Turn(new MoveQuantum("q",  3, 2, 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an outer and inner layer: q/);
   });
 
   it("supports a default amount of 1.", () => {
@@ -73,7 +73,7 @@ describe("BlockMove", () => {
   });
 
   it("throws an error for an invalid family", () => {
-    // expect(() => new Move("Q", 1)).toThrowError(/Invalid SiGN plain move family/);
+    // expect(() => new Turn("Q", 1)).toThrowError(/Invalid SiGN plain move family/);
   });
 
   it("has a default amount of 1", () => {
@@ -231,11 +231,11 @@ describe("Object Freezing", () => {
 
   it("freezes `nestedUnits` list on Alg", () => {
     // // Update this based on the length of AllAlgParts.
-    // expect(Object.isFrozen(new Alg([new Move("R", 1)]).nestedUnits)).toBe(true);
+    // expect(Object.isFrozen(new Alg([new Turn("R", 1)]).nestedUnits)).toBe(true);
   });
 
   // it("makes it impossible to modify a BaseMove", () => {
-  //   const b = new Move("R", 4);
+  //   const b = new Turn("R", 4);
   //   let caughtErr: Error | undefined;
   //   try {
   //     b.effectiveAmount = 2;

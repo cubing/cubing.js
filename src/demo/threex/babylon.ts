@@ -52,7 +52,7 @@ class BabylonTest {
       false,
       Mesh.FRONTSIDE,
     );
-    // Move the sphere upward 1/2 of its height
+    // Turn the sphere upward 1/2 of its height
     sphere.position.y = 1;
     // Create a built-in "ground" shape; its constructor takes 6 params : name, width, height, subdivision, scene, updatable
     Mesh.CreateGround("ground1", 6, 6, 2, this.scene, false);

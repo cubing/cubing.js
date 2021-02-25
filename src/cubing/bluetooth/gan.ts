@@ -207,7 +207,7 @@ const commands: { [cmd: string]: BufferSource } = {
   ]),
 };
 
-// // TODO: Move this into a factory?
+// // TODO: Turn this into a factory?
 export const ganConfig: BluetoothConfig = {
   filters: [{ namePrefix: "GAN" }],
   optionalServices: [UUIDs.ganCubeService, UUIDs.infoService],
@@ -327,7 +327,7 @@ export class GanCube extends BluetoothPuzzle {
     const initialMoveCounter = (
       await PhysicalState.read(physicalStateCharacteristic, aesKey)
     ).moveCounter();
-    debugLog("Initial Move Counter:", initialMoveCounter);
+    debugLog("Initial Turn Counter:", initialMoveCounter);
     const cube = new GanCube(
       await puzzles["3x3x3"].def(),
       ganCubeService,

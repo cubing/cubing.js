@@ -56,7 +56,7 @@ export class OrbitsDef {
     result.push("End");
     result.push("");
     for (let i = 0; i < this.movenames.length; i++) {
-      result.push("Move " + this.movenames[i]);
+      result.push("Turn " + this.movenames[i]);
       for (let j = 0; j < this.orbitnames.length; j++) {
         if (!forTwisty && this.moveops[i].orbits[j].isIdentity()) {
           continue;
