@@ -71,6 +71,10 @@ export class Repetition<Q extends Repeatable> {
     );
   }
 
+  info(): RepetitionInfo {
+    return [this.absAmount, this.prime];
+  }
+
   inverseInfo(): RepetitionInfo {
     return [this.absAmount, !this.prime];
   }

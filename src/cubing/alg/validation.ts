@@ -1,15 +1,15 @@
-import {
-  BlockMove,
-  LineComment,
-  Commutator,
-  Conjugate,
-  Group,
-  NewLine,
-  Pause,
-  Sequence,
-} from "./algorithm";
+import { Alg } from "./Alg";
 
 import { TraversalUp } from "./traversal";
+import {
+  Commutator,
+  Conjugate,
+  Grouping,
+  LineComment,
+  Move,
+  Newline,
+  Pause,
+} from "./units";
 
 export class ValidationError extends Error {}
 
@@ -69,32 +69,32 @@ const wideMoveFamilies: FamilyList = {
 };
 
 abstract class BaseMoveValidator extends ValidatorTraversal {
-  public traverseSequence(sequence: Sequence): void {
-    // TODO: Handle newLines and comments correctly
-    for (const unit of sequence.nestedUnits) {
-      this.traverse(unit);
+  public traverseAlg(alg: Alg): void {
+    // TODO: Handle newlines and comments correctly
+    for (const unit of alg.units()) {
+      this.traverseUnit(unit);
     }
   }
 
-  public traverseGroup(group: Group): void {
-    return this.traverse(group.nestedSequence);
+  public traverseGrouping(grouping: Grouping): void {
+    return this.traverseAlg(grouping.experimentalAlg);
   }
 
   public traverseCommutator(commutator: Commutator): void {
-    this.traverse(commutator.A);
-    this.traverse(commutator.B);
+    this.traverseAlg(commutator.A);
+    this.traverseAlg(commutator.B);
   }
 
   public traverseConjugate(conjugate: Conjugate): void {
-    this.traverse(conjugate.A);
-    this.traverse(conjugate.B);
+    this.traverseAlg(conjugate.A);
+    this.traverseAlg(conjugate.B);
   }
 
   public traversePause(_pause: Pause): void {
     return;
   }
 
-  public traverseNewLine(_newLine: NewLine): void {
+  public traverseNewline(_newline: Newline): void {
     return;
   }
 
@@ -105,53 +105,53 @@ abstract class BaseMoveValidator extends ValidatorTraversal {
 
 // TODO: Export function instead?
 export class BlockMoveValidator extends BaseMoveValidator {
-  public traverseBlockMove(blockMove: BlockMove): void {
-    if (typeof blockMove.outerLayer !== "undefined") {
-      if (typeof blockMove.innerLayer === "undefined") {
+  public traverseMove(move: Move): void {
+    if (typeof move.outerLayer !== "undefined") {
+      if (typeof move.innerLayer === "undefined") {
         throw new ValidationError(
           "A BlockMove with an outer layer must have an inner layer.",
         );
       }
-      if (!validateFamily(blockMove.family, [wideMoveFamilies])) {
+      if (!validateFamily(move.family, [wideMoveFamilies])) {
         throw new ValidationError(
-          `The provided SiGN move family is invalid, or cannot have an outer and inner layer: ${blockMove.family}`,
+          `The provided SiGN move family is invalid, or cannot have an outer and inner layer: ${move.family}`,
         );
       }
-      if (blockMove.outerLayer <= 0) {
+      if (move.outerLayer <= 0) {
         throw new ValidationError("Cannot have an outer layer of 0 or less.");
       }
       // TODO: Allow 2-2r?
-      if (blockMove.outerLayer >= blockMove.innerLayer) {
+      if (move.outerLayer >= move.innerLayer) {
         throw new ValidationError(
           "The outer layer must be less than the inner layer.",
         );
       }
       return;
-    } else if (typeof blockMove.innerLayer !== "undefined") {
+    } else if (typeof move.innerLayer !== "undefined") {
       if (
-        !validateFamily(blockMove.family, [
+        !validateFamily(move.family, [
           wideMoveFamilies,
           singleSliceMoveFamilies,
         ])
       ) {
         throw new ValidationError(
-          `The provided SiGN move family is invalid, or cannot have an inner slice: ${blockMove.family}`,
+          `The provided SiGN move family is invalid, or cannot have an inner slice: ${move.family}`,
         );
       }
-      if (blockMove.innerLayer <= 0) {
+      if (move.innerLayer <= 0) {
         throw new ValidationError("Cannot have an inner layer of 0 or less.");
       }
       return;
     } else {
       if (
-        !validateFamily(blockMove.family, [
+        !validateFamily(move.family, [
           wideMoveFamilies,
           singleSliceMoveFamilies,
           plainMoveFamilies,
         ])
       ) {
         throw new ValidationError(
-          `Invalid SiGN plain move family: ${blockMove.family}`,
+          `Invalid SiGN plain move family: ${move.family}`,
         );
       }
       return;
@@ -161,19 +161,19 @@ export class BlockMoveValidator extends BaseMoveValidator {
 
 // TODO: Export function instead?
 export class FlatAlgValidator extends ValidatorTraversal {
-  public traverseSequence(sequence: Sequence): void {
-    // TODO: Handle newLines and comments correctly
-    for (const unit of sequence.nestedUnits) {
-      this.traverse(unit);
+  public traverseAlg(alg: Alg): void {
+    // TODO: Handle newlines and comments correctly
+    for (const unit of alg.units()) {
+      this.traverseUnit(unit);
     }
     return;
   }
 
-  public traverseGroup(_group: Group): void {
-    throw new ValidationError("A flat alg cannot contain a group.");
+  public traverseGrouping(_grouping: Grouping): void {
+    throw new ValidationError("A flat alg cannot contain a grouping.");
   }
 
-  public traverseBlockMove(_blockMove: BlockMove): void {
+  public traverseMove(_move: Move): void {
     return;
   }
 
@@ -189,7 +189,7 @@ export class FlatAlgValidator extends ValidatorTraversal {
     return;
   }
 
-  public traverseNewLine(_newLine: NewLine): void {
+  public traverseNewline(_newline: Newline): void {
     return;
   }
 
@@ -198,20 +198,20 @@ export class FlatAlgValidator extends ValidatorTraversal {
   }
 }
 
-export type Validator = (a: Sequence) => void;
+export type Validator = (a: Alg) => void;
 
 const BlockMoveValidatorInstance = new BlockMoveValidator();
-export const validateSiGNMoves = BlockMoveValidatorInstance.traverse.bind(
+export const validateSiGNMoves = BlockMoveValidatorInstance.traverseAlg.bind(
   BlockMoveValidatorInstance,
 ) as Validator;
 
 const flatAlgValidatorInstance = new FlatAlgValidator();
-export const validateFlatAlg = flatAlgValidatorInstance.traverse.bind(
+export const validateFlatAlg = flatAlgValidatorInstance.traverseAlg.bind(
   flatAlgValidatorInstance,
 ) as Validator;
 
 // TODO: Option for puzzle size?
-export function validateSiGNAlg(a: Sequence): void {
+export function validateSiGNAlg(a: Alg): void {
   validateSiGNMoves(a);
   validateFlatAlg(a);
 }

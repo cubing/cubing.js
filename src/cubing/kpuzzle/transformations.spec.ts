@@ -1,5 +1,5 @@
 import { KPuzzleDefinition } from ".";
-import { parseAlg } from "../alg";
+import { Alg } from "../alg";
 import { puzzles } from "../puzzles";
 import { Transformation } from "./definition_types";
 import { KPuzzle } from "./kpuzzle";
@@ -29,9 +29,9 @@ describe("tranformations", () => {
   it("correctly compares orbits", async () => {
     const def = await puzzles["3x3x3"].def();
     const kpuzzle1 = new KPuzzle(def);
-    kpuzzle1.applyAlg(parseAlg(""));
+    kpuzzle1.applyAlg(Alg.fromString(""));
     const kpuzzle2 = new KPuzzle(def);
-    kpuzzle2.applyAlg(parseAlg("(R' U' R U')5"));
+    kpuzzle2.applyAlg(Alg.fromString("(R' U' R U')5"));
 
     expect(
       areOrbitTransformationsEquivalent(
@@ -56,9 +56,9 @@ describe("tranformations", () => {
   it("correctly compares transformations", async () => {
     const def = await puzzles["3x3x3"].def();
     const kpuzzle1 = new KPuzzle(def);
-    kpuzzle1.applyAlg(parseAlg(""));
+    kpuzzle1.applyAlg(Alg.fromString(""));
     const kpuzzle2 = new KPuzzle(def);
-    kpuzzle2.applyAlg(parseAlg("(R' U' R U')5"));
+    kpuzzle2.applyAlg(Alg.fromString("(R' U' R U')5"));
 
     expect(
       areTransformationsEquivalent(def, kpuzzle1.state, kpuzzle2.state),

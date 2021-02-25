@@ -1,6 +1,6 @@
-import { parseAlg, Sequence, structureEquals } from "../alg";
-
-import { giikerMoveToBlockMoveForTesting } from "./giiker";
+import { Alg } from "../alg";
+import { giikerMoveToAlgMoveForTesting } from "./giiker";
+import "../alg/test/alg-comparison";
 
 describe("GiiKerCube", () => {
   // it("should be possible to construct", () => {
@@ -8,24 +8,16 @@ describe("GiiKerCube", () => {
   // });
 
   it("should calculate giikerMoveToAlgMove() correctly", () => {
-    expect(
-      structureEquals(
-        new Sequence([giikerMoveToBlockMoveForTesting(1, 1)]),
-        parseAlg("B"),
-      ),
-    ).toBe(true);
-    expect(
-      structureEquals(
-        new Sequence([giikerMoveToBlockMoveForTesting(2, 3)]),
-        parseAlg("D'"),
-      ),
-    ).toBe(true);
-    expect(
-      structureEquals(
-        new Sequence([giikerMoveToBlockMoveForTesting(3, 9)]),
-        parseAlg("L2'"),
-      ),
-    ).toBe(true);
+    console.log(new Alg([giikerMoveToAlgMoveForTesting(1, 1)]).toString());
+    expect(new Alg([giikerMoveToAlgMoveForTesting(1, 1)])).toBeIdentical(
+      new Alg("B"),
+    );
+    expect(new Alg([giikerMoveToAlgMoveForTesting(2, 3)])).toBeIdentical(
+      new Alg("D'"),
+    );
+    expect(new Alg([giikerMoveToAlgMoveForTesting(3, 9)])).toBeIdentical(
+      new Alg("L2'"),
+    );
   });
 });
 

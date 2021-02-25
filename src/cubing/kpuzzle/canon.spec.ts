@@ -4,8 +4,8 @@ import {
   areStatesEquivalient,
   combineTransformations,
 } from ".";
-import { parseAlg } from "../alg";
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
+import { Alg } from "../alg";
 describe("CanonSequences", () => {
   it("should merge sequences (megaminx test)", () => {
     const options: string[] = [];
@@ -14,11 +14,13 @@ describe("CanonSequences", () => {
     const canon = new Canonicalizer(def);
     const a1 = "U F2 BL R3 L3";
     const a2 = "L2 BL2 F' U2";
-    const ss1 = canon.sequenceToSearchSequence(parseAlg(a1));
+    const ss1 = canon.sequenceToSearchSequence(Alg.fromString(a1));
     expect(ss1.moveseq.length).toBe(5);
-    const ss2 = canon.sequenceToSearchSequence(parseAlg(a2));
+    const ss2 = canon.sequenceToSearchSequence(Alg.fromString(a2));
     expect(ss2.moveseq.length).toBe(4);
-    const ss3 = canon.mergeSequenceToSearchSequence(parseAlg(a1 + " " + a2));
+    const ss3 = canon.mergeSequenceToSearchSequence(
+      Alg.fromString(a1 + " " + a2),
+    );
     expect(ss3.moveseq.length).toBe(6);
     expect(ss3.getSequenceAsString()).toBe("U F2 BL2' R2' F' U2");
     expect(

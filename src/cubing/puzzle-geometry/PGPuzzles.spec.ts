@@ -5,8 +5,9 @@ import {
   transformationOrder,
   Transformation,
 } from "../kpuzzle";
-import { BlockMove, parseAlg, Sequence } from "../alg";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
+import { Alg, Move } from "../alg";
+import { PGVendoredMove } from "./interfaces";
 /**
  *   Test basic things about puzzles created by puzzle
  *   geometry.  We check stickers per face, face count
@@ -79,14 +80,16 @@ describe("PuzzleGeometry-Puzzles", () => {
       const kpuzzledef = pg.writekpuzzle(false) as KPuzzleDefinition;
       const sep = ", ";
       const seq = Object.getOwnPropertyNames(kpuzzledef.moves).sort().join(" ");
-      let algo = parseAlg(seq);
+      let algo = Alg.fromString(seq);
       // TODO:  likely a temporary hack until we resolve how notations are
       // added or set in puzzle geometry.
       const bms = [];
-      for (const bm of algo.nestedUnits) {
-        bms.push(pg.notationMapper.notationToExternal(bm as BlockMove));
+      for (const move of algo.units()) {
+        bms.push(
+          pg.notationMapper.notationToExternal(move as Move) as PGVendoredMove,
+        );
       }
-      algo = new Sequence(bms);
+      algo = new Alg(bms);
       const ksp = new KSolvePuzzle(kpuzzledef);
       const tai = new TreeAlgIndexer(ksp, algo);
       const tr = tai.transformAtIndex(tai.numMoves());

@@ -53,7 +53,7 @@ export class MoveQuantum extends Comparable {
     if (
       this.#outerLayer !== null &&
       this.#innerLayer !== null &&
-      this.#innerLayer! >= this.#outerLayer!
+      this.#innerLayer! <= this.#outerLayer!
     ) {
       throw new Error(
         "MoveQuantum outer layer must be smaller than inner layer.",
@@ -195,7 +195,7 @@ export class Move extends AlgCommon<Move> {
   modified(modifications: MoveModifications): Move {
     return new Move(
       this.#repetition.quantum.modified(modifications),
-      modifications.repetition,
+      modifications.repetition ?? this.#repetition.info(),
     );
   }
 

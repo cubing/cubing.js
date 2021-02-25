@@ -51,7 +51,7 @@ function giikerMoveToAlgMove(face: number, amount: number): Move {
   return new Move(family, amount);
 }
 
-export { giikerMoveToAlgMove as giikerMoveToBlockMoveForTesting };
+export { giikerMoveToAlgMove as giikerMoveToAlgMoveForTesting };
 
 function giikerStateStr(giikerState: number[]): string {
   let str = "";

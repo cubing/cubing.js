@@ -1,79 +1,47 @@
-import { Move } from "./Move";
-import { algPartToStringForTesting, algToString } from "./traversal";
+import { Alg } from "./Alg";
+import { experimentalAppendMove } from "./operation";
+import { Move } from "./units";
 
 describe("operation", () => {
-  it("can modify BlockMove", () => {
-    expect(
-      algPartToStringForTesting(new Move("R").modified({ repetition: 2 })),
-    ).toBe("R2");
-    expect(
-      algPartToStringForTesting(
-        modifiedBlockMove(LayerBlockMove(4, "r", 3), {
-          family: "u",
-          outerLayer: 2,
-        }),
-      ),
-    ).toBe("2-4u3");
-  });
-
   it("can append moves", () => {
+    expect(experimentalAppendMove(new Alg("R U R'"), new Move("U2"))).toBe(
+      "R U R' U2",
+    );
     expect(
-      algToString(
-        experimentalAppendBlockMove(parseAlg("R U R'"), BareBlockMove("U2")),
-      ),
-    ).toBe("R U R' U2");
+      experimentalAppendMove(new Alg("R U R'"), new Move("R", -2)),
+    ).toBeIdentical(new Alg("R U R' R2'"));
     expect(
-      algToString(
-        experimentalAppendBlockMove(parseAlg("R U R'"), BareBlockMove("R", -2)),
-      ),
-    ).toBe("R U R' R2'");
-    expect(
-      algToString(
-        experimentalAppendBlockMove(parseAlg("R U R'"), BareBlockMove("R")),
-      ),
-    ).toBe("R U R' R");
+      experimentalAppendMove(new Alg("R U R'"), new Move("R")),
+    ).toBeIdentical(new Alg("R U R' R"));
   });
 
   it("can coalesce appended moves", () => {
     expect(
-      algToString(
-        experimentalAppendBlockMove(
-          parseAlg("R U R'"),
-          BareBlockMove("U2"),
-          true,
-        ),
-      ),
-    ).toBe("R U R' U2");
+      experimentalAppendMove(new Alg("R U R'"), new Move("U2"), {
+        coalesce: true,
+      }),
+    ).toBeIdentical(new Alg("R U R' U2"));
     expect(
-      algToString(
-        experimentalAppendBlockMove(
-          parseAlg("R U R'"),
-          BareBlockMove("R", -2),
-          true,
-        ),
-      ),
-    ).toBe("R U R3'");
+      experimentalAppendMove(new Alg("R U R'"), new Move("R", -2), {
+        coalesce: true,
+      }),
+    ).toBeIdentical(new Alg("R U R3'"));
     expect(
-      algToString(
-        experimentalAppendBlockMove(
-          parseAlg("R U R'"),
-          BareBlockMove("R"),
-          true,
-        ),
-      ),
-    ).toBe("R U");
+      experimentalAppendMove(new Alg("R U R'"), new Move("R"), {
+        coalesce: true,
+      }),
+    ).toBeIdentical(new Alg("R U"));
   });
 
   it("can concat algs", () => {
+    expect(new Alg("R U2").concat(new Alg("F' D"))).toBeIdentical(
+      new Alg("R U2 F' D"),
+    );
     expect(
-      algToString(experimentalConcatAlgs(parseAlg("R U2"), parseAlg("F' D"))),
-    ).toBe("R U2 F' D");
-    expect(
-      experimentalConcatAlgs(parseAlg("R U2"), parseAlg("U R'")).nestedUnits
-        .length,
+      Array.from(new Alg("R U2").concat(new Alg("U R'")).units()).length,
     ).toBe(4);
-    expect(
-      algToString(experimentalConcatAlgs(parseAlg("R U2"), parseAlg("U R'"))),
-    ).toBe("R U2 U R'");
+    expect(new Alg("R U2").concat(new Alg("U R'"))).toBeIdentical(
+      new Alg("R U2 U R'"),
+    );
   });
 });

@@ -1,14 +1,10 @@
-import { Sequence } from "../algorithm";
-import { structureEquals } from "../traversal";
+import { Alg } from "../Alg";
 
 expect.extend({
-  toStructureEqual(
-    expected: Sequence,
-    observed: Sequence,
-  ): jest.CustomMatcherResult {
+  toBeIdentical(expected: Alg, observed: Alg): jest.CustomMatcherResult {
     return {
       message: (): string => "Expected the same alg structure.",
-      pass: structureEquals(expected, observed),
+      pass: expected.isIdentical(observed),
     };
   },
 });
@@ -17,7 +13,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface Matchers<R, T> {
-      toStructureEqual(observed: Sequence): CustomMatcherResult;
+      toBeIdentical(observed: Alg): CustomMatcherResult;
     }
   }
 }

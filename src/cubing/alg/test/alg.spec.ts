@@ -28,7 +28,7 @@ import {
   validateSiGNMoves,
   ValidationError,
 } from "../validation";
-import "./structure-equals";
+import "./alg-comparison";
 
 setAlgPartTypeMismatchReportingLevel("error");
 

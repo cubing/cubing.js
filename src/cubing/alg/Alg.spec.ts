@@ -1,5 +1,5 @@
 import { Alg } from "./Alg";
-import "./test/structure-equals";
+import "./test/alg-comparison";
 
 describe("operation", () => {
   it("can be constructed from a string", () => {

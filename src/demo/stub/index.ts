@@ -1,7 +1,18 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { Alg } from "../../cubing/alg";
+import { Alg, Move } from "../../cubing/alg";
+import { TwistyPlayer } from "../../cubing/twisty";
+
+console.log(
+  "a",
+  new Move("4r", 3)
+    .modified({
+      family: "u",
+      outerLayer: 2,
+    })
+    .toString(),
+);
 
 // const sune = new Alg("R U R' U R U2' R'");
 
@@ -22,6 +33,12 @@ const c = new Alg("[R U R2', R U R']");
 console.log(c.expand().toString());
 console.log(c.expand().simplify().toString());
 console.log(c.toString());
+
+const player = new TwistyPlayer({
+  alg: new Alg("R U R'"),
+});
+player.experimentalSetCursorIndexer("simple");
+document.body.appendChild(player);
 
 // console.log(new Alg("(R U')2'").expand({ depth: 0 }).toString());
 // // console.log(new Alg("[(R U)2, F]").expand({ depth: 0 }).toString());

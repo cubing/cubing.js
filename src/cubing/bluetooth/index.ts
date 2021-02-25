@@ -7,6 +7,6 @@ export {
 export { connect } from "./connect";
 export { enableDebugLogging } from "./debug";
 export { GanCube } from "./gan";
-export { GiiKERCube, giikerMoveToBlockMoveForTesting } from "./giiker";
+export { GiiKERCube, giikerMoveToAlgMoveForTesting } from "./giiker";
 export { GoCube } from "./gocube";
 export { debugKeyboardConnect, KeyboardPuzzle } from "./keyboard";

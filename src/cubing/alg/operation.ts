@@ -5,7 +5,7 @@ export function experimentalAppendMove(
   alg: Alg,
   newMove: Move,
   options?: {
-    coalesce?: boolean;
+    coalesce?: boolean; // defaults to false
     mod?: number;
   },
 ): Alg {
