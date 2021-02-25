@@ -1,12 +1,13 @@
 import { Alg } from "./Alg";
 import { experimentalAppendMove } from "./operation";
 import { Move } from "./units";
+import "./test/alg-comparison";
 
 describe("operation", () => {
   it("can append moves", () => {
-    expect(experimentalAppendMove(new Alg("R U R'"), new Move("U2"))).toBe(
-      "R U R' U2",
-    );
+    expect(
+      experimentalAppendMove(new Alg("R U R'"), new Move("U2")),
+    ).toBeIdentical(new Alg("R U R' U2"));
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("R", -2)),
     ).toBeIdentical(new Alg("R U R' R2'"));

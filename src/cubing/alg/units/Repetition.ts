@@ -54,7 +54,8 @@ export class Repetition<Q extends Repeatable> {
 
   suffix(): string {
     let s: string = "";
-    if (this.absAmount !== null) {
+    // TODO
+    if (this.absAmount !== null && this.absAmount !== 1) {
       s += this.absAmount;
     }
     if (this.prime) {
@@ -66,7 +67,7 @@ export class Repetition<Q extends Repeatable> {
   isIdentical(other: Repetition<Q>): boolean {
     return (
       this.quantum.isIdentical(other.quantum) &&
-      this.absAmount === other.absAmount &&
+      (this.absAmount ?? 1) === (other.absAmount ?? 1) && // TODO
       this.prime === other.prime
     );
   }
@@ -89,7 +90,6 @@ export class Repetition<Q extends Repeatable> {
 
     const absAmount = this.absAmount ?? 1;
     const newIterDir = toggleDirection(iterDir, this.prime);
-    console.log(newIterDir);
     for (let i = 0; i < absAmount; i++) {
       yield* this.quantum.experimentalExpand(newIterDir, depth - 1);
     }

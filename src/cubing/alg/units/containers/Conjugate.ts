@@ -1,6 +1,6 @@
 import { Alg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
-import { IterationDirection, toggleDirection } from "../../iteration";
+import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 
@@ -25,7 +25,7 @@ export class ConjugateQuantum extends Comparable {
   ): Generator<LeafUnit> {
     yield* this.A.experimentalExpand(IterationDirection.Forwards);
     yield* this.B.experimentalExpand(iterDir);
-    yield* this.A.experimentalExpand(toggleDirection(iterDir));
+    yield* this.A.experimentalExpand(IterationDirection.Backwards);
   }
 
   toString(): string {

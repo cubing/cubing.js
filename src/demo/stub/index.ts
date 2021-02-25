@@ -1,8 +1,19 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { Alg, Move } from "../../cubing/alg";
+import { Alg, Example, Move } from "../../cubing/alg";
 import { TwistyPlayer } from "../../cubing/twisty";
+
+const a = Example.EPerm.expand();
+const b = new Alg("x' R U' R' D R U R' D' R U R' D R U' R' D' x");
+
+console.log(a.toString());
+console.log(b.toString());
+console.log(a.isIdentical(b));
+
+console.log(
+  new Alg("R U2").concat(new Alg("F' D")).isIdentical(new Alg("R U2 F' D")),
+);
 
 console.log(
   "a",

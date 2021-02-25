@@ -1,4 +1,5 @@
-import { AlgCommon, Comparable, experimentalIs } from "./common";
+import { AlgCommon, Comparable } from "./common";
+import { experimentalIs, experimentalIsUnit } from "./is";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
 import { SimplifyOptions, simplify } from "./traversal";
@@ -44,6 +45,12 @@ export class Alg extends AlgCommon<Alg> {
   constructor(alg?: FlexibleAlgSource) {
     super();
     this.#units = Array.from(toIterable(alg)); // TODO: can we avoid array-casting?
+
+    for (const unit of this.#units) {
+      if (!experimentalIsUnit(unit)) {
+        throw new Error("An alg can only contain units.");
+      }
+    }
   }
 
   isIdentical(other: Comparable): boolean {
@@ -132,6 +139,10 @@ export class Alg extends AlgCommon<Alg> {
     for (const unit of this.#units) {
       yield unit;
     }
+  }
+
+  experimentalNumUnits(): number {
+    return Array.from(this.#units).length;
   }
 
   /** @deprecated */

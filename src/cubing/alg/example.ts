@@ -1,13 +1,10 @@
 // tslint:disable-next-line no-namespace // TODO: nested module
 
 import { Alg } from "./Alg";
-import { Grouping } from "./units/containers/Grouping";
 import { Commutator } from "./units/containers/Commutator";
 import { Conjugate } from "./units/containers/Conjugate";
 import { Move } from "./units/leaves/Move";
-import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
-import { LineComment } from "./units/leaves/LineComment";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export const Example = {
@@ -148,15 +145,15 @@ export const Example = {
 
   TriplePause: new Alg([new Pause(), new Pause(), new Pause()]),
 
-  AllAlgParts: [
-    new Alg([new Move("R", 1), new Move("U", -1)]),
-    new Grouping(new Alg([new Move("F", 1)]), 2),
-    // new Rotation("y", -1),
-    new Move("R", 2),
-    new Commutator(new Alg([new Move("R", 2)]), new Alg([new Move("U", 2)]), 2),
-    new Conjugate(new Alg([new Move("L", 2)]), new Alg([new Move("D", -1)]), 2),
-    new Pause(),
-    new Newline(),
-    new LineComment("line comment"),
-  ],
+  // AllAlgParts: [
+  //   new Alg([new Move("R", 1), new Move("U", -1)]),
+  //   new Grouping(new Alg([new Move("F", 1)]), 2),
+  //   // new Rotation("y", -1),
+  //   new Move("R", 2),
+  //   new Commutator(new Alg([new Move("R", 2)]), new Alg([new Move("U", 2)]), 2),
+  //   new Conjugate(new Alg([new Move("L", 2)]), new Alg([new Move("D", -1)]), 2),
+  //   new Pause(),
+  //   new Newline(),
+  //   new LineComment("line comment"),
+  // ],
 };

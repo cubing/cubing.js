@@ -1,4 +1,4 @@
-import { parseAlg } from "../../alg";
+import { Alg } from "../../alg";
 import { KPuzzle, Transformation } from "../../kpuzzle";
 import { cube3x3x3KPuzzle as def } from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 import {
@@ -9,7 +9,7 @@ import { bufferToSpacedHex } from "./hex";
 
 function stateForAlg(alg: string): Transformation {
   const kpuzzle = new KPuzzle(def);
-  kpuzzle.applyAlg(parseAlg(alg));
+  kpuzzle.applyAlg(new Alg(alg));
   return kpuzzle.state;
 }
 

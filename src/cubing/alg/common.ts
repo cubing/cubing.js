@@ -7,11 +7,6 @@ export function setAlgDebugField(debug: boolean): void {
   writeAlgDebugField = debug;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function experimentalIs(v: any, c: typeof Comparable): boolean {
-  return v instanceof c;
-}
-
 export abstract class Comparable {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   is(c: any): boolean {

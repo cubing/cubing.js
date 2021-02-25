@@ -4,7 +4,7 @@ expect.extend({
   toBeIdentical(expected: Alg, observed: Alg): jest.CustomMatcherResult {
     return {
       message: (): string => "Expected the same alg structure.",
-      pass: expected.isIdentical(observed),
+      pass: expected?.isIdentical(observed),
     };
   },
 });

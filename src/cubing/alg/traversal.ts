@@ -123,7 +123,7 @@ export abstract class TraversalUp<
 
 export interface SimplifyOptions {
   collapseMoves?: boolean;
-  depth?: number | null;
+  depth?: number | null; // TODO: test
 }
 
 // TODO: Test that inverses are bijections.
