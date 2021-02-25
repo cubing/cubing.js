@@ -1,4 +1,4 @@
-import { Move } from "../../../alg";
+import { Turn } from "../../../alg";
 import {
   combineTransformations,
   areStatesEquivalient,
@@ -13,7 +13,7 @@ import { puzzles } from "../../../puzzles";
 export type MoveName = string;
 
 export interface MoveProgress {
-  move: Move;
+  move: Turn;
   fraction: number;
 }
 
@@ -48,7 +48,7 @@ export abstract class PuzzleWrapper {
     return newState;
   }
 
-  public abstract stateFromMove(move: Move): State<PuzzleWrapper>;
+  public abstract stateFromMove(move: Turn): State<PuzzleWrapper>;
   public abstract identity(): State<PuzzleWrapper>;
   public abstract equivalent(
     s1: State<PuzzleWrapper>,
@@ -84,7 +84,7 @@ export class KPuzzleWrapper extends PuzzleWrapper {
     return combineTransformations(this.definition, s1, s2);
   }
 
-  public stateFromMove(move: Move): KSolvePuzzleState {
+  public stateFromMove(move: Turn): KSolvePuzzleState {
     const key = move.toString();
     if (!this.moveCache[key]) {
       this.moveCache[key] = transformationForMove(this.definition, move);
@@ -118,7 +118,7 @@ export class QTMCounterPuzzle extends PuzzleWrapper {
     return new QTMCounterState(s1.value + s2.value);
   }
 
-  public stateFromMove(move: Move): QTMCounterState {
+  public stateFromMove(move: Turn): QTMCounterState {
     return new QTMCounterState(Math.abs(move.effectiveAmount));
   }
 

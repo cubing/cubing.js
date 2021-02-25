@@ -1,7 +1,7 @@
 import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import { Alg, Move } from "../../cubing/alg/index";
+import { Alg, Turn } from "../../cubing/alg/index";
 import { experimentalAppendMove } from "../../cubing/alg/operation";
 import {
   connect,
@@ -95,7 +95,7 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
   return true;
 }
 
-function getModValueForMove(move: Move): number {
+function getModValueForMove(move: Turn): number {
   if (!pg) {
     return 1;
   }
@@ -125,7 +125,7 @@ function intersectionToMove(
   point: Vector3,
   event: MouseEvent,
   rightClick: boolean,
-): Move | null {
+): Turn | null {
   const allowRotatingGrips = event.ctrlKey || event.metaKey;
   let bestGrip: string = stickerDat.axis[0][1];
   let bestProduct: number = 0;
@@ -139,7 +139,7 @@ function intersectionToMove(
       bestGrip = axis[1];
     }
   }
-  let move = new Move(bestGrip);
+  let move = new Turn(bestGrip);
   if (bestProduct > 0) {
     if (event.shiftKey) {
       if (getCheckbox("blockmoves")) {
@@ -686,7 +686,7 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
   if (intersects.length > 0) {
     if (pg) {
       const mv2 = pg.notationMapper.notationToExternal(
-        new Move(intersects[0].object.userData.name),
+        new Turn(intersects[0].object.userData.name),
       );
       if (mv2 !== null) {
         canvas.title = mv2.family;
@@ -698,7 +698,7 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
 }
 
 // TODO: Animate latest move but cancel algorithm moves.
-function addMove(move: Move): void {
+function addMove(move: Turn): void {
   const currentAlg = Alg.fromString(algoinput.value);
   const newAlg = experimentalAppendMove(currentAlg, move, {
     coalesce: true,

@@ -6,7 +6,7 @@ import {
   Conjugate,
   Grouping,
   LineComment,
-  Move,
+  Turn,
   Newline,
   Pause,
 } from "./units";
@@ -29,7 +29,7 @@ export class FlatAlgValidator extends ValidatorTraversal {
     throw new ValidationError("A flat alg cannot contain a grouping.");
   }
 
-  public traverseMove(_move: Move): void {
+  public traverseMove(_move: Turn): void {
     return;
   }
 

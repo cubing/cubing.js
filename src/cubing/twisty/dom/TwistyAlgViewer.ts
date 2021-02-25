@@ -4,7 +4,7 @@ import {
   LineComment,
   Commutator,
   Conjugate,
-  Move,
+  Turn,
   Newline,
   Pause,
   TraversalDownUp,
@@ -152,7 +152,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     };
   }
 
-  public traverseMove(blockMove: Move, dataDown: DataDown): DataUp {
+  public traverseMove(blockMove: Turn, dataDown: DataDown): DataUp {
     return {
       moveCount: 1,
       element: new TwistyAlgLeafElem(

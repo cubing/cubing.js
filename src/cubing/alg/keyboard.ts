@@ -1,45 +1,45 @@
-import { Move } from "./units/leaves/Move";
+import { Turn } from "./units/leaves/Turn";
 
-const cubeKeyMapping: { [key: number]: Move } = {
-  73: new Move("R"),
-  75: new Move("R'"),
-  87: new Move("B"),
-  79: new Move("B'"),
-  83: new Move("D"),
-  76: new Move("D'"),
-  68: new Move("L"),
-  69: new Move("L'"),
-  74: new Move("U"),
-  70: new Move("U'"),
-  72: new Move("F"),
-  71: new Move("F'"),
+const cubeKeyMapping: { [key: number]: Turn } = {
+  73: new Turn("R"),
+  75: new Turn("R'"),
+  87: new Turn("B"),
+  79: new Turn("B'"),
+  83: new Turn("D"),
+  76: new Turn("D'"),
+  68: new Turn("L"),
+  69: new Turn("L'"),
+  74: new Turn("U"),
+  70: new Turn("U'"),
+  72: new Turn("F"),
+  71: new Turn("F'"),
 
-  78: new Move("x'"),
-  67: new Move("l"),
-  82: new Move("l'"),
-  85: new Move("r"),
-  77: new Move("r'"),
+  78: new Turn("x'"),
+  67: new Turn("l"),
+  82: new Turn("l'"),
+  85: new Turn("r"),
+  77: new Turn("r'"),
 
-  88: new Move("d"),
-  188: new Move("d'"),
+  88: new Turn("d"),
+  188: new Turn("d'"),
 
-  84: new Move("x"),
-  89: new Move("x"),
-  66: new Move("x'"),
-  186: new Move("y"),
-  59: new Move("y"),
-  65: new Move("y'"), // 186 is WebKit, 59 is Mozilla; see http://unixpapa.com/js/key.html
-  80: new Move("z"),
-  81: new Move("z'"),
+  84: new Turn("x"),
+  89: new Turn("x"),
+  66: new Turn("x'"),
+  186: new Turn("y"),
+  59: new Turn("y"),
+  65: new Turn("y'"), // 186 is WebKit, 59 is Mozilla; see http://unixpapa.com/js/key.html
+  80: new Turn("z"),
+  81: new Turn("z'"),
 
-  90: new Move("M'"),
-  190: new Move("M'"),
+  90: new Turn("M'"),
+  190: new Turn("M'"),
 };
 
 // TODO: options about whether to ignore modifier keys (e.g. alt, ctrl).
 // TODO: Support different mappings.
 // TODO: Return BaseMove instead?
-export function keyToMove(e: KeyboardEvent): Move | null {
+export function keyToMove(e: KeyboardEvent): Turn | null {
   if (e.altKey || e.ctrlKey) {
     return null;
   }

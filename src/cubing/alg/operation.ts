@@ -1,16 +1,16 @@
 import { Alg } from "./Alg";
-import { Move } from "./units/leaves/Move";
+import { Turn } from "./units/leaves/Turn";
 
 export function experimentalAppendMove(
   alg: Alg,
-  newMove: Move,
+  newMove: Turn,
   options?: {
     coalesce?: boolean; // defaults to false
     mod?: number;
   },
 ): Alg {
   const oldUnits = Array.from(alg.units());
-  const oldLastMove = oldUnits[oldUnits.length - 1] as Move | undefined;
+  const oldLastMove = oldUnits[oldUnits.length - 1] as Turn | undefined;
   if (
     options?.coalesce &&
     oldLastMove &&

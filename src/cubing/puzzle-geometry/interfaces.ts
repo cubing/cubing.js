@@ -4,9 +4,9 @@
 //   use interoperably.  These definitions are not identical to those in
 //   the corresponding classes but they are interoperable.
 
-import { Move, MoveQuantum } from "../alg";
+import { Turn, MoveQuantum } from "../alg";
 
-export class PGVendoredMove extends Move {}
+export class PGVendoredMove extends Turn {}
 export class PGVendoredMoveQuantum extends MoveQuantum {}
 
 // export class PGVendoredMove {

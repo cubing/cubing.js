@@ -4,7 +4,7 @@ import {
   Conjugate,
   Grouping,
   LineComment,
-  Move,
+  Turn,
   Newline,
   Pause,
 } from "./units";
@@ -18,7 +18,7 @@ export function experimentalIs(
     | typeof LineComment
     | typeof Commutator
     | typeof Conjugate
-    | typeof Move
+    | typeof Turn
     | typeof Newline
     | typeof Pause,
 ): boolean {
@@ -31,7 +31,7 @@ export function experimentalIsUnit(v: any): boolean {
     experimentalIs(v, LineComment) ||
     experimentalIs(v, Commutator) ||
     experimentalIs(v, Conjugate) ||
-    experimentalIs(v, Move) ||
+    experimentalIs(v, Turn) ||
     experimentalIs(v, Newline) ||
     experimentalIs(v, Pause)
   );

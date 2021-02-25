@@ -2,8 +2,8 @@
 //  Transformations.
 
 import { Transformation } from "./definition_types";
-import { Move } from "../alg";
+import { Turn } from "../alg";
 
 export interface MoveNotation {
-  lookupMove(move: Move): Transformation | undefined;
+  lookupMove(move: Turn): Transformation | undefined;
 }

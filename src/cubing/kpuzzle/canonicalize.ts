@@ -3,7 +3,7 @@
  *  combining moves (fully respecting commuting moves), and you can
  *  generate canonical sequences efficiently.
  */
-import { Alg, Move } from "../alg";
+import { Alg, Turn } from "../alg";
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import {
   areTransformationsEquivalent,
@@ -81,7 +81,7 @@ export class Canonicalizer {
     }
   }
 
-  public blockMoveToInternalMove(move: Move): InternalMove {
+  public blockMoveToInternalMove(move: Turn): InternalMove {
     const quantumMoveStr = move.quantum.toString();
     if (!(quantumMoveStr in this.def.moves)) {
       throw new Error("! move " + quantumMoveStr + " not in def.");
@@ -103,7 +103,7 @@ export class Canonicalizer {
   ): SearchSequence {
     const ss = new SearchSequence(this, tr);
     for (const move of alg.experimentalLeafMoves()) {
-      ss.appendOneMove(this.blockMoveToInternalMove(move as Move));
+      ss.appendOneMove(this.blockMoveToInternalMove(move as Turn));
     }
     return ss;
   }

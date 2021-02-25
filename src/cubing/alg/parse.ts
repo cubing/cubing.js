@@ -3,7 +3,7 @@ import { AlgBuilder } from "./AlgBuilder";
 import { Grouping } from "./units/containers/Grouping";
 import { Commutator } from "./units/containers/Commutator";
 import { Conjugate } from "./units/containers/Conjugate";
-import { Move, MoveQuantum } from "./units/leaves/Move";
+import { Turn, QuantumTurn } from "./units/leaves/Turn";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
 import { RepetitionInfo } from "./units/Repetition";
@@ -24,11 +24,11 @@ export function parseAlg(s: string): Alg {
   return new AlgParser().parseAlg(s);
 }
 
-export function parseMove(s: string): Move {
+export function parseMove(s: string): Turn {
   return new AlgParser().parseMove(s);
 }
 
-export function parseMoveQuantum(s: string): MoveQuantum {
+export function parseMoveQuantum(s: string): QuantumTurn {
   return new AlgParser().parseMoveQuantum(s);
 }
 
@@ -45,7 +45,7 @@ class AlgParser {
     return alg;
   }
 
-  parseMove(input: string): Move {
+  parseMove(input: string): Turn {
     this.#input = input;
     this.#idx = 0;
     const move = this.parseMoveImpl();
@@ -53,7 +53,7 @@ class AlgParser {
     return move;
   }
 
-  parseMoveQuantum(input: string): MoveQuantum {
+  parseMoveQuantum(input: string): QuantumTurn {
     this.#input = input;
     this.#idx = 0;
     const moveQuantum = this.parseMoveQuantumImpl();
@@ -154,23 +154,23 @@ class AlgParser {
     return algBuilder.toAlg();
   }
 
-  private parseMoveQuantumImpl(): MoveQuantum {
+  private parseMoveQuantumImpl(): QuantumTurn {
     const [, , , outerLayerStr, innerLayerStr, family] = this.parseRegex(
       moveQuantumRegex,
     );
 
-    return new MoveQuantum(
+    return new QuantumTurn(
       family,
       parseIntWithEmptyFallback(innerLayerStr, undefined),
       parseIntWithEmptyFallback(outerLayerStr, undefined),
     );
   }
 
-  private parseMoveImpl(): Move {
+  private parseMoveImpl(): Turn {
     const moveQuantum = this.parseMoveQuantumImpl();
     const repetitionInfo = this.parseRepetition();
 
-    const move = new Move(moveQuantum, repetitionInfo);
+    const move = new Turn(moveQuantum, repetitionInfo);
     return move;
   }
 

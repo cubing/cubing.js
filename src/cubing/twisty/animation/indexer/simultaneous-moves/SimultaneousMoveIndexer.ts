@@ -1,4 +1,4 @@
-import { Alg, Move } from "../../../../alg";
+import { Alg, Turn } from "../../../../alg";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import {
   Direction,
@@ -11,48 +11,48 @@ import { MoveWithRange, simulMoves } from "./simul-moves";
 
 const demos: Record<string, MoveWithRange[]> = {
   "y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2": [
-    { move: new Move("y", -1), start: 0, end: 1000 },
-    { move: new Move("y", -1), start: 1000, end: 2000 },
-    { move: new Move("U", -1), start: 1000, end: 1600 },
-    { move: new Move("E", 1), start: 1200, end: 1800 },
-    { move: new Move("D"), start: 1400, end: 2000 },
-    { move: new Move("R", 2), start: 2000, end: 3500 },
-    { move: new Move("r", 2), start: 2000, end: 3500 },
-    { move: new Move("F", 2), start: 3500, end: 4200 },
-    { move: new Move("B", 2), start: 3800, end: 4500 },
-    { move: new Move("U", 1), start: 4500, end: 5500 },
-    { move: new Move("E", 1), start: 4500, end: 5500 },
-    { move: new Move("D", -1), start: 4500, end: 5500 },
-    { move: new Move("R", 2), start: 5500, end: 6500 },
-    { move: new Move("L", -2), start: 5500, end: 6500 },
-    { move: new Move("z", 2), start: 5500, end: 6500 },
-    { move: new Move("S", 2), start: 6500, end: 7500 },
-    { move: new Move("U"), start: 7500, end: 8000 },
-    { move: new Move("U"), start: 8000, end: 8500 },
-    { move: new Move("D"), start: 7750, end: 8250 },
-    { move: new Move("D"), start: 8250, end: 8750 },
-    { move: new Move("S", 2), start: 8750, end: 9250 },
-    { move: new Move("F", -2), start: 8750, end: 10000 },
-    { move: new Move("B", 2), start: 8750, end: 10000 },
+    { move: new Turn("y", -1), start: 0, end: 1000 },
+    { move: new Turn("y", -1), start: 1000, end: 2000 },
+    { move: new Turn("U", -1), start: 1000, end: 1600 },
+    { move: new Turn("E", 1), start: 1200, end: 1800 },
+    { move: new Turn("D"), start: 1400, end: 2000 },
+    { move: new Turn("R", 2), start: 2000, end: 3500 },
+    { move: new Turn("r", 2), start: 2000, end: 3500 },
+    { move: new Turn("F", 2), start: 3500, end: 4200 },
+    { move: new Turn("B", 2), start: 3800, end: 4500 },
+    { move: new Turn("U", 1), start: 4500, end: 5500 },
+    { move: new Turn("E", 1), start: 4500, end: 5500 },
+    { move: new Turn("D", -1), start: 4500, end: 5500 },
+    { move: new Turn("R", 2), start: 5500, end: 6500 },
+    { move: new Turn("L", -2), start: 5500, end: 6500 },
+    { move: new Turn("z", 2), start: 5500, end: 6500 },
+    { move: new Turn("S", 2), start: 6500, end: 7500 },
+    { move: new Turn("U"), start: 7500, end: 8000 },
+    { move: new Turn("U"), start: 8000, end: 8500 },
+    { move: new Turn("D"), start: 7750, end: 8250 },
+    { move: new Turn("D"), start: 8250, end: 8750 },
+    { move: new Turn("S", 2), start: 8750, end: 9250 },
+    { move: new Turn("F", -2), start: 8750, end: 10000 },
+    { move: new Turn("B", 2), start: 8750, end: 10000 },
   ],
   "M' R' U' D' M R": [
-    { move: new Move("M", -1), start: 0, end: 1000 },
-    { move: new Move("R", -1), start: 0, end: 1000 },
-    { move: new Move("U", -1), start: 1000, end: 2000 },
-    { move: new Move("D", -1), start: 1000, end: 2000 },
-    { move: new Move("M"), start: 2000, end: 3000 },
-    { move: new Move("R"), start: 2000, end: 3000 },
+    { move: new Turn("M", -1), start: 0, end: 1000 },
+    { move: new Turn("R", -1), start: 0, end: 1000 },
+    { move: new Turn("U", -1), start: 1000, end: 2000 },
+    { move: new Turn("D", -1), start: 1000, end: 2000 },
+    { move: new Turn("M"), start: 2000, end: 3000 },
+    { move: new Turn("R"), start: 2000, end: 3000 },
   ],
   "U' E' r E r2' E r U E": [
-    { move: new Move("U", -1), start: 0, end: 1000 },
-    { move: new Move("E", -1), start: 0, end: 1000 },
-    { move: new Move("r"), start: 1000, end: 2500 },
-    { move: new Move("E"), start: 2500, end: 3500 },
-    { move: new Move("r", -2), start: 3500, end: 5000 },
-    { move: new Move("E"), start: 5000, end: 6000 },
-    { move: new Move("r"), start: 6000, end: 7000 },
-    { move: new Move("U"), start: 7000, end: 8000 },
-    { move: new Move("E"), start: 7000, end: 8000 },
+    { move: new Turn("U", -1), start: 0, end: 1000 },
+    { move: new Turn("E", -1), start: 0, end: 1000 },
+    { move: new Turn("r"), start: 1000, end: 2500 },
+    { move: new Turn("E"), start: 2500, end: 3500 },
+    { move: new Turn("r", -2), start: 3500, end: 5000 },
+    { move: new Turn("E"), start: 5000, end: 6000 },
+    { move: new Turn("r"), start: 6000, end: 7000 },
+    { move: new Turn("U"), start: 7000, end: 8000 },
+    { move: new Turn("E"), start: 7000, end: 8000 },
   ],
 };
 
@@ -66,7 +66,7 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
     // TODO: Avoid assuming all base moves are block moves.
   }
 
-  public getMove(index: number): Move {
+  public getMove(index: number): Turn {
     return this.moves[Math.min(index, this.moves.length - 1)].move;
   }
 

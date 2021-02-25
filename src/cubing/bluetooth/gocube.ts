@@ -1,5 +1,5 @@
 import { Quaternion } from "three";
-import { Alg, Move } from "../alg";
+import { Alg, Turn } from "../alg";
 import { experimentalAppendMove } from "../alg/operation";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { debugLog } from "./debug";
@@ -34,19 +34,19 @@ function bufferToString(buffer: ArrayBuffer): string {
   return str;
 }
 
-const moveMap: Move[] = [
-  new Move("B", 1),
-  new Move("B", -1),
-  new Move("F", 1),
-  new Move("F", -1),
-  new Move("U", 1),
-  new Move("U", -1),
-  new Move("D", 1),
-  new Move("D", -1),
-  new Move("R", 1),
-  new Move("R", -1),
-  new Move("L", 1),
-  new Move("L", -1),
+const moveMap: Turn[] = [
+  new Turn("B", 1),
+  new Turn("B", -1),
+  new Turn("F", 1),
+  new Turn("F", -1),
+  new Turn("U", 1),
+  new Turn("U", -1),
+  new Turn("D", 1),
+  new Turn("D", -1),
+  new Turn("R", 1),
+  new Turn("R", -1),
+  new Turn("L", 1),
+  new Turn("L", -1),
 ];
 
 export class GoCube extends BluetoothPuzzle {

@@ -4,7 +4,7 @@ import {
   LineComment,
   Commutator,
   Conjugate,
-  Move,
+  Turn,
   Newline,
   Pause,
   TraversalUp,
@@ -69,7 +69,7 @@ export class AlgDuration extends TraversalUp<Duration> {
     );
   }
 
-  public traverseMove(move: Move): Duration {
+  public traverseMove(move: Turn): Duration {
     return this.durationForAmount(move.effectiveAmount);
   }
 

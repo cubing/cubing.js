@@ -1,4 +1,4 @@
-import { Alg, Move, TraversalUp } from "../../../alg";
+import { Alg, Turn, TraversalUp } from "../../../alg";
 import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import { Duration, Timestamp } from "../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
@@ -17,8 +17,8 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
     this.moves = new Alg(alg.experimentalExpand());
   }
 
-  public getMove(index: number): Move {
-    return Array.from(this.moves.units())[index] as Move; // TODO: perf
+  public getMove(index: number): Turn {
+    return Array.from(this.moves.units())[index] as Turn; // TODO: perf
   }
 
   public indexToMoveStartTimestamp(index: number): Timestamp {
@@ -50,7 +50,7 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
     for (const move of Array.from(this.moves.units()).slice(0, index)) {
       state = this.puzzle.combine(
         state,
-        this.puzzle.stateFromMove(move as Move),
+        this.puzzle.stateFromMove(move as Turn),
       );
     }
     return state;

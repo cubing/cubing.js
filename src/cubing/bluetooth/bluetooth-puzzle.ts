@@ -1,4 +1,4 @@
-import { Move } from "../alg";
+import { Turn } from "../alg";
 import { Transformation } from "../kpuzzle";
 import { BasicRotationTransformer, StreamTransformer } from "./transformer";
 
@@ -10,7 +10,7 @@ export type PuzzleState = Transformation;
 // TODO: Use actual `CustomEvent`s?
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
 export interface MoveEvent {
-  latestMove: Move;
+  latestMove: Turn;
   timeStamp: number;
   debug?: Record<string, unknown>;
   state?: PuzzleState;

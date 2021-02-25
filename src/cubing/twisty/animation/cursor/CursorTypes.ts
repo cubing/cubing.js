@@ -1,4 +1,4 @@
-import { Move } from "../../../alg";
+import { Turn } from "../../../alg";
 import { Transformation as KPuzzleState } from "../../../kpuzzle";
 
 export type MillisecondTimestamp = number;
@@ -23,7 +23,7 @@ export function directionScalar(direction: Direction): MillisecondTimestamp {
 }
 
 export interface MoveInProgress {
-  move: Move;
+  move: Turn;
   direction: Direction;
   fraction: number;
 }

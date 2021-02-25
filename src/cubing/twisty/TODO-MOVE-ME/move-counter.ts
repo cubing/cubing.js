@@ -5,7 +5,7 @@ import {
   LineComment,
   Commutator,
   Conjugate,
-  Move,
+  Turn,
   Newline,
   Pause,
   TraversalUp,
@@ -16,7 +16,7 @@ import {
  *   should be moved to the alg class, probably.
  */
 class MoveCounter extends TraversalUp<number> {
-  constructor(private metric: (move: Move) => number) {
+  constructor(private metric: (move: Turn) => number) {
     super();
   }
 
@@ -35,7 +35,7 @@ class MoveCounter extends TraversalUp<number> {
     );
   }
 
-  public traverseMove(move: Move): number {
+  public traverseMove(move: Turn): number {
     return this.metric(move);
   }
 
@@ -73,7 +73,7 @@ function isCharUppercase(c: string): boolean {
   return "A" <= c && c <= "Z";
 }
 
-function baseMetric(move: Move): number {
+function baseMetric(move: Turn): number {
   const fam = move.family;
   if (
     (isCharUppercase(fam[0]) && fam[fam.length - 1] === "v") ||

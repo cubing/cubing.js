@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { Alg, Move } from "../../alg";
+import { Alg, Turn } from "../../alg";
 import { experimentalAppendMove } from "../../alg/operation";
 import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
@@ -88,8 +88,8 @@ export class TwistyPlayer extends ManagedCustomElement {
   #hackyPendingFinalMoveCoalesce: boolean = false;
 
   #viewerWrapper: TwistyViewerWrapper;
-  public legacyExperimentalCoalesceModFunc: (move: Move) => number = (
-    _move: Move,
+  public legacyExperimentalCoalesceModFunc: (move: Turn) => number = (
+    _move: Turn,
   ): number => 0;
 
   #controlsClassListManager: ClassListManager<
@@ -715,7 +715,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   // TODO: Handle playing the new move vs. just modying the alg.
   // Note: setting `coalesce`
   experimentalAddMove(
-    move: Move,
+    move: Turn,
     coalesce: boolean = false,
     coalesceDelayed: boolean = false,
   ): void {
@@ -763,8 +763,8 @@ export class TwistyPlayer extends ManagedCustomElement {
     const length = units.length;
     const pending = this.#hackyPendingFinalMoveCoalesce;
     this.#hackyPendingFinalMoveCoalesce = false;
-    if (pending && length > 1 && units[length - 1].is(Move)) {
-      const finalMove = units[length - 1] as Move;
+    if (pending && length > 1 && units[length - 1].is(Turn)) {
+      const finalMove = units[length - 1] as Turn;
       const newAlg = experimentalAppendMove(
         new Alg(units.slice(0, length - 1)),
         finalMove,

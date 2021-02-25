@@ -6,7 +6,7 @@ import {
   Transformation,
 } from "../kpuzzle";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
-import { Alg, Move } from "../alg";
+import { Alg, Turn } from "../alg";
 import { PGVendoredMove } from "./interfaces";
 /**
  *   Test basic things about puzzles created by puzzle
@@ -86,7 +86,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       const bms = [];
       for (const move of algo.units()) {
         bms.push(
-          pg.notationMapper.notationToExternal(move as Move) as PGVendoredMove,
+          pg.notationMapper.notationToExternal(move as Turn) as PGVendoredMove,
         );
       }
       algo = new Alg(bms);

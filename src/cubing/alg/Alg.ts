@@ -4,7 +4,7 @@ import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
 import { SimplifyOptions, simplify } from "./traversal";
 import { LineComment } from "./units/leaves/LineComment";
-import { Move } from "./units/leaves/Move";
+import { Turn } from "./units/leaves/Turn";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
 import { LeafUnit, Unit } from "./units/Unit";
@@ -103,10 +103,10 @@ export class Alg extends AlgCommon<Alg> {
   }
 
   /** @deprecated */
-  *experimentalLeafMoves(): Generator<Move> {
+  *experimentalLeafMoves(): Generator<Turn> {
     for (const leaf of this.experimentalExpand()) {
-      if (leaf.is(Move)) {
-        yield leaf as Move;
+      if (leaf.is(Turn)) {
+        yield leaf as Turn;
       }
     }
   }

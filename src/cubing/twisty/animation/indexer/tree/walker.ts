@@ -4,7 +4,7 @@ import {
   LineComment,
   Commutator,
   Conjugate,
-  Move,
+  Turn,
   Newline,
   Pause,
   TraversalDownUp,
@@ -78,7 +78,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     return this.mult(dec, grouping.experimentalEffectiveAmount, [dec]);
   }
 
-  public traverseMove(move: Move): AlgPartDecoration<P> {
+  public traverseMove(move: Turn): AlgPartDecoration<P> {
     return new AlgPartDecoration<P>(
       this.puz,
       1,
@@ -261,7 +261,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     );
   }
 
-  public traverseMove(move: Move, wd: WalkerDown<P>): boolean {
+  public traverseMove(move: Turn, wd: WalkerDown<P>): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }

@@ -1,4 +1,4 @@
-import { Alg, Move } from "../../../../alg";
+import { Alg, Turn } from "../../../../alg";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration, Timestamp } from "../../cursor/CursorTypes";
 import { AlgIndexer } from "../AlgIndexer";
@@ -17,13 +17,13 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     );
   }
 
-  public getMove(index: number): Move | null {
+  public getMove(index: number): Turn | null {
     // FIXME need to support Pause
     if (this.walker.moveByIndex(index)) {
       if (!this.walker.move) {
         throw new Error("`this.walker.mv` missing");
       }
-      const move = this.walker.move as Move;
+      const move = this.walker.move as Turn;
       // TODO: this type of negation needs to be in alg
       if (this.walker.back) {
         return move.inverse();

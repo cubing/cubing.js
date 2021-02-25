@@ -1,6 +1,6 @@
 /* tslint:disable no-bitwise */
 
-import { Move } from "../alg";
+import { Turn } from "../alg";
 import { Transformation } from "../kpuzzle";
 import {
   BluetoothConfig,
@@ -36,7 +36,7 @@ export const giiKERConfig: BluetoothConfig = {
 };
 
 // TODO: Expose for testing.
-function giikerMoveToAlgMove(face: number, amount: number): Move {
+function giikerMoveToAlgMove(face: number, amount: number): Turn {
   switch (amount) {
     case 3:
       amount = -1;
@@ -48,7 +48,7 @@ function giikerMoveToAlgMove(face: number, amount: number): Move {
   }
 
   const family = ["?", "B", "D", "L", "U", "R", "F"][face];
-  return new Move(family, amount);
+  return new Turn(family, amount);
 }
 
 export { giikerMoveToAlgMove as giikerMoveToAlgMoveForTesting };

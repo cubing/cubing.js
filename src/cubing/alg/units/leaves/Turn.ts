@@ -6,13 +6,13 @@ import { LeafUnit } from "../Unit";
 import { warnOnce } from "../../warnOnce";
 import { IterationDirection } from "../../iteration";
 
-interface MoveQuantumModifications {
+interface QuantumMoveModifications {
   outerLayer?: number;
   innerLayer?: number;
   family?: string;
 }
 
-export class MoveQuantum extends Comparable {
+export class QuantumTurn extends Comparable {
   readonly #family: string;
   readonly #innerLayer: number | null;
   readonly #outerLayer: number | null;
@@ -67,12 +67,12 @@ export class MoveQuantum extends Comparable {
     }
   }
 
-  static fromString(s: string): MoveQuantum {
+  static fromString(s: string): QuantumTurn {
     return parseMoveQuantum(s);
   }
 
-  modified(modifications: MoveQuantumModifications): MoveQuantum {
-    return new MoveQuantum(
+  modified(modifications: QuantumMoveModifications): QuantumTurn {
+    return new QuantumTurn(
       modifications.family ?? this.#family,
       modifications.innerLayer ?? this.#innerLayer,
       modifications.outerLayer ?? this.#outerLayer,
@@ -80,9 +80,9 @@ export class MoveQuantum extends Comparable {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsMoveQuantum = other as MoveQuantum;
+    const otherAsMoveQuantum = other as QuantumTurn;
     return (
-      other.is(MoveQuantum) &&
+      other.is(QuantumTurn) &&
       this.#family === otherAsMoveQuantum.#family &&
       this.#innerLayer === otherAsMoveQuantum.#innerLayer &&
       this.#outerLayer === otherAsMoveQuantum.#outerLayer
@@ -135,13 +135,13 @@ interface MoveModifications {
   repetition?: RepetitionInfo;
 }
 
-export class Move extends AlgCommon<Move> {
-  readonly #repetition: Repetition<MoveQuantum>;
+export class Turn extends AlgCommon<Turn> {
+  readonly #repetition: Repetition<QuantumTurn>;
 
   constructor(
     ...args:
-      | [MoveQuantum]
-      | [MoveQuantum, RepetitionInfo]
+      | [QuantumTurn]
+      | [QuantumTurn, RepetitionInfo]
       | [string]
       | [string, RepetitionInfo]
   ) {
@@ -149,26 +149,26 @@ export class Move extends AlgCommon<Move> {
     if (typeof args[0] === "string") {
       if (args[1] ?? null) {
         this.#repetition = new Repetition(
-          MoveQuantum.fromString(args[0]),
+          QuantumTurn.fromString(args[0]),
           args[1],
         );
         return;
       } else {
-        return Move.fromString(args[0]); // TODO: can we return here?
+        return Turn.fromString(args[0]); // TODO: can we return here?
       }
     }
-    this.#repetition = new Repetition<MoveQuantum>(args[0], args[1]);
+    this.#repetition = new Repetition<QuantumTurn>(args[0], args[1]);
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsMove = other as Move;
+    const otherAsMove = other as Turn;
     return (
-      other.is(Move) && this.#repetition.isIdentical(otherAsMove.#repetition)
+      other.is(Turn) && this.#repetition.isIdentical(otherAsMove.#repetition)
     );
   }
 
-  inverse(): Move {
-    return new Move(this.#repetition.quantum, this.#repetition.inverseInfo());
+  inverse(): Turn {
+    return new Turn(this.#repetition.quantum, this.#repetition.inverseInfo());
   }
 
   *experimentalExpand(
@@ -181,25 +181,25 @@ export class Move extends AlgCommon<Move> {
     }
   }
 
-  get quantum(): MoveQuantum {
+  get quantum(): QuantumTurn {
     return this.#repetition.quantum;
   }
 
-  equals(other: Move): boolean {
+  equals(other: Turn): boolean {
     return (
       this.quantum.isIdentical(other.quantum) &&
       this.#repetition.isIdentical(other.#repetition)
     );
   }
 
-  modified(modifications: MoveModifications): Move {
-    return new Move(
+  modified(modifications: MoveModifications): Turn {
+    return new Turn(
       this.#repetition.quantum.modified(modifications),
       modifications.repetition ?? this.#repetition.info(),
     );
   }
 
-  static fromString(s: string): Move {
+  static fromString(s: string): Turn {
     return parseMove(s);
   }
 

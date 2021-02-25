@@ -1,7 +1,7 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { Alg, Example, Move } from "../../cubing/alg";
+import { Alg, Example, Turn } from "../../cubing/alg";
 import { TwistyPlayer } from "../../cubing/twisty";
 
 const a = Example.EPerm.expand();
@@ -17,7 +17,7 @@ console.log(
 
 console.log(
   "a",
-  new Move("4r", 3)
+  new Turn("4r", 3)
     .modified({
       family: "u",
       outerLayer: 2,

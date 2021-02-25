@@ -4,16 +4,16 @@ import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 
-export class ConjugateQuantum extends Comparable {
+export class QuantumConjugate extends Comparable {
   constructor(public A: Alg, public B: Alg) {
     super();
     Object.freeze(this);
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsConjugateQuantum = other as ConjugateQuantum;
+    const otherAsConjugateQuantum = other as QuantumConjugate;
     return (
-      other.is(ConjugateQuantum) &&
+      other.is(QuantumConjugate) &&
       this.A.isIdentical(otherAsConjugateQuantum.A) &&
       this.B.isIdentical(otherAsConjugateQuantum.B)
     );
@@ -34,7 +34,7 @@ export class ConjugateQuantum extends Comparable {
 }
 
 export class Conjugate extends AlgCommon<Conjugate> {
-  readonly #repetition: Repetition<ConjugateQuantum>;
+  readonly #repetition: Repetition<QuantumConjugate>;
 
   constructor(
     aSource: FlexibleAlgSource,
@@ -42,8 +42,8 @@ export class Conjugate extends AlgCommon<Conjugate> {
     repetitionInfo?: RepetitionInfo,
   ) {
     super();
-    this.#repetition = new Repetition<ConjugateQuantum>(
-      new ConjugateQuantum(new Alg(aSource), new Alg(bSource)), // TODO
+    this.#repetition = new Repetition<QuantumConjugate>(
+      new QuantumConjugate(new Alg(aSource), new Alg(bSource)), // TODO
       repetitionInfo,
     );
   }

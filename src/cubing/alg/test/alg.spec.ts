@@ -1,13 +1,13 @@
 import { Alg } from "../Alg";
 import { setAlgPartTypeMismatchReportingLevel } from "../debug";
 import { Example as Ex } from "../example";
-import { Commutator, Grouping, Move, MoveQuantum, Pause } from "../units";
+import { Commutator, Grouping, Turn, QuantumTurn, Pause } from "../units";
 import "./alg-comparison";
 
 setAlgPartTypeMismatchReportingLevel("error");
 
-const UU = new Alg([new Move("U", 1), new Move("U", 1)]);
-const U2 = new Alg([new Move("U", 2)]);
+const UU = new Alg([new Turn("U", 1), new Turn("U", 1)]);
+const U2 = new Alg([new Turn("U", 2)]);
 
 describe("Alg", () => {
   it("allows an empty Alg", () => {
@@ -17,7 +17,7 @@ describe("Alg", () => {
   });
 
   it("throws an error for a nested Alg", () => {
-    expect(() => new Alg([new Alg([new Move("R", 1)])])).toThrowError(
+    expect(() => new Alg([new Alg([new Turn("R", 1)])])).toThrowError(
       /An alg can only contain units./,
     );
   });
@@ -25,26 +25,26 @@ describe("Alg", () => {
 
 describe("BlockMove", () => {
   it("allows constructing: x, U, u", () => {
-    expect(new Move("x", 1).toString()).toBe("x");
-    expect(new Move("U", 1).toString()).toBe("U");
-    expect(new Move("u", 1).toString()).toBe("u");
+    expect(new Turn("x", 1).toString()).toBe("x");
+    expect(new Turn("U", 1).toString()).toBe("U");
+    expect(new Turn("u", 1).toString()).toBe("u");
   });
 
   it("allows constructing: 2U, 2u", () => {
-    expect(new Move(new MoveQuantum("U", 2), 1).toString()).toBe("2U");
-    expect(new Move("2U", 1).toString()).toBe("2U");
-    expect(new Move(new MoveQuantum("u", 2), 1).toString()).toBe("2u");
-    expect(new Move("2u", 1).toString()).toBe("2u");
+    expect(new Turn(new QuantumTurn("U", 2), 1).toString()).toBe("2U");
+    expect(new Turn("2U", 1).toString()).toBe("2U");
+    expect(new Turn(new QuantumTurn("u", 2), 1).toString()).toBe("2u");
+    expect(new Turn("2u", 1).toString()).toBe("2u");
   });
 
   it("prevents constructing: [-2]U, [-2]u", () => {
-    expect(() => new MoveQuantum("U", -2)).toThrowError(
+    expect(() => new QuantumTurn("U", -2)).toThrowError(
       /MoveQuantum inner layer must be a positive integer/,
     );
   });
 
   it("allows constructing: 2-3u", () => {
-    expect(new Move(new MoveQuantum("u", 3, 2), 1).toString()).toBe("2-3u");
+    expect(new Turn(new QuantumTurn("u", 3, 2), 1).toString()).toBe("2-3u");
   });
 
   it("prevents constructing: 2-3x, 2-3U, [-2]-3u, 4-3u", () => {
@@ -69,7 +69,7 @@ describe("BlockMove", () => {
   });
 
   it("supports a default amount of 1.", () => {
-    expect(new Alg([new Move("U")])).toBeIdentical(new Alg([new Move("U", 1)]));
+    expect(new Alg([new Turn("U")])).toBeIdentical(new Alg([new Turn("U", 1)]));
   });
 
   it("throws an error for an invalid family", () => {
@@ -77,21 +77,21 @@ describe("BlockMove", () => {
   });
 
   it("has a default amount of 1", () => {
-    expect(new Move("x").effectiveAmount).toBe(1);
-    expect(new Move("R").effectiveAmount).toBe(1);
-    expect(new Move("u").effectiveAmount).toBe(1);
-    expect(new Move(new MoveQuantum("R", 2)).effectiveAmount).toBe(1);
-    expect(new Move(new MoveQuantum("u", 3)).effectiveAmount).toBe(1);
-    expect(new Move(new MoveQuantum("u", 3, 2)).effectiveAmount).toBe(1);
+    expect(new Turn("x").effectiveAmount).toBe(1);
+    expect(new Turn("R").effectiveAmount).toBe(1);
+    expect(new Turn("u").effectiveAmount).toBe(1);
+    expect(new Turn(new QuantumTurn("R", 2)).effectiveAmount).toBe(1);
+    expect(new Turn(new QuantumTurn("u", 3)).effectiveAmount).toBe(1);
+    expect(new Turn(new QuantumTurn("u", 3, 2)).effectiveAmount).toBe(1);
   });
 
   it("allows different amounts 1", () => {
-    expect(new Move("x", 2).effectiveAmount).toBe(2);
-    expect(new Move("R", 3).effectiveAmount).toBe(3);
-    expect(new Move("u", -5).effectiveAmount).toBe(-5);
-    expect(new Move(new MoveQuantum("R", 2), 10).effectiveAmount).toBe(10);
-    expect(new Move(new MoveQuantum("L", 3), -13).effectiveAmount).toBe(-13);
-    expect(new Move(new MoveQuantum("u", 12, 2), 15).effectiveAmount).toBe(15);
+    expect(new Turn("x", 2).effectiveAmount).toBe(2);
+    expect(new Turn("R", 3).effectiveAmount).toBe(3);
+    expect(new Turn("u", -5).effectiveAmount).toBe(-5);
+    expect(new Turn(new QuantumTurn("R", 2), 10).effectiveAmount).toBe(10);
+    expect(new Turn(new QuantumTurn("L", 3), -13).effectiveAmount).toBe(-13);
+    expect(new Turn(new QuantumTurn("u", 12, 2), 15).effectiveAmount).toBe(15);
   });
 
   it("catches invalid moves with parseSiGN().", () => {
@@ -115,25 +115,25 @@ describe("BlockMove", () => {
   });
 
   it("prevents construction a move quantum with only outer layer", () => {
-    expect(() => new MoveQuantum("R", undefined, 1)).toThrow();
+    expect(() => new QuantumTurn("R", undefined, 1)).toThrow();
   });
 });
 
 describe("algToString()", () => {
   it("converts all move types correctly", () => {
-    expect(new Move("x", 2).toString()).toBe("x2");
-    expect(new Move("R", 3).toString()).toBe("R3");
-    expect(new Move("u", -5).toString()).toBe("u5'");
-    expect(new Move(new MoveQuantum("R", 2), 10).toString()).toBe("2R10");
-    expect(new Move(new MoveQuantum("L", 3), -13).toString()).toBe("3L13'");
-    expect(new Move(new MoveQuantum("u", 12, 2), 15).toString()).toBe(
+    expect(new Turn("x", 2).toString()).toBe("x2");
+    expect(new Turn("R", 3).toString()).toBe("R3");
+    expect(new Turn("u", -5).toString()).toBe("u5'");
+    expect(new Turn(new QuantumTurn("R", 2), 10).toString()).toBe("2R10");
+    expect(new Turn(new QuantumTurn("L", 3), -13).toString()).toBe("3L13'");
+    expect(new Turn(new QuantumTurn("u", 12, 2), 15).toString()).toBe(
       "2-12u15",
     );
   });
 
   it("distinguishes between 1R and R", () => {
-    expect(new Move(new MoveQuantum("R", 1)).toString()).toBe("1R");
-    expect(new Move("R").toString()).toBe("R");
+    expect(new Turn(new QuantumTurn("R", 1)).toString()).toBe("1R");
+    expect(new Turn("R").toString()).toBe("R");
   });
 
   it("handles empty Algs", () => {

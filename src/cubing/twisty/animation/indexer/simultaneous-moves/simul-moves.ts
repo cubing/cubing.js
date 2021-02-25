@@ -4,7 +4,7 @@ import {
   Conjugate,
   Pause,
   TraversalUp,
-  Move,
+  Turn,
   Alg,
   Grouping,
   Newline,
@@ -13,13 +13,13 @@ import { MillisecondTimestamp } from "../../cursor/CursorTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
 export interface LocalMoveWithRange {
-  move: Move;
+  move: Turn;
   msUntilNext: MillisecondTimestamp;
   duration: MillisecondTimestamp;
 }
 
 export interface MoveWithRange {
-  move: Move;
+  move: Turn;
   start: MillisecondTimestamp;
   end: MillisecondTimestamp;
 }
@@ -39,7 +39,7 @@ const axisLookup: Record<string, "x" | "y" | "z"> = {
   z: "z",
 };
 
-function isSameAxis(move1: Move, move2: Move): boolean {
+function isSameAxis(move1: Turn, move2: Turn): boolean {
   return (
     axisLookup[move1.family[0].toLowerCase()] ===
     axisLookup[move2.family[0].toLowerCase()]
@@ -63,12 +63,12 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     }
 
     for (const unit of alg.units()) {
-      if (!unit.is(Move))
+      if (!unit.is(Turn))
         // TODO: define the type statically on the class?
         return this.traverseAlg(alg);
     }
 
-    const moves = Array.from(alg.units()) as Move[];
+    const moves = Array.from(alg.units()) as Turn[];
     let maxSimulDur = defaultDurationForAmount(moves[0].effectiveAmount);
     for (let i = 0; i < moves.length - 1; i++) {
       for (let j = 1; j < moves.length; j++) {
@@ -110,7 +110,7 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return Array.prototype.concat(...processed);
   }
 
-  public traverseMove(move: Move): LocalMoveWithRange[] {
+  public traverseMove(move: Turn): LocalMoveWithRange[] {
     const duration = defaultDurationForAmount(move.effectiveAmount);
     return [
       {

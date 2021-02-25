@@ -4,7 +4,7 @@ import {
   Conjugate,
   Grouping,
   LineComment,
-  Move,
+  Turn,
   Newline,
   Pause,
   TraversalUp,
@@ -13,7 +13,7 @@ import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import { Duration, PuzzlePosition, Timestamp } from "../cursor/CursorTypes";
 
 export interface AlgIndexer<P extends PuzzleWrapper> {
-  getMove(index: number): Move | null;
+  getMove(index: number): Turn | null;
   indexToMoveStartTimestamp(index: number): Timestamp;
   stateAtIndex(index: number, startTransformation?: State<P>): State<P>;
   transformAtIndex(index: number): State<P>;
@@ -44,7 +44,7 @@ class CountAnimatedMoves extends TraversalUp<number, number> {
     );
   }
 
-  public traverseMove(_move: Move): number {
+  public traverseMove(_move: Turn): number {
     return 1;
   }
 
