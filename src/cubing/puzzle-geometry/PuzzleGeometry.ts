@@ -341,43 +341,32 @@ export function getPuzzleGeometryByName(
   return getPuzzleGeometryByDesc(PGPuzzles[puzzleName], options);
 }
 
-function getmovename(geo: any, bits: number, slices: number): any {
+function getmovename(geo: any, bits: number[], slices: number): any {
   // generate a move name based on bits, slice, and geo
   // if the move name is from the opposite face, say so.
   // find the face that's turned.
-  let nbits = 0;
   let inverted = false;
-  for (let i = 0; i <= slices; i++) {
-    if ((bits >> i) & 1) {
-      nbits |= 1 << (slices - i);
-    }
-  }
-  if (nbits < bits) {
+  if (slices - bits[1] < bits[0]) {
     // flip if most of the move is on the other side
     geo = [geo[2], geo[3], geo[0], geo[1]];
-    bits = nbits;
+    bits = [slices - bits[1], slices - bits[0]];
     inverted = true;
   }
   let movenameFamily = geo[0];
   let movenamePrefix = "";
-  let hibit = 0;
-  while (bits >> (1 + hibit)) {
-    hibit++;
-  }
-  if (bits === (2 << slices) - 1) {
+  if (bits[0] === 0 && bits[1] === slices) {
     movenameFamily = movenameFamily + "v";
-  } else if (bits === 1 << hibit) {
-    if (hibit > 0) {
-      movenamePrefix = String(hibit + 1);
+  } else if (bits[0] === bits[1]) {
+    if (bits[1] > 0) {
+      movenamePrefix = String(bits[1] + 1);
     }
-  } else if (bits === (2 << hibit) - 1) {
+  } else if (bits[0] === 0) {
     movenameFamily = movenameFamily.toLowerCase();
-    if (hibit > 1) {
-      movenamePrefix = String(hibit + 1);
+    if (bits[1] > 1) {
+      movenamePrefix = String(bits[1] + 1);
     }
   } else {
-    movenamePrefix = "_" + bits + "_";
-    //       throw "We only support slice and outer block moves right now. " + bits ;
+    throw "We only support slice and outer block moves right now. " + bits;
   }
   return [movenamePrefix + movenameFamily, inverted];
 }
@@ -1789,9 +1778,6 @@ export class PuzzleGeometry {
     // but it is what we do for now.
     // if there was a move list specified, pull values from that
     const slices = this.moveplanesets[k].length;
-    if (slices > 30) {
-      throw new Error("Too many slices for getmovesets bitmasks");
-    }
     let r = [];
     if (this.parsedmovelist !== undefined) {
       for (let i = 0; i < this.parsedmovelist.length; i++) {
@@ -1800,11 +1786,9 @@ export class PuzzleGeometry {
           continue;
         }
         if (parsedmove[4]) {
-          r.push((2 << parsedmove[3]) - (1 << parsedmove[2]));
+          r.push([parsedmove[2], parsedmove[3]]);
         } else {
-          r.push(
-            (2 << (slices - parsedmove[2])) - (1 << (slices - parsedmove[3])),
-          );
+          r.push([slices - parsedmove[3], slices - parsedmove[2]]);
         }
         r.push(parsedmove[5]);
       }
@@ -1814,16 +1798,16 @@ export class PuzzleGeometry {
         for (let i = 0; i < slices; i++) {
           if (msg[1] !== "v") {
             if (this.outerblockmoves) {
-              r.push((2 << slices) - (2 << i));
+              r.push([i + 1, slices]);
             } else {
-              r.push(2 << i);
+              r.push([i + 1]);
             }
             r.push(1);
           } else {
             if (this.outerblockmoves) {
-              r.push((2 << i) - 1);
+              r.push([0, i]);
             } else {
-              r.push(1 << i);
+              r.push([i, i]);
             }
             r.push(1);
           }
@@ -1836,31 +1820,41 @@ export class PuzzleGeometry {
         }
         if (this.outerblockmoves) {
           if (i + i > slices) {
-            r.push((2 << slices) - (1 << i));
+            r.push([i, slices]);
           } else {
-            r.push((2 << i) - 1);
+            r.push([0, i]);
           }
         } else {
-          r.push(1 << i);
+          r.push([i, i]);
         }
         r.push(1);
       }
     }
     if (this.addrotations && !this.allmoves) {
-      r.push((2 << slices) - 1);
+      r.push([0, slices]);
       r.push(1);
     }
     if (this.fixedCubie >= 0) {
-      const dep = 1 << +this.cubiekeys[this.fixedCubie].trim().split(" ")[k];
+      const dep = +this.cubiekeys[this.fixedCubie].trim().split(" ")[k];
       const newr = [];
       for (let i = 0; i < r.length; i += 2) {
         let o = r[i];
-        if (o & dep) {
-          o = (2 << slices) - 1 - o;
+        if (dep >= o[0] && dep <= o[1]) {
+          if (o[0] === 0) {
+            o = [o[1] + 1, slices];
+          } else if (slices === o[1]) {
+            o = [0, o[0] - 1];
+          } else {
+            throw Error("fixed cubie option would disconnect move");
+          }
         }
         let found = false;
         for (let j = 0; j < newr.length; j += 2) {
-          if (newr[j] === o && newr[j + 1] === r[i + 1]) {
+          if (
+            newr[j][0] === o[0] &&
+            newr[j][1] === o[1] &&
+            newr[j + 1] === r[i + 1]
+          ) {
             found = true;
             break;
           }
@@ -1959,7 +1953,7 @@ export class PuzzleGeometry {
   }
 
   public getMoveFromBits(
-    movebits: number,
+    moverange: number[],
     amount: number,
     inverted: boolean,
     axiscmoves: number[][],
@@ -1973,10 +1967,7 @@ export class PuzzleGeometry {
       perms.push(iota(this.cubieords[ii]));
       oris.push(zeros(this.cubieords[ii]));
     }
-    for (let m = 0; m < axiscmoves.length; m++) {
-      if (((movebits >> m) & 1) === 0) {
-        continue;
-      }
+    for (let m = moverange[0]; m <= moverange[1]; m++) {
       const slicecmoves = axiscmoves[m];
       for (let j = 0; j < slicecmoves.length; j += 2 * movesetorder) {
         const mperm = slicecmoves.slice(j, j + 2 * movesetorder);
@@ -2046,13 +2037,15 @@ export class PuzzleGeometry {
           }
         }
       }
-      let allbits = 0;
+      const allbits = [];
       for (let i = 0; i < moveset.length; i += 2) {
-        allbits |= moveset[i];
+        for (let j = moveset[i][0]; j <= moveset[i][1]; j++) {
+          allbits[j] = 1;
+        }
       }
       const axiscmoves = this.cmovesbyslice[k];
       for (let i = 0; i < axiscmoves.length; i++) {
-        if (((allbits >> i) & 1) === 0) {
+        if (allbits[i] !== 1) {
           continue;
         }
         const slicecmoves = axiscmoves[i];
@@ -2702,10 +2695,10 @@ class PGNotation implements PGVendoredMoveNotation {
       return this.cache[key];
     }
     const mv = this.pg.parseMove(move);
-    let bits = (2 << mv[3]) - (1 << mv[2]);
+    let bits = [mv[2], mv[3]];
     if (!mv[4]) {
       const slices = this.pg.moveplanesets[mv[1]].length;
-      bits = (2 << (slices - mv[2])) - (1 << (slices - mv[3]));
+      bits = [slices - mv[3], slices - mv[2]];
     }
     const pgmv = this.pg.getMoveFromBits(
       bits,
