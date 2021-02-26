@@ -8,7 +8,7 @@ console.log(
 );
 
 const alg = require("cubing/alg");
-console.log(alg.algToString(alg.invert(alg.parse("R U R'"))));
+console.log(new alg.Alg("R U R'").inverse().toString());
 
 console.log("Importing individual modules.");
 require("cubing/alg");
