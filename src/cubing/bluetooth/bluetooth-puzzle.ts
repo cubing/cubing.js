@@ -9,15 +9,15 @@ export type PuzzleState = Transformation;
 
 // TODO: Use actual `CustomEvent`s?
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
-export interface MoveEvent {
-  latestMove: Turn;
+export interface TurnEvent {
+  latestTurn: Turn;
   timeStamp: number;
   debug?: Record<string, unknown>;
   state?: PuzzleState;
   quaternion?: any; // TODO: Unused
 }
 
-// TODO: Only use the `quaternion` field in the `MoveEvent`?
+// TODO: Only use the `quaternion` field in the `TurnEvent`?
 export interface OrientationEvent {
   quaternion: {
     x: number;
@@ -37,7 +37,7 @@ export interface BluetoothConfig {
 // TODO: Expose device name (and/or globally unique identifier)?
 export abstract class BluetoothPuzzle {
   public transformers: StreamTransformer[] = [];
-  protected listeners: Array<(e: MoveEvent) => void> = []; // TODO: type
+  protected listeners: Array<(e: TurnEvent) => void> = []; // TODO: type
   protected orientationListeners: Array<(e: OrientationEvent) => void> = []; // TODO: type
 
   public abstract name(): string | undefined;
@@ -47,7 +47,7 @@ export abstract class BluetoothPuzzle {
     throw new Error("cannot get state");
   }
 
-  public addMoveListener(listener: (e: MoveEvent) => void): void {
+  public addTurnListener(listener: (e: TurnEvent) => void): void {
     this.listeners.push(listener);
   }
 
@@ -59,12 +59,12 @@ export abstract class BluetoothPuzzle {
     this.transformers.push(new BasicRotationTransformer());
   }
 
-  protected dispatchMove(moveEvent: MoveEvent): void {
+  protected dispatchTurn(turnEvent: TurnEvent): void {
     for (const transformer of this.transformers) {
-      transformer.transformMove(moveEvent);
+      transformer.transformTurn(turnEvent);
     }
     for (const l of this.listeners) {
-      l(moveEvent);
+      l(turnEvent);
     }
   }
 

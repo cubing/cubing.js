@@ -92,10 +92,10 @@ export class AlgCursor
   }
 
   /** @deprecated */
-  experimentalTimestampForStartOfLastMove(): MillisecondTimestamp {
-    const numMoves = this.todoIndexer.numMoves();
-    if (numMoves > 0) {
-      return this.todoIndexer.indexToMoveStartTimestamp(numMoves - 1);
+  experimentalTimestampForStartOfLastTurn(): MillisecondTimestamp {
+    const numTurns = this.todoIndexer.numTurns();
+    if (numTurns > 0) {
+      return this.todoIndexer.indexToTurnStartTimestamp(numTurns - 1);
     }
     return 0;
   }
@@ -131,24 +131,24 @@ export class AlgCursor
       const state = this.todoIndexer.stateAtIndex(idx, this.startState) as any; // TODO
       position = {
         state,
-        movesInProgress: [],
+        turnsInProgress: [],
       };
 
-      if (this.todoIndexer.numMoves() > 0) {
+      if (this.todoIndexer.numTurns() > 0) {
         const fraction =
-          (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
-          this.todoIndexer.moveDuration(idx);
+          (timestamp - this.todoIndexer.indexToTurnStartTimestamp(idx)) /
+          this.todoIndexer.turnDuration(idx);
         if (fraction === 1) {
           // TODO: push this into the indexer
           position.state = this.ksolvePuzzle.combine(
             state,
-            this.ksolvePuzzle.stateFromMove(this.todoIndexer.getMove(idx)!),
+            this.ksolvePuzzle.stateFromTurn(this.todoIndexer.getTurn(idx)!),
           ) as Transformation;
         } else if (fraction > 0) {
-          const move = this.todoIndexer.getMove(idx);
-          if (move) {
-            position.movesInProgress.push({
-              move,
+          const turn = this.todoIndexer.getTurn(idx);
+          if (turn) {
+            position.turnsInProgress.push({
+              turn,
               direction: Direction.Forwards,
               fraction,
             });
@@ -174,23 +174,23 @@ export class AlgCursor
     // TODO: Handle state change.
   }
 
-  moveBoundary(
+  turnBoundary(
     timestamp: MillisecondTimestamp,
     direction: Direction.Backwards | Direction.Forwards,
   ): MillisecondTimestamp | null {
-    if (this.todoIndexer.numMoves() === 0) {
+    if (this.todoIndexer.numTurns() === 0) {
       return null;
     }
-    // TODO: define semantics of indexing edge cases and remove this hack.
+    // TODO: define semantics of indexing edge cases and return this hack.
     const offsetHack = directionScalar(direction) * 0.001;
     const idx = this.todoIndexer.timestampToIndex(timestamp + offsetHack);
-    const moveStart = this.todoIndexer.indexToMoveStartTimestamp(idx);
+    const turnStart = this.todoIndexer.indexToTurnStartTimestamp(idx);
 
     if (direction === Direction.Backwards) {
-      return timestamp >= moveStart ? moveStart : null;
+      return timestamp >= turnStart ? turnStart : null;
     } else {
-      const moveEnd = moveStart + this.todoIndexer.moveDuration(idx);
-      return timestamp <= moveEnd ? moveEnd : null;
+      const turnEnd = turnStart + this.todoIndexer.turnDuration(idx);
+      return timestamp <= turnEnd ? turnEnd : null;
     }
   }
 
@@ -215,7 +215,7 @@ export class AlgCursor
 
   /** @deprecated */
   experimentalTimestampFromIndex(index: number): MillisecondTimestamp {
-    return this.todoIndexer.indexToMoveStartTimestamp(index);
+    return this.todoIndexer.indexToTurnStartTimestamp(index);
   }
 
   /** @deprecated */

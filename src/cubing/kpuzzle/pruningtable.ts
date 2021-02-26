@@ -58,7 +58,7 @@ export class PruningTable {
         ) {
           return t.value.getSequenceAsString();
         }
-        if (t.value.moveseq.length + dep > d) {
+        if (t.value.turnseq.length + dep > d) {
           rval = 1;
         } else {
           rval = 0;

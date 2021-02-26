@@ -38,8 +38,8 @@ const cubeKeyMapping: { [key: number]: Turn } = {
 
 // TODO: options about whether to ignore modifier keys (e.g. alt, ctrl).
 // TODO: Support different mappings.
-// TODO: Return BaseMove instead?
-export function keyToMove(e: KeyboardEvent): Turn | null {
+// TODO: Return BaseTurn instead?
+export function keyToTurn(e: KeyboardEvent): Turn | null {
   if (e.altKey || e.ctrlKey) {
     return null;
   }

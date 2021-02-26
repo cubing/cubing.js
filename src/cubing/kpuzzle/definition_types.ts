@@ -1,4 +1,4 @@
-import { MoveNotation } from "./move_notation";
+import { TurnNotation } from "./TurnNotation";
 
 // TODO: Properly handle freezing
 export interface OrbitTransformation {
@@ -17,7 +17,7 @@ export interface KPuzzleDefinition {
   name: string;
   orbits: Record<string, OrbitDefinition>;
   startPieces: Transformation; // TODO: Expose a way to get the transformed start pieces.
-  moves: Record<string, Transformation>;
+  turns: Record<string, Transformation>;
   svg?: string;
-  moveNotation?: MoveNotation;
+  turnNotation?: TurnNotation;
 }

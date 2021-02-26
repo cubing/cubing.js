@@ -12,14 +12,14 @@ import {
 import { MillisecondTimestamp } from "../../cursor/CursorTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
-export interface LocalMoveWithRange {
-  move: Turn;
+export interface LocalTurnWithRange {
+  turn: Turn;
   msUntilNext: MillisecondTimestamp;
   duration: MillisecondTimestamp;
 }
 
-export interface MoveWithRange {
-  move: Turn;
+export interface TurnWithRange {
+  turn: Turn;
   start: MillisecondTimestamp;
   end: MillisecondTimestamp;
 }
@@ -39,25 +39,25 @@ const axisLookup: Record<string, "x" | "y" | "z"> = {
   z: "z",
 };
 
-function isSameAxis(move1: Turn, move2: Turn): boolean {
+function isSameAxis(turn1: Turn, turn2: Turn): boolean {
   return (
-    axisLookup[move1.family[0].toLowerCase()] ===
-    axisLookup[move2.family[0].toLowerCase()]
+    axisLookup[turn1.family[0].toLowerCase()] ===
+    axisLookup[turn2.family[0].toLowerCase()]
   );
 }
 
 // TODO: Replace this with an optimized implementation.
 // TODO: Consider `(x U)` and `(U x F)` to be simultaneous.
-export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
-  public traverseAlg(alg: Alg): LocalMoveWithRange[] {
-    const processed: LocalMoveWithRange[][] = [];
+export class LocalSimulTurns extends TraversalUp<LocalTurnWithRange[]> {
+  public traverseAlg(alg: Alg): LocalTurnWithRange[] {
+    const processed: LocalTurnWithRange[][] = [];
     for (const nestedUnit of alg.units()) {
       processed.push(this.traverseUnit(nestedUnit));
     }
     return Array.prototype.concat(...processed);
   }
 
-  public traverseGroupingOnce(alg: Alg): LocalMoveWithRange[] {
+  public traverseGroupingOnce(alg: Alg): LocalTurnWithRange[] {
     if (alg.experimentalIsEmpty()) {
       return [];
     }
@@ -68,37 +68,37 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
         return this.traverseAlg(alg);
     }
 
-    const moves = Array.from(alg.units()) as Turn[];
-    let maxSimulDur = defaultDurationForAmount(moves[0].effectiveAmount);
-    for (let i = 0; i < moves.length - 1; i++) {
-      for (let j = 1; j < moves.length; j++) {
-        if (!isSameAxis(moves[i], moves[j])) {
+    const turns = Array.from(alg.units()) as Turn[];
+    let maxSimulDur = defaultDurationForAmount(turns[0].effectiveAmount);
+    for (let i = 0; i < turns.length - 1; i++) {
+      for (let j = 1; j < turns.length; j++) {
+        if (!isSameAxis(turns[i], turns[j])) {
           return this.traverseAlg(alg);
         }
       }
       maxSimulDur = Math.max(
         maxSimulDur,
-        defaultDurationForAmount(moves[i].effectiveAmount),
+        defaultDurationForAmount(turns[i].effectiveAmount),
       );
     }
 
-    const localMovesWithRange: LocalMoveWithRange[] = moves.map(
-      (blockMove): LocalMoveWithRange => {
+    const localTurnsWithRange: LocalTurnWithRange[] = turns.map(
+      (blockTurn): LocalTurnWithRange => {
         return {
-          move: blockMove,
+          turn: blockTurn,
           msUntilNext: 0,
           duration: maxSimulDur,
         };
       },
     );
-    localMovesWithRange[
-      localMovesWithRange.length - 1
+    localTurnsWithRange[
+      localTurnsWithRange.length - 1
     ].msUntilNext = maxSimulDur;
-    return localMovesWithRange;
+    return localTurnsWithRange;
   }
 
-  public traverseGrouping(grouping: Grouping): LocalMoveWithRange[] {
-    const processed: LocalMoveWithRange[][] = [];
+  public traverseGrouping(grouping: Grouping): LocalTurnWithRange[] {
+    const processed: LocalTurnWithRange[][] = [];
 
     const segmentOnce: Alg =
       grouping.experimentalEffectiveAmount > 0
@@ -110,19 +110,19 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return Array.prototype.concat(...processed);
   }
 
-  public traverseMove(move: Turn): LocalMoveWithRange[] {
-    const duration = defaultDurationForAmount(move.effectiveAmount);
+  public traverseTurn(turn: Turn): LocalTurnWithRange[] {
+    const duration = defaultDurationForAmount(turn.effectiveAmount);
     return [
       {
-        move: move,
+        turn: turn,
         msUntilNext: duration,
         duration,
       },
     ];
   }
 
-  public traverseCommutator(commutator: Commutator): LocalMoveWithRange[] {
-    const processed: LocalMoveWithRange[][] = [];
+  public traverseCommutator(commutator: Commutator): LocalTurnWithRange[] {
+    const processed: LocalTurnWithRange[][] = [];
     const segmentsOnce: Alg[] =
       commutator.experimentalEffectiveAmount > 0
         ? [
@@ -145,8 +145,8 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return Array.prototype.concat(...processed);
   }
 
-  public traverseConjugate(conjugate: Conjugate): LocalMoveWithRange[] {
-    const processed: LocalMoveWithRange[][] = [];
+  public traverseConjugate(conjugate: Conjugate): LocalTurnWithRange[] {
+    const processed: LocalTurnWithRange[][] = [];
     const segmentsOnce: Alg[] =
       conjugate.experimentalEffectiveAmount > 0
         ? [conjugate.A, conjugate.B, conjugate.A.inverse()]
@@ -159,36 +159,36 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return Array.prototype.concat(...processed);
   }
 
-  public traversePause(_pause: Pause): LocalMoveWithRange[] {
+  public traversePause(_pause: Pause): LocalTurnWithRange[] {
     return [];
   }
 
-  public traverseNewline(_newline: Newline): LocalMoveWithRange[] {
+  public traverseNewline(_newline: Newline): LocalTurnWithRange[] {
     return [];
   }
 
-  public traverseLineComment(_comment: LineComment): LocalMoveWithRange[] {
+  public traverseLineComment(_comment: LineComment): LocalTurnWithRange[] {
     return [];
   }
 }
 
-const localSimulMovesInstance = new LocalSimulMoves();
+const localSimulTurnsInstance = new LocalSimulTurns();
 
-const localSimulMoves = localSimulMovesInstance.traverseAlg.bind(
-  localSimulMovesInstance,
-) as (a: Alg) => LocalMoveWithRange[];
+const localSimulTurns = localSimulTurnsInstance.traverseAlg.bind(
+  localSimulTurnsInstance,
+) as (a: Alg) => LocalTurnWithRange[];
 
-export function simulMoves(a: Alg): MoveWithRange[] {
+export function simulTurns(a: Alg): TurnWithRange[] {
   let timestamp = 0;
-  const l = localSimulMoves(a).map(
-    (localSimulMove: LocalMoveWithRange): MoveWithRange => {
-      const moveWithRange = {
-        move: localSimulMove.move,
+  const l = localSimulTurns(a).map(
+    (localSimulTurn: LocalTurnWithRange): TurnWithRange => {
+      const turnWithRange = {
+        turn: localSimulTurn.turn,
         start: timestamp,
-        end: timestamp + localSimulMove.duration,
+        end: timestamp + localSimulTurn.duration,
       };
-      timestamp += localSimulMove.msUntilNext;
-      return moveWithRange;
+      timestamp += localSimulTurn.msUntilNext;
+      return turnWithRange;
     },
   );
   return l;

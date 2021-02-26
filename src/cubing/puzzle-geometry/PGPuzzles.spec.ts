@@ -79,7 +79,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       const pg = getPuzzleGeometryByDesc(desc, options);
       const kpuzzledef = pg.writekpuzzle(false) as KPuzzleDefinition;
       const sep = ", ";
-      const seq = Object.getOwnPropertyNames(kpuzzledef.moves).sort().join(" ");
+      const seq = Object.getOwnPropertyNames(kpuzzledef.turns).sort().join(" ");
       let algo = Alg.fromString(seq);
       // TODO:  likely a temporary hack until we resolve how notations are
       // added or set in puzzle geometry.
@@ -105,7 +105,7 @@ describe("PuzzleGeometry-Puzzles", () => {
         sep +
         Object.getOwnPropertyNames(kpuzzledef.orbits).length +
         sep +
-        Object.getOwnPropertyNames(kpuzzledef.moves).length +
+        Object.getOwnPropertyNames(kpuzzledef.turns).length +
         sep +
         o;
       // right now names are changing on 8- and 12-face puzzles.  We truncate

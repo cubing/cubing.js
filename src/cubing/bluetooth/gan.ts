@@ -12,12 +12,12 @@ import {
 import { debugLog } from "./debug";
 import { importKey, unsafeDecryptBlock } from "./unsafe-raw-aes";
 
-// This needs to be short enough to capture 6 moves (OBQTM).
+// This needs to be short enough to capture 6 turns (OBQTM).
 const DEFAULT_INTERVAL_MS = 150;
-// Number of latest moves provided by the Gan 356i.
-const MAX_LATEST_MOVES = 6;
+// Number of latest turns provided by the Gan 356i.
+const MAX_LATEST_TURNS = 6;
 
-const ganMoveToBlockMove: { [i: number]: Turn } = {
+const ganTurnToAlgTurn: { [i: number]: Turn } = {
   0x00: new Turn("U"),
   0x02: new Turn("U", -1),
   0x03: new Turn("R"),
@@ -145,23 +145,23 @@ class PhysicalState {
   }
 
   // Loops from 255 to 0.
-  public moveCounter(): number {
+  public turnCounter(): number {
     return this.arr[12];
   }
 
-  public numMovesSince(previousMoveCounter: number): number {
-    return (this.moveCounter() - previousMoveCounter) & 0xff;
+  public numTurnsSince(previousTurnCounter: number): number {
+    return (this.turnCounter() - previousTurnCounter) & 0xff;
   }
 
   // Due to the design of the Gan356i protocol, it's common to query for the
-  // latest physical state and find 0 moves have been performed since the last
+  // latest physical state and find 0 turns have been performed since the last
   // query. Therefore, it's useful to allow 0 as an argument.
-  public latestMoves(n: number): Turn[] {
-    if (n < 0 || n > MAX_LATEST_MOVES) {
-      throw new Error(`Must ask for 0 to 6 latest moves. (Asked for ${n})`);
+  public latestTurns(n: number): Turn[] {
+    if (n < 0 || n > MAX_LATEST_TURNS) {
+      throw new Error(`Must ask for 0 to 6 latest turns. (Asked for ${n})`);
     }
     return Array.from(this.arr.slice(19 - n, 19)).map(
-      (i) => ganMoveToBlockMove[i],
+      (i) => ganTurnToAlgTurn[i],
     );
   }
 
@@ -207,7 +207,7 @@ const commands: { [cmd: string]: BufferSource } = {
   ]),
 };
 
-// // TODO: Turn this into a factory?
+// // TODO: Move this into a factory?
 export const ganConfig: BluetoothConfig = {
   filters: [{ namePrefix: "GAN" }],
   optionalServices: [UUIDs.ganCubeService, UUIDs.infoService],
@@ -324,16 +324,16 @@ export class GanCube extends BluetoothPuzzle {
 
     const aesKey = await getKey(server);
 
-    const initialMoveCounter = (
+    const initialTurnCounter = (
       await PhysicalState.read(physicalStateCharacteristic, aesKey)
-    ).moveCounter();
-    debugLog("Initial Turn Counter:", initialMoveCounter);
+    ).turnCounter();
+    debugLog("Initial Turn Counter:", initialTurnCounter);
     const cube = new GanCube(
       await puzzles["3x3x3"].def(),
       ganCubeService,
       server,
       physicalStateCharacteristic,
-      initialMoveCounter,
+      initialTurnCounter,
       aesKey,
     );
     return cube;
@@ -359,19 +359,19 @@ export class GanCube extends BluetoothPuzzle {
     private service: BluetoothRemoteGATTService,
     private server: BluetoothRemoteGATTServer,
     private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic,
-    private lastMoveCounter: number,
+    private lastTurnCounter: number,
     private aesKey: CryptoKey | null,
   ) {
     super();
     this.kpuzzle = new KPuzzle(def);
-    this.startTrackingMoves();
+    this.startTrackingTurns();
   }
 
   public name(): string | undefined {
     return this.server.device.name;
   }
 
-  public startTrackingMoves(): void {
+  public startTrackingTurns(): void {
     // `window.setInterval` instead of `setInterval`:
     // https://github.com/Microsoft/TypeScript/issues/842#issuecomment-252445883
     this.intervalHandle = window.setInterval(
@@ -380,9 +380,9 @@ export class GanCube extends BluetoothPuzzle {
     );
   }
 
-  public stopTrackingMoves(): void {
+  public stopTrackingTurns(): void {
     if (!this.intervalHandle) {
-      throw new Error("Not tracking moves!");
+      throw new Error("Not tracking turns!");
     }
     clearInterval(this.intervalHandle);
     this.intervalHandle = null;
@@ -394,21 +394,21 @@ export class GanCube extends BluetoothPuzzle {
       this.physicalStateCharacteristic,
       this.aesKey,
     );
-    let numInterveningMoves = physicalState.numMovesSince(this.lastMoveCounter);
-    // console.log(numInterveningMoves);
-    if (numInterveningMoves > MAX_LATEST_MOVES) {
+    let numInterveningTurns = physicalState.numTurnsSince(this.lastTurnCounter);
+    // console.log(numInterveningTurns);
+    if (numInterveningTurns > MAX_LATEST_TURNS) {
       debugLog(
-        `Too many moves! Dropping ${
-          numInterveningMoves - MAX_LATEST_MOVES
-        } moves`,
+        `Too many turns! Dropping ${
+          numInterveningTurns - MAX_LATEST_TURNS
+        } turns`,
       );
-      numInterveningMoves = MAX_LATEST_MOVES;
+      numInterveningTurns = MAX_LATEST_TURNS;
     }
-    for (const move of physicalState.latestMoves(numInterveningMoves)) {
-      // console.log(move);
-      this.kpuzzle.applyMove(move);
-      this.dispatchMove({
-        latestMove: move,
+    for (const turn of physicalState.latestTurns(numInterveningTurns)) {
+      // console.log(turn);
+      this.kpuzzle.applyTurn(turn);
+      this.dispatchTurn({
+        latestTurn: turn,
         timeStamp: physicalState.timeStamp,
         debug: physicalState.debugInfo(),
         state: this.kpuzzle.state,
@@ -419,7 +419,7 @@ export class GanCube extends BluetoothPuzzle {
       timeStamp: physicalState.timeStamp,
       quaternion: physicalState.rotQuat(),
     });
-    this.lastMoveCounter = physicalState.moveCounter();
+    this.lastTurnCounter = physicalState.turnCounter();
   }
 
   public async getBattery(): Promise<number> {

@@ -1,22 +1,22 @@
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
-import { PGVendoredMove, PGVendoredMoveQuantum } from "./interfaces";
+import { PGVendoredTurn, PGVendoredQuantumTurn } from "./interfaces";
 
 export interface NotationMapper {
-  notationToInternal(move: PGVendoredMove): PGVendoredMove | null;
-  notationToExternal(move: PGVendoredMove): PGVendoredMove | null;
+  notationToInternal(turn: PGVendoredTurn): PGVendoredTurn | null;
+  notationToExternal(turn: PGVendoredTurn): PGVendoredTurn | null;
 }
 
 export class NullMapper implements NotationMapper {
-  public notationToInternal(move: PGVendoredMove): PGVendoredMove {
-    return move;
+  public notationToInternal(turn: PGVendoredTurn): PGVendoredTurn {
+    return turn;
   }
 
-  public notationToExternal(move: PGVendoredMove): PGVendoredMove {
-    return move;
+  public notationToExternal(turn: PGVendoredTurn): PGVendoredTurn {
+    return turn;
   }
 }
 
-function negate(family: string, v: number | undefined): PGVendoredMove {
+function negate(family: string, v: number | undefined): PGVendoredTurn {
   if (v === undefined) {
     v = -1;
   } else if (v === -1) {
@@ -24,81 +24,81 @@ function negate(family: string, v: number | undefined): PGVendoredMove {
   } else {
     v = -v;
   }
-  return new PGVendoredMove(family, v);
+  return new PGVendoredTurn(family, v);
 }
 
 export class NxNxNCubeMapper implements NotationMapper {
   constructor(public slices: number) {}
 
-  public notationToInternal(move: PGVendoredMove): PGVendoredMove {
-    const grip = move.family;
-    if (!move.innerLayer && !move.outerLayer) {
+  public notationToInternal(turn: PGVendoredTurn): PGVendoredTurn {
+    const grip = turn.family;
+    if (!turn.innerLayer && !turn.outerLayer) {
       if (grip === "x") {
-        move = new PGVendoredMove("Rv", move.effectiveAmount);
+        turn = new PGVendoredTurn("Rv", turn.effectiveAmount);
       } else if (grip === "y") {
-        move = new PGVendoredMove("Uv", move.effectiveAmount);
+        turn = new PGVendoredTurn("Uv", turn.effectiveAmount);
       } else if (grip === "z") {
-        move = new PGVendoredMove("Fv", move.effectiveAmount);
+        turn = new PGVendoredTurn("Fv", turn.effectiveAmount);
       }
       if ((this.slices & 1) === 1) {
         if (grip === "E") {
-          move = new PGVendoredMove(
-            new PGVendoredMoveQuantum("D", (this.slices + 1) / 2),
-            move.effectiveAmount,
+          turn = new PGVendoredTurn(
+            new PGVendoredQuantumTurn("D", (this.slices + 1) / 2),
+            turn.effectiveAmount,
           );
         } else if (grip === "M") {
-          move = new PGVendoredMove(
-            new PGVendoredMoveQuantum("L", (this.slices + 1) / 2),
-            move.effectiveAmount,
+          turn = new PGVendoredTurn(
+            new PGVendoredQuantumTurn("L", (this.slices + 1) / 2),
+            turn.effectiveAmount,
           );
         } else if (grip === "S") {
-          move = new PGVendoredMove(
-            new PGVendoredMoveQuantum("F", (this.slices + 1) / 2),
-            move.effectiveAmount,
+          turn = new PGVendoredTurn(
+            new PGVendoredQuantumTurn("F", (this.slices + 1) / 2),
+            turn.effectiveAmount,
           );
         }
       }
       if (this.slices > 2) {
         if (grip === "e") {
-          move = new PGVendoredMove(
-            new PGVendoredMoveQuantum("D", this.slices - 1, 2),
-            move.effectiveAmount,
+          turn = new PGVendoredTurn(
+            new PGVendoredQuantumTurn("D", this.slices - 1, 2),
+            turn.effectiveAmount,
           );
         } else if (grip === "m") {
-          move = new PGVendoredMove(
-            new PGVendoredMoveQuantum("L", this.slices - 1, 2),
-            move.effectiveAmount,
+          turn = new PGVendoredTurn(
+            new PGVendoredQuantumTurn("L", this.slices - 1, 2),
+            turn.effectiveAmount,
           );
         } else if (grip === "s") {
-          move = new PGVendoredMove(
-            new PGVendoredMoveQuantum("F", this.slices - 1, 2),
-            move.effectiveAmount,
+          turn = new PGVendoredTurn(
+            new PGVendoredQuantumTurn("F", this.slices - 1, 2),
+            turn.effectiveAmount,
           );
         }
       }
     }
-    return move;
+    return turn;
   }
 
-  // do we want to map slice moves to E/M/S instead of 2U/etc.?
-  public notationToExternal(move: PGVendoredMove): PGVendoredMove {
-    const grip = move.family;
-    if (!move.innerLayer && !move.outerLayer) {
+  // do we want to map slice turns to E/M/S instead of 2U/etc.?
+  public notationToExternal(turn: PGVendoredTurn): PGVendoredTurn {
+    const grip = turn.family;
+    if (!turn.innerLayer && !turn.outerLayer) {
       if (grip === "Rv") {
-        return new PGVendoredMove("x", move.effectiveAmount);
+        return new PGVendoredTurn("x", turn.effectiveAmount);
       } else if (grip === "Uv") {
-        return new PGVendoredMove("y", move.effectiveAmount);
+        return new PGVendoredTurn("y", turn.effectiveAmount);
       } else if (grip === "Fv") {
-        return new PGVendoredMove("z", move.effectiveAmount);
+        return new PGVendoredTurn("z", turn.effectiveAmount);
       } else if (grip === "Lv") {
-        return negate("x", move.effectiveAmount);
+        return negate("x", turn.effectiveAmount);
       } else if (grip === "Dv") {
-        return negate("y", move.effectiveAmount);
+        return negate("y", turn.effectiveAmount);
       } else if (grip === "Bv") {
-        return negate("z", move.effectiveAmount);
+        return negate("z", turn.effectiveAmount);
       }
     }
-    return move;
+    return turn;
   }
 }
 
@@ -136,29 +136,29 @@ export class FaceRenamingMapper implements NotationMapper {
   }
 
   public convert(
-    move: PGVendoredMove,
+    turn: PGVendoredTurn,
     a: FaceNameSwizzler,
     b: FaceNameSwizzler,
-  ): PGVendoredMove {
-    const grip = move.family;
+  ): PGVendoredTurn {
+    const grip = turn.family;
     const ngrip = this.convertString(grip, a, b);
     if (grip === ngrip) {
-      return move;
+      return turn;
     } else {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum(ngrip, move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn(ngrip, turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
     }
   }
 
-  public notationToInternal(move: PGVendoredMove): PGVendoredMove {
-    const r = this.convert(move, this.externalNames, this.internalNames);
+  public notationToInternal(turn: PGVendoredTurn): PGVendoredTurn {
+    const r = this.convert(turn, this.externalNames, this.internalNames);
     return r;
   }
 
-  public notationToExternal(move: PGVendoredMove): PGVendoredMove {
-    return this.convert(move, this.internalNames, this.externalNames);
+  public notationToExternal(turn: PGVendoredTurn): PGVendoredTurn {
+    return this.convert(turn, this.internalNames, this.externalNames);
   }
 }
 
@@ -167,127 +167,127 @@ export class FaceRenamingMapper implements NotationMapper {
 export class MegaminxScramblingNotationMapper implements NotationMapper {
   constructor(private child: NotationMapper) {}
 
-  public notationToInternal(move: PGVendoredMove): PGVendoredMove | null {
-    if (move.innerLayer === undefined && move.outerLayer === undefined) {
-      if (Math.abs(move.effectiveAmount) === 1) {
-        if (move.family === "R++") {
-          return new PGVendoredMove(
-            new PGVendoredMoveQuantum("L", 3, 2),
-            -2 * move.effectiveAmount,
+  public notationToInternal(turn: PGVendoredTurn): PGVendoredTurn | null {
+    if (turn.innerLayer === undefined && turn.outerLayer === undefined) {
+      if (Math.abs(turn.effectiveAmount) === 1) {
+        if (turn.family === "R++") {
+          return new PGVendoredTurn(
+            new PGVendoredQuantumTurn("L", 3, 2),
+            -2 * turn.effectiveAmount,
           );
-        } else if (move.family === "R--") {
-          return new PGVendoredMove(
-            new PGVendoredMoveQuantum("L", 3, 2),
-            2 * move.effectiveAmount,
+        } else if (turn.family === "R--") {
+          return new PGVendoredTurn(
+            new PGVendoredQuantumTurn("L", 3, 2),
+            2 * turn.effectiveAmount,
           );
-        } else if (move.family === "D++") {
-          return new PGVendoredMove(
-            new PGVendoredMoveQuantum("U", 3, 2),
-            -2 * move.effectiveAmount,
+        } else if (turn.family === "D++") {
+          return new PGVendoredTurn(
+            new PGVendoredQuantumTurn("U", 3, 2),
+            -2 * turn.effectiveAmount,
           );
-        } else if (move.family === "D--") {
-          return new PGVendoredMove(
-            new PGVendoredMoveQuantum("U", 3, 2),
-            2 * move.effectiveAmount,
+        } else if (turn.family === "D--") {
+          return new PGVendoredTurn(
+            new PGVendoredQuantumTurn("U", 3, 2),
+            2 * turn.effectiveAmount,
           );
         }
       }
-      if (move.family === "y") {
-        return new PGVendoredMove("Uv", move.effectiveAmount);
+      if (turn.family === "y") {
+        return new PGVendoredTurn("Uv", turn.effectiveAmount);
       }
     }
-    return this.child.notationToInternal(move);
+    return this.child.notationToInternal(turn);
   }
 
-  // we never rewrite click moves to these moves.
-  public notationToExternal(move: PGVendoredMove): PGVendoredMove | null {
-    if (move.family === "Uv") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("y", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+  // we never rewrite click turns to these turns.
+  public notationToExternal(turn: PGVendoredTurn): PGVendoredTurn | null {
+    if (turn.family === "Uv") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("y", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
     }
-    if (move.family === "Dv") {
-      return negate("y", move.effectiveAmount);
+    if (turn.family === "Dv") {
+      return negate("y", turn.effectiveAmount);
     }
-    return this.child.notationToExternal(move);
+    return this.child.notationToExternal(turn);
   }
 }
 
 export class SkewbNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
-  public notationToInternal(move: PGVendoredMove): PGVendoredMove | null {
-    if (move.innerLayer || move.outerLayer) {
+  public notationToInternal(turn: PGVendoredTurn): PGVendoredTurn | null {
+    if (turn.innerLayer || turn.outerLayer) {
       return null;
     }
-    if (move.family === "F") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("DFR", move.outerLayer, move.innerLayer),
-        move.effectiveAmount,
+    if (turn.family === "F") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("DFR", turn.outerLayer, turn.innerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "R") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("DBR", move.outerLayer, move.innerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "R") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("DBR", turn.outerLayer, turn.innerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "L") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("DFL", move.outerLayer, move.innerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "L") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("DFL", turn.outerLayer, turn.innerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "B") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("DBL", move.outerLayer, move.innerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "B") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("DBL", turn.outerLayer, turn.innerLayer),
+        turn.effectiveAmount,
       );
       /*
        *   (1) We are not including x/y/z in Skewb; they aren't WCA notation and
        *   it's unclear anyone needs them for reconstructions.
        *
-    } else if (move.family === "x") {
-      return new BlockMove(move.outerLayer, move.innerLayer, "Rv", move.amount);
-    } else if (move.family === "y") {
-      return new BlockMove(move.outerLayer, move.innerLayer, "Uv", move.amount);
-    } else if (move.family === "z") {
-      return new BlockMove(move.outerLayer, move.innerLayer, "Fv", move.amount);
+    } else if (turn.family === "x") {
+      return new BlockTurn(turn.outerLayer, turn.innerLayer, "Rv", turn.amount);
+    } else if (turn.family === "y") {
+      return new BlockTurn(turn.outerLayer, turn.innerLayer, "Uv", turn.amount);
+    } else if (turn.family === "z") {
+      return new BlockTurn(turn.outerLayer, turn.innerLayer, "Fv", turn.amount);
        */
     } else {
       return null;
     }
   }
 
-  // we never rewrite click moves to these moves.
-  public notationToExternal(move: PGVendoredMove): PGVendoredMove | null {
-    if (this.child.spinmatch(move.family, "DFR")) {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("F", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+  // we never rewrite click turns to these turns.
+  public notationToExternal(turn: PGVendoredTurn): PGVendoredTurn | null {
+    if (this.child.spinmatch(turn.family, "DFR")) {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("F", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (this.child.spinmatch(move.family, "DRB")) {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("R", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (this.child.spinmatch(turn.family, "DRB")) {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("R", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (this.child.spinmatch(move.family, "DFL")) {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("L", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (this.child.spinmatch(turn.family, "DFL")) {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("L", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (this.child.spinmatch(move.family, "DBL")) {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("B", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (this.child.spinmatch(turn.family, "DBL")) {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("B", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
       /*
        *   See (1) above.
        *
-    } else if (move.family === "Rv") {
-      return new BlockMove(move.outerLayer, move.innerLayer, "x", move.amount);
-    } else if (move.family === "Uv") {
-      return new BlockMove(move.outerLayer, move.innerLayer, "y", move.amount);
-    } else if (move.family === "Fv") {
-      return new BlockMove(move.outerLayer, move.innerLayer, "z", move.amount);
+    } else if (turn.family === "Rv") {
+      return new BlockTurn(turn.outerLayer, turn.innerLayer, "x", turn.amount);
+    } else if (turn.family === "Uv") {
+      return new BlockTurn(turn.outerLayer, turn.innerLayer, "y", turn.amount);
+    } else if (turn.family === "Fv") {
+      return new BlockTurn(turn.outerLayer, turn.innerLayer, "z", turn.amount);
        */
     } else {
       return null;
@@ -298,108 +298,108 @@ export class SkewbNotationMapper implements NotationMapper {
 export class PyraminxNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
-  public notationToInternal(move: PGVendoredMove): PGVendoredMove | null {
-    if (move.innerLayer || move.outerLayer) {
+  public notationToInternal(turn: PGVendoredTurn): PGVendoredTurn | null {
+    if (turn.innerLayer || turn.outerLayer) {
       return null;
     }
-    if (move.family === "U") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("flr", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    if (turn.family === "U") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("flr", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "R") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("fld", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "R") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("fld", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "L") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("frd", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "L") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("frd", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "B") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("dlr", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "B") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("dlr", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "u") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("FLR", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "u") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("FLR", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "r") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("FLD", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "r") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("FLD", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "l") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("FRD", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "l") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("FRD", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "b") {
-      return new PGVendoredMove(
-        new PGVendoredMoveQuantum("DLR", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+    } else if (turn.family === "b") {
+      return new PGVendoredTurn(
+        new PGVendoredQuantumTurn("DLR", turn.innerLayer, turn.outerLayer),
+        turn.effectiveAmount,
       );
-    } else if (move.family === "y") {
-      return negate("Dv", move.effectiveAmount);
+    } else if (turn.family === "y") {
+      return negate("Dv", turn.effectiveAmount);
     } else {
       return null;
     }
   }
 
-  // we never rewrite click moves to these moves.
-  public notationToExternal(move: PGVendoredMove): PGVendoredMove | null {
-    if (move.family === move.family.toLowerCase()) {
-      const fam = move.family.toUpperCase();
+  // we never rewrite click turns to these turns.
+  public notationToExternal(turn: PGVendoredTurn): PGVendoredTurn | null {
+    if (turn.family === turn.family.toLowerCase()) {
+      const fam = turn.family.toUpperCase();
       if (this.child.spinmatch(fam, "FLR")) {
-        return new PGVendoredMove(
-          new PGVendoredMoveQuantum("U", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+        return new PGVendoredTurn(
+          new PGVendoredQuantumTurn("U", turn.innerLayer, turn.outerLayer),
+          turn.effectiveAmount,
         );
       } else if (this.child.spinmatch(fam, "FLD")) {
-        return new PGVendoredMove(
-          new PGVendoredMoveQuantum("R", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+        return new PGVendoredTurn(
+          new PGVendoredQuantumTurn("R", turn.innerLayer, turn.outerLayer),
+          turn.effectiveAmount,
         );
       } else if (this.child.spinmatch(fam, "FRD")) {
-        return new PGVendoredMove(
-          new PGVendoredMoveQuantum("L", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+        return new PGVendoredTurn(
+          new PGVendoredQuantumTurn("L", turn.innerLayer, turn.outerLayer),
+          turn.effectiveAmount,
         );
       } else if (this.child.spinmatch(fam, "DLR")) {
-        return new PGVendoredMove(
-          new PGVendoredMoveQuantum("B", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+        return new PGVendoredTurn(
+          new PGVendoredQuantumTurn("B", turn.innerLayer, turn.outerLayer),
+          turn.effectiveAmount,
         );
       }
     }
-    if (move.family === move.family.toUpperCase()) {
-      if (this.child.spinmatch(move.family, "FLR")) {
-        return new PGVendoredMove(
-          new PGVendoredMoveQuantum("u", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+    if (turn.family === turn.family.toUpperCase()) {
+      if (this.child.spinmatch(turn.family, "FLR")) {
+        return new PGVendoredTurn(
+          new PGVendoredQuantumTurn("u", turn.innerLayer, turn.outerLayer),
+          turn.effectiveAmount,
         );
-      } else if (this.child.spinmatch(move.family, "FLD")) {
-        return new PGVendoredMove(
-          new PGVendoredMoveQuantum("r", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+      } else if (this.child.spinmatch(turn.family, "FLD")) {
+        return new PGVendoredTurn(
+          new PGVendoredQuantumTurn("r", turn.innerLayer, turn.outerLayer),
+          turn.effectiveAmount,
         );
-      } else if (this.child.spinmatch(move.family, "FRD")) {
-        return new PGVendoredMove(
-          new PGVendoredMoveQuantum("l", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+      } else if (this.child.spinmatch(turn.family, "FRD")) {
+        return new PGVendoredTurn(
+          new PGVendoredQuantumTurn("l", turn.innerLayer, turn.outerLayer),
+          turn.effectiveAmount,
         );
-      } else if (this.child.spinmatch(move.family, "DLR")) {
-        return new PGVendoredMove(
-          new PGVendoredMoveQuantum("b", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+      } else if (this.child.spinmatch(turn.family, "DLR")) {
+        return new PGVendoredTurn(
+          new PGVendoredQuantumTurn("b", turn.innerLayer, turn.outerLayer),
+          turn.effectiveAmount,
         );
       }
     }
-    if (move.family === "Dv") {
-      return negate("y", move.effectiveAmount);
+    if (turn.family === "Dv") {
+      return negate("y", turn.effectiveAmount);
     } else {
       return null;
     }

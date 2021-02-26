@@ -1,5 +1,5 @@
-// export interface MoveJSON {
-//   type: "move";
+// export interface TurnJSON {
+//   type: "turn";
 //   family: string;
 //   innerLayer?: number;
 //   outerLayer?: number;
@@ -21,7 +21,7 @@
 //   B: AlgJSON;
 // }
 
-// export type UnitJSON = MoveJSON | GroupingJSON;
+// export type UnitJSON = TurnJSON | GroupingJSON;
 
 // export interface AlgJSON {
 //   type: "alg";

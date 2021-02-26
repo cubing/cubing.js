@@ -1,23 +1,23 @@
 import { Alg } from "./Alg";
 import { Turn } from "./units/leaves/Turn";
 
-export function experimentalAppendMove(
+export function experimentalAppendTurn(
   alg: Alg,
-  newMove: Turn,
+  newTurn: Turn,
   options?: {
     coalesce?: boolean; // defaults to false
     mod?: number;
   },
 ): Alg {
   const oldUnits = Array.from(alg.units());
-  const oldLastMove = oldUnits[oldUnits.length - 1] as Turn | undefined;
+  const oldLastTurn = oldUnits[oldUnits.length - 1] as Turn | undefined;
   if (
     options?.coalesce &&
-    oldLastMove &&
-    oldLastMove.quantum.isIdentical(newMove.quantum)
+    oldLastTurn &&
+    oldLastTurn.quantum.isIdentical(newTurn.quantum)
   ) {
     const newUnits = oldUnits.slice(0, oldUnits.length - 1);
-    let newAmount = oldLastMove.effectiveAmount + newMove.effectiveAmount;
+    let newAmount = oldLastTurn.effectiveAmount + newTurn.effectiveAmount;
     const mod = options?.mod;
     if (mod) {
       newAmount = ((newAmount % mod) + mod) % mod;
@@ -26,10 +26,10 @@ export function experimentalAppendMove(
       }
     }
     if (newAmount !== 0) {
-      newUnits.push(oldLastMove.modified({ repetition: newAmount }));
+      newUnits.push(oldLastTurn.modified({ repetition: newAmount }));
     }
     return new Alg(newUnits);
   } else {
-    return new Alg([...oldUnits, newMove]);
+    return new Alg([...oldUnits, newTurn]);
   }
 }

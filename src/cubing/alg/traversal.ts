@@ -19,7 +19,7 @@ function dispatch<DataDown, DataAlgUp, DataUnitUp>(
     return t.traverseGrouping(unit as Grouping, dataDown);
   }
   if (unit.is(Turn)) {
-    return t.traverseMove(unit as Turn, dataDown);
+    return t.traverseTurn(unit as Turn, dataDown);
   }
   if (unit.is(Commutator)) {
     return t.traverseCommutator(unit as Commutator, dataDown);
@@ -75,7 +75,7 @@ export abstract class TraversalDownUp<
     dataDown: DataDown,
   ): DataUnitUp;
 
-  public abstract traverseMove(move: Turn, dataDown: DataDown): DataUnitUp;
+  public abstract traverseTurn(turn: Turn, dataDown: DataDown): DataUnitUp;
 
   public abstract traverseCommutator(
     commutator: Commutator,
@@ -113,7 +113,7 @@ export abstract class TraversalUp<
 
   public abstract traverseAlg(alg: Alg): DataAlgUp;
   public abstract traverseGrouping(grouping: Grouping): DataUnitUp;
-  public abstract traverseMove(move: Turn): DataUnitUp;
+  public abstract traverseTurn(turn: Turn): DataUnitUp;
   public abstract traverseCommutator(commutator: Commutator): DataUnitUp;
   public abstract traverseConjugate(conjugate: Conjugate): DataUnitUp;
   public abstract traversePause(pause: Pause): DataUnitUp;
@@ -122,7 +122,7 @@ export abstract class TraversalUp<
 }
 
 export interface SimplifyOptions {
-  collapseMoves?: boolean;
+  collapseTurns?: boolean;
   depth?: number | null; // TODO: test
 }
 
@@ -137,18 +137,18 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
 
     const newUnits: Unit[] = [];
     let lastUnit: Unit | null = null;
-    const collapseMoves = options?.collapseMoves ?? true;
+    const collapseTurns = options?.collapseTurns ?? true;
     function appendCollapsed(newUnit: Unit) {
-      if (collapseMoves && lastUnit?.is(Turn) && newUnit.is(Turn)) {
-        const lastMove = lastUnit as Turn;
-        const newMove = newUnit as Turn;
-        if (lastMove.quantum.isIdentical(newMove.quantum)) {
+      if (collapseTurns && lastUnit?.is(Turn) && newUnit.is(Turn)) {
+        const lastTurn = lastUnit as Turn;
+        const newTurn = newUnit as Turn;
+        if (lastTurn.quantum.isIdentical(newTurn.quantum)) {
           newUnits.pop();
-          const newAmount = lastMove.effectiveAmount + newMove.effectiveAmount;
+          const newAmount = lastTurn.effectiveAmount + newTurn.effectiveAmount;
           if (newAmount !== 0) {
-            const coalescedMove = new Turn(lastMove.quantum, newAmount);
-            newUnits.push(coalescedMove);
-            lastUnit = coalescedMove;
+            const coalescedTurn = new Turn(lastTurn.quantum, newAmount);
+            newUnits.push(coalescedTurn);
+            lastUnit = coalescedTurn;
           } else {
             lastUnit = newUnits.slice(-1)[0];
           }
@@ -189,8 +189,8 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
     yield new Grouping(this.traverseAlg(grouping.experimentalAlg, newOptions));
   }
 
-  public *traverseMove(move: Turn, _options: SimplifyOptions): Generator<Unit> {
-    yield move;
+  public *traverseTurn(turn: Turn, _options: SimplifyOptions): Generator<Unit> {
+    yield turn;
   }
 
   public *traverseCommutator(

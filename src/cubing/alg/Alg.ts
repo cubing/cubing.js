@@ -103,7 +103,7 @@ export class Alg extends AlgCommon<Alg> {
   }
 
   /** @deprecated */
-  *experimentalLeafMoves(): Generator<Turn> {
+  *experimentalLeafTurns(): Generator<Turn> {
     for (const leaf of this.experimentalExpand()) {
       if (leaf.is(Turn)) {
         yield leaf as Turn;

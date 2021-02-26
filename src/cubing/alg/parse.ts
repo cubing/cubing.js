@@ -16,23 +16,23 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
 }
 
 const repetitionRegex = /^(\d+)?('?)/;
-const moveStartRegex = /^[_\dA-Za-z]/;
-const moveQuantumRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
+const turnStartRegex = /^[_\dA-Za-z]/;
+const turnQuantumRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
 const commentTextRegex = /[^\n]*/;
 
 export function parseAlg(s: string): Alg {
   return new AlgParser().parseAlg(s);
 }
 
-export function parseMove(s: string): Turn {
-  return new AlgParser().parseMove(s);
+export function parseTurn(s: string): Turn {
+  return new AlgParser().parseTurn(s);
 }
 
-export function parseMoveQuantum(s: string): QuantumTurn {
-  return new AlgParser().parseMoveQuantum(s);
+export function parseQuantumTurn(s: string): QuantumTurn {
+  return new AlgParser().parseQuantumTurn(s);
 }
 
-// TODO: support recording string locations for moves.
+// TODO: support recording string locations for turns.
 class AlgParser {
   #input: string = "";
   #idx: number = 0;
@@ -45,20 +45,20 @@ class AlgParser {
     return alg;
   }
 
-  parseMove(input: string): Turn {
+  parseTurn(input: string): Turn {
     this.#input = input;
     this.#idx = 0;
-    const move = this.parseMoveImpl();
+    const turn = this.parseTurnImpl();
     this.mustBeAtEndOfInput();
-    return move;
+    return turn;
   }
 
-  parseMoveQuantum(input: string): QuantumTurn {
+  parseQuantumTurn(input: string): QuantumTurn {
     this.#input = input;
     this.#idx = 0;
-    const moveQuantum = this.parseMoveQuantumImpl();
+    const turnQuantum = this.parseTurnQuantumImpl();
     this.mustBeAtEndOfInput();
-    return moveQuantum;
+    return turnQuantum;
   }
 
   private mustBeAtEndOfInput() {
@@ -88,10 +88,10 @@ class AlgParser {
       if (this.tryConsumeNext(" ")) {
         crowded = false;
         continue mainLoop;
-      } else if (moveStartRegex.test(this.#input[this.#idx])) {
+      } else if (turnStartRegex.test(this.#input[this.#idx])) {
         mustNotBeCrowded();
-        const move = this.parseMoveImpl();
-        algBuilder.push(move);
+        const turn = this.parseTurnImpl();
+        algBuilder.push(turn);
         crowded = true;
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
@@ -154,9 +154,9 @@ class AlgParser {
     return algBuilder.toAlg();
   }
 
-  private parseMoveQuantumImpl(): QuantumTurn {
+  private parseTurnQuantumImpl(): QuantumTurn {
     const [, , , outerLayerStr, innerLayerStr, family] = this.parseRegex(
-      moveQuantumRegex,
+      turnQuantumRegex,
     );
 
     return new QuantumTurn(
@@ -166,12 +166,12 @@ class AlgParser {
     );
   }
 
-  private parseMoveImpl(): Turn {
-    const moveQuantum = this.parseMoveQuantumImpl();
+  private parseTurnImpl(): Turn {
+    const turnQuantum = this.parseTurnQuantumImpl();
     const repetitionInfo = this.parseRepetition();
 
-    const move = new Turn(moveQuantum, repetitionInfo);
-    return move;
+    const turn = new Turn(turnQuantum, repetitionInfo);
+    return turn;
   }
 
   private parseRepetition(): RepetitionInfo {

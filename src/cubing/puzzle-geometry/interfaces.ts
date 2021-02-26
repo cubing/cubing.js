@@ -4,13 +4,13 @@
 //   use interoperably.  These definitions are not identical to those in
 //   the corresponding classes but they are interoperable.
 
-import { Turn, MoveQuantum } from "../alg";
+import { Turn, QuantumTurn } from "../alg";
 
-export class PGVendoredMove extends Turn {}
-export class PGVendoredMoveQuantum extends MoveQuantum {}
+export class PGVendoredTurn extends Turn {}
+export class PGVendoredQuantumTurn extends QuantumTurn {}
 
-// export class PGVendoredMove {
-//   public type: string = "blockMove";
+// export class PGVendoredTurn {
+//   public type: string = "blockTurn";
 //   public outerLayer?: number;
 //   public innerLayer?: number;
 //   constructor(
@@ -27,14 +27,14 @@ export class PGVendoredMoveQuantum extends MoveQuantum {}
 //     }
 //     if (outerLayer && !innerLayer) {
 //       throw new Error(
-//         "Attempted to contruct block move with outer layer but no inner layer",
+//         "Attempted to contruct block turn with outer layer but no inner layer",
 //       );
 //     }
 //   }
 // }
 
-export interface PGVendoredMoveNotation {
-  lookupMove(move: PGVendoredMove): Transformation | undefined;
+export interface PGVendoredTurnNotation {
+  lookupTurn(turn: PGVendoredTurn): Transformation | undefined;
 }
 
 export interface PGVendoredOrbitTransformation {
@@ -53,7 +53,7 @@ export interface PGVendoredKPuzzleDefinition {
   name: string;
   orbits: { [key: string]: PGVendoredOrbitDefinition };
   startPieces: Transformation;
-  moves: { [key: string]: Transformation };
+  turns: { [key: string]: Transformation };
   svg?: string;
-  moveNotation?: PGVendoredMoveNotation;
+  turnNotation?: PGVendoredTurnNotation;
 }

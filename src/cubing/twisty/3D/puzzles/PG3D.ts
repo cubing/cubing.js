@@ -16,7 +16,7 @@ import {
   KPuzzleDefinition,
   Transformation,
 } from "../../../kpuzzle";
-import { transformationForMoveQuantum } from "../../../kpuzzle/kpuzzle";
+import { transformationForTurnQuantum } from "../../../kpuzzle/kpuzzle";
 import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
 import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
@@ -231,7 +231,7 @@ const PG_SCALE = 0.5;
  *  two meshes are directly coincident, and the (shared) materialIndex
  *  in each face points to a non-invisible material in exactly one of
  *  the two meshes.  When we decide to twist some cubies, we make
- *  the cubies that move point to visible materials in the moving
+ *  the cubies that turn point to visible materials in the moving
  *  mesh (which makes them point to invisible materials in the static
  *  mesh).  This way, we only need to rotate the moving mesh as a
  *  single object---this should be very fast, and occur entirely in
@@ -256,7 +256,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   protected movingObj: Object3D;
   protected fixedGeo: Geometry;
   protected lastPos: Transformation;
-  protected lastMove: Transformation;
+  protected lastTurn: Transformation;
 
   constructor(
     cursor: AlgCursor,
@@ -414,29 +414,29 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     // FIXME tgr const kp = new KPuzzle(this.definition);
     let vismods = 0;
-    for (const moveProgress of p.movesInProgress) {
-      const externalMove = moveProgress.move;
+    for (const turnProgress of p.turnsInProgress) {
+      const externalTurn = turnProgress.turn;
       // TODO: unswizzle goes external to internal, and so does the call after that
-      // and so does the stateForBlockMove call
-      const unswizzled = this.pgdat.unswizzle(externalMove);
-      const move = this.pgdat.notationMapper.notationToInternal(externalMove);
-      if (move === null) {
-        throw Error("Bad blockmove " + externalMove.family);
+      // and so does the stateForBlockTurn call
+      const unswizzled = this.pgdat.unswizzle(externalTurn);
+      const turn = this.pgdat.notationMapper.notationToInternal(externalTurn);
+      if (turn === null) {
+        throw Error("Bad blockturn " + externalTurn.family);
       }
-      const quantumTransformation = transformationForMoveQuantum(
+      const quantumTransformation = transformationForTurnQuantum(
         this.definition,
-        externalMove.quantum,
+        externalTurn.quantum,
       );
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
       const angle =
-        (-this.ease(moveProgress.fraction) *
-          moveProgress.direction *
-          move.effectiveAmount *
+        (-this.ease(turnProgress.fraction) *
+          turnProgress.direction *
+          turn.effectiveAmount *
           TAU) /
         ax.order;
       this.movingObj.rotateOnAxis(turnNormal, angle);
-      if (this.lastMove !== quantumTransformation) {
+      if (this.lastTurn !== quantumTransformation) {
         for (const orbit in this.stickers) {
           const pieces = this.stickers[orbit];
           const orin = pieces.length;
@@ -465,7 +465,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
             }
           }
         }
-        this.lastMove = quantumTransformation;
+        this.lastTurn = quantumTransformation;
       }
     }
     if (vismods) {

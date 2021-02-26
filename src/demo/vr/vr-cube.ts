@@ -12,12 +12,12 @@ import {
   Vector3,
 } from "three";
 // Import index files from source.
-// This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../cubing/alg";
+// This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockTurn, Sequence } from "../../cubing/alg";
 import {
-  BareBlockMove,
-  BlockMove,
-  coalesceBaseMoves,
-  experimentalAppendBlockMove,
+  BareBlockTurn,
+  BlockTurn,
+  coalesceBaseTurns,
+  experimentalAppendBlockTurn,
   parseAlg,
   Sequence,
 } from "../../cubing/alg/index";
@@ -27,7 +27,7 @@ import { TAU } from "../../cubing/twisty/3D/TAU";
 import { AlgCursor } from "../../cubing/twisty/animation/cursor/AlgCursor";
 import { Timeline } from "../../cubing/twisty/animation/Timeline";
 import { Cube3D } from "../../cubing/twisty/index";
-import { countMoves } from "../../cubing/twisty/TODO-MOVE-ME/move-counter";
+import { countTurns } from "../../cubing/twisty/TODO-MOVE-ME/turn-counter";
 import {
   daydream,
   initialHeight,
@@ -92,15 +92,15 @@ export class VRCube {
   private resizeInitialDistance: number;
   private resizeInitialScale: number;
 
-  private moveInitialPuzzleQuaternion: Quaternion = new Quaternion();
-  private moveInitialControllerQuaternion: Quaternion = new Quaternion();
+  private turnInitialPuzzleQuaternion: Quaternion = new Quaternion();
+  private turnInitialControllerQuaternion: Quaternion = new Quaternion();
 
-  private moveLastControllerPosition: Vector3 = new Vector3();
-  private moveVelocity: Vector3 = new Vector3(); // TODO: Track elapsed time since last update?
+  private turnLastControllerPosition: Vector3 = new Vector3();
+  private turnVelocity: Vector3 = new Vector3(); // TODO: Track elapsed time since last update?
 
-  // Wait for both move buttons to be released before allowing moves.
+  // Wait for both turn buttons to be released before allowing turns.
   // This "locks" the input into resizing.
-  private waitForMoveButtonClear = false;
+  private waitForTurnButtonClear = false;
 
   constructor(private vrInput: VRInput) {
     this.timeline = new Timeline();
@@ -183,8 +183,8 @@ export class VRCube {
           invert: true,
         },
       ],
-      this.onMoveStart.bind(this, 0),
-      this.onMoveContinued.bind(this, 0),
+      this.onTurnStart.bind(this, 0),
+      this.onTurnContinued.bind(this, 0),
     );
     this.vrInput.addButtonListener(
       ButtonGrouping.All,
@@ -199,8 +199,8 @@ export class VRCube {
           buttonIdx: OculusButton.XorA,
         },
       ],
-      this.onMoveStart.bind(this, 1),
-      this.onMoveContinued.bind(this, 1),
+      this.onTurnStart.bind(this, 1),
+      this.onTurnContinued.bind(this, 1),
     );
     this.vrInput.addButtonListener(
       ButtonGrouping.All,
@@ -230,7 +230,7 @@ export class VRCube {
           buttonIdx: OculusButton.XorA,
         },
       ],
-      this.moveButtonClear.bind(this),
+      this.turnButtonClear.bind(this),
     );
 
     try {
@@ -247,10 +247,10 @@ export class VRCube {
   }
 
   public update(): void {
-    this.group.position.add(this.moveVelocity);
-    this.moveVelocity.multiplyScalar(0.99);
-    if (this.moveVelocity.length() < 0.001) {
-      this.moveVelocity.setScalar(0);
+    this.group.position.add(this.turnVelocity);
+    this.turnVelocity.multiplyScalar(0.99);
+    if (this.turnVelocity.length() < 0.001) {
+      this.turnVelocity.setScalar(0);
       // TODO: Set a flag to indicate that the puzzle is not moving?
     }
   }
@@ -300,8 +300,8 @@ export class VRCube {
   }
 
   private onResizeStart(): void {
-    this.waitForMoveButtonClear = true;
-    this.moveVelocity.setScalar(0);
+    this.waitForTurnButtonClear = true;
+    this.turnVelocity.setScalar(0);
     this.hapticPulse(0, 0.2, 75);
     this.hapticPulse(1, 0.2, 75);
     this.resizeInitialDistance = this.controllerDistance();
@@ -320,38 +320,38 @@ export class VRCube {
     this.hapticPulse(1, 0.1, 75);
   }
 
-  private moveButtonClear(): void {
-    this.waitForMoveButtonClear = false;
+  private turnButtonClear(): void {
+    this.waitForTurnButtonClear = false;
   }
 
-  private onMoveStart(controllerIdx: number): void {
-    if (this.waitForMoveButtonClear) {
+  private onTurnStart(controllerIdx: number): void {
+    if (this.waitForTurnButtonClear) {
       return;
     }
     this.hapticPulse(controllerIdx, 0.2, 50);
-    this.moveInitialPuzzleQuaternion.copy(this.group.quaternion);
+    this.turnInitialPuzzleQuaternion.copy(this.group.quaternion);
 
     const controller = this.vrInput.controllers[controllerIdx];
-    this.moveLastControllerPosition.copy(controller.position);
-    this.moveInitialControllerQuaternion.copy(controller.quaternion);
+    this.turnLastControllerPosition.copy(controller.position);
+    this.turnInitialControllerQuaternion.copy(controller.quaternion);
   }
 
-  private onMoveContinued(controllerIdx: number): void {
-    if (this.waitForMoveButtonClear) {
+  private onTurnContinued(controllerIdx: number): void {
+    if (this.waitForTurnButtonClear) {
       return;
     }
     const controller = this.vrInput.controllers[controllerIdx];
 
-    this.moveVelocity
+    this.turnVelocity
       .copy(controller.position)
-      .sub(this.moveLastControllerPosition);
-    this.moveLastControllerPosition.copy(controller.position);
+      .sub(this.turnLastControllerPosition);
+    this.turnLastControllerPosition.copy(controller.position);
 
     this.group.quaternion
-      .copy(this.moveInitialControllerQuaternion)
+      .copy(this.turnInitialControllerQuaternion)
       .inverse()
       .premultiply(controller.quaternion)
-      .multiply(this.moveInitialPuzzleQuaternion);
+      .multiply(this.turnInitialPuzzleQuaternion);
   }
 
   private onPress(controllerIdx: number): void {
@@ -381,7 +381,7 @@ export class VRCube {
         controller.userData.controllerNumber
       ] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
       const side = closestIntersection.object.userData.side;
-      this.addMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
+      this.addTurn(BareBlockTurn(side, controllerIdx === 0 ? -1 : 1));
       this.hapticPulse(controllerIdx, 0.1, 75);
     }
   }
@@ -391,19 +391,19 @@ export class VRCube {
     this.cursor.setAlg(alg);
   }
 
-  addMove(move: BlockMove, coalesce: boolean = false): void {
-    const oldNumMoves = countMoves(this.alg); // TODO
-    const newAlg = experimentalAppendBlockMove(
-      coalesceBaseMoves(this.alg),
-      move,
+  addTurn(turn: BlockTurn, coalesce: boolean = false): void {
+    const oldNumTurns = countTurns(this.alg); // TODO
+    const newAlg = experimentalAppendBlockTurn(
+      coalesceBaseTurns(this.alg),
+      turn,
       coalesce,
       0,
     );
     this.setAlg(newAlg);
 
     // TODO
-    if (oldNumMoves <= countMoves(newAlg)) {
-      this.timeline.experimentalJumpToLastMove();
+    if (oldNumTurns <= countTurns(newAlg)) {
+      this.timeline.experimentalJumpToLastTurn();
     } else {
       this.timeline.jumpToEnd();
     }
@@ -415,8 +415,8 @@ export class VRCube {
       case "reset":
         this.setAlg(new Sequence([]));
         break;
-      case "move":
-        this.addMove(e.data.latestMove);
+      case "turn":
+        this.addTurn(e.data.latestTurn);
         break;
       case "orientation": {
         const { x, y, z, w } = e.data.quaternion;

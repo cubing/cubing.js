@@ -1,4 +1,4 @@
-import { MoveEvent } from "../bluetooth";
+import { TurnEvent } from "../bluetooth";
 import { OrientationEvent } from "../bluetooth/bluetooth-puzzle";
 import { ProxyEvent } from "./proxy-event";
 
@@ -11,9 +11,9 @@ export class WebSocketProxySender {
     this.websocket.onmessage = this.onmessage.bind(this);
   }
 
-  public sendMoveEvent(e: MoveEvent): void {
+  public sendTurnEvent(e: TurnEvent): void {
     this.sendProxyEvent({
-      event: "move",
+      event: "turn",
       data: e,
     });
   }

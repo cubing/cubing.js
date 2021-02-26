@@ -24,7 +24,7 @@ export const cube3x3x3KPuzzle: KPuzzleDefinition = {
       orientation: [0, 0, 0, 0, 0, 0],
     },
   },
-  moves: {
+  turns: {
     U: {
       EDGES: {
         permutation: [1, 2, 3, 0, 4, 5, 6, 7, 8, 9, 10, 11],

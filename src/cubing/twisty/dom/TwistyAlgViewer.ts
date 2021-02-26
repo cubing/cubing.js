@@ -19,13 +19,13 @@ import {
 } from "./element/node-custom-element-shims";
 
 class DataDown {
-  earliestMoveIndex: number;
+  earliestTurnIndex: number;
   twistyAlgViewer: ExperimentalTwistyAlgViewer;
   direction: IterationDirection;
 }
 
 class DataUp {
-  moveCount: number;
+  turnCount: number;
   element: TwistyAlgWrapperElem | TwistyAlgLeafElem;
 }
 
@@ -36,7 +36,7 @@ class TwistyAlgLeafElem extends HTMLElementShim {
     this.classList.add(className);
 
     this.addEventListener("click", () => {
-      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex);
+      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestTurnIndex);
     });
   }
 
@@ -61,7 +61,7 @@ class TwistyAlgWrapperElem extends HTMLElementShim {
 
   addElem(dataUp: DataUp): number {
     this.queue.push(dataUp.element);
-    return dataUp.moveCount;
+    return dataUp.turnCount;
   }
 
   flushQueue(
@@ -106,7 +106,7 @@ function maybeReverseList<T>(l: T[], direction: IterationDirection): T[] {
 
 class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
-    let moveCount = 0;
+    let turnCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-sequence");
     let first = true;
     for (const unit of direct(alg.units(), dataDown.direction)) {
@@ -114,9 +114,9 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
         element.addString(" ");
       }
       first = false;
-      moveCount += element.addElem(
+      turnCount += element.addElem(
         this.traverseUnit(unit, {
-          earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+          earliestTurnIndex: dataDown.earliestTurnIndex + turnCount,
           twistyAlgViewer: dataDown.twistyAlgViewer,
           direction: dataDown.direction,
         }),
@@ -124,7 +124,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     }
     element.flushQueue(dataDown.direction);
     return {
-      moveCount: moveCount,
+      turnCount: turnCount,
       element,
     };
   }
@@ -134,12 +134,12 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       dataDown.direction,
       grouping.experimentalEffectiveAmount,
     );
-    let moveCount = 0;
+    let turnCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-group");
     element.addString("(");
-    moveCount += element.addElem(
+    turnCount += element.addElem(
       this.traverseAlg(grouping.experimentalAlg, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestTurnIndex: dataDown.earliestTurnIndex + turnCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction,
       }),
@@ -147,17 +147,17 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString(")" + grouping.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount: moveCount * Math.abs(grouping.experimentalEffectiveAmount),
+      turnCount: turnCount * Math.abs(grouping.experimentalEffectiveAmount),
       element,
     };
   }
 
-  public traverseMove(blockMove: Turn, dataDown: DataDown): DataUp {
+  public traverseTurn(blockTurn: Turn, dataDown: DataDown): DataUp {
     return {
-      moveCount: 1,
+      turnCount: 1,
       element: new TwistyAlgLeafElem(
-        "twisty-alg-blockMove",
-        blockMove.toString(),
+        "twisty-alg-blockTurn",
+        blockTurn.toString(),
         dataDown,
       ),
     };
@@ -167,7 +167,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     commutator: Commutator,
     dataDown: DataDown,
   ): DataUp {
-    let moveCount = 0;
+    let turnCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-commutator");
     element.addString("[");
     element.flushQueue();
@@ -179,17 +179,17 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       [commutator.A, commutator.B],
       direction,
     );
-    moveCount += element.addElem(
+    turnCount += element.addElem(
       this.traverseAlg(first, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestTurnIndex: dataDown.earliestTurnIndex + turnCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction,
       }),
     );
     element.addString(", ");
-    moveCount += element.addElem(
+    turnCount += element.addElem(
       this.traverseAlg(second, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestTurnIndex: dataDown.earliestTurnIndex + turnCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction,
       }),
@@ -198,14 +198,14 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("]" + commutator.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount:
-        moveCount * 2 * Math.abs(commutator.experimentalEffectiveAmount),
+      turnCount:
+        turnCount * 2 * Math.abs(commutator.experimentalEffectiveAmount),
       element,
     };
   }
 
   public traverseConjugate(conjugate: Conjugate, dataDown: DataDown): DataUp {
-    let moveCount = 0;
+    let turnCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-conjugate");
     element.addString("[");
     const direction = updateDirectionByAmount(
@@ -214,16 +214,16 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     );
     const aLen = element.addElem(
       this.traverseAlg(conjugate.A, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestTurnIndex: dataDown.earliestTurnIndex + turnCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction,
       }),
     );
-    moveCount += aLen;
+    turnCount += aLen;
     element.addString(": ");
-    moveCount += element.addElem(
+    turnCount += element.addElem(
       this.traverseAlg(conjugate.B, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+        earliestTurnIndex: dataDown.earliestTurnIndex + turnCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
         direction,
       }),
@@ -231,15 +231,15 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("]" + conjugate.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount:
-        (moveCount + aLen) * Math.abs(conjugate.experimentalEffectiveAmount),
+      turnCount:
+        (turnCount + aLen) * Math.abs(conjugate.experimentalEffectiveAmount),
       element,
     };
   }
 
   public traversePause(_pause: Pause, dataDown: DataDown): DataUp {
     return {
-      moveCount: 1,
+      turnCount: 1,
       element: new TwistyAlgLeafElem("twisty-alg-pause", ".", dataDown),
     };
   }
@@ -248,14 +248,14 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     const element = new TwistyAlgWrapperElem("twisty-alg-newLine");
     element.append(document.createElement("br"));
     return {
-      moveCount: 0,
+      turnCount: 0,
       element,
     };
   }
 
   public traverseLineComment(comment: LineComment, dataDown: DataDown): DataUp {
     return {
-      moveCount: 0,
+      turnCount: 0,
       element: new TwistyAlgLeafElem(
         "twisty-alg-comment",
         `//${comment.text}`,
@@ -287,7 +287,7 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
 
   private setAlg(alg: Alg): void {
     this.#domTree = algToDOMTree(alg, {
-      earliestMoveIndex: 0,
+      earliestTurnIndex: 0,
       twistyAlgViewer: this,
       direction: IterationDirection.Forwards,
     }).element;

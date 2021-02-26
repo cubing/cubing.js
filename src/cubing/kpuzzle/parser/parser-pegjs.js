@@ -1257,8 +1257,8 @@ function peg$parse(input, options) {
   }
 
   function fixMoves(def) {
-    for (const moveName in def.moves) {
-      const move = def.moves[moveName];
+    for (const moveName in def.turns) {
+      const move = def.turns[moveName];
       for (const orbitName in def.orbits) {
         const moveOrbit = move[orbitName];
         const oldOrientation = moveOrbit.orientation;

@@ -1,6 +1,6 @@
 export {
   ProxyEvent,
-  ProxyMoveEvent,
+  ProxyTurnEvent,
   ProxyOrientationEvent,
   ProxyResetEvent,
 } from "./proxy-event";

@@ -1,6 +1,6 @@
 import { Vector3 } from "three";
 import { Alg, Turn } from "../../alg";
-import { experimentalAppendMove } from "../../alg/operation";
+import { experimentalAppendTurn } from "../../alg/operation";
 import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
@@ -13,7 +13,7 @@ import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor } from "../animation/cursor/AlgCursor";
 import { SimpleAlgIndexer } from "../animation/indexer/SimpleAlgIndexer";
-import { SimultaneousMoveIndexer } from "../animation/indexer/simultaneous-moves/SimultaneousMoveIndexer";
+import { SimultaneousTurnIndexer } from "../animation/indexer/simultaneous-turns/SimultaneousTurnIndexer";
 import { TreeAlgIndexer } from "../animation/indexer/tree/TreeAlgIndexer";
 import {
   Timeline,
@@ -21,7 +21,7 @@ import {
   TimelineActionEvent,
   TimestampLocationType,
 } from "../animation/Timeline";
-import { countMoves } from "../TODO-MOVE-ME/move-counter"; // TODO
+import { countTurns } from "../TODO-MOVE-ME/turn-counter"; // TODO
 import { TwistyControlButtonPanel } from "./controls/buttons";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
@@ -85,11 +85,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   viewerElems: TwistyViewerElement[] = []; // TODO: can we represent the intermediate state better?
   controlElems: TwistyControlElement[] = []; // TODO: can we represent the intermediate state better?
 
-  #hackyPendingFinalMoveCoalesce: boolean = false;
+  #hackyPendingFinalTurnCoalesce: boolean = false;
 
   #viewerWrapper: TwistyViewerWrapper;
-  public legacyExperimentalCoalesceModFunc: (move: Turn) => number = (
-    _move: Turn,
+  public legacyExperimentalCoalesceModFunc: (turn: Turn) => number = (
+    _turn: Turn,
   ): number => 0;
 
   #controlsClassListManager: ClassListManager<
@@ -288,7 +288,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       this.createBackViewer();
     }
     if (backView === "none" && this.viewerElems.length > 1) {
-      this.removeBackViewerElem();
+      this.returnBackViewerElem();
     }
     if (this.#viewerWrapper && this.#viewerWrapper.setBackView(backView)) {
       for (const viewer of this.viewerElems as Twisty3DCanvas[]) {
@@ -382,7 +382,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       {
         simple: SimpleAlgIndexer,
         tree: TreeAlgIndexer,
-        simultaneous: SimultaneousMoveIndexer,
+        simultaneous: SimultaneousTurnIndexer,
       }[cursorName],
     );
   }
@@ -696,12 +696,12 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#viewerWrapper.addElement(backViewer);
   }
 
-  private removeBackViewerElem(): void {
+  private returnBackViewerElem(): void {
     // TODO: Validate visualization.
     if (this.viewerElems.length !== 2) {
-      throw new Error("Tried to remove non-existent back view!");
+      throw new Error("Tried to return non-existent back view!");
     }
-    this.#viewerWrapper.removeElement(this.viewerElems.pop()!);
+    this.#viewerWrapper.returnElement(this.viewerElems.pop()!);
   }
 
   async setCustomPuzzleGeometry(
@@ -712,35 +712,35 @@ export class TwistyPlayer extends ManagedCustomElement {
     await this.updatePuzzleDOM();
   }
 
-  // TODO: Handle playing the new move vs. just modying the alg.
+  // TODO: Handle playing the new turn vs. just modying the alg.
   // Note: setting `coalesce`
-  experimentalAddMove(
-    move: Turn,
+  experimentalAddTurn(
+    turn: Turn,
     coalesce: boolean = false,
     coalesceDelayed: boolean = false,
   ): void {
-    if (this.#hackyPendingFinalMoveCoalesce) {
+    if (this.#hackyPendingFinalTurnCoalesce) {
       this.hackyCoalescePending();
     }
-    const oldNumMoves = countMoves(this.alg); // TODO
-    const newAlg = experimentalAppendMove(this.alg, move, {
+    const oldNumTurns = countTurns(this.alg); // TODO
+    const newAlg = experimentalAppendTurn(this.alg, turn, {
       coalesce: coalesce && !coalesceDelayed,
-      mod: this.legacyExperimentalCoalesceModFunc(move),
+      mod: this.legacyExperimentalCoalesceModFunc(turn),
     });
-    // const newAlg = experimentalAppendBlockMove(
+    // const newAlg = experimentalAppendBlockTurn(
     //   this.alg,
-    //   move,
+    //   turn,
     //   coalesce && !coalesceDelayed,
-    //   this.legacyExperimentalCoalesceModFunc(move),
+    //   this.legacyExperimentalCoalesceModFunc(turn),
     // );
     if (coalesce && coalesceDelayed) {
-      this.#hackyPendingFinalMoveCoalesce = true;
+      this.#hackyPendingFinalTurnCoalesce = true;
     }
 
     this.alg = newAlg;
     // TODO
-    if (oldNumMoves <= countMoves(newAlg)) {
-      this.timeline.experimentalJumpToLastMove();
+    if (oldNumTurns <= countTurns(newAlg)) {
+      this.timeline.experimentalJumpToLastTurn();
     } else {
       this.timeline.jumpToEnd();
     }
@@ -751,7 +751,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     if (
       actionEvent.action === TimelineAction.Pausing &&
       actionEvent.locationType === TimestampLocationType.EndOfTimeline &&
-      this.#hackyPendingFinalMoveCoalesce
+      this.#hackyPendingFinalTurnCoalesce
     ) {
       this.hackyCoalescePending();
       this.timeline.jumpToEnd();
@@ -761,16 +761,16 @@ export class TwistyPlayer extends ManagedCustomElement {
   private hackyCoalescePending(): void {
     const units = Array.from(this.alg.units());
     const length = units.length;
-    const pending = this.#hackyPendingFinalMoveCoalesce;
-    this.#hackyPendingFinalMoveCoalesce = false;
+    const pending = this.#hackyPendingFinalTurnCoalesce;
+    this.#hackyPendingFinalTurnCoalesce = false;
     if (pending && length > 1 && units[length - 1].is(Turn)) {
-      const finalMove = units[length - 1] as Turn;
-      const newAlg = experimentalAppendMove(
+      const finalTurn = units[length - 1] as Turn;
+      const newAlg = experimentalAppendTurn(
         new Alg(units.slice(0, length - 1)),
-        finalMove,
+        finalTurn,
         {
           coalesce: true,
-          mod: this.legacyExperimentalCoalesceModFunc(finalMove),
+          mod: this.legacyExperimentalCoalesceModFunc(finalTurn),
         },
       );
       this.alg = newAlg;

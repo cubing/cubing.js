@@ -17,31 +17,31 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     );
   }
 
-  public getMove(index: number): Turn | null {
+  public getTurn(index: number): Turn | null {
     // FIXME need to support Pause
-    if (this.walker.moveByIndex(index)) {
-      if (!this.walker.move) {
+    if (this.walker.turnByIndex(index)) {
+      if (!this.walker.turn) {
         throw new Error("`this.walker.mv` missing");
       }
-      const move = this.walker.move as Turn;
+      const turn = this.walker.turn as Turn;
       // TODO: this type of negation needs to be in alg
       if (this.walker.back) {
-        return move.inverse();
+        return turn.inverse();
       }
-      return move;
+      return turn;
     }
     return null;
   }
 
-  public indexToMoveStartTimestamp(index: number): Timestamp {
-    if (this.walker.moveByIndex(index) || this.walker.i === index) {
+  public indexToTurnStartTimestamp(index: number): Timestamp {
+    if (this.walker.turnByIndex(index) || this.walker.i === index) {
       return this.walker.dur;
     }
     throw new Error("Out of algorithm: index " + index);
   }
 
-  public indexToMovesInProgress(index: number): Timestamp {
-    if (this.walker.moveByIndex(index) || this.walker.i === index) {
+  public indexToTurnsInProgress(index: number): Timestamp {
+    if (this.walker.turnByIndex(index) || this.walker.i === index) {
       return this.walker.dur;
     }
     throw new Error("Out of algorithm: index " + index);
@@ -51,7 +51,7 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     index: number,
     startTransformation?: State<PuzzleWrapper>,
   ): State<PuzzleWrapper> {
-    this.walker.moveByIndex(index);
+    this.walker.turnByIndex(index);
     return this.puzzle.combine(
       startTransformation ?? this.puzzle.startState(),
       this.walker.st,
@@ -59,19 +59,19 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
   }
 
   // TransformAtIndex does not reflect the start state; it only reflects
-  // the change from the start state to the current move index.  If you
+  // the change from the start state to the current turn index.  If you
   // want the actual state, use stateAtIndex.
   public transformAtIndex(index: number): State<PuzzleWrapper> {
-    this.walker.moveByIndex(index);
+    this.walker.turnByIndex(index);
     return this.walker.st;
   }
 
-  public numMoves(): number {
-    return this.decoration.moveCount;
+  public numTurns(): number {
+    return this.decoration.turnCount;
   }
 
   public timestampToIndex(timestamp: Timestamp): number {
-    this.walker.moveByDuration(timestamp);
+    this.walker.turnByDuration(timestamp);
     return this.walker.i;
   }
 
@@ -79,8 +79,8 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     return this.decoration.duration;
   }
 
-  public moveDuration(index: number): number {
-    this.walker.moveByIndex(index);
-    return this.walker.moveDuration;
+  public turnDuration(index: number): number {
+    this.walker.turnByIndex(index);
+    return this.walker.turnDuration;
   }
 }

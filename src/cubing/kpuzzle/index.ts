@@ -4,7 +4,7 @@ export {
   Transformation,
 } from "./definition_types";
 
-export { KPuzzle, transformationForMove } from "./kpuzzle";
+export { KPuzzle, transformationForTurn } from "./kpuzzle";
 
 export {
   Canonicalizer,

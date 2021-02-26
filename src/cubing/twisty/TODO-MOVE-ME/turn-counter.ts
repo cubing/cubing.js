@@ -1,4 +1,4 @@
-// TODO: move this file somewhere permanent.
+// TODO: turn this file somewhere permanent.
 import {
   Alg,
   Grouping,
@@ -12,11 +12,11 @@ import {
 } from "../../alg/index";
 
 /*
- *   For movecount, that understands puzzle rotations.  This code
+ *   For turncount, that understands puzzle rotations.  This code
  *   should be moved to the alg class, probably.
  */
-class MoveCounter extends TraversalUp<number> {
-  constructor(private metric: (move: Turn) => number) {
+class TurnCounter extends TraversalUp<number> {
+  constructor(private metric: (turn: Turn) => number) {
     super();
   }
 
@@ -35,8 +35,8 @@ class MoveCounter extends TraversalUp<number> {
     );
   }
 
-  public traverseMove(move: Turn): number {
-    return this.metric(move);
+  public traverseTurn(turn: Turn): number {
+    return this.metric(turn);
   }
 
   public traverseCommutator(commutator: Commutator): number {
@@ -73,8 +73,8 @@ function isCharUppercase(c: string): boolean {
   return "A" <= c && c <= "Z";
 }
 
-function baseMetric(move: Turn): number {
-  const fam = move.family;
+function baseMetric(turn: Turn): number {
+  const fam = turn.family;
   if (
     (isCharUppercase(fam[0]) && fam[fam.length - 1] === "v") ||
     fam === "x" ||
@@ -87,5 +87,5 @@ function baseMetric(move: Turn): number {
   }
 }
 
-const baseCounter = new MoveCounter(baseMetric);
-export const countMoves = baseCounter.traverseAlg.bind(baseCounter);
+const turnCounter = new TurnCounter(baseMetric);
+export const countTurns = turnCounter.traverseAlg.bind(turnCounter);

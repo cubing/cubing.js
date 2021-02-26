@@ -1,7 +1,7 @@
 import { Alg, Turn } from "../alg";
 import { QuantumTurn } from "../alg/units/leaves/Turn";
 import { KPuzzleDefinition, Transformation } from "./definition_types";
-import { MoveNotation } from "./move_notation";
+import { TurnNotation } from "./TurnNotation";
 import {
   combineTransformations,
   identityTransformation,
@@ -9,52 +9,52 @@ import {
 } from "./transformations";
 
 // TODO: Turn other helpers into the definition.
-export function transformationForMoveQuantum(
+export function transformationForTurnQuantum(
   def: KPuzzleDefinition,
-  moveQuantum: QuantumTurn,
+  turnQuantum: QuantumTurn,
 ): Transformation {
-  const transformation = getNotationLayer(def).lookupMove(
-    new Turn(moveQuantum), // TODO
+  const transformation = getNotationLayer(def).lookupTurn(
+    new Turn(turnQuantum), // TODO
   );
   if (!transformation) {
-    throw new Error("Unknown move: " + moveQuantum.toString());
+    throw new Error("Unknown turn: " + turnQuantum.toString());
   }
   return transformation;
 }
 
 // TODO: Turn other helpers into the definition.
-export function transformationForMove(
+export function transformationForTurn(
   def: KPuzzleDefinition,
-  move: Turn,
+  turn: Turn,
 ): Transformation {
-  const transformation = getNotationLayer(def).lookupMove(move);
+  const transformation = getNotationLayer(def).lookupTurn(turn);
   if (!transformation) {
-    throw new Error("Unknown move: " + move.toString());
+    throw new Error("Unknown turn: " + turn.toString());
   }
   return transformation;
 }
 
-export function getNotationLayer(def: KPuzzleDefinition): MoveNotation {
-  if (!def.moveNotation) {
-    def.moveNotation = new KPuzzleMoveNotation(def);
+export function getNotationLayer(def: KPuzzleDefinition): TurnNotation {
+  if (!def.turnNotation) {
+    def.turnNotation = new KPuzzleTurnNotation(def);
   }
-  return def.moveNotation;
+  return def.turnNotation;
 }
 
-class KPuzzleMoveNotation implements MoveNotation {
+class KPuzzleTurnNotation implements TurnNotation {
   private cache: { [key: string]: Transformation } = {};
   constructor(public def: KPuzzleDefinition) {}
 
-  public lookupMove(move: Turn): Transformation | undefined {
-    const key = move.toString();
+  public lookupTurn(turn: Turn): Transformation | undefined {
+    const key = turn.toString();
     let r: Transformation | undefined = this.cache[key];
     if (r) {
       return r;
     }
-    const quantumKey = move.quantum.toString();
-    r = this.def.moves[quantumKey];
+    const quantumKey = turn.quantum.toString();
+    r = this.def.turns[quantumKey];
     if (r) {
-      r = multiplyTransformations(this.def, r, move.effectiveAmount);
+      r = multiplyTransformations(this.def, r, turn.effectiveAmount);
       this.cache[key] = r;
     }
     return r;
@@ -82,18 +82,18 @@ export class KPuzzle {
     return output;
   }
 
-  public applyMove(move: Turn): void {
+  public applyTurn(turn: Turn): void {
     this.state = combineTransformations(
       this.definition,
       this.state,
-      transformationForMove(this.definition, move),
+      transformationForTurn(this.definition, turn),
     );
   }
 
   public applyAlg(alg: Alg): void {
     // TODO: use indexer instead of full expansion.
-    for (const move of alg.experimentalLeafMoves()) {
-      this.applyMove(move);
+    for (const turn of alg.experimentalLeafTurns()) {
+      this.applyTurn(turn);
     }
   }
   // TODO: Implement

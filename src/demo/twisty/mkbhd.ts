@@ -8,11 +8,11 @@ import mkbhdHintSpriteURL from "url:./mkbhd-sprite-red-hint.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import mkbhdSpriteURL from "url:./mkbhd-sprite-red.png";
-import { parseAlg } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
 import {
   connect,
   debugKeyboardConnect,
-  MoveEvent,
+  TurnEvent,
 } from "../../cubing/bluetooth";
 import {
   Cube3D,
@@ -31,7 +31,7 @@ const hintSpriteURL =
 
 // Common picture cube demo code.
 
-let haveHadMoveInput = false;
+let haveHadTurnInput = false;
 
 const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
 twistyPlayer.experimentalSetCursorIndexer("simultaneous");
@@ -39,7 +39,7 @@ twistyPlayer.timeline.jumpToStart();
 twistyPlayer.timeline.play(); // TODO: add autoplay
 twistyPlayer.timeline.addActionListener({
   onTimelineAction: (actionEvent: TimelineActionEvent) => {
-    if (haveHadMoveInput) {
+    if (haveHadTurnInput) {
       return;
     }
     if (actionEvent.locationType === TimestampLocationType.EndOfTimeline) {
@@ -51,13 +51,13 @@ twistyPlayer.timeline.addActionListener({
 
 (async () => {
   const kb = await debugKeyboardConnect();
-  kb.addMoveListener((e: MoveEvent) => {
-    if (!haveHadMoveInput) {
+  kb.addTurnListener((e: TurnEvent) => {
+    if (!haveHadTurnInput) {
       twistyPlayer.timeline.pause();
-      twistyPlayer.alg = parseAlg("");
-      haveHadMoveInput = true;
+      twistyPlayer.alg = new Alg();
+      haveHadTurnInput = true;
     }
-    twistyPlayer.experimentalAddMove(e.latestMove);
+    twistyPlayer.experimentalAddTurn(e.latestTurn);
   });
 })();
 
@@ -81,7 +81,7 @@ function rotate() {
   );
   if (
     !(twistyPlayer.viewerElems[0] as any)?.orbitControls
-      .experimentalHasBeenMoved
+      .experimentalHasBeenTurnd
   ) {
     requestAnimationFrame(rotate);
     lastTimestamp = newTimestamp;
@@ -92,13 +92,13 @@ requestAnimationFrame(rotate);
 async function connectBluetooth(): Promise<void> {
   const bluetoothPuzzle = await connect();
   document.body.removeEventListener("click", connectBluetooth);
-  bluetoothPuzzle.addMoveListener((e: MoveEvent) => {
-    if (!haveHadMoveInput) {
+  bluetoothPuzzle.addTurnListener((e: TurnEvent) => {
+    if (!haveHadTurnInput) {
       twistyPlayer.timeline.pause();
-      twistyPlayer.alg = parseAlg("");
-      haveHadMoveInput = true;
+      twistyPlayer.alg = new Alg();
+      haveHadTurnInput = true;
     }
-    twistyPlayer.experimentalAddMove(e.latestMove);
+    twistyPlayer.experimentalAddTurn(e.latestTurn);
   });
 }
 if (new URL(location.href).searchParams.get("bluetooth") === "true") {

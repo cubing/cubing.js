@@ -24,10 +24,10 @@ export enum TimelineAction {
 export enum TimestampLocationType {
   StartOfTimeline = "Start",
   EndOfTimeline = "End",
-  StartOfMove = "StartOfMove",
-  EndOfMove = "EndOfMove",
-  MiddleOfMove = "MiddleOfMove",
-  BetweenMoves = "BetweenMoves",
+  StartOfTurn = "StartOfTurn",
+  EndOfTurn = "EndOfTurn",
+  MiddleOfTurn = "MiddleOfTurn",
+  BetweenTurns = "BetweenTurns",
 }
 
 export interface TimelineActionEvent {
@@ -268,7 +268,7 @@ export class Timeline
       case BoundaryType.Turn: {
         let result: null | MillisecondTimestamp = null;
         for (const cursor of this.cursors) {
-          const boundaryTimestamp = cursor.moveBoundary(timestamp, direction);
+          const boundaryTimestamp = cursor.turnBoundary(timestamp, direction);
           if (boundaryTimestamp !== null) {
             switch (direction) {
               case Direction.Backwards: {
@@ -343,19 +343,19 @@ export class Timeline
   }
 
   /** @deprecated */
-  experimentalJumpToLastMove(): void {
+  experimentalJumpToLastTurn(): void {
     let max: MillisecondTimestamp = 0;
     for (const cursor of this.cursors) {
       max = Math.max(
         max,
-        cursor.experimentalTimestampForStartOfLastMove() ?? 0,
+        cursor.experimentalTimestampForStartOfLastTurn() ?? 0,
       );
     }
     this.setTimestamp(max);
   }
 
   private dispatchAction(event: TimelineAction): void {
-    let locationType = TimestampLocationType.MiddleOfMove; // TODO
+    let locationType = TimestampLocationType.MiddleOfTurn; // TODO
     switch (this.timestamp) {
       // TODO
       case this.minTimestamp():

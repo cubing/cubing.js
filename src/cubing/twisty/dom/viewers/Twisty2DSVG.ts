@@ -3,7 +3,7 @@ import {
   KPuzzleDefinition,
   KPuzzleSVGWrapper,
   Transformation,
-  transformationForMove,
+  transformationForTurn,
 } from "../../../kpuzzle";
 import { PuzzleAppearance } from "../../3D/puzzles/appearance";
 import { appearances3x3x3 } from "../../3D/puzzles/stickerings";
@@ -51,25 +51,25 @@ export class Twisty2DSVG
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   onPositionChange(position: PuzzlePosition): void {
-    if (position.movesInProgress.length > 0) {
-      const move = position.movesInProgress[0].move;
+    if (position.turnsInProgress.length > 0) {
+      const turn = position.turnsInProgress[0].turn;
 
       const def = this.definition;
-      let partialMove = move;
-      if (position.movesInProgress[0].direction === Direction.Backwards) {
-        partialMove = move.inverse();
+      let partialTurn = turn;
+      if (position.turnsInProgress[0].direction === Direction.Backwards) {
+        partialTurn = turn.inverse();
       }
       const newState = combineTransformations(
         def,
         position.state as Transformation,
-        transformationForMove(def, partialMove),
+        transformationForTurn(def, partialTurn),
       );
-      // TODO: move to render()
+      // TODO: turn to render()
       this.svg.draw(
         this.definition,
         position.state as Transformation,
         newState,
-        position.movesInProgress[0].fraction,
+        position.turnsInProgress[0].fraction,
       );
     } else {
       this.svg.draw(this.definition, position.state as Transformation);
@@ -89,7 +89,7 @@ export class Twisty2DSVG
   // TODO: do this without constructing a new SVG.
   private resetSVG(appearance?: PuzzleAppearance): void {
     if (this.svg) {
-      this.removeElement(this.svg.element);
+      this.returnElement(this.svg.element);
     }
     if (!this.definition) {
       return; // TODO

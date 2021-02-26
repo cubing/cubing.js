@@ -1,4 +1,4 @@
-import { keyToMove } from "../alg";
+import { keyToTurn } from "../alg";
 import { KPuzzle } from "../kpuzzle";
 import { puzzles } from "../puzzles";
 import { BluetoothPuzzle, PuzzleState } from "./bluetooth-puzzle";
@@ -27,11 +27,11 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
       return;
     }
 
-    const move = keyToMove(e);
-    if (move) {
-      (await this.puzzle).applyMove(move);
-      this.dispatchMove({
-        latestMove: move,
+    const turn = keyToTurn(e);
+    if (turn) {
+      (await this.puzzle).applyTurn(turn);
+      this.dispatchTurn({
+        latestTurn: turn,
         timeStamp: e.timeStamp,
         state: (await this.puzzle).state,
       });

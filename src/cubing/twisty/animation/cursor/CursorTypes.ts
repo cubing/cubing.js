@@ -5,7 +5,7 @@ export type MillisecondTimestamp = number;
 
 // TODO: unify duration/timstamp types
 export type Duration = MillisecondTimestamp; // Duration in milliseconds
-// TODO: Extend `number`, introduce MoveSequenceTimestamp vs. EpochTimestamp,
+// TODO: Extend `number`, introduce TurnSequenceTimestamp vs. EpochTimestamp,
 // force Duration to be a difference.
 export type Timestamp = MillisecondTimestamp; // Duration since a particular epoch.
 
@@ -22,15 +22,15 @@ export function directionScalar(direction: Direction): MillisecondTimestamp {
   return direction;
 }
 
-export interface MoveInProgress {
-  move: Turn;
+export interface TurnInProgress {
+  turn: Turn;
   direction: Direction;
   fraction: number;
 }
 
 export type PuzzlePosition = {
   state: KPuzzleState;
-  movesInProgress: MoveInProgress[];
+  turnsInProgress: TurnInProgress[];
 };
 
 export enum BoundaryType {

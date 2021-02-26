@@ -29,7 +29,7 @@ export class FlatAlgValidator extends ValidatorTraversal {
     throw new ValidationError("A flat alg cannot contain a grouping.");
   }
 
-  public traverseMove(_move: Turn): void {
+  public traverseTurn(_turn: Turn): void {
     return;
   }
 

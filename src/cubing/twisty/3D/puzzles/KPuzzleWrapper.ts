@@ -5,15 +5,15 @@ import {
   identityTransformation,
   invertTransformation,
   KPuzzleDefinition,
-  transformationForMove,
+  transformationForTurn,
   Transformation,
 } from "../../../kpuzzle";
 import { puzzles } from "../../../puzzles";
 
-export type MoveName = string;
+export type TurnName = string;
 
-export interface MoveProgress {
-  move: Turn;
+export interface TurnProgress {
+  turn: Turn;
   fraction: number;
 }
 
@@ -48,7 +48,7 @@ export abstract class PuzzleWrapper {
     return newState;
   }
 
-  public abstract stateFromMove(move: Turn): State<PuzzleWrapper>;
+  public abstract stateFromTurn(turn: Turn): State<PuzzleWrapper>;
   public abstract identity(): State<PuzzleWrapper>;
   public abstract equivalent(
     s1: State<PuzzleWrapper>,
@@ -64,7 +64,7 @@ export class KPuzzleWrapper extends PuzzleWrapper {
     return new KPuzzleWrapper(await puzzles[id].def());
   }
 
-  public moveCache: { [key: string]: Transformation } = {};
+  public turnCache: { [key: string]: Transformation } = {};
   constructor(private definition: KPuzzleDefinition) {
     super();
   }
@@ -84,12 +84,12 @@ export class KPuzzleWrapper extends PuzzleWrapper {
     return combineTransformations(this.definition, s1, s2);
   }
 
-  public stateFromMove(move: Turn): KSolvePuzzleState {
-    const key = move.toString();
-    if (!this.moveCache[key]) {
-      this.moveCache[key] = transformationForMove(this.definition, move);
+  public stateFromTurn(turn: Turn): KSolvePuzzleState {
+    const key = turn.toString();
+    if (!this.turnCache[key]) {
+      this.turnCache[key] = transformationForTurn(this.definition, turn);
     }
-    return this.moveCache[key];
+    return this.turnCache[key];
   }
 
   public identity(): KSolvePuzzleState {
@@ -118,8 +118,8 @@ export class QTMCounterPuzzle extends PuzzleWrapper {
     return new QTMCounterState(s1.value + s2.value);
   }
 
-  public stateFromMove(move: Turn): QTMCounterState {
-    return new QTMCounterState(Math.abs(move.effectiveAmount));
+  public stateFromTurn(turn: Turn): QTMCounterState {
+    return new QTMCounterState(Math.abs(turn.effectiveAmount));
   }
 
   public identity(): QTMCounterState {

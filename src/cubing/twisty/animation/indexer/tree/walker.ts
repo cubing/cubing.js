@@ -22,7 +22,7 @@ import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
 export class AlgPartDecoration<P extends PuzzleWrapper> {
   constructor(
     _puz: PuzzleWrapper,
-    public moveCount: number,
+    public turnCount: number,
     public duration: number,
     public forward: State<P>,
     public backward: State<P>,
@@ -52,20 +52,20 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
   }
 
   public traverseAlg(alg: Alg): AlgPartDecoration<P> {
-    let moveCount = 0;
+    let turnCount = 0;
     let duration = 0;
     let state = this.identity;
     const child: Array<AlgPartDecoration<P>> = [];
     for (const unit of alg.units()) {
       const apd = this.traverseUnit(unit);
-      moveCount += apd.moveCount;
+      turnCount += apd.turnCount;
       duration += apd.duration;
       state = this.puz.combine(state, apd.forward);
       child.push(apd);
     }
     return new AlgPartDecoration<P>(
       this.puz,
-      moveCount,
+      turnCount,
       duration,
       state,
       this.puz.invert(state),
@@ -78,13 +78,13 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     return this.mult(dec, grouping.experimentalEffectiveAmount, [dec]);
   }
 
-  public traverseMove(move: Turn): AlgPartDecoration<P> {
+  public traverseTurn(turn: Turn): AlgPartDecoration<P> {
     return new AlgPartDecoration<P>(
       this.puz,
       1,
-      this.durationFn.traverseUnit(move),
-      this.puz.stateFromMove(move),
-      this.puz.stateFromMove(move.inverse()),
+      this.durationFn.traverseUnit(turn),
+      this.puz.stateFromTurn(turn),
+      this.puz.stateFromTurn(turn.inverse()),
     );
   }
 
@@ -96,7 +96,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     const ABApBp = this.puz.combine(AB, ApBp);
     const dec = new AlgPartDecoration<P>(
       this.puz,
-      2 * (decA.moveCount + decB.moveCount),
+      2 * (decA.turnCount + decB.turnCount),
       2 * (decA.duration + decB.duration),
       ABApBp,
       this.puz.invert(ABApBp),
@@ -116,7 +116,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     const ABAp = this.puz.combine(AB, decA.backward);
     const dec = new AlgPartDecoration<P>(
       this.puz,
-      2 * decA.moveCount + decB.moveCount,
+      2 * decA.turnCount + decB.turnCount,
       2 * decA.duration + decB.duration,
       ABAp,
       this.puz.invert(ABAp),
@@ -156,7 +156,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     const st = this.puz.multiply(apd.forward, n);
     return new AlgPartDecoration<P>(
       this.puz,
-      apd.moveCount * absn,
+      apd.turnCount * absn,
       apd.duration * absn,
       st,
       this.puz.invert(st),
@@ -173,8 +173,8 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
   WalkerDown<P>,
   boolean
 > {
-  public move?: Unit;
-  public moveDuration: number;
+  public turn?: Unit;
+  public turnDuration: number;
   public back: boolean;
   public st: State<P>;
   public root: WalkerDown<P>;
@@ -192,27 +192,27 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     this.dur = -1;
     this.goali = -1;
     this.goaldur = -1;
-    this.move = undefined;
+    this.turn = undefined;
     this.back = false;
-    this.moveDuration = 0;
+    this.turnDuration = 0;
     this.st = this.puz.identity();
     this.root = new WalkerDown(this.apd, false);
   }
 
-  public moveByIndex(loc: number): boolean {
+  public turnByIndex(loc: number): boolean {
     if (this.i >= 0 && this.i === loc) {
-      return this.move !== undefined;
+      return this.turn !== undefined;
     }
     return this.dosearch(loc, Infinity);
   }
 
-  public moveByDuration(dur: number): boolean {
+  public turnByDuration(dur: number): boolean {
     if (
       this.dur >= 0 &&
       this.dur < dur &&
-      this.dur + this.moveDuration >= dur
+      this.dur + this.turnDuration >= dur
     ) {
-      return this.move !== undefined;
+      return this.turn !== undefined;
     }
     return this.dosearch(Infinity, dur);
   }
@@ -222,8 +222,8 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     this.goaldur = dur;
     this.i = 0;
     this.dur = 0;
-    this.move = undefined;
-    this.moveDuration = 0;
+    this.turn = undefined;
+    this.turnDuration = 0;
     this.back = false;
     this.st = this.puz.identity();
     const r = this.algOrUnit.is(Alg)
@@ -261,12 +261,12 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     );
   }
 
-  public traverseMove(move: Turn, wd: WalkerDown<P>): boolean {
+  public traverseTurn(turn: Turn, wd: WalkerDown<P>): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
-    this.move = move;
-    this.moveDuration = wd.apd.duration;
+    this.turn = turn;
+    this.turnDuration = wd.apd.duration;
     this.back = wd.back;
     return true;
   }
@@ -353,8 +353,8 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     if (!this.firstcheck(wd)) {
       return false;
     }
-    this.move = pause;
-    this.moveDuration = wd.apd.duration;
+    this.turn = pause;
+    this.turnDuration = wd.apd.duration;
     this.back = wd.back;
     return true;
   }
@@ -372,7 +372,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
 
   private firstcheck(wd: WalkerDown<P>): boolean {
     if (
-      wd.apd.moveCount + this.i <= this.goali &&
+      wd.apd.turnCount + this.i <= this.goali &&
       wd.apd.duration + this.dur < this.goaldur
     ) {
       return this.keepgoing(wd);
@@ -392,7 +392,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     }
     const base = wd.apd.children[0];
     const full = Math.min(
-      Math.floor((this.goali - this.i) / base.moveCount),
+      Math.floor((this.goali - this.i) / base.turnCount),
       Math.ceil((this.goaldur - this.dur) / base.duration - 1),
     );
     if (full > 0) {
@@ -402,7 +402,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
   }
 
   private keepgoing(wd: WalkerDown<P>, mul: number = 1): boolean {
-    this.i += mul * wd.apd.moveCount;
+    this.i += mul * wd.apd.turnCount;
     this.dur += mul * wd.apd.duration;
     if (mul !== 1) {
       if (wd.back) {

@@ -23,7 +23,7 @@ describe("Alg", () => {
   });
 });
 
-describe("BlockMove", () => {
+describe("BlockTurn", () => {
   it("allows constructing: x, U, u", () => {
     expect(new Turn("x", 1).toString()).toBe("x");
     expect(new Turn("U", 1).toString()).toBe("U");
@@ -39,7 +39,7 @@ describe("BlockMove", () => {
 
   it("prevents constructing: [-2]U, [-2]u", () => {
     expect(() => new QuantumTurn("U", -2)).toThrowError(
-      /MoveQuantum inner layer must be a positive integer/,
+      /TurnQuantum inner layer must be a positive integer/,
     );
   });
 
@@ -49,23 +49,23 @@ describe("BlockMove", () => {
 
   it("prevents constructing: 2-3x, 2-3U, [-2]-3u, 4-3u", () => {
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Turn(new MoveQuantum("x",  3, 2, 1)])),
+    //   validateSiGNTurns(new Alg([new Turn(new TurnQuantum("x",  3, 2, 1)])),
     // ).toThrowError(/cannot have an outer and inner layer/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Turn(new MoveQuantum("U",  3, 2, 1)])),
+    //   validateSiGNTurns(new Alg([new Turn(new TurnQuantum("U",  3, 2, 1)])),
     // ).toThrowError(/cannot have an outer and inner layer/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Turn(new MoveQuantum("u", 3, -2), 1)])),
+    //   validateSiGNTurns(new Alg([new Turn(new TurnQuantum("u", 3, -2), 1)])),
     // ).toThrowError(/Cannot have an outer layer of 0 or less/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Turn(new MoveQuantum("u", 3, 4), 1)])),
+    //   validateSiGNTurns(new Alg([new Turn(new TurnQuantum("u", 3, 4), 1)])),
     // ).toThrowError(/The outer layer must be less than the inner layer/);
   });
 
   it("prevents constructing: w, 2T, 2-3q", () => {
-    // expect(() =>algPartToStringForTesting(new Turn("w", 1))).toThrowError(/Invalid SiGN plain move family: w/);
-    // expect(() =>algPartToStringForTesting(new Turn(new MoveQuantum("T", 2), 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an inner slice: T/);
-    // expect(() =>algPartToStringForTesting(new Turn(new MoveQuantum("q",  3, 2, 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an outer and inner layer: q/);
+    // expect(() =>algPartToStringForTesting(new Turn("w", 1))).toThrowError(/Invalid SiGN plain turn family: w/);
+    // expect(() =>algPartToStringForTesting(new Turn(new TurnQuantum("T", 2), 1))).toThrowError(/The provided SiGN turn family is invalid, or cannot have an inner slice: T/);
+    // expect(() =>algPartToStringForTesting(new Turn(new TurnQuantum("q",  3, 2, 1))).toThrowError(/The provided SiGN turn family is invalid, or cannot have an outer and inner layer: q/);
   });
 
   it("supports a default amount of 1.", () => {
@@ -73,7 +73,7 @@ describe("BlockMove", () => {
   });
 
   it("throws an error for an invalid family", () => {
-    // expect(() => new Turn("Q", 1)).toThrowError(/Invalid SiGN plain move family/);
+    // expect(() => new Turn("Q", 1)).toThrowError(/Invalid SiGN plain turn family/);
   });
 
   it("has a default amount of 1", () => {
@@ -94,33 +94,33 @@ describe("BlockMove", () => {
     expect(new Turn(new QuantumTurn("u", 12, 2), 15).effectiveAmount).toBe(15);
   });
 
-  it("catches invalid moves with parseSiGN().", () => {
+  it("catches invalid turns with parseSiGN().", () => {
     // expect(() => parseSiGN("R")).not.toThrowError();
-    // expect(() => parseSiGN("g")).toThrowError(/Invalid SiGN plain move family/);
+    // expect(() => parseSiGN("g")).toThrowError(/Invalid SiGN plain turn family/);
     // expect(() => parseSiGN("2Ww")).toThrowError(
-    //   /The provided SiGN move family is invalid/,
+    //   /The provided SiGN turn family is invalid/,
     // );
     // expect(() => parseSiGN("2-3T")).toThrowError(
-    //   /The provided SiGN move family is invalid/,
+    //   /The provided SiGN turn family is invalid/,
     // );
     // expect(() => parseSiGN("2-3UF")).toThrowError(
-    //   /The provided SiGN move family is invalid/,
+    //   /The provided SiGN turn family is invalid/,
     // );
     // expect(() => parseSiGN("4TEST_Hello")).toThrowError(
-    //   /The provided SiGN move family is invalid/,
+    //   /The provided SiGN turn family is invalid/,
     // );
     // expect(() => parseSiGN("_R")).toThrowError(
-    //   /Invalid SiGN plain move family/,
+    //   /Invalid SiGN plain turn family/,
     // );
   });
 
-  it("prevents construction a move quantum with only outer layer", () => {
+  it("prevents construction a turn quantum with only outer layer", () => {
     expect(() => new QuantumTurn("R", undefined, 1)).toThrow();
   });
 });
 
 describe("algToString()", () => {
-  it("converts all move types correctly", () => {
+  it("converts all turn types correctly", () => {
     expect(new Turn("x", 2).toString()).toBe("x2");
     expect(new Turn("R", 3).toString()).toBe("R3");
     expect(new Turn("u", -5).toString()).toBe("u5'");
@@ -173,7 +173,7 @@ describe("invert()", () => {
 
 describe("expand()", () => {
   it("correctly expands", () => {
-    expect(Ex.FURURFCompact.expand()).toBeIdentical(Ex.FURURFMoves);
+    expect(Ex.FURURFCompact.expand()).toBeIdentical(Ex.FURURFTurns);
     expect(Ex.Sune.expand()).toBeIdentical(Ex.Sune);
     expect(Ex.SuneCommutator.expand()).not.toBeIdentical(Ex.Sune);
     expect(Ex.FURURFCompact.expand()).not.toBeIdentical(Ex.SuneCommutator);
@@ -192,21 +192,21 @@ describe("expand()", () => {
 
 describe("structureEquals", () => {
   it("correctly compares algs", () => {
-    expect(Ex.FURURFCompact).not.toBeIdentical(Ex.FURURFMoves);
-    expect(Ex.FURURFMoves).not.toBeIdentical(Ex.FURURFCompact);
-    expect(Ex.FURURFMoves).toBeIdentical(Ex.FURURFMoves);
+    expect(Ex.FURURFCompact).not.toBeIdentical(Ex.FURURFTurns);
+    expect(Ex.FURURFTurns).not.toBeIdentical(Ex.FURURFCompact);
+    expect(Ex.FURURFTurns).toBeIdentical(Ex.FURURFTurns);
     expect(Ex.FURURFCompact).toBeIdentical(Ex.FURURFCompact);
   });
 });
 
-describe("move collapsing ()", () => {
+describe("turn collapsing ()", () => {
   it("coalesces U U to U2", () => {
-    expect(UU.simplify({ collapseMoves: true })).toBeIdentical(U2);
+    expect(UU.simplify({ collapseTurns: true })).toBeIdentical(U2);
   });
 
   it("coalesces expanded commutator Sune corectly", () => {
     expect(
-      Ex.SuneCommutator.expand().simplify({ collapseMoves: true }),
+      Ex.SuneCommutator.expand().simplify({ collapseTurns: true }),
     ).toBeIdentical(Ex.Sune);
   });
 });
@@ -234,7 +234,7 @@ describe("Object Freezing", () => {
     // expect(Object.isFrozen(new Alg([new Turn("R", 1)]).nestedUnits)).toBe(true);
   });
 
-  // it("makes it impossible to modify a BaseMove", () => {
+  // it("makes it impossible to modify a BaseTurn", () => {
   //   const b = new Turn("R", 4);
   //   let caughtErr: Error | undefined;
   //   try {
@@ -318,23 +318,23 @@ describe("Validator", () => {
   //     () => new Alg("(Qw)", { validators: [validateFlatAlg] }),
   //   ).toThrowError(/cannot contain a group/); // toThrowError(ValidationError, );
   // });
-  // it("can validate cube base moves alg", () => {
+  // it("can validate cube base turns alg", () => {
   //   expect(
-  //     () => new Alg("(R)", { validators: [validateSiGNMoves] }),
+  //     () => new Alg("(R)", { validators: [validateSiGNTurns] }),
   //   ).not.toThrowError();
   //   expect(
-  //     () => new Alg("Qw", { validators: [validateSiGNMoves] }),
-  //   ).toThrowError(/Invalid SiGN plain move family/);
+  //     () => new Alg("Qw", { validators: [validateSiGNTurns] }),
+  //   ).toThrowError(/Invalid SiGN plain turn family/);
   //   expect(
-  //     () => new Alg("(Qw)", { validators: [validateSiGNMoves] }),
-  //   ).toThrowError(/Invalid SiGN plain move family/);
+  //     () => new Alg("(Qw)", { validators: [validateSiGNTurns] }),
+  //   ).toThrowError(/Invalid SiGN plain turn family/);
   // });
   // it("can validate cube algs", () => {
   //   expect(
   //     () => new Alg("(R)", { validators: [validateSiGNAlg] }),
   //   ).toThrowError(/cannot contain a group/);
   //   expect(() => new Alg("Qw", { validators: [validateSiGNAlg] })).toThrowError(
-  //     /Invalid SiGN plain move family/,
+  //     /Invalid SiGN plain turn family/,
   //   );
   //   expect(
   //     () => new Alg("(Qw)", { validators: [validateSiGNAlg] }),

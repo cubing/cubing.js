@@ -103,7 +103,7 @@ export const Example = {
     ),
   ]),
 
-  FURURFMoves: new Alg([
+  FURURFTurns: new Alg([
     new Turn("F", 1),
     new Turn("U", 1),
     new Turn("R", 1),

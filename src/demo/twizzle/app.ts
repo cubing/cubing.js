@@ -2,11 +2,11 @@ import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { Alg, Turn } from "../../cubing/alg/index";
-import { experimentalAppendMove } from "../../cubing/alg/operation";
+import { experimentalAppendTurn } from "../../cubing/alg/operation";
 import {
   connect,
   debugKeyboardConnect,
-  MoveEvent,
+  TurnEvent,
 } from "../../cubing/bluetooth/index";
 import { KPuzzleDefinition } from "../../cubing/kpuzzle/index";
 import {
@@ -23,7 +23,7 @@ import {
   Twisty3DCanvas,
 } from "../../cubing/twisty/dom/viewers/Twisty3DCanvas";
 import { TwistyPlayer } from "../../cubing/twisty/index";
-import { countMoves } from "../../cubing/twisty/TODO-MOVE-ME/move-counter";
+import { countTurns } from "../../cubing/twisty/TODO-MOVE-ME/turn-counter";
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
@@ -95,16 +95,16 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
   return true;
 }
 
-function getModValueForMove(move: Turn): number {
+function getModValueForTurn(turn: Turn): number {
   if (!pg) {
     return 1;
   }
-  const move2 = pg.notationMapper.notationToInternal(move);
-  if (move2 === null) {
+  const turn2 = pg.notationMapper.notationToInternal(turn);
+  if (turn2 === null) {
     return 1;
   }
-  move = move2;
-  let family = move.family;
+  turn = turn2;
+  let family = turn.family;
   if (family.length > 1) {
     if (
       family[0] <= "Z" &&
@@ -158,7 +158,7 @@ function intersectionToMove(
     }
     move = move2;
   }
-  if (getModValueForMove(move) !== 2 && !rightClick) {
+  if (getModValueForTurn(move) !== 2 && !rightClick) {
     move = move.inverse();
   }
   return move;
@@ -172,7 +172,7 @@ function LucasSetup(
 ): void {
   safeKpuzzle = kpuzzledef; // this holds the scrambled position
   puzzle = kpuzzledef as KPuzzleDefinition;
-  const mps = pg.movesetgeos;
+  const mps = pg.turnsetgeos;
   gripdepth = {};
   for (const mp of mps) {
     const grip1 = mp[0] as string;
@@ -195,7 +195,7 @@ function trimEq(a: string, b: string): boolean {
 }
 
 function updateMoveCount(alg?: Alg): void {
-  const len = countMoves(alg ? alg : Alg.fromString(lastalgo));
+  const len = countTurns(alg ? alg : Alg.fromString(lastalgo));
   const mc = document.getElementById("movecount");
   if (mc) {
     mc.innerText = "Moves: " + len;
@@ -268,7 +268,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       twisty.timeline.tempoScale = tempomult;
       lastShape = nextShape;
       elem.appendChild(twisty);
-      twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
+      twisty.legacyExperimentalCoalesceModFunc = getModValueForTurn;
 
       const twisty3DCanvases: Twisty3DCanvas[] = twisty.viewerElems as Twisty3DCanvas[];
       // TODO: This is a hack.
@@ -378,8 +378,8 @@ function dowork(cmd: string): void {
       const inputPuzzle = await (cmd === "bluetooth"
         ? connect
         : debugKeyboardConnect)();
-      inputPuzzle.addMoveListener((e: MoveEvent) => {
-        addMove(e.latestMove);
+      inputPuzzle.addTurnListener((e: TurnEvent) => {
+        addTurn(e.latestTurn);
       });
     })();
     return;
@@ -436,7 +436,7 @@ function dowork(cmd: string): void {
     const os = pg.getOrbitsDef(false);
     const as = os.reassemblySize();
     gtw("Reassembly size is " + as);
-    const ss = schreierSims(pg.getMovesAsPerms(), gtw);
+    const ss = schreierSims(pg.getTurnsAsPerms(), gtw);
     const r = as / ss;
     gtw("Ratio is " + r);
   } else if (cmd === "canon") {
@@ -650,7 +650,7 @@ function onMouseClick(
     event.preventDefault();
     const mv = intersectionToMove(intersects[0].point, event, rightClick);
     if (mv !== null) {
-      addMove(mv);
+      addTurn(mv);
     }
   }
 }
@@ -698,15 +698,15 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
 }
 
 // TODO: Animate latest move but cancel algorithm moves.
-function addMove(move: Turn): void {
+function addTurn(turn: Turn): void {
   const currentAlg = Alg.fromString(algoinput.value);
-  const newAlg = experimentalAppendMove(currentAlg, move, {
+  const newAlg = experimentalAppendTurn(currentAlg, turn, {
     coalesce: true,
-    mod: getModValueForMove(move),
+    mod: getModValueForTurn(turn),
   });
   // TODO: Avoid round-trip through string?
   lastalgo = newAlg.toString();
-  twisty.experimentalAddMove(move, true, true);
+  twisty.experimentalAddTurn(turn, true, true);
   algoinput.value = lastalgo;
   updateMoveCount(newAlg);
   setURLParams({ alg: newAlg });

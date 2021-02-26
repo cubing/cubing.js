@@ -1,10 +1,9 @@
-import { BlockMove } from "../../../alg";
-import { experimentalBlockMoveQuantumName } from "../../../alg/traversal";
+import { Turn } from "../../../alg";
 import { Duration, Timestamp } from "../cursor/CursorTypes";
 
 interface Event {
   timeStamp: Timestamp;
-  move: BlockMove;
+  turn: Turn;
 }
 
 export interface TimelineEntry {
@@ -15,9 +14,9 @@ export interface TimelineEntry {
 
 type Timeline = TimelineEntry[];
 
-function isSameAxis(move1: BlockMove, move2: BlockMove): boolean {
+function isSameAxis(turn1: Turn, turn2: Turn): boolean {
   const familyRoots =
-    move1.family[0].toLowerCase() + move2.family[0].toLowerCase();
+    turn1.family[0].toLowerCase() + turn2.family[0].toLowerCase();
   // console.log(familyRoots);
   return ![
     "uu",
@@ -40,7 +39,7 @@ export function toAxes(
   diameterMs: Duration,
 ): TimelineEntry[][] {
   const axes: TimelineEntry[][] = [];
-  const axisMoveTracker = new Map();
+  const axisTurnTracker = new Map();
   let lastEntry: TimelineEntry | null = null;
   for (const event of events) {
     if (!lastEntry) {
@@ -50,10 +49,7 @@ export function toAxes(
         end: event.timeStamp + diameterMs / 2,
       };
       axes.push([lastEntry]);
-      axisMoveTracker.set(
-        experimentalBlockMoveQuantumName(lastEntry.event.move),
-        lastEntry,
-      );
+      axisTurnTracker.set(lastEntry.event.turn.quantum.toString(), lastEntry);
       continue;
     }
     const newEntry: TimelineEntry = {
@@ -61,33 +57,33 @@ export function toAxes(
       start: event.timeStamp - diameterMs / 2,
       end: event.timeStamp + diameterMs / 2,
     };
-    if (isSameAxis(lastEntry.event.move, event.move)) {
-      const quarterName = experimentalBlockMoveQuantumName(newEntry.event.move);
+    if (isSameAxis(lastEntry.event.turn, event.turn)) {
+      const quarterName = newEntry.event.turn.quantum.toString();
       // console.log(quarterName);
-      const prev = axisMoveTracker.get(quarterName);
+      const prev = axisTurnTracker.get(quarterName);
       // console.log("prev", prev);
       if (
         prev &&
         prev.end > newEntry.start &&
-        Math.sign(prev.event.move.amount) ===
-          Math.sign(newEntry.event.move.amount)
+        Math.sign(prev.event.turn.amount) ===
+          Math.sign(newEntry.event.turn.amount)
       ) {
-        prev.event.move = new BlockMove(
-          prev.event.move.outerLayer,
-          prev.event.move.innerLayer,
-          prev.event.move.family,
-          prev.event.move.amount + newEntry.event.move.amount,
+        prev.event.turn = new Turn(
+          prev.event.turn.outerLayer,
+          prev.event.turn.innerLayer,
+          prev.event.turn.family,
+          prev.event.turn.amount + newEntry.event.turn.amount,
         );
       } else {
         axes[axes.length - 1].push(newEntry);
-        axisMoveTracker.set(quarterName, newEntry);
+        axisTurnTracker.set(quarterName, newEntry);
       }
     } else {
-      // console.log("--", algPartToStringForTesting(newEntry.event.move));
+      // console.log("--", algPartToStringForTesting(newEntry.event.turn));
       axes.push([newEntry]);
-      axisMoveTracker.clear();
-      axisMoveTracker.set(
-        experimentalBlockMoveQuantumName(newEntry.event.move),
+      axisTurnTracker.clear();
+      axisTurnTracker.set(
+        experimentalBlockTurnQuantumName(newEntry.event.turn),
         newEntry,
       );
       if (newEntry.start < lastEntry.end) {
@@ -115,8 +111,8 @@ export function toTimeline(
 
 /*
 
-Input: list of {move: {base, amount}}, centerTime} events sorted by centerTime of halfway through "quarter" turns.
-Output list of {move, centerTime, start, end}
+Input: list of {turn: {base, amount}}, centerTime} events sorted by centerTime of halfway through "quarter" turns.
+Output list of {turn, centerTime, start, end}
 Options:
   - radius # milliseconds
   - maxImbalance # maximum ratio of (centerTime - end)/(centerTime - start)
@@ -126,13 +122,13 @@ eventsToTimeline(events):
   for e of events:
     add event to timeline with range {start: e.centerTime - radius, end: e.centerTime + radius}
     for each event d of the frontier:
-      if d.base == e.base && sign(d.amount) == sign(e.amount): # d and e have the same base move in the same direction:
+      if d.base == e.base && sign(d.amount) == sign(e.amount): # d and e have the same base turn in the same direction:
         coalesce(d, e)
         continue outer loop
       if d.end > e.start and conflicts(d, e):
         d.end   = min(e.end, (d.centerTime + e.centerTime) / 2)
         e.start = max(e.end, (d.centerTime + e.centerTime) / 2)
-        remove d from the frontier
+        return d from the frontier
       if d.centerTime < e.centerTime - radius
         drop d from the frontier # optimization: too old to overlap with future events
     e.end = min(e.end, e.centerTime + maxImbalance * (e.centerTime - e.start))
@@ -155,13 +151,13 @@ conflicts(d, e):
 
 Thoughts:
 - Alternative to max imbalance: animate first and second part separately?
-- Fingertrick mode: allow an optional overlap amount between any two conflicting moves (possibly depending on the moves)
+- Fingertrick mode: allow an optional overlap amount between any two conflicting turns (possibly depending on the turns)
 
 Properties:
 - An event's start time will never change after it is added.
 - An event might take up less time than it "can".
-  - i.e. its start and/or end time could be extended after the algorithm finishes, without overlapping with conflicting moves.
+  - i.e. its start and/or end time could be extended after the algorithm finishes, without overlapping with conflicting turns.
   - This is an acceptable compromise for simplicity.
-- As written, moves are only removed from the frontier opportunistically. This shouldn't be a problem.
+- As written, turns are only removed from the frontier opportunistically. This shouldn't be a problem.
 
 */

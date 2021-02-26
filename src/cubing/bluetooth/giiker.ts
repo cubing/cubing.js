@@ -16,7 +16,7 @@ const UUIDs = {
   cubeCharacteristic: "0000aadc-0000-1000-8000-00805f9b34fb",
 };
 
-// TODO: Turn this into a factory?
+// TODO: Move this into a factory?
 export const giiKERConfig: BluetoothConfig = {
   filters: [
     // Known prefixes: GiC, GiS (3x3x3), Gi2 (2x2x2)
@@ -36,7 +36,7 @@ export const giiKERConfig: BluetoothConfig = {
 };
 
 // TODO: Expose for testing.
-function giikerMoveToAlgMove(face: number, amount: number): Turn {
+function giikerTurnToAlgTurn(face: number, amount: number): Turn {
   switch (amount) {
     case 3:
       amount = -1;
@@ -51,7 +51,7 @@ function giikerMoveToAlgMove(face: number, amount: number): Turn {
   return new Turn(family, amount);
 }
 
-export { giikerMoveToAlgMove as giikerMoveToAlgMoveForTesting };
+export { giikerTurnToAlgTurn as giikerTurnToAlgTurnForTesting };
 
 function giikerStateStr(giikerState: number[]): string {
   let str = "";
@@ -268,8 +268,8 @@ export class GiiKERCube extends BluetoothPuzzle {
     const str = giikerStateStr(giikerState);
     debugLog(str);
 
-    this.dispatchMove({
-      latestMove: giikerMoveToAlgMove(giikerState[32], giikerState[33]),
+    this.dispatchTurn({
+      latestTurn: giikerTurnToAlgTurn(giikerState[32], giikerState[33]),
       timeStamp: event.timeStamp,
       debug: {
         stateStr: str,

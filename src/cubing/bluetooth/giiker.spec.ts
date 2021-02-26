@@ -1,5 +1,5 @@
 import { Alg } from "../alg";
-import { giikerMoveToAlgMoveForTesting } from "./giiker";
+import { giikerTurnToAlgTurnForTesting } from "./giiker";
 import "../alg/test/alg-comparison";
 
 describe("GiiKerCube", () => {
@@ -7,15 +7,15 @@ describe("GiiKerCube", () => {
   //   new GiiKERi3Cube();
   // });
 
-  it("should calculate giikerMoveToAlgMove() correctly", () => {
-    console.log(new Alg([giikerMoveToAlgMoveForTesting(1, 1)]).toString());
-    expect(new Alg([giikerMoveToAlgMoveForTesting(1, 1)])).toBeIdentical(
+  it("should calculate giikerTurnToAlgTurn() correctly", () => {
+    console.log(new Alg([giikerTurnToAlgTurnForTesting(1, 1)]).toString());
+    expect(new Alg([giikerTurnToAlgTurnForTesting(1, 1)])).toBeIdentical(
       new Alg("B"),
     );
-    expect(new Alg([giikerMoveToAlgMoveForTesting(2, 3)])).toBeIdentical(
+    expect(new Alg([giikerTurnToAlgTurnForTesting(2, 3)])).toBeIdentical(
       new Alg("D'"),
     );
-    expect(new Alg([giikerMoveToAlgMoveForTesting(3, 9)])).toBeIdentical(
+    expect(new Alg([giikerTurnToAlgTurnForTesting(3, 9)])).toBeIdentical(
       new Alg("L2'"),
     );
   });

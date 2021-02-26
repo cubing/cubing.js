@@ -1,12 +1,12 @@
 import { AlgCommon, Comparable } from "../../common";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
-import { parseMove, parseMoveQuantum } from "../../parse";
+import { parseTurn, parseQuantumTurn } from "../../parse";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 import { warnOnce } from "../../warnOnce";
 import { IterationDirection } from "../../iteration";
 
-interface QuantumMoveModifications {
+interface QuantumTurnModifications {
   outerLayer?: number;
   innerLayer?: number;
   family?: string;
@@ -35,7 +35,7 @@ export class QuantumTurn extends Comparable {
         this.#innerLayer! > MAX_INT)
     ) {
       throw new Error(
-        `MoveQuantum inner layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
+        `TurnQuantum inner layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
       );
     }
 
@@ -46,7 +46,7 @@ export class QuantumTurn extends Comparable {
         this.#outerLayer > MAX_INT)
     ) {
       throw new Error(
-        `MoveQuantum outer layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
+        `TurnQuantum outer layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
       );
     }
 
@@ -56,22 +56,22 @@ export class QuantumTurn extends Comparable {
       this.#innerLayer! <= this.#outerLayer!
     ) {
       throw new Error(
-        "MoveQuantum outer layer must be smaller than inner layer.",
+        "TurnQuantum outer layer must be smaller than inner layer.",
       );
     }
 
     if (this.#outerLayer !== null && this.#innerLayer === null) {
       throw new Error(
-        "MoveQuantum with an outer layer must have an inner layer",
+        "TurnQuantum with an outer layer must have an inner layer",
       ); // TODO: test
     }
   }
 
   static fromString(s: string): QuantumTurn {
-    return parseMoveQuantum(s);
+    return parseQuantumTurn(s);
   }
 
-  modified(modifications: QuantumMoveModifications): QuantumTurn {
+  modified(modifications: QuantumTurnModifications): QuantumTurn {
     return new QuantumTurn(
       modifications.family ?? this.#family,
       modifications.innerLayer ?? this.#innerLayer,
@@ -80,12 +80,12 @@ export class QuantumTurn extends Comparable {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsMoveQuantum = other as QuantumTurn;
+    const otherAsTurnQuantum = other as QuantumTurn;
     return (
       other.is(QuantumTurn) &&
-      this.#family === otherAsMoveQuantum.#family &&
-      this.#innerLayer === otherAsMoveQuantum.#innerLayer &&
-      this.#outerLayer === otherAsMoveQuantum.#outerLayer
+      this.#family === otherAsTurnQuantum.#family &&
+      this.#innerLayer === otherAsTurnQuantum.#innerLayer &&
+      this.#outerLayer === otherAsTurnQuantum.#outerLayer
     );
   }
 
@@ -112,7 +112,7 @@ export class QuantumTurn extends Comparable {
 
   experimentalExpand(): Generator<LeafUnit> {
     throw new Error(
-      "experimentalExpand() cannot be called on a `MoveQuantum` directly.",
+      "experimentalExpand() cannot be called on a `TurnQuantum` directly.",
     );
   }
 
@@ -128,7 +128,7 @@ export class QuantumTurn extends Comparable {
   }
 }
 
-interface MoveModifications {
+interface TurnModifications {
   outerLayer?: number;
   innerLayer?: number;
   family?: string;
@@ -161,9 +161,9 @@ export class Turn extends AlgCommon<Turn> {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsMove = other as Turn;
+    const otherAsTurn = other as Turn;
     return (
-      other.is(Turn) && this.#repetition.isIdentical(otherAsMove.#repetition)
+      other.is(Turn) && this.#repetition.isIdentical(otherAsTurn.#repetition)
     );
   }
 
@@ -192,7 +192,7 @@ export class Turn extends AlgCommon<Turn> {
     );
   }
 
-  modified(modifications: MoveModifications): Turn {
+  modified(modifications: TurnModifications): Turn {
     return new Turn(
       this.#repetition.quantum.modified(modifications),
       modifications.repetition ?? this.#repetition.info(),
@@ -200,7 +200,7 @@ export class Turn extends AlgCommon<Turn> {
   }
 
   static fromString(s: string): Turn {
-    return parseMove(s);
+    return parseTurn(s);
   }
 
   /** @deprecated */
@@ -213,7 +213,7 @@ export class Turn extends AlgCommon<Turn> {
   /** @deprecated */
   get type(): string {
     warnOnce("deprecated: type");
-    return "blockMove";
+    return "blockTurn";
   }
 
   /** @deprecated */
@@ -239,9 +239,9 @@ export class Turn extends AlgCommon<Turn> {
   }
 
   // // TODO: Serialize as a string?
-  // toJSON(): MoveJSON {
+  // toJSON(): TurnJSON {
   //   return {
-  //     type: "move",
+  //     type: "turn",
   //     family: this.family,
   //     innerLayer: this.innerLayer,
   //     outerLayer: this.outerLayer,

@@ -69,8 +69,8 @@ export class AlgDuration extends TraversalUp<Duration> {
     );
   }
 
-  public traverseMove(move: Turn): Duration {
-    return this.durationForAmount(move.effectiveAmount);
+  public traverseTurn(turn: Turn): Duration {
+    return this.durationForAmount(turn.effectiveAmount);
   }
 
   public traverseCommutator(commutator: Commutator): Duration {

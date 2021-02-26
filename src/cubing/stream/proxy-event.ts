@@ -1,8 +1,8 @@
-import { MoveEvent } from "../bluetooth";
+import { TurnEvent } from "../bluetooth";
 import { OrientationEvent } from "../bluetooth/bluetooth-puzzle";
-export interface ProxyMoveEvent {
-  event: "move";
-  data: MoveEvent;
+export interface ProxyTurnEvent {
+  event: "turn";
+  data: TurnEvent;
 }
 export interface ProxyOrientationEvent {
   event: "orientation";
@@ -12,6 +12,6 @@ export interface ProxyResetEvent {
   event: "reset";
 }
 export type ProxyEvent =
-  | ProxyMoveEvent
+  | ProxyTurnEvent
   | ProxyOrientationEvent
   | ProxyResetEvent;

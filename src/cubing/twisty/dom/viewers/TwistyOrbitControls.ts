@@ -79,16 +79,16 @@ export class TwistyOrbitControls {
   private lastTouchClientX: number = 0;
   private lastTouchClientY: number = 0;
   private currentTouchID: number | null = null; // TODO: support multiple touches?
-  private onMoveBound = this.onMove.bind(this);
+  private onTurnBound = this.onTurn.bind(this);
   private onMouseMoveBound = this.onMouseMove.bind(this);
   private onMouseEndBound = this.onMouseEnd.bind(this);
-  private onTouchMoveBound = this.onTouchMove.bind(this);
+  private onTouchTurnBound = this.onTouchTurn.bind(this);
   private onTouchEndBound = this.onTouchEnd.bind(this);
   // Variable for temporary use, to prevent reallocation.
   private tempSpherical: Spherical = new Spherical();
   private lastTouchTimestamp: number = 0;
-  private lastTouchMoveMomentumX: number = 0;
-  private lastTouchMoveMomentumY: number = 0;
+  private lastTouchTurnMomentumX: number = 0;
+  private lastTouchTurnMomentumY: number = 0;
   private lastMouseTimestamp: number = 0;
   private lastMouseMoveMomentumX: number = 0;
   private lastMouseMoveMomentumY: number = 0;
@@ -130,7 +130,7 @@ export class TwistyOrbitControls {
     const movementY = this.temperMovement(
       (e.movementY / minDim) * VERTICAL_MOVEMENT_BASE_SCALE,
     );
-    this.onMove(movementX, movementY);
+    this.onTurn(movementX, movementY);
 
     this.lastMouseMoveMomentumX =
       movementX / (e.timeStamp - this.lastMouseTimestamp);
@@ -149,7 +149,7 @@ export class TwistyOrbitControls {
         this.lastMouseTimestamp,
         this.lastMouseMoveMomentumX,
         this.lastMouseMoveMomentumY,
-        this.onMoveBound,
+        this.onTurnBound,
       );
     }
   }
@@ -159,7 +159,7 @@ export class TwistyOrbitControls {
       this.currentTouchID = e.changedTouches[0].identifier;
       this.lastTouchClientX = e.touches[0].clientX;
       this.lastTouchClientY = e.touches[0].clientY;
-      window.addEventListener("touchmove", this.onTouchMoveBound);
+      window.addEventListener("touchmove", this.onTouchTurnBound);
       window.addEventListener("touchend", this.onTouchEndBound);
       window.addEventListener("touchcanel", this.onTouchEndBound);
       this.onStart(e);
@@ -168,7 +168,7 @@ export class TwistyOrbitControls {
     }
   }
 
-  onTouchMove(e: TouchEvent): void {
+  onTouchTurn(e: TouchEvent): void {
     for (let i = 0; i < e.changedTouches.length; i++) {
       const touch = e.changedTouches[i];
       if (touch.identifier === this.currentTouchID) {
@@ -183,13 +183,13 @@ export class TwistyOrbitControls {
           ((touch.clientY - this.lastTouchClientY) / minDim) *
             VERTICAL_MOVEMENT_BASE_SCALE,
         );
-        this.onMove(movementX, movementY);
+        this.onTurn(movementX, movementY);
         this.lastTouchClientX = touch.clientX;
         this.lastTouchClientY = touch.clientY;
 
-        this.lastTouchMoveMomentumX =
+        this.lastTouchTurnMomentumX =
           movementX / (e.timeStamp - this.lastTouchTimestamp);
-        this.lastTouchMoveMomentumY =
+        this.lastTouchTurnMomentumY =
           movementY / (e.timeStamp - this.lastTouchTimestamp);
         this.lastTouchTimestamp = e.timeStamp;
       }
@@ -201,7 +201,7 @@ export class TwistyOrbitControls {
       const touch = e.changedTouches[i];
       if (touch.identifier === this.currentTouchID) {
         this.currentTouchID = null;
-        window.removeEventListener("touchmove", this.onTouchMoveBound);
+        window.removeEventListener("touchturn", this.onTouchTurnBound);
         window.removeEventListener("touchend", this.onTouchEndBound);
         window.removeEventListener("touchcancel", this.onTouchEndBound);
         this.onEnd(e);
@@ -211,9 +211,9 @@ export class TwistyOrbitControls {
     if (this.experimentalInertia) {
       new Inertia(
         this.lastTouchTimestamp,
-        this.lastTouchMoveMomentumX,
-        this.lastTouchMoveMomentumY,
-        this.onMoveBound,
+        this.lastTouchTurnMomentumX,
+        this.lastTouchTurnMomentumY,
+        this.onTurnBound,
       );
     }
   }
@@ -222,7 +222,7 @@ export class TwistyOrbitControls {
     e.preventDefault();
   }
 
-  onMove(movementX: number, movementY: number): void {
+  onTurn(movementX: number, movementY: number): void {
     // TODO: optimize, e.g. by caching or using the spherical coordinates
     // directly if they are still fresh.
     this.tempSpherical.setFromVector3(this.camera.position);

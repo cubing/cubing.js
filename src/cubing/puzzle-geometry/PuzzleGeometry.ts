@@ -6,9 +6,9 @@
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
 import {
   PGVendoredKPuzzleDefinition,
-  PGVendoredMove,
-  PGVendoredMoveNotation,
-  PGVendoredMoveQuantum,
+  PGVendoredTurn,
+  PGVendoredTurnNotation,
+  PGVendoredQuantumTurn,
   Transformation as KTransformation,
 } from "./interfaces";
 import {
@@ -64,11 +64,11 @@ export interface StickerDat {
   foundations: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
-  unswizzle(mv: PGVendoredMove): string;
+  unswizzle(mv: PGVendoredTurn): string;
   notationMapper: NotationMapper;
 }
 
-// TODO: Remove this once we no longer have prefix restrictions.
+// TODO: Return this once we no longer have prefix restrictions.
 let NEW_FACE_NAMES = true;
 export function useNewFaceNames(use: boolean): void {
   NEW_FACE_NAMES = use;
@@ -93,7 +93,7 @@ export function useNewFaceNames(use: boolean): void {
 
 const eps: number = 1e-9;
 const copyright = "PuzzleGeometry 0.1 Copyright 2018 Tomas Rokicki.";
-const permissivieMoveParsing = false;
+const permissivieTurnParsing = false;
 
 // This is a description of the nets and the external names we give each
 // face.  The names should be a set of prefix-free upper-case alphabetics
@@ -341,9 +341,9 @@ export function getPuzzleGeometryByName(
   return getPuzzleGeometryByDesc(PGPuzzles[puzzleName], options);
 }
 
-function getmovename(geo: any, bits: number, slices: number): any {
-  // generate a move name based on bits, slice, and geo
-  // if the move name is from the opposite face, say so.
+function getturnname(geo: any, bits: number, slices: number): any {
+  // generate a turn name based on bits, slice, and geo
+  // if the turn name is from the opposite face, say so.
   // find the face that's turned.
   let nbits = 0;
   let inverted = false;
@@ -353,33 +353,33 @@ function getmovename(geo: any, bits: number, slices: number): any {
     }
   }
   if (nbits < bits) {
-    // flip if most of the move is on the other side
+    // flip if most of the turn is on the other side
     geo = [geo[2], geo[3], geo[0], geo[1]];
     bits = nbits;
     inverted = true;
   }
-  let movenameFamily = geo[0];
-  let movenamePrefix = "";
+  let turnnameFamily = geo[0];
+  let turnnamePrefix = "";
   let hibit = 0;
   while (bits >> (1 + hibit)) {
     hibit++;
   }
   if (bits === (2 << slices) - 1) {
-    movenameFamily = movenameFamily + "v";
+    turnnameFamily = turnnameFamily + "v";
   } else if (bits === 1 << hibit) {
     if (hibit > 0) {
-      movenamePrefix = String(hibit + 1);
+      turnnamePrefix = String(hibit + 1);
     }
   } else if (bits === (2 << hibit) - 1) {
-    movenameFamily = movenameFamily.toLowerCase();
+    turnnameFamily = turnnameFamily.toLowerCase();
     if (hibit > 1) {
-      movenamePrefix = String(hibit + 1);
+      turnnamePrefix = String(hibit + 1);
     }
   } else {
-    movenamePrefix = "_" + bits + "_";
-    //       throw "We only support slice and outer block moves right now. " + bits ;
+    turnnamePrefix = "_" + bits + "_";
+    //       throw "We only support slice and outer block turns right now. " + bits ;
   }
-  return [movenamePrefix + movenameFamily, inverted];
+  return [turnnamePrefix + turnnameFamily, inverted];
 }
 
 // split a geometrical element into face names.  Do greedy match.
@@ -461,12 +461,12 @@ export class PuzzleGeometry {
   public edgenames: any[]; // edge names
   public vertexnames: any[]; // vertexnames
   public geonormals: any[]; // all geometric directions, with names and types
-  public moveplanes: Quat[]; // the planes that split moves
-  public moveplanes2: Quat[]; // the planes that split moves, filtered
-  public moveplanesets: any[]; // the move planes, in parallel sets
-  public moveplanenormals: Quat[]; // one move plane
-  public movesetorders: any[]; // the order of rotations for each move set
-  public movesetgeos: any[]; // geometric feature information for move sets
+  public turnplanes: Quat[]; // the planes that split turns
+  public turnplanes2: Quat[]; // the planes that split turns, filtered
+  public turnplanesets: any[]; // the turn planes, in parallel sets
+  public turnplanenormals: Quat[]; // one turn plane
+  public turnsetorders: any[]; // the order of rotations for each turn set
+  public turnsetgeos: any[]; // geometric feature information for turn sets
   public basefaces: Quat[][]; // polytope faces before cuts
   public faces: Quat[][]; // all the stickers
   public basefacecount: number; // number of base faces
@@ -478,7 +478,7 @@ export class PuzzleGeometry {
   public edgedistance: number; // edge distance
   public orbits: number; // count of cubie orbits
   public facetocubies: any[]; // map a face to a cubie index and offset
-  public moverotations: Quat[][]; // move rotations
+  public turnrotations: Quat[][]; // turn rotations
   public cubiekey: any; // cubie locator
   public cubiekeys: string[]; // cubie keys
   public facelisthash: any; // face list by key
@@ -489,15 +489,15 @@ export class PuzzleGeometry {
   public orbitoris: number[]; // the orientation size of each orbit
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
-  public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
+  public cturnsbyslice: number[][][] = []; // cturns as perms by slice
   // options
   public verbose: number = 0; // verbosity (console.log)
-  public allmoves: boolean = false; // generate all slice moves in ksolve
-  public outerblockmoves: boolean; // generate outer block moves
-  public vertexmoves: boolean; // generate vertex moves
+  public allmoves: boolean = false; // generate all slice turns in ksolve
+  public outerblockturns: boolean; // generate outer block turns
+  public vertexturns: boolean; // generate vertex turns
   public addrotations: boolean; // add symmetry information to ksolve output
-  public movelist: any; // move list to generate
-  public parsedmovelist: any; // parsed move list
+  public turnlist: any; // turn list to generate
+  public parsedturnlist: any; // parsed turn list
   public puzzleOrientation: any; // single puzzle orientation from options
   public puzzleOrientations: any; // puzzle orientation override list from options
   public cornersets: boolean = true; // include corner sets
@@ -509,7 +509,7 @@ export class PuzzleGeometry {
   public killorientation: boolean = false; // eliminate any orientations
   public optimize: boolean = false; // optimize PermOri
   public scramble: number = 0; // scramble?
-  public ksolvemovenames: string[]; // move names from ksolve
+  public ksolveturnnames: string[]; // turn names from ksolve
   public fixPiece: string = ""; // fix a piece?
   public orientCenters: boolean = false; // orient centers?
   public duplicatedFaces: number[] = []; // which faces are duplicated
@@ -551,10 +551,10 @@ export class PuzzleGeometry {
           this.verbose = 0;
         } else if (optionlist[i] === "allmoves") {
           this.allmoves = asboolean(optionlist[i + 1]);
-        } else if (optionlist[i] === "outerblockmoves") {
-          this.outerblockmoves = asboolean(optionlist[i + 1]);
-        } else if (optionlist[i] === "vertexmoves") {
-          this.vertexmoves = asboolean(optionlist[i + 1]);
+        } else if (optionlist[i] === "outerblockturns") {
+          this.outerblockturns = asboolean(optionlist[i + 1]);
+        } else if (optionlist[i] === "vertexturns") {
+          this.vertexturns = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "rotations") {
           this.addrotations = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "cornersets") {
@@ -569,8 +569,8 @@ export class PuzzleGeometry {
           this.graycenters = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "grayedges") {
           this.grayedges = asboolean(optionlist[i + 1]);
-        } else if (optionlist[i] === "movelist") {
-          this.movelist = asstructured(optionlist[i + 1]);
+        } else if (optionlist[i] === "turnlist") {
+          this.turnlist = asstructured(optionlist[i + 1]);
         } else if (optionlist[i] === "killorientation") {
           this.killorientation = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "optimize") {
@@ -609,8 +609,8 @@ export class PuzzleGeometry {
     // we probably don't want to display or manipulate this one.  How
     // short is too short is hard to say.
     // var that = this ; // TODO
-    this.moveplanes = [];
-    this.moveplanes2 = [];
+    this.turnplanes = [];
+    this.turnplanes2 = [];
     this.faces = [];
     this.cubies = [];
     let g = null;
@@ -924,17 +924,17 @@ export class PuzzleGeometry {
       for (let i = 0; i < this.rotations.length; i++) {
         const q = cutplanes[c].rotateplane(this.rotations[i]);
         let wasseen = false;
-        for (let j = 0; j < this.moveplanes.length; j++) {
-          if (q.sameplane(this.moveplanes[j])) {
+        for (let j = 0; j < this.turnplanes.length; j++) {
+          if (q.sameplane(this.turnplanes[j])) {
             wasseen = true;
             break;
           }
         }
         if (!wasseen) {
-          this.moveplanes.push(q);
+          this.turnplanes.push(q);
           faces = q.cutfaces(faces);
           if (intersects[c]) {
-            this.moveplanes2.push(q);
+            this.turnplanes2.push(q);
           }
         }
       }
@@ -960,7 +960,7 @@ export class PuzzleGeometry {
     if (this.verbose) {
       console.log("# Short edge is " + shortedge);
     }
-    // add nxnxn cube notation if it has cube face moves
+    // add nxnxn cube notation if it has cube face turns
     if (shape === "c" && sawface && !sawedge && !sawvertex) {
       // In this case the mapper adding is deferred until we
       // know the number of slices.
@@ -1005,20 +1005,20 @@ export class PuzzleGeometry {
   }
 
   public keyface2(cm: Quat): string {
-    // take a face and figure out the sides of each move plane
+    // take a face and figure out the sides of each turn plane
     let s = "";
-    for (let i = 0; i < this.moveplanesets.length; i++) {
-      if (this.moveplanesets[i].length > 0) {
-        const dv = cm.dot(this.moveplanesets[i][0]);
+    for (let i = 0; i < this.turnplanesets.length; i++) {
+      if (this.turnplanesets[i].length > 0) {
+        const dv = cm.dot(this.turnplanesets[i][0]);
         let t = 0;
         let b = 1;
-        while (b * 2 <= this.moveplanesets[i].length) {
+        while (b * 2 <= this.turnplanesets[i].length) {
           b *= 2;
         }
         for (; b > 0; b >>= 1) {
           if (
-            t + b <= this.moveplanesets[i].length &&
-            dv > this.moveplanesets[i][t + b - 1].a
+            t + b <= this.turnplanesets[i].length &&
+            dv > this.turnplanesets[i][t + b - 1].a
           ) {
             t += b;
           }
@@ -1086,56 +1086,56 @@ export class PuzzleGeometry {
     if (this.verbose) {
       console.log("# Total stickers is now " + this.faces.length);
     }
-    // Split moveplanes into a list of parallel planes.
-    const moveplanesets: Quat[][] = [];
-    const moveplanenormals: Quat[] = [];
-    // get the normals, first, from unfiltered moveplanes.
-    for (let i = 0; i < this.moveplanes.length; i++) {
-      const q = this.moveplanes[i];
+    // Split turnplanes into a list of parallel planes.
+    const turnplanesets: Quat[][] = [];
+    const turnplanenormals: Quat[] = [];
+    // get the normals, first, from unfiltered turnplanes.
+    for (let i = 0; i < this.turnplanes.length; i++) {
+      const q = this.turnplanes[i];
       const qnormal = q.makenormal();
       let wasseen = false;
-      for (let j = 0; j < moveplanenormals.length; j++) {
-        if (qnormal.sameplane(moveplanenormals[j].makenormal())) {
+      for (let j = 0; j < turnplanenormals.length; j++) {
+        if (qnormal.sameplane(turnplanenormals[j].makenormal())) {
           wasseen = true;
         }
       }
       if (!wasseen) {
-        moveplanenormals.push(qnormal);
-        moveplanesets.push([]);
+        turnplanenormals.push(qnormal);
+        turnplanesets.push([]);
       }
     }
-    for (let i = 0; i < this.moveplanes2.length; i++) {
-      const q = this.moveplanes2[i];
+    for (let i = 0; i < this.turnplanes2.length; i++) {
+      const q = this.turnplanes2[i];
       const qnormal = q.makenormal();
-      for (let j = 0; j < moveplanenormals.length; j++) {
-        if (qnormal.sameplane(moveplanenormals[j])) {
-          moveplanesets[j].push(q);
+      for (let j = 0; j < turnplanenormals.length; j++) {
+        if (qnormal.sameplane(turnplanenormals[j])) {
+          turnplanesets[j].push(q);
           break;
         }
       }
     }
     // make the normals all face the same way in each set.
-    for (let i = 0; i < moveplanesets.length; i++) {
-      const q: Quat[] = moveplanesets[i].map((_) => _.normalizeplane());
-      const goodnormal = moveplanenormals[i];
+    for (let i = 0; i < turnplanesets.length; i++) {
+      const q: Quat[] = turnplanesets[i].map((_) => _.normalizeplane());
+      const goodnormal = turnplanenormals[i];
       for (let j = 0; j < q.length; j++) {
         if (q[j].makenormal().dist(goodnormal) > eps) {
           q[j] = q[j].smul(-1);
         }
       }
       q.sort((a, b) => a.a - b.a);
-      moveplanesets[i] = q;
+      turnplanesets[i] = q;
     }
-    this.moveplanesets = moveplanesets;
-    this.moveplanenormals = moveplanenormals;
-    const sizes = moveplanesets.map((_) => _.length);
+    this.turnplanesets = turnplanesets;
+    this.turnplanenormals = turnplanenormals;
+    const sizes = turnplanesets.map((_) => _.length);
     if (this.verbose) {
       console.log("# Turn plane sets: " + sizes);
     }
-    // for each of the move planes, find the rotations that are relevant
-    const moverotations: Quat[][] = [];
-    for (let i = 0; i < moveplanesets.length; i++) {
-      moverotations.push([]);
+    // for each of the turn planes, find the rotations that are relevant
+    const turnrotations: Quat[][] = [];
+    for (let i = 0; i < turnplanesets.length; i++) {
+      turnrotations.push([]);
     }
     for (let i = 0; i < this.rotations.length; i++) {
       const q: Quat = this.rotations[i];
@@ -1143,19 +1143,19 @@ export class PuzzleGeometry {
         continue;
       }
       const qnormal = q.makenormal();
-      for (let j = 0; j < moveplanesets.length; j++) {
-        if (qnormal.sameplane(moveplanenormals[j])) {
-          moverotations[j].push(q);
+      for (let j = 0; j < turnplanesets.length; j++) {
+        if (qnormal.sameplane(turnplanenormals[j])) {
+          turnrotations[j].push(q);
           break;
         }
       }
     }
-    this.moverotations = moverotations;
+    this.turnrotations = turnrotations;
     //  Sort the rotations by the angle of rotation.  A bit tricky because
     //  while the norms should be the same, they need not be.  So we start
     //  by making the norms the same, and then sorting.
-    for (let i = 0; i < moverotations.length; i++) {
-      const r = moverotations[i];
+    for (let i = 0; i < turnrotations.length; i++) {
+      const r = turnrotations[i];
       const goodnormal = r[0].makenormal();
       for (let j = 0; j < r.length; j++) {
         if (goodnormal.dist(r[j].makenormal()) > eps) {
@@ -1163,16 +1163,16 @@ export class PuzzleGeometry {
         }
       }
       r.sort((a, b) => a.angle() - b.angle());
-      if (moverotations[i][0].dot(moveplanenormals[i]) < 0) {
+      if (turnrotations[i][0].dot(turnplanenormals[i]) < 0) {
         r.reverse();
       }
     }
-    const sizes2 = moverotations.map((_) => 1 + _.length);
-    this.movesetorders = sizes2;
-    const movesetgeos = [];
+    const sizes2 = turnrotations.map((_) => 1 + _.length);
+    this.turnsetorders = sizes2;
+    const turnsetgeos = [];
     let gtype = "?";
-    for (let i = 0; i < moveplanesets.length; i++) {
-      const p0 = moveplanenormals[i];
+    for (let i = 0; i < turnplanesets.length; i++) {
+      const p0 = turnplanenormals[i];
       let neg = null;
       let pos = null;
       for (let j = 0; j < this.geonormals.length; j++) {
@@ -1188,33 +1188,33 @@ export class PuzzleGeometry {
       if (pos === null || neg === null) {
         throw new Error("Saw positive or negative sides as null");
       }
-      movesetgeos.push([
+      turnsetgeos.push([
         pos[0],
         pos[1],
         neg[0],
         neg[1],
-        1 + moveplanesets[i].length,
+        1 + turnplanesets[i].length,
       ]);
       if (this.addNotationMapper === "NxNxNCubeMapper" && gtype === "f") {
-        this.notationMapper = new NxNxNCubeMapper(1 + moveplanesets[i].length);
+        this.notationMapper = new NxNxNCubeMapper(1 + turnplanesets[i].length);
         this.addNotationMapper = "";
       }
       if (
         this.addNotationMapper === "SkewbMapper---DISABLED" &&
-        moveplanesets[0].length === 1
+        turnplanesets[0].length === 1
       ) {
         this.notationMapper = new SkewbNotationMapper(this.swizzler);
         this.addNotationMapper = "";
       }
       if (
         this.addNotationMapper === "PyraminxMapper---DISABLED" &&
-        moveplanesets[0].length === 2
+        turnplanesets[0].length === 2
       ) {
         this.notationMapper = new PyraminxNotationMapper(this.swizzler);
         this.addNotationMapper = "";
       }
       if (this.addNotationMapper === "Megaminx" && gtype === "f") {
-        if (1 + moveplanesets[i].length === 3) {
+        if (1 + turnplanesets[i].length === 3) {
           this.notationMapper = new MegaminxScramblingNotationMapper(
             this.notationMapper,
           );
@@ -1222,12 +1222,12 @@ export class PuzzleGeometry {
         this.addNotationMapper = "";
       }
     }
-    this.movesetgeos = movesetgeos;
-    //  Cubies are split by move plane sets.  For each cubie we can
+    this.turnsetgeos = turnsetgeos;
+    //  Cubies are split by turn plane sets.  For each cubie we can
     //  average its points to find a point on the interior of that
-    //  cubie.  We can then check that point against all the move
+    //  cubie.  We can then check that point against all the turn
     //  planes and from that derive a coordinate for the cubie.
-    //  This also works for faces; no face should ever lie on a move
+    //  This also works for faces; no face should ever lie on a turn
     //  plane.  This allows us to take a set of stickers and break
     //  them up into cubie sets.
     const cubiehash: any = {};
@@ -1352,7 +1352,7 @@ export class PuzzleGeometry {
       }
     }
     this.facetocubies = facetocubies;
-    //  Calculate the orbits of each cubie.  Assumes we do all moves.
+    //  Calculate the orbits of each cubie.  Assumes we do all turns.
     //  Also calculates which cubies are identical.
     const typenames = ["?", "CENTERS", "EDGES", "CORNERS", "C4RNER", "C5RNER"];
     const cubiesetnames = [];
@@ -1407,9 +1407,9 @@ export class PuzzleGeometry {
         cubiesetnums[cind] = cubiesetnum;
         cubiesetcubies[cubiesetnum].push(cind);
         cubieordnums[cind] = cubieords[cubiesetnum]++;
-        for (let j = 0; j < moverotations.length; j++) {
+        for (let j = 0; j < turnrotations.length; j++) {
           const tq = this.findcubie(
-            moverotations[j][0].rotateface(cubies[cind][0]),
+            turnrotations[j][0].rotateface(cubies[cind][0]),
           );
           if (!seen[tq]) {
             queue.push(tq);
@@ -1451,7 +1451,7 @@ export class PuzzleGeometry {
     }
   }
 
-  public unswizzle(mv: PGVendoredMove): string {
+  public unswizzle(mv: PGVendoredTurn): string {
     const newmv = this.notationMapper.notationToInternal(mv);
     if (newmv === null) {
       return "";
@@ -1461,12 +1461,12 @@ export class PuzzleGeometry {
 
   // We use an extremely permissive parse here; any character but
   // digits are allowed in a family name.
-  public stringToBlockMove(mv: string): PGVendoredMove {
-    // parse a move from the command line
+  public stringToBlockTurn(mv: string): PGVendoredTurn {
+    // parse a turn from the command line
     const re = RegExp("^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$");
     const p = mv.match(re);
     if (p === null) {
-      throw new Error("Bad move passed " + mv);
+      throw new Error("Bad turn passed " + mv);
     }
     const grip = p[4];
     let loslice = undefined;
@@ -1489,22 +1489,22 @@ export class PuzzleGeometry {
       }
       amount = parseInt(amountstr, 10);
     }
-    return new PGVendoredMove(
-      new PGVendoredMoveQuantum(grip, hislice, loslice),
+    return new PGVendoredTurn(
+      new PGVendoredQuantumTurn(grip, hislice, loslice),
       amount,
     );
   }
 
-  public parseMove(move: PGVendoredMove): any {
-    const bm = this.notationMapper.notationToInternal(move); // pluggable notation
+  public parseTurn(turn: PGVendoredTurn): any {
+    const bm = this.notationMapper.notationToInternal(turn); // pluggable notation
     if (bm === null) {
-      throw new Error("Bad move " + move.family);
+      throw new Error("Bad turn " + turn.family);
     }
-    move = bm;
-    let grip = move.family;
+    turn = bm;
+    let grip = turn.family;
     let fullrotation = false;
     if (grip.endsWith("v") && grip[0] <= "Z") {
-      if (move.innerLayer !== undefined || move.outerLayer !== undefined) {
+      if (turn.innerLayer !== undefined || turn.outerLayer !== undefined) {
         throw new Error("Cannot use a prefix with full cube rotations");
       }
       grip = grip.slice(0, -1);
@@ -1517,8 +1517,8 @@ export class PuzzleGeometry {
     let msi = -1;
     const geoname = this.swizzler.unswizzle(grip);
     let firstgrip = false;
-    for (let i = 0; i < this.movesetgeos.length; i++) {
-      const g = this.movesetgeos[i];
+    for (let i = 0; i < this.turnsetgeos.length; i++) {
+      const g = this.turnsetgeos[i];
       if (geoname === g[0]) {
         firstgrip = true;
         geo = g;
@@ -1536,41 +1536,41 @@ export class PuzzleGeometry {
       hislice = 2;
     }
     if (geo === undefined) {
-      throw new Error("Bad grip in move " + move.family);
+      throw new Error("Bad grip in turn " + turn.family);
     }
-    if (move.outerLayer !== undefined) {
-      loslice = move.outerLayer;
+    if (turn.outerLayer !== undefined) {
+      loslice = turn.outerLayer;
     }
-    if (move.innerLayer !== undefined) {
-      if (move.outerLayer === undefined) {
-        hislice = move.innerLayer;
+    if (turn.innerLayer !== undefined) {
+      if (turn.outerLayer === undefined) {
+        hislice = turn.innerLayer;
         if (geoname === grip) {
           loslice = hislice;
         } else {
           loslice = 1;
         }
       } else {
-        hislice = move.innerLayer;
+        hislice = turn.innerLayer;
       }
     }
     loslice--;
     hislice--;
     if (fullrotation) {
       loslice = 0;
-      hislice = this.moveplanesets[msi].length;
+      hislice = this.turnplanesets[msi].length;
     }
     if (
       loslice < 0 ||
-      loslice > this.moveplanesets[msi].length ||
+      loslice > this.turnplanesets[msi].length ||
       hislice < 0 ||
-      hislice > this.moveplanesets[msi].length
+      hislice > this.turnplanesets[msi].length
     ) {
       throw new Error("Bad slice spec " + loslice + " " + hislice);
     }
     if (
-      !permissivieMoveParsing &&
+      !permissivieTurnParsing &&
       loslice === 0 &&
-      hislice === this.moveplanesets[msi].length &&
+      hislice === this.turnplanesets[msi].length &&
       !fullrotation
     ) {
       throw new Error(
@@ -1583,24 +1583,24 @@ export class PuzzleGeometry {
       loslice,
       hislice,
       firstgrip,
-      move.effectiveAmount,
+      turn.effectiveAmount,
     ];
     return r;
   }
 
-  public parsemove(mv: string): any {
-    const r = this.parseMove(this.stringToBlockMove(mv));
+  public parseturn(mv: string): any {
+    const r = this.parseTurn(this.stringToBlockTurn(mv));
     r[0] = mv;
     return r;
   }
 
   public genperms(): void {
-    // generate permutations for moves
-    if (this.cmovesbyslice.length > 0) {
+    // generate permutations for turns
+    if (this.cturnsbyslice.length > 0) {
       // did this already?
       return;
     }
-    const cmovesbyslice = [];
+    const cturnsbyslice = [];
     // if orientCenters is set, we find all cubies that have only one
     // sticker and that sticker is in the center of a face, and we
     // introduce duplicate stickers so we can orient them properly.
@@ -1625,15 +1625,15 @@ export class PuzzleGeometry {
         }
       }
     }
-    for (let k = 0; k < this.moveplanesets.length; k++) {
-      const moveplaneset = this.moveplanesets[k];
+    for (let k = 0; k < this.turnplanesets.length; k++) {
+      const turnplaneset = this.turnplanesets[k];
       const slicenum = [];
       const slicecnts = [];
       for (let i = 0; i < this.faces.length; i++) {
         const face = this.faces[i];
         let t = 0;
-        for (let j = 0; j < moveplaneset.length; j++) {
-          if (moveplaneset[j].faceside(face) < 0) {
+        for (let j = 0; j < turnplaneset.length; j++) {
+          if (turnplaneset[j].faceside(face) < 0) {
             t++;
           }
         }
@@ -1643,9 +1643,9 @@ export class PuzzleGeometry {
         }
         slicecnts[t]++;
       }
-      const axiscmoves = [];
+      const axiscturns = [];
       for (let sc = 0; sc < slicecnts.length; sc++) {
-        const slicecmoves = [];
+        const slicecturns = [];
         const cubiedone = [];
         for (let i = 0; i < this.faces.length; i++) {
           if (slicenum[i] !== sc) {
@@ -1656,13 +1656,13 @@ export class PuzzleGeometry {
           let fi2 = i;
           for (;;) {
             slicenum[fi2] = -1;
-            const face2 = this.moverotations[k][0].rotateface(face);
+            const face2 = this.turnrotations[k][0].rotateface(face);
             fi2 = this.findface(face2);
             if (slicenum[fi2] < 0) {
               break;
             }
             if (slicenum[fi2] !== sc) {
-              throw new Error("Bad movement?");
+              throw new Error("Bad turnment?");
             }
             const c = this.facetocubies[fi2];
             b.push(c[0], c[1]);
@@ -1682,11 +1682,11 @@ export class PuzzleGeometry {
           // a point or cross sticker on the 5x5x5, for example.)
           //
           // This also simplifies things because it means the actual
-          // remapping has the same order as the moves themselves.
+          // remapping has the same order as the turns themselves.
           //
           // The center may or may not have been duplicated at this point.
           //
-          // The move moving the center might not be the same modulo as the
+          // The turn moving the center might not be the same modulo as the
           // center itself.
           if (
             b.length > 2 &&
@@ -1717,7 +1717,7 @@ export class PuzzleGeometry {
                   );
                 } else {
                   b[ii + 1] = o;
-                  face1 = this.moverotations[k][0].rotateface(face1);
+                  face1 = this.turnrotations[k][0].rotateface(face1);
                 }
               }
             }
@@ -1726,41 +1726,41 @@ export class PuzzleGeometry {
           // in this case we add duplicate stickers
           // so that we can make it animate properly in a 3D world.
           if (b.length === 2 && this.orientCenters) {
-            for (let ii = 1; ii < this.movesetorders[k]; ii++) {
+            for (let ii = 1; ii < this.turnsetorders[k]; ii++) {
               if (sc === 0) {
                 b.push(b[0], ii);
               } else {
                 b.push(
                   b[0],
-                  (this.movesetorders[k] - ii) % this.movesetorders[k],
+                  (this.turnsetorders[k] - ii) % this.turnsetorders[k],
                 );
               }
             }
           }
           if (b.length > 2 && !cubiedone[b[0]]) {
-            if (b.length !== 2 * this.movesetorders[k]) {
+            if (b.length !== 2 * this.turnsetorders[k]) {
               throw new Error("Bad length in perm gen");
             }
             for (let j = 0; j < b.length; j++) {
-              slicecmoves.push(b[j]);
+              slicecturns.push(b[j]);
             }
           }
           for (let j = 0; j < b.length; j += 2) {
             cubiedone[b[j]] = true;
           }
         }
-        axiscmoves.push(slicecmoves);
+        axiscturns.push(slicecturns);
       }
-      cmovesbyslice.push(axiscmoves);
+      cturnsbyslice.push(axiscturns);
     }
-    this.cmovesbyslice = cmovesbyslice;
-    if (this.movelist !== undefined) {
-      const parsedmovelist: any[] = [];
-      // make sure the movelist makes sense based on the geos.
-      for (let i = 0; i < this.movelist.length; i++) {
-        parsedmovelist.push(this.parsemove(this.movelist[i]));
+    this.cturnsbyslice = cturnsbyslice;
+    if (this.turnlist !== undefined) {
+      const parsedturnlist: any[] = [];
+      // make sure the turnlist makes sense based on the geos.
+      for (let i = 0; i < this.turnlist.length; i++) {
+        parsedturnlist.push(this.parseturn(this.turnlist[i]));
       }
-      this.parsedmovelist = parsedmovelist;
+      this.parsedturnlist = parsedturnlist;
     }
   }
 
@@ -1783,44 +1783,44 @@ export class PuzzleGeometry {
     };
   }
 
-  public getmovesets(k: number): any {
-    // get the move sets we support based on slices
+  public getturnsets(k: number): any {
+    // get the turn sets we support based on slices
     // for even values we omit the middle "slice".  This isn't perfect
     // but it is what we do for now.
-    // if there was a move list specified, pull values from that
-    const slices = this.moveplanesets[k].length;
+    // if there was a turn list specified, pull values from that
+    const slices = this.turnplanesets[k].length;
     if (slices > 30) {
-      throw new Error("Too many slices for getmovesets bitmasks");
+      throw new Error("Too many slices for getturnsets bitmasks");
     }
     let r = [];
-    if (this.parsedmovelist !== undefined) {
-      for (let i = 0; i < this.parsedmovelist.length; i++) {
-        const parsedmove = this.parsedmovelist[i];
-        if (parsedmove[1] !== k) {
+    if (this.parsedturnlist !== undefined) {
+      for (let i = 0; i < this.parsedturnlist.length; i++) {
+        const parsedturn = this.parsedturnlist[i];
+        if (parsedturn[1] !== k) {
           continue;
         }
-        if (parsedmove[4]) {
-          r.push((2 << parsedmove[3]) - (1 << parsedmove[2]));
+        if (parsedturn[4]) {
+          r.push((2 << parsedturn[3]) - (1 << parsedturn[2]));
         } else {
           r.push(
-            (2 << (slices - parsedmove[2])) - (1 << (slices - parsedmove[3])),
+            (2 << (slices - parsedturn[2])) - (1 << (slices - parsedturn[3])),
           );
         }
-        r.push(parsedmove[5]);
+        r.push(parsedturn[5]);
       }
-    } else if (this.vertexmoves && !this.allmoves) {
-      const msg = this.movesetgeos[k];
+    } else if (this.vertexturns && !this.allmoves) {
+      const msg = this.turnsetgeos[k];
       if (msg[1] !== msg[3]) {
         for (let i = 0; i < slices; i++) {
           if (msg[1] !== "v") {
-            if (this.outerblockmoves) {
+            if (this.outerblockturns) {
               r.push((2 << slices) - (2 << i));
             } else {
               r.push(2 << i);
             }
             r.push(1);
           } else {
-            if (this.outerblockmoves) {
+            if (this.outerblockturns) {
               r.push((2 << i) - 1);
             } else {
               r.push(1 << i);
@@ -1834,7 +1834,7 @@ export class PuzzleGeometry {
         if (!this.allmoves && i + i === slices) {
           continue;
         }
-        if (this.outerblockmoves) {
+        if (this.outerblockturns) {
           if (i + i > slices) {
             r.push((2 << slices) - (1 << i));
           } else {
@@ -1920,11 +1920,11 @@ export class PuzzleGeometry {
     const os = this.getOrbitsDef(false);
     const r = [];
     const mvs = [];
-    for (let i = 0; i < os.moveops.length; i++) {
-      const movename = "M_" + os.movenames[i];
+    for (let i = 0; i < os.turnops.length; i++) {
+      const turnname = "M_" + os.turnnames[i];
       // gap doesn't like angle brackets in IDs
-      mvs.push(movename);
-      r.push(movename + ":=" + os.moveops[i].toPerm().toGap() + ";");
+      mvs.push(turnname);
+      r.push(turnname + ":=" + os.turnops[i].toPerm().toGap() + ";");
     }
     r.push("Gen:=[");
     r.push(mvs.join(","));
@@ -1954,32 +1954,32 @@ export class PuzzleGeometry {
   public writekpuzzle(fortwisty: boolean = true): PGVendoredKPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty);
     const r = od.toKpuzzle() as PGVendoredKPuzzleDefinition;
-    r.moveNotation = new PGNotation(this, od);
+    r.turnNotation = new PGNotation(this, od);
     return r;
   }
 
-  public getMoveFromBits(
-    movebits: number,
+  public getTurnFromBits(
+    turnbits: number,
     amount: number,
     inverted: boolean,
-    axiscmoves: number[][],
-    setmoves: number[] | undefined,
-    movesetorder: number,
+    axiscturns: number[][],
+    setturns: number[] | undefined,
+    turnsetorder: number,
   ): Transformation {
-    const moveorbits: Orbit[] = [];
+    const turnorbits: Orbit[] = [];
     const perms = [];
     const oris = [];
     for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
       perms.push(iota(this.cubieords[ii]));
       oris.push(zeros(this.cubieords[ii]));
     }
-    for (let m = 0; m < axiscmoves.length; m++) {
-      if (((movebits >> m) & 1) === 0) {
+    for (let m = 0; m < axiscturns.length; m++) {
+      if (((turnbits >> m) & 1) === 0) {
         continue;
       }
-      const slicecmoves = axiscmoves[m];
-      for (let j = 0; j < slicecmoves.length; j += 2 * movesetorder) {
-        const mperm = slicecmoves.slice(j, j + 2 * movesetorder);
+      const slicecturns = axiscturns[m];
+      for (let j = 0; j < slicecturns.length; j += 2 * turnsetorder) {
+        const mperm = slicecturns.slice(j, j + 2 * turnsetorder);
         const setnum = this.cubiesetnums[mperm[0]];
         for (let ii = 0; ii < mperm.length; ii += 2) {
           mperm[ii] = this.cubieordnums[mperm[ii]];
@@ -2009,21 +2009,21 @@ export class PuzzleGeometry {
       }
     }
     for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
-      if (setmoves && !setmoves[ii]) {
+      if (setturns && !setturns[ii]) {
         continue;
       }
       if (this.orbitoris[ii] === 1 || this.killorientation) {
-        moveorbits.push(new Orbit(perms[ii], oris[ii], 1));
+        turnorbits.push(new Orbit(perms[ii], oris[ii], 1));
       } else {
         const no = new Array<number>(oris[ii].length);
         // convert ksolve oris to our internal ori rep
         for (let jj = 0; jj < perms[ii].length; jj++) {
           no[jj] = oris[ii][perms[ii][jj]];
         }
-        moveorbits.push(new Orbit(perms[ii], no, this.orbitoris[ii]));
+        turnorbits.push(new Orbit(perms[ii], no, this.orbitoris[ii]));
       }
     }
-    let mv = new Transformation(moveorbits);
+    let mv = new Transformation(turnorbits);
     if (amount !== 1) {
       mv = mv.mulScalar(amount);
     }
@@ -2032,41 +2032,41 @@ export class PuzzleGeometry {
 
   public getOrbitsDef(fortwisty: boolean): OrbitsDef {
     // generate a representation of the puzzle
-    const setmoves = [];
+    const setturns = [];
     const setnames: string[] = [];
     const setdefs: OrbitDef[] = [];
-    for (let k = 0; k < this.moveplanesets.length; k++) {
-      const moveset = this.getmovesets(k);
-      const movesetorder = this.movesetorders[k];
-      // check there's no redundancy in moveset.
-      for (let i = 0; i < moveset.length; i += 2) {
+    for (let k = 0; k < this.turnplanesets.length; k++) {
+      const turnset = this.getturnsets(k);
+      const turnsetorder = this.turnsetorders[k];
+      // check there's no redundancy in turnset.
+      for (let i = 0; i < turnset.length; i += 2) {
         for (let j = 0; j < i; j += 2) {
-          if (moveset[i] === moveset[j] && moveset[i + 1] === moveset[j + 1]) {
-            throw new Error("Redundant moves in moveset.");
+          if (turnset[i] === turnset[j] && turnset[i + 1] === turnset[j + 1]) {
+            throw new Error("Redundant turns in turnset.");
           }
         }
       }
       let allbits = 0;
-      for (let i = 0; i < moveset.length; i += 2) {
-        allbits |= moveset[i];
+      for (let i = 0; i < turnset.length; i += 2) {
+        allbits |= turnset[i];
       }
-      const axiscmoves = this.cmovesbyslice[k];
-      for (let i = 0; i < axiscmoves.length; i++) {
+      const axiscturns = this.cturnsbyslice[k];
+      for (let i = 0; i < axiscturns.length; i++) {
         if (((allbits >> i) & 1) === 0) {
           continue;
         }
-        const slicecmoves = axiscmoves[i];
-        for (let j = 0; j < slicecmoves.length; j += 2 * movesetorder) {
-          if (this.skipcubie(slicecmoves[j])) {
+        const slicecturns = axiscturns[i];
+        for (let j = 0; j < slicecturns.length; j += 2 * turnsetorder) {
+          if (this.skipcubie(slicecturns[j])) {
             continue;
           }
-          const ind = this.cubiesetnums[slicecmoves[j]];
-          setmoves[ind] = 1;
+          const ind = this.cubiesetnums[slicecturns[j]];
+          setturns[ind] = 1;
         }
       }
     }
     for (let i = 0; i < this.cubiesetnames.length; i++) {
-      if (!setmoves[i]) {
+      if (!setturns[i]) {
         continue;
       }
       setnames.push(this.cubiesetnames[i]);
@@ -2079,7 +2079,7 @@ export class PuzzleGeometry {
     }
     const solved: Orbit[] = [];
     for (let i = 0; i < this.cubiesetnames.length; i++) {
-      if (!setmoves[i]) {
+      if (!setturns[i]) {
         continue;
       }
       const p = [];
@@ -2097,41 +2097,41 @@ export class PuzzleGeometry {
         new Orbit(p, o, this.killorientation ? 1 : this.orbitoris[i]),
       );
     }
-    const movenames: string[] = [];
-    const moves: Transformation[] = [];
-    for (let k = 0; k < this.moveplanesets.length; k++) {
-      const moveplaneset = this.moveplanesets[k];
-      const slices = moveplaneset.length;
-      const moveset = this.getmovesets(k);
-      const movesetgeo = this.movesetgeos[k];
-      for (let i = 0; i < moveset.length; i += 2) {
-        const movebits = moveset[i];
-        const mna = getmovename(movesetgeo, movebits, slices);
-        const movename = mna[0];
+    const turnnames: string[] = [];
+    const turns: Transformation[] = [];
+    for (let k = 0; k < this.turnplanesets.length; k++) {
+      const turnplaneset = this.turnplanesets[k];
+      const slices = turnplaneset.length;
+      const turnset = this.getturnsets(k);
+      const turnsetgeo = this.turnsetgeos[k];
+      for (let i = 0; i < turnset.length; i += 2) {
+        const turnbits = turnset[i];
+        const mna = getturnname(turnsetgeo, turnbits, slices);
+        const turnname = mna[0];
         const inverted = mna[1];
-        if (moveset[i + 1] === 1) {
-          movenames.push(movename);
+        if (turnset[i + 1] === 1) {
+          turnnames.push(turnname);
         } else {
-          movenames.push(movename + moveset[i + 1]);
+          turnnames.push(turnname + turnset[i + 1]);
         }
-        const mv = this.getMoveFromBits(
-          movebits,
-          moveset[i + 1],
+        const mv = this.getTurnFromBits(
+          turnbits,
+          turnset[i + 1],
           inverted,
-          this.cmovesbyslice[k],
-          setmoves,
-          this.movesetorders[k],
+          this.cturnsbyslice[k],
+          setturns,
+          this.turnsetorders[k],
         );
-        moves.push(mv);
+        turns.push(mv);
       }
     }
-    this.ksolvemovenames = movenames; // hack!
+    this.ksolveturnnames = turnnames; // hack!
     let r = new OrbitsDef(
       setnames,
       setdefs,
       new VisibleState(solved),
-      movenames,
-      moves,
+      turnnames,
+      turns,
     );
     if (this.optimize) {
       r = r.optimize();
@@ -2142,14 +2142,14 @@ export class PuzzleGeometry {
     return r;
   }
 
-  public getMovesAsPerms(): Perm[] {
-    return this.getOrbitsDef(false).moveops.map((_: Transformation) =>
+  public getTurnsAsPerms(): Perm[] {
+    return this.getOrbitsDef(false).turnops.map((_: Transformation) =>
       _.toPerm(),
     );
   }
 
   public showcanon(disp: (s: string) => void): void {
-    // show information for canonical move derivation
+    // show information for canonical turn derivation
     showcanon(this.getOrbitsDef(false), disp);
   }
 
@@ -2270,8 +2270,8 @@ export class PuzzleGeometry {
     let needvertexgrips = this.addrotations;
     let neededgegrips = this.addrotations;
     let needfacegrips = this.addrotations;
-    for (let i = 0; i < this.movesetgeos.length; i++) {
-      const msg = this.movesetgeos[i];
+    for (let i = 0; i < this.turnsetgeos.length; i++) {
+      const msg = this.turnsetgeos[i];
       for (let j = 1; j <= 3; j += 2) {
         if (msg[j] === "v") {
           needvertexgrips = true;
@@ -2628,9 +2628,9 @@ export class PuzzleGeometry {
       }
     }
     const grips: StickerDatAxis[] = [];
-    for (let i = 0; i < this.movesetgeos.length; i++) {
-      const msg = this.movesetgeos[i];
-      const order = this.movesetorders[i];
+    for (let i = 0; i < this.turnsetgeos.length; i++) {
+      const msg = this.turnsetgeos[i];
+      const order = this.turnsetorders[i];
       for (let j = 0; j < this.geonormals.length; j++) {
         const gn = this.geonormals[j];
         if (msg[0] === gn[1] && msg[1] === gn[2]) {
@@ -2644,7 +2644,7 @@ export class PuzzleGeometry {
       }
     }
     const f = (function () {
-      return function (mv: PGVendoredMove): string {
+      return function (mv: PGVendoredTurn): string {
         return this.unswizzle(mv);
       };
     })().bind(this);
@@ -2692,28 +2692,28 @@ export class PuzzleGeometry {
   }
 }
 
-class PGNotation implements PGVendoredMoveNotation {
+class PGNotation implements PGVendoredTurnNotation {
   private cache: { [key: string]: KTransformation } = {};
   constructor(public pg: PuzzleGeometry, public od: OrbitsDef) {}
 
-  public lookupMove(move: PGVendoredMove): KTransformation | undefined {
-    const key = this.moveToKeyString(move);
+  public lookupTurn(turn: PGVendoredTurn): KTransformation | undefined {
+    const key = this.turnToKeyString(turn);
     if (key in this.cache) {
       return this.cache[key];
     }
-    const mv = this.pg.parseMove(move);
+    const mv = this.pg.parseTurn(turn);
     let bits = (2 << mv[3]) - (1 << mv[2]);
     if (!mv[4]) {
-      const slices = this.pg.moveplanesets[mv[1]].length;
+      const slices = this.pg.turnplanesets[mv[1]].length;
       bits = (2 << (slices - mv[2])) - (1 << (slices - mv[3]));
     }
-    const pgmv = this.pg.getMoveFromBits(
+    const pgmv = this.pg.getTurnFromBits(
       bits,
       mv[5],
       !mv[4],
-      this.pg.cmovesbyslice[mv[1]],
+      this.pg.cturnsbyslice[mv[1]],
       undefined,
-      this.pg.movesetorders[mv[1]],
+      this.pg.turnsetorders[mv[1]],
     );
     const r = this.od.transformToKPuzzle(pgmv);
     this.cache[key] = r;
@@ -2721,15 +2721,15 @@ class PGNotation implements PGVendoredMoveNotation {
   }
 
   // This is only used to construct keys, so does not need to be beautiful.
-  private moveToKeyString(move: PGVendoredMove): string {
+  private turnToKeyString(turn: PGVendoredTurn): string {
     let r = "";
-    if (move.outerLayer) {
-      r = r + move.outerLayer + ",";
+    if (turn.outerLayer) {
+      r = r + turn.outerLayer + ",";
     }
-    if (move.innerLayer) {
-      r = r + move.innerLayer + ",";
+    if (turn.innerLayer) {
+      r = r + turn.innerLayer + ",";
     }
-    r = r + move.family + "," + move.effectiveAmount;
+    r = r + turn.family + "," + turn.effectiveAmount;
     return r;
   }
 }

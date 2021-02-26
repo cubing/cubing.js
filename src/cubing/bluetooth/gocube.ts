@@ -1,6 +1,6 @@
 import { Quaternion } from "three";
 import { Alg, Turn } from "../alg";
-import { experimentalAppendMove } from "../alg/operation";
+import { experimentalAppendTurn } from "../alg/operation";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { debugLog } from "./debug";
 
@@ -9,7 +9,7 @@ const UUIDs = {
   goCubeStateCharacteristic: "6e400003-b5a3-f393-e0a9-e50e24dcca9e",
 };
 
-// TODO: Turn this into a factory?
+// TODO: Move this into a factory?
 export const goCubeConfig: BluetoothConfig = {
   filters: [{ namePrefix: "GoCube" }, { namePrefix: "Rubik" }],
   optionalServices: [UUIDs.goCubeService],
@@ -34,7 +34,7 @@ function bufferToString(buffer: ArrayBuffer): string {
   return str;
 }
 
-const moveMap: Turn[] = [
+const turnMap: Turn[] = [
   new Turn("B", 1),
   new Turn("B", -1),
   new Turn("F", 1),
@@ -121,10 +121,10 @@ export class GoCube extends BluetoothPuzzle {
     // TODO: read bytes from buffer instead of guessing meaning based on length.
     if (buffer.byteLength < 16) {
       for (let i = 3; i < buffer.byteLength - 4; i += 2) {
-        const move = moveMap[buffer.getUint8(i)];
-        this.alg = experimentalAppendMove(this.alg, move);
-        this.dispatchMove({
-          latestMove: moveMap[buffer.getUint8(i)],
+        const turn = turnMap[buffer.getUint8(i)];
+        this.alg = experimentalAppendTurn(this.alg, turn);
+        this.dispatchTurn({
+          latestTurn: turnMap[buffer.getUint8(i)],
           timeStamp: event.timeStamp,
           debug: {
             stateStr: buf2hex(buffer.buffer),

@@ -13,14 +13,14 @@ import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import { Duration, PuzzlePosition, Timestamp } from "../cursor/CursorTypes";
 
 export interface AlgIndexer<P extends PuzzleWrapper> {
-  getMove(index: number): Turn | null;
-  indexToMoveStartTimestamp(index: number): Timestamp;
+  getTurn(index: number): Turn | null;
+  indexToTurnStartTimestamp(index: number): Timestamp;
   stateAtIndex(index: number, startTransformation?: State<P>): State<P>;
   transformAtIndex(index: number): State<P>;
-  numMoves(): number;
+  numTurns(): number;
   timestampToIndex(timestamp: Timestamp): number;
   algDuration(): Duration;
-  moveDuration(index: number): number;
+  turnDuration(index: number): number;
   timestampToPosition?: (
     timestamp: Timestamp,
     startTransformation?: State<P>,
@@ -28,7 +28,7 @@ export interface AlgIndexer<P extends PuzzleWrapper> {
 }
 
 // TODO: Include Pause, include amounts
-class CountAnimatedMoves extends TraversalUp<number, number> {
+class CountAnimatedTurns extends TraversalUp<number, number> {
   public traverseAlg(alg: Alg): number {
     let total = 0;
     for (const part of alg.units()) {
@@ -44,7 +44,7 @@ class CountAnimatedMoves extends TraversalUp<number, number> {
     );
   }
 
-  public traverseMove(_move: Turn): number {
+  public traverseTurn(_turn: Turn): number {
     return 1;
   }
 
@@ -71,7 +71,7 @@ class CountAnimatedMoves extends TraversalUp<number, number> {
   }
 }
 
-const countAnimatedMovesInstance = new CountAnimatedMoves();
-export const countAnimatedMoves = countAnimatedMovesInstance.traverseAlg.bind(
-  countAnimatedMovesInstance,
+const countAnimatedTurnsInstance = new CountAnimatedTurns();
+export const countAnimatedTurns = countAnimatedTurnsInstance.traverseAlg.bind(
+  countAnimatedTurnsInstance,
 );

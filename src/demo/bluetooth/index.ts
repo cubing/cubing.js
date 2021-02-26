@@ -7,7 +7,7 @@ import {
   BluetoothPuzzle,
   connect,
   debugKeyboardConnect,
-  MoveEvent,
+  TurnEvent,
 } from "../../cubing/bluetooth/index";
 import { TwistyPlayer } from "../../cubing/twisty/index";
 
@@ -17,9 +17,9 @@ async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
   console.log("asyncSetup");
   const keyboard = await debugKeyboardConnect(twistyPlayer); // TODO: attach to viewer only?
   console.log("keyboard", twistyPlayer, keyboard);
-  keyboard.addMoveListener((e: MoveEvent) => {
+  keyboard.addTurnListener((e: TurnEvent) => {
     console.log("listener", e);
-    twistyPlayer.experimentalAddMove(e.latestMove);
+    twistyPlayer.experimentalAddTurn(e.latestTurn);
   });
 }
 
@@ -37,7 +37,7 @@ window.addEventListener("load", async () => {
 
   asyncSetup(twistyPlayer);
 
-  // latestMove: BlockMove;
+  // latestTurn: BlockTurn;
   // timeStamp: number;
   // debug?: object;
   // state?: PuzzleState;
@@ -47,8 +47,8 @@ window.addEventListener("load", async () => {
       "#acceptAllDevices",
     ) as HTMLInputElement).checked;
     window.puzzle = await connect({ acceptAllDevices });
-    window.puzzle.addMoveListener((e: MoveEvent) => {
-      twistyPlayer.experimentalAddMove(e.latestMove);
+    window.puzzle.addTurnListener((e: TurnEvent) => {
+      twistyPlayer.experimentalAddTurn(e.latestTurn);
     });
     window.puzzle.addOrientationListener((_e: OrientationEvent) => {
       // TODO
