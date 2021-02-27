@@ -20,6 +20,8 @@ export const PGPuzzles: { [name: string]: PuzzleDescriptionString } = {
   "20x20x20": "c f 0 f .1 f .2 f .3 f .4 f .5 f .6 f .7 f .8 f .9",
   "30x30x30":
     "c f 0 f .066667 f .133333 f .2 f .266667 f .333333 f .4 f .466667 f .533333 f .6 f .666667 f .733333 f .8 f .866667 f .933333",
+  "40x40x40":
+    "c f 0 f .05 f .1 f .15 f .2 f .25 f .3 f .35 f .4 f .45 f .5 f .55 f .6 f .65 f .7 f .75 f .8 f .85 f .9 f .95",
   "skewb": "c v 0",
   "master skewb": "c v 0.275",
   "professor skewb": "c v 0 v 0.38",
