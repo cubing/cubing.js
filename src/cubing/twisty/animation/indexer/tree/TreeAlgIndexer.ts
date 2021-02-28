@@ -1,18 +1,38 @@
-import { Alg, Move } from "../../../../alg";
+import { Alg, Grouping, Move } from "../../../../alg";
+import { AlgBuilder } from "../../../../alg/AlgBuilder";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration, Timestamp } from "../../cursor/CursorTypes";
 import { AlgIndexer } from "../AlgIndexer";
 import { AlgPartDecoration, AlgWalker, DecoratorConstructor } from "./walker";
+
+// TODO: This only chunks the top-level alg. It won't help when a long alg is inside a container.
+function chunkAlg(alg: Alg): Alg {
+  const chunkMaxLength = Math.floor(Math.sqrt(alg.experimentalNumUnits()));
+  const mainAlgBuilder = new AlgBuilder();
+  const chunkAlgBuilder = new AlgBuilder();
+  for (const unit of alg.units()) {
+    chunkAlgBuilder.push(unit);
+    if (chunkAlgBuilder.experimentalNumUnits() >= chunkMaxLength) {
+      mainAlgBuilder.push(new Grouping(chunkAlgBuilder.toAlg()));
+      chunkAlgBuilder.reset();
+    }
+  }
+  mainAlgBuilder.push(new Grouping(chunkAlgBuilder.toAlg()));
+  return mainAlgBuilder.toAlg();
+}
 
 export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
   private decoration: AlgPartDecoration<PuzzleWrapper>;
   private walker: AlgWalker<PuzzleWrapper>;
   constructor(private puzzle: PuzzleWrapper, alg: Alg) {
     const deccon = new DecoratorConstructor<PuzzleWrapper>(this.puzzle);
-    this.decoration = deccon.traverseAlg(alg);
+
+    const chunkedAlg = chunkAlg(alg);
+
+    this.decoration = deccon.traverseAlg(chunkedAlg);
     this.walker = new AlgWalker<PuzzleWrapper>(
       this.puzzle,
-      alg,
+      chunkedAlg,
       this.decoration,
     );
   }
