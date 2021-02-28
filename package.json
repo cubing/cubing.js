@@ -52,7 +52,7 @@
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx pegjs src/cubing/alg/parser/parser-pegjs.pegjs && npx pegjs src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
-    "dev": "npx parcel serve --no-autoinstall src/demo/index.html --port 3333 --open --dist-dir /tmp/cubing-js-parcel # workaround dir",
+    "dev": "npm run clean && npx parcel serve --no-autoinstall src/demo/index.html --port 3333 --open --dist-dir /tmp/cubing-js-parcel # cleaning is a workaround for one set of PArcel bugs, /tmp dir is a workaround dir for other Parcel bugs",
     "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel",
     "test": "npm run test-jest && npm run lint",
     "test-jest": "npx jest --collectCoverage",
