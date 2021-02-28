@@ -559,3 +559,109 @@ export const appearances4x4x4: Record<
     },
   },
 };
+
+export const appearancesFTO: Record<
+  string, // TODO: ExperimentalStickering,
+  PuzzleAppearance
+> = {
+  "full": {
+    orbits: {
+      C4RNER: {
+        pieces: new Array(6).fill(r),
+      },
+      CENTERS: {
+        pieces: new Array(12).fill(r),
+      },
+      CENTERS2: {
+        pieces: new Array(12).fill(r),
+      },
+      EDGES: {
+        pieces: new Array(12).fill(r),
+      },
+    },
+  },
+  "experimental-fto-fc": {
+    orbits: {
+      C4RNER: {
+        pieces: [i, i, i, i, i, i],
+      },
+      CENTERS: {
+        pieces: replace(new Array(12).fill(r), [2, 3, 4, 6, 7, 8, 0, 1, 5], i),
+      },
+      CENTERS2: {
+        pieces: replace(
+          new Array(12).fill(r),
+          [0, 1, 2, 3, 6, 8, 5, 11, 4, 7, 9, 10],
+          i,
+        ),
+      },
+      EDGES: {
+        pieces: replace(new Array(12).fill(r), [2, 3, 4, 6, 7, 8, 0, 1, 5], i),
+      },
+    },
+  },
+  "experimental-fto-f2t": {
+    orbits: {
+      C4RNER: {
+        pieces: [i, i, r, i, i, r],
+      },
+      CENTERS: {
+        pieces: replace(new Array(12).fill(r), [2, 3, 4, 6, 7, 8, 0, 1, 5], i),
+      },
+      CENTERS2: {
+        pieces: replace(new Array(12).fill(r), [0, 1, 2, 3, 6, 8, 5, 11], i),
+      },
+      EDGES: {
+        pieces: replace(new Array(12).fill(r), [2, 3, 4, 6, 7, 8, 0, 1, 5], i),
+      },
+    },
+  },
+  "experimental-fto-sc": {
+    orbits: {
+      C4RNER: {
+        pieces: [i, i, r, i, i, r],
+      },
+      CENTERS: {
+        pieces: replace(new Array(12).fill(r), [2, 3, 4, 6, 7, 8], i),
+      },
+      CENTERS2: {
+        pieces: replace(new Array(12).fill(r), [0, 1, 2, 3, 6, 8, 5, 11], i),
+      },
+      EDGES: {
+        pieces: replace(new Array(12).fill(r), [2, 3, 4, 6, 7, 8], i),
+      },
+    },
+  },
+  "experimental-fto-l2c": {
+    orbits: {
+      C4RNER: {
+        pieces: [i, i, r, i, i, r],
+      },
+      CENTERS: {
+        pieces: new Array(12).fill(r),
+      },
+      CENTERS2: {
+        pieces: replace(new Array(12).fill(r), [0, 1, 2, 3, 6, 8, 5, 11], i),
+      },
+      EDGES: {
+        pieces: new Array(12).fill(r),
+      },
+    },
+  },
+  "experimental-fto-lbt": {
+    orbits: {
+      C4RNER: {
+        pieces: [r, i, r, i, i, r],
+      },
+      CENTERS: {
+        pieces: new Array(12).fill(r),
+      },
+      CENTERS2: {
+        pieces: replace(new Array(12).fill(r), [0, 1, 2, 3, 6, 8], i),
+      },
+      EDGES: {
+        pieces: new Array(12).fill(r),
+      },
+    },
+  },
+};

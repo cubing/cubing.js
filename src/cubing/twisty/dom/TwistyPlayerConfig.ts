@@ -85,6 +85,11 @@ export const experimentalStickerings = {
   "experimental-centers-U-L-D": true,
   "experimental-centers-U-L-B-D": true,
   "experimental-centers": true,
+  "experimental-fto-fc": true,
+  "experimental-fto-f2t": true,
+  "experimental-fto-sc": true,
+  "experimental-fto-l2c": true,
+  "experimental-fto-lbt": true,
 };
 export type ExperimentalStickering = keyof typeof experimentalStickerings;
 

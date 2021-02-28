@@ -8,7 +8,7 @@ import { PuzzleManager } from "../../puzzles/PuzzleManager";
 import { PuzzleAppearance } from "../3D/puzzles/appearance";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D, PG3DOptions } from "../3D/puzzles/PG3D";
-import { appearances4x4x4 } from "../3D/puzzles/stickerings";
+import { appearances4x4x4, appearancesFTO } from "../3D/puzzles/stickerings";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor } from "../animation/cursor/AlgCursor";
@@ -677,6 +677,13 @@ export class TwistyPlayer extends ManagedCustomElement {
       return (
         appearances4x4x4[this.experimentalStickering ?? "full"] ??
         appearances4x4x4["full"]
+      );
+    } else if (this.puzzle === "fto") {
+      console.log("fto", this.experimentalStickering);
+      console.log("fto", appearancesFTO[this.experimentalStickering]);
+      return (
+        appearancesFTO[this.experimentalStickering ?? "full"] ??
+        appearancesFTO["full"]
       );
     }
     return null;
