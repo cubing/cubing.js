@@ -26,6 +26,3 @@ export {
 export { parseKPuzzleDefinition } from "./parser";
 
 export { KPuzzleSVGWrapper } from "./svg";
-
-// Legacy exports
-export * from "./index-legacy";
