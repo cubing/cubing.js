@@ -18,7 +18,11 @@ import { AlgPartDecoration, AlgWalker, DecoratorConstructor } from "./walker";
 
 class ChunkAlgs extends TraversalUp<Alg, Unit> {
   traverseAlg(alg: Alg): Alg {
-    const chunkMaxLength = Math.floor(Math.sqrt(alg.experimentalNumUnits()));
+    const length = alg.experimentalNumUnits();
+    if (length < 100) {
+      return alg;
+    }
+    const chunkMaxLength = Math.floor(Math.sqrt(length));
     const mainAlgBuilder = new AlgBuilder();
     const chunkAlgBuilder = new AlgBuilder();
     for (const unit of alg.units()) {
