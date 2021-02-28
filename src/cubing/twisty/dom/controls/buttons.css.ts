@@ -12,6 +12,8 @@ export const buttonGridCSS = new CSSSource(`
   height: 100%;
   display: grid;
   overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .wrapper {

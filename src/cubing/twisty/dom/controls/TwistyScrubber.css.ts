@@ -12,6 +12,8 @@ export const twistyScrubberCSS = new CSSSource(`
   height: 100%;
   display: grid;
   overflow: hidden;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 input {
