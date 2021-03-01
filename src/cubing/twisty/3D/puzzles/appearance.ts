@@ -20,6 +20,7 @@ export type OrbitAppearance = {
 };
 
 export type PuzzleAppearance = {
+  name?: string; // TODO
   orbits: Record<string, OrbitAppearance>;
 };
 

@@ -1,23 +1,23 @@
+import { Vector3 } from "three";
+import { Alg } from "../../cubing/alg";
 import {
   ExperimentalStickering,
   TwistyPlayer,
   TwistyPlayerInitialConfig,
 } from "../../cubing/twisty";
-import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
-import { puzzles } from "./supported-puzzles";
-import {
-  ALG_INPUT_PLACEHOLDER,
-  ALG_SETUP_INPUT_PLACEHOLDER,
-  APP_TITLE,
-} from "./strings";
-import { getURLParam, setURLParams } from "./url-params";
-import { Vector3 } from "three";
-import { Alg } from "../../cubing/alg";
 import {
   appearances3x3x3,
   appearances4x4x4,
   appearancesFTO,
 } from "../../cubing/twisty/3D/puzzles/stickerings";
+import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
+import {
+  ALG_INPUT_PLACEHOLDER,
+  ALG_SETUP_INPUT_PLACEHOLDER,
+  APP_TITLE,
+} from "./strings";
+import { puzzles } from "./supported-puzzles";
+import { getURLParam, setURLParams } from "./url-params";
 
 export interface AppData {
   puzzleName: string;
@@ -323,7 +323,7 @@ class ControlPane {
     for (const setupAnchor of ["start", "end"]) {
       const option = document.createElement("option");
       option.value = setupAnchor;
-      option.textContent = setupAnchor;
+      option.textContent = setupAnchor + "ing solved"; // TODO
       this.setupAnchorSelect.appendChild(option);
       if (setupAnchor === initialSetupAnchor) {
         option.selected = true;
@@ -344,29 +344,29 @@ class ControlPane {
     initialStickering: string,
     puzzleName: string,
   ): void {
-    let stickerings: ExperimentalStickering[];
+    let appearances: Record<ExperimentalStickering, { name?: string }>;
     switch (puzzleName) {
       case "3x3x3":
-        stickerings = Object.keys(appearances3x3x3) as ExperimentalStickering[];
+        appearances = appearances3x3x3 as any;
         break;
       case "4x4x4":
-        stickerings = Object.keys(appearances4x4x4) as ExperimentalStickering[];
+        appearances = appearances4x4x4;
         break;
       case "fto":
-        stickerings = Object.keys(appearancesFTO) as ExperimentalStickering[];
+        appearances = appearancesFTO;
         break;
       default:
-        stickerings = ["full"];
+        appearances = { full: {} } as any;
         this.stickeringSelect.disabled = true;
     }
 
     this.stickeringSelect.textContent = "";
-    for (const stickering of stickerings) {
+    for (const [appearanceName, appearance] of Object.entries(appearances)) {
       const option = document.createElement("option");
-      option.value = stickering;
-      option.textContent = stickering;
+      option.value = appearanceName;
+      option.textContent = appearance?.name ?? appearanceName;
       this.stickeringSelect.appendChild(option);
-      if (stickering === initialStickering) {
+      if (appearanceName === initialStickering) {
         option.selected = true;
       }
     }

@@ -74,6 +74,7 @@ export const appearances3x3x3: Partial<Record<
   },
 
   "centers-only": {
+    name: "Centers",
     orbits: {
       EDGES: {
         pieces: [i, i, i, i, i, i, i, i, i, i, i, i],
@@ -504,6 +505,7 @@ export const appearances4x4x4: Record<
     },
   },
   "experimental-centers-U": {
+    name: "Center: U",
     orbits: {
       EDGES: { pieces: new Array(24).fill(i) },
       CORNERS: { pieces: new Array(8).fill(i) },
@@ -513,6 +515,7 @@ export const appearances4x4x4: Record<
     },
   },
   "experimental-centers-U-D": {
+    name: "Centers: U, D",
     orbits: {
       EDGES: { pieces: new Array(24).fill(i) },
       CORNERS: { pieces: new Array(8).fill(i) },
@@ -526,6 +529,7 @@ export const appearances4x4x4: Record<
     },
   },
   "experimental-centers-U-L-D": {
+    name: "Centers: U, L, D",
     orbits: {
       EDGES: { pieces: new Array(24).fill(i) },
       CORNERS: { pieces: new Array(8).fill(i) },
@@ -539,6 +543,7 @@ export const appearances4x4x4: Record<
     },
   },
   "experimental-centers-U-L-B-D": {
+    name: "Centers: U, L, B, D",
     orbits: {
       EDGES: { pieces: new Array(24).fill(i) },
       CORNERS: { pieces: new Array(8).fill(i) },
@@ -552,6 +557,7 @@ export const appearances4x4x4: Record<
     },
   },
   "experimental-centers": {
+    name: "Centers",
     orbits: {
       EDGES: { pieces: new Array(24).fill(i) },
       CORNERS: { pieces: new Array(8).fill(i) },
@@ -599,6 +605,7 @@ export const appearancesFTO: Record<
     },
   },
   "experimental-fto-fc": {
+    name: "First Center",
     orbits: {
       EDGES: { pieces: [i, i, i, i, i, i, r, i, r, i, i, r] },
       CENTERS: {
@@ -633,6 +640,7 @@ export const appearancesFTO: Record<
     },
   },
   "experimental-fto-f2t": {
+    name: "First Two Triples",
     orbits: {
       EDGES: { pieces: [i, i, i, i, i, i, r, i, r, i, i, r] },
       CENTERS: {
@@ -667,6 +675,7 @@ export const appearancesFTO: Record<
     },
   },
   "experimental-fto-sc": {
+    name: "Second Center",
     orbits: {
       EDGES: { pieces: [r, r, i, i, i, i, r, i, r, i, r, r] },
       CENTERS: {
@@ -701,6 +710,7 @@ export const appearancesFTO: Record<
     },
   },
   "experimental-fto-l2c": {
+    name: "Last Two Centers",
     orbits: {
       EDGES: { pieces: [r, r, r, r, r, r, r, r, r, r, r, r] },
       CENTERS: {
@@ -735,6 +745,7 @@ export const appearancesFTO: Record<
     },
   },
   "experimental-fto-lbt": {
+    name: "Last Bottom Triple",
     orbits: {
       EDGES: { pieces: [r, r, r, r, r, r, r, r, r, r, r, r] },
       CENTERS: {
