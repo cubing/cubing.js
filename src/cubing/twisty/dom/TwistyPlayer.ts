@@ -438,6 +438,18 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.experimentalSetupAlg.toString(),
       );
     }
+    if (this.experimentalSetupAnchor !== "start") {
+      url.searchParams.set(
+        "experimental-setup-anchor",
+        this.experimentalSetupAnchor,
+      );
+    }
+    if (this.experimentalStickering !== "full") {
+      url.searchParams.set(
+        "experimental-stickering",
+        this.experimentalStickering,
+      );
+    }
     if (this.puzzle !== "3x3x3") {
       url.searchParams.set("puzzle", this.puzzle);
     }

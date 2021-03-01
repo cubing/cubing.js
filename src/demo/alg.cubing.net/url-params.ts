@@ -1,9 +1,12 @@
 // TODO: implement URL listener.
 
 import { Alg } from "../../cubing/alg";
+import { ExperimentalStickering } from "../../cubing/twisty";
 
 interface URLParamValues {
   "experimental-setup-alg": Alg;
+  "experimental-setup-anchor": "end" | "start";
+  "experimental-stickering": ExperimentalStickering;
   "alg": Alg;
   "puzzle": string;
   "debug-js": boolean;
@@ -12,6 +15,8 @@ interface URLParamValues {
 
 const paramDefaults: URLParamValues = {
   "experimental-setup-alg": new Alg(),
+  "experimental-setup-anchor": "start",
+  "experimental-stickering": "full",
   "alg": new Alg(),
   "puzzle": "3x3x3",
   "debug-js": true,
@@ -23,6 +28,8 @@ export type ParamName = keyof typeof paramDefaults;
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
   "experimental-setup-alg": "",
+  "experimental-setup-anchor": "start",
+  "experimental-stickering": "full",
   "alg": "",
   "puzzle": "3x3x3",
   "debug-js": "true",
@@ -45,6 +52,12 @@ export function getURLParam<K extends ParamName>(
     case "experimental-setup-alg":
       // TODO: can we avoid the `as` cast?
       return Alg.fromString(str) as URLParamValues[K];
+    case "experimental-setup-anchor":
+      // TODO: can we avoid the `as` cast?
+      return str as URLParamValues[K];
+    case "experimental-stickering":
+      // TODO: can we avoid the `as` cast?
+      return str as URLParamValues[K];
     case "puzzle":
       // TODO: can we avoid the `as` cast?
       return str as URLParamValues[K];
@@ -76,6 +89,12 @@ export function setURLParams(newParams: Partial<URLParamValues>): void {
     switch (key) {
       case "experimental-setup-alg":
         setParam(key, (value as Alg).toString());
+        break;
+      case "experimental-setup-anchor":
+        setParam(key, (value as "start" | "end").toString());
+        break;
+      case "experimental-stickering":
+        setParam(key, (value as ExperimentalStickering).toString());
         break;
       case "alg":
         setParam(key, (value as Alg).toString());

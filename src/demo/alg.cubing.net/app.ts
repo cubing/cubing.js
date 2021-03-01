@@ -1,4 +1,8 @@
-import { TwistyPlayer, TwistyPlayerInitialConfig } from "../../cubing/twisty";
+import {
+  ExperimentalStickering,
+  TwistyPlayer,
+  TwistyPlayerInitialConfig,
+} from "../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { puzzles } from "./supported-puzzles";
 import {
@@ -9,10 +13,17 @@ import {
 import { getURLParam, setURLParams } from "./url-params";
 import { Vector3 } from "three";
 import { Alg } from "../../cubing/alg";
+import {
+  appearances3x3x3,
+  appearances4x4x4,
+  appearancesFTO,
+} from "../../cubing/twisty/3D/puzzles/stickerings";
 
 export interface AppData {
   puzzleName: string;
   experimentalSetupAlg: Alg;
+  experimentalSetupAnchor: "start" | "end";
+  experimentalStickering: ExperimentalStickering;
   alg: Alg;
 }
 
@@ -46,6 +57,8 @@ export class App {
       this.setexperimentalSetupAlg.bind(this),
       this.setAlg.bind(this),
       this.setPuzzle.bind(this),
+      this.setSetupAnchor.bind(this),
+      this.setStickering.bind(this),
     );
   }
 
@@ -60,6 +73,8 @@ export class App {
     const displayablePuzzle = puzzles[initialData.puzzleName];
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
+    twistyConfig.experimentalSetupAnchor = initialData.experimentalSetupAnchor;
+    twistyConfig.experimentalStickering = initialData.experimentalStickering;
     this.twistyPlayer = new TwistyPlayer(twistyConfig);
     if (getURLParam("debug-simultaneous")) {
       this.twistyPlayer.experimentalSetCursorIndexer("simultaneous");
@@ -102,6 +117,18 @@ export class App {
     location.reload();
     return true;
   }
+
+  private setSetupAnchor(setupAnchor: "start" | "end"): boolean {
+    setURLParams({ "experimental-setup-anchor": setupAnchor });
+    location.reload();
+    return true;
+  }
+
+  private setStickering(stickering: ExperimentalStickering): boolean {
+    setURLParams({ "experimental-stickering": stickering });
+    location.reload();
+    return true;
+  }
 }
 
 // TODO: Generate type from list.
@@ -115,12 +142,18 @@ class ControlPane {
   public experimentalSetupAlgInput: HTMLTextAreaElement;
   public algInput: HTMLTextAreaElement;
   public puzzleSelect: HTMLSelectElement;
+  public setupAnchorSelect: HTMLSelectElement;
+  public stickeringSelect: HTMLSelectElement;
   constructor(
     public element: Element,
     initialData: AppData,
     private experimentalSetupAlgChangeCallback: (alg: Alg) => boolean,
     private algChangeCallback: (alg: Alg) => boolean,
     private setPuzzleCallback: (puzzleName: string) => boolean,
+    private setSetupAnchorCallback: (setupAnchor: string) => boolean,
+    private setStickeringCallback: (
+      stickering: ExperimentalStickering,
+    ) => boolean,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
@@ -145,6 +178,23 @@ class ControlPane {
       "select",
     );
     this.initializePuzzleSelect(initialData.puzzleName);
+
+    this.setupAnchorSelect = findOrCreateChildWithClass(
+      this.element,
+      "setup-anchor",
+      "select",
+    );
+    this.initializeSetupAnchorSelect(initialData.experimentalSetupAnchor);
+
+    this.stickeringSelect = findOrCreateChildWithClass(
+      this.element,
+      "stickering",
+      "select",
+    );
+    this.initializeStickeringSelect(
+      initialData.experimentalStickering,
+      initialData.puzzleName,
+    );
 
     this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));
     this.algInput.addEventListener("change", this.onAlgInput.bind(this, true));
@@ -266,5 +316,68 @@ class ControlPane {
   private puzzleSelectChanged(): void {
     const option = this.puzzleSelect.selectedOptions[0];
     this.setPuzzleCallback(option.value);
+  }
+
+  private initializeSetupAnchorSelect(initialSetupAnchor: string): void {
+    this.setupAnchorSelect.textContent = "";
+    for (const setupAnchor of ["start", "end"]) {
+      const option = document.createElement("option");
+      option.value = setupAnchor;
+      option.textContent = setupAnchor;
+      this.setupAnchorSelect.appendChild(option);
+      if (setupAnchor === initialSetupAnchor) {
+        option.selected = true;
+      }
+    }
+    this.setupAnchorSelect.addEventListener(
+      "change",
+      this.setupAnchorSelectChanged.bind(this),
+    );
+  }
+
+  private setupAnchorSelectChanged(): void {
+    const option = this.setupAnchorSelect.selectedOptions[0];
+    this.setSetupAnchorCallback(option.value);
+  }
+
+  private initializeStickeringSelect(
+    initialStickering: string,
+    puzzleName: string,
+  ): void {
+    let stickerings: ExperimentalStickering[];
+    switch (puzzleName) {
+      case "3x3x3":
+        stickerings = Object.keys(appearances3x3x3) as ExperimentalStickering[];
+        break;
+      case "4x4x4":
+        stickerings = Object.keys(appearances4x4x4) as ExperimentalStickering[];
+        break;
+      case "fto":
+        stickerings = Object.keys(appearancesFTO) as ExperimentalStickering[];
+        break;
+      default:
+        stickerings = ["full"];
+        this.stickeringSelect.disabled = true;
+    }
+
+    this.stickeringSelect.textContent = "";
+    for (const stickering of stickerings) {
+      const option = document.createElement("option");
+      option.value = stickering;
+      option.textContent = stickering;
+      this.stickeringSelect.appendChild(option);
+      if (stickering === initialStickering) {
+        option.selected = true;
+      }
+    }
+    this.stickeringSelect.addEventListener(
+      "change",
+      this.stickeringChanged.bind(this),
+    );
+  }
+
+  private stickeringChanged(): void {
+    const option = this.stickeringSelect.selectedOptions[0];
+    this.setStickeringCallback(option.value as ExperimentalStickering);
   }
 }

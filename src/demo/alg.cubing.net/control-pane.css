@@ -43,7 +43,7 @@ control-pane textarea.status-bad {
   border: 1px solid rgba(255, 0, 0, 0.5);
 }
 
-control-pane select.puzzle {
+control-pane select {
   font-size: 1.5em;
   background: rgba(255, 250, 245, 1);
   border: 1px solid rgba(0, 0, 0, 0.2);
