@@ -679,8 +679,6 @@ export class TwistyPlayer extends ManagedCustomElement {
         appearances4x4x4["full"]
       );
     } else if (this.puzzle === "fto") {
-      console.log("fto", this.experimentalStickering);
-      console.log("fto", appearancesFTO[this.experimentalStickering]);
       return (
         appearancesFTO[this.experimentalStickering ?? "full"] ??
         appearancesFTO["full"]

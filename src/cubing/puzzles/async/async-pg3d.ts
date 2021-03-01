@@ -11,6 +11,8 @@ export async function asyncGetPuzzleGeometry(
     "true",
     "orientcenters",
     "true",
+    "rotations",
+    "true",
   ]);
 }
 
