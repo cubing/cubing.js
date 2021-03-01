@@ -30,7 +30,10 @@ export interface AppData {
 export class App {
   public twistyPlayer: TwistyPlayer;
   private puzzlePane: HTMLElement;
+  private cachedSetupAnchor: "start" | "end";
   constructor(public element: Element, initialData: AppData) {
+    this.cachedSetupAnchor = initialData.experimentalSetupAnchor;
+
     this.puzzlePane = findOrCreateChild(
       this.element,
       "puzzle-pane",
@@ -101,7 +104,11 @@ export class App {
   private setAlg(alg: Alg): boolean {
     try {
       this.twistyPlayer.alg = alg;
-      this.twistyPlayer.timeline.jumpToEnd();
+      if (this.cachedSetupAnchor === "start") {
+        this.twistyPlayer.timeline.jumpToEnd();
+      } else {
+        this.twistyPlayer.timeline.jumpToStart();
+      }
       setURLParams({ alg });
       return true;
     } catch (e) {
