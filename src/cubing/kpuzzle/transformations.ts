@@ -1,24 +1,64 @@
-import { KPuzzleDefinition, Transformation } from "./definition_types";
+import {
+  KPuzzleDefinition,
+  OrbitTransformation,
+  Transformation,
+} from "./definition_types";
+
+function isIdentity(omod: number, o: OrbitTransformation): boolean {
+  const perm = o.permutation;
+  const n = perm.length;
+  for (let idx = 0; idx < n; idx++) {
+    if (perm[idx] !== idx) {
+      return false;
+    }
+  }
+  if (omod > 1) {
+    const ori = o.orientation;
+    for (let idx = 0; idx < n; idx++) {
+      if (ori[idx] !== 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
 export function combineTransformations(
   def: KPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
 ): Transformation {
-  const newTrans: Transformation = {} as Transformation;
+  const newTrans: Transformation = Object.assign({}, t1) as Transformation;
   for (const orbitName in def.orbits) {
     const oDef = def.orbits[orbitName];
     const o1 = t1[orbitName];
     const o2 = t2[orbitName];
-    const newPerm = new Array(oDef.numPieces);
-    const newOri = new Array(oDef.numPieces);
-    for (let idx = 0; idx < oDef.numPieces; idx++) {
-      newOri[idx] =
-        (o1.orientation[o2.permutation[idx]] + o2.orientation[idx]) %
-        oDef.orientations;
-      newPerm[idx] = o1.permutation[o2.permutation[idx]];
+    if (isIdentity(oDef.orientations, o2)) {
+      // common case for big cubes
+      newTrans[orbitName] = o1;
+    } else if (isIdentity(oDef.orientations, o1)) {
+      newTrans[orbitName] = o2;
+    } else {
+      const newPerm = new Array(oDef.numPieces);
+      if (oDef.orientations === 1) {
+        for (let idx = 0; idx < oDef.numPieces; idx++) {
+          newPerm[idx] = o1.permutation[o2.permutation[idx]];
+        }
+        newTrans[orbitName] = {
+          permutation: newPerm,
+          orientation: o1.orientation,
+        };
+      } else {
+        const newOri = new Array(oDef.numPieces);
+        for (let idx = 0; idx < oDef.numPieces; idx++) {
+          newOri[idx] =
+            (o1.orientation[o2.permutation[idx]] + o2.orientation[idx]) %
+            oDef.orientations;
+          newPerm[idx] = o1.permutation[o2.permutation[idx]];
+        }
+        newTrans[orbitName] = { permutation: newPerm, orientation: newOri };
+      }
     }
-    newTrans[orbitName] = { permutation: newPerm, orientation: newOri };
   }
   return newTrans;
 }
@@ -74,16 +114,29 @@ export function invertTransformation(
   for (const orbitName in def.orbits) {
     const oDef = def.orbits[orbitName];
     const o = t[orbitName];
-    const newPerm = new Array(oDef.numPieces);
-    const newOri = new Array(oDef.numPieces);
-    for (let idx = 0; idx < oDef.numPieces; idx++) {
-      const fromIdx = o.permutation[idx] as number;
-      newPerm[fromIdx] = idx;
-      newOri[fromIdx] =
-        (oDef.orientations - o.orientation[idx] + oDef.orientations) %
-        oDef.orientations;
+    if (isIdentity(oDef.orientations, o)) {
+      newTrans[orbitName] = o;
+    } else if (oDef.orientations === 1) {
+      const newPerm = new Array(oDef.numPieces);
+      for (let idx = 0; idx < oDef.numPieces; idx++) {
+        newPerm[o.permutation[idx]] = idx;
+      }
+      newTrans[orbitName] = {
+        permutation: newPerm,
+        orientation: o.orientation,
+      };
+    } else {
+      const newPerm = new Array(oDef.numPieces);
+      const newOri = new Array(oDef.numPieces);
+      for (let idx = 0; idx < oDef.numPieces; idx++) {
+        const fromIdx = o.permutation[idx] as number;
+        newPerm[fromIdx] = idx;
+        newOri[fromIdx] =
+          (oDef.orientations - o.orientation[idx] + oDef.orientations) %
+          oDef.orientations;
+      }
+      newTrans[orbitName] = { permutation: newPerm, orientation: newOri };
     }
-    newTrans[orbitName] = { permutation: newPerm, orientation: newOri };
   }
   return newTrans;
 }
