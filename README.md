@@ -9,7 +9,7 @@
 
 ## Documentation
 
-Documentation is at [`js.cubing.net/cubing/`](https://js.cubing.net/cubing>).  
+Documentation is at [`js.cubing.net/cubing/`](https://js.cubing.net/cubing).  
 The source for the documentation site is currently inside the [`docs`](./docs/) folder of this repository.
 
 ## Development
