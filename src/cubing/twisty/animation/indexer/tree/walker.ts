@@ -60,7 +60,11 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
       const apd = this.traverseUnit(unit);
       moveCount += apd.moveCount;
       duration += apd.duration;
-      state = this.puz.combine(state, apd.forward);
+      if (state === this.identity) {
+        state = apd.forward;
+      } else {
+        state = this.puz.combine(state, apd.forward);
+      }
       child.push(apd);
     }
     return new AlgPartDecoration<P>(

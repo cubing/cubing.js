@@ -40,10 +40,16 @@ export abstract class PuzzleWrapper {
     let newState = this.identity();
     while (amount > 0) {
       if (amount % 2 === 1) {
-        newState = this.combine(newState, state);
+        if (newState === this.identity()) {
+          newState = state;
+        } else {
+          newState = this.combine(newState, state);
+        }
       }
       amount = Math.floor(amount / 2);
-      state = this.combine(state, state);
+      if (amount > 0) {
+        state = this.combine(state, state);
+      }
     }
     return newState;
   }
