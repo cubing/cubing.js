@@ -507,7 +507,10 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       // TODO
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.setAppearance(appearances3x3x3[this.options.experimentalStickering]);
+      this.setAppearance(
+        appearances3x3x3[this.options.experimentalStickering] ??
+          (appearances3x3x3["full"] as PuzzleAppearance), // TODO
+      );
     }
 
     cursor?.addPositionListener(this);
