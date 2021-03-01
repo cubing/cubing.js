@@ -1,18 +1,98 @@
-import { Alg, Move } from "../../../../alg";
+import {
+  Alg,
+  Commutator,
+  Conjugate,
+  Grouping,
+  LineComment,
+  Move,
+  Newline,
+  Pause,
+  TraversalUp,
+  Unit,
+} from "../../../../alg";
+import { AlgBuilder } from "../../../../alg/AlgBuilder";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration, Timestamp } from "../../cursor/CursorTypes";
 import { AlgIndexer } from "../AlgIndexer";
 import { AlgPartDecoration, AlgWalker, DecoratorConstructor } from "./walker";
+
+class ChunkAlgs extends TraversalUp<Alg, Unit> {
+  traverseAlg(alg: Alg): Alg {
+    const length = alg.experimentalNumUnits();
+    if (length < 100) {
+      return alg;
+    }
+    const chunkMaxLength = Math.floor(Math.sqrt(length));
+    const mainAlgBuilder = new AlgBuilder();
+    const chunkAlgBuilder = new AlgBuilder();
+    for (const unit of alg.units()) {
+      chunkAlgBuilder.push(unit);
+      if (chunkAlgBuilder.experimentalNumUnits() >= chunkMaxLength) {
+        mainAlgBuilder.push(new Grouping(chunkAlgBuilder.toAlg()));
+        chunkAlgBuilder.reset();
+      }
+    }
+    mainAlgBuilder.push(new Grouping(chunkAlgBuilder.toAlg()));
+    return mainAlgBuilder.toAlg();
+  }
+
+  traverseGrouping(grouping: Grouping): Unit {
+    return new Grouping(
+      this.traverseAlg(grouping.experimentalAlg),
+      grouping.experimentalEffectiveAmount, // TODO
+    );
+  }
+
+  traverseMove(move: Move): Unit {
+    return move;
+  }
+
+  traverseCommutator(commutator: Commutator): Unit {
+    return new Conjugate(
+      this.traverseAlg(commutator.A),
+      this.traverseAlg(commutator.B),
+      commutator.experimentalEffectiveAmount, // TODO
+    );
+  }
+
+  traverseConjugate(conjugate: Conjugate): Unit {
+    return new Conjugate(
+      this.traverseAlg(conjugate.A),
+      this.traverseAlg(conjugate.B),
+      conjugate.experimentalEffectiveAmount, // TODO
+    );
+  }
+
+  traversePause(pause: Pause): Unit {
+    return pause;
+  }
+
+  traverseNewline(newline: Newline): Unit {
+    return newline;
+  }
+
+  traverseLineComment(comment: LineComment): Unit {
+    return comment;
+  }
+}
+
+const chunkAlgsInstance = new ChunkAlgs();
+export const chunkAlgs = chunkAlgsInstance.traverseAlg.bind(
+  chunkAlgsInstance,
+) as (alg: Alg) => Alg;
 
 export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
   private decoration: AlgPartDecoration<PuzzleWrapper>;
   private walker: AlgWalker<PuzzleWrapper>;
   constructor(private puzzle: PuzzleWrapper, alg: Alg) {
     const deccon = new DecoratorConstructor<PuzzleWrapper>(this.puzzle);
-    this.decoration = deccon.traverseAlg(alg);
+
+    const chunkedAlg = chunkAlgs(alg);
+
+    this.decoration = deccon.traverseAlg(chunkedAlg);
     this.walker = new AlgWalker<PuzzleWrapper>(
       this.puzzle,
-      alg,
+      chunkedAlg,
       this.decoration,
     );
   }
