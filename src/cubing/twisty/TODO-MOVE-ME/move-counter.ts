@@ -30,7 +30,7 @@ class MoveCounter extends TraversalUp<number> {
 
   public traverseGrouping(grouping: Grouping): number {
     return (
-      this.traverseUnit(grouping.experimentalAlg) *
+      this.traverseAlg(grouping.experimentalAlg) *
       Math.abs(grouping.experimentalEffectiveAmount)
     );
   }
