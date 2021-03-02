@@ -1,8 +1,4 @@
-import {
-  KPuzzleDefinition,
-  OrbitTransformation,
-  Transformation,
-} from "./definition_types";
+import { KPuzzleDefinition, Transformation } from "./definition_types";
 
 export function combineTransformations(
   def: KPuzzleDefinition,
