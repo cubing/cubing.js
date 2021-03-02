@@ -1981,12 +1981,6 @@ export class PuzzleGeometry {
           inc = mperm.length - 2;
           oinc = mperm.length - 1;
         }
-        if (perms[setnum] === iota(this.cubieords[setnum])) {
-          perms[setnum] = perms[setnum].slice();
-          if (this.orbitoris[setnum] > 1 && !this.killorientation) {
-            oris[setnum] = oris[setnum].slice();
-          }
-        }
         for (let ii = 0; ii < mperm.length; ii += 2) {
           perms[setnum][mperm[(ii + inc) % mperm.length]] = mperm[ii];
           if (this.orbitoris[setnum] > 1 && !this.killorientation) {
