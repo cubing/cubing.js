@@ -33,7 +33,7 @@ class CountMoves extends TraversalUp<number> {
     // console.log(unit);
     const alg: Alg = grouping.experimentalAlg;
     return (
-      this.traverseUnit(alg) * Math.abs(grouping.experimentalEffectiveAmount)
+      this.traverseAlg(alg) * Math.abs(grouping.experimentalEffectiveAmount)
     );
   }
 
