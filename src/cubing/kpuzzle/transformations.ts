@@ -28,7 +28,7 @@ export function combineTransformations(
   t1: Transformation,
   t2: Transformation,
 ): Transformation {
-  const newTrans: Transformation = Object.assign({}, t1) as Transformation;
+  const newTrans: Transformation = {} as Transformation;
   for (const orbitName in def.orbits) {
     const oDef = def.orbits[orbitName];
     const o1 = t1[orbitName];
