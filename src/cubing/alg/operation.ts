@@ -14,6 +14,7 @@ export function experimentalAppendMove(
   if (
     options?.coalesce &&
     oldLastMove &&
+    oldLastMove.quantum &&
     oldLastMove.quantum.isIdentical(newMove.quantum)
   ) {
     const newUnits = oldUnits.slice(0, oldUnits.length - 1);
