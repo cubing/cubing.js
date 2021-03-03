@@ -13,6 +13,7 @@ import {
 } from "./interfaces";
 import {
   FaceRenamingMapper,
+  FTONotationMapper,
   MegaminxScramblingNotationMapper,
   NotationMapper,
   NullMapper,
@@ -966,9 +967,12 @@ export class PuzzleGeometry {
         this.swizzler,
         new FaceNameSwizzler(["F", "D", "L", "BL", "R", "U", "BR", "B"]),
       );
+      if (!sawedge && !sawvertex) {
+        this.addNotationMapper = "FTOMapper";
+      }
     }
     if (shape === "d" && sawface && NEW_FACE_NAMES) {
-      this.addNotationMapper = "Megaminx";
+      this.addNotationMapper = "MegaminxMapper";
       this.notationMapper = new FaceRenamingMapper(
         this.swizzler,
         new FaceNameSwizzler([
@@ -1202,10 +1206,19 @@ export class PuzzleGeometry {
         this.notationMapper = new PyraminxNotationMapper(this.swizzler);
         this.addNotationMapper = "";
       }
-      if (this.addNotationMapper === "Megaminx" && gtype === "f") {
+      if (this.addNotationMapper === "MegaminxMapper" && gtype === "f") {
         if (1 + moveplanesets[i].length === 3) {
           this.notationMapper = new MegaminxScramblingNotationMapper(
             this.notationMapper,
+          );
+        }
+        this.addNotationMapper = "";
+      }
+      if (this.addNotationMapper === "FTOMapper" && gtype === "f") {
+        if (1 + moveplanesets[i].length === 3) {
+          this.notationMapper = new FTONotationMapper(
+            this.notationMapper,
+            this.swizzler,
           );
         }
         this.addNotationMapper = "";

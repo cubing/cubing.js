@@ -405,3 +405,38 @@ export class PyraminxNotationMapper implements NotationMapper {
     }
   }
 }
+
+export class FTONotationMapper implements NotationMapper {
+  constructor(private child: NotationMapper, private sw: FaceNameSwizzler) {}
+
+  public notationToInternal(move: PGVendoredMove): PGVendoredMove | null {
+    if (
+      move.family === "T" &&
+      move.innerLayer === undefined &&
+      move.outerLayer === undefined
+    ) {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("FLRv", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    } else {
+      const r = this.child.notationToInternal(move);
+      return r;
+    }
+  }
+
+  // we never rewrite click moves to these moves.
+  public notationToExternal(move: PGVendoredMove): PGVendoredMove | null {
+    let fam = move.family;
+    if (fam.length > 0 && fam[fam.length - 1] === "v") {
+      fam = fam.substring(0, fam.length - 1);
+    }
+    if (this.sw.spinmatch(fam, "FLUR")) {
+      return new PGVendoredMove(
+        new PGVendoredMoveQuantum("T", move.innerLayer, move.outerLayer),
+        move.effectiveAmount,
+      );
+    }
+    return this.child.notationToExternal(move);
+  }
+}
