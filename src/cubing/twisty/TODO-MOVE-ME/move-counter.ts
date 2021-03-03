@@ -79,7 +79,8 @@ function baseMetric(move: Move): number {
     (isCharUppercase(fam[0]) && fam[fam.length - 1] === "v") ||
     fam === "x" ||
     fam === "y" ||
-    fam === "z"
+    fam === "z" ||
+    fam === "T"
   ) {
     return 0;
   } else {
