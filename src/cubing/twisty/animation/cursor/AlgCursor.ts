@@ -41,7 +41,7 @@ type IndexerConstructor = new (puzzle: KPuzzleWrapper, alg: Alg) => AlgIndexer<
 
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
-  private todoIndexer: AlgIndexer<KPuzzleWrapper>;
+  private indexer: AlgIndexer<KPuzzleWrapper>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
   private ksolvePuzzle: KPuzzleWrapper;
   private startState: Transformation;
@@ -74,7 +74,7 @@ export class AlgCursor
   }
 
   private instantiateIndexer(alg: Alg): void {
-    this.todoIndexer = new this.indexerConstructor(this.ksolvePuzzle, alg);
+    this.indexer = new this.indexerConstructor(this.ksolvePuzzle, alg);
   }
 
   /** @deprecated */
@@ -87,15 +87,15 @@ export class AlgCursor
   timeRange(): TimeRange {
     return {
       start: 0,
-      end: this.todoIndexer.algDuration(),
+      end: this.indexer.algDuration(),
     };
   }
 
   /** @deprecated */
   experimentalTimestampForStartOfLastMove(): MillisecondTimestamp {
-    const numMoves = this.todoIndexer.numMoves();
+    const numMoves = this.indexer.numMoves();
     if (numMoves > 0) {
-      return this.todoIndexer.indexToMoveStartTimestamp(numMoves - 1);
+      return this.indexer.indexToMoveStartTimestamp(numMoves - 1);
     }
     return 0;
   }
@@ -121,31 +121,28 @@ export class AlgCursor
       .positionListeners,
   ): void {
     let position: PuzzlePosition;
-    if (this.todoIndexer.timestampToPosition) {
-      position = this.todoIndexer.timestampToPosition(
-        timestamp,
-        this.startState,
-      );
+    if (this.indexer.timestampToPosition) {
+      position = this.indexer.timestampToPosition(timestamp, this.startState);
     } else {
-      const idx = this.todoIndexer.timestampToIndex(timestamp);
-      const state = this.todoIndexer.stateAtIndex(idx, this.startState) as any; // TODO
+      const idx = this.indexer.timestampToIndex(timestamp);
+      const state = this.indexer.stateAtIndex(idx, this.startState) as any; // TODO
       position = {
         state,
         movesInProgress: [],
       };
 
-      if (this.todoIndexer.numMoves() > 0) {
+      if (this.indexer.numMoves() > 0) {
         const fraction =
-          (timestamp - this.todoIndexer.indexToMoveStartTimestamp(idx)) /
-          this.todoIndexer.moveDuration(idx);
+          (timestamp - this.indexer.indexToMoveStartTimestamp(idx)) /
+          this.indexer.moveDuration(idx);
         if (fraction === 1) {
           // TODO: push this into the indexer
           position.state = this.ksolvePuzzle.combine(
             state,
-            this.ksolvePuzzle.stateFromMove(this.todoIndexer.getMove(idx)!),
+            this.ksolvePuzzle.stateFromMove(this.indexer.getMove(idx)!),
           ) as Transformation;
         } else if (fraction > 0) {
-          const move = this.todoIndexer.getMove(idx);
+          const move = this.indexer.getMove(idx);
           if (move) {
             position.movesInProgress.push({
               move,
@@ -178,18 +175,18 @@ export class AlgCursor
     timestamp: MillisecondTimestamp,
     direction: Direction.Backwards | Direction.Forwards,
   ): MillisecondTimestamp | null {
-    if (this.todoIndexer.numMoves() === 0) {
+    if (this.indexer.numMoves() === 0) {
       return null;
     }
     // TODO: define semantics of indexing edge cases and remove this hack.
     const offsetHack = directionScalar(direction) * 0.001;
-    const idx = this.todoIndexer.timestampToIndex(timestamp + offsetHack);
-    const moveStart = this.todoIndexer.indexToMoveStartTimestamp(idx);
+    const idx = this.indexer.timestampToIndex(timestamp + offsetHack);
+    const moveStart = this.indexer.indexToMoveStartTimestamp(idx);
 
     if (direction === Direction.Backwards) {
       return timestamp >= moveStart ? moveStart : null;
     } else {
-      const moveEnd = moveStart + this.todoIndexer.moveDuration(idx);
+      const moveEnd = moveStart + this.indexer.moveDuration(idx);
       return timestamp <= moveEnd ? moveEnd : null;
     }
   }
@@ -201,7 +198,7 @@ export class AlgCursor
   ): void {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
     this.def = def;
-    this.todoIndexer = new this.indexerConstructor(this.ksolvePuzzle, alg);
+    this.indexer = new this.indexerConstructor(this.ksolvePuzzle, alg);
     if (alg !== this.alg) {
       this.timeline.onCursorChange(this);
     }
@@ -215,11 +212,11 @@ export class AlgCursor
 
   /** @deprecated */
   experimentalTimestampFromIndex(index: number): MillisecondTimestamp {
-    return this.todoIndexer.indexToMoveStartTimestamp(index);
+    return this.indexer.indexToMoveStartTimestamp(index);
   }
 
   /** @deprecated */
   experimentalIndexFromTimestamp(timestamp: MillisecondTimestamp): number {
-    return this.todoIndexer.timestampToIndex(timestamp);
+    return this.indexer.timestampToIndex(timestamp);
   }
 }
