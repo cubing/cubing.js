@@ -29,9 +29,11 @@ class MoveCounter extends TraversalUp<number> {
   }
 
   public traverseGrouping(grouping: Grouping): number {
+    // const unit: Unit = Alg.fromString("SDf");
+    // console.log(unit);
+    const alg: Alg = grouping.experimentalAlg;
     return (
-      this.traverseAlg(grouping.experimentalAlg) *
-      Math.abs(grouping.experimentalEffectiveAmount)
+      this.traverseUnit(alg) * Math.abs(grouping.experimentalEffectiveAmount)
     );
   }
 

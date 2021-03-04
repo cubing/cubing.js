@@ -7,7 +7,6 @@ import {
 } from "../kpuzzle";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
 import { Alg, Move } from "../alg";
-import { PGVendoredMove } from "./interfaces";
 /**
  *   Test basic things about puzzles created by puzzle
  *   geometry.  We check stickers per face, face count
@@ -86,9 +85,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       // added or set in puzzle geometry.
       const bms = [];
       for (const move of algo.units()) {
-        bms.push(
-          pg.notationMapper.notationToExternal(move as Move) as PGVendoredMove,
-        );
+        bms.push(pg.notationMapper.notationToExternal(move as Move) as Move);
       }
       algo = new Alg(bms);
       const ksp = new KSolvePuzzle(kpuzzledef);
