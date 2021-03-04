@@ -159,7 +159,7 @@ function intersectionToMove(
     move = move2;
   }
   if (getModValueForMove(move) !== 2 && !rightClick) {
-    move = move.inverse();
+    move = move.invert();
   }
   return move;
 }

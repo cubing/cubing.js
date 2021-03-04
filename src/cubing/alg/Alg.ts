@@ -73,10 +73,10 @@ export class Alg extends AlgCommon<Alg> {
     return true;
   }
 
-  inverse(): Alg {
+  invert(): Alg {
     // TODO: Handle newLines and comments correctly
     // TODO: Make more efficient.
-    return new Alg(reverse(Array.from(this.#units).map((u) => u.inverse())));
+    return new Alg(reverse(Array.from(this.#units).map((u) => u.invert())));
   }
 
   /** @deprecated */
@@ -85,7 +85,7 @@ export class Alg extends AlgCommon<Alg> {
     depth: number = Infinity,
   ): Generator<LeafUnit> {
     if (depth === 0) {
-      yield iterDir === IterationDirection.Forwards ? this : this.inverse();
+      yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
       for (const unit of direct(this.#units, iterDir)) {
         yield* unit.experimentalExpand(iterDir, depth);

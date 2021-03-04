@@ -74,10 +74,10 @@ export class Conjugate extends AlgCommon<Conjugate> {
     );
   }
 
-  inverse(): Conjugate {
+  invert(): Conjugate {
     return new Conjugate(
       this.#repetition.quantum.A,
-      this.#repetition.quantum.B.inverse(),
+      this.#repetition.quantum.B.invert(),
       this.#repetition.info(),
     );
   }
@@ -87,7 +87,7 @@ export class Conjugate extends AlgCommon<Conjugate> {
     depth: number = Infinity,
   ): Generator<LeafUnit> {
     if (depth === 0) {
-      yield iterDir === IterationDirection.Forwards ? this : this.inverse();
+      yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
       yield* this.#repetition.experimentalExpand(iterDir, depth);
     }

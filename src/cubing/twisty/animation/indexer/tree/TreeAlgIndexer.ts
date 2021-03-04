@@ -30,7 +30,7 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
       const move = this.walker.move as Move;
       // TODO: this type of negation needs to be in alg
       if (this.walker.back) {
-        return move.inverse();
+        return move.invert();
       }
       return move;
     }

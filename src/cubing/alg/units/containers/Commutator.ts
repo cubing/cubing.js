@@ -82,7 +82,7 @@ export class Commutator extends AlgCommon<Commutator> {
     );
   }
 
-  inverse(): Commutator {
+  invert(): Commutator {
     return new Commutator(
       this.#repetition.quantum.B,
       this.#repetition.quantum.A,
@@ -95,7 +95,7 @@ export class Commutator extends AlgCommon<Commutator> {
     depth: number = Infinity,
   ): Generator<LeafUnit> {
     if (depth === 0) {
-      yield iterDir === IterationDirection.Forwards ? this : this.inverse();
+      yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
       yield* this.#repetition.experimentalExpand(iterDir, depth);
     }

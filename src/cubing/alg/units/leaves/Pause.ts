@@ -11,7 +11,7 @@ export class Pause extends AlgCommon<Pause> {
     return other.is(Pause);
   }
 
-  inverse(): Pause {
+  invert(): Pause {
     return this;
   }
 

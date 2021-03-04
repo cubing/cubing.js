@@ -40,7 +40,7 @@ export abstract class AlgCommon<T extends Alg | Unit>
 
   abstract toString(): string;
 
-  abstract inverse(): T;
+  abstract invert(): T;
 
   abstract experimentalExpand(iterDir: IterationDirection): Generator<LeafUnit>;
 }

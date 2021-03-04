@@ -164,7 +164,7 @@ export class Move extends AlgCommon<Move> {
     );
   }
 
-  inverse(): Move {
+  invert(): Move {
     return new Move(this.#repetition.quantum, this.#repetition.inverseInfo());
   }
 

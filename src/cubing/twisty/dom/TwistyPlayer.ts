@@ -166,7 +166,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   private cursorStartAlg(): Alg {
     let startAlg = this.experimentalSetupAlg;
     if (this.experimentalSetupAnchor === "end") {
-      startAlg = startAlg.concat(this.alg.inverse());
+      startAlg = startAlg.concat(this.alg.invert());
     }
     return startAlg; // TODO
   }

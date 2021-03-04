@@ -57,7 +57,7 @@ export class Twisty2DSVG
       const def = this.definition;
       let partialMove = move;
       if (position.movesInProgress[0].direction === Direction.Backwards) {
-        partialMove = move.inverse();
+        partialMove = move.invert();
       }
       const newState = combineTransformations(
         def,

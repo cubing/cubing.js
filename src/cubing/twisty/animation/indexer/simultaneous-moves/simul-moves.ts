@@ -103,7 +103,7 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     const segmentOnce: Alg =
       grouping.experimentalEffectiveAmount > 0
         ? grouping.experimentalAlg
-        : grouping.experimentalAlg.inverse();
+        : grouping.experimentalAlg.invert();
     for (let i = 0; i < Math.abs(grouping.experimentalEffectiveAmount); i++) {
       processed.push(this.traverseGroupingOnce(segmentOnce));
     }
@@ -128,14 +128,14 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
         ? [
             commutator.A,
             commutator.B,
-            commutator.A.inverse(),
-            commutator.B.inverse(),
+            commutator.A.invert(),
+            commutator.B.invert(),
           ]
         : [
             commutator.B,
             commutator.A,
-            commutator.B.inverse(),
-            commutator.A.inverse(),
+            commutator.B.invert(),
+            commutator.A.invert(),
           ];
     for (let i = 0; i < Math.abs(commutator.experimentalEffectiveAmount); i++) {
       for (const segment of segmentsOnce) {
@@ -149,8 +149,8 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     const processed: LocalMoveWithRange[][] = [];
     const segmentsOnce: Alg[] =
       conjugate.experimentalEffectiveAmount > 0
-        ? [conjugate.A, conjugate.B, conjugate.A.inverse()]
-        : [conjugate.A, conjugate.B.inverse(), conjugate.A.inverse()];
+        ? [conjugate.A, conjugate.B, conjugate.A.invert()]
+        : [conjugate.A, conjugate.B.invert(), conjugate.A.invert()];
     for (let i = 0; i < Math.abs(conjugate.experimentalEffectiveAmount); i++) {
       for (const segment of segmentsOnce) {
         processed.push(this.traverseGroupingOnce(segment));

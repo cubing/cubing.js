@@ -36,7 +36,7 @@ export class Grouping extends AlgCommon<Grouping> {
     return this.#repetition.suffix();
   }
 
-  inverse(): Grouping {
+  invert(): Grouping {
     return new Grouping(
       this.#repetition.quantum,
       this.#repetition.inverseInfo(),
@@ -48,7 +48,7 @@ export class Grouping extends AlgCommon<Grouping> {
     depth: number = Infinity,
   ): Generator<LeafUnit> {
     if (depth === 0) {
-      yield iterDir === IterationDirection.Forwards ? this : this.inverse();
+      yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
       yield* this.#repetition.experimentalExpand(iterDir, depth);
     }

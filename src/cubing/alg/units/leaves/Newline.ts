@@ -11,7 +11,7 @@ export class Newline extends AlgCommon<Newline> {
     return other.is(Newline);
   }
 
-  inverse(): Newline {
+  invert(): Newline {
     return this;
   }
 

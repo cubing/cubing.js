@@ -165,9 +165,9 @@ describe("algToString()", () => {
 
 describe("invert()", () => {
   it("correctly inverts", () => {
-    expect(Ex.Sune.inverse()).toBeIdentical(Ex.AntiSune);
-    expect(Ex.Sune.inverse().inverse()).toBeIdentical(Ex.Sune);
-    expect(Ex.Sune.inverse().inverse()).not.toBeIdentical(Ex.AntiSune);
+    expect(Ex.Sune.invert()).toBeIdentical(Ex.AntiSune);
+    expect(Ex.Sune.invert().invert()).toBeIdentical(Ex.Sune);
+    expect(Ex.Sune.invert().invert()).not.toBeIdentical(Ex.AntiSune);
   });
 });
 

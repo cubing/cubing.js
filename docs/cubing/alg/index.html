@@ -45,36 +45,46 @@ console.log(alg.toString());</span>
             <span>import { Alg } from &quot;cubing/alg&quot;<br>
 <br>
 const alg = new Alg(&quot;&nbsp;R&nbsp;&nbsp;&nbsp;U&nbsp;R'&nbsp;&nbsp;&nbsp;U&nbsp;R&nbsp;U2'&nbsp;&nbsp;&nbsp;R'&quot;);<br>
-console.log(alg);<br>
 console.log(alg.toString());</span>
           </code>
         </div>
         <code class="sample output">
-          <span>Alg {}</span>
           <span>&quot;R U R' U R U2' R'&quot;</span>
         </code>
       </div>
     </section>
 
     <section id="invert-alg">
-      <h1><a href="#invert-alg">Parse an alg</a></h1>
+      <h1><a href="#invert-alg">Operations</a></h1>
+      <p>You can perform operations directly on alg objects:
+        <ul>
+          
+        </ul>
+      </p>
       <div class="code-demo">
         <div>
-          <p>Perform operations like this:</p>
           <code class="sample">
-            <span>import { Alg } from &quot;cubing/alg&quot;<br><br>
+            <span>import { Alg } from &quot;cubing/alg&quot;;<br>
+<br>
 const sune = new Alg(&quot;R U R' U R U2' R'&quot;);<br>
 console.log(sune.toString());<br>
 <br>
-const antiSune = sune.inverse();
+const antiSune = <b><u>sune.inverse()</u></b>;<br>
 console.log(antiSune.toString());<br>
 <br>
-const jPerm = antiSune.concat(new Alg(&quot;[R, [L': U]]&quot;))
-console.log(jPerm.toString());<br></span>
+const jPerm = <b><u>antiSune.concat(new Alg(&quot;[R, [U': L']]&quot;))</u></b>;<br>
+console.log(jPerm.toString());<br>
+console.log(<b><u>jPerm.expand()</u></b>.toString());<br>
+console.log(<b><u>jPerm.expand().simplify()</u></b>.toString());<br>
+</span>
           </code>
         </div>
-        <code class="sample output"><span>&quot;R U R' U R U2' R'&quot;</span>
+        <code class="sample output">
+          <span>&quot;R U R' U R U2' R'&quot;</span>
           <span>&quot;R U2 R' U' R U' R'&quot;</span>
+          <span>&quot;R U2 R' U' R U' R' [R, [U': L']]&quot;</span>
+          <span>&quot;R U2 R' U' R U' R' R U' L' U R' U' L U&quot;</span>
+          <span>&quot;R U2 R' U' R U2' L' U R' U' L U&quot;</span>
         </code>
       </div>
       <p>

@@ -88,7 +88,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
       1,
       this.durationFn.traverseUnit(move),
       this.puz.stateFromMove(move),
-      this.puz.stateFromMove(move.inverse()),
+      this.puz.stateFromMove(move.invert()),
     );
   }
 

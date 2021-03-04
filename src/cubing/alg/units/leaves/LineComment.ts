@@ -24,7 +24,7 @@ export class LineComment extends AlgCommon<LineComment> {
     return other.is(LineComment) && this.#text === otherAsLineComment.#text;
   }
 
-  inverse(): LineComment {
+  invert(): LineComment {
     return this;
   }
 
