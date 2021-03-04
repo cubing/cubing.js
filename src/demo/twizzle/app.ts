@@ -23,7 +23,7 @@ import {
   Twisty3DCanvas,
 } from "../../cubing/twisty/dom/viewers/Twisty3DCanvas";
 import { TwistyPlayer } from "../../cubing/twisty/index";
-import { countMoves } from "../../cubing/twisty/TODO-MOVE-ME/move-counter";
+import { countMoves } from "../../cubing/notation";
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {

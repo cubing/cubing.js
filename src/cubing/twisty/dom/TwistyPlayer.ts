@@ -21,7 +21,7 @@ import {
   TimelineActionEvent,
   TimestampLocationType,
 } from "../animation/Timeline";
-import { countMoves } from "../TODO-MOVE-ME/move-counter"; // TODO
+import { countMoves } from "../../notation"; // TODO
 import { TwistyControlButtonPanel } from "./controls/buttons";
 import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";

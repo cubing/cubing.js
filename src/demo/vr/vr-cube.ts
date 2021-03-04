@@ -27,7 +27,7 @@ import { TAU } from "../../cubing/twisty/3D/TAU";
 import { AlgCursor } from "../../cubing/twisty/animation/cursor/AlgCursor";
 import { Timeline } from "../../cubing/twisty/animation/Timeline";
 import { Cube3D } from "../../cubing/twisty/index";
-import { countMoves } from "../../cubing/twisty/TODO-MOVE-ME/move-counter";
+import { countMoves } from "../../cubing/notation";
 import {
   daydream,
   initialHeight,

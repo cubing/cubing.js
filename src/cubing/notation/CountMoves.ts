@@ -9,13 +9,13 @@ import {
   Newline,
   Pause,
   TraversalUp,
-} from "../../alg/index";
+} from "../alg/index";
 
 /*
  *   For movecount, that understands puzzle rotations.  This code
  *   should be moved to the alg class, probably.
  */
-class MoveCounter extends TraversalUp<number> {
+class CountMoves extends TraversalUp<number> {
   constructor(private metric: (move: Move) => number) {
     super();
   }
@@ -75,6 +75,7 @@ function isCharUppercase(c: string): boolean {
   return "A" <= c && c <= "Z";
 }
 
+// TODO: Implement a puzzle-specific way to calculate this.
 function baseMetric(move: Move): number {
   const fam = move.family;
   if (
@@ -90,5 +91,7 @@ function baseMetric(move: Move): number {
   }
 }
 
-const baseCounter = new MoveCounter(baseMetric);
-export const countMoves = baseCounter.traverseAlg.bind(baseCounter);
+const countMovesInstance = new CountMoves(baseMetric);
+export const countMoves: (
+  alg: Alg,
+) => number = countMovesInstance.traverseAlg.bind(countMovesInstance);
