@@ -91,22 +91,19 @@ export class MoveQuantum extends Comparable {
 
   // TODO: provide something more useful on average.
   /** @deprecated */
-  get experimentalRawFamily(): string {
-    warnOnce("deprecated: experimentalRawFamily");
+  get family(): string {
     return this.#family;
   }
 
   // TODO: provide something more useful on average.
   /** @deprecated */
-  get experimentalRawOuterLayer(): number | null {
-    warnOnce("deprecated: experimentalRawOuterLayer");
+  get outerLayer(): number | null {
     return this.#outerLayer;
   }
 
   // TODO: provide something more useful on average.
   /** @deprecated */
-  get experimentalRawInnerLayer(): number | null {
-    warnOnce("deprecated: experimentalRawInnerLayer");
+  get innerLayer(): number | null {
     return this.#innerLayer;
   }
 
@@ -218,20 +215,17 @@ export class Move extends AlgCommon<Move> {
 
   /** @deprecated */
   get family(): string {
-    warnOnce("deprecated: family");
-    return this.#repetition.quantum.experimentalRawFamily ?? undefined;
+    return this.#repetition.quantum.family ?? undefined;
   }
 
   /** @deprecated */
   get outerLayer(): number | undefined {
-    warnOnce("deprecated: outerLayer");
-    return this.#repetition.quantum.experimentalRawOuterLayer ?? undefined;
+    return this.#repetition.quantum.outerLayer ?? undefined;
   }
 
   /** @deprecated */
   get innerLayer(): number | undefined {
-    warnOnce("deprecated: innerLayer");
-    return this.#repetition.quantum.experimentalRawInnerLayer ?? undefined;
+    return this.#repetition.quantum.innerLayer ?? undefined;
   }
 
   toString(): string {
