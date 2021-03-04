@@ -78,7 +78,7 @@ export class Conjugate extends AlgCommon<Conjugate> {
     return new Conjugate(
       this.#repetition.quantum.A,
       this.#repetition.quantum.B.inverse(),
-      this.#repetition.inverseInfo(),
+      this.#repetition.info(),
     );
   }
 

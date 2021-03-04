@@ -86,7 +86,7 @@ export class Commutator extends AlgCommon<Commutator> {
     return new Commutator(
       this.#repetition.quantum.B,
       this.#repetition.quantum.A,
-      this.#repetition.inverseInfo(),
+      this.#repetition.info(),
     );
   }
 
