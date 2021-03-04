@@ -245,7 +245,7 @@ export const appearances3x3x3: Partial<Record<
   "WVLS": {
     orbits: {
       EDGES: {
-        pieces: [d, d, d, d, d, d, d, d, r, d, d, d],
+        pieces: [o, o, o, o, d, d, d, d, r, d, d, d],
       },
       CORNERS: {
         pieces: [o, o, o, o, r, d, d, d],
