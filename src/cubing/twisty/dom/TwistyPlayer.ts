@@ -377,6 +377,10 @@ export class TwistyPlayer extends ManagedCustomElement {
   public experimentalSetCursorIndexer(
     cursorName: "simple" | "tree" | "simultaneous",
   ): void {
+    if (this.#cursorIndexerName === cursorName) {
+      // TODO: This is a hacky optimization.
+      return;
+    }
     this.#cursorIndexerName = cursorName;
     this.cursor?.experimentalSetIndexer(
       {

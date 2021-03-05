@@ -164,6 +164,10 @@ export class AlgCursor
   }
 
   setAlg(alg: Alg): void {
+    if (alg.isIdentical(this.alg)) {
+      // TODO: this is a hacky optimization.
+      return;
+    }
     this.alg = alg;
     this.instantiateIndexer(alg);
     this.timeline.onCursorChange(this);
