@@ -12,8 +12,6 @@ import {
 } from "../../../../alg";
 import { AlgBuilder } from "../../../../alg/AlgBuilder";
 
-const MAX_NODE_LENGTH = 10;
-
 function chunkifyAlg(alg: Alg, chunkMaxLength: number): Alg {
   const mainAlgBuilder = new AlgBuilder();
   const chunkAlgBuilder = new AlgBuilder();
@@ -30,10 +28,8 @@ function chunkifyAlg(alg: Alg, chunkMaxLength: number): Alg {
 
 class ChunkAlgs extends TraversalUp<Alg, Unit> {
   traverseAlg(alg: Alg): Alg {
-    while (alg.experimentalNumUnits() > MAX_NODE_LENGTH) {
-      alg = chunkifyAlg(alg, MAX_NODE_LENGTH);
-    }
-    return alg;
+    const algLength = alg.experimentalNumUnits();
+    return chunkifyAlg(alg, Math.ceil(Math.sqrt(algLength)));
   }
 
   traverseGrouping(grouping: Grouping): Unit {
