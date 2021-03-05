@@ -1,5 +1,5 @@
 import * as alg from "cubing/alg";
-console.log(new alg.Alg("R U R'").inverse().toString());
+console.log(new alg.Alg("R U R'").invert().toString());
 
 import * as kpuzzle from "cubing/kpuzzle";
 console.log(kpuzzle);
