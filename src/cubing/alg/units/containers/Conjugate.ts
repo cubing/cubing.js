@@ -22,10 +22,15 @@ export class ConjugateQuantum extends Comparable {
   // TODO: use a common composite iterator helper.
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
+    depth: number,
   ): Generator<LeafUnit> {
-    yield* this.A.experimentalExpand(IterationDirection.Forwards);
-    yield* this.B.experimentalExpand(iterDir);
-    yield* this.A.experimentalExpand(IterationDirection.Backwards);
+    if (depth === 0) {
+      throw new Error("cannot expand depth 0 for a quantum");
+    }
+
+    yield* this.A.experimentalExpand(IterationDirection.Forwards, depth - 1);
+    yield* this.B.experimentalExpand(iterDir, depth - 1);
+    yield* this.A.experimentalExpand(IterationDirection.Backwards, depth - 1);
   }
 
   toString(): string {
@@ -84,8 +89,9 @@ export class Conjugate extends AlgCommon<Conjugate> {
 
   *experimentalExpand(
     iterDir: IterationDirection,
-    depth: number = Infinity,
+    depth?: number,
   ): Generator<LeafUnit> {
+    depth ??= Infinity;
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {

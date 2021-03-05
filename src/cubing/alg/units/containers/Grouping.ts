@@ -45,12 +45,13 @@ export class Grouping extends AlgCommon<Grouping> {
 
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
-    depth: number = Infinity,
+    depth?: number,
   ): Generator<LeafUnit> {
+    depth ??= Infinity;
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
-      yield* this.#repetition.experimentalExpand(iterDir, depth);
+      yield* this.#repetition.experimentalExpand(iterDir, depth - 1);
     }
   }
 

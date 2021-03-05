@@ -80,18 +80,15 @@ export class Repetition<Q extends Repeatable> {
     return [this.absAmount, !this.prime];
   }
 
+  // TODO: `Conjugate` and `Commutator` decrement `depth` inside the quantum, `Grouping` has to do it outside the quantum.
   *experimentalExpand(
     iterDir: IterationDirection,
     depth: number,
   ): Generator<LeafUnit> {
-    if (depth === 0) {
-      throw new Error("expand error!"); // TODO
-    }
-
     const absAmount = this.absAmount ?? 1;
     const newIterDir = toggleDirection(iterDir, this.prime);
     for (let i = 0; i < absAmount; i++) {
-      yield* this.quantum.experimentalExpand(newIterDir, depth - 1);
+      yield* this.quantum.experimentalExpand(newIterDir, depth);
     }
   }
 }

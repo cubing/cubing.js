@@ -26,17 +26,22 @@ export class CommutatorQuantum extends Comparable {
   // TODO: use a common composite iterator helper.
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
+    depth: number, // TODO
   ): Generator<LeafUnit> {
+    if (depth === 0) {
+      throw new Error("cannot expand depth 0 for a quantum");
+    }
+
     if (iterDir === IterationDirection.Forwards) {
-      yield* this.A.experimentalExpand(IterationDirection.Forwards);
-      yield* this.B.experimentalExpand(IterationDirection.Forwards);
-      yield* this.A.experimentalExpand(IterationDirection.Backwards);
-      yield* this.B.experimentalExpand(IterationDirection.Backwards);
+      yield* this.A.experimentalExpand(IterationDirection.Forwards, depth - 1);
+      yield* this.B.experimentalExpand(IterationDirection.Forwards, depth - 1);
+      yield* this.A.experimentalExpand(IterationDirection.Backwards, depth - 1);
+      yield* this.B.experimentalExpand(IterationDirection.Backwards, depth - 1);
     } else {
-      yield* this.B.experimentalExpand(IterationDirection.Forwards);
-      yield* this.A.experimentalExpand(IterationDirection.Forwards);
-      yield* this.B.experimentalExpand(IterationDirection.Backwards);
-      yield* this.A.experimentalExpand(IterationDirection.Backwards);
+      yield* this.B.experimentalExpand(IterationDirection.Forwards, depth - 1);
+      yield* this.A.experimentalExpand(IterationDirection.Forwards, depth - 1);
+      yield* this.B.experimentalExpand(IterationDirection.Backwards, depth - 1);
+      yield* this.A.experimentalExpand(IterationDirection.Backwards, depth - 1);
     }
   }
 }
@@ -92,8 +97,9 @@ export class Commutator extends AlgCommon<Commutator> {
 
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
-    depth: number = Infinity,
+    depth?: number,
   ): Generator<LeafUnit> {
+    depth ??= Infinity;
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {

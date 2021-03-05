@@ -82,14 +82,11 @@ export class Alg extends AlgCommon<Alg> {
   /** @deprecated */
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
-    depth: number = Infinity,
+    depth?: number,
   ): Generator<LeafUnit> {
-    if (depth === 0) {
-      yield iterDir === IterationDirection.Forwards ? this : this.invert();
-    } else {
-      for (const unit of direct(this.#units, iterDir)) {
-        yield* unit.experimentalExpand(iterDir, depth);
-      }
+    depth ??= Infinity;
+    for (const unit of direct(this.#units, iterDir)) {
+      yield* unit.experimentalExpand(iterDir, depth);
     }
   }
 
