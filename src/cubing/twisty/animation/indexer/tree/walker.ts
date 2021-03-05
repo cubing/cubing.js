@@ -38,6 +38,8 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     defaultDurationForAmount,
   );
 
+  private cache: { [key: string]: AlgPartDecoration<P> } = {};
+
   constructor(private puz: PuzzleWrapper) {
     super();
     this.identity = puz.identity();
@@ -83,13 +85,20 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
   }
 
   public traverseMove(move: Move): AlgPartDecoration<P> {
-    return new AlgPartDecoration<P>(
+    const key = move.toString();
+    let r: AlgPartDecoration<P> | undefined = this.cache[key];
+    if (r) {
+      return r;
+    }
+    r = new AlgPartDecoration<P>(
       this.puz,
       1,
       this.durationFn.traverseUnit(move),
       this.puz.stateFromMove(move),
       this.puz.stateFromMove(move.invert()),
     );
+    this.cache[key] = r;
+    return r;
   }
 
   public traverseCommutator(commutator: Commutator): AlgPartDecoration<P> {
