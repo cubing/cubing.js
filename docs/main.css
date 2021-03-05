@@ -155,6 +155,12 @@ twisty-player {
   gap: 0.5em;
   padding: 0.5em;
   border: 1px solid #00000022;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.code-demo > div:first-child {
+  overflow-x: hidden;
 }
 
 .code-demo code.sample {
