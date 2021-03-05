@@ -458,6 +458,7 @@ export class PuzzleGeometry {
   public movesetgeos: any[]; // geometric feature information for move sets
   public basefaces: Quat[][]; // polytope faces before cuts
   public faces: Quat[][]; // all the stickers
+  public facecentermass: Quat[]; // center of mass of all faces
   public basefacecount: number; // number of base faces
   public stickersperface: number; // number of stickers per face
   public cornerfaces: number; // number of faces that meet at a corner
@@ -921,12 +922,14 @@ export class PuzzleGeometry {
         }
         if (!wasseen) {
           this.moveplanes.push(q);
-          faces = q.cutfaces(faces);
           if (intersects[c]) {
             this.moveplanes2.push(q);
           }
         }
       }
+    }
+    for (let i = 0; i < this.moveplanes2.length; i++) {
+      faces = this.moveplanes2[i].cutfaces(faces);
     }
     this.faces = faces;
     if (this.verbose) {
@@ -1021,10 +1024,6 @@ export class PuzzleGeometry {
     return s;
   }
 
-  public findcubie(face: Quat[]): number {
-    return this.facetocubies[this.findface(face)][0];
-  }
-
   public findface(face: Quat[]): number {
     const cm = centermassface(face);
     const key = this.keyface2(cm);
@@ -1034,7 +1033,22 @@ export class PuzzleGeometry {
     }
     for (let i = 0; i + 1 < arr.length; i++) {
       const face2 = this.facelisthash[key][i];
-      if (Math.abs(cm.dist(centermassface(this.faces[face2]))) < eps) {
+      if (Math.abs(cm.dist(this.facecentermass[face2])) < eps) {
+        return face2;
+      }
+    }
+    return arr[arr.length - 1];
+  }
+
+  public findface2(cm: Quat): number {
+    const key = this.keyface2(cm);
+    const arr = this.facelisthash[key];
+    if (arr.length === 1) {
+      return arr[0];
+    }
+    for (let i = 0; i + 1 < arr.length; i++) {
+      const face2 = this.facelisthash[key][i];
+      if (Math.abs(cm.dist(this.facecentermass[face2])) < eps) {
         return face2;
       }
     }
@@ -1077,6 +1091,10 @@ export class PuzzleGeometry {
     this.faces = expandfaces(this.baseplanerot, this.faces);
     if (this.verbose) {
       console.log("# Total stickers is now " + this.faces.length);
+    }
+    this.facecentermass = new Array(this.faces.length);
+    for (let i = 0; i < this.faces.length; i++) {
+      this.facecentermass[i] = centermassface(this.faces[i]);
     }
     // Split moveplanes into a list of parallel planes.
     const moveplanesets: Quat[][] = [];
@@ -1408,13 +1426,16 @@ export class PuzzleGeometry {
         cubiesetnums[cind] = cubiesetnum;
         cubiesetcubies[cubiesetnum].push(cind);
         cubieordnums[cind] = cubieords[cubiesetnum]++;
-        for (let j = 0; j < moverotations.length; j++) {
-          const tq = this.findcubie(
-            moverotations[j][0].rotateface(cubies[cind][0]),
-          );
-          if (!seen[tq]) {
-            queue.push(tq);
-            seen[tq] = true;
+        const cm = centermassface(cubies[cind][0]);
+        if (queue.length < this.rotations.length) {
+          for (let j = 0; j < moverotations.length; j++) {
+            const tq = this.facetocubies[
+              this.findface2(cm.rotatepoint(moverotations[j][0]))
+            ][0];
+            if (!seen[tq]) {
+              queue.push(tq);
+              seen[tq] = true;
+            }
           }
         }
       }
@@ -1608,9 +1629,8 @@ export class PuzzleGeometry {
           const kk = this.findface(this.cubies[k][0]);
           const i = this.getfaceindex(kk);
           if (
-            centermassface(this.basefaces[i]).dist(
-              centermassface(this.faces[kk]),
-            ) < eps
+            centermassface(this.basefaces[i]).dist(this.facecentermass[kk]) <
+            eps
           ) {
             const o = this.basefaces[i].length;
             for (let m = 0; m < o; m++) {
@@ -1626,14 +1646,24 @@ export class PuzzleGeometry {
     for (let k = 0; k < this.moveplanesets.length; k++) {
       const moveplaneset = this.moveplanesets[k];
       const slicenum = [];
-      const slicecnts = [];
+      const slicecnts = [moveplaneset.length + 1, 0];
+      let bhi = 1;
+      while (bhi * 2 <= moveplaneset.length) {
+        bhi *= 2;
+      }
       for (let i = 0; i < this.faces.length; i++) {
-        const face = this.faces[i];
         let t = 0;
-        for (let j = 0; j < moveplaneset.length; j++) {
-          if (moveplaneset[j].faceside(face) < 0) {
-            t++;
+        if (moveplaneset.length > 0) {
+          const dv = this.facecentermass[i].dot(moveplaneset[0]);
+          for (let b = bhi; b > 0; b >>= 1) {
+            if (
+              t + b <= moveplaneset.length &&
+              dv > moveplaneset[t + b - 1].a
+            ) {
+              t += b;
+            }
           }
+          t = moveplaneset.length - t;
         }
         slicenum.push(t);
         while (slicecnts.length <= t) {
@@ -1641,113 +1671,111 @@ export class PuzzleGeometry {
         }
         slicecnts[t]++;
       }
-      const axiscmoves = [];
+      const axiscmoves = new Array(slicecnts.length);
       for (let sc = 0; sc < slicecnts.length; sc++) {
-        const slicecmoves = [];
-        const cubiedone = [];
-        for (let i = 0; i < this.faces.length; i++) {
-          if (slicenum[i] !== sc) {
-            continue;
+        axiscmoves[sc] = [];
+      }
+      const cubiedone = [];
+      for (let i = 0; i < this.faces.length; i++) {
+        if (slicenum[i] < 0) {
+          continue;
+        }
+        const b = this.facetocubies[i].slice();
+        let cm = this.facecentermass[i];
+        const ocm = cm;
+        let fi2 = i;
+        const sc = slicenum[fi2];
+        for (;;) {
+          slicenum[fi2] = -1;
+          const cm2 = cm.rotatepoint(this.moverotations[k][0]);
+          if (cm2.dist(ocm) < eps) {
+            break;
           }
-          const b = this.facetocubies[i].slice();
-          let face = this.faces[i];
-          let fi2 = i;
-          for (;;) {
-            slicenum[fi2] = -1;
-            const face2 = this.moverotations[k][0].rotateface(face);
-            fi2 = this.findface(face2);
-            if (slicenum[fi2] < 0) {
-              break;
-            }
-            if (slicenum[fi2] !== sc) {
-              throw new Error("Bad movement?");
-            }
-            const c = this.facetocubies[fi2];
-            b.push(c[0], c[1]);
-            face = face2;
-          }
-          // If an oriented center is moving, we need to figure out
-          // the appropriate new orientation.  Normally we use the cubie
-          // sticker identity to locate, but this doesn't work here.
-          // Instead we need to redo the geometry of the sticker itself
-          // rotating and figure out how that maps to the destination
-          // sticker.
-          //
-          // We only need to do this for central center stickers: those
-          // where the face vertex goes through the center.  The others
-          // don't actually need orientation because they can only be
-          // in one orientation by physical constraints.  (You can't spin
-          // a point or cross sticker on the 5x5x5, for example.)
-          //
-          // This also simplifies things because it means the actual
-          // remapping has the same order as the moves themselves.
-          //
-          // The center may or may not have been duplicated at this point.
-          //
-          // The move moving the center might not be the same modulo as the
-          // center itself.
+          fi2 = this.findface2(cm2);
+          const c = this.facetocubies[fi2];
+          b.push(c[0], c[1]);
+          cm = cm2;
+        }
+        // If an oriented center is moving, we need to figure out
+        // the appropriate new orientation.  Normally we use the cubie
+        // sticker identity to locate, but this doesn't work here.
+        // Instead we need to redo the geometry of the sticker itself
+        // rotating and figure out how that maps to the destination
+        // sticker.
+        //
+        // We only need to do this for central center stickers: those
+        // where the face vertex goes through the center.  The others
+        // don't actually need orientation because they can only be
+        // in one orientation by physical constraints.  (You can't spin
+        // a point or cross sticker on the 5x5x5, for example.)
+        //
+        // This also simplifies things because it means the actual
+        // remapping has the same order as the moves themselves.
+        //
+        // The center may or may not have been duplicated at this point.
+        //
+        // The move moving the center might not be the same modulo as the
+        // center itself.
+        if (
+          b.length > 2 &&
+          this.orientCenters &&
+          (this.cubies[b[0]].length === 1 ||
+            this.cubies[b[0]][0] === this.cubies[b[0]][1])
+        ) {
+          // is this a real center cubie, around an axis?
           if (
-            b.length > 2 &&
-            this.orientCenters &&
-            (this.cubies[b[0]].length === 1 ||
-              this.cubies[b[0]][0] === this.cubies[b[0]][1])
+            this.facecentermass[i].dist(
+              centermassface(this.basefaces[this.getfaceindex(i)]),
+            ) < eps
           ) {
-            // is this a real center cubie, around an axis?
-            if (
-              centermassface(this.faces[i]).dist(
-                centermassface(this.basefaces[this.getfaceindex(i)]),
-              ) < eps
-            ) {
-              // how does remapping of the face/point set map to the original?
-              let face1 = this.cubies[b[0]][0];
-              for (let ii = 0; ii < b.length; ii += 2) {
-                const face0 = this.cubies[b[ii]][0];
-                let o = -1;
-                for (let jj = 0; jj < face1.length; jj++) {
-                  if (face0[jj].dist(face1[0]) < eps) {
-                    o = jj;
-                    break;
-                  }
-                }
-                if (o < 0) {
-                  throw new Error(
-                    "Couldn't find rotation of center faces; ignoring for now.",
-                  );
-                } else {
-                  b[ii + 1] = o;
-                  face1 = this.moverotations[k][0].rotateface(face1);
+            // how does remapping of the face/point set map to the original?
+            let face1 = this.cubies[b[0]][0];
+            for (let ii = 0; ii < b.length; ii += 2) {
+              const face0 = this.cubies[b[ii]][0];
+              let o = -1;
+              for (let jj = 0; jj < face1.length; jj++) {
+                if (face0[jj].dist(face1[0]) < eps) {
+                  o = jj;
+                  break;
                 }
               }
-            }
-          }
-          // b.length == 2 means a sticker is spinning in place.
-          // in this case we add duplicate stickers
-          // so that we can make it animate properly in a 3D world.
-          if (b.length === 2 && this.orientCenters) {
-            for (let ii = 1; ii < this.movesetorders[k]; ii++) {
-              if (sc === 0) {
-                b.push(b[0], ii);
-              } else {
-                b.push(
-                  b[0],
-                  (this.movesetorders[k] - ii) % this.movesetorders[k],
+              if (o < 0) {
+                throw new Error(
+                  "Couldn't find rotation of center faces; ignoring for now.",
                 );
+              } else {
+                b[ii + 1] = o;
+                face1 = this.moverotations[k][0].rotateface(face1);
               }
             }
-          }
-          if (b.length > 2 && !cubiedone[b[0]]) {
-            if (b.length !== 2 * this.movesetorders[k]) {
-              throw new Error("Bad length in perm gen");
-            }
-            for (let j = 0; j < b.length; j++) {
-              slicecmoves.push(b[j]);
-            }
-          }
-          for (let j = 0; j < b.length; j += 2) {
-            cubiedone[b[j]] = true;
           }
         }
-        axiscmoves.push(slicecmoves);
+        // b.length == 2 means a sticker is spinning in place.
+        // in this case we add duplicate stickers
+        // so that we can make it animate properly in a 3D world.
+        if (b.length === 2 && this.orientCenters) {
+          for (let ii = 1; ii < this.movesetorders[k]; ii++) {
+            if (sc === 0) {
+              b.push(b[0], ii);
+            } else {
+              b.push(
+                b[0],
+                (this.movesetorders[k] - ii) % this.movesetorders[k],
+              );
+            }
+          }
+        }
+        if (b.length > 2 && !cubiedone[b[0]]) {
+          if (b.length !== 2 * this.movesetorders[k]) {
+            throw new Error("Bad length in perm gen");
+          }
+          for (let j = 0; j < b.length; j++) {
+            axiscmoves[sc].push(b[j]);
+          }
+        }
+        for (let j = 0; j < b.length; j += 2) {
+          cubiedone[b[j]] = true;
+        }
       }
       cmovesbyslice.push(axiscmoves);
     }

@@ -284,13 +284,13 @@ export class Quat {
     const nfaces = [];
     for (let j = 0; j < faces.length; j++) {
       const face = faces[j];
-      const inout = face.map((_: Quat) => this.side(_.dot(this) - d));
       let seen = 0;
-      for (let i = 0; i < inout.length; i++) {
-        seen |= 1 << (inout[i] + 1);
+      for (let i = 0; i < face.length; i++) {
+        seen |= 1 << (this.side(face[i].dot(this) - d) + 1);
       }
       if ((seen & 5) === 5) {
         // saw both sides
+        const inout = face.map((_: Quat) => this.side(_.dot(this) - d));
         for (let s = -1; s <= 1; s += 2) {
           const nface = [];
           for (let k = 0; k < face.length; k++) {
