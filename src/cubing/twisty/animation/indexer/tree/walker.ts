@@ -240,16 +240,17 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     if (!this.firstcheck(wd)) {
       return false;
     }
-    let i = 0;
+    let i = wd.back ? alg.experimentalNumUnits() - 1 : 0;
     for (const unit of directedGenerator(
       alg.units(),
       wd.back ? IterationDirection.Backwards : IterationDirection.Forwards,
     )) {
       if (
-        this.traverseUnit(unit, new WalkerDown(wd.apd.children[i++], wd.back))
+        this.traverseUnit(unit, new WalkerDown(wd.apd.children[i], wd.back))
       ) {
         return true;
       }
+      i += wd.back ? -1 : 1;
     }
     return false;
   }
