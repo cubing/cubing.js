@@ -77,7 +77,10 @@ export function multiplyTransformations(
   if (amount === 1) {
     return t;
   }
-  const halfish = multiplyTransformations(def, t, Math.floor(amount / 2));
+  let halfish = t;
+  if (amount !== 2) {
+    halfish = multiplyTransformations(def, t, Math.floor(amount / 2));
+  }
   const twiceHalfish = combineTransformations(def, halfish, halfish);
   if (amount % 2 === 0) {
     return twiceHalfish;

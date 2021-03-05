@@ -36,15 +36,18 @@ export abstract class PuzzleWrapper {
     if (amount < 0) {
       return this.invert(this.multiply(state, -amount));
     }
-
-    let newState = this.identity();
+    if (amount === 0) {
+      return this.identity();
+    }
+    while (amount % 2 === 0) {
+      amount = amount / 2;
+      state = this.combine(state, state);
+    }
+    let newState = state;
+    amount--;
     while (amount > 0) {
       if (amount % 2 === 1) {
-        if (newState === this.identity()) {
-          newState = state;
-        } else {
-          newState = this.combine(newState, state);
-        }
+        newState = this.combine(newState, state);
       }
       amount = Math.floor(amount / 2);
       if (amount > 0) {
