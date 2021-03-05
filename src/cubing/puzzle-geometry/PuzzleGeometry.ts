@@ -928,8 +928,14 @@ export class PuzzleGeometry {
         }
       }
     }
+    const originalFace = faces;
     for (let i = 0; i < this.moveplanes2.length; i++) {
-      faces = this.moveplanes2[i].cutfaces(faces);
+      if (
+        this.moveplanes2[i].cutfaces(originalFace).length !==
+        originalFace.length
+      ) {
+        faces = this.moveplanes2[i].cutfaces(faces);
+      }
     }
     this.faces = faces;
     if (this.verbose) {
