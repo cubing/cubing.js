@@ -12,6 +12,8 @@ import {
 } from "../../../../alg";
 import { AlgBuilder } from "../../../../alg/AlgBuilder";
 
+const MIN_CHUNKING_THRESHOLD = 16;
+
 function chunkifyAlg(alg: Alg, chunkMaxLength: number): Alg {
   const mainAlgBuilder = new AlgBuilder();
   const chunkAlgBuilder = new AlgBuilder();
@@ -29,6 +31,9 @@ function chunkifyAlg(alg: Alg, chunkMaxLength: number): Alg {
 class ChunkAlgs extends TraversalUp<Alg, Unit> {
   traverseAlg(alg: Alg): Alg {
     const algLength = alg.experimentalNumUnits();
+    if (algLength < MIN_CHUNKING_THRESHOLD) {
+      return alg;
+    }
     return chunkifyAlg(alg, Math.ceil(Math.sqrt(algLength)));
   }
 
