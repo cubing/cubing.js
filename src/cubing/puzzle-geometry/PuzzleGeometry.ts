@@ -40,7 +40,7 @@ import {
   tetrahedron,
   uniqueplanes,
 } from "./PlatonicGenerator";
-import { centermassface, expandfaces, Quat } from "./Quat";
+import { centermassface, expandfaces, FaceTree, Quat } from "./Quat";
 
 const DEFAULT_COLOR_FRACTION = 0.77;
 
@@ -928,15 +928,14 @@ export class PuzzleGeometry {
         }
       }
     }
-    const originalFace = faces;
-    for (let i = 0; i < this.moveplanes2.length; i++) {
-      if (
-        this.moveplanes2[i].cutfaces(originalFace).length !==
-        originalFace.length
-      ) {
-        faces = this.moveplanes2[i].cutfaces(faces);
-      }
+    let ft = new FaceTree(faces[0]);
+    const tar = this.moveplanes2.slice();
+    for (let i = 0; i < tar.length; i++) {
+      const j = i + Math.floor((tar.length - i) * Math.random());
+      ft = ft.split(tar[j]);
+      tar[j] = tar[i];
     }
+    faces = ft.collect([]);
     this.faces = faces;
     if (this.verbose) {
       console.log("# Faces is now " + faces.length);

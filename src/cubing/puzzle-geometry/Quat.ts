@@ -69,6 +69,38 @@ export function solvethreeplanes(
   return p;
 }
 
+export class FaceTree {
+  constructor(
+    public face: Quat[],
+    public left?: FaceTree,
+    public right?: FaceTree,
+  ) {}
+
+  public split(q: Quat): FaceTree {
+    const t = q.cutface(this.face);
+    if (t !== null) {
+      if (this.left === undefined) {
+        this.left = new FaceTree(t[0]);
+        this.right = new FaceTree(t[1]);
+      } else {
+        this.left = this.left?.split(q);
+        this.right = this.right?.split(q);
+      }
+    }
+    return this;
+  }
+
+  public collect(arr: Quat[][]): Quat[][] {
+    if (this.left === undefined) {
+      arr.push(this.face);
+    } else {
+      this.left?.collect(arr);
+      this.right?.collect(arr);
+    }
+    return arr;
+  }
+}
+
 export class Quat {
   constructor(
     public a: number,
@@ -278,38 +310,53 @@ export class Quat {
     return 0;
   }
 
+  /**
+   * Cuts a face by this plane, or returns null if there
+   * is no intersection.
+   * @param face The face to cut.
+   */
+  public cutface(face: Quat[]): Quat[][] | null {
+    const d = this.a;
+    let seen = 0;
+    let r = null;
+    for (let i = 0; i < face.length; i++) {
+      seen |= 1 << (this.side(face[i].dot(this) - d) + 1);
+    }
+    if ((seen & 5) === 5) {
+      r = [];
+      // saw both sides
+      const inout = face.map((_: Quat) => this.side(_.dot(this) - d));
+      for (let s = -1; s <= 1; s += 2) {
+        const nface = [];
+        for (let k = 0; k < face.length; k++) {
+          if (inout[k] === s || inout[k] === 0) {
+            nface.push(face[k]);
+          }
+          const kk = (k + 1) % face.length;
+          if (inout[k] + inout[kk] === 0 && inout[k] !== 0) {
+            const vk = face[k].dot(this) - d;
+            const vkk = face[kk].dot(this) - d;
+            const r = vk / (vk - vkk);
+            const pt = face[k].smul(1 - r).sum(face[kk].smul(r));
+            nface.push(pt);
+          }
+        }
+        r.push(nface);
+      }
+    }
+    return r;
+  }
+
   public cutfaces(faces: Quat[][]): Quat[][] {
     // Cut a set of faces by a plane and return new set
-    const d = this.a;
     const nfaces = [];
     for (let j = 0; j < faces.length; j++) {
       const face = faces[j];
-      let seen = 0;
-      for (let i = 0; i < face.length; i++) {
-        seen |= 1 << (this.side(face[i].dot(this) - d) + 1);
-      }
-      if ((seen & 5) === 5) {
-        // saw both sides
-        const inout = face.map((_: Quat) => this.side(_.dot(this) - d));
-        for (let s = -1; s <= 1; s += 2) {
-          const nface = [];
-          for (let k = 0; k < face.length; k++) {
-            if (inout[k] === s || inout[k] === 0) {
-              nface.push(face[k]);
-            }
-            const kk = (k + 1) % face.length;
-            if (inout[k] + inout[kk] === 0 && inout[k] !== 0) {
-              const vk = face[k].dot(this) - d;
-              const vkk = face[kk].dot(this) - d;
-              const r = vk / (vk - vkk);
-              const pt = face[k].smul(1 - r).sum(face[kk].smul(r));
-              nface.push(pt);
-            }
-          }
-          nfaces.push(nface);
-        }
+      const t = this.cutface(face);
+      if (t) {
+        nfaces.push(t[0]);
+        nfaces.push(t[1]);
       } else {
-        // no split
         nfaces.push(face);
       }
     }
