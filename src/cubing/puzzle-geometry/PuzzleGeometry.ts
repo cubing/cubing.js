@@ -930,10 +930,17 @@ export class PuzzleGeometry {
     }
     let ft = new FaceTree(faces[0]);
     const tar = this.moveplanes2.slice();
+    // we want to use Math.random() here but we can't, because when
+    // we call multiple times we'll get different orbits/layouts.
+    // to resolve this, we use a very simple linear congruential
+    // generator.  for our purposes, the numbers don't need to be
+    // very random.
+    let rval = 31;
     for (let i = 0; i < tar.length; i++) {
-      const j = i + Math.floor((tar.length - i) * Math.random());
+      const j = i + Math.floor((tar.length - i) * (rval / 65536.0));
       ft = ft.split(tar[j]);
       tar[j] = tar[i];
+      rval = (rval * 1657 + 101) % 65536;
     }
     faces = ft.collect([]);
     this.faces = faces;
