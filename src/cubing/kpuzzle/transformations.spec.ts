@@ -2,7 +2,7 @@ import { KPuzzleDefinition } from ".";
 import { Alg } from "../alg";
 import { puzzles } from "../puzzles";
 import { Transformation } from "./definition_types";
-import { KPuzzle } from "./kpuzzle";
+import { deserializeKPuzzleDefinition, KPuzzle } from "./kpuzzle";
 import {
   areOrbitTransformationsEquivalent,
   areTransformationsEquivalent,
@@ -27,7 +27,7 @@ function isEquivalentTranformationIgnoringOrientationForCENTERS(
 
 describe("tranformations", () => {
   it("correctly compares orbits", async () => {
-    const def = await puzzles["3x3x3"].def();
+    const def = deserializeKPuzzleDefinition(await puzzles["3x3x3"].def());
     const kpuzzle1 = new KPuzzle(def);
     kpuzzle1.applyAlg(Alg.fromString(""));
     const kpuzzle2 = new KPuzzle(def);
@@ -54,7 +54,7 @@ describe("tranformations", () => {
   });
 
   it("correctly compares transformations", async () => {
-    const def = await puzzles["3x3x3"].def();
+    const def = deserializeKPuzzleDefinition(await puzzles["3x3x3"].def());
     const kpuzzle1 = new KPuzzle(def);
     kpuzzle1.applyAlg(Alg.fromString(""));
     const kpuzzle2 = new KPuzzle(def);

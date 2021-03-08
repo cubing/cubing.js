@@ -7,6 +7,6 @@ describe("applyBlockMove()", () => {
     const p = new KPuzzle(await puzzles["3x3x3"].def());
     p.applyMove(new Move("U"));
     // tslint:disable-next-line: no-string-literal
-    expect(p.state["EDGES"].permutation[0]).toEqual(1);
+    expect(p.state.orbits["EDGES"].permutation[0]).toEqual(1);
   });
 });

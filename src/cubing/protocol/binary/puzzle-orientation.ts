@@ -1,17 +1,19 @@
 import { Alg } from "../../alg";
 import {
   combineTransformations,
+  deserializeKPuzzleDefinition,
   invertTransformation,
   KPuzzle,
   Transformation,
 } from "../../kpuzzle";
 // TODO: Should we expose this directly in the `puzzles` package for sync uses?
-import { cube3x3x3KPuzzle as def } from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import { cube3x3x3KPuzzle as sdef } from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+const def = deserializeKPuzzleDefinition(sdef);
 
 export function puzzleOrientationIdx(state: Transformation): [number, number] {
-  const idxU = state["CENTERS"].permutation[0];
-  const idxD = state["CENTERS"].permutation[5];
-  const unadjustedIdxL = state["CENTERS"].permutation[1];
+  const idxU = state.orbits["CENTERS"].permutation[0];
+  const idxD = state.orbits["CENTERS"].permutation[5];
+  const unadjustedIdxL = state.orbits["CENTERS"].permutation[1];
   let idxL = unadjustedIdxL;
   if (idxU < unadjustedIdxL) {
     idxL--;

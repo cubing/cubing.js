@@ -15,7 +15,9 @@ export interface PGVendoredOrbitTransformation {
   orientation: number[];
 }
 
-export type Transformation = Record<string, PGVendoredOrbitTransformation>;
+export interface Transformation {
+  orbits: { [key: string]: PGVendoredOrbitTransformation };
+}
 
 export interface PGVendoredOrbitDefinition {
   numPieces: number;

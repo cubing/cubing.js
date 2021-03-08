@@ -1,7 +1,7 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../alg";
-import { Transformation } from "../kpuzzle";
+import { deserializeTransformation, Transformation } from "../kpuzzle";
 import {
   BluetoothConfig,
   BluetoothPuzzle,
@@ -246,7 +246,7 @@ export class GiiKERCube extends BluetoothPuzzle {
           postCO[i]) %
         3;
     }
-    return state;
+    return deserializeTransformation(state);
   }
 
   private async onCubeCharacteristicChanged(event: any): Promise<void> {

@@ -1,11 +1,17 @@
 import { Alg, Move } from "../alg";
 import { MoveQuantum } from "../alg/units/leaves/Move";
-import { KPuzzleDefinition, Transformation } from "./definition_types";
+import {
+  KPuzzleDefinition,
+  SerializedKPuzzleDefinition,
+  SerializedTransformation,
+  Transformation,
+} from "./definition_types";
 import { MoveNotation } from "./move_notation";
 import {
   combineTransformations,
   identityTransformation,
   multiplyTransformations,
+  SparseTransformation,
 } from "./transformations";
 
 // TODO: Move other helpers into the definition.
@@ -55,16 +61,48 @@ class KPuzzleMoveNotation implements MoveNotation {
     r = this.def.moves[quantumKey];
     if (r) {
       r = multiplyTransformations(this.def, r, move.effectiveAmount);
+      r = new SparseTransformation(this.def, r);
       this.cache[key] = r;
     }
     return r;
   }
 }
 
+export function deserializeTransformation(
+  trans: SerializedTransformation | Transformation,
+): Transformation {
+  if (trans.orbits) {
+    return trans as Transformation;
+  } else {
+    return { orbits: trans } as Transformation;
+  }
+}
+export function deserializeKPuzzleDefinition(
+  def: KPuzzleDefinition | SerializedKPuzzleDefinition,
+): KPuzzleDefinition {
+  if (!def.startPieces.orbits) {
+    const sdef = def as SerializedKPuzzleDefinition;
+    return {
+      name: sdef.name,
+      orbits: sdef.orbits,
+      startPieces: deserializeTransformation(sdef.startPieces),
+      moves: Object.fromEntries(
+        Object.entries(sdef.moves).map(([k, v]) => [
+          k,
+          deserializeTransformation(v),
+        ]),
+      ),
+    };
+  }
+  return def as KPuzzleDefinition;
+}
+
 export class KPuzzle {
   public state: Transformation;
-  constructor(public definition: KPuzzleDefinition) {
-    this.state = identityTransformation(definition);
+  public definition: KPuzzleDefinition;
+  constructor(def: KPuzzleDefinition | SerializedKPuzzleDefinition) {
+    this.definition = deserializeKPuzzleDefinition(def);
+    this.state = identityTransformation(this.definition);
   }
 
   public reset(): void {
@@ -75,8 +113,8 @@ export class KPuzzle {
     let output = "";
     for (const orbitName in this.definition.orbits) {
       output += orbitName + "\n";
-      output += this.state[orbitName].permutation.join(" ") + "\n";
-      output += this.state[orbitName].orientation.join(" ") + "\n";
+      output += this.state.orbits[orbitName].permutation.join(" ") + "\n";
+      output += this.state.orbits[orbitName].orientation.join(" ") + "\n";
     }
     output = output.slice(0, output.length - 1); // Trim last newline.
     return output;

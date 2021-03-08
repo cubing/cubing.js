@@ -2,6 +2,7 @@ import { Move } from "../../../alg";
 import {
   combineTransformations,
   areStatesEquivalient,
+  deserializeKPuzzleDefinition,
   identityTransformation,
   invertTransformation,
   KPuzzleDefinition,
@@ -70,7 +71,9 @@ interface KSolvePuzzleState extends Transformation, State<KPuzzleWrapper> {}
 export class KPuzzleWrapper extends PuzzleWrapper {
   // don't work the underlying kdefinition/multiply so hard
   public static async fromID(id: string): Promise<KPuzzleWrapper> {
-    return new KPuzzleWrapper(await puzzles[id].def());
+    return new KPuzzleWrapper(
+      deserializeKPuzzleDefinition(await puzzles[id].def()),
+    );
   }
 
   public moveCache: { [key: string]: Transformation } = {};

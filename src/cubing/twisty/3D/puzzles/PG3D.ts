@@ -387,13 +387,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   public onPositionChange(p: PuzzlePosition): void {
-    const pos = p.state as Transformation;
+    const tpos = p.state as Transformation;
+    const pos = tpos.orbits;
     const noRotation = new Euler();
     this.movingObj.rotation.copy(noRotation);
     let colormods = 0;
     if (
       !this.lastPos ||
-      !areTransformationsEquivalent(this.definition, this.lastPos, pos)
+      !areTransformationsEquivalent(this.definition, this.lastPos, tpos)
     ) {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
@@ -410,7 +411,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           }
         }
       }
-      this.lastPos = pos;
+      this.lastPos = tpos;
     }
     // FIXME tgr const kp = new KPuzzle(this.definition);
     let vismods = 0;
@@ -440,7 +441,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         for (const orbit in this.stickers) {
           const pieces = this.stickers[orbit];
           const orin = pieces.length;
-          const bmv = quantumTransformation[orbit];
+          const bmv = quantumTransformation.orbits[orbit];
           for (let ori = 0; ori < orin; ori++) {
             const pieces2 = pieces[ori];
             for (let i = 0; i < pieces2.length; i++) {

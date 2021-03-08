@@ -1,4 +1,7 @@
-import { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
+import {
+  PGVendoredKPuzzleDefinition,
+  PGVendoredOrbitTransformation,
+} from "./interfaces"; // TODO
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
   factorial,
@@ -28,7 +31,7 @@ export class OrbitsDef {
     for (let j = 0; j < this.orbitnames.length; j++) {
       mp[this.orbitnames[j]] = t.orbits[j].toKpuzzle();
     }
-    return mp;
+    return { orbits: mp };
   }
 
   public toKsolve(name: string, forTwisty: boolean): string[] {
@@ -88,7 +91,14 @@ export class OrbitsDef {
     for (let i = 0; i < this.movenames.length; i++) {
       moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
     }
-    return { name: "PG3D", orbits, startPieces: start, moves };
+    return {
+      name: "PG3D",
+      orbits,
+      startPieces: {
+        orbits: start as { [key: string]: PGVendoredOrbitTransformation },
+      },
+      moves,
+    };
   }
 
   public optimize(): OrbitsDef {

@@ -1,9 +1,9 @@
 // TODO: this would be a raw `.json` file, but Parcel runs into an error from
 
-import { KPuzzleDefinition } from "../../../kpuzzle";
+import { SerializedKPuzzleDefinition } from "../../../kpuzzle";
 
 // using that as both a sync and async import. Probably https://github.com/parcel-bundler/parcel/issues/2546
-export const cube3x3x3KPuzzle: KPuzzleDefinition = {
+export const cube3x3x3KPuzzle: SerializedKPuzzleDefinition = {
   name: "3x3x3",
   orbits: {
     EDGES: { numPieces: 12, orientations: 2 },

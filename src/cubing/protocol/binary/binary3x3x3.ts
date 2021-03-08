@@ -1,4 +1,4 @@
-import { Transformation } from "../../kpuzzle";
+import { deserializeTransformation, Transformation } from "../../kpuzzle";
 import {
   identityPermutation,
   lexToPermutation,
@@ -89,13 +89,19 @@ export function reid3x3x3ToBinaryComponents(
 ): Binary3x3x3Components {
   const normedState = normalizePuzzleOrientation(state);
 
-  const epLex = permutationToLex(normedState["EDGES"].permutation);
-  const eoMask = orientationsToMask(2, normedState["EDGES"].orientation);
-  const cpLex = permutationToLex(normedState["CORNERS"].permutation);
-  const coMask = orientationsToMask(3, normedState["CORNERS"].orientation);
+  const epLex = permutationToLex(normedState.orbits["EDGES"].permutation);
+  const eoMask = orientationsToMask(2, normedState.orbits["EDGES"].orientation);
+  const cpLex = permutationToLex(normedState.orbits["CORNERS"].permutation);
+  const coMask = orientationsToMask(
+    3,
+    normedState.orbits["CORNERS"].orientation,
+  );
   const [poIdxU, poIdxL] = puzzleOrientationIdx(state);
   const moSupport = 1; // Required for now.
-  const moMask = orientationsToMask(4, normedState["CENTERS"].orientation);
+  const moMask = orientationsToMask(
+    4,
+    normedState.orbits["CENTERS"].orientation,
+  );
 
   return {
     epLex,
@@ -191,10 +197,14 @@ export function binaryComponentsToReid3x3x3(
   };
 
   if (!supportsPuzzleOrientation(components)) {
-    return normedState;
+    return deserializeTransformation(normedState);
   }
 
-  return reorientPuzzle(normedState, components.poIdxU, components.poIdxL);
+  return reorientPuzzle(
+    deserializeTransformation(normedState),
+    components.poIdxU,
+    components.poIdxL,
+  );
 }
 
 // Returns a list of error string.

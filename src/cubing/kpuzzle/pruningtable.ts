@@ -6,7 +6,7 @@ function hash(def: KPuzzleDefinition, s: Transformation): number {
   let r = 0;
   for (const orbitName in def.orbits) {
     const oDef = def.orbits[orbitName];
-    const o = s[orbitName];
+    const o = s.orbits[orbitName];
     for (let idx = 0; idx < oDef.numPieces; idx++) {
       r =
         (37 * r + oDef.orientations * o.permutation[idx] + o.orientation[idx]) &

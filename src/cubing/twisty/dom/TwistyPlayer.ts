@@ -1,7 +1,11 @@
 import { Vector3 } from "three";
 import { Alg, Move } from "../../alg";
 import { experimentalAppendMove } from "../../alg/operation";
-import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
+import {
+  deserializeKPuzzleDefinition,
+  KPuzzleDefinition,
+  Transformation,
+} from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
 import { PuzzleManager } from "../../puzzles/PuzzleManager";
@@ -572,7 +576,9 @@ export class TwistyPlayer extends ManagedCustomElement {
     const pendingPuzzleUpdate: PendingPuzzleUpdate = { cancelled: false };
     this.#pendingPuzzleUpdates.push(pendingPuzzleUpdate);
 
-    const def: KPuzzleDefinition = await puzzleManager.def();
+    const def: KPuzzleDefinition = deserializeKPuzzleDefinition(
+      await puzzleManager.def(),
+    );
     if (pendingPuzzleUpdate.cancelled) {
       return;
     }

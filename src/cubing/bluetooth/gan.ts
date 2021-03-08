@@ -2,7 +2,11 @@
 
 import { Quaternion } from "three";
 import { Move } from "../alg";
-import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
+import {
+  deserializeKPuzzleDefinition,
+  KPuzzle,
+  KPuzzleDefinition,
+} from "../kpuzzle";
 import { puzzles } from "../puzzles";
 import {
   BluetoothConfig,
@@ -329,7 +333,7 @@ export class GanCube extends BluetoothPuzzle {
     ).moveCounter();
     debugLog("Initial Move Counter:", initialMoveCounter);
     const cube = new GanCube(
-      await puzzles["3x3x3"].def(),
+      deserializeKPuzzleDefinition(await puzzles["3x3x3"].def()),
       ganCubeService,
       server,
       physicalStateCharacteristic,
@@ -443,32 +447,34 @@ export class GanCube extends BluetoothPuzzle {
     }
 
     const state: PuzzleState = {
-      CORNERS: {
-        permutation: [],
-        orientation: [],
-      },
-      EDGES: {
-        permutation: [],
-        orientation: [],
-      },
-      CENTERS: {
-        permutation: [0, 1, 2, 3, 4, 5],
-        orientation: [0, 0, 0, 0, 0, 0],
+      orbits: {
+        CORNERS: {
+          permutation: [],
+          orientation: [],
+        },
+        EDGES: {
+          permutation: [],
+          orientation: [],
+        },
+        CENTERS: {
+          permutation: [0, 1, 2, 3, 4, 5],
+          orientation: [0, 0, 0, 0, 0, 0],
+        },
       },
     };
 
     for (const cornerMapping of gan356iCornerMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[cornerMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      state.CORNERS.permutation.push(pieceInfo.piece);
-      state.CORNERS.orientation.push(pieceInfo.orientation);
+      state.orbits.CORNERS.permutation.push(pieceInfo.piece);
+      state.orbits.CORNERS.orientation.push(pieceInfo.orientation);
     }
 
     for (const edgeMapping of gan356iEdgeMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[edgeMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      state.EDGES.permutation.push(pieceInfo.piece);
-      state.EDGES.orientation.push(pieceInfo.orientation);
+      state.orbits.EDGES.permutation.push(pieceInfo.piece);
+      state.orbits.EDGES.orientation.push(pieceInfo.orientation);
     }
 
     return state;

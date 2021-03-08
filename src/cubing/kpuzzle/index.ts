@@ -1,10 +1,17 @@
 export {
   KPuzzleDefinition,
   OrbitTransformation,
+  SerializedKPuzzleDefinition,
+  SerializedTransformation,
   Transformation,
 } from "./definition_types";
 
-export { KPuzzle, transformationForMove } from "./kpuzzle";
+export {
+  KPuzzle,
+  transformationForMove,
+  deserializeKPuzzleDefinition,
+  deserializeTransformation,
+} from "./kpuzzle";
 
 export {
   Canonicalizer,

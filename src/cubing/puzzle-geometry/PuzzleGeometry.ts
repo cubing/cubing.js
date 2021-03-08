@@ -4,6 +4,8 @@
 /* tslint:disable typedef */ // TODO
 
 import { Move, MoveQuantum } from "../alg";
+import { KPuzzleDefinition } from "../kpuzzle";
+import { SparseTransformation } from "../kpuzzle/transformations";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
 import {
   MoveNotation,
@@ -2736,7 +2738,10 @@ export class PuzzleGeometry {
 
 class PGNotation implements MoveNotation {
   private cache: { [key: string]: KTransformation } = {};
-  constructor(public pg: PuzzleGeometry, public od: OrbitsDef) {}
+  private puzdef: KPuzzleDefinition;
+  constructor(public pg: PuzzleGeometry, public od: OrbitsDef) {
+    this.puzdef = od.toKpuzzle();
+  }
 
   public lookupMove(move: Move): KTransformation | undefined {
     const key = this.moveToKeyString(move);
@@ -2757,7 +2762,8 @@ class PGNotation implements MoveNotation {
       undefined,
       this.pg.movesetorders[mv[1]],
     );
-    const r = this.od.transformToKPuzzle(pgmv);
+    let r = this.od.transformToKPuzzle(pgmv);
+    r = new SparseTransformation(this.puzdef, r);
     this.cache[key] = r;
     return r;
   }
