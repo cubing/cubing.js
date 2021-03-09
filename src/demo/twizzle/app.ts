@@ -313,6 +313,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
     str = str.trim();
     algoinput.style.backgroundColor = "";
     try {
+      console.log("trying");
       alg = Alg.fromString(str);
       str = alg.toString();
       twisty.alg = alg;
@@ -321,7 +322,9 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       }
       updateMoveCount(alg);
       setURLParams({ alg: alg });
+      console.log("tttttrying");
     } catch (e) {
+      console.log("frying");
       markInvalidAlg(str);
     }
     if (writeback) {

@@ -535,7 +535,14 @@ export class TwistyPlayer extends ManagedCustomElement {
   private setCursor(cursor: AlgCursor): void {
     const oldCursor = this.cursor;
     this.cursor = cursor;
-    this.cursor.setAlg(this.alg);
+    try {
+      this.cursor.setAlg(this.alg);
+      this.setCursorStartState();
+    } catch (e) {
+      this.cursor.setAlg(new Alg());
+      this.cursor.setStartState(this.cursor.algToState(new Alg()));
+      this.experimentalInvalidInitialAlgCallback(this.alg);
+    }
     this.setCursorStartState();
     this.timeline.addCursor(cursor);
     if (oldCursor) {
@@ -585,19 +592,17 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.alg,
         this.cursorStartAlg(),
       ); // TODO: validate more directly if the alg is okay for the puzzle.
+      this.setCursor(cursor);
     } catch (e) {
       if (initial) {
         // TODO: also take into account setup alg.
         this.experimentalInvalidInitialAlgCallback(this.alg);
       }
-      cursor = new AlgCursor(
-        this.timeline,
-        def,
-        this.alg,
-        this.cursorStartAlg(),
-      );
+      console.log("fallback;;");
+      cursor = new AlgCursor(this.timeline, def, new Alg(), new Alg());
+      console.log("fallbacko;;");
+      this.setCursor(cursor);
     }
-    this.setCursor(cursor);
     if (
       initial &&
       this.experimentalSetupAlg.experimentalIsEmpty() &&
