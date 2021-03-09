@@ -16,7 +16,7 @@ import {
   KPuzzleDefinition,
   Transformation,
 } from "../../../kpuzzle";
-import { transformationForMoveQuantum } from "../../../kpuzzle/kpuzzle";
+import { transformationForQuantumMove } from "../../../kpuzzle/kpuzzle";
 import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
 import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
@@ -423,7 +423,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (move === null) {
         throw Error("Bad blockmove " + externalMove.family);
       }
-      const quantumTransformation = transformationForMoveQuantum(
+      const quantumTransformation = transformationForQuantumMove(
         this.definition,
         externalMove.quantum,
       );

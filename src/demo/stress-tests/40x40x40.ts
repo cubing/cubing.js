@@ -1,7 +1,7 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { Move, MoveQuantum } from "../../cubing/alg";
+import { Move, QuantumMove } from "../../cubing/alg";
 import { AlgBuilder } from "../../cubing/alg/AlgBuilder";
 import { RepetitionInfo } from "../../cubing/alg/units/Repetition";
 import { ExperimentalTwistyAlgViewer, TwistyPlayer } from "../../cubing/twisty";
@@ -38,15 +38,15 @@ for (let i = 0; i < nums.length; i += 5) {
       innerLayer = null;
     }
     algBuilder.push(
-      new Move(new MoveQuantum(family, innerLayer, outerLayer), repetitionInfo),
+      new Move(new QuantumMove(family, innerLayer, outerLayer), repetitionInfo),
     );
   } else if (outerLayer === 1 && innerLayer === width) {
     const family = "zyx"[nums[i + 1]];
-    algBuilder.push(new Move(new MoveQuantum(family), repetitionInfo));
+    algBuilder.push(new Move(new QuantumMove(family), repetitionInfo));
   } else {
     const family = "fur"[nums[i + 1]];
     algBuilder.push(
-      new Move(new MoveQuantum(family, innerLayer, outerLayer), repetitionInfo),
+      new Move(new QuantumMove(family, innerLayer, outerLayer), repetitionInfo),
     );
   }
 }

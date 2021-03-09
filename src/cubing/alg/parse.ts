@@ -3,7 +3,7 @@ import { AlgBuilder } from "./AlgBuilder";
 import { Grouping } from "./units/containers/Grouping";
 import { Commutator } from "./units/containers/Commutator";
 import { Conjugate } from "./units/containers/Conjugate";
-import { Move, MoveQuantum } from "./units/leaves/Move";
+import { Move, QuantumMove } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
 import { RepetitionInfo } from "./units/Repetition";
@@ -17,7 +17,7 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
 
 const repetitionRegex = /^(\d+)?('?)/;
 const moveStartRegex = /^[_\dA-Za-z]/;
-const moveQuantumRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
+const quantumMoveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
 const commentTextRegex = /[^\n]*/;
 
 export function parseAlg(s: string): Alg {
@@ -28,8 +28,8 @@ export function parseMove(s: string): Move {
   return new AlgParser().parseMove(s);
 }
 
-export function parseMoveQuantum(s: string): MoveQuantum {
-  return new AlgParser().parseMoveQuantum(s);
+export function parseQuantumMove(s: string): QuantumMove {
+  return new AlgParser().parseQuantumMove(s);
 }
 
 // TODO: support recording string locations for moves.
@@ -53,12 +53,12 @@ class AlgParser {
     return move;
   }
 
-  parseMoveQuantum(input: string): MoveQuantum {
+  parseQuantumMove(input: string): QuantumMove {
     this.#input = input;
     this.#idx = 0;
-    const moveQuantum = this.parseMoveQuantumImpl();
+    const quantumMove = this.parseQuantumMoveImpl();
     this.mustBeAtEndOfInput();
-    return moveQuantum;
+    return quantumMove;
   }
 
   private mustBeAtEndOfInput() {
@@ -154,12 +154,12 @@ class AlgParser {
     return algBuilder.toAlg();
   }
 
-  private parseMoveQuantumImpl(): MoveQuantum {
+  private parseQuantumMoveImpl(): QuantumMove {
     const [, , , outerLayerStr, innerLayerStr, family] = this.parseRegex(
-      moveQuantumRegex,
+      quantumMoveRegex,
     );
 
-    return new MoveQuantum(
+    return new QuantumMove(
       family,
       parseIntWithEmptyFallback(innerLayerStr, undefined),
       parseIntWithEmptyFallback(outerLayerStr, undefined),
@@ -167,10 +167,10 @@ class AlgParser {
   }
 
   private parseMoveImpl(): Move {
-    const moveQuantum = this.parseMoveQuantumImpl();
+    const quantumMove = this.parseQuantumMoveImpl();
     const repetitionInfo = this.parseRepetition();
 
-    const move = new Move(moveQuantum, repetitionInfo);
+    const move = new Move(quantumMove, repetitionInfo);
     return move;
   }
 

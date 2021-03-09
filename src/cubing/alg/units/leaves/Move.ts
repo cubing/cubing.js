@@ -1,18 +1,18 @@
 import { AlgCommon, Comparable } from "../../common";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
-import { parseMove, parseMoveQuantum } from "../../parse";
+import { parseMove, parseQuantumMove } from "../../parse";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
 import { warnOnce } from "../../warnOnce";
 import { IterationDirection } from "../../iteration";
 
-interface MoveQuantumModifications {
+interface QuantumMoveModifications {
   outerLayer?: number;
   innerLayer?: number;
   family?: string;
 }
 
-export class MoveQuantum extends Comparable {
+export class QuantumMove extends Comparable {
   readonly #family: string;
   readonly #innerLayer: number | null;
   readonly #outerLayer: number | null;
@@ -35,7 +35,7 @@ export class MoveQuantum extends Comparable {
         this.#innerLayer! > MAX_INT)
     ) {
       throw new Error(
-        `MoveQuantum inner layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
+        `QuantumMove inner layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
       );
     }
 
@@ -46,7 +46,7 @@ export class MoveQuantum extends Comparable {
         this.#outerLayer > MAX_INT)
     ) {
       throw new Error(
-        `MoveQuantum outer layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
+        `QuantumMove outer layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
       );
     }
 
@@ -56,23 +56,23 @@ export class MoveQuantum extends Comparable {
       this.#innerLayer! <= this.#outerLayer!
     ) {
       throw new Error(
-        "MoveQuantum outer layer must be smaller than inner layer.",
+        "QuantumMove outer layer must be smaller than inner layer.",
       );
     }
 
     if (this.#outerLayer !== null && this.#innerLayer === null) {
       throw new Error(
-        "MoveQuantum with an outer layer must have an inner layer",
+        "QuantumMove with an outer layer must have an inner layer",
       ); // TODO: test
     }
   }
 
-  static fromString(s: string): MoveQuantum {
-    return parseMoveQuantum(s);
+  static fromString(s: string): QuantumMove {
+    return parseQuantumMove(s);
   }
 
-  modified(modifications: MoveQuantumModifications): MoveQuantum {
-    return new MoveQuantum(
+  modified(modifications: QuantumMoveModifications): QuantumMove {
+    return new QuantumMove(
       modifications.family ?? this.#family,
       modifications.innerLayer ?? this.#innerLayer,
       modifications.outerLayer ?? this.#outerLayer,
@@ -80,12 +80,12 @@ export class MoveQuantum extends Comparable {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsMoveQuantum = other as MoveQuantum;
+    const otherAsQuantumMove = other as QuantumMove;
     return (
-      other.is(MoveQuantum) &&
-      this.#family === otherAsMoveQuantum.#family &&
-      this.#innerLayer === otherAsMoveQuantum.#innerLayer &&
-      this.#outerLayer === otherAsMoveQuantum.#outerLayer
+      other.is(QuantumMove) &&
+      this.#family === otherAsQuantumMove.#family &&
+      this.#innerLayer === otherAsQuantumMove.#innerLayer &&
+      this.#outerLayer === otherAsQuantumMove.#outerLayer
     );
   }
 
@@ -109,7 +109,7 @@ export class MoveQuantum extends Comparable {
 
   experimentalExpand(): Generator<LeafUnit> {
     throw new Error(
-      "experimentalExpand() cannot be called on a `MoveQuantum` directly.",
+      "experimentalExpand() cannot be called on a `QuantumMove` directly.",
     );
   }
 
@@ -133,12 +133,12 @@ interface MoveModifications {
 }
 
 export class Move extends AlgCommon<Move> {
-  readonly #repetition: Repetition<MoveQuantum>;
+  readonly #repetition: Repetition<QuantumMove>;
 
   constructor(
     ...args:
-      | [MoveQuantum]
-      | [MoveQuantum, RepetitionInfo]
+      | [QuantumMove]
+      | [QuantumMove, RepetitionInfo]
       | [string]
       | [string, RepetitionInfo]
   ) {
@@ -146,7 +146,7 @@ export class Move extends AlgCommon<Move> {
     if (typeof args[0] === "string") {
       if (args[1] ?? null) {
         this.#repetition = new Repetition(
-          MoveQuantum.fromString(args[0]),
+          QuantumMove.fromString(args[0]),
           args[1],
         );
         return;
@@ -154,7 +154,7 @@ export class Move extends AlgCommon<Move> {
         return Move.fromString(args[0]); // TODO: can we return here?
       }
     }
-    this.#repetition = new Repetition<MoveQuantum>(args[0], args[1]);
+    this.#repetition = new Repetition<QuantumMove>(args[0], args[1]);
   }
 
   isIdentical(other: Comparable): boolean {
@@ -178,7 +178,7 @@ export class Move extends AlgCommon<Move> {
     }
   }
 
-  get quantum(): MoveQuantum {
+  get quantum(): QuantumMove {
     return this.#repetition.quantum;
   }
 

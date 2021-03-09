@@ -3,7 +3,7 @@
 /* tslint:disable only-arrow-functions */ // TODO
 /* tslint:disable typedef */ // TODO
 
-import { Move, MoveQuantum } from "../alg";
+import { Move, QuantumMove } from "../alg";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
 import {
   MoveNotation,
@@ -1523,7 +1523,7 @@ export class PuzzleGeometry {
       }
       amount = parseInt(amountstr, 10);
     }
-    return new Move(new MoveQuantum(grip, hislice, loslice), amount);
+    return new Move(new QuantumMove(grip, hislice, loslice), amount);
   }
 
   public parseMove(move: Move): any {

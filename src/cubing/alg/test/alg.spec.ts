@@ -1,7 +1,7 @@
 import { Alg } from "../Alg";
 import { setAlgPartTypeMismatchReportingLevel } from "../debug";
 import { Example as Ex } from "../example";
-import { Commutator, Grouping, Move, MoveQuantum, Pause } from "../units";
+import { Commutator, Grouping, Move, QuantumMove, Pause } from "../units";
 import "./alg-comparison";
 
 setAlgPartTypeMismatchReportingLevel("error");
@@ -31,41 +31,41 @@ describe("BlockMove", () => {
   });
 
   it("allows constructing: 2U, 2u", () => {
-    expect(new Move(new MoveQuantum("U", 2), 1).toString()).toBe("2U");
+    expect(new Move(new QuantumMove("U", 2), 1).toString()).toBe("2U");
     expect(new Move("2U", 1).toString()).toBe("2U");
-    expect(new Move(new MoveQuantum("u", 2), 1).toString()).toBe("2u");
+    expect(new Move(new QuantumMove("u", 2), 1).toString()).toBe("2u");
     expect(new Move("2u", 1).toString()).toBe("2u");
   });
 
   it("prevents constructing: [-2]U, [-2]u", () => {
-    expect(() => new MoveQuantum("U", -2)).toThrowError(
-      /MoveQuantum inner layer must be a positive integer/,
+    expect(() => new QuantumMove("U", -2)).toThrowError(
+      /QuantumMove inner layer must be a positive integer/,
     );
   });
 
   it("allows constructing: 2-3u", () => {
-    expect(new Move(new MoveQuantum("u", 3, 2), 1).toString()).toBe("2-3u");
+    expect(new Move(new QuantumMove("u", 3, 2), 1).toString()).toBe("2-3u");
   });
 
   it("prevents constructing: 2-3x, 2-3U, [-2]-3u, 4-3u", () => {
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Move(new MoveQuantum("x",  3, 2, 1)])),
+    //   validateSiGNMoves(new Alg([new Move(new QuantumMove("x",  3, 2, 1)])),
     // ).toThrowError(/cannot have an outer and inner layer/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Move(new MoveQuantum("U",  3, 2, 1)])),
+    //   validateSiGNMoves(new Alg([new Move(new QuantumMove("U",  3, 2, 1)])),
     // ).toThrowError(/cannot have an outer and inner layer/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Move(new MoveQuantum("u", 3, -2), 1)])),
+    //   validateSiGNMoves(new Alg([new Move(new QuantumMove("u", 3, -2), 1)])),
     // ).toThrowError(/Cannot have an outer layer of 0 or less/);
     // expect(() =>
-    //   validateSiGNMoves(new Alg([new Move(new MoveQuantum("u", 3, 4), 1)])),
+    //   validateSiGNMoves(new Alg([new Move(new QuantumMove("u", 3, 4), 1)])),
     // ).toThrowError(/The outer layer must be less than the inner layer/);
   });
 
   it("prevents constructing: w, 2T, 2-3q", () => {
     // expect(() =>algPartToStringForTesting(new Move("w", 1))).toThrowError(/Invalid SiGN plain move family: w/);
-    // expect(() =>algPartToStringForTesting(new Move(new MoveQuantum("T", 2), 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an inner slice: T/);
-    // expect(() =>algPartToStringForTesting(new Move(new MoveQuantum("q",  3, 2, 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an outer and inner layer: q/);
+    // expect(() =>algPartToStringForTesting(new Move(new QuantumMove("T", 2), 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an inner slice: T/);
+    // expect(() =>algPartToStringForTesting(new Move(new QuantumMove("q",  3, 2, 1))).toThrowError(/The provided SiGN move family is invalid, or cannot have an outer and inner layer: q/);
   });
 
   it("supports a default amount of 1.", () => {
@@ -80,18 +80,18 @@ describe("BlockMove", () => {
     expect(new Move("x").effectiveAmount).toBe(1);
     expect(new Move("R").effectiveAmount).toBe(1);
     expect(new Move("u").effectiveAmount).toBe(1);
-    expect(new Move(new MoveQuantum("R", 2)).effectiveAmount).toBe(1);
-    expect(new Move(new MoveQuantum("u", 3)).effectiveAmount).toBe(1);
-    expect(new Move(new MoveQuantum("u", 3, 2)).effectiveAmount).toBe(1);
+    expect(new Move(new QuantumMove("R", 2)).effectiveAmount).toBe(1);
+    expect(new Move(new QuantumMove("u", 3)).effectiveAmount).toBe(1);
+    expect(new Move(new QuantumMove("u", 3, 2)).effectiveAmount).toBe(1);
   });
 
   it("allows different amounts 1", () => {
     expect(new Move("x", 2).effectiveAmount).toBe(2);
     expect(new Move("R", 3).effectiveAmount).toBe(3);
     expect(new Move("u", -5).effectiveAmount).toBe(-5);
-    expect(new Move(new MoveQuantum("R", 2), 10).effectiveAmount).toBe(10);
-    expect(new Move(new MoveQuantum("L", 3), -13).effectiveAmount).toBe(-13);
-    expect(new Move(new MoveQuantum("u", 12, 2), 15).effectiveAmount).toBe(15);
+    expect(new Move(new QuantumMove("R", 2), 10).effectiveAmount).toBe(10);
+    expect(new Move(new QuantumMove("L", 3), -13).effectiveAmount).toBe(-13);
+    expect(new Move(new QuantumMove("u", 12, 2), 15).effectiveAmount).toBe(15);
   });
 
   it("catches invalid moves with parseSiGN().", () => {
@@ -115,7 +115,7 @@ describe("BlockMove", () => {
   });
 
   it("prevents construction a move quantum with only outer layer", () => {
-    expect(() => new MoveQuantum("R", undefined, 1)).toThrow();
+    expect(() => new QuantumMove("R", undefined, 1)).toThrow();
   });
 });
 
@@ -124,15 +124,15 @@ describe("algToString()", () => {
     expect(new Move("x", 2).toString()).toBe("x2");
     expect(new Move("R", 3).toString()).toBe("R3");
     expect(new Move("u", -5).toString()).toBe("u5'");
-    expect(new Move(new MoveQuantum("R", 2), 10).toString()).toBe("2R10");
-    expect(new Move(new MoveQuantum("L", 3), -13).toString()).toBe("3L13'");
-    expect(new Move(new MoveQuantum("u", 12, 2), 15).toString()).toBe(
+    expect(new Move(new QuantumMove("R", 2), 10).toString()).toBe("2R10");
+    expect(new Move(new QuantumMove("L", 3), -13).toString()).toBe("3L13'");
+    expect(new Move(new QuantumMove("u", 12, 2), 15).toString()).toBe(
       "2-12u15",
     );
   });
 
   it("distinguishes between 1R and R", () => {
-    expect(new Move(new MoveQuantum("R", 1)).toString()).toBe("1R");
+    expect(new Move(new QuantumMove("R", 1)).toString()).toBe("1R");
     expect(new Move("R").toString()).toBe("R");
   });
 

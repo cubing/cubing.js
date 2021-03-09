@@ -1,5 +1,5 @@
 import { BlockMove } from "../../../alg";
-import { experimentalBlockMoveQuantumName } from "../../../alg/traversal";
+import { experimentalBlockQuantumMoveName } from "../../../alg/traversal";
 import { Duration, Timestamp } from "../cursor/CursorTypes";
 
 interface Event {
@@ -51,7 +51,7 @@ export function toAxes(
       };
       axes.push([lastEntry]);
       axisMoveTracker.set(
-        experimentalBlockMoveQuantumName(lastEntry.event.move),
+        experimentalBlockQuantumMoveName(lastEntry.event.move),
         lastEntry,
       );
       continue;
@@ -62,7 +62,7 @@ export function toAxes(
       end: event.timeStamp + diameterMs / 2,
     };
     if (isSameAxis(lastEntry.event.move, event.move)) {
-      const quarterName = experimentalBlockMoveQuantumName(newEntry.event.move);
+      const quarterName = experimentalBlockQuantumMoveName(newEntry.event.move);
       // console.log(quarterName);
       const prev = axisMoveTracker.get(quarterName);
       // console.log("prev", prev);
@@ -87,7 +87,7 @@ export function toAxes(
       axes.push([newEntry]);
       axisMoveTracker.clear();
       axisMoveTracker.set(
-        experimentalBlockMoveQuantumName(newEntry.event.move),
+        experimentalBlockQuantumMoveName(newEntry.event.move),
         newEntry,
       );
       if (newEntry.start < lastEntry.end) {
