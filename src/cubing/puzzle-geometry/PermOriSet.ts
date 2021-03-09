@@ -262,7 +262,10 @@ export class OrbitsDef {
     return n;
   }
 }
+
 export class Orbit {
+  static kcache: Record<string, unknown>[] = [];
+
   public static e(n: number, mod: number): Orbit {
     return new Orbit(iota(n), zeros(n), mod);
   }
@@ -416,7 +419,15 @@ export class Orbit {
 
   // TODO: return type
   public toKpuzzle(): Record<string, unknown> {
-    return { permutation: this.perm, orientation: this.ori };
+    const n = this.perm.length;
+    if (this.isIdentity()) {
+      if (!Orbit.kcache[n]) {
+        Orbit.kcache[n] = { permutation: iota(n), orientation: zeros(n) };
+      }
+      return Orbit.kcache[n];
+    } else {
+      return { permutation: this.perm, orientation: this.ori };
+    }
   }
 }
 export class TransformationBase {
