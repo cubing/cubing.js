@@ -2736,7 +2736,10 @@ export class PuzzleGeometry {
 
 class PGNotation implements MoveNotation {
   private cache: { [key: string]: KTransformation } = {};
-  constructor(public pg: PuzzleGeometry, public od: OrbitsDef) {}
+  public orbitNames: string[];
+  constructor(public pg: PuzzleGeometry, od: OrbitsDef) {
+    this.orbitNames = od.orbitnames;
+  }
 
   public lookupMove(move: Move): KTransformation | undefined {
     const key = this.moveToKeyString(move);
@@ -2757,7 +2760,7 @@ class PGNotation implements MoveNotation {
       undefined,
       this.pg.movesetorders[mv[1]],
     );
-    const r = this.od.transformToKPuzzle(pgmv);
+    const r = OrbitsDef.transformToKPuzzle(this.orbitNames, pgmv);
     this.cache[key] = r;
     return r;
   }

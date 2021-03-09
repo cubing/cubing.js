@@ -31,6 +31,17 @@ export class OrbitsDef {
     return mp;
   }
 
+  public static transformToKPuzzle(
+    orbitnames: string[],
+    t: Transformation,
+  ): any {
+    const mp: { [orbitName: string]: any } = {};
+    for (let j = 0; j < orbitnames.length; j++) {
+      mp[orbitnames[j]] = t.orbits[j].toKpuzzle();
+    }
+    return mp;
+  }
+
   public toKsolve(name: string, forTwisty: boolean): string[] {
     const result = [];
     result.push("Name " + name);
