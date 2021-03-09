@@ -1800,6 +1800,9 @@ export class PuzzleGeometry {
       }
       this.parsedmovelist = parsedmovelist;
     }
+    this.facelisthash = null;
+    this.facecentermass = [];
+    this.cubiekey = [];
   }
 
   public getfaces(): number[][][] {
