@@ -513,6 +513,7 @@ export class PuzzleGeometry {
   public swizzler: FaceNameSwizzler;
   public notationMapper: NotationMapper = new NullMapper();
   public addNotationMapper: string = "";
+  public setReidOrder: boolean = false;
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
     function asstructured(v: any): any {
       if (typeof v === "string") {
@@ -843,7 +844,7 @@ export class PuzzleGeometry {
       }
       edgenames[i] = [edgenames[i][0], c1];
     }
-    // fix the vertex names; clockwise rotations; low face first.
+    // fix the vertex names; counterclockwise rotations; low face first.
     this.cornerfaces = vertexnames[0].length - 1;
     for (let i = 0; i < vertexnames.length; i++) {
       if (vertexnames[i].length < 4) {
@@ -866,7 +867,7 @@ export class PuzzleGeometry {
           r = r + sep + vertexnames[i][st][0];
         }
         for (let k = 1; k < vertexnames[i].length; k++) {
-          if (vertexnames[i][st][2] === vertexnames[i][k][1]) {
+          if (vertexnames[i][st][1] === vertexnames[i][k][2]) {
             st = k;
             break;
           }
@@ -875,11 +876,11 @@ export class PuzzleGeometry {
       vertexnames[i] = [vertexnames[i][0], r];
     }
     if (this.verbose > 1) {
-      console.log("Face precedence list: " + this.faceorder.join(" "));
-      console.log("Face names: " + facenames.map((_: any) => _[1]).join(" "));
-      console.log("Edge names: " + edgenames.map((_: any) => _[1]).join(" "));
+      console.log("# Face precedence list: " + this.faceorder.join(" "));
+      console.log("# Face names: " + facenames.map((_: any) => _[1]).join(" "));
+      console.log("# Edge names: " + edgenames.map((_: any) => _[1]).join(" "));
       console.log(
-        "Vertex names: " + vertexnames.map((_: any) => _[1]).join(" "),
+        "# Vertex names: " + vertexnames.map((_: any) => _[1]).join(" "),
       );
     }
     const geonormals = [];
@@ -969,6 +970,8 @@ export class PuzzleGeometry {
       // In this case the mapper adding is deferred until we
       // know the number of slices.
       this.addNotationMapper = "NxNxNCubeMapper";
+      // try to set Reid order of the cubies within an orbit
+      this.setReidOrder = true;
     }
     if (shape === "c" && sawvertex && !sawface && !sawedge) {
       this.addNotationMapper = "SkewbMapper";
@@ -1304,7 +1307,7 @@ export class PuzzleGeometry {
     if (this.verbose) {
       console.log("# Cubies: " + Object.keys(cubiehash).length);
     }
-    //  Sort the faces around each corner so they are clockwise.  Only
+    //  Sort the faces around each corner so they are counterclockwise.  Only
     //  relevant for cubies that actually are corners (three or more
     //  faces).  In general cubies might have many faces; for icosohedrons
     //  there are five faces on the corner cubies.
@@ -1452,6 +1455,55 @@ export class PuzzleGeometry {
         }
       }
       cubiesetnum++;
+    }
+    if (
+      this.setReidOrder &&
+      4 <= this.stickersperface &&
+      this.stickersperface <= 9
+    ) {
+      const reidorder = [
+        [
+          "UF",
+          "UR",
+          "UB",
+          "UL",
+          "DF",
+          "DR",
+          "DB",
+          "DL",
+          "FR",
+          "FL",
+          "BR",
+          "BL",
+        ],
+        ["UFR", "URB", "UBL", "ULF", "DRF", "DFL", "DLB", "DBR"],
+        ["U", "L", "F", "R", "B", "D"],
+      ];
+      const reidmap: { [key: number]: number } = {};
+      for (let i = 0; i < reidorder.length; i++) {
+        for (let j = 0; j < reidorder[i].length; j++) {
+          let mask = 0;
+          for (let k = 0; k < reidorder[i][j].length; k++) {
+            mask |= 1 << (reidorder[i][j].charCodeAt(k) - 65);
+          }
+          reidmap[mask] = j;
+        }
+      }
+      for (let i = 0; i < cubiesetnum; i++) {
+        for (let j = 0; j < cubiesetcubies[i].length; j++) {
+          const cubienum = cubiesetcubies[i][j];
+          let mask = 0;
+          for (let k = 0; k < cubies[cubienum].length; k++) {
+            mask |=
+              1 <<
+              (this.facenames[
+                this.getfaceindex(this.findface(cubies[cubienum][k]))
+              ][1].charCodeAt(0) -
+                65);
+          }
+          cubieordnums[cubienum] = reidmap[mask];
+        }
+      }
     }
     this.orbits = cubieords.length;
     this.cubiesetnums = cubiesetnums;

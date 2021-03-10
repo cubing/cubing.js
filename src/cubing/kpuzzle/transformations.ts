@@ -4,7 +4,13 @@ import {
   Transformation,
 } from "./definition_types";
 
+// this is the last identity orbit transformation we saw or looked at.
+let lasto: OrbitTransformation | null;
+
 function isIdentity(omod: number, o: OrbitTransformation): boolean {
+  if (o === lasto) {
+    return true;
+  }
   const perm = o.permutation;
   const n = perm.length;
   for (let idx = 0; idx < n; idx++) {
@@ -20,6 +26,7 @@ function isIdentity(omod: number, o: OrbitTransformation): boolean {
       }
     }
   }
+  lasto = o;
   return true;
 }
 
@@ -94,17 +101,20 @@ export function identityTransformation(
   const transformation = {} as Transformation;
   for (const orbitName in definition.orbits) {
     const orbitDefinition = definition.orbits[orbitName];
-    const newPermutation = new Array(orbitDefinition.numPieces);
-    const newOrientation = new Array(orbitDefinition.numPieces);
-    for (let i = 0; i < orbitDefinition.numPieces; i++) {
-      newPermutation[i] = i;
-      newOrientation[i] = 0;
+    if (!lasto || lasto.permutation.length !== orbitDefinition.numPieces) {
+      const newPermutation = new Array(orbitDefinition.numPieces);
+      const newOrientation = new Array(orbitDefinition.numPieces);
+      for (let i = 0; i < orbitDefinition.numPieces; i++) {
+        newPermutation[i] = i;
+        newOrientation[i] = 0;
+      }
+      const orbitTransformation = {
+        permutation: newPermutation,
+        orientation: newOrientation,
+      };
+      lasto = orbitTransformation;
     }
-    const orbitTransformation = {
-      permutation: newPermutation,
-      orientation: newOrientation,
-    };
-    transformation[orbitName] = orbitTransformation;
+    transformation[orbitName] = lasto;
   }
   return transformation;
 }
