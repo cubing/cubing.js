@@ -8,7 +8,6 @@
   "license": "GPL-3.0-or-later",
   "repository": "github:cubing/cubing.js",
   "dependencies": {
-    "@types/resize-observer-browser": "^0.1.3",
     "@types/web-bluetooth": "0.0.4",
     "three": "^0.118.3"
   },
