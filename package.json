@@ -58,7 +58,7 @@
     "test-jest": "npx jest --collectCoverage",
     "test-node-require": "node src/dist-test/require.cjs",
     "test-node-import": "node src/dist-test/import.mjs",
-    "format": "npx eslint --fix .; npx prettier --write src *.config.js */index.js */index.d.ts",
+    "format": "npx eslint --fix .; npx prettier --write src */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
