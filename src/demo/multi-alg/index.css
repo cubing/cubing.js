@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -6,7 +7,8 @@ html, body {
   overflow: hidden;
 }
 
-body, body > div {
+body,
+body > div {
   display: grid;
   box-sizing: border-box;
   gap: 1em;

@@ -3,7 +3,8 @@
   src: url("../../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
 }
 
-html, body {
+html,
+body {
   font-family: "Ubuntu", Tahoma, sans-serif;
   margin: 0;
   padding: 0;
