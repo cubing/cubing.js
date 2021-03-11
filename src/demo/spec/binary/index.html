@@ -55,7 +55,9 @@
           </tr>
           <tr class="puzzOri">
             <td><span class="componentName">PO_U</span></td>
-            <td colspan=2 rowspan=2><a href="#puzzle-orientation">see below</a></td>
+            <td colspan="2" rowspan="2">
+              <a href="#puzzle-orientation">see below</a>
+            </td>
             <td>3 bits</td>
           </tr>
           <tr class="puzzOri">
@@ -64,11 +66,11 @@
           </tr>
           <tr class="centerOri">
             <td><span class="componentName">MO_Q</span></td>
-            <td>whether center ("middle")<br>orientation is
-              supported</td>
+            <td>whether center ("middle")<br />orientation is supported</td>
             <td>0 to 1</td>
             <td>1 bit</td>
-          </tr><tr class="centerOri">
+          </tr>
+          <tr class="centerOri">
             <td><span class="componentName">MO</span></td>
             <td>center ("middle") orientation</td>
             <td>0 to 4<sup>6</sup>-1</td>
@@ -105,24 +107,26 @@
 
     <section id="byte-layout">
       <h2>Byte Layout</h2>
-
       <div id="stub">
-        <noscript>This page currently requires Javascript to load the example table.</noscript>
+        <noscript
+          >This page currently requires Javascript to load the example
+          table.</noscript
+        >
       </div>
-
-      <p>If puzzle orientation is not encoded:
+      <p>If puzzle orientation is not encoded:</p>
       <ul>
-        <li><span class="componentName">PO_U</span> is set to <code>0b111</code>.</li>
+        <li>
+          <span class="componentName">PO_U</span> is set to <code>0b111</code>.
+        </li>
         <li><span class="componentName">PO_L</span> is ignored.</li>
       </ul>
-      </p>
-      <p>If center orientation is not encoded:
+      <p>If center orientation is not encoded:</p>
       <ul>
-        <li><span class="componentName">MO?</span> is set to <code>0b0</code>.</li>
+        <li>
+          <span class="componentName">MO?</span> is set to <code>0b0</code>.
+        </li>
         <li>The <span class="componentName">MO</span> bits are ignored.</li>
       </ul>
-      </p>
-
     </section>
 
     <section id="puzzle-orientation">
