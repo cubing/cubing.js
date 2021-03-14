@@ -2103,12 +2103,20 @@ export class PuzzleGeometry {
         }
       }
     }
+    let lastId = new Orbit(iota(24), zeros(24), 1);
     for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
       if (setmoves && !setmoves[ii]) {
         continue;
       }
       if (this.orbitoris[ii] === 1 || this.killorientation) {
-        moveorbits.push(new Orbit(perms[ii], oris[ii], 1));
+        if (perms[ii] === iota(lastId.perm.length)) {
+          if (perms[ii] !== lastId.perm) {
+            lastId = new Orbit(perms[ii], oris[ii], 1);
+          }
+          moveorbits.push(lastId);
+        } else {
+          moveorbits.push(new Orbit(perms[ii], oris[ii], 1));
+        }
       } else {
         const no = new Array<number>(oris[ii].length);
         // convert ksolve oris to our internal ori rep
