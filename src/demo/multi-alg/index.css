@@ -1,0 +1,20 @@
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+body div:first-child {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+twisty-player {
+  width: 100%;
+  height: 100%;
+}

@@ -1,4 +1,5 @@
-import { Alg } from "../../cubing/alg";
+import { Alg, Newline } from "../../cubing/alg";
+import { AlgBuilder } from "../../cubing/alg/AlgBuilder";
 import "../../cubing/twisty"
 import {Twisty3DCanvas, TwistyPlayer} from "../../cubing/twisty"
 
@@ -18,6 +19,17 @@ function getScreenshot(alg: Alg) {
 }
 
 document.querySelector("#screenshot")?.addEventListener("click", () => {
-  getScreenshot(new Alg("R U R' U R U2' R'"))
-  getScreenshot(new Alg("R U R' U' R' F R F'"))
+  const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
+  const algs = new Alg(algsTextarea.value);
+
+  const currentAlgBuilder = new AlgBuilder();
+  for (const unit of algs.units()) {
+    if (unit.is(Newline)) {
+      getScreenshot(currentAlgBuilder.toAlg());
+      currentAlgBuilder.reset();
+    } else {
+      currentAlgBuilder.push(unit);
+    }
+  }
+  getScreenshot(currentAlgBuilder.toAlg());
 })
