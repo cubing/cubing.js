@@ -2,6 +2,7 @@ import { Alg, Newline } from "../../cubing/alg";
 import { AlgBuilder } from "../../cubing/alg/AlgBuilder";
 import "../../cubing/twisty"
 import {Twisty3DCanvas, TwistyPlayer} from "../../cubing/twisty"
+import {appearances3x3x3} from "../../cubing/twisty/3D/puzzles/stickerings"
 
 const player: TwistyPlayer = document.querySelector("twisty-player")!;
 
@@ -18,7 +19,7 @@ function getScreenshot(alg: Alg) {
   downloadDataURL(twisty3DCanvas.renderToDataURL({squareCrop: true}));
 }
 
-document.querySelector("#screenshot")?.addEventListener("click", () => {
+document.querySelector("#screenshot")!.addEventListener("click", () => {
   const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
   const algs = new Alg(algsTextarea.value);
 
@@ -32,4 +33,17 @@ document.querySelector("#screenshot")?.addEventListener("click", () => {
     }
   }
   getScreenshot(currentAlgBuilder.toAlg());
+})
+
+const stickeringSelect = document.querySelector("#stickering")! as HTMLSelectElement
+
+for (const stickering of Object.keys(appearances3x3x3)) {
+  const option = document.createElement("option");
+  option.value = stickering;
+  option.textContent = stickering;
+  stickeringSelect.appendChild(option);
+}
+
+stickeringSelect.addEventListener("change", () => {
+  player.experimentalStickering = stickeringSelect.value as any
 })
