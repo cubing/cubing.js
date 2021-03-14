@@ -45,5 +45,17 @@ for (const stickering of Object.keys(appearances3x3x3)) {
 }
 
 stickeringSelect.addEventListener("change", () => {
-  player.experimentalStickering = stickeringSelect.value as any
+  const stickering = stickeringSelect.value
+  player.experimentalStickering = stickering as any
+
+  const url = new URL(location.href)
+  url.searchParams.set("stickering", stickering)
+  window.history.pushState(null, "", url.toString())
 })
+
+const originalURL = new URL(location.href)
+const stickering = originalURL.searchParams.get("stickering");
+if (stickering) {
+  stickeringSelect.value = stickering;
+  player.experimentalStickering = stickering as any;
+}
