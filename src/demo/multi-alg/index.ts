@@ -19,20 +19,31 @@ function getScreenshot(alg: Alg) {
   downloadDataURL(twisty3DCanvas.renderToDataURL({squareCrop: true}));
 }
 
+const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
+algsTextarea.value = localStorage["multi-alg-text"] ?? "";
 document.querySelector("#screenshot")!.addEventListener("click", () => {
-  const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
-  const algs = new Alg(algsTextarea.value);
+  const algsText = algsTextarea.value;
 
-  const currentAlgBuilder = new AlgBuilder();
-  for (const unit of algs.units()) {
-    if (unit.is(Newline)) {
-      getScreenshot(currentAlgBuilder.toAlg());
-      currentAlgBuilder.reset();
-    } else {
-      currentAlgBuilder.push(unit);
+  try {
+    const algs = new Alg(algsText);
+    algsTextarea.classList.add("saved");
+    algsTextarea.classList.remove("error");
+    localStorage["multi-alg-text"] = algsText;
+
+    const currentAlgBuilder = new AlgBuilder();
+    for (const unit of algs.units()) {
+      if (unit.is(Newline)) {
+        getScreenshot(currentAlgBuilder.toAlg());
+        currentAlgBuilder.reset();
+      } else {
+        currentAlgBuilder.push(unit);
+      }
     }
+    getScreenshot(currentAlgBuilder.toAlg());
+  } catch(e) {
+    algsTextarea.classList.remove("saved");
+    algsTextarea.classList.add("error");
   }
-  getScreenshot(currentAlgBuilder.toAlg());
 })
 
 const stickeringSelect = document.querySelector("#stickering")! as HTMLSelectElement
