@@ -19,7 +19,7 @@ export {
   invertTransformation,
   areTransformationsEquivalent,
   areOrbitTransformationsEquivalent,
-  areStatesEquivalient,
+  areStatesEquivalent,
   transformationOrder,
 } from "./transformations";
 

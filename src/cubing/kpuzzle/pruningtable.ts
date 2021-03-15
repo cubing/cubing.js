@@ -1,6 +1,6 @@
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
 import { KPuzzleDefinition, Transformation } from ".";
-import { areStatesEquivalient } from "./transformations";
+import { areStatesEquivalent } from "./transformations";
 const mask = 0x7fffffff;
 function hash(def: KPuzzleDefinition, s: Transformation): number {
   let r = 0;
@@ -54,7 +54,7 @@ export class PruningTable {
         const dep = this.lookup(t.value.trans);
         if (
           dep === 0 &&
-          areStatesEquivalient(this.def, t.value.trans, this.def.startPieces)
+          areStatesEquivalent(this.def, t.value.trans, this.def.startPieces)
         ) {
           return t.value.getSequenceAsString();
         }

@@ -238,7 +238,7 @@ export function areTransformationsEquivalent(
   return true;
 }
 
-export function areStatesEquivalient(
+export function areStatesEquivalent(
   def: KPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,

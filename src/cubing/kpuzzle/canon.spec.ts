@@ -1,7 +1,7 @@
 import { getPuzzleGeometryByName } from "../puzzle-geometry";
 import {
   KPuzzleDefinition,
-  areStatesEquivalient,
+  areStatesEquivalent,
   combineTransformations,
 } from ".";
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
@@ -24,7 +24,7 @@ describe("CanonSequences", () => {
     expect(ss3.moveseq.length).toBe(6);
     expect(ss3.getSequenceAsString()).toBe("U F2 BL2' R2' F' U2");
     expect(
-      areStatesEquivalient(
+      areStatesEquivalent(
         def,
         ss3.trans,
         combineTransformations(def, ss1.trans, ss2.trans),

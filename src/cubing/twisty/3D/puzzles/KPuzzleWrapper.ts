@@ -1,7 +1,7 @@
 import { Move } from "../../../alg";
 import {
   combineTransformations,
-  areStatesEquivalient,
+  areStatesEquivalent,
   identityTransformation,
   invertTransformation,
   KPuzzleDefinition,
@@ -106,7 +106,7 @@ export class KPuzzleWrapper extends PuzzleWrapper {
   }
 
   public equivalent(s1: KSolvePuzzleState, s2: KSolvePuzzleState): boolean {
-    return areStatesEquivalient(this.definition, s1, s2);
+    return areStatesEquivalent(this.definition, s1, s2);
   }
 }
 
