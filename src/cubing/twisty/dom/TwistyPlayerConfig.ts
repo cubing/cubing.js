@@ -158,8 +158,8 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 }
 
 export interface TwistyPlayerConfigValues {
-  alg: Alg;
-  experimentalSetupAlg: Alg;
+  alg: Alg | string;
+  experimentalSetupAlg: Alg | string;
   experimentalSetupAnchor: SetupToLocation;
 
   puzzle: PuzzleID;

@@ -6,8 +6,16 @@ import { Alg } from "../../../alg";
 export class AlgAttribute {
   string: string;
   value: Alg;
-  constructor(initialValue?: Alg) {
-    this.setValue(initialValue ?? this.defaultValue());
+  constructor(initialValue?: Alg | string) {
+    if (initialValue) {
+      if (typeof initialValue === "string") {
+        this.setString(initialValue);
+      } else {
+        this.setValue(initialValue);
+      }
+    } else {
+      this.setValue(this.defaultValue());
+    }
   }
 
   // Return value indicates if the attribute changed.
