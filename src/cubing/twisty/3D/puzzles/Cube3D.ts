@@ -10,7 +10,6 @@ import {
   Mesh,
   MeshBasicMaterial,
   Object3D,
-  PlaneGeometry,
   Quaternion,
   Texture,
   TextureLoader,
@@ -440,15 +439,22 @@ function sharedCubieFoundationGeometry(): BoxGeometry {
   );
 }
 
-function newStickerGeometry(): PlaneGeometry {
-  return new PlaneGeometry(
-    cubieDimensions.stickerWidth,
-    cubieDimensions.stickerWidth,
-  );
+function newStickerGeometry(): BufferGeometry {
+  const r = new BufferGeometry();
+  const half = 0.5 * cubieDimensions.stickerWidth;
+  r.setAttribute('position', new BufferAttribute(new Float32Array([
+    half, half, 0, -half, half, 0, half, -half, 0, -half, half, 0, -half, -half, 0, half, -half, 0]), 3));
+  r.setAttribute('uv', new BufferAttribute(new Float32Array([
+    1, 1, 0, 1, 1, 0,
+    0, 1, 0, 0, 1, 0,
+    0, 1, 0, 0, 1, 1,
+    0, 0, 1, 0, 1, 1]), 2));
+//  r.setAttribute('normals', new BufferAttribute(new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), 3));
+  return r;
 }
 
-let sharedStickerGeometryCache: PlaneGeometry | null = null;
-function sharedStickerGeometry(): PlaneGeometry {
+let sharedStickerGeometryCache: BufferGeometry | null = null;
+function sharedStickerGeometry(): BufferGeometry {
   return (
     sharedStickerGeometryCache ??
     (sharedStickerGeometryCache = newStickerGeometry())
@@ -746,12 +752,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                 [v1, v2, v3, v4] = [v4, v1, v2, v3];
                 break;
             }
-/*
- *   Something like this should work, but this doesn't.
- *
             (mesh.geometry as BufferGeometry).setAttribute("uv", new BufferAttribute(new Float32Array(
-              [v2.x, v2.y, v1.x, v1.y, v3.x, v3.y, v1.x, v1.y, v4.x, v4.y, v3.x, v3.y]), 2));
- */
+              [ v3.x, v3.y, v2.x, v2.y, v4.x, v4.y, v2.x, v2.y, v1.x, v1.y, v4.x, v4.y]), 2));
             cubie.add(mesh);
           };
           // const delay: number = ({
