@@ -649,6 +649,7 @@ function onMouseClick(
   // calculate objects intersecting the picking ray
   const controlTargets = twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
+  console.log("Intersects returned " + intersects.length);
   if (intersects.length > 0) {
     event.preventDefault();
     const mv = intersectionToMove(intersects[0].point, event, rightClick);

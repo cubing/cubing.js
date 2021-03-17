@@ -4,8 +4,6 @@ import {
   Color,
   DoubleSide,
   Euler,
-  Face3,
-  Geometry,
   Group,
   Mesh,
   MeshBasicMaterial,
@@ -53,10 +51,12 @@ class Filler {
   vertices: Float32Array;
   colors: Float32Array;
   ind: Uint8Array;
-  constructor(public sz: number) {
+  constructor(public sz: number, public colored: boolean = true) {
     this.vertices = new Float32Array(9*sz);
-    this.colors = new Float32Array(9*sz);
-    this.ind = new Uint8Array(sz);
+    if (colored) {
+      this.colors = new Float32Array(9*sz);
+      this.ind = new Uint8Array(sz);
+    }
     this.pos = 0;
     this.ipos = 0;
   }
@@ -71,13 +71,22 @@ class Filler {
     this.pos += 3;
   }
 
+  addUncolored(pt: number[]) {
+    this.vertices[this.pos] = pt[0];
+    this.vertices[this.pos+1] = pt[1];
+    this.vertices[this.pos+2] = pt[2];
+    this.pos += 3;
+  }
+
   setind(i: number) {
     this.ind[this.ipos++] = i;
   }
 
   setAttributes(geo: BufferGeometry) {
     geo.setAttribute('position', new BufferAttribute(this.vertices, 3));
-    geo.setAttribute('color', new BufferAttribute(this.colors, 3));
+    if (this.colored) {
+      geo.setAttribute('color', new BufferAttribute(this.colors, 3));
+    }
   }
 
   makeGroups(geo: BufferGeometry) {
@@ -230,21 +239,18 @@ class StickerDef {
 
 class HitPlaneDef {
   public cubie: Group;
-  protected geo: Geometry;
+  protected geo: BufferGeometry;
   constructor(hitface: any) {
     this.cubie = new Group();
-    this.geo = new Geometry();
     const coords = hitface.coords as number[][];
-    const vertind: number[] = [];
-    for (const coord of coords) {
-      const v = new Vector3(coord[0], coord[1], coord[2]);
-      vertind.push(this.geo.vertices.length);
-      this.geo.vertices.push(v);
+    const filler = new Filler(coords.length - 2, true);
+    for (let g = 1; g + 1 < coords.length; g++) {
+      filler.addUncolored(coords[0]);
+      filler.addUncolored(coords[g]);
+      filler.addUncolored(coords[g+1]);
     }
-    for (let g = 1; g + 1 < vertind.length; g++) {
-      const face = new Face3(vertind[0], vertind[g], vertind[g + 1]);
-      this.geo.faces.push(face);
-    }
+    this.geo = new BufferGeometry();
+    filler.setAttributes(this.geo);
     const obj = new Mesh(this.geo, polyMaterial);
     obj.userData.name = hitface.name;
     this.cubie.scale.setScalar(0.99);
@@ -356,7 +362,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const sides = stickers[si].coords.length;
       triangleCount += multiplier * (sides - 2);
     }
-    console.log("Triangle count is " + triangleCount);
     const filler = new Filler(triangleCount);
     const black = new Color(0);
     for (let si = 0; si < stickers.length; si++) {
@@ -403,7 +408,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         );
       }
     }
-    console.log("Filler at " + filler.pos + " " + filler.ipos)
     const fixedGeo = new BufferGeometry();
     filler.setAttributes(fixedGeo);
     filler.makeGroups(fixedGeo);
@@ -423,7 +427,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.add(facedef.cubie);
       this.controlTargets.push(facedef.cubie.children[0]);
     }
-
     cursor!.addPositionListener(this);
   }
 

@@ -1,6 +1,8 @@
 import {
   BackSide,
   BoxGeometry,
+  BufferAttribute,
+  BufferGeometry,
   DoubleSide,
   Euler,
   Group,
@@ -744,14 +746,12 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                 [v1, v2, v3, v4] = [v4, v1, v2, v3];
                 break;
             }
-
-            (mesh.geometry as PlaneGeometry).faceVertexUvs = [
-              [
-                [v2, v1, v3],
-                [v1, v4, v3],
-              ],
-            ]; // TODO: Share the geometry for a given orientation.
-
+/*
+ *   Something like this should work, but this doesn't.
+ *
+            (mesh.geometry as BufferGeometry).setAttribute("uv", new BufferAttribute(new Float32Array(
+              [v2.x, v2.y, v1.x, v1.y, v3.x, v3.y, v1.x, v1.y, v4.x, v4.y, v3.x, v3.y]), 2));
+ */
             cubie.add(mesh);
           };
           // const delay: number = ({
