@@ -1,6 +1,6 @@
 import {
   Color,
-  Face3,
+  DoubleSide,
   Vector3,
   Scene,
   Group,
@@ -8,8 +8,9 @@ import {
   WebGLRenderer,
   Mesh,
   MeshBasicMaterial,
-  Geometry,
+  BufferGeometry,
   Object3D,
+  BufferAttribute,
 } from "three";
 import Stats from "../../vendor/node_modules/three/examples/jsm/libs/stats.module";
 
@@ -22,8 +23,7 @@ let scene: Scene,
 
 let width: number, height: number;
 
-const m = 5;
-const cubeType = 1;
+const m = 100;
 const useStats = true;
 
 function init() {
@@ -50,9 +50,12 @@ function initRenderer() {
   renderer = new WebGLRenderer({ antialias: true });
   renderer.setSize(width, height);
 }
+let pos: Float32Array;
+let posLoc: number = 0;
+let color: Float32Array;
+let colorLoc: number = 0;
 function makepoint(
   verts: Vector3[],
-  geo: Geometry,
   a: number,
   b: number,
   c: number,
@@ -61,7 +64,7 @@ function makepoint(
   y: number,
   m: number,
   off: number,
-) {
+): void {
   const r = new Vector3(0, 0, 0);
   const t = verts[a].clone();
   t.multiplyScalar((x * y) / (m * m));
@@ -76,13 +79,22 @@ function makepoint(
   t.multiplyScalar((x * (m - y)) / (m * m));
   r.add(t);
   r.multiplyScalar(1 + off);
-  const ri = geo.vertices.length;
-  geo.vertices.push(r);
-  return ri;
+  const ri = posLoc;
+  pos[ri] = r.x;
+  pos[ri+1] = r.y;
+  pos[ri+2] = r.z;
+  posLoc += 3;
+}
+function makecolor(c: Color, n: number): void {
+  for (let i = 0; i < n; i++) {
+    color[colorLoc] = c.r;
+    color[colorLoc+1] = c.g;
+    color[colorLoc+2] = c.b;
+    colorLoc += 3
+  }
 }
 function addface(
   verts: Vector3[],
-  geo: Geometry,
   a: number,
   b: number,
   c: number,
@@ -90,48 +102,31 @@ function addface(
   x: number,
   y: number,
   m: number,
-  color: Color | null,
+  color: Color,
   front: boolean,
 ) {
   if (front) {
     const u = 0.08;
     const off = 0.00002;
-    const aa = makepoint(verts, geo, a, b, c, d, x + u, y + u, m, off);
-    const bb = makepoint(verts, geo, a, b, c, d, x + 1 - u, y + u, m, off);
-    const cc = makepoint(verts, geo, a, b, c, d, x + 1 - u, y + 1 - u, m, off);
-    const dd = makepoint(verts, geo, a, b, c, d, x + u, y + 1 - u, m, off);
-    const f1 = new Face3(aa, bb, cc);
-    const f2 = new Face3(aa, cc, dd);
-    if (color) {
-      f1.color = color;
-      f2.color = color;
-    }
-    geo.faces.push(f1);
-    geo.faces.push(f2);
+    makepoint(verts, a, b, c, d, x + u, y + u, m, off);
+    makepoint(verts, a, b, c, d, x + 1 - u, y + u, m, off);
+    makepoint(verts, a, b, c, d, x + 1 - u, y + 1 - u, m, off);
+    makepoint(verts, a, b, c, d, x + u, y + u, m, off);
+    makepoint(verts, a, b, c, d, x + 1 - u, y + 1 - u, m, off);
+    makepoint(verts, a, b, c, d, x + u, y + 1 - u, m, off);
+    makecolor(color, 6);
   } else {
-    const aa = makepoint(verts, geo, a, b, c, d, x, y, m, 0);
-    const bb = makepoint(verts, geo, a, b, c, d, x + 1, y, m, 0);
-    const cc = makepoint(verts, geo, a, b, c, d, x + 1, y + 1, m, 0);
-    const dd = makepoint(verts, geo, a, b, c, d, x, y + 1, m, 0);
-    const f1 = new Face3(aa, cc, bb);
-    const f2 = new Face3(aa, dd, cc);
-    const f3 = new Face3(aa, bb, cc);
-    const f4 = new Face3(aa, cc, dd);
-    if (color) {
-      f1.color = color;
-      f2.color = color;
-      f3.color = color;
-      f4.color = color;
-    }
-    geo.faces.push(f1);
-    geo.faces.push(f2);
-    geo.faces.push(f3);
-    geo.faces.push(f4);
+    makepoint(verts, a, b, c, d, x, y, m, 0);
+    makepoint(verts, a, b, c, d, x + 1, y, m, 0);
+    makepoint(verts, a, b, c, d, x + 1, y + 1, m, 0);
+    makepoint(verts, a, b, c, d, x, y, m, 0);
+    makepoint(verts, a, b, c, d, x + 1, y + 1, m, 0);
+    makepoint(verts, a, b, c, d, x, y + 1, m, 0);
+    makecolor(color, 6);
   }
 }
 function addface2(
   verts: Vector3[],
-  geo: Geometry,
   a: number,
   b: number,
   c: number,
@@ -144,7 +139,6 @@ function addface2(
 ) {
   addface(
     verts,
-    geo,
     a,
     b,
     c,
@@ -155,11 +149,12 @@ function addface2(
     colors[Math.floor(6 * Math.random())],
     true,
   );
-  addface(verts, geo, a, b, c, d, x, y, m, black, false);
+  addface(verts, a, b, c, d, x, y, m, black, false);
 }
 function getCube() {
-  const geo = new Geometry();
-  geo.vertices.push(
+  const geo = new BufferGeometry();
+  const vertices = [];
+  vertices.push(
     new Vector3(-1, -1, -1),
     new Vector3(-1, -1, 1),
     new Vector3(-1, 1, -1),
@@ -176,117 +171,26 @@ function getCube() {
   }
   for (let x = 0; x < m; x++) {
     for (let y = 0; y < m; y++) {
-      addface2(geo.vertices, geo, 0, 1, 3, 2, x, y, m, black, colors);
-      addface2(geo.vertices, geo, 4, 6, 7, 5, x, y, m, black, colors);
-      addface2(geo.vertices, geo, 0, 2, 6, 4, x, y, m, black, colors);
-      addface2(geo.vertices, geo, 1, 5, 7, 3, x, y, m, black, colors);
-      addface2(geo.vertices, geo, 0, 4, 5, 1, x, y, m, black, colors);
-      addface2(geo.vertices, geo, 2, 3, 7, 6, x, y, m, black, colors);
+      addface2(vertices, 0, 1, 3, 2, x, y, m, black, colors);
+      addface2(vertices, 4, 6, 7, 5, x, y, m, black, colors);
+      addface2(vertices, 0, 2, 6, 4, x, y, m, black, colors);
+      addface2(vertices, 1, 5, 7, 3, x, y, m, black, colors);
+      addface2(vertices, 0, 4, 5, 1, x, y, m, black, colors);
+      addface2(vertices, 2, 3, 7, 6, x, y, m, black, colors);
     }
   }
+  geo.setAttribute('position', new BufferAttribute(pos, 3));
+  geo.setAttribute('color', new BufferAttribute(color, 3));
   return new Mesh(geo, new MeshBasicMaterial({ vertexColors: true }));
-}
-function getCube2() {
-  const geo = new Geometry();
-  geo.vertices.push(
-    new Vector3(-1, -1, -1),
-    new Vector3(-1, -1, 1),
-    new Vector3(-1, 1, -1),
-    new Vector3(-1, 1, 1),
-    new Vector3(1, -1, -1),
-    new Vector3(1, -1, 1),
-    new Vector3(1, 1, -1),
-    new Vector3(1, 1, 1),
-  );
-  const black = new Color(0);
-  const colors = [];
-  for (let i = 0; i < 6; i++) {
-    colors.push(new Color(Math.floor(0x1000000 * Math.random())));
-  }
-  const blackGeo = new Geometry();
-  const colorGeo = [];
-  for (let i = 0; i < 6; i++) {
-    colorGeo.push(new Geometry());
-  }
-  for (let x = 0; x < m; x++) {
-    for (let y = 0; y < m; y++) {
-      addface(geo.vertices, blackGeo, 0, 1, 3, 2, x, y, m, null, false);
-      addface(geo.vertices, blackGeo, 4, 6, 7, 5, x, y, m, null, false);
-      addface(geo.vertices, blackGeo, 0, 2, 6, 4, x, y, m, null, false);
-      addface(geo.vertices, blackGeo, 1, 5, 7, 3, x, y, m, null, false);
-      addface(geo.vertices, blackGeo, 0, 4, 5, 1, x, y, m, null, false);
-      addface(geo.vertices, blackGeo, 2, 3, 7, 6, x, y, m, null, false);
-      let c = Math.floor(6 * Math.random());
-      addface(geo.vertices, colorGeo[c], 0, 1, 3, 2, x, y, m, null, true);
-      c = Math.floor(6 * Math.random());
-      addface(geo.vertices, colorGeo[c], 4, 6, 7, 5, x, y, m, null, true);
-      c = Math.floor(6 * Math.random());
-      addface(geo.vertices, colorGeo[c], 0, 2, 6, 4, x, y, m, null, true);
-      c = Math.floor(6 * Math.random());
-      addface(geo.vertices, colorGeo[c], 1, 5, 7, 3, x, y, m, null, true);
-      c = Math.floor(6 * Math.random());
-      addface(geo.vertices, colorGeo[c], 0, 4, 5, 1, x, y, m, null, true);
-      c = Math.floor(6 * Math.random());
-      addface(geo.vertices, colorGeo[c], 2, 3, 7, 6, x, y, m, null, true);
-    }
-  }
-  const gr = new Group();
-  gr.add(new Mesh(blackGeo, new MeshBasicMaterial({ color: black })));
-  for (let i = 0; i < 6; i++) {
-    gr.add(new Mesh(colorGeo[i], new MeshBasicMaterial({ color: colors[i] })));
-  }
-  return gr;
-}
-function getCube3() {
-  const geo = new Geometry();
-  geo.vertices.push(
-    new Vector3(-1, -1, -1),
-    new Vector3(-1, -1, 1),
-    new Vector3(-1, 1, -1),
-    new Vector3(-1, 1, 1),
-    new Vector3(1, -1, -1),
-    new Vector3(1, -1, 1),
-    new Vector3(1, 1, -1),
-    new Vector3(1, 1, 1),
-  );
-  const black = new Color(0);
-  const colors = [];
-  for (let i = 0; i < 6; i++) {
-    colors.push(new Color(Math.floor(0x1000000 * Math.random())));
-  }
-  const gr = new Group();
-  for (let x = 0; x < m; x++) {
-    for (let y = 0; y < m; y++) {
-      let ngeo = new Geometry();
-      addface2(geo.vertices, ngeo, 0, 1, 3, 2, x, y, m, black, colors);
-      gr.add(new Mesh(ngeo, new MeshBasicMaterial({ vertexColors: true })));
-      ngeo = new Geometry();
-      addface2(geo.vertices, ngeo, 4, 6, 7, 5, x, y, m, black, colors);
-      gr.add(new Mesh(ngeo, new MeshBasicMaterial({ vertexColors: true })));
-      ngeo = new Geometry();
-      addface2(geo.vertices, ngeo, 0, 2, 6, 4, x, y, m, black, colors);
-      gr.add(new Mesh(ngeo, new MeshBasicMaterial({ vertexColors: true })));
-      ngeo = new Geometry();
-      addface2(geo.vertices, ngeo, 1, 5, 7, 3, x, y, m, black, colors);
-      gr.add(new Mesh(ngeo, new MeshBasicMaterial({ vertexColors: true })));
-      ngeo = new Geometry();
-      addface2(geo.vertices, ngeo, 0, 4, 5, 1, x, y, m, black, colors);
-      gr.add(new Mesh(ngeo, new MeshBasicMaterial({ vertexColors: true })));
-      ngeo = new Geometry();
-      addface2(geo.vertices, ngeo, 2, 3, 7, 6, x, y, m, black, colors);
-      gr.add(new Mesh(ngeo, new MeshBasicMaterial({ vertexColors: true })));
-    }
-  }
-  return gr;
 }
 
 function initCube() {
-  if (cubeType * 1 === 1) {
-    cube = getCube();
-  } else if (cubeType * 1 === 2) {
-    cube = getCube2();
-  } else {
-    cube = getCube3();
+  const nfloats = 4 * 3 * 3 * m * m * 6;
+  pos = new Float32Array(nfloats);
+  color = new Float32Array(nfloats);
+  cube = getCube();
+  if (pos.length !== nfloats || color.length !== nfloats) {
+    console.log("Wrong lengths");
   }
   cube2 = cube.clone();
   const gr = new Group();

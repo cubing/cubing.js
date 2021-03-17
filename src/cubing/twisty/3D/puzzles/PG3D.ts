@@ -1,4 +1,6 @@
 import {
+  BufferAttribute,
+  BufferGeometry,
   Color,
   DoubleSide,
   Euler,
@@ -45,29 +47,74 @@ const polyMaterial = new MeshBasicMaterial({
   visible: false,
 });
 
+class Filler {
+  pos: number;
+  ipos: number;
+  vertices: Float32Array;
+  colors: Float32Array;
+  ind: Uint8Array;
+  constructor(public sz: number) {
+    this.vertices = new Float32Array(9*sz);
+    this.colors = new Float32Array(9*sz);
+    this.ind = new Uint8Array(sz);
+    this.pos = 0;
+    this.ipos = 0;
+  }
+
+  add(pt: number[], col: Color) {
+    this.vertices[this.pos] = pt[0];
+    this.vertices[this.pos+1] = pt[1];
+    this.vertices[this.pos+2] = pt[2];
+    this.colors[this.pos] = col.r;
+    this.colors[this.pos+1] = col.g;
+    this.colors[this.pos+2] = col.b;
+    this.pos += 3;
+  }
+
+  setind(i: number) {
+    this.ind[this.ipos++] = i;
+  }
+
+  setAttributes(geo: BufferGeometry) {
+    geo.setAttribute('position', new BufferAttribute(this.vertices, 3));
+    geo.setAttribute('color', new BufferAttribute(this.colors, 3));
+  }
+
+  makeGroups(geo: BufferGeometry) {
+    geo.clearGroups();
+    for (let i=0; i<this.ipos; ) {
+      const si=i++;
+      const iv=this.ind[si];
+      while (this.ind[i] === iv) {
+        i++;
+      }
+      geo.addGroup(3*si, 3*(i-si), iv);
+    }
+  }
+}
+
 function makePoly(
-  geo: Geometry,
+  filler: Filler,
   coords: number[][],
   color: Color,
   scale: number,
   ind: number,
-  faceArray: Face3[],
+  faceArray: number[],
 ): void {
-  const vertind: number[] = [];
-  for (const coord of coords) {
-    const v = new Vector3(coord[0], coord[1], coord[2]);
-    if (scale !== 1) {
-      v.multiplyScalar(scale);
+  let ncoords: number[][] = coords;
+  if (scale !== 1) {
+    ncoords = [];
+    for (const v of coords) {
+      const v2 = [v[0]*scale, v[1]*scale, v[2]*scale];
+      ncoords.push(v2);
     }
-    vertind.push(geo.vertices.length);
-    geo.vertices.push(v);
   }
-  for (let g = 1; g + 1 < vertind.length; g++) {
-    const face = new Face3(vertind[0], vertind[g], vertind[g + 1]);
-    face.materialIndex = ind;
-    face.color = color;
-    geo.faces.push(face);
-    faceArray.push(face);
+  for (let g = 1; g + 1 < ncoords.length; g++) {
+    faceArray.push(filler.ipos);
+    filler.add(ncoords[0], color);
+    filler.add(ncoords[g], color);
+    filler.add(ncoords[g+1], color);
+    filler.setind(ind);
   }
 }
 
@@ -75,10 +122,10 @@ class StickerDef {
   public origColor: Color;
   public origColorAppearance: Color;
   public faceColor: Color;
-  public faceArray: Face3[] = [];
+  public faceArray: number[] = [];
   public twistVal: number = -1;
   constructor(
-    fixedGeo: Geometry,
+    public filler: Filler,
     stickerDat: StickerDatSticker,
     hintStickers: boolean,
     options?: {
@@ -92,15 +139,15 @@ class StickerDef {
     }
     this.faceColor = new Color(stickerDat.color);
     const coords = stickerDat.coords as number[][];
-    makePoly(fixedGeo, coords, this.faceColor, 1, 0, this.faceArray);
+    makePoly(filler, coords, this.faceColor, 1, 0, this.faceArray);
     if (hintStickers) {
       let highArea = 0;
       let goodFace = null;
       for (const f of this.faceArray) {
         const t = new Triangle(
-          fixedGeo.vertices[f.a],
-          fixedGeo.vertices[f.b],
-          fixedGeo.vertices[f.c],
+          new Vector3(filler.vertices[9*f], filler.vertices[9*f+1], filler.vertices[9*f+2]),
+          new Vector3(filler.vertices[9*f+3], filler.vertices[9*f+4], filler.vertices[9*f+5]),
+          new Vector3(filler.vertices[9*f+6], filler.vertices[9*f+7], filler.vertices[9*f+8]),
         );
         const a = t.getArea();
         if (a > highArea) {
@@ -120,17 +167,17 @@ class StickerDef {
           coords[j][2] + norm.z,
         ]);
       }
-      makePoly(fixedGeo, hintCoords, this.faceColor, 1, 0, this.faceArray);
+      makePoly(filler, hintCoords, this.faceColor, 1, 0, this.faceArray);
     }
   }
 
   public addFoundation(
-    fixedGeo: Geometry,
+    filler: Filler,
     foundationDat: StickerDatSticker,
     black: Color,
   ) {
     makePoly(
-      fixedGeo,
+      filler,
       foundationDat.coords as number[][],
       black,
       0.999,
@@ -164,8 +211,16 @@ class StickerDef {
   }
 
   public setColor(c: Color): number {
+
     if (!this.faceColor.equals(c)) {
       this.faceColor.copy(c);
+      for (const f of this.faceArray) {
+        for (let i=0; i<9; i += 3) {
+          this.filler.colors[9*f+i] = c.r ;
+          this.filler.colors[9*f+i+1] = c.g ;
+          this.filler.colors[9*f+i+2] = c.b ;
+        }
+      }
       return 1;
     } else {
       return 0;
@@ -190,7 +245,6 @@ class HitPlaneDef {
       const face = new Face3(vertind[0], vertind[g], vertind[g + 1]);
       this.geo.faces.push(face);
     }
-    this.geo.computeFaceNormals();
     const obj = new Mesh(this.geo, polyMaterial);
     obj.userData.name = hitface.name;
     this.cubie.scale.setScalar(0.99);
@@ -254,7 +308,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private controlTargets: Object3D[] = [];
 
   protected movingObj: Object3D;
-  protected fixedGeo: Geometry;
+  protected filler: Filler;
+  protected foundationBound: number; // before this: colored; after: black
+  protected fixedGeo: BufferGeometry;
   protected lastPos: Transformation;
   protected lastMove: Transformation;
 
@@ -288,7 +344,20 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       polyMaterial,
       foundationMaterial,
     ];
-    const fixedGeo = new Geometry();
+    let triangleCount = 0;
+    let multiplier = 1;
+    if (hintStickers) {
+      multiplier++;
+    }
+    if (foundationMaterial) {
+      multiplier++;
+    }
+    for (let si = 0; si < stickers.length; si++) {
+      const sides = stickers[si].coords.length;
+      triangleCount += multiplier * (sides - 2);
+    }
+    console.log("Triangle count is " + triangleCount);
+    const filler = new Filler(triangleCount);
     const black = new Color(0);
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
@@ -312,14 +381,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         );
       }
       const stickerdef = new StickerDef(
-        fixedGeo,
+        filler,
         sticker,
         hintStickers,
         options,
       );
-
       this.stickers[orbit][ori][ord] = stickerdef;
     }
+    this.foundationBound = filler.ipos;
     if (showFoundation) {
       for (let si = 0; si < stickers.length; si++) {
         const sticker = stickers[si];
@@ -328,13 +397,16 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         const ord = sticker.ord as number;
         const ori = sticker.ori as number;
         this.stickers[orbit][ori][ord].addFoundation(
-          fixedGeo,
+          filler,
           foundation,
           black,
         );
       }
     }
-    fixedGeo.computeFaceNormals();
+    console.log("Filler at " + filler.pos + " " + filler.ipos)
+    const fixedGeo = new BufferGeometry();
+    filler.setAttributes(fixedGeo);
+    filler.makeGroups(fixedGeo);
     const obj = new Mesh(fixedGeo, materialArray1);
     obj.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
     this.add(obj);
@@ -344,6 +416,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     const hitfaces = this.pgdat.faces as any[];
     this.movingObj = obj2;
     this.fixedGeo = fixedGeo;
+    this.filler = filler;
     for (const hitface of hitfaces) {
       const facedef = new HitPlaneDef(hitface);
       facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
@@ -452,11 +525,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               if (tv !== pieces2[i].twistVal) {
                 if (tv) {
                   for (const f of pieces2[i].faceArray) {
-                    f.materialIndex |= 1;
+                    this.filler.ind[f] |= 1;
                   }
                 } else {
                   for (const f of pieces2[i].faceArray) {
-                    f.materialIndex &= ~1;
+                    this.filler.ind[f] &= ~1;
                   }
                 }
                 pieces2[i].twistVal = tv;
@@ -469,10 +542,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       }
     }
     if (vismods) {
-      this.fixedGeo.groupsNeedUpdate = true;
+      this.filler.makeGroups(this.fixedGeo);
     }
     if (colormods) {
-      this.fixedGeo.colorsNeedUpdate = true;
+      this.fixedGeo.setAttribute('color', new BufferAttribute(this.filler.colors, 3));
     }
     this.scheduleRenderCallback!();
   }
