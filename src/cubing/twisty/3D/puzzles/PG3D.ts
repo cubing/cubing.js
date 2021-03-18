@@ -555,7 +555,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.filler.makeGroups(this.fixedGeo);
     }
     if (colormods) {
-      this.fixedGeo.setAttribute('color', new BufferAttribute(this.filler.colors, 3));
+      // this is what we want to do:
+      // (this.fixedGeo.getAttribute("color") as BufferAttribute).updateRange = {offset: 0, count: this.foundationBound};
+      // this is what works:
+      (this.fixedGeo.getAttribute("color") as BufferAttribute).needsUpdate = true;
     }
     this.scheduleRenderCallback!();
   }
