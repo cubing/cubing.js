@@ -61,13 +61,13 @@ class Filler {
     this.ipos = 0;
   }
 
-  add(pt: number[], col: Color) {
+  add(pt: number[], c: number) {
     this.vertices[this.pos] = pt[0];
     this.vertices[this.pos+1] = pt[1];
     this.vertices[this.pos+2] = pt[2];
-    this.colors[this.pos] = Math.floor(0.49 + 255 * col.r);
-    this.colors[this.pos+1] = Math.floor(0.49 + 255 * col.g);
-    this.colors[this.pos+2] = Math.floor(0.49 + 255 * col.b);
+    this.colors[this.pos] = c >> 16;
+    this.colors[this.pos+1] = (c >> 8) & 255;
+    this.colors[this.pos+2] = c & 255;
     this.pos += 3;
   }
 
@@ -101,14 +101,13 @@ class Filler {
       geo.addGroup(3*si, 3*(i-si), iv);
       groupCount++;
     }
-    console.log("Group count is " + groupCount);
   }
 }
 
 function makePoly(
   filler: Filler,
   coords: number[][],
-  color: Color,
+  color: number,
   scale: number,
   ind: number,
   faceArray: number[],
@@ -131,9 +130,9 @@ function makePoly(
 }
 
 class StickerDef {
-  public origColor: Color;
-  public origColorAppearance: Color;
-  public faceColor: Color;
+  public origColor: number;
+  public origColorAppearance: number;
+  public faceColor: number;
   public faceArray: number[] = [];
   public twistVal: number = -1;
   constructor(
@@ -144,12 +143,13 @@ class StickerDef {
       appearance?: FaceletMeshAppearance;
     },
   ) {
-    this.origColor = new Color(stickerDat.color);
-    this.origColorAppearance = new Color(stickerDat.color);
+    const sdColor = new Color(stickerDat.color).getHex();
+    this.origColor = sdColor;
+    this.origColorAppearance = sdColor;
     if (options?.appearance) {
       this.setAppearance(options.appearance);
     }
-    this.faceColor = new Color(stickerDat.color);
+    this.faceColor = sdColor;
     const coords = stickerDat.coords as number[][];
     makePoly(filler, coords, this.faceColor, 1, 0, this.faceArray);
     if (hintStickers) {
@@ -186,7 +186,7 @@ class StickerDef {
   public addFoundation(
     filler: Filler,
     foundationDat: StickerDatSticker,
-    black: Color,
+    black: number,
   ) {
     makePoly(
       filler,
@@ -201,33 +201,32 @@ class StickerDef {
   public setAppearance(faceletMeshAppearance: FaceletMeshAppearance): void {
     switch (faceletMeshAppearance) {
       case "regular":
-        this.origColorAppearance.copy(this.origColor);
+        this.origColorAppearance = this.origColor;
         break;
       case "dim":
-        if (this.origColor.getHex() === 0xffffff) {
-          this.origColorAppearance.setHex(0xdddddd);
+        if (this.origColor === 0xffffff) {
+          this.origColorAppearance = 0xdddddd;
         } else {
-          this.origColorAppearance.copy(this.origColor);
-          this.origColorAppearance.multiplyScalar(0.5); // TODO: this is an approximation.
+          this.origColorAppearance = new Color(this.origColor).multiplyScalar(0.5).getHex();
         }
         break;
       case "oriented":
-        this.origColorAppearance.set("#ff00ff");
+        this.origColorAppearance = 0xff00ff;
         break;
       case "ignored":
-        this.origColorAppearance.set("#444444");
+        this.origColorAppearance = 0x444444;
         break;
       case "invisible":
         throw new Error("unimplemented");
     }
   }
 
-  public setColor(c: Color): number {
-    if (!this.faceColor.equals(c)) {
-      this.faceColor.copy(c);
-      const r = Math.floor(0.49 + 255 * c.r);
-      const g = Math.floor(0.49 + 255 * c.g);
-      const b = Math.floor(0.49 + 255 * c.b);
+  public setColor(c: number): number {
+    if (this.faceColor !== c) {
+      this.faceColor = c;
+      const r = c >> 16;
+      const g = (c >> 8) & 255;
+      const b = c & 255;
       for (const f of this.faceArray) {
         for (let i=0; i<9; i += 3) {
           this.filler.colors[9*f+i] = r;
@@ -369,7 +368,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     console.log("Triangle count is " + triangleCount);
     const filler = new Filler(triangleCount);
-    const black = new Color(0);
+    const black = 0;
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
       const orbit = sticker.orbit as string;
