@@ -943,7 +943,7 @@ export class PuzzleGeometry {
       tar[j] = tar[i];
       rval = (rval * 1657 + 101) % 65536;
     }
-    faces = ft.collect([]);
+    faces = ft.collect([], true);
     this.faces = faces;
     if (this.verbose) {
       console.log("# Faces is now " + faces.length);

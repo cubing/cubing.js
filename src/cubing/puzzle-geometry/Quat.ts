@@ -90,12 +90,15 @@ export class FaceTree {
     return this;
   }
 
-  public collect(arr: Quat[][]): Quat[][] {
+  public collect(arr: Quat[][], leftfirst: boolean): Quat[][] {
     if (this.left === undefined) {
       arr.push(this.face);
+    } else if (leftfirst) {
+      this.left?.collect(arr, false);
+      this.right?.collect(arr, true);
     } else {
-      this.left?.collect(arr);
-      this.right?.collect(arr);
+      this.right?.collect(arr, false);
+      this.left?.collect(arr, true);
     }
     return arr;
   }
