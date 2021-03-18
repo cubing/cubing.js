@@ -526,6 +526,9 @@ export class TwistyPlayer extends ManagedCustomElement {
   private setTwisty3D(twisty3D: Twisty3DPuzzle): void {
     if (this.twisty3D) {
       this.scene!.removeTwisty3DPuzzle(this.twisty3D);
+      if (this.twisty3D instanceof PG3D) {
+        this.twisty3D.dispose();
+      }
       this.twisty3D = null;
     }
     this.twisty3D = twisty3D;

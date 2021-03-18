@@ -355,13 +355,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (hintStickers) {
       multiplier++;
     }
-    if (foundationMaterial) {
+    if (showFoundation) {
       multiplier++;
     }
     for (let si = 0; si < stickers.length; si++) {
       const sides = stickers[si].coords.length;
       triangleCount += multiplier * (sides - 2);
     }
+    console.log("Triangle count is " + triangleCount);
     const filler = new Filler(triangleCount);
     const black = new Color(0);
     for (let si = 0; si < stickers.length; si++) {
@@ -428,6 +429,12 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.controlTargets.push(facedef.cubie.children[0]);
     }
     cursor!.addPositionListener(this);
+  }
+
+  public dispose(): void {
+    if (this.fixedGeo) {
+      this.fixedGeo.dispose();
+    }
   }
 
   public experimentalGetStickerTargets(): Object3D[] {
