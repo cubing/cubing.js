@@ -49,12 +49,12 @@ class Filler {
   pos: number;
   ipos: number;
   vertices: Float32Array;
-  colors: Float32Array;
+  colors: Uint8Array;
   ind: Uint8Array;
   constructor(public sz: number, public colored: boolean = true) {
     this.vertices = new Float32Array(9*sz);
     if (colored) {
-      this.colors = new Float32Array(9*sz);
+      this.colors = new Uint8Array(9*sz);
       this.ind = new Uint8Array(sz);
     }
     this.pos = 0;
@@ -65,9 +65,9 @@ class Filler {
     this.vertices[this.pos] = pt[0];
     this.vertices[this.pos+1] = pt[1];
     this.vertices[this.pos+2] = pt[2];
-    this.colors[this.pos] = col.r;
-    this.colors[this.pos+1] = col.g;
-    this.colors[this.pos+2] = col.b;
+    this.colors[this.pos] = Math.floor(0.49 + 255 * col.r);
+    this.colors[this.pos+1] = Math.floor(0.49 + 255 * col.g);
+    this.colors[this.pos+2] = Math.floor(0.49 + 255 * col.b);
     this.pos += 3;
   }
 
@@ -85,7 +85,7 @@ class Filler {
   setAttributes(geo: BufferGeometry) {
     geo.setAttribute('position', new BufferAttribute(this.vertices, 3));
     if (this.colored) {
-      geo.setAttribute('color', new BufferAttribute(this.colors, 3));
+      geo.setAttribute('color', new BufferAttribute(this.colors, 3, true));
     }
   }
 
@@ -220,14 +220,13 @@ class StickerDef {
   }
 
   public setColor(c: Color): number {
-
     if (!this.faceColor.equals(c)) {
       this.faceColor.copy(c);
       for (const f of this.faceArray) {
         for (let i=0; i<9; i += 3) {
-          this.filler.colors[9*f+i] = c.r ;
-          this.filler.colors[9*f+i+1] = c.g ;
-          this.filler.colors[9*f+i+2] = c.b ;
+          this.filler.colors[9*f+i] = Math.floor(0.49 + 255 * c.r) ;
+          this.filler.colors[9*f+i+1] = Math.floor(0.49 + 255 * c.g) ;
+          this.filler.colors[9*f+i+2] = Math.floor(0.49 + 255 * c.b) ;
         }
       }
       return 1;
