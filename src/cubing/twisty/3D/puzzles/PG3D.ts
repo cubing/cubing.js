@@ -222,11 +222,14 @@ class StickerDef {
   public setColor(c: Color): number {
     if (!this.faceColor.equals(c)) {
       this.faceColor.copy(c);
+      const r = Math.floor(0.49 + 255 * c.r);
+      const g = Math.floor(0.49 + 255 * c.g);
+      const b = Math.floor(0.49 + 255 * c.b);
       for (const f of this.faceArray) {
         for (let i=0; i<9; i += 3) {
-          this.filler.colors[9*f+i] = Math.floor(0.49 + 255 * c.r) ;
-          this.filler.colors[9*f+i+1] = Math.floor(0.49 + 255 * c.g) ;
-          this.filler.colors[9*f+i+2] = Math.floor(0.49 + 255 * c.b) ;
+          this.filler.colors[9*f+i] = r;
+          this.filler.colors[9*f+i+1] = g;
+          this.filler.colors[9*f+i+2] = b;
         }
       }
       return 1;
@@ -481,20 +484,27 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         const pieces = this.stickers[orbit];
         const pos2 = pos[orbit];
         const orin = pieces.length;
-        for (let ori = 0; ori < orin; ori++) {
-          const pieces2 = pieces[ori];
+        if (orin === 1) {
+          const pieces2 = pieces[0];
           for (let i = 0; i < pieces2.length; i++) {
-            const nori = (ori + orin - pos2.orientation[i]) % orin;
             const ni = pos2.permutation[i];
-            colormods += pieces2[i].setColor(
-              pieces[nori][ni].origColorAppearance,
+            colormods += pieces2[i].setColor(pieces2[ni].origColorAppearance);
+          }
+        } else {
+          for (let ori = 0; ori < orin; ori++) {
+            const pieces2 = pieces[ori];
+            for (let i = 0; i < pieces2.length; i++) {
+              const nori = (ori + orin - pos2.orientation[i]) % orin;
+              const ni = pos2.permutation[i];
+              colormods += pieces2[i].setColor(
+                pieces[nori][ni].origColorAppearance,
             );
+            }
           }
         }
       }
       this.lastPos = pos;
     }
-    // FIXME tgr const kp = new KPuzzle(this.definition);
     let vismods = 0;
     for (const moveProgress of p.movesInProgress) {
       const externalMove = moveProgress.move;
