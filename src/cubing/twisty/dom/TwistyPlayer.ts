@@ -11,7 +11,7 @@ import { PG3D, PG3DOptions } from "../3D/puzzles/PG3D";
 import { appearances4x4x4, appearancesFTO } from "../3D/puzzles/stickerings";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
-import { AlgCursor } from "../animation/cursor/AlgCursor";
+import { AlgCursor, IndexerConstructor } from "../animation/cursor/AlgCursor";
 import { SimpleAlgIndexer } from "../animation/indexer/SimpleAlgIndexer";
 import { SimultaneousMoveIndexer } from "../animation/indexer/simultaneous-moves/SimultaneousMoveIndexer";
 import { TreeAlgIndexer } from "../animation/indexer/tree/TreeAlgIndexer";
@@ -67,6 +67,12 @@ interface PendingPuzzleUpdate {
   cancelled: boolean;
 }
 
+const indexerMap = {
+  simple: SimpleAlgIndexer,
+  tree: TreeAlgIndexer,
+  simultaneous: SimultaneousMoveIndexer,
+};
+
 // <twisty-player>
 export class TwistyPlayer extends ManagedCustomElement {
   #config: TwistyPlayerConfig;
@@ -92,9 +98,11 @@ export class TwistyPlayer extends ManagedCustomElement {
     _move: Move,
   ): number => 0;
 
-  #controlsClassListManager: ClassListManager<
-    ControlsLocation
-  > = new ClassListManager(this, "controls-", ["none", "bottom-row"]);
+  #controlsClassListManager: ClassListManager<ControlsLocation> = new ClassListManager(
+    this,
+    "controls-",
+    ["none", "bottom-row"],
+  );
 
   // TODO: support config from DOM.
   constructor(
@@ -128,7 +136,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       newAlg = new Alg((newAlg as unknown) as string);
     }
     this.#config.attributes["alg"].setValue(newAlg);
-    this.cursor?.setAlg(newAlg); // TODO: can we ensure the cursor already exists?
+    this.cursor?.setAlg(newAlg, this.indexerConstructor()); // TODO: can we ensure the cursor already exists?
     this.setCursorStartState();
   }
 
@@ -382,13 +390,11 @@ export class TwistyPlayer extends ManagedCustomElement {
       return;
     }
     this.#cursorIndexerName = cursorName;
-    this.cursor?.experimentalSetIndexer(
-      {
-        simple: SimpleAlgIndexer,
-        tree: TreeAlgIndexer,
-        simultaneous: SimultaneousMoveIndexer,
-      }[cursorName],
-    );
+    this.cursor?.experimentalSetIndexer(this.indexerConstructor());
+  }
+
+  private indexerConstructor(): IndexerConstructor {
+    return indexerMap[this.#cursorIndexerName];
   }
 
   // TODO: It seems this called after the `attributeChangedCallback`s for initial values. Can we rely on this?
@@ -539,10 +545,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     const oldCursor = this.cursor;
     this.cursor = cursor;
     try {
-      this.cursor.setAlg(this.alg);
+      this.cursor.setAlg(this.alg, this.indexerConstructor());
       this.setCursorStartState();
     } catch (e) {
-      this.cursor.setAlg(new Alg());
+      this.cursor.setAlg(new Alg(), this.indexerConstructor());
       this.cursor.setStartState(this.cursor.algToState(new Alg()));
       this.experimentalInvalidInitialAlgCallback(this.alg);
     }
@@ -594,6 +600,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         def,
         this.alg,
         this.cursorStartAlg(),
+        this.indexerConstructor(),
       ); // TODO: validate more directly if the alg is okay for the puzzle.
       this.setCursor(cursor);
     } catch (e) {
@@ -602,7 +609,13 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.experimentalInvalidInitialAlgCallback(this.alg);
       }
       console.log("fallback;;");
-      cursor = new AlgCursor(this.timeline, def, new Alg(), new Alg());
+      cursor = new AlgCursor(
+        this.timeline,
+        def,
+        new Alg(),
+        new Alg(),
+        this.indexerConstructor(),
+      );
       console.log("fallbacko;;");
       this.setCursor(cursor);
     }

@@ -8,7 +8,7 @@ import mkbhdHintSpriteURL from "url:./mkbhd-sprite-red-hint.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import mkbhdSpriteURL from "url:./mkbhd-sprite-red.png";
-import { parseAlg } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
 import {
   connect,
   debugKeyboardConnect,
@@ -36,7 +36,9 @@ let haveHadMoveInput = false;
 const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
 twistyPlayer.experimentalSetCursorIndexer("simultaneous");
 twistyPlayer.timeline.jumpToStart();
-twistyPlayer.timeline.play(); // TODO: add autoplay
+setTimeout(() => {
+  twistyPlayer.timeline.play(); // TODO: add autoplay
+}, 1000);
 twistyPlayer.timeline.addActionListener({
   onTimelineAction: (actionEvent: TimelineActionEvent) => {
     if (haveHadMoveInput) {
@@ -54,7 +56,7 @@ twistyPlayer.timeline.addActionListener({
   kb.addMoveListener((e: MoveEvent) => {
     if (!haveHadMoveInput) {
       twistyPlayer.timeline.pause();
-      twistyPlayer.alg = parseAlg("");
+      twistyPlayer.alg = new Alg();
       haveHadMoveInput = true;
     }
     twistyPlayer.experimentalAddMove(e.latestMove);
@@ -95,7 +97,7 @@ async function connectBluetooth(): Promise<void> {
   bluetoothPuzzle.addMoveListener((e: MoveEvent) => {
     if (!haveHadMoveInput) {
       twistyPlayer.timeline.pause();
-      twistyPlayer.alg = parseAlg("");
+      twistyPlayer.alg = new Alg("");
       haveHadMoveInput = true;
     }
     twistyPlayer.experimentalAddMove(e.latestMove);

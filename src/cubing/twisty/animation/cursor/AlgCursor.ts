@@ -35,9 +35,10 @@ export interface TimeRange {
   end: MillisecondTimestamp;
 }
 
-type IndexerConstructor = new (puzzle: KPuzzleWrapper, alg: Alg) => AlgIndexer<
-  KPuzzleWrapper
->;
+export type IndexerConstructor = new (
+  puzzle: KPuzzleWrapper,
+  alg: Alg,
+) => AlgIndexer<KPuzzleWrapper>;
 
 export class AlgCursor
   implements TimelineTimestampListener, PositionDispatcher {
@@ -51,8 +52,12 @@ export class AlgCursor
     private def: KPuzzleDefinition,
     private alg: Alg,
     startStateAlg?: Alg, // TODO: accept actual start state
+    indexerConstructor?: IndexerConstructor,
   ) {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
+    if (indexerConstructor) {
+      this.indexerConstructor = this.indexerConstructor;
+    }
     this.instantiateIndexer(alg);
     this.startState = startStateAlg
       ? this.algToState(startStateAlg)
@@ -163,11 +168,15 @@ export class AlgCursor
     // nothing to do
   }
 
-  setAlg(alg: Alg): void {
-    if (alg.isIdentical(this.alg)) {
+  setAlg(alg: Alg, indexerConstructor: IndexerConstructor): void {
+    if (
+      alg.isIdentical(this.alg) &&
+      this.indexerConstructor === indexerConstructor
+    ) {
       // TODO: this is a hacky optimization.
       return;
     }
+    this.indexerConstructor = indexerConstructor;
     this.alg = alg;
     this.instantiateIndexer(alg);
     this.timeline.onCursorChange(this);
