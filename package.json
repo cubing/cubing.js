@@ -28,7 +28,7 @@
     "babel-jest": "^24.9.0",
     "babylonjs": "^4.2.0",
     "baretest": "^2.0.0",
-    "esbuild": "^0.8.16",
+    "esbuild": "^0.9.3",
     "eslint": "^7.21.0",
     "eslint-config-mdcs": "^5.0.0",
     "eslint-config-prettier": "^8.1.0",
