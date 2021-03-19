@@ -7,6 +7,7 @@ import { cube6x6x6 } from "./implementations/6x6x6";
 import { cube7x7x7 } from "./implementations/7x7x7";
 import { clock } from "./implementations/clock";
 import { fto } from "./implementations/fto";
+import { gigaminx } from "./implementations/gigaminx";
 import { megaminx } from "./implementations/megaminx";
 import { pyraminx } from "./implementations/pyraminx";
 import { skewb } from "./implementations/skewb";
@@ -34,6 +35,7 @@ export const puzzles: Record<string, PuzzleManager> = {
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
   fto,
+  gigaminx,
 };
 
 export { cube2x2x2, cube3x3x3 };

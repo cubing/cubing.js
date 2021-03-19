@@ -114,6 +114,7 @@ export const puzzleIDs = {
   "clock": true,
   "skewb": true,
   "fto": true,
+  "gigaminx": true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 

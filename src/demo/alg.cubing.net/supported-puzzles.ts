@@ -66,6 +66,7 @@ for (const key of [
   "square1",
   "clock",
   "megaminx",
+  "gigaminx",
   "skewb",
   "fto",
 ]) {
@@ -81,6 +82,7 @@ for (const key of [
       "megaminx",
       "skewb",
       "fto",
+      "gigaminx",
     ].includes(key)
       ? "3D"
       : "2D",
