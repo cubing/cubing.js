@@ -3,6 +3,7 @@ import {
   BoxGeometry,
   BufferAttribute,
   BufferGeometry,
+  CircleGeometry,
   DoubleSide,
   Euler,
   Group,
@@ -191,6 +192,7 @@ interface Cube3DOptions {
   hintFacelets?: HintFaceletStyle;
   showFoundation?: boolean; // TODO: better name
   experimentalStickering?: ExperimentalStickering;
+  roundy: boolean;
 }
 
 const cube3DOptionsDefaults: Cube3DOptions = {
@@ -198,6 +200,7 @@ const cube3DOptionsDefaults: Cube3DOptions = {
   hintFacelets: "floating",
   showFoundation: true,
   experimentalStickering: "full",
+  roundy: false,
 };
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
@@ -439,17 +442,77 @@ function sharedCubieFoundationGeometry(): BoxGeometry {
   );
 }
 
-function newStickerGeometry(): BufferGeometry {
+function newStickerGeometry(
+  roundy: boolean = false,
+  black: boolean = false,
+): BufferGeometry {
+  if (roundy) {
+    const geo = new CircleGeometry(black ? 0.3 : 0.25, 32);
+    geo.translate(0, 0, (black ? 1 : 2) * 0.001);
+    return geo;
+  }
+
   const r = new BufferGeometry();
   const half = 0.5 * cubieDimensions.stickerWidth;
-  r.setAttribute('position', new BufferAttribute(new Float32Array([
-    half, half, 0, -half, half, 0, half, -half, 0, -half, half, 0, -half, -half, 0, half, -half, 0]), 3));
-  r.setAttribute('uv', new BufferAttribute(new Float32Array([
-    1, 1, 0, 1, 1, 0,
-    0, 1, 0, 0, 1, 0,
-    0, 1, 0, 0, 1, 1,
-    0, 0, 1, 0, 1, 1]), 2));
-//  r.setAttribute('normals', new BufferAttribute(new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), 3));
+  r.setAttribute(
+    "position",
+    new BufferAttribute(
+      new Float32Array([
+        half,
+        half,
+        0,
+        -half,
+        half,
+        0,
+        half,
+        -half,
+        0,
+        -half,
+        half,
+        0,
+        -half,
+        -half,
+        0,
+        half,
+        -half,
+        0,
+      ]),
+      3,
+    ),
+  );
+  r.setAttribute(
+    "uv",
+    new BufferAttribute(
+      new Float32Array([
+        1,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+      ]),
+      2,
+    ),
+  );
+  //  r.setAttribute('normals', new BufferAttribute(new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), 3));
   return r;
 }
 
@@ -684,6 +747,16 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       this.experimentalFoundationMeshes.push(foundation);
     }
     for (let i = 0; i < piece.stickerFaces.length; i++) {
+      if (this.options.roundy) {
+        cubie.add(
+          this.createSticker(
+            axesInfo[cubieStickerOrder[i]],
+            axesInfo[piece.stickerFaces[i]],
+            false,
+            true,
+          ),
+        );
+      }
       const sticker = this.createSticker(
         axesInfo[cubieStickerOrder[i]],
         axesInfo[piece.stickerFaces[i]],
@@ -752,8 +825,26 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                 [v1, v2, v3, v4] = [v4, v1, v2, v3];
                 break;
             }
-            (mesh.geometry as BufferGeometry).setAttribute("uv", new BufferAttribute(new Float32Array(
-              [ v3.x, v3.y, v2.x, v2.y, v4.x, v4.y, v2.x, v2.y, v1.x, v1.y, v4.x, v4.y]), 2));
+            (mesh.geometry as BufferGeometry).setAttribute(
+              "uv",
+              new BufferAttribute(
+                new Float32Array([
+                  v3.x,
+                  v3.y,
+                  v2.x,
+                  v2.y,
+                  v4.x,
+                  v4.y,
+                  v2.x,
+                  v2.y,
+                  v1.x,
+                  v1.y,
+                  v4.x,
+                  v4.y,
+                ]),
+                2,
+              ),
+            );
             cubie.add(mesh);
           };
           // const delay: number = ({
@@ -802,14 +893,21 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     posAxisInfo: AxisInfo,
     materialAxisInfo: AxisInfo,
     isHint: boolean,
+    black: boolean = false,
   ): Mesh {
     const geo =
       this.options.experimentalStickering === "picture"
         ? newStickerGeometry()
+        : this.options.roundy
+        ? newStickerGeometry(true, black)
         : sharedStickerGeometry();
     const stickerMesh = new Mesh(
       geo,
-      isHint
+      black
+        ? new MeshBasicMaterial({
+            color: 0x000000,
+          })
+        : isHint
         ? materialAxisInfo.hintStickerMaterial.regular
         : materialAxisInfo.stickerMaterial.regular,
     );
