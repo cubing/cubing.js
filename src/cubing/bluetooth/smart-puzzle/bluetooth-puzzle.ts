@@ -1,6 +1,6 @@
-import { Move } from "../alg";
-import { Transformation } from "../kpuzzle";
-import { BasicRotationTransformer, StreamTransformer } from "./transformer";
+import { Move } from "../../alg";
+import { Transformation } from "../../kpuzzle";
+import { BasicRotationTransformer, StreamTransformer } from "../transformer";
 
 /******** BluetoothPuzzle ********/
 

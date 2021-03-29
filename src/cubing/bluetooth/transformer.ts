@@ -1,5 +1,5 @@
 import { Quaternion, Vector3 } from "three";
-import { MoveEvent, OrientationEvent } from "./bluetooth-puzzle";
+import { MoveEvent, OrientationEvent } from "./smart-puzzle/bluetooth-puzzle";
 
 // TODO: Combine orientation and moves into a single event to handle quaternion remapping.
 export interface StreamTransformer {

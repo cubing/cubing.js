@@ -1,7 +1,7 @@
 import { keyToMove } from "../alg";
 import { KPuzzle } from "../kpuzzle";
 import { puzzles } from "../puzzles";
-import { BluetoothPuzzle, PuzzleState } from "./bluetooth-puzzle";
+import { BluetoothPuzzle, PuzzleState } from "./smart-puzzle/bluetooth-puzzle";
 
 export class KeyboardPuzzle extends BluetoothPuzzle {
   public puzzle: Promise<KPuzzle> = (async () =>

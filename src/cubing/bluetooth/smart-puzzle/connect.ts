@@ -1,5 +1,5 @@
 import { BluetoothPuzzle } from "./bluetooth-puzzle";
-import { debugLog } from "./debug";
+import { debugLog } from "../debug";
 import { ganConfig, GanCube } from "./gan";
 import { giiKERConfig, GiiKERCube } from "./giiker";
 import { GoCube, goCubeConfig } from "./gocube";

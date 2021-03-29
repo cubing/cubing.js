@@ -1,15 +1,15 @@
 /* tslint:disable no-bitwise */
 
 import { Quaternion } from "three";
-import { Move } from "../alg";
-import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
-import { puzzles } from "../puzzles";
+import { Move } from "../../alg";
+import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
+import { puzzles } from "../../puzzles";
 import {
   BluetoothConfig,
   BluetoothPuzzle,
   PuzzleState,
 } from "./bluetooth-puzzle";
-import { debugLog } from "./debug";
+import { debugLog } from "../debug";
 import { importKey, unsafeDecryptBlock } from "./unsafe-raw-aes";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
@@ -342,17 +342,11 @@ export class GanCube extends BluetoothPuzzle {
   public INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
   private intervalHandle: number | null = null;
   private kpuzzle: KPuzzle;
-  private cachedFaceletStatus1Characteristic: Promise<
-    BluetoothRemoteGATTCharacteristic
-  >;
+  private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
 
-  private cachedFaceletStatus2Characteristic: Promise<
-    BluetoothRemoteGATTCharacteristic
-  >;
+  private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
 
-  private cachedActualAngleAndBatteryCharacteristic: Promise<
-    BluetoothRemoteGATTCharacteristic
-  >;
+  private cachedActualAngleAndBatteryCharacteristic: Promise<BluetoothRemoteGATTCharacteristic>;
 
   private constructor(
     def: KPuzzleDefinition,
@@ -474,27 +468,21 @@ export class GanCube extends BluetoothPuzzle {
     return state;
   }
 
-  public async faceletStatus1Characteristic(): Promise<
-    BluetoothRemoteGATTCharacteristic
-  > {
+  public async faceletStatus1Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
     this.cachedFaceletStatus1Characteristic =
       this.cachedFaceletStatus1Characteristic ||
       this.service.getCharacteristic(UUIDs.faceletStatus1Characteristic);
     return this.cachedFaceletStatus1Characteristic;
   }
 
-  public async faceletStatus2Characteristic(): Promise<
-    BluetoothRemoteGATTCharacteristic
-  > {
+  public async faceletStatus2Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
     this.cachedFaceletStatus2Characteristic =
       this.cachedFaceletStatus2Characteristic ||
       this.service.getCharacteristic(UUIDs.faceletStatus2Characteristic);
     return this.cachedFaceletStatus2Characteristic;
   }
 
-  public async actualAngleAndBatteryCharacteristic(): Promise<
-    BluetoothRemoteGATTCharacteristic
-  > {
+  public async actualAngleAndBatteryCharacteristic(): Promise<BluetoothRemoteGATTCharacteristic> {
     this.cachedActualAngleAndBatteryCharacteristic =
       this.cachedActualAngleAndBatteryCharacteristic ||
       this.service.getCharacteristic(UUIDs.actualAngleAndBatteryCharacteristic);

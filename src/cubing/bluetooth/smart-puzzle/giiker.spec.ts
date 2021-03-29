@@ -1,4 +1,4 @@
-import { Alg } from "../alg";
+import { Alg } from "../../alg";
 import { giikerMoveToAlgMoveForTesting } from "./giiker";
 import "../alg/test/alg-comparison";
 

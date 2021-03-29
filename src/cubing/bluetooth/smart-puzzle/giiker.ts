@@ -1,13 +1,13 @@
 /* tslint:disable no-bitwise */
 
-import { Move } from "../alg";
-import { Transformation } from "../kpuzzle";
+import { Move } from "../../alg";
+import { Transformation } from "../../kpuzzle";
 import {
   BluetoothConfig,
   BluetoothPuzzle,
   PuzzleState,
 } from "./bluetooth-puzzle";
-import { debugLog } from "./debug";
+import { debugLog } from "../debug";
 
 const MESSAGE_LENGTH = 20;
 
