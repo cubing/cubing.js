@@ -1,5 +1,4 @@
-import { MoveEvent } from "../bluetooth";
-import { OrientationEvent } from "../bluetooth/bluetooth-puzzle";
+import { MoveEvent, OrientationEvent } from "../bluetooth";
 export interface ProxyMoveEvent {
   event: "move";
   data: MoveEvent;

@@ -1,6 +1,6 @@
 import { Alg } from "../../alg";
 import { giikerMoveToAlgMoveForTesting } from "./giiker";
-import "../alg/test/alg-comparison";
+import "../../alg/test/alg-comparison";
 
 describe("GiiKerCube", () => {
   // it("should be possible to construct", () => {

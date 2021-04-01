@@ -1,5 +1,4 @@
-import { MoveEvent } from "../bluetooth";
-import { OrientationEvent } from "../bluetooth/bluetooth-puzzle";
+import { MoveEvent, OrientationEvent } from "../bluetooth";
 import { ProxyEvent } from "./proxy-event";
 
 export class WebSocketProxySender {

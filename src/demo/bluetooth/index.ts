@@ -1,8 +1,8 @@
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 
-import { Alg } from "../../cubing/alg";
-import { OrientationEvent } from "../../cubing/bluetooth/bluetooth-puzzle";
+import { Alg } from "../../cubing/alg/index";
+import { OrientationEvent } from "../../cubing/bluetooth/index";
 import {
   BluetoothPuzzle,
   connect,
