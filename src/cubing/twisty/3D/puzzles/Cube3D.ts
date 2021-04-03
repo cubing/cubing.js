@@ -153,21 +153,27 @@ const face: { [s: string]: number } = {
 const familyToAxis: { [s: string]: number } = {
   U: face.U,
   u: face.U,
+  Uw: face.U,
   y: face.U,
   L: face.L,
   l: face.L,
+  Lw: face.L,
   M: face.L,
   F: face.F,
   f: face.F,
+  Fw: face.F,
   S: face.F,
   z: face.F,
   R: face.R,
   r: face.R,
+  Rw: face.R,
   x: face.R,
   B: face.B,
   b: face.B,
+  Bw: face.B,
   D: face.D,
   d: face.D,
+  Dw: face.D,
   E: face.D,
 };
 
@@ -442,14 +448,65 @@ function sharedCubieFoundationGeometry(): BoxGeometry {
 function newStickerGeometry(): BufferGeometry {
   const r = new BufferGeometry();
   const half = 0.5 * cubieDimensions.stickerWidth;
-  r.setAttribute('position', new BufferAttribute(new Float32Array([
-    half, half, 0, -half, half, 0, half, -half, 0, -half, half, 0, -half, -half, 0, half, -half, 0]), 3));
-  r.setAttribute('uv', new BufferAttribute(new Float32Array([
-    1, 1, 0, 1, 1, 0,
-    0, 1, 0, 0, 1, 0,
-    0, 1, 0, 0, 1, 1,
-    0, 0, 1, 0, 1, 1]), 2));
-//  r.setAttribute('normals', new BufferAttribute(new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), 3));
+  r.setAttribute(
+    "position",
+    new BufferAttribute(
+      new Float32Array([
+        half,
+        half,
+        0,
+        -half,
+        half,
+        0,
+        half,
+        -half,
+        0,
+        -half,
+        half,
+        0,
+        -half,
+        -half,
+        0,
+        half,
+        -half,
+        0,
+      ]),
+      3,
+    ),
+  );
+  r.setAttribute(
+    "uv",
+    new BufferAttribute(
+      new Float32Array([
+        1,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+      ]),
+      2,
+    ),
+  );
+  //  r.setAttribute('normals', new BufferAttribute(new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), 3));
   return r;
 }
 
@@ -752,8 +809,26 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                 [v1, v2, v3, v4] = [v4, v1, v2, v3];
                 break;
             }
-            (mesh.geometry as BufferGeometry).setAttribute("uv", new BufferAttribute(new Float32Array(
-              [ v3.x, v3.y, v2.x, v2.y, v4.x, v4.y, v2.x, v2.y, v1.x, v1.y, v4.x, v4.y]), 2));
+            (mesh.geometry as BufferGeometry).setAttribute(
+              "uv",
+              new BufferAttribute(
+                new Float32Array([
+                  v3.x,
+                  v3.y,
+                  v2.x,
+                  v2.y,
+                  v4.x,
+                  v4.y,
+                  v2.x,
+                  v2.y,
+                  v1.x,
+                  v1.y,
+                  v4.x,
+                  v4.y,
+                ]),
+                2,
+              ),
+            );
             cubie.add(mesh);
           };
           // const delay: number = ({

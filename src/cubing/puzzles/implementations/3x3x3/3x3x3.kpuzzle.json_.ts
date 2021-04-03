@@ -279,3 +279,10 @@ export const cube3x3x3KPuzzle: KPuzzleDefinition = {
     },
   },
 };
+
+cube3x3x3KPuzzle.moves["Uw"] = cube3x3x3KPuzzle.moves["u"];
+cube3x3x3KPuzzle.moves["Lw"] = cube3x3x3KPuzzle.moves["l"];
+cube3x3x3KPuzzle.moves["Fw"] = cube3x3x3KPuzzle.moves["f"];
+cube3x3x3KPuzzle.moves["Rw"] = cube3x3x3KPuzzle.moves["r"];
+cube3x3x3KPuzzle.moves["Bw"] = cube3x3x3KPuzzle.moves["b"];
+cube3x3x3KPuzzle.moves["Dw"] = cube3x3x3KPuzzle.moves["d"];
