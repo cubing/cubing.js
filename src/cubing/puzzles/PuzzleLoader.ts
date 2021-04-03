@@ -1,7 +1,7 @@
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { KPuzzleDefinition } from "../kpuzzle";
 
-export interface PuzzleManager {
+export interface PuzzleLoader {
   id: string;
   // shortname?: string;
   fullName: string;

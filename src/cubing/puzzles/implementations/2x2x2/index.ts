@@ -1,7 +1,7 @@
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
-import { PuzzleManager } from "../../PuzzleManager";
+import { PuzzleLoader } from "../../PuzzleLoader";
 
-export const cube2x2x2: PuzzleManager = {
+export const cube2x2x2: PuzzleLoader = {
   id: "2x2x2",
   fullName: "2×2×2 Cube",
   def: async () => {

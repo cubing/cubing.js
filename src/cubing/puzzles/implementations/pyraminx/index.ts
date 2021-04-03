@@ -1,6 +1,6 @@
-import { PuzzleManager } from "../../PuzzleManager";
+import { PuzzleLoader } from "../../PuzzleLoader";
 
-export const pyraminx: PuzzleManager = {
+export const pyraminx: PuzzleLoader = {
   id: "pyraminx",
   fullName: "Pyraminx",
   inventedBy: ["Uwe Meffert"],

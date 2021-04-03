@@ -1,6 +1,6 @@
 import type { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
-import { PuzzleManager } from "../PuzzleManager";
+import { PuzzleLoader } from "../PuzzleLoader";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
@@ -33,8 +33,8 @@ export function genericPGPuzzle(
     inventedBy?: string[];
     inventionYear?: number;
   },
-): PuzzleManager {
-  const puzzleManager: PuzzleManager = {
+): PuzzleLoader {
+  const puzzleLoader: PuzzleLoader = {
     id: id,
     fullName: fullName,
     def: async () => {
@@ -49,10 +49,10 @@ export function genericPGPuzzle(
     },
   };
   if (info?.inventedBy) {
-    puzzleManager.inventedBy = info.inventedBy;
+    puzzleLoader.inventedBy = info.inventedBy;
   }
   if (info?.inventionYear) {
-    puzzleManager.inventionYear = info.inventionYear;
+    puzzleLoader.inventionYear = info.inventionYear;
   }
-  return puzzleManager;
+  return puzzleLoader;
 }

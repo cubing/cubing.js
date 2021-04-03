@@ -1,6 +1,6 @@
-import { PuzzleManager } from "../../PuzzleManager";
+import { PuzzleLoader } from "../../PuzzleLoader";
 
-export const square1: PuzzleManager = {
+export const square1: PuzzleLoader = {
   id: "square1",
   fullName: "Square-1",
   inventedBy: ["Karel Hršel", "Vojtech Kopský"],

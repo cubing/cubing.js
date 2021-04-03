@@ -4,9 +4,9 @@ import { cube3x3x3 } from "./implementations/3x3x3";
 import { clock } from "./implementations/clock";
 import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
-import { PuzzleManager } from "./PuzzleManager";
+import { PuzzleLoader } from "./PuzzleLoader";
 
-export const puzzles: Record<string, PuzzleManager> = {
+export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,

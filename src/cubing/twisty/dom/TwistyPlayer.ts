@@ -4,7 +4,7 @@ import { experimentalAppendMove } from "../../alg/operation";
 import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
-import { PuzzleManager } from "../../puzzles/PuzzleManager";
+import { PuzzleLoader } from "../../puzzles/PuzzleLoader";
 import { PuzzleAppearance } from "../3D/puzzles/appearance";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D, PG3DOptions } from "../3D/puzzles/PG3D";
@@ -567,9 +567,9 @@ export class TwistyPlayer extends ManagedCustomElement {
       return;
     }
 
-    let puzzleManager: PuzzleManager;
+    let puzzleLoader: PuzzleLoader;
     if (this.puzzle === "custom") {
-      puzzleManager = {
+      puzzleLoader = {
         id: "custom",
         fullName: "Custom (PG3D)",
         def: () => Promise.resolve(this.#legacyExperimentalPG3DViewConfig!.def),
@@ -578,7 +578,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         },
       };
     } else {
-      puzzleManager = puzzles[this.puzzle];
+      puzzleLoader = puzzles[this.puzzle];
     }
 
     for (const pendingPuzzleUpdate of this.#pendingPuzzleUpdates) {
@@ -588,7 +588,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     const pendingPuzzleUpdate: PendingPuzzleUpdate = { cancelled: false };
     this.#pendingPuzzleUpdates.push(pendingPuzzleUpdate);
 
-    const def: KPuzzleDefinition = await puzzleManager.def();
+    const def: KPuzzleDefinition = await puzzleLoader.def();
     if (pendingPuzzleUpdate.cancelled) {
       return;
     }
@@ -638,8 +638,8 @@ export class TwistyPlayer extends ManagedCustomElement {
           this.setRenderMode2D();
           const svgPromiseFn =
             this.visualization === "2D"
-              ? puzzleManager.svg
-              : puzzleManager.llSVG ?? puzzleManager.svg;
+              ? puzzleLoader.svg
+              : puzzleLoader.llSVG ?? puzzleLoader.svg;
           const mainViewer = new Twisty2DSVG(
             cursor,
             def,
@@ -671,7 +671,7 @@ export class TwistyPlayer extends ManagedCustomElement {
           } else {
             let def: KPuzzleDefinition;
             let stickerDat: StickerDat;
-            const pgGetter = puzzleManager.pg;
+            const pgGetter = puzzleLoader.pg;
             if (this.puzzle === "custom") {
               def = this.#legacyExperimentalPG3DViewConfig!.def;
               stickerDat = this.#legacyExperimentalPG3DViewConfig!.stickerDat;
