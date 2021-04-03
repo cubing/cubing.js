@@ -39,7 +39,13 @@ export const PGPuzzles: { [name: string]: PuzzleDescriptionString } = {
   "master pyramorphix": "t e 0.866025403784437",
   "megaminx": "d f 0.7",
   "gigaminx": "d f 0.64 f 0.82",
+  "teraminx": "d f 0.64 f 0.76 f 0.88",
+  "petaminx": "d f 0.64 f 0.73 f 0.82 f 0.91",
+  "examinx": "d f 0.64 f 0.712 f 0.784 f 0.856 f 0.928",
+  "zetaminx": "d f 0.64 f 0.7 f 0.76 f 0.82 f 0.88 f 0.94",
+  "yottaminx": "d f 0.64 f 0.6914 f 0.7429 f 0.7943 f 0.8457 f 0.8971 f 0.9486",
   "pentultimate": "d f 0",
+  "master pentultimate": "d f 0.1",
   // exact value for starminx is sqrt(5(5-2 sqrt(5))/3)
   "starminx": "d v 0.937962370425399",
   "starminx 2": "d f 0.23606797749979",

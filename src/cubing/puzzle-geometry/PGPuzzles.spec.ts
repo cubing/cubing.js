@@ -46,17 +46,23 @@ const expectedData: { [nam: string]: string } = {
   "master pyramorphix": "master pyramorphix, 4, 10, 27, 8, 9, 6",
   "megaminx": "megaminx, 12, 11, 62, 3, 18, 702",
   "gigaminx": "gigaminx, 12, 31, 242, 6, 30, 18181800",
+  "teraminx": "teraminx, 12, 61, 542, 11, 42, 18181800",
+  "petaminx": "petaminx, 12, 101, 962, 18, 54, 18181800",
+  "examinx": "examinx, 12, 151, 1502, 27, 66, 18181800",
+  "zetaminx": "zetaminx, 12, 211, 2162, 38, 78, 18181800",
+  "yottaminx": "yottaminx, 12, 281, 2942, 51, 90, 18181800",
   "pentultimate": "pentultimate, 12, 6, 32, 2, 12, 132",
-  "starminx": "starminx, 12, 11, 63, 3, 30, 828",
+  "master pentultimate": "master pentultimate, 12, 16, 122, 4, 18, 1741740",
+  "starminx": "starminx, 12, 11, 63, 3, 30, 48",
   "starminx 2": "starminx 2, 12, 11, 102, 3, 18, 158340",
   "pyraminx crystal": "pyraminx crystal, 12, 10, 50, 2, 18, 9828",
-  "chopasaurus": "chopasaurus, 12, 11, 92, 3, 20, 9996",
+  "chopasaurus": "chopasaurus, 12, 11, 92, 3, 20, 115710",
   "big chop": "big chop, 12, 10, 120, 2, 30, 31668",
   "skewb diamond": "skewb diamond, 8, 4, 14, 3, 8, 6",
   "FTO": "FTO, 8, 9, 42, 4, 12, 990",
-  "Christopher's jewel": "Christopher's jewel, 8, 6, 18, 2, 9, 60",
+  "Christopher's jewel": "Christopher's jewel, 8, 6, 18, 2, 9, 120",
   "octastar": "octastar, 8, 6, 24, 1, 12, 168",
-  "Trajber's octahedron": "Trajber's octahedron, 8, 7, 26, 3, 9, 60",
+  "Trajber's octahedron": "Trajber's octahedron, 8, 7, 26, 3, 9, 120",
   "radio chop": "radio chop, 20, 10, 92, 3, 20, 41580",
   "icosamate": "icosamate, 20, 4, 32, 2, 12, 780",
   "icosahedron 2": "icosahedron 2, 20, 9, 102, 3, 18, 12240",
@@ -71,8 +77,8 @@ const expectedData: { [nam: string]: string } = {
   "dino + little chop": "dino + little chop, 6, 4, 24, 1, 24, 280",
   "2x2x2 + dino + little chop":
     "2x2x2 + dino + little chop, 6, 8, 48, 2, 30, 2340",
-  "megaminx + chopasaurus": "megaminx + chopasaurus, 12, 11, 92, 3, 38, 9828",
-  "starminx combo": "starminx combo, 12, 11, 102, 3, 48, 78960",
+  "megaminx + chopasaurus": "megaminx + chopasaurus, 12, 11, 92, 3, 38, 2610",
+  "starminx combo": "starminx combo, 12, 11, 102, 3, 48, 664020",
 };
 describe("PuzzleGeometry-Puzzles", () => {
   it("testpuzzles", () => {
@@ -111,10 +117,6 @@ describe("PuzzleGeometry-Puzzles", () => {
       // right now names are changing on 8- and 12-face puzzles.  We truncate
       // the last element on such puzzles as a temporary hack.
       let exp = expectedData[name];
-      if (pg.baseplanerot.length === 8 || pg.baseplanerot.length === 12) {
-        dat = dat.substring(0, dat.lastIndexOf(","));
-        exp = exp.substring(0, exp.lastIndexOf(","));
-      }
       expect(dat).toBe(exp);
     }
   });
