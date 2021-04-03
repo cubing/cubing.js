@@ -127,13 +127,11 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#legacyExperimentalPG3DViewConfig = legacyExperimentalPG3DViewConfig;
   }
 
-  set alg(newAlg: Alg) {
+  // TODO(https://github.com/microsoft/TypeScript/pull/42425): Allow setting string in the type decl.
+  set alg(newAlg: Alg /* | string*/) {
     // TODO: do validation for other algs as well.
     if (typeof newAlg === "string") {
-      console.warn(
-        "`alg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
-      );
-      newAlg = new Alg((newAlg as unknown) as string);
+      newAlg = Alg.fromString(newAlg);
     }
     this.#config.attributes["alg"].setValue(newAlg);
     this.cursor?.setAlg(newAlg, this.indexerConstructor()); // TODO: can we ensure the cursor already exists?
