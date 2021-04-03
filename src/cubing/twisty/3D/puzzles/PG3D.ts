@@ -52,9 +52,9 @@ class Filler {
   colors: Uint8Array;
   ind: Uint8Array;
   constructor(public sz: number, public colored: boolean = true) {
-    this.vertices = new Float32Array(9*sz);
+    this.vertices = new Float32Array(9 * sz);
     if (colored) {
-      this.colors = new Uint8Array(9*sz);
+      this.colors = new Uint8Array(9 * sz);
       this.ind = new Uint8Array(sz);
     }
     this.pos = 0;
@@ -63,18 +63,18 @@ class Filler {
 
   add(pt: number[], c: number) {
     this.vertices[this.pos] = pt[0];
-    this.vertices[this.pos+1] = pt[1];
-    this.vertices[this.pos+2] = pt[2];
+    this.vertices[this.pos + 1] = pt[1];
+    this.vertices[this.pos + 2] = pt[2];
     this.colors[this.pos] = c >> 16;
-    this.colors[this.pos+1] = (c >> 8) & 255;
-    this.colors[this.pos+2] = c & 255;
+    this.colors[this.pos + 1] = (c >> 8) & 255;
+    this.colors[this.pos + 2] = c & 255;
     this.pos += 3;
   }
 
   addUncolored(pt: number[]) {
     this.vertices[this.pos] = pt[0];
-    this.vertices[this.pos+1] = pt[1];
-    this.vertices[this.pos+2] = pt[2];
+    this.vertices[this.pos + 1] = pt[1];
+    this.vertices[this.pos + 2] = pt[2];
     this.pos += 3;
   }
 
@@ -83,22 +83,22 @@ class Filler {
   }
 
   setAttributes(geo: BufferGeometry) {
-    geo.setAttribute('position', new BufferAttribute(this.vertices, 3));
+    geo.setAttribute("position", new BufferAttribute(this.vertices, 3));
     if (this.colored) {
-      geo.setAttribute('color', new BufferAttribute(this.colors, 3, true));
+      geo.setAttribute("color", new BufferAttribute(this.colors, 3, true));
     }
   }
 
   makeGroups(geo: BufferGeometry) {
     geo.clearGroups();
     let groupCount = 0;
-    for (let i=0; i<this.ipos; ) {
-      const si=i++;
-      const iv=this.ind[si];
+    for (let i = 0; i < this.ipos; ) {
+      const si = i++;
+      const iv = this.ind[si];
       while (this.ind[i] === iv) {
         i++;
       }
-      geo.addGroup(3*si, 3*(i-si), iv);
+      geo.addGroup(3 * si, 3 * (i - si), iv);
       groupCount++;
     }
   }
@@ -116,7 +116,7 @@ function makePoly(
   if (scale !== 1) {
     ncoords = [];
     for (const v of coords) {
-      const v2 = [v[0]*scale, v[1]*scale, v[2]*scale];
+      const v2 = [v[0] * scale, v[1] * scale, v[2] * scale];
       ncoords.push(v2);
     }
   }
@@ -124,7 +124,7 @@ function makePoly(
     faceArray.push(filler.ipos);
     filler.add(ncoords[0], color);
     filler.add(ncoords[g], color);
-    filler.add(ncoords[g+1], color);
+    filler.add(ncoords[g + 1], color);
     filler.setind(ind);
   }
 }
@@ -157,9 +157,21 @@ class StickerDef {
       let goodFace = null;
       for (const f of this.faceArray) {
         const t = new Triangle(
-          new Vector3(filler.vertices[9*f], filler.vertices[9*f+1], filler.vertices[9*f+2]),
-          new Vector3(filler.vertices[9*f+3], filler.vertices[9*f+4], filler.vertices[9*f+5]),
-          new Vector3(filler.vertices[9*f+6], filler.vertices[9*f+7], filler.vertices[9*f+8]),
+          new Vector3(
+            filler.vertices[9 * f],
+            filler.vertices[9 * f + 1],
+            filler.vertices[9 * f + 2],
+          ),
+          new Vector3(
+            filler.vertices[9 * f + 3],
+            filler.vertices[9 * f + 4],
+            filler.vertices[9 * f + 5],
+          ),
+          new Vector3(
+            filler.vertices[9 * f + 6],
+            filler.vertices[9 * f + 7],
+            filler.vertices[9 * f + 8],
+          ),
         );
         const a = t.getArea();
         if (a > highArea) {
@@ -207,7 +219,9 @@ class StickerDef {
         if (this.origColor === 0xffffff) {
           this.origColorAppearance = 0xdddddd;
         } else {
-          this.origColorAppearance = new Color(this.origColor).multiplyScalar(0.5).getHex();
+          this.origColorAppearance = new Color(this.origColor)
+            .multiplyScalar(0.5)
+            .getHex();
         }
         break;
       case "oriented":
@@ -228,10 +242,10 @@ class StickerDef {
       const g = (c >> 8) & 255;
       const b = c & 255;
       for (const f of this.faceArray) {
-        for (let i=0; i<9; i += 3) {
-          this.filler.colors[9*f+i] = r;
-          this.filler.colors[9*f+i+1] = g;
-          this.filler.colors[9*f+i+2] = b;
+        for (let i = 0; i < 9; i += 3) {
+          this.filler.colors[9 * f + i] = r;
+          this.filler.colors[9 * f + i + 1] = g;
+          this.filler.colors[9 * f + i + 2] = b;
         }
       }
       return 1;
@@ -251,7 +265,7 @@ class HitPlaneDef {
     for (let g = 1; g + 1 < coords.length; g++) {
       filler.addUncolored(coords[0]);
       filler.addUncolored(coords[g]);
-      filler.addUncolored(coords[g+1]);
+      filler.addUncolored(coords[g + 1]);
     }
     this.geo = new BufferGeometry();
     filler.setAttributes(this.geo);
@@ -366,7 +380,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const sides = stickers[si].coords.length;
       triangleCount += multiplier * (sides - 2);
     }
-    console.log("Triangle count is " + triangleCount);
     const filler = new Filler(triangleCount);
     const black = 0;
     for (let si = 0; si < stickers.length; si++) {
@@ -390,12 +403,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           false,
         );
       }
-      const stickerdef = new StickerDef(
-        filler,
-        sticker,
-        hintStickers,
-        options,
-      );
+      const stickerdef = new StickerDef(filler, sticker, hintStickers, options);
       this.stickers[orbit][ori][ord] = stickerdef;
     }
     this.foundationBound = filler.ipos;
@@ -406,11 +414,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         const orbit = sticker.orbit as number;
         const ord = sticker.ord as number;
         const ori = sticker.ori as number;
-        this.stickers[orbit][ori][ord].addFoundation(
-          filler,
-          foundation,
-          black,
-        );
+        this.stickers[orbit][ori][ord].addFoundation(filler, foundation, black);
       }
     }
     const fixedGeo = new BufferGeometry();
@@ -500,7 +504,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               const ni = pos2.permutation[i];
               colormods += pieces2[i].setColor(
                 pieces[nori][ni].origColorAppearance,
-            );
+              );
             }
           }
         }
@@ -566,8 +570,13 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.filler.makeGroups(this.fixedGeo);
     }
     if (colormods) {
-      (this.fixedGeo.getAttribute("color") as BufferAttribute).updateRange = {offset: 0, count: 9 * this.foundationBound};
-      (this.fixedGeo.getAttribute("color") as BufferAttribute).needsUpdate = true;
+      (this.fixedGeo.getAttribute("color") as BufferAttribute).updateRange = {
+        offset: 0,
+        count: 9 * this.foundationBound,
+      };
+      (this.fixedGeo.getAttribute(
+        "color",
+      ) as BufferAttribute).needsUpdate = true;
     }
     this.scheduleRenderCallback!();
   }
