@@ -26,7 +26,7 @@ export async function asyncGetDef(
   return (await asyncGetPuzzleGeometry(puzzleName)).writekpuzzle(true);
 }
 
-export function genericPGPuzzle(
+export function genericPGPuzzleLoader(
   id: string,
   fullName: string,
   info?: {

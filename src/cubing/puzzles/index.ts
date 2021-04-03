@@ -1,4 +1,4 @@
-import { genericPGPuzzle } from "./async/async-pg3d";
+import { genericPGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
 import { clock } from "./implementations/clock";
@@ -10,21 +10,21 @@ export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,
-  "4x4x4": genericPGPuzzle("4x4x4", "4×4×4 Cube"),
-  "5x5x5": genericPGPuzzle("5x5x5", "5×5×5 Cube"),
-  "6x6x6": genericPGPuzzle("6x6x6", "6×6×6 Cube"),
-  "7x7x7": genericPGPuzzle("7x7x7", "7×7×7 Cube"),
-  "40x40x40": genericPGPuzzle("40x40x40", "40×40×40 Cube"),
+  "4x4x4": genericPGPuzzleLoader("4x4x4", "4×4×4 Cube"),
+  "5x5x5": genericPGPuzzleLoader("5x5x5", "5×5×5 Cube"),
+  "6x6x6": genericPGPuzzleLoader("6x6x6", "6×6×6 Cube"),
+  "7x7x7": genericPGPuzzleLoader("7x7x7", "7×7×7 Cube"),
+  "40x40x40": genericPGPuzzleLoader("40x40x40", "40×40×40 Cube"),
   // 3x3x3 Blindfolded
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
   clock,
-  "megaminx": genericPGPuzzle("megaminx", "Megaminx", {
+  "megaminx": genericPGPuzzleLoader("megaminx", "Megaminx", {
     // Too many simultaneous inventors to name.
     inventionYear: 1981, // Earliest date from https://www.jaapsch.net/puzzles/megaminx.htm
   }),
   pyraminx,
-  "skewb": genericPGPuzzle("skewb", "Skewb", {
+  "skewb": genericPGPuzzleLoader("skewb", "Skewb", {
     inventedBy: ["Tony Durham"], // https://www.jaapsch.net/puzzles/skewb.htm
     // inventionYear: 1982, // 1982 is actually the year of Hofstadter's column.
   }),
@@ -32,11 +32,11 @@ export const puzzles: Record<string, PuzzleLoader> = {
   // 4x4x4 Blindfolded
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
-  "fto": genericPGPuzzle("fto", "Face-Turning Octahedron", {
+  "fto": genericPGPuzzleLoader("fto", "Face-Turning Octahedron", {
     inventedBy: ["Karl Rohrbach", "David Pitcher"], // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
     inventionYear: 1983, // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
   }),
-  "gigaminx": genericPGPuzzle("gigaminx", "Gigaminx", {
+  "gigaminx": genericPGPuzzleLoader("gigaminx", "Gigaminx", {
     inventedBy: ["Tyler Fox"],
     inventionYear: 2006, // Earliest date from https://www.twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1475
   }),
