@@ -1,16 +1,8 @@
+import { genericPGPuzzle } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
-import { cube40x40x40 } from "./implementations/40x40x40";
-import { cube4x4x4 } from "./implementations/4x4x4";
-import { cube5x5x5 } from "./implementations/5x5x5";
-import { cube6x6x6 } from "./implementations/6x6x6";
-import { cube7x7x7 } from "./implementations/7x7x7";
 import { clock } from "./implementations/clock";
-import { fto } from "./implementations/fto";
-import { gigaminx } from "./implementations/gigaminx";
-import { megaminx } from "./implementations/megaminx";
 import { pyraminx } from "./implementations/pyraminx";
-import { skewb } from "./implementations/skewb";
 import { square1 } from "./implementations/square1";
 import { PuzzleManager } from "./PuzzleManager";
 
@@ -18,24 +10,36 @@ export const puzzles: Record<string, PuzzleManager> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,
-  "4x4x4": cube4x4x4,
-  "5x5x5": cube5x5x5,
-  "6x6x6": cube6x6x6,
-  "7x7x7": cube7x7x7,
-  "40x40x40": cube40x40x40,
+  "4x4x4": genericPGPuzzle("4x4x4", "4×4×4 Cube"),
+  "5x5x5": genericPGPuzzle("5x5x5", "5×5×5 Cube"),
+  "6x6x6": genericPGPuzzle("6x6x6", "6×6×6 Cube"),
+  "7x7x7": genericPGPuzzle("7x7x7", "7×7×7 Cube"),
+  "40x40x40": genericPGPuzzle("40x40x40", "40×40×40 Cube"),
   // 3x3x3 Blindfolded
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
   clock,
-  megaminx,
+  "megaminx": genericPGPuzzle("megaminx", "Megaminx", {
+    // Too many simultaneous inventors to name.
+    inventionYear: 1981, // Earliest date from https://www.jaapsch.net/puzzles/megaminx.htm
+  }),
   pyraminx,
-  skewb,
+  "skewb": genericPGPuzzle("skewb", "Skewb", {
+    inventedBy: ["Tony Durham"], // https://www.jaapsch.net/puzzles/skewb.htm
+    // inventionYear: 1982, // 1982 is actually the year of Hofstadter's column.
+  }),
   square1,
   // 4x4x4 Blindfolded
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
-  fto,
-  gigaminx,
+  "fto": genericPGPuzzle("fto", "Face-Turning Octahedron", {
+    inventedBy: ["Karl Rohrbach", "David Pitcher"], // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
+    inventionYear: 1983, // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
+  }),
+  "gigaminx": genericPGPuzzle("gigaminx", "Gigaminx", {
+    inventedBy: ["Tyler Fox"],
+    inventionYear: 2006, // Earliest date from https://www.twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1475
+  }),
 };
 
 export { cube2x2x2, cube3x3x3 };

@@ -1,5 +1,6 @@
 import type { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
+import { PuzzleManager } from "../PuzzleManager";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
@@ -23,4 +24,35 @@ export async function asyncGetDef(
   puzzleName: string,
 ): Promise<KPuzzleDefinition> {
   return (await asyncGetPuzzleGeometry(puzzleName)).writekpuzzle(true);
+}
+
+export function genericPGPuzzle(
+  id: string,
+  fullName: string,
+  info?: {
+    inventedBy?: string[];
+    inventionYear?: number;
+  },
+): PuzzleManager {
+  const puzzleManager: PuzzleManager = {
+    id: id,
+    fullName: fullName,
+    def: async () => {
+      return asyncGetDef(id);
+    },
+    svg: async () => {
+      const pg = await asyncGetPuzzleGeometry(id);
+      return pg.generatesvg();
+    },
+    pg: async () => {
+      return asyncGetPuzzleGeometry(id);
+    },
+  };
+  if (info?.inventedBy) {
+    puzzleManager.inventedBy = info.inventedBy;
+  }
+  if (info?.inventionYear) {
+    puzzleManager.inventionYear = info.inventionYear;
+  }
+  return puzzleManager;
 }
