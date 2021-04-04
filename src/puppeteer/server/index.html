@@ -14,7 +14,9 @@
 </style>
 <script defer>
   window.addEventListener("DOMContentLoaded", () => {
-    const options = JSON.parse(new URL(location.href).searchParams.get("options") || "{}");
+    const options = JSON.parse(
+      new URL(location.href).searchParams.get("options") || "{}",
+    );
     document.body.appendChild(new cubing.twisty.TwistyPlayer(options));
-  })
+  });
 </script>

@@ -278,9 +278,11 @@ customElementsShim.define("twisty-control-button", TwistyControlButton);
 export class TwistyControlButtonPanel
   extends ManagedCustomElement
   implements TwistyControlElement {
-  #viewerLinkClassListManager: ClassListManager<
-    ViewerLinkPage
-  > = new ClassListManager(this, "viewer-link-", ["none", "twizzle"]);
+  #viewerLinkClassListManager: ClassListManager<ViewerLinkPage> = new ClassListManager(
+    this,
+    "viewer-link-",
+    ["none", "twizzle"],
+  );
 
   constructor(
     timeline?: Timeline,

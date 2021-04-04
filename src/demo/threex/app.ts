@@ -81,16 +81,16 @@ function makepoint(
   r.multiplyScalar(1 + off);
   const ri = posLoc;
   pos[ri] = r.x;
-  pos[ri+1] = r.y;
-  pos[ri+2] = r.z;
+  pos[ri + 1] = r.y;
+  pos[ri + 2] = r.z;
   posLoc += 3;
 }
 function makecolor(c: Color, n: number): void {
   for (let i = 0; i < n; i++) {
     color[colorLoc] = c.r;
-    color[colorLoc+1] = c.g;
-    color[colorLoc+2] = c.b;
-    colorLoc += 3
+    color[colorLoc + 1] = c.g;
+    color[colorLoc + 2] = c.b;
+    colorLoc += 3;
   }
 }
 function addface(
@@ -179,8 +179,8 @@ function getCube() {
       addface2(vertices, 2, 3, 7, 6, x, y, m, black, colors);
     }
   }
-  geo.setAttribute('position', new BufferAttribute(pos, 3));
-  geo.setAttribute('color', new BufferAttribute(color, 3));
+  geo.setAttribute("position", new BufferAttribute(pos, 3));
+  geo.setAttribute("color", new BufferAttribute(color, 3));
   return new Mesh(geo, new MeshBasicMaterial({ vertexColors: true }));
 }
 
