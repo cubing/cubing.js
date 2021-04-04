@@ -333,8 +333,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   protected filler: Filler;
   protected foundationBound: number; // before this: colored; after: black
   protected fixedGeo: BufferGeometry;
-  protected lastPos: Transformation;
+  protected lastPos: PuzzlePosition;
   protected lastMove: Transformation;
+
+  #pendingStickeringUpdate: boolean = false;
 
   constructor(
     cursor: AlgCursor,
@@ -470,23 +472,25 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       }
     }
     if (this.scheduleRenderCallback) {
-      // Doesn't seem to work?
+      this.#pendingStickeringUpdate = true;
+      this.onPositionChange(this.lastPos);
       this.scheduleRenderCallback();
     }
   }
 
   public onPositionChange(p: PuzzlePosition): void {
-    const pos = p.state as Transformation;
+    const state = p.state as Transformation;
     const noRotation = new Euler();
     this.movingObj.rotation.copy(noRotation);
     let colormods = 0;
     if (
       !this.lastPos ||
-      !areTransformationsEquivalent(this.definition, this.lastPos, pos)
+      this.#pendingStickeringUpdate ||
+      !areTransformationsEquivalent(this.definition, this.lastPos.state, state)
     ) {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
-        const pos2 = pos[orbit];
+        const pos2 = state[orbit];
         const orin = pieces.length;
         if (orin === 1) {
           const pieces2 = pieces[0];
@@ -507,7 +511,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           }
         }
       }
-      this.lastPos = pos;
+      this.lastPos = p;
+      this.#pendingStickeringUpdate = false;
     }
     let vismods = 0;
     for (const moveProgress of p.movesInProgress) {

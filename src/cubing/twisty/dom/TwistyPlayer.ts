@@ -240,13 +240,17 @@ export class TwistyPlayer extends ManagedCustomElement {
         experimentalStickering,
       )
     ) {
-      if (this.twisty3D instanceof Cube3D) {
-        this.twisty3D.experimentalUpdateOptions({
+      const twisty3D = this.twisty3D;
+      if (twisty3D instanceof Cube3D) {
+        twisty3D.experimentalUpdateOptions({
           experimentalStickering,
         });
       }
-      if (this.twisty3D instanceof PG3D) {
-        this.twisty3D.experimentalSetAppearance(this.getPG3DAppearance()!); // TODO
+      if (twisty3D instanceof PG3D) {
+        (async () => {
+          const appearance = await this.getPG3DAppearance();
+          twisty3D.experimentalSetAppearance(appearance!); // TODO
+        })();
       }
       if (this.viewerElems[0] instanceof Twisty2DSVG) {
         (this.viewerElems[0] as Twisty2DSVG).experimentalSetStickering(
@@ -308,7 +312,6 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set experimentalCameraPosition(cameraPosition: Vector3 | null) {
-    console.log("experimentalCameraPosition");
     this.#config.attributes["experimental-camera-position"].setValue(
       cameraPosition,
     );
@@ -606,7 +609,6 @@ export class TwistyPlayer extends ManagedCustomElement {
         // TODO: also take into account setup alg.
         this.experimentalInvalidInitialAlgCallback(this.alg);
       }
-      console.log("fallback;;");
       cursor = new AlgCursor(
         this.timeline,
         def,
@@ -614,7 +616,6 @@ export class TwistyPlayer extends ManagedCustomElement {
         new Alg(),
         this.indexerConstructor(),
       );
-      console.log("fallbacko;;");
       this.setCursor(cursor);
     }
     if (
@@ -684,10 +685,6 @@ export class TwistyPlayer extends ManagedCustomElement {
               throw "Unimplemented!";
             }
             const options: PG3DOptions = {};
-            const appearance = this.getPG3DAppearance();
-            if (appearance) {
-              options.appearance = appearance;
-            }
             const pg3d = new PG3D(
               cursor,
               scene.scheduleRender.bind(scene),
@@ -698,6 +695,12 @@ export class TwistyPlayer extends ManagedCustomElement {
                 this.hintFacelets === "floating",
               options,
             );
+            (async () => {
+              const appearance = await this.getPG3DAppearance();
+              if (appearance) {
+                pg3d.experimentalSetAppearance(appearance);
+              }
+            })();
             this.legacyExperimentalPG3D = pg3d;
             twisty3D = pg3d;
           }
@@ -707,7 +710,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
-  private getPG3DAppearance(): PuzzleAppearance | null {
+  private async getPG3DAppearance(): Promise<PuzzleAppearance | null> {
     if (this.puzzle === "4x4x4") {
       return (
         appearances4x4x4[this.experimentalStickering ?? "full"] ??
