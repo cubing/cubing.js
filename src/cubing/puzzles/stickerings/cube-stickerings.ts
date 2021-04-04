@@ -466,6 +466,38 @@ export async function cubeStickering(
   return puzzleStickering.toAppearance();
 }
 
+export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
+  return [
+    "full",
+    "PLL",
+    "CLS",
+    "OLL",
+    "COLL",
+    "OCLL",
+    "ELL",
+    "ELS",
+    "LL",
+    "F2L",
+    "ZBLL",
+    "ZBLS",
+    "WVLS",
+    "VLS",
+    "LS",
+    "EO",
+    "CMLL",
+    "L6E",
+    "L6EO",
+    "Daisy",
+    "Cross",
+    "2x2x2",
+    "2x2x3",
+    "Void Cube",
+    "picture",
+    "invisible",
+    "centers-only",
+  ];
+}
+
 // (async () => {
 //   // const def = await puzzles["fto"].def();
 //   // console.log(def);

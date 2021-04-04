@@ -5,8 +5,8 @@ import {
   Transformation,
   transformationForMove,
 } from "../../../kpuzzle";
+import { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
 import { PuzzleAppearance } from "../../3D/puzzles/appearance";
-import { appearances3x3x3 } from "../../3D/puzzles/stickerings";
 import {
   PositionDispatcher,
   PositionListener,
@@ -36,6 +36,7 @@ export class Twisty2DSVG
     def?: KPuzzleDefinition,
     private svgSource?: string,
     private options?: Twisty2DSVGOptions,
+    private puzzleLoader?: PuzzleLoader,
   ) {
     super();
     this.addCSS(twisty2DSVGCSS);
@@ -82,8 +83,13 @@ export class Twisty2DSVG
   }
 
   experimentalSetStickering(stickering: ExperimentalStickering): void {
-    const appearance = appearances3x3x3[stickering];
-    this.resetSVG(appearance);
+    (async () => {
+      if (!this.puzzleLoader?.appearance) {
+        return;
+      }
+      const appearance = await this.puzzleLoader.appearance(stickering);
+      this.resetSVG(appearance);
+    })();
   }
 
   // TODO: do this without constructing a new SVG.

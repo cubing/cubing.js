@@ -643,6 +643,7 @@ export class TwistyPlayer extends ManagedCustomElement {
             def,
             await svgPromiseFn(),
             options,
+            this.puzzle,
           );
           if (!pendingPuzzleUpdate.cancelled) {
             this.setTwisty2DSVG(mainViewer);

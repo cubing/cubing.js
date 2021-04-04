@@ -1,22 +1,18 @@
 import { Vector3 } from "three";
 import { Alg } from "../../cubing/alg";
+import { puzzles } from "../../cubing/puzzles";
 import {
   ExperimentalStickering,
   TwistyPlayer,
   TwistyPlayerInitialConfig,
 } from "../../cubing/twisty";
-import {
-  appearances3x3x3,
-  appearances4x4x4,
-  appearancesFTO,
-} from "../../cubing/twisty/3D/puzzles/stickerings";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import {
   ALG_INPUT_PLACEHOLDER,
   ALG_SETUP_INPUT_PLACEHOLDER,
   APP_TITLE,
 } from "./strings";
-import { puzzles } from "./supported-puzzles";
+import { supportedPuzzles } from "./supported-puzzles";
 import { getURLParam, setURLParams } from "./url-params";
 
 export interface AppData {
@@ -73,7 +69,7 @@ export class App {
     if (initialData.puzzleName === "megaminx") {
       twistyConfig.experimentalCameraPosition = new Vector3(0, 3.09, 5);
     }
-    const displayablePuzzle = puzzles[initialData.puzzleName];
+    const displayablePuzzle = supportedPuzzles[initialData.puzzleName];
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
     twistyConfig.experimentalSetupAnchor = initialData.experimentalSetupAnchor;
@@ -305,10 +301,10 @@ class ControlPane {
 
   private initializePuzzleSelect(initialPuzzleName: string): void {
     this.puzzleSelect.textContent = "";
-    for (const puzzleName in puzzles) {
+    for (const puzzleName in supportedPuzzles) {
       const option = document.createElement("option");
       option.value = puzzleName;
-      option.textContent = puzzles[puzzleName].displayName();
+      option.textContent = supportedPuzzles[puzzleName].displayName();
       this.puzzleSelect.appendChild(option);
       if (puzzleName === initialPuzzleName) {
         option.selected = true;
@@ -347,24 +343,22 @@ class ControlPane {
     this.setSetupAnchorCallback(option.value);
   }
 
-  private initializeStickeringSelect(
+  private async initializeStickeringSelect(
     initialStickering: string,
     puzzleName: string,
-  ): void {
-    let appearances: Record<ExperimentalStickering, { name?: string }>;
-    switch (puzzleName) {
-      case "3x3x3":
-        appearances = appearances3x3x3 as any;
-        break;
-      case "4x4x4":
-        appearances = appearances4x4x4;
-        break;
-      case "fto":
-        appearances = appearancesFTO;
-        break;
-      default:
-        appearances = { full: {} } as any;
-        this.stickeringSelect.disabled = true;
+  ): Promise<void> {
+    let appearances: Partial<Record<ExperimentalStickering, { name?: string }>>;
+
+    // TODO: Look
+    const p = puzzles[puzzleName];
+    if (p.stickerings) {
+      appearances = {};
+      for (const stickering of await p.stickerings()) {
+        appearances[stickering] = {};
+      }
+    } else {
+      appearances = { full: {} } as any;
+      this.stickeringSelect.disabled = true;
     }
 
     this.stickeringSelect.textContent = "";

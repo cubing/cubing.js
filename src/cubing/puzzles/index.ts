@@ -11,10 +11,10 @@ export const puzzles: Record<string, PuzzleLoader> = {
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,
   "4x4x4": cubePGPuzzleLoader("4x4x4", "4×4×4 Cube"),
-  "5x5x5": genericPGPuzzleLoader("5x5x5", "5×5×5 Cube"),
-  "6x6x6": genericPGPuzzleLoader("6x6x6", "6×6×6 Cube"),
-  "7x7x7": genericPGPuzzleLoader("7x7x7", "7×7×7 Cube"),
-  "40x40x40": genericPGPuzzleLoader("40x40x40", "40×40×40 Cube"),
+  "5x5x5": cubePGPuzzleLoader("5x5x5", "5×5×5 Cube"),
+  "6x6x6": cubePGPuzzleLoader("6x6x6", "6×6×6 Cube"),
+  "7x7x7": cubePGPuzzleLoader("7x7x7", "7×7×7 Cube"),
+  "40x40x40": cubePGPuzzleLoader("40x40x40", "40×40×40 Cube"),
   // 3x3x3 Blindfolded
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
