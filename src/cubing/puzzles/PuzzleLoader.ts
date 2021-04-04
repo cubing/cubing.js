@@ -13,6 +13,8 @@ export interface PuzzleLoader {
   svg: () => Promise<string>;
   llSVG?: () => Promise<string>;
   pg?: () => Promise<PuzzleGeometry>;
-  appearance?: (stickering: string /* TODO */) => Promise<PuzzleAppearance>;
+  appearance?: (
+    stickering: ExperimentalStickering,
+  ) => Promise<PuzzleAppearance>;
   stickerings?: () => Promise<ExperimentalStickering[]>;
 }
