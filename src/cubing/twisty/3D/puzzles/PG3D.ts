@@ -91,7 +91,6 @@ class Filler {
 
   makeGroups(geo: BufferGeometry) {
     geo.clearGroups();
-    let groupCount = 0;
     for (let i = 0; i < this.ipos; ) {
       const si = i++;
       const iv = this.ind[si];
@@ -99,7 +98,6 @@ class Filler {
         i++;
       }
       geo.addGroup(3 * si, 3 * (i - si), iv);
-      groupCount++;
     }
   }
 }
