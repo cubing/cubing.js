@@ -2,6 +2,7 @@ import { cubePGPuzzleLoader, genericPGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
 import { clock } from "./implementations/clock";
+import { fto } from "./implementations/fto";
 import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
 import { PuzzleLoader } from "./PuzzleLoader";
@@ -32,10 +33,7 @@ export const puzzles: Record<string, PuzzleLoader> = {
   // 4x4x4 Blindfolded
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
-  "fto": genericPGPuzzleLoader("FTO", "Face-Turning Octahedron", {
-    inventedBy: ["Karl Rohrbach", "David Pitcher"], // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
-    inventionYear: 1983, // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
-  }),
+  "fto": fto,
   "gigaminx": genericPGPuzzleLoader("gigaminx", "Gigaminx", {
     inventedBy: ["Tyler Fox"],
     inventionYear: 2006, // Earliest date from https://www.twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1475
