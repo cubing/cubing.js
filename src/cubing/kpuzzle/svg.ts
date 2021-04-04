@@ -1,7 +1,7 @@
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
-} from "../twisty/3D/puzzles/appearance"; // TODO
+} from "../puzzles/stickerings/appearance"; // TODO
 import { KPuzzleDefinition, Transformation } from "./definition_types";
 import { KPuzzle } from "./kpuzzle";
 
@@ -17,10 +17,9 @@ function nextSVGID(): string {
 }
 
 // TODO: This is hardcoded to 3x3x3 SVGs
-const colorMaps: Partial<Record<
-  FaceletMeshAppearance,
-  Record<string, string>
->> = {
+const colorMaps: Partial<
+  Record<FaceletMeshAppearance, Record<string, string>>
+> = {
   dim: {
     "white": "#dddddd",
     "orange": "#884400",
