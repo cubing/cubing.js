@@ -16,7 +16,6 @@ export async function cubeStickering(
   const def = await puzzleLoader.def();
   const puzzleStickering = new PuzzleStickering(def);
   const m = new StickeringManager(def);
-  console.log(stickering);
 
   const LL = (): PieceSet => m.move("U");
   const orUD = (): PieceSet => m.or(m.moves(["U", "D"]));

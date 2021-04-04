@@ -712,7 +712,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   private async getPG3DAppearance(): Promise<PuzzleAppearance | null> {
     const puzzleLoader = puzzles[this.puzzle];
-    if (puzzleLoader.appearance) {
+    if (puzzleLoader?.appearance) {
       return puzzleLoader.appearance(this.experimentalStickering ?? "full");
     }
     return null;

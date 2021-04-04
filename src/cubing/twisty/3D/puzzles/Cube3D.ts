@@ -572,16 +572,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
     // TODO: Can we construct this directly instead of applying it later? Would that be more code-efficient?
     if (this.options.experimentalStickering) {
-      // TODO
-      (async () => {
-        // TODO
-        const appearance = await puzzles["3x3x3"].appearance!(
-          this.options.experimentalStickering ?? "full",
-        );
-        this.setAppearance(
-          appearance ?? (await puzzles["3x3x3"].appearance!("full")),
-        );
-      })();
+      this.setStickering(this.options.experimentalStickering);
     }
 
     cursor?.addPositionListener(this);
@@ -597,6 +588,19 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   /** @deprecated */
   experimentalSetHintStickerSpriteURL(hintStickerSpriteURL: string): void {
     this.setHintSpriteURL(hintStickerSpriteURL);
+  }
+
+  setStickering(stickering: ExperimentalStickering): void {
+    // TODO
+    (async () => {
+      // TODO
+      const appearance = await puzzles["3x3x3"].appearance!(
+        stickering ?? "full",
+      );
+      this.setAppearance(
+        appearance ?? (await puzzles["3x3x3"].appearance!("full")),
+      );
+    })();
   }
 
   setAppearance(appearance: PuzzleAppearance): void {
@@ -688,7 +692,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       // TODO
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.setAppearance(appearances3x3x3[experimentalStickering]);
+      this.setStickering(experimentalStickering);
       this.scheduleRenderCallback!(); // TODO
     }
   }

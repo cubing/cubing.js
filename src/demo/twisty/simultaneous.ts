@@ -1,12 +1,12 @@
-import { parseAlg } from "../../cubing/alg";
 import { Cube3D, TwistyPlayer } from "../../cubing/twisty";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import supercubeSprite from "url:./supercube-sprite.png";
+import { Alg } from "../../cubing/alg";
 
 {
   const player = new TwistyPlayer({
-    alg: parseAlg(
+    alg: Alg.fromString(
       "y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2",
     ),
   });
@@ -17,8 +17,8 @@ import supercubeSprite from "url:./supercube-sprite.png";
 
 {
   const player = new TwistyPlayer({
-    alg: parseAlg("M' R' U' D' M R"),
-    experimentalSetupAlg: parseAlg("(M' R' U' D' M R)'"),
+    alg: Alg.fromString("M' R' U' D' M R"),
+    experimentalSetupAlg: Alg.fromString("(M' R' U' D' M R)'"),
   });
   player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo2")!.appendChild(player);
@@ -30,7 +30,7 @@ import supercubeSprite from "url:./supercube-sprite.png";
 
 {
   const player = new TwistyPlayer({
-    alg: parseAlg("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
+    alg: Alg.fromString("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     experimentalStickering: "picture",
   });
   player.experimentalSetCursorIndexer("simultaneous");
@@ -47,7 +47,7 @@ import supercubeSprite from "url:./supercube-sprite.png";
 
 {
   const player = new TwistyPlayer({
-    alg: parseAlg("U' E' r E r2' E r U E"),
+    alg: Alg.fromString("U' E' r E r2' E r U E"),
   });
   player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo4")!.appendChild(player);
@@ -56,7 +56,7 @@ import supercubeSprite from "url:./supercube-sprite.png";
 
 {
   const player = new TwistyPlayer({
-    alg: parseAlg("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
+    alg: Alg.fromString("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     puzzle: "5x5x5",
   });
   player.experimentalSetCursorIndexer("simultaneous");
