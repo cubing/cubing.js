@@ -3,7 +3,7 @@ import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { PuzzleLoader } from "../../PuzzleLoader";
 import { PuzzleAppearance } from "../../stickerings/appearance";
 import {
-  cubeStickering,
+  cubeAppearance,
   cubeStickerings,
 } from "../../stickerings/cube-stickerings";
 
@@ -29,6 +29,6 @@ export const cube3x3x3: PuzzleLoader = {
     return asyncGetPuzzleGeometry("3x3x3");
   },
   appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
-    cubeStickering(cube3x3x3, stickering),
+    cubeAppearance(cube3x3x3, stickering),
   stickerings: cubeStickerings,
 };

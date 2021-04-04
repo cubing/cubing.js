@@ -9,7 +9,7 @@ import {
 } from "./appearance";
 
 // TODO: cache calculations?
-export async function cubeStickering(
+export async function cubeAppearance(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<PuzzleAppearance> {

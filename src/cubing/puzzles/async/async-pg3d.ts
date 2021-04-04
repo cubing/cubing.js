@@ -2,7 +2,7 @@ import type { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import { PuzzleLoader } from "../PuzzleLoader";
 import {
-  cubeStickering,
+  cubeAppearance,
   cubeStickerings,
 } from "../stickerings/cube-stickerings";
 
@@ -70,7 +70,7 @@ export function cubePGPuzzleLoader(
   },
 ): PuzzleLoader {
   const puzzleLoader: PuzzleLoader = genericPGPuzzleLoader(id, fullName, info);
-  puzzleLoader.appearance = cubeStickering.bind(cubeStickering, puzzleLoader);
+  puzzleLoader.appearance = cubeAppearance.bind(cubeAppearance, puzzleLoader);
   puzzleLoader.stickerings = cubeStickerings;
   return puzzleLoader;
 }

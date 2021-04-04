@@ -3,6 +3,7 @@ import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
 import { clock } from "./implementations/clock";
 import { fto } from "./implementations/fto";
+import { megaminx } from "./implementations/megaminx";
 import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
 import { PuzzleLoader } from "./PuzzleLoader";
@@ -20,10 +21,7 @@ export const puzzles: Record<string, PuzzleLoader> = {
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
   clock,
-  "megaminx": genericPGPuzzleLoader("megaminx", "Megaminx", {
-    // Too many simultaneous inventors to name.
-    inventionYear: 1981, // Earliest date from https://www.jaapsch.net/puzzles/megaminx.htm
-  }),
+  "megaminx": megaminx,
   pyraminx,
   "skewb": genericPGPuzzleLoader("skewb", "Skewb", {
     inventedBy: ["Tony Durham"], // https://www.jaapsch.net/puzzles/skewb.htm

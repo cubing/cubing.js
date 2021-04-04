@@ -83,17 +83,17 @@ export class PieceAnnotation<T> {
 
 // regular
 const r: PieceAppearance = {
-  facelets: ["regular", "regular", "regular", "regular"],
+  facelets: ["regular", "regular", "regular", "regular", "regular"],
 };
 
 // ignored
 const i: PieceAppearance = {
-  facelets: ["ignored", "ignored", "ignored", "ignored"],
+  facelets: ["ignored", "ignored", "ignored", "ignored", "ignored"],
 };
 
 // oriented stickers
 const o: PieceAppearance = {
-  facelets: ["oriented", "oriented", "oriented", "oriented"],
+  facelets: ["oriented", "oriented", "oriented", "oriented", "oriented"],
 };
 
 // invisible
@@ -102,28 +102,28 @@ const invisible: PieceAppearance = {
 };
 
 // "OLL"
-const riii: PieceAppearance = {
-  facelets: ["regular", "ignored", "ignored", "ignored"],
+const riiii: PieceAppearance = {
+  facelets: ["regular", "ignored", "ignored", "ignored", "ignored"],
 };
 
 // "PLL"
-const drrr: PieceAppearance = {
-  facelets: ["dim", "regular", "regular", "regular"],
+const drrrr: PieceAppearance = {
+  facelets: ["dim", "regular", "regular", "regular", "regular"],
 };
 
 // ignored
 const d: PieceAppearance = {
-  facelets: ["dim", "dim", "dim", "dim"],
+  facelets: ["dim", "dim", "dim", "dim", "dim"],
 };
 
 // "OLL"
-const diii: PieceAppearance = {
-  facelets: ["dim", "ignored", "ignored", "ignored"],
+const diiii: PieceAppearance = {
+  facelets: ["dim", "ignored", "ignored", "ignored", "ignored"],
 };
 
 // oriented
-const oiii: PieceAppearance = {
-  facelets: ["oriented", "ignored", "ignored", "ignored"],
+const oiiii: PieceAppearance = {
+  facelets: ["oriented", "ignored", "ignored", "ignored", "ignored"],
 };
 
 export function getPieceAppearance(
@@ -141,13 +141,13 @@ export function getPieceAppearance(
     case PieceStickering.Invisible: // TODO: Hack for centers. This shouldn't be needed.
       return invisible;
     case PieceStickering.IgnoreNonPrimary:
-      return riii;
+      return riiii;
     case PieceStickering.PermuteNonPrimary:
-      return drrr;
+      return drrrr;
     case PieceStickering.Ignoriented:
-      return diii;
+      return diiii;
     case PieceStickering.OrientationWithoutPermutation:
-      return oiii;
+      return oiiii;
   }
 }
 
