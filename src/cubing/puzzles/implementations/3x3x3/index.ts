@@ -1,8 +1,11 @@
 import { ExperimentalStickering } from "../../../twisty";
-import { PuzzleAppearance } from "../../../twisty/3D/puzzles/appearance";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { PuzzleLoader } from "../../PuzzleLoader";
-import { cubeStickering } from "../../stickerings/cube-stickerings";
+import { PuzzleAppearance } from "../../stickerings/appearance";
+import {
+  cubeStickering,
+  cubeStickerings,
+} from "../../stickerings/cube-stickerings";
 
 // Include 3x3x3 in the main bundle for better performance.
 import { cube3x3x3KPuzzle } from "./3x3x3.kpuzzle.json_";
@@ -27,4 +30,5 @@ export const cube3x3x3: PuzzleLoader = {
   },
   appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
     cubeStickering(cube3x3x3, stickering),
+  stickerings: cubeStickerings,
 };

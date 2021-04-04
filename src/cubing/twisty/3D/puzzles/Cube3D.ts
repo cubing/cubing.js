@@ -21,6 +21,10 @@ import {
 import { BlockMove } from "../../../alg";
 import { KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { puzzles } from "../../../puzzles";
+import {
+  FaceletMeshAppearance,
+  PuzzleAppearance,
+} from "../../../puzzles/stickerings/appearance";
 import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { smootherStep } from "../../animation/easing";
@@ -31,7 +35,6 @@ import {
   hintFaceletStyles,
 } from "../../dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
-import { FaceletMeshAppearance, PuzzleAppearance } from "./appearance";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const svgLoader = new TextureLoader();

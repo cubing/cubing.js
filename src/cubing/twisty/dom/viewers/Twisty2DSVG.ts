@@ -6,7 +6,7 @@ import {
   transformationForMove,
 } from "../../../kpuzzle";
 import { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
-import { PuzzleAppearance } from "../../3D/puzzles/appearance";
+import { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
 import {
   PositionDispatcher,
   PositionListener,

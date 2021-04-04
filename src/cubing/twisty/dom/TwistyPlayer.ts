@@ -5,7 +5,6 @@ import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
 import { PuzzleLoader } from "../../puzzles/PuzzleLoader";
-import { PuzzleAppearance } from "../3D/puzzles/appearance";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D, PG3DOptions } from "../3D/puzzles/PG3D";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
@@ -49,6 +48,7 @@ import {
   BackViewLayout,
   TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
+import { PuzzleAppearance } from "../../puzzles/stickerings/appearance";
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;
@@ -643,7 +643,7 @@ export class TwistyPlayer extends ManagedCustomElement {
             def,
             await svgPromiseFn(),
             options,
-            this.puzzle,
+            puzzleLoader,
           );
           if (!pendingPuzzleUpdate.cancelled) {
             this.setTwisty2DSVG(mainViewer);

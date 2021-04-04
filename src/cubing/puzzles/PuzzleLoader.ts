@@ -1,7 +1,7 @@
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { KPuzzleDefinition } from "../kpuzzle";
-import { PuzzleAppearance } from "../twisty/3D/puzzles/appearance";
 import { ExperimentalStickering } from "../twisty";
+import { PuzzleAppearance } from "./stickerings/appearance";
 
 export interface PuzzleLoader {
   id: string;
