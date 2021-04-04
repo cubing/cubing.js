@@ -18,15 +18,16 @@ import {
 } from "../../../kpuzzle";
 import { transformationForQuantumMove } from "../../../kpuzzle/kpuzzle";
 import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
-import { AlgCursor } from "../../animation/cursor/AlgCursor";
-import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
-import { smootherStep } from "../../animation/easing";
-import { TAU } from "../TAU";
 import {
   FaceletMeshAppearance,
   getFaceletAppearance,
   PuzzleAppearance,
-} from "./appearance";
+} from "../../../puzzles/stickerings/appearance";
+import { AlgCursor } from "../../animation/cursor/AlgCursor";
+import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
+import { smootherStep } from "../../animation/easing";
+import { TAU } from "../TAU";
+
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const foundationMaterial = new MeshBasicMaterial({
@@ -223,7 +224,7 @@ class StickerDef {
         }
         break;
       case "oriented":
-        this.origColorAppearance = 0xff00ff;
+        this.origColorAppearance = 0xff88ff;
         break;
       case "ignored":
         this.origColorAppearance = 0x444444;

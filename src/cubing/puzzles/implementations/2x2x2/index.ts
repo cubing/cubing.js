@@ -1,5 +1,11 @@
+import { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { PuzzleLoader } from "../../PuzzleLoader";
+import { PuzzleAppearance } from "../../stickerings/appearance";
+import {
+  cubeStickering,
+  cubeStickerings,
+} from "../../stickerings/cube-stickerings";
 
 export const cube2x2x2: PuzzleLoader = {
   id: "2x2x2",
@@ -13,4 +19,7 @@ export const cube2x2x2: PuzzleLoader = {
   pg: async () => {
     return asyncGetPuzzleGeometry("2x2x2"); // TODO: def compat
   },
+  appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
+    cubeStickering(cube2x2x2, stickering),
+  stickerings: cubeStickerings,
 };

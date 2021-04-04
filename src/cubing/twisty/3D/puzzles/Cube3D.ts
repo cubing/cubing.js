@@ -20,6 +20,11 @@ import {
 // @ts-ignore
 import { BlockMove } from "../../../alg";
 import { KPuzzleDefinition, Transformation } from "../../../kpuzzle";
+import { puzzles } from "../../../puzzles";
+import {
+  FaceletMeshAppearance,
+  PuzzleAppearance,
+} from "../../../puzzles/stickerings/appearance";
 import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { smootherStep } from "../../animation/easing";
@@ -30,8 +35,6 @@ import {
   hintFaceletStyles,
 } from "../../dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
-import { FaceletMeshAppearance, PuzzleAppearance } from "./appearance";
-import { appearances3x3x3 } from "./stickerings";
 import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const svgLoader = new TextureLoader();
@@ -569,13 +572,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
     // TODO: Can we construct this directly instead of applying it later? Would that be more code-efficient?
     if (this.options.experimentalStickering) {
-      // TODO
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.setAppearance(
-        appearances3x3x3[this.options.experimentalStickering] ??
-          (appearances3x3x3["full"] as PuzzleAppearance), // TODO
-      );
+      this.setStickering(this.options.experimentalStickering);
     }
 
     cursor?.addPositionListener(this);
@@ -591,6 +588,19 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   /** @deprecated */
   experimentalSetHintStickerSpriteURL(hintStickerSpriteURL: string): void {
     this.setHintSpriteURL(hintStickerSpriteURL);
+  }
+
+  setStickering(stickering: ExperimentalStickering): void {
+    // TODO
+    (async () => {
+      // TODO
+      const appearance = await puzzles["3x3x3"].appearance!(
+        stickering ?? "full",
+      );
+      this.setAppearance(
+        appearance ?? (await puzzles["3x3x3"].appearance!("full")),
+      );
+    })();
   }
 
   setAppearance(appearance: PuzzleAppearance): void {
@@ -682,7 +692,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       // TODO
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.setAppearance(appearances3x3x3[experimentalStickering]);
+      this.setStickering(experimentalStickering);
       this.scheduleRenderCallback!(); // TODO
     }
   }

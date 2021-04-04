@@ -54,7 +54,7 @@ class DisplayablePG3D {
 
 export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 
-const supportedPuzzle: { [s: string]: DisplayablePuzzle } = {};
+const supportedPuzzles: { [s: string]: DisplayablePuzzle } = {};
 for (const key of [
   "2x2x2",
   "3x3x3",
@@ -70,7 +70,7 @@ for (const key of [
   "skewb",
   "fto",
 ]) {
-  supportedPuzzle[key as any] = new DisplayableKPuzzle(
+  supportedPuzzles[key as any] = new DisplayableKPuzzle(
     key,
     [
       "2x2x2",
@@ -107,4 +107,4 @@ for (const key of [
 //   true,
 // );
 
-export { supportedPuzzle as puzzles };
+export { supportedPuzzles };
