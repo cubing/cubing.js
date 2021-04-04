@@ -8,7 +8,6 @@ import { PuzzleLoader } from "../../puzzles/PuzzleLoader";
 import { PuzzleAppearance } from "../3D/puzzles/appearance";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D, PG3DOptions } from "../3D/puzzles/PG3D";
-import { appearances4x4x4, appearancesFTO } from "../3D/puzzles/stickerings";
 import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor, IndexerConstructor } from "../animation/cursor/AlgCursor";
@@ -711,16 +710,9 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   private async getPG3DAppearance(): Promise<PuzzleAppearance | null> {
-    if (this.puzzle === "4x4x4") {
-      return (
-        appearances4x4x4[this.experimentalStickering ?? "full"] ??
-        appearances4x4x4["full"]
-      );
-    } else if (this.puzzle === "fto") {
-      return (
-        appearancesFTO[this.experimentalStickering ?? "full"] ??
-        appearancesFTO["full"]
-      );
+    const puzzleLoader = puzzles[this.puzzle];
+    if (puzzleLoader.appearance) {
+      return puzzleLoader.appearance(this.experimentalStickering ?? "full");
     }
     return null;
   }

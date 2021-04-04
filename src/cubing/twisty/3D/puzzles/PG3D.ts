@@ -223,7 +223,7 @@ class StickerDef {
         }
         break;
       case "oriented":
-        this.origColorAppearance = 0xff00ff;
+        this.origColorAppearance = 0xff88ff;
         break;
       case "ignored":
         this.origColorAppearance = 0x444444;
