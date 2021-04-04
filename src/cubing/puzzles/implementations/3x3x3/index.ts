@@ -26,7 +26,7 @@ export const cube3x3x3: PuzzleLoader = {
     return (await import("./3x3x3-ll.kpuzzle.svg")).default;
   },
   pg: async () => {
-    return asyncGetPuzzleGeometry("3x3x3"); // TODO: def compat
+    return asyncGetPuzzleGeometry("3x3x3");
   },
   appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
     cubeStickering(cube3x3x3, stickering),
