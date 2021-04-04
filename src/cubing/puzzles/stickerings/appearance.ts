@@ -41,12 +41,12 @@ export function getFaceletAppearance(
   const pieceAppearance: PieceAppearance | null =
     orbitAppearance.pieces[pieceIdx];
   if (pieceAppearance === null) {
-    return "regular";
+    return regular;
   }
   const faceletAppearance: FaceletMeshAppearance | FaceletAppearance | null =
     pieceAppearance.facelets[faceletIdx];
   if (faceletAppearance === null) {
-    return "regular";
+    return regular;
   }
   if (typeof faceletAppearance === "string") {
     return faceletAppearance;
@@ -81,49 +81,55 @@ export class PieceAnnotation<T> {
   }
 }
 
+const regular = "regular";
+const ignored = "ignored";
+const oriented = "oriented";
+const invisible = "invisible";
+const dim = "dim";
+
 // regular
 const r: PieceAppearance = {
-  facelets: ["regular", "regular", "regular", "regular", "regular"],
+  facelets: [regular, regular, regular, regular, regular],
 };
 
 // ignored
 const i: PieceAppearance = {
-  facelets: ["ignored", "ignored", "ignored", "ignored", "ignored"],
+  facelets: [ignored, ignored, ignored, ignored, ignored],
 };
 
 // oriented stickers
 const o: PieceAppearance = {
-  facelets: ["oriented", "oriented", "oriented", "oriented", "oriented"],
+  facelets: [oriented, oriented, oriented, oriented, oriented],
 };
 
 // invisible
-const invisible: PieceAppearance = {
-  facelets: ["invisible", "invisible", "invisible", "invisible"], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
+const invisiblePiece: PieceAppearance = {
+  facelets: [invisible, invisible, invisible, invisible], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
 };
 
 // "OLL"
 const riiii: PieceAppearance = {
-  facelets: ["regular", "ignored", "ignored", "ignored", "ignored"],
+  facelets: [regular, ignored, ignored, ignored, ignored],
 };
 
 // "PLL"
 const drrrr: PieceAppearance = {
-  facelets: ["dim", "regular", "regular", "regular", "regular"],
+  facelets: [dim, regular, regular, regular, regular],
 };
 
 // ignored
 const d: PieceAppearance = {
-  facelets: ["dim", "dim", "dim", "dim", "dim"],
+  facelets: [dim, dim, dim, dim, dim],
 };
 
 // "OLL"
 const diiii: PieceAppearance = {
-  facelets: ["dim", "ignored", "ignored", "ignored", "ignored"],
+  facelets: [dim, ignored, ignored, ignored, ignored],
 };
 
 // oriented
 const oiiii: PieceAppearance = {
-  facelets: ["oriented", "ignored", "ignored", "ignored", "ignored"],
+  facelets: [oriented, ignored, ignored, ignored, ignored],
 };
 
 export function getPieceAppearance(
@@ -139,7 +145,7 @@ export function getPieceAppearance(
     case PieceStickering.OrientationStickers: // TODO: Hack for centers. This shouldn't be needed.
       return o;
     case PieceStickering.Invisible: // TODO: Hack for centers. This shouldn't be needed.
-      return invisible;
+      return invisiblePiece;
     case PieceStickering.IgnoreNonPrimary:
       return riiii;
     case PieceStickering.PermuteNonPrimary:
