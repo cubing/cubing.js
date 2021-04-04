@@ -100,6 +100,13 @@ export async function cubeAppearance(
         PieceStickering.IgnoreNonPrimary,
       );
       break;
+    case "CLL":
+      dimF2L();
+      puzzleStickering.set(
+        m.not(m.and([CORNERS(), LL()])),
+        PieceStickering.Dim,
+      );
+      break;
     case "ELL":
       dimF2L();
       puzzleStickering.set(LL(), PieceStickering.Dim);
