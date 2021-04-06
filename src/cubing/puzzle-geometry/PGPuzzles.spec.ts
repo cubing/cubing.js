@@ -53,6 +53,7 @@ const expectedData: { [nam: string]: string } = {
   "yottaminx": "yottaminx, 12, 281, 2942, 51, 90, 18181800",
   "pentultimate": "pentultimate, 12, 6, 32, 2, 12, 132",
   "master pentultimate": "master pentultimate, 12, 16, 122, 4, 18, 1741740",
+  "elite pentultimate": "elite pentultimate, 12, 31, 272, 6, 24, 6832980",
   "starminx": "starminx, 12, 11, 63, 3, 30, 48",
   "starminx 2": "starminx 2, 12, 11, 102, 3, 18, 158340",
   "pyraminx crystal": "pyraminx crystal, 12, 10, 50, 2, 18, 9828",

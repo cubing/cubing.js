@@ -46,6 +46,7 @@ export const PGPuzzles: { [name: string]: PuzzleDescriptionString } = {
   "yottaminx": "d f 0.64 f 0.6914 f 0.7429 f 0.7943 f 0.8457 f 0.8971 f 0.9486",
   "pentultimate": "d f 0",
   "master pentultimate": "d f 0.1",
+  "elite pentultimate": "d f 0 f 0.145905",
   // exact value for starminx is sqrt(5(5-2 sqrt(5))/3)
   "starminx": "d v 0.937962370425399",
   "starminx 2": "d f 0.23606797749979",
