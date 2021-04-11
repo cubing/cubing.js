@@ -46,7 +46,8 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build-esm && npm run build-cjs && npm run build-bundle-global && npm run build-types && npm run build-bin",
-    "build-esm": "npx esbuild --target=es2015 --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/stream/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm",
+    "build-esm": "node src/make/build.js",
+    "build-dist-esm": "npx esbuild --target=es2015 --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/stream/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm",
     "build-cjs": "npx esbuild --target=es2015 --bundle --external:three --format=cjs --outfile=dist/cjs/index.js src/cubing/index.ts && cp -R src/dist-static/cjs/* dist/cjs",
     "build-bundle-global": "npx esbuild --target=es2015 --bundle --format=cjs --minify --outdir=dist/bundle-global src/cubing/cubing.bundle-global.ts",
     "build-types": "npx tsc src/cubing/*.ts src/cubing/**/*.ts --declaration --emitDeclarationOnly --outDir dist/types --target es2015 --module es2020 --moduleResolution node --lib esnext,dom --resolveJsonModule --allowJs --allowSyntheticDefaultImports # TODO: unify with tsconfig.json",
@@ -55,7 +56,7 @@
     "generate-js-parsers": "npx pegjs src/cubing/alg/parser/parser-pegjs.pegjs && npx pegjs src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "npm run clean && npx parcel serve --no-autoinstall src/demo/index.html --port 3333 --open --dist-dir /tmp/cubing-js-parcel # cleaning is a workaround for one set of Parcel bugs, /tmp dir is a workaround dir for other Parcel bugs",
-    "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel",
+    "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel; node src/make/clean.js",
     "test": "npm run test-jest && npm run lint",
     "test-jest": "npx jest --collectCoverage",
     "test-node-require": "node src/dist-test/require.cjs",
@@ -138,47 +139,47 @@
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js",
+      "import": "./index.js",
       "types": "./types/types/index.d.ts"
     },
     "./alg": {
       "require": "./dist/cjs/alg/index.js",
-      "import": "./dist/esm/alg/index.js",
+      "import": "./alg/index.js",
       "types": "./dist/types/alg/index.d.ts"
     },
     "./bluetooth": {
       "require": "./dist/cjs/bluetooth/index.js",
-      "import": "./dist/esm/bluetooth/index.js",
+      "import": "./bluetooth/index.js",
       "types": "./dist/types/bluetooth/index.d.ts"
     },
     "./kpuzzle": {
       "require": "./dist/cjs/kpuzzle/index.js",
-      "import": "./dist/esm/kpuzzle/index.js",
+      "import": "./kpuzzle/index.js",
       "types": "./dist/types/kpuzzle/index.d.ts"
     },
     "./protocol": {
       "require": "./dist/cjs/protocol/index.js",
-      "import": "./dist/esm/protocol/index.js",
+      "import": "./protocol/index.js",
       "types": "./dist/types/protocol/index.d.ts"
     },
     "./puzzle-geometry": {
       "require": "./dist/cjs/puzzle-geometry/index.js",
-      "import": "./dist/esm/puzzle-geometry/index.js",
+      "import": "./puzzle-geometry/index.js",
       "types": "./dist/esm/types/puzzle-geometry/index.d.ts"
     },
     "./puzzles": {
       "require": "./dist/cjs/puzzles/index.js",
-      "import": "./dist/esm/puzzles/index.js",
+      "import": "./puzzles/index.js",
       "types": "./dist/esm/types-geometry/index.d.ts"
     },
     "./stream": {
       "require": "./dist/cjs/stream/index.js",
-      "import": "./dist/esm/stream/index.js",
+      "import": "./stream/index.js",
       "types": "./dist/types/stream/index.d.ts"
     },
     "./twisty": {
       "require": "./dist/cjs/twisty/index.js",
-      "import": "./dist/esm/twisty/index.js",
+      "import": "./twisty/index.js",
       "types": "./dist/types/twisty/index.d.ts"
     }
   },

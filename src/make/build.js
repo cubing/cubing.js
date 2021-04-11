@@ -2,6 +2,8 @@ import {build} from "esbuild";
 import { resolve } from "path";
 import { existsSync } from "fs";
 
+import { targetNames } from "./target-names.js";
+
 // Note that we have to use an extra `..` to back out of the file name
 const PATH_TO_SRC_CUBING = resolve(new URL(".", import.meta.url).pathname, "../cubing");
 
@@ -59,18 +61,8 @@ class Target {
 }
 
 const targets = []
-for (const name of [
-  "alg",
-  "bluetooth",
-  "kpuzzle",
-  "notation",
-  "protocol",
-  "puzzle-geometry",
-  "puzzles",
-  "stream",
-  "twisty"
-]) {
-  targets.push(new Target(name))
+for (const targetName of targetNames) {
+  targets.push(new Target(targetName))
 }
 
 // targets.map(a => console.log(a.dirPath))
