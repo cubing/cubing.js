@@ -7,7 +7,6 @@ import { megaminx } from "./implementations/megaminx";
 import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
 import { PuzzleLoader } from "./PuzzleLoader";
-import { getFaceletAppearance } from "./stickerings/appearance";
 
 export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
