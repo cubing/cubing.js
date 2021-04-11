@@ -157,6 +157,11 @@
       "import": "./kpuzzle/index.js",
       "types": "./dist/types/kpuzzle/index.d.ts"
     },
+    "./notation": {
+      "require": "./dist/cjs/notation/index.js",
+      "import": "./notation/index.js",
+      "types": "./dist/types/notation/index.d.ts"
+    },
     "./protocol": {
       "require": "./dist/cjs/protocol/index.js",
       "import": "./protocol/index.js",
