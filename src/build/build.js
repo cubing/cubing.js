@@ -23,8 +23,8 @@ class Target {
 
     const setup = (build) => {
       for (const otherTarget of targets ) {
-        if (otherTarget === this) {
-          console.log("curr!")
+        if (otherTarget.name === this.name) {
+          continue
         }
         build.onResolve({ filter: otherTarget.regExp }, (arg) => {
           const resolved = resolve(arg.resolveDir, arg.path);
@@ -39,8 +39,10 @@ class Target {
             return arg
           }
 
-          console.log(arg)
-          throw new Error("bad import!", arg)
+          console.error("bad import!")
+          console.log(this.indexFilePath)
+          console.error(arg)
+          process.exit(1)
         })
       }
     }
@@ -66,14 +68,9 @@ for (const name of [
   targets.push(new Target(name))
 }
 
-targets.map(a => console.log(a.dirPath))
+// targets.map(a => console.log(a.dirPath))
 
-
-console.log()
-const path = new URL("../alg", import.meta.url)
-console.log(path.pathname, resolve(path.toString()))
-
-const currentTarget = targets[4];
+const currentTarget = new Target("alg")
 build({
   target: "es2015",
   bundle: true,
