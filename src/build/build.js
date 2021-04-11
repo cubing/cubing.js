@@ -22,6 +22,7 @@ class Target {
     this.regExp = new RegExp(this.name);
 
     const setup = (build) => {
+      console.log(this.name)
       for (const otherTarget of targets ) {
         if (otherTarget.name === this.name) {
           continue
