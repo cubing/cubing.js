@@ -1,6 +1,6 @@
 {
   "name": "puzzles",
   "type": "module",
-  "main": "../dist/esm/puzzles/index.js",
+  "main": "./index.js",
   "types": "../dist/types/puzzles/index.d.ts"
 }

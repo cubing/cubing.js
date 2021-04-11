@@ -1,6 +1,6 @@
 {
   "name": "stream",
   "type": "module",
-  "main": "../dist/esm/stream/index.js",
+  "main": "./index.js",
   "types": "../dist/types/stream/index.d.ts"
 }

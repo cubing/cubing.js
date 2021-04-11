@@ -1,7 +1,6 @@
 {
   "name": "alg",
   "type": "module",
-  "main": "../dist/esm/alg/index.js",
-  "module": "../dist/esm/alg/index.js",
+  "main": "./index.js",
   "types": "../dist/types/alg/index.d.ts"
 }
