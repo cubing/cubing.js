@@ -9,7 +9,7 @@ import {
   Newline,
   Pause,
   TraversalUp,
-} from "../alg/index";
+} from "../alg";
 
 /*
  *   For movecount, that understands puzzle rotations.  This code

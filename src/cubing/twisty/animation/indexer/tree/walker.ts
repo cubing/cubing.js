@@ -12,9 +12,9 @@ import {
   Unit,
 } from "../../../../alg";
 import {
-  directedGenerator,
-  IterationDirection,
-} from "../../../../alg/iteration";
+  experimentalDirectedGenerator,
+  ExperimentalIterationDirection,
+} from "../../../../alg";
 import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration } from "../../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
@@ -250,9 +250,9 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
       return false;
     }
     let i = wd.back ? alg.experimentalNumUnits() - 1 : 0;
-    for (const unit of directedGenerator(
+    for (const unit of experimentalDirectedGenerator(
       alg.units(),
-      wd.back ? IterationDirection.Backwards : IterationDirection.Forwards,
+      wd.back ? ExperimentalIterationDirection.Backwards : ExperimentalIterationDirection.Forwards,
     )) {
       if (
         this.traverseUnit(unit, new WalkerDown(wd.apd.children[i], wd.back))

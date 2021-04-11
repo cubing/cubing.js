@@ -10,7 +10,7 @@ import {
   TraversalUp,
   Unit,
 } from "../../../../alg";
-import { AlgBuilder } from "../../../../alg/AlgBuilder";
+import { AlgBuilder } from "../../../../alg";
 
 const MIN_CHUNKING_THRESHOLD = 16;
 

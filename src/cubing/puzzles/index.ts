@@ -7,6 +7,7 @@ import { megaminx } from "./implementations/megaminx";
 import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
 import { PuzzleLoader } from "./PuzzleLoader";
+import { getFaceletAppearance } from "./stickerings/appearance";
 
 export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
@@ -39,6 +40,11 @@ export const puzzles: Record<string, PuzzleLoader> = {
 };
 
 export { cube2x2x2, cube3x3x3 };
+
+export {cube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle} from "./implementations/3x3x3/3x3x3.kpuzzle.json_";
+
+export {getFaceletAppearance as experimentalGetFaceletAppearance} from "./stickerings/appearance"
+export type {FaceletMeshAppearance as ExperimentalFaceletMeshAppearance, PuzzleAppearance as ExperimentalPuzzleAppearance} from "./stickerings/appearance"
 
 // // TODO: find a better way to share these defs.
 // for (const puzzleName of [

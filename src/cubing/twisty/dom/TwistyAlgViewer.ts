@@ -9,7 +9,7 @@ import {
   Pause,
   TraversalDownUp,
 } from "../../alg";
-import { direct, IterationDirection } from "../../alg/iteration";
+import { experimentalDirect, ExperimentalIterationDirection } from "../../alg";
 import { TwistyPlayer } from "../../twisty";
 import { TimeRange } from "../animation/cursor/AlgCursor";
 import { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
@@ -21,7 +21,7 @@ import {
 class DataDown {
   earliestMoveIndex: number;
   twistyAlgViewer: ExperimentalTwistyAlgViewer;
-  direction: IterationDirection;
+  direction: ExperimentalIterationDirection;
 }
 
 class DataUp {
@@ -65,7 +65,7 @@ class TwistyAlgWrapperElem extends HTMLElementShim {
   }
 
   flushQueue(
-    direction: IterationDirection = IterationDirection.Forwards,
+    direction: ExperimentalIterationDirection = ExperimentalIterationDirection.Forwards,
   ): void {
     for (const node of maybeReverseList(this.queue, direction)) {
       this.append(node);
@@ -80,21 +80,21 @@ class TwistyAlgWrapperElem extends HTMLElementShim {
 
 customElementsShim.define("twisty-alg-wrapper-elem", TwistyAlgWrapperElem);
 
-function oppositeDirection(direction: IterationDirection): IterationDirection {
-  return direction === IterationDirection.Forwards
-    ? IterationDirection.Backwards
-    : IterationDirection.Forwards;
+function oppositeDirection(direction: ExperimentalIterationDirection): ExperimentalIterationDirection {
+  return direction === ExperimentalIterationDirection.Forwards
+    ? ExperimentalIterationDirection.Backwards
+    : ExperimentalIterationDirection.Forwards;
 }
 
 function updateDirectionByAmount(
-  currentDirection: IterationDirection,
+  currentDirection: ExperimentalIterationDirection,
   amount: number,
-): IterationDirection {
+): ExperimentalIterationDirection {
   return amount < 0 ? oppositeDirection(currentDirection) : currentDirection;
 }
 
-function maybeReverseList<T>(l: T[], direction: IterationDirection): T[] {
-  if (direction === IterationDirection.Forwards) {
+function maybeReverseList<T>(l: T[], direction: ExperimentalIterationDirection): T[] {
+  if (direction === ExperimentalIterationDirection.Forwards) {
     return l;
   }
   // console.log("rev", Array.from(l).reverse());
@@ -109,7 +109,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-sequence");
     let first = true;
-    for (const unit of direct(alg.units(), dataDown.direction)) {
+    for (const unit of experimentalDirect(alg.units(), dataDown.direction)) {
       if (!first) {
         element.addString(" ");
       }
@@ -289,7 +289,7 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
     this.#domTree = algToDOMTree(alg, {
       earliestMoveIndex: 0,
       twistyAlgViewer: this,
-      direction: IterationDirection.Forwards,
+      direction: ExperimentalIterationDirection.Forwards,
     }).element;
     this.textContent = "";
     this.appendChild(this.#domTree);

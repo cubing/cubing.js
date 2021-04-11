@@ -1,6 +1,6 @@
 import { Vector3 } from "three";
 import { Alg, Move } from "../../alg";
-import { experimentalAppendMove } from "../../alg/operation";
+import { experimentalAppendMove } from "../../alg";
 import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
