@@ -34,16 +34,23 @@ export function parseQuantumMove(s: string): QuantumMove {
 }
 
 
-interface ParserIndexed {
+export interface ParserIndexed {
   charIndex: number
 }
 
-type Parsed<T extends Alg | Unit> = T & ParserIndexed
+export type Parsed<T extends Alg | Unit> = T & ParserIndexed
 
 function addCharIndex<T extends Alg | Unit>(t: T, charIndex: number): Parsed<T> {
   const parsedT = (t as ParserIndexed & T)
   parsedT.charIndex = charIndex
   return parsedT
+}
+
+export function transferCharIndex<T extends Alg | Unit>(from: T, to: T): T {
+  if ("charIndex" in from) {
+    (to as Parsed<T>).charIndex = (from as Parsed<T>).charIndex
+  }
+  return to;
 }
 
 // TODO: support recording string locations for moves.
