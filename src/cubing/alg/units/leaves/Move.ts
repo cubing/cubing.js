@@ -1,10 +1,10 @@
 import { AlgCommon, Comparable } from "../../common";
+import { IterationDirection } from "../../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
-import { parseMove, parseQuantumMove } from "../../parse";
+import { parseMove, parseQuantumMove, transferCharIndex } from "../../parse";
+import { warnOnce } from "../../warnOnce";
 import { Repetition, RepetitionInfo } from "../Repetition";
 import { LeafUnit } from "../Unit";
-import { warnOnce } from "../../warnOnce";
-import { IterationDirection } from "../../iteration";
 
 interface QuantumMoveModifications {
   outerLayer?: number;
@@ -165,7 +165,8 @@ export class Move extends AlgCommon<Move> {
   }
 
   invert(): Move {
-    return new Move(this.#repetition.quantum, this.#repetition.inverseInfo());
+    // TODO: handle char indices more consistently among units.
+    return transferCharIndex(this, new Move(this.#repetition.quantum, this.#repetition.inverseInfo()));
   }
 
   *experimentalExpand(

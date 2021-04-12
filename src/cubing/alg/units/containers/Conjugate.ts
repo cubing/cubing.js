@@ -1,4 +1,4 @@
-import { Alg, FlexibleAlgSource } from "../../Alg";
+import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
@@ -48,7 +48,7 @@ export class Conjugate extends AlgCommon<Conjugate> {
   ) {
     super();
     this.#repetition = new Repetition<QuantumCommutator>(
-      new QuantumCommutator(new Alg(aSource), new Alg(bSource)), // TODO
+      new QuantumCommutator(experimentalEnsureAlg(aSource), experimentalEnsureAlg(bSource)), // TODO
       repetitionInfo,
     );
   }
