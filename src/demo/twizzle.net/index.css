@@ -1,0 +1,81 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  background-color: #eaeaea;
+  background-image: linear-gradient(
+      45deg,
+      #ddd 25%,
+      transparent 0,
+      transparent 75%,
+      #ddd 0,
+      #ddd
+    ),
+    linear-gradient(
+      45deg,
+      #ddd 25%,
+      transparent 0,
+      transparent 75%,
+      #ddd 0,
+      #ddd
+    );
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+.swipe-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 3em 1fr;
+}
+
+.control-bar {
+  height: 3em;
+  font-family: Verdana, Tahoma, sans-serif;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  background: rgba(255, 255, 255, 0.75);
+  align-items: center;
+}
+
+.control-bar button,
+.control-bar a {
+  font-size: 1.5rem;
+  height: 100%;
+  display: grid;
+  align-items: center;
+  padding: 0.25em;
+  box-sizing: border-box;
+}
+
+.control-bar a {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+swipey-puzzle {
+  display: grid;
+  overflow: hidden;
+  contain: content;
+  position: relative;
+  top: 0;
+}
+
+swipe-grid {
+  height: 100%;
+}
+
+twisty-player {
+  contain: content;
+  width: 100%;
+  height: 100%;
+}

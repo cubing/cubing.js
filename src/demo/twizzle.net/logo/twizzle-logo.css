@@ -1,0 +1,109 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+body {
+  display: grid;
+  background: #e8eaed;
+}
+
+#twizzle-logo {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+
+  display: grid;
+  place-content: center;
+}
+
+svg {
+  width: 70vw;
+  height: 70vh;
+}
+svg .primary-color {
+  animation: primary-color 10s infinite;
+}
+svg .secondary-color {
+  animation: secondary-color 10s infinite;
+}
+
+@keyframes primary-color {
+  00% {
+    fill: #4285f4;
+  }
+  20% {
+    fill: #4285f4;
+  }
+  25% {
+    fill: #5c5c5c;
+  }
+  35% {
+    fill: #5c5c5c;
+  }
+  40% {
+    fill: #c41506;
+  }
+  50% {
+    fill: #c41506;
+  }
+  55% {
+    fill: #0d904f;
+  }
+  65% {
+    fill: #0d904f;
+  }
+  70% {
+    fill: #f4ad42;
+  }
+  80% {
+    fill: #f4ad42;
+  }
+  85% {
+    fill: #f68800;
+  }
+  95% {
+    fill: #f68800;
+  }
+}
+
+@keyframes secondary-color {
+  00% {
+    fill: #0a703e;
+  }
+  20% {
+    fill: #0a703e;
+  }
+  25% {
+    fill: #f4ad42;
+  }
+  35% {
+    fill: #f4ad42;
+  }
+  40% {
+    fill: #f68800;
+  }
+  50% {
+    fill: #f68800;
+  }
+  55% {
+    fill: #4285f4;
+  }
+  65% {
+    fill: #4285f4;
+  }
+  70% {
+    fill: #5c5c5c;
+  }
+  80% {
+    fill: #5c5c5c;
+  }
+  85% {
+    fill: #c41506;
+  }
+  95% {
+    fill: #c41506;
+  }
+}
