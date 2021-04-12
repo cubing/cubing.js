@@ -1,5 +1,5 @@
 import { Alg, Move, TraversalUp } from "../../../alg";
-import { countAnimatedMoves } from "../../../notation/CountAnimatedMoves";
+import { countAnimatedMoves } from "../../../notation";
 import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import { Duration, Timestamp } from "../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";

@@ -28,3 +28,5 @@ export { parseKPuzzleDefinition } from "./parser";
 export { KPuzzleSVGWrapper } from "./svg";
 
 export { experimentalIs3x3x3Solved } from "./puzzle-orientation";
+
+export { transformationForQuantumMove as experimentalTransformationForQuantumMove } from "./kpuzzle";

@@ -16,13 +16,13 @@ import {
   KPuzzleDefinition,
   Transformation,
 } from "../../../kpuzzle";
-import { transformationForQuantumMove } from "../../../kpuzzle/kpuzzle";
+import { experimentalTransformationForQuantumMove } from "../../../kpuzzle";
 import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
 import {
-  FaceletMeshAppearance,
-  getFaceletAppearance,
-  PuzzleAppearance,
-} from "../../../puzzles/stickerings/appearance";
+  ExperimentalFaceletMeshAppearance,
+  experimentalGetFaceletAppearance,
+  ExperimentalPuzzleAppearance,
+} from "../../../puzzles";
 import { AlgCursor } from "../../animation/cursor/AlgCursor";
 import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { smootherStep } from "../../animation/easing";
@@ -139,7 +139,7 @@ class StickerDef {
     stickerDat: StickerDatSticker,
     hintStickers: boolean,
     options?: {
-      appearance?: FaceletMeshAppearance;
+      appearance?: ExperimentalFaceletMeshAppearance;
     },
   ) {
     const sdColor = new Color(stickerDat.color).getHex();
@@ -209,7 +209,7 @@ class StickerDef {
     );
   }
 
-  public setAppearance(faceletMeshAppearance: FaceletMeshAppearance): void {
+  public setAppearance(faceletMeshAppearance: ExperimentalFaceletMeshAppearance): void {
     switch (faceletMeshAppearance) {
       case "regular":
         this.origColorAppearance = this.origColor;
@@ -286,7 +286,7 @@ class AxisInfo {
 }
 
 export interface PG3DOptions {
-  appearance?: PuzzleAppearance;
+  appearance?: ExperimentalPuzzleAppearance;
 }
 
 const PG_SCALE = 0.5;
@@ -394,9 +394,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const options: { appearance?: FaceletMeshAppearance } = {};
+      const options: { appearance?: ExperimentalFaceletMeshAppearance } = {};
       if (params.appearance) {
-        options.appearance = getFaceletAppearance(
+        options.appearance = experimentalGetFaceletAppearance(
           params.appearance,
           orbit,
           ord,
@@ -454,13 +454,13 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return this.controlTargets;
   }
 
-  experimentalSetAppearance(appearance: PuzzleAppearance): void {
+  experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
     this.params.appearance = appearance;
     for (const orbitName in this.definition.orbits) {
       const { numPieces, orientations } = this.definition.orbits[orbitName];
       for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
         for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {
-          const faceletAppearance = getFaceletAppearance(
+          const faceletAppearance = experimentalGetFaceletAppearance(
             appearance,
             orbitName,
             pieceIdx,
@@ -525,7 +525,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (move === null) {
         throw Error("Bad blockmove " + externalMove.family);
       }
-      const quantumTransformation = transformationForQuantumMove(
+      const quantumTransformation = experimentalTransformationForQuantumMove(
         this.definition,
         externalMove.quantum,
       );

@@ -51,12 +51,13 @@
     "build-bundle-global": "npx esbuild --target=es2015 --bundle --format=cjs --minify --outdir=dist/bundle-global src/cubing/cubing.bundle-global.ts",
     "build-types": "npx tsc src/cubing/*.ts src/cubing/**/*.ts --declaration --emitDeclarationOnly --outDir dist/types --target es2015 --module es2020 --moduleResolution node --lib esnext,dom --resolveJsonModule --allowJs --allowSyntheticDefaultImports # TODO: unify with tsconfig.json",
     "build-bin": "npx esbuild --target=es2015 --bundle --external:three --format=esm --outfile=dist/bin/puzzle-geometry-bin.js src/bin/puzzle-geometry-bin.ts",
+    "build-experimental-splitting-build": "node src/make/build.js",
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx pegjs src/cubing/alg/parser/parser-pegjs.pegjs && npx pegjs src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "npm run clean && npx parcel serve --no-autoinstall src/demo/index.html --port 3333 --open --dist-dir /tmp/cubing-js-parcel # cleaning is a workaround for one set of Parcel bugs, /tmp dir is a workaround dir for other Parcel bugs",
     "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel",
-    "test": "npm run test-jest && npm run lint",
+    "test": "npm run test-jest && npm run lint && npm run build-experimental-splitting-build",
     "test-jest": "npx jest --collectCoverage",
     "test-node-require": "node src/dist-test/require.cjs",
     "test-node-import": "node src/dist-test/import.mjs",
@@ -138,7 +139,7 @@
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js",
+      "import": "./index.js",
       "types": "./types/types/index.d.ts"
     },
     "./alg": {
@@ -155,6 +156,11 @@
       "require": "./dist/cjs/kpuzzle/index.js",
       "import": "./dist/esm/kpuzzle/index.js",
       "types": "./dist/types/kpuzzle/index.d.ts"
+    },
+    "./notation": {
+      "require": "./dist/cjs/notation/index.js",
+      "import": "./dist/esm/notation/index.js",
+      "types": "./dist/types/notation/index.d.ts"
     },
     "./protocol": {
       "require": "./dist/cjs/protocol/index.js",

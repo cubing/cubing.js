@@ -1,7 +1,7 @@
 // TODO: figure out where to house this permanently.
 
 import { Move } from "../../alg";
-import { experimentalIs } from "../../alg/is";
+import { experimentalIs } from "../../alg";
 import { KPuzzleDefinition, transformationForMove } from "../../kpuzzle";
 
 export type FaceletMeshAppearance =

@@ -1,6 +1,6 @@
-import { normalizePuzzleOrientation as normalize3x3x3Orientation } from "../protocol/binary/puzzle-orientation";
+import { experimentalNormalizePuzzleOrientation as normalize3x3x3Orientation } from "../protocol";
 import { Transformation } from "./definition_types";
-import { cube3x3x3KPuzzle as def } from "../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import { experimentalCube3x3x3KPuzzle as def } from "../puzzles";
 import {
   areOrbitTransformationsEquivalent,
   areTransformationsEquivalent,
