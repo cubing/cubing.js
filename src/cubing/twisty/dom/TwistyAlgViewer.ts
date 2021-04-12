@@ -336,11 +336,13 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
       return;
     }
     this.twistyPlayer = twistyPlayer;
-    const alg = Alg.fromString(this.twistyPlayer.alg.toString()); // TODO: is there a better way to ensure this is parsed?
-    this.setAlg(alg);
+    const sourceAlg = this.twistyPlayer.alg;
+    // TODO: Use proper architecture instead of a heuristic to ensure we have a parsed alg annotated with char indices.
+    const parsedAlg = ("charIndex" in (sourceAlg as Partial<Parsed<Alg>>)) ? sourceAlg : Alg.fromString(sourceAlg.toString());
+    this.setAlg(parsedAlg);
     (async () => {
       const wrapper = new KPuzzleWrapper(await puzzles[twistyPlayer!.puzzle].def());
-      const indexer = new TreeAlgIndexer(wrapper, alg);
+      const indexer = new TreeAlgIndexer(wrapper, parsedAlg);
       twistyPlayer.timeline.addTimestampListener({
         onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
           // TODO: improve perf, e.g. only get notified when the move index changes.
