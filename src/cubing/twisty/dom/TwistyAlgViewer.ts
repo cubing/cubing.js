@@ -114,7 +114,7 @@ function maybeReverseList<T>(l: T[], direction: ExperimentalIterationDirection):
 class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-sequence", alg);
+    const element = new TwistyAlgWrapperElem("twisty-alg-alg", alg); // TODO: pick a better class name.
     let first = true;
     for (const unit of experimentalDirect(alg.units(), dataDown.direction)) {
       if (!first) {
@@ -255,7 +255,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   }
 
   public traverseNewline(newline: Newline, _dataDown: DataDown): DataUp {
-    const element = new TwistyAlgWrapperElem("twisty-alg-newLine", newline);
+    const element = new TwistyAlgWrapperElem("twisty-alg-newline", newline);
     element.append(document.createElement("br"));
     return {
       moveCount: 0,
@@ -267,7 +267,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     return {
       moveCount: 0,
       element: new TwistyAlgLeafElem(
-        "twisty-alg-comment",
+        "twisty-alg-line-comment",
         `//${lineComment.text}`,
         dataDown,
         lineComment
