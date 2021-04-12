@@ -290,7 +290,6 @@ class MoveHighlighter {
   }
 
   set(move: Parsed<Move> | null): void {
-    console.log(move);
     const newElem = move ? this.moveCharIndexMap.get(move.charIndex) ?? null : null
     if (this.currentElem === newElem) {
       return;
@@ -336,13 +335,11 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
     const alg = Alg.fromString(this.twistyPlayer.alg.toString()); // TODO: is there a better way to ensure this is parsed?
     this.setAlg(alg);
     (async () => {
-      console.log(alg)
       const wrapper = new KPuzzleWrapper(await puzzles[twistyPlayer!.puzzle].def());
       const indexer = new TreeAlgIndexer(wrapper, alg);
-      console.log(indexer)
-      console.log(indexer.getMove(0))
       twistyPlayer.timeline.addTimestampListener({
         onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
+          // TODO: improve perf, e.g. only get notified when the move index changes.
           this.highlighter.set(indexer.getMove(indexer.timestampToIndex(timestamp)) as Parsed<Move> | null)
         },
         onTimeRangeChange(_timeRange: TimeRange): void {}
