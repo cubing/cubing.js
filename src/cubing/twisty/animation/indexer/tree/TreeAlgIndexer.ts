@@ -3,7 +3,7 @@ import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import { Duration, Timestamp } from "../../cursor/CursorTypes";
 import { AlgIndexer } from "../AlgIndexer";
 import { chunkAlgs } from "./chunkAlgs";
-import { AlgPartDecoration, AlgWalker, DecoratorConstructor } from "./walker";
+import { AlgPartDecoration, AlgWalker, DecoratorConstructor } from "./AlgWalker";
 
 export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
   private decoration: AlgPartDecoration<PuzzleWrapper>;
