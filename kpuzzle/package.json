@@ -1,6 +1,6 @@
 {
   "name": "kpuzzle",
   "type": "module",
-  "main": "./index.js",
+  "main": "../dist/esm/kpuzzle/index.js",
   "types": "../dist/types/kpuzzle/index.d.ts"
 }

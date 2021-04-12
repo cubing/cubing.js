@@ -1,6 +1,6 @@
 {
   "name": "twisty",
   "type": "module",
-  "main": "./index.js",
+  "main": "../dist/esm/twisty/index.js",
   "types": "../dist/types/twisty/index.d.ts"
 }

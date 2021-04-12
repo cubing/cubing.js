@@ -10,7 +10,8 @@ const PATH_TO_SRC_CUBING = resolve(new URL(".", import.meta.url).pathname, "../c
 class Target {
   constructor(name, targetInfo) {
     this.name = name;
-    this.outdir = `./${this.name}`
+    // this.outdir = `./${this.name}`
+    this.outdir = `./dist/experimental-splitting-build/${this.name}`
 
     this.deps = targetInfo.deps;
 
