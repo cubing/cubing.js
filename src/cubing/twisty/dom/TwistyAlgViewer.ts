@@ -25,6 +25,8 @@ import {
   HTMLElementShim
 } from "./element/node-custom-element-shims";
 
+const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
+
 class DataDown {
   earliestMoveIndex: number;
   twistyAlgViewer: ExperimentalTwistyAlgViewer;
@@ -37,13 +39,13 @@ class DataUp {
 }
 
 class TwistyAlgLeafElem extends HTMLElementShim {
-  constructor(className: string, text: string, dataDown: DataDown, public algOrUnit: Alg | Unit) {
+  constructor(className: string, text: string, dataDown: DataDown, public algOrUnit: Alg | Unit, offsetIntoMove: boolean) {
     super();
     this.textContent = text;
     this.classList.add(className);
 
     this.addEventListener("click", () => {
-      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex);
+      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex, offsetIntoMove);
     });
   }
 
@@ -164,7 +166,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       "twisty-alg-move",
       move.toString(),
       dataDown,
-      move
+      move,
+      true
     );
     dataDown.twistyAlgViewer.highlighter.addMove((move as Parsed<Move>).charIndex, element);
     return {
@@ -250,7 +253,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traversePause(pause: Pause, dataDown: DataDown): DataUp {
     return {
       moveCount: 1,
-      element: new TwistyAlgLeafElem("twisty-alg-pause", ".", dataDown, pause),
+      element: new TwistyAlgLeafElem("twisty-alg-pause", ".", dataDown, pause, true),
     };
   }
 
@@ -270,7 +273,8 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
         "twisty-alg-line-comment",
         `//${lineComment.text}`,
         dataDown,
-        lineComment
+        lineComment,
+        false
       ),
     };
   }
@@ -365,11 +369,12 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
     });
   }
 
-  jumpToIndex(index: number): void {
+  jumpToIndex(index: number, offsetIntoMove: boolean): void {
     if (this.twistyPlayer && this.twistyPlayer.cursor) {
+      const offset = offsetIntoMove ? DEFAULT_OFFSET_MS : 0;
       const timestamp =
         (this.twistyPlayer.cursor.experimentalTimestampFromIndex(index) ??
-          -250) + 250;
+          -offset) + offset;
       this.twistyPlayer?.timeline.setTimestamp(timestamp);
       if (this.lastClickTimestamp === timestamp) {
         this.twistyPlayer.timeline.play();
