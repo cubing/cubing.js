@@ -1,4 +1,4 @@
-import { targetNames } from "./target-names.js";
+import { targetNames } from "./target-infos.js";
 import { exec } from "child_process"
 
 for (const targetName of targetNames) {
