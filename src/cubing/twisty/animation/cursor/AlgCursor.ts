@@ -168,7 +168,8 @@ export class AlgCursor
     // nothing to do
   }
 
-  setAlg(alg: Alg, indexerConstructor: IndexerConstructor): void {
+  setAlg(alg: Alg, indexerConstructor?: IndexerConstructor): void {
+    indexerConstructor ??= this.indexerConstructor;
     if (
       alg.isIdentical(this.alg) &&
       this.indexerConstructor === indexerConstructor

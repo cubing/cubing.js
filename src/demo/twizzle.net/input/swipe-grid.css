@@ -1,0 +1,304 @@
+swipe-grid {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+
+  /* border: 2px solid rgba(0, 0, 0, 0.25) */
+
+  user-select: none;
+}
+
+swipe-grid div {
+  cursor: grab;
+  box-sizing: content-box;
+  overflow: visible;
+
+  display: grid;
+  place-content: center;
+  color: white;
+  font-size: min(15vw, 20vh); /* TODO Size against element. */
+  font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
+
+  position: relative;
+  transition: background-color 0.1s;
+}
+
+swipe-grid.showing-all-targets div:not(.source) {
+  background: rgba(255, 255, 255, 0.65);
+  color: black;
+
+  animation: revealing-all-targets 0.25s;
+}
+
+@keyframes revealing-all-targets {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+swipe-grid.theme-dots div:nth-child(1)::before,
+swipe-grid.theme-dots div:nth-child(3)::before,
+swipe-grid.theme-dots div:nth-child(7)::before,
+swipe-grid.theme-dots div:nth-child(9)::before {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 25%;
+  background: rgba(0, 0, 0, 0.65);
+  box-shadow: 0 0 12px 6px white;
+}
+
+swipe-grid.theme-dots div:nth-child(1)::before {
+  bottom: -12px;
+  right: -12px;
+}
+
+swipe-grid.theme-dots div:nth-child(3)::before {
+  bottom: -12px;
+  left: -12px;
+}
+
+swipe-grid.theme-dots div:nth-child(7)::before {
+  top: -12px;
+  right: -12px;
+}
+
+swipe-grid.theme-dots div:nth-child(9)::before {
+  top: -12px;
+  left: -12px;
+}
+
+swipe-grid.theme-cross-hairs div:nth-child(1)::before,
+swipe-grid.theme-cross-hairs div:nth-child(3)::before,
+swipe-grid.theme-cross-hairs div:nth-child(7)::before,
+swipe-grid.theme-cross-hairs div:nth-child(9)::before {
+  content: "";
+  position: absolute;
+  width: max(min(10vw, 10vh), 48px);
+  height: max(min(10vw, 10vh), 48px);
+  border-radius: 25%;
+  background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) calc(50% - 4px),
+      rgba(32, 32, 32, 1) calc(50% - 4px),
+      rgba(32, 32, 32, 1) calc(50% + 4px),
+      rgba(0, 0, 0, 0) calc(50% + 4px),
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) calc(50% - 4px),
+      rgba(32, 32, 32, 1) calc(50% - 4px),
+      rgba(32, 32, 32, 1) calc(50% + 4px),
+      rgba(0, 0, 0, 0) calc(50% + 4px),
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) calc(50% - 12px),
+      rgba(255, 255, 255, 1) calc(50% - 4px),
+      rgba(255, 255, 255, 1) calc(50% + 4px),
+      rgba(0, 0, 0, 0) calc(50% + 12px),
+      rgba(0, 0, 0, 0) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) calc(50% - 12px),
+      rgba(255, 255, 255, 1) calc(50% - 4px),
+      rgba(255, 255, 255, 1) calc(50% + 4px),
+      rgba(0, 0, 0, 0) calc(50% + 12px),
+      rgba(0, 0, 0, 0) 100%
+    );
+}
+
+swipe-grid.theme-cross-hairs div:nth-child(1)::before {
+  bottom: min(max(-5vw, -5vh), -24px);
+  right: min(max(-5vw, -5vh), -24px);
+}
+
+swipe-grid.theme-cross-hairs div:nth-child(3)::before {
+  bottom: min(max(-5vw, -5vh), -24px);
+  left: min(max(-5vw, -5vh), -24px);
+}
+
+swipe-grid.theme-cross-hairs div:nth-child(7)::before {
+  top: min(max(-5vw, -5vh), -24px);
+  right: min(max(-5vw, -5vh), -24px);
+}
+
+swipe-grid.theme-cross-hairs div:nth-child(9)::before {
+  top: min(max(-5vw, -5vh), -24px);
+  left: min(max(-5vw, -5vh), -24px);
+}
+
+swipe-grid.theme-box div:nth-child(5) {
+  border: 4px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.75),
+    inset 0 0 24px 0 rgba(0, 0, 0, 0.75);
+}
+
+swipe-grid.theme-HUD div:nth-child(1) {
+  border-width: 6px;
+  border-style: solid;
+  border-image: linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.5) 20%,
+      rgba(0, 0, 0, 0) 25%,
+      rgba(0, 0, 0, 0) 100%
+    )
+    10;
+}
+
+swipe-grid.theme-HUD div:nth-child(3) {
+  border-width: 6px;
+  border-style: solid;
+  border-image: linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.5) 20%,
+      rgba(0, 0, 0, 0) 25%,
+      rgba(0, 0, 0, 0) 100%
+    )
+    10;
+}
+
+swipe-grid.theme-HUD div:nth-child(9) {
+  border-width: 6px;
+  border-style: solid;
+  border-image: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.5) 20%,
+      rgba(0, 0, 0, 0) 25%,
+      rgba(0, 0, 0, 0) 100%
+    )
+    10;
+}
+
+swipe-grid.theme-HUD div:nth-child(7) {
+  border-width: 6px;
+  border-style: solid;
+  border-image: linear-gradient(
+      -135deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.5) 20%,
+      rgba(0, 0, 0, 0) 25%,
+      rgba(0, 0, 0, 0) 100%
+    )
+    10;
+}
+
+swipe-grid.theme-layers div:nth-child(1) {
+  box-shadow: -32px -32px 16px 32px rgba(0, 0, 0, 0.5);
+}
+
+swipe-grid.theme-layers div:nth-child(3) {
+  box-shadow: 32px -32px 16px 32px rgba(0, 0, 0, 0.5);
+}
+
+swipe-grid.theme-layers div:nth-child(5) {
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+}
+
+swipe-grid.theme-layers div:nth-child(7) {
+  box-shadow: -32px 32px 16px 32px rgba(0, 0, 0, 0.5);
+}
+
+swipe-grid.theme-layers div:nth-child(9) {
+  box-shadow: 32px 32px 16px 32px rgba(0, 0, 0, 0.5);
+}
+
+/********/
+
+swipe-grid.theme-grid div:nth-child(3n + 1),
+swipe-grid.theme-grid div:nth-child(3n + 2) {
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+swipe-grid.theme-grid div:nth-child(3n + 2),
+swipe-grid.theme-grid div:nth-child(3n + 3) {
+  border-left: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+swipe-grid.theme-grid div:nth-child(-n + 6) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+swipe-grid.theme-grid div:nth-child(n + 4):nth-child(-n + 9) {
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/********/
+
+swipe-grid.theme-transparent-grid div:nth-child(3n + 1),
+swipe-grid.theme-transparent-grid div:nth-child(3n + 2) {
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+swipe-grid.theme-transparent-grid div:nth-child(3n + 2),
+swipe-grid.theme-transparent-grid div:nth-child(3n + 3) {
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+swipe-grid.theme-transparent-grid div:nth-child(-n + 6) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+swipe-grid.theme-transparent-grid div:nth-child(n + 4):nth-child(-n + 9) {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/********/
+
+swipe-grid.theme-transparent-grid-back div:nth-child(3n + 1),
+swipe-grid.theme-transparent-grid-back div:nth-child(3n + 2) {
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+swipe-grid.theme-transparent-grid-back div:nth-child(3n + 2),
+swipe-grid.theme-transparent-grid-back div:nth-child(3n + 3) {
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+swipe-grid.theme-transparent-grid-back div:nth-child(-n + 6) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+swipe-grid.theme-transparent-grid-back div:nth-child(n + 4):nth-child(-n + 9) {
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+swipe-grid div.tentative-target {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+swipe-grid div.source {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+swipe-grid div.self-retarget {
+  background: rgba(192, 0, 0, 0.65);
+}
+
+swipe-grid.theme-grid div.source,
+swipe-grid.theme-grid div.tentative-target,
+swipe-grid.theme-grid div.source.tentative-target {
+  border: none !important;
+}
+
+swipe-grid.swiping div {
+  cursor: move;
+}
