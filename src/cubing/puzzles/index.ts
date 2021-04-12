@@ -1,3 +1,6 @@
+
+export {cube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle} from "./implementations/3x3x3/3x3x3.kpuzzle.json_";
+
 import { cubePGPuzzleLoader, genericPGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
@@ -39,8 +42,6 @@ export const puzzles: Record<string, PuzzleLoader> = {
 };
 
 export { cube2x2x2, cube3x3x3 };
-
-export {cube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle} from "./implementations/3x3x3/3x3x3.kpuzzle.json_";
 
 export {getFaceletAppearance as experimentalGetFaceletAppearance} from "./stickerings/appearance"
 export type {FaceletMeshAppearance as ExperimentalFaceletMeshAppearance, PuzzleAppearance as ExperimentalPuzzleAppearance} from "./stickerings/appearance"
