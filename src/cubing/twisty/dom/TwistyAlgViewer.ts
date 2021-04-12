@@ -8,6 +8,7 @@ import {
   Newline,
   Pause,
   TraversalDownUp,
+  Unit,
 } from "../../alg";
 import { experimentalDirect, ExperimentalIterationDirection } from "../../alg";
 import { TwistyPlayer } from "../../twisty";
@@ -30,7 +31,7 @@ class DataUp {
 }
 
 class TwistyAlgLeafElem extends HTMLElementShim {
-  constructor(className: string, text: string, dataDown: DataDown) {
+  constructor(className: string, text: string, dataDown: DataDown, public algOrUnit: Alg | Unit) {
     super();
     this.textContent = text;
     this.classList.add(className);
@@ -50,7 +51,7 @@ customElementsShim.define("twisty-alg-leaf-elem", TwistyAlgLeafElem);
 class TwistyAlgWrapperElem extends HTMLElementShim {
   private queue: (Element | Text)[] = [];
 
-  constructor(className: string) {
+  constructor(className: string, public algOrUnit: Alg | Unit) {
     super();
     this.classList.add(className);
   }
@@ -107,7 +108,7 @@ function maybeReverseList<T>(l: T[], direction: ExperimentalIterationDirection):
 class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-sequence");
+    const element = new TwistyAlgWrapperElem("twisty-alg-sequence", alg);
     let first = true;
     for (const unit of experimentalDirect(alg.units(), dataDown.direction)) {
       if (!first) {
@@ -135,7 +136,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       grouping.experimentalEffectiveAmount,
     );
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-group");
+    const element = new TwistyAlgWrapperElem("twisty-alg-grouping", grouping);
     element.addString("(");
     moveCount += element.addElem(
       this.traverseAlg(grouping.experimentalAlg, {
@@ -152,13 +153,14 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     };
   }
 
-  public traverseMove(blockMove: Move, dataDown: DataDown): DataUp {
+  public traverseMove(move: Move, dataDown: DataDown): DataUp {
     return {
       moveCount: 1,
       element: new TwistyAlgLeafElem(
-        "twisty-alg-blockMove",
-        blockMove.toString(),
+        "twisty-alg-move",
+        move.toString(),
         dataDown,
+        move
       ),
     };
   }
@@ -168,7 +170,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     dataDown: DataDown,
   ): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-commutator");
+    const element = new TwistyAlgWrapperElem("twisty-alg-commutator", commutator);
     element.addString("[");
     element.flushQueue();
     const direction = updateDirectionByAmount(
@@ -206,7 +208,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
 
   public traverseConjugate(conjugate: Conjugate, dataDown: DataDown): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-conjugate");
+    const element = new TwistyAlgWrapperElem("twisty-alg-conjugate", conjugate);
     element.addString("[");
     const direction = updateDirectionByAmount(
       dataDown.direction,
@@ -237,15 +239,15 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     };
   }
 
-  public traversePause(_pause: Pause, dataDown: DataDown): DataUp {
+  public traversePause(pause: Pause, dataDown: DataDown): DataUp {
     return {
       moveCount: 1,
-      element: new TwistyAlgLeafElem("twisty-alg-pause", ".", dataDown),
+      element: new TwistyAlgLeafElem("twisty-alg-pause", ".", dataDown, pause),
     };
   }
 
-  public traverseNewline(_newLine: Newline, _dataDown: DataDown): DataUp {
-    const element = new TwistyAlgWrapperElem("twisty-alg-newLine");
+  public traverseNewline(newline: Newline, _dataDown: DataDown): DataUp {
+    const element = new TwistyAlgWrapperElem("twisty-alg-newLine", newline);
     element.append(document.createElement("br"));
     return {
       moveCount: 0,
@@ -253,13 +255,14 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     };
   }
 
-  public traverseLineComment(comment: LineComment, dataDown: DataDown): DataUp {
+  public traverseLineComment(lineComment: LineComment, dataDown: DataDown): DataUp {
     return {
       moveCount: 0,
       element: new TwistyAlgLeafElem(
         "twisty-alg-comment",
-        `//${comment.text}`,
+        `//${lineComment.text}`,
         dataDown,
+        lineComment
       ),
     };
   }

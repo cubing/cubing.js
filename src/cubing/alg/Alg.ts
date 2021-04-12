@@ -40,6 +40,14 @@ function toIterable(input?: FlexibleAlgSource): Iterable<Unit> {
   throw "Invalid unit";
 }
 
+// Preserves the alg if it's already an `Alg`.
+export function experimentalEnsureAlg(alg: FlexibleAlgSource): Alg {
+  if (experimentalIs(alg, Alg)) {
+    return (alg as Alg);
+  }
+  return new Alg(alg);
+}
+
 export class Alg extends AlgCommon<Alg> {
   #units: Iterable<Unit>; // TODO: freeze?
   constructor(alg?: FlexibleAlgSource) {
