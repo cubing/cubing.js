@@ -1,11 +1,7 @@
 import {
+  Alg,
   algCubingNetLink,
-  algToString,
-  coalesceBaseMoves,
-  parse,
-  Sequence,
-  modifiedBlockMove,
-} from "cubing/alg";
+} from "../../cubing/alg";
 import {
   BluetoothPuzzle,
   connect,
@@ -13,14 +9,14 @@ import {
   GoCube,
   MoveEvent,
   OrientationEvent,
-} from "cubing/bluetooth";
-import { ProxyEvent, WebSocketProxySender } from "cubing/stream";
+} from "../../cubing/bluetooth";
+import { ProxyEvent, WebSocketProxySender } from "../../cubing/stream";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
   Twisty3DPuzzle,
-} from "cubing/twisty";
-import { useNewFaceNames } from "cubing/puzzle-geometry";
+} from "../../cubing/twisty";
+import { useNewFaceNames } from "../../cubing/puzzle-geometry";
 import "regenerator-runtime/runtime";
 // @ts-ignore
 import bluetoothSVG from "url:./bluetooth.svg";
@@ -38,7 +34,7 @@ import {
 } from "./url-params";
 import { CallbackProxyReceiver } from "./websocket-proxy";
 import { Quaternion } from "three";
-import { AlgCubingNetOptions } from "cubing/dist/esm/src/alg/url";
+import { AlgCubingNetOptions } from "../../cubing/alg";
 
 useNewFaceNames(true);
 
@@ -47,7 +43,7 @@ experimentalShowRenderStats(debugShowRenderStats());
 
 let trackingOrientation: boolean = false;
 let bluetoothPuzzle: BluetoothPuzzle | null = null;
-let callbackProxyReceiver: CallbackProxyReceiver | null = null;
+// let callbackProxyReceiver: CallbackProxyReceiver | null = null;
 let sender: WebSocketProxySender | null = null;
 
 function puzzleName(puzzleID: PuzzleID): string {
@@ -57,8 +53,8 @@ function puzzleName(puzzleID: PuzzleID): string {
   return puzzleNameMap[puzzleID] ?? puzzleID;
 }
 
-function maybeCoalesce(s: Sequence): Sequence {
-  return coalesce() ? coalesceBaseMoves(s) : s;
+function maybeCoalesce(alg: Alg): Alg {
+  return coalesce() ? alg.simplify() : alg;
 }
 
 const fn = async (
@@ -101,7 +97,7 @@ const fn = async (
         //   })
         //   break;
         case "y":
-          e.latestMove = modifiedBlockMove(e.latestMove, {
+          e.latestMove = e.latestMove.modified({
             family: "Uv",
           });
           break;
@@ -129,21 +125,21 @@ const fn = async (
   controlBar.appendChild(clearButton);
   clearButton.addEventListener("click", space);
 
-  function toLink(seq: Sequence): string {
+  function toLink(alg: Alg): string {
     const url = new URL("https://experiments.cubing.net/cubing.js/twizzle/");
     const puzzleID = getPuzzleID();
-    if (puzzleID == "3x3x3") {
+    if (puzzleID === "3x3x3") {
       const opts: AlgCubingNetOptions = {
-        alg: seq,
+        alg: alg,
       };
-      const setup = swipeyPuzzle.twistyPlayer.experimentalStartSetup;
-      if (setup.nestedUnits.length > 0) {
+      const setup = swipeyPuzzle.twistyPlayer.experimentalSetupAlg;
+      if (!setup.experimentalIsEmpty()) {
         opts.setup = setup;
       }
       return algCubingNetLink(opts);
     } else {
       url.searchParams.set("puzzle", puzzleID);
-      url.searchParams.set("alg", algToString(seq));
+      url.searchParams.set("alg", (alg.toString()));
       return url.toString();
     }
   }
@@ -155,8 +151,8 @@ const fn = async (
   controlBar.appendChild(algLink);
   function updateAlgLink(): void {
     const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
-    const alg = algToString(seq);
-    if (alg == "") {
+    const alg = (seq.toString());
+    if (alg === "") {
       algLink.textContent = instructions;
       algLink.removeAttribute("href");
     } else {
@@ -184,7 +180,7 @@ const fn = async (
       trackingOrientation = true;
       resetCamera();
     }
-    swipeyPuzzle.twistyPlayer.scene.twisty3Ds.forEach(
+    swipeyPuzzle.twistyPlayer.scene!.twisty3Ds.forEach(
       (twisty3DPuzzle: Twisty3DPuzzle) => {
         twisty3DPuzzle.quaternion.copy(event.quaternion as Quaternion); // TODO
       }
@@ -230,7 +226,7 @@ const fn = async (
 
   function space() {
     resetCamera();
-    swipeyPuzzle.twistyPlayer.alg = parse("");
+    swipeyPuzzle.twistyPlayer.alg = new Alg();
     updateAlgLink();
 
     if (sender) {
@@ -275,14 +271,14 @@ const fn = async (
 
   document.addEventListener("copy", (e) => {
     const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg); // TODO
-    const alg = algToString(seq);
-    e.clipboardData.setData("text/plain", alg);
+    const alg = (seq.toString());
+    e.clipboardData!.setData("text/plain", alg);
 
     const a = document.createElement("a");
     a.href = toLink(seq);
     a.textContent = alg;
     const html = new XMLSerializer().serializeToString(a);
-    e.clipboardData.setData("text/html", html);
+    e.clipboardData!.setData("text/html", html);
 
     e.preventDefault();
   });
@@ -291,11 +287,12 @@ const fn = async (
     e?.preventDefault();
   }
 
-  if (receivingSocketOrigin()) {
+  const receivingOrigin = receivingSocketOrigin();
+  if (receivingOrigin) {
     console.log("Registering receiver");
-    const url = new URL(receivingSocketOrigin());
+    const url = new URL(receivingOrigin);
     url.pathname = "/register-receiver";
-    callbackProxyReceiver = new CallbackProxyReceiver(
+    new CallbackProxyReceiver(
       url.toString(),
       (e: ProxyEvent) => {
         console.log(e);
@@ -314,9 +311,10 @@ const fn = async (
     );
   }
 
-  if (sendingSocketOrigin()) {
+  const sendingOrigin = sendingSocketOrigin();
+  if (sendingOrigin) {
     console.log("Registering senter");
-    const url = new URL(sendingSocketOrigin());
+    const url = new URL(sendingOrigin);
     url.pathname = "/register-sender";
     sender = new WebSocketProxySender(url.toString());
   }

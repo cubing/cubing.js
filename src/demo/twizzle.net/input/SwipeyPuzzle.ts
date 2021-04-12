@@ -1,9 +1,6 @@
-import { BlockMove, Sequence } from "cubing/alg";
-import { BackViewLayout } from "cubing/dist/esm/src/twisty/dom/viewers/TwistyViewerWrapper";
-import { KPuzzle } from "cubing/kpuzzle";
-import { getPuzzleGeometryByName } from "cubing/puzzle-geometry";
-import { Twisty3DCanvas, TwistyPlayer } from "cubing/twisty";
-import { Vector3 } from "three";
+import { Move, Alg } from "../../../cubing/alg";
+// import { BackViewLayout } from "../../../cubing/twisty";
+import { BackViewLayout, Twisty3DCanvas, TwistyPlayer } from "../../../cubing/twisty";
 import { getSetup, PuzzleID } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 
@@ -54,7 +51,7 @@ export const moveMaps: Record<PuzzleID, string[][]> = {
     ["2L2'", "Rv2", "2R2", "2L'", "Lv'", "2R", "D'", "", "D"],
     ["/space", "B2", "R2", "F2'", "d'", "F'", "D2'", "D'", ""],
   ],
-  FTO: [
+  "FTO": [
     ["", "U'", "U2'", "L", "l", "u'", "L2", "2L2", "/enter"],
     ["U", "", "U'", "BL", "Rv'", "BR'", "BL2", "Rv2'", "BR2'"],
     ["U2", "U", "", "u", "r'", "R'", "Fv'", "2R2'", "R2'"],
@@ -65,7 +62,7 @@ export const moveMaps: Record<PuzzleID, string[][]> = {
     ["2L2'", "Rv2", "2R2", "2L'", "Lv'", "2R", "D'", "", "D"],
     ["/space", "BR2", "R2", "F2'", "d'", "F'", "D'", "D'", ""],
   ],
-  megaminx: [
+  "megaminx": [
     ["", "U'", "U2'", "L", "l", "u'", "L2", "2L2", "/enter"],
     ["U", "", "U'", "BL", "Rv'", "BR'", "BL2", "Rv2'", "BR2'"],
     ["U2", "U", "", "u", "r'", "R'", "Fv'", "2R2'", "R2'"],
@@ -92,12 +89,12 @@ function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayer {
     "back-view"
   ) as BackViewLayout | undefined;
   return new TwistyPlayer({
-    alg: new Sequence([]),
-    puzzle: puzzleName,
-    controls: "none",
+    alg: new Alg(),
+    puzzle: puzzleName as any,
+    controlPanel: "none",
     background: "none",
     backView,
-    experimentalStartSetup: getSetup(),
+    experimentalSetupAlg: getSetup(),
   });
 }
 
@@ -114,13 +111,13 @@ export class SwipeyPuzzle extends HTMLElement {
     super();
     this.twistyPlayer = constructTwistyPlayer(puzzleName);
 
-    let theme: ThemeType = new URL(document.location.href).searchParams.get(
+    let theme: ThemeType | null = new URL(document.location.href).searchParams.get(
       "theme"
     ) as ThemeType | null;
-    if (!themes.includes(theme)) {
+    if (!themes.includes(theme as ThemeType /* TODO*/)) {
       theme = DEFAULT_THEME;
     }
-    this.theme = theme;
+    this.theme = theme!;
     console.log("Using theme:", this.theme);
   }
 
@@ -172,18 +169,18 @@ export class SwipeyPuzzle extends HTMLElement {
     }
   }
 
-  private onMove(move: BlockMove): void {
+  private onMove(move: Move): void {
     this.addMove(move);
     this.algListener();
   }
 
   // TODO: move this somewhere better.
-  public addMove(move: BlockMove): void {
+  public addMove(move: Move): void {
     const oldAlg = this.twistyPlayer.alg;
     try {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddMove(move);
-      this.twistyPlayer.cursor.setAlg(this.twistyPlayer.alg);
+      this.twistyPlayer.cursor!.setAlg(this.twistyPlayer.alg);
     } catch (e) {
       this.twistyPlayer.alg = oldAlg;
     }

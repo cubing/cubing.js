@@ -1,4 +1,4 @@
-import { BlockMove, parse } from "cubing/alg";
+import { Move} from "../../../cubing/alg";
 import { PuzzleID, StringListAsType } from "../url-params";
 import { ActiveSwipe, SwipeTracker } from "./SwipeTracker";
 import { Action, actionToUIText, moveMaps } from "./SwipeyPuzzle";
@@ -26,14 +26,14 @@ export class SwipeGrid extends HTMLElement {
   private sectorMap: Map<HTMLElement, number> = new Map();
   // `swipeSource` indicates if a swipe is in progress.
   private swipeSource: HTMLElement | null = null;
-  private currentMove: string | null = null;
-  private lastSectorUnderSwipe: HTMLElement | null = null;
+  // private currentMove: string | null = null;
+  // private lastSectorUnderSwipe: HTMLElement | null = null;
   private showAllTargetMovesID: number = 0; // TODO: use proper state tracking.
   constructor(
     private puzzleName: PuzzleID,
-    private moveListener: (move: BlockMove) => void,
+    private moveListener: (move: Move) => void,
     private actionListener: (action: Action) => void,
-    private active: boolean = false,
+    _active: boolean = false, // TODO
     private theme: ThemeType
   ) {
     super();
@@ -67,7 +67,7 @@ export class SwipeGrid extends HTMLElement {
         isTentativeTarget: boolean;
         isSelfRetarget: boolean;
         text: string;
-        hasMoved;
+        hasMoved: boolean;
       }
     > = new Map();
     for (const sector of this.sectors) {
@@ -81,15 +81,15 @@ export class SwipeGrid extends HTMLElement {
     }
 
     for (const swipe of swipes) {
-      const data = newSectorData.get(swipe.sourceSector);
+      const data = newSectorData.get(swipe.sourceSector)!;
       data.isSource = true;
       data.text = this.moveUIText(
-        moveMaps[this.puzzleName][this.sectorMap.get(swipe.sourceSector)][
-          this.sectorMap.get(swipe.currentSector)
+        moveMaps[this.puzzleName][this.sectorMap.get(swipe.sourceSector)!][
+          this.sectorMap.get(swipe.currentSector!)!
         ]
       );
       data.hasMoved = data.hasMoved || swipe.hasMovedAwayFromSourceSector;
-      newSectorData.get(swipe.currentSector).isTentativeTarget = true;
+      newSectorData.get(swipe.currentSector!)!.isTentativeTarget = true;
       data.isSelfRetarget =
         data.isSelfRetarget ||
         (swipe.hasMovedAwayFromSourceSector &&
@@ -114,8 +114,8 @@ export class SwipeGrid extends HTMLElement {
   private onSwipeFinish(source: HTMLElement, target: HTMLElement) {
     this.hideAllTargetMoves();
     const move =
-      moveMaps[this.puzzleName][this.sectorMap.get(source)][
-        this.sectorMap.get(target)
+      moveMaps[this.puzzleName][this.sectorMap.get(source)!][
+        this.sectorMap.get(target)!
       ];
     if (move === "") {
       // nothing
@@ -125,7 +125,7 @@ export class SwipeGrid extends HTMLElement {
         this.swipeTracker.reset();
       }
     } else {
-      this.moveListener(parse(move).nestedUnits[0] as BlockMove);
+      this.moveListener(new Move(move));
     }
   }
 
@@ -144,7 +144,7 @@ export class SwipeGrid extends HTMLElement {
         const targetSector = this.sectors[i];
         if (targetSector !== swipe.sourceSector) {
           targetSector.textContent = this.moveUIText(
-            moveMaps[this.puzzleName][this.sectorMap.get(swipe.sourceSector)][i]
+            moveMaps[this.puzzleName][this.sectorMap.get(swipe.sourceSector)!][i]
           );
         }
       }

@@ -43,16 +43,16 @@ export class SwipeTracker {
     return this.activeTouches.includes(swipe as ActiveTouch);
   }
 
-  private idx(sector: HTMLElement): number {
-    return this.sectorIndices.get(sector);
-  }
+  // private idx(sector: HTMLElement): number {
+  //   return this.sectorIndices.get(sector);
+  // }
 
   private dispatchTouchChange(): void {
     this.swipeChangeListener(this.activeTouches);
   }
 
   private touchStart(sector: HTMLElement, e: TouchEvent): void {
-    for (const touch of e.changedTouches) {
+    for (const touch of e.changedTouches as any) {
       const activeTouch = {
         sourceSector: sector,
         currentSector: sector,
@@ -71,9 +71,9 @@ export class SwipeTracker {
     let anyChanged = false;
     // console.log("touchMove", sector, this.idx(sector), e);
     // const foundIDs: Set<number> = new Set(); // TODO: is this expensive?
-    for (const touch of e.changedTouches) {
+    for (const touch of e.changedTouches as any) {
       // foundIDs.add(touch.identifier);
-      const activeTouch = this.activeTouchesByID.get(touch.identifier);
+      const activeTouch = this.activeTouchesByID.get(touch.identifier)!;
       if (!activeTouch) {
         // TODO: this shouldn't happen?
         // continue;
@@ -112,11 +112,11 @@ export class SwipeTracker {
     }
   }
 
-  private touchEnd(sector: HTMLElement, e: TouchEvent): void {
-    for (const touch of e.changedTouches) {
+  private touchEnd(_sector: HTMLElement, e: TouchEvent): void {
+    for (const touch of e.changedTouches as any) {
       // console.log("Ended touch #", touch.identifier);
       // console.log("touchEnd", sector, this.idx(sector), e);
-      const activeTouch = this.activeTouchesByID.get(touch.identifier);
+      const activeTouch = this.activeTouchesByID.get(touch.identifier)!;
       this.activeTouchesByID.delete(touch.identifier);
 
       const activeTouchIdx = this.activeTouches.indexOf(activeTouch);
@@ -124,7 +124,7 @@ export class SwipeTracker {
 
       this.swipeFinishListener(
         activeTouch.sourceSector,
-        activeTouch.currentSector
+        activeTouch.currentSector!
       );
     }
 

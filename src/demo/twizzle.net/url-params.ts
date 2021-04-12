@@ -1,4 +1,4 @@
-import { parse, Sequence } from "cubing/alg";
+import { Alg } from "../../cubing/alg";
 
 // Trick from https://github.com/microsoft/TypeScript/issues/28046#issuecomment-480516434
 export type StringListAsType<
@@ -21,8 +21,8 @@ const puzzleIDs = {
   "3x3x3": true,
   "4x4x4": true,
   "5x5x5": true,
-  FTO: true,
-  megaminx: true,
+  "FTO": true,
+  "megaminx": true,
 };
 export const DEFAULT_PUZZLE_ID = "3x3x3";
 export type PuzzleID = keyof typeof puzzleIDs;
@@ -35,15 +35,15 @@ export function getPuzzleID(): PuzzleID {
   );
 }
 
-export function getSetup(): Sequence {
+export function getSetup(): Alg {
   const setup = new URL(document.location.href).searchParams.get("setup");
   if (!setup) {
-    return new Sequence([]);
+    return new Alg();
   }
   try {
-    return parse(setup);
+    return Alg.fromString(setup);
   } catch (e) {
-    return new Sequence([]);
+    return new Alg();
   }
 }
 
