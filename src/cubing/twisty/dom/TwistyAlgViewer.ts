@@ -12,12 +12,15 @@ import {
 } from "../../alg";
 import { experimentalDirect, ExperimentalIterationDirection } from "../../alg";
 import { TwistyPlayer } from "../../twisty";
-import { TimeRange } from "../animation/cursor/AlgCursor";
+import { AlgCursor, TimeRange } from "../animation/cursor/AlgCursor";
 import { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
 import {
   customElementsShim,
   HTMLElementShim,
 } from "./element/node-custom-element-shims";
+import {TreeAlgIndexer} from "../animation/indexer/tree/TreeAlgIndexer";
+import { puzzles } from "../../puzzles";
+import { KPuzzleWrapper } from "../3D/puzzles/KPuzzleWrapper";
 
 class DataDown {
   earliestMoveIndex: number;
@@ -304,7 +307,21 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
       return;
     }
     this.twistyPlayer = twistyPlayer;
-    this.setAlg(this.twistyPlayer.alg);
+    const alg = this.twistyPlayer.alg;
+    this.setAlg(alg);
+    (async () => {
+      console.log(alg)
+      const wrapper = new KPuzzleWrapper(await puzzles[twistyPlayer!.puzzle].def());
+      const indexer = new TreeAlgIndexer(wrapper, alg);
+      console.log(indexer)
+      console.log(indexer.getMove(0))
+      twistyPlayer.timeline.addTimestampListener({
+        onTimelineTimestampChange(timestamp: MillisecondTimestamp): void {
+          console.log(indexer.getMove(indexer.timestampToIndex(timestamp)))
+        },
+        onTimeRangeChange(_timeRange: TimeRange): void {}
+      })
+    })();
     twistyPlayer.timeline.addTimestampListener({
       onTimelineTimestampChange: (timestamp: MillisecondTimestamp) => {
         if (timestamp !== this.lastClickTimestamp) {
