@@ -1,4 +1,4 @@
-import { Move} from "../../../cubing/alg";
+import { Move } from "../../../cubing/alg";
 import { PuzzleID, StringListAsType } from "../url-params";
 import { ActiveSwipe, SwipeTracker } from "./SwipeTracker";
 import { Action, actionToUIText, moveMaps } from "./SwipeyPuzzle";
@@ -34,7 +34,7 @@ export class SwipeGrid extends HTMLElement {
     private moveListener: (move: Move) => void,
     private actionListener: (action: Action) => void,
     _active: boolean = false, // TODO
-    private theme: ThemeType
+    private theme: ThemeType,
   ) {
     super();
 
@@ -47,7 +47,7 @@ export class SwipeGrid extends HTMLElement {
     this.swipeTracker = new SwipeTracker(
       this.sectors,
       this.onTouchChange.bind(this),
-      this.onSwipeFinish.bind(this)
+      this.onSwipeFinish.bind(this),
     );
 
     this.classList.add(`theme-${this.theme}`);
@@ -86,7 +86,7 @@ export class SwipeGrid extends HTMLElement {
       data.text = this.moveUIText(
         moveMaps[this.puzzleName][this.sectorMap.get(swipe.sourceSector)!][
           this.sectorMap.get(swipe.currentSector!)!
-        ]
+        ],
       );
       data.hasMoved = data.hasMoved || swipe.hasMovedAwayFromSourceSector;
       newSectorData.get(swipe.currentSector!)!.isTentativeTarget = true;
@@ -144,7 +144,9 @@ export class SwipeGrid extends HTMLElement {
         const targetSector = this.sectors[i];
         if (targetSector !== swipe.sourceSector) {
           targetSector.textContent = this.moveUIText(
-            moveMaps[this.puzzleName][this.sectorMap.get(swipe.sourceSector)!][i]
+            moveMaps[this.puzzleName][this.sectorMap.get(swipe.sourceSector)!][
+              i
+            ],
           );
         }
       }

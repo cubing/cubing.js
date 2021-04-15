@@ -1,17 +1,16 @@
 import {
   Alg,
-
-
   Commutator,
-  Conjugate, experimentalDirect, ExperimentalIterationDirection, Grouping,
+  Conjugate,
+  experimentalDirect,
+  ExperimentalIterationDirection,
+  Grouping,
   LineComment,
-
-
   Move,
   Newline,
   Pause,
   TraversalDownUp,
-  Unit
+  Unit,
 } from "../../alg";
 import { Parsed } from "../../alg/parse";
 import { puzzles } from "../../puzzles";
@@ -22,7 +21,7 @@ import { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
 import { TreeAlgIndexer } from "../animation/indexer/tree/TreeAlgIndexer";
 import {
   customElementsShim,
-  HTMLElementShim
+  HTMLElementShim,
 } from "./element/node-custom-element-shims";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
@@ -39,13 +38,22 @@ class DataUp {
 }
 
 class TwistyAlgLeafElem extends HTMLElementShim {
-  constructor(className: string, text: string, dataDown: DataDown, public algOrUnit: Alg | Unit, offsetIntoMove: boolean) {
+  constructor(
+    className: string,
+    text: string,
+    dataDown: DataDown,
+    public algOrUnit: Alg | Unit,
+    offsetIntoMove: boolean,
+  ) {
     super();
     this.textContent = text;
     this.classList.add(className);
 
     this.addEventListener("click", () => {
-      dataDown.twistyAlgViewer.jumpToIndex(dataDown.earliestMoveIndex, offsetIntoMove);
+      dataDown.twistyAlgViewer.jumpToIndex(
+        dataDown.earliestMoveIndex,
+        offsetIntoMove,
+      );
     });
   }
 
@@ -89,7 +97,9 @@ class TwistyAlgWrapperElem extends HTMLElementShim {
 
 customElementsShim.define("twisty-alg-wrapper-elem", TwistyAlgWrapperElem);
 
-function oppositeDirection(direction: ExperimentalIterationDirection): ExperimentalIterationDirection {
+function oppositeDirection(
+  direction: ExperimentalIterationDirection,
+): ExperimentalIterationDirection {
   return direction === ExperimentalIterationDirection.Forwards
     ? ExperimentalIterationDirection.Backwards
     : ExperimentalIterationDirection.Forwards;
@@ -102,7 +112,10 @@ function updateDirectionByAmount(
   return amount < 0 ? oppositeDirection(currentDirection) : currentDirection;
 }
 
-function maybeReverseList<T>(l: T[], direction: ExperimentalIterationDirection): T[] {
+function maybeReverseList<T>(
+  l: T[],
+  direction: ExperimentalIterationDirection,
+): T[] {
   if (direction === ExperimentalIterationDirection.Forwards) {
     return l;
   }
@@ -167,12 +180,15 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       move.toString(),
       dataDown,
       move,
-      true
+      true,
     );
-    dataDown.twistyAlgViewer.highlighter.addMove((move as Parsed<Move>).charIndex, element);
+    dataDown.twistyAlgViewer.highlighter.addMove(
+      (move as Parsed<Move>).charIndex,
+      element,
+    );
     return {
       moveCount: 1,
-      element
+      element,
     };
   }
 
@@ -181,7 +197,10 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     dataDown: DataDown,
   ): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-commutator", commutator);
+    const element = new TwistyAlgWrapperElem(
+      "twisty-alg-commutator",
+      commutator,
+    );
     element.addString("[");
     element.flushQueue();
     const direction = updateDirectionByAmount(
@@ -253,7 +272,13 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traversePause(pause: Pause, dataDown: DataDown): DataUp {
     return {
       moveCount: 1,
-      element: new TwistyAlgLeafElem("twisty-alg-pause", ".", dataDown, pause, true),
+      element: new TwistyAlgLeafElem(
+        "twisty-alg-pause",
+        ".",
+        dataDown,
+        pause,
+        true,
+      ),
     };
   }
 
@@ -266,7 +291,10 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     };
   }
 
-  public traverseLineComment(lineComment: LineComment, dataDown: DataDown): DataUp {
+  public traverseLineComment(
+    lineComment: LineComment,
+    dataDown: DataDown,
+  ): DataUp {
     return {
       moveCount: 0,
       element: new TwistyAlgLeafElem(
@@ -274,7 +302,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
         `//${lineComment.text}`,
         dataDown,
         lineComment,
-        false
+        false,
       ),
     };
   }
@@ -294,12 +322,14 @@ class MoveHighlighter {
   }
 
   set(move: Parsed<Move> | null): void {
-    const newElem = move ? this.moveCharIndexMap.get(move.charIndex) ?? null : null
+    const newElem = move
+      ? this.moveCharIndexMap.get(move.charIndex) ?? null
+      : null;
     if (this.currentElem === newElem) {
       return;
     }
     this.currentElem?.classList.remove("twisty-alg-current-move");
-    newElem?.classList.add("twisty-alg-current-move")
+    newElem?.classList.add("twisty-alg-current-move");
     this.currentElem = newElem;
   }
 }
@@ -338,18 +368,27 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
     this.twistyPlayer = twistyPlayer;
     const sourceAlg = this.twistyPlayer.alg;
     // TODO: Use proper architecture instead of a heuristic to ensure we have a parsed alg annotated with char indices.
-    const parsedAlg = ("charIndex" in (sourceAlg as Partial<Parsed<Alg>>)) ? sourceAlg : Alg.fromString(sourceAlg.toString());
+    const parsedAlg =
+      "charIndex" in (sourceAlg as Partial<Parsed<Alg>>)
+        ? sourceAlg
+        : Alg.fromString(sourceAlg.toString());
     this.setAlg(parsedAlg);
     (async () => {
-      const wrapper = new KPuzzleWrapper(await puzzles[twistyPlayer!.puzzle].def());
+      const wrapper = new KPuzzleWrapper(
+        await puzzles[twistyPlayer!.puzzle].def(),
+      );
       const indexer = new TreeAlgIndexer(wrapper, parsedAlg);
       twistyPlayer.timeline.addTimestampListener({
         onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
           // TODO: improve perf, e.g. only get notified when the move index changes.
-          this.highlighter.set(indexer.getMove(indexer.timestampToIndex(timestamp)) as Parsed<Move> | null)
+          this.highlighter.set(
+            indexer.getMove(
+              indexer.timestampToIndex(timestamp),
+            ) as Parsed<Move> | null,
+          );
         },
-        onTimeRangeChange(_timeRange: TimeRange): void {}
-      })
+        onTimeRangeChange(_timeRange: TimeRange): void {},
+      });
     })();
     twistyPlayer.timeline.addTimestampListener({
       onTimelineTimestampChange: (timestamp: MillisecondTimestamp) => {

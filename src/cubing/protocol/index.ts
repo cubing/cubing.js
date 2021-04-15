@@ -4,4 +4,4 @@ export {
 } from "./binary/binary3x3x3";
 export { bufferToSpacedHex, spacedHexToBuffer } from "./binary/hex";
 
-export {normalizePuzzleOrientation as experimentalNormalizePuzzleOrientation} from "./binary/puzzle-orientation"
+export { normalizePuzzleOrientation as experimentalNormalizePuzzleOrientation } from "./binary/puzzle-orientation";

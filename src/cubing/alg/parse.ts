@@ -33,22 +33,24 @@ export function parseQuantumMove(s: string): QuantumMove {
   return new AlgParser().parseQuantumMove(s);
 }
 
-
 export interface ParserIndexed {
-  charIndex: number
+  charIndex: number;
 }
 
-export type Parsed<T extends Alg | Unit> = T & ParserIndexed
+export type Parsed<T extends Alg | Unit> = T & ParserIndexed;
 
-function addCharIndex<T extends Alg | Unit>(t: T, charIndex: number): Parsed<T> {
-  const parsedT = (t as ParserIndexed & T)
-  parsedT.charIndex = charIndex
-  return parsedT
+function addCharIndex<T extends Alg | Unit>(
+  t: T,
+  charIndex: number,
+): Parsed<T> {
+  const parsedT = t as ParserIndexed & T;
+  parsedT.charIndex = charIndex;
+  return parsedT;
 }
 
 export function transferCharIndex<T extends Alg | Unit>(from: T, to: T): T {
   if ("charIndex" in from) {
-    (to as Parsed<T>).charIndex = (from as Parsed<T>).charIndex
+    (to as Parsed<T>).charIndex = (from as Parsed<T>).charIndex;
   }
   return to;
 }
@@ -122,7 +124,9 @@ class AlgParser {
         const alg = this.parseAlgWithStopping([")"]);
         this.mustConsumeNext(")");
         const repetitionInfo = this.parseRepetition();
-        algBuilder.push(addCharIndex(new Grouping(alg, repetitionInfo), savedCharIndex));
+        algBuilder.push(
+          addCharIndex(new Grouping(alg, repetitionInfo), savedCharIndex),
+        );
         crowded = true;
         continue mainLoop;
       } else if (this.tryConsumeNext("[")) {
@@ -133,19 +137,26 @@ class AlgParser {
         this.mustConsumeNext("]");
         const repetitionInfo = this.parseRepetition();
         switch (separator) {
-          case ":": 
-            algBuilder.push(addCharIndex(new Conjugate(A, B, repetitionInfo), savedCharIndex));
+          case ":":
+            algBuilder.push(
+              addCharIndex(new Conjugate(A, B, repetitionInfo), savedCharIndex),
+            );
             crowded = true;
             continue mainLoop;
           case ",":
-            algBuilder.push(addCharIndex( new Commutator(A, B, repetitionInfo), savedCharIndex));
+            algBuilder.push(
+              addCharIndex(
+                new Commutator(A, B, repetitionInfo),
+                savedCharIndex,
+              ),
+            );
             crowded = true;
             continue mainLoop;
           default:
             throw "unexpected parsing error";
         }
       } else if (this.tryConsumeNext("\n")) {
-        algBuilder.push(addCharIndex( new Newline(), savedCharIndex));
+        algBuilder.push(addCharIndex(new Newline(), savedCharIndex));
         crowded = false;
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
@@ -193,7 +204,10 @@ class AlgParser {
     const quantumMove = this.parseQuantumMoveImpl();
     const repetitionInfo = this.parseRepetition();
 
-    const move = addCharIndex( new Move(quantumMove, repetitionInfo), savedCharIndex);
+    const move = addCharIndex(
+      new Move(quantumMove, repetitionInfo),
+      savedCharIndex,
+    );
     return move;
   }
 

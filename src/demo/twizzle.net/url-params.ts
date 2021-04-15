@@ -8,7 +8,7 @@ export type StringListAsType<
 function getURLParamChecked<T>(
   name: string,
   defaultValue: T,
-  validValues: T[]
+  validValues: T[],
 ): T {
   let value = new URL(document.location.href).searchParams.get(name);
   return validValues.includes((value as unknown) as T)
@@ -31,7 +31,7 @@ export function getPuzzleID(): PuzzleID {
   return getURLParamChecked<PuzzleID>(
     "puzzle",
     DEFAULT_PUZZLE_ID,
-    Object.keys(puzzleIDs) as PuzzleID[]
+    Object.keys(puzzleIDs) as PuzzleID[],
   );
 }
 
@@ -67,12 +67,12 @@ export function coalesce(): boolean {
 
 export function sendingSocketOrigin(): string | null {
   return new URL(document.location.href).searchParams.get(
-    "sendingSocketOrigin"
+    "sendingSocketOrigin",
   );
 }
 
 export function receivingSocketOrigin(): string | null {
   return new URL(document.location.href).searchParams.get(
-    "receivingSocketOrigin"
+    "receivingSocketOrigin",
   );
 }

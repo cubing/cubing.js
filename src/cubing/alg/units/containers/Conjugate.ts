@@ -48,7 +48,10 @@ export class Conjugate extends AlgCommon<Conjugate> {
   ) {
     super();
     this.#repetition = new Repetition<QuantumCommutator>(
-      new QuantumCommutator(experimentalEnsureAlg(aSource), experimentalEnsureAlg(bSource)), // TODO
+      new QuantumCommutator(
+        experimentalEnsureAlg(aSource),
+        experimentalEnsureAlg(bSource),
+      ), // TODO
       repetitionInfo,
     );
   }

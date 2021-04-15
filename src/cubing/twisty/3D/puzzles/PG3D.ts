@@ -209,7 +209,9 @@ class StickerDef {
     );
   }
 
-  public setAppearance(faceletMeshAppearance: ExperimentalFaceletMeshAppearance): void {
+  public setAppearance(
+    faceletMeshAppearance: ExperimentalFaceletMeshAppearance,
+  ): void {
     switch (faceletMeshAppearance) {
       case "regular":
         this.origColorAppearance = this.origColor;

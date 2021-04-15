@@ -17,8 +17,8 @@ export class SwipeTracker {
     private swipeChangeListener: (activeSwipes: ActiveSwipe[]) => void,
     private swipeFinishListener: (
       source: HTMLElement,
-      target: HTMLElement
-    ) => void
+      target: HTMLElement,
+    ) => void,
   ) {
     for (const [idx, sector] of this.sectors.entries()) {
       this.sectorIndices.set(sector, idx);
@@ -80,7 +80,7 @@ export class SwipeTracker {
       }
       const sectorUnderSwipe = document.elementFromPoint(
         touch.pageX,
-        touch.pageY
+        touch.pageY,
       ) as HTMLElement | null;
 
       if (!sectorUnderSwipe || !this.sectorIndices.has(sectorUnderSwipe)) {
@@ -124,7 +124,7 @@ export class SwipeTracker {
 
       this.swipeFinishListener(
         activeTouch.sourceSector,
-        activeTouch.currentSector!
+        activeTouch.currentSector!,
       );
     }
 

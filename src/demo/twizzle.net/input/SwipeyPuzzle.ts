@@ -1,6 +1,10 @@
 import { Move, Alg } from "../../../cubing/alg";
 // import { BackViewLayout } from "../../../cubing/twisty";
-import { BackViewLayout, Twisty3DCanvas, TwistyPlayer } from "../../../cubing/twisty";
+import {
+  BackViewLayout,
+  Twisty3DCanvas,
+  TwistyPlayer,
+} from "../../../cubing/twisty";
 import { getSetup, PuzzleID } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 
@@ -86,7 +90,7 @@ export function actionToUIText(action: Action): string {
 
 function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayer {
   let backView = new URL(document.location.href).searchParams.get(
-    "back-view"
+    "back-view",
   ) as BackViewLayout | undefined;
   return new TwistyPlayer({
     alg: new Alg(),
@@ -106,14 +110,14 @@ export class SwipeyPuzzle extends HTMLElement {
   constructor(
     private puzzleName: PuzzleID,
     private actionListener: (action: Action) => void,
-    private algListener: () => void
+    private algListener: () => void,
   ) {
     super();
     this.twistyPlayer = constructTwistyPlayer(puzzleName);
 
-    let theme: ThemeType | null = new URL(document.location.href).searchParams.get(
-      "theme"
-    ) as ThemeType | null;
+    let theme: ThemeType | null = new URL(
+      document.location.href,
+    ).searchParams.get("theme") as ThemeType | null;
     if (!themes.includes(theme as ThemeType /* TODO*/)) {
       theme = DEFAULT_THEME;
     }
@@ -141,7 +145,7 @@ export class SwipeyPuzzle extends HTMLElement {
         });
         console.log("Setting touch icon from canvas.");
         (document.querySelector(
-          'link[rel="apple-touch-icon"]'
+          'link[rel="apple-touch-icon"]',
         ) as HTMLLinkElement).href = icon;
       }, 100);
     }
@@ -153,7 +157,7 @@ export class SwipeyPuzzle extends HTMLElement {
       this.onMove.bind(this),
       (action: Action) => this.actionListener(action),
       true,
-      this.theme === "grid-back" ? "blank" : this.theme
+      this.theme === "grid-back" ? "blank" : this.theme,
     );
     this.appendChild(swipeGrid);
 
@@ -163,7 +167,7 @@ export class SwipeyPuzzle extends HTMLElement {
         this.onMove.bind(this),
         (action: Action) => this.actionListener(action),
         false,
-        "transparent-grid-back"
+        "transparent-grid-back",
       );
       this.prepend(swipeGridExtra);
     }

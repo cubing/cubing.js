@@ -1,28 +1,31 @@
-import {build} from "esbuild";
+import { build } from "esbuild";
 import { resolve } from "path";
 import { existsSync } from "fs";
 
 import { targetInfos } from "./target-infos.js";
 
 // Note that we have to use an extra `..` to back out of the file name
-const PATH_TO_SRC_CUBING = resolve(new URL(".", import.meta.url).pathname, "../cubing");
+const PATH_TO_SRC_CUBING = resolve(
+  new URL(".", import.meta.url).pathname,
+  "../cubing",
+);
 
 class Target {
   constructor(name, targetInfo) {
     this.name = name;
     // this.outdir = `./${this.name}`
-    this.outdir = `./dist/experimental-splitting-build/${this.name}`
+    this.outdir = `./dist/experimental-splitting-build/${this.name}`;
 
     this.deps = targetInfo.deps;
 
     this.dirPath = resolve(PATH_TO_SRC_CUBING, this.name);
     if (!existsSync(this.dirPath)) {
-      throw new Error(`Folder doesn't exist: ${this.name}`)
+      throw new Error(`Folder doesn't exist: ${this.name}`);
     }
 
-    this.indexFilePath = resolve(this.dirPath, "index.ts")
+    this.indexFilePath = resolve(this.dirPath, "index.ts");
     if (!existsSync(this.indexFilePath)) {
-      throw new Error(`Entry point index file doesn't exist: ${this.name}`)
+      throw new Error(`Entry point index file doesn't exist: ${this.name}`);
     }
 
     this.regExp = new RegExp(this.name);
@@ -32,64 +35,74 @@ class Target {
     switch (args.kind) {
       case "import-statement":
         if (!forTarget.deps.direct.includes(this.name)) {
-          console.error(`\`cubing/${forTarget.name}\` is not allowed to directly (non-dynamically) import \`cubing/${this.name}\`. Update src/make/target-infos.js to change this.`)
-          console.log("From: ", args.importer)
-          console.log("Import path: ", args.path)
-          process.exit(2)
+          console.error(
+            `\`cubing/${forTarget.name}\` is not allowed to directly (non-dynamically) import \`cubing/${this.name}\`. Update src/make/target-infos.js to change this.`,
+          );
+          console.log("From: ", args.importer);
+          console.log("Import path: ", args.path);
+          process.exit(2);
         }
         return;
       case "dynamic-import":
         if (!forTarget.deps.dynamic.includes(this.name)) {
-          console.error(`\`cubing/${forTarget.name}\` is not allowed to dynamically import \`cubing/${this.name}\`. Update src/make/target-infos.js to change this.`)
-          console.log("From: ", args.importer)
-          console.log("Import path: ", args.path)
-          process.exit(2)
+          console.error(
+            `\`cubing/${forTarget.name}\` is not allowed to dynamically import \`cubing/${this.name}\`. Update src/make/target-infos.js to change this.`,
+          );
+          console.log("From: ", args.importer);
+          console.log("Import path: ", args.path);
+          process.exit(2);
         }
         return;
       default:
-        throw new Error(`Unknown kind: ${args.kind}`)
+        throw new Error(`Unknown kind: ${args.kind}`);
     }
   }
 
   plugin(forTarget) {
     const setup = (build) => {
       if (this.name === forTarget.name) {
-        return undefined
+        return undefined;
       }
       build.onResolve({ filter: this.regExp }, (args) => {
-        if (args.kind !== "import-statement" && args.kind !== "dynamic-import") { // TODO
-          return undefined
+        if (
+          args.kind !== "import-statement" &&
+          args.kind !== "dynamic-import"
+        ) {
+          // TODO
+          return undefined;
         }
 
         const resolved = resolve(args.resolveDir, args.path);
-        if(this.dirPath === resolved) {
-          this.checkImportable(args, forTarget)
+        if (this.dirPath === resolved) {
+          this.checkImportable(args, forTarget);
           return {
             path: `cubing/${this.name}`,
-            external: true
-          }
+            external: true,
+          };
         }
 
         if (resolved.startsWith(forTarget.dirPath + "/")) {
-          return undefined
+          return undefined;
         }
 
-        console.error("Bad import! Imports between targets must reference each other's top-level folders.")
-        console.log("From: ", args.importer)
-        console.log("Import path: ", args.path)
-        process.exit(1)
-      })
-    }
+        console.error(
+          "Bad import! Imports between targets must reference each other's top-level folders.",
+        );
+        console.log("From: ", args.importer);
+        console.log("Import path: ", args.path);
+        process.exit(1);
+      });
+    };
     return {
       name: this.name,
-      setup: setup
-    }
+      setup: setup,
+    };
   }
 }
 
-const targets = []
+const targets = [];
 for (const [name, targetInfo] of Object.entries(targetInfos)) {
-  targets.push(new Target(name, targetInfo))
+  targets.push(new Target(name, targetInfo));
 }
 
 // targets.map(a => console.log(a.dirPath))
@@ -102,12 +115,8 @@ for (const currentTarget of targets) {
     format: "esm",
     // sourcemap: true,
     outdir: currentTarget.outdir,
-    external: [
-      "three"
-    ],
-    entryPoints: [
-      currentTarget.indexFilePath
-    ],
-    plugins: targets.map(t => t.plugin(currentTarget)),
-  })
+    external: ["three"],
+    entryPoints: [currentTarget.indexFilePath],
+    plugins: targets.map((t) => t.plugin(currentTarget)),
+  });
 }

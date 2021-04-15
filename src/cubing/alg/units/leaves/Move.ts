@@ -166,7 +166,10 @@ export class Move extends AlgCommon<Move> {
 
   invert(): Move {
     // TODO: handle char indices more consistently among units.
-    return transferCharIndex(this, new Move(this.#repetition.quantum, this.#repetition.inverseInfo()));
+    return transferCharIndex(
+      this,
+      new Move(this.#repetition.quantum, this.#repetition.inverseInfo()),
+    );
   }
 
   *experimentalExpand(

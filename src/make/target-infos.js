@@ -10,58 +10,57 @@ export const targetInfos = {
   "alg": {
     deps: {
       direct: [],
-      dynamic: []
-    }
+      dynamic: [],
+    },
   },
   "bluetooth": {
     deps: {
       direct: ["alg", "kpuzzle", "puzzles"],
-      dynamic: []
-    }
+      dynamic: [],
+    },
   },
   "kpuzzle": {
     deps: {
       direct: ["alg", "protocol", "puzzles"],
-      dynamic: []
-    }
+      dynamic: [],
+    },
   },
   "notation": {
     deps: {
       direct: ["alg"],
-      dynamic: []
-    }
+      dynamic: [],
+    },
   },
   "protocol": {
     deps: {
       direct: ["alg", "kpuzzle", "puzzles"],
-      dynamic: []
-    }
+      dynamic: [],
+    },
   },
   "puzzle-geometry": {
     deps: {
       direct: ["alg"],
-      dynamic: []
-    }
+      dynamic: [],
+    },
   },
   "puzzles": {
     deps: {
       direct: ["alg", "kpuzzle"],
-      dynamic: ["puzzle-geometry"]
-    }
+      dynamic: ["puzzle-geometry"],
+    },
   },
   "stream": {
     deps: {
       direct: [],
-      dynamic: []
-    }
+      dynamic: [],
+    },
   },
   "twisty": {
     deps: {
       direct: ["alg", "kpuzzle", "notation", "puzzles"],
-      dynamic: []
-    }
+      dynamic: [],
+    },
   },
 };
-
 
 export const targetNames = Object.keys(targetInfos);

@@ -1,7 +1,4 @@
-import {
-  Alg,
-  algCubingNetLink,
-} from "../../cubing/alg";
+import { Alg, algCubingNetLink } from "../../cubing/alg";
 import {
   BluetoothPuzzle,
   connect,
@@ -60,7 +57,7 @@ function maybeCoalesce(alg: Alg): Alg {
 const fn = async (
   fromMouse: boolean,
   fromKeyboard: boolean,
-  e: KeyboardEvent
+  e: KeyboardEvent,
 ) => {
   if (!fromMouse && fromKeyboard) {
     if (e?.which && e.which !== 32) {
@@ -139,7 +136,7 @@ const fn = async (
       return algCubingNetLink(opts);
     } else {
       url.searchParams.set("puzzle", puzzleID);
-      url.searchParams.set("alg", (alg.toString()));
+      url.searchParams.set("alg", alg.toString());
       return url.toString();
     }
   }
@@ -151,7 +148,7 @@ const fn = async (
   controlBar.appendChild(algLink);
   function updateAlgLink(): void {
     const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
-    const alg = (seq.toString());
+    const alg = seq.toString();
     if (alg === "") {
       algLink.textContent = instructions;
       algLink.removeAttribute("href");
@@ -183,7 +180,7 @@ const fn = async (
     swipeyPuzzle.twistyPlayer.scene!.twisty3Ds.forEach(
       (twisty3DPuzzle: Twisty3DPuzzle) => {
         twisty3DPuzzle.quaternion.copy(event.quaternion as Quaternion); // TODO
-      }
+      },
     );
     // TODO: expose a way to scheduler renders on objects.
     (swipeyPuzzle.twistyPlayer.timeline as any).dispatchTimestamp(); // TODO
@@ -271,7 +268,7 @@ const fn = async (
 
   document.addEventListener("copy", (e) => {
     const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg); // TODO
-    const alg = (seq.toString());
+    const alg = seq.toString();
     e.clipboardData!.setData("text/plain", alg);
 
     const a = document.createElement("a");
@@ -292,23 +289,20 @@ const fn = async (
     console.log("Registering receiver");
     const url = new URL(receivingOrigin);
     url.pathname = "/register-receiver";
-    new CallbackProxyReceiver(
-      url.toString(),
-      (e: ProxyEvent) => {
-        console.log(e);
-        switch (e.event) {
-          case "move":
-            moveListener(e.data);
-            break;
-          case "orientation":
-            orientationEventListener(e.data);
-            break;
-          case "reset":
-            space();
-            break;
-        }
+    new CallbackProxyReceiver(url.toString(), (e: ProxyEvent) => {
+      console.log(e);
+      switch (e.event) {
+        case "move":
+          moveListener(e.data);
+          break;
+        case "orientation":
+          orientationEventListener(e.data);
+          break;
+        case "reset":
+          space();
+          break;
       }
-    );
+    });
   }
 
   const sendingOrigin = sendingSocketOrigin();
@@ -348,5 +342,5 @@ window.addEventListener("DOMContentLoaded", () => {
 const swipeyPuzzle = new SwipeyPuzzle(
   getPuzzleID(),
   () => {},
-  () => {}
+  () => {},
 );

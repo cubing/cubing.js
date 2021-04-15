@@ -252,7 +252,9 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     let i = wd.back ? alg.experimentalNumUnits() - 1 : 0;
     for (const unit of experimentalDirectedGenerator(
       alg.units(),
-      wd.back ? ExperimentalIterationDirection.Backwards : ExperimentalIterationDirection.Forwards,
+      wd.back
+        ? ExperimentalIterationDirection.Backwards
+        : ExperimentalIterationDirection.Forwards,
     )) {
       if (
         this.traverseUnit(unit, new WalkerDown(wd.apd.children[i], wd.back))
