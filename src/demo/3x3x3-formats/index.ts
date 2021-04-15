@@ -3,6 +3,7 @@ import {
   KPuzzleDefinition,
   KPuzzleSVGWrapper,
   Transformation,
+  transformationOrder,
 } from "../../cubing/kpuzzle";
 import {
   binaryComponentsToReid3x3x3,
@@ -44,6 +45,8 @@ class App {
   reidStringTextarea = document.querySelector(
     "#reid-string",
   )! as HTMLTextAreaElement;
+
+  orderElem = document.querySelector("#order")! as HTMLSpanElement;
 
   stickersTextarea = document.querySelector(
     "#stickers",
@@ -134,6 +137,7 @@ class App {
     this.binaryTextarea.value = bufferToSpacedHex(
       reid3x3x3ToTwizzleBinary(state),
     );
+    this.orderElem.textContent = transformationOrder(def, state).toString();
   }
 }
 
