@@ -1,6 +1,5 @@
 import {
   Color,
-  DoubleSide,
   Vector3,
   Scene,
   Group,
