@@ -57,29 +57,15 @@ deploy-experiments: parcel-build-for-experiments-cubing-net
 		${EXPERIMENTS_SFTP_PATH}
 	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
 
-TWIZZLE_SFTP_PATH = "towns.dreamhost.com:~/twizzle.net/explore/"
-TWIZZLE_URL       = "https://twizzle.net/explore/"
-
-TWIZZLE_DIARIES_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/twizzle-diaries/"
-TWIZZLE_DIARIES_URL       = "https://experiments.cubing.net/twizzle-diaries/"
-
-.PHONY: deploy-twizzle-diaries
-deploy-twizzle-diaries: parcel-build-for-twizzle-diaries
-	rsync -avz \
-		--exclude .DS_Store \
-		--exclude .git \
-		./dist/experiments.cubing.net/twizzle-diaries/ \
-		${TWIZZLE_DIARIES_SFTP_PATH}
-	echo "\nDone deploying. Go to ${TWIZZLE_DIARIES_URL}\n"
-
-TWIZZLE_SFTP_PATH = "towns.dreamhost.com:~/twizzle.net/explore/"
-TWIZZLE_URL       = "https://twizzle.net/explore/"
+TWIZZLE_SOURCE_PATH = "./dist/twizzle.net/twizzle-net/"
+TWIZZLE_SFTP_PATH   = "towns.dreamhost.com:~/twizzle.net/play/"
+TWIZZLE_URL         = "https://twizzle.net/"
 
 .PHONY: deploy-twizzle
 deploy-twizzle: parcel-build-for-twizzle-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/twizzle.net/explore/twizzle-net/ \
+		${TWIZZLE_SOURCE_PATH} \
 		${TWIZZLE_SFTP_PATH}
 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
