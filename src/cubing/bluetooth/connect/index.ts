@@ -84,7 +84,7 @@ export async function bluetoothConnect<T>(
   for (const config of configs) {
     for (const prefix of config.prefixes) {
       if (name?.startsWith(prefix)) {
-        return config.connect(server);
+        return config.connect(server, device);
       }
     }
   }
