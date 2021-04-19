@@ -55,6 +55,7 @@ export const PGPuzzles: { [name: string]: PuzzleDescriptionString } = {
   "big chop": "d e 0",
   "skewb diamond": "o f 0",
   "FTO": "o f 0.333333333333333",
+  "master FTO": "o f 0.5 f 0",
   "Christopher's jewel": "o v 0.577350269189626",
   "octastar": "o e 0",
   "Trajber's octahedron": "o v 0.433012701892219",

@@ -61,6 +61,7 @@ const expectedData: { [nam: string]: string } = {
   "big chop": "big chop, 12, 10, 120, 2, 30, 31668",
   "skewb diamond": "skewb diamond, 8, 4, 14, 3, 8, 6",
   "FTO": "FTO, 8, 9, 42, 4, 12, 990",
+  "master FTO": "master FTO, 8, 16, 86, 9, 16, 330",
   "Christopher's jewel": "Christopher's jewel, 8, 6, 18, 2, 9, 120",
   "octastar": "octastar, 8, 6, 24, 1, 12, 168",
   "Trajber's octahedron": "Trajber's octahedron, 8, 7, 26, 3, 9, 120",
