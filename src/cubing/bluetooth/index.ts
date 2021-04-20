@@ -4,7 +4,7 @@ export {
   MoveEvent,
   OrientationEvent,
 } from "./smart-puzzle/bluetooth-puzzle";
-export { connect } from "./smart-puzzle/connect";
+export { connectSmartPuzzle } from "./smart-puzzle/connect";
 export { enableDebugLogging } from "./debug";
 export { GanCube } from "./smart-puzzle/gan";
 export {

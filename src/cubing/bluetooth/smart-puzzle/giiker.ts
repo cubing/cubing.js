@@ -16,25 +16,6 @@ const UUIDs = {
   cubeCharacteristic: "0000aadc-0000-1000-8000-00805f9b34fb",
 };
 
-// TODO: Move this into a factory?
-export const giiKERConfig: BluetoothConfig = {
-  filters: [
-    // Known prefixes: GiC, GiS (3x3x3), Gi2 (2x2x2)
-    // Suspected prefixes GiY, Gi3
-    { namePrefix: "Gi" },
-    { services: ["0000aadb-0000-1000-8000-00805f9b34fb"] },
-    { services: ["0000aaaa-0000-1000-8000-00805f9b34fb"] },
-    { services: ["0000fe95-0000-1000-8000-00805f9b34fb"] },
-  ],
-  optionalServices: [
-    // "00001530-1212-efde-1523-785feabcd123",
-    // "0000aaaa-0000-1000-8000-00805f9b34fb",
-    UUIDs.cubeService,
-    // "0000180f-0000-1000-8000-00805f9b34fb",
-    // "0000180a-0000-1000-8000-00805f9b34fb"
-  ],
-};
-
 // TODO: Expose for testing.
 function giikerMoveToAlgMove(face: number, amount: number): Move {
   switch (amount) {
@@ -302,3 +283,24 @@ export class GiiKERCube extends BluetoothPuzzle {
     return true;
   }
 }
+
+// TODO: Move this into a factory?
+export const giiKERConfig: BluetoothConfig<BluetoothPuzzle> = {
+  connect: GiiKERCube.connect,
+  prefixes: ["Gi", ""], // Hack
+  filters: [
+    // Known prefixes: GiC, GiS (3x3x3), Gi2 (2x2x2)
+    // Suspected prefixes GiY, Gi3
+    { namePrefix: "Gi" },
+    { services: ["0000aadb-0000-1000-8000-00805f9b34fb"] },
+    { services: ["0000aaaa-0000-1000-8000-00805f9b34fb"] },
+    { services: ["0000fe95-0000-1000-8000-00805f9b34fb"] },
+  ],
+  optionalServices: [
+    // "00001530-1212-efde-1523-785feabcd123",
+    // "0000aaaa-0000-1000-8000-00805f9b34fb",
+    UUIDs.cubeService,
+    // "0000180f-0000-1000-8000-00805f9b34fb",
+    // "0000180a-0000-1000-8000-00805f9b34fb"
+  ],
+};
