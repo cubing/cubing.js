@@ -5,7 +5,7 @@ import { Alg } from "../../cubing/alg/index";
 import { OrientationEvent } from "../../cubing/bluetooth/index";
 import {
   BluetoothPuzzle,
-  connect,
+  connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
 } from "../../cubing/bluetooth/index";
@@ -46,7 +46,7 @@ window.addEventListener("load", async () => {
     const acceptAllDevices = (document.querySelector(
       "#acceptAllDevices",
     ) as HTMLInputElement).checked;
-    window.puzzle = await connect({ acceptAllDevices });
+    window.puzzle = await connectSmartPuzzle({ acceptAllDevices });
     window.puzzle.addMoveListener((e: MoveEvent) => {
       twistyPlayer.experimentalAddMove(e.latestMove);
     });

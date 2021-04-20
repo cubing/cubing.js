@@ -4,12 +4,12 @@ import { Quaternion } from "three";
 import { Move } from "../../alg";
 import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
+import { debugLog } from "../debug";
 import {
   BluetoothConfig,
   BluetoothPuzzle,
   PuzzleState,
 } from "./bluetooth-puzzle";
-import { debugLog } from "../debug";
 import { importKey, unsafeDecryptBlock } from "./unsafe-raw-aes";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
@@ -205,12 +205,6 @@ const commands: { [cmd: string]: BufferSource } = {
     0x6d,
     0xdb,
   ]),
-};
-
-// // TODO: Move this into a factory?
-export const ganConfig: BluetoothConfig = {
-  filters: [{ namePrefix: "GAN" }],
-  optionalServices: [UUIDs.ganCubeService, UUIDs.infoService],
 };
 
 function buf2hex(buffer: ArrayBuffer): string {
@@ -515,3 +509,11 @@ export class GanCube extends BluetoothPuzzle {
   //   debugLog(val);
   // }
 }
+
+// // TODO: Move this into a factory?
+export const ganConfig: BluetoothConfig<BluetoothPuzzle> = {
+  connect: GanCube.connect,
+  prefixes: ["GAN"],
+  filters: [{ namePrefix: "GAN" }],
+  optionalServices: [UUIDs.ganCubeService, UUIDs.infoService],
+};

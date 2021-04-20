@@ -10,7 +10,7 @@ import supercubeSprite from "url:./supercube-sprite.png";
 import mkbhdSpriteURL from "url:./mkbhd-sprite-red.png";
 import { Alg } from "../../cubing/alg";
 import {
-  connect,
+  connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
 } from "../../cubing/bluetooth";
@@ -92,7 +92,7 @@ function rotate() {
 requestAnimationFrame(rotate);
 
 async function connectBluetooth(): Promise<void> {
-  const bluetoothPuzzle = await connect();
+  const bluetoothPuzzle = await connectSmartPuzzle();
   document.body.removeEventListener("click", connectBluetooth);
   bluetoothPuzzle.addMoveListener((e: MoveEvent) => {
     if (!haveHadMoveInput) {

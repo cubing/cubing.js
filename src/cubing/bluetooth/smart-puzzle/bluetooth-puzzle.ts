@@ -29,7 +29,13 @@ export interface OrientationEvent {
   debug?: Record<string, unknown>;
 }
 
-export interface BluetoothConfig {
+export interface BluetoothConfig<T> {
+  connect: (
+    server: BluetoothRemoteGATTServer,
+    device?: BluetoothDevice,
+  ) => Promise<T>;
+  // TODO: Can we reuse `filters`?
+  prefixes: string[]; // `[""]` for GiiKER
   filters: BluetoothRequestDeviceFilter[];
   optionalServices: BluetoothServiceUUID[];
 }

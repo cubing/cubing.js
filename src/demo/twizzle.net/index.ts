@@ -1,7 +1,7 @@
 import { Alg, algCubingNetLink } from "../../cubing/alg";
 import {
   BluetoothPuzzle,
-  connect,
+  connectSmartPuzzle,
   debugKeyboardConnect,
   GoCube,
   MoveEvent,
@@ -192,7 +192,7 @@ const fn = async (
 
   bluetoothButton.addEventListener("click", async () => {
     try {
-      bluetoothPuzzle = await connect();
+      bluetoothPuzzle = await connectSmartPuzzle();
       bluetoothPuzzle.addMoveListener(moveListener);
       bluetoothButton.style.display = "none";
       bluetoothPuzzle?.addOrientationListener(orientationEventListener);

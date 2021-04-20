@@ -8,12 +8,6 @@ const UUIDs = {
   goCubeStateCharacteristic: "6e400003-b5a3-f393-e0a9-e50e24dcca9e",
 };
 
-// TODO: Move this into a factory?
-export const goCubeConfig: BluetoothConfig = {
-  filters: [{ namePrefix: "GoCube" }, { namePrefix: "Rubik" }],
-  optionalServices: [UUIDs.goCubeService],
-};
-
 // https://stackoverflow.com/a/40031979
 function buf2hex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
@@ -159,3 +153,11 @@ export class GoCube extends BluetoothPuzzle {
 }
 
 const rotateTowardsRate = 0.5;
+
+// TODO: Move this into a factory?
+export const goCubeConfig: BluetoothConfig<BluetoothPuzzle> = {
+  connect: GoCube.connect,
+  prefixes: ["GoCube", "Rubik"],
+  filters: [{ namePrefix: "GoCube" }, { namePrefix: "Rubik" }],
+  optionalServices: [UUIDs.goCubeService],
+};

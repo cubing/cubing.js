@@ -4,7 +4,7 @@ import { Raycaster, Vector2, Vector3 } from "three";
 import { Alg, Move } from "../../cubing/alg/index";
 import { experimentalAppendMove } from "../../cubing/alg/operation";
 import {
-  connect,
+  connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
 } from "../../cubing/bluetooth/index";
@@ -376,7 +376,7 @@ function dowork(cmd: string): void {
   if (cmd === "bluetooth" || cmd === "keyboard") {
     (async (): Promise<void> => {
       const inputPuzzle = await (cmd === "bluetooth"
-        ? connect
+        ? connectSmartPuzzle
         : debugKeyboardConnect)();
       inputPuzzle.addMoveListener((e: MoveEvent) => {
         addMove(e.latestMove);

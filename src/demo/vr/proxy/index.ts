@@ -6,7 +6,7 @@ import { WebSocketProxySender } from "../../../cubing/stream/websocket-proxy";
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import {
   BluetoothPuzzle,
-  connect,
+  connectSmartPuzzle,
   debugKeyboardConnect,
 } from "../../../cubing/bluetooth/index";
 import { GoCube } from "../../../cubing/bluetooth/index";
@@ -27,7 +27,7 @@ class App {
     document
       .querySelector("#connect-bluetooth")!
       .addEventListener("click", async () => {
-        this.puzzle = await connect();
+        this.puzzle = await connectSmartPuzzle();
         this.puzzle.addMoveListener(
           this.proxySender.sendMoveEvent.bind(this.proxySender),
         );
