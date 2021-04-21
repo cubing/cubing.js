@@ -32,6 +32,9 @@ button2.addEventListener("click", async () => {
   kb.addMoveListener((moveEvent) => {
     console.log(moveEvent, moveEvent.latestMove);
     // moveEvent.latestMove;
+    if ((window as any).skip) {
+      return;
+    }
     player.experimentalAddMove(moveEvent.latestMove);
     robot.applyMoves([moveEvent.latestMove]);
   });
@@ -39,6 +42,9 @@ button2.addEventListener("click", async () => {
   moveSource.addMoveListener((moveEvent) => {
     console.log(moveEvent, moveEvent.latestMove);
     // moveEvent.latestMove;
+    if ((window as any).skip) {
+      return;
+    }
     player.experimentalAddMove(moveEvent.latestMove);
     robot.applyMoves([moveEvent.latestMove]);
   });
