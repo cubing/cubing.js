@@ -144,7 +144,7 @@ export class GanRobot extends EventTarget {
     const statusBytes = new Uint8Array(
       (await this.statusCharacteristic.readValue()).buffer,
     );
-    console.log("status bytes", statusBytes);
+    // console.log("status bytes", statusBytes);
     return {
       movesRemaining: statusBytes[0],
     };
