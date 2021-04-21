@@ -1,14 +1,17 @@
 import { Alg, Move } from "../../alg";
 import { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
+const DEFAULT_ANGLE = true;
+
 const MAX_NIBBLES_PER_WRITE = 18 * 2;
 // const WRITE_DEBOUNCE_MS = 500;
 const QUANTUM_TURN_DURATION_MS = 150;
 const DOUBLE_TURN_DURATION_MS = 250;
 const WRITE_PADDING_MS = 100;
 
-const U_D_SWAP = new Alg("F B R2 L2 B' F'");
-// const U_D_SWAP = new Alg("U D R2 L2 D' U'");
+const U_D_SWAP = DEFAULT_ANGLE
+  ? new Alg("F B R2 L2 B' F'")
+  : new Alg("U D R2 L2 D' U'");
 const U_D_UNSWAP = U_D_SWAP.invert(); // TODO: make `cubing.js` clever enough to be able to reuse the regular swap.
 
 // TODO: Short IDs
@@ -18,28 +21,51 @@ const UUIDs = {
   moveCharacteristic: "0000fff3-0000-1000-8000-00805f9b34fb",
 };
 
-const moveMap: Record<string, number> = {
-  "R": 0,
-  "R2": 1,
-  "R2'": 1,
-  "R'": 2,
-  "F": 3,
-  "F2": 4,
-  "F2'": 4,
-  "F'": 5,
-  "D": 6,
-  "D2": 7,
-  "D2'": 7,
-  "D'": 8,
-  "L": 9,
-  "L2": 10,
-  "L2'": 10,
-  "L'": 11,
-  "B": 12,
-  "B2": 13,
-  "B2'": 13,
-  "B'": 14,
-};
+const moveMap: Record<string, number> = DEFAULT_ANGLE
+  ? {
+      "R": 0,
+      "R2": 1,
+      "R2'": 1,
+      "R'": 2,
+      "F": 3,
+      "F2": 4,
+      "F2'": 4,
+      "F'": 5,
+      "D": 6,
+      "D2": 7,
+      "D2'": 7,
+      "D'": 8,
+      "L": 9,
+      "L2": 10,
+      "L2'": 10,
+      "L'": 11,
+      "B": 12,
+      "B2": 13,
+      "B2'": 13,
+      "B'": 14,
+    }
+  : {
+      "R": 0,
+      "R2": 1,
+      "R2'": 1,
+      "R'": 2,
+      "U": 3,
+      "U2": 4,
+      "U2'": 4,
+      "U'": 5,
+      "F": 6,
+      "F2": 7,
+      "F2'": 7,
+      "F'": 8,
+      "L": 9,
+      "L2": 10,
+      "L2'": 10,
+      "L'": 11,
+      "D": 12,
+      "D2": 13,
+      "D2'": 13,
+      "D'": 14,
+    };
 
 function isDoubleTurnNibble(nibble: number): boolean {
   return nibble % 3 === 1;
@@ -188,12 +214,14 @@ export class GanRobot extends EventTarget {
       const str = move.toString();
       if (str in moveMap) {
         await this.queueMoves(new Alg([move]));
-      } else if (move.family === "U") {
+      } else if (move.family === (DEFAULT_ANGLE ? "U" : "B")) {
         // We purposely send just the swap, so that U2 will get coalesced
         await Promise.all([
           this.queueMoves(U_D_SWAP),
           this.queueMoves(
-            new Alg([move.modified({ family: "D" })]).concat(U_D_UNSWAP),
+            new Alg([
+              move.modified({ family: DEFAULT_ANGLE ? "D" : "F" }),
+            ]).concat(U_D_UNSWAP),
           ),
         ]);
       }
