@@ -7,13 +7,14 @@ const QUANTUM_TURN_DURATION_MS = 150;
 const DOUBLE_TURN_DURATION_MS = 250;
 const WRITE_PADDING_MS = 100;
 
-// const U_D_SWAP = new Alg("F B R2 L2 B' F'");
-const U_D_SWAP = new Alg("U D R2 L2 D' U'");
+const U_D_SWAP = new Alg("F B R2 L2 B' F'");
+// const U_D_SWAP = new Alg("U D R2 L2 D' U'");
 const U_D_UNSWAP = U_D_SWAP.invert(); // TODO: make `cubing.js` clever enough to be able to reuse the regular swap.
 
 // TODO: Short IDs
 const UUIDs = {
   ganTimerService: "0000fff0-0000-1000-8000-00805f9b34fb",
+  statusCharacteristic: "0000fff2-0000-1000-8000-00805f9b34fb",
   moveCharacteristic: "0000fff3-0000-1000-8000-00805f9b34fb",
 };
 
@@ -22,22 +23,22 @@ const moveMap: Record<string, number> = {
   "R2": 1,
   "R2'": 1,
   "R'": 2,
-  "U": 3,
-  "U2": 4,
-  "U2'": 4,
-  "U'": 5,
-  "F": 6,
-  "F2": 7,
-  "F2'": 7,
-  "F'": 8,
+  "F": 3,
+  "F2": 4,
+  "F2'": 4,
+  "F'": 5,
+  "D": 6,
+  "D2": 7,
+  "D2'": 7,
+  "D'": 8,
   "L": 9,
   "L2": 10,
   "L2'": 10,
   "L'": 11,
-  "D": 12,
-  "D2": 13,
-  "D2'": 13,
-  "D'": 14,
+  "B": 12,
+  "B2": 13,
+  "B2'": 13,
+  "B'": 14,
 };
 
 function isDoubleTurnNibble(nibble: number): boolean {
@@ -67,6 +68,7 @@ export class GanRobot extends EventTarget {
     _service: BluetoothRemoteGATTService,
     private server: BluetoothRemoteGATTServer,
     device: BluetoothDevice,
+    private statusCharacteristic: BluetoothRemoteGATTCharacteristic,
     private moveCharacteristic: BluetoothRemoteGATTCharacteristic,
   ) {
     super();
@@ -84,6 +86,9 @@ export class GanRobot extends EventTarget {
     const ganTimerService = await server.getPrimaryService(
       UUIDs.ganTimerService,
     );
+    const statusCharacteristic = await ganTimerService.getCharacteristic(
+      UUIDs.statusCharacteristic,
+    );
     const moveCharacteristic = await ganTimerService.getCharacteristic(
       UUIDs.moveCharacteristic,
     );
@@ -91,6 +96,7 @@ export class GanRobot extends EventTarget {
       ganTimerService,
       server,
       device,
+      statusCharacteristic,
       moveCharacteristic,
     );
     return timer;
@@ -127,10 +133,21 @@ export class GanRobot extends EventTarget {
     for (const nibble of nibbles) {
       sleepDuration += nibbleDuration(nibble);
     }
-    await Promise.all([
-      this.moveCharacteristic.writeValue(bytes),
-      sleep(sleepDuration),
-    ]);
+    await this.moveCharacteristic.writeValue(bytes);
+    await sleep(sleepDuration * 0.75);
+    while ((await this.getStatus()).movesRemaining > 0) {
+      // repeat
+    }
+  }
+
+  private async getStatus(): Promise<{ movesRemaining: number }> {
+    const statusBytes = new Uint8Array(
+      (await this.statusCharacteristic.readValue()).buffer,
+    );
+    console.log("status bytes", statusBytes);
+    return {
+      movesRemaining: statusBytes[0],
+    };
   }
 
   locked: boolean = false;
@@ -171,12 +188,12 @@ export class GanRobot extends EventTarget {
       const str = move.toString();
       if (str in moveMap) {
         await this.queueMoves(new Alg([move]));
-      } else if (move.family === "B") {
+      } else if (move.family === "U") {
         // We purposely send just the swap, so that U2 will get coalesced
         await Promise.all([
           this.queueMoves(U_D_SWAP),
           this.queueMoves(
-            new Alg([move.modified({ family: "F" })]).concat(U_D_UNSWAP),
+            new Alg([move.modified({ family: "D" })]).concat(U_D_UNSWAP),
           ),
         ]);
       }
