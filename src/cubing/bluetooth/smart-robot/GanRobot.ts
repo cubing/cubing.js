@@ -1,71 +1,44 @@
 import { Alg, Move } from "../../alg";
 import { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
-const DEFAULT_ANGLE = true;
-
 const MAX_NIBBLES_PER_WRITE = 18 * 2;
 // const WRITE_DEBOUNCE_MS = 500;
 const QUANTUM_TURN_DURATION_MS = 150;
 const DOUBLE_TURN_DURATION_MS = 250;
 const WRITE_PADDING_MS = 100;
 
-const U_D_SWAP = DEFAULT_ANGLE
-  ? new Alg("F B R2 L2 B' F'")
-  : new Alg("U D R2 L2 D' U'");
+const U_D_SWAP = new Alg("F B R2 L2 B' F'");
 const U_D_UNSWAP = U_D_SWAP.invert(); // TODO: make `cubing.js` clever enough to be able to reuse the regular swap.
 
 // TODO: Short IDs
 const UUIDs = {
-  ganTimerService: "0000fff0-0000-1000-8000-00805f9b34fb",
+  ganRobotService: "0000fff0-0000-1000-8000-00805f9b34fb",
   statusCharacteristic: "0000fff2-0000-1000-8000-00805f9b34fb",
   moveCharacteristic: "0000fff3-0000-1000-8000-00805f9b34fb",
 };
 
-const moveMap: Record<string, number> = DEFAULT_ANGLE
-  ? {
-      "R": 0,
-      "R2": 1,
-      "R2'": 1,
-      "R'": 2,
-      "F": 3,
-      "F2": 4,
-      "F2'": 4,
-      "F'": 5,
-      "D": 6,
-      "D2": 7,
-      "D2'": 7,
-      "D'": 8,
-      "L": 9,
-      "L2": 10,
-      "L2'": 10,
-      "L'": 11,
-      "B": 12,
-      "B2": 13,
-      "B2'": 13,
-      "B'": 14,
-    }
-  : {
-      "R": 0,
-      "R2": 1,
-      "R2'": 1,
-      "R'": 2,
-      "U": 3,
-      "U2": 4,
-      "U2'": 4,
-      "U'": 5,
-      "F": 6,
-      "F2": 7,
-      "F2'": 7,
-      "F'": 8,
-      "L": 9,
-      "L2": 10,
-      "L2'": 10,
-      "L'": 11,
-      "D": 12,
-      "D2": 13,
-      "D2'": 13,
-      "D'": 14,
-    };
+const moveMap: Record<string, number> = {
+  "R": 0,
+  "R2": 1,
+  "R2'": 1,
+  "R'": 2,
+  "F": 3,
+  "F2": 4,
+  "F2'": 4,
+  "F'": 5,
+  "D": 6,
+  "D2": 7,
+  "D2'": 7,
+  "D'": 8,
+  "L": 9,
+  "L2": 10,
+  "L2'": 10,
+  "L'": 11,
+  "B": 12,
+  "B2": 13,
+  "B2'": 13,
+  "B'": 14,
+};
 
 function isDoubleTurnNibble(nibble: number): boolean {
   return nibble % 3 === 1;
@@ -89,6 +62,10 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export interface GanRobotStatus {
+  movesRemaining: number;
+}
+
 export class GanRobot extends EventTarget {
   constructor(
     _service: BluetoothRemoteGATTService,
@@ -110,7 +87,7 @@ export class GanRobot extends EventTarget {
     device: BluetoothDevice,
   ) {
     const ganTimerService = await server.getPrimaryService(
-      UUIDs.ganTimerService,
+      UUIDs.ganRobotService,
     );
     const statusCharacteristic = await ganTimerService.getCharacteristic(
       UUIDs.statusCharacteristic,
@@ -154,7 +131,6 @@ export class GanRobot extends EventTarget {
     if (nibbles.length % 2 === 1) {
       bytes[byteLength - 1] += 0xf;
     }
-    console.log("SENDING:", nibbles);
     let sleepDuration = WRITE_PADDING_MS;
     for (const nibble of nibbles) {
       sleepDuration += nibbleDuration(nibble);
@@ -166,11 +142,10 @@ export class GanRobot extends EventTarget {
     }
   }
 
-  private async getStatus(): Promise<{ movesRemaining: number }> {
+  private async getStatus(): Promise<GanRobotStatus> {
     const statusBytes = new Uint8Array(
       (await this.statusCharacteristic.readValue()).buffer,
     );
-    // console.log("status bytes", statusBytes);
     return {
       movesRemaining: statusBytes[0],
     };
@@ -185,12 +160,9 @@ export class GanRobot extends EventTarget {
     this.moveQueue = this.moveQueue
       .concat(moves)
       .simplify({ collapseMoves: true, quantumMoveOrder: (_) => 4 });
-    console.log(this.moveQueue.toString());
     if (!this.locked) {
       // TODO: We're currently iterating over units instead of leaves to avoid "zip bomps".
-
       try {
-        console.log("locking");
         this.locked = true;
         while (this.moveQueue.experimentalNumUnits() > 0) {
           const units = Array.from(this.moveQueue.units());
@@ -202,7 +174,6 @@ export class GanRobot extends EventTarget {
           await write;
         }
       } finally {
-        console.log("locking resolved");
         this.locked = false;
       }
     }
@@ -214,14 +185,12 @@ export class GanRobot extends EventTarget {
       const str = move.toString();
       if (str in moveMap) {
         await this.queueMoves(new Alg([move]));
-      } else if (move.family === (DEFAULT_ANGLE ? "U" : "B")) {
+      } else if (move.family === "U") {
         // We purposely send just the swap, so that U2 will get coalesced
         await Promise.all([
           this.queueMoves(U_D_SWAP),
           this.queueMoves(
-            new Alg([
-              move.modified({ family: DEFAULT_ANGLE ? "D" : "F" }),
-            ]).concat(U_D_UNSWAP),
+            new Alg([move.modified({ family: "D" })]).concat(U_D_UNSWAP),
           ),
         ]);
       }
@@ -234,5 +203,5 @@ export const ganTimerConfig: BluetoothConfig<GanRobot> = {
   connect: GanRobot.connect,
   prefixes: ["GAN"],
   filters: [{ namePrefix: "GAN" }],
-  optionalServices: [UUIDs.ganTimerService],
+  optionalServices: [UUIDs.ganRobotService],
 };
