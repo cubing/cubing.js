@@ -1,10 +1,14 @@
-import { Move } from "../../alg";
+import { Alg, Move } from "../../alg";
 import { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 const MAX_NIBBLES_PER_WRITE = 18 * 2;
 // const WRITE_DEBOUNCE_MS = 500;
-const QUARTER_TURN_DURATION_MS = 150;
+const QUANTUM_TURN_DURATION_MS = 150;
+const DOUBLE_TURN_DURATION_MS = 250;
 const WRITE_PADDING_MS = 100;
+
+const U_D_SWAP = new Alg("F B R2 L2 B' F'");
+const U_D_UNSWAP = U_D_SWAP.invert(); // TODO: make `cubing.js` clever enough to be able to reuse the regular swap.
 
 // TODO: Short IDs
 const UUIDs = {
@@ -15,20 +19,43 @@ const UUIDs = {
 const moveMap: Record<string, number> = {
   "R": 0,
   "R2": 1,
+  "R2'": 1,
   "R'": 2,
   "F": 3,
   "F2": 4,
+  "F2'": 4,
   "F'": 5,
   "D": 6,
   "D2": 7,
+  "D2'": 7,
   "D'": 8,
   "L": 9,
   "L2": 10,
+  "L2'": 10,
   "L'": 11,
   "B": 12,
   "B2": 13,
+  "B2'": 13,
   "B'": 14,
 };
+
+function isDoubleTurnNibble(nibble: number): boolean {
+  return nibble % 3 === 1;
+}
+
+function nibbleDuration(nibble: number): number {
+  return isDoubleTurnNibble(nibble)
+    ? DOUBLE_TURN_DURATION_MS
+    : QUANTUM_TURN_DURATION_MS;
+}
+
+function throwInvalidMove(move: Move) {
+  console.error("invalid move", move, move.toString());
+  throw new Error("invalid move!");
+}
+function moveToNibble(move: Move): number {
+  return moveMap[move.toString()] ?? throwInvalidMove(move);
+}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -78,7 +105,9 @@ export class GanRobot extends EventTarget {
 
   private async writeNibbles(nibbles: number[]): Promise<void> {
     if (nibbles.length > MAX_NIBBLES_PER_WRITE) {
-      throw new Error("Can only write 40 nibbles at a time!");
+      throw new Error(
+        `Can only write ${MAX_NIBBLES_PER_WRITE} nibbles at a time!`,
+      );
     }
     const byteLength = Math.ceil(nibbles.length / 2);
     const bytes = new Uint8Array(byteLength);
@@ -93,30 +122,45 @@ export class GanRobot extends EventTarget {
       bytes[byteLength - 1] += 0xf;
     }
     console.log("SENDING:", nibbles);
+    let sleepDuration = WRITE_PADDING_MS;
+    for (const nibble of nibbles) {
+      sleepDuration += nibbleDuration(nibble);
+    }
     await Promise.all([
       this.moveCharacteristic.writeValue(bytes),
-      sleep(QUARTER_TURN_DURATION_MS * nibbles.length + WRITE_PADDING_MS),
+      sleep(sleepDuration),
     ]);
   }
 
   locked: boolean = false;
   processQueue(): void {}
 
-  private nibbleQueue: number[] = [];
-  private async queueNibbles(nibbles: number[]): Promise<void> {
-    this.nibbleQueue = this.nibbleQueue.concat(nibbles);
-    console.log("queue:", this.nibbleQueue, this.locked);
+  private moveQueue: Alg = new Alg();
+  // TODO: Don't let this resolve until the move is done?
+  private async queueMoves(moves: Alg): Promise<void> {
+    this.moveQueue = this.moveQueue
+      .concat(moves)
+      .simplify({ collapseMoves: true, quantumMoveOrder: (_) => 4 });
+    console.log(this.moveQueue.toString());
     if (!this.locked) {
-      console.log("locking");
-      this.locked = true;
-      while (this.nibbleQueue.length > 0) {
-        const write = this.writeNibbles(
-          this.nibbleQueue.splice(0, MAX_NIBBLES_PER_WRITE),
-        );
-        await write;
+      // TODO: We're currently iterating over units instead of leaves to avoid "zip bomps".
+
+      try {
+        console.log("locking");
+        this.locked = true;
+        while (this.moveQueue.experimentalNumUnits() > 0) {
+          const units = Array.from(this.moveQueue.units());
+          const nibbles = units
+            .splice(0, MAX_NIBBLES_PER_WRITE)
+            .map(moveToNibble);
+          const write = this.writeNibbles(nibbles);
+          this.moveQueue = new Alg(units);
+          await write;
+        }
+      } finally {
+        console.log("locking resolved");
+        this.locked = false;
       }
-      this.locked = false;
-      console.log("locking resolved");
     }
   }
 
@@ -125,28 +169,14 @@ export class GanRobot extends EventTarget {
     for (const move of moves) {
       const str = move.toString();
       if (str in moveMap) {
-        const nibble = moveMap[str];
-        await this.queueNibbles([nibble]);
+        await this.queueMoves(new Alg([move]));
       } else if (move.family === "U") {
-        const middle: number = {
-          "1": 0x6,
-          "2": 0x7,
-          "-1": 0x8,
-        }[move.effectiveAmount]!;
-        await this.queueNibbles([
-          0x3,
-          0xc,
-          0x1,
-          0xa,
-          0x5,
-          0xe,
-          middle,
-          0xc,
-          0x3,
-          0xa,
-          0x1,
-          0x5,
-          0xe,
+        // We purposely send just the swap, so that U2 will get coalesced
+        await Promise.all([
+          this.queueMoves(U_D_SWAP),
+          this.queueMoves(
+            new Alg([move.modified({ family: "D" })]).concat(U_D_UNSWAP),
+          ),
         ]);
       }
     }
