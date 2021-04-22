@@ -134,12 +134,6 @@ export class Alg extends AlgCommon<Alg> {
     return parseAlg(s);
   }
 
-  // /** @deprecated */
-  // get nestedUnits(): Unit[] {
-  //   warnOnce("deprecated: nestedUnits");
-  //   return Array.from(this.#units);
-  // }
-
   *units(): Generator<Unit> {
     for (const unit of this.#units) {
       yield unit;
