@@ -66,9 +66,9 @@
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
-    "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --public-url ./ --dist-dir dist/twizzle.net/explore src/demo/twizzle/index.html",
-    "parcel-build-for-vr-cubing-net": "parcel build --no-scope-hoist --no-minify --target vr-cubing-net --public-url ./ --dist-dir dist/experiments.cubing.net/vr src/demo/vr/index.html",
-    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-minify --target experiments-cubing-net --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html",
+    "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-optimize --target twizzle-net --public-url ./ --dist-dir dist/twizzle.net/explore src/demo/twizzle/index.html",
+    "parcel-build-for-vr-cubing-net": "parcel build --no-scope-hoist --no-optimize --target vr-cubing-net --public-url ./ --dist-dir dist/experiments.cubing.net/vr src/demo/vr/index.html",
+    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-optimize --target experiments-cubing-net --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html",
     "parcel-build-for-twizzle-diaries": "parcel build --no-scope-hoist --target twizzle-diaries --public-url /twizzle-diaries/ --dist-dir dist/experiments.cubing.net src/demo/twizzle-diaries/index.html"
   },
   "targets": {
