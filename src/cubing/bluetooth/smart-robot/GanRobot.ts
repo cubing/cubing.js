@@ -55,7 +55,11 @@ function throwInvalidMove(move: Move) {
   throw new Error("invalid move!");
 }
 function moveToNibble(move: Move): number {
-  return moveMap[move.toString()] ?? throwInvalidMove(move);
+  const nibble = moveMap[move.toString()] ?? null;
+  if (nibble === null) {
+    throwInvalidMove(move);
+  }
+  return nibble;
 }
 
 function sleep(ms: number): Promise<void> {
