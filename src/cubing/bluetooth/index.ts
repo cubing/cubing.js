@@ -13,3 +13,4 @@ export {
   giikerMoveToAlgMoveForTesting,
 } from "./smart-puzzle/giiker";
 export { GoCube } from "./smart-puzzle/gocube";
+export { connectSmartRobot } from "./smart-robot";

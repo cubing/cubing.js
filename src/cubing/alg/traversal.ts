@@ -2,7 +2,7 @@ import { Alg } from "./Alg";
 import { Grouping } from "./units/containers/Grouping";
 import { Comparable } from "./common";
 import { Commutator } from "./units/containers/Commutator";
-import { Move } from "./units/leaves/Move";
+import { Move, QuantumMove } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
 import { Conjugate } from "./units/containers/Conjugate";
@@ -123,6 +123,7 @@ export abstract class TraversalUp<
 
 export interface SimplifyOptions {
   collapseMoves?: boolean;
+  quantumMoveOrder?: (quantumMove: QuantumMove) => number;
   depth?: number | null; // TODO: test
 }
 
@@ -144,7 +145,11 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
         const newMove = newUnit as Move;
         if (lastMove.quantum.isIdentical(newMove.quantum)) {
           newUnits.pop();
-          const newAmount = lastMove.effectiveAmount + newMove.effectiveAmount;
+          let newAmount = lastMove.effectiveAmount + newMove.effectiveAmount;
+          if (options?.quantumMoveOrder) {
+            const order = options.quantumMoveOrder(lastMove.quantum);
+            newAmount = (((newAmount % order) + order + 1) % order) - 1; // TODO
+          }
           if (newAmount !== 0) {
             const coalescedMove = new Move(lastMove.quantum, newAmount);
             newUnits.push(coalescedMove);
@@ -153,10 +158,12 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
             lastUnit = newUnits.slice(-1)[0];
           }
         } else {
+          // TODO: handle quantum move order
           newUnits.push(newUnit);
           lastUnit = newUnit;
         }
       } else {
+        // TODO: handle quantum move order
         newUnits.push(newUnit);
         lastUnit = newUnit;
       }
