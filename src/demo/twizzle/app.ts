@@ -442,7 +442,7 @@ function dowork(cmd: string): void {
   } else if (cmd === "canon") {
     pg.showcanon(gettextwriter());
   } else if (cmd === "ksolve") {
-    showtext(pg.writeksolve("TwizzlePuzzle", false));
+    showtext(pg.writeksolve("TwizzlePuzzle"));
   } else if (cmd === "svgcmd") {
     showtext(pg.generatesvg(800, 500, 10, getCheckbox("threed")));
   } else {

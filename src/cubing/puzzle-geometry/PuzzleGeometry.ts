@@ -2039,14 +2039,9 @@ export class PuzzleGeometry {
 
   public writeksolve(
     name: string = "PuzzleGeometryPuzzle",
-    fortwisty: boolean = false,
   ): string {
-    const od = this.getOrbitsDef(fortwisty);
-    if (fortwisty) {
-      return od.toKsolve(name, fortwisty).join("\n");
-    } else {
-      return this.header("# ") + od.toKsolve(name, fortwisty).join("\n");
-    }
+    const od = this.getOrbitsDef(false);
+    return this.header("# ") + od.toKsolve(name).join("\n");
   }
 
   public writekpuzzle(fortwisty: boolean = true): PGVendoredKPuzzleDefinition {

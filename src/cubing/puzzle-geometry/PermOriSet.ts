@@ -42,7 +42,7 @@ export class OrbitsDef {
     return mp;
   }
 
-  public toKsolve(name: string, forTwisty: boolean): string[] {
+  public toKsolve(name: string): string[] {
     const result = [];
     result.push("Name " + name);
     result.push("");
@@ -59,26 +59,16 @@ export class OrbitsDef {
     result.push("");
     result.push("Solved");
     for (let i = 0; i < this.orbitnames.length; i++) {
-      result.push(this.orbitnames[i]);
-      const o = this.solved.orbits[i].toKsolveVS();
-      result.push(o[0]);
-      result.push(o[1]);
+      this.solved.orbits[i].appendConciseDefinition(result, this.orbitnames[i], true);
     }
     result.push("End");
-    result.push("");
     for (let i = 0; i < this.movenames.length; i++) {
+      result.push("");
       result.push("Move " + this.movenames[i]);
       for (let j = 0; j < this.orbitnames.length; j++) {
-        if (!forTwisty && this.moveops[i].orbits[j].isIdentity()) {
-          continue;
-        }
-        result.push(this.orbitnames[j]);
-        const o = this.moveops[i].orbits[j].toKsolve();
-        result.push(o[0]);
-        result.push(o[1]);
+        this.moveops[i].orbits[j].appendConciseDefinition(result, this.orbitnames[j], false);
       }
       result.push("End");
-      result.push("");
     }
     // extra blank line on end lets us use join("\n") to terminate all
     return result;
@@ -390,6 +380,19 @@ export class Orbit {
     return true;
   }
 
+  public zeroOris(): boolean {
+    const n = this.perm.length;
+    if (this.ori === zeros(n)) {
+      return true;
+    }
+    for (let i = 0; i < n; i++) {
+      if (this.ori[i] !== 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   public remap(no: number[], on: number[], nv: number): Orbit {
     const newPerm = new Array<number>(nv);
     const newOri = new Array<number>(nv);
@@ -416,16 +419,23 @@ export class Orbit {
     return new Orbit(newPerm, newOri, this.orimod);
   }
 
-  public toKsolveVS(): string[] {
-    return [this.perm.map((_: number) => _ + 1).join(" "), this.ori.join(" ")];
-  }
-
-  public toKsolve(): string[] {
-    const newori = new Array<number>(this.ori.length);
-    for (let i = 0; i < newori.length; i++) {
-      newori[this.perm[i]] = this.ori[i];
+  public appendConciseDefinition(result:String[], name: string, useVS: boolean): void {
+    if (this.isIdentity()) {
+      return;
     }
-    return [this.perm.map((_: number) => _ + 1).join(" "), newori.join(" ")];
+    result.push(name);
+    result.push(this.perm.map((_: number) => _ + 1).join(" "));
+    if (!this.zeroOris()) {
+      if (useVS) {
+        const newori = new Array<number>(this.ori.length);
+        for (let i = 0; i < newori.length; i++) {
+          newori[this.perm[i]] = this.ori[i];
+        }
+        result.push(newori.join(" "));
+      } else {
+        result.push(this.ori.join(" "));
+      }
+    }
   }
 
   // TODO: return type
