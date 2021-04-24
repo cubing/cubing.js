@@ -158,9 +158,10 @@ export class GanRobot extends EventTarget {
         `Can only write ${MAX_NIBBLES_PER_WRITE} nibbles at a time!`,
       );
     }
-    const byteLength = Math.ceil(nibbles.length / 2);
-    const bytes = new Uint8Array(byteLength);
-    for (let i = 0; i < nibbles.length; i++) {
+    // const byteLength = Math.ceil(nibbles.length / 2);
+    const bytes = new Uint8Array(18);
+    let i: number;
+    for (i = 0; i < nibbles.length; i++) {
       const byteIdx = Math.floor(i / 2);
       bytes[byteIdx] += nibbles[i];
       if (i % 2 === 0) {
@@ -168,13 +169,16 @@ export class GanRobot extends EventTarget {
       }
     }
     if (nibbles.length % 2 === 1) {
-      bytes[byteLength - 1] += 0xf;
+      bytes[Math.ceil(nibbles.length / 2) - 1] += 0xf;
+    }
+    for (let i = Math.ceil(nibbles.length / 2); i < 18; i++) {
+      bytes[i] = 0xff;
     }
     let sleepDuration = WRITE_PADDING_MS;
     for (const nibble of nibbles) {
       sleepDuration += nibbleDuration(nibble);
     }
-    console.log(buf2hex(bytes));
+    console.log("WRITING:", buf2hex(bytes));
     await this.moveCharacteristic.writeValue(bytes);
     await sleep(sleepDuration * 0.75);
     while ((await this.getStatus()).movesRemaining > 0) {
@@ -206,6 +210,7 @@ export class GanRobot extends EventTarget {
       // TODO: We're currently iterating over units instead of leaves to avoid "zip bomps".
       try {
         this.locked = true;
+        // await this.writeNibbles([0xf, 0xf]);
         while (this.moveQueue.experimentalNumUnits() > 0) {
           const units = Array.from(this.moveQueue.units());
           const moves = units.splice(0, MAX_NIBBLES_PER_WRITE);
