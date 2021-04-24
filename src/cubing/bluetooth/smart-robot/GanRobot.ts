@@ -11,6 +11,7 @@ function buf2hex(buffer: ArrayBuffer): string {
 }
 
 const DEFAULT_ANGLE = false;
+const SINGLE_MOVE_FIX_HACK = false;
 
 const MAX_NIBBLES_PER_WRITE = 18 * 2;
 // const WRITE_DEBOUNCE_MS = 500;
@@ -212,7 +213,21 @@ export class GanRobot extends EventTarget {
         this.locked = true;
         // await this.writeNibbles([0xf, 0xf]);
         while (this.moveQueue.experimentalNumUnits() > 0) {
-          const units = Array.from(this.moveQueue.units());
+          let units = Array.from(this.moveQueue.units());
+          if (SINGLE_MOVE_FIX_HACK && units.length === 1) {
+            const move = units[0] as Move;
+            if (move.effectiveAmount === 2) {
+              units = [
+                move.modified({ repetition: 1 }),
+                move.modified({ repetition: 1 }),
+              ];
+            } else {
+              units = [
+                move.modified({ repetition: -move.effectiveAmount }),
+                move.modified({ repetition: 2 }),
+              ];
+            }
+          }
           const moves = units.splice(0, MAX_NIBBLES_PER_WRITE);
           const nibbles = moves.map(moveToNibble);
           console.log("SENDING", new Alg(moves).toString());
