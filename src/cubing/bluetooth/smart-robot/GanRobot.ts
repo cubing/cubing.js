@@ -10,8 +10,9 @@ function buf2hex(buffer: ArrayBuffer): string {
     .join(" ");
 }
 
-const DEFAULT_ANGLE = false;
-const SINGLE_MOVE_FIX_HACK = false;
+const DEFAULT_ANGLE = true;
+const SINGLE_MOVE_FIX_HACK = true;
+const PRE_SLEEP = true;
 
 const MAX_NIBBLES_PER_WRITE = 18 * 2;
 // const WRITE_DEBOUNCE_MS = 500;
@@ -107,6 +108,8 @@ export interface GanRobotStatus {
 }
 
 export class GanRobot extends EventTarget {
+  debugOnSend: ((alg: Alg) => void) | null = null;
+
   constructor(
     _service: BluetoothRemoteGATTService,
     private server: BluetoothRemoteGATTServer,
@@ -143,6 +146,10 @@ export class GanRobot extends EventTarget {
       moveCharacteristic,
     );
     return timer;
+  }
+
+  public name(): string | undefined {
+    return this.server.device.name;
   }
 
   disconnect(): void {
@@ -211,8 +218,12 @@ export class GanRobot extends EventTarget {
       // TODO: We're currently iterating over units instead of leaves to avoid "zip bomps".
       try {
         this.locked = true;
+        const queueLen = this.moveQueue.experimentalNumUnits();
+        if (PRE_SLEEP && queueLen === 1) {
+          await sleep(150);
+        }
         // await this.writeNibbles([0xf, 0xf]);
-        while (this.moveQueue.experimentalNumUnits() > 0) {
+        while (queueLen > 0) {
           let units = Array.from(this.moveQueue.units());
           if (SINGLE_MOVE_FIX_HACK && units.length === 1) {
             const move = units[0] as Move;
@@ -230,7 +241,11 @@ export class GanRobot extends EventTarget {
           }
           const moves = units.splice(0, MAX_NIBBLES_PER_WRITE);
           const nibbles = moves.map(moveToNibble);
-          console.log("SENDING", new Alg(moves).toString());
+          const sending = new Alg(moves);
+          console.log("SENDING", sending.toString());
+          if (this.debugOnSend) {
+            this.debugOnSend(sending);
+          }
           const write = this.writeNibbles(nibbles);
           this.moveQueue = new Alg(units);
           await write;

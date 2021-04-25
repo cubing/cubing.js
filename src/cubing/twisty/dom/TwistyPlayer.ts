@@ -112,6 +112,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     },
   ) {
     super();
+    console.log("constructivating");
     this.addCSS(twistyPlayerCSS);
     this.#config = new TwistyPlayerConfig(this, initialConfig);
 
@@ -818,4 +819,5 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 }
 
+console.log("regitesting");
 customElementsShim.define("twisty-player", TwistyPlayer);
