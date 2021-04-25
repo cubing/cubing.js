@@ -116,8 +116,6 @@ describe("PuzzleGeometry-Puzzles", () => {
         Object.getOwnPropertyNames(kpuzzledef.moves).length +
         sep +
         o;
-      // right now names are changing on 8- and 12-face puzzles.  We truncate
-      // the last element on such puzzles as a temporary hack.
       let exp = expectedData[name];
       expect(dat).toBe(exp);
     }
