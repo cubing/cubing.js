@@ -2,7 +2,7 @@ import { bluetoothConnect, BluetoothConnectOptions } from "../connect";
 import { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 import { GanRobot, ganTimerConfig } from "./GanRobot";
 
-type BluetoothRobot = GanRobot; // TODO
+export type BluetoothRobot = GanRobot; // TODO
 
 const smartRobotConfigs: BluetoothConfig<BluetoothRobot>[] = [ganTimerConfig];
 

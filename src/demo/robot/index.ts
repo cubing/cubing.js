@@ -2,46 +2,131 @@ import {
   BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
+  MoveEvent,
 } from "../../cubing/bluetooth";
 import { connectSmartRobot } from "../../cubing/bluetooth/smart-robot";
-import { TwistyPlayer } from "../../cubing/twisty";
+import { GanRobot } from "../../cubing/bluetooth/smart-robot/GanRobot";
+import type { TwistyPlayer } from "../../cubing/twisty";
+import "../../cubing/twisty";
+import { Alg } from "../../cubing/alg";
 
-const player = document.body.appendChild(new TwistyPlayer());
+class RobotDemo {
+  // DOM
+  player: TwistyPlayer = document.querySelector("twisty-player")!;
+  inputButton: HTMLButtonElement = document.querySelector("#input")!;
+  outputButton: HTMLButtonElement = document.querySelector("#output")!;
+  recorderButton: HTMLButtonElement = document.querySelector("#recorder")!;
+  pauseButton: HTMLButtonElement = document.querySelector("#pause")!;
+  // Devices
+  inputs: BluetoothPuzzle[] = [];
+  output: GanRobot | null = null;
+  paused: boolean = false;
 
-const button = document.body.appendChild(document.createElement("button"));
-button.textContent = "connect input";
-const button2 = document.body.appendChild(document.createElement("button"));
-button2.textContent = "connect output";
+  sentStorageName: string;
+  recorderStorageName: string;
 
-let moveSource: BluetoothPuzzle;
+  constructor() {
+    this.inputButton.addEventListener(
+      "click",
+      this.connectBluetoothPuzzleInput.bind(this),
+    );
+    this.recorderButton.addEventListener(
+      "click",
+      this.connectRecorder.bind(this),
+    );
+    this.outputButton.addEventListener("click", this.connectOutput.bind(this));
+    this.pauseButton.addEventListener("click", () => this.togglePause());
+    this.connectKeyboardInput();
+  }
 
-button.addEventListener("click", async () => {
-  moveSource = await connectSmartPuzzle();
-  console.log(moveSource);
-});
+  resetSession(): void {
+    const date = Date.now();
+    console.log("Setting session:", date);
+    this.sentStorageName = `robot-sent-${date}`;
+    this.recorderStorageName = `robot-recorded-${date}`;
+  }
 
-button2.addEventListener("click", async () => {
-  const robot = await connectSmartRobot();
-  (window as any).robot = robot;
-  console.log(robot);
+  async connectKeyboardInput(): Promise<void> {
+    const kb = await debugKeyboardConnect();
+    kb.addMoveListener(this.onMove.bind(this));
+  }
 
-  const kb = await debugKeyboardConnect();
-  kb.addMoveListener((moveEvent) => {
-    console.log(moveEvent, moveEvent.latestMove);
-    // moveEvent.latestMove;
-    if ((window as any).skip) {
+  async connectRecorder(): Promise<void> {
+    this.recorderButton.disabled = true;
+    try {
+      const puzzle = await connectSmartPuzzle();
+      this.inputs.push(puzzle);
+      puzzle.addMoveListener(this.recordMove.bind(this));
+      this.recorderButton.textContent = `Recorder: ${puzzle.name()}`;
+    } catch {
+      this.recorderButton.disabled = false;
+    }
+  }
+
+  async connectBluetoothPuzzleInput(): Promise<void> {
+    this.inputButton.disabled = true;
+    try {
+      const puzzle = await connectSmartPuzzle();
+      this.inputs.push(puzzle);
+      puzzle.addMoveListener(this.onMove.bind(this));
+      this.inputButton.textContent = `Input: ${puzzle.name()}`;
+    } catch {
+      this.inputButton.disabled = false;
+    }
+    this.pauseButton.disabled = false;
+  }
+
+  async connectOutput(): Promise<void> {
+    this.outputButton.disabled = true;
+    try {
+      this.output = await connectSmartRobot();
+      this.output.experimentalDebugLog = console.log;
+      this.output.experimentalOptions.preSleep = true;
+      this.output.experimentalOptions.singleMoveFixHack = true;
+      this.output.experimentalOptions.xAngle = true;
+      this.output.experimentalDebugOnSend = (alg: Alg) => {
+        localStorage[this.sentStorageName] =
+          (localStorage[this.sentStorageName] ?? "") +
+          alg.toString() +
+          ` // ${Date.now()}\n`;
+      };
+      this.outputButton.textContent = `Output: ${this.output.name()}`;
+    } catch {
+      this.outputButton.disabled = false;
+    }
+  }
+
+  onMove(move: MoveEvent): void {
+    this.player.experimentalAddMove(move.latestMove);
+    if (this.paused) {
+      console.log("Paused. Not sending moves.");
+    } else {
+      this.output?.applyMoves([move.latestMove]);
+    }
+  }
+
+  recordMove(moveEvent: MoveEvent): void {
+    localStorage[this.recorderStorageName] =
+      (localStorage[this.recorderStorageName] ?? "") +
+      moveEvent.latestMove.toString() +
+      ` // ${Date.now()}\n`;
+  }
+
+  togglePause(newPause?: boolean): void {
+    if (typeof newPause === "undefined") {
+      this.togglePause(!this.paused);
       return;
     }
-    player.experimentalAddMove(moveEvent.latestMove);
-    robot.applyMoves([moveEvent.latestMove]);
-  });
-
-  moveSource.addMoveListener((moveEvent) => {
-    console.log(moveEvent, moveEvent.latestMove);
-    if ((window as any).skip) {
-      return;
+    console.log("Setting pause:", newPause);
+    this.resetSession();
+    if (newPause) {
+      this.pauseButton.textContent = "▶️";
+      this.paused = newPause;
+    } else {
+      this.pauseButton.textContent = "⏸";
+      this.paused = newPause;
     }
-    player.experimentalAddMove(moveEvent.latestMove);
-    robot.applyMoves([moveEvent.latestMove]);
-  });
-});
+  }
+}
+
+(window as any).robotDemo = new RobotDemo();
