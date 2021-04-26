@@ -1,6 +1,7 @@
 import { Alg, Move } from "../../alg";
 import { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
+// TODO: Remove this. It's only used for debugging.
 function buf2hex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
   return Array.prototype.map
@@ -10,19 +11,16 @@ function buf2hex(buffer: ArrayBuffer): string {
     .join(" ");
 }
 
-const DEFAULT_ANGLE = true;
-const SINGLE_MOVE_FIX_HACK = true;
-const PRE_SLEEP = true;
-
 const MAX_NIBBLES_PER_WRITE = 18 * 2;
 // const WRITE_DEBOUNCE_MS = 500;
 const QUANTUM_TURN_DURATION_MS = 150;
 const DOUBLE_TURN_DURATION_MS = 250;
 const WRITE_PADDING_MS = 100;
 
-// const U_D_SWAP = new Alg("F B R2 L2 B' F'");
-const U_D_SWAP = new Alg("U D R2 L2 D' U'");
+const U_D_SWAP = new Alg("F B R2 L2 B' F'");
 const U_D_UNSWAP = U_D_SWAP.invert(); // TODO: make `cubing.js` clever enough to be able to reuse the regular swap.
+const F_B_SWAP = new Alg("U D R2 L2 D' U'");
+const F_B_UNSWAP = F_B_SWAP.invert();
 
 // TODO: Short IDs
 const UUIDs = {
@@ -31,51 +29,51 @@ const UUIDs = {
   moveCharacteristic: "0000fff3-0000-1000-8000-00805f9b34fb",
 };
 
-const moveMap: Record<string, number> = DEFAULT_ANGLE
-  ? {
-      "R": 0,
-      "R2": 1,
-      "R2'": 1,
-      "R'": 2,
-      "F": 3,
-      "F2": 4,
-      "F2'": 4,
-      "F'": 5,
-      "D": 6,
-      "D2": 7,
-      "D2'": 7,
-      "D'": 8,
-      "L": 9,
-      "L2": 10,
-      "L2'": 10,
-      "L'": 11,
-      "B": 12,
-      "B2": 13,
-      "B2'": 13,
-      "B'": 14,
-    }
-  : {
-      "R": 0,
-      "R2": 1,
-      "R2'": 1,
-      "R'": 2,
-      "U": 3,
-      "U2": 4,
-      "U2'": 4,
-      "U'": 5,
-      "F": 6,
-      "F2": 7,
-      "F2'": 7,
-      "F'": 8,
-      "L": 9,
-      "L2": 10,
-      "L2'": 10,
-      "L'": 11,
-      "D": 12,
-      "D2": 13,
-      "D2'": 13,
-      "D'": 14,
-    };
+const moveMap: Record<string, number> = {
+  "R": 0,
+  "R2": 1,
+  "R2'": 1,
+  "R'": 2,
+  "F": 3,
+  "F2": 4,
+  "F2'": 4,
+  "F'": 5,
+  "D": 6,
+  "D2": 7,
+  "D2'": 7,
+  "D'": 8,
+  "L": 9,
+  "L2": 10,
+  "L2'": 10,
+  "L'": 11,
+  "B": 12,
+  "B2": 13,
+  "B2'": 13,
+  "B'": 14,
+};
+
+const moveMapX: Record<string, number> = {
+  "R": 0,
+  "R2": 1,
+  "R2'": 1,
+  "R'": 2,
+  "U": 3,
+  "U2": 4,
+  "U2'": 4,
+  "U'": 5,
+  "F": 6,
+  "F2": 7,
+  "F2'": 7,
+  "F'": 8,
+  "L": 9,
+  "L2": 10,
+  "L2'": 10,
+  "L'": 11,
+  "D": 12,
+  "D2": 13,
+  "D2'": 13,
+  "D'": 14,
+};
 
 function isDoubleTurnNibble(nibble: number): boolean {
   return nibble % 3 === 1;
@@ -91,13 +89,6 @@ function throwInvalidMove(move: Move) {
   console.error("invalid move", move, move.toString());
   throw new Error("invalid move!");
 }
-function moveToNibble(move: Move): number {
-  const nibble = moveMap[move.toString()] ?? null;
-  if (nibble === null) {
-    throwInvalidMove(move);
-  }
-  return nibble;
-}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -107,8 +98,22 @@ export interface GanRobotStatus {
   movesRemaining: number;
 }
 
+interface GanRobotOptions {
+  xAngle: boolean;
+  singleMoveFixHack: boolean;
+  preSleep: boolean;
+}
+
 export class GanRobot extends EventTarget {
-  debugOnSend: ((alg: Alg) => void) | null = null;
+  experimentalDebugOnSend: ((alg: Alg) => void) | null = null;
+  experimentalDebugLog: typeof console.log = () => {};
+
+  // Because our Bluetooth connection code is set up not to know what kind of device is connecting, we put these options directly on the class.
+  experimentalOptions: GanRobotOptions = {
+    xAngle: false,
+    singleMoveFixHack: false,
+    preSleep: false,
+  };
 
   constructor(
     _service: BluetoothRemoteGATTService,
@@ -160,6 +165,16 @@ export class GanRobot extends EventTarget {
     this.dispatchEvent(new CustomEvent("disconnect"));
   }
 
+  private moveToNibble(move: Move): number {
+    const nibble =
+      (this.experimentalOptions.xAngle ? moveMapX : moveMap)[move.toString()] ??
+      null;
+    if (nibble === null) {
+      throwInvalidMove(move);
+    }
+    return nibble;
+  }
+
   private async writeNibbles(nibbles: number[]): Promise<void> {
     if (nibbles.length > MAX_NIBBLES_PER_WRITE) {
       throw new Error(
@@ -186,7 +201,7 @@ export class GanRobot extends EventTarget {
     for (const nibble of nibbles) {
       sleepDuration += nibbleDuration(nibble);
     }
-    console.log("WRITING:", buf2hex(bytes));
+    this.experimentalDebugLog("WRITING:", buf2hex(bytes));
     await this.moveCharacteristic.writeValue(bytes);
     await sleep(sleepDuration * 0.75);
     while ((await this.getStatus()).movesRemaining > 0) {
@@ -199,7 +214,7 @@ export class GanRobot extends EventTarget {
     const statusBytes = new Uint8Array(
       (await this.statusCharacteristic.readValue()).buffer,
     );
-    console.log("moves remaining:", statusBytes[0]);
+    this.experimentalDebugLog("moves remaining:", statusBytes[0]);
     return {
       movesRemaining: statusBytes[0],
     };
@@ -218,14 +233,19 @@ export class GanRobot extends EventTarget {
       // TODO: We're currently iterating over units instead of leaves to avoid "zip bomps".
       try {
         this.locked = true;
-        const queueLen = this.moveQueue.experimentalNumUnits();
-        if (PRE_SLEEP && queueLen === 1) {
+        if (
+          this.experimentalOptions.preSleep &&
+          this.moveQueue.experimentalNumUnits() === 1
+        ) {
           await sleep(150);
         }
         // await this.writeNibbles([0xf, 0xf]);
-        while (queueLen > 0) {
+        while (this.moveQueue.experimentalNumUnits() > 0) {
           let units = Array.from(this.moveQueue.units());
-          if (SINGLE_MOVE_FIX_HACK && units.length === 1) {
+          if (
+            this.experimentalOptions.singleMoveFixHack &&
+            units.length === 1
+          ) {
             const move = units[0] as Move;
             if (move.effectiveAmount === 2) {
               units = [
@@ -240,11 +260,11 @@ export class GanRobot extends EventTarget {
             }
           }
           const moves = units.splice(0, MAX_NIBBLES_PER_WRITE);
-          const nibbles = moves.map(moveToNibble);
+          const nibbles: number[] = moves.map(this.moveToNibble.bind(this));
           const sending = new Alg(moves);
-          console.log("SENDING", sending.toString());
-          if (this.debugOnSend) {
-            this.debugOnSend(sending);
+          this.experimentalDebugLog("SENDING", sending.toString());
+          if (this.experimentalDebugOnSend) {
+            this.experimentalDebugOnSend(sending);
           }
           const write = this.writeNibbles(nibbles);
           this.moveQueue = new Alg(units);
@@ -260,16 +280,24 @@ export class GanRobot extends EventTarget {
     // const nibbles: number[] = [];
     for (const move of moves) {
       const str = move.toString();
-      if (str in moveMap) {
+      if (str in (this.experimentalOptions.xAngle ? moveMapX : moveMap)) {
         await this.queueMoves(new Alg([move]));
-      } else if (move.family === (DEFAULT_ANGLE ? "U" : "B")) {
+      } else if (
+        move.family === (this.experimentalOptions.xAngle ? "B" : "U")
+      ) {
         // We purposely send just the swap, so that U2 will get coalesced
         await Promise.all([
-          this.queueMoves(U_D_SWAP),
+          this.queueMoves(
+            this.experimentalOptions.xAngle ? F_B_SWAP : U_D_SWAP,
+          ),
           this.queueMoves(
             new Alg([
-              move.modified({ family: DEFAULT_ANGLE ? "D" : "F" }),
-            ]).concat(U_D_UNSWAP),
+              move.modified({
+                family: this.experimentalOptions.xAngle ? "F" : "D",
+              }),
+            ]).concat(
+              this.experimentalOptions.xAngle ? F_B_UNSWAP : U_D_UNSWAP,
+            ),
           ),
         ]);
       }

@@ -80,7 +80,11 @@ class RobotDemo {
     this.outputButton.disabled = true;
     try {
       this.output = await connectSmartRobot();
-      this.output.debugOnSend = (alg: Alg) => {
+      this.output.experimentalDebugLog = console.log;
+      this.output.experimentalOptions.preSleep = true;
+      this.output.experimentalOptions.singleMoveFixHack = true;
+      this.output.experimentalOptions.xAngle = true;
+      this.output.experimentalDebugOnSend = (alg: Alg) => {
         localStorage[this.sentStorageName] =
           (localStorage[this.sentStorageName] ?? "") +
           alg.toString() +
