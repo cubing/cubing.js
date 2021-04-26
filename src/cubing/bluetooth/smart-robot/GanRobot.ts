@@ -12,10 +12,8 @@ function buf2hex(buffer: ArrayBuffer): string {
 }
 
 const MAX_NIBBLES_PER_WRITE = 18 * 2;
-// const WRITE_DEBOUNCE_MS = 500;
 const QUANTUM_TURN_DURATION_MS = 150;
 const DOUBLE_TURN_DURATION_MS = 250;
-const WRITE_PADDING_MS = 100;
 
 const U_D_SWAP = new Alg("F B R2 L2 B' F'");
 const U_D_UNSWAP = U_D_SWAP.invert(); // TODO: make `cubing.js` clever enough to be able to reuse the regular swap.
@@ -199,7 +197,7 @@ export class GanRobot extends EventTarget {
     for (let i = Math.ceil(nibbles.length / 2); i < 18; i++) {
       bytes[i] = 0xff;
     }
-    let sleepDuration = WRITE_PADDING_MS;
+    let sleepDuration = 0;
     for (const nibble of nibbles) {
       sleepDuration += nibbleDuration(nibble);
     }
