@@ -81,7 +81,8 @@ class RobotDemo {
     try {
       this.output = await connectSmartRobot();
       this.output.experimentalDebugLog = console.log;
-      this.output.experimentalOptions.preSleep = true;
+      this.output.experimentalOptions.bufferQueue = 150;
+      this.output.experimentalOptions.postSleep = 100;
       this.output.experimentalOptions.singleMoveFixHack = true;
       this.output.experimentalOptions.xAngle = true;
       this.output.experimentalDebugOnSend = (alg: Alg) => {

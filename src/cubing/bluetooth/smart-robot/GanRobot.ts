@@ -101,7 +101,8 @@ export interface GanRobotStatus {
 interface GanRobotOptions {
   xAngle: boolean;
   singleMoveFixHack: boolean;
-  preSleep: boolean;
+  bufferQueue: number;
+  postSleep: number;
 }
 
 export class GanRobot extends EventTarget {
@@ -112,7 +113,8 @@ export class GanRobot extends EventTarget {
   experimentalOptions: GanRobotOptions = {
     xAngle: false,
     singleMoveFixHack: false,
-    preSleep: false,
+    bufferQueue: 0,
+    postSleep: 0,
   };
 
   constructor(
@@ -207,7 +209,7 @@ export class GanRobot extends EventTarget {
     while ((await this.getStatus()).movesRemaining > 0) {
       // repeat
     }
-    await sleep(100);
+    await sleep(this.experimentalOptions.postSleep);
   }
 
   private async getStatus(): Promise<GanRobotStatus> {
@@ -233,11 +235,8 @@ export class GanRobot extends EventTarget {
       // TODO: We're currently iterating over units instead of leaves to avoid "zip bomps".
       try {
         this.locked = true;
-        if (
-          this.experimentalOptions.preSleep &&
-          this.moveQueue.experimentalNumUnits() === 1
-        ) {
-          await sleep(150);
+        if (this.moveQueue.experimentalNumUnits() === 1) {
+          await sleep(this.experimentalOptions.bufferQueue);
         }
         // await this.writeNibbles([0xf, 0xf]);
         while (this.moveQueue.experimentalNumUnits() > 0) {
