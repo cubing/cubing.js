@@ -126,7 +126,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   // TODO(https://github.com/microsoft/TypeScript/pull/42425): Allow setting string in the type decl.
-  set alg(newAlg: Alg /* | string*/) {
+  set alg(newAlg: Alg | string) {
     // TODO: do validation for other algs as well.
     if (typeof newAlg === "string") {
       newAlg = Alg.fromString(newAlg);
