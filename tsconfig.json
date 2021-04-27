@@ -20,5 +20,5 @@
     "importsNotUsedAsValues": "error"
   },
   "include": ["src/**/*", "*/index.d.ts", "*/index.js"],
-  "exclude": ["/node_modules", "/dist", "/src/dist-static"]
+  "exclude": ["/node_modules", "/dist", "src/dist-static"]
 }
