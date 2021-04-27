@@ -6,8 +6,8 @@ import {
   Scene,
 } from "three";
 import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry";
-import { VRInput } from "./vr-input";
-import { VRPuzzle } from "./vr-puzzle";
+import type { VRInput } from "./vr-input";
+import type { VRPuzzle } from "./vr-puzzle";
 
 export class Room {
   public scene: Scene;

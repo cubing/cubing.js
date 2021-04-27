@@ -13,15 +13,8 @@ import {
 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../cubing/alg";
-import {
-  BareBlockMove,
-  BlockMove,
-  coalesceBaseMoves,
-  experimentalAppendBlockMove,
-  parseAlg,
-  Sequence,
-} from "../../cubing/alg/index";
-import { Puzzles } from "../../cubing/kpuzzle";
+import { Alg, Move } from "../../cubing/alg/index";
+import {} from "../../cubing/kpuzzle";
 import { ProxyEvent, WebSocketProxyReceiver } from "../../cubing/stream";
 import { TAU } from "../../cubing/twisty/3D/TAU";
 import { AlgCursor } from "../../cubing/twisty/animation/cursor/AlgCursor";
@@ -42,6 +35,7 @@ import {
   Status,
   VRInput,
 } from "./vr-input";
+import { cube3x3x3KPuzzle } from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 
 // From `cube3D.ts`
 class AxisInfo {
@@ -81,7 +75,7 @@ class CallbackProxyReceiver extends WebSocketProxyReceiver {
 export class VRCube {
   public group: Group = new Group();
   private timeline: Timeline;
-  private alg: Sequence = new Sequence([]);
+  private alg: Alg = new Alg();
   private cube3D: Cube3D;
   private cursor: AlgCursor;
   private controlPlanes: Mesh[] = [];
@@ -107,20 +101,21 @@ export class VRCube {
     this.timeline.tempoScale = 4;
     this.cursor = new AlgCursor(
       this.timeline,
-      Puzzles["3x3x3"],
-      parseAlg("R U R'"),
+      cube3x3x3KPuzzle,
+      new Alg("R U R'"),
     );
 
     this.timeline.addCursor(this.cursor);
 
     this.cube3D = new Cube3D(
+      cube3x3x3KPuzzle,
       this.cursor,
       () => {
         /**/
       },
       {
         showFoundation: false,
-        showHintStickers: false,
+        hintFacelets: "none",
       },
     );
     this.group.add(this.cube3D);
@@ -381,24 +376,23 @@ export class VRCube {
         controller.userData.controllerNumber
       ] = controller.userData.isSelecting ? Status.Pressed : Status.Targeted;
       const side = closestIntersection.object.userData.side;
-      this.addMove(BareBlockMove(side, controllerIdx === 0 ? -1 : 1));
+      this.addMove(new Move(side, controllerIdx === 0 ? -1 : 1));
       this.hapticPulse(controllerIdx, 0.1, 75);
     }
   }
 
-  setAlg(alg: Sequence): void {
+  setAlg(alg: Alg): void {
     this.alg = alg;
     this.cursor.setAlg(alg);
   }
 
-  addMove(move: BlockMove, coalesce: boolean = false): void {
+  addMove(move: Move, coalesce: boolean = false): void {
     const oldNumMoves = countMoves(this.alg); // TODO
-    const newAlg = experimentalAppendBlockMove(
-      coalesceBaseMoves(this.alg),
-      move,
-      coalesce,
-      0,
-    );
+    let newAlg = this.alg.simplify().concat([move]);
+    if (coalesce) {
+      // TODO
+      newAlg = newAlg.simplify();
+    }
     this.setAlg(newAlg);
 
     // TODO
@@ -413,7 +407,7 @@ export class VRCube {
   private onProxyEvent(e: ProxyEvent): void {
     switch (e.event) {
       case "reset":
-        this.setAlg(new Sequence([]));
+        this.setAlg(new Alg());
         break;
       case "move":
         this.addMove(e.data.latestMove);
