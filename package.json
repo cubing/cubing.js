@@ -65,7 +65,7 @@
     "test-node-import": "node src/dist-test/import.mjs",
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
     "setup": "npm install",
-    "lint": "npx eslint --ext=js,ts .",
+    "lint": "npx eslint --ext=js,ts,d.ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
     "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-optimize --target twizzle-net --public-url ./ --dist-dir dist/twizzle.net/explore src/demo/twizzle/index.html",
     "parcel-build-for-vr-cubing-net": "parcel build --no-scope-hoist --no-optimize --target vr-cubing-net --public-url ./ --dist-dir dist/experiments.cubing.net/vr src/demo/vr/index.html",
@@ -121,7 +121,7 @@
     "ignorePatterns": [
       "/coverage",
       "/dist",
-      "/dist-test",
+      "/src/dist-static",
       "/src/vendor/modules/three/examples/jsm/libs/stats.module.d.ts",
       "/src/vendor/modules/three/examples/jsm/libs/stats.module.js",
       "parser-pegjs.js"
