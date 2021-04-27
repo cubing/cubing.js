@@ -1,10 +1,9 @@
-import { BlockMove } from "../../../alg";
-import { experimentalBlockQuantumMoveName } from "../../../alg/traversal";
-import { Duration, Timestamp } from "../cursor/CursorTypes";
+import { Move, QuantumMove } from "../../../alg";
+import type { Duration, Timestamp } from "../cursor/CursorTypes";
 
 interface Event {
   timeStamp: Timestamp;
-  move: BlockMove;
+  move: Move;
 }
 
 export interface TimelineEntry {
@@ -15,7 +14,7 @@ export interface TimelineEntry {
 
 type Timeline = TimelineEntry[];
 
-function isSameAxis(move1: BlockMove, move2: BlockMove): boolean {
+function isSameAxis(move1: Move, move2: Move): boolean {
   const familyRoots =
     move1.family[0].toLowerCase() + move2.family[0].toLowerCase();
   // console.log(familyRoots);
@@ -50,10 +49,7 @@ export function toAxes(
         end: event.timeStamp + diameterMs / 2,
       };
       axes.push([lastEntry]);
-      axisMoveTracker.set(
-        experimentalBlockQuantumMoveName(lastEntry.event.move),
-        lastEntry,
-      );
+      axisMoveTracker.set(lastEntry.event.move.quantum.toString(), lastEntry);
       continue;
     }
     const newEntry: TimelineEntry = {
@@ -62,7 +58,7 @@ export function toAxes(
       end: event.timeStamp + diameterMs / 2,
     };
     if (isSameAxis(lastEntry.event.move, event.move)) {
-      const quarterName = experimentalBlockQuantumMoveName(newEntry.event.move);
+      const quarterName = newEntry.event.move.quantum.toString();
       // console.log(quarterName);
       const prev = axisMoveTracker.get(quarterName);
       // console.log("prev", prev);
@@ -70,13 +66,15 @@ export function toAxes(
         prev &&
         prev.end > newEntry.start &&
         Math.sign(prev.event.move.amount) ===
-          Math.sign(newEntry.event.move.amount)
+          Math.sign(newEntry.event.move.effectiveAmount)
       ) {
-        prev.event.move = new BlockMove(
-          prev.event.move.outerLayer,
-          prev.event.move.innerLayer,
-          prev.event.move.family,
-          prev.event.move.amount + newEntry.event.move.amount,
+        prev.event.move = new Move(
+          new QuantumMove(
+            prev.event.move.family,
+            prev.event.move.innerLayer,
+            prev.event.move.outerLayer,
+          ),
+          prev.event.move.amount + newEntry.event.move.effectiveAmount,
         );
       } else {
         axes[axes.length - 1].push(newEntry);
@@ -86,10 +84,7 @@ export function toAxes(
       // console.log("--", algPartToStringForTesting(newEntry.event.move));
       axes.push([newEntry]);
       axisMoveTracker.clear();
-      axisMoveTracker.set(
-        experimentalBlockQuantumMoveName(newEntry.event.move),
-        newEntry,
-      );
+      axisMoveTracker.set(newEntry.event.move.quantum.toString(), newEntry);
       if (newEntry.start < lastEntry.end) {
         const midpoint = (newEntry.start + lastEntry.end) / 2;
         newEntry.start = midpoint;
