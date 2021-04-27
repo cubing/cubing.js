@@ -59,7 +59,7 @@
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "npm run clean && npx parcel serve --no-autoinstall src/demo/index.html --port 3333 --open --dist-dir /tmp/cubing-js-parcel # cleaning is a workaround for one set of Parcel bugs, /tmp dir is a workaround dir for other Parcel bugs",
     "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel",
-    "test": "npm run test-jest && npm run lint && npm run build-experimental-splitting-build && npm run build",
+    "test": "npm run test-jest && npm run lint && npm run build-experimental-splitting-build && npm run build-tsc",
     "test-jest": "npx jest --collectCoverage",
     "test-node-require": "node src/dist-test/require.cjs",
     "test-node-import": "node src/dist-test/import.mjs",
