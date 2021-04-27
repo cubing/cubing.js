@@ -59,14 +59,22 @@ export class OrbitsDef {
     result.push("");
     result.push("Solved");
     for (let i = 0; i < this.orbitnames.length; i++) {
-      this.solved.orbits[i].appendConciseDefinition(result, this.orbitnames[i], true);
+      this.solved.orbits[i].appendConciseDefinition(
+        result,
+        this.orbitnames[i],
+        true,
+      );
     }
     result.push("End");
     for (let i = 0; i < this.movenames.length; i++) {
       result.push("");
       result.push("Move " + this.movenames[i]);
       for (let j = 0; j < this.orbitnames.length; j++) {
-        this.moveops[i].orbits[j].appendConciseDefinition(result, this.orbitnames[j], false);
+        this.moveops[i].orbits[j].appendConciseDefinition(
+          result,
+          this.orbitnames[j],
+          false,
+        );
       }
       result.push("End");
     }
@@ -419,7 +427,11 @@ export class Orbit {
     return new Orbit(newPerm, newOri, this.orimod);
   }
 
-  public appendConciseDefinition(result:String[], name: string, useVS: boolean): void {
+  public appendConciseDefinition(
+    result: String[],
+    name: string,
+    useVS: boolean,
+  ): void {
     if (this.isIdentity()) {
       return;
     }

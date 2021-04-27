@@ -2037,9 +2037,7 @@ export class PuzzleGeometry {
     return this.header("# ") + r.join("\n");
   }
 
-  public writeksolve(
-    name: string = "PuzzleGeometryPuzzle",
-  ): string {
+  public writeksolve(name: string = "PuzzleGeometryPuzzle"): string {
     const od = this.getOrbitsDef(false);
     return this.header("# ") + od.toKsolve(name).join("\n");
   }
