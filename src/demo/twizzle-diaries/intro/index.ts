@@ -1,5 +1,4 @@
 import { svgFiles } from "./svg";
-import JSZip from "jszip";
 import {
   Color,
   DoubleSide,
@@ -30,6 +29,7 @@ import { TwistyScrubber } from "../../../cubing/twisty/dom/controls/TwistyScrubb
 import checkeredBackground from "url:./checkered-background.png";
 import { experimentalSetDefaultStickerElevation } from "../../../cubing/twisty/3D/puzzles/Cube3D";
 import { Alg } from "../../../cubing/alg";
+import { JSZip } from "./jszip-wrapper";
 
 experimentalSetDefaultStickerElevation(0.51);
 
