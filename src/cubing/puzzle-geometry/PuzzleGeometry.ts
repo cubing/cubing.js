@@ -5,7 +5,7 @@
 
 import { Move, QuantumMove } from "../alg";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
-import {
+import type {
   MoveNotation,
   PGVendoredKPuzzleDefinition,
   Transformation as KTransformation,

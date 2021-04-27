@@ -17,18 +17,18 @@ import {
   Transformation,
 } from "../../../kpuzzle";
 import { experimentalTransformationForQuantumMove } from "../../../kpuzzle";
-import { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
+import type { StickerDat, StickerDatSticker } from "../../../puzzle-geometry";
 import {
   ExperimentalFaceletMeshAppearance,
   experimentalGetFaceletAppearance,
   ExperimentalPuzzleAppearance,
 } from "../../../puzzles";
-import { AlgCursor } from "../../animation/cursor/AlgCursor";
-import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
+import type { AlgCursor } from "../../animation/cursor/AlgCursor";
+import type { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { smootherStep } from "../../animation/easing";
 import { TAU } from "../TAU";
 
-import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
+import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,

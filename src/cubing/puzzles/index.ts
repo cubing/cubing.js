@@ -8,7 +8,7 @@ import { fto } from "./implementations/fto";
 import { megaminx } from "./implementations/megaminx";
 import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
-import { PuzzleLoader } from "./PuzzleLoader";
+import type { PuzzleLoader } from "./PuzzleLoader";
 
 export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/

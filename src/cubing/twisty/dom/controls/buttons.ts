@@ -1,4 +1,4 @@
-import { TimeRange } from "../../animation/cursor/AlgCursor";
+import type { TimeRange } from "../../animation/cursor/AlgCursor";
 import {
   BoundaryType,
   Direction,
@@ -13,9 +13,9 @@ import {
 import { ClassListManager } from "../element/ClassListManager";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
-import { ViewerLinkPage } from "../TwistyPlayerConfig";
+import type { ViewerLinkPage } from "../TwistyPlayerConfig";
 import { buttonCSS, buttonGridCSS } from "./buttons.css";
-import { TwistyControlElement } from "./TwistyControlElement.ts";
+import type { TwistyControlElement } from "./TwistyControlElement.ts";
 
 type TimelineCommand =
   | "fullscreen"

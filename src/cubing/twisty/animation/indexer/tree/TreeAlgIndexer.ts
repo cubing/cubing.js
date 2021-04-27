@@ -1,7 +1,7 @@
-import { Alg, Move } from "../../../../alg";
-import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
-import { Duration, Timestamp } from "../../cursor/CursorTypes";
-import { AlgIndexer } from "../AlgIndexer";
+import type { Alg, Move } from "../../../../alg";
+import type { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
+import type { Duration, Timestamp } from "../../cursor/CursorTypes";
+import type { AlgIndexer } from "../AlgIndexer";
 import { chunkAlgs } from "./chunkAlgs";
 import {
   AlgPartDecoration,

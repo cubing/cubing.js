@@ -1,6 +1,6 @@
-import { ExperimentalStickering } from "../../twisty";
-import { PuzzleLoader } from "../PuzzleLoader";
-import { PuzzleAppearance } from "./appearance";
+import type { ExperimentalStickering } from "../../twisty";
+import type { PuzzleLoader } from "../PuzzleLoader";
+import type { PuzzleAppearance } from "./appearance";
 import { cubeAppearance } from "./cube-stickerings";
 
 // TODO: cache calculations?

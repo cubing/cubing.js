@@ -19,14 +19,14 @@ import {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { BlockMove } from "../../../alg";
-import { KPuzzleDefinition, Transformation } from "../../../kpuzzle";
+import type { KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { puzzles } from "../../../puzzles";
-import {
+import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
 } from "../../../puzzles/stickerings/appearance";
-import { AlgCursor } from "../../animation/cursor/AlgCursor";
-import { PuzzlePosition } from "../../animation/cursor/CursorTypes";
+import type { AlgCursor } from "../../animation/cursor/AlgCursor";
+import type { PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { smootherStep } from "../../animation/easing";
 import {
   ExperimentalStickering,
@@ -35,7 +35,7 @@ import {
   hintFaceletStyles,
 } from "../../dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
-import { Twisty3DPuzzle } from "./Twisty3DPuzzle";
+import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const svgLoader = new TextureLoader();
 

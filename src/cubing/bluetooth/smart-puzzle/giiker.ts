@@ -1,7 +1,7 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import { Transformation } from "../../kpuzzle";
+import type { Transformation } from "../../kpuzzle";
 import {
   BluetoothConfig,
   BluetoothPuzzle,

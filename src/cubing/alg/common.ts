@@ -1,6 +1,6 @@
-import { Alg } from "./Alg";
-import { IterationDirection } from "./iteration";
-import { LeafUnit, Unit } from "./units/Unit";
+import type { Alg } from "./Alg";
+import type { IterationDirection } from "./iteration";
+import type { LeafUnit, Unit } from "./units/Unit";
 
 let writeAlgDebugField = false;
 export function setAlgDebugField(debug: boolean): void {

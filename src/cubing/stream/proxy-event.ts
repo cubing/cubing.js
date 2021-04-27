@@ -1,4 +1,4 @@
-import { MoveEvent, OrientationEvent } from "../bluetooth";
+import type { MoveEvent, OrientationEvent } from "../bluetooth";
 export interface ProxyMoveEvent {
   event: "move";
   data: MoveEvent;

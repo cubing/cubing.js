@@ -12,12 +12,12 @@ import {
   TraversalDownUp,
   Unit,
 } from "../../alg";
-import { Parsed } from "../../alg/parse";
+import type { Parsed } from "../../alg/parse";
 import { puzzles } from "../../puzzles";
 import { TwistyPlayer } from "../../twisty";
 import { KPuzzleWrapper } from "../3D/puzzles/KPuzzleWrapper";
-import { TimeRange } from "../animation/cursor/AlgCursor";
-import { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
+import type { TimeRange } from "../animation/cursor/AlgCursor";
+import type { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
 import { TreeAlgIndexer } from "../animation/indexer/tree/TreeAlgIndexer";
 import {
   customElementsShim,

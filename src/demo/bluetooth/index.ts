@@ -2,7 +2,7 @@
 // This allows Parcel to be faster while only using values exported in the final distribution.
 
 import { Alg } from "../../cubing/alg/index";
-import { OrientationEvent } from "../../cubing/bluetooth/index";
+import type { OrientationEvent } from "../../cubing/bluetooth/index";
 import {
   BluetoothPuzzle,
   connectSmartPuzzle,

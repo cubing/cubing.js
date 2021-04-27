@@ -1,5 +1,5 @@
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
-import { KPuzzleDefinition, Transformation } from ".";
+import type { KPuzzleDefinition, Transformation } from ".";
 import { areStatesEquivalent } from "./transformations";
 const mask = 0x7fffffff;
 function hash(def: KPuzzleDefinition, s: Transformation): number {

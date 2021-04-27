@@ -1,4 +1,4 @@
-import { FaceNameSwizzler } from "./FaceNameSwizzler";
+import type { FaceNameSwizzler } from "./FaceNameSwizzler";
 import { Move, QuantumMove } from "../alg";
 
 export interface NotationMapper {

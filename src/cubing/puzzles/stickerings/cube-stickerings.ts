@@ -1,5 +1,5 @@
-import { ExperimentalStickering } from "../../twisty";
-import { PuzzleLoader } from "../PuzzleLoader";
+import type { ExperimentalStickering } from "../../twisty";
+import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   PuzzleAppearance,
   PuzzleStickering,

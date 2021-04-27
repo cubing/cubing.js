@@ -30,8 +30,8 @@ import {
   debugShowRenderStats,
 } from "./url-params";
 import { CallbackProxyReceiver } from "./websocket-proxy";
-import { Quaternion } from "three";
-import { AlgCubingNetOptions } from "../../cubing/alg";
+import type { Quaternion } from "three";
+import type { AlgCubingNetOptions } from "../../cubing/alg";
 
 useNewFaceNames(true);
 

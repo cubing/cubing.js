@@ -1,7 +1,7 @@
-import { KPuzzleDefinition } from ".";
+import type { KPuzzleDefinition } from ".";
 import { Alg } from "../alg";
 import { puzzles } from "../puzzles";
-import { Transformation } from "./definition_types";
+import type { Transformation } from "./definition_types";
 import { KPuzzle } from "./kpuzzle";
 import {
   areOrbitTransformationsEquivalent,

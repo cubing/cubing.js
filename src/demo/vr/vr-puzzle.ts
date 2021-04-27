@@ -1,4 +1,4 @@
-import { Group } from "three";
+import type { Group } from "three";
 
 export interface VRPuzzle {
   group: Group;

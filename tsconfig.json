@@ -1,33 +1,25 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "alwaysStrict": true,
     "declaration": true,
-    "declarationDir": "./dist",
+    "declarationDir": "./dist/types",
     "declarationMap": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "outDir": "dist",
+    "outDir": "./dist/tsc",
     "sourceMap": true,
     "strictNullChecks": true,
     "target": "es2020",
     "module": "esnext",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "importsNotUsedAsValues": "error"
   },
-  "include": [
-    "src/**/*",
-    "*/index.d.ts",
-    "*/index.js"
-  ],
-  "exclude": [
-    "/node_modules",
-    "/dist"
-  ]
+  "include": ["src/**/*", "*/index.d.ts", "*/index.js"],
+  "exclude": ["/node_modules", "/dist", "src/dist-static"]
 }

@@ -1,5 +1,5 @@
-import { Move } from "../../../alg";
-import { Transformation as KPuzzleState } from "../../../kpuzzle";
+import type { Move } from "../../../alg";
+import type { Transformation as KPuzzleState } from "../../../kpuzzle";
 
 export type MillisecondTimestamp = number;
 

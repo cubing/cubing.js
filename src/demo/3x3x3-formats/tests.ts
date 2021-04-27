@@ -1,4 +1,4 @@
-import { parseAlg } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
@@ -27,7 +27,7 @@ const tests: {
 
 function addTest(name: string, alg: string): void {
   kpuzzle.reset();
-  kpuzzle.applyAlg(parseAlg(alg));
+  kpuzzle.applyAlg(Alg.fromString(alg));
   tests.push({
     name: name,
     alg: alg,

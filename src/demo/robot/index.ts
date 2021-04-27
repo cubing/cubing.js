@@ -5,10 +5,10 @@ import {
   MoveEvent,
 } from "../../cubing/bluetooth";
 import { connectSmartRobot } from "../../cubing/bluetooth/smart-robot";
-import { GanRobot } from "../../cubing/bluetooth/smart-robot/GanRobot";
+import type { GanRobot } from "../../cubing/bluetooth/smart-robot/GanRobot";
 import type { TwistyPlayer } from "../../cubing/twisty";
 import "../../cubing/twisty";
-import { Alg } from "../../cubing/alg";
+import type { Alg } from "../../cubing/alg";
 
 class RobotDemo {
   // DOM

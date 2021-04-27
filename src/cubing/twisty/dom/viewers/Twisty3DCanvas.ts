@@ -1,11 +1,11 @@
 import { PerspectiveCamera, Vector3, WebGLRenderer } from "three";
-import { Twisty3DScene } from "../../3D/Twisty3DScene";
+import type { Twisty3DScene } from "../../3D/Twisty3DScene";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { pixelRatio } from "./canvas";
 import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
 import { TwistyOrbitControls } from "./TwistyOrbitControls";
-import { TwistyViewerElement } from "./TwistyViewerElement";
+import type { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import Stats from "../../../../vendor/node_modules/three/examples/jsm/libs/stats.module";
 

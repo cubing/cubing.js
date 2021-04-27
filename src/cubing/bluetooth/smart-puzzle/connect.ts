@@ -1,5 +1,5 @@
 import { bluetoothConnect, BluetoothConnectOptions } from "../connect";
-import { BluetoothPuzzle } from "./bluetooth-puzzle";
+import type { BluetoothPuzzle } from "./bluetooth-puzzle";
 import { ganConfig } from "./gan";
 import { giiKERConfig } from "./giiker";
 import { goCubeConfig } from "./gocube";

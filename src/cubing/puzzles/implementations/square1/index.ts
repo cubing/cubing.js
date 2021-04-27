@@ -1,4 +1,4 @@
-import { PuzzleLoader } from "../../PuzzleLoader";
+import type { PuzzleLoader } from "../../PuzzleLoader";
 
 export const square1: PuzzleLoader = {
   id: "square1",

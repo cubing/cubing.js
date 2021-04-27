@@ -1,5 +1,5 @@
 import { RenderScheduler } from "./RenderScheduler";
-import { AlgCursor, TimeRange } from "./cursor/AlgCursor";
+import type { AlgCursor, TimeRange } from "./cursor/AlgCursor";
 import {
   BoundaryType,
   Direction,

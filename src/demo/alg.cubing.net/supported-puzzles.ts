@@ -3,7 +3,7 @@ import {
   StickerDat,
 } from "../../cubing/puzzle-geometry";
 import { puzzles } from "../../cubing/puzzles";
-import { VisualizationFormat } from "../../cubing/twisty/dom/TwistyPlayerConfig";
+import type { VisualizationFormat } from "../../cubing/twisty/dom/TwistyPlayerConfig";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";

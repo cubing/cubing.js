@@ -1,7 +1,7 @@
-import { Alg } from "./Alg";
+import type { Alg } from "./Alg";
 
 import { TraversalUp } from "./traversal";
-import {
+import type {
   Commutator,
   Conjugate,
   Grouping,

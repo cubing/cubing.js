@@ -1,11 +1,14 @@
 // <twisty-scrubber>
 
-import { TimeRange } from "../../animation/cursor/AlgCursor";
-import { MillisecondTimestamp } from "../../animation/cursor/CursorTypes";
-import { Timeline, TimelineTimestampListener } from "../../animation/Timeline";
+import type { TimeRange } from "../../animation/cursor/AlgCursor";
+import type { MillisecondTimestamp } from "../../animation/cursor/CursorTypes";
+import type {
+  Timeline,
+  TimelineTimestampListener,
+} from "../../animation/Timeline";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
-import { TwistyControlElement } from "./TwistyControlElement.ts";
+import type { TwistyControlElement } from "./TwistyControlElement.ts";
 import { twistyScrubberCSS } from "./TwistyScrubber.css";
 
 // Usually a horizontal line.

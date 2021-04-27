@@ -4,7 +4,7 @@
 //   use interoperably.  These definitions are not identical to those in
 //   the corresponding classes but they are interoperable.
 
-import { Move } from "../alg";
+import type { Move } from "../alg";
 
 export interface MoveNotation {
   lookupMove(move: Move): Transformation | undefined;

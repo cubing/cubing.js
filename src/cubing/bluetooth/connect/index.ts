@@ -1,5 +1,5 @@
 import { debugLog } from "../debug";
-import { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
+import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 /******** requestOptions ********/
 

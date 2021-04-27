@@ -2,7 +2,7 @@ import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { Repetition, RepetitionInfo } from "../Repetition";
-import { LeafUnit } from "../Unit";
+import type { LeafUnit } from "../Unit";
 
 export class Grouping extends AlgCommon<Grouping> {
   readonly #repetition: Repetition<Alg>;

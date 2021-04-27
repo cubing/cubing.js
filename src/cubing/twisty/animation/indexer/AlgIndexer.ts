@@ -1,6 +1,10 @@
-import { Move } from "../../../alg";
-import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
-import { Duration, PuzzlePosition, Timestamp } from "../cursor/CursorTypes";
+import type { Move } from "../../../alg";
+import type { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
+import type {
+  Duration,
+  PuzzlePosition,
+  Timestamp,
+} from "../cursor/CursorTypes";
 
 export interface AlgIndexer<P extends PuzzleWrapper> {
   getMove(index: number): Move | null;

@@ -1,7 +1,7 @@
-import { ExperimentalStickering } from "../../../twisty";
+import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
-import { PuzzleLoader } from "../../PuzzleLoader";
-import { PuzzleAppearance } from "../../stickerings/appearance";
+import type { PuzzleLoader } from "../../PuzzleLoader";
+import type { PuzzleAppearance } from "../../stickerings/appearance";
 import {
   cubeAppearance,
   cubeStickerings,

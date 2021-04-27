@@ -3,7 +3,7 @@
 
 import { Move, QuantumMove } from "../../cubing/alg";
 import { AlgBuilder } from "../../cubing/alg/AlgBuilder";
-import { RepetitionInfo } from "../../cubing/alg/units/Repetition";
+import type { RepetitionInfo } from "../../cubing/alg/units/Repetition";
 import { ExperimentalTwistyAlgViewer, TwistyPlayer } from "../../cubing/twisty";
 // import { TwistyPlayer } from "../../cubing/twisty";
 

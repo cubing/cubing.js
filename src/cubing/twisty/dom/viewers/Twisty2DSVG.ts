@@ -5,9 +5,9 @@ import {
   Transformation,
   transformationForMove,
 } from "../../../kpuzzle";
-import { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
-import { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
-import {
+import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
+import type { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
+import type {
   PositionDispatcher,
   PositionListener,
 } from "../../animation/cursor/AlgCursor";
@@ -15,9 +15,9 @@ import { Direction, PuzzlePosition } from "../../animation/cursor/CursorTypes";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
-import { ExperimentalStickering } from "../TwistyPlayerConfig";
+import type { ExperimentalStickering } from "../TwistyPlayerConfig";
 import { twisty2DSVGCSS } from "./Twisty2DSVGView.css";
-import { TwistyViewerElement } from "./TwistyViewerElement";
+import type { TwistyViewerElement } from "./TwistyViewerElement";
 
 export interface Twisty2DSVGOptions {
   experimentalStickering?: ExperimentalStickering;
