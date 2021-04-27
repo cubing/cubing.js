@@ -1,13 +1,14 @@
 import { Vector3 } from "three";
-import { Alg, Move } from "../../alg";
-import { experimentalAppendMove } from "../../alg";
-import { KPuzzleDefinition, Transformation } from "../../kpuzzle";
+import { Alg, experimentalAppendMove, Move } from "../../alg";
+import type { KPuzzleDefinition, Transformation } from "../../kpuzzle";
+import { countMoves } from "../../notation"; // TODO
 import type { StickerDat } from "../../puzzle-geometry";
 import { puzzles } from "../../puzzles";
-import { PuzzleLoader } from "../../puzzles/PuzzleLoader";
+import type { PuzzleLoader } from "../../puzzles/PuzzleLoader";
+import type { PuzzleAppearance } from "../../puzzles/stickerings/appearance";
 import { Cube3D } from "../3D/puzzles/Cube3D";
 import { PG3D, PG3DOptions } from "../3D/puzzles/PG3D";
-import { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
+import type { Twisty3DPuzzle } from "../3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DScene } from "../3D/Twisty3DScene";
 import { AlgCursor, IndexerConstructor } from "../animation/cursor/AlgCursor";
 import { SimpleAlgIndexer } from "../animation/indexer/SimpleAlgIndexer";
@@ -19,9 +20,8 @@ import {
   TimelineActionEvent,
   TimestampLocationType,
 } from "../animation/Timeline";
-import { countMoves } from "../../notation"; // TODO
 import { TwistyControlButtonPanel } from "./controls/buttons";
-import { TwistyControlElement } from "./controls/TwistyControlElement.ts";
+import type { TwistyControlElement } from "./controls/TwistyControlElement.ts";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
@@ -43,12 +43,11 @@ import {
 } from "./TwistyPlayerConfig";
 import { Twisty2DSVG, Twisty2DSVGOptions } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
-import { TwistyViewerElement } from "./viewers/TwistyViewerElement";
+import type { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import {
   BackViewLayout,
   TwistyViewerWrapper,
 } from "./viewers/TwistyViewerWrapper";
-import { PuzzleAppearance } from "../../puzzles/stickerings/appearance";
 
 export interface LegacyExperimentalPG3DViewConfig {
   def: KPuzzleDefinition;

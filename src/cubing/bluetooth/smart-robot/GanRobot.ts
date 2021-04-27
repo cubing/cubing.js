@@ -1,5 +1,5 @@
 import { Alg, Move } from "../../alg";
-import { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
+import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 // TODO: Remove this. It's only used for debugging.
 function buf2hex(buffer: ArrayBuffer): string {

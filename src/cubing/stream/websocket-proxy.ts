@@ -1,5 +1,5 @@
-import { MoveEvent, OrientationEvent } from "../bluetooth";
-import { ProxyEvent } from "./proxy-event";
+import type { MoveEvent, OrientationEvent } from "../bluetooth";
+import type { ProxyEvent } from "./proxy-event";
 
 export class WebSocketProxySender {
   protected websocket: WebSocket;

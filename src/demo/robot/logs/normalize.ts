@@ -10,7 +10,7 @@ import {
   TraversalDownUp,
   Unit,
 } from "../../../cubing/alg";
-import { SimplifyOptions } from "../../../cubing/alg/traversal";
+import type { SimplifyOptions } from "../../../cubing/alg/traversal";
 
 // TODO: Test that inverses are bijections.
 class Normalize extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {

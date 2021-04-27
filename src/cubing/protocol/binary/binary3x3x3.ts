@@ -1,4 +1,4 @@
-import { Transformation } from "../../kpuzzle";
+import type { Transformation } from "../../kpuzzle";
 import {
   identityPermutation,
   lexToPermutation,

@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { Alg } from "../../alg";
+import type { Alg } from "../../alg";
 import {
   AlgAttribute,
   StringEnumAttribute,

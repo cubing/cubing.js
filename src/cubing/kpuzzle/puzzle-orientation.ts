@@ -1,5 +1,5 @@
 import { experimentalNormalizePuzzleOrientation as normalize3x3x3Orientation } from "../protocol";
-import { Transformation } from "./definition_types";
+import type { Transformation } from "./definition_types";
 import { experimentalCube3x3x3KPuzzle as def } from "../puzzles";
 import {
   areOrbitTransformationsEquivalent,

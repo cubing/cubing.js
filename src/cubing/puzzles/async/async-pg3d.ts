@@ -1,6 +1,6 @@
 import type { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
-import { PuzzleLoader } from "../PuzzleLoader";
+import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   cubeAppearance,
   cubeStickerings,

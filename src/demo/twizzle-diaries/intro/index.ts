@@ -19,8 +19,8 @@ import {
   TwistyPlayer,
 } from "../../../cubing/twisty";
 import { TAU } from "../../../cubing/twisty/3D/TAU";
-import { TimeRange } from "../../../cubing/twisty/animation/cursor/AlgCursor";
-import { MillisecondTimestamp } from "../../../cubing/twisty/animation/cursor/CursorTypes";
+import type { TimeRange } from "../../../cubing/twisty/animation/cursor/AlgCursor";
+import type { MillisecondTimestamp } from "../../../cubing/twisty/animation/cursor/CursorTypes";
 import { smootherStep } from "../../../cubing/twisty/animation/easing";
 import { TimelineAction } from "../../../cubing/twisty/animation/Timeline";
 import { TwistyControlButton } from "../../../cubing/twisty/dom/controls/buttons";

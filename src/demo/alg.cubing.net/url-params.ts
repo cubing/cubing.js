@@ -1,7 +1,7 @@
 // TODO: implement URL listener.
 
 import { Alg } from "../../cubing/alg";
-import { ExperimentalStickering } from "../../cubing/twisty";
+import type { ExperimentalStickering } from "../../cubing/twisty";
 
 interface URLParamValues {
   "experimental-setup-alg": Alg;

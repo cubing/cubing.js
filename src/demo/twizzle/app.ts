@@ -8,7 +8,7 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../cubing/bluetooth/index";
-import { KPuzzleDefinition } from "../../cubing/kpuzzle/index";
+import type { KPuzzleDefinition } from "../../cubing/kpuzzle/index";
 import {
   getpuzzle,
   getpuzzles,
@@ -17,7 +17,7 @@ import {
   schreierSims,
   StickerDat,
 } from "../../cubing/puzzle-geometry/index";
-import { LegacyExperimentalPG3DViewConfig } from "../../cubing/twisty/dom/TwistyPlayer";
+import type { LegacyExperimentalPG3DViewConfig } from "../../cubing/twisty/dom/TwistyPlayer";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,

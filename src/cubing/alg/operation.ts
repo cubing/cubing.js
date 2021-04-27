@@ -1,5 +1,5 @@
 import { Alg } from "./Alg";
-import { Move } from "./units/leaves/Move";
+import type { Move } from "./units/leaves/Move";
 
 export function experimentalAppendMove(
   alg: Alg,

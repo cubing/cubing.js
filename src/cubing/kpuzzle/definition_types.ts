@@ -1,4 +1,4 @@
-import { MoveNotation } from "./move_notation";
+import type { MoveNotation } from "./move_notation";
 
 // TODO: Properly handle freezing
 export interface OrbitTransformation {

@@ -1,4 +1,4 @@
-import { Move } from "../../../alg";
+import type { Move } from "../../../alg";
 import {
   combineTransformations,
   areStatesEquivalent,

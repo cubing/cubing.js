@@ -2,8 +2,8 @@ import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
 } from "../puzzles/stickerings/appearance"; // TODO
-import { KPuzzleDefinition, Transformation } from "./definition_types";
-import { KPuzzle } from "./kpuzzle";
+import type { KPuzzleDefinition, Transformation } from "./definition_types";
+import type { KPuzzle } from "./kpuzzle";
 
 const xmlns = "http://www.w3.org/2000/svg";
 

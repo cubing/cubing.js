@@ -1,4 +1,4 @@
-import { Alg } from "./Alg";
+import type { Alg } from "./Alg";
 import {
   Commutator,
   Conjugate,

@@ -9,7 +9,7 @@ import {
   connectSmartPuzzle,
   debugKeyboardConnect,
 } from "../../../cubing/bluetooth/index";
-import { GoCube } from "../../../cubing/bluetooth/index";
+import type { GoCube } from "../../../cubing/bluetooth/index";
 import { socketOrigin } from "../config";
 
 class App {

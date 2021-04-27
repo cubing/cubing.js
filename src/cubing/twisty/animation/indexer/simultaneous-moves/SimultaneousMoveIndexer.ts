@@ -1,12 +1,12 @@
 import { Alg, Move } from "../../../../alg";
-import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
+import type { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
 import {
   Direction,
   Duration,
   PuzzlePosition,
   Timestamp,
 } from "../../cursor/CursorTypes";
-import { AlgIndexer } from "../AlgIndexer";
+import type { AlgIndexer } from "../AlgIndexer";
 import { MoveWithRange, simulMoves } from "./simul-moves";
 
 const demos: Record<string, MoveWithRange[]> = {

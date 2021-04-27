@@ -1,7 +1,7 @@
 import { Alg, Move } from "../alg";
-import { QuantumMove } from "../alg/units/leaves/Move";
-import { KPuzzleDefinition, Transformation } from "./definition_types";
-import { MoveNotation } from "./move_notation";
+import type { QuantumMove } from "../alg/units/leaves/Move";
+import type { KPuzzleDefinition, Transformation } from "./definition_types";
+import type { MoveNotation } from "./move_notation";
 import {
   combineTransformations,
   identityTransformation,

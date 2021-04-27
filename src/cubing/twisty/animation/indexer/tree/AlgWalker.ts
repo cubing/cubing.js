@@ -15,8 +15,8 @@ import {
   experimentalDirectedGenerator,
   ExperimentalIterationDirection,
 } from "../../../../alg";
-import { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
-import { Duration } from "../../cursor/CursorTypes";
+import type { PuzzleWrapper, State } from "../../../3D/puzzles/KPuzzleWrapper";
+import type { Duration } from "../../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
 
 export class AlgPartDecoration<P extends PuzzleWrapper> {

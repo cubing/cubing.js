@@ -9,7 +9,7 @@ import {
   Grouping,
   Newline,
 } from "../../../../alg";
-import { MillisecondTimestamp } from "../../cursor/CursorTypes";
+import type { MillisecondTimestamp } from "../../cursor/CursorTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
 export interface LocalMoveWithRange {

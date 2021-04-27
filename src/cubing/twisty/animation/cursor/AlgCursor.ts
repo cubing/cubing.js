@@ -6,12 +6,12 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 // start of imports
-import { Alg } from "../../../alg";
+import type { Alg } from "../../../alg";
 import { KPuzzle, KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
-import { AlgIndexer } from "../indexer/AlgIndexer";
+import type { AlgIndexer } from "../indexer/AlgIndexer";
 import { TreeAlgIndexer } from "../indexer/tree/TreeAlgIndexer";
-import { Timeline, TimelineTimestampListener } from "../Timeline";
+import type { Timeline, TimelineTimestampListener } from "../Timeline";
 import {
   Direction,
   directionScalar,

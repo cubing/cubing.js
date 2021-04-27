@@ -1,9 +1,9 @@
 import { Alg, Move, TraversalUp } from "../../../alg";
 import { countAnimatedMoves } from "../../../notation";
-import { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
-import { Duration, Timestamp } from "../cursor/CursorTypes";
+import type { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
+import type { Duration, Timestamp } from "../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
-import { AlgIndexer } from "./AlgIndexer";
+import type { AlgIndexer } from "./AlgIndexer";
 
 export class SimpleAlgIndexer<P extends PuzzleWrapper>
   implements AlgIndexer<P> {

@@ -1,6 +1,6 @@
 import { Scene as ThreeScene } from "three";
-import { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
-import { Twisty3DRenderTarget } from "./Twisty3DRenderTarget";
+import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
+import type { Twisty3DRenderTarget } from "./Twisty3DRenderTarget";
 
 export class Twisty3DScene extends ThreeScene implements Twisty3DRenderTarget {
   private renderTargets: Set<Twisty3DRenderTarget> = new Set();

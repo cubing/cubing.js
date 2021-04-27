@@ -1,6 +1,6 @@
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import { LeafUnit } from "../Unit";
+import type { LeafUnit } from "../Unit";
 
 // TODO: hash
 // TODO: this conflicts with the HTML `LineComment` class

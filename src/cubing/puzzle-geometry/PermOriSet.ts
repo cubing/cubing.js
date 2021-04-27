@@ -1,4 +1,4 @@
-import { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
+import type { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
   factorial,

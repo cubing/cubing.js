@@ -5,7 +5,7 @@ import {
   ExperimentalStickering,
   TwistyPlayer,
 } from "../../cubing/twisty";
-import { VisualizationFormat } from "../../cubing/twisty/dom/TwistyPlayerConfig";
+import type { VisualizationFormat } from "../../cubing/twisty/dom/TwistyPlayerConfig";
 
 function demo(visualization: VisualizationFormat): void {
   experimentalSetShareAllNewRenderers(true);

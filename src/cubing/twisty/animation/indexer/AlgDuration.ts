@@ -9,7 +9,7 @@ import {
   Pause,
   TraversalUp,
 } from "../../../alg";
-import { Duration } from "../cursor/CursorTypes";
+import type { Duration } from "../cursor/CursorTypes";
 
 export function constantDurationForAmount(_amount: number): Duration {
   return 1000;

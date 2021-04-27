@@ -1,6 +1,6 @@
 import { ManagedCustomElement } from "../../../cubing/twisty/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../../cubing/twisty/dom/element/node-custom-element-shims";
-import { TwistyPlayerInitialConfig } from "../../../cubing/twisty";
+import type { TwistyPlayerInitialConfig } from "../../../cubing/twisty";
 import { TwistyPlayer } from "../../../cubing/twisty/index";
 import { Alg } from "../../../cubing/alg";
 

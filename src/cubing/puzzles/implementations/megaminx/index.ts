@@ -1,6 +1,6 @@
-import { ExperimentalStickering } from "../../../twisty";
+import type { ExperimentalStickering } from "../../../twisty";
 import { genericPGPuzzleLoader } from "../../async/async-pg3d";
-import { PuzzleAppearance } from "../../stickerings/appearance";
+import type { PuzzleAppearance } from "../../stickerings/appearance";
 import {
   megaminxAppearance,
   megaminxStickerings,
