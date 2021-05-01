@@ -1,6 +1,6 @@
 export { enableDebugLogging } from "./debug";
 export { debugKeyboardConnect, KeyboardPuzzle } from "./keyboard";
-export {
+export type {
   BluetoothConfig,
   BluetoothPuzzle,
   MoveEvent,
@@ -13,5 +13,7 @@ export {
   giikerMoveToAlgMoveForTesting,
 } from "./smart-puzzle/giiker";
 export { GoCube } from "./smart-puzzle/gocube";
-export { BluetoothRobot, connectSmartRobot } from "./smart-robot";
-export { BluetoothTimer, connectSmartTimer } from "./smart-timer";
+export type { BluetoothRobot } from "./smart-robot";
+export { connectSmartRobot } from "./smart-robot";
+export type { BluetoothTimer } from "./smart-timer";
+export { connectSmartTimer } from "./smart-timer";
