@@ -1,8 +1,8 @@
-import "../../cubing/twisty";
+import "../../../cubing/twisty";
 import { App } from "./app";
 import { getURLParam } from "./url-params";
-import { useNewFaceNames } from "../../cubing/puzzle-geometry";
-import { Alg } from "../../cubing/alg";
+import { useNewFaceNames } from "../../../cubing/puzzle-geometry";
+import { Alg } from "../../../cubing/alg";
 
 useNewFaceNames(true);
 

@@ -1,15 +1,15 @@
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 
-import { Alg } from "../../cubing/alg/index";
-import type { OrientationEvent } from "../../cubing/bluetooth/index";
+import { Alg } from "../../../cubing/alg/index";
+import type { OrientationEvent } from "../../../cubing/bluetooth/index";
 import {
   BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../cubing/bluetooth/index";
-import { TwistyPlayer } from "../../cubing/twisty/index";
+} from "../../../cubing/bluetooth/index";
+import { TwistyPlayer } from "../../../cubing/twisty/index";
 
 // experimentalShowJumpingFlash(false); // TODO
 

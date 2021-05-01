@@ -4,13 +4,13 @@ import {
   KPuzzleSVGWrapper,
   Transformation,
   transformationOrder,
-} from "../../cubing/kpuzzle";
+} from "../../../cubing/kpuzzle";
 import {
   binaryComponentsToReid3x3x3,
   reid3x3x3ToBinaryComponents,
   reid3x3x3ToTwizzleBinary,
   twizzleBinaryToReid3x3x3,
-} from "../../cubing/protocol/binary/binary3x3x3";
+} from "../../../cubing/protocol/binary/binary3x3x3";
 import {
   kpuzzleToReidString,
   kpuzzleToStickers,
@@ -19,10 +19,10 @@ import {
   stickersToKPuzzle,
 } from "./convert";
 
-import { cube3x3x3KPuzzle as defJSON } from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import { cube3x3x3KPuzzle as defJSON } from "../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 const def: KPuzzleDefinition = defJSON;
-import svgSource from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.svg";
-import { Alg } from "../../cubing/alg";
+import svgSource from "../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.svg";
+import { Alg } from "../../../cubing/alg";
 
 export function bufferToSpacedHex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer

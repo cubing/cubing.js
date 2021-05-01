@@ -8,18 +8,18 @@ import mkbhdHintSpriteURL from "url:./mkbhd-sprite-red-hint.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import mkbhdSpriteURL from "url:./mkbhd-sprite-red.png";
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../cubing/alg";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../cubing/bluetooth";
+} from "../../../cubing/bluetooth";
 import {
   Cube3D,
   TimelineActionEvent,
   TimestampLocationType,
   TwistyPlayer,
-} from "../../cubing/twisty";
+} from "../../../cubing/twisty";
 
 (window as any).m12Cube = m12Cube;
 

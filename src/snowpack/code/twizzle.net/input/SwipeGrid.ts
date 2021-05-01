@@ -1,4 +1,4 @@
-import { Move } from "../../../cubing/alg";
+import { Move } from "../../../../cubing/alg";
 import type { PuzzleID, StringListAsType } from "../url-params";
 import { ActiveSwipe, SwipeTracker } from "./SwipeTracker";
 import { Action, actionToUIText, moveMaps } from "./SwipeyPuzzle";

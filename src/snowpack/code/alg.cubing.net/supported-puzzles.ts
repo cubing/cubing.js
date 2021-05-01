@@ -1,9 +1,9 @@
 import {
   getPuzzleGeometryByDesc,
   StickerDat,
-} from "../../cubing/puzzle-geometry";
-import { puzzles } from "../../cubing/puzzles";
-import type { VisualizationFormat } from "../../cubing/twisty/dom/TwistyPlayerConfig";
+} from "../../../cubing/puzzle-geometry";
+import { puzzles } from "../../../cubing/puzzles";
+import type { VisualizationFormat } from "../../../cubing/twisty/dom/TwistyPlayerConfig";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";

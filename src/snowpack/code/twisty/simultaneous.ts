@@ -1,8 +1,8 @@
-import { Cube3D, TwistyPlayer } from "../../cubing/twisty";
+import { Cube3D, TwistyPlayer } from "../../../cubing/twisty";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import supercubeSprite from "url:./supercube-sprite.png";
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../cubing/alg";
 
 {
   const player = new TwistyPlayer({

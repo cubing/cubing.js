@@ -1,11 +1,11 @@
 import { Vector3 } from "three";
-import { Alg } from "../../cubing/alg";
-import { puzzles } from "../../cubing/puzzles";
+import { Alg } from "../../../cubing/alg";
+import { puzzles } from "../../../cubing/puzzles";
 import {
   ExperimentalStickering,
   TwistyPlayer,
   TwistyPlayerInitialConfig,
-} from "../../cubing/twisty";
+} from "../../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import {
   ALG_INPUT_PLACEHOLDER,

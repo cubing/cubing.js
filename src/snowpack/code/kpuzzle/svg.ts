@@ -1,10 +1,10 @@
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../cubing/alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
   KPuzzleSVGWrapper,
-} from "../../cubing/kpuzzle";
-import { puzzles } from "../../cubing/puzzles";
+} from "../../../cubing/kpuzzle";
+import { puzzles } from "../../../cubing/puzzles";
 
 class SVGDisplay {
   private svg: KPuzzleSVGWrapper;

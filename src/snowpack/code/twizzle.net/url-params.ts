@@ -1,4 +1,4 @@
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../cubing/alg";
 
 // Trick from https://github.com/microsoft/TypeScript/issues/28046#issuecomment-480516434
 export type StringListAsType<

@@ -1,10 +1,10 @@
 import { Vector3 } from "three";
-import { Alg } from "../../cubing/alg";
-import { useNewFaceNames } from "../../cubing/puzzle-geometry";
+import { Alg } from "../../../cubing/alg";
+import { useNewFaceNames } from "../../../cubing/puzzle-geometry";
 import {
   experimentalSetShareAllNewRenderers,
   TwistyPlayer,
-} from "../../cubing/twisty";
+} from "../../../cubing/twisty";
 
 useNewFaceNames(true);
 experimentalSetShareAllNewRenderers(true);

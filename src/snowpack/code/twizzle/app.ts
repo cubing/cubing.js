@@ -1,14 +1,14 @@
 import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import { Alg, Move } from "../../cubing/alg/index";
-import { experimentalAppendMove } from "../../cubing/alg/operation";
+import { Alg, Move } from "../../../cubing/alg/index";
+import { experimentalAppendMove } from "../../../cubing/alg/operation";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../cubing/bluetooth/index";
-import type { KPuzzleDefinition } from "../../cubing/kpuzzle/index";
+} from "../../../cubing/bluetooth/index";
+import type { KPuzzleDefinition } from "../../../cubing/kpuzzle/index";
 import {
   getpuzzle,
   getpuzzles,
@@ -16,14 +16,14 @@ import {
   PuzzleGeometry,
   schreierSims,
   StickerDat,
-} from "../../cubing/puzzle-geometry/index";
-import type { LegacyExperimentalPG3DViewConfig } from "../../cubing/twisty/dom/TwistyPlayer";
+} from "../../../cubing/puzzle-geometry/index";
+import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/dom/TwistyPlayer";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
-} from "../../cubing/twisty/dom/viewers/Twisty3DCanvas";
-import { TwistyPlayer } from "../../cubing/twisty/index";
-import { countMoves } from "../../cubing/notation";
+} from "../../../cubing/twisty/dom/viewers/Twisty3DCanvas";
+import { TwistyPlayer } from "../../../cubing/twisty/index";
+import { countMoves } from "../../../cubing/notation";
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {

@@ -3,12 +3,12 @@ import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../cubing/bluetooth";
-import { connectSmartRobot } from "../../cubing/bluetooth/smart-robot";
-import type { GanRobot } from "../../cubing/bluetooth/smart-robot/GanRobot";
-import type { TwistyPlayer } from "../../cubing/twisty";
-import "../../cubing/twisty";
-import type { Alg } from "../../cubing/alg";
+} from "../../../cubing/bluetooth";
+import { connectSmartRobot } from "../../../cubing/bluetooth/smart-robot";
+import type { GanRobot } from "../../../cubing/bluetooth/smart-robot/GanRobot";
+import type { TwistyPlayer } from "../../../cubing/twisty";
+import "../../../cubing/twisty";
+import type { Alg } from "../../../cubing/alg";
 
 class RobotDemo {
   // DOM
