@@ -27,6 +27,9 @@ const args = yargs(hideBin(process.argv))
     type: "string",
     choices: ["none", "floating"],
   })
+  .option("visualization", {
+    type: "string",
+  })
   .option("debug", {
     type: "boolean",
   })
@@ -48,6 +51,7 @@ const options = {
   experimentalStickering: args.stickering,
   experimentalSetupAnchor: args.anchor,
   hintFacelets: args["hint-facelets"],
+  visualization: args.visualization,
 };
 
 for (const key in options) {
