@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import m12Cube from "./M12Cube.gif";
 // Supercube arrow image from Ben Whitmore.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -21,8 +18,6 @@ import {
   TimestampLocationType,
   TwistyPlayer,
 } from "../../../cubing/twisty";
-
-(window as any).m12Cube = m12Cube;
 
 const spriteURL =
   new URL(location.href).searchParams.get("sprite") ?? supercubeArrowsSprite;
