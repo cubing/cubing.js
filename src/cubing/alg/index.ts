@@ -5,7 +5,8 @@ export { Example } from "./example";
 export { keyToMove } from "./keyboard";
 export * from "./units";
 
-export { algCubingNetLink, AlgCubingNetOptions } from "./url";
+export { algCubingNetLink } from "./url";
+export type { AlgCubingNetOptions } from "./url";
 
 export { experimentalAppendMove } from "./operation";
 export { experimentalIs } from "./is";

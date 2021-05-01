@@ -5,4 +5,4 @@ export { Conjugate } from "./containers/Conjugate";
 export { Move, QuantumMove } from "./leaves/Move";
 export { Newline } from "./leaves/Newline";
 export { Pause } from "./leaves/Pause";
-export { Unit } from "./Unit";
+export type { Unit } from "./Unit";
