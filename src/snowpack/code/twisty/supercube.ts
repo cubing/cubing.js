@@ -1,8 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import m12Cube from "./M12Cube.gif";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import supercubeSprite from "./supercube-sprite.png";
 // Parcel-ism.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -20,8 +17,6 @@ import {
   TimestampLocationType,
   TwistyPlayer,
 } from "../../../cubing/twisty";
-
-(window as any).m12Cube = m12Cube;
 
 const spriteURL =
   new URL(location.href).searchParams.get("sprite") ?? supercubeSprite;

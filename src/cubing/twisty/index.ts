@@ -9,10 +9,8 @@ export type {
   TwistyPlayerInitialConfig,
   ExperimentalStickering,
 } from "./dom/TwistyPlayerConfig";
-export type {
-  TimelineActionEvent,
-  TimestampLocationType,
-} from "./animation/Timeline";
+export { TimestampLocationType } from "./animation/Timeline";
+export type { TimelineActionEvent } from "./animation/Timeline";
 export { ExperimentalTwistyAlgViewer } from "./dom/TwistyAlgViewer";
 
 // Old

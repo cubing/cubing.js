@@ -1,8 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import m12Cube from "./M12Cube.gif";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import mkbhdHintSpriteURL from "./mkbhd-sprite-red-hint.png";
 // Parcel-ism.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -14,14 +11,13 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../../cubing/bluetooth";
-import {
+import "../../../cubing/twisty";
+import { TimestampLocationType } from "../../../cubing/twisty";
+import type {
   Cube3D,
   TimelineActionEvent,
-  TimestampLocationType,
   TwistyPlayer,
 } from "../../../cubing/twisty";
-
-(window as any).m12Cube = m12Cube;
 
 const spriteURL =
   new URL(location.href).searchParams.get("sprite") ?? mkbhdSpriteURL;

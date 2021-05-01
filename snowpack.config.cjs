@@ -12,7 +12,7 @@ module.exports = {
     external: ["child_process"],
   },
   devOptions: {
-    port: 4444,
+    port: 3333,
   },
   buildOptions: {
     out: "dist/snowpack",
