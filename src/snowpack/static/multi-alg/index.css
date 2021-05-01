@@ -31,7 +31,7 @@ body > div:nth-child(2) {
 
 @font-face {
   font-family: "Ubuntu";
-  src: url("../../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
+  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
 }
 
 textarea {
