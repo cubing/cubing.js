@@ -1,13 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import m12Cube from "url:./M12Cube.gif";
+import m12Cube from "./M12Cube.gif";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import supercubeSprite from "url:./supercube-sprite.png";
+import supercubeSprite from "./supercube-sprite.png";
 // Parcel-ism.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import mkbhdSpriteURL from "url:./mkbhd-sprite-red.png";
+import mkbhdSpriteURL from "./mkbhd-sprite-red.png";
 import { Alg } from "../../../cubing/alg";
 import {
   connectSmartPuzzle,

@@ -16,9 +16,9 @@ import {
 import { useNewFaceNames } from "../../../cubing/puzzle-geometry";
 import "regenerator-runtime/runtime";
 // @ts-ignore
-import bluetoothSVG from "url:./bluetooth.svg";
+import bluetoothSVG from "./bluetooth.svg";
 // @ts-ignore
-import clearSVG from "url:./clear.svg";
+import clearSVG from "./clear.svg";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
   DEFAULT_PUZZLE_ID,

@@ -26,7 +26,7 @@ import { TwistyControlButton } from "../../../../cubing/twisty/dom/controls/butt
 import { TwistyScrubber } from "../../../../cubing/twisty/dom/controls/TwistyScrubber";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import checkeredBackground from "url:./checkered-background.png";
+import checkeredBackground from "./checkered-background.png";
 import { experimentalSetDefaultStickerElevation } from "../../../../cubing/twisty/3D/puzzles/Cube3D";
 import { Alg } from "../../../../cubing/alg";
 import { JSZip } from "./jszip-wrapper";
