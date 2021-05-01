@@ -1,24 +1,20 @@
 // Snowpack Configuration File
-// See all supported options: https://www.snowpack.dev/reference/configuration
+// See all supported options: https://www.snowpack. dev/reference/configuration
 
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
+  workspaceRoot: "/",
   mount: {
-    "src": "/"
+    "src/snowpack/static": { url: "/", static: true },
+    "src/snowpack/code": { url: "/code" },
   },
-  exclude: [
-    "src/dist-static/**/*"
-  ],
-  plugins: [
-    "@snowpack/plugin-typescript"
-  ],
   packageOptions: {
-    /* ... */
+    external: ["child_process"],
   },
   devOptions: {
-    port: 4444
+    port: 4444,
   },
   buildOptions: {
-    /* ... */
+    out: "dist/snowpack",
   },
 };
