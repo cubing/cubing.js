@@ -21,10 +21,6 @@ app {
   background: rgb(255, 245, 235);
 }
 
-@import "./spinner.css";
-
-@import "./responsive.css";
-
 puzzle-pane {
   grid-area: "puzzle";
 
@@ -45,5 +41,3 @@ puzzle-pane twisty-player {
   height: 100%;
   overflow: hidden;
 }
-
-@import "./control-pane.css";
