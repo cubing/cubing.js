@@ -21,3 +21,6 @@ export interface KPuzzleDefinition {
   svg?: string;
   moveNotation?: MoveNotation;
 }
+
+// @ts-ignore https://github.com/snowpackjs/snowpack/discussions/1589#discussioncomment-130176
+const _SNOWPACK_HACK = true;
