@@ -9,7 +9,7 @@ import type {
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import type { TwistyControlElement } from "./TwistyControlElement.ts";
-import { twistyScrubberCSS } from "./TwistyScrubber.css";
+import { twistyScrubberCSS } from "./TwistyScrubber.css_";
 
 // Usually a horizontal line.
 export class TwistyScrubber

@@ -20,3 +20,6 @@ export interface AlgIndexer<P extends PuzzleWrapper> {
     startTransformation?: State<P>,
   ) => PuzzlePosition;
 }
+
+// @ts-ignore https://github.com/snowpackjs/snowpack/discussions/1589#discussioncomment-130176
+const _SNOWPACK_HACK = true;

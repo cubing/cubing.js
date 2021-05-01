@@ -16,7 +16,7 @@ import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import type { ExperimentalStickering } from "../TwistyPlayerConfig";
-import { twisty2DSVGCSS } from "./Twisty2DSVGView.css";
+import { twisty2DSVGCSS } from "./Twisty2DSVGView.css_";
 import type { TwistyViewerElement } from "./TwistyViewerElement";
 
 export interface Twisty2DSVGOptions {
