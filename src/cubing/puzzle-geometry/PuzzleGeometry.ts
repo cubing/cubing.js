@@ -2180,6 +2180,7 @@ export class PuzzleGeometry {
         continue;
       }
       if (this.omitSet(this.cubiesetnames[i])) {
+        setmoves[i] = 0;
         continue;
       }
       setnames.push(this.cubiesetnames[i]);
