@@ -8,13 +8,12 @@ module.exports = {
     "src/snowpack/static": { url: "/", static: true },
     "src/snowpack/code": { url: "/code" },
   },
-  packageOptions: {
-    external: ["child_process"],
-  },
+  packageOptions: {},
   devOptions: {
     port: 3333,
   },
   buildOptions: {
     out: "dist/snowpack",
+    baseUrl: "/cubing.js",
   },
 };
