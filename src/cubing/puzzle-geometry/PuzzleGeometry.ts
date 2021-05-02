@@ -555,6 +555,8 @@ export class PuzzleGeometry {
           this.centersets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "edgesets") {
           this.edgesets = asboolean(optionlist[i + 1]);
+        } else if (optionlist[i] === "omit") {
+          this.omitsets = optionlist[i + 1];
         } else if (optionlist[i] === "graycorners") {
           this.graycorners = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "graycenters") {
@@ -2177,7 +2179,7 @@ export class PuzzleGeometry {
       if (!setmoves[i]) {
         continue;
       }
-      if (omitset(this.cubiesetnames[i])) {
+      if (this.omitSet(this.cubiesetnames[i])) {
         continue;
       }
       setnames.push(this.cubiesetnames[i]);
@@ -2193,7 +2195,7 @@ export class PuzzleGeometry {
       if (!setmoves[i]) {
         continue;
       }
-      if (omitset(this.cubiesetnames[i])) {
+      if (this.omitSet(this.cubiesetnames[i])) {
         continue;
       }
       const p = [];
