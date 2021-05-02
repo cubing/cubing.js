@@ -1,13 +1,15 @@
-{
-  "name": "Clock",
-  "orbits": {
-    "DIALS": { "numPieces": 18, "orientations": 12 },
-    "FACES": { "numPieces": 18, "orientations": 1 },
-    "FRAME": { "numPieces": 1, "orientations": 2 }
+import type { KPuzzleDefinition } from "../../../kpuzzle";
+
+export const clockKPuzzle: KPuzzleDefinition = {
+  name: "Clock",
+  orbits: {
+    DIALS: { numPieces: 18, orientations: 12 },
+    FACES: { numPieces: 18, orientations: 1 },
+    FRAME: { numPieces: 1, orientations: 2 },
   },
-  "startPieces": {
-    "DIALS": {
-      "permutation": [
+  startPieces: {
+    DIALS: {
+      permutation: [
         0,
         1,
         2,
@@ -25,12 +27,12 @@
         14,
         15,
         16,
-        17
+        17,
       ],
-      "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
-    "FACES": {
-      "permutation": [
+    FACES: {
+      permutation: [
         0,
         1,
         2,
@@ -48,16 +50,16 @@
         14,
         15,
         16,
-        17
+        17,
       ],
-      "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
-    "FRAME": { "permutation": [0], "orientation": [0] }
+    FRAME: { permutation: [0], orientation: [0] },
   },
-  "moves": {
-    "UR": {
-      "DIALS": {
-        "permutation": [
+  moves: {
+    UR: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -75,12 +77,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 1, 1, 0, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 1, 1, 0, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -98,15 +100,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "DR": {
-      "DIALS": {
-        "permutation": [
+    DR: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -124,12 +126,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0]
+        orientation: [0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -147,15 +149,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "DL": {
-      "DIALS": {
-        "permutation": [
+    DL: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -173,12 +175,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1]
+        orientation: [0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -196,15 +198,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "UL": {
-      "DIALS": {
-        "permutation": [
+    UL: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -222,12 +224,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0]
+        orientation: [1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -245,15 +247,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "U": {
-      "DIALS": {
-        "permutation": [
+    U: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -271,12 +273,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [1, 1, 1, 1, 1, 1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0]
+        orientation: [1, 1, 1, 1, 1, 1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -294,15 +296,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "R": {
-      "DIALS": {
-        "permutation": [
+    R: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -320,12 +322,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 1, 1, 0, 1, 1, 0, 1, 1, -1, 0, 0, 0, 0, 0, -1, 0, 0]
+        orientation: [0, 1, 1, 0, 1, 1, 0, 1, 1, -1, 0, 0, 0, 0, 0, -1, 0, 0],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -343,15 +345,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "D": {
-      "DIALS": {
-        "permutation": [
+    D: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -369,12 +371,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, -1]
+        orientation: [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, -1],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -392,15 +394,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "L": {
-      "DIALS": {
-        "permutation": [
+    L: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -418,12 +420,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1]
+        orientation: [1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -441,15 +443,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "ALL": {
-      "DIALS": {
-        "permutation": [
+    ALL: {
+      DIALS: {
+        permutation: [
           0,
           1,
           2,
@@ -467,31 +469,12 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          -1,
-          0,
-          -1,
-          0,
-          0,
-          0,
-          -1,
-          0,
-          -1
-        ]
+        orientation: [1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 0, -1, 0, 0, 0, -1, 0, -1],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           0,
           1,
           2,
@@ -509,15 +492,15 @@
           14,
           15,
           16,
-          17
+          17,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [0] }
+      FRAME: { permutation: [0], orientation: [0] },
     },
-    "FLIP": {
-      "DIALS": {
-        "permutation": [
+    FLIP: {
+      DIALS: {
+        permutation: [
           9,
           10,
           11,
@@ -535,12 +518,12 @@
           5,
           6,
           7,
-          8
+          8,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FACES": {
-        "permutation": [
+      FACES: {
+        permutation: [
           9,
           10,
           11,
@@ -558,11 +541,11 @@
           5,
           6,
           7,
-          8
+          8,
         ],
-        "orientation": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
-      "FRAME": { "permutation": [0], "orientation": [1] }
-    }
-  }
-}
+      FRAME: { permutation: [0], orientation: [1] },
+    },
+  },
+};

@@ -1,12 +1,14 @@
-{
-  "name": "Square-1",
-  "orbits": {
-    "WEDGES": { "numPieces": 24, "orientations": 9 },
-    "EQUATOR": { "numPieces": 2, "orientations": 6 }
+import type { KPuzzleDefinition } from "../../../kpuzzle";
+
+export const sq1HyperOrbitKPuzzle: KPuzzleDefinition = {
+  name: "Square-1",
+  orbits: {
+    WEDGES: { numPieces: 24, orientations: 9 },
+    EQUATOR: { numPieces: 2, orientations: 6 },
   },
-  "startPieces": {
-    "WEDGES": {
-      "permutation": [
+  startPieces: {
+    WEDGES: {
+      permutation: [
         0,
         1,
         2,
@@ -30,9 +32,9 @@
         20,
         21,
         22,
-        23
+        23,
       ],
-      "orientation": [
+      orientation: [
         0,
         0,
         0,
@@ -56,15 +58,15 @@
         0,
         0,
         0,
-        0
-      ]
+        0,
+      ],
     },
-    "EQUATOR": { "permutation": [0, 1], "orientation": [0, 0] }
+    EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
   },
-  "moves": {
-    "U": {
-      "WEDGES": {
-        "permutation": [
+  moves: {
+    U: {
+      WEDGES: {
+        permutation: [
           11,
           0,
           1,
@@ -88,9 +90,9 @@
           20,
           21,
           22,
-          23
+          23,
         ],
-        "orientation": [
+        orientation: [
           0,
           0,
           0,
@@ -114,14 +116,14 @@
           0,
           0,
           0,
-          0
-        ]
+          0,
+        ],
       },
-      "EQUATOR": { "permutation": [0, 1], "orientation": [0, 0] }
+      EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
     },
-    "D": {
-      "WEDGES": {
-        "permutation": [
+    D: {
+      WEDGES: {
+        permutation: [
           0,
           1,
           2,
@@ -145,9 +147,9 @@
           19,
           20,
           21,
-          22
+          22,
         ],
-        "orientation": [
+        orientation: [
           0,
           0,
           0,
@@ -171,14 +173,14 @@
           0,
           0,
           0,
-          0
-        ]
+          0,
+        ],
       },
-      "EQUATOR": { "permutation": [0, 1], "orientation": [0, 0] }
+      EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
     },
-    "SLICE": {
-      "WEDGES": {
-        "permutation": [
+    SLICE: {
+      WEDGES: {
+        permutation: [
           0,
           1,
           2,
@@ -202,9 +204,9 @@
           20,
           21,
           22,
-          23
+          23,
         ],
-        "orientation": [
+        orientation: [
           0,
           0,
           0,
@@ -228,10 +230,10 @@
           0,
           0,
           0,
-          0
-        ]
+          0,
+        ],
       },
-      "EQUATOR": { "permutation": [0, 1], "orientation": [0, 3] }
-    }
-  }
-}
+      EQUATOR: { permutation: [0, 1], orientation: [0, 3] },
+    },
+  },
+};
