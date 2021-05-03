@@ -8,12 +8,20 @@ import { connectSmartRobot } from "../../cubing/bluetooth/smart-robot";
 import type { GanRobot } from "../../cubing/bluetooth/smart-robot/GanRobot";
 import type { TwistyPlayer } from "../../cubing/twisty";
 import "../../cubing/twisty";
-import type { Alg } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
+import { TwizzleStreamServer } from "./stream";
+
+const BOGUS_VALUE = "BOGUS";
 
 class RobotDemo {
   // DOM
   player: TwistyPlayer = document.querySelector("twisty-player")!;
   inputButton: HTMLButtonElement = document.querySelector("#input")!;
+  getStreamsButton: HTMLButtonElement = document.querySelector("#get-streams")!;
+  streamSelect: HTMLSelectElement = document.querySelector("#stream-select")!;
+
+  streamServer = new TwizzleStreamServer();
+
   outputButton: HTMLButtonElement = document.querySelector("#output")!;
   recorderButton: HTMLButtonElement = document.querySelector("#recorder")!;
   pauseButton: HTMLButtonElement = document.querySelector("#pause")!;
@@ -26,10 +34,11 @@ class RobotDemo {
   recorderStorageName: string;
 
   constructor() {
-    this.inputButton.addEventListener(
+    this.inputButton?.addEventListener(
       "click",
       this.connectBluetoothPuzzleInput.bind(this),
     );
+    this.getStreamsButton.addEventListener("click", this.getStreams.bind(this));
     this.recorderButton.addEventListener(
       "click",
       this.connectRecorder.bind(this),
@@ -37,6 +46,9 @@ class RobotDemo {
     this.outputButton.addEventListener("click", this.connectOutput.bind(this));
     this.pauseButton.addEventListener("click", () => this.togglePause());
     this.connectKeyboardInput();
+
+    this.streamSelect.addEventListener("change", () => this.onStreamSelect());
+    // this.getStreams();
   }
 
   resetSession(): void {
@@ -63,6 +75,40 @@ class RobotDemo {
     }
   }
 
+  async getStreams(): Promise<void> {
+    const streams = await this.streamServer.streams();
+    this.streamSelect.textContent = "";
+    this.streamSelect.disabled = false;
+    const info = this.streamSelect.appendChild(
+      document.createElement("option"),
+    );
+    info.textContent = `Select a stream (${streams.length} available)`;
+    info.value = BOGUS_VALUE;
+    for (const stream of streams) {
+      const firstSender = stream.senders[0];
+      const option = this.streamSelect.appendChild(
+        document.createElement("option"),
+      );
+      option.value = stream.streamID;
+      option.textContent = firstSender.name;
+    }
+  }
+
+  onStreamSelect(): void {
+    const streamID = this.streamSelect.value;
+    if (streamID === BOGUS_VALUE) {
+      return;
+    }
+    const stream = this.streamServer.connect(streamID);
+    stream.addEventListener("move", (moveEvent: CustomEvent) => {
+      console.log("Incoming stream move:", moveEvent.detail.move.toString());
+      this.onMove({
+        latestMove: moveEvent.detail.move,
+        timeStamp: Date.now(),
+      });
+    });
+  }
+
   async connectBluetoothPuzzleInput(): Promise<void> {
     this.inputButton.disabled = true;
     try {
@@ -81,10 +127,10 @@ class RobotDemo {
     try {
       this.output = await connectSmartRobot();
       this.output.experimentalDebugLog = console.log;
-      this.output.experimentalOptions.bufferQueue = 150;
-      this.output.experimentalOptions.postSleep = 100;
+      // this.output.experimentalOptions.bufferQueue = 150;
+      // this.output.experimentalOptions.postSleep = 100;
       this.output.experimentalOptions.singleMoveFixHack = true;
-      this.output.experimentalOptions.xAngle = true;
+      this.output.experimentalOptions.xAngle = false;
       this.output.experimentalDebugOnSend = (alg: Alg) => {
         localStorage[this.sentStorageName] =
           (localStorage[this.sentStorageName] ?? "") +
@@ -95,6 +141,14 @@ class RobotDemo {
     } catch {
       this.outputButton.disabled = false;
     }
+  }
+
+  applyAlgString(s: string): void {
+    const alg = Alg.fromString(s);
+    for (const move of alg.experimentalLeafMoves()) {
+      this.player.experimentalAddMove(move);
+    }
+    this.output?.applyMoves(Array.from(alg.experimentalLeafMoves()));
   }
 
   onMove(move: MoveEvent): void {
