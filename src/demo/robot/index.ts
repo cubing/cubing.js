@@ -125,7 +125,7 @@ class RobotDemo {
       this.output.experimentalDebugLog = console.log;
       // this.output.experimentalOptions.bufferQueue = 150;
       // this.output.experimentalOptions.postSleep = 100;
-      this.output.experimentalOptions.singleMoveFixHack = false;
+      this.output.experimentalOptions.singleMoveFixHack = true;
       this.output.experimentalOptions.xAngle = false;
       this.output.experimentalDebugOnSend = (alg: Alg) => {
         localStorage[this.sentStorageName] =
