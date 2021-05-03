@@ -36,7 +36,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.4.2",
     "jszip": "^3.5.0",
-    "parcel": "^2.0.0-nightly.643",
+    "parcel": "^2.0.0-nightly.442",
     "pegjs": "^0.11.0-master.f69239d",
     "prettier": "^2.2.1",
     "puppeteer": "^8.0.0",
@@ -66,8 +66,8 @@
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts,d.ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
-    "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-optimize --target twizzle-net --no-source-maps --public-url ./ --dist-dir dist/twizzle.net src/demo/twizzle.net/index.html",
-    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-optimize --target experiments-cubing-net --no-source-maps --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html"
+    "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --no-source-maps --public-url ./ --dist-dir dist/twizzle.net src/demo/twizzle.net/index.html",
+    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-minify --target experiments-cubing-net --no-source-maps --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html"
   },
   "targets": {
     "twizzle-net": {},
