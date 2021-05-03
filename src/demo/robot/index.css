@@ -32,3 +32,17 @@ select {
   padding-left: 0.5em;
   padding-right: 0.5em;
 }
+
+@media (max-height: 600px) and (min-width: 600px) {
+  body {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(6, 1fr);
+  }
+
+  twisty-player {
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 7;
+  }
+}
