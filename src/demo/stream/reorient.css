@@ -10,9 +10,13 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(384px, 1fr));
   gap: 1em;
   padding: 1em;
-  place-content: center;
+  align-items: center;
 }
 
 body > * {
   justify-self: center;
+}
+
+twisty-player {
+  max-width: 100%;
 }
