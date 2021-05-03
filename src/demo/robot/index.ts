@@ -47,21 +47,8 @@ class RobotDemo {
     this.pauseButton.addEventListener("click", () => this.togglePause());
     this.connectKeyboardInput();
 
-    this.streamSelect.addEventListener("change", () => {
-      const streamID = this.streamSelect.value;
-      if (streamID === BOGUS_VALUE) {
-        return;
-      }
-      const stream = this.streamServer.connect(streamID);
-      stream.addEventListener("move", (moveEvent: CustomEvent) => {
-        console.log("Incoming stream move:", moveEvent.detail.move.toString());
-        this.onMove({
-          latestMove: moveEvent.detail.move,
-          timeStamp: Date.now(),
-        });
-      });
-    });
-    this.getStreams();
+    this.streamSelect.addEventListener("change", () => this.onStreamSelect());
+    // this.getStreams();
   }
 
   resetSession(): void {
@@ -91,6 +78,7 @@ class RobotDemo {
   async getStreams(): Promise<void> {
     const streams = await this.streamServer.streams();
     this.streamSelect.textContent = "";
+    this.streamSelect.disabled = false;
     const info = this.streamSelect.appendChild(
       document.createElement("option"),
     );
@@ -104,6 +92,21 @@ class RobotDemo {
       option.value = stream.streamID;
       option.textContent = firstSender.name;
     }
+  }
+
+  onStreamSelect(): void {
+    const streamID = this.streamSelect.value;
+    if (streamID === BOGUS_VALUE) {
+      return;
+    }
+    const stream = this.streamServer.connect(streamID);
+    stream.addEventListener("move", (moveEvent: CustomEvent) => {
+      console.log("Incoming stream move:", moveEvent.detail.move.toString());
+      this.onMove({
+        latestMove: moveEvent.detail.move,
+        timeStamp: Date.now(),
+      });
+    });
   }
 
   async connectBluetoothPuzzleInput(): Promise<void> {
