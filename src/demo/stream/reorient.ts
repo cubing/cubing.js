@@ -3,9 +3,8 @@
 
 import { debugKeyboardConnect } from "../../cubing/bluetooth";
 import {
-  ReorientedStream,
-  PuzzleStreamMoveEventDetail,
   PuzzleStreamMoveEventRegisterCompatible,
+  ReorientedStream,
 } from "../../cubing/stream/process/ReorientedStream";
 import { TwistyPlayer } from "../../cubing/twisty";
 
@@ -32,13 +31,22 @@ const stream = new Stream();
 
 const reorienter = new ReorientedStream(stream);
 
-const player = document.body.appendChild(new TwistyPlayer());
+const player1 = document.body.appendChild(new TwistyPlayer());
+const player2 = document.body.appendChild(new TwistyPlayer());
 
 reorienter.addEventListener(
   "move",
   (e: PuzzleStreamMoveEventRegisterCompatible) => {
     console.log(e.detail.move.toString());
-    player.experimentalAddMove(e.detail.move);
+    player1.experimentalAddMove(e.detail.move);
+  },
+);
+stream.addEventListener(
+  "move",
+  (e: PuzzleStreamMoveEventRegisterCompatible) => {
+    if (!"xyz".includes(e.detail.move.family)) {
+      player2.experimentalAddMove(e.detail.move);
+    }
   },
 );
 
