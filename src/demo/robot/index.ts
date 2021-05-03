@@ -54,6 +54,7 @@ class RobotDemo {
       }
       const stream = this.streamServer.connect(streamID);
       stream.addEventListener("move", (moveEvent: CustomEvent) => {
+        console.log("Incoming stream move:", moveEvent.detail.move.toString());
         this.onMove({
           latestMove: moveEvent.detail.move,
           timeStamp: Date.now(),
