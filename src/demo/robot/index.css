@@ -7,8 +7,8 @@ body {
 body {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 4fr 1fr 1fr;
-  gap: 2em;
+  grid-template-rows: 4fr 1fr 1fr 1fr;
+  gap: 1em;
   padding: 2em;
   box-sizing: border-box;
 
@@ -16,7 +16,7 @@ body {
 }
 
 button {
-  font-size: 3em;
+  font-size: 2em;
 }
 
 twisty-player {
@@ -25,4 +25,8 @@ twisty-player {
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+select {
+  font-size: 2em;
 }
