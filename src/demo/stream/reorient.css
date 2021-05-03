@@ -12,3 +12,7 @@ body {
   padding: 1em;
   place-content: center;
 }
+
+body > * {
+  justify-self: center;
+}

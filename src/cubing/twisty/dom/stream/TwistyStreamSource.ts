@@ -3,6 +3,7 @@ import type {
   BluetoothPuzzle,
   MoveEvent,
 } from "../../../bluetooth/smart-puzzle/bluetooth-puzzle";
+import type { TwizzleStreamServer } from "../../../stream";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../stream/process/ReorientedStream";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
@@ -72,6 +73,7 @@ export class TwistyStreamSource extends ManagedCustomElement {
 
     this.addSource("📡 Bluetooth", BluetoothStreamSource);
     this.addSource("⌨️ Keyboard", KeyboardStreamSource);
+    this.addStreamSource();
   }
 
   addSource(
@@ -88,6 +90,51 @@ export class TwistyStreamSource extends ManagedCustomElement {
         "move",
         (e: PuzzleStreamMoveEventRegisterCompatible) => {
           this.dispatchEvent(new CustomEvent("move", e));
+        },
+      );
+    });
+  }
+
+  addStreamSource(): void {
+    const SENTINEL_VALUE = "SENTINEL";
+    const button = this.addElement(document.createElement("button"));
+    button.textContent = "🔴 Get Twizzle streams";
+
+    const select = this.addElement(document.createElement("select"));
+    select.appendChild(document.createElement("option")).textContent =
+      "Streams";
+    select.disabled = true;
+
+    let streamServer: TwizzleStreamServer | null = null;
+    button.addEventListener("click", async () => {
+      const TwizzleStreamServer = (await import("../../../stream"))
+        .TwizzleStreamServer;
+      streamServer ||= new TwizzleStreamServer();
+      const streams = await streamServer.streams();
+      select.textContent = "";
+      select.disabled = false;
+      const info = select.appendChild(document.createElement("option"));
+      info.textContent = `Select a stream (${streams.length} available)`;
+      info.value = SENTINEL_VALUE;
+      for (const stream of streams) {
+        const firstSender = stream.senders[0];
+        const option = select.appendChild(document.createElement("option"));
+        option.value = stream.streamID;
+        option.textContent = firstSender.name;
+      }
+    });
+
+    select.addEventListener("change", () => {
+      const streamID = select.value;
+      if (streamID === SENTINEL_VALUE) {
+        return;
+      }
+      const stream = streamServer!.connect(streamID);
+      stream.addEventListener(
+        "move",
+        (moveEvent: PuzzleStreamMoveEventRegisterCompatible) => {
+          console.log(moveEvent);
+          this.dispatchEvent(new CustomEvent("move", moveEvent));
         },
       );
     });

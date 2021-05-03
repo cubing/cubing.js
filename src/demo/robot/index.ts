@@ -9,7 +9,7 @@ import type { GanRobot } from "../../cubing/bluetooth/smart-robot/GanRobot";
 import type { TwistyPlayer } from "../../cubing/twisty";
 import "../../cubing/twisty";
 import { Alg } from "../../cubing/alg";
-import { TwizzleStreamServer } from "./stream";
+import { TwizzleStreamServer } from "../../cubing/stream/twizzle/TwizzleStream";
 
 const BOGUS_VALUE = "BOGUS";
 

@@ -1,4 +1,4 @@
-import { Move, QuantumMove } from "../../cubing/alg";
+import { Move, QuantumMove } from "../../alg";
 import type { StreamMessageEvent } from "./stream-types";
 
 class TwizzleStream extends EventTarget {
