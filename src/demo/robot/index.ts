@@ -8,7 +8,7 @@ import { connectSmartRobot } from "../../cubing/bluetooth/smart-robot";
 import type { GanRobot } from "../../cubing/bluetooth/smart-robot/GanRobot";
 import type { TwistyPlayer } from "../../cubing/twisty";
 import "../../cubing/twisty";
-import type { Alg } from "../../cubing/alg";
+import { Alg } from "../../cubing/alg";
 import { TwizzleStreamServer } from "./stream";
 
 const BOGUS_VALUE = "BOGUS";
@@ -138,6 +138,14 @@ class RobotDemo {
     } catch {
       this.outputButton.disabled = false;
     }
+  }
+
+  applyAlgString(s: string): void {
+    const alg = Alg.fromString(s);
+    for (const move of alg.experimentalLeafMoves()) {
+      this.player.experimentalAddMove(move);
+    }
+    this.output?.applyMoves(Array.from(alg.experimentalLeafMoves()));
   }
 
   onMove(move: MoveEvent): void {
