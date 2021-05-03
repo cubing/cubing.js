@@ -39,7 +39,7 @@ class BluetoothStreamSource extends EventTarget {
 }
 
 class KeyboardStreamSource extends EventTarget {
-  private constructor(puzzle: KeyboardPuzzle) {
+  private constructor(private puzzle: KeyboardPuzzle) {
     super();
     puzzle.addMoveListener((e: MoveEvent) => {
       this.dispatchEvent(
@@ -59,7 +59,7 @@ class KeyboardStreamSource extends EventTarget {
   }
 
   disconnect(): void {
-    throw new Error("unplmemented;");
+    this.puzzle.disconnect();
   }
 }
 
@@ -92,6 +92,7 @@ export class TwistyStreamSource extends ManagedCustomElement {
           this.dispatchEvent(new CustomEvent("move", e));
         },
       );
+      // TODO: Hook up UI for disconnection.
     });
   }
 

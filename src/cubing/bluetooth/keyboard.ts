@@ -7,15 +7,22 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
   public puzzle: Promise<KPuzzle> = (async () =>
     new KPuzzle(await puzzles["3x3x3"].def()))();
 
+  listener: (e: KeyboardEvent) => Promise<void>;
+
   // TODO: Decide on the right arguments.
-  constructor(target: Element) {
+  constructor(private target: Element) {
     super();
     // TODO: Filter out repeated keydown?
-    target.addEventListener("keydown", this.onKeyDown.bind(this));
+    this.listener = this.onKeyDown.bind(this);
+    target.addEventListener("keydown", this.listener);
   }
 
   public name(): string | undefined {
     return "Keyboard Input";
+  }
+
+  disconnect() {
+    this.target.removeEventListener("keydown", this.listener);
   }
 
   public async getState(): Promise<PuzzleState> {
