@@ -47,6 +47,7 @@ export abstract class BluetoothPuzzle {
   protected orientationListeners: Array<(e: OrientationEvent) => void> = []; // TODO: type
 
   public abstract name(): string | undefined;
+  public abstract disconnect(): void; // TODO: Can we make this reutrn (async) on success?
 
   // TODO: require subclasses to implement this?
   public async getState(): Promise<PuzzleState> {
