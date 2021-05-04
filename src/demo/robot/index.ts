@@ -90,7 +90,7 @@ class RobotDemo {
         document.createElement("option"),
       );
       option.value = stream.streamID;
-      option.textContent = firstSender.name;
+      option.textContent = `${firstSender.name} (0x${stream.streamID.slice(-2)})`;
     }
   }
 

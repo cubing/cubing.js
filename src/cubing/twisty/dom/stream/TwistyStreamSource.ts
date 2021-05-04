@@ -121,7 +121,7 @@ export class TwistyStreamSource extends ManagedCustomElement {
         const firstSender = stream.senders[0];
         const option = select.appendChild(document.createElement("option"));
         option.value = stream.streamID;
-        option.textContent = firstSender.name;
+        option.textContent = `${firstSender.name} (${stream.streamID.slice(-2)})`;
       }
     });
 
