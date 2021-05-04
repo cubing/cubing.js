@@ -67,7 +67,8 @@
     "lint": "npx eslint --ext=js,ts,d.ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
     "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --no-source-maps --public-url ./ --dist-dir dist/twizzle.net src/demo/twizzle.net/index.html",
-    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-minify --target experiments-cubing-net --no-source-maps --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html"
+    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-minify --target experiments-cubing-net --no-source-maps --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html",
+    "parcel-build-test": "node src/parcel-build-test/test.js"
   },
   "targets": {
     "twizzle-net": {},
@@ -211,6 +212,9 @@
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!(three/))"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/src/parcel-build-test/"
     ]
   },
   "files": [
