@@ -7,7 +7,7 @@ import type { TwizzleStreamServer } from "../../../stream";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../stream/process/ReorientedStream";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
-import { twistyStreamSourceCSS } from "./TwistyStreamSource.css";
+import { twistyStreamSourceCSS } from "./TwistyStreamSource.css_";
 
 interface StreamSource extends EventTarget {
   disconnect?: () => void;
@@ -121,7 +121,9 @@ export class TwistyStreamSource extends ManagedCustomElement {
         const firstSender = stream.senders[0];
         const option = select.appendChild(document.createElement("option"));
         option.value = stream.streamID;
-        option.textContent = `${firstSender.name} (${stream.streamID.slice(-2)})`;
+        option.textContent = `${firstSender.name} (${stream.streamID.slice(
+          -2,
+        )})`;
       }
     });
 

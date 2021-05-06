@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "Ubuntu";
+  src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+app {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  background: rgb(255, 245, 235);
+}
+
+puzzle-pane {
+  grid-area: "puzzle";
+
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+
+  display: grid;
+
+  overflow: hidden;
+}
+
+puzzle-pane.loading {
+  place-content: center;
+}
+
+puzzle-pane twisty-player {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}

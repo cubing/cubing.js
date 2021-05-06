@@ -43,7 +43,7 @@ deploy-vr: clean parcel-build-for-vr-cubing-net
 
 .PHONY: deploy
 # The `clean` dependency is a workaround for Parcel bugs.
-deploy: clean deploy-experiments deploy-twizzle
+deploy: clean deploy-experiments
 
 EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
 EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
@@ -53,7 +53,7 @@ deploy-experiments: parcel-build-for-experiments-cubing-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/experiments.cubing.net/cubing.js/experiments-cubing-net/ \
+		./dist/snowpack/ \
 		${EXPERIMENTS_SFTP_PATH}
 	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
 

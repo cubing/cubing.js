@@ -13,11 +13,13 @@ export {
   getpuzzles,
   parsedesc,
   PuzzleGeometry,
+  useNewFaceNames,
+} from "./PuzzleGeometry";
+export type {
   StickerDat,
   StickerDatAxis,
   StickerDatFace,
   StickerDatSticker,
-  useNewFaceNames,
 } from "./PuzzleGeometry";
 export { Quat } from "./Quat";
 export { schreierSims } from "./SchreierSims";

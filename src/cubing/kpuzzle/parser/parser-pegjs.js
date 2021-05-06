@@ -1287,7 +1287,5 @@ function peg$parse(input, options) {
   }
 }
 
-module.exports = {
-  SyntaxError: peg$SyntaxError,
-  parse: peg$parse,
-};
+// Note: this was modified from `module.exports` by hand for Snowpack.
+export { peg$SyntaxError as SyntaxError, peg$parse as parse };

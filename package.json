@@ -23,6 +23,7 @@
     "@babel/preset-typescript": "^7.12.1",
     "@babel/runtime": "^7.12.5",
     "@parcel/transformer-image": "^2.0.0-nightly.2267",
+    "@snowpack/plugin-typescript": "^1.2.1",
     "@types/jest": "^24.9.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
@@ -40,6 +41,7 @@
     "pegjs": "^0.11.0-master.f69239d",
     "prettier": "^2.2.1",
     "puppeteer": "^8.0.0",
+    "snowpack": "^3.3.7",
     "ts-jest": "^26.3.0",
     "typescript": "^4.2.3",
     "yargs": "^16.2.0"
@@ -56,7 +58,7 @@
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx pegjs src/cubing/alg/parser/parser-pegjs.pegjs && npx pegjs src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
-    "dev": "npm run clean && npx parcel serve --no-autoinstall src/demo/index.html --port 3333 --open --dist-dir /tmp/cubing-js-parcel # cleaning is a workaround for one set of Parcel bugs, /tmp dir is a workaround dir for other Parcel bugs",
+    "dev": "npx snowpack dev",
     "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel",
     "test": "npm run test-jest && npm run lint && npm run build-experimental-splitting-build && npm run build-tsc",
     "test-jest": "npx jest --collectCoverage",
@@ -67,7 +69,7 @@
     "lint": "npx eslint --ext=js,ts,d.ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
     "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --no-source-maps --public-url ./ --dist-dir dist/twizzle.net src/demo/twizzle.net/index.html",
-    "parcel-build-for-experiments-cubing-net": "parcel build --no-scope-hoist --no-minify --target experiments-cubing-net --no-source-maps --public-url /cubing.js/ --dist-dir dist/experiments.cubing.net/cubing.js src/demo/index.html",
+    "parcel-build-for-experiments-cubing-net": "npx snowpack build",
     "parcel-build-test": "node src/parcel-build-test/test.js"
   },
   "targets": {
