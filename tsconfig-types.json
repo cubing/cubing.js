@@ -1,8 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "rootDir": "src/cubing"
   },
-  "include": ["src/cubing/*.ts", "src/cubing/**/*.ts"],
-  "exclude": ["/node_modules", "/dist", "src/dist-static"]
+  "include": ["src/cubing/**/*"]
 }
