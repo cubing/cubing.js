@@ -5,15 +5,15 @@
 module.exports = {
   workspaceRoot: "/",
   mount: {
-    "src/snowpack/static": { url: "/", static: true },
-    "src/snowpack/code": { url: "/_code" },
+    "src/experiments/static": { url: "/", static: true },
+    "src/experiments/code": { url: "/_code" },
   },
   packageOptions: {},
   devOptions: {
     port: 3333,
   },
   buildOptions: {
-    out: "dist/snowpack",
+    out: "dist/experiments",
     baseUrl: "/cubing.js",
   },
   optimize: {
