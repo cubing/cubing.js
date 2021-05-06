@@ -11,7 +11,7 @@ import {
   Object3D,
   BufferAttribute,
 } from "three";
-import { Stats } from "../../../vendor/node_modules/three/examples/jsm/libs/stats.module";
+import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
 
 let scene: Scene,
   camera: PerspectiveCamera,

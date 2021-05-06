@@ -210,9 +210,6 @@
     "roots": [
       "<rootDir>/src"
     ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(three/))"
-    ],
     "modulePathIgnorePatterns": [
       "<rootDir>/src/parcel-build-test/"
     ]

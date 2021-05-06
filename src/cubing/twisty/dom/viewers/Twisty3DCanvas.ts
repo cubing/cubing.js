@@ -7,7 +7,7 @@ import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css_";
 import { TwistyOrbitControls } from "./TwistyOrbitControls";
 import type { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
-import { Stats } from "../../../../vendor/node_modules/three/examples/jsm/libs/stats.module";
+import { Stats } from "../../../../vendor/three/examples/jsm/libs/stats.module";
 
 let SHOW_STATS = false;
 // Show render stats for newly contructed renderers.
