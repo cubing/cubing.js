@@ -1,0 +1,22 @@
+html,
+body {
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(384px, 1fr));
+  gap: 1em;
+  padding: 1em;
+  align-items: center;
+}
+
+body > * {
+  justify-self: center;
+}
+
+twisty-player {
+  max-width: 100%;
+}

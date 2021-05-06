@@ -119,6 +119,9 @@ if (
       optionlist.push("killorientation", true);
     } else if (option === "--nocenters") {
       optionlist.push("centersets", false);
+    } else if (option === "--omit") {
+      optionlist.push("omit", process.argv[argp].split(","));
+      argp++;
     } else if (option === "--moves") {
       optionlist.push("movelist", process.argv[argp].split(","));
       argp++;

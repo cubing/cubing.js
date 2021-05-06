@@ -493,6 +493,7 @@ export class PuzzleGeometry {
   public cornersets: boolean = true; // include corner sets
   public centersets: boolean = true; // include center sets
   public edgesets: boolean = true; // include edge sets
+  public omitsets : string[] = []; // omit these sets
   public graycorners: boolean = false; // make corner sets gray
   public graycenters: boolean = false; // make center sets gray
   public grayedges: boolean = false; // make edge sets gray
@@ -554,6 +555,8 @@ export class PuzzleGeometry {
           this.centersets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "edgesets") {
           this.edgesets = asboolean(optionlist[i + 1]);
+        } else if (optionlist[i] === "omit") {
+          this.omitsets = optionlist[i + 1];
         } else if (optionlist[i] === "graycorners") {
           this.graycorners = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "graycenters") {
@@ -2126,6 +2129,15 @@ export class PuzzleGeometry {
     return mv;
   }
 
+  public omitSet(name: string): boolean {
+    for (let k = 0; k < this.omitsets.length; k++) {
+      if (this.omitsets[k] === name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public getOrbitsDef(fortwisty: boolean): OrbitsDef {
     // generate a representation of the puzzle
     const setmoves = [];
@@ -2167,6 +2179,10 @@ export class PuzzleGeometry {
       if (!setmoves[i]) {
         continue;
       }
+      if (this.omitSet(this.cubiesetnames[i])) {
+        setmoves[i] = 0;
+        continue;
+      }
       setnames.push(this.cubiesetnames[i]);
       setdefs.push(
         new OrbitDef(
@@ -2178,6 +2194,9 @@ export class PuzzleGeometry {
     const solved: Orbit[] = [];
     for (let i = 0; i < this.cubiesetnames.length; i++) {
       if (!setmoves[i]) {
+        continue;
+      }
+      if (this.omitSet(this.cubiesetnames[i])) {
         continue;
       }
       const p = [];

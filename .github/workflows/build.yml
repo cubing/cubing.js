@@ -35,3 +35,4 @@ jobs:
       - run: make test-node-import
       - run: make parcel-build-for-twizzle-net
       - run: make parcel-build-for-experiments-cubing-net
+      - run: make parcel-build-test

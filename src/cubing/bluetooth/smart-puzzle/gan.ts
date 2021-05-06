@@ -359,6 +359,10 @@ export class GanCube extends BluetoothPuzzle {
     return this.server.device.name;
   }
 
+  disconnect(): void {
+    this.server.disconnect();
+  }
+
   public startTrackingMoves(): void {
     // `window.setInterval` instead of `setInterval`:
     // https://github.com/Microsoft/TypeScript/issues/842#issuecomment-252445883

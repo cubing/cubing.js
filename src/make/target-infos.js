@@ -51,7 +51,7 @@ export const targetInfos = {
   },
   "stream": {
     deps: {
-      direct: [],
+      direct: ["alg"],
       dynamic: [],
     },
   },
