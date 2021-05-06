@@ -1,1 +1,1 @@
-export * from "../../types/cubing/kpuzzle";
+export * from "../../types/kpuzzle";

@@ -1,1 +1,1 @@
-export * from "../dist/types/cubing/bluetooth";
+export * from "../dist/types/bluetooth";

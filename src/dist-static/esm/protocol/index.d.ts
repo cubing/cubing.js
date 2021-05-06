@@ -1,1 +1,1 @@
-export * from "../../types/cubing/protocol";
+export * from "../../types/protocol";

@@ -1,1 +1,1 @@
-export * from "../dist/types/cubing/twisty";
+export * from "../dist/types/twisty";

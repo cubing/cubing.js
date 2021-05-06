@@ -1,1 +1,1 @@
-export * from "../../types/cubing/puzzle-geometry";
+export * from "../../types/puzzle-geometry";
