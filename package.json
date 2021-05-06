@@ -23,7 +23,6 @@
     "babylonjs": "^4.2.0",
     "esbuild": "^0.9.3",
     "eslint": "^7.21.0",
-    "eslint-config-mdcs": "^5.0.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-html": "^6.1.0",
     "eslint-plugin-prettier": "^3.3.1",
