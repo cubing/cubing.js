@@ -2,7 +2,11 @@
 import puppeteer from "puppeteer";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import "./server.js";
+import { startServer } from "./experiments-server/index.js";
+
+const PAGE_URL = "http://localhost:4443/cubing.js/screenshot/index.html";
+
+startServer();
 
 const args = yargs(hideBin(process.argv))
   .command(
@@ -73,7 +77,7 @@ options.controlPanel = "none";
     height: args["size"],
   });
 
-  const url = new URL("http://localhost:3334/");
+  const url = new URL(PAGE_URL);
   url.searchParams.set("options", JSON.stringify(options));
 
   if (args.debug) {
