@@ -14,10 +14,6 @@ import {
   Twisty3DPuzzle,
 } from "../../../cubing/twisty";
 import { useNewFaceNames } from "../../../cubing/puzzle-geometry";
-// @ts-ignore
-import bluetoothSVG from "./bluetooth.svg";
-// @ts-ignore
-import clearSVG from "./clear.svg";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
   DEFAULT_PUZZLE_ID,
@@ -31,6 +27,9 @@ import {
 import { CallbackProxyReceiver } from "./websocket-proxy";
 import type { Quaternion } from "three";
 import type { AlgCubingNetOptions } from "../../../cubing/alg";
+
+const bluetoothSVG = new URL("./bluetooth.svg", import.meta.url).toString();
+const clearSVG = new URL("./clear.svg", import.meta.url).toString();
 
 useNewFaceNames(true);
 

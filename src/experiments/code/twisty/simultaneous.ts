@@ -1,8 +1,10 @@
 import { Cube3D, TwistyPlayer } from "../../../cubing/twisty";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import supercubeSprite from "./supercube-sprite.png";
 import { Alg } from "../../../cubing/alg";
+
+const supercubeSprite = new URL(
+  "./supercube-sprite.png",
+  import.meta.url,
+).toString();
 
 {
   const player = new TwistyPlayer({

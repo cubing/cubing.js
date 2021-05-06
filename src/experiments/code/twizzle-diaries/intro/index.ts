@@ -24,12 +24,14 @@ import { smootherStep } from "../../../../cubing/twisty/animation/easing";
 import { TimelineAction } from "../../../../cubing/twisty/animation/Timeline";
 import { TwistyControlButton } from "../../../../cubing/twisty/dom/controls/buttons";
 import { TwistyScrubber } from "../../../../cubing/twisty/dom/controls/TwistyScrubber";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import checkeredBackground from "./checkered-background.png";
 import { experimentalSetDefaultStickerElevation } from "../../../../cubing/twisty/3D/puzzles/Cube3D";
 import { Alg } from "../../../../cubing/alg";
 import { JSZip } from "./jszip-wrapper";
+
+const checkeredBackground = new URL(
+  "./checkered-background.png",
+  import.meta.url,
+).toString();
 
 experimentalSetDefaultStickerElevation(0.51);
 

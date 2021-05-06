@@ -1,10 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import mkbhdHintSpriteURL from "./mkbhd-sprite-red-hint.png";
-// Parcel-ism.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import mkbhdSpriteURL from "./mkbhd-sprite-red.png";
 import { Alg } from "../../../cubing/alg";
 import {
   connectSmartPuzzle,
@@ -18,6 +11,15 @@ import type {
   TimelineActionEvent,
   TwistyPlayer,
 } from "../../../cubing/twisty";
+
+const mkbhdHintSpriteURL = new URL(
+  "./mkbhd-sprite-red-hint.png",
+  import.meta.url,
+).toString();
+const mkbhdSpriteURL = new URL(
+  "./mkbhd-sprite-red.png",
+  import.meta.url,
+).toString();
 
 const spriteURL =
   new URL(location.href).searchParams.get("sprite") ?? mkbhdSpriteURL;

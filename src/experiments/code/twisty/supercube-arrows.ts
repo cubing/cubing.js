@@ -1,11 +1,3 @@
-// Supercube arrow image from Ben Whitmore.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import supercubeArrowsSprite from "./supercube-arrows-sprite.png";
-// Parcel-ism.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import mkbhdSpriteURL from "./mkbhd-sprite-red.png";
 import { Alg } from "../../../cubing/alg";
 import {
   connectSmartPuzzle,
@@ -18,6 +10,12 @@ import {
   TimestampLocationType,
   TwistyPlayer,
 } from "../../../cubing/twisty";
+
+// Supercube arrow image from Ben Whitmore.
+const supercubeArrowsSprite = new URL(
+  "./supercube-arrows-sprite.png",
+  import.meta.url,
+).toString();
 
 const spriteURL =
   new URL(location.href).searchParams.get("sprite") ?? supercubeArrowsSprite;

@@ -1,10 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import supercubeSprite from "./supercube-sprite.png";
-// Parcel-ism.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import mkbhdSpriteURL from "./mkbhd-sprite-red.png";
 import { Alg } from "../../../cubing/alg";
 import {
   connectSmartPuzzle,
@@ -17,6 +10,11 @@ import {
   TimestampLocationType,
   TwistyPlayer,
 } from "../../../cubing/twisty";
+
+const supercubeSprite = new URL(
+  "./supercube-sprite.png",
+  import.meta.url,
+).toString();
 
 const spriteURL =
   new URL(location.href).searchParams.get("sprite") ?? supercubeSprite;
