@@ -16,4 +16,11 @@ module.exports = {
     out: "dist/snowpack",
     baseUrl: "/cubing.js",
   },
+  optimize: {
+    bundle: true,
+    splitting: true,
+    minify: true,
+    target: "es2020",
+    sourcemap: false,
+  },
 };
