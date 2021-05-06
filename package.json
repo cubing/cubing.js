@@ -68,7 +68,7 @@
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
     "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --no-source-maps --public-url ./ --dist-dir dist/twizzle.net src/demo/twizzle.net/index.html",
     "build-experiments": "npx snowpack build",
-    "parcel-build-test": "node src/parcel-build-test/test.js"
+    "test-experiments": "node src/test-experiments/test.js"
   },
   "targets": {
     "twizzle-net": {},
@@ -211,7 +211,7 @@
       "<rootDir>/src"
     ],
     "modulePathIgnorePatterns": [
-      "<rootDir>/src/parcel-build-test/"
+      "<rootDir>/src/test-experiments/"
     ]
   },
   "files": [

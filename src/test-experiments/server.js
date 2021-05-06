@@ -19,10 +19,7 @@ export function startServer(port) {
       let filePath;
       if (topPath === "cubing.js") {
         filePath = new URL(
-          path.join(
-            "../../dist/experiments.cubing.net/cubing.js/experiments-cubing-net/",
-            remainingPath,
-          ),
+          path.join("../../dist/snowpack/", remainingPath),
           import.meta.url,
         ).pathname;
       } else {
