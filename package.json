@@ -52,12 +52,14 @@
     "build-types": "npx tsc --build ./tsconfig-types.json",
     "build-bin": "npx esbuild --target=es2015 --bundle --external:three --format=esm --outfile=dist/bin/puzzle-geometry-bin.js src/bin/puzzle-geometry-bin.ts",
     "build-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
+    "build-experiments": "npx snowpack build",
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx pegjs src/cubing/alg/parser/parser-pegjs.pegjs && npx pegjs src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "npx snowpack dev",
     "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel",
     "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run build-tsc",
+    "test-experiments": "node src/test-experiments/test.js",
     "test-import-restrictions": "node src/import-restrictions/build.js",
     "test-jest": "npx jest --collectCoverage",
     "test-node-require": "node src/dist-test/require.cjs",
@@ -66,9 +68,7 @@
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts,d.ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
-    "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --no-source-maps --public-url ./ --dist-dir dist/twizzle.net src/demo/twizzle.net/index.html",
-    "build-experiments": "npx snowpack build",
-    "test-experiments": "node src/test-experiments/test.js"
+    "parcel-build-for-twizzle-net": "echo \"parcel-build-for-twizzle-net is currently unimplemented.\""
   },
   "targets": {
     "twizzle-net": {},
