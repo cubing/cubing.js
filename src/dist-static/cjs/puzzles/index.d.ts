@@ -1,1 +1,1 @@
-export * from "../../types/puzzles";
+export * from "../../types/cubing/puzzles";

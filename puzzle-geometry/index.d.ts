@@ -1,1 +1,1 @@
-export * from "../dist/types/puzzle-geometry";
+export * from "../dist/types/cubing/puzzle-geometry";

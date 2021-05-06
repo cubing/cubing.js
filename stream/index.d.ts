@@ -1,1 +1,1 @@
-export * from "../dist/types/stream";
+export * from "../dist/types/cubing/stream";

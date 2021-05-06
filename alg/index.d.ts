@@ -1,1 +1,1 @@
-export * from "../dist/types/alg";
+export * from "../dist/types/cubing/alg";

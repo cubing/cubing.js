@@ -3,5 +3,6 @@
   "compilerOptions": {
     "emitDeclarationOnly": true
   },
-  "include": ["src/cubing/*.ts", "src/cubing/**/*.ts"]
+  "include": ["src/cubing/*.ts", "src/cubing/**/*.ts"],
+  "exclude": ["/node_modules", "/dist", "src/dist-static"]
 }

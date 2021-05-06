@@ -1,1 +1,1 @@
-export * from "../dist/types/notation";
+export * from "../dist/types/cubing/notation";
