@@ -493,7 +493,7 @@ export class PuzzleGeometry {
   public cornersets: boolean = true; // include corner sets
   public centersets: boolean = true; // include center sets
   public edgesets: boolean = true; // include edge sets
-  public omitsets : string[] = []; // omit these sets
+  public omitsets: string[] = []; // omit these sets
   public graycorners: boolean = false; // make corner sets gray
   public graycenters: boolean = false; // make center sets gray
   public grayedges: boolean = false; // make edge sets gray
