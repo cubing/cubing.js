@@ -47,7 +47,7 @@
     "build-bin": "npx esbuild --target=es2015 --bundle --external:three --format=esm --outfile=dist/bin/puzzle-geometry-bin.js src/bin/puzzle-geometry-bin.ts",
     "build-experiments": "npx snowpack build",
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
-    "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
+    "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "npx snowpack dev",
     "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel",
@@ -113,7 +113,7 @@
       "/dist",
       "/src/dist-static",
       "/snowpack.config.cjs",
-      "parser-pegjs.js"
+      "parser-peggy.js"
     ],
     "env": {
       "commonjs": true,
