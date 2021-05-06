@@ -60,7 +60,7 @@
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
     "setup": "npm install",
-    "lint": "npx eslint --ext=js,ts,d.ts .",
+    "lint": "npx eslint --ext=js,ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
     "parcel-build-for-twizzle-net": "echo \"parcel-build-for-twizzle-net is currently unimplemented.\""
   },
@@ -112,6 +112,7 @@
       "/coverage",
       "/dist",
       "/src/dist-static",
+      "/snowpack.config.cjs",
       "parser-pegjs.js"
     ],
     "env": {
