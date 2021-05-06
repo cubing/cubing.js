@@ -6,7 +6,7 @@ module.exports = {
   workspaceRoot: "/",
   mount: {
     "src/snowpack/static": { url: "/", static: true },
-    "src/snowpack/code": { url: "/code" },
+    "src/snowpack/code": { url: "/_code" },
   },
   packageOptions: {},
   devOptions: {
