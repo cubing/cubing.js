@@ -69,7 +69,7 @@
     "lint": "npx eslint --ext=js,ts,d.ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
     "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --no-source-maps --public-url ./ --dist-dir dist/twizzle.net src/demo/twizzle.net/index.html",
-    "parcel-build-for-experiments-cubing-net": "npx snowpack build",
+    "build-experiments": "npx snowpack build",
     "parcel-build-test": "node src/parcel-build-test/test.js"
   },
   "targets": {

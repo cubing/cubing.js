@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build build-esm build-cjs build-bundle-global build-types build-bin build-experimental-splitting-build build-tsc generate-js generate-js-parsers generate-js-svg dev clean test test-jest test-node-require test-node-import format setup lint prepack parcel-build-for-twizzle-net parcel-build-for-experiments-cubing-net parcel-build-test
+NPM_COMMANDS = build build-esm build-cjs build-bundle-global build-types build-bin build-experimental-splitting-build build-tsc generate-js generate-js-parsers generate-js-svg dev clean test test-jest test-node-require test-node-import format setup lint prepack parcel-build-for-twizzle-net build-experiments parcel-build-test
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
@@ -49,7 +49,7 @@ EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/
 EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
 
 .PHONY: deploy-experiments
-deploy-experiments: parcel-build-for-experiments-cubing-net
+deploy-experiments: build-experiments
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
