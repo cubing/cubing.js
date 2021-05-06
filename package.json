@@ -118,8 +118,6 @@
       "/coverage",
       "/dist",
       "/src/dist-static",
-      "/src/vendor/modules/three/examples/jsm/libs/stats.module.d.ts",
-      "/src/vendor/modules/three/examples/jsm/libs/stats.module.js",
       "parser-pegjs.js"
     ],
     "env": {
