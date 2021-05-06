@@ -13,12 +13,6 @@
     "three": "^0.126.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
-    "@babel/plugin-proposal-optional-chaining": "^7.12.1",
-    "@babel/plugin-proposal-private-methods": "^7.12.1",
-    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.12.1",
     "@babel/runtime": "^7.12.5",
@@ -36,7 +30,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.4.2",
     "jszip": "^3.5.0",
-    "pegjs": "^0.11.0-master.f69239d",
+    "peggy": "^1.1.0",
     "prettier": "^2.2.1",
     "puppeteer": "^8.0.0",
     "snowpack": "^3.3.7",
@@ -49,26 +43,26 @@
     "build-esm": "npx esbuild --target=es2015 --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/stream/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm",
     "build-cjs": "npx esbuild --target=es2015 --bundle --external:three --format=cjs --outfile=dist/cjs/index.js src/cubing/index.ts && cp -R src/dist-static/cjs/* dist/cjs",
     "build-bundle-global": "npx esbuild --target=es2015 --bundle --format=cjs --minify --outdir=dist/bundle-global src/cubing/cubing.bundle-global.ts",
-    "build-types": "npx tsc --build tsconfig-types.json",
+    "build-types": "npx tsc --build ./tsconfig-types.json",
     "build-bin": "npx esbuild --target=es2015 --bundle --external:three --format=esm --outfile=dist/bin/puzzle-geometry-bin.js src/bin/puzzle-geometry-bin.ts",
-    "build-experimental-splitting-build": "node src/make/build.js",
-    "build-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
+    "build-experiments": "npx snowpack build",
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
-    "generate-js-parsers": "npx pegjs src/cubing/alg/parser/parser-pegjs.pegjs && npx pegjs src/cubing/kpuzzle/parser/parser-pegjs.pegjs",
+    "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "npx snowpack dev",
     "clean": "rm -rf dist .cache .parcel-cache .rpt2_cache /tmp/cubing-js-parcel",
-    "test": "npm run test-jest && npm run lint && npm run build-experimental-splitting-build && npm run build-tsc",
+    "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc",
+    "test-experiments": "node src/test-experiments/test.js",
+    "test-import-restrictions": "node src/import-restrictions/build.js",
     "test-jest": "npx jest --collectCoverage",
     "test-node-require": "node src/dist-test/require.cjs",
     "test-node-import": "node src/dist-test/import.mjs",
+    "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
     "setup": "npm install",
-    "lint": "npx eslint --ext=js,ts,d.ts .",
+    "lint": "npx eslint --ext=js,ts .",
     "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
-    "parcel-build-for-twizzle-net": "parcel build --no-scope-hoist --no-minify --target twizzle-net --no-source-maps --public-url ./ --dist-dir dist/twizzle.net src/demo/twizzle.net/index.html",
-    "build-experiments": "npx snowpack build",
-    "parcel-build-test": "node src/parcel-build-test/test.js"
+    "parcel-build-for-twizzle-net": "echo \"parcel-build-for-twizzle-net is currently unimplemented.\""
   },
   "targets": {
     "twizzle-net": {},
@@ -118,9 +112,8 @@
       "/coverage",
       "/dist",
       "/src/dist-static",
-      "/src/vendor/modules/three/examples/jsm/libs/stats.module.d.ts",
-      "/src/vendor/modules/three/examples/jsm/libs/stats.module.js",
-      "parser-pegjs.js"
+      "/snowpack.config.cjs",
+      "parser-peggy.js"
     ],
     "env": {
       "commonjs": true,
@@ -197,24 +190,14 @@
         }
       ],
       "@babel/preset-typescript"
-    ],
-    "plugins": [
-      "@babel/plugin-transform-runtime",
-      "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-private-methods",
-      "@babel/plugin-proposal-optional-chaining",
-      "@babel/plugin-proposal-nullish-coalescing-operator"
     ]
   },
   "jest": {
     "roots": [
       "<rootDir>/src"
     ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(three/))"
-    ],
     "modulePathIgnorePatterns": [
-      "<rootDir>/src/parcel-build-test/"
+      "<rootDir>/src/test-experiments/"
     ]
   },
   "files": [

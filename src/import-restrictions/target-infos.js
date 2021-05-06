@@ -3,6 +3,7 @@
 Some notes:
 
 - Don't allow the same cross-target import to be both direct and dynamic. If there is any direct import, we pay the same performance penalty regardless of any dynamic imports.
+  - Exception: If you're actively trying to convert all those direct imports to dynamic, it may make sense to commit intermediate progress with both allowed.
 - TODO: remove all cyclic imports.
 
 */

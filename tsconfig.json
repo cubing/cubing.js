@@ -16,8 +16,9 @@
     "target": "es2020",
     "module": "esnext",
     "resolveJsonModule": true,
-    "importsNotUsedAsValues": "error"
+    "importsNotUsedAsValues": "error",
+    "rootDir": "."
   },
-  "include": ["src/**/*", "*/index.d.ts", "*/index.js"],
-  "exclude": ["/node_modules", "/dist", "src/dist-static"]
+  "include": ["src/**/*", "*/index.js", "*/index.d.ts"],
+  "exclude": ["src/dist-static/**/*"]
 }

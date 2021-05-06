@@ -14,7 +14,6 @@ import {
   Twisty3DPuzzle,
 } from "../../../cubing/twisty";
 import { useNewFaceNames } from "../../../cubing/puzzle-geometry";
-import "regenerator-runtime/runtime";
 // @ts-ignore
 import bluetoothSVG from "./bluetooth.svg";
 // @ts-ignore

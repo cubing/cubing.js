@@ -33,6 +33,6 @@ jobs:
       - run: make build
       - run: make test-node-require
       - run: make test-node-import
-      - run: make parcel-build-for-twizzle-net
-      - run: make parcel-build-for-experiments-cubing-net
-      - run: make parcel-build-test
+      - run: make build-experiments
+      - run: make test-experiments
+      # - run: make parcel-build-for-twizzle-net
