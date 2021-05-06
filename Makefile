@@ -53,7 +53,7 @@ deploy-experiments: parcel-build-for-experiments-cubing-net
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/experiments.cubing.net/cubing.js/experiments-cubing-net/ \
+		./dist/snowpack/ \
 		${EXPERIMENTS_SFTP_PATH}
 	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
 
