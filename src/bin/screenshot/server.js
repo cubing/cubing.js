@@ -4,7 +4,7 @@ import { createServer } from "http";
 const files = {
   "/": { relativePath: "./server/index.html", contentType: "text/html" },
   "/cubing.bundle-global.js": {
-    relativePath: "../../dist/bundle-global/cubing.bundle-global.js",
+    relativePath: "../../../dist/bundle-global/cubing.bundle-global.js",
     contentType: "text/javascript",
   },
 };
