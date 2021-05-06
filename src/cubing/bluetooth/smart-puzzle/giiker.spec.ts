@@ -8,7 +8,7 @@ describe("GiiKerCube", () => {
   // });
 
   it("should calculate giikerMoveToAlgMove() correctly", () => {
-    console.log(new Alg([giikerMoveToAlgMoveForTesting(1, 1)]).toString());
+    // console.log(new Alg([giikerMoveToAlgMoveForTesting(1, 1)]).toString());
     expect(new Alg([giikerMoveToAlgMoveForTesting(1, 1)])).toBeIdentical(
       new Alg("B"),
     );
