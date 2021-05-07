@@ -57,7 +57,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
     FRAME: { permutation: [0], orientation: [0] },
   },
   moves: {
-    UR: {
+    UR_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -106,7 +106,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    DR: {
+    DR_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -155,7 +155,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    DL: {
+    DL_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -204,7 +204,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    UL: {
+    UL_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -253,7 +253,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    U: {
+    U_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -302,7 +302,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    R: {
+    R_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -351,7 +351,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    D: {
+    D_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -400,7 +400,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    L: {
+    L_PLUS_: {
       DIALS: {
         permutation: [
           0,

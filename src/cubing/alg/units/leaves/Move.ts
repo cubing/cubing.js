@@ -232,6 +232,25 @@ export class Move extends AlgCommon<Move> {
   }
 
   toString(): string {
+    if (this.family === "_SLASH_") {
+      return "/"; // TODO: validate no amount
+    }
+    if (this.family.endsWith("_PLUS_")) {
+      return (
+        this.#quantumWithAmount.quantum.toString().slice(0, -6) +
+        Math.abs(this.amount) +
+        (this.amount < 0 ? "-" : "+")
+      ); // TODO
+    }
+    if (this.family.endsWith("_PLUSPLUS_")) {
+      const absAmount = Math.abs(this.amount);
+      return (
+        this.#quantumWithAmount.quantum.toString().slice(0, -10) +
+        (absAmount === 1 ? "" : absAmount) +
+        (this.amount < 0 ? "--" : "++")
+      ); // TODO
+    }
+
     return (
       this.#quantumWithAmount.quantum.toString() +
       this.#quantumWithAmount.suffix()

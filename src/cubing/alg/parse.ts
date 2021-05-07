@@ -16,7 +16,7 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
 }
 
 const amountRegex = /^(\d+)?('?)/;
-const moveStartRegex = /^[_\dA-Za-z]/;
+const moveStartRegex = /^[_\dA-Za-z]/; // TODO: Handle slash
 const quantumMoveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
 const commentTextRegex = /[^\n]*/;
 
@@ -53,6 +53,8 @@ export function transferCharIndex<T extends Alg | Unit>(from: T, to: T): T {
   }
   return to;
 }
+
+type MoveSuffix = "+" | "++" | "-" | "--";
 
 // TODO: support recording string locations for moves.
 class AlgParser {
@@ -156,11 +158,15 @@ class AlgParser {
         crowded = false;
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
-        this.mustConsumeNext("/");
-        const [text] = this.parseRegex(commentTextRegex);
-        algBuilder.push(addCharIndex(new LineComment(text), savedCharIndex));
-        crowded = false;
-        continue mainLoop;
+        if (this.tryConsumeNext("/")) {
+          const [text] = this.parseRegex(commentTextRegex);
+          algBuilder.push(addCharIndex(new LineComment(text), savedCharIndex));
+          crowded = false;
+          continue mainLoop;
+        } else {
+          algBuilder.push(addCharIndex(new Move("_SLASH_"), savedCharIndex));
+          continue mainLoop;
+        }
       } else if (this.tryConsumeNext(".")) {
         mustNotBeCrowded();
         algBuilder.push(addCharIndex(new Pause(), savedCharIndex));
@@ -197,14 +203,58 @@ class AlgParser {
 
   private parseMoveImpl(): Parsed<Move> {
     const savedCharIndex = this.#idx;
-    const quantumMove = this.parseQuantumMoveImpl();
-    const repetitionInfo = this.parseAmount();
 
-    const move = addCharIndex(
-      new Move(quantumMove, repetitionInfo),
-      savedCharIndex,
-    );
+    if (this.tryConsumeNext("/")) {
+      return addCharIndex(new Move("_SLASH_"), savedCharIndex);
+    }
+
+    let quantumMove = this.parseQuantumMoveImpl();
+    let amount = this.parseAmount();
+    const suffix = this.parseMoveSuffix();
+
+    if (suffix) {
+      if (amount < 0) {
+        throw new Error("uh-oh");
+      }
+      if ((suffix === "++" || suffix === "--") && amount !== 1) {
+        // TODO: Handle 1 vs. null
+        throw new Error("++ or -- moves cannot have an amount other than 1");
+      }
+      if (suffix.startsWith("+")) {
+        quantumMove = quantumMove.modified({
+          family: `${quantumMove.family}_${
+            suffix === "+" ? "PLUS" : "PLUSPLUS"
+          }_`, // TODO
+        });
+      }
+      if (suffix.startsWith("-")) {
+        quantumMove = quantumMove.modified({
+          family: `${quantumMove.family}_${
+            suffix === "-" ? "PLUS" : "PLUSPLUS"
+          }_`, // TODO
+        });
+        amount *= -1;
+      }
+    }
+
+    const move = addCharIndex(new Move(quantumMove, amount), savedCharIndex);
     return move;
+  }
+
+  private parseMoveSuffix(): MoveSuffix | null {
+    if (this.tryConsumeNext("+")) {
+      if (this.tryConsumeNext("+")) {
+        return "++";
+      }
+      return "+";
+    }
+    if (this.tryConsumeNext("-")) {
+      if (this.tryConsumeNext("-")) {
+        return "--";
+      }
+      return "-";
+    }
+    return null;
   }
 
   private parseAmount(): number {

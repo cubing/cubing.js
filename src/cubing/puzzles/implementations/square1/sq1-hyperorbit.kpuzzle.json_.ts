@@ -178,7 +178,7 @@ export const sq1HyperOrbitKPuzzle: KPuzzleDefinition = {
       },
       EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
     },
-    SLICE: {
+    _SLASH_: {
       WEDGES: {
         permutation: [
           0,
