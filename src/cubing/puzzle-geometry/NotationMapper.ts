@@ -16,15 +16,8 @@ export class NullMapper implements NotationMapper {
   }
 }
 
-function negate(family: string, v: number | undefined): Move {
-  if (v === undefined) {
-    v = -1;
-  } else if (v === -1) {
-    v = 1;
-  } else {
-    v = -v;
-  }
-  return new Move(family, v);
+function negate(family: string, v: number): Move {
+  return new Move(family, -(v ?? 1));
 }
 
 export class NxNxNCubeMapper implements NotationMapper {

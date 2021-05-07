@@ -3,7 +3,6 @@ import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
-import type { UnitAmount } from "../UnitAmount";
 
 export class QuantumCommutator extends Comparable {
   constructor(public A: Alg, public B: Alg) {
@@ -53,7 +52,7 @@ export class Commutator extends AlgCommon<Commutator> {
   constructor(
     aSource: FlexibleAlgSource,
     bSource: FlexibleAlgSource,
-    amount?: UnitAmount,
+    amount?: number,
   ) {
     super();
     this.#quantumWithAmount = new QuantumWithAmount<QuantumCommutator>(
@@ -73,7 +72,7 @@ export class Commutator extends AlgCommon<Commutator> {
     return this.#quantumWithAmount.quantum.B;
   }
 
-  get amount(): UnitAmount {
+  get amount(): number {
     return this.#quantumWithAmount.amount;
   }
 

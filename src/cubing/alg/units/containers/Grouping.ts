@@ -3,7 +3,6 @@ import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
-import type { UnitAmount } from "../UnitAmount";
 
 export class Grouping extends AlgCommon<Grouping> {
   readonly #quantumWithAmount: QuantumWithAmount<Alg>;
@@ -27,7 +26,7 @@ export class Grouping extends AlgCommon<Grouping> {
     return this.#quantumWithAmount.quantum;
   }
 
-  get amount(): UnitAmount {
+  get amount(): number {
     return this.#quantumWithAmount.amount;
   }
 

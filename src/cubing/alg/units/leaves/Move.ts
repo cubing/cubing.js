@@ -5,7 +5,6 @@ import { parseMove, parseQuantumMove, transferCharIndex } from "../../parse";
 import { warnOnce } from "../../warnOnce";
 import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
-import type { UnitAmount } from "../UnitAmount";
 
 interface QuantumMoveModifications {
   outerLayer?: number;
@@ -130,18 +129,14 @@ interface MoveModifications {
   outerLayer?: number;
   innerLayer?: number;
   family?: string;
-  amount?: UnitAmount;
+  amount?: number;
 }
 
 export class Move extends AlgCommon<Move> {
   readonly #quantumWithAmount: QuantumWithAmount<QuantumMove>;
 
   constructor(
-    ...args:
-      | [QuantumMove]
-      | [QuantumMove, UnitAmount]
-      | [string]
-      | [string, UnitAmount]
+    ...args: [QuantumMove] | [QuantumMove, number] | [string] | [string, number]
   ) {
     super();
     if (typeof args[0] === "string") {
@@ -211,7 +206,7 @@ export class Move extends AlgCommon<Move> {
     return parseMove(s);
   }
 
-  get amount(): UnitAmount {
+  get amount(): number {
     return this.#quantumWithAmount.amount;
   }
 

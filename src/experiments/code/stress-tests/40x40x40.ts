@@ -3,7 +3,6 @@
 
 import { Move, QuantumMove } from "../../../cubing/alg";
 import { AlgBuilder } from "../../../cubing/alg/AlgBuilder";
-import type { RepetitionInfo } from "../../../cubing/alg/units/QuantumWithAmount";
 import {
   ExperimentalTwistyAlgViewer,
   TwistyPlayer,
@@ -26,12 +25,7 @@ function layer(n: number): number {
 const nums = icsMoves.split(",").map((s: string) => parseInt(s));
 const algBuilder = new AlgBuilder();
 for (let i = 0; i < nums.length; i += 5) {
-  const repetitionInfo: RepetitionInfo = [
-    undefined,
-    null,
-    2,
-    [null, true] as RepetitionInfo,
-  ][nums[i]];
+  const amount: number = [0, 1, 2, -1][nums[i]];
   let innerLayer: number | null = layer(nums[i + 3]);
   let outerLayer: number | null = layer(nums[i + 2]);
   if (outerLayer === innerLayer) {
@@ -41,15 +35,15 @@ for (let i = 0; i < nums.length; i += 5) {
       innerLayer = null;
     }
     algBuilder.push(
-      new Move(new QuantumMove(family, innerLayer, outerLayer), repetitionInfo),
+      new Move(new QuantumMove(family, innerLayer, outerLayer), amount),
     );
   } else if (outerLayer === 1 && innerLayer === width) {
     const family = "zyx"[nums[i + 1]];
-    algBuilder.push(new Move(new QuantumMove(family), repetitionInfo));
+    algBuilder.push(new Move(new QuantumMove(family), amount));
   } else {
     const family = "fur"[nums[i + 1]];
     algBuilder.push(
-      new Move(new QuantumMove(family, innerLayer, outerLayer), repetitionInfo),
+      new Move(new QuantumMove(family, innerLayer, outerLayer), amount),
     );
   }
 }

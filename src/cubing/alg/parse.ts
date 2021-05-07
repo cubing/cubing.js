@@ -8,7 +8,6 @@ import { LineComment } from "./units/leaves/LineComment";
 import { Move, QuantumMove } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
-import type { UnitAmount } from "./units/UnitAmount";
 
 type StoppingChar = "," | ":" | "]" | ")";
 
@@ -208,7 +207,7 @@ class AlgParser {
     return move;
   }
 
-  private parseAmount(): UnitAmount {
+  private parseAmount(): number {
     const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
     return (
       parseIntWithEmptyFallback(absAmountStr, 1) * (primeStr === "'" ? -1 : 1)
