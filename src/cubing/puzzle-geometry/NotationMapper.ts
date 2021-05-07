@@ -20,7 +20,7 @@ function negate(family: string, v: number | undefined): Move {
   if (v === undefined) {
     v = -1;
   } else if (v === -1) {
-    v = undefined;
+    v = 1;
   } else {
     v = -v;
   }
