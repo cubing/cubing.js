@@ -8,7 +8,7 @@ import { LineComment } from "./units/leaves/LineComment";
 import { Move, QuantumMove } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
-import type { RepetitionInfo } from "./units/Repetition";
+import type { UnitAmount } from "./units/UnitAmount";
 
 type StoppingChar = "," | ":" | "]" | ")";
 
@@ -16,7 +16,7 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
   return n ? parseInt(n) : emptyFallback;
 }
 
-const repetitionRegex = /^(\d+)?('?)/;
+const amountRegex = /^(\d+)?('?)/;
 const moveStartRegex = /^[_\dA-Za-z]/;
 const quantumMoveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
 const commentTextRegex = /[^\n]*/;
@@ -123,9 +123,9 @@ class AlgParser {
         mustNotBeCrowded();
         const alg = this.parseAlgWithStopping([")"]);
         this.mustConsumeNext(")");
-        const repetitionInfo = this.parseRepetition();
+        const amount = this.parseAmount();
         algBuilder.push(
-          addCharIndex(new Grouping(alg, repetitionInfo), savedCharIndex),
+          addCharIndex(new Grouping(alg, amount), savedCharIndex),
         );
         crowded = true;
         continue mainLoop;
@@ -135,20 +135,17 @@ class AlgParser {
         const separator = this.popNext();
         const B = this.parseAlgWithStopping(["]"]);
         this.mustConsumeNext("]");
-        const repetitionInfo = this.parseRepetition();
+        const amount = this.parseAmount();
         switch (separator) {
           case ":":
             algBuilder.push(
-              addCharIndex(new Conjugate(A, B, repetitionInfo), savedCharIndex),
+              addCharIndex(new Conjugate(A, B, amount), savedCharIndex),
             );
             crowded = true;
             continue mainLoop;
           case ",":
             algBuilder.push(
-              addCharIndex(
-                new Commutator(A, B, repetitionInfo),
-                savedCharIndex,
-              ),
+              addCharIndex(new Commutator(A, B, amount), savedCharIndex),
             );
             crowded = true;
             continue mainLoop;
@@ -202,7 +199,7 @@ class AlgParser {
   private parseMoveImpl(): Parsed<Move> {
     const savedCharIndex = this.#idx;
     const quantumMove = this.parseQuantumMoveImpl();
-    const repetitionInfo = this.parseRepetition();
+    const repetitionInfo = this.parseAmount();
 
     const move = addCharIndex(
       new Move(quantumMove, repetitionInfo),
@@ -211,9 +208,11 @@ class AlgParser {
     return move;
   }
 
-  private parseRepetition(): RepetitionInfo {
-    const [, absAmountStr, primeStr] = this.parseRegex(repetitionRegex);
-    return [parseIntWithEmptyFallback(absAmountStr, null), primeStr === "'"];
+  private parseAmount(): UnitAmount {
+    const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
+    return (
+      parseIntWithEmptyFallback(absAmountStr, 1) * (primeStr === "'" ? -1 : 1)
+    );
   }
 
   private parseRegex(regex: RegExp): RegExpExecArray {

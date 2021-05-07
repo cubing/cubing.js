@@ -77,21 +77,21 @@ describe("BlockMove", () => {
   });
 
   it("has a default amount of 1", () => {
-    expect(new Move("x").effectiveAmount).toBe(1);
-    expect(new Move("R").effectiveAmount).toBe(1);
-    expect(new Move("u").effectiveAmount).toBe(1);
-    expect(new Move(new QuantumMove("R", 2)).effectiveAmount).toBe(1);
-    expect(new Move(new QuantumMove("u", 3)).effectiveAmount).toBe(1);
-    expect(new Move(new QuantumMove("u", 3, 2)).effectiveAmount).toBe(1);
+    expect(new Move("x").amount).toBe(1);
+    expect(new Move("R").amount).toBe(1);
+    expect(new Move("u").amount).toBe(1);
+    expect(new Move(new QuantumMove("R", 2)).amount).toBe(1);
+    expect(new Move(new QuantumMove("u", 3)).amount).toBe(1);
+    expect(new Move(new QuantumMove("u", 3, 2)).amount).toBe(1);
   });
 
   it("allows different amounts 1", () => {
-    expect(new Move("x", 2).effectiveAmount).toBe(2);
-    expect(new Move("R", 3).effectiveAmount).toBe(3);
-    expect(new Move("u", -5).effectiveAmount).toBe(-5);
-    expect(new Move(new QuantumMove("R", 2), 10).effectiveAmount).toBe(10);
-    expect(new Move(new QuantumMove("L", 3), -13).effectiveAmount).toBe(-13);
-    expect(new Move(new QuantumMove("u", 12, 2), 15).effectiveAmount).toBe(15);
+    expect(new Move("x", 2).amount).toBe(2);
+    expect(new Move("R", 3).amount).toBe(3);
+    expect(new Move("u", -5).amount).toBe(-5);
+    expect(new Move(new QuantumMove("R", 2), 10).amount).toBe(10);
+    expect(new Move(new QuantumMove("L", 3), -13).amount).toBe(-13);
+    expect(new Move(new QuantumMove("u", 12, 2), 15).amount).toBe(15);
   });
 
   it("catches invalid moves with parseSiGN().", () => {

@@ -66,7 +66,7 @@ export function toAxes(
         prev &&
         prev.end > newEntry.start &&
         Math.sign(prev.event.move.amount) ===
-          Math.sign(newEntry.event.move.effectiveAmount)
+          Math.sign(newEntry.event.move.amount)
       ) {
         prev.event.move = new Move(
           new QuantumMove(
@@ -74,7 +74,7 @@ export function toAxes(
             prev.event.move.innerLayer,
             prev.event.move.outerLayer,
           ),
-          prev.event.move.amount + newEntry.event.move.effectiveAmount,
+          prev.event.move.amount + newEntry.event.move.amount,
         );
       } else {
         axes[axes.length - 1].push(newEntry);

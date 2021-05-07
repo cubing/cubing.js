@@ -154,7 +154,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traverseGrouping(grouping: Grouping, dataDown: DataDown): DataUp {
     const direction = updateDirectionByAmount(
       dataDown.direction,
-      grouping.experimentalEffectiveAmount,
+      grouping.amount,
     );
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-grouping", grouping);
@@ -169,7 +169,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString(")" + grouping.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount: moveCount * Math.abs(grouping.experimentalEffectiveAmount),
+      moveCount: moveCount * Math.abs(grouping.amount),
       element,
     };
   }
@@ -205,7 +205,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.flushQueue();
     const direction = updateDirectionByAmount(
       dataDown.direction,
-      commutator.experimentalEffectiveAmount,
+      commutator.amount,
     );
     const [first, second]: Alg[] = maybeReverseList(
       [commutator.A, commutator.B],
@@ -230,8 +230,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("]" + commutator.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount:
-        moveCount * 2 * Math.abs(commutator.experimentalEffectiveAmount),
+      moveCount: moveCount * 2 * Math.abs(commutator.amount),
       element,
     };
   }
@@ -242,7 +241,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("[");
     const direction = updateDirectionByAmount(
       dataDown.direction,
-      conjugate.experimentalEffectiveAmount,
+      conjugate.amount,
     );
     const aLen = element.addElem(
       this.traverseAlg(conjugate.A, {
@@ -263,8 +262,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("]" + conjugate.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount:
-        (moveCount + aLen) * Math.abs(conjugate.experimentalEffectiveAmount),
+      moveCount: (moveCount + aLen) * Math.abs(conjugate.amount),
       element,
     };
   }

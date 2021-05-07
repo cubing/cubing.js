@@ -54,7 +54,7 @@ class KPuzzleMoveNotation implements MoveNotation {
     const quantumKey = move.quantum.toString();
     r = this.def.moves[quantumKey];
     if (r) {
-      r = multiplyTransformations(this.def, r, move.effectiveAmount);
+      r = multiplyTransformations(this.def, r, move.amount);
       this.cache[key] = r;
     }
     return r;

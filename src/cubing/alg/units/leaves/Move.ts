@@ -3,8 +3,9 @@ import { IterationDirection } from "../../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
 import { parseMove, parseQuantumMove, transferCharIndex } from "../../parse";
 import { warnOnce } from "../../warnOnce";
-import { Repetition, RepetitionInfo } from "../Repetition";
+import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
+import type { UnitAmount } from "../UnitAmount";
 
 interface QuantumMoveModifications {
   outerLayer?: number;
@@ -129,23 +130,23 @@ interface MoveModifications {
   outerLayer?: number;
   innerLayer?: number;
   family?: string;
-  repetition?: RepetitionInfo;
+  amount?: UnitAmount;
 }
 
 export class Move extends AlgCommon<Move> {
-  readonly #repetition: Repetition<QuantumMove>;
+  readonly #quantumWithAmount: QuantumWithAmount<QuantumMove>;
 
   constructor(
     ...args:
       | [QuantumMove]
-      | [QuantumMove, RepetitionInfo]
+      | [QuantumMove, UnitAmount]
       | [string]
-      | [string, RepetitionInfo]
+      | [string, UnitAmount]
   ) {
     super();
     if (typeof args[0] === "string") {
       if (args[1] ?? null) {
-        this.#repetition = new Repetition(
+        this.#quantumWithAmount = new QuantumWithAmount(
           QuantumMove.fromString(args[0]),
           args[1],
         );
@@ -154,13 +155,17 @@ export class Move extends AlgCommon<Move> {
         return Move.fromString(args[0]); // TODO: can we return here?
       }
     }
-    this.#repetition = new Repetition<QuantumMove>(args[0], args[1]);
+    this.#quantumWithAmount = new QuantumWithAmount<QuantumMove>(
+      args[0],
+      args[1],
+    );
   }
 
   isIdentical(other: Comparable): boolean {
     const otherAsMove = other as Move;
     return (
-      other.is(Move) && this.#repetition.isIdentical(otherAsMove.#repetition)
+      other.is(Move) &&
+      this.#quantumWithAmount.isIdentical(otherAsMove.#quantumWithAmount)
     );
   }
 
@@ -168,7 +173,7 @@ export class Move extends AlgCommon<Move> {
     // TODO: handle char indices more consistently among units.
     return transferCharIndex(
       this,
-      new Move(this.#repetition.quantum, this.#repetition.inverseInfo()),
+      new Move(this.#quantumWithAmount.quantum, -this.amount),
     );
   }
 
@@ -178,25 +183,27 @@ export class Move extends AlgCommon<Move> {
     if (iterDir === IterationDirection.Forwards) {
       yield this;
     } else {
-      yield this.modified({ repetition: this.#repetition.inverseInfo() });
+      yield this.modified({
+        amount: -this.amount,
+      });
     }
   }
 
   get quantum(): QuantumMove {
-    return this.#repetition.quantum;
+    return this.#quantumWithAmount.quantum;
   }
 
   equals(other: Move): boolean {
     return (
       this.quantum.isIdentical(other.quantum) &&
-      this.#repetition.isIdentical(other.#repetition)
+      this.#quantumWithAmount.isIdentical(other.#quantumWithAmount)
     );
   }
 
   modified(modifications: MoveModifications): Move {
     return new Move(
-      this.#repetition.quantum.modified(modifications),
-      modifications.repetition ?? this.#repetition.info(),
+      this.#quantumWithAmount.quantum.modified(modifications),
+      modifications.amount ?? this.amount,
     );
   }
 
@@ -204,11 +211,8 @@ export class Move extends AlgCommon<Move> {
     return parseMove(s);
   }
 
-  /** @deprecated */
-  get effectiveAmount(): number {
-    return (
-      (this.#repetition.absAmount ?? 1) * (this.#repetition.prime ? -1 : 1)
-    );
+  get amount(): UnitAmount {
+    return this.#quantumWithAmount.amount;
   }
 
   /** @deprecated */
@@ -219,21 +223,24 @@ export class Move extends AlgCommon<Move> {
 
   /** @deprecated */
   get family(): string {
-    return this.#repetition.quantum.family ?? undefined;
+    return this.#quantumWithAmount.quantum.family ?? undefined;
   }
 
   /** @deprecated */
   get outerLayer(): number | undefined {
-    return this.#repetition.quantum.outerLayer ?? undefined;
+    return this.#quantumWithAmount.quantum.outerLayer ?? undefined;
   }
 
   /** @deprecated */
   get innerLayer(): number | undefined {
-    return this.#repetition.quantum.innerLayer ?? undefined;
+    return this.#quantumWithAmount.quantum.innerLayer ?? undefined;
   }
 
   toString(): string {
-    return this.#repetition.quantum.toString() + this.#repetition.suffix();
+    return (
+      this.#quantumWithAmount.quantum.toString() +
+      this.#quantumWithAmount.suffix()
+    );
   }
 
   // // TODO: Serialize as a string?

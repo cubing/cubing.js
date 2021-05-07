@@ -536,7 +536,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const angle =
         (-this.ease(moveProgress.fraction) *
           moveProgress.direction *
-          move.effectiveAmount *
+          move.amount *
           TAU) /
         ax.order;
       this.movingObj.rotateOnAxis(turnNormal, angle);

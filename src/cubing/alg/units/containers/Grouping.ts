@@ -1,45 +1,45 @@
 import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import { Repetition, RepetitionInfo } from "../Repetition";
+import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
+import type { UnitAmount } from "../UnitAmount";
 
 export class Grouping extends AlgCommon<Grouping> {
-  readonly #repetition: Repetition<Alg>;
+  readonly #quantumWithAmount: QuantumWithAmount<Alg>;
 
-  constructor(algSource: FlexibleAlgSource, repetitionInfo?: RepetitionInfo) {
+  constructor(algSource: FlexibleAlgSource, amount?: number) {
     super();
     const alg = experimentalEnsureAlg(algSource);
-    this.#repetition = new Repetition(alg, repetitionInfo);
+    this.#quantumWithAmount = new QuantumWithAmount(alg, amount);
   }
 
   isIdentical(other: Comparable): boolean {
     const otherAsGrouping = other as Grouping;
     return (
       other.is(Grouping) &&
-      this.#repetition.isIdentical(otherAsGrouping.#repetition)
+      this.#quantumWithAmount.isIdentical(otherAsGrouping.#quantumWithAmount)
     );
   }
 
   /** @deprecated */
   get experimentalAlg(): Alg {
-    return this.#repetition.quantum;
+    return this.#quantumWithAmount.quantum;
   }
 
-  /** @deprecated */
-  get experimentalEffectiveAmount(): number {
-    return this.#repetition.experimentalEffectiveAmount();
+  get amount(): UnitAmount {
+    return this.#quantumWithAmount.amount;
   }
 
   /** @deprecated */
   get experimentalRepetitionSuffix(): string {
-    return this.#repetition.suffix();
+    return this.#quantumWithAmount.suffix();
   }
 
   invert(): Grouping {
     return new Grouping(
-      this.#repetition.quantum,
-      this.#repetition.inverseInfo(),
+      this.#quantumWithAmount.quantum,
+      -this.#quantumWithAmount.amount,
     );
   }
 
@@ -51,7 +51,7 @@ export class Grouping extends AlgCommon<Grouping> {
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
-      yield* this.#repetition.experimentalExpand(iterDir, depth - 1);
+      yield* this.#quantumWithAmount.experimentalExpand(iterDir, depth - 1);
     }
   }
 
@@ -60,7 +60,7 @@ export class Grouping extends AlgCommon<Grouping> {
   }
 
   toString(): string {
-    return `(${this.#repetition.quantum.toString()})${this.#repetition.suffix()}`;
+    return `(${this.#quantumWithAmount.quantum.toString()})${this.#quantumWithAmount.suffix()}`;
   }
 
   // toJSON(): GroupingJSON {

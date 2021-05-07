@@ -63,19 +63,16 @@ export class AlgDuration extends TraversalUp<Duration> {
   }
 
   public traverseGrouping(grouping: Grouping): Duration {
-    return (
-      grouping.experimentalEffectiveAmount *
-      this.traverseAlg(grouping.experimentalAlg)
-    );
+    return grouping.amount * this.traverseAlg(grouping.experimentalAlg);
   }
 
   public traverseMove(move: Move): Duration {
-    return this.durationForAmount(move.effectiveAmount);
+    return this.durationForAmount(move.amount);
   }
 
   public traverseCommutator(commutator: Commutator): Duration {
     return (
-      commutator.experimentalEffectiveAmount *
+      commutator.amount *
       2 *
       (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
     );
@@ -83,7 +80,7 @@ export class AlgDuration extends TraversalUp<Duration> {
 
   public traverseConjugate(conjugate: Conjugate): Duration {
     return (
-      conjugate.experimentalEffectiveAmount *
+      conjugate.amount *
       (2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B))
     );
   }

@@ -88,7 +88,7 @@ export class Canonicalizer {
     }
     const ind = this.moveindex[quantumMoveStr];
     const mod = this.moveorder[ind];
-    let tw = move.effectiveAmount % mod; // TODO
+    let tw = move.amount % mod; // TODO
     if (tw < 0) {
       tw = (tw + mod) % mod;
     }

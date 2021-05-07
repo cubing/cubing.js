@@ -34,27 +34,27 @@ export class NxNxNCubeMapper implements NotationMapper {
     const grip = move.family;
     if (!move.innerLayer && !move.outerLayer) {
       if (grip === "x") {
-        move = new Move("Rv", move.effectiveAmount);
+        move = new Move("Rv", move.amount);
       } else if (grip === "y") {
-        move = new Move("Uv", move.effectiveAmount);
+        move = new Move("Uv", move.amount);
       } else if (grip === "z") {
-        move = new Move("Fv", move.effectiveAmount);
+        move = new Move("Fv", move.amount);
       }
       if ((this.slices & 1) === 1) {
         if (grip === "E") {
           move = new Move(
             new QuantumMove("D", (this.slices + 1) / 2),
-            move.effectiveAmount,
+            move.amount,
           );
         } else if (grip === "M") {
           move = new Move(
             new QuantumMove("L", (this.slices + 1) / 2),
-            move.effectiveAmount,
+            move.amount,
           );
         } else if (grip === "S") {
           move = new Move(
             new QuantumMove("F", (this.slices + 1) / 2),
-            move.effectiveAmount,
+            move.amount,
           );
         }
       }
@@ -62,17 +62,17 @@ export class NxNxNCubeMapper implements NotationMapper {
         if (grip === "e") {
           move = new Move(
             new QuantumMove("D", this.slices - 1, 2),
-            move.effectiveAmount,
+            move.amount,
           );
         } else if (grip === "m") {
           move = new Move(
             new QuantumMove("L", this.slices - 1, 2),
-            move.effectiveAmount,
+            move.amount,
           );
         } else if (grip === "s") {
           move = new Move(
             new QuantumMove("F", this.slices - 1, 2),
-            move.effectiveAmount,
+            move.amount,
           );
         }
       }
@@ -85,17 +85,17 @@ export class NxNxNCubeMapper implements NotationMapper {
     const grip = move.family;
     if (!move.innerLayer && !move.outerLayer) {
       if (grip === "Rv") {
-        return new Move("x", move.effectiveAmount);
+        return new Move("x", move.amount);
       } else if (grip === "Uv") {
-        return new Move("y", move.effectiveAmount);
+        return new Move("y", move.amount);
       } else if (grip === "Fv") {
-        return new Move("z", move.effectiveAmount);
+        return new Move("z", move.amount);
       } else if (grip === "Lv") {
-        return negate("x", move.effectiveAmount);
+        return negate("x", move.amount);
       } else if (grip === "Dv") {
-        return negate("y", move.effectiveAmount);
+        return negate("y", move.amount);
       } else if (grip === "Bv") {
-        return negate("z", move.effectiveAmount);
+        return negate("z", move.amount);
       }
     }
     return move;
@@ -143,7 +143,7 @@ export class FaceRenamingMapper implements NotationMapper {
     } else {
       return new Move(
         new QuantumMove(ngrip, move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     }
   }
@@ -165,25 +165,19 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
 
   public notationToInternal(move: Move): Move | null {
     if (move.innerLayer === undefined && move.outerLayer === undefined) {
-      if (Math.abs(move.effectiveAmount) === 1) {
+      if (Math.abs(move.amount) === 1) {
         if (move.family === "R++") {
-          return new Move(
-            new QuantumMove("L", 3, 2),
-            -2 * move.effectiveAmount,
-          );
+          return new Move(new QuantumMove("L", 3, 2), -2 * move.amount);
         } else if (move.family === "R--") {
-          return new Move(new QuantumMove("L", 3, 2), 2 * move.effectiveAmount);
+          return new Move(new QuantumMove("L", 3, 2), 2 * move.amount);
         } else if (move.family === "D++") {
-          return new Move(
-            new QuantumMove("U", 3, 2),
-            -2 * move.effectiveAmount,
-          );
+          return new Move(new QuantumMove("U", 3, 2), -2 * move.amount);
         } else if (move.family === "D--") {
-          return new Move(new QuantumMove("U", 3, 2), 2 * move.effectiveAmount);
+          return new Move(new QuantumMove("U", 3, 2), 2 * move.amount);
         }
       }
       if (move.family === "y") {
-        return new Move("Uv", move.effectiveAmount);
+        return new Move("Uv", move.amount);
       }
     }
     return this.child.notationToInternal(move);
@@ -194,11 +188,11 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
     if (move.family === "Uv") {
       return new Move(
         new QuantumMove("y", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     }
     if (move.family === "Dv") {
-      return negate("y", move.effectiveAmount);
+      return negate("y", move.amount);
     }
     return this.child.notationToExternal(move);
   }
@@ -214,22 +208,22 @@ export class SkewbNotationMapper implements NotationMapper {
     if (move.family === "F") {
       return new Move(
         new QuantumMove("DFR", move.outerLayer, move.innerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "R") {
       return new Move(
         new QuantumMove("DBR", move.outerLayer, move.innerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "L") {
       return new Move(
         new QuantumMove("DFL", move.outerLayer, move.innerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "B") {
       return new Move(
         new QuantumMove("DBL", move.outerLayer, move.innerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
       /*
        *   (1) We are not including x/y/z in Skewb; they aren't WCA notation and
@@ -252,22 +246,22 @@ export class SkewbNotationMapper implements NotationMapper {
     if (this.child.spinmatch(move.family, "DFR")) {
       return new Move(
         new QuantumMove("F", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (this.child.spinmatch(move.family, "DRB")) {
       return new Move(
         new QuantumMove("R", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (this.child.spinmatch(move.family, "DFL")) {
       return new Move(
         new QuantumMove("L", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (this.child.spinmatch(move.family, "DBL")) {
       return new Move(
         new QuantumMove("B", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
       /*
        *   See (1) above.
@@ -295,45 +289,45 @@ export class PyraminxNotationMapper implements NotationMapper {
     if (move.family === "U") {
       return new Move(
         new QuantumMove("flr", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "R") {
       return new Move(
         new QuantumMove("fld", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "L") {
       return new Move(
         new QuantumMove("frd", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "B") {
       return new Move(
         new QuantumMove("dlr", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "u") {
       return new Move(
         new QuantumMove("FLR", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "r") {
       return new Move(
         new QuantumMove("FLD", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "l") {
       return new Move(
         new QuantumMove("FRD", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "b") {
       return new Move(
         new QuantumMove("DLR", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else if (move.family === "y") {
-      return negate("Dv", move.effectiveAmount);
+      return negate("Dv", move.amount);
     } else {
       return null;
     }
@@ -346,22 +340,22 @@ export class PyraminxNotationMapper implements NotationMapper {
       if (this.child.spinmatch(fam, "FLR")) {
         return new Move(
           new QuantumMove("U", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+          move.amount,
         );
       } else if (this.child.spinmatch(fam, "FLD")) {
         return new Move(
           new QuantumMove("R", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+          move.amount,
         );
       } else if (this.child.spinmatch(fam, "FRD")) {
         return new Move(
           new QuantumMove("L", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+          move.amount,
         );
       } else if (this.child.spinmatch(fam, "DLR")) {
         return new Move(
           new QuantumMove("B", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+          move.amount,
         );
       }
     }
@@ -369,27 +363,27 @@ export class PyraminxNotationMapper implements NotationMapper {
       if (this.child.spinmatch(move.family, "FLR")) {
         return new Move(
           new QuantumMove("u", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+          move.amount,
         );
       } else if (this.child.spinmatch(move.family, "FLD")) {
         return new Move(
           new QuantumMove("r", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+          move.amount,
         );
       } else if (this.child.spinmatch(move.family, "FRD")) {
         return new Move(
           new QuantumMove("l", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+          move.amount,
         );
       } else if (this.child.spinmatch(move.family, "DLR")) {
         return new Move(
           new QuantumMove("b", move.innerLayer, move.outerLayer),
-          move.effectiveAmount,
+          move.amount,
         );
       }
     }
     if (move.family === "Dv") {
-      return negate("y", move.effectiveAmount);
+      return negate("y", move.amount);
     } else {
       return null;
     }
@@ -407,7 +401,7 @@ export class FTONotationMapper implements NotationMapper {
     ) {
       return new Move(
         new QuantumMove("FLRv", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     } else {
       const r = this.child.notationToInternal(move);
@@ -424,7 +418,7 @@ export class FTONotationMapper implements NotationMapper {
     if (this.sw.spinmatch(fam, "FLUR")) {
       return new Move(
         new QuantumMove("T", move.innerLayer, move.outerLayer),
-        move.effectiveAmount,
+        move.amount,
       );
     }
     return this.child.notationToExternal(move);
