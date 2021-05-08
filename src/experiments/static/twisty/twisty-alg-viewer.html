@@ -16,6 +16,9 @@
         place-content: center;
         font-size: 1.5em;
       }
+      .monospace {
+        font-family: monospace;
+      }
       twisty-alg-leaf-elem:not(.comment):hover {
         cursor: pointer;
         color: #4285f4;
@@ -64,6 +67,23 @@ U // AUF"
       <div class="alg-example">
         <experimental-twisty-alg-viewer
           for="wr-3.47"
+        ></experimental-twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="megaminx-scramble"
+        alg="R-- D-- R++ D-- R-- D-- R++ D++ R++ D-- U'
+R-- D++ R-- D-- R++ D-- R++ D++ R++ D-- U'
+R++ D++ R-- D-- R++ D-- R++ D-- R++ D++ U
+R-- D-- R-- D++ R-- D-- R-- D-- R-- D-- U'
+R-- D++ R-- D++ R-- D-- R-- D++ R-- D++ U
+R++ D++ R-- D-- R-- D-- R++ D++ R++ D++ U
+R-- D++ R++ D-- R-- D-- R-- D-- R-- D-- U'"
+        puzzle="megaminx"
+      ></twisty-player>
+      <div class="alg-example monospace">
+        <experimental-twisty-alg-viewer
+          for="megaminx-scramble"
         ></experimental-twisty-alg-viewer>
       </div>
     </div>

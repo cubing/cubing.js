@@ -168,6 +168,13 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
         } else if (move.family === "D--") {
           return new Move(new QuantumMove("U", 3, 2), 2 * move.amount);
         }
+
+        // TODO: Figure out if `cubing/alg` should parse `R++` to a family of `R++`.
+        if (move.family === "R_PLUSPLUS_") {
+          return new Move(new QuantumMove("L", 3, 2), -2 * move.amount);
+        } else if (move.family === "D_PLUSPLUS_") {
+          return new Move(new QuantumMove("U", 3, 2), -2 * move.amount);
+        }
       }
       if (move.family === "y") {
         return new Move("Uv", move.amount);
