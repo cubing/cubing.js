@@ -158,6 +158,7 @@ class AlgParser {
         crowded = false;
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
+        mustNotBeCrowded();
         if (this.tryConsumeNext("/")) {
           const [text] = this.parseRegex(commentTextRegex);
           algBuilder.push(addCharIndex(new LineComment(text), savedCharIndex));
@@ -165,6 +166,7 @@ class AlgParser {
           continue mainLoop;
         } else {
           algBuilder.push(addCharIndex(new Move("_SLASH_"), savedCharIndex));
+          crowded = true;
           continue mainLoop;
         }
       } else if (this.tryConsumeNext(".")) {
