@@ -22,6 +22,11 @@ class Square1TupleFormatter {
         U.as(Move)?.quantum.isIdentical(this.quantumU_SQ_) &&
         D.as(Move)?.quantum.isIdentical(this.quantumD_SQ_)
       ) {
+        if (grouping.amount !== 1) {
+          throw new Error(
+            "Square-1 tuples cannot have an amount other than 1.",
+          );
+        }
         return `(${(U as Move).amount}, ${(D as Move).amount})`;
       }
     }
