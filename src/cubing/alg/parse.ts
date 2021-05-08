@@ -18,7 +18,7 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
 const amountRegex = /^(\d+)?('?)/;
 const moveStartRegex = /^[_\dA-Za-z]/; // TODO: Handle slash
 const quantumMoveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
-const commentTextRegex = /[^\n]*/;
+const commentTextRegex = /^[^\n]*/;
 
 export function parseAlg(s: string): Alg {
   return new AlgParser().parseAlg(s);
