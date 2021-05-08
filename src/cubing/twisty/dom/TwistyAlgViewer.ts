@@ -152,6 +152,11 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   }
 
   public traverseGrouping(grouping: Grouping, dataDown: DataDown): DataUp {
+    const square1Tuple = grouping.experimentalAsSquare1Tuple();
+    // if (square1Tuplle) {
+
+    // }
+
     const direction = updateDirectionByAmount(
       dataDown.direction,
       grouping.amount,
@@ -159,13 +164,39 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-grouping", grouping);
     element.addString("(");
-    moveCount += element.addElem(
-      this.traverseAlg(grouping.experimentalAlg, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
-        twistyAlgViewer: dataDown.twistyAlgViewer,
-        direction,
-      }),
-    );
+
+    if (square1Tuple) {
+      moveCount += element.addElem({
+        moveCount: 1,
+        element: new TwistyAlgLeafElem(
+          "twisty-alg-move", // TODO: Mark the tuple with a special class?
+          square1Tuple[0].amount.toString(),
+          dataDown,
+          square1Tuple[0],
+          true,
+        ),
+      });
+      element.addString(", ");
+      moveCount += element.addElem({
+        moveCount: 1,
+        element: new TwistyAlgLeafElem(
+          "twisty-alg-move", // TODO: Mark the tuple with a special class?
+          square1Tuple[1].amount.toString(),
+          dataDown,
+          square1Tuple[1],
+          true,
+        ),
+      });
+    } else {
+      moveCount += element.addElem(
+        this.traverseAlg(grouping.experimentalAlg, {
+          earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+          twistyAlgViewer: dataDown.twistyAlgViewer,
+          direction,
+        }),
+      );
+    }
+
     element.addString(")" + grouping.experimentalRepetitionSuffix);
     element.flushQueue();
     return {

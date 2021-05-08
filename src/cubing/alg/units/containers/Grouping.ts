@@ -12,6 +12,14 @@ class Square1TupleFormatter {
   quantumD_SQ_: QuantumMove | null = null;
 
   format(grouping: Grouping): string | null {
+    const amounts = this.tuple(grouping);
+    if (!amounts) {
+      return null;
+    }
+    return `(${amounts.map((move) => move.amount).join(", ")})`;
+  }
+
+  tuple(grouping: Grouping): [moveU: Move, moveD: Move] | null {
     this.quantumU_SQ_ ||= new QuantumMove("U_SQ_");
     this.quantumD_SQ_ ||= new QuantumMove("D_SQ_");
 
@@ -27,7 +35,7 @@ class Square1TupleFormatter {
             "Square-1 tuples cannot have an amount other than 1.",
           );
         }
-        return `(${(U as Move).amount}, ${(D as Move).amount})`;
+        return [U as Move, D as Move]; // TODO: can we reuse the casting from above?
       }
     }
     return null;
@@ -94,6 +102,10 @@ export class Grouping extends AlgCommon<Grouping> {
       square1TupleFormatterInstance.format(this) ??
       `(${this.#quantumWithAmount.quantum.toString()})${this.#quantumWithAmount.suffix()}`
     );
+  }
+
+  experimentalAsSquare1Tuple(): [moveU: Move, moveD: Move] | null {
+    return square1TupleFormatterInstance.tuple(this);
   }
 
   // toJSON(): GroupingJSON {
