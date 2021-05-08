@@ -19,7 +19,7 @@ const amountRegex = /^(\d+)?('?)/;
 const moveStartRegex = /^[_\dA-Za-z]/; // TODO: Handle slash
 const quantumMoveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
 const commentTextRegex = /^[^\n]*/;
-const square1PairStart = /^(-?\d+), /; // TODO: match up with other whitespace handling?
+const square1PairStart = /^(-?\d+), ?/; // TODO: match up with other whitespace handling?
 const square1PairEnd = /^(-?\d+)\)/; // TODO: match up with other whitespace handling?
 
 export function parseAlg(s: string): Alg {
@@ -178,13 +178,14 @@ class AlgParser {
         crowded = false;
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
-        mustNotBeCrowded();
         if (this.tryConsumeNext("/")) {
+          mustNotBeCrowded();
           const [text] = this.parseRegex(commentTextRegex);
           algBuilder.push(addCharIndex(new LineComment(text), savedCharIndex));
           crowded = false;
           continue mainLoop;
         } else {
+          // We allow crowding here to account for csTimer scrambles, which don't have a space between a Square-1 tuple and the following slash.
           algBuilder.push(addCharIndex(new Move("_SLASH_"), savedCharIndex));
           crowded = true;
           continue mainLoop;
