@@ -1,8 +1,12 @@
 import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
+import { Move, QuantumMove } from "../leaves/Move";
 import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
+
+const quantumU_SQ_ = new QuantumMove("U_SQ_");
+const quantumD_SQ_ = new QuantumMove("D_SQ_");
 
 export class Grouping extends AlgCommon<Grouping> {
   readonly #quantumWithAmount: QuantumWithAmount<Alg>;
@@ -59,6 +63,19 @@ export class Grouping extends AlgCommon<Grouping> {
   }
 
   toString(): string {
+    const quantum = this.#quantumWithAmount.quantum;
+    if (quantum.experimentalNumUnits() === 2) {
+      const [U, D] = quantum.units();
+      if (
+        U.is(Move) &&
+        (U as Move).quantum.isIdentical(quantumU_SQ_) &&
+        D.is(Move) &&
+        (D as Move).quantum.isIdentical(quantumD_SQ_)
+      ) {
+        return `(${(U as Move).amount}, ${(D as Move).amount})`;
+      }
+    }
+
     return `(${this.#quantumWithAmount.quantum.toString()})${this.#quantumWithAmount.suffix()}`;
   }
 

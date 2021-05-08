@@ -1,4 +1,4 @@
-import type { Alg } from "./Alg";
+import { Alg } from "./Alg";
 import { AlgBuilder } from "./AlgBuilder";
 import type { Unit } from "./units";
 import { Commutator } from "./units/containers/Commutator";
@@ -19,6 +19,8 @@ const amountRegex = /^(\d+)?('?)/;
 const moveStartRegex = /^[_\dA-Za-z]/; // TODO: Handle slash
 const quantumMoveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
 const commentTextRegex = /^[^\n]*/;
+const square1PairStart = /^(-?\d+), /; // TODO: match up with other whitespace handling?
+const square1PairEnd = /^(-?\d+)\)/; // TODO: match up with other whitespace handling?
 
 export function parseAlg(s: string): Alg {
   return new AlgParser().parseAlg(s);
@@ -122,14 +124,32 @@ class AlgParser {
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
         mustNotBeCrowded();
-        const alg = this.parseAlgWithStopping([")"]);
-        this.mustConsumeNext(")");
-        const amount = this.parseAmount();
-        algBuilder.push(
-          addCharIndex(new Grouping(alg, amount), savedCharIndex),
-        );
-        crowded = true;
-        continue mainLoop;
+        const sq1PairStartMatch = this.tryRegex(square1PairStart);
+        if (sq1PairStartMatch) {
+          const savedCharIndexD = this.#idx;
+          const sq1PairEndMatch = this.parseRegex(square1PairEnd);
+          const uMove = addCharIndex(
+            new Move(new QuantumMove("U_SQ_"), parseInt(sq1PairStartMatch[1])),
+            savedCharIndex + 1,
+          );
+          const dMove = addCharIndex(
+            new Move(new QuantumMove("D_SQ_"), parseInt(sq1PairEndMatch[1])),
+            savedCharIndexD,
+          );
+          const alg = addCharIndex(new Alg([uMove, dMove]), savedCharIndex + 1);
+          algBuilder.push(addCharIndex(new Grouping(alg), savedCharIndex));
+          crowded = true;
+          continue mainLoop;
+        } else {
+          const alg = this.parseAlgWithStopping([")"]);
+          this.mustConsumeNext(")");
+          const amount = this.parseAmount();
+          algBuilder.push(
+            addCharIndex(new Grouping(alg, amount), savedCharIndex),
+          );
+          crowded = true;
+          continue mainLoop;
+        }
       } else if (this.tryConsumeNext("[")) {
         mustNotBeCrowded();
         const A = this.parseAlgWithStopping([",", ":"]);
@@ -270,6 +290,16 @@ class AlgParser {
     const arr = regex.exec(this.remaining());
     if (arr === null) {
       throw new Error("internal parsing error"); // TODO
+    }
+    this.#idx += arr[0].length;
+    return arr;
+  }
+
+  // TOD: can we avoid this?
+  private tryRegex(regex: RegExp): RegExpExecArray | null {
+    const arr = regex.exec(this.remaining());
+    if (arr === null) {
+      return null;
     }
     this.#idx += arr[0].length;
     return arr;

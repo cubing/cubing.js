@@ -64,7 +64,7 @@ export const sq1HyperOrbitKPuzzle: KPuzzleDefinition = {
     EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
   },
   moves: {
-    U: {
+    U_SQ_: {
       WEDGES: {
         permutation: [
           11,
@@ -121,7 +121,7 @@ export const sq1HyperOrbitKPuzzle: KPuzzleDefinition = {
       },
       EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
     },
-    D: {
+    D_SQ_: {
       WEDGES: {
         permutation: [
           0,
