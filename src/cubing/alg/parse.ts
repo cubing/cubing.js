@@ -100,10 +100,10 @@ class AlgParser {
     // We're "crowded" if there was not a space or newline since the last unit.
     let crowded = false;
 
-    const mustNotBeCrowded = (): void => {
+    const mustNotBeCrowded = (idx: number): void => {
       if (crowded) {
         throw new Error(
-          `Unexpected unit at idx ${this.#idx}. Are you missing a space?`,
+          `Unexpected character at index ${idx}. Are you missing a space?`,
         ); // TODO better error message
       }
     };
@@ -117,13 +117,13 @@ class AlgParser {
         crowded = false;
         continue mainLoop;
       } else if (moveStartRegex.test(this.#input[this.#idx])) {
-        mustNotBeCrowded();
+        mustNotBeCrowded(savedCharIndex);
         const move = this.parseMoveImpl();
         algBuilder.push(move);
         crowded = true;
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
-        mustNotBeCrowded();
+        mustNotBeCrowded(savedCharIndex);
         const sq1PairStartMatch = this.tryRegex(square1PairStart);
         if (sq1PairStartMatch) {
           const savedCharIndexD = this.#idx;
@@ -151,7 +151,7 @@ class AlgParser {
           continue mainLoop;
         }
       } else if (this.tryConsumeNext("[")) {
-        mustNotBeCrowded();
+        mustNotBeCrowded(savedCharIndex);
         const A = this.parseAlgWithStopping([",", ":"]);
         const separator = this.popNext();
         const B = this.parseAlgWithStopping(["]"]);
@@ -179,7 +179,7 @@ class AlgParser {
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
         if (this.tryConsumeNext("/")) {
-          mustNotBeCrowded();
+          mustNotBeCrowded(savedCharIndex);
           const [text] = this.parseRegex(commentTextRegex);
           algBuilder.push(addCharIndex(new LineComment(text), savedCharIndex));
           crowded = false;
@@ -191,7 +191,7 @@ class AlgParser {
           continue mainLoop;
         }
       } else if (this.tryConsumeNext(".")) {
-        mustNotBeCrowded();
+        mustNotBeCrowded(savedCharIndex);
         algBuilder.push(addCharIndex(new Pause(), savedCharIndex));
         while (this.tryConsumeNext(".")) {
           algBuilder.push(addCharIndex(new Pause(), this.#idx - 1)); // TODO: Can we precompute index similarly to other units?
