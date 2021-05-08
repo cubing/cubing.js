@@ -5,8 +5,30 @@ import { Move, QuantumMove } from "../leaves/Move";
 import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
 
-const quantumU_SQ_ = new QuantumMove("U_SQ_");
-const quantumD_SQ_ = new QuantumMove("D_SQ_");
+// This is a workaround for `jest`, which doesn't handle cycles of imports inside `cubing/alg`.
+// We need to lazy-initialize the reusable quantum moves for Square-1, so we create this wrapper for it.
+class Square1TupleFormatter {
+  quantumU_SQ_: QuantumMove | null = null;
+  quantumD_SQ_: QuantumMove | null = null;
+
+  format(grouping: Grouping): string | null {
+    this.quantumU_SQ_ ||= new QuantumMove("U_SQ_");
+    this.quantumD_SQ_ ||= new QuantumMove("D_SQ_");
+
+    const quantumAlg = grouping.experimentalAlg;
+    if (quantumAlg.experimentalNumUnits() === 2) {
+      const [U, D] = quantumAlg.units();
+      if (
+        U.as(Move)?.quantum.isIdentical(this.quantumU_SQ_) &&
+        D.as(Move)?.quantum.isIdentical(this.quantumD_SQ_)
+      ) {
+        return `(${(U as Move).amount}, ${(D as Move).amount})`;
+      }
+    }
+    return null;
+  }
+}
+const square1TupleFormatterInstance = new Square1TupleFormatter();
 
 export class Grouping extends AlgCommon<Grouping> {
   readonly #quantumWithAmount: QuantumWithAmount<Alg>;
@@ -63,20 +85,10 @@ export class Grouping extends AlgCommon<Grouping> {
   }
 
   toString(): string {
-    const quantum = this.#quantumWithAmount.quantum;
-    if (quantum.experimentalNumUnits() === 2) {
-      const [U, D] = quantum.units();
-      if (
-        U.is(Move) &&
-        (U as Move).quantum.isIdentical(quantumU_SQ_) &&
-        D.is(Move) &&
-        (D as Move).quantum.isIdentical(quantumD_SQ_)
-      ) {
-        return `(${(U as Move).amount}, ${(D as Move).amount})`;
-      }
-    }
-
-    return `(${this.#quantumWithAmount.quantum.toString()})${this.#quantumWithAmount.suffix()}`;
+    return (
+      square1TupleFormatterInstance.format(this) ??
+      `(${this.#quantumWithAmount.quantum.toString()})${this.#quantumWithAmount.suffix()}`
+    );
   }
 
   // toJSON(): GroupingJSON {
