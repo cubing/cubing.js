@@ -232,7 +232,7 @@ class AlgParser {
     }
 
     let quantumMove = this.parseQuantumMoveImpl();
-    let [amount, hadEmptyAmount] = this.parseAmountAndTrackEmptyAmount();
+    let [amount, hadEmptyAbsAmount] = this.parseAmountAndTrackEmptyAbsAmount();
     const suffix = this.parseMoveSuffix();
 
     if (suffix) {
@@ -245,12 +245,12 @@ class AlgParser {
           "Pochmann ++ or -- moves cannot have an amount other than 1.",
         );
       }
-      if ((suffix === "++" || suffix === "--") && !hadEmptyAmount) {
+      if ((suffix === "++" || suffix === "--") && !hadEmptyAbsAmount) {
         throw new Error(
           "Pochmann ++ or -- moves cannot have an amount written as a number.",
         );
       }
-      if ((suffix === "+" || suffix === "-") && hadEmptyAmount) {
+      if ((suffix === "+" || suffix === "-") && hadEmptyAbsAmount) {
         throw new Error(
           "Clock dial moves must have an amount written as a natural number followed by + or -.",
         );
@@ -292,7 +292,7 @@ class AlgParser {
     return null;
   }
 
-  private parseAmountAndTrackEmptyAmount(): [number, boolean] {
+  private parseAmountAndTrackEmptyAbsAmount(): [number, boolean] {
     const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
     return [
       parseIntWithEmptyFallback(absAmountStr, 1) * (primeStr === "'" ? -1 : 1),
