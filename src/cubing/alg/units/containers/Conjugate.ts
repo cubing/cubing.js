@@ -11,11 +11,10 @@ export class QuantumCommutator extends Comparable {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsQuantumCommutator = other as QuantumCommutator;
-    return (
-      other.is(QuantumCommutator) &&
-      this.A.isIdentical(otherAsQuantumCommutator.A) &&
-      this.B.isIdentical(otherAsQuantumCommutator.B)
+    const otherAsQuantumCommutator = other.as(QuantumCommutator);
+    return !!(
+      otherAsQuantumCommutator?.A.isIdentical(this.A) &&
+      otherAsQuantumCommutator?.B.isIdentical(this.B)
     );
   }
 
