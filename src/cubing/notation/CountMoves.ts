@@ -32,9 +32,7 @@ class CountMoves extends TraversalUp<number> {
     // const unit: Unit = Alg.fromString("SDf");
     // console.log(unit);
     const alg: Alg = grouping.experimentalAlg;
-    return (
-      this.traverseAlg(alg) * Math.abs(grouping.experimentalEffectiveAmount)
-    );
+    return this.traverseAlg(alg) * Math.abs(grouping.amount);
   }
 
   public traverseMove(move: Move): number {
@@ -43,7 +41,7 @@ class CountMoves extends TraversalUp<number> {
 
   public traverseCommutator(commutator: Commutator): number {
     return (
-      Math.abs(commutator.experimentalEffectiveAmount) *
+      Math.abs(commutator.amount) *
       2 *
       (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
     );
@@ -51,7 +49,7 @@ class CountMoves extends TraversalUp<number> {
 
   public traverseConjugate(conjugate: Conjugate): number {
     return (
-      Math.abs(conjugate.experimentalEffectiveAmount) *
+      Math.abs(conjugate.amount) *
       (2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B))
     );
   }

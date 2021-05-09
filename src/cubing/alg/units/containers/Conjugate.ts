@@ -1,7 +1,7 @@
 import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import { Repetition, RepetitionInfo } from "../Repetition";
+import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
 
 export class QuantumCommutator extends Comparable {
@@ -11,11 +11,10 @@ export class QuantumCommutator extends Comparable {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsQuantumCommutator = other as QuantumCommutator;
-    return (
-      other.is(QuantumCommutator) &&
-      this.A.isIdentical(otherAsQuantumCommutator.A) &&
-      this.B.isIdentical(otherAsQuantumCommutator.B)
+    const otherAsQuantumCommutator = other.as(QuantumCommutator);
+    return !!(
+      otherAsQuantumCommutator?.A.isIdentical(this.A) &&
+      otherAsQuantumCommutator?.B.isIdentical(this.B)
     );
   }
 
@@ -39,54 +38,53 @@ export class QuantumCommutator extends Comparable {
 }
 
 export class Conjugate extends AlgCommon<Conjugate> {
-  readonly #repetition: Repetition<QuantumCommutator>;
+  readonly #quantumWithAmount: QuantumWithAmount<QuantumCommutator>;
 
   constructor(
     aSource: FlexibleAlgSource,
     bSource: FlexibleAlgSource,
-    repetitionInfo?: RepetitionInfo,
+    amount?: number,
   ) {
     super();
-    this.#repetition = new Repetition<QuantumCommutator>(
+    this.#quantumWithAmount = new QuantumWithAmount<QuantumCommutator>(
       new QuantumCommutator(
         experimentalEnsureAlg(aSource),
         experimentalEnsureAlg(bSource),
       ), // TODO
-      repetitionInfo,
+      amount,
     );
   }
 
   get A(): Alg {
-    return this.#repetition.quantum.A;
+    return this.#quantumWithAmount.quantum.A;
   }
 
   get B(): Alg {
-    return this.#repetition.quantum.B;
+    return this.#quantumWithAmount.quantum.B;
   }
 
-  /** @deprecated */
-  get experimentalEffectiveAmount(): number {
-    return this.#repetition.experimentalEffectiveAmount();
+  get amount(): number {
+    return this.#quantumWithAmount.amount;
   }
 
   /** @deprecated */
   get experimentalRepetitionSuffix(): string {
-    return this.#repetition.suffix();
+    return this.#quantumWithAmount.suffix();
   }
 
   isIdentical(other: Comparable): boolean {
     const otherAsConjugate = other as Conjugate;
     return (
       other.is(Conjugate) &&
-      this.#repetition.isIdentical(otherAsConjugate.#repetition)
+      this.#quantumWithAmount.isIdentical(otherAsConjugate.#quantumWithAmount)
     );
   }
 
   invert(): Conjugate {
     return new Conjugate(
-      this.#repetition.quantum.A,
-      this.#repetition.quantum.B.invert(),
-      this.#repetition.info(),
+      this.#quantumWithAmount.quantum.A,
+      this.#quantumWithAmount.quantum.B.invert(),
+      -this.amount,
     );
   }
 
@@ -98,12 +96,12 @@ export class Conjugate extends AlgCommon<Conjugate> {
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
-      yield* this.#repetition.experimentalExpand(iterDir, depth);
+      yield* this.#quantumWithAmount.experimentalExpand(iterDir, depth);
     }
   }
 
   toString(): string {
-    return `${this.#repetition.quantum.toString()}${this.#repetition.suffix()}`;
+    return `${this.#quantumWithAmount.quantum.toString()}${this.#quantumWithAmount.suffix()}`;
   }
 
   // toJSON(): ConjugateJSON {

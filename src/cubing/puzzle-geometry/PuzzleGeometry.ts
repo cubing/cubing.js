@@ -1663,14 +1663,7 @@ export class PuzzleGeometry {
         "! full puzzle rotations must be specified with v suffix.",
       );
     }
-    const r = [
-      undefined,
-      msi,
-      loslice,
-      hislice,
-      firstgrip,
-      move.effectiveAmount,
-    ];
+    const r = [undefined, msi, loslice, hislice, firstgrip, move.amount];
     return r;
   }
 
@@ -2849,7 +2842,7 @@ class PGNotation implements MoveNotation {
     if (move.innerLayer) {
       r = r + move.innerLayer + ",";
     }
-    r = r + move.family + "," + move.effectiveAmount;
+    r = r + move.family + "," + move.amount;
     return r;
   }
 }

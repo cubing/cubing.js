@@ -145,7 +145,7 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
         const newMove = newUnit as Move;
         if (lastMove.quantum.isIdentical(newMove.quantum)) {
           newUnits.pop();
-          let newAmount = lastMove.effectiveAmount + newMove.effectiveAmount;
+          let newAmount = lastMove.amount + newMove.amount;
           if (options?.quantumMoveOrder) {
             const order = options.quantumMoveOrder(lastMove.quantum);
             newAmount = (((newAmount % order) + order + 1) % order) - 1; // TODO

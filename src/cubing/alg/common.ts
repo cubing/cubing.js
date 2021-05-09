@@ -13,6 +13,10 @@ export abstract class Comparable {
     return this instanceof c;
   }
 
+  as<T>(c: new (...args: any) => T): T | null {
+    return this instanceof c ? this : null;
+  }
+
   abstract isIdentical(other: Comparable): boolean;
 }
 

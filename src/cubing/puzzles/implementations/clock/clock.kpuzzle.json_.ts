@@ -57,7 +57,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
     FRAME: { permutation: [0], orientation: [0] },
   },
   moves: {
-    UR: {
+    UR_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -106,7 +106,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    DR: {
+    DR_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -155,7 +155,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    DL: {
+    DL_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -204,7 +204,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    UL: {
+    UL_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -253,7 +253,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    U: {
+    U_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -302,7 +302,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    R: {
+    R_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -351,7 +351,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    D: {
+    D_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -400,7 +400,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    L: {
+    L_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -449,7 +449,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    ALL: {
+    ALL_PLUS_: {
       DIALS: {
         permutation: [
           0,
@@ -498,7 +498,7 @@ export const clockKPuzzle: KPuzzleDefinition = {
       },
       FRAME: { permutation: [0], orientation: [0] },
     },
-    FLIP: {
+    y2: {
       DIALS: {
         permutation: [
           9,
@@ -546,6 +546,206 @@ export const clockKPuzzle: KPuzzleDefinition = {
         orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       FRAME: { permutation: [0], orientation: [1] },
+    },
+    UL: {
+      // TODO: define "pin up" as something other than a normal move.
+      DIALS: {
+        permutation: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+        ],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      FACES: {
+        permutation: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+        ],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      FRAME: { permutation: [0], orientation: [0] },
+    },
+    UR: {
+      // TODO: define "pin up" as something other than a normal move.
+      DIALS: {
+        permutation: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+        ],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      FACES: {
+        permutation: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+        ],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      FRAME: { permutation: [0], orientation: [0] },
+    },
+    DL: {
+      // TODO: define "pin up" as something other than a normal move.
+      DIALS: {
+        permutation: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+        ],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      FACES: {
+        permutation: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+        ],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      FRAME: { permutation: [0], orientation: [0] },
+    },
+    DR: {
+      // TODO: define "pin up" as something other than a normal move.
+      DIALS: {
+        permutation: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+        ],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      FACES: {
+        permutation: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+        ],
+        orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+      FRAME: { permutation: [0], orientation: [0] },
     },
   },
 };

@@ -715,7 +715,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
           turnNormal,
           (-this.ease(moveProgress.fraction) *
             moveProgress.direction *
-            move.effectiveAmount *
+            move.amount *
             TAU) /
             4,
         );

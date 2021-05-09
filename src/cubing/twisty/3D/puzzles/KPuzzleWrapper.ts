@@ -128,7 +128,7 @@ export class QTMCounterPuzzle extends PuzzleWrapper {
   }
 
   public stateFromMove(move: Move): QTMCounterState {
-    return new QTMCounterState(Math.abs(move.effectiveAmount));
+    return new QTMCounterState(Math.abs(move.amount));
   }
 
   public identity(): QTMCounterState {

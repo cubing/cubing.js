@@ -152,24 +152,55 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   }
 
   public traverseGrouping(grouping: Grouping, dataDown: DataDown): DataUp {
+    const square1Tuple = grouping.experimentalAsSquare1Tuple();
+    // if (square1Tuplle) {
+
+    // }
+
     const direction = updateDirectionByAmount(
       dataDown.direction,
-      grouping.experimentalEffectiveAmount,
+      grouping.amount,
     );
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-grouping", grouping);
     element.addString("(");
-    moveCount += element.addElem(
-      this.traverseAlg(grouping.experimentalAlg, {
-        earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
-        twistyAlgViewer: dataDown.twistyAlgViewer,
-        direction,
-      }),
-    );
+
+    if (square1Tuple) {
+      moveCount += element.addElem({
+        moveCount: 1,
+        element: new TwistyAlgLeafElem(
+          "twisty-alg-move", // TODO: Mark the tuple with a special class?
+          square1Tuple[0].amount.toString(),
+          dataDown,
+          square1Tuple[0],
+          true,
+        ),
+      });
+      element.addString(", ");
+      moveCount += element.addElem({
+        moveCount: 1,
+        element: new TwistyAlgLeafElem(
+          "twisty-alg-move", // TODO: Mark the tuple with a special class?
+          square1Tuple[1].amount.toString(),
+          dataDown,
+          square1Tuple[1],
+          true,
+        ),
+      });
+    } else {
+      moveCount += element.addElem(
+        this.traverseAlg(grouping.experimentalAlg, {
+          earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+          twistyAlgViewer: dataDown.twistyAlgViewer,
+          direction,
+        }),
+      );
+    }
+
     element.addString(")" + grouping.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount: moveCount * Math.abs(grouping.experimentalEffectiveAmount),
+      moveCount: moveCount * Math.abs(grouping.amount),
       element,
     };
   }
@@ -205,7 +236,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.flushQueue();
     const direction = updateDirectionByAmount(
       dataDown.direction,
-      commutator.experimentalEffectiveAmount,
+      commutator.amount,
     );
     const [first, second]: Alg[] = maybeReverseList(
       [commutator.A, commutator.B],
@@ -230,8 +261,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("]" + commutator.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount:
-        moveCount * 2 * Math.abs(commutator.experimentalEffectiveAmount),
+      moveCount: moveCount * 2 * Math.abs(commutator.amount),
       element,
     };
   }
@@ -242,7 +272,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("[");
     const direction = updateDirectionByAmount(
       dataDown.direction,
-      conjugate.experimentalEffectiveAmount,
+      conjugate.amount,
     );
     const aLen = element.addElem(
       this.traverseAlg(conjugate.A, {
@@ -263,8 +293,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     element.addString("]" + conjugate.experimentalRepetitionSuffix);
     element.flushQueue();
     return {
-      moveCount:
-        (moveCount + aLen) * Math.abs(conjugate.experimentalEffectiveAmount),
+      moveCount: (moveCount + aLen) * Math.abs(conjugate.amount),
       element,
     };
   }

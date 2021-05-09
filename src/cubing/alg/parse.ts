@@ -1,4 +1,4 @@
-import type { Alg } from "./Alg";
+import { Alg } from "./Alg";
 import { AlgBuilder } from "./AlgBuilder";
 import type { Unit } from "./units";
 import { Commutator } from "./units/containers/Commutator";
@@ -8,7 +8,6 @@ import { LineComment } from "./units/leaves/LineComment";
 import { Move, QuantumMove } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
 import { Pause } from "./units/leaves/Pause";
-import type { RepetitionInfo } from "./units/Repetition";
 
 type StoppingChar = "," | ":" | "]" | ")";
 
@@ -16,10 +15,12 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
   return n ? parseInt(n) : emptyFallback;
 }
 
-const repetitionRegex = /^(\d+)?('?)/;
-const moveStartRegex = /^[_\dA-Za-z]/;
+const amountRegex = /^(\d+)?('?)/;
+const moveStartRegex = /^[_\dA-Za-z]/; // TODO: Handle slash
 const quantumMoveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
-const commentTextRegex = /[^\n]*/;
+const commentTextRegex = /^[^\n]*/;
+const square1PairStart = /^(-?\d+), ?/; // TODO: match up with other whitespace handling?
+const square1PairEnd = /^(-?\d+)\)/; // TODO: match up with other whitespace handling?
 
 export function parseAlg(s: string): Alg {
   return new AlgParser().parseAlg(s);
@@ -54,6 +55,8 @@ export function transferCharIndex<T extends Alg | Unit>(from: T, to: T): T {
   }
   return to;
 }
+
+type MoveSuffix = "+" | "++" | "-" | "--";
 
 // TODO: support recording string locations for moves.
 class AlgParser {
@@ -97,10 +100,10 @@ class AlgParser {
     // We're "crowded" if there was not a space or newline since the last unit.
     let crowded = false;
 
-    const mustNotBeCrowded = (): void => {
+    const mustNotBeCrowded = (idx: number): void => {
       if (crowded) {
         throw new Error(
-          `Unexpected unit at idx ${this.#idx}. Are you missing a space?`,
+          `Unexpected character at index ${idx}. Are you missing a space?`,
         ); // TODO better error message
       }
     };
@@ -114,41 +117,56 @@ class AlgParser {
         crowded = false;
         continue mainLoop;
       } else if (moveStartRegex.test(this.#input[this.#idx])) {
-        mustNotBeCrowded();
+        mustNotBeCrowded(savedCharIndex);
         const move = this.parseMoveImpl();
         algBuilder.push(move);
         crowded = true;
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
-        mustNotBeCrowded();
-        const alg = this.parseAlgWithStopping([")"]);
-        this.mustConsumeNext(")");
-        const repetitionInfo = this.parseRepetition();
-        algBuilder.push(
-          addCharIndex(new Grouping(alg, repetitionInfo), savedCharIndex),
-        );
-        crowded = true;
-        continue mainLoop;
+        mustNotBeCrowded(savedCharIndex);
+        const sq1PairStartMatch = this.tryRegex(square1PairStart);
+        if (sq1PairStartMatch) {
+          const savedCharIndexD = this.#idx;
+          const sq1PairEndMatch = this.parseRegex(square1PairEnd);
+          const uMove = addCharIndex(
+            new Move(new QuantumMove("U_SQ_"), parseInt(sq1PairStartMatch[1])),
+            savedCharIndex + 1,
+          );
+          const dMove = addCharIndex(
+            new Move(new QuantumMove("D_SQ_"), parseInt(sq1PairEndMatch[1])),
+            savedCharIndexD,
+          );
+          const alg = addCharIndex(new Alg([uMove, dMove]), savedCharIndex + 1);
+          algBuilder.push(addCharIndex(new Grouping(alg), savedCharIndex));
+          crowded = true;
+          continue mainLoop;
+        } else {
+          const alg = this.parseAlgWithStopping([")"]);
+          this.mustConsumeNext(")");
+          const amount = this.parseAmount();
+          algBuilder.push(
+            addCharIndex(new Grouping(alg, amount), savedCharIndex),
+          );
+          crowded = true;
+          continue mainLoop;
+        }
       } else if (this.tryConsumeNext("[")) {
-        mustNotBeCrowded();
+        mustNotBeCrowded(savedCharIndex);
         const A = this.parseAlgWithStopping([",", ":"]);
         const separator = this.popNext();
         const B = this.parseAlgWithStopping(["]"]);
         this.mustConsumeNext("]");
-        const repetitionInfo = this.parseRepetition();
+        const amount = this.parseAmount();
         switch (separator) {
           case ":":
             algBuilder.push(
-              addCharIndex(new Conjugate(A, B, repetitionInfo), savedCharIndex),
+              addCharIndex(new Conjugate(A, B, amount), savedCharIndex),
             );
             crowded = true;
             continue mainLoop;
           case ",":
             algBuilder.push(
-              addCharIndex(
-                new Commutator(A, B, repetitionInfo),
-                savedCharIndex,
-              ),
+              addCharIndex(new Commutator(A, B, amount), savedCharIndex),
             );
             crowded = true;
             continue mainLoop;
@@ -160,13 +178,20 @@ class AlgParser {
         crowded = false;
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
-        this.mustConsumeNext("/");
-        const [text] = this.parseRegex(commentTextRegex);
-        algBuilder.push(addCharIndex(new LineComment(text), savedCharIndex));
-        crowded = false;
-        continue mainLoop;
+        if (this.tryConsumeNext("/")) {
+          mustNotBeCrowded(savedCharIndex);
+          const [text] = this.parseRegex(commentTextRegex);
+          algBuilder.push(addCharIndex(new LineComment(text), savedCharIndex));
+          crowded = false;
+          continue mainLoop;
+        } else {
+          // We allow crowding here to account for csTimer scrambles, which don't have a space between a Square-1 tuple and the following slash.
+          algBuilder.push(addCharIndex(new Move("_SLASH_"), savedCharIndex));
+          crowded = true;
+          continue mainLoop;
+        }
       } else if (this.tryConsumeNext(".")) {
-        mustNotBeCrowded();
+        mustNotBeCrowded(savedCharIndex);
         algBuilder.push(addCharIndex(new Pause(), savedCharIndex));
         while (this.tryConsumeNext(".")) {
           algBuilder.push(addCharIndex(new Pause(), this.#idx - 1)); // TODO: Can we precompute index similarly to other units?
@@ -201,25 +226,101 @@ class AlgParser {
 
   private parseMoveImpl(): Parsed<Move> {
     const savedCharIndex = this.#idx;
-    const quantumMove = this.parseQuantumMoveImpl();
-    const repetitionInfo = this.parseRepetition();
 
-    const move = addCharIndex(
-      new Move(quantumMove, repetitionInfo),
-      savedCharIndex,
-    );
+    if (this.tryConsumeNext("/")) {
+      return addCharIndex(new Move("_SLASH_"), savedCharIndex);
+    }
+
+    let quantumMove = this.parseQuantumMoveImpl();
+    let [amount, hadEmptyAbsAmount] = this.parseAmountAndTrackEmptyAbsAmount();
+    const suffix = this.parseMoveSuffix();
+
+    if (suffix) {
+      if (amount < 0) {
+        throw new Error("uh-oh");
+      }
+      if ((suffix === "++" || suffix === "--") && amount !== 1) {
+        // TODO: Handle 1 vs. null
+        throw new Error(
+          "Pochmann ++ or -- moves cannot have an amount other than 1.",
+        );
+      }
+      if ((suffix === "++" || suffix === "--") && !hadEmptyAbsAmount) {
+        throw new Error(
+          "Pochmann ++ or -- moves cannot have an amount written as a number.",
+        );
+      }
+      if ((suffix === "+" || suffix === "-") && hadEmptyAbsAmount) {
+        throw new Error(
+          "Clock dial moves must have an amount written as a natural number followed by + or -.",
+        );
+      }
+      if (suffix.startsWith("+")) {
+        quantumMove = quantumMove.modified({
+          family: `${quantumMove.family}_${
+            suffix === "+" ? "PLUS" : "PLUSPLUS"
+          }_`, // TODO
+        });
+      }
+      if (suffix.startsWith("-")) {
+        quantumMove = quantumMove.modified({
+          family: `${quantumMove.family}_${
+            suffix === "-" ? "PLUS" : "PLUSPLUS"
+          }_`, // TODO
+        });
+        amount *= -1;
+      }
+    }
+
+    const move = addCharIndex(new Move(quantumMove, amount), savedCharIndex);
     return move;
   }
 
-  private parseRepetition(): RepetitionInfo {
-    const [, absAmountStr, primeStr] = this.parseRegex(repetitionRegex);
-    return [parseIntWithEmptyFallback(absAmountStr, null), primeStr === "'"];
+  private parseMoveSuffix(): MoveSuffix | null {
+    if (this.tryConsumeNext("+")) {
+      if (this.tryConsumeNext("+")) {
+        return "++";
+      }
+      return "+";
+    }
+    if (this.tryConsumeNext("-")) {
+      if (this.tryConsumeNext("-")) {
+        return "--";
+      }
+      return "-";
+    }
+    return null;
+  }
+
+  private parseAmountAndTrackEmptyAbsAmount(): [number, boolean] {
+    const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
+    return [
+      parseIntWithEmptyFallback(absAmountStr, 1) * (primeStr === "'" ? -1 : 1),
+      !absAmountStr,
+    ];
+  }
+
+  private parseAmount(): number {
+    const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
+    return (
+      parseIntWithEmptyFallback(absAmountStr, 1) * (primeStr === "'" ? -1 : 1)
+    );
   }
 
   private parseRegex(regex: RegExp): RegExpExecArray {
     const arr = regex.exec(this.remaining());
     if (arr === null) {
       throw new Error("internal parsing error"); // TODO
+    }
+    this.#idx += arr[0].length;
+    return arr;
+  }
+
+  // TOD: can we avoid this?
+  private tryRegex(regex: RegExp): RegExpExecArray | null {
+    const arr = regex.exec(this.remaining());
+    if (arr === null) {
+      return null;
     }
     this.#idx += arr[0].length;
     return arr;

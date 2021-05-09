@@ -11,10 +11,18 @@
       defer
     ></script>
     <style>
+      .content {
+        padding-bottom: 4em;
+      }
       .alg-example {
         display: grid;
         place-content: center;
         font-size: 1.5em;
+        max-width: 75%;
+        margin: auto;
+      }
+      .monospace {
+        font-family: monospace;
       }
       twisty-alg-leaf-elem:not(.comment):hover {
         cursor: pointer;
@@ -64,6 +72,47 @@ U // AUF"
       <div class="alg-example">
         <experimental-twisty-alg-viewer
           for="wr-3.47"
+        ></experimental-twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="megaminx-scramble"
+        alg="R-- D-- R++ D-- R-- D-- R++ D++ R++ D-- U'
+R-- D++ R-- D-- R++ D-- R++ D++ R++ D-- U'
+R++ D++ R-- D-- R++ D-- R++ D-- R++ D++ U
+R-- D-- R-- D++ R-- D-- R-- D-- R-- D-- U'
+R-- D++ R-- D++ R-- D-- R-- D++ R-- D++ U
+R++ D++ R-- D-- R-- D-- R++ D++ R++ D++ U
+R-- D++ R++ D-- R-- D-- R-- D-- R-- D-- U'"
+        puzzle="megaminx"
+      ></twisty-player>
+      <div class="alg-example monospace">
+        <experimental-twisty-alg-viewer
+          for="megaminx-scramble"
+        ></experimental-twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="sq1-parity"
+        alg="/ (-3, 0) / (0, 3) / (0, -3) / (0, 3) / (2, 0) / (0, 2) / (-2, 0) / (4, 0) / (0, -2) / (0, 2) / (-1, 4) / (0, -3) / (0, 3)"
+        puzzle="square1"
+        visualization="2D"
+      ></twisty-player>
+      <div class="alg-example">
+        <experimental-twisty-alg-viewer
+          for="sq1-parity"
+        ></experimental-twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="clock-scramble"
+        alg="UR4+ DR4+ DL1+ UL3- U1+ R2- D5+ L6+ ALL4- y2 U3- R5- D4+ L6+ ALL5+ UL"
+        puzzle="clock"
+        visualization="2D"
+      ></twisty-player>
+      <div class="alg-example">
+        <experimental-twisty-alg-viewer
+          for="clock-scramble"
         ></experimental-twisty-alg-viewer>
       </div>
     </div>

@@ -81,7 +81,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
 
   public traverseGrouping(grouping: Grouping): AlgPartDecoration<P> {
     const dec = this.traverseAlg(grouping.experimentalAlg);
-    return this.mult(dec, grouping.experimentalEffectiveAmount, [dec]);
+    return this.mult(dec, grouping.amount, [dec]);
   }
 
   public traverseMove(move: Move): AlgPartDecoration<P> {
@@ -115,11 +115,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
       this.puz.invert(ABApBp),
       [decA, decB],
     );
-    return this.mult(dec, commutator.experimentalEffectiveAmount, [
-      dec,
-      decA,
-      decB,
-    ]);
+    return this.mult(dec, commutator.amount, [dec, decA, decB]);
   }
 
   public traverseConjugate(conjugate: Conjugate): AlgPartDecoration<P> {
@@ -135,11 +131,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
       this.puz.invert(ABAp),
       [decA, decB],
     );
-    return this.mult(dec, conjugate.experimentalEffectiveAmount, [
-      dec,
-      decA,
-      decB,
-    ]);
+    return this.mult(dec, conjugate.amount, [dec, decA, decB]);
   }
 
   public traversePause(pause: Pause): AlgPartDecoration<P> {
@@ -270,7 +262,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     if (!this.firstcheck(wd)) {
       return false;
     }
-    const back = this.domult(wd, grouping.experimentalEffectiveAmount);
+    const back = this.domult(wd, grouping.amount);
     return this.traverseAlg(
       grouping.experimentalAlg,
       new WalkerDown(wd.apd.children[0], back),
@@ -294,7 +286,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     if (!this.firstcheck(wd)) {
       return false;
     }
-    const back = this.domult(wd, commutator.experimentalEffectiveAmount);
+    const back = this.domult(wd, commutator.amount);
     if (back) {
       return (
         this.traverseAlg(
@@ -337,7 +329,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     if (!this.firstcheck(wd)) {
       return false;
     }
-    const back = this.domult(wd, conjugate.experimentalEffectiveAmount);
+    const back = this.domult(wd, conjugate.amount);
     if (back) {
       return (
         this.traverseAlg(

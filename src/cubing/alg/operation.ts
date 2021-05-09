@@ -18,7 +18,7 @@ export function experimentalAppendMove(
     oldLastMove.quantum.isIdentical(newMove.quantum)
   ) {
     const newUnits = oldUnits.slice(0, oldUnits.length - 1);
-    let newAmount = oldLastMove.effectiveAmount + newMove.effectiveAmount;
+    let newAmount = oldLastMove.amount + newMove.amount;
     const mod = options?.mod;
     if (mod) {
       newAmount = ((newAmount % mod) + mod) % mod;
@@ -27,7 +27,7 @@ export function experimentalAppendMove(
       }
     }
     if (newAmount !== 0) {
-      newUnits.push(oldLastMove.modified({ repetition: newAmount }));
+      newUnits.push(oldLastMove.modified({ amount: newAmount }));
     }
     return new Alg(newUnits);
   } else {

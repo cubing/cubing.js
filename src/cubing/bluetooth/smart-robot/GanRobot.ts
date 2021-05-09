@@ -244,15 +244,15 @@ export class GanRobot extends EventTarget {
             units.length === 1
           ) {
             const move = units[0] as Move;
-            if (move.effectiveAmount === 2) {
+            if (move.amount === 2) {
               units = [
-                move.modified({ repetition: 1 }),
-                move.modified({ repetition: 1 }),
+                move.modified({ amount: 1 }),
+                move.modified({ amount: 1 }),
               ];
             } else {
               units = [
-                move.modified({ repetition: -move.effectiveAmount }),
-                move.modified({ repetition: 2 }),
+                move.modified({ amount: -move.amount }),
+                move.modified({ amount: 2 }),
               ];
             }
           }

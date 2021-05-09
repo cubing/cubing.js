@@ -40,7 +40,7 @@ class ChunkAlgs extends TraversalUp<Alg, Unit> {
   traverseGrouping(grouping: Grouping): Unit {
     return new Grouping(
       this.traverseAlg(grouping.experimentalAlg),
-      grouping.experimentalEffectiveAmount, // TODO
+      grouping.amount, // TODO
     );
   }
 
@@ -52,7 +52,7 @@ class ChunkAlgs extends TraversalUp<Alg, Unit> {
     return new Conjugate(
       this.traverseAlg(commutator.A),
       this.traverseAlg(commutator.B),
-      commutator.experimentalEffectiveAmount, // TODO
+      commutator.amount, // TODO
     );
   }
 
@@ -60,7 +60,7 @@ class ChunkAlgs extends TraversalUp<Alg, Unit> {
     return new Conjugate(
       this.traverseAlg(conjugate.A),
       this.traverseAlg(conjugate.B),
-      conjugate.experimentalEffectiveAmount, // TODO
+      conjugate.amount, // TODO
     );
   }
 
