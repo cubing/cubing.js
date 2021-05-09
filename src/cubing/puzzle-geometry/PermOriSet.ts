@@ -62,7 +62,7 @@ export class OrbitsDef {
       this.solved.orbits[i].appendConciseDefinition(
         result,
         this.orbitnames[i],
-        true,
+        false,
       );
     }
     result.push("End");
@@ -73,7 +73,7 @@ export class OrbitsDef {
         this.moveops[i].orbits[j].appendConciseDefinition(
           result,
           this.orbitnames[j],
-          false,
+          true,
         );
       }
       result.push("End");
