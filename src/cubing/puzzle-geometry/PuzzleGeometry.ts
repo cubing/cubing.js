@@ -22,6 +22,7 @@ import {
 } from "./NotationMapper";
 import { iota, Perm, zeros } from "./Perm";
 import {
+  externalName,
   Orbit,
   OrbitDef,
   OrbitsDef,
@@ -2015,7 +2016,7 @@ export class PuzzleGeometry {
     const r = [];
     const mvs = [];
     for (let i = 0; i < os.moveops.length; i++) {
-      const movename = "M_" + os.movenames[i];
+      const movename = "M_" + externalName(this.notationMapper, os.movenames[i]);
       // gap doesn't like angle brackets in IDs
       mvs.push(movename);
       r.push(movename + ":=" + os.moveops[i].toPerm().toGap() + ";");
@@ -2035,7 +2036,7 @@ export class PuzzleGeometry {
 
   public writeksolve(name: string = "PuzzleGeometryPuzzle"): string {
     const od = this.getOrbitsDef(false);
-    return this.header("# ") + od.toKsolve(name).join("\n");
+    return this.header("# ") + od.toKsolve(name, this.notationMapper).join("\n");
   }
 
   public writekpuzzle(fortwisty: boolean = true): PGVendoredKPuzzleDefinition {

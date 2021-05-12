@@ -1,4 +1,6 @@
+import { NullMapper } from "./NotationMapper";
 import type { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
+import type { NotationMapper } from "./NotationMapper";
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
   factorial,
@@ -7,11 +9,21 @@ import type { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
   Perm,
   zeros,
 } from "./Perm";
+import { Move } from "../alg";
 export class OrbitDef {
   constructor(public size: number, public mod: number) {}
   public reassemblySize(): number {
     return factorial(this.size) * Math.pow(this.mod, this.size);
   }
+}
+
+export function externalName(mapper: NotationMapper, moveString: string) : string {
+  const mv = Move.fromString(moveString);
+  const mv2 = mapper.notationToExternal(mv);
+  if (mv2 === null || mv === mv2) {
+    return moveString;
+  }
+  return mv2.toString();
 }
 
 export class OrbitsDef {
@@ -42,7 +54,7 @@ export class OrbitsDef {
     return mp;
   }
 
-  public toKsolve(name: string): string[] {
+  public toKsolve(name: string, mapper: NotationMapper = new NullMapper()): string[] {
     const result = [];
     result.push("Name " + name);
     result.push("");
@@ -68,7 +80,7 @@ export class OrbitsDef {
     result.push("End");
     for (let i = 0; i < this.movenames.length; i++) {
       result.push("");
-      result.push("Move " + this.movenames[i]);
+      result.push("Move " + externalName(mapper, this.movenames[i]));
       for (let j = 0; j < this.orbitnames.length; j++) {
         this.moveops[i].orbits[j].appendConciseDefinition(
           result,
