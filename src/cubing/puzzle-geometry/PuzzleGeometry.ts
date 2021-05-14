@@ -1631,9 +1631,12 @@ export class PuzzleGeometry {
     if (move.innerLayer !== undefined) {
       if (move.outerLayer === undefined) {
         hislice = move.innerLayer;
-        if (geoname === grip) {
+        // big assumption here!  if outerlayer not specified, but inner
+        // layer is (like 2U), we use the case of the family (upper vs
+        // lower) to decide if it should be a slice turn or a wide turn.
+        if (grip >= "A") { // uppercase; slice move
           loslice = hislice;
-        } else {
+        } else {           // lowercase; wide move
           loslice = 1;
         }
       } else {
