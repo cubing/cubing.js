@@ -222,7 +222,9 @@ export class SkewbNotationMapper implements NotationMapper {
         new QuantumMove(newFamily, move.outerLayer, move.innerLayer),
         move.amount,
       );
-      /*
+    }
+    return null;
+    /*
        *   (1) We are not including x/y/z in Skewb; they aren't WCA notation and
        *   it's unclear anyone needs them for reconstructions.
        *
@@ -233,9 +235,6 @@ export class SkewbNotationMapper implements NotationMapper {
     } else if (move.family === "z") {
       return new BlockMove(move.outerLayer, move.innerLayer, "Fv", move.amount);
        */
-    } else {
-      return null;
-    }
   }
 
   // we never rewrite click moves to these moves.
@@ -248,6 +247,7 @@ export class SkewbNotationMapper implements NotationMapper {
         );
       }
     }
+    return null;
     /*
        *   See (1) above.
        *
@@ -259,60 +259,72 @@ export class SkewbNotationMapper implements NotationMapper {
       return new BlockMove(move.outerLayer, move.innerLayer, "z", move.amount);
        */
     // } else {
-    return null;
+    //   return null;
     // }
   }
 }
+
+const pyraminxFamilyMap: Record<string, string> = {
+  U: "frl",
+  L: "fld",
+  R: "fdr",
+  B: "dlr",
+  u: "FRL",
+  l: "FLD",
+  r: "FDR",
+  b: "DLR",
+};
+
+const pyraminxFamilyMap3: Record<string, string> = {
+  U: "FRL",
+  L: "FLD",
+  R: "FDR",
+  B: "DLR",
+};
+
+const pyraminxExternalQuantumY = new QuantumMove("y");
+const pyraminxInternalQuantumY = new QuantumMove("Dv");
+
+// class QuantumMoveMapper {
+//   #mapToInternal: Map<QuantumMove, QuantumMove> = new Map();
+//   #mapToExternal: Map<QuantumMove, QuantumMove> = new Map();
+//   constructor(toInternal: Record<string, string>) {
+//     for (const [external, internal] of Object.entries(toInternal)) {
+//       const externalQuantum = new QuantumMove(external);
+//       const internalQuantum = new QuantumMove(internal);
+//       this.#mapToInternal.set(externalQuantum, internalQuantum);
+//       this.#mapToExternal.set(externalQuantum, internalQuantum);
+//     }
+//   }
+// }
 
 export class PyraminxNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
   public notationToInternal(move: Move): Move | null {
+    console.log("move", move);
+    console.log("split", this.child.splitByFaceNames(move.family));
+    if (move.innerLayer === 3 && !move.outerLayer) {
+      const newFamily3 = pyraminxFamilyMap3[move.family];
+      console.log({ newFamily3 });
+      if (newFamily3) {
+        return new Move(
+          new QuantumMove(newFamily3, move.outerLayer, move.innerLayer),
+          move.amount,
+        );
+      }
+    }
     if (move.innerLayer || move.outerLayer) {
       return null;
     }
-    if (move.family === "U") {
+    const newFamily = pyraminxFamilyMap[move.family];
+    if (newFamily) {
       return new Move(
-        new QuantumMove("flr", move.innerLayer, move.outerLayer),
+        new QuantumMove(newFamily, move.outerLayer, move.innerLayer),
         move.amount,
       );
-    } else if (move.family === "R") {
-      return new Move(
-        new QuantumMove("fld", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (move.family === "L") {
-      return new Move(
-        new QuantumMove("frd", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (move.family === "B") {
-      return new Move(
-        new QuantumMove("dlr", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (move.family === "u") {
-      return new Move(
-        new QuantumMove("FLR", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (move.family === "r") {
-      return new Move(
-        new QuantumMove("FLD", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (move.family === "l") {
-      return new Move(
-        new QuantumMove("FRD", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (move.family === "b") {
-      return new Move(
-        new QuantumMove("DLR", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (move.family === "y") {
-      return negate("Dv", move.amount);
+    } else if (pyraminxExternalQuantumY.isIdentical(move.quantum)) {
+      return new Move(pyraminxInternalQuantumY, -move.amount);
     } else {
       return null;
     }
@@ -320,55 +332,26 @@ export class PyraminxNotationMapper implements NotationMapper {
 
   // we never rewrite click moves to these moves.
   public notationToExternal(move: Move): Move | null {
-    if (move.family === move.family.toLowerCase()) {
-      const fam = move.family.toUpperCase();
-      if (this.child.spinmatch(fam, "FLR")) {
+    if (move.innerLayer === 3 && !move.outerLayer) {
+      for (const [external, internal] of Object.entries(pyraminxFamilyMap3)) {
+        if (this.child.spinmatch(move.family, internal)) {
+          return new Move(
+            new QuantumMove(external, move.innerLayer, move.outerLayer),
+            move.amount,
+          );
+        }
+      }
+    }
+    for (const [external, internal] of Object.entries(pyraminxFamilyMap)) {
+      if (this.child.spinmatch(move.family, internal)) {
         return new Move(
-          new QuantumMove("U", move.innerLayer, move.outerLayer),
-          move.amount,
-        );
-      } else if (this.child.spinmatch(fam, "FLD")) {
-        return new Move(
-          new QuantumMove("R", move.innerLayer, move.outerLayer),
-          move.amount,
-        );
-      } else if (this.child.spinmatch(fam, "FRD")) {
-        return new Move(
-          new QuantumMove("L", move.innerLayer, move.outerLayer),
-          move.amount,
-        );
-      } else if (this.child.spinmatch(fam, "DLR")) {
-        return new Move(
-          new QuantumMove("B", move.innerLayer, move.outerLayer),
+          new QuantumMove(external, move.innerLayer, move.outerLayer),
           move.amount,
         );
       }
     }
-    if (move.family === move.family.toUpperCase()) {
-      if (this.child.spinmatch(move.family, "FLR")) {
-        return new Move(
-          new QuantumMove("u", move.innerLayer, move.outerLayer),
-          move.amount,
-        );
-      } else if (this.child.spinmatch(move.family, "FLD")) {
-        return new Move(
-          new QuantumMove("r", move.innerLayer, move.outerLayer),
-          move.amount,
-        );
-      } else if (this.child.spinmatch(move.family, "FRD")) {
-        return new Move(
-          new QuantumMove("l", move.innerLayer, move.outerLayer),
-          move.amount,
-        );
-      } else if (this.child.spinmatch(move.family, "DLR")) {
-        return new Move(
-          new QuantumMove("b", move.innerLayer, move.outerLayer),
-          move.amount,
-        );
-      }
-    }
-    if (move.family === "Dv") {
-      return negate("y", move.amount);
+    if (pyraminxInternalQuantumY.isIdentical(move.quantum)) {
+      return new Move("y", -move.amount);
     } else {
       return null;
     }
