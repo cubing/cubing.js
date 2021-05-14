@@ -198,6 +198,17 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
   }
 }
 
+const skewbFamilyMap: Record<string, string> = {
+  U: "UBL",
+  UL: "ULF",
+  F: "UFR",
+  UR: "URB",
+  B: "DBL",
+  D: "DFR",
+  L: "DLF",
+  R: "DRB",
+};
+
 export class SkewbNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
@@ -205,24 +216,10 @@ export class SkewbNotationMapper implements NotationMapper {
     if (move.innerLayer || move.outerLayer) {
       return null;
     }
-    if (move.family === "F") {
+    const newFamily = skewbFamilyMap[move.family];
+    if (newFamily) {
       return new Move(
-        new QuantumMove("DFR", move.outerLayer, move.innerLayer),
-        move.amount,
-      );
-    } else if (move.family === "R") {
-      return new Move(
-        new QuantumMove("DBR", move.outerLayer, move.innerLayer),
-        move.amount,
-      );
-    } else if (move.family === "L") {
-      return new Move(
-        new QuantumMove("DFL", move.outerLayer, move.innerLayer),
-        move.amount,
-      );
-    } else if (move.family === "B") {
-      return new Move(
-        new QuantumMove("DBL", move.outerLayer, move.innerLayer),
+        new QuantumMove(newFamily, move.outerLayer, move.innerLayer),
         move.amount,
       );
       /*
@@ -243,39 +240,27 @@ export class SkewbNotationMapper implements NotationMapper {
 
   // we never rewrite click moves to these moves.
   public notationToExternal(move: Move): Move | null {
-    if (this.child.spinmatch(move.family, "DFR")) {
-      return new Move(
-        new QuantumMove("F", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (this.child.spinmatch(move.family, "DRB")) {
-      return new Move(
-        new QuantumMove("R", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (this.child.spinmatch(move.family, "DFL")) {
-      return new Move(
-        new QuantumMove("L", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-    } else if (this.child.spinmatch(move.family, "DBL")) {
-      return new Move(
-        new QuantumMove("B", move.innerLayer, move.outerLayer),
-        move.amount,
-      );
-      /*
+    for (const [external, internal] of Object.entries(skewbFamilyMap)) {
+      if (this.child.spinmatch(move.family, internal)) {
+        return new Move(
+          new QuantumMove(external, move.innerLayer, move.outerLayer),
+          move.amount,
+        );
+      }
+    }
+    /*
        *   See (1) above.
        *
-    } else if (move.family === "Rv") {
+    if (move.family === "Rv") {
       return new BlockMove(move.outerLayer, move.innerLayer, "x", move.amount);
     } else if (move.family === "Uv") {
       return new BlockMove(move.outerLayer, move.innerLayer, "y", move.amount);
     } else if (move.family === "Fv") {
       return new BlockMove(move.outerLayer, move.innerLayer, "z", move.amount);
        */
-    } else {
-      return null;
-    }
+    // } else {
+    return null;
+    // }
   }
 }
 
