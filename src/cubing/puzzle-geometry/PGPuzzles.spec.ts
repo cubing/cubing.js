@@ -97,6 +97,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       for (const move of algo.units()) {
         bms.push(pg.notationMapper.notationToExternal(move as Move) as Move);
       }
+      console.log(algo.toString(), bms);
       algo = new Alg(bms);
       const ksp = new KSolvePuzzle(kpuzzledef);
       const tai = new TreeAlgIndexer(ksp, algo);
