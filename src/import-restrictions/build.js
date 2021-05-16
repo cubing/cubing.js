@@ -36,7 +36,7 @@ class Target {
       case "import-statement":
         if (!forTarget.deps.direct.includes(this.name)) {
           console.error(
-            `\`cubing/${forTarget.name}\` is not allowed to directly (non-dynamically) import \`cubing/${this.name}\`. Update src/make/target-infos.js to change this.`,
+            `\`cubing/${forTarget.name}\` is not allowed to directly (non-dynamically) import \`cubing/${this.name}\`. Update src/import-restrictions/target-infos.js to change this.`,
           );
           console.log("From: ", args.importer);
           console.log("Import path: ", args.path);
@@ -46,7 +46,7 @@ class Target {
       case "dynamic-import":
         if (!forTarget.deps.dynamic.includes(this.name)) {
           console.error(
-            `\`cubing/${forTarget.name}\` is not allowed to dynamically import \`cubing/${this.name}\`. Update src/make/target-infos.js to change this.`,
+            `\`cubing/${forTarget.name}\` is not allowed to dynamically import \`cubing/${this.name}\`. Update src/import-restrictions/target-infos.js to change this.`,
           );
           console.log("From: ", args.importer);
           console.log("Import path: ", args.path);

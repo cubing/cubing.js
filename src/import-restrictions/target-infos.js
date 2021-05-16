@@ -16,7 +16,7 @@ export const targetInfos = {
   },
   "bluetooth": {
     deps: {
-      direct: ["alg", "kpuzzle", "puzzles"],
+      direct: ["alg", "kpuzzle", "protocol", "puzzles"],
       dynamic: [],
     },
   },

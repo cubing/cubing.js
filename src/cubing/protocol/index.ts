@@ -5,3 +5,8 @@ export {
 export { bufferToSpacedHex, spacedHexToBuffer } from "./binary/hex";
 
 export { normalizePuzzleOrientation as experimentalNormalizePuzzleOrientation } from "./binary/puzzle-orientation";
+
+export {
+  binaryComponentsToReid3x3x3 as experimentalBinaryComponentsToReid3x3x3,
+  twizzleBinaryToBinaryComponents as experimentalTwizzleBinaryToBinaryComponents,
+} from "./binary/binary3x3x3";
