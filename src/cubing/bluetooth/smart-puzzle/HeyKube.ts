@@ -17,17 +17,17 @@ import { flipBitOrder } from "./endianness";
 
 // TODO: Short IDs
 const UUIDs = {
-  heyKubeService: "b46a791a-8273-4fc1-9e67-94d3dc2aac1c",
+  heykubeService: "b46a791a-8273-4fc1-9e67-94d3dc2aac1c",
   stateCharacteristic: "a2f41a4e-0e31-4bbc-9389-4253475481fb",
 };
 
-export class HeyKubeCube extends BluetoothPuzzle {
+export class HeykubeCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
   public static async connect(
     server: BluetoothRemoteGATTServer,
     device: BluetoothDevice,
-  ): Promise<HeyKubeCube> {
-    const service = await server.getPrimaryService(UUIDs.heyKubeService);
+  ): Promise<HeykubeCube> {
+    const service = await server.getPrimaryService(UUIDs.heykubeService);
     debugLog("Service:", service);
 
     const stateCharacteristic = await service.getCharacteristic(
@@ -35,7 +35,7 @@ export class HeyKubeCube extends BluetoothPuzzle {
     );
     debugLog("Characteristic:", stateCharacteristic);
 
-    const cube = new HeyKubeCube(
+    const cube = new HeykubeCube(
       await puzzles["3x3x3"].def(),
       service,
       device,
@@ -156,9 +156,9 @@ export class HeyKubeCube extends BluetoothPuzzle {
 }
 
 // // TODO: Move this into a factory?
-export const heyKubeConfig: BluetoothConfig<BluetoothPuzzle> = {
-  connect: HeyKubeCube.connect,
+export const heykubeConfig: BluetoothConfig<BluetoothPuzzle> = {
+  connect: HeykubeCube.connect,
   prefixes: ["HEYKUBE"],
   filters: [{ namePrefix: "HEYKUBE" }],
-  optionalServices: [UUIDs.heyKubeService],
+  optionalServices: [UUIDs.heykubeService],
 };
