@@ -19,6 +19,7 @@ import { flipBitOrder } from "./endianness";
 const UUIDs = {
   heykubeService: "b46a791a-8273-4fc1-9e67-94d3dc2aac1c",
   stateCharacteristic: "a2f41a4e-0e31-4bbc-9389-4253475481fb",
+  batteryCharacteristic: "fd51b3ba-99c7-49c6-9f85-5644ff56a378",
 };
 
 export class HeykubeCube extends BluetoothPuzzle {
