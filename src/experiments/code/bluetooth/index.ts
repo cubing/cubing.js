@@ -32,8 +32,12 @@ declare global {
 window.puzzle = null;
 
 window.addEventListener("load", async () => {
-  const twistyPlayer = new TwistyPlayer({ alg: new Alg() });
-  document.body.appendChild(twistyPlayer);
+  const twistyPlayer = new TwistyPlayer({
+    alg: new Alg(),
+    // controlPanel: "none",
+    // background: "none",
+  });
+  document.querySelector("#player")!.appendChild(twistyPlayer);
 
   asyncSetup(twistyPlayer);
 
@@ -42,11 +46,14 @@ window.addEventListener("load", async () => {
   // debug?: object;
   // state?: PuzzleState;
   // quaternion?: any;
-  document.querySelector("#connect")?.addEventListener("click", async () => {
-    const acceptAllDevices = (document.querySelector(
-      "#acceptAllDevices",
-    ) as HTMLInputElement).checked;
-    const puzzle = await connectSmartPuzzle({ acceptAllDevices });
+
+  const connectButton = document.querySelector("#connect") as HTMLButtonElement;
+
+  connectButton.addEventListener("click", async () => {
+    // const acceptAllDevices = (document.querySelector(
+    //   "#acceptAllDevices",
+    // ) as HTMLInputElement).checked;
+    const puzzle = await connectSmartPuzzle();
     window.puzzle = puzzle;
     try {
       const state = await puzzle.getState();
@@ -55,6 +62,9 @@ window.addEventListener("load", async () => {
     } catch (e) {
       console.error("Unable to get initial state", e);
     }
+    connectButton.textContent = `Connected: ${puzzle.name()}`;
+    connectButton.disabled = true;
+
     puzzle.addMoveListener((e: MoveEvent) => {
       twistyPlayer.experimentalAddMove(e.latestMove);
     });

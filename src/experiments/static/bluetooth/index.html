@@ -2,30 +2,32 @@
 <html>
   <head>
     <meta charset="utf8" />
-    <style>
-      twisty-player {
-        width: 400px;
-        height: 400px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <button id="connect">Connect</button>
-    <label for="acceptAllDevices"
-      ><input type="checkbox" id="acceptAllDevices" />Accept all devices</label
-    >
-
-    <br />
-    <button id="player-state-reset" disabled>Reset player state</button>
-    <button id="player-state-read" disabled>
-      Set player to physical state
-    </button>
-
+    <link href="./index.css" rel="stylesheet" type="text/css" />
     <script
       src="../_code/bluetooth/index.js"
       href="../../code/bluetooth/index.ts"
       type="module"
+      defer
     ></script>
+  </head>
+
+  <body>
+    <div id="controls">
+      <h2>Bluetooth Puzzle Test Page</h2>
+      <button id="connect">Connect</button>
+      <br />
+      <!-- <label for="acceptAllDevices"
+        ><input type="checkbox" id="acceptAllDevices" /> Accept all
+        devices</label
+      > -->
+
+      <h3>State</h3>
+      <button id="player-state-reset" disabled>Reset player state</button>
+      <br />
+      <button id="player-state-read" disabled>
+        Set player to physical state
+      </button>
+    </div>
+    <div id="player"></div>
   </body>
 </html>

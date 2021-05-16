@@ -1,0 +1,48 @@
+body {
+  font-size: 1.25rem;
+  font-family: sans-serif;
+}
+
+button {
+  font-size: 1.25rem;
+}
+
+#controls {
+  line-height: 1.5em;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  grid-template-areas: "player controls";
+  grid-template-columns: 50% 50%;
+  gap: 1em;
+  margin: 0;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+#controls {
+  grid-area: controls;
+}
+
+#player {
+  grid-area: player;
+}
+
+twisty-player {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 640px) and (min-height: 640px), (orientation: portrait) {
+  body {
+    grid-template-areas: "player" "controls";
+    grid-template-columns: 1fr;
+    grid-template-rows: 50% 50%;
+  }
+}
