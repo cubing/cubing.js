@@ -395,6 +395,14 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
       return;
     }
     this.twistyPlayer = twistyPlayer;
+
+    this.twistyPlayer.addEventListener(
+      "experimental-alg-update",
+      (e: CustomEvent<{ alg: Alg }>) => {
+        this.setAlg(e.detail.alg);
+      },
+    );
+
     const sourceAlg = this.twistyPlayer.alg;
     // TODO: Use proper architecture instead of a heuristic to ensure we have a parsed alg annotated with char indices.
     const parsedAlg =
