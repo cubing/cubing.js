@@ -50,7 +50,7 @@ function entry(
   entry(tr5, "CO (continued)", "corner", 6);
   entry(tr5, "PO_U", "puzzOri", 3);
   entry(tr5, "PO_L", "puzzOri", 2);
-  entry(tr5, "MO?", "centerOri", 1);
+  entry(tr5, "MO_Q", "centerOri", 1);
   entry(tr5, "MO", "centerOri", 4);
 
   const tr6 = tbody.appendChild(document.createElement("tr"));
