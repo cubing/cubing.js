@@ -374,7 +374,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#config.attributeChangedCallback(attributeName, oldValue, newValue);
   }
 
-  experimentalSetStartStateOverride(state: Transformation): void {
+  experimentalSetStartStateOverride(state: Transformation | null): void {
     this.#experimentalStartStateOverride = state;
     this.setCursorStartState();
   }

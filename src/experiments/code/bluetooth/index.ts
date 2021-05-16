@@ -46,11 +46,38 @@ window.addEventListener("load", async () => {
     const acceptAllDevices = (document.querySelector(
       "#acceptAllDevices",
     ) as HTMLInputElement).checked;
-    window.puzzle = await connectSmartPuzzle({ acceptAllDevices });
-    window.puzzle.addMoveListener((e: MoveEvent) => {
+    const puzzle = await connectSmartPuzzle({ acceptAllDevices });
+    window.puzzle = puzzle;
+    try {
+      const state = await puzzle.getState();
+      twistyPlayer.experimentalSetStartStateOverride(state);
+      twistyPlayer.alg = new Alg();
+    } catch (e) {
+      console.error("Unable to get initial state", e);
+    }
+    puzzle.addMoveListener((e: MoveEvent) => {
       twistyPlayer.experimentalAddMove(e.latestMove);
     });
-    window.puzzle.addOrientationListener((_e: OrientationEvent) => {
+
+    const resetButton = document.querySelector(
+      "#player-state-reset",
+    ) as HTMLButtonElement;
+    resetButton.addEventListener("click", () => {
+      twistyPlayer.experimentalSetStartStateOverride(null);
+      twistyPlayer.alg = new Alg();
+    });
+    resetButton.disabled = false;
+
+    const cubeStateButton = document.querySelector(
+      "#player-state-read",
+    ) as HTMLButtonElement;
+    cubeStateButton.addEventListener("click", async () => {
+      twistyPlayer.experimentalSetStartStateOverride(await puzzle.getState());
+      twistyPlayer.alg = new Alg();
+    });
+    cubeStateButton.disabled = false;
+
+    puzzle.addOrientationListener((_e: OrientationEvent) => {
       // TODO
       // const { x, y, z, w } = e.quaternion;
       // twistyPlayer
