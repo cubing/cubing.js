@@ -1,7 +1,6 @@
 import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
 
 export class QuantumConjugate extends Comparable {
@@ -38,54 +37,34 @@ export class QuantumConjugate extends Comparable {
 }
 
 export class Conjugate extends AlgCommon<Conjugate> {
-  readonly #quantumWithAmount: QuantumWithAmount<QuantumConjugate>;
+  readonly #quantum: QuantumConjugate;
 
-  constructor(
-    aSource: FlexibleAlgSource,
-    bSource: FlexibleAlgSource,
-    amount?: number,
-  ) {
+  constructor(aSource: FlexibleAlgSource, bSource: FlexibleAlgSource) {
     super();
-    this.#quantumWithAmount = new QuantumWithAmount<QuantumConjugate>(
-      new QuantumConjugate(
-        experimentalEnsureAlg(aSource),
-        experimentalEnsureAlg(bSource),
-      ), // TODO
-      amount,
-    );
+    this.#quantum = new QuantumConjugate(
+      experimentalEnsureAlg(aSource),
+      experimentalEnsureAlg(bSource),
+    ); // TODO
   }
 
   get A(): Alg {
-    return this.#quantumWithAmount.quantum.A;
+    return this.#quantum.A;
   }
 
   get B(): Alg {
-    return this.#quantumWithAmount.quantum.B;
-  }
-
-  get amount(): number {
-    return this.#quantumWithAmount.amount;
-  }
-
-  /** @deprecated */
-  get experimentalRepetitionSuffix(): string {
-    return this.#quantumWithAmount.suffix();
+    return this.#quantum.B;
   }
 
   isIdentical(other: Comparable): boolean {
     const otherAsConjugate = other as Conjugate;
     return (
       other.is(Conjugate) &&
-      this.#quantumWithAmount.isIdentical(otherAsConjugate.#quantumWithAmount)
+      this.#quantum.isIdentical(otherAsConjugate.#quantum)
     );
   }
 
   invert(): Conjugate {
-    return new Conjugate(
-      this.#quantumWithAmount.quantum.A,
-      this.#quantumWithAmount.quantum.B.invert(),
-      -this.amount,
-    );
+    return new Conjugate(this.#quantum.A, this.#quantum.B.invert());
   }
 
   *experimentalExpand(
@@ -96,12 +75,12 @@ export class Conjugate extends AlgCommon<Conjugate> {
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
-      yield* this.#quantumWithAmount.experimentalExpand(iterDir, depth);
+      yield* this.#quantum.experimentalExpand(iterDir, depth);
     }
   }
 
   toString(): string {
-    return `${this.#quantumWithAmount.quantum.toString()}${this.#quantumWithAmount.suffix()}`;
+    return this.#quantum.toString();
   }
 
   // toJSON(): ConjugateJSON {

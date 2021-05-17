@@ -1,7 +1,6 @@
 import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
 
 export class QuantumCommutator extends Comparable {
@@ -46,54 +45,34 @@ export class QuantumCommutator extends Comparable {
 }
 
 export class Commutator extends AlgCommon<Commutator> {
-  readonly #quantumWithAmount: QuantumWithAmount<QuantumCommutator>;
+  readonly #quantum: QuantumCommutator;
 
-  constructor(
-    aSource: FlexibleAlgSource,
-    bSource: FlexibleAlgSource,
-    amount?: number,
-  ) {
+  constructor(aSource: FlexibleAlgSource, bSource: FlexibleAlgSource) {
     super();
-    this.#quantumWithAmount = new QuantumWithAmount<QuantumCommutator>(
-      new QuantumCommutator(
-        experimentalEnsureAlg(aSource),
-        experimentalEnsureAlg(bSource),
-      ), // TODO
-      amount,
-    );
+    this.#quantum = new QuantumCommutator(
+      experimentalEnsureAlg(aSource),
+      experimentalEnsureAlg(bSource),
+    ); // TODO
   }
 
   get A(): Alg {
-    return this.#quantumWithAmount.quantum.A;
+    return this.#quantum.A;
   }
 
   get B(): Alg {
-    return this.#quantumWithAmount.quantum.B;
-  }
-
-  get amount(): number {
-    return this.#quantumWithAmount.amount;
-  }
-
-  /** @deprecated */
-  get experimentalRepetitionSuffix(): string {
-    return this.#quantumWithAmount.suffix();
+    return this.#quantum.B;
   }
 
   isIdentical(other: Comparable): boolean {
     const otherAsCommutator = other.as(Commutator);
     return (
       !!otherAsCommutator &&
-      this.#quantumWithAmount.isIdentical(otherAsCommutator.#quantumWithAmount)
+      this.#quantum.isIdentical(otherAsCommutator.#quantum)
     );
   }
 
   invert(): Commutator {
-    return new Commutator(
-      this.#quantumWithAmount.quantum.B,
-      this.#quantumWithAmount.quantum.A,
-      -this.amount,
-    );
+    return new Commutator(this.#quantum.B, this.#quantum.A);
   }
 
   *experimentalExpand(
@@ -104,12 +83,12 @@ export class Commutator extends AlgCommon<Commutator> {
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();
     } else {
-      yield* this.#quantumWithAmount.experimentalExpand(iterDir, depth);
+      yield* this.#quantum.experimentalExpand(iterDir, depth);
     }
   }
 
   toString(): string {
-    return `${this.#quantumWithAmount.quantum.toString()}${this.#quantumWithAmount.suffix()}`;
+    return this.#quantum.toString();
   }
 
   // toJSON(): CommutatorJSON {
