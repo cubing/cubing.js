@@ -61,7 +61,7 @@
           <tr class="puzzOri">
             <td><span class="componentName">PO_U</span></td>
             <td colspan="2" rowspan="2">
-              <a href="#puzzle-orientation">see below</a>
+              puzzle orientation (<a href="#puzzle-orientation">see below</a>)
             </td>
             <td>3 bits</td>
           </tr>
@@ -118,6 +118,12 @@
           table.</noscript
         >
       </div>
+      <p>
+        Each component is stored with binary bits contiguously from high to low.
+        Example: the high bit of <span class="componentName">EP</span> is at bit
+        index 0 (first bit of the first byte), and the low bit is at index 28
+        (5th bit of the third byte).
+      </p>
       <p>If puzzle orientation is not encoded:</p>
       <ul>
         <li>
