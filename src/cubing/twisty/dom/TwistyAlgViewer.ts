@@ -234,19 +234,15 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     );
     element.addString("[");
     element.flushQueue();
-    const direction = updateDirectionByAmount(
-      dataDown.direction,
-      commutator.amount,
-    );
     const [first, second]: Alg[] = maybeReverseList(
       [commutator.A, commutator.B],
-      direction,
+      dataDown.direction,
     );
     moveCount += element.addElem(
       this.traverseAlg(first, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
-        direction,
+        direction: dataDown.direction,
       }),
     );
     element.addString(", ");
@@ -254,14 +250,14 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       this.traverseAlg(second, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
-        direction,
+        direction: dataDown.direction,
       }),
     );
-    element.flushQueue(direction);
-    element.addString("]" + commutator.experimentalRepetitionSuffix);
+    element.flushQueue(dataDown.direction);
+    element.addString("]");
     element.flushQueue();
     return {
-      moveCount: moveCount * 2 * Math.abs(commutator.amount),
+      moveCount: moveCount * 2,
       element,
     };
   }
@@ -270,15 +266,11 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-conjugate", conjugate);
     element.addString("[");
-    const direction = updateDirectionByAmount(
-      dataDown.direction,
-      conjugate.amount,
-    );
     const aLen = element.addElem(
       this.traverseAlg(conjugate.A, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
-        direction,
+        direction: dataDown.direction,
       }),
     );
     moveCount += aLen;
@@ -287,13 +279,13 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       this.traverseAlg(conjugate.B, {
         earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
         twistyAlgViewer: dataDown.twistyAlgViewer,
-        direction,
+        direction: dataDown.direction,
       }),
     );
-    element.addString("]" + conjugate.experimentalRepetitionSuffix);
+    element.addString("]");
     element.flushQueue();
     return {
-      moveCount: (moveCount + aLen) * Math.abs(conjugate.amount),
+      moveCount: moveCount + aLen,
       element,
     };
   }

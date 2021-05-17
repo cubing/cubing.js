@@ -156,18 +156,13 @@ class AlgParser {
         const separator = this.popNext();
         const B = this.parseAlgWithStopping(["]"]);
         this.mustConsumeNext("]");
-        const amount = this.parseAmount();
         switch (separator) {
           case ":":
-            algBuilder.push(
-              addCharIndex(new Conjugate(A, B, amount), savedCharIndex),
-            );
+            algBuilder.push(addCharIndex(new Conjugate(A, B), savedCharIndex));
             crowded = true;
             continue mainLoop;
           case ",":
-            algBuilder.push(
-              addCharIndex(new Commutator(A, B, amount), savedCharIndex),
-            );
+            algBuilder.push(addCharIndex(new Commutator(A, B), savedCharIndex));
             crowded = true;
             continue mainLoop;
           default:

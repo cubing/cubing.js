@@ -115,7 +115,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
       this.puz.invert(ABApBp),
       [decA, decB],
     );
-    return this.mult(dec, commutator.amount, [dec, decA, decB]);
+    return this.mult(dec, 1, [dec, decA, decB]);
   }
 
   public traverseConjugate(conjugate: Conjugate): AlgPartDecoration<P> {
@@ -131,7 +131,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
       this.puz.invert(ABAp),
       [decA, decB],
     );
-    return this.mult(dec, conjugate.amount, [dec, decA, decB]);
+    return this.mult(dec, 1, [dec, decA, decB]);
   }
 
   public traversePause(pause: Pause): AlgPartDecoration<P> {
@@ -286,7 +286,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     if (!this.firstcheck(wd)) {
       return false;
     }
-    const back = this.domult(wd, commutator.amount);
+    const back = this.domult(wd, 1);
     if (back) {
       return (
         this.traverseAlg(
@@ -329,7 +329,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     if (!this.firstcheck(wd)) {
       return false;
     }
-    const back = this.domult(wd, conjugate.amount);
+    const back = this.domult(wd, 1);
     if (back) {
       return (
         this.traverseAlg(

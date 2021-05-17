@@ -1,6 +1,7 @@
 // tslint:disable-next-line no-namespace // TODO: nested module
 
 import { Alg } from "./Alg";
+import { Grouping } from "./units";
 import { Commutator } from "./units/containers/Commutator";
 import { Conjugate } from "./units/containers/Conjugate";
 import { Move } from "./units/leaves/Move";
@@ -32,13 +33,8 @@ export const Example = {
     new Commutator(
       new Alg([new Move("R", 1), new Move("U", 1), new Move("R", -2)]),
       new Alg([
-        new Conjugate(
-          new Alg([new Move("R", 1)]),
-          new Alg([new Move("U", 1)]),
-          1,
-        ),
+        new Conjugate(new Alg([new Move("R", 1)]), new Alg([new Move("U", 1)])),
       ]),
-      1,
     ),
   ]),
 
@@ -63,14 +59,12 @@ export const Example = {
         ),
       ]),
       new Alg([new Move("D", 1)]),
-      1,
     ),
     new Commutator(
       new Alg([
         new Conjugate(new Alg([new Move("R", 1)]), new Alg([new Move("U", 1)])),
       ]),
       new Alg([new Move("D", 1)]),
-      1,
     ),
     new Move("x", 1),
   ]),
@@ -82,10 +76,8 @@ export const Example = {
         new Commutator(
           new Alg([new Move("U", 1)]),
           new Alg([new Move("R", 1)]),
-          1,
         ),
       ]),
-      1,
     ),
   ]),
 
@@ -96,10 +88,8 @@ export const Example = {
         new Commutator(
           new Alg([new Move("F", 2)]),
           new Alg([new Move("R", -1), new Move("B", -1), new Move("R", 1)]),
-          1,
         ),
       ]),
-      1,
     ),
   ]),
 
@@ -133,13 +123,16 @@ export const Example = {
     new Conjugate(
       new Alg([new Move("F", 1)]),
       new Alg([
-        new Commutator(
-          new Alg([new Move("R", 1)]),
-          new Alg([new Move("U", 1)]),
+        new Grouping(
+          new Alg([
+            new Commutator(
+              new Alg([new Move("R", 1)]),
+              new Alg([new Move("U", 1)]),
+            ),
+          ]),
           3,
         ),
       ]),
-      1,
     ),
   ]),
 

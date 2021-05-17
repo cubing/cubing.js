@@ -123,38 +123,27 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
 
   public traverseCommutator(commutator: Commutator): LocalMoveWithRange[] {
     const processed: LocalMoveWithRange[][] = [];
-    const segmentsOnce: Alg[] =
-      commutator.amount > 0
-        ? [
-            commutator.A,
-            commutator.B,
-            commutator.A.invert(),
-            commutator.B.invert(),
-          ]
-        : [
-            commutator.B,
-            commutator.A,
-            commutator.B.invert(),
-            commutator.A.invert(),
-          ];
-    for (let i = 0; i < Math.abs(commutator.amount); i++) {
-      for (const segment of segmentsOnce) {
-        processed.push(this.traverseGroupingOnce(segment));
-      }
+    const segmentsOnce: Alg[] = [
+      commutator.A,
+      commutator.B,
+      commutator.A.invert(),
+      commutator.B.invert(),
+    ];
+    for (const segment of segmentsOnce) {
+      processed.push(this.traverseGroupingOnce(segment));
     }
     return Array.prototype.concat(...processed);
   }
 
   public traverseConjugate(conjugate: Conjugate): LocalMoveWithRange[] {
     const processed: LocalMoveWithRange[][] = [];
-    const segmentsOnce: Alg[] =
-      conjugate.amount > 0
-        ? [conjugate.A, conjugate.B, conjugate.A.invert()]
-        : [conjugate.A, conjugate.B.invert(), conjugate.A.invert()];
-    for (let i = 0; i < Math.abs(conjugate.amount); i++) {
-      for (const segment of segmentsOnce) {
-        processed.push(this.traverseGroupingOnce(segment));
-      }
+    const segmentsOnce: Alg[] = [
+      conjugate.A,
+      conjugate.B,
+      conjugate.A.invert(),
+    ];
+    for (const segment of segmentsOnce) {
+      processed.push(this.traverseGroupingOnce(segment));
     }
     return Array.prototype.concat(...processed);
   }

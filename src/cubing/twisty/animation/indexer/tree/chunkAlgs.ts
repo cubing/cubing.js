@@ -52,7 +52,6 @@ class ChunkAlgs extends TraversalUp<Alg, Unit> {
     return new Conjugate(
       this.traverseAlg(commutator.A),
       this.traverseAlg(commutator.B),
-      commutator.amount, // TODO
     );
   }
 
@@ -60,7 +59,6 @@ class ChunkAlgs extends TraversalUp<Alg, Unit> {
     return new Conjugate(
       this.traverseAlg(conjugate.A),
       this.traverseAlg(conjugate.B),
-      conjugate.amount, // TODO
     );
   }
 

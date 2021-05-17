@@ -72,17 +72,12 @@ export class AlgDuration extends TraversalUp<Duration> {
 
   public traverseCommutator(commutator: Commutator): Duration {
     return (
-      commutator.amount *
-      2 *
-      (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
+      2 * (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
     );
   }
 
   public traverseConjugate(conjugate: Conjugate): Duration {
-    return (
-      conjugate.amount *
-      (2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B))
-    );
+    return 2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B);
   }
 
   public traversePause(_pause: Pause): Duration {

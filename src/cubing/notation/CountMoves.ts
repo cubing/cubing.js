@@ -41,17 +41,12 @@ class CountMoves extends TraversalUp<number> {
 
   public traverseCommutator(commutator: Commutator): number {
     return (
-      Math.abs(commutator.amount) *
-      2 *
-      (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
+      2 * (this.traverseAlg(commutator.A) + this.traverseAlg(commutator.B))
     );
   }
 
   public traverseConjugate(conjugate: Conjugate): number {
-    return (
-      Math.abs(conjugate.amount) *
-      (2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B))
-    );
+    return 2 * this.traverseAlg(conjugate.A) + this.traverseAlg(conjugate.B);
   }
 
   // TODO: Remove spaces between repeated pauses (in traverseSequence)
