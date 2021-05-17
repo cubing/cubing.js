@@ -4,14 +4,14 @@ import { IterationDirection } from "../../iteration";
 import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
 
-export class QuantumCommutator extends Comparable {
+export class QuantumConjugate extends Comparable {
   constructor(public A: Alg, public B: Alg) {
     super();
     Object.freeze(this);
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsQuantumCommutator = other.as(QuantumCommutator);
+    const otherAsQuantumCommutator = other.as(QuantumConjugate);
     return !!(
       otherAsQuantumCommutator?.A.isIdentical(this.A) &&
       otherAsQuantumCommutator?.B.isIdentical(this.B)
@@ -38,7 +38,7 @@ export class QuantumCommutator extends Comparable {
 }
 
 export class Conjugate extends AlgCommon<Conjugate> {
-  readonly #quantumWithAmount: QuantumWithAmount<QuantumCommutator>;
+  readonly #quantumWithAmount: QuantumWithAmount<QuantumConjugate>;
 
   constructor(
     aSource: FlexibleAlgSource,
@@ -46,8 +46,8 @@ export class Conjugate extends AlgCommon<Conjugate> {
     amount?: number,
   ) {
     super();
-    this.#quantumWithAmount = new QuantumWithAmount<QuantumCommutator>(
-      new QuantumCommutator(
+    this.#quantumWithAmount = new QuantumWithAmount<QuantumConjugate>(
+      new QuantumConjugate(
         experimentalEnsureAlg(aSource),
         experimentalEnsureAlg(bSource),
       ), // TODO
