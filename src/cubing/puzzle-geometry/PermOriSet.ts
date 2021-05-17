@@ -17,7 +17,10 @@ export class OrbitDef {
   }
 }
 
-export function externalName(mapper: NotationMapper, moveString: string) : string {
+export function externalName(
+  mapper: NotationMapper,
+  moveString: string,
+): string {
   const mv = Move.fromString(moveString);
   const mv2 = mapper.notationToExternal(mv);
   if (mv2 === null || mv === mv2) {
@@ -54,7 +57,10 @@ export class OrbitsDef {
     return mp;
   }
 
-  public toKsolve(name: string, mapper: NotationMapper = new NullMapper()): string[] {
+  public toKsolve(
+    name: string,
+    mapper: NotationMapper = new NullMapper(),
+  ): string[] {
     const result = [];
     result.push("Name " + name);
     result.push("");
