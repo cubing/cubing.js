@@ -1934,10 +1934,6 @@ export class PuzzleGeometry {
         r.push(1);
       }
     }
-    if (this.addrotations && !this.allmoves) {
-      r.push([0, slices]);
-      r.push(1);
-    }
     if (this.fixedCubie >= 0) {
       const dep = +this.cubiekeys[this.fixedCubie].trim().split(" ")[k];
       const newr = [];
@@ -2135,13 +2131,104 @@ export class PuzzleGeometry {
     return false;
   }
 
+  public diffmvsets(a:any[], b:any[], slices:number, neg:boolean) {
+    for (let i = 0; i<a.length; i += 2) {
+      let found = false ;
+      for (let j = 0; !found && j<b.length; j += 2) {
+        if (neg) {
+          if (a[i][0] + b[j][1] === slices  && a[i][1] + b[j][0] === slices && a[i+1] === b[j+1]) {
+            found = true;
+          }
+        } else {
+          if (a[i][0] === b[j][0] && a[i][1] === b[j][1] && a[i+1] === b[j+1]) {
+            found = true;
+          }
+        }
+      }
+      if (!found) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public getOrbitsDef(fortwisty: boolean): OrbitsDef {
     // generate a representation of the puzzle
     const setmoves = [];
     const setnames: string[] = [];
     const setdefs: OrbitDef[] = [];
+    // if both a movelist and rotations are needed, eliminate rotations
+    // that do not preserve the movelist.
+    const mps = [];
+    const addrot = [];
     for (let k = 0; k < this.moveplanesets.length; k++) {
       const moveset = this.getmovesets(k);
+      mps.push(moveset);
+      if (this.addrotations) {
+        addrot.push(1);
+      } else {
+        addrot.push(0);
+      }
+    }
+    if (this.movelist && this.addrotations) {
+      for (let i = 0; i < this.moverotations.length; i++) {
+        addrot[i] = 0;
+      }
+      for (let k = 0; k < this.moveplanesets.length; k++) {
+        // does a rotation around k preserve the move set?
+        for (let i = 0; i < this.moverotations.length; i++) {
+          let nn = this.moveplanenormals[k];
+          for (let ii = 1; ii * 2 <= this.movesetorders[i]; ii++) {
+            nn = nn.rotatepoint(this.moverotations[i][0]);
+            if (addrot[i] & ii) {
+              continue;
+            }
+            let found = -1;
+            let neg = false;
+            for (let j = 0; found < 0 && j < this.moveplanenormals.length; j++) {
+              if (nn.dist(this.moveplanenormals[j]) < eps) {
+                found = j;
+              } else if (nn.dist(this.moveplanenormals[j].smul(-1)) < eps) {
+                found = j;
+                neg = true;
+              }
+            }
+            if (found < 0) {
+              throw new Error("Could not find rotation");
+            }
+            let cmp = mps[found];
+            if (cmp.length !== mps[k].length ||
+                this.moveplanesets[k].length !== this.moveplanesets[found].length ||
+                this.diffmvsets(cmp, mps[k], this.moveplanesets[found].length, neg)) {
+              addrot[i] |= ii;
+            }
+          }
+        }
+      }
+      for (let i = 0; i < this.moverotations.length; i++) {
+        if (addrot[i] === 0) {
+          addrot[i] = 1;
+        } else if (addrot[i] === 1) {
+          if (this.movesetorders[i] > 3) {
+            addrot[i] = 2;
+          } else {
+            addrot[i] = 0;
+          }
+        } else if (addrot[i] === 3) {
+          addrot[i] = 0;
+        } else {
+          throw new Error("Impossible addrot val");
+        }
+      }
+    }
+    for (let k = 0; k < this.moveplanesets.length; k++) {
+      if (addrot[k] !== 0) {
+        mps[k].push([0,this.moveplanesets[k].length]);
+        mps[k].push(addrot[k]);
+      }
+    }
+    for (let k = 0; k < this.moveplanesets.length; k++) {
+      const moveset = mps[k];
       const movesetorder = this.movesetorders[k];
       // check there's no redundancy in moveset.
       for (let i = 0; i < moveset.length; i += 2) {
@@ -2216,7 +2303,7 @@ export class PuzzleGeometry {
     for (let k = 0; k < this.moveplanesets.length; k++) {
       const moveplaneset = this.moveplanesets[k];
       const slices = moveplaneset.length;
-      const moveset = this.getmovesets(k);
+      const moveset = mps[k];
       const movesetgeo = this.movesetgeos[k];
       for (let i = 0; i < moveset.length; i += 2) {
         const movebits = moveset[i];
