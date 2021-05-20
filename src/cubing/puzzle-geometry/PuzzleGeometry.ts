@@ -2015,10 +2015,19 @@ export class PuzzleGeometry {
     const r = [];
     const mvs = [];
     for (let i = 0; i < os.moveops.length; i++) {
-      const movename = "M_" + externalName(this.notationMapper, os.movenames[i]);
+      let movename = "M_" + externalName(this.notationMapper, os.movenames[i]);
+      let doinv = false;
+      if (movename[movename.length-1] === "'") {
+        movename = movename.substring(0, movename.length-1);
+        doinv = true;
+      }
       // gap doesn't like angle brackets in IDs
       mvs.push(movename);
-      r.push(movename + ":=" + os.moveops[i].toPerm().toGap() + ";");
+      if (doinv) {
+        r.push(movename + ":=" + os.moveops[i].toPerm().toGap() + ";");
+      } else {
+        r.push(movename + ":=" + os.moveops[i].toPerm().inv().toGap() + ";");
+      }
     }
     r.push("Gen:=[");
     r.push(mvs.join(","));

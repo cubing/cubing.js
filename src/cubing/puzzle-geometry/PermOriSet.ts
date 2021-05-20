@@ -86,13 +86,27 @@ export class OrbitsDef {
     result.push("End");
     for (let i = 0; i < this.movenames.length; i++) {
       result.push("");
-      result.push("Move " + externalName(mapper, this.movenames[i]));
+      let name = externalName(mapper, this.movenames[i]);
+      let doinv = false;
+      if (name[name.length - 1] === "'") {
+        doinv = true;
+        name = name.substring(0, name.length-1);
+      }
+      result.push("Move " + name);
       for (let j = 0; j < this.orbitnames.length; j++) {
-        this.moveops[i].orbits[j].appendConciseDefinition(
-          result,
-          this.orbitnames[j],
-          true,
-        );
+        if (doinv) {
+          this.moveops[i].orbits[j].appendConciseDefinition(
+            result,
+            this.orbitnames[j],
+            true,
+          );
+        } else {
+          this.moveops[i].orbits[j].inv().appendConciseDefinition(
+            result,
+            this.orbitnames[j],
+            true,
+          );
+        }
       }
       result.push("End");
     }
