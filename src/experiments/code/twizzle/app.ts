@@ -113,6 +113,7 @@ function getModValueForMove(move: Move): number {
       family = family.substr(0, family.length - 1);
     }
   }
+  family = family.toUpperCase();
   for (const axis of stickerDat.axis) {
     if (family === axis[1]) {
       return axis[2] as number;
