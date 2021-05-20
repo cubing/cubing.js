@@ -2915,6 +2915,28 @@ class PGNotation implements MoveNotation {
       return this.cache[key];
     }
     const mv = this.pg.parseMove(move);
+    // if a move list subset is defined, don't return moves outside the subset.
+    if (this.pg.parsedmovelist) {
+      let found = false;
+      for (let i=0; i<this.pg.parsedmovelist.length; i++) {
+        console.log("Comparing " + this.pg.parsedmovelist[i]);
+        console.log("To " + mv);
+        if (this.pg.parsedmovelist[i][1] === mv[1] &&
+          this.pg.parsedmovelist[i][2] === mv[2] &&
+          this.pg.parsedmovelist[i][3] === mv[3] &&
+          this.pg.parsedmovelist[i][4] === mv[4]) {
+            found = true;
+        }
+      }
+      console.log("Parsed move list");
+      console.log(this.pg.parsedmovelist);
+      console.log("Requested move");
+      console.log(mv);
+      if (!found) {
+        console.log("No match.");
+        return undefined;
+      }
+    }
     let bits = [mv[2], mv[3]];
     if (!mv[4]) {
       const slices = this.pg.moveplanesets[mv[1]].length;

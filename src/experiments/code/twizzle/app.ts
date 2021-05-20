@@ -13,6 +13,7 @@ import {
   getpuzzle,
   getpuzzles,
   parsedesc,
+  parseoptions,
   PuzzleGeometry,
   schreierSims,
   StickerDat,
@@ -25,6 +26,7 @@ import {
 import { TwistyPlayer } from "../../../cubing/twisty/index";
 import { countMoves } from "../../../cubing/notation";
 import { getURLParam, setURLParams } from "./url-params";
+import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
 
 if (getURLParam("debugShowRenderStats")) {
   experimentalShowRenderStats(true);
@@ -93,6 +95,16 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
     }
   }
   return true;
+}
+
+function myparsedesc(desc: string, options:Array<string | number | boolean | Array<string>>) {
+   try {
+     const args = desc.split(" ");
+     const descind = parseoptions(args, options);
+     return parsedesc(args.slice(descind, args.length).join(" "));
+   } catch (e) {
+     return undefined;
+   }
 }
 
 function getModValueForMove(move: Move): number {
@@ -424,7 +436,7 @@ function dowork(cmd: string): void {
   if (checkboxes.killori) {
     options.push("killorientation", true);
   }
-  const p = parsedesc(descinput.value);
+  const p = myparsedesc(descinput.value, options);
   const pg = new PuzzleGeometry(p[0], p[1], options);
   nextShape = p[0];
   pg.allstickers();
@@ -474,7 +486,8 @@ function checkchange(): void {
     let savealg = true;
     lastval = descarg;
     lastRender = newRender;
-    const p = parsedesc(descarg);
+    const moreoptions: Array<string | number | boolean> = [];
+    const p = myparsedesc(descarg, moreoptions);
     if (p) {
       if (savecam) {
         saveCamera();
@@ -504,6 +517,9 @@ function checkchange(): void {
         algo = "";
         safeKpuzzle = undefined;
         savealg = false;
+      }
+      for (let i = 0; i < moreoptions.length; i++) {
+        options.push(moreoptions[i]);
       }
       pg = new PuzzleGeometry(p[0], p[1], options);
       nextShape = p[0];
@@ -700,6 +716,9 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
 
 // TODO: Animate latest move but cancel algorithm moves.
 function addMove(move: Move): void {
+  if (puzzle && getNotationLayer(puzzle).lookupMove(move) === undefined) {
+    return;
+  }
   const currentAlg = Alg.fromString(algoinput.value);
   const newAlg = experimentalAppendMove(currentAlg, move, {
     coalesce: true,
