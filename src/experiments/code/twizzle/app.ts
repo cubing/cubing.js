@@ -112,10 +112,12 @@ function myparsedesc(
 
 function getModValueForMove(move: Move): number {
   if (!pg) {
+    console.log("Bailing on mod; pg is null");
     return 1;
   }
   const move2 = pg.notationMapper.notationToInternal(move);
   if (move2 === null) {
+    console.log("Bailing on mod; can't translate move");
     return 1;
   }
   move = move2;
@@ -128,11 +130,13 @@ function getModValueForMove(move: Move): number {
       family = family.substr(0, family.length - 1);
     }
   }
+  family = family.toUpperCase();
   for (const axis of stickerDat.axis) {
     if (family === axis[1]) {
       return axis[2] as number;
     }
   }
+  console.log("Bailing on mod for " + family + "; no axis match");
   return 1;
 }
 
@@ -665,7 +669,6 @@ function onMouseClick(
   // calculate objects intersecting the picking ray
   const controlTargets = twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
-  console.log("Intersects returned " + intersects.length);
   if (intersects.length > 0) {
     event.preventDefault();
     const mv = intersectionToMove(intersects[0].point, event, rightClick);
