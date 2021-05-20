@@ -2943,8 +2943,6 @@ class PGNotation implements MoveNotation {
     if (this.pg.parsedmovelist) {
       let found = false;
       for (let i = 0; i < this.pg.parsedmovelist.length; i++) {
-        console.log("Comparing " + this.pg.parsedmovelist[i]);
-        console.log("To " + mv);
         if (
           this.pg.parsedmovelist[i][1] === mv[1] &&
           this.pg.parsedmovelist[i][2] === mv[2] &&
@@ -2954,12 +2952,7 @@ class PGNotation implements MoveNotation {
           found = true;
         }
       }
-      console.log("Parsed move list");
-      console.log(this.pg.parsedmovelist);
-      console.log("Requested move");
-      console.log(mv);
       if (!found) {
-        console.log("No match.");
         return undefined;
       }
     }
