@@ -1634,9 +1634,11 @@ export class PuzzleGeometry {
         // big assumption here!  if outerlayer not specified, but inner
         // layer is (like 2U), we use the case of the family (upper vs
         // lower) to decide if it should be a slice turn or a wide turn.
-        if (grip >= "A") { // uppercase; slice move
+        if (grip >= "A") {
+          // uppercase; slice move
           loslice = hislice;
-        } else {           // lowercase; wide move
+        } else {
+          // lowercase; wide move
           loslice = 1;
         }
       } else {
@@ -2017,8 +2019,8 @@ export class PuzzleGeometry {
     for (let i = 0; i < os.moveops.length; i++) {
       let movename = "M_" + externalName(this.notationMapper, os.movenames[i]);
       let doinv = false;
-      if (movename[movename.length-1] === "'") {
-        movename = movename.substring(0, movename.length-1);
+      if (movename[movename.length - 1] === "'") {
+        movename = movename.substring(0, movename.length - 1);
         doinv = true;
       }
       // gap doesn't like angle brackets in IDs
@@ -2044,7 +2046,9 @@ export class PuzzleGeometry {
 
   public writeksolve(name: string = "PuzzleGeometryPuzzle"): string {
     const od = this.getOrbitsDef(false);
-    return this.header("# ") + od.toKsolve(name, this.notationMapper).join("\n");
+    return (
+      this.header("# ") + od.toKsolve(name, this.notationMapper).join("\n")
+    );
   }
 
   public writekpuzzle(fortwisty: boolean = true): PGVendoredKPuzzleDefinition {
@@ -2140,16 +2144,24 @@ export class PuzzleGeometry {
     return false;
   }
 
-  public diffmvsets(a:any[], b:any[], slices:number, neg:boolean) {
-    for (let i = 0; i<a.length; i += 2) {
-      let found = false ;
-      for (let j = 0; !found && j<b.length; j += 2) {
+  public diffmvsets(a: any[], b: any[], slices: number, neg: boolean) {
+    for (let i = 0; i < a.length; i += 2) {
+      let found = false;
+      for (let j = 0; !found && j < b.length; j += 2) {
         if (neg) {
-          if (a[i][0] + b[j][1] === slices  && a[i][1] + b[j][0] === slices && a[i+1] === b[j+1]) {
+          if (
+            a[i][0] + b[j][1] === slices &&
+            a[i][1] + b[j][0] === slices &&
+            a[i + 1] === b[j + 1]
+          ) {
             found = true;
           }
         } else {
-          if (a[i][0] === b[j][0] && a[i][1] === b[j][1] && a[i+1] === b[j+1]) {
+          if (
+            a[i][0] === b[j][0] &&
+            a[i][1] === b[j][1] &&
+            a[i + 1] === b[j + 1]
+          ) {
             found = true;
           }
         }
@@ -2194,7 +2206,11 @@ export class PuzzleGeometry {
             }
             let found = -1;
             let neg = false;
-            for (let j = 0; found < 0 && j < this.moveplanenormals.length; j++) {
+            for (
+              let j = 0;
+              found < 0 && j < this.moveplanenormals.length;
+              j++
+            ) {
               if (nn.dist(this.moveplanenormals[j]) < eps) {
                 found = j;
               } else if (nn.dist(this.moveplanenormals[j].smul(-1)) < eps) {
@@ -2206,9 +2222,17 @@ export class PuzzleGeometry {
               throw new Error("Could not find rotation");
             }
             let cmp = mps[found];
-            if (cmp.length !== mps[k].length ||
-                this.moveplanesets[k].length !== this.moveplanesets[found].length ||
-                this.diffmvsets(cmp, mps[k], this.moveplanesets[found].length, neg)) {
+            if (
+              cmp.length !== mps[k].length ||
+              this.moveplanesets[k].length !==
+                this.moveplanesets[found].length ||
+              this.diffmvsets(
+                cmp,
+                mps[k],
+                this.moveplanesets[found].length,
+                neg,
+              )
+            ) {
               addrot[i] |= ii;
             }
           }
@@ -2232,7 +2256,7 @@ export class PuzzleGeometry {
     }
     for (let k = 0; k < this.moveplanesets.length; k++) {
       if (addrot[k] !== 0) {
-        mps[k].push([0,this.moveplanesets[k].length]);
+        mps[k].push([0, this.moveplanesets[k].length]);
         mps[k].push(addrot[k]);
       }
     }
