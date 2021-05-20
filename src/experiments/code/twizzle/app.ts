@@ -97,14 +97,17 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
   return true;
 }
 
-function myparsedesc(desc: string, options:Array<string | number | boolean | Array<string>>) {
-   try {
-     const args = desc.split(" ");
-     const descind = parseoptions(args, options);
-     return parsedesc(args.slice(descind, args.length).join(" "));
-   } catch (e) {
-     return undefined;
-   }
+function myparsedesc(
+  desc: string,
+  options: Array<string | number | boolean | Array<string>>,
+) {
+  try {
+    const args = desc.split(" ");
+    const descind = parseoptions(args, options);
+    return parsedesc(args.slice(descind, args.length).join(" "));
+  } catch (e) {
+    return undefined;
+  }
 }
 
 function getModValueForMove(move: Move): number {

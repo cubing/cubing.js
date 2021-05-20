@@ -1,5 +1,8 @@
-export function parseoptions(argv: string[], optionlist: Array<string | boolean | number | Array<string>>): number {
-  let argp = 0 ;
+export function parseoptions(
+  argv: string[],
+  optionlist: Array<string | boolean | number | Array<string>>,
+): number {
+  let argp = 0;
   while (argp < argv.length && argv[argp][0] === "-") {
     const option = argv[argp++];
     if (option === "--rotations") {
