@@ -214,7 +214,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       true,
     );
     dataDown.twistyAlgViewer.highlighter.addMove(
-      (move as Parsed<Move>).charIndex,
+      (move as Parsed<Move>).startCharIndex,
       element,
     );
     return {
@@ -344,7 +344,7 @@ class MoveHighlighter {
 
   set(move: Parsed<Move> | null): void {
     const newElem = move
-      ? this.moveCharIndexMap.get(move.charIndex) ?? null
+      ? this.moveCharIndexMap.get(move.startCharIndex) ?? null
       : null;
     if (this.currentElem === newElem) {
       return;

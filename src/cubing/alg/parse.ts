@@ -35,23 +35,30 @@ export function parseQuantumMove(s: string): QuantumMove {
 }
 
 export interface ParserIndexed {
-  charIndex: number;
+  startCharIndex: number;
+  endCharIndex: number;
 }
 
 export type Parsed<T extends Alg | Unit> = T & ParserIndexed;
 
-function addCharIndex<T extends Alg | Unit>(
+// TODO: attach to parser so the end char index can default to `this.#idx`?
+function addCharIndices<T extends Alg | Unit>(
   t: T,
-  charIndex: number,
+  startCharIndex: number,
+  endCharIndex: number,
 ): Parsed<T> {
   const parsedT = t as ParserIndexed & T;
-  parsedT.charIndex = charIndex;
+  parsedT.startCharIndex = startCharIndex;
+  parsedT.endCharIndex = endCharIndex;
   return parsedT;
 }
 
 export function transferCharIndex<T extends Alg | Unit>(from: T, to: T): T {
-  if ("charIndex" in from) {
-    (to as Parsed<T>).charIndex = (from as Parsed<T>).charIndex;
+  if ("startCharIndex" in from) {
+    (to as Parsed<T>).startCharIndex = (from as Parsed<T>).startCharIndex;
+  }
+  if ("endCharIndex" in from) {
+    (to as Parsed<T>).endCharIndex = (from as Parsed<T>).endCharIndex;
   }
   return to;
 }
@@ -94,7 +101,8 @@ class AlgParser {
   }
 
   private parseAlgWithStopping(stopBefore: StoppingChar[]): Parsed<Alg> {
-    const algStartIdx = this.#idx;
+    let algStartIdx = this.#idx;
+    let algEndIdx = this.#idx;
     const algBuilder = new AlgBuilder();
 
     // We're "crowded" if there was not a space or newline since the last unit.
@@ -111,43 +119,62 @@ class AlgParser {
     mainLoop: while (this.#idx < this.#input.length) {
       const savedCharIndex = this.#idx;
       if ((stopBefore as string[]).includes(this.#input[this.#idx])) {
-        return addCharIndex(algBuilder.toAlg(), algStartIdx);
+        return addCharIndices(algBuilder.toAlg(), algStartIdx, algEndIdx);
       }
       if (this.tryConsumeNext(" ")) {
         crowded = false;
+        if (algBuilder.experimentalNumUnits() === 0) {
+          algStartIdx = this.#idx;
+        }
         continue mainLoop;
       } else if (moveStartRegex.test(this.#input[this.#idx])) {
         mustNotBeCrowded(savedCharIndex);
         const move = this.parseMoveImpl();
         algBuilder.push(move);
         crowded = true;
+        algEndIdx = this.#idx;
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
         mustNotBeCrowded(savedCharIndex);
         const sq1PairStartMatch = this.tryRegex(square1PairStart);
         if (sq1PairStartMatch) {
+          const topAmountString = sq1PairStartMatch[1];
           const savedCharIndexD = this.#idx;
           const sq1PairEndMatch = this.parseRegex(square1PairEnd);
-          const uMove = addCharIndex(
-            new Move(new QuantumMove("U_SQ_"), parseInt(sq1PairStartMatch[1])),
+          const uMove = addCharIndices(
+            new Move(new QuantumMove("U_SQ_"), parseInt(topAmountString)),
             savedCharIndex + 1,
+            savedCharIndex + 1 + topAmountString.length,
           );
-          const dMove = addCharIndex(
+          const dMove = addCharIndices(
             new Move(new QuantumMove("D_SQ_"), parseInt(sq1PairEndMatch[1])),
             savedCharIndexD,
+            this.#idx - 1,
           );
-          const alg = addCharIndex(new Alg([uMove, dMove]), savedCharIndex + 1);
-          algBuilder.push(addCharIndex(new Grouping(alg), savedCharIndex));
+          const alg = addCharIndices(
+            new Alg([uMove, dMove]),
+            savedCharIndex + 1,
+            this.#idx - 1,
+          );
+          algBuilder.push(
+            addCharIndices(new Grouping(alg), savedCharIndex, this.#idx),
+          );
           crowded = true;
+          algEndIdx = this.#idx;
           continue mainLoop;
         } else {
           const alg = this.parseAlgWithStopping([")"]);
           this.mustConsumeNext(")");
           const amount = this.parseAmount();
           algBuilder.push(
-            addCharIndex(new Grouping(alg, amount), savedCharIndex),
+            addCharIndices(
+              new Grouping(alg, amount),
+              savedCharIndex,
+              this.#idx,
+            ),
           );
           crowded = true;
+          algEndIdx = this.#idx;
           continue mainLoop;
         }
       } else if (this.tryConsumeNext("[")) {
@@ -158,40 +185,58 @@ class AlgParser {
         this.mustConsumeNext("]");
         switch (separator) {
           case ":":
-            algBuilder.push(addCharIndex(new Conjugate(A, B), savedCharIndex));
+            algBuilder.push(
+              addCharIndices(new Conjugate(A, B), savedCharIndex, this.#idx),
+            );
             crowded = true;
+            algEndIdx = this.#idx;
             continue mainLoop;
           case ",":
-            algBuilder.push(addCharIndex(new Commutator(A, B), savedCharIndex));
+            algBuilder.push(
+              addCharIndices(new Commutator(A, B), savedCharIndex, this.#idx),
+            );
             crowded = true;
+            algEndIdx = this.#idx;
             continue mainLoop;
           default:
             throw "unexpected parsing error";
         }
       } else if (this.tryConsumeNext("\n")) {
-        algBuilder.push(addCharIndex(new Newline(), savedCharIndex));
+        algBuilder.push(
+          addCharIndices(new Newline(), savedCharIndex, this.#idx),
+        );
         crowded = false;
+        algEndIdx = this.#idx;
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
         if (this.tryConsumeNext("/")) {
           mustNotBeCrowded(savedCharIndex);
           const [text] = this.parseRegex(commentTextRegex);
-          algBuilder.push(addCharIndex(new LineComment(text), savedCharIndex));
+          algBuilder.push(
+            addCharIndices(new LineComment(text), savedCharIndex, this.#idx),
+          );
           crowded = false;
+          algEndIdx = this.#idx;
           continue mainLoop;
         } else {
           // We allow crowding here to account for csTimer scrambles, which don't have a space between a Square-1 tuple and the following slash.
-          algBuilder.push(addCharIndex(new Move("_SLASH_"), savedCharIndex));
+          algBuilder.push(
+            addCharIndices(new Move("_SLASH_"), savedCharIndex, this.#idx),
+          );
           crowded = true;
+          algEndIdx = this.#idx;
           continue mainLoop;
         }
       } else if (this.tryConsumeNext(".")) {
         mustNotBeCrowded(savedCharIndex);
-        algBuilder.push(addCharIndex(new Pause(), savedCharIndex));
+        algBuilder.push(addCharIndices(new Pause(), savedCharIndex, this.#idx));
         while (this.tryConsumeNext(".")) {
-          algBuilder.push(addCharIndex(new Pause(), this.#idx - 1)); // TODO: Can we precompute index similarly to other units?
+          algBuilder.push(
+            addCharIndices(new Pause(), this.#idx - 1, this.#idx),
+          ); // TODO: Can we precompute index similarly to other units?
         }
         crowded = true;
+        algEndIdx = this.#idx;
         continue mainLoop;
       } else {
         throw new Error(`Unexpected character: ${this.popNext()}`);
@@ -204,7 +249,7 @@ class AlgParser {
     if (stopBefore.length > 0) {
       throw new Error("expected stopping");
     }
-    return addCharIndex(algBuilder.toAlg(), algStartIdx);
+    return addCharIndices(algBuilder.toAlg(), algStartIdx, algEndIdx);
   }
 
   private parseQuantumMoveImpl(): QuantumMove {
@@ -223,7 +268,7 @@ class AlgParser {
     const savedCharIndex = this.#idx;
 
     if (this.tryConsumeNext("/")) {
-      return addCharIndex(new Move("_SLASH_"), savedCharIndex);
+      return addCharIndices(new Move("_SLASH_"), savedCharIndex, this.#idx);
     }
 
     let quantumMove = this.parseQuantumMoveImpl();
@@ -267,7 +312,11 @@ class AlgParser {
       }
     }
 
-    const move = addCharIndex(new Move(quantumMove, amount), savedCharIndex);
+    const move = addCharIndices(
+      new Move(quantumMove, amount),
+      savedCharIndex,
+      this.#idx,
+    );
     return move;
   }
 
