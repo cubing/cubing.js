@@ -45,5 +45,5 @@ function updateInspector(s: string): void {
 
 algElem.addEventListener("input", () => updateInspector(algElem.value));
 
-algElem.textContent = "((5, -24234) R++)' / [ UR1+  , F2 ] ";
+algElem.textContent = "(R 2-5r3' (5, -24234) R++)' / [ UR1+   UR , F2 ] ";
 updateInspector(algElem.value);
