@@ -383,7 +383,7 @@ function gettextwriter(): (s: string) => void {
 
 function dowork(cmd: string): void {
   if (cmd === "scramble") {
-    scramble = 1;
+    scramble = 100;
     checkchange();
     return;
   }
@@ -518,7 +518,7 @@ function checkchange(): void {
       }
       if (scramble !== 0) {
         if (scramble > 0) {
-          options.push("scramble", 1);
+          options.push("scramble", 100);
         }
         scramble = 0;
         algo = "";
