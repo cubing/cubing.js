@@ -17,14 +17,10 @@ function updateInspector(s: string): void {
   inspectorElem.textContent = ""; //.padStart(12, " ") + singleLineS;
   try {
     const parsed = Alg.fromString(s);
-    for (const v of extract(parsed)) {
-      console.log(v);
+    for (const [name, v] of extract(parsed)) {
       const parsed = v as Parsed<Alg | Unit>;
       inspectorElem.textContent += "\n";
-      inspectorElem.textContent += ("" + v.constructor.name + ":").padStart(
-        12,
-        " ",
-      );
+      inspectorElem.textContent += ("" + name + ": ").padStart(12, " ");
       inspectorElem.textContent += new Array(parsed.startCharIndex)
         .fill(" ")
         .join("");
