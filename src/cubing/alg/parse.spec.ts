@@ -1,6 +1,22 @@
 import { parseAlg } from "./parse";
 import "./test/alg-comparison";
 
+describe("amount", () => {
+  it("handles 0 amounts", () => {
+    expect(parseAlg("R0").toString()).toEqual("R0");
+    // We currently allow `R0'` because some programs might need to go out of their
+    // way to avoid producing it in an edge cases. It's interpreted the same as
+    // `R0`.
+    expect(parseAlg("R0'").toString()).toEqual("R0");
+    expect(() => parseAlg("R01")).toThrow(
+      "Error at char index 1: An amount can only start with 0 if it's exactly the digit 0.",
+    );
+    expect(() => parseAlg("R00")).toThrow(
+      "Error at char index 1: An amount can only start with 0 if it's exactly the digit 0.",
+    );
+  });
+});
+
 describe("Clock", () => {
   it("parses notation", () => {
     expect(

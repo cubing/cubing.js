@@ -337,7 +337,13 @@ class AlgParser {
   }
 
   private parseAmountAndTrackEmptyAbsAmount(): [number, boolean] {
+    const savedIdx = this.#idx;
     const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
+    if (absAmountStr?.startsWith("0") && absAmountStr !== "0") {
+      throw new Error(
+        `Error at char index ${savedIdx}: An amount can only start with 0 if it's exactly the digit 0.`,
+      );
+    }
     return [
       parseIntWithEmptyFallback(absAmountStr, 1) * (primeStr === "'" ? -1 : 1),
       !absAmountStr,
@@ -345,7 +351,13 @@ class AlgParser {
   }
 
   private parseAmount(): number {
+    const savedIdx = this.#idx;
     const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
+    if (absAmountStr?.startsWith("0") && absAmountStr !== "0") {
+      throw new Error(
+        `Error at char index ${savedIdx}: An amount number can only start with 0 if it's exactly the digit 0.`,
+      );
+    }
     return (
       parseIntWithEmptyFallback(absAmountStr, 1) * (primeStr === "'" ? -1 : 1)
     );
