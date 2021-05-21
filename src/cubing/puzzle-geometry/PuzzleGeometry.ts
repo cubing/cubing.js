@@ -1634,7 +1634,7 @@ export class PuzzleGeometry {
         // big assumption here!  if outerlayer not specified, but inner
         // layer is (like 2U), we use the case of the family (upper vs
         // lower) to decide if it should be a slice turn or a wide turn.
-        if (grip >= "A") {
+        if (grip <= "Z") {
           // uppercase; slice move
           loslice = hislice;
         } else {
@@ -1657,7 +1657,14 @@ export class PuzzleGeometry {
       hislice < 0 ||
       hislice > this.moveplanesets[msi].length
     ) {
-      throw new Error("Bad slice spec " + loslice + " " + hislice);
+      throw new Error(
+        "Bad slice spec " +
+          loslice +
+          " " +
+          hislice +
+          " vs " +
+          this.moveplanesets[msi].length,
+      );
     }
     if (
       !permissivieMoveParsing &&
@@ -2176,6 +2183,11 @@ export class PuzzleGeometry {
   public getOrbitsDef(fortwisty: boolean): OrbitsDef {
     // generate a representation of the puzzle
     const setmoves = [];
+    if (fortwisty) {
+      for (let i = 0; i < this.cubiesetnames.length; i++) {
+        setmoves.push(1);
+      }
+    }
     const setnames: string[] = [];
     const setdefs: OrbitDef[] = [];
     // if both a movelist and rotations are needed, eliminate rotations
