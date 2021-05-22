@@ -469,7 +469,7 @@ function dowork(cmd: string): void {
   }
 }
 
-function checkchange(): void {
+function checkchange_internal(): void {
   // for some reason we need to do this repeatedly
   const descarg = descinput.value;
   if (descarg === null) {
@@ -588,6 +588,14 @@ function checkchange(): void {
     if (puzzle) {
       setAlgo(toparse, false);
     }
+  }
+}
+
+function checkchange(): void {
+  try {
+    checkchange_internal();
+  } catch (e) {
+    console.log("Ignoring " + e);
   }
 }
 
