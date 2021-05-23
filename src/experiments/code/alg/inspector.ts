@@ -13,7 +13,7 @@ function bracket(n: number): string {
 }
 
 function updateInspector(s: string): void {
-  const singleLineS = s.replace("\n", "⏎");
+  const singleLineS = s.replaceAll("\n", "⏎");
   inspectorElem.textContent = "";
   try {
     const parsed = Alg.fromString(s);
