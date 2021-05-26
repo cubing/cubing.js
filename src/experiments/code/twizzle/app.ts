@@ -13,6 +13,7 @@ import {
   getpuzzle,
   getpuzzles,
   parsedesc,
+  parseoptions,
   PuzzleGeometry,
   schreierSims,
   StickerDat,
@@ -25,6 +26,7 @@ import {
 import { TwistyPlayer } from "../../../cubing/twisty/index";
 import { countMoves } from "../../../cubing/notation";
 import { getURLParam, setURLParams } from "./url-params";
+import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
 
 if (getURLParam("debugShowRenderStats")) {
   experimentalShowRenderStats(true);
@@ -95,12 +97,27 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
   return true;
 }
 
+function myparsedesc(
+  desc: string,
+  options: Array<string | number | boolean | Array<string>>,
+) {
+  try {
+    const args = desc.split(" ");
+    const descind = parseoptions(args, options);
+    return parsedesc(args.slice(descind, args.length).join(" "));
+  } catch (e) {
+    return undefined;
+  }
+}
+
 function getModValueForMove(move: Move): number {
   if (!pg) {
+    console.log("Bailing on mod; pg is null");
     return 1;
   }
   const move2 = pg.notationMapper.notationToInternal(move);
   if (move2 === null) {
+    console.log("Bailing on mod; can't translate move");
     return 1;
   }
   move = move2;
@@ -119,6 +136,7 @@ function getModValueForMove(move: Move): number {
       return axis[2] as number;
     }
   }
+  console.log("Bailing on mod for " + family + "; no axis match");
   return 1;
 }
 
@@ -365,7 +383,7 @@ function gettextwriter(): (s: string) => void {
 
 function dowork(cmd: string): void {
   if (cmd === "scramble") {
-    scramble = 1;
+    scramble = 100;
     checkchange();
     return;
   }
@@ -425,7 +443,7 @@ function dowork(cmd: string): void {
   if (checkboxes.killori) {
     options.push("killorientation", true);
   }
-  const p = parsedesc(descinput.value);
+  const p = myparsedesc(descinput.value, options);
   const pg = new PuzzleGeometry(p[0], p[1], options);
   nextShape = p[0];
   pg.allstickers();
@@ -451,7 +469,7 @@ function dowork(cmd: string): void {
   }
 }
 
-function checkchange(): void {
+function checkchange_internal(): void {
   // for some reason we need to do this repeatedly
   const descarg = descinput.value;
   if (descarg === null) {
@@ -475,7 +493,8 @@ function checkchange(): void {
     let savealg = true;
     lastval = descarg;
     lastRender = newRender;
-    const p = parsedesc(descarg);
+    const moreoptions: Array<string | number | boolean> = [];
+    const p = myparsedesc(descarg, moreoptions);
     if (p) {
       if (savecam) {
         saveCamera();
@@ -499,12 +518,15 @@ function checkchange(): void {
       }
       if (scramble !== 0) {
         if (scramble > 0) {
-          options.push("scramble", 1);
+          options.push("scramble", 100);
         }
         scramble = 0;
         algo = "";
         safeKpuzzle = undefined;
         savealg = false;
+      }
+      for (let i = 0; i < moreoptions.length; i++) {
+        options.push(moreoptions[i]);
       }
       pg = new PuzzleGeometry(p[0], p[1], options);
       nextShape = p[0];
@@ -566,6 +588,14 @@ function checkchange(): void {
     if (puzzle) {
       setAlgo(toparse, false);
     }
+  }
+}
+
+function checkchange(): void {
+  try {
+    checkchange_internal();
+  } catch (e) {
+    console.log("Ignoring " + e);
   }
 }
 
@@ -647,7 +677,6 @@ function onMouseClick(
   // calculate objects intersecting the picking ray
   const controlTargets = twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
-  console.log("Intersects returned " + intersects.length);
   if (intersects.length > 0) {
     event.preventDefault();
     const mv = intersectionToMove(intersects[0].point, event, rightClick);
@@ -701,6 +730,9 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
 
 // TODO: Animate latest move but cancel algorithm moves.
 function addMove(move: Move): void {
+  if (puzzle && getNotationLayer(puzzle).lookupMove(move) === undefined) {
+    return;
+  }
   const currentAlg = Alg.fromString(algoinput.value);
   const newAlg = experimentalAppendMove(currentAlg, move, {
     coalesce: true,
