@@ -156,10 +156,10 @@ export class Move extends AlgCommon<Move> {
     );
   }
 
-  isIdentical(other: Move): boolean {
-    const otherAsMove = other as Move;
+  isIdentical(other: Comparable): boolean {
+    const otherAsMove = other.as(Move);
     return (
-      other.is(Move) &&
+      !!otherAsMove &&
       this.#quantumWithAmount.isIdentical(otherAsMove.#quantumWithAmount)
     );
   }
