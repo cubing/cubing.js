@@ -145,7 +145,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   /** @deprecated */
-  set experimentalSetupAlg(newAlg: Alg) {
+  set experimentalSetupAlg(newAlg: Alg | string) {
     // TODO: do validation for other algs as well.
     if (typeof newAlg === "string") {
       console.warn(
