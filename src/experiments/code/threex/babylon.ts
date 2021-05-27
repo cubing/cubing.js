@@ -5,11 +5,7 @@ import {
   Mesh,
   Scene,
   Vector3,
-  // TODO: This is a workaround for TypeScript 4.3, which errors because
-  // `babylonjs` uses `WebGLObject`. It breaks Snowpack, but allows CI to work.
-  // Import `@babylonjs/core` directly once it has updated defs.
-  // @ts-ignore
-} from "../../../../node_modules/babylonjs/babylon";
+} from "@babylonjs/core";
 
 class BabylonTest {
   public canvas: HTMLCanvasElement = document.createElement("canvas");
