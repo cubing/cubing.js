@@ -79,7 +79,7 @@ export class QuantumMove extends Comparable {
     );
   }
 
-  isIdentical(other: Comparable): boolean {
+  isIdentical(other: QuantumMove): boolean {
     const otherAsQuantumMove = other as QuantumMove;
     return (
       other.is(QuantumMove) &&
@@ -157,9 +157,9 @@ export class Move extends AlgCommon<Move> {
   }
 
   isIdentical(other: Comparable): boolean {
-    const otherAsMove = other as Move;
+    const otherAsMove = other.as(Move);
     return (
-      other.is(Move) &&
+      !!otherAsMove &&
       this.#quantumWithAmount.isIdentical(otherAsMove.#quantumWithAmount)
     );
   }

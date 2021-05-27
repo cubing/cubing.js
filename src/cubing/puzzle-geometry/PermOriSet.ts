@@ -1,6 +1,6 @@
-import { NullMapper } from "./NotationMapper";
+import { NullMapper } from "./notation-mapping";
 import type { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
-import type { NotationMapper } from "./NotationMapper";
+import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
   factorial,

@@ -19,7 +19,7 @@ import {
   NxNxNCubeMapper,
   PyraminxNotationMapper,
   SkewbNotationMapper,
-} from "./NotationMapper";
+} from "./notation-mapping";
 import { iota, Perm, zeros } from "./Perm";
 import {
   externalName,
@@ -1229,14 +1229,14 @@ export class PuzzleGeometry {
         this.addNotationMapper = "";
       }
       if (
-        this.addNotationMapper === "SkewbMapper---DISABLED" &&
+        this.addNotationMapper === "SkewbMapper" &&
         moveplanesets[0].length === 1
       ) {
         this.notationMapper = new SkewbNotationMapper(this.swizzler);
         this.addNotationMapper = "";
       }
       if (
-        this.addNotationMapper === "PyraminxMapper---DISABLED" &&
+        this.addNotationMapper === "PyraminxMapper" &&
         moveplanesets[0].length === 2
       ) {
         this.notationMapper = new PyraminxNotationMapper(this.swizzler);

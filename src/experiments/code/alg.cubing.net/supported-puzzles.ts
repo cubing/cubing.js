@@ -83,6 +83,7 @@ for (const key of [
       "skewb",
       "fto",
       "gigaminx",
+      "pyraminx",
     ].includes(key)
       ? "3D"
       : "2D",
