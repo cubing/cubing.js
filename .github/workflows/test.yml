@@ -30,6 +30,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-      - run: make test
+      - run: make test-jest
       - run: make lint
+      - run: make test-import-restrictions
+      - run: make test-tsc
       - run: make format
