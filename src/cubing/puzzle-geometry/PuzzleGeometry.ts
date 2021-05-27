@@ -19,7 +19,7 @@ import {
   NxNxNCubeMapper,
   PyraminxNotationMapper,
   SkewbNotationMapper,
-} from "./NotationMapper";
+} from "./notation-mapping";
 import { iota, Perm, zeros } from "./Perm";
 import {
   externalName,
