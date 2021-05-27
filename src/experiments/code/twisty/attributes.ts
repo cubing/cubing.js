@@ -16,7 +16,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#alg")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
     }),
   );
   const tw = new TwistyPlayer();
@@ -27,7 +27,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#experimental-setup-alg")!.appendChild(
     new TwistyPlayer({
-      experimentalSetupAlg: new Alg("L' U R U' L U R'"),
+      experimentalSetupAlg: "L' U R U' L U R'",
     }),
   );
   const tw = new TwistyPlayer();
@@ -38,12 +38,12 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#experimental-setup-anchor")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       experimentalSetupAnchor: "end",
     }),
   );
   const tw = new TwistyPlayer({
-    alg: new Alg("R U R' U R U2' R'"),
+    alg: "R U R' U R U2' R'",
   });
   document.querySelector("#experimental-setup-anchor")!.appendChild(tw);
   tw.experimentalSetupAnchor = "end";
@@ -52,7 +52,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#puzzle")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       puzzle: "fto",
     }),
   );
@@ -65,7 +65,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#visualization")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       visualization: "2D",
     }),
   );
@@ -78,7 +78,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#hint-facelets")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       hintFacelets: "none",
     }),
   );
@@ -91,7 +91,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#experimental-stickering")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       experimentalStickering: "OLL",
     }),
   );
@@ -104,7 +104,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#background")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       background: "none",
     }),
   );
@@ -117,7 +117,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#control-panel")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       controlPanel: "none",
     }),
   );
@@ -130,7 +130,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#back-view")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       backView: "side-by-side",
     }),
   );
@@ -143,7 +143,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#experimental-camera-position")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       experimentalCameraPosition: new Vector3(-4, 4, 0),
     }),
   );
@@ -156,7 +156,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#viewer-link")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       viewerLink: "none",
     }),
   );
@@ -169,7 +169,7 @@ experimentalSetShareAllNewRenderers(true);
 {
   document.querySelector("#multiple-attributes")!.appendChild(
     new TwistyPlayer({
-      alg: new Alg("R U R' U R U2' R'"),
+      alg: "R U R' U R U2' R'",
       experimentalSetupAnchor: "end",
       experimentalStickering: "OLL",
       background: "none",

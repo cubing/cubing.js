@@ -14,7 +14,7 @@ window.addEventListener("load", () => {
     new TwistyPlayer({
       puzzle: "2x2x2",
       visualization: "2D",
-      alg: new Alg("R2 F2 U2 R2"),
+      alg: "R2 F2 U2 R2",
       // playerConfig: {
       //   experimentalBackgroundCheckered: false,
       // },

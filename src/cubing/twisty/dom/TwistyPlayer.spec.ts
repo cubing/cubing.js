@@ -5,14 +5,14 @@ import "../../alg/test/alg-comparison";
 describe("TwistyPlayer", () => {
   it("can be constructed", () => {
     const twistyPlayer = new TwistyPlayer({
-      alg: new Alg("R U R'"),
+      alg: "R U R'",
     });
     expect(twistyPlayer.alg.experimentalNumUnits()).toEqual(3);
   });
 
   it("can set alg using string", () => {
     const twistyPlayer = new TwistyPlayer({
-      alg: new Alg("R U R'"),
+      alg: "R U R'",
     });
     // TODO(https://github.com/microsoft/TypeScript/pull/42425): remove `@ts-ignore`.
     // @ts-ignore
