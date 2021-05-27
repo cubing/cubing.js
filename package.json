@@ -33,7 +33,7 @@
     "puppeteer": "^8.0.0",
     "snowpack": "^3.5.0",
     "ts-jest": "^26.3.0",
-    "typescript": "^4.2.3",
+    "typescript": "^4.3.2",
     "yargs": "^16.2.0"
   },
   "scripts": {
