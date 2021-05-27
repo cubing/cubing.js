@@ -11,6 +11,10 @@ const pyraminxFamilyMap: Record<string, string> = {
   l: "FLD",
   r: "FDR",
   b: "DLR",
+  Uv: "FRLv",
+  Lv: "FLDv",
+  Rv: "FDRv",
+  Bv: "DLRv",
 };
 
 const pyraminxFamilyMap3: Record<string, string> = {
@@ -40,14 +44,33 @@ export class PyraminxNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
   public notationToInternal(move: Move): Move | null {
-    console.log("move", move);
-    console.log("split", this.child.splitByFaceNames(move.family));
+    console.log(
+      "move",
+      move.toString(),
+      move,
+      move.innerLayer,
+      move.outerLayer,
+      move.family,
+      move.innerLayer === 3 && !move.outerLayer,
+    );
     if (move.innerLayer === 3 && !move.outerLayer) {
+      console.log("Sdfsdfds");
       const newFamily3 = pyraminxFamilyMap3[move.family];
-      console.log({ newFamily3 });
+      console.log(
+        move.family,
+        { newFamily3 },
+        new Move(
+          new QuantumMove(newFamily3, move.innerLayer, move.outerLayer),
+          move.amount,
+        ),
+        new Move(
+          new QuantumMove(newFamily3, move.innerLayer, move.outerLayer),
+          move.amount,
+        ).toString(),
+      );
       if (newFamily3) {
         return new Move(
-          new QuantumMove(newFamily3, move.outerLayer, move.innerLayer),
+          new QuantumMove(newFamily3, move.innerLayer, move.outerLayer),
           move.amount,
         );
       }
@@ -56,12 +79,14 @@ export class PyraminxNotationMapper implements NotationMapper {
       return null;
     }
     const newFamily = pyraminxFamilyMap[move.family];
+
     if (newFamily) {
       return new Move(
-        new QuantumMove(newFamily, move.outerLayer, move.innerLayer),
+        new QuantumMove(newFamily, move.innerLayer, move.outerLayer),
         move.amount,
       );
     } else if (pyraminxExternalQuantumY.isIdentical(move.quantum)) {
+      console.log("sfdsf", pyraminxInternalQuantumY);
       return new Move(pyraminxInternalQuantumY, -move.amount);
     } else {
       return null;
@@ -70,6 +95,7 @@ export class PyraminxNotationMapper implements NotationMapper {
 
   // we never rewrite click moves to these moves.
   public notationToExternal(move: Move): Move | null {
+    console.log("split", this.child.splitByFaceNames(move.family));
     if (move.innerLayer === 3 && !move.outerLayer) {
       for (const [external, internal] of Object.entries(pyraminxFamilyMap3)) {
         if (this.child.spinmatch(move.family, internal)) {
