@@ -14,7 +14,7 @@ import type { Parsed } from "../../alg/parse";
 type AnimatedLeafUnit = Move | Pause;
 
 interface DataDown {
-  startCharIdxMin: number;
+  targetCharIdx: number;
   numMovesSofar: number;
 }
 
@@ -25,13 +25,12 @@ type DataUp =
     }
   | { animatedMoveCount: number };
 
-// Returns the first move with ending char index >= the given index.
 export class AlgEditorCharSearch extends TraversalDownUp<DataDown, DataUp> {
   traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     let numMovesSofar: number = dataDown.numMovesSofar;
     for (const unit of alg.units()) {
-      const newDown = {
-        startCharIdxMin: dataDown.startCharIdxMin,
+      const newDown: DataDown = {
+        targetCharIdx: dataDown.targetCharIdx,
         numMovesSofar,
       };
       const dataUp = this.traverseUnit(unit, newDown);
@@ -56,7 +55,7 @@ export class AlgEditorCharSearch extends TraversalDownUp<DataDown, DataUp> {
   traverseMove(move: Move, dataDown: DataDown): DataUp {
     const asParsed = move as Parsed<Move>; // TODO: handle non-parsed?
     // console.log(dataDown, move.toString(), asParsed.startCharIndex);
-    if (asParsed.endCharIndex >= dataDown.startCharIdxMin) {
+    if (asParsed.endCharIndex > dataDown.targetCharIdx) {
       return {
         latestUnit: asParsed,
         animatedMoveIdx: dataDown.numMovesSofar,
@@ -73,7 +72,7 @@ export class AlgEditorCharSearch extends TraversalDownUp<DataDown, DataUp> {
       return dataUpA;
     }
     const dataDownB: DataDown = {
-      startCharIdxMin: dataDown.startCharIdxMin,
+      targetCharIdx: dataDown.targetCharIdx,
       numMovesSofar: dataDown.numMovesSofar + dataUpA.animatedMoveCount,
     };
     const dataUpB = this.traverseAlg(commutator.B, dataDownB);
@@ -93,7 +92,7 @@ export class AlgEditorCharSearch extends TraversalDownUp<DataDown, DataUp> {
       return dataUpA;
     }
     const dataDownB: DataDown = {
-      startCharIdxMin: dataDown.startCharIdxMin,
+      targetCharIdx: dataDown.targetCharIdx,
       numMovesSofar: dataDown.numMovesSofar + dataUpA.animatedMoveCount,
     };
     const dataUpB = this.traverseAlg(conjugate.B, dataDownB);
@@ -109,7 +108,7 @@ export class AlgEditorCharSearch extends TraversalDownUp<DataDown, DataUp> {
   // TODO: share impl with move?
   traversePause(pause: Pause, dataDown: DataDown): DataUp {
     const asParsed = pause as Parsed<Pause>; // TODO: handle non-parsed?
-    if (asParsed.endCharIndex >= dataDown.startCharIdxMin) {
+    if (asParsed.endCharIndex > dataDown.targetCharIdx) {
       return {
         latestUnit: asParsed,
         animatedMoveIdx: dataDown.numMovesSofar,

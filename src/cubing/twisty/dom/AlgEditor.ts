@@ -86,7 +86,7 @@ export class AlgEditor extends ManagedCustomElement {
     }
     // console.log(this.#textarea.selectionStart);
     const dataUp = algEditorCharSearch(this.#alg, {
-      startCharIdxMin: this.#textarea.selectionStart,
+      targetCharIdx: this.#textarea.selectionStart,
       numMovesSofar: 0,
     });
     if ("latestUnit" in dataUp) {
@@ -95,8 +95,9 @@ export class AlgEditor extends ManagedCustomElement {
           detail: {
             idx: dataUp.animatedMoveIdx,
             isAtStartOfLeaf:
-              this.#textarea.selectionStart ===
-              dataUp.latestUnit.startCharIndex,
+              this.#textarea.selectionStart >=
+                dataUp.latestUnit.startCharIndex &&
+              this.#textarea.selectionStart < dataUp.latestUnit.endCharIndex,
             leaf: dataUp.latestUnit,
           },
         }),
@@ -105,7 +106,7 @@ export class AlgEditor extends ManagedCustomElement {
     } else {
       this.dispatchEvent(
         new CustomEvent("animatedMoveIndexChange", {
-          detail: { idx: dataUp.animatedMoveCount, isAtStartOfLeaf: false },
+          detail: { idx: dataUp.animatedMoveCount, isPartiallyInLeaf: false },
         }),
       );
     }
