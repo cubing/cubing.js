@@ -133,7 +133,7 @@ export class Twisty3DCanvas
 
   protected connectedCallback(): void {
     // Resize as soon as we're in the DOM, to avoid a flash of incorrectly sized content.
-    this.resize();
+    this.#resize();
     this.render();
   }
 
@@ -159,7 +159,7 @@ export class Twisty3DCanvas
     this.stats?.begin();
     this.scheduler.cancelAnimFrame();
     if (this.resizePending) {
-      this.resize();
+      this.#resize();
     }
 
     if (this.rendererIsShared) {
@@ -193,11 +193,11 @@ export class Twisty3DCanvas
     this.scheduleRender();
   }
 
-  private resize(): void {
+  #resize(minWidth: number = 0, minHeight: number = 0): void {
     this.resizePending = false;
 
-    const w = this.contentWrapper.clientWidth;
-    const h = this.contentWrapper.clientHeight;
+    const w = Math.max(this.contentWrapper.clientWidth, minWidth);
+    const h = Math.max(this.contentWrapper.clientHeight, minHeight);
     let off = 0;
     if (this.legacyExperimentalShift > 0) {
       off = Math.max(0, Math.floor((w - h) * 0.5));
@@ -228,15 +228,24 @@ export class Twisty3DCanvas
   }
 
   // Square crop is useful for rending icons.
-  renderToDataURL(options: { squareCrop?: boolean } = {}): string {
+  renderToDataURL(
+    options: {
+      squareCrop?: boolean;
+      minWidth?: number;
+      minHeight?: number;
+    } = {},
+  ): string {
+    this.#resize(options.minWidth, options.minHeight);
+
     // We don't preserve the drawing buffer, so we have to render again and then immediately read the canvas data.
     // https://stackoverflow.com/a/30647502
     this.render();
 
+    let url: string;
     // TODO: can we assume that a central crop is similar enough to how a square canvas render would loook?
     if (!options.squareCrop || this.canvas.width === this.canvas.height) {
       // TODO: is this such an uncommon path that we can skip it?
-      return this.canvas.toDataURL();
+      url = this.canvas.toDataURL();
     } else {
       const tempCanvas = document.createElement("canvas");
       const squareSize = Math.min(this.canvas.width, this.canvas.height);
@@ -248,8 +257,10 @@ export class Twisty3DCanvas
         -(this.canvas.width - squareSize) / 2,
         -(this.canvas.height - squareSize) / 2,
       );
-      return tempCanvas.toDataURL();
+      url = tempCanvas.toDataURL();
     }
+    this.#resize();
+    return url;
   }
 }
 
