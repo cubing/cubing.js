@@ -30,9 +30,11 @@ algTracker.addEventListener(
   (e: CustomEvent<{ alg: Alg }>) => {
     try {
       player.alg = e.detail.alg;
+      algTracker.setAlgValidForPuzzle(true);
     } catch (e) {
       console.error("cannot set alg for puzzle", e);
       player.alg = new Alg();
+      algTracker.setAlgValidForPuzzle(false);
     }
   },
 );
@@ -40,14 +42,14 @@ algTracker.addEventListener(
 algTracker.addEventListener(
   "animatedMoveIndexChange",
   (e: CustomEvent<{ idx: number }>) => {
-    const timestamp = player.cursor!.experimentalTimestampFromIndex(
-      e.detail.idx,
-    );
-    console.log(e.detail.idx, timestamp);
     try {
+      const timestamp = player.cursor!.experimentalTimestampFromIndex(
+        e.detail.idx,
+      );
+      console.log(e.detail.idx, timestamp);
       player.timeline.setTimestamp(timestamp);
     } catch (e) {
-      console.error("cannot set idx", e);
+      // console.error("cannot set idx", e);
       player.timeline.timestamp = 0;
     }
   },

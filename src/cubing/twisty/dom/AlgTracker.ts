@@ -15,6 +15,14 @@ export class AlgTracker extends ManagedCustomElement {
     "none" | "warning" | "error"
   > = new ClassListManager(this, "issue-", ["none", "warning", "error"]);
 
+  #textareaClassListValidForPuzzleManager: ClassListManager<
+    "none" | "warning" | "error"
+  > = new ClassListManager(this, "valid-for-puzzle-", [
+    "none",
+    "warning",
+    "error",
+  ]);
+
   constructor() {
     super();
     this.addElement(this.#textarea);
@@ -80,6 +88,12 @@ export class AlgTracker extends ManagedCustomElement {
         }),
       );
     }
+  }
+
+  setAlgValidForPuzzle(valid: boolean) {
+    this.#textareaClassListValidForPuzzleManager.setValue(
+      valid ? "none" : "error",
+    );
   }
 }
 
