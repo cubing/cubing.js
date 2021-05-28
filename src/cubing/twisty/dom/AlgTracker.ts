@@ -2,6 +2,7 @@
 
 import { Alg } from "../../alg";
 import { algTrackerCSS } from "./AlgTracker.css_";
+import { algTrackerStartCharSearch } from "./AlgTrackerStartCharSearch";
 import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { customElementsShim } from "./element/node-custom-element-shims";
@@ -43,10 +44,15 @@ export class AlgTracker extends ManagedCustomElement {
   }
 
   onSelectionChange(): void {
+    if (
+      document.activeElement !== this ||
+      this.shadow.activeElement !== this.#textarea
+    ) {
+      return;
+    }
+    console.log(this.#textarea.selectionStart);
     console.log(
-      document.activeElement === this,
-      this.shadow.activeElement === this.#textarea,
-      this.#textarea.selectionStart,
+      algTrackerStartCharSearch(this.#alg, this.#textarea.selectionStart),
     );
   }
 }
