@@ -2,13 +2,13 @@
 
 import { Alg, Move, Pause } from "../../alg";
 import type { Parsed } from "../../alg/parse";
-import { algTrackerCSS } from "./AlgTracker.css_";
-import { algTrackerCharSearch } from "./AlgTrackerStartCharSearch";
+import { algEditorCSS } from "./AlgEditor.css_";
+import { algEditorCharSearch } from "./AlgEditorStartCharSearch";
 import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { customElementsShim } from "./element/node-custom-element-shims";
 
-export class AlgTracker extends ManagedCustomElement {
+export class AlgEditor extends ManagedCustomElement {
   #alg: Alg = new Alg();
   #textarea: HTMLTextAreaElement = document.createElement("textarea");
   #carbonCopy: HTMLDivElement = document.createElement("div");
@@ -39,7 +39,7 @@ export class AlgTracker extends ManagedCustomElement {
     this.#carbonCopyHighlight.classList.add("highlight");
     this.#carbonCopy.appendChild(this.#carbonCopyHighlight);
 
-    this.addCSS(algTrackerCSS);
+    this.addCSS(algEditorCSS);
 
     this.#textarea.addEventListener("input", () => this.onInput());
     document.addEventListener("selectionchange", () =>
@@ -85,7 +85,7 @@ export class AlgTracker extends ManagedCustomElement {
       return;
     }
     // console.log(this.#textarea.selectionStart);
-    const dataUp = algTrackerCharSearch(this.#alg, {
+    const dataUp = algEditorCharSearch(this.#alg, {
       startCharIdxMin: this.#textarea.selectionStart,
       numMovesSofar: 0,
     });
@@ -133,4 +133,4 @@ export class AlgTracker extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("alg-tracker", AlgTracker);
+customElementsShim.define("alg-editor", AlgEditor);

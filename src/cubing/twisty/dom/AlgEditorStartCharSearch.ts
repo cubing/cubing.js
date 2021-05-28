@@ -26,7 +26,7 @@ type DataUp =
   | { animatedMoveCount: number };
 
 // Returns the first move with ending char index >= the given index.
-export class AlgTrackerCharSearch extends TraversalDownUp<DataDown, DataUp> {
+export class AlgEditorCharSearch extends TraversalDownUp<DataDown, DataUp> {
   traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     let numMovesSofar: number = dataDown.numMovesSofar;
     for (const unit of alg.units()) {
@@ -129,7 +129,7 @@ export class AlgTrackerCharSearch extends TraversalDownUp<DataDown, DataUp> {
   }
 }
 
-const algTrackerCharSearchInstance = new AlgTrackerCharSearch();
-export const algTrackerCharSearch = algTrackerCharSearchInstance.traverseAlg.bind(
-  algTrackerCharSearchInstance,
+const algEditorCharSearchInstance = new AlgEditorCharSearch();
+export const algEditorCharSearch = algEditorCharSearchInstance.traverseAlg.bind(
+  algEditorCharSearchInstance,
 ) as (alg: Alg, dataDown: DataDown) => DataUp;

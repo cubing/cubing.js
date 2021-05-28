@@ -1,6 +1,6 @@
 import { CSSSource } from "./element/ManagedCustomElement";
 
-export const algTrackerCSS = new CSSSource(`
+export const algEditorCSS = new CSSSource(`
 :host {
   width: 384px;
   height: 384px;
@@ -9,7 +9,7 @@ export const algTrackerCSS = new CSSSource(`
 
 textarea, .carbon-copy {
   font-family: sans-serif;
-  padding: 0.1em;
+  padding: 0.5em;
   box-sizing: border-box;
   font-size: 1.25em;
   line-height: 1.2em;
