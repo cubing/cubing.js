@@ -41,13 +41,15 @@ algTracker.addEventListener(
 
 algTracker.addEventListener(
   "animatedMoveIndexChange",
-  (e: CustomEvent<{ idx: number }>) => {
+  (e: CustomEvent<{ idx: number; isAtStartOfLeaf: Blob }>) => {
     try {
       const timestamp = player.cursor!.experimentalTimestampFromIndex(
         e.detail.idx,
       );
-      console.log(e.detail.idx, timestamp);
-      player.timeline.setTimestamp(timestamp);
+      console.log(e.detail, timestamp);
+      player.timeline.setTimestamp(
+        timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
+      );
     } catch (e) {
       // console.error("cannot set idx", e);
       player.timeline.timestamp = 0;

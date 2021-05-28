@@ -78,13 +78,18 @@ export class AlgTracker extends ManagedCustomElement {
     if ("latestUnit" in dataUp) {
       this.dispatchEvent(
         new CustomEvent("animatedMoveIndexChange", {
-          detail: { idx: dataUp.animatedMoveIdx },
+          detail: {
+            idx: dataUp.animatedMoveIdx,
+            isAtStartOfLeaf:
+              this.#textarea.selectionStart ===
+              dataUp.latestUnit.startCharIndex,
+          },
         }),
       );
     } else {
       this.dispatchEvent(
         new CustomEvent("animatedMoveIndexChange", {
-          detail: { idx: dataUp.animatedMoveCount },
+          detail: { idx: dataUp.animatedMoveCount, isAtStartOfLeaf: false },
         }),
       );
     }
