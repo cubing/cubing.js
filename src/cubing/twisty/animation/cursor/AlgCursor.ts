@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 // start of imports
-import type { Alg } from "../../../alg";
+import { Alg, Move } from "../../../alg";
 import { KPuzzle, KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { KPuzzleWrapper } from "../../3D/puzzles/KPuzzleWrapper";
 import type { AlgIndexer } from "../indexer/AlgIndexer";
@@ -137,6 +137,10 @@ export class AlgCursor
       };
 
       if (this.indexer.numMoves() > 0) {
+        const move = this.indexer.getMove(idx)?.as(Move);
+        if (!move) {
+          return; // TODO
+        }
         const fraction =
           (timestamp - this.indexer.indexToMoveStartTimestamp(idx)) /
           this.indexer.moveDuration(idx);
@@ -144,10 +148,9 @@ export class AlgCursor
           // TODO: push this into the indexer
           position.state = this.ksolvePuzzle.combine(
             state,
-            this.ksolvePuzzle.stateFromMove(this.indexer.getMove(idx)!),
+            this.ksolvePuzzle.stateFromMove(move),
           ) as Transformation;
         } else if (fraction > 0) {
-          const move = this.indexer.getMove(idx);
           if (move) {
             position.movesInProgress.push({
               move,

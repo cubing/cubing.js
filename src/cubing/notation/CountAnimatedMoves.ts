@@ -41,7 +41,7 @@ class CountAnimatedMoves extends TraversalUp<number, number> {
   }
 
   public traversePause(_pause: Pause): number {
-    return 0;
+    return 1;
   }
 
   public traverseNewline(_newline: Newline): number {
