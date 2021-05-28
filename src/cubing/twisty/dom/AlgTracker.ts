@@ -10,6 +10,7 @@ import { customElementsShim } from "./element/node-custom-element-shims";
 export class AlgTracker extends ManagedCustomElement {
   #alg: Alg = new Alg();
   #textarea: HTMLTextAreaElement = document.createElement("textarea");
+  #carbonCopy: HTMLDivElement = document.createElement("div");
 
   #textareaClassListManager: ClassListManager<
     "none" | "warning" | "error"
@@ -25,6 +26,8 @@ export class AlgTracker extends ManagedCustomElement {
 
   constructor() {
     super();
+    this.#carbonCopy.classList.add("carbon-copy");
+    this.addElement(this.#carbonCopy);
     this.addElement(this.#textarea);
 
     this.addCSS(algTrackerCSS);
@@ -42,6 +45,7 @@ export class AlgTracker extends ManagedCustomElement {
   }
 
   onInput(): void {
+    this.#carbonCopy.textContent = this.#textarea.value;
     try {
       this.#alg = new Alg(this.#textarea.value);
       this.dispatchEvent(
