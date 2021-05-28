@@ -102,17 +102,20 @@ export class TwistyPlayer extends ManagedCustomElement {
     ["none", "bottom-row"],
   );
 
+  #experimentalInvalidInitialAlgCallback: (alg: Alg) => void;
+
   // TODO: support config from DOM.
   constructor(
     initialConfig: TwistyPlayerInitialConfig = {},
     legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null,
-    private experimentalInvalidInitialAlgCallback: (alg: Alg) => void = () => {
+    experimentalInvalidInitialAlgCallback: (alg: Alg) => void = () => {
       // stub
     },
   ) {
     super();
     this.addCSS(twistyPlayerCSS);
     this.#config = new TwistyPlayerConfig(this, initialConfig);
+    this.#experimentalInvalidInitialAlgCallback = experimentalInvalidInitialAlgCallback;
 
     this.timeline = new Timeline();
     this.timeline.addActionListener(this);
@@ -131,8 +134,8 @@ export class TwistyPlayer extends ManagedCustomElement {
       newAlg = Alg.fromString(newAlg);
     }
     this.#config.attributes["alg"].setValue(newAlg);
-    this.cursor?.setAlg(newAlg, this.indexerConstructor()); // TODO: can we ensure the cursor already exists?
-    this.setCursorStartState();
+    this.cursor?.setAlg(newAlg, this.#indexerConstructor()); // TODO: can we ensure the cursor already exists?
+    this.#setCursorStartState();
 
     this.dispatchEvent(
       new CustomEvent("experimental-alg-update", { detail: { alg: this.alg } }),
@@ -153,7 +156,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       newAlg = new Alg((newAlg as unknown) as string);
     }
     this.#config.attributes["experimental-setup-alg"].setValue(newAlg);
-    this.setCursorStartState();
+    this.#setCursorStartState();
   }
 
   /** @deprecated */
@@ -161,16 +164,16 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["experimental-setup-alg"].value;
   }
 
-  private setCursorStartState(): void {
+  #setCursorStartState(): void {
     if (this.cursor) {
       this.cursor.setStartState(
         this.#experimentalStartStateOverride ??
-          this.cursor.algToState(this.cursorStartAlg()),
+          this.cursor.algToState(this.#cursorStartAlg()),
       ); // TODO
     }
   }
 
-  private cursorStartAlg(): Alg {
+  #cursorStartAlg(): Alg {
     let startAlg = this.experimentalSetupAlg;
     if (this.experimentalSetupAnchor === "end") {
       startAlg = startAlg.concat(this.alg.invert());
@@ -183,7 +186,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#config.attributes["experimental-setup-anchor"].setValue(
       setupToLocation,
     );
-    this.setCursorStartState();
+    this.#setCursorStartState();
   }
 
   /** @deprecated */
@@ -249,7 +252,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       }
       if (twisty3D instanceof PG3D) {
         (async () => {
-          const appearance = await this.getPG3DAppearance();
+          const appearance = await this.#getPG3DAppearance();
           twisty3D.experimentalSetAppearance(appearance!); // TODO
         })();
       }
@@ -296,10 +299,10 @@ export class TwistyPlayer extends ManagedCustomElement {
   set backView(backView: BackViewLayout) {
     this.#config.attributes["back-view"].setValue(backView);
     if (backView !== "none" && this.viewerElems.length === 1) {
-      this.createBackViewer();
+      this.#createBackViewer();
     }
     if (backView === "none" && this.viewerElems.length > 1) {
-      this.removeBackViewerElem();
+      this.#removeBackViewerElem();
     }
     if (this.#viewerWrapper && this.#viewerWrapper.setBackView(backView)) {
       for (const viewer of this.viewerElems as Twisty3DCanvas[]) {
@@ -379,7 +382,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   experimentalSetStartStateOverride(state: Transformation | null): void {
     this.#experimentalStartStateOverride = state;
-    this.setCursorStartState();
+    this.#setCursorStartState();
   }
 
   #cursorIndexerName: "simple" | "tree" | "simultaneous" = "tree";
@@ -392,10 +395,10 @@ export class TwistyPlayer extends ManagedCustomElement {
       return;
     }
     this.#cursorIndexerName = cursorName;
-    this.cursor?.experimentalSetIndexer(this.indexerConstructor());
+    this.cursor?.experimentalSetIndexer(this.#indexerConstructor());
   }
 
-  private indexerConstructor(): IndexerConstructor {
+  #indexerConstructor(): IndexerConstructor {
     return indexerMap[this.#cursorIndexerName];
   }
 
@@ -479,7 +482,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   #renderMode: "2D" | "3D" | null = null;
 
   // Idempotent
-  private clearRenderMode(): void {
+  #clearRenderMode(): void {
     switch (this.#renderMode) {
       case "3D":
         this.scene = null;
@@ -496,27 +499,27 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#renderMode = null;
   }
 
-  private setRenderMode2D(): void {
+  #setRenderMode2D(): void {
     if (this.#renderMode === "2D") {
       return;
     }
-    this.clearRenderMode();
+    this.#clearRenderMode();
     this.#renderMode = "2D";
   }
 
-  private setTwisty2DSVG(twisty2DSVG: Twisty2DSVG): void {
-    this.setRenderMode2D();
+  #setTwisty2DSVG(twisty2DSVG: Twisty2DSVG): void {
+    this.#setRenderMode2D();
 
     this.#viewerWrapper.clear();
     this.#viewerWrapper.addElement(twisty2DSVG);
     this.viewerElems.push(twisty2DSVG);
   }
 
-  private setRenderMode3D(): void {
+  #setRenderMode3D(): void {
     if (this.#renderMode === "3D") {
       return;
     }
-    this.clearRenderMode();
+    this.#clearRenderMode();
 
     this.scene = new Twisty3DScene();
     const mainViewer = new Twisty3DCanvas(this.scene, {
@@ -526,12 +529,12 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#viewerWrapper.addElement(mainViewer);
 
     if (this.backView !== "none") {
-      this.createBackViewer();
+      this.#createBackViewer();
     }
     this.#renderMode = "3D";
   }
 
-  private setTwisty3D(twisty3D: Twisty3DPuzzle): void {
+  #setTwisty3D(twisty3D: Twisty3DPuzzle): void {
     if (this.twisty3D) {
       this.scene!.removeTwisty3DPuzzle(this.twisty3D);
       if (this.twisty3D instanceof PG3D) {
@@ -543,18 +546,18 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.scene!.addTwisty3DPuzzle(twisty3D);
   }
 
-  private setCursor(cursor: AlgCursor): void {
+  #setCursor(cursor: AlgCursor): void {
     const oldCursor = this.cursor;
     this.cursor = cursor;
     try {
-      this.cursor.setAlg(this.alg, this.indexerConstructor());
-      this.setCursorStartState();
+      this.cursor.setAlg(this.alg, this.#indexerConstructor());
+      this.#setCursorStartState();
     } catch (e) {
-      this.cursor.setAlg(new Alg(), this.indexerConstructor());
+      this.cursor.setAlg(new Alg(), this.#indexerConstructor());
       this.cursor.setStartState(this.cursor.algToState(new Alg()));
-      this.experimentalInvalidInitialAlgCallback(this.alg);
+      this.#experimentalInvalidInitialAlgCallback(this.alg);
     }
-    this.setCursorStartState();
+    this.#setCursorStartState();
     this.timeline.addCursor(cursor);
     if (oldCursor) {
       this.timeline.removeCursor(oldCursor);
@@ -601,23 +604,23 @@ export class TwistyPlayer extends ManagedCustomElement {
         this.timeline,
         def,
         this.alg,
-        this.cursorStartAlg(),
-        this.indexerConstructor(),
+        this.#cursorStartAlg(),
+        this.#indexerConstructor(),
       ); // TODO: validate more directly if the alg is okay for the puzzle.
-      this.setCursor(cursor);
+      this.#setCursor(cursor);
     } catch (e) {
       if (initial) {
         // TODO: also take into account setup alg.
-        this.experimentalInvalidInitialAlgCallback(this.alg);
+        this.#experimentalInvalidInitialAlgCallback(this.alg);
       }
       cursor = new AlgCursor(
         this.timeline,
         def,
         new Alg(),
         new Alg(),
-        this.indexerConstructor(),
+        this.#indexerConstructor(),
       );
-      this.setCursor(cursor);
+      this.#setCursor(cursor);
     }
     if (
       initial &&
@@ -635,7 +638,7 @@ export class TwistyPlayer extends ManagedCustomElement {
             options.experimentalStickering = this.experimentalStickering;
           }
 
-          this.setRenderMode2D();
+          this.#setRenderMode2D();
           const svgPromiseFn =
             this.visualization === "2D"
               ? puzzleLoader.svg
@@ -648,14 +651,14 @@ export class TwistyPlayer extends ManagedCustomElement {
             puzzleLoader,
           );
           if (!pendingPuzzleUpdate.cancelled) {
-            this.setTwisty2DSVG(mainViewer);
+            this.#setTwisty2DSVG(mainViewer);
           }
         }
         break;
       case "3D":
       case "PG3D":
         {
-          this.setRenderMode3D();
+          this.#setRenderMode3D();
           const scene = this.scene!;
 
           let twisty3D: Twisty3DPuzzle;
@@ -698,7 +701,7 @@ export class TwistyPlayer extends ManagedCustomElement {
               options,
             );
             (async () => {
-              const appearance = await this.getPG3DAppearance();
+              const appearance = await this.#getPG3DAppearance();
               if (appearance) {
                 pg3d.experimentalSetAppearance(appearance);
               }
@@ -706,13 +709,13 @@ export class TwistyPlayer extends ManagedCustomElement {
             this.legacyExperimentalPG3D = pg3d;
             twisty3D = pg3d;
           }
-          this.setTwisty3D(twisty3D);
+          this.#setTwisty3D(twisty3D);
         }
         break;
     }
   }
 
-  private async getPG3DAppearance(): Promise<PuzzleAppearance | null> {
+  async #getPG3DAppearance(): Promise<PuzzleAppearance | null> {
     const puzzleLoader = puzzles[this.puzzle];
     if (puzzleLoader?.appearance) {
       return puzzleLoader.appearance(this.experimentalStickering ?? "full");
@@ -720,7 +723,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     return null;
   }
 
-  private createBackViewer(): void {
+  #createBackViewer(): void {
     if (!is3DVisualization(this.visualization)) {
       throw new Error("Back viewer requires a 3D visualization");
     }
@@ -734,7 +737,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.#viewerWrapper.addElement(backViewer);
   }
 
-  private removeBackViewerElem(): void {
+  #removeBackViewerElem(): void {
     // TODO: Validate visualization.
     if (this.viewerElems.length !== 2) {
       throw new Error("Tried to remove non-existent back view!");
@@ -758,7 +761,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     coalesceDelayed: boolean = false,
   ): void {
     if (this.#hackyPendingFinalMoveCoalesce) {
-      this.hackyCoalescePending();
+      this.#hackyCoalescePending();
     }
     const oldNumMoves = countMoves(this.alg); // TODO
     const newAlg = experimentalAppendMove(this.alg, move, {
@@ -791,12 +794,12 @@ export class TwistyPlayer extends ManagedCustomElement {
       actionEvent.locationType === TimestampLocationType.EndOfTimeline &&
       this.#hackyPendingFinalMoveCoalesce
     ) {
-      this.hackyCoalescePending();
+      this.#hackyCoalescePending();
       this.timeline.jumpToEnd();
     }
   }
 
-  private hackyCoalescePending(): void {
+  #hackyCoalescePending(): void {
     const units = Array.from(this.alg.units());
     const length = units.length;
     const pending = this.#hackyPendingFinalMoveCoalesce;
