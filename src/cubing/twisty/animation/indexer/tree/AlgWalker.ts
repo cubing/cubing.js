@@ -80,7 +80,7 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
   }
 
   public traverseGrouping(grouping: Grouping): AlgPartDecoration<P> {
-    const dec = this.traverseAlg(grouping.experimentalAlg);
+    const dec = this.traverseAlg(grouping.alg);
     return this.mult(dec, grouping.amount, [dec]);
   }
 
@@ -264,7 +264,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     }
     const back = this.domult(wd, grouping.amount);
     return this.traverseAlg(
-      grouping.experimentalAlg,
+      grouping.alg,
       new WalkerDown(wd.apd.children[0], back),
     );
   }

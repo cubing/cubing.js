@@ -39,7 +39,7 @@ class ChunkAlgs extends TraversalUp<Alg, Unit> {
 
   traverseGrouping(grouping: Grouping): Unit {
     return new Grouping(
-      this.traverseAlg(grouping.experimentalAlg),
+      this.traverseAlg(grouping.alg),
       grouping.amount, // TODO
     );
   }

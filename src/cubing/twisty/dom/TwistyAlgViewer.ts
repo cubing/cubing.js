@@ -189,7 +189,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       });
     } else {
       moveCount += element.addElem(
-        this.traverseAlg(grouping.experimentalAlg, {
+        this.traverseAlg(grouping.alg, {
           earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
           twistyAlgViewer: dataDown.twistyAlgViewer,
           direction,

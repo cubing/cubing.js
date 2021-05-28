@@ -78,7 +78,7 @@ class Normalize extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
     const newOptions = {
       depth: options.depth ? options.depth - 1 : null,
     }; // TODO: avoid allocations?
-    yield new Grouping(this.traverseAlg(grouping.experimentalAlg, newOptions));
+    yield new Grouping(this.traverseAlg(grouping.alg, newOptions));
   }
 
   public *traverseMove(move: Move, _options: SimplifyOptions): Generator<Unit> {

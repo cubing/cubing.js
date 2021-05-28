@@ -21,9 +21,7 @@ class CountAnimatedMoves extends TraversalUp<number, number> {
   }
 
   public traverseGrouping(grouping: Grouping): number {
-    return (
-      this.traverseAlg(grouping.experimentalAlg) * Math.abs(grouping.amount)
-    );
+    return this.traverseAlg(grouping.alg) * Math.abs(grouping.amount);
   }
 
   public traverseMove(_move: Move): number {

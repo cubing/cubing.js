@@ -101,9 +101,7 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     const processed: LocalMoveWithRange[][] = [];
 
     const segmentOnce: Alg =
-      grouping.amount > 0
-        ? grouping.experimentalAlg
-        : grouping.experimentalAlg.invert();
+      grouping.amount > 0 ? grouping.alg : grouping.alg.invert();
     for (let i = 0; i < Math.abs(grouping.amount); i++) {
       processed.push(this.traverseGroupingOnce(segmentOnce));
     }

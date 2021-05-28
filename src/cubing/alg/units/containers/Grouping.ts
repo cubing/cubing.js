@@ -23,7 +23,7 @@ class Square1TupleFormatter {
     this.quantumU_SQ_ ||= new QuantumMove("U_SQ_");
     this.quantumD_SQ_ ||= new QuantumMove("D_SQ_");
 
-    const quantumAlg = grouping.experimentalAlg;
+    const quantumAlg = grouping.alg;
     if (quantumAlg.experimentalNumUnits() === 2) {
       const [U, D] = quantumAlg.units();
       if (
@@ -60,8 +60,7 @@ export class Grouping extends AlgCommon<Grouping> {
     );
   }
 
-  /** @deprecated */
-  get experimentalAlg(): Alg {
+  get alg(): Alg {
     return this.#quantumWithAmount.quantum;
   }
 

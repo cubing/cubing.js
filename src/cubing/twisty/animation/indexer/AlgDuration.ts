@@ -63,7 +63,7 @@ export class AlgDuration extends TraversalUp<Duration> {
   }
 
   public traverseGrouping(grouping: Grouping): Duration {
-    return grouping.amount * this.traverseAlg(grouping.experimentalAlg);
+    return grouping.amount * this.traverseAlg(grouping.alg);
   }
 
   public traverseMove(move: Move): Duration {

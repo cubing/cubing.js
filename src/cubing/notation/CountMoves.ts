@@ -31,7 +31,7 @@ class CountMoves extends TraversalUp<number> {
   public traverseGrouping(grouping: Grouping): number {
     // const unit: Unit = Alg.fromString("SDf");
     // console.log(unit);
-    const alg: Alg = grouping.experimentalAlg;
+    const alg: Alg = grouping.alg;
     return this.traverseAlg(alg) * Math.abs(grouping.amount);
   }
 

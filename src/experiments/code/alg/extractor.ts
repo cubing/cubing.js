@@ -21,7 +21,7 @@ class Extractor extends TraversalUp<Generator<[string, Unit | Alg]>> {
 
   *traverseGrouping(grouping: Grouping): Generator<[string, Unit | Alg]> {
     yield ["Grouping", grouping];
-    yield* this.traverseAlg(grouping.experimentalAlg);
+    yield* this.traverseAlg(grouping.alg);
   }
 
   *traverseMove(move: Move): Generator<[string, Unit | Alg]> {
