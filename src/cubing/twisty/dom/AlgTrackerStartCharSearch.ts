@@ -10,102 +10,125 @@ import {
   TraversalDownUp,
 } from "../../alg";
 import type { Parsed } from "../../alg/parse";
-import type { LeafUnit } from "../../alg/units/Unit";
+
+type AnimatedLeafUnit = Move | Pause;
 
 interface DataDown {
-  idx: number;
+  startCharIdxMin: number;
   numMovesSofar: number;
 }
 
-interface DataUp {
-  latestUnit: Parsed<LeafUnit>;
-  numMovesInside: number;
-}
+type DataUp =
+  | {
+      latestUnit: Parsed<AnimatedLeafUnit>;
+      animatedMovedIdx: number;
+    }
+  | { animatedMoveCount: number };
 
-// Returns the first move with starting char index <= the given index.
+// Returns the first move with starting char index >= the given index.
 export class AlgTrackerStartCharSearch extends TraversalDownUp<
   DataDown,
-  { unit: Parsed<LeafUnit>; numMovesSofar: number } | null
+  DataUp
 > {
-  traverseAlg(alg: Alg, dataDown: DataDown): Parsed<LeafUnit> | null {
-    let latest: Parsed<LeafUnit> | null = null;
+  traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
+    let animatedMoveCount: number = 0;
     for (const unit of alg.units()) {
-      const traversed = this.traverseUnit(unit, dataDown);
-      if (traversed) {
-        latest = traversed;
-      } else {
-        continue;
+      const dataUp = this.traverseUnit(unit, dataDown);
+      if ("latestUnit" in dataUp) {
+        return dataUp;
       }
+      animatedMoveCount += dataUp.animatedMoveCount;
     }
-    return latest;
+    return { animatedMoveCount };
   }
 
-  traverseGrouping(
-    grouping: Grouping,
-    dataDown: DataDown,
-  ): Parsed<LeafUnit> | null {
-    return this.traverseAlg(grouping.experimentalAlg, idx);
+  traverseGrouping(grouping: Grouping, dataDown: DataDown): DataUp {
+    const dataUp = this.traverseAlg(grouping.alg, dataDown);
+    if ("latestUnit" in dataUp) {
+      return dataUp;
+    }
+    return {
+      animatedMoveCount: dataUp.animatedMoveCount * Math.abs(grouping.amount),
+    };
   }
 
-  traverseMove(move: Move, dataDown: DataDown): Parsed<LeafUnit> | null {
+  traverseMove(move: Move, dataDown: DataDown): DataUp {
     const asParsed = move as Parsed<Move>; // TODO: handle non-parsed?
-    if (asParsed.startCharIndex <= idx) {
-      return asParsed;
+    console.log(dataDown, move.toString(), asParsed.startCharIndex);
+    if (asParsed.startCharIndex >= dataDown.startCharIdxMin) {
+      return {
+        latestUnit: asParsed,
+        animatedMovedIdx: dataDown.numMovesSofar,
+      };
     }
-    return null;
+    return {
+      animatedMoveCount: 1,
+    };
   }
 
-  traverseCommutator(
-    commutator: Commutator,
-    idx: number,
-  ): Parsed<LeafUnit> | null {
-    return (
-      this.traverseUnit(commutator.B, idx) ||
-      this.traverseUnit(commutator.A, idx)
-    );
+  traverseCommutator(commutator: Commutator, dataDown: DataDown): DataUp {
+    const dataUpA = this.traverseAlg(commutator.A, dataDown);
+    if ("latestUnit" in dataUpA) {
+      return dataUpA;
+    }
+    const dataDownB: DataDown = {
+      startCharIdxMin: dataDown.startCharIdxMin,
+      numMovesSofar: dataDown.numMovesSofar + dataUpA.animatedMoveCount,
+    };
+    const dataUpB = this.traverseAlg(commutator.B, dataDownB);
+    if ("latestUnit" in dataUpB) {
+      return dataUpB;
+    }
+    return {
+      animatedMoveCount:
+        2 * (dataUpA.animatedMoveCount + dataUpB.animatedMoveCount),
+    };
   }
 
-  traverseConjugate(
-    conjugate: Conjugate,
-    idx: number,
-  ): Parsed<LeafUnit> | null {
-    return (
-      this.traverseUnit(conjugate.B, idx) || this.traverseUnit(conjugate.A, idx)
-    );
+  // TODO: share impl with comm
+  traverseConjugate(conjugate: Conjugate, dataDown: DataDown): DataUp {
+    const dataUpA = this.traverseAlg(conjugate.A, dataDown);
+    if ("latestUnit" in dataUpA) {
+      return dataUpA;
+    }
+    const dataDownB: DataDown = {
+      startCharIdxMin: dataDown.startCharIdxMin,
+      numMovesSofar: dataDown.numMovesSofar + dataUpA.animatedMoveCount,
+    };
+    const dataUpB = this.traverseAlg(conjugate.B, dataDownB);
+    if ("latestUnit" in dataUpB) {
+      return dataUpB;
+    }
+    return {
+      animatedMoveCount:
+        dataUpA.animatedMoveCount * 2 + dataUpB.animatedMoveCount,
+    };
   }
 
-  traversePause(pause: Pause, dataDown: DataDown): Parsed<Pause> | null {
+  // TODO: share impl with move?
+  traversePause(pause: Pause, dataDown: DataDown): DataUp {
     const asParsed = pause as Parsed<Pause>; // TODO: handle non-parsed?
-    if (asParsed.startCharIndex <= idx) {
-      return asParsed;
+    if (asParsed.startCharIndex >= dataDown.startCharIdxMin) {
+      return {
+        latestUnit: asParsed,
+        animatedMovedIdx: dataDown.numMovesSofar,
+      };
     }
-    return null;
+    return {
+      animatedMoveCount: 1,
+    };
   }
 
-  traverseNewline(
-    newline: Newline,
-    dataDown: DataDown,
-  ): Parsed<Newline> | null {
-    const asParsed = newline as Parsed<Newline>; // TODO: handle non-parsed?
-    if (asParsed.startCharIndex <= idx) {
-      return asParsed;
-    }
-    return null;
+  traverseNewline(_newline: Newline, _dataDown: DataDown): DataUp {
+    return { animatedMoveCount: 0 };
   }
 
-  traverseLineComment(
-    comment: LineComment,
-    idx: number,
-  ): Parsed<LeafUnit> | null {
-    const asParsed = comment as Parsed<LineComment>; // TODO: handle non-parsed?
-    if (asParsed.startCharIndex <= idx) {
-      return asParsed;
-    }
-    return null;
+  traverseLineComment(_comment: LineComment, _dataDown: DataDown): DataUp {
+    return { animatedMoveCount: 0 };
   }
 }
 
 const algTrackerStartCharSearchInstance = new AlgTrackerStartCharSearch();
 export const algTrackerStartCharSearch = algTrackerStartCharSearchInstance.traverseAlg.bind(
   algTrackerStartCharSearchInstance,
-) as (alg: Alg, dataDown: DataDown) => Generator<Parsed<LeafUnit> | null>;
+) as (alg: Alg, dataDown: DataDown) => DataUp;

@@ -51,9 +51,15 @@ export class AlgTracker extends ManagedCustomElement {
       return;
     }
     console.log(this.#textarea.selectionStart);
-    console.log(
-      algTrackerStartCharSearch(this.#alg, this.#textarea.selectionStart),
-    );
+    const dataUp = algTrackerStartCharSearch(this.#alg, {
+      startCharIdxMin: this.#textarea.selectionStart,
+      numMovesSofar: 0,
+    });
+    if ("latestUnit" in dataUp) {
+      console.log(dataUp, dataUp.latestUnit.toString());
+    } else {
+      console.error(dataUp);
+    }
   }
 }
 
