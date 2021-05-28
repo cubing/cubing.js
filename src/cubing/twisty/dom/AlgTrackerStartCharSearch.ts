@@ -55,7 +55,7 @@ export class AlgTrackerCharSearch extends TraversalDownUp<DataDown, DataUp> {
 
   traverseMove(move: Move, dataDown: DataDown): DataUp {
     const asParsed = move as Parsed<Move>; // TODO: handle non-parsed?
-    console.log(dataDown, move.toString(), asParsed.startCharIndex);
+    // console.log(dataDown, move.toString(), asParsed.startCharIndex);
     if (asParsed.endCharIndex >= dataDown.startCharIdxMin) {
       return {
         latestUnit: asParsed,

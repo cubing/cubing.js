@@ -3,12 +3,12 @@ import { CSSSource } from "./element/ManagedCustomElement";
 export const algTrackerCSS = new CSSSource(`
 :host {
   width: 384px;
-  height: 256px;
+  height: 384px;
   display: grid;
 }
 
 textarea, .carbon-copy {
-  font-family: monospace;
+  font-family: sans-serif;
   padding: 0.1em;
   box-sizing: border-box;
   font-size: 1.25em;

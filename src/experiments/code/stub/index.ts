@@ -4,6 +4,7 @@
 import { Alg, Move, Pause } from "../../../cubing/alg";
 import type { Parsed } from "../../../cubing/alg/parse";
 import { TwistyPlayer } from "../../../cubing/twisty";
+import type { PuzzlePosition } from "../../../cubing/twisty/animation/cursor/CursorTypes";
 import { AlgTracker } from "../../../cubing/twisty/dom/AlgTracker";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
@@ -53,7 +54,7 @@ algTracker.addEventListener(
       const timestamp = player.cursor!.experimentalTimestampFromIndex(
         e.detail.idx,
       );
-      console.log(e.detail, timestamp, e.detail.leaf);
+      // console.log(e.detail, timestamp, e.detail.leaf);
       player.timeline.setTimestamp(
         timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
       );
@@ -64,5 +65,14 @@ algTracker.addEventListener(
   },
 );
 
-const algTracker2 = new AlgTracker();
-document.body.appendChild(algTracker2);
+setTimeout(() => {
+  player.cursor!.addPositionListener({
+    onPositionChange: (position: PuzzlePosition): void => {
+      if (position.movesInProgress.length > 0) {
+        algTracker.highlightLeaf(
+          position.movesInProgress[0].move as Parsed<Move>,
+        );
+      }
+    },
+  });
+}, 100);

@@ -1,6 +1,7 @@
 // TODO: see if this can replace AlgCursor?
 
-import { Alg } from "../../alg";
+import { Alg, Move, Pause } from "../../alg";
+import type { Parsed } from "../../alg/parse";
 import { algTrackerCSS } from "./AlgTracker.css_";
 import { algTrackerCharSearch } from "./AlgTrackerStartCharSearch";
 import { ClassListManager } from "./element/ClassListManager";
@@ -13,6 +14,8 @@ export class AlgTracker extends ManagedCustomElement {
   #carbonCopy: HTMLDivElement = document.createElement("div");
   #carbonCopyPrefix: HTMLSpanElement = document.createElement("span");
   #carbonCopyHighlight: HTMLSpanElement = document.createElement("span");
+
+  #highlightedLeaf: Parsed<Move | Pause> | null = null;
 
   #textareaClassListManager: ClassListManager<
     "none" | "warning" | "error"
@@ -71,7 +74,7 @@ export class AlgTracker extends ManagedCustomElement {
       );
       this.#textareaClassListManager.setValue("error");
     }
-    console.log(this.#alg);
+    // console.log(this.#alg);
   }
 
   onSelectionChange(): void {
@@ -81,7 +84,7 @@ export class AlgTracker extends ManagedCustomElement {
     ) {
       return;
     }
-    console.log(this.#textarea.selectionStart);
+    // console.log(this.#textarea.selectionStart);
     const dataUp = algTrackerCharSearch(this.#alg, {
       startCharIdxMin: this.#textarea.selectionStart,
       numMovesSofar: 0,
@@ -98,15 +101,7 @@ export class AlgTracker extends ManagedCustomElement {
           },
         }),
       );
-
-      this.#carbonCopyPrefix.textContent = this.#textarea.value.slice(
-        0,
-        dataUp.latestUnit.startCharIndex,
-      );
-      this.#carbonCopyHighlight.textContent = this.#textarea.value.slice(
-        dataUp.latestUnit.startCharIndex,
-        dataUp.latestUnit.endCharIndex,
-      );
+      this.highlightLeaf(dataUp.latestUnit);
     } else {
       this.dispatchEvent(
         new CustomEvent("animatedMoveIndexChange", {
@@ -119,6 +114,21 @@ export class AlgTracker extends ManagedCustomElement {
   setAlgValidForPuzzle(valid: boolean) {
     this.#textareaClassListValidForPuzzleManager.setValue(
       valid ? "none" : "error",
+    );
+  }
+
+  highlightLeaf(leaf: Parsed<Move | Pause>): void {
+    if (leaf === this.#highlightedLeaf) {
+      return;
+    }
+    this.#highlightedLeaf = leaf;
+    this.#carbonCopyPrefix.textContent = this.#textarea.value.slice(
+      0,
+      leaf.startCharIndex,
+    );
+    this.#carbonCopyHighlight.textContent = this.#textarea.value.slice(
+      leaf.startCharIndex,
+      leaf.endCharIndex,
     );
   }
 }
