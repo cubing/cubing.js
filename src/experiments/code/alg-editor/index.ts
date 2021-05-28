@@ -1,7 +1,8 @@
 import { Alg, Move, Pause } from "../../../cubing/alg";
 import type { Parsed } from "../../../cubing/alg/parse";
 import { TwistyPlayer } from "../../../cubing/twisty";
-import type { PuzzlePosition } from "../../../cubing/twisty/animation/cursor/CursorTypes";
+import type { TimeRange } from "../../../cubing/twisty/animation/cursor/AlgCursor";
+import type { MillisecondTimestamp } from "../../../cubing/twisty/animation/cursor/CursorTypes";
 import { AlgEditor } from "../../../cubing/twisty/dom/AlgEditor";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
@@ -63,13 +64,15 @@ algEditor.addEventListener(
 );
 
 setTimeout(() => {
-  player.cursor!.addPositionListener({
-    onPositionChange: (position: PuzzlePosition): void => {
-      if (position.movesInProgress.length > 0) {
-        algEditor.highlightLeaf(
-          position.movesInProgress[0].move as Parsed<Move>,
-        );
+  player.timeline!.addTimestampListener({
+    onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
+      const idx = player.cursor!.experimentalIndexFromTimestamp(timestamp);
+      const move = player.cursor!.experimentalMoveAtIndex(idx);
+      if (move) {
+        algEditor.highlightLeaf(move as Parsed<Move>);
       }
     },
+
+    onTimeRangeChange: (_timeRange: TimeRange): void => {},
   });
 }, 100);

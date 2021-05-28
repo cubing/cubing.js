@@ -21,8 +21,6 @@ alg-editor {
   grid-area: editor;
   width: 100%;
   height: 100%;
-  padding: 0.5em;
-  box-sizing: border-box;
 }
 
 /* Vertical Layout */
