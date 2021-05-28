@@ -25,11 +25,8 @@ type DataUp =
     }
   | { animatedMoveCount: number };
 
-// Returns the first move with starting char index >= the given index.
-export class AlgTrackerStartCharSearch extends TraversalDownUp<
-  DataDown,
-  DataUp
-> {
+// Returns the first move with ending char index >= the given index.
+export class AlgTrackerCharSearch extends TraversalDownUp<DataDown, DataUp> {
   traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     let numMovesSofar: number = dataDown.numMovesSofar;
     for (const unit of alg.units()) {
@@ -59,7 +56,7 @@ export class AlgTrackerStartCharSearch extends TraversalDownUp<
   traverseMove(move: Move, dataDown: DataDown): DataUp {
     const asParsed = move as Parsed<Move>; // TODO: handle non-parsed?
     console.log(dataDown, move.toString(), asParsed.startCharIndex);
-    if (asParsed.startCharIndex >= dataDown.startCharIdxMin) {
+    if (asParsed.endCharIndex >= dataDown.startCharIdxMin) {
       return {
         latestUnit: asParsed,
         animatedMoveIdx: dataDown.numMovesSofar,
@@ -112,7 +109,7 @@ export class AlgTrackerStartCharSearch extends TraversalDownUp<
   // TODO: share impl with move?
   traversePause(pause: Pause, dataDown: DataDown): DataUp {
     const asParsed = pause as Parsed<Pause>; // TODO: handle non-parsed?
-    if (asParsed.startCharIndex >= dataDown.startCharIdxMin) {
+    if (asParsed.endCharIndex >= dataDown.startCharIdxMin) {
       return {
         latestUnit: asParsed,
         animatedMoveIdx: dataDown.numMovesSofar,
@@ -132,7 +129,7 @@ export class AlgTrackerStartCharSearch extends TraversalDownUp<
   }
 }
 
-const algTrackerStartCharSearchInstance = new AlgTrackerStartCharSearch();
-export const algTrackerStartCharSearch = algTrackerStartCharSearchInstance.traverseAlg.bind(
-  algTrackerStartCharSearchInstance,
+const algTrackerCharSearchInstance = new AlgTrackerCharSearch();
+export const algTrackerCharSearch = algTrackerCharSearchInstance.traverseAlg.bind(
+  algTrackerCharSearchInstance,
 ) as (alg: Alg, dataDown: DataDown) => DataUp;

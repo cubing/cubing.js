@@ -1,7 +1,8 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { Alg } from "../../../cubing/alg";
+import { Alg, Move, Pause } from "../../../cubing/alg";
+import type { Parsed } from "../../../cubing/alg/parse";
 import { TwistyPlayer } from "../../../cubing/twisty";
 import { AlgTracker } from "../../../cubing/twisty/dom/AlgTracker";
 
@@ -41,12 +42,18 @@ algTracker.addEventListener(
 
 algTracker.addEventListener(
   "animatedMoveIndexChange",
-  (e: CustomEvent<{ idx: number; isAtStartOfLeaf: Blob }>) => {
+  (
+    e: CustomEvent<{
+      idx: number;
+      isAtStartOfLeaf: Blob;
+      leaf: Parsed<Move | Pause>;
+    }>,
+  ) => {
     try {
       const timestamp = player.cursor!.experimentalTimestampFromIndex(
         e.detail.idx,
       );
-      console.log(e.detail, timestamp);
+      console.log(e.detail, timestamp, e.detail.leaf);
       player.timeline.setTimestamp(
         timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
       );

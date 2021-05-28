@@ -2,7 +2,7 @@
 
 import { Alg } from "../../alg";
 import { algTrackerCSS } from "./AlgTracker.css_";
-import { algTrackerStartCharSearch } from "./AlgTrackerStartCharSearch";
+import { algTrackerCharSearch } from "./AlgTrackerStartCharSearch";
 import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { customElementsShim } from "./element/node-custom-element-shims";
@@ -11,6 +11,8 @@ export class AlgTracker extends ManagedCustomElement {
   #alg: Alg = new Alg();
   #textarea: HTMLTextAreaElement = document.createElement("textarea");
   #carbonCopy: HTMLDivElement = document.createElement("div");
+  #carbonCopyPrefix: HTMLSpanElement = document.createElement("span");
+  #carbonCopyHighlight: HTMLSpanElement = document.createElement("span");
 
   #textareaClassListManager: ClassListManager<
     "none" | "warning" | "error"
@@ -29,6 +31,10 @@ export class AlgTracker extends ManagedCustomElement {
     this.#carbonCopy.classList.add("carbon-copy");
     this.addElement(this.#carbonCopy);
     this.addElement(this.#textarea);
+    this.#carbonCopyPrefix.classList.add("prefix");
+    this.#carbonCopy.appendChild(this.#carbonCopyPrefix);
+    this.#carbonCopyHighlight.classList.add("highlight");
+    this.#carbonCopy.appendChild(this.#carbonCopyHighlight);
 
     this.addCSS(algTrackerCSS);
 
@@ -45,7 +51,8 @@ export class AlgTracker extends ManagedCustomElement {
   }
 
   onInput(): void {
-    this.#carbonCopy.textContent = this.#textarea.value;
+    this.#carbonCopyPrefix.textContent = this.#textarea.value;
+    this.#carbonCopyHighlight.textContent = "";
     try {
       this.#alg = new Alg(this.#textarea.value);
       this.dispatchEvent(
@@ -75,7 +82,7 @@ export class AlgTracker extends ManagedCustomElement {
       return;
     }
     console.log(this.#textarea.selectionStart);
-    const dataUp = algTrackerStartCharSearch(this.#alg, {
+    const dataUp = algTrackerCharSearch(this.#alg, {
       startCharIdxMin: this.#textarea.selectionStart,
       numMovesSofar: 0,
     });
@@ -87,8 +94,18 @@ export class AlgTracker extends ManagedCustomElement {
             isAtStartOfLeaf:
               this.#textarea.selectionStart ===
               dataUp.latestUnit.startCharIndex,
+            leaf: dataUp.latestUnit,
           },
         }),
+      );
+
+      this.#carbonCopyPrefix.textContent = this.#textarea.value.slice(
+        0,
+        dataUp.latestUnit.startCharIndex,
+      );
+      this.#carbonCopyHighlight.textContent = this.#textarea.value.slice(
+        dataUp.latestUnit.startCharIndex,
+        dataUp.latestUnit.endCharIndex,
       );
     } else {
       this.dispatchEvent(

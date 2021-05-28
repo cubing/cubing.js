@@ -31,7 +31,14 @@ textarea {
   border: 1px solid rgba(0, 0, 0, 0);
   white-space: pre-wrap;
   word-wrap: break-word;
-  text-shadow: 0 0 2px rgba(255, 128, 0, 0.5);
+  color: transparent;
+}
+
+.carbon-copy .highlight {
+  background: rgba(255, 128, 0, 0.5);
+  padding: 0.1em 0.2em;
+  margin: -0.1em -0.2em;
+  border-radius: 0.2em;
 }
 
 .wrapper.issue-warning textarea,
