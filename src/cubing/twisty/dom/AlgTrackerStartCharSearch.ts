@@ -21,7 +21,7 @@ interface DataDown {
 type DataUp =
   | {
       latestUnit: Parsed<AnimatedLeafUnit>;
-      animatedMovedIdx: number;
+      animatedMoveIdx: number;
     }
   | { animatedMoveCount: number };
 
@@ -31,15 +31,19 @@ export class AlgTrackerStartCharSearch extends TraversalDownUp<
   DataUp
 > {
   traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
-    let animatedMoveCount: number = 0;
+    let numMovesSofar: number = dataDown.numMovesSofar;
     for (const unit of alg.units()) {
-      const dataUp = this.traverseUnit(unit, dataDown);
+      const newDown = {
+        startCharIdxMin: dataDown.startCharIdxMin,
+        numMovesSofar,
+      };
+      const dataUp = this.traverseUnit(unit, newDown);
       if ("latestUnit" in dataUp) {
         return dataUp;
       }
-      animatedMoveCount += dataUp.animatedMoveCount;
+      numMovesSofar += dataUp.animatedMoveCount;
     }
-    return { animatedMoveCount };
+    return { animatedMoveCount: numMovesSofar - dataDown.numMovesSofar };
   }
 
   traverseGrouping(grouping: Grouping, dataDown: DataDown): DataUp {
@@ -58,7 +62,7 @@ export class AlgTrackerStartCharSearch extends TraversalDownUp<
     if (asParsed.startCharIndex >= dataDown.startCharIdxMin) {
       return {
         latestUnit: asParsed,
-        animatedMovedIdx: dataDown.numMovesSofar,
+        animatedMoveIdx: dataDown.numMovesSofar,
       };
     }
     return {
@@ -111,7 +115,7 @@ export class AlgTrackerStartCharSearch extends TraversalDownUp<
     if (asParsed.startCharIndex >= dataDown.startCharIdxMin) {
       return {
         latestUnit: asParsed,
-        animatedMovedIdx: dataDown.numMovesSofar,
+        animatedMoveIdx: dataDown.numMovesSofar,
       };
     }
     return {

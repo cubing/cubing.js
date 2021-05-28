@@ -27,9 +27,18 @@ export class AlgTracker extends ManagedCustomElement {
     );
   }
 
+  // TODO
+  set algString(s: string) {
+    this.#textarea.value = s;
+    this.onInput();
+  }
+
   onInput(): void {
     try {
       this.#alg = new Alg(this.#textarea.value);
+      this.dispatchEvent(
+        new CustomEvent("effectiveAlgChange", { detail: { alg: this.#alg } }),
+      );
       this.#textareaClassListManager.setValue(
         // TODO: better heuristics to avoid warning during editing
         this.#alg.toString().trimEnd() === this.#textarea.value.trimEnd()
@@ -38,6 +47,9 @@ export class AlgTracker extends ManagedCustomElement {
       );
     } catch (e) {
       this.#alg = new Alg();
+      this.dispatchEvent(
+        new CustomEvent("effectiveAlgChange", { detail: { alg: this.#alg } }),
+      );
       this.#textareaClassListManager.setValue("error");
     }
     console.log(this.#alg);
@@ -56,9 +68,17 @@ export class AlgTracker extends ManagedCustomElement {
       numMovesSofar: 0,
     });
     if ("latestUnit" in dataUp) {
-      console.log(dataUp, dataUp.latestUnit.toString());
+      this.dispatchEvent(
+        new CustomEvent("animatedMoveIndexChange", {
+          detail: { idx: dataUp.animatedMoveIdx },
+        }),
+      );
     } else {
-      console.error(dataUp);
+      this.dispatchEvent(
+        new CustomEvent("animatedMoveIndexChange", {
+          detail: { idx: dataUp.animatedMoveCount },
+        }),
+      );
     }
   }
 }
