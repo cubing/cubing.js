@@ -5,10 +5,6 @@ import type { TimeRange } from "../../../cubing/twisty/animation/cursor/AlgCurso
 import type { MillisecondTimestamp } from "../../../cubing/twisty/animation/cursor/CursorTypes";
 import { AlgEditor } from "../../../cubing/twisty/dom/AlgEditor";
 
-// Note: this file needs to contain code to avoid a Snowpack error.
-// So we put a `console.log` here for now.
-console.log("Loading stub file.");
-
 const alg = `F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2
 
 y x' // inspection
