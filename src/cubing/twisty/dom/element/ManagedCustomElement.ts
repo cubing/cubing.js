@@ -21,7 +21,7 @@ export class CSSSource {
 //   - Shadow root
 //     - Content wrapper
 export class ManagedCustomElement extends HTMLElementShim {
-  public shadow: ShadowRoot;
+  public shadow: ShadowRoot; // TODO: hide this
   public contentWrapper: HTMLDivElement; // TODO: can we get rid of this wrapper?
 
   private cssSourceMap: Map<CSSSource, HTMLStyleElement> = new Map();

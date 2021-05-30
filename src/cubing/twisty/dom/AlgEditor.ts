@@ -1,12 +1,17 @@
 // TODO: see if this can replace AlgCursor?
 
-import { Alg, Move, Pause } from "../../alg";
-import type { Parsed } from "../../alg/parse";
+import { Alg, Move, Pause } from "../../../cubing/alg";
+import type { Parsed } from "../../../cubing/alg/parse";
+import { TwistyPlayer } from "../../../cubing/twisty";
+import type { TimeRange } from "../animation/cursor/AlgCursor";
+import type { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
 import { algEditorCSS } from "./AlgEditor.css_";
 import { algEditorCharSearch } from "./AlgEditorStartCharSearch";
 import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { customElementsShim } from "./element/node-custom-element-shims";
+
+const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 
 export class AlgEditor extends ManagedCustomElement {
   #alg: Alg = new Alg();
@@ -29,7 +34,9 @@ export class AlgEditor extends ManagedCustomElement {
     "error",
   ]);
 
-  constructor() {
+  #twistyPlayer: TwistyPlayer | null = null;
+
+  constructor(options?: { twistyPlayer?: TwistyPlayer }) {
     super();
     this.#carbonCopy.classList.add("carbon-copy");
     this.addElement(this.#carbonCopy);
@@ -41,10 +48,15 @@ export class AlgEditor extends ManagedCustomElement {
 
     this.addCSS(algEditorCSS);
 
+    // TODO: What set of events should we register? `change`? `keydown`?
     this.#textarea.addEventListener("input", () => this.onInput());
     document.addEventListener("selectionchange", () =>
       this.onSelectionChange(),
     );
+
+    if (options?.twistyPlayer) {
+      this.twistyPlayer = options.twistyPlayer;
+    }
   }
 
   // TODO
@@ -131,6 +143,96 @@ export class AlgEditor extends ManagedCustomElement {
       leaf.startCharIndex,
       leaf.endCharIndex,
     );
+  }
+
+  get twistyPlayer(): TwistyPlayer | null {
+    return this.#twistyPlayer;
+  }
+
+  // TODO: spread out this impl over private methods instead of self-listeners.
+  set twistyPlayer(twistyPlayer: TwistyPlayer | null) {
+    if (this.#twistyPlayer) {
+      // TODO: support reassigment/clearing
+      console.warn("twisty-player reassignment/clearing is not supported");
+      return;
+    }
+    this.#twistyPlayer = twistyPlayer;
+
+    this.addEventListener(
+      "effectiveAlgChange",
+      (e: CustomEvent<{ alg: Alg }>) => {
+        try {
+          this.#twistyPlayer!.alg = e.detail.alg;
+          this.setAlgValidForPuzzle(true);
+        } catch (e) {
+          console.error("cannot set alg for puzzle", e);
+          this.#twistyPlayer!.alg = new Alg();
+          this.setAlgValidForPuzzle(false);
+        }
+      },
+    );
+
+    this.addEventListener(
+      "animatedMoveIndexChange",
+      (
+        e: CustomEvent<{
+          idx: number;
+          isAtStartOfLeaf: Blob;
+          leaf: Parsed<Move | Pause>;
+        }>,
+      ) => {
+        try {
+          const timestamp = this.#twistyPlayer!.cursor!.experimentalTimestampFromIndex(
+            e.detail.idx,
+          );
+          // console.log(e.detail, timestamp, e.detail.leaf);
+          this.#twistyPlayer!.timeline.setTimestamp(
+            timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
+          );
+        } catch (e) {
+          // console.error("cannot set idx", e);
+          this.#twistyPlayer!.timeline.timestamp = 0;
+        }
+      },
+    );
+
+    this.#twistyPlayer!.timeline!.addTimestampListener({
+      onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
+        const idx = this.#twistyPlayer!.cursor!.experimentalIndexFromTimestamp(
+          timestamp,
+        );
+        const move = this.#twistyPlayer!.cursor!.experimentalMoveAtIndex(idx);
+        if (move) {
+          this.highlightLeaf(move as Parsed<Move>);
+        }
+      },
+
+      onTimeRangeChange: (_timeRange: TimeRange): void => {},
+    });
+  }
+
+  protected attributeChangedCallback(
+    attributeName: string,
+    _oldValue: string,
+    newValue: string,
+  ): void {
+    if (attributeName === ATTRIBUTE_FOR_TWISTY_PLAYER) {
+      const elem = document.getElementById(newValue);
+      if (!elem) {
+        console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}= elem does not exist`);
+        return;
+      }
+      if (!(elem instanceof TwistyPlayer)) {
+        // TODO: avoid assuming single instance of lib?
+        console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}=is not a twisty-player`);
+        return;
+      }
+      this.twistyPlayer = elem;
+    }
+  }
+
+  static get observedAttributes(): string[] {
+    return [ATTRIBUTE_FOR_TWISTY_PLAYER];
   }
 }
 

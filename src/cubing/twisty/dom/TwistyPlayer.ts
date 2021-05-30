@@ -446,6 +446,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     });
   }
 
+  get initialized(): boolean {
+    return this.#initialized;
+  }
+
   public twizzleLink(): string {
     const url = new URL(
       "https://experiments.cubing.net/cubing.js/alg.cubing.net/index.html",
