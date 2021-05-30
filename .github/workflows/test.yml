@@ -35,3 +35,4 @@ jobs:
       - run: make test-import-restrictions
       - run: make test-tsc
       - run: make format
+      - run: make clean
