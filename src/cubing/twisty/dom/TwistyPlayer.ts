@@ -103,6 +103,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   );
 
   #experimentalInvalidInitialAlgCallback: (alg: Alg) => void;
+  #initialized: boolean = false;
 
   // TODO: support config from DOM.
   constructor(
@@ -436,7 +437,13 @@ export class TwistyPlayer extends ManagedCustomElement {
     this.addElement(this.controlElems[1]);
 
     this.#connected = true;
-    this.updatePuzzleDOM(true);
+    this.updatePuzzleDOM(true).then(() => {
+      if (!this.#initialized) {
+        this.#initialized = true;
+        // TODO: warn if `initialized` listener is registered after initialized?
+        this.dispatchEvent(new CustomEvent("initialized"));
+      }
+    });
   }
 
   public twizzleLink(): string {

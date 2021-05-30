@@ -59,16 +59,20 @@ algEditor.addEventListener(
   },
 );
 
-setTimeout(() => {
-  player.timeline!.addTimestampListener({
-    onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
-      const idx = player.cursor!.experimentalIndexFromTimestamp(timestamp);
-      const move = player.cursor!.experimentalMoveAtIndex(idx);
-      if (move) {
-        algEditor.highlightLeaf(move as Parsed<Move>);
-      }
-    },
+player.addEventListener(
+  "initialized",
+  () => {
+    player.timeline!.addTimestampListener({
+      onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
+        const idx = player.cursor!.experimentalIndexFromTimestamp(timestamp);
+        const move = player.cursor!.experimentalMoveAtIndex(idx);
+        if (move) {
+          algEditor.highlightLeaf(move as Parsed<Move>);
+        }
+      },
 
-    onTimeRangeChange: (_timeRange: TimeRange): void => {},
-  });
-}, 100);
+      onTimeRangeChange: (_timeRange: TimeRange): void => {},
+    });
+  },
+  { once: true },
+);
