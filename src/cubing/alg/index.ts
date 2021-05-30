@@ -8,6 +8,8 @@ export * from "./units";
 export { algCubingNetLink } from "./url";
 export type { AlgCubingNetOptions } from "./url";
 
+export { AlgEditor } from "../twisty/dom/AlgEditor";
+
 export { experimentalAppendMove } from "./operation";
 export { experimentalIs } from "./is";
 export {
