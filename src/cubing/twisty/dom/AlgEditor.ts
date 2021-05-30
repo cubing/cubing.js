@@ -46,6 +46,9 @@ export class AlgEditor extends ManagedCustomElement {
     this.#carbonCopyHighlight.classList.add("highlight");
     this.#carbonCopy.appendChild(this.#carbonCopyHighlight);
 
+    // Prevent iOS from defaulting to smart quotes.
+    this.#textarea.setAttribute("spellcheck", "false");
+
     this.addCSS(algEditorCSS);
 
     // TODO: What set of events should we register? `change`? `keydown`?
