@@ -1,12 +1,13 @@
 import { Vector3 } from "three";
 import { Alg } from "../../../cubing/alg";
 import { puzzles } from "../../../cubing/puzzles";
+import "../../../cubing/twisty"; // For `<alg-editor>` custom elem registration.
+import type { AlgEditor } from "../../../cubing/twisty";
 import {
   ExperimentalStickering,
   TwistyPlayer,
   TwistyPlayerInitialConfig,
 } from "../../../cubing/twisty";
-import type { AlgEditor } from "../../../cubing/twisty/dom/AlgEditor";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import {
   ALG_INPUT_PLACEHOLDER,

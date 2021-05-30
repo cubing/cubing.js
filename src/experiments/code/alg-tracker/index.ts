@@ -2,7 +2,7 @@ import { Alg, Move, Pause } from "../../../cubing/alg";
 import type { Parsed } from "../../../cubing/alg/parse";
 import { TwistyPlayer } from "../../../cubing/twisty";
 import type { PuzzlePosition } from "../../../cubing/twisty/animation/cursor/CursorTypes";
-import { AlgEditor } from "../../../cubing/twisty/dom/AlgEditor";
+import { AlgEditor } from "../../../cubing/twisty";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.

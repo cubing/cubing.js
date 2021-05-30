@@ -1,8 +1,8 @@
 // TODO: see if this can replace AlgCursor?
 
-import { Alg, Move, Pause } from "../../../cubing/alg";
-import type { Parsed } from "../../../cubing/alg/parse";
-import { TwistyPlayer } from "../../../cubing/twisty";
+import type { ExperimentalParsed } from "../../alg";
+import { Alg, Move, Pause } from "../../alg";
+import { TwistyPlayer } from "../../twisty";
 import type { TimeRange } from "../animation/cursor/AlgCursor";
 import type { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
 import { algEditorCSS } from "./AlgEditor.css_";
@@ -20,7 +20,7 @@ export class AlgEditor extends ManagedCustomElement {
   #carbonCopyPrefix: HTMLSpanElement = document.createElement("span");
   #carbonCopyHighlight: HTMLSpanElement = document.createElement("span");
 
-  #highlightedLeaf: Parsed<Move | Pause> | null = null;
+  #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
 
   #textareaClassListManager: ClassListManager<
     "none" | "warning" | "error"
@@ -138,7 +138,7 @@ export class AlgEditor extends ManagedCustomElement {
     );
   }
 
-  highlightLeaf(leaf: Parsed<Move | Pause>): void {
+  highlightLeaf(leaf: ExperimentalParsed<Move | Pause>): void {
     if (leaf === this.#highlightedLeaf) {
       return;
     }
@@ -186,7 +186,7 @@ export class AlgEditor extends ManagedCustomElement {
         e: CustomEvent<{
           idx: number;
           isAtStartOfLeaf: Blob;
-          leaf: Parsed<Move | Pause>;
+          leaf: ExperimentalParsed<Move | Pause>;
         }>,
       ) => {
         try {
@@ -211,7 +211,7 @@ export class AlgEditor extends ManagedCustomElement {
         );
         const move = this.#twistyPlayer!.cursor!.experimentalMoveAtIndex(idx);
         if (move) {
-          this.highlightLeaf(move as Parsed<Move>);
+          this.highlightLeaf(move as ExperimentalParsed<Move>);
         }
       },
 
