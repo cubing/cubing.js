@@ -9,6 +9,7 @@ control-pane {
   font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
   background: rgb(255, 245, 235);
   overflow: hidden;
+  overflow-y: auto;
   transition: opacity 0.5s;
 }
 
