@@ -21,10 +21,10 @@ export class CSSSource {
 //   - Shadow root
 //     - Content wrapper
 export class ManagedCustomElement extends HTMLElementShim {
-  public shadow: ShadowRoot; // TODO: hide this
-  public contentWrapper: HTMLDivElement; // TODO: can we get rid of this wrapper?
+  public readonly shadow: ShadowRoot; // TODO: hide this
+  public readonly contentWrapper: HTMLDivElement; // TODO: can we get rid of this wrapper?
 
-  private cssSourceMap: Map<CSSSource, HTMLStyleElement> = new Map();
+  #cssSourceMap: Map<CSSSource, HTMLStyleElement> = new Map();
   constructor(options?: { mode: "open" | "closed" }) {
     super();
     this.shadow = this.attachShadow({ mode: options?.mode ?? "closed" });
@@ -36,25 +36,25 @@ export class ManagedCustomElement extends HTMLElementShim {
 
   // Add the source, if not already added.
   public addCSS(cssSource: CSSSource): void {
-    if (this.cssSourceMap.get(cssSource)) {
+    if (this.#cssSourceMap.get(cssSource)) {
       return;
     }
 
     const cssElem: HTMLStyleElement = document.createElement("style");
     cssElem.textContent = cssSource.getAsString();
 
-    this.cssSourceMap.set(cssSource, cssElem);
+    this.#cssSourceMap.set(cssSource, cssElem);
     this.shadow.appendChild(cssElem);
   }
 
   // Remove the source, if it's currently added.
   public removeCSS(cssSource: CSSSource): void {
-    const cssElem = this.cssSourceMap.get(cssSource);
+    const cssElem = this.#cssSourceMap.get(cssSource);
     if (!cssElem) {
       return;
     }
     this.shadow.removeChild(cssElem);
-    this.cssSourceMap.delete(cssSource);
+    this.#cssSourceMap.delete(cssSource);
   }
 
   public addElement<T extends Node>(element: T): T {
