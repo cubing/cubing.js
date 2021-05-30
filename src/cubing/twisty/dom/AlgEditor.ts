@@ -68,6 +68,11 @@ export class AlgEditor extends ManagedCustomElement {
     this.onInput();
   }
 
+  // To we need a getter?
+  set placeholder(placeholderText: string) {
+    this.#textarea.placeholder = placeholderText;
+  }
+
   onInput(): void {
     this.#carbonCopyPrefix.textContent = this.#textarea.value;
     this.#carbonCopyHighlight.textContent = "";
@@ -231,6 +236,8 @@ export class AlgEditor extends ManagedCustomElement {
         return;
       }
       this.twistyPlayer = elem;
+    } else if (attributeName === "placeholder") {
+      this.placeholder = newValue;
     }
   }
 

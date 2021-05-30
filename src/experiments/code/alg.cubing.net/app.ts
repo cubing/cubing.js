@@ -6,6 +6,7 @@ import {
   TwistyPlayer,
   TwistyPlayerInitialConfig,
 } from "../../../cubing/twisty";
+import type { AlgEditor } from "../../../cubing/twisty/dom/AlgEditor";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import {
   ALG_INPUT_PLACEHOLDER,
@@ -58,6 +59,7 @@ export class App {
       this.setPuzzle.bind(this),
       this.setSetupAnchor.bind(this),
       this.setStickering.bind(this),
+      this.twistyPlayer,
     );
   }
 
@@ -143,7 +145,7 @@ const algElemStatusClasses: AlgElemStatusClass[] = [
 
 class ControlPane {
   public experimentalSetupAlgInput: HTMLTextAreaElement;
-  public algInput: HTMLTextAreaElement;
+  public algInput: AlgEditor;
   public puzzleSelect: HTMLSelectElement;
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
@@ -157,6 +159,7 @@ class ControlPane {
     private setStickeringCallback: (
       stickering: ExperimentalStickering,
     ) => boolean,
+    twistyPlayer: TwistyPlayer,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
@@ -170,9 +173,15 @@ class ControlPane {
     this.experimentalSetupAlgInput.value = initialData.experimentalSetupAlg.toString();
     this.setexperimentalSetupAlgElemStatus(null);
 
-    this.algInput = findOrCreateChildWithClass(this.element, "alg", "textarea");
+    this.algInput = findOrCreateChildWithClass(
+      this.element,
+      "alg",
+      "alg-editor",
+    ) as AlgEditor;
+    console.log(this.algInput, { twistyPlayer });
+    this.algInput.twistyPlayer = twistyPlayer;
     this.algInput.placeholder = ALG_INPUT_PLACEHOLDER;
-    this.algInput.value = initialData.alg.toString();
+    this.algInput.algString = initialData.alg.toString();
     this.setAlgElemStatus(null);
 
     this.puzzleSelect = findOrCreateChildWithClass(
@@ -250,7 +259,7 @@ class ControlPane {
 
   private onAlgInput(canonicalize: boolean): void {
     try {
-      const algString = this.algInput.value;
+      const algString = this.algInput.algString;
       const parsedAlg = Alg.fromString(algString);
       this.algChangeCallback(parsedAlg);
 
@@ -258,7 +267,7 @@ class ControlPane {
       const algIsCanonical = restringifiedAlg === algString;
 
       if (canonicalize && !algIsCanonical) {
-        this.algInput.value = restringifiedAlg;
+        this.algInput.algString = restringifiedAlg;
       }
       // Set status before passing to the `Twisty`.
       this.setAlgElemStatus(
