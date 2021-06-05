@@ -14,9 +14,6 @@ let SHOW_STATS = false;
 export function experimentalShowRenderStats(show: boolean): void {
   SHOW_STATS = show;
 }
-
-let resizeObserverWarningShown = false;
-
 let shareAllNewRenderers: boolean = false;
 
 // WARNING: The current shared renderer implementation is not every efficient.
@@ -106,19 +103,8 @@ export class Twisty3DCanvas
       this.scheduleRender.bind(this),
     );
 
-    // TODO: Remove this when enough Safari users have `ResizeObserver`.
-    if (window.ResizeObserver) {
-      const observer = new window.ResizeObserver(this.onResize.bind(this));
-      observer.observe(this.contentWrapper);
-    } else {
-      this.scheduleRender();
-      if (!resizeObserverWarningShown) {
-        console.warn(
-          "You are using an older browser that does not support `ResizeObserver`. Displayed puzzles will not be rescaled.",
-        );
-        resizeObserverWarningShown = true;
-      }
-    }
+    const observer = new window.ResizeObserver(this.onResize.bind(this));
+    observer.observe(this.contentWrapper);
   }
 
   public setMirror(partner: Twisty3DCanvas): void {
