@@ -3,35 +3,45 @@ import { CSSSource } from "./element/ManagedCustomElement";
 export const algEditorCSS = new CSSSource(`
 :host {
   width: 384px;
-  height: 384px;
   display: grid;
-}
-
-textarea, .carbon-copy {
-  font-family: sans-serif;
-  padding: 0.5em;
-  box-sizing: border-box;
-  font-size: 1.25em;
-  line-height: 1.2em;
-  position: absolute;
-}
-
-textarea {
-  width: 100%;
-  height: 100%;
-  resize: none;
-  background: none;
 }
 
 .wrapper {
   position: relative;
+  /*overflow: hidden;
+  resize: horizontal;*/
+}
+
+textarea, .carbon-copy {
+  width: 100%;
+  font-family: sans-serif;
+  line-height: 1.2em;
+
+  font-size: var(--font-size, inherit);
+  font-family: var(--font-family, inherit);
+
+  box-sizing: border-box;
+
+  padding: 0.5em;
+}
+
+textarea {
+  resize: none;
+  background: var(--background, none);
+  z-index: 2;
+  overflow: hidden;
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.25));
 }
 
 .carbon-copy {
-  border: 1px solid rgba(0, 0, 0, 0);
   white-space: pre-wrap;
   word-wrap: break-word;
   color: transparent;
+  user-select: none;
+  pointer-events: none;
+
+  z-index: 1;
+  position: absolute;
 }
 
 .carbon-copy .highlight {

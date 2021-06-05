@@ -13,6 +13,13 @@ import { customElementsShim } from "./element/node-custom-element-shims";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 
+// function parsePx(s: string): number {
+//   if (s.slice(-2) !== "px") {
+//     throw new Error(`Expected px suffix: ${s}`);
+//   }
+//   return parseInt(s.slice(0, -2));
+// }
+
 export class AlgEditor extends ManagedCustomElement {
   #alg: Alg = new Alg();
   #textarea: HTMLTextAreaElement = document.createElement("textarea");
@@ -37,9 +44,10 @@ export class AlgEditor extends ManagedCustomElement {
   #twistyPlayer: TwistyPlayer | null = null;
 
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
-    super();
+    super({ mode: "open" });
     this.#carbonCopy.classList.add("carbon-copy");
     this.addElement(this.#carbonCopy);
+    this.#textarea.rows = 1;
     this.addElement(this.#textarea);
     this.#carbonCopyPrefix.classList.add("prefix");
     this.#carbonCopy.appendChild(this.#carbonCopyPrefix);
@@ -78,7 +86,56 @@ export class AlgEditor extends ManagedCustomElement {
     this.#textarea.placeholder = placeholderText;
   }
 
+  resizeTextarea(): void {
+    // This seems to be reasonably performant. Direct calculation is tricky
+    // because we're trying to find the least fixed point of recursive constraints:
+    //
+    // - Textarea height depends on line wrapping,
+    // - which depends on textarea width,
+    // - which may depends on parent width,
+    // - which may change if the textarea height is large enough to cause
+    //   scrolling.
+    //
+    // In practice, it seems that `this.#textarea.clientHeight` and
+    // `this.#textarea.scrollHeight` match when the wrapped text fits inside the
+    // textarea without scrolling (but I don't know if this is guaranteed).
+    if (this.#textarea.clientHeight < this.#textarea.scrollHeight) {
+      while (this.#textarea.clientHeight < this.#textarea.scrollHeight) {
+        this.#textarea.rows++;
+      }
+      return;
+    } else {
+      while (this.#textarea.clientHeight === this.#textarea.scrollHeight) {
+        if (this.#textarea.rows === 1) {
+          return;
+        }
+        this.#textarea.rows--;
+      }
+      this.#textarea.rows++;
+    }
+
+    // Here's some old code that almost worked (but doesn't work if the parent scrollbar depends on how long the alg is):
+
+    // this.#textarea.style.maxHeight = "1px";
+    // const computedStyle = getComputedStyle(this.#textarea);
+    // const paddingTop = parsePx(computedStyle.getPropertyValue("padding-top"));
+    // const paddingBottom = parsePx(
+    //   computedStyle.getPropertyValue("padding-bottom"),
+    // );
+    // this.#textarea.style.paddingTop = "0px"; // Workaround for Firefox, which doesn't calculate the same `scrollHeight` as Chromium and WebKit without this. https://bugzilla.mozilla.org/show_bug.cgi?id=576976
+    // this.#textarea.style.paddingBottom = "0px"; // Workaround for Firefox, which doesn't calculate the same `scrollHeight` as Chromium and WebKit without this. https://bugzilla.mozilla.org/show_bug.cgi?id=576976
+    // this.#textarea.style.height = `${
+    //   this.#textarea.scrollHeight + paddingTop + paddingBottom
+    // }px`;
+    // this.#textarea.style.maxHeight = "";
+    // this.#textarea.style.paddingTop = "";
+    // this.#textarea.style.paddingBottom = "";
+  }
+
   onInput(): void {
+    this.#carbonCopyHighlight.hidden = true;
+    this.resizeTextarea();
+
     this.#carbonCopyPrefix.textContent = this.#textarea.value;
     this.#carbonCopyHighlight.textContent = "";
     try {
@@ -156,6 +213,7 @@ export class AlgEditor extends ManagedCustomElement {
       leaf.startCharIndex,
       leaf.endCharIndex,
     );
+    this.#carbonCopyHighlight.hidden = false;
   }
 
   get twistyPlayer(): TwistyPlayer | null {
