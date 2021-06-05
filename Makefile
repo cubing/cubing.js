@@ -42,8 +42,7 @@ deploy-vr: clean parcel-build-for-vr-cubing-net
 	echo "\nDone deploying. Go to ${VR_URL}\n"
 
 .PHONY: deploy
-# The `clean` dependency is a workaround for Parcel bugs.
-deploy: clean deploy-experiments
+deploy: deploy-experiments
 
 EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
 EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
