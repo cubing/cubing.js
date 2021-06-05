@@ -68,6 +68,11 @@ export class AlgEditor extends ManagedCustomElement {
     this.onInput();
   }
 
+  // TODO: remove?
+  get algString(): string {
+    return this.#textarea.value;
+  }
+
   // To we need a getter?
   set placeholder(placeholderText: string) {
     this.#textarea.placeholder = placeholderText;
