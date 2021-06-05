@@ -5,12 +5,16 @@
 
 control-pane {
   grid-area: "control";
-  padding: 1em;
+  /* padding: 1em; */
   font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
   background: rgb(255, 245, 235);
   overflow: hidden;
   overflow-y: auto;
   transition: opacity 0.5s;
+}
+
+control-pane section {
+  padding: 1em;
 }
 
 control-pane.loading {
@@ -22,13 +26,21 @@ control-pane .title {
   font-weight: bold;
 }
 
+control-pane h2 {
+  margin: 0;
+  padding: 5px 10px;
+  /* background: rgba(50, 0, 0, 0.2); */
+  background: rgba(255, 230, 210, 1);
+  border-top: 1px solid #888;
+}
+
 control-pane alg-editor {
   width: 100%;
-  --border-color: rgba(0, 0, 0, 0.25);
+  --border-color: rgba(0, 0, 0, 0);
   --background: rgb(255, 253, 251);
   --font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
   --font-size: 1.5em;
-  margin-top: 0.5em;
+  --padding: 0.75em;
 }
 
 control-pane textarea.experimental-setup-alg {
@@ -49,6 +61,6 @@ control-pane select {
   font-size: 1.5em;
   background: rgba(255, 250, 245, 1);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   padding: 8px;
 }

@@ -22,30 +22,37 @@
         <div class="spinner"></div>
       </puzzle-pane>
       <control-pane class="loading">
-        <div class="title">alg.cubing.net [v2 beta]</div>
-        <p style="margin-top: 1.5em; color: red">
-          Note: everything here is super-experimental. Puzzles and notation will
-          change.
-        </p>
+        <section>
+          <div class="title">alg.cubing.net [v2 beta]</div>
+          <div style="margin-top: 0.5em; color: red">
+            Note: everything here is super-experimental. Puzzles and notation
+            will change.
+          </div>
+        </section>
+        <h2>Setup</h2>
         <alg-editor
           class="experimental-setup-alg"
           placeholder="[Click here to add anchor setup alg.]"
           twisty-player-prop="experimentalSetupAlg"
         ></alg-editor>
+        <h2>Moves</h2>
         <alg-editor
           class="alg"
           placeholder="[Click here to add alg.]"
         ></alg-editor>
-        <select class="puzzle">
-          <option>Puzzle</option>
-        </select>
-        <br />
-        <select class="stickering">
-          <option>Stickering</option>
-        </select>
-        <select class="setup-anchor">
-          <option>Setup Anchor</option>
-        </select>
+        <h2>Settings</h2>
+        <section>
+          <select class="puzzle">
+            <option>Puzzle</option>
+          </select>
+          <br />
+          <select class="stickering">
+            <option>Stickering</option>
+          </select>
+          <select class="setup-anchor">
+            <option>Setup Anchor</option>
+          </select>
+        </section>
       </control-pane>
     </app>
   </body>

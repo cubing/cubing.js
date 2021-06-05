@@ -26,7 +26,7 @@ textarea, .carbon-copy {
 
   box-sizing: border-box;
 
-  padding: 0.5em;
+  padding: var(--padding, 0.5em);
 }
 
 textarea {
