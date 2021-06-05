@@ -12,6 +12,7 @@ import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { customElementsShim } from "./element/node-custom-element-shims";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
+const ATTRIBUTE_PLACEHOLDER = "placeholder";
 
 // function parsePx(s: string): number {
 //   if (s.slice(-2) !== "px") {
@@ -305,7 +306,7 @@ export class AlgEditor extends ManagedCustomElement {
   }
 
   static get observedAttributes(): string[] {
-    return [ATTRIBUTE_FOR_TWISTY_PLAYER];
+    return [ATTRIBUTE_FOR_TWISTY_PLAYER, ATTRIBUTE_PLACEHOLDER];
   }
 }
 
