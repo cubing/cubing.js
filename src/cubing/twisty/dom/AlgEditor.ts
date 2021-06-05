@@ -13,6 +13,9 @@ import { customElementsShim } from "./element/node-custom-element-shims";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";
+const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
+
+type TwistyPlayerAlgProp = "alg" | "experimentalSetupAlg";
 
 // function parsePx(s: string): number {
 //   if (s.slice(-2) !== "px") {
@@ -43,8 +46,12 @@ export class AlgEditor extends ManagedCustomElement {
   ]);
 
   #twistyPlayer: TwistyPlayer | null = null;
+  #twistyPlayerProp: TwistyPlayerAlgProp;
 
-  constructor(options?: { twistyPlayer?: TwistyPlayer }) {
+  constructor(options?: {
+    twistyPlayer?: TwistyPlayer;
+    twistyPlayerProp?: TwistyPlayerAlgProp;
+  }) {
     super();
     this.#carbonCopy.classList.add("carbon-copy");
     this.addElement(this.#carbonCopy);
@@ -69,6 +76,7 @@ export class AlgEditor extends ManagedCustomElement {
     if (options?.twistyPlayer) {
       this.twistyPlayer = options.twistyPlayer;
     }
+    this.#twistyPlayerProp = options?.twistyPlayerProp ?? "alg";
   }
 
   // TODO
@@ -167,6 +175,9 @@ export class AlgEditor extends ManagedCustomElement {
     ) {
       return;
     }
+    if (this.#twistyPlayerProp !== "alg") {
+      return;
+    }
     // console.log(this.#textarea.selectionStart);
     const dataUp = algEditorCharSearch(this.#alg, {
       targetCharIdx: this.#textarea.selectionStart,
@@ -234,53 +245,55 @@ export class AlgEditor extends ManagedCustomElement {
       "effectiveAlgChange",
       (e: CustomEvent<{ alg: Alg }>) => {
         try {
-          this.#twistyPlayer!.alg = e.detail.alg;
+          this.#twistyPlayer![this.#twistyPlayerProp] = e.detail.alg;
           this.setAlgValidForPuzzle(true);
         } catch (e) {
           console.error("cannot set alg for puzzle", e);
-          this.#twistyPlayer!.alg = new Alg();
+          this.#twistyPlayer![this.#twistyPlayerProp] = new Alg();
           this.setAlgValidForPuzzle(false);
         }
       },
     );
 
-    this.addEventListener(
-      "animatedMoveIndexChange",
-      (
-        e: CustomEvent<{
-          idx: number;
-          isAtStartOfLeaf: Blob;
-          leaf: ExperimentalParsed<Move | Pause>;
-        }>,
-      ) => {
-        try {
-          const timestamp = this.#twistyPlayer!.cursor!.experimentalTimestampFromIndex(
-            e.detail.idx,
-          );
-          // console.log(e.detail, timestamp, e.detail.leaf);
-          this.#twistyPlayer!.timeline.setTimestamp(
-            timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
-          );
-        } catch (e) {
-          // console.error("cannot set idx", e);
-          this.#twistyPlayer!.timeline.timestamp = 0;
-        }
-      },
-    );
+    if (this.#twistyPlayerProp === "alg") {
+      this.addEventListener(
+        "animatedMoveIndexChange",
+        (
+          e: CustomEvent<{
+            idx: number;
+            isAtStartOfLeaf: Blob;
+            leaf: ExperimentalParsed<Move | Pause>;
+          }>,
+        ) => {
+          try {
+            const timestamp = this.#twistyPlayer!.cursor!.experimentalTimestampFromIndex(
+              e.detail.idx,
+            );
+            // console.log(e.detail, timestamp, e.detail.leaf);
+            this.#twistyPlayer!.timeline.setTimestamp(
+              timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
+            );
+          } catch (e) {
+            // console.error("cannot set idx", e);
+            this.#twistyPlayer!.timeline.timestamp = 0;
+          }
+        },
+      );
 
-    this.#twistyPlayer!.timeline!.addTimestampListener({
-      onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
-        const idx = this.#twistyPlayer!.cursor!.experimentalIndexFromTimestamp(
-          timestamp,
-        );
-        const move = this.#twistyPlayer!.cursor!.experimentalMoveAtIndex(idx);
-        if (move) {
-          this.highlightLeaf(move as ExperimentalParsed<Move>);
-        }
-      },
+      this.#twistyPlayer!.timeline!.addTimestampListener({
+        onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
+          const idx = this.#twistyPlayer!.cursor!.experimentalIndexFromTimestamp(
+            timestamp,
+          );
+          const move = this.#twistyPlayer!.cursor!.experimentalMoveAtIndex(idx);
+          if (move) {
+            this.highlightLeaf(move as ExperimentalParsed<Move>);
+          }
+        },
 
-      onTimeRangeChange: (_timeRange: TimeRange): void => {},
-    });
+        onTimeRangeChange: (_timeRange: TimeRange): void => {},
+      });
+    }
   }
 
   protected attributeChangedCallback(
@@ -288,25 +301,38 @@ export class AlgEditor extends ManagedCustomElement {
     _oldValue: string,
     newValue: string,
   ): void {
-    if (attributeName === ATTRIBUTE_FOR_TWISTY_PLAYER) {
-      const elem = document.getElementById(newValue);
-      if (!elem) {
-        console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}= elem does not exist`);
+    switch (attributeName) {
+      case ATTRIBUTE_FOR_TWISTY_PLAYER:
+        const elem = document.getElementById(newValue);
+        if (!elem) {
+          console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}= elem does not exist`);
+          return;
+        }
+        if (!(elem instanceof TwistyPlayer)) {
+          // TODO: avoid assuming single instance of lib?
+          console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}=is not a twisty-player`);
+          return;
+        }
+        this.twistyPlayer = elem;
         return;
-      }
-      if (!(elem instanceof TwistyPlayer)) {
-        // TODO: avoid assuming single instance of lib?
-        console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}=is not a twisty-player`);
+      case ATTRIBUTE_PLACEHOLDER:
+        this.placeholder = newValue;
         return;
-      }
-      this.twistyPlayer = elem;
-    } else if (attributeName === "placeholder") {
-      this.placeholder = newValue;
+      case ATTRIBUTE_TWISTY_PLAYER_PROP:
+        if (this.#twistyPlayer) {
+          throw new Error("cannot set prop after twisty player");
+        }
+        this.#twistyPlayerProp = newValue as TwistyPlayerAlgProp;
+        return;
     }
   }
 
   static get observedAttributes(): string[] {
-    return [ATTRIBUTE_FOR_TWISTY_PLAYER, ATTRIBUTE_PLACEHOLDER];
+    return [
+      ATTRIBUTE_FOR_TWISTY_PLAYER,
+      ATTRIBUTE_PLACEHOLDER,
+      ATTRIBUTE_TWISTY_PLAYER_PROP,
+    ];
   }
 }
 

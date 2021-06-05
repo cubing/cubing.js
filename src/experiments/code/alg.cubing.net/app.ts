@@ -9,11 +9,7 @@ import {
   TwistyPlayerInitialConfig,
 } from "../../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
-import {
-  ALG_INPUT_PLACEHOLDER,
-  ALG_SETUP_INPUT_PLACEHOLDER,
-  APP_TITLE,
-} from "./strings";
+import { APP_TITLE } from "./strings";
 import { supportedPuzzles } from "./supported-puzzles";
 import { getURLParam, setURLParams } from "./url-params";
 
@@ -55,7 +51,7 @@ export class App {
     new ControlPane(
       controlPaneElem,
       initialData,
-      this.setexperimentalSetupAlg.bind(this),
+      this.setExperimentalSetupAlg.bind(this),
       this.setAlg.bind(this),
       this.setPuzzle.bind(this),
       this.setSetupAnchor.bind(this),
@@ -81,13 +77,13 @@ export class App {
     if (getURLParam("debug-simultaneous")) {
       this.twistyPlayer.experimentalSetCursorIndexer("simultaneous");
     }
-    this.setexperimentalSetupAlg(initialData.experimentalSetupAlg);
+    this.setExperimentalSetupAlg(initialData.experimentalSetupAlg);
     this.setAlg(initialData.alg);
     this.puzzlePane.appendChild(this.twistyPlayer);
   }
 
   // Boolean indicates success (e.g. alg is valid).
-  private setexperimentalSetupAlg(experimentalSetupAlg: Alg): boolean {
+  private setExperimentalSetupAlg(experimentalSetupAlg: Alg): boolean {
     try {
       this.twistyPlayer.experimentalSetupAlg = experimentalSetupAlg;
       this.twistyPlayer.timeline.jumpToStart();
@@ -145,7 +141,7 @@ const algElemStatusClasses: AlgElemStatusClass[] = [
 ];
 
 class ControlPane {
-  public experimentalSetupAlgInput: HTMLTextAreaElement;
+  public experimentalSetupAlgInput: AlgEditor;
   public algInput: AlgEditor;
   public puzzleSelect: HTMLSelectElement;
   public setupAnchorSelect: HTMLSelectElement;
@@ -168,20 +164,19 @@ class ControlPane {
     this.experimentalSetupAlgInput = findOrCreateChildWithClass(
       this.element,
       "experimental-setup-alg",
-      "textarea",
-    );
-    this.experimentalSetupAlgInput.placeholder = ALG_SETUP_INPUT_PLACEHOLDER;
-    this.experimentalSetupAlgInput.value = initialData.experimentalSetupAlg.toString();
-    this.setexperimentalSetupAlgElemStatus(null);
+      "alg-editor",
+    ) as AlgEditor;
+    this.experimentalSetupAlgInput.twistyPlayer = twistyPlayer;
+    this.experimentalSetupAlgInput.algString = initialData.experimentalSetupAlg.toString();
+    this.setExperimentalSetupAlgElemStatus(null);
 
     this.algInput = findOrCreateChildWithClass(
       this.element,
       "alg",
       "alg-editor",
     ) as AlgEditor;
-    console.log(this.algInput, { twistyPlayer });
+    this.algInput, { twistyPlayer };
     this.algInput.twistyPlayer = twistyPlayer;
-    this.algInput.placeholder = ALG_INPUT_PLACEHOLDER;
     this.algInput.algString = initialData.alg.toString();
     this.setAlgElemStatus(null);
 
@@ -226,7 +221,8 @@ class ControlPane {
 
   private onexperimentalSetupAlgInput(canonicalize: boolean): void {
     try {
-      const experimentalSetupAlgString = this.experimentalSetupAlgInput.value;
+      const experimentalSetupAlgString = this.experimentalSetupAlgInput
+        .algString;
       const parsedexperimentalSetupAlg = Alg.fromString(
         experimentalSetupAlgString,
       );
@@ -237,10 +233,10 @@ class ControlPane {
         restringifiedexperimentalSetupAlg === experimentalSetupAlgString;
 
       if (canonicalize && !experimentalSetupAlgIsCanonical) {
-        this.experimentalSetupAlgInput.value = restringifiedexperimentalSetupAlg;
+        this.experimentalSetupAlgInput.algString = restringifiedexperimentalSetupAlg;
       }
       // Set status before passing to the `Twisty`.
-      this.setexperimentalSetupAlgElemStatus(
+      this.setExperimentalSetupAlgElemStatus(
         canonicalize || experimentalSetupAlgIsCanonical
           ? null
           : "status-warning",
@@ -251,10 +247,10 @@ class ControlPane {
       if (
         !this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg)
       ) {
-        this.setexperimentalSetupAlgElemStatus("status-bad");
+        this.setExperimentalSetupAlgElemStatus("status-bad");
       }
     } catch (e) {
-      this.setexperimentalSetupAlgElemStatus("status-bad");
+      this.setExperimentalSetupAlgElemStatus("status-bad");
     }
   }
 
@@ -286,7 +282,7 @@ class ControlPane {
   }
 
   // Set to `null` to clear.
-  private setexperimentalSetupAlgElemStatus(
+  private setExperimentalSetupAlgElemStatus(
     latestStatusClass: AlgElemStatusClass | null,
   ): void {
     for (const statusClass of algElemStatusClasses) {
