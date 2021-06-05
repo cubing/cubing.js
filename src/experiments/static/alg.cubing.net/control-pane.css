@@ -24,10 +24,6 @@ control-pane .title {
 
 control-pane alg-editor {
   width: 100%;
-}
-
-control-pane alg-editor {
-  width: 100%;
   --border-color: rgba(0, 0, 0, 0.25);
   --background: rgb(255, 253, 251);
   --font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
