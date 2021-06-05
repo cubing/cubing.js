@@ -48,8 +48,11 @@ export class AlgEditor extends ManagedCustomElement {
   #twistyPlayer: TwistyPlayer | null = null;
   #twistyPlayerProp: TwistyPlayerAlgProp;
 
-  #observer = new window.ResizeObserver(() => this.onResize());
-  #lastResize: number = 0;
+  #observer = new window.ResizeObserver((entries: ResizeObserverEntry[]) =>
+    this.onResize(entries),
+  );
+
+  #lastObserverRect: DOMRectReadOnly | null = null;
 
   constructor(options?: {
     twistyPlayer?: TwistyPlayer;
@@ -84,14 +87,19 @@ export class AlgEditor extends ManagedCustomElement {
     this.#observer.observe(this.contentWrapper);
   }
 
-  onResize(): void {
-    const now = Date.now();
-    this.#observer.unobserve(this.contentWrapper);
-    this.resizeTextarea();
-    setTimeout(() => {
-      this.#observer.observe(this.contentWrapper);
-    }, 0);
-    this.#lastResize = now;
+  onResize(entries: ResizeObserverEntry[]): void {
+    const rect = entries[0].contentRect;
+    if (
+      rect.height !== this.#lastObserverRect?.height ||
+      rect.width !== this.#lastObserverRect?.width
+    ) {
+      this.#observer.unobserve(this.contentWrapper);
+      this.resizeTextarea();
+      requestAnimationFrame(() => {
+        this.#observer.observe(this.contentWrapper);
+      });
+      this.#lastObserverRect = rect;
+    }
   }
 
   // TODO
