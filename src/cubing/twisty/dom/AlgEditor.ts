@@ -48,6 +48,9 @@ export class AlgEditor extends ManagedCustomElement {
   #twistyPlayer: TwistyPlayer | null = null;
   #twistyPlayerProp: TwistyPlayerAlgProp;
 
+  #observer = new window.ResizeObserver(() => this.onResize());
+  #lastResize: number = 0;
+
   constructor(options?: {
     twistyPlayer?: TwistyPlayer;
     twistyPlayerProp?: TwistyPlayerAlgProp;
@@ -77,6 +80,18 @@ export class AlgEditor extends ManagedCustomElement {
       this.twistyPlayer = options.twistyPlayer;
     }
     this.#twistyPlayerProp = options?.twistyPlayerProp ?? "alg";
+
+    this.#observer.observe(this.contentWrapper);
+  }
+
+  onResize(): void {
+    const now = Date.now();
+    this.#observer.unobserve(this.contentWrapper);
+    this.resizeTextarea();
+    setTimeout(() => {
+      this.#observer.observe(this.contentWrapper);
+    }, 0);
+    this.#lastResize = now;
   }
 
   // TODO
