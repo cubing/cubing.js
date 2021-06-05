@@ -44,7 +44,7 @@ export class AlgEditor extends ManagedCustomElement {
   #twistyPlayer: TwistyPlayer | null = null;
 
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
-    super({ mode: "open" });
+    super();
     this.#carbonCopy.classList.add("carbon-copy");
     this.addElement(this.#carbonCopy);
     this.#textarea.rows = 1;
