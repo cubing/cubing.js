@@ -28,6 +28,7 @@ control-pane alg-editor {
   --background: rgb(255, 253, 251);
   --font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
   --font-size: 1.5em;
+  margin-top: 0.5em;
 }
 
 control-pane textarea.experimental-setup-alg {

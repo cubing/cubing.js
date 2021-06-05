@@ -7,12 +7,16 @@ export const algEditorCSS = new CSSSource(`
 }
 
 .wrapper {
-  position: relative;
   /*overflow: hidden;
   resize: horizontal;*/
+
+  background: var(--background, none);
+  display: grid;
 }
 
 textarea, .carbon-copy {
+  grid-area: 1 / 1 / 2 / 2;
+
   width: 100%;
   font-family: sans-serif;
   line-height: 1.2em;
@@ -27,7 +31,7 @@ textarea, .carbon-copy {
 
 textarea {
   resize: none;
-  background: var(--background, none);
+  background: none;
   z-index: 2;
   overflow: hidden;
   border: 1px solid var(--border-color, rgba(0, 0, 0, 0.25));
@@ -41,11 +45,10 @@ textarea {
   pointer-events: none;
 
   z-index: 1;
-  position: absolute;
 }
 
 .carbon-copy .highlight {
-  background: rgba(255, 128, 0, 0.5);
+  background: var(--highlight-color, rgba(255, 128, 0, 0.5));
   padding: 0.1em 0.2em;
   margin: -0.1em -0.2em;
   border-radius: 0.2em;
