@@ -1,8 +1,8 @@
 import { Vector3 } from "three";
 import { Alg } from "../../../cubing/alg";
 import { puzzles } from "../../../cubing/puzzles";
-import "../../../cubing/twisty"; // For `<alg-editor>` custom elem registration.
-import type { AlgEditor } from "../../../cubing/twisty";
+import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
+import type { TwistyAlgEditor } from "../../../cubing/twisty";
 import {
   ExperimentalStickering,
   TwistyPlayer,
@@ -141,8 +141,8 @@ const algElemStatusClasses: AlgElemStatusClass[] = [
 ];
 
 class ControlPane {
-  public experimentalSetupAlgInput: AlgEditor;
-  public algInput: AlgEditor;
+  public experimentalSetupAlgInput: TwistyAlgEditor;
+  public algInput: TwistyAlgEditor;
   public puzzleSelect: HTMLSelectElement;
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
@@ -164,8 +164,8 @@ class ControlPane {
     this.experimentalSetupAlgInput = findOrCreateChildWithClass(
       this.element,
       "experimental-setup-alg",
-      "alg-editor",
-    ) as AlgEditor;
+      "twisty-alg-editor",
+    ) as TwistyAlgEditor;
     this.experimentalSetupAlgInput.twistyPlayer = twistyPlayer;
     this.experimentalSetupAlgInput.algString = initialData.experimentalSetupAlg.toString();
     this.setExperimentalSetupAlgElemStatus(null);
@@ -173,8 +173,8 @@ class ControlPane {
     this.algInput = findOrCreateChildWithClass(
       this.element,
       "alg",
-      "alg-editor",
-    ) as AlgEditor;
+      "twisty-alg-editor",
+    ) as TwistyAlgEditor;
     this.algInput, { twistyPlayer };
     this.algInput.twistyPlayer = twistyPlayer;
     this.algInput.algString = initialData.alg.toString();

@@ -2,7 +2,7 @@ import { Alg, Move, Pause } from "../../../cubing/alg";
 import type { Parsed } from "../../../cubing/alg/parse";
 import { TwistyPlayer } from "../../../cubing/twisty";
 import type { PuzzlePosition } from "../../../cubing/twisty/animation/cursor/CursorTypes";
-import { AlgEditor } from "../../../cubing/twisty";
+import { TwistyAlgEditor } from "../../../cubing/twisty";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
@@ -20,25 +20,25 @@ U // AUF
 // from http://cubesolv.es/solve/5757`;
 const player = document.body.appendChild(new TwistyPlayer({ alg }));
 
-const algEditor = new AlgEditor();
-algEditor.algString = alg;
-document.body.appendChild(algEditor);
+const twistyAlgEditor = new TwistyAlgEditor();
+twistyAlgEditor.algString = alg;
+document.body.appendChild(twistyAlgEditor);
 
-algEditor.addEventListener(
+twistyAlgEditor.addEventListener(
   "effectiveAlgChange",
   (e: CustomEvent<{ alg: Alg }>) => {
     try {
       player.alg = e.detail.alg;
-      algEditor.setAlgValidForPuzzle(true);
+      twistyAlgEditor.setAlgValidForPuzzle(true);
     } catch (e) {
       console.error("cannot set alg for puzzle", e);
       player.alg = new Alg();
-      algEditor.setAlgValidForPuzzle(false);
+      twistyAlgEditor.setAlgValidForPuzzle(false);
     }
   },
 );
 
-algEditor.addEventListener(
+twistyAlgEditor.addEventListener(
   "animatedMoveIndexChange",
   (
     e: CustomEvent<{
@@ -66,7 +66,7 @@ setTimeout(() => {
   player.cursor!.addPositionListener({
     onPositionChange: (position: PuzzlePosition): void => {
       if (position.movesInProgress.length > 0) {
-        algEditor.highlightLeaf(
+        twistyAlgEditor.highlightLeaf(
           position.movesInProgress[0].move as Parsed<Move>,
         );
       }

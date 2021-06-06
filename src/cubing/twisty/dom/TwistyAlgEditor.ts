@@ -2,11 +2,11 @@
 
 import type { ExperimentalParsed } from "../../alg";
 import { Alg, Move, Pause } from "../../alg";
-import { TwistyPlayer } from "../../twisty";
+import { TwistyPlayer } from "..";
 import type { TimeRange } from "../animation/cursor/AlgCursor";
 import type { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
-import { algEditorCSS } from "./AlgEditor.css_";
-import { algEditorCharSearch } from "./AlgEditorStartCharSearch";
+import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css_";
+import { twistyAlgEditorCharSearch } from "./TwistyAlgEditorStartCharSearch";
 import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { customElementsShim } from "./element/node-custom-element-shims";
@@ -24,7 +24,7 @@ type TwistyPlayerAlgProp = "alg" | "experimentalSetupAlg";
 //   return parseInt(s.slice(0, -2));
 // }
 
-export class AlgEditor extends ManagedCustomElement {
+export class TwistyAlgEditor extends ManagedCustomElement {
   #alg: Alg = new Alg();
   #textarea: HTMLTextAreaElement = document.createElement("textarea");
   #carbonCopy: HTMLDivElement = document.createElement("div");
@@ -71,7 +71,7 @@ export class AlgEditor extends ManagedCustomElement {
     // Prevent iOS from defaulting to smart quotes.
     this.#textarea.setAttribute("spellcheck", "false");
 
-    this.addCSS(algEditorCSS);
+    this.addCSS(twistyAlgEditorCSS);
 
     // TODO: What set of events should we register? `change`? `keydown`?
     this.#textarea.addEventListener("input", () => this.onInput());
@@ -202,7 +202,7 @@ export class AlgEditor extends ManagedCustomElement {
       return;
     }
     // console.log(this.#textarea.selectionStart);
-    const dataUp = algEditorCharSearch(this.#alg, {
+    const dataUp = twistyAlgEditorCharSearch(this.#alg, {
       targetCharIdx: this.#textarea.selectionStart,
       numMovesSofar: 0,
     });
@@ -359,4 +359,4 @@ export class AlgEditor extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("alg-editor", AlgEditor);
+customElementsShim.define("twisty-alg-editor", TwistyAlgEditor);

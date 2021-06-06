@@ -25,7 +25,10 @@ type DataUp =
     }
   | { animatedMoveCount: number };
 
-export class AlgEditorCharSearch extends TraversalDownUp<DataDown, DataUp> {
+export class TwistyAlgEditorCharSearch extends TraversalDownUp<
+  DataDown,
+  DataUp
+> {
   traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     let numMovesSofar: number = dataDown.numMovesSofar;
     for (const unit of alg.units()) {
@@ -128,7 +131,7 @@ export class AlgEditorCharSearch extends TraversalDownUp<DataDown, DataUp> {
   }
 }
 
-const algEditorCharSearchInstance = new AlgEditorCharSearch();
-export const algEditorCharSearch = algEditorCharSearchInstance.traverseAlg.bind(
-  algEditorCharSearchInstance,
+const TwistyAlgEditorCharSearchInstance = new TwistyAlgEditorCharSearch();
+export const twistyAlgEditorCharSearch = TwistyAlgEditorCharSearchInstance.traverseAlg.bind(
+  TwistyAlgEditorCharSearchInstance,
 ) as (alg: Alg, dataDown: DataDown) => DataUp;

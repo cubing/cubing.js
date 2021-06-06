@@ -1,6 +1,6 @@
 import { CSSSource } from "./element/ManagedCustomElement";
 
-export const algEditorCSS = new CSSSource(`
+export const twistyAlgEditorCSS = new CSSSource(`
 :host {
   width: 384px;
   display: grid;

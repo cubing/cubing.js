@@ -33,7 +33,7 @@ control-pane h2 {
   border-top: 1px solid rgba(0, 0, 0, 0.5);
 }
 
-control-pane alg-editor {
+control-pane twisty-alg-editor {
   width: 100%;
   --border-color: rgba(0, 0, 0, 0);
   --font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
@@ -41,7 +41,7 @@ control-pane alg-editor {
   --padding: 0.75em;
 }
 
-control-pane alg-editor:focus-within {
+control-pane twisty-alg-editor:focus-within {
   --background: rgb(255, 253, 251);
 }
 

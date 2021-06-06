@@ -12,7 +12,7 @@ export type {
 export { TimestampLocationType } from "./animation/Timeline";
 export type { TimelineActionEvent } from "./animation/Timeline";
 export { TwistyAlgViewer } from "./dom/TwistyAlgViewer";
-export { AlgEditor } from "./dom/AlgEditor";
+export { TwistyAlgEditor } from "./dom/TwistyAlgEditor";
 
 // Old
 export { Cube3D } from "./3D/puzzles/Cube3D";
