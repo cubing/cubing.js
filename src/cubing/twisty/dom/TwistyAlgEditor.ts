@@ -263,16 +263,20 @@ export class TwistyAlgEditor extends ManagedCustomElement {
       return;
     }
     this.#twistyPlayer = twistyPlayer;
+    if (!twistyPlayer) {
+      return;
+    }
+    this.algString = twistyPlayer.alg.toString();
 
     this.addEventListener(
       "effectiveAlgChange",
       (e: CustomEvent<{ alg: Alg }>) => {
         try {
-          this.#twistyPlayer![this.#twistyPlayerProp] = e.detail.alg;
+          twistyPlayer[this.#twistyPlayerProp] = e.detail.alg;
           this.setAlgValidForPuzzle(true);
         } catch (e) {
           console.error("cannot set alg for puzzle", e);
-          this.#twistyPlayer![this.#twistyPlayerProp] = new Alg();
+          twistyPlayer[this.#twistyPlayerProp] = new Alg();
           this.setAlgValidForPuzzle(false);
         }
       },
@@ -289,26 +293,26 @@ export class TwistyAlgEditor extends ManagedCustomElement {
           }>,
         ) => {
           try {
-            const timestamp = this.#twistyPlayer!.cursor!.experimentalTimestampFromIndex(
+            const timestamp = twistyPlayer.cursor!.experimentalTimestampFromIndex(
               e.detail.idx,
             );
             // console.log(e.detail, timestamp, e.detail.leaf);
-            this.#twistyPlayer!.timeline.setTimestamp(
+            twistyPlayer.timeline.setTimestamp(
               timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
             );
           } catch (e) {
             // console.error("cannot set idx", e);
-            this.#twistyPlayer!.timeline.timestamp = 0;
+            twistyPlayer.timeline.timestamp = 0;
           }
         },
       );
 
-      this.#twistyPlayer!.timeline!.addTimestampListener({
+      twistyPlayer.timeline!.addTimestampListener({
         onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
-          const idx = this.#twistyPlayer!.cursor!.experimentalIndexFromTimestamp(
+          const idx = twistyPlayer.cursor!.experimentalIndexFromTimestamp(
             timestamp,
           );
-          const move = this.#twistyPlayer!.cursor!.experimentalMoveAtIndex(idx);
+          const move = twistyPlayer.cursor!.experimentalMoveAtIndex(idx);
           if (move) {
             this.highlightLeaf(move as ExperimentalParsed<Move>);
           }
