@@ -22,7 +22,7 @@ textarea, .carbon-copy {
   line-height: 1.2em;
 
   font-size: var(--font-size, inherit);
-  font-family: var(--font-family, inherit);
+  font-family: var(--font-family, sans-serif);
 
   box-sizing: border-box;
 
