@@ -103,7 +103,7 @@ export class Twisty3DCanvas
       this.scheduleRender.bind(this),
     );
 
-    const observer = new window.ResizeObserver(this.onResize.bind(this));
+    const observer = new ResizeObserver(this.onResize.bind(this));
     observer.observe(this.contentWrapper);
   }
 

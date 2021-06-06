@@ -1,7 +1,23 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { AlgEditor } from "./AlgEditor";
 import { TwistyPlayer } from "./TwistyPlayer";
 import "../../alg/test/alg-comparison";
 import { Alg } from "../../alg";
+
+class ResizeObserver {
+  observe() {
+    // do nothing
+  }
+
+  unobserve() {
+    // do nothing
+  }
+}
+
+(window as any).ResizeObserver = ResizeObserver;
 
 describe("AlgEditor", () => {
   it("can be constructed without arguments", () => {

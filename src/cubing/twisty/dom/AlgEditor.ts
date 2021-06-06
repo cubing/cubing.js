@@ -48,7 +48,7 @@ export class AlgEditor extends ManagedCustomElement {
   #twistyPlayer: TwistyPlayer | null = null;
   #twistyPlayerProp: TwistyPlayerAlgProp;
 
-  #observer = new window.ResizeObserver((entries: ResizeObserverEntry[]) =>
+  #observer = new ResizeObserver((entries: ResizeObserverEntry[]) =>
     this.onResize(entries),
   );
 
