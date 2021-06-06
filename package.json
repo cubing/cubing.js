@@ -15,7 +15,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.13.0",
-    "@babylonjs/core": "^4.2.0",
+    "@babylonjs/core": "^5.0.0-alpha.24",
     "@snowpack/plugin-typescript": "^1.2.1",
     "@types/jest": "^24.9.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
