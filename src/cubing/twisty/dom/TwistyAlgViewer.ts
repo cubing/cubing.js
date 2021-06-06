@@ -28,7 +28,7 @@ const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
 
 class DataDown {
   earliestMoveIndex: number;
-  twistyAlgViewer: ExperimentalTwistyAlgViewer;
+  twistyAlgViewer: TwistyAlgViewer;
   direction: ExperimentalIterationDirection;
 }
 
@@ -355,7 +355,7 @@ class MoveHighlighter {
   }
 }
 
-export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
+export class TwistyAlgViewer extends HTMLElementShim {
   highlighter: MoveHighlighter = new MoveHighlighter();
   #domTree: TwistyAlgWrapperElem | TwistyAlgLeafElem;
   twistyPlayer: TwistyPlayer | null = null;
@@ -479,7 +479,4 @@ export class ExperimentalTwistyAlgViewer extends HTMLElementShim {
   }
 }
 
-customElementsShim.define(
-  "experimental-twisty-alg-viewer",
-  ExperimentalTwistyAlgViewer,
-);
+customElementsShim.define("twisty-alg-viewer", TwistyAlgViewer);

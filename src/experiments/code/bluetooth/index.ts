@@ -9,10 +9,7 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../../cubing/bluetooth/index";
-import {
-  ExperimentalTwistyAlgViewer,
-  TwistyPlayer,
-} from "../../../cubing/twisty/index";
+import { TwistyAlgViewer, TwistyPlayer } from "../../../cubing/twisty/index";
 
 // experimentalShowJumpingFlash(false); // TODO
 
@@ -43,7 +40,7 @@ window.addEventListener("load", async () => {
   document.querySelector("#player")!.appendChild(twistyPlayer);
   document
     .querySelector("#controls")!
-    .appendChild(new ExperimentalTwistyAlgViewer({ twistyPlayer }));
+    .appendChild(new TwistyAlgViewer({ twistyPlayer }));
 
   asyncSetup(twistyPlayer);
 

@@ -11,7 +11,7 @@ export type {
 } from "./dom/TwistyPlayerConfig";
 export { TimestampLocationType } from "./animation/Timeline";
 export type { TimelineActionEvent } from "./animation/Timeline";
-export { ExperimentalTwistyAlgViewer } from "./dom/TwistyAlgViewer";
+export { TwistyAlgViewer } from "./dom/TwistyAlgViewer";
 export { AlgEditor } from "./dom/AlgEditor";
 
 // Old
