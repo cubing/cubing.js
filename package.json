@@ -56,6 +56,7 @@
     "test-node-require": "node src/dist-test/require.cjs",
     "test-node-import": "node src/dist-test/import.mjs",
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
+    "test-dist-perf": "node src/dist-test/perf/*.mjs",
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts .",
@@ -80,7 +81,11 @@
   "eslintConfig": {
     "root": true,
     "parserOptions": {
-      "project": "./tsconfig.json"
+      "project": "./tsconfig.json",
+      "extraFileExtensions": [
+        ".cjs",
+        ".mjs"
+      ]
     },
     "parser": "@typescript-eslint/parser",
     "plugins": [
