@@ -87,7 +87,7 @@ export class Alg extends AlgCommon<Alg> {
     return new Alg(reverse(Array.from(this.#units).map((u) => u.invert())));
   }
 
-  /** @deprecated */
+  /** @deprecated Use {@link Alg.expand} instead. */
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
     depth?: number,
