@@ -230,11 +230,6 @@ class AlgParser {
       } else if (this.tryConsumeNext(".")) {
         mustNotBeCrowded(savedCharIndex);
         algBuilder.push(addCharIndices(new Pause(), savedCharIndex, this.#idx));
-        while (this.tryConsumeNext(".")) {
-          algBuilder.push(
-            addCharIndices(new Pause(), this.#idx - 1, this.#idx),
-          ); // TODO: Can we precompute index similarly to other units?
-        }
         crowded = true;
         algEndIdx = this.#idx;
         continue mainLoop;
@@ -253,9 +248,8 @@ class AlgParser {
   }
 
   private parseQuantumMoveImpl(): QuantumMove {
-    const [, , , outerLayerStr, innerLayerStr, family] = this.parseRegex(
-      quantumMoveRegex,
-    );
+    const [, , , outerLayerStr, innerLayerStr, family] =
+      this.parseRegex(quantumMoveRegex);
 
     return new QuantumMove(
       family,

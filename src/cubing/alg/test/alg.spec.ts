@@ -158,8 +158,8 @@ describe("algToString()", () => {
     expect(Ex.EPerm.toString()).toBe("x' [[R: U'], D] [[R: U], D] x");
   });
 
-  it("converts triple pause to ... (without spaces)", () => {
-    expect(Ex.TriplePause.toString()).toBe("...");
+  it("converts triple pause to . . . (with spaces)", () => {
+    expect(Ex.TriplePause.toString()).toBe(". . .");
   });
 });
 
@@ -271,9 +271,9 @@ describe("Parser", () => {
     expect(new Alg(s).toString()).toBe(s);
   });
 
-  it("parses ...", () => {
+  it("parses . . .", () => {
     const p = new Pause();
-    expect(new Alg("...")).toBeIdentical(new Alg([p, p, p]));
+    expect(new Alg(". . .")).toBeIdentical(new Alg([p, p, p]));
   });
 
   // TODO: Should these be parsed differently?

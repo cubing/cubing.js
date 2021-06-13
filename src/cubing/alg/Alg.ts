@@ -2,11 +2,10 @@ import { AlgCommon, Comparable } from "./common";
 import { experimentalIs, experimentalIsUnit } from "./is";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
-import { SimplifyOptions, simplify } from "./traversal";
+import { simplify, SimplifyOptions } from "./traversal";
 import { LineComment } from "./units/leaves/LineComment";
 import { Move } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
-import { Pause } from "./units/leaves/Pause";
 import type { LeafUnit, Unit } from "./units/Unit";
 import { warnOnce } from "./warnOnce";
 
@@ -190,9 +189,6 @@ export class Alg extends AlgCommon<Alg> {
 }
 
 function spaceBetween(u1: Unit, u2: Unit): string {
-  if (u1.is(Pause) && u2.is(Pause)) {
-    return "";
-  }
   if (u1.is(Newline) || u2.is(Newline)) {
     return "";
   }
