@@ -23,5 +23,3 @@ export { TreeAlgIndexer } from "./animation/indexer/tree/TreeAlgIndexer";
 export { KPuzzleWrapper as KSolvePuzzle } from "./3D/puzzles/KPuzzleWrapper";
 
 export type { BackViewLayout } from "./dom/viewers/TwistyViewerWrapper";
-
-export { instantiate } from "./worker/outside";

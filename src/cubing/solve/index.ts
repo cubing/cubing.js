@@ -9,3 +9,5 @@ export async function solve(
   console.log(puzzle, state);
   return new Alg("F2 D2");
 }
+
+export { instantiate } from "./worker/outside";
