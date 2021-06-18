@@ -19,6 +19,6 @@
     "importsNotUsedAsValues": "error",
     "rootDir": "."
   },
-  "include": ["src/**/*", "*/index.js", "*/index.d.ts", "script/*"],
+  "include": ["src/**/*", "*/index.js", "*/index.d.ts"],
   "exclude": ["src/dist-static/**/*"]
 }

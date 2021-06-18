@@ -83,7 +83,7 @@
   "eslintConfig": {
     "root": true,
     "parserOptions": {
-      "project": "./tsconfig.json",
+      "project": "./tsconfig-eslint.json",
       "extraFileExtensions": [
         ".cjs",
         ".mjs"
