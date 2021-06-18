@@ -5,14 +5,18 @@ import * as kpuzzle from "./kpuzzle";
 import * as protocol from "./protocol";
 import * as puzzleGeometry from "./puzzle-geometry";
 import * as puzzles from "./puzzles";
+import * as scramble from "./scramble";
 import * as stream from "./stream";
+import * as solve from "./solve";
 import * as twisty from "./twisty";
 
 export { alg };
 export { bluetooth };
 export { protocol };
 export { kpuzzle };
+export { scramble };
 export { stream };
+export { solve };
 export { puzzles };
 export { twisty };
 
