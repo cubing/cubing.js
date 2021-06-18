@@ -26,5 +26,5 @@
     "script/*",
     "script/**/*"
   ],
-  "exclude": ["src/dist-static/**/*", "node_modules"]
+  "exclude": ["src/dist-static/**/*"]
 }
