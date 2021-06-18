@@ -43,7 +43,6 @@ export const BundleGlobalTarget = {
   },
 };
 
-//npm run build-worker; npx esbuild --target=es2020 --bundle --external:three --external:web-worker --format=cjs --outfile=dist/cjs/index.js src/cubing/index.ts && cp -R src/dist-static/cjs/* dist/cjs
 export const cjsTarget = {
   dependencies: [],
   buildSelf: async (dev) => {
@@ -62,6 +61,48 @@ export const cjsTarget = {
   },
 };
 
+// npm run build-worker; npx esbuild
+// --target=es2020
+// --bundle
+// --external:three
+// --external:web-worker
+// --splitting
+// --format=esm
+// --sourcemap
+// --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/scramble/index.ts src/cubing/stream/index.ts src/cubing/solve/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm && cp src/cubing/solve/worker/worker-inside-generated.cjs dist/esm/worker-inside-generated.cjs
+export const esmTarget = {
+  dependencies: [],
+  buildSelf: async (dev) => {
+    await esbuild.build({
+      entryPoints: [
+        "src/cubing/alg/index.ts",
+        "src/cubing/bluetooth/index.ts",
+        "src/cubing/kpuzzle/index.ts",
+        "src/cubing/protocol/index.ts",
+        "src/cubing/puzzle-geometry/index.ts",
+        "src/cubing/puzzles/index.ts",
+        "src/cubing/scramble/index.ts",
+        "src/cubing/stream/index.ts",
+        "src/cubing/solve/index.ts",
+        "src/cubing/twisty/index.ts",
+      ],
+      outdir: "dist/esm",
+      format: "esm",
+      target: "es2020",
+      bundle: true,
+      watch: dev,
+      logLevel: "info",
+      sourcemap: true,
+      //
+      external: ["three", "web-worker"],
+    });
+    await execPromise("cp -R src/dist-static/esm/* dist/esm");
+    await execPromise(
+      "cp src/cubing/solve/worker/worker-inside-generated.cjs dist/esm/worker-inside-generated.cjs",
+    );
+  },
+};
+
 export const SnowpackTarget = {
   dependencies: [SolveWorkerTarget],
   buildSelf: async (dev) => {
@@ -74,9 +115,9 @@ export const SnowpackTarget = {
   },
 };
 
-const target = process.argv[2];
-if (!target) {
-  console.error("not a target:", target);
+const targetName = process.argv[2];
+if (!targetName) {
+  console.error("not a target:", targetName);
   process.exit(1);
 }
 
@@ -87,9 +128,14 @@ const targets /*: Record<String, SolverWorker>*/ = {
   "snowpack": SnowpackTarget,
   "bundle-global": BundleGlobalTarget,
   "cjs": cjsTarget,
+  "esm": esmTarget,
 };
 
 (async () => {
-  // console.log(targets[target]);
-  await build(targets[target], dev);
+  const target = targets[targetName];
+  if (!target) {
+    console.error("Unknown target:", targetName);
+    process.exit(1);
+  }
+  await build(target, dev);
 })();

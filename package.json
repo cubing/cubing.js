@@ -39,7 +39,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build-esm && npm run build-cjs && npm run build-bundle-global && npm run build-types && npm run build-bin",
-    "build-esm": "npm run build-worker; npx esbuild --target=es2020 --bundle --external:three --external:web-worker --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/scramble/index.ts src/cubing/stream/index.ts src/cubing/solve/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm && cp src/cubing/solve/worker/worker-inside-generated.cjs dist/esm/worker-inside-generated.cjs",
+    "build-esm": "node ./script/build.js esm",
     "build-cjs": "node ./script/build.js cjs",
     "build-bundle-global": "node ./script/build.js bundle-global",
     "build-types": "npm run build-worker; npx tsc --build ./tsconfig-types.json",
