@@ -187,6 +187,7 @@ const targets /*: Record<String, SolverWorker>*/ = {
   "bundle-global": bundleGlobalTarget,
   "cjs": cjsTarget,
   "esm": esmTarget,
+  "types": typesTarget,
   "bin": binTarget,
   "all": allTarget,
 };
