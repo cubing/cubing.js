@@ -6,3 +6,5 @@ function workerInside() {
 }
 
 workerInside();
+
+import "./vendor/entries/esm/scrambles-worker";
