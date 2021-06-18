@@ -4,7 +4,7 @@ import * as esbuild from "esbuild";
 import configSrc from "../snowpack.config.mjs";
 
 export async function main(options) {
-  const { dev } = options;
+  const { dev, workerOnly } = options;
 
   const config = snowpack.createConfiguration(configSrc);
 
@@ -20,8 +20,10 @@ export async function main(options) {
 
   await esbuildPromise;
 
-  const snowpackPromise = dev
-    ? snowpack.startServer({ config }, { isDev: dev })
-    : snowpack.build({ config });
-  await snowpackPromise;
+  if (!workerOnly) {
+    const snowpackPromise = dev
+      ? snowpack.startServer({ config }, { isDev: dev })
+      : snowpack.build({ config });
+    await snowpackPromise;
+  }
 }

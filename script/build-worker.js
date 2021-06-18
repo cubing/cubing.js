@@ -1,3 +1,3 @@
 import { main } from "./esbuild-snowpack.js";
 
-main({ dev: false, workerOnly: false });
+main({ dev: false, workerOnly: true });
