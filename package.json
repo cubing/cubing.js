@@ -118,6 +118,7 @@
       "/dist",
       "/src/dist-static",
       "/snowpack.config.mjs",
+      "/src/cubing/solve/worker/worker-inside-generated.js",
       "parser-peggy.js"
     ],
     "env": {
