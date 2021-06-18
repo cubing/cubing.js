@@ -1,6 +1,6 @@
 // This file was created because:
 //
-// - Safari and Firefox don't support `modules` workers yet.
+// - Safari and Firefox don't support `module` workers yet.
 // - `esbuild` and `snowpack` don't automatically handle transpilation to
 //   `classic` web workers.
 // - Parcel has too many show-stopping bugs for us to use.
