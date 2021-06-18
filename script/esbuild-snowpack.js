@@ -1,10 +1,12 @@
 import * as snowpack from "snowpack";
 import * as esbuild from "esbuild";
 
+import configSrc from "../snowpack.config.mjs";
+
 export async function main(options) {
   const { dev } = options;
 
-  const config = snowpack.createConfiguration();
+  const config = snowpack.loadConfiguration(configSrc);
 
   const esbuildPromise = esbuild.build({
     entryPoints: ["src/cubing/solve/worker/inside/src/worker-inside.ts"],

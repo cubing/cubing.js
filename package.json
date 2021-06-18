@@ -115,7 +115,7 @@
       "/coverage",
       "/dist",
       "/src/dist-static",
-      "/snowpack.config.cjs",
+      "/snowpack.config.mjs",
       "parser-peggy.js"
     ],
     "env": {
