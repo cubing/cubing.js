@@ -109,7 +109,7 @@ export const esmTarget = {
     });
     await execPromise("cp -R src/dist-static/esm/* dist/esm");
     await execPromise(
-      "cp src/cubing/solve/worker/worker-inside-generated.cjs dist/esm/worker-inside-generated.cjs",
+      "cp src/cubing/solve/worker/worker-inside-generated.cjs dist/esm/solve/worker-inside-generated.cjs",
     );
   },
 };
