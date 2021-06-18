@@ -179,15 +179,15 @@
       "import": "./dist/esm/scramble/index.js",
       "types": "./dist/types/scramble/index.d.ts"
     },
-    "./stream": {
-      "require": "./dist/cjs/stream/index.js",
-      "import": "./dist/esm/stream/index.js",
-      "types": "./dist/types/stream/index.d.ts"
-    },
     "./solve": {
       "require": "./dist/cjs/solve/index.js",
       "import": "./dist/esm/solve/index.js",
       "types": "./dist/types/solve/index.d.ts"
+    },
+    "./stream": {
+      "require": "./dist/cjs/stream/index.js",
+      "import": "./dist/esm/stream/index.js",
+      "types": "./dist/types/stream/index.d.ts"
     },
     "./twisty": {
       "require": "./dist/cjs/twisty/index.js",

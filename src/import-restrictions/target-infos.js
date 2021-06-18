@@ -56,13 +56,13 @@ export const targetInfos = {
       dynamic: [],
     },
   },
-  "stream": {
+  "solve": {
     deps: {
       direct: ["alg"],
       dynamic: [],
     },
   },
-  "solve": {
+  "stream": {
     deps: {
       direct: ["alg"],
       dynamic: [],
