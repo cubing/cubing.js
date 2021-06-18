@@ -1,6 +1,6 @@
 /** @ts-ignore */
-import { algToString, Sequence } from "cubing/alg";
-import { preInitialize222 } from "../implementations/2x2x2";
+import { Alg } from "../../../../alg";
+// import { preInitialize222 } from "../implementations/2x2x2";
 import { randomClockScrambleString } from "../implementations/clock";
 import { randomMegaminxScrambleString } from "../implementations/minx";
 import { getWorker } from "../worker/strategy/outside";
@@ -32,7 +32,7 @@ function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
 // pre-initialize multiple events will initialize them consecutively. Scrambles
 // for a given event cannot be computed while another event is being initialized.
 export function _preInitializationHintForEvent(
-  eventID: string
+  eventID: string,
   // callback?: () => void
 ): void {
   switch (eventID) {
@@ -47,14 +47,20 @@ export function _preInitializationHintForEvent(
   })();
 }
 
-export async function _randomScrambleForEvent(
-  eventID: string
-): Promise<Sequence> {
+export async function _randomScrambleForEvent(eventID: string): Promise<Alg> {
   return (await getCachedWorkerInstance()).randomScramble(eventID);
 }
 
+export async function _randomScrambleStringForEvent(
+  eventID: string,
+): Promise<string> {
+  return (await getCachedWorkerInstance()).randomScrambleStringForEvent(
+    eventID,
+  );
+}
+
 export async function randomScrambleStringForEvent(
-  eventID: string
+  eventID: string,
 ): Promise<string> {
   switch (eventID) {
     case "clock":
@@ -64,5 +70,5 @@ export async function randomScrambleStringForEvent(
     case "minx":
       return randomMegaminxScrambleString();
   }
-  return algToString(await _randomScrambleForEvent(eventID));
+  return await _randomScrambleStringForEvent(eventID);
 }

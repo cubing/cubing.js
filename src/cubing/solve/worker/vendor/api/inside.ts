@@ -1,3 +1,4 @@
+import type { Alg } from "../../../../alg";
 import { preInitialize222, random222Scramble } from "../implementations/2x2x2";
 import { initialize333, random333Scramble } from "../implementations/3x3x3";
 import { initialize444, random444Scramble } from "../implementations/4x4x4";
@@ -10,7 +11,7 @@ function now() {
 
 async function measurePerf<T>(
   name: string,
-  f: () => T | Promise<T>
+  f: () => T | Promise<T>,
 ): Promise<T> {
   if (!DEBUG_MEASURE_PERF) {
     return f();
@@ -42,7 +43,7 @@ export const insideAPI = {
     }
   },
 
-  randomScramble: async (eventID: string) => {
+  randomScramble: async (eventID: string): Promise<Alg> => {
     switch (eventID) {
       case "222":
         return measurePerf("random222Scramble", random222Scramble);
@@ -55,5 +56,9 @@ export const insideAPI = {
       default:
         throw new Error(`unsupported event: ${eventID}`);
     }
+  },
+
+  randomScrambleStringForEvent: async (eventID: string): Promise<string> => {
+    return (await insideAPI.randomScramble(eventID)).toString();
   },
 };

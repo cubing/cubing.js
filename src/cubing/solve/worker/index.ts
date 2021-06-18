@@ -24,3 +24,13 @@ export function terminateWorkers(): void {
     worker.terminate();
   }
 }
+
+import {
+  randomScrambleStringForEvent,
+  _preInitializationHintForEvent,
+} from "./vendor/entries/esm/scrambles";
+
+export {
+  randomScrambleStringForEvent,
+  _preInitializationHintForEvent as experimentalPreInitializationHintForEvent,
+};
