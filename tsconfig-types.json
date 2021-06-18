@@ -5,5 +5,5 @@
     "rootDir": "src/cubing"
   },
   "include": ["src/cubing/**/*", "script/*"],
-  "exclude": ["script/*"]
+  "exclude": ["script/*", "node_modules"]
 }
