@@ -26,11 +26,11 @@ export function terminateWorkers(): void {
 }
 
 import {
-  randomScrambleStringForEvent,
+  randomScrambleForEvent,
   _preInitializationHintForEvent,
 } from "./vendor/entries/esm/scrambles";
 
 export {
-  randomScrambleStringForEvent,
+  randomScrambleForEvent,
   _preInitializationHintForEvent as experimentalPreInitializationHintForEvent,
 };

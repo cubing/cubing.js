@@ -47,8 +47,12 @@ export function _preInitializationHintForEvent(
   })();
 }
 
-export async function _randomScrambleForEvent(eventID: string): Promise<Alg> {
-  return (await getCachedWorkerInstance()).randomScramble(eventID);
+export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
+  return Alg.fromString(
+    await (
+      await getCachedWorkerInstance()
+    ).randomScrambleStringForEvent(eventID),
+  );
 }
 
 export async function _randomScrambleStringForEvent(

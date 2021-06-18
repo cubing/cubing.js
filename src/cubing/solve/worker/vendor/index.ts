@@ -1,5 +1,5 @@
 export {
   _preInitializationHintForEvent,
-  _randomScrambleForEvent,
+  randomScrambleForEvent,
   randomScrambleStringForEvent,
 } from "./api/outside";
