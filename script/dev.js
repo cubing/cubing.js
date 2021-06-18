@@ -1,9 +1,5 @@
-const {
-  loadConfiguration,
-  startServer,
-  createConfiguration,
-} = require("snowpack");
-const { build } = require("esbuild");
+import { startServer, createConfiguration } from "snowpack";
+import { build } from "esbuild";
 
 const config = createConfiguration({
   workspaceRoot: "/",
@@ -31,8 +27,8 @@ const config = createConfiguration({
 (async () => {
   console.log("starting?");
   const esbuildServerPromise = build({
-    entryPoints: ["src/cubing/twisty/worker/inside/src/worker-inside.ts"],
-    outfile: "src/cubing/twisty/worker/inside/generated/worker-inside.js",
+    entryPoints: ["src/cubing/solve/worker/inside/src/worker-inside.ts"],
+    outfile: "src/cubing/solve/worker/inside/generated/worker-inside.js",
     format: "cjs",
     target: "es2015",
     bundle: true,
