@@ -9,10 +9,14 @@ export async function build(target, dev) {
     build(dependency, dev),
   );
   await depPromises;
-  return Promise.all(depPromises.concat([target.buildSelf(dev)]));
+  if (!target.builtYet) {
+    await target.buildSelf(dev);
+    target.builtYet = true;
+  }
 }
 
 export const SolveWorkerTarget = {
+  builtYet: false,
   dependencies: [],
   buildSelf: (dev) => {
     return esbuild.build({
@@ -28,6 +32,7 @@ export const SolveWorkerTarget = {
 };
 
 export const BundleGlobalTarget = {
+  builtYet: false,
   dependencies: [],
   buildSelf: (dev) => {
     return esbuild.build({
@@ -44,6 +49,7 @@ export const BundleGlobalTarget = {
 };
 
 export const cjsTarget = {
+  builtYet: false,
   dependencies: [],
   buildSelf: async (dev) => {
     await esbuild.build({
@@ -71,6 +77,7 @@ export const cjsTarget = {
 // --sourcemap
 // --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/scramble/index.ts src/cubing/stream/index.ts src/cubing/solve/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm && cp src/cubing/solve/worker/worker-inside-generated.cjs dist/esm/worker-inside-generated.cjs
 export const esmTarget = {
+  builtYet: false,
   dependencies: [],
   buildSelf: async (dev) => {
     await esbuild.build({
@@ -104,6 +111,7 @@ export const esmTarget = {
 };
 
 export const SnowpackTarget = {
+  builtYet: false,
   dependencies: [SolveWorkerTarget],
   buildSelf: async (dev) => {
     const config = snowpack.createConfiguration(configSrc);
