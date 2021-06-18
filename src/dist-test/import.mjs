@@ -15,4 +15,4 @@ console.log(stream);
 // https://github.com/mrdoob/three.js/pull/18498
 
 import * as solve from "cubing/solve";
-solve.instantiate().then(console.log);
+solve.instantiate();
