@@ -11,7 +11,7 @@ export async function build(target, dev) {
   return Promise.all(depPromises.concat([target.buildSelf(dev)]));
 }
 
-export const SolveWorkerBuild = {
+export const SolveWorkerTarget = {
   dependencies: [],
   buildSelf: (dev) => {
     return esbuild.build({
@@ -26,17 +26,15 @@ export const SolveWorkerBuild = {
   },
 };
 
-export const SnowpackBuild = {
-  dependencies: [],
+export const SnowpackTarget = {
+  dependencies: [SolveWorkerTarget],
   buildSelf: async (dev) => {
     const config = snowpack.createConfiguration(configSrc);
 
-    if (!workerOnly) {
-      const snowpackPromise = dev
-        ? snowpack.startServer({ config }, { isDev: dev })
-        : snowpack.build({ config });
-      await snowpackPromise;
-    }
+    const snowpackPromise = dev
+      ? snowpack.startServer({ config }, { isDev: dev })
+      : snowpack.build({ config });
+    await snowpackPromise;
   },
 };
 
@@ -49,7 +47,8 @@ if (!target) {
 const dev = process.argv[3] === "dev";
 
 const targets /*: Record<String, SolverWorker>*/ = {
-  "solve-worker": SolveWorkerBuild,
+  "solve-worker": SolveWorkerTarget,
+  "snowpack": SnowpackTarget,
 };
 
 (async () => {
