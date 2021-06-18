@@ -38,11 +38,11 @@
     "yargs": "^16.2.0"
   },
   "scripts": {
-    "build": "npm run clean && npm run build-esm && npm run build-cjs && npm run build-bundle-global && npm run build-types && npm run build-bin",
+    "build": "npm run clean && node ./script/build.js all",
     "build-esm": "node ./script/build.js esm",
     "build-cjs": "node ./script/build.js cjs",
     "build-bundle-global": "node ./script/build.js bundle-global",
-    "build-types": "npm run build-worker; npx tsc --build ./tsconfig-types.json",
+    "build-types": "node ./script/build.js types",
     "build-bin": "node ./script/build.js bin",
     "build-experiments": "node ./script/build.js snowpack",
     "build-worker": "node ./script/build-worker.js",

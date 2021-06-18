@@ -28,7 +28,7 @@ export async function build(target, dev) {
   }
 }
 
-export const SolveWorkerTarget = {
+export const solveWorkerTarget = {
   builtYet: false,
   dependencies: [],
   buildSelf: (dev) => {
@@ -44,7 +44,7 @@ export const SolveWorkerTarget = {
   },
 };
 
-export const BundleGlobalTarget = {
+export const bundleGlobalTarget = {
   builtYet: false,
   dependencies: [],
   buildSelf: (dev) => {
@@ -82,7 +82,7 @@ export const cjsTarget = {
 
 export const esmTarget = {
   builtYet: false,
-  dependencies: [SolveWorkerTarget],
+  dependencies: [solveWorkerTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
       entryPoints: [
@@ -116,7 +116,7 @@ export const esmTarget = {
 
 export const binTarget = {
   builtYet: false,
-  dependencies: [SolveWorkerTarget],
+  dependencies: [solveWorkerTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
       entryPoints: ["src/bin/puzzle-geometry-bin.ts"],
@@ -135,7 +135,7 @@ export const binTarget = {
 
 export const SnowpackTarget = {
   builtYet: false,
-  dependencies: [SolveWorkerTarget],
+  dependencies: [solveWorkerTarget],
   buildSelf: async (dev) => {
     const config = snowpack.createConfiguration(configSrc);
 
@@ -143,6 +143,33 @@ export const SnowpackTarget = {
       ? snowpack.startServer({ config }, { isDev: dev })
       : snowpack.build({ config });
     await snowpackPromise;
+  },
+};
+
+export const typesTarget = {
+  builtYet: false,
+  dependencies: [], // solve worker?
+  buildSelf: async (dev) => {
+    if (dev) {
+      throw new Error("Cannot build `types` target in dev mode.");
+    }
+    await execPromise("npx tsc --build ./tsconfig-types.json");
+  },
+};
+
+export const allTarget = {
+  builtYet: false,
+  dependencies: [
+    esmTarget,
+    cjsTarget,
+    bundleGlobalTarget,
+    typesTarget,
+    binTarget,
+  ],
+  buildSelf: async (dev) => {
+    if (dev) {
+      throw new Error("Cannot build `types` target in dev mode.");
+    }
   },
 };
 
@@ -155,12 +182,13 @@ if (!targetName) {
 const dev = process.argv[3] === "dev";
 
 const targets /*: Record<String, SolverWorker>*/ = {
-  "solve-worker": SolveWorkerTarget,
+  "solve-worker": solveWorkerTarget,
   "snowpack": SnowpackTarget,
-  "bundle-global": BundleGlobalTarget,
+  "bundle-global": bundleGlobalTarget,
   "cjs": cjsTarget,
   "esm": esmTarget,
   "bin": binTarget,
+  "all": allTarget,
 };
 
 (async () => {
