@@ -10,7 +10,7 @@ export async function main(options) {
 
   const esbuildPromise = esbuild.build({
     entryPoints: ["src/cubing/solve/worker/worker-inside-src.ts"],
-    outfile: "src/cubing/solve/worker/worker-inside-generated.js",
+    outfile: "src/cubing/solve/worker/worker-inside-generated.cjs",
     format: "cjs",
     target: "es2015",
     bundle: true,

@@ -6,7 +6,7 @@ export function instantiate(): void {
   console.log("Worker", Worker);
   console.log("import.meta.url", import.meta.url);
   const url = new URL(
-    "./worker-inside-generated.js",
+    "./worker-inside-generated.cjs",
     import.meta.url,
   ).toString();
   console.log("url", url);
