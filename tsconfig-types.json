@@ -4,6 +4,6 @@
     "emitDeclarationOnly": true,
     "rootDir": "src/cubing"
   },
-  "include": ["src/cubing/**/*", "script/*"],
-  "exclude": ["script/*", "node_modules"]
+  "include": ["src/cubing/**/*"],
+  "exclude": ["node_modules"]
 }
