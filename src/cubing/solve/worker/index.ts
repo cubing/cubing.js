@@ -1,6 +1,6 @@
 export function instantiate(): void {
   console.log("instantiating!!!!");
-  new Worker(new URL("../inside/generated/worker-inside.js", import.meta.url), {
+  new Worker(new URL("./worker-inside-generated.js", import.meta.url), {
     type: "classic",
   });
 }

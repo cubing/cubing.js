@@ -9,8 +9,8 @@ export async function main(options) {
   const config = snowpack.createConfiguration(configSrc);
 
   const esbuildPromise = esbuild.build({
-    entryPoints: ["src/cubing/solve/worker/inside/src/worker-inside.ts"],
-    outfile: "src/cubing/solve/worker/inside/generated/worker-inside.js",
+    entryPoints: ["src/cubing/solve/worker/worker-inside-src.ts"],
+    outfile: "src/cubing/solve/worker/worker-inside-generated.js",
     format: "cjs",
     target: "es2015",
     bundle: true,

@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build-esm && npm run build-cjs && npm run build-bundle-global && npm run build-types && npm run build-bin",
-    "build-esm": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/stream/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm",
+    "build-esm": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/scramble/index.ts src/cubing/stream/index.ts src/cubing/solve/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm",
     "build-cjs": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --format=cjs --outfile=dist/cjs/index.js src/cubing/index.ts && cp -R src/dist-static/cjs/* dist/cjs",
     "build-bundle-global": "npm run build-worker; npx esbuild --target=es2015 --bundle --format=cjs --minify --outdir=dist/bundle-global src/cubing/cubing.bundle-global.ts",
     "build-types": "npm run build-worker; npx tsc --build ./tsconfig-types.json",
