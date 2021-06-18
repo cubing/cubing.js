@@ -10,7 +10,8 @@
   "dependencies": {
     "@types/three": "^0.126.1",
     "@types/web-bluetooth": "0.0.4",
-    "three": "^0.126.1"
+    "three": "^0.126.1",
+    "web-worker": "^1.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.11.5",
@@ -38,18 +39,18 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build-esm && npm run build-cjs && npm run build-bundle-global && npm run build-types && npm run build-bin",
-    "build-esm": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/scramble/index.ts src/cubing/stream/index.ts src/cubing/solve/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm && cp src/cubing/solve/worker/worker-inside-generated.js dist/esm/worker-inside-generated.js",
-    "build-cjs": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --format=cjs --outfile=dist/cjs/index.js src/cubing/index.ts && cp -R src/dist-static/cjs/* dist/cjs",
+    "build-esm": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --external:web-worker --splitting --format=esm --sourcemap --outdir=dist/esm src/cubing/index.ts src/cubing/alg/index.ts src/cubing/bluetooth/index.ts src/cubing/kpuzzle/index.ts src/cubing/protocol/index.ts src/cubing/puzzle-geometry/index.ts src/cubing/puzzles/index.ts src/cubing/scramble/index.ts src/cubing/stream/index.ts src/cubing/solve/index.ts src/cubing/twisty/index.ts && cp -R src/dist-static/esm/* dist/esm && cp src/cubing/solve/worker/worker-inside-generated.js dist/esm/worker-inside-generated.js",
+    "build-cjs": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --external:web-worker --format=cjs --outfile=dist/cjs/index.js src/cubing/index.ts && cp -R src/dist-static/cjs/* dist/cjs",
     "build-bundle-global": "npm run build-worker; npx esbuild --target=es2015 --bundle --format=cjs --minify --outdir=dist/bundle-global src/cubing/cubing.bundle-global.ts",
     "build-types": "npm run build-worker; npx tsc --build ./tsconfig-types.json",
-    "build-bin": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --format=esm --outfile=dist/bin/puzzle-geometry-bin.js src/bin/puzzle-geometry-bin.ts",
+    "build-bin": "npm run build-worker; npx esbuild --target=es2015 --bundle --external:three --external:web-worker --format=esm --outfile=dist/bin/puzzle-geometry-bin.js src/bin/puzzle-geometry-bin.ts",
     "build-experiments": "node ./script/build.js",
     "build-worker": "node ./script/build-worker.js",
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "node ./script/dev.js",
-    "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel",
+    "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/solve/worker/worker-inside-generated.js",
     "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml in sync with this",
     "test-experiments": "node src/test-experiments/test.js",
     "test-import-restrictions": "node src/import-restrictions/build.js",
