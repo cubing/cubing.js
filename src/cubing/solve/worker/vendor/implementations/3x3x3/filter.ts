@@ -1,10 +1,10 @@
 // @ts-ignore
-import { BareBlockMove } from "../../../../../alg";
+import { Move } from "../../../../../alg";
 import {
   // @ts-ignore
   KPuzzle,
   // @ts-ignore
-  EquivalentOrbitTransformations,
+  areOrbitTransformationsEquivalent,
   // @ts-ignore
   KPuzzleDefinition,
   // @ts-ignore
@@ -19,7 +19,7 @@ export function isEquivalentTranformationIgnoringCENTERS(
 ): boolean {
   for (const orbitName in def.orbits) {
     if (
-      !EquivalentOrbitTransformations(def, orbitName, t1, t2, {
+      !areOrbitTransformationsEquivalent(def, orbitName, t1, t2, {
         ignoreOrientation: orbitName === "CENTERS",
       })
     ) {
@@ -41,7 +41,7 @@ export function passesFilter(
   for (const face of "ULFRBD") {
     for (let amount = 1; amount < 4; amount++) {
       kpuzzle.reset();
-      kpuzzle.applyMove(BareBlockMove(face, amount));
+      kpuzzle.applyMove(new Move(face, amount));
       if (isEquivalentTranformationIgnoringCENTERS(def, kpuzzle.state, state)) {
         return false;
       }

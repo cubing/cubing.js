@@ -1,5 +1,5 @@
 // Snowpack Configuration File
-// See all supported options: https://www.snowpack. dev/reference/configuration
+// See all supported options: https://www.snowpack.dev/reference/configuration
 
 export default {
   workspaceRoot: "/",
@@ -7,7 +7,13 @@ export default {
     "src/experiments/static": { url: "/", static: true },
     "src/experiments/code": { url: "/_code" },
   },
-  packageOptions: {},
+  exclude: ["**/node.*", "**/get-random-values.*"],
+  installOptions: {
+    externalPackage: ["crypto", "worker_threads"],
+  },
+  packageOptions: {
+    knownEntrypoints: ["web-worker"],
+  },
   devOptions: {
     port: 3333,
   },

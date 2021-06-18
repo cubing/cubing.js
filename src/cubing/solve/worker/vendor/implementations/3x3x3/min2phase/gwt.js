@@ -29,7 +29,8 @@ function emptyMethod() {}
 function defineClass(typeId, superTypeId, castableTypeMap) {
   var prototypesByTypeId = prototypesByTypeId_0;
   var createSubclassPrototype = createSubclassPrototype_0;
-  var maybeGetClassLiteralFromPlaceHolder = maybeGetClassLiteralFromPlaceHolder_0;
+  var maybeGetClassLiteralFromPlaceHolder =
+    maybeGetClassLiteralFromPlaceHolder_0;
   var prototype_0 = prototypesByTypeId[typeId];
   var clazz = maybeGetClassLiteralFromPlaceHolder(prototype_0);
   if (prototype_0 && !clazz) {
@@ -155,9 +156,8 @@ function getClassLiteralForArray_0(leafClass, dimensions) {
   var arrayLiterals = (leafClass.arrayLiterals = leafClass.arrayLiterals || []);
   return (
     arrayLiterals[dimensions] ||
-    (arrayLiterals[dimensions] = leafClass.createClassLiteralForArray(
-      dimensions
-    ))
+    (arrayLiterals[dimensions] =
+      leafClass.createClassLiteralForArray(dimensions))
   );
 }
 
@@ -240,7 +240,7 @@ function initDim(
   elementTypeId,
   length_0,
   elementTypeCategory,
-  dimensions
+  dimensions,
 ) {
   var result;
   result = initializeArrayElementsWithDefaults(elementTypeCategory, length_0);
@@ -249,7 +249,7 @@ function initDim(
     castableTypeMap,
     elementTypeId,
     elementTypeCategory,
-    result
+    result,
   );
   return result;
 }
@@ -260,7 +260,7 @@ function initDims(
   elementTypeIds,
   leafElementTypeCategory,
   dimExprs,
-  count
+  count,
 ) {
   return initDims_0(
     leafClassLiteral,
@@ -269,7 +269,7 @@ function initDims(
     leafElementTypeCategory,
     dimExprs,
     0,
-    count
+    count,
   );
 }
 
@@ -280,7 +280,7 @@ function initDims_0(
   leafElementTypeCategory,
   dimExprs,
   index_0,
-  count
+  count,
 ) {
   var elementTypeCategory, i, isLastDim, length_0, result;
   length_0 = dimExprs[index_0];
@@ -292,7 +292,7 @@ function initDims_0(
     castableTypeMapExprs[index_0],
     elementTypeIds[index_0],
     elementTypeCategory,
-    result
+    result,
   );
   if (!isLastDim) {
     ++index_0;
@@ -304,7 +304,7 @@ function initDims_0(
         leafElementTypeCategory,
         dimExprs,
         index_0,
-        count
+        count,
       );
     }
   }
@@ -316,7 +316,7 @@ function initValues(
   castableTypeMap,
   elementTypeId,
   elementTypeCategory,
-  array
+  array,
 ) {
   array.___clazz$ = arrayClass;
   array.castableTypeMap$ = castableTypeMap;
@@ -412,7 +412,7 @@ function fromInt(value_0) {
         293,
         256,
         0,
-        1
+        1,
       ));
     result = boxedValues[rebase];
     !result && (result = boxedValues[rebase] = create(value_0));
@@ -588,7 +588,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [495, 18],
-    2
+    2,
   );
   TwistMove = initDims(
     C_classLit,
@@ -596,7 +596,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [324, 18],
-    2
+    2,
   );
   FlipMove = initDims(
     C_classLit,
@@ -604,7 +604,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [336, 18],
-    2
+    2,
   );
   UDSliceConj = initDims(
     C_classLit,
@@ -612,7 +612,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [495, 8],
-    2
+    2,
   );
   UDSliceTwistPrun = initDim(I_classLit, $intern_27, 0, 20048, 7, 1);
   UDSliceFlipPrun = initDim(I_classLit, $intern_27, 0, 20791, 7, 1);
@@ -623,7 +623,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [2768, 10],
-    2
+    2,
   );
   EPermMove = initDims(
     C_classLit,
@@ -631,7 +631,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [2768, 10],
-    2
+    2,
   );
   MPermMove = initDims(
     C_classLit,
@@ -639,7 +639,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [24, 10],
-    2
+    2,
   );
   MPermConj = initDims(
     C_classLit,
@@ -647,7 +647,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [24, 16],
-    2
+    2,
   );
   CCombPConj = initDims(
     C_classLit,
@@ -655,7 +655,7 @@ function $clinit_CoordCube() {
     [11, 0],
     7,
     [140, 16],
-    2
+    2,
   );
   MCPermPrun = initDim(I_classLit, $intern_27, 0, 8305, 7, 1);
   EPermCCombPPrun = initDim(I_classLit, $intern_27, 0, 48441, 7, 1);
@@ -675,21 +675,21 @@ function $doMovePrun(this$static, cc, m) {
       getPruning(
         UDSliceTwistPrun,
         this$static.twist * 495 +
-          UDSliceConj[this$static.slice_0][this$static.tsym]
+          UDSliceConj[this$static.slice_0][this$static.tsym],
       ),
       getPruning(
         UDSliceFlipPrun,
         this$static.flip * 495 +
-          UDSliceConj[this$static.slice_0][this$static.fsym]
-      )
+          UDSliceConj[this$static.slice_0][this$static.fsym],
+      ),
     ),
     getPruning(
       TwistFlipPrun,
       (this$static.twist << 11) |
         FlipS2RF[
           (this$static.flip << 3) | (this$static.fsym ^ this$static.tsym)
-        ]
-    )
+        ],
+    ),
   );
   return this$static.prun;
 }
@@ -705,7 +705,7 @@ function $doMovePrunConj(this$static, cc, m) {
   return getPruning(
     TwistFlipPrun,
     ((this$static.twistc >> 3) << 11) |
-      FlipS2RF[this$static.flipc ^ (this$static.twistc & 7)]
+      FlipS2RF[this$static.flipc ^ (this$static.twistc & 7)],
   );
 }
 
@@ -717,7 +717,7 @@ function $setWithPrun(this$static, cc, depth) {
   this$static.twist = this$static.twist >> 3;
   this$static.prun = getPruning(
     TwistFlipPrun,
-    (this$static.twist << 11) | FlipS2RF[this$static.flip ^ this$static.tsym]
+    (this$static.twist << 11) | FlipS2RF[this$static.flip ^ this$static.tsym],
   );
   if (this$static.prun > depth) {
     return false;
@@ -731,14 +731,14 @@ function $setWithPrun(this$static, cc, depth) {
       getPruning(
         UDSliceTwistPrun,
         this$static.twist * 495 +
-          UDSliceConj[this$static.slice_0][this$static.tsym]
+          UDSliceConj[this$static.slice_0][this$static.tsym],
       ),
       getPruning(
         UDSliceFlipPrun,
         this$static.flip * 495 +
-          UDSliceConj[this$static.slice_0][this$static.fsym]
-      )
-    )
+          UDSliceConj[this$static.slice_0][this$static.fsym],
+      ),
+    ),
   );
   if (this$static.prun > depth) {
     return false;
@@ -753,8 +753,8 @@ function $setWithPrun(this$static, cc, depth) {
     getPruning(
       TwistFlipPrun,
       ((this$static.twistc >> 3) << 11) |
-        FlipS2RF[this$static.flipc ^ (this$static.twistc & 7)]
-    )
+        FlipS2RF[this$static.flipc ^ (this$static.twistc & 7)],
+    ),
   );
   return this$static.prun <= depth;
 }
@@ -785,14 +785,14 @@ function init_0(fullInit) {
       FlipS2R,
       FlipR2S,
       (SymStateFlip = initDim(C_classLit, $intern_26, 0, 336, 7, 1)),
-      0
+      0,
     );
     initSym2Raw(
       2187,
       TwistS2R,
       TwistR2S,
       (SymStateTwist = initDim(C_classLit, $intern_26, 0, 324, 7, 1)),
-      1
+      1,
     );
     initFlipMove();
     initTwistMove();
@@ -805,7 +805,7 @@ function init_0(fullInit) {
     CPermMove,
     ($clinit_CubieCube(), SymStatePerm),
     584244,
-    fullInit
+    fullInit,
   );
   initRawSymPrun(
     EPermCCombPPrun,
@@ -814,7 +814,7 @@ function init_0(fullInit) {
     EPermMove,
     SymStatePerm,
     514084,
-    fullInit
+    fullInit,
   );
   initRawSymPrun(
     UDSliceTwistPrun,
@@ -823,7 +823,7 @@ function init_0(fullInit) {
     TwistMove,
     SymStateTwist,
     431619,
-    fullInit
+    fullInit,
   );
   initRawSymPrun(
     UDSliceFlipPrun,
@@ -832,7 +832,7 @@ function init_0(fullInit) {
     FlipMove,
     SymStateFlip,
     431619,
-    fullInit
+    fullInit,
   );
   initRawSymPrun(
     TwistFlipPrun,
@@ -841,7 +841,7 @@ function init_0(fullInit) {
     TwistMove,
     SymStateTwist,
     103939,
-    fullInit
+    fullInit,
   );
   initLevel = fullInit ? 2 : 1;
 }
@@ -870,7 +870,7 @@ function initCombPMoveConj() {
     [11, 0],
     7,
     [140, 10],
-    2
+    2,
   );
   for (i = 0; i < 140; i++) {
     setComb(c.ca, i % 70, 0, false);
@@ -878,7 +878,7 @@ function initCombPMoveConj() {
       CornMult(
         c,
         ($clinit_CubieCube(), moveCube)[($clinit_Util(), ud2std)[j0]],
-        d
+        d,
       );
       CCombPMove[i][j0] =
         (getComb(d.ca, 0, false) + 70 * (((165 >> j0) & 1) ^ ~~(i / 70))) &
@@ -928,7 +928,7 @@ function initMPermMoveConj() {
       EdgeMult(
         c,
         ($clinit_CubieCube(), moveCube)[($clinit_Util(), ud2std)[j0]],
-        d
+        d,
       );
       MPermMove[i][j0] = getNPerm(d.ea, 12, true) % 24 & $intern_20;
     }
@@ -946,7 +946,7 @@ function initRawSymPrun(
   SymMove,
   SymState,
   PrunFlag,
-  fullInit
+  fullInit,
 ) {
   var INV_DEPTH,
     ISTFP,
@@ -1154,7 +1154,7 @@ var CCombPConj,
 var Lorg_cubing_min2phase_client_CoordCube_2_classLit = createForClass(
   "org.cubing.min2phase.client",
   "CoordCube",
-  31
+  31,
 );
 function $clinit_CubieCube() {
   $clinit_CubieCube = emptyMethod;
@@ -1164,7 +1164,7 @@ function $clinit_CubieCube() {
     7,
     16,
     0,
-    1
+    1,
   );
   moveCube = initDim(
     Lorg_cubing_min2phase_client_CubieCube_2_classLit,
@@ -1172,7 +1172,7 @@ function $clinit_CubieCube() {
     7,
     18,
     0,
-    1
+    1,
   );
   moveCubeSym = initDim(J_classLit, $intern_3, 0, 18, 6, 1);
   firstMoveSym = initDim(I_classLit, $intern_27, 0, 48, 7, 1);
@@ -1182,7 +1182,7 @@ function $clinit_CubieCube() {
     [17, 0],
     7,
     [16, 16],
-    2
+    2,
   );
   SymMultInv = initDims(
     I_classLit,
@@ -1190,7 +1190,7 @@ function $clinit_CubieCube() {
     [17, 0],
     7,
     [16, 16],
-    2
+    2,
   );
   SymMove_0 = initDims(
     I_classLit,
@@ -1198,7 +1198,7 @@ function $clinit_CubieCube() {
     [17, 0],
     7,
     [16, 18],
-    2
+    2,
   );
   Sym8Move = initDim(I_classLit, $intern_27, 0, 144, 7, 1);
   SymMoveUD = initDims(
@@ -1207,7 +1207,7 @@ function $clinit_CubieCube() {
     [17, 0],
     7,
     [16, 18],
-    2
+    2,
   );
   FlipS2R = initDim(C_classLit, $intern_26, 0, 336, 7, 1);
   TwistS2R = initDim(C_classLit, $intern_26, 0, 324, 7, 1);
@@ -1227,127 +1227,49 @@ function $clinit_CubieCube() {
     10,
     0,
     [
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
         0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
         7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        6,
-        7,
-        8,
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
         0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        15,
-        16,
-        17,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        3,
-        4,
-        5,
-        6,
         7,
-        8,
+        [6, 7, 8, 0, 1, 2, 3, 4, 5, 15, 16, 17, 9, 10, 11, 12, 13, 14],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
         0,
-        1,
-        2,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        9,
-        10,
-        11,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        2,
-        1,
-        0,
-        5,
-        4,
-        3,
-        8,
         7,
-        6,
-        11,
-        10,
-        9,
-        14,
-        13,
-        12,
-        17,
-        16,
-        15,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        8,
-        7,
-        6,
-        2,
-        1,
+        [3, 4, 5, 6, 7, 8, 0, 1, 2, 12, 13, 14, 15, 16, 17, 9, 10, 11],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
         0,
-        5,
-        4,
-        3,
-        17,
-        16,
-        15,
-        11,
-        10,
-        9,
-        14,
-        13,
-        12,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        5,
-        4,
-        3,
-        8,
         7,
-        6,
-        2,
-        1,
+        [2, 1, 0, 5, 4, 3, 8, 7, 6, 11, 10, 9, 14, 13, 12, 17, 16, 15],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
         0,
-        14,
-        13,
-        12,
-        17,
-        16,
-        15,
-        11,
-        10,
-        9,
-      ]),
-    ]
+        7,
+        [8, 7, 6, 2, 1, 0, 5, 4, 3, 17, 16, 15, 11, 10, 9, 14, 13, 12],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [5, 4, 3, 8, 7, 6, 2, 1, 0, 14, 13, 12, 17, 16, 15, 11, 10, 9],
+      ),
+    ],
   );
   initMove();
   initSym();
@@ -1359,14 +1281,14 @@ function $$init(this$static) {
     $intern_30,
     0,
     7,
-    [0, 1, 2, 3, 4, 5, 6, 7]
+    [0, 1, 2, 3, 4, 5, 6, 7],
   );
   this$static.ea = initValues(
     getClassLiteralForArray(B_classLit, 1),
     $intern_30,
     0,
     7,
-    [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
+    [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],
   );
 }
 
@@ -1446,8 +1368,8 @@ function $selfSymmetry(this$static) {
               sym,
               shl(
                 { l: 1, m: 0, h: 0 },
-                ((urfInv << 4) | i) < 48 ? (urfInv << 4) | i : 48
-              )
+                ((urfInv << 4) | i) < 48 ? (urfInv << 4) | i : 48,
+              ),
             ));
         }
       }
@@ -1648,7 +1570,7 @@ function initPermSym2Raw() {
     EPermS2R,
     EPermR2S,
     (SymStatePerm = initDim(C_classLit, $intern_26, 0, 2768, 7, 1)),
-    2
+    2,
   );
   cc = new CubieCube();
   for (i0 = 0; i0 < 2768; i0++) {
@@ -1808,7 +1730,7 @@ var CubeSym,
 var Lorg_cubing_min2phase_client_CubieCube_2_classLit = createForClass(
   "org.cubing.min2phase.client",
   "CubieCube",
-  7
+  7,
 );
 
 function $initPhase2(
@@ -1819,7 +1741,7 @@ function $initPhase2(
   p2esym,
   p2mid,
   edgei,
-  corni
+  corni,
 ) {
   var depth2, i, i0, prun, ret;
   prun = max_0(
@@ -1828,16 +1750,16 @@ function $initPhase2(
       (edgei >> 4) * 140 +
         CCombPConj[($clinit_CubieCube(), Perm2CombP)[corni >> 4] & 255][
           SymMultInv[edgei & 15][corni & 15]
-        ]
+        ],
     ),
     max_0(
       getPruning(
         EPermCCombPPrun,
         p2edge * 140 +
-          CCombPConj[Perm2CombP[p2corn] & 255][SymMultInv[p2esym][p2csym]]
+          CCombPConj[Perm2CombP[p2corn] & 255][SymMultInv[p2esym][p2csym]],
       ),
-      getPruning(MCPermPrun, p2corn * 24 + MPermConj[p2mid][p2csym])
-    )
+      getPruning(MCPermPrun, p2corn * 24 + MPermConj[p2mid][p2csym]),
+    ),
   );
   if (prun > this$static.maxDep2) {
     return prun - this$static.maxDep2;
@@ -1852,7 +1774,7 @@ function $initPhase2(
       p2mid,
       depth2,
       this$static.depth1,
-      10
+      10,
     );
     if (ret < 0) {
       break;
@@ -1864,7 +1786,7 @@ function $initPhase2(
       this$static.solution,
       this$static.verbose,
       this$static.urfIdx,
-      this$static.depth1
+      this$static.depth1,
     );
     for (i0 = 0; i0 < this$static.depth1 + depth2; i0++) {
       $appendSolMove(this$static.solution, this$static.move[i0]);
@@ -1877,7 +1799,7 @@ function $initPhase2(
   if (depth2 != this$static.maxDep2) {
     this$static.maxDep2 = min_0(
       MAX_DEPTH2,
-      this$static.solLen - this$static.length1 - 1
+      this$static.solLen - this$static.length1 - 1,
     );
     return gte(this$static.probe, this$static.probeMin) ? 0 : 1;
   }
@@ -1904,7 +1826,7 @@ function $initPhase2Pre(this$static) {
   if (
     gte(
       this$static.probe,
-      !this$static.solution ? this$static.probeMax : this$static.probeMin
+      !this$static.solution ? this$static.probeMax : this$static.probeMin,
     )
   ) {
     return 0;
@@ -1914,12 +1836,12 @@ function $initPhase2Pre(this$static) {
     CornMult(
       this$static.phase1Cubie[i],
       ($clinit_CubieCube(), moveCube)[this$static.move[i]],
-      this$static.phase1Cubie[i + 1]
+      this$static.phase1Cubie[i + 1],
     );
     EdgeMult(
       this$static.phase1Cubie[i],
       moveCube[this$static.move[i]],
-      this$static.phase1Cubie[i + 1]
+      this$static.phase1Cubie[i + 1],
     );
   }
   this$static.valid1 = this$static.depth1;
@@ -1957,7 +1879,7 @@ function $initPhase2Pre(this$static) {
         p2esym,
         p2mid,
         edgei,
-        corni
+        corni,
       );
       if (ret == 0 || ret > 2) {
         break;
@@ -2011,19 +1933,19 @@ function $initSearch(this$static) {
   this$static.selfSym = $selfSymmetry(this$static.cc);
   this$static.conjMask |= neq(
     and(shr(this$static.selfSym, 16), { l: $intern_20, m: 0, h: 0 }),
-    { l: 0, m: 0, h: 0 }
+    { l: 0, m: 0, h: 0 },
   )
     ? 18
     : 0;
   this$static.conjMask |= neq(
     and(shr(this$static.selfSym, 32), { l: $intern_20, m: 0, h: 0 }),
-    { l: 0, m: 0, h: 0 }
+    { l: 0, m: 0, h: 0 },
   )
     ? 36
     : 0;
   this$static.conjMask |= neq(
     and(shr(this$static.selfSym, 48), { l: $intern_20, m: 0, h: 0 }),
-    { l: 0, m: 0, h: 0 }
+    { l: 0, m: 0, h: 0 },
   )
     ? 56
     : 0;
@@ -2086,7 +2008,7 @@ function $phase1(this$static, node, ssym, maxl, lm) {
         this$static.nodeUD[maxl],
         ssym & toInt(($clinit_CubieCube(), moveCubeSym)[m]),
         maxl - 1,
-        axis_0
+        axis_0,
       );
       if (ret == 0) {
         return 0;
@@ -2114,14 +2036,14 @@ function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
       $setWithPrun(
         this$static.nodeUD[this$static.depth1 + 1],
         cc,
-        this$static.depth1
+        this$static.depth1,
       ) &&
       $phase1(
         this$static,
         this$static.nodeUD[this$static.depth1 + 1],
         ssym,
         this$static.depth1,
-        -1
+        -1,
       ) == 0
     ) {
       return 0;
@@ -2153,7 +2075,7 @@ function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
     CornMult(
       ($clinit_CubieCube(), moveCube)[m],
       cc,
-      this$static.preMoveCubes[maxl]
+      this$static.preMoveCubes[maxl],
     );
     EdgeMult(moveCube[m], cc, this$static.preMoveCubes[maxl]);
     this$static.preMoves[this$static.maxPreMoves - maxl] = m;
@@ -2162,7 +2084,7 @@ function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
       maxl - 1,
       m,
       this$static.preMoveCubes[maxl],
-      ssym & toInt(moveCubeSym[m])
+      ssym & toInt(moveCubeSym[m]),
     );
     if (ret == 0) {
       return 0;
@@ -2196,7 +2118,7 @@ function $phase2(this$static, edge, esym, corn, csym, mid, maxl, depth, lm) {
       (edgei >> 4) * 140 +
         CCombPConj[Perm2CombP[corni >> 4] & 255][
           SymMultInv[edgei & 15][corni & 15]
-        ]
+        ],
     );
     if (prun > maxl + 1) {
       return maxl - prun + 1;
@@ -2209,8 +2131,8 @@ function $phase2(this$static, edge, esym, corn, csym, mid, maxl, depth, lm) {
       getPruning(
         EPermCCombPPrun,
         edgex * 140 +
-          CCombPConj[Perm2CombP[cornx] & 255][SymMultInv[esymx][csymx]]
-      )
+          CCombPConj[Perm2CombP[cornx] & 255][SymMultInv[esymx][csymx]],
+      ),
     );
     if (prun >= maxl) {
       m += (66 >> m) & 3 & (maxl - prun);
@@ -2225,7 +2147,7 @@ function $phase2(this$static, edge, esym, corn, csym, mid, maxl, depth, lm) {
       midx,
       maxl - 1,
       depth + 1,
-      m
+      m,
     );
     if (ret >= 0) {
       this$static.move[depth] = ud2std[m];
@@ -2247,7 +2169,7 @@ function $search(this$static) {
   ) {
     this$static.maxDep2 = min_0(
       MAX_DEPTH2,
-      this$static.solLen - this$static.length1 - 1
+      this$static.solLen - this$static.length1 - 1,
     );
     for (
       this$static.urfIdx = this$static.isRec ? this$static.urfIdx : 0;
@@ -2263,7 +2185,7 @@ function $search(this$static) {
           this$static.maxPreMoves,
           -30,
           this$static.urfCubieCube[this$static.urfIdx],
-          toInt(and(this$static.selfSym, { l: $intern_20, m: 0, h: 0 }))
+          toInt(and(this$static.selfSym, { l: $intern_20, m: 0, h: 0 })),
         ) == 0
       ) {
         return !this$static.solution
@@ -2306,7 +2228,7 @@ function $verify_0(this$static, facelets) {
         facelets.charCodeAt(31),
         facelets.charCodeAt(40),
         facelets.charCodeAt(49),
-      ])
+      ]),
     );
     for (i = 0; i < 54; i++) {
       f[i] =
@@ -2338,7 +2260,7 @@ function Search() {
     31,
     21,
     0,
-    1
+    1,
   );
   this.nodeRL = initDim(
     Lorg_cubing_min2phase_client_CoordCube_2_classLit,
@@ -2346,7 +2268,7 @@ function Search() {
     31,
     21,
     0,
-    1
+    1,
   );
   this.nodeFB = initDim(
     Lorg_cubing_min2phase_client_CoordCube_2_classLit,
@@ -2354,7 +2276,7 @@ function Search() {
     31,
     21,
     0,
-    1
+    1,
   );
   this.cc = new CubieCube();
   this.urfCubieCube = initDim(
@@ -2363,7 +2285,7 @@ function Search() {
     7,
     6,
     0,
-    1
+    1,
   );
   this.urfCoordCube = initDim(
     Lorg_cubing_min2phase_client_CoordCube_2_classLit,
@@ -2371,7 +2293,7 @@ function Search() {
     31,
     6,
     0,
-    1
+    1,
   );
   this.phase1Cubie = initDim(
     Lorg_cubing_min2phase_client_CubieCube_2_classLit,
@@ -2379,7 +2301,7 @@ function Search() {
     7,
     21,
     0,
-    1
+    1,
   );
   this.preMoveCubes = initDim(
     Lorg_cubing_min2phase_client_CubieCube_2_classLit,
@@ -2387,7 +2309,7 @@ function Search() {
     7,
     21,
     0,
-    1
+    1,
   );
   this.preMoves = initDim(I_classLit, $intern_27, 0, 20, 7, 1);
   for (i0 = 0; i0 < 21; i0++) {
@@ -2427,7 +2349,7 @@ var MAX_DEPTH2 = 12,
 var Lorg_cubing_min2phase_client_Search_2_classLit = createForClass(
   "org.cubing.min2phase.client",
   "Search",
-  72
+  72,
 );
 function $clinit_Util() {
   $clinit_Util = emptyMethod;
@@ -2438,47 +2360,63 @@ function $clinit_Util() {
     10,
     0,
     [
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        8,
-        9,
-        20,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        6,
-        18,
-        38,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
         0,
-        36,
-        47,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        2,
-        45,
-        11,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        29,
-        26,
-        15,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        27,
-        44,
-        24,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        33,
-        53,
-        42,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        35,
-        17,
-        51,
-      ]),
-    ]
+        7,
+        [8, 9, 20],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [6, 18, 38],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [0, 36, 47],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [2, 45, 11],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [29, 26, 15],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [27, 44, 24],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [33, 53, 42],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [35, 17, 51],
+      ),
+    ],
   );
   edgeFacelet = initValues(
     getClassLiteralForArray(B_classLit, 2),
@@ -2486,55 +2424,91 @@ function $clinit_Util() {
     10,
     0,
     [
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        5,
-        10,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
         7,
-        19,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        3,
-        37,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        1,
-        46,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        32,
-        16,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        28,
-        25,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        30,
-        43,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        34,
-        52,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        23,
-        12,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        21,
-        41,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        50,
-        39,
-      ]),
-      initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-        48,
-        14,
-      ]),
-    ]
+        [5, 10],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [7, 19],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [3, 37],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [1, 46],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [32, 16],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [28, 25],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [30, 43],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [34, 52],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [23, 12],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [21, 41],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [50, 39],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [48, 14],
+      ),
+    ],
   );
   Cnk = initDims(I_classLit, [$intern_3, $intern_27], [17, 0], 7, [13, 13], 2);
   move2str = initValues(
@@ -2561,14 +2535,14 @@ function $clinit_Util() {
       "B ",
       "B2",
       "B'",
-    ]
+    ],
   );
   ud2std = initValues(
     getClassLiteralForArray(I_classLit, 1),
     $intern_27,
     0,
     7,
-    [0, 1, 2, 4, 7, 9, 10, 11, 13, 16, 3, 5, 6, 8, 12, 14, 15, 17]
+    [0, 1, 2, 4, 7, 9, 10, 11, 13, 16, 3, 5, 6, 8, 12, 14, 15, 17],
   );
   std2ud = initDim(I_classLit, $intern_27, 0, 18, 7, 1);
   ckmv2bit = initDim(I_classLit, $intern_27, 0, 11, 7, 1);
@@ -2665,7 +2639,7 @@ function setNPerm(arr, idx, n, isEdge) {
     arr[i] = setVal(
       arr[i],
       toInt(and(shr(val, v), { l: 15, m: 0, h: 0 })),
-      isEdge
+      isEdge,
     );
     m = sub_0(shl({ l: 1, m: 0, h: 0 }, v), { l: 1, m: 0, h: 0 });
     val = or(
@@ -2674,13 +2648,13 @@ function setNPerm(arr, idx, n, isEdge) {
         l: ~m.l & $intern_9,
         m: ~m.m & $intern_9,
         h: ~m.h & $intern_10,
-      })
+      }),
     );
   }
   arr[n - 1] = setVal(
     arr[n - 1],
     toInt(and(val, { l: 15, m: 0, h: 0 })),
-    isEdge
+    isEdge,
   );
 }
 
@@ -2795,8 +2769,8 @@ function $toString_2(this$static) {
           sb,
           ($clinit_Util(), move2str)[
             ($clinit_CubieCube(), urfMove)[urf][this$static.moves[s]]
-          ]
-        )
+          ],
+        ),
       );
     }
   } else {
@@ -2806,8 +2780,8 @@ function $toString_2(this$static) {
           sb,
           ($clinit_Util(), move2str)[
             ($clinit_CubieCube(), urfMove)[urf][this$static.moves[s]]
-          ]
-        )
+          ],
+        ),
       );
       (this$static.verbose & 1) != 0 &&
         s == this$static.depth1 &&
@@ -2834,7 +2808,7 @@ _.verbose = 0;
 var Lorg_cubing_min2phase_client_Util$Solution_2_classLit = createForClass(
   "org.cubing.min2phase.client",
   "Util/Solution",
-  150
+  150,
 );
 function isValidName(name_0) {
   if (name_0 == null) {
@@ -2847,22 +2821,22 @@ var I_classLit = createForPrimitive("int", "I"),
   Lcom_google_gwt_lang_CollapsedPropertyHolder_2_classLit = createForClass(
     "com.google.gwt.lang",
     "CollapsedPropertyHolder",
-    252
+    252,
   ),
   Lcom_google_gwt_lang_JavaClassHierarchySetupUtil_2_classLit = createForClass(
     "com.google.gwt.lang",
     "JavaClassHierarchySetupUtil",
-    254
+    254,
   ),
   Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit = createForClass(
     "com.google.gwt.lang",
     "LongLibBase/LongEmul",
-    null
+    null,
   ),
   Lcom_google_gwt_lang_ModuleUtils_2_classLit = createForClass(
     "com.google.gwt.lang",
     "ModuleUtils",
-    257
+    257,
   ),
   B_classLit = createForPrimitive("byte", "B"),
   J_classLit = createForPrimitive("long", "J"),
@@ -2870,16 +2844,16 @@ var I_classLit = createForPrimitive("int", "I"),
   Lcom_google_gwt_user_client_rpc_XsrfToken_2_classLit = createForClass(
     "com.google.gwt.user.client.rpc",
     "XsrfToken",
-    null
+    null,
   ),
   Ljava_util_Map$Entry_2_classLit = createForInterface(
     "java.util",
-    "Map/Entry"
+    "Map/Entry",
   );
 
-module.exports.initialize = function () {
+export const initialize = function () {
   init_0(false);
 };
-module.exports.solveState = function (s) {
+export const solveState = function (s) {
   return $solution(new Search(), s);
 };
