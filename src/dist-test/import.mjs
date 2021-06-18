@@ -15,4 +15,9 @@ console.log(stream);
 // https://github.com/mrdoob/three.js/pull/18498
 
 import * as solve from "cubing/solve";
-solve.instantiate();
+(async () => {
+  await solve.instantiate();
+  setTimeout(() => {
+    solve.terminateWorkers();
+  }, 1000);
+})();

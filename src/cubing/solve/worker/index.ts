@@ -1,6 +1,8 @@
 // @ts-ignore https://github.com/developit/web-worker/issues/13
 import { default as Worker } from "web-worker";
 
+const workers: Worker[] = [];
+
 export function instantiate(): void {
   console.log("instantiating ing!!!!");
   console.log("Worker", Worker);
@@ -10,7 +12,15 @@ export function instantiate(): void {
     import.meta.url,
   ).toString();
   console.log("url", url);
-  new Worker(url, {
-    type: "classic",
-  });
+  workers.push(
+    new Worker(url, {
+      type: "classic",
+    }),
+  );
+}
+
+export function terminateWorkers(): void {
+  for (const worker of workers) {
+    worker.terminate();
+  }
 }
