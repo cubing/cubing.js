@@ -13,3 +13,6 @@ console.log(stream);
 // TODO: Importing `cubing` as a module, doesn't currently work, because we
 // import `three` synchronously, and it doesn't define exports:
 // https://github.com/mrdoob/three.js/pull/18498
+
+import * as solve from "cubing/solve";
+console.log(solve);

@@ -1,4 +1,4 @@
-import { Alg } from "../../../../alg";
+import { Alg } from "../../alg";
 
 function workerInside() {
   console.log("inside worker!", this);
