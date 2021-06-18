@@ -43,7 +43,7 @@
     "build-cjs": "node ./script/build.js cjs",
     "build-bundle-global": "node ./script/build.js bundle-global",
     "build-types": "npm run build-worker; npx tsc --build ./tsconfig-types.json",
-    "build-bin": "npm run build-worker; npx esbuild --target=es2020 --bundle --external:three --external:web-worker --format=esm --outfile=dist/bin/puzzle-geometry-bin.js src/bin/puzzle-geometry-bin.ts",
+    "build-bin": "node ./script/build.js bin",
     "build-experiments": "node ./script/build.js snowpack",
     "build-worker": "node ./script/build-worker.js",
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
