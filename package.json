@@ -45,7 +45,7 @@
     "build-types": "node ./script/build.js types",
     "build-bin": "node ./script/build.js bin",
     "build-experiments": "node ./script/build.js snowpack",
-    "build-worker": "node ./script/build-worker.js",
+    "build-solve-worker": "node ./script/build.js solve-worker",
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",

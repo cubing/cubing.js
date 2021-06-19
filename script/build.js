@@ -15,7 +15,8 @@ import * as esbuild from "esbuild";
 import configSrc from "../snowpack.config.mjs";
 import { execPromise } from "./execPromise.js";
 
-const external = ["three", "web-worker"];
+const externalNode = ["worker_threads"];
+const external = ["three", "web-worker", ...externalNode];
 
 export async function build(target, dev) {
   const depPromises = target.dependencies.map((dependency) =>
@@ -40,6 +41,7 @@ export const solveWorkerTarget = {
       bundle: true,
       watch: dev,
       logLevel: "info",
+      external: externalNode,
     });
   },
 };
@@ -57,6 +59,7 @@ export const bundleGlobalTarget = {
       minify: true,
       watch: dev,
       logLevel: "info",
+      external: externalNode,
     });
   },
 };
