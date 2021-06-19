@@ -10,7 +10,7 @@ export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction>
     return crypto.getRandomValues.bind(crypto);
   } else {
     // @ts-ignore
-    const nodeCrypto = 1 as any; // await import("crypto");
+    const nodeCrypto = await import("crypto");
     return (arr: Uint32Array) => {
       if (!(arr instanceof Uint32Array)) {
         throw new Error(

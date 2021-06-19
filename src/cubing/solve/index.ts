@@ -10,4 +10,4 @@ export async function solve(
   return new Alg("F2 D2");
 }
 
-export { instantiate, terminateWorkers } from "./worker";
+export { randomScrambleForEvent, terminateWorkers } from "./worker";

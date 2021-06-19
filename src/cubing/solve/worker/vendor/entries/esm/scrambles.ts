@@ -5,7 +5,10 @@ import { outsideStrategy } from "../../worker/strategy/outside";
 import { trampolineBrowser } from "../../worker/trampoline/browser";
 import { workerInstantiatorESM } from "../../worker/workerInstantiator/esm";
 
-outsideStrategy.url.esm = new URL("./scrambles-worker.js", import.meta.url);
+outsideStrategy.url.esm = new URL(
+  "./worker-inside-generated.cjs",
+  import.meta.url,
+);
 outsideStrategy.getNodeAdapter.esm = getNodeAdapterESM;
 
 outsideStrategy.getWorkerConstructor.browser = workerConstructorBrowser;

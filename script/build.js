@@ -15,7 +15,7 @@ import * as esbuild from "esbuild";
 import configSrc from "../snowpack.config.mjs";
 import { execPromise } from "./execPromise.js";
 
-const externalNode = ["worker_threads"];
+const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "web-worker", ...externalNode];
 
 export async function build(target, dev) {
@@ -33,6 +33,9 @@ export const solveWorkerTarget = {
   builtYet: false,
   dependencies: [],
   buildSelf: (dev) => {
+    console.log(
+      "\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget",
+    );
     return esbuild.build({
       entryPoints: ["src/cubing/solve/worker/worker-inside-src.ts"],
       outfile: "src/cubing/solve/worker/worker-inside-generated.cjs",
@@ -111,6 +114,10 @@ export const esmTarget = {
       external,
     });
     await execPromise("cp -R src/dist-static/esm/* dist/esm");
+    await new Promise((resolve) => {
+      // TODO: this sleep is a workaround for @lgarron's Big Sur filesystem issues.
+      setTimeout(resolve, 100);
+    });
     await execPromise(
       "cp src/cubing/solve/worker/worker-inside-generated.cjs dist/esm/solve/worker-inside-generated.cjs",
     );

@@ -16,7 +16,8 @@ console.log(stream);
 
 import * as solve from "cubing/solve";
 (async () => {
-  await solve.instantiate();
+  // await solve.instantiate();
+  console.log((await solve.randomScrambleForEvent("333")).toString());
   setTimeout(() => {
     solve.terminateWorkers();
   }, 1000);
