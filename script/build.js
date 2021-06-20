@@ -29,6 +29,7 @@ const stringWrappingPlugin = {
           execPromise(
             "rm src/cubing/solve/worker/worker-inside-generated-string.js",
           );
+          console.log("removed worker-inside-generated-string.js");
           resolve();
         }
         readFile(
@@ -40,8 +41,8 @@ const stringWrappingPlugin = {
               `export const workerContents = "${contents
                 .replaceAll('"', '\\"')
                 .replaceAll("\n", "\\n")}";`,
-              () => {
-                console.log("copied worker-inside-generated-string.js");
+              async () => {
+                console.log("updated worker-inside-generated-string.js");
                 resolve();
               },
             );
