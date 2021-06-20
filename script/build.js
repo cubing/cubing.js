@@ -12,11 +12,39 @@
 import * as snowpack from "snowpack";
 import * as esbuild from "esbuild";
 
+import { readFile, writeFile } from "fs";
+
 import configSrc from "../snowpack.config.mjs";
 import { execPromise } from "./execPromise.js";
 
 const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "web-worker", ...externalNode];
+
+const examplePlugin = {
+  name: "example",
+  setup(build) {
+    build.onEnd((result) => {
+      if (result.errors.length !== 0) {
+        execPromise(
+          "rm src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated-string.js",
+        );
+      }
+      readFile(
+        "src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js",
+        "utf8",
+        (_, contents) => {
+          writeFile(
+            "src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated-string.js",
+            `export const workerContents = "${contents
+              .replaceAll('"', '\\"')
+              .replaceAll("\n", "\\n")}";`,
+            () => {},
+          );
+        },
+      );
+    });
+  },
+};
 
 export async function build(target, dev) {
   const depPromises = target.dependencies.map((dependency) =>
@@ -48,6 +76,8 @@ export const solveWorkerTarget = {
       watch: dev,
       logLevel: "info",
       external: externalNode,
+      minify: true, // TODO: prod only?
+      plugins: [examplePlugin],
     });
   },
 };
