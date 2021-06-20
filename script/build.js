@@ -20,28 +20,34 @@ import { execPromise } from "./execPromise.js";
 const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "web-worker", ...externalNode];
 
-const examplePlugin = {
-  name: "example",
+const stringWrappingPlugin = {
+  name: "wrapping",
   setup(build) {
     build.onEnd((result) => {
-      if (result.errors.length !== 0) {
-        execPromise(
-          "rm src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated-string.js",
-        );
-      }
-      readFile(
-        "src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js",
-        "utf8",
-        (_, contents) => {
-          writeFile(
-            "src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated-string.js",
-            `export const workerContents = "${contents
-              .replaceAll('"', '\\"')
-              .replaceAll("\n", "\\n")}";`,
-            () => {},
+      return new Promise((resolve /*reject*/) => {
+        if (result.errors.length !== 0) {
+          execPromise(
+            "rm src/cubing/solve/worker/worker-inside-generated-string.js",
           );
-        },
-      );
+          resolve();
+        }
+        readFile(
+          "src/cubing/solve/worker/worker-inside-generated.js",
+          "utf8",
+          (_, contents) => {
+            writeFile(
+              "src/cubing/solve/worker/worker-inside-generated-string.js",
+              `export const workerContents = "${contents
+                .replaceAll('"', '\\"')
+                .replaceAll("\n", "\\n")}";`,
+              () => {
+                console.log("copied worker-inside-generated-string.js");
+                resolve();
+              },
+            );
+          },
+        );
+      });
     });
   },
 };
@@ -61,15 +67,11 @@ export const solveWorkerTarget = {
   builtYet: false,
   dependencies: [],
   buildSelf: (dev) => {
-    console.log(
-      "\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget\nsolveWorkerTarget",
-    );
     return esbuild.build({
       entryPoints: [
         "./src/cubing/solve/worker/vendor/entries/esm/scrambles-worker.js",
       ],
-      outfile:
-        "./src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js",
+      outfile: "./src/cubing/solve/worker/worker-inside-generated.js",
       format: "cjs",
       target: "es2015",
       bundle: true,
@@ -77,7 +79,7 @@ export const solveWorkerTarget = {
       logLevel: "info",
       external: externalNode,
       minify: true, // TODO: prod only?
-      plugins: [examplePlugin],
+      plugins: [stringWrappingPlugin],
     });
   },
 };
@@ -118,7 +120,7 @@ export const cjsTarget = {
     await execPromise("cp -R src/dist-static/cjs/* dist/cjs");
 
     await execPromise(
-      "cp ./cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js dist/cjs/worker-inside-generated.js",
+      "cp ./cubing/solve/worker/worker-inside-generated.js dist/cjs/worker-inside-generated.js",
     );
   },
 };
@@ -151,13 +153,6 @@ export const esmTarget = {
       external,
     });
     await execPromise("cp -R src/dist-static/esm/* dist/esm");
-    await new Promise((resolve) => {
-      // TODO: this sleep is a workaround for @lgarron's Big Sur filesystem issues.
-      setTimeout(resolve, 100);
-    });
-    await execPromise(
-      "cp ./cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js dist/esm/solve/worker-inside-generated.js",
-    );
   },
 };
 
