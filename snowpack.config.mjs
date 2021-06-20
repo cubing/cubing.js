@@ -8,11 +8,15 @@ export default {
     "src/experiments/code": { url: "/_code" },
   },
   exclude: ["**/node.*", "**/get-random-values.*"],
+  alias: {
+    crypto: "./src/experiments/code/stub/index.ts",
+    worker_threads: "./src/experiments/code/stub/index.ts",
+  },
   installOptions: {
     externalPackage: ["crypto", "worker_threads"],
   },
   packageOptions: {
-    knownEntrypoints: ["web-worker"],
+    knownEntrypoints: ["comlink", "web-worker"],
   },
   devOptions: {
     port: 3333,

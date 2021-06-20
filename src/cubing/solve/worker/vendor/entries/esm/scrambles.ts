@@ -6,7 +6,7 @@ import { trampolineBrowser } from "../../worker/trampoline/browser";
 import { workerInstantiatorESM } from "../../worker/workerInstantiator/esm";
 
 outsideStrategy.url.esm = new URL(
-  "./worker-inside-generated.cjs",
+  "./worker-inside-generated.js",
   import.meta.url,
 );
 outsideStrategy.getNodeAdapter.esm = getNodeAdapterESM;
