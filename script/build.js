@@ -20,6 +20,17 @@ import { execPromise } from "./execPromise.js";
 const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "web-worker", ...externalNode];
 
+export async function build(target, dev) {
+  const depPromises = target.dependencies.map((dependency) =>
+    build(dependency, dev),
+  );
+  await Promise.all(depPromises);
+  if (!target.builtYet) {
+    await target.buildSelf(dev);
+    target.builtYet = true;
+  }
+}
+
 const stringWrappingPlugin = {
   name: "wrapping",
   setup(build) {
@@ -52,17 +63,6 @@ const stringWrappingPlugin = {
     });
   },
 };
-
-export async function build(target, dev) {
-  const depPromises = target.dependencies.map((dependency) =>
-    build(dependency, dev),
-  );
-  await depPromises;
-  if (!target.builtYet) {
-    await target.buildSelf(dev);
-    target.builtYet = true;
-  }
-}
 
 export const solveWorkerTarget = {
   builtYet: false,
