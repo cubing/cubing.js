@@ -16,7 +16,11 @@ export default {
     externalPackage: ["crypto", "worker_threads"],
   },
   packageOptions: {
-    knownEntrypoints: ["comlink", "web-worker"],
+    knownEntrypoints: [
+      "comlink",
+      "comlink/dist/esm/node-adapter.mjs",
+      "web-worker",
+    ],
   },
   devOptions: {
     port: 3333,
