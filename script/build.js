@@ -38,10 +38,10 @@ export const solveWorkerTarget = {
     );
     return esbuild.build({
       entryPoints: [
-        "/Users/lgarron/Code/git/github.com/cubing/cubing.js/src/cubing/solve/worker/vendor/entries/esm/scrambles-worker.js",
+        "./src/cubing/solve/worker/vendor/entries/esm/scrambles-worker.js",
       ],
       outfile:
-        "/Users/lgarron/Code/git/github.com/cubing/cubing.js/src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js",
+        "./src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js",
       format: "cjs",
       target: "es2015",
       bundle: true,
@@ -86,6 +86,10 @@ export const cjsTarget = {
       external,
     });
     await execPromise("cp -R src/dist-static/cjs/* dist/cjs");
+
+    await execPromise(
+      "cp ./cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js dist/cjs/worker-inside-generated.js",
+    );
   },
 };
 
@@ -122,7 +126,7 @@ export const esmTarget = {
       setTimeout(resolve, 100);
     });
     await execPromise(
-      "cp /Users/lgarron/Code/git/github.com/cubing/cubing.js/src/cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js dist/esm/solve/worker-inside-generated.js",
+      "cp ./cubing/solve/worker/vendor/entries/esm/worker-inside-generated.js dist/esm/solve/worker-inside-generated.js",
     );
   },
 };
