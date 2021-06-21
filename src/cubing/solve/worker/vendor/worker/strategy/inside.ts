@@ -4,12 +4,10 @@ import type { ModuleSystem, NodeWorker, RuntimeEnvironment } from "./types";
 
 export const insideStrategy = {
   getParentPort: {
-    browser: null,
     node: null,
   } as Record<RuntimeEnvironment, null | (() => Promise<MessagePort>)>,
   getNodeAdapter: {
     esm: null,
-    cjs: null,
   } as Record<
     ModuleSystem,
     null | (() => Promise<(worker: NodeWorker | MessagePort) => Worker>)
@@ -22,9 +20,7 @@ export async function exposeAPI(): Promise<void> {
   // @ts-ignore
   if (typeof WorkerNavigator === "undefined") {
     const parentPort: MessagePort = await insideStrategy.getParentPort.node!();
-    const getNodeAdapter = await (
-      insideStrategy.getNodeAdapter.esm ?? insideStrategy.getNodeAdapter.cjs!
-    )();
+    const getNodeAdapter = await insideStrategy.getNodeAdapter.esm!();
     expose(insideAPI, getNodeAdapter(parentPort));
   } else {
     expose(insideAPI);
