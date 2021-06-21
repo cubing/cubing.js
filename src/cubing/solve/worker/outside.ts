@@ -6,12 +6,7 @@ import { randomMegaminxScrambleString } from "./vendor/implementations/minx";
 import { instantiateWorker } from "./instantiator";
 import type { WorkerInsideAPI } from "./vendor/worker/strategy/types";
 
-let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
-function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
-  return (cachedWorkerInstance ??= instantiateWorker());
-}
-
-// const workers: Worker[] = [];
+// const terminateCallbacks: (() => void)[] = [];
 
 // TODO
 export async function terminateAllWorkers(): Promise<void> {
@@ -19,7 +14,16 @@ export async function terminateAllWorkers(): Promise<void> {
   // for (const worker of workers) {
   //   worker.terminate();
   // }
+  console.log(await cachedWorkerInstance);
   ((await cachedWorkerInstance) as Worker | null)?.terminate();
+}
+
+let cachedWorkerInstance: Promise<{
+  wrappedWorker: WorkerInsideAPI;
+  terminate: () => void;
+}> | null = null;
+async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
+  return (await (cachedWorkerInstance ??= instantiateWorker())).wrappedWorker;
 }
 
 // Pre-initialize the scrambler for the given event. (Otherwise, an event is
