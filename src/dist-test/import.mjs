@@ -19,6 +19,6 @@ import * as solve from "cubing/solve";
   // await solve.instantiate();
   console.log((await solve.randomScrambleForEvent("333")).toString());
   setTimeout(() => {
-    solve.terminateAllWorkers();
+    // solve.terminateAllWorkers();
   }, 1000);
 })();
