@@ -1,5 +1,5 @@
 import { wrap } from "comlink";
-import type { WorkerInsideAPI } from "./vendor/worker/strategy/types";
+import type { WorkerInsideAPI } from "./vendor/api/inside";
 
 const useNodeWorkarounds = typeof globalThis.Worker === "undefined";
 

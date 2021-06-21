@@ -4,7 +4,7 @@ import { Alg } from "../../alg";
 import { randomClockScrambleString } from "./vendor/implementations/clock";
 import { randomMegaminxScrambleString } from "./vendor/implementations/minx";
 import { instantiateWorker } from "./instantiator";
-import type { WorkerInsideAPI } from "./vendor/worker/strategy/types";
+import type { WorkerInsideAPI } from "./vendor/api/inside";
 
 // const terminateCallbacks: (() => void)[] = [];
 
