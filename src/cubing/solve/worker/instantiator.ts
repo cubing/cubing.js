@@ -16,13 +16,13 @@ async function workerConstructor(): Promise<
 
 async function instantiateWorker(): Promise<Worker> {
   console.log("instantiateWorker");
-  const { workerContents } = await import("./worker-inside-generated-string");
+  const { workerDataURL } = await import("./worker-inside-generated-string");
 
-  const blob = new Blob([workerContents], { type: "application/javascript" });
-  const workerURL = URL.createObjectURL(blob);
+  // const blob = new Blob([workerContents], { type: "application/javascript" });
+  // const workerURL = URL.createObjectURL(blob);
   // TODO: trampoline??
   const constructor = await workerConstructor();
-  const worker = new constructor(workerURL, {
+  const worker = new constructor(workerDataURL, {
     type: "classic",
   });
   return worker;

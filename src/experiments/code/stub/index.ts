@@ -8,5 +8,5 @@ import { randomScrambleForEvent } from "../../../cubing/solve/worker";
 console.log("Loading stub file.");
 
 (async () => {
-  console.log(await randomScrambleForEvent("333"));
+  console.log("from stub", (await randomScrambleForEvent("333")).toString());
 })();

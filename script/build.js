@@ -49,10 +49,9 @@ const stringWrappingPlugin = {
           (_, contents) => {
             writeFile(
               "src/cubing/solve/worker/worker-inside-generated-string.js",
-              `export const workerContents = "${contents
-                .replaceAll("\\", "\\\\")
-                .replaceAll('"', '\\"')
-                .replaceAll("\n", "\\n")}";`,
+              `export const workerDataURL = "data:application/javascript,${encodeURIComponent(
+                contents,
+              )}";`,
               async () => {
                 console.log("updated worker-inside-generated-string.js");
                 resolve();
