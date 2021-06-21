@@ -14,6 +14,7 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
   if (useNodeWorkarounds) {
     const constructor = (await import("worker_threads")).Worker;
     const rawWorker = new constructor(workerDataURL);
+    process.exit(1);
     // @ts-ignore
     const adapter = (await import("comlink/dist/esm/node-adapter.mjs")).default;
     worker = adapter(rawWorker);
