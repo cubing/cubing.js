@@ -3,12 +3,12 @@ import { Alg } from "../../alg";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import { randomClockScrambleString } from "./vendor/implementations/clock";
 import { randomMegaminxScrambleString } from "./vendor/implementations/minx";
-import { getWorker } from "./instantiator";
+import { instantiateWorker } from "./instantiator";
 import type { WorkerInsideAPI } from "./vendor/worker/strategy/types";
 
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
 function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
-  return (cachedWorkerInstance ??= getWorker());
+  return (cachedWorkerInstance ??= instantiateWorker());
 }
 
 // const workers: Worker[] = [];
