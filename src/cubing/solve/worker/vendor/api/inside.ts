@@ -62,3 +62,5 @@ export const insideAPI = {
     return (await insideAPI.randomScramble(eventID)).toString();
   },
 };
+
+insideAPI.randomScramble("333").then((s) => console.info(s.toString()));
