@@ -4,12 +4,3 @@ export {
   randomScrambleForEvent,
   _preInitializationHintForEvent,
 } from "./outside";
-
-const workers: Worker[] = [];
-
-// TODO
-export function terminateWorkers(): void {
-  for (const worker of workers) {
-    worker.terminate();
-  }
-}

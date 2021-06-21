@@ -11,6 +11,17 @@ function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
   return (cachedWorkerInstance ??= getWorker());
 }
 
+// const workers: Worker[] = [];
+
+// TODO
+export async function terminateAllWorkers(): Promise<void> {
+  // TODO: Handle multiple workers instead of caching just one.
+  // for (const worker of workers) {
+  //   worker.terminate();
+  // }
+  ((await cachedWorkerInstance) as Worker | null)?.terminate();
+}
+
 // Pre-initialize the scrambler for the given event. (Otherwise, an event is
 // initialized the first time you ask for a scramble for that event.)
 //
