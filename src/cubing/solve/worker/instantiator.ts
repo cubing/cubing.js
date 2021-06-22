@@ -4,10 +4,50 @@ import type { URL as NodeURL } from "url";
 
 const useNodeWorkarounds = typeof globalThis.Worker === "undefined";
 
+export async function instantiateRelativeURLWorker(): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    setTimeout(() => {
+      reject();
+    }, 1000);
+    console.log("instantiateRelativeURLWorker");
+    let terminate: () => void;
+    let worker: Worker;
+    if (useNodeWorkarounds) {
+      const constructor = (await import("worker_threads")).Worker;
+      const rawWorker = new constructor(
+        new URL("./worker-stub.js", import.meta.url) as NodeURL,
+      );
+      terminate = rawWorker.terminate.bind(rawWorker);
+      // @ts-ignore
+      const adapter = (await import("comlink/dist/esm/node-adapter.mjs"))
+        .default;
+      worker = adapter(rawWorker);
+    } else {
+      worker = new Worker(new URL("./worker-stub.js", import.meta.url), {
+        type: "classic",
+      });
+      terminate = worker.terminate.bind(worker);
+    }
+    worker.postMessage("to worker");
+    worker.onmessage = (e) => {
+      if (e.data === "from worker") {
+        terminate();
+        resolve();
+      }
+    };
+  });
+}
+
+export async function relativeURLWorkerTest(): Promise<void> {
+  await instantiateRelativeURLWorker();
+}
+
 export async function instantiateWorker(): Promise<{
   wrappedWorker: WorkerInsideAPI;
   terminate: () => void;
 }> {
+  await relativeURLWorkerTest();
+  console.log("testing success");
   console.log("instantiateWorker");
   // const { workerSource } = await import("./worker-inside-generated-string");
 
