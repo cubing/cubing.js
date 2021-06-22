@@ -63,42 +63,26 @@ export async function instantiateWorker(): Promise<{
   terminate: () => void;
 }> {
   await relativeURLWorkerTest();
-  // console.log("testing success");
-  // console.log("instantiateWorker");
-  // const { workerSource } = await import("./worker-inside-generated-string");
 
-  // if (!import.meta.url) {
-  //   // We will need to rely on `new Worker(new URL(workerEntryPath, import.meta.url))` in the future.
-  //   console.warn(
-  //     "WARNING: `cubing/solve` is not being used in a module environment. Future versions of `cubing.js` might require a module environment for `cubing/solve`.",
-  //   );
-  // }
+  const { workerSource } = await import("./worker-inside-generated-string.js");
 
   // TODO: trampoline??
   let terminate: () => void;
   let worker: Worker;
   if (useNodeWorkarounds) {
     const constructor = (await import("worker_threads")).Worker;
-    const rawWorker = new constructor(
-      new URL(
-        "./worker-inside-generated-string.cjs",
-        import.meta.url,
-      ) as NodeURL,
-    );
+    const rawWorker = new constructor(workerSource, { eval: true });
     terminate = rawWorker.terminate.bind(rawWorker);
     // @ts-ignore
     const adapter = (await import("comlink/dist/esm/node-adapter.mjs")).default;
     worker = adapter(rawWorker);
   } else {
-    worker = new Worker(
-      new URL("./worker-inside-generated-string.cjs", import.meta.url),
-      {
-        type: "classic",
-      },
-    );
+    const blob = new Blob([workerSource], { type: "application/javascript" });
+    const workerURL = URL.createObjectURL(blob);
+    worker = new Worker(workerURL, {
+      type: "classic",
+    });
     terminate = worker.terminate.bind(worker);
   }
-  const returno = { wrappedWorker: wrap(worker) as WorkerInsideAPI, terminate };
-  // console.log("returno", returno);
-  return returno;
+  return { wrappedWorker: wrap(worker) as WorkerInsideAPI, terminate };
 }
