@@ -23,7 +23,15 @@ let cachedWorkerInstance: Promise<{
   terminate: () => void;
 }> | null = null;
 async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
-  return (await (cachedWorkerInstance ??= instantiateWorker())).wrappedWorker;
+  // return (await (cachedWorkerInstance ??= instantiateWorker())).wrappedWorker;
+
+  const cacheeey = (cachedWorkerInstance ??= instantiateWorker());
+  console.log("cacheeey", cacheeey);
+  const awaiteeeeey = await cacheeey;
+  console.log("awaiteeeeey", awaiteeeeey);
+  const wrappedy = awaiteeeeey.wrappedWorker;
+  console.log("wrappedy", wrappedy);
+  return wrappedy;
 }
 
 // Pre-initialize the scrambler for the given event. (Otherwise, an event is
@@ -60,19 +68,20 @@ export function _preInitializationHintForEvent(
 }
 
 export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
-  return Alg.fromString(
-    await (
-      await getCachedWorkerInstance()
-    ).randomScrambleStringForEvent(eventID),
-  );
+  console.log("randy");
+  const prom = _randomScrambleStringForEvent(eventID);
+  console.log("prom", prom);
+  const wat = await prom;
+  console.log("wat", wat);
+  return Alg.fromString(wat);
 }
 
 export async function _randomScrambleStringForEvent(
   eventID: string,
 ): Promise<string> {
-  return (await getCachedWorkerInstance()).randomScrambleStringForEvent(
-    eventID,
-  );
+  const cwi = await getCachedWorkerInstance();
+  console.log("cwi", cwi);
+  return cwi.randomScrambleStringForEvent(eventID);
 }
 
 export async function randomScrambleStringForEvent(

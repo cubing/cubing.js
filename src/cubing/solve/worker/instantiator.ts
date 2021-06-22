@@ -1,5 +1,6 @@
 import { wrap } from "comlink";
 import type { WorkerInsideAPI } from "./vendor/api/inside";
+import type { URL as NodeURL } from "url";
 
 const useNodeWorkarounds = typeof globalThis.Worker === "undefined";
 
@@ -23,7 +24,10 @@ export async function instantiateWorker(): Promise<{
   if (useNodeWorkarounds) {
     const constructor = (await import("worker_threads")).Worker;
     const rawWorker = new constructor(
-      new URL("./worker-inside-generated-string.js", import.meta.url),
+      new URL(
+        "./worker-inside-generated-string.cjs",
+        import.meta.url,
+      ) as NodeURL,
     );
     terminate = rawWorker.terminate.bind(rawWorker);
     // @ts-ignore
@@ -31,12 +35,14 @@ export async function instantiateWorker(): Promise<{
     worker = adapter(rawWorker);
   } else {
     worker = new Worker(
-      new URL("./worker-inside-generated-string.js", import.meta.url),
+      new URL("./worker-inside-generated-string.cjs", import.meta.url),
       {
         type: "classic",
       },
     );
     terminate = worker.terminate.bind(worker);
   }
-  return { wrappedWorker: wrap(worker) as WorkerInsideAPI, terminate };
+  const returno = { wrappedWorker: wrap(worker) as WorkerInsideAPI, terminate };
+  console.log("returno", returno);
+  return returno;
 }

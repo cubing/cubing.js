@@ -38,9 +38,9 @@ const stringWrappingPlugin = {
       return new Promise((resolve /*reject*/) => {
         if (result.errors.length !== 0) {
           execPromise(
-            "rm src/cubing/solve/worker/worker-inside-generated-string.js",
+            "rm src/cubing/solve/worker/worker-inside-generated-string.cjs",
           );
-          console.log("removed worker-inside-generated-string.js");
+          console.log("removed worker-inside-generated-string.cjs");
           resolve();
         }
         readFile(
@@ -48,14 +48,14 @@ const stringWrappingPlugin = {
           "utf8",
           (_, contents) => {
             writeFile(
-              "src/cubing/solve/worker/worker-inside-generated-string.js",
+              "src/cubing/solve/worker/worker-inside-generated-string.cjs",
               contents,
               // `export const workerSource = "${contents
               // .replaceAll("\\", "\\\\")
               // .replaceAll('"', '\\"')
               // .replaceAll("\n", "\\n")}";`,
               async () => {
-                console.log("updated worker-inside-generated-string.js");
+                console.log("updated worker-inside-generated-string.cjs");
                 resolve();
               },
             );
@@ -153,7 +153,7 @@ export const esmTarget = {
     });
     await execPromise("cp -R src/dist-static/esm/* dist/esm");
     await execPromise(
-      "cp src/cubing/solve/worker/worker-inside-generated-string.js dist/esm/solve/worker-inside-generated-string.js",
+      "cp src/cubing/solve/worker/worker-inside-generated-string.cjs dist/esm/solve/worker-inside-generated-string.cjs",
     );
   },
 };
