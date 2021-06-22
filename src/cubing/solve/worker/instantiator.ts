@@ -10,12 +10,12 @@ export async function instantiateWorker(): Promise<{
   console.log("instantiateWorker");
   const { workerSource } = await import("./worker-inside-generated-string");
 
-  if (!import.meta.url) {
-    // We will need to rely on `new Worker(new URL(workerEntryPath, import.meta.url))` in the future.
-    console.warn(
-      "WARNING: `cubing/solve` is not being used in a module environment. Future versions of `cubing.js` might require a module environment for `cubing/solve`.",
-    );
-  }
+  // if (!import.meta.url) {
+  //   // We will need to rely on `new Worker(new URL(workerEntryPath, import.meta.url))` in the future.
+  //   console.warn(
+  //     "WARNING: `cubing/solve` is not being used in a module environment. Future versions of `cubing.js` might require a module environment for `cubing/solve`.",
+  //   );
+  // }
 
   // TODO: trampoline??
   let terminate: () => void;

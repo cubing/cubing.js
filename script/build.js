@@ -120,10 +120,6 @@ export const cjsTarget = {
       external,
     });
     await execPromise("cp -R src/dist-static/cjs/* dist/cjs");
-
-    await execPromise(
-      "cp ./cubing/solve/worker/worker-inside-generated.js dist/cjs/worker-inside-generated.js",
-    );
   },
 };
 
@@ -192,7 +188,7 @@ export const SnowpackTarget = {
 
 export const typesTarget = {
   builtYet: false,
-  dependencies: [], // solve worker?
+  dependencies: [solveWorkerTarget], // solve worker?
   buildSelf: async (dev) => {
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");
