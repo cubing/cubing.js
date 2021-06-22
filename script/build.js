@@ -49,10 +49,11 @@ const stringWrappingPlugin = {
           (_, contents) => {
             writeFile(
               "src/cubing/solve/worker/worker-inside-generated-string.js",
-              `export const workerSource = "${contents
-                .replaceAll("\\", "\\\\")
-                .replaceAll('"', '\\"')
-                .replaceAll("\n", "\\n")}";`,
+              contents,
+              // `export const workerSource = "${contents
+              // .replaceAll("\\", "\\\\")
+              // .replaceAll('"', '\\"')
+              // .replaceAll("\n", "\\n")}";`,
               async () => {
                 console.log("updated worker-inside-generated-string.js");
                 resolve();
@@ -151,6 +152,9 @@ export const esmTarget = {
       external,
     });
     await execPromise("cp -R src/dist-static/esm/* dist/esm");
+    await execPromise(
+      "cp src/cubing/solve/worker/worker-inside-generated-string.js dist/esm/solve/worker-inside-generated-string.js",
+    );
   },
 };
 
