@@ -40,7 +40,7 @@ const stringWrappingPlugin = {
           execPromise(
             "rm src/cubing/solve/worker/worker-inside-generated-string.js",
           );
-          console.log("removed worker-inside-generated-string.cjs");
+          console.log("removed worker-inside-generated-string.js");
           resolve();
         }
         readFile(

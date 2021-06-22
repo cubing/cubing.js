@@ -51,7 +51,7 @@
     "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "node ./script/build.js snowpack dev",
-    "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/solve/worker/worker-inside-generated.cjs",
+    "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/solve/worker/worker-inside-generated.js",
     "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml in sync with this",
     "test-experiments": "node src/test-experiments/test.js",
     "test-import-restrictions": "node src/import-restrictions/build.js",
