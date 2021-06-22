@@ -155,6 +155,9 @@ export const esmTarget = {
     await execPromise(
       "cp src/cubing/solve/worker/worker-inside-generated-string.cjs dist/esm/solve/worker-inside-generated-string.cjs",
     );
+    await execPromise(
+      "cp src/cubing/solve/worker/worker-stub.js dist/esm/solve/worker-stub.js",
+    );
   },
 };
 
