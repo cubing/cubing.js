@@ -8,15 +8,9 @@ export default {
     "src/experiments/code": { url: "/_code" },
   },
   exclude: ["**/node.*", "**/get-random-values.*"],
-  alias: {
-    crypto: "./src/cubing/solve/snowpack-stubs.ts",
-    worker_threads: "./src/cubing/solve/snowpack-stubs.ts",
-  },
-  installOptions: {
-    externalPackage: ["crypto", "worker_threads"],
-  },
   packageOptions: {
     knownEntrypoints: ["comlink"],
+    external: ["crypto", "worker_threads"],
   },
   devOptions: {
     port: 3333,
