@@ -17,7 +17,7 @@ export async function instantiateRelativeURLWorker(): Promise<void> {
 
     const Worker = await workerFileConstructor();
     const worker = new Worker(new URL("./esm-test-worker.js", import.meta.url));
-    const api = wrap(worker) as ESMTestAPI;
+    const api = wrap(worker) as any as ESMTestAPI;
 
     if ((await api.test("to worker")) === "from worker") {
       resolve();

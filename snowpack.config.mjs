@@ -18,6 +18,7 @@ export default {
   packageOptions: {
     knownEntrypoints: [
       "comlink-everywhere/outside",
+      "comlink-everywhere/inside",
       "comlink/dist/esm/node-adapter.mjs",
       "web-worker",
     ],
