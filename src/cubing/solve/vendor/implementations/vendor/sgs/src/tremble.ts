@@ -89,9 +89,11 @@ export class TrembleSolver {
     state: State,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
   ): Promise<Alg> {
+    console.log("tremble solve");
     let bestAlg: string | null = null;
     var best = 1000000;
     const recur = (st4: State, togo: number, sofar: string[]) => {
+      console.log("recur");
       if (togo === 0) {
         var t = this.sgsPhaseSolve(st4);
         if (sofar.length + t[0] < best) {

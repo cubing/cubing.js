@@ -84,10 +84,13 @@ export async function random222State(): Promise<Transformation> {
 }
 
 export async function random222Scramble(): Promise<Alg> {
+  console.log("scramby!");
   const state = await random222State();
+  console.log("state!", state);
   // console.log("loggo", state);
   const seq = await solve222State(state);
   // console.log(seq.nestedUnits.length);
   // console.log(algToString(seq));
+  console.log("seq!", seq);
   return seq;
 }

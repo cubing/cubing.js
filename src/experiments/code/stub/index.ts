@@ -8,5 +8,11 @@ import { randomScrambleForEvent } from "../../../cubing/solve";
 console.log("Loading stub file.");
 
 (async () => {
+  console.log("asyncey");
   console.log("from stub", (await randomScrambleForEvent("333")).toString());
+  console.log("from stub", (await randomScrambleForEvent("clock")).toString());
+  console.log("from stub", (await randomScrambleForEvent("minx")).toString());
+  console.log("from stub", (await randomScrambleForEvent("444")).toString());
+  console.log("from stub", (await randomScrambleForEvent("222")).toString());
+  // console.log("from stub", (await randomScrambleForEvent("444")).toString());
 })();
