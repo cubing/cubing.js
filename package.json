@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/three": "^0.126.1",
     "@types/web-bluetooth": "0.0.4",
-    "comlink-everywhere": "^0.2.1",
+    "comlink-everywhere": "^0.2.4",
     "three": "^0.126.1",
     "web-worker": "^1.0.0"
   },

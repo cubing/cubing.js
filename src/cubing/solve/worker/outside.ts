@@ -6,15 +6,6 @@ import { randomMegaminxScrambleString } from "./vendor/implementations/minx";
 import { instantiateWorker } from "./instantiator";
 import type { WorkerInsideAPI } from "./inside/api";
 
-// TODO
-export async function terminateAllWorkers(): Promise<void> {
-  // // TODO: Handle multiple workers instead of caching just one.
-  // // for (const worker of workers) {
-  // //   worker.terminate();
-  // // }
-  // ((await cachedWorkerInstance) as Worker | null)?.terminate();
-}
-
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
 async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
   return await (cachedWorkerInstance ??= instantiateWorker());
