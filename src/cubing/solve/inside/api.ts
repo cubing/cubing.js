@@ -1,4 +1,4 @@
-import type { Alg } from "../../../alg";
+import type { Alg } from "../../alg";
 import {
   preInitialize222,
   random222Scramble,
