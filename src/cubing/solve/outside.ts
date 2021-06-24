@@ -1,5 +1,5 @@
 /** @ts-ignore */
-import { Alg } from "../../alg";
+import { Alg } from "../alg";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import { randomClockScrambleString } from "./vendor/implementations/clock";
 import { randomMegaminxScrambleString } from "./vendor/implementations/minx";

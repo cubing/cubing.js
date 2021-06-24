@@ -10,4 +10,4 @@ export async function solve(
   return new Alg("F2 D2");
 }
 
-export { randomScrambleForEvent } from "./worker";
+export { randomScrambleForEvent } from "./outside";

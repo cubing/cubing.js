@@ -37,18 +37,16 @@ const stringWrappingPlugin = {
     build.onEnd((result) => {
       return new Promise((resolve /*reject*/) => {
         if (result.errors.length !== 0) {
-          execPromise(
-            "rm src/cubing/solve/worker/worker-inside-generated-string.js",
-          );
+          execPromise("rm src/cubing/solve/worker-inside-generated-string.js");
           console.log("removed worker-inside-generated-string.js");
           resolve();
         }
         readFile(
-          "src/cubing/solve/worker/worker-inside-generated.js",
+          "src/cubing/solve/worker-inside-generated.js",
           "utf8",
           (_, contents) => {
             writeFile(
-              "src/cubing/solve/worker/worker-inside-generated-string.js",
+              "src/cubing/solve/worker-inside-generated-string.js",
               `export const workerSource = "${contents
                 .replaceAll("\\", "\\\\")
                 .replaceAll('"', '\\"')
@@ -70,8 +68,8 @@ export const solveWorkerTarget = {
   dependencies: [],
   buildSelf: (dev) => {
     return esbuild.build({
-      entryPoints: ["./src/cubing/solve/worker/inside/entry.js"],
-      outfile: "./src/cubing/solve/worker/worker-inside-generated.js",
+      entryPoints: ["./src/cubing/solve/inside/entry.js"],
+      outfile: "./src/cubing/solve/worker-inside-generated.js",
       format: "cjs",
       target: "es2015",
       bundle: true,
@@ -137,6 +135,7 @@ export const esmTarget = {
         "src/cubing/stream/index.ts",
         "src/cubing/solve/index.ts",
         "src/cubing/twisty/index.ts",
+        "src/cubing/solve/esm-test-worker.js",
       ],
       outdir: "dist/esm",
       format: "esm",
@@ -149,9 +148,9 @@ export const esmTarget = {
       external,
     });
     await execPromise("cp -R src/dist-static/esm/* dist/esm");
-    await execPromise(
-      "cp src/cubing/solve/worker/esm-test-worker.js dist/esm/solve/esm-test-worker.js",
-    );
+    // await execPromise(
+    //   "cp src/cubing/solve/esm-test-worker.js dist/esm/solve/esm-test-worker.js",
+    // );
   },
 };
 

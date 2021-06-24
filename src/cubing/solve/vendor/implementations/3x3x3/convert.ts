@@ -17,7 +17,7 @@ LFRB
          |51|52|53|
 */
 
-import type { Transformation } from "../../../../../kpuzzle";
+import type { Transformation } from "../../../../kpuzzle";
 
 const reidEdgeOrder = "UF UR UB UL DF DR DB DL FR FL BR BL".split(" ");
 const reidCornerOrder = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");

@@ -1,10 +1,10 @@
-import type { Alg } from "../../../../../alg";
+import type { Alg } from "../../../../alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
   Transformation,
-} from "../../../../../kpuzzle";
-import { puzzles } from "../../../../../puzzles";
+} from "../../../../kpuzzle";
+import { puzzles } from "../../../../puzzles";
 import {
   randomPermute,
   randomUIntBelowFactory,

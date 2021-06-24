@@ -1,8 +1,8 @@
-import { Unit, Alg } from "../../../../../alg";
+import { Unit, Alg } from "../../../../alg";
 // @ts-ignore
-import { KPuzzle, Transformation } from "../../../../../kpuzzle";
+import { KPuzzle, Transformation } from "../../../../kpuzzle";
 // @ts-ignore
-import { puzzles } from "../../../../../puzzles";
+import { puzzles } from "../../../../puzzles";
 import { randomChoiceFactory } from "../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";

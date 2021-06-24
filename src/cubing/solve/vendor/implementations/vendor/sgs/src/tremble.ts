@@ -1,12 +1,12 @@
-import { Alg } from "../../../../../../../alg";
+import { Alg } from "../../../../../../alg";
 // import type { Puzzle, State } from "cubing/dist/types/twisty"; // TODO
 import {
   invertTransformation,
   KPuzzleDefinition,
   transformationOrder,
   Transformation,
-} from "../../../../../../../kpuzzle";
-import { KSolvePuzzle, TreeAlgIndexer } from "../../../../../../../twisty";
+} from "../../../../../../kpuzzle";
+import { KSolvePuzzle, TreeAlgIndexer } from "../../../../../../twisty";
 import type { SGSCachedData } from "./sgs";
 
 type Puzzle = any; // TODO
