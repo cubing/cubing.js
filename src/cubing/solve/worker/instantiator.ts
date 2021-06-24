@@ -4,7 +4,7 @@ import {
   constructWorkerFromString,
   workerFileConstructor,
   wrap,
-} from "comlink-everywhere/outside";
+} from "comlink-everywhere/static-node-imports/outside";
 
 import type { esmTestAPIImplementation } from "./esm-test-worker";
 type ESMTestAPI = typeof esmTestAPIImplementation;
@@ -17,7 +17,7 @@ export async function instantiateRelativeURLWorker(): Promise<void> {
 
     const Worker = await workerFileConstructor();
     const worker = new Worker(new URL("./esm-test-worker.js", import.meta.url));
-    const api = wrap(worker) as any as ESMTestAPI;
+    const api = wrap<ESMTestAPI>(worker);
 
     if ((await api.test("to worker")) === "from worker") {
       resolve();
