@@ -1,4 +1,4 @@
-import { expose } from "comlink-everywhere/static-node-imports/inside";
+import { expose } from "../vendor/comlink-everywhere/inside";
 import { insideAPI } from "./api";
 
 expose(insideAPI);

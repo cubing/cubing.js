@@ -9,18 +9,14 @@ export default {
   },
   exclude: ["**/node.*", "**/get-random-values.*"],
   alias: {
-    crypto: "./src/experiments/code/stub/index.ts",
-    worker_threads: "./src/experiments/code/stub/index.ts",
+    crypto: "./src/cubing/solve/snowpack-stubs.ts",
+    worker_threads: "./src/cubing/solve/snowpack-stubs.ts",
   },
   installOptions: {
     externalPackage: ["crypto", "worker_threads"],
   },
   packageOptions: {
-    knownEntrypoints: [
-      "comlink-everywhere/static-node-imports/outside",
-      "comlink-everywhere/static-node-imports/inside",
-      "comlink",
-    ],
+    knownEntrypoints: ["comlink"],
   },
   devOptions: {
     port: 3333,
