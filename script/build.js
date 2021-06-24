@@ -70,9 +70,7 @@ export const solveWorkerTarget = {
   dependencies: [],
   buildSelf: (dev) => {
     return esbuild.build({
-      entryPoints: [
-        "./src/cubing/solve/worker/vendor/entries/esm/scrambles-worker.js",
-      ],
+      entryPoints: ["./src/cubing/solve/worker/inside/entry.js"],
       outfile: "./src/cubing/solve/worker/worker-inside-generated.js",
       format: "cjs",
       target: "es2015",
@@ -152,7 +150,7 @@ export const esmTarget = {
     });
     await execPromise("cp -R src/dist-static/esm/* dist/esm");
     await execPromise(
-      "cp src/cubing/solve/worker/worker-stub.js dist/esm/solve/worker-stub.js",
+      "cp src/cubing/solve/worker/esm-test-worker.js dist/esm/solve/esm-test-worker.js",
     );
   },
 };

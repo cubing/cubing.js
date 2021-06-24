@@ -4,34 +4,20 @@ import { Alg } from "../../alg";
 import { randomClockScrambleString } from "./vendor/implementations/clock";
 import { randomMegaminxScrambleString } from "./vendor/implementations/minx";
 import { instantiateWorker } from "./instantiator";
-import type { WorkerInsideAPI } from "./vendor/api/inside";
-
-// const terminateCallbacks: (() => void)[] = [];
+import type { WorkerInsideAPI } from "./inside/api";
 
 // TODO
 export async function terminateAllWorkers(): Promise<void> {
-  // TODO: Handle multiple workers instead of caching just one.
-  // for (const worker of workers) {
-  //   worker.terminate();
-  // }
-  console.log(await cachedWorkerInstance);
-  ((await cachedWorkerInstance) as Worker | null)?.terminate();
+  // // TODO: Handle multiple workers instead of caching just one.
+  // // for (const worker of workers) {
+  // //   worker.terminate();
+  // // }
+  // ((await cachedWorkerInstance) as Worker | null)?.terminate();
 }
 
-let cachedWorkerInstance: Promise<{
-  wrappedWorker: WorkerInsideAPI;
-  terminate: () => void;
-}> | null = null;
+let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
 async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
-  // return (await (cachedWorkerInstance ??= instantiateWorker())).wrappedWorker;
-
-  const cacheeey = (cachedWorkerInstance ??= instantiateWorker());
-  console.log("cacheeey", cacheeey);
-  const awaiteeeeey = await cacheeey;
-  console.log("awaiteeeeey", awaiteeeeey);
-  const wrappedy = awaiteeeeey.wrappedWorker;
-  console.log("wrappedy", wrappedy);
-  return wrappedy;
+  return await (cachedWorkerInstance ??= instantiateWorker());
 }
 
 // Pre-initialize the scrambler for the given event. (Otherwise, an event is

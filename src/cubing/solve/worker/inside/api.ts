@@ -1,7 +1,16 @@
-import type { Alg } from "../../../../alg";
-import { preInitialize222, random222Scramble } from "../implementations/2x2x2";
-import { initialize333, random333Scramble } from "../implementations/3x3x3";
-import { initialize444, random444Scramble } from "../implementations/4x4x4";
+import type { Alg } from "../../../alg";
+import {
+  preInitialize222,
+  random222Scramble,
+} from "../vendor/implementations/2x2x2";
+import {
+  initialize333,
+  random333Scramble,
+} from "../vendor/implementations/3x3x3";
+import {
+  initialize444,
+  random444Scramble,
+} from "../vendor/implementations/4x4x4";
 
 const DEBUG_MEASURE_PERF = true;
 
