@@ -7,7 +7,6 @@ export default {
     "src/experiments/static": { url: "/", static: true },
     "src/experiments/code": { url: "/_code" },
   },
-  exclude: ["**/node.*", "**/get-random-values.*"],
   packageOptions: {
     knownEntrypoints: ["comlink"],
     external: ["crypto", "worker_threads"],
