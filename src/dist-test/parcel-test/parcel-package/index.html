@@ -1,0 +1,10 @@
+<script type="module">
+  import { randomScrambleForEvent } from "../../../../solve";
+  (async () => {
+    const scramble = await randomScrambleForEvent("333");
+    const elem = document.createElement("div");
+    elem.id = "scramble-test";
+    elem.textContent = scramble;
+    document.body.appendChild(elem);
+  })();
+</script>
