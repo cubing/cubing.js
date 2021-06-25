@@ -5,15 +5,11 @@ export const port = 1236;
 const packagePath = new URL("./parcel-package", import.meta.url).pathname;
 
 export function installServer() {
-  // TODO: safer cd?
-  const command = `cd "${packagePath}"; npm install`;
-  console.log("command:", command);
-  execPromise(command);
+  execPromise("npm install", { cwd: packagePath });
 }
 
 export function startServer() {
-  // TODO: safer cd?
-  const command = `cd "${packagePath}"; npx parcel --port ${port} index.html`;
-  console.log("command:", command);
-  execPromise(command);
+  execPromise(`./node_modules/.bin/parcel serve --port ${port} index.html`, {
+    cwd: packagePath,
+  });
 }

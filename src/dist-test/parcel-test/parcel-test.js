@@ -28,12 +28,12 @@ async function runTest() {
     height: 1024,
   });
   await new Promise((resolve) => {
-    setTimeout(resolve, 3000);
+    setTimeout(resolve, 1000);
   });
   await page.goto(`http://localhost:${port}/`);
   const elem = await page.waitForSelector("#scramble-test");
   const textContent = await elem.evaluate((node) => node.textContent);
-  console.log(textContent);
+  console.log("Generated scramble:", textContent);
   const alg = Alg.fromString(textContent);
   const algLength = alg.experimentalNumUnits();
   assert("algLength > 12", true, algLength > 12);
@@ -47,9 +47,19 @@ async function runTest() {
 }
 
 (async () => {
-  await installServer();
-  startServer();
-  await runTest();
-  killAllChildProcesses();
-  process.exit(exitCode);
+  try {
+    console.log("Installing Parcel server dependencies.");
+    await installServer();
+    console.log("Starting Parcel server.");
+    // TODO: show zombie process info only on child process failure.
+    console.log(
+      `\nIf you see \`Error: Port "${port}" could not be used\` below, try running: killall node\nOr find the process using port ${port}: lsof -i :${port}\n`,
+    );
+    startServer();
+    console.log("Running test.\n");
+    await runTest();
+  } finally {
+    killAllChildProcesses();
+    process.exit(exitCode);
+  }
 })();

@@ -14,13 +14,13 @@ export function killAllChildProcesses() {
   }
 }
 
-export function execPromise(cmd) {
+export function execPromise(cmd, options) {
   return new Promise((resolve, reject) => {
-    const childProcess = exec(cmd, (error, stdout, stderr) => {
+    const childProcess = exec(cmd, options, (error, stdout, stderr) => {
       if (error) {
         reject(error);
       }
-      console.log(stdout);
+      // console.log(stdout);
       resolve(stdout ? stdout : stderr);
     });
     childProcesses.push(childProcess);
