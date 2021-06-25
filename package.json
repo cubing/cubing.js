@@ -40,7 +40,6 @@
   "scripts": {
     "build": "npm run clean && node ./script/build.js all",
     "build-esm": "node ./script/build.js esm",
-    "build-cjs": "node ./script/build.js cjs",
     "build-bundle-global": "node ./script/build.js bundle-global",
     "build-types": "node ./script/build.js types",
     "build-bin": "node ./script/build.js bin",
@@ -50,13 +49,12 @@
     "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "node ./script/build.js snowpack dev",
-    "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/solve/worker/worker-inside-generated.js",
+    "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/solve/worker-inside-generated* src/dist-test/parcel-test/parcel-package/.parcel-cache src/dist-test/parcel-test/parcel-package/dist src/dist-test/parcel-test/parcel-package/node_modules",
     "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml in sync with this",
     "test-dist-parcel": "node ./src/dist-test/parcel-test/parcel-test.js",
     "test-experiments": "node src/test-experiments/test.js",
     "test-import-restrictions": "node src/import-restrictions/build.js",
     "test-jest": "npx jest --collectCoverage",
-    "test-node-require": "node src/dist-test/require.cjs",
     "test-node-import": "node src/dist-test/import.mjs",
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
     "test-dist-perf": "node src/dist-test/perf/*.mjs",
@@ -119,7 +117,7 @@
       "/dist",
       "/src/dist-static",
       "/snowpack.config.mjs",
-      "/src/cubing/solve/worker/worker-inside-generated.cjs",
+      "/src/cubing/solve/worker/worker-inside-generated*",
       "parser-peggy.js"
     ],
     "env": {

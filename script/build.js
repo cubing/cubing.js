@@ -100,25 +100,6 @@ export const bundleGlobalTarget = {
   },
 };
 
-export const cjsTarget = {
-  builtYet: false,
-  dependencies: [],
-  buildSelf: async (dev) => {
-    await esbuild.build({
-      entryPoints: ["src/cubing/index.ts"],
-      outfile: "dist/cjs/index.js",
-      format: "cjs",
-      target: "es2020",
-      bundle: true,
-      watch: dev,
-      logLevel: "info",
-      //
-      external,
-    });
-    await execPromise("cp -R src/dist-static/cjs/* dist/cjs");
-  },
-};
-
 export const esmTarget = {
   builtYet: false,
   dependencies: [solveWorkerTarget],
@@ -199,13 +180,7 @@ export const typesTarget = {
 
 export const allTarget = {
   builtYet: false,
-  dependencies: [
-    esmTarget,
-    cjsTarget,
-    bundleGlobalTarget,
-    typesTarget,
-    binTarget,
-  ],
+  dependencies: [esmTarget, bundleGlobalTarget, typesTarget, binTarget],
   buildSelf: async (dev) => {
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");
@@ -225,7 +200,6 @@ const targets /*: Record<String, SolverWorker>*/ = {
   "solve-worker": solveWorkerTarget,
   "snowpack": SnowpackTarget,
   "bundle-global": bundleGlobalTarget,
-  "cjs": cjsTarget,
   "esm": esmTarget,
   "types": typesTarget,
   "bin": binTarget,
