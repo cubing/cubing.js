@@ -35,11 +35,13 @@ const stringWrappingPlugin = {
   name: "wrapping",
   setup(build) {
     build.onEnd((result) => {
-      return new Promise((resolve /*reject*/) => {
+      return new Promise((resolve, reject) => {
         if (result.errors.length !== 0) {
-          execPromise("rm src/cubing/solve/worker-inside-generated-string.js");
-          console.log("removed worker-inside-generated-string.js");
-          resolve();
+          execPromise(
+            "rm -f src/cubing/solve/worker-inside-generated.js src/cubing/solve/worker-inside-generated-string.js",
+          );
+          console.log("removed generated worker files.");
+          reject();
         }
         readFile(
           "src/cubing/solve/worker-inside-generated.js",
@@ -84,7 +86,7 @@ export const solveWorkerTarget = {
 
 export const bundleGlobalTarget = {
   builtYet: false,
-  dependencies: [],
+  dependencies: [solveWorkerTarget],
   buildSelf: (dev) => {
     return esbuild.build({
       entryPoints: ["src/cubing/cubing.bundle-global.ts"],
