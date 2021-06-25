@@ -23,6 +23,7 @@
   "exclude": [
     "src/dist-static/**/*",
     "src/**/*.spec.ts",
-    "src/cubing/solve/worker-inside-generated*"
+    "src/cubing/solve/worker-inside-generated*",
+    "src/cubing/solve/vendor/implementations/3x3x3/min2phase/gwt.js"
   ]
 }

@@ -127,7 +127,7 @@ function set8Perm(arr, idx, n?: number, even?: number) {
     var m = (1 << v) - 1;
     val = (val & m) + ((val >> 4) & ~m);
   }
-  if (even < 0 && (prt & 1) != 0) {
+  if (even < 0 && (prt & 1) !== 0) {
     arr[n] = arr[n - 1];
     arr[n - 1] = val & 7;
   } else {
@@ -163,7 +163,7 @@ function coord(type, length, evenbase) {
   this.length = length;
   this.evenbase = evenbase;
   this.get =
-    type == "p"
+    type === "p"
       ? function (arr) {
           return get8Perm(arr, this.length, this.evenbase);
         }
@@ -171,7 +171,7 @@ function coord(type, length, evenbase) {
           return getNOri(arr, this.length, this.evenbase);
         };
   this.set =
-    type == "p"
+    type === "p"
       ? function (arr, idx) {
           return set8Perm(arr, idx, this.length, this.evenbase);
         }
@@ -214,22 +214,22 @@ function createMove(moveTable, size, doMove, N_MOVES) {
 }
 
 function edgeMove(arr, m) {
-  if (m == 0) {
+  if (m === 0) {
     //F
     circleOri(arr, 0, 7, 8, 4, 1);
-  } else if (m == 1) {
+  } else if (m === 1) {
     //R
     circleOri(arr, 3, 6, 11, 7, 0);
-  } else if (m == 2) {
+  } else if (m === 2) {
     //U
     circleOri(arr, 0, 1, 2, 3, 0);
-  } else if (m == 3) {
+  } else if (m === 3) {
     //B
     circleOri(arr, 2, 5, 10, 6, 1);
-  } else if (m == 4) {
+  } else if (m === 4) {
     //L
     circleOri(arr, 1, 4, 9, 5, 0);
-  } else if (m == 5) {
+  } else if (m === 5) {
     //D
     circleOri(arr, 11, 10, 9, 8, 0);
   }
@@ -266,12 +266,12 @@ CubieCube.prototype.init = function (ca, ea) {
 
 CubieCube.prototype.isEqual = function (c) {
   for (var i = 0; i < 8; i++) {
-    if (this.ca[i] != c.ca[i]) {
+    if (this.ca[i] !== c.ca[i]) {
       return false;
     }
   }
   for (var i = 0; i < 12; i++) {
-    if (this.ea[i] != c.ea[i]) {
+    if (this.ea[i] !== c.ea[i]) {
       return false;
     }
   }
@@ -350,22 +350,22 @@ CubieCube.prototype.fromFacelet = function (facelet, cFacelet, eFacelet) {
     facelet[49];
   for (let i = 0; i < 54; ++i) {
     f[i] = centers.indexOf(facelet[i]);
-    if (f[i] == -1) {
+    if (f[i] === -1) {
       return -1;
     }
     count += 1 << (f[i] << 2);
   }
-  if (count != 0x999999) {
+  if (count !== 0x999999) {
     return -1;
   }
   var col1, col2, i, j, ori;
   for (i = 0; i < 8; ++i) {
     for (ori = 0; ori < 3; ++ori)
-      if (f[cFacelet[i][ori]] == 0 || f[cFacelet[i][ori]] == 3) break;
+      if (f[cFacelet[i][ori]] === 0 || f[cFacelet[i][ori]] === 3) break;
     col1 = f[cFacelet[i][(ori + 1) % 3]];
     col2 = f[cFacelet[i][(ori + 2) % 3]];
     for (j = 0; j < 8; ++j) {
-      if (col1 == ~~(cFacelet[j][1] / 9) && col2 == ~~(cFacelet[j][2] / 9)) {
+      if (col1 === ~~(cFacelet[j][1] / 9) && col2 === ~~(cFacelet[j][2] / 9)) {
         this.ca[i] = j | (ori % 3 << 3);
         break;
       }
@@ -374,15 +374,15 @@ CubieCube.prototype.fromFacelet = function (facelet, cFacelet, eFacelet) {
   for (i = 0; i < 12; ++i) {
     for (j = 0; j < 12; ++j) {
       if (
-        f[eFacelet[i][0]] == ~~(eFacelet[j][0] / 9) &&
-        f[eFacelet[i][1]] == ~~(eFacelet[j][1] / 9)
+        f[eFacelet[i][0]] === ~~(eFacelet[j][0] / 9) &&
+        f[eFacelet[i][1]] === ~~(eFacelet[j][1] / 9)
       ) {
         this.ea[i] = j << 1;
         break;
       }
       if (
-        f[eFacelet[i][0]] == ~~(eFacelet[j][1] / 9) &&
-        f[eFacelet[i][1]] == ~~(eFacelet[j][0] / 9)
+        f[eFacelet[i][0]] === ~~(eFacelet[j][1] / 9) &&
+        f[eFacelet[i][1]] === ~~(eFacelet[j][0] / 9)
       ) {
         this.ea[i] = (j << 1) | 1;
         break;
@@ -398,27 +398,27 @@ for (var i = 0; i < 18; i++) {
 }
 moveCube[0].init(
   [3, 0, 1, 2, 4, 5, 6, 7],
-  [6, 0, 2, 4, 8, 10, 12, 14, 16, 18, 20, 22]
+  [6, 0, 2, 4, 8, 10, 12, 14, 16, 18, 20, 22],
 );
 moveCube[3].init(
   [20, 1, 2, 8, 15, 5, 6, 19],
-  [16, 2, 4, 6, 22, 10, 12, 14, 8, 18, 20, 0]
+  [16, 2, 4, 6, 22, 10, 12, 14, 8, 18, 20, 0],
 );
 moveCube[6].init(
   [9, 21, 2, 3, 16, 12, 6, 7],
-  [0, 19, 4, 6, 8, 17, 12, 14, 3, 11, 20, 22]
+  [0, 19, 4, 6, 8, 17, 12, 14, 3, 11, 20, 22],
 );
 moveCube[9].init(
   [0, 1, 2, 3, 5, 6, 7, 4],
-  [0, 2, 4, 6, 10, 12, 14, 8, 16, 18, 20, 22]
+  [0, 2, 4, 6, 10, 12, 14, 8, 16, 18, 20, 22],
 );
 moveCube[12].init(
   [0, 10, 22, 3, 4, 17, 13, 7],
-  [0, 2, 20, 6, 8, 10, 18, 14, 16, 4, 12, 22]
+  [0, 2, 20, 6, 8, 10, 18, 14, 16, 4, 12, 22],
 );
 moveCube[15].init(
   [0, 1, 11, 23, 4, 5, 18, 14],
-  [0, 2, 4, 23, 8, 10, 12, 21, 16, 18, 7, 15]
+  [0, 2, 4, 23, 8, 10, 12, 21, 16, 18, 7, 15],
 );
 for (var a = 0; a < 18; a += 3) {
   for (var p = 0; p < 2; p++) {
@@ -444,16 +444,16 @@ CubieCube.prototype.edgeCycles = function () {
     do {
       visited[y] = true;
       ++length;
-      ((flip as unknown) as number) ^= this.ea[y] & 1;
+      (flip as unknown as number) ^= this.ea[y] & 1;
       y = this.ea[y] >> 1;
-    } while (y != x);
+    } while (y !== x);
     cycles += length >> 1;
     if (length & 1) {
       parity = !parity;
       ++cycles;
     }
     if (flip) {
-      if (length == 0) {
+      if (length === 0) {
         ++small_cycles[0];
       } else if (length & 1) {
         small_cycles[2] ^= 1;
@@ -470,7 +470,7 @@ CubieCube.prototype.edgeCycles = function () {
     cycles +=
       small_cycles[1] + flip_cycles[(small_cycles[0] - small_cycles[1]) >> 1];
   }
-  return cycles - ((parity as unknown) as number);
+  return cycles - (parity as unknown as number);
 };
 
 function createPrun(prun, init, size, maxd, doMove, N_MOVES, N_POWER, N_INV) {
@@ -493,21 +493,21 @@ function createPrun(prun, init, size, maxd, doMove, N_MOVES, N_POWER, N_INV) {
     var check = inv ? l : 0xf;
 
     out: for (var p = 0; p < size; p++, val >>= 4) {
-      if ((p & 7) == 0) {
+      if ((p & 7) === 0) {
         val = prun[p >> 3];
-        if (!inv && val == -1) {
+        if (!inv && val === -1) {
           p += 7;
           continue;
         }
       }
-      if ((val & 0xf) != find) {
+      if ((val & 0xf) !== find) {
         continue;
       }
       for (var m = 0; m < N_MOVES; m++) {
         var q = p;
         for (var c = 0; c < N_POWER; c++) {
           q = isMoveTable ? doMove[m][q] : doMove(q, m);
-          if (getPruning(prun, q) != check) {
+          if (getPruning(prun, q) !== check) {
             continue;
           }
           ++done;
@@ -519,7 +519,7 @@ function createPrun(prun, init, size, maxd, doMove, N_MOVES, N_POWER, N_INV) {
         }
       }
     }
-    if (done == 0) {
+    if (done === 0) {
       break;
     }
     DEBUG && console.log("[prun]", done);
@@ -560,7 +560,7 @@ _.search = function (state, minl, MAXL) {
         this.move[i],
         this.N_MOVES,
         this.N_POWER,
-        N_INV
+        N_INV,
       );
     }
     this.inited = true;
@@ -571,7 +571,7 @@ _.search = function (state, minl, MAXL) {
       break;
     }
   }
-  return maxl == MAXL ? null : this.sol.reverse();
+  return maxl === MAXL ? null : this.sol.reverse();
 };
 
 _.toStr = function (sol, move_map, power_map) {
@@ -589,13 +589,13 @@ _.idaSearch = function (state, maxl, lm) {
       return false;
     }
   }
-  if (maxl == 0) {
+  if (maxl === 0) {
     return true;
   }
   var offset = state[0] + maxl + lm + 1;
   for (var move0 = 0; move0 < this.N_MOVES; move0++) {
     var move = (move0 + offset) % this.N_MOVES;
-    if (move == lm) {
+    if (move === lm) {
       continue;
     }
     var cur_state = state.slice();
@@ -646,7 +646,7 @@ _.updatePrun = function (targetDepth) {
 
 _.updatePrunBFS = function (fromDepth) {
   for (var state in this.prunTable) {
-    if (this.prunTable[state][0] != fromDepth) {
+    if (this.prunTable[state][0] !== fromDepth) {
       continue;
     }
     for (var move in this.moves) {
@@ -665,17 +665,17 @@ _.updatePrunDFS = function (state, maxl, depth, lm) {
     this.prunTable[state] = [depth, lm];
     this.prunTableSize++;
   }
-  if (maxl <= 0 || this.prunTable[state][1] != lm) {
+  if (maxl <= 0 || this.prunTable[state][1] !== lm) {
     return;
   }
-  var lastAxisFace = lm == null ? -1 : this.moves[lm];
+  var lastAxisFace = lm === null ? -1 : this.moves[lm];
   for (var move in this.moves) {
     var axisface = this.moves[move] ^ lastAxisFace;
-    if (axisface == 0 || ((axisface & 0xf) == 0 && move < lm)) {
+    if (axisface === 0 || ((axisface & 0xf) === 0 && move < lm)) {
       continue;
     }
     var newState = this.doMove(state, move);
-    if (!newState || newState == state) {
+    if (!newState || newState === state) {
       continue;
     }
     this.updatePrunDFS(newState, maxl - 1, depth + 1, move);
@@ -708,18 +708,18 @@ _.idaSearch = function (state, maxl, lm) {
     return false;
   }
   this.visited[state] = 0;
-  if (maxl == 0) {
+  if (maxl === 0) {
     this.sols.push(this.sol.slice());
     return this.sols.length >= this.nsol;
   }
-  var lastAxisFace = lm == null ? -1 : this.moves[lm];
+  var lastAxisFace = lm === null ? -1 : this.moves[lm];
   for (var move in this.moves) {
     var axisface = this.moves[move] ^ lastAxisFace;
-    if (axisface == 0 || ((axisface & 0xf) == 0 && move < lm)) {
+    if (axisface === 0 || ((axisface & 0xf) === 0 && move < lm)) {
       continue;
     }
     var newState = this.doMove(state, move);
-    if (!newState || newState == state) {
+    if (!newState || newState === state) {
       continue;
     }
     this.sol.push(move);
@@ -754,7 +754,7 @@ function rndProb(plist) {
   var cum = 0;
   var curIdx = 0;
   for (var i = 0; i < plist.length; i++) {
-    if (plist[i] == 0) {
+    if (plist[i] === 0) {
       continue;
     }
     if (randomUIntBelow(cum + plist[i]) < plist[i]) {
@@ -798,14 +798,14 @@ function str2time(val) {
 }
 
 function obj2str(val) {
-  if (typeof val == "string") {
+  if (typeof val === "string") {
     return val;
   }
   return JSON.stringify(val);
 }
 
 function str2obj(val) {
-  if (typeof val != "string") {
+  if (typeof val !== "string") {
     return val;
   }
   return JSON.parse(val);

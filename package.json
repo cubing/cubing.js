@@ -117,7 +117,9 @@
       "/dist",
       "/src/dist-static",
       "/snowpack.config.mjs",
-      "/src/cubing/solve/worker/worker-inside-generated*",
+      "/src/cubing/solve/vendor/implementations/3x3x3/min2phase/gwt.js",
+      "/src/cubing/solve/vendor/implementations/vendor/random-uint-below/get-random-values.d.ts",
+      "/src/cubing/solve/worker-inside-generated*",
       "parser-peggy.js"
     ],
     "env": {

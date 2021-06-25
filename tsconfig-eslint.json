@@ -1,4 +1,15 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*", "*/index.js", "*/index.d.ts", "script/*"]
+  "include": [
+    "src/**/*",
+    "*/index.js",
+    "*/index.d.ts",
+    "script/*",
+    "src/**/*.spec.ts"
+  ],
+  "exclude": [
+    "src/dist-static/**/*",
+    "src/cubing/solve/worker-inside-generated*",
+    "src/cubing/solve/vendor/implementations/3x3x3/min2phase/gwt.js"
+  ]
 }
