@@ -1,4 +1,4 @@
-import { SGSCachedData } from "../../sgs";
+import type { SGSCachedData } from "../../sgs";
 
 // TODO: Reduce info.
 export const cachedData222: SGSCachedData = {
