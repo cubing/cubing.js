@@ -52,7 +52,7 @@ export const targetInfos = {
   },
   "scramble": {
     deps: {
-      direct: ["alg"],
+      direct: ["alg", "solve"],
       dynamic: [],
     },
   },
