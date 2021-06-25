@@ -199,7 +199,13 @@ export const typesTarget = {
 
 export const allTarget = {
   builtYet: false,
-  dependencies: [esmTarget, cjsTarget, bundleGlobalTarget, binTarget],
+  dependencies: [
+    esmTarget,
+    cjsTarget,
+    bundleGlobalTarget,
+    typesTarget,
+    binTarget,
+  ],
   buildSelf: async (dev) => {
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");
