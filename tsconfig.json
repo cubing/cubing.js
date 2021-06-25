@@ -20,5 +20,5 @@
     "rootDir": "."
   },
   "include": ["src/**/*", "*/index.js", "*/index.d.ts"],
-  "exclude": ["src/dist-static/**/*"]
+  "exclude": ["src/dist-static/**/*", "src/**/*.spec.ts"]
 }
