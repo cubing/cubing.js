@@ -20,5 +20,9 @@
     "rootDir": "."
   },
   "include": ["src/**/*", "*/index.js", "*/index.d.ts"],
-  "exclude": ["src/dist-static/**/*", "src/**/*.spec.ts"]
+  "exclude": [
+    "src/dist-static/**/*",
+    "src/**/*.spec.ts",
+    "src/cubing/solve/worker-inside-generated*"
+  ]
 }
