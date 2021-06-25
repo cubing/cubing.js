@@ -17,16 +17,25 @@ import { readFile, writeFile } from "fs";
 import configSrc from "../snowpack.config.mjs";
 import { execPromise } from "./execPromise.js";
 
+const PARALLEL = false;
+
 const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "comlink", ...externalNode];
 
 export async function build(target, dev) {
-  const depPromises = target.dependencies.map((dependency) =>
-    build(dependency, dev),
-  );
+  const depPromises = [];
+  for (const dependency of target.dependencies) {
+    const depPromise = build(dependency, dev);
+    depPromises.push(depPromise);
+    if (!PARALLEL) {
+      await depPromise;
+    }
+  }
   await Promise.all(depPromises);
   if (!target.builtYet) {
+    console.log("Building target:", target.name);
     await target.buildSelf(dev);
+    console.log("Successfully built target:", target.name);
     target.builtYet = true;
   }
 }
@@ -66,6 +75,7 @@ const stringWrappingPlugin = {
 };
 
 export const solveWorkerTarget = {
+  name: "solve-worker",
   builtYet: false,
   dependencies: [],
   buildSelf: (dev) => {
@@ -85,6 +95,7 @@ export const solveWorkerTarget = {
 };
 
 export const bundleGlobalTarget = {
+  name: "bundle-global",
   builtYet: false,
   dependencies: [solveWorkerTarget],
   buildSelf: (dev) => {
@@ -103,6 +114,7 @@ export const bundleGlobalTarget = {
 };
 
 export const esmTarget = {
+  name: "esm",
   builtYet: false,
   dependencies: [solveWorkerTarget],
   buildSelf: async (dev) => {
@@ -138,6 +150,7 @@ export const esmTarget = {
 };
 
 export const binTarget = {
+  name: "bin",
   builtYet: false,
   dependencies: [solveWorkerTarget],
   buildSelf: async (dev) => {
@@ -157,6 +170,7 @@ export const binTarget = {
 };
 
 export const SnowpackTarget = {
+  name: "snowpack",
   builtYet: false,
   dependencies: [solveWorkerTarget],
   buildSelf: async (dev) => {
@@ -170,6 +184,7 @@ export const SnowpackTarget = {
 };
 
 export const typesTarget = {
+  name: "types",
   builtYet: false,
   dependencies: [solveWorkerTarget], // solve worker?
   buildSelf: async (dev) => {
@@ -181,6 +196,7 @@ export const typesTarget = {
 };
 
 export const allTarget = {
+  name: "all",
   builtYet: false,
   dependencies: [esmTarget, bundleGlobalTarget, typesTarget, binTarget],
   buildSelf: async (dev) => {
