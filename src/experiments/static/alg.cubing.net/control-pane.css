@@ -59,10 +59,20 @@ control-pane textarea.status-bad {
   border: 1px solid rgba(255, 0, 0, 0.5);
 }
 
-control-pane select {
+control-pane select,
+control-pane button {
   font-size: 1.5em;
   background: rgba(255, 250, 245, 1);
   border: 1px solid rgba(0, 0, 0, 0.2);
   margin-bottom: 0.5em;
   padding: 8px;
+}
+
+control-pane button:hover {
+  background: rgba(255, 230, 210, 1);
+  cursor: pointer;
+}
+
+control-pane button:active {
+  background: white;
 }

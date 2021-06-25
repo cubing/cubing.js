@@ -1,5 +1,6 @@
 import { Vector3 } from "three";
-import { Alg } from "../../../cubing/alg";
+import { KPuzzle } from "../../../cubing/kpuzzle";
+import { Alg, LineComment, Newline } from "../../../cubing/alg";
 import { puzzles } from "../../../cubing/puzzles";
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import type { TwistyAlgEditor } from "../../../cubing/twisty";
@@ -12,6 +13,8 @@ import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { APP_TITLE } from "./strings";
 import { supportedPuzzles } from "./supported-puzzles";
 import { getURLParam, setURLParams } from "./url-params";
+import { cube3x3x3KPuzzle } from "../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import { experimentalSolve3x3x3IgnoringCenters } from "../../../cubing/solve";
 
 export interface AppData {
   puzzleName: string;
@@ -25,6 +28,7 @@ export class App {
   public twistyPlayer: TwistyPlayer;
   private puzzlePane: HTMLElement;
   private cachedSetupAnchor: "start" | "end";
+  private controlPane: ControlPane;
   constructor(public element: Element, initialData: AppData) {
     this.cachedSetupAnchor = initialData.experimentalSetupAnchor;
 
@@ -48,7 +52,7 @@ export class App {
     );
     controlPaneElem.classList.remove("loading");
     // tslint:disable-next-line: no-unused-expression
-    new ControlPane(
+    this.controlPane = new ControlPane(
       controlPaneElem,
       initialData,
       this.setExperimentalSetupAlg.bind(this),
@@ -56,8 +60,11 @@ export class App {
       this.setPuzzle.bind(this),
       this.setSetupAnchor.bind(this),
       this.setStickering.bind(this),
+      this.solve.bind(this),
       this.twistyPlayer,
     );
+
+    this.controlPane.setPuzzle(initialData.puzzleName);
   }
 
   private initializeTwisty(initialData: AppData): void {
@@ -117,6 +124,7 @@ export class App {
     // TODO: Handle 2D/3D transitions
     // this.twistyPlayer.setPuzzle(puzzleName);
     location.reload();
+    this.controlPane.setPuzzle(puzzleName);
     return true;
   }
 
@@ -130,6 +138,17 @@ export class App {
     setURLParams({ "experimental-stickering": stickering });
     location.reload();
     return true;
+  }
+
+  async solve(): Promise<void> {
+    const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
+    kpuzzle.applyAlg(this.twistyPlayer.alg);
+    const solution = await experimentalSolve3x3x3IgnoringCenters(kpuzzle.state);
+    this.controlPane.setSolution(
+      this.twistyPlayer.alg
+        .concat([new Newline(), new LineComment(" Solution"), new Newline()])
+        .concat(solution),
+    );
   }
 }
 
@@ -146,6 +165,7 @@ class ControlPane {
   public puzzleSelect: HTMLSelectElement;
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
+  private solveButton: HTMLButtonElement;
   constructor(
     public element: Element,
     initialData: AppData,
@@ -156,6 +176,7 @@ class ControlPane {
     private setStickeringCallback: (
       stickering: ExperimentalStickering,
     ) => boolean,
+    private solve: () => void,
     twistyPlayer: TwistyPlayer,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
@@ -167,7 +188,8 @@ class ControlPane {
       "twisty-alg-editor",
     ) as TwistyAlgEditor;
     this.experimentalSetupAlgInput.twistyPlayer = twistyPlayer;
-    this.experimentalSetupAlgInput.algString = initialData.experimentalSetupAlg.toString();
+    this.experimentalSetupAlgInput.algString =
+      initialData.experimentalSetupAlg.toString();
     this.setExperimentalSetupAlgElemStatus(null);
 
     this.algInput = findOrCreateChildWithClass(
@@ -216,24 +238,33 @@ class ControlPane {
       this.onexperimentalSetupAlgInput.bind(this, true),
     );
 
+    this.solveButton = findOrCreateChildWithClass(
+      this.element,
+      "solve-button",
+      "button",
+    );
+    this.solveButton.addEventListener("click", this.solve);
+
     this.onAlgInput(true);
   }
 
   private onexperimentalSetupAlgInput(canonicalize: boolean): void {
     try {
-      const experimentalSetupAlgString = this.experimentalSetupAlgInput
-        .algString;
+      const experimentalSetupAlgString =
+        this.experimentalSetupAlgInput.algString;
       const parsedexperimentalSetupAlg = Alg.fromString(
         experimentalSetupAlgString,
       );
       this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg);
 
-      const restringifiedexperimentalSetupAlg = parsedexperimentalSetupAlg.toString();
+      const restringifiedexperimentalSetupAlg =
+        parsedexperimentalSetupAlg.toString();
       const experimentalSetupAlgIsCanonical =
         restringifiedexperimentalSetupAlg === experimentalSetupAlgString;
 
       if (canonicalize && !experimentalSetupAlgIsCanonical) {
-        this.experimentalSetupAlgInput.algString = restringifiedexperimentalSetupAlg;
+        this.experimentalSetupAlgInput.algString =
+          restringifiedexperimentalSetupAlg;
       }
       // Set status before passing to the `Twisty`.
       this.setExperimentalSetupAlgElemStatus(
@@ -386,5 +417,13 @@ class ControlPane {
   private stickeringChanged(): void {
     const option = this.stickeringSelect.selectedOptions[0];
     this.setStickeringCallback(option.value as ExperimentalStickering);
+  }
+
+  setSolution(alg: Alg): void {
+    this.algInput.algString = alg.toString();
+  }
+
+  setPuzzle(puzzle: string): void {
+    this.solveButton.disabled = puzzle !== "3x3x3";
   }
 }
