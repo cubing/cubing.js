@@ -53,11 +53,8 @@ export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
     case "minx":
       return Alg.fromString(await randomMegaminxScrambleString());
   }
-  console.log("randy");
   const prom = _randomScrambleStringForEvent(eventID);
-  console.log("prom", prom);
   const wat = await prom;
-  console.log("wat", wat);
   return Alg.fromString(wat);
 }
 
@@ -65,7 +62,6 @@ export async function _randomScrambleStringForEvent(
   eventID: string,
 ): Promise<string> {
   const cwi = await getCachedWorkerInstance();
-  console.log("cwi", cwi);
   return cwi.randomScrambleStringForEvent(eventID);
 }
 

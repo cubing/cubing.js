@@ -1,4 +1,4 @@
-import { randomScrambleForEvent } from "../../../cubing/solve";
+import { randomScrambleForEvent } from "../../../cubing/scramble";
 import "../../../cubing/twisty";
 import type { TwistyPlayer } from "../../../cubing/twisty";
 import type { PuzzleID } from "../../../cubing/twisty/dom/TwistyPlayerConfig";
