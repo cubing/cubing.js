@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { Alg } from "../../alg";
 import { giikerMoveToAlgMoveForTesting } from "./giiker";
 import "../../alg/test/alg-comparison";
