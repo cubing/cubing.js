@@ -18,7 +18,7 @@ import configSrc from "../snowpack.config.mjs";
 import { execPromise } from "./execPromise.js";
 
 const externalNode = ["crypto", "worker_threads"];
-const external = ["three", "web-worker", ...externalNode];
+const external = ["three", "comlink", ...externalNode];
 
 export async function build(target, dev) {
   const depPromises = target.dependencies.map((dependency) =>
@@ -199,13 +199,7 @@ export const typesTarget = {
 
 export const allTarget = {
   builtYet: false,
-  dependencies: [
-    esmTarget,
-    cjsTarget,
-    bundleGlobalTarget,
-    typesTarget,
-    binTarget,
-  ],
+  dependencies: [esmTarget, cjsTarget, bundleGlobalTarget, binTarget],
   buildSelf: async (dev) => {
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");

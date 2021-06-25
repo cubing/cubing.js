@@ -11,8 +11,7 @@
     "@types/three": "^0.126.1",
     "@types/web-bluetooth": "0.0.4",
     "comlink": "^4.3.1",
-    "three": "^0.126.1",
-    "web-worker": "^1.0.0"
+    "three": "^0.126.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.11.5",
@@ -63,7 +62,7 @@
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts .",
-    "prepack": "npm run clean && npm run build && npm run test-node-require && npm run test-node-import",
+    "prepack": "npm run clean && npm run build && npm run test-node-import",
     "parcel-build-for-twizzle-net": "echo \"parcel-build-for-twizzle-net is currently unimplemented.\""
   },
   "targets": {
