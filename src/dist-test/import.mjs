@@ -14,8 +14,8 @@ console.log(stream);
 // import `three` synchronously, and it doesn't define exports:
 // https://github.com/mrdoob/three.js/pull/18498
 
-import * as solve from "cubing/solve";
+import * as scramble from "cubing/scramble";
 (async () => {
-  // await solve.instantiate();
-  console.log((await solve.randomScrambleForEvent("333")).toString());
+  // await scramble.instantiate();
+  console.log((await scramble.randomScrambleForEvent("333")).toString());
 })();
