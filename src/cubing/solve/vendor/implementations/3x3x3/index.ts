@@ -9,7 +9,7 @@ import { passesFilter } from "./filter";
 import { initialize, solveState } from "./min2phase/gwt";
 import { sgs3x3x3 } from "./sgs";
 
-async function random333State(): Promise<Transformation> {
+export async function random333State(): Promise<Transformation> {
   const def = await puzzles["3x3x3"].def();
   const kpuzzle = new KPuzzle(def);
   for (const piece of sgs3x3x3) {
@@ -23,7 +23,7 @@ async function random333State(): Promise<Transformation> {
   return kpuzzle.state;
 }
 
-async function solve333(s: Transformation): Promise<Alg> {
+export async function solve333(s: Transformation): Promise<Alg> {
   return Alg.fromString(solveState(toMin2PhaseState(s)));
 }
 

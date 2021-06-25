@@ -5,6 +5,7 @@ import { randomClockScrambleString } from "./vendor/implementations/clock";
 import { randomMegaminxScrambleString } from "./vendor/implementations/minx";
 import { instantiateWorker } from "./instantiator";
 import type { WorkerInsideAPI } from "./inside/api";
+import type { Transformation } from "../puzzle-geometry/interfaces";
 
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
 async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
@@ -77,4 +78,11 @@ export async function randomScrambleStringForEvent(
       return randomMegaminxScrambleString();
   }
   return await _randomScrambleStringForEvent(eventID);
+}
+
+export async function experimentalSolve3x3x3IgnoringCenters(
+  s: Transformation,
+): Promise<Alg> {
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solve333ToString(s));
 }

@@ -1,4 +1,5 @@
 import type { Alg } from "../../alg";
+import type { Transformation } from "../../puzzle-geometry/interfaces";
 import {
   preInitialize222,
   random222Scramble,
@@ -6,6 +7,7 @@ import {
 import {
   initialize333,
   random333Scramble,
+  solve333,
 } from "../vendor/implementations/3x3x3";
 import {
   initialize444,
@@ -69,6 +71,10 @@ export const insideAPI = {
 
   randomScrambleStringForEvent: async (eventID: string): Promise<string> => {
     return (await insideAPI.randomScramble(eventID)).toString();
+  },
+
+  solve333ToString: async (s: Transformation): Promise<string> => {
+    return (await solve333(s)).toString();
   },
 };
 
