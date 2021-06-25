@@ -1,6 +1,8 @@
 import { expose as comlinkExpose } from "comlink";
 
-const useNodeWorkarounds = typeof globalThis.Worker === "undefined";
+const useNodeWorkarounds =
+  typeof globalThis.Worker === "undefined" &&
+  typeof globalThis.WorkerNavigator === "undefined";
 
 export function expose(api) {
   if (useNodeWorkarounds) {

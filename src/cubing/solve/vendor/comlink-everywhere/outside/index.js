@@ -1,6 +1,8 @@
 export { wrap } from "comlink";
 
-const useNodeWorkarounds = typeof globalThis.Worker === "undefined";
+const useNodeWorkarounds =
+  typeof globalThis.Worker === "undefined" &&
+  typeof globalThis.WorkerNavigator === "undefined";
 
 export async function workerFileConstructor() {
   if (useNodeWorkarounds) {
