@@ -31,7 +31,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: make build
-      - run: make test-node-require
       - run: make test-node-import
       - run: make test-dist-perf
       - run: make build-experiments
