@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer";
 import { Alg } from "../../../dist/esm/alg/index.js";
 import { installServer, port, startServer } from "./serve-parcel.js";
+import { killAllChildProcesses } from "../../../script/execPromise.js";
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;
@@ -27,7 +28,7 @@ async function runTest() {
     height: 1024,
   });
   await new Promise((resolve) => {
-    setTimeout(resolve, 1000);
+    setTimeout(resolve, 3000);
   });
   await page.goto(`http://localhost:${port}/`);
   const elem = await page.waitForSelector("#scramble-test");
@@ -42,12 +43,13 @@ async function runTest() {
     (await import("repl")).start();
   } else {
     await browser.close();
-    process.exit(exitCode);
   }
 }
 
 (async () => {
   await installServer();
   startServer();
-  runTest();
+  await runTest();
+  killAllChildProcesses();
+  process.exit(exitCode);
 })();
