@@ -50,6 +50,18 @@ export const targetInfos = {
       dynamic: ["puzzle-geometry"],
     },
   },
+  "scramble": {
+    deps: {
+      direct: ["alg", "solve"],
+      dynamic: [],
+    },
+  },
+  "solve": {
+    deps: {
+      direct: ["alg", "kpuzzle", "puzzles"],
+      dynamic: [],
+    },
+  },
   "stream": {
     deps: {
       direct: ["alg"],

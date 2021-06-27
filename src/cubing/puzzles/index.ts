@@ -10,6 +10,8 @@ import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
 import type { PuzzleLoader } from "./PuzzleLoader";
 
+export type { PuzzleLoader };
+
 export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,

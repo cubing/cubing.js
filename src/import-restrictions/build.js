@@ -2,7 +2,10 @@ import { build } from "esbuild";
 import { resolve } from "path";
 import { existsSync } from "fs";
 
+const externalNode = ["crypto", "worker_threads"];
+
 import { targetInfos } from "./target-infos.js";
+import { execPromise } from "../../script/execPromise.js";
 
 // Note that we have to use an extra `..` to back out of the file name
 const PATH_TO_SRC_CUBING = resolve(
@@ -107,16 +110,19 @@ for (const [name, targetInfo] of Object.entries(targetInfos)) {
 
 // targets.map(a => console.log(a.dirPath))
 
-for (const currentTarget of targets) {
-  build({
-    target: "es2020",
-    bundle: true,
-    splitting: true,
-    format: "esm",
-    // sourcemap: true,
-    outdir: currentTarget.outdir,
-    external: ["three"],
-    entryPoints: [currentTarget.indexFilePath],
-    plugins: targets.map((t) => t.plugin(currentTarget)),
-  });
-}
+(async () => {
+  await execPromise("make build-solve-worker");
+  for (const currentTarget of targets) {
+    build({
+      target: "es2020",
+      bundle: true,
+      splitting: true,
+      format: "esm",
+      // sourcemap: true,
+      outdir: currentTarget.outdir,
+      external: ["three", ...externalNode],
+      entryPoints: [currentTarget.indexFilePath],
+      plugins: targets.map((t) => t.plugin(currentTarget)),
+    });
+  }
+})();

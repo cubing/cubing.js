@@ -1,14 +1,16 @@
 // Snowpack Configuration File
-// See all supported options: https://www.snowpack. dev/reference/configuration
+// See all supported options: https://www.snowpack.dev/reference/configuration
 
-/** @type {import("snowpack").SnowpackUserConfig } */
-module.exports = {
+export default {
   workspaceRoot: "/",
   mount: {
     "src/experiments/static": { url: "/", static: true },
     "src/experiments/code": { url: "/_code" },
   },
-  packageOptions: {},
+  packageOptions: {
+    knownEntrypoints: ["comlink"],
+    external: ["crypto", "worker_threads"],
+  },
   devOptions: {
     port: 3333,
   },
