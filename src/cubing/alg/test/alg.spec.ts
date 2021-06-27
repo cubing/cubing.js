@@ -190,7 +190,7 @@ describe("expand()", () => {
   });
 });
 
-describe("structureEquals", () => {
+describe("toBeIdentical", () => {
   it("correctly compares algs", () => {
     expect(Ex.FURURFCompact).not.toBeIdentical(Ex.FURURFMoves);
     expect(Ex.FURURFMoves).not.toBeIdentical(Ex.FURURFCompact);

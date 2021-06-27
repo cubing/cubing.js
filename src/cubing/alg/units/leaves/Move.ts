@@ -188,10 +188,6 @@ export class Move extends AlgCommon<Move> {
     return this.#quantumWithAmount.quantum;
   }
 
-  equals(other: Move): boolean {
-    return this.#quantumWithAmount.isIdentical(other.#quantumWithAmount);
-  }
-
   modified(modifications: MoveModifications): Move {
     return new Move(
       this.#quantumWithAmount.quantum.modified(modifications),
