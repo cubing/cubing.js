@@ -1,6 +1,9 @@
+// TODO: Inline this again once https://github.com/snowpackjs/snowpack/pull/3499 is resolved.
+const WORKER_THREADS = "worker_threads";
+
 async function getImports() {
   return {
-    NodeWorker: (await import("worker_threads")).Worker,
+    NodeWorker: (await import(WORKER_THREADS)).Worker,
     nodeEndpoint: (await import("comlink/dist/esm/node-adapter.mjs")).default,
   };
 }

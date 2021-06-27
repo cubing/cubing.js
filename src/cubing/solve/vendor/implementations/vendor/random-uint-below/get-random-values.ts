@@ -1,5 +1,8 @@
 export type GetRandomValuesFunction = (arr: Uint32Array) => void;
 
+// TODO: Inline this again once https://github.com/snowpackjs/snowpack/pull/3499 is resolved.
+const CRYPTO = "crypto";
+
 // We could use top-level await to define this more statically, but that has limited transpilation support.
 export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction> {
   const hasWebCrypto =
@@ -10,7 +13,7 @@ export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction>
     return crypto.getRandomValues.bind(crypto);
   } else {
     // @ts-ignore
-    const nodeCrypto = await import("crypto");
+    const nodeCrypto = await import(CRYPTO);
     return (arr: Uint32Array) => {
       if (!(arr instanceof Uint32Array)) {
         throw new Error(
