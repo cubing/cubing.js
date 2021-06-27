@@ -81,7 +81,9 @@ export class TwistyPlayer extends ManagedCustomElement {
   twisty3D: Twisty3DPuzzle | null = null;
 
   #connected: boolean = false;
-  #legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null = null;
+  #legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null =
+    null;
+
   /** @deprecated */
   public legacyExperimentalPG3D: PG3D | null = null;
   #experimentalStartStateOverride: Transformation | null = null;
@@ -96,11 +98,8 @@ export class TwistyPlayer extends ManagedCustomElement {
     _move: Move,
   ): number => 0;
 
-  #controlsClassListManager: ClassListManager<ControlsLocation> = new ClassListManager(
-    this,
-    "controls-",
-    ["none", "bottom-row"],
-  );
+  #controlsClassListManager: ClassListManager<ControlsLocation> =
+    new ClassListManager(this, "controls-", ["none", "bottom-row"]);
 
   #experimentalInvalidInitialAlgCallback: (alg: Alg) => void;
   #initialized: boolean = false;
@@ -116,7 +115,8 @@ export class TwistyPlayer extends ManagedCustomElement {
     super();
     this.addCSS(twistyPlayerCSS);
     this.#config = new TwistyPlayerConfig(this, initialConfig);
-    this.#experimentalInvalidInitialAlgCallback = experimentalInvalidInitialAlgCallback;
+    this.#experimentalInvalidInitialAlgCallback =
+      experimentalInvalidInitialAlgCallback;
 
     this.timeline = new Timeline();
     this.timeline.addActionListener(this);
@@ -154,7 +154,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       console.warn(
         "`experimentalSetupAlg` for a `TwistyPlayer` was set using a string. It should be set using a `Sequence`!",
       );
-      newAlg = new Alg((newAlg as unknown) as string);
+      newAlg = new Alg(newAlg as unknown as string);
     }
     this.#config.attributes["experimental-setup-alg"].setValue(newAlg);
     this.#setCursorStartState();
@@ -232,13 +232,6 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   // TODO: Implement for PG3D
   /** @deprecated */
-  get experimentalStickering(): ExperimentalStickering {
-    return this.#config.attributes["experimental-stickering"]
-      .value as ExperimentalStickering;
-  }
-
-  // TODO: Implement for PG3D
-  /** @deprecated */
   set experimentalStickering(experimentalStickering: ExperimentalStickering) {
     if (
       this.#config.attributes["experimental-stickering"].setValue(
@@ -263,6 +256,13 @@ export class TwistyPlayer extends ManagedCustomElement {
         );
       }
     }
+  }
+
+  // TODO: Implement for PG3D
+  /** @deprecated */
+  get experimentalStickering(): ExperimentalStickering {
+    return this.#config.attributes["experimental-stickering"]
+      .value as ExperimentalStickering;
   }
 
   set background(background: BackgroundTheme) {

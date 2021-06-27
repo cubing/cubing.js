@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8">
+  <title>cubing.js</title>
+  <meta name="theme-color" content="#4285f4">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../main.css">
+</head>
+
+<body>
+  <content>
+    <!-- Tip: Avoid using specialized terminology (e.g. "element", "attribute") where possible. -->
+    <div id="heading">
+      <code><a href="../">cubing</a> API</code>
+    </div>
+
+    <section class="no-header">
+      Note: These documents are still in early draft stage. Each method and should have enough examples to demonstrate all possible arguments.
+        </section>
+
+    <section id="alg">
+      <h1><a href="#alg"><code>cubing/alg</code></a></h1>
+
+      <p>
+        The most important classes in <code>cubing/alg</code> are <code>Alg</code> and <code>Move</code>.
+      </p>
+
+      <code class="sample">class Alg {<br>
+&nbsp;&nbsp;// Constructors<br>
+&nbsp;&nbsp;constructor(alg: Unit[] | Iterable&lt;Unit&gt;)<br>
+&nbsp;&nbsp;constructor(alg: string)<br>
+<br>
+&nbsp;&nbsp;// String conversion<br>
+&nbsp;&nbsp;static fromString(s: string): Alg;<br>
+&nbsp;&nbsp;toString(): string;<br>
+<br>
+&nbsp;&nbsp;// Comparison<br>
+&nbsp;&nbsp;isIdentical(other: Alg): boolean;<br>
+<br>
+&nbsp;&nbsp;// Operations<br>
+&nbsp;&nbsp;invert(): Alg;<br>
+&nbsp;&nbsp;concat(input: Alg): Alg;<br>
+&nbsp;&nbsp;expand(options?: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;depth?: number;<br>
+&nbsp;&nbsp;}): Alg;<br>
+&nbsp;&nbsp;simplify(options?: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;collapseMoves?: boolean;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;quantumMoveOrder?: (quantumMove: QuantumMove) => number;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;depth?: number | null;<br>
+&nbsp;&nbsp;}): Alg;<br>
+<br>
+&nbsp;&nbsp;// Contents<br>
+&nbsp;&nbsp;units(): Generator<Unit>;<br>
+&nbsp;&nbsp;experimentalLeafMoves(): Generator&lt;Move&gt;;<br>
+&nbsp;&nbsp;experimentalIsEmpty(): boolean;<br>
+&nbsp;&nbsp;experimentalNumUnits(): number;<br>
+}</code>
+
+<p>A <code>Move</code> is a <code>QuantumMove</code> (like <code>R</code> or <code>UL</code>) with an amount (any integer).</p>
+
+<code class="sample">class Move {<br>
+&nbsp;&nbsp;// Constructors<br>
+&nbsp;&nbsp;constructor(s: string);<br>
+&nbsp;&nbsp;constructor(quantumMove: string, amount: number);<br>
+&nbsp;&nbsp;constructor(quantumMove: QuantumMove, amount?: number);<br>
+<br>
+&nbsp;&nbsp;// String conversion<br>
+&nbsp;&nbsp;static fromString(s: string): Move;<br>
+&nbsp;&nbsp;toString(): string;<br>
+<br>
+&nbsp;&nbsp;// Comparison<br>
+&nbsp;&nbsp;isIdentical(other: Comparable): boolean;<br>
+&nbsp;&nbsp;invert(): Move;<br>
+<br>
+&nbsp;&nbsp;// Operations<br>
+&nbsp;&nbsp;modified(modifications: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;outerLayer?: number;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;innerLayer?: number;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;family?: string;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;amount?: number;<br>
+&nbsp;&nbsp;}): Move;<br>
+<br>
+&nbsp;&nbsp;// Contents<br>
+&nbsp;&nbsp;get quantum(): QuantumMove;<br>
+&nbsp;&nbsp;get amount(): number;<br>
+}<br>
+<br>
+class QuantumMove {<br>
+&nbsp;&nbsp;// Constructors<br>
+&nbsp;&nbsp;constructor(family: string, innerLayer?: number | null, outerLayer?: number | null);<br>
+<br>
+&nbsp;&nbsp;// String conversion<br>
+&nbsp;&nbsp;static fromString(s: string): QuantumMove;<br>
+&nbsp;&nbsp;toString(): string;<br>
+<br>
+&nbsp;&nbsp;// Comparison<br>
+&nbsp;&nbsp;isIdentical(other: QuantumMove): boolean;<br>
+<br>
+&nbsp;&nbsp;// Operations<br>
+&nbsp;&nbsp;modified(modifications: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;outerLayer?: number;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;innerLayer?: number;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;family?: string;<br>
+&nbsp;&nbsp;}): QuantumMove;<br>
+<br>
+&nbsp;&nbsp;// Contents<br>
+&nbsp;&nbsp;get family(): string;<br>
+&nbsp;&nbsp;get outerLayer(): number | null;<br>
+&nbsp;&nbsp;get innerLayer(): number | null;<br>
+}</code>
+
+
+      <h2><code>Examples</code></h2>
+
+<p></p>
+
+      <div class="code-demo">
+        <div>
+          <code class="sample">
+            <span>import { Alg } from &quot;cubing/alg&quot;;<br>
+<br>
+function logAlg(alg) { console.log(alg.toString())};<br>
+<br>
+const sune = new Alg(&quot;[R U R2', [R: U]]&quot;);<br>
+const antiSune = sune.<b><u>invert()</u></b>;<br>
+logAlg(antiSune);<br>
+logAlg(antiSune<b><u>.expand()</u></b>);
+</span>
+          </code>
+        </div>
+          <code class="sample output">
+            <span>&quot;[[R: U], R U R2']&quot;</span>
+            <span>&quot;R U2 R' U' R U' R'&quot;</span>
+          </code>
+      </div>
+    </section>
+
+    <section id="twisty">
+      <h1><a href="#twisty"><code>cubing/twisty</code></a></h1>
+
+      <p>
+        The most important class in <code>cubing/twisty</code> is <code>TwistyPlayer</code>.
+      </p>
+
+      <code class="sample">class TwistyPlayer {<br>
+&nbsp;&nbsp;// Constructor<br>
+&nbsp;&nbsp;constructor(initialConfig?: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;// Note that any of the config options can be accessed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;// or updated as properties on a TwistyPlayer instance directly.<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alg?: Alg | string;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;experimentalSetupAlg?: Alg | string;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;experimentalSetupAnchor?: "start" | "end";<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;puzzle?: PuzzleID;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;visualization?: "3D" | "2D" | "experimental-2D-LL" | "PG3D";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;hintFacelets?: "floating" | "none";<br>
+&nbsp;&nbsp;&nbsp;&nbsp;experimentalStickering?: ExperimentalStickering;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;background?: BackgroundTheme;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;controlPanel?: "bottom-row" | "none";<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;backView?: BackViewLayout;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;experimentalCameraPosition?: Vector3;<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;viewerLink?: "twizzle" | "none";<br>
+&nbsp;&nbsp;})<br>
+<br>
+&nbsp;&nbsp;// Structure<br>
+&nbsp;&nbsp;timeline: Timeline;<br>
+&nbsp;&nbsp;cursor: AlgCursor | null;<br>
+&nbsp;&nbsp;viewerElems: TwistyViewerElement[];<br>
+&nbsp;&nbsp;controlElems: TwistyControlElement[];<br>
+&nbsp;&nbsp;fullscreen(): void;<br>
+<br>
+&nbsp;&nbsp;// Twizzle<br>
+&nbsp;&nbsp;twizzleLink(): string;<br>
+&nbsp;&nbsp;visitTwizzleLink(): void;<br>
+<br>
+&nbsp;&nbsp;// 3D code<br>
+&nbsp;&nbsp;scene: Twisty3DScene | null;<br>
+&nbsp;&nbsp;twisty3D: Twisty3DPuzzle | null;<br>
+<br>
+&nbsp;&nbsp;// Experimental methods<br>
+&nbsp;&nbsp;experimentalSetStartStateOverride(state: Transformation | null): void;<br>
+&nbsp;&nbsp;experimentalSetCursorIndexer(cursorName: "simple" | "tree" | "simultaneous"): void;<br>
+&nbsp;&nbsp;experimentalAddMove(move: Move, coalesce?: boolean, coalesceDelayed?: boolean): void;<br>
+}
+</code>
+</section>
+
+    <section id="methods">
+      <h1><a href="#methods">Examples</a></h1>
+      <p>TODO</p>
+    </section>
+  </content>
+</body>
+
+</html>

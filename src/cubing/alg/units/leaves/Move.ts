@@ -71,6 +71,7 @@ export class QuantumMove extends Comparable {
     return parseQuantumMove(s);
   }
 
+  // TODO: `modify`?
   modified(modifications: QuantumMoveModifications): QuantumMove {
     return new QuantumMove(
       modifications.family ?? this.#family,
@@ -188,7 +189,9 @@ export class Move extends AlgCommon<Move> {
     return this.#quantumWithAmount.quantum;
   }
 
+  // TODO: `modify`?
   modified(modifications: MoveModifications): Move {
+    // TODO: Avoid creating a new quantum move
     return new Move(
       this.#quantumWithAmount.quantum.modified(modifications),
       modifications.amount ?? this.amount,
