@@ -30,7 +30,8 @@ export interface Repeatable extends Comparable {
 // Common to algs or units
 export abstract class AlgCommon<T extends Alg | Unit>
   extends Comparable
-  implements Repeatable {
+  implements Repeatable
+{
   constructor() {
     super();
     if (writeAlgDebugField) {
@@ -40,6 +41,15 @@ export abstract class AlgCommon<T extends Alg | Unit>
         },
       });
     }
+  }
+
+  log(message?: string): T {
+    // console.log("sdfd", err.message);
+    // console.log(err.stack!);
+    // console.trace("Sfdf");
+    // console.trace("Sfdf", this, this.toString());
+    console.log(...(message ? [message] : []), ...[this, this.toString()]);
+    return this as any;
   }
 
   abstract toString(): string;
