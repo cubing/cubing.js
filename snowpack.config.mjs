@@ -13,6 +13,7 @@ export default {
   },
   devOptions: {
     port: 3333,
+    hmr: true,
   },
   buildOptions: {
     out: "dist/experiments",
