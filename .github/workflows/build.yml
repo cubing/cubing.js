@@ -36,5 +36,5 @@ jobs:
       - run: make build-experiments
       - run: make test-experiments
       # - run: make parcel-build-for-twizzle-net
-      - run: make clean
       - run: make test-dist-parcel
+      - run: make clean
