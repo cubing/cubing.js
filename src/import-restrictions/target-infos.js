@@ -58,7 +58,7 @@ export const targetInfos = {
   },
   "solve": {
     deps: {
-      direct: ["alg"],
+      direct: ["alg", "kpuzzle", "puzzles"],
       dynamic: [],
     },
   },
