@@ -189,10 +189,7 @@ export class Move extends AlgCommon<Move> {
   }
 
   equals(other: Move): boolean {
-    return (
-      this.quantum.isIdentical(other.quantum) &&
-      this.#quantumWithAmount.isIdentical(other.#quantumWithAmount)
-    );
+    return this.#quantumWithAmount.isIdentical(other.#quantumWithAmount);
   }
 
   modified(modifications: MoveModifications): Move {
