@@ -78,6 +78,4 @@ export const insideAPI = {
   },
 };
 
-insideAPI.randomScramble("333").then((s) => console.info(s.toString()));
-
 export type WorkerInsideAPI = typeof insideAPI;
