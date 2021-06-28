@@ -1,20 +1,20 @@
-import { Alg } from "../../../../../../alg";
-// import type { Puzzle, State } from "cubing/dist/types/twisty"; // TODO
+import { Alg } from "../../../cubing/alg";
 import {
   invertTransformation,
   KPuzzleDefinition,
-  transformationOrder,
   Transformation,
-} from "../../../../../../kpuzzle";
-import { KSolvePuzzle, TreeAlgIndexer } from "../../../../../../twisty";
+  transformationOrder,
+} from "../../../cubing/kpuzzle";
+import { KSolvePuzzle, TreeAlgIndexer } from "../../../cubing/twisty";
+import type {
+  PuzzleWrapper,
+  State,
+} from "../../../cubing/twisty/3D/puzzles/KPuzzleWrapper";
 import type { SGSCachedData } from "./sgs";
 
-type Puzzle = any; // TODO
-type State = any; // TODO
+const DEFAULT_STAGE1_DEPTH_LIMIT = 4; // For 2x2x2 demo.
 
-const DEFAULT_STAGE1_DEPTH_LIMIT = 5; // For 2x2x2 demo.
-
-function calculateMoves(puzzle: Puzzle, ksp: KSolvePuzzle) {
+function calculateMoves(puzzle: KPuzzleDefinition, ksp: KSolvePuzzle) {
   /*
    *   Get a list of all moves; synthesize the multiples.
    */
@@ -47,7 +47,7 @@ function calculateMoves(puzzle: Puzzle, ksp: KSolvePuzzle) {
   };
 }
 
-function badRandomMoves(moves: string[], ksp: KSolvePuzzle): State {
+function badRandomMoves(moves, ksp: KSolvePuzzle): State<PuzzleWrapper> {
   // var sum = 0;
   var scramble = "";
   for (var i = 0; i < 1000; i++) {
@@ -59,15 +59,15 @@ function badRandomMoves(moves: string[], ksp: KSolvePuzzle): State {
 }
 
 export class TrembleSolver {
-  // private puzzle: KPuzzleDefinition;
+  private puzzle: KPuzzleDefinition;
   private ksp;
   private st;
 
   private baseorder: Array<any>; // TODO
   private esgs: Array<any>; // TODO
 
-  private moves;
-  private movest;
+  private moves: string[];
+  private movest: Transformation[];
 
   constructor(private def: KPuzzleDefinition, sgs: SGSCachedData) {
     this.ksp = new KSolvePuzzle(this.def);
@@ -81,19 +81,17 @@ export class TrembleSolver {
     this.movest = movesInfo.movest;
   }
 
-  public badRandomMoves(): State {
+  public badRandomMoves(): State<PuzzleWrapper> {
     return badRandomMoves(this.moves, this.ksp);
   }
 
   public async solve(
-    state: State,
+    state: State<PuzzleWrapper>,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
   ): Promise<Alg> {
-    console.log("tremble solve");
-    let bestAlg: string | null = null;
+    let bestAlg: string;
     var best = 1000000;
-    const recur = (st4: State, togo: number, sofar: string[]) => {
-      console.log("recur");
+    const recur = (st4, togo: number, sofar: string[]) => {
       if (togo === 0) {
         var t = this.sgsPhaseSolve(st4);
         if (sofar.length + t[0] < best) {
@@ -113,13 +111,10 @@ export class TrembleSolver {
     for (var d = 0; d < stage1DepthLimit; d++) {
       recur(state, d, []);
     }
-    if (bestAlg === null) {
-      throw "No solution found!";
-    }
-    return Alg.fromString(bestAlg).simplify({ collapseMoves: true });
+    return Alg.fromString(bestAlg!).simplify({ collapseMoves: true });
   }
 
-  private sgsPhaseSolve(st4: State): [number, string[]] {
+  private sgsPhaseSolve(st4): [number, string[]] {
     var algos = [];
     var len = 0;
     for (var i = 0; i < this.baseorder.length; i++) {
@@ -130,18 +125,9 @@ export class TrembleSolver {
         st4[set].orientation[ind] !== this.st[set].orientation[ind]
       ) {
         var st4i = invertTransformation(this.def, st4);
-        console.log(
-          "Sfdsf",
-          i,
-          ind,
-          this.esgs[i],
-          this.esgs[i][st4i[set].permutation[ind]],
-          st4i[set].orientation[ind],
-        );
         var a =
           this.esgs[i][st4i[set].permutation[ind]][st4i[set].orientation[ind]];
-        if (!a) throw "Missing algorithm in sgs or esgs?";
-        console.log("a", a);
+        if (a === undefined) throw "Missing algorithm in sgs or esgs?";
         len = len + a[0].split(" ").length;
         algos.push(a[0]);
         st4 = this.ksp.combine(st4, a[1]);

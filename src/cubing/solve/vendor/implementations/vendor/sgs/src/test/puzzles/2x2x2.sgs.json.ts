@@ -24,7 +24,7 @@ export const cachedData222: SGSCachedData = {
     [
       [
         [
-          "F2'",
+          "F2",
           {
             CORNERS: {
               permutation: [3, 6, 2, 0, 4, 5, 1, 7],
@@ -71,7 +71,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "R F2'",
+          "R F2",
           {
             CORNERS: {
               permutation: [3, 6, 0, 1, 2, 5, 4, 7],
@@ -82,7 +82,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "U F2'",
+          "U F2",
           {
             CORNERS: {
               permutation: [3, 0, 5, 2, 4, 6, 1, 7],
@@ -91,7 +91,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U2' F'",
+          "U2 F'",
           {
             CORNERS: {
               permutation: [1, 3, 6, 2, 4, 0, 5, 7],
@@ -100,7 +100,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "R' F2'",
+          "R' F2",
           {
             CORNERS: {
               permutation: [3, 6, 4, 2, 1, 5, 0, 7],
@@ -132,7 +132,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "D2'",
+          "D2",
           {
             CORNERS: {
               permutation: [0, 7, 2, 4, 3, 5, 6, 1],
@@ -161,7 +161,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "L2'",
+          "L2",
           {
             CORNERS: {
               permutation: [0, 1, 2, 5, 4, 3, 7, 6],
@@ -190,7 +190,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "U' F2'",
+          "U' F2",
           {
             CORNERS: {
               permutation: [3, 5, 0, 6, 4, 2, 1, 7],
@@ -228,7 +228,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "L2' F'",
+          "L2 F'",
           {
             CORNERS: {
               permutation: [1, 5, 2, 7, 4, 3, 0, 6],
@@ -250,7 +250,7 @@ export const cachedData222: SGSCachedData = {
     [
       [
         [
-          "U' B2'",
+          "U' B2",
           {
             CORNERS: {
               permutation: [6, 1, 7, 3, 2, 4, 5, 0],
@@ -259,7 +259,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "R B2'",
+          "R B2",
           {
             CORNERS: {
               permutation: [1, 4, 7, 3, 5, 2, 6, 0],
@@ -268,7 +268,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "R2' B'",
+          "R2 B'",
           {
             CORNERS: {
               permutation: [4, 2, 5, 3, 1, 7, 6, 0],
@@ -279,7 +279,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "R2' B2'",
+          "R2 B2",
           {
             CORNERS: {
               permutation: [4, 2, 7, 3, 5, 0, 6, 1],
@@ -297,7 +297,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "R U' B2'",
+          "R U' B2",
           {
             CORNERS: {
               permutation: [6, 4, 7, 3, 0, 2, 5, 1],
@@ -308,7 +308,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "B2'",
+          "B2",
           {
             CORNERS: {
               permutation: [0, 1, 7, 3, 5, 4, 6, 2],
@@ -347,7 +347,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "R' B2'",
+          "R' B2",
           {
             CORNERS: {
               permutation: [2, 0, 7, 3, 5, 1, 6, 4],
@@ -367,7 +367,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "U B2'",
+          "U B2",
           {
             CORNERS: {
               permutation: [2, 1, 7, 3, 6, 4, 0, 5],
@@ -376,7 +376,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "F2' L' F2'",
+          "F2 L' F2",
           {
             CORNERS: {
               permutation: [7, 0, 2, 3, 4, 1, 6, 5],
@@ -396,7 +396,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "U2' B2'",
+          "U2 B2",
           {
             CORNERS: {
               permutation: [5, 1, 7, 3, 0, 4, 2, 6],
@@ -405,7 +405,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U2' R B'",
+          "U2 R B'",
           {
             CORNERS: {
               permutation: [1, 4, 0, 3, 5, 7, 2, 6],
@@ -426,7 +426,7 @@ export const cachedData222: SGSCachedData = {
       [
         null,
         [
-          "B2' R B'",
+          "B2 R B'",
           {
             CORNERS: {
               permutation: [1, 5, 4, 3, 0, 2, 6, 7],
@@ -435,7 +435,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "B R' B2'",
+          "B R' B2",
           {
             CORNERS: {
               permutation: [4, 0, 5, 3, 2, 1, 6, 7],
@@ -448,7 +448,7 @@ export const cachedData222: SGSCachedData = {
     [
       [
         [
-          "R2'",
+          "R2",
           {
             CORNERS: {
               permutation: [4, 2, 1, 3, 0, 5, 6, 7],
@@ -477,7 +477,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "L2' D L2'",
+          "L2 D L2",
           {
             CORNERS: {
               permutation: [0, 5, 2, 3, 1, 6, 4, 7],
@@ -506,7 +506,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "U R2'",
+          "U R2",
           {
             CORNERS: {
               permutation: [4, 5, 1, 3, 2, 6, 0, 7],
@@ -537,7 +537,7 @@ export const cachedData222: SGSCachedData = {
       [
         null,
         [
-          "R' U R2'",
+          "R' U R2",
           {
             CORNERS: {
               permutation: [1, 5, 0, 3, 4, 6, 2, 7],
@@ -546,7 +546,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "R2' U' R",
+          "R2 U' R",
           {
             CORNERS: {
               permutation: [2, 0, 6, 3, 4, 1, 5, 7],
@@ -557,7 +557,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "U2' R2'",
+          "U2 R2",
           {
             CORNERS: {
               permutation: [4, 6, 1, 3, 5, 0, 2, 7],
@@ -566,7 +566,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U2' F R' F'",
+          "U2 F R' F'",
           {
             CORNERS: {
               permutation: [2, 1, 4, 3, 5, 0, 6, 7],
@@ -586,7 +586,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "U' R2'",
+          "U' R2",
           {
             CORNERS: {
               permutation: [4, 0, 1, 3, 6, 2, 5, 7],
@@ -595,7 +595,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "F R2' F'",
+          "F R2 F'",
           {
             CORNERS: {
               permutation: [2, 1, 0, 3, 6, 5, 4, 7],
@@ -604,7 +604,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U2' R",
+          "U2 R",
           {
             CORNERS: {
               permutation: [1, 4, 5, 3, 6, 0, 2, 7],
@@ -617,7 +617,7 @@ export const cachedData222: SGSCachedData = {
     [
       [
         [
-          "F2' D' L2' D F2'",
+          "F2 D' L2 D F2",
           {
             CORNERS: {
               permutation: [1, 0, 2, 3, 4, 6, 5, 7],
@@ -647,7 +647,7 @@ export const cachedData222: SGSCachedData = {
       [
         null,
         [
-          "F' U2' L F' L' F2'",
+          "F' U2 L F' L' F2",
           {
             CORNERS: {
               permutation: [6, 1, 0, 3, 4, 5, 2, 7],
@@ -656,7 +656,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "L F' L2' U L F'",
+          "L F' L2 U L F'",
           {
             CORNERS: {
               permutation: [6, 1, 5, 3, 4, 0, 2, 7],
@@ -667,7 +667,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "F D2' B' D2' F'",
+          "F D2 B' D2 F'",
           {
             CORNERS: {
               permutation: [1, 2, 5, 3, 4, 0, 6, 7],
@@ -698,7 +698,7 @@ export const cachedData222: SGSCachedData = {
       null,
       [
         [
-          "F' L F' L' F2'",
+          "F' L F' L' F2",
           {
             CORNERS: {
               permutation: [6, 5, 2, 3, 4, 1, 0, 7],
@@ -707,7 +707,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "L F2' L'",
+          "L F2 L'",
           {
             CORNERS: {
               permutation: [6, 5, 2, 3, 4, 1, 0, 7],
@@ -716,7 +716,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "F' U2' F",
+          "F' U2 F",
           {
             CORNERS: {
               permutation: [2, 5, 0, 3, 4, 1, 6, 7],
@@ -727,7 +727,7 @@ export const cachedData222: SGSCachedData = {
       ],
       [
         [
-          "L' F2' L F2' L",
+          "L' F2 L F2 L",
           {
             CORNERS: {
               permutation: [1, 6, 2, 3, 4, 0, 5, 7],
@@ -745,7 +745,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U F' U2' F",
+          "U F' U2 F",
           {
             CORNERS: {
               permutation: [5, 6, 2, 3, 4, 1, 0, 7],
@@ -767,7 +767,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "L2' D2' R' D2' L2'",
+          "L2 D2 R' D2 L2",
           {
             CORNERS: {
               permutation: [2, 1, 5, 3, 4, 6, 0, 7],
@@ -776,7 +776,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "F2' D2' B' D2' F2'",
+          "F2 D2 B' D2 F2",
           {
             CORNERS: {
               permutation: [2, 1, 5, 3, 4, 6, 0, 7],
@@ -788,7 +788,7 @@ export const cachedData222: SGSCachedData = {
       null,
       [
         [
-          "U2'",
+          "U2",
           {
             CORNERS: {
               permutation: [5, 1, 6, 3, 4, 0, 2, 7],
@@ -797,7 +797,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "F2' D2' B D2' F2' U'",
+          "F2 D2 B D2 F2 U'",
           {
             CORNERS: {
               permutation: [5, 1, 6, 3, 4, 0, 2, 7],
@@ -806,7 +806,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U F2' D2' B' D2' F2'",
+          "U F2 D2 B' D2 F2",
           {
             CORNERS: {
               permutation: [5, 1, 6, 3, 4, 0, 2, 7],
@@ -828,7 +828,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "L2' D2' R D2' L2'",
+          "L2 D2 R D2 L2",
           {
             CORNERS: {
               permutation: [6, 1, 0, 3, 4, 2, 5, 7],
@@ -837,7 +837,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "F2' D2' B D2' F2'",
+          "F2 D2 B D2 F2",
           {
             CORNERS: {
               permutation: [6, 1, 0, 3, 4, 2, 5, 7],
@@ -849,7 +849,7 @@ export const cachedData222: SGSCachedData = {
       [
         null,
         [
-          "F2' D2' B' D2' F2' U'",
+          "F2 D2 B' D2 F2 U'",
           {
             CORNERS: {
               permutation: [0, 1, 2, 3, 4, 5, 6, 7],
@@ -858,7 +858,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U' F2' D2' B' D2' F2'",
+          "U' F2 D2 B' D2 F2",
           {
             CORNERS: {
               permutation: [0, 1, 2, 3, 4, 5, 6, 7],
@@ -910,7 +910,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "R F D' F2' L' F' D F2'",
+          "R F D' F2 L' F' D F2",
           {
             CORNERS: {
               permutation: [5, 1, 0, 3, 4, 2, 6, 7],
@@ -955,7 +955,7 @@ export const cachedData222: SGSCachedData = {
     [
       [
         [
-          "U' F2' L2' F' L' D F2' D' L F'",
+          "U' F2 L2 F' L' D F2 D' L F'",
           {
             CORNERS: {
               permutation: [2, 1, 0, 3, 4, 5, 6, 7],
@@ -964,7 +964,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U2' F D' L' D2' R2' F' D' L F'",
+          "U2 F D' L' D2 R2 F' D' L F'",
           {
             CORNERS: {
               permutation: [2, 1, 0, 3, 4, 5, 6, 7],
@@ -973,7 +973,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U B2' D F R F' L2' D' F D' F'",
+          "U B2 D F R F' L2 D' F D' F'",
           {
             CORNERS: {
               permutation: [2, 1, 0, 3, 4, 5, 6, 7],
@@ -986,7 +986,7 @@ export const cachedData222: SGSCachedData = {
       [
         null,
         [
-          "R B L2' D2' F' L' D L' D F'",
+          "R B L2 D2 F' L' D L' D F'",
           {
             CORNERS: {
               permutation: [0, 1, 2, 3, 4, 5, 6, 7],
@@ -995,7 +995,7 @@ export const cachedData222: SGSCachedData = {
           },
         ],
         [
-          "U F U2' R2' F' D' L F' D F'",
+          "U F U2 R2 F' D' L F' D F'",
           {
             CORNERS: {
               permutation: [0, 1, 2, 3, 4, 5, 6, 7],
