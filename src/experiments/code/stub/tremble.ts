@@ -6,10 +6,7 @@ import {
   transformationOrder,
 } from "../../../cubing/kpuzzle";
 import { KSolvePuzzle, TreeAlgIndexer } from "../../../cubing/twisty";
-import type {
-  PuzzleWrapper,
-  State,
-} from "../../../cubing/twisty/3D/puzzles/KPuzzleWrapper";
+import type { KSolvePuzzleState } from "../../../cubing/twisty/3D/puzzles/KPuzzleWrapper";
 import type { SGSCachedData } from "./sgs";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 4; // For 2x2x2 demo.
@@ -47,7 +44,7 @@ function calculateMoves(puzzle: KPuzzleDefinition, ksp: KSolvePuzzle) {
   };
 }
 
-function badRandomMoves(moves, ksp: KSolvePuzzle): State<PuzzleWrapper> {
+function badRandomMoves(moves: string[], ksp: KSolvePuzzle): KSolvePuzzleState {
   // var sum = 0;
   var scramble = "";
   for (var i = 0; i < 1000; i++) {
@@ -55,11 +52,11 @@ function badRandomMoves(moves, ksp: KSolvePuzzle): State<PuzzleWrapper> {
   }
   // var sol = "";
   const indexer = new TreeAlgIndexer(ksp, Alg.fromString(scramble));
-  return indexer.transformAtIndex(indexer.numMoves());
+  return indexer.transformAtIndex(indexer.numMoves()) as any; // TODO
 }
 
 export class TrembleSolver {
-  private puzzle: KPuzzleDefinition;
+  // private puzzle: KPuzzleDefinition;
   private ksp;
   private st;
 
@@ -81,17 +78,17 @@ export class TrembleSolver {
     this.movest = movesInfo.movest;
   }
 
-  public badRandomMoves(): State<PuzzleWrapper> {
+  public badRandomMoves(): KSolvePuzzleState {
     return badRandomMoves(this.moves, this.ksp);
   }
 
   public async solve(
-    state: State<PuzzleWrapper>,
+    state: KSolvePuzzleState,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
   ): Promise<Alg> {
     let bestAlg: string;
     var best = 1000000;
-    const recur = (st4, togo: number, sofar: string[]) => {
+    const recur = (st4: KSolvePuzzleState, togo: number, sofar: string[]) => {
       if (togo === 0) {
         var t = this.sgsPhaseSolve(st4);
         if (sofar.length + t[0] < best) {
@@ -114,7 +111,7 @@ export class TrembleSolver {
     return Alg.fromString(bestAlg!).simplify({ collapseMoves: true });
   }
 
-  private sgsPhaseSolve(st4): [number, string[]] {
+  private sgsPhaseSolve(st4: KSolvePuzzleState): [number, string[]] {
     var algos = [];
     var len = 0;
     for (var i = 0; i < this.baseorder.length; i++) {

@@ -15,7 +15,7 @@ console.log("Loading stub file.");
 import { parseSGS } from "./sgs";
 
 (async () => {
-  parseSGS(
+  const sgs = parseSGS(
     await cube2x2x2.def(),
     `SetOrder CORNERS 8 7 6 5 4 1 2 3
 Alg F
@@ -117,4 +117,11 @@ Alg F L' F D' L F U2 R2 F' R'
 Alg F L' D L' D F L2 D2 B' U'
 Alg F L F' D2 B' L' U' L D2 F L'`,
   );
+  console.log(sgs);
+  document.body
+    .appendChild(document.createElement("button"))
+    .addEventListener("click", () => {
+      console.log("click");
+      navigator.clipboard.writeText(JSON.stringify(sgs));
+    });
 })();

@@ -1,5 +1,4 @@
-
 export interface SGSCachedData {
-  baseorder: Array<Array<number>>;
+  baseorder: Array<[string, number]>;
   esgs: Array<any>; // TODO
 }
