@@ -17,7 +17,7 @@ import { parseSGS } from "./sgs";
 (async () => {
   const sgs = parseSGS(
     await cube2x2x2.def(),
-    `SetOrder CORNERS 8 7 6 5 4 1 2 3
+    `SetOrder CORNERS 6 7 8 5 4 3 2 1
 Alg F
 Alg F2
 Alg F'
@@ -27,71 +27,71 @@ Alg D'
 Alg L
 Alg L2
 Alg L'
-Alg F D
-Alg F D2
-Alg F D'
-Alg F R
-Alg F R2
-Alg F R'
+Alg F U
+Alg F U2
+Alg F U'
+Alg F L
+Alg F L2
+Alg F L'
 Alg F2 U
 Alg F2 U'
 Alg F2 R
 Alg F2 R'
-Alg F' U
-Alg F' U'
-Alg F' L
-Alg F' L'
+Alg F' D
+Alg F' D'
+Alg F' R
+Alg F' R'
 Alg B
 Alg B2
 Alg B'
-Alg B U
-Alg B U2
-Alg B U'
+Alg B R
+Alg B R2
+Alg B R'
 Alg B2 U
 Alg B2 U2
 Alg B2 U'
 Alg B2 R
 Alg B2 R2
 Alg B2 R'
-Alg B' R
-Alg B' R'
-Alg F L' F'
-Alg F2 D F2
-Alg B U' B2
-Alg B U' R2
-Alg B2 U B'
-Alg B2 R U'
+Alg B' U
+Alg B' U'
+Alg F D' F'
+Alg F2 L F2
+Alg B R' B2
+Alg B R' U2
+Alg B2 U R'
+Alg B2 R B'
 Alg R
 Alg R2
 Alg R'
-Alg R U
-Alg R U2
-Alg R U'
 Alg R2 U
 Alg R2 U2
 Alg R2 U'
-Alg F' R2 F
-Alg F' R' F
-Alg L B' L'
-Alg L2 D L2
-Alg R U' R
-Alg R U' R2
-Alg R2 U R'
-Alg B' U2 B U'
-Alg F U F'
-Alg F U2 F'
-Alg F U' F'
-Alg L' F L
-Alg L' F2 L
-Alg L' F' L
-Alg F D' R' D
-Alg B R B' U2
-Alg F R F2 R' F'
-Alg F2 L' F' L F'
-Alg F' D2 B' D2 F
-Alg L F2 L F2 L'
-Alg F D2 B' L' D2 R
-Alg F D' R2 F D L'
+Alg R' U
+Alg R' U2
+Alg R' U'
+Alg F R F'
+Alg F R2 F'
+Alg L2 D' L2
+Alg L' B L
+Alg R2 U' R
+Alg R' U R2
+Alg R' U R'
+Alg F R F' U2
+Alg F' U F
+Alg F' U2 F
+Alg F' U' F
+Alg L F L'
+Alg L F2 L'
+Alg L F' L'
+Alg F' D R D'
+Alg F' U2 F U'
+Alg F D2 B D2 F'
+Alg F2 D' L2 D F2
+Alg F2 L F L' F
+Alg L' F2 L' F2 L
+Alg F L' U' L2 F L'
+Alg F2 L F L' U2 F
 Alg U
 Alg U2
 Alg U'
@@ -103,19 +103,19 @@ Alg F2 D2 B D2 F2 U
 Alg F2 D2 B D2 F2 U'
 Alg U F2 D2 B D2 F2
 Alg U F2 D2 B' D2 F2
-Alg F D' L' F' U' B L
-Alg F L F' U' L' U' L
-Alg F L D F' L' B' U'
-Alg D L U B D' L' F'
-Alg L' F' L U F U F'
-Alg L' D F L U R' F'
-Alg F D F D' R' U2 F' R2
-Alg F D F U F' D' F' R'
-Alg F D' L F U2 L2 D L F' R2
-Alg F D' L F2 L' D F D2 F2 R
-Alg F L' F D' L F U2 R2 F' R'
-Alg F L' D L' D F L2 D2 B' U'
-Alg F L F' D2 B' L' U' L D2 F L'`,
+Alg F D B D' R' F' U
+Alg F' D L F U B' L'
+Alg F' L' F U L U L'
+Alg D' L F D R' U' F'
+Alg L F L' U' F' U' F
+Alg L D' F' L' U' R F
+Alg F D F U F' L' F' R'
+Alg F2 D' F L F2 D F' R'
+Alg F D' F L' D F R2 U2 F' U'
+Alg F D' L D' L F D2 L2 B' R'
+Alg F L' D F R2 D2 L D F' U2
+Alg F L' D F2 D' L F L2 F2 U
+Alg F D F' D L2 F R' F' D' B2 U'`,
   );
   console.log(sgs);
   document.body

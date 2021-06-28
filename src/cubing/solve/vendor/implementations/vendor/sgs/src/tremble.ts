@@ -140,7 +140,7 @@ export class TrembleSolver {
         );
         var a =
           this.esgs[i][st4i[set].permutation[ind]][st4i[set].orientation[ind]];
-        if (!a) throw "Missing algorithm in sgs or esgs?";
+        if (a === undefined) throw "Missing algorithm in sgs or esgs?";
         console.log("a", a);
         len = len + a[0].split(" ").length;
         algos.push(a[0]);
