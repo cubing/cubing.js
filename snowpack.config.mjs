@@ -7,6 +7,7 @@ export default {
     "src/experiments/static": { url: "/", static: true },
     "src/experiments/code": { url: "/_code" },
   },
+  exclude: ["**/.DS_Store"],
   packageOptions: {
     knownEntrypoints: ["comlink"],
     external: ["crypto", "worker_threads"],
