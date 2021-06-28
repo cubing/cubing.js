@@ -1,5 +1,8 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
+import "../experiments/code/stub/index";
+process.exit(1);
+
 import {
   PuzzleGeometry,
   getpuzzles,

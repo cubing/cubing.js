@@ -17,7 +17,7 @@ import { parseSGS } from "./sgs";
 (async () => {
   const sgs = parseSGS(
     await cube2x2x2.def(),
-    `SetOrder CORNERS 6 7 8 5 4 3 2 1
+    `SetOrder CORNERS 8 7 6 5 4 1 2 3
 Alg F
 Alg F2
 Alg F'
@@ -118,10 +118,12 @@ Alg F L' D F2 D' L F L2 F2 U
 Alg F D F' D L2 F R' F' D' B2 U'`,
   );
   console.log(sgs);
+  const str = JSON.stringify(sgs);
+  console.log(str);
   document.body
     .appendChild(document.createElement("button"))
     .addEventListener("click", () => {
       console.log("click");
-      navigator.clipboard.writeText(JSON.stringify(sgs));
+      navigator.clipboard.writeText(str);
     });
 })();

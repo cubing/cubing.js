@@ -40,6 +40,7 @@ function calculateMoves(puzzle: Puzzle, ksp: KSolvePuzzle) {
         stm = ksp.combine(stm, st0);
       }
     });
+    console.log({ moves });
   })();
   return {
     moves,

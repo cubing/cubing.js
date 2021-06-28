@@ -36,6 +36,8 @@ function calculateMoves(puzzle: KPuzzleDefinition, ksp: KSolvePuzzle) {
         movest.push(stm);
         stm = ksp.combine(stm, st0);
       }
+      console.log("mvname", mvname);
+      console.log({ moves });
     });
   })();
   return {
