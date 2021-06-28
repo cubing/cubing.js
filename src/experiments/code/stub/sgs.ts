@@ -22,7 +22,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     if (line.startsWith("SetOrder")) {
       var f = line.split(" ");
       for (var j = 2; j < f.length; j++) {
-        baseorder[parseInt(f[j], 10) - 1] = [f[1], j - 2];
+        baseorder[j - 2] = [f[1], parseInt(f[j], 10) - 1];
       }
     } else if (line.startsWith("Alg ")) {
       var salgo = line.substring(4);
@@ -55,8 +55,9 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
       console.log(st, st2, loc);
       var set = baseorder[loc][0];
       var ind = baseorder[loc][1];
-      esgs[loc] ||= [];
-      esgs[loc][st2i[set].permutation[ind]] ||= [];
+      if (esgs[loc] === undefined) esgs[loc] = [];
+      if (esgs[loc][st2i[set].permutation[ind]] === undefined)
+        esgs[loc][st2i[set].permutation[ind]] = [];
       esgs[loc][st2i[set].permutation[ind]][st2i[set].orientation[ind]] = [
         algo.invert().toString(),
         st2i,
