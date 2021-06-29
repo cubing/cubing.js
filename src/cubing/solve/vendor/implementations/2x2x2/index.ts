@@ -26,9 +26,9 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
       delete def.moves.z;
       // TODO: reduce size of JSON.
       // TODO: this technically doesn't use the same definition as cubing.js 2x2x2.
-      const json: SGSCachedData = (
+      const json: SGSCachedData = await (
         await import("../vendor/sgs/src/test/puzzles/2x2x2.sgs.json")
-      ).cachedData222;
+      ).cachedData222();
       // console.log(json)
       return new TrembleSolver(def, json);
     })())
