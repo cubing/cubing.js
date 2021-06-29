@@ -83,18 +83,9 @@ export async function random222State(): Promise<Transformation> {
   const kpuzzle = new KPuzzle(def);
   const stateCopy = JSON.parse(JSON.stringify(kpuzzle.state)); // TODO
   await randomizeOrbit(def, "CORNERS", stateCopy, { orientationSum: 0 });
-  console.log(await puzzles["2x2x2"].def());
   return stateCopy;
 }
 
 export async function random222Scramble(): Promise<Alg> {
-  console.log("scramby!");
-  const state = await random222State();
-  console.log("state!", state);
-  // console.log("loggo", state);
-  const seq = await solve222(state);
-  // console.log(seq.nestedUnits.length);
-  // console.log(algToString(seq));
-  console.log("seq!", seq);
-  return seq;
+  return await solve222(await random222State());
 }
