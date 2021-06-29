@@ -5,6 +5,7 @@ import {
   Transformation,
 } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
+import { mustBeInsideWorker } from "../../../inside/inside-worker";
 import {
   randomPermute,
   randomUIntBelowFactory,
@@ -41,6 +42,7 @@ export async function preInitialize222(): Promise<void> {
 
 // TODO: fix def consistency.
 export async function solve222(state: Transformation): Promise<Alg> {
+  mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   return trembleSolver.solve(state, 3);
 }

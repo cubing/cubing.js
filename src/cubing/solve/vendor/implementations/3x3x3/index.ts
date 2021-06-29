@@ -3,6 +3,7 @@ import { Unit, Alg } from "../../../../alg";
 import { KPuzzle, Transformation } from "../../../../kpuzzle";
 // @ts-ignore
 import { puzzles } from "../../../../puzzles";
+import { mustBeInsideWorker } from "../../../inside/inside-worker";
 import { randomChoiceFactory } from "../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
@@ -24,6 +25,7 @@ export async function random333State(): Promise<Transformation> {
 }
 
 export async function solve333(s: Transformation): Promise<Alg> {
+  mustBeInsideWorker();
   return Alg.fromString(solveState(toMin2PhaseState(s)));
 }
 

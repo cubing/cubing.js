@@ -14,6 +14,9 @@ import {
   initialize444,
   random444Scramble,
 } from "../vendor/implementations/4x4x4";
+import { setIsInsideWorker } from "./inside-worker";
+
+setIsInsideWorker(true);
 
 const DEBUG_MEASURE_PERF = true;
 

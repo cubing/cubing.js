@@ -4,6 +4,7 @@ import { Alg } from "../../../../../../../../alg";
 import { random333Scramble as getRandomScramble333 } from "../../../../../3x3x3";
 import { circle, Cnk, set8Perm } from "../lib/mathlib";
 import { randomUIntBelowFactory } from "../../../../random-uint-below";
+import { mustBeInsideWorker } from "../../../../../../../inside/inside-worker";
 
 function createArray(length1: number, length2?: number) {
   var result, i;
@@ -2856,6 +2857,7 @@ export function initialize(): void {
 }
 
 export async function random444Scramble(): Promise<Alg> {
+  mustBeInsideWorker();
   init();
   const suffix = Alg.fromString(
     $randomState(searcher, await randomUIntBelowFactory()),
