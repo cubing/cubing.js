@@ -40,7 +40,7 @@ export async function preInitialize222(): Promise<void> {
 }
 
 // TODO: fix def consistency.
-export async function solve222State(state: Transformation): Promise<Alg> {
+export async function solve222(state: Transformation): Promise<Alg> {
   const trembleSolver = await getCachedTrembleSolver();
   return trembleSolver.solve(state, 3);
 }
@@ -90,7 +90,7 @@ export async function random222Scramble(): Promise<Alg> {
   const state = await random222State();
   console.log("state!", state);
   // console.log("loggo", state);
-  const seq = await solve222State(state);
+  const seq = await solve222(state);
   // console.log(seq.nestedUnits.length);
   // console.log(algToString(seq));
   console.log("seq!", seq);

@@ -4,7 +4,7 @@
 import { Alg } from "../../../cubing/alg";
 import { KPuzzle } from "../../../cubing/kpuzzle";
 import { cube2x2x2 } from "../../../cubing/puzzles";
-import { solve222State } from "../../../cubing/solve/vendor/implementations/2x2x2";
+import { experimentalSolve2x2x2 } from "../../../cubing/solve";
 // import { random222Scramble } from "../../../cubing/solve/vendor/implementations/2x2x2";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
@@ -19,7 +19,7 @@ console.log("Loading stub file.");
   const kpuzzle = new KPuzzle(await cube2x2x2.def());
   kpuzzle.applyAlg(new Alg("R U R' D2 F2 L2 R U2 x L2 F R'"));
 
-  (await solve222State(kpuzzle.state)).log();
+  (await experimentalSolve2x2x2(kpuzzle.state)).log();
 
   // const state = kpuzzle.state;
   // console.log("random state", state);

@@ -25,11 +25,6 @@ function calculateMoves(def: KPuzzleDefinition): {
   const kpuzzle = new KPuzzle(def);
   // TODO: Make it easy to filter moves.
   Object.keys(def.moves).forEach(function (moveName) {
-    if (moveName.toLowerCase() === moveName) {
-      console.log("Skipping move:", moveName);
-      return;
-    }
-
     const rootMove = new Move(moveName);
     if (rootMove.amount !== 1) {
       throw new Error(

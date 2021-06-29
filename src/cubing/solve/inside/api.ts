@@ -3,6 +3,7 @@ import type { Transformation } from "../../puzzle-geometry/interfaces";
 import {
   preInitialize222,
   random222Scramble,
+  solve222,
 } from "../vendor/implementations/2x2x2";
 import {
   initialize333,
@@ -75,6 +76,10 @@ export const insideAPI = {
 
   solve333ToString: async (s: Transformation): Promise<string> => {
     return (await solve333(s)).toString();
+  },
+
+  solve222ToString: async (s: Transformation): Promise<string> => {
+    return (await solve222(s)).toString();
   },
 };
 
