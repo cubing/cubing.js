@@ -43,12 +43,15 @@ export abstract class AlgCommon<T extends Alg | Unit>
     }
   }
 
-  log(message?: string): T {
+  log(message?: any): T {
     // console.log("sdfd", err.message);
     // console.log(err.stack!);
     // console.trace("Sfdf");
     // console.trace("Sfdf", this, this.toString());
-    console.log(...(message ? [message] : []), ...[this, this.toString()]);
+    console.log(
+      ...(message === undefined ? [] : [message]),
+      ...[this, this.toString()],
+    );
     return this as any;
   }
 
