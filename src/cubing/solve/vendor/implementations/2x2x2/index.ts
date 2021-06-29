@@ -21,7 +21,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
       // TODO: fix assignment bug that prevents extensions.
       const nonExtensibleDef = await puzzles["2x2x2"].def();
-      const def = Object.assign({}, nonExtensibleDef);
+      const def = JSON.parse(JSON.stringify(nonExtensibleDef)); // TODO: perf
       // TODO: Allow reducing moves.
       delete def.moves.x;
       delete def.moves.y;
