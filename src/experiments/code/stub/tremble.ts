@@ -9,7 +9,6 @@ import {
   Transformation,
 } from "../../../cubing/kpuzzle";
 import { countMoves } from "../../../cubing/notation";
-import type { KSolvePuzzleState } from "../../../cubing/twisty/3D/puzzles/KPuzzleWrapper";
 import type { SGSCachedData } from "./sgs2";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 4; // For 2x2x2 demo.
@@ -18,12 +17,14 @@ function calculateMoves(def: KPuzzleDefinition): {
   move: Move;
   transformation: Transformation;
 }[] {
+  console.log("calculateMoves");
   const searchMoves: {
     move: Move;
     transformation: Transformation;
   }[] = [];
-  const id = identityTransformation(def);
+  // const id = identityTransformation(def);
   const kpuzzle = new KPuzzle(def);
+  // TODO: Make it easy to filter moves.
   Object.keys(def.moves).forEach(function (moveName) {
     const rootMove = new Move(moveName);
     if (rootMove.amount !== 1) {
@@ -34,7 +35,11 @@ function calculateMoves(def: KPuzzleDefinition): {
     kpuzzle.reset();
     for (let i = 1; true; i++) {
       kpuzzle.applyMove(rootMove);
-      if (areStatesEquivalent(def, kpuzzle.state, id)) {
+      console.log(kpuzzle.state, identityTransformation(def));
+      if (
+        // TODO: Use cached identity.
+        areStatesEquivalent(def, kpuzzle.state, identityTransformation(def))
+      ) {
         break;
       }
       searchMoves.push({
@@ -72,13 +77,13 @@ export class TrembleSolver {
   // }
 
   public async solve(
-    state: KSolvePuzzleState,
+    state: Transformation,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
   ): Promise<Alg> {
     console.log("solve");
     let bestAlg: Alg | null = null;
     var bestLen = 1000000;
-    const recur = (st4: KSolvePuzzleState, togo: number, sofar: Alg) => {
+    const recur = (st4: Transformation, togo: number, sofar: Alg) => {
       console.log("recur");
       if (togo === 0) {
         const newAlg = sofar
@@ -109,7 +114,8 @@ export class TrembleSolver {
     return bestAlg;
   }
 
-  private sgsPhaseSolve(st4: KSolvePuzzleState): Alg {
+  private sgsPhaseSolve(st4: Transformation): Alg {
+    console.log("sgsPhaseSolve");
     const algBuilder = new AlgBuilder();
     let state = st4;
 
