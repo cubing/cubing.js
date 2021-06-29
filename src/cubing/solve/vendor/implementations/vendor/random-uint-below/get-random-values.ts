@@ -19,7 +19,7 @@ export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction>
     return crypto.getRandomValues.bind(crypto);
   } else {
     // @ts-ignore
-    const nodeCrypto = await (cryptoPromise ??= import(CRYPTO));
+    const nodeCrypto = await (cryptoPromise ??= import(CRYPTO).catch()); // TODO: The `.catch()` is there to silence a Snowpack build-time warning.
     return (arr: Uint32Array) => {
       if (!(arr instanceof Uint32Array)) {
         throw new Error(
