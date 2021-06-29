@@ -25,6 +25,7 @@ window.addEventListener("load", () => {
     twistyPlayer.alg = "";
     try {
       twistyPlayer.puzzle = {
+        222: "2x2x2",
         333: "3x3x3",
         444: "4x4x4",
         minx: "megaminx",
