@@ -14,6 +14,11 @@ import type { SGSCachedData } from "../vendor/sgs/src/sgs";
 import { TrembleSolver } from "../vendor/sgs/src/tremble";
 import { simplify222Alg } from "./simplify222Alg";
 
+// Empirical ly determined depth:
+// - ≈11 moves on average (as opposed to >13 moves for depth 2),
+// - in close to 40ms(on a MacBook Pro).
+const TREMBLE_DEPTH = 3;
+
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
 async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
@@ -39,7 +44,7 @@ export async function preInitialize222(): Promise<void> {
 export async function solve222(state: Transformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
-  const alg = await trembleSolver.solve(state, 3);
+  const alg = await trembleSolver.solve(state, TREMBLE_DEPTH);
   return simplify222Alg(alg);
 }
 
