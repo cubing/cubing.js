@@ -18,4 +18,5 @@ import * as scramble from "cubing/scramble";
 (async () => {
   // await scramble.instantiate();
   console.log((await scramble.randomScrambleForEvent("333")).toString());
+  console.log((await scramble.randomScrambleForEvent("222")).toString());
 })();
