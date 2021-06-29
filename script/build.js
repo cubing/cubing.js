@@ -235,4 +235,7 @@ const targets /*: Record<String, SolverWorker>*/ = {
     process.exit(1);
   }
   await build(target, dev);
+  console.log("Finished building!");
+  // TODO: Why does this script hang (non-deterministically?) if we don't exit here?
+  process.exit(0);
 })();
