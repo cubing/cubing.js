@@ -11,7 +11,7 @@ import {
 import { countMoves } from "../../../../../../notation";
 import type { SGSCachedData } from "./sgs";
 
-const DEFAULT_STAGE1_DEPTH_LIMIT = 5; // For 2x2x2 demo.
+const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
 function calculateMoves(def: KPuzzleDefinition): {
   move: Move;
@@ -88,13 +88,15 @@ export class TrembleSolver {
     ) => {
       // console.log("recur");
       if (togo === 0) {
-        const newAlg = sofar
-          .concat(this.sgsPhaseSolve(recursiveState))
-          .simplify({ collapseMoves: true });
+        const sgsAlg = this.sgsPhaseSolve(recursiveState, bestLen);
+        if (!sgsAlg) {
+          return;
+        }
+        const newAlg = sofar.concat(sgsAlg).simplify({ collapseMoves: true });
 
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
-          console.log(`New best (${len} moves): ${newAlg.toString()}`);
+          // console.log(`New best (${len} moves): ${newAlg.toString()}`);
           bestAlg = newAlg;
           bestLen = len;
         }
@@ -112,7 +114,7 @@ export class TrembleSolver {
         );
       }
     };
-    for (var d = 0; d < stage1DepthLimit; d++) {
+    for (var d = 0; d <= stage1DepthLimit; d++) {
       recur(state, d, new Alg());
     }
     if (bestAlg === null) {
@@ -121,7 +123,10 @@ export class TrembleSolver {
     return bestAlg;
   }
 
-  private sgsPhaseSolve(initialState: Transformation): Alg {
+  private sgsPhaseSolve(
+    initialState: Transformation,
+    bestLenSofar: number,
+  ): Alg | null {
     // const pieceNames = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
 
     // function loggo(s: string) {
@@ -136,50 +141,7 @@ export class TrembleSolver {
     for (const piece of this.sgs.ordering) {
       const orbitName = piece.pieceRef.orbitName;
       const permutationIdx = piece.pieceRef.permutationIdx;
-      // loggo(
-      //   `Solving piece #${piece.pieceRef.permutationIdx} (${pieceNames[permutationIdx]})`,
-      // );
-
       const inverseState = invertTransformation(this.def, state);
-      // console.log(
-      //   piece.pieceRef,
-      //   JSON.stringify(initialState),
-      //   JSON.stringify(inverseState),
-      // );
-      // console.log(
-      //   piece.inverseLocations,
-      //   orbitName,
-      //   permutationIdx,
-      //   inverseState[orbitName],
-      //   inverseState[orbitName].permutation,
-      //   inverseState[orbitName].permutation[permutationIdx],
-      //   piece.inverseLocations[
-      //     inverseState[orbitName].permutation[permutationIdx]
-      //   ],
-      //   inverseState[orbitName].orientation[permutationIdx],
-      // );
-
-      // loggo(
-      //   `In the inverse, the location for piece #${
-      //     piece.pieceRef.permutationIdx
-      //   } (${pieceNames[permutationIdx]}) is occupied by piece #${
-      //     inverseState[orbitName].permutation[permutationIdx]
-      //   } (${
-      //     pieceNames[inverseState[orbitName].permutation[permutationIdx]]
-      //   }) oriented ${
-      //     inverseState[orbitName].orientation[permutationIdx]
-      //   }× clockwise.`,
-      // );
-
-      // const player1 = new TwistyPlayer({
-      //   puzzle: "2x2x2",
-      //   background: "none",
-      // });
-      // player1.experimentalSetStartStateOverride(
-      //   JSON.parse(JSON.stringify(inverseState)),
-      // );
-      // document.body.appendChild(player1);
-
       const info =
         piece.inverseLocations[
           inverseState[orbitName].permutation[permutationIdx]
@@ -190,19 +152,10 @@ export class TrembleSolver {
       }
 
       algBuilder.experimentalPushAlg(info.alg);
+      if (algBuilder.experimentalNumUnits() >= bestLenSofar) {
+        return null;
+      }
       state = combineTransformations(this.def, state, info.transformation);
-      // console.log(state, permutationIdx);
-
-      // loggo(`This is solved by ${info.alg.toString()}`);
-
-      // const player = new TwistyPlayer({
-      //   puzzle: "2x2x2",
-      //   alg: algBuilder.toAlg(),
-      // });
-      // player.experimentalSetStartStateOverride(
-      //   JSON.parse(JSON.stringify(initialState)),
-      // );
-      // document.body.appendChild(player);
       if (
         state[orbitName].permutation[permutationIdx] !== permutationIdx ||
         state[orbitName].orientation[permutationIdx] !== 0

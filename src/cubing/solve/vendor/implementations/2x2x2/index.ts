@@ -12,6 +12,7 @@ import {
 } from "../vendor/random-uint-below";
 import type { SGSCachedData } from "../vendor/sgs/src/sgs";
 import { TrembleSolver } from "../vendor/sgs/src/tremble";
+import { simplify222Alg } from "./simplify222Alg";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
 async function getCachedTrembleSolver(): Promise<TrembleSolver> {
@@ -44,7 +45,8 @@ export async function preInitialize222(): Promise<void> {
 export async function solve222(state: Transformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
-  return trembleSolver.solve(state, 3);
+  const alg = await trembleSolver.solve(state, 3);
+  return simplify222Alg(alg);
 }
 
 // TODO: factor out and test.
