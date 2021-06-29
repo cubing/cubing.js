@@ -8,6 +8,15 @@ export class AlgBuilder {
     this.#units.push(u);
   }
 
+  // TODO: Allow FlexibleAlgSource?
+  /** @deprecated */
+  experimentalPushAlg(alg: Alg): void {
+    // TODO: Optimize?
+    for (const u of alg.units()) {
+      this.push(u);
+    }
+  }
+
   // TODO: can we guarantee this to be fast in the permanent API?
   experimentalNumUnits(): number {
     return this.#units.length;

@@ -2,6 +2,7 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { cube2x2x2 } from "../../../cubing/puzzles";
+import { random222State } from "../../../cubing/solve/vendor/implementations/2x2x2";
 // import { random222Scramble } from "../../../cubing/solve/vendor/implementations/2x2x2";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
@@ -13,6 +14,7 @@ console.log("Loading stub file.");
 // })();
 
 import { parseSGS } from "./sgs2";
+import { TrembleSolver } from "./tremble";
 
 (async () => {
   const sgs = parseSGS(
@@ -118,12 +120,19 @@ Alg F L' D F2 D' L F L2 F2 U
 Alg F D F' D L2 F R' F' D' B2 U'`,
   );
   console.log(sgs);
-  const str = JSON.stringify(sgs);
-  // console.log(sgs);
-  globalThis?.document?.body
-    .appendChild(document.createElement("button"))
-    .addEventListener("click", () => {
-      console.log("click");
-      navigator.clipboard.writeText(str);
-    });
+
+  const state = await random222State();
+  console.log(state);
+  console.log("def", await cube2x2x2.def());
+  const solver = new TrembleSolver(await cube2x2x2.def(), sgs);
+  console.log(await solver.solve(state));
+
+  // const str = JSON.stringify(sgs);
+  // // console.log(sgs);
+  // globalThis?.document?.body
+  //   .appendChild(document.createElement("button"))
+  //   .addEventListener("click", () => {
+  //     console.log("click");
+  //     navigator.clipboard.writeText(str);
+  //   });
 })();
