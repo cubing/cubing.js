@@ -93,7 +93,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
         if (i !== 0) {
           throw new Error("Ran out of algs partway through a piece.");
         }
-        console.log("Skipping pieces starting with:", pieceRef);
+        // console.log("Skipping pieces starting with:", pieceRef);
         break outer;
       }
       const alg = next.value;

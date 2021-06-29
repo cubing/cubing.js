@@ -17,7 +17,6 @@ function calculateMoves(def: KPuzzleDefinition): {
   move: Move;
   transformation: Transformation;
 }[] {
-  console.log("calculateMoves");
   const searchMoves: {
     move: Move;
     transformation: Transformation;
@@ -85,7 +84,6 @@ export class TrembleSolver {
     state: Transformation,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
   ): Promise<Alg> {
-    console.log("solve");
     let bestAlg: Alg | null = null;
     var bestLen = 1000000;
     const recur = (
@@ -101,6 +99,7 @@ export class TrembleSolver {
 
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
+          console.log(`New best (${len} moves): ${newAlg.toString()}`);
           bestAlg = newAlg;
           bestLen = len;
         }
