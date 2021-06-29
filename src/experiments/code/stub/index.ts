@@ -132,7 +132,7 @@ Alg F D F' D L2 F R' F' D' B2 U'`,
   document.body.appendChild(player);
   console.log("def", await cube2x2x2.def());
   const solver = new TrembleSolver(await cube2x2x2.def(), sgs);
-  console.log(await solver.solve(state));
+  console.log((await solver.solve(state)).invert());
 
   // const str = JSON.stringify(sgs);
   // // console.log(sgs);
