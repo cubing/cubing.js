@@ -43,6 +43,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
           st2[set].permutation[ind],
           st[set].orientation[ind],
           st2[set].orientation[ind],
+          "st",
           JSON.stringify(st),
           JSON.stringify(st2),
           algo.toString(),

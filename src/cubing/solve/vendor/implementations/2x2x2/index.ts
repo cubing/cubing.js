@@ -80,6 +80,7 @@ export async function random222State(): Promise<Transformation> {
   const def = Object.assign({}, nonExtensibleDef);
   const kpuzzle = new KPuzzle(def);
   await randomizeOrbit(def, "CORNERS", kpuzzle.state, { orientationSum: 0 });
+  console.log(await puzzles["2x2x2"].def());
   return kpuzzle.state;
 }
 

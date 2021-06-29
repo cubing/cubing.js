@@ -123,6 +123,7 @@ export class TrembleSolver {
   private sgsPhaseSolve(st4: State): [number, string[]] {
     var algos = [];
     var len = 0;
+    this.st = st4;
     for (var i = 0; i < this.baseorder.length; i++) {
       var set = this.baseorder[i][0];
       var ind = this.baseorder[i][1];

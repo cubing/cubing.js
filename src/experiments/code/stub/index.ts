@@ -2,22 +2,22 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { cube2x2x2 } from "../../../cubing/puzzles";
-import { random222Scramble } from "../../../cubing/solve/vendor/implementations/2x2x2";
+// import { random222Scramble } from "../../../cubing/solve/vendor/implementations/2x2x2";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
 console.log("Loading stub file.");
 
-(async () => {
-  (await random222Scramble()).log("222");
-})();
+// (async () => {
+//   (await random222Scramble()).log("222");
+// })();
 
-import { parseSGS } from "./sgs";
+import { parseSGS } from "./sgs2";
 
 (async () => {
   const sgs = parseSGS(
     await cube2x2x2.def(),
-    `SetOrder CORNERS 8 7 6 5 4 1 2 3
+    `SetOrder CORNERS 5 6 7 4 3 2 1 0
 Alg F
 Alg F2
 Alg F'
@@ -119,8 +119,8 @@ Alg F D F' D L2 F R' F' D' B2 U'`,
   );
   console.log(sgs);
   const str = JSON.stringify(sgs);
-  console.log(str);
-  document.body
+  // console.log(sgs);
+  globalThis?.document?.body
     .appendChild(document.createElement("button"))
     .addEventListener("click", () => {
       console.log("click");
