@@ -62,17 +62,16 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
   ): PieceLocation {
     // TODO: optimize
     const inverse = invertTransformation(def, transformation);
-    const mod = def.orbits[pieceRef.orbitName].orientations;
-    function neg(amount: number): number {
-      return (mod - amount) % mod;
-    }
+    // const mod = def.orbits[pieceRef.orbitName].orientations;
+    // function neg(amount: number): number {
+    //   return (mod - amount) % mod;
+    // }
     return {
       orbitName: pieceRef.orbitName,
       permutationIdx:
         inverse[pieceRef.orbitName].permutation[pieceRef.permutationIdx],
-      orientation: neg(
+      orientation:
         inverse[pieceRef.orbitName].orientation[pieceRef.permutationIdx],
-      ),
     };
   }
 
@@ -107,7 +106,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
         def.orbits[pieceRef.orbitName].orientations,
       ).fill(null);
       locations[location.permutationIdx][location.orientation] = {
-        alg,
+        alg: alg.invert(),
         transformation: kpuzzle.state,
       };
     }

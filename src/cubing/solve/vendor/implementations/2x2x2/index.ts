@@ -53,7 +53,7 @@ async function randomizeOrbit(
   options?: { orientationSum?: number },
 ): Promise<void> {
   const randomUIntBelow = await randomUIntBelowFactory();
-  await randomPermute(state[orbitName].permutation);
+  await randomPermute(new Array(state[orbitName].permutation));
 
   const orbitDef = def.orbits[orbitName];
   const ori = state[orbitName].orientation;

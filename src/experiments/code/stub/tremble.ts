@@ -22,7 +22,7 @@ function calculateMoves(def: KPuzzleDefinition): {
     move: Move;
     transformation: Transformation;
   }[] = [];
-  // const id = identityTransformation(def);
+  // const identity = identityTransformation(def); // TODO
   const kpuzzle = new KPuzzle(def);
   // TODO: Make it easy to filter moves.
   Object.keys(def.moves).forEach(function (moveName) {
@@ -35,7 +35,7 @@ function calculateMoves(def: KPuzzleDefinition): {
     kpuzzle.reset();
     for (let i = 1; true; i++) {
       kpuzzle.applyMove(rootMove);
-      console.log(kpuzzle.state, identityTransformation(def));
+      // console.log(kpuzzle.state, identityTransformation(def));
       if (
         // TODO: Use cached identity.
         areStatesEquivalent(def, kpuzzle.state, identityTransformation(def))
@@ -83,11 +83,15 @@ export class TrembleSolver {
     console.log("solve");
     let bestAlg: Alg | null = null;
     var bestLen = 1000000;
-    const recur = (st4: Transformation, togo: number, sofar: Alg) => {
+    const recur = (
+      recursiveState: Transformation,
+      togo: number,
+      sofar: Alg,
+    ) => {
       console.log("recur");
       if (togo === 0) {
         const newAlg = sofar
-          .concat(this.sgsPhaseSolve(st4))
+          .concat(this.sgsPhaseSolve(recursiveState))
           .simplify({ collapseMoves: true });
 
         const len = countMoves(newAlg);
@@ -99,7 +103,11 @@ export class TrembleSolver {
       }
       for (const searchMove of this.searchMoves) {
         recur(
-          combineTransformations(this.def, st4, searchMove.transformation),
+          combineTransformations(
+            this.def,
+            recursiveState,
+            searchMove.transformation,
+          ),
           togo - 1,
           sofar.concat([searchMove.move]),
         );
@@ -114,18 +122,23 @@ export class TrembleSolver {
     return bestAlg;
   }
 
-  private sgsPhaseSolve(st4: Transformation): Alg {
+  private sgsPhaseSolve(initialState: Transformation): Alg {
     console.log("sgsPhaseSolve");
     const algBuilder = new AlgBuilder();
-    let state = st4;
+    let state = initialState;
 
     for (const piece of this.sgs.ordering) {
       const orbitName = piece.pieceRef.orbitName;
       const permutationIdx = piece.pieceRef.permutationIdx;
-      const st4i = invertTransformation(this.def, st4);
+      const inverseState = invertTransformation(this.def, initialState);
+      console.log(
+        piece.pieceRef,
+        JSON.stringify(initialState),
+        JSON.stringify(inverseState),
+      );
       const info =
-        piece.locations[st4i[orbitName].permutation[permutationIdx]][
-          st4i[orbitName].orientation[permutationIdx]
+        piece.locations[inverseState[orbitName].permutation[permutationIdx]][
+          inverseState[orbitName].orientation[permutationIdx]
         ];
       if (!info) {
         throw new Error("Missing algorithm in sgs or esgs?");
@@ -134,8 +147,9 @@ export class TrembleSolver {
       state = combineTransformations(this.def, state, info.transformation);
 
       if (
-        st4[orbitName].permutation[permutationIdx] !== permutationIdx ||
-        st4[orbitName].orientation[permutationIdx] !== 0
+        initialState[orbitName].permutation[permutationIdx] !==
+          permutationIdx ||
+        initialState[orbitName].orientation[permutationIdx] !== 0
       ) {
         console.log("Fail.");
       }
