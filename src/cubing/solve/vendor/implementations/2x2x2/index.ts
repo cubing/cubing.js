@@ -5,6 +5,7 @@ import {
   Transformation,
 } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
+import { mustBeInsideWorker } from "../../../inside/inside-worker";
 import {
   randomPermute,
   randomUIntBelowFactory,
@@ -26,9 +27,9 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
       delete def.moves.z;
       // TODO: reduce size of JSON.
       // TODO: this technically doesn't use the same definition as cubing.js 2x2x2.
-      const json: SGSCachedData = (
+      const json: SGSCachedData = await (
         await import("../vendor/sgs/src/test/puzzles/2x2x2.sgs.json")
-      ).cachedData222;
+      ).cachedData222();
       // console.log(json)
       return new TrembleSolver(def, json);
     })())
@@ -40,7 +41,8 @@ export async function preInitialize222(): Promise<void> {
 }
 
 // TODO: fix def consistency.
-export async function solve222State(state: Transformation): Promise<Alg> {
+export async function solve222(state: Transformation): Promise<Alg> {
+  mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   return trembleSolver.solve(state, 3);
 }
@@ -79,18 +81,11 @@ export async function random222State(): Promise<Transformation> {
   const nonExtensibleDef = await puzzles["2x2x2"].def();
   const def = Object.assign({}, nonExtensibleDef);
   const kpuzzle = new KPuzzle(def);
-  await randomizeOrbit(def, "CORNERS", kpuzzle.state, { orientationSum: 0 });
-  return kpuzzle.state;
+  const stateCopy = JSON.parse(JSON.stringify(kpuzzle.state)); // TODO
+  await randomizeOrbit(def, "CORNERS", stateCopy, { orientationSum: 0 });
+  return stateCopy;
 }
 
 export async function random222Scramble(): Promise<Alg> {
-  console.log("scramby!");
-  const state = await random222State();
-  console.log("state!", state);
-  // console.log("loggo", state);
-  const seq = await solve222State(state);
-  // console.log(seq.nestedUnits.length);
-  // console.log(algToString(seq));
-  console.log("seq!", seq);
-  return seq;
+  return await solve222(await random222State());
 }

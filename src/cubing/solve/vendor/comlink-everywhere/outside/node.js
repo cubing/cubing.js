@@ -3,7 +3,7 @@ const WORKER_THREADS = "worker_threads";
 
 async function getImports() {
   return {
-    NodeWorker: (await import(WORKER_THREADS)).Worker,
+    NodeWorker: (await import(WORKER_THREADS).catch()).Worker, // TODO: The `.catch()` is there to silence a Snowpack build-time warning.
     nodeEndpoint: (await import("comlink/dist/esm/node-adapter.mjs")).default,
   };
 }

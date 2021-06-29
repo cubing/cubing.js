@@ -48,10 +48,12 @@ export function experimentalEnsureAlg(alg: FlexibleAlgSource): Alg {
 }
 
 export class Alg extends AlgCommon<Alg> {
+  // #debugString: string;
   #units: Iterable<Unit>; // TODO: freeze?
   constructor(alg?: FlexibleAlgSource) {
     super();
     this.#units = Array.from(toIterable(alg)); // TODO: can we avoid array-casting?
+    // this.#debugString = this.toString();
 
     for (const unit of this.#units) {
       if (!experimentalIsUnit(unit)) {

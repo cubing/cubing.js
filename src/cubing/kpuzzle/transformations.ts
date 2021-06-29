@@ -113,9 +113,14 @@ export function identityTransformation(
         orientation: newOrientation,
       };
       lasto = orbitTransformation;
+      // Object.freeze(newPermutation); // TODO
+      // Object.freeze(newOrientation); // TODO
     }
     transformation[orbitName] = lasto;
+
+    // Object.freeze(orbitDefinition); // TODO
   }
+  // Object.freeze(transformation); // TODO
   return transformation;
 }
 

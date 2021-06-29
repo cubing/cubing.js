@@ -65,7 +65,9 @@ export abstract class PuzzleWrapper {
   ): boolean;
 }
 
-interface KSolvePuzzleState extends Transformation, State<KPuzzleWrapper> {}
+export interface KSolvePuzzleState
+  extends Transformation,
+    State<KPuzzleWrapper> {}
 
 export class KPuzzleWrapper extends PuzzleWrapper {
   // don't work the underlying kdefinition/multiply so hard
