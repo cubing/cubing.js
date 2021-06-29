@@ -9,6 +9,7 @@ import {
   Transformation,
 } from "../../../cubing/kpuzzle";
 import { countMoves } from "../../../cubing/notation";
+import { TwistyPlayer } from "../../../cubing/twisty";
 import type { SGSCachedData } from "./sgs2";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 4; // For 2x2x2 demo.
@@ -123,6 +124,13 @@ export class TrembleSolver {
   }
 
   private sgsPhaseSolve(initialState: Transformation): Alg {
+    const pieceNames = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
+
+    function loggo(s: string) {
+      console.warn(s);
+      document.body.appendChild(document.createElement("div")).textContent = s;
+    }
+
     console.log("sgsPhaseSolve");
     const algBuilder = new AlgBuilder();
     let state = initialState;
@@ -130,28 +138,78 @@ export class TrembleSolver {
     for (const piece of this.sgs.ordering) {
       const orbitName = piece.pieceRef.orbitName;
       const permutationIdx = piece.pieceRef.permutationIdx;
-      const inverseState = invertTransformation(this.def, initialState);
+      loggo(
+        `Solving piece #${piece.pieceRef.permutationIdx} (${pieceNames[permutationIdx]})`,
+      );
+
+      const inverseState = invertTransformation(this.def, state);
       console.log(
         piece.pieceRef,
         JSON.stringify(initialState),
         JSON.stringify(inverseState),
       );
-      const info =
-        piece.locations[inverseState[orbitName].permutation[permutationIdx]][
+      console.log(
+        piece.inverseLocations,
+        orbitName,
+        permutationIdx,
+        inverseState[orbitName],
+        inverseState[orbitName].permutation,
+        inverseState[orbitName].permutation[permutationIdx],
+        piece.inverseLocations[
+          inverseState[orbitName].permutation[permutationIdx]
+        ],
+        inverseState[orbitName].orientation[permutationIdx],
+      );
+
+      loggo(
+        `In the inverse, the location for piece #${
+          piece.pieceRef.permutationIdx
+        } (${pieceNames[permutationIdx]}) is occupied by piece #${
+          inverseState[orbitName].permutation[permutationIdx]
+        } (${
+          pieceNames[inverseState[orbitName].permutation[permutationIdx]]
+        }) oriented ${
           inverseState[orbitName].orientation[permutationIdx]
-        ];
+        }× clockwise.`,
+      );
+
+      // const player1 = new TwistyPlayer({
+      //   puzzle: "2x2x2",
+      //   background: "none",
+      // });
+      // player1.experimentalSetStartStateOverride(
+      //   JSON.parse(JSON.stringify(inverseState)),
+      // );
+      // document.body.appendChild(player1);
+
+      const info =
+        piece.inverseLocations[
+          inverseState[orbitName].permutation[permutationIdx]
+        ][inverseState[orbitName].orientation[permutationIdx]];
+      console.log(info);
       if (!info) {
         throw new Error("Missing algorithm in sgs or esgs?");
       }
+
       algBuilder.experimentalPushAlg(info.alg);
       state = combineTransformations(this.def, state, info.transformation);
+      console.log(state, permutationIdx);
 
+      loggo(`This is solved by ${info.alg.toString()}`);
+
+      // const player = new TwistyPlayer({
+      //   puzzle: "2x2x2",
+      //   alg: algBuilder.toAlg(),
+      // });
+      // player.experimentalSetStartStateOverride(
+      //   JSON.parse(JSON.stringify(initialState)),
+      // );
+      // document.body.appendChild(player);
       if (
-        initialState[orbitName].permutation[permutationIdx] !==
-          permutationIdx ||
-        initialState[orbitName].orientation[permutationIdx] !== 0
+        state[orbitName].permutation[permutationIdx] !== permutationIdx ||
+        state[orbitName].orientation[permutationIdx] !== 0
       ) {
-        console.log("Fail.");
+        throw new Error("bad SGS :-(");
       }
     }
 

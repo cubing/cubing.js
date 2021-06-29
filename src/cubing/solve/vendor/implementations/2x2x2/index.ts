@@ -79,14 +79,10 @@ export async function random222State(): Promise<Transformation> {
   const nonExtensibleDef = await puzzles["2x2x2"].def();
   const def = Object.assign({}, nonExtensibleDef);
   const kpuzzle = new KPuzzle(def);
-  await randomizeOrbit(
-    def,
-    "CORNERS",
-    JSON.parse(JSON.stringify(kpuzzle.state)), // TODO
-    { orientationSum: 0 },
-  );
+  const stateCopy = JSON.parse(JSON.stringify(kpuzzle.state)); // TODO
+  await randomizeOrbit(def, "CORNERS", stateCopy, { orientationSum: 0 });
   console.log(await puzzles["2x2x2"].def());
-  return kpuzzle.state;
+  return stateCopy;
 }
 
 export async function random222Scramble(): Promise<Alg> {

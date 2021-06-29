@@ -3,6 +3,7 @@
 
 import { cube2x2x2 } from "../../../cubing/puzzles";
 import { random222State } from "../../../cubing/solve/vendor/implementations/2x2x2";
+import { TwistyPlayer } from "../../../cubing/twisty";
 // import { random222Scramble } from "../../../cubing/solve/vendor/implementations/2x2x2";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
@@ -122,7 +123,13 @@ Alg F D F' D L2 F R' F' D' B2 U'`,
   console.log(sgs);
 
   const state = await random222State();
-  console.log(state);
+  console.log("random state", state);
+
+  const player = new TwistyPlayer({
+    puzzle: "2x2x2",
+  });
+  player.experimentalSetStartStateOverride(JSON.parse(JSON.stringify(state)));
+  document.body.appendChild(player);
   console.log("def", await cube2x2x2.def());
   const solver = new TrembleSolver(await cube2x2x2.def(), sgs);
   console.log(await solver.solve(state));
