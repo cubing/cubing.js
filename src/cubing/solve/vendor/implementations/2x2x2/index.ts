@@ -53,7 +53,7 @@ async function randomizeOrbit(
   options?: { orientationSum?: number },
 ): Promise<void> {
   const randomUIntBelow = await randomUIntBelowFactory();
-  await randomPermute(new Array(state[orbitName].permutation));
+  await randomPermute(state[orbitName].permutation);
 
   const orbitDef = def.orbits[orbitName];
   const ori = state[orbitName].orientation;
@@ -79,7 +79,12 @@ export async function random222State(): Promise<Transformation> {
   const nonExtensibleDef = await puzzles["2x2x2"].def();
   const def = Object.assign({}, nonExtensibleDef);
   const kpuzzle = new KPuzzle(def);
-  await randomizeOrbit(def, "CORNERS", kpuzzle.state, { orientationSum: 0 });
+  await randomizeOrbit(
+    def,
+    "CORNERS",
+    JSON.parse(JSON.stringify(kpuzzle.state)), // TODO
+    { orientationSum: 0 },
+  );
   console.log(await puzzles["2x2x2"].def());
   return kpuzzle.state;
 }

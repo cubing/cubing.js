@@ -24,7 +24,7 @@ interface SGSLocationInfo {
 export interface SGSCachedData {
   ordering: {
     pieceRef: PieceRef;
-    locations: SGSLocationInfo[][];
+    inverseLocations: SGSLocationInfo[][];
   }[];
 }
 
@@ -89,7 +89,6 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     // console.log(pieceRef, numAlgsToConsume);
     for (let i = 0; i < numAlgsToConsume; i++) {
       const next = algs.next();
-      const alg = next.value;
       if (next.done) {
         if (i !== 0) {
           throw new Error("Ran out of algs partway through a piece.");
@@ -97,6 +96,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
         console.log("Skipping pieces starting with:", pieceRef);
         break outer;
       }
+      const alg = next.value;
       const kpuzzle = new KPuzzle(def);
       kpuzzle.reset();
       // alg.log(def);
@@ -107,7 +107,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
       ).fill(null);
       locations[location.permutationIdx][location.orientation] = {
         alg: alg.invert(),
-        transformation: kpuzzle.state,
+        transformation: invertTransformation(def, kpuzzle.state),
       };
     }
     // Fill in the solved piece case.
@@ -117,7 +117,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     };
     sgsCachedData.ordering.push({
       pieceRef,
-      locations,
+      inverseLocations: locations,
     });
   }
   return sgsCachedData;
