@@ -19,20 +19,14 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      // TODO: fix assignment bug that prevents extensions.
-      const nonExtensibleDef = await puzzles["2x2x2"].def();
-      const def = JSON.parse(JSON.stringify(nonExtensibleDef)); // TODO: perf
-      // TODO: Allow reducing moves.
-      delete def.moves.x;
-      delete def.moves.y;
-      delete def.moves.z;
-      // TODO: reduce size of JSON.
-      // TODO: this technically doesn't use the same definition as cubing.js 2x2x2.
       const json: SGSCachedData = await (
         await import("../vendor/sgs/src/test/puzzles/2x2x2.sgs.json")
       ).cachedData222();
-      // console.log(json)
-      return new TrembleSolver(def, json);
+      return new TrembleSolver(
+        await puzzles["2x2x2"].def(),
+        json,
+        "URFLBD".split(""),
+      );
     })())
   );
 }

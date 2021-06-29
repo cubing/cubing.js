@@ -13,7 +13,11 @@ import type { SGSCachedData } from "./sgs";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
-function calculateMoves(def: KPuzzleDefinition): {
+// TODO: Take moves instead of move names?
+function calculateMoves(
+  def: KPuzzleDefinition,
+  moveNames: string[],
+): {
   move: Move;
   transformation: Transformation;
 }[] {
@@ -24,7 +28,7 @@ function calculateMoves(def: KPuzzleDefinition): {
   // const identity = identityTransformation(def); // TODO
   const kpuzzle = new KPuzzle(def);
   // TODO: Make it easy to filter moves.
-  Object.keys(def.moves).forEach(function (moveName) {
+  moveNames.forEach(function (moveName) {
     const rootMove = new Move(moveName);
     if (rootMove.amount !== 1) {
       throw new Error(
@@ -67,8 +71,15 @@ export class TrembleSolver {
     transformation: Transformation;
   }[];
 
-  constructor(private def: KPuzzleDefinition, private sgs: SGSCachedData) {
-    this.searchMoves = calculateMoves(this.def);
+  constructor(
+    private def: KPuzzleDefinition,
+    private sgs: SGSCachedData,
+    trembleMoveNames?: string[],
+  ) {
+    this.searchMoves = calculateMoves(
+      this.def,
+      trembleMoveNames ?? Object.keys(this.def.moves),
+    );
   }
 
   // public badRandomMoves(): KSolvePuzzleState {
