@@ -1,7 +1,6 @@
 import { Alg } from "../../../cubing/alg";
 import type { OrientationEvent } from "../../../cubing/bluetooth";
 import {
-  BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
@@ -18,19 +17,11 @@ async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
   });
 }
 
-declare global {
-  interface Window {
-    puzzle: BluetoothPuzzle | null;
-  }
-}
-
-window.puzzle = null;
+(globalThis as any).puzzle = null;
 
 window.addEventListener("load", async () => {
   const twistyPlayer = new TwistyPlayer({
     alg: new Alg(),
-    // controlPanel: "none",
-    // background: "none",
   });
   document.querySelector("#player")!.appendChild(twistyPlayer);
   document
@@ -39,20 +30,13 @@ window.addEventListener("load", async () => {
 
   asyncSetup(twistyPlayer);
 
-  // latestMove: BlockMove;
-  // timeStamp: number;
-  // debug?: object;
-  // state?: PuzzleState;
-  // quaternion?: any;
-
   const connectButton = document.querySelector("#connect") as HTMLButtonElement;
-
   connectButton.addEventListener("click", async () => {
     // const acceptAllDevices = (document.querySelector(
     //   "#acceptAllDevices",
     // ) as HTMLInputElement).checked;
     const puzzle = await connectSmartPuzzle();
-    window.puzzle = puzzle;
+    (globalThis as any).puzzle = puzzle;
     try {
       const state = await puzzle.getState();
       twistyPlayer.experimentalSetStartStateOverride(state);
@@ -80,7 +64,11 @@ window.addEventListener("load", async () => {
       "#player-state-read",
     ) as HTMLButtonElement;
     cubeStateButton.addEventListener("click", async () => {
-      twistyPlayer.experimentalSetStartStateOverride(await puzzle.getState());
+      try {
+        twistyPlayer.experimentalSetStartStateOverride(await puzzle.getState());
+      } catch (e) {
+        twistyPlayer.experimentalSetStartStateOverride(null);
+      }
       twistyPlayer.alg = new Alg();
     });
     cubeStateButton.disabled = false;
