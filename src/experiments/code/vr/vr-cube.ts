@@ -13,13 +13,13 @@ import {
 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../../cubing/alg";
-import { Alg, Move } from "../../../cubing/alg/index";
+import { Alg, Move } from "../../../cubing/alg";
 import {} from "../../../cubing/kpuzzle";
 import { ProxyEvent, WebSocketProxyReceiver } from "../../../cubing/stream";
 import { TAU } from "../../../cubing/twisty/3D/TAU";
 import { AlgCursor } from "../../../cubing/twisty/animation/cursor/AlgCursor";
 import { Timeline } from "../../../cubing/twisty/animation/Timeline";
-import { Cube3D } from "../../../cubing/twisty/index";
+import { Cube3D } from "../../../cubing/twisty";
 import { countMoves } from "../../../cubing/notation";
 import {
   daydream,

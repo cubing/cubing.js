@@ -1,5 +1,5 @@
 import { Alg } from "../../../cubing/alg";
-import { TwistyPlayer } from "../../../cubing/twisty/index";
+import { TwistyPlayer } from "../../../cubing/twisty";
 
 window.addEventListener("load", () => {
   const twistyPlayer = new TwistyPlayer({

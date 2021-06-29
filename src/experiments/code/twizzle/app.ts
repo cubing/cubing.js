@@ -1,14 +1,14 @@
 import { Raycaster, Vector2, Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
-import { Alg, Move } from "../../../cubing/alg/index";
+import { Alg, Move } from "../../../cubing/alg";
 import { experimentalAppendMove } from "../../../cubing/alg/operation";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../../cubing/bluetooth/index";
-import type { KPuzzleDefinition } from "../../../cubing/kpuzzle/index";
+} from "../../../cubing/bluetooth";
+import type { KPuzzleDefinition } from "../../../cubing/kpuzzle";
 import {
   getpuzzle,
   getpuzzles,
@@ -17,13 +17,13 @@ import {
   PuzzleGeometry,
   schreierSims,
   StickerDat,
-} from "../../../cubing/puzzle-geometry/index";
+} from "../../../cubing/puzzle-geometry";
 import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/dom/TwistyPlayer";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
 } from "../../../cubing/twisty/dom/viewers/Twisty3DCanvas";
-import { TwistyPlayer } from "../../../cubing/twisty/index";
+import { TwistyPlayer } from "../../../cubing/twisty";
 import { countMoves } from "../../../cubing/notation";
 import { getURLParam, setURLParams } from "./url-params";
 import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
@@ -289,7 +289,8 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       elem.appendChild(twisty);
       twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
 
-      const twisty3DCanvases: Twisty3DCanvas[] = twisty.viewerElems as Twisty3DCanvas[];
+      const twisty3DCanvases: Twisty3DCanvas[] =
+        twisty.viewerElems as Twisty3DCanvas[];
       // TODO: This is a hack.
       // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
       // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
@@ -675,7 +676,8 @@ function onMouseClick(
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const controlTargets = twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
+  const controlTargets =
+    twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
   const intersects = raycaster.intersectObjects(controlTargets);
   if (intersects.length > 0) {
     event.preventDefault();
@@ -820,11 +822,10 @@ export function setup(): void {
   moveInput.onchange = doMoveInputSelection;
   const commands = ["scramble", "reset", "options"];
   for (const command of commands) {
-    (document.getElementById(
-      command,
-    ) as HTMLInputElement).onclick = (): void => {
-      dowork(command);
-    };
+    (document.getElementById(command) as HTMLInputElement).onclick =
+      (): void => {
+        dowork(command);
+      };
   }
   const qalg = getURLParam("alg").toString();
   if (qalg !== "") {

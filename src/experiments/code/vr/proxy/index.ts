@@ -8,8 +8,8 @@ import {
   BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
-} from "../../../../cubing/bluetooth/index";
-import type { GoCube } from "../../../../cubing/bluetooth/index";
+} from "../../../../cubing/bluetooth";
+import type { GoCube } from "../../../../cubing/bluetooth";
 import { socketOrigin } from "../config";
 
 class App {

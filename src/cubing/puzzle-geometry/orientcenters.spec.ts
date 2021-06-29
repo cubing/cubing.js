@@ -1,4 +1,4 @@
-import { getPuzzleGeometryByName, schreierSims } from "./index";
+import { getPuzzleGeometryByName, schreierSims } from ".";
 /**
  *   We've had a number of bugs in center orientation (which was initially
  *   added just so 3D rotation worked in twizzle but has seen additional

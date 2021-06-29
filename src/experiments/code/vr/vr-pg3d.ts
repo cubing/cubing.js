@@ -1,9 +1,9 @@
 // import { Group, Quaternion, Vector3 } from "three";
 // // Import index files from source.
 // // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../../cubing/alg";
-// import { Sequence, parse } from "../../../cubing/alg/index";
-// import { getPuzzleGeometryByName } from "../../../cubing/puzzle-geometry/index";
-// import { PG3D, Cube3D } from "../../../cubing/twisty/index";
+// import { Sequence, parse } from "../../../cubing/alg";
+// import { getPuzzleGeometryByName } from "../../../cubing/puzzle-geometry";
+// import { PG3D, Cube3D } from "../../../cubing/twisty";
 // import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
 // import { Twisty3DPuzzle } from "../../../cubing/twisty";
 // import { Twisty3DScene } from "../../../cubing/twisty/3D/Twisty3DScene";

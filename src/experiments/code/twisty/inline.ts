@@ -4,7 +4,7 @@ import { useNewFaceNames } from "../../../cubing/puzzle-geometry";
 useNewFaceNames(true);
 
 import "../../../cubing/twisty/dom/TwistyPlayer";
-import { TwistyPlayer } from "../../../cubing/twisty/index";
+import { TwistyPlayer } from "../../../cubing/twisty";
 
 window.addEventListener("load", () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

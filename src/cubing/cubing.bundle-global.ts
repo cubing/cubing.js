@@ -1,4 +1,4 @@
-import * as cubing from "./index";
+import * as cubing from ".";
 
 try {
   (globalThis as any).cubing = cubing;

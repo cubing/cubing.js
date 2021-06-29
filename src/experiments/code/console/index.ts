@@ -1,5 +1,5 @@
 import * as three from "three";
-import * as cubing from "../../../cubing/index";
+import * as cubing from "../../../cubing";
 
 console.log("cubing", cubing);
 for (const [moduleName, moduleExport] of Object.entries(cubing)) {

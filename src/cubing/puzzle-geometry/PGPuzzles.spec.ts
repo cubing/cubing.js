@@ -1,4 +1,4 @@
-import { getPuzzleGeometryByDesc } from "./index";
+import { getPuzzleGeometryByDesc } from ".";
 import { PGPuzzles } from "./PGPuzzles";
 import {
   KPuzzleDefinition,
