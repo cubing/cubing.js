@@ -64,7 +64,7 @@ const stringWrappingPlugin = {
                 .replace(/\n/g, "\\n")}";`,
               async () => {
                 await execPromise(
-                  "rm src/cubing/solve/worker-inside-generated.js",
+                  "rm -f src/cubing/solve/worker-inside-generated.js",
                 );
                 console.log("updated worker-inside-generated-string.js");
                 resolve();
