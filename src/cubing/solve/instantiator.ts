@@ -49,3 +49,8 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
   const worker = await constructWorkerFromString(workerSource);
   return wrap(worker);
 }
+
+// TODO: This is an (undocumented?) Snowpack workaround for `cubing.js` to prevent a full-page dev mode error popup.
+if (typeof window !== "undefined") {
+  (window as any).snowpackHmrErrorOverlayIgnoreErrors = ["import"];
+}
