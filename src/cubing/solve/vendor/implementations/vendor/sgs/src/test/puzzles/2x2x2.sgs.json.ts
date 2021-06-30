@@ -10,7 +10,7 @@ export async function cachedData222() {
 export async function data222(): Promise<SGSCachedData> {
   return parseSGS(
     await cube2x2x2.def(),
-    `SetOrder CORNERS 5 6 7 4 3 2 1 0
+    `SetOrder CORNERS 8 7 6 5 4 1 2 3
 Alg F
 Alg F2
 Alg F'

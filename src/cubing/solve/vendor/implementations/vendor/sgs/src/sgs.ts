@@ -34,13 +34,15 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     if (line.startsWith("SetOrder ")) {
       var lineTokens = line.split(" ");
       for (var j = 2; j < lineTokens.length; j++) {
-        pieceOrdering.push({
+        pieceOrdering[parseInt(lineTokens[j]) - 1] = {
           orbitName: lineTokens[1],
-          permutationIdx: parseInt(lineTokens[j]),
-        });
+          permutationIdx: j - 2,
+        };
       }
     }
   }
+
+  console.log(pieceOrdering);
 
   const remainingPiecesPerOrbit: Record<string, number> = {};
   for (const [orbitName, orbitDef] of Object.entries(def.orbits)) {
