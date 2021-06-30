@@ -107,7 +107,7 @@ export class TrembleSolver {
 
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
-          // console.log(`New best (${len} moves): ${newAlg.toString()}`);
+          console.log(`New best (${len} moves): ${newAlg}`);
           bestAlg = newAlg;
           bestLen = len;
         }
@@ -150,6 +150,7 @@ export class TrembleSolver {
     let state = initialState;
 
     for (const piece of this.sgs.ordering) {
+      console.log(piece);
       const orbitName = piece.pieceRef.orbitName;
       const permutationIdx = piece.pieceRef.permutationIdx;
       const inverseState = invertTransformation(this.def, state);
@@ -157,7 +158,7 @@ export class TrembleSolver {
         piece.inverseLocations[
           inverseState[orbitName].permutation[permutationIdx]
         ][inverseState[orbitName].orientation[permutationIdx]];
-      // console.log(info);
+      console.log(info);
       if (!info) {
         throw new Error("Missing algorithm in sgs or esgs?");
       }

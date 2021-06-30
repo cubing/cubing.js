@@ -90,6 +90,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     });
 
     // Fill in the solved piece case.
+    inverseLocations[pieceRef.permutationIdx] = new Array();
     inverseLocations[pieceRef.permutationIdx][0] = {
       alg: new Alg(),
       transformation: identityTransformation(def),
@@ -100,7 +101,6 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
   outer: for (const alg of algs) {
     const kpuzzle = new KPuzzle(def);
     kpuzzle.reset();
-    alg.log("def");
     kpuzzle.applyAlg(alg);
     for (const { pieceRef, inverseLocations } of sgsCachedData.ordering) {
       function isSolvedPiece(state: Transformation, pieceRef: PieceRef) {
@@ -119,6 +119,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
           alg: alg.invert(),
           transformation: invertTransformation(def, kpuzzle.state),
         };
+        alg.log(location);
         continue outer;
       }
     }
