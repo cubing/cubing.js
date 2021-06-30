@@ -115,6 +115,15 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
         inverseLocations[location.permutationIdx] ??= new Array(
           def.orbits[pieceRef.orbitName].orientations,
         ).fill(null);
+        if (inverseLocations[location.permutationIdx][location.orientation]) {
+          console.error(
+            "SGS entry is already populated?! We're going to ignore this new alg, but other things will probably break later on.",
+            alg.toString(),
+            pieceRef,
+            location,
+          );
+          break;
+        }
         inverseLocations[location.permutationIdx][location.orientation] = {
           alg: alg.invert(),
           transformation: invertTransformation(def, kpuzzle.state),
