@@ -14,8 +14,6 @@ export async function asyncGetPuzzleGeometry(
   return puzzleGeometry.getPuzzleGeometryByName(puzzleName, [
     "allmoves",
     "true",
-    "orientcenters",
-    "true",
     "rotations",
     "true",
   ]);
