@@ -14,7 +14,11 @@ import { APP_TITLE } from "./strings";
 import { supportedPuzzles } from "./supported-puzzles";
 import { getURLParam, setURLParams } from "./url-params";
 import { cube3x3x3KPuzzle } from "../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
-import { experimentalSolve3x3x3IgnoringCenters } from "../../../cubing/solve";
+import {
+  experimentalSolve2x2x2,
+  experimentalSolve3x3x3IgnoringCenters,
+} from "../../../cubing/solve";
+import { cube2x2x2KPuzzle } from "../../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
 
 export interface AppData {
   puzzleName: string;
@@ -141,9 +145,23 @@ export class App {
   }
 
   async solve(): Promise<void> {
-    const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
-    kpuzzle.applyAlg(this.twistyPlayer.alg);
-    const solution = await experimentalSolve3x3x3IgnoringCenters(kpuzzle.state);
+    let solution: Alg;
+    switch (this.twistyPlayer.puzzle) {
+      case "2x2x2": {
+        const kpuzzle = new KPuzzle(cube2x2x2KPuzzle);
+        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        solution = await experimentalSolve2x2x2(kpuzzle.state);
+        break;
+      }
+      case "3x3x3": {
+        const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
+        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        solution = await experimentalSolve3x3x3IgnoringCenters(kpuzzle.state);
+        break;
+      }
+      default:
+        return;
+    }
     this.controlPane.setSolution(
       this.twistyPlayer.alg
         .concat([new Newline(), new LineComment(" Solution"), new Newline()])
@@ -424,6 +442,6 @@ class ControlPane {
   }
 
   setPuzzle(puzzle: string): void {
-    this.solveButton.disabled = puzzle !== "3x3x3";
+    this.solveButton.disabled = !["2x2x2", "3x3x3"].includes(puzzle);
   }
 }
