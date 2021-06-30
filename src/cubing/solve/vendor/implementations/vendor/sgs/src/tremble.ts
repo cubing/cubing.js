@@ -158,7 +158,8 @@ export class TrembleSolver {
         piece.inverseLocations[
           inverseState[orbitName].permutation[permutationIdx]
         ][inverseState[orbitName].orientation[permutationIdx]];
-      console.log(info);
+      // console.log(info);
+      info.alg.log(JSON.parse(JSON.stringify(state)));
       if (!info) {
         throw new Error("Missing algorithm in sgs or esgs?");
       }
