@@ -95,15 +95,15 @@ export class OrbitsDef {
       result.push("Move " + name);
       for (let j = 0; j < this.orbitnames.length; j++) {
         if (doinv) {
+          this.moveops[i].orbits[j]
+            .inv()
+            .appendConciseDefinition(result, this.orbitnames[j], true);
+        } else {
           this.moveops[i].orbits[j].appendConciseDefinition(
             result,
             this.orbitnames[j],
             true,
           );
-        } else {
-          this.moveops[i].orbits[j]
-            .inv()
-            .appendConciseDefinition(result, this.orbitnames[j], true);
         }
       }
       result.push("End");

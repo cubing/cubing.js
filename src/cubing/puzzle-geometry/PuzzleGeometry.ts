@@ -2033,9 +2033,9 @@ export class PuzzleGeometry {
       // gap doesn't like angle brackets in IDs
       mvs.push(movename);
       if (doinv) {
-        r.push(movename + ":=" + os.moveops[i].toPerm().toGap() + ";");
-      } else {
         r.push(movename + ":=" + os.moveops[i].toPerm().inv().toGap() + ";");
+      } else {
+        r.push(movename + ":=" + os.moveops[i].toPerm().toGap() + ";");
       }
     }
     r.push("Gen:=[");
