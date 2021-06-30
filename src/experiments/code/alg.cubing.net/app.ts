@@ -19,6 +19,7 @@ import {
   experimentalSolve3x3x3IgnoringCenters,
 } from "../../../cubing/solve";
 import { cube2x2x2KPuzzle } from "../../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
+import { randomScrambleForEvent } from "../../../cubing/scramble";
 
 export interface AppData {
   puzzleName: string;
@@ -65,6 +66,7 @@ export class App {
       this.setSetupAnchor.bind(this),
       this.setStickering.bind(this),
       this.solve.bind(this),
+      this.scramble.bind(this),
       this.twistyPlayer,
     );
 
@@ -162,10 +164,31 @@ export class App {
       default:
         return;
     }
-    this.controlPane.setSolution(
+    this.controlPane.setAlg(
       this.twistyPlayer.alg
         .concat([new Newline(), new LineComment(" Solution"), new Newline()])
         .concat(solution),
+    );
+  }
+
+  async scramble(): Promise<void> {
+    let scramble: Alg;
+    switch (this.twistyPlayer.puzzle) {
+      case "2x2x2": {
+        scramble = await randomScrambleForEvent("222");
+        break;
+      }
+      case "3x3x3": {
+        scramble = await randomScrambleForEvent("333");
+        break;
+      }
+      default:
+        return;
+    }
+    this.controlPane.setAlg(
+      this.twistyPlayer.alg
+        .concat([new Newline(), new LineComment(" Scramble"), new Newline()])
+        .concat(scramble),
     );
   }
 }
@@ -184,6 +207,7 @@ class ControlPane {
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
   private solveButton: HTMLButtonElement;
+  private scrambleButton: HTMLButtonElement;
   constructor(
     public element: Element,
     initialData: AppData,
@@ -195,6 +219,7 @@ class ControlPane {
       stickering: ExperimentalStickering,
     ) => boolean,
     private solve: () => void,
+    private scramble: () => void,
     twistyPlayer: TwistyPlayer,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
@@ -262,6 +287,13 @@ class ControlPane {
       "button",
     );
     this.solveButton.addEventListener("click", this.solve);
+
+    this.scrambleButton = findOrCreateChildWithClass(
+      this.element,
+      "scramble-button",
+      "button",
+    );
+    this.scrambleButton.addEventListener("click", this.scramble);
 
     this.onAlgInput(true);
   }
@@ -437,11 +469,12 @@ class ControlPane {
     this.setStickeringCallback(option.value as ExperimentalStickering);
   }
 
-  setSolution(alg: Alg): void {
+  setAlg(alg: Alg): void {
     this.algInput.algString = alg.toString();
   }
 
   setPuzzle(puzzle: string): void {
     this.solveButton.disabled = !["2x2x2", "3x3x3"].includes(puzzle);
+    this.scrambleButton.disabled = !["2x2x2", "3x3x3"].includes(puzzle);
   }
 }
