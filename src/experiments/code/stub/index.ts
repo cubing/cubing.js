@@ -3,7 +3,6 @@
 
 import { Alg } from "../../../cubing/alg";
 import { KPuzzle, parseKPuzzleDefinition } from "../../../cubing/kpuzzle";
-import { puzzles } from "../../../cubing/puzzles";
 import { cachedSGSDataSkewb } from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/test/puzzles/skewb.sgs.json";
 import { TrembleSolver } from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/tremble";
 
