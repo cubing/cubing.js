@@ -19,10 +19,12 @@ import { KPuzzleWrapper } from "../3D/puzzles/KPuzzleWrapper";
 import type { TimeRange } from "../animation/cursor/AlgCursor";
 import type { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
 import { TreeAlgIndexer } from "../animation/indexer/tree/TreeAlgIndexer";
+import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import {
   customElementsShim,
   HTMLElementShim,
 } from "./element/node-custom-element-shims";
+import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css_";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
 
@@ -37,28 +39,46 @@ class DataUp {
   element: TwistyAlgWrapperElem | TwistyAlgLeafElem;
 }
 
-class TwistyAlgLeafElem extends HTMLElementShim {
+class TwistyAlgLeafElem extends ManagedCustomElement {
   constructor(
     className: string,
     text: string,
     dataDown: DataDown,
     public algOrUnit: Alg | Unit,
     offsetIntoMove: boolean,
+    clickable: boolean,
   ) {
-    super();
-    this.textContent = text;
+    super({ mode: "open" });
     this.classList.add(className);
 
-    this.addEventListener("click", () => {
-      dataDown.twistyAlgViewer.jumpToIndex(
-        dataDown.earliestMoveIndex,
-        offsetIntoMove,
+    this.addCSS(twistyAlgViewerCSS);
+    if (clickable) {
+      const anchor = this.contentWrapper.appendChild(
+        document.createElement("a"),
       );
-    });
+      anchor.href = "#";
+      anchor.textContent = text;
+
+      anchor.addEventListener("click", (e) => {
+        e.preventDefault();
+        dataDown.twistyAlgViewer.jumpToIndex(
+          dataDown.earliestMoveIndex,
+          offsetIntoMove,
+        );
+      });
+    } else {
+      this.contentWrapper.appendChild(
+        document.createElement("span"),
+      ).textContent = text;
+    }
   }
 
   pathToIndex(_index: number): (TwistyAlgWrapperElem | TwistyAlgLeafElem)[] {
     return [];
+  }
+
+  setCurrentMove(current: boolean) {
+    this.contentWrapper.classList.toggle("current-move", current);
   }
 }
 
@@ -174,6 +194,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
           dataDown,
           square1Tuple[0],
           true,
+          true,
         ),
       });
       element.addString(", ");
@@ -184,6 +205,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
           square1Tuple[1].amount.toString(),
           dataDown,
           square1Tuple[1],
+          true,
           true,
         ),
       });
@@ -211,6 +233,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       move.toString(),
       dataDown,
       move,
+      true,
       true,
     );
     dataDown.twistyAlgViewer.highlighter.addMove(
@@ -299,6 +322,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
         dataDown,
         pause,
         true,
+        true,
       ),
     };
   }
@@ -323,6 +347,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
         `//${lineComment.text}`,
         dataDown,
         lineComment,
+        false,
         false,
       ),
     };
@@ -350,7 +375,9 @@ class MoveHighlighter {
       return;
     }
     this.currentElem?.classList.remove("twisty-alg-current-move");
+    this.currentElem?.setCurrentMove(false);
     newElem?.classList.add("twisty-alg-current-move");
+    newElem?.setCurrentMove(true);
     this.currentElem = newElem;
   }
 }
