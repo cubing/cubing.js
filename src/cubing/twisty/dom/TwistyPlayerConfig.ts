@@ -21,6 +21,7 @@ export const centeredCameraPosition = new Vector3(
 // TODO
 export const cubeCameraPosition = new Vector3(3, 4, 5);
 export const cornerCameraPosition = new Vector3(4, 4, 4);
+export const pyraminxCameraPosition = new Vector3(0.6, 3, 5); // TODO: center puzzle in frame, use x=0 but increase y
 
 // TODO: turn these maps into lists?
 export const setupToLocations = {
