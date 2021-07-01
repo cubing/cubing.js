@@ -42,7 +42,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     }
   }
 
-  console.log(pieceOrdering);
+  // console.log(pieceOrdering);
 
   const remainingPiecesPerOrbit: Record<string, number> = {};
   for (const [orbitName, orbitDef] of Object.entries(def.orbits)) {
@@ -80,47 +80,62 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
   const sgsCachedData: SGSCachedData = {
     ordering: [],
   };
-  outer: for (const pieceRef of pieceOrdering) {
-    const numAlgsToConsume =
-      def.orbits[pieceRef.orbitName].orientations *
-        remainingPiecesPerOrbit[pieceRef.orbitName]-- -
-      1;
-    const locations: SGSLocationInfo[][] = new Array(
+  for (const pieceRef of pieceOrdering) {
+    const inverseLocations: SGSLocationInfo[][] = new Array(
       def.orbits[pieceRef.orbitName].numPieces,
     ).fill(null);
-    // console.log(pieceRef, numAlgsToConsume);
-    for (let i = 0; i < numAlgsToConsume; i++) {
-      const next = algs.next();
-      if (next.done) {
-        if (i !== 0) {
-          throw new Error("Ran out of algs partway through a piece.");
-        }
-        // console.log("Skipping pieces starting with:", pieceRef);
-        break outer;
-      }
-      const alg = next.value;
-      const kpuzzle = new KPuzzle(def);
-      kpuzzle.reset();
-      // alg.log(def);
-      kpuzzle.applyAlg(alg);
-      const location = locatePiece(pieceRef, kpuzzle.state);
-      locations[location.permutationIdx] ??= new Array(
-        def.orbits[pieceRef.orbitName].orientations,
-      ).fill(null);
-      locations[location.permutationIdx][location.orientation] = {
-        alg: alg.invert(),
-        transformation: invertTransformation(def, kpuzzle.state),
-      };
-    }
+    sgsCachedData.ordering.push({
+      pieceRef,
+      inverseLocations: inverseLocations,
+    });
+
     // Fill in the solved piece case.
-    locations[pieceRef.permutationIdx][0] = {
+    inverseLocations[pieceRef.permutationIdx] = new Array();
+    inverseLocations[pieceRef.permutationIdx][0] = {
       alg: new Alg(),
       transformation: identityTransformation(def),
     };
-    sgsCachedData.ordering.push({
-      pieceRef,
-      inverseLocations: locations,
-    });
+  }
+  // console.log(pieceRef, numAlgsToConsume);
+
+  outer: for (const alg of algs) {
+    const kpuzzle = new KPuzzle(def);
+    kpuzzle.reset();
+    kpuzzle.applyAlg(alg);
+    for (const { pieceRef, inverseLocations } of sgsCachedData.ordering) {
+      function isSolvedPiece(state: Transformation, pieceRef: PieceRef) {
+        return (
+          state[pieceRef.orbitName].permutation[pieceRef.permutationIdx] ===
+            pieceRef.permutationIdx &&
+          state[pieceRef.orbitName].orientation[pieceRef.permutationIdx] === 0
+        );
+      }
+      if (!isSolvedPiece(kpuzzle.state, pieceRef)) {
+        const location = locatePiece(pieceRef, kpuzzle.state);
+        inverseLocations[location.permutationIdx] ??= new Array(
+          def.orbits[pieceRef.orbitName].orientations,
+        ).fill(null);
+        if (inverseLocations[location.permutationIdx][location.orientation]) {
+          console.error(
+            "SGS entry is already populated?! We're going to ignore this new alg, but other things will probably break later on.",
+            alg.toString(),
+            pieceRef,
+            location,
+            inverseLocations[location.permutationIdx][
+              location.orientation
+            ].alg.toString(),
+            inverseLocations[location.permutationIdx][location.orientation],
+          );
+          break;
+        }
+        inverseLocations[location.permutationIdx][location.orientation] = {
+          alg: alg.invert(),
+          transformation: invertTransformation(def, kpuzzle.state),
+        };
+        // alg.log(location);
+        continue outer;
+      }
+    }
   }
   return sgsCachedData;
 }

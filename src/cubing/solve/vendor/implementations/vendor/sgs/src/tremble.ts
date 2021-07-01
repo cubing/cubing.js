@@ -13,6 +13,8 @@ import type { SGSCachedData } from "./sgs";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
+const DEBUG = false;
+
 // TODO: Take moves instead of move names?
 function calculateMoves(
   def: KPuzzleDefinition,
@@ -103,11 +105,15 @@ export class TrembleSolver {
         if (!sgsAlg) {
           return;
         }
-        const newAlg = sofar.concat(sgsAlg).simplify({ collapseMoves: true });
+        // console.log("sgs done!", sofar.toString(), "|", sgsAlg.toString());
+        const newAlg = sofar.concat(sgsAlg); //.simplify({ collapseMoves: false });
 
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
-          // console.log(`New best (${len} moves): ${newAlg.toString()}`);
+          if (DEBUG) {
+            console.log(`New best (${len} moves): ${newAlg}`);
+            console.log(`Tremble moves are: ${sofar}`);
+          }
           bestAlg = newAlg;
           bestLen = len;
         }
@@ -158,6 +164,7 @@ export class TrembleSolver {
           inverseState[orbitName].permutation[permutationIdx]
         ][inverseState[orbitName].orientation[permutationIdx]];
       // console.log(info);
+      // info.alg.log(JSON.parse(JSON.stringify(state)));
       if (!info) {
         throw new Error("Missing algorithm in sgs or esgs?");
       }

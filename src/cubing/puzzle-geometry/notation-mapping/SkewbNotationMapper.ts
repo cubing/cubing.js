@@ -13,6 +13,9 @@ const skewbFamilyMap: Record<string, string> = {
   R: "DRB",
 };
 
+const skewbExternalQuantumY = new QuantumMove("y");
+const skewbInternalQuantumY = new QuantumMove("Dv");
+
 export class SkewbNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
 
@@ -26,6 +29,9 @@ export class SkewbNotationMapper implements NotationMapper {
         new QuantumMove(newFamily, move.outerLayer, move.innerLayer),
         move.amount,
       );
+    }
+    if (skewbExternalQuantumY.isIdentical(move.quantum)) {
+      return new Move(skewbInternalQuantumY, -move.amount);
     }
     return null;
     /*
@@ -50,6 +56,9 @@ export class SkewbNotationMapper implements NotationMapper {
           move.amount,
         );
       }
+    }
+    if (skewbInternalQuantumY.isIdentical(move.quantum)) {
+      return new Move(skewbExternalQuantumY, -move.amount);
     }
     return null;
     /*
