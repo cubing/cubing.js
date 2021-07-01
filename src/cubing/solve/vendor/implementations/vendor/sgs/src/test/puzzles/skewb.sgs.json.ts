@@ -1,5 +1,20 @@
-import { puzzles } from "../../../../../../../../puzzles";
+import type { KPuzzleDefinition } from "../../../../../../../../kpuzzle";
 import { parseSGS, SGSCachedData } from "../../sgs";
+
+async function skewbDefWithoutMO(): Promise<KPuzzleDefinition> {
+  const puzzleGeometry = await import(
+    "../../../../../../../../puzzle-geometry"
+  );
+  return puzzleGeometry
+    .getPuzzleGeometryByName("skewb", ["allmoves", "true", "rotations", "true"])
+    .writekpuzzle(true);
+}
+
+// TODO: Implement a general lazy Promise/ Promise cache wrapper
+let defCache: Promise<KPuzzleDefinition> | null = null;
+export async function skewbDefWithoutMOCached(): Promise<KPuzzleDefinition> {
+  return (defCache ??= skewbDefWithoutMO());
+}
 
 let cachedData: Promise<SGSCachedData> | null = null;
 export async function cachedSGSDataSkewb() {
@@ -9,7 +24,7 @@ export async function cachedSGSDataSkewb() {
 // TODO: Reduce info.
 export async function sgsDataSkewb(): Promise<SGSCachedData> {
   return parseSGS(
-    await puzzles.skewb.def(),
+    await skewbDefWithoutMOCached(),
     `SetOrder CORNERS 14 3 4 13 12 8 7 5
 SetOrder CENTERS 11 2 10 1 6 9
 

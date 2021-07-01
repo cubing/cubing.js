@@ -1,6 +1,5 @@
 import type { Alg } from "../../../../alg";
 import type { Transformation } from "../../../../kpuzzle";
-import { puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../../inside/inside-worker";
 import type { SGSCachedData } from "../vendor/sgs/src/sgs";
 import { TrembleSolver } from "../vendor/sgs/src/tremble";
@@ -13,13 +12,12 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const json: SGSCachedData = await (
-        await import("../vendor/sgs/src/test/puzzles/skewb.sgs.json")
-      ).cachedSGSDataSkewb();
+      const sgs = await import("../vendor/sgs/src/test/puzzles/skewb.sgs.json");
+      const json: SGSCachedData = await sgs.cachedSGSDataSkewb();
       return new TrembleSolver(
-        await puzzles.skewb.def(),
+        await sgs.skewbDefWithoutMOCached(),
         json,
-        "RLLUB".split(""),
+        "RLUB".split(""),
       );
     })())
   );
@@ -33,6 +31,14 @@ export async function preInitializeSkewb(): Promise<void> {
 export async function solveSkewb(state: Transformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
-  const alg = await trembleSolver.solve(state, TREMBLE_DEPTH);
+  const newState = {
+    CORNERS: state.CORNERS,
+    CENTERS: {
+      permutation: state.CENTERS.permutation,
+      orientation: new Array(6).fill(0),
+    },
+  };
+  console.log("state", state, newState);
+  const alg = await trembleSolver.solve(newState, TREMBLE_DEPTH);
   return simplifySkewbAlg(alg);
 }
