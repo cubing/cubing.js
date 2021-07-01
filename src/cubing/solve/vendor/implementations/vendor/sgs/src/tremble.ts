@@ -99,11 +99,11 @@ export class TrembleSolver {
     ) => {
       // console.log("recur");
       if (togo === 0) {
-        console.log("sgs time", sofar.toString());
         const sgsAlg = this.sgsPhaseSolve(recursiveState, bestLen);
         if (!sgsAlg) {
           return;
         }
+        console.log("sgs done!", sofar.toString(), "|", sgsAlg.toString());
         const newAlg = sofar.concat(sgsAlg); //.simplify({ collapseMoves: false });
 
         const len = countMoves(newAlg);
