@@ -82,7 +82,7 @@ export class PyraminxNotationMapper implements NotationMapper {
       }
     }
     if (pyraminxInternalQuantumY.isIdentical(move.quantum)) {
-      return new Move("y", -move.amount);
+      return new Move(pyraminxExternalQuantumY, -move.amount);
     } else {
       return null;
     }
