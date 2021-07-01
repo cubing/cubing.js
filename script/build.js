@@ -23,6 +23,7 @@ const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "comlink", ...externalNode];
 
 export async function build(target, dev) {
+  const startDeps = Date.now();
   const depPromises = [];
   for (const dependency of target.dependencies) {
     const depPromise = build(dependency, dev);
@@ -33,9 +34,16 @@ export async function build(target, dev) {
   }
   await Promise.all(depPromises);
   if (!target.builtYet) {
+    const startSelf = Date.now();
     console.log("Building target:", target.name);
     await target.buildSelf(dev);
-    console.log("Successfully built target:", target.name);
+    const doneTimestamp = Date.now();
+    const durTotalSeconds = Math.floor(doneTimestamp - startDeps) / 1000;
+    const durDepsSeconds = Math.floor(startSelf - startDeps) / 1000;
+    console.log(
+      `Successfully built target in ${durTotalSeconds} seconds (${durDepsSeconds} spent in dependencies):`,
+      target.name,
+    );
     target.builtYet = true;
   }
 }
@@ -192,6 +200,9 @@ export const typesTarget = {
   builtYet: false,
   dependencies: [solveWorkerTarget], // solve worker?
   buildSelf: async (dev) => {
+    console.warn(
+      "Note: The `types` target uses `tsc`, which is slow. Expect ≈10 seconds or more.",
+    );
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");
     }
