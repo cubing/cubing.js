@@ -103,11 +103,12 @@ export class TrembleSolver {
         if (!sgsAlg) {
           return;
         }
-        const newAlg = sofar.concat(sgsAlg).simplify({ collapseMoves: true });
+        const newAlg = sofar.concat(sgsAlg).simplify({ collapseMoves: false });
 
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
           console.log(`New best (${len} moves): ${newAlg}`);
+          console.log(`Tremble moves are: ${sofar}`);
           bestAlg = newAlg;
           bestLen = len;
         }
