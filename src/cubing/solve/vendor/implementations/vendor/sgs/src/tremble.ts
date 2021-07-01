@@ -13,6 +13,8 @@ import type { SGSCachedData } from "./sgs";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
+const DEBUG = false;
+
 // TODO: Take moves instead of move names?
 function calculateMoves(
   def: KPuzzleDefinition,
@@ -108,8 +110,10 @@ export class TrembleSolver {
 
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
-          console.log(`New best (${len} moves): ${newAlg}`);
-          console.log(`Tremble moves are: ${sofar}`);
+          if (DEBUG) {
+            console.log(`New best (${len} moves): ${newAlg}`);
+            console.log(`Tremble moves are: ${sofar}`);
+          }
           bestAlg = newAlg;
           bestLen = len;
         }

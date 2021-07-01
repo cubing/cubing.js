@@ -42,7 +42,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     }
   }
 
-  console.log(pieceOrdering);
+  // console.log(pieceOrdering);
 
   const remainingPiecesPerOrbit: Record<string, number> = {};
   for (const [orbitName, orbitDef] of Object.entries(def.orbits)) {
@@ -132,7 +132,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
           alg: alg.invert(),
           transformation: invertTransformation(def, kpuzzle.state),
         };
-        alg.log(location);
+        // alg.log(location);
         continue outer;
       }
     }
