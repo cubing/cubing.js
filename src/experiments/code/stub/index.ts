@@ -1,16 +1,14 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { combineTransformations } from "../../../../kpuzzle";
 import { Alg } from "../../../cubing/alg";
 import {
   areStatesEquivalent,
   identityTransformation,
   KPuzzle,
 } from "../../../cubing/kpuzzle";
-import { cube3x3x3, puzzles } from "../../../cubing/puzzles";
+import { puzzles } from "../../../cubing/puzzles";
 import { randomChoiceFactory } from "../../../cubing/solve/vendor/implementations/vendor/random-uint-below";
-import { cachedSGSData3x3x3 } from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/test/puzzles/3x3x3-inefficient.sgs.json";
 import { cachedSGSDataSkewb } from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/test/puzzles/skewb.sgs.json";
 import { TrembleSolver } from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/tremble";
 
@@ -54,8 +52,8 @@ console.log("Loading stub file.");
         .join(" "),
     );
     console.log("ra", randomAlg);
-    // kpuzzle.applyAlg(randomAlg); //new Alg("U' B U' B U L B R' L B'"));
-    kpuzzle.applyAlg(new Alg("U' B U' B U L B R' L B'"));
+    kpuzzle.applyAlg(randomAlg); //new Alg("U' B U' B U L B R' L B'"));
+    // kpuzzle.applyAlg(new Alg("U' B U' B U L B R' L B'"));
     // kpuzzle.applyAlg(new Alg("([U, B'])3"));
     // kpuzzle.applyAlg(
     //   new Alg("F B2 L U D2 B' D' F' L F2 L2 U2 F' R2 L2 B' D2 B2 D2 L2 F2"),

@@ -103,7 +103,7 @@ export class TrembleSolver {
         if (!sgsAlg) {
           return;
         }
-        console.log("sgs done!", sofar.toString(), "|", sgsAlg.toString());
+        // console.log("sgs done!", sofar.toString(), "|", sgsAlg.toString());
         const newAlg = sofar.concat(sgsAlg); //.simplify({ collapseMoves: false });
 
         const len = countMoves(newAlg);
@@ -147,7 +147,7 @@ export class TrembleSolver {
     //   // document.body.appendChild(document.createElement("div")).textContent = s;
     // }
 
-    console.log("sgsPhaseSolve");
+    // console.log("sgsPhaseSolve");
     const algBuilder = new AlgBuilder();
     let state = initialState;
 
