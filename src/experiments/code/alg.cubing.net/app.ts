@@ -17,6 +17,7 @@ import { cube3x3x3KPuzzle } from "../../../cubing/puzzles/implementations/3x3x3/
 import {
   experimentalSolve2x2x2,
   experimentalSolve3x3x3IgnoringCenters,
+  solveSkewb,
 } from "../../../cubing/solve";
 import { cube2x2x2KPuzzle } from "../../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
@@ -159,6 +160,12 @@ export class App {
         const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
         kpuzzle.applyAlg(this.twistyPlayer.alg);
         solution = await experimentalSolve3x3x3IgnoringCenters(kpuzzle.state);
+        break;
+      }
+      case "skewb": {
+        const kpuzzle = new KPuzzle(await puzzles.skewb.def());
+        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        solution = await solveSkewb(kpuzzle.state);
         break;
       }
       default:
@@ -474,7 +481,7 @@ class ControlPane {
   }
 
   setPuzzle(puzzle: string): void {
-    this.solveButton.disabled = !["2x2x2", "3x3x3"].includes(puzzle);
+    this.solveButton.disabled = !["2x2x2", "3x3x3", "skewb"].includes(puzzle);
     this.scrambleButton.disabled = !["2x2x2", "3x3x3"].includes(puzzle);
   }
 }

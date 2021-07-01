@@ -91,3 +91,8 @@ export async function experimentalSolve2x2x2(s: Transformation): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solve222ToString(s));
 }
+
+export async function solveSkewb(s: Transformation): Promise<Alg> {
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solveSkewbToString(s));
+}

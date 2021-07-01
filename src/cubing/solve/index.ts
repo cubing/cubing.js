@@ -2,6 +2,7 @@ export {
   randomScrambleForEvent as experimentalRandomScrambleForEvent,
   experimentalSolve3x3x3IgnoringCenters,
   experimentalSolve2x2x2,
+  solveSkewb,
 } from "./outside";
 
 // TODO: handle centers properly.

@@ -52,8 +52,8 @@ console.log("Loading stub file.");
         .join(" "),
     );
     console.log("ra", randomAlg);
-    kpuzzle.applyAlg(randomAlg); //new Alg("U' B U' B U L B R' L B'"));
-    // kpuzzle.applyAlg(new Alg("U' B U' B U L B R' L B'"));
+    // kpuzzle.applyAlg(randomAlg); //new Alg("U' B U' B U L B R' L B'"));
+    kpuzzle.applyAlg(new Alg("U' B U' B U L B R' L B'"));
     // kpuzzle.applyAlg(new Alg("([U, B'])3"));
     // kpuzzle.applyAlg(
     //   new Alg("F B2 L U D2 B' D' F' L F2 L2 U2 F' R2 L2 B' D2 B2 D2 L2 F2"),
