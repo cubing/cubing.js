@@ -150,7 +150,6 @@ export class TrembleSolver {
     let state = initialState;
 
     for (const piece of this.sgs.ordering) {
-      console.log(piece);
       const orbitName = piece.pieceRef.orbitName;
       const permutationIdx = piece.pieceRef.permutationIdx;
       const inverseState = invertTransformation(this.def, state);
@@ -159,7 +158,7 @@ export class TrembleSolver {
           inverseState[orbitName].permutation[permutationIdx]
         ][inverseState[orbitName].orientation[permutationIdx]];
       // console.log(info);
-      info.alg.log(JSON.parse(JSON.stringify(state)));
+      // info.alg.log(JSON.parse(JSON.stringify(state)));
       if (!info) {
         throw new Error("Missing algorithm in sgs or esgs?");
       }
