@@ -31,6 +31,7 @@ import {
   BackgroundTheme,
   centeredCameraPosition,
   ControlsLocation,
+  cornerCameraPosition,
   cubeCameraPosition,
   ExperimentalStickering,
   HintFaceletStyle,
@@ -366,7 +367,13 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   // TODO
   get defaultCameraPosition(): Vector3 {
-    return this.puzzle[1] === "x" ? cubeCameraPosition : centeredCameraPosition;
+    if (this.puzzle[1] === "x") {
+      return cubeCameraPosition;
+    }
+    if (this.puzzle === "skewb") {
+      return cornerCameraPosition;
+    }
+    return centeredCameraPosition;
   }
 
   static get observedAttributes(): string[] {

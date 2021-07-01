@@ -20,6 +20,7 @@ export const centeredCameraPosition = new Vector3(
 
 // TODO
 export const cubeCameraPosition = new Vector3(3, 4, 5);
+export const cornerCameraPosition = new Vector3(4, 4, 4);
 
 // TODO: turn these maps into lists?
 export const setupToLocations = {
