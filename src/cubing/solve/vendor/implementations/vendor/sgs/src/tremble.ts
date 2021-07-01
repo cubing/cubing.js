@@ -99,11 +99,12 @@ export class TrembleSolver {
     ) => {
       // console.log("recur");
       if (togo === 0) {
+        console.log("sgs time", sofar.toString());
         const sgsAlg = this.sgsPhaseSolve(recursiveState, bestLen);
         if (!sgsAlg) {
           return;
         }
-        const newAlg = sofar.concat(sgsAlg).simplify({ collapseMoves: false });
+        const newAlg = sofar.concat(sgsAlg); //.simplify({ collapseMoves: false });
 
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
@@ -146,7 +147,7 @@ export class TrembleSolver {
     //   // document.body.appendChild(document.createElement("div")).textContent = s;
     // }
 
-    // console.log("sgsPhaseSolve");
+    console.log("sgsPhaseSolve");
     const algBuilder = new AlgBuilder();
     let state = initialState;
 

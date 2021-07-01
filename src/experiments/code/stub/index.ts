@@ -67,5 +67,5 @@ End`);
   kpuzzle.applyAlg(new Alg("([U, B'])3"));
   // kpuzzle.applyAlg(new Alg("R U"));
   console.log("state", kpuzzle.state);
-  (await solver.solve(kpuzzle.state, 1)).log();
+  (await solver.solve(kpuzzle.state, 2)).log();
 })();
