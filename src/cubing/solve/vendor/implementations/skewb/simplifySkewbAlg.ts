@@ -36,7 +36,8 @@ class SimplifySkewbAlg extends TraversalUp<Alg, Unit> {
   }
 
   public traverseMove(move: Move): Unit {
-    const newAmount = (((move.amount % 3) + 4) % 3) - 1;
+    const mod = move.family === "y" ? 4 : 3;
+    const newAmount = (((move.amount % mod) + mod + 1) % mod) - 1;
     return move.modified({ amount: newAmount });
   }
 

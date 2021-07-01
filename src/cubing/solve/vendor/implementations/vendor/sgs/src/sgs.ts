@@ -121,6 +121,10 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
             alg.toString(),
             pieceRef,
             location,
+            inverseLocations[location.permutationIdx][
+              location.orientation
+            ].alg.toString(),
+            inverseLocations[location.permutationIdx][location.orientation],
           );
           break;
         }

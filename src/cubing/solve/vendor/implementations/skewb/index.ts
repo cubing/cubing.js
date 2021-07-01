@@ -38,7 +38,6 @@ export async function solveSkewb(state: Transformation): Promise<Alg> {
       orientation: new Array(6).fill(0),
     },
   };
-  console.log("state", state, newState);
   const alg = await trembleSolver.solve(newState, TREMBLE_DEPTH);
   return simplifySkewbAlg(alg);
 }
