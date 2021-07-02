@@ -12,6 +12,10 @@ import { TrembleSolver } from "../../../cubing/solve/vendor/implementations/vend
 console.log("Loading stub file.");
 
 (async () => {
+  new Alg("R U R' Z2 U3 R4 L5 G6 B2' N0")
+    .simplify({ quantumMoveOrder: () => 4 })
+    .log("simplified!");
+
   const def = await puzzles.pyraminx.def();
   const sgs = await cachedSGSDataPyraminx();
   console.log(sgs);

@@ -1,8 +1,9 @@
-import type { Alg, QuantumMove } from "../../../../alg";
+import type { Alg } from "../../../../alg";
 import type { Transformation } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../../inside/inside-worker";
 import type { SGSCachedData } from "../vendor/sgs/src/sgs";
 import { TrembleSolver } from "../vendor/sgs/src/tremble";
+import { simplifySkewbAlg } from "./simplifySkewbAlg";
 
 const TREMBLE_DEPTH = 3;
 
@@ -37,10 +38,6 @@ export async function solveSkewb(state: Transformation): Promise<Alg> {
       orientation: new Array(6).fill(0),
     },
   };
-  const alg = await trembleSolver.solve(
-    newState,
-    TREMBLE_DEPTH,
-    (quantumMove: QuantumMove) => (quantumMove.family === "y" ? 4 : 3), // TODO: Attach quantum move order lookup to puzzle.
-  );
+  const alg = await trembleSolver.solve(newState, TREMBLE_DEPTH, () => 3); // TODO: Attach quantum move order lookup to puzzle.
   return alg;
 }
