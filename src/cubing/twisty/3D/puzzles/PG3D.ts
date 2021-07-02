@@ -138,6 +138,7 @@ class StickerDef {
     public filler: Filler,
     stickerDat: StickerDatSticker,
     hintStickers: boolean,
+    hintStickerHeightScale: number,
     options?: {
       appearance?: ExperimentalFaceletMeshAppearance;
     },
@@ -180,7 +181,7 @@ class StickerDef {
       }
       const norm = new Vector3();
       goodFace!.getNormal(norm);
-      norm.multiplyScalar(0.5);
+      norm.multiplyScalar(0.5 * hintStickerHeightScale);
       const hintCoords = [];
       for (let i = 0; i < coords.length; i++) {
         const j = coords.length - 1 - i;
@@ -348,6 +349,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private pgdat: StickerDat,
     showFoundation: boolean = false,
     hintStickers: boolean = false,
+    hintStickerHeightScale: number = 1,
     private params: PG3DOptions = {},
   ) {
     super();
@@ -406,7 +408,13 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           false,
         );
       }
-      const stickerdef = new StickerDef(filler, sticker, hintStickers, options);
+      const stickerdef = new StickerDef(
+        filler,
+        sticker,
+        hintStickers,
+        hintStickerHeightScale,
+        options,
+      );
       this.stickers[orbit][ori][ord] = stickerdef;
     }
     this.foundationBound = filler.ipos;

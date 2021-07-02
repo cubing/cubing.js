@@ -58,6 +58,7 @@ export interface LegacyExperimentalPG3DViewConfig {
   experimentalPolarVantages?: boolean;
   showFoundation?: boolean;
   hintStickers?: boolean;
+  hintStickerHeightScale?: number;
 }
 
 function is3DVisualization(visualizationFormat: VisualizationFormat): boolean {
@@ -715,6 +716,15 @@ export class TwistyPlayer extends ManagedCustomElement {
               throw "Unimplemented!";
             }
             const options: PG3DOptions = {};
+
+            const heightMap: Record<string, number> = {
+              megaminx: 1.5,
+              pyraminx: 1.75,
+            };
+            const hintStickerHeightScale =
+              this.#legacyExperimentalPG3DViewConfig?.hintStickerHeightScale ??
+              heightMap[this.puzzle] ??
+              1;
             const pg3d = new PG3D(
               cursor,
               scene.scheduleRender.bind(scene),
@@ -723,6 +733,7 @@ export class TwistyPlayer extends ManagedCustomElement {
               this.#legacyExperimentalPG3DViewConfig?.showFoundation ?? true,
               this.#legacyExperimentalPG3DViewConfig?.hintStickers ??
                 this.hintFacelets === "floating",
+              hintStickerHeightScale,
               options,
             );
             (async () => {
