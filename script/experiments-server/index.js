@@ -4,7 +4,7 @@ import { existsSync, readFile } from "fs";
 import { createServer } from "http";
 import { extname, join } from "path";
 
-const FILE_ROOT = "../../../dist/experiments/";
+const FILE_ROOT = "../../dist/experiments/";
 
 const FILE_ROOT_EXPANDED = new URL(FILE_ROOT, import.meta.url).pathname;
 if (!existsSync(FILE_ROOT_EXPANDED)) {
@@ -27,10 +27,8 @@ export function startServer(port) {
 
     let filePath;
     if (topPath === "cubing.js") {
-      filePath = new URL(
-        join("../../../dist/experiments/", remainingPath),
-        import.meta.url,
-      ).pathname;
+      filePath = new URL(join(FILE_ROOT, remainingPath), import.meta.url)
+        .pathname;
     } else {
       response.writeHead(404, { "Content-Type": "text/html" });
       response.end("bad path", "utf-8");
