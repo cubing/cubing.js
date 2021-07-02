@@ -1,5 +1,10 @@
+import { needFolder } from "../../../../lib/need-folder.js";
+needFolder(
+  new URL("../../../../../dist/esm/alg", import.meta.url).pathname,
+  "make build-esm",
+);
+
 import puppeteer from "puppeteer";
-import { Alg } from "cubing/alg";
 import { installServer, port, startServer } from "./serve-parcel.js";
 import { killAllChildProcesses } from "../../../../lib/execPromise.js";
 
@@ -34,7 +39,7 @@ async function runTest() {
   const elem = await page.waitForSelector("#scramble-test");
   const textContent = await elem.evaluate((node) => node.textContent);
   console.log("Generated scramble:", textContent);
-  const alg = Alg.fromString(textContent);
+  const alg = (await import("cubing/alg")).Alg.fromString(textContent);
   const algLength = alg.experimentalNumUnits();
   assert("algLength > 12", true, algLength > 12);
   assert("algLength < 30", true, algLength < 30);
