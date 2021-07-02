@@ -16,7 +16,7 @@ SetOrder EDGES 9 7 8 5 3 10
 
 Alg B
 Alg B'
-alg y
+Alg y
 Alg B y
 Alg B' y
 Alg y'
