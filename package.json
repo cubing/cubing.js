@@ -57,7 +57,7 @@
     "test-jest": "npx jest --collectCoverage",
     "test-dist-esm-import": "node script/test/dist/esm/import/main.mjs",
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
-    "test-dist-perf": "node script/dist-test/perf/*.mjs",
+    "test-dist-esm-perf": "node script/test/dist/esm/perf/*.mjs",
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts .",
