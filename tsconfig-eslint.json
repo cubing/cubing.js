@@ -9,7 +9,7 @@
     "src/**/*.spec.ts"
   ],
   "exclude": [
-    "script/dist-static/**/*",
+    "src/dist-static/**/*",
     "src/cubing/solve/worker-inside-generated*",
     "src/cubing/solve/vendor/implementations/3x3x3/min2phase/gwt.js"
   ]
