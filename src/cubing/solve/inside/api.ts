@@ -14,6 +14,7 @@ import {
   initialize444,
   random444Scramble,
 } from "../vendor/implementations/4x4x4";
+import { solvePyraminx } from "../vendor/implementations/pyraminx";
 import { solveSkewb } from "../vendor/implementations/skewb";
 import { setIsInsideWorker } from "./inside-worker";
 
@@ -88,6 +89,10 @@ export const insideAPI = {
 
   solveSkewbToString: async (s: Transformation): Promise<string> => {
     return (await solveSkewb(s)).toString();
+  },
+
+  solvePyraminxToString: async (s: Transformation): Promise<string> => {
+    return (await solvePyraminx(s)).toString();
   },
 };
 

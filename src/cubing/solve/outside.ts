@@ -96,3 +96,8 @@ export async function solveSkewb(s: Transformation): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solveSkewbToString(s));
 }
+
+export async function solvePyraminx(s: Transformation): Promise<Alg> {
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solvePyraminxToString(s));
+}

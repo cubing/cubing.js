@@ -1,4 +1,4 @@
-import { Alg, AlgBuilder, Move } from "../../../../../../alg";
+import { Alg, AlgBuilder, Move, QuantumMove } from "../../../../../../alg";
 import {
   areStatesEquivalent,
   combineTransformations,
@@ -91,6 +91,7 @@ export class TrembleSolver {
   public async solve(
     state: Transformation,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
+    quantumMoveOrder?: (quantumMove: QuantumMove) => number,
   ): Promise<Alg> {
     let bestAlg: Alg | null = null;
     var bestLen = 1000000;
@@ -106,7 +107,9 @@ export class TrembleSolver {
           return;
         }
         // console.log("sgs done!", sofar.toString(), "|", sgsAlg.toString());
-        const newAlg = sofar.concat(sgsAlg); //.simplify({ collapseMoves: false });
+        const newAlg = sofar
+          .concat(sgsAlg)
+          .simplify({ collapseMoves: true, quantumMoveOrder });
 
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {

@@ -129,6 +129,24 @@ export interface SimplifyOptions {
 
 // TODO: Test that inverses are bijections.
 class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
+  static #newAmount(
+    move: Move,
+    deltaAmount: number,
+    options: SimplifyOptions,
+  ): number {
+    let newAmount = move.amount + deltaAmount;
+    if (options?.quantumMoveOrder) {
+      const order = options.quantumMoveOrder(move.quantum);
+      // Examples:
+      // • order 4 → min -1 (e.g. cube)
+      // • order 5 → min -2 (e.g. Megaminx)
+      // • order 3 → min -1 (e.g. Pyraminx)
+      const min = Math.floor(order / 2) + 1 - order;
+      newAmount = (((newAmount % order) + order - min) % order) + min; // TODO
+    }
+    return newAmount;
+  }
+
   // TODO: Handle
   public *traverseAlg(alg: Alg, options: SimplifyOptions): Generator<Unit> {
     if (options.depth === 0) {
@@ -139,33 +157,36 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
     const newUnits: Unit[] = [];
     let lastUnit: Unit | null = null;
     const collapseMoves = options?.collapseMoves ?? true;
+    function appendMoveWithNewAmount(move: Move, deltaAmount: number): boolean {
+      const newAmount = Simplify.#newAmount(move, deltaAmount, options);
+      if (newAmount === 0) {
+        return false;
+      }
+      const newMove = new Move(move.quantum, newAmount);
+      newUnits.push(newMove);
+      lastUnit = newMove;
+      return true;
+    }
     function appendCollapsed(newUnit: Unit) {
-      if (collapseMoves && lastUnit?.is(Move) && newUnit.is(Move)) {
-        const lastMove = lastUnit as Move;
-        const newMove = newUnit as Move;
-        if (lastMove.quantum.isIdentical(newMove.quantum)) {
-          newUnits.pop();
-          let newAmount = lastMove.amount + newMove.amount;
-          if (options?.quantumMoveOrder) {
-            const order = options.quantumMoveOrder(lastMove.quantum);
-            newAmount = (((newAmount % order) + order + 1) % order) - 1; // TODO
-          }
-          if (newAmount !== 0) {
-            const coalescedMove = new Move(lastMove.quantum, newAmount);
-            newUnits.push(coalescedMove);
-            lastUnit = coalescedMove;
-          } else {
-            lastUnit = newUnits.slice(-1)[0];
-          }
+      if (
+        collapseMoves &&
+        lastUnit?.is(Move) &&
+        newUnit.is(Move) &&
+        (lastUnit as Move).quantum.isIdentical((newUnit as Move).quantum)
+      ) {
+        newUnits.pop();
+        if (
+          !appendMoveWithNewAmount(lastUnit as Move, (newUnit as Move).amount)
+        ) {
+          lastUnit = newUnits.slice(-1)[0];
+        }
+      } else {
+        if (newUnit.is(Move)) {
+          appendMoveWithNewAmount(newUnit as Move, 0);
         } else {
-          // TODO: handle quantum move order
           newUnits.push(newUnit);
           lastUnit = newUnit;
         }
-      } else {
-        // TODO: handle quantum move order
-        newUnits.push(newUnit);
-        lastUnit = newUnit;
       }
     }
 

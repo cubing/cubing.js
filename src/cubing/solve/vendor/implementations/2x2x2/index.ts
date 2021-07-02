@@ -12,7 +12,6 @@ import {
 } from "../vendor/random-uint-below";
 import type { SGSCachedData } from "../vendor/sgs/src/sgs";
 import { TrembleSolver } from "../vendor/sgs/src/tremble";
-import { simplify222Alg } from "./simplify222Alg";
 
 // Empirical ly determined depth:
 // - ≈11 moves on average (as opposed to >13 moves for depth 2),
@@ -44,8 +43,8 @@ export async function preInitialize222(): Promise<void> {
 export async function solve222(state: Transformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
-  const alg = await trembleSolver.solve(state, TREMBLE_DEPTH);
-  return simplify222Alg(alg);
+  const alg = await trembleSolver.solve(state, TREMBLE_DEPTH, () => 4); // TODO: Attach quantum move order lookup to puzzle.
+  return alg;
 }
 
 // TODO: factor out and test.
