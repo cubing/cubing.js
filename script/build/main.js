@@ -48,42 +48,63 @@ export async function build(target, dev) {
   }
 }
 
-const stringWrappingPlugin = {
-  name: "wrapping",
-  setup(build) {
-    build.onEnd((result) => {
-      return new Promise((resolve, reject) => {
-        if (result.errors.length !== 0) {
-          execPromise(
-            "rm -f src/cubing/solve/worker-inside-generated.js src/cubing/solve/worker-inside-generated-string.js",
-          );
-          console.log("removed generated worker files.");
-          reject();
-        }
-        readFile(
-          "src/cubing/solve/worker-inside-generated.js",
-          "utf8",
-          (_, contents) => {
-            writeFile(
-              "src/cubing/solve/worker-inside-generated-string.js",
-              `export const workerSource = "${contents
-                .replace(/\\/g, "\\\\")
-                .replace(/"/g, '\\"')
-                .replace(/\n/g, "\\n")}";`,
-              async () => {
-                await execPromise(
-                  "rm -f src/cubing/solve/worker-inside-generated.js",
+function constructStringWrappingPlugin(dev) {
+  return {
+    name: "wrapping",
+    setup(build) {
+      build.onEnd((result) => {
+        return new Promise(async (resolve, _) => {
+          if (result.errors.length !== 0) {
+            await execPromise(
+              "rm -f src/cubing/solve/worker-inside-generated.js",
+            );
+
+            if (dev) {
+              writeFile(
+                "src/cubing/solve/worker-inside-generated-string.js",
+                'export const workerSource = "throw new Error(\\"Worker build error.\\");";',
+                () => {
+                  console.log(
+                    "Worker generation failed. Generated worker has been replaced with a stub.",
+                  );
+                  resolve();
+                },
+              );
+            } else {
+              await execPromise(
+                "rm -f src/cubing/solve/worker-inside-generated-string.js",
+              );
+              console.log(
+                "Worker generation failed. Removed generated worker files.",
+              );
+            }
+          } else {
+            readFile(
+              "src/cubing/solve/worker-inside-generated.js",
+              "utf8",
+              (_, contents) => {
+                writeFile(
+                  "src/cubing/solve/worker-inside-generated-string.js",
+                  `export const workerSource = "${contents
+                    .replace(/\\/g, "\\\\")
+                    .replace(/"/g, '\\"')
+                    .replace(/\n/g, "\\n")}";`,
+                  async () => {
+                    await execPromise(
+                      "rm -f src/cubing/solve/worker-inside-generated.js",
+                    );
+                    console.log("updated worker-inside-generated-string.js");
+                    resolve();
+                  },
                 );
-                console.log("updated worker-inside-generated-string.js");
-                resolve();
               },
             );
-          },
-        );
+          }
+        });
       });
-    });
-  },
-};
+    },
+  };
+}
 
 export const solveWorkerTarget = {
   name: "solve-worker",
@@ -100,7 +121,7 @@ export const solveWorkerTarget = {
       logLevel: "info",
       external: externalNode,
       minify: true, // TODO: prod only?
-      plugins: [stringWrappingPlugin],
+      plugins: [constructStringWrappingPlugin(dev)],
     });
   },
 };
