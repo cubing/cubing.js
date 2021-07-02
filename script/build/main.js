@@ -155,9 +155,9 @@ export const esmTarget = {
       external,
     });
     await execPromise("cp -R src/dist-static/esm/* dist/esm");
-    // await execPromise(
-    //   "cp src/cubing/solve/esm-test-worker.js dist/esm/solve/esm-test-worker.js",
-    // );
+    await execPromise(
+      "cp src/cubing/solve/esm-test-worker.js dist/esm/solve/esm-test-worker.js",
+    );
   },
 };
 
@@ -192,6 +192,12 @@ export const SnowpackTarget = {
       ? snowpack.startServer({ config }, { isDev: dev })
       : snowpack.build({ config });
     await snowpackPromise;
+
+    if (!dev) {
+      await execPromise(
+        "cp src/cubing/solve/esm-test-worker.js dist/experiments/esm-test-worker.js",
+      );
+    }
   },
 };
 
