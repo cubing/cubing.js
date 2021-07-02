@@ -19,6 +19,9 @@ export const centeredCameraPosition = new Vector3(
 );
 
 // TODO
+export const megaminxCameraPosition = centeredCameraPosition
+  .clone()
+  .multiplyScalar(1.15);
 export const cubeCameraPosition = new Vector3(3, 4, 5).multiplyScalar(0.8);
 export const cornerCameraPosition = new Vector3(4, 4, 4);
 export const pyraminxCameraPosition = new Vector3(0.6, 3, 5); // TODO: center puzzle in frame, use x=0 but increase y

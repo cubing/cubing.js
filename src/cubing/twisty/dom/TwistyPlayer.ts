@@ -35,6 +35,7 @@ import {
   cubeCameraPosition,
   ExperimentalStickering,
   HintFaceletStyle,
+  megaminxCameraPosition,
   PuzzleID,
   pyraminxCameraPosition,
   SetupToLocation,
@@ -372,10 +373,12 @@ export class TwistyPlayer extends ManagedCustomElement {
       return cubeCameraPosition;
     }
     switch (this.puzzle) {
-      case "skewb":
-        return cornerCameraPosition;
+      case "megaminx":
+        return megaminxCameraPosition;
       case "pyraminx":
         return pyraminxCameraPosition;
+      case "skewb":
+        return cornerCameraPosition;
     }
     return centeredCameraPosition;
   }

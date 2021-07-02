@@ -1,4 +1,3 @@
-import { Vector3 } from "three";
 import { KPuzzle } from "../../../cubing/kpuzzle";
 import { Alg, LineComment, Newline } from "../../../cubing/alg";
 import { puzzles } from "../../../cubing/puzzles";
@@ -79,9 +78,6 @@ export class App {
       alg: new Alg(),
       viewerLink: "none",
     };
-    if (initialData.puzzleName === "megaminx") {
-      twistyConfig.experimentalCameraPosition = new Vector3(0, 3.09, 5);
-    }
     const displayablePuzzle = supportedPuzzles[initialData.puzzleName];
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
