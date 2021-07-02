@@ -37,9 +37,6 @@
     "typescript": "^4.3.2",
     "yargs": "^16.2.0"
   },
-  "bin": {
-    "cubing-screenshot": "script/bin/screenshot/bin.js"
-  },
   "scripts": {
     "build": "npm run clean && node ./script/build/main.js all",
     "build-esm": "node ./script/build/main.js esm",
