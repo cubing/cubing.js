@@ -4,7 +4,7 @@ import { existsSync, readFile } from "fs";
 import { createServer } from "http";
 import { extname, join } from "path";
 
-const FILE_ROOT = "../../dist/experiments/";
+const FILE_ROOT = "../../../dist/experiments/";
 
 const FILE_ROOT_EXPANDED = new URL(FILE_ROOT, import.meta.url).pathname;
 if (!existsSync(FILE_ROOT_EXPANDED)) {
