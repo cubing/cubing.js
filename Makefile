@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build build-esm build-bundle-global build-types build-bin build-experiments build-solve-worker generate-js generate-js-parsers generate-js-svg dev clean test test-dist-parcel test-experiments test-import-restrictions test-jest test-node-import test-tsc test-dist-perf format setup lint prepack parcel-build-for-twizzle-net
+NPM_COMMANDS = build build-esm build-bundle-global build-types build-bin build-experiments build-solve-worker generate-js generate-js-parsers generate-js-svg dev clean test test-dist-parcel test-dist-experiments test-import-restrictions test-jest test-node-import test-tsc test-dist-perf format setup lint prepack parcel-build-for-twizzle-net
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
