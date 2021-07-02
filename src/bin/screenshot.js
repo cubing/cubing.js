@@ -40,9 +40,14 @@ const args = yargs(hideBin(process.argv))
   .option("out-file", {
     type: "string",
   })
-  .option("size", {
+  .option("width", {
     type: "number",
     default: 1024,
+  })
+  .option("height", {
+    type: "number",
+    default: null,
+    description: "Defaults to width",
   })
   .strictOptions()
   .demandCommand(1).argv;
@@ -72,9 +77,10 @@ options.controlPanel = "none";
 (async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+  const height = args["height"] ?? args["width"];
   page.setViewport({
-    width: args["size"],
-    height: args["size"],
+    width: args["width"],
+    height,
   });
 
   const url = new URL(PAGE_URL);
