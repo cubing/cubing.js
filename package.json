@@ -52,7 +52,7 @@
     "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/solve/worker-inside-generated* script/dist-test/parcel-test/parcel-package/.parcel-cache script/dist-test/parcel-test/parcel-package/dist script/dist-test/parcel-test/parcel-package/node_modules",
     "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml in sync with this",
     "test-dist-parcel": "node ./script/dist-test/parcel-test/parcel-test.js",
-    "test-experiments": "node ./script/test/experiments/test.js",
+    "test-experiments": "node ./script/test/dist/experiments/main.js",
     "test-import-restrictions": "node ./script/import-restrictions/build.js",
     "test-jest": "npx jest --collectCoverage",
     "test-node-import": "node script/dist-test/import.mjs",

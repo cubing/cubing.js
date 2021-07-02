@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { startServer } from "../../experiments-server/index.js";
+import { startServer } from "../../../lib/experiments-server/index.js";
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;
