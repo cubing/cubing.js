@@ -132,7 +132,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
           alg: alg.invert(),
           transformation: invertTransformation(def, kpuzzle.state),
         };
-        // alg.log(location);
+        // alg.log([pieceRef, location]);
         continue outer;
       }
     }
