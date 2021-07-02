@@ -1,18 +1,14 @@
 // https://developer.mozilla.org/en-US/docs/Learn/Server-side/Node_server_without_framework
 
-import { existsSync, readFile } from "fs";
+import { readFile } from "fs";
 import { createServer } from "http";
 import { extname, join } from "path";
+import { needFolder } from "../need-folder.js";
 
 const FILE_ROOT = "../../../dist/experiments/";
 
 const FILE_ROOT_EXPANDED = new URL(FILE_ROOT, import.meta.url).pathname;
-if (!existsSync(FILE_ROOT_EXPANDED)) {
-  console.error(
-    `\nFolder does not exist: ${FILE_ROOT_EXPANDED}\n\nRun \`make build-experiments\` first!\n\b`,
-  );
-  process.exit(1);
-}
+needFolder(FILE_ROOT_EXPANDED, "make build-experiments");
 
 export function startServer(port) {
   port ??= 4443;
