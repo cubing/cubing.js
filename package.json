@@ -55,7 +55,7 @@
     "test-dist-experiments": "node ./script/test/dist/experiments/main.js",
     "test-import-restrictions": "node ./script/import-restrictions/build.js",
     "test-jest": "npx jest --collectCoverage",
-    "test-node-import": "node script/dist-test/import.mjs",
+    "test-dist-esm-import": "node script/test/dist/esm/import/main.mjs",
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
     "test-dist-perf": "node script/dist-test/perf/*.mjs",
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
