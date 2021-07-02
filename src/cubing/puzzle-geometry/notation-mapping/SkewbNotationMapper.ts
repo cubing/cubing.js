@@ -11,6 +11,14 @@ const skewbFamilyMap: Record<string, string> = {
   D: "DFR",
   L: "DLF",
   R: "DRB",
+  Uv: "UBLv",
+  ULv: "ULFv",
+  Fv: "UFRv",
+  URv: "URBv",
+  Bv: "DBLv",
+  Dv: "DFRv",
+  Lv: "DLFv",
+  Rv: "DRBv",
 };
 
 const skewbExternalQuantumY = new QuantumMove("y");
