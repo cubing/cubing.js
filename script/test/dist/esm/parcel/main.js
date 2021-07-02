@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
-import { Alg } from "../../../dist/esm/alg/index.js";
+import { Alg } from "cubing/alg";
 import { installServer, port, startServer } from "./serve-parcel.js";
-import { killAllChildProcesses } from "../../../script/execPromise.js";
+import { killAllChildProcesses } from "../../../../lib/execPromise.js";
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;

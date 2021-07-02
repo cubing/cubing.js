@@ -31,10 +31,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: make build
-      - run: make test-node-import
-      - run: make test-dist-perf
+      - run: test-dist-esm-node-import
+      - run: make test-dist-esm-perf
       - run: make build-experiments
       - run: make test-dist-experiments
       # - run: make parcel-build-for-twizzle-net
-      - run: make test-dist-parcel
+      - run: make test-dist-esm-parcel
       - run: make clean

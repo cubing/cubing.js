@@ -1,4 +1,4 @@
-import { execPromise } from "../../../script/execPromise.js";
+import { execPromise } from "../../../../lib/execPromise.js";
 
 export const port = 1236;
 
