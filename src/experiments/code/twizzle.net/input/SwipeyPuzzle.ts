@@ -139,14 +139,17 @@ export class SwipeyPuzzle extends HTMLElement {
 
     if (this.puzzleName !== "3x3x3") {
       setTimeout(() => {
-        const icon = (this.twistyPlayer
-          .viewerElems[0] as Twisty3DCanvas).renderToDataURL({
+        const icon = (
+          this.twistyPlayer.viewerElems[0] as Twisty3DCanvas
+        ).renderToDataURL({
           squareCrop: true,
         });
         console.log("Setting touch icon from canvas.");
-        (document.querySelector(
-          'link[rel="apple-touch-icon"]',
-        ) as HTMLLinkElement).href = icon;
+        (
+          document.querySelector(
+            'link[rel="apple-touch-icon"]',
+          ) as HTMLLinkElement
+        ).href = icon;
       }, 100);
     }
   }

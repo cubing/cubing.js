@@ -42,7 +42,8 @@ type ButtonIconName =
 
 export class TwistyControlButton
   extends ManagedCustomElement
-  implements TwistyControlElement {
+  implements TwistyControlElement
+{
   private timeline: Timeline;
   private timelineCommand: TimelineCommand;
   private currentIconName: string | null = null;
@@ -277,12 +278,10 @@ customElementsShim.define("twisty-control-button", TwistyControlButton);
 // Usually a horizontal line.
 export class TwistyControlButtonPanel
   extends ManagedCustomElement
-  implements TwistyControlElement {
-  #viewerLinkClassListManager: ClassListManager<ViewerLinkPage> = new ClassListManager(
-    this,
-    "viewer-link-",
-    ["none", "twizzle"],
-  );
+  implements TwistyControlElement
+{
+  #viewerLinkClassListManager: ClassListManager<ViewerLinkPage> =
+    new ClassListManager(this, "viewer-link-", ["none", "twizzle"]);
 
   constructor(
     timeline?: Timeline,

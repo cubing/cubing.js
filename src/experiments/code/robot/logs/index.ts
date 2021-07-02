@@ -12,21 +12,18 @@ function setSession(session: string): void {
   const receivedText: string =
     localStorage[`${ROBOT_RECORDED_PREFIX}${session}`];
   (document.querySelector("#left") as HTMLTextAreaElement).value = sentText;
-  (document.querySelector(
-    "#right",
-  ) as HTMLTextAreaElement).value = receivedText;
+  (document.querySelector("#right") as HTMLTextAreaElement).value =
+    receivedText;
 
-  (document.querySelector(
-    "#left-normalized",
-  ) as HTMLTextAreaElement).value = new Alg(
-    normalize(Alg.fromString(sentText), { quantumMoveOrder: () => 4 }),
-  ).toString();
+  (document.querySelector("#left-normalized") as HTMLTextAreaElement).value =
+    new Alg(
+      normalize(Alg.fromString(sentText), { quantumMoveOrder: () => 4 }),
+    ).toString();
 
-  (document.querySelector(
-    "#right-normalized",
-  ) as HTMLTextAreaElement).value = new Alg(
-    normalize(Alg.fromString(receivedText), { quantumMoveOrder: () => 4 }),
-  ).toString();
+  (document.querySelector("#right-normalized") as HTMLTextAreaElement).value =
+    new Alg(
+      normalize(Alg.fromString(receivedText), { quantumMoveOrder: () => 4 }),
+    ).toString();
 }
 
 let sessions: string[] = [];

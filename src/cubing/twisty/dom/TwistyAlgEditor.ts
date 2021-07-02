@@ -33,9 +33,8 @@ export class TwistyAlgEditor extends ManagedCustomElement {
 
   #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
 
-  #textareaClassListManager: ClassListManager<
-    "none" | "warning" | "error"
-  > = new ClassListManager(this, "issue-", ["none", "warning", "error"]);
+  #textareaClassListManager: ClassListManager<"none" | "warning" | "error"> =
+    new ClassListManager(this, "issue-", ["none", "warning", "error"]);
 
   #textareaClassListValidForPuzzleManager: ClassListManager<
     "none" | "warning" | "error"
@@ -293,9 +292,8 @@ export class TwistyAlgEditor extends ManagedCustomElement {
           }>,
         ) => {
           try {
-            const timestamp = twistyPlayer.cursor!.experimentalTimestampFromIndex(
-              e.detail.idx,
-            );
+            const timestamp =
+              twistyPlayer.cursor!.experimentalTimestampFromIndex(e.detail.idx);
             // console.log(e.detail, timestamp, e.detail.leaf);
             twistyPlayer.timeline.setTimestamp(
               timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
@@ -309,9 +307,8 @@ export class TwistyAlgEditor extends ManagedCustomElement {
 
       twistyPlayer.timeline!.addTimestampListener({
         onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
-          const idx = twistyPlayer.cursor!.experimentalIndexFromTimestamp(
-            timestamp,
-          );
+          const idx =
+            twistyPlayer.cursor!.experimentalIndexFromTimestamp(timestamp);
           const move = twistyPlayer.cursor!.experimentalMoveAtIndex(idx);
           if (move) {
             this.highlightLeaf(move as ExperimentalParsed<Move>);

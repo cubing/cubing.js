@@ -5,8 +5,8 @@ export { randomUIntBelowFactory } from "./random-int";
 import { randomUIntBelowFactory } from "./random-int";
 const randomUIntBelowPromise = randomUIntBelowFactory();
 export async function randomPermute<T>(list: T[]): Promise<void> {
-  for (let i=1; i < list.length; i++) {
+  for (let i = 1; i < list.length; i++) {
     const j = (await randomUIntBelowPromise)(i);
-    [list[i], list[j]] = [list[j], list[i]]
+    [list[i], list[j]] = [list[j], list[i]];
   }
 }

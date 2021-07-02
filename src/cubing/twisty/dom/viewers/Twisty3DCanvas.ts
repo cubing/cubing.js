@@ -39,7 +39,8 @@ function newSharedRenderer(): WebGLRenderer {
 // <twisty-3d-canvas>
 export class Twisty3DCanvas
   extends ManagedCustomElement
-  implements TwistyViewerElement {
+  implements TwistyViewerElement
+{
   private scene: Twisty3DScene;
   public canvas: HTMLCanvasElement;
   public camera: PerspectiveCamera;

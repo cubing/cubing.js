@@ -132,6 +132,7 @@ export class TwistyAlgEditorCharSearch extends TraversalDownUp<
 }
 
 const TwistyAlgEditorCharSearchInstance = new TwistyAlgEditorCharSearch();
-export const twistyAlgEditorCharSearch = TwistyAlgEditorCharSearchInstance.traverseAlg.bind(
-  TwistyAlgEditorCharSearchInstance,
-) as (alg: Alg, dataDown: DataDown) => DataUp;
+export const twistyAlgEditorCharSearch =
+  TwistyAlgEditorCharSearchInstance.traverseAlg.bind(
+    TwistyAlgEditorCharSearchInstance,
+  ) as (alg: Alg, dataDown: DataDown) => DataUp;

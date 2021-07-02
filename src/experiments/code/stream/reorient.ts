@@ -14,9 +14,8 @@ const twistyStreamSource: TwistyStreamSource = document.querySelector(
   "twisty-stream-source",
 )!;
 const reorientedPlayer: TwistyPlayer = document.querySelector("#reoriented")!;
-const unreorientedPlayer: TwistyPlayer = document.querySelector(
-  "#unreoriented",
-)!;
+const unreorientedPlayer: TwistyPlayer =
+  document.querySelector("#unreoriented")!;
 
 const reorienter = new ReorientedStream(twistyStreamSource);
 

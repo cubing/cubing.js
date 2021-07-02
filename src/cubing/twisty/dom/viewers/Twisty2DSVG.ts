@@ -26,7 +26,8 @@ export interface Twisty2DSVGOptions {
 // <twisty-2d-svg>
 export class Twisty2DSVG
   extends ManagedCustomElement
-  implements TwistyViewerElement, PositionListener {
+  implements TwistyViewerElement, PositionListener
+{
   private definition: KPuzzleDefinition;
   private svg: KPuzzleSVGWrapper;
   private scheduler = new RenderScheduler(this.render.bind(this));

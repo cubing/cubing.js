@@ -12,7 +12,8 @@ export interface PuzzleStreamMoveEvent {
   detail: PuzzleStreamMoveEventDetail;
 }
 
-export type PuzzleStreamMoveEventRegisterCompatible = CustomEvent<PuzzleStreamMoveEventDetail>;
+export type PuzzleStreamMoveEventRegisterCompatible =
+  CustomEvent<PuzzleStreamMoveEventDetail>;
 
 function ensurePuzzleStreamMoveEvent(
   event: CustomEvent,

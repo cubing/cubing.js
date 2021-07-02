@@ -46,40 +46,10 @@ function probablyDecodedCorrectly(data: Uint8Array): boolean {
 }
 
 const key10 = new Uint8Array([
-  198,
-  202,
-  21,
-  223,
-  79,
-  110,
-  19,
-  182,
-  119,
-  13,
-  230,
-  89,
-  58,
-  175,
-  186,
-  162,
+  198, 202, 21, 223, 79, 110, 19, 182, 119, 13, 230, 89, 58, 175, 186, 162,
 ]);
 const key11 = new Uint8Array([
-  67,
-  226,
-  91,
-  214,
-  125,
-  220,
-  120,
-  216,
-  7,
-  96,
-  163,
-  218,
-  130,
-  60,
-  1,
-  241,
+  67, 226, 91, 214, 125, 220, 120, 216, 7, 96, 163, 218, 130, 60, 1, 241,
 ]);
 
 // Clean-room reverse-engineered
@@ -186,24 +156,8 @@ const UUIDs = {
 
 const commands: { [cmd: string]: BufferSource } = {
   reset: new Uint8Array([
-    0x00,
-    0x00,
-    0x24,
-    0x00,
-    0x49,
-    0x92,
-    0x24,
-    0x49,
-    0x6d,
-    0x92,
-    0xdb,
-    0xb6,
-    0x49,
-    0x92,
-    0xb6,
-    0x24,
-    0x6d,
-    0xdb,
+    0x00, 0x00, 0x24, 0x00, 0x49, 0x92, 0x24, 0x49, 0x6d, 0x92, 0xdb, 0xb6,
+    0x49, 0x92, 0xb6, 0x24, 0x6d, 0xdb,
   ]),
 };
 
@@ -488,22 +442,26 @@ export class GanCube extends BluetoothPuzzle {
   }
 
   public async reset(): Promise<void> {
-    const faceletStatus1Characteristic = await this.faceletStatus1Characteristic();
+    const faceletStatus1Characteristic =
+      await this.faceletStatus1Characteristic();
     await faceletStatus1Characteristic.writeValue(commands.reset);
   }
 
   public async readFaceletStatus1Characteristic(): Promise<ArrayBuffer> {
-    const faceletStatus1Characteristic = await this.faceletStatus1Characteristic();
+    const faceletStatus1Characteristic =
+      await this.faceletStatus1Characteristic();
     return (await faceletStatus1Characteristic.readValue()).buffer;
   }
 
   public async readFaceletStatus2Characteristic(): Promise<string> {
-    const faceletStatus2Characteristic = await this.faceletStatus2Characteristic();
+    const faceletStatus2Characteristic =
+      await this.faceletStatus2Characteristic();
     return buf2hex((await faceletStatus2Characteristic.readValue()).buffer);
   }
 
   public async readActualAngleAndBatteryCharacteristic(): Promise<ArrayBuffer> {
-    const actualAngleAndBatteryCharacteristic = await this.actualAngleAndBatteryCharacteristic();
+    const actualAngleAndBatteryCharacteristic =
+      await this.actualAngleAndBatteryCharacteristic();
     return (await actualAngleAndBatteryCharacteristic.readValue()).buffer;
   }
 

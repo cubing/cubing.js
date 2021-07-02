@@ -52,8 +52,5 @@ class CountAnimatedMoves extends TraversalUp<number, number> {
 }
 
 const countAnimatedMovesInstance = new CountAnimatedMoves();
-export const countAnimatedMoves: (
-  alg: Alg,
-) => number = countAnimatedMovesInstance.traverseAlg.bind(
-  countAnimatedMovesInstance,
-);
+export const countAnimatedMoves: (alg: Alg) => number =
+  countAnimatedMovesInstance.traverseAlg.bind(countAnimatedMovesInstance);

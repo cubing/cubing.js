@@ -35,18 +35,7 @@ describe("orientationRangeToMask", () => {
   });
   it("converts from mask correctly", () => {
     expect(maskToOrientations(2, 12, 1217)).toEqual([
-      0,
-      1,
-      0,
-      0,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
+      0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
     ]);
   });
   it("round-trips", () => {

@@ -57,7 +57,7 @@ function assertIsUnit(t: Comparable): Unit {
 export abstract class TraversalDownUp<
   DataDown,
   DataAlgUp,
-  DataUnitUp = DataAlgUp
+  DataUnitUp = DataAlgUp,
 > {
   // Immediate subclasses should overwrite this.
   public traverseUnit(unit: Unit, dataDown: DataDown): DataUnitUp {
@@ -101,7 +101,7 @@ export abstract class TraversalDownUp<
 
 export abstract class TraversalUp<
   DataAlgUp,
-  DataUnitUp = DataAlgUp
+  DataUnitUp = DataAlgUp,
 > extends TraversalDownUp<undefined, DataAlgUp, DataUnitUp> {
   public traverseUnit(unit: Unit): DataUnitUp {
     return dispatch<unknown, DataAlgUp, DataUnitUp>(this, unit, undefined);

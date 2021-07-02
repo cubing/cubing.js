@@ -28,14 +28,14 @@ function random53BitValue(getRandomValues: GetRandomValuesFunction): number {
 function validateMax(max: number): void {
   if (typeof max !== "number" || max < 0 || Math.floor(max) !== max) {
     throw new Error(
-      "randomInt.below() not called with a positive integer value."
+      "randomInt.below() not called with a positive integer value.",
     );
   }
   if (max > MAX_JS_PRECISE_INT) {
     throw new Error(
       "Called randomInt.below() with max == " +
         max +
-        ", which is larger than Javascript can handle with integer precision."
+        ", which is larger than Javascript can handle with integer precision.",
     );
   }
 }

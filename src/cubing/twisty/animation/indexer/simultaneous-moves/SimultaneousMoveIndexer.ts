@@ -57,7 +57,8 @@ const demos: Record<string, MoveWithRange[]> = {
 };
 
 export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
-  implements AlgIndexer<P> {
+  implements AlgIndexer<P>
+{
   private moves: MoveWithRange[];
   // TODO: Allow custom `durationFn`.
 

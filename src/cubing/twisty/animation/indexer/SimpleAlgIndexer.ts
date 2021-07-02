@@ -6,7 +6,8 @@ import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
 import type { AlgIndexer } from "./AlgIndexer";
 
 export class SimpleAlgIndexer<P extends PuzzleWrapper>
-  implements AlgIndexer<P> {
+  implements AlgIndexer<P>
+{
   private moves: Alg;
   // TODO: Allow custom `durationFn`.
   private durationFn: TraversalUp<Duration> = new AlgDuration(

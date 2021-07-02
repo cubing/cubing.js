@@ -580,9 +580,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         offset: 0,
         count: 9 * this.foundationBound,
       };
-      (this.fixedGeo.getAttribute(
-        "color",
-      ) as BufferAttribute).needsUpdate = true;
+      (this.fixedGeo.getAttribute("color") as BufferAttribute).needsUpdate =
+        true;
     }
     this.scheduleRenderCallback!();
   }

@@ -85,6 +85,5 @@ function baseMetric(move: Move): number {
 }
 
 const countMovesInstance = new CountMoves(baseMetric);
-export const countMoves: (
-  alg: Alg,
-) => number = countMovesInstance.traverseAlg.bind(countMovesInstance);
+export const countMoves: (alg: Alg) => number =
+  countMovesInstance.traverseAlg.bind(countMovesInstance);

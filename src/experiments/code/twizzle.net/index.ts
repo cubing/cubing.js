@@ -164,8 +164,9 @@ const fn = async (
 
   function resetCamera() {
     if (trackingOrientation) {
-      (swipeyPuzzle.twistyPlayer
-        .viewerElems[0] as Twisty3DCanvas).camera.position.set(0, 4, 5);
+      (
+        swipeyPuzzle.twistyPlayer.viewerElems[0] as Twisty3DCanvas
+      ).camera.position.set(0, 4, 5);
     }
   }
 

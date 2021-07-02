@@ -14,7 +14,8 @@ import { twistyScrubberCSS } from "./TwistyScrubber.css_";
 // Usually a horizontal line.
 export class TwistyScrubber
   extends ManagedCustomElement
-  implements TwistyControlElement, TimelineTimestampListener {
+  implements TwistyControlElement, TimelineTimestampListener
+{
   private timeline: Timeline;
   range: HTMLInputElement = document.createElement("input"); // type="range"
   constructor(timeline?: Timeline) {

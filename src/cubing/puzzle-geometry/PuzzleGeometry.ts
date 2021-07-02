@@ -1448,9 +1448,10 @@ export class PuzzleGeometry {
         const cm = centermassface(cubies[cind][0]);
         if (queue.length < this.rotations.length) {
           for (let j = 0; j < moverotations.length; j++) {
-            const tq = this.facetocubies[
-              this.findface2(cm.rotatepoint(moverotations[j][0]))
-            ][0];
+            const tq =
+              this.facetocubies[
+                this.findface2(cm.rotatepoint(moverotations[j][0]))
+              ][0];
             if (!seen[tq]) {
               queue.push(tq);
               seen[tq] = true;

@@ -481,30 +481,7 @@ function newStickerGeometry(): BufferGeometry {
     "uv",
     new BufferAttribute(
       new Float32Array([
-        1,
-        1,
-        0,
-        1,
-        1,
-        0,
-        0,
-        1,
-        0,
-        0,
-        1,
-        0,
-        0,
-        1,
-        0,
-        0,
-        1,
-        1,
-        0,
-        0,
-        1,
-        0,
-        1,
-        1,
+        1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1,
       ]),
       2,
     ),
@@ -778,9 +755,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         pictureStickerCoords[orbit][orbitPieceIdx] &&
         pictureStickerCoords[orbit][orbitPieceIdx][i]
       ) {
-        const [rotate, offsetX, offsetY] = pictureStickerCoords[orbit][
-          orbitPieceIdx
-        ][i];
+        const [rotate, offsetX, offsetY] =
+          pictureStickerCoords[orbit][orbitPieceIdx][i];
         (async () => {
           const addImageSticker = async (hint: boolean) => {
             const texture: Texture = await (hint
@@ -912,8 +888,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
   /** @deprecated */
   experimentalSetFoundationOpacity(opacity: number): void {
-    (this.experimentalFoundationMeshes[0]
-      .material as MeshBasicMaterial).opacity = opacity;
+    (
+      this.experimentalFoundationMeshes[0].material as MeshBasicMaterial
+    ).opacity = opacity;
   }
 
   /** @deprecated */

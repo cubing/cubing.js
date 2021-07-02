@@ -112,16 +112,8 @@ export function reid3x3x3ToBinaryComponents(
 export function binaryComponentsToTwizzleBinary(
   components: Binary3x3x3Components,
 ): Binary3x3x3State {
-  const {
-    epLex,
-    eoMask,
-    cpLex,
-    coMask,
-    poIdxU,
-    poIdxL,
-    moSupport,
-    moMask,
-  } = components;
+  const { epLex, eoMask, cpLex, coMask, poIdxU, poIdxL, moSupport, moMask } =
+    components;
 
   return concatBinary(BIT_LENGTHS, [
     epLex,
@@ -145,16 +137,8 @@ export function reid3x3x3ToTwizzleBinary(
 export function twizzleBinaryToBinaryComponents(
   buffer: ArrayBuffer,
 ): Binary3x3x3Components {
-  const [
-    epLex,
-    eoMask,
-    cpLex,
-    coMask,
-    poIdxU,
-    poIdxL,
-    moSupport,
-    moMask,
-  ] = splitBinary(BIT_LENGTHS, buffer);
+  const [epLex, eoMask, cpLex, coMask, poIdxU, poIdxL, moSupport, moMask] =
+    splitBinary(BIT_LENGTHS, buffer);
 
   return {
     epLex,

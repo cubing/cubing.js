@@ -91,9 +91,8 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
         };
       },
     );
-    localMovesWithRange[
-      localMovesWithRange.length - 1
-    ].msUntilNext = maxSimulDur;
+    localMovesWithRange[localMovesWithRange.length - 1].msUntilNext =
+      maxSimulDur;
     return localMovesWithRange;
   }
 

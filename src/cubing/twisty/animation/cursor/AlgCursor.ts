@@ -41,7 +41,8 @@ export type IndexerConstructor = new (
 ) => AlgIndexer<KPuzzleWrapper>;
 
 export class AlgCursor
-  implements TimelineTimestampListener, PositionDispatcher {
+  implements TimelineTimestampListener, PositionDispatcher
+{
   private indexer: AlgIndexer<KPuzzleWrapper>;
   private positionListeners: Set<PositionListener> = new Set(); // TODO: accessor instead of direct access
   private ksolvePuzzle: KPuzzleWrapper;

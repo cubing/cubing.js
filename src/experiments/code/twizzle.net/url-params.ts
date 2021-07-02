@@ -1,9 +1,8 @@
 import { Alg } from "../../../cubing/alg";
 
 // Trick from https://github.com/microsoft/TypeScript/issues/28046#issuecomment-480516434
-export type StringListAsType<
-  T extends ReadonlyArray<unknown>
-> = T extends ReadonlyArray<infer StringListAsType> ? StringListAsType : never;
+export type StringListAsType<T extends ReadonlyArray<unknown>> =
+  T extends ReadonlyArray<infer StringListAsType> ? StringListAsType : never;
 
 function getURLParamChecked<T>(
   name: string,
@@ -11,8 +10,8 @@ function getURLParamChecked<T>(
   validValues: T[],
 ): T {
   let value = new URL(document.location.href).searchParams.get(name);
-  return validValues.includes((value as unknown) as T)
-    ? ((value as unknown) as T)
+  return validValues.includes(value as unknown as T)
+    ? (value as unknown as T)
     : defaultValue;
 }
 
