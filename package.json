@@ -38,26 +38,26 @@
     "yargs": "^16.2.0"
   },
   "scripts": {
-    "build": "npm run clean && node ./script/build.js all",
-    "build-esm": "node ./script/build.js esm",
-    "build-bundle-global": "node ./script/build.js bundle-global",
-    "build-types": "node ./script/build.js types",
-    "build-bin": "node ./script/build.js bin",
-    "build-experiments": "node ./script/build.js snowpack",
-    "build-solve-worker": "node ./script/build.js solve-worker",
+    "build": "npm run clean && node ./script/build/main.js all",
+    "build-esm": "node ./script/build/main.js esm",
+    "build-bundle-global": "node ./script/build/main.js bundle-global",
+    "build-types": "node ./script/build/main.js types",
+    "build-bin": "node ./script/build/main.js bin",
+    "build-experiments": "node ./script/build/main.js snowpack",
+    "build-solve-worker": "node ./script/build/main.js solve-worker",
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
-    "dev": "node ./script/build.js snowpack dev",
-    "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/solve/worker-inside-generated* src/dist-test/parcel-test/parcel-package/.parcel-cache src/dist-test/parcel-test/parcel-package/dist src/dist-test/parcel-test/parcel-package/node_modules",
+    "dev": "node ./script/build/main.js snowpack dev",
+    "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/solve/worker-inside-generated* script/dist-test/parcel-test/parcel-package/.parcel-cache script/dist-test/parcel-test/parcel-package/dist script/dist-test/parcel-test/parcel-package/node_modules",
     "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml in sync with this",
-    "test-dist-parcel": "node ./src/dist-test/parcel-test/parcel-test.js",
-    "test-experiments": "node src/test-experiments/test.js",
-    "test-import-restrictions": "node src/import-restrictions/build.js",
+    "test-dist-esm-node-import": "node script/test/dist/esm/node-import/main.mjs",
+    "test-dist-esm-parcel": "node ./script/test/dist/esm/parcel/main.js",
+    "test-dist-esm-perf": "node script/test/dist/esm/perf/*.mjs",
+    "test-dist-experiments": "node ./script/test/dist/experiments/main.js",
+    "test-import-restrictions": "node ./script/test/import-restrictions/main.js",
     "test-jest": "npx jest --collectCoverage",
-    "test-node-import": "node src/dist-test/import.mjs",
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
-    "test-dist-perf": "node src/dist-test/perf/*.mjs",
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts .",
@@ -120,6 +120,7 @@
       "/src/cubing/solve/vendor/implementations/3x3x3/min2phase/gwt.js",
       "/src/cubing/solve/vendor/implementations/vendor/random-uint-below/get-random-values.d.ts",
       "/src/cubing/solve/worker-inside-generated*",
+      "/script/test/dist/esm/parcel/parcel-package/**/*",
       "parser-peggy.js"
     ],
     "env": {
@@ -199,10 +200,11 @@
   },
   "jest": {
     "roots": [
-      "<rootDir>/src"
+      "<rootDir>/src",
+      "<rootDir>/script"
     ],
     "modulePathIgnorePatterns": [
-      "<rootDir>/src/test-experiments/"
+      "<rootDir>/script/test/experiments/"
     ]
   },
   "files": [

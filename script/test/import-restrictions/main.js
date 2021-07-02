@@ -5,19 +5,24 @@ import { existsSync } from "fs";
 const externalNode = ["crypto", "worker_threads"];
 
 import { targetInfos } from "./target-infos.js";
-import { execPromise } from "../../script/execPromise.js";
+import { execPromise } from "../../lib/execPromise.js";
+
+const TARGET_INFOS_PATH = resolve(
+  new URL(".", import.meta.url).pathname,
+  "./target-infos.js",
+);
 
 // Note that we have to use an extra `..` to back out of the file name
 const PATH_TO_SRC_CUBING = resolve(
   new URL(".", import.meta.url).pathname,
-  "../cubing",
+  "../../../src/cubing",
 );
 
 class Target {
   constructor(name, targetInfo) {
     this.name = name;
     // this.outdir = `./${this.name}`
-    this.outdir = `./dist/experimental-splitting-build/${this.name}`;
+    this.outdir = `./dist/test-import-restrictions/${this.name}`;
 
     this.deps = targetInfo.deps;
 
@@ -39,7 +44,7 @@ class Target {
       case "import-statement":
         if (!forTarget.deps.direct.includes(this.name)) {
           console.error(
-            `\`cubing/${forTarget.name}\` is not allowed to directly (non-dynamically) import \`cubing/${this.name}\`. Update src/import-restrictions/target-infos.js to change this.`,
+            `\`cubing/${forTarget.name}\` is not allowed to directly (non-dynamically) import \`cubing/${this.name}\`. Update ${TARGET_INFOS_PATH} to change this.`,
           );
           console.log("From: ", args.importer);
           console.log("Import path: ", args.path);
@@ -49,7 +54,7 @@ class Target {
       case "dynamic-import":
         if (!forTarget.deps.dynamic.includes(this.name)) {
           console.error(
-            `\`cubing/${forTarget.name}\` is not allowed to dynamically import \`cubing/${this.name}\`. Update src/import-restrictions/target-infos.js to change this.`,
+            `\`cubing/${forTarget.name}\` is not allowed to dynamically import \`cubing/${this.name}\`. Update ${TARGET_INFOS_PATH} to change this.`,
           );
           console.log("From: ", args.importer);
           console.log("Import path: ", args.path);

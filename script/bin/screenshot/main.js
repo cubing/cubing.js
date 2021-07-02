@@ -2,7 +2,7 @@
 import puppeteer from "puppeteer";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { startServer } from "./experiments-server/index.js";
+import { startServer } from "../../lib/experiments-server/index.js";
 
 const PAGE_URL = "http://localhost:4443/cubing.js/screenshot/index.html";
 

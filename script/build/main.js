@@ -14,8 +14,8 @@ import * as esbuild from "esbuild";
 
 import { readFile, writeFile } from "fs";
 
-import configSrc from "../snowpack.config.mjs";
-import { execPromise } from "./execPromise.js";
+import configSrc from "../../snowpack.config.mjs";
+import { execPromise } from "../lib/execPromise.js";
 
 const PARALLEL = false;
 
