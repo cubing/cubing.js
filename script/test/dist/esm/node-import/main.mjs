@@ -1,3 +1,10 @@
+import { needFolder } from "../../../../lib/need-folder.js";
+
+needFolder(
+  new URL("../../../../../dist/esm/alg", import.meta.url).pathname,
+  "make build-esm",
+);
+
 import * as alg from "cubing/alg";
 console.log(new alg.Alg("R U R'").invert().toString());
 
