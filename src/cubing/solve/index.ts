@@ -3,6 +3,7 @@ export {
   experimentalSolve3x3x3IgnoringCenters,
   experimentalSolve2x2x2,
   solveSkewb,
+  solvePyraminx,
 } from "./outside";
 
 // TODO: handle centers properly.
