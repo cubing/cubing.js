@@ -1,5 +1,5 @@
 import { KPuzzle } from "../../../cubing/kpuzzle";
-import { Alg, LineComment, Newline } from "../../../cubing/alg";
+import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { puzzles } from "../../../cubing/puzzles";
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import type { TwistyAlgEditor } from "../../../cubing/twisty";
@@ -203,11 +203,14 @@ export class App {
       default:
         return;
     }
-    this.controlPane.setAlg(
-      this.twistyPlayer.alg
-        .concat([new Newline(), new LineComment(" Scramble"), new Newline()])
-        .concat(scramble),
-    );
+    const oldAlg = this.twistyPlayer.alg;
+    const newAlgBuilder = new AlgBuilder();
+    if (!oldAlg.experimentalIsEmpty() && Array.from(oldAlg.units()).slice(-1))
+      this.controlPane.setAlg(
+        this.twistyPlayer.alg
+          .concat([new Newline(), new LineComment(" Scramble"), new Newline()])
+          .concat(scramble),
+      );
   }
 }
 
