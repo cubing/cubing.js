@@ -25,7 +25,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   );
 }
 
-export async function preInitialize222(): Promise<void> {
+export async function preInitializePyraminx(): Promise<void> {
   await getCachedTrembleSolver();
 }
 
