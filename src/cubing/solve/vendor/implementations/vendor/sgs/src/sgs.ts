@@ -7,6 +7,8 @@ import {
   Transformation,
 } from "../../../../../../kpuzzle";
 
+const DEBUG = false;
+
 interface PieceRef {
   orbitName: string;
   permutationIdx: number;
@@ -42,7 +44,9 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     }
   }
 
-  // console.log(pieceOrdering);
+  if (DEBUG) {
+    console.log(pieceOrdering);
+  }
 
   const remainingPiecesPerOrbit: Record<string, number> = {};
   for (const [orbitName, orbitDef] of Object.entries(def.orbits)) {
@@ -118,12 +122,19 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
         if (inverseLocations[location.permutationIdx][location.orientation]) {
           console.error(
             "SGS entry is already populated?! We're going to ignore this new alg, but other things will probably break later on.",
-            alg.toString(),
-            pieceRef,
-            location,
+          );
+          console.error("New (backward, from SGS) alg:", alg.toString());
+          console.error("New (forward) alg:", alg.invert().toString());
+          console.error(
+            "Old (forward) alg:",
             inverseLocations[location.permutationIdx][
               location.orientation
             ].alg.toString(),
+          );
+          console.error("Piece being solved:", pieceRef);
+          console.error("Location:", location);
+          console.error(
+            "Location Info:",
             inverseLocations[location.permutationIdx][location.orientation],
           );
           break;
@@ -132,7 +143,9 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
           alg: alg.invert(),
           transformation: invertTransformation(def, kpuzzle.state),
         };
-        // alg.log([pieceRef, location]);
+        if (DEBUG) {
+          alg.log([pieceRef, location]);
+        }
         continue outer;
       }
     }

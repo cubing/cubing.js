@@ -120,7 +120,7 @@ export const solveWorkerTarget = {
       watch: dev,
       logLevel: "info",
       external: externalNode,
-      minify: true, // TODO: prod only?
+      minify: !dev,
       plugins: [constructStringWrappingPlugin(dev)],
     });
   },

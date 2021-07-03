@@ -16,6 +16,7 @@ import { cube3x3x3KPuzzle } from "../../../cubing/puzzles/implementations/3x3x3/
 import {
   experimentalSolve2x2x2,
   experimentalSolve3x3x3IgnoringCenters,
+  solveMegaminx,
   solvePyraminx,
   solveSkewb,
 } from "../../../cubing/solve";
@@ -169,6 +170,12 @@ export class App {
         const kpuzzle = new KPuzzle(await puzzles.pyraminx.def());
         kpuzzle.applyAlg(this.twistyPlayer.alg);
         solution = await solvePyraminx(kpuzzle.state);
+        break;
+      }
+      case "megaminx": {
+        const kpuzzle = new KPuzzle(await puzzles.megaminx.def());
+        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        solution = await solveMegaminx(kpuzzle.state);
         break;
       }
       default:
@@ -500,6 +507,7 @@ class ControlPane {
       "3x3x3",
       "skewb",
       "pyraminx",
+      "megaminx",
     ].includes(puzzle);
     this.scrambleButton.disabled = ![
       "2x2x2",

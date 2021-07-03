@@ -4,6 +4,7 @@ export {
   experimentalSolve2x2x2,
   solveSkewb,
   solvePyraminx,
+  solveMegaminx,
 } from "./outside";
 
 // TODO: handle centers properly.

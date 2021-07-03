@@ -1,13 +1,14 @@
 import type { KPuzzleDefinition } from "../../../../../../../../kpuzzle";
+import { getPuzzleGeometryByName } from "../../../../../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../../sgs";
 
 async function skewbDefWithoutMO(): Promise<KPuzzleDefinition> {
-  const puzzleGeometry = await import(
-    "../../../../../../../../puzzle-geometry"
-  );
-  return puzzleGeometry
-    .getPuzzleGeometryByName("skewb", ["allmoves", "true", "rotations", "true"])
-    .writekpuzzle(true);
+  return getPuzzleGeometryByName("skewb", [
+    "allmoves",
+    "true",
+    "rotations",
+    "true",
+  ]).writekpuzzle(true);
 }
 
 // TODO: Implement a general lazy Promise/ Promise cache wrapper
