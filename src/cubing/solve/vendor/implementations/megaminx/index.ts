@@ -1,8 +1,8 @@
 import type { Alg } from "../../../../alg";
 import type { Transformation } from "../../../../kpuzzle";
-import { puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../../inside/inside-worker";
 import type { SGSCachedData } from "../vendor/sgs/src/sgs";
+import { cachedMegaminxDefWithoutMO } from "../vendor/sgs/src/test/puzzles/skewb.sgs.json";
 import { TrembleSolver } from "../vendor/sgs/src/tremble";
 
 const TREMBLE_DEPTH = 2;
@@ -16,7 +16,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
         "../vendor/sgs/src/test/puzzles/megaminx.sgs.json"
       );
       const json: SGSCachedData = await sgs.cachedSGSDataMegaminx();
-      return new TrembleSolver(await puzzles.megaminx.def(), json, [
+      return new TrembleSolver(await cachedMegaminxDefWithoutMO(), json, [
         "U",
         "R",
         "F",
@@ -42,6 +42,8 @@ export async function preInitializeMegaminx(): Promise<void> {
 export async function solveMegaminx(state: Transformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
+  const stateWithoutMO: Transformation = JSON.parse(JSON.stringify(state));
+  stateWithoutMO.CENTERS.orientation = new Array(12).fill(0);
   const alg = await trembleSolver.solve(
     state,
     TREMBLE_DEPTH,
