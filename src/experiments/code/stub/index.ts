@@ -4,7 +4,6 @@
 import { Alg } from "../../../cubing/alg";
 import { KPuzzle } from "../../../cubing/kpuzzle";
 import { puzzles } from "../../../cubing/puzzles";
-import { randomScrambleForEvent } from "../../../cubing/scramble";
 import { cachedSGSDataMegaminx } from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/test/puzzles/megaminx.sgs.json";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
@@ -12,7 +11,7 @@ import { cachedSGSDataMegaminx } from "../../../cubing/solve/vendor/implementati
 console.log("Loading stub file.");
 
 (async () => {
-  console.log(await randomScrambleForEvent("minx"));
+  // console.log(await randomScrambleForEvent("minx"));
 
   const def = await puzzles.megaminx.def();
   const kpuzzle = new KPuzzle(def);
