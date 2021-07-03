@@ -13,7 +13,7 @@ import type { SGSCachedData } from "./sgs";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
-const DEBUG = false;
+const DEBUG = true;
 
 // TODO: Take moves instead of move names?
 function calculateMoves(

@@ -2,7 +2,7 @@ import type { Alg } from "../../../../alg";
 import type { Transformation } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../../inside/inside-worker";
 import type { SGSCachedData } from "../vendor/sgs/src/sgs";
-import { cachedMegaminxDefWithoutMO } from "../vendor/sgs/src/test/puzzles/skewb.sgs.json";
+import { cachedMegaminxDefWithoutMO } from "../vendor/sgs/src/test/puzzles/megaminx.sgs.json";
 import { TrembleSolver } from "../vendor/sgs/src/tremble";
 
 const TREMBLE_DEPTH = 2;
@@ -45,7 +45,7 @@ export async function solveMegaminx(state: Transformation): Promise<Alg> {
   const stateWithoutMO: Transformation = JSON.parse(JSON.stringify(state));
   stateWithoutMO.CENTERS.orientation = new Array(12).fill(0);
   const alg = await trembleSolver.solve(
-    state,
+    stateWithoutMO,
     TREMBLE_DEPTH,
     () => 5, // TODO: Attach quantum move order lookup to puzzle.
   );

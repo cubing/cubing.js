@@ -1,18 +1,14 @@
 import type { KPuzzleDefinition } from "../../../../../../../../kpuzzle";
-import { puzzles } from "../../../../../../../../puzzles";
+import { getPuzzleGeometryByName } from "../../../../../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../../sgs";
 
 async function megaminxDefWithoutMO(): Promise<KPuzzleDefinition> {
-  // Asking PG for a def without centers... seems to affect edges. So we have to patch it ourselves.
-  const rawDef = await puzzles.megaminx.def();
-  const defClone: KPuzzleDefinition = JSON.parse(JSON.stringify(rawDef)); // TODO: avoid the need for this.
-  defClone.orbits.CENTERS.orientations = 1;
-  defClone.startPieces.CENTERS.orientation = new Array(12).fill(0);
-  for (const transformation of Object.values(defClone.moves)) {
-    transformation.CENTERS.orientation = new Array(12).fill(0);
-  }
-  console.log(defClone);
-  return defClone;
+  return getPuzzleGeometryByName("megaminx", [
+    "allmoves",
+    "true",
+    "rotations",
+    "true",
+  ]).writekpuzzle(true);
 }
 
 // TODO: Implement a general lazy Promise/ Promise cache wrapper
@@ -30,26 +26,26 @@ export async function cachedSGSDataMegaminx() {
 export async function sgsDataMegaminx(): Promise<SGSCachedData> {
   return parseSGS(
     await cachedMegaminxDefWithoutMO(),
-    `SetOrder CENTERS 1 
-SetOrder EDGES 29 34 27 24 37 50 32 31 36 14 39 13 41 11 44 16 43 2 19 18 1 22 10 4 5 7 45 26 21 8
-SetOrder CORNERS 35 49 30 38 40 48 47 33 25 12 42 46 23 20 17 6 9 15 3 28
+    `SetOrder CENTERS 1 53 2 54 55 56 57 58 59 60 61 62
+SetOrder EDGES 31 36 29 26 39 52 34 33 38 16 41 15 43 13 46 18 45 4 21 20 3 24 12 6 7 9 47 28 23 10
+SetOrder CORNERS 37 51 32 40 42 50 49 35 27 14 44 48 25 22 19 8 11 17 5 30
 
-Rv
-Rv2
-Rv2'
-Rv'
-Lv
-Lv2
-Lv2'
-Fv
-Fv'
-BR2'
-Lv Rv2'
+Alg Rv
+Alg Rv2
+Alg Rv2'
+Alg Rv'
+Alg Lv'
+Alg Lv2
+Alg Lv2'
+Alg Fv
+Alg Fv'
+Alg BRv2
+Alg Lv2 Rv'
 
-Alg y
-Alg y2
-Alg y2'
-Alg y'
+Alg Uv
+Alg Uv2
+Alg Uv2'
+Alg Uv'
 
 Alg D
 Alg D2

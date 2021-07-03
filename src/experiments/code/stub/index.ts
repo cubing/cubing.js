@@ -3,8 +3,11 @@
 
 import { Alg } from "../../../cubing/alg";
 import { KPuzzle } from "../../../cubing/kpuzzle";
-import { puzzles } from "../../../cubing/puzzles";
-import { cachedSGSDataMegaminx } from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/test/puzzles/megaminx.sgs.json";
+import { solveMegaminx } from "../../../cubing/solve";
+import {
+  cachedMegaminxDefWithoutMO,
+  cachedSGSDataMegaminx,
+} from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/test/puzzles/megaminx.sgs.json";
 import { TrembleSolver } from "../../../cubing/solve/vendor/implementations/vendor/sgs/src/tremble";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
@@ -14,17 +17,18 @@ console.log("Loading stub file.");
 (async () => {
   // console.log(await randomScrambleForEvent("minx"));
 
-  const def = await puzzles.megaminx.def();
+  const def = await cachedMegaminxDefWithoutMO();
   const kpuzzle = new KPuzzle(def);
   kpuzzle.applyAlg(
-    new Alg(`(R-- D-- R-- D-- R-- D-- R++ D++ R-- D-- U
-R-- D-- R++ D++ R-- D++ R++ D++ R-- D++ U'
-R++ D++ R++ D++ R++ D-- R++ D++ R++ D++ U'
-R++ D++ R-- D-- R++ D++ R-- D-- R++ D-- U
-R-- D++ R++ D-- R-- D-- R-- D-- R-- D++ U
-R++ D++ R++ D++ R-- D++ R++ D-- R-- D-- U)3`),
+    new Alg(`R-- D++ R-- D-- R++ D-- R-- D-- R++ D-- U'
+R++ D-- R-- D-- R++ D-- R-- D++ R++ D-- U
+R-- D-- R++ D++ R-- D++ R-- D-- R-- D++ U'
+R-- D++ R-- D-- R++ D-- R-- D-- R-- D++ U'
+R-- D++ R-- D-- R-- D-- R-- D-- R++ D-- U
+R-- D-- R-- D++ R-- D-- R-- D++ R++ D-- U`),
   );
   const sgs = await cachedSGSDataMegaminx();
+  console.log(sgs);
   const solver = new TrembleSolver(def, sgs, [
     "U",
     "R",
@@ -40,4 +44,5 @@ R++ D++ R++ D++ R-- D++ R++ D-- R-- D-- U)3`),
     "D",
   ]);
   (await solver.solve(kpuzzle.state, 2, () => 5)).log();
+  (await solveMegaminx(kpuzzle.state)).log();
 })();
