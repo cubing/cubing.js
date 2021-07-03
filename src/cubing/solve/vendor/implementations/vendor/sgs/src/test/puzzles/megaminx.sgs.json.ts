@@ -10,8 +10,8 @@ export async function cachedSGSDataMegaminx() {
 async function sgsDataMegaminx(): Promise<SGSCachedData> {
   return parseSGS(
     await puzzles.megaminx.def(),
-    `SetOrder EDGES 29 34 27 24 37 50 32 45 31 36 39 41 44 26 14 11 13 4 2 43 16 21 22 19 18 1 5 10 7 8
-SetOrder CORNERS 35 49 30 38 40 48 47 33 42 46 28 25 12 3 23 20 17 6 15 9
+    `SetOrder EDGES 29 34 27 24 37 50 32 31 36 14 39 13 41 11 44 16 43 2 19 18 1 22 10 4 5 7 45 26 21 8
+SetOrder CORNERS 35 49 30 38 40 48 47 33 25 12 42 46 23 20 17 6 9 15 3 28
 Alg D
 Alg D2
 Alg D2'
