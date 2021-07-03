@@ -43,16 +43,10 @@ export abstract class AlgCommon<T extends Alg | Unit>
     }
   }
 
-  log(message?: any): T {
-    // console.log("sdfd", err.message);
-    // console.log(err.stack!);
-    // console.trace("Sfdf");
-    // console.trace("Sfdf", this, this.toString());
-    console.log(
-      ...(message === undefined ? [] : [message]),
-      ...[this, this.toString()],
-    );
-    return this as any;
+  get log(): (message?: any) => void {
+    // By returning a (bound) version of `console.log`, we ensure that DevTools
+    // logs the call site instead of this function.
+    return console.log.bind(console, this, this.toString());
   }
 
   abstract toString(): string;
