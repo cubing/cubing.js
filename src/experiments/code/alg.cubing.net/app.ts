@@ -31,6 +31,21 @@ export interface AppData {
   alg: Alg;
 }
 
+function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
+  const newAlgBuilder = new AlgBuilder();
+  newAlgBuilder.experimentalPushAlg(oldAlg);
+  if (
+    !oldAlg.experimentalIsEmpty() &&
+    !Array.from(oldAlg.units()).slice(-1)[0].is(Newline)
+  ) {
+    newAlgBuilder.push(new Newline());
+  }
+  newAlgBuilder.push(new LineComment(comment));
+  newAlgBuilder.push(new Newline());
+  newAlgBuilder.experimentalPushAlg(newAlg);
+  return newAlgBuilder.toAlg();
+}
+
 export class App {
   public twistyPlayer: TwistyPlayer;
   private puzzlePane: HTMLElement;
@@ -182,9 +197,7 @@ export class App {
         return;
     }
     this.controlPane.setAlg(
-      this.twistyPlayer.alg
-        .concat([new Newline(), new LineComment(" Solution"), new Newline()])
-        .concat(solution),
+      algAppend(this.twistyPlayer.alg, " Solution", solution),
     );
   }
 
@@ -210,14 +223,9 @@ export class App {
       default:
         return;
     }
-    const oldAlg = this.twistyPlayer.alg;
-    const newAlgBuilder = new AlgBuilder();
-    if (!oldAlg.experimentalIsEmpty() && Array.from(oldAlg.units()).slice(-1))
-      this.controlPane.setAlg(
-        this.twistyPlayer.alg
-          .concat([new Newline(), new LineComment(" Scramble"), new Newline()])
-          .concat(scramble),
-      );
+    this.controlPane.setAlg(
+      algAppend(this.twistyPlayer.alg, " Scramble", scramble),
+    );
   }
 }
 
@@ -499,6 +507,7 @@ class ControlPane {
 
   setAlg(alg: Alg): void {
     this.algInput.algString = alg.toString();
+    this.algChangeCallback(alg);
   }
 
   setPuzzle(puzzle: string): void {
