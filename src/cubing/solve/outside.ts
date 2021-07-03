@@ -101,3 +101,8 @@ export async function solvePyraminx(s: Transformation): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solvePyraminxToString(s));
 }
+
+export async function solveMegaminx(s: Transformation): Promise<Alg> {
+  const cwi = await getCachedWorkerInstance();
+  return Alg.fromString(await cwi.solveMegaminxToString(s));
+}
