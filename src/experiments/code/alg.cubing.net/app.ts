@@ -192,6 +192,14 @@ export class App {
         scramble = await randomScrambleForEvent("333");
         break;
       }
+      case "megaminx": {
+        scramble = await randomScrambleForEvent("minx");
+        break;
+      }
+      case "clock": {
+        scramble = await randomScrambleForEvent("clock");
+        break;
+      }
       default:
         return;
     }
@@ -490,6 +498,11 @@ class ControlPane {
       "skewb",
       "pyraminx",
     ].includes(puzzle);
-    this.scrambleButton.disabled = !["2x2x2", "3x3x3"].includes(puzzle);
+    this.scrambleButton.disabled = ![
+      "2x2x2",
+      "3x3x3",
+      "megaminx",
+      "clock",
+    ].includes(puzzle);
   }
 }
