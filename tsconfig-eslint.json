@@ -2,8 +2,8 @@
   "extends": "./tsconfig.json",
   "include": [
     "src/**/*",
-    "*/index.js",
-    "*/index.d.ts",
+    "src/static/*/index.js",
+    "src/static/*/index.d.ts",
     "script/**/*",
     "script/*",
     "src/**/*.spec.ts"

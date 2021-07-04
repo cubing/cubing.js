@@ -58,7 +58,7 @@
     "test-import-restrictions": "node ./script/test/import-restrictions/main.js",
     "test-jest": "npx jest --collectCoverage",
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
-    "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src */index.d.ts",
+    "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src",
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts .",
     "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import",
