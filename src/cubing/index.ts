@@ -2,6 +2,7 @@
 import * as alg from "./alg";
 import * as bluetooth from "./bluetooth";
 import * as kpuzzle from "./kpuzzle";
+import * as notation from "./notation";
 import * as protocol from "./protocol";
 import * as puzzleGeometry from "./puzzle-geometry";
 import * as puzzles from "./puzzles";
@@ -12,6 +13,7 @@ import * as twisty from "./twisty";
 
 export { alg };
 export { bluetooth };
+export { notation };
 export { protocol };
 export { kpuzzle };
 export { scramble };
