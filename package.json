@@ -121,6 +121,7 @@
       "/src/cubing/solve/inside/solve/vendor/random-uint-below/get-random-values.d.ts",
       "/src/cubing/solve/worker-inside-generated*",
       "/script/test/dist/esm/parcel/parcel-package/**/*",
+      "/*/index.d.ts",
       "parser-peggy.js"
     ],
     "env": {

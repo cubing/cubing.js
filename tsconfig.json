@@ -21,6 +21,7 @@
   },
   "include": ["src/**/*"],
   "exclude": [
+    "*/index.d.ts",
     "src/static/**/*",
     "src/**/*.spec.ts",
     "src/cubing/solve/worker-inside-generated*",
