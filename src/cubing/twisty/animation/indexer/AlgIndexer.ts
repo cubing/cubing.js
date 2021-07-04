@@ -11,7 +11,7 @@ export interface AlgIndexer<P extends PuzzleWrapper> {
   indexToMoveStartTimestamp(index: number): Timestamp;
   stateAtIndex(index: number, startTransformation?: State<P>): State<P>;
   transformAtIndex(index: number): State<P>;
-  numMoves(): number;
+  numAnimatedLeaves(): number;
   timestampToIndex(timestamp: Timestamp): number;
   algDuration(): Duration;
   moveDuration(index: number): number;

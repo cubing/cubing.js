@@ -156,7 +156,7 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
     return max;
   }
 
-  public numMoves(): number {
+  public numAnimatedLeaves(): number {
     // TODO: Cache internally once performance matters.
     return this.moves.length;
   }

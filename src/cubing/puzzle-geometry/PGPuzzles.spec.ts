@@ -101,7 +101,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       algo = new Alg(bms);
       const ksp = new KSolvePuzzle(kpuzzledef);
       const tai = new TreeAlgIndexer(ksp, algo);
-      const tr = tai.transformAtIndex(tai.numMoves());
+      const tr = tai.transformAtIndex(tai.numAnimatedLeaves());
       const o = transformationOrder(kpuzzledef, tr as Transformation);
       let dat =
         name +

@@ -1,5 +1,5 @@
 import { Alg, Move, TraversalUp } from "../../../alg";
-import { countAnimatedMoves } from "../../../notation";
+import { countAnimatedLeaves } from "../../../notation";
 import type { PuzzleWrapper, State } from "../../3D/puzzles/KPuzzleWrapper";
 import type { Duration, Timestamp } from "../cursor/CursorTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
@@ -31,7 +31,7 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
   public timestampToIndex(timestamp: Timestamp): number {
     let cumulativeTime = 0;
     let i;
-    for (i = 0; i < this.numMoves(); i++) {
+    for (i = 0; i < this.numAnimatedLeaves(); i++) {
       cumulativeTime += this.durationFn.traverseMove(this.getMove(i));
       if (cumulativeTime >= timestamp) {
         return i;
@@ -62,9 +62,9 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
     return this.durationFn.traverseAlg(this.moves);
   }
 
-  public numMoves(): number {
+  public numAnimatedLeaves(): number {
     // TODO: Cache internally once performance matters.
-    return countAnimatedMoves(this.moves);
+    return countAnimatedLeaves(this.moves);
   }
 
   public moveDuration(index: number): number {

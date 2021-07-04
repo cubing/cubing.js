@@ -74,7 +74,7 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     return this.walker.st;
   }
 
-  public numMoves(): number {
+  public numAnimatedLeaves(): number {
     return this.decoration.moveCount;
   }
 

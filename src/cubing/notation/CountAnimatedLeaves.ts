@@ -11,7 +11,7 @@ import {
 } from "../alg";
 
 // TODO: Include Pause, include amounts
-class CountAnimatedMoves extends TraversalUp<number, number> {
+class CountAnimatedLeaves extends TraversalUp<number, number> {
   public traverseAlg(alg: Alg): number {
     let total = 0;
     for (const part of alg.units()) {
@@ -51,6 +51,6 @@ class CountAnimatedMoves extends TraversalUp<number, number> {
   }
 }
 
-const countAnimatedMovesInstance = new CountAnimatedMoves();
-export const countAnimatedMoves: (alg: Alg) => number =
-  countAnimatedMovesInstance.traverseAlg.bind(countAnimatedMovesInstance);
+const countAnimatedLeavesInstance = new CountAnimatedLeaves();
+export const countAnimatedLeaves: (alg: Alg) => number =
+  countAnimatedLeavesInstance.traverseAlg.bind(countAnimatedLeavesInstance);

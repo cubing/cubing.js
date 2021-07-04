@@ -99,7 +99,7 @@ export class AlgCursor
 
   /** @deprecated */
   experimentalTimestampForStartOfLastMove(): MillisecondTimestamp {
-    const numMoves = this.indexer.numMoves();
+    const numMoves = this.indexer.numAnimatedLeaves();
     if (numMoves > 0) {
       return this.indexer.indexToMoveStartTimestamp(numMoves - 1);
     }
@@ -137,7 +137,7 @@ export class AlgCursor
         movesInProgress: [],
       };
 
-      if (this.indexer.numMoves() > 0) {
+      if (this.indexer.numAnimatedLeaves() > 0) {
         const move = this.indexer.getMove(idx)?.as(Move);
         if (!move) {
           return; // TODO
@@ -193,7 +193,7 @@ export class AlgCursor
     timestamp: MillisecondTimestamp,
     direction: Direction.Backwards | Direction.Forwards,
   ): MillisecondTimestamp | null {
-    if (this.indexer.numMoves() === 0) {
+    if (this.indexer.numAnimatedLeaves() === 0) {
       return null;
     }
     // TODO: define semantics of indexing edge cases and remove this hack.
