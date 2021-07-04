@@ -175,7 +175,7 @@ export const esmTarget = {
       //
       external,
     });
-    await execPromise("cp -R src/dist-static/esm/* dist/esm");
+    await execPromise("cp -R src/static/* ./");
     await execPromise(
       "cp src/cubing/solve/esm-test-worker.js dist/esm/solve/esm-test-worker.js",
     );
