@@ -9,7 +9,14 @@
 
 ## Documentation
 
-Documentation is at [`js.cubing.net/cubing/`](https://js.cubing.net/cubing).  
+If you want to display algs or solvers, the following code is a good way to get started:
+
+```html
+<script src="https://cdn.cubing.net/esm/cubing/twisty" type="module" defer></script>
+<twisty-player alg="R U R' U R U2' R'"></twisty-player>
+```
+
+You can find more documentation at [`js.cubing.net/cubing/`](https://js.cubing.net/cubing).  
 The source for the documentation site is currently inside the [`docs`](./docs/) folder of this repository.
 
 ## Development
@@ -22,7 +29,7 @@ npm install
 make dev
 ```
 
-This should open [the `experiments` root file](/Users/lgarron/Code/git/github.com/cubing/cubing.js/src/experiments/static/index.html) at http://localhost:3333/ automatically. Any source code changes will refresh the browser.
+This should open [the `experiments` root file](/Users/lgarron/Code/git/github.com/cubing/cubing.js/src/experiments/static/index.html) at http://localhost:3333/ automatically. Any source code changes will refresh the browser. We don't yet have a development guide, so you'll have to search the code to find where features are implemented.
 
 The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/) To test changes, use:
 
