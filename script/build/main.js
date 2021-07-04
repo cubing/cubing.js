@@ -176,6 +176,7 @@ export const esmTarget = {
       //
       external,
     });
+    await execPromise("cp -R src/static/* ./");
   },
 };
 

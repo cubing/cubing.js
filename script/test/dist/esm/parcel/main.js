@@ -1,6 +1,10 @@
 import { needFolder } from "../../../../lib/need-folder.js";
 needFolder(
-  new URL("../../../../../dist/esm/alg", import.meta.url).pathname,
+  new URL("../../../../../kpuzzle", import.meta.url).pathname,
+  "make build-esm",
+);
+needFolder(
+  new URL("../../../../../dist/esm/kpuzzle", import.meta.url).pathname,
   "make build-esm",
 );
 
@@ -63,6 +67,10 @@ async function runTest() {
     startServer();
     console.log("Running test.\n");
     await runTest();
+    console.log("Finished test.");
+  } catch (e) {
+    console.error(e);
+    exitCode = 1;
   } finally {
     killAllChildProcesses();
     process.exit(exitCode);
