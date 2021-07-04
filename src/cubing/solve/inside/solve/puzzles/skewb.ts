@@ -1,8 +1,8 @@
 import type { Alg, QuantumMove } from "../../../../alg";
 import type { Transformation } from "../../../../kpuzzle";
-import { mustBeInsideWorker } from "../../../inside/inside-worker";
-import type { SGSCachedData } from "../vendor/sgs/src/sgs";
-import { TrembleSolver } from "../vendor/sgs/src/tremble";
+import { mustBeInsideWorker } from "../../inside-worker";
+import type { SGSCachedData } from "../sgs";
+import { TrembleSolver } from "../tremble";
 
 const TREMBLE_DEPTH = 3;
 
@@ -11,7 +11,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const sgs = await import("../vendor/sgs/src/test/puzzles/skewb.sgs.json");
+      const sgs = await import("./skewb.sgs.json");
       const json: SGSCachedData = await sgs.cachedSGSDataSkewb();
       return new TrembleSolver(
         await sgs.skewbDefWithoutMOCached(),

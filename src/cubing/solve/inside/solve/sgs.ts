@@ -1,11 +1,11 @@
-import { Alg } from "../../../../../../alg";
+import { Alg } from "../../../alg";
 import {
   identityTransformation,
   invertTransformation,
   KPuzzle,
   KPuzzleDefinition,
   Transformation,
-} from "../../../../../../kpuzzle";
+} from "../../../kpuzzle";
 
 const DEBUG = false;
 

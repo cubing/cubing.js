@@ -1,10 +1,10 @@
 // @ts-nocheck
 
 import { Alg } from "../../../../../../../../alg";
-import { random333Scramble as getRandomScramble333 } from "../../../../../3x3x3";
+import { random333Scramble as getRandomScramble333 } from "../../../../../puzzles/3x3x3";
 import { circle, Cnk, set8Perm } from "../lib/mathlib";
 import { randomUIntBelowFactory } from "../../../../random-uint-below";
-import { mustBeInsideWorker } from "../../../../../../../inside/inside-worker";
+import { mustBeInsideWorker } from "../../../../../../inside-worker";
 
 function createArray(length1: number, length2?: number) {
   var result, i;

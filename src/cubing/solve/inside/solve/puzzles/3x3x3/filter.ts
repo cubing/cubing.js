@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Move } from "../../../../alg";
+import { Move } from "../../../../../alg";
 import {
   // @ts-ignore
   KPuzzle,
@@ -10,7 +10,7 @@ import {
   // @ts-ignore
   Transformation,
   // @ts-ignore
-} from "../../../../kpuzzle";
+} from "../../../../../kpuzzle";
 
 export function isEquivalentTranformationIgnoringCENTERS(
   def: KPuzzleDefinition,

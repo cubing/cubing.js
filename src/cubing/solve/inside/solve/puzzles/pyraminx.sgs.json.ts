@@ -1,5 +1,5 @@
-import { puzzles } from "../../../../../../../../puzzles";
-import { parseSGS, SGSCachedData } from "../../sgs";
+import { puzzles } from "../../../../puzzles";
+import { parseSGS, SGSCachedData } from "../sgs";
 
 let cachedData: Promise<SGSCachedData> | null = null;
 export async function cachedSGSDataPyraminx() {

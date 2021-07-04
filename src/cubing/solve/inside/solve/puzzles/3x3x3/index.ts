@@ -1,14 +1,14 @@
-import { Unit, Alg } from "../../../../alg";
+import { Unit, Alg } from "../../../../../alg";
 // @ts-ignore
-import { KPuzzle, Transformation } from "../../../../kpuzzle";
+import { KPuzzle, Transformation } from "../../../../../kpuzzle";
 // @ts-ignore
-import { puzzles } from "../../../../puzzles";
-import { mustBeInsideWorker } from "../../../inside/inside-worker";
-import { randomChoiceFactory } from "../vendor/random-uint-below";
+import { puzzles } from "../../../../../puzzles";
+import { mustBeInsideWorker } from "../../../inside-worker";
+import { randomChoiceFactory } from "../../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
-import { initialize, solveState } from "./min2phase/gwt";
-import { sgs3x3x3 } from "./sgs";
+import { initialize, solveState } from "../../vendor/min2phase/gwt";
+import { sgs3x3x3 } from "./legacy-sgs";
 
 export async function random333State(): Promise<Transformation> {
   const def = await puzzles["3x3x3"].def();

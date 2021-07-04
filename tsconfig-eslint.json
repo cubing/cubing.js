@@ -4,7 +4,7 @@
   "exclude": [
     "src/static/**/*",
     "src/cubing/solve/worker-inside-generated*",
-    "src/cubing/solve/vendor/implementations/3x3x3/min2phase/gwt.js",
+    "src/cubing/solve/inside/solve/vendor/min2phase/gwt.js",
     "script/test/dist/esm/parcel/parcel-package/**/*"
   ]
 }

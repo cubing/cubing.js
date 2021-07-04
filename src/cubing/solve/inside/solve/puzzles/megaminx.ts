@@ -1,9 +1,9 @@
 import type { Alg } from "../../../../alg";
 import type { Transformation } from "../../../../kpuzzle";
-import { mustBeInsideWorker } from "../../../inside/inside-worker";
-import type { SGSCachedData } from "../vendor/sgs/src/sgs";
-import { cachedMegaminxDefWithoutMO } from "../vendor/sgs/src/test/puzzles/megaminx.sgs.json";
-import { TrembleSolver } from "../vendor/sgs/src/tremble";
+import { mustBeInsideWorker } from "../../inside-worker";
+import type { SGSCachedData } from "../sgs";
+import { cachedMegaminxDefWithoutMO } from "./megaminx.sgs.json";
+import { TrembleSolver } from "../tremble";
 
 const TREMBLE_DEPTH = 2;
 
@@ -12,9 +12,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const sgs = await import(
-        "../vendor/sgs/src/test/puzzles/megaminx.sgs.json"
-      );
+      const sgs = await import("./megaminx.sgs.json");
       const json: SGSCachedData = await sgs.cachedSGSDataMegaminx();
       return new TrembleSolver(await cachedMegaminxDefWithoutMO(), json, [
         "U",

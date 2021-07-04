@@ -4,19 +4,16 @@ import {
   preInitialize222,
   random222Scramble,
   solve222,
-} from "../vendor/implementations/2x2x2";
+} from "./solve/puzzles/2x2x2";
 import {
   initialize333,
   random333Scramble,
   solve333,
-} from "../vendor/implementations/3x3x3";
-import {
-  initialize444,
-  random444Scramble,
-} from "../vendor/implementations/4x4x4";
-import { solveMegaminx } from "../vendor/implementations/megaminx";
-import { solvePyraminx } from "../vendor/implementations/pyraminx";
-import { solveSkewb } from "../vendor/implementations/skewb";
+} from "./solve/puzzles/3x3x3";
+import { initialize444, random444Scramble } from "./solve/puzzles/4x4x4";
+import { solveMegaminx } from "./solve/puzzles/megaminx";
+import { solvePyraminx } from "./solve/puzzles/pyraminx";
+import { solveSkewb } from "./solve/puzzles/skewb";
 import { setIsInsideWorker } from "./inside-worker";
 
 setIsInsideWorker(true);

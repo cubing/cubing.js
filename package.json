@@ -117,8 +117,8 @@
       "/dist",
       "/src/static",
       "/snowpack.config.mjs",
-      "/src/cubing/solve/vendor/implementations/3x3x3/min2phase/gwt.js",
-      "/src/cubing/solve/vendor/implementations/vendor/random-uint-below/get-random-values.d.ts",
+      "/src/cubing/solve/inside/solve/vendor/min2phase/gwt.js",
+      "/src/cubing/solve/inside/solve/vendor/random-uint-below/get-random-values.d.ts",
       "/src/cubing/solve/worker-inside-generated*",
       "/script/test/dist/esm/parcel/parcel-package/**/*",
       "parser-peggy.js"

@@ -1,4 +1,4 @@
-import { Alg, AlgBuilder, Move, QuantumMove } from "../../../../../../alg";
+import { Alg, AlgBuilder, Move, QuantumMove } from "../../../alg";
 import {
   areStatesEquivalent,
   combineTransformations,
@@ -7,8 +7,8 @@ import {
   KPuzzle,
   KPuzzleDefinition,
   Transformation,
-} from "../../../../../../kpuzzle";
-import { countMoves } from "../../../../../../notation";
+} from "../../../kpuzzle";
+import { countMoves } from "../../../notation";
 import type { SGSCachedData } from "./sgs";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.

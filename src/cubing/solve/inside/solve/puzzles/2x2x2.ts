@@ -5,13 +5,13 @@ import {
   Transformation,
 } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
-import { mustBeInsideWorker } from "../../../inside/inside-worker";
+import { mustBeInsideWorker } from "../../inside-worker";
 import {
   randomPermute,
   randomUIntBelowFactory,
 } from "../vendor/random-uint-below";
-import type { SGSCachedData } from "../vendor/sgs/src/sgs";
-import { TrembleSolver } from "../vendor/sgs/src/tremble";
+import type { SGSCachedData } from "../sgs";
+import { TrembleSolver } from "../tremble";
 
 // Empirical ly determined depth:
 // - ≈11 moves on average (as opposed to >13 moves for depth 2),
@@ -24,7 +24,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
       const json: SGSCachedData = await (
-        await import("../vendor/sgs/src/test/puzzles/2x2x2.sgs.json")
+        await import("./2x2x2.sgs.json")
       ).cachedData222();
       return new TrembleSolver(
         await puzzles["2x2x2"].def(),

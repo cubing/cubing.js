@@ -1,8 +1,8 @@
 /** @ts-ignore */
 import { Alg } from "../alg";
 // import { preInitialize222 } from "../implementations/2x2x2";
-import { randomClockScrambleString } from "./vendor/implementations/clock";
-import { randomMegaminxScrambleString } from "./vendor/implementations/minx";
+import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
+import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import { instantiateWorker } from "./instantiator";
 import type { WorkerInsideAPI } from "./inside/api";
 import type { Transformation } from "../puzzle-geometry/interfaces";
