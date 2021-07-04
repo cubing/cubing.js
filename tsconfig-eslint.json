@@ -1,13 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": [
-    "src/**/*",
-    "src/static/*/index.js",
-    "src/static/*/index.d.ts",
-    "script/**/*",
-    "script/*",
-    "src/**/*.spec.ts"
-  ],
+  "include": ["src/**/*", "script/**/*", "script/*", "src/**/*.spec.ts"],
   "exclude": [
     "src/static/**/*",
     "src/cubing/solve/worker-inside-generated*",
