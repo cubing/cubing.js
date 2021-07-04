@@ -47,6 +47,8 @@ const ignoredMaterial = new MeshBasicMaterial({
 const ignoredMaterialHint = new MeshBasicMaterial({
   color: 0xcccccc,
   side: BackSide,
+  transparent: true,
+  opacity: 0.75,
 });
 
 const invisibleMaterial = new MeshBasicMaterial({
@@ -60,6 +62,8 @@ const orientedMaterial = new MeshBasicMaterial({
 const orientedMaterialHint = new MeshBasicMaterial({
   color: 0xff88ff,
   side: BackSide,
+  transparent: true,
+  opacity: 0.5,
 });
 
 interface MaterialMap extends Record<FaceletMeshAppearance, MeshBasicMaterial> {
