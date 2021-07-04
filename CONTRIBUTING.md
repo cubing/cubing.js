@@ -7,3 +7,7 @@ If you have any thoughts about bigger contributions, please consider [filing an 
 ## Development
 
 Please see the [development instruction in `README.md`](./README.md#development) for how to work on `cubing.js`.
+
+## Code of Conduct
+
+Please see [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
