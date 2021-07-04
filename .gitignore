@@ -7,3 +7,16 @@
 /dist
 /node_modules
 
+# Legacy package folders.
+# We can hopefully get rid of this once enough bundlers support the `exports` field in `package.json`.
+/alg
+/bluetooth
+/kpuzzle
+/notation
+/protocol
+/puzzle-geometry
+/puzzles
+/scramble
+/solve
+/stream
+/twisty
