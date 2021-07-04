@@ -6,7 +6,7 @@ import { Alg } from "../../../cubing/alg";
 
 useNewFaceNames(true);
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
   if (!getURLParam("debug-js")) {
     return;
   }

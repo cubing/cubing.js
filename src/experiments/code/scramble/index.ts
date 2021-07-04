@@ -19,7 +19,7 @@ async function newScramble() {
   twistyPlayer.timeline.jumpToEnd();
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
   button.addEventListener("click", newScramble);
   select.addEventListener("change", () => {
     twistyPlayer.alg = "";

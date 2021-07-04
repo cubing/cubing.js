@@ -6,7 +6,7 @@ useNewFaceNames(true);
 import "../../../cubing/twisty/dom/TwistyPlayer";
 import { TwistyPlayer } from "../../../cubing/twisty";
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const elem = document.querySelector("#js-init-example")!;
   // tslint:disable-next-line: no-unused-expression
@@ -22,7 +22,7 @@ window.addEventListener("load", () => {
   );
 });
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const elem = document.querySelector("#custom-pg3d")!;
   // tslint:disable-next-line: no-unused-expression

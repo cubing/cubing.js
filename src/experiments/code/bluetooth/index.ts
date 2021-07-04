@@ -19,7 +19,7 @@ async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
 
 (globalThis as any).puzzle = null;
 
-window.addEventListener("load", async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   const twistyPlayer = new TwistyPlayer({
     alg: new Alg(),
   });

@@ -3,7 +3,7 @@ import { KPuzzle, KPuzzleSVGWrapper } from "../../../cubing/kpuzzle";
 import { puzzles } from "../../../cubing/puzzles";
 import "../../../cubing/twisty/dom/TwistyPlayer";
 
-window.addEventListener("load", async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   const def = await puzzles["3x3x3"].def();
   const llSVG = await puzzles["3x3x3"].llSVG!(); // TODO: Avoid the need for an assertion?
   const kpuzzle = new KPuzzle(def);

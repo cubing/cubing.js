@@ -170,7 +170,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
 
 customElementsShim.define("twisty-anim-cube", TwistyAnimCube);
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
   const applets = document.querySelectorAll("applet");
   for (const applet of Array.from(applets)) {
     const attributeContains = (attrName: string, substr: string): boolean => {

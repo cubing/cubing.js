@@ -1,3 +1,3 @@
 import { setup } from "./app";
 
-window.addEventListener("load", setup);
+window.addEventListener("DOMContentLoaded", setup);

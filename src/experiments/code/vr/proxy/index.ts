@@ -58,7 +58,7 @@ class App {
   }
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
   const app = new App();
   (window as any).app = app;
 });
