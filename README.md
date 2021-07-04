@@ -9,7 +9,7 @@
 
 ## Documentation
 
-If you want to display algs or solvers, the following code is a good way to get started:
+If you want to display algs or solves, the following code is a good way to get started:
 
 ```html
 <script src="https://cdn.cubing.net/esm/cubing/twisty" type="module" defer></script>
