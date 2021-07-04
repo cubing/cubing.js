@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>TwistyAlgViewer | twisty.js</title>
+    <link href="./inline.css" rel="stylesheet" type="text/css" />
+    <script
+      src="./twisty-alg-viewer.js"
+      href="./twisty-alg-viewer.ts"
+      type="module"
+      defer
+    ></script>
+    <style>
+      .content {
+        padding-bottom: 4em;
+      }
+      .alg-example {
+        display: grid;
+        place-content: center;
+        font-size: 1.5em;
+        max-width: 75%;
+        margin: auto;
+      }
+      .monospace {
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <h1 style="text-align: center">
+        <code>&lt;twisty-alg-viewer&gt;</code>
+      </h1>
+      <twisty-player
+        id="main-player"
+        alg="([R, U])3 (U L)2' [M2': U2]"
+      ></twisty-player>
+      <div class="alg-example">
+        <twisty-alg-viewer for="main-player"></twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="wr-3.47"
+        experimental-setup-alg="F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2"
+        alg="y x' // inspection
+U R2 U' F' L F' U' L' // XX-Cross + EO
+U' R U R' // 3rd slot
+R' U R U2' R' U R // 4th slot
+U R' U' R U' R' U2 R // OLL / ZBLL
+U // AUF"
+      ></twisty-player>
+      <div class="alg-example">
+        <twisty-alg-viewer for="wr-3.47"></twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="megaminx-scramble"
+        alg="R-- D-- R++ D-- R-- D-- R++ D++ R++ D-- U'
+R-- D++ R-- D-- R++ D-- R++ D++ R++ D-- U'
+R++ D++ R-- D-- R++ D-- R++ D-- R++ D++ U
+R-- D-- R-- D++ R-- D-- R-- D-- R-- D-- U'
+R-- D++ R-- D++ R-- D-- R-- D++ R-- D++ U
+R++ D++ R-- D-- R-- D-- R++ D++ R++ D++ U
+R-- D++ R++ D-- R-- D-- R-- D-- R-- D-- U'"
+        puzzle="megaminx"
+      ></twisty-player>
+      <div class="alg-example monospace">
+        <twisty-alg-viewer for="megaminx-scramble"></twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="sq1-parity"
+        alg="/ (-3, 0) / (0, 3) / (0, -3) / (0, 3) / (2, 0) / (0, 2) / (-2, 0) / (4, 0) / (0, -2) / (0, 2) / (-1, 4) / (0, -3) / (0, 3)"
+        puzzle="square1"
+        visualization="2D"
+      ></twisty-player>
+      <div class="alg-example">
+        <twisty-alg-viewer for="sq1-parity"></twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="clock-scramble"
+        alg="UR4+ DR4+ DL1+ UL3- U1+ R2- D5+ L6+ ALL4- y2 U3- R5- D4+ L6+ ALL5+ UL"
+        puzzle="clock"
+        visualization="2D"
+      ></twisty-player>
+      <div class="alg-example">
+        <twisty-alg-viewer for="clock-scramble"></twisty-alg-viewer>
+      </div>
+    </div>
+  </body>
+</html>

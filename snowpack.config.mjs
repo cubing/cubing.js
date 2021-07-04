@@ -16,8 +16,7 @@ if (EXCLUDE_BABYLON) {
 export default {
   workspaceRoot: "/",
   mount: {
-    "src/experiments/static": { url: "/", static: true },
-    "src/experiments/code": { url: "/_code" },
+    "src/experiments": { url: "/" },
   },
   exclude: ["**/.DS_Store"],
   packageOptions: {

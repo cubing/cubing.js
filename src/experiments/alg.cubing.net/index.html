@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=0.8" />
+    <title>alg.cubing.net v2</title>
+    <link href="./index.css" rel="stylesheet" type="text/css" />
+    <link href="./responsive.css" rel="stylesheet" type="text/css" />
+    <link href="./spinner.css" rel="stylesheet" type="text/css" />
+    <link href="./control-pane.css" rel="stylesheet" type="text/css" />
+    <script src="./index.js" href="./index.ts" type="module" defer></script>
+  </head>
+
+  <body>
+    <app>
+      <puzzle-pane class="loading">
+        <div class="spinner"></div>
+      </puzzle-pane>
+      <control-pane class="loading">
+        <section>
+          <div class="title">Twizzle Editor / alg.cubing.net v2</div>
+          <div style="margin-top: 0.5em; color: red">
+            Note: everything here is super-experimental. Puzzles and notation
+            will change.
+          </div>
+        </section>
+        <h2>Setup</h2>
+        <twisty-alg-editor
+          class="experimental-setup-alg"
+          placeholder="[Click here to add anchor setup alg.]"
+          twisty-player-prop="experimentalSetupAlg"
+        ></twisty-alg-editor>
+        <h2>Moves</h2>
+        <twisty-alg-editor
+          class="alg"
+          placeholder="[Click here to add alg.]"
+        ></twisty-alg-editor>
+        <h2>Settings</h2>
+        <section>
+          <select class="puzzle">
+            <option>Puzzle</option>
+          </select>
+          <br />
+          <select class="stickering">
+            <option>Stickering</option>
+          </select>
+          <select class="setup-anchor">
+            <option>Setup Anchor</option>
+          </select>
+        </section>
+        <h2>Experiments</h2>
+        <section>
+          <button class="solve-button">Solve</button>
+          <button class="scramble-button">Scramble</button>
+        </section>
+      </control-pane>
+    </app>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>cubing.js | Scramble</title>
+    <script src="./index.js" href="./index.ts" type="module" defer></script>
+  </head>
+  <body>
+    <select>
+      <option value="222">2x2x2</option>
+      <option value="333" selected>3x3x3</option>
+      <option value="444">4x4x4</option>
+      <option value="minx">Megaminx</option>
+    </select>
+    <button>New scramble</button>
+    <br /><br />
+    <div id="scramble-string" style="font-family: sans-serif"></div>
+    <br />
+    <twisty-player control-panel="none"></twisty-player>
+  </body>
+</html>
