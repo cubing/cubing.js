@@ -81,7 +81,7 @@ class AxisInfo {
     public fromZ: Euler,
     public color: number,
     public dimColor: number,
-    public hintOpacityScale: number // TODO: make this work better across bright *and* dark backgrounds. Maybe tweak sticker compositing settings?
+    public hintOpacityScale: number, // TODO: make this work better across bright *and* dark backgrounds. Maybe tweak sticker compositing settings?
   ) {
     // TODO: Make sticker material single-sided when cubie foundation is opaque?
     this.stickerMaterial = {
@@ -123,14 +123,14 @@ const axesInfo: AxisInfo[] = [
     new Euler(-TAU / 4, 0, 0),
     0xffffff,
     0xdddddd,
-    1.25
+    1.25,
   ),
   new AxisInfo(
     new Vector3(-1, 0, 0),
     new Euler(0, -TAU / 4, 0),
     0xff8800,
     0x884400,
-    1
+    1,
   ),
   new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ff00, 0x008800, 1),
   new AxisInfo(
@@ -138,21 +138,21 @@ const axesInfo: AxisInfo[] = [
     new Euler(0, TAU / 4, 0),
     0xff0000,
     0x660000,
-    1
+    1,
   ),
   new AxisInfo(
     new Vector3(0, 0, -1),
     new Euler(0, TAU / 2, 0),
     0x0000ff,
     0x000088,
-    0.75
+    0.75,
   ),
   new AxisInfo(
     new Vector3(0, -1, 0),
     new Euler(TAU / 4, 0, 0),
     0xffff00,
     0x888800,
-    1.25
+    1.25,
   ),
 ];
 
