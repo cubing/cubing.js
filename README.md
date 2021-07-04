@@ -14,13 +14,21 @@ The source for the documentation site is currently inside the [`docs`](./docs/) 
 
 ## Development
 
+Development relies on [`node`](https://nodejs.org/en/) and [`npm`](https://docs.npmjs.com/getting-started). Once you have installed those, you can run:
+
 ```shell
 git clone https://github.com/cubing/cubing.js && cd cubing.js
 npm install
 make dev
 ```
 
-This should open http://localhost:3333/ automatically.
+This should open [the `experiments` root file](/Users/lgarron/Code/git/github.com/cubing/cubing.js/src/experiments/static/index.html) at http://localhost:3333/ automatically. Any source code changes will refresh the browser.
+
+The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/) To test changes, use:
+
+```shell
+make test
+```
 
 ## License
 
