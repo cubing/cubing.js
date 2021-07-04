@@ -96,12 +96,14 @@ class AxisInfo {
       regular: new MeshBasicMaterial({
         color,
         side: BackSide,
+        transparent: true,
+        opacity: 0.5,
       }),
       dim: new MeshBasicMaterial({
         color: dimColor,
         side: BackSide,
         transparent: true,
-        opacity: 0.75,
+        opacity: 0.5,
       }),
       oriented: orientedMaterialHint,
       ignored: ignoredMaterialHint,
