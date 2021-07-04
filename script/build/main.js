@@ -155,6 +155,7 @@ export const esmTarget = {
         "src/cubing/alg/index.ts",
         "src/cubing/bluetooth/index.ts",
         "src/cubing/kpuzzle/index.ts",
+        "src/cubing/notation/index.ts",
         "src/cubing/protocol/index.ts",
         "src/cubing/puzzle-geometry/index.ts",
         "src/cubing/puzzles/index.ts",
