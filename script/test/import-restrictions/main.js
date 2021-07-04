@@ -31,11 +31,6 @@ class Target {
       throw new Error(`Folder doesn't exist: ${this.name}`);
     }
 
-    this.indexFilePath = resolve(this.dirPath, "index.ts");
-    if (!existsSync(this.indexFilePath)) {
-      throw new Error(`Entry point index file doesn't exist: ${this.name}`);
-    }
-
     this.regExp = new RegExp(this.name);
   }
 
@@ -126,7 +121,7 @@ for (const [name, targetInfo] of Object.entries(targetInfos)) {
       // sourcemap: true,
       outdir: currentTarget.outdir,
       external: ["three", ...externalNode],
-      entryPoints: [currentTarget.indexFilePath],
+      entryPoints: [currentTarget.dirPath],
       plugins: targets.map((t) => t.plugin(currentTarget)),
     });
   }
