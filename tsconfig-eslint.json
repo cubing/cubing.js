@@ -1,10 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*", "script/**/*", "script/*", "src/**/*.spec.ts"],
-  "exclude": [
-    "src/static/**/*",
-    "src/cubing/solve/worker-inside-generated*",
-    "src/cubing/solve/inside/solve/vendor/min2phase/gwt.js",
-    "script/test/dist/esm/parcel/parcel-package/**/*"
-  ]
+  "include": ["src/**/*", "script/*", "script/**/*", "src/**/*.spec.ts"],
+  "exclude": ["script/test/dist/esm/parcel/parcel-package/**/*"]
 }
