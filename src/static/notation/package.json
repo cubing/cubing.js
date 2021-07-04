@@ -1,6 +1,6 @@
 {
   "name": "notation",
   "type": "module",
-  "main": "./dist/esm/notation/index.js",
+  "main": "../dist/esm/notation/index.js",
   "types": "../dist/types/notation/index.d.ts"
 }
