@@ -52,11 +52,11 @@ export const targetInfos = {
   },
   "scramble": {
     deps: {
-      direct: ["alg", "solve"],
+      direct: ["alg", "search"],
       dynamic: [],
     },
   },
-  "solve": {
+  "search": {
     deps: {
       direct: ["alg", "kpuzzle", "puzzles"],
       dynamic: [],

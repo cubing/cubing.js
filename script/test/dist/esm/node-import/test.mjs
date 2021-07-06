@@ -6,7 +6,7 @@ import "cubing/protocol";
 import "cubing/puzzle-geometry";
 import "cubing/puzzles";
 import "cubing/scramble";
-import "cubing/solve";
+import "cubing/search";
 import "cubing/stream";
 import "cubing/twisty";
 

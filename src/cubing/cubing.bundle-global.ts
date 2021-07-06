@@ -7,7 +7,7 @@ import * as puzzleGeometry from "./puzzle-geometry";
 import * as puzzles from "./puzzles";
 import * as scramble from "./scramble";
 import * as stream from "./stream";
-import * as solve from "./solve";
+import * as search from "./search";
 import * as twisty from "./twisty";
 
 export const cubing = {
@@ -20,7 +20,7 @@ export const cubing = {
   puzzles,
   scramble,
   stream,
-  solve,
+  search,
   twisty,
 };
 

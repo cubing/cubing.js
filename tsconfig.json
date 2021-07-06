@@ -24,7 +24,7 @@
     "*/index.d.ts",
     "src/static/**/*",
     "src/**/*.spec.ts",
-    "src/cubing/solve/worker-inside-generated*",
-    "src/cubing/solve/inside/solve/vendor/min2phase/gwt.js"
+    "src/cubing/search/worker-inside-generated*",
+    "src/cubing/search/inside/solve/vendor/min2phase/gwt.js"
   ]
 }

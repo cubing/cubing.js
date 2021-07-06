@@ -1,1 +1,1 @@
-export { experimentalRandomScrambleForEvent as randomScrambleForEvent } from "../solve";
+export { experimentalRandomScrambleForEvent as randomScrambleForEvent } from "../search";

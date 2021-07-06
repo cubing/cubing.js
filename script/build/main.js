@@ -56,12 +56,12 @@ function constructStringWrappingPlugin(dev) {
         return new Promise(async (resolve, _) => {
           if (result.errors.length !== 0) {
             await execPromise(
-              "rm -f src/cubing/solve/worker-inside-generated.js",
+              "rm -f src/cubing/search/worker-inside-generated.js",
             );
 
             if (dev) {
               writeFile(
-                "src/cubing/solve/worker-inside-generated-string.js",
+                "src/cubing/search/worker-inside-generated-string.js",
                 'export const workerSource = "throw new Error(\\"Worker build error.\\");";',
                 () => {
                   console.log(
@@ -72,7 +72,7 @@ function constructStringWrappingPlugin(dev) {
               );
             } else {
               await execPromise(
-                "rm -f src/cubing/solve/worker-inside-generated-string.js",
+                "rm -f src/cubing/search/worker-inside-generated-string.js",
               );
               console.log(
                 "Worker generation failed. Removed generated worker files.",
@@ -80,18 +80,18 @@ function constructStringWrappingPlugin(dev) {
             }
           } else {
             readFile(
-              "src/cubing/solve/worker-inside-generated.js",
+              "src/cubing/search/worker-inside-generated.js",
               "utf8",
               (_, contents) => {
                 writeFile(
-                  "src/cubing/solve/worker-inside-generated-string.js",
+                  "src/cubing/search/worker-inside-generated-string.js",
                   `export const workerSource = "${contents
                     .replace(/\\/g, "\\\\")
                     .replace(/"/g, '\\"')
                     .replace(/\n/g, "\\n")}";`,
                   async () => {
                     await execPromise(
-                      "rm -f src/cubing/solve/worker-inside-generated.js",
+                      "rm -f src/cubing/search/worker-inside-generated.js",
                     );
                     console.log("updated worker-inside-generated-string.js");
                     resolve();
@@ -106,14 +106,14 @@ function constructStringWrappingPlugin(dev) {
   };
 }
 
-export const solveWorkerTarget = {
-  name: "solve-worker",
+export const searchWorkerTarget = {
+  name: "search-worker",
   builtYet: false,
   dependencies: [],
   buildSelf: (dev) => {
     return esbuild.build({
-      entryPoints: ["./src/cubing/solve/inside/entry.js"],
-      outfile: "./src/cubing/solve/worker-inside-generated.js",
+      entryPoints: ["./src/cubing/search/inside/entry.js"],
+      outfile: "./src/cubing/search/worker-inside-generated.js",
       format: "cjs",
       target: "es2015",
       bundle: true,
@@ -129,7 +129,7 @@ export const solveWorkerTarget = {
 export const bundleGlobalTarget = {
   name: "bundle-global",
   builtYet: false,
-  dependencies: [solveWorkerTarget],
+  dependencies: [searchWorkerTarget],
   buildSelf: (dev) => {
     return esbuild.build({
       entryPoints: ["src/cubing/cubing.bundle-global.ts"],
@@ -148,7 +148,7 @@ export const bundleGlobalTarget = {
 export const esmTarget = {
   name: "esm",
   builtYet: false,
-  dependencies: [solveWorkerTarget],
+  dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
       entryPoints: [
@@ -161,7 +161,7 @@ export const esmTarget = {
         "src/cubing/puzzles/index.ts",
         "src/cubing/scramble/index.ts",
         "src/cubing/stream/index.ts",
-        "src/cubing/solve/index.ts",
+        "src/cubing/search/index.ts",
         "src/cubing/twisty/index.ts",
         "src/cubing/esm-test-worker.js",
       ],
@@ -183,7 +183,7 @@ export const esmTarget = {
 export const binTarget = {
   name: "bin",
   builtYet: false,
-  dependencies: [solveWorkerTarget],
+  dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
       entryPoints: ["src/bin/puzzle-geometry-bin.ts"],
@@ -203,7 +203,7 @@ export const binTarget = {
 export const SnowpackTarget = {
   name: "snowpack",
   builtYet: false,
-  dependencies: [solveWorkerTarget],
+  dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     const config = snowpack.createConfiguration(configSrc);
 
@@ -214,7 +214,7 @@ export const SnowpackTarget = {
 
     // if (!dev) {
     //   await execPromise(
-    //     "cp src/cubing/solve/esm-test-worker.js dist/experiments/esm-test-worker.js",
+    //     "cp src/cubing/search/esm-test-worker.js dist/experiments/esm-test-worker.js",
     //   );
     // }
   },
@@ -223,7 +223,7 @@ export const SnowpackTarget = {
 export const typesTarget = {
   name: "types",
   builtYet: false,
-  dependencies: [solveWorkerTarget], // solve worker?
+  dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     console.warn(
       "Note: The `types` target uses `tsc`, which is slow. Expect ≈10 seconds or more.",
@@ -255,7 +255,7 @@ if (!targetName) {
 const dev = process.argv[3] === "dev";
 
 const targets /*: Record<String, SolverWorker>*/ = {
-  "solve-worker": solveWorkerTarget,
+  "search-worker": searchWorkerTarget,
   "snowpack": SnowpackTarget,
   "bundle-global": bundleGlobalTarget,
   "esm": esmTarget,

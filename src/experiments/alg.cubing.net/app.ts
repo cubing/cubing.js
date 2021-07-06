@@ -19,7 +19,7 @@ import {
   solveMegaminx,
   solvePyraminx,
   solveSkewb,
-} from "../../cubing/solve";
+} from "../../cubing/search";
 import { cube2x2x2KPuzzle } from "../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
 import { randomScrambleForEvent } from "../../cubing/scramble";
 

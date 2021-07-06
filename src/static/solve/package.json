@@ -1,6 +1,0 @@
-{
-  "name": "solve",
-  "type": "module",
-  "main": "../dist/esm/solve/index.js",
-  "types": "../dist/types/solve/index.d.ts"
-}
