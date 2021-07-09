@@ -23,6 +23,8 @@ import {
 import { cube2x2x2KPuzzle } from "../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
 import { randomScrambleForEvent } from "../../cubing/scramble";
 import { customElementsShim } from "../../cubing/twisty/dom/element/node-custom-element-shims";
+import { examples } from "./examples";
+import { experimentalEnsureAlg } from "../../cubing/alg/Alg";
 export interface AppData {
   puzzleName: string;
   experimentalSetupAlg: Alg;
@@ -75,6 +77,7 @@ export class App {
     controlPaneElem.classList.remove("loading");
     // tslint:disable-next-line: no-unused-expression
     this.controlPane = new ControlPane(
+      this,
       controlPaneElem,
       initialData,
       this.setExperimentalSetupAlg.bind(this),
@@ -148,13 +151,18 @@ export class App {
     return true;
   }
 
-  private setSetupAnchor(setupAnchor: "start" | "end"): boolean {
+  public setSetupAnchor(
+    setupAnchor: "start" | "end",
+    reload: boolean = true,
+  ): boolean {
     setURLParams({ "experimental-setup-anchor": setupAnchor });
-    location.reload();
+    if (!reload) {
+      location.reload();
+    }
     return true;
   }
 
-  private setStickering(stickering: ExperimentalStickering): boolean {
+  public setStickering(stickering: ExperimentalStickering): boolean {
     setURLParams({ "experimental-stickering": stickering });
     location.reload();
     return true;
@@ -236,8 +244,7 @@ const algElemStatusClasses: AlgElemStatusClass[] = [
   "status-bad",
 ];
 
-type ToolAction = "expand" | "simplify" | "invert" | "clear";
-class ToolGrid extends HTMLElement {
+class ButtonGrid extends HTMLElement {
   constructor() {
     super();
     for (const button of Array.from(this.querySelectorAll("button"))) {
@@ -252,9 +259,14 @@ class ToolGrid extends HTMLElement {
       }),
     );
   }
+
+  setButtonEnabled(id: string, enabled: boolean): void {
+    // TODO: better button binding
+    (this.querySelector(`#${id}`)! as HTMLButtonElement).disabled = !enabled;
+  }
 }
 
-customElementsShim.define("tool-grid", ToolGrid);
+customElementsShim.define("button-grid", ButtonGrid);
 
 class ControlPane {
   public experimentalSetupAlgInput: TwistyAlgEditor;
@@ -264,11 +276,12 @@ class ControlPane {
   public stickeringSelect: HTMLSelectElement;
   public tempoInput: HTMLInputElement;
   public hintFaceletCheckbox: HTMLInputElement;
-  public toolGrid: ToolGrid;
-  private solveButton: HTMLButtonElement;
-  private scrambleButton: HTMLButtonElement;
+  public toolGrid: ButtonGrid;
+  public experimentsGrid: ButtonGrid;
+  public examplesGrid: ButtonGrid;
   private tempoDisplay: HTMLSpanElement;
   constructor(
+    private app: App,
     public element: Element,
     initialData: AppData,
     private experimentalSetupAlgChangeCallback: (alg: Alg) => boolean,
@@ -356,9 +369,29 @@ class ControlPane {
     this.toolGrid = findOrCreateChildWithClass(
       this.element,
       "tool-grid",
-      "tool-grid",
+      "button-grid",
     );
     this.toolGrid.addEventListener("action", this.onToolAction.bind(this));
+
+    this.experimentsGrid = findOrCreateChildWithClass(
+      this.element,
+      "experiments-grid",
+      "button-grid",
+    );
+    this.experimentsGrid.addEventListener(
+      "action",
+      this.onExperimentsAction.bind(this),
+    );
+
+    this.examplesGrid = findOrCreateChildWithClass(
+      this.element,
+      "examples-grid",
+      "button-grid",
+    );
+    this.examplesGrid.addEventListener(
+      "action",
+      this.onExampleAction.bind(this),
+    );
 
     this.experimentalSetupAlgInput.addEventListener(
       "input",
@@ -368,20 +401,6 @@ class ControlPane {
       "change",
       this.onexperimentalSetupAlgInput.bind(this, true),
     );
-
-    this.solveButton = findOrCreateChildWithClass(
-      this.element,
-      "solve-button",
-      "button",
-    );
-    this.solveButton.addEventListener("click", this.solve);
-
-    this.scrambleButton = findOrCreateChildWithClass(
-      this.element,
-      "scramble-button",
-      "button",
-    );
-    this.scrambleButton.addEventListener("click", this.scramble);
 
     this.onAlgInput(true);
   }
@@ -462,8 +481,7 @@ class ControlPane {
       : "none";
   }
 
-  private onToolAction(e: CustomEvent<{ action: ToolAction }>): void {
-    console.log(e.detail.action);
+  private onToolAction(e: CustomEvent<{ action: string }>): void {
     switch (e.detail.action) {
       case "expand":
         this.setAlg(this.twistyPlayer.alg.expand());
@@ -481,6 +499,29 @@ class ControlPane {
       default:
         throw new Error(`Unknown tool action! ${e.detail.action}`);
     }
+  }
+
+  private onExperimentsAction(e: CustomEvent<{ action: string }>): void {
+    switch (e.detail.action) {
+      case "solve":
+        this.solve();
+        break;
+      case "scramble":
+        this.scramble();
+        break;
+      default:
+        throw new Error(`Unknown experiments action! ${e.detail.action}`);
+    }
+  }
+
+  private onExampleAction(e: CustomEvent<{ action: string }>): void {
+    const config = examples[e.detail.action];
+    this.setAlg(experimentalEnsureAlg(config.alg!));
+    this.setExperimentalSetupAlg(
+      experimentalEnsureAlg(config.experimentalSetupAlg!),
+    );
+    this.app.setSetupAnchor(config.experimentalSetupAnchor!, false);
+    this.app.setStickering(config.experimentalStickering!);
   }
 
   // Set to `null` to clear.
@@ -602,18 +643,13 @@ class ControlPane {
 
   setPuzzle(puzzle: string): void {
     this.hintFaceletCheckbox.disabled = !["3x3x3"].includes(puzzle);
-    this.solveButton.disabled = ![
-      "2x2x2",
-      "3x3x3",
-      "skewb",
-      "pyraminx",
-      "megaminx",
-    ].includes(puzzle);
-    this.scrambleButton.disabled = ![
-      "2x2x2",
-      "3x3x3",
-      "megaminx",
-      "clock",
-    ].includes(puzzle);
+    this.experimentsGrid.setButtonEnabled(
+      "solve",
+      ["2x2x2", "3x3x3", "skewb", "pyraminx", "megaminx"].includes(puzzle),
+    );
+    this.experimentsGrid.setButtonEnabled(
+      "scramble",
+      ["2x2x2", "3x3x3", "megaminx", "clock"].includes(puzzle),
+    );
   }
 }

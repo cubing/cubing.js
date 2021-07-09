@@ -89,12 +89,12 @@ control-pane input[type="checkbox"] {
   margin-left: 0em;
 }
 
-tool-grid {
+button-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
 
-tool-grid button {
+button-grid button {
   margin-bottom: 0;
 }
 

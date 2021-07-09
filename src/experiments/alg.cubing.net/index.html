@@ -72,17 +72,28 @@
         </section>
         <h2>Tools</h2>
         <section class="unpadded">
-          <tool-grid class="tool-grid">
+          <button-grid class="tool-grid">
             <button id="expand">Expand</button>
             <button id="simplify">Simplify</button>
             <button id="clear">Clear</button>
             <button id="invert">Invert</button>
-          </tool-grid>
+          </button-grid>
         </section>
         <h2>Experiments</h2>
-        <section>
-          <button class="solve-button">Solve</button>
-          <button class="scramble-button">Scramble</button>
+        <section class="unpadded">
+          <button-grid class="experiments-grid">
+            <button id="solve">Solve</button>
+            <button id="scramble">Scramble</button>
+          </button-grid>
+        </section>
+        <h2 hidden>Examples</h2>
+        <section class="unpadded" hidden>
+          <button-grid class="examples-grid">
+            <button id="wr">WR</button>
+            <button id="t-perm">T-Perm</button>
+            <button id="sune">Sune</button>
+            <button id="notation">Notation</button>
+          </button-grid>
         </section>
       </control-pane>
     </app>
