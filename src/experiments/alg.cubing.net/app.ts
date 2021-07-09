@@ -242,8 +242,10 @@ class ControlPane {
   public puzzleSelect: HTMLSelectElement;
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
+  public tempoInput: HTMLInputElement;
   private solveButton: HTMLButtonElement;
   private scrambleButton: HTMLButtonElement;
+  private tempoDisplay: HTMLSpanElement;
   constructor(
     public element: Element,
     initialData: AppData,
@@ -256,7 +258,7 @@ class ControlPane {
     ) => boolean,
     private solve: () => void,
     private scramble: () => void,
-    twistyPlayer: TwistyPlayer,
+    private twistyPlayer: TwistyPlayer,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
@@ -307,6 +309,18 @@ class ControlPane {
 
     this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));
     this.algInput.addEventListener("change", this.onAlgInput.bind(this, true));
+
+    this.tempoInput = findOrCreateChildWithClass(
+      this.element,
+      "tempo",
+      "input",
+    );
+    this.tempoDisplay = findOrCreateChildWithClass(
+      this.element,
+      "tempo-display",
+      "span",
+    );
+    this.tempoInput.addEventListener("input", this.onTempoInput.bind(this));
 
     this.experimentalSetupAlgInput.addEventListener(
       "input",
@@ -396,6 +410,12 @@ class ControlPane {
     } catch (e) {
       this.setAlgElemStatus("status-bad");
     }
+  }
+
+  private onTempoInput(): void {
+    const tempoScale = parseFloat(this.tempoInput.value);
+    this.twistyPlayer.timeline.tempoScale = tempoScale;
+    this.tempoDisplay.textContent = `${tempoScale}×`;
   }
 
   // Set to `null` to clear.

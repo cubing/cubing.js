@@ -13,6 +13,11 @@ control-pane {
   transition: opacity 0.5s;
 }
 
+control-pane div.inline {
+  display: inline;
+  font-size: 1.5em;
+}
+
 control-pane section {
   padding: 1em;
 }
