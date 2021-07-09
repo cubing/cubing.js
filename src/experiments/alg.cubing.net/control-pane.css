@@ -97,3 +97,7 @@ tool-grid {
 tool-grid button {
   margin-bottom: 0;
 }
+
+input:disabled + label {
+  opacity: 0.3;
+}
