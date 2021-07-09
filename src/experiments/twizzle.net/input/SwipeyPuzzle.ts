@@ -55,7 +55,7 @@ export const moveMaps: Record<PuzzleID, string[][]> = {
     ["2L2'", "Rv2", "2R2", "2L'", "Lv'", "2R", "D'", "", "D"],
     ["/space", "B2", "R2", "F2'", "d'", "F'", "D2'", "D'", ""],
   ],
-  "FTO": [
+  "fto": [
     ["", "U'", "U2'", "L", "l", "u'", "L2", "2L2", "/enter"],
     ["U", "", "U'", "BL", "Rv'", "BR'", "BL2", "Rv2'", "BR2'"],
     ["U2", "U", "", "u", "r'", "R'", "Fv'", "2R2'", "R2'"],
@@ -94,7 +94,7 @@ function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayer {
   ) as BackViewLayout | undefined;
   return new TwistyPlayer({
     alg: new Alg(),
-    puzzle: puzzleName as any,
+    puzzle: puzzleName,
     controlPanel: "none",
     background: "none",
     backView,
