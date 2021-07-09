@@ -243,6 +243,7 @@ class ControlPane {
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
   public tempoInput: HTMLInputElement;
+  public hintFaceletCheckbox: HTMLInputElement;
   private solveButton: HTMLButtonElement;
   private scrambleButton: HTMLButtonElement;
   private tempoDisplay: HTMLSpanElement;
@@ -320,7 +321,16 @@ class ControlPane {
       "tempo-display",
       "span",
     );
+    this.hintFaceletCheckbox = findOrCreateChildWithClass(
+      this.element,
+      "hint-facelets",
+      "input",
+    );
     this.tempoInput.addEventListener("input", this.onTempoInput.bind(this));
+    this.hintFaceletCheckbox.addEventListener(
+      "input",
+      this.onHintFaceletInput.bind(this),
+    );
 
     this.experimentalSetupAlgInput.addEventListener(
       "input",
@@ -416,6 +426,12 @@ class ControlPane {
     const tempoScale = parseFloat(this.tempoInput.value);
     this.twistyPlayer.timeline.tempoScale = tempoScale;
     this.tempoDisplay.textContent = `${tempoScale}×`;
+  }
+
+  private onHintFaceletInput(): void {
+    this.twistyPlayer.hintFacelets = this.hintFaceletCheckbox.checked
+      ? "floating"
+      : "none";
   }
 
   // Set to `null` to clear.
@@ -531,6 +547,7 @@ class ControlPane {
   }
 
   setPuzzle(puzzle: string): void {
+    this.hintFaceletCheckbox.disabled = !["3x3x3"].includes(puzzle);
     this.solveButton.disabled = ![
       "2x2x2",
       "3x3x3",

@@ -81,3 +81,10 @@ control-pane button:hover {
 control-pane button:active {
   background: white;
 }
+
+control-pane input[type="checkbox"] {
+  vertical-align: 5%;
+  margin-right: 0.5em;
+  margin-top: 1em;
+  margin-left: 0em;
+}
