@@ -121,7 +121,9 @@ const fn = async (
   clearButton.addEventListener("click", space);
 
   function toLink(alg: Alg): string {
-    const url = new URL("https://experiments.cubing.net/cubing.js/twizzle/");
+    const url = new URL(
+      "https://experiments.cubing.net/cubing.js/alg.cubing.net/",
+    );
     const puzzleID = getPuzzleID();
     if (puzzleID === "3x3x3") {
       const opts: AlgCubingNetOptions = {
