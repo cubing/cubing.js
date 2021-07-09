@@ -22,7 +22,7 @@ import {
 } from "../../cubing/search";
 import { cube2x2x2KPuzzle } from "../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
 import { randomScrambleForEvent } from "../../cubing/scramble";
-
+import { customElementsShim } from "../../cubing/twisty/dom/element/node-custom-element-shims";
 export interface AppData {
   puzzleName: string;
   experimentalSetupAlg: Alg;
@@ -236,6 +236,26 @@ const algElemStatusClasses: AlgElemStatusClass[] = [
   "status-bad",
 ];
 
+type ToolAction = "expand" | "simplify" | "invert" | "clear";
+class ToolGrid extends HTMLElement {
+  constructor() {
+    super();
+    for (const button of Array.from(this.querySelectorAll("button"))) {
+      button.addEventListener("click", this.onClick.bind(this));
+    }
+  }
+
+  onClick(e: MouseEvent): void {
+    this.dispatchEvent(
+      new CustomEvent("action", {
+        detail: { action: (e.target as HTMLButtonElement).id },
+      }),
+    );
+  }
+}
+
+customElementsShim.define("tool-grid", ToolGrid);
+
 class ControlPane {
   public experimentalSetupAlgInput: TwistyAlgEditor;
   public algInput: TwistyAlgEditor;
@@ -244,6 +264,7 @@ class ControlPane {
   public stickeringSelect: HTMLSelectElement;
   public tempoInput: HTMLInputElement;
   public hintFaceletCheckbox: HTMLInputElement;
+  public toolGrid: ToolGrid;
   private solveButton: HTMLButtonElement;
   private scrambleButton: HTMLButtonElement;
   private tempoDisplay: HTMLSpanElement;
@@ -331,6 +352,13 @@ class ControlPane {
       "input",
       this.onHintFaceletInput.bind(this),
     );
+
+    this.toolGrid = findOrCreateChildWithClass(
+      this.element,
+      "tool-grid",
+      "tool-grid",
+    );
+    this.toolGrid.addEventListener("action", this.onToolAction.bind(this));
 
     this.experimentalSetupAlgInput.addEventListener(
       "input",
@@ -432,6 +460,27 @@ class ControlPane {
     this.twistyPlayer.hintFacelets = this.hintFaceletCheckbox.checked
       ? "floating"
       : "none";
+  }
+
+  private onToolAction(e: CustomEvent<{ action: ToolAction }>): void {
+    console.log(e.detail.action);
+    switch (e.detail.action) {
+      case "expand":
+        this.setAlg(this.twistyPlayer.alg.expand());
+        break;
+      case "simplify":
+        this.setAlg(this.twistyPlayer.alg.simplify());
+        break;
+      case "clear":
+        this.setAlg(new Alg());
+        this.setExperimentalSetupAlg(new Alg());
+        break;
+      case "invert":
+        this.setAlg(this.twistyPlayer.alg.invert());
+        break;
+      default:
+        throw new Error(`Unknown tool action! ${e.detail.action}`);
+    }
   }
 
   // Set to `null` to clear.
@@ -539,6 +588,11 @@ class ControlPane {
   private stickeringChanged(): void {
     const option = this.stickeringSelect.selectedOptions[0];
     this.setStickeringCallback(option.value as ExperimentalStickering);
+  }
+
+  setExperimentalSetupAlg(alg: Alg): void {
+    this.experimentalSetupAlgInput.algString = alg.toString();
+    this.experimentalSetupAlgChangeCallback(alg);
   }
 
   setAlg(alg: Alg): void {
