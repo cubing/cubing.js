@@ -15,7 +15,7 @@ U // AUF
     experimentalSetupAnchor: "start",
   },
 
-  tPerm: {
+  tperm: {
     experimentalSetupAlg: ``,
     alg: `R U R' U' R' F R2 U' R' U' R U R' F'`,
     experimentalStickering: "PLL",
@@ -29,7 +29,7 @@ U // AUF
     experimentalSetupAnchor: "end",
   },
 
-  notation5x5x5: {
+  notation: {
     experimentalSetupAlg: ``,
     alg: `R L U D B F // Single moves, variable spacing.
 B' F' D' U' L' R' // Inverses.
@@ -46,5 +46,6 @@ Rw r' Lw l' Uw u' Dw d' Bw b' Fw f' // Wide turns.
 ([R: U'] D2)2' [R: U2] // Grouping and repetition`,
     experimentalStickering: "PLL",
     experimentalSetupAnchor: "start",
+    puzzle: "5x5x5",
   },
 };

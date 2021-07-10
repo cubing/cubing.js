@@ -156,15 +156,20 @@ export class App {
     reload: boolean = true,
   ): boolean {
     setURLParams({ "experimental-setup-anchor": setupAnchor });
-    if (!reload) {
+    if (reload) {
       location.reload();
     }
     return true;
   }
 
-  public setStickering(stickering: ExperimentalStickering): boolean {
+  public setStickering(
+    stickering: ExperimentalStickering,
+    reload: boolean = true,
+  ): boolean {
     setURLParams({ "experimental-stickering": stickering });
-    location.reload();
+    if (reload) {
+      location.reload();
+    }
     return true;
   }
 
@@ -281,7 +286,7 @@ class ControlPane {
   public examplesGrid: ButtonGrid;
   private tempoDisplay: HTMLSpanElement;
   constructor(
-    private app: App,
+    _app: App,
     public element: Element,
     initialData: AppData,
     private experimentalSetupAlgChangeCallback: (alg: Alg) => boolean,
@@ -520,8 +525,11 @@ class ControlPane {
     this.setExperimentalSetupAlg(
       experimentalEnsureAlg(config.experimentalSetupAlg!),
     );
-    this.app.setSetupAnchor(config.experimentalSetupAnchor!, false);
-    this.app.setStickering(config.experimentalStickering!);
+    // this.app.setSetupAnchor(config.experimentalSetupAnchor!, false);
+    // this.app.setStickering(config.experimentalStickering!, false);
+    // if (config.puzzle) {
+    //   this.setPuzzle(config.puzzle);
+    // }
   }
 
   // Set to `null` to clear.
