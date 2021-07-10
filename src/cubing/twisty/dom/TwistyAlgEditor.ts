@@ -190,6 +190,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     // console.log(this.#alg);
   }
 
+  #lastSelection: { start: number; end: number } | null = null;
   onSelectionChange(): void {
     if (
       document.activeElement !== this ||
@@ -201,10 +202,19 @@ export class TwistyAlgEditor extends ManagedCustomElement {
       return;
     }
     // console.log(this.#textarea.selectionStart);
+    const idx =
+      this.#lastSelection?.start === this.#textarea.selectionStart &&
+      this.#lastSelection?.end !== this.#textarea.selectionEnd
+        ? this.#textarea.selectionEnd
+        : this.#textarea.selectionStart;
     const dataUp = twistyAlgEditorCharSearch(this.#alg, {
-      targetCharIdx: this.#textarea.selectionStart,
+      targetCharIdx: idx,
       numMovesSofar: 0,
     });
+    this.#lastSelection = {
+      start: this.#textarea.selectionStart,
+      end: this.#textarea.selectionEnd,
+    };
     if ("latestUnit" in dataUp) {
       this.dispatchEvent(
         new CustomEvent("animatedMoveIndexChange", {
