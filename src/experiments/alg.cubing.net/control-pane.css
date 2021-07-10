@@ -50,6 +50,10 @@ control-pane twisty-alg-editor:focus-within {
   --background: rgb(255, 253, 251);
 }
 
+control-pane twisty-alg-editor:hover {
+  background: white;
+}
+
 control-pane textarea.experimental-setup-alg {
   min-height: 2em;
 }
@@ -67,8 +71,8 @@ control-pane textarea.status-bad {
 control-pane select,
 control-pane button {
   font-size: 1.5em;
-  background: rgba(255, 250, 245, 1);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgb(255, 245, 235);
+  border: none;
   padding: 8px;
 }
 
@@ -76,13 +80,16 @@ section#settings :first-child {
   grid-column: 1 / 3;
 }
 
-control-pane button:hover {
-  background: rgba(255, 230, 210, 1);
+control-pane select:hover,
+control-pane button:hover,
+control-pane select:focus,
+control-pane button:focus {
   cursor: pointer;
+  background: white;
 }
 
 control-pane button:active {
-  background: white;
+  background: rgb(255, 245, 235);
 }
 
 control-pane input[type="checkbox"] {
@@ -95,7 +102,9 @@ control-pane input[type="checkbox"] {
 button-grid,
 section#settings {
   display: grid;
-  /* background: rgba(255, 230, 210, 1); */
+  gap: 0.4em;
+  padding: 0 0.4em 0.4em;
+  background: rgba(255, 230, 210, 1);
   grid-template-columns: repeat(2, 1fr);
 }
 
