@@ -372,7 +372,7 @@ const pictureStickerCoords: Record<string, number[][][]> = {
       [2, 7, 3],
     ],
     [
-      [2, 4, 2],
+      [0, 4, 0],
       [2, 10, 3],
     ],
     [
