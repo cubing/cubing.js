@@ -12,12 +12,12 @@ import {
 } from "../../cubing/twisty";
 
 const supercubeSprite = new URL(
-  "./supercube-sprite.png",
+  "./world.png",
   import.meta.url,
 ).toString();
 
 const spriteURL =
-  new URL(location.href).searchParams.get("sprite") ?? supercubeSprite;
+  new URL(location.href).searchParams.get("world") ?? supercubeSprite;
 
 const hintSpriteURL =
   new URL(location.href).searchParams.get("hint-sprite") ?? "";
@@ -27,6 +27,7 @@ const hintSpriteURL =
 let haveHadMoveInput = false;
 
 const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
+twistyPlayer.timeline.tempoScale = 0.25 / 4;
 twistyPlayer.experimentalSetCursorIndexer("simultaneous");
 twistyPlayer.timeline.jumpToStart();
 setTimeout(() => {
@@ -57,7 +58,7 @@ twistyPlayer.timeline.addActionListener({
 })();
 
 let lastTimestamp = performance.now();
-const ROTATION_RATE = (2 * Math.PI) / 15;
+const ROTATION_RATE = (2 * Math.PI) / 15 / 4;
 let haveTriedToSetSpriteURL = false;
 function rotate() {
   if (twistyPlayer.twisty3D && !haveTriedToSetSpriteURL) {

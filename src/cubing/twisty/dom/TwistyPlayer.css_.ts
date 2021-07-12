@@ -34,9 +34,9 @@ twisty-scrubber {
 }
 
 .wrapper.checkered {
-  background-color: #EAEAEA;
-  background-image: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
-    linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
+  background-color: #707070;
+  background-image: linear-gradient(45deg, #666 25%, transparent 25%, transparent 75%, #666 75%, #666),
+    linear-gradient(45deg, #666 25%, transparent 25%, transparent 75%, #666 75%, #666);
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
 }

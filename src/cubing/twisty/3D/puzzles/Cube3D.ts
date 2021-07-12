@@ -193,7 +193,7 @@ const familyToAxis: { [s: string]: number } = {
 };
 
 const cubieDimensions = {
-  stickerWidth: 0.85,
+  stickerWidth: 1,
   stickerElevation: 0.503,
   foundationWidth: 1,
   hintStickerElevation: 1.45,
@@ -223,7 +223,7 @@ const cube3DOptionsDefaults: Cube3DOptions = {
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
 const blackMesh = new MeshBasicMaterial({
-  color: 0x000000,
+  color: 0x707070,
   opacity: 1,
   transparent: true,
 });
