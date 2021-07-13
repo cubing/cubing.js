@@ -10,9 +10,7 @@ export async function cachedSGSDataPyraminx() {
 async function sgsDataPyraminx(): Promise<SGSCachedData> {
   return parseSGS(
     await puzzles.pyraminx.def(),
-    `SetOrder CORNERS 6 1 4 2
-SetOrder CORNERS2 14 11 13 12
-SetOrder EDGES 9 7 8 5 3 10
+    `SubgroupSizes 12 9 12 3 10 3 8 6 2 3 3 3 3
 
 Alg B
 Alg B'

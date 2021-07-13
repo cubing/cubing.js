@@ -1037,7 +1037,11 @@ export class PuzzleGeometry {
             t += b;
           }
         }
-        s = s + " " + t;
+        if (t <= 90) {
+           s = s + String.fromCharCode(34+t);
+        } else {
+           s = s + "!" + String.fromCharCode(34+Math.floor(t/90)) + String.fromCharCode(34+t%90);
+        }
       }
     }
     return s;
@@ -1445,8 +1449,8 @@ export class PuzzleGeometry {
         cubiesetnums[cind] = cubiesetnum;
         cubiesetcubies[cubiesetnum].push(cind);
         cubieordnums[cind] = cubieords[cubiesetnum]++;
-        const cm = centermassface(cubies[cind][0]);
         if (queue.length < this.rotations.length) {
+          const cm = centermassface(cubies[cind][0]);
           for (let j = 0; j < moverotations.length; j++) {
             const tq =
               this.facetocubies[
@@ -1457,6 +1461,21 @@ export class PuzzleGeometry {
               seen[tq] = true;
             }
           }
+        }
+      }
+      const that = this;
+      queue.sort(function(a: number, b: number): number {
+         if (that.cubiekeys[a] < that.cubiekeys[b]) {
+            return 1;
+         } else if (that.cubiekeys[a] > that.cubiekeys[b]) {
+            return -1;
+         } else {
+            return 0;
+         }
+      }) ;
+      for (let i=0; i<queue.length; i++) {
+        if (i > 1000000) {
+          cubieordnums[queue[i]] = i;
         }
       }
       cubiesetnum++;

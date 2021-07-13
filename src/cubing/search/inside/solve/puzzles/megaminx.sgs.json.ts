@@ -26,9 +26,7 @@ export async function cachedSGSDataMegaminx() {
 export async function sgsDataMegaminx(): Promise<SGSCachedData> {
   return parseSGS(
     await cachedMegaminxDefWithoutMO(),
-    `SetOrder CENTERS 1 53 2 54 55 56 57 58 59 60 61 62
-SetOrder EDGES 31 36 29 26 39 52 34 33 38 16 41 15 43 13 46 18 45 4 21 20 3 24 12 6 7 9 47 28 23 10
-SetOrder CORNERS 37 51 32 40 42 50 49 35 27 14 44 48 25 22 19 8 11 17 5 30
+    `SubgroupSizes 12 5 60 58 60 56 54 57 52 50 54 48 46 51 44 42 48 40 45 38 36 42 34 32 39 30 36 28 26 33 24 30 22 20 27 18 24 16 14 21 12 18 10 15 8 6 2 12 9 3
 
 Alg Rv
 Alg Rv2

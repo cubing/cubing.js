@@ -26,8 +26,7 @@ export async function cachedSGSDataSkewb() {
 export async function sgsDataSkewb(): Promise<SGSCachedData> {
   return parseSGS(
     await skewbDefWithoutMOCached(),
-    `SetOrder CORNERS 14 4 5 1 13 9 8 6
-SetOrder CENTERS 12 3 11 2 7 10
+    `SubgroupSizes 24 6 5 12 9 3 4 9 3 3
 
 Alg y
 Alg y2

@@ -157,34 +157,38 @@ export class TrembleSolver {
     // console.log("sgsPhaseSolve");
     const algBuilder = new AlgBuilder();
     let state = initialState;
-
-    for (const piece of this.sgs.ordering) {
-      const orbitName = piece.pieceRef.orbitName;
-      const permutationIdx = piece.pieceRef.permutationIdx;
+    for (const step of this.sgs.ordering) {
+      const cubieSeq = step.cubieSeq;
+      let key = "";
       const inverseState = invertTransformation(this.def, state);
-      const info =
-        piece.inverseLocations[
-          inverseState[orbitName].permutation[permutationIdx]
-        ][inverseState[orbitName].orientation[permutationIdx]];
-      // console.log(info);
-      // info.alg.log(JSON.parse(JSON.stringify(state)));
+      for (let i=0; i<cubieSeq.length; i++) {
+        const loc = cubieSeq[i];
+        const orbitName = loc.orbitName;
+        const idx = loc.permutationIdx;
+        key += " " + inverseState[orbitName].permutation[idx] + " " + inverseState[orbitName].orientation[idx];
+      }
+      const info = step.lookup[key];
       if (!info) {
         throw new Error("Missing algorithm in sgs or esgs?");
       }
-
       algBuilder.experimentalPushAlg(info.alg);
       if (algBuilder.experimentalNumUnits() >= bestLenSofar) {
         return null;
       }
-      state = combineTransformations(this.def, state, info.transformation);
-      if (
-        state[orbitName].permutation[permutationIdx] !== permutationIdx ||
-        state[orbitName].orientation[permutationIdx] !== 0
-      ) {
-        throw new Error("bad SGS :-(");
+      state = combineTransformations(this.def, state, info.trans);
+      // check; disable this later
+      for (let i=0; i<cubieSeq.length; i++) {
+        const loc = cubieSeq[i];
+        const orbitName = loc.orbitName;
+        const idx = loc.permutationIdx;
+        if (
+          state[orbitName].permutation[idx] !== idx ||
+          state[orbitName].orientation[idx] !== 0
+        ) {
+          throw new Error("bad SGS :-(");
+        }
       }
     }
-
     return algBuilder.toAlg();
   }
 }

@@ -7,148 +7,91 @@ import {
   Transformation,
 } from "../../../kpuzzle";
 
-const DEBUG = false;
-
 interface PieceRef {
   orbitName: string;
   permutationIdx: number;
 }
 
-interface PieceLocation extends PieceRef {
-  orientation: number;
-}
-
-interface SGSLocationInfo {
+export interface SGSAction {
   alg: Alg;
-  transformation: Transformation;
+  trans: Transformation;
 }
 
 export interface SGSCachedData {
   ordering: {
-    pieceRef: PieceRef;
-    inverseLocations: SGSLocationInfo[][];
+    cubieSeq: PieceRef[];
+    lookup: Record<string, SGSAction>;
   }[];
 }
 
 export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
-  const pieceOrdering: PieceRef[] = [];
+  const subgroupSizes: number[] = [];
+  const sgsActions: SGSAction[] = [];
   for (const line of sgs.split("\n")) {
+    const lineTokens = line.split(" ");
     if (line.startsWith("SetOrder ")) {
-      var lineTokens = line.split(" ");
-      for (var j = 2; j < lineTokens.length; j++) {
-        pieceOrdering[parseInt(lineTokens[j]) - 1] = {
-          orbitName: lineTokens[1],
-          permutationIdx: j - 2,
-        };
+      // ignore
+    } else if (line.startsWith("Alg ")) {
+      const alg = Alg.fromString(line.substring(4));
+      const kpuzzle = new KPuzzle(def);
+      kpuzzle.reset();
+      kpuzzle.applyAlg(alg);
+      sgsActions.push({alg: alg, trans: kpuzzle.state});
+    } else if (line.startsWith("SubgroupSizes ")) {
+      for (var j = 1; j < lineTokens.length; j++) {
+        subgroupSizes.push(parseInt(lineTokens[j]));
       }
     }
   }
 
-  if (DEBUG) {
-    console.log(pieceOrdering);
+  const sgscd: SGSCachedData = {ordering:new Array(subgroupSizes.length)};
+  const subgroupAlgsStart: number[] = [];
+  let sum = 0;
+  subgroupAlgsStart.push(0);
+  const emptyAlg = Alg.fromString("");
+  const identity = identityTransformation(def);
+  for (let i=0; i<subgroupSizes.length; i++) {
+    sum += subgroupSizes[i];
+    subgroupAlgsStart.push(sum);
+    sgsActions.splice(sum-1, 0, {alg: emptyAlg, trans: identity});
   }
-
-  const remainingPiecesPerOrbit: Record<string, number> = {};
-  for (const [orbitName, orbitDef] of Object.entries(def.orbits)) {
-    remainingPiecesPerOrbit[orbitName] = orbitDef.numPieces;
+  if (sgsActions.length !== sum) {
+    throw Error("Bad sgs; expected " + (sum - subgroupSizes.length) + " algs but saw " + (sgsActions.length - subgroupSizes.length));
   }
-
-  function* algGenerator(): Generator<Alg> {
-    for (const line of sgs.split("\n")) {
-      if (line.startsWith("Alg ")) {
-        yield Alg.fromString(line.substring(4));
-      }
-    }
+  const cubieState: Record<string, boolean[]> = {};
+  for (const orbitName in def.orbits) {
+    const oDef = def.orbits[orbitName];
+    cubieState[orbitName] = new Array(oDef.numPieces).fill(false);
   }
-  const algs = algGenerator();
-
-  function locatePiece(
-    pieceRef: PieceRef,
-    transformation: Transformation,
-  ): PieceLocation {
-    // TODO: optimize
-    const inverse = invertTransformation(def, transformation);
-    // const mod = def.orbits[pieceRef.orbitName].orientations;
-    // function neg(amount: number): number {
-    //   return (mod - amount) % mod;
-    // }
-    return {
-      orbitName: pieceRef.orbitName,
-      permutationIdx:
-        inverse[pieceRef.orbitName].permutation[pieceRef.permutationIdx],
-      orientation:
-        inverse[pieceRef.orbitName].orientation[pieceRef.permutationIdx],
-    };
-  }
-
-  const sgsCachedData: SGSCachedData = {
-    ordering: [],
-  };
-  for (const pieceRef of pieceOrdering) {
-    const inverseLocations: SGSLocationInfo[][] = new Array(
-      def.orbits[pieceRef.orbitName].numPieces,
-    ).fill(null);
-    sgsCachedData.ordering.push({
-      pieceRef,
-      inverseLocations: inverseLocations,
-    });
-
-    // Fill in the solved piece case.
-    inverseLocations[pieceRef.permutationIdx] = new Array();
-    inverseLocations[pieceRef.permutationIdx][0] = {
-      alg: new Alg(),
-      transformation: identityTransformation(def),
-    };
-  }
-  // console.log(pieceRef, numAlgsToConsume);
-
-  outer: for (const alg of algs) {
-    const kpuzzle = new KPuzzle(def);
-    kpuzzle.reset();
-    kpuzzle.applyAlg(alg);
-    for (const { pieceRef, inverseLocations } of sgsCachedData.ordering) {
-      function isSolvedPiece(state: Transformation, pieceRef: PieceRef) {
-        return (
-          state[pieceRef.orbitName].permutation[pieceRef.permutationIdx] ===
-            pieceRef.permutationIdx &&
-          state[pieceRef.orbitName].orientation[pieceRef.permutationIdx] === 0
-        );
-      }
-      if (!isSolvedPiece(kpuzzle.state, pieceRef)) {
-        const location = locatePiece(pieceRef, kpuzzle.state);
-        inverseLocations[location.permutationIdx] ??= new Array(
-          def.orbits[pieceRef.orbitName].orientations,
-        ).fill(null);
-        if (inverseLocations[location.permutationIdx][location.orientation]) {
-          console.error(
-            "SGS entry is already populated?! We're going to ignore this new alg, but other things will probably break later on.",
-          );
-          console.error("New (backward, from SGS) alg:", alg.toString());
-          console.error("New (forward) alg:", alg.invert().toString());
-          console.error(
-            "Old (forward) alg:",
-            inverseLocations[location.permutationIdx][
-              location.orientation
-            ].alg.toString(),
-          );
-          console.error("Piece being solved:", pieceRef);
-          console.error("Location:", location);
-          console.error(
-            "Location Info:",
-            inverseLocations[location.permutationIdx][location.orientation],
-          );
-          break;
+  for (let i=subgroupSizes.length-1; i>=0; i--) {
+    const cubieSeq: PieceRef[] = [];
+    for (let j=subgroupAlgsStart[i]; j<subgroupAlgsStart[i+1]; j++) {
+      const trans = sgsActions[j].trans;
+      for (const orbitName in def.orbits) {
+        const oDef = def.orbits[orbitName];
+        for (let idx = 0; idx < oDef.numPieces; idx++) {
+          if (trans[orbitName].permutation[idx] !== idx || trans[orbitName].orientation[idx] !== 0) {
+            if (!cubieState[orbitName][idx]) {
+              cubieSeq.push({orbitName: orbitName, permutationIdx: idx});
+              cubieState[orbitName][idx] = true;
+            }
+          }
         }
-        inverseLocations[location.permutationIdx][location.orientation] = {
-          alg: alg.invert(),
-          transformation: invertTransformation(def, kpuzzle.state),
-        };
-        if (DEBUG) {
-          alg.log([pieceRef, location]);
-        }
-        continue outer;
       }
     }
+    const lookup: Record<string, SGSAction> = {};
+    for (let j=subgroupAlgsStart[i]; j<subgroupAlgsStart[i+1]; j++) {
+      const trans = invertTransformation(def, sgsActions[j].trans);
+      let key = "";
+      for (let k=0; k<cubieSeq.length; k++) {
+        const loc = cubieSeq[k];
+        key = key + " " + trans[loc.orbitName].permutation[loc.permutationIdx] + " " + trans[loc.orbitName].orientation[loc.permutationIdx];
+      }
+      lookup[key] = sgsActions[j];
+      sgsActions[j].alg = sgsActions[j].alg.invert();
+      sgsActions[j].trans = invertTransformation(def, sgsActions[j].trans);
+    }
+    sgscd.ordering[i] = {cubieSeq: cubieSeq, lookup: lookup};
   }
-  return sgsCachedData;
+  return sgscd;
 }
