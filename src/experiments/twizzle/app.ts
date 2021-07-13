@@ -115,22 +115,7 @@ function getModValueForMove(move: Move): number {
     console.log("Bailing on mod; pg is null");
     return 1;
   }
-  const move2 = pg.notationMapper.notationToInternal(move);
-  if (move2 === null) {
-    console.log("Bailing on mod; can't translate move");
-    return 1;
-  }
-  move = move2;
-  let family = move.family;
-  if (family.length > 1) {
-    if (
-      family[0] <= "Z" &&
-      (family[family.length - 1] === "w" || family[family.length - 1] === "v")
-    ) {
-      family = family.substr(0, family.length - 1);
-    }
-  }
-  family = family.toUpperCase();
+  let family = stickerDat.unswizzle(move);
   for (const axis of stickerDat.axis) {
     if (family === axis[1]) {
       return axis[2] as number;
