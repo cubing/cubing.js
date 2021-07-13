@@ -1,7 +1,7 @@
 import type { Alg } from "../../../../alg";
 import type { Transformation } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
-import type { SGSCachedData } from "../sgs";
+import type { SGSCachedData } from "../parseSGS";
 import { cachedMegaminxDefWithoutMO } from "./megaminx.sgs.json";
 import { TrembleSolver } from "../tremble";
 

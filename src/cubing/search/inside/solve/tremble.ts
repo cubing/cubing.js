@@ -9,10 +9,11 @@ import {
   Transformation,
 } from "../../../kpuzzle";
 import { countMoves } from "../../../notation";
-import type { SGSCachedData } from "./sgs";
+import type { SGSCachedData } from "./parseSGS";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
+const DOUBLECHECK_PLACED_PIECES = true;
 const DEBUG = false;
 
 // TODO: Take moves instead of move names?
@@ -158,14 +159,18 @@ export class TrembleSolver {
     const algBuilder = new AlgBuilder();
     let state = initialState;
     for (const step of this.sgs.ordering) {
-      const cubieSeq = step.cubieSeq;
+      const cubieSeq = step.pieceOrdering;
       let key = "";
       const inverseState = invertTransformation(this.def, state);
-      for (let i=0; i<cubieSeq.length; i++) {
+      for (let i = 0; i < cubieSeq.length; i++) {
         const loc = cubieSeq[i];
         const orbitName = loc.orbitName;
         const idx = loc.permutationIdx;
-        key += " " + inverseState[orbitName].permutation[idx] + " " + inverseState[orbitName].orientation[idx];
+        key +=
+          " " +
+          inverseState[orbitName].permutation[idx] +
+          " " +
+          inverseState[orbitName].orientation[idx];
       }
       const info = step.lookup[key];
       if (!info) {
@@ -175,17 +180,18 @@ export class TrembleSolver {
       if (algBuilder.experimentalNumUnits() >= bestLenSofar) {
         return null;
       }
-      state = combineTransformations(this.def, state, info.trans);
-      // check; disable this later
-      for (let i=0; i<cubieSeq.length; i++) {
-        const loc = cubieSeq[i];
-        const orbitName = loc.orbitName;
-        const idx = loc.permutationIdx;
-        if (
-          state[orbitName].permutation[idx] !== idx ||
-          state[orbitName].orientation[idx] !== 0
-        ) {
-          throw new Error("bad SGS :-(");
+      state = combineTransformations(this.def, state, info.transformation);
+      if (DOUBLECHECK_PLACED_PIECES) {
+        for (let i = 0; i < cubieSeq.length; i++) {
+          const location = cubieSeq[i];
+          const orbitName = location.orbitName;
+          const idx = location.permutationIdx;
+          if (
+            state[orbitName].permutation[idx] !== idx ||
+            state[orbitName].orientation[idx] !== 0
+          ) {
+            throw new Error("bad SGS :-(");
+          }
         }
       }
     }

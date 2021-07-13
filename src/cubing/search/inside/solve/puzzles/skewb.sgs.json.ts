@@ -1,6 +1,6 @@
 import type { KPuzzleDefinition } from "../../../../kpuzzle";
 import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
-import { parseSGS, SGSCachedData } from "../sgs";
+import { parseSGS, SGSCachedData } from "../parseSGS";
 
 async function skewbDefWithoutMO(): Promise<KPuzzleDefinition> {
   return getPuzzleGeometryByName("skewb", [

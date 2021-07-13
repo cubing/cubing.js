@@ -1,7 +1,7 @@
 import type { Alg, QuantumMove } from "../../../../alg";
 import type { Transformation } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
-import type { SGSCachedData } from "../sgs";
+import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 
 const TREMBLE_DEPTH = 3;

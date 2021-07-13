@@ -10,7 +10,7 @@ import {
   randomPermute,
   randomUIntBelowFactory,
 } from "../vendor/random-uint-below";
-import type { SGSCachedData } from "../sgs";
+import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 
 // Empirical ly determined depth:
