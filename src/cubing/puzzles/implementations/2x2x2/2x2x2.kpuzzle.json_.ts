@@ -68,3 +68,25 @@ export const cube2x2x2KPuzzle: KPuzzleDefinition = {
     },
   },
 };
+
+cube2x2x2KPuzzle.moves["Rv"] = cube2x2x2KPuzzle.moves["x"];
+cube2x2x2KPuzzle.moves["Uv"] = cube2x2x2KPuzzle.moves["y"];
+cube2x2x2KPuzzle.moves["Fv"] = cube2x2x2KPuzzle.moves["z"];
+cube2x2x2KPuzzle.moves["Lv"] = {
+  CORNERS: {
+    permutation: [1, 7, 6, 2, 0, 3, 5, 4],
+    orientation: [2, 1, 2, 1, 1, 2, 1, 2],
+  },
+};
+cube2x2x2KPuzzle.moves["Dv"] = {
+  CORNERS: {
+    permutation: [3, 0, 1, 2, 5, 6, 7, 4],
+    orientation: [0, 0, 0, 0, 0, 0, 0, 0],
+  },
+};
+cube2x2x2KPuzzle.moves["Bv"] = {
+  CORNERS: {
+    permutation: [4, 7, 1, 0, 5, 3, 2, 6],
+    orientation: [1, 2, 1, 2, 2, 1, 2, 1],
+  },
+};

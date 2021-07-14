@@ -286,3 +286,49 @@ cube3x3x3KPuzzle.moves["Fw"] = cube3x3x3KPuzzle.moves["f"];
 cube3x3x3KPuzzle.moves["Rw"] = cube3x3x3KPuzzle.moves["r"];
 cube3x3x3KPuzzle.moves["Bw"] = cube3x3x3KPuzzle.moves["b"];
 cube3x3x3KPuzzle.moves["Dw"] = cube3x3x3KPuzzle.moves["d"];
+
+cube3x3x3KPuzzle.moves["Rv"] = cube3x3x3KPuzzle.moves["x"];
+cube3x3x3KPuzzle.moves["Uv"] = cube3x3x3KPuzzle.moves["y"];
+cube3x3x3KPuzzle.moves["Fv"] = cube3x3x3KPuzzle.moves["z"];
+cube3x3x3KPuzzle.moves["Lv"] = {
+  EDGES: {
+    permutation: [2, 10, 6, 11, 0, 8, 4, 9, 1, 3, 5, 7],
+    orientation: [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+  },
+  CORNERS: {
+    permutation: [1, 7, 6, 2, 0, 3, 5, 4],
+    orientation: [2, 1, 2, 1, 1, 2, 1, 2],
+  },
+  CENTERS: {
+    permutation: [4, 1, 0, 3, 5, 2],
+    orientation: [2, 1, 0, 3, 2, 0],
+  },
+};
+cube3x3x3KPuzzle.moves["Dv"] = {
+  EDGES: {
+    permutation: [3, 0, 1, 2, 7, 4, 5, 6, 9, 11, 8, 10],
+    orientation: [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+  },
+  CORNERS: {
+    permutation: [3, 0, 1, 2, 5, 6, 7, 4],
+    orientation: [0, 0, 0, 0, 0, 0, 0, 0],
+  },
+  CENTERS: {
+    permutation: [0, 4, 1, 2, 3, 5],
+    orientation: [3, 0, 0, 0, 0, 1],
+  },
+};
+cube3x3x3KPuzzle.moves["Bv"] = {
+  EDGES: {
+    permutation: [8, 5, 10, 1, 9, 7, 11, 3, 4, 0, 6, 2],
+    orientation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  },
+  CORNERS: {
+    permutation: [4, 7, 1, 0, 5, 3, 2, 6],
+    orientation: [1, 2, 1, 2, 2, 1, 2, 1],
+  },
+  CENTERS: {
+    permutation: [3, 0, 2, 5, 4, 1],
+    orientation: [3, 3, 3, 3, 1, 3],
+  },
+};
