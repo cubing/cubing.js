@@ -172,7 +172,7 @@ export class Vector3Attribute {
     if (coords.length !== 3) {
       throw new Error("TODO");
     }
-    const [x, y, z] = coords.map((c) => parseInt(c, 10));
+    const [x, y, z] = coords.map((c) => parseFloat(c));
     return new Vector3(x, y, z);
   }
 
