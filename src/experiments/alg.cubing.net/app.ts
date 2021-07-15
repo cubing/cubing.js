@@ -10,7 +10,7 @@ import {
 } from "../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { APP_TITLE } from "./strings";
-import { supportedPuzzles } from "./supported-puzzles";
+import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
 import { getURLParam, setURLParams } from "./url-params";
 import { cube3x3x3KPuzzle } from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 import {
@@ -558,13 +558,20 @@ class ControlPane {
 
   private initializePuzzleSelect(initialPuzzleName: string): void {
     this.puzzleSelect.textContent = "";
-    for (const puzzleName in supportedPuzzles) {
-      const option = document.createElement("option");
-      option.value = puzzleName;
-      option.textContent = supportedPuzzles[puzzleName].displayName();
-      this.puzzleSelect.appendChild(option);
-      if (puzzleName === initialPuzzleName) {
-        option.selected = true;
+    for (const [groupName, puzzles] of Object.entries(puzzleGroups)) {
+      const optgroup = this.puzzleSelect.appendChild(
+        document.createElement("optgroup"),
+      );
+      optgroup.label = groupName;
+      for (const puzzleName of puzzles) {
+        const option = document.createElement("option");
+        option.value = puzzleName;
+        console.log(supportedPuzzles, puzzleName);
+        option.textContent = supportedPuzzles[puzzleName].displayName();
+        optgroup.appendChild(option);
+        if (puzzleName === initialPuzzleName) {
+          option.selected = true;
+        }
       }
     }
     this.puzzleSelect.addEventListener(
