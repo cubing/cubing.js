@@ -668,3 +668,54 @@ class ControlPane {
     );
   }
 }
+
+const exclusiveExpandButtons: ExpandButton[] = [];
+
+class ExpandButton extends HTMLElement {
+  associatedElem: HTMLElement | null = null;
+  expanded: boolean;
+  expandIcon: HTMLAnchorElement;
+  exclusive: boolean;
+  connectedCallback() {
+    const forID = this.getAttribute("for");
+    this.associatedElem = forID ? document.getElementById(forID) : null;
+    this.expandIcon = this.querySelector(".expand-icon")!;
+    this.querySelector("a")!.addEventListener("click", this.onClick.bind(this));
+    this.expanded = this.getAttribute("expanded") === "true";
+    this.exclusive = this.getAttribute("exclusive") !== "false";
+    if (this.exclusive) {
+      exclusiveExpandButtons.push(this);
+    }
+  }
+
+  onClick(e: MouseEvent) {
+    e.preventDefault();
+    this.toggle();
+    console.log(this.associatedElem);
+    if (this.exclusive) {
+      if (this.expanded) {
+        for (const expandButton of exclusiveExpandButtons) {
+          if (expandButton !== this) {
+            expandButton.toggle(false);
+          }
+        }
+      }
+    }
+  }
+
+  toggle(expand?: boolean): void {
+    this.expanded = expand ?? !this.expanded;
+    if (this.associatedElem) {
+      this.associatedElem.hidden = !this.expanded;
+    }
+    this.expandIcon.textContent = this.exclusive
+      ? this.expanded
+        ? "▿"
+        : "▹"
+      : this.expanded
+      ? "▾"
+      : "▸";
+  }
+}
+
+customElementsShim.define("expand-button", ExpandButton);

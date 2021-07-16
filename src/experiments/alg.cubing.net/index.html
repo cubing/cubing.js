@@ -24,19 +24,46 @@
             will change.
           </div>
         </section>
-        <h2>Setup</h2>
-        <twisty-alg-editor
-          class="experimental-setup-alg"
-          placeholder="[Click here to add anchor setup alg.]"
-          twisty-player-prop="experimentalSetupAlg"
-        ></twisty-alg-editor>
-        <h2>Moves</h2>
-        <twisty-alg-editor
-          class="alg"
-          placeholder="[Click here to add alg.]"
-        ></twisty-alg-editor>
-        <h2>Settings</h2>
-        <section class="unpadded" id="settings">
+        <expand-button for="setup" expanded="true" exclusive="false">
+          <a href="#">
+            <h2>
+              <span class="expand-icon">▾</span>
+              Setup
+            </h2>
+          </a>
+        </expand-button>
+        <section id="setup" class="unpadded">
+          <twisty-alg-editor
+            class="experimental-setup-alg"
+            placeholder="[Click here to add anchor setup alg.]"
+            twisty-player-prop="experimentalSetupAlg"
+          ></twisty-alg-editor>
+        </section>
+        <div id="moves-sticky-wrapper">
+          <expand-button for="moves" expanded="true" exclusive="false">
+            <a href="#">
+              <h2>
+                <span class="expand-icon">▾</span>
+                Moves
+              </h2>
+            </a>
+          </expand-button>
+          <section id="moves" class="unpadded">
+            <twisty-alg-editor
+              class="alg"
+              placeholder="[Click here to add alg.]"
+            ></twisty-alg-editor>
+          </section>
+        </div>
+        <expand-button for="puzzle-settings" expanded="true">
+          <a href="#">
+            <h2>
+              <span class="expand-icon">▿</span>
+              ⚙️ Puzzle Settings
+            </h2>
+          </a>
+        </expand-button>
+        <section class="unpadded" id="puzzle-settings">
           <select class="puzzle">
             <option>Puzzle</option>
           </select>
@@ -47,8 +74,15 @@
             <option>Setup Anchor</option>
           </select>
         </section>
-        <h2>Playback Options</h2>
-        <section>
+        <expand-button for="playback-options">
+          <a href="#">
+            <h2>
+              <span class="expand-icon">▹</span>
+              👓 Playback Options
+            </h2>
+          </a>
+        </expand-button>
+        <section id="playback-options" hidden>
           <div class="inline">Tempo:</div>
           <input
             class="tempo"
@@ -69,8 +103,15 @@
             /><label for="hint-facelets">Hint Facelets</label>
           </div>
         </section>
-        <h2>Tools</h2>
-        <section class="unpadded">
+        <expand-button for="alg-tools">
+          <a href="#">
+            <h2>
+              <span class="expand-icon">▹</span>
+              ✍️ Alg Tools
+            </h2>
+          </a>
+        </expand-button>
+        <section id="alg-tools" class="unpadded" hidden>
           <button-grid class="tool-grid">
             <button id="expand">Expand</button>
             <button id="simplify">Simplify</button>
@@ -78,15 +119,29 @@
             <button id="invert">Invert</button>
           </button-grid>
         </section>
-        <h2>Experiments</h2>
-        <section class="unpadded">
+        <expand-button for="experiments">
+          <a href="#">
+            <h2>
+              <span class="expand-icon">▹</span>
+              🧪 Experiments
+            </h2>
+          </a>
+        </expand-button>
+        <section id="experiments" class="unpadded" hidden>
           <button-grid class="experiments-grid">
             <button id="solve">Solve</button>
             <button id="scramble">Scramble</button>
           </button-grid>
         </section>
-        <h2>Examples</h2>
-        <section class="unpadded">
+        <expand-button for="examples">
+          <a href="#">
+            <h2>
+              <span class="expand-icon">▹</span>
+              📖 Examples
+            </h2>
+          </a>
+        </expand-button>
+        <section id="examples" class="unpadded" hidden>
           <button-grid class="examples-grid">
             <button id="wr" hidden>WR</button>
             <button id="tperm">T-Perm</button>

@@ -8,7 +8,7 @@ control-pane {
   /* padding: 1em; */
   font-family: "Ubuntu", Verdana, Tahoma, sans-serif;
   background: rgb(255, 245, 235);
-  overflow: hidden;
+  overflow-x: hidden;
   overflow-y: auto;
   transition: opacity 0.5s;
 }
@@ -76,7 +76,7 @@ control-pane button {
   padding: 8px;
 }
 
-section#settings :first-child {
+section#puzzle-settings :first-child {
   grid-column: 1 / 3;
 }
 
@@ -100,12 +100,18 @@ control-pane input[type="checkbox"] {
 }
 
 button-grid,
-section#settings {
+section#puzzle-settings {
   display: grid;
   gap: 0.4em;
   padding: 0 0.4em 0.4em;
   background: rgba(255, 230, 210, 1);
   grid-template-columns: repeat(2, 1fr);
+}
+
+button-grid[hidden],
+section#puzzle-settings[hidden] {
+  /* 🤷‍♀️ */
+  display: none;
 }
 
 button-grid button {
@@ -114,4 +120,26 @@ button-grid button {
 
 input:disabled + label {
   opacity: 0.3;
+}
+
+expand-button:hover h2 {
+  text-decoration: underline;
+}
+
+expand-button .expand-icon {
+  display: inline-block;
+  width: 0.75em;
+}
+
+expand-button a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#moves-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  background: rgb(255, 245, 235);
+  border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+  margin-bottom: -1px;
 }
