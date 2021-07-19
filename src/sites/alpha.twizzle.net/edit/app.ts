@@ -282,7 +282,6 @@ class ControlPane {
   public tempoInput: HTMLInputElement;
   public hintFaceletCheckbox: HTMLInputElement;
   public toolGrid: ButtonGrid;
-  public experimentsGrid: ButtonGrid;
   public examplesGrid: ButtonGrid;
   private tempoDisplay: HTMLSpanElement;
   constructor(
@@ -377,16 +376,6 @@ class ControlPane {
       "button-grid",
     );
     this.toolGrid.addEventListener("action", this.onToolAction.bind(this));
-
-    this.experimentsGrid = findOrCreateChildWithClass(
-      this.element,
-      "experiments-grid",
-      "button-grid",
-    );
-    this.experimentsGrid.addEventListener(
-      "action",
-      this.onExperimentsAction.bind(this),
-    );
 
     this.examplesGrid = findOrCreateChildWithClass(
       this.element,
@@ -501,21 +490,14 @@ class ControlPane {
       case "invert":
         this.setAlg(this.twistyPlayer.alg.invert());
         break;
+        case "solve":
+          this.solve();
+          break;
+        case "scramble":
+          this.scramble();
+          break;
       default:
         throw new Error(`Unknown tool action! ${e.detail.action}`);
-    }
-  }
-
-  private onExperimentsAction(e: CustomEvent<{ action: string }>): void {
-    switch (e.detail.action) {
-      case "solve":
-        this.solve();
-        break;
-      case "scramble":
-        this.scramble();
-        break;
-      default:
-        throw new Error(`Unknown experiments action! ${e.detail.action}`);
     }
   }
 
@@ -658,11 +640,11 @@ class ControlPane {
 
   setPuzzle(puzzle: string): void {
     this.hintFaceletCheckbox.disabled = !["3x3x3"].includes(puzzle);
-    this.experimentsGrid.setButtonEnabled(
+    this.toolGrid.setButtonEnabled(
       "solve",
       ["2x2x2", "3x3x3", "skewb", "pyraminx", "megaminx"].includes(puzzle),
     );
-    this.experimentsGrid.setButtonEnabled(
+    this.toolGrid.setButtonEnabled(
       "scramble",
       ["2x2x2", "3x3x3", "megaminx", "clock"].includes(puzzle),
     );
