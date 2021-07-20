@@ -20,8 +20,30 @@ const pyraminxFamilyMap: Record<string, string> = {
   BL: "L",
   BR: "R",
 };
+const tetraminxFamilyMap: Record<string, string> = {
+  U: "FRL",
+  L: "FLD",
+  R: "FDR",
+  B: "DLR",
+  u: "frl",
+  l: "fld",
+  r: "fdr",
+  b: "dlr",
+  Uv: "FRLv",
+  Lv: "FLDv",
+  Rv: "FDRv",
+  Bv: "DLRv",
+  D: "D",
+  F: "F",
+  BL: "L",
+  BR: "R",
+  d: "d",
+  f: "f",
+  bl: "l",
+  br: "r",
+};
 
-const pyraminxFamilyMap2: Record<string, string> = {
+const pyraminxFamilyMapWCA: Record<string, string> = {
   U: "FRL",
   L: "FLD",
   R: "FDR",
@@ -32,22 +54,22 @@ const pyraminxExternalQuantumY = new QuantumMove("y");
 const pyraminxInternalQuantumY = new QuantumMove("Dv");
 
 export class PyraminxNotationMapper implements NotationMapper {
+  protected wcaHack: boolean = false;
+  map: Record<string, string> = pyraminxFamilyMap;
+
   constructor(private child: FaceNameSwizzler) {}
 
   public notationToInternal(move: Move): Move | null {
-    if (move.innerLayer === 2 && !move.outerLayer) {
-      const newFamily2 = pyraminxFamilyMap2[move.family];
-      if (newFamily2) {
+    if (this.wcaHack && move.innerLayer === 2 && move.outerLayer === null) {
+      const newFamilyWCA = pyraminxFamilyMapWCA[move.family];
+      if (newFamilyWCA) {
         return new Move(
-          new QuantumMove(newFamily2, move.innerLayer, move.outerLayer),
+          new QuantumMove(newFamilyWCA, move.innerLayer, move.outerLayer),
           move.amount,
         );
       }
     }
-    if (move.innerLayer || move.outerLayer) {
-      return null;
-    }
-    const newFamily = pyraminxFamilyMap[move.family];
+    const newFamily = this.map[move.family];
 
     if (newFamily) {
       return new Move(
@@ -63,8 +85,8 @@ export class PyraminxNotationMapper implements NotationMapper {
 
   // we never rewrite click moves to these moves.
   public notationToExternal(move: Move): Move | null {
-    if (move.innerLayer === 2 && !move.outerLayer) {
-      for (const [external, internal] of Object.entries(pyraminxFamilyMap2)) {
+    if (this.wcaHack && move.innerLayer === 2 && move.outerLayer === null) {
+      for (const [external, internal] of Object.entries(pyraminxFamilyMapWCA)) {
         if (this.child.spinmatch(move.family, internal)) {
           return new Move(
             new QuantumMove(external, move.innerLayer, move.outerLayer),
@@ -73,7 +95,7 @@ export class PyraminxNotationMapper implements NotationMapper {
         }
       }
     }
-    for (const [external, internal] of Object.entries(pyraminxFamilyMap)) {
+    for (const [external, internal] of Object.entries(this.map)) {
       if (this.child.spinmatch(move.family, internal)) {
         return new Move(
           new QuantumMove(external, move.innerLayer, move.outerLayer),
@@ -86,5 +108,14 @@ export class PyraminxNotationMapper implements NotationMapper {
     } else {
       return null;
     }
+  }
+}
+
+export class TetraminxNotationMapper extends PyraminxNotationMapper {
+  protected wcaHack: true;
+
+  constructor(child: FaceNameSwizzler) {
+    super(child);
+    this.map = tetraminxFamilyMap;
   }
 }

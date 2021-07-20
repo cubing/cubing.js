@@ -19,6 +19,7 @@ import {
   NxNxNCubeMapper,
   PyraminxNotationMapper,
   SkewbNotationMapper,
+  TetraminxNotationMapper,
 } from "./notation-mapping";
 import { iota, Perm, zeros } from "./Perm";
 import {
@@ -981,7 +982,7 @@ export class PuzzleGeometry {
       this.addNotationMapper = "SkewbMapper";
     }
     if (shape === "t" && (sawvertex || sawface) && !sawedge) {
-      this.addNotationMapper = "PyraminxMapper";
+      this.addNotationMapper = "PyraminxOrTetraminxMapper";
     }
     if (shape === "o" && sawface && NEW_FACE_NAMES) {
       this.notationMapper = new FaceRenamingMapper(
@@ -1038,9 +1039,13 @@ export class PuzzleGeometry {
           }
         }
         if (t <= 90) {
-           s = s + String.fromCharCode(34+t);
+          s = s + String.fromCharCode(34 + t);
         } else {
-           s = s + "!" + String.fromCharCode(34+Math.floor(t/90)) + String.fromCharCode(34+t%90);
+          s =
+            s +
+            "!" +
+            String.fromCharCode(34 + Math.floor(t / 90)) +
+            String.fromCharCode(34 + (t % 90));
         }
       }
     }
@@ -1239,12 +1244,18 @@ export class PuzzleGeometry {
         this.notationMapper = new SkewbNotationMapper(this.swizzler);
         this.addNotationMapper = "";
       }
-      if (
-        this.addNotationMapper === "PyraminxMapper" &&
-        moveplanesets[0].length === 2
-      ) {
-        this.notationMapper = new PyraminxNotationMapper(this.swizzler);
-        this.addNotationMapper = "";
+      if (this.addNotationMapper === "PyraminxOrTetraminxMapper") {
+        if (
+          moveplanesets[0].length === 2 &&
+          moveplanesets[0][0].a === 0.333333333333333 &&
+          moveplanesets[0][1].a === 1.66666666666667
+        ) {
+          this.notationMapper = new PyraminxNotationMapper(this.swizzler);
+          this.addNotationMapper = "";
+        } else {
+          this.notationMapper = new TetraminxNotationMapper(this.swizzler);
+          this.addNotationMapper = "";
+        }
       }
       if (this.addNotationMapper === "MegaminxMapper" && gtype === "f") {
         if (1 + moveplanesets[i].length === 3) {
@@ -1464,16 +1475,16 @@ export class PuzzleGeometry {
         }
       }
       const that = this;
-      queue.sort(function(a: number, b: number): number {
-         if (that.cubiekeys[a] < that.cubiekeys[b]) {
-            return 1;
-         } else if (that.cubiekeys[a] > that.cubiekeys[b]) {
-            return -1;
-         } else {
-            return 0;
-         }
-      }) ;
-      for (let i=0; i<queue.length; i++) {
+      queue.sort(function (a: number, b: number): number {
+        if (that.cubiekeys[a] < that.cubiekeys[b]) {
+          return 1;
+        } else if (that.cubiekeys[a] > that.cubiekeys[b]) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      for (let i = 0; i < queue.length; i++) {
         if (i > 1000000) {
           cubieordnums[queue[i]] = i;
         }

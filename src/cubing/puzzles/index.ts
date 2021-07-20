@@ -40,6 +40,14 @@ export const puzzles: Record<string, PuzzleLoader> = {
     inventedBy: ["Tyler Fox"],
     inventionYear: 2006, // Earliest date from https://www.twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1475
   }),
+  "master_tetraminx": genericPGPuzzleLoader(
+    "master tetraminx",
+    "Master Tetraminx",
+    {
+      inventedBy: ["Katsuhiko Okamoto"], // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
+      inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
+    },
+  ),
 };
 
 export { cube2x2x2, cube3x3x3 };

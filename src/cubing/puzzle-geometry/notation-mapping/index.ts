@@ -6,5 +6,8 @@ export { FTONotationMapper } from "./FTONotationMapper";
 export { FaceRenamingMapper } from "./FaceRenamingMapper";
 export { MegaminxScramblingNotationMapper } from "./MegaminxScramblingNotationMapper";
 export { NxNxNCubeMapper } from "./NxNxNCubeMapper";
-export { PyraminxNotationMapper } from "./PyraminxNotationMapper";
+export {
+  PyraminxNotationMapper,
+  TetraminxNotationMapper,
+} from "./PyraminxNotationMapper";
 export { SkewbNotationMapper } from "./SkewbNotationMapper";

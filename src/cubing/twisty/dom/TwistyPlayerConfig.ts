@@ -121,6 +121,7 @@ export const puzzleIDs = {
   "skewb": true,
   "fto": true,
   "gigaminx": true,
+  "master_tetraminx": true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 

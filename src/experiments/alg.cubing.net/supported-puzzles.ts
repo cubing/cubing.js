@@ -57,7 +57,7 @@ export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 export const puzzleGroups: Record<string, string[]> = {
   "Cubes": ["2x2x2", "3x3x3", "4x4x4", "5x5x5", "6x6x6", "7x7x7"],
   "More WCA puzzles": ["clock", "megaminx", "pyraminx", "skewb", "square1"],
-  "Common puzzles": ["gigaminx", "fto"],
+  "Other puzzles": ["gigaminx", "fto", "master_tetraminx"],
 };
 const supportedPuzzles: { [s: string]: DisplayablePuzzle } = {};
 for (const key of [
@@ -74,6 +74,7 @@ for (const key of [
   "gigaminx",
   "skewb",
   "fto",
+  "master_tetraminx",
 ]) {
   supportedPuzzles[key as any] = new DisplayableKPuzzle(
     key,
@@ -89,6 +90,7 @@ for (const key of [
       "fto",
       "gigaminx",
       "pyraminx",
+      "master_tetraminx",
     ].includes(key)
       ? "3D"
       : "2D",
