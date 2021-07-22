@@ -410,8 +410,15 @@ class ControlPane {
   }
 
   private onMove(e: PuzzleStreamMoveEventRegisterCompatible): void {
-    this.twistyPlayer.experimentalAddMove(e.detail.move, true);
-    this.setAlg(this.twistyPlayer.alg);
+    const move = e.detail.move;
+    let alg = this.twistyPlayer.alg;
+    try {
+      this.twistyPlayer.experimentalAddMove(move, true);
+      alg = this.twistyPlayer.alg;
+    } catch (e) {
+      console.info("Ignoring move:", move.toString());
+    }
+    this.setAlg(alg);
   }
 
   private onexperimentalSetupAlgInput(canonicalize: boolean): void {
