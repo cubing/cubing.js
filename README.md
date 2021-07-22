@@ -12,7 +12,11 @@
 If you want to display algs or solves, the following code is a good way to get started:
 
 ```html
-<script src="https://cdn.cubing.net/esm/cubing/twisty" type="module" defer></script>
+<script
+  src="https://cdn.cubing.net/esm/cubing/twisty"
+  type="module"
+  defer
+></script>
 <twisty-player alg="R U R' U R U2' R'"></twisty-player>
 ```
 
@@ -29,7 +33,7 @@ npm install
 make dev
 ```
 
-This should open [the `experiments` root file](./src/experiments/index.html) at http://localhost:3333/ automatically. Any source code changes will refresh the browser. We don't yet have a development guide, so you'll have to search the code to find where features are implemented.
+This should open [the `ites` root file](./src/sites/index.html) at http://localhost:3333/ automatically. Any source code changes will refresh the browser. We don't yet have a development guide, so you'll have to search the code to find where features are implemented.
 
 The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/) To test changes, use:
 

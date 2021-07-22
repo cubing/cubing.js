@@ -43,6 +43,7 @@
     "build-bundle-global": "node ./script/build/main.js bundle-global",
     "build-types": "node ./script/build/main.js types",
     "build-bin": "node ./script/build/main.js bin",
+    "build-sites": "npm run build-site-twizzle && npm run build-site-experiments",
     "build-site-twizzle": "node ./script/build/main.js twizzle",
     "build-site-experiments": "node ./script/build/main.js experiments",
     "build-search-worker": "node ./script/build/main.js search-worker",

@@ -26,7 +26,7 @@ async function runTest() {
     height: 1024,
   });
 
-  await page.goto("http://localhost:4443/cubing.js/twizzle/index.html?alg=R");
+  await page.goto("http://localhost:4443/alpha.twizzle.net/explore/?alg=R");
   // await page.screenshot({
   //   path: "out.png",
   //   omitBackground: true,
