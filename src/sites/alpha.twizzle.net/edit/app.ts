@@ -418,7 +418,8 @@ class ControlPane {
     } catch (e) {
       console.info("Ignoring move:", move.toString());
     }
-    this.setAlg(alg);
+    this.algInput.algString = alg.toString();
+    setURLParams({ alg });
   }
 
   private onexperimentalSetupAlgInput(canonicalize: boolean): void {
@@ -681,11 +682,13 @@ class ControlPane {
   setExperimentalSetupAlg(alg: Alg): void {
     this.experimentalSetupAlgInput.algString = alg.toString();
     this.experimentalSetupAlgChangeCallback(alg);
+    setURLParams({ "experimental-setup-alg": alg });
   }
 
   setAlg(alg: Alg): void {
     this.algInput.algString = alg.toString();
     this.algChangeCallback(alg);
+    setURLParams({ alg });
   }
 
   setPuzzle(puzzle: string): void {
