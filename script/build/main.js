@@ -14,8 +14,12 @@ import * as esbuild from "esbuild";
 
 import { readFile, writeFile } from "fs";
 
-import configSrc from "../../snowpack.config.mjs";
+import {
+  default as configSrc,
+  twizzleSnowpackConfig,
+} from "../../snowpack.config.mjs";
 import { execPromise } from "../lib/execPromise.js";
+import { experimentsSnowpackConfig } from "../../snowpack.config.mjs";
 
 const PARALLEL = false;
 
@@ -200,12 +204,40 @@ export const binTarget = {
   },
 };
 
+export const sitesTarget = {
+  name: "sites",
+  builtYet: false,
+  dependencies: [searchWorkerTarget],
+  buildSelf: async (dev) => {
+    const config = snowpack.createConfiguration(configSrc);
+
+    const snowpackPromise = dev
+      ? snowpack.startServer({ config }, { isDev: dev })
+      : snowpack.build({ config });
+    await snowpackPromise;
+  },
+};
+
+export const twizzleTarget = {
+  name: "twizzle",
+  builtYet: false,
+  dependencies: [searchWorkerTarget],
+  buildSelf: async (dev) => {
+    const config = snowpack.createConfiguration(twizzleSnowpackConfig);
+
+    const snowpackPromise = dev
+      ? snowpack.startServer({ config }, { isDev: dev })
+      : snowpack.build({ config });
+    await snowpackPromise;
+  },
+};
+
 export const experimentsTarget = {
   name: "experiments",
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(configSrc);
+    const config = snowpack.createConfiguration(experimentsSnowpackConfig);
 
     const snowpackPromise = dev
       ? snowpack.startServer({ config }, { isDev: dev })
@@ -250,6 +282,8 @@ const dev = process.argv[3] === "dev";
 
 const targets /*: Record<String, SolverWorker>*/ = {
   "search-worker": searchWorkerTarget,
+  "sites": sitesTarget,
+  "twizzle": twizzleTarget,
   "experiments": experimentsTarget,
   "bundle-global": bundleGlobalTarget,
   "esm": esmTarget,

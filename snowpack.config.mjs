@@ -13,7 +13,7 @@ if (EXCLUDE_BABYLON) {
   );
 }
 
-export default {
+const common = {
   workspaceRoot: "/",
   mount: {
     "src/sites": { url: "/" },
@@ -27,10 +27,6 @@ export default {
     port: 3333,
     hmr: true,
   },
-  buildOptions: {
-    out: "dist/experiments",
-    baseUrl: "/cubing.js",
-  },
   optimize: {
     bundle: true,
     splitting: true,
@@ -38,4 +34,33 @@ export default {
     target: "es2020",
     sourcemap: false,
   },
+};
+
+export default {
+  mount: {
+    "src/sites": { url: "/" },
+  },
+  ...common,
+};
+
+export const twizzleSnowpackConfig = {
+  mount: {
+    "src/sites/twizzle": { url: "/" },
+  },
+  buildOptions: {
+    out: "dist/sites/twizzle.net",
+    baseUrl: "/",
+  },
+  ...common,
+};
+
+export const experimentsSnowpackConfig = {
+  mount: {
+    "src/sites/experiments.cubing.net/cubing.js": { url: "/" },
+  },
+  buildOptions: {
+    out: "dist/sites/experiments.cubing.net/cubing.js",
+    baseUrl: "/cubing.js",
+  },
+  ...common,
 };
