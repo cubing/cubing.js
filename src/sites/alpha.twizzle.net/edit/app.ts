@@ -229,6 +229,10 @@ export class App {
         scramble = await randomScrambleForEvent("333");
         break;
       }
+      case "4x4x4": {
+        scramble = await randomScrambleForEvent("444");
+        break;
+      }
       case "megaminx": {
         scramble = await randomScrambleForEvent("minx");
         break;
@@ -699,7 +703,7 @@ class ControlPane {
     );
     this.toolGrid.setButtonEnabled(
       "scramble",
-      ["2x2x2", "3x3x3", "megaminx", "clock"].includes(puzzle),
+      ["2x2x2", "3x3x3", "4x4x4", "megaminx", "clock"].includes(puzzle),
     );
     this.toolGrid.setButtonEnabled(
       "screenshot",
