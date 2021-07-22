@@ -1,3 +1,4 @@
+import type { PuzzleID } from "../../../../dist/types/twisty/dom/TwistyPlayerConfig";
 import {
   getPuzzleGeometryByDesc,
   StickerDat,
@@ -54,65 +55,65 @@ class DisplayablePG3D {
 
 export type DisplayablePuzzle = DisplayableKPuzzle | DisplayablePG3D;
 
-export const puzzleGroups: Record<string, string[]> = {
-  "Cubes": ["2x2x2", "3x3x3", "4x4x4", "5x5x5", "6x6x6", "7x7x7"],
-  "More WCA puzzles": ["clock", "megaminx", "pyraminx", "skewb", "square1"],
-  "Other puzzles": ["gigaminx", "fto", "master_tetraminx"],
+enum OptGroup {
+  WCACubes = "Cubes",
+  WCAMore = "More WCA puzzles",
+  Other = "Other puzzles",
+}
+enum GeometrySymbol {
+  Square = "■",
+  Diamond = "◆",
+  Pentagon = "⬟",
+  TriangleUp = "▲",
+  TriangleDown = "▼",
+  Circle = "●",
+}
+
+const puzzleData: Partial<
+  Record<
+    PuzzleID,
+    { "2D"?: boolean; "optgroup": OptGroup; "symbol": GeometrySymbol }
+  >
+> = {
+  "2x2x2": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
+  "3x3x3": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
+  "4x4x4": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
+  "5x5x5": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
+  "6x6x6": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
+  "7x7x7": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
+  // Note: the order is important! It matches the WCA website.
+  "clock": {
+    "2D": true,
+    "optgroup": OptGroup.WCAMore,
+    "symbol": GeometrySymbol.Circle,
+  },
+  "megaminx": { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.Pentagon },
+  "pyraminx": { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.TriangleUp },
+  "skewb": { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.Diamond },
+  "square1": {
+    "2D": true,
+    "optgroup": OptGroup.WCAMore,
+    "symbol": GeometrySymbol.Diamond,
+  },
+  "gigaminx": { optgroup: OptGroup.Other, symbol: GeometrySymbol.Pentagon },
+  "fto": { optgroup: OptGroup.Other, symbol: GeometrySymbol.TriangleDown },
+  "master_tetraminx": {
+    optgroup: OptGroup.Other,
+    symbol: GeometrySymbol.TriangleUp,
+  },
 };
+
+const puzzleGroups: Record<string, { name: string; symbol: string }[]> = {};
 const supportedPuzzles: { [s: string]: DisplayablePuzzle } = {};
-for (const key of [
-  "2x2x2",
-  "3x3x3",
-  "4x4x4",
-  "5x5x5",
-  "6x6x6",
-  "7x7x7",
-  "pyraminx",
-  "square1",
-  "clock",
-  "megaminx",
-  "gigaminx",
-  "skewb",
-  "fto",
-  "master_tetraminx",
-]) {
-  supportedPuzzles[key as any] = new DisplayableKPuzzle(
-    key,
-    [
-      "2x2x2",
-      "3x3x3",
-      "4x4x4",
-      "5x5x5",
-      "6x6x6",
-      "7x7x7",
-      "megaminx",
-      "skewb",
-      "fto",
-      "gigaminx",
-      "pyraminx",
-      "master_tetraminx",
-    ].includes(key)
-      ? "3D"
-      : "2D",
+for (const [puzzleName, puzzleInfo] of Object.entries(puzzleData)) {
+  (puzzleGroups[puzzleInfo.optgroup] ||= []).push({
+    name: puzzleName,
+    symbol: puzzleInfo.symbol,
+  });
+  supportedPuzzles[puzzleName] = new DisplayableKPuzzle(
+    puzzleName,
+    puzzleInfo["2D"] ? "2D" : "3D",
   );
 }
-// supportedPuzzle.megaminx = new DisplayablePG3D(
-//   "Megaminx",
-//   "megaminx",
-//   puzzles.megaminx,
-//   false,
-// );
-// supportedPuzzle.skewb = new DisplayablePG3D(
-//   "Skewb",
-//   "skewb",
-//   PGPuzzles.skewb,
-//   false,
-// );
-// supportedPuzzle.fto = new DisplayablePG3D(
-//   "FTO",
-//   "FTO",
-//   "o f 0.333333333333333 v -2",
-//   true,
-// );
 
-export { supportedPuzzles };
+export { puzzleGroups, supportedPuzzles };

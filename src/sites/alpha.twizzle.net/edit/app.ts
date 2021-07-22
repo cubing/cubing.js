@@ -601,12 +601,14 @@ class ControlPane {
         document.createElement("optgroup"),
       );
       optgroup.label = groupName;
-      for (const puzzleName of puzzles) {
+      for (const puzzleOptInfo of puzzles) {
         const option = document.createElement("option");
-        option.value = puzzleName;
-        option.textContent = supportedPuzzles[puzzleName].displayName();
+        option.value = puzzleOptInfo.name;
+        option.textContent = `${puzzleOptInfo.symbol} ${supportedPuzzles[
+          puzzleOptInfo.name
+        ].displayName()}`;
         optgroup.appendChild(option);
-        if (puzzleName === initialPuzzleName) {
+        if (puzzleOptInfo.name === initialPuzzleName) {
           option.selected = true;
         }
       }
