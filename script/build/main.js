@@ -15,11 +15,11 @@ import * as esbuild from "esbuild";
 import { readFile, writeFile } from "fs";
 
 import {
-  default as configSrc,
+  sitesSnowpackConfig,
   twizzleSnowpackConfig,
+  experimentsSnowpackConfig,
 } from "../../snowpack.config.mjs";
 import { execPromise } from "../lib/execPromise.js";
-import { experimentsSnowpackConfig } from "../../snowpack.config.mjs";
 
 const PARALLEL = false;
 
@@ -209,7 +209,7 @@ export const sitesTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(configSrc);
+    const config = snowpack.createConfiguration(sitesSnowpackConfig);
 
     const snowpackPromise = dev
       ? snowpack.startServer({ config }, { isDev: dev })

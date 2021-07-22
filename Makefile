@@ -19,36 +19,31 @@ publish:
 	npm publish
 
 .PHONY: deploy
-deploy: deploy-experiments
+deploy: deploy-twizzle deploy-experiments
 
-EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/alpha.twizzle.net/"
-EXPERIMENTS_URL       = "https://alpha.twizzle.net/"
+TWIZZLE_SFTP_PATH = "towns.dreamhost.com:~/alpha.twizzle.net/"
+TWIZZLE_URL       = "https://alpha.twizzle.net/"
 
-.PHONY: deploy-experiments
-deploy-experiments: build-experiments
+.PHONY: deploy-twizzle
+deploy-twizzle: build-site-twizzle
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/experiments/ \
+		./dist/sites/alpha.twizzle.net/ \
+		${TWIZZLE_SFTP_PATH}
+	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
+
+EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
+EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
+
+.PHONY: deploy-experiments
+deploy-experiments: build-site-experiments
+	rsync -avz \
+		--exclude .DS_Store \
+		--exclude .git \
+		./dist/sites/experiments.cubing.net/cubing.js/ \
 		${EXPERIMENTS_SFTP_PATH}
 	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
-
-
-######## Twizzle ########
-
-
-# TWIZZLE_SOURCE_PATH = "./dist/twizzle.net/twizzle-net/"
-# TWIZZLE_SFTP_PATH   = "towns.dreamhost.com:~/twizzle.net/play/"
-# TWIZZLE_URL         = "https://twizzle.net/"
-
-# .PHONY: deploy-twizzle
-# deploy-twizzle: parcel-build-for-twizzle-net
-# 	rsync -avz \
-# 		--exclude .DS_Store \
-# 		--exclude .git \
-# 		${TWIZZLE_SOURCE_PATH} \
-# 		${TWIZZLE_SFTP_PATH}
-# 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
 
 
 ######## VR ########

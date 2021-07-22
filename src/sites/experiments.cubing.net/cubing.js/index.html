@@ -29,13 +29,39 @@
         border-radius: 1em;
       }
     </style>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (location.hostname === "localhost") {
+          for (const a of document.querySelectorAll("a")) {
+            const devHref = a.getAttribute("data-dev-href");
+            if (devHref) {
+              a.setAttribute("href", devHref);
+            }
+          }
+        }
+      });
+    </script>
   </head>
 
   <body>
     <section>
       <h2><code>cubing.js</code><br />Dev Apps</h2>
-      <div>✍️ <a href="./edit/">Twizzle Editor</a></div>
-      <div>🔭 <a href="./bluetooth/">Twizzle Explorer</a></div>
+      <div>
+        ✍️
+        <a
+          href="https://alpha.twizzle.net/edit/"
+          data-dev-href="../../alpha.twizzle.net/edit/"
+          >Twizzle Editor</a
+        >
+      </div>
+      <div>
+        🔭
+        <a
+          href="https://alpha.twizzle.net/explore/"
+          data-dev-href="../../alpha.twizzle.net/explore/"
+          >Twizzle Explorer</a
+        >
+      </div>
       <hr />
       <div>🌀 <a href="./play/">Play</a></div>
       <div>📶 <a href="./bluetooth/">Bluetooth</a></div>

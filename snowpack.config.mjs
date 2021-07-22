@@ -15,9 +15,6 @@ if (EXCLUDE_BABYLON) {
 
 const common = {
   workspaceRoot: "/",
-  mount: {
-    "src/sites": { url: "/" },
-  },
   exclude: ["**/.DS_Store"],
   packageOptions: {
     knownEntrypoints: ["comlink"],
@@ -36,7 +33,7 @@ const common = {
   },
 };
 
-export default {
+export const sitesSnowpackConfig = {
   mount: {
     "src/sites": { url: "/" },
   },
@@ -45,13 +42,17 @@ export default {
 
 export const twizzleSnowpackConfig = {
   mount: {
-    "src/sites/twizzle": { url: "/" },
+    "src/sites/alpha.twizzle.net": { url: "/" },
   },
   buildOptions: {
-    out: "dist/sites/twizzle.net",
+    out: "dist/sites/alpha.twizzle.net",
     baseUrl: "/",
   },
   ...common,
+  packageOptions: {
+    knownEntrypoints: ["comlink"],
+    external: ["crypto", "worker_threads", "@babylonjs/core"],
+  },
 };
 
 export const experimentsSnowpackConfig = {
