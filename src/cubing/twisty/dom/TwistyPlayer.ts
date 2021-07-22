@@ -31,7 +31,6 @@ import {
   BackgroundTheme,
   centeredCameraPosition,
   ControlsLocation,
-  cornerCameraPosition,
   cubeCameraPosition,
   ExperimentalStickering,
   HintFaceletStyle,
@@ -379,7 +378,7 @@ export class TwistyPlayer extends ManagedCustomElement {
       case "pyraminx":
         return pyraminxCameraPosition;
       case "skewb":
-        return cornerCameraPosition;
+        return cubeCameraPosition;
     }
     return centeredCameraPosition;
   }

@@ -21,8 +21,13 @@ const skewbFamilyMap: Record<string, string> = {
   Rv: "DRBv",
 };
 
+// TODO: combine using a similar table.
+const skewbExternalQuantumX = new QuantumMove("x");
+const skewbInternalQuantumX = new QuantumMove("Rv");
 const skewbExternalQuantumY = new QuantumMove("y");
-const skewbInternalQuantumY = new QuantumMove("Dv");
+const skewbInternalQuantumY = new QuantumMove("Uv");
+const skewbExternalQuantumZ = new QuantumMove("z");
+const skewbInternalQuantumZ = new QuantumMove("Fv");
 
 export class SkewbNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
@@ -38,8 +43,14 @@ export class SkewbNotationMapper implements NotationMapper {
         move.amount,
       );
     }
+    if (skewbExternalQuantumX.isIdentical(move.quantum)) {
+      return new Move(skewbInternalQuantumX, move.amount);
+    }
     if (skewbExternalQuantumY.isIdentical(move.quantum)) {
-      return new Move(skewbInternalQuantumY, -move.amount);
+      return new Move(skewbInternalQuantumY, move.amount);
+    }
+    if (skewbExternalQuantumZ.isIdentical(move.quantum)) {
+      return new Move(skewbInternalQuantumZ, move.amount);
     }
     return null;
     /*
@@ -65,8 +76,14 @@ export class SkewbNotationMapper implements NotationMapper {
         );
       }
     }
+    if (skewbInternalQuantumX.isIdentical(move.quantum)) {
+      return new Move(skewbExternalQuantumX, move.amount);
+    }
     if (skewbInternalQuantumY.isIdentical(move.quantum)) {
-      return new Move(skewbExternalQuantumY, -move.amount);
+      return new Move(skewbExternalQuantumY, move.amount);
+    }
+    if (skewbInternalQuantumZ.isIdentical(move.quantum)) {
+      return new Move(skewbExternalQuantumZ, move.amount);
     }
     return null;
     /*
