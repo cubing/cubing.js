@@ -4,11 +4,11 @@
 import {
   PuzzleStreamMoveEventRegisterCompatible,
   ReorientedStream,
-} from "../../cubing/stream/process/ReorientedStream";
-import "../../cubing/twisty";
-import type { TwistyPlayer } from "../../cubing/twisty";
-import "../../cubing/twisty/dom/stream/TwistyStreamSource";
-import type { TwistyStreamSource } from "../../cubing/twisty/dom/stream/TwistyStreamSource";
+} from "../../../../cubing/stream/process/ReorientedStream";
+import "../../../../cubing/twisty";
+import type { TwistyPlayer } from "../../../../cubing/twisty";
+import "../../../../cubing/twisty/dom/stream/TwistyStreamSource";
+import type { TwistyStreamSource } from "../../../../cubing/twisty/dom/stream/TwistyStreamSource";
 
 const twistyStreamSource: TwistyStreamSource = document.querySelector(
   "twisty-stream-source",

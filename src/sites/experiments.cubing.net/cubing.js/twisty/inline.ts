@@ -1,10 +1,10 @@
-import { Alg } from "../../cubing/alg";
-import { useNewFaceNames } from "../../cubing/puzzle-geometry";
+import { Alg } from "../../../../cubing/alg";
+import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
 
 useNewFaceNames(true);
 
-import "../../cubing/twisty/dom/TwistyPlayer";
-import { TwistyPlayer } from "../../cubing/twisty";
+import "../../../../cubing/twisty/dom/TwistyPlayer";
+import { TwistyPlayer } from "../../../../cubing/twisty";
 
 window.addEventListener("DOMContentLoaded", () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

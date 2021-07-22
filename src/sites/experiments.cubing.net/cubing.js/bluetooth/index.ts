@@ -1,11 +1,11 @@
-import { Alg } from "../../cubing/alg";
-import type { OrientationEvent } from "../../cubing/bluetooth";
+import { Alg } from "../../../../cubing/alg";
+import type { OrientationEvent } from "../../../../cubing/bluetooth";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../cubing/bluetooth";
-import { TwistyAlgViewer, TwistyPlayer } from "../../cubing/twisty";
+} from "../../../../cubing/bluetooth";
+import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
 
 async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
   console.log("asyncSetup");

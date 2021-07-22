@@ -1,5 +1,5 @@
-import { Cube3D, TwistyPlayer } from "../../cubing/twisty";
-import { Alg } from "../../cubing/alg";
+import { Cube3D, TwistyPlayer } from "../../../../cubing/twisty";
+import { Alg } from "../../../../cubing/alg";
 
 const supercubeSprite = new URL(
   "./supercube-sprite.png",

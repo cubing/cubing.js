@@ -1,15 +1,15 @@
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../../cubing/alg";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../cubing/bluetooth";
+} from "../../../../cubing/bluetooth";
 import {
   Cube3D,
   TimelineActionEvent,
   TimestampLocationType,
   TwistyPlayer,
-} from "../../cubing/twisty";
+} from "../../../../cubing/twisty";
 
 const supercubeSprite = new URL(
   "./supercube-sprite.png",

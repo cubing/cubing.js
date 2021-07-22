@@ -1,16 +1,16 @@
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../../cubing/alg";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../cubing/bluetooth";
-import "../../cubing/twisty";
-import { TimestampLocationType } from "../../cubing/twisty";
+} from "../../../../cubing/bluetooth";
+import "../../../../cubing/twisty";
+import { TimestampLocationType } from "../../../../cubing/twisty";
 import type {
   Cube3D,
   TimelineActionEvent,
   TwistyPlayer,
-} from "../../cubing/twisty";
+} from "../../../../cubing/twisty";
 
 const mkbhdHintSpriteURL = new URL(
   "./mkbhd-sprite-red-hint.png",

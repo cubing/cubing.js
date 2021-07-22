@@ -1,9 +1,9 @@
-import { Alg, LineComment, Newline } from "../../cubing/alg";
-import { Twisty3DCanvas, TwistyPlayer } from "../../cubing/twisty";
+import { Alg, LineComment, Newline } from "../../../../cubing/alg";
+import { Twisty3DCanvas, TwistyPlayer } from "../../../../cubing/twisty";
 import {
   experimentalStickerings,
   ExperimentalStickering,
-} from "../../cubing/twisty/dom/TwistyPlayerConfig";
+} from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
 
 const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
 if (localStorage["multi-alg-textarea"]) {

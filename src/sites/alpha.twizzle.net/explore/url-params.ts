@@ -1,6 +1,6 @@
 // TODO: implement URL listener.
 
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../cubing/alg";
 
 export interface PartialURLParamValues {
   alg?: Alg;

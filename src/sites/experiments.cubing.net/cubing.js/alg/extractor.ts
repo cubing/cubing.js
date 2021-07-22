@@ -9,7 +9,7 @@ import {
   Pause,
   TraversalUp,
   Unit,
-} from "../../cubing/alg";
+} from "../../../../cubing/alg";
 
 class Extractor extends TraversalUp<Generator<[string, Unit | Alg]>> {
   *traverseAlg(alg: Alg): Generator<[string, Unit | Alg]> {

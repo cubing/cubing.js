@@ -1,4 +1,4 @@
-import { TwistyPlayer } from "../../cubing/twisty";
+import { TwistyPlayer } from "../../../../cubing/twisty";
 
 window.addEventListener("DOMContentLoaded", () => {
   const options = JSON.parse(

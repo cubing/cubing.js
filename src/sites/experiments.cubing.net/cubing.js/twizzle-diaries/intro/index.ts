@@ -16,16 +16,16 @@ import {
   TimelineActionEvent,
   Twisty3DCanvas,
   TwistyPlayer,
-} from "../../../cubing/twisty";
-import { TAU } from "../../../cubing/twisty/3D/TAU";
-import type { TimeRange } from "../../../cubing/twisty/animation/cursor/AlgCursor";
-import type { MillisecondTimestamp } from "../../../cubing/twisty/animation/cursor/CursorTypes";
-import { smootherStep } from "../../../cubing/twisty/animation/easing";
-import { TimelineAction } from "../../../cubing/twisty/animation/Timeline";
-import { TwistyControlButton } from "../../../cubing/twisty/dom/controls/buttons";
-import { TwistyScrubber } from "../../../cubing/twisty/dom/controls/TwistyScrubber";
-import { experimentalSetDefaultStickerElevation } from "../../../cubing/twisty/3D/puzzles/Cube3D";
-import { Alg } from "../../../cubing/alg";
+} from "../../../../../cubing/twisty";
+import { TAU } from "../../../../../cubing/twisty/3D/TAU";
+import type { TimeRange } from "../../../../../cubing/twisty/animation/cursor/AlgCursor";
+import type { MillisecondTimestamp } from "../../../../../cubing/twisty/animation/cursor/CursorTypes";
+import { smootherStep } from "../../../../../cubing/twisty/animation/easing";
+import { TimelineAction } from "../../../../../cubing/twisty/animation/Timeline";
+import { TwistyControlButton } from "../../../../../cubing/twisty/dom/controls/buttons";
+import { TwistyScrubber } from "../../../../../cubing/twisty/dom/controls/TwistyScrubber";
+import { experimentalSetDefaultStickerElevation } from "../../../../../cubing/twisty/3D/puzzles/Cube3D";
+import { Alg } from "../../../../../cubing/alg";
 import { JSZip } from "./jszip-wrapper";
 
 const checkeredBackground = new URL(

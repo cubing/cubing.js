@@ -1,30 +1,30 @@
-import { KPuzzle } from "../../cubing/kpuzzle";
-import { Alg, AlgBuilder, LineComment, Newline } from "../../cubing/alg";
-import { puzzles } from "../../cubing/puzzles";
-import "../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
-import type { TwistyAlgEditor } from "../../cubing/twisty";
+import { KPuzzle } from "../../../cubing/kpuzzle";
+import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
+import { puzzles } from "../../../cubing/puzzles";
+import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
+import type { TwistyAlgEditor } from "../../../cubing/twisty";
 import {
   ExperimentalStickering,
   TwistyPlayer,
   TwistyPlayerInitialConfig,
-} from "../../cubing/twisty";
+} from "../../../cubing/twisty";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
 import { getURLParam, setURLParams } from "./url-params";
-import { cube3x3x3KPuzzle } from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import { cube3x3x3KPuzzle } from "../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 import {
   experimentalSolve2x2x2,
   experimentalSolve3x3x3IgnoringCenters,
   solveMegaminx,
   solvePyraminx,
   solveSkewb,
-} from "../../cubing/search";
-import { cube2x2x2KPuzzle } from "../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
-import { randomScrambleForEvent } from "../../cubing/scramble";
-import { customElementsShim } from "../../cubing/twisty/dom/element/node-custom-element-shims";
+} from "../../../cubing/search";
+import { cube2x2x2KPuzzle } from "../../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
+import { randomScrambleForEvent } from "../../../cubing/scramble";
+import { customElementsShim } from "../../../cubing/twisty/dom/element/node-custom-element-shims";
 import { examples } from "./examples";
-import { experimentalEnsureAlg } from "../../cubing/alg/Alg";
+import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
 export interface AppData {
   puzzleName: string;
   experimentalSetupAlg: Alg;

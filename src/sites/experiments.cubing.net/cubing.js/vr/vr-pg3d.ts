@@ -1,15 +1,15 @@
 // import { Group, Quaternion, Vector3 } from "three";
 // // Import index files from source.
-// // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../cubing/alg";
-// import { Sequence, parse } from "../../cubing/alg";
-// import { getPuzzleGeometryByName } from "../../cubing/puzzle-geometry";
-// import { PG3D, Cube3D } from "../../cubing/twisty";
+// // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../../../cubing/alg";
+// import { Sequence, parse } from "../../../../cubing/alg";
+// import { getPuzzleGeometryByName } from "../../../../cubing/puzzle-geometry";
+// import { PG3D, Cube3D } from "../../../../cubing/twisty";
 // import { ButtonGrouping, OculusButton, VRInput } from "./vr-input";
-// import { Twisty3DPuzzle } from "../../cubing/twisty";
-// import { Twisty3DScene } from "../../cubing/twisty/3D/Twisty3DScene";
-// import { Timeline } from "../../cubing/twisty/animation/Timeline";
-// import { AlgCursor } from "../../cubing/twisty/animation/alg/AlgCursor";
-// import { Puzzles } from "../../cubing/kpuzzle";
+// import { Twisty3DPuzzle } from "../../../../cubing/twisty";
+// import { Twisty3DScene } from "../../../../cubing/twisty/3D/Twisty3DScene";
+// import { Timeline } from "../../../../cubing/twisty/animation/Timeline";
+// import { AlgCursor } from "../../../../cubing/twisty/animation/alg/AlgCursor";
+// import { Puzzles } from "../../../../cubing/kpuzzle";
 
 // export class VRPG3D {
 //   public group: Group = new Group();

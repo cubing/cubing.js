@@ -1,10 +1,10 @@
-import { Move, Alg } from "../../../cubing/alg";
-// import { BackViewLayout } from "../../../cubing/twisty";
+import { Move, Alg } from "../../../../../cubing/alg";
+// import { BackViewLayout } from "../../../../../cubing/twisty";
 import {
   BackViewLayout,
   Twisty3DCanvas,
   TwistyPlayer,
-} from "../../../cubing/twisty";
+} from "../../../../../cubing/twisty";
 import { getSetup, PuzzleID } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 

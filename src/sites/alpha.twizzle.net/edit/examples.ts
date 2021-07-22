@@ -1,4 +1,4 @@
-import type { TwistyPlayerInitialConfig } from "../../cubing/twisty";
+import type { TwistyPlayerInitialConfig } from "../../../cubing/twisty";
 
 export const examples: Record<string, TwistyPlayerInitialConfig> = {
   wr: {

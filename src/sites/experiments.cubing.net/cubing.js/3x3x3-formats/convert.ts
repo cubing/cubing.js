@@ -2,7 +2,7 @@ import type {
   Transformation,
   OrbitTransformation,
   KPuzzleDefinition,
-} from "../../cubing/kpuzzle";
+} from "../../../../cubing/kpuzzle";
 
 export function kpuzzleToString(state: Transformation): string {
   return JSON.stringify(state, null, "  ")
@@ -10,7 +10,7 @@ export function kpuzzleToString(state: Transformation): string {
     .replace(/\n +(\d+)\n +/g, "$1");
 }
 
-import { cube3x3x3KPuzzle as defJSON } from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import { cube3x3x3KPuzzle as defJSON } from "../../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 const def: KPuzzleDefinition = defJSON;
 
 const pieceNames: Record<string, string[]> = {

@@ -1,11 +1,11 @@
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../../cubing/alg";
 import {
   Cube3D,
   experimentalSetShareAllNewRenderers,
   ExperimentalStickering,
   TwistyPlayer,
-} from "../../cubing/twisty";
-import type { VisualizationFormat } from "../../cubing/twisty/dom/TwistyPlayerConfig";
+} from "../../../../cubing/twisty";
+import type { VisualizationFormat } from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
 
 function demo(visualization: VisualizationFormat): void {
   experimentalSetShareAllNewRenderers(true);

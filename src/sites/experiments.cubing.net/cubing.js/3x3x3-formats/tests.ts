@@ -1,15 +1,15 @@
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../../cubing/alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
   Transformation,
-} from "../../cubing/kpuzzle";
-import { reid3x3x3ToTwizzleBinary } from "../../cubing/protocol";
+} from "../../../../cubing/kpuzzle";
+import { reid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol";
 import {
   Binary3x3x3Components,
   reid3x3x3ToBinaryComponents,
-} from "../../cubing/protocol/binary/binary3x3x3";
-import { cube3x3x3KPuzzle as defJSON } from "../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+} from "../../../../cubing/protocol/binary/binary3x3x3";
+import { cube3x3x3KPuzzle as defJSON } from "../../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 import { kpuzzleToReidString, kpuzzleToStickers } from "./convert";
 
 const def: KPuzzleDefinition = defJSON;

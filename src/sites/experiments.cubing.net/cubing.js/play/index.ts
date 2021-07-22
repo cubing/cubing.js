@@ -1,4 +1,4 @@
-import { Alg, algCubingNetLink } from "../../cubing/alg";
+import { Alg, algCubingNetLink } from "../../../../cubing/alg";
 import {
   BluetoothPuzzle,
   connectSmartPuzzle,
@@ -6,14 +6,14 @@ import {
   GoCube,
   MoveEvent,
   OrientationEvent,
-} from "../../cubing/bluetooth";
-import { ProxyEvent, WebSocketProxySender } from "../../cubing/stream";
+} from "../../../../cubing/bluetooth";
+import { ProxyEvent, WebSocketProxySender } from "../../../../cubing/stream";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
   Twisty3DPuzzle,
-} from "../../cubing/twisty";
-import { useNewFaceNames } from "../../cubing/puzzle-geometry";
+} from "../../../../cubing/twisty";
+import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
   DEFAULT_PUZZLE_ID,
@@ -26,7 +26,7 @@ import {
 } from "./url-params";
 import { CallbackProxyReceiver } from "./websocket-proxy";
 import type { Quaternion } from "three";
-import type { AlgCubingNetOptions } from "../../cubing/alg";
+import type { AlgCubingNetOptions } from "../../../../cubing/alg";
 
 const bluetoothSVG = new URL("./bluetooth.svg", import.meta.url).toString();
 const clearSVG = new URL("./clear.svg", import.meta.url).toString();

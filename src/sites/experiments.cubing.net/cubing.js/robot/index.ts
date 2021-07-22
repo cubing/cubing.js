@@ -1,16 +1,16 @@
-import { Alg } from "../../cubing/alg";
+import { Alg } from "../../../../cubing/alg";
 import {
   BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
-} from "../../cubing/bluetooth";
-import { connectSmartRobot } from "../../cubing/bluetooth/smart-robot";
-import type { GanRobot } from "../../cubing/bluetooth/smart-robot/GanRobot";
-import "../../cubing/twisty";
-import type { TwistyPlayer } from "../../cubing/twisty";
-import { TwizzleStreamServer } from "../../cubing/stream/twizzle/TwizzleStream";
-import "../../cubing/twisty";
+} from "../../../../cubing/bluetooth";
+import { connectSmartRobot } from "../../../../cubing/bluetooth/smart-robot";
+import type { GanRobot } from "../../../../cubing/bluetooth/smart-robot/GanRobot";
+import "../../../../cubing/twisty";
+import type { TwistyPlayer } from "../../../../cubing/twisty";
+import { TwizzleStreamServer } from "../../../../cubing/stream/twizzle/TwizzleStream";
+import "../../../../cubing/twisty";
 
 const BOGUS_VALUE = "BOGUS";
 
