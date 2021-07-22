@@ -2,7 +2,7 @@ import { KPuzzle } from "../../../cubing/kpuzzle";
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { puzzles } from "../../../cubing/puzzles";
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
-import type { TwistyAlgEditor } from "../../../cubing/twisty";
+import type { Twisty3DCanvas, TwistyAlgEditor } from "../../../cubing/twisty";
 import {
   ExperimentalStickering,
   TwistyPlayer,
@@ -290,7 +290,7 @@ class ControlPane {
   private tempoDisplay: HTMLSpanElement;
   private twistyStreamSource: TwistyStreamSource;
   constructor(
-    app: App,
+    private app: App,
     public element: Element,
     initialData: AppData,
     private experimentalSetupAlgChangeCallback: (alg: Alg) => boolean,
@@ -518,8 +518,22 @@ class ControlPane {
       case "scramble":
         this.scramble();
         break;
+        case "screenshot":
+          this.screenshot();
+          break;
       default:
         throw new Error(`Unknown tool action! ${e.detail.action}`);
+    }
+  }
+  
+  private screenshot(): void {
+    const elem = this.app.twistyPlayer.viewerElems[0] as Twisty3DCanvas | undefined;
+    if (elem) {
+      const url = elem.renderToDataURL({squareCrop: true, minWidth: 2048, minHeight: 2048});
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `[${this.app.twistyPlayer.puzzle}] ${this.app.twistyPlayer.alg.toString()}.png`
+      a.click();
     }
   }
 
@@ -669,6 +683,10 @@ class ControlPane {
     this.toolGrid.setButtonEnabled(
       "scramble",
       ["2x2x2", "3x3x3", "megaminx", "clock"].includes(puzzle),
+    );
+    this.toolGrid.setButtonEnabled(
+      "screenshot",
+      !["clock", "square1"].includes(puzzle),
     );
   }
 }
