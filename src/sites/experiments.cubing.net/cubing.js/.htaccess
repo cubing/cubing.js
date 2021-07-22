@@ -3,3 +3,6 @@ Header set Cache-Control "max-age=300; must-revalidate"
 # This might be redundant, but just to be sure:
 ExpiresActive On
 ExpiresDefault A300
+
+Redirect 307 /cubing.js/twizzle/ https://alpha.twizzle.net/explore/
+Redirect 307 /cubing.js/alg.cubing.net/ https://alpha.twizzle.net/edit/

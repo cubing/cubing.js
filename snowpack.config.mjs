@@ -42,7 +42,10 @@ export const sitesSnowpackConfig = {
 
 export const twizzleSnowpackConfig = {
   mount: {
-    "src/sites/alpha.twizzle.net": { url: "/" },
+    "src/sites/alpha.twizzle.net": {
+      url: "/",
+      dot: true, // for .htaccess
+    },
   },
   buildOptions: {
     out: "dist/sites/alpha.twizzle.net",
@@ -57,7 +60,10 @@ export const twizzleSnowpackConfig = {
 
 export const experimentsSnowpackConfig = {
   mount: {
-    "src/sites/experiments.cubing.net/cubing.js": { url: "/" },
+    "src/sites/experiments.cubing.net/cubing.js": {
+      url: "/",
+      dot: true, // for .htaccess
+    },
   },
   buildOptions: {
     out: "dist/sites/experiments.cubing.net/cubing.js",
