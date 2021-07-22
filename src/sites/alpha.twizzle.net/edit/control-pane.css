@@ -139,9 +139,11 @@ expand-button a {
 #moves-sticky-wrapper {
   position: sticky;
   top: 0;
-  background: rgb(255, 245, 235);
+  background: rgba(255, 245, 235, 0.75);
   border-bottom: 3px solid rgba(0, 0, 0, 0.5);
   margin-bottom: -1px;
+  -webkit-backdrop-filter: blur(0.5em);
+  backdrop-filter: blur(0.5em);
 }
 
 twisty-stream-source {
