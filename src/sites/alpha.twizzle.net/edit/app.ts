@@ -599,7 +599,6 @@ class ControlPane {
       for (const puzzleName of puzzles) {
         const option = document.createElement("option");
         option.value = puzzleName;
-        console.log(supportedPuzzles, puzzleName);
         option.textContent = supportedPuzzles[puzzleName].displayName();
         optgroup.appendChild(option);
         if (puzzleName === initialPuzzleName) {
@@ -728,7 +727,6 @@ class ExpandButton extends HTMLElement {
   onClick(e: MouseEvent) {
     e.preventDefault();
     this.toggle();
-    console.log(this.associatedElem);
     if (this.exclusive) {
       if (this.expanded) {
         for (const expandButton of exclusiveExpandButtons) {
