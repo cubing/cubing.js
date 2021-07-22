@@ -518,23 +518,38 @@ class ControlPane {
       case "scramble":
         this.scramble();
         break;
-        case "screenshot":
-          this.screenshot();
-          break;
+      case "screenshot":
+        this.screenshot();
+        break;
+      case "connect-input":
+        this.connectInput();
+        break;
       default:
         throw new Error(`Unknown tool action! ${e.detail.action}`);
     }
   }
-  
+
   private screenshot(): void {
-    const elem = this.app.twistyPlayer.viewerElems[0] as Twisty3DCanvas | undefined;
+    const elem = this.app.twistyPlayer.viewerElems[0] as
+      | Twisty3DCanvas
+      | undefined;
     if (elem) {
-      const url = elem.renderToDataURL({squareCrop: true, minWidth: 2048, minHeight: 2048});
+      const url = elem.renderToDataURL({
+        squareCrop: true,
+        minWidth: 2048,
+        minHeight: 2048,
+      });
       const a = document.createElement("a");
       a.href = url;
-      a.download = `[${this.app.twistyPlayer.puzzle}] ${this.app.twistyPlayer.alg.toString()}.png`
+      a.download = `[${
+        this.app.twistyPlayer.puzzle
+      }] ${this.app.twistyPlayer.alg.toString()}.png`;
       a.click();
     }
+  }
+
+  private connectInput(): void {
+    this.twistyStreamSource.style.setProperty("display", "inherit");
   }
 
   private onExampleAction(e: CustomEvent<{ action: string }>): void {
