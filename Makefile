@@ -21,8 +21,8 @@ publish:
 .PHONY: deploy
 deploy: deploy-experiments
 
-EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
-EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
+EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/alpha.twizzle.net/"
+EXPERIMENTS_URL       = "https://alpha.twizzle.net/"
 
 .PHONY: deploy-experiments
 deploy-experiments: build-experiments

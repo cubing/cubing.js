@@ -16,7 +16,10 @@ if (EXCLUDE_BABYLON) {
 export default {
   workspaceRoot: "/",
   mount: {
-    "src/experiments": { url: "/" },
+    "src/experiments/twizzle.net": { url: "/play/" },
+    "src/experiments/twizzle": { url: "/explore/" },
+    "src/experiments/alg.cubing.net": { url: "/edit/" },
+    "src/twizzle": { url: "/" },
   },
   exclude: ["**/.DS_Store"],
   packageOptions: {

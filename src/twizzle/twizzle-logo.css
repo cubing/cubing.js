@@ -1,0 +1,106 @@
+html {
+  background-color: #eaeaea;
+  background-image: linear-gradient(
+      45deg,
+      #ddd 25%,
+      transparent 25%,
+      transparent 75%,
+      #ddd 75%,
+      #ddd
+    ),
+    linear-gradient(
+      45deg,
+      #ddd 25%,
+      transparent 25%,
+      transparent 75%,
+      #ddd 75%,
+      #ddd
+    );
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+svg .primary-color {
+  animation: primary-color 10s infinite;
+}
+svg .secondary-color {
+  animation: secondary-color 10s infinite;
+}
+
+@keyframes primary-color {
+  00% {
+    fill: #4285f4;
+  }
+  20% {
+    fill: #4285f4;
+  }
+  25% {
+    fill: #5c5c5c;
+  }
+  35% {
+    fill: #5c5c5c;
+  }
+  40% {
+    fill: #c41506;
+  }
+  50% {
+    fill: #c41506;
+  }
+  55% {
+    fill: #0d904f;
+  }
+  65% {
+    fill: #0d904f;
+  }
+  70% {
+    fill: #f4ad42;
+  }
+  80% {
+    fill: #f4ad42;
+  }
+  85% {
+    fill: #f68800;
+  }
+  95% {
+    fill: #f68800;
+  }
+}
+
+@keyframes secondary-color {
+  00% {
+    fill: #0a703e;
+  }
+  20% {
+    fill: #0a703e;
+  }
+  25% {
+    fill: #f4ad42;
+  }
+  35% {
+    fill: #f4ad42;
+  }
+  40% {
+    fill: #f68800;
+  }
+  50% {
+    fill: #f68800;
+  }
+  55% {
+    fill: #4285f4;
+  }
+  65% {
+    fill: #4285f4;
+  }
+  70% {
+    fill: #5c5c5c;
+  }
+  80% {
+    fill: #5c5c5c;
+  }
+  85% {
+    fill: #c41506;
+  }
+  95% {
+    fill: #c41506;
+  }
+}
