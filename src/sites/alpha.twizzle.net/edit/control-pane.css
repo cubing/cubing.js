@@ -143,3 +143,9 @@ expand-button a {
   border-bottom: 3px solid rgba(0, 0, 0, 0.5);
   margin-bottom: -1px;
 }
+
+twisty-stream-source {
+  width: 100%;
+  height: auto;
+  padding: 2em;
+}

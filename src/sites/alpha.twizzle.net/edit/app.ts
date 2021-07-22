@@ -25,6 +25,10 @@ import { randomScrambleForEvent } from "../../../cubing/scramble";
 import { customElementsShim } from "../../../cubing/twisty/dom/element/node-custom-element-shims";
 import { examples } from "./examples";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
+import "../../../cubing/twisty/dom/stream/TwistyStreamSource";
+import type { TwistyStreamSource } from "../../../cubing/twisty/dom/stream/TwistyStreamSource";
+import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream";
+
 export interface AppData {
   puzzleName: string;
   experimentalSetupAlg: Alg;
@@ -284,8 +288,9 @@ class ControlPane {
   public toolGrid: ButtonGrid;
   public examplesGrid: ButtonGrid;
   private tempoDisplay: HTMLSpanElement;
+  private twistyStreamSource: TwistyStreamSource;
   constructor(
-    _app: App,
+    app: App,
     public element: Element,
     initialData: AppData,
     private experimentalSetupAlgChangeCallback: (alg: Alg) => boolean,
@@ -397,6 +402,16 @@ class ControlPane {
     );
 
     this.onAlgInput(true);
+
+    this.twistyStreamSource = app.element.querySelector(
+      "twisty-stream-source",
+    ) as TwistyStreamSource;
+    this.twistyStreamSource.addEventListener("move", this.onMove.bind(this));
+  }
+
+  private onMove(e: PuzzleStreamMoveEventRegisterCompatible): void {
+    this.twistyPlayer.experimentalAddMove(e.detail.move, true);
+    this.setAlg(this.twistyPlayer.alg);
   }
 
   private onexperimentalSetupAlgInput(canonicalize: boolean): void {
@@ -490,12 +505,12 @@ class ControlPane {
       case "invert":
         this.setAlg(this.twistyPlayer.alg.invert());
         break;
-        case "solve":
-          this.solve();
-          break;
-        case "scramble":
-          this.scramble();
-          break;
+      case "solve":
+        this.solve();
+        break;
+      case "scramble":
+        this.scramble();
+        break;
       default:
         throw new Error(`Unknown tool action! ${e.detail.action}`);
     }
