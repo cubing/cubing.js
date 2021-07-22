@@ -1,1 +1,1 @@
-export const APP_TITLE = "Twizzle Editor / alg.cubing.net v2";
+export const APP_TITLE = "Twizzle Editor [alpha]";
