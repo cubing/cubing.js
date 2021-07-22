@@ -4,7 +4,8 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { startServer } from "../../lib/experiments-server/index.js";
 
-const PAGE_URL = "http://localhost:4443/cubing.js/screenshot/index.html";
+const PAGE_URL =
+  "http://localhost:4443/experiments.cubing.net/cubing.js/screenshot/";
 
 startServer();
 

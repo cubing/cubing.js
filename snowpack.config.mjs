@@ -13,11 +13,8 @@ if (EXCLUDE_BABYLON) {
   );
 }
 
-export default {
+const common = {
   workspaceRoot: "/",
-  mount: {
-    "src/experiments": { url: "/" },
-  },
   exclude: ["**/.DS_Store"],
   packageOptions: {
     knownEntrypoints: ["comlink"],
@@ -27,10 +24,6 @@ export default {
     port: 3333,
     hmr: true,
   },
-  buildOptions: {
-    out: "dist/experiments",
-    baseUrl: "/cubing.js",
-  },
   optimize: {
     bundle: true,
     splitting: true,
@@ -38,4 +31,43 @@ export default {
     target: "es2020",
     sourcemap: false,
   },
+};
+
+export const sitesSnowpackConfig = {
+  mount: {
+    "src/sites": { url: "/" },
+  },
+  ...common,
+};
+
+export const twizzleSnowpackConfig = {
+  mount: {
+    "src/sites/alpha.twizzle.net": {
+      url: "/",
+      dot: true, // for .htaccess
+    },
+  },
+  buildOptions: {
+    out: "dist/sites/alpha.twizzle.net",
+    baseUrl: "/",
+  },
+  ...common,
+  packageOptions: {
+    knownEntrypoints: ["comlink"],
+    external: ["crypto", "worker_threads", "@babylonjs/core"],
+  },
+};
+
+export const experimentsSnowpackConfig = {
+  mount: {
+    "src/sites/experiments.cubing.net/cubing.js": {
+      url: "/",
+      dot: true, // for .htaccess
+    },
+  },
+  buildOptions: {
+    out: "dist/sites/experiments.cubing.net/cubing.js",
+    baseUrl: "/cubing.js",
+  },
+  ...common,
 };

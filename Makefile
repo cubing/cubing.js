@@ -2,7 +2,7 @@
 # https://github.com/lgarron/Makefile-scripts
 
 # Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build build-esm build-bundle-global build-types build-bin build-experiments build-search-worker generate-js generate-js-parsers generate-js-svg dev clean test test-dist-esm-node-import test-dist-esm-parcel test-dist-esm-perf test-dist-experiments test-import-restrictions test-jest test-tsc format setup lint prepack parcel-build-for-twizzle-net
+NPM_COMMANDS = build build-esm build-bundle-global build-types build-bin build-site-twizzle build-sites build-site-experiments build-search-worker generate-js generate-js-parsers generate-js-svg dev clean test test-dist-esm-node-import test-dist-esm-parcel test-dist-esm-perf test-dist-experiments test-import-restrictions test-jest test-tsc format setup lint prepack parcel-build-for-twizzle-net
 
 .PHONY: $(NPM_COMMANDS)
 $(NPM_COMMANDS):
@@ -19,36 +19,31 @@ publish:
 	npm publish
 
 .PHONY: deploy
-deploy: deploy-experiments
+deploy: deploy-twizzle deploy-experiments
+
+TWIZZLE_SFTP_PATH = "towns.dreamhost.com:~/alpha.twizzle.net/"
+TWIZZLE_URL       = "https://alpha.twizzle.net/"
+
+.PHONY: deploy-twizzle
+deploy-twizzle: build-site-twizzle
+	rsync -avz \
+		--exclude .DS_Store \
+		--exclude .git \
+		./dist/sites/alpha.twizzle.net/ \
+		${TWIZZLE_SFTP_PATH}
+	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
 
 EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
 EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
 
 .PHONY: deploy-experiments
-deploy-experiments: build-experiments
+deploy-experiments: build-site-experiments
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/experiments/ \
+		./dist/sites/experiments.cubing.net/cubing.js/ \
 		${EXPERIMENTS_SFTP_PATH}
 	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
-
-
-######## Twizzle ########
-
-
-# TWIZZLE_SOURCE_PATH = "./dist/twizzle.net/twizzle-net/"
-# TWIZZLE_SFTP_PATH   = "towns.dreamhost.com:~/twizzle.net/play/"
-# TWIZZLE_URL         = "https://twizzle.net/"
-
-# .PHONY: deploy-twizzle
-# deploy-twizzle: parcel-build-for-twizzle-net
-# 	rsync -avz \
-# 		--exclude .DS_Store \
-# 		--exclude .git \
-# 		${TWIZZLE_SOURCE_PATH} \
-# 		${TWIZZLE_SFTP_PATH}
-# 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
 
 
 ######## VR ########

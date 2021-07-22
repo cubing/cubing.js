@@ -14,7 +14,11 @@ import * as esbuild from "esbuild";
 
 import { readFile, writeFile } from "fs";
 
-import configSrc from "../../snowpack.config.mjs";
+import {
+  sitesSnowpackConfig,
+  twizzleSnowpackConfig,
+  experimentsSnowpackConfig,
+} from "../../snowpack.config.mjs";
 import { execPromise } from "../lib/execPromise.js";
 
 const PARALLEL = false;
@@ -200,23 +204,45 @@ export const binTarget = {
   },
 };
 
-export const SnowpackTarget = {
-  name: "snowpack",
+export const sitesTarget = {
+  name: "sites",
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(configSrc);
+    const config = snowpack.createConfiguration(sitesSnowpackConfig);
 
     const snowpackPromise = dev
       ? snowpack.startServer({ config }, { isDev: dev })
       : snowpack.build({ config });
     await snowpackPromise;
+  },
+};
 
-    // if (!dev) {
-    //   await execPromise(
-    //     "cp src/cubing/search/esm-test-worker.js dist/experiments/esm-test-worker.js",
-    //   );
-    // }
+export const twizzleTarget = {
+  name: "twizzle",
+  builtYet: false,
+  dependencies: [searchWorkerTarget],
+  buildSelf: async (dev) => {
+    const config = snowpack.createConfiguration(twizzleSnowpackConfig);
+
+    const snowpackPromise = dev
+      ? snowpack.startServer({ config }, { isDev: dev })
+      : snowpack.build({ config });
+    await snowpackPromise;
+  },
+};
+
+export const experimentsTarget = {
+  name: "experiments",
+  builtYet: false,
+  dependencies: [searchWorkerTarget],
+  buildSelf: async (dev) => {
+    const config = snowpack.createConfiguration(experimentsSnowpackConfig);
+
+    const snowpackPromise = dev
+      ? snowpack.startServer({ config }, { isDev: dev })
+      : snowpack.build({ config });
+    await snowpackPromise;
   },
 };
 
@@ -256,7 +282,9 @@ const dev = process.argv[3] === "dev";
 
 const targets /*: Record<String, SolverWorker>*/ = {
   "search-worker": searchWorkerTarget,
-  "snowpack": SnowpackTarget,
+  "sites": sitesTarget,
+  "twizzle": twizzleTarget,
+  "experiments": experimentsTarget,
   "bundle-global": bundleGlobalTarget,
   "esm": esmTarget,
   "types": typesTarget,

@@ -1,5 +1,0 @@
-Header set Cache-Control "max-age=300; must-revalidate"
-
-# This might be redundant, but just to be sure:
-ExpiresActive On
-ExpiresDefault A300

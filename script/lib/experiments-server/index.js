@@ -5,31 +5,30 @@ import { createServer } from "http";
 import { extname, join } from "path";
 import { needFolder } from "../need-folder.js";
 
-const FILE_ROOT = "../../../dist/experiments/";
+const DIST_SITES_ROOT = "../../../dist/sites/";
 
-const FILE_ROOT_EXPANDED = new URL(FILE_ROOT, import.meta.url).pathname;
-needFolder(FILE_ROOT_EXPANDED, "make build-experiments");
+const DIST_SITES_ROOT_EXPANDED = new URL(DIST_SITES_ROOT, import.meta.url)
+  .pathname;
+needFolder(
+  join(DIST_SITES_ROOT_EXPANDED, "alpha.twizzle.net"),
+  "make build-sites",
+);
+needFolder(
+  join(DIST_SITES_ROOT_EXPANDED, "experiments.cubing.net/cubing.js"),
+  "make build-sites",
+);
 
 export function startServer(port) {
   port ??= 4443;
   console.log("Starting server.");
   createServer(function (request, response) {
-    console.log("request ", request.url);
-
-    const normalizedURL = new URL(request.url, "http://test/").pathname;
-    let segments = normalizedURL.split("/");
-    const topPath = segments.splice(1, 1)[0];
-    const remainingPath = segments.join("/");
+    const normalizedPath = new URL(request.url, "http://test/").pathname;
 
     let filePath;
-    if (topPath === "cubing.js") {
-      filePath = new URL(join(FILE_ROOT, remainingPath), import.meta.url)
-        .pathname;
-    } else {
-      response.writeHead(404, { "Content-Type": "text/html" });
-      response.end("bad path", "utf-8");
-      return;
-    }
+    filePath = new URL(
+      join(DIST_SITES_ROOT_EXPANDED, normalizedPath),
+      import.meta.url,
+    ).pathname;
 
     if (filePath.endsWith("/")) {
       filePath += "index.html";
@@ -58,7 +57,7 @@ export function startServer(port) {
 
     readFile(filePath, function (error, content) {
       if (error) {
-        if (error.code === "ENOENT") {
+        if (["ENOENT", "EISDIR"].includes(error.code)) {
           readFile("./404.html", function (_error, content) {
             response.writeHead(404, { "Content-Type": "text/html" });
             response.end(content, "utf-8");
