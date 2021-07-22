@@ -200,8 +200,8 @@ export const binTarget = {
   },
 };
 
-export const SnowpackTarget = {
-  name: "snowpack",
+export const experimentsTarget = {
+  name: "experiments",
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
@@ -211,12 +211,6 @@ export const SnowpackTarget = {
       ? snowpack.startServer({ config }, { isDev: dev })
       : snowpack.build({ config });
     await snowpackPromise;
-
-    // if (!dev) {
-    //   await execPromise(
-    //     "cp src/cubing/search/esm-test-worker.js dist/experiments/esm-test-worker.js",
-    //   );
-    // }
   },
 };
 
@@ -256,7 +250,7 @@ const dev = process.argv[3] === "dev";
 
 const targets /*: Record<String, SolverWorker>*/ = {
   "search-worker": searchWorkerTarget,
-  "snowpack": SnowpackTarget,
+  "experiments": experimentsTarget,
   "bundle-global": bundleGlobalTarget,
   "esm": esmTarget,
   "types": typesTarget,
