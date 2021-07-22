@@ -71,15 +71,22 @@ export class TwistyStreamSource extends ManagedCustomElement {
     this.addElement(document.createElement("span")).textContent =
       "Connect a stream source:";
 
-    this.addSource("📡 Bluetooth", BluetoothStreamSource);
+    const bluetoothButton = this.addSource(
+      "📡 Bluetooth",
+      BluetoothStreamSource,
+    );
     this.addSource("⌨️ Keyboard", KeyboardStreamSource);
     this.addStreamSource();
+
+    if (!navigator?.bluetooth) {
+      bluetoothButton.disabled = true;
+    }
   }
 
   addSource(
     label: string,
     sourceClass: { connect: () => Promise<StreamSource> },
-  ): void {
+  ): HTMLButtonElement {
     const button = this.addElement(document.createElement("button"));
     button.textContent = label;
     button.addEventListener("click", async () => {
@@ -94,6 +101,7 @@ export class TwistyStreamSource extends ManagedCustomElement {
       );
       // TODO: Hook up UI for disconnection.
     });
+    return button;
   }
 
   addStreamSource(): void {
