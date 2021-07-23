@@ -10,12 +10,15 @@ const twistyPlayer = document.body.appendChild(
 );
 setTimeout(() => {
   const twisty3DCanvas = twistyPlayer.viewerElems[0] as Twisty3DCanvas;
-  var c = twisty3DCanvas.canvas;
+  var canvas = twisty3DCanvas.canvas;
+  var ctx = canvas.getContext("2d")!;
+  console.log("ctx", canvas, ctx);
+  ctx.fillStyle = "white";
 
-  const stream = c.captureStream(0);
+  const stream = canvas.captureStream(0);
   var recordedChunks = [];
   var options = {
-    mimeType: "video/mp4",
+    // mimeType: "video/mp4",
     videoBitsPerSecond: 2500000,
   };
   const mediaRecorder = new MediaRecorder(stream, options);
@@ -30,6 +33,7 @@ setTimeout(() => {
   twistyPlayer.timeline.setTimestamp(0);
   twistyPlayer.timeline.tempoScale = 4;
   async function animationLoop() {
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     twistyPlayer.timeline.setTimestamp(
       twistyPlayer.timeline.timestamp +
         (1000 / 60) * twistyPlayer.timeline.tempoScale,
