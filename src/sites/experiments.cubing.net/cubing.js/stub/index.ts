@@ -1,19 +1,35 @@
 // // Stub file for testing.
 // // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
+import { Texture, TextureLoader } from "three";
 import { Twisty3DCanvas, TwistyPlayer } from "../../../../cubing/twisty";
+
+const checkeredBackground = new URL(
+  "./twizzle-animation-background.png",
+  import.meta.url,
+).toString();
 
 const twistyPlayer = document.body.appendChild(
   new TwistyPlayer({
-    alg: "U R U' R' U' R U' r2' u r U r2 u' r2' U' r' U r' U2 r y2",
+    alg: "R U R'", // "U R U' R' U' R U' r2' u r U r2 u' r2' U' r' U r' U2 r y2",
   }),
 );
-setTimeout(() => {
+setTimeout(async () => {
   const twisty3DCanvas = twistyPlayer.viewerElems[0] as Twisty3DCanvas;
+  twisty3DCanvas.experimentalForceSize(512, 512);
+
+  await new Promise<void>((resolve) => {
+    const loader = new TextureLoader();
+    loader.load(checkeredBackground, (texture: Texture) => {
+      twistyPlayer.scene!.background = texture;
+      resolve();
+    });
+  });
+
   var canvas = twisty3DCanvas.canvas;
-  var ctx = canvas.getContext("2d")!;
+  var ctx = canvas.getContext("webgl2")!;
   console.log("ctx", canvas, ctx);
-  ctx.fillStyle = "white";
+  ctx.clearColor(1, 1, 1, 0);
 
   const stream = canvas.captureStream(0);
   var recordedChunks = [];
@@ -33,7 +49,7 @@ setTimeout(() => {
   twistyPlayer.timeline.setTimestamp(0);
   twistyPlayer.timeline.tempoScale = 4;
   async function animationLoop() {
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // ctx.clear(ctx.COLOR_BUFFER_BIT);
     twistyPlayer.timeline.setTimestamp(
       twistyPlayer.timeline.timestamp +
         (1000 / 60) * twistyPlayer.timeline.tempoScale,

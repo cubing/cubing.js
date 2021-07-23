@@ -180,6 +180,11 @@ export class Twisty3DCanvas
     this.scheduleRender();
   }
 
+  experimentalForceSize(width: number, height: number) {
+    // Seantic madness!
+    this.#resize(width, height);
+  }
+
   #resize(minWidth: number = 0, minHeight: number = 0): void {
     this.resizePending = false;
 
