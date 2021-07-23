@@ -7,6 +7,12 @@
 
 `cubing.js` is a collection of Javascript libraries, still under development.
 
+## Twizzle
+
+<img src="./src/sites/alpha.twizzle.net/twizzle-social-media-image.png" width="256">
+
+[Twizzle](https://alpha.twizzle.net/) is based on `cubing.js`, and is currently being developed at [`src/sites/alpha.twizzle.net`](./src/sites/alpha.twizzle.net/).
+
 ## Documentation
 
 If you want to display algs or solves, the following code is a good way to get started:
