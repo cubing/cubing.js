@@ -11,12 +11,18 @@ const checkeredBackground = new URL(
 
 const twistyPlayer = document.body.appendChild(
   new TwistyPlayer({
-    alg: "R U R'", // "U R U' R' U' R U' r2' u r U r2 u' r2' U' r' U r' U2 r y2",
+    puzzle: "3x3x3",
+    experimentalSetupAlg: "(U' R U' R' U R U2' R' U' R U R')'",
+    alg: `U' R U' R' U R U2' R' U' R U R'`,
+    experimentalStickering: "CLS",
+    // hintFacelets: "none",
+    // alg: "BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2'", // "U R U' R' U' R U' r2' u r U r2 u' r2' U' r' U r' U2 r y2",
   }),
 );
 setTimeout(async () => {
   const twisty3DCanvas = twistyPlayer.viewerElems[0] as Twisty3DCanvas;
-  twisty3DCanvas.experimentalForceSize(512, 288);
+  // twisty3DCanvas.experimentalForceSize(512, 288);
+  twisty3DCanvas.experimentalForceSize(1920 / 2, 1080 / 2);
 
   await new Promise<void>((resolve) => {
     const loader = new TextureLoader();
@@ -142,4 +148,4 @@ setTimeout(async () => {
   //   mediaRecorder.stop();
   // }, 10000);
   // console.log("please wait while recording (10s)");
-}, 100);
+}, 1000);
