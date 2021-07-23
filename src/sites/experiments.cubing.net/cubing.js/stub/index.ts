@@ -122,14 +122,14 @@ import { Twisty3DCanvas, TwistyPlayer } from "../../../../cubing/twisty";
 
 const twistyPlayer = document.body.appendChild(
   new TwistyPlayer({
-    alg: "R U R'",
+    alg: "U R U' R' U' R U' r2' u r U r2 u' r2' U' r' U r' U2 r",
   }),
 );
 setTimeout(() => {
   const twisty3DCanvas = twistyPlayer.viewerElems[0] as Twisty3DCanvas;
   var c = twisty3DCanvas.canvas;
 
-  const stream = c.captureStream(25);
+  const stream = c.captureStream(0);
   var recordedChunks = [];
   var options = {};
   const mediaRecorder = new MediaRecorder(stream, options);
@@ -139,7 +139,42 @@ setTimeout(() => {
   // Chrome requires we draw on the canvas while recording
   mediaRecorder.onstart = animationLoop;
 
-  function animationLoop() {
+  const track = stream.getVideoTracks()[0];
+  // track.applyConstraints({ frameRate: 60 });
+  twistyPlayer.timeline.setTimestamp(0);
+  twistyPlayer.timeline.tempoScale = 2;
+  async function animationLoop() {
+    twistyPlayer.timeline.setTimestamp(
+      twistyPlayer.timeline.timestamp +
+        (1000 / 60) * twistyPlayer.timeline.tempoScale,
+    );
+    twistyPlayer.timeline.timestamp = Math.min(
+      twistyPlayer.timeline.timestamp,
+      twistyPlayer.timeline.timeRange().end,
+    );
+    console.log(
+      "timestamp",
+      twistyPlayer.timeline.timestamp,
+      twistyPlayer.timeline.timeRange().end,
+    );
+    twisty3DCanvas.experimentalSetOnRenderFinish(() => {
+      console.log("frame!");
+      track.requestFrame();
+      twisty3DCanvas.experimentalSetOnRenderFinish(null);
+      console.log(
+        "sdfd",
+        twistyPlayer.timeline.timestamp >=
+          twistyPlayer.timeline.timeRange().end,
+      );
+      if (
+        twistyPlayer.timeline.timestamp >= twistyPlayer.timeline.timeRange().end
+      ) {
+        console.log("end");
+        mediaRecorder.stop();
+      } else {
+        animationLoop();
+      }
+    });
     // // draw nothing, but still draw
     // ctx.globalAlpha = 0;
     // ctx.fillRect(0, 0, 1, 1);
@@ -174,11 +209,16 @@ setTimeout(() => {
         once: true,
       });
     };
+
+    const a = document.createElement("a");
+    a.download = "a.webm";
+    a.href = url;
+    a.click();
   }
 
-  setTimeout(() => {
-    console.clear();
-    mediaRecorder.stop();
-  }, 10000);
-  console.log("please wait while recording (10s)");
+  // setTimeout(() => {
+  //   console.clear();
+  //   mediaRecorder.stop();
+  // }, 10000);
+  // console.log("please wait while recording (10s)");
 }, 100);
