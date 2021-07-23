@@ -3,126 +3,9 @@
 
 import { Twisty3DCanvas, TwistyPlayer } from "../../../../cubing/twisty";
 
-// import { Twisty3DCanvas, TwistyPlayer } from "../../../../cubing/twisty";
-
-// // Note: this file needs to contain code to avoid a Snowpack error.
-// // So we put a `console.log` here for now.
-// console.log("Loading stub file.");
-
-// // const twistyPlayer = document.body.appendChild(
-// //   new TwistyPlayer({
-// //     alg: "R U R'",
-// //   }),
-// // );
-// // setTimeout(() => {
-// //   const twisty3DCanvas = twistyPlayer.viewerElems[0] as Twisty3DCanvas;
-// //   const stream = twisty3DCanvas.canvas.captureStream(0);
-// //   // console.log(stream.getVideoTracks()[0]);
-// //   const track = stream.getVideoTracks()[0];
-// //   track.requestFrame();
-
-// //   twistyPlayer.timeline.setTimestamp(700);
-// //   twisty3DCanvas.experimentalSetOnRenderFinish(() => {
-// //     console.log("frame!");
-// //     track.requestFrame();
-// //   });
-// //   // track.stop();
-
-// //   var options = { mimeType: "video/webm; codecs=vp9" };
-// //   const mediaRecorder = new MediaRecorder(stream, options);
-
-// //   mediaRecorder.ondataavailable = handleDataAvailable;
-// //   mediaRecorder.start();
-
-// //   var recordedChunks = [];
-// //   function handleDataAvailable(event) {
-// //     console.log("data-available");
-// //     if (event.data.size > 0) {
-// //       recordedChunks.push(event.data);
-// //       console.log(recordedChunks);
-// //       // download();
-// //     } else {
-// //       // ...
-// //     }
-// //   }
-// //   function download() {
-// //     console.log("downlaod!");
-// //     var blob = new Blob(recordedChunks, {
-// //       type: "video/webm",
-// //     });
-// //     var url = URL.createObjectURL(blob);
-// //     var a = document.createElement("a");
-// //     a.href = url;
-// //     a.download = "test.webm";
-// //     a.click();
-// //     window.URL.revokeObjectURL(url);
-// //   }
-
-// //   const downloadButton = document.body.appendChild(
-// //     document.createElement("button"),
-// //   );
-// //   downloadButton.textContent = "Download";
-// //   downloadButton.addEventListener("click", download);
-
-// //   (window as any).stream = stream;
-
-// //   console.log(stream);
-// // }, 100);
-
-// const twistyPlayer = document.body.appendChild(
-//   new TwistyPlayer({
-//     alg: "R U R'",
-//   }),
-// );
-// setTimeout(() => {
-//   const twisty3DCanvas = twistyPlayer.viewerElems[0] as Twisty3DCanvas;
-//   var canvas = twisty3DCanvas.canvas;
-
-//   // Optional frames per second argument.
-//   var stream = canvas.captureStream(25);
-//   var recordedChunks = [];
-
-//   console.log(stream);
-//   var options = { mimeType: "video/webm; codecs=vp9" };
-//   const mediaRecorder = new MediaRecorder(stream, options);
-
-//   mediaRecorder.ondataavailable = handleDataAvailable;
-//   mediaRecorder.start();
-
-//   function handleDataAvailable(event) {
-//     console.log("data-available");
-//     if (event.data.size > 0) {
-//       recordedChunks.push(event.data);
-//       console.log(recordedChunks);
-//       download();
-//     } else {
-//       // ...
-//     }
-//   }
-//   function download() {
-//     var blob = new Blob(recordedChunks, {
-//       type: "video/webm",
-//     });
-//     var url = URL.createObjectURL(blob);
-//     var a = document.createElement("a");
-//     document.body.appendChild(a);
-//     a.style = "display: none";
-//     a.href = url;
-//     a.download = "test.webm";
-//     a.click();
-//     window.URL.revokeObjectURL(url);
-//   }
-
-//   // demo: to download after 9sec
-//   setTimeout((event) => {
-//     console.log("stopping");
-//     mediaRecorder.stop();
-//   }, 9000);
-// }, 100);
-
 const twistyPlayer = document.body.appendChild(
   new TwistyPlayer({
-    alg: "U R U' R' U' R U' r2' u r U r2 u' r2' U' r' U r' U2 r",
+    alg: "U R U' R' U' R U' r2' u r U r2 u' r2' U' r' U r' U2 r y2",
   }),
 );
 setTimeout(() => {
@@ -131,7 +14,10 @@ setTimeout(() => {
 
   const stream = c.captureStream(0);
   var recordedChunks = [];
-  var options = {};
+  var options = {
+    mimeType: "video/mp4",
+    videoBitsPerSecond: 2500000,
+  };
   const mediaRecorder = new MediaRecorder(stream, options);
 
   mediaRecorder.ondataavailable = handleDataAvailable;
@@ -142,7 +28,7 @@ setTimeout(() => {
   const track = stream.getVideoTracks()[0];
   // track.applyConstraints({ frameRate: 60 });
   twistyPlayer.timeline.setTimestamp(0);
-  twistyPlayer.timeline.tempoScale = 2;
+  twistyPlayer.timeline.tempoScale = 4;
   async function animationLoop() {
     twistyPlayer.timeline.setTimestamp(
       twistyPlayer.timeline.timestamp +
