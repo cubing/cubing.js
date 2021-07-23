@@ -375,6 +375,7 @@ function dowork(cmd: string): void {
   }
   if (cmd === "reset") {
     scramble = -1;
+    algoinput.value = "";
     checkchange();
     return;
   }
