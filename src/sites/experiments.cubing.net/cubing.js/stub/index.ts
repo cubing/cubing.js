@@ -5,7 +5,7 @@ import { Texture, TextureLoader } from "three";
 import { Twisty3DCanvas, TwistyPlayer } from "../../../../cubing/twisty";
 
 const checkeredBackground = new URL(
-  "./twizzle-animation-background.png",
+  "./twizzle-animation-background-16-9.png",
   import.meta.url,
 ).toString();
 
@@ -16,7 +16,7 @@ const twistyPlayer = document.body.appendChild(
 );
 setTimeout(async () => {
   const twisty3DCanvas = twistyPlayer.viewerElems[0] as Twisty3DCanvas;
-  twisty3DCanvas.experimentalForceSize(512, 512);
+  twisty3DCanvas.experimentalForceSize(512, 288);
 
   await new Promise<void>((resolve) => {
     const loader = new TextureLoader();
@@ -32,10 +32,13 @@ setTimeout(async () => {
   ctx.clearColor(1, 1, 1, 0);
   ctx.draw;
 
+  const canMP4 = MediaRecorder.isTypeSupported("video/mp4");
+  const mimeType = canMP4 ? "video/mp4" : "video/webm";
+
   const stream = canvas.captureStream(0);
   var recordedChunks = [];
   var options = {
-    // mimeType: "video/mp4",
+    mimeType,
     videoBitsPerSecond: 10000000,
   };
   const mediaRecorder = new MediaRecorder(stream, options);
@@ -46,11 +49,12 @@ setTimeout(async () => {
   mediaRecorder.onstart = animationLoop;
 
   const track = stream.getVideoTracks()[0];
-  track.applyConstraints({ aspectRatio: 1 });
+  // track.applyConstraints({ aspectRatio: 16 / 9 });
+  // track.applyConstraints({ frameRate: 60 }); // TODO: Why doesn't this break recording?
   twistyPlayer.timeline.setTimestamp(0);
   twistyPlayer.timeline.tempoScale = 4;
-  let startRemaining = 60;
-  let endRemaining = 60;
+  let startRemaining = 30; // TODO: Can we do 60fps in the output?
+  let endRemaining = 30; // TODO: Can we do 60fps in the output?
   const end = twistyPlayer.timeline.timeRange().end;
   async function animationLoop() {
     // ctx.clear(ctx.COLOR_BUFFER_BIT);
@@ -128,7 +132,7 @@ setTimeout(async () => {
     };
 
     const a = document.createElement("a");
-    a.download = "a.webm";
+    a.download = `twizzle.${canMP4 ? "mp4" : "webm"}`;
     a.href = url;
     a.click();
   }
