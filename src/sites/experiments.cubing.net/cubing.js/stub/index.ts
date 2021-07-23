@@ -27,15 +27,16 @@ setTimeout(async () => {
   });
 
   var canvas = twisty3DCanvas.canvas;
-  var ctx = canvas.getContext("webgl2")!;
+  var ctx = canvas.getContext("webgl2")! as WebGL2RenderingContext;
   console.log("ctx", canvas, ctx);
   ctx.clearColor(1, 1, 1, 0);
+  ctx.draw;
 
   const stream = canvas.captureStream(0);
   var recordedChunks = [];
   var options = {
     // mimeType: "video/mp4",
-    videoBitsPerSecond: 2500000,
+    videoBitsPerSecond: 10000000,
   };
   const mediaRecorder = new MediaRecorder(stream, options);
 
@@ -45,24 +46,32 @@ setTimeout(async () => {
   mediaRecorder.onstart = animationLoop;
 
   const track = stream.getVideoTracks()[0];
-  // track.applyConstraints({ frameRate: 60 });
+  track.applyConstraints({ aspectRatio: 1 });
   twistyPlayer.timeline.setTimestamp(0);
   twistyPlayer.timeline.tempoScale = 4;
+  let startRemaining = 60;
+  let endRemaining = 60;
+  const end = twistyPlayer.timeline.timeRange().end;
   async function animationLoop() {
     // ctx.clear(ctx.COLOR_BUFFER_BIT);
-    twistyPlayer.timeline.setTimestamp(
-      twistyPlayer.timeline.timestamp +
-        (1000 / 60) * twistyPlayer.timeline.tempoScale,
-    );
-    twistyPlayer.timeline.timestamp = Math.min(
-      twistyPlayer.timeline.timestamp,
-      twistyPlayer.timeline.timeRange().end,
-    );
-    console.log(
-      "timestamp",
-      twistyPlayer.timeline.timestamp,
-      twistyPlayer.timeline.timeRange().end,
-    );
+    if (startRemaining > 0) {
+      startRemaining--;
+      twistyPlayer.timeline.setTimestamp(startRemaining / 100);
+    } else if (twistyPlayer.timeline.timestamp === end && endRemaining > 0) {
+      endRemaining--;
+      twistyPlayer.timeline.setTimestamp(twistyPlayer.timeline.timestamp - 1);
+      twistyPlayer.timeline.setTimestamp(twistyPlayer.timeline.timestamp);
+    } else {
+      twistyPlayer.timeline.setTimestamp(
+        twistyPlayer.timeline.timestamp +
+          (1000 / 60) * twistyPlayer.timeline.tempoScale,
+      );
+      twistyPlayer.timeline.timestamp = Math.min(
+        twistyPlayer.timeline.timestamp,
+        end,
+      );
+    }
+    console.log("timestamp", twistyPlayer.timeline.timestamp, end);
     twisty3DCanvas.experimentalSetOnRenderFinish(() => {
       console.log("frame!");
       track.requestFrame();
@@ -73,7 +82,9 @@ setTimeout(async () => {
           twistyPlayer.timeline.timeRange().end,
       );
       if (
-        twistyPlayer.timeline.timestamp >= twistyPlayer.timeline.timeRange().end
+        twistyPlayer.timeline.timestamp >=
+          twistyPlayer.timeline.timeRange().end &&
+        endRemaining === 0
       ) {
         console.log("end");
         mediaRecorder.stop();
