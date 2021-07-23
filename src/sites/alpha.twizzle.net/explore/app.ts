@@ -451,6 +451,28 @@ function dowork(cmd: string): void {
     showtext(pg.writeksolve("TwizzlePuzzle"));
   } else if (cmd === "svgcmd") {
     showtext(pg.generatesvg(800, 500, 10, getCheckbox("threed")));
+  } else if (cmd === "screenshot" || cmd === "screenshot-back") {
+    const back = cmd === "screenshot-back";
+    console.log(cmd, back);
+    const elem = twisty.viewerElems[back ? 1 : 0] as Twisty3DCanvas | undefined;
+    if (elem) {
+      const url = elem.renderToDataURL({
+        squareCrop: true,
+        minWidth: 2048,
+        minHeight: 2048,
+      });
+      const a = document.createElement("a");
+      a.href = url;
+      console.log(getURLParam("puzzlegeometry"));
+      a.download = `[${
+        getURLParam("puzzle")
+          ? getURLParam("puzzle")
+          : getURLParam("puzzlegeometry") ?? "twizzle"
+      }${back ? " (back)" : ""}]${
+        algoinput.value ? " " + algoinput.value : ""
+      }.png`; // TODO: this is super hacky.
+      a.click();
+    }
   } else {
     alert("Command " + cmd + " not handled yet.");
   }
