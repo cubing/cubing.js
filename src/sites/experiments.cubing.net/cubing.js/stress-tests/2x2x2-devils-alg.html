@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>cubing.js | 2x2x2 Devil's Algorithm</title>
+    <script
+      src="./2x2x2-devils-alg.js"
+      href="./2x2x2-devils-alg.ts"
+      type="module"
+      defer
+    ></script>
+    <link rel="stylesheet" href="./40x40x40.css" />
+    <style>
+      /* From Twizzle Editor */
+      .spinner {
+        width: 4em;
+        height: 4em;
+        border-radius: 2.5em;
+        border: 0.5em solid rgba(0, 0, 0, 0);
+        border-top: 0.5em solid rgba(0, 0, 0, 0.7);
+        border-right: 0.5em solid rgba(0, 0, 0, 0.7);
+        animation: spinnerRotate 1s linear infinite;
+      }
+
+      @keyframes spinnerRotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      #spinner-wrapper {
+        display: grid;
+        place-content: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      #player-wrapper twisty-player {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="player-wrapper">
+      <div id="spinner-wrapper">
+        <div class="spinner"></div>
+      </div>
+    </div>
+    <div id="controls">
+      <h1>2x2x2 Devil's Algorithm 😈</h1>
+      <div id="please-wait">
+        A Hamiltonian circuit of the 2x2x2 state graph
+        <a
+          href="https://www.speedsolving.com/threads/hamiltonian-circuit-for-the-entire-2x2x2-cube-group.34318/"
+          >by Bruce Norskog</a
+        >. This may take a minute or longer to load.
+      </div>
+      <br />
+      <div id="progress"></div>
+      <br /><br />
+    </div>
+  </body>
+</html>
