@@ -1,4 +1,4 @@
-<img src="cubing.js.jpg" width="100%">
+<img src="cubing.js.jpg" width="480">
 
 # `cubing.js`
 
