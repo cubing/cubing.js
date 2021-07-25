@@ -9,9 +9,9 @@
 
 ## Twizzle
 
-<img src="./src/sites/alpha.twizzle.net/twizzle-social-media-image.png" width="256">
+<a href="https://alpha.twizzle.net/"><img src="./src/sites/alpha.twizzle.net/twizzle-social-media-image.png" width="256">
 
-[Twizzle](https://alpha.twizzle.net/) is based on `cubing.js`, and is currently being developed at [`src/sites/alpha.twizzle.net`](./src/sites/alpha.twizzle.net/).
+Twizzle</a> is based on `cubing.js`, and is currently being developed at [`src/sites/alpha.twizzle.net`](./src/sites/alpha.twizzle.net/).
 
 ## Documentation
 
