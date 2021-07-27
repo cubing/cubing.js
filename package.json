@@ -63,8 +63,7 @@
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src",
     "setup": "npm install",
     "lint": "npx eslint --ext=js,ts .",
-    "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import",
-    "parcel-build-for-twizzle-net": "echo \"parcel-build-for-twizzle-net is currently unimplemented.\""
+    "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import"
   },
   "targets": {
     "twizzle-net": {},
