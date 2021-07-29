@@ -31,6 +31,7 @@ import {
   BackgroundTheme,
   centeredCameraPosition,
   ControlsLocation,
+  cubeCameraOrbitCoordinates,
   cubeCameraPosition,
   ExperimentalStickering,
   HintFaceletStyle,
@@ -45,6 +46,7 @@ import {
 } from "./TwistyPlayerConfig";
 import { Twisty2DSVG, Twisty2DSVGOptions } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
+import type { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
 import type { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import {
   BackViewLayout,
@@ -386,19 +388,26 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   // TODO
-  get defaultCameraPosition(): Vector3 {
+  #derivedCameraOrbitCoordinates(): OrbitCoordinates {
+    let coords: OrbitCoordinates;
     if (this.puzzle[1] === "x") {
-      return cubeCameraPosition;
+      coords = cubeCameraOrbitCoordinates;
     }
     switch (this.puzzle) {
       case "megaminx":
-        return megaminxCameraPosition;
+        coords = megaminxCameraPosition;
       case "pyraminx":
-        return pyraminxCameraPosition;
+        coords = pyraminxCameraPosition;
       case "skewb":
-        return cubeCameraPosition;
+        coords = cubeCameraPosition;
     }
-    return centeredCameraPosition;
+    coords = centeredCameraPosition;
+
+    return {
+      latitude: this.experimentalCameraLatitude ?? coords.latitude,
+      longitude: this.experimentalCameraLongitude ?? coords.longitude,
+      distance: coords.distance, // TODO
+    };
   }
 
   static get observedAttributes(): string[] {

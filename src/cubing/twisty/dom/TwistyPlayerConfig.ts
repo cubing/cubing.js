@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import { PerspectiveCamera, Vector3 } from "three";
 import type { Alg } from "../../alg";
 import {
   AlgAttribute,
@@ -6,6 +6,10 @@ import {
   StringEnumAttribute,
 } from "./element/ElementConfig";
 import type { TwistyPlayer } from "./TwistyPlayer";
+import {
+  OrbitCoordinates,
+  TwistyOrbitControls,
+} from "./viewers/TwistyOrbitControls";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
 const DEFAULT_CAMERA_Z = 5;
@@ -25,6 +29,41 @@ export const megaminxCameraPosition = centeredCameraPosition
 export const cubeCameraPosition = new Vector3(3, 4, 5).multiplyScalar(0.8);
 export const cornerCameraPosition = new Vector3(4, 4, 4);
 export const pyraminxCameraPosition = new Vector3(0, 2.5, 5); // TODO: center puzzle in frame, use x=0 but increase y
+
+export const cubeCameraOrbitCoordinates: OrbitCoordinates = {
+  longitude: 34.44990198795349,
+  latitude: 30.96375653207353,
+  distance: 5.656854249492381,
+};
+
+const camera = new PerspectiveCamera();
+camera.position.copy(cubeCameraPosition);
+camera.lookAt(0, 0, 0);
+const controls = new TwistyOrbitControls(
+  camera,
+  document.createElement("canvas"),
+  () => {},
+);
+console.log(controls.latitude);
+console.log(controls.longitude);
+console.log(controls.distance);
+
+// TODO
+export function defaultCameraOrbitCoordinates(): OrbitCoordinates {
+  return cubeCameraOrbitCoordinates;
+  // if (this.puzzle[1] === "x") {
+  //   return cubeCameraPosition;
+  // }
+  // switch (this.puzzle) {
+  //   case "megaminx":
+  //     return megaminxCameraPosition;
+  //   case "pyraminx":
+  //     return pyraminxCameraPosition;
+  //   case "skewb":
+  //     return cubeCameraPosition;
+  // }
+  // return centeredCameraPosition;
+}
 
 // TODO: turn these maps into lists?
 export const setupToLocations = {

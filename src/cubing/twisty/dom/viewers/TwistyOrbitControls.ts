@@ -70,6 +70,14 @@ class Inertia {
   }
 }
 
+const RADIANS_IN_DEGREES = 360 / TAU;
+
+export interface OrbitCoordinates {
+  latitude: number;
+  longitude: number;
+  distance: number;
+}
+
 // TODO: change mouse cursor while moving.
 export class TwistyOrbitControls {
   // TODO: should we store as lat/long directly and stick to more rounded values in degrees?
@@ -80,32 +88,32 @@ export class TwistyOrbitControls {
 
   set longitude(newLongitude: number) {
     this.#pullFromCamera();
-    this.#spherical.theta = (newLongitude / 360) * TAU;
+    this.#spherical.theta = newLongitude / RADIANS_IN_DEGREES;
     this.#propagateSpherical();
   }
 
   // TODO: Wrap into [-180, 180]
   get longitude(): number {
-    return (this.#spherical.theta / TAU) * 360;
+    return this.#spherical.theta * RADIANS_IN_DEGREES;
   }
 
   set latitude(newLatitude: number) {
     this.#pullFromCamera();
-    this.#spherical.phi = ((90 - newLatitude) / 360) * TAU;
+    this.#spherical.phi = (90 - newLatitude) / RADIANS_IN_DEGREES;
     this.#propagateSpherical();
   }
 
   get latitude(): number {
-    return 90 - (this.#spherical.phi / TAU) * 360;
+    return 90 - this.#spherical.phi * RADIANS_IN_DEGREES;
   }
 
-  set altitude(newAltitude: number) {
+  set distance(newDistance: number) {
     this.#pullFromCamera();
-    this.#spherical.radius = newAltitude;
+    this.#spherical.radius = newDistance;
     this.#propagateSpherical();
   }
 
-  get altitude(): number {
+  get distance(): number {
     return this.#spherical.radius;
   }
 

@@ -1,6 +1,5 @@
 // // type ConfigAttributes = Record<string, any>;
 
-import { Vector3 } from "three";
 import { Alg } from "../../../alg";
 
 export class AlgAttribute {
