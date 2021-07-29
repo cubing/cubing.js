@@ -406,8 +406,6 @@ export class TwistyPlayer extends ManagedCustomElement {
       }
     }
 
-    console.log("coords", coords);
-
     return {
       latitude: this.experimentalCameraLatitude ?? coords.latitude,
       longitude: this.experimentalCameraLongitude ?? coords.longitude,

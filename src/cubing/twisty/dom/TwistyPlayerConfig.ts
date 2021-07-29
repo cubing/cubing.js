@@ -2,10 +2,10 @@ import type { Alg } from "../../alg";
 import {
   AlgAttribute,
   RangedFloatAttribute,
-  StringEnumAttribute,
+  StringEnumAttribute
 } from "./element/ElementConfig";
 import type { TwistyPlayer } from "./TwistyPlayer";
-import { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
+import type { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
 // const DEFAULT_CAMERA_Z = 5;
