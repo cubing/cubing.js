@@ -326,7 +326,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     );
   }
 
-  set cameraLongitude(longitude: number) {
+  set experimentalCameraLongitude(longitude: number) {
     if (this.#hasCamera()) {
       console.log("setting longitude", longitude);
       (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude =
@@ -336,14 +336,14 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
-  get cameraLongitude(): number {
+  get experimentalCameraLongitude(): number {
     if (!this.#hasCamera()) {
       return 0; // TODO
     }
     return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude;
   }
 
-  set cameraLatitude(latitude: number) {
+  set experimentalCameraLatitude(latitude: number) {
     if (this.#hasCamera()) {
       console.log("setting latitude", latitude);
       (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude = latitude;
@@ -352,7 +352,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
-  get cameraLatitude(): number {
+  get experimentalCameraLatitude(): number {
     if (!this.#hasCamera()) {
       return 0; // TODO
     }
