@@ -86,6 +86,16 @@ export class TwistyOrbitControls {
   // latitude: number;
   // altitude: number;
 
+  set latitude(newLatitude: number) {
+    this.#pullFromCamera();
+    this.#spherical.phi = (90 - newLatitude) / RADIANS_IN_DEGREES;
+    this.#propagateSpherical();
+  }
+
+  get latitude(): number {
+    return 90 - this.#spherical.phi * RADIANS_IN_DEGREES;
+  }
+
   set longitude(newLongitude: number) {
     this.#pullFromCamera();
     this.#spherical.theta = newLongitude / RADIANS_IN_DEGREES;
@@ -95,16 +105,6 @@ export class TwistyOrbitControls {
   // TODO: Wrap into [-180, 180]
   get longitude(): number {
     return this.#spherical.theta * RADIANS_IN_DEGREES;
-  }
-
-  set latitude(newLatitude: number) {
-    this.#pullFromCamera();
-    this.#spherical.phi = (90 - newLatitude) / RADIANS_IN_DEGREES;
-    this.#propagateSpherical();
-  }
-
-  get latitude(): number {
-    return 90 - this.#spherical.phi * RADIANS_IN_DEGREES;
   }
 
   set distance(newDistance: number) {

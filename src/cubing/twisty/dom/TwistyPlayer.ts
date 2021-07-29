@@ -326,6 +326,27 @@ export class TwistyPlayer extends ManagedCustomElement {
     );
   }
 
+  set experimentalCameraLatitude(latitude: number | null) {
+    this.#config.attributes["experimental-camera-latitude"].setValue(latitude);
+    if (this.#hasCamera() && latitude !== null) {
+      (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude = latitude;
+      this.viewerElems[0].scheduleRender();
+      this.viewerElems[1]?.scheduleRender();
+    }
+  }
+
+  get experimentalCameraLatitude(): number | null {
+    if (
+      this.#config.attributes["experimental-camera-latitude"].value !== null
+    ) {
+      return this.#config.attributes["experimental-camera-latitude"].value;
+    }
+    if (!this.#hasCamera()) {
+      return null;
+    }
+    return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude;
+  }
+
   set experimentalCameraLongitude(longitude: number | null) {
     this.#config.attributes["experimental-camera-longitude"].setValue(
       longitude,
@@ -348,27 +369,6 @@ export class TwistyPlayer extends ManagedCustomElement {
       return null;
     }
     return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude;
-  }
-
-  set experimentalCameraLatitude(latitude: number | null) {
-    this.#config.attributes["experimental-camera-latitude"].setValue(latitude);
-    if (this.#hasCamera() && latitude !== null) {
-      (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude = latitude;
-      this.viewerElems[0].scheduleRender();
-      this.viewerElems[1]?.scheduleRender();
-    }
-  }
-
-  get experimentalCameraLatitude(): number | null {
-    if (
-      this.#config.attributes["experimental-camera-latitude"].value !== null
-    ) {
-      return this.#config.attributes["experimental-camera-latitude"].value;
-    }
-    if (!this.#hasCamera()) {
-      return null;
-    }
-    return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude;
   }
 
   set viewerLink(viewerLinkPage: ViewerLinkPage) {

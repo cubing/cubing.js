@@ -84,8 +84,8 @@ for (const [propName, attrName, valueMap] of enumOptions) {
 }
 
 const numberOptions: [string, string, number][] = [
-  ["experimentalCameraLongitude", "experimental-camera-longitude", 0],
   ["experimentalCameraLatitude", "experimental-camera-latitude", 0],
+  ["experimentalCameraLongitude", "experimental-camera-longitude", 0],
 ];
 
 for (const [propName, attrName, alg] of numberOptions) {

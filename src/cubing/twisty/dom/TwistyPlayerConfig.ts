@@ -1,4 +1,3 @@
-import { PerspectiveCamera, Vector3 } from "three";
 import type { Alg } from "../../alg";
 import {
   AlgAttribute,
@@ -6,30 +5,12 @@ import {
   StringEnumAttribute,
 } from "./element/ElementConfig";
 import type { TwistyPlayer } from "./TwistyPlayer";
-import {
-  OrbitCoordinates,
-  TwistyOrbitControls,
-} from "./viewers/TwistyOrbitControls";
+import { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
-const DEFAULT_CAMERA_Z = 5;
-// Golden ratio is perfect for FTO and Megaminx.
-const DEFAULT_CAMERA_Y = DEFAULT_CAMERA_Z * (2 / (1 + Math.sqrt(5)));
-
-export const centeredCameraPosition = new Vector3(
-  0,
-  DEFAULT_CAMERA_Y,
-  DEFAULT_CAMERA_Z,
-);
-
-// TODO
-export const megaminxCameraPosition = centeredCameraPosition
-  .clone()
-  .multiplyScalar(1.15);
-export const cubeCameraPosition = new Vector3(3, 4, 5).multiplyScalar(0.8);
-export const cornerCameraPosition = new Vector3(4, 4, 4);
-export const pyraminxCameraPosition = new Vector3(0, 2.5, 5); // TODO: center puzzle in frame, use x=0 but increase y
-
+// const DEFAULT_CAMERA_Z = 5;
+// // Golden ratio is perfect for FTO and Megaminx.
+// const DEFAULT_CAMERA_Y = DEFAULT_CAMERA_Z * (2 / (1 + Math.sqrt(5)));
 export const centeredCameraOrbitCoordinates: OrbitCoordinates = {
   latitude: 31.717474411461005,
   longitude: 0,
@@ -59,18 +40,6 @@ export const cornerCameraOrbitCoordinates: OrbitCoordinates = {
   longitude: 45,
   distance: 6.928203230275509,
 };
-
-const camera = new PerspectiveCamera();
-camera.position.copy(pyraminxCameraPosition);
-camera.lookAt(0, 0, 0);
-const controls = new TwistyOrbitControls(
-  camera,
-  document.createElement("canvas"),
-  () => {},
-);
-console.log(controls.latitude);
-console.log(controls.longitude);
-console.log(controls.distance);
 
 // TODO
 export function defaultCameraOrbitCoordinates(): OrbitCoordinates {
@@ -222,8 +191,8 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 
   // 3D config
   "back-view": StringEnumAttribute<BackViewLayout>;
-  "experimental-camera-longitude": RangedFloatAttribute;
   "experimental-camera-latitude": RangedFloatAttribute;
+  "experimental-camera-longitude": RangedFloatAttribute;
 
   // Interaction
   "viewer-link": StringEnumAttribute<ViewerLinkPage>;
@@ -243,8 +212,8 @@ export interface TwistyPlayerConfigValues {
   controlPanel: ControlsLocation;
 
   backView: BackViewLayout;
-  experimentalCameraLongitude: number;
   experimentalCameraLatitude: number;
+  experimentalCameraLongitude: number;
 
   viewerLink: ViewerLinkPage;
 }
@@ -268,8 +237,8 @@ const twistyPlayerAttributeMap: Record<
   "control-panel": "controlPanel",
 
   "back-view": "backView",
-  "experimental-camera-longitude": "experimentalCameraLongitude",
   "experimental-camera-latitude": "experimentalCameraLatitude",
+  "experimental-camera-longitude": "experimentalCameraLongitude",
 
   "viewer-link": "viewerLink",
 };
@@ -317,12 +286,6 @@ export class TwistyPlayerConfig {
         backViewLayouts,
         initialValues["backView"],
       ),
-      "experimental-camera-longitude": new RangedFloatAttribute(
-        null,
-        -180,
-        180,
-        initialValues["experimentalCameraLongitude"],
-      ),
       "experimental-camera-latitude": new RangedFloatAttribute(
         null,
         -90,
@@ -332,6 +295,12 @@ export class TwistyPlayerConfig {
       "viewer-link": new StringEnumAttribute(
         viewerLinkPages,
         initialValues.viewerLink,
+      ),
+      "experimental-camera-longitude": new RangedFloatAttribute(
+        null,
+        -180,
+        180,
+        initialValues["experimentalCameraLongitude"],
       ),
     };
   }
