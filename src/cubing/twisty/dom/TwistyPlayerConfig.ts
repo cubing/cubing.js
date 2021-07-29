@@ -30,14 +30,38 @@ export const cubeCameraPosition = new Vector3(3, 4, 5).multiplyScalar(0.8);
 export const cornerCameraPosition = new Vector3(4, 4, 4);
 export const pyraminxCameraPosition = new Vector3(0, 2.5, 5); // TODO: center puzzle in frame, use x=0 but increase y
 
+export const centeredCameraOrbitCoordinates: OrbitCoordinates = {
+  longitude: 31.717474411461005,
+  latitude: 0,
+  distance: 5.877852522924731,
+};
+
 export const cubeCameraOrbitCoordinates: OrbitCoordinates = {
   longitude: 34.44990198795349,
   latitude: 30.96375653207353,
   distance: 5.656854249492381,
 };
 
+export const megaminxCameraOrbitCoordinates: OrbitCoordinates = {
+  longitude: 31.71747441146099,
+  latitude: 0,
+  distance: 6.759530401363441,
+};
+
+export const pyraminxCameraOrbitCoordinates: OrbitCoordinates = {
+  longitude: 26.56505117707799,
+  latitude: 0,
+  distance: 5.5901699437494745,
+};
+
+export const cornerCameraOrbitCoordinates: OrbitCoordinates = {
+  longitude: 35.264389682754654,
+  latitude: 45,
+  distance: 6.928203230275509,
+};
+
 const camera = new PerspectiveCamera();
-camera.position.copy(cubeCameraPosition);
+camera.position.copy(centeredCameraPosition);
 camera.lookAt(0, 0, 0);
 const controls = new TwistyOrbitControls(
   camera,

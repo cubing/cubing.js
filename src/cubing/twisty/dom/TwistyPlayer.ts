@@ -1,4 +1,3 @@
-import type { Vector3 } from "three";
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import { countMoves } from "../../notation"; // TODO
@@ -29,15 +28,14 @@ import { customElementsShim } from "./element/node-custom-element-shims";
 import { twistyPlayerCSS } from "./TwistyPlayer.css_";
 import {
   BackgroundTheme,
-  centeredCameraPosition,
+  centeredCameraOrbitCoordinates,
   ControlsLocation,
   cubeCameraOrbitCoordinates,
-  cubeCameraPosition,
   ExperimentalStickering,
   HintFaceletStyle,
-  megaminxCameraPosition,
+  megaminxCameraOrbitCoordinates,
   PuzzleID,
-  pyraminxCameraPosition,
+  pyraminxCameraOrbitCoordinates,
   SetupToLocation,
   TwistyPlayerConfig,
   TwistyPlayerInitialConfig,
@@ -395,13 +393,13 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
     switch (this.puzzle) {
       case "megaminx":
-        coords = megaminxCameraPosition;
+        coords = megaminxCameraOrbitCoordinates;
       case "pyraminx":
-        coords = pyraminxCameraPosition;
+        coords = pyraminxCameraOrbitCoordinates;
       case "skewb":
-        coords = cubeCameraPosition;
+        coords = cubeCameraOrbitCoordinates;
     }
-    coords = centeredCameraPosition;
+    coords = centeredCameraOrbitCoordinates;
 
     return {
       latitude: this.experimentalCameraLatitude ?? coords.latitude,
@@ -572,9 +570,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.scene = new Twisty3DScene();
     const mainViewer = new Twisty3DCanvas(this.scene, {
-      experimentalCameraLongitude:
-        this.experimentalCameraLongitude ?? undefined,
-      experimentalCameraLatitude: this.experimentalCameraLatitude ?? undefined,
+      orbitCoordinates: this.#derivedCameraOrbitCoordinates(),
     });
     this.viewerElems.push(mainViewer);
     this.#viewerWrapper.addElement(mainViewer);
@@ -790,9 +786,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
 
     const backViewer = new Twisty3DCanvas(this.scene!, {
-      experimentalCameraLongitude:
-        this.experimentalCameraLongitude ?? undefined,
-      experimentalCameraLatitude: this.experimentalCameraLatitude ?? undefined,
+      orbitCoordinates: this.#derivedCameraOrbitCoordinates(),
       negateCameraPosition: true,
     });
     this.viewerElems.push(backViewer);

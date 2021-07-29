@@ -14,7 +14,11 @@ const WOBBLE = 0.2;
 
 const scene = new Twisty3DScene();
 const canvas = new Twisty3DCanvas(scene, {
-  experimentalCameraLatitude: 90, //new Vector3(0, 24, 0),
+  orbitCoordinates: {
+    latitude: 90,
+    longitude: 0,
+    distance: 24,
+  },
 });
 canvas.camera.position.y = 24;
 canvas.camera.far = 100; // Document this for others.

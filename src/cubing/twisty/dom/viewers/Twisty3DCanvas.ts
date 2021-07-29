@@ -4,7 +4,7 @@ import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { pixelRatio } from "./canvas";
 import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css_";
-import { TwistyOrbitControls } from "./TwistyOrbitControls";
+import { OrbitCoordinates, TwistyOrbitControls } from "./TwistyOrbitControls";
 import type { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
@@ -61,8 +61,7 @@ export class Twisty3DCanvas
   constructor(
     scene?: Twisty3DScene,
     options: {
-      experimentalCameraLongitude?: number;
-      experimentalCameraLatitude?: number;
+      orbitCoordinates?: OrbitCoordinates;
       negateCameraPosition?: boolean;
     } = {},
   ) {
@@ -99,11 +98,11 @@ export class Twisty3DCanvas
       this.canvas,
       this.scheduleRender.bind(this),
     );
-    if (options.experimentalCameraLongitude) {
-      this.orbitControls.longitude = options.experimentalCameraLongitude;
+    if (options.orbitCoordinates) {
+      this.orbitControls.latitude = options.orbitCoordinates?.latitude;
     }
-    if (options.experimentalCameraLatitude) {
-      this.orbitControls.latitude = options.experimentalCameraLatitude;
+    if (options.orbitCoordinates) {
+      this.orbitControls.longitude = options.orbitCoordinates.longitude;
     }
     if (options.negateCameraPosition) {
       this.camera.position.multiplyScalar(-1);
