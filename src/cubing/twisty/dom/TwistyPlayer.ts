@@ -319,14 +319,37 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["back-view"].value as BackViewLayout;
   }
 
+  #hasCamera(): boolean {
+    return (
+      this.viewerElems[0] &&
+      ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
+    );
+  }
+
+  set cameraLongitude(longitude: number) {
+    if (this.#hasCamera()) {
+      console.log("setting longitude", longitude);
+      (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude =
+        longitude;
+      this.viewerElems[0].scheduleRender();
+      this.viewerElems[1]?.scheduleRender();
+    }
+  }
+
+  set cameraLatitude(latitude: number) {
+    if (this.#hasCamera()) {
+      console.log("setting latitude", latitude);
+      (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude = latitude;
+      this.viewerElems[0].scheduleRender();
+      this.viewerElems[1]?.scheduleRender();
+    }
+  }
+
   set experimentalCameraPosition(cameraPosition: Vector3 | null) {
     this.#config.attributes["experimental-camera-position"].setValue(
       cameraPosition,
     );
-    if (
-      this.viewerElems &&
-      ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
-    ) {
+    if (this.#hasCamera()) {
       (this.viewerElems[0] as Twisty3DCanvas)?.camera.position.copy(
         this.effectiveCameraPosition,
       );
@@ -334,7 +357,7 @@ export class TwistyPlayer extends ManagedCustomElement {
         new Vector3(0, 0, 0),
       );
       this.viewerElems[0]?.scheduleRender();
-      // Back view may or may not exist.
+      // Back view may or may not exist.z
       (this.viewerElems[1] as Twisty3DCanvas)?.camera.position
         .copy(this.effectiveCameraPosition)
         .multiplyScalar(-1);

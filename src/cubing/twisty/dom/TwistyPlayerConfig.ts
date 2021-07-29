@@ -2,6 +2,7 @@ import { Vector3 } from "three";
 import type { Alg } from "../../alg";
 import {
   AlgAttribute,
+  RangedFloatAttribute,
   StringEnumAttribute,
   Vector3Attribute,
 } from "./element/ElementConfig";
@@ -160,6 +161,8 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   // 3D config
   "back-view": StringEnumAttribute<BackViewLayout>;
   "experimental-camera-position": Vector3Attribute;
+  "camera-longitude": RangedFloatAttribute;
+  "camera-latitude": RangedFloatAttribute;
 
   // Interaction
   "viewer-link": StringEnumAttribute<ViewerLinkPage>;
@@ -180,6 +183,8 @@ export interface TwistyPlayerConfigValues {
 
   backView: BackViewLayout;
   experimentalCameraPosition: Vector3;
+  cameraLongitude: number;
+  cameraLatitude: number;
 
   viewerLink: ViewerLinkPage;
 }
@@ -204,6 +209,8 @@ const twistyPlayerAttributeMap: Record<
 
   "back-view": "backView",
   "experimental-camera-position": "experimentalCameraPosition",
+  "camera-longitude": "cameraLongitude",
+  "camera-latitude": "cameraLatitude",
 
   "viewer-link": "viewerLink",
 };
@@ -254,6 +261,18 @@ export class TwistyPlayerConfig {
       "experimental-camera-position": new Vector3Attribute(
         null,
         initialValues["experimentalCameraPosition"],
+      ),
+      "camera-longitude": new RangedFloatAttribute(
+        null,
+        -180,
+        180,
+        initialValues["cameraLongitude"],
+      ),
+      "camera-latitude": new RangedFloatAttribute(
+        null,
+        -90,
+        90,
+        initialValues["cameraLatitude"],
       ),
       "viewer-link": new StringEnumAttribute(
         viewerLinkPages,

@@ -1,4 +1,5 @@
 import { Camera, Spherical, Vector3 } from "three";
+import { TAU } from "../../3D/TAU";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 
 // Buffer at the end values of the latitude (phi), to prevent gymbal lock.
@@ -71,6 +72,45 @@ class Inertia {
 
 // TODO: change mouse cursor while moving.
 export class TwistyOrbitControls {
+  // TODO: should we store as lat/long directly and stick to more rounded values in degrees?
+  #spherical: Spherical = new Spherical();
+  // longitude: number;
+  // latitude: number;
+  // altitude: number;
+
+  set longitude(newLongitude: number) {
+    this.#pullFromCamera();
+    console.log("newLong", newLongitude);
+    this.#spherical.theta = (newLongitude / 360) * TAU;
+    console.log(this.#spherical);
+    this.#propagateSpherical();
+  }
+
+  // TODO: Wrap into [-180, 180]
+  get longitude(): number {
+    return (this.#spherical.phi / TAU) * 360;
+  }
+
+  set latitude(newLatitude: number) {
+    this.#pullFromCamera();
+    this.#spherical.phi = ((90 - newLatitude) / 360) * TAU;
+    this.#propagateSpherical();
+  }
+
+  get latitude(): number {
+    return 90 - (this.#spherical.phi / TAU) * 360;
+  }
+
+  set altitude(newAltitude: number) {
+    this.#pullFromCamera();
+    this.#spherical.radius = newAltitude;
+    this.#propagateSpherical();
+  }
+
+  get altitude(): number {
+    return this.#spherical.radius;
+  }
+
   /** @deprecated */
   experimentalInertia: boolean = INERTIA_DEFAULT;
   /** @deprecated */
@@ -84,8 +124,6 @@ export class TwistyOrbitControls {
   private onMouseEndBound = this.onMouseEnd.bind(this);
   private onTouchMoveBound = this.onTouchMove.bind(this);
   private onTouchEndBound = this.onTouchEnd.bind(this);
-  // Variable for temporary use, to prevent reallocation.
-  private tempSpherical: Spherical = new Spherical();
   private lastTouchTimestamp: number = 0;
   private lastTouchMoveMomentumX: number = 0;
   private lastTouchMoveMomentumY: number = 0;
@@ -98,6 +136,7 @@ export class TwistyOrbitControls {
     private canvas: HTMLCanvasElement,
     private scheduleRender: () => void,
   ) {
+    this.#spherical.setFromVector3(camera.position);
     canvas.addEventListener("mousedown", this.onMouseStart.bind(this));
     canvas.addEventListener("touchstart", this.onTouchStart.bind(this));
   }
@@ -225,22 +264,29 @@ export class TwistyOrbitControls {
   onMove(movementX: number, movementY: number): void {
     // TODO: optimize, e.g. by caching or using the spherical coordinates
     // directly if they are still fresh.
-    this.tempSpherical.setFromVector3(this.camera.position);
 
-    this.tempSpherical.theta += -2 * movementX;
-    this.tempSpherical.phi += -2 * movementY;
+    this.#pullFromCamera();
+
+    this.#spherical.theta += -2 * movementX;
+    this.#spherical.phi += -2 * movementY;
     if (this.experimentalLatitudeLimits) {
-      this.tempSpherical.phi = Math.max(this.tempSpherical.phi, Math.PI * 0.3);
-      this.tempSpherical.phi = Math.min(this.tempSpherical.phi, Math.PI * 0.7);
+      this.#spherical.phi = Math.max(this.#spherical.phi, Math.PI * 0.3); // TODO: Arctic circle: 1/6
+      this.#spherical.phi = Math.min(this.#spherical.phi, Math.PI * 0.7); // TODO: Antarctic circle: 5/6
     } else {
-      this.tempSpherical.phi = Math.max(this.tempSpherical.phi, EPSILON);
-      this.tempSpherical.phi = Math.min(
-        this.tempSpherical.phi,
-        Math.PI - EPSILON,
-      );
+      this.#spherical.phi = Math.max(this.#spherical.phi, EPSILON);
+      this.#spherical.phi = Math.min(this.#spherical.phi, Math.PI - EPSILON);
     }
+    this.#propagateSpherical();
+  }
 
-    this.camera.position.setFromSpherical(this.tempSpherical);
+  #pullFromCamera(): void {
+    // TODO: Turn `this.#spherical` into the source of truth instead.
+    this.#spherical.setFromVector3(this.camera.position);
+  }
+
+  #propagateSpherical(): void {
+    console.log(this.#spherical);
+    this.camera.position.setFromSpherical(this.#spherical);
     this.camera.lookAt(new Vector3(0, 0, 0));
     this.experimentalHasBeenMoved = true;
 

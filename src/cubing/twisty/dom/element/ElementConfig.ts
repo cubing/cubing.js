@@ -180,3 +180,51 @@ export class Vector3Attribute {
     return v ? `[${v.x}, ${v.y}, ${v.z}]` : ""; // TODO: empty string is not null
   }
 }
+
+export class RangedFloatAttribute {
+  string: string;
+  value: number | null;
+  #defaultValue: number | null;
+  constructor(
+    defaultValue: number | null,
+    private minValue: number,
+    private maxValue: number,
+    initialValue?: number | null,
+  ) {
+    this.#defaultValue =
+      defaultValue === null ? null : this.#clampValue(defaultValue);
+    this.setValue(initialValue ?? this.defaultValue());
+  }
+
+  #clampValue(val: number) {
+    return Math.max(Math.min(val, this.maxValue), this.minValue);
+  }
+
+  // Return value indicates if the attribute changed.
+  setString(str: string): boolean {
+    return this.setValue(str === "" ? null : this.toValue(str)); // TODO: test empty string
+  }
+
+  // Return value indicates if the attribute changed.
+  setValue(val: number | null): boolean {
+    const str = this.toString(val);
+    if (this.string === str) {
+      return false;
+    }
+    this.string = str;
+    this.value = val;
+    return true;
+  }
+
+  private defaultValue(): number | null {
+    return this.#defaultValue;
+  }
+
+  private toValue(s: string): number | null {
+    return parseFloat(s);
+  }
+
+  private toString(v: number | null): string {
+    return v === null ? "" : v.toString();
+  }
+}

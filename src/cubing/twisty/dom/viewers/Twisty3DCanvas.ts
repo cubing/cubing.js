@@ -45,7 +45,7 @@ export class Twisty3DCanvas
   public canvas: HTMLCanvasElement;
   public camera: PerspectiveCamera;
   private legacyExperimentalShift: number = 0;
-  private orbitControls: TwistyOrbitControls;
+  orbitControls: TwistyOrbitControls;
   private scheduler = new RenderScheduler(this.render.bind(this));
   private resizePending: boolean = false;
 
