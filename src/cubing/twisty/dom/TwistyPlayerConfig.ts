@@ -4,7 +4,6 @@ import {
   AlgAttribute,
   RangedFloatAttribute,
   StringEnumAttribute,
-  Vector3Attribute,
 } from "./element/ElementConfig";
 import type { TwistyPlayer } from "./TwistyPlayer";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
@@ -160,7 +159,6 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 
   // 3D config
   "back-view": StringEnumAttribute<BackViewLayout>;
-  "experimental-camera-position": Vector3Attribute;
   "experimental-camera-longitude": RangedFloatAttribute;
   "experimental-camera-latitude": RangedFloatAttribute;
 
@@ -182,7 +180,6 @@ export interface TwistyPlayerConfigValues {
   controlPanel: ControlsLocation;
 
   backView: BackViewLayout;
-  experimentalCameraPosition: Vector3;
   experimentalCameraLongitude: number;
   experimentalCameraLatitude: number;
 
@@ -208,7 +205,6 @@ const twistyPlayerAttributeMap: Record<
   "control-panel": "controlPanel",
 
   "back-view": "backView",
-  "experimental-camera-position": "experimentalCameraPosition",
   "experimental-camera-longitude": "experimentalCameraLongitude",
   "experimental-camera-latitude": "experimentalCameraLatitude",
 
@@ -257,10 +253,6 @@ export class TwistyPlayerConfig {
       "back-view": new StringEnumAttribute(
         backViewLayouts,
         initialValues["backView"],
-      ),
-      "experimental-camera-position": new Vector3Attribute(
-        null,
-        initialValues["experimentalCameraPosition"],
       ),
       "experimental-camera-longitude": new RangedFloatAttribute(
         null,

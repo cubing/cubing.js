@@ -42,19 +42,6 @@ for (const [propName, attrName, alg] of algOptions) {
   update();
 }
 
-// // Puzzle
-// "puzzle": StringEnumAttribute<PuzzleID>;
-// "visualization": StringEnumAttribute<VisualizationFormat>;
-// "hint-facelets": StringEnumAttribute<HintFaceletStyle>;
-// "experimental-stickering": StringEnumAttribute<ExperimentalStickering>;
-
-// // Background
-// "background": StringEnumAttribute<BackgroundTheme>;
-// "control-panel": StringEnumAttribute<ControlsLocation>;
-
-// // 3D config
-// "back-view": StringEnumAttribute<BackViewLayout>;
-// "experimental-camera-position": Vector3Attribute;
 const enumOptions: [string, string, Record<string, any>][] = [
   ["experimentalSetupAnchor", "experimental-setup-anchor", setupToLocations],
   ["puzzle", "puzzle", puzzleIDs],

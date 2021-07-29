@@ -61,7 +61,8 @@ export class Twisty3DCanvas
   constructor(
     scene?: Twisty3DScene,
     options: {
-      experimentalCameraPosition?: Vector3;
+      experimentalCameraLongitude?: number;
+      experimentalCameraLatitude?: number;
       negateCameraPosition?: boolean;
     } = {},
   ) {
@@ -91,18 +92,22 @@ export class Twisty3DCanvas
       0.1,
       20,
     );
-    this.camera.position.copy(
-      options.experimentalCameraPosition ?? new Vector3(2, 4, 4),
-    );
-    if (options.negateCameraPosition) {
-      this.camera.position.multiplyScalar(-1);
-    }
+    this.camera.position.copy(new Vector3(2, 4, 4));
     this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
     this.orbitControls = new TwistyOrbitControls(
       this.camera,
       this.canvas,
       this.scheduleRender.bind(this),
     );
+    if (options.experimentalCameraLongitude) {
+      this.orbitControls.longitude = options.experimentalCameraLongitude;
+    }
+    if (options.experimentalCameraLatitude) {
+      this.orbitControls.latitude = options.experimentalCameraLatitude;
+    }
+    if (options.negateCameraPosition) {
+      this.camera.position.multiplyScalar(-1);
+    }
 
     const observer = new ResizeObserver(this.onResize.bind(this));
     observer.observe(this.contentWrapper);

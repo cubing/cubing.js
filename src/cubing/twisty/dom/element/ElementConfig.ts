@@ -132,55 +132,6 @@ export class StringFakeEnumAttribute<E extends string> {
   // }
 }
 
-export class Vector3Attribute {
-  string: string;
-  value: Vector3 | null;
-  #defaultValue: Vector3 | null;
-  constructor(defaultValue: Vector3 | null, initialValue?: Vector3 | null) {
-    this.#defaultValue = defaultValue;
-    this.setValue(initialValue ?? this.defaultValue());
-  }
-
-  // Return value indicates if the attribute changed.
-  setString(str: string): boolean {
-    return this.setValue(str === "" ? null : this.toValue(str)); // TODO: test empty string
-  }
-
-  // Return value indicates if the attribute changed.
-  setValue(val: Vector3 | null): boolean {
-    const str = this.toString(val);
-    if (this.string === str) {
-      return false;
-    }
-    this.string = str;
-    this.value = val;
-    return true;
-  }
-
-  private defaultValue(): Vector3 | null {
-    return this.#defaultValue;
-  }
-
-  private toValue(s: string): Vector3 | null {
-    if (!s.startsWith("[")) {
-      throw new Error("TODO");
-    }
-    if (!s.endsWith("]")) {
-      throw new Error("TODO");
-    }
-    const coords = s.slice(1, s.length - 1).split(",");
-    if (coords.length !== 3) {
-      throw new Error("TODO");
-    }
-    const [x, y, z] = coords.map((c) => parseFloat(c));
-    return new Vector3(x, y, z);
-  }
-
-  private toString(v: Vector3 | null): string {
-    return v ? `[${v.x}, ${v.y}, ${v.z}]` : ""; // TODO: empty string is not null
-  }
-}
-
 export class RangedFloatAttribute {
   string: string;
   value: number | null;

@@ -1,4 +1,3 @@
-import { Vector3 } from "three";
 import { Alg } from "../../../../cubing/alg";
 import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
 import {
@@ -141,16 +140,16 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
-  document.querySelector("#experimental-camera-position")!.appendChild(
+  document.querySelector("#experimental-camera-longitude")!.appendChild(
     new TwistyPlayer({
       alg: "R U R' U R U2' R'",
-      experimentalCameraPosition: new Vector3(-4, 4, 0),
+      experimentalCameraLongitude: 45,
     }),
   );
   const tw = new TwistyPlayer();
-  document.querySelector("#experimental-camera-position")!.appendChild(tw);
+  document.querySelector("#experimental-camera-longitude")!.appendChild(tw);
   tw.alg = new Alg("R U R' U R U2' R'");
-  tw.experimentalCameraPosition = new Vector3(-4, 4, 0);
+  tw.experimentalCameraLongitude = 45;
 }
 
 {

@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import type { Vector3 } from "three";
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import { countMoves } from "../../notation"; // TODO
@@ -327,6 +327,9 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set experimentalCameraLongitude(longitude: number) {
+    this.#config.attributes["experimental-camera-longitude"].setValue(
+      longitude,
+    );
     if (this.#hasCamera()) {
       (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude =
         longitude;
@@ -336,6 +339,11 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   get experimentalCameraLongitude(): number {
+    if (
+      this.#config.attributes["experimental-camera-longitude"].value !== null
+    ) {
+      return this.#config.attributes["experimental-camera-longitude"].value;
+    }
     if (!this.#hasCamera()) {
       return 0; // TODO
     }
@@ -343,6 +351,7 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   set experimentalCameraLatitude(latitude: number) {
+    this.#config.attributes["experimental-camera-latitude"].setValue(latitude);
     if (this.#hasCamera()) {
       (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude = latitude;
       this.viewerElems[0].scheduleRender();
@@ -351,37 +360,15 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 
   get experimentalCameraLatitude(): number {
+    if (
+      this.#config.attributes["experimental-camera-latitude"].value !== null
+    ) {
+      return this.#config.attributes["experimental-camera-latitude"].value;
+    }
     if (!this.#hasCamera()) {
       return 0; // TODO
     }
     return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude;
-  }
-
-  set experimentalCameraPosition(cameraPosition: Vector3 | null) {
-    this.#config.attributes["experimental-camera-position"].setValue(
-      cameraPosition,
-    );
-    if (this.#hasCamera()) {
-      (this.viewerElems[0] as Twisty3DCanvas)?.camera.position.copy(
-        this.effectiveCameraPosition,
-      );
-      (this.viewerElems[0] as Twisty3DCanvas)?.camera.lookAt(
-        new Vector3(0, 0, 0),
-      );
-      this.viewerElems[0]?.scheduleRender();
-      // Back view may or may not exist.z
-      (this.viewerElems[1] as Twisty3DCanvas)?.camera.position
-        .copy(this.effectiveCameraPosition)
-        .multiplyScalar(-1);
-      (this.viewerElems[1] as Twisty3DCanvas)?.camera.lookAt(
-        new Vector3(0, 0, 0),
-      );
-      this.viewerElems[1]?.scheduleRender();
-    }
-  }
-
-  get experimentalCameraPosition(): Vector3 | null {
-    return this.#config.attributes["experimental-camera-position"].value;
   }
 
   set viewerLink(viewerLinkPage: ViewerLinkPage) {
@@ -396,10 +383,6 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   get viewerLink(): ViewerLinkPage {
     return this.#config.attributes["viewer-link"].value;
-  }
-
-  get effectiveCameraPosition(): Vector3 {
-    return this.experimentalCameraPosition ?? this.defaultCameraPosition;
   }
 
   // TODO
@@ -580,7 +563,9 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.scene = new Twisty3DScene();
     const mainViewer = new Twisty3DCanvas(this.scene, {
-      experimentalCameraPosition: this.effectiveCameraPosition,
+      experimentalCameraLongitude:
+        this.experimentalCameraLongitude ?? undefined,
+      experimentalCameraLatitude: this.experimentalCameraLatitude ?? undefined,
     });
     this.viewerElems.push(mainViewer);
     this.#viewerWrapper.addElement(mainViewer);
@@ -796,7 +781,9 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
 
     const backViewer = new Twisty3DCanvas(this.scene!, {
-      experimentalCameraPosition: this.effectiveCameraPosition,
+      experimentalCameraLongitude:
+        this.experimentalCameraLongitude ?? undefined,
+      experimentalCameraLatitude: this.experimentalCameraLatitude ?? undefined,
       negateCameraPosition: true,
     });
     this.viewerElems.push(backViewer);
