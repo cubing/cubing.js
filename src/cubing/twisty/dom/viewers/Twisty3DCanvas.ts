@@ -92,7 +92,6 @@ export class Twisty3DCanvas
       20,
     );
     this.camera.position.copy(new Vector3(2, 4, 4));
-    this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
     this.orbitControls = new TwistyOrbitControls(
       this.camera,
       this.canvas,
@@ -110,6 +109,7 @@ export class Twisty3DCanvas
     if (options.negateCameraPosition) {
       this.camera.position.multiplyScalar(-1);
     }
+    this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
 
     const observer = new ResizeObserver(this.onResize.bind(this));
     observer.observe(this.contentWrapper);
