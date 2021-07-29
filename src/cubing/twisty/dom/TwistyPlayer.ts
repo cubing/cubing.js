@@ -326,11 +326,11 @@ export class TwistyPlayer extends ManagedCustomElement {
     );
   }
 
-  set experimentalCameraLongitude(longitude: number) {
+  set experimentalCameraLongitude(longitude: number | null) {
     this.#config.attributes["experimental-camera-longitude"].setValue(
       longitude,
     );
-    if (this.#hasCamera()) {
+    if (this.#hasCamera() && longitude !== null) {
       (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude =
         longitude;
       this.viewerElems[0].scheduleRender();
@@ -338,35 +338,35 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
-  get experimentalCameraLongitude(): number {
+  get experimentalCameraLongitude(): number | null {
     if (
       this.#config.attributes["experimental-camera-longitude"].value !== null
     ) {
       return this.#config.attributes["experimental-camera-longitude"].value;
     }
     if (!this.#hasCamera()) {
-      return 0; // TODO
+      return null;
     }
     return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude;
   }
 
-  set experimentalCameraLatitude(latitude: number) {
+  set experimentalCameraLatitude(latitude: number | null) {
     this.#config.attributes["experimental-camera-latitude"].setValue(latitude);
-    if (this.#hasCamera()) {
+    if (this.#hasCamera() && latitude !== null) {
       (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude = latitude;
       this.viewerElems[0].scheduleRender();
       this.viewerElems[1]?.scheduleRender();
     }
   }
 
-  get experimentalCameraLatitude(): number {
+  get experimentalCameraLatitude(): number | null {
     if (
       this.#config.attributes["experimental-camera-latitude"].value !== null
     ) {
       return this.#config.attributes["experimental-camera-latitude"].value;
     }
     if (!this.#hasCamera()) {
-      return 0; // TODO
+      return null;
     }
     return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude;
   }
@@ -390,16 +390,23 @@ export class TwistyPlayer extends ManagedCustomElement {
     let coords: OrbitCoordinates;
     if (this.puzzle[1] === "x") {
       coords = cubeCameraOrbitCoordinates;
+    } else {
+      switch (this.puzzle) {
+        case "megaminx":
+          coords = megaminxCameraOrbitCoordinates;
+          break;
+        case "pyraminx":
+          coords = pyraminxCameraOrbitCoordinates;
+          break;
+        case "skewb":
+          coords = cubeCameraOrbitCoordinates;
+          break;
+        default:
+          coords = centeredCameraOrbitCoordinates;
+      }
     }
-    switch (this.puzzle) {
-      case "megaminx":
-        coords = megaminxCameraOrbitCoordinates;
-      case "pyraminx":
-        coords = pyraminxCameraOrbitCoordinates;
-      case "skewb":
-        coords = cubeCameraOrbitCoordinates;
-    }
-    coords = centeredCameraOrbitCoordinates;
+
+    console.log("coords", coords);
 
     return {
       latitude: this.experimentalCameraLatitude ?? coords.latitude,

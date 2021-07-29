@@ -104,6 +104,10 @@ export class Twisty3DCanvas
     if (options.orbitCoordinates) {
       this.orbitControls.longitude = options.orbitCoordinates.longitude;
     }
+    if (options.orbitCoordinates) {
+      this.orbitControls.distance = options.orbitCoordinates.distance;
+    }
+    console.log(options.orbitCoordinates);
     if (options.negateCameraPosition) {
       this.camera.position.multiplyScalar(-1);
     }
