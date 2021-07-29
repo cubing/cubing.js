@@ -110,15 +110,16 @@ for (const [propName, attrName, alg] of numberOptions) {
   const td2 = tr.appendChild(document.createElement("td"));
   const input = td2.appendChild(document.createElement("input"));
   input.value = alg.toString();
-  input.placeholder = "(none)";
+  input.type = "number";
+  input.placeholder = "(no value)";
+  input.value = "";
   const update = () => {
+    if (input.value === "") {
+      return;
+    }
     (twistyPlayer as any)[propName] = input.value;
   };
-  input.addEventListener("change", update);
+  input.addEventListener("input", update);
+  // input.addEventListener("change", update);
   input.addEventListener("keyup", update);
-  // update();
-  setTimeout(() => {
-    console.log(twistyPlayer, propName);
-    input.value = (twistyPlayer as any)[propName];
-  }, 100);
 }

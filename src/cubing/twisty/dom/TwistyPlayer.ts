@@ -328,7 +328,6 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   set experimentalCameraLongitude(longitude: number) {
     if (this.#hasCamera()) {
-      console.log("setting longitude", longitude);
       (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude =
         longitude;
       this.viewerElems[0].scheduleRender();
@@ -345,7 +344,6 @@ export class TwistyPlayer extends ManagedCustomElement {
 
   set experimentalCameraLatitude(latitude: number) {
     if (this.#hasCamera()) {
-      console.log("setting latitude", latitude);
       (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude = latitude;
       this.viewerElems[0].scheduleRender();
       this.viewerElems[1]?.scheduleRender();
