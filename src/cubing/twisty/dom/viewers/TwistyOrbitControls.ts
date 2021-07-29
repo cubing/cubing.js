@@ -80,15 +80,13 @@ export class TwistyOrbitControls {
 
   set longitude(newLongitude: number) {
     this.#pullFromCamera();
-    console.log("newLong", newLongitude);
     this.#spherical.theta = (newLongitude / 360) * TAU;
-    console.log(this.#spherical);
     this.#propagateSpherical();
   }
 
   // TODO: Wrap into [-180, 180]
   get longitude(): number {
-    return (this.#spherical.phi / TAU) * 360;
+    return (this.#spherical.theta / TAU) * 360;
   }
 
   set latitude(newLatitude: number) {
@@ -285,7 +283,6 @@ export class TwistyOrbitControls {
   }
 
   #propagateSpherical(): void {
-    console.log(this.#spherical);
     this.camera.position.setFromSpherical(this.#spherical);
     this.camera.lookAt(new Vector3(0, 0, 0));
     this.experimentalHasBeenMoved = true;
