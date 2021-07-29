@@ -336,7 +336,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
-  experimentalGetCameraLongitude(): number {
+  get cameraLongitude(): number {
     if (!this.#hasCamera()) {
       return 0; // TODO
     }
@@ -352,7 +352,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
   }
 
-  experimentalGetCameraLatitude(): number {
+  get cameraLatitude(): number {
     if (!this.#hasCamera()) {
       return 0; // TODO
     }

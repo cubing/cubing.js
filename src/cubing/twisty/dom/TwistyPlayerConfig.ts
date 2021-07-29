@@ -161,8 +161,8 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   // 3D config
   "back-view": StringEnumAttribute<BackViewLayout>;
   "experimental-camera-position": Vector3Attribute;
-  "camera-longitude": RangedFloatAttribute;
-  "camera-latitude": RangedFloatAttribute;
+  "experimental-camera-longitude": RangedFloatAttribute;
+  "experimental-camera-latitude": RangedFloatAttribute;
 
   // Interaction
   "viewer-link": StringEnumAttribute<ViewerLinkPage>;
@@ -183,8 +183,8 @@ export interface TwistyPlayerConfigValues {
 
   backView: BackViewLayout;
   experimentalCameraPosition: Vector3;
-  cameraLongitude: number;
-  cameraLatitude: number;
+  experimentalCameraLongitude: number;
+  experimentalCameraLatitude: number;
 
   viewerLink: ViewerLinkPage;
 }
@@ -209,8 +209,8 @@ const twistyPlayerAttributeMap: Record<
 
   "back-view": "backView",
   "experimental-camera-position": "experimentalCameraPosition",
-  "camera-longitude": "cameraLongitude",
-  "camera-latitude": "cameraLatitude",
+  "experimental-camera-longitude": "experimentalCameraLongitude",
+  "experimental-camera-latitude": "experimentalCameraLatitude",
 
   "viewer-link": "viewerLink",
 };
@@ -262,17 +262,17 @@ export class TwistyPlayerConfig {
         null,
         initialValues["experimentalCameraPosition"],
       ),
-      "camera-longitude": new RangedFloatAttribute(
+      "experimental-camera-longitude": new RangedFloatAttribute(
         null,
         -180,
         180,
-        initialValues["cameraLongitude"],
+        initialValues["experimentalCameraLongitude"],
       ),
-      "camera-latitude": new RangedFloatAttribute(
+      "experimental-camera-latitude": new RangedFloatAttribute(
         null,
         -90,
         90,
-        initialValues["cameraLatitude"],
+        initialValues["experimentalCameraLatitude"],
       ),
       "viewer-link": new StringEnumAttribute(
         viewerLinkPages,

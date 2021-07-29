@@ -95,3 +95,30 @@ for (const [propName, attrName, valueMap] of enumOptions) {
   });
   contentElem.append(document.createElement("br"));
 }
+
+const numberOptions: [string, string, number][] = [
+  ["experimentalCameraLongitude", "experimental-camera-longitude", 0],
+  ["experimentalCameraLatitude", "experimental-camera-latitude", 0],
+];
+
+for (const [propName, attrName, alg] of numberOptions) {
+  const tr = table.appendChild(document.createElement("tr"));
+
+  const td1 = tr.appendChild(document.createElement("td"));
+  td1.appendChild(document.createElement("code")).textContent = attrName;
+
+  const td2 = tr.appendChild(document.createElement("td"));
+  const input = td2.appendChild(document.createElement("input"));
+  input.value = alg.toString();
+  input.placeholder = "(none)";
+  const update = () => {
+    (twistyPlayer as any)[propName] = input.value;
+  };
+  input.addEventListener("change", update);
+  input.addEventListener("keyup", update);
+  // update();
+  setTimeout(() => {
+    console.log(twistyPlayer, propName);
+    input.value = (twistyPlayer as any)[propName];
+  }, 100);
+}
