@@ -82,6 +82,7 @@ class AxisInfo {
     public color: number,
     public dimColor: number,
     public hintOpacityScale: number, // TODO: make this work better across bright *and* dark backgrounds. Maybe tweak sticker compositing settings?
+    options?: { hintColor?: number; hintDimColor?: number },
   ) {
     // TODO: Make sticker material single-sided when cubie foundation is opaque?
     this.stickerMaterial = {
@@ -99,13 +100,13 @@ class AxisInfo {
     };
     this.hintStickerMaterial = {
       regular: new MeshBasicMaterial({
-        color,
+        color: options?.hintColor ?? color,
         side: BackSide,
         transparent: true,
         opacity: 0.5 * hintOpacityScale,
       }),
       dim: new MeshBasicMaterial({
-        color: dimColor,
+        color: options?.hintDimColor ?? color,
         side: BackSide,
         transparent: true,
         opacity: 0.5 * hintOpacityScale,
@@ -146,6 +147,7 @@ const axesInfo: AxisInfo[] = [
     0x0000ff,
     0x000088,
     0.75,
+    { hintColor: 0x0044ff, hintDimColor: 0x002288 },
   ),
   new AxisInfo(
     new Vector3(0, -1, 0),
