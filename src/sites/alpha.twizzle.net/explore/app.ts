@@ -27,6 +27,10 @@ import { TwistyPlayer } from "../../../cubing/twisty";
 import { countMoves } from "../../../cubing/notation";
 import { getURLParam, setURLParams } from "./url-params";
 import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
+import {
+  OrbitCoordinates,
+  positionToOrbitCoordinates,
+} from "../../../cubing/twisty/dom/viewers/TwistyOrbitControls";
 
 if (getURLParam("debugShowRenderStats")) {
   experimentalShowRenderStats(true);
@@ -47,8 +51,16 @@ let lastalgo: string = "";
 let scramble: number = 0;
 let stickerDat: StickerDat;
 const DEFAULT_CAMERA_DISTANCE = 5.5;
-let initialCameraPos: Vector3 = new Vector3(0.0, 0.0, DEFAULT_CAMERA_DISTANCE);
-let savedCameraPos: Vector3 = new Vector3(0.0, 0.0, 0.0);
+let initialCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: 0,
+  longitude: 0,
+  distance: DEFAULT_CAMERA_DISTANCE,
+};
+let savedCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: 0,
+  longitude: 0,
+  distance: DEFAULT_CAMERA_DISTANCE,
+};
 let haveSavedCamera = false;
 let lastShape: string = "";
 let nextShape: string = "";
@@ -207,15 +219,16 @@ function updateMoveCount(alg?: Alg): void {
 }
 
 function saveCamera(): void {
-  savedCameraPos = twisty.experimentalCameraPosition!.clone();
+  savedCameraOrbitCoordinates =
+    twisty.experimentalDerivedCameraOrbitCoordinates();
   haveSavedCamera = true;
 }
 //  This function is *not* idempotent when we save the
 //  camera position.
-function cameraPos(pg: PuzzleGeometry): Vector3 {
+function cameraCoords(pg: PuzzleGeometry): OrbitCoordinates {
   if (haveSavedCamera) {
     haveSavedCamera = false;
-    return savedCameraPos;
+    return savedCameraOrbitCoordinates;
   }
   const faceCount = pg.baseplanerot.length;
   let geoTowardsViewer = "?";
@@ -232,9 +245,13 @@ function cameraPos(pg: PuzzleGeometry): Vector3 {
   }
   const norm = pg.getGeoNormal(geoTowardsViewer);
   if (norm === undefined) {
-    return new Vector3(0, 0, DEFAULT_CAMERA_DISTANCE);
+    return positionToOrbitCoordinates(
+      new Vector3(0, 0, DEFAULT_CAMERA_DISTANCE),
+    );
   }
-  return new Vector3(...norm).multiplyScalar(DEFAULT_CAMERA_DISTANCE);
+  return positionToOrbitCoordinates(
+    new Vector3(...norm).multiplyScalar(DEFAULT_CAMERA_DISTANCE),
+  );
 }
 
 function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
@@ -261,7 +278,9 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
           alg: new Alg(),
           visualization: "PG3D",
           backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
-          experimentalCameraPosition: initialCameraPos,
+          experimentalCameraLatitude: initialCameraOrbitCoordinates.latitude,
+          experimentalCameraLongitude: initialCameraOrbitCoordinates.longitude,
+          // TODO: distance?
           viewerLink: "none",
         },
         legacyExperimentalPG3DViewConfig(),
@@ -280,6 +299,9 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
       // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
       setTimeout(() => {
+        twisty.experimentalSetCameraOrbitCoordinates(
+          initialCameraOrbitCoordinates,
+        );
         for (const twisty3DCanvas of twisty3DCanvases) {
           twisty3DCanvas.experimentalSetLatitudeLimits(false);
           twisty3DCanvas.canvas.addEventListener(
@@ -309,7 +331,10 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
     } else if (puzzleSelected) {
       await twisty.setCustomPuzzleGeometry(legacyExperimentalPG3DViewConfig());
       if (nextShape !== lastShape) {
-        twisty.experimentalCameraPosition = initialCameraPos;
+        twisty.experimentalCameraLatitude =
+          initialCameraOrbitCoordinates.latitude;
+        twisty.experimentalCameraLongitude =
+          initialCameraOrbitCoordinates.longitude;
         lastShape = nextShape;
       }
       puzzleSelected = false;
@@ -572,11 +597,13 @@ function checkchange_internal(): void {
       }
       const newStickerDat = pg.get3d();
       nextShape = p[0];
-      initialCameraPos = cameraPos(pg);
+      initialCameraOrbitCoordinates = cameraCoords(pg);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
       // Twisty constructor currently ignores initial camera position
       if (firstLoad) {
-        twisty.experimentalCameraPosition = initialCameraPos;
+        twisty.experimentalSetCameraOrbitCoordinates(
+          initialCameraOrbitCoordinates,
+        );
         twisty.timeline.jumpToEnd();
       }
       setpuzzleparams(descarg);

@@ -140,16 +140,29 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
+  document.querySelector("#experimental-camera-latitude")!.appendChild(
+    new TwistyPlayer({
+      alg: "R U R' U R U2' R'",
+      experimentalCameraLatitude: 0,
+    }),
+  );
+  const tw = new TwistyPlayer();
+  document.querySelector("#experimental-camera-latitude")!.appendChild(tw);
+  tw.alg = new Alg("R U R' U R U2' R'");
+  tw.experimentalCameraLatitude = 0;
+}
+
+{
   document.querySelector("#experimental-camera-longitude")!.appendChild(
     new TwistyPlayer({
       alg: "R U R' U R U2' R'",
-      experimentalCameraLongitude: 45,
+      experimentalCameraLongitude: 0,
     }),
   );
   const tw = new TwistyPlayer();
   document.querySelector("#experimental-camera-longitude")!.appendChild(tw);
   tw.alg = new Alg("R U R' U R U2' R'");
-  tw.experimentalCameraLongitude = 45;
+  tw.experimentalCameraLongitude = 0;
 }
 
 {

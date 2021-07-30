@@ -98,16 +98,17 @@ export class Twisty3DCanvas
       this.scheduleRender.bind(this),
     );
     if (options.orbitCoordinates) {
-      this.orbitControls.latitude = options.orbitCoordinates?.latitude;
+      this.orbitControls.latitude =
+        options.orbitCoordinates.latitude *
+        (options.negateCameraPosition ? -1 : 1);
     }
     if (options.orbitCoordinates) {
-      this.orbitControls.longitude = options.orbitCoordinates.longitude;
+      this.orbitControls.longitude =
+        options.orbitCoordinates.longitude +
+        (options.negateCameraPosition ? 180 : 0);
     }
     if (options.orbitCoordinates) {
       this.orbitControls.distance = options.orbitCoordinates.distance;
-    }
-    if (options.negateCameraPosition) {
-      this.camera.position.multiplyScalar(-1);
     }
     this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
 

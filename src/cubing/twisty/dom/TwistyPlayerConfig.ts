@@ -1,8 +1,10 @@
+import { Vector3 } from "three";
 import type { Alg } from "../../alg";
+import { DEGREES_PER_RADIAN } from "../3D/TAU";
 import {
   AlgAttribute,
   RangedFloatAttribute,
-  StringEnumAttribute
+  StringEnumAttribute,
 } from "./element/ElementConfig";
 import type { TwistyPlayer } from "./TwistyPlayer";
 import type { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
@@ -24,15 +26,15 @@ export const cubeCameraOrbitCoordinates: OrbitCoordinates = {
 };
 
 export const megaminxCameraOrbitCoordinates: OrbitCoordinates = {
-  latitude: 31.71747441146099,
+  latitude: Math.atan(1 / 2) * DEGREES_PER_RADIAN,
   longitude: 0,
-  distance: 6.759530401363441,
+  distance: 6.7,
 };
 
 export const pyraminxCameraOrbitCoordinates: OrbitCoordinates = {
   latitude: 26.56505117707799,
   longitude: 0,
-  distance: 5.5901699437494745,
+  distance: 6,
 };
 
 export const cornerCameraOrbitCoordinates: OrbitCoordinates = {
@@ -41,21 +43,28 @@ export const cornerCameraOrbitCoordinates: OrbitCoordinates = {
   distance: 6.928203230275509,
 };
 
+export const pyraminxLookAt = new Vector3(0, 1 / 6, 0);
+
 // TODO
-export function defaultCameraOrbitCoordinates(): OrbitCoordinates {
-  return cubeCameraOrbitCoordinates;
-  // if (this.puzzle[1] === "x") {
-  //   return cubeCameraPosition;
-  // }
-  // switch (this.puzzle) {
-  //   case "megaminx":
-  //     return megaminxCameraPosition;
-  //   case "pyraminx":
-  //     return pyraminxCameraPosition;
-  //   case "skewb":
-  //     return cubeCameraPosition;
-  // }
-  // return centeredCameraPosition;
+export function defaultCameraOrbitCoordinates(
+  puzzleID: PuzzleID,
+): OrbitCoordinates {
+  if (puzzleID[1] === "x") {
+    return cubeCameraOrbitCoordinates;
+  } else {
+    switch (puzzleID) {
+      case "megaminx":
+      case "gigaminx":
+        return megaminxCameraOrbitCoordinates;
+      case "pyraminx":
+      case "master_tetraminx":
+        return pyraminxCameraOrbitCoordinates;
+      case "skewb":
+        return cubeCameraOrbitCoordinates;
+      default:
+        return centeredCameraOrbitCoordinates;
+    }
+  }
 }
 
 // TODO: turn these maps into lists?

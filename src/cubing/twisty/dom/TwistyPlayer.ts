@@ -1,3 +1,4 @@
+import { Vector3 } from "three";
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { KPuzzleDefinition, Transformation } from "../../kpuzzle";
 import { countMoves } from "../../notation"; // TODO
@@ -28,14 +29,12 @@ import { customElementsShim } from "./element/node-custom-element-shims";
 import { twistyPlayerCSS } from "./TwistyPlayer.css_";
 import {
   BackgroundTheme,
-  centeredCameraOrbitCoordinates,
   ControlsLocation,
-  cubeCameraOrbitCoordinates,
+  defaultCameraOrbitCoordinates,
   ExperimentalStickering,
   HintFaceletStyle,
-  megaminxCameraOrbitCoordinates,
   PuzzleID,
-  pyraminxCameraOrbitCoordinates,
+  pyraminxLookAt,
   SetupToLocation,
   TwistyPlayerConfig,
   TwistyPlayerInitialConfig,
@@ -44,7 +43,10 @@ import {
 } from "./TwistyPlayerConfig";
 import { Twisty2DSVG, Twisty2DSVGOptions } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
-import type { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
+import type {
+  OrbitCoordinates,
+  TwistyOrbitControls,
+} from "./viewers/TwistyOrbitControls";
 import type { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import {
   BackViewLayout,
@@ -319,17 +321,20 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["back-view"].value as BackViewLayout;
   }
 
-  #hasCamera(): boolean {
-    return (
-      this.viewerElems[0] &&
-      ["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
-    );
+  #orbitControls(): TwistyOrbitControls | null {
+    if (
+      !["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
+    ) {
+      return null;
+    }
+    return (this.viewerElems[0] as Twisty3DCanvas)?.orbitControls ?? null;
   }
 
   set experimentalCameraLatitude(latitude: number | null) {
     this.#config.attributes["experimental-camera-latitude"].setValue(latitude);
-    if (this.#hasCamera() && latitude !== null) {
-      (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude = latitude;
+    const orbitControls = this.#orbitControls();
+    if (orbitControls && latitude !== null) {
+      orbitControls.latitude = latitude;
       this.viewerElems[0].scheduleRender();
       this.viewerElems[1]?.scheduleRender();
     }
@@ -341,19 +346,16 @@ export class TwistyPlayer extends ManagedCustomElement {
     ) {
       return this.#config.attributes["experimental-camera-latitude"].value;
     }
-    if (!this.#hasCamera()) {
-      return null;
-    }
-    return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.latitude;
+    return this.#orbitControls()?.latitude ?? null;
   }
 
   set experimentalCameraLongitude(longitude: number | null) {
     this.#config.attributes["experimental-camera-longitude"].setValue(
       longitude,
     );
-    if (this.#hasCamera() && longitude !== null) {
-      (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude =
-        longitude;
+    const orbitControls = this.#orbitControls();
+    if (orbitControls && longitude !== null) {
+      orbitControls.longitude = longitude;
       this.viewerElems[0].scheduleRender();
       this.viewerElems[1]?.scheduleRender();
     }
@@ -365,10 +367,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     ) {
       return this.#config.attributes["experimental-camera-longitude"].value;
     }
-    if (!this.#hasCamera()) {
-      return null;
-    }
-    return (this.viewerElems[0] as Twisty3DCanvas).orbitControls.longitude;
+    return this.#orbitControls()?.longitude ?? null;
   }
 
   set viewerLink(viewerLinkPage: ViewerLinkPage) {
@@ -385,32 +384,40 @@ export class TwistyPlayer extends ManagedCustomElement {
     return this.#config.attributes["viewer-link"].value;
   }
 
-  // TODO
-  #derivedCameraOrbitCoordinates(): OrbitCoordinates {
-    let coords: OrbitCoordinates;
-    if (this.puzzle[1] === "x") {
-      coords = cubeCameraOrbitCoordinates;
-    } else {
-      switch (this.puzzle) {
-        case "megaminx":
-          coords = megaminxCameraOrbitCoordinates;
-          break;
-        case "pyraminx":
-          coords = pyraminxCameraOrbitCoordinates;
-          break;
-        case "skewb":
-          coords = cubeCameraOrbitCoordinates;
-          break;
-        default:
-          coords = centeredCameraOrbitCoordinates;
-      }
+  /** @deprecated */
+  experimentalSetCameraOrbitCoordinates(coords: OrbitCoordinates): void {
+    this.experimentalCameraLatitude = coords.latitude;
+    this.experimentalCameraLongitude = coords.longitude;
+    const orbitControls = this.#orbitControls();
+    if (orbitControls) {
+      orbitControls.distance = coords.distance;
     }
+  }
+
+  /** @deprecated */
+  experimentalDerivedCameraOrbitCoordinates(): OrbitCoordinates {
+    let defaultCoordinatesForPuzzle = defaultCameraOrbitCoordinates(
+      this.puzzle,
+    );
 
     return {
-      latitude: this.experimentalCameraLatitude ?? coords.latitude,
-      longitude: this.experimentalCameraLongitude ?? coords.longitude,
-      distance: coords.distance, // TODO
+      latitude:
+        this.experimentalCameraLatitude ?? defaultCoordinatesForPuzzle.latitude,
+      longitude:
+        this.experimentalCameraLongitude ??
+        defaultCoordinatesForPuzzle.longitude,
+      distance: defaultCoordinatesForPuzzle.distance, // TODO
     };
+  }
+
+  #lookAt(): Vector3 {
+    switch (this.puzzle) {
+      case "pyraminx":
+      case "master_tetraminx":
+        return pyraminxLookAt;
+      default:
+        return new Vector3(0, 0, 0);
+    }
   }
 
   static get observedAttributes(): string[] {
@@ -575,7 +582,7 @@ export class TwistyPlayer extends ManagedCustomElement {
 
     this.scene = new Twisty3DScene();
     const mainViewer = new Twisty3DCanvas(this.scene, {
-      orbitCoordinates: this.#derivedCameraOrbitCoordinates(),
+      orbitCoordinates: this.experimentalDerivedCameraOrbitCoordinates(),
     });
     this.viewerElems.push(mainViewer);
     this.#viewerWrapper.addElement(mainViewer);
@@ -596,6 +603,10 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
     this.twisty3D = twisty3D;
     this.scene!.addTwisty3DPuzzle(twisty3D);
+    const orbitControls = this.#orbitControls();
+    if (orbitControls) {
+      orbitControls.lookAt(this.#lookAt());
+    }
   }
 
   #setCursor(cursor: AlgCursor): void {
@@ -791,7 +802,7 @@ export class TwistyPlayer extends ManagedCustomElement {
     }
 
     const backViewer = new Twisty3DCanvas(this.scene!, {
-      orbitCoordinates: this.#derivedCameraOrbitCoordinates(),
+      orbitCoordinates: this.experimentalDerivedCameraOrbitCoordinates(),
       negateCameraPosition: true,
     });
     this.viewerElems.push(backViewer);
