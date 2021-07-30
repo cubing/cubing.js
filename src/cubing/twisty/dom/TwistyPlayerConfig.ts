@@ -1,30 +1,71 @@
 import { Vector3 } from "three";
 import type { Alg } from "../../alg";
+import { DEGREES_PER_RADIAN } from "../3D/TAU";
 import {
   AlgAttribute,
+  RangedFloatAttribute,
   StringEnumAttribute,
-  Vector3Attribute,
 } from "./element/ElementConfig";
 import type { TwistyPlayer } from "./TwistyPlayer";
+import type { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
-const DEFAULT_CAMERA_Z = 5;
-// Golden ratio is perfect for FTO and Megaminx.
-const DEFAULT_CAMERA_Y = DEFAULT_CAMERA_Z * (2 / (1 + Math.sqrt(5)));
+// const DEFAULT_CAMERA_Z = 5;
+// // Golden ratio is perfect for FTO and Megaminx.
+// const DEFAULT_CAMERA_Y = DEFAULT_CAMERA_Z * (2 / (1 + Math.sqrt(5)));
+export const centeredCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: 31.717474411461005,
+  longitude: 0,
+  distance: 5.877852522924731,
+};
 
-export const centeredCameraPosition = new Vector3(
-  0,
-  DEFAULT_CAMERA_Y,
-  DEFAULT_CAMERA_Z,
-);
+export const cubeCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: 34.44990198795349,
+  longitude: 30.96375653207353,
+  distance: 5.656854249492381,
+};
+
+export const megaminxCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: Math.atan(1 / 2) * DEGREES_PER_RADIAN,
+  longitude: 0,
+  distance: 6.7,
+};
+
+export const pyraminxCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: 26.56505117707799,
+  longitude: 0,
+  distance: 6,
+};
+
+export const cornerCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: 35.264389682754654,
+  longitude: 45,
+  distance: 6.928203230275509,
+};
+
+export const pyraminxLookAt = new Vector3(0, 1 / 6, 0);
 
 // TODO
-export const megaminxCameraPosition = centeredCameraPosition
-  .clone()
-  .multiplyScalar(1.15);
-export const cubeCameraPosition = new Vector3(3, 4, 5).multiplyScalar(0.8);
-export const cornerCameraPosition = new Vector3(4, 4, 4);
-export const pyraminxCameraPosition = new Vector3(0, 2.5, 5); // TODO: center puzzle in frame, use x=0 but increase y
+export function defaultCameraOrbitCoordinates(
+  puzzleID: PuzzleID,
+): OrbitCoordinates {
+  if (puzzleID[1] === "x") {
+    return cubeCameraOrbitCoordinates;
+  } else {
+    switch (puzzleID) {
+      case "megaminx":
+      case "gigaminx":
+        return megaminxCameraOrbitCoordinates;
+      case "pyraminx":
+      case "master_tetraminx":
+        return pyraminxCameraOrbitCoordinates;
+      case "skewb":
+        return cubeCameraOrbitCoordinates;
+      default:
+        return centeredCameraOrbitCoordinates;
+    }
+  }
+}
 
 // TODO: turn these maps into lists?
 export const setupToLocations = {
@@ -159,7 +200,8 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
 
   // 3D config
   "back-view": StringEnumAttribute<BackViewLayout>;
-  "experimental-camera-position": Vector3Attribute;
+  "experimental-camera-latitude": RangedFloatAttribute;
+  "experimental-camera-longitude": RangedFloatAttribute;
 
   // Interaction
   "viewer-link": StringEnumAttribute<ViewerLinkPage>;
@@ -179,7 +221,8 @@ export interface TwistyPlayerConfigValues {
   controlPanel: ControlsLocation;
 
   backView: BackViewLayout;
-  experimentalCameraPosition: Vector3;
+  experimentalCameraLatitude: number;
+  experimentalCameraLongitude: number;
 
   viewerLink: ViewerLinkPage;
 }
@@ -203,7 +246,8 @@ const twistyPlayerAttributeMap: Record<
   "control-panel": "controlPanel",
 
   "back-view": "backView",
-  "experimental-camera-position": "experimentalCameraPosition",
+  "experimental-camera-latitude": "experimentalCameraLatitude",
+  "experimental-camera-longitude": "experimentalCameraLongitude",
 
   "viewer-link": "viewerLink",
 };
@@ -251,13 +295,21 @@ export class TwistyPlayerConfig {
         backViewLayouts,
         initialValues["backView"],
       ),
-      "experimental-camera-position": new Vector3Attribute(
+      "experimental-camera-latitude": new RangedFloatAttribute(
         null,
-        initialValues["experimentalCameraPosition"],
+        -90,
+        90,
+        initialValues["experimentalCameraLatitude"],
       ),
       "viewer-link": new StringEnumAttribute(
         viewerLinkPages,
         initialValues.viewerLink,
+      ),
+      "experimental-camera-longitude": new RangedFloatAttribute(
+        null,
+        -180,
+        180,
+        initialValues["experimentalCameraLongitude"],
       ),
     };
   }

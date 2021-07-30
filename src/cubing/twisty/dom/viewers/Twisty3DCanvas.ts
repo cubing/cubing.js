@@ -4,7 +4,7 @@ import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { pixelRatio } from "./canvas";
 import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css_";
-import { TwistyOrbitControls } from "./TwistyOrbitControls";
+import { OrbitCoordinates, TwistyOrbitControls } from "./TwistyOrbitControls";
 import type { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
@@ -45,7 +45,7 @@ export class Twisty3DCanvas
   public canvas: HTMLCanvasElement;
   public camera: PerspectiveCamera;
   private legacyExperimentalShift: number = 0;
-  private orbitControls: TwistyOrbitControls;
+  orbitControls: TwistyOrbitControls;
   private scheduler = new RenderScheduler(this.render.bind(this));
   private resizePending: boolean = false;
 
@@ -61,7 +61,7 @@ export class Twisty3DCanvas
   constructor(
     scene?: Twisty3DScene,
     options: {
-      experimentalCameraPosition?: Vector3;
+      orbitCoordinates?: OrbitCoordinates;
       negateCameraPosition?: boolean;
     } = {},
   ) {
@@ -91,18 +91,26 @@ export class Twisty3DCanvas
       0.1,
       20,
     );
-    this.camera.position.copy(
-      options.experimentalCameraPosition ?? new Vector3(2, 4, 4),
-    );
-    if (options.negateCameraPosition) {
-      this.camera.position.multiplyScalar(-1);
-    }
-    this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
+    this.camera.position.copy(new Vector3(2, 4, 4));
     this.orbitControls = new TwistyOrbitControls(
       this.camera,
       this.canvas,
       this.scheduleRender.bind(this),
     );
+    if (options.orbitCoordinates) {
+      this.orbitControls.latitude =
+        options.orbitCoordinates.latitude *
+        (options.negateCameraPosition ? -1 : 1);
+    }
+    if (options.orbitCoordinates) {
+      this.orbitControls.longitude =
+        options.orbitCoordinates.longitude +
+        (options.negateCameraPosition ? 180 : 0);
+    }
+    if (options.orbitCoordinates) {
+      this.orbitControls.distance = options.orbitCoordinates.distance;
+    }
+    this.camera.lookAt(new Vector3(0, 0, 0)); // TODO: Handle with `negateCameraPosition`
 
     const observer = new ResizeObserver(this.onResize.bind(this));
     observer.observe(this.contentWrapper);
