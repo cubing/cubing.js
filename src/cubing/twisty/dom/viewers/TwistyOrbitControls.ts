@@ -334,6 +334,7 @@ export class TwistyOrbitControls {
   }
 
   #adjust(): void {
+    this.#spherical.makeSafe(); // TODO: IS this close enouh for all purposes? Can we set exact using e.g. matrices?
     this.camera.position.setFromSpherical(this.#spherical);
     this.camera.lookAt(this.#lookAt);
   }
