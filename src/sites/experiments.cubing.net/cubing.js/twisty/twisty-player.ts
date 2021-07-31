@@ -1,5 +1,6 @@
 import {
   backgroundThemes,
+  cameraLatitudeLimits,
   controlsLocations,
   experimentalStickerings,
   hintFaceletStyles,
@@ -57,6 +58,11 @@ const enumOptions: [string, string, Record<string, any>][] = [
   ["controlPanel", "control-panel", controlsLocations],
 
   ["backView", "back-view", backViewLayouts],
+  [
+    "experimentalCameraLatitudeLimits",
+    "experimental-camera-latitude-limits",
+    cameraLatitudeLimits,
+  ],
 
   ["viewerLink", "viewer-link", viewerLinkPages],
 ];

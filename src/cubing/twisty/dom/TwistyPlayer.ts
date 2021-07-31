@@ -29,6 +29,7 @@ import { customElementsShim } from "./element/node-custom-element-shims";
 import { twistyPlayerCSS } from "./TwistyPlayer.css_";
 import {
   BackgroundTheme,
+  CameraLatitudeLimits,
   ControlsLocation,
   defaultCameraOrbitCoordinates,
   ExperimentalStickering,
@@ -330,6 +331,15 @@ export class TwistyPlayer extends ManagedCustomElement {
     return (this.viewerElems[0] as Twisty3DCanvas)?.orbitControls ?? null;
   }
 
+  #backOrbitControls(): TwistyOrbitControls | null {
+    if (
+      !["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
+    ) {
+      return null;
+    }
+    return (this.viewerElems[1] as Twisty3DCanvas)?.orbitControls ?? null;
+  }
+
   set experimentalCameraLatitude(latitude: number | null) {
     this.#config.attributes["experimental-camera-latitude"].setValue(latitude);
     const orbitControls = this.#orbitControls();
@@ -368,6 +378,27 @@ export class TwistyPlayer extends ManagedCustomElement {
       return this.#config.attributes["experimental-camera-longitude"].value;
     }
     return this.#orbitControls()?.longitude ?? null;
+  }
+
+  set experimentalCameraLatitudeLimits(latitudeLimits: CameraLatitudeLimits) {
+    this.#config.attributes["experimental-camera-latitude-limits"].setValue(
+      latitudeLimits,
+    );
+    const orbitControls = this.#orbitControls();
+    console.log({ orbitControls });
+    if (orbitControls) {
+      orbitControls.experimentalLatitudeLimits = latitudeLimits;
+    }
+    const backOrbitControls = this.#backOrbitControls(); // TODO: propagate through direct orbit controls as source of truth.
+    if (backOrbitControls) {
+      backOrbitControls.experimentalLatitudeLimits = latitudeLimits;
+    }
+  }
+
+  get experimentalCameraLatitudeLimits(): CameraLatitudeLimits {
+    // TODO: sync with orbit controls
+    return this.#config.attributes["experimental-camera-latitude-limits"]
+      .value as CameraLatitudeLimits;
   }
 
   set viewerLink(viewerLinkPage: ViewerLinkPage) {
@@ -584,6 +615,8 @@ export class TwistyPlayer extends ManagedCustomElement {
     const mainViewer = new Twisty3DCanvas(this.scene, {
       orbitCoordinates: this.experimentalDerivedCameraOrbitCoordinates(),
     });
+    mainViewer.orbitControls.experimentalLatitudeLimits =
+      this.experimentalCameraLatitudeLimits;
     this.viewerElems.push(mainViewer);
     this.#viewerWrapper.addElement(mainViewer);
 
@@ -805,6 +838,8 @@ export class TwistyPlayer extends ManagedCustomElement {
       orbitCoordinates: this.experimentalDerivedCameraOrbitCoordinates(),
       negateCameraPosition: true,
     });
+    backViewer.orbitControls.experimentalLatitudeLimits =
+      this.experimentalCameraLatitudeLimits;
     this.viewerElems.push(backViewer);
     (this.viewerElems[0] as Twisty3DCanvas).setMirror(backViewer);
     this.#viewerWrapper.addElement(backViewer);

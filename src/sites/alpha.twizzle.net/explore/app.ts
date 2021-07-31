@@ -280,6 +280,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
           backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
           experimentalCameraLatitude: initialCameraOrbitCoordinates.latitude,
           experimentalCameraLongitude: initialCameraOrbitCoordinates.longitude,
+          experimentalCameraLatitudeLimits: "none",
           // TODO: distance?
           viewerLink: "none",
         },
@@ -303,7 +304,6 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
           initialCameraOrbitCoordinates,
         );
         for (const twisty3DCanvas of twisty3DCanvases) {
-          twisty3DCanvas.experimentalSetLatitudeLimits(false);
           twisty3DCanvas.canvas.addEventListener(
             "mouseup",
             onMouseClick.bind(onMouseClick, twisty3DCanvas, "U"),

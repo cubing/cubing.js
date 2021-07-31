@@ -166,6 +166,23 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
+  document.querySelector("#experimental-camera-latitude-limits")!.appendChild(
+    new TwistyPlayer({
+      alg: "R U R' U R U2' R'",
+      experimentalCameraLatitudeLimits: "none",
+      experimentalCameraLatitude: 80,
+    }),
+  );
+  const tw = new TwistyPlayer();
+  document
+    .querySelector("#experimental-camera-latitude-limits")!
+    .appendChild(tw);
+  tw.alg = new Alg("R U R' U R U2' R'");
+  tw.experimentalCameraLatitudeLimits = "none";
+  tw.experimentalCameraLatitude = 80;
+}
+
+{
   document.querySelector("#viewer-link")!.appendChild(
     new TwistyPlayer({
       alg: "R U R' U R U2' R'",

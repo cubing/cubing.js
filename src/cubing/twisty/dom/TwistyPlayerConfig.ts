@@ -180,6 +180,12 @@ export interface ManagedAttribute<K> {
   setValue(v: K): boolean;
 }
 
+export const cameraLatitudeLimits = {
+  auto: true, // default
+  none: true,
+};
+export type CameraLatitudeLimits = keyof typeof cameraLatitudeLimits;
+
 type AnyManagedAttribute = ManagedAttribute<any>;
 
 interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
@@ -202,6 +208,7 @@ interface TwistyPlayerAttributes extends Record<string, AnyManagedAttribute> {
   "back-view": StringEnumAttribute<BackViewLayout>;
   "experimental-camera-latitude": RangedFloatAttribute;
   "experimental-camera-longitude": RangedFloatAttribute;
+  "experimental-camera-latitude-limits": StringEnumAttribute<CameraLatitudeLimits>;
 
   // Interaction
   "viewer-link": StringEnumAttribute<ViewerLinkPage>;
@@ -223,6 +230,7 @@ export interface TwistyPlayerConfigValues {
   backView: BackViewLayout;
   experimentalCameraLatitude: number;
   experimentalCameraLongitude: number;
+  experimentalCameraLatitudeLimits: CameraLatitudeLimits;
 
   viewerLink: ViewerLinkPage;
 }
@@ -248,6 +256,7 @@ const twistyPlayerAttributeMap: Record<
   "back-view": "backView",
   "experimental-camera-latitude": "experimentalCameraLatitude",
   "experimental-camera-longitude": "experimentalCameraLongitude",
+  "experimental-camera-latitude-limits": "experimentalCameraLatitudeLimits",
 
   "viewer-link": "viewerLink",
 };
@@ -301,15 +310,19 @@ export class TwistyPlayerConfig {
         90,
         initialValues["experimentalCameraLatitude"],
       ),
-      "viewer-link": new StringEnumAttribute(
-        viewerLinkPages,
-        initialValues.viewerLink,
-      ),
       "experimental-camera-longitude": new RangedFloatAttribute(
         null,
         -180,
         180,
         initialValues["experimentalCameraLongitude"],
+      ),
+      "experimental-camera-latitude-limits": new StringEnumAttribute(
+        cameraLatitudeLimits,
+        initialValues["experimentalCameraLatitudeLimits"],
+      ),
+      "viewer-link": new StringEnumAttribute(
+        viewerLinkPages,
+        initialValues.viewerLink,
       ),
     };
   }

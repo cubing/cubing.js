@@ -8,6 +8,7 @@ import { OrbitCoordinates, TwistyOrbitControls } from "./TwistyOrbitControls";
 import type { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
+import type { CameraLatitudeLimits } from "../TwistyPlayerConfig";
 
 let SHOW_STATS = false;
 // Show render stats for newly contructed renderers.
@@ -122,7 +123,7 @@ export class Twisty3DCanvas
   }
 
   /** @deprecated */
-  public experimentalSetLatitudeLimits(limits: boolean): void {
+  public experimentalSetLatitudeLimits(limits: CameraLatitudeLimits): void {
     this.orbitControls.experimentalLatitudeLimits = limits;
   }
 

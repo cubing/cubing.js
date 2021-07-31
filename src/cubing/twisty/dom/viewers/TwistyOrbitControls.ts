@@ -1,6 +1,7 @@
 import { Camera, Spherical, Vector3 } from "three";
 import { DEGREES_PER_RADIAN } from "../../3D/TAU";
 import { RenderScheduler } from "../../animation/RenderScheduler";
+import type { CameraLatitudeLimits } from "../TwistyPlayerConfig";
 
 // Buffer at the end values of the latitude (phi), to prevent gymbal lock.
 // Without this, the puzzle would flip every frame if you try to push past the
@@ -8,7 +9,7 @@ import { RenderScheduler } from "../../animation/RenderScheduler";
 const EPSILON = 0.00000001;
 
 const INERTIA_DEFAULT: boolean = true;
-const LATITUDE_LIMITS_DEFAULT: boolean = true;
+const LATITUDE_LIMITS_DEFAULT: CameraLatitudeLimits = "auto";
 
 const INERTIA_DURATION_MS = 500;
 // If the first inertial render is this long after the last move, we assume the
@@ -166,7 +167,7 @@ export class TwistyOrbitControls {
   /** @deprecated */
   experimentalInertia: boolean = INERTIA_DEFAULT;
   /** @deprecated */
-  experimentalLatitudeLimits: boolean = LATITUDE_LIMITS_DEFAULT;
+  experimentalLatitudeLimits: CameraLatitudeLimits = LATITUDE_LIMITS_DEFAULT;
   private mirrorControls?: TwistyOrbitControls;
   private lastTouchClientX: number = 0;
   private lastTouchClientY: number = 0;
@@ -322,7 +323,7 @@ export class TwistyOrbitControls {
 
     this.#spherical.theta += -2 * movementX;
     this.#spherical.phi += -2 * movementY;
-    if (this.experimentalLatitudeLimits) {
+    if (this.experimentalLatitudeLimits !== "none") {
       this.#spherical.phi = Math.max(this.#spherical.phi, Math.PI * 0.3); // TODO: Arctic circle: 1/6
       this.#spherical.phi = Math.min(this.#spherical.phi, Math.PI * 0.7); // TODO: Antarctic circle: 5/6
     } else {

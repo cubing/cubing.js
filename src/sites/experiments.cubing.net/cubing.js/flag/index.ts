@@ -22,7 +22,7 @@ const canvas = new Twisty3DCanvas(scene, {
 });
 canvas.camera.position.y = 24;
 canvas.camera.far = 100; // Document this for others.
-canvas.experimentalSetLatitudeLimits(false);
+canvas.experimentalSetLatitudeLimits("none");
 document.body.appendChild(canvas);
 
 function randomChoice<T>(l: T[]): T {
