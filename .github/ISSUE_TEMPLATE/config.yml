@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Slack forum
+    url: "https://join.slack.com/t/cubing-org/shared_invite/zt-8ok0y7cl-CffvDqFxnp9LheabPzmfgw"
+    about: "If you'd like to ask more direct questions about using `cubing.js`, feel free to join our Slack forum."
