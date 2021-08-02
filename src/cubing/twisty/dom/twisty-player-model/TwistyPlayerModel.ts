@@ -1,4 +1,5 @@
 import { PuzzleLoader, puzzles } from "../../..//puzzles";
+import type { Alg } from "../../../alg";
 
 import { KPuzzle } from "../../../kpuzzle";
 import type { PuzzleID } from "../TwistyPlayerConfig";
@@ -80,5 +81,29 @@ export class TwistyPlayerModel {
     this.algProp = new AlgProp();
     this.puzzleProp = new PuzzleProp();
     this.displayAlgProp = new DisplayAlgProp(this.algProp, this.puzzleProp);
+  }
+
+  set alg(newAlg: Alg | string) {
+    this.algProp.alg = newAlg;
+  }
+
+  get alg(): Alg {
+    return this.algProp.alg;
+  }
+
+  set puzzleID(puzzleID: PuzzleID) {
+    this.puzzleProp.puzzleID = puzzleID;
+  }
+
+  get puzzleID(): PuzzleID {
+    return this.puzzleProp.puzzleID;
+  }
+
+  get puzzleLoader(): PuzzleLoader {
+    return this.puzzleProp.puzzleLoader;
+  }
+
+  algIssues(): Promise<AlgIssues> {
+    return this.displayAlgProp.algIssues();
   }
 }
