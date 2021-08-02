@@ -146,17 +146,16 @@ class Twisty3DWrapper extends ManagedCustomElement {
   #cachedTwisty3D: Promise<Cube3D | PG3D> | null = null;
   async twisty3D(): Promise<Cube3D | PG3D> {
     return (this.#cachedTwisty3D ??= (async () => {
-      // switch (this.#puzzleProp.puzzleID) {
-      // case "3x3x3":
-      // return await(await this.constructorProxy()).cube3DShim();
-      const pg3d: PG3D = await (
-        await this.constructorProxy()
-      ).pg3dShim(this.#puzzleProp.puzzleID);
-      return pg3d;
-      // default:
-      //   // TODO
-      //   return new (await this.constructorProxy()).PG3D();
-      // }
+      switch (this.#puzzleProp.puzzleID) {
+        case "3x3x3":
+          return await (await this.constructorProxy()).cube3DShim();
+        default: {
+          const pg3d: PG3D = await (
+            await this.constructorProxy()
+          ).pg3dShim(this.#puzzleProp.puzzleID);
+          return pg3d;
+        }
+      }
     })());
   }
 
