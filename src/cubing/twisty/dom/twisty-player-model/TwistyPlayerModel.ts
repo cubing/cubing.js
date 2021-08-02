@@ -1,6 +1,6 @@
 import type { VisualizationFormat } from "../../../../../dist/types/twisty/dom/TwistyPlayerConfig";
 import { PuzzleLoader, puzzles } from "../../..//puzzles";
-import type { Alg } from "../../../alg";
+import { Alg } from "../../../alg";
 import { KPuzzle } from "../../../kpuzzle";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
@@ -33,9 +33,14 @@ class PuzzleProp extends EventTarget {
   }
 }
 
-class DisplayAlgProp extends EventTarget {
+interface DerivedAlgInfo {
+  alg: Alg;
+  algIssues: AlgIssues;
+}
+
+class DerivedAlgProp extends EventTarget {
   algSource: ManagedSource<AlgProp>;
-  #algIssues: Promise<AlgIssues> | null = null;
+
   puzzleSource: ManagedSource<PuzzleProp>;
 
   constructor(algProp: AlgProp, puzzleProp: PuzzleProp) {
@@ -48,30 +53,40 @@ class DisplayAlgProp extends EventTarget {
   }
 
   onAlg() {
-    // console.log("onAlg");
-    this.#algIssues = null;
+    this.dispatchEvent(new CustomEvent("update"));
   }
 
   onPuzzle() {
-    // console.log("onPuzzle");
-    this.#algIssues = null;
+    this.#cachedDerivedAlgInfo = null;
   }
 
-  algIssues(): Promise<AlgIssues> {
+  async alg(): Promise<Alg> {
+    return (await this.#derive()).alg;
+  }
+
+  async algIssues(): Promise<AlgIssues> {
     // TODO: handle string sources to compare caononicalization.
-    return (this.#algIssues ||= (async () => {
-      const algIssues = this.algSource.target.algIssues.clone();
-      // console.log("dfdf", this.algSource.target.algIssues === algIssues);
-      try {
-        const alg = this.algSource.target.alg; // TODO: Can we get a frozen reference before doing anything async?
-        const def = await this.puzzleSource.target.puzzleLoader.def();
-        const kpuzzle = new KPuzzle(def);
-        kpuzzle.applyAlg(alg);
-      } catch (e) {
-        algIssues.errors.push(`Invalid alg for puzzle: ${e}`);
-      }
-      return algIssues;
-    })());
+    return (await this.#derive()).algIssues;
+  }
+
+  #cachedDerivedAlgInfo: Promise<DerivedAlgInfo> | null = null;
+  async #derive(): Promise<DerivedAlgInfo> {
+    return (this.#cachedDerivedAlgInfo ??=
+      (async (): Promise<DerivedAlgInfo> => {
+        const algIssues = this.algSource.target.algIssues.clone();
+        let alg: Alg | null = null;
+        try {
+          const maybeAlg = this.algSource.target.alg; // TODO: Can we get a frozen reference before doing anything async?
+          const def = await this.puzzleSource.target.puzzleLoader.def();
+          const kpuzzle = new KPuzzle(def);
+          kpuzzle.applyAlg(maybeAlg);
+          // Looks like we could apply the alg!
+          alg = maybeAlg;
+        } catch (e) {
+          algIssues.errors.push(`Invalid alg for puzzle: ${e}`);
+        }
+        return { alg: alg ?? new Alg(), algIssues };
+      })());
   }
 }
 
@@ -86,11 +101,38 @@ customElementsShim.define("twisty-3d-wrapper", Twisty3DWrapper);
 type DerivedVisualizationFormat = "2D" | "3D" | null;
 
 class VisualizationProp {
+  #displayAlgProp: DerivedAlgProp;
+  #puzzleProp: PuzzleProp;
+
+  constructor(displayAlgProp: DerivedAlgProp, puzzleProp: PuzzleProp) {
+    this.#displayAlgProp = displayAlgProp;
+    this.#displayAlgProp.addEventListener(
+      "update",
+      this.onDerivedAlg.bind(this),
+    );
+    this.#puzzleProp = puzzleProp;
+    this.#puzzleProp.addEventListener("update", this.onPuzzle.bind(this));
+  }
+
+  async onDerivedAlg(): Promise<void> {
+    // TODO: dedup
+    // TODO: Push into `this.element
+    this.wrapperElement.appendChild(document.createElement("br"));
+    this.wrapperElement.append(` | alg = ${await this.#displayAlgProp.alg()}`);
+  }
+
+  onPuzzle(): void {
+    // TODO: dedup
+    // TODO: Push into `this.element
+    this.wrapperElement.appendChild(document.createElement("br"));
+    this.wrapperElement.append(` | puzzle = ${this.#puzzleProp.puzzleID}`);
+  }
+
   #visualizationInput: VisualizationFormat | null = null;
-  #cachedDerivedVisualization: DerivedVisualizationFormat = null;
+  #cachedDerivedVisualization: DerivedVisualizationFormat = null; // TODO: `null` is an actual value.
 
   private get derivedVisualization(): DerivedVisualizationFormat {
-    return (this.#cachedDerivedVisualization ||= ["2D", null].includes(
+    return (this.#cachedDerivedVisualization ??= ["2D", null].includes(
       this.#visualizationInput,
     )
       ? (this.#visualizationInput as "2D" | null)
@@ -118,14 +160,20 @@ class VisualizationProp {
   }
 
   set visualization(visualizationFormat: VisualizationFormat) {
-    console.log("setting!");
+    console.log("setting!", visualizationFormat);
     const oldDerivedVisualizationInput = this.derivedVisualization;
+
+    // TODO:
     this.#visualizationInput = visualizationFormat;
+    this.#cachedDerivedVisualization = null;
+
     const newDerivedVisualizationInput = this.derivedVisualization;
+    console.log({ oldDerivedVisualizationInput, newDerivedVisualizationInput });
     if (oldDerivedVisualizationInput !== newDerivedVisualizationInput) {
       console.log("new!");
       switch (newDerivedVisualizationInput) {
         case "2D":
+          console.log("2D!");
           this.element = new Twisty2DSVG();
           break;
         case "3D":
@@ -140,14 +188,17 @@ class VisualizationProp {
 export class TwistyPlayerModel {
   algProp: AlgProp;
   puzzleProp: PuzzleProp;
-  displayAlgProp: DisplayAlgProp;
+  displayAlgProp: DerivedAlgProp;
   visualizationProp: VisualizationProp;
 
   constructor() {
     this.algProp = new AlgProp();
     this.puzzleProp = new PuzzleProp();
-    this.displayAlgProp = new DisplayAlgProp(this.algProp, this.puzzleProp);
-    this.visualizationProp = new VisualizationProp();
+    this.displayAlgProp = new DerivedAlgProp(this.algProp, this.puzzleProp);
+    this.visualizationProp = new VisualizationProp(
+      this.displayAlgProp,
+      this.puzzleProp,
+    );
   }
 
   set alg(newAlg: Alg | string) {

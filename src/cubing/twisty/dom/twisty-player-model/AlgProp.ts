@@ -44,7 +44,7 @@ export class AlgProp extends EventTarget {
   }
 
   setFromString(newAlgString: string) {
-    // console.log("fromstring!");
+    console.log("fromstring!");
     try {
       this.alg = new Alg(newAlgString); // TODO: is this safe?
       if (this.#alg.toString() !== newAlgString) {
@@ -65,6 +65,6 @@ export class AlgProp extends EventTarget {
   }
 
   get algIssues(): AlgIssues {
-    return (this.#cachedAlgIssues ||= new AlgIssues());
+    return (this.#cachedAlgIssues ??= new AlgIssues());
   }
 }

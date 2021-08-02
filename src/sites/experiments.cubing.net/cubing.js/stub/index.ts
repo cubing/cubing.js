@@ -35,4 +35,7 @@ console.log(model.puzzleProp.puzzleLoader);
   document.body.appendChild(model.visualizationProp.wrapperElement);
 
   model.visualizationProp.visualization = "3D";
+  model.visualizationProp.visualization = "2D";
+  model.visualizationProp.visualization = "3D";
+  model.alg = "U2 D2";
 })();
