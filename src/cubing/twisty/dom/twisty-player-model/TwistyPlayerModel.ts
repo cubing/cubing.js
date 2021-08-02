@@ -108,12 +108,15 @@ class Twisty3DWrapper extends ManagedCustomElement {
 
   onPuzzle(): void {
     // TODO: Check if puzzle changed.
+    this.#clearTwisty3DPuzzles();
+    this.pullTwisty3D();
   }
 
   connectedCallback() {
     console.log("connected!");
     this.contentWrapper.textContent = "wrapper!";
     (async () => {
+      this.pullTwisty3D(); // Note: we specifically don't await.
       this.appendChild(await this.mainCanvas());
     })();
   }
@@ -155,6 +158,24 @@ class Twisty3DWrapper extends ManagedCustomElement {
       //   return new (await this.constructorProxy()).PG3D();
       // }
     })());
+  }
+
+  async pullTwisty3D(): Promise<void> {
+    this.#addTwisty3D(await this.twisty3D());
+  }
+
+  #twisty3DPuzzlesInScene: Set<Cube3D | PG3D> = new Set();
+  async #addTwisty3D(twisty3D: Cube3D | PG3D): Promise<void> {
+    if (!this.#twisty3DPuzzlesInScene.has(twisty3D)) {
+      (await this.scene()).add(twisty3D); // TODO: Prevent double add?
+      this.#twisty3DPuzzlesInScene.add(twisty3D);
+    }
+  }
+
+  async #clearTwisty3DPuzzles(): Promise<void> {
+    for (const twisty3D of this.#twisty3DPuzzlesInScene) {
+      (await this.scene()).remove(twisty3D);
+    }
   }
 }
 customElementsShim.define("twisty-3d-wrapper", Twisty3DWrapper);
