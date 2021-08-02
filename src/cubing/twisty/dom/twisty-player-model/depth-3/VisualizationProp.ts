@@ -3,21 +3,20 @@ import { Twisty2DSVG } from "../../viewers/Twisty2DSVG";
 import type { PuzzleProp } from "../depth-1/PuzzleProp";
 import type { DerivedAlgProp } from "../depth-2/DerivedAlgProp";
 import { Twisty3DWrapper } from "../depth-2/Twisty3DWrapper";
+import { ManagedSource } from "../ManagedSource";
 
 type DerivedVisualizationFormat = "2D" | "3D" | null;
 
 export class VisualizationProp {
-  #displayAlgProp: DerivedAlgProp;
-  #puzzleProp: PuzzleProp;
+  #displayAlgProp: ManagedSource<DerivedAlgProp>;
+  #puzzleProp: ManagedSource<PuzzleProp>;
 
   constructor(derivedAlgProp: DerivedAlgProp, puzzleProp: PuzzleProp) {
-    this.#displayAlgProp = derivedAlgProp;
-    this.#displayAlgProp.addEventListener(
-      "update",
+    this.#displayAlgProp = new ManagedSource(
+      derivedAlgProp,
       this.onDerivedAlg.bind(this),
     );
-    this.#puzzleProp = puzzleProp;
-    this.#puzzleProp.addEventListener("update", this.onPuzzle.bind(this));
+    this.#puzzleProp = new ManagedSource(puzzleProp, this.onPuzzle.bind(this));
   }
 
   async onDerivedAlg(): Promise<void> {
@@ -26,7 +25,7 @@ export class VisualizationProp {
     // TODO: Push into `this.element
     // this.wrapperElement.appendChild(document.createElement("br"));
     const div = this.wrapperElement.appendChild(document.createElement("div"));
-    div.append(` | alg = ${await this.#displayAlgProp.alg()}`);
+    div.append(` | alg = ${await this.#displayAlgProp.target.alg()}`);
   }
 
   onPuzzle(): void {
@@ -35,7 +34,7 @@ export class VisualizationProp {
     // TODO: Push into `this.element
     // this.wrapperElement.appendChild(document.createElement("br"));
     const div = this.wrapperElement.appendChild(document.createElement("div"));
-    div.append(` | puzzle = ${this.#puzzleProp.puzzleID}`);
+    div.append(` | puzzle = ${this.#puzzleProp.target.puzzleID}`);
   }
 
   #visualizationInput: VisualizationFormat | null = null;
@@ -92,7 +91,7 @@ export class VisualizationProp {
           break;
         case "3D":
           console.log("3D!");
-          this.element = new Twisty3DWrapper(this.#puzzleProp);
+          this.element = new Twisty3DWrapper(this.#puzzleProp.target);
           break;
       }
     }

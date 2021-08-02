@@ -11,9 +11,7 @@ interface DerivedAlgInfo {
 
 export class DerivedAlgProp extends EventTarget {
   algSource: ManagedSource<AlgProp>;
-
   puzzleSource: ManagedSource<PuzzleProp>;
-
   constructor(algProp: AlgProp, puzzleProp: PuzzleProp) {
     super();
     this.algSource = new ManagedSource<AlgProp>(algProp, this.onAlg.bind(this));

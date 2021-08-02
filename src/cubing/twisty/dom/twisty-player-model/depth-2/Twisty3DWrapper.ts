@@ -8,9 +8,10 @@ import {
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { Twisty3DCanvas } from "../../viewers/Twisty3DCanvas";
 import type { PuzzleProp } from "../depth-1/PuzzleProp";
+import { ManagedSource } from "../ManagedSource";
 
 export class Twisty3DWrapper extends ManagedCustomElement {
-  #puzzleProp: PuzzleProp;
+  #puzzleProp: ManagedSource<PuzzleProp>;
   constructor(puzzleProp: PuzzleProp) {
     super();
     this.addCSS(
@@ -26,8 +27,10 @@ twisty-3d-canvas {
 }
 `),
     );
-    this.#puzzleProp = puzzleProp;
-    this.#puzzleProp.addEventListener("update", this.onPuzzle.bind(this));
+    this.#puzzleProp = new ManagedSource<PuzzleProp>(
+      puzzleProp,
+      this.onPuzzle.bind(this),
+    );
   }
 
   onPuzzle(): void {
@@ -74,11 +77,11 @@ twisty-3d-canvas {
   async twisty3D(): Promise<Cube3D | PG3D> {
     return (this.#cachedTwisty3D ??= (async () => {
       const proxy = await this.constructorProxy();
-      switch (this.#puzzleProp.puzzleID) {
+      switch (this.#puzzleProp.target.puzzleID) {
         case "3x3x3":
           return await proxy.cube3DShim();
         default: {
-          return await proxy.pg3dShim(this.#puzzleProp.puzzleID);
+          return await proxy.pg3dShim(this.#puzzleProp.target.puzzleID);
         }
       }
     })());
