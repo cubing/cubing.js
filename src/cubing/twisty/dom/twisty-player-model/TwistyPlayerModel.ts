@@ -53,11 +53,14 @@ class DerivedAlgProp extends EventTarget {
   }
 
   onAlg() {
+    console.log("DerivedAlgProp.onAlg");
+    this.#cachedDerivedAlgInfo = null;
     this.dispatchEvent(new CustomEvent("update"));
   }
 
   onPuzzle() {
     this.#cachedDerivedAlgInfo = null;
+    this.dispatchEvent(new CustomEvent("update"));
   }
 
   async alg(): Promise<Alg> {
@@ -73,6 +76,7 @@ class DerivedAlgProp extends EventTarget {
   async #derive(): Promise<DerivedAlgInfo> {
     return (this.#cachedDerivedAlgInfo ??=
       (async (): Promise<DerivedAlgInfo> => {
+        console.log("DerivedAlgProp deriving!");
         const algIssues = this.algSource.target.algIssues.clone();
         let alg: Alg | null = null;
         try {
@@ -104,8 +108,8 @@ class VisualizationProp {
   #displayAlgProp: DerivedAlgProp;
   #puzzleProp: PuzzleProp;
 
-  constructor(displayAlgProp: DerivedAlgProp, puzzleProp: PuzzleProp) {
-    this.#displayAlgProp = displayAlgProp;
+  constructor(derivedAlgProp: DerivedAlgProp, puzzleProp: PuzzleProp) {
+    this.#displayAlgProp = derivedAlgProp;
     this.#displayAlgProp.addEventListener(
       "update",
       this.onDerivedAlg.bind(this),
@@ -115,17 +119,21 @@ class VisualizationProp {
   }
 
   async onDerivedAlg(): Promise<void> {
+    console.log("VisualizationProp.onDerivedAlg");
     // TODO: dedup
     // TODO: Push into `this.element
-    this.wrapperElement.appendChild(document.createElement("br"));
-    this.wrapperElement.append(` | alg = ${await this.#displayAlgProp.alg()}`);
+    // this.wrapperElement.appendChild(document.createElement("br"));
+    const div = this.wrapperElement.appendChild(document.createElement("div"));
+    div.append(` | alg = ${await this.#displayAlgProp.alg()}`);
   }
 
   onPuzzle(): void {
+    console.log("VisualizationProp.onPuzzle");
     // TODO: dedup
     // TODO: Push into `this.element
-    this.wrapperElement.appendChild(document.createElement("br"));
-    this.wrapperElement.append(` | puzzle = ${this.#puzzleProp.puzzleID}`);
+    // this.wrapperElement.appendChild(document.createElement("br"));
+    const div = this.wrapperElement.appendChild(document.createElement("div"));
+    div.append(` | puzzle = ${this.#puzzleProp.puzzleID}`);
   }
 
   #visualizationInput: VisualizationFormat | null = null;
@@ -209,11 +217,11 @@ export class TwistyPlayerModel {
     return this.algProp.alg;
   }
 
-  set puzzleID(puzzleID: PuzzleID) {
+  set puzzle(puzzleID: PuzzleID) {
     this.puzzleProp.puzzleID = puzzleID;
   }
 
-  get puzzleID(): PuzzleID {
+  get puzzle(): PuzzleID {
     return this.puzzleProp.puzzleID;
   }
 

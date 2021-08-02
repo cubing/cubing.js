@@ -38,4 +38,8 @@ console.log(model.puzzleProp.puzzleLoader);
   model.visualizationProp.visualization = "2D";
   model.visualizationProp.visualization = "3D";
   model.alg = "U2 D2";
+
+  model.alg = "R++";
+  model.puzzle = "3x3x3";
+  model.puzzle = "megaminx";
 })();
