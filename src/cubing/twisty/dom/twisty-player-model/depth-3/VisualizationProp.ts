@@ -5,7 +5,7 @@ import type { DerivedAlgProp } from "../depth-2/DerivedAlgProp";
 import { Twisty3DWrapper } from "../depth-2/Twisty3DWrapper";
 import { ManagedSource } from "../ManagedSource";
 
-type DerivedVisualizationFormat = "2D" | "3D" | null;
+type DerivedVisualizationFormat = "2D" | "3D"; // TODO | null;
 
 export class VisualizationProp {
   #displayAlgProp: ManagedSource<DerivedAlgProp>;
@@ -37,14 +37,15 @@ export class VisualizationProp {
     div.append(` | puzzle = ${this.#puzzleProp.target.puzzleID}`);
   }
 
-  #visualizationInput: VisualizationFormat | null = null;
-  #cachedDerivedVisualization: DerivedVisualizationFormat = null; // TODO: `null` is an actual value.
+  #visualizationInput: VisualizationFormat = "3D"; // TODO: "preferred"?
+  #cachedDerivedVisualization: DerivedVisualizationFormat | null = null; // TODO: `null` is an actual value.
 
-  private get derivedVisualization(): DerivedVisualizationFormat {
-    return (this.#cachedDerivedVisualization ??= ["2D", null].includes(
+  // TODO
+  get derivedVisualization(): DerivedVisualizationFormat {
+    return (this.#cachedDerivedVisualization ??= ["2D"].includes(
       this.#visualizationInput,
     )
-      ? (this.#visualizationInput as "2D" | null)
+      ? (this.#visualizationInput as "2D")
       : "3D");
   }
 
@@ -95,5 +96,9 @@ export class VisualizationProp {
           break;
       }
     }
+  }
+
+  get visualizationInput(): VisualizationFormat {
+    return this.#visualizationInput;
   }
 }
