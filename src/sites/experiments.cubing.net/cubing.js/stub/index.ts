@@ -24,4 +24,10 @@ console.log(model.puzzleProp.puzzleLoader);
 
   model.algProp.setFromString("notamove");
   console.log(await model.displayAlgProp.algIssues());
+
+  model.algProp.setFromString("R++");
+  console.log(await model.displayAlgProp.algIssues());
+
+  model.puzzleProp.puzzleID = "megaminx";
+  console.log(await model.displayAlgProp.algIssues());
 })();

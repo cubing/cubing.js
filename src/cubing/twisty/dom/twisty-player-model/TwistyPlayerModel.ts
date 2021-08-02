@@ -1,70 +1,9 @@
 import { PuzzleLoader, puzzles } from "../../..//puzzles";
 
-import { Alg } from "../../../alg";
 import { KPuzzle } from "../../../kpuzzle";
 import type { PuzzleID } from "../TwistyPlayerConfig";
-
-// TODO: add stale marker?
-class ManagedSource<T extends EventTarget> extends EventTarget {
-  #target: T; // TODO: | null
-  constructor(target: T, private listener: () => {}) {
-    super();
-    // this.set(target);
-    this.#target = target;
-    this.#target.addEventListener("update", this.listener);
-  }
-
-  get target(): T {
-    return this.#target;
-  }
-
-  // clear(): void {
-  //   this.#target.removeEventListener("update", this.listener);
-  // }
-
-  // set(target: T): void {
-  //   this.clear();
-  //   this.#target.addEventListener("update", this.listener);
-  //   this.#target = target;
-  // }
-}
-
-class AlgProp extends EventTarget {
-  #alg: Alg = new Alg();
-  #cachedAlgIssues: AlgIssues | null = null;
-
-  set alg(newAlg: Alg) {
-    // if (!this.#alg.isIdentical(newAlg)) { // TODO: is this the right way?
-    this.#alg = newAlg;
-    this.#cachedAlgIssues = null;
-    this.dispatchEvent(new CustomEvent("update"));
-    // }
-  }
-
-  setFromString(newAlgString: string) {
-    console.log("fromstring!");
-    try {
-      this.alg = new Alg(newAlgString); // TODO: is this safe?
-      if (this.#alg.toString() !== newAlgString) {
-        this.#cachedAlgIssues = new AlgIssues();
-        this.#cachedAlgIssues.warnings.push(`Alg is non-canonical!`);
-      }
-    } catch (e) {
-      console.log("catch");
-      this.#alg = new Alg(); // TODO
-      this.#cachedAlgIssues = new AlgIssues();
-      this.#cachedAlgIssues.errors.push(`Malformed alg: ${e}`);
-    }
-  }
-
-  get alg(): Alg {
-    return this.#alg;
-  }
-
-  get algIssues(): AlgIssues {
-    return (this.#cachedAlgIssues ||= new AlgIssues());
-  }
-}
+import { AlgIssues, AlgProp } from "./AlgProp";
+import { ManagedSource } from "./ManagedSource";
 
 class PuzzleProp extends EventTarget {
   #puzzleID: PuzzleID = "3x3x3";
@@ -90,20 +29,6 @@ class PuzzleProp extends EventTarget {
   }
 }
 
-class AlgIssues {
-  // TODO: (string | Error)[]
-  warnings: string[] = [];
-  errors: string[] = [];
-
-  clone() {
-    const newAlgIssues = new AlgIssues();
-    newAlgIssues.warnings = this.warnings.slice();
-    newAlgIssues.errors = this.errors.slice();
-    console.log("clone");
-    return newAlgIssues;
-  }
-}
-
 class DisplayAlgProp extends EventTarget {
   algSource: ManagedSource<AlgProp>;
   #algIssues: Promise<AlgIssues> | null = null;
@@ -119,12 +44,12 @@ class DisplayAlgProp extends EventTarget {
   }
 
   onAlg() {
-    console.log("onAlg");
+    // console.log("onAlg");
     this.#algIssues = null;
   }
 
   onPuzzle() {
-    console.log("onPuzzle");
+    // console.log("onPuzzle");
     this.#algIssues = null;
   }
 
@@ -132,7 +57,7 @@ class DisplayAlgProp extends EventTarget {
     // TODO: handle string sources to compare caononicalization.
     return (this.#algIssues ||= (async () => {
       const algIssues = this.algSource.target.algIssues.clone();
-      console.log("dfdf", this.algSource.target.algIssues === algIssues);
+      // console.log("dfdf", this.algSource.target.algIssues === algIssues);
       try {
         const alg = this.algSource.target.alg; // TODO: Can we get a frozen reference before doing anything async?
         const def = await this.puzzleSource.target.puzzleLoader.def();
