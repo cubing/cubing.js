@@ -2,10 +2,14 @@ import type { VisualizationFormat } from "../../../../../dist/types/twisty/dom/T
 import { PuzzleLoader, puzzles } from "../../..//puzzles";
 import { Alg } from "../../../alg";
 import { KPuzzle } from "../../../kpuzzle";
+import type { Cube3D } from "../../3D/puzzles/Cube3D";
+import type { PG3D } from "../../3D/puzzles/PG3D";
+import type { Twisty3DScene } from "../../3D/Twisty3DScene";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import type { PuzzleID } from "../TwistyPlayerConfig";
 import { Twisty2DSVG } from "../viewers/Twisty2DSVG";
+import type { Twisty3DCanvas } from "../viewers/Twisty3DCanvas";
 import { AlgIssues, AlgProp } from "./AlgProp";
 import { ManagedSource } from "./ManagedSource";
 
@@ -95,9 +99,62 @@ class DerivedAlgProp extends EventTarget {
 }
 
 class Twisty3DWrapper extends ManagedCustomElement {
+  #puzzleProp: PuzzleProp;
+  constructor(puzzleProp: PuzzleProp) {
+    super();
+    this.#puzzleProp = puzzleProp;
+    this.#puzzleProp.addEventListener("update", this.onPuzzle.bind(this));
+  }
+
+  onPuzzle(): void {
+    // TODO: Check if puzzle changed.
+  }
+
   connectedCallback() {
     console.log("connected!");
     this.contentWrapper.textContent = "wrapper!";
+    (async () => {
+      this.appendChild(await this.mainCanvas());
+    })();
+  }
+
+  // TODO can we remove the cached proxy?
+  // In theory we can, but we've run into situations where imports are not properly cached.
+  #cachedConstructorProxy: Promise<typeof import("./3d-proxy")> | null = null;
+  async constructorProxy(): Promise<typeof import("./3d-proxy")> {
+    return (this.#cachedConstructorProxy ??= import("./3d-proxy"));
+  }
+
+  #cachedScene: Promise<Twisty3DScene> | null = null;
+  async scene(): Promise<Twisty3DScene> {
+    return (this.#cachedScene ??= (async () =>
+      new (await this.constructorProxy()).Twisty3DScene())());
+  }
+
+  #cachedMainCanvas: Promise<Twisty3DCanvas> | null = null;
+  async mainCanvas(): Promise<Twisty3DCanvas> {
+    return (this.#cachedMainCanvas ??= (async () =>
+      new (await this.constructorProxy()).Twisty3DCanvas(
+        await this.scene(),
+      ))());
+  }
+
+  // TODO: Why can't we use `Twisty3DPuzzle` instead of `Cube3D | PG3D`?
+  #cachedTwisty3D: Promise<Cube3D | PG3D> | null = null;
+  async twisty3D(): Promise<Cube3D | PG3D> {
+    return (this.#cachedTwisty3D ??= (async () => {
+      // switch (this.#puzzleProp.puzzleID) {
+      // case "3x3x3":
+      // return await(await this.constructorProxy()).cube3DShim();
+      const pg3d: PG3D = await (
+        await this.constructorProxy()
+      ).pg3dShim(this.#puzzleProp.puzzleID);
+      return pg3d;
+      // default:
+      //   // TODO
+      //   return new (await this.constructorProxy()).PG3D();
+      // }
+    })());
   }
 }
 customElementsShim.define("twisty-3d-wrapper", Twisty3DWrapper);
@@ -186,7 +243,7 @@ class VisualizationProp {
           break;
         case "3D":
           console.log("3D!");
-          this.element = new Twisty3DWrapper();
+          this.element = new Twisty3DWrapper(this.#puzzleProp);
           break;
       }
     }
