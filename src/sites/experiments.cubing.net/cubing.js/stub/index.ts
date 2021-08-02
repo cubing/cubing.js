@@ -11,10 +11,21 @@ console.log("Loading stub file.");
 const model = new TwistyPlayerModel();
 
 console.log(model);
-model.algProp.alg = new Alg("R U Rsdfd'");
+model.algProp.alg = new Alg("R U R'");
 model.puzzleProp.puzzleID = "skewb";
 
 console.log(model.puzzleProp.puzzleLoader);
 (async () => {
+  model.algProp.setFromString("sdfdfsdf'sdfdsf");
+  console.log(await model.displayAlgProp.algIssues());
+})();
+
+(async () => {
+  model.algProp.setFromString("R  F");
+  console.log(await model.displayAlgProp.algIssues());
+})();
+
+(async () => {
+  model.algProp.setFromString("notamove");
   console.log(await model.displayAlgProp.algIssues());
 })();
