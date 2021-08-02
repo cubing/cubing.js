@@ -44,15 +44,16 @@ class AlgProp extends EventTarget {
   setFromString(newAlgString: string) {
     console.log("fromstring!");
     try {
-      this.#alg = new Alg(newAlgString);
+      this.alg = new Alg(newAlgString); // TODO: is this safe?
       if (this.#alg.toString() !== newAlgString) {
         this.#cachedAlgIssues = new AlgIssues();
         this.#cachedAlgIssues.warnings.push(`Alg is non-canonical!`);
       }
     } catch (e) {
+      console.log("catch");
       this.#alg = new Alg(); // TODO
       this.#cachedAlgIssues = new AlgIssues();
-      this.#cachedAlgIssues.errors.push(`Invalid alg: ${e}`);
+      this.#cachedAlgIssues.errors.push(`Malformed alg: ${e}`);
     }
   }
 
@@ -123,7 +124,8 @@ class DisplayAlgProp extends EventTarget {
   }
 
   onPuzzle() {
-    console.log("onAlg");
+    console.log("onPuzzle");
+    this.#algIssues = null;
   }
 
   algIssues(): Promise<AlgIssues> {
@@ -132,11 +134,12 @@ class DisplayAlgProp extends EventTarget {
       const algIssues = this.algSource.target.algIssues.clone();
       console.log("dfdf", this.algSource.target.algIssues === algIssues);
       try {
+        const alg = this.algSource.target.alg; // TODO: Can we get a frozen reference before doing anything async?
         const def = await this.puzzleSource.target.puzzleLoader.def();
         const kpuzzle = new KPuzzle(def);
-        kpuzzle.applyAlg(this.algSource.target.alg);
+        kpuzzle.applyAlg(alg);
       } catch (e) {
-        algIssues.errors.push("Invalid alg!");
+        algIssues.errors.push(`Invalid alg for puzzle: ${e}`);
       }
       return algIssues;
     })());

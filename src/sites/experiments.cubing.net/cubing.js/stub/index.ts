@@ -18,14 +18,10 @@ console.log(model.puzzleProp.puzzleLoader);
 (async () => {
   model.algProp.setFromString("sdfdfsdf'sdfdsf");
   console.log(await model.displayAlgProp.algIssues());
-})();
 
-(async () => {
   model.algProp.setFromString("R  F");
   console.log(await model.displayAlgProp.algIssues());
-})();
 
-(async () => {
   model.algProp.setFromString("notamove");
   console.log(await model.displayAlgProp.algIssues());
 })();
