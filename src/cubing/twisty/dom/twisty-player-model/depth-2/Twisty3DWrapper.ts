@@ -1,13 +1,13 @@
-import type { Cube3D } from "../../3D/puzzles/Cube3D";
-import type { PG3D } from "../../3D/puzzles/PG3D";
-import type { Twisty3DScene } from "../../3D/Twisty3DScene";
+import type { Cube3D } from "../../../3D/puzzles/Cube3D";
+import type { PG3D } from "../../../3D/puzzles/PG3D";
+import type { Twisty3DScene } from "../../../3D/Twisty3DScene";
 import {
   CSSSource,
   ManagedCustomElement,
-} from "../element/ManagedCustomElement";
-import { customElementsShim } from "../element/node-custom-element-shims";
-import type { Twisty3DCanvas } from "../viewers/Twisty3DCanvas";
-import type { PuzzleProp } from "./PuzzleProp";
+} from "../../element/ManagedCustomElement";
+import { customElementsShim } from "../../element/node-custom-element-shims";
+import type { Twisty3DCanvas } from "../../viewers/Twisty3DCanvas";
+import type { PuzzleProp } from "../depth-1/PuzzleProp";
 
 export class Twisty3DWrapper extends ManagedCustomElement {
   #puzzleProp: PuzzleProp;

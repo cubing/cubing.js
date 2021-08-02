@@ -1,8 +1,8 @@
-import { Alg } from "../../../alg";
-import { KPuzzle } from "../../../kpuzzle";
-import type { AlgIssues, AlgProp } from "./AlgProp";
-import { ManagedSource } from "./ManagedSource";
-import type { PuzzleProp } from "./PuzzleProp";
+import { Alg } from "../../../../alg";
+import { KPuzzle } from "../../../../kpuzzle";
+import type { AlgIssues, AlgProp } from "../depth-1/AlgProp";
+import { ManagedSource } from "../ManagedSource";
+import type { PuzzleProp } from "../depth-1/PuzzleProp";
 
 interface DerivedAlgInfo {
   alg: Alg;

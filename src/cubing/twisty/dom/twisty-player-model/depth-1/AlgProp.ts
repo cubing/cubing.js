@@ -1,4 +1,4 @@
-import { Alg } from "../../../alg";
+import { Alg } from "../../../../alg";
 
 export class AlgIssues {
   // TODO: (string | Error)[]

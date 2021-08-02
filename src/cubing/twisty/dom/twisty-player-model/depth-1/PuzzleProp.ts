@@ -1,5 +1,5 @@
-import { PuzzleLoader, puzzles } from "../../..//puzzles";
-import type { PuzzleID } from "../TwistyPlayerConfig";
+import { PuzzleLoader, puzzles } from "../../../../puzzles";
+import type { PuzzleID } from "../../TwistyPlayerConfig";
 
 export class PuzzleProp extends EventTarget {
   #puzzleID: PuzzleID = "3x3x3";
