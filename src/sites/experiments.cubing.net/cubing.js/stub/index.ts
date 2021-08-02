@@ -30,4 +30,9 @@ console.log(model.puzzleProp.puzzleLoader);
 
   model.puzzleProp.puzzleID = "megaminx";
   (await model.algIssues()).log();
+
+  console.log(model.visualizationProp.wrapperElement);
+  document.body.appendChild(model.visualizationProp.wrapperElement);
+
+  model.visualizationProp.visualization = "3D";
 })();
