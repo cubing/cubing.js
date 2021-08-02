@@ -178,8 +178,9 @@ twisty-3d-canvas {
 
   async updateTwisty3D(): Promise<void> {
     // TODO: Check if puzzle changed.
+    const twisty3D = await this.twisty3D();
     this.#clearTwisty3DPuzzles();
-    this.#addTwisty3D(await this.twisty3D());
+    this.#addTwisty3D(twisty3D);
   }
 
   #twisty3DPuzzlesInScene: Set<Cube3D | PG3D> = new Set();
@@ -195,6 +196,7 @@ twisty-3d-canvas {
     for (const twisty3D of this.#twisty3DPuzzlesInScene) {
       (await this.scene()).remove(twisty3D);
     }
+    this.#twisty3DPuzzlesInScene.clear();
     this.scheduleRender();
   }
 

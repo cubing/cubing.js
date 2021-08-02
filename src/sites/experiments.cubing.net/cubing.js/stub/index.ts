@@ -50,7 +50,16 @@ console.log(model.puzzleProp.puzzleLoader);
   async function update() {
     const randomChoice = await randomChoiceFactory<PuzzleID>();
     // TODO: 3x3x3 only works the first time.
-    model.puzzle = randomChoice(["3x3x3", "megaminx", "pyraminx"]);
+    let puzzle = model.puzzle;
+    while (puzzle === model.puzzle) {
+      model.puzzle = randomChoice([
+        "3x3x3",
+        "megaminx",
+        "pyraminx",
+        "master_tetraminx",
+        "7x7x7",
+      ]);
+    }
     console.log("model.puzzle", model.puzzle);
     setTimeout(update, 2000);
   }
