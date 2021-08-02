@@ -5,7 +5,10 @@ import { KPuzzle } from "../../../kpuzzle";
 import type { Cube3D } from "../../3D/puzzles/Cube3D";
 import type { PG3D } from "../../3D/puzzles/PG3D";
 import type { Twisty3DScene } from "../../3D/Twisty3DScene";
-import { ManagedCustomElement } from "../element/ManagedCustomElement";
+import {
+  CSSSource,
+  ManagedCustomElement,
+} from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import type { PuzzleID } from "../TwistyPlayerConfig";
 import { Twisty2DSVG } from "../viewers/Twisty2DSVG";
@@ -102,22 +105,38 @@ class Twisty3DWrapper extends ManagedCustomElement {
   #puzzleProp: PuzzleProp;
   constructor(puzzleProp: PuzzleProp) {
     super();
+    this.addCSS(
+      new CSSSource(`
+:host {
+  display: grid;
+  width: 256px !important; height: 256px !important;
+}
+
+twisty-3d-canvas {
+  width: 100%;
+  height: 100%;
+}
+`),
+    );
     this.#puzzleProp = puzzleProp;
     this.#puzzleProp.addEventListener("update", this.onPuzzle.bind(this));
   }
 
   onPuzzle(): void {
-    // TODO: Check if puzzle changed.
-    this.#clearTwisty3DPuzzles();
-    this.pullTwisty3D();
+    console.log("Twisty3DWrapper.onPuzzle");
+    this.#cachedTwisty3D = null;
+    this.updateTwisty3D();
   }
 
   connectedCallback() {
     console.log("connected!");
-    this.contentWrapper.textContent = "wrapper!";
     (async () => {
-      this.pullTwisty3D(); // Note: we specifically don't await.
-      this.appendChild(await this.mainCanvas());
+      this.updateTwisty3D(); // Note: we specifically don't await.
+      this.contentWrapper.appendChild(await this.mainCanvas());
+
+      // TODO: Draw when ready?
+      setTimeout(async () => (await this.mainCanvas()).scheduleRender(), 100); // TODO
+      setTimeout(async () => (await this.mainCanvas()).scheduleRender(), 1000); // TODO
     })();
   }
 
@@ -146,20 +165,20 @@ class Twisty3DWrapper extends ManagedCustomElement {
   #cachedTwisty3D: Promise<Cube3D | PG3D> | null = null;
   async twisty3D(): Promise<Cube3D | PG3D> {
     return (this.#cachedTwisty3D ??= (async () => {
+      const proxy = await this.constructorProxy();
       switch (this.#puzzleProp.puzzleID) {
         case "3x3x3":
-          return await (await this.constructorProxy()).cube3DShim();
+          return await proxy.cube3DShim();
         default: {
-          const pg3d: PG3D = await (
-            await this.constructorProxy()
-          ).pg3dShim(this.#puzzleProp.puzzleID);
-          return pg3d;
+          return await proxy.pg3dShim(this.#puzzleProp.puzzleID);
         }
       }
     })());
   }
 
-  async pullTwisty3D(): Promise<void> {
+  async updateTwisty3D(): Promise<void> {
+    // TODO: Check if puzzle changed.
+    this.#clearTwisty3DPuzzles();
     this.#addTwisty3D(await this.twisty3D());
   }
 
@@ -169,12 +188,20 @@ class Twisty3DWrapper extends ManagedCustomElement {
       (await this.scene()).add(twisty3D); // TODO: Prevent double add?
       this.#twisty3DPuzzlesInScene.add(twisty3D);
     }
+    this.scheduleRender();
   }
 
   async #clearTwisty3DPuzzles(): Promise<void> {
     for (const twisty3D of this.#twisty3DPuzzlesInScene) {
       (await this.scene()).remove(twisty3D);
     }
+    this.scheduleRender();
+  }
+
+  scheduleRender(): void {
+    (async () => {
+      (await this.scene()).scheduleRender();
+    })();
   }
 }
 customElementsShim.define("twisty-3d-wrapper", Twisty3DWrapper);
@@ -242,6 +269,10 @@ class VisualizationProp {
     if (this.#element !== null) {
       this.#wrapperElement.appendChild(this.#element);
     }
+  }
+
+  get element(): HTMLElement | null {
+    return this.#element;
   }
 
   set visualization(visualizationFormat: VisualizationFormat) {
