@@ -3,7 +3,7 @@ import type { PuzzleID, VisualizationFormat } from "../TwistyPlayerConfig";
 import { AlgIssues, AlgProp } from "./depth-1/AlgProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
-import type { VisualizationStrategyProp } from "./depth-2/VisualizationStrategyProp";
+import { VisualizationStrategyProp } from "./depth-2/VisualizationStrategyProp";
 import { PositionProp } from "./depth-3/PositionProp";
 import { VisualizationProp } from "./depth-4/VisualizationProp";
 
@@ -30,7 +30,11 @@ export class TwistyPlayerModel {
       this.puzzleSetupProp,
       this.puzzleProp,
     );
+    this.visualizationStrategyProp = new VisualizationStrategyProp(
+      this.puzzleProp,
+    );
     this.visualizationProp = new VisualizationProp(
+      this.visualizationStrategyProp,
       this.positionProp,
       this.puzzleProp,
     );
@@ -70,10 +74,6 @@ export class TwistyPlayerModel {
 
   get puzzle(): PuzzleID {
     return this.puzzleProp.puzzleID;
-  }
-
-  set visualization(newVisualization: VisualizationFormat) {
-    this.visualizationProp.visualization = newVisualization;
   }
 
   algIssues(): Promise<AlgIssues> {

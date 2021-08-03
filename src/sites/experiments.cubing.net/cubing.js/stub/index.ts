@@ -43,9 +43,9 @@ console.log(model.puzzleProp.puzzleLoader);
   console.log(model.visualizationProp.wrapperElement);
   document.body.appendChild(model.visualizationProp.wrapperElement);
 
-  model.visualizationProp.visualization = "3D";
-  model.visualizationProp.visualization = "2D";
-  model.visualizationProp.visualization = "3D";
+  model.requestedVisualization = "3D";
+  model.requestedVisualization = "2D";
+  model.requestedVisualization = "3D";
   model.alg = "U2 D2";
 
   model.alg = "R++";
