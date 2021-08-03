@@ -10,6 +10,13 @@ import type { PuzzleID } from "../../../../cubing/twisty/dom/TwistyPlayerConfig"
 // So we put a `console.log` here for now.
 console.log("Loading stub file.");
 
+const timeoutInput = document.body.appendChild(
+  document.createElement("input"),
+) as HTMLInputElement;
+timeoutInput.type = "number";
+timeoutInput.value = "200";
+timeoutInput.step = "25";
+
 const model = new TwistyPlayerModel();
 
 console.log(model);
@@ -61,7 +68,7 @@ console.log(model.puzzleProp.puzzleLoader);
       ]);
     }
     console.log("model.puzzle", model.puzzle);
-    setTimeout(update, 2000);
+    setTimeout(update, parseInt(timeoutInput.value));
   }
   update();
 })();
