@@ -33,8 +33,14 @@ export class VisualizationProp {
     // TODO: dedup
     // TODO: Push into `this.element
     // this.wrapperElement.appendChild(document.createElement("br"));
-    const div = this.wrapperElement.appendChild(document.createElement("div"));
-    div.append(` | alg = ${await this.#positionProp.target}`);
+    // const div = this.wrapperElement.appendChild(document.createElement("div"));
+    const twisty3D = await (this.element as Twisty3DWrapper).twisty3D();
+    console.log(
+      twisty3D.onPositionChange({
+        state: await this.#positionProp.target.startState(),
+        movesInProgress: [],
+      }),
+    );
   }
 
   onPuzzle(): void {

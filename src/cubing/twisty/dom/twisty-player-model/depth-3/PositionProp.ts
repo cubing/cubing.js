@@ -1,12 +1,19 @@
-import type { PuzzlePosition } from "../../../animation/cursor/CursorTypes";
+import {
+  KPuzzle,
+  KPuzzleDefinition,
+  Transformation,
+} from "../../../../kpuzzle";
+import type { SetupToLocation } from "../../TwistyPlayerConfig";
 import type { PuzzleProp } from "../depth-1/PuzzleProp";
 import type { PuzzleAlgProp } from "../depth-2/PuzzleAlgProp";
 import { ManagedSource } from "../ManagedSource";
+import { TwistyProp } from "../TwistyProp";
 
-export class PositionProp extends EventTarget {
+export class PositionProp extends TwistyProp {
   #puzzleAlgProp: ManagedSource<PuzzleAlgProp>;
   #puzzleSetupProp: ManagedSource<PuzzleAlgProp>;
   #puzzleProp: ManagedSource<PuzzleProp>;
+  TODO_ANCHOR: SetupToLocation = "end";
 
   constructor(
     puzzleAlgProp: PuzzleAlgProp,
@@ -26,30 +33,42 @@ export class PositionProp extends EventTarget {
   }
 
   async onAlg(): Promise<void> {
-    console.log("PlayerPositionProp.onDerivedAlg");
-    // TODO: dedup
-    // TODO: Push into `this.element
-    // this.wrapperElement.appendChild(document.createElement("br"));
-    console.log(` | alg = ${await this.#puzzleAlgProp.target.alg()}`);
+    console.log("PositionProp.onAlg");
+    this.#cachedStartState = null;
+    this.dispatch();
   }
 
   async onSetup(): Promise<void> {
-    console.log("PlayerPositionProp.onDerivedAlg");
-    // TODO: dedup
-    // TODO: Push into `this.element
-    // this.wrapperElement.appendChild(document.createElement("br"));
-    console.log(` | setup = ${await this.#puzzleSetupProp.target.alg()}`);
+    this.#cachedStartState = null;
+    console.log("PositionProp.onSetup");
+    this.dispatch();
   }
 
   onPuzzle(): void {
-    console.log("PlayerPositionProp.onPuzzle");
-    // TODO: dedup
-    // TODO: Push into `this.element
-    // this.wrapperElement.appendChild(document.createElement("br"));
-    console.log(` | puzzle = ${this.#puzzleProp.target.puzzleID}`);
+    this.#cachedStartState = null;
+    this.#cachedKPuzzleDefinition = null;
+    console.log("PositionProp.onPuzzle");
+    this.dispatch();
   }
 
-  async position(): Promise<PuzzlePosition> {
-    throw new Error("Unipmlemented!");
+  // async position(): Promise<PuzzlePosition> {
+  //   throw new Error("Unipmlemented!");
+  // }
+
+  #cachedStartState: Promise<Transformation> | null = null;
+  #cachedKPuzzleDefinition: Promise<KPuzzleDefinition> | null = null;
+  startState(): Promise<Transformation> {
+    this.#cachedKPuzzleDefinition ??=
+      this.#puzzleProp.target.puzzleLoader.def();
+    return (this.#cachedStartState ??= (async () => {
+      const kpuzzle = new KPuzzle(await this.#cachedKPuzzleDefinition!); // TODO: HOw can we make this easy and safe to reuse?
+      // TODO: It's not
+      // kpuzzle.reset();
+      kpuzzle.applyAlg(await this.#puzzleSetupProp.target.alg()); // TODO: do we have to pull retrieve this value earlier to avoid e.g. puzzle consistency issues?
+      if (this.TODO_ANCHOR === "end") {
+        kpuzzle.applyAlg((await this.#puzzleAlgProp.target.alg()).invert()); // TODO: do we have to pull retrieve this value earlier to avoid e.g. puzzle consistency issues?
+      }
+      return kpuzzle.state;
+    })());
   }
 }

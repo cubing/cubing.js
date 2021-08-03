@@ -48,10 +48,10 @@ console.log(model.puzzleProp.puzzleLoader);
   model.requestedVisualization = "3D";
   model.alg = "U2 D2";
 
-  model.alg = "R++";
+  model.alg = "R";
   model.puzzle = "3x3x3";
-  model.puzzle = "megaminx";
-  model.setup = "F2 L2";
+  // model.puzzle = "megaminx";
+  model.setup = "F L";
 
   (window as any).model = model;
 
