@@ -2,19 +2,19 @@ import type { Alg } from "../../../alg";
 import type { PuzzleID, VisualizationFormat } from "../TwistyPlayerConfig";
 import { AlgIssues, AlgProp } from "./depth-1/AlgProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
-import { DerivedAlgProp } from "./depth-2/DerivedAlgProp";
+import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
 import { VisualizationProp } from "./depth-3/VisualizationProp";
 
 export class TwistyPlayerModel {
   algProp: AlgProp;
   puzzleProp: PuzzleProp;
-  displayAlgProp: DerivedAlgProp;
+  displayAlgProp: PuzzleAlgProp;
   visualizationProp: VisualizationProp;
 
   constructor() {
     this.algProp = new AlgProp();
     this.puzzleProp = new PuzzleProp();
-    this.displayAlgProp = new DerivedAlgProp(this.algProp, this.puzzleProp);
+    this.displayAlgProp = new PuzzleAlgProp(this.algProp, this.puzzleProp);
     this.visualizationProp = new VisualizationProp(
       this.displayAlgProp,
       this.puzzleProp,

@@ -9,7 +9,7 @@ interface DerivedAlgInfo {
   algIssues: AlgIssues;
 }
 
-export class DerivedAlgProp extends EventTarget {
+export class PuzzleAlgProp extends EventTarget {
   algSource: ManagedSource<AlgProp>;
   puzzleSource: ManagedSource<PuzzleProp>;
   constructor(algProp: AlgProp, puzzleProp: PuzzleProp) {

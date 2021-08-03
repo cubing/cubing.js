@@ -1,17 +1,17 @@
 import type { VisualizationFormat } from "../../TwistyPlayerConfig";
 import { Twisty2DSVG } from "../../viewers/Twisty2DSVG";
 import type { PuzzleProp } from "../depth-1/PuzzleProp";
-import type { DerivedAlgProp } from "../depth-2/DerivedAlgProp";
+import type { PuzzleAlgProp } from "../depth-2/PuzzleAlgProp";
 import { Twisty3DWrapper } from "../depth-2/Twisty3DWrapper";
 import { ManagedSource } from "../ManagedSource";
 
 type DerivedVisualizationFormat = "2D" | "3D"; // TODO | null;
 
 export class VisualizationProp {
-  #displayAlgProp: ManagedSource<DerivedAlgProp>;
+  #displayAlgProp: ManagedSource<PuzzleAlgProp>;
   #puzzleProp: ManagedSource<PuzzleProp>;
 
-  constructor(derivedAlgProp: DerivedAlgProp, puzzleProp: PuzzleProp) {
+  constructor(derivedAlgProp: PuzzleAlgProp, puzzleProp: PuzzleProp) {
     this.#displayAlgProp = new ManagedSource(
       derivedAlgProp,
       this.onDerivedAlg.bind(this),
