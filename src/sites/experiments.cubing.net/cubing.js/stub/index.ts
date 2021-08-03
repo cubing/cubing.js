@@ -70,5 +70,7 @@ console.log(model.puzzleProp.puzzleLoader);
     console.log("model.puzzle", model.puzzle);
     setTimeout(update, parseInt(timeoutInput.value));
   }
-  update();
+  if (false) {
+    update();
+  }
 })();
