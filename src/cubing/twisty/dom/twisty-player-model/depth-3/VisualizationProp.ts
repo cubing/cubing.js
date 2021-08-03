@@ -8,24 +8,42 @@ import { ManagedSource } from "../ManagedSource";
 type DerivedVisualizationFormat = "2D" | "3D"; // TODO | null;
 
 export class VisualizationProp {
-  #displayAlgProp: ManagedSource<PuzzleAlgProp>;
+  #puzzleAlgProp: ManagedSource<PuzzleAlgProp>;
+  #puzzleSetupProp: ManagedSource<PuzzleAlgProp>;
   #puzzleProp: ManagedSource<PuzzleProp>;
 
-  constructor(derivedAlgProp: PuzzleAlgProp, puzzleProp: PuzzleProp) {
-    this.#displayAlgProp = new ManagedSource(
-      derivedAlgProp,
-      this.onDerivedAlg.bind(this),
+  constructor(
+    puzzleAlgProp: PuzzleAlgProp,
+    puzzleSetupProp: PuzzleAlgProp,
+    puzzleProp: PuzzleProp,
+  ) {
+    this.#puzzleAlgProp = new ManagedSource(
+      puzzleAlgProp,
+      this.onAlg.bind(this),
+    );
+    this.#puzzleSetupProp = new ManagedSource(
+      puzzleSetupProp,
+      this.onSetup.bind(this),
     );
     this.#puzzleProp = new ManagedSource(puzzleProp, this.onPuzzle.bind(this));
   }
 
-  async onDerivedAlg(): Promise<void> {
+  async onAlg(): Promise<void> {
     console.log("VisualizationProp.onDerivedAlg");
     // TODO: dedup
     // TODO: Push into `this.element
     // this.wrapperElement.appendChild(document.createElement("br"));
     const div = this.wrapperElement.appendChild(document.createElement("div"));
-    div.append(` | alg = ${await this.#displayAlgProp.target.alg()}`);
+    div.append(` | alg = ${await this.#puzzleAlgProp.target.alg()}`);
+  }
+
+  async onSetup(): Promise<void> {
+    console.log("VisualizationProp.onDerivedAlg");
+    // TODO: dedup
+    // TODO: Push into `this.element
+    // this.wrapperElement.appendChild(document.createElement("br"));
+    const div = this.wrapperElement.appendChild(document.createElement("div"));
+    div.append(` | setup = ${await this.#puzzleSetupProp.target.alg()}`);
   }
 
   onPuzzle(): void {

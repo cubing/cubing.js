@@ -7,16 +7,21 @@ import { VisualizationProp } from "./depth-3/VisualizationProp";
 
 export class TwistyPlayerModel {
   algProp: AlgProp;
+  setupProp: AlgProp;
   puzzleProp: PuzzleProp;
-  displayAlgProp: PuzzleAlgProp;
+  puzzleAlgProp: PuzzleAlgProp;
+  puzzleSetupProp: PuzzleAlgProp;
   visualizationProp: VisualizationProp;
 
   constructor() {
     this.algProp = new AlgProp();
+    this.setupProp = new AlgProp();
     this.puzzleProp = new PuzzleProp();
-    this.displayAlgProp = new PuzzleAlgProp(this.algProp, this.puzzleProp);
+    this.puzzleAlgProp = new PuzzleAlgProp(this.algProp, this.puzzleProp);
+    this.puzzleSetupProp = new PuzzleAlgProp(this.setupProp, this.puzzleProp);
     this.visualizationProp = new VisualizationProp(
-      this.displayAlgProp,
+      this.puzzleAlgProp,
+      this.puzzleSetupProp,
       this.puzzleProp,
     );
   }
@@ -27,6 +32,14 @@ export class TwistyPlayerModel {
 
   get alg(): Alg {
     return this.algProp.alg;
+  }
+
+  set setup(newSetup: Alg | string) {
+    this.setupProp.alg = newSetup;
+  }
+
+  get setup(): Alg {
+    return this.setupProp.alg;
   }
 
   set puzzle(puzzleID: PuzzleID) {
@@ -56,6 +69,6 @@ export class TwistyPlayerModel {
   // }
 
   algIssues(): Promise<AlgIssues> {
-    return this.displayAlgProp.algIssues();
+    return this.puzzleAlgProp.algIssues();
   }
 }
