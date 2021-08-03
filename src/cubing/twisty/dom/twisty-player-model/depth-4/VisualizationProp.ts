@@ -1,49 +1,31 @@
 import type { VisualizationFormat } from "../../TwistyPlayerConfig";
 import { Twisty2DSVG } from "../../viewers/Twisty2DSVG";
 import type { PuzzleProp } from "../depth-1/PuzzleProp";
-import type { PuzzleAlgProp } from "../depth-2/PuzzleAlgProp";
 import { Twisty3DWrapper } from "../depth-2/Twisty3DWrapper";
+import type { PositionProp } from "../depth-3/PositionProp";
 import { ManagedSource } from "../ManagedSource";
 
 type DerivedVisualizationFormat = "2D" | "3D"; // TODO | null;
 
 export class VisualizationProp {
-  #puzzleAlgProp: ManagedSource<PuzzleAlgProp>;
-  #puzzleSetupProp: ManagedSource<PuzzleAlgProp>;
+  #positionProp: ManagedSource<PositionProp>;
   #puzzleProp: ManagedSource<PuzzleProp>;
 
-  constructor(
-    puzzleAlgProp: PuzzleAlgProp,
-    puzzleSetupProp: PuzzleAlgProp,
-    puzzleProp: PuzzleProp,
-  ) {
-    this.#puzzleAlgProp = new ManagedSource(
-      puzzleAlgProp,
-      this.onAlg.bind(this),
-    );
-    this.#puzzleSetupProp = new ManagedSource(
-      puzzleSetupProp,
-      this.onSetup.bind(this),
+  constructor(positionProp: PositionProp, puzzleProp: PuzzleProp) {
+    this.#positionProp = new ManagedSource(
+      positionProp,
+      this.onPosition.bind(this),
     );
     this.#puzzleProp = new ManagedSource(puzzleProp, this.onPuzzle.bind(this));
   }
 
-  async onAlg(): Promise<void> {
+  async onPosition(): Promise<void> {
     console.log("VisualizationProp.onDerivedAlg");
     // TODO: dedup
     // TODO: Push into `this.element
     // this.wrapperElement.appendChild(document.createElement("br"));
     const div = this.wrapperElement.appendChild(document.createElement("div"));
-    div.append(` | alg = ${await this.#puzzleAlgProp.target.alg()}`);
-  }
-
-  async onSetup(): Promise<void> {
-    console.log("VisualizationProp.onDerivedAlg");
-    // TODO: dedup
-    // TODO: Push into `this.element
-    // this.wrapperElement.appendChild(document.createElement("br"));
-    const div = this.wrapperElement.appendChild(document.createElement("div"));
-    div.append(` | setup = ${await this.#puzzleSetupProp.target.alg()}`);
+    div.append(` | alg = ${await this.#positionProp.target}`);
   }
 
   onPuzzle(): void {

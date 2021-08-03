@@ -51,6 +51,7 @@ console.log(model.puzzleProp.puzzleLoader);
   model.alg = "R++";
   model.puzzle = "3x3x3";
   model.puzzle = "megaminx";
+  model.setup = "F2 L2";
 
   (window as any).model = model;
 

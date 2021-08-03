@@ -3,7 +3,8 @@ import type { PuzzleID, VisualizationFormat } from "../TwistyPlayerConfig";
 import { AlgIssues, AlgProp } from "./depth-1/AlgProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
-import { VisualizationProp } from "./depth-3/VisualizationProp";
+import { PositionProp } from "./depth-3/PositionProp";
+import { VisualizationProp } from "./depth-4/VisualizationProp";
 
 export class TwistyPlayerModel {
   algProp: AlgProp;
@@ -11,6 +12,7 @@ export class TwistyPlayerModel {
   puzzleProp: PuzzleProp;
   puzzleAlgProp: PuzzleAlgProp;
   puzzleSetupProp: PuzzleAlgProp;
+  positionProp: PositionProp;
   visualizationProp: VisualizationProp;
 
   constructor() {
@@ -19,9 +21,13 @@ export class TwistyPlayerModel {
     this.puzzleProp = new PuzzleProp();
     this.puzzleAlgProp = new PuzzleAlgProp(this.algProp, this.puzzleProp);
     this.puzzleSetupProp = new PuzzleAlgProp(this.setupProp, this.puzzleProp);
-    this.visualizationProp = new VisualizationProp(
+    this.positionProp = new PositionProp(
       this.puzzleAlgProp,
       this.puzzleSetupProp,
+      this.puzzleProp,
+    );
+    this.visualizationProp = new VisualizationProp(
+      this.positionProp,
       this.puzzleProp,
     );
   }
