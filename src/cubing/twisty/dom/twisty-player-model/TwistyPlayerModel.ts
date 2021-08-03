@@ -3,6 +3,7 @@ import type { PuzzleID, VisualizationFormat } from "../TwistyPlayerConfig";
 import { AlgIssues, AlgProp } from "./depth-1/AlgProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
+import type { VisualizationStrategyProp } from "./depth-2/VisualizationStrategyProp";
 import { PositionProp } from "./depth-3/PositionProp";
 import { VisualizationProp } from "./depth-4/VisualizationProp";
 
@@ -10,7 +11,10 @@ export class TwistyPlayerModel {
   algProp: AlgProp;
   setupProp: AlgProp;
   puzzleProp: PuzzleProp;
+
   puzzleAlgProp: PuzzleAlgProp;
+  visualizationStrategyProp: VisualizationStrategyProp;
+
   puzzleSetupProp: PuzzleAlgProp;
   positionProp: PositionProp;
   visualizationProp: VisualizationProp;
@@ -30,6 +34,18 @@ export class TwistyPlayerModel {
       this.positionProp,
       this.puzzleProp,
     );
+  }
+
+  set requestedVisualization(visualization: VisualizationFormat) {
+    this.visualizationStrategyProp.requestedVisualization = visualization;
+  }
+
+  get requestedVisualization(): VisualizationFormat {
+    return this.visualizationStrategyProp.requestedVisualization;
+  }
+
+  get visualizationStrategy(): VisualizationFormat {
+    return this.visualizationStrategyProp.visualizationStrategy;
   }
 
   set alg(newAlg: Alg | string) {
@@ -59,20 +75,6 @@ export class TwistyPlayerModel {
   set visualization(newVisualization: VisualizationFormat) {
     this.visualizationProp.visualization = newVisualization;
   }
-
-  // TODO: Very TODO.
-  get requestedVisualization(): VisualizationFormat {
-    return this.visualizationProp.visualizationInput;
-  }
-
-  // TODO: Very TODO.
-  get effectiveVisualization(): VisualizationFormat {
-    return this.visualizationProp.derivedVisualization;
-  }
-
-  // get puzzleLoader(): PuzzleLoader {
-  //   return this.puzzleProp.puzzleLoader;
-  // }
 
   algIssues(): Promise<AlgIssues> {
     return this.puzzleAlgProp.algIssues();
