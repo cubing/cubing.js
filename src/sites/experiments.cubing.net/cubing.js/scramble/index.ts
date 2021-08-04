@@ -39,8 +39,8 @@ window.addEventListener("DOMContentLoaded", () => {
         // "pyram": "pyraminx",
         // "skewb": "skewb",
         // "sq1": "square1",
-        // "444bf": "4x4x4",
-        // "555bf": "5x5x5",
+        "444bf": "4x4x4",
+        "555bf": "5x5x5",
       }[select.value] as PuzzleID;
     } finally {
       // TODO

@@ -12,12 +12,17 @@ import {
   random333Scramble,
   solve333,
 } from "./solve/puzzles/3x3x3";
-import { initialize444, random444Scramble } from "./solve/puzzles/4x4x4";
+import {
+  initialize444,
+  random444OrientedScramble,
+  random444Scramble,
+} from "./solve/puzzles/4x4x4";
 import { solveMegaminx } from "./solve/puzzles/megaminx";
 import { solvePyraminx } from "./solve/puzzles/pyraminx";
 import { solveSkewb } from "./solve/puzzles/skewb";
 import { setIsInsideWorker } from "./inside-worker";
-import { bigCubeScramble } from "./solve/puzzles/big-cubes";
+import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
+import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
 
 setIsInsideWorker(true);
 
@@ -81,20 +86,27 @@ export const insideAPI = {
         );
       case "444":
         return measurePerf("random444Scramble", random444Scramble);
+      case "444bf":
+        return measurePerf(
+          "random444OrientedScramble",
+          random444OrientedScramble,
+        );
       case "555":
         return measurePerf(
           "bigCubeScramble(5)",
-          bigCubeScramble.bind(bigCubeScramble, 5),
+          bigCubeRandomMoves.bind(bigCubeRandomMoves, 5),
         );
+      case "555bf":
+        return measurePerf("oriented555RandomMoves", oriented555RandomMoves);
       case "666":
         return measurePerf(
           "bigCubeScramble(6)",
-          bigCubeScramble.bind(bigCubeScramble, 6),
+          bigCubeRandomMoves.bind(bigCubeRandomMoves, 6),
         );
       case "777":
         return measurePerf(
           "bigCubeScramble(7)",
-          bigCubeScramble.bind(bigCubeScramble, 7),
+          bigCubeRandomMoves.bind(bigCubeRandomMoves, 7),
         );
       default:
         throw new Error(`unsupported event: ${eventID}`);

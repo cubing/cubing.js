@@ -1,9 +1,10 @@
-import { Alg, AlgBuilder, Move } from "../../../../../alg";
+import { Alg, AlgBuilder } from "../../../../../alg";
 // @ts-ignore
 import { KPuzzle, Transformation } from "../../../../../kpuzzle";
 // @ts-ignore
 import { puzzles } from "../../../../../puzzles";
 import { mustBeInsideWorker } from "../../../inside-worker";
+import { addOrientationSuffix } from "../../addOrientationSuffix";
 import { initialize, solveState } from "../../vendor/min2phase/gwt";
 import { randomChoiceFactory } from "../../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
@@ -33,26 +34,17 @@ export async function random333Scramble(): Promise<Alg> {
   return solve333(await random333State());
 }
 
+export async function initialize333(): Promise<void> {
+  initialize();
+}
+
 const randomSuffixes = [
   [null, "Rw", "Rw2", "Rw'", "Fw", "Fw'"],
   [null, "Dw", "Dw2", "Dw'"],
 ];
 
-export async function initialize333(): Promise<void> {
-  initialize();
-}
-
 export async function random333OrientedScramble(): Promise<Alg> {
-  const algBuilder = new AlgBuilder();
-  const unorientedScramble = await random333Scramble();
-  algBuilder.experimentalPushAlg(unorientedScramble);
-  for (const suffix of randomSuffixes) {
-    const choice = ((await randomChoiceFactory()) as any)(suffix);
-    if (choice !== null) {
-      algBuilder.push(Move.fromString(choice));
-    }
-  }
-  return algBuilder.toAlg();
+  return addOrientationSuffix(await random333Scramble(), randomSuffixes);
 }
 
 const extraBit = new Alg("R' U' F");

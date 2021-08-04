@@ -45,7 +45,8 @@ function cachedAxesMoves(n: number): QuantumMove[][] {
   return axesMoves;
 }
 
-export async function bigCubeScramble(n: number): Promise<Alg> {
+// TODO: Document this algorithm and compare to TNoodle.
+export async function bigCubeRandomMoves(n: number): Promise<Alg> {
   const randomUintBelow = await randomUIntBelowFactory();
   const randomChoice = await randomChoiceFactory<QuantumMove>();
   const randomNumChoice = randomChoice as any as (arr: Array<number>) => number; // TODO: Avoid needing multiple instantiations or recasting.
