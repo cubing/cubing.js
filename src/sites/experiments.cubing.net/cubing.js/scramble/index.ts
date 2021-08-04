@@ -25,15 +25,28 @@ window.addEventListener("DOMContentLoaded", () => {
     twistyPlayer.alg = "";
     try {
       twistyPlayer.puzzle = {
-        222: "2x2x2",
-        333: "3x3x3",
-        444: "4x4x4",
-        minx: "megaminx",
-        clock: "clock",
+        "333": "3x3x3",
+        "222": "2x2x2",
+        "444": "4x4x4",
+        // "555": "5x5x5",
+        // "666": "6x6x6",
+        // "777": "7x7x7",
+        "333bf": "3x3x3",
+        // "333fm": "3x3x3",
+        "333oh": "3x3x3oh",
+        "clock": "clock",
+        "minx": "megaminx",
+        // "pyram": "pyraminx",
+        // "sq1": "square1",
+        // "444bf": "4x4x4",
+        // "555bf": "5x5x5",
       }[select.value] as PuzzleID;
     } finally {
       // TODO
     }
+    twistyPlayer.visualization = ["clock", "sq1"].includes(select.value)
+      ? "2D"
+      : "3D";
     setTimeout(newScramble, 100);
   });
 
