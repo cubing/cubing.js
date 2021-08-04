@@ -7,6 +7,7 @@ import {
 } from "./solve/puzzles/2x2x2";
 import {
   initialize333,
+  random333OrientedScramble,
   random333Scramble,
   solve333,
 } from "./solve/puzzles/3x3x3";
@@ -66,6 +67,11 @@ export const insideAPI = {
       case "333oh":
       case "333ft":
         return measurePerf("random333Scramble", random333Scramble);
+      case "333bf":
+        return measurePerf(
+          "random333OrientedScramble",
+          random333OrientedScramble,
+        );
       case "444":
         return measurePerf("random444Scramble", random444Scramble);
       default:

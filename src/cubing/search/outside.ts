@@ -49,8 +49,6 @@ export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
   switch (eventID) {
     case "clock":
       return Alg.fromString(await randomClockScrambleString());
-    case "333oh":
-      return Alg.fromString(await randomScrambleStringForEvent("333"));
     case "minx":
       return Alg.fromString(await randomMegaminxScrambleString());
   }
