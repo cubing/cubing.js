@@ -9,7 +9,8 @@ import {
   Transformation,
 } from "../../../kpuzzle";
 import { countMoves } from "../../../notation";
-import type { SGSCachedData } from "./parseSGS";
+import type { SGSAction, SGSCachedData } from "./parseSGS";
+import { randomChoiceFactory } from "./vendor/random-uint-below";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
@@ -197,4 +198,18 @@ export class TrembleSolver {
     }
     return algBuilder.toAlg();
   }
+}
+
+export async function randomStateFromSGS(
+  def: KPuzzleDefinition,
+  sgs: SGSCachedData,
+): Promise<Transformation> {
+  const randomChoice = await randomChoiceFactory<SGSAction>(); // TODO: make this sync by putting the factory into a TLA
+
+  let state = identityTransformation(def);
+  for (const step of sgs.ordering) {
+    const sgsAction = randomChoice(Object.values(step.lookup));
+    state = combineTransformations(def, state, sgsAction.transformation);
+  }
+  return state;
 }

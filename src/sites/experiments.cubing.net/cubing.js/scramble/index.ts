@@ -37,7 +37,7 @@ window.addEventListener("DOMContentLoaded", () => {
         "clock": "clock",
         "minx": "megaminx",
         // "pyram": "pyraminx",
-        // "skewb": "skewb",
+        "skewb": "skewb",
         // "sq1": "square1",
         "444bf": "4x4x4",
         "555bf": "5x5x5",

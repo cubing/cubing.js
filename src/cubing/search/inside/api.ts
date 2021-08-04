@@ -19,7 +19,10 @@ import {
 } from "./solve/puzzles/4x4x4";
 import { solveMegaminx } from "./solve/puzzles/megaminx";
 import { solvePyraminx } from "./solve/puzzles/pyraminx";
-import { solveSkewb } from "./solve/puzzles/skewb";
+import {
+  randomSkewbFixedCornerScramble,
+  solveSkewb,
+} from "./solve/puzzles/skewb";
 import { setIsInsideWorker } from "./inside-worker";
 import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
 import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
@@ -107,6 +110,11 @@ export const insideAPI = {
         return measurePerf(
           "bigCubeScramble(7)",
           bigCubeRandomMoves.bind(bigCubeRandomMoves, 7),
+        );
+      case "skewb":
+        return measurePerf(
+          "randomSkewbFixedCornerScramble",
+          randomSkewbFixedCornerScramble,
         );
       default:
         throw new Error(`unsupported event: ${eventID}`);

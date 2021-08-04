@@ -18,12 +18,18 @@ export async function skewbDefWithoutMOCached(): Promise<KPuzzleDefinition> {
 }
 
 let cachedData: Promise<SGSCachedData> | null = null;
-export async function cachedSGSDataSkewb() {
-  return (cachedData ??= sgsDataSkewb());
+export async function sgsDataSkewb() {
+  return (cachedData ??= uncachedSGSDataSkewb());
+}
+
+export async function sgsDataSkewbFixedCorner(): Promise<SGSCachedData> {
+  return {
+    ordering: (await sgsDataSkewb()).ordering.slice(1),
+  };
 }
 
 // TODO: Reduce info.
-export async function sgsDataSkewb(): Promise<SGSCachedData> {
+async function uncachedSGSDataSkewb(): Promise<SGSCachedData> {
   return parseSGS(
     await skewbDefWithoutMOCached(),
     `SubgroupSizes 24 6 5 12 9 3 4 9 3 3
