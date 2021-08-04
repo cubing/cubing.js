@@ -42,11 +42,15 @@ export class IndexerProp extends TwistyProp {
   async onAlg(): Promise<void> {
     console.log("PositionProp.onAlg");
     this.#cachedStartState = null;
+    this.#cachedIndexer = null;
+    this.#cachedTimeRange = null;
     this.dispatch();
   }
 
   async onSetup(): Promise<void> {
-    this.#cachedStartState = null;
+    if (this.TODO_ANCHOR === "end") {
+      this.#cachedStartState = null;
+    }
     console.log("PositionProp.onSetup");
     this.dispatch();
   }
@@ -54,6 +58,8 @@ export class IndexerProp extends TwistyProp {
   onPuzzle(): void {
     this.#cachedStartState = null;
     this.#cachedKPuzzleDefinition = null;
+    this.#cachedIndexer = null;
+    this.#cachedTimeRange = null; // This doesn't currently depend on the puzzle, but this is future-proofing.
     console.log("PositionProp.onPuzzle");
     this.dispatch();
   }
@@ -88,7 +94,7 @@ export class IndexerProp extends TwistyProp {
         this.#puzzleProp.target.puzzleLoader.def(),
       ]);
       const kpuzzleWrapper = new KPuzzleWrapper(puzzle); // TODO: remove this level
-      return new this.#INDEXER_CONSTRUCTOR(kpuzzleWrapper, alg);
+      return new this.#INDEXER_CONSTRUCTOR(kpuzzleWrapper, alg); // TODO: Puzzle-specific indexing (e.g. due to parallel moves)
     })());
   }
 
