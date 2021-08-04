@@ -33,7 +33,10 @@ import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
 
 setIsInsideWorker(true);
 
-const DEBUG_MEASURE_PERF = true;
+let DEBUG_MEASURE_PERF = true;
+export function setDebugMeasurePerf(newDebugMeasurePerf: boolean): void {
+  DEBUG_MEASURE_PERF = newDebugMeasurePerf;
+}
 
 function now() {
   return (typeof performance === "undefined" ? Date : performance).now();
