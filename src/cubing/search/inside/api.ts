@@ -76,7 +76,7 @@ export const insideAPI = {
     }
   },
 
-  randomScramble: async (eventID: string): Promise<Alg> => {
+  randomScrambleForEvent: async (eventID: string): Promise<Alg> => {
     switch (eventID) {
       case "222":
         return measurePerf("random222Scramble", random222Scramble);
@@ -139,7 +139,7 @@ export const insideAPI = {
   },
 
   randomScrambleStringForEvent: async (eventID: string): Promise<string> => {
-    return (await insideAPI.randomScramble(eventID)).toString();
+    return (await insideAPI.randomScrambleForEvent(eventID)).toString();
   },
 
   solve333ToString: async (s: Transformation): Promise<string> => {

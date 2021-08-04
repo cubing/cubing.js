@@ -24,7 +24,7 @@ setDebugMeasurePerf(false);
 describe("Internal API", () => {
   for (const event of events) {
     it(`Generates scramble alg for event: ${event}`, () => {
-      expect(() => insideAPI.randomScramble(event)).not.toThrow();
+      expect(() => insideAPI.randomScrambleForEvent(event)).not.toThrow();
     });
   }
 
