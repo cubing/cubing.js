@@ -90,17 +90,23 @@ twisty-3d-canvas {
   async updateTwisty3D(): Promise<void> {
     // TODO: Check if puzzle changed.
     const twisty3D = await this.twisty3D();
-    this.#clearTwisty3DPuzzles();
-    this.#addTwisty3D(twisty3D);
+    this.#addTwisty3D(twisty3D, { removeExisting: true });
   }
 
   #twisty3DPuzzlesInScene: Set<Cube3D | PG3D> = new Set();
-  async #addTwisty3D(twisty3D: Cube3D | PG3D): Promise<void> {
+  async #addTwisty3D(
+    twisty3D: Cube3D | PG3D,
+    options?: { removeExisting?: boolean },
+  ): Promise<void> {
+    const scene = await this.scene();
     if (!this.#twisty3DPuzzlesInScene.has(twisty3D)) {
-      (await this.scene()).add(twisty3D); // TODO: Prevent double add?
+      if (options?.removeExisting) {
+        this.#clearTwisty3DPuzzles();
+      }
+      scene.add(twisty3D); // TODO: Prevent double add?
       this.#twisty3DPuzzlesInScene.add(twisty3D);
+      this.scheduleRender();
     }
-    this.scheduleRender();
   }
 
   async #clearTwisty3DPuzzles(): Promise<void> {
