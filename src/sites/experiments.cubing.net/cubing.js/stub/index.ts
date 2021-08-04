@@ -21,7 +21,7 @@ const model = new TwistyPlayerModel();
 
 console.log(model);
 model.algProp.alg = new Alg("R U R'");
-model.puzzleProp.puzzleID = "skewb";
+// model.puzzleProp.puzzleID = "skewb";
 
 console.log(model.puzzleProp.puzzleLoader);
 (async () => {
@@ -37,20 +37,20 @@ console.log(model.puzzleProp.puzzleLoader);
   model.algProp.setFromString("R++");
   (await model.algIssues()).log();
 
-  model.puzzleProp.puzzleID = "megaminx";
+  // model.puzzleProp.puzzleID = "megaminx";
   (await model.algIssues()).log();
 
   console.log(model.visualizationProp.wrapperElement);
   document.body.appendChild(model.visualizationProp.wrapperElement);
 
   model.requestedVisualization = "3D";
-  model.requestedVisualization = "2D";
+  // model.requestedVisualization = "2D";
   model.requestedVisualization = "3D";
   model.alg = "U2 D2";
 
   model.alg = "L U2 D F";
   model.puzzle = "3x3x3";
-  // model.puzzle = "megaminx";
+  model.puzzle = "pyraminx";
   model.setup = "R2 U R U R' U' R' U' R' U R'";
 
   (window as any).model = model;

@@ -36,6 +36,7 @@ twisty-3d-canvas {
   onPuzzle(): void {
     console.log("Twisty3DWrapper.onPuzzle");
     this.#cachedTwisty3D = null;
+    this.#clearTwisty3DPuzzles();
     this.updateTwisty3D();
   }
 
@@ -90,30 +91,33 @@ twisty-3d-canvas {
   async updateTwisty3D(): Promise<void> {
     // TODO: Check if puzzle changed.
     const twisty3D = await this.twisty3D();
-    this.#addTwisty3D(twisty3D, { removeExisting: true });
+    this.#addTwisty3D(twisty3D);
   }
 
   #twisty3DPuzzlesInScene: Set<Cube3D | PG3D> = new Set();
   async #addTwisty3D(
     twisty3D: Cube3D | PG3D,
-    options?: { removeExisting?: boolean },
+    // options?: { removeExisting?: boolean },
   ): Promise<void> {
     const scene = await this.scene();
     if (!this.#twisty3DPuzzlesInScene.has(twisty3D)) {
-      if (options?.removeExisting) {
-        this.#clearTwisty3DPuzzles();
+      // if (options?.removeExisting) {
+      //   this.#clearTwisty3DPuzzles();
+      // }
+      if ((await this.twisty3D()) === twisty3D) {
+        scene.add(twisty3D); // TODO: Prevent double add?
+        this.#twisty3DPuzzlesInScene.add(twisty3D);
       }
-      scene.add(twisty3D); // TODO: Prevent double add?
-      this.#twisty3DPuzzlesInScene.add(twisty3D);
       this.scheduleRender();
     }
   }
 
   async #clearTwisty3DPuzzles(): Promise<void> {
-    for (const twisty3D of this.#twisty3DPuzzlesInScene) {
+    const old = this.#twisty3DPuzzlesInScene;
+    this.#twisty3DPuzzlesInScene = new Set();
+    for (const twisty3D of old) {
       (await this.scene()).remove(twisty3D);
     }
-    this.#twisty3DPuzzlesInScene.clear();
     this.scheduleRender();
   }
 
