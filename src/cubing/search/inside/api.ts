@@ -17,6 +17,7 @@ import { solveMegaminx } from "./solve/puzzles/megaminx";
 import { solvePyraminx } from "./solve/puzzles/pyraminx";
 import { solveSkewb } from "./solve/puzzles/skewb";
 import { setIsInsideWorker } from "./inside-worker";
+import { bigCubeScramble } from "./solve/puzzles/big-cubes";
 
 setIsInsideWorker(true);
 
@@ -80,6 +81,21 @@ export const insideAPI = {
         );
       case "444":
         return measurePerf("random444Scramble", random444Scramble);
+      case "555":
+        return measurePerf(
+          "bigCubeScramble(5)",
+          bigCubeScramble.bind(bigCubeScramble, 5),
+        );
+      case "666":
+        return measurePerf(
+          "bigCubeScramble(6)",
+          bigCubeScramble.bind(bigCubeScramble, 6),
+        );
+      case "777":
+        return measurePerf(
+          "bigCubeScramble(7)",
+          bigCubeScramble.bind(bigCubeScramble, 7),
+        );
       default:
         throw new Error(`unsupported event: ${eventID}`);
     }
