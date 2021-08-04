@@ -1,8 +1,8 @@
 import { cachedSGSData3x3x3 } from "./3x3x3-inefficient.sgs.json";
 import { cachedData222 } from "./2x2x2.sgs.json";
 import { cachedSGSDataMegaminx } from "./megaminx.sgs.json";
-import { cachedSGSDataPyraminx } from "./pyraminx.sgs.json";
-import { cachedSGSDataSkewb } from "./skewb.sgs.json";
+import { sgsDataPyraminx } from "./pyraminx.sgs.json";
+import { sgsDataSkewb } from "./skewb.sgs.json";
 
 describe("SGS", () => {
   it("Parses 2x2x2 SGS", () => {
@@ -18,10 +18,10 @@ describe("SGS", () => {
   });
 
   it("Parses Pyraminx SGS", () => {
-    expect(cachedSGSDataPyraminx).not.toThrow();
+    expect(sgsDataPyraminx).not.toThrow();
   });
 
   it("Parses Skewb SGS", () => {
-    expect(cachedSGSDataSkewb).not.toThrow();
+    expect(sgsDataSkewb).not.toThrow();
   });
 });

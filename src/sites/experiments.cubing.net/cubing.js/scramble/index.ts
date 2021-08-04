@@ -1,7 +1,7 @@
+import { puzzleIDForWCAEvent } from "../../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import "../../../../cubing/twisty";
 import type { TwistyPlayer } from "../../../../cubing/twisty";
-import type { PuzzleID } from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
 
 const select = document.querySelector("select") as HTMLSelectElement;
 const scrambleStringDiv = document.querySelector(
@@ -24,16 +24,13 @@ window.addEventListener("DOMContentLoaded", () => {
   select.addEventListener("change", () => {
     twistyPlayer.alg = "";
     try {
-      twistyPlayer.puzzle = {
-        222: "2x2x2",
-        333: "3x3x3",
-        444: "4x4x4",
-        minx: "megaminx",
-        clock: "clock",
-      }[select.value] as PuzzleID;
+      twistyPlayer.puzzle = puzzleIDForWCAEvent(select.value)!;
     } finally {
       // TODO
     }
+    twistyPlayer.visualization = ["clock", "sq1"].includes(select.value)
+      ? "2D"
+      : "3D";
     setTimeout(newScramble, 100);
   });
 

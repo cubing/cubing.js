@@ -12,7 +12,7 @@ interface PieceReference {
   permutationIdx: number;
 }
 
-interface SGSAction {
+export interface SGSAction {
   alg: Alg;
   transformation: Transformation;
 }
