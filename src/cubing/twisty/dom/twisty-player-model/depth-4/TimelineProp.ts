@@ -3,7 +3,7 @@ import type { IndexerProp } from "../depth-3/IndexerProp";
 import { ManagedSource } from "../ManagedSource";
 import { TwistyProp } from "../TwistyProp";
 
-export class VisualizationProp extends TwistyProp {
+export class TimelineProp extends TwistyProp {
   #indexerProps: ManagedSource<IndexerProp>[];
 
   constructor(initialIndexerProps: IndexerProp[]) {
