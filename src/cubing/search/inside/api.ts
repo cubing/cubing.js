@@ -29,6 +29,7 @@ import {
 import { setIsInsideWorker } from "./inside-worker";
 import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
 import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
+import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
 
 setIsInsideWorker(true);
 
@@ -123,6 +124,11 @@ export const insideAPI = {
         return measurePerf(
           "randomPyraminxScrambleFixedOrientation",
           randomPyraminxScrambleFixedOrientation,
+        );
+      case "sq1":
+        return measurePerf(
+          "getRandomSquare1Scramble",
+          getRandomSquare1Scramble,
         );
       default:
         throw new Error(`unsupported event: ${eventID}`);
