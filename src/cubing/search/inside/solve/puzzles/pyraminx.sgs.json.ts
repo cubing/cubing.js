@@ -2,12 +2,18 @@ import { puzzles } from "../../../../puzzles";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
 let cachedData: Promise<SGSCachedData> | null = null;
-export async function cachedSGSDataPyraminx() {
-  return (cachedData ??= sgsDataPyraminx());
+export async function sgsDataPyraminx() {
+  return (cachedData ??= uncachedSGSDataPyraminx());
+}
+
+export async function sgsDataPyraminxFixedOrientation(): Promise<SGSCachedData> {
+  return {
+    ordering: (await sgsDataPyraminx()).ordering.slice(1),
+  };
 }
 
 // TODO: Reduce info.
-async function sgsDataPyraminx(): Promise<SGSCachedData> {
+async function uncachedSGSDataPyraminx(): Promise<SGSCachedData> {
   return parseSGS(
     await puzzles.pyraminx.def(),
     `SubgroupSizes 12 9 12 3 10 3 8 6 2 3 3 3 3

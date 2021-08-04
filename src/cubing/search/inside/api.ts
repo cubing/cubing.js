@@ -18,7 +18,10 @@ import {
   random444Scramble,
 } from "./solve/puzzles/4x4x4";
 import { solveMegaminx } from "./solve/puzzles/megaminx";
-import { solvePyraminx } from "./solve/puzzles/pyraminx";
+import {
+  randomPyraminxScrambleFixedOrientation,
+  solvePyraminx,
+} from "./solve/puzzles/pyraminx";
 import {
   randomSkewbFixedCornerScramble,
   solveSkewb,
@@ -115,6 +118,11 @@ export const insideAPI = {
         return measurePerf(
           "randomSkewbFixedCornerScramble",
           randomSkewbFixedCornerScramble,
+        );
+      case "pyram":
+        return measurePerf(
+          "randomPyraminxScrambleFixedOrientation",
+          randomPyraminxScrambleFixedOrientation,
         );
       default:
         throw new Error(`unsupported event: ${eventID}`);
