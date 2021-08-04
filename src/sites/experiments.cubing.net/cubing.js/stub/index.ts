@@ -48,7 +48,7 @@ console.log(model.puzzleProp.puzzleLoader);
   model.requestedVisualization = "3D";
   model.alg = "U2 D2";
 
-  model.alg = "L U2";
+  model.alg = "L U2 D F";
   model.puzzle = "3x3x3";
   // model.puzzle = "megaminx";
   model.setup = "R2 U R U R' U' R' U' R' U R'";

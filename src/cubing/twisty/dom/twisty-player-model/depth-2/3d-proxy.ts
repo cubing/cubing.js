@@ -11,7 +11,9 @@ export { Twisty3DCanvas } from "../../viewers/Twisty3DCanvas";
 
 export async function cube3DShim(): Promise<Cube3D> {
   console.log("cube3DShim");
-  return new Cube3D(await cube3x3x3.def());
+  const cursorShim = { addPositionListener: () => {} } as any as AlgCursor; // TODO
+  const renderCallbackShim = () => {};
+  return new Cube3D(await cube3x3x3.def(), cursorShim, renderCallbackShim);
 }
 
 // TODO: take loader?

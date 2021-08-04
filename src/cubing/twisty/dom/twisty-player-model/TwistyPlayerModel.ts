@@ -8,6 +8,7 @@ import { VisualizationStrategyProp } from "./depth-2/VisualizationStrategyProp";
 import { IndexerProp } from "./depth-3/IndexerProp";
 import { TimelineProp } from "./depth-4/TimelineProp";
 import { VisualizationProp } from "./depth-4/VisualizationProp";
+import { PositionProp } from "./depth-5/PositionProp";
 
 export class TwistyPlayerModel {
   algProp: AlgProp;
@@ -22,6 +23,8 @@ export class TwistyPlayerModel {
 
   timelineProp: TimelineProp;
   visualizationProp: VisualizationProp;
+
+  positionProp: PositionProp;
 
   constructor() {
     this.algProp = new AlgProp();
@@ -46,6 +49,8 @@ export class TwistyPlayerModel {
       this.indexerProp,
       this.puzzleProp,
     );
+
+    this.positionProp = new PositionProp(this.indexerProp, this.timelineProp);
   }
 
   set requestedVisualization(visualization: VisualizationFormat) {
