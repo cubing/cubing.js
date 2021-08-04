@@ -1,10 +1,11 @@
 import type { Alg } from "../../../alg";
+import type { TimeRange } from "../../animation/cursor/AlgCursor";
 import type { PuzzleID, VisualizationFormat } from "../TwistyPlayerConfig";
 import { AlgIssues, AlgProp } from "./depth-1/AlgProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
 import { VisualizationStrategyProp } from "./depth-2/VisualizationStrategyProp";
-import { PositionProp } from "./depth-3/PositionProp";
+import { IndexerProp } from "./depth-3/IndexerProp";
 import { VisualizationProp } from "./depth-4/VisualizationProp";
 
 export class TwistyPlayerModel {
@@ -16,7 +17,7 @@ export class TwistyPlayerModel {
   visualizationStrategyProp: VisualizationStrategyProp;
 
   puzzleSetupProp: PuzzleAlgProp;
-  positionProp: PositionProp;
+  indexerProp: IndexerProp;
   visualizationProp: VisualizationProp;
 
   constructor() {
@@ -25,7 +26,7 @@ export class TwistyPlayerModel {
     this.puzzleProp = new PuzzleProp();
     this.puzzleAlgProp = new PuzzleAlgProp(this.algProp, this.puzzleProp);
     this.puzzleSetupProp = new PuzzleAlgProp(this.setupProp, this.puzzleProp);
-    this.positionProp = new PositionProp(
+    this.indexerProp = new IndexerProp(
       this.puzzleAlgProp,
       this.puzzleSetupProp,
       this.puzzleProp,
@@ -35,7 +36,7 @@ export class TwistyPlayerModel {
     );
     this.visualizationProp = new VisualizationProp(
       this.visualizationStrategyProp,
-      this.positionProp,
+      this.indexerProp,
       this.puzzleProp,
     );
   }
@@ -74,6 +75,10 @@ export class TwistyPlayerModel {
 
   get puzzle(): PuzzleID {
     return this.puzzleProp.puzzleID;
+  }
+
+  timeRange(): Promise<TimeRange> {
+    return this.indexerProp.timeRange();
   }
 
   algIssues(): Promise<AlgIssues> {

@@ -4,7 +4,10 @@ import {
   Transformation,
 } from "../../../../kpuzzle";
 import { KPuzzleWrapper } from "../../../3D/puzzles/KPuzzleWrapper";
-import type { IndexerConstructor } from "../../../animation/cursor/AlgCursor";
+import type {
+  IndexerConstructor,
+  TimeRange,
+} from "../../../animation/cursor/AlgCursor";
 import type { AlgIndexer } from "../../../animation/indexer/AlgIndexer";
 import { TreeAlgIndexer } from "../../../animation/indexer/tree/TreeAlgIndexer";
 import type { SetupToLocation } from "../../TwistyPlayerConfig";
@@ -13,7 +16,7 @@ import type { PuzzleAlgProp } from "../depth-2/PuzzleAlgProp";
 import { ManagedSource } from "../ManagedSource";
 import { TwistyProp } from "../TwistyProp";
 
-export class PositionProp extends TwistyProp {
+export class IndexerProp extends TwistyProp {
   #puzzleAlgProp: ManagedSource<PuzzleAlgProp>;
   #puzzleSetupProp: ManagedSource<PuzzleAlgProp>;
   #puzzleProp: ManagedSource<PuzzleProp>;
@@ -86,6 +89,16 @@ export class PositionProp extends TwistyProp {
       ]);
       const kpuzzleWrapper = new KPuzzleWrapper(puzzle); // TODO: remove this level
       return new this.#INDEXER_CONSTRUCTOR(kpuzzleWrapper, alg);
+    })());
+  }
+
+  #cachedTimeRange: Promise<TimeRange> | null = null;
+  async timeRange(): Promise<TimeRange> {
+    return (this.#cachedTimeRange ??= (async () => {
+      return {
+        start: 0,
+        end: (await this.indexer()).algDuration(),
+      };
     })());
   }
 }

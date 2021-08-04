@@ -2,17 +2,17 @@ import { Twisty2DSVG } from "../../viewers/Twisty2DSVG";
 import type { PuzzleProp } from "../depth-1/PuzzleProp";
 import { Twisty3DWrapper } from "../depth-2/Twisty3DWrapper";
 import type { VisualizationStrategyProp } from "../depth-2/VisualizationStrategyProp";
-import type { PositionProp } from "../depth-3/PositionProp";
+import type { IndexerProp } from "../depth-3/IndexerProp";
 import { ManagedSource } from "../ManagedSource";
 
 export class VisualizationProp {
   #visualizationStrategyProp: ManagedSource<VisualizationStrategyProp>;
-  #positionProp: ManagedSource<PositionProp>;
+  #positionProp: ManagedSource<IndexerProp>;
   #puzzleProp: ManagedSource<PuzzleProp>;
 
   constructor(
     visualizationStrategyProp: VisualizationStrategyProp,
-    positionProp: PositionProp,
+    positionProp: IndexerProp,
     puzzleProp: PuzzleProp,
   ) {
     this.#visualizationStrategyProp = new ManagedSource(
