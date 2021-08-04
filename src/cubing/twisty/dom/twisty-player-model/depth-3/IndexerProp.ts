@@ -3,6 +3,10 @@ import {
   KPuzzleDefinition,
   Transformation,
 } from "../../../../kpuzzle";
+import { KPuzzleWrapper } from "../../../3D/puzzles/KPuzzleWrapper";
+import type { IndexerConstructor } from "../../../animation/cursor/AlgCursor";
+import type { AlgIndexer } from "../../../animation/indexer/AlgIndexer";
+import { TreeAlgIndexer } from "../../../animation/indexer/tree/TreeAlgIndexer";
 import type { SetupToLocation } from "../../TwistyPlayerConfig";
 import type { PuzzleProp } from "../depth-1/PuzzleProp";
 import type { PuzzleAlgProp } from "../depth-2/PuzzleAlgProp";
@@ -69,6 +73,19 @@ export class PositionProp extends TwistyProp {
         kpuzzle.applyAlg((await this.#puzzleAlgProp.target.alg()).invert()); // TODO: do we have to pull retrieve this value earlier to avoid e.g. puzzle consistency issues?
       }
       return kpuzzle.state;
+    })());
+  }
+
+  #cachedIndexer: Promise<AlgIndexer<KPuzzleWrapper>> | null = null;
+  #INDEXER_CONSTRUCTOR: IndexerConstructor = TreeAlgIndexer;
+  async indexer(): Promise<AlgIndexer<KPuzzleWrapper>> {
+    return (this.#cachedIndexer ??= (async () => {
+      const [alg, puzzle] = await Promise.all([
+        this.#puzzleAlgProp.target.alg(),
+        this.#puzzleProp.target.puzzleLoader.def(),
+      ]);
+      const kpuzzleWrapper = new KPuzzleWrapper(puzzle); // TODO: remove this level
+      return new this.#INDEXER_CONSTRUCTOR(kpuzzleWrapper, alg);
     })());
   }
 }
