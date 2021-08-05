@@ -77,6 +77,7 @@ async function randomizeOrbit(
   }
 }
 
+// TODO: Use SGS?
 export async function random222State(): Promise<Transformation> {
   const nonExtensibleDef = await puzzles["2x2x2"].def();
   const def = Object.assign({}, nonExtensibleDef);

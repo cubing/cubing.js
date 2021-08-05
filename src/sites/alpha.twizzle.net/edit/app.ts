@@ -28,6 +28,7 @@ import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
 import "../../../cubing/twisty/dom/stream/TwistyStreamSource";
 import type { TwistyStreamSource } from "../../../cubing/twisty/dom/stream/TwistyStreamSource";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream";
+import type { PuzzleID } from "../../../cubing/twisty/dom/TwistyPlayerConfig";
 
 export interface AppData {
   puzzleName: string;
@@ -51,6 +52,20 @@ function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
   newAlgBuilder.experimentalPushAlg(newAlg);
   return newAlgBuilder.toAlg();
 }
+
+const SCRAMBLE_EVENTS: Partial<Record<PuzzleID, string>> = {
+  "3x3x3": "333",
+  "2x2x2": "222",
+  "4x4x4": "444",
+  "5x5x5": "555",
+  "6x6x6": "666",
+  "7x7x7": "777",
+  "clock": "clock",
+  "megaminx": "minx",
+  "pyraminx": "pyram",
+  "skewb": "skewb",
+  "square1": "sq1",
+};
 
 export class App {
   public twistyPlayer: TwistyPlayer;
@@ -219,34 +234,16 @@ export class App {
   }
 
   async scramble(): Promise<void> {
-    let scramble: Alg;
-    switch (this.twistyPlayer.puzzle) {
-      case "2x2x2": {
-        scramble = await randomScrambleForEvent("222");
-        break;
-      }
-      case "3x3x3": {
-        scramble = await randomScrambleForEvent("333");
-        break;
-      }
-      case "4x4x4": {
-        scramble = await randomScrambleForEvent("444");
-        break;
-      }
-      case "megaminx": {
-        scramble = await randomScrambleForEvent("minx");
-        break;
-      }
-      case "clock": {
-        scramble = await randomScrambleForEvent("clock");
-        break;
-      }
-      default:
-        return;
+    const event = SCRAMBLE_EVENTS[this.twistyPlayer.puzzle];
+    if (event) {
+      this.controlPane.setAlg(
+        algAppend(
+          this.twistyPlayer.alg,
+          " Scramble",
+          await randomScrambleForEvent(event),
+        ),
+      );
     }
-    this.controlPane.setAlg(
-      algAppend(this.twistyPlayer.alg, " Scramble", scramble),
-    );
   }
 }
 
@@ -705,7 +702,7 @@ class ControlPane {
     );
     this.toolGrid.setButtonEnabled(
       "scramble",
-      ["2x2x2", "3x3x3", "4x4x4", "megaminx", "clock"].includes(puzzle),
+      Object.keys(SCRAMBLE_EVENTS).includes(puzzle),
     );
     this.toolGrid.setButtonEnabled(
       "screenshot",
