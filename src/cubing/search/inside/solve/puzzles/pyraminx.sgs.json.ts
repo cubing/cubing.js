@@ -8,7 +8,7 @@ export async function sgsDataPyraminx() {
 
 export async function sgsDataPyraminxFixedOrientation(): Promise<SGSCachedData> {
   return {
-    ordering: (await sgsDataPyraminx()).ordering.slice(1),
+    ordering: (await sgsDataPyraminx()).ordering.slice(2),
   };
 }
 
