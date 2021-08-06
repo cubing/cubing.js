@@ -21,7 +21,7 @@ import {
   TimestampLocationType,
 } from "../animation/Timeline";
 import { TwistyControlButtonPanel } from "./controls/buttons";
-import type { TwistyControlElement } from "./controls/TwistyControlElement.ts";
+import type { TwistyControlElement } from "./controls/TwistyControlElement";
 import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";

@@ -8,7 +8,7 @@ import type {
 } from "../../animation/Timeline";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
-import type { TwistyControlElement } from "./TwistyControlElement.ts";
+import type { TwistyControlElement } from "./TwistyControlElement";
 import { twistyScrubberCSS } from "./TwistyScrubber.css_";
 
 // Usually a horizontal line.
