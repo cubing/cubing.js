@@ -35,7 +35,7 @@ export abstract class TwistySourceProp<T> extends TwistyPropParent<T> {
 }
 
 // TODO: Can / should we support `null` as a valid output value?
-export abstract class TwistyPropV2<
+export abstract class TwistyProp<
   InputTypes extends Object,
   OutputType,
 > extends TwistyPropParent<OutputType> {
@@ -90,44 +90,3 @@ export abstract class TwistyPropV2<
 
   protected abstract derive(input: InputTypes): Promise<OutputType>;
 }
-
-// interface GenerationalLazyPromise<T> {
-//   generation: number;
-//   lazyPromise: Promise<T>;
-// }
-
-// interface LazyPromiseEventDetail<T> {
-//   lazyPromise: GenerationalLazyPromise<T>;
-// }
-
-// type LazyPromiseEvent<T> = CustomEvent<LazyPromiseEventDetail<T>>;
-
-// let globalGenerationCounter = 0;
-
-// TODO: add stale marker?
-// export class ManagedSource<T> extends EventTarget {
-//   #target: TwistyPropV2<T>;
-//   constructor(target: TwistyPropV2<T>, private listener: () => {}) {
-//     super();
-//     // this.set(target);
-//     this.#target = target;
-//     this.#target.addEventListener("update", this.#onUpdate.bind(this));
-//   }
-
-//   value(): Promise<T> {}
-
-//   #onUpdate(event: LazyPromiseEvent<T>): void {
-//     this.#lazyPromise = event.detail.lazyPromise;
-//   }
-
-//   get target(): TwistyPropV2<T> {
-//     return this.#target;
-//   }
-// }
-
-// Principles:
-// - Any time a value is derived, it uses a consistent set of input generations.
-// - Values are immutable.
-// - Don't derive any value unless someone awaits it. To start an expensive operation, get someone to await a derived value that depends on it.
-
-// TODO: Isolating reused objects (e.g. Twisty3D)
