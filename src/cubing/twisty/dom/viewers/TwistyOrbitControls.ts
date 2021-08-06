@@ -254,7 +254,7 @@ export class TwistyOrbitControls {
       this.lastTouchClientY = e.touches[0].clientY;
       window.addEventListener("touchmove", this.onTouchMoveBound);
       window.addEventListener("touchend", this.onTouchEndBound);
-      window.addEventListener("touchcanel", this.onTouchEndBound);
+      window.addEventListener("touchcancel", this.onTouchEndBound);
       this.onStart(e);
 
       this.lastTouchTimestamp = e.timeStamp;
