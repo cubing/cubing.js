@@ -41,11 +41,15 @@ class D extends TwistyPropV2<{ b: number; c: number }, boolean> {
   }
 }
 
-const a = new A();
+const a = new A(2);
 const b = new B({ a });
 const c = new C({ a });
 const d = new D({ b, c });
 
+console.log(await a.get(), await b.get(), await c.get(), await d.get());
+a.set(6);
+console.log(await a.get(), await b.get(), await c.get(), await d.get());
+a.set(8);
 console.log(await a.get(), await b.get(), await c.get(), await d.get());
 
 // const timeoutInput = document.body.appendChild(

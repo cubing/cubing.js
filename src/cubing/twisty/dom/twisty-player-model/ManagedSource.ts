@@ -1,5 +1,5 @@
 type InputProps<T extends Object> = {
-  [s in keyof T]: TwistySourceProp<T[s]>;
+  [s in keyof T]: TwistyPropParent<T[s]>;
 };
 
 type InputPromises<T extends Object> = {
@@ -17,12 +17,16 @@ export abstract class TwistyPropParent<T> {
 }
 
 export abstract class TwistySourceProp<T> extends TwistyPropParent<T> {
-  #value: T;
-  defaultValue: T;
+  #value: Promise<T>;
+
+  constructor(initialValue: T | Promise<T>) {
+    super();
+    this.#value = Promise.resolve(initialValue);
+  }
 
   // TODO: Accept promise?
-  set(t: T): void {
-    this.#value = t;
+  set(t: T | Promise<T>): void {
+    this.#value = Promise.resolve(t);
   }
 
   async get(): Promise<T> {
@@ -30,14 +34,16 @@ export abstract class TwistySourceProp<T> extends TwistyPropParent<T> {
   }
 }
 
+// TODO: Can / should we support `null` as a valid output value?
 export abstract class TwistyPropV2<
   InputTypes extends Object,
   OutputType,
-> extends TwistySourceProp<OutputType> {
+> extends TwistyPropParent<OutputType> {
   // cachedInputs:
   #parents: InputProps<InputTypes>;
 
-  #cachedResult: { inputs: InputTypes; output: OutputType } | null = null;
+  #cachedResult: { inputs: InputTypes; output: Promise<OutputType> } | null =
+    null;
 
   constructor(parents: InputProps<InputTypes>) {
     super();
@@ -45,6 +51,29 @@ export abstract class TwistyPropV2<
   }
 
   public async get(): Promise<OutputType> {
+    const inputs = await this.#getParents();
+
+    console.log(this, inputs, this.#cachedResult);
+
+    const cachedResult = this.#cachedResult;
+    const fromCache = (): Promise<OutputType> | null => {
+      if (cachedResult) {
+        for (const key in this.#parents) {
+          const parent = this.#parents[key];
+          if (!parent.canReuse(inputs[key], cachedResult.inputs[key])) {
+            console.log("continue!");
+            return null;
+          }
+        }
+        return cachedResult.output;
+      }
+      return null;
+    };
+
+    return fromCache() ?? this.#cacheDerive(inputs);
+  }
+
+  async #getParents(): Promise<InputTypes> {
     const inputValuePromises: InputPromises<InputTypes> = {} as any; // TODO
     for (const key in this.#parents) {
       inputValuePromises[key] = this.#parents[key].get();
@@ -54,19 +83,11 @@ export abstract class TwistyPropV2<
     for (const key in this.#parents) {
       inputs[key] = await inputValuePromises[key];
     }
+    return inputs;
+  }
 
-    const cachedResult = this.#cachedResult;
-    if (cachedResult) {
-      for (const key in this.#parents) {
-        const parent = this.#parents[key];
-        if (!parent.canReuse(inputs[key], cachedResult.inputs[key])) {
-          continue;
-        }
-      }
-      return cachedResult!.output;
-    }
-
-    const output = await this.derive(inputs);
+  #cacheDerive(inputs: InputTypes): Promise<OutputType> {
+    const output = this.derive(inputs);
     this.#cachedResult = { inputs, output };
     return output;
   }
