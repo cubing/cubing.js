@@ -16,6 +16,7 @@
     "target": "es2020",
     "module": "esnext",
     "resolveJsonModule": true,
+    "useUnknownInCatchVariables": true,
     "importsNotUsedAsValues": "error",
     "rootDir": "."
   },
