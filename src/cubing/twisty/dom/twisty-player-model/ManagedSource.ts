@@ -6,6 +6,7 @@ type InputPromises<T extends Object> = {
   [s in keyof T]: Promise<T[s]>;
 };
 
+// Values of T must be immutable.
 export abstract class TwistyPropParent<T> {
   public abstract get(): Promise<T>;
 
@@ -24,7 +25,6 @@ export abstract class TwistySourceProp<T> extends TwistyPropParent<T> {
     this.#value = Promise.resolve(initialValue);
   }
 
-  // TODO: Accept promise?
   set(t: T | Promise<T>): void {
     this.#value = Promise.resolve(t);
   }
@@ -52,25 +52,21 @@ export abstract class TwistyPropV2<
 
   public async get(): Promise<OutputType> {
     const inputs = await this.#getParents();
+    return this.fromCache(inputs) ?? this.#cacheDerive(inputs);
+  }
 
-    console.log(this, inputs, this.#cachedResult);
-
+  fromCache(inputs: InputTypes): Promise<OutputType> | null {
     const cachedResult = this.#cachedResult;
-    const fromCache = (): Promise<OutputType> | null => {
-      if (cachedResult) {
-        for (const key in this.#parents) {
-          const parent = this.#parents[key];
-          if (!parent.canReuse(inputs[key], cachedResult.inputs[key])) {
-            console.log("continue!");
-            return null;
-          }
+    if (cachedResult) {
+      for (const key in this.#parents) {
+        const parent = this.#parents[key];
+        if (!parent.canReuse(inputs[key], cachedResult.inputs[key])) {
+          return null;
         }
-        return cachedResult.output;
       }
-      return null;
-    };
-
-    return fromCache() ?? this.#cacheDerive(inputs);
+      return cachedResult.output;
+    }
+    return null;
   }
 
   async #getParents(): Promise<InputTypes> {
@@ -93,9 +89,6 @@ export abstract class TwistyPropV2<
   }
 
   protected abstract derive(input: InputTypes): Promise<OutputType>;
-
-  // TODO: Async?
-  // protected abstract canReuse(v1: OutputType, v2: OutputType): boolean;
 }
 
 // interface GenerationalLazyPromise<T> {
