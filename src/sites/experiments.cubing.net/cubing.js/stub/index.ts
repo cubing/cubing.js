@@ -4,9 +4,12 @@
 import { AlgProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/AlgProp";
 import { IndexerConstructorProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/IndexerConstructorProp";
 import { PuzzleProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/PuzzleProp";
-import { PuzzleDefProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-2/PuzzleDef";
+import { TimestampProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/TimestampProp";
+import { PuzzleDefProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-2/PuzzleDefProp";
 import { PuzzleAlgProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-3/PuzzleAlgProp";
+import { AlgTransformationProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-4/AlgTransformationProp";
 import { IndexerProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-4/IndexerProp";
+import { PositionProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-5/PositionProp";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
@@ -73,10 +76,15 @@ if (false) {
 }
 
 const algProp = new AlgProp();
+const setupProp = new AlgProp();
 const puzzleProp = new PuzzleProp();
 const puzzleDefProp = new PuzzleDefProp({ puzzle: puzzleProp });
 const puzzleAlgProp = new PuzzleAlgProp({
   algWithIssues: algProp,
+  puzzleDef: puzzleDefProp,
+});
+const puzzleSetupProp = new PuzzleAlgProp({
+  algWithIssues: setupProp,
   puzzleDef: puzzleDefProp,
 });
 
@@ -87,23 +95,43 @@ const indexerProp = new IndexerProp({
   def: puzzleDefProp,
 });
 
+const timestampProp = new TimestampProp();
+
+const setupTransformationProp = new AlgTransformationProp({
+  alg: puzzleSetupProp,
+  def: puzzleDefProp,
+});
+
+const positionProp = new PositionProp({
+  setupTransformation: setupTransformationProp,
+  indexer: indexerProp,
+  timestamp: timestampProp,
+  def: puzzleDefProp,
+});
+
 indexerProp.addListener(async () => {
   const indexer = await indexerProp.get();
   console.log(indexer.algDuration());
 });
 
-algProp.set("U D");
-console.log("a1", (await indexerProp.get()).algDuration());
-algProp.set("(U D)");
-console.log("a2", (await indexerProp.get()).algDuration());
-indexerConstructor.set("simultaneous");
-const g = indexerProp.get();
-console.log("a4", (await indexerProp.get()).algDuration());
-algProp.set("(U D E2)");
-console.log("a5", (await g).algDuration());
+// algProp.set("U D");
+// console.log("a1", (await indexerProp.get()).algDuration());
+// algProp.set("(U D)");
+// console.log("a2", (await indexerProp.get()).algDuration());
+// indexerConstructor.set("simultaneous");
+// const g = indexerProp.get();
+// console.log("a4", (await indexerProp.get()).algDuration());
+// algProp.set("(U D E2)");
+// console.log("a5", (await g).algDuration());
 
-indexerConstructor.set("tree");
-console.log("a6", (await indexerProp.get()).algDuration());
+// indexerConstructor.set("tree");
+// console.log("a6", (await indexerProp.get()).algDuration());
+
+setupProp.set("R U R' U' R' F R2 U' R' U' R U R' F'");
+console.log(JSON.stringify(await positionProp.get(), null, "  "));
+algProp.set("R U R' U' R' F R2 U' R' U' R U R' F'");
+timestampProp.set(14200);
+console.log(JSON.stringify(await positionProp.get(), null, "  "));
 
 // // (await puzzleAlgProp.get()).alg.log();
 // // puzzleAlgProp.addListener(console.log);

@@ -7,15 +7,16 @@ import type { AlgWithIssues } from "../depth-1/AlgProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 type AlgTransformationPropInputs = {
-  algWithIssues: AlgWithIssues;
+  alg: AlgWithIssues;
   def: KPuzzleDefinition;
 };
+
 export class AlgTransformationProp extends TwistyPropDerived<
   AlgTransformationPropInputs,
   Transformation
 > {
   derive(input: AlgTransformationPropInputs): Transformation {
-    return this.applyAlg(input.def, input.algWithIssues.alg);
+    return this.applyAlg(input.def, input.alg.alg);
   }
 
   applyAlg(def: KPuzzleDefinition, alg: Alg): Transformation {
