@@ -5,7 +5,7 @@ import { AlgIssues, AlgProp } from "./depth-1/AlgProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
 import { VisualizationStrategyProp } from "./depth-2/VisualizationStrategyProp";
-import { IndexerProp } from "./depth-3/IndexerProp";
+import { IndexerProp } from "./depth-4/IndexerProp";
 import { TimelineProp } from "./depth-4/TimelineProp";
 import { VisualizationProp } from "./depth-4/VisualizationProp";
 import { PositionProp } from "./depth-5/PositionProp";

@@ -2,9 +2,11 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { AlgProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/AlgProp";
+import { IndexerConstructorProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/IndexerConstructorProp";
 import { PuzzleProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/PuzzleProp";
 import { PuzzleDefProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-2/PuzzleDef";
 import { PuzzleAlgProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-3/PuzzleAlgProp";
+import { IndexerProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-4/IndexerProp";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
@@ -78,49 +80,66 @@ const puzzleAlgProp = new PuzzleAlgProp({
   puzzleDef: puzzleDefProp,
 });
 
-// (await puzzleAlgProp.get()).alg.log();
-// puzzleAlgProp.addListener(console.log);
+const indexerConstructor = new IndexerConstructorProp();
+const indexerProp = new IndexerProp({
+  indexerConstructor: indexerConstructor,
+  algWithIssues: puzzleAlgProp,
+  def: puzzleDefProp,
+});
 
-algProp.set("R U R'");
-(await algProp.get()).alg.log(0);
-(async () => {
-  const g = puzzleAlgProp.get();
-  await new Promise(async (resolve) =>
-    setTimeout(resolve, Math.random() * 100),
-  );
-  (await g).alg.log(1);
-})();
-algProp.set("F2");
-(await algProp.get()).alg.log();
-(async () => {
-  const g = puzzleAlgProp.get();
-  await new Promise(async (resolve) =>
-    setTimeout(resolve, Math.random() * 100),
-  );
-  (await g).alg.log(2);
-})();
-algProp.set("L2");
-(async () => {
-  const g = await puzzleAlgProp.get();
-  (await g).alg.log(3);
-})();
-algProp.set("R++");
-(async () => {
-  const g = await puzzleAlgProp.get();
-  console.log(4, await g);
-})();
-puzzleProp.set("megaminx");
-(async () => {
-  const g = await puzzleAlgProp.get();
-  (await g).alg.log(5);
-})();
-puzzleProp.set("clock");
-(async () => {
-  const g = await puzzleAlgProp.get();
-  (await g).alg.log(6);
-})();
-algProp.set("UR1+");
-(async () => {
-  const g = await puzzleAlgProp.get();
-  (await g).alg.log(7);
-})();
+indexerProp.addListener(async () => {
+  const indexer = await indexerProp.get();
+  console.log(indexer.algDuration());
+});
+
+algProp.set("U D");
+algProp.set("(U D)");
+indexerConstructor.set("simultaneous");
+console.log((await indexerProp.get()).algDuration());
+
+// // (await puzzleAlgProp.get()).alg.log();
+// // puzzleAlgProp.addListener(console.log);
+
+// algProp.set("R U R'");
+// (await algProp.get()).alg.log(0);
+// (async () => {
+//   const g = puzzleAlgProp.get();
+//   await new Promise(async (resolve) =>
+//     setTimeout(resolve, Math.random() * 100),
+//   );
+//   (await g).alg.log(1);
+// })();
+// algProp.set("F2");
+// (await algProp.get()).alg.log();
+// (async () => {
+//   const g = puzzleAlgProp.get();
+//   await new Promise(async (resolve) =>
+//     setTimeout(resolve, Math.random() * 100),
+//   );
+//   (await g).alg.log(2);
+// })();
+// algProp.set("L2");
+// (async () => {
+//   const g = await puzzleAlgProp.get();
+//   (await g).alg.log(3);
+// })();
+// algProp.set("R++");
+// (async () => {
+//   const g = await puzzleAlgProp.get();
+//   console.log(4, await g);
+// })();
+// puzzleProp.set("megaminx");
+// (async () => {
+//   const g = await puzzleAlgProp.get();
+//   (await g).alg.log(5);
+// })();
+// puzzleProp.set("clock");
+// (async () => {
+//   const g = await puzzleAlgProp.get();
+//   (await g).alg.log(6);
+// })();
+// algProp.set("UR1+");
+// (async () => {
+//   const g = await puzzleAlgProp.get();
+//   (await g).alg.log(7);
+// })();
