@@ -25,16 +25,16 @@ export class AlgIssues {
   }
 }
 
-interface AlgPropOutput {
+export interface AlgWithIssues {
   alg: Alg;
   issues: AlgIssues;
 }
-export class AlgProp extends TwistyPropSource<AlgPropOutput, Alg | String> {
-  async getDefaultValue(): Promise<AlgPropOutput> {
+export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
+  async getDefaultValue(): Promise<AlgWithIssues> {
     return { alg: new Alg(), issues: new AlgIssues() };
   }
 
-  async derive(newAlg: Alg | string): Promise<AlgPropOutput> {
+  async derive(newAlg: Alg | string): Promise<AlgWithIssues> {
     if (typeof newAlg === "string") {
       console.log("fromstring!");
       try {

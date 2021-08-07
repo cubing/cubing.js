@@ -27,12 +27,12 @@ export abstract class TwistyPropParent<T> {
 
   // Propagation
 
-  #children: Set<TwistyDerivedProp<any, any>> = new Set();
-  addChild(child: TwistyDerivedProp<any, any>): void {
+  #children: Set<TwistyPropDerived<any, any>> = new Set();
+  addChild(child: TwistyPropDerived<any, any>): void {
     this.#children.add(child);
   }
 
-  removeChild(child: TwistyDerivedProp<any, any>): void {
+  removeChild(child: TwistyPropDerived<any, any>): void {
     this.#children.delete(child);
   }
 
@@ -74,13 +74,13 @@ export abstract class TwistyPropSource<
 > extends TwistyPropParent<OutputType> {
   #value: Promise<OutputType>;
 
-  abstract getDefaultValue(): Promise<OutputType>;
+  abstract getDefaultValue(): OutputType | Promise<OutputType>;
 
   constructor(initialValue?: InputType | Promise<InputType>) {
     super();
     this.#value = initialValue
       ? (async () => this.derive(await initialValue))()
-      : this.getDefaultValue();
+      : Promise.resolve(this.getDefaultValue());
   }
 
   set(t: OutputType | Promise<OutputType>): void {
@@ -103,19 +103,19 @@ export abstract class TwistyPropSource<
   }
 
   // TODO: add an indirect layer to cache the derivation?
-  protected abstract derive(input: InputType): Promise<OutputType>;
+  protected abstract derive(input: InputType): OutputType | Promise<OutputType>;
 }
 
 export abstract class SimpleTwistyPropSource<
   SimpleType,
 > extends TwistyPropSource<SimpleType> {
-  async derive(input: SimpleType): Promise<SimpleType> {
+  derive(input: SimpleType): SimpleType | Promise<SimpleType> {
     return input;
   }
 }
 
 // TODO: Can / should we support `null` as a valid output value?
-export abstract class TwistyDerivedProp<
+export abstract class TwistyPropDerived<
   InputTypes extends Object,
   OutputType,
 > extends TwistyPropParent<OutputType> {
@@ -173,14 +173,16 @@ export abstract class TwistyDerivedProp<
   }
 
   #cacheDerive(inputs: InputTypes): Promise<OutputType> {
-    const output = this.derive(inputs);
+    const output = Promise.resolve(this.derive(inputs));
     this.#cachedResult = {
       inputs,
-      output,
+      output: output,
       generation: this.lastSourceGeneration,
     };
     return output;
   }
 
-  protected abstract derive(input: InputTypes): Promise<OutputType>;
+  protected abstract derive(
+    input: InputTypes,
+  ): OutputType | Promise<OutputType>;
 }

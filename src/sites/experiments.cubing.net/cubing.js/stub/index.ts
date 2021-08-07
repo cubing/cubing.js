@@ -2,19 +2,19 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import {
-  TwistyDerivedProp,
-  TwistyPropSource,
-} from "../../../../cubing/twisty/dom/twisty-player-model/ManagedSource";
+  SimpleTwistyPropSource,
+  TwistyPropDerived,
+} from "../../../../cubing/twisty/dom/twisty-player-model/TwistyProp";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
 console.log("Loading stub file.");
 
-class A extends TwistyPropSource<number> {
-  defaultValue: 4;
+class A extends SimpleTwistyPropSource<number> {
+  getDefaultValue: () => 4;
 }
 
-class B extends TwistyDerivedProp<{ a: number }, number> {
+class B extends TwistyPropDerived<{ a: number }, number> {
   async derive(input: { a: number }): Promise<number> {
     await new Promise(async (resolve) =>
       setTimeout(resolve, Math.random() * 100),
@@ -23,7 +23,7 @@ class B extends TwistyDerivedProp<{ a: number }, number> {
   }
 }
 
-class C extends TwistyDerivedProp<{ a: number }, number> {
+class C extends TwistyPropDerived<{ a: number }, number> {
   async derive(input: { a: number }): Promise<number> {
     await new Promise(async (resolve) =>
       setTimeout(resolve, Math.random() * 10),
@@ -32,11 +32,8 @@ class C extends TwistyDerivedProp<{ a: number }, number> {
   }
 }
 
-class D extends TwistyDerivedProp<{ b: number; c: number }, boolean> {
-  async derive(input: { b: number; c: number }): Promise<boolean> {
-    await new Promise(async (resolve) =>
-      setTimeout(resolve, Math.random() * 10),
-    );
+class D extends TwistyPropDerived<{ b: number; c: number }, boolean> {
+  derive(input: { b: number; c: number }): boolean {
     return input.b > input.c;
   }
 }
