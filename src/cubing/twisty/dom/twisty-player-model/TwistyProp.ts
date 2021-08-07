@@ -47,6 +47,10 @@ export abstract class TwistyPropParent<T> {
       "Marking stale",
       this.constructor.name,
     );
+    if (sourceEvent.detail.generation !== globalSourceGeneration) {
+      // The full stale propagation is synchronous, so there should not be a new one yet.
+      throw new Error("A TwistyProp was marked stale too late!");
+    }
     if (this.lastSourceGeneration === sourceEvent.detail.generation) {
       // Already propagated.
       return;
@@ -55,9 +59,9 @@ export abstract class TwistyPropParent<T> {
     for (const child of this.#children) {
       child.markStale(sourceEvent);
     }
-    // TODO: do we need to avoid interference from the listeners (e.g. changing the prop graph)?
-    // Can we move this earlier for better perf?
-    this.dispatchListeners();
+    // We schedul sending out events *after* the (synchronous) propagation has happened, in
+    // case one of the listeners updates a source again.
+    setTimeout(() => this.dispatchListeners(), 0);
   }
 
   #listeners: Set<() => void> = new Set();
