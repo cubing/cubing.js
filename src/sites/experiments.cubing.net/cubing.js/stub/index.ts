@@ -11,6 +11,8 @@ import { AlgTransformationProp } from "../../../../cubing/twisty/dom/twisty-play
 import { IndexerProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-4/IndexerProp";
 import { PositionProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-5/PositionProp";
 import { TimeRangeProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-5/TimeRangeProp";
+import { Twisty3DProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-6/Twisty3DProp";
+import { Twisty3DWrapper } from "../../../../cubing/twisty/dom/twisty-player-model/old/Twisty3DWrapper";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
@@ -117,6 +119,51 @@ timeRangeProp.addListener(async () => {
   console.log("timeRange", timeRange);
 });
 
+let cachedConstructorProxy: Promise<
+  typeof import("../../../../cubing/twisty/dom/twisty-player-model/depth-6/3d-proxy")
+> | null = null;
+async function constructorProxy(): Promise<
+  typeof import("../../../../cubing/twisty/dom/twisty-player-model/depth-6/3d-proxy")
+> {
+  return (cachedConstructorProxy ??= import(
+    "../../../../cubing/twisty/dom/twisty-player-model/depth-6/3d-proxy"
+  ));
+}
+
+const scene = new (await constructorProxy()).Twisty3DScene();
+const canvas = new (await constructorProxy()).Twisty3DCanvas(scene);
+const div = document.body.appendChild(document.createElement("div"));
+div.setAttribute("style", "width: 256px; height: 256px;");
+div.appendChild(canvas.canvas);
+canvas.canvas.setAttribute("style", "width: 256px; height: 256px;");
+
+const twisty3D = new Twisty3DProp({ puzzleID: puzzleProp });
+scene.add(await twisty3D.get());
+
+setupProp.set("F2");
+
+positionProp.addListener(async () => {
+  (await twisty3D.get()).onPositionChange(await positionProp.get());
+  scene.scheduleRender();
+});
+
+algProp.set("R U R'");
+timestampProp.set(500);
+
+const input = document.body.appendChild(document.createElement("input"));
+input.type = "range";
+input.min = (await timeRangeProp.get()).start.toString();
+input.max = (await timeRangeProp.get()).end.toString();
+
+input.addEventListener("input", () => {
+  timestampProp.set(parseFloat(input.value));
+  scene.scheduleRender();
+});
+
+scene.scheduleRender();
+
+// new Twisty3DWrapper()
+
 // algProp.set("U D");
 // console.log("a1", (await indexerProp.get()).algDuration());
 // algProp.set("(U D)");
@@ -130,15 +177,15 @@ timeRangeProp.addListener(async () => {
 // indexerConstructor.set("tree");
 // console.log("a6", (await indexerProp.get()).algDuration());
 
-setupProp.set("R U R' U' R' F R2 U' R' U' R U R' F'");
-console.log(JSON.stringify(await positionProp.get(), null, "  "));
-algProp.set("R U R' U' R' F R2 U' R' U' R U R' F'");
-timestampProp.set(14200);
-console.log(JSON.stringify(await positionProp.get(), null, "  "));
+// setupProp.set("R U R' U' R' F R2 U' R' U' R U R' F'");
+// console.log(JSON.stringify(await positionProp.get(), null, "  "));
+// algProp.set("R U R' U' R' F R2 U' R' U' R U R' F'");
+// timestampProp.set(14200);
+// console.log(JSON.stringify(await positionProp.get(), null, "  "));
 
-algProp.set("(U D)");
-console.log("foo");
-indexerConstructor.set("simultaneous");
+// algProp.set("(U D)");
+// console.log("foo");
+// indexerConstructor.set("simultaneous");
 
 // // (await puzzleAlgProp.get()).alg.log();
 // // puzzleAlgProp.addListener(console.log);
