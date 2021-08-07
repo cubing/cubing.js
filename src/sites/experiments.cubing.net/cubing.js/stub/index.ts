@@ -47,20 +47,27 @@ const b = new B({ a });
 const c = new C({ a });
 const d = new D({ b, c });
 
-console.log(await a.get(), await b.get(), await c.get(), await d.get());
-a.set(6);
-console.log(await a.get(), await b.get(), await c.get(), await d.get());
-a.set(8);
-console.log(await a.get(), await b.get(), await c.get(), await d.get());
-for (let i = 0; i < 17; i++) {
-  a.set(i);
-  console.log(await a.get(), await d.get());
-}
+async function f() {
+  console.log(await a.get(), await b.get(), await c.get(), await d.get());
+  a.set(6);
+  console.log(await a.get(), await b.get(), await c.get(), await d.get());
+  a.set(8);
+  console.log(await a.get(), await b.get(), await c.get(), await d.get());
+  for (let i = 0; i < 17; i++) {
+    a.set(i);
+    console.log(await a.get(), await d.get());
+  }
 
-for (let i = 0; i < 17; i++) {
-  a.set(i);
-  d.get().then(async (dv) => console.log(i, await a.get(), dv));
-  await new Promise(async (resolve) => setTimeout(resolve, Math.random() * 5));
+  for (let i = 0; i < 17; i++) {
+    a.set(i);
+    d.get().then(async (dv) => console.log(i, await a.get(), dv));
+    await new Promise(async (resolve) =>
+      setTimeout(resolve, Math.random() * 5),
+    );
+  }
+}
+if (false) {
+  f();
 }
 
 const algProp = new AlgProp();
@@ -71,9 +78,25 @@ const puzzleAlgProp = new PuzzleAlgProp({
   puzzleDef: puzzleDefProp,
 });
 
-console.log(await puzzleAlgProp.get());
+(await puzzleAlgProp.get()).alg.log();
 puzzleAlgProp.addListener(console.log);
 
 algProp.set("R U R'");
-console.log((await algProp.get()).alg.log());
-console.log((await puzzleAlgProp.get()).alg.log());
+(await algProp.get()).alg.log();
+(async () => {
+  const g = puzzleAlgProp.get();
+  await new Promise(async (resolve) => setTimeout(resolve, 1000));
+  (await g).alg.log("sdfsd");
+})();
+algProp.set("F2");
+(await algProp.get()).alg.log();
+(async () => {
+  const g = puzzleAlgProp.get();
+  await new Promise(async (resolve) => setTimeout(resolve, 1000));
+  (await g).alg.log("aad");
+})();
+algProp.set("L2");
+(async () => {
+  const g = puzzleAlgProp.get();
+  (await g).alg.log("ada");
+})();

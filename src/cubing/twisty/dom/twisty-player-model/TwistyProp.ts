@@ -41,6 +41,7 @@ export abstract class TwistyPropParent<T> {
   protected lastSourceGeneration: number = 0;
   // Synchronously marks all descendants as stale.
   markStale(sourceEvent: SourceEvent<any>): void {
+    console.log("marking stale", this, this.#children);
     if (this.lastSourceGeneration === sourceEvent.detail.generation) {
       // Already propagated.
       return;
@@ -140,7 +141,7 @@ export abstract class TwistyPropDerived<
     super();
     this.#parents = parents;
     for (const parent of Object.values(parents)) {
-      this.addChild(parent);
+      parent.addChild(this);
     }
   }
 
