@@ -1,16 +1,16 @@
 import { Alg } from "../../../../alg";
+import { TwistyPropSource } from "../TwistyProp";
 
 export class AlgIssues {
   // TODO: (string | Error)[]
-  warnings: string[] = [];
-  errors: string[] = [];
 
-  clone() {
-    const newAlgIssues = new AlgIssues();
-    newAlgIssues.warnings = this.warnings.slice();
-    newAlgIssues.errors = this.errors.slice();
-    // console.log("clone");
-    return newAlgIssues;
+  warnings: string[];
+  errors: string[];
+
+  constructor(issues?: { warnings?: string[]; errors?: string[] }) {
+    Object.freeze(issues?.warnings ?? []);
+    Object.freeze(issues?.errors ?? []);
+    Object.freeze(this);
   }
 
   /** @deprecated */
@@ -25,46 +25,70 @@ export class AlgIssues {
   }
 }
 
-export class AlgProp extends EventTarget {
-  #alg: Alg = new Alg();
-  #cachedAlgIssues: AlgIssues | null = null;
-
-  #setAlgInternal(newAlg: Alg): void {
-    this.#alg = newAlg;
-    this.#cachedAlgIssues = null;
-    this.dispatchEvent(new CustomEvent("update"));
+interface AlgPropOutput {
+  alg: Alg;
+  issues: AlgIssues;
+}
+export class AlgProp extends TwistyPropSource<AlgPropOutput, Alg | String> {
+  async getDefaultValue(): Promise<AlgPropOutput> {
+    return { alg: new Alg(), issues: new AlgIssues() };
   }
 
-  set alg(newAlg: Alg | string) {
+  async derive(newAlg: Alg | string): Promise<AlgPropOutput> {
     if (typeof newAlg === "string") {
-      this.setFromString(newAlg);
-    } else {
-      this.#setAlgInternal(newAlg);
-    }
-  }
-
-  setFromString(newAlgString: string) {
-    console.log("fromstring!");
-    try {
-      this.alg = new Alg(newAlgString); // TODO: is this safe?
-      if (this.#alg.toString() !== newAlgString) {
-        // TODO: Push this check into the parser and return semantic info (so they can be e.g. highlighted).
-        this.#cachedAlgIssues = new AlgIssues();
-        this.#cachedAlgIssues.warnings.push(`Alg is non-canonical!`);
+      console.log("fromstring!");
+      try {
+        const alg = Alg.fromString(newAlg); // TODO: is this safe?
+        const warnings = [];
+        if (alg.toString() !== newAlg) {
+          // TODO: Push this check into the parser and return semantic info (so they can be e.g. highlighted).
+          warnings.push(`Alg is non-canonical!`);
+        }
+        return {
+          alg,
+          issues: new AlgIssues({ warnings }),
+        };
+      } catch (e) {
+        return {
+          alg: new Alg(),
+          issues: new AlgIssues({ errors: [`Malformed alg: ${e}`] }),
+        };
       }
-    } catch (e) {
-      // console.log("catch");
-      this.#alg = new Alg(); // TODO
-      this.#cachedAlgIssues = new AlgIssues();
-      this.#cachedAlgIssues.errors.push(`Malformed alg: ${e}`);
+    } else {
+      return {
+        alg: newAlg,
+        issues: new AlgIssues(),
+      };
     }
-  }
-
-  get alg(): Alg {
-    return this.#alg;
-  }
-
-  get algIssues(): AlgIssues {
-    return (this.#cachedAlgIssues ??= new AlgIssues());
   }
 }
+
+// export class AlgProp extends EventTarget {
+//   #alg: Alg = new Alg();
+//   #cachedAlgIssues: AlgIssues | null = null;
+
+//   #setAlgInternal(newAlg: Alg): void {
+//     this.#alg = newAlg;
+//     this.#cachedAlgIssues = null;
+//     this.dispatchEvent(new CustomEvent("update"));
+//   }
+
+//   set alg(newAlg: Alg | string) {
+//     if (typeof newAlg === "string") {
+//       this.setFromString(newAlg);
+//     } else {
+//       this.#setAlgInternal(newAlg);
+//     }
+//   }
+
+//   setFromString(newAlgString: string) {
+//   }
+
+//   get alg(): Alg {
+//     return this.#alg;
+//   }
+
+//   get algIssues(): AlgIssues {
+//     return (this.#cachedAlgIssues ??= new AlgIssues());
+//   }
+// }
