@@ -14,6 +14,8 @@ interface SourceEventDetail<OutputType> {
 
 type SourceEvent<T> = CustomEvent<SourceEventDetail<T>>;
 
+type PromiseOrValue<T> = T | Promise<T>;
+
 // Values of T must be immutable.
 let globalSourceGeneration = 0; // This is incremented before being used, so 1 will be the first active value.
 export abstract class TwistyPropParent<T> {
@@ -28,11 +30,11 @@ export abstract class TwistyPropParent<T> {
   // Propagation
 
   #children: Set<TwistyPropDerived<any, any>> = new Set();
-  addChild(child: TwistyPropDerived<any, any>): void {
+  protected addChild(child: TwistyPropDerived<any, any>): void {
     this.#children.add(child);
   }
 
-  removeChild(child: TwistyPropDerived<any, any>): void {
+  protected removeChild(child: TwistyPropDerived<any, any>): void {
     this.#children.delete(child);
   }
 
@@ -74,17 +76,17 @@ export abstract class TwistyPropSource<
 > extends TwistyPropParent<OutputType> {
   #value: Promise<OutputType>;
 
-  abstract getDefaultValue(): OutputType | Promise<OutputType>;
+  abstract getDefaultValue(): PromiseOrValue<OutputType>;
 
-  constructor(initialValue?: InputType | Promise<InputType>) {
+  constructor(initialValue?: PromiseOrValue<InputType>) {
     super();
     this.#value = initialValue
-      ? (async () => this.derive(await initialValue))()
+      ? this.deriveFromPromiseOrValue(initialValue)
       : Promise.resolve(this.getDefaultValue());
   }
 
-  set(t: OutputType | Promise<OutputType>): void {
-    this.#value = Promise.resolve(t);
+  set(input: PromiseOrValue<InputType>): void {
+    this.#value = this.deriveFromPromiseOrValue(input);
 
     const sourceEventDetail: SourceEventDetail<OutputType> = {
       sourceProp: this,
@@ -102,14 +104,20 @@ export abstract class TwistyPropSource<
     return this.#value;
   }
 
+  async deriveFromPromiseOrValue(
+    input: PromiseOrValue<InputType>,
+  ): Promise<OutputType> {
+    return this.derive(await input);
+  }
+
   // TODO: add an indirect layer to cache the derivation?
-  protected abstract derive(input: InputType): OutputType | Promise<OutputType>;
+  protected abstract derive(input: InputType): PromiseOrValue<OutputType>;
 }
 
 export abstract class SimpleTwistyPropSource<
   SimpleType,
 > extends TwistyPropSource<SimpleType> {
-  derive(input: SimpleType): SimpleType | Promise<SimpleType> {
+  derive(input: SimpleType): PromiseOrValue<SimpleType> {
     return input;
   }
 }
@@ -182,7 +190,5 @@ export abstract class TwistyPropDerived<
     return output;
   }
 
-  protected abstract derive(
-    input: InputTypes,
-  ): OutputType | Promise<OutputType>;
+  protected abstract derive(input: InputTypes): PromiseOrValue<OutputType>;
 }

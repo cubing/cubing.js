@@ -1,6 +1,10 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
+import { AlgProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/AlgProp";
+import { PuzzleProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-1/PuzzleProp";
+import { PuzzleDefProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-2/PuzzleDef";
+import { PuzzleAlgProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-3/PuzzleAlgProp";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
@@ -58,3 +62,18 @@ for (let i = 0; i < 17; i++) {
   d.get().then(async (dv) => console.log(i, await a.get(), dv));
   await new Promise(async (resolve) => setTimeout(resolve, Math.random() * 5));
 }
+
+const algProp = new AlgProp();
+const puzzleProp = new PuzzleProp();
+const puzzleDefProp = new PuzzleDefProp({ puzzle: puzzleProp });
+const puzzleAlgProp = new PuzzleAlgProp({
+  algWithIssues: algProp,
+  puzzleDef: puzzleDefProp,
+});
+
+console.log(await puzzleAlgProp.get());
+puzzleAlgProp.addListener(console.log);
+
+algProp.set("R U R'");
+console.log((await algProp.get()).alg.log());
+console.log((await puzzleAlgProp.get()).alg.log());

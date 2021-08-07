@@ -11,6 +11,7 @@ export class PuzzleAlgProp extends TwistyPropDerived<
     algWithIssues: AlgWithIssues;
     puzzleDef: KPuzzleDefinition;
   }): Promise<AlgWithIssues> {
+    console.log("deriving!", this);
     try {
       const kpuzzle = new KPuzzle(inputs.puzzleDef);
       kpuzzle.applyAlg(inputs.algWithIssues.alg);
