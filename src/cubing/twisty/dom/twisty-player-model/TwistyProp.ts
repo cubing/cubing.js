@@ -39,8 +39,10 @@ export abstract class TwistyPropParent<T> {
   }
 
   protected lastSourceGeneration: number = 0;
-  // Synchronously marks all descendants as stale.
-  markStale(sourceEvent: SourceEvent<any>): void {
+  // Synchronously marks all descendants as stale. This doesn't actually
+  // literally mark as stale, but it updates the last source generation, which
+  // is used to tell if a cahced result is stale.
+  protected markStale(sourceEvent: SourceEvent<any>): void {
     console.log(
       "Generation",
       sourceEvent.detail.generation,
@@ -169,6 +171,9 @@ export abstract class TwistyPropDerived<
       return this.#cacheDerive(this.#getParents(), generation);
     }
 
+    // If the cached result generation matches the last time, the calculation
+    // can't be stale, so we can immediately return (the `Promise` for) it
+    // without doing an equality checks.
     if (cachedResult.generation === generation) {
       return cachedResult.output;
     }

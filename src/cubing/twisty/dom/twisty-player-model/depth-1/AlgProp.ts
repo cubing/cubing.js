@@ -4,12 +4,13 @@ import { TwistyPropSource } from "../TwistyProp";
 export class AlgIssues {
   // TODO: (string | Error)[]
 
-  readonly warnings: string[];
-  readonly errors: string[];
+  readonly warnings: readonly string[];
+  readonly errors: readonly string[];
 
   constructor(issues?: { warnings?: string[]; errors?: string[] }) {
-    Object.freeze(issues?.warnings ?? []);
-    Object.freeze(issues?.errors ?? []);
+    // TODO: clone inputs?
+    this.warnings = Object.freeze(issues?.warnings ?? []);
+    this.errors = Object.freeze(issues?.errors ?? []);
     Object.freeze(this);
   }
 

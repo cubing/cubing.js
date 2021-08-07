@@ -18,11 +18,6 @@ export class PuzzleAlgProp extends TwistyPropDerived<
       // Looks like we could apply the alg!
       return inputs.algWithIssues;
     } catch (e) {
-      console.log(
-        "invalid!",
-        inputs.algWithIssues.alg.toString(),
-        inputs.puzzleDef.name,
-      );
       return {
         alg: new Alg(),
         issues: new AlgIssues({ errors: [`Invalid alg for puzzle: ${e}`] }),

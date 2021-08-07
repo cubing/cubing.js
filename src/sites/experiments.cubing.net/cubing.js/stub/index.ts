@@ -107,10 +107,20 @@ algProp.set("L2");
 algProp.set("R++");
 (async () => {
   const g = await puzzleAlgProp.get();
-  console.log(4, (await g).issues);
+  console.log(4, await g);
 })();
 puzzleProp.set("megaminx");
 (async () => {
   const g = await puzzleAlgProp.get();
   (await g).alg.log(5);
+})();
+puzzleProp.set("clock");
+(async () => {
+  const g = await puzzleAlgProp.get();
+  (await g).alg.log(6);
+})();
+algProp.set("UR1+");
+(async () => {
+  const g = await puzzleAlgProp.get();
+  (await g).alg.log(7);
 })();
