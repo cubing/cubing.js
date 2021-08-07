@@ -4,8 +4,8 @@ import { TwistyPropSource } from "../TwistyProp";
 export class AlgIssues {
   // TODO: (string | Error)[]
 
-  warnings: string[];
-  errors: string[];
+  readonly warnings: string[];
+  readonly errors: string[];
 
   constructor(issues?: { warnings?: string[]; errors?: string[] }) {
     Object.freeze(issues?.warnings ?? []);
@@ -62,33 +62,3 @@ export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
     }
   }
 }
-
-// export class AlgProp extends EventTarget {
-//   #alg: Alg = new Alg();
-//   #cachedAlgIssues: AlgIssues | null = null;
-
-//   #setAlgInternal(newAlg: Alg): void {
-//     this.#alg = newAlg;
-//     this.#cachedAlgIssues = null;
-//     this.dispatchEvent(new CustomEvent("update"));
-//   }
-
-//   set alg(newAlg: Alg | string) {
-//     if (typeof newAlg === "string") {
-//       this.setFromString(newAlg);
-//     } else {
-//       this.#setAlgInternal(newAlg);
-//     }
-//   }
-
-//   setFromString(newAlgString: string) {
-//   }
-
-//   get alg(): Alg {
-//     return this.#alg;
-//   }
-
-//   get algIssues(): AlgIssues {
-//     return (this.#cachedAlgIssues ??= new AlgIssues());
-//   }
-// }

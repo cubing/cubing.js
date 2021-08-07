@@ -41,7 +41,12 @@ export abstract class TwistyPropParent<T> {
   protected lastSourceGeneration: number = 0;
   // Synchronously marks all descendants as stale.
   markStale(sourceEvent: SourceEvent<any>): void {
-    console.log("marking stale", this, this.#children);
+    console.log(
+      "Generation",
+      sourceEvent.detail.generation,
+      "Marking stale",
+      this.constructor.name,
+    );
     if (this.lastSourceGeneration === sourceEvent.detail.generation) {
       // Already propagated.
       return;
@@ -102,6 +107,7 @@ export abstract class TwistyPropSource<
   }
 
   async get(): Promise<OutputType> {
+    console.log("get source", this.constructor.name, this.lastSourceGeneration);
     return this.#value;
   }
 
@@ -146,26 +152,32 @@ export abstract class TwistyPropDerived<
   }
 
   public async get(): Promise<OutputType> {
-    const inputs = await this.#getParents();
-    return this.fromCache(inputs) ?? this.#cacheDerive(inputs);
-  }
+    console.log(
+      "get derived",
+      this.constructor.name,
+      this.lastSourceGeneration,
+    );
 
-  fromCache(inputs: InputTypes): Promise<OutputType> | null {
+    const generation = this.lastSourceGeneration;
+
     const cachedResult = this.#cachedResult;
-    if (cachedResult) {
-      if (cachedResult.generation === this.lastSourceGeneration) {
-        return cachedResult.output;
-      }
+    if (!cachedResult) {
+      return this.#cacheDerive(this.#getParents(), generation);
+    }
 
-      for (const key in this.#parents) {
-        const parent = this.#parents[key];
-        if (!parent.canReuse(inputs[key], cachedResult.inputs[key])) {
-          return null;
-        }
-      }
+    if (cachedResult.generation === generation) {
       return cachedResult.output;
     }
-    return null;
+
+    const inputs = await this.#getParents();
+
+    for (const key in this.#parents) {
+      const parent = this.#parents[key];
+      if (!parent.canReuse(inputs[key], cachedResult.inputs[key])) {
+        return this.#cacheDerive(inputs, generation);
+      }
+    }
+    return cachedResult.output;
   }
 
   async #getParents(): Promise<InputTypes> {
@@ -181,12 +193,15 @@ export abstract class TwistyPropDerived<
     return inputs;
   }
 
-  #cacheDerive(inputs: InputTypes): Promise<OutputType> {
-    const output = Promise.resolve(this.derive(inputs));
+  async #cacheDerive(
+    inputsPromise: PromiseOrValue<InputTypes>,
+    generation: number,
+  ): Promise<OutputType> {
+    const output = Promise.resolve(this.derive(await inputsPromise));
     this.#cachedResult = {
-      inputs,
+      inputs: await inputsPromise,
       output: output,
-      generation: this.lastSourceGeneration,
+      generation,
     };
     return output;
   }

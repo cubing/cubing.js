@@ -78,25 +78,39 @@ const puzzleAlgProp = new PuzzleAlgProp({
   puzzleDef: puzzleDefProp,
 });
 
-(await puzzleAlgProp.get()).alg.log();
-puzzleAlgProp.addListener(console.log);
+// (await puzzleAlgProp.get()).alg.log();
+// puzzleAlgProp.addListener(console.log);
 
 algProp.set("R U R'");
-(await algProp.get()).alg.log();
+(await algProp.get()).alg.log(0);
 (async () => {
   const g = puzzleAlgProp.get();
-  await new Promise(async (resolve) => setTimeout(resolve, 1000));
-  (await g).alg.log("sdfsd");
+  await new Promise(async (resolve) =>
+    setTimeout(resolve, Math.random() * 100),
+  );
+  (await g).alg.log(1);
 })();
 algProp.set("F2");
 (await algProp.get()).alg.log();
 (async () => {
   const g = puzzleAlgProp.get();
-  await new Promise(async (resolve) => setTimeout(resolve, 1000));
-  (await g).alg.log("aad");
+  await new Promise(async (resolve) =>
+    setTimeout(resolve, Math.random() * 100),
+  );
+  (await g).alg.log(2);
 })();
 algProp.set("L2");
 (async () => {
-  const g = puzzleAlgProp.get();
-  (await g).alg.log("ada");
+  const g = await puzzleAlgProp.get();
+  (await g).alg.log(3);
+})();
+algProp.set("R++");
+(async () => {
+  const g = await puzzleAlgProp.get();
+  console.log(4, (await g).issues);
+})();
+puzzleProp.set("megaminx");
+(async () => {
+  const g = await puzzleAlgProp.get();
+  (await g).alg.log(5);
 })();
