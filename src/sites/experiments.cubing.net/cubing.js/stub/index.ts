@@ -10,6 +10,7 @@ import { PuzzleAlgProp } from "../../../../cubing/twisty/dom/twisty-player-model
 import { AlgTransformationProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-4/AlgTransformationProp";
 import { IndexerProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-4/IndexerProp";
 import { PositionProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-5/PositionProp";
+import { TimeRangeProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-5/TimeRangeProp";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
@@ -109,9 +110,11 @@ const positionProp = new PositionProp({
   def: puzzleDefProp,
 });
 
-indexerProp.addListener(async () => {
-  const indexer = await indexerProp.get();
-  console.log(indexer.algDuration());
+const timeRangeProp = new TimeRangeProp({ indexer: indexerProp });
+
+timeRangeProp.addListener(async () => {
+  const timeRange = await timeRangeProp.get();
+  console.log("timeRange", timeRange);
 });
 
 // algProp.set("U D");
@@ -132,6 +135,10 @@ console.log(JSON.stringify(await positionProp.get(), null, "  "));
 algProp.set("R U R' U' R' F R2 U' R' U' R U R' F'");
 timestampProp.set(14200);
 console.log(JSON.stringify(await positionProp.get(), null, "  "));
+
+algProp.set("(U D)");
+console.log("foo");
+indexerConstructor.set("simultaneous");
 
 // // (await puzzleAlgProp.get()).alg.log();
 // // puzzleAlgProp.addListener(console.log);

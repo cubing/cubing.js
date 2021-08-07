@@ -46,6 +46,7 @@ export abstract class TwistyPropParent<T> {
     console.log(
       "Generation",
       sourceEvent.detail.generation,
+      this.lastSourceGeneration,
       "Marking stale",
       this.constructor.name,
     );
@@ -63,7 +64,12 @@ export abstract class TwistyPropParent<T> {
     }
     // We schedul sending out events *after* the (synchronous) propagation has happened, in
     // case one of the listeners updates a source again.
-    setTimeout(() => this.dispatchListeners(), 0);
+    console.log(
+      "dispatch",
+      this.constructor.name,
+      sourceEvent.detail.generation,
+    );
+    this.#scheduleDispatch();
   }
 
   #listeners: Set<() => void> = new Set();
@@ -75,9 +81,19 @@ export abstract class TwistyPropParent<T> {
     this.#listeners.delete(listener);
   }
 
-  dispatchListeners(): void {
-    for (const listener of this.#listeners) {
-      listener();
+  #scheduleDispatch(): void {
+    this.#dispatchPending = true;
+    setTimeout(() => this.#dispatchListeners(), 0);
+  }
+
+  #dispatchPending: boolean = false;
+  #dispatchListeners(): void {
+    if (this.#dispatchPending) {
+      for (const listener of this.#listeners) {
+        console.log("list", listener);
+        listener();
+      }
+      this.#dispatchPending = false;
     }
   }
 }
