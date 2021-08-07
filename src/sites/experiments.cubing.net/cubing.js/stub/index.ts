@@ -93,9 +93,17 @@ indexerProp.addListener(async () => {
 });
 
 algProp.set("U D");
+console.log("a1", (await indexerProp.get()).algDuration());
 algProp.set("(U D)");
+console.log("a2", (await indexerProp.get()).algDuration());
 indexerConstructor.set("simultaneous");
-console.log((await indexerProp.get()).algDuration());
+const g = indexerProp.get();
+console.log("a4", (await indexerProp.get()).algDuration());
+algProp.set("(U D E2)");
+console.log("a5", (await g).algDuration());
+
+indexerConstructor.set("tree");
+console.log("a6", (await indexerProp.get()).algDuration());
 
 // // (await puzzleAlgProp.get()).alg.log();
 // // puzzleAlgProp.addListener(console.log);

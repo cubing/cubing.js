@@ -14,6 +14,13 @@ export class AlgIssues {
     Object.freeze(this);
   }
 
+  add(issues?: { warnings?: string[]; errors?: string[] }) {
+    return new AlgIssues({
+      warnings: this.warnings.concat(issues?.warnings ?? []),
+      errors: this.errors.concat(issues?.errors ?? []),
+    });
+  }
+
   /** @deprecated */
   log() {
     if (this.errors.length > 0) {
@@ -30,8 +37,9 @@ export interface AlgWithIssues {
   alg: Alg;
   issues: AlgIssues;
 }
+
 export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
-  async getDefaultValue(): Promise<AlgWithIssues> {
+  getDefaultValue(): AlgWithIssues {
     return { alg: new Alg(), issues: new AlgIssues() };
   }
 
