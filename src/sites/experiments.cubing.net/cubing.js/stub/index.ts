@@ -155,12 +155,70 @@ console.log("Loading stub file.");
   timestampProp.set(500);
 
   const input = document.body.appendChild(document.createElement("input"));
+  input.setAttribute("style", "width: 100%;");
   input.type = "range";
   input.min = (await timeRangeProp.get()).start.toString();
   input.max = (await timeRangeProp.get()).end.toString();
 
-  input.addEventListener("input", () => {
-    timestampProp.set(parseFloat(input.value));
+  var isMouseDown = false;
+
+  document.addEventListener(
+    "mousedown",
+    function (event) {
+      if (event.which) isMouseDown = true;
+    },
+    true,
+  );
+
+  document.addEventListener(
+    "mouseup",
+    function (event) {
+      if (event.which) isMouseDown = false;
+    },
+    true,
+  );
+
+  var x = 0;
+  var y = 0;
+
+  document.addEventListener("mousemove", onMouseUpdate, false);
+  document.addEventListener("mouseenter", onMouseUpdate, false);
+
+  function onMouseUpdate(e: MouseEvent) {
+    x = e.pageX;
+    y = e.pageY;
+    console.log(x, y);
+  }
+
+  let lastVal = parseInt(input.value);
+  let lastPreval = parseInt(input.value);
+  let scaling: boolean = false;
+  input.addEventListener("input", (e: Event) => {
+    if (scaling) {
+      return;
+    }
+    if (isMouseDown) {
+      const rect = input.getBoundingClientRect();
+      const sliderY = rect.top + rect.height / 2;
+      console.log(sliderY, e, y, isMouseDown);
+
+      const yDist = Math.abs(sliderY - y);
+      let scale = 1;
+      if (yDist > 64) {
+        scale = Math.max(Math.pow(2, -(yDist - 64) / 64), 1 / 64);
+      }
+      const preVal = parseInt(input.value);
+      const delta = preVal - lastPreval;
+      scaling = true;
+      input.value = (lastVal + delta * scale).toString();
+      console.log(scale);
+      scaling = false;
+      lastPreval = preVal;
+    }
+
+    const val = parseInt(input.value);
+    lastVal = val;
+    timestampProp.set(val);
     scene.scheduleRender();
   });
 
