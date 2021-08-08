@@ -150,7 +150,7 @@ console.log("Loading stub file.");
   });
 
   algProp.set(
-    "BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2'",
+    "(BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2')2",
   );
   timestampProp.set(500);
 
@@ -215,7 +215,7 @@ console.log("Loading stub file.");
       const yDist = Math.abs(sliderY - y);
       let scale = 1;
       if (yDist > 64) {
-        scale = Math.max(Math.pow(2, -(yDist - 64) / 64), 1 / 64);
+        scale = Math.max(Math.pow(2, -(yDist - 64) / 64), 1 / 32);
       }
       const preVal = parseInt(input.value);
       console.log("cl", currentClickNum, clickNum, preVal);
@@ -224,12 +224,11 @@ console.log("Loading stub file.");
         console.log("delta", delta, yDist);
         scaling = true;
         let newVal = preVal;
-        if (yDist > 64) {
-          newVal = lastVal + delta * scale;
-        } else {
-          newVal =
-            lastVal + (preVal - lastVal) * Math.min(1, (64 - yDist) / 32);
-        }
+        newVal =
+          lastVal +
+          delta * scale +
+          (preVal - lastVal) *
+            Math.min(1, Math.pow(1 / 2, (yDist * yDist) / 64));
         input.value = newVal.toString();
         console.log(scale);
         scaling = false;
