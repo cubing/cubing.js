@@ -1,99 +1,82 @@
 import type { Alg } from "../../../alg";
-import type { TimeRange } from "../../animation/cursor/AlgCursor";
-import type { PuzzleID, VisualizationFormat } from "../TwistyPlayerConfig";
-import { AlgIssues, AlgProp } from "./depth-1/AlgProp";
+import type { Timestamp } from "../../animation/cursor/CursorTypes";
+import type { PuzzleID } from "../TwistyPlayerConfig";
+import { AlgProp } from "./depth-1/AlgProp";
+import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
-import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
-import { VisualizationStrategyProp } from "./depth-2/VisualizationStrategyProp";
+import { TimestampProp } from "./depth-1/TimestampProp";
+import { PuzzleDefProp } from "./depth-2/PuzzleDefProp";
+import { PuzzleAlgProp } from "./depth-3/PuzzleAlgProp";
+import { AlgTransformationProp } from "./depth-4/AlgTransformationProp";
 import { IndexerProp } from "./depth-4/IndexerProp";
-import { TimelineProp } from "./depth-4/TimelineProp";
-import { VisualizationProp } from "./depth-4/VisualizationProp";
 import { PositionProp } from "./depth-5/PositionProp";
+import { TimeRangeProp } from "./depth-5/TimeRangeProp";
 
 export class TwistyPlayerModel {
   algProp: AlgProp;
   setupProp: AlgProp;
   puzzleProp: PuzzleProp;
-
+  puzzleDefProp: PuzzleDefProp;
   puzzleAlgProp: PuzzleAlgProp;
   puzzleSetupProp: PuzzleAlgProp;
-  visualizationStrategyProp: VisualizationStrategyProp;
-
+  indexerConstructor: IndexerConstructorProp;
   indexerProp: IndexerProp;
-
-  timelineProp: TimelineProp;
-  visualizationProp: VisualizationProp;
-
+  timestampProp: TimestampProp;
+  setupTransformationProp: AlgTransformationProp;
   positionProp: PositionProp;
+  timeRangeProp: TimeRangeProp;
 
   constructor() {
     this.algProp = new AlgProp();
     this.setupProp = new AlgProp();
     this.puzzleProp = new PuzzleProp();
+    this.puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
+    this.puzzleAlgProp = new PuzzleAlgProp({
+      algWithIssues: this.algProp,
+      puzzleDef: this.puzzleDefProp,
+    });
+    this.puzzleSetupProp = new PuzzleAlgProp({
+      algWithIssues: this.setupProp,
+      puzzleDef: this.puzzleDefProp,
+    });
 
-    this.puzzleAlgProp = new PuzzleAlgProp(this.algProp, this.puzzleProp);
-    this.puzzleSetupProp = new PuzzleAlgProp(this.setupProp, this.puzzleProp);
-    this.visualizationStrategyProp = new VisualizationStrategyProp(
-      this.puzzleProp,
-    );
+    this.indexerConstructor = new IndexerConstructorProp();
+    this.indexerProp = new IndexerProp({
+      indexerConstructor: this.indexerConstructor,
+      algWithIssues: this.puzzleAlgProp,
+      def: this.puzzleDefProp,
+    });
 
-    this.indexerProp = new IndexerProp(
-      this.puzzleAlgProp,
-      this.puzzleSetupProp,
-      this.puzzleProp,
-    );
+    this.timestampProp = new TimestampProp();
 
-    this.timelineProp = new TimelineProp([this.indexerProp]);
-    this.visualizationProp = new VisualizationProp(
-      this.visualizationStrategyProp,
-      this.indexerProp,
-      this.puzzleProp,
-    );
+    this.setupTransformationProp = new AlgTransformationProp({
+      alg: this.puzzleSetupProp,
+      def: this.puzzleDefProp,
+    });
 
-    this.positionProp = new PositionProp(this.indexerProp, this.timelineProp);
-  }
+    this.positionProp = new PositionProp({
+      setupTransformation: this.setupTransformationProp,
+      indexer: this.indexerProp,
+      timestamp: this.timestampProp,
+      def: this.puzzleDefProp,
+    });
 
-  set requestedVisualization(visualization: VisualizationFormat) {
-    this.visualizationStrategyProp.requestedVisualization = visualization;
-  }
-
-  get requestedVisualization(): VisualizationFormat {
-    return this.visualizationStrategyProp.requestedVisualization;
-  }
-
-  get visualizationStrategy(): VisualizationFormat {
-    return this.visualizationStrategyProp.visualizationStrategy;
+    this.timeRangeProp = new TimeRangeProp({ indexer: this.indexerProp });
   }
 
   set alg(newAlg: Alg | string) {
-    this.algProp.alg = newAlg;
-  }
-
-  get alg(): Alg {
-    return this.algProp.alg;
+    this.algProp.set(newAlg);
   }
 
   set setup(newSetup: Alg | string) {
-    this.setupProp.alg = newSetup;
-  }
-
-  get setup(): Alg {
-    return this.setupProp.alg;
+    this.setupProp.set(newSetup);
   }
 
   set puzzle(puzzleID: PuzzleID) {
-    this.puzzleProp.puzzleID = puzzleID;
+    this.puzzleProp.set(puzzleID);
   }
 
-  get puzzle(): PuzzleID {
-    return this.puzzleProp.puzzleID;
-  }
-
-  timeRange(): Promise<TimeRange> {
-    return this.timelineProp.timeRange();
-  }
-
-  algIssues(): Promise<AlgIssues> {
-    return this.puzzleAlgProp.algIssues();
+  set timestamp(timestamp: Timestamp) {
+    this.timestampProp.set(timestamp);
   }
 }
