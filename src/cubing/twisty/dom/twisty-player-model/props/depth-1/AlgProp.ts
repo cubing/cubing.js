@@ -45,7 +45,6 @@ export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
 
   async derive(newAlg: Alg | string): Promise<AlgWithIssues> {
     if (typeof newAlg === "string") {
-      console.log("fromstring!");
       try {
         const alg = Alg.fromString(newAlg); // TODO: is this safe?
         const warnings = [];

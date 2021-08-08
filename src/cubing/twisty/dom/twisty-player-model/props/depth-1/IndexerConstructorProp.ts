@@ -17,13 +17,10 @@ export class IndexerConstructorProp extends TwistyPropSource<
   derive(strategyName: IndexerStrategyName): IndexerConstructor {
     switch (strategyName) {
       case "simple":
-        console.log("deriving simple");
         return SimpleAlgIndexer;
       case "simultaneous":
-        console.log("deriving simultaneo");
         return SimultaneousMoveIndexer;
       case "tree":
-        console.log("deriving tree");
         return TreeAlgIndexer;
       default:
         throw new Error("Invalid Indexer!");

@@ -10,7 +10,6 @@ export { Twisty3DScene } from "../../../../3D/Twisty3DScene";
 export { Twisty3DCanvas } from "../../../viewers/Twisty3DCanvas";
 
 export async function cube3DShim(): Promise<Cube3D> {
-  console.log("cube3DShim");
   const cursorShim = { addPositionListener: () => {} } as any as AlgCursor; // TODO
   const renderCallbackShim = () => {};
   return new Cube3D(await cube3x3x3.def(), cursorShim, renderCallbackShim);
@@ -18,7 +17,6 @@ export async function cube3DShim(): Promise<Cube3D> {
 
 // TODO: take loader?
 export async function pg3dShim(puzzleID: PuzzleID): Promise<PG3D> {
-  console.log("pg3dShim", puzzleID);
   const cursorShim = { addPositionListener: () => {} } as any as AlgCursor; // TODO
   const renderCallbackShim = () => {};
   return new PG3D(

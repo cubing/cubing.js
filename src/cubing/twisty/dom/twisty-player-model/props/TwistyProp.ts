@@ -43,13 +43,6 @@ export abstract class TwistyPropParent<T> {
   // literally mark as stale, but it updates the last source generation, which
   // is used to tell if a cahced result is stale.
   protected markStale(sourceEvent: SourceEvent<any>): void {
-    console.log(
-      "Generation",
-      sourceEvent.detail.generation,
-      this.lastSourceGeneration,
-      "Marking stale",
-      this.constructor.name,
-    );
     if (sourceEvent.detail.generation !== globalSourceGeneration) {
       // The full stale propagation is synchronous, so there should not be a new one yet.
       throw new Error("A TwistyProp was marked stale too late!");
@@ -64,11 +57,6 @@ export abstract class TwistyPropParent<T> {
     }
     // We schedul sending out events *after* the (synchronous) propagation has happened, in
     // case one of the listeners updates a source again.
-    console.log(
-      "dispatch",
-      this.constructor.name,
-      sourceEvent.detail.generation,
-    );
     this.#scheduleDispatch();
   }
 
@@ -90,7 +78,6 @@ export abstract class TwistyPropParent<T> {
   #dispatchListeners(): void {
     if (this.#dispatchPending) {
       for (const listener of this.#listeners) {
-        console.log("list", listener);
         listener();
       }
       this.#dispatchPending = false;
@@ -129,7 +116,6 @@ export abstract class TwistyPropSource<
   }
 
   async get(): Promise<OutputType> {
-    console.log("get source", this.constructor.name, this.lastSourceGeneration);
     return this.#value;
   }
 
@@ -174,12 +160,6 @@ export abstract class TwistyPropDerived<
   }
 
   public async get(): Promise<OutputType> {
-    console.log(
-      "get derived",
-      this.constructor.name,
-      this.lastSourceGeneration,
-    );
-
     const generation = this.lastSourceGeneration;
 
     const cachedResult = this.#cachedResult;
