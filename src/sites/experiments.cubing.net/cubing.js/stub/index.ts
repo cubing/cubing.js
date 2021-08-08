@@ -180,6 +180,15 @@ console.log("Loading stub file.");
 
   var x = 0;
   var y = 0;
+  let clickNum = 0;
+
+  document.addEventListener(
+    "mousedown",
+    () => {
+      clickNum++;
+    },
+    false,
+  );
 
   document.addEventListener("mousemove", onMouseUpdate, false);
   document.addEventListener("mouseenter", onMouseUpdate, false);
@@ -187,12 +196,13 @@ console.log("Loading stub file.");
   function onMouseUpdate(e: MouseEvent) {
     x = e.pageX;
     y = e.pageY;
-    console.log(x, y);
+    // console.log(x, y);
   }
 
   let lastVal = parseInt(input.value);
   let lastPreval = parseInt(input.value);
   let scaling: boolean = false;
+  let currentClickNum = 0;
   input.addEventListener("input", (e: Event) => {
     if (scaling) {
       return;
@@ -208,11 +218,16 @@ console.log("Loading stub file.");
         scale = Math.max(Math.pow(2, -(yDist - 64) / 64), 1 / 64);
       }
       const preVal = parseInt(input.value);
-      const delta = preVal - lastPreval;
-      scaling = true;
-      input.value = (lastVal + delta * scale).toString();
-      console.log(scale);
-      scaling = false;
+      console.log("cl", currentClickNum, clickNum, preVal);
+      if (currentClickNum === clickNum) {
+        const delta = preVal - lastPreval;
+        scaling = true;
+        input.value = (lastVal + delta * scale).toString();
+        console.log(scale);
+        scaling = false;
+      } else {
+        currentClickNum = clickNum;
+      }
       lastPreval = preVal;
     }
 
