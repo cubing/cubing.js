@@ -28,3 +28,5 @@ export async function pg3dShim(puzzleID: PuzzleID): Promise<PG3D> {
     true,
   );
 }
+
+export * as THREE from "three";

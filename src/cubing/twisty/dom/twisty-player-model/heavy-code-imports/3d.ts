@@ -9,3 +9,18 @@ export async function proxy3D(): Promise<
 > {
   return (cachedConstructorProxy ??= import("./dynamic-entries/3d"));
 }
+
+export async function THREE(): Promise<
+  typeof import("./dynamic-entries/3d").THREE
+> {
+  return (await proxy3D()).THREE;
+}
+
+// TOFO: Catch?
+export const THEESRY = {
+  then: (
+    callback: (v: typeof import("./dynamic-entries/3d").THREE) => void,
+  ): void => {
+    THREE().then(callback);
+  },
+};
