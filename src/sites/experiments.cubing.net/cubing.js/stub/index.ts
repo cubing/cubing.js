@@ -1,8 +1,8 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { Twisty3DProp } from "../../../../cubing/twisty/dom/twisty-player-model/depth-6/Twisty3DProp";
-import { TwistyPlayerModel } from "../../../../cubing/twisty/dom/twisty-player-model/TwistyPlayerModel";
+import { Twisty3DProp } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/Twisty3DProp";
+import { TwistyPlayerModel } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPlayerModel";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
@@ -17,13 +17,13 @@ console.log("Loading stub file.");
   });
 
   let cachedConstructorProxy: Promise<
-    typeof import("../../../../cubing/twisty/dom/twisty-player-model/depth-6/3d-proxy")
+    typeof import("../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/3d-proxy")
   > | null = null;
   async function constructorProxy(): Promise<
-    typeof import("../../../../cubing/twisty/dom/twisty-player-model/depth-6/3d-proxy")
+    typeof import("../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/3d-proxy")
   > {
     return (cachedConstructorProxy ??= import(
-      "../../../../cubing/twisty/dom/twisty-player-model/depth-6/3d-proxy"
+      "../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/3d-proxy"
     ));
   }
 

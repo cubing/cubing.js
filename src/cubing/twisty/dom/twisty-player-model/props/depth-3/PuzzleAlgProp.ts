@@ -1,5 +1,5 @@
-import { Alg } from "../../../../alg";
-import { KPuzzle, KPuzzleDefinition } from "../../../../kpuzzle";
+import { Alg } from "../../../../../alg";
+import { KPuzzle, KPuzzleDefinition } from "../../../../../kpuzzle";
 import { AlgIssues, AlgWithIssues } from "../depth-1/AlgProp";
 import { TwistyPropDerived } from "../TwistyProp";
 

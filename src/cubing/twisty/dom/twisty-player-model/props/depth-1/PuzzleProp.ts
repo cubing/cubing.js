@@ -1,4 +1,4 @@
-import type { PuzzleID } from "../../TwistyPlayerConfig";
+import type { PuzzleID } from "../../../TwistyPlayerConfig";
 import { SimpleTwistyPropSource } from "../TwistyProp";
 
 export class PuzzleProp extends SimpleTwistyPropSource<PuzzleID> {

@@ -1,6 +1,6 @@
-import type { Alg } from "../../../alg";
-import type { Timestamp } from "../../animation/cursor/CursorTypes";
-import type { PuzzleID } from "../TwistyPlayerConfig";
+import type { Alg } from "../../../../alg";
+import type { Timestamp } from "../../../animation/cursor/CursorTypes";
+import type { PuzzleID } from "../../TwistyPlayerConfig";
 import { AlgProp } from "./depth-1/AlgProp";
 import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";

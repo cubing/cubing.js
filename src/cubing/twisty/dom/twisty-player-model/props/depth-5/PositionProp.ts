@@ -1,16 +1,16 @@
-import { Move } from "../../../../alg";
+import { Move } from "../../../../../alg";
 import {
   combineTransformations,
   KPuzzleDefinition,
   transformationForMove,
-} from "../../../../kpuzzle";
-import type { Transformation } from "../../../../puzzle-geometry/interfaces";
+} from "../../../../../kpuzzle";
+import type { Transformation } from "../../../../../puzzle-geometry/interfaces";
 import {
   Direction,
   MillisecondTimestamp,
   PuzzlePosition,
-} from "../../../animation/cursor/CursorTypes";
-import type { AlgIndexer } from "../../../animation/indexer/AlgIndexer";
+} from "../../../../animation/cursor/CursorTypes";
+import type { AlgIndexer } from "../../../../animation/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface PositionPropInputs {

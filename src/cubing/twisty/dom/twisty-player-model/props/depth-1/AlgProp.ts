@@ -1,4 +1,4 @@
-import { Alg } from "../../../../alg";
+import { Alg } from "../../../../../alg";
 import { TwistyPropSource } from "../TwistyProp";
 
 export class AlgIssues {

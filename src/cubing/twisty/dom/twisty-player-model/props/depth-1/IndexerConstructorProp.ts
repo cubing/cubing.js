@@ -1,7 +1,7 @@
-import type { IndexerConstructor } from "../../../animation/cursor/AlgCursor";
-import { SimpleAlgIndexer } from "../../../animation/indexer/SimpleAlgIndexer";
-import { SimultaneousMoveIndexer } from "../../../animation/indexer/simultaneous-moves/SimultaneousMoveIndexer";
-import { TreeAlgIndexer } from "../../../animation/indexer/tree/TreeAlgIndexer";
+import type { IndexerConstructor } from "../../../../animation/cursor/AlgCursor";
+import { SimpleAlgIndexer } from "../../../../animation/indexer/SimpleAlgIndexer";
+import { SimultaneousMoveIndexer } from "../../../../animation/indexer/simultaneous-moves/SimultaneousMoveIndexer";
+import { TreeAlgIndexer } from "../../../../animation/indexer/tree/TreeAlgIndexer";
 import { TwistyPropSource } from "../TwistyProp";
 
 type IndexerStrategyName = "simple" | "tree" | "simultaneous";

@@ -1,5 +1,5 @@
-import type { Twisty3DPuzzle } from "../../../3D/puzzles/Twisty3DPuzzle";
-import type { PuzzleID } from "../../TwistyPlayerConfig";
+import type { Twisty3DPuzzle } from "../../../..";
+import type { PuzzleID } from "../../../TwistyPlayerConfig";
 import { TwistyPropDerived } from "../TwistyProp";
 
 export class Twisty3DProp extends TwistyPropDerived<
