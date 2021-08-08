@@ -1,6 +1,8 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
+import { Twisty3DSceneWrapper } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/Twisty3DSceneWrapper";
+import { Twisty3DVantage } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/Twisty3DVantage";
 import { proxy3D } from "../../../../cubing/twisty/dom/twisty-player-model/heavy-code-imports/3d";
 import { Twisty3DProp } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/Twisty3DProp";
 import { TwistyPlayerModel } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPlayerModel";
@@ -29,7 +31,7 @@ console.log("Loading stub file.");
   const twisty3D = new Twisty3DProp({ puzzleID: model.puzzleProp });
   scene.add(await twisty3D.get());
 
-  model.setup = "F2";
+  // model.setup = "F2";
 
   model.positionProp.addListener(async () => {
     (await twisty3D.get()).onPositionChange(await model.positionProp.get());
@@ -121,7 +123,6 @@ console.log("Loading stub file.");
         scaling = false;
       } else {
         currentClickNum = clickNum;
-        input.value = (parseInt(input.value) - 20000).toString();
       }
       lastPreval = preVal;
     }
@@ -133,4 +134,32 @@ console.log("Loading stub file.");
   });
 
   scene.scheduleRender();
+})();
+
+(async () => {
+  const sceneWrapper = new Twisty3DSceneWrapper();
+  const vantage = new Twisty3DVantage(sceneWrapper);
+
+  document.body.appendChild(sceneWrapper);
+  document.body.appendChild(vantage);
+
+  sceneWrapper.setAttribute("style", "width: 256px; height: 256px;");
+  vantage.setAttribute("style", "width: 256px; height: 256px;");
+  (await vantage.scene!).setAttribute("style", "width: 256px; height: 256px;");
+
+  const model = new TwistyPlayerModel();
+  const twisty3DProp = new Twisty3DProp({ puzzleID: model.puzzleProp });
+
+  const scene = await sceneWrapper.scene();
+  const twisty3D = await twisty3DProp.get();
+
+  scene.add(twisty3D);
+  console.log(scene);
+
+  // console.log("sdfdsf", );
+  // (await scene.scene()).add(await twisty3D.get());
+  // console.log("scene", await scene.scene());
+  // console.log("scene.chilndreldn", (await scene.scene()).children);
+  // console.log(await model.puzzleProp.get());
+  vantage.scheduleRender();
 })();

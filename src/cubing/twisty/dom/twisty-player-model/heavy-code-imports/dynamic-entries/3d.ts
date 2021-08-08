@@ -29,4 +29,6 @@ export async function pg3dShim(puzzleID: PuzzleID): Promise<PG3D> {
   );
 }
 
-export * as THREE from "three";
+// Mangled to avoid autocompleting.
+// This must not be imported directly.
+export * as T3I from "three";
