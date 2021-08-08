@@ -148,6 +148,7 @@ console.log("Loading stub file.");
   (await vantage.scene!).setAttribute("style", "width: 256px; height: 256px;");
 
   const model = new TwistyPlayerModel();
+  model.puzzle = "gigaminx";
   const twisty3DProp = new Twisty3DProp({ puzzleID: model.puzzleProp });
 
   const scene = await sceneWrapper.scene();
