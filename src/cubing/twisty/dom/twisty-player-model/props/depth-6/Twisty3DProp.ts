@@ -1,5 +1,6 @@
 import type { Twisty3DPuzzle } from "../../../..";
 import type { PuzzleID } from "../../../TwistyPlayerConfig";
+import { proxy3D } from "../../heavy-code-imports/3d";
 import { TwistyPropDerived } from "../TwistyProp";
 
 export class Twisty3DProp extends TwistyPropDerived<
@@ -7,7 +8,7 @@ export class Twisty3DProp extends TwistyPropDerived<
   Twisty3DPuzzle
 > {
   async derive(inputs: { puzzleID: PuzzleID }): Promise<Twisty3DPuzzle> {
-    const proxy = await this.constructorProxy();
+    const proxy = await proxy3D();
     switch (inputs.puzzleID) {
       case "3x3x3":
         return await proxy.cube3DShim();
@@ -15,12 +16,5 @@ export class Twisty3DProp extends TwistyPropDerived<
         return await proxy.pg3dShim(inputs.puzzleID);
       }
     }
-  }
-
-  // TODO can we remove the cached proxy?
-  // In theory we can, but we've run into situations where imports are not properly cached.
-  #cachedConstructorProxy: Promise<typeof import("./3d-proxy")> | null = null;
-  async constructorProxy(): Promise<typeof import("./3d-proxy")> {
-    return (this.#cachedConstructorProxy ??= import("./3d-proxy"));
   }
 }

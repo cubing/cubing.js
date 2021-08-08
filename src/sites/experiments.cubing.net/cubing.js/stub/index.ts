@@ -1,6 +1,7 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
+import { proxy3D } from "../../../../cubing/twisty/dom/twisty-player-model/heavy-code-imports/3d";
 import { Twisty3DProp } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/Twisty3DProp";
 import { TwistyPlayerModel } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPlayerModel";
 
@@ -16,19 +17,8 @@ console.log("Loading stub file.");
     console.log("timeRange", timeRange);
   });
 
-  let cachedConstructorProxy: Promise<
-    typeof import("../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/3d-proxy")
-  > | null = null;
-  async function constructorProxy(): Promise<
-    typeof import("../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/3d-proxy")
-  > {
-    return (cachedConstructorProxy ??= import(
-      "../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/3d-proxy"
-    ));
-  }
-
-  const scene = new (await constructorProxy()).Twisty3DScene();
-  const canvas = new (await constructorProxy()).Twisty3DCanvas(scene);
+  const scene = new (await proxy3D()).Twisty3DScene();
+  const canvas = new (await proxy3D()).Twisty3DCanvas(scene);
   const div = document.body.appendChild(document.createElement("div"));
   div.setAttribute("style", "width: 256px; height: 256px;");
   div.appendChild(canvas.canvas);
