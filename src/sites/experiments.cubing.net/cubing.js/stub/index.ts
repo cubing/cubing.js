@@ -220,13 +220,22 @@ console.log("Loading stub file.");
       const preVal = parseInt(input.value);
       console.log("cl", currentClickNum, clickNum, preVal);
       if (currentClickNum === clickNum) {
-        const delta = preVal - lastPreval;
+        const delta = (preVal - lastPreval) * scale;
+        console.log("delta", delta, yDist);
         scaling = true;
-        input.value = (lastVal + delta * scale).toString();
+        let newVal = preVal;
+        if (yDist > 64) {
+          newVal = lastVal + delta * scale;
+        } else {
+          newVal =
+            lastVal + (preVal - lastVal) * Math.min(1, (64 - yDist) / 32);
+        }
+        input.value = newVal.toString();
         console.log(scale);
         scaling = false;
       } else {
         currentClickNum = clickNum;
+        input.value = (parseInt(input.value) - 20000).toString();
       }
       lastPreval = preVal;
     }
