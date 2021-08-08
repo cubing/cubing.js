@@ -11,8 +11,9 @@ export class Twisty3DSceneWrapper extends ManagedCustomElement {
 
   async connectedCallback(): Promise<void> {}
 
+  #cachedScene: Promise<Scene> | null;
   async scene(): Promise<Scene> {
-    return new (await THREEJS).Scene();
+    return (this.#cachedScene ??= (async () => new (await THREEJS).Scene())());
   }
 }
 
