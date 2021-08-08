@@ -178,7 +178,7 @@ console.log("Loading stub file.");
     true,
   );
 
-  var x = 0;
+  // var x = 0;
   var y = 0;
   let clickNum = 0;
 
@@ -194,7 +194,7 @@ console.log("Loading stub file.");
   document.addEventListener("mouseenter", onMouseUpdate, false);
 
   function onMouseUpdate(e: MouseEvent) {
-    x = e.pageX;
+    // x = e.pageX;
     y = e.pageY;
     // console.log(x, y);
   }
