@@ -61,8 +61,11 @@ export abstract class TwistyPropParent<T> {
   }
 
   #listeners: Set<() => void> = new Set();
-  addListener(listener: () => void): void {
+  addListener(listener: () => void, options?: { initial: boolean }): void {
     this.#listeners.add(listener);
+    if (options?.initial) {
+      listener();
+    }
   }
 
   removeListener(listener: () => void): void {

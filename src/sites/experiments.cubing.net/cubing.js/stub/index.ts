@@ -3,6 +3,7 @@
 
 import { Twisty3DSceneWrapper } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/Twisty3DSceneWrapper";
 import { Twisty3DVantage } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/Twisty3DVantage";
+import { TwistyScrubberV2 } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/TwistyScrubberV2";
 import { Twisty3DProp } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/Twisty3DProp";
 import { TwistyPlayerModel } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPlayerModel";
 
@@ -23,6 +24,8 @@ console.log("Loading stub file.");
 
   const model = new TwistyPlayerModel();
   model.puzzle = "gigaminx";
+
+  (window as any).model = model;
 
   model.algProp.set(
     "(BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2')2",
@@ -138,4 +141,7 @@ console.log("Loading stub file.");
   });
 
   sceneWrapper.scheduleRender();
+
+  const scrubber = new TwistyScrubberV2(model);
+  document.body.appendChild(scrubber);
 })();
