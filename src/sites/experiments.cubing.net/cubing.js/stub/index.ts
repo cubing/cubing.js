@@ -3,46 +3,12 @@
 
 import { Twisty3DSceneWrapper } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/Twisty3DSceneWrapper";
 import { Twisty3DVantage } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/Twisty3DVantage";
-import { proxy3D } from "../../../../cubing/twisty/dom/twisty-player-model/heavy-code-imports/3d";
 import { Twisty3DProp } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/Twisty3DProp";
 import { TwistyPlayerModel } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPlayerModel";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
 console.log("Loading stub file.");
-
-(async () => {
-  const model = new TwistyPlayerModel();
-
-  model.timeRangeProp.addListener(async () => {
-    const timeRange = await model.timeRangeProp.get();
-    console.log("timeRange", timeRange);
-  });
-
-  const scene = new (await proxy3D()).Twisty3DScene();
-  const canvas = new (await proxy3D()).Twisty3DCanvas(scene);
-  const div = document.body.appendChild(document.createElement("div"));
-  div.setAttribute("style", "width: 256px; height: 256px;");
-  div.appendChild(canvas.canvas);
-  canvas.canvas.setAttribute("style", "width: 256px; height: 256px;");
-
-  model.puzzle = "gigaminx";
-
-  const twisty3D = new Twisty3DProp({ puzzleID: model.puzzleProp });
-  scene.add(await twisty3D.get());
-
-  // model.setup = "F2";
-
-  model.positionProp.addListener(async () => {
-    (await twisty3D.get()).onPositionChange(await model.positionProp.get());
-    scene.scheduleRender();
-  });
-
-  model.algProp.set(
-    "(BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2')2",
-  );
-  model.timestamp = 500;
-})();
 
 (async () => {
   const sceneWrapper = new Twisty3DSceneWrapper();
