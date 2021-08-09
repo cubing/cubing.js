@@ -42,6 +42,44 @@ console.log("Loading stub file.");
     "(BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2')2",
   );
   model.timestamp = 500;
+})();
+
+(async () => {
+  const sceneWrapper = new Twisty3DSceneWrapper();
+  const vantage = new Twisty3DVantage(sceneWrapper);
+
+  document.body.appendChild(sceneWrapper);
+  document.body.appendChild(vantage);
+
+  sceneWrapper.setAttribute("style", "width: 256px; height: 256px;");
+  vantage.setAttribute("style", "width: 256px; height: 256px;");
+  (await vantage.scene!).setAttribute("style", "width: 256px; height: 256px;");
+
+  const model = new TwistyPlayerModel();
+  model.puzzle = "gigaminx";
+
+  model.algProp.set(
+    "(BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2')2",
+  );
+  const twisty3DProp = new Twisty3DProp({ puzzleID: model.puzzleProp });
+
+  const scene = await sceneWrapper.scene();
+  const twisty3D = await twisty3DProp.get();
+
+  model.positionProp.addListener(async () => {
+    twisty3D.onPositionChange(await model.positionProp.get());
+    sceneWrapper.scheduleRender();
+  });
+
+  scene.add(twisty3D);
+  console.log(scene);
+
+  // console.log("sdfdsf", );
+  // (await scene.scene()).add(await twisty3D.get());
+  // console.log("scene", await scene.scene());
+  // console.log("scene.chilndreldn", (await scene.scene()).children);
+  // console.log(await model.puzzleProp.get());
+  vantage.scheduleRender();
 
   const input = document.body.appendChild(document.createElement("input"));
   input.setAttribute("style", "width: 100%;");
@@ -130,37 +168,8 @@ console.log("Loading stub file.");
     const val = parseInt(input.value);
     lastVal = val;
     model.timestamp = val;
-    scene.scheduleRender();
+    sceneWrapper.scheduleRender();
   });
 
-  scene.scheduleRender();
-})();
-
-(async () => {
-  const sceneWrapper = new Twisty3DSceneWrapper();
-  const vantage = new Twisty3DVantage(sceneWrapper);
-
-  document.body.appendChild(sceneWrapper);
-  document.body.appendChild(vantage);
-
-  sceneWrapper.setAttribute("style", "width: 256px; height: 256px;");
-  vantage.setAttribute("style", "width: 256px; height: 256px;");
-  (await vantage.scene!).setAttribute("style", "width: 256px; height: 256px;");
-
-  const model = new TwistyPlayerModel();
-  model.puzzle = "gigaminx";
-  const twisty3DProp = new Twisty3DProp({ puzzleID: model.puzzleProp });
-
-  const scene = await sceneWrapper.scene();
-  const twisty3D = await twisty3DProp.get();
-
-  scene.add(twisty3D);
-  console.log(scene);
-
-  // console.log("sdfdsf", );
-  // (await scene.scene()).add(await twisty3D.get());
-  // console.log("scene", await scene.scene());
-  // console.log("scene.chilndreldn", (await scene.scene()).children);
-  // console.log(await model.puzzleProp.get());
-  vantage.scheduleRender();
+  sceneWrapper.scheduleRender();
 })();

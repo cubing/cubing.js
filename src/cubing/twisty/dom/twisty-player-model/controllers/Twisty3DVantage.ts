@@ -16,6 +16,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
   constructor(scene?: Twisty3DSceneWrapper) {
     super();
     this.scene = scene ?? null;
+    this.scene?.addVantage(this); // TODO
   }
 
   async connectedCallback(): Promise<void> {
@@ -88,13 +89,14 @@ canvas {
       this.scene.scene(),
       this.camera(),
     ]);
-    console.log("rendering!!!!", renderer, scene, camera);
+    // console.log("rendering!!!!", renderer, scene, camera);
     renderer.setSize(256, 256);
     renderer.render(scene, camera); // TODO
   }
 
   #scheduler = new RenderScheduler(this.render.bind(this));
   scheduleRender(): void {
+    // console.log("scheduling", this);
     this.#scheduler.requestAnimFrame();
   }
 }
