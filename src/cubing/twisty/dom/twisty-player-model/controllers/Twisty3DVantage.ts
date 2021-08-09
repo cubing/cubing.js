@@ -23,7 +23,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
       new CSSSource(`
 :host {
   width: 256px;
-  height: 192px;
+  height: 256px;
   overflow: hidden;
 }
 
@@ -61,7 +61,7 @@ canvas {
     return (this.#cachedCamera ??= (async () => {
       const camera = new (await THREEJS).PerspectiveCamera(
         20,
-        4 / 3, // We rely on the resize logic to handle this.
+        1, // We rely on the resize logic to handle this.
         0.1,
         20,
       );
@@ -89,7 +89,7 @@ canvas {
       this.camera(),
     ]);
     console.log("rendering!!!!", renderer, scene, camera);
-    renderer.setSize(256, 192);
+    renderer.setSize(256, 256);
     renderer.render(scene, camera); // TODO
   }
 
