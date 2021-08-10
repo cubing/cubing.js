@@ -1,6 +1,7 @@
-import PLazy from "p-lazy";
+import PLazy from "../../../../vendor/p-lazy";
 
 // TODO can we remove the cached proxy?
+
 // In theory we can, but we've run into situations where imports are not properly cached.
 let cachedConstructorProxy: Promise<
   typeof import("./dynamic-entries/3d")

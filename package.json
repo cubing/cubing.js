@@ -11,7 +11,6 @@
     "@types/three": "^0.126.1",
     "@types/web-bluetooth": "0.0.4",
     "comlink": "^4.3.1",
-    "p-lazy": "^4.0.0",
     "three": "^0.126.1"
   },
   "devDependencies": {

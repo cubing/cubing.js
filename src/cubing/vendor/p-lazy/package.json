@@ -1,0 +1,45 @@
+{
+	"name": "p-lazy",
+	"version": "4.0.0",
+	"description": "Create a lazy promise that defers execution until it's awaited or when `.then()` or `.catch()` is called",
+	"license": "MIT",
+	"repository": "sindresorhus/p-lazy",
+	"funding": "https://github.com/sponsors/sindresorhus",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "https://sindresorhus.com"
+	},
+	"type": "module",
+	"exports": "./index.js",
+	"engines": {
+		"node": ">=12"
+	},
+	"scripts": {
+		"test": "xo && ava && tsd"
+	},
+	"files": [
+		"index.js",
+		"index.d.ts"
+	],
+	"keywords": [
+		"promise",
+		"lazy",
+		"defer",
+		"deferred",
+		"then",
+		"catch",
+		"fulfilled",
+		"async",
+		"function",
+		"await",
+		"promises",
+		"bluebird"
+	],
+	"devDependencies": {
+		"ava": "^3.15.0",
+		"delay": "^5.0.0",
+		"tsd": "^0.14.0",
+		"xo": "^0.38.2"
+	}
+}
