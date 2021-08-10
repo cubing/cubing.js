@@ -134,7 +134,7 @@ class PlayController {
       return;
     }
 
-    console.log({ frameDatestamp });
+    // console.log({ frameDatestamp });
 
     this.scheduler.requestAnimFrame();
     const delta =
@@ -158,16 +158,16 @@ class PlayController {
     // TODO: Don't animate past end.
 
     const newTimestamp = lastTimestamp + delta;
-    console.log({
-      lastTimestamp,
-      newTimestamp,
-      frameDatestamp,
-      lastDatestamp: this.lastDatestamp,
-    });
+    // console.log({
+    //   lastTimestamp,
+    //   newTimestamp,
+    //   frameDatestamp,
+    //   lastDatestamp: this.lastDatestamp,
+    // });
 
     this.lastDatestamp = frameDatestamp;
     this.lastTimestamp = Promise.resolve(newTimestamp); // TODO: Safe this earlier?
-    console.log("setting timestamp", newTimestamp);
+    // console.log("setting timestamp", newTimestamp);
     this.model.timestampProp.set(newTimestamp);
   }
 }

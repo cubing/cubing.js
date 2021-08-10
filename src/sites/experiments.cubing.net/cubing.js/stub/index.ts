@@ -144,4 +144,15 @@ console.log("Loading stub file.");
 
   const scrubber = new TwistyScrubberV2(model);
   document.body.appendChild(scrubber);
+
+  const playButton = document.body.appendChild(
+    document.createElement("button"),
+  );
+  playButton.textContent = "Play";
+  playButton.addEventListener("click", () => model.playController.play());
+  const pauseButton = document.body.appendChild(
+    document.createElement("button"),
+  );
+  pauseButton.textContent = "pause";
+  pauseButton.addEventListener("click", () => model.playController.pause());
 })();
