@@ -1,5 +1,11 @@
 import type { Alg } from "../../../../alg";
-import type { Timestamp } from "../../../animation/cursor/CursorTypes";
+import {
+  Direction,
+  directionScalar,
+  MillisecondTimestamp,
+  Timestamp,
+} from "../../../animation/cursor/CursorTypes";
+import { RenderScheduler } from "../../../animation/RenderScheduler";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
 import { AlgProp } from "./depth-1/AlgProp";
 import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
@@ -25,6 +31,8 @@ export class TwistyPlayerModel {
   setupTransformationProp: AlgTransformationProp;
   positionProp: PositionProp;
   timeRangeProp: TimeRangeProp;
+
+  playController: PlayController; // TODO: #private?
 
   constructor() {
     this.algProp = new AlgProp();
@@ -62,6 +70,8 @@ export class TwistyPlayerModel {
     });
 
     this.timeRangeProp = new TimeRangeProp({ indexer: this.indexerProp });
+
+    this.playController = new PlayController(this);
   }
 
   set alg(newAlg: Alg | string) {
@@ -78,5 +88,84 @@ export class TwistyPlayerModel {
 
   set timestamp(timestamp: Timestamp) {
     this.timestampProp.set(timestamp);
+  }
+}
+
+class PlayController {
+  // TODO: #private?
+  private playing: boolean = false;
+  private direction: Direction = Direction.Forwards;
+
+  private model: TwistyPlayerModel;
+
+  private lastDatestamp: MillisecondTimestamp = 0;
+  private lastTimestamp: Promise<MillisecondTimestamp>;
+
+  private scheduler: RenderScheduler = new RenderScheduler(
+    this.animFrame.bind(this),
+  );
+
+  constructor(model: TwistyPlayerModel) {
+    this.model = model;
+    this.lastTimestamp = this.model.timestampProp.get();
+  }
+
+  play(): void {
+    if (this.playing) {
+      return;
+    }
+
+    this.playing = true;
+    this.lastDatestamp = performance.now(); // TODO: Take from event.
+    this.lastTimestamp = this.model.timestampProp.get();
+
+    // TODO: Save timestamp from model?
+
+    this.scheduler.requestAnimFrame();
+  }
+
+  pause(): void {
+    this.playing = false;
+    this.scheduler.cancelAnimFrame();
+  }
+
+  async animFrame(frameDatestamp: MillisecondTimestamp): Promise<void> {
+    if (!this.playing) {
+      return;
+    }
+
+    console.log({ frameDatestamp });
+
+    this.scheduler.requestAnimFrame();
+    const delta =
+      (frameDatestamp - this.lastDatestamp) * directionScalar(this.direction);
+
+    const lastTimestamp = await this.lastTimestamp!;
+    const recheckTimestamp = await this.model.timestampProp.get();
+
+    if (recheckTimestamp !== lastTimestamp) {
+      console.log(
+        new Error(
+          "Looks like something updated the timestamp outside the animation!",
+        ),
+      );
+      this.pause();
+      // TODO: Listen for timestamp updates not caused by us, so that the anim frame is never run.
+      // That would turn this code path into an error case.
+      return;
+    }
+
+    const newTimestamp = lastTimestamp + delta;
+    console.log({
+      lastTimestamp,
+      newTimestamp,
+      frameDatestamp,
+      lastDatestamp: this.lastDatestamp,
+    });
+
+    this.lastDatestamp = frameDatestamp;
+    this.lastTimestamp = Promise.resolve(newTimestamp); // TODO: Safe this earlier?
+    console.log("setting timestamp", newTimestamp);
+    this.model.timestampProp.set(newTimestamp);
   }
 }
