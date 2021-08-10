@@ -97,7 +97,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
       return; // TODO
     }
     const inputElem = await this.inputElem();
-    // await this.slowDown(e, inputElem); // TODO
+    await this.slowDown(e, inputElem); // TODO
 
     const value = parseInt(inputElem.value);
     console.log("on input", value);
@@ -105,6 +105,8 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
   }
 
   async slowDown(e: Event, inputElem: HTMLInputElement): Promise<void> {
+    return; // TODO
+
     if (isMouseDown) {
       const rect = inputElem.getBoundingClientRect();
       const sliderY = rect.top + rect.height / 2;
