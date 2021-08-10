@@ -155,6 +155,8 @@ class PlayController {
       return;
     }
 
+    // TODO: Don't animate past end.
+
     const newTimestamp = lastTimestamp + delta;
     console.log({
       lastTimestamp,
