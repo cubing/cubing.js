@@ -55,7 +55,7 @@ export abstract class TwistyPropParent<T> {
     for (const child of this.#children) {
       child.markStale(sourceEvent);
     }
-    // We schedul sending out events *after* the (synchronous) propagation has happened, in
+    // We schedule sending out events *after* the (synchronous) propagation has happened, in
     // case one of the listeners updates a source again.
     this.#scheduleDispatch();
   }

@@ -97,7 +97,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
       return; // TODO
     }
     const inputElem = await this.inputElem();
-    // await this.slowDown(e, inputElem);
+    // await this.slowDown(e, inputElem); // TODO
 
     const value = parseInt(inputElem.value);
     console.log("on input", value);
