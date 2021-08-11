@@ -1,5 +1,8 @@
+import type { Alg } from "../../../../alg";
+import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
+import type { PuzzleID } from "../../TwistyPlayerConfig";
 import { Twisty3DProp } from "../props/depth-6/Twisty3DProp";
 import {
   TwistyPlayerController,
@@ -74,6 +77,22 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     });
 
     sceneWrapper.scheduleRender();
+  }
+
+  set alg(newAlg: Alg | string) {
+    this.model.algProp.set(newAlg);
+  }
+
+  set setup(newSetup: Alg | string) {
+    this.model.setupProp.set(newSetup);
+  }
+
+  set puzzle(puzzleID: PuzzleID) {
+    this.model.puzzleProp.set(puzzleID);
+  }
+
+  set timestamp(timestamp: MillisecondTimestamp) {
+    this.model.timestampProp.set(timestamp);
   }
 }
 

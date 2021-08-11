@@ -3,7 +3,6 @@ import {
   Direction,
   directionScalar,
   MillisecondTimestamp,
-  Timestamp,
 } from "../../../animation/cursor/CursorTypes";
 import { RenderScheduler } from "../../../animation/RenderScheduler";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
@@ -91,7 +90,7 @@ export class TwistyPlayerModel {
     this.puzzleProp.set(puzzleID);
   }
 
-  set timestamp(timestamp: Timestamp) {
+  set timestamp(timestamp: MillisecondTimestamp) {
     this.timestampProp.set(timestamp);
   }
 }
