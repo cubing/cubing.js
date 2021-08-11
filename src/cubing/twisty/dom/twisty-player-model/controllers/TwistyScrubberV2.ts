@@ -2,6 +2,8 @@ import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 
+const SLOW_DOWN_SCRUBBING = false;
+
 var isMouseDown = false;
 
 document.addEventListener(
@@ -105,7 +107,9 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
   }
 
   async slowDown(e: Event, inputElem: HTMLInputElement): Promise<void> {
-    // return; // TODO
+    if (!SLOW_DOWN_SCRUBBING) {
+      return; // TODO
+    }
 
     if (isMouseDown) {
       const rect = inputElem.getBoundingClientRect();
@@ -132,6 +136,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
         inputElem.value = newVal.toString();
         console.log(scale);
         scaling = false;
+        this.contentWrapper.style.opacity = scale.toString();
       } else {
         currentClickNum = clickNum;
       }
