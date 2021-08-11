@@ -1,3 +1,5 @@
+import PLazy from "../../../../vendor/p-lazy";
+
 type InputProps<T extends Object> = {
   [s in keyof T]: TwistyPropParent<T[s]>;
 };
@@ -98,13 +100,14 @@ export abstract class TwistyPropSource<
 
   constructor(initialValue?: PromiseOrValue<InputType>) {
     super();
-    this.#value = initialValue
-      ? this.deriveFromPromiseOrValue(initialValue)
-      : Promise.resolve(this.getDefaultValue());
+    this.#value = PLazy.from(() => this.getDefaultValue());
+    if (initialValue) {
+      this.#value = this.deriveFromPromiseOrValue(initialValue, this.#value);
+    }
   }
 
   set(input: PromiseOrValue<InputType>): void {
-    this.#value = this.deriveFromPromiseOrValue(input);
+    this.#value = this.deriveFromPromiseOrValue(input, this.#value);
 
     const sourceEventDetail: SourceEventDetail<OutputType> = {
       sourceProp: this,
@@ -124,12 +127,16 @@ export abstract class TwistyPropSource<
 
   async deriveFromPromiseOrValue(
     input: PromiseOrValue<InputType>,
+    oldValuePromise: Promise<OutputType>,
   ): Promise<OutputType> {
-    return this.derive(await input);
+    return this.derive(await input, oldValuePromise);
   }
 
   // TODO: add an indirect layer to cache the derivation?
-  protected abstract derive(input: InputType): PromiseOrValue<OutputType>;
+  protected abstract derive(
+    input: InputType,
+    oldValuePromise: Promise<OutputType>,
+  ): PromiseOrValue<OutputType>;
 }
 
 export abstract class SimpleTwistyPropSource<

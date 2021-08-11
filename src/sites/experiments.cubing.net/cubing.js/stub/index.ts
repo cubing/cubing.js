@@ -5,7 +5,10 @@ import { Twisty3DSceneWrapper } from "../../../../cubing/twisty/dom/twisty-playe
 import { Twisty3DVantage } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/Twisty3DVantage";
 import { TwistyScrubberV2 } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/TwistyScrubberV2";
 import { Twisty3DProp } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-6/Twisty3DProp";
-import { TwistyPlayerModel } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPlayerModel";
+import {
+  TwistyPlayerController,
+  TwistyPlayerModel,
+} from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPlayerModel";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
@@ -24,6 +27,7 @@ console.log("Loading stub file.");
 
   const model = new TwistyPlayerModel();
   model.puzzle = "gigaminx";
+  const controller = new TwistyPlayerController(model);
 
   (window as any).model = model;
 
@@ -48,7 +52,7 @@ console.log("Loading stub file.");
   // console.log("scene", await scene.scene());
   // console.log("scene.chilndreldn", (await scene.scene()).children);
   // console.log(await model.puzzleProp.get());
-  vantage.scheduleRender();
+  // vantage.scheduleRender();
 
   const input = document.body.appendChild(document.createElement("input"));
   input.setAttribute("style", "width: 100%;");
@@ -99,14 +103,14 @@ console.log("Loading stub file.");
   let lastPreval = parseInt(input.value);
   let scaling: boolean = false;
   let currentClickNum = 0;
-  input.addEventListener("input", (e: Event) => {
+  input.addEventListener("input", (_e: Event) => {
     if (scaling) {
       return;
     }
     if (isMouseDown) {
       const rect = input.getBoundingClientRect();
       const sliderY = rect.top + rect.height / 2;
-      console.log(sliderY, e, y, isMouseDown);
+      // console.log(sliderY, e, y, isMouseDown);
 
       const yDist = Math.abs(sliderY - y);
       let scale = 1;
@@ -114,10 +118,10 @@ console.log("Loading stub file.");
         scale = Math.max(Math.pow(2, -(yDist - 64) / 64), 1 / 32);
       }
       const preVal = parseInt(input.value);
-      console.log("cl", currentClickNum, clickNum, preVal);
+      // console.log("cl", currentClickNum, clickNum, preVal);
       if (currentClickNum === clickNum) {
         const delta = (preVal - lastPreval) * scale;
-        console.log("delta", delta, yDist);
+        // console.log("delta", delta, yDist);
         scaling = true;
         let newVal = preVal;
         newVal =
@@ -126,7 +130,7 @@ console.log("Loading stub file.");
           (preVal - lastVal) *
             Math.min(1, Math.pow(1 / 2, (yDist * yDist) / 64));
         input.value = newVal.toString();
-        console.log(scale);
+        // console.log(scale);
         scaling = false;
       } else {
         currentClickNum = clickNum;
@@ -144,15 +148,41 @@ console.log("Loading stub file.");
 
   const scrubber = new TwistyScrubberV2(model);
   document.body.appendChild(scrubber);
-
   const playButton = document.body.appendChild(
     document.createElement("button"),
   );
   playButton.textContent = "Play";
-  playButton.addEventListener("click", () => model.playController.play());
+  playButton.addEventListener("click", () => controller.play());
   const pauseButton = document.body.appendChild(
     document.createElement("button"),
   );
   pauseButton.textContent = "pause";
-  pauseButton.addEventListener("click", () => model.playController.pause());
+  pauseButton.addEventListener("click", () => controller.pause());
+  const playPauseButton = document.body.appendChild(
+    document.createElement("button"),
+  );
+  playPauseButton.textContent = "▶️";
+  model.playingProp.addListener(async () => {
+    console.log("playingprop!");
+    playPauseButton.textContent = (await model.playingProp.get()).playing
+      ? "⏸"
+      : "▶️";
+  });
+  playPauseButton.addEventListener("click", () => {
+    controller.playPause(); //.playing ? "⏸" : "▶️";
+  });
+
+  // const scrubber2 = new TwistyScrubberV2(model);
+  // document.body.appendChild(scrubber2);
+  // scrubber2.setAttribute(
+  //   "style",
+  //   "transform: rotate(90deg); width: 256px; height: 256px; display: block",
+  // );
+
+  model.orbitCoordinatesProp.set({ latitude: 40 });
+  console.log("orbit party", await model.orbitCoordinatesProp.get());
+  // const orbitCoordinatesProp = new OrbitCoordinatesProp(); //{ latitude: 40 });
+  // console.log("propppy", await orbitCoordinatesProp.get());
+  // orbitCoordinatesProp.set({ latitude: 40 });
+  // console.log("propppy", await orbitCoordinatesProp.get());
 })();

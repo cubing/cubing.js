@@ -105,7 +105,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
   }
 
   async slowDown(e: Event, inputElem: HTMLInputElement): Promise<void> {
-    return; // TODO
+    // return; // TODO
 
     if (isMouseDown) {
       const rect = inputElem.getBoundingClientRect();
