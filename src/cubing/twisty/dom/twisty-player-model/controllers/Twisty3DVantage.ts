@@ -1,4 +1,5 @@
 import type { Camera, PerspectiveCamera, Renderer } from "three";
+import { Stats } from "../../../../vendor/three/examples/jsm/libs/stats.module.js";
 import { RenderScheduler } from "../../../animation/RenderScheduler";
 import {
   CSSSource,
@@ -10,13 +11,23 @@ import { TwistyOrbitControls } from "../../viewers/TwistyOrbitControls";
 import { THREEJS } from "../heavy-code-imports/3d";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 
+let SHOW_STATS = true;
+
 export class Twisty3DVantage extends ManagedCustomElement {
   scene: Twisty3DSceneWrapper | null = null;
+
+  stats: Stats | null = null;
 
   constructor(scene?: Twisty3DSceneWrapper) {
     super();
     this.scene = scene ?? null;
     this.scene?.addVantage(this); // TODO
+
+    if (SHOW_STATS) {
+      this.stats = Stats();
+      this.stats.dom.style.position = "absolute";
+      this.contentWrapper.appendChild(this.stats.dom);
+    }
   }
 
   async connectedCallback(): Promise<void> {
@@ -84,6 +95,8 @@ canvas {
       throw new Error("Attempted to render without a scene");
     }
 
+    this.stats?.begin();
+
     const [renderer, scene, camera] = await Promise.all([
       this.renderer(),
       this.scene.scene(),
@@ -92,6 +105,8 @@ canvas {
     // console.log("rendering!!!!", renderer, scene, camera);
     renderer.setSize(256, 256);
     renderer.render(scene, camera); // TODO
+
+    this.stats?.end();
   }
 
   #scheduler = new RenderScheduler(this.render.bind(this));
