@@ -31,6 +31,12 @@ export class TwistyPlayerModel {
   setupAnchorProp: SetupAnchorProp = new SetupAnchorProp();
   setupProp: AlgProp = new AlgProp();
   timestampProp: TimestampProp = new TimestampProp();
+  // back-view // TODO
+  // background // TODO
+  // control-panel // TODO
+  // hint-facelets // TODO
+  // stickering // TODO
+  // visualization // TODO
 
   // Depth 2
   puzzleDefProp: PuzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
