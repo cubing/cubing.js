@@ -1,3 +1,4 @@
+import type { TimeRange } from "../../../animation/cursor/AlgCursor";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
@@ -54,18 +55,33 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
     super();
   }
 
+  #latestTimeRangePromise: Promise<TimeRange> | null = null;
   async onTimeRange(): Promise<void> {
+    console.log("onTimeRange");
     if (this.model) {
-      const timeRange = await this.model.timeRangeProp.get();
+      const rand = Math.random();
+      const promise = this.model.timeRangeProp.get();
+      this.#latestTimeRangePromise = promise;
+      const timeRange = await promise;
+      console.log("onTimeRange timeRange", timeRange, rand);
       const inputElem = await this.inputElem();
+      if (this.#latestTimeRangePromise !== promise) {
+        console.log("skipping!", rand);
+        return;
+      }
       inputElem.min = timeRange.start.toString();
       inputElem.max = timeRange.end.toString();
+
+      this.onTimestamp(); // TODO
     }
   }
 
   async onTimestamp(): Promise<void> {
+    console.log("onTimestamp");
     if (this.model) {
-      const timestamp = await this.model.timestampRequestProp.get();
+      const timestamp = (await this.model.effectiveTimestampProp.get())
+        .timestamp;
+      console.log("onTimeRange timestamp", timestamp);
       const inputElem = await this.inputElem();
       inputElem.value = timestamp.toString();
     }
@@ -84,7 +100,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
       this.model?.timeRangeProp.addListener(this.onTimeRange.bind(this), {
         initial: true,
       });
-      this.model?.timestampRequestProp.addListener(
+      this.model?.effectiveTimestampProp.addListener(
         this.onTimestamp.bind(this),
         {
           initial: true,
