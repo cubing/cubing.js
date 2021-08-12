@@ -272,7 +272,10 @@ class PlayController {
   >();
 
   async animFrame(frameDatestamp: MillisecondTimestamp): Promise<void> {
-    console.log("animFrame", this.playing);
+    if (this.playing) {
+      this.scheduler.requestAnimFrame();
+    }
+    // console.log("animFrame", this.playing);
     // if (!this.playing) {
     //   return;
     // }
@@ -340,9 +343,5 @@ class PlayController {
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
     // console.log("setting timestamp", newTimestamp);
     this.model.timestampRequestProp.set(newTimestamp);
-
-    if (this.playing) {
-      this.scheduler.requestAnimFrame();
-    }
   }
 }
