@@ -11,6 +11,7 @@ import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
 import { PlayingProp } from "./depth-1/PlayingProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
+import { SetupAnchorProp } from "./depth-1/SetupAnchorProp";
 import { TimestampProp } from "./depth-1/TimestampProp";
 import { PuzzleDefProp } from "./depth-2/PuzzleDefProp";
 import { PuzzleAlgProp } from "./depth-3/PuzzleAlgProp";
@@ -20,26 +21,39 @@ import { PositionProp } from "./depth-5/PositionProp";
 import { TimeRangeProp } from "./depth-5/TimeRangeProp";
 
 export class TwistyPlayerModel {
+  // Depth 1
   algProp: AlgProp;
-  setupProp: AlgProp;
+  indexerConstructor: IndexerConstructorProp;
+  orbitCoordinatesProp: OrbitCoordinatesProp;
+  playingProp: PlayingProp;
   puzzleProp: PuzzleProp;
+  setupProp: AlgProp;
+  setupAnchorProp: SetupAnchorProp;
+  timestampProp: TimestampProp;
+
+  // Depth 2
   puzzleDefProp: PuzzleDefProp;
+
+  // Depth 3
   puzzleAlgProp: PuzzleAlgProp;
   puzzleSetupProp: PuzzleAlgProp;
-  indexerConstructor: IndexerConstructorProp;
+
+  // Depth 4
   indexerProp: IndexerProp;
-  timestampProp: TimestampProp;
   setupTransformationProp: AlgTransformationProp;
+
+  // Depth 5
   positionProp: PositionProp;
   timeRangeProp: TimeRangeProp;
 
-  playingProp: PlayingProp;
-  orbitCoordinatesProp: OrbitCoordinatesProp;
+  // Depth 6
+  // TODO: Inline Twisty3D management.
 
   constructor() {
     this.algProp = new AlgProp();
     this.setupProp = new AlgProp();
     this.puzzleProp = new PuzzleProp();
+    this.setupAnchorProp = new SetupAnchorProp();
     this.puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
     this.puzzleAlgProp = new PuzzleAlgProp({
       algWithIssues: this.algProp,
