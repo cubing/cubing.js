@@ -8,7 +8,7 @@ interface ButtonAppearance {
   icon: string;
   title: string;
 }
-type ButtonAppearances = Record<ButtonCommand, ButtonAppearance>;
+export type ButtonAppearances = Record<ButtonCommand, ButtonAppearance>;
 
 interface ButtonAppearancePropInputs {
   effectiveTimestamp: EffectiveTimestamp;

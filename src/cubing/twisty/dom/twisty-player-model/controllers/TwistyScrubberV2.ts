@@ -3,6 +3,7 @@ import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { EffectiveTimestamp } from "../props/depth-6/EffectiveTimestamp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
+import { PromiseFreshener } from "./PromiseFreshener";
 
 const SLOW_DOWN_SCRUBBING = false;
 
@@ -56,43 +57,30 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
     super();
   }
 
-  #latestTimeRangePromise: Promise<TimeRange> | null = null;
-  async onTimeRange(): Promise<void> {
-    // console.log("tr onTimeRange");
+  #timeRangeFreshener: PromiseFreshener<[EffectiveTimestamp, TimeRange]> =
+    new PromiseFreshener<[EffectiveTimestamp, TimeRange]>();
+
+  async onTimeRangeOrTimestamp(): Promise<void> {
     if (this.model) {
-      // const rand = Math.random();
-      const promise = this.model.timeRangeProp.get();
-      this.#latestTimeRangePromise = promise;
-      const timeRange = await promise;
-      // console.log("tr onTimeRange timeRange", timeRange, rand);
-      const inputElem = await this.inputElem();
-      if (this.#latestTimeRangePromise !== promise) {
-        // console.log("tr skipping!", rand);
+      // TODO: Avoid the need for `Promise.all`?
+      const fromFreshener = await this.#timeRangeFreshener.queue(
+        Promise.all([
+          this.model.effectiveTimestampProp.get(),
+          this.model.timeRangeProp.get(),
+        ]),
+      );
+      if (!fromFreshener.fresh) {
+        console.log("unfresh time range");
         return;
       }
-      // console.log("tr setting!", timeRange);
+
+      const [effectiveTimestamp, timeRange] = fromFreshener.result;
+
+      // TODO: is this efficient enough?
+      const inputElem = await this.inputElem();
       inputElem.min = timeRange.start.toString();
       inputElem.max = timeRange.end.toString();
-
-      // this.onTimestamp(); // TODO
-    }
-  }
-
-  #latestTimestampPromise: Promise<EffectiveTimestamp> | null = null;
-  async onTimestamp(): Promise<void> {
-    // const rand = Math.random();
-    // console.log("ts onTimestamp rand", rand);
-    if (this.model) {
-      const timestampPromise = this.model.effectiveTimestampProp.get();
-      this.#latestTimestampPromise = timestampPromise;
-      const timestamp = (await timestampPromise).timestamp;
-      const inputElem = await this.inputElem();
-      if (this.#latestTimestampPromise !== timestampPromise) {
-        // console.log("ts skipping!", rand);
-        return;
-      }
-      // console.log("ts setting", timestamp);
-      inputElem.value = timestamp.toString();
+      inputElem.value = effectiveTimestamp.timestamp.toString();
     }
   }
 
@@ -102,20 +90,26 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
   #inputElem: Promise<HTMLInputElement> | null = null;
   async inputElem(): Promise<HTMLInputElement> {
+    // console.log("inputElem", this.#inputElem);
     return (this.#inputElem ??= (async () => {
       const elem = document.createElement("input");
       elem.type = "range";
 
-      this.model?.timeRangeProp.addListener(this.onTimeRange.bind(this), {
-        initial: true,
-      });
-      this.model?.effectiveTimestampProp.addListener(
-        this.onTimestamp.bind(this),
+      // console.log("1");
+      this.model?.timeRangeProp.addListener(
+        this.onTimeRangeOrTimestamp.bind(this),
         {
           initial: true,
         },
       );
-
+      // console.log("2");
+      this.model?.effectiveTimestampProp.addListener(
+        this.onTimeRangeOrTimestamp.bind(this),
+        {
+          initial: true,
+        },
+      );
+      // console.log("3");
       elem.addEventListener("input", this.onInput.bind(this));
 
       return elem;
@@ -130,7 +124,8 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
     await this.slowDown(e, inputElem); // TODO
 
     const value = parseInt(inputElem.value);
-    console.log("on input", value);
+    // console.log("on input", value);
+    this.model?.playingProp.set({ playing: false });
     this.model?.timestampRequestProp.set(value);
   }
 
