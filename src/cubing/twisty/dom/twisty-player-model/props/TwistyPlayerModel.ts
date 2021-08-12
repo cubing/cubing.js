@@ -1,4 +1,5 @@
 import type { Alg } from "../../../../alg";
+import type { TimeRange } from "../../../animation/cursor/AlgCursor";
 import {
   Direction,
   directionScalar,
@@ -6,6 +7,7 @@ import {
 } from "../../../animation/cursor/CursorTypes";
 import { RenderScheduler } from "../../../animation/RenderScheduler";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
+import { PromiseFreshener } from "../controllers/PromiseFreshener";
 import { AlgProp } from "./depth-1/AlgProp";
 import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
@@ -244,7 +246,7 @@ class PlayController {
     }
 
     if ((await this.model.effectiveTimestampProp.get()).atEnd) {
-      this.jumpToStart();
+      this.model.timestampRequestProp.set("start");
     }
     this.model.playingProp.set({ playing: true });
 
@@ -263,36 +265,62 @@ class PlayController {
     this.model.playingProp.set({ playing: false });
   }
 
+  #animFrameEffectiveTimestampFreshener: PromiseFreshener<
+    [{ playing: boolean }, MillisecondTimestamp, TimeRange]
+  > = new PromiseFreshener<
+    [{ playing: boolean }, MillisecondTimestamp, TimeRange]
+  >();
+
   async animFrame(frameDatestamp: MillisecondTimestamp): Promise<void> {
-    if (!this.playing) {
+    console.log("animFrame", this.playing);
+    // if (!this.playing) {
+    //   return;
+    // }
+
+    const lastDatestamp = this.lastDatestamp;
+    const freshenerResult =
+      await this.#animFrameEffectiveTimestampFreshener.queue(
+        Promise.all([
+          this.model.playingProp.get(),
+          this.lastTimestampPromise,
+          this.model.timeRangeProp.get(),
+        ]),
+      );
+    if (!freshenerResult.fresh) {
       return;
     }
 
+    const [playing, lastTimestamp, timeRange] = freshenerResult.result;
+
+    // TODO: Get this without wasting time on the others?
+    if (playing.playing === false) {
+      this.playing = false;
+      // TODO
+      return;
+    }
     // console.log({ frameDatestamp });
 
-    this.scheduler.requestAnimFrame();
     const delta =
-      (frameDatestamp - this.lastDatestamp) * directionScalar(this.direction);
+      (frameDatestamp - lastDatestamp) * directionScalar(this.direction);
 
-    const lastTimestamp = await this.lastTimestampPromise;
-    const recheckTimestamp = await this.#effectiveTimestampMilliseconds();
+    // const recheckTimestamp = freshenerResult.result;
 
-    if (false && recheckTimestamp !== lastTimestamp) {
-      console.log(
-        new Error(
-          "Looks like something updated the timestamp outside the animation!",
-        ),
-      );
-      this.pause();
-      this.model.playingProp.set({ playing: false });
-      // TODO: Listen for timestamp updates not caused by us, so that the anim frame is never run.
-      // That would turn this code path into an error case.
-      return;
-    }
+    // if (false && recheckTimestamp !== lastTimestamp) {
+    //   console.log(
+    //     new Error(
+    //       "Looks like something updated the timestamp outside the animation!",
+    //     ),
+    //   );
+    //   this.pause();
+    //   this.model.playingProp.set({ playing: false });
+    //   // TODO: Listen for timestamp updates not caused by us, so that the anim frame is never run.
+    //   // That would turn this code path into an error case.
+    //   return;
+    // }
 
     // TODO: Don't animate past end.
 
-    const newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
+    let newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
     // console.log({
     //   lastTimestamp,
     //   newTimestamp,
@@ -300,9 +328,21 @@ class PlayController {
     //   lastDatestamp: this.lastDatestamp,
     // });
 
+    // console.log(newTimestamp, timeRange.end);
+
+    if (newTimestamp >= timeRange.end) {
+      newTimestamp = timeRange.end;
+      this.model.timestampRequestProp.set("end");
+      this.playing = false;
+      this.model.playingProp.set({ playing: false });
+    }
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
     // console.log("setting timestamp", newTimestamp);
     this.model.timestampRequestProp.set(newTimestamp);
+
+    if (this.playing) {
+      this.scheduler.requestAnimFrame();
+    }
   }
 }
