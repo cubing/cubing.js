@@ -58,19 +58,19 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
   #latestTimeRangePromise: Promise<TimeRange> | null = null;
   async onTimeRange(): Promise<void> {
-    console.log("tr onTimeRange");
+    // console.log("tr onTimeRange");
     if (this.model) {
-      const rand = Math.random();
+      // const rand = Math.random();
       const promise = this.model.timeRangeProp.get();
       this.#latestTimeRangePromise = promise;
       const timeRange = await promise;
-      console.log("tr onTimeRange timeRange", timeRange, rand);
+      // console.log("tr onTimeRange timeRange", timeRange, rand);
       const inputElem = await this.inputElem();
       if (this.#latestTimeRangePromise !== promise) {
-        console.log("tr skipping!", rand);
+        // console.log("tr skipping!", rand);
         return;
       }
-      console.log("tr setting!", timeRange);
+      // console.log("tr setting!", timeRange);
       inputElem.min = timeRange.start.toString();
       inputElem.max = timeRange.end.toString();
 
@@ -80,18 +80,18 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
   #latestTimestampPromise: Promise<EffectiveTimestamp> | null = null;
   async onTimestamp(): Promise<void> {
-    const rand = Math.random();
-    console.log("ts onTimestamp rand", rand);
+    // const rand = Math.random();
+    // console.log("ts onTimestamp rand", rand);
     if (this.model) {
       const timestampPromise = this.model.effectiveTimestampProp.get();
       this.#latestTimestampPromise = timestampPromise;
       const timestamp = (await timestampPromise).timestamp;
       const inputElem = await this.inputElem();
       if (this.#latestTimestampPromise !== timestampPromise) {
-        console.log("ts skipping!", rand);
+        // console.log("ts skipping!", rand);
         return;
       }
-      console.log("ts setting", timestamp);
+      // console.log("ts setting", timestamp);
       inputElem.value = timestamp.toString();
     }
   }

@@ -181,11 +181,13 @@ class PlayController {
   // TODO: Return the animation we've switched to.
   jumpToStart(): void {
     this.model.timestampRequestProp.set("start");
+    this.pause();
   }
 
   // TODO: Return the animation we've switched to.
   jumpToEnd(): void {
     this.model.timestampRequestProp.set("end");
+    this.pause();
   }
 
   // TODO: Return the animation we've switched to.
@@ -198,11 +200,15 @@ class PlayController {
     return { direction: this.direction, playing: this.playing };
   }
 
-  play(): void {
+  async play(): Promise<void> {
+    console.log("play", this.playing);
     if (this.playing) {
       return;
     }
 
+    if ((await this.model.effectiveTimestampProp.get()).atEnd) {
+      this.jumpToStart();
+    }
     this.model.playingProp.set({ playing: true });
 
     this.playing = true;
@@ -234,7 +240,7 @@ class PlayController {
     const lastTimestamp = await this.lastTimestampPromise;
     const recheckTimestamp = await this.#effectiveTimestampMilliseconds();
 
-    if (recheckTimestamp !== lastTimestamp) {
+    if (false && recheckTimestamp !== lastTimestamp) {
       console.log(
         new Error(
           "Looks like something updated the timestamp outside the animation!",
