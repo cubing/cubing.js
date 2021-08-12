@@ -23,86 +23,63 @@ import { AnchoredStartProp } from "./depth-5/AnchoredStartProp";
 
 export class TwistyPlayerModel {
   // Depth 1
-  algProp: AlgProp;
-  indexerConstructor: IndexerConstructorProp;
-  orbitCoordinatesProp: OrbitCoordinatesProp;
-  playingProp: PlayingProp;
-  puzzleProp: PuzzleProp;
-  setupAnchorProp: SetupAnchorProp;
-  setupProp: AlgProp;
-  timestampProp: TimestampProp;
+  algProp: AlgProp = new AlgProp();
+  indexerConstructor: IndexerConstructorProp = new IndexerConstructorProp();
+  orbitCoordinatesProp: OrbitCoordinatesProp = new OrbitCoordinatesProp();
+  playingProp: PlayingProp = new PlayingProp();
+  puzzleProp: PuzzleProp = new PuzzleProp();
+  setupAnchorProp: SetupAnchorProp = new SetupAnchorProp();
+  setupProp: AlgProp = new AlgProp();
+  timestampProp: TimestampProp = new TimestampProp();
 
   // Depth 2
-  puzzleDefProp: PuzzleDefProp;
+  puzzleDefProp: PuzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
 
   // Depth 3
-  puzzleAlgProp: PuzzleAlgProp;
-  puzzleSetupProp: PuzzleAlgProp;
+  puzzleAlgProp: PuzzleAlgProp = new PuzzleAlgProp({
+    algWithIssues: this.algProp,
+    puzzleDef: this.puzzleDefProp,
+  });
+
+  puzzleSetupProp: PuzzleAlgProp = new PuzzleAlgProp({
+    algWithIssues: this.setupProp,
+    puzzleDef: this.puzzleDefProp,
+  });
 
   // Depth 4
-  indexerProp: IndexerProp;
-  setupTransformationProp: AlgTransformationProp;
+  indexerProp: IndexerProp = new IndexerProp({
+    indexerConstructor: this.indexerConstructor,
+    algWithIssues: this.puzzleAlgProp,
+    def: this.puzzleDefProp,
+  });
+
+  setupTransformationProp: AlgTransformationProp = new AlgTransformationProp({
+    alg: this.puzzleSetupProp,
+    def: this.puzzleDefProp,
+  });
 
   // Depth 5anchoredStartProp
-  anchoredStartProp: AnchoredStartProp;
-  timeRangeProp: TimeRangeProp;
+  anchoredStartProp: AnchoredStartProp = new AnchoredStartProp({
+    setupAnchor: this.setupAnchorProp,
+    setupTransformation: this.setupTransformationProp,
+    indexer: this.indexerProp,
+    def: this.puzzleDefProp,
+  });
+
+  timeRangeProp: TimeRangeProp = new TimeRangeProp({
+    indexer: this.indexerProp,
+  });
 
   // Depth 6
-  positionProp: PositionProp;
+  positionProp: PositionProp = new PositionProp({
+    anchoredStart: this.anchoredStartProp,
+    indexer: this.indexerProp,
+    timestamp: this.timestampProp,
+    def: this.puzzleDefProp,
+  });
 
   // Depth 7
   // TODO: Inline Twisty3D management.
-
-  constructor() {
-    // Depth 1
-    this.algProp = new AlgProp();
-    this.setupProp = new AlgProp();
-    this.puzzleProp = new PuzzleProp();
-    this.setupAnchorProp = new SetupAnchorProp();
-    this.puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
-    this.puzzleAlgProp = new PuzzleAlgProp({
-      algWithIssues: this.algProp,
-      puzzleDef: this.puzzleDefProp,
-    });
-    this.puzzleSetupProp = new PuzzleAlgProp({
-      algWithIssues: this.setupProp,
-      puzzleDef: this.puzzleDefProp,
-    });
-
-    this.indexerConstructor = new IndexerConstructorProp();
-    this.indexerProp = new IndexerProp({
-      indexerConstructor: this.indexerConstructor,
-      algWithIssues: this.puzzleAlgProp,
-      def: this.puzzleDefProp,
-    });
-
-    this.timestampProp = new TimestampProp();
-
-    this.setupTransformationProp = new AlgTransformationProp({
-      alg: this.puzzleSetupProp,
-      def: this.puzzleDefProp,
-    });
-
-    this.anchoredStartProp = new AnchoredStartProp({
-      setupAnchor: this.setupAnchorProp,
-      setupTransformation: this.setupTransformationProp,
-      indexer: this.indexerProp,
-      def: this.puzzleDefProp,
-    });
-
-    this.positionProp = new PositionProp({
-      anchoredStart: this.anchoredStartProp,
-      indexer: this.indexerProp,
-      timestamp: this.timestampProp,
-      def: this.puzzleDefProp,
-    });
-
-    this.timeRangeProp = new TimeRangeProp({ indexer: this.indexerProp });
-
-    this.playingProp = new PlayingProp();
-
-    this.orbitCoordinatesProp = new OrbitCoordinatesProp();
-  }
 
   set alg(newAlg: Alg | string) {
     this.algProp.set(newAlg);
