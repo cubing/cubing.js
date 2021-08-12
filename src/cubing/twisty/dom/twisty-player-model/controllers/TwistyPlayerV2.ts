@@ -3,7 +3,7 @@ import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
-import { Twisty3DProp } from "../props/depth-7/Twisty3DProp";
+import { Twisty3DProp } from "../props/depth-8/Twisty3DProp";
 import {
   TwistyPlayerController,
   TwistyPlayerModel,
@@ -98,7 +98,7 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
   }
 
   set timestamp(timestamp: MillisecondTimestamp) {
-    this.model.timestampProp.set(timestamp);
+    this.model.timestampRequestProp.set(timestamp);
   }
 }
 
