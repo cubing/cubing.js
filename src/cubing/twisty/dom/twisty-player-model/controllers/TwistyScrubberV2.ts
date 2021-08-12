@@ -1,6 +1,7 @@
 import type { TimeRange } from "../../../animation/cursor/AlgCursor";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
+import type { EffectiveTimestamp } from "../props/depth-6/EffectiveTimestamp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 
 const SLOW_DOWN_SCRUBBING = false;
@@ -57,32 +58,40 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
   #latestTimeRangePromise: Promise<TimeRange> | null = null;
   async onTimeRange(): Promise<void> {
-    console.log("onTimeRange");
+    console.log("tr onTimeRange");
     if (this.model) {
       const rand = Math.random();
       const promise = this.model.timeRangeProp.get();
       this.#latestTimeRangePromise = promise;
       const timeRange = await promise;
-      console.log("onTimeRange timeRange", timeRange, rand);
+      console.log("tr onTimeRange timeRange", timeRange, rand);
       const inputElem = await this.inputElem();
       if (this.#latestTimeRangePromise !== promise) {
-        console.log("skipping!", rand);
+        console.log("tr skipping!", rand);
         return;
       }
+      console.log("tr setting!", timeRange);
       inputElem.min = timeRange.start.toString();
       inputElem.max = timeRange.end.toString();
 
-      this.onTimestamp(); // TODO
+      // this.onTimestamp(); // TODO
     }
   }
 
+  #latestTimestampPromise: Promise<EffectiveTimestamp> | null = null;
   async onTimestamp(): Promise<void> {
-    console.log("onTimestamp");
+    const rand = Math.random();
+    console.log("ts onTimestamp rand", rand);
     if (this.model) {
-      const timestamp = (await this.model.effectiveTimestampProp.get())
-        .timestamp;
-      console.log("onTimeRange timestamp", timestamp);
+      const timestampPromise = this.model.effectiveTimestampProp.get();
+      this.#latestTimestampPromise = timestampPromise;
+      const timestamp = (await timestampPromise).timestamp;
       const inputElem = await this.inputElem();
+      if (this.#latestTimestampPromise !== timestampPromise) {
+        console.log("ts skipping!", rand);
+        return;
+      }
+      console.log("ts setting", timestamp);
       inputElem.value = timestamp.toString();
     }
   }

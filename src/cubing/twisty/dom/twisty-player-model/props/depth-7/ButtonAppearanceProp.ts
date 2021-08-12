@@ -32,7 +32,7 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
         title: "Restart",
       },
       "play-step-backwards": {
-        enabled: !inputs.effectiveTimestamp.atStart,
+        enabled: false,
         icon: "⏪",
         title: "Step backward",
       },
@@ -42,7 +42,7 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
         title: inputs.playing.playing ? "Pause" : "Play",
       },
       "play-step": {
-        enabled: !inputs.effectiveTimestamp.atEnd,
+        enabled: false,
         icon: "⏩",
         title: "Step forward",
       },

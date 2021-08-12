@@ -125,6 +125,14 @@ export class TwistyPlayerController {
     this.playController = new PlayController(model);
   }
 
+  jumpToStart(): void {
+    this.playController.jumpToStart();
+  }
+
+  jumpToEnd(): void {
+    this.playController.jumpToEnd();
+  }
+
   play(): void {
     this.playController.play();
   }
