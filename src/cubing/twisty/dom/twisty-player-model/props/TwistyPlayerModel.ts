@@ -116,12 +116,42 @@ export class TwistyPlayerModel {
   set timestamp(timestamp: MillisecondTimestamp) {
     this.timestampRequestProp.set(timestamp);
   }
+
+  public async twizzleLink(): Promise<string> {
+    const url = new URL("https://alpha.twizzle.net/edit/");
+
+    const [puzzle, alg, setup, anchor] = await Promise.all([
+      this.puzzleProp.get(),
+      this.algProp.get(),
+      this.setupProp.get(),
+      this.setupAnchorProp.get(),
+    ]);
+
+    if (!alg.alg.experimentalIsEmpty()) {
+      url.searchParams.set("alg", alg.alg.toString());
+    }
+    if (!setup.alg.experimentalIsEmpty()) {
+      url.searchParams.set("experimental-setup-alg", setup.toString());
+    }
+    if (anchor !== "start") {
+      url.searchParams.set("experimental-setup-anchor", anchor);
+    }
+    // if (this.experimentalStickering !== "full") {
+    //   url.searchParams.set(
+    //     "experimental-stickering",
+    //     this.experimentalStickering,
+    //   );
+    if (puzzle !== "3x3x3") {
+      url.searchParams.set("puzzle", puzzle);
+    }
+    return url.toString();
+  }
 }
 
 export class TwistyPlayerController {
   playController: PlayController;
 
-  constructor(model: TwistyPlayerModel) {
+  constructor(private model: TwistyPlayerModel) {
     this.playController = new PlayController(model);
   }
 
@@ -143,6 +173,13 @@ export class TwistyPlayerController {
 
   playPause(): { direction: Direction; playing: boolean } {
     return this.playController.playPause();
+  }
+
+  public async visitTwizzleLink(): Promise<void> {
+    const a = document.createElement("a");
+    a.href = await this.model.twizzleLink();
+    a.target = "_blank";
+    a.click();
   }
 }
 

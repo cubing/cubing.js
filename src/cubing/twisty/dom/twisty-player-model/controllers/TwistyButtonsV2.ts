@@ -66,6 +66,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
         this.controller?.jumpToEnd();
         break;
       case "twizzle-link":
+        this.controller?.visitTwizzleLink();
         break;
       default:
         throw new Error("Missing command");

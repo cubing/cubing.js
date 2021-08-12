@@ -51,7 +51,7 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
         icon: "⏭",
         title: "Skip to End",
       },
-      "twizzle-link": { enabled: false, icon: "🔗", title: "View at Twizzle" },
+      "twizzle-link": { enabled: true, icon: "🔗", title: "View at Twizzle" },
     };
     return buttonAppearances;
   }
