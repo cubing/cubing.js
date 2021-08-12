@@ -7,16 +7,16 @@ import {
 import type { Transformation } from "../../../../../puzzle-geometry/interfaces";
 import {
   Direction,
-  MillisecondTimestamp,
   PuzzlePosition,
 } from "../../../../animation/cursor/CursorTypes";
 import type { AlgIndexer } from "../../../../animation/indexer/AlgIndexer";
+import type { EffectiveTimestamp } from "../depth-6/EffectiveTimestamp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface PositionPropInputs {
   anchoredStart: Transformation;
   indexer: AlgIndexer<any>;
-  timestamp: MillisecondTimestamp;
+  effectiveTimestamp: EffectiveTimestamp;
   def: KPuzzleDefinition;
 }
 
@@ -28,11 +28,13 @@ export class PositionProp extends TwistyPropDerived<
     // Copied from AlgCursor
     if (inputs.indexer.timestampToPosition) {
       return inputs.indexer.timestampToPosition(
-        inputs.timestamp,
+        inputs.effectiveTimestamp.timestamp,
         inputs.anchoredStart,
       );
     } else {
-      const idx = inputs.indexer.timestampToIndex(inputs.timestamp);
+      const idx = inputs.indexer.timestampToIndex(
+        inputs.effectiveTimestamp.timestamp,
+      );
       const state = inputs.indexer.stateAtIndex(
         idx,
         inputs.anchoredStart,
@@ -51,7 +53,8 @@ export class PositionProp extends TwistyPropDerived<
           };
         }
         const fraction =
-          (inputs.timestamp - inputs.indexer.indexToMoveStartTimestamp(idx)) /
+          (inputs.effectiveTimestamp.timestamp -
+            inputs.indexer.indexToMoveStartTimestamp(idx)) /
           inputs.indexer.moveDuration(idx);
         if (fraction === 1) {
           // TODO: push this into the indexer

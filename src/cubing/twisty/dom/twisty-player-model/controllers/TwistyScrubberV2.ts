@@ -65,7 +65,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
   async onTimestamp(): Promise<void> {
     if (this.model) {
-      const timestamp = await this.model.timestampProp.get();
+      const timestamp = await this.model.timestampRequestProp.get();
       const inputElem = await this.inputElem();
       inputElem.value = timestamp.toString();
     }
@@ -84,9 +84,12 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
       this.model?.timeRangeProp.addListener(this.onTimeRange.bind(this), {
         initial: true,
       });
-      this.model?.timestampProp.addListener(this.onTimestamp.bind(this), {
-        initial: true,
-      });
+      this.model?.timestampRequestProp.addListener(
+        this.onTimestamp.bind(this),
+        {
+          initial: true,
+        },
+      );
 
       elem.addEventListener("input", this.onInput.bind(this));
 
@@ -103,7 +106,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
     const value = parseInt(inputElem.value);
     console.log("on input", value);
-    this.model?.timestampProp.set(value);
+    this.model?.timestampRequestProp.set(value);
   }
 
   async slowDown(e: Event, inputElem: HTMLInputElement): Promise<void> {

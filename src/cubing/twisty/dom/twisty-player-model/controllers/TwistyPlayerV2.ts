@@ -10,11 +10,14 @@ import {
 } from "../props/TwistyPlayerModel";
 import { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { Twisty3DVantage } from "./Twisty3DVantage";
+import { TwistyButtonsV2 } from "./TwistyButtonsV2";
 import { TwistyScrubberV2 } from "./TwistyScrubberV2";
 
 export class TwistyPlayerV2 extends ManagedCustomElement {
   model: TwistyPlayerModel = new TwistyPlayerModel();
   controller: TwistyPlayerController = new TwistyPlayerController(this.model);
+
+  buttons: TwistyButtonsV2;
 
   constructor() {
     super();
@@ -25,8 +28,11 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
   async connectedCallback(): Promise<void> {
     const sceneWrapper = new Twisty3DSceneWrapper();
     const vantage = new Twisty3DVantage(sceneWrapper);
+    console.log("butttotntontonst", this.model, this.controller);
+    this.buttons = new TwistyButtonsV2(this.model, this.controller);
     this.contentWrapper.appendChild(sceneWrapper);
     this.contentWrapper.appendChild(vantage);
+    this.contentWrapper.appendChild(this.buttons);
 
     sceneWrapper.setAttribute("style", "width: 256px; height: 256px;");
     vantage.setAttribute("style", "width: 256px; height: 256px;");

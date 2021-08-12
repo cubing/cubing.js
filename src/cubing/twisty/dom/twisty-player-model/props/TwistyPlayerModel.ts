@@ -12,14 +12,16 @@ import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
 import { PlayingProp } from "./depth-1/PlayingProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { SetupAnchorProp } from "./depth-1/SetupAnchorProp";
-import { TimestampProp } from "./depth-1/TimestampProp";
+import { TimestampRequestProp } from "./depth-1/TimestampRequestProp";
 import { PuzzleDefProp } from "./depth-2/PuzzleDefProp";
 import { PuzzleAlgProp } from "./depth-3/PuzzleAlgProp";
 import { AlgTransformationProp } from "./depth-4/AlgTransformationProp";
 import { IndexerProp } from "./depth-4/IndexerProp";
-import { PositionProp } from "./depth-6/PositionProp";
-import { TimeRangeProp } from "./depth-5/TimeRangeProp";
 import { AnchoredStartProp } from "./depth-5/AnchoredStartProp";
+import { TimeRangeProp } from "./depth-5/TimeRangeProp";
+import { EffectiveTimestampProp } from "./depth-6/EffectiveTimestamp";
+import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
+import { PositionProp } from "./depth-7/PositionProp";
 
 export class TwistyPlayerModel {
   // Depth 1
@@ -30,7 +32,7 @@ export class TwistyPlayerModel {
   puzzleProp: PuzzleProp = new PuzzleProp();
   setupAnchorProp: SetupAnchorProp = new SetupAnchorProp();
   setupProp: AlgProp = new AlgProp();
-  timestampProp: TimestampProp = new TimestampProp();
+  timestampRequestProp: TimestampRequestProp = new TimestampRequestProp();
   // back-view // TODO
   // background // TODO
   // control-panel // TODO
@@ -64,7 +66,7 @@ export class TwistyPlayerModel {
     def: this.puzzleDefProp,
   });
 
-  // Depth 5anchoredStartProp
+  // Depth 5
   anchoredStartProp: AnchoredStartProp = new AnchoredStartProp({
     setupAnchor: this.setupAnchorProp,
     setupTransformation: this.setupTransformationProp,
@@ -77,14 +79,26 @@ export class TwistyPlayerModel {
   });
 
   // Depth 6
-  positionProp: PositionProp = new PositionProp({
-    anchoredStart: this.anchoredStartProp,
-    indexer: this.indexerProp,
-    timestamp: this.timestampProp,
-    def: this.puzzleDefProp,
+  effectiveTimestampProp: EffectiveTimestampProp = new EffectiveTimestampProp({
+    timestampRequest: this.timestampRequestProp,
+    timeRange: this.timeRangeProp,
+    setupAnchor: this.setupAnchorProp,
   });
 
   // Depth 7
+  buttonAppearanceProp: ButtonAppearanceProp = new ButtonAppearanceProp({
+    effectiveTimestamp: this.effectiveTimestampProp,
+    playing: this.playingProp,
+  });
+
+  positionProp: PositionProp = new PositionProp({
+    anchoredStart: this.anchoredStartProp,
+    indexer: this.indexerProp,
+    effectiveTimestamp: this.effectiveTimestampProp,
+    def: this.puzzleDefProp,
+  });
+
+  // Depth 8
   // TODO: Inline Twisty3D management.
 
   set alg(newAlg: Alg | string) {
@@ -100,7 +114,7 @@ export class TwistyPlayerModel {
   }
 
   set timestamp(timestamp: MillisecondTimestamp) {
-    this.timestampProp.set(timestamp);
+    this.timestampRequestProp.set(timestamp);
   }
 }
 
@@ -132,7 +146,7 @@ class PlayController {
   private model: TwistyPlayerModel;
 
   private lastDatestamp: MillisecondTimestamp = 0;
-  private lastTimestamp: Promise<MillisecondTimestamp>;
+  private lastTimestampPromise: Promise<MillisecondTimestamp>;
 
   private scheduler: RenderScheduler = new RenderScheduler(
     this.animFrame.bind(this),
@@ -140,7 +154,7 @@ class PlayController {
 
   constructor(model: TwistyPlayerModel) {
     this.model = model;
-    this.lastTimestamp = this.model.timestampProp.get();
+    this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
     this.model.playingProp.addListener(() => this.onPlayingProp); // TODO
   }
@@ -150,6 +164,20 @@ class PlayController {
     if (playing !== this.playing) {
       playing ? this.play() : this.pause();
     }
+  }
+
+  async #effectiveTimestampMilliseconds(): Promise<MillisecondTimestamp> {
+    return (await this.model.effectiveTimestampProp.get()).timestamp;
+  }
+
+  // TODO: Return the animation we've switched to.
+  jumpToStart(): void {
+    this.model.timestampRequestProp.set("start");
+  }
+
+  // TODO: Return the animation we've switched to.
+  jumpToEnd(): void {
+    this.model.timestampRequestProp.set("end");
   }
 
   // TODO: Return the animation we've switched to.
@@ -171,7 +199,7 @@ class PlayController {
 
     this.playing = true;
     this.lastDatestamp = performance.now(); // TODO: Take from event.
-    this.lastTimestamp = this.model.timestampProp.get();
+    this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
     // TODO: Save timestamp from model?
 
@@ -195,8 +223,8 @@ class PlayController {
     const delta =
       (frameDatestamp - this.lastDatestamp) * directionScalar(this.direction);
 
-    const lastTimestamp = await this.lastTimestamp!;
-    const recheckTimestamp = await this.model.timestampProp.get();
+    const lastTimestamp = await this.lastTimestampPromise;
+    const recheckTimestamp = await this.#effectiveTimestampMilliseconds();
 
     if (recheckTimestamp !== lastTimestamp) {
       console.log(
@@ -213,7 +241,7 @@ class PlayController {
 
     // TODO: Don't animate past end.
 
-    const newTimestamp = lastTimestamp + delta;
+    const newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
     // console.log({
     //   lastTimestamp,
     //   newTimestamp,
@@ -222,8 +250,8 @@ class PlayController {
     // });
 
     this.lastDatestamp = frameDatestamp;
-    this.lastTimestamp = Promise.resolve(newTimestamp); // TODO: Safe this earlier?
+    this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
     // console.log("setting timestamp", newTimestamp);
-    this.model.timestampProp.set(newTimestamp);
+    this.model.timestampRequestProp.set(newTimestamp);
   }
 }
