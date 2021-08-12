@@ -3,7 +3,7 @@ import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
-import { Twisty3DProp } from "../props/depth-6/Twisty3DProp";
+import { Twisty3DProp } from "../props/depth-7/Twisty3DProp";
 import {
   TwistyPlayerController,
   TwistyPlayerModel,

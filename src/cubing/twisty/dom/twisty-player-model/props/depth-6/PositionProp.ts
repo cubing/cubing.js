@@ -14,7 +14,7 @@ import type { AlgIndexer } from "../../../../animation/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface PositionPropInputs {
-  setupTransformation: Transformation;
+  anchoredStart: Transformation;
   indexer: AlgIndexer<any>;
   timestamp: MillisecondTimestamp;
   def: KPuzzleDefinition;
@@ -29,13 +29,13 @@ export class PositionProp extends TwistyPropDerived<
     if (inputs.indexer.timestampToPosition) {
       return inputs.indexer.timestampToPosition(
         inputs.timestamp,
-        inputs.setupTransformation,
+        inputs.anchoredStart,
       );
     } else {
       const idx = inputs.indexer.timestampToIndex(inputs.timestamp);
       const state = inputs.indexer.stateAtIndex(
         idx,
-        inputs.setupTransformation,
+        inputs.anchoredStart,
       ) as any; // TODO
       const position: PuzzlePosition = {
         state,

@@ -17,8 +17,9 @@ import { PuzzleDefProp } from "./depth-2/PuzzleDefProp";
 import { PuzzleAlgProp } from "./depth-3/PuzzleAlgProp";
 import { AlgTransformationProp } from "./depth-4/AlgTransformationProp";
 import { IndexerProp } from "./depth-4/IndexerProp";
-import { PositionProp } from "./depth-5/PositionProp";
+import { PositionProp } from "./depth-6/PositionProp";
 import { TimeRangeProp } from "./depth-5/TimeRangeProp";
+import { AnchoredStartProp } from "./depth-5/AnchoredStartProp";
 
 export class TwistyPlayerModel {
   // Depth 1
@@ -27,8 +28,8 @@ export class TwistyPlayerModel {
   orbitCoordinatesProp: OrbitCoordinatesProp;
   playingProp: PlayingProp;
   puzzleProp: PuzzleProp;
-  setupProp: AlgProp;
   setupAnchorProp: SetupAnchorProp;
+  setupProp: AlgProp;
   timestampProp: TimestampProp;
 
   // Depth 2
@@ -42,14 +43,18 @@ export class TwistyPlayerModel {
   indexerProp: IndexerProp;
   setupTransformationProp: AlgTransformationProp;
 
-  // Depth 5
-  positionProp: PositionProp;
+  // Depth 5anchoredStartProp
+  anchoredStartProp: AnchoredStartProp;
   timeRangeProp: TimeRangeProp;
 
   // Depth 6
+  positionProp: PositionProp;
+
+  // Depth 7
   // TODO: Inline Twisty3D management.
 
   constructor() {
+    // Depth 1
     this.algProp = new AlgProp();
     this.setupProp = new AlgProp();
     this.puzzleProp = new PuzzleProp();
@@ -78,8 +83,15 @@ export class TwistyPlayerModel {
       def: this.puzzleDefProp,
     });
 
-    this.positionProp = new PositionProp({
+    this.anchoredStartProp = new AnchoredStartProp({
+      setupAnchor: this.setupAnchorProp,
       setupTransformation: this.setupTransformationProp,
+      indexer: this.indexerProp,
+      def: this.puzzleDefProp,
+    });
+
+    this.positionProp = new PositionProp({
+      anchoredStart: this.anchoredStartProp,
       indexer: this.indexerProp,
       timestamp: this.timestampProp,
       def: this.puzzleDefProp,
