@@ -27,11 +27,15 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
   async connectedCallback(): Promise<void> {
     const sceneWrapper = new Twisty3DSceneWrapper();
-    const vantage = new Twisty3DVantage(sceneWrapper);
-    console.log("butttotntontonst", this.model, this.controller);
-    this.buttons = new TwistyButtonsV2(this.model, this.controller);
     this.contentWrapper.appendChild(sceneWrapper);
+
+    const vantage = new Twisty3DVantage(sceneWrapper);
     this.contentWrapper.appendChild(vantage);
+
+    const scrubber = new TwistyScrubberV2(this.model);
+    this.contentWrapper.appendChild(scrubber);
+
+    this.buttons = new TwistyButtonsV2(this.model, this.controller);
     this.contentWrapper.appendChild(this.buttons);
 
     sceneWrapper.setAttribute("style", "width: 256px; height: 256px;");
@@ -55,32 +59,6 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     });
 
     scene.add(twisty3D);
-
-    const scrubber = new TwistyScrubberV2(this.model);
-    this.contentWrapper.appendChild(scrubber);
-    const playButton = this.contentWrapper.appendChild(
-      document.createElement("button"),
-    );
-    playButton.textContent = "Play";
-    playButton.addEventListener("click", () => this.controller.play());
-    const pauseButton = this.contentWrapper.appendChild(
-      document.createElement("button"),
-    );
-    pauseButton.textContent = "pause";
-    pauseButton.addEventListener("click", () => this.controller.pause());
-    const playPauseButton = this.contentWrapper.appendChild(
-      document.createElement("button"),
-    );
-    playPauseButton.textContent = "▶️";
-    this.model.playingProp.addListener(async () => {
-      console.log("playingprop!");
-      playPauseButton.textContent = (await this.model.playingProp.get()).playing
-        ? "⏸"
-        : "▶️";
-    });
-    playPauseButton.addEventListener("click", () => {
-      this.controller.playPause(); //.playing ? "⏸" : "▶️";
-    });
 
     sceneWrapper.scheduleRender();
   }
