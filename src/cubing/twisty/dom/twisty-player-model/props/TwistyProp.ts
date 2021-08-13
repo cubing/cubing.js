@@ -1,5 +1,5 @@
 import PLazy from "../../../../vendor/p-lazy";
-import { addVisualizer } from "./TwistyPropVisualizer";
+import { addDebugger } from "./TwistyPropDebugger";
 
 type InputProps<T extends Object> = {
   [s in keyof T]: TwistyPropParent<T[s]>;
@@ -23,7 +23,7 @@ type PromiseOrValue<T> = T | Promise<T>;
 let globalSourceGeneration = 0; // This is incremented before being used, so 1 will be the first active value.
 export abstract class TwistyPropParent<T> {
   constructor() {
-    addVisualizer(this);
+    addDebugger(this);
   }
 
   public abstract get(): Promise<T>;

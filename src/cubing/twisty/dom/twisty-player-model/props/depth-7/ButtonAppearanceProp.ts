@@ -10,6 +10,7 @@ interface ButtonAppearance {
 }
 export type ButtonAppearances = Record<ButtonCommand, ButtonAppearance>;
 
+// TODO: reduce inputs to avoid unnecessary updates.
 interface ButtonAppearancePropInputs {
   effectiveTimestamp: EffectiveTimestamp;
   playing: PlayingInfo;
