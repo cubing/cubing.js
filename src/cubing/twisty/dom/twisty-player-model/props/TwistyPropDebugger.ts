@@ -37,7 +37,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 .wrapper {
   font-family: Ubuntu, sans-serif;
   display: grid;
-  grid-template-rows: 1fr 2fr;
+  grid-template-rows: 1.2em 3.5em;
   max-width: 20em;
 
   border: 1px solid #000;
@@ -104,7 +104,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-prop-visualizer", TwistyPropDebugger);
+customElementsShim.define("twisty-prop-debugger", TwistyPropDebugger);
 
 const debuggerListElem = document.createElement("div");
 debuggerListElem.id = "debuggers";
