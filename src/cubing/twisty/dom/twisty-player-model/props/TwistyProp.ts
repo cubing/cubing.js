@@ -1,4 +1,5 @@
 import PLazy from "../../../../vendor/p-lazy";
+import { addVisualizer } from "./TwistyPropVisualizer";
 
 type InputProps<T extends Object> = {
   [s in keyof T]: TwistyPropParent<T[s]>;
@@ -21,6 +22,10 @@ type PromiseOrValue<T> = T | Promise<T>;
 // Values of T must be immutable.
 let globalSourceGeneration = 0; // This is incremented before being used, so 1 will be the first active value.
 export abstract class TwistyPropParent<T> {
+  constructor() {
+    addVisualizer(this);
+  }
+
   public abstract get(): Promise<T>;
 
   // Uses value comparison. Overwrite with a cheap semantic comparison when
@@ -66,7 +71,7 @@ export abstract class TwistyPropParent<T> {
   addListener(listener: () => void, options?: { initial: boolean }): void {
     this.#listeners.add(listener);
     if (options?.initial) {
-      listener();
+      listener(); // TODO: wrap in a try?
     }
   }
 
@@ -83,7 +88,7 @@ export abstract class TwistyPropParent<T> {
   #dispatchListeners(): void {
     if (this.#dispatchPending) {
       for (const listener of this.#listeners) {
-        listener();
+        listener(); // TODO: wrap in a try?
       }
       this.#dispatchPending = false;
     }

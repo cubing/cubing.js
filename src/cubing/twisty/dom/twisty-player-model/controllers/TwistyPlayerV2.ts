@@ -2,7 +2,7 @@ import type { Alg } from "../../../../alg";
 import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
-import type { PuzzleID } from "../../TwistyPlayerConfig";
+import type { PuzzleID, SetupToLocation } from "../../TwistyPlayerConfig";
 import { Twisty3DProp } from "../props/depth-8/Twisty3DProp";
 import {
   TwistyPlayerController,
@@ -72,6 +72,10 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
   set setup(newSetup: Alg | string) {
     this.model.setupProp.set(newSetup);
+  }
+
+  set anchor(anchor: SetupToLocation) {
+    this.model.setupAnchorProp.set(anchor);
   }
 
   set puzzle(puzzleID: PuzzleID) {
