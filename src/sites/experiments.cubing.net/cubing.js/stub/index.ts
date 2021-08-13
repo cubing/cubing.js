@@ -3,19 +3,28 @@
 
 import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayerV2 } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/TwistyPlayerV2";
-import { setupToLocations } from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
+import {
+  PuzzleID,
+  puzzleIDs,
+  setupToLocations,
+} from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
 console.log("Loading stub file.");
 
 (async () => {
+  const puzzle = (new URL(location.href).searchParams.get("puzzle") ??
+    "gigaminx") as PuzzleID;
+
   const twistyPlayer = document.body.appendChild(
-    new TwistyPlayerV2({ puzzle: "gigaminx" }),
+    new TwistyPlayerV2({ puzzle }),
   );
 
   const alg =
-    "(BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2')";
+    puzzle === "gigaminx"
+      ? "(BL2 B2' DL2' B' BL' B' DL2' BL2 B' BL2' B2 BL DL2 B' DL BL B' BL2 DR2 U' (F2 FR2' D2 FR L2' 1-4BR 1-4R2' U)5 F2 FR2' D2 FR L2' 1-4BR 1-4R2' U2 2DR2 u2' 1-3R2 1-3BR' l2 fr' d2' fr2 f2' (u' 1-3R2 1-3BR' l2 fr' d2' fr2 f2')5 u dr2' bl2' b bl' dl' b dl2' bl' b2' bl2 b bl2' dl2 b bl b dl2 b2 bl2')"
+      : "R U R' U R U2' R'";
   twistyPlayer.alg = alg;
 
   const table = document.body.appendChild(document.createElement("table"));
@@ -43,9 +52,9 @@ console.log("Loading stub file.");
     update();
   }
 
-  const enumOptions: [string, string, Record<string, any>][] = [
+  const enumOptions: [string, string, Record<string, any>, string?][] = [
     ["anchor", "anchor", setupToLocations],
-    // ["puzzle", "puzzle", puzzleIDs],
+    ["puzzle", "puzzle", puzzleIDs, puzzle],
     // ["visualization", "visualization", visualizationFormats],
     // ["hintFacelets", "hint-facelets", hintFaceletStyles],
     // [
@@ -67,7 +76,7 @@ console.log("Loading stub file.");
     // ["viewerLink", "viewer-link", viewerLinkPages],
   ];
 
-  for (const [propName, attrName, valueMap] of enumOptions) {
+  for (const [propName, attrName, valueMap, defaultValue] of enumOptions) {
     const tr = table.appendChild(document.createElement("tr"));
 
     const td1 = tr.appendChild(document.createElement("td"));
@@ -81,8 +90,18 @@ console.log("Loading stub file.");
       const optionElem = select.appendChild(document.createElement("option"));
       optionElem.textContent = value;
       optionElem.value = value;
+
+      if (value === defaultValue) {
+        optionElem.selected = true;
+      }
     }
     select.addEventListener("change", () => {
+      if (attrName === "puzzle") {
+        const url = new URL(location.href);
+        url.searchParams.set("puzzle", select.value);
+        location.href = url.toString();
+      }
+
       console.log(attrName, select.value);
       (twistyPlayer as any)[propName] = select.value as any;
     });
