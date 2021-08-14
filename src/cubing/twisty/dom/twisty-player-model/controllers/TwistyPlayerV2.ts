@@ -69,7 +69,8 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
       async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
         if ("experimentalUpdateOptions" in twisty3D) {
           (twisty3D as Cube3D).experimentalUpdateOptions({
-            hintFacelets: hintFaceletStyle === "auto" ? "floating" : "none",
+            hintFacelets:
+              hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
           });
           sceneWrapper.scheduleRender();
         }
