@@ -98,28 +98,58 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     this.model.algProp.set(newAlg);
   }
 
+  get alg(): never {
+    throw new Error("Cannot get `.alg` directly from a `TwistyPlayer`.");
+  }
+
   set setup(newSetup: Alg | string) {
     this.model.setupProp.set(newSetup);
+  }
+
+  get setup(): never {
+    throw new Error("Cannot get `.setup` directly from a `TwistyPlayer`.");
   }
 
   set anchor(anchor: SetupToLocation) {
     this.model.setupAnchorProp.set(anchor);
   }
 
+  get anchor(): never {
+    throw new Error("Cannot get `.anchor` directly from a `TwistyPlayer`.");
+  }
+
   set puzzle(puzzleID: PuzzleID) {
     this.model.puzzleProp.set(puzzleID);
+  }
+
+  get puzzle(): never {
+    throw new Error("Cannot get `.puzzle` directly from a `TwistyPlayer`.");
   }
 
   set timestamp(timestamp: MillisecondTimestamp) {
     this.model.timestampRequestProp.set(timestamp);
   }
 
+  get timestamp(): never {
+    throw new Error("Cannot get `.timestamp` directly from a `TwistyPlayer`.");
+  }
+
   set hintFacelets(hintFaceletStyle: HintFaceletStyleWithAuto) {
     this.model.hintFaceletProp.set(hintFaceletStyle);
   }
 
+  get hintFacelets(): never {
+    throw new Error(
+      "Cannot get `.hintFacelets` directly from a `TwistyPlayer`.",
+    );
+  }
+
   set stickering(stickering: ExperimentalStickering) {
     this.model.stickeringProp.set(stickering);
+  }
+
+  get stickering(): never {
+    throw new Error("Cannot get `.stickering` directly from a `TwistyPlayer`.");
   }
 }
 
