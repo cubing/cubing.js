@@ -120,9 +120,11 @@ export abstract class TwistyPropParent<T> {
   }
 
   removeFreshListener(listener: (value: T) => void): void {
+    console.log("remove", this, this.#freshListeners);
     if (this.#freshListeners.delete(listener)) {
       this.removeRawListener(this.#freshListeners.get(listener)!); // TODO: throw a custom error?
     }
+    console.log("removed", this, this.#freshListeners);
   }
 }
 

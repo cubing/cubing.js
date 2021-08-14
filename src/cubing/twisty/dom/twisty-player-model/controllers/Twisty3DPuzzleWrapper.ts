@@ -15,17 +15,24 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     public schedulable: Schedulable,
     public twisty3D: Twisty3DPuzzle,
   ) {
+    let disconnected = false;
     const addListener = <T>(
       prop: TwistyPropParent<T>,
       listener: (value: T) => void,
     ) => {
       prop.addFreshListener(listener);
       this.#disconnectionFunctions.push(() => {
+        console.log("disconnecting", prop, listener);
         prop.removeFreshListener(listener);
+        disconnected = true;
       });
     };
 
     addListener(this.model.positionProp, async (position: PuzzlePosition) => {
+      if (disconnected) {
+        // TODO: wait what?
+        return;
+      }
       twisty3D.onPositionChange(position);
       this.scheduleRender();
     });
@@ -33,6 +40,10 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     addListener(
       this.model.hintFaceletProp,
       async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
+        if (disconnected) {
+          // TODO: wait what?
+          return;
+        }
         if ("experimentalUpdateOptions" in twisty3D) {
           (twisty3D as Cube3D).experimentalUpdateOptions({
             hintFacelets:
@@ -45,6 +56,10 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     addListener(
       this.model.stickeringProp,
       async (stickering: ExperimentalStickering) => {
+        if (disconnected) {
+          // TODO: wait what?
+          return;
+        }
         if ("setStickering" in twisty3D) {
           (twisty3D as Cube3D).setStickering(stickering);
           this.scheduleRender();

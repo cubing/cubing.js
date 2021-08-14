@@ -48,6 +48,7 @@ export class Twisty3DSceneWrapper
 
   async onPuzzle(puzzle: PuzzleID): Promise<void> {
     console.log("foosy");
+    this.#currentTwisty3DPuzzleWrapper?.disconnect();
     const [scene, twisty3DPuzzleWrapper] =
       // await this.#twisty3DStaleDropper.queue( // TODO: Why doesn't this work?
       await Promise.all([
@@ -60,7 +61,7 @@ export class Twisty3DSceneWrapper
     if (old) {
       this.#staleTwisty3DPuzzleWrappers.push(old);
       scene.remove(old.twisty3D);
-      old.disconnect();
+      // old.disconnect();
       this.scheduleRender();
     }
     this.#currentTwisty3DPuzzleWrapper = twisty3DPuzzleWrapper;

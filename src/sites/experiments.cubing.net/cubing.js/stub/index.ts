@@ -98,12 +98,6 @@ console.log("Loading stub file.");
       }
     }
     select.addEventListener("change", () => {
-      if (attrName === "puzzle") {
-        const url = new URL(location.href);
-        url.searchParams.set("puzzle", select.value);
-        location.href = url.toString();
-      }
-
       console.log(attrName, select.value);
       (twistyPlayer as any)[propName] = select.value as any;
     });
