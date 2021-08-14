@@ -1,3 +1,4 @@
+import type { ExperimentalStickering } from "../../..";
 import type { Alg } from "../../../../alg";
 import type {
   MillisecondTimestamp,
@@ -75,6 +76,18 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
       },
     );
 
+    this.model.stickeringProp.addFreshListener(
+      async (stickering: ExperimentalStickering) => {
+        if ("setStickering" in twisty3D) {
+          (twisty3D as Cube3D).setStickering(stickering);
+          sceneWrapper.scheduleRender();
+        } else {
+          // TODO: create a prop to handle this.
+          console.error("Still need to connect PG3D appearance.");
+        }
+      },
+    );
+
     scene.add(twisty3D);
 
     sceneWrapper.scheduleRender();
@@ -102,6 +115,10 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
   set hintFacelets(hintFaceletStyle: HintFaceletStyleWithAuto) {
     this.model.hintFaceletProp.set(hintFaceletStyle);
+  }
+
+  set stickering(stickering: ExperimentalStickering) {
+    this.model.stickeringProp.set(stickering);
   }
 }
 

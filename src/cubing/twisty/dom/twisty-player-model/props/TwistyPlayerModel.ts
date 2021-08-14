@@ -26,6 +26,7 @@ import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
 import { PositionProp } from "./depth-7/PositionProp";
 import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfo";
 import { HintFaceletProp } from "./depth-1/HintFaceletProp";
+import { StickeringProp } from "./depth-1/StickeringProp";
 
 export class TwistyPlayerModel {
   // Depth 1
@@ -37,11 +38,11 @@ export class TwistyPlayerModel {
   puzzleProp: PuzzleProp = new PuzzleProp();
   setupAnchorProp: SetupAnchorProp = new SetupAnchorProp();
   setupProp: AlgProp = new AlgProp();
+  stickeringProp: StickeringProp = new StickeringProp();
   timestampRequestProp: TimestampRequestProp = new TimestampRequestProp();
   // back-view // TODO
   // background // TODO
   // control-panel // TODO
-  // stickering // TODO
   // visualization // TODO
 
   // Depth 2
