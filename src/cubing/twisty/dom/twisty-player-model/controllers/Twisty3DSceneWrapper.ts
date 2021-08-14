@@ -57,7 +57,12 @@ export class Twisty3DSceneWrapper
       // await this.#twisty3DStaleDropper.queue( // TODO: Why doesn't this work?
       await Promise.all([
         this.scene(),
-        Twisty3DPuzzleWrapper.fromPuzzleID(this.model!, this, puzzle), // TODO
+        Twisty3DPuzzleWrapper.fromPuzzleID(
+          this.model!,
+          this,
+          puzzle,
+          this.model!.positionProp.get(),
+        ), // TODO
       ]);
     // );
     console.log({ twisty3DPuzzleWrapper });

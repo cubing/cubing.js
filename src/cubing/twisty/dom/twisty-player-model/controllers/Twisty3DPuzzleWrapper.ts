@@ -89,21 +89,26 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     model: TwistyPlayerModel,
     schedulable: Schedulable,
     puzzleID: PuzzleID,
+    positionPromise: Promise<PuzzlePosition>,
   ): Promise<Twisty3DPuzzleWrapper> {
-    const proxy = await proxy3D();
+    const [proxy, position] = await Promise.all([proxy3D(), positionPromise]);
     switch (puzzleID) {
       case "3x3x3":
-        return new Twisty3DPuzzleWrapper(
+        const twisty3D = new Twisty3DPuzzleWrapper(
           model,
           schedulable,
           await proxy.cube3DShim(),
         );
+        twisty3D.twisty3D.onPositionChange(position);
+        return twisty3D;
       default: {
-        return new Twisty3DPuzzleWrapper(
+        const twisty3D = new Twisty3DPuzzleWrapper(
           model,
           schedulable,
           await proxy.pg3dShim(puzzleID),
         );
+        twisty3D.twisty3D.onPositionChange(position);
+        return twisty3D;
       }
     }
   }
