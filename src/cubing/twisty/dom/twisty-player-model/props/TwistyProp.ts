@@ -28,10 +28,16 @@ export abstract class TwistyPropParent<T> {
 
   public abstract get(): Promise<T>;
 
-  // Uses value comparison. Overwrite with a cheap semantic comparison when
-  // possible.
+  // Don't overwrite this. Overwrite `canReuseValue` instead.
   canReuse(v1: T, v2: T): boolean {
-    return v1 === v2;
+    return v1 === v2 || this.canReuseValue(v1, v2);
+  }
+
+  // Overwrite with a cheap semantic comparison when possible.
+  // Note that this is not called if `v1 === v2` (in which case the value is automatically reused).
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
+  canReuseValue(v1: T, v2: T): boolean {
+    return false;
   }
 
   // Propagation

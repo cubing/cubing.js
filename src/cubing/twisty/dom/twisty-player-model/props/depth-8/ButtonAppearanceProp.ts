@@ -20,7 +20,6 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
 > {
   // TODO: This still seems to fire twice for play/pause?
   derive(inputs: ButtonAppearancePropInputs): ButtonAppearances {
-    console.log("buttons");
     const buttonAppearances = {
       "fullscreen": {
         enabled: false,

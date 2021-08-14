@@ -10,7 +10,6 @@ interface ButtonAppearance {
 }
 export type ButtonAppearances = Record<ButtonCommand, ButtonAppearance>;
 
-// TODO: reduce inputs to avoid unnecessary updates.
 interface CoarseTimelineInfoInputs {
   playingInfo: PlayingInfo;
   effectiveTimestamp: EffectiveTimestamp;
@@ -36,12 +35,11 @@ export class CoarseTimelineInfoProp extends TwistyPropDerived<
     };
   }
 
-  canReuse(v1: CoarseTimelineInfo, v2: CoarseTimelineInfo): boolean {
+  canReuseValue(v1: CoarseTimelineInfo, v2: CoarseTimelineInfo): boolean {
     return (
-      v1 === v2 ||
-      (v1.playing === v2.playing &&
-        v1.atStart === v2.atStart &&
-        v1.atEnd === v2.atEnd)
+      v1.playing === v2.playing &&
+      v1.atStart === v2.atStart &&
+      v1.atEnd === v2.atEnd
     );
   }
 }
