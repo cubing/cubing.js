@@ -54,12 +54,12 @@ export class Twisty3DSceneWrapper
       old.disconnect();
     }
     const [scene, twisty3DPuzzleWrapper] =
-      // await this.#twisty3DStaleDropper.queue(
-      await Promise.all([
-        this.scene(),
-        new Twisty3DPuzzleWrapper(this.model!, this, puzzle), // TODO
-      ]);
-    // );
+      await this.#twisty3DStaleDropper.queue(
+        Promise.all([
+          this.scene(),
+          new Twisty3DPuzzleWrapper(this.model!, this, puzzle), // TODO
+        ]),
+      );
 
     const newTwisty3DPuzzlePromise = twisty3DPuzzleWrapper.twisty3DPuzzle();
 
@@ -67,21 +67,27 @@ export class Twisty3DSceneWrapper
       this.#staleTwisty3DPuzzleWrappers.push(old);
       (async () => {
         // TODO: Make this more convenient and avoid a flash of missing puzzle.
-        const [oldTwisty3DPuzzle, _] = await Promise.all([
-          old.twisty3DPuzzle(),
-          newTwisty3DPuzzlePromise, // We don't remove until the new puzzle is ready.
-        ]);
-        scene.remove(oldTwisty3DPuzzle);
+        // const [oldTwisty3DPuzzle, _] = await Promise.all([
+        //   old.twisty3DPuzzle(),
+        //   newTwisty3DPuzzlePromise, // We don't remove until the new puzzle is ready.
+        // ]);
+        scene.remove(await old.twisty3DPuzzle());
+        console.log("removing", await old.twisty3DPuzzle());
         this.scheduleRender();
       })();
       // old.disconnect();
     }
-    this.#currentTwisty3DPuzzleWrapper = twisty3DPuzzleWrapper;
 
     // Go!
     (async () => {
       // TODO: Make this more convenient and avoid a flash of missing puzzle.
+      for (const child of scene.children) {
+        // TODO: This hsouldn't be necessary. Why are we getting duplicate initial instantiations?
+        scene.remove(child);
+      }
       scene.add(await newTwisty3DPuzzlePromise);
+      this.#currentTwisty3DPuzzleWrapper = twisty3DPuzzleWrapper;
+      console.log("adding", await newTwisty3DPuzzlePromise);
       this.scheduleRender();
     })();
   }

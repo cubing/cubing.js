@@ -63,12 +63,13 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           // TODO: Why does this still fire?
           throw new Error("We should be disconnected!");
         }
+        console.log("stickering", stickering);
         if ("setStickering" in (await this.twisty3DPuzzle())) {
           ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
           this.scheduleRender();
         } else {
           // TODO: create a prop to handle this.
-          console.error("Still need to connect PG3D appearance.");
+          console.warn("Still need to connect PG3D appearance.");
         }
       },
     );

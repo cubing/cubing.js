@@ -7,7 +7,7 @@ export class PromiseFreshener<T> {
   async queue(
     p: Promise<T>,
   ): Promise<{ fresh: false } | { fresh: true; result: T }> {
-    const idx = this.#latestAssignedIdx++;
+    const idx = ++this.#latestAssignedIdx;
     const result = await p;
     if (idx > this.#latestResolvedIdx) {
       this.#latestResolvedIdx = idx;
@@ -33,7 +33,7 @@ export class StaleDropper<T> {
   queue(p: Promise<T>): Promise<T> {
     return new Promise(async (resolve, reject) => {
       try {
-        const idx = this.#latestAssignedIdx++;
+        const idx = ++this.#latestAssignedIdx;
         const result = await p;
         if (idx > this.#latestResolvedIdx) {
           this.#latestResolvedIdx = idx;
