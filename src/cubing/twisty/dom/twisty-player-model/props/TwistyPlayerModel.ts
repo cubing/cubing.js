@@ -207,7 +207,7 @@ class PlayController {
     this.model = model;
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
-    this.model.playingProp.addListener(() => this.onPlayingProp); // TODO
+    this.model.playingProp.addRawListener(() => this.onPlayingProp); // TODO
   }
 
   async onPlayingProp(): Promise<void> {

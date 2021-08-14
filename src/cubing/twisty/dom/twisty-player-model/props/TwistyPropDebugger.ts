@@ -29,7 +29,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     this.valueElem = this.contentWrapper.appendChild(
       document.createElement("div"),
     );
-    this.twistyProp.addListener(() => this.onProp(), { initial: true });
+    this.twistyProp.addRawListener(() => this.onProp(), { initial: true });
 
     this.addCSS(
       new CSSSource(`

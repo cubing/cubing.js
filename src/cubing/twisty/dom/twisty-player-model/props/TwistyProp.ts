@@ -1,4 +1,5 @@
 import PLazy from "../../../../vendor/p-lazy";
+import { PromiseFreshener } from "../controllers/PromiseFreshener";
 import { addDebugger } from "./TwistyPropDebugger";
 
 type InputProps<T extends Object> = {
@@ -70,37 +71,58 @@ export abstract class TwistyPropParent<T> {
     }
     // We schedule sending out events *after* the (synchronous) propagation has happened, in
     // case one of the listeners updates a source again.
-    this.#scheduleDispatch();
+    this.#scheduleRawDispatch();
   }
 
-  #listeners: Set<() => void> = new Set();
-  addListener(listener: () => void, options?: { initial: boolean }): void {
-    this.#listeners.add(listener);
+  #rawListeners: Set<() => void> = new Set();
+  addRawListener(listener: () => void, options?: { initial: boolean }): void {
+    this.#rawListeners.add(listener);
     if (options?.initial) {
       listener(); // TODO: wrap in a try?
     }
   }
 
-  removeListener(listener: () => void): void {
-    this.#listeners.delete(listener);
+  removeRawListener(listener: () => void): void {
+    this.#rawListeners.delete(listener);
   }
 
-  #scheduleDispatch(): void {
-    if (!this.#dispatchPending) {
-      this.#dispatchPending = true;
-      setTimeout(() => this.#dispatchListeners(), 0);
+  #scheduleRawDispatch(): void {
+    if (!this.#rawDispatchPending) {
+      this.#rawDispatchPending = true;
+      setTimeout(() => this.#dispatchRawListeners(), 0);
     }
   }
 
-  #dispatchPending: boolean = false;
-  #dispatchListeners(): void {
-    if (!this.#dispatchPending) {
+  #rawDispatchPending: boolean = false;
+  #dispatchRawListeners(): void {
+    if (!this.#rawDispatchPending) {
       throw new Error("Invalid dispatch state!");
     }
-    for (const listener of this.#listeners) {
+    for (const listener of this.#rawListeners) {
       listener(); // TODO: wrap in a try?
     }
-    this.#dispatchPending = false;
+    this.#rawDispatchPending = false;
+  }
+
+  #freshListeners: Map<(value: T) => void, () => void> = new Map();
+  // TODO: Pick a better name.
+  addFreshListener(listener: (value: T) => void) {
+    const promiseFreshener: PromiseFreshener<T> = new PromiseFreshener<T>();
+    const callback = async () => {
+      const fromQueue = await promiseFreshener.queue(this.get());
+      if (!fromQueue.fresh) {
+        return;
+      }
+      listener(fromQueue.result);
+    };
+    this.#freshListeners.set(listener, callback);
+    this.addRawListener(callback, { initial: true });
+  }
+
+  removeFreshListener(listener: () => void): void {
+    if (this.#freshListeners.delete(listener)) {
+      this.removeRawListener(this.#freshListeners.get(listener)!); // TODO: throw a custom error?
+    }
   }
 }
 

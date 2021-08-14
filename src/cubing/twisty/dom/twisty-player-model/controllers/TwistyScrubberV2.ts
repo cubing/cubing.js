@@ -96,14 +96,14 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
       elem.type = "range";
 
       // console.log("1");
-      this.model?.timeRangeProp.addListener(
+      this.model?.timeRangeProp.addRawListener(
         this.onTimeRangeOrTimestamp.bind(this),
         {
           initial: true,
         },
       );
       // console.log("2");
-      this.model?.effectiveTimestampProp.addListener(
+      this.model?.effectiveTimestampProp.addRawListener(
         this.onTimeRangeOrTimestamp.bind(this),
         {
           initial: true,

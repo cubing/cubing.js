@@ -5,7 +5,6 @@ import type {
   TwistyPlayerController,
   TwistyPlayerModel,
 } from "../props/TwistyPlayerModel";
-import { PromiseFreshener } from "./PromiseFreshener";
 
 const buttonCommands = {
   "fullscreen": true,
@@ -44,9 +43,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
     }
     this.buttons = buttons as Record<ButtonCommand, HTMLButtonElement>;
 
-    this.model?.buttonAppearanceProp.addListener(() => this.update(), {
-      initial: true,
-    });
+    this.model?.buttonAppearanceProp.addFreshListener(this.update.bind(this));
   }
 
   #onCommand(command: ButtonCommand) {
@@ -75,19 +72,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
     }
   }
 
-  #updatePromiseFreshener: PromiseFreshener<ButtonAppearances> =
-    new PromiseFreshener<ButtonAppearances>();
-
-  async update(): Promise<void> {
-    const fromQueue = await this.#updatePromiseFreshener.queue(
-      this.model!.buttonAppearanceProp.get(),
-    );
-    if (!fromQueue.fresh) {
-      console.log("buttons not fresh!");
-      return;
-    }
-
-    const buttonAppearances = fromQueue.result;
+  async update(buttonAppearances: ButtonAppearances): Promise<void> {
     // TODO: Check that we have every command?
     for (const command in buttonCommands) {
       // TODO: Why doesn't `command` have the type `ButtonCommand`?

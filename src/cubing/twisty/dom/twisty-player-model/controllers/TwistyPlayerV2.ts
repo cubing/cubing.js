@@ -52,7 +52,7 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     const scene = await sceneWrapper.scene();
     const twisty3D = await twisty3DProp.get();
 
-    this.model.positionProp.addListener(
+    this.model.positionProp.addRawListener(
       async () => {
         twisty3D.onPositionChange(await this.model.positionProp.get());
         sceneWrapper.scheduleRender();
