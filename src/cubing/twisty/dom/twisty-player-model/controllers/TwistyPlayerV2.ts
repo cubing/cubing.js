@@ -1,5 +1,8 @@
 import type { Alg } from "../../../../alg";
-import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes";
+import type {
+  MillisecondTimestamp,
+  PuzzlePosition,
+} from "../../../animation/cursor/CursorTypes";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { PuzzleID, SetupToLocation } from "../../TwistyPlayerConfig";
@@ -52,12 +55,11 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     const scene = await sceneWrapper.scene();
     const twisty3D = await twisty3DProp.get();
 
-    this.model.positionProp.addRawListener(
-      async () => {
-        twisty3D.onPositionChange(await this.model.positionProp.get());
+    this.model.positionProp.addFreshListener(
+      async (position: PuzzlePosition) => {
+        twisty3D.onPositionChange(position);
         sceneWrapper.scheduleRender();
       },
-      { initial: true },
     );
 
     scene.add(twisty3D);

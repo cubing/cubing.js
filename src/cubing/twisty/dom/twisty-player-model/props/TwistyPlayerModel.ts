@@ -11,7 +11,7 @@ import { PromiseFreshener } from "../controllers/PromiseFreshener";
 import { AlgProp } from "./depth-1/AlgProp";
 import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
-import { PlayingProp } from "./depth-1/PlayingProp";
+import { PlayingInfo, PlayingProp } from "./depth-1/PlayingProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { SetupAnchorProp } from "./depth-1/SetupAnchorProp";
 import { TimestampRequestProp } from "./depth-1/TimestampRequestProp";
@@ -208,13 +208,12 @@ class PlayController {
     this.model = model;
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
-    this.model.playingProp.addRawListener(() => this.onPlayingProp); // TODO
+    this.model.playingProp.addFreshListener(this.onPlayingProp.bind(this)); // TODO
   }
 
-  async onPlayingProp(): Promise<void> {
-    const playing = (await this.model.playingProp.get()).playing;
-    if (playing !== this.playing) {
-      playing ? this.play() : this.pause();
+  async onPlayingProp(playingInfo: PlayingInfo): Promise<void> {
+    if (playingInfo.playing !== this.playing) {
+      playingInfo.playing ? this.play() : this.pause();
     }
   }
 

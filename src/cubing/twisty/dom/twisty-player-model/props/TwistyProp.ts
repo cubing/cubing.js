@@ -75,6 +75,7 @@ export abstract class TwistyPropParent<T> {
   }
 
   #rawListeners: Set<() => void> = new Set();
+  /** @deprecated */
   addRawListener(listener: () => void, options?: { initial: boolean }): void {
     this.#rawListeners.add(listener);
     if (options?.initial) {
@@ -82,10 +83,12 @@ export abstract class TwistyPropParent<T> {
     }
   }
 
+  /** @deprecated */
   removeRawListener(listener: () => void): void {
     this.#rawListeners.delete(listener);
   }
 
+  /** @deprecated */
   #scheduleRawDispatch(): void {
     if (!this.#rawDispatchPending) {
       this.#rawDispatchPending = true;
