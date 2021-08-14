@@ -1,6 +1,6 @@
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
-import type { ButtonAppearances } from "../props/depth-7/ButtonAppearanceProp";
+import type { ButtonAppearances } from "../props/depth-8/ButtonAppearanceProp";
 import type {
   TwistyPlayerController,
   TwistyPlayerModel,

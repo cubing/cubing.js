@@ -1,6 +1,5 @@
 import type { ButtonCommand } from "../../controllers/TwistyButtonsV2";
-import type { PlayingInfo } from "../depth-1/PlayingProp";
-import type { EffectiveTimestamp } from "../depth-6/EffectiveTimestamp";
+import type { CoarseTimelineInfo as CoarseTimelineInfo } from "../depth-7/CoarseTimelineInfo";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface ButtonAppearance {
@@ -12,15 +11,16 @@ export type ButtonAppearances = Record<ButtonCommand, ButtonAppearance>;
 
 // TODO: reduce inputs to avoid unnecessary updates.
 interface ButtonAppearancePropInputs {
-  effectiveTimestamp: EffectiveTimestamp;
-  playing: PlayingInfo;
+  coarseTimelineInfo: CoarseTimelineInfo;
 }
 
 export class ButtonAppearanceProp extends TwistyPropDerived<
   ButtonAppearancePropInputs,
   ButtonAppearances
 > {
+  // TODO: This still seems to fire twice for play/pause?
   derive(inputs: ButtonAppearancePropInputs): ButtonAppearances {
+    console.log("buttons");
     const buttonAppearances = {
       "fullscreen": {
         enabled: false,
@@ -28,7 +28,7 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
         title: "Enter fullscreen",
       },
       "jump-to-start": {
-        enabled: !inputs.effectiveTimestamp.atStart,
+        enabled: !inputs.coarseTimelineInfo.atStart,
         icon: "⏮",
         title: "Restart",
       },
@@ -39,8 +39,8 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
       },
       "play-pause": {
         enabled: true,
-        icon: inputs.playing.playing ? "⏸" : "▶️",
-        title: inputs.playing.playing ? "Pause" : "Play",
+        icon: inputs.coarseTimelineInfo.playing ? "⏸" : "▶️",
+        title: inputs.coarseTimelineInfo.playing ? "Pause" : "Play",
       },
       "play-step": {
         enabled: false,
@@ -48,7 +48,7 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
         title: "Step forward",
       },
       "jump-to-end": {
-        enabled: !inputs.effectiveTimestamp.atEnd,
+        enabled: !inputs.coarseTimelineInfo.atEnd,
         icon: "⏭",
         title: "Skip to End",
       },

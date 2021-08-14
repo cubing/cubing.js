@@ -22,8 +22,9 @@ import { IndexerProp } from "./depth-4/IndexerProp";
 import { AnchoredStartProp } from "./depth-5/AnchoredStartProp";
 import { TimeRangeProp } from "./depth-5/TimeRangeProp";
 import { EffectiveTimestampProp } from "./depth-6/EffectiveTimestamp";
-import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
+import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
 import { PositionProp } from "./depth-7/PositionProp";
+import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfo";
 
 export class TwistyPlayerModel {
   // Depth 1
@@ -88,11 +89,6 @@ export class TwistyPlayerModel {
   });
 
   // Depth 7
-  buttonAppearanceProp: ButtonAppearanceProp = new ButtonAppearanceProp({
-    effectiveTimestamp: this.effectiveTimestampProp,
-    playing: this.playingProp,
-  });
-
   positionProp: PositionProp = new PositionProp({
     anchoredStart: this.anchoredStartProp,
     indexer: this.indexerProp,
@@ -100,8 +96,16 @@ export class TwistyPlayerModel {
     def: this.puzzleDefProp,
   });
 
+  coarseTimelineInfoProp: CoarseTimelineInfoProp = new CoarseTimelineInfoProp({
+    effectiveTimestamp: this.effectiveTimestampProp,
+    playingInfo: this.playingProp,
+  });
+
   // Depth 8
   // TODO: Inline Twisty3D management.
+  buttonAppearanceProp: ButtonAppearanceProp = new ButtonAppearanceProp({
+    coarseTimelineInfo: this.coarseTimelineInfoProp,
+  });
 
   set alg(newAlg: Alg | string) {
     this.algProp.set(newAlg);
