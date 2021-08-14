@@ -1,6 +1,6 @@
 import type { ButtonCommand } from "../../controllers/TwistyButtonsV2";
 import type { PlayingInfo } from "../depth-1/PlayingProp";
-import type { EffectiveTimestamp } from "../depth-6/EffectiveTimestamp";
+import type { DetailedTimelineInfo } from "../depth-6/EffectiveTimestamp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface ButtonAppearance {
@@ -12,7 +12,7 @@ export type ButtonAppearances = Record<ButtonCommand, ButtonAppearance>;
 
 interface CoarseTimelineInfoInputs {
   playingInfo: PlayingInfo;
-  effectiveTimestamp: EffectiveTimestamp;
+  detailedTimelineInfo: DetailedTimelineInfo;
 }
 
 export interface CoarseTimelineInfo {
@@ -30,8 +30,8 @@ export class CoarseTimelineInfoProp extends TwistyPropDerived<
   derive(inputs: CoarseTimelineInfoInputs): CoarseTimelineInfo {
     return {
       playing: inputs.playingInfo.playing,
-      atStart: inputs.effectiveTimestamp.atStart,
-      atEnd: inputs.effectiveTimestamp.atEnd,
+      atStart: inputs.detailedTimelineInfo.atStart,
+      atEnd: inputs.detailedTimelineInfo.atEnd,
     };
   }
 

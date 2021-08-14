@@ -29,7 +29,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     this.valueElem = this.contentWrapper.appendChild(
       document.createElement("div"),
     );
-    this.twistyProp.addRawListener(() => this.onProp(), { initial: true });
+    this.twistyProp.addFreshListener(this.onProp.bind(this));
 
     this.addCSS(
       new CSSSource(`
@@ -54,8 +54,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     );
   }
 
-  async onProp(): Promise<void> {
-    const value = await this.twistyProp.get();
+  async onProp(value: any): Promise<void> {
     // console.log("onProp", value, this.valueElem, JSON.stringify(value));
 
     function isAlgIssues(v: any): boolean {

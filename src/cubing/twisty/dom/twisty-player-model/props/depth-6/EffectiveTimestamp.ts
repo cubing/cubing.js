@@ -4,25 +4,26 @@ import type { SetupToLocation } from "../../../TwistyPlayerConfig";
 import type { TimestampRequest } from "../depth-1/TimestampRequestProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
-interface EffectiveTimestampPropInputs {
+interface DetailedTimelineInfoInputs {
   timestampRequest: TimestampRequest;
   timeRange: TimeRange;
   setupAnchor: SetupToLocation;
 }
 
-export interface EffectiveTimestamp {
+export interface DetailedTimelineInfo {
   timestamp: MillisecondTimestamp;
+  timeRange: TimeRange; // TODO: Don't incluede this, and let fresh listeners listen to multiple inputs?
   // Note: `atStart` and `atEnd` can both be true. This is the case with the
   // default (empty) alg, which has a duration of 0 ms.
   atStart: boolean;
   atEnd: boolean;
 }
 
-export class EffectiveTimestampProp extends TwistyPropDerived<
-  EffectiveTimestampPropInputs,
-  EffectiveTimestamp
+export class DetailedTimelineInfoProp extends TwistyPropDerived<
+  DetailedTimelineInfoInputs,
+  DetailedTimelineInfo
 > {
-  derive(inputs: EffectiveTimestampPropInputs): EffectiveTimestamp {
+  derive(inputs: DetailedTimelineInfoInputs): DetailedTimelineInfo {
     let timestamp = this.#requestedTimestampToMilliseconds(inputs);
     let atStart: boolean = false;
     let atEnd: boolean = false;
@@ -36,13 +37,14 @@ export class EffectiveTimestampProp extends TwistyPropDerived<
     }
     return {
       timestamp,
+      timeRange: inputs.timeRange,
       atStart,
       atEnd,
     };
   }
 
   #requestedTimestampToMilliseconds(
-    inputs: EffectiveTimestampPropInputs,
+    inputs: DetailedTimelineInfoInputs,
   ): MillisecondTimestamp {
     switch (inputs.timestampRequest) {
       case "start":

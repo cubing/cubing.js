@@ -1,9 +1,7 @@
-import type { TimeRange } from "../../../animation/cursor/AlgCursor";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
-import type { EffectiveTimestamp } from "../props/depth-6/EffectiveTimestamp";
+import type { DetailedTimelineInfo } from "../props/depth-6/EffectiveTimestamp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import { PromiseFreshener } from "./PromiseFreshener";
 
 const SLOW_DOWN_SCRUBBING = false;
 
@@ -57,31 +55,14 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
     super();
   }
 
-  #timeRangeFreshener: PromiseFreshener<[EffectiveTimestamp, TimeRange]> =
-    new PromiseFreshener<[EffectiveTimestamp, TimeRange]>();
-
-  async onTimeRangeOrTimestamp(): Promise<void> {
-    if (this.model) {
-      // TODO: Avoid the need for `Promise.all`?
-      const fromFreshener = await this.#timeRangeFreshener.queue(
-        Promise.all([
-          this.model.effectiveTimestampProp.get(),
-          this.model.timeRangeProp.get(),
-        ]),
-      );
-      if (!fromFreshener.fresh) {
-        console.log("unfresh time range");
-        return;
-      }
-
-      const [effectiveTimestamp, timeRange] = fromFreshener.result;
-
-      // TODO: is this efficient enough?
-      const inputElem = await this.inputElem();
-      inputElem.min = timeRange.start.toString();
-      inputElem.max = timeRange.end.toString();
-      inputElem.value = effectiveTimestamp.timestamp.toString();
-    }
+  async onDetailedTimelineInfo(
+    detailedTimelineInfo: DetailedTimelineInfo,
+  ): Promise<void> {
+    // TODO: is this efficient enough?
+    const inputElem = await this.inputElem();
+    inputElem.min = detailedTimelineInfo.timeRange.start.toString();
+    inputElem.max = detailedTimelineInfo.timeRange.end.toString();
+    inputElem.value = detailedTimelineInfo.timestamp.toString();
   }
 
   async connectedCallback(): Promise<void> {
@@ -96,18 +77,8 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
       elem.type = "range";
 
       // console.log("1");
-      this.model?.timeRangeProp.addRawListener(
-        this.onTimeRangeOrTimestamp.bind(this),
-        {
-          initial: true,
-        },
-      );
-      // console.log("2");
-      this.model?.effectiveTimestampProp.addRawListener(
-        this.onTimeRangeOrTimestamp.bind(this),
-        {
-          initial: true,
-        },
+      this.model?.detailedTimelineInfoProp.addFreshListener(
+        this.onDetailedTimelineInfo.bind(this),
       );
       // console.log("3");
       elem.addEventListener("input", this.onInput.bind(this));

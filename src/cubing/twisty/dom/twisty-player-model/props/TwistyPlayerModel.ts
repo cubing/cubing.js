@@ -21,7 +21,7 @@ import { AlgTransformationProp } from "./depth-4/AlgTransformationProp";
 import { IndexerProp } from "./depth-4/IndexerProp";
 import { AnchoredStartProp } from "./depth-5/AnchoredStartProp";
 import { TimeRangeProp } from "./depth-5/TimeRangeProp";
-import { EffectiveTimestampProp } from "./depth-6/EffectiveTimestamp";
+import { DetailedTimelineInfoProp } from "./depth-6/EffectiveTimestamp";
 import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
 import { PositionProp } from "./depth-7/PositionProp";
 import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfo";
@@ -82,22 +82,23 @@ export class TwistyPlayerModel {
   });
 
   // Depth 6
-  effectiveTimestampProp: EffectiveTimestampProp = new EffectiveTimestampProp({
-    timestampRequest: this.timestampRequestProp,
-    timeRange: this.timeRangeProp,
-    setupAnchor: this.setupAnchorProp,
-  });
+  detailedTimelineInfoProp: DetailedTimelineInfoProp =
+    new DetailedTimelineInfoProp({
+      timestampRequest: this.timestampRequestProp,
+      timeRange: this.timeRangeProp,
+      setupAnchor: this.setupAnchorProp,
+    });
 
   // Depth 7
   positionProp: PositionProp = new PositionProp({
     anchoredStart: this.anchoredStartProp,
     indexer: this.indexerProp,
-    effectiveTimestamp: this.effectiveTimestampProp,
+    detailedTimelineInfo: this.detailedTimelineInfoProp,
     def: this.puzzleDefProp,
   });
 
   coarseTimelineInfoProp: CoarseTimelineInfoProp = new CoarseTimelineInfoProp({
-    effectiveTimestamp: this.effectiveTimestampProp,
+    detailedTimelineInfo: this.detailedTimelineInfoProp,
     playingInfo: this.playingProp,
   });
 
@@ -218,7 +219,7 @@ class PlayController {
   }
 
   async #effectiveTimestampMilliseconds(): Promise<MillisecondTimestamp> {
-    return (await this.model.effectiveTimestampProp.get()).timestamp;
+    return (await this.model.detailedTimelineInfoProp.get()).timestamp;
   }
 
   // TODO: Return the animation we've switched to.
@@ -249,7 +250,7 @@ class PlayController {
       return;
     }
 
-    if ((await this.model.effectiveTimestampProp.get()).atEnd) {
+    if ((await this.model.detailedTimelineInfoProp.get()).atEnd) {
       this.model.timestampRequestProp.set("start");
     }
     this.model.playingProp.set({ playing: true });
