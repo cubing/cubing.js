@@ -1,4 +1,5 @@
 import { Alg } from "../../../../../alg";
+import { arrayEquals } from "../equals";
 import { TwistyPropSource } from "../TwistyProp";
 
 export class AlgIssues {
@@ -38,9 +39,21 @@ export interface AlgWithIssues {
   issues: AlgIssues;
 }
 
+function algWithIssuesEquals(a1: AlgWithIssues, a2: AlgWithIssues): boolean {
+  return (
+    a1.alg.isIdentical(a2.alg) &&
+    arrayEquals(a1.issues.warnings, a2.issues.warnings) &&
+    arrayEquals(a1.issues.errors, a2.issues.errors)
+  );
+}
+
 export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
   getDefaultValue(): AlgWithIssues {
     return { alg: new Alg(), issues: new AlgIssues() };
+  }
+
+  canReuseValue(v1: AlgWithIssues, v2: AlgWithIssues) {
+    return algWithIssuesEquals(v1, v2);
   }
 
   async derive(newAlg: Alg | string): Promise<AlgWithIssues> {
