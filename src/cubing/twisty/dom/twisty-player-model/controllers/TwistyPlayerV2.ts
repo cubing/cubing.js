@@ -6,6 +6,8 @@ import type {
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { PuzzleID, SetupToLocation } from "../../TwistyPlayerConfig";
+import type { Cube3D } from "../heavy-code-imports/dynamic-entries/3d";
+import type { HintFaceletStyleWithAuto } from "../props/depth-1/HintFaceletProp";
 import { Twisty3DProp } from "../props/depth-8/Twisty3DProp";
 import {
   TwistyPlayerController,
@@ -62,6 +64,17 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
       },
     );
 
+    this.model.hintFaceletProp.addFreshListener(
+      async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
+        if ("experimentalUpdateOptions" in twisty3D) {
+          (twisty3D as Cube3D).experimentalUpdateOptions({
+            hintFacelets: hintFaceletStyle === "auto" ? "floating" : "none",
+          });
+          sceneWrapper.scheduleRender();
+        }
+      },
+    );
+
     scene.add(twisty3D);
 
     sceneWrapper.scheduleRender();
@@ -85,6 +98,10 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
   set timestamp(timestamp: MillisecondTimestamp) {
     this.model.timestampRequestProp.set(timestamp);
+  }
+
+  set hintFacelets(hintFaceletStyle: HintFaceletStyleWithAuto) {
+    this.model.hintFaceletProp.set(hintFaceletStyle);
   }
 }
 

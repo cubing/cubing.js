@@ -25,10 +25,12 @@ import { DetailedTimelineInfoProp } from "./depth-6/EffectiveTimestamp";
 import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
 import { PositionProp } from "./depth-7/PositionProp";
 import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfo";
+import { HintFaceletProp } from "./depth-1/HintFaceletProp";
 
 export class TwistyPlayerModel {
   // Depth 1
   algProp: AlgProp = new AlgProp();
+  hintFaceletProp: HintFaceletProp = new HintFaceletProp();
   indexerConstructor: IndexerConstructorProp = new IndexerConstructorProp();
   orbitCoordinatesProp: OrbitCoordinatesProp = new OrbitCoordinatesProp();
   playingProp: PlayingProp = new PlayingProp();
@@ -39,7 +41,6 @@ export class TwistyPlayerModel {
   // back-view // TODO
   // background // TODO
   // control-panel // TODO
-  // hint-facelets // TODO
   // stickering // TODO
   // visualization // TODO
 

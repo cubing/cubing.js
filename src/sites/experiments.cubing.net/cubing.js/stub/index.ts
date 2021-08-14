@@ -4,6 +4,7 @@
 import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayerV2 } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/TwistyPlayerV2";
 import {
+  hintFaceletStyles,
   PuzzleID,
   puzzleIDs,
   setupToLocations,
@@ -56,7 +57,11 @@ console.log("Loading stub file.");
     ["anchor", "anchor", setupToLocations],
     ["puzzle", "puzzle", puzzleIDs, puzzle],
     // ["visualization", "visualization", visualizationFormats],
-    // ["hintFacelets", "hint-facelets", hintFaceletStyles],
+    [
+      "hintFacelets",
+      "hint-facelets",
+      Object.assign({ auto: true }, hintFaceletStyles),
+    ],
     // [
     //   "experimentalStickering",
     //   "experimental-stickering",
