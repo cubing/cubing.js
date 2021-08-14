@@ -119,7 +119,7 @@ export abstract class TwistyPropParent<T> {
     this.addRawListener(callback, { initial: true });
   }
 
-  removeFreshListener(listener: () => void): void {
+  removeFreshListener(listener: (value: T) => void): void {
     if (this.#freshListeners.delete(listener)) {
       this.removeRawListener(this.#freshListeners.get(listener)!); // TODO: throw a custom error?
     }

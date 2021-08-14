@@ -21,3 +21,8 @@ export class RenderScheduler {
     this.callback(timestamp);
   }
 }
+
+// An interface for classes to use to expose their scheduling.
+export interface Schedulable {
+  scheduleRender(): void;
+}

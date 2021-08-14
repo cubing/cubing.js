@@ -1,15 +1,10 @@
 import type { ExperimentalStickering } from "../../..";
 import type { Alg } from "../../../../alg";
-import type {
-  MillisecondTimestamp,
-  PuzzlePosition,
-} from "../../../animation/cursor/CursorTypes";
+import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { PuzzleID, SetupToLocation } from "../../TwistyPlayerConfig";
-import type { Cube3D } from "../heavy-code-imports/dynamic-entries/3d";
 import type { HintFaceletStyleWithAuto } from "../props/depth-1/HintFaceletProp";
-import { Twisty3DProp } from "../props/depth-8/Twisty3DProp";
 import {
   TwistyPlayerController,
   TwistyPlayerModel,
@@ -34,7 +29,7 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
   }
 
   async connectedCallback(): Promise<void> {
-    const sceneWrapper = new Twisty3DSceneWrapper();
+    const sceneWrapper = new Twisty3DSceneWrapper(this.model);
     this.contentWrapper.appendChild(sceneWrapper);
 
     const vantage = new Twisty3DVantage(sceneWrapper);
@@ -52,44 +47,6 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
       "style",
       "width: 256px; height: 256px;",
     );
-
-    const twisty3DProp = new Twisty3DProp({ puzzleID: this.model.puzzleProp });
-
-    const scene = await sceneWrapper.scene();
-    const twisty3D = await twisty3DProp.get();
-
-    this.model.positionProp.addFreshListener(
-      async (position: PuzzlePosition) => {
-        twisty3D.onPositionChange(position);
-        sceneWrapper.scheduleRender();
-      },
-    );
-
-    this.model.hintFaceletProp.addFreshListener(
-      async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
-        if ("experimentalUpdateOptions" in twisty3D) {
-          (twisty3D as Cube3D).experimentalUpdateOptions({
-            hintFacelets:
-              hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
-          });
-          sceneWrapper.scheduleRender();
-        }
-      },
-    );
-
-    this.model.stickeringProp.addFreshListener(
-      async (stickering: ExperimentalStickering) => {
-        if ("setStickering" in twisty3D) {
-          (twisty3D as Cube3D).setStickering(stickering);
-          sceneWrapper.scheduleRender();
-        } else {
-          // TODO: create a prop to handle this.
-          console.error("Still need to connect PG3D appearance.");
-        }
-      },
-    );
-
-    scene.add(twisty3D);
 
     sceneWrapper.scheduleRender();
   }
