@@ -20,3 +20,28 @@ export class PromiseFreshener<T> {
     }
   }
 }
+
+// This will silenty drop a queued Promise (i.e. not resolve it) if a
+// newer queued one already resolved first. This is useful for classes that want
+// to know the "latest" state of something without jumping back to an older
+// value by accident.
+// TODO: Remove this because it's too easy to misuse?
+export class StaleDropper<T> {
+  #latestAssignedIdx = 0;
+  #latestResolvedIdx = 0;
+
+  queue(p: Promise<T>): Promise<T> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const idx = this.#latestAssignedIdx++;
+        const result = await p;
+        if (idx > this.#latestResolvedIdx) {
+          this.#latestResolvedIdx = idx;
+          resolve(result);
+        }
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+}

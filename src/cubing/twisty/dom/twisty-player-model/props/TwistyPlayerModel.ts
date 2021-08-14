@@ -7,13 +7,15 @@ import {
 } from "../../../animation/cursor/CursorTypes";
 import { RenderScheduler } from "../../../animation/RenderScheduler";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
-import { PromiseFreshener } from "../controllers/PromiseFreshener";
+import { StaleDropper } from "../controllers/PromiseFreshener";
 import { AlgProp } from "./depth-1/AlgProp";
+import { HintFaceletProp } from "./depth-1/HintFaceletProp";
 import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
 import { PlayingInfo, PlayingProp } from "./depth-1/PlayingProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { SetupAnchorProp } from "./depth-1/SetupAnchorProp";
+import { StickeringProp } from "./depth-1/StickeringProp";
 import { TimestampRequestProp } from "./depth-1/TimestampRequestProp";
 import { PuzzleDefProp } from "./depth-2/PuzzleDefProp";
 import { PuzzleAlgProp } from "./depth-3/PuzzleAlgProp";
@@ -22,11 +24,9 @@ import { IndexerProp } from "./depth-4/IndexerProp";
 import { AnchoredStartProp } from "./depth-5/AnchoredStartProp";
 import { TimeRangeProp } from "./depth-5/TimeRangeProp";
 import { DetailedTimelineInfoProp } from "./depth-6/EffectiveTimestamp";
-import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
-import { PositionProp } from "./depth-7/PositionProp";
 import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfo";
-import { HintFaceletProp } from "./depth-1/HintFaceletProp";
-import { StickeringProp } from "./depth-1/StickeringProp";
+import { PositionProp } from "./depth-7/PositionProp";
+import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
 
 export class TwistyPlayerModel {
   // Depth 1
@@ -271,9 +271,9 @@ class PlayController {
     this.model.playingProp.set({ playing: false });
   }
 
-  #animFrameEffectiveTimestampFreshener: PromiseFreshener<
+  #animFrameEffectiveTimestampStaleDropper: StaleDropper<
     [{ playing: boolean }, MillisecondTimestamp, TimeRange]
-  > = new PromiseFreshener<
+  > = new StaleDropper<
     [{ playing: boolean }, MillisecondTimestamp, TimeRange]
   >();
 
@@ -288,18 +288,15 @@ class PlayController {
 
     const lastDatestamp = this.lastDatestamp;
     const freshenerResult =
-      await this.#animFrameEffectiveTimestampFreshener.queue(
+      await this.#animFrameEffectiveTimestampStaleDropper.queue(
         Promise.all([
           this.model.playingProp.get(),
           this.lastTimestampPromise,
           this.model.timeRangeProp.get(),
         ]),
       );
-    if (!freshenerResult.fresh) {
-      return;
-    }
 
-    const [playing, lastTimestamp, timeRange] = freshenerResult.result;
+    const [playing, lastTimestamp, timeRange] = freshenerResult;
 
     // TODO: Get this without wasting time on the others?
     if (playing.playing === false) {

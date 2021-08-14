@@ -1,5 +1,5 @@
 import PLazy from "../../../../vendor/p-lazy";
-import { PromiseFreshener } from "../controllers/PromiseFreshener";
+import { StaleDropper } from "../controllers/PromiseFreshener";
 import { addDebugger } from "./TwistyPropDebugger";
 
 type InputProps<T extends Object> = {
@@ -110,13 +110,10 @@ export abstract class TwistyPropParent<T> {
   #freshListeners: Map<(value: T) => void, () => void> = new Map();
   // TODO: Pick a better name.
   addFreshListener(listener: (value: T) => void) {
-    const promiseFreshener: PromiseFreshener<T> = new PromiseFreshener<T>();
+    const staleDropper: StaleDropper<T> = new StaleDropper<T>();
     const callback = async () => {
-      const fromQueue = await promiseFreshener.queue(this.get());
-      if (!fromQueue.fresh) {
-        return;
-      }
-      listener(fromQueue.result);
+      const result = await staleDropper.queue(this.get());
+      listener(result);
     };
     this.#freshListeners.set(listener, callback);
     this.addRawListener(callback, { initial: true });
