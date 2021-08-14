@@ -43,6 +43,7 @@ export class Twisty3DSceneWrapper
   #currentTwisty3DPuzzleWrapper: Twisty3DPuzzleWrapper | null = null;
   #staleTwisty3DPuzzleWrappers: Twisty3DPuzzleWrapper[] = []; // TODO: Animate these out.
 
+  // TODO: Why doesn't this work?
   #twisty3DStaleDropper: StaleDropper<[ThreeScene, Twisty3DPuzzleWrapper]> =
     new StaleDropper<[ThreeScene, Twisty3DPuzzleWrapper]>();
 
@@ -54,29 +55,30 @@ export class Twisty3DSceneWrapper
       old.disconnect();
     }
     const [scene, twisty3DPuzzleWrapper] =
-      // await this.#twisty3DStaleDropper.queue( // TODO: Why doesn't this work?
+      // await this.#twisty3DStaleDropper.queue(
       await Promise.all([
         this.scene(),
-        Twisty3DPuzzleWrapper.fromPuzzleID(
-          this.model!,
-          this,
-          puzzle,
-          this.model!.positionProp.get(),
-        ), // TODO
+        new Twisty3DPuzzleWrapper(this.model!, this, puzzle), // TODO
       ]);
     // );
     console.log({ twisty3DPuzzleWrapper });
     if (old) {
       this.#staleTwisty3DPuzzleWrappers.push(old);
-      scene.remove(old.twisty3D);
+      (async () => {
+        // TODO: Make this more convenient and avoid a flash of missing puzzle.
+        scene.remove(await old.twisty3DPuzzle());
+        this.scheduleRender();
+      })();
       // old.disconnect();
-      this.scheduleRender();
     }
     this.#currentTwisty3DPuzzleWrapper = twisty3DPuzzleWrapper;
 
     // Go!
-    scene.add(twisty3DPuzzleWrapper.twisty3D);
-    this.scheduleRender();
+    (async () => {
+      // TODO: Make this more convenient and avoid a flash of missing puzzle.
+      scene.add(await twisty3DPuzzleWrapper.twisty3DPuzzle());
+      this.scheduleRender();
+    })();
   }
 }
 

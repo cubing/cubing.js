@@ -10,12 +10,16 @@ import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import type { TwistyPropParent } from "../props/TwistyProp";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {
-  private constructor(
+  constructor(
     private model: TwistyPlayerModel,
     public schedulable: Schedulable,
-    public twisty3D: Twisty3DPuzzle,
+    private puzzleID: PuzzleID,
   ) {
+    this.twisty3DPuzzle(); // Start constructing.
+
     let disconnected = false;
+    // TODO: Hook up listeners before loading the heavy code in the async constructor, so we get any intermediate updates?
+    // Repro: Switch to 40x40x40 a fraction of a second before animation finishes. When it's loaded the itmeline is at the end, but the 40x40x40 is rendered with an earlier position.
     const addListener = <T>(
       prop: TwistyPropParent<T>,
       listener: (value: T) => void,
@@ -34,7 +38,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         // TODO: wait what?
         return;
       }
-      twisty3D.onPositionChange(position);
+      (await this.twisty3DPuzzle()).onPositionChange(position);
       this.scheduleRender();
     });
 
@@ -46,8 +50,8 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           // TODO: wait what?
           return;
         }
-        if ("experimentalUpdateOptions" in twisty3D) {
-          (twisty3D as Cube3D).experimentalUpdateOptions({
+        if ("experimentalUpdateOptions" in (await this.twisty3DPuzzle())) {
+          ((await this.twisty3DPuzzle()) as Cube3D).experimentalUpdateOptions({
             hintFacelets:
               hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
           });
@@ -63,8 +67,8 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           // TODO: wait what?
           return;
         }
-        if ("setStickering" in twisty3D) {
-          (twisty3D as Cube3D).setStickering(stickering);
+        if ("setStickering" in (await this.twisty3DPuzzle())) {
+          ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
           this.scheduleRender();
         } else {
           // TODO: create a prop to handle this.
@@ -85,31 +89,16 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     this.schedulable.scheduleRender();
   }
 
-  static async fromPuzzleID(
-    model: TwistyPlayerModel,
-    schedulable: Schedulable,
-    puzzleID: PuzzleID,
-    positionPromise: Promise<PuzzlePosition>,
-  ): Promise<Twisty3DPuzzleWrapper> {
-    const [proxy, position] = await Promise.all([proxy3D(), positionPromise]);
-    switch (puzzleID) {
-      case "3x3x3":
-        const twisty3D = new Twisty3DPuzzleWrapper(
-          model,
-          schedulable,
-          await proxy.cube3DShim(),
-        );
-        twisty3D.twisty3D.onPositionChange(position);
-        return twisty3D;
-      default: {
-        const twisty3D = new Twisty3DPuzzleWrapper(
-          model,
-          schedulable,
-          await proxy.pg3dShim(puzzleID),
-        );
-        twisty3D.twisty3D.onPositionChange(position);
-        return twisty3D;
+  #cachedTwisty3DPuzzle: Promise<Twisty3DPuzzle> | null = null;
+  async twisty3DPuzzle(): Promise<Twisty3DPuzzle> {
+    return (this.#cachedTwisty3DPuzzle ??= (async () => {
+      const proxy = await proxy3D();
+      switch (this.puzzleID) {
+        case "3x3x3":
+          return proxy.cube3DShim();
+        default:
+          return proxy.pg3dShim(this.puzzleID);
       }
-    }
+    })());
   }
 }

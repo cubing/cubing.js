@@ -66,24 +66,28 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     }
 
     let str: string;
-    if (typeof value === "undefined") {
-      str = "(undefined)";
-    } else if (isAlgIssues(value)) {
-      str = JSON.stringify({
-        alg: value.alg.toString(),
-        issues: value.issues,
-      }).slice(0, 100);
-    } else {
-      const str1 = JSON.stringify(value);
-      if (typeof str1 === "undefined") {
-        if (value.name) {
-          str = `${value.name} (constructor)`;
-        } else {
-          str = "(undefined)";
-        }
+    try {
+      if (typeof value === "undefined") {
+        str = "(undefined)";
+      } else if (isAlgIssues(value)) {
+        str = JSON.stringify({
+          alg: value.alg.toString(),
+          issues: value.issues,
+        }).slice(0, 100);
       } else {
-        str = str1.slice(0, 100);
+        const str1 = JSON.stringify(value);
+        if (typeof str1 === "undefined") {
+          if (value.name) {
+            str = `${value.name} (constructor)`;
+          } else {
+            str = "(undefined)";
+          }
+        } else {
+          str = str1.slice(0, 100);
+        }
       }
+    } catch (e) {
+      str = "(can't be serialized)";
     }
 
     if (this.valueElem) {
