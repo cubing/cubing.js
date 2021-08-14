@@ -62,11 +62,18 @@ export class Twisty3DSceneWrapper
       ]);
     // );
     console.log({ twisty3DPuzzleWrapper });
+
+    const newTwisty3DPuzzlePromise = twisty3DPuzzleWrapper.twisty3DPuzzle();
+
     if (old) {
       this.#staleTwisty3DPuzzleWrappers.push(old);
       (async () => {
         // TODO: Make this more convenient and avoid a flash of missing puzzle.
-        scene.remove(await old.twisty3DPuzzle());
+        const [oldTwisty3DPuzzle, _] = await Promise.all([
+          old.twisty3DPuzzle(),
+          newTwisty3DPuzzlePromise, // We don't remove until the new puzzle is ready.
+        ]);
+        scene.remove(oldTwisty3DPuzzle);
         this.scheduleRender();
       })();
       // old.disconnect();
@@ -76,7 +83,7 @@ export class Twisty3DSceneWrapper
     // Go!
     (async () => {
       // TODO: Make this more convenient and avoid a flash of missing puzzle.
-      scene.add(await twisty3DPuzzleWrapper.twisty3DPuzzle());
+      scene.add(await newTwisty3DPuzzlePromise);
       this.scheduleRender();
     })();
   }
