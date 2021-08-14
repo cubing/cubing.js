@@ -86,18 +86,21 @@ export abstract class TwistyPropParent<T> {
   }
 
   #scheduleDispatch(): void {
-    this.#dispatchPending = true;
-    setTimeout(() => this.#dispatchListeners(), 0);
+    if (!this.#dispatchPending) {
+      this.#dispatchPending = true;
+      setTimeout(() => this.#dispatchListeners(), 0);
+    }
   }
 
   #dispatchPending: boolean = false;
   #dispatchListeners(): void {
-    if (this.#dispatchPending) {
-      for (const listener of this.#listeners) {
-        listener(); // TODO: wrap in a try?
-      }
-      this.#dispatchPending = false;
+    if (!this.#dispatchPending) {
+      throw new Error("Invalid dispatch state!");
     }
+    for (const listener of this.#listeners) {
+      listener(); // TODO: wrap in a try?
+    }
+    this.#dispatchPending = false;
   }
 }
 
