@@ -30,6 +30,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
 
     addListener(this.model.positionProp, async (position: PuzzlePosition) => {
       if (disconnected) {
+        console.log("disconnnencnteerje?!?");
         // TODO: wait what?
         return;
       }
@@ -41,6 +42,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       this.model.hintFaceletProp,
       async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
         if (disconnected) {
+          console.log("disconnnencnteerje?!?");
           // TODO: wait what?
           return;
         }
@@ -57,6 +59,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       this.model.stickeringProp,
       async (stickering: ExperimentalStickering) => {
         if (disconnected) {
+          console.log("disconnnencnteerje?!?");
           // TODO: wait what?
           return;
         }
