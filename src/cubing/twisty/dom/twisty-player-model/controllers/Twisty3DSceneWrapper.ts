@@ -48,7 +48,6 @@ export class Twisty3DSceneWrapper
     new StaleDropper<[ThreeScene, Twisty3DPuzzleWrapper]>();
 
   async onPuzzle(puzzle: PuzzleID): Promise<void> {
-    console.log("foosy");
     this.#currentTwisty3DPuzzleWrapper?.disconnect();
     const old = this.#currentTwisty3DPuzzleWrapper;
     if (old) {
@@ -61,7 +60,6 @@ export class Twisty3DSceneWrapper
         new Twisty3DPuzzleWrapper(this.model!, this, puzzle), // TODO
       ]);
     // );
-    console.log({ twisty3DPuzzleWrapper });
 
     const newTwisty3DPuzzlePromise = twisty3DPuzzleWrapper.twisty3DPuzzle();
 

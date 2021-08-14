@@ -80,12 +80,11 @@ canvas {
       camera.position.copy(new (await THREEJS).Vector3(2, 4, 4));
       camera.lookAt(0, 0, 0);
       // TODO: `TwistyOrbitControls` breaks isolateion
-      const orbitControls = new TwistyOrbitControls(
+      new TwistyOrbitControls(
         camera,
         await this.canvas(),
         this.scheduleRender.bind(this),
       );
-      console.log({ orbitControls });
       return camera;
     })());
   }

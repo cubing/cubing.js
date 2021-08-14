@@ -246,7 +246,6 @@ class PlayController {
   }
 
   async play(): Promise<void> {
-    console.log("play", this.playing);
     if (this.playing) {
       return;
     }
@@ -281,10 +280,6 @@ class PlayController {
     if (this.playing) {
       this.scheduler.requestAnimFrame();
     }
-    // console.log("animFrame", this.playing);
-    // if (!this.playing) {
-    //   return;
-    // }
 
     const lastDatestamp = this.lastDatestamp;
     const freshenerResult =

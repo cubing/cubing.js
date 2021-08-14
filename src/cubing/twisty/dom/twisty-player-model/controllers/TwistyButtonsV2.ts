@@ -27,7 +27,6 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
     public controller?: TwistyPlayerController,
   ) {
     super();
-    console.log({ model, controller });
   }
 
   connectedCallback(): void {
@@ -56,7 +55,6 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
       case "play-step-backwards":
         break;
       case "play-pause":
-        console.log("play-pause!", this.controller);
         this.controller?.playPause();
         break;
       case "play-step":
