@@ -1,17 +1,18 @@
 import type { PerspectiveCamera, WebGLRenderer } from "three";
 import { Stats } from "../../../../vendor/three/examples/jsm/libs/stats.module.js";
+import { DEGREES_PER_RADIAN } from "../../../3D/TAU.js";
 import { RenderScheduler } from "../../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import { pixelRatio } from "../../viewers/canvas";
 import { twisty3DCanvasCSS } from "../../viewers/Twisty3DCanvas.css_.js";
-import { TwistyOrbitControls } from "../../viewers/TwistyOrbitControls";
 import { THREEJS } from "../heavy-code-imports/3d";
 import type { OrbitCoordinatesV2 } from "../props/depth-1/OrbitCoordinatesRequestProp.js";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel.js";
 import type { TwistyPropParent } from "../props/TwistyProp.js";
 import { StaleDropper } from "./PromiseFreshener.js";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
+import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2.js";
 
 let SHOW_STATS = false;
 
@@ -122,23 +123,36 @@ export class Twisty3DVantage extends ManagedCustomElement {
     })());
   }
 
-  #cachedOrbitControls: Promise<TwistyOrbitControls> | null = null;
-  async orbitControls(): Promise<TwistyOrbitControls> {
+  #cachedOrbitControls: Promise<TwistyOrbitControlsV2> | null = null;
+  async orbitControls(): Promise<TwistyOrbitControlsV2> {
     return (this.#cachedOrbitControls ??= (async () => {
-      const orbitControls = new TwistyOrbitControls(
-        await this.camera(),
+      const orbitControls = new TwistyOrbitControlsV2(
+        this.model!,
+        !!this.options?.backView,
         await this.canvas(),
-        this.scheduleRender.bind(this),
       );
 
       if (this.model) {
-        console.log("orbitcytsi!");
         this.addListener(
           this.model.orbitCoordinatesProp,
-          (orbitCoordinates: OrbitCoordinatesV2) => {
-            orbitControls.latitude = orbitCoordinates.latitude;
-            orbitControls.longitude = orbitCoordinates.longitude;
-            orbitControls.distance = orbitCoordinates.distance;
+          async (orbitCoordinates: OrbitCoordinatesV2) => {
+            const spherical = new (await THREEJS).Spherical(
+              orbitCoordinates.distance,
+              (90 -
+                (this.options?.backView ? -1 : 1) * orbitCoordinates.latitude) /
+                DEGREES_PER_RADIAN,
+              ((this.options?.backView ? 180 : 0) +
+                orbitCoordinates.longitude) /
+                DEGREES_PER_RADIAN,
+            );
+            spherical.makeSafe();
+
+            const camera = await this.camera();
+
+            // TODO: Wrap in StaleDropper?
+            camera.position.setFromSpherical(spherical);
+            camera.lookAt(0, 0, 0);
+            this.scheduleRender();
           },
         );
       }

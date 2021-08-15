@@ -21,9 +21,9 @@ export function orbitCoordinatesEqual(
 
 // TOOD: Check if freezing affects perf.
 const DEFAULT_COORDINATES = Object.freeze({
-  latitude: 0,
-  longitude: 0,
-  distance: 5,
+  latitude: 35,
+  longitude: 30,
+  distance: 6,
 });
 
 // TODO: Built-in latitude locking.
