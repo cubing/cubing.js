@@ -1,14 +1,13 @@
-import type { Camera, PerspectiveCamera, Renderer } from "three";
+import type { PerspectiveCamera, WebGLRenderer } from "three";
 import { Stats } from "../../../../vendor/three/examples/jsm/libs/stats.module.js";
 import { RenderScheduler } from "../../../animation/RenderScheduler";
-import {
-  CSSSource,
-  ManagedCustomElement,
-} from "../../element/ManagedCustomElement";
+import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import { pixelRatio } from "../../viewers/canvas";
+import { twisty3DCanvasCSS } from "../../viewers/Twisty3DCanvas.css_.js";
 import { TwistyOrbitControls } from "../../viewers/TwistyOrbitControls";
 import { THREEJS } from "../heavy-code-imports/3d";
+import { StaleDropper } from "./PromiseFreshener.js";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 
 let SHOW_STATS = true;
@@ -34,25 +33,52 @@ export class Twisty3DVantage extends ManagedCustomElement {
   }
 
   async connectedCallback(): Promise<void> {
-    this.addCSS(
-      new CSSSource(`
-:host {
-  width: 256px;
-  height: 256px;
-  overflow: hidden;
-}
-
-canvas {
-  width: 100%;
-  height: 100%;
-}
-`),
-    );
+    this.addCSS(twisty3DCanvasCSS);
     this.addElement(await this.canvas());
+
+    this.#onResize();
+    const observer = new ResizeObserver(this.#onResize.bind(this));
+    observer.observe(this.contentWrapper);
   }
 
-  #cachedRenderer: Promise<Renderer> | null = null;
-  async renderer(): Promise<Renderer> {
+  #onResizeStaleDropper = new StaleDropper<
+    [PerspectiveCamera, WebGLRenderer]
+  >();
+
+  // TODO: Why doesn't this work for the top-right back view height?
+  async #onResize(): Promise<void> {
+    const [camera, renderer] = await this.#onResizeStaleDropper.queue(
+      Promise.all([this.camera(), this.renderer()]),
+    );
+
+    const w = this.contentWrapper.clientWidth;
+    const h = this.contentWrapper.clientHeight;
+    let off = 0;
+    let yoff = 0;
+    let excess = 0;
+    if (h > w) {
+      excess = h - w;
+      yoff = -Math.floor(0.5 * excess);
+    }
+    camera.aspect = w / h;
+    camera.setViewOffset(w, h - excess, off, yoff, w, h);
+    camera.updateProjectionMatrix(); // TODO
+
+    // if (this.rendererIsShared) {
+    //   canvas.width = w * pixelRatio();
+    //   canvas.height = h * pixelRatio();
+    //   canvas.style.width = w.toString();
+    //   canvas.style.height = w.toString();
+    // } else {
+    renderer.setPixelRatio(pixelRatio());
+    renderer.setSize(w, h, true);
+    // }
+
+    this.scheduleRender();
+  }
+
+  #cachedRenderer: Promise<WebGLRenderer> | null = null;
+  async renderer(): Promise<WebGLRenderer> {
     return (this.#cachedRenderer ??= (async () => {
       const rendererConstructor = (await THREEJS).WebGLRenderer;
       const renderer = new rendererConstructor({
@@ -72,7 +98,7 @@ canvas {
   }
 
   #cachedCamera: Promise<PerspectiveCamera> | null = null;
-  async camera(): Promise<Camera> {
+  async camera(): Promise<PerspectiveCamera> {
     return (this.#cachedCamera ??= (async () => {
       const camera = new (await THREEJS).PerspectiveCamera(
         20,

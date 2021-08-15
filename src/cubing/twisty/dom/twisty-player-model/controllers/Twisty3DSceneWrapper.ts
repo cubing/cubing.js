@@ -36,12 +36,6 @@ export class Twisty3DSceneWrapper
   async connectedCallback(): Promise<void> {
     const vantage = new Twisty3DVantage(this);
     this.contentWrapper.appendChild(vantage);
-    // vantage.setAttribute("style", "width: 256px; height: 256px;");
-    // (await vantage.scene!).setAttribute(
-    //   "style",
-    //   "width: 256px; height: 256px;",
-    // );
-
     this.scheduleRender();
   }
 
