@@ -1,3 +1,4 @@
+import { twistyScrubberCSS } from "../../controls/TwistyScrubber.css_";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { DetailedTimelineInfo } from "../props/depth-6/DetailedTimelineInfoProp";
@@ -66,6 +67,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
   }
 
   async connectedCallback(): Promise<void> {
+    this.addCSS(twistyScrubberCSS);
     this.addElement(await this.inputElem());
   }
 
