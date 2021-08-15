@@ -18,7 +18,10 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
   stats: Stats | null = null;
 
-  constructor(scene?: Twisty3DSceneWrapper) {
+  constructor(
+    scene?: Twisty3DSceneWrapper,
+    private options?: { backView?: boolean },
+  ) {
     super();
     this.scene = scene ?? null;
     this.scene?.addVantage(this); // TODO
@@ -77,7 +80,11 @@ canvas {
         0.1,
         20,
       );
-      camera.position.copy(new (await THREEJS).Vector3(2, 4, 4));
+      camera.position.copy(
+        new (await THREEJS).Vector3(2, 4, 4).multiplyScalar(
+          this.options?.backView ? -1 : 1,
+        ),
+      );
       camera.lookAt(0, 0, 0);
       // TODO: `TwistyOrbitControls` breaks isolateion
       new TwistyOrbitControls(

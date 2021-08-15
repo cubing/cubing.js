@@ -10,6 +10,7 @@ import {
   puzzleIDs,
   setupToLocations,
 } from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
+import { backViewLayouts } from "../../../../cubing/twisty/dom/viewers/TwistyViewerWrapper";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
@@ -68,7 +69,7 @@ console.log("Loading stub file.");
     // ["background", "background", backgroundThemes],
     // ["controlPanel", "control-panel", controlsLocations],
 
-    // ["backView", "back-view", backViewLayouts],
+    ["backView", "back-view", Object.assign({ auto: true }, backViewLayouts)],
     // [
     //   "experimentalCameraLatitudeLimits",
     //   "experimental-camera-latitude-limits",

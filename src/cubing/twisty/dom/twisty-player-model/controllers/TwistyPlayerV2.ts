@@ -4,13 +4,13 @@ import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { PuzzleID, SetupToLocation } from "../../TwistyPlayerConfig";
+import type { BackViewLayoutWithAuto } from "../props/depth-1/BackViewProp";
 import type { HintFaceletStyleWithAuto } from "../props/depth-1/HintFaceletProp";
 import {
   TwistyPlayerController,
   TwistyPlayerModel,
 } from "../props/TwistyPlayerModel";
 import { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
-import { Twisty3DVantage } from "./Twisty3DVantage";
 import { TwistyButtonsV2 } from "./TwistyButtonsV2";
 import { TwistyScrubberV2 } from "./TwistyScrubberV2";
 
@@ -32,9 +32,6 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     const sceneWrapper = new Twisty3DSceneWrapper(this.model);
     this.contentWrapper.appendChild(sceneWrapper);
 
-    const vantage = new Twisty3DVantage(sceneWrapper);
-    this.contentWrapper.appendChild(vantage);
-
     const scrubber = new TwistyScrubberV2(this.model);
     this.contentWrapper.appendChild(scrubber);
 
@@ -42,13 +39,6 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     this.contentWrapper.appendChild(this.buttons);
 
     sceneWrapper.setAttribute("style", "width: 256px; height: 256px;");
-    vantage.setAttribute("style", "width: 256px; height: 256px;");
-    (await vantage.scene!).setAttribute(
-      "style",
-      "width: 256px; height: 256px;",
-    );
-
-    sceneWrapper.scheduleRender();
   }
 
   set alg(newAlg: Alg | string) {
@@ -107,6 +97,14 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
   get stickering(): never {
     throw new Error("Cannot get `.stickering` directly from a `TwistyPlayer`.");
+  }
+
+  set backView(backView: BackViewLayoutWithAuto) {
+    this.model.backViewProp.set(backView);
+  }
+
+  get backView(): never {
+    throw new Error("Cannot get `.backView` directly from a `TwistyPlayer`.");
   }
 }
 

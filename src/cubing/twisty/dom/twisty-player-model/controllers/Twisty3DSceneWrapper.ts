@@ -3,11 +3,12 @@ import type { Schedulable } from "../../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
+import type { BackViewLayout } from "../../viewers/TwistyViewerWrapper";
 import { THREEJS } from "../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { StaleDropper } from "./PromiseFreshener";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
-import type { Twisty3DVantage } from "./Twisty3DVantage";
+import { Twisty3DVantage } from "./Twisty3DVantage";
 
 export class Twisty3DSceneWrapper
   extends ManagedCustomElement
@@ -16,9 +17,43 @@ export class Twisty3DSceneWrapper
   constructor(public model?: TwistyPlayerModel) {
     super();
     this.model?.puzzleProp.addFreshListener(this.onPuzzle.bind(this));
+    this.model?.backViewProp.addFreshListener(this.onBackView.bind(this));
   }
 
-  async connectedCallback(): Promise<void> {}
+  async connectedCallback(): Promise<void> {
+    const vantage = new Twisty3DVantage(this);
+    this.contentWrapper.appendChild(vantage);
+    vantage.setAttribute("style", "width: 256px; height: 256px;");
+    (await vantage.scene!).setAttribute(
+      "style",
+      "width: 256px; height: 256px;",
+    );
+
+    this.scheduleRender();
+  }
+
+  #backViewVantage: Twisty3DVantage | null = null;
+  setBackView(backView: BackViewLayout): void {
+    const shouldHaveBackView = ["side-by-side", "top-right"].includes(backView);
+    const hasBackView = this.#backViewVantage !== null;
+    if (shouldHaveBackView) {
+      if (!hasBackView) {
+        this.#backViewVantage = new Twisty3DVantage(this, { backView: true });
+        this.contentWrapper.appendChild(this.#backViewVantage);
+        this.scheduleRender();
+      }
+    } else {
+      if (this.#backViewVantage) {
+        this.#backViewVantage.remove();
+        this.removeVantage(this.#backViewVantage);
+        this.#backViewVantage = null;
+      }
+    }
+  }
+
+  onBackView(backView: BackViewLayout): void {
+    this.setBackView(backView);
+  }
 
   #cachedScene: Promise<ThreeScene> | null;
   async scene(): Promise<ThreeScene> {
