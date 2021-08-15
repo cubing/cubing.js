@@ -70,12 +70,14 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           this.scheduleRender();
         } else {
           // TODO: create a prop to handle this.
-          const [twisty3D, appearancePromise] = await Promise.all([
-            this.twisty3DPuzzle(),
-            puzzles[puzzleID]!.appearance!(stickering ?? "full"),
-          ]);
-          (twisty3D as PG3D).experimentalSetAppearance(appearancePromise);
-          this.scheduleRender();
+          if ("appearance" in puzzles[puzzleID]!) {
+            const [twisty3D, appearancePromise] = await Promise.all([
+              this.twisty3DPuzzle(),
+              puzzles[puzzleID]!.appearance!(stickering ?? "full"),
+            ]);
+            (twisty3D as PG3D).experimentalSetAppearance(appearancePromise);
+            this.scheduleRender();
+          }
         }
       },
     );
