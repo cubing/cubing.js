@@ -296,41 +296,21 @@ class PlayController {
     // TODO: Get this without wasting time on the others?
     if (playing.playing === false) {
       this.playing = false;
-      // TODO
+      // TODO: Ideally we'd cancel the anim frame from the top of this method.
+      // But `this.scheduler.cancelAnimFrame();` might accidentally cancel a
+      // legit freshly scheduled frame. We should modify `RenderScheduler` to
+      // either have individually cancellable requests, or to have something
+      // like a "default" anim frame re-request that can be canceled separately.
+      //
+      // Note that we can't wait until here to call
+      // `this.scheduler.requestAnimFrame();`, because that would slow down the
+      // frame rate.
       return;
     }
-    // console.log({ frameDatestamp });
 
     const delta =
       (frameDatestamp - lastDatestamp) * directionScalar(this.direction);
-
-    // const recheckTimestamp = freshenerResult.result;
-
-    // if (false && recheckTimestamp !== lastTimestamp) {
-    //   console.log(
-    //     new Error(
-    //       "Looks like something updated the timestamp outside the animation!",
-    //     ),
-    //   );
-    //   this.pause();
-    //   this.model.playingProp.set({ playing: false });
-    //   // TODO: Listen for timestamp updates not caused by us, so that the anim frame is never run.
-    //   // That would turn this code path into an error case.
-    //   return;
-    // }
-
-    // TODO: Don't animate past end.
-
     let newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
-    // console.log({
-    //   lastTimestamp,
-    //   newTimestamp,
-    //   frameDatestamp,
-    //   lastDatestamp: this.lastDatestamp,
-    // });
-
-    // console.log(newTimestamp, timeRange.end);
-
     if (newTimestamp >= timeRange.end) {
       newTimestamp = timeRange.end;
       this.model.timestampRequestProp.set("end");
@@ -339,7 +319,6 @@ class PlayController {
     }
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
-    // console.log("setting timestamp", newTimestamp);
     this.model.timestampRequestProp.set(newTimestamp);
   }
 }
