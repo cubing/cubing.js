@@ -1,10 +1,13 @@
 import type { Scene as ThreeScene } from "three";
 import type { Schedulable } from "../../../animation/RenderScheduler";
+import { ClassListManager } from "../../element/ClassListManager";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
 import type { BackViewLayout } from "../../viewers/TwistyViewerWrapper";
+import { twistyViewerWrapperCSS } from "../../viewers/TwistyViewerWrapper.css_";
 import { THREEJS } from "../heavy-code-imports/3d";
+import type { BackViewLayoutWithAuto } from "../props/depth-1/BackViewProp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { StaleDropper } from "./PromiseFreshener";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
@@ -14,20 +17,30 @@ export class Twisty3DSceneWrapper
   extends ManagedCustomElement
   implements Schedulable
 {
+  #backViewClassListManager: ClassListManager<BackViewLayoutWithAuto> =
+    new ClassListManager(this, "back-view-", [
+      "auto",
+      "none",
+      "side-by-side",
+      "top-right",
+    ]);
+
   constructor(public model?: TwistyPlayerModel) {
     super();
     this.model?.puzzleProp.addFreshListener(this.onPuzzle.bind(this));
     this.model?.backViewProp.addFreshListener(this.onBackView.bind(this));
+
+    this.addCSS(twistyViewerWrapperCSS);
   }
 
   async connectedCallback(): Promise<void> {
     const vantage = new Twisty3DVantage(this);
     this.contentWrapper.appendChild(vantage);
-    vantage.setAttribute("style", "width: 256px; height: 256px;");
-    (await vantage.scene!).setAttribute(
-      "style",
-      "width: 256px; height: 256px;",
-    );
+    // vantage.setAttribute("style", "width: 256px; height: 256px;");
+    // (await vantage.scene!).setAttribute(
+    //   "style",
+    //   "width: 256px; height: 256px;",
+    // );
 
     this.scheduleRender();
   }
@@ -36,6 +49,8 @@ export class Twisty3DSceneWrapper
   setBackView(backView: BackViewLayout): void {
     const shouldHaveBackView = ["side-by-side", "top-right"].includes(backView);
     const hasBackView = this.#backViewVantage !== null;
+
+    this.#backViewClassListManager.setValue(backView);
     if (shouldHaveBackView) {
       if (!hasBackView) {
         this.#backViewVantage = new Twisty3DVantage(this, { backView: true });
