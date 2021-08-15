@@ -33,8 +33,8 @@ export class Twisty3DSceneWrapper
 
   async connectedCallback(): Promise<void> {
     this.addCSS(twistyViewerWrapperCSS);
-    const vantage = new Twisty3DVantage(this);
-    this.contentWrapper.appendChild(vantage);
+    const vantage = new Twisty3DVantage(this.model, this);
+    this.addVantage(vantage);
     this.scheduleRender();
   }
 
@@ -46,13 +46,14 @@ export class Twisty3DSceneWrapper
     this.#backViewClassListManager.setValue(backView);
     if (shouldHaveBackView) {
       if (!hasBackView) {
-        this.#backViewVantage = new Twisty3DVantage(this, { backView: true });
-        this.contentWrapper.appendChild(this.#backViewVantage);
+        this.#backViewVantage = new Twisty3DVantage(this.model, this, {
+          backView: true,
+        });
+        this.addVantage(this.#backViewVantage);
         this.scheduleRender();
       }
     } else {
       if (this.#backViewVantage) {
-        this.#backViewVantage.remove();
         this.removeVantage(this.#backViewVantage);
         this.#backViewVantage = null;
       }
@@ -71,10 +72,13 @@ export class Twisty3DSceneWrapper
   #vantages: Set<Twisty3DVantage> = new Set();
   addVantage(vantage: Twisty3DVantage) {
     this.#vantages.add(vantage);
+    this.contentWrapper.appendChild(vantage);
   }
 
   removeVantage(vantage: Twisty3DVantage) {
     this.#vantages.delete(vantage);
+    vantage.remove();
+    vantage.disconnect();
   }
 
   scheduleRender(): void {

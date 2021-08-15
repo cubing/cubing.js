@@ -7,6 +7,9 @@ import { pixelRatio } from "../../viewers/canvas";
 import { twisty3DCanvasCSS } from "../../viewers/Twisty3DCanvas.css_.js";
 import { TwistyOrbitControls } from "../../viewers/TwistyOrbitControls";
 import { THREEJS } from "../heavy-code-imports/3d";
+import type { OrbitCoordinatesV2 } from "../props/depth-1/OrbitCoordinatesRequestProp.js";
+import type { TwistyPlayerModel } from "../props/TwistyPlayerModel.js";
+import type { TwistyPropParent } from "../props/TwistyProp.js";
 import { StaleDropper } from "./PromiseFreshener.js";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 
@@ -18,12 +21,12 @@ export class Twisty3DVantage extends ManagedCustomElement {
   stats: Stats | null = null;
 
   constructor(
+    private model?: TwistyPlayerModel,
     scene?: Twisty3DSceneWrapper,
     private options?: { backView?: boolean },
   ) {
     super();
     this.scene = scene ?? null;
-    this.scene?.addVantage(this); // TODO
 
     if (SHOW_STATS) {
       this.stats = Stats();
@@ -39,6 +42,8 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.#onResize();
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
+    this.orbitControls(); // TODO
+    this.scheduleRender();
   }
 
   #onResizeStaleDropper = new StaleDropper<
@@ -113,13 +118,52 @@ export class Twisty3DVantage extends ManagedCustomElement {
       );
       camera.lookAt(0, 0, 0);
       // TODO: `TwistyOrbitControls` breaks isolateion
-      new TwistyOrbitControls(
-        camera,
+      return camera;
+    })());
+  }
+
+  #cachedOrbitControls: Promise<TwistyOrbitControls> | null = null;
+  async orbitControls(): Promise<TwistyOrbitControls> {
+    return (this.#cachedOrbitControls ??= (async () => {
+      const orbitControls = new TwistyOrbitControls(
+        await this.camera(),
         await this.canvas(),
         this.scheduleRender.bind(this),
       );
-      return camera;
+
+      if (this.model) {
+        console.log("orbitcytsi!");
+        this.addListener(
+          this.model.orbitCoordinatesProp,
+          (orbitCoordinates: OrbitCoordinatesV2) => {
+            orbitControls.latitude = orbitCoordinates.latitude;
+            orbitControls.longitude = orbitCoordinates.longitude;
+            orbitControls.distance = orbitCoordinates.distance;
+          },
+        );
+      }
+
+      return orbitControls;
     })());
+  }
+
+  addListener<T>(
+    prop: TwistyPropParent<T>,
+    listener: (value: T) => void,
+  ): void {
+    prop.addFreshListener(listener);
+    this.#disconnectionFunctions.push(() => {
+      prop.removeFreshListener(listener);
+      // disconnected = true; // TODO
+    });
+  }
+
+  #disconnectionFunctions: (() => void)[] = [];
+  disconnect(): void {
+    for (const fn of this.#disconnectionFunctions) {
+      fn();
+    }
+    this.#disconnectionFunctions = []; // TODO: Encapsulate this.
   }
 
   async render(): Promise<void> {
