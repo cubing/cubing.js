@@ -1,5 +1,5 @@
 import type { ButtonCommand } from "../../controllers/TwistyButtonsV2";
-import type { CoarseTimelineInfo as CoarseTimelineInfo } from "../depth-7/CoarseTimelineInfo";
+import type { CoarseTimelineInfo as CoarseTimelineInfo } from "../depth-7/CoarseTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface ButtonAppearance {

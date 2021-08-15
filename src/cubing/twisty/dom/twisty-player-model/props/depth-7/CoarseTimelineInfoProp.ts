@@ -1,6 +1,6 @@
 import type { ButtonCommand } from "../../controllers/TwistyButtonsV2";
 import type { PlayingInfo } from "../depth-1/PlayingProp";
-import type { DetailedTimelineInfo } from "../depth-6/EffectiveTimestamp";
+import type { DetailedTimelineInfo } from "../depth-6/DetailedTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface ButtonAppearance {

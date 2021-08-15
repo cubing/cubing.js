@@ -10,7 +10,7 @@ import {
   PuzzlePosition,
 } from "../../../../animation/cursor/CursorTypes";
 import type { AlgIndexer } from "../../../../animation/indexer/AlgIndexer";
-import type { DetailedTimelineInfo } from "../depth-6/EffectiveTimestamp";
+import type { DetailedTimelineInfo } from "../depth-6/DetailedTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface PositionPropInputs {

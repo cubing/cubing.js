@@ -24,8 +24,8 @@ import { AlgTransformationProp } from "./depth-4/AlgTransformationProp";
 import { IndexerProp } from "./depth-4/IndexerProp";
 import { AnchoredStartProp } from "./depth-5/AnchoredStartProp";
 import { TimeRangeProp } from "./depth-5/TimeRangeProp";
-import { DetailedTimelineInfoProp } from "./depth-6/EffectiveTimestamp";
-import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfo";
+import { DetailedTimelineInfoProp } from "./depth-6/DetailedTimelineInfoProp";
+import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfoProp";
 import { PositionProp } from "./depth-7/PositionProp";
 import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
 
