@@ -9,6 +9,7 @@ import { RenderScheduler } from "../../../animation/RenderScheduler";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
 import { StaleDropper } from "../controllers/PromiseFreshener";
 import { AlgProp } from "./depth-1/AlgProp";
+import { BackgroundProp } from "./depth-1/BackgroundProp";
 import { BackViewProp } from "./depth-1/BackViewProp";
 import { HintFaceletProp } from "./depth-1/HintFaceletProp";
 import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
@@ -32,6 +33,8 @@ import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
 export class TwistyPlayerModel {
   // Depth 1
   algProp: AlgProp = new AlgProp();
+  backgroundProp: BackgroundProp = new BackgroundProp();
+  backViewProp: BackViewProp = new BackViewProp();
   hintFaceletProp: HintFaceletProp = new HintFaceletProp();
   indexerConstructor: IndexerConstructorProp = new IndexerConstructorProp();
   orbitCoordinatesProp: OrbitCoordinatesProp = new OrbitCoordinatesProp();
@@ -41,9 +44,6 @@ export class TwistyPlayerModel {
   setupProp: AlgProp = new AlgProp();
   stickeringProp: StickeringProp = new StickeringProp();
   timestampRequestProp: TimestampRequestProp = new TimestampRequestProp();
-  backViewProp: BackViewProp = new BackViewProp();
-  // back-view // TODO
-  // background // TODO
   // control-panel // TODO
   // visualization // TODO
 

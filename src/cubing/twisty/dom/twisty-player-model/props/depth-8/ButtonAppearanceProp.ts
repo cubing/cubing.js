@@ -2,9 +2,22 @@ import type { ButtonCommand } from "../../controllers/TwistyButtonsV2";
 import type { CoarseTimelineInfo as CoarseTimelineInfo } from "../depth-7/CoarseTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
+export const buttonIcons = [
+  "skip-to-start",
+  "skip-to-end",
+  "step-forward",
+  "step-backward",
+  "pause",
+  "play",
+  "enter-fullscreen",
+  "exit-fullscreen",
+  "twizzle-tw",
+];
+export type ButtonIcon = typeof buttonIcons[number];
+
 interface ButtonAppearance {
   enabled: boolean;
-  icon: string;
+  icon: ButtonIcon;
   title: string;
 }
 export type ButtonAppearances = Record<ButtonCommand, ButtonAppearance>;
@@ -23,35 +36,39 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
     const buttonAppearances = {
       "fullscreen": {
         enabled: false,
-        icon: "↕️",
+        icon: "enter-fullscreen",
         title: "Enter fullscreen",
       },
       "jump-to-start": {
         enabled: !inputs.coarseTimelineInfo.atStart,
-        icon: "⏮",
+        icon: "skip-to-start",
         title: "Restart",
       },
       "play-step-backwards": {
         enabled: false,
-        icon: "⏪",
+        icon: "step-backward",
         title: "Step backward",
       },
       "play-pause": {
         enabled: true,
-        icon: inputs.coarseTimelineInfo.playing ? "⏸" : "▶️",
+        icon: inputs.coarseTimelineInfo.playing ? "pause" : "play",
         title: inputs.coarseTimelineInfo.playing ? "Pause" : "Play",
       },
       "play-step": {
         enabled: false,
-        icon: "⏩",
+        icon: "step-forward",
         title: "Step forward",
       },
       "jump-to-end": {
         enabled: !inputs.coarseTimelineInfo.atEnd,
-        icon: "⏭",
+        icon: "skip-to-end",
         title: "Skip to End",
       },
-      "twizzle-link": { enabled: true, icon: "🔗", title: "View at Twizzle" },
+      "twizzle-link": {
+        enabled: true,
+        icon: "twizzle-tw",
+        title: "View at Twizzle",
+      },
     };
     return buttonAppearances;
   }

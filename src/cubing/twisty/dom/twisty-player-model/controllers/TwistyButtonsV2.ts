@@ -1,6 +1,12 @@
+import { buttonCSS, buttonGridCSS } from "../../controls/buttons.css_";
+import { ClassListManager } from "../../element/ClassListManager";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
-import type { ButtonAppearances } from "../props/depth-8/ButtonAppearanceProp";
+import {
+  ButtonAppearances,
+  ButtonIcon,
+  buttonIcons,
+} from "../props/depth-8/ButtonAppearanceProp";
 import type {
   TwistyPlayerController,
   TwistyPlayerModel,
@@ -19,7 +25,7 @@ const buttonCommands = {
 export type ButtonCommand = keyof typeof buttonCommands;
 
 export class TwistyButtonsV2 extends ManagedCustomElement {
-  buttons: Record<ButtonCommand, HTMLButtonElement> | null = null;
+  buttons: Record<ButtonCommand, TwistyButtonV2> | null = null;
 
   // TODO: Privacy
   constructor(
@@ -30,17 +36,17 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
   }
 
   connectedCallback(): void {
-    const buttons: Partial<Record<ButtonCommand, HTMLButtonElement>> = {};
+    this.addCSS(buttonGridCSS);
+    const buttons: Partial<Record<ButtonCommand, TwistyButtonV2>> = {};
     for (const command in buttonCommands) {
-      const button = document.createElement("button");
-      button.textContent = command;
+      const button = new TwistyButtonV2();
       buttons[command as ButtonCommand] = button;
       button.addEventListener("click", () =>
         this.#onCommand(command as ButtonCommand),
       );
       this.addElement(button);
     }
-    this.buttons = buttons as Record<ButtonCommand, HTMLButtonElement>;
+    this.buttons = buttons as Record<ButtonCommand, TwistyButtonV2>;
 
     this.model?.buttonAppearanceProp.addFreshListener(this.update.bind(this));
   }
@@ -77,11 +83,33 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
       const button = this.buttons![command as ButtonCommand];
       // TODO: track individual changes?
       const info = buttonAppearances[command as ButtonCommand];
-      button.disabled = !info.enabled;
-      button.title = info.title;
-      button.textContent = info.icon;
+      button.button.disabled = !info.enabled;
+      button.button.title = info.title;
+      button.setIcon(info.icon);
+      // button.textContent = info.icon;
     }
   }
 }
 
 customElementsShim.define("twisty-buttons-v2", TwistyButtonsV2);
+
+class TwistyButtonV2 extends ManagedCustomElement {
+  button: HTMLButtonElement = document.createElement("button"); // TODO: async?
+
+  connectedCallback() {
+    this.addCSS(buttonCSS);
+    this.addElement(this.button);
+  }
+
+  #iconManager: ClassListManager<ButtonIcon> = new ClassListManager(
+    this,
+    "svg-",
+    buttonIcons,
+  );
+
+  setIcon(iconName: ButtonIcon): void {
+    this.#iconManager.setValue(iconName);
+  }
+}
+
+customElementsShim.define("twisty-button-v2", TwistyButtonV2);

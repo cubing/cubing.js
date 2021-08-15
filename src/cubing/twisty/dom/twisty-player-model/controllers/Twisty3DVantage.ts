@@ -72,7 +72,6 @@ export class Twisty3DVantage extends ManagedCustomElement {
     // } else {
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(w, h, true);
-    console.log(w, h);
     // }
 
     this.scheduleRender();

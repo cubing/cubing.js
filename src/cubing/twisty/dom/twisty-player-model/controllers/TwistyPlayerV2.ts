@@ -5,6 +5,7 @@ import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../../TwistyPlayer.css_";
 import type { PuzzleID, SetupToLocation } from "../../TwistyPlayerConfig";
+import type { BackgroundThemeWithAuto } from "../props/depth-1/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../props/depth-1/BackViewProp";
 import type { HintFaceletStyleWithAuto } from "../props/depth-1/HintFaceletProp";
 import {
@@ -40,6 +41,15 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
     this.buttons = new TwistyButtonsV2(this.model, this.controller);
     this.contentWrapper.appendChild(this.buttons);
+
+    this.model.backgroundProp.addFreshListener(
+      (backgroundTheme: BackgroundThemeWithAuto) => {
+        this.contentWrapper.classList.toggle(
+          "checkered",
+          backgroundTheme !== "none",
+        );
+      },
+    );
   }
 
   set alg(newAlg: Alg | string) {
@@ -106,6 +116,14 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
   get backView(): never {
     throw new Error("Cannot get `.backView` directly from a `TwistyPlayer`.");
+  }
+
+  set background(backgroundTheme: BackgroundThemeWithAuto) {
+    this.model.backgroundProp.set(backgroundTheme);
+  }
+
+  get background(): never {
+    throw new Error("Cannot get `.background` directly from a `TwistyPlayer`.");
   }
 }
 
