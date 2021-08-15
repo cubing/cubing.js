@@ -3,6 +3,7 @@ import type { Alg } from "../../../../alg";
 import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
+import { twistyPlayerCSS } from "../../TwistyPlayer.css_";
 import type { PuzzleID, SetupToLocation } from "../../TwistyPlayerConfig";
 import type { BackViewLayoutWithAuto } from "../props/depth-1/BackViewProp";
 import type { HintFaceletStyleWithAuto } from "../props/depth-1/HintFaceletProp";
@@ -29,6 +30,8 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
   }
 
   async connectedCallback(): Promise<void> {
+    this.addCSS(twistyPlayerCSS);
+
     const sceneWrapper = new Twisty3DSceneWrapper(this.model);
     this.contentWrapper.appendChild(sceneWrapper);
 
@@ -37,8 +40,6 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
     this.buttons = new TwistyButtonsV2(this.model, this.controller);
     this.contentWrapper.appendChild(this.buttons);
-
-    sceneWrapper.setAttribute("style", "width: 256px; height: 256px;");
   }
 
   set alg(newAlg: Alg | string) {

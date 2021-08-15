@@ -10,7 +10,7 @@ import { THREEJS } from "../heavy-code-imports/3d";
 import { StaleDropper } from "./PromiseFreshener.js";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 
-let SHOW_STATS = true;
+let SHOW_STATS = false;
 
 export class Twisty3DVantage extends ManagedCustomElement {
   scene: Twisty3DSceneWrapper | null = null;
@@ -72,6 +72,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
     // } else {
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(w, h, true);
+    console.log(w, h);
     // }
 
     this.scheduleRender();
@@ -135,7 +136,6 @@ export class Twisty3DVantage extends ManagedCustomElement {
       this.camera(),
     ]);
     // console.log("rendering!!!!", renderer, scene, camera);
-    renderer.setSize(256, 256);
     renderer.render(scene, camera); // TODO
 
     this.stats?.end();

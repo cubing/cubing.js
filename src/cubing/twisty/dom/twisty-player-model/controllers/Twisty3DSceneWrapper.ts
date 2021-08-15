@@ -29,11 +29,10 @@ export class Twisty3DSceneWrapper
     super();
     this.model?.puzzleProp.addFreshListener(this.onPuzzle.bind(this));
     this.model?.backViewProp.addFreshListener(this.onBackView.bind(this));
-
-    this.addCSS(twistyViewerWrapperCSS);
   }
 
   async connectedCallback(): Promise<void> {
+    this.addCSS(twistyViewerWrapperCSS);
     const vantage = new Twisty3DVantage(this);
     this.contentWrapper.appendChild(vantage);
     this.scheduleRender();

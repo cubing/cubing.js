@@ -35,7 +35,8 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     addListener(this.model.positionProp, async (position: PuzzlePosition) => {
       if (disconnected) {
         // TODO: Why does this still fire?
-        throw new Error("We should be disconnected!");
+        console.log(new Error("We should be disconnected!"));
+        return;
       }
       (await this.twisty3DPuzzle()).onPositionChange(position);
       this.scheduleRender();
@@ -46,7 +47,8 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
         if (disconnected) {
           // TODO: Why does this still fire?
-          throw new Error("We should be disconnected!");
+          console.log(new Error("We should be disconnected!"));
+          return;
         }
         if ("experimentalUpdateOptions" in (await this.twisty3DPuzzle())) {
           ((await this.twisty3DPuzzle()) as Cube3D).experimentalUpdateOptions({
@@ -62,7 +64,8 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       async (stickering: ExperimentalStickering) => {
         if (disconnected) {
           // TODO: Why does this still fire?
-          throw new Error("We should be disconnected!");
+          console.log(new Error("We should be disconnected!"));
+          return;
         }
         console.log("stickering", stickering);
         if ("setStickering" in (await this.twisty3DPuzzle())) {

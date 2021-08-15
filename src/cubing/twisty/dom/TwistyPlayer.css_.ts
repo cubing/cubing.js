@@ -25,7 +25,9 @@ export const twistyPlayerCSS = new CSSSource(`
 }
 
 .wrapper.controls-none twisty-scrubber,
-.wrapper.controls-none twisty-control-button-panel {
+.wrapper.controls-none twisty-control-button-panel ,
+.wrapper.controls-none twisty-scrubber-v2,
+.wrapper.controls-none twisty-buttons-v2 {
   display: none;
 }
 
