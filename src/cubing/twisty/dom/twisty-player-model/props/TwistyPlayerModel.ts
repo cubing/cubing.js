@@ -13,7 +13,7 @@ import { BackgroundProp } from "./depth-1/BackgroundProp";
 import { BackViewProp } from "./depth-1/BackViewProp";
 import { HintFaceletProp } from "./depth-1/HintFaceletProp";
 import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
-import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
+import { OrbitCoordinatesProp } from "./depth-2/OrbitCoordinatesProp";
 import { PlayingInfo, PlayingProp } from "./depth-1/PlayingProp";
 import { PuzzleProp } from "./depth-1/PuzzleProp";
 import { SetupAnchorProp } from "./depth-1/SetupAnchorProp";
@@ -29,6 +29,8 @@ import { DetailedTimelineInfoProp } from "./depth-6/DetailedTimelineInfoProp";
 import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfoProp";
 import { PositionProp } from "./depth-7/PositionProp";
 import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
+import { OrbitCoordinatesRequestProp } from "./depth-1/OrbitCoordinatesRequestProp";
+import { LatitudeLimitProp } from "./depth-1/LatitudeLimit";
 
 export class TwistyPlayerModel {
   // Depth 1
@@ -37,7 +39,10 @@ export class TwistyPlayerModel {
   backViewProp: BackViewProp = new BackViewProp();
   hintFaceletProp: HintFaceletProp = new HintFaceletProp();
   indexerConstructor: IndexerConstructorProp = new IndexerConstructorProp();
-  orbitCoordinatesProp: OrbitCoordinatesProp = new OrbitCoordinatesProp();
+  latitudeLimitProp: LatitudeLimitProp = new LatitudeLimitProp();
+  orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
+    new OrbitCoordinatesRequestProp();
+
   playingProp: PlayingProp = new PlayingProp();
   puzzleProp: PuzzleProp = new PuzzleProp();
   setupAnchorProp: SetupAnchorProp = new SetupAnchorProp();
@@ -49,6 +54,10 @@ export class TwistyPlayerModel {
 
   // Depth 2
   puzzleDefProp: PuzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
+  orbitCoordinatesProp: OrbitCoordinatesProp = new OrbitCoordinatesProp({
+    orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
+    latitudeLimit: this.latitudeLimitProp,
+  });
 
   // Depth 3
   puzzleAlgProp: PuzzleAlgProp = new PuzzleAlgProp({
