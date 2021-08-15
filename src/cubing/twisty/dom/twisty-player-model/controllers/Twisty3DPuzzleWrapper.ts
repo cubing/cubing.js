@@ -86,6 +86,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     for (const fn of this.#disconnectionFunctions) {
       fn();
     }
+    this.#disconnectionFunctions = []; // TODO: Encapsulate this.
   }
 
   scheduleRender(): void {
