@@ -2,7 +2,7 @@ import {
   CoordinateDegrees,
   orbitCoordinatesEqual,
   OrbitCoordinatesV2,
-} from "../depth-1/OrbitCoordinatesRequestProp";
+} from "../depth-0/OrbitCoordinatesRequestProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface OrbitCoordinatesPropInputs {

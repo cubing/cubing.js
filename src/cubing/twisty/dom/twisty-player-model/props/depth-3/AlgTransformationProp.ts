@@ -3,7 +3,7 @@ import type { KPuzzleDefinition } from "../../../../../kpuzzle";
 import type { Transformation } from "../../../../../puzzle-geometry/interfaces";
 import { KPuzzleWrapper } from "../../../../3D/puzzles/KPuzzleWrapper";
 import { TreeAlgIndexer } from "../../../../animation/indexer/tree/TreeAlgIndexer";
-import type { AlgWithIssues } from "../depth-1/AlgProp";
+import type { AlgWithIssues } from "../depth-0/AlgProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 type AlgTransformationPropInputs = {

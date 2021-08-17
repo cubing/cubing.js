@@ -7,7 +7,7 @@ import type { PuzzleID } from "../../TwistyPlayerConfig";
 import type { BackViewLayout } from "../../viewers/TwistyViewerWrapper";
 import { twistyViewerWrapperCSS } from "../../viewers/TwistyViewerWrapper.css_";
 import { THREEJS } from "../heavy-code-imports/3d";
-import type { BackViewLayoutWithAuto } from "../props/depth-1/BackViewProp";
+import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { StaleDropper } from "./PromiseFreshener";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";

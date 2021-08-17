@@ -1,7 +1,7 @@
 import { Spherical, Vector3 } from "three";
 import { DEGREES_PER_RADIAN } from "../../../3D/TAU";
 import { RenderScheduler } from "../../../animation/RenderScheduler";
-import type { OrbitCoordinatesV2 } from "../../twisty-player-model/props/depth-1/OrbitCoordinatesRequestProp";
+import type { OrbitCoordinatesV2 } from "../props/depth-0/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "../../twisty-player-model/props/TwistyPlayerModel";
 import type { CameraLatitudeLimits } from "../../TwistyPlayerConfig";
 

@@ -6,7 +6,7 @@ import {
   ButtonAppearances,
   ButtonIcon,
   buttonIcons,
-} from "../props/depth-8/ButtonAppearanceProp";
+} from "../props/depth-7/ButtonAppearanceProp";
 import type {
   TwistyPlayerController,
   TwistyPlayerModel,

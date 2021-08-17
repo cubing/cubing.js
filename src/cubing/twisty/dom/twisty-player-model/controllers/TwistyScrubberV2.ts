@@ -1,7 +1,7 @@
 import { twistyScrubberCSS } from "../../controls/TwistyScrubber.css_";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
-import type { DetailedTimelineInfo } from "../props/depth-6/DetailedTimelineInfoProp";
+import type { DetailedTimelineInfo } from "../props/depth-5/DetailedTimelineInfoProp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 
 const SLOW_DOWN_SCRUBBING = false;

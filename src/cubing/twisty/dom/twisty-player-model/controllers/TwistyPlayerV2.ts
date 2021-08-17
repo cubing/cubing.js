@@ -10,10 +10,10 @@ import {
   PuzzleID,
   SetupToLocation,
 } from "../../TwistyPlayerConfig";
-import type { BackgroundThemeWithAuto } from "../props/depth-1/BackgroundProp";
-import type { BackViewLayoutWithAuto } from "../props/depth-1/BackViewProp";
-import type { ControlPanelThemeWithAuto } from "../props/depth-1/ControlPanelProp";
-import type { HintFaceletStyleWithAuto } from "../props/depth-1/HintFaceletProp";
+import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
+import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
+import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelProp";
+import type { HintFaceletStyleWithAuto } from "../props/depth-0/HintFaceletProp";
 import {
   TwistyPlayerController,
   TwistyPlayerModel,

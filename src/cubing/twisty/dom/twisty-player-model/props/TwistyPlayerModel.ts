@@ -8,33 +8,33 @@ import {
 import { RenderScheduler } from "../../../animation/RenderScheduler";
 import type { PuzzleID } from "../../TwistyPlayerConfig";
 import { StaleDropper } from "../controllers/PromiseFreshener";
-import { AlgProp } from "./depth-1/AlgProp";
-import { BackgroundProp } from "./depth-1/BackgroundProp";
-import { BackViewProp } from "./depth-1/BackViewProp";
-import { HintFaceletProp } from "./depth-1/HintFaceletProp";
-import { IndexerConstructorProp } from "./depth-1/IndexerConstructorProp";
-import { OrbitCoordinatesProp } from "./depth-2/OrbitCoordinatesProp";
-import { PlayingInfo, PlayingProp } from "./depth-1/PlayingProp";
-import { PuzzleProp } from "./depth-1/PuzzleProp";
-import { SetupAnchorProp } from "./depth-1/SetupAnchorProp";
-import { StickeringProp } from "./depth-1/StickeringProp";
-import { TimestampRequestProp } from "./depth-1/TimestampRequestProp";
-import { PuzzleDefProp } from "./depth-2/PuzzleDefProp";
-import { PuzzleAlgProp } from "./depth-3/PuzzleAlgProp";
-import { AlgTransformationProp } from "./depth-4/AlgTransformationProp";
-import { IndexerProp } from "./depth-4/IndexerProp";
-import { AnchoredStartProp } from "./depth-5/AnchoredStartProp";
-import { TimeRangeProp } from "./depth-5/TimeRangeProp";
-import { DetailedTimelineInfoProp } from "./depth-6/DetailedTimelineInfoProp";
-import { CoarseTimelineInfoProp } from "./depth-7/CoarseTimelineInfoProp";
-import { PositionProp } from "./depth-7/PositionProp";
-import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
-import { OrbitCoordinatesRequestProp } from "./depth-1/OrbitCoordinatesRequestProp";
-import { LatitudeLimitProp } from "./depth-1/LatitudeLimit";
-import { ControlPanelProp } from "./depth-1/ControlPanelProp";
+import { AlgProp } from "./depth-0/AlgProp";
+import { BackgroundProp } from "./depth-0/BackgroundProp";
+import { BackViewProp } from "./depth-0/BackViewProp";
+import { HintFaceletProp } from "./depth-0/HintFaceletProp";
+import { IndexerConstructorProp } from "./depth-0/IndexerConstructorProp";
+import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
+import { PlayingInfo, PlayingProp } from "./depth-0/PlayingProp";
+import { PuzzleProp } from "./depth-0/PuzzleProp";
+import { SetupAnchorProp } from "./depth-0/SetupAnchorProp";
+import { StickeringProp } from "./depth-0/StickeringProp";
+import { TimestampRequestProp } from "./depth-0/TimestampRequestProp";
+import { PuzzleDefProp } from "./depth-1/PuzzleDefProp";
+import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
+import { AlgTransformationProp } from "./depth-3/AlgTransformationProp";
+import { IndexerProp } from "./depth-3/IndexerProp";
+import { AnchoredStartProp } from "./depth-4/AnchoredStartProp";
+import { TimeRangeProp } from "./depth-4/TimeRangeProp";
+import { DetailedTimelineInfoProp } from "./depth-5/DetailedTimelineInfoProp";
+import { CoarseTimelineInfoProp } from "./depth-6/CoarseTimelineInfoProp";
+import { PositionProp } from "./depth-6/PositionProp";
+import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
+import { OrbitCoordinatesRequestProp } from "./depth-0/OrbitCoordinatesRequestProp";
+import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
+import { ControlPanelProp } from "./depth-0/ControlPanelProp";
 
 export class TwistyPlayerModel {
-  // Depth 1
+  // Depth 0
   algProp = new AlgProp();
   backgroundProp = new BackgroundProp();
   backViewProp = new BackViewProp();
@@ -53,14 +53,14 @@ export class TwistyPlayerModel {
   timestampRequestProp = new TimestampRequestProp();
   // visualization // TODO
 
-  // Depth 2
+  // Depth 1
   puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
   orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
     latitudeLimit: this.latitudeLimitProp,
   });
 
-  // Depth 3
+  // Depth 2
   puzzleAlgProp = new PuzzleAlgProp({
     algWithIssues: this.algProp,
     puzzleDef: this.puzzleDefProp,
@@ -71,7 +71,7 @@ export class TwistyPlayerModel {
     puzzleDef: this.puzzleDefProp,
   });
 
-  // Depth 4
+  // Depth 3
   indexerProp = new IndexerProp({
     indexerConstructor: this.indexerConstructor,
     algWithIssues: this.puzzleAlgProp,
@@ -83,7 +83,7 @@ export class TwistyPlayerModel {
     def: this.puzzleDefProp,
   });
 
-  // Depth 5
+  // Depth 4
   anchoredStartProp = new AnchoredStartProp({
     setupAnchor: this.setupAnchorProp,
     setupTransformation: this.setupTransformationProp,
@@ -95,7 +95,7 @@ export class TwistyPlayerModel {
     indexer: this.indexerProp,
   });
 
-  // Depth 6
+  // Depth 5
   detailedTimelineInfoProp: DetailedTimelineInfoProp =
     new DetailedTimelineInfoProp({
       timestampRequest: this.timestampRequestProp,
@@ -103,7 +103,7 @@ export class TwistyPlayerModel {
       setupAnchor: this.setupAnchorProp,
     });
 
-  // Depth 7
+  // Depth 6
   positionProp = new PositionProp({
     anchoredStart: this.anchoredStartProp,
     indexer: this.indexerProp,
@@ -116,7 +116,7 @@ export class TwistyPlayerModel {
     playingInfo: this.playingProp,
   });
 
-  // Depth 8
+  // Depth 7
   // TODO: Inline Twisty3D management.
   buttonAppearanceProp = new ButtonAppearanceProp({
     coarseTimelineInfo: this.coarseTimelineInfoProp,

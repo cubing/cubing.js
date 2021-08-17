@@ -7,7 +7,7 @@ import { customElementsShim } from "../../element/node-custom-element-shims";
 import { pixelRatio } from "../../viewers/canvas";
 import { twisty3DCanvasCSS } from "../../viewers/Twisty3DCanvas.css_.js";
 import { THREEJS } from "../heavy-code-imports/3d";
-import type { OrbitCoordinatesV2 } from "../props/depth-1/OrbitCoordinatesRequestProp.js";
+import type { OrbitCoordinatesV2 } from "../props/depth-0/OrbitCoordinatesRequestProp.js";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel.js";
 import type { TwistyPropParent } from "../props/TwistyProp.js";
 import { StaleDropper } from "./PromiseFreshener.js";
