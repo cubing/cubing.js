@@ -111,8 +111,13 @@ export abstract class TwistyPropParent<T> {
   // TODO: Pick a better name.
   addFreshListener(listener: (value: T) => void) {
     const staleDropper: StaleDropper<T> = new StaleDropper<T>();
+    let lastResult: T | null = null;
     const callback = async () => {
       const result = await staleDropper.queue(this.get());
+      if (lastResult !== null && this.canReuse(lastResult, result)) {
+        return;
+      }
+      lastResult = result;
       listener(result);
     };
     this.#freshListeners.set(listener, callback);
