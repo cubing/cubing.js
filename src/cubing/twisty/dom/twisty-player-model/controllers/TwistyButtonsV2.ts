@@ -86,6 +86,8 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
       button.button.disabled = !info.enabled;
       button.button.title = info.title;
       button.setIcon(info.icon);
+      console.log(command, info);
+      button.hidden = !!info.hidden;
       // button.textContent = info.icon;
     }
   }

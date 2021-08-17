@@ -11,6 +11,7 @@ import {
   PuzzleID,
   puzzleIDs,
   setupToLocations,
+  viewerLinkPages,
   visualizationFormats,
 } from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
 import { backViewLayouts } from "../../../../cubing/twisty/dom/viewers/TwistyViewerWrapper";
@@ -91,7 +92,11 @@ console.log("Loading stub file.");
     //   cameraLatitudeLimits,
     // ],
 
-    // ["viewerLink", "viewer-link", viewerLinkPages],
+    [
+      "viewerLink",
+      "viewer-link",
+      Object.assign({ auto: true }, viewerLinkPages),
+    ],
   ];
 
   for (const [propName, attrName, valueMap, defaultValue] of enumOptions) {
@@ -115,7 +120,11 @@ console.log("Loading stub file.");
     }
     select.addEventListener("change", () => {
       console.log(attrName, select.value);
-      (twistyPlayer as any)[propName] = select.value as any;
+      if (propName in twistyPlayer) {
+        (twistyPlayer as any)[propName] = select.value as any;
+      } else {
+        console.error("Invalid prop name!", propName);
+      }
     });
     document.body.append(document.createElement("br"));
   }

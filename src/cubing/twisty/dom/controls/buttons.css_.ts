@@ -32,10 +32,13 @@ export const buttonGridCSS = new CSSSource(`
 `);
 
 export const buttonCSS = new CSSSource(`
+:host:not([hidden]) {
+  display: grid;
+}
+
 :host {
   width: 48px;
   height: 24px;
-  display: grid;
 }
 
 .wrapper {

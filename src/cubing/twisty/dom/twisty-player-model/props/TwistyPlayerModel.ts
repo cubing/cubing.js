@@ -34,6 +34,7 @@ import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
 import { ControlPanelProp } from "./depth-0/ControlPanelProp";
 import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
 import { EffectiveVisualizationFormatProp } from "./depth-1/EffectiveVisualizationFormatProp";
+import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
 
 export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
@@ -55,6 +56,7 @@ export class TwistyPlayerModel {
   setupProp = new AlgProp();
   stickeringProp = new StickeringProp();
   timestampRequestProp = new TimestampRequestProp();
+  viewerLinkProp = new ViewerLinkProp();
   visualizationFormatProp = new VisualizationFormatProp();
 
   // Depth 1
@@ -130,6 +132,7 @@ export class TwistyPlayerModel {
   // TODO: Inline Twisty3D management.
   buttonAppearanceProp = new ButtonAppearanceProp({
     coarseTimelineInfo: this.coarseTimelineInfoProp,
+    viewerLink: this.viewerLinkProp,
   });
 
   set alg(newAlg: Alg | string) {

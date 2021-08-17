@@ -1,4 +1,5 @@
 import type { ButtonCommand } from "../../controllers/TwistyButtonsV2";
+import type { ViewerLinkPageWithAuto } from "../depth-0/ViewerLinkProp";
 import type { CoarseTimelineInfo as CoarseTimelineInfo } from "../depth-6/CoarseTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
@@ -19,12 +20,14 @@ interface ButtonAppearance {
   enabled: boolean;
   icon: ButtonIcon;
   title: string;
+  hidden?: boolean;
 }
 export type ButtonAppearances = Record<ButtonCommand, ButtonAppearance>;
 
 // TODO: reduce inputs to avoid unnecessary updates.
 interface ButtonAppearancePropInputs {
   coarseTimelineInfo: CoarseTimelineInfo;
+  viewerLink: ViewerLinkPageWithAuto;
 }
 
 export class ButtonAppearanceProp extends TwistyPropDerived<
@@ -68,6 +71,7 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
         enabled: true,
         icon: "twizzle-tw",
         title: "View at Twizzle",
+        hidden: inputs.viewerLink === "none",
       },
     };
     return buttonAppearances;

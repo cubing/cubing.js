@@ -15,6 +15,7 @@ import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelProp";
 import type { HintFaceletStyleWithAuto } from "../props/depth-0/HintFaceletProp";
+import type { ViewerLinkPageWithAuto } from "../props/depth-0/ViewerLinkProp";
 import {
   TwistyPlayerController,
   TwistyPlayerModel,
@@ -199,6 +200,14 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     throw new Error(
       "Cannot get `.visualization` directly from a `TwistyPlayer`.",
     );
+  }
+
+  set viewerLink(viewerLinkPage: ViewerLinkPageWithAuto) {
+    this.model.viewerLinkProp.set(viewerLinkPage);
+  }
+
+  get viewerLink(): never {
+    throw new Error("Cannot get `.viewerLink` directly from a `TwistyPlayer`.");
   }
 }
 
