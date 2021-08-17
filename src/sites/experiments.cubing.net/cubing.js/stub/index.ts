@@ -129,12 +129,14 @@ console.log("Loading stub file.");
     document.body.append(document.createElement("br"));
   }
 
-  const numberOptions: [string, string, number][] = [
-    // ["experimentalCameraLatitude", "experimental-camera-latitude", 0],
-    // ["experimentalCameraLongitude", "experimental-camera-longitude", 0],
+  const numberOptions: [string, string, number | null][] = [
+    ["cameraLatitude", "camera-latitude", null],
+    ["cameraLongitude", "camera-longitude", null],
+    ["cameraDistance", "camera-distance", 6],
+    ["cameraLatitudeLimit", "camera-latitude-limit", 35],
   ];
 
-  for (const [propName, attrName, alg] of numberOptions) {
+  for (const [propName, attrName, initialValue] of numberOptions) {
     const tr = table.appendChild(document.createElement("tr"));
 
     const td1 = tr.appendChild(document.createElement("td"));
@@ -142,10 +144,12 @@ console.log("Loading stub file.");
 
     const td2 = tr.appendChild(document.createElement("td"));
     const input = td2.appendChild(document.createElement("input"));
-    input.value = alg.toString();
+    console.log(propName, initialValue, initialValue !== null);
+    if (initialValue !== null) {
+      input.value = initialValue.toString();
+    }
     input.type = "number";
     input.placeholder = "(no value)";
-    input.value = "";
     const update = () => {
       if (input.value === "") {
         return;

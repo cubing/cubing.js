@@ -209,6 +209,46 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
   get viewerLink(): never {
     throw new Error("Cannot get `.viewerLink` directly from a `TwistyPlayer`.");
   }
+
+  set cameraLatitude(latitude: number) {
+    this.model.orbitCoordinatesRequestProp.set({ latitude });
+  }
+
+  get cameraLatitude(): never {
+    throw new Error(
+      "Cannot get `.cameraLatitude` directly from a `TwistyPlayer`.",
+    );
+  }
+
+  set cameraLongitude(longitude: number) {
+    this.model.orbitCoordinatesRequestProp.set({ longitude });
+  }
+
+  get cameraLongitude(): never {
+    throw new Error(
+      "Cannot get `.cameraLongitude` directly from a `TwistyPlayer`.",
+    );
+  }
+
+  set cameraDistance(distance: number) {
+    this.model.orbitCoordinatesRequestProp.set({ distance });
+  }
+
+  get cameraDistance(): never {
+    throw new Error(
+      "Cannot get `.cameraDistance` directly from a `TwistyPlayer`.",
+    );
+  }
+
+  set cameraLatitudeLimit(latitudeLimit: number) {
+    this.model.latitudeLimitProp.set(latitudeLimit);
+  }
+
+  get cameraLatitudeLimit(): never {
+    throw new Error(
+      "Cannot get `.cameraLatitudeLimit` directly from a `TwistyPlayer`.",
+    );
+  }
 }
 
 customElementsShim.define("twisty-player-v2", TwistyPlayerV2);
