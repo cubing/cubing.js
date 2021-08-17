@@ -1,15 +1,13 @@
-import type {
-  PuzzleID,
-  VisualizationFormat,
-} from "../../../TwistyPlayerConfig";
+import type { PuzzleID } from "../../../TwistyPlayerConfig";
+import type { VisualizationFormatWithAuto } from "../depth-0/VisualizationProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 export class EffectiveVisualizationFormatProp extends TwistyPropDerived<
-  { visualizationRequest: VisualizationFormat; puzzleID: PuzzleID },
+  { visualizationRequest: VisualizationFormatWithAuto; puzzleID: PuzzleID },
   "2D" | "3D" | null
 > {
   derive(inputs: {
-    visualizationRequest: VisualizationFormat;
+    visualizationRequest: VisualizationFormatWithAuto;
     puzzleID: PuzzleID;
   }): "2D" | "3D" {
     switch (inputs.puzzleID) {

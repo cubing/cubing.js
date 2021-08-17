@@ -11,6 +11,7 @@ import {
   PuzzleID,
   puzzleIDs,
   setupToLocations,
+  visualizationFormats,
 } from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
 import { backViewLayouts } from "../../../../cubing/twisty/dom/viewers/TwistyViewerWrapper";
 
@@ -60,7 +61,11 @@ console.log("Loading stub file.");
   const enumOptions: [string, string, Record<string, any>, string?][] = [
     ["anchor", "anchor", setupToLocations],
     ["puzzle", "puzzle", puzzleIDs, puzzle],
-    // ["visualization", "visualization", visualizationFormats],
+    [
+      "visualization",
+      "visualization",
+      Object.assign({ auto: true }, visualizationFormats),
+    ],
     [
       "hintFacelets",
       "hint-facelets",

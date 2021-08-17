@@ -9,6 +9,7 @@ import {
   controlsLocations,
   PuzzleID,
   SetupToLocation,
+  VisualizationFormat,
 } from "../../TwistyPlayerConfig";
 import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
@@ -187,6 +188,16 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
   get controlPanel(): never {
     throw new Error(
       "Cannot get `.controlPanel` directly from a `TwistyPlayer`.",
+    );
+  }
+
+  set visualization(visualizationFormat: VisualizationFormat) {
+    this.model.visualizationFormatProp.set(visualizationFormat);
+  }
+
+  get visualization(): never {
+    throw new Error(
+      "Cannot get `.visualization` directly from a `TwistyPlayer`.",
     );
   }
 }
