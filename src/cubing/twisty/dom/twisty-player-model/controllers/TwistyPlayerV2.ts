@@ -1,12 +1,18 @@
 import type { ExperimentalStickering } from "../../..";
 import type { Alg } from "../../../../alg";
 import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes";
+import { ClassListManager } from "../../element/ClassListManager";
 import { ManagedCustomElement } from "../../element/ManagedCustomElement";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../../TwistyPlayer.css_";
-import type { PuzzleID, SetupToLocation } from "../../TwistyPlayerConfig";
+import {
+  controlsLocations,
+  PuzzleID,
+  SetupToLocation,
+} from "../../TwistyPlayerConfig";
 import type { BackgroundThemeWithAuto } from "../props/depth-1/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../props/depth-1/BackViewProp";
+import type { ControlPanelThemeWithAuto } from "../props/depth-1/ControlPanelProp";
 import type { HintFaceletStyleWithAuto } from "../props/depth-1/HintFaceletProp";
 import {
   TwistyPlayerController,
@@ -30,6 +36,15 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     }
   }
 
+  #controlsManager: ClassListManager<ControlPanelThemeWithAuto> =
+    new ClassListManager<ControlPanelThemeWithAuto>(
+      this,
+      "controls-",
+      (["auto"] as ControlPanelThemeWithAuto[]).concat(
+        Object.keys(controlsLocations) as ControlPanelThemeWithAuto[],
+      ),
+    );
+
   async connectedCallback(): Promise<void> {
     this.addCSS(twistyPlayerCSS);
 
@@ -48,6 +63,12 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
           "checkered",
           backgroundTheme !== "none",
         );
+      },
+    );
+
+    this.model.controlPanelProp.addFreshListener(
+      (controlPanel: ControlPanelThemeWithAuto) => {
+        this.#controlsManager.setValue(controlPanel);
       },
     );
   }
@@ -124,6 +145,16 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
   get background(): never {
     throw new Error("Cannot get `.background` directly from a `TwistyPlayer`.");
+  }
+
+  set controlPanel(newControlPanel: ControlPanelThemeWithAuto) {
+    this.model.controlPanelProp.set(newControlPanel);
+  }
+
+  get controlPanel(): never {
+    throw new Error(
+      "Cannot get `.controlPanel` directly from a `TwistyPlayer`.",
+    );
   }
 }
 

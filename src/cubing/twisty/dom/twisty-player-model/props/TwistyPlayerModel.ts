@@ -31,12 +31,14 @@ import { PositionProp } from "./depth-7/PositionProp";
 import { ButtonAppearanceProp } from "./depth-8/ButtonAppearanceProp";
 import { OrbitCoordinatesRequestProp } from "./depth-1/OrbitCoordinatesRequestProp";
 import { LatitudeLimitProp } from "./depth-1/LatitudeLimit";
+import { ControlPanelProp } from "./depth-1/ControlPanelProp";
 
 export class TwistyPlayerModel {
   // Depth 1
   algProp: AlgProp = new AlgProp();
   backgroundProp: BackgroundProp = new BackgroundProp();
   backViewProp: BackViewProp = new BackViewProp();
+  controlPanelProp: ControlPanelProp = new ControlPanelProp();
   hintFaceletProp: HintFaceletProp = new HintFaceletProp();
   indexerConstructor: IndexerConstructorProp = new IndexerConstructorProp();
   latitudeLimitProp: LatitudeLimitProp = new LatitudeLimitProp();
@@ -49,7 +51,6 @@ export class TwistyPlayerModel {
   setupProp: AlgProp = new AlgProp();
   stickeringProp: StickeringProp = new StickeringProp();
   timestampRequestProp: TimestampRequestProp = new TimestampRequestProp();
-  // control-panel // TODO
   // visualization // TODO
 
   // Depth 2

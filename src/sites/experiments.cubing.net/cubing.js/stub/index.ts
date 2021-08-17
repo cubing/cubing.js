@@ -5,6 +5,7 @@ import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayerV2 } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/TwistyPlayerV2";
 import {
   backgroundThemes,
+  controlsLocations,
   experimentalStickerings,
   hintFaceletStyles,
   PuzzleID,
@@ -72,7 +73,11 @@ console.log("Loading stub file.");
       "background",
       Object.assign({ auto: true }, backgroundThemes),
     ],
-    // ["controlPanel", "control-panel", controlsLocations],
+    [
+      "controlPanel",
+      "control-panel",
+      Object.assign({ auto: true }, controlsLocations),
+    ],
 
     ["backView", "back-view", Object.assign({ auto: true }, backViewLayouts)],
     // [
