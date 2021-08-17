@@ -35,63 +35,63 @@ import { ControlPanelProp } from "./depth-1/ControlPanelProp";
 
 export class TwistyPlayerModel {
   // Depth 1
-  algProp: AlgProp = new AlgProp();
-  backgroundProp: BackgroundProp = new BackgroundProp();
-  backViewProp: BackViewProp = new BackViewProp();
-  controlPanelProp: ControlPanelProp = new ControlPanelProp();
-  hintFaceletProp: HintFaceletProp = new HintFaceletProp();
-  indexerConstructor: IndexerConstructorProp = new IndexerConstructorProp();
-  latitudeLimitProp: LatitudeLimitProp = new LatitudeLimitProp();
+  algProp = new AlgProp();
+  backgroundProp = new BackgroundProp();
+  backViewProp = new BackViewProp();
+  controlPanelProp = new ControlPanelProp();
+  hintFaceletProp = new HintFaceletProp();
+  indexerConstructor = new IndexerConstructorProp();
+  latitudeLimitProp = new LatitudeLimitProp();
   orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
 
-  playingProp: PlayingProp = new PlayingProp();
-  puzzleProp: PuzzleProp = new PuzzleProp();
-  setupAnchorProp: SetupAnchorProp = new SetupAnchorProp();
-  setupProp: AlgProp = new AlgProp();
-  stickeringProp: StickeringProp = new StickeringProp();
-  timestampRequestProp: TimestampRequestProp = new TimestampRequestProp();
+  playingProp = new PlayingProp();
+  puzzleProp = new PuzzleProp();
+  setupAnchorProp = new SetupAnchorProp();
+  setupProp = new AlgProp();
+  stickeringProp = new StickeringProp();
+  timestampRequestProp = new TimestampRequestProp();
   // visualization // TODO
 
   // Depth 2
-  puzzleDefProp: PuzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
-  orbitCoordinatesProp: OrbitCoordinatesProp = new OrbitCoordinatesProp({
+  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
+  orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
     latitudeLimit: this.latitudeLimitProp,
   });
 
   // Depth 3
-  puzzleAlgProp: PuzzleAlgProp = new PuzzleAlgProp({
+  puzzleAlgProp = new PuzzleAlgProp({
     algWithIssues: this.algProp,
     puzzleDef: this.puzzleDefProp,
   });
 
-  puzzleSetupProp: PuzzleAlgProp = new PuzzleAlgProp({
+  puzzleSetupProp = new PuzzleAlgProp({
     algWithIssues: this.setupProp,
     puzzleDef: this.puzzleDefProp,
   });
 
   // Depth 4
-  indexerProp: IndexerProp = new IndexerProp({
+  indexerProp = new IndexerProp({
     indexerConstructor: this.indexerConstructor,
     algWithIssues: this.puzzleAlgProp,
     def: this.puzzleDefProp,
   });
 
-  setupTransformationProp: AlgTransformationProp = new AlgTransformationProp({
+  setupTransformationProp = new AlgTransformationProp({
     alg: this.puzzleSetupProp,
     def: this.puzzleDefProp,
   });
 
   // Depth 5
-  anchoredStartProp: AnchoredStartProp = new AnchoredStartProp({
+  anchoredStartProp = new AnchoredStartProp({
     setupAnchor: this.setupAnchorProp,
     setupTransformation: this.setupTransformationProp,
     indexer: this.indexerProp,
     def: this.puzzleDefProp,
   });
 
-  timeRangeProp: TimeRangeProp = new TimeRangeProp({
+  timeRangeProp = new TimeRangeProp({
     indexer: this.indexerProp,
   });
 
@@ -104,21 +104,21 @@ export class TwistyPlayerModel {
     });
 
   // Depth 7
-  positionProp: PositionProp = new PositionProp({
+  positionProp = new PositionProp({
     anchoredStart: this.anchoredStartProp,
     indexer: this.indexerProp,
     detailedTimelineInfo: this.detailedTimelineInfoProp,
     def: this.puzzleDefProp,
   });
 
-  coarseTimelineInfoProp: CoarseTimelineInfoProp = new CoarseTimelineInfoProp({
+  coarseTimelineInfoProp = new CoarseTimelineInfoProp({
     detailedTimelineInfo: this.detailedTimelineInfoProp,
     playingInfo: this.playingProp,
   });
 
   // Depth 8
   // TODO: Inline Twisty3D management.
-  buttonAppearanceProp: ButtonAppearanceProp = new ButtonAppearanceProp({
+  buttonAppearanceProp = new ButtonAppearanceProp({
     coarseTimelineInfo: this.coarseTimelineInfoProp,
   });
 
