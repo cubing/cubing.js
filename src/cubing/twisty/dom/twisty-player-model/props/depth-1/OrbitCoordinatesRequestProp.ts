@@ -14,7 +14,7 @@ export function orbitCoordinatesEqual(
 ): boolean {
   return (
     c1.latitude === c2.latitude &&
-    c1.longitude === c1.longitude &&
+    c1.longitude === c2.longitude &&
     c1.distance === c2.distance
   );
 }
