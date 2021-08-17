@@ -44,8 +44,18 @@ export class OrbitCoordinatesRequestProp extends TwistyPropSource<
     oldValuePromise: Promise<OrbitCoordinatesV2>,
   ): Promise<OrbitCoordinatesV2> {
     const oldValue = await oldValuePromise;
+
     const newValue: OrbitCoordinatesV2 = Object.assign({}, oldValue);
     Object.assign(newValue, newCoordinates);
+
+    newValue.latitude = Math.min(Math.max(newValue.latitude, -90), 90);
+    newValue.longitude = mod(newValue.longitude, 360, 180);
     return newValue;
   }
+}
+
+// Assumes `offset > 0`. Will produce invalid values if not!
+// We don't check for that, since this can be a hot path.
+function mod(v: number, m: number, offset = 0): number {
+  return (((v % m) + m + offset) % m) - offset;
 }

@@ -27,6 +27,7 @@ export class OrbitCoordinatesProp extends TwistyPropDerived<
       return inputs.orbitCoordinatesRequest;
     } else {
       const { latitude, longitude, distance } = inputs.orbitCoordinatesRequest;
+      // TODO: Should we re-normalize the request, so we don't depend on normalization in the input?
       return {
         latitude: inputs.latitudeLimit * Math.sign(latitude),
         longitude,
