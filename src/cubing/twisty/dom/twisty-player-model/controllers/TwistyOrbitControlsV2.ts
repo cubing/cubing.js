@@ -139,6 +139,12 @@ export class TwistyOrbitControlsV2 {
       this.onMouseEnd(e);
       return;
     }
+
+    if (e.movementX === 0 && e.movementY === 0) {
+      // Short-circuit
+      return;
+    }
+
     const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
     const movementX = this.temperMovement(e.movementX / minDim);
     const movementY = this.temperMovement(
@@ -170,6 +176,10 @@ export class TwistyOrbitControlsV2 {
 
   onTouchStart(e: TouchEvent): void {
     if (this.currentTouchID === null) {
+      if (e.touches[0].clientX === 0 && e.touches[0].clientY === 0) {
+        // Short-circuit
+        return;
+      }
       this.currentTouchID = e.changedTouches[0].identifier;
       this.lastTouchClientX = e.touches[0].clientX;
       this.lastTouchClientY = e.touches[0].clientY;
