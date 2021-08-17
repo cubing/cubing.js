@@ -35,8 +35,21 @@ console.log(alg.toString());</span>
           </code>
         </div>
         <code class="sample output">
-          <span>Alg {}</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span></span>
           <span>&quot;R U R' U R U2' R'&quot;</span>
+        </code>
+      </div>
+      <p>As a convenience, you can use <code>.log()</code> to view an alg in a JavaScript console (e.g. <a href="https://nodejs.org/en/about/"><code>node</code></a> or <a href="https://developer.chrome.com/docs/devtools/console/javascript/">DevTools</a>). We'll use that for all the examples from now on:</p>
+      <div class="code-demo">
+        <div>
+          <code class="sample">
+            <span>import { Alg } from &quot;cubing/alg&quot;<br>
+<br>
+new Alg(&quot;R U R' U R U2' R'&quot;).log();</span>
+          </code>
+        </div>
+        <code class="sample output">
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U R' U R U2' R'&quot;</span>
         </code>
       </div>
       <p>Note that this will result in a canonical string for the alg with whitespace collapsed.</p>
@@ -46,11 +59,11 @@ console.log(alg.toString());</span>
             <span>import { Alg } from &quot;cubing/alg&quot;<br>
 <br>
 const alg = new Alg(&quot;&nbsp;R&nbsp;&nbsp;&nbsp;U&nbsp;R'&nbsp;&nbsp;&nbsp;U&nbsp;R&nbsp;U2'&nbsp;&nbsp;&nbsp;R'&quot;);<br>
-console.log(alg.toString());</span>
+alg.log();</span>
           </code>
         </div>
         <code class="sample output">
-          <span>&quot;R U R' U R U2' R'&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U R' U R U2' R'&quot;</span>
         </code>
       </div>
     </section>
@@ -71,32 +84,33 @@ console.log(alg.toString());</span>
             <span>import { Alg } from &quot;cubing/alg&quot;;<br>
 <br>
 const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
-console.log(commutator<b><u>.expand()</u></b>.toString());
+commutator<b><u>.expand()</u></b>g().log();
 </span>
           </code>
         </div>
         <code class="sample output">
-          <span>&quot;R U' L' U R' U' L U&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U' L' U R' U' L U&quot;</span>
         </code>
       </div>
       <br>
       <div class="code-demo">
         <div>
+          <!-- TODO: The number of underlines match the number of output lines, which might decivingly imply they match up. Can we make this clear in another way? -->
           <code class="sample">
             <span>import { Alg } from &quot;cubing/alg&quot;;<br>
 const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
 <br>
 const niklas = commutator<b><u>.concat(&quot;U'&quot;)</u></b>;<br>
-console.log(niklas.toString());<br>
-console.log(niklas<b><u>.expand()</u></b>.toString());<br>
-console.log(niklas<b><u>.expand().simplify()</u></b>.toString());
+niklas.log();<br>
+niklas<b><u>.expand()</u></b>.log();<br>
+niklas<b><u>.expand().simplify()</u></b>.log();
 </span>
           </code>
         </div>
         <code class="sample output">
-          <span>&quot;[R, [U': L']] U'&quot;</span>
-          <span>&quot;R U' L' U R' U' L U U'&quot;</span>
-          <span>&quot;R U' L' U R' U' L&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;[R, [U': L']] U'&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U' L' U R' U' L U U'&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U' L' U R' U' L&quot;</span>
         </code>
       </div>
       <br>
@@ -107,14 +121,14 @@ console.log(niklas<b><u>.expand().simplify()</u></b>.toString());
 <br>
 const sune = new Alg(&quot;[R U R2', [R: U]]&quot;);<br>
 const antiSune = sune.<b><u>invert()</u></b>;<br>
-console.log(antiSune.toString());<br>
-console.log(antiSune<b><u>.expand()</u></b>.toString());
+antiSune.log();<br>
+antiSune<b><u>.expand()</u></b>.log();
 </span>
           </code>
         </div>
           <code class="sample output">
-            <span>&quot;[[R: U], R U R2']&quot;</span>
-            <span>&quot;R U2 R' U' R U' R'&quot;</span>
+            <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;[[R: U], R U R2']&quot;</span>
+            <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U2 R' U' R U' R'&quot;</span>
           </code>
       </div>
       <br>
@@ -126,16 +140,16 @@ const antiSune = new Alg(&quot;[[R: U], R U R2']&quot;);<br>
 const niklas = new Alg(&quot;[R, [U': L']] U'&quot;);<br>
 <br>
 const jPerm = antiSune<b><u>.concat(niklas)</u></b>;<br>
-console.log(jPerm.toString());<br>
-console.log(jPerm<b><u>.expand()</u></b>.toString());<br>
-console.log(jPerm<b><u>.expand()</u></b>.simplify().toString());
+jPerm.log();<br>
+jPerm<b><u>.expand()</u></b>.log();<br>
+jPerm<b><u>.expand()</u></b>.simplify().log();
 </span>
           </code>
         </div>
         <code class="sample output">
-          <span>&quot;[[R: U], R U R2'] [R, [U': L']] U'&quot;</span>
-          <span>&quot;R U R' R U R2' R U' R' R2 U' R' R U' L' U R' U' L U U'&quot;</span>
-          <span>&quot;R U2 R' U' R U2' L' U R' U' L&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;[[R: U], R U R2'] [R, [U': L']] U'&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U R' R U R2' R U' R' R2 U' R' R U' L' U R' U' L U U'&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U2 R' U' R U2' L' U R' U' L&quot;</span>
         </code>
       </div>
       <p><code>.expand()</code> and <code>.simplify()</code> can also take options:</p>
@@ -145,12 +159,12 @@ console.log(jPerm<b><u>.expand()</u></b>.simplify().toString());
             <span>import { Alg } from &quot;cubing/alg&quot;;<br>
 <br>
 const oll = new Alg(&quot;[F: [R, U]]]&quot;);<br>
-console.log(<b><u>oll.expand({depth: 1})</u></b>.toString());<br>
+<b><u>oll.expand({depth: 1})</u></b>.log();<br>
 </span>
           </code>
         </div>
         <code class="sample output">
-          <span>&quot;F [R, U] F'&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;F [R, U] F'&quot;</span>
         </code>
       </div>
     </section>

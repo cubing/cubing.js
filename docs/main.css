@@ -130,18 +130,18 @@ code.sample.output {
   color: white;
 }
 
-code.sample.output span::before {
+code.sample.output > span::before {
   content: "⇒ ";
   opacity: 0.3;
   font-size: 2em;
   vertical-align: -20%;
 }
 
-code.sample span {
+code.sample > span {
   display: block;
 }
 
-code.sample span:not(:first-child) {
+code.sample > span:not(:first-child) {
   margin-top: 0.5em;
 }
 
@@ -177,4 +177,12 @@ twisty-player {
   .code-demo {
     grid-template-columns: 1fr;
   }
+}
+
+code.sample span.js-object {
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  padding: 0.2em;
+  margin: -0.2em -0.1em;
+  border-radius: 0.3em;
 }
