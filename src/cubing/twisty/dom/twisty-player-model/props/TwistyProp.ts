@@ -92,8 +92,7 @@ export abstract class TwistyPropParent<T> {
   #scheduleRawDispatch(): void {
     if (!this.#rawDispatchPending) {
       this.#rawDispatchPending = true;
-      // TODO: Measure if this is better than `setTimeout(_, 0)`
-      queueMicrotask(() => this.#dispatchRawListeners());
+      setTimeout(() => this.#dispatchRawListeners(), 0);
     }
   }
 
