@@ -34,6 +34,8 @@ import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
 import { ControlPanelProp } from "./depth-0/ControlPanelProp";
 
 export class TwistyPlayerModel {
+  // TODO: Redistribute and group props with controllers.
+
   // Depth 0
   algProp = new AlgProp();
   backgroundProp = new BackgroundProp();
