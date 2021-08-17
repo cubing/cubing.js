@@ -42,4 +42,9 @@ twisty-scrubber {
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
 }
+
+.visualization-wrapper > * {
+  width: 100%;
+  height: 100%;
+}
 `);

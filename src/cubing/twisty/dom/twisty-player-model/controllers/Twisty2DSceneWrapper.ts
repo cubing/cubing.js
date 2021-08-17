@@ -14,7 +14,7 @@ import { StaleDropper } from "./PromiseFreshener";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
 import { Twisty3DVantage } from "./Twisty3DVantage";
 
-export class Twisty3DSceneWrapper
+export class Twisty2DSceneWrapper
   extends ManagedCustomElement
   implements Schedulable
 {
@@ -37,8 +37,6 @@ export class Twisty3DSceneWrapper
 
   async connectedCallback(): Promise<void> {
     this.addCSS(twistyViewerWrapperCSS);
-    const vantage = new Twisty3DVantage(this.model, this);
-    this.addVantage(vantage);
     if (this.model) {
       this.#freshListenerManager.addListener(
         this.model.puzzleProp,
@@ -49,7 +47,6 @@ export class Twisty3DSceneWrapper
         this.onBackView.bind(this),
       );
     }
-    this.scheduleRender();
   }
 
   #backViewVantage: Twisty3DVantage | null = null;
@@ -60,7 +57,7 @@ export class Twisty3DSceneWrapper
     this.#backViewClassListManager.setValue(backView);
     if (shouldHaveBackView) {
       if (!hasBackView) {
-        this.#backViewVantage = new Twisty3DVantage(this.model, this, {
+        this.#backViewVantage = new Twisty3DVantage(this.model, this as any, {
           backView: true,
         });
         this.addVantage(this.#backViewVantage);
@@ -93,7 +90,6 @@ export class Twisty3DSceneWrapper
     this.#vantages.delete(vantage);
     vantage.remove();
     vantage.disconnect();
-    this.#currentTwisty3DPuzzleWrapper?.disconnect();
   }
 
   scheduleRender(): void {
@@ -135,4 +131,4 @@ export class Twisty3DSceneWrapper
   }
 }
 
-customElementsShim.define("twisty-3d-scene-wrapper", Twisty3DSceneWrapper);
+customElementsShim.define("twisty-2d-scene-wrapper", Twisty2DSceneWrapper);

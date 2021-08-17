@@ -18,6 +18,7 @@ import {
   TwistyPlayerController,
   TwistyPlayerModel,
 } from "../props/TwistyPlayerModel";
+import { Twisty2DSceneWrapper } from "./Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./TwistyButtonsV2";
 import { TwistyScrubberV2 } from "./TwistyScrubberV2";
@@ -45,11 +46,13 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
       ),
     );
 
+  #visualizationWrapperElem = document.createElement("div"); // TODO: Better pattern.
   async connectedCallback(): Promise<void> {
     this.addCSS(twistyPlayerCSS);
 
-    const sceneWrapper = new Twisty3DSceneWrapper(this.model);
-    this.contentWrapper.appendChild(sceneWrapper);
+    this.addElement(this.#visualizationWrapperElem).classList.add(
+      "visualization-wrapper",
+    );
 
     const scrubber = new TwistyScrubberV2(this.model);
     this.contentWrapper.appendChild(scrubber);
@@ -71,6 +74,36 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
         this.#controlsManager.setValue(controlPanel);
       },
     );
+
+    this.model.effectiveVisualizationFormatProp.addFreshListener(
+      this.#setVisualizationWrapper.bind(this),
+    );
+  }
+
+  #visualizationWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper | null =
+    null;
+
+  #visualizationStrategy: "2D" | "3D" | null = null;
+  #setVisualizationWrapper(strategy: "2D" | "3D"): void {
+    if (strategy !== this.#visualizationStrategy) {
+      this.#visualizationWrapper?.remove();
+      this.#visualizationWrapper?.disconnect();
+      let newWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper;
+      console.log("strategy", strategy);
+      switch (strategy) {
+        case "2D":
+          newWrapper = new Twisty2DSceneWrapper(this.model);
+          break;
+        case "3D":
+          newWrapper = new Twisty3DSceneWrapper(this.model);
+          break;
+        default:
+          throw new Error("Invalid visualization");
+      }
+      this.#visualizationWrapperElem.appendChild(newWrapper);
+      this.#visualizationWrapper = newWrapper;
+      this.#visualizationStrategy = strategy;
+    }
   }
 
   set alg(newAlg: Alg | string) {

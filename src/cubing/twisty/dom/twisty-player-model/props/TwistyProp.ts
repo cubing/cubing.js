@@ -258,3 +258,34 @@ export abstract class TwistyPropDerived<
 
   protected abstract derive(input: InputTypes): PromiseOrValue<OutputType>;
 }
+
+export class FreshListenerManager {
+  #disconnectionFunctions: Function[] = [];
+
+  addListener<T>(
+    prop: TwistyPropParent<T>,
+    listener: (value: T) => void,
+  ): void {
+    let disconnected = false;
+    const wrappedListener = (value: T) => {
+      if (disconnected) {
+        console.warn("Should be disconnected!");
+        return;
+      }
+      listener(value);
+    };
+
+    prop.addFreshListener(wrappedListener);
+
+    this.#disconnectionFunctions.push(() => {
+      prop.removeFreshListener(wrappedListener);
+      disconnected = true;
+    });
+  }
+
+  disconnect(): void {
+    for (const disconnectionFunction of this.#disconnectionFunctions) {
+      disconnectionFunction();
+    }
+  }
+}

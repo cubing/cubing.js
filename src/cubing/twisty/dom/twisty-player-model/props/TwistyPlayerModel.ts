@@ -32,6 +32,8 @@ import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
 import { OrbitCoordinatesRequestProp } from "./depth-0/OrbitCoordinatesRequestProp";
 import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
 import { ControlPanelProp } from "./depth-0/ControlPanelProp";
+import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
+import { EffectiveVisualizationFormatProp } from "./depth-1/EffectiveVisualizationFormatProp";
 
 export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
@@ -53,14 +55,20 @@ export class TwistyPlayerModel {
   setupProp = new AlgProp();
   stickeringProp = new StickeringProp();
   timestampRequestProp = new TimestampRequestProp();
-  // visualization // TODO
+  visualizationFormatProp = new VisualizationFormatProp();
 
   // Depth 1
-  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
+  effectiveVisualizationFormatProp = new EffectiveVisualizationFormatProp({
+    visualizationRequest: this.visualizationFormatProp,
+    puzzleID: this.puzzleProp,
+  });
+
   orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
     latitudeLimit: this.latitudeLimitProp,
   });
+
+  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
 
   // Depth 2
   puzzleAlgProp = new PuzzleAlgProp({
