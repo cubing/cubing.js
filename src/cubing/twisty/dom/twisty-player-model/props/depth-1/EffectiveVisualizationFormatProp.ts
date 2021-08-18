@@ -4,7 +4,7 @@ import { TwistyPropDerived } from "../TwistyProp";
 
 export class EffectiveVisualizationFormatProp extends TwistyPropDerived<
   { visualizationRequest: VisualizationFormatWithAuto; puzzleID: PuzzleID },
-  "2D" | "3D" | null
+  "2D" | "3D"
 > {
   derive(inputs: {
     visualizationRequest: VisualizationFormatWithAuto;

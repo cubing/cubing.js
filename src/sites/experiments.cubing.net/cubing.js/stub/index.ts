@@ -3,6 +3,7 @@
 
 import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayerV2 } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/TwistyPlayerV2";
+import { indexerStrategyNames } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-0/IndexerConstructorRequestProp";
 import {
   backgroundThemes,
   controlsLocations,
@@ -52,7 +53,7 @@ console.log("Loading stub file.");
     input.value = alg.toString();
     input.placeholder = "(none)";
     const update = () => {
-      (twistyPlayer as any)[propName] = Alg.fromString(input.value);
+      (twistyPlayer as any)[propName] = input.value;
     };
     input.addEventListener("change", update);
     input.addEventListener("keyup", update);
@@ -86,6 +87,8 @@ console.log("Loading stub file.");
     ],
 
     ["backView", "back-view", Object.assign({ auto: true }, backViewLayouts)],
+
+    ["indexer", "indexer", Object.assign({ auto: true }, indexerStrategyNames)],
     // [
     //   "experimentalCameraLatitudeLimits",
     //   "experimental-camera-latitude-limits",

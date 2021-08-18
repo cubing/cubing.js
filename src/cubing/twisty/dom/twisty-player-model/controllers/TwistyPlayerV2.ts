@@ -15,6 +15,7 @@ import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelProp";
 import type { HintFaceletStyleWithAuto } from "../props/depth-0/HintFaceletProp";
+import type { IndexerStrategyName } from "../props/depth-0/IndexerConstructorRequestProp";
 import type { ViewerLinkPageWithAuto } from "../props/depth-0/ViewerLinkProp";
 import {
   TwistyPlayerController,
@@ -248,6 +249,15 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     throw new Error(
       "Cannot get `.cameraLatitudeLimit` directly from a `TwistyPlayer`.",
     );
+  }
+
+  // TODO: this needs a much better name.
+  set indexer(indexer: IndexerStrategyName) {
+    this.model.indexerConstructorRequestProp.set(indexer);
+  }
+
+  get indexer(): never {
+    throw new Error("Cannot get `.indexer` directly from a `TwistyPlayer`.");
   }
 }
 

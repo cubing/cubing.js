@@ -12,7 +12,7 @@ import { AlgProp } from "./depth-0/AlgProp";
 import { BackgroundProp } from "./depth-0/BackgroundProp";
 import { BackViewProp } from "./depth-0/BackViewProp";
 import { HintFaceletProp } from "./depth-0/HintFaceletProp";
-import { IndexerConstructorProp } from "./depth-0/IndexerConstructorProp";
+import { IndexerConstructorRequestProp } from "./depth-0/IndexerConstructorRequestProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
 import { PlayingInfo, PlayingProp } from "./depth-0/PlayingProp";
 import { PuzzleProp } from "./depth-0/PuzzleProp";
@@ -35,6 +35,7 @@ import { ControlPanelProp } from "./depth-0/ControlPanelProp";
 import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
 import { EffectiveVisualizationFormatProp } from "./depth-1/EffectiveVisualizationFormatProp";
 import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
+import { IndexerConstructorProp } from "./depth-2/IndexerConstructorProp";
 
 export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
@@ -45,7 +46,8 @@ export class TwistyPlayerModel {
   backViewProp = new BackViewProp();
   controlPanelProp = new ControlPanelProp();
   hintFaceletProp = new HintFaceletProp();
-  indexerConstructor = new IndexerConstructorProp();
+  indexerConstructorRequestProp = new IndexerConstructorRequestProp();
+
   latitudeLimitProp = new LatitudeLimitProp();
   orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
@@ -73,6 +75,13 @@ export class TwistyPlayerModel {
   puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
 
   // Depth 2
+  indexerConstructorProp = new IndexerConstructorProp({
+    alg: this.algProp,
+    puzzle: this.puzzleProp,
+    effectiveVisualization: this.effectiveVisualizationFormatProp,
+    indexerConstructorRequest: this.indexerConstructorRequestProp,
+  });
+
   puzzleAlgProp = new PuzzleAlgProp({
     algWithIssues: this.algProp,
     puzzleDef: this.puzzleDefProp,
@@ -85,7 +94,7 @@ export class TwistyPlayerModel {
 
   // Depth 3
   indexerProp = new IndexerProp({
-    indexerConstructor: this.indexerConstructor,
+    indexerConstructor: this.indexerConstructorProp,
     algWithIssues: this.puzzleAlgProp,
     def: this.puzzleDefProp,
   });
