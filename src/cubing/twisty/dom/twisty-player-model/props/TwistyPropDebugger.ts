@@ -31,6 +31,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     this.valueElem = this.contentWrapper.appendChild(
       document.createElement("div"),
     );
+    this.twistyProp.addRawListener(this.onPropRaw.bind(this));
     this.twistyProp.addFreshListener(this.onProp.bind(this));
 
     this.addCSS(
@@ -60,6 +61,19 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   text-overflow: ellipsis;
 }
     `),
+    );
+  }
+
+  async onPropRaw(): Promise<void> {
+    this.contentWrapper.animate(
+      [
+        // keyframes
+        { background: "rgba(244, 133, 66, 0.4)" },
+        { background: "transparent" },
+      ],
+      {
+        duration: 500,
+      },
     );
   }
 
