@@ -129,7 +129,6 @@ console.log("Loading stub file.");
         console.error("Invalid prop name!", propName);
       }
     });
-    document.body.append(document.createElement("br"));
   }
 
   const numberOptions: [string, string, number | null][] = [

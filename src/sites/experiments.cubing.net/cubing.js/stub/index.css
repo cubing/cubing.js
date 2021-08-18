@@ -3,5 +3,35 @@
 #debuggers {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+}
+
+html {
+  height: 100%;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  grid-template-areas: "player props" "inputs props";
+  grid-template-columns: auto 2fr;
+  grid-template-rows: auto 1fr;
+
+  height: 100%;
+  overflow: hidden;
+}
+
+body > twisty-player {
+  grid-area: player;
+}
+
+body > table {
+  grid-area: inputs;
+}
+
+body > #debuggers {
+  grid-area: props;
+  height: 100%;
+  overflow-y: auto;
 }

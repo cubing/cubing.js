@@ -24,7 +24,9 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   valueElem: HTMLElement | null = null;
 
   connectedCallback(): void {
-    this.contentWrapper.append(splitName(this.twistyProp.constructor.name));
+    const span = document.createElement("span");
+    span.textContent = splitName(this.twistyProp.constructor.name);
+    this.contentWrapper.append(span);
 
     this.valueElem = this.contentWrapper.appendChild(
       document.createElement("div"),
@@ -43,12 +45,19 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   border: 1px solid #000;
   overflow: hidden;
   padding: 0.25em;
+  box-sizing: border-box;
 }
 
 .wrapper > * {
   border-top: 1px solid #000;
   width: 100%;
   height: 3.5em;
+}
+
+.wrapper > span {
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
     `),
     );
