@@ -254,8 +254,7 @@ export class TwistyOrbitControlsV2 {
         const newCoords = {
           latitude:
             prevCoords.latitude + 2 * movementY * DEGREES_PER_RADIAN * scale,
-          longitude:
-            prevCoords.longitude - 2 * movementX * DEGREES_PER_RADIAN * scale,
+          longitude: prevCoords.longitude - 2 * movementX * DEGREES_PER_RADIAN,
         };
         // console.log("coords", prevCoords, newCoords);
         return newCoords;
