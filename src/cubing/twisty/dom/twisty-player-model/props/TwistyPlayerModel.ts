@@ -36,6 +36,7 @@ import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
 import { EffectiveVisualizationFormatProp } from "./depth-1/EffectiveVisualizationFormatProp";
 import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
 import { IndexerConstructorProp } from "./depth-2/IndexerConstructorProp";
+import { TempoScaleProp } from "./depth-0/TempoScaleProp";
 
 export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
@@ -57,6 +58,7 @@ export class TwistyPlayerModel {
   setupAnchorProp = new SetupAnchorProp();
   setupProp = new AlgProp();
   stickeringProp = new StickeringProp();
+  tempoScaleProp = new TempoScaleProp();
   timestampRequestProp = new TimestampRequestProp();
   viewerLinkProp = new ViewerLinkProp();
   visualizationFormatProp = new VisualizationFormatProp();
@@ -305,9 +307,9 @@ class PlayController {
   }
 
   #animFrameEffectiveTimestampStaleDropper: StaleDropper<
-    [{ playing: boolean }, MillisecondTimestamp, TimeRange]
+    [{ playing: boolean }, MillisecondTimestamp, TimeRange, number]
   > = new StaleDropper<
-    [{ playing: boolean }, MillisecondTimestamp, TimeRange]
+    [{ playing: boolean }, MillisecondTimestamp, TimeRange, number]
   >();
 
   async animFrame(frameDatestamp: MillisecondTimestamp): Promise<void> {
@@ -322,10 +324,11 @@ class PlayController {
           this.model.playingProp.get(),
           this.lastTimestampPromise,
           this.model.timeRangeProp.get(),
+          this.model.tempoScaleProp.get(),
         ]),
       );
 
-    const [playing, lastTimestamp, timeRange] = freshenerResult;
+    const [playing, lastTimestamp, timeRange, tempoScale] = freshenerResult;
 
     // TODO: Get this without wasting time on the others?
     if (playing.playing === false) {
@@ -343,7 +346,9 @@ class PlayController {
     }
 
     const delta =
-      (frameDatestamp - lastDatestamp) * directionScalar(this.direction);
+      (frameDatestamp - lastDatestamp) *
+      directionScalar(this.direction) *
+      tempoScale;
     let newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
     if (newTimestamp >= timeRange.end) {
       newTimestamp = timeRange.end;

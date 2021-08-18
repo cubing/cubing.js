@@ -259,6 +259,15 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
   get indexer(): never {
     throw new Error("Cannot get `.indexer` directly from a `TwistyPlayer`.");
   }
+
+  // TODO: this needs a much better name.
+  set tempoScale(newTempoScale: number) {
+    this.model.tempoScaleProp.set(newTempoScale);
+  }
+
+  get tempoScale(): never {
+    throw new Error("Cannot get `.tempoScale` directly from a `TwistyPlayer`.");
+  }
 }
 
 customElementsShim.define("twisty-player-v2", TwistyPlayerV2);

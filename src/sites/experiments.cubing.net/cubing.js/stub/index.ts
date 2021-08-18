@@ -131,14 +131,15 @@ console.log("Loading stub file.");
     });
   }
 
-  const numberOptions: [string, string, number | null][] = [
-    ["cameraLatitude", "camera-latitude", null],
-    ["cameraLongitude", "camera-longitude", null],
-    ["cameraDistance", "camera-distance", 6],
-    ["cameraLatitudeLimit", "camera-latitude-limit", 35],
+  const numberOptions: [string, string, number | null, number | null][] = [
+    ["cameraLatitude", "camera-latitude", null, null],
+    ["cameraLongitude", "camera-longitude", null, null],
+    ["cameraDistance", "camera-distance", 6, null],
+    ["cameraLatitudeLimit", "camera-latitude-limit", 35, null],
+    ["tempoScale", "tempo-scale", 1, 0.1],
   ];
 
-  for (const [propName, attrName, initialValue] of numberOptions) {
+  for (const [propName, attrName, initialValue, step] of numberOptions) {
     const tr = table.appendChild(document.createElement("tr"));
 
     const td1 = tr.appendChild(document.createElement("td"));
@@ -152,11 +153,18 @@ console.log("Loading stub file.");
     }
     input.type = "number";
     input.placeholder = "(no value)";
+    if (step !== null) {
+      input.step = step.toString();
+    }
     const update = () => {
       if (input.value === "") {
         return;
       }
-      (twistyPlayer as any)[propName] = input.value;
+      if (propName in twistyPlayer) {
+        (twistyPlayer as any)[propName] = input.value;
+      } else {
+        console.error("Invalid prop name!", propName);
+      }
     };
     input.addEventListener("input", update);
     // input.addEventListener("change", update);
