@@ -60,7 +60,7 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     const scrubber = new TwistyScrubberV2(this.model);
     this.contentWrapper.appendChild(scrubber);
 
-    this.buttons = new TwistyButtonsV2(this.model, this.controller);
+    this.buttons = new TwistyButtonsV2(this.model, this.controller, this);
     this.contentWrapper.appendChild(this.buttons);
 
     this.model.backgroundProp.addFreshListener(

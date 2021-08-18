@@ -2,7 +2,7 @@ import PLazy from "../../../../vendor/p-lazy";
 import { StaleDropper } from "../controllers/PromiseFreshener";
 import { addDebugger } from "./TwistyPropDebugger";
 
-type InputProps<T extends Object> = {
+export type InputProps<T extends Object> = {
   [s in keyof T]: TwistyPropParent<T[s]>;
 };
 

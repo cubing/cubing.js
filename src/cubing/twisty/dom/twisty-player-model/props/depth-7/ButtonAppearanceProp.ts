@@ -38,8 +38,13 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
   derive(inputs: ButtonAppearancePropInputs): ButtonAppearances {
     const buttonAppearances = {
       "fullscreen": {
-        enabled: false,
-        icon: "enter-fullscreen",
+        enabled: document.fullscreenEnabled, // TODO: Cache?
+        icon:
+          // TODO: Check against the expected element?
+          // TODO: This will *not* update when we enter/leave fullscreen. We need to work more closely with the controller.
+          document.fullscreenElement === null
+            ? "enter-fullscreen"
+            : "exit-fullscreen",
         title: "Enter fullscreen",
       },
       "jump-to-start": {
