@@ -53,6 +53,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   border-top: 1px solid #000;
   width: 100%;
   height: 3.5em;
+  overflow-wrap: anywhere;
 }
 
 .wrapper > span {

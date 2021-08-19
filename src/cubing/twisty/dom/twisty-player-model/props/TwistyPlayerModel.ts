@@ -9,7 +9,7 @@ import { HintFaceletProp } from "./depth-0/HintFaceletProp";
 import { IndexerConstructorRequestProp } from "./depth-0/IndexerConstructorRequestProp";
 import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
 import { OrbitCoordinatesRequestProp } from "./depth-0/OrbitCoordinatesRequestProp";
-import { PlayingProp } from "./depth-0/PlayingProp";
+import { PlayingInfoProp } from "./depth-0/PlayingInfoProp";
 import { PuzzleProp } from "./depth-0/PuzzleProp";
 import { SetupAnchorProp } from "./depth-0/SetupAnchorProp";
 import { StickeringProp } from "./depth-0/StickeringProp";
@@ -48,7 +48,7 @@ export class TwistyPlayerModel {
   orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
 
-  playingProp = new PlayingProp();
+  playingInfoProp = new PlayingInfoProp();
   puzzleProp = new PuzzleProp();
   setupAnchorProp = new SetupAnchorProp();
   setupProp = new AlgProp();
@@ -129,7 +129,7 @@ export class TwistyPlayerModel {
 
   coarseTimelineInfoProp = new CoarseTimelineInfoProp({
     detailedTimelineInfo: this.detailedTimelineInfoProp,
-    playingInfo: this.playingProp,
+    playingInfo: this.playingInfoProp,
   });
 
   // Depth 7

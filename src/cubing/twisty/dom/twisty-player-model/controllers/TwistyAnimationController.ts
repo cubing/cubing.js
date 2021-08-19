@@ -6,10 +6,14 @@ import {
   MillisecondTimestamp,
 } from "../../../animation/cursor/CursorTypes";
 import { RenderScheduler } from "../../../animation/RenderScheduler";
-import type { PlayingInfo } from "../props/depth-0/PlayingProp";
+import type {
+  PlayingInfo,
+  SimpleDirection,
+} from "../props/depth-0/PlayingInfoProp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { StaleDropper } from "../props/PromiseFreshener";
 import type { CurrentMoveInfo } from "../../../animation/indexer/AlgIndexer";
+import type { TimestampRequest } from "../props/depth-0/TimestampRequestProp";
 
 export class TwistyAnimationController {
   // TODO: #private?
@@ -29,12 +33,13 @@ export class TwistyAnimationController {
     this.model = model;
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
-    this.model.playingProp.addFreshListener(this.onPlayingProp.bind(this)); // TODO
+    this.model.playingInfoProp.addFreshListener(this.onPlayingProp.bind(this)); // TODO
   }
 
+  // TODO: Do we need this?
   async onPlayingProp(playingInfo: PlayingInfo): Promise<void> {
     if (playingInfo.playing !== this.playing) {
-      playingInfo.playing ? this.play() : this.pause();
+      playingInfo.playing ? this.play(playingInfo) : this.pause();
     }
   }
 
@@ -54,30 +59,32 @@ export class TwistyAnimationController {
     this.pause();
   }
 
-  // TODO: Return the animation we've switched to.
-  playPause(): { direction: Direction; playing: boolean } {
+  // TODO: Return the playing info we've switched to.
+  playPause(): void {
     if (this.playing) {
       this.pause();
     } else {
       this.play();
     }
-    return { direction: this.direction, playing: this.playing };
   }
 
   // TODO: bundle playing direction, and boundary into `toggle`.
-  async play(
-    untilBoundary: BoundaryType = BoundaryType.EntireTimeline,
-  ): Promise<void> {
-    if (this.playing) {
-      return;
-    }
+  async play(options?: {
+    direction?: SimpleDirection;
+    untilBoundary?: BoundaryType;
+  }): Promise<void> {
+    // TODO: We might need to cache all playing info?
+    // if (this.playing) {
+    //   return;
+    // }
 
     if ((await this.model.detailedTimelineInfoProp.get()).atEnd) {
       this.model.timestampRequestProp.set("start");
     }
-    this.model.playingProp.set({
+    this.model.playingInfoProp.set({
       playing: true,
-      untilBoundary,
+      direction: options?.direction ?? Direction.Forwards,
+      untilBoundary: options?.untilBoundary ?? BoundaryType.EntireTimeline,
     });
 
     this.playing = true;
@@ -91,7 +98,7 @@ export class TwistyAnimationController {
   pause(): void {
     this.playing = false;
     this.scheduler.cancelAnimFrame();
-    this.model.playingProp.set({
+    this.model.playingInfoProp.set({
       playing: false,
       untilBoundary: BoundaryType.EntireTimeline,
     });
@@ -112,7 +119,7 @@ export class TwistyAnimationController {
     const freshenerResult =
       await this.#animFrameEffectiveTimestampStaleDropper.queue(
         Promise.all([
-          this.model.playingProp.get(),
+          this.model.playingInfoProp.get(),
           this.lastTimestampPromise,
           this.model.timeRangeProp.get(),
           this.model.tempoScaleProp.get(),
@@ -145,26 +152,46 @@ export class TwistyAnimationController {
     ) {
       end = timeRange.end;
     }
+
+    let start = currentMoveInfo.latestStart; // timeRange.end
+    if (
+      currentMoveInfo.currentMoves.length === 0 ||
+      playingInfo.untilBoundary === BoundaryType.EntireTimeline
+    ) {
+      start = timeRange.start;
+    }
     // const start = currentMoveInfo.latestStart; // timeRange.start // TODO
 
     let delta =
       (frameDatestamp - lastDatestamp) *
       directionScalar(this.direction) *
       tempoScale;
-    delta = Math.max(delta, 1); // TODO: This guards against the timestamp going backwards by accident. Can we avoid it?
+    delta = Math.max(delta, 1); // TODO: This guards against the timestamp going in the wrong direction by accident. Can we avoid it?
+    delta *= playingInfo.direction;
     let newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
+    let newTimestampRequest: TimestampRequest = newTimestamp; // TODO: Pre-emptively clamp.
 
     if (newTimestamp >= end) {
       newTimestamp = end;
-      this.model.timestampRequestProp.set("end");
+      if (newTimestamp === timeRange.end) {
+        newTimestampRequest = "end"; // TODO: Only for EntireTimeline
+      }
       this.playing = false;
-      this.model.playingProp.set({
+      this.model.playingInfoProp.set({
         playing: false,
-        untilBoundary: BoundaryType.EntireTimeline,
+      });
+    } else if (newTimestamp <= start) {
+      newTimestamp = start;
+      if (newTimestamp === timeRange.start) {
+        newTimestampRequest = "start"; // TODO: Only for EntireTimeline
+      }
+      this.playing = false;
+      this.model.playingInfoProp.set({
+        playing: false,
       });
     }
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
-    this.model.timestampRequestProp.set(newTimestamp);
+    this.model.timestampRequestProp.set(newTimestampRequest);
   }
 }

@@ -98,7 +98,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
     const value = parseInt(inputElem.value);
     // console.log("on input", value);
-    this.model?.playingProp.set({ playing: false });
+    this.model?.playingInfoProp.set({ playing: false });
     this.model?.timestampRequestProp.set(value);
   }
 

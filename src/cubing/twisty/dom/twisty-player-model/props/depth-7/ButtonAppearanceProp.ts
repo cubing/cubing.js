@@ -1,4 +1,4 @@
-import type { ButtonCommand } from "../../controllers/TwistyButtonsV2";
+import type { ButtonCommand } from "../../controllers/control-panel/TwistyButtonsV2";
 import type { ViewerLinkPageWithAuto } from "../depth-0/ViewerLinkProp";
 import type { CoarseTimelineInfo as CoarseTimelineInfo } from "../depth-6/CoarseTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
@@ -53,7 +53,7 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
         title: "Restart",
       },
       "play-step-backwards": {
-        enabled: false,
+        enabled: !inputs.coarseTimelineInfo.atStart,
         icon: "step-backward",
         title: "Step backward",
       },

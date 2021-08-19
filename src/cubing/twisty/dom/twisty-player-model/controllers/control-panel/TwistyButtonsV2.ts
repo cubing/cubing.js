@@ -1,4 +1,7 @@
-import { BoundaryType } from "../../../../animation/cursor/CursorTypes";
+import {
+  BoundaryType,
+  Direction,
+} from "../../../../animation/cursor/CursorTypes";
 import { buttonCSS, buttonGridCSS } from "../../../controls/buttons.css_";
 import { ClassListManager } from "../../../element/ClassListManager";
 import { ManagedCustomElement } from "../../../element/ManagedCustomElement";
@@ -41,6 +44,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
     for (const command in buttonCommands) {
       const button = new TwistyButtonV2();
       buttons[command as ButtonCommand] = button;
+      // Why does this still fire with the `disabled` attribute?
       button.addEventListener("click", () =>
         this.#onCommand(command as ButtonCommand),
       );
@@ -60,12 +64,19 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
         this.controller?.jumpToStart();
         break;
       case "play-step-backwards":
+        this.controller?.animationController.play({
+          direction: Direction.Backwards,
+          untilBoundary: BoundaryType.Move,
+        });
         break;
       case "play-pause":
         this.controller?.togglePlay();
         break;
       case "play-step":
-        this.controller?.animationController.play(BoundaryType.Move);
+        this.controller?.animationController.play({
+          direction: Direction.Forwards,
+          untilBoundary: BoundaryType.Move,
+        });
         break;
       case "jump-to-end":
         this.controller?.jumpToEnd();

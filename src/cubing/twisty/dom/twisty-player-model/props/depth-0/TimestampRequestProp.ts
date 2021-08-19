@@ -12,4 +12,11 @@ export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampReques
   getDefaultValue(): TimestampRequest {
     return "opposite-anchor";
   }
+
+  set(v: TimestampRequest) {
+    if (v === null || v === NaN) {
+      debugger;
+    }
+    super.set(v);
+  }
 }
