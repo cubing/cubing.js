@@ -15,6 +15,9 @@ import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2.js";
 
 let SHOW_STATS = false;
+export function showStats(enable: boolean): void {
+  SHOW_STATS = enable;
+}
 
 export class Twisty3DVantage extends ManagedCustomElement {
   scene: Twisty3DSceneWrapper | null = null;
