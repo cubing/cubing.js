@@ -1,5 +1,5 @@
 import { Alg } from "../../../../../alg";
-import { arrayEquals } from "../equals";
+import { arrayEquals } from "../helpers";
 import { TwistyPropSource } from "../TwistyProp";
 
 export class AlgIssues {

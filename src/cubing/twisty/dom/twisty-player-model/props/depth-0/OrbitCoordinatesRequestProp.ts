@@ -1,3 +1,4 @@
+import { mod } from "../helpers";
 import { TwistyPropSource } from "../TwistyProp";
 
 export type CoordinateDegrees = number;
@@ -52,10 +53,4 @@ export class OrbitCoordinatesRequestProp extends TwistyPropSource<
     newValue.longitude = mod(newValue.longitude, 360, 180);
     return newValue;
   }
-}
-
-// Assumes `offset > 0`. Will produce invalid values if not!
-// We don't check for that, since this can be a hot path.
-function mod(v: number, m: number, offset = 0): number {
-  return (((v % m) + m + offset) % m) - offset;
 }

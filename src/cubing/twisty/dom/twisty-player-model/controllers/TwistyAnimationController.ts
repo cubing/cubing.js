@@ -14,6 +14,7 @@ import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { StaleDropper } from "../props/PromiseFreshener";
 import type { CurrentMoveInfo } from "../../../animation/indexer/AlgIndexer";
 import type { TimestampRequest } from "../props/depth-0/TimestampRequestProp";
+import { modIntoRange } from "../props/helpers";
 
 // TODO: Fiture out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {
@@ -72,7 +73,7 @@ export class TwistyAnimationController {
     if (this.playing) {
       this.pause();
     } else {
-      this.play();
+      this.play(); // TODO: Resume direction and looping behaviour?
     }
   }
 
@@ -81,6 +82,7 @@ export class TwistyAnimationController {
     direction?: SimpleDirection;
     untilBoundary?: BoundaryType;
     autoSkipToOtherEndIfStartingAtBoundary?: boolean; // TODO What's a good short name that doesn't imply a more general looping concept?
+    loop?: boolean;
   }): Promise<void> {
     // TODO: We might need to cache all playing info?
     // Or maybe we don't have to worry about short-circuiting, since this is idempotent?
@@ -105,6 +107,7 @@ export class TwistyAnimationController {
       playing: true,
       direction,
       untilBoundary: options?.untilBoundary ?? BoundaryType.EntireTimeline,
+      loop: options?.loop ?? false,
     });
 
     this.playing = true;
@@ -192,23 +195,39 @@ export class TwistyAnimationController {
     let newTimestampRequest: TimestampRequest = newTimestamp; // TODO: Pre-emptively clamp.
 
     if (newTimestamp >= end) {
-      newTimestamp = end;
-      if (newTimestamp === timeRange.end) {
-        newTimestampRequest = "end"; // TODO: Only for EntireTimeline
+      if (playingInfo.loop) {
+        newTimestamp = modIntoRange(
+          newTimestamp,
+          timeRange.start,
+          timeRange.end,
+        );
+      } else {
+        newTimestamp = end;
+        if (newTimestamp === timeRange.end) {
+          newTimestampRequest = "end"; // TODO: Only for EntireTimeline
+        }
+        this.playing = false;
+        this.model.playingInfoProp.set({
+          playing: false,
+        });
       }
-      this.playing = false;
-      this.model.playingInfoProp.set({
-        playing: false,
-      });
     } else if (newTimestamp <= start) {
-      newTimestamp = start;
-      if (newTimestamp === timeRange.start) {
-        newTimestampRequest = "start"; // TODO: Only for EntireTimeline
+      if (playingInfo.loop) {
+        newTimestamp = modIntoRange(
+          newTimestamp,
+          timeRange.start,
+          timeRange.end,
+        );
+      } else {
+        newTimestamp = start;
+        if (newTimestamp === timeRange.start) {
+          newTimestampRequest = "start"; // TODO: Only for EntireTimeline
+        }
+        this.playing = false;
+        this.model.playingInfoProp.set({
+          playing: false,
+        });
       }
-      this.playing = false;
-      this.model.playingInfoProp.set({
-        playing: false,
-      });
     }
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?

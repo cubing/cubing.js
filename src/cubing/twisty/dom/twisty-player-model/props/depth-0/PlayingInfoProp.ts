@@ -10,6 +10,9 @@ export interface PlayingInfo {
   playing: boolean;
   direction: SimpleDirection;
   untilBoundary: BoundaryType; // TODO: allows this to be optional in the setter?
+  // TODO: Is `loop` responsible to add at this point? Maybe we should wait until we've figured out autoplay?
+  // TODO: Combine `loop` into something with BoundaryType?
+  loop: boolean;
 }
 
 // TODO: direction,
@@ -22,6 +25,7 @@ export class PlayingInfoProp extends TwistyPropSource<
       direction: Direction.Forwards,
       playing: false,
       untilBoundary: BoundaryType.EntireTimeline,
+      loop: false,
     };
   }
 
@@ -40,7 +44,8 @@ export class PlayingInfoProp extends TwistyPropSource<
     return (
       v1.direction === v2.direction &&
       v1.playing === v2.playing &&
-      v1.untilBoundary === v2.untilBoundary
+      v1.untilBoundary === v2.untilBoundary &&
+      v1.loop === v2.loop
     );
   }
 }
