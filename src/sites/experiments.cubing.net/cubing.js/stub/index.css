@@ -1,11 +1,5 @@
 /* Add CSS below. */
 
-#debuggers {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
-}
-
 html {
   height: 100%;
   padding: 1em;
@@ -17,6 +11,7 @@ body {
   grid-template-areas: "player props" "inputs props";
   grid-template-columns: auto 2fr;
   grid-template-rows: auto 1fr;
+  gap: 1em;
 
   height: 100%;
   overflow: hidden;
@@ -32,6 +27,11 @@ body > table {
 
 body > #debuggers {
   grid-area: props;
-  height: 100%;
   overflow-y: auto;
+}
+
+#debuggers > div {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
 }

@@ -135,11 +135,14 @@ customElementsShim.define("twisty-prop-debugger", TwistyPropDebugger);
 
 const debuggerListElem = document.createElement("div");
 debuggerListElem.id = "debuggers";
+const debuggerListGrid = debuggerListElem.appendChild(
+  document.createElement("div"),
+);
 
 const DEBUG = true;
 export function addDebugger(twistyProp: TwistyPropParent<any>): void {
   if (DEBUG) {
-    debuggerListElem.appendChild(new TwistyPropDebugger(twistyProp));
+    debuggerListGrid.appendChild(new TwistyPropDebugger(twistyProp));
   }
 }
 

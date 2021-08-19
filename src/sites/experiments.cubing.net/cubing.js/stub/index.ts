@@ -35,7 +35,10 @@ console.log("Loading stub file.");
       : "R U R' U R U2' R'";
   twistyPlayer.alg = alg;
 
-  const table = document.body.appendChild(document.createElement("table"));
+  const tableWrapper = document.body.appendChild(
+    document.createElement("table"),
+  );
+  const table = tableWrapper.appendChild(document.createElement("table"));
 
   const algOptions: [string, string, Alg][] = [
     ["alg", "alg", Alg.fromString(alg)],
