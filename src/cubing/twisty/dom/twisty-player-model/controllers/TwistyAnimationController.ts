@@ -7,7 +7,7 @@ import {
 import { RenderScheduler } from "../../../animation/RenderScheduler";
 import type { PlayingInfo } from "../props/depth-0/PlayingProp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import { StaleDropper } from "./PromiseFreshener";
+import { StaleDropper } from "../props/PromiseFreshener";
 
 export class TwistyAnimationController {
   // TODO: #private?

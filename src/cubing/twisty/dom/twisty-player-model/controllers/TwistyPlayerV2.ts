@@ -18,11 +18,11 @@ import type { HintFaceletStyleWithAuto } from "../props/depth-0/HintFaceletProp"
 import type { IndexerStrategyName } from "../props/depth-0/IndexerConstructorRequestProp";
 import type { ViewerLinkPageWithAuto } from "../props/depth-0/ViewerLinkProp";
 import { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import { Twisty2DSceneWrapper } from "./Twisty2DSceneWrapper";
-import { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
-import { TwistyButtonsV2 } from "./TwistyButtonsV2";
+import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
+import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
+import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
 import { TwistyPlayerController } from "./TwistyPlayerController";
-import { TwistyScrubberV2 } from "./TwistyScrubberV2";
+import { TwistyScrubberV2 } from "./control-panel/TwistyScrubberV2";
 
 export class TwistyPlayerV2 extends ManagedCustomElement {
   model: TwistyPlayerModel = new TwistyPlayerModel();

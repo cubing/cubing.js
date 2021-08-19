@@ -4,22 +4,22 @@ import {
   KPuzzleSVGWrapper,
   Transformation,
   transformationForMove,
-} from "../../../../kpuzzle";
-import type { PuzzleLoader } from "../../../../puzzles/PuzzleLoader";
-import type { PuzzleAppearance } from "../../../../puzzles/stickerings/appearance";
-import type { PositionListener } from "../../../animation/cursor/AlgCursor";
+} from "../../../../../kpuzzle";
+import type { PuzzleLoader } from "../../../../../puzzles/PuzzleLoader";
+import type { PuzzleAppearance } from "../../../../../puzzles/stickerings/appearance";
+import type { PositionListener } from "../../../../animation/cursor/AlgCursor";
 import {
   Direction,
   PuzzlePosition,
-} from "../../../animation/cursor/CursorTypes";
-import { RenderScheduler } from "../../../animation/RenderScheduler";
-import { ManagedCustomElement } from "../../element/ManagedCustomElement";
-import { customElementsShim } from "../../element/node-custom-element-shims";
-import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import { FreshListenerManager } from "../props/TwistyProp";
-import type { ExperimentalStickering } from "../../TwistyPlayerConfig";
-import { twisty2DSVGCSS } from "../../viewers/Twisty2DSVGView.css_";
-import type { TwistyViewerElement } from "../../viewers/TwistyViewerElement";
+} from "../../../../animation/cursor/CursorTypes";
+import { RenderScheduler } from "../../../../animation/RenderScheduler";
+import { ManagedCustomElement } from "../../../element/ManagedCustomElement";
+import { customElementsShim } from "../../../element/node-custom-element-shims";
+import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
+import { FreshListenerManager } from "../../props/TwistyProp";
+import type { ExperimentalStickering } from "../../../TwistyPlayerConfig";
+import { twisty2DSVGCSS } from "../../../viewers/Twisty2DSVGView.css_";
+import type { TwistyViewerElement } from "../../../viewers/TwistyViewerElement";
 
 export interface Twisty2DPuzzleOptions {
   experimentalStickering?: ExperimentalStickering;

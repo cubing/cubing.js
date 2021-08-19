@@ -1,16 +1,16 @@
 import type { Scene as ThreeScene } from "three";
-import type { Schedulable } from "../../../animation/RenderScheduler";
-import { ClassListManager } from "../../element/ClassListManager";
-import { ManagedCustomElement } from "../../element/ManagedCustomElement";
-import { customElementsShim } from "../../element/node-custom-element-shims";
-import type { PuzzleID } from "../../TwistyPlayerConfig";
-import type { BackViewLayout } from "../../viewers/TwistyViewerWrapper";
-import { twistyViewerWrapperCSS } from "../../viewers/TwistyViewerWrapper.css_";
-import { THREEJS } from "../heavy-code-imports/3d";
-import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
-import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import { FreshListenerManager } from "../props/TwistyProp";
-import { StaleDropper } from "./PromiseFreshener";
+import type { Schedulable } from "../../../../animation/RenderScheduler";
+import { ClassListManager } from "../../../element/ClassListManager";
+import { ManagedCustomElement } from "../../../element/ManagedCustomElement";
+import { customElementsShim } from "../../../element/node-custom-element-shims";
+import type { PuzzleID } from "../../../TwistyPlayerConfig";
+import type { BackViewLayout } from "../../../viewers/TwistyViewerWrapper";
+import { twistyViewerWrapperCSS } from "../../../viewers/TwistyViewerWrapper.css_";
+import { THREEJS } from "../../heavy-code-imports/3d";
+import type { BackViewLayoutWithAuto } from "../../props/depth-0/BackViewProp";
+import { StaleDropper } from "../../props/PromiseFreshener";
+import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
+import { FreshListenerManager } from "../../props/TwistyProp";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
 import { Twisty3DVantage } from "./Twisty3DVantage";
 

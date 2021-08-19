@@ -1,12 +1,12 @@
 import type { Scene as ThreeScene } from "three";
-import type { Schedulable } from "../../../animation/RenderScheduler";
-import { ManagedCustomElement } from "../../element/ManagedCustomElement";
-import { customElementsShim } from "../../element/node-custom-element-shims";
-import type { PuzzleID } from "../../TwistyPlayerConfig";
-import { twistyViewerWrapperCSS } from "../../viewers/TwistyViewerWrapper.css_";
-import { THREEJS } from "../heavy-code-imports/3d";
-import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import { FreshListenerManager } from "../props/TwistyProp";
+import type { Schedulable } from "../../../../animation/RenderScheduler";
+import { ManagedCustomElement } from "../../../element/ManagedCustomElement";
+import { customElementsShim } from "../../../element/node-custom-element-shims";
+import type { PuzzleID } from "../../../TwistyPlayerConfig";
+import { twistyViewerWrapperCSS } from "../../../viewers/TwistyViewerWrapper.css_";
+import { THREEJS } from "../../heavy-code-imports/3d";
+import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
+import { FreshListenerManager } from "../../props/TwistyProp";
 import { Twisty2DPuzzleWrapper } from "./Twisty2DPuzzleWrapper";
 
 export class Twisty2DSceneWrapper

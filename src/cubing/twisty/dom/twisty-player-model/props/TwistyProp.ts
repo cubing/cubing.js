@@ -1,5 +1,5 @@
 import PLazy from "../../../../vendor/p-lazy";
-import { StaleDropper } from "../controllers/PromiseFreshener";
+import { StaleDropper } from "./PromiseFreshener";
 import { addDebugger } from "./TwistyPropDebugger";
 
 export type InputProps<T extends Object> = {

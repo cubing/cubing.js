@@ -1,10 +1,10 @@
-import type { ExperimentalStickering } from "../../..";
-import { puzzles } from "../../../../puzzles";
-import type { PuzzlePosition } from "../../../animation/cursor/CursorTypes";
-import type { Schedulable } from "../../../animation/RenderScheduler";
-import type { PuzzleID } from "../../TwistyPlayerConfig";
-import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import type { TwistyPropParent } from "../props/TwistyProp";
+import type { ExperimentalStickering } from "../../../..";
+import { puzzles } from "../../../../../puzzles";
+import type { PuzzlePosition } from "../../../../animation/cursor/CursorTypes";
+import type { Schedulable } from "../../../../animation/RenderScheduler";
+import type { PuzzleID } from "../../../TwistyPlayerConfig";
+import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
+import type { TwistyPropParent } from "../../props/TwistyProp";
 import { Twisty2DPuzzle } from "./Twisty2DPuzzle";
 
 export class Twisty2DPuzzleWrapper implements Schedulable {

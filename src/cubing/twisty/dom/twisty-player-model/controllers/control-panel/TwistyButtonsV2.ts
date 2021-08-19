@@ -1,14 +1,14 @@
-import { buttonCSS, buttonGridCSS } from "../../controls/buttons.css_";
-import { ClassListManager } from "../../element/ClassListManager";
-import { ManagedCustomElement } from "../../element/ManagedCustomElement";
-import { customElementsShim } from "../../element/node-custom-element-shims";
+import { buttonCSS, buttonGridCSS } from "../../../controls/buttons.css_";
+import { ClassListManager } from "../../../element/ClassListManager";
+import { ManagedCustomElement } from "../../../element/ManagedCustomElement";
+import { customElementsShim } from "../../../element/node-custom-element-shims";
 import {
   ButtonAppearances,
   ButtonIcon,
   buttonIcons,
-} from "../props/depth-7/ButtonAppearanceProp";
-import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import type { TwistyPlayerController } from "./TwistyPlayerController";
+} from "../../props/depth-7/ButtonAppearanceProp";
+import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
+import type { TwistyPlayerController } from "../TwistyPlayerController";
 
 const buttonCommands = {
   "fullscreen": true,

@@ -1,14 +1,14 @@
-import type { ExperimentalStickering } from "../../..";
-import { puzzles } from "../../../../puzzles";
-import type { Twisty3DPuzzle } from "../../../3D/puzzles/Twisty3DPuzzle";
-import type { PuzzlePosition } from "../../../animation/cursor/CursorTypes";
-import type { Schedulable } from "../../../animation/RenderScheduler";
-import type { PuzzleID } from "../../TwistyPlayerConfig";
-import { proxy3D } from "../heavy-code-imports/3d";
-import type { Cube3D, PG3D } from "../heavy-code-imports/dynamic-entries/3d";
-import type { HintFaceletStyleWithAuto } from "../props/depth-0/HintFaceletProp";
-import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import type { TwistyPropParent } from "../props/TwistyProp";
+import type { ExperimentalStickering } from "../../../..";
+import { puzzles } from "../../../../../puzzles";
+import type { Twisty3DPuzzle } from "../../../../3D/puzzles/Twisty3DPuzzle";
+import type { PuzzlePosition } from "../../../../animation/cursor/CursorTypes";
+import type { Schedulable } from "../../../../animation/RenderScheduler";
+import type { PuzzleID } from "../../../TwistyPlayerConfig";
+import { proxy3D } from "../../heavy-code-imports/3d";
+import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
+import type { HintFaceletStyleWithAuto } from "../../props/depth-0/HintFaceletProp";
+import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
+import type { TwistyPropParent } from "../../props/TwistyProp";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {
   constructor(
