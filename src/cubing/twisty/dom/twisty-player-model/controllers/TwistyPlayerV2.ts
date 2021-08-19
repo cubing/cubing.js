@@ -315,6 +315,10 @@ export class TwistyPlayerV2
     switch (attributeName) {
       case "alg":
         this.alg = newValue;
+        return;
+      case "control-panel":
+        this.controlPanel = newValue as ControlPanelThemeWithAuto;
+        return;
     }
   }
 }

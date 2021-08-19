@@ -7,7 +7,7 @@ const select = document.querySelector("select") as HTMLSelectElement;
 const scrambleStringDiv = document.querySelector(
   "#scramble-string",
 ) as HTMLDivElement;
-const twistyPlayer = document.querySelector("twisty-player") as TwistyPlayer;
+const twistyPlayer = document.querySelector("twisty-player-v2") as TwistyPlayer;
 const button = document.querySelector("button") as HTMLButtonElement;
 
 async function newScramble() {
@@ -16,7 +16,6 @@ async function newScramble() {
   const scramble = await randomScrambleForEvent(select.value);
   scrambleStringDiv.textContent = scramble.toString();
   twistyPlayer.alg = scramble;
-  twistyPlayer.timeline.jumpToEnd();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
