@@ -1,4 +1,5 @@
 import type { ButtonCommand } from "../../controllers/control-panel/TwistyButtonsV2";
+import { fullscreenEnabled } from "../../controllers/control-panel/webkit-fullscreen";
 import type { ViewerLinkPageWithAuto } from "../depth-0/ViewerLinkProp";
 import type { CoarseTimelineInfo as CoarseTimelineInfo } from "../depth-6/CoarseTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";
@@ -38,7 +39,8 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
   derive(inputs: ButtonAppearancePropInputs): ButtonAppearances {
     const buttonAppearances = {
       "fullscreen": {
-        enabled: document.fullscreenEnabled, // TODO: Cache?
+        // TODO: Cache?// TODO: Cache?
+        enabled: fullscreenEnabled,
         icon:
           // TODO: Check against the expected element?
           // TODO: This will *not* update when we enter/leave fullscreen. We need to work more closely with the controller.

@@ -13,6 +13,11 @@ import {
 } from "../../props/depth-7/ButtonAppearanceProp";
 import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
 import type { TwistyPlayerController } from "../TwistyPlayerController";
+import {
+  documentExitFullscreen,
+  documentFullscreenElement,
+  requestFullscreen,
+} from "./webkit-fullscreen";
 
 const buttonCommands = {
   "fullscreen": true,
@@ -91,21 +96,28 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
 
   // TODO: Should we have a prop, or a way to query if we're fullscreen?
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
-  onFullscreenButton(): void {
-    if (document.fullscreenElement === this.fullscreenElement) {
-      document.exitFullscreen();
+  async onFullscreenButton(): Promise<void> {
+    if (!this.fullscreenElement) {
+      throw new Error("Attempted to go fullscreen without an element.");
+    }
+
+    if (documentFullscreenElement() === this.fullscreenElement) {
+      documentExitFullscreen();
     } else {
       // TODO: Propagate button info to `ButtonAppearanceProp`.
       this.buttons?.fullscreen.setIcon("exit-fullscreen");
-      this.fullscreenElement!.requestFullscreen().then(() => {
-        const onFullscreen = (): void => {
-          if (document.fullscreenElement !== this.fullscreenElement) {
-            this.buttons?.fullscreen.setIcon("enter-fullscreen");
-            window.removeEventListener("fullscreenchange", onFullscreen);
-          }
-        };
-        window.addEventListener("fullscreenchange", onFullscreen);
-      });
+
+      requestFullscreen(this.fullscreenElement!);
+
+      console.log("a");
+      const onFullscreen = (): void => {
+        if (documentFullscreenElement() !== this.fullscreenElement) {
+          this.buttons?.fullscreen.setIcon("enter-fullscreen");
+          window.removeEventListener("fullscreenchange", onFullscreen);
+        }
+        console.log("b");
+      };
+      window.addEventListener("fullscreenchange", onFullscreen);
     }
   }
 
