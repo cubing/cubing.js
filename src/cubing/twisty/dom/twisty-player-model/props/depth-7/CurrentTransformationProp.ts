@@ -23,6 +23,7 @@ export class CurentTransformationProp extends TwistyPropDerived<
   CurentTransformationPropInputs,
   Transformation
 > {
+  // TODO: Figure out why this is still firing 6 times during stub demo loading.
   derive(inputs: CurentTransformationPropInputs): Transformation {
     let state: Transformation = inputs.indexer.transformAtIndex(
       inputs.currentMoveInfo.stateIndex,

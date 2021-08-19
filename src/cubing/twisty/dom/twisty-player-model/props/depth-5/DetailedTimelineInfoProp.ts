@@ -63,4 +63,14 @@ export class DetailedTimelineInfoProp extends TwistyPropDerived<
         return inputs.timestampRequest;
     }
   }
+
+  canReuse(v1: DetailedTimelineInfo, v2: DetailedTimelineInfo) {
+    return (
+      v1.timestamp === v2.timestamp &&
+      v1.timeRange.start === v2.timeRange.start &&
+      v1.timeRange.end === v2.timeRange.end &&
+      v1.atStart === v2.atStart &&
+      v1.atEnd === v2.atEnd
+    );
+  }
 }
