@@ -14,12 +14,12 @@ export class TwistyPlayerController {
     this.animationController = new TwistyAnimationController(model, delegate);
   }
 
-  jumpToStart(): void {
-    this.animationController.jumpToStart();
+  jumpToStart(options?: { flash: boolean }): void {
+    this.animationController.jumpToStart(options);
   }
 
-  jumpToEnd(): void {
-    this.animationController.jumpToEnd();
+  jumpToEnd(options?: { flash: boolean }): void {
+    this.animationController.jumpToEnd(options);
   }
 
   togglePlay(play?: boolean) {

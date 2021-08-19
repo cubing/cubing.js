@@ -57,15 +57,21 @@ export class TwistyAnimationController {
   }
 
   // TODO: Return the animation we've switched to.
-  jumpToStart(): void {
+  jumpToStart(options?: { flash: boolean }): void {
     this.model.timestampRequestProp.set("start");
     this.pause();
+    if (options?.flash) {
+      this.delegate.flashAutoSkip();
+    }
   }
 
   // TODO: Return the animation we've switched to.
-  jumpToEnd(): void {
+  jumpToEnd(options?: { flash: boolean }): void {
     this.model.timestampRequestProp.set("end");
     this.pause();
+    if (options?.flash) {
+      this.delegate.flashAutoSkip();
+    }
   }
 
   // TODO: Return the playing info we've switched to.

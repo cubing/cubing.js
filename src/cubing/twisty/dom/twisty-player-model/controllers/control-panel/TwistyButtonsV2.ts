@@ -61,7 +61,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
         this.onFullscreenButton();
         break;
       case "jump-to-start":
-        this.controller?.jumpToStart();
+        this.controller?.jumpToStart({ flash: true });
         break;
       case "play-step-backwards":
         this.controller?.animationController.play({
@@ -79,7 +79,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
         });
         break;
       case "jump-to-end":
-        this.controller?.jumpToEnd();
+        this.controller?.jumpToEnd({ flash: true });
         break;
       case "twizzle-link":
         this.controller?.visitTwizzleLink();

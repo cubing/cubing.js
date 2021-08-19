@@ -280,12 +280,12 @@ export class TwistyPlayerV2
     throw new Error("Cannot get `.tempoScale` directly from a `TwistyPlayer`.");
   }
 
-  jumpToStart(): void {
-    this.controller.jumpToStart();
+  jumpToStart(options?: { flash: boolean }): void {
+    this.controller.jumpToStart(options);
   }
 
-  jumpToEnd(): void {
-    this.controller.jumpToEnd();
+  jumpToEnd(options?: { flash: boolean }): void {
+    this.controller.jumpToEnd(options);
   }
 
   play(): void {
