@@ -70,7 +70,6 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           console.log(new Error("We should be disconnected!"));
           return;
         }
-        console.log("stickering", stickering);
         if ("setStickering" in (await this.twisty3DPuzzle())) {
           ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
           this.scheduleRender();

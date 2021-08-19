@@ -103,7 +103,6 @@ export class TwistyPlayerV2
       this.#visualizationWrapper?.remove();
       this.#visualizationWrapper?.disconnect();
       let newWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper;
-      console.log("strategy", strategy);
       switch (strategy) {
         case "2D":
           newWrapper = new Twisty2DSceneWrapper(this.model);

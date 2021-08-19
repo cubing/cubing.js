@@ -155,7 +155,6 @@ showStats(true);
 
     const td2 = tr.appendChild(document.createElement("td"));
     const input = td2.appendChild(document.createElement("input"));
-    console.log(propName, initialValue, initialValue !== null);
     if (initialValue !== null) {
       input.value = initialValue.toString();
     }
