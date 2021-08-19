@@ -48,7 +48,7 @@ export class Twisty2DPuzzle
     this.resetSVG(); // TODO: do this in `connectedCallback()`?
 
     this.#freshListenerManager.addListener(
-      this.model!.positionProp,
+      this.model!.currentLeavesProp,
       this.onPositionChange.bind(this),
     );
 

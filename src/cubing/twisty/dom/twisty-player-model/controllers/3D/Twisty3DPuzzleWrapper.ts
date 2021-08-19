@@ -32,15 +32,18 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       });
     };
 
-    addListener(this.model.positionProp, async (position: PuzzlePosition) => {
-      if (disconnected) {
-        // TODO: Why does this still fire?
-        console.log(new Error("We should be disconnected!"));
-        return;
-      }
-      (await this.twisty3DPuzzle()).onPositionChange(position);
-      this.scheduleRender();
-    });
+    addListener(
+      this.model.legacyPositionProp,
+      async (position: PuzzlePosition) => {
+        if (disconnected) {
+          // TODO: Why does this still fire?
+          console.log(new Error("We should be disconnected!"));
+          return;
+        }
+        (await this.twisty3DPuzzle()).onPositionChange(position);
+        this.scheduleRender();
+      },
+    );
 
     addListener(
       this.model.hintFaceletProp,

@@ -28,8 +28,10 @@ import { AnchoredStartProp } from "./depth-4/AnchoredStartProp";
 import { TimeRangeProp } from "./depth-4/TimeRangeProp";
 import { DetailedTimelineInfoProp } from "./depth-5/DetailedTimelineInfoProp";
 import { CoarseTimelineInfoProp } from "./depth-6/CoarseTimelineInfoProp";
-import { PositionProp } from "./depth-6/PositionProp";
+import { CurrentLeavesProp } from "./depth-6/CurrentLeavesProp";
 import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
+import { CurentTransformationProp } from "./depth-7/CurrentTransformationProp";
+import { LegacyPositionProp } from "./depth-8/LegacyPositionProp";
 
 export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
@@ -120,11 +122,9 @@ export class TwistyPlayerModel {
     });
 
   // Depth 6
-  positionProp = new PositionProp({
-    anchoredStart: this.anchoredStartProp,
+  currentLeavesProp = new CurrentLeavesProp({
     indexer: this.indexerProp,
     detailedTimelineInfo: this.detailedTimelineInfoProp,
-    def: this.puzzleDefProp,
   });
 
   coarseTimelineInfoProp = new CoarseTimelineInfoProp({
@@ -137,6 +137,19 @@ export class TwistyPlayerModel {
   buttonAppearanceProp = new ButtonAppearanceProp({
     coarseTimelineInfo: this.coarseTimelineInfoProp,
     viewerLink: this.viewerLinkProp,
+  });
+
+  curentTransformationProp = new CurentTransformationProp({
+    anchoredStart: this.anchoredStartProp,
+    currentMoveInfo: this.currentLeavesProp,
+    indexer: this.indexerProp,
+    def: this.puzzleDefProp,
+  });
+
+  // Depth 8
+  legacyPositionProp = new LegacyPositionProp({
+    currentMoveInfo: this.currentLeavesProp,
+    transformation: this.curentTransformationProp,
   });
 
   set alg(newAlg: Alg | string) {
