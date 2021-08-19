@@ -159,6 +159,8 @@ export function addDebugger(twistyProp: TwistyPropParent<any>): void {
   }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  document.body.appendChild(debuggerElems().wrapper);
-});
+if (typeof window !== "undefined") {
+  window?.addEventListener("DOMContentLoaded", () => {
+    document.body.appendChild(debuggerElems().wrapper);
+  });
+}
