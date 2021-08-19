@@ -139,7 +139,10 @@ const debuggerListGrid = debuggerListElem.appendChild(
   document.createElement("div"),
 );
 
-const DEBUG = true;
+let DEBUG = false;
+export function enableDebuggers(enable: boolean) {
+  DEBUG = enable;
+}
 export function addDebugger(twistyProp: TwistyPropParent<any>): void {
   if (DEBUG) {
     debuggerListGrid.appendChild(new TwistyPropDebugger(twistyProp));

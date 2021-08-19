@@ -303,6 +303,21 @@ export class TwistyPlayerV2
   togglePlay(play?: boolean): void {
     this.controller.togglePlay(play);
   }
+
+  static get observedAttributes(): string[] {
+    return ["alg"];
+  }
+
+  attributeChangedCallback(
+    attributeName: string,
+    _oldValue: string,
+    newValue: string,
+  ): void {
+    switch (attributeName) {
+      case "alg":
+        this.alg = newValue;
+    }
+  }
 }
 
 customElementsShim.define("twisty-player-v2", TwistyPlayerV2);

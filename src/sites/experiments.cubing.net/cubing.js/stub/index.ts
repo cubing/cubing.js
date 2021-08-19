@@ -4,6 +4,7 @@
 import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayerV2 } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/TwistyPlayerV2";
 import { indexerStrategyNames } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-0/IndexerConstructorRequestProp";
+import { enableDebuggers } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPropDebugger";
 import {
   backgroundThemes,
   controlsLocations,
@@ -20,6 +21,8 @@ import { backViewLayouts } from "../../../../cubing/twisty/dom/viewers/TwistyVie
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
 console.log("Loading stub file.");
+
+enableDebuggers(true);
 
 (async () => {
   const puzzle = (new URL(location.href).searchParams.get("puzzle") ??

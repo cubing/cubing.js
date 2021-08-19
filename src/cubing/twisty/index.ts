@@ -1,3 +1,6 @@
+export { TwistyPlayerV2 } from "./dom/twisty-player-model/controllers/TwistyPlayerV2";
+
+// Old
 export type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";
 export {
   experimentalSetShareAllNewRenderers,
@@ -14,7 +17,7 @@ export type { TimelineActionEvent } from "./animation/Timeline";
 export { TwistyAlgViewer } from "./dom/TwistyAlgViewer";
 export { TwistyAlgEditor } from "./dom/TwistyAlgEditor";
 
-// Old
+// Older
 export { Cube3D } from "./3D/puzzles/Cube3D";
 export { PG3D } from "./3D/puzzles/PG3D";
 export type { AlgIndexer } from "./animation/indexer/AlgIndexer";
