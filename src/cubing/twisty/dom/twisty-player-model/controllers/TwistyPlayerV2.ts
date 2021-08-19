@@ -23,10 +23,17 @@ import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
 import { TwistyPlayerController } from "./TwistyPlayerController";
 import { TwistyScrubberV2 } from "./control-panel/TwistyScrubberV2";
+import type { TwistyAnimationControllerDelegate } from "./TwistyAnimationController";
 
-export class TwistyPlayerV2 extends ManagedCustomElement {
+export class TwistyPlayerV2
+  extends ManagedCustomElement
+  implements TwistyAnimationControllerDelegate
+{
   model: TwistyPlayerModel = new TwistyPlayerModel();
-  controller: TwistyPlayerController = new TwistyPlayerController(this.model);
+  controller: TwistyPlayerController = new TwistyPlayerController(
+    this.model,
+    this,
+  );
 
   buttons: TwistyButtonsV2;
 
@@ -79,6 +86,12 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
     this.model.effectiveVisualizationFormatProp.addFreshListener(
       this.#setVisualizationWrapper.bind(this),
     );
+  }
+
+  flashAutoSkip() {
+    this.#visualizationWrapper?.animate([{ opacity: 0.25 }, { opacity: 1 }], {
+      duration: 250,
+    });
   }
 
   #visualizationWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper | null =

@@ -15,6 +15,11 @@ import { StaleDropper } from "../props/PromiseFreshener";
 import type { CurrentMoveInfo } from "../../../animation/indexer/AlgIndexer";
 import type { TimestampRequest } from "../props/depth-0/TimestampRequestProp";
 
+// TODO: Fiture out a better way for the controller to instruct the player.
+export interface TwistyAnimationControllerDelegate {
+  flashAutoSkip(): void;
+}
+
 export class TwistyAnimationController {
   // TODO: #private?
   private playing: boolean = false;
@@ -29,7 +34,10 @@ export class TwistyAnimationController {
     this.animFrame.bind(this),
   );
 
-  constructor(model: TwistyPlayerModel) {
+  constructor(
+    model: TwistyPlayerModel,
+    private delegate: TwistyAnimationControllerDelegate,
+  ) {
     this.model = model;
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
@@ -86,9 +94,11 @@ export class TwistyAnimationController {
     if (options?.autoSkipToOtherEndIfStartingAtBoundary ?? true) {
       if (direction === Direction.Forwards && coarseTimelineInfo.atEnd) {
         this.model.timestampRequestProp.set("start");
+        this.delegate.flashAutoSkip();
       }
       if (direction === Direction.Backwards && coarseTimelineInfo.atStart) {
         this.model.timestampRequestProp.set("end");
+        this.delegate.flashAutoSkip();
       }
     }
     this.model.playingInfoProp.set({

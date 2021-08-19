@@ -1,11 +1,17 @@
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
-import { TwistyAnimationController } from "./TwistyAnimationController";
+import {
+  TwistyAnimationController,
+  TwistyAnimationControllerDelegate,
+} from "./TwistyAnimationController";
 
 export class TwistyPlayerController {
   animationController: TwistyAnimationController;
 
-  constructor(private model: TwistyPlayerModel) {
-    this.animationController = new TwistyAnimationController(model);
+  constructor(
+    private model: TwistyPlayerModel,
+    delegate: TwistyAnimationControllerDelegate,
+  ) {
+    this.animationController = new TwistyAnimationController(model, delegate);
   }
 
   jumpToStart(): void {

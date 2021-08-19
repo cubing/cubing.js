@@ -33,7 +33,6 @@ export class PlayingInfoProp extends TwistyPropSource<
 
     const newValue: PlayingInfo = Object.assign({}, oldValue);
     Object.assign(newValue, newInfo);
-    console.log(newValue, newInfo);
     return newValue;
   }
 
