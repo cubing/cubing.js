@@ -7,10 +7,8 @@ import {
   ButtonIcon,
   buttonIcons,
 } from "../props/depth-7/ButtonAppearanceProp";
-import type {
-  TwistyPlayerController,
-  TwistyPlayerModel,
-} from "../props/TwistyPlayerModel";
+import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
+import type { TwistyPlayerController } from "./TwistyPlayerController";
 
 const buttonCommands = {
   "fullscreen": true,
@@ -63,7 +61,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
       case "play-step-backwards":
         break;
       case "play-pause":
-        this.controller?.playPause();
+        this.controller?.togglePlay();
         break;
       case "play-step":
         break;

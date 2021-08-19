@@ -17,13 +17,11 @@ import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelPro
 import type { HintFaceletStyleWithAuto } from "../props/depth-0/HintFaceletProp";
 import type { IndexerStrategyName } from "../props/depth-0/IndexerConstructorRequestProp";
 import type { ViewerLinkPageWithAuto } from "../props/depth-0/ViewerLinkProp";
-import {
-  TwistyPlayerController,
-  TwistyPlayerModel,
-} from "../props/TwistyPlayerModel";
+import { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { Twisty2DSceneWrapper } from "./Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./TwistyButtonsV2";
+import { TwistyPlayerController } from "./TwistyPlayerController";
 import { TwistyScrubberV2 } from "./TwistyScrubberV2";
 
 export class TwistyPlayerV2 extends ManagedCustomElement {
@@ -267,6 +265,30 @@ export class TwistyPlayerV2 extends ManagedCustomElement {
 
   get tempoScale(): never {
     throw new Error("Cannot get `.tempoScale` directly from a `TwistyPlayer`.");
+  }
+
+  jumpToStart(): void {
+    this.controller.jumpToStart();
+  }
+
+  jumpToEnd(): void {
+    this.controller.jumpToEnd();
+  }
+
+  play(): void {
+    this.controller.togglePlay(true);
+  }
+
+  pause(): void {
+    this.controller.togglePlay(false);
+  }
+
+  // Inspiration:
+  // - https://developer.mozilla.org/en-US/docs/Web/API/Element/toggleAttribute (`force` argument)
+  // - https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/toggle (`force` argument)
+  // We still provide `play()` and `pause()` individually for convenience, though.
+  togglePlay(play?: boolean): void {
+    this.controller.togglePlay(play);
   }
 }
 
