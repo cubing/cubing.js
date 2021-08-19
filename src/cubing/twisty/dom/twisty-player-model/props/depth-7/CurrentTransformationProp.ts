@@ -1,3 +1,4 @@
+import { KSolvePuzzle } from "../../../..";
 import {
   combineTransformations,
   KPuzzleDefinition,
@@ -23,13 +24,18 @@ export class CurentTransformationProp extends TwistyPropDerived<
   Transformation
 > {
   derive(inputs: CurentTransformationPropInputs): Transformation {
-    const indexedTransformation = inputs.indexer.transformAtIndex(
+    let state: Transformation = inputs.indexer.transformAtIndex(
       inputs.currentMoveInfo.stateIndex,
     ) as any;
-    return combineTransformations(
-      inputs.def,
-      inputs.anchoredStart,
-      indexedTransformation,
-    );
+    state = combineTransformations(inputs.def, inputs.anchoredStart, state);
+    const ksolvePuzzle = new KSolvePuzzle(inputs.def); // TODO: put this elsewhere.
+    for (const finishingMove of inputs.currentMoveInfo.movesFinishing) {
+      state = combineTransformations(
+        inputs.def,
+        inputs.anchoredStart,
+        ksolvePuzzle.stateFromMove(finishingMove.move),
+      );
+    }
+    return state;
   }
 }

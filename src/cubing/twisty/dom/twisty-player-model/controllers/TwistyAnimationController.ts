@@ -1,5 +1,6 @@
 import type { TimeRange } from "../../../animation/cursor/AlgCursor";
 import {
+  BoundaryType,
   Direction,
   directionScalar,
   MillisecondTimestamp,
@@ -8,6 +9,7 @@ import { RenderScheduler } from "../../../animation/RenderScheduler";
 import type { PlayingInfo } from "../props/depth-0/PlayingProp";
 import type { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { StaleDropper } from "../props/PromiseFreshener";
+import type { CurrentMoveInfo } from "../../../animation/indexer/AlgIndexer";
 
 export class TwistyAnimationController {
   // TODO: #private?
@@ -62,7 +64,10 @@ export class TwistyAnimationController {
     return { direction: this.direction, playing: this.playing };
   }
 
-  async play(): Promise<void> {
+  // TODO: bundle playing direction, and boundary into `toggle`.
+  async play(
+    untilBoundary: BoundaryType = BoundaryType.EntireTimeline,
+  ): Promise<void> {
     if (this.playing) {
       return;
     }
@@ -70,7 +75,10 @@ export class TwistyAnimationController {
     if ((await this.model.detailedTimelineInfoProp.get()).atEnd) {
       this.model.timestampRequestProp.set("start");
     }
-    this.model.playingProp.set({ playing: true });
+    this.model.playingProp.set({
+      playing: true,
+      untilBoundary,
+    });
 
     this.playing = true;
     this.lastDatestamp = performance.now(); // TODO: Take from event.
@@ -83,13 +91,16 @@ export class TwistyAnimationController {
   pause(): void {
     this.playing = false;
     this.scheduler.cancelAnimFrame();
-    this.model.playingProp.set({ playing: false });
+    this.model.playingProp.set({
+      playing: false,
+      untilBoundary: BoundaryType.EntireTimeline,
+    });
   }
 
   #animFrameEffectiveTimestampStaleDropper: StaleDropper<
-    [{ playing: boolean }, MillisecondTimestamp, TimeRange, number]
+    [PlayingInfo, MillisecondTimestamp, TimeRange, number, CurrentMoveInfo]
   > = new StaleDropper<
-    [{ playing: boolean }, MillisecondTimestamp, TimeRange, number]
+    [PlayingInfo, MillisecondTimestamp, TimeRange, number, CurrentMoveInfo]
   >();
 
   async animFrame(frameDatestamp: MillisecondTimestamp): Promise<void> {
@@ -105,13 +116,15 @@ export class TwistyAnimationController {
           this.lastTimestampPromise,
           this.model.timeRangeProp.get(),
           this.model.tempoScaleProp.get(),
+          this.model.currentLeavesProp.get(),
         ]),
       );
 
-    const [playing, lastTimestamp, timeRange, tempoScale] = freshenerResult;
+    const [playingInfo, lastTimestamp, timeRange, tempoScale, currentMoveInfo] =
+      freshenerResult;
 
     // TODO: Get this without wasting time on the others?
-    if (playing.playing === false) {
+    if (playingInfo.playing === false) {
       this.playing = false;
       // TODO: Ideally we'd cancel the anim frame from the top of this method.
       // But `this.scheduler.cancelAnimFrame();` might accidentally cancel a
@@ -125,16 +138,30 @@ export class TwistyAnimationController {
       return;
     }
 
-    const delta =
+    let end = currentMoveInfo.earliestEnd; // timeRange.end
+    if (
+      currentMoveInfo.currentMoves.length === 0 ||
+      playingInfo.untilBoundary === BoundaryType.EntireTimeline
+    ) {
+      end = timeRange.end;
+    }
+    // const start = currentMoveInfo.latestStart; // timeRange.start // TODO
+
+    let delta =
       (frameDatestamp - lastDatestamp) *
       directionScalar(this.direction) *
       tempoScale;
+    delta = Math.max(delta, 1); // TODO: This guards against the timestamp going backwards by accident. Can we avoid it?
     let newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
-    if (newTimestamp >= timeRange.end) {
-      newTimestamp = timeRange.end;
+
+    if (newTimestamp >= end) {
+      newTimestamp = end;
       this.model.timestampRequestProp.set("end");
       this.playing = false;
-      this.model.playingProp.set({ playing: false });
+      this.model.playingProp.set({
+        playing: false,
+        untilBoundary: BoundaryType.EntireTimeline,
+      });
     }
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?

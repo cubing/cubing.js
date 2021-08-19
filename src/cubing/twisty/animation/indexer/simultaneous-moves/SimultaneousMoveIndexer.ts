@@ -118,6 +118,8 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
 
   public currentMoveInfo(timestamp: Timestamp): CurrentMoveInfo {
     const currentMoves: CurrentMove[] = [];
+    const movesStarting: CurrentMove[] = [];
+    const movesFinishing: CurrentMove[] = [];
     let stateIndex: number = 0;
     let latestStart: number = -Infinity; // TODO: is there a better way to accumulate this?
     let earliestEnd: number = Infinity; // TODO: is there a better way to accumulate this?
@@ -128,22 +130,40 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
         moveWithRange.start < timestamp &&
         timestamp < moveWithRange.end
       ) {
-        currentMoves.push({
+        const fraction =
+          (timestamp - moveWithRange.start) /
+          (moveWithRange.end - moveWithRange.start);
+        const currentMove = {
           move: moveWithRange.move,
           direction: Direction.Forwards,
-          fraction:
-            (timestamp - moveWithRange.start) /
-            (moveWithRange.end - moveWithRange.start),
+          fraction,
           startTimestamp: moveWithRange.start,
           endTimestamp: moveWithRange.end,
-        });
-        latestStart = Math.max(latestStart, moveWithRange.start);
-        earliestEnd = Math.max(earliestEnd, moveWithRange.end);
+        };
+        switch (fraction) {
+          case 0:
+            movesStarting.push(currentMove);
+            break;
+          case 1:
+            movesFinishing.push(currentMove);
+            break;
+          default:
+            currentMoves.push(currentMove);
+            latestStart = Math.max(latestStart, moveWithRange.start);
+            earliestEnd = Math.min(earliestEnd, moveWithRange.end);
+        }
       } else if (timestamp < moveWithRange.start) {
         continue; // TODO: break?
       }
     }
-    return { stateIndex, currentMoves, latestStart, earliestEnd };
+    return {
+      stateIndex,
+      currentMoves,
+      latestStart,
+      earliestEnd,
+      movesStarting,
+      movesFinishing,
+    };
   }
 
   public stateAtIndex(index: number, startTransformation?: State<P>): State<P> {

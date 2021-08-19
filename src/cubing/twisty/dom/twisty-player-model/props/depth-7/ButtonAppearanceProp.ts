@@ -63,7 +63,7 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
         title: inputs.coarseTimelineInfo.playing ? "Pause" : "Play",
       },
       "play-step": {
-        enabled: false,
+        enabled: !inputs.coarseTimelineInfo.atEnd,
         icon: "step-forward",
         title: "Step forward",
       },

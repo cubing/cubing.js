@@ -1,3 +1,4 @@
+import { BoundaryType } from "../../../../animation/cursor/CursorTypes";
 import { buttonCSS, buttonGridCSS } from "../../../controls/buttons.css_";
 import { ClassListManager } from "../../../element/ClassListManager";
 import { ManagedCustomElement } from "../../../element/ManagedCustomElement";
@@ -64,6 +65,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
         this.controller?.togglePlay();
         break;
       case "play-step":
+        this.controller?.animationController.play(BoundaryType.Move);
         break;
       case "jump-to-end":
         this.controller?.jumpToEnd();

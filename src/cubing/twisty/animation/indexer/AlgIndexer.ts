@@ -19,6 +19,8 @@ export interface CurrentMove {
 export interface CurrentMoveInfo {
   stateIndex: number;
   currentMoves: CurrentMove[];
+  movesFinishing: CurrentMove[];
+  movesStarting: CurrentMove[];
   latestStart: number;
   earliestEnd: number;
 }

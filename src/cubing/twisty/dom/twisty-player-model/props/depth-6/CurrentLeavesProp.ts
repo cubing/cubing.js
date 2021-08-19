@@ -12,6 +12,7 @@ interface PositionPropInputs {
   detailedTimelineInfo: DetailedTimelineInfo;
 }
 
+// TODO: Rename "current" (implies a single one) to "active"?
 export class CurrentLeavesProp extends TwistyPropDerived<
   PositionPropInputs,
   CurrentMoveInfo
@@ -29,6 +30,8 @@ export class CurrentLeavesProp extends TwistyPropDerived<
       const currentMoveInfo: CurrentMoveInfo = {
         stateIndex: idx,
         currentMoves: [],
+        movesFinishing: [],
+        movesStarting: [],
         latestStart: -Infinity,
         earliestEnd: Infinity,
       };
@@ -43,24 +46,32 @@ export class CurrentLeavesProp extends TwistyPropDerived<
         const fraction =
           (inputs.detailedTimelineInfo.timestamp - start) / duration;
         const end = start + duration;
-        // if (fraction === 1) {
-        //   // // TODO: push this into the indexer
-        //   // position.state = combineTransformations(
-        //   //   inputs.def,
-        //   //   state,
-        //   //   transformationForMove(inputs.def, move),
-        //   // ) as Transformation;
-        // } else if (fraction >= 0) {
-        // if (move) {
-        if (fraction < 1) {
+        const currentMove = {
+          move,
+          direction: Direction.Forwards,
+          fraction,
+          startTimestamp: start,
+          endTimestamp: end,
+        };
+        if (fraction === 0) {
+          currentMoveInfo.movesStarting.push(currentMove);
+          // // TODO: push this into the indexer
+          // position.state = combineTransformations(
+          //   inputs.def,
+          //   state,
+          //   transformationForMove(inputs.def, move),
+          // ) as Transformation;
+        } else if (fraction === 1) {
+          currentMoveInfo.movesFinishing.push(currentMove);
+          // // TODO: push this into the indexer
+          // position.state = combineTransformations(
+          //   inputs.def,
+          //   state,
+          //   transformationForMove(inputs.def, move),
+          // ) as Transformation;
+        } else {
           // TODO
-          currentMoveInfo.currentMoves.push({
-            move,
-            direction: Direction.Forwards,
-            fraction,
-            startTimestamp: start,
-            endTimestamp: end,
-          });
+          currentMoveInfo.currentMoves.push(currentMove);
           currentMoveInfo.latestStart = Math.max(
             currentMoveInfo.latestStart,
             start,
