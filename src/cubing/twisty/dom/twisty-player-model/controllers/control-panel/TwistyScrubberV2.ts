@@ -3,12 +3,13 @@ import { ManagedCustomElement } from "../../../element/ManagedCustomElement";
 import { customElementsShim } from "../../../element/node-custom-element-shims";
 import type { DetailedTimelineInfo } from "../../props/depth-5/DetailedTimelineInfoProp";
 import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
+import { globalSafeDocument } from "../document";
 
 const SLOW_DOWN_SCRUBBING = false;
 
 var isMouseDown = false;
 
-document.addEventListener(
+globalSafeDocument?.addEventListener(
   "mousedown",
   function (event) {
     if (event.which) isMouseDown = true;
@@ -16,7 +17,7 @@ document.addEventListener(
   true,
 );
 
-document.addEventListener(
+globalSafeDocument?.addEventListener(
   "mouseup",
   function (event) {
     if (event.which) isMouseDown = false;
@@ -28,7 +29,7 @@ document.addEventListener(
 var y = 0;
 let clickNum = 0;
 
-document.addEventListener(
+globalSafeDocument?.addEventListener(
   "mousedown",
   () => {
     clickNum++;
@@ -36,8 +37,8 @@ document.addEventListener(
   false,
 );
 
-document.addEventListener("mousemove", onMouseUpdate, false);
-document.addEventListener("mouseenter", onMouseUpdate, false);
+globalSafeDocument?.addEventListener("mousemove", onMouseUpdate, false);
+globalSafeDocument?.addEventListener("mouseenter", onMouseUpdate, false);
 
 function onMouseUpdate(e: MouseEvent) {
   // x = e.pageX;

@@ -1,5 +1,7 @@
 // Ponyfills for prefixing in Safari.
 
+import { globalSafeDocument } from "../document";
+
 declare global {
   interface Document {
     webkitFullscreenEnabled?: boolean;
@@ -14,7 +16,8 @@ declare global {
 
 // TODO: Can `webkitFullscreenEnabled` change after it's cached at page load?
 export const fullscreenEnabled: boolean =
-  document?.fullscreenEnabled || !!document?.webkitFullscreenEnabled;
+  globalSafeDocument?.fullscreenEnabled ||
+  !!globalSafeDocument?.webkitFullscreenEnabled;
 
 export function documentExitFullscreen(): Promise<void> {
   if (document.exitFullscreen) {
