@@ -192,7 +192,8 @@ export class TwistyAnimationController {
     delta = Math.max(delta, 1); // TODO: This guards against the timestamp going in the wrong direction by accident. Can we avoid it?
     delta *= playingInfo.direction;
     let newTimestamp = lastTimestamp + delta; // TODO: Pre-emptively clamp.
-    let newTimestampRequest: TimestampRequest = newTimestamp; // TODO: Pre-emptively clamp.
+    let newSmartTimestampRequest: Exclude<TimestampRequest, number> | null =
+      null;
 
     if (newTimestamp >= end) {
       if (playingInfo.loop) {
@@ -202,9 +203,10 @@ export class TwistyAnimationController {
           timeRange.end,
         );
       } else {
-        newTimestamp = end;
         if (newTimestamp === timeRange.end) {
-          newTimestampRequest = "end"; // TODO: Only for EntireTimeline
+          newSmartTimestampRequest = "end";
+        } else {
+          newTimestamp = end;
         }
         this.playing = false;
         this.model.playingInfoProp.set({
@@ -219,9 +221,10 @@ export class TwistyAnimationController {
           timeRange.end,
         );
       } else {
-        newTimestamp = start;
         if (newTimestamp === timeRange.start) {
-          newTimestampRequest = "start"; // TODO: Only for EntireTimeline
+          newSmartTimestampRequest = "start";
+        } else {
+          newTimestamp = start;
         }
         this.playing = false;
         this.model.playingInfoProp.set({
@@ -231,6 +234,8 @@ export class TwistyAnimationController {
     }
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
-    this.model.timestampRequestProp.set(newTimestampRequest);
+    this.model.timestampRequestProp.set(
+      newSmartTimestampRequest ?? newTimestamp,
+    );
   }
 }
