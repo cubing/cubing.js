@@ -14,7 +14,7 @@ declare global {
 
 // TODO: Can `webkitFullscreenEnabled` change after it's cached at page load?
 export const fullscreenEnabled: boolean =
-  document.fullscreenEnabled || !!document.webkitFullscreenEnabled;
+  document?.fullscreenEnabled || !!document?.webkitFullscreenEnabled;
 
 export function documentExitFullscreen(): Promise<void> {
   if (document.exitFullscreen) {
