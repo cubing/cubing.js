@@ -72,18 +72,28 @@ export class TwistyAnimationController {
   async play(options?: {
     direction?: SimpleDirection;
     untilBoundary?: BoundaryType;
+    autoSkipToOtherEndIfStartingAtBoundary?: boolean; // TODO What's a good short name that doesn't imply a more general looping concept?
   }): Promise<void> {
     // TODO: We might need to cache all playing info?
+    // Or maybe we don't have to worry about short-circuiting, since this is idempotent?
     // if (this.playing) {
     //   return;
     // }
 
-    if ((await this.model.detailedTimelineInfoProp.get()).atEnd) {
-      this.model.timestampRequestProp.set("start");
+    const direction = options?.direction ?? Direction.Forwards;
+
+    const coarseTimelineInfo = await this.model.coarseTimelineInfoProp.get(); // TODO: Why do we need to read this if we don't use it?
+    if (options?.autoSkipToOtherEndIfStartingAtBoundary ?? true) {
+      if (direction === Direction.Forwards && coarseTimelineInfo.atEnd) {
+        this.model.timestampRequestProp.set("start");
+      }
+      if (direction === Direction.Backwards && coarseTimelineInfo.atStart) {
+        this.model.timestampRequestProp.set("end");
+      }
     }
     this.model.playingInfoProp.set({
       playing: true,
-      direction: options?.direction ?? Direction.Forwards,
+      direction,
       untilBoundary: options?.untilBoundary ?? BoundaryType.EntireTimeline,
     });
 
