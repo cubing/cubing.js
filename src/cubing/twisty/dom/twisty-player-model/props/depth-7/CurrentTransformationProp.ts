@@ -32,7 +32,7 @@ export class CurentTransformationProp extends TwistyPropDerived<
     for (const finishingMove of inputs.currentMoveInfo.movesFinishing) {
       state = combineTransformations(
         inputs.def,
-        inputs.anchoredStart,
+        state,
         ksolvePuzzle.stateFromMove(finishingMove.move),
       );
     }
