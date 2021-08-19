@@ -133,11 +133,21 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 
 customElementsShim.define("twisty-prop-debugger", TwistyPropDebugger);
 
-const debuggerListElem = document.createElement("div");
-debuggerListElem.id = "debuggers";
-const debuggerListGrid = debuggerListElem.appendChild(
-  document.createElement("div"),
-);
+interface DebuggerElems {
+  wrapper: HTMLElement;
+  grid: HTMLElement;
+}
+let cachedDebuggerListGrid: DebuggerElems | null = null;
+function debuggerElems(): DebuggerElems {
+  return (cachedDebuggerListGrid ??= ((): DebuggerElems => {
+    const wrapper = document.createElement("div");
+    wrapper.id = "debuggers";
+    return {
+      wrapper: wrapper,
+      grid: wrapper.appendChild(document.createElement("div")),
+    };
+  })());
+}
 
 let DEBUG = false;
 export function enableDebuggers(enable: boolean) {
@@ -145,10 +155,10 @@ export function enableDebuggers(enable: boolean) {
 }
 export function addDebugger(twistyProp: TwistyPropParent<any>): void {
   if (DEBUG) {
-    debuggerListGrid.appendChild(new TwistyPropDebugger(twistyProp));
+    debuggerElems().grid.appendChild(new TwistyPropDebugger(twistyProp));
   }
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  document.body.appendChild(debuggerListElem);
+  document.body.appendChild(debuggerElems().wrapper);
 });
