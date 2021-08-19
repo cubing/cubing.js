@@ -14,9 +14,6 @@ export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampReques
   }
 
   set(v: TimestampRequest) {
-    if (v === null || v === NaN) {
-      debugger;
-    }
     super.set(v);
   }
 }
