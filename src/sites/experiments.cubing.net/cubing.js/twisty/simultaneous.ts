@@ -1,4 +1,8 @@
-import { Cube3D, TwistyPlayer } from "../../../../cubing/twisty";
+import {
+  Cube3D,
+  TwistyPlayer,
+  TwistyPlayerV2,
+} from "../../../../cubing/twisty";
 import { Alg } from "../../../../cubing/alg";
 
 const supercubeSprite = new URL(
@@ -7,12 +11,11 @@ const supercubeSprite = new URL(
 ).toString();
 
 {
-  const player = new TwistyPlayer({
+  const player = new TwistyPlayerV2({
     alg: Alg.fromString(
       "y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2",
     ),
   });
-  player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo1")!.appendChild(player);
   player.style.height = "400px";
 }
