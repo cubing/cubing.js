@@ -1,9 +1,16 @@
+import type { ExperimentalStickering } from "../../..";
+import type { SetupToLocation } from "../../../../../../dist/types/twisty/dom/TwistyPlayerConfig";
+import type { Alg } from "../../../../alg";
 import { ClassListManager } from "../../element/ClassListManager";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../../TwistyPlayer.css_";
 import { controlsLocations, PuzzleID } from "../../TwistyPlayerConfig";
 import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
+import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelProp";
+import type { HintFaceletStyleWithAuto } from "../props/depth-0/HintFaceletProp";
+import type { ViewerLinkPageWithAuto } from "../props/depth-0/ViewerLinkProp";
+import type { VisualizationFormatWithAuto } from "../props/depth-0/VisualizationProp";
 import type { VisualizationStrategy } from "../props/depth-1/VisualizationStrategyProp";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
@@ -45,6 +52,38 @@ const attributeMap: Record<string, string> = {
   "tempo-scale": "tempoScale",
 };
 
+// TODO: Why isn't this exact?
+type ConfigKey = typeof attributeMap[keyof typeof attributeMap];
+
+const configKeys: Record<ConfigKey, true> = Object.fromEntries(
+  Object.values(attributeMap).map((s) => [s, true]),
+);
+
+// TODO: Find a way to share this def with `attributeMap`.
+interface TwistyPlayerV2Config {
+  // Alg
+  alg?: Alg | string;
+  setup?: Alg | string;
+
+  // String-based
+  experimentalSetupAnchor?: SetupToLocation; // TODO: "auto"
+  puzzle?: PuzzleID;
+  visualization?: VisualizationFormatWithAuto;
+  hintFacelets?: HintFaceletStyleWithAuto;
+  experimentalStickering?: ExperimentalStickering;
+  background?: BackViewLayoutWithAuto;
+  controlPanel?: ControlPanelThemeWithAuto;
+  backView?: BackViewLayoutWithAuto;
+  // "indexer"?: "indexer";
+  viewerLink?: ViewerLinkPageWithAuto;
+
+  // NumberBased
+  cameraLatitude?: number;
+  cameraLongitude?: number;
+  cameraDistance?: number;
+  cameraLatitudeLimit?: number;
+  tempoScale?: number;
+}
 export class TwistyPlayerV2
   extends TwistyPlayerSettable
   implements TwistyAnimationControllerDelegate
@@ -56,11 +95,16 @@ export class TwistyPlayerV2
 
   buttons: TwistyButtonsV2;
 
-  constructor(options?: { puzzle?: PuzzleID }) {
+  constructor(config: TwistyPlayerV2Config = {}) {
     super();
 
-    if (options?.puzzle) {
-      this.model.puzzle = options.puzzle;
+    // TODO: double-check that these are all getting set sync without causing extra work.
+    for (const [propName, value] of Object.entries(config)) {
+      if (!configKeys[propName]) {
+        console.warn(`Invalid config passed to TwistyPlayerV2: ${propName}`);
+        break;
+      }
+      (this as any)[propName] = value;
     }
   }
 
