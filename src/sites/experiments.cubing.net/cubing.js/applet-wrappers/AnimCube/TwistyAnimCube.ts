@@ -1,8 +1,10 @@
+import { Alg } from "../../../../../cubing/alg";
+import {
+  TwistyPlayerV2,
+  TwistyPlayerV2Config,
+} from "../../../../../cubing/twisty";
 import { ManagedCustomElement } from "../../../../../cubing/twisty/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../../../../cubing/twisty/dom/element/node-custom-element-shims";
-import type { TwistyPlayerInitialConfig } from "../../../../../cubing/twisty";
-import { TwistyPlayer } from "../../../../../cubing/twisty";
-import { Alg } from "../../../../../cubing/alg";
 
 const DEBUG = false;
 
@@ -42,7 +44,7 @@ const paramsNotImplementedYet: Record<string, true> = {
 };
 
 export class TwistyAnimCube extends ManagedCustomElement {
-  twistyPlayer: TwistyPlayer;
+  twistyPlayer: TwistyPlayerV2;
   constructor(
     private finishConnectedCallback?: (twistyAnimCube: TwistyAnimCube) => void,
   ) {
@@ -52,7 +54,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
   protected connectedCallback(): void {
     // We set timeout so that we can access the children.
     setTimeout(() => {
-      const twistyPlayerConfig: TwistyPlayerInitialConfig = {
+      const twistyPlayerConfig: TwistyPlayerV2Config = {
         alg: new Alg(),
       };
 
@@ -130,7 +132,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
       if (DEBUG) {
         console.info(twistyPlayerConfig);
       }
-      this.twistyPlayer = new TwistyPlayer(twistyPlayerConfig);
+      this.twistyPlayer = new TwistyPlayerV2(twistyPlayerConfig);
 
       process("speed", (value: string) => {
         let speed = parseFloat(value);
@@ -140,7 +142,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
         if (speed < 0) {
           warnOnce("speed must be a non-negative number");
         }
-        this.twistyPlayer.timeline.tempoScale = 10 / speed;
+        this.twistyPlayer.tempoScale = 10 / speed;
       });
 
       // process("width", (value: string) => {

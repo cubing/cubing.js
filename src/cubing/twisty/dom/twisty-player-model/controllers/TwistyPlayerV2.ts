@@ -30,7 +30,7 @@ const attributeMap: Record<string, string> = {
 
   // Alg
   "alg": "alg",
-  "setup": "setup",
+  "experimental-setup-alg": "experimentalSetupAlg",
 
   // String-based
   "experimental-setup-anchor": "experimentalSetupAnchor",
@@ -60,10 +60,10 @@ const configKeys: Record<ConfigKey, true> = Object.fromEntries(
 );
 
 // TODO: Find a way to share this def with `attributeMap`.
-interface TwistyPlayerV2Config {
+export interface TwistyPlayerV2Config {
   // Alg
   alg?: Alg | string;
-  setup?: Alg | string;
+  experimentalSetupAlg?: Alg | string;
 
   // String-based
   experimentalSetupAnchor?: SetupToLocation; // TODO: "auto"

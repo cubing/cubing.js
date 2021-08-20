@@ -1,4 +1,5 @@
 export { TwistyPlayerV2 } from "./dom/twisty-player-model/controllers/TwistyPlayerV2";
+export type { TwistyPlayerV2Config } from "./dom/twisty-player-model/controllers/TwistyPlayerV2";
 
 // Old
 export type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";

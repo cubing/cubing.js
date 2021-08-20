@@ -25,8 +25,8 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set alg(newAlg: Alg | string) { this.model.algProp.set(newAlg); }
   get alg(): never { throw err("alg"); }
 
-  set setup(newSetup: Alg | string) { this.model.setupProp.set(newSetup); }
-  get setup(): never { throw err("setup"); }
+  set experimentalSetupAlg(newSetup: Alg | string) { this.model.setupProp.set(newSetup); }
+  get experimentalSetupAlg(): never { throw err("setup"); }
 
   set experimentalSetupAnchor(anchor: SetupToLocation) { this.model.setupAnchorProp.set(anchor); }
   get experimentalSetupAnchor(): never { throw err("anchor"); }
@@ -75,35 +75,4 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
 
   set tempoScale(newTempoScale: number) { this.model.tempoScaleProp.set(newTempoScale); }
   get tempoScale(): never { throw err("tempoScale"); }
-
-  static get observedAttributes(): string[] {
-    return ["alg"];
-  }
-
-  attributeChangedCallback(
-    attributeName: string,
-    _oldValue: string,
-    newValue: string,
-  ): void {
-    switch (attributeName) {
-      case "alg":
-        this.alg = newValue;
-        return;
-      case "control-panel":
-        this.controlPanel = newValue as ControlPanelThemeWithAuto;
-        return;
-      case "visualization": //"experimental-2D-LL"
-        this.visualization = newValue as VisualizationFormatWithAuto;
-        return;
-      case "experimental-stickering": //"OLL"
-        this.experimentalStickering = newValue as ExperimentalStickering;
-        return;
-      case "experimental-setup-anchor": //"end"
-        this.experimentalSetupAnchor = newValue as SetupToLocation;
-        return;
-      case "background": //"none"
-        this.background = newValue as BackgroundThemeWithAuto;
-        return;
-    }
-  }
 }
