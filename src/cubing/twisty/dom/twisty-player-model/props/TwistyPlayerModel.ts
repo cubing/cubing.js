@@ -17,9 +17,9 @@ import { TempoScaleProp } from "./depth-0/TempoScaleProp";
 import { TimestampRequestProp } from "./depth-0/TimestampRequestProp";
 import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
 import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
-import { EffectiveVisualizationFormatProp } from "./depth-1/EffectiveVisualizationFormatProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
 import { PuzzleDefProp } from "./depth-1/PuzzleDefProp";
+import { VisualizationStrategyProp } from "./depth-1/VisualizationStrategyProp";
 import { IndexerConstructorProp } from "./depth-2/IndexerConstructorProp";
 import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
 import { AlgTransformationProp } from "./depth-3/AlgTransformationProp";
@@ -59,7 +59,7 @@ export class TwistyPlayerModel {
   visualizationFormatProp = new VisualizationFormatProp();
 
   // Depth 1
-  effectiveVisualizationFormatProp = new EffectiveVisualizationFormatProp({
+  visualizationStrategyProp = new VisualizationStrategyProp({
     visualizationRequest: this.visualizationFormatProp,
     puzzleID: this.puzzleProp,
   });
@@ -75,7 +75,7 @@ export class TwistyPlayerModel {
   indexerConstructorProp = new IndexerConstructorProp({
     alg: this.algProp,
     puzzle: this.puzzleProp,
-    effectiveVisualization: this.effectiveVisualizationFormatProp,
+    visualizationStrategy: this.visualizationStrategyProp,
     indexerConstructorRequest: this.indexerConstructorRequestProp,
   });
 

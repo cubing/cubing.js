@@ -2,8 +2,8 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { Alg } from "../../../../cubing/alg";
+import { TwistyPlayerV2 } from "../../../../cubing/twisty";
 import { showStats } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/3D/Twisty3DVantage";
-import { TwistyPlayerV2 } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/TwistyPlayerV2";
 import { indexerStrategyNames } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-0/IndexerConstructorRequestProp";
 import { enableDebuggers } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPropDebugger";
 import {

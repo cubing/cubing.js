@@ -6,12 +6,13 @@ import { TreeAlgIndexer } from "../../../../animation/indexer/tree/TreeAlgIndexe
 import type { PuzzleID } from "../../../TwistyPlayerConfig";
 import type { AlgWithIssues } from "../depth-0/AlgProp";
 import type { IndexerStrategyName } from "../depth-0/IndexerConstructorRequestProp";
+import type { VisualizationStrategy } from "../depth-1/VisualizationStrategyProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface IndexerConstructorPropInputs {
   puzzle: PuzzleID;
   alg: AlgWithIssues;
-  effectiveVisualization: "2D" | "3D";
+  visualizationStrategy: VisualizationStrategy;
   indexerConstructorRequest: IndexerStrategyName;
 }
 
@@ -26,7 +27,7 @@ export class IndexerConstructorProp extends TwistyPropDerived<
         if (
           countMoves(inputs.alg.alg) < 100 &&
           inputs.puzzle === "3x3x3" &&
-          inputs.effectiveVisualization === "3D"
+          inputs.visualizationStrategy === "Cube3D"
         ) {
           return SimultaneousMoveIndexer;
         } else {

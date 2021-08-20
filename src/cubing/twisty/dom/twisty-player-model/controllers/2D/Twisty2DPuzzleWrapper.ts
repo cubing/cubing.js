@@ -12,6 +12,7 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
     private model: TwistyPlayerModel,
     public schedulable: Schedulable,
     private puzzleID: PuzzleID,
+    private effectiveVisualization: "2D" | "experimental-2D-LL",
   ) {
     this.twisty2DPuzzle(); // Start constructing.
 
@@ -72,10 +73,15 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
   // TODO: Stale dropper?
   async twisty2DPuzzle(): Promise<Twisty2DPuzzle> {
     return (this.#cachedTwisty2DPuzzle ??= (async () => {
+      console.log("fdfdf", this.effectiveVisualization);
+      const svgPromise =
+        this.effectiveVisualization === "experimental-2D-LL"
+          ? puzzles[this.puzzleID].llSVG!()
+          : puzzles[this.puzzleID].svg();
       return new Twisty2DPuzzle(
         this.model,
         await puzzles[this.puzzleID].def(),
-        await puzzles[this.puzzleID].svg(),
+        await svgPromise,
         {},
         puzzles[this.puzzleID],
       );

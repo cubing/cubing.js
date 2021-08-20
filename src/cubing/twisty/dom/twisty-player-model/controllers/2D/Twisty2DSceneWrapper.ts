@@ -18,7 +18,10 @@ export class Twisty2DSceneWrapper
     this.#freshListenerManager.disconnect();
   }
 
-  constructor(public model?: TwistyPlayerModel) {
+  constructor(
+    public model?: TwistyPlayerModel,
+    private effectiveVisualization?: "2D" | "experimental-2D-LL",
+  ) {
     super();
   }
 
@@ -60,6 +63,7 @@ export class Twisty2DSceneWrapper
       this.model!,
       this,
       puzzle,
+      this.effectiveVisualization!,
     );
 
     this.setCurrentTwisty2DPuzzleWrapper(twisty2DPuzzleWrapper);

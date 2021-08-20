@@ -109,7 +109,7 @@ export abstract class TwistyPropParent<T> {
 
   #freshListeners: Map<(value: T) => void, () => void> = new Map();
   // TODO: Pick a better name.
-  addFreshListener(listener: (value: T) => void) {
+  addFreshListener(listener: (value: T) => void): void {
     const staleDropper: StaleDropper<T> = new StaleDropper<T>();
     let lastResult: T | null = null;
     const callback = async () => {

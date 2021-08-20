@@ -4,6 +4,7 @@ import { twistyPlayerCSS } from "../../TwistyPlayer.css_";
 import { controlsLocations, PuzzleID } from "../../TwistyPlayerConfig";
 import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
 import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelProp";
+import type { VisualizationStrategy } from "../props/depth-1/VisualizationStrategyProp";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
@@ -101,7 +102,7 @@ export class TwistyPlayerV2
       },
     );
 
-    this.model.effectiveVisualizationFormatProp.addFreshListener(
+    this.model.visualizationStrategyProp.addFreshListener(
       this.#setVisualizationWrapper.bind(this),
     );
   }
@@ -115,17 +116,20 @@ export class TwistyPlayerV2
   #visualizationWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper | null =
     null;
 
-  #visualizationStrategy: "2D" | "3D" | null = null;
-  #setVisualizationWrapper(strategy: "2D" | "3D"): void {
+  #visualizationStrategy: VisualizationStrategy | null = null;
+  #setVisualizationWrapper(strategy: VisualizationStrategy): void {
     if (strategy !== this.#visualizationStrategy) {
       this.#visualizationWrapper?.remove();
       this.#visualizationWrapper?.disconnect();
       let newWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper;
       switch (strategy) {
         case "2D":
-          newWrapper = new Twisty2DSceneWrapper(this.model);
+        case "experimental-2D-LL":
+          newWrapper = new Twisty2DSceneWrapper(this.model, strategy);
           break;
-        case "3D":
+        case "Cube3D":
+        case "PG3D":
+          // TODO: Properly wire this up so we can set PG3D for the cube.
           newWrapper = new Twisty3DSceneWrapper(this.model);
           break;
         default:
