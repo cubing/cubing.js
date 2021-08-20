@@ -1,6 +1,3 @@
-import type { Alg } from "../../../../alg";
-import type { MillisecondTimestamp } from "../../../animation/cursor/CursorTypes";
-import type { PuzzleID } from "../../TwistyPlayerConfig";
 import { AlgProp } from "./depth-0/AlgProp";
 import { BackgroundProp } from "./depth-0/BackgroundProp";
 import { BackViewProp } from "./depth-0/BackViewProp";
@@ -151,22 +148,6 @@ export class TwistyPlayerModel {
     currentMoveInfo: this.currentLeavesProp,
     transformation: this.curentTransformationProp,
   });
-
-  set alg(newAlg: Alg | string) {
-    this.algProp.set(newAlg);
-  }
-
-  set setup(newSetup: Alg | string) {
-    this.setupProp.set(newSetup);
-  }
-
-  set puzzle(puzzleID: PuzzleID) {
-    this.puzzleProp.set(puzzleID);
-  }
-
-  set timestamp(timestamp: MillisecondTimestamp) {
-    this.timestampRequestProp.set(timestamp);
-  }
 
   public async twizzleLink(): Promise<string> {
     const url = new URL("https://alpha.twizzle.net/edit/");
