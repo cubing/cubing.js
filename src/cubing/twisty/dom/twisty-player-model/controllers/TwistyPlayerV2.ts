@@ -1,15 +1,9 @@
-import type { ExperimentalStickering } from "../../..";
 import { ClassListManager } from "../../element/ClassListManager";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../../TwistyPlayer.css_";
-import {
-  controlsLocations,
-  PuzzleID,
-  SetupToLocation,
-} from "../../TwistyPlayerConfig";
+import { controlsLocations, PuzzleID } from "../../TwistyPlayerConfig";
 import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
 import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelProp";
-import type { VisualizationFormatWithAuto } from "../props/depth-0/VisualizationProp";
 import { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
@@ -18,6 +12,17 @@ import { TwistyScrubberV2 } from "./control-panel/TwistyScrubberV2";
 import type { TwistyAnimationControllerDelegate } from "./TwistyAnimationController";
 import { TwistyPlayerController } from "./TwistyPlayerController";
 import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
+
+// TODO: I couldn't figure out how to use use more specific types. Ideally, we'd
+// enforce consistency with the model.
+const attributeMap: Record<string, string> = {
+  "alg": "alg",
+  "control-panel": "controlPanel",
+  "visualization": "visualization",
+  "experimental-stickering": "experimentalStickering",
+  "experimental-setup-anchor": "experimentalSetupAnchor",
+  "background": "background",
+};
 
 export class TwistyPlayerV2
   extends TwistyPlayerSettable
@@ -138,7 +143,7 @@ export class TwistyPlayerV2
   }
 
   static get observedAttributes(): string[] {
-    return ["alg"];
+    return Object.keys(attributeMap);
   }
 
   attributeChangedCallback(
@@ -146,26 +151,12 @@ export class TwistyPlayerV2
     _oldValue: string,
     newValue: string,
   ): void {
-    switch (attributeName) {
-      case "alg":
-        this.alg = newValue;
-        return;
-      case "control-panel":
-        this.controlPanel = newValue as ControlPanelThemeWithAuto;
-        return;
-      case "visualization": //"experimental-2D-LL"
-        this.visualization = newValue as VisualizationFormatWithAuto;
-        return;
-      case "experimental-stickering": //"OLL"
-        this.experimentalStickering = newValue as ExperimentalStickering;
-        return;
-      case "experimental-setup-anchor": //"end"
-        this.experimentalSetupAnchor = newValue as SetupToLocation;
-        return;
-      case "background": //"none"
-        this.background = newValue as BackgroundThemeWithAuto;
-        return;
+    const setterName = attributeMap[attributeName];
+    if (!setterName) {
+      return;
     }
+
+    (this as any)[setterName] = newValue;
   }
 }
 
