@@ -16,12 +16,33 @@ import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
 // TODO: I couldn't figure out how to use use more specific types. Ideally, we'd
 // enforce consistency with the model.
 const attributeMap: Record<string, string> = {
+  // TODO: We assume each of these can be set using a string or will be automatically converted by JS (e.g. numbers). Can we enforce
+  // that with types? Do we need to add a translation mechanism for things we
+  // don't want to leave settable as strings?
+  // TODO: Enum validation.
+
+  // Alg
   "alg": "alg",
-  "control-panel": "controlPanel",
-  "visualization": "visualization",
-  "experimental-stickering": "experimentalStickering",
+  "setup": "setup",
+
+  // String-based
   "experimental-setup-anchor": "experimentalSetupAnchor",
+  "puzzle": "puzzle",
+  "visualization": "visualization",
+  "hint-facelets": "hintFacelets",
+  "experimental-stickering": "experimentalStickering",
   "background": "background",
+  "control-panel": "controlPanel",
+  "back-view": "backView",
+  // "indexer": "indexer",
+  "viewer-link": "viewerLink",
+
+  // Number-based
+  "camera-latitude": "cameraLatitude",
+  "camera-longitude": "cameraLongitude",
+  "camera-distance": "cameraDistance",
+  "camera-latitude-limit": "cameraLatitudeLimit",
+  "tempo-scale": "tempoScale",
 };
 
 export class TwistyPlayerV2
