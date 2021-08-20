@@ -8,9 +8,9 @@ import {
   setupToLocations,
   viewerLinkPages,
   visualizationFormats,
-} from "../../../../cubing/twisty/dom/TwistyPlayerConfig"; // TODO
+} from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig"; // TODO
 import { TwistyPlayer } from "../../../../cubing/twisty";
-import { backViewLayouts } from "../../../../cubing/twisty/dom/viewers/TwistyViewerWrapper";
+import { backViewLayouts } from "../../../../cubing/twisty/old/dom/viewers/TwistyViewerWrapper";
 import { Alg } from "../../../../cubing/alg";
 
 const contentElem = document.querySelector(".content")!;

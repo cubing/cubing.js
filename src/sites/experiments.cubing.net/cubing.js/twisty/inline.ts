@@ -1,7 +1,7 @@
 import { Alg } from "../../../../cubing/alg";
 import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
 import { TwistyPlayerV2 } from "../../../../cubing/twisty";
-import "../../../../cubing/twisty/dom/TwistyPlayer";
+import "../../../../cubing/twisty/old/dom/TwistyPlayer";
 
 useNewFaceNames(true);
 

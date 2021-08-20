@@ -22,13 +22,13 @@ import {
 } from "../../../cubing/search";
 import { cube2x2x2KPuzzle } from "../../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
-import { customElementsShim } from "../../../cubing/twisty/dom/element/node-custom-element-shims";
+import { customElementsShim } from "../../../cubing/twisty/old/dom/element/node-custom-element-shims";
 import { examples } from "./examples";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
-import "../../../cubing/twisty/dom/stream/TwistyStreamSource";
-import type { TwistyStreamSource } from "../../../cubing/twisty/dom/stream/TwistyStreamSource";
+import "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
+import type { TwistyStreamSource } from "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream";
-import type { PuzzleID } from "../../../cubing/twisty/dom/TwistyPlayerConfig";
+import type { PuzzleID } from "../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 
 export interface AppData {
   puzzleName: string;

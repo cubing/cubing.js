@@ -1,6 +1,6 @@
 export { cube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle } from "./implementations/3x3x3/3x3x3.kpuzzle.json_";
 
-import type { PuzzleID } from "../twisty/dom/TwistyPlayerConfig";
+import type { PuzzleID } from "../twisty/old/dom/TwistyPlayerConfig";
 import { cubePGPuzzleLoader, genericPGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";

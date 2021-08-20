@@ -3,9 +3,9 @@
 
 import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayerV2 } from "../../../../cubing/twisty";
-import { showStats } from "../../../../cubing/twisty/dom/twisty-player-model/controllers/3D/Twisty3DVantage";
-import { indexerStrategyNames } from "../../../../cubing/twisty/dom/twisty-player-model/props/depth-0/IndexerConstructorRequestProp";
-import { enableDebuggers } from "../../../../cubing/twisty/dom/twisty-player-model/props/TwistyPropDebugger";
+import { showStats } from "../../../../cubing/twisty/views/3D/Twisty3DVantage";
+import { indexerStrategyNames } from "../../../../cubing/twisty/model/depth-0/IndexerConstructorRequestProp";
+import { enableDebuggers } from "../../../../cubing/twisty/model/TwistyPropDebugger";
 import {
   backgroundThemes,
   controlsLocations,
@@ -16,8 +16,8 @@ import {
   setupToLocations,
   viewerLinkPages,
   visualizationFormats,
-} from "../../../../cubing/twisty/dom/TwistyPlayerConfig";
-import { backViewLayouts } from "../../../../cubing/twisty/dom/viewers/TwistyViewerWrapper";
+} from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
+import { backViewLayouts } from "../../../../cubing/twisty/old/dom/viewers/TwistyViewerWrapper";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.

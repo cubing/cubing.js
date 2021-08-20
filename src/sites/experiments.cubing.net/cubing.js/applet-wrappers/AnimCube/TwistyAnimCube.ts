@@ -3,8 +3,8 @@ import {
   TwistyPlayerV2,
   TwistyPlayerV2Config,
 } from "../../../../../cubing/twisty";
-import { ManagedCustomElement } from "../../../../../cubing/twisty/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../../../../cubing/twisty/dom/element/node-custom-element-shims";
+import { ManagedCustomElement } from "../../../../../cubing/twisty/old/dom/element/ManagedCustomElement";
+import { customElementsShim } from "../../../../../cubing/twisty/old/dom/element/node-custom-element-shims";
 
 const DEBUG = false;
 

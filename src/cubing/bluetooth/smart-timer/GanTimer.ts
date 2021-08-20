@@ -1,4 +1,4 @@
-import type { MillisecondTimestamp } from "../../twisty/animation/cursor/CursorTypes";
+import type { MillisecondTimestamp } from "../../twisty/old/animation/cursor/CursorTypes";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 // TODO: Short IDs

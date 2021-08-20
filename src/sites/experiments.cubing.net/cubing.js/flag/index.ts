@@ -3,11 +3,11 @@ import { Alg } from "../../../../cubing/alg";
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 import { puzzles } from "../../../../cubing/puzzles";
 import { Cube3D, Twisty3DCanvas } from "../../../../cubing/twisty";
-import { Twisty3DScene } from "../../../../cubing/twisty/3D/Twisty3DScene";
-import { AlgCursor } from "../../../../cubing/twisty/animation/cursor/AlgCursor";
-import { Timeline } from "../../../../cubing/twisty/animation/Timeline";
-import { TwistyControlButtonPanel } from "../../../../cubing/twisty/dom/controls/buttons";
-import { TwistyScrubber } from "../../../../cubing/twisty/dom/controls/TwistyScrubber";
+import { Twisty3DScene } from "../../../../cubing/twisty/views/3D/Twisty3DScene";
+import { AlgCursor } from "../../../../cubing/twisty/old/animation/cursor/AlgCursor";
+import { Timeline } from "../../../../cubing/twisty/old/animation/Timeline";
+import { TwistyControlButtonPanel } from "../../../../cubing/twisty/old/dom/controls/buttons";
+import { TwistyScrubber } from "../../../../cubing/twisty/old/dom/controls/TwistyScrubber";
 
 const TRANSLATE_SCALE = 1.1;
 const WOBBLE = 0.2;

@@ -18,11 +18,11 @@ import {
   schreierSims,
   StickerDat,
 } from "../../../cubing/puzzle-geometry";
-import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/dom/TwistyPlayer";
+import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/old/dom/TwistyPlayer";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
-} from "../../../cubing/twisty/dom/viewers/Twisty3DCanvas";
+} from "../../../cubing/twisty/old/dom/viewers/Twisty3DCanvas";
 import { TwistyPlayer } from "../../../cubing/twisty";
 import { countMoves } from "../../../cubing/notation";
 import { getURLParam, setURLParams } from "./url-params";
@@ -30,7 +30,7 @@ import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
 import {
   OrbitCoordinates,
   positionToOrbitCoordinates,
-} from "../../../cubing/twisty/dom/viewers/TwistyOrbitControls";
+} from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControls";
 
 if (getURLParam("debugShowRenderStats")) {
   experimentalShowRenderStats(true);

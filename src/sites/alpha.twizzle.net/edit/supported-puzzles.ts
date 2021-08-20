@@ -6,7 +6,7 @@ import { puzzles } from "../../../cubing/puzzles";
 import type {
   PuzzleID,
   VisualizationFormat,
-} from "../../../cubing/twisty/dom/TwistyPlayerConfig";
+} from "../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";

@@ -16,9 +16,9 @@ import {
 import { Alg, Move } from "../../../../cubing/alg";
 import {} from "../../../../cubing/kpuzzle";
 import { ProxyEvent, WebSocketProxyReceiver } from "../../../../cubing/stream";
-import { TAU } from "../../../../cubing/twisty/3D/TAU";
-import { AlgCursor } from "../../../../cubing/twisty/animation/cursor/AlgCursor";
-import { Timeline } from "../../../../cubing/twisty/animation/Timeline";
+import { TAU } from "../../../../cubing/twisty/views/3D/TAU";
+import { AlgCursor } from "../../../../cubing/twisty/old/animation/cursor/AlgCursor";
+import { Timeline } from "../../../../cubing/twisty/old/animation/Timeline";
 import { Cube3D } from "../../../../cubing/twisty";
 import { countMoves } from "../../../../cubing/notation";
 import {
