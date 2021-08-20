@@ -103,12 +103,16 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
   #cachedTwisty3DPuzzle: Promise<Twisty3DPuzzle> | null = null;
   async twisty3DPuzzle(): Promise<Twisty3DPuzzle> {
     return (this.#cachedTwisty3DPuzzle ??= (async () => {
-      const proxy = await proxy3D();
+      const proxyPromise = proxy3D();
       switch (this.puzzleID) {
         case "3x3x3":
-          return proxy.cube3DShim();
+          return (await proxyPromise).cube3DShim();
         default:
-          return proxy.pg3dShim(this.puzzleID);
+          const hintFacelets = await this.model!.hintFaceletProp.get();
+          return (await proxyPromise).pg3dShim(
+            this.puzzleID,
+            hintFacelets === "auto" ? "floating" : hintFacelets,
+          );
       }
     })());
   }
