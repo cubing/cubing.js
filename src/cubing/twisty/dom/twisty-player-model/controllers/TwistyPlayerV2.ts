@@ -1,10 +1,13 @@
 import type { ExperimentalStickering } from "../../..";
-import type { SetupToLocation } from "../../../../../../dist/types/twisty/dom/TwistyPlayerConfig";
 import type { Alg } from "../../../../alg";
 import { ClassListManager } from "../../element/ClassListManager";
 import { customElementsShim } from "../../element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../../TwistyPlayer.css_";
-import { controlsLocations, PuzzleID } from "../../TwistyPlayerConfig";
+import {
+  controlsLocations,
+  PuzzleID,
+  SetupToLocation,
+} from "../../TwistyPlayerConfig";
 import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelProp";

@@ -1,10 +1,12 @@
-import type { PuzzleID } from "../../../../dist/types/twisty/dom/TwistyPlayerConfig";
 import {
   getPuzzleGeometryByDesc,
   StickerDat,
 } from "../../../cubing/puzzle-geometry";
 import { puzzles } from "../../../cubing/puzzles";
-import type { VisualizationFormat } from "../../../cubing/twisty/dom/TwistyPlayerConfig";
+import type {
+  PuzzleID,
+  VisualizationFormat,
+} from "../../../cubing/twisty/dom/TwistyPlayerConfig";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";
