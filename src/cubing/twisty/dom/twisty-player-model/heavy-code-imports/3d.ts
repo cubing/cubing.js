@@ -1,4 +1,4 @@
-import PLazy from "../../../../vendor/p-lazy";
+import { from } from "../../../../vendor/p-lazy/p-lazy";
 
 // TODO can we remove the cached proxy?
 
@@ -13,4 +13,6 @@ export async function proxy3D(): Promise<
   return (cachedConstructorProxy ??= import("./dynamic-entries/3d"));
 }
 
-export const THREEJS = PLazy.from(async () => (await proxy3D()).T3I);
+export const THREEJS = from(async () => (await proxy3D()).T3I) as Promise<
+  typeof import("three")
+>;

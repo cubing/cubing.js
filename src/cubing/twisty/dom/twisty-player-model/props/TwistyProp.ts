@@ -1,4 +1,4 @@
-import PLazy from "../../../../vendor/p-lazy";
+import { from } from "../../../../vendor/p-lazy/p-lazy";
 import { StaleDropper } from "./PromiseFreshener";
 import { addDebugger } from "./TwistyPropDebugger";
 
@@ -140,7 +140,7 @@ export abstract class TwistyPropSource<
 
   constructor(initialValue?: PromiseOrValue<InputType>) {
     super();
-    this.#value = PLazy.from(() => this.getDefaultValue());
+    this.#value = from(() => this.getDefaultValue());
     if (initialValue) {
       this.#value = this.deriveFromPromiseOrValue(initialValue, this.#value);
     }

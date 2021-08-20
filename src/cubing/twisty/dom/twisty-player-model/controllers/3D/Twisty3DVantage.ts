@@ -1,18 +1,18 @@
 import type { PerspectiveCamera, WebGLRenderer } from "three";
-import { Stats } from "../../../../../vendor/three/examples/jsm/libs/stats.module.js";
-import { DEGREES_PER_RADIAN } from "../../../../3D/TAU.js";
+import { Stats } from "../../../../../vendor/three/examples/jsm/libs/stats.module";
+import { DEGREES_PER_RADIAN } from "../../../../3D/TAU";
 import { RenderScheduler } from "../../../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../../../element/ManagedCustomElement";
 import { customElementsShim } from "../../../element/node-custom-element-shims";
 import { pixelRatio } from "../../../viewers/canvas";
-import { twisty3DCanvasCSS } from "../../../viewers/Twisty3DCanvas.css_.js";
+import { twisty3DCanvasCSS } from "../../../viewers/Twisty3DCanvas.css_";
 import { THREEJS } from "../../heavy-code-imports/3d";
-import type { OrbitCoordinatesV2 } from "../../props/depth-0/OrbitCoordinatesRequestProp.js";
-import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel.js";
-import type { TwistyPropParent } from "../../props/TwistyProp.js";
-import { StaleDropper } from "../../props/PromiseFreshener.js";
+import type { OrbitCoordinatesV2 } from "../../props/depth-0/OrbitCoordinatesRequestProp";
+import type { TwistyPlayerModel } from "../../props/TwistyPlayerModel";
+import type { TwistyPropParent } from "../../props/TwistyProp";
+import { StaleDropper } from "../../props/PromiseFreshener";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
-import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2.js";
+import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
 
 let SHOW_STATS = false;
 export function showStats(enable: boolean): void {

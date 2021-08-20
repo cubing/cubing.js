@@ -1,6 +1,8 @@
+// @ts-nocheck
+
 // TODO: Use private class fields when ESLint support it.
 
-export default class PLazy extends Promise {
+export class PLazy<T> extends Promise<T> {
   constructor(executor) {
     super((resolve) => {
       resolve();
@@ -36,4 +38,10 @@ export default class PLazy extends Promise {
     this._promise = this._promise || new Promise(this._executor);
     return this._promise.catch(onRejected);
   }
+}
+
+export function from<T>(function_): Promise<T> {
+  return new PLazy((resolve) => {
+    resolve(function_());
+  });
 }
