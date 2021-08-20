@@ -9,7 +9,6 @@ import {
   controlsLocations,
   PuzzleID,
   SetupToLocation,
-  VisualizationFormat,
 } from "../../TwistyPlayerConfig";
 import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../props/depth-0/BackViewProp";
@@ -17,13 +16,14 @@ import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelPro
 import type { HintFaceletStyleWithAuto } from "../props/depth-0/HintFaceletProp";
 import type { IndexerStrategyName } from "../props/depth-0/IndexerConstructorRequestProp";
 import type { ViewerLinkPageWithAuto } from "../props/depth-0/ViewerLinkProp";
+import type { VisualizationFormatWithAuto } from "../props/depth-0/VisualizationProp";
 import { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
-import { TwistyPlayerController } from "./TwistyPlayerController";
 import { TwistyScrubberV2 } from "./control-panel/TwistyScrubberV2";
 import type { TwistyAnimationControllerDelegate } from "./TwistyAnimationController";
+import { TwistyPlayerController } from "./TwistyPlayerController";
 
 export class TwistyPlayerV2
   extends ManagedCustomElement
@@ -135,11 +135,11 @@ export class TwistyPlayerV2
     throw new Error("Cannot get `.setup` directly from a `TwistyPlayer`.");
   }
 
-  set anchor(anchor: SetupToLocation) {
+  set experimentalSetupAnchor(anchor: SetupToLocation) {
     this.model.setupAnchorProp.set(anchor);
   }
 
-  get anchor(): never {
+  get experimentalSetupAnchor(): never {
     throw new Error("Cannot get `.anchor` directly from a `TwistyPlayer`.");
   }
 
@@ -169,11 +169,11 @@ export class TwistyPlayerV2
     );
   }
 
-  set stickering(stickering: ExperimentalStickering) {
+  set experimentalStickering(stickering: ExperimentalStickering) {
     this.model.stickeringProp.set(stickering);
   }
 
-  get stickering(): never {
+  get experimentalStickering(): never {
     throw new Error("Cannot get `.stickering` directly from a `TwistyPlayer`.");
   }
 
@@ -203,7 +203,7 @@ export class TwistyPlayerV2
     );
   }
 
-  set visualization(visualizationFormat: VisualizationFormat) {
+  set visualization(visualizationFormat: VisualizationFormatWithAuto) {
     this.model.visualizationFormatProp.set(visualizationFormat);
   }
 
@@ -318,6 +318,18 @@ export class TwistyPlayerV2
         return;
       case "control-panel":
         this.controlPanel = newValue as ControlPanelThemeWithAuto;
+        return;
+      case "visualization": //"experimental-2D-LL"
+        this.visualization = newValue as VisualizationFormatWithAuto;
+        return;
+      case "experimental-stickering": //"OLL"
+        this.experimentalStickering = newValue as ExperimentalStickering;
+        return;
+      case "experimental-setup-anchor": //"end"
+        this.experimentalSetupAnchor = newValue as SetupToLocation;
+        return;
+      case "background": //"none"
+        this.background = newValue as BackgroundThemeWithAuto;
         return;
     }
   }
