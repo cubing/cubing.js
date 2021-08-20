@@ -4,7 +4,6 @@ import { twistyPlayerCSS } from "../../TwistyPlayer.css_";
 import { controlsLocations, PuzzleID } from "../../TwistyPlayerConfig";
 import type { BackgroundThemeWithAuto } from "../props/depth-0/BackgroundProp";
 import type { ControlPanelThemeWithAuto } from "../props/depth-0/ControlPanelProp";
-import { TwistyPlayerModel } from "../props/TwistyPlayerModel";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
@@ -49,7 +48,6 @@ export class TwistyPlayerV2
   extends TwistyPlayerSettable
   implements TwistyAnimationControllerDelegate
 {
-  model: TwistyPlayerModel = new TwistyPlayerModel();
   controller: TwistyPlayerController = new TwistyPlayerController(
     this.model,
     this,
