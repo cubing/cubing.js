@@ -27,7 +27,7 @@ import { DetailedTimelineInfoProp } from "./depth-5/DetailedTimelineInfoProp";
 import { CoarseTimelineInfoProp } from "./depth-6/CoarseTimelineInfoProp";
 import { CurrentLeavesProp } from "./depth-6/CurrentLeavesProp";
 import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
-import { CurentTransformationProp } from "./depth-7/CurrentTransformationProp";
+import { CurrentTransformationProp } from "./depth-7/CurrentTransformationProp";
 import { LegacyPositionProp } from "./depth-8/LegacyPositionProp";
 
 export class TwistyPlayerModel {
@@ -136,7 +136,7 @@ export class TwistyPlayerModel {
     viewerLink: this.viewerLinkProp,
   });
 
-  curentTransformationProp = new CurentTransformationProp({
+  currentTransformationProp = new CurrentTransformationProp({
     anchoredStart: this.anchoredStartProp,
     currentMoveInfo: this.currentLeavesProp,
     indexer: this.indexerProp,
@@ -146,7 +146,7 @@ export class TwistyPlayerModel {
   // Depth 8
   legacyPositionProp = new LegacyPositionProp({
     currentMoveInfo: this.currentLeavesProp,
-    transformation: this.curentTransformationProp,
+    transformation: this.currentTransformationProp,
   });
 
   public async twizzleLink(): Promise<string> {

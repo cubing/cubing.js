@@ -7,7 +7,7 @@ import type {
 } from "../../old/animation/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../TwistyProp";
 
-interface CurentTransformationPropInputs {
+interface CurrentTransformationPropInputs {
   anchoredStart: Transformation;
   currentMoveInfo: CurrentMoveInfo;
   indexer: AlgIndexer<any>;
@@ -16,14 +16,14 @@ interface CurentTransformationPropInputs {
 
 // This started as a version of `EffectiveTimestamp` without the actual
 // timestamp, to enable easier caching.
-export class CurentTransformationProp extends TwistyPropDerived<
-  CurentTransformationPropInputs,
+export class CurrentTransformationProp extends TwistyPropDerived<
+  CurrentTransformationPropInputs,
   Transformation
 > {
   name = "current transformation";
 
   // TODO: Figure out why this is still firing 6 times during stub demo loading.
-  derive(inputs: CurentTransformationPropInputs): Transformation {
+  derive(inputs: CurrentTransformationPropInputs): Transformation {
     let state: Transformation = inputs.indexer.transformAtIndex(
       inputs.currentMoveInfo.stateIndex,
     ) as any;
