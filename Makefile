@@ -23,7 +23,7 @@ publish:
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
 
-TWIZZLE_SFTP_PATH = "towns.dreamhost.com:~/alpha.twizzle.net/"
+TWIZZLE_SFTP_PATH = "cubing_deploy@towns.dreamhost.com:~/alpha.twizzle.net/"
 TWIZZLE_URL       = "https://alpha.twizzle.net/"
 
 .PHONY: deploy-twizzle
@@ -35,7 +35,7 @@ deploy-twizzle: build-site-twizzle
 		${TWIZZLE_SFTP_PATH}
 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
 
-EXPERIMENTS_SFTP_PATH = "towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
+EXPERIMENTS_SFTP_PATH = "cubing_deploy@towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
 EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
 
 .PHONY: deploy-experiments
