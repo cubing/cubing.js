@@ -1,5 +1,9 @@
 import type { Move } from "../../../../alg";
-import type { PuzzleWrapper, State } from "../../../views/3D/puzzles/KPuzzleWrapper";
+import { arrayEqualsCompare } from "../../../model/helpers";
+import type {
+  PuzzleWrapper,
+  State,
+} from "../../../views/3D/puzzles/KPuzzleWrapper";
 import type {
   Direction,
   Duration,
@@ -11,9 +15,26 @@ import type {
 export interface CurrentMove {
   move: Move;
   direction: Direction; // TODO: `animationDirection`?
-  fraction: number;
+  fraction: number; // TODO: Figure out how to separate this field to make this whole object easier to cache?
   startTimestamp: MillisecondTimestamp;
   endTimestamp: MillisecondTimestamp;
+}
+
+export function currentMoveEquals(cm1: CurrentMove, cm2: CurrentMove): boolean {
+  return (
+    (cm1 === cm2 || cm1.move.isIdentical(cm2.move)) &&
+    cm1.direction === cm2.direction &&
+    cm1.fraction === cm2.fraction &&
+    cm1.startTimestamp === cm1.startTimestamp &&
+    cm1.endTimestamp === cm1.endTimestamp
+  );
+}
+
+export function currentMoveArrayEquals(
+  cma1: CurrentMove[],
+  cma2: CurrentMove[],
+): boolean {
+  return arrayEqualsCompare(cma1, cma2, currentMoveEquals);
 }
 
 export interface CurrentMoveInfo {
@@ -23,6 +44,21 @@ export interface CurrentMoveInfo {
   movesStarting: CurrentMove[];
   latestStart: number;
   earliestEnd: number;
+}
+
+// TODO: Write tests fore this before using.
+export function currentMoveInfoEquals(
+  c1: CurrentMoveInfo,
+  c2: CurrentMoveInfo,
+): boolean {
+  return (
+    c1.stateIndex === c2.stateIndex &&
+    currentMoveArrayEquals(c1.currentMoves, c2.currentMoves) &&
+    currentMoveArrayEquals(c1.movesFinishing, c2.movesFinishing) &&
+    currentMoveArrayEquals(c1.movesStarting, c2.movesStarting) &&
+    c1.latestStart === c2.latestStart &&
+    c2.earliestEnd === c2.earliestEnd
+  );
 }
 
 export interface AlgIndexer<P extends PuzzleWrapper> {

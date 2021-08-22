@@ -27,8 +27,9 @@ import { DetailedTimelineInfoProp } from "./depth-5/DetailedTimelineInfoProp";
 import { CoarseTimelineInfoProp } from "./depth-6/CoarseTimelineInfoProp";
 import { CurrentLeavesProp } from "./depth-6/CurrentLeavesProp";
 import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
-import { CurrentTransformationProp } from "./depth-7/CurrentTransformationProp";
-import { LegacyPositionProp } from "./depth-8/LegacyPositionProp";
+import { CurrentLeavesSimplifiedProp } from "./depth-7/CurrentLeavesSimplified";
+import { CurrentTransformationProp } from "./depth-8/CurrentTransformationProp";
+import { LegacyPositionProp } from "./depth-9/LegacyPositionProp";
 
 export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
@@ -136,14 +137,19 @@ export class TwistyPlayerModel {
     viewerLink: this.viewerLinkProp,
   });
 
+  currentLeavesSimplifiedProp = new CurrentLeavesSimplifiedProp({
+    currentMoveInfo: this.currentLeavesProp,
+  });
+
+  // Depth 8
   currentTransformationProp = new CurrentTransformationProp({
     anchoredStart: this.anchoredStartProp,
-    currentMoveInfo: this.currentLeavesProp,
+    currentLeavesSimplified: this.currentLeavesSimplifiedProp,
     indexer: this.indexerProp,
     def: this.puzzleDefProp,
   });
 
-  // Depth 8
+  // Depth 9
   legacyPositionProp = new LegacyPositionProp({
     currentMoveInfo: this.currentLeavesProp,
     transformation: this.currentTransformationProp,

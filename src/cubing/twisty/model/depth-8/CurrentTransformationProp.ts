@@ -1,21 +1,18 @@
-import { KSolvePuzzle } from "../../../twisty";
+import { KSolvePuzzle } from "../..";
 import { combineTransformations, KPuzzleDefinition } from "../../../kpuzzle";
 import type { Transformation } from "../../../puzzle-geometry/interfaces";
-import type {
-  AlgIndexer,
-  CurrentMoveInfo,
-} from "../../old/animation/indexer/AlgIndexer";
+import type { AlgIndexer } from "../../old/animation/indexer/AlgIndexer";
+import type { CurrentLeavesSimplified } from "../depth-7/CurrentLeavesSimplified";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface CurrentTransformationPropInputs {
   anchoredStart: Transformation;
-  currentMoveInfo: CurrentMoveInfo;
+  currentLeavesSimplified: CurrentLeavesSimplified;
   indexer: AlgIndexer<any>;
   def: KPuzzleDefinition;
 }
 
-// This started as a version of `EffectiveTimestamp` without the actual
-// timestamp, to enable easier caching.
+// TODO: Make this so we don't have to handle the finishing moves?
 export class CurrentTransformationProp extends TwistyPropDerived<
   CurrentTransformationPropInputs,
   Transformation
@@ -25,15 +22,15 @@ export class CurrentTransformationProp extends TwistyPropDerived<
   // TODO: Figure out why this is still firing 6 times during stub demo loading.
   derive(inputs: CurrentTransformationPropInputs): Transformation {
     let state: Transformation = inputs.indexer.transformAtIndex(
-      inputs.currentMoveInfo.stateIndex,
+      inputs.currentLeavesSimplified.stateIndex,
     ) as any;
     state = combineTransformations(inputs.def, inputs.anchoredStart, state);
     const ksolvePuzzle = new KSolvePuzzle(inputs.def); // TODO: put this elsewhere.
-    for (const finishingMove of inputs.currentMoveInfo.movesFinishing) {
+    for (const finishingMove of inputs.currentLeavesSimplified.movesFinishing) {
       state = combineTransformations(
         inputs.def,
         state,
-        ksolvePuzzle.stateFromMove(finishingMove.move),
+        ksolvePuzzle.stateFromMove(finishingMove),
       );
     }
     return state;
