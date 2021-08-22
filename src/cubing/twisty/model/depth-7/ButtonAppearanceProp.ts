@@ -35,6 +35,8 @@ export class ButtonAppearanceProp extends TwistyPropDerived<
   ButtonAppearancePropInputs,
   ButtonAppearances
 > {
+  name = "button appearance";
+
   // TODO: This still seems to fire twice for play/pause?
   derive(inputs: ButtonAppearancePropInputs): ButtonAppearances {
     const buttonAppearances = {

@@ -20,6 +20,8 @@ export class PlayingInfoProp extends TwistyPropSource<
   PlayingInfo,
   Partial<PlayingInfo>
 > {
+  name = "playing info";
+
   async getDefaultValue(): Promise<PlayingInfo> {
     return {
       direction: Direction.Forwards,

@@ -1,8 +1,5 @@
 import { KSolvePuzzle } from "../../../twisty";
-import {
-  combineTransformations,
-  KPuzzleDefinition,
-} from "../../../kpuzzle";
+import { combineTransformations, KPuzzleDefinition } from "../../../kpuzzle";
 import type { Transformation } from "../../../puzzle-geometry/interfaces";
 import type {
   AlgIndexer,
@@ -23,6 +20,8 @@ export class CurentTransformationProp extends TwistyPropDerived<
   CurentTransformationPropInputs,
   Transformation
 > {
+  name = "current transformation";
+
   // TODO: Figure out why this is still firing 6 times during stub demo loading.
   derive(inputs: CurentTransformationPropInputs): Transformation {
     let state: Transformation = inputs.indexer.transformAtIndex(

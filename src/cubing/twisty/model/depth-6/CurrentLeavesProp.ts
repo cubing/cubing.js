@@ -17,6 +17,8 @@ export class CurrentLeavesProp extends TwistyPropDerived<
   PositionPropInputs,
   CurrentMoveInfo
 > {
+  name = "current leaves";
+
   derive(inputs: PositionPropInputs): CurrentMoveInfo {
     // Copied from AlgCursor
     if (inputs.indexer.currentMoveInfo) {

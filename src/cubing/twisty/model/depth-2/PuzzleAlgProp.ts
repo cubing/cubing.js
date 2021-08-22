@@ -7,6 +7,8 @@ export class PuzzleAlgProp extends TwistyPropDerived<
   { algWithIssues: AlgWithIssues; puzzleDef: KPuzzleDefinition },
   AlgWithIssues
 > {
+  name = "puzzle alg";
+
   async derive(inputs: {
     algWithIssues: AlgWithIssues;
     puzzleDef: KPuzzleDefinition;

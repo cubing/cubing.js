@@ -21,6 +21,8 @@ export class IndexerConstructorProp extends TwistyPropDerived<
   IndexerConstructorPropInputs,
   IndexerConstructor
 > {
+  name = "indexer constructor";
+
   derive(inputs: IndexerConstructorPropInputs): IndexerConstructor {
     switch (inputs.indexerConstructorRequest) {
       case "auto":

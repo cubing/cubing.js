@@ -5,16 +5,16 @@ import {
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
 import type { TwistyPropParent } from "./TwistyProp";
 
-function splitName(s: string): string {
-  let out = "";
-  for (const c of s.slice(0, -4)) {
-    if (c.toUpperCase() === c && out.slice(-1)[0] !== "3") {
-      out += " ";
-    }
-    out += c.toLowerCase();
-  }
-  return out;
-}
+// function splitConstructorName(s: string): string {
+//   let out = "";
+//   for (const c of s.slice(0, -4)) {
+//     if (c.toUpperCase() === c && out.slice(-1)[0] !== "3") {
+//       out += " ";
+//     }
+//     out += c.toLowerCase();
+//   }
+//   return out;
+// }
 
 export class TwistyPropDebugger extends ManagedCustomElement {
   constructor(private twistyProp: TwistyPropParent<any>) {
@@ -25,7 +25,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 
   connectedCallback(): void {
     const span = document.createElement("span");
-    span.textContent = splitName(this.twistyProp.constructor.name);
+    span.textContent = this.twistyProp.name;
     this.contentWrapper.append(span);
 
     this.valueElem = this.contentWrapper.appendChild(

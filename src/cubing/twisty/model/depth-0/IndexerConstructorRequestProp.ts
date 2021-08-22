@@ -9,6 +9,8 @@ export const indexerStrategyNames = {
 export type IndexerStrategyName = keyof typeof indexerStrategyNames;
 
 export class IndexerConstructorRequestProp extends SimpleTwistyPropSource<IndexerStrategyName> {
+  name = "indexer constructor request";
+
   getDefaultValue(): IndexerStrategyName {
     return "auto";
   }

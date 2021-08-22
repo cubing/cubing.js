@@ -5,6 +5,8 @@ import type { CoordinateDegrees } from "./OrbitCoordinatesRequestProp";
 const DEFAULT_LATITUDE_LIMIT = 35;
 
 export class LatitudeLimitProp extends SimpleTwistyPropSource<CoordinateDegrees> {
+  name = "latitude limits";
+
   getDefaultValue(): CoordinateDegrees {
     return DEFAULT_LATITUDE_LIMIT;
   }

@@ -23,6 +23,8 @@ export class DetailedTimelineInfoProp extends TwistyPropDerived<
   DetailedTimelineInfoInputs,
   DetailedTimelineInfo
 > {
+  name = "detailed timeline";
+
   derive(inputs: DetailedTimelineInfoInputs): DetailedTimelineInfo {
     let timestamp = this.#requestedTimestampToMilliseconds(inputs);
     let atStart: boolean = false;
