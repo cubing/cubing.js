@@ -152,11 +152,13 @@ export class TwistyOrbitControlsV2 {
     );
     this.onMove(movementX, movementY);
 
-    this.lastMouseMoveMomentumX =
-      movementX / (e.timeStamp - this.lastMouseTimestamp);
-    this.lastMouseMoveMomentumY =
-      movementY / (e.timeStamp - this.lastMouseTimestamp);
-    this.lastMouseTimestamp = e.timeStamp;
+    if (e.timeStamp !== this.lastMouseTimestamp) {
+      this.lastMouseMoveMomentumX =
+        movementX / (e.timeStamp - this.lastMouseTimestamp);
+      this.lastMouseMoveMomentumY =
+        movementY / (e.timeStamp - this.lastMouseTimestamp);
+      this.lastMouseTimestamp = e.timeStamp;
+    }
   }
 
   onMouseEnd(e: MouseEvent): void {
@@ -211,11 +213,13 @@ export class TwistyOrbitControlsV2 {
         this.lastTouchClientX = touch.clientX;
         this.lastTouchClientY = touch.clientY;
 
-        this.lastTouchMoveMomentumX =
-          movementX / (e.timeStamp - this.lastTouchTimestamp);
-        this.lastTouchMoveMomentumY =
-          movementY / (e.timeStamp - this.lastTouchTimestamp);
-        this.lastTouchTimestamp = e.timeStamp;
+        if (e.timeStamp !== this.lastTouchTimestamp) {
+          this.lastTouchMoveMomentumX =
+            movementX / (e.timeStamp - this.lastTouchTimestamp);
+          this.lastTouchMoveMomentumY =
+            movementY / (e.timeStamp - this.lastTouchTimestamp);
+          this.lastTouchTimestamp = e.timeStamp;
+        }
       }
     }
   }
