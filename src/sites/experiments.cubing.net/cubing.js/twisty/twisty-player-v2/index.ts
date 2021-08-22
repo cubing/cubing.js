@@ -40,9 +40,10 @@ showStats(true);
       : "R U R' U R U2' R'";
   twistyPlayer.alg = alg;
 
-  const tableWrapper = document.body.appendChild(
-    document.createElement("table"),
-  );
+  const tableWrapper = document.body.appendChild(document.createElement("div"));
+  tableWrapper.id = "inputs";
+  tableWrapper.appendChild(document.createElement("h1")).textContent =
+    "<twisty-player-v2>";
   const table = tableWrapper.appendChild(document.createElement("table"));
 
   const algOptions: [string, string, Alg][] = [

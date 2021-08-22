@@ -21,7 +21,7 @@ body > twisty-player {
   grid-area: player;
 }
 
-body > table {
+body > #inputs {
   grid-area: inputs;
 }
 
@@ -34,4 +34,10 @@ body > #debuggers {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+}
+
+#inputs h1 {
+  font-size: 2em;
+  margin: 0 auto 0.5em;
+  font-family: monospace;
 }
