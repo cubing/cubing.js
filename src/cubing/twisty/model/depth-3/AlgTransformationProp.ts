@@ -15,7 +15,7 @@ export class AlgTransformationProp extends TwistyPropDerived<
   AlgTransformationPropInputs,
   Transformation
 > {
-  name = "AlgTransformation";
+  name = "alg transformation";
 
   derive(input: AlgTransformationPropInputs): Transformation {
     return this.applyAlg(input.def, input.alg.alg);
