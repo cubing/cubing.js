@@ -8,9 +8,9 @@ html {
 
 body {
   display: grid;
-  grid-template-areas: "player props" "inputs props";
+  grid-template-areas: "player props" "title props" "inputs props";
   grid-template-columns: auto 2fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   gap: 1em;
 
   height: 100%;
@@ -21,8 +21,17 @@ body > twisty-player {
   grid-area: player;
 }
 
+body > h1 {
+  grid-area: title;
+  font-size: 2em;
+  margin: 0 auto;
+  font-family: monospace;
+}
+
 body > #inputs {
   grid-area: inputs;
+  height: 100%;
+  overflow-y: auto;
 }
 
 body > #debuggers {
@@ -36,8 +45,9 @@ body > #debuggers {
   grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
 }
 
-#inputs h1 {
-  font-size: 2em;
-  margin: 0 auto 0.5em;
-  font-family: monospace;
+#inputs table td:first-child {
+  text-align: right;
+}
+#inputs table td:first-child::after {
+  content: " =";
 }
