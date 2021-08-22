@@ -34,3 +34,5 @@ Some examples of what this means:
   - If you're only drawing 2D puzzles, you shouldn't have to load the (fairly sizable) 3D code.
   - If you just need to draw freeze frames (like VisualCube), you should be able to use `<twisty-player>` without worrying about the "extra work" it does to prepare for animation.
 - For speed or simplicity, it is often valuable to require features that are only available in modern browsers/environments. In general, we are willing to require the most recent version of a modern browser, as long as the relevant feature is available across Chromium-based browsers (including Edge), Firefox, and Safari. We don't support Internet Explorer or Edge Spartan.
+
+In addition, it's valuable to apply some of these principles to the codebase itself. For example, we try to make it as easy as possible to get started, and generally use more verbose names to avoid any ambiguity when a shorter name could be ambiguous.
