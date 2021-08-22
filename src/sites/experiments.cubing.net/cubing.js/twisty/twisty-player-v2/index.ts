@@ -70,7 +70,7 @@ function addDebuggers(player: TwistyPlayerV2): void {
 
   const algOptions: [string, string, Alg][] = [
     ["alg", "alg", Alg.fromString(alg)],
-    ["setup", "setup", Alg.fromString("")],
+    ["experimentalSetupAlg", "setup-alg", Alg.fromString("")],
   ];
 
   for (const [propName, attrName, alg] of algOptions) {
@@ -84,6 +84,7 @@ function addDebuggers(player: TwistyPlayerV2): void {
     input.value = alg.toString();
     input.placeholder = "(none)";
     const update = () => {
+      console.log(propName, input.value);
       (twistyPlayer as any)[propName] = input.value;
     };
     input.addEventListener("change", update);
