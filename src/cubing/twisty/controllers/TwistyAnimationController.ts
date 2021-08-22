@@ -16,11 +16,12 @@ import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
 import type { TimestampRequest } from "../model/depth-0/TimestampRequestProp";
 import { modIntoRange } from "../model/helpers";
 
-// TODO: Fiture out a better way for the controller to instruct the player.
+// TODO: Figure out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {
   flashAutoSkip(): void;
 }
 
+// This controls the logic for animation, so that the main controller can focus on the right API abstractions.
 export class TwistyAnimationController {
   // TODO: #private?
   private playing: boolean = false;
