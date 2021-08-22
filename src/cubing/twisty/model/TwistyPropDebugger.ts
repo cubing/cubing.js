@@ -82,6 +82,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   }
 
   async onPropRaw(): Promise<void> {
+    // TODO: Animate `opacity` on overlapping elements for better perf.
     this.animate(
       [
         // keyframes
@@ -145,6 +146,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
       this.valueElem.textContent = str;
     }
 
+    // TODO: Animate `opacity` on overlapping elements for better perf.
     this.contentWrapper.animate(
       [
         // keyframes
