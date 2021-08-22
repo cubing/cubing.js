@@ -27,24 +27,33 @@ const DEFAULT_COORDINATES = Object.freeze({
   distance: 6,
 });
 
-// TODO: Built-in latitude locking.
+export type OrbitCoordinatesRequest = OrbitCoordinatesV2 | "auto";
+
+// TODO: Put the "auto" calculations in a separate place.
 export class OrbitCoordinatesRequestProp extends TwistyPropSource<
-  OrbitCoordinatesV2,
-  Partial<OrbitCoordinatesV2>
+  OrbitCoordinatesRequest,
+  Partial<OrbitCoordinatesV2> | "auto"
 > {
-  getDefaultValue(): OrbitCoordinatesV2 {
-    return DEFAULT_COORDINATES;
+  getDefaultValue(): OrbitCoordinatesRequest {
+    return "auto";
   }
 
   canReuseValue(v1: OrbitCoordinatesV2, v2: OrbitCoordinatesV2) {
-    return orbitCoordinatesEqual(v1, v2);
+    return v1 === v2 || orbitCoordinatesEqual(v1, v2);
   }
 
   async derive(
-    newCoordinates: Partial<OrbitCoordinatesV2>,
-    oldValuePromise: Promise<OrbitCoordinatesV2>,
-  ): Promise<OrbitCoordinatesV2> {
-    const oldValue = await oldValuePromise;
+    newCoordinates: Partial<OrbitCoordinatesV2> | "auto",
+    oldValuePromise: Promise<OrbitCoordinatesRequest>,
+  ): Promise<OrbitCoordinatesRequest> {
+    if (newCoordinates === "auto") {
+      return "auto";
+    }
+
+    let oldValue = await oldValuePromise;
+    if (oldValue === "auto") {
+      oldValue = DEFAULT_COORDINATES;
+    }
 
     const newValue: OrbitCoordinatesV2 = Object.assign({}, oldValue);
     Object.assign(newValue, newCoordinates);

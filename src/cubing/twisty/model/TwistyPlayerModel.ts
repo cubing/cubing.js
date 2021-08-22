@@ -65,6 +65,7 @@ export class TwistyPlayerModel {
   orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
     latitudeLimit: this.latitudeLimitProp,
+    puzzleID: this.puzzleProp,
   });
 
   puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
