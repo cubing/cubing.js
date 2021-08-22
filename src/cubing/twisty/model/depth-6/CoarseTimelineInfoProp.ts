@@ -27,8 +27,6 @@ export class CoarseTimelineInfoProp extends TwistyPropDerived<
   CoarseTimelineInfoInputs,
   CoarseTimelineInfo
 > {
-  name = "coarse timeline";
-
   derive(inputs: CoarseTimelineInfoInputs): CoarseTimelineInfo {
     return {
       playing: inputs.playingInfo.playing,

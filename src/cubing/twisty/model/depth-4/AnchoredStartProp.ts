@@ -19,8 +19,6 @@ export class AnchoredStartProp extends TwistyPropDerived<
   AnchoredStartPropInputs,
   Transformation
 > {
-  name = "anchored start";
-
   derive(inputs: AnchoredStartPropInputs): Transformation {
     switch (inputs.setupAnchor) {
       case "start":

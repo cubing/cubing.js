@@ -6,8 +6,6 @@ export class TimeRangeProp extends TwistyPropDerived<
   { indexer: AlgIndexer<any> },
   TimeRange
 > {
-  name = "time range";
-
   derive(inputs: { indexer: AlgIndexer<any> }): TimeRange {
     return {
       start: 0,

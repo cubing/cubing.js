@@ -87,11 +87,7 @@ abstract class AlgPropSuperclass extends TwistyPropSource<
   }
 }
 
-export class AlgProp extends AlgPropSuperclass {
-  name = "alg";
-}
+export class AlgProp extends AlgPropSuperclass {}
 
 // TODO: Is a separate prop worth it?
-export class SetupAlgProp extends AlgPropSuperclass {
-  name = "setup alg";
-}
+export class SetupAlgProp extends AlgPropSuperclass {}

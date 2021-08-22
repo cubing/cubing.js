@@ -13,8 +13,6 @@ export type TimestampRequest =
   | keyof typeof smartTimestamps;
 
 export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampRequest> {
-  name = "timestamp request";
-
   getDefaultValue(): TimestampRequest {
     return "opposite-anchor";
   }

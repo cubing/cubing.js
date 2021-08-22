@@ -7,8 +7,6 @@ export class PuzzleDefProp extends TwistyPropDerived<
   { puzzle: PuzzleID },
   KPuzzleDefinition
 > {
-  name = "puzle def";
-
   async derive(inputs: { puzzle: PuzzleID }): Promise<KPuzzleDefinition> {
     return puzzles[inputs.puzzle].def();
   }

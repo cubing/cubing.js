@@ -32,8 +32,6 @@ export class OrbitCoordinatesRequestProp extends TwistyPropSource<
   OrbitCoordinatesV2,
   Partial<OrbitCoordinatesV2>
 > {
-  name = "orbit coordinates request";
-
   getDefaultValue(): OrbitCoordinatesV2 {
     return DEFAULT_COORDINATES;
   }

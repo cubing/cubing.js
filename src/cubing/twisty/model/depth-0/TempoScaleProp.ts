@@ -3,8 +3,6 @@ import { TwistyPropSource } from "../TwistyProp";
 // TODO: Pick a better name. `speed` is probably good, although that could mean
 // something else (e.g. shorter, faster moves but still with the same spacing).
 export class TempoScaleProp extends TwistyPropSource<number, number> {
-  name = "tempo scale";
-
   getDefaultValue(): number {
     return 1;
   }

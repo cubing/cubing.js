@@ -17,8 +17,6 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
   VisualizationStrategyPropInputs,
   VisualizationStrategy
 > {
-  name = "visualization strategy";
-
   derive(inputs: VisualizationStrategyPropInputs): VisualizationStrategy {
     switch (inputs.puzzleID) {
       case "clock":

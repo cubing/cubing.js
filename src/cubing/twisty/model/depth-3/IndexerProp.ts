@@ -14,8 +14,6 @@ export class IndexerProp extends TwistyPropDerived<
   IndexerPropInputs,
   AlgIndexer<any>
 > {
-  name = "indexer";
-
   derive(input: IndexerPropInputs): AlgIndexer<any> {
     const kpuzzleWrapper = new KPuzzleWrapper(input.def); // TODO: Remove this layer.
     return new input.indexerConstructor(

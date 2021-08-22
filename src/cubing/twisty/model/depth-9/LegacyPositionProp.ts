@@ -13,8 +13,6 @@ export class LegacyPositionProp extends TwistyPropDerived<
   LegacyPositionPropInputs,
   PuzzlePosition
 > {
-  name = "legacy position";
-
   derive(inputs: LegacyPositionPropInputs): PuzzlePosition {
     return {
       state: inputs.transformation,
