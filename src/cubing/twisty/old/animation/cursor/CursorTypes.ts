@@ -34,8 +34,8 @@ export type PuzzlePosition = {
 };
 
 export enum BoundaryType {
-  Move,
-  EntireTimeline,
+  Move = "move",
+  EntireTimeline = "entire-timeline",
 }
 
 // export type DurationForAmount = (amount: number) => Duration;
