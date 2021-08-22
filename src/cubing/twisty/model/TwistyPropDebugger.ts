@@ -82,7 +82,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   }
 
   async onPropRaw(): Promise<void> {
-    this.contentWrapper.animate(
+    this.animate(
       [
         // keyframes
         { background: "rgba(244, 133, 66, 0.4)" },
@@ -148,7 +148,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     this.contentWrapper.animate(
       [
         // keyframes
-        { background: "rgba(66, 133, 244, 0.4)" },
+        { background: "rgba(140, 190, 250)" },
         { background: "transparent" },
       ],
       {
