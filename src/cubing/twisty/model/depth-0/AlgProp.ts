@@ -47,10 +47,7 @@ function algWithIssuesEquals(a1: AlgWithIssues, a2: AlgWithIssues): boolean {
   );
 }
 
-abstract class AlgPropSuperclass extends TwistyPropSource<
-  AlgWithIssues,
-  Alg | String
-> {
+export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
   getDefaultValue(): AlgWithIssues {
     return { alg: new Alg(), issues: new AlgIssues() };
   }
@@ -86,8 +83,3 @@ abstract class AlgPropSuperclass extends TwistyPropSource<
     }
   }
 }
-
-export class AlgProp extends AlgPropSuperclass {}
-
-// TODO: Is a separate prop worth it?
-export class SetupAlgProp extends AlgPropSuperclass {}

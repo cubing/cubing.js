@@ -1,4 +1,4 @@
-import { AlgProp, SetupAlgProp } from "./depth-0/AlgProp";
+import { AlgProp } from "./depth-0/AlgProp";
 import { BackgroundProp } from "./depth-0/BackgroundProp";
 import { BackViewProp } from "./depth-0/BackViewProp";
 import { ControlPanelProp } from "./depth-0/ControlPanelProp";
@@ -49,7 +49,7 @@ export class TwistyPlayerModel {
   playingInfoProp = new PlayingInfoProp();
   puzzleProp = new PuzzleProp();
   setupAnchorProp = new SetupAnchorProp();
-  setupProp = new SetupAlgProp();
+  setupProp = new AlgProp();
   stickeringProp = new StickeringProp();
   tempoScaleProp = new TempoScaleProp();
   timestampRequestProp = new TimestampRequestProp();
