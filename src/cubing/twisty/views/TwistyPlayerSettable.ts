@@ -11,6 +11,7 @@ import type { IndexerStrategyName } from "../model/depth-0/IndexerConstructorReq
 import type { ViewerLinkPageWithAuto } from "../model/depth-0/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/depth-0/VisualizationProp";
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
+import type { ExperimentalAnimationIteration } from "./ExperimentalAnimationIteration";
 
 function err(propName: string): Error {
   return new Error(
@@ -75,4 +76,7 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
 
   set tempoScale(newTempoScale: number) { this.model.tempoScaleProp.set(newTempoScale); }
   get tempoScale(): never { throw err("tempoScale"); }
+
+  set experimentalAnimationIteration(animationIteration: ExperimentalAnimationIteration) { this.model.playingInfoProp.set({loop: animationIteration === "loop"});console.log(animationIteration) }
+  get experimentalAnimationIteration(): never { throw err("experimentalAnimationIteration"); }
 }

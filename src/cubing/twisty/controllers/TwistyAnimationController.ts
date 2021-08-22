@@ -114,7 +114,7 @@ export class TwistyAnimationController {
       playing: true,
       direction,
       untilBoundary: options?.untilBoundary ?? BoundaryType.EntireTimeline,
-      loop: options?.loop ?? false,
+      // loop: options?.loop ?? false,
     });
 
     this.playing = true;

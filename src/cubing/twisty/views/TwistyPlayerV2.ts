@@ -1,5 +1,5 @@
 import type { ExperimentalStickering } from "../../twisty";
-import type { Alg } from "../../alg";
+import type { Alg, ExperimentalIterationDirection } from "../../alg";
 import { ClassListManager } from "../old/dom/element/ClassListManager";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../old/dom/TwistyPlayer.css_";
@@ -46,6 +46,7 @@ const attributeMap: Record<string, string> = {
   "back-view": "backView",
   // "indexer": "indexer",
   "viewer-link": "viewerLink",
+  "experimental-animation-iteration": "experimentalAnimationIteration",
 
   // Number-based
   "camera-latitude": "cameraLatitude",
@@ -79,8 +80,9 @@ export interface TwistyPlayerV2Config {
   backView?: BackViewLayoutWithAuto;
   // "indexer"?: "indexer";
   viewerLink?: ViewerLinkPageWithAuto;
+  experimentalAnimationIteration?: ExperimentalIterationDirection;
 
-  // NumberBased
+  // Number-based
   cameraLatitude?: number;
   cameraLongitude?: number;
   cameraDistance?: number;

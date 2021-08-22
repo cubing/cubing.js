@@ -8,6 +8,8 @@ export type SimpleDirection = Direction.Forwards | Direction.Backwards;
 
 export interface PlayingInfo {
   playing: boolean;
+  // TODO: Use something like "animation direction" to request back and forth?
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction
   direction: SimpleDirection;
   untilBoundary: BoundaryType; // TODO: allows this to be optional in the setter?
   // TODO: Is `loop` responsible to add at this point? Maybe we should wait until we've figured out autoplay?

@@ -18,6 +18,7 @@ import {
   visualizationFormats,
 } from "../../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 import { backViewLayouts } from "../../../../../cubing/twisty/old/dom/viewers/TwistyViewerWrapper";
+import { experimentalAnimationIterationInstructions } from "../../../../../cubing/twisty/views/ExperimentalAnimationIteration";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
@@ -109,6 +110,11 @@ showStats(true);
       "viewerLink",
       "viewer-link",
       Object.assign({ auto: true }, viewerLinkPages),
+    ],
+
+    ["experimentalAnimationIteration",
+      "animation-iteration",
+      experimentalAnimationIterationInstructions,
     ],
   ];
 
