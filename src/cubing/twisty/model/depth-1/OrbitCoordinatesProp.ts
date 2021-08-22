@@ -31,12 +31,18 @@ export class OrbitCoordinatesProp extends TwistyPropDerived<
       return defaultCameraOrbitCoordinates(inputs.puzzleID);
     }
 
-    if (
-      Math.abs(inputs.orbitCoordinatesRequest.latitude) <= inputs.latitudeLimit
-    ) {
-      return inputs.orbitCoordinatesRequest;
+    const req = Object.assign(
+      Object.assign(
+        {},
+        defaultCameraOrbitCoordinates(inputs.puzzleID),
+        inputs.orbitCoordinatesRequest,
+      ),
+    );
+
+    if (Math.abs(req.latitude) <= inputs.latitudeLimit) {
+      return req;
     } else {
-      const { latitude, longitude, distance } = inputs.orbitCoordinatesRequest;
+      const { latitude, longitude, distance } = req;
       // TODO: Should we re-normalize the request, so we don't depend on normalization in the input?
       return {
         latitude: inputs.latitudeLimit * Math.sign(latitude),
