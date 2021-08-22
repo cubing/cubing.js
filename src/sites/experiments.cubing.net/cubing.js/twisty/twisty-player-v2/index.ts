@@ -3,9 +3,11 @@
 
 import { Alg } from "../../../../../cubing/alg";
 import { TwistyPlayerV2 } from "../../../../../cubing/twisty";
-import { showStats } from "../../../../../cubing/twisty/views/3D/Twisty3DVantage";
 import { indexerStrategyNames } from "../../../../../cubing/twisty/model/depth-0/IndexerConstructorRequestProp";
-import { enableDebuggers } from "../../../../../cubing/twisty/model/TwistyPropDebugger";
+import {
+  splitFieldName,
+  TwistyPropDebugger,
+} from "../../../../../cubing/twisty/model/TwistyPropDebugger";
 import {
   backgroundThemes,
   controlsLocations,
@@ -18,13 +20,30 @@ import {
   visualizationFormats,
 } from "../../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 import { backViewLayouts } from "../../../../../cubing/twisty/old/dom/viewers/TwistyViewerWrapper";
+import { showStats } from "../../../../../cubing/twisty/views/3D/Twisty3DVantage";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
 console.log("Loading stub file.");
 
-enableDebuggers(true);
 showStats(true);
+
+function addDebuggers(player: TwistyPlayerV2): void {
+  const debuggersWrapper = document.body.appendChild(
+    document.createElement("div"),
+  );
+  debuggersWrapper.id = "debuggers";
+  const debuggersGrid = debuggersWrapper.appendChild(
+    document.createElement("div"),
+  );
+  for (const [key, value] of Object.entries(player.model)) {
+    if (key.endsWith("Prop")) {
+      debuggersGrid.appendChild(
+        new TwistyPropDebugger(splitFieldName(key), value),
+      );
+    }
+  }
+}
 
 (async () => {
   const puzzle = (new URL(location.href).searchParams.get("puzzle") ??
@@ -33,6 +52,8 @@ showStats(true);
   const twistyPlayer = document.body.appendChild(
     new TwistyPlayerV2({ puzzle }),
   );
+
+  addDebuggers(twistyPlayer);
 
   const alg =
     puzzle === "gigaminx"

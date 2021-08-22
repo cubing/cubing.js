@@ -1,6 +1,5 @@
 import { from } from "../../vendor/p-lazy/p-lazy";
 import { StaleDropper } from "./PromiseFreshener";
-import { addDebugger } from "./TwistyPropDebugger";
 
 export type InputProps<T extends Object> = {
   [s in keyof T]: TwistyPropParent<T[s]>;
@@ -24,10 +23,6 @@ type PromiseOrValue<T> = T | Promise<T>;
 let globalSourceGeneration = 0; // This is incremented before being used, so 1 will be the first active value.
 export abstract class TwistyPropParent<T> {
   abstract name: string;
-
-  constructor() {
-    addDebugger(this);
-  }
 
   public abstract get(): Promise<T>;
 

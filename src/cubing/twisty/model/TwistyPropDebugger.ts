@@ -1,23 +1,39 @@
+import type { Alg } from "../../alg";
+import { countMoves } from "../../notation";
 import {
   CSSSource,
   ManagedCustomElement,
 } from "../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
+import type { AlgIssues } from "./depth-0/AlgProp";
 import type { TwistyPropParent } from "./TwistyProp";
 
-// function splitConstructorName(s: string): string {
-//   let out = "";
-//   for (const c of s.slice(0, -4)) {
-//     if (c.toUpperCase() === c && out.slice(-1)[0] !== "3") {
-//       out += " ";
-//     }
-//     out += c.toLowerCase();
-//   }
-//   return out;
-// }
+export function splitFieldName(s: string): string {
+  let out = "";
+  for (const c of s.slice(0, -4)) {
+    if (c.toUpperCase() === c && out.slice(-1)[0] !== "3") {
+      out += " ";
+    }
+    out += c.toLowerCase();
+  }
+  return out;
+}
+
+function truncateAlgForDisplay(alg: Alg): string {
+  let str = alg.toString();
+  if (str.length < 50) {
+    return str;
+  }
+  str = str.slice(0, 50);
+  const lastSpace = str.lastIndexOf(" ");
+  if (lastSpace !== -1) {
+    str = str.slice(0, lastSpace) + "…";
+  }
+  return str;
+}
 
 export class TwistyPropDebugger extends ManagedCustomElement {
-  constructor(private twistyProp: TwistyPropParent<any>) {
+  constructor(private name: string, private twistyProp: TwistyPropParent<any>) {
     super();
   }
 
@@ -25,7 +41,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 
   connectedCallback(): void {
     const span = document.createElement("span");
-    span.textContent = this.twistyProp.name;
+    span.textContent = this.name;
     this.contentWrapper.append(span);
 
     this.valueElem = this.contentWrapper.appendChild(
@@ -94,10 +110,21 @@ export class TwistyPropDebugger extends ManagedCustomElement {
       if (typeof value === "undefined") {
         str = "(undefined)";
       } else if (isAlgIssues(value)) {
-        str = JSON.stringify({
-          alg: value.alg.toString(),
-          issues: value.issues,
-        }).slice(0, 100);
+        str = `Alg`;
+        if ((value.issues as AlgIssues).errors.length > 0) {
+          str += ` 🚨 ${value.issues.errors[0]}`;
+        } else {
+          str += ` (${countMoves(value.alg)} moves): ${truncateAlgForDisplay(
+            value.alg,
+          )}`;
+        }
+        if ((value.issues as AlgIssues).warnings.length > 0) {
+          str += ` ⚠️ ${value.issues.warnings[0]}`;
+        }
+        // str = JSON.stringify({
+        //   alg: value.alg.toString(),
+        //   issues: value.issues,
+        // }).slice(0, 100);
       } else {
         const str1 = JSON.stringify(value);
         if (typeof str1 === "undefined") {
@@ -132,35 +159,3 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 }
 
 customElementsShim.define("twisty-prop-debugger", TwistyPropDebugger);
-
-interface DebuggerElems {
-  wrapper: HTMLElement;
-  grid: HTMLElement;
-}
-let cachedDebuggerListGrid: DebuggerElems | null = null;
-function debuggerElems(): DebuggerElems {
-  return (cachedDebuggerListGrid ??= ((): DebuggerElems => {
-    const wrapper = document.createElement("div");
-    wrapper.id = "debuggers";
-    return {
-      wrapper: wrapper,
-      grid: wrapper.appendChild(document.createElement("div")),
-    };
-  })());
-}
-
-let DEBUG = false;
-export function enableDebuggers(enable: boolean) {
-  DEBUG = enable;
-}
-export function addDebugger(twistyProp: TwistyPropParent<any>): void {
-  if (DEBUG) {
-    debuggerElems().grid.appendChild(new TwistyPropDebugger(twistyProp));
-  }
-}
-
-if (typeof window !== "undefined") {
-  window?.addEventListener("DOMContentLoaded", () => {
-    document.body.appendChild(debuggerElems().wrapper);
-  });
-}
