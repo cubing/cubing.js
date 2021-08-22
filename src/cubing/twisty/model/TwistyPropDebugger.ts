@@ -115,17 +115,15 @@ export class TwistyPropDebugger extends ManagedCustomElement {
         if ((value.issues as AlgIssues).errors.length > 0) {
           str += ` 🚨 ${value.issues.errors[0]}`;
         } else {
-          str += ` (${countMoves(value.alg)} moves): ${truncateAlgForDisplay(
-            value.alg,
-          )}`;
+          const numMoves = countMoves(value.alg);
+          str += ` (${numMoves} moves)`;
+          if (numMoves > 0) {
+            str += `: ${truncateAlgForDisplay(value.alg)}`;
+          }
         }
         if ((value.issues as AlgIssues).warnings.length > 0) {
           str += ` ⚠️ ${value.issues.warnings[0]}`;
         }
-        // str = JSON.stringify({
-        //   alg: value.alg.toString(),
-        //   issues: value.issues,
-        // }).slice(0, 100);
       } else {
         const str1 = JSON.stringify(value);
         if (typeof str1 === "undefined") {
