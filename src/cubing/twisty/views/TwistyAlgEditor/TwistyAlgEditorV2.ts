@@ -1,15 +1,15 @@
 // TODO: see if this can replace AlgCursor?
 
-import type { ExperimentalParsed } from "../../alg";
-import { Alg, Move, Pause } from "../../alg";
-import type { AlgProp, AlgWithIssues } from "../model/depth-0/AlgProp";
-import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
-import { ClassListManager } from "../old/dom/element/ClassListManager";
-import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
-import { twistyAlgEditorCSS } from "../old/dom/TwistyAlgEditor.css_";
-import { twistyAlgEditorCharSearch } from "../old/dom/TwistyAlgEditorStartCharSearch";
-import { TwistyPlayerV2 } from "./TwistyPlayerV2";
+import type { ExperimentalParsed } from "../../../alg";
+import { Alg, Move, Pause } from "../../../alg";
+import type { AlgProp, AlgWithIssues } from "../../model/depth-0/AlgProp";
+import type { CurrentMoveInfo } from "../../old/animation/indexer/AlgIndexer";
+import { ClassListManager } from "../../old/dom/element/ClassListManager";
+import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
+import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
+import { twistyAlgEditorCSS } from "../../old/dom/TwistyAlgEditor.css_";
+import { twistyAlgEditorCharSearch } from "../../old/dom/TwistyAlgEditorStartCharSearch";
+import { TwistyPlayerV2 } from "../TwistyPlayerV2";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";
