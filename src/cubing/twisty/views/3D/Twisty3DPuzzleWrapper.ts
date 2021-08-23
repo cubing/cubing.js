@@ -109,6 +109,12 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           return (await proxyPromise).cube3DShim();
         default:
           const hintFacelets = await this.model!.hintFaceletProp.get();
+          if ((await this.model.visualizationStrategyProp.get()) === "PG3DV2") {
+            return (await proxyPromise).pg3dv2Shim(
+              this.puzzleID,
+              hintFacelets === "auto" ? "floating" : hintFacelets,
+            );
+          }
           return (await proxyPromise).pg3dShim(
             this.puzzleID,
             hintFacelets === "auto" ? "floating" : hintFacelets,

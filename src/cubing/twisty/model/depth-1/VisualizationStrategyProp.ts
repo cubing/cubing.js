@@ -11,7 +11,8 @@ export type VisualizationStrategy =
   | "Cube3D"
   | "2D"
   | "experimental-2D-LL"
-  | "PG3D";
+  | "PG3D"
+  | "PG3DV2";
 
 export class VisualizationStrategyProp extends TwistyPropDerived<
   VisualizationStrategyPropInputs,

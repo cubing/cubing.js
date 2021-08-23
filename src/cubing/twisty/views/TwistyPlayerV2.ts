@@ -176,6 +176,7 @@ export class TwistyPlayerV2
           newWrapper = new Twisty2DSceneWrapper(this.model, strategy);
           break;
         case "Cube3D":
+        case "PG3DV2":
         case "PG3D":
           // TODO: Properly wire this up so we can set PG3D for the cube.
           newWrapper = new Twisty3DSceneWrapper(this.model);

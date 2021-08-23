@@ -2,7 +2,11 @@ import { cube3x3x3, puzzles } from "../../../puzzles";
 import { Cube3D } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
 import type { AlgCursor } from "../../old/animation/cursor/AlgCursor";
-import type { HintFaceletStyle, PuzzleID } from "../../old/dom/TwistyPlayerConfig";
+import type {
+  HintFaceletStyle,
+  PuzzleID,
+} from "../../old/dom/TwistyPlayerConfig";
+import { PG3DV2 } from "../../views/3D/puzzles/PG3DV2";
 
 export { Cube3D } from "../../views/3D/puzzles/Cube3D";
 export { PG3D } from "../../views/3D/puzzles/PG3D";
@@ -23,6 +27,23 @@ export async function pg3dShim(
   const cursorShim = { addPositionListener: () => {} } as any as AlgCursor; // TODO
   const renderCallbackShim = () => {};
   return new PG3D(
+    cursorShim,
+    renderCallbackShim,
+    await puzzles[puzzleID].def(),
+    (await puzzles[puzzleID].pg!()).get3d(),
+    true,
+    hintFacelets === "floating",
+  );
+}
+
+// TODO: take loader?
+export async function pg3dv2Shim(
+  puzzleID: PuzzleID,
+  hintFacelets: HintFaceletStyle,
+): Promise<PG3DV2> {
+  const cursorShim = { addPositionListener: () => {} } as any as AlgCursor; // TODO
+  const renderCallbackShim = () => {};
+  return new PG3DV2(
     cursorShim,
     renderCallbackShim,
     await puzzles[puzzleID].def(),
