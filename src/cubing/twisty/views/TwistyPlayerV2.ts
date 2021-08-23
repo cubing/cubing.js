@@ -1,4 +1,4 @@
-import type { Alg } from "../../alg";
+import type { Alg, Move } from "../../alg";
 import type { ExperimentalStickering } from "../../twisty";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
@@ -211,6 +211,15 @@ export class TwistyPlayerV2
   // We still provide `play()` and `pause()` individually for convenience, though.
   togglePlay(play?: boolean): void {
     this.controller.togglePlay(play);
+  }
+
+  // TODO: Animate the new move.
+  experimentalAddMove(move: Move): void {
+    (async () => {
+      const alg = (await this.model.algProp.get()).alg;
+      this.model.algProp.set(alg.concat([move]));
+      this.model.timestampRequestProp.set("end");
+    })();
   }
 
   static get observedAttributes(): string[] {
