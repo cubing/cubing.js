@@ -1,22 +1,37 @@
 import type { PerspectiveCamera, WebGLRenderer } from "three";
 import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
-import { DEGREES_PER_RADIAN } from "./TAU";
+import { THREEJS } from "../../heavy-code-imports/3d";
+import type { OrbitCoordinatesV2 } from "../../model/depth-0/OrbitCoordinatesRequestProp";
+import { StaleDropper } from "../../model/PromiseFreshener";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import type { TwistyPropParent } from "../../model/TwistyProp";
 import { RenderScheduler } from "../../old/animation/RenderScheduler";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import { pixelRatio } from "../../old/dom/viewers/canvas";
 import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css_";
-import { THREEJS } from "../../heavy-code-imports/3d";
-import type { OrbitCoordinatesV2 } from "../../model/depth-0/OrbitCoordinatesRequestProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { TwistyPropParent } from "../../model/TwistyProp";
-import { StaleDropper } from "../../model/PromiseFreshener";
+import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
 
 let SHOW_STATS = false;
 export function showStats(enable: boolean): void {
   SHOW_STATS = enable;
+}
+
+export async function setCameraFromOrbitCoordinates(
+  camera: PerspectiveCamera,
+  orbitCoordinates: OrbitCoordinatesV2,
+  backView: boolean = false,
+): Promise<void> {
+  const spherical = new (await THREEJS).Spherical(
+    orbitCoordinates.distance,
+    (90 - (backView ? -1 : 1) * orbitCoordinates.latitude) / DEGREES_PER_RADIAN,
+    ((backView ? 180 : 0) + orbitCoordinates.longitude) / DEGREES_PER_RADIAN,
+  );
+  spherical.makeSafe();
+  camera.position.setFromSpherical(spherical);
+  camera.lookAt(0, 0, 0);
 }
 
 export class Twisty3DVantage extends ManagedCustomElement {
@@ -139,22 +154,14 @@ export class Twisty3DVantage extends ManagedCustomElement {
         this.addListener(
           this.model.orbitCoordinatesProp,
           async (orbitCoordinates: OrbitCoordinatesV2) => {
-            const spherical = new (await THREEJS).Spherical(
-              orbitCoordinates.distance,
-              (90 -
-                (this.options?.backView ? -1 : 1) * orbitCoordinates.latitude) /
-                DEGREES_PER_RADIAN,
-              ((this.options?.backView ? 180 : 0) +
-                orbitCoordinates.longitude) /
-                DEGREES_PER_RADIAN,
-            );
-            spherical.makeSafe();
-
             const camera = await this.camera();
-
+            setCameraFromOrbitCoordinates(
+              camera,
+              orbitCoordinates,
+              this.options?.backView,
+            );
             // TODO: Wrap in StaleDropper?
-            camera.position.setFromSpherical(spherical);
-            camera.lookAt(0, 0, 0);
+
             this.scheduleRender();
           },
         );

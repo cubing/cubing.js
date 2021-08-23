@@ -1,5 +1,14 @@
-import type { ExperimentalStickering } from "../../twisty";
 import type { Alg } from "../../alg";
+import type { ExperimentalStickering } from "../../twisty";
+import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
+import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
+import type { BackgroundThemeWithAuto } from "../model/depth-0/BackgroundProp";
+import type { BackViewLayoutWithAuto } from "../model/depth-0/BackViewProp";
+import type { ControlPanelThemeWithAuto } from "../model/depth-0/ControlPanelProp";
+import type { HintFaceletStyleWithAuto } from "../model/depth-0/HintFaceletProp";
+import type { ViewerLinkPageWithAuto } from "../model/depth-0/ViewerLinkProp";
+import type { VisualizationFormatWithAuto } from "../model/depth-0/VisualizationProp";
+import type { VisualizationStrategy } from "../model/depth-1/VisualizationStrategyProp";
 import { ClassListManager } from "../old/dom/element/ClassListManager";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../old/dom/TwistyPlayer.css_";
@@ -8,19 +17,11 @@ import {
   PuzzleID,
   SetupToLocation,
 } from "../old/dom/TwistyPlayerConfig";
-import type { BackgroundThemeWithAuto } from "../model/depth-0/BackgroundProp";
-import type { BackViewLayoutWithAuto } from "../model/depth-0/BackViewProp";
-import type { ControlPanelThemeWithAuto } from "../model/depth-0/ControlPanelProp";
-import type { HintFaceletStyleWithAuto } from "../model/depth-0/HintFaceletProp";
-import type { ViewerLinkPageWithAuto } from "../model/depth-0/ViewerLinkProp";
-import type { VisualizationFormatWithAuto } from "../model/depth-0/VisualizationProp";
-import type { VisualizationStrategy } from "../model/depth-1/VisualizationStrategyProp";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
 import { TwistyScrubberV2 } from "./control-panel/TwistyScrubberV2";
-import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
-import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
+import { screenshot } from "./screenshot";
 import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
 
 // TODO: I couldn't figure out how to use use more specific types. Ideally, we'd
@@ -227,6 +228,18 @@ export class TwistyPlayerV2
     }
 
     (this as any)[setterName] = newValue;
+  }
+
+  // TODO: Make this more ergonomic and flexible.
+  // TODO: dimensions.
+  async experimentalScreenshot(): Promise<string> {
+    return (await screenshot(this.model)).dataURL;
+  }
+
+  // TODO: Make this more ergonomic and flexible.
+  // TODO: dimensions.
+  async experimentalDownloadScreenshot(filename?: string): Promise<void> {
+    await (await screenshot(this.model)).download(filename);
   }
 }
 
