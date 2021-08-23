@@ -329,10 +329,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
 
       twistyPlayer.model.currentLeavesProp.addFreshListener(
         (currentMoveInfo: CurrentMoveInfo) => {
-          // const timestamp = detailedTimelineInfo.timestamp;
-          // const idx =
-          //   twistyPlayer.cursor!.experimentalIndexFromTimestamp(timestamp);
-          // const move = twistyPlayer.cursor!.experimentalMoveAtIndex(idx);
+          // TODO: take into account finishing moves.
           const currentMove = currentMoveInfo.currentMoves[0];
           if (!currentMove) {
             return;
