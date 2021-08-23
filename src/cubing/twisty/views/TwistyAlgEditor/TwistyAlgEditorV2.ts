@@ -10,6 +10,7 @@ import { customElementsShim } from "../../old/dom/element/node-custom-element-sh
 import { twistyAlgEditorCSS } from "../../old/dom/TwistyAlgEditor.css_";
 import { twistyAlgEditorCharSearch } from "../../old/dom/TwistyAlgEditorStartCharSearch";
 import { TwistyPlayerV2 } from "../TwistyPlayerV2";
+import { TwistyAlgEditorModel } from "./model";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";
@@ -25,6 +26,8 @@ type TwistyPlayerAlgProp = "algProp" | "setupProp";
 // }
 
 export class TwistyAlgEditorV2 extends ManagedCustomElement {
+  model = new TwistyAlgEditorModel();
+
   #alg: Alg = new Alg();
   #textarea: HTMLTextAreaElement = document.createElement("textarea");
   #carbonCopy: HTMLDivElement = document.createElement("div");
@@ -198,7 +201,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   }
 
   #lastSelection: { start: number; end: number } | null = null;
-  onSelectionChange(): void {
+  async onSelectionChange(): Promise<void> {
     if (
       document.activeElement !== this ||
       this.shadow.activeElement !== this.#textarea
@@ -208,12 +211,15 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     if (this.#twistyPlayerProp !== "algProp") {
       return;
     }
+
+    const { selectionStart, selectionEnd } = this.#textarea;
+    this.model.selectionProp.set({
+      selectionStart,
+      selectionEnd,
+    });
+
     // console.log(this.#textarea.selectionStart);
-    const idx =
-      this.#lastSelection?.start === this.#textarea.selectionStart &&
-      this.#lastSelection?.end !== this.#textarea.selectionEnd
-        ? this.#textarea.selectionEnd
-        : this.#textarea.selectionStart;
+    const idx = await this.model.targetCharProp.get();
     const dataUp = twistyAlgEditorCharSearch(this.#alg, {
       targetCharIdx: idx,
       numMovesSofar: 0,

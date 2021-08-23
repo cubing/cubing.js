@@ -1,5 +1,8 @@
+// TODO: Move this?
+
 import {
   SimpleTwistyPropSource,
+  TwistyPropDerived,
   TwistyPropSource,
 } from "../../model/TwistyProp";
 
@@ -10,8 +13,8 @@ export class TwistyAlgEditorValueProp extends SimpleTwistyPropSource<string> {
 }
 
 interface SelectionInfoPropInput {
-  selectionStart: number | null;
-  selectionEnd: number | null;
+  selectionStart: number;
+  selectionEnd: number;
 }
 interface SelectionInfo extends SelectionInfoPropInput {
   endChangedMostRecently: boolean;
@@ -22,8 +25,8 @@ export class TwistyAlgEditorSelectionProp extends TwistyPropSource<
 > {
   getDefaultValue() {
     return {
-      selectionStart: null,
-      selectionEnd: null,
+      selectionStart: 0,
+      selectionEnd: 0,
       endChangedMostRecently: false,
     };
   }
@@ -43,4 +46,25 @@ export class TwistyAlgEditorSelectionProp extends TwistyPropSource<
       endChangedMostRecently,
     };
   }
+}
+
+interface TargetCharPropInputs {
+  selectionInfo: SelectionInfo;
+}
+
+export class TargetCharProp extends TwistyPropDerived<
+  TargetCharPropInputs,
+  number
+> {
+  derive(inputs: TargetCharPropInputs) {
+    return inputs.selectionInfo.endChangedMostRecently
+      ? inputs.selectionInfo.selectionEnd
+      : inputs.selectionInfo.selectionStart;
+  }
+}
+
+export class TwistyAlgEditorModel {
+  valueProp = new TwistyAlgEditorValueProp();
+  selectionProp = new TwistyAlgEditorSelectionProp();
+  targetCharProp = new TargetCharProp({ selectionInfo: this.selectionProp });
 }
