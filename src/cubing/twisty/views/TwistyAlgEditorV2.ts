@@ -2,7 +2,7 @@
 
 import type { ExperimentalParsed } from "../../alg";
 import { Alg, Move, Pause } from "../../alg";
-import type { AlgProp } from "../model/depth-0/AlgProp";
+import type { AlgProp, AlgWithIssues } from "../model/depth-0/AlgProp";
 import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
 import { ClassListManager } from "../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
@@ -327,16 +327,35 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
         },
       );
 
+      // TODO: listen to puzzle prop?
+      this.#twistyPlayer?.model.puzzleAlgProp.addFreshListener(
+        (algWithIssues: AlgWithIssues) => {
+          if (algWithIssues.issues.errors.length === 0) {
+            this.setAlgValidForPuzzle(true);
+            const newAlg = algWithIssues.alg;
+            if (!newAlg.isIdentical(Alg.fromString(this.algString))) {
+              this.algString = newAlg.toString();
+            }
+          } else {
+            this.setAlgValidForPuzzle(false);
+          }
+        },
+      );
+
       twistyPlayer.model.currentLeavesProp.addFreshListener(
         (currentMoveInfo: CurrentMoveInfo) => {
           // TODO: take into account finishing moves.
           const currentMove = currentMoveInfo.currentMoves[0];
-          if (!currentMove) {
-            return;
-          }
+          console.log({ currentMove });
           if (currentMove) {
             this.highlightLeaf(currentMove.move as ExperimentalParsed<Move>);
+            return;
           }
+          // const moveStarting = currentMoveInfo.movesStarting[0];
+          // console.log({ moveStarting });
+          // if (moveStarting) {
+          //   this.highlightLeaf(moveStarting.move as ExperimentalParsed<Move>);
+          // }
         },
       );
     }
