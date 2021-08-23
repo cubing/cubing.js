@@ -9,6 +9,7 @@ import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
 import type { HintFaceletStyleWithAuto } from "../../model/depth-0/HintFaceletProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { TwistyPropParent } from "../../model/TwistyProp";
+import type { PG3DV2 } from "./puzzles/PG3DV2";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {
   constructor(
@@ -55,6 +56,15 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         }
         if ("experimentalUpdateOptions" in (await this.twisty3DPuzzle())) {
           ((await this.twisty3DPuzzle()) as Cube3D).experimentalUpdateOptions({
+            hintFacelets:
+              hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
+          });
+          this.scheduleRender();
+        }
+        if ("experimentalUpdatePG3DOptions" in (await this.twisty3DPuzzle())) {
+          (
+            (await this.twisty3DPuzzle()) as PG3DV2
+          ).experimentalUpdatePG3DOptions({
             hintFacelets:
               hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
           });

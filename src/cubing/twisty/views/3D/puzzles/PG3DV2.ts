@@ -13,10 +13,10 @@ import {
 } from "three";
 import {
   areTransformationsEquivalent,
+  experimentalTransformationForQuantumMove,
   KPuzzleDefinition,
   Transformation,
 } from "../../../../kpuzzle";
-import { experimentalTransformationForQuantumMove } from "../../../../kpuzzle";
 import type {
   StickerDat,
   StickerDatSticker,
@@ -29,8 +29,8 @@ import {
 import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
 import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
 import { smootherStep } from "../../../old/animation/easing";
+import type { HintFaceletStyle } from "../../../old/dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
-
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const foundationMaterial = new MeshBasicMaterial({
@@ -599,5 +599,13 @@ export class PG3DV2 extends Object3D implements Twisty3DPuzzle {
 
   private ease(fraction: number): number {
     return smootherStep(fraction);
+  }
+
+  public experimentalUpdatePG3DOptions(options: {
+    showMainStickers?: boolean;
+    hintFacelets?: HintFaceletStyle;
+    showFoundation?: boolean;
+  }): void {
+    console.log("New PG3D options:", options);
   }
 }
