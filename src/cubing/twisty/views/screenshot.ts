@@ -32,6 +32,9 @@ export async function screenshot(
     await model.puzzleProp.get(),
   );
 
+  // TODO: Find a more robust way to do this.
+  await model.legacyPositionProp.get(); // Force the 3D puzzle listeners for the state to fire.
+
   scene.add(await twisty3DWrapper.twisty3DPuzzle());
 
   const orbitCoordinates = await model.orbitCoordinatesProp.get();

@@ -1,12 +1,8 @@
 import { Alg, LineComment, Newline } from "../../../../cubing/alg";
+import { TwistyPlayerV2 } from "../../../../cubing/twisty";
 import {
-  Twisty3DCanvas,
-  TwistyPlayer,
-  TwistyPlayerV2,
-} from "../../../../cubing/twisty";
-import {
-  experimentalStickerings,
   ExperimentalStickering,
+  experimentalStickerings,
 } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 
 const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
@@ -22,24 +18,12 @@ algsTextarea.addEventListener("input", () => {
 const player = new TwistyPlayerV2({});
 document.querySelector("#display")!.appendChild(player);
 
-function downloadURL(url: string, name: string): void {
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${name}.png`;
-  a.click();
-}
-
-function downloadAlg(alg: Alg, name: string) {
+async function downloadAlg(alg: Alg, name: string) {
   player.alg = alg;
   player.experimentalSetupAnchor = "end";
+  player.timestamp = "opposite-anchor";
 
-  const canvas = player.viewerElems[0] as Twisty3DCanvas;
-  const dataURL = canvas.renderToDataURL({
-    squareCrop: true,
-    minWidth: 1024,
-    minHeight: 1024,
-  });
-  downloadURL(dataURL, name);
+  await player.experimentalDownloadScreenshot(name);
 }
 
 const stickeringSelect = document.querySelector(
@@ -71,7 +55,7 @@ stickeringSelect?.addEventListener("change", () => {
   window.history.replaceState("", "", url.toString());
 });
 
-document.querySelector("#download")?.addEventListener("click", () => {
+document.querySelector("#download")?.addEventListener("click", async () => {
   const allAlgs = Alg.fromString(algsTextarea.value);
 
   let currentAlg = new Alg();
@@ -96,7 +80,7 @@ document.querySelector("#download")?.addEventListener("click", () => {
   save();
 
   for (const { alg, name } of algList) {
-    downloadAlg(
+    await downloadAlg(
       new Alg(alg.experimentalExpand()),
       `${stickeringSelect.value} — ${name}`,
     );

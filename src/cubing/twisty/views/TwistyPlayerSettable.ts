@@ -1,16 +1,16 @@
-import type { ExperimentalStickering } from "../../twisty";
 import type { Alg } from "../../alg";
-import type { MillisecondTimestamp } from "../old/animation/cursor/CursorTypes";
-import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
-import type { PuzzleID, SetupToLocation } from "../old/dom/TwistyPlayerConfig";
+import type { ExperimentalStickering } from "../../twisty";
 import type { BackgroundThemeWithAuto } from "../model/depth-0/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/depth-0/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../model/depth-0/ControlPanelProp";
 import type { HintFaceletStyleWithAuto } from "../model/depth-0/HintFaceletProp";
 import type { IndexerStrategyName } from "../model/depth-0/IndexerConstructorRequestProp";
+import type { TimestampRequest } from "../model/depth-0/TimestampRequestProp";
 import type { ViewerLinkPageWithAuto } from "../model/depth-0/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/depth-0/VisualizationProp";
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
+import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
+import type { PuzzleID, SetupToLocation } from "../old/dom/TwistyPlayerConfig";
 
 function err(propName: string): Error {
   return new Error(
@@ -34,7 +34,7 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set puzzle(puzzleID: PuzzleID) { this.model.puzzleProp.set(puzzleID); }
   get puzzle(): never { throw err("puzzle"); }
 
-  set timestamp(timestamp: MillisecondTimestamp) { this.model.timestampRequestProp.set(timestamp); }
+  set timestamp(timestamp: TimestampRequest) { this.model.timestampRequestProp.set(timestamp); }
   get timestamp(): never { throw err("timestamp"); }
 
   set hintFacelets(hintFaceletStyle: HintFaceletStyleWithAuto) { this.model.hintFaceletProp.set(hintFaceletStyle); }
