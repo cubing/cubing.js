@@ -21,6 +21,11 @@ import { TAU } from "../TAU";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 import { smootherStep } from "../../../old/animation/easing";
 import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
+import { ExperimentalFaceletMeshAppearance, experimentalGetFaceletAppearance, ExperimentalPuzzleAppearance } from "../../../../puzzles";
+
+export interface PG3DOptions {
+  appearance?: ExperimentalPuzzleAppearance;
+}
 
 const foundationMaterial = new MeshBasicMaterial({
   side: DoubleSide,
@@ -39,15 +44,16 @@ const polyMaterial = new MeshBasicMaterial({
 });
 
 class StickerDef {
-  public origColor: Color;
-  public faceColor: Color;
+  public origColor: number;
+  public faceColor: number;
+  public origColorAppearance: number;
   public cubie: Group;
   protected geo: BufferGeometry;
   protected vertices: Float32Array;
   protected colors: Uint8Array;
   constructor(stickerDat: StickerDatSticker, showFoundation: boolean) {
-    this.origColor = new Color(stickerDat.color);
-    this.faceColor = new Color(stickerDat.color);
+    this.origColor = new Color(stickerDat.color).getHex();
+    this.faceColor = this.origColor;
     this.cubie = new Group();
     this.geo = new BufferGeometry();
     const coords = stickerDat.coords as number[][];
@@ -84,14 +90,41 @@ class StickerDef {
   }
 
   fillc(pos: number): void {
-    const h = this.faceColor.getHex();
+    const h = this.faceColor;
     this.colors[pos] = h >> 16;
     this.colors[pos+1] = (h >> 8) & 255;
     this.colors[pos+2] = h & 255;
   }
 
-  public setColor(c: Color): void {
-    this.faceColor.copy(c);
+  public setColor(c: number): void {
+    this.faceColor = c;
+  }
+
+  public setAppearance(
+    faceletMeshAppearance: ExperimentalFaceletMeshAppearance,
+  ): void {
+    switch (faceletMeshAppearance) {
+      case "regular":
+        this.origColorAppearance = this.origColor;
+        break;
+      case "dim":
+        if (this.origColor === 0xffffff) {
+          this.origColorAppearance = 0xdddddd;
+        } else {
+          this.origColorAppearance = new Color(this.origColor)
+            .multiplyScalar(0.5)
+            .getHex();
+        }
+        break;
+      case "oriented":
+        this.origColorAppearance = 0xff88ff;
+        break;
+      case "ignored":
+        this.origColorAppearance = 0x444444;
+        break;
+      case "invisible":
+        throw new Error("unimplemented");
+    }
   }
 }
 
@@ -145,6 +178,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   private stickerTargets: Object3D[] = [];
   private controlTargets: Object3D[] = [];
+  origColorAppearance: any;
+  origColor: number;
 
   constructor(
     cursor: AlgCursor,
@@ -152,8 +187,12 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private definition: KPuzzleDefinition,
     private pgdat: StickerDat,
     showFoundation: boolean = false,
+    hintStickers: boolean = false,
+    hintStickerHeightScale: number = 1,
+    private params: PG3DOptions = {},
   ) {
     super();
+    console.log(hintStickers, "", hintStickerHeightScale);
     cursor!.addPositionListener(this);
 
     this.axesInfo = {};
@@ -253,6 +292,29 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   private ease(fraction: number): number {
     return smootherStep(fraction);
+  }
+
+  experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
+    this.params.appearance = appearance;
+    for (const orbitName in this.definition.orbits) {
+      const { numPieces, orientations } = this.definition.orbits[orbitName];
+      for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
+        for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {
+          const faceletAppearance = experimentalGetFaceletAppearance(
+            appearance,
+            orbitName,
+            pieceIdx,
+            faceletIdx,
+            false,
+          );
+          const stickerDef = this.stickers[orbitName][faceletIdx][pieceIdx];
+          stickerDef.setAppearance(faceletAppearance);
+        }
+      }
+    }
+    if (this.scheduleRenderCallback) {
+      this.scheduleRenderCallback();
+    }
   }
 
   public dispose(): void {
