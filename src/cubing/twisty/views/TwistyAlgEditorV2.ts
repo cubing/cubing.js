@@ -291,11 +291,11 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       (e: CustomEvent<{ alg: Alg }>) => {
         try {
           this.#algProp?.set(e.detail.alg);
-          this.setAlgValidForPuzzle(true);
+          // this.setAlgValidForPuzzle(true);
         } catch (e) {
           console.error("cannot set alg for puzzle", e);
           this.#algProp?.set(new Alg());
-          this.setAlgValidForPuzzle(false);
+          // this.setAlgValidForPuzzle(false);
         }
       },
     );
@@ -330,6 +330,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       // TODO: listen to puzzle prop?
       this.#twistyPlayer?.model.puzzleAlgProp.addFreshListener(
         (algWithIssues: AlgWithIssues) => {
+          console.log(JSON.stringify(algWithIssues));
           if (algWithIssues.issues.errors.length === 0) {
             this.setAlgValidForPuzzle(true);
             const newAlg = algWithIssues.alg;
