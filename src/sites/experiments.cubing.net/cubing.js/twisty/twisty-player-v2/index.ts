@@ -98,7 +98,7 @@ function addDebuggers(player: TwistyPlayerV2): void {
     [
       "visualization",
       "visualization",
-      Object.assign({ auto: true }, visualizationFormats),
+      Object.assign({ auto: true, PG3DV2: true }, visualizationFormats),
     ],
     [
       "hintFacelets",
