@@ -105,7 +105,7 @@ function addDebuggers(player: TwistyPlayerV2): void {
       "hint-facelets",
       Object.assign({ auto: true }, hintFaceletStyles),
     ],
-    ["stickering", "stickering", experimentalStickerings],
+    ["experimentalStickering", "stickering", experimentalStickerings],
 
     [
       "background",
