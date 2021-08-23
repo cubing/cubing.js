@@ -17,6 +17,7 @@ export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampReques
     return "opposite-anchor";
   }
 
+  // TODO: Support `Promise`
   set(v: TimestampRequest) {
     if (!this.validInput(v)) {
       // TODO: Generalize this to more props. How do we surface this? Throw an error and catch it from sync setters that call into this?
