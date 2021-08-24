@@ -509,7 +509,6 @@ export class PuzzleGeometry {
   public duplicatedFaces: number[] = []; // which faces are duplicated
   public duplicatedCubies: number[] = []; // which cubies are duplicated
   public fixedCubie: number = -1; // fixed cubie, if any
-  public svggrips: any[]; // grips from svg generation by svg coordinate
   public net: any = [];
   public colors: any = [];
   public faceorder: any = [];
@@ -2506,13 +2505,13 @@ export class PuzzleGeometry {
     return this.getOrientationRotation(rotDesc);
   }
 
-  public generatesvg(
+  public generate2dmapping(
     w: number = 800,
     h: number = 500,
     trim: number = 10,
     threed: boolean = false,
-  ): string {
-    // generate svg to interoperate with Lucas twistysim
+  ): any {
+    // generate a mapping to use for 2D for textures, svg
     w -= 2 * trim;
     h -= 2 * trim;
     function extendedges(a: number[][], n: number): void {
@@ -2526,40 +2525,6 @@ export class PuzzleGeometry {
         dy = dy * cosa - dx * sina;
         dx = ndx;
         a.push([a[i - 1][0] + dx, a[i - 1][1] + dy]);
-      }
-    }
-    // if we don't add this noise to coordinate values, then Safari
-    // doesn't render our polygons correctly.  What a hack.
-    function noise(c: number): number {
-      return c + 0 * (Math.random() - 0.5);
-    }
-    function drawedges(id: string, pts: number[][], color: string): string {
-      return (
-        '<polygon id="' +
-        id +
-        '" class="sticker" style="fill: ' +
-        color +
-        '" points="' +
-        pts.map((p) => noise(p[0]) + " " + noise(p[1])).join(" ") +
-        '"/>\n'
-      );
-    }
-    // What grips do we need?  if rotations, add all grips.
-    let needvertexgrips = this.addrotations;
-    let neededgegrips = this.addrotations;
-    let needfacegrips = this.addrotations;
-    for (let i = 0; i < this.movesetgeos.length; i++) {
-      const msg = this.movesetgeos[i];
-      for (let j = 1; j <= 3; j += 2) {
-        if (msg[j] === "v") {
-          needvertexgrips = true;
-        }
-        if (msg[j] === "f") {
-          needfacegrips = true;
-        }
-        if (msg[j] === "e") {
-          neededgegrips = true;
-        }
       }
     }
     // Find a net from a given face count.  Walk it, assuming we locate
@@ -2686,22 +2651,14 @@ export class PuzzleGeometry {
         }
       }
     }
-    // Let's build arrays for faster rendering.  We want to map from geo
-    // base face number to color, and we want to map from geo face number
-    // to 2D geometry.  These can be reused as long as the puzzle overall
-    // orientation and canvas size remains unchanged.
-    const pos = this.getsolved();
-    const colormap = [];
-    const facegeo = [];
-    for (let i = 0; i < this.basefacecount; i++) {
-      colormap[i] = this.colors[this.facenames[i][1]];
-    }
     let hix = 0;
     let hiy = 0;
     const rot = this.getInitial3DRotation();
     for (let i = 0; i < this.faces.length; i++) {
       let face = this.faces[i];
-      face = rot.rotateface(face);
+      if (threed) {
+        face = rot.rotateface(face);
+      }
       for (let j = 0; j < face.length; j++) {
         hix = Math.max(hix, Math.abs(face[j].b));
         hiy = Math.max(hiy, Math.abs(face[j].c));
@@ -2710,6 +2667,7 @@ export class PuzzleGeometry {
     const sc2 = Math.min(h / hiy / 2, (w - trim) / hix / 4);
     const mappt2d = (fn: number, q: Quat): number[] => {
       if (threed) {
+        q = q.rotatepoint(rot);
         const xoff2 = 0.5 * trim + 0.25 * w;
         const xmul = this.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1;
         return [
@@ -2722,12 +2680,44 @@ export class PuzzleGeometry {
                 trim + h - SVG_2D_SHRINK * q.dot(g[1]) - g[2].c];
       }
     };
+    return mappt2d;
+  }
+
+  public generatesvg(
+    w: number = 800,
+    h: number = 500,
+    trim: number = 10,
+    threed: boolean = false,
+  ): string {
+    const mappt2d = this.generate2dmapping(w, h, trim, threed);
+    // doesn't render our polygons correctly.  What a hack.
+    function noise(c: number): number {
+      return c + 0 * (Math.random() - 0.5);
+    }
+    function drawedges(id: string, pts: number[][], color: string): string {
+      return (
+        '<polygon id="' +
+        id +
+        '" class="sticker" style="fill: ' +
+        color +
+        '" points="' +
+        pts.map((p) => noise(p[0]) + " " + noise(p[1])).join(" ") +
+        '"/>\n'
+      );
+    }
+    // Let's build arrays for faster rendering.  We want to map from geo
+    // base face number to color, and we want to map from geo face number
+    // to 2D geometry.  These can be reused as long as the puzzle overall
+    // orientation and canvas size remains unchanged.
+    const pos = this.getsolved();
+    const colormap = [];
+    const facegeo = [];
+    for (let i = 0; i < this.basefacecount; i++) {
+      colormap[i] = this.colors[this.facenames[i][1]];
+    }
     for (let i = 0; i < this.faces.length; i++) {
       let face = this.faces[i];
       const facenum = Math.floor(i / this.stickersperface);
-      if (threed) {
-        face = rot.rotateface(face);
-      }
       facegeo.push(face.map((_: Quat) => mappt2d(facenum, _)));
     }
     const svg = [];
@@ -2754,53 +2744,6 @@ export class PuzzleGeometry {
       }
       svg.push("</g>");
     }
-    const svggrips: any[] = [];
-    function addgrip(
-      onface: number,
-      name: string,
-      pt: Quat,
-      order: number,
-    ): void {
-      const pt2 = mappt2d(onface, pt);
-      for (let i = 0; i < svggrips.length; i++) {
-        if (
-          Math.hypot(pt2[0] - svggrips[i][0], pt2[1] - svggrips[i][1]) < eps
-        ) {
-          return;
-        }
-      }
-      svggrips.push([pt2[0], pt2[1], name, order]);
-    }
-    for (let i = 0; i < this.faceplanes.length; i++) {
-      const baseface = this.facenames[i][0];
-      let facecoords = baseface;
-      if (threed) {
-        facecoords = rot.rotateface(facecoords);
-      }
-      if (needfacegrips) {
-        let pt = this.faceplanes[i][0];
-        if (threed) {
-          pt = pt.rotatepoint(rot);
-        }
-        addgrip(i, this.faceplanes[i][1], pt, polyn);
-      }
-      for (let j = 0; j < baseface.length; j++) {
-        if (neededgegrips) {
-          const mp = baseface[j]
-            .sum(baseface[(j + 1) % baseface.length])
-            .smul(0.5);
-          const ep = findelement(this.edgenames, mp);
-          const mpc = facecoords[j]
-            .sum(facecoords[(j + 1) % baseface.length])
-            .smul(0.5);
-          addgrip(i, this.edgenames[ep][1], mpc, 2);
-        }
-        if (needvertexgrips) {
-          const vp = findelement(this.vertexnames, baseface[j]);
-          addgrip(i, this.vertexnames[vp][1], facecoords[j], this.cornerfaces);
-        }
-      }
-    }
     const html =
       '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n' +
       '<style type="text/css"><![CDATA[' +
@@ -2808,7 +2751,6 @@ export class PuzzleGeometry {
       "]]></style>\n" +
       svg.join("") +
       "</svg>";
-    this.svggrips = svggrips;
     return html;
   }
 
