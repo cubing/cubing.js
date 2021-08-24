@@ -21,7 +21,7 @@ import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
 import { TwistyScrubberV2 } from "./control-panel/TwistyScrubberV2";
-import { screenshot } from "./screenshot";
+import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
 import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
 
 // TODO: I couldn't figure out how to use use more specific types. Ideally, we'd
@@ -248,7 +248,28 @@ export class TwistyPlayerV2
   // TODO: Make this more ergonomic and flexible.
   // TODO: dimensions.
   async experimentalDownloadScreenshot(filename?: string): Promise<void> {
-    await (await screenshot(this.model)).download(filename);
+    if (
+      ["2D", "experimental-2D-LL"].includes(
+        await this.model.visualizationStrategyProp.get(),
+      )
+    ) {
+      // TODO: This has lots of async issues. It should also go into the screenshot impl file.
+      const wrapper2D = this.#visualizationWrapper as Twisty2DSceneWrapper;
+      const twisty2DPuzzle = await wrapper2D
+        .currentTwisty2DPuzzleWrapper()!
+        .twisty2DPuzzle();
+      const str = new XMLSerializer().serializeToString(
+        twisty2DPuzzle.svg.element,
+      );
+      const url = URL.createObjectURL(new Blob([str]));
+      downloadURL(
+        url,
+        filename ?? (await getDefaultFilename(this.model)),
+        "svg",
+      );
+    } else {
+      await (await screenshot(this.model)).download(filename);
+    }
   }
 }
 

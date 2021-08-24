@@ -45,6 +45,10 @@ export class Twisty2DSceneWrapper
   }
 
   #currentTwisty2DPuzzleWrapper: Twisty2DPuzzleWrapper | null = null;
+  currentTwisty2DPuzzleWrapper(): Twisty2DPuzzleWrapper | null {
+    return this.#currentTwisty2DPuzzleWrapper;
+  }
+
   // #oldTwisty3DPuzzleWrappers: Twisty3DPuzzleWrapper[] = []; // TODO: Animate these out.
   async setCurrentTwisty2DPuzzleWrapper(
     twisty2DPuzzleWrapper: Twisty2DPuzzleWrapper,

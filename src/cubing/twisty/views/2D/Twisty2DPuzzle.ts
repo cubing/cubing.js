@@ -31,7 +31,7 @@ export class Twisty2DPuzzle
   implements TwistyViewerElement, PositionListener
 {
   private definition: KPuzzleDefinition;
-  private svg: KPuzzleSVGWrapper;
+  public svg: KPuzzleSVGWrapper;
   private scheduler = new RenderScheduler(this.render.bind(this));
   #cachedPosition: PuzzlePosition | null = null; // TODO: pull when needed.
   constructor(

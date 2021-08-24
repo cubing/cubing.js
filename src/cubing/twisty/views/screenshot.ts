@@ -59,7 +59,10 @@ export async function screenshot(
   };
 }
 
-async function getDefaultFilename(model: TwistyPlayerModel): Promise<string> {
+export async function getDefaultFilename(
+  model: TwistyPlayerModel,
+  extension: string = "png",
+): Promise<string> {
   const [puzzleID, algWithIssues] = await Promise.all([
     model.puzzleProp.get(),
     model.algProp.get(),
@@ -68,12 +71,16 @@ async function getDefaultFilename(model: TwistyPlayerModel): Promise<string> {
     algWithIssues.alg.experimentalNumUnits() === 0
       ? ""
       : " " + algWithIssues.alg.toString()
-  }.png`;
+  }.${extension}`;
 }
 
-export function downloadURL(url: string, name: string): void {
+export function downloadURL(
+  url: string,
+  name: string,
+  extension: string = "png",
+): void {
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${name}.png`;
+  a.download = `${name}.${extension}`;
   a.click();
 }
