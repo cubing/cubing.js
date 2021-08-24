@@ -45,6 +45,7 @@ import {
 import { centermassface, expandfaces, FaceTree, Quat } from "./Quat";
 
 const DEFAULT_COLOR_FRACTION = 0.77;
+const SVG_2D_SHRINK = 0.92;
 
 export interface StickerDatSticker {
   coords: number[][];
@@ -2717,7 +2718,8 @@ export class PuzzleGeometry {
         ];
       } else {
         const g = geos[this.facenames[fn][1]];
-        return [trim + q.dot(g[0]) + g[2].b, trim + h - q.dot(g[1]) - g[2].c];
+        return [trim + SVG_2D_SHRINK * q.dot(g[0]) + g[2].b,
+                trim + h - SVG_2D_SHRINK * q.dot(g[1]) - g[2].c];
       }
     };
     for (let i = 0; i < this.faces.length; i++) {
