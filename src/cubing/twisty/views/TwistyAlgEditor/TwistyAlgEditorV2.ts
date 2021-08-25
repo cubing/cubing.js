@@ -176,9 +176,9 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   onInput(): void {
     this.#carbonCopyHighlight.hidden = true;
     this.resizeTextarea();
-
     this.#carbonCopyPrefix.textContent = this.#textarea.value;
     this.#carbonCopyHighlight.textContent = "";
+
     try {
       this.#alg = new Alg(this.#textarea.value);
       this.dispatchEvent(
