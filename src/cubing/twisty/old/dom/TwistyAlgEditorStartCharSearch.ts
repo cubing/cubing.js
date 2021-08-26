@@ -58,7 +58,10 @@ export class TwistyAlgEditorCharSearch extends TraversalDownUp<
   traverseMove(move: Move, dataDown: DataDown): DataUp {
     const asParsed = move as Parsed<Move>; // TODO: handle non-parsed?
     // console.log(dataDown, move.toString(), asParsed.startCharIndex);
-    if (asParsed.endCharIndex > dataDown.targetCharIdx) {
+    if (
+      asParsed.startCharIndex <= dataDown.targetCharIdx &&
+      asParsed.endCharIndex >= dataDown.targetCharIdx
+    ) {
       return {
         latestUnit: asParsed,
         animatedMoveIdx: dataDown.numMovesSofar,
