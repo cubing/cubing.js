@@ -14,7 +14,7 @@ import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/old/dom/v
 
 const pixelRatio = new URL(location.href).searchParams.get("pixelRatio");
 if (pixelRatio !== null) {
-  setGlobalPixelRatioOverride(parseInt(pixelRatio));
+  setGlobalPixelRatioOverride(parseFloat(pixelRatio));
 }
 
 // Supercube arrow image from Ben Whitmore.

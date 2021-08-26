@@ -15,8 +15,9 @@ import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/old/dom/v
 
 const pixelRatio = new URL(location.href).searchParams.get("pixelRatio");
 if (pixelRatio !== null) {
-  setGlobalPixelRatioOverride(parseInt(pixelRatio));
+  setGlobalPixelRatioOverride(parseFloat(pixelRatio));
 }
+
 const mkbhdHintSpriteURL = new URL(
   "./mkbhd-sprite-red-hint.png",
   import.meta.url,
@@ -39,6 +40,11 @@ let haveHadMoveInput = false;
 const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
 twistyPlayer.experimentalSetCursorIndexer("simultaneous");
 twistyPlayer.timeline.jumpToStart();
+const tempo = new URL(location.href).searchParams.get("tempo");
+if (tempo !== null) {
+  twistyPlayer.timeline.tempoScale = parseFloat(tempo);
+}
+
 setTimeout(() => {
   twistyPlayer.timeline.play(); // TODO: add autoplay
 }, 1000);
