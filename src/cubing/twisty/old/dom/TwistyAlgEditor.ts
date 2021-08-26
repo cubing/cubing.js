@@ -211,6 +211,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
       targetCharIdx: idx,
       numMovesSofar: 0,
     });
+    console.log("dataUp", dataUp, idx);
     this.#lastSelection = {
       start: this.#textarea.selectionStart,
       end: this.#textarea.selectionEnd,

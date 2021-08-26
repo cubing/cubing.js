@@ -200,8 +200,8 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     // console.log(this.#alg);
   }
 
-  #lastSelection: { start: number; end: number } | null = null;
   async onSelectionChange(): Promise<void> {
+    console.log("onSelectionChange");
     if (
       document.activeElement !== this ||
       this.shadow.activeElement !== this.#textarea
@@ -224,10 +224,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       targetCharIdx: idx,
       numMovesSofar: 0,
     });
-    this.#lastSelection = {
-      start: this.#textarea.selectionStart,
-      end: this.#textarea.selectionEnd,
-    };
+    console.log("dataUp", dataUp);
     if ("latestUnit" in dataUp) {
       this.dispatchEvent(
         new CustomEvent("animatedMoveIndexChange", {
@@ -316,12 +313,14 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
             leaf: ExperimentalParsed<Move | Pause>;
           }>,
         ) => {
+          console.log(e);
           try {
             // TODO: async issues
             (async () => {
               const moveStartTimestamp = (
                 await twistyPlayer.model.indexerProp.get()
               ).indexToMoveStartTimestamp(e.detail.idx);
+              console.log({ moveStartTimestamp });
               const newTimestamp =
                 moveStartTimestamp + (e.detail.isAtStartOfLeaf ? 250 : 0);
               twistyPlayer.model.timestampRequestProp.set(newTimestamp);
@@ -357,6 +356,12 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
           if (currentMove) {
             this.highlightLeaf(currentMove.move as ExperimentalParsed<Move>);
             return;
+          } else if (currentMoveInfo.movesFinishing.length > 0) {
+            console.log("movesFinishing[0]");
+            this.highlightLeaf(
+              currentMoveInfo.movesFinishing[0]
+                .move as ExperimentalParsed<Move>,
+            );
           }
           // const moveStarting = currentMoveInfo.movesStarting[0];
           // console.log({ moveStarting });

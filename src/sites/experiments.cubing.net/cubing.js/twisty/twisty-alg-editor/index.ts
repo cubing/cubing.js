@@ -11,10 +11,10 @@ U R' U' R U' R' U2 R // OLL / ZBLL
 U // AUF
 
 // from http://cubesolv.es/solve/5757`;
-const twistyPlayer = document.body.appendChild(new TwistyPlayerV2({}));
+const twistyPlayer = document.body.appendChild(new TwistyPlayerV2({ alg }));
 twistyPlayer.id = "plplpl";
 
 const twistyAlgEditor = new TwistyAlgEditorV2({});
 twistyAlgEditor.setAttribute("for-twisty-player", "plplpl");
-twistyAlgEditor.algString = alg;
+// twistyAlgEditor.algString = alg;
 document.body.appendChild(twistyAlgEditor);
