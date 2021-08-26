@@ -1,7 +1,7 @@
 import { countMoves } from "../../../notation";
 import type { IndexerConstructor } from "../../old/animation/cursor/AlgCursor";
 import { SimpleAlgIndexer } from "../../old/animation/indexer/SimpleAlgIndexer";
-import { SimultaneousMoveIndexer } from "../../old/animation/indexer/simultaneous-moves/SimultaneousMoveIndexer";
+import { SimultaneousMoveIndexerV2 } from "../../old/animation/indexer/simultaneous-moves/SimultaneousMoveIndexerV2";
 import { TreeAlgIndexer } from "../../old/animation/indexer/tree/TreeAlgIndexer";
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import type { AlgWithIssues } from "../depth-0/AlgProp";
@@ -29,7 +29,7 @@ export class IndexerConstructorProp extends TwistyPropDerived<
           inputs.puzzle === "3x3x3" &&
           inputs.visualizationStrategy === "Cube3D"
         ) {
-          return SimultaneousMoveIndexer;
+          return SimultaneousMoveIndexerV2;
         } else {
           return TreeAlgIndexer;
         }
@@ -38,7 +38,7 @@ export class IndexerConstructorProp extends TwistyPropDerived<
       case "simple":
         return SimpleAlgIndexer;
       case "simultaneous":
-        return SimultaneousMoveIndexer;
+        return SimultaneousMoveIndexerV2;
       default:
         throw new Error("Invalid indexer request!");
     }

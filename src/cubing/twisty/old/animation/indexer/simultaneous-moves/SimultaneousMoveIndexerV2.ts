@@ -9,7 +9,7 @@ import {
   PuzzlePosition,
   Timestamp,
 } from "../../cursor/CursorTypes";
-import type { AlgIndexer } from "../AlgIndexer";
+import type { AlgIndexer, CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import { MoveWithRange, simulMoves } from "./simul-moves";
 
 const demos: Record<string, MoveWithRange[]> = {
@@ -59,7 +59,7 @@ const demos: Record<string, MoveWithRange[]> = {
   ],
 };
 
-export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
+export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
   implements AlgIndexer<P>
 {
   private moves: MoveWithRange[];
@@ -100,32 +100,73 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
     timestamp: Timestamp,
     startTransformation?: State<P>,
   ): PuzzlePosition {
-    const position: PuzzlePosition = {
-      state: startTransformation ?? (this.puzzle.identity() as any),
-      movesInProgress: [],
+    const currentMoveInfo = this.currentMoveInfo(timestamp);
+
+    let state = startTransformation ?? this.puzzle.identity();
+    for (const moveWithRange of this.moves.slice(
+      0,
+      currentMoveInfo.stateIndex,
+    )) {
+      state = this.puzzle.combine(
+        state,
+        this.puzzle.stateFromMove(moveWithRange.move),
+      );
+    }
+
+    return {
+      state: state as any,
+      movesInProgress: currentMoveInfo.currentMoves,
     };
+  }
+
+  public currentMoveInfo(timestamp: Timestamp): CurrentMoveInfo {
+    const currentMoves: CurrentMove[] = [];
+    const movesStarting: CurrentMove[] = [];
+    const movesFinishing: CurrentMove[] = [];
+    let stateIndex: number = 0;
+    let latestStart: number = -Infinity; // TODO: is there a better way to accumulate this?
+    let earliestEnd: number = Infinity; // TODO: is there a better way to accumulate this?
     for (const moveWithRange of this.moves) {
       if (moveWithRange.end <= timestamp) {
-        position.state = this.puzzle.combine(
-          position.state,
-          this.puzzle.stateFromMove(moveWithRange.move),
-        ) as any;
+        stateIndex++;
       } else if (
         moveWithRange.start < timestamp &&
         timestamp < moveWithRange.end
       ) {
-        position.movesInProgress.push({
+        const fraction =
+          (timestamp - moveWithRange.start) /
+          (moveWithRange.end - moveWithRange.start);
+        const currentMove = {
           move: moveWithRange.move,
           direction: Direction.Forwards,
-          fraction:
-            (timestamp - moveWithRange.start) /
-            (moveWithRange.end - moveWithRange.start),
-        });
+          fraction,
+          startTimestamp: moveWithRange.start,
+          endTimestamp: moveWithRange.end,
+        };
+        switch (fraction) {
+          case 0:
+            movesStarting.push(currentMove);
+            break;
+          case 1:
+            movesFinishing.push(currentMove);
+            break;
+          default:
+            currentMoves.push(currentMove);
+            latestStart = Math.max(latestStart, moveWithRange.start);
+            earliestEnd = Math.min(earliestEnd, moveWithRange.end);
+        }
       } else if (timestamp < moveWithRange.start) {
-        continue;
+        continue; // TODO: break?
       }
     }
-    return position;
+    return {
+      stateIndex,
+      currentMoves,
+      latestStart,
+      earliestEnd,
+      movesStarting,
+      movesFinishing,
+    };
   }
 
   public stateAtIndex(index: number, startTransformation?: State<P>): State<P> {
