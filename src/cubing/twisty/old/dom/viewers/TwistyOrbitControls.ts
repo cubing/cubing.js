@@ -203,6 +203,7 @@ export class TwistyOrbitControls {
   }
 
   onMouseStart(e: MouseEvent): void {
+    this.experimentalHasBeenMoved = true;
     window.addEventListener("mousemove", this.onMouseMoveBound);
     window.addEventListener("mouseup", this.onMouseEndBound);
     this.onStart(e);
@@ -250,6 +251,7 @@ export class TwistyOrbitControls {
   }
 
   onTouchStart(e: TouchEvent): void {
+    this.experimentalHasBeenMoved = true;
     if (this.currentTouchID === null) {
       this.currentTouchID = e.changedTouches[0].identifier;
       this.lastTouchClientX = e.touches[0].clientX;
@@ -349,8 +351,6 @@ export class TwistyOrbitControls {
     this.#acceptPropagation = false;
     try {
       this.#adjust();
-
-      this.experimentalHasBeenMoved = true;
 
       this.scheduleRender();
       this.mirrorControls?.updateMirroredCamera({
