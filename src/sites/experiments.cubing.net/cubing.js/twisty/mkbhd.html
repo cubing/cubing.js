@@ -15,10 +15,23 @@
         background-image: url(mkbhd-background.png);
         background-repeat: repeat;
         box-shadow: inset 0 0 1em black;
+
+        animation-name: background-movement;
+        animation-duration: 600s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
       }
       twisty-player {
         width: 100%;
         height: 100%;
+      }
+      @keyframes background-movement {
+        from {
+          background-position: 0% 0%;
+        }
+        to {
+          background-position: 800% 100%;
+        }
       }
     </style>
     <script src="./mkbhd.js" href="./mkbhd.ts" type="module" defer></script>
