@@ -10,6 +10,12 @@ import {
   TimestampLocationType,
   TwistyPlayer,
 } from "../../../../cubing/twisty";
+import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/old/dom/viewers/canvas";
+
+const pixelRatio = new URL(location.href).searchParams.get("pixelRatio");
+if (pixelRatio !== null) {
+  setGlobalPixelRatioOverride(parseInt(pixelRatio));
+}
 
 const supercubeSprite = new URL(
   "./supercube-sprite.png",
