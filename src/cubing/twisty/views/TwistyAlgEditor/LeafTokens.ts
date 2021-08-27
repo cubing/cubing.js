@@ -30,7 +30,7 @@ interface DataDown {
 class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
   public traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     const unitArrays: OrderedLeafTokens[] = [];
-    let numMovesInside = dataDown.numMovesSofar;
+    let numMovesInside = 0;
     for (const unit of alg.units()) {
       const dataUp = this.traverseUnit(unit, {
         numMovesSofar: dataDown.numMovesSofar + numMovesInside,
@@ -64,6 +64,7 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
     dataDown: DataDown,
   ): DataUp {
     const dataUpA = this.traverseAlg(commutator.A, dataDown);
+    console.log("comm", dataDown, dataUpA);
     const dataUpB = this.traverseAlg(commutator.B, {
       numMovesSofar: dataDown.numMovesSofar + dataUpA.numLeavesInside,
     });
