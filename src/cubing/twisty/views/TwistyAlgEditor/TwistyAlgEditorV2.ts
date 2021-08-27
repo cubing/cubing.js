@@ -5,7 +5,6 @@ import { Alg, Move, Pause } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
 import type { AlgProp, AlgWithIssues } from "../../model/depth-0/AlgProp";
 import type { CurrentLeavesSimplified } from "../../model/depth-7/CurrentLeavesSimplified";
-import type { CurrentMoveInfo } from "../../old/animation/indexer/AlgIndexer";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
@@ -181,8 +180,15 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#carbonCopyHighlight.hidden = true;
     this.resizeTextarea();
     this.highlightLeaf(null);
-    this.model.valueProp.set(this.#textarea.value);
-    this.#algProp?.set(this.#textarea.value);
+
+    // TODO: This is a hack so that the you don't get a warning when the cursor
+    // is after the space while typing `R U`. It would be nice to have something
+    // cursor-aware that can also ignore whitespace warnings (or other syntax
+    // errors due to normal input) adjacent to the cursor when it's in the
+    // middle, but this is suffuciently useful for now.
+    const endTrimmed = this.#textarea.value.trimEnd();
+    this.model.valueProp.set(endTrimmed);
+    this.#algProp?.set(endTrimmed);
   }
 
   async onSelectionChange(): Promise<void> {
