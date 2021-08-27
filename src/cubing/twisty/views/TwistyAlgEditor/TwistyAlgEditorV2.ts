@@ -336,6 +336,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       this.#twistyPlayer?.model.puzzleAlgProp.addFreshListener(
         (algWithIssues: AlgWithIssues) => {
           console.log(JSON.stringify(algWithIssues));
+          this.model.algInputProp.set(algWithIssues.alg);
           if (algWithIssues.issues.errors.length === 0) {
             this.setAlgValidForPuzzle(true);
             const newAlg = algWithIssues.alg;
