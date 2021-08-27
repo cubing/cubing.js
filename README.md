@@ -35,11 +35,10 @@ Development relies on [`node`](https://nodejs.org/en/) and [`npm`](https://docs.
 
 ```shell
 git clone https://github.com/cubing/cubing.js && cd cubing.js
-npm install
 make dev
 ```
 
-This should open [the `sites` root file](./src/sites/index.html) at http://localhost:3333/ automatically. Any source code changes will refresh the browser. We don't yet have a development guide, so you'll have to search the code to find where features are implemented.
+This should run `npm install` and then open [the `sites` root file](./src/sites/index.html) at http://localhost:3333/ automatically. Any source code changes will refresh the browser. We don't yet have a development guide, so you'll have to search the code to find where features are implemented.
 
 The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/) To test changes, use:
 
