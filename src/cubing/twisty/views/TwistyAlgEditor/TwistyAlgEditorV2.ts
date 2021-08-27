@@ -27,14 +27,14 @@ type TwistyPlayerAlgProp = "algProp" | "setupProp";
 export class TwistyAlgEditorV2 extends ManagedCustomElement {
   model = new TwistyAlgEditorModel();
 
-  #alg: Alg = new Alg();
+  // #alg: Alg = new Alg();
   #textarea: HTMLTextAreaElement = document.createElement("textarea");
   #carbonCopy: HTMLDivElement = document.createElement("div");
   #carbonCopyPrefix: HTMLSpanElement = document.createElement("span");
   #carbonCopyHighlight: HTMLSpanElement = document.createElement("span");
 
-  #textareaClassListManager: ClassListManager<"none" | "warning" | "error"> =
-    new ClassListManager(this, "issue-", ["none", "warning", "error"]);
+  // #textareaClassListManager: ClassListManager<"none" | "warning" | "error"> =
+  //   new ClassListManager(this, "issue-", ["none", "warning", "error"]);
 
   #textareaClassListValidForPuzzleManager: ClassListManager<
     "none" | "warning" | "error"
@@ -174,7 +174,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#carbonCopyHighlight.hidden = true;
     this.resizeTextarea();
     this.highlightLeaf(null);
-    this.#twistyPlayer?.model.algProp.set(this.#textarea.value);
+    this.#algProp?.set(this.#textarea.value);
   }
 
   async onSelectionChange(): Promise<void> {
