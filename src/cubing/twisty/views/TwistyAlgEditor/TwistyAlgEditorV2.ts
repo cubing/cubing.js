@@ -82,6 +82,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
 
     // TODO: What set of events should we register? `change`? `keydown`?
     this.#textarea.addEventListener("input", () => this.onInput());
+    this.#textarea.addEventListener("blur", () => this.onBlur());
     document.addEventListener("selectionchange", () =>
       this.onSelectionChange(),
     );
@@ -208,6 +209,18 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       selectionStart,
       selectionEnd,
     });
+  }
+
+  async onBlur(): Promise<void> {
+    // TODO: Figure out how not to make the cursor jump.
+    // const parsed = Alg.fromString(this.algString);
+    // this.algString = parsed.toString();
+    // const [currentLeavesSimplified, indexer] = await Promise.all([
+    //   this.#twistyPlayer!.model.currentLeavesSimplifiedProp.get(),
+    //   this.#twistyPlayer!.model.indexerProp.get(),
+    // ]);
+    // const leaf = indexer.getAnimLeaf(currentLeavesSimplified.stateIndex);
+    // this.highlightLeaf(leaf as Parsed<Move | Pause> | null);
   }
 
   setAlgIssueClassForPuzzle(issues: "none" | "warning" | "error") {
