@@ -320,7 +320,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
         onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
           const idx =
             twistyPlayer.cursor!.experimentalIndexFromTimestamp(timestamp);
-          const move = twistyPlayer.cursor!.experimentalMoveAtIndex(idx);
+          const move = twistyPlayer.cursor!.experimentalLeafAtIndex(idx);
           if (move) {
             this.highlightLeaf(move as ExperimentalParsed<Move>);
           }

@@ -1,9 +1,8 @@
 import { Move } from "../../../alg";
 import { Direction } from "../../old/animation/cursor/CursorTypes";
-import {
+import type {
   AlgIndexer,
   CurrentMoveInfo,
-  currentMoveInfoEquals,
 } from "../../old/animation/indexer/AlgIndexer";
 import type { DetailedTimelineInfo } from "../depth-5/DetailedTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";

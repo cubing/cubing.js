@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 // start of imports
-import { Alg, Move } from "../../../../alg";
+import { Alg, Move, Pause } from "../../../../alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
@@ -243,7 +243,7 @@ export class AlgCursor
   }
 
   /** @deprecated */
-  experimentalMoveAtIndex(index: number): Move | null {
+  experimentalLeafAtIndex(index: number): Move | Pause | null {
     return this.indexer.getAnimLeaf(index);
   }
 }

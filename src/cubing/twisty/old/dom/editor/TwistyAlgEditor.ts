@@ -1,23 +1,21 @@
 // TODO: see if this can replace AlgCursor?
 
-import type { ExperimentalParsed } from "../../../alg";
-import { Alg, Move, Pause } from "../../../alg";
-import type { Parsed } from "../../../alg/parse";
-import type { AlgProp, AlgWithIssues } from "../../model/depth-0/AlgProp";
-import type { CurrentLeavesSimplified } from "../../model/depth-7/CurrentLeavesSimplified";
-import type { CurrentMoveInfo } from "../../old/animation/indexer/AlgIndexer";
-import { ClassListManager } from "../../old/dom/element/ClassListManager";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
-import { twistyAlgEditorCSS } from "../../old/dom/TwistyAlgEditor.css_";
-import { TwistyPlayerV2 } from "../TwistyPlayerV2";
-import { HighlightInfo, TwistyAlgEditorModel } from "./model";
+import type { ExperimentalParsed } from "../../../../alg";
+import { Alg, Move, Pause } from "../../../../alg";
+import { TwistyPlayer } from "../../../";
+import type { TimeRange } from "../../animation/cursor/AlgCursor";
+import type { MillisecondTimestamp } from "../../animation/cursor/CursorTypes";
+import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css_";
+import { twistyAlgEditorCharSearch } from "./TwistyAlgEditorStartCharSearch";
+import { ClassListManager } from "../element/ClassListManager";
+import { ManagedCustomElement } from "../element/ManagedCustomElement";
+import { customElementsShim } from "../element/node-custom-element-shims";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";
 const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
-type TwistyPlayerAlgProp = "algProp" | "setupProp";
+type TwistyPlayerAlgProp = "alg" | "experimentalSetupAlg";
 
 // function parsePx(s: string): number {
 //   if (s.slice(-2) !== "px") {
@@ -26,17 +24,17 @@ type TwistyPlayerAlgProp = "algProp" | "setupProp";
 //   return parseInt(s.slice(0, -2));
 // }
 
-export class TwistyAlgEditorV2 extends ManagedCustomElement {
-  model = new TwistyAlgEditorModel();
-
-  // #alg: Alg = new Alg();
+export class TwistyAlgEditor extends ManagedCustomElement {
+  #alg: Alg = new Alg();
   #textarea: HTMLTextAreaElement = document.createElement("textarea");
   #carbonCopy: HTMLDivElement = document.createElement("div");
   #carbonCopyPrefix: HTMLSpanElement = document.createElement("span");
   #carbonCopyHighlight: HTMLSpanElement = document.createElement("span");
 
-  // #textareaClassListManager: ClassListManager<"none" | "warning" | "error"> =
-  //   new ClassListManager(this, "issue-", ["none", "warning", "error"]);
+  #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
+
+  #textareaClassListManager: ClassListManager<"none" | "warning" | "error"> =
+    new ClassListManager(this, "issue-", ["none", "warning", "error"]);
 
   #textareaClassListValidForPuzzleManager: ClassListManager<
     "none" | "warning" | "error"
@@ -46,15 +44,8 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     "error",
   ]);
 
-  #twistyPlayer: TwistyPlayerV2 | null = null;
+  #twistyPlayer: TwistyPlayer | null = null;
   #twistyPlayerProp: TwistyPlayerAlgProp;
-  get #algProp(): AlgProp | null {
-    if (this.#twistyPlayer === null) {
-      return null;
-    } else {
-      return this.#twistyPlayer.model[this.#twistyPlayerProp];
-    }
-  }
 
   #observer = new ResizeObserver((entries: ResizeObserverEntry[]) =>
     this.onResize(entries),
@@ -63,7 +54,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   #lastObserverRect: DOMRectReadOnly | null = null;
 
   constructor(options?: {
-    twistyPlayer?: TwistyPlayerV2;
+    twistyPlayer?: TwistyPlayer;
     twistyPlayerProp?: TwistyPlayerAlgProp;
   }) {
     super();
@@ -90,14 +81,9 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     if (options?.twistyPlayer) {
       this.twistyPlayer = options.twistyPlayer;
     }
-    this.#twistyPlayerProp = options?.twistyPlayerProp ?? "algProp";
+    this.#twistyPlayerProp = options?.twistyPlayerProp ?? "alg";
 
     this.#observer.observe(this.contentWrapper);
-    this.model.leafToHighlight.addFreshListener(
-      (highlightInfo: HighlightInfo) => {
-        this.highlightLeaf(highlightInfo.leafInfo.leaf);
-      },
-    );
   }
 
   onResize(entries: ResizeObserverEntry[]): void {
@@ -180,47 +166,90 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   onInput(): void {
     this.#carbonCopyHighlight.hidden = true;
     this.resizeTextarea();
-    this.highlightLeaf(null);
-    this.model.valueProp.set(this.#textarea.value);
-    this.#algProp?.set(this.#textarea.value);
+
+    this.#carbonCopyPrefix.textContent = this.#textarea.value;
+    this.#carbonCopyHighlight.textContent = "";
+    try {
+      this.#alg = new Alg(this.#textarea.value);
+      this.dispatchEvent(
+        new CustomEvent("effectiveAlgChange", { detail: { alg: this.#alg } }),
+      );
+      this.#textareaClassListManager.setValue(
+        // TODO: better heuristics to avoid warning during editing
+        this.#alg.toString().trimEnd() === this.#textarea.value.trimEnd()
+          ? "none"
+          : "warning",
+      );
+    } catch (e) {
+      this.#alg = new Alg();
+      this.dispatchEvent(
+        new CustomEvent("effectiveAlgChange", { detail: { alg: this.#alg } }),
+      );
+      this.#textareaClassListManager.setValue("error");
+    }
+    // console.log(this.#alg);
   }
 
-  async onSelectionChange(): Promise<void> {
-    console.log("onSelectionChange");
+  #lastSelection: { start: number; end: number } | null = null;
+  onSelectionChange(): void {
     if (
       document.activeElement !== this ||
       this.shadow.activeElement !== this.#textarea
     ) {
       return;
     }
-    if (this.#twistyPlayerProp !== "algProp") {
+    if (this.#twistyPlayerProp !== "alg") {
       return;
     }
-
-    const { selectionStart, selectionEnd } = this.#textarea;
-    this.model.selectionProp.set({
-      selectionStart,
-      selectionEnd,
+    // console.log(this.#textarea.selectionStart);
+    const idx =
+      this.#lastSelection?.start === this.#textarea.selectionStart &&
+      this.#lastSelection?.end !== this.#textarea.selectionEnd
+        ? this.#textarea.selectionEnd
+        : this.#textarea.selectionStart;
+    const dataUp = twistyAlgEditorCharSearch(this.#alg, {
+      targetCharIdx: idx,
+      numMovesSofar: 0,
     });
-  }
-
-  setAlgIssueClassForPuzzle(issues: "none" | "warning" | "error") {
-    this.#textareaClassListValidForPuzzleManager.setValue(issues);
-  }
-
-  #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
-  // TODO: support a primary highlighted move and secondary ones.
-  highlightLeaf(leaf: ExperimentalParsed<Move | Pause> | null): void {
-    if (leaf === null) {
-      this.#carbonCopyPrefix.textContent = "";
-      this.#carbonCopyHighlight.textContent = "";
-      return;
+    console.log("dataUp", dataUp, idx);
+    this.#lastSelection = {
+      start: this.#textarea.selectionStart,
+      end: this.#textarea.selectionEnd,
+    };
+    if ("latestUnit" in dataUp) {
+      this.dispatchEvent(
+        new CustomEvent("animatedMoveIndexChange", {
+          detail: {
+            idx: dataUp.animatedMoveIdx,
+            isAtStartOfLeaf:
+              this.#textarea.selectionStart >=
+                dataUp.latestUnit.startCharIndex &&
+              this.#textarea.selectionStart < dataUp.latestUnit.endCharIndex,
+            leaf: dataUp.latestUnit,
+          },
+        }),
+      );
+      this.highlightLeaf(dataUp.latestUnit);
+    } else {
+      this.dispatchEvent(
+        new CustomEvent("animatedMoveIndexChange", {
+          detail: { idx: dataUp.animatedMoveCount, isPartiallyInLeaf: false },
+        }),
+      );
     }
+  }
+
+  setAlgValidForPuzzle(valid: boolean) {
+    this.#textareaClassListValidForPuzzleManager.setValue(
+      valid ? "none" : "error",
+    );
+  }
+
+  highlightLeaf(leaf: ExperimentalParsed<Move | Pause>): void {
     if (leaf === this.#highlightedLeaf) {
       return;
     }
     this.#highlightedLeaf = leaf;
-    console.log("leaf", leaf.startCharIndex);
     this.#carbonCopyPrefix.textContent = this.#textarea.value.slice(
       0,
       leaf.startCharIndex,
@@ -232,12 +261,12 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#carbonCopyHighlight.hidden = false;
   }
 
-  get twistyPlayer(): TwistyPlayerV2 | null {
+  get twistyPlayer(): TwistyPlayer | null {
     return this.#twistyPlayer;
   }
 
   // TODO: spread out this impl over private methods instead of self-listeners.
-  set twistyPlayer(twistyPlayer: TwistyPlayerV2 | null) {
+  set twistyPlayer(twistyPlayer: TwistyPlayer | null) {
     if (this.#twistyPlayer) {
       // TODO: support reassigment/clearing
       console.warn("twisty-player reassignment/clearing is not supported");
@@ -247,81 +276,58 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     if (!twistyPlayer) {
       return;
     }
-    (async () => {
-      this.algString = (await twistyPlayer.model.algProp.get()).alg.toString();
-    })();
+    this.algString = twistyPlayer.alg.toString();
 
-    if (this.#twistyPlayerProp === "algProp") {
-      // this.model.leafToHighlight.addFreshListener(
-      //   this.highlightLeaf.bind(this),
-      // );
+    this.addEventListener(
+      "effectiveAlgChange",
+      (e: CustomEvent<{ alg: Alg }>) => {
+        try {
+          twistyPlayer[this.#twistyPlayerProp] = e.detail.alg;
+          this.setAlgValidForPuzzle(true);
+        } catch (e) {
+          console.error("cannot set alg for puzzle", e);
+          twistyPlayer[this.#twistyPlayerProp] = new Alg();
+          this.setAlgValidForPuzzle(false);
+        }
+      },
+    );
 
-      // TODO: listen to puzzle prop?
-      this.#twistyPlayer?.model.puzzleAlgProp.addFreshListener(
-        (algWithIssues: AlgWithIssues) => {
-          // console.log(JSON.stringify(algWithIssues));
-          if (algWithIssues.issues.errors.length === 0) {
-            this.setAlgIssueClassForPuzzle(
-              // TODO: Allow trailing spaces.
-              algWithIssues.issues.warnings.length === 0 ? "none" : "warning",
+    if (this.#twistyPlayerProp === "alg") {
+      this.addEventListener(
+        "animatedMoveIndexChange",
+        (
+          e: CustomEvent<{
+            idx: number;
+            isAtStartOfLeaf: Blob;
+            leaf: ExperimentalParsed<Move | Pause>;
+          }>,
+        ) => {
+          try {
+            const timestamp =
+              twistyPlayer.cursor!.experimentalTimestampFromIndex(e.detail.idx);
+            // console.log(e.detail, timestamp, e.detail.leaf);
+            twistyPlayer.timeline.setTimestamp(
+              timestamp + (e.detail.isAtStartOfLeaf ? 250 : 0),
             );
-            const newAlg = algWithIssues.alg;
-            const oldAlg = Alg.fromString(this.algString);
-            console.log({ oldAlg });
-            if (!newAlg.isIdentical(oldAlg)) {
-              console.log("identical");
-              this.algString = newAlg.toString();
-              this.onInput();
-            } else {
-              console.log("not identical!");
-              // this.model.algInputProp.set(oldAlg);
-            }
-          } else {
-            this.setAlgIssueClassForPuzzle("error");
+          } catch (e) {
+            // console.error("cannot set idx", e);
+            twistyPlayer.timeline.timestamp = 0;
           }
         },
       );
 
-      this.model.leafToHighlight.addFreshListener(
-        async (highlightInfo: HighlightInfo | null) => {
-          if (highlightInfo === null) {
-            return;
+      twistyPlayer.timeline!.addTimestampListener({
+        onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
+          const idx =
+            twistyPlayer.cursor!.experimentalIndexFromTimestamp(timestamp);
+          const move = twistyPlayer.cursor!.experimentalLeafAtIndex(idx);
+          if (move) {
+            this.highlightLeaf(move as ExperimentalParsed<Move>);
           }
-          // TODO: This indexer can be out of date!
-          const indexer = await twistyPlayer.model.indexerProp.get();
-          const moveStartTimestamp = indexer.indexToMoveStartTimestamp(
-            highlightInfo.leafInfo.idx,
-          );
-          const duration = indexer.moveDuration(highlightInfo.leafInfo.idx);
-
-          let newTimestamp: number;
-          console.log(highlightInfo.where);
-          switch (highlightInfo.where) {
-            case "before":
-              newTimestamp = moveStartTimestamp;
-              break;
-            case "start":
-            case "inside":
-              newTimestamp = moveStartTimestamp + duration / 4;
-              break;
-            case "end":
-            case "after":
-              newTimestamp = moveStartTimestamp + duration;
-              break;
-            default:
-              throw new Error("Invalid where!");
-          }
-          twistyPlayer.model.timestampRequestProp.set(newTimestamp);
         },
-      );
 
-      twistyPlayer.model.currentLeavesSimplifiedProp.addFreshListener(
-        async (currentLeavesSimplified: CurrentLeavesSimplified) => {
-          const indexer = await twistyPlayer.model.indexerProp.get();
-          const leaf = indexer.getAnimLeaf(currentLeavesSimplified.stateIndex);
-          this.highlightLeaf(leaf as Parsed<Move | Pause> | null);
-        },
-      );
+        onTimeRangeChange: (_timeRange: TimeRange): void => {},
+      });
     }
   }
 
@@ -337,7 +343,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
           console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}= elem does not exist`);
           return;
         }
-        if (!(elem instanceof TwistyPlayerV2)) {
+        if (!(elem instanceof TwistyPlayer)) {
           // TODO: avoid assuming single instance of lib?
           console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}=is not a twisty-player`);
           return;
@@ -365,4 +371,4 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-alg-editor-v2", TwistyAlgEditorV2);
+customElementsShim.define("twisty-alg-editor", TwistyAlgEditor);
