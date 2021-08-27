@@ -39,6 +39,26 @@ export interface AlgWithIssues {
   issues: AlgIssues;
 }
 
+export function algWithIssuesFromString(s: string): AlgWithIssues {
+  try {
+    const alg = Alg.fromString(s); // TODO: is this safe?
+    const warnings = [];
+    if (alg.toString() !== s) {
+      // TODO: Push this check into the parser and return semantic info (so they can be e.g. highlighted).
+      warnings.push(`Alg is non-canonical!`);
+    }
+    return {
+      alg,
+      issues: new AlgIssues({ warnings }),
+    };
+  } catch (e) {
+    return {
+      alg: new Alg(),
+      issues: new AlgIssues({ errors: [`Malformed alg: ${e}`] }),
+    };
+  }
+}
+
 function algWithIssuesEquals(a1: AlgWithIssues, a2: AlgWithIssues): boolean {
   return (
     a1.alg.isIdentical(a2.alg) &&
@@ -58,23 +78,7 @@ export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
 
   async derive(newAlg: Alg | string): Promise<AlgWithIssues> {
     if (typeof newAlg === "string") {
-      try {
-        const alg = Alg.fromString(newAlg); // TODO: is this safe?
-        const warnings = [];
-        if (alg.toString() !== newAlg) {
-          // TODO: Push this check into the parser and return semantic info (so they can be e.g. highlighted).
-          warnings.push(`Alg is non-canonical!`);
-        }
-        return {
-          alg,
-          issues: new AlgIssues({ warnings }),
-        };
-      } catch (e) {
-        return {
-          alg: new Alg(),
-          issues: new AlgIssues({ errors: [`Malformed alg: ${e}`] }),
-        };
-      }
+      return algWithIssuesFromString(newAlg);
     } else {
       return {
         alg: newAlg,

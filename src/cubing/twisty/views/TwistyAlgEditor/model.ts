@@ -1,7 +1,11 @@
 // TODO: Move this?
 
-import { Alg } from "../../../alg";
+import type { Alg } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
+import {
+  AlgWithIssues,
+  algWithIssuesFromString,
+} from "../../model/depth-0/AlgProp";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
@@ -16,6 +20,18 @@ import {
 export class TwistyAlgEditorValueProp extends SimpleTwistyPropSource<string> {
   getDefaultValue(): string {
     return "";
+  }
+}
+
+interface AlgEditorAlgWithIssuesPropInput {
+  value: string;
+}
+class AlgEditorAlgWithIssuesProp extends TwistyPropDerived<
+  AlgEditorAlgWithIssuesPropInput,
+  AlgWithIssues
+> {
+  derive(input: AlgEditorAlgWithIssuesPropInput): AlgWithIssues {
+    return algWithIssuesFromString(input.value);
   }
 }
 
@@ -70,37 +86,17 @@ export class TargetCharProp extends TwistyPropDerived<
   }
 }
 
-class AlgInputProp extends SimpleTwistyPropSource<Alg> {
-  getDefaultValue(): Alg {
-    return new Alg();
-  }
-}
-
-interface ParsedAlgPropInputs {
-  alg: Alg | Parsed<Alg>;
-}
-class ParsedAlgProp extends TwistyPropDerived<
-  ParsedAlgPropInputs,
-  Parsed<Alg>
-> {
-  derive(inputs: ParsedAlgPropInputs): Parsed<Alg> {
-    if ("" in inputs.alg) {
-      return inputs.alg;
-    }
-
-    return Alg.fromString(inputs.alg.toString()) as Parsed<Alg>;
-  }
-}
-
 interface LeafTokensPropInputs {
-  parsedAlg: Parsed<Alg>;
+  algWithIssues: AlgWithIssues;
 }
 class LeafTokensProp extends TwistyPropDerived<
   LeafTokensPropInputs,
   OrderedLeafTokens
 > {
   derive(inputs: LeafTokensPropInputs): OrderedLeafTokens {
-    return leafTokens(inputs.parsedAlg, { numMovesSofar: 0 }).tokens;
+    return leafTokens(inputs.algWithIssues.alg as Parsed<Alg>, {
+      numMovesSofar: 0,
+    }).tokens;
   }
 }
 
@@ -163,9 +159,13 @@ export class TwistyAlgEditorModel {
   selectionProp = new TwistyAlgEditorSelectionProp();
   targetCharProp = new TargetCharProp({ selectionInfo: this.selectionProp });
 
-  algInputProp = new AlgInputProp();
-  parsedAlgProp = new ParsedAlgProp({ alg: this.algInputProp });
-  leafTokensProp = new LeafTokensProp({ parsedAlg: this.parsedAlgProp });
+  algEditorAlgWithIssues = new AlgEditorAlgWithIssuesProp({
+    value: this.valueProp,
+  });
+
+  leafTokensProp = new LeafTokensProp({
+    algWithIssues: this.algEditorAlgWithIssues,
+  });
 
   leafToHighlight = new LeafToHighlightProp({
     leafTokens: this.leafTokensProp,

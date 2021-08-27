@@ -174,6 +174,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#carbonCopyHighlight.hidden = true;
     this.resizeTextarea();
     this.highlightLeaf(null);
+    this.model.valueProp.set(this.#textarea.value);
     this.#algProp?.set(this.#textarea.value);
   }
 
@@ -211,6 +212,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       return;
     }
     this.#highlightedLeaf = leaf;
+    console.log("leaf", leaf.startCharIndex);
     this.#carbonCopyPrefix.textContent = this.#textarea.value.slice(
       0,
       leaf.startCharIndex,
@@ -250,15 +252,21 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       this.#twistyPlayer?.model.puzzleAlgProp.addFreshListener(
         (algWithIssues: AlgWithIssues) => {
           // console.log(JSON.stringify(algWithIssues));
-          this.model.algInputProp.set(algWithIssues.alg);
           if (algWithIssues.issues.errors.length === 0) {
             this.setAlgIssueClassForPuzzle(
               // TODO: Allow trailing spaces.
               algWithIssues.issues.warnings.length === 0 ? "none" : "warning",
             );
             const newAlg = algWithIssues.alg;
-            if (!newAlg.isIdentical(Alg.fromString(this.algString))) {
+            const oldAlg = Alg.fromString(this.algString);
+            console.log({ oldAlg });
+            if (!newAlg.isIdentical(oldAlg)) {
+              console.log("identical");
               this.algString = newAlg.toString();
+              this.onInput();
+            } else {
+              console.log("not identical!");
+              // this.model.algInputProp.set(oldAlg);
             }
           } else {
             this.setAlgIssueClassForPuzzle("error");
