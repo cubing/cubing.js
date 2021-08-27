@@ -9,8 +9,7 @@ import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import { twistyAlgEditorCSS } from "../../old/dom/TwistyAlgEditor.css_";
 import { TwistyPlayerV2 } from "../TwistyPlayerV2";
-import type { AnimatedLeafUnitInfo } from "./LeafTokens";
-import { TwistyAlgEditorModel } from "./model";
+import { HighlightInfo, TwistyAlgEditorModel } from "./model";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";
@@ -250,7 +249,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       // TODO: listen to puzzle prop?
       this.#twistyPlayer?.model.puzzleAlgProp.addFreshListener(
         (algWithIssues: AlgWithIssues) => {
-          console.log(JSON.stringify(algWithIssues));
+          // console.log(JSON.stringify(algWithIssues));
           this.model.algInputProp.set(algWithIssues.alg);
           if (algWithIssues.issues.errors.length === 0) {
             this.setAlgIssueClassForPuzzle(
@@ -271,12 +270,12 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
         (currentMoveInfo: CurrentMoveInfo) => {
           // TODO: take into account finishing moves.
           const currentMove = currentMoveInfo.currentMoves[0];
-          console.log({ currentMove });
+          // console.log({ currentMove });
           if (currentMove) {
             this.highlightLeaf(currentMove.move as ExperimentalParsed<Move>);
             return;
           } else if (currentMoveInfo.movesFinishing.length > 0) {
-            console.log("movesFinishing[0]");
+            // console.log("movesFinishing[0]");
             this.highlightLeaf(
               currentMoveInfo.movesFinishing[0]
                 .move as ExperimentalParsed<Move>,
@@ -291,17 +290,36 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       );
 
       this.model.leafToHighlight.addFreshListener(
-        async (leafInfo: AnimatedLeafUnitInfo | null) => {
-          if (!leafInfo) {
+        async (highlightInfo: HighlightInfo | null) => {
+          if (highlightInfo === null) {
             return;
           }
+          // TODO: This indexer can be out of date!
+          const indexer = await twistyPlayer.model.indexerProp.get();
           console.log(await twistyPlayer.model.detailedTimelineInfoProp.get());
-          console.log(
-            (
-              await twistyPlayer.model.indexerProp.get()
-            ).indexToMoveStartTimestamp(leafInfo.idx),
+          const moveStartTimestamp = indexer.indexToMoveStartTimestamp(
+            highlightInfo.leafInfo.idx,
           );
-          // return leafInfo?.startCharIndex;
+          const duration = indexer.moveDuration(highlightInfo.leafInfo.idx);
+
+          let newTimestamp: number;
+          switch (highlightInfo.where) {
+            case "before":
+              newTimestamp = moveStartTimestamp;
+              break;
+            case "start":
+            case "inside":
+              newTimestamp = moveStartTimestamp + duration / 4;
+              break;
+            case "end":
+            case "after":
+              newTimestamp = moveStartTimestamp + duration;
+              break;
+            default:
+              throw new Error("Invalid where!");
+          }
+          twistyPlayer.model.timestampRequestProp.set(newTimestamp);
+          this.highlightLeaf(highlightInfo.leafInfo.leaf);
         },
       );
     }

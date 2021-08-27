@@ -8,9 +8,9 @@ import {
   TwistyPropSource,
 } from "../../model/TwistyProp";
 import {
-  OrderedLeafTokens,
-  leafTokens,
   AnimatedLeafUnitInfo,
+  leafTokens,
+  OrderedLeafTokens,
 } from "./LeafTokens";
 
 export class TwistyAlgEditorValueProp extends SimpleTwistyPropSource<string> {
@@ -108,23 +108,53 @@ interface LeafToHighlightPropInputs {
   targetChar: number;
   leafTokens: OrderedLeafTokens;
 }
+type HighlightWhere = "before" | "start" | "inside" | "end" | "after";
+export interface HighlightInfo {
+  leafInfo: AnimatedLeafUnitInfo;
+  where: HighlightWhere;
+}
 class LeafToHighlightProp extends TwistyPropDerived<
   LeafToHighlightPropInputs,
-  AnimatedLeafUnitInfo | null
+  HighlightInfo | null
 > {
-  derive(inputs: LeafToHighlightPropInputs): AnimatedLeafUnitInfo | null {
+  derive(inputs: LeafToHighlightPropInputs): HighlightInfo | null {
+    function withWhere(
+      leafInfo: AnimatedLeafUnitInfo | null,
+    ): HighlightInfo | null {
+      if (leafInfo === null) {
+        return null;
+      }
+      let where: HighlightWhere;
+      if (inputs.targetChar < leafInfo.leaf.startCharIndex) {
+        where = "before";
+      } else if (inputs.targetChar === leafInfo.leaf.startCharIndex) {
+        where = "start";
+      } else if (inputs.targetChar < leafInfo.leaf.endCharIndex) {
+        where = "inside";
+      } else if (inputs.targetChar === leafInfo.leaf.endCharIndex) {
+        where = "end";
+      } else {
+        where = "after";
+      }
+      return {
+        leafInfo,
+        where,
+      };
+    }
+
     let lastLeafInfo: AnimatedLeafUnitInfo | null = null;
     // TODO: binary search
     for (const leafInfo of inputs.leafTokens) {
       if (inputs.targetChar < leafInfo.leaf.startCharIndex) {
-        return lastLeafInfo;
+        return withWhere(lastLeafInfo);
       }
       if (inputs.targetChar <= leafInfo.leaf.endCharIndex) {
-        return leafInfo;
+        return withWhere(leafInfo);
       }
       lastLeafInfo = leafInfo;
     }
-    return lastLeafInfo;
+
+    return withWhere(lastLeafInfo);
   }
 }
 
