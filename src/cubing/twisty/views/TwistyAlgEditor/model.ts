@@ -112,7 +112,8 @@ class LeafToHighlightProp extends TwistyPropDerived<
     let lastLeaf: Parsed<AnimatedLeafUnit> | null = null;
     // TODO: binary search
     for (const leaf of inputs.leafTokens) {
-      if (leaf.endCharIndex < inputs.targetChar) {
+      console.log(leaf);
+      if (leaf.endCharIndex > inputs.targetChar) {
         return lastLeaf;
       }
       lastLeaf = leaf;

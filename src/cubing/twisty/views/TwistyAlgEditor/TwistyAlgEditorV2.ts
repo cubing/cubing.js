@@ -8,7 +8,6 @@ import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import { twistyAlgEditorCSS } from "../../old/dom/TwistyAlgEditor.css_";
-import { twistyAlgEditorCharSearch } from "../../old/dom/TwistyAlgEditorStartCharSearch";
 import { TwistyPlayerV2 } from "../TwistyPlayerV2";
 import { TwistyAlgEditorModel } from "./model";
 
@@ -33,8 +32,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   #carbonCopy: HTMLDivElement = document.createElement("div");
   #carbonCopyPrefix: HTMLSpanElement = document.createElement("span");
   #carbonCopyHighlight: HTMLSpanElement = document.createElement("span");
-
-  #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
 
   #textareaClassListManager: ClassListManager<"none" | "warning" | "error"> =
     new ClassListManager(this, "issue-", ["none", "warning", "error"]);
@@ -176,28 +173,8 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   onInput(): void {
     this.#carbonCopyHighlight.hidden = true;
     this.resizeTextarea();
-    this.#carbonCopyPrefix.textContent = this.#textarea.value;
-    this.#carbonCopyHighlight.textContent = "";
-
-    try {
-      this.#alg = new Alg(this.#textarea.value);
-      this.dispatchEvent(
-        new CustomEvent("effectiveAlgChange", { detail: { alg: this.#alg } }),
-      );
-      this.#textareaClassListManager.setValue(
-        // TODO: better heuristics to avoid warning during editing
-        this.#alg.toString().trimEnd() === this.#textarea.value.trimEnd()
-          ? "none"
-          : "warning",
-      );
-    } catch (e) {
-      this.#alg = new Alg();
-      this.dispatchEvent(
-        new CustomEvent("effectiveAlgChange", { detail: { alg: this.#alg } }),
-      );
-      this.#textareaClassListManager.setValue("error");
-    }
-    // console.log(this.#alg);
+    this.highlightLeaf(null);
+    this.#twistyPlayer?.model.algProp.set(this.#textarea.value);
   }
 
   async onSelectionChange(): Promise<void> {
@@ -217,44 +194,19 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       selectionStart,
       selectionEnd,
     });
+  }
 
-    // console.log(this.#textarea.selectionStart);
-    const idx = await this.model.targetCharProp.get();
-    const dataUp = twistyAlgEditorCharSearch(this.#alg, {
-      targetCharIdx: idx,
-      numMovesSofar: 0,
-    });
-    console.log("dataUp", dataUp);
-    if ("latestUnit" in dataUp) {
-      this.dispatchEvent(
-        new CustomEvent("animatedMoveIndexChange", {
-          detail: {
-            idx: dataUp.animatedMoveIdx,
-            isAtStartOfLeaf:
-              this.#textarea.selectionStart >=
-                dataUp.latestUnit.startCharIndex &&
-              this.#textarea.selectionStart < dataUp.latestUnit.endCharIndex,
-            leaf: dataUp.latestUnit,
-          },
-        }),
-      );
-      this.highlightLeaf(dataUp.latestUnit);
-    } else {
-      this.dispatchEvent(
-        new CustomEvent("animatedMoveIndexChange", {
-          detail: { idx: dataUp.animatedMoveCount, isPartiallyInLeaf: false },
-        }),
-      );
+  setAlgIssueClassForPuzzle(issues: "none" | "warning" | "error") {
+    this.#textareaClassListValidForPuzzleManager.setValue(issues);
+  }
+
+  #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
+  highlightLeaf(leaf: ExperimentalParsed<Move | Pause> | null): void {
+    if (leaf === null) {
+      this.#carbonCopyPrefix.textContent = "";
+      this.#carbonCopyHighlight.textContent = "";
+      return;
     }
-  }
-
-  setAlgValidForPuzzle(valid: boolean) {
-    this.#textareaClassListValidForPuzzleManager.setValue(
-      valid ? "none" : "error",
-    );
-  }
-
-  highlightLeaf(leaf: ExperimentalParsed<Move | Pause>): void {
     if (leaf === this.#highlightedLeaf) {
       return;
     }
@@ -289,47 +241,9 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       this.algString = (await twistyPlayer.model.algProp.get()).alg.toString();
     })();
 
-    this.addEventListener(
-      "effectiveAlgChange",
-      (e: CustomEvent<{ alg: Alg }>) => {
-        try {
-          this.#algProp?.set(e.detail.alg);
-          // this.setAlgValidForPuzzle(true);
-        } catch (e) {
-          console.error("cannot set alg for puzzle", e);
-          this.#algProp?.set(new Alg());
-          // this.setAlgValidForPuzzle(false);
-        }
-      },
-    );
-
     if (this.#twistyPlayerProp === "algProp") {
-      this.addEventListener(
-        "animatedMoveIndexChange",
-        (
-          e: CustomEvent<{
-            idx: number;
-            isAtStartOfLeaf: Blob;
-            leaf: ExperimentalParsed<Move | Pause>;
-          }>,
-        ) => {
-          console.log(e);
-          try {
-            // TODO: async issues
-            (async () => {
-              const moveStartTimestamp = (
-                await twistyPlayer.model.indexerProp.get()
-              ).indexToMoveStartTimestamp(e.detail.idx);
-              console.log({ moveStartTimestamp });
-              const newTimestamp =
-                moveStartTimestamp + (e.detail.isAtStartOfLeaf ? 250 : 0);
-              twistyPlayer.model.timestampRequestProp.set(newTimestamp);
-            })();
-          } catch (e) {
-            // console.error("cannot set idx", e);
-            twistyPlayer.timestamp = "anchor";
-          }
-        },
+      this.model.leafToHighlight.addFreshListener(
+        this.highlightLeaf.bind(this),
       );
 
       // TODO: listen to puzzle prop?
@@ -338,13 +252,16 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
           console.log(JSON.stringify(algWithIssues));
           this.model.algInputProp.set(algWithIssues.alg);
           if (algWithIssues.issues.errors.length === 0) {
-            this.setAlgValidForPuzzle(true);
+            this.setAlgIssueClassForPuzzle(
+              // TODO: Allow trailing spaces.
+              algWithIssues.issues.warnings.length === 0 ? "none" : "warning",
+            );
             const newAlg = algWithIssues.alg;
             if (!newAlg.isIdentical(Alg.fromString(this.algString))) {
               this.algString = newAlg.toString();
             }
           } else {
-            this.setAlgValidForPuzzle(false);
+            this.setAlgIssueClassForPuzzle("error");
           }
         },
       );
