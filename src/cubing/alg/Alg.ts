@@ -47,6 +47,29 @@ export function experimentalEnsureAlg(alg: FlexibleAlgSource): Alg {
   return new Alg(alg);
 }
 
+/**
+ * Alg is a class that encapsulated a structured alg. To create an alg from a string, use:
+ *
+ *     new Alg("R U R'"); // Convenient
+ *     Alg.fromString(dynamicString); // Recommended when handling dynamic input.
+ *
+ * Once you have an Alg, you can call methods to transform it:
+ *
+ *     new Alg("[[R: U], R U R2']").expand().simplify().invert();
+ *
+ * To convert an Alg to a string, use .toString():
+ *
+ *     new Alg("R U F").invert().toString();
+ *
+ * If you need to debug, you may also find it convenient to use .log():
+ *
+ *     if (alg.isIdentical(alg.invert())) {
+ *       alg.log("A self-inverse!")
+ *     }
+ *
+ * For more information, see: {@link https://js.cubing.net/cubing/alg/}
+ *
+ */
 export class Alg extends AlgCommon<Alg> {
   // #debugString: string;
   #units: Iterable<Unit>; // TODO: freeze?
@@ -62,6 +85,36 @@ export class Alg extends AlgCommon<Alg> {
     }
   }
 
+  /**
+   * Checks whether this Alg is structurally identical to another Alg. This
+   * essentially means that they are written identically apart from whitespace.
+   *
+   *     const alg1 = new Alg("R U L'");
+   *     const alg2 = new Alg("L U' R'").invert();
+   *     // true
+   *     alg1.isIdentical(alg2);
+   *
+   *     // false
+   *     new Alg("[R, U]").isIdentical(new Alg("R U R' U'"));
+   *     // true
+   *     new Alg("[R, U]").expand().isIdentical(new Alg("R U R' U'"));
+   *
+   * Note that .isIdentical() efficiently compares algorithms, but mainly exists
+   * to help optimize code when the structure of an algorithm hasn't changed.
+   * There are many ways to write the "same" alg on most puzzles, but is
+   * *highly* recommended to avoid expanding two Alg instances to compare them,
+   * since that can easily slow your program to a crawl if someone inputs an alg
+   * containing a large repetition. In general, you should use `cubing/kpuzzle`
+   * to compare if two algs have the same effect on a puzzle.
+   *
+   * Also note that parser annotations are not take into account while comparing
+   * algs:
+   *
+   *     const alg = new Alg([new Move("R"), new Move("U2")]);
+   *     // true, even though one of the algs has parser annotations
+   *     alg.isIdentical(new Alg("R U2"))
+   *
+   */
   isIdentical(other: Comparable): boolean {
     const otherAsAlg = other as Alg;
     if (!other.is(Alg)) {
@@ -82,6 +135,16 @@ export class Alg extends AlgCommon<Alg> {
     return true;
   }
 
+  /**
+   * Returns the inverse of the given alg.
+   *
+   * Note that that this does not make any assumptions about what puzzle the alg
+   * is for. For example, U2 is its own inverse on a cube, but U2' has the same
+   * effect U3 (and not U2) on Megaminx:
+   *
+   *     // Outputs: R U2' L'
+   *     new Alg("L U2 R'").invert().log();
+   */
   invert(): Alg {
     // TODO: Handle newLines and comments correctly
     // TODO: Make more efficient.
@@ -99,6 +162,24 @@ export class Alg extends AlgCommon<Alg> {
     }
   }
 
+  /**
+   * Expands all Grouping, Commutator, and Conjugate parts nested inside the
+   * alg.
+   *
+   *     // F R U R' U' F'
+   *     new Alg("[F: [R, U]]").expand().log();
+   *
+   *     // F [R, U] F'
+   *     new Alg("[F: [R, U]]").expand(({ depth: 1 }).log();
+   *
+   * Avoid calling this on a user-provided alg unless the user explicitly asks
+   * to see the expanded alg. Otherwise, it's easy to make your program freeze
+   * when someone passes in an alg like: (R U)10000000
+   *
+   * Generally, if you want to perform an operation on an entire alg, you'll
+   * want to use something based on the `Traversal` mechanism, like countMoves()
+   * from `cubing/notation`.
+   */
   expand(options?: { depth?: number }): Alg {
     return new Alg(
       this.experimentalExpand(
@@ -158,6 +239,13 @@ export class Alg extends AlgCommon<Alg> {
   //   };
   // }
 
+  /**
+   * Converts the Alg to a string:
+   *
+   *     const alg = new Alg([new Move("R"), new Move("U2"), new Move("L")])
+   *     // R U2 L
+   *     console.log(alg.toString())
+   */
   toString(): string {
     let output = "";
     let previousUnit: Unit | null = null;
