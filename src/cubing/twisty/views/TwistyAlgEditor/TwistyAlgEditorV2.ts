@@ -3,6 +3,7 @@
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, Move, Pause } from "../../../alg";
 import type { AlgProp, AlgWithIssues } from "../../model/depth-0/AlgProp";
+import type { CurrentMoveInfo } from "../../old/animation/indexer/AlgIndexer";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
@@ -309,6 +310,12 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
               throw new Error("Invalid where!");
           }
           twistyPlayer.model.timestampRequestProp.set(newTimestamp);
+        },
+      );
+
+      twistyPlayer.model.currentLeavesProp.addFreshListener(
+        (currentLeaves: CurrentMoveInfo) => {
+          console.log(currentLeaves);
         },
       );
     }

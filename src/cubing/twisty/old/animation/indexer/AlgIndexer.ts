@@ -23,11 +23,12 @@ export interface CurrentMove {
 
 export function currentMoveEquals(cm1: CurrentMove, cm2: CurrentMove): boolean {
   return (
-    (cm1 === cm2 || cm1.move.isIdentical(cm2.move)) &&
-    cm1.direction === cm2.direction &&
-    cm1.fraction === cm2.fraction &&
-    cm1.startTimestamp === cm2.startTimestamp &&
-    cm1.endTimestamp === cm2.endTimestamp
+    cm1 === cm2 ||
+    (cm1.move.isIdentical(cm2.move) &&
+      cm1.direction === cm2.direction &&
+      cm1.fraction === cm2.fraction &&
+      cm1.startTimestamp === cm2.startTimestamp &&
+      cm1.endTimestamp === cm2.endTimestamp)
   );
 }
 
@@ -52,14 +53,15 @@ export function currentMoveInfoEquals(
   c1: CurrentMoveInfo,
   c2: CurrentMoveInfo,
 ): boolean {
-  return (
-    c1.stateIndex === c2.stateIndex &&
-    currentMoveArrayEquals(c1.currentMoves, c2.currentMoves) &&
-    currentMoveArrayEquals(c1.movesFinishing, c2.movesFinishing) &&
-    currentMoveArrayEquals(c1.movesStarting, c2.movesStarting) &&
-    c1.latestStart === c2.latestStart &&
-    c2.earliestEnd === c2.earliestEnd
-  );
+  const eq =
+    c1 === c2 ||
+    (c1.stateIndex === c2.stateIndex &&
+      currentMoveArrayEquals(c1.currentMoves, c2.currentMoves) &&
+      currentMoveArrayEquals(c1.movesFinishing, c2.movesFinishing) &&
+      currentMoveArrayEquals(c1.movesStarting, c2.movesStarting) &&
+      c1.latestStart === c2.latestStart &&
+      c2.earliestEnd === c2.earliestEnd);
+  return eq;
 }
 
 export interface AlgIndexer<P extends PuzzleWrapper> {
