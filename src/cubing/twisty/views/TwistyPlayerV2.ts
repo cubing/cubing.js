@@ -88,6 +88,22 @@ export interface TwistyPlayerV2Config {
   cameraLatitudeLimit?: number;
   tempoScale?: number;
 }
+
+/**
+ * TwistyPlayerV2 is the heart of `cubing.js`. It can be used to display a puzzle on a web page like this:
+ *
+ *     <script src="path/to/cubing/twisty" type="module"></script>
+ *     <twisty-player-v2 alg="R U R'"></twisty-player-v2>
+ *
+ * You can also construct it directly in JavaScript:
+ *
+ *     import { TwistyPlayerV2 } from "cubing/twisty";
+ *     const twistyPlayer = new TwistyPlayerV2({alg: "R U R'"});
+ *     // Once the page has loaded, you can do this:
+ *     document.body.appendChild(twistyPlayer);
+ *
+ * See {@link https://js.cubing.net/cubing/} for more examples.
+ */
 export class TwistyPlayerV2
   extends TwistyPlayerSettable
   implements TwistyAnimationControllerDelegate
