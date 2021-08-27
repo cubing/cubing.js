@@ -7,54 +7,109 @@ import {
   Move,
   Newline,
   Pause,
-  TraversalUp,
+  TraversalDownUp,
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
 
-export type AnimatedLeafUnit = Move | Pause;
-export type OrderedLeafTokens = Parsed<AnimatedLeafUnit>[];
+export type AnimatedLeafUnitInfo = {
+  leaf: Parsed<Move | Pause>;
+  idx: number;
+};
+export type OrderedLeafTokens = AnimatedLeafUnitInfo[];
 
-class LeafTokens extends TraversalUp<OrderedLeafTokens> {
-  public traverseAlg(alg: Alg): OrderedLeafTokens {
+interface DataUp {
+  tokens: OrderedLeafTokens;
+  numLeavesInside: number;
+}
+
+interface DataDown {
+  numMovesSofar: number;
+}
+
+class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
+  public traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     const unitArrays: OrderedLeafTokens[] = [];
+    let numMovesInside = dataDown.numMovesSofar;
     for (const unit of alg.units()) {
-      unitArrays.push(this.traverseUnit(unit));
+      const dataUp = this.traverseUnit(unit, {
+        numMovesSofar: dataDown.numMovesSofar + numMovesInside,
+      });
+      unitArrays.push(dataUp.tokens);
+      numMovesInside += dataUp.numLeavesInside;
     }
-    return Array.prototype.concat(...unitArrays);
+    return {
+      tokens: Array.prototype.concat(...unitArrays),
+      numLeavesInside: numMovesInside,
+    };
   }
 
-  public traverseGrouping(grouping: Grouping): OrderedLeafTokens {
-    return this.traverseAlg(grouping.alg);
+  public traverseGrouping(grouping: Grouping, dataDown: DataDown): DataUp {
+    const dataUp = this.traverseAlg(grouping.alg, dataDown);
+    return {
+      tokens: dataUp.tokens,
+      numLeavesInside: dataUp.numLeavesInside * grouping.amount,
+    };
   }
 
-  public traverseMove(move: Move): OrderedLeafTokens {
-    return [move as Parsed<Move>]; // TODO: What if not parsed?
+  public traverseMove(move: Move, dataDown: DataDown): DataUp {
+    return {
+      tokens: [{ leaf: move as Parsed<Move>, idx: dataDown.numMovesSofar }],
+      numLeavesInside: 1,
+    }; // TODO: What if not parsed?
   }
 
-  public traverseCommutator(commutator: Commutator): OrderedLeafTokens {
-    return this.traverseAlg(commutator.A).concat(
-      this.traverseAlg(commutator.B),
-    );
+  public traverseCommutator(
+    commutator: Commutator,
+    dataDown: DataDown,
+  ): DataUp {
+    const dataUpA = this.traverseAlg(commutator.A, dataDown);
+    const dataUpB = this.traverseAlg(commutator.B, {
+      numMovesSofar: dataDown.numMovesSofar + dataUpA.numLeavesInside,
+    });
+    return {
+      tokens: dataUpA.tokens.concat(dataUpB.tokens),
+      numLeavesInside: dataUpA.numLeavesInside * 2 + dataUpB.numLeavesInside,
+    };
   }
 
-  public traverseConjugate(conjugate: Conjugate): OrderedLeafTokens {
-    return this.traverseAlg(conjugate.A).concat(this.traverseAlg(conjugate.B));
+  public traverseConjugate(conjugate: Conjugate, dataDown: DataDown): DataUp {
+    const dataUpA = this.traverseAlg(conjugate.A, dataDown);
+    const dataUpB = this.traverseAlg(conjugate.B, {
+      numMovesSofar: dataDown.numMovesSofar + dataUpA.numLeavesInside,
+    });
+    return {
+      tokens: dataUpA.tokens.concat(dataUpB.tokens),
+      numLeavesInside:
+        dataUpA.numLeavesInside * 2 + dataUpB.numLeavesInside * 2,
+    };
   }
 
-  public traversePause(pause: Pause): OrderedLeafTokens {
-    return [pause as Parsed<Pause>]; // TODO: What if not parsed?
+  public traversePause(pause: Pause, dataDown: DataDown): DataUp {
+    return {
+      tokens: [{ leaf: pause as Parsed<Move>, idx: dataDown.numMovesSofar }],
+      numLeavesInside: 1,
+    }; // TODO: What if not parsed?
   }
 
-  public traverseNewline(_newline: Newline): OrderedLeafTokens {
-    return [];
+  public traverseNewline(_newline: Newline, _dataDown: DataDown): DataUp {
+    return {
+      tokens: [],
+      numLeavesInside: 0,
+    };
   }
 
-  public traverseLineComment(_comment: LineComment): OrderedLeafTokens {
-    return [];
+  public traverseLineComment(
+    _comment: LineComment,
+    _dataDown: DataDown,
+  ): DataUp {
+    return {
+      tokens: [],
+      numLeavesInside: 0,
+    };
   }
 }
 
 const leafTokensInstance = new LeafTokens();
 export const leafTokens = leafTokensInstance.traverseAlg.bind(
   leafTokensInstance,
-) as (alg: Alg) => OrderedLeafTokens;
+) as (alg: Parsed<Alg>, dataDown: DataDown) => DataUp;

@@ -7,7 +7,11 @@ import {
   TwistyPropDerived,
   TwistyPropSource,
 } from "../../model/TwistyProp";
-import { OrderedLeafTokens, leafTokens, AnimatedLeafUnit } from "./LeafTokens";
+import {
+  OrderedLeafTokens,
+  leafTokens,
+  AnimatedLeafUnitInfo,
+} from "./LeafTokens";
 
 export class TwistyAlgEditorValueProp extends SimpleTwistyPropSource<string> {
   getDefaultValue(): string {
@@ -96,7 +100,7 @@ class LeafTokensProp extends TwistyPropDerived<
   OrderedLeafTokens
 > {
   derive(inputs: LeafTokensPropInputs): OrderedLeafTokens {
-    return leafTokens(inputs.parsedAlg);
+    return leafTokens(inputs.parsedAlg, { numMovesSofar: 0 }).tokens;
   }
 }
 
@@ -106,19 +110,21 @@ interface LeafToHighlightPropInputs {
 }
 class LeafToHighlightProp extends TwistyPropDerived<
   LeafToHighlightPropInputs,
-  Parsed<AnimatedLeafUnit> | null
+  AnimatedLeafUnitInfo | null
 > {
-  derive(inputs: LeafToHighlightPropInputs): Parsed<AnimatedLeafUnit> | null {
-    let lastLeaf: Parsed<AnimatedLeafUnit> | null = null;
+  derive(inputs: LeafToHighlightPropInputs): AnimatedLeafUnitInfo | null {
+    let lastLeafInfo: AnimatedLeafUnitInfo | null = null;
     // TODO: binary search
-    for (const leaf of inputs.leafTokens) {
-      console.log(leaf);
-      if (leaf.endCharIndex > inputs.targetChar) {
-        return lastLeaf;
+    for (const leafInfo of inputs.leafTokens) {
+      if (inputs.targetChar < leafInfo.leaf.startCharIndex) {
+        return lastLeafInfo;
       }
-      lastLeaf = leaf;
+      if (inputs.targetChar <= leafInfo.leaf.endCharIndex) {
+        return leafInfo;
+      }
+      lastLeafInfo = leafInfo;
     }
-    return lastLeaf;
+    return lastLeafInfo;
   }
 }
 

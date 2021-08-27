@@ -9,6 +9,7 @@ import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import { twistyAlgEditorCSS } from "../../old/dom/TwistyAlgEditor.css_";
 import { TwistyPlayerV2 } from "../TwistyPlayerV2";
+import type { AnimatedLeafUnitInfo } from "./LeafTokens";
 import { TwistyAlgEditorModel } from "./model";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
@@ -286,6 +287,21 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
           // if (moveStarting) {
           //   this.highlightLeaf(moveStarting.move as ExperimentalParsed<Move>);
           // }
+        },
+      );
+
+      this.model.leafToHighlight.addFreshListener(
+        async (leafInfo: AnimatedLeafUnitInfo | null) => {
+          if (!leafInfo) {
+            return;
+          }
+          console.log(await twistyPlayer.model.detailedTimelineInfoProp.get());
+          console.log(
+            (
+              await twistyPlayer.model.indexerProp.get()
+            ).indexToMoveStartTimestamp(leafInfo.idx),
+          );
+          // return leafInfo?.startCharIndex;
         },
       );
     }
