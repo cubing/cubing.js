@@ -10,9 +10,10 @@ import {
   TraversalDownUp,
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
+import type { AnimatedLeafUnit } from "../../old/animation/indexer/simultaneous-moves/simul-moves";
 
 export type AnimatedLeafUnitInfo = {
-  leaf: Parsed<Move | Pause>;
+  leaf: Parsed<AnimatedLeafUnit>;
   idx: number;
 };
 export type OrderedLeafTokens = AnimatedLeafUnitInfo[];
@@ -86,7 +87,7 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
 
   public traversePause(pause: Pause, dataDown: DataDown): DataUp {
     return {
-      tokens: [{ leaf: pause as Parsed<Move>, idx: dataDown.numMovesSofar }],
+      tokens: [{ leaf: pause as Parsed<Pause>, idx: dataDown.numMovesSofar }],
       numLeavesInside: 1,
     }; // TODO: What if not parsed?
   }

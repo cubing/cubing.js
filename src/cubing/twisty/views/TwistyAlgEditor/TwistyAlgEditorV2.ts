@@ -303,6 +303,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
           const duration = indexer.moveDuration(highlightInfo.leafInfo.idx);
 
           let newTimestamp: number;
+          console.log(highlightInfo.where);
           switch (highlightInfo.where) {
             case "before":
               newTimestamp = moveStartTimestamp;

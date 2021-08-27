@@ -11,6 +11,7 @@ import type {
   PuzzlePosition,
   Timestamp,
 } from "../cursor/CursorTypes";
+import type { AnimatedLeafUnit } from "./simultaneous-moves/simul-moves";
 
 export interface CurrentMove {
   move: Move;
@@ -62,7 +63,7 @@ export function currentMoveInfoEquals(
 }
 
 export interface AlgIndexer<P extends PuzzleWrapper> {
-  getMove(index: number): Move | null;
+  getAnimLeaf(index: number): AnimatedLeafUnit | null;
   indexToMoveStartTimestamp(index: number): Timestamp;
   stateAtIndex(index: number, startTransformation?: State<P>): State<P>;
   transformAtIndex(index: number): State<P>;

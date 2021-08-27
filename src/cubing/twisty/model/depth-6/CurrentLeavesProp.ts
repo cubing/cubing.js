@@ -37,7 +37,7 @@ export class CurrentLeavesProp extends TwistyPropDerived<
       };
 
       if (inputs.indexer.numAnimatedLeaves() > 0) {
-        const move = inputs.indexer.getMove(idx)?.as(Move);
+        const move = inputs.indexer.getAnimLeaf(idx)?.as(Move);
         if (!move) {
           return currentMoveInfo;
         }
