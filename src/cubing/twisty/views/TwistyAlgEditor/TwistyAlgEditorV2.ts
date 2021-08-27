@@ -3,7 +3,6 @@
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, Move, Pause } from "../../../alg";
 import type { AlgProp, AlgWithIssues } from "../../model/depth-0/AlgProp";
-import type { CurrentMoveInfo } from "../../old/animation/indexer/AlgIndexer";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
@@ -91,6 +90,11 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#twistyPlayerProp = options?.twistyPlayerProp ?? "algProp";
 
     this.#observer.observe(this.contentWrapper);
+    this.model.leafToHighlight.addFreshListener(
+      (highlightInfo: HighlightInfo) => {
+        this.highlightLeaf(highlightInfo.leafInfo.leaf);
+      },
+    );
   }
 
   onResize(entries: ResizeObserverEntry[]): void {
@@ -244,9 +248,9 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     })();
 
     if (this.#twistyPlayerProp === "algProp") {
-      this.model.leafToHighlight.addFreshListener(
-        this.highlightLeaf.bind(this),
-      );
+      // this.model.leafToHighlight.addFreshListener(
+      //   this.highlightLeaf.bind(this),
+      // );
 
       // TODO: listen to puzzle prop?
       this.#twistyPlayer?.model.puzzleAlgProp.addFreshListener(
@@ -271,29 +275,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
           } else {
             this.setAlgIssueClassForPuzzle("error");
           }
-        },
-      );
-
-      twistyPlayer.model.currentLeavesProp.addFreshListener(
-        (currentMoveInfo: CurrentMoveInfo) => {
-          // TODO: take into account finishing moves.
-          const currentMove = currentMoveInfo.currentMoves[0];
-          // console.log({ currentMove });
-          if (currentMove) {
-            this.highlightLeaf(currentMove.move as ExperimentalParsed<Move>);
-            return;
-          } else if (currentMoveInfo.movesFinishing.length > 0) {
-            // console.log("movesFinishing[0]");
-            this.highlightLeaf(
-              currentMoveInfo.movesFinishing[0]
-                .move as ExperimentalParsed<Move>,
-            );
-          }
-          // const moveStarting = currentMoveInfo.movesStarting[0];
-          // console.log({ moveStarting });
-          // if (moveStarting) {
-          //   this.highlightLeaf(moveStarting.move as ExperimentalParsed<Move>);
-          // }
         },
       );
 
@@ -328,7 +309,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
               throw new Error("Invalid where!");
           }
           twistyPlayer.model.timestampRequestProp.set(newTimestamp);
-          this.highlightLeaf(highlightInfo.leafInfo.leaf);
         },
       );
     }
