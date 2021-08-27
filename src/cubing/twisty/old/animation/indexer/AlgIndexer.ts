@@ -26,8 +26,8 @@ export function currentMoveEquals(cm1: CurrentMove, cm2: CurrentMove): boolean {
     (cm1 === cm2 || cm1.move.isIdentical(cm2.move)) &&
     cm1.direction === cm2.direction &&
     cm1.fraction === cm2.fraction &&
-    cm1.startTimestamp === cm1.startTimestamp &&
-    cm1.endTimestamp === cm1.endTimestamp
+    cm1.startTimestamp === cm2.startTimestamp &&
+    cm1.endTimestamp === cm2.endTimestamp
   );
 }
 
