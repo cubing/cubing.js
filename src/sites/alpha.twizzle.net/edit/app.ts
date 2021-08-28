@@ -166,26 +166,14 @@ export class App {
     return true;
   }
 
-  public setSetupAnchor(
-    setupAnchor: "start" | "end",
-    reload: boolean = true,
-  ): boolean {
+  public setSetupAnchor(setupAnchor: "start" | "end"): void {
     setURLParams({ "experimental-setup-anchor": setupAnchor });
-    if (reload) {
-      location.reload();
-    }
-    return true;
+    this.twistyPlayer.experimentalSetupAnchor = setupAnchor;
   }
 
-  public setStickering(
-    stickering: ExperimentalStickering,
-    reload: boolean = true,
-  ): boolean {
+  public setStickering(stickering: ExperimentalStickering): void {
     setURLParams({ "experimental-stickering": stickering });
-    if (reload) {
-      location.reload();
-    }
-    return true;
+    this.twistyPlayer.experimentalStickering = stickering;
   }
 
   async solve(): Promise<void> {
