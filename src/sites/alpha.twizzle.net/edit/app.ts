@@ -161,8 +161,7 @@ export class App {
   private setPuzzle(puzzleName: string): boolean {
     setURLParams({ puzzle: puzzleName });
     // TODO: Handle 2D/3D transitions
-    // this.twistyPlayer.setPuzzle(puzzleName);
-    location.reload();
+    this.twistyPlayer.puzzle = puzzleName as PuzzleID;
     this.controlPane.setPuzzle(puzzleName);
     return true;
   }
