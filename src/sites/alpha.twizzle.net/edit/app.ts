@@ -190,52 +190,59 @@ export class App {
   }
 
   async solve(): Promise<void> {
+    const [puzzleID, currentAlgWithIssues] = await Promise.all([
+      this.twistyPlayer.model.puzzleProp.get(),
+      this.twistyPlayer.model.algProp.get(),
+    ]);
+    const currentAlg = currentAlgWithIssues.alg;
     let solution: Alg;
-    switch (this.twistyPlayer.puzzle) {
+    switch (puzzleID) {
       case "2x2x2": {
         const kpuzzle = new KPuzzle(cube2x2x2KPuzzle);
-        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        kpuzzle.applyAlg(currentAlg);
         solution = await experimentalSolve2x2x2(kpuzzle.state);
         break;
       }
       case "3x3x3": {
         const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
-        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        kpuzzle.applyAlg(currentAlg);
         solution = await experimentalSolve3x3x3IgnoringCenters(kpuzzle.state);
         break;
       }
       case "skewb": {
         const kpuzzle = new KPuzzle(await puzzles.skewb.def());
-        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        kpuzzle.applyAlg(currentAlg);
         solution = await solveSkewb(kpuzzle.state);
         break;
       }
       case "pyraminx": {
         const kpuzzle = new KPuzzle(await puzzles.pyraminx.def());
-        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        kpuzzle.applyAlg(currentAlg);
         solution = await solvePyraminx(kpuzzle.state);
         break;
       }
       case "megaminx": {
         const kpuzzle = new KPuzzle(await puzzles.megaminx.def());
-        kpuzzle.applyAlg(this.twistyPlayer.alg);
+        kpuzzle.applyAlg(currentAlg);
         solution = await solveMegaminx(kpuzzle.state);
         break;
       }
       default:
         return;
     }
-    this.controlPane.setAlg(
-      algAppend(this.twistyPlayer.alg, " Solution", solution),
-    );
+    this.controlPane.setAlg(algAppend(currentAlg, " Solution", solution));
   }
 
   async scramble(): Promise<void> {
-    const event = SCRAMBLE_EVENTS[this.twistyPlayer.puzzle];
+    const [puzzleID, currentAlgWithIssues] = await Promise.all([
+      this.twistyPlayer.model.puzzleProp.get(),
+      this.twistyPlayer.model.algProp.get(),
+    ]);
+    const event = SCRAMBLE_EVENTS[puzzleID];
     if (event) {
       this.controlPane.setAlg(
         algAppend(
-          this.twistyPlayer.alg,
+          currentAlgWithIssues.alg,
           " Scramble",
           await randomScrambleForEvent(event),
         ),
