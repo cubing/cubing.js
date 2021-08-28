@@ -1,4 +1,15 @@
-// TODO: see if this can replace AlgCursor?
+/**
+ * Warning: the current implementation of <twisty-alg-editor-v2> is *not good*,
+ * but it is *good enough*. The important parts is that:
+ *
+ * - The editor can be used in apps without much effort.
+ * - The editor handles alg validation and move highlighting *okay* when not
+ *   connected to a `<twisty-player-v2>`.
+ * - The editor stays in sync if it's connected to a `<twisty-player-v2>`.
+ *
+ * The current implementation still has some race conditions and edge cases. A
+ * proper rewrite with a better model would be very welcom.
+ */
 
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, Move, Pause } from "../../../alg";
@@ -17,13 +28,6 @@ const ATTRIBUTE_PLACEHOLDER = "placeholder";
 const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
 type TwistyPlayerAlgProp = "algProp" | "setupProp";
-
-// function parsePx(s: string): number {
-//   if (s.slice(-2) !== "px") {
-//     throw new Error(`Expected px suffix: ${s}`);
-//   }
-//   return parseInt(s.slice(0, -2));
-// }
 
 export class TwistyAlgEditorV2 extends ManagedCustomElement {
   model = new TwistyAlgEditorModel();
