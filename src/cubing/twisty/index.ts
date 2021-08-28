@@ -1,6 +1,8 @@
 export { TwistyPlayerV2 } from "./views/TwistyPlayerV2";
 export type { TwistyPlayerV2Config } from "./views/TwistyPlayerV2";
 
+export { TwistyAlgEditorV2 } from "./views/TwistyAlgEditor/TwistyAlgEditorV2";
+
 // Old
 export type { Twisty3DPuzzle } from "./views/3D/puzzles/Twisty3DPuzzle";
 export {
