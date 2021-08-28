@@ -17,7 +17,10 @@ import {
   Transformation,
 } from "../../../../kpuzzle";
 import { experimentalTransformationForQuantumMove } from "../../../../kpuzzle";
-import type { StickerDat, StickerDatSticker } from "../../../../puzzle-geometry";
+import type {
+  StickerDat,
+  StickerDatSticker,
+} from "../../../../puzzle-geometry";
 import {
   ExperimentalFaceletMeshAppearance,
   experimentalGetFaceletAppearance,

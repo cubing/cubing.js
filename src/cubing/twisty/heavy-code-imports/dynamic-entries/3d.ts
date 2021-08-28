@@ -2,7 +2,10 @@ import { cube3x3x3, puzzles } from "../../../puzzles";
 import { Cube3D } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
 import type { AlgCursor } from "../../old/animation/cursor/AlgCursor";
-import type { HintFaceletStyle, PuzzleID } from "../../old/dom/TwistyPlayerConfig";
+import type {
+  HintFaceletStyle,
+  PuzzleID,
+} from "../../old/dom/TwistyPlayerConfig";
 
 export { Cube3D } from "../../views/3D/puzzles/Cube3D";
 export { PG3D } from "../../views/3D/puzzles/PG3D";

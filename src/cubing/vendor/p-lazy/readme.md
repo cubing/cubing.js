@@ -13,10 +13,10 @@ $ npm install p-lazy
 ## Usage
 
 ```js
-import PLazy from 'p-lazy';
+import PLazy from "p-lazy";
 
-const lazyPromise = new PLazy(resolve => {
-	someHeavyOperation(resolve);
+const lazyPromise = new PLazy((resolve) => {
+  someHeavyOperation(resolve);
 });
 
 // `someHeavyOperation` is not yet called
