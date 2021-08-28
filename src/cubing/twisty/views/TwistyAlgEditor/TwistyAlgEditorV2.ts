@@ -94,8 +94,10 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
 
     this.#observer.observe(this.contentWrapper);
     this.model.leafToHighlight.addFreshListener(
-      (highlightInfo: HighlightInfo) => {
-        this.highlightLeaf(highlightInfo.leafInfo.leaf);
+      (highlightInfo: HighlightInfo | null) => {
+        if (highlightInfo) {
+          this.highlightLeaf(highlightInfo.leafInfo.leaf);
+        }
       },
     );
   }
