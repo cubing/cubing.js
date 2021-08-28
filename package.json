@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.13.0",
     "@babylonjs/core": "^5.0.0-alpha.24",
+    "@microsoft/api-extractor": "^7.18.7",
     "@snowpack/plugin-typescript": "^1.2.1",
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
@@ -64,7 +65,8 @@
     "setup": "npm install",
     "initial-setup": "[ -d \"node_modules\" ] || echo \"Automatically running `npm install`. Note that you have to run this manually in the future if `package-lock.json` changes.\" && npm run setup",
     "lint": "npx eslint --ext=js,ts .",
-    "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import"
+    "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import",
+    "api-extractor": "mkdir -p dist/api-extractor && npm run build-types && npx @microsoft/api-extractor run --local --verbose -c config/api-extractor.json5"
   },
   "targets": {
     "twizzle-net": {},
