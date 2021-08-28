@@ -1,5 +1,8 @@
 import type { Alg, Move } from "../../../../../alg";
-import type { PuzzleWrapper, State } from "../../../../views/3D/puzzles/KPuzzleWrapper";
+import type {
+  PuzzleWrapper,
+  State,
+} from "../../../../views/3D/puzzles/KPuzzleWrapper";
 import type { Duration, Timestamp } from "../../cursor/CursorTypes";
 import type { AlgIndexer } from "../AlgIndexer";
 import { chunkAlgs } from "./chunkAlgs";
@@ -25,7 +28,7 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     );
   }
 
-  public getMove(index: number): Move | null {
+  public getAnimLeaf(index: number): Move | null {
     // FIXME need to support Pause
     if (this.walker.moveByIndex(index)) {
       if (!this.walker.move) {

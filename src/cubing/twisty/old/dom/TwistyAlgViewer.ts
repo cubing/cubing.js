@@ -438,7 +438,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
         onTimelineTimestampChange: (timestamp: MillisecondTimestamp): void => {
           // TODO: improve perf, e.g. only get notified when the move index changes.
           this.highlighter.set(
-            indexer.getMove(
+            indexer.getAnimLeaf(
               indexer.timestampToIndex(timestamp),
             ) as Parsed<Move> | null,
           );

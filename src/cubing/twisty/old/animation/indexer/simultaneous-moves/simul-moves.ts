@@ -12,14 +12,15 @@ import {
 import type { MillisecondTimestamp } from "../../cursor/CursorTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
-export interface LocalMoveWithRange {
-  move: Move;
+export type AnimatedLeafUnit = Move | Pause;
+export interface LocalAnimLeavesWithRange {
+  animLeafUnit: AnimatedLeafUnit;
   msUntilNext: MillisecondTimestamp;
   duration: MillisecondTimestamp;
 }
 
-export interface MoveWithRange {
-  move: Move;
+export interface AnimLeafWithRange {
+  animLeaf: AnimatedLeafUnit;
   start: MillisecondTimestamp;
   end: MillisecondTimestamp;
 }
@@ -48,16 +49,16 @@ function isSameAxis(move1: Move, move2: Move): boolean {
 
 // TODO: Replace this with an optimized implementation.
 // TODO: Consider `(x U)` and `(U x F)` to be simultaneous.
-export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
-  public traverseAlg(alg: Alg): LocalMoveWithRange[] {
-    const processed: LocalMoveWithRange[][] = [];
+export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
+  public traverseAlg(alg: Alg): LocalAnimLeavesWithRange[] {
+    const processed: LocalAnimLeavesWithRange[][] = [];
     for (const nestedUnit of alg.units()) {
       processed.push(this.traverseUnit(nestedUnit));
     }
     return Array.prototype.concat(...processed);
   }
 
-  public traverseGroupingOnce(alg: Alg): LocalMoveWithRange[] {
+  public traverseGroupingOnce(alg: Alg): LocalAnimLeavesWithRange[] {
     if (alg.experimentalIsEmpty()) {
       return [];
     }
@@ -82,10 +83,10 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
       );
     }
 
-    const localMovesWithRange: LocalMoveWithRange[] = moves.map(
-      (blockMove): LocalMoveWithRange => {
+    const localMovesWithRange: LocalAnimLeavesWithRange[] = moves.map(
+      (blockMove): LocalAnimLeavesWithRange => {
         return {
-          move: blockMove,
+          animLeafUnit: blockMove,
           msUntilNext: 0,
           duration: maxSimulDur,
         };
@@ -96,8 +97,8 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return localMovesWithRange;
   }
 
-  public traverseGrouping(grouping: Grouping): LocalMoveWithRange[] {
-    const processed: LocalMoveWithRange[][] = [];
+  public traverseGrouping(grouping: Grouping): LocalAnimLeavesWithRange[] {
+    const processed: LocalAnimLeavesWithRange[][] = [];
 
     const segmentOnce: Alg =
       grouping.amount > 0 ? grouping.alg : grouping.alg.invert();
@@ -107,19 +108,21 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return Array.prototype.concat(...processed);
   }
 
-  public traverseMove(move: Move): LocalMoveWithRange[] {
+  public traverseMove(move: Move): LocalAnimLeavesWithRange[] {
     const duration = defaultDurationForAmount(move.amount);
     return [
       {
-        move: move,
+        animLeafUnit: move,
         msUntilNext: duration,
         duration,
       },
     ];
   }
 
-  public traverseCommutator(commutator: Commutator): LocalMoveWithRange[] {
-    const processed: LocalMoveWithRange[][] = [];
+  public traverseCommutator(
+    commutator: Commutator,
+  ): LocalAnimLeavesWithRange[] {
+    const processed: LocalAnimLeavesWithRange[][] = [];
     const segmentsOnce: Alg[] = [
       commutator.A,
       commutator.B,
@@ -132,8 +135,8 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return Array.prototype.concat(...processed);
   }
 
-  public traverseConjugate(conjugate: Conjugate): LocalMoveWithRange[] {
-    const processed: LocalMoveWithRange[][] = [];
+  public traverseConjugate(conjugate: Conjugate): LocalAnimLeavesWithRange[] {
+    const processed: LocalAnimLeavesWithRange[][] = [];
     const segmentsOnce: Alg[] = [
       conjugate.A,
       conjugate.B,
@@ -145,15 +148,24 @@ export class LocalSimulMoves extends TraversalUp<LocalMoveWithRange[]> {
     return Array.prototype.concat(...processed);
   }
 
-  public traversePause(_pause: Pause): LocalMoveWithRange[] {
+  public traversePause(pause: Pause): LocalAnimLeavesWithRange[] {
+    const duration = defaultDurationForAmount(1);
+    return [
+      {
+        animLeafUnit: pause,
+        msUntilNext: duration, // TODO
+        duration,
+      },
+    ];
+  }
+
+  public traverseNewline(_newline: Newline): LocalAnimLeavesWithRange[] {
     return [];
   }
 
-  public traverseNewline(_newline: Newline): LocalMoveWithRange[] {
-    return [];
-  }
-
-  public traverseLineComment(_comment: LineComment): LocalMoveWithRange[] {
+  public traverseLineComment(
+    _comment: LineComment,
+  ): LocalAnimLeavesWithRange[] {
     return [];
   }
 }
@@ -162,19 +174,19 @@ const localSimulMovesInstance = new LocalSimulMoves();
 
 const localSimulMoves = localSimulMovesInstance.traverseAlg.bind(
   localSimulMovesInstance,
-) as (a: Alg) => LocalMoveWithRange[];
+) as (a: Alg) => LocalAnimLeavesWithRange[];
 
-export function simulMoves(a: Alg): MoveWithRange[] {
+export function simulMoves(a: Alg): AnimLeafWithRange[] {
   let timestamp = 0;
   const l = localSimulMoves(a).map(
-    (localSimulMove: LocalMoveWithRange): MoveWithRange => {
-      const moveWithRange = {
-        move: localSimulMove.move,
+    (localSimulMove: LocalAnimLeavesWithRange): AnimLeafWithRange => {
+      const leafWithRange = {
+        animLeaf: localSimulMove.animLeafUnit,
         start: timestamp,
         end: timestamp + localSimulMove.duration,
       };
       timestamp += localSimulMove.msUntilNext;
-      return moveWithRange;
+      return leafWithRange;
     },
   );
   return l;

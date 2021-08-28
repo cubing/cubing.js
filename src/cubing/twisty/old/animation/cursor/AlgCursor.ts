@@ -6,8 +6,12 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 // start of imports
-import { Alg, Move } from "../../../../alg";
-import { KPuzzle, KPuzzleDefinition, Transformation } from "../../../../kpuzzle";
+import { Alg, Move, Pause } from "../../../../alg";
+import {
+  KPuzzle,
+  KPuzzleDefinition,
+  Transformation,
+} from "../../../../kpuzzle";
 import { KPuzzleWrapper } from "../../../views/3D/puzzles/KPuzzleWrapper";
 import type { AlgIndexer } from "../indexer/AlgIndexer";
 import { TreeAlgIndexer } from "../indexer/tree/TreeAlgIndexer";
@@ -138,7 +142,7 @@ export class AlgCursor
       };
 
       if (this.indexer.numAnimatedLeaves() > 0) {
-        const move = this.indexer.getMove(idx)?.as(Move);
+        const move = this.indexer.getAnimLeaf(idx)?.as(Move);
         if (!move) {
           return; // TODO
         }
@@ -239,7 +243,7 @@ export class AlgCursor
   }
 
   /** @deprecated */
-  experimentalMoveAtIndex(index: number): Move | null {
-    return this.indexer.getMove(index);
+  experimentalLeafAtIndex(index: number): Move | Pause | null {
+    return this.indexer.getAnimLeaf(index);
   }
 }
