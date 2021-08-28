@@ -195,7 +195,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   }
 
   async onSelectionChange(): Promise<void> {
-    console.log("onSelectionChange");
     if (
       document.activeElement !== this ||
       this.shadow.activeElement !== this.#textarea
@@ -241,7 +240,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       return;
     }
     this.#highlightedLeaf = leaf;
-    console.log("leaf", leaf.startCharIndex);
     this.#carbonCopyPrefix.textContent = this.#textarea.value.slice(
       0,
       leaf.startCharIndex,
@@ -288,13 +286,10 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
             );
             const newAlg = algWithIssues.alg;
             const oldAlg = Alg.fromString(this.algString);
-            console.log({ oldAlg });
             if (!newAlg.isIdentical(oldAlg)) {
-              console.log("identical");
               this.algString = newAlg.toString();
               this.onInput();
             } else {
-              console.log("not identical!");
               // this.model.algInputProp.set(oldAlg);
             }
           } else {
@@ -316,7 +311,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
           const duration = indexer.moveDuration(highlightInfo.leafInfo.idx);
 
           let newTimestamp: number;
-          console.log(highlightInfo.where);
           switch (highlightInfo.where) {
             case "before":
               newTimestamp = moveStartTimestamp;
