@@ -401,14 +401,17 @@ class ControlPane {
     this.twistyStreamSource.addEventListener("move", this.onMove.bind(this));
   }
 
-  private onMove(e: PuzzleStreamMoveEventRegisterCompatible): void {
+  private async onMove(
+    e: PuzzleStreamMoveEventRegisterCompatible,
+  ): Promise<void> {
     const move = e.detail.move;
-    let alg = this.twistyPlayer.alg;
+    let alg: Alg;
     try {
       this.twistyPlayer.experimentalAddMove(move); // TODO
-      alg = this.twistyPlayer.alg;
+      alg = (await this.twistyPlayer.model.algProp.get()).alg;
     } catch (e) {
       console.info("Ignoring move:", move.toString());
+      alg = (await this.twistyPlayer.model.algProp.get()).alg;
     }
     // this.algInput.algString = alg;
     setURLParams({ alg });
