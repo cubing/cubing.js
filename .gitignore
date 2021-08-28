@@ -6,6 +6,7 @@
 /coverage
 /dist
 /node_modules
+/temp
 
 # Legacy package folders.
 # We can hopefully get rid of this once enough bundlers support the `exports` field in `package.json`.
