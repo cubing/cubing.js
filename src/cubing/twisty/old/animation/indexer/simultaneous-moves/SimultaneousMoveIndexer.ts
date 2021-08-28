@@ -70,9 +70,11 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
     // TODO: Avoid assuming all base moves are block moves.
   }
 
-  public getAnimLeaf(index: number): AnimatedLeafUnit {
-    return this.animLeaves[Math.min(index, this.animLeaves.length - 1)]
-      .animLeaf;
+  public getAnimLeaf(index: number): AnimatedLeafUnit | null {
+    return (
+      this.animLeaves[Math.min(index, this.animLeaves.length - 1)]?.animLeaf ??
+      null
+    );
   }
 
   private getAnimLeafWithRange(index: number): AnimLeafWithRange {
