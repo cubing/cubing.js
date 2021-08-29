@@ -50,7 +50,7 @@
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
-    "dev": "npm run initial-setup && node ./script/build/main.js sites dev",
+    "dev": "npm run initial-setup-checked && node ./script/build/main.js sites dev",
     "clean": "rm -rf dist .cache .parcel-cache coverage .rpt2_cache /tmp/cubing-js-parcel src/cubing/search/worker-inside-generated* script/dist-test/parcel-test/parcel-package/.parcel-cache script/dist-test/parcel-test/parcel-package/dist script/dist-test/parcel-test/parcel-package/node_modules  ./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty",
     "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml in sync with this",
     "test-dist-esm-node-import": "node script/test/dist/esm/node-import/main.mjs",
@@ -62,7 +62,8 @@
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src",
     "setup": "npm install",
-    "initial-setup": "[ -d \"node_modules\" ] || echo \"Automatically running `npm install`. Note that you have to run this manually in the future if `package-lock.json` changes.\" && npm run setup",
+    "initial-setup-checked": "[ -d \"node_modules\" ] || npm run initial-setup",
+    "initial-setup": "echo \"Automatically running `npm install`. Note that you have to run this manually in the future if `package-lock.json` changes.\" && npm run setup",
     "lint": "npx eslint --ext=js,ts .",
     "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import"
   },
