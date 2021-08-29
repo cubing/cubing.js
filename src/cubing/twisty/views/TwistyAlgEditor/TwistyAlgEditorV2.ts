@@ -8,7 +8,7 @@
  * - The editor stays in sync if it's connected to a `<twisty-player-v2>`.
  *
  * The current implementation still has some race conditions and edge cases. A
- * proper rewrite with a better model would be very welcom.
+ * proper rewrite with a better model would be very welcome.
  */
 
 import type { ExperimentalParsed } from "../../../alg";
