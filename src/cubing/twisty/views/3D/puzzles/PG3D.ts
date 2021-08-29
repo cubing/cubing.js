@@ -29,6 +29,7 @@ import {
 import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
 import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
 import { smootherStep } from "../../../old/animation/easing";
+import type { HintFaceletStyle } from "../../../old/dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
 
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
@@ -172,13 +173,13 @@ class StickerDef {
     }
     this.faceColor = sdColor;
     const coords = stickerDat.coords as number[][];
-    makePoly(filler, coords, this.faceColor, 1, this.isDup ? 4: 0);
+    makePoly(filler, coords, this.faceColor, 1, this.isDup ? 4 : 0);
     this.hintIndStart = filler.ipos;
     let highArea = 0;
     let goodFace = null;
     const v0 = new Vector3(coords[0][0], coords[0][1], coords[0][2]);
     let v1 = new Vector3(coords[1][0], coords[1][1], coords[1][2]);
-    for (let g=2; g<coords.length; g++) {
+    for (let g = 2; g < coords.length; g++) {
       const v2 = new Vector3(coords[g][0], coords[g][1], coords[g][2]);
       const t = new Triangle(v0, v1, v2);
       const a = t.getArea();
@@ -200,7 +201,13 @@ class StickerDef {
         coords[j][2] + norm.z,
       ]);
     }
-    makePoly(filler, hintCoords, this.faceColor, 1, hintStickers && !this.isDup ? 2 : 4);
+    makePoly(
+      filler,
+      hintCoords,
+      this.faceColor,
+      1,
+      hintStickers && !this.isDup ? 2 : 4,
+    );
     this.colorEnd = filler.pos;
     this.indEnd = filler.ipos;
   }
@@ -211,7 +218,13 @@ class StickerDef {
     black: number,
   ) {
     this.ind2Start = filler.ipos;
-    makePoly(filler, foundationDat.coords as number[][], black, 0.999, this.isDup ? 4 : 6);
+    makePoly(
+      filler,
+      foundationDat.coords as number[][],
+      black,
+      0.999,
+      this.isDup ? 4 : 6,
+    );
     this.ind2End = filler.ipos;
   }
 
@@ -228,9 +241,7 @@ class StickerDef {
         if (this.origColor === 0xffffff) {
           c = 0xdddddd;
         } else {
-          c = new Color(this.origColor)
-            .multiplyScalar(0.5)
-            .getHex();
+          c = new Color(this.origColor).multiplyScalar(0.5).getHex();
         }
         break;
       case "oriented":
@@ -244,12 +255,12 @@ class StickerDef {
         indv = 4;
     }
     this.origColorAppearance = c;
-    for (let i=this.colorStart; i<this.colorEnd; i += 3) {
+    for (let i = this.colorStart; i < this.colorEnd; i += 3) {
       this.filler.colors[this.filler.pos + i] = c >> 16;
       this.filler.colors[this.filler.pos + i] = (c >> 8) & 255;
       this.filler.colors[this.filler.pos + i] = c >> 16;
     }
-    for (let i=this.hintIndStart; i<this.indEnd; i++) {
+    for (let i = this.hintIndStart; i < this.indEnd; i++) {
       this.filler.ind[i] = indv;
     }
   }
@@ -258,7 +269,11 @@ class StickerDef {
     const c = sd.origColorAppearance;
     if (this.faceColor !== c) {
       this.faceColor = c;
-      this.filler.colors.copyWithin(this.colorStart, sd.colorStart + this.filler.pos, sd.colorEnd + this.filler.pos);
+      this.filler.colors.copyWithin(
+        this.colorStart,
+        sd.colorStart + this.filler.pos,
+        sd.colorEnd + this.filler.pos,
+      );
       return 1;
     } else {
       return 0;
@@ -581,17 +596,33 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               }
               if (tv !== pieces2[i].twistVal) {
                 if (tv) {
-                  for (let j=pieces2[i].indStart; j<pieces2[i].indEnd; j++) {
+                  for (
+                    let j = pieces2[i].indStart;
+                    j < pieces2[i].indEnd;
+                    j++
+                  ) {
                     this.filler.ind[j] |= 1;
                   }
-                  for (let j=pieces2[i].ind2Start; j<pieces2[i].ind2End; j++) {
+                  for (
+                    let j = pieces2[i].ind2Start;
+                    j < pieces2[i].ind2End;
+                    j++
+                  ) {
                     this.filler.ind[j] |= 1;
                   }
                 } else {
-                  for (let j=pieces2[i].indStart; j<pieces2[i].indEnd; j++) {
+                  for (
+                    let j = pieces2[i].indStart;
+                    j < pieces2[i].indEnd;
+                    j++
+                  ) {
                     this.filler.ind[j] &= ~1;
                   }
-                  for (let j=pieces2[i].ind2Start; j<pieces2[i].ind2End; j++) {
+                  for (
+                    let j = pieces2[i].ind2Start;
+                    j < pieces2[i].ind2End;
+                    j++
+                  ) {
                     this.filler.ind[j] &= ~1;
                   }
                 }
@@ -620,5 +651,17 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   private ease(fraction: number): number {
     return smootherStep(fraction);
+  }
+
+  public experimentalUpdateOptions(options: {
+    showMainStickers?: boolean;
+    hintFacelets?: HintFaceletStyle;
+    showFoundation?: boolean; // TODO: better name
+  }): void {
+    if (options.hintFacelets) {
+      const showHintFacelets = options.hintFacelets !== "none";
+      console.log("should show hint facelets:", showHintFacelets);
+    }
+    // ignore unsupported options
   }
 }
