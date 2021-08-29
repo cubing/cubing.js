@@ -83,26 +83,38 @@ function constructStringWrappingPlugin(dev) {
               );
             }
           } else {
-            readFile(
-              "src/cubing/search/worker-inside-generated.js",
-              "utf8",
-              (_, contents) => {
-                writeFile(
-                  "src/cubing/search/worker-inside-generated-string.js",
-                  `export const workerSource = "${contents
-                    .replace(/\\/g, "\\\\")
-                    .replace(/"/g, '\\"')
-                    .replace(/\n/g, "\\n")}";`,
-                  async () => {
-                    await execPromise(
-                      "rm -f src/cubing/search/worker-inside-generated.js",
+            function attemptWriteWorkerInsideGenerated() {
+              // Based on "Waiting for Things with setTimeout" https://www.sitepoint.com/delay-sleep-pause-wait/
+              // keeps attempting to write to src/cubing/search/worker-inside-generated-string.js until successful
+              // try{} runs the usual readFile/writeFile code
+              // catch{} catches an error, and then re-runs this function with a 20ms timeout using setTimeout()
+              try {
+                readFile(
+                  "src/cubing/search/worker-inside-generated.js",
+                  "utf8",
+                  (_, contents) => {
+                    writeFile(
+                      "src/cubing/search/worker-inside-generated-string.js",
+                      `export const workerSource = "${contents
+                        .replace(/\\/g, "\\\\")
+                        .replace(/"/g, '\\"')
+                        .replace(/\n/g, "\\n")}";`,
+                      async () => {
+                        await execPromise(
+                          "rm -f src/cubing/search/worker-inside-generated.js",
+                        );
+                        console.log("updated worker-inside-generated-string.js");
+                        resolve();
+                      },
                     );
-                    console.log("updated worker-inside-generated-string.js");
-                    resolve();
                   },
                 );
-              },
-            );
+              } catch (err) {
+                console.log(err); // No console output on error - not sure why this is? Did we just not get here? 
+                setTimeout(attemptWriteWorkerInsideGenerated, 20); // 20ms is arbitrarily selected
+              };
+            };
+            attemptWriteWorkerInsideGenerated(); // run the function
           }
         });
       });
