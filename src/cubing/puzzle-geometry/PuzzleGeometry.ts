@@ -52,6 +52,7 @@ export interface StickerDatSticker {
   orbit: string;
   ord: number;
   ori: number;
+  isDup?: boolean;
 }
 
 export interface StickerDatFace {
@@ -2893,6 +2894,7 @@ export class PuzzleGeometry {
             orbit: this.cubiesetnames[cubiesetnum],
             ord: cubieord,
             ori: jj,
+            isDup: true,
           });
           foundations.push({
             coords: toFaceCoords(fcoords, maxdist),
@@ -2900,6 +2902,7 @@ export class PuzzleGeometry {
             orbit: this.cubiesetnames[cubiesetnum],
             ord: cubieord,
             ori: jj,
+            isDup: true,
           });
         }
       }

@@ -47,6 +47,8 @@ const stickerMaterial = new MeshBasicMaterial({
 });
 const hintMaterial = new MeshBasicMaterial({
   vertexColors: true,
+  transparent: true,
+  opacity: 0.5,
   //    side: DoubleSide,
 });
 const polyMaterial = new MeshBasicMaterial({
@@ -149,6 +151,7 @@ class StickerDef {
   public indEnd: number;
   public ind2Start: number = 0;
   public ind2End: number = 0;
+  public isDup: boolean;
   constructor(
     public filler: Filler,
     stickerDat: StickerDatSticker,
@@ -158,6 +161,7 @@ class StickerDef {
       appearance?: ExperimentalFaceletMeshAppearance;
     },
   ) {
+    this.isDup = !!stickerDat.isDup;
     this.colorStart = filler.pos;
     this.indStart = filler.ipos;
     const sdColor = new Color(stickerDat.color).getHex();
@@ -168,7 +172,7 @@ class StickerDef {
     }
     this.faceColor = sdColor;
     const coords = stickerDat.coords as number[][];
-    makePoly(filler, coords, this.faceColor, 1, 0);
+    makePoly(filler, coords, this.faceColor, 1, this.isDup ? 4: 0);
     this.hintIndStart = filler.ipos;
     let highArea = 0;
     let goodFace = null;
@@ -196,7 +200,7 @@ class StickerDef {
         coords[j][2] + norm.z,
       ]);
     }
-    makePoly(filler, hintCoords, this.faceColor, 1, hintStickers ? 2 : 4);
+    makePoly(filler, hintCoords, this.faceColor, 1, hintStickers && !this.isDup ? 2 : 4);
     this.colorEnd = filler.pos;
     this.indEnd = filler.ipos;
   }
@@ -207,7 +211,7 @@ class StickerDef {
     black: number,
   ) {
     this.ind2Start = filler.ipos;
-    makePoly(filler, foundationDat.coords as number[][], black, 0.999, 6);
+    makePoly(filler, foundationDat.coords as number[][], black, 0.999, this.isDup ? 4 : 6);
     this.ind2End = filler.ipos;
   }
 
@@ -215,7 +219,7 @@ class StickerDef {
     faceletMeshAppearance: ExperimentalFaceletMeshAppearance,
   ): void {
     let c = 0;
-    let indv = 2;
+    let indv = this.isDup ? 4 : 2;
     switch (faceletMeshAppearance) {
       case "regular":
         c = this.origColor;
