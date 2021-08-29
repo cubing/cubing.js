@@ -53,13 +53,13 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           console.log(new Error("We should be disconnected!"));
           return;
         }
-        if ("experimentalUpdateOptions" in (await this.twisty3DPuzzle())) {
-          ((await this.twisty3DPuzzle()) as Cube3D).experimentalUpdateOptions({
-            hintFacelets:
-              hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
-          });
-          this.scheduleRender();
-        }
+        (
+          (await this.twisty3DPuzzle()) as Cube3D | PG3D
+        ).experimentalUpdateOptions({
+          hintFacelets:
+            hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
+        });
+        this.scheduleRender();
       },
     );
     addListener(
