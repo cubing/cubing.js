@@ -11,7 +11,9 @@
 
 <a href="https://alpha.twizzle.net/"><img src="./src/sites/alpha.twizzle.net/twizzle-social-media-image.png" width="256">
 
-Twizzle</a> is based on `cubing.js`, and is currently being developed at [`src/sites/alpha.twizzle.net`](./src/sites/alpha.twizzle.net/).
+Twizzle</a> is the spiritual successor to [alg.cubing.net](https://alg.cubing.net/), based on `cubing.js`. It is currently being developed at [`src/sites/alpha.twizzle.net`](./src/sites/alpha.twizzle.net/).
+
+See the [Twizzle Diaries](https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3NgpDbzN4VkcfjEZSQ_TYQv_OEjbjF) video series for more information on Twizzle's vision and use cases.
 
 ## Documentation
 
