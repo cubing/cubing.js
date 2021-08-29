@@ -4,6 +4,19 @@ Pull requests are welcome for any part of this project. Please feel free to send
 
 If you have any thoughts about bigger contributions, please consider [filing an issue](https://github.com/cubing/cubing.js/issues/new) to discuss it before sending a pull request. (Since we're still [below version 1.0](https://semver.org/#spec-item-4), some relevant design choices are still not settled or written down yet.)
 
+## First-Time Contributors
+
+If this is your first time contributing to a project on Github, these are the steps you need to take to contribute code:
+
+1. Create a fork of `cubing.js` 
+2. Install [Git](https://git-scm.com/downloads)
+3. Clone your forked version of `cubing.js` to your computer
+4. Create a new branch in your cloned project, and make the changes you would like to make 
+5. Push your changes to your forked cubing.js repo
+6. Create a pull request in `cubing.js`, with your new branch from your forked repo as the source.
+
+Youtube has many [beginners guides](https://www.youtube.com/watch?v=RGOj5yH7evk) to Git and Github if you would like more information.
+
 ## Development
 
 Please see the [development instruction in `README.md`](./README.md#development) for how to work on `cubing.js`.
