@@ -143,7 +143,6 @@ class StickerDef {
   public faceColor: number;
   public twistVal: number = -1;
   public colorStart: number;
-  public hintColorStart: number;
   public colorEnd: number;
   public hintIndStart: number;
   public indStart: number;
@@ -170,7 +169,6 @@ class StickerDef {
     this.faceColor = sdColor;
     const coords = stickerDat.coords as number[][];
     makePoly(filler, coords, this.faceColor, 1, 0);
-    this.hintColorStart = filler.pos;
     this.hintIndStart = filler.ipos;
     let highArea = 0;
     let goodFace = null;
@@ -242,7 +240,7 @@ class StickerDef {
         indv = 4;
     }
     this.origColorAppearance = c;
-    for (let i=this.hintColorStart; i<this.colorEnd; i += 3) {
+    for (let i=this.colorStart; i<this.colorEnd; i += 3) {
       this.filler.colors[this.filler.pos + i] = c >> 16;
       this.filler.colors[this.filler.pos + i] = (c >> 8) & 255;
       this.filler.colors[this.filler.pos + i] = c >> 16;
