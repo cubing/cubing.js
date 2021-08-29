@@ -4,10 +4,13 @@ import {
   Color,
   DoubleSide,
   Euler,
+  FrontSide,
   Group,
   Mesh,
   MeshBasicMaterial,
   Object3D,
+  Texture,
+  TextureLoader,
   Triangle,
   Vector3,
 } from "three";
@@ -18,6 +21,7 @@ import {
 } from "../../../../kpuzzle";
 import { experimentalTransformationForQuantumMove } from "../../../../kpuzzle";
 import type { StickerDat, StickerDatSticker } from "../../../../puzzle-geometry";
+import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry";
 import {
   ExperimentalFaceletMeshAppearance,
   experimentalGetFaceletAppearance,
@@ -38,31 +42,34 @@ const foundationMaterial = new MeshBasicMaterial({
   //  transparent: true,
   //  opacity: 0.75,
 });
-const stickerMaterial = new MeshBasicMaterial({
-  vertexColors: true,
-  //    side: DoubleSide,
-});
 const polyMaterial = new MeshBasicMaterial({
   visible: false,
 });
 
 class Filler {
   pos: number;
+  uvpos: number;
   ipos: number;
   vertices: Float32Array;
+  uvs: Float32Array;
   colors: Uint8Array;
   ind: Uint8Array;
-  constructor(public sz: number, public colored: boolean = true) {
+  constructor(public sz: number, public colored: boolean = true, public tm?: TextureMapper) {
     this.vertices = new Float32Array(9 * sz);
+    if (tm) {
+      // we double this because we use copyWithin to update
+      this.uvs = new Float32Array(12 * sz);
+    }
     if (colored) {
       this.colors = new Uint8Array(9 * sz);
       this.ind = new Uint8Array(sz);
     }
     this.pos = 0;
+    this.uvpos = 0;
     this.ipos = 0;
   }
 
-  add(pt: number[], c: number) {
+  add(pt: number[], c: number, fn: number) {
     this.vertices[this.pos] = pt[0];
     this.vertices[this.pos + 1] = pt[1];
     this.vertices[this.pos + 2] = pt[2];
@@ -70,6 +77,12 @@ class Filler {
     this.colors[this.pos + 1] = (c >> 8) & 255;
     this.colors[this.pos + 2] = c & 255;
     this.pos += 3;
+    if (this.tm && fn >= 0) {
+      const uv = this.tm.getuv(fn, pt);
+      this.uvs[this.uvpos] = uv[0];
+      this.uvs[this.uvpos + 1] = uv[1];
+      this.uvpos += 2;
+    }
   }
 
   addUncolored(pt: number[]) {
@@ -88,6 +101,9 @@ class Filler {
     if (this.colored) {
       geo.setAttribute("color", new BufferAttribute(this.colors, 3, true));
     }
+    if (this.tm) {
+      geo.setAttribute("uv", new BufferAttribute(this.uvs, 2));
+    }
   }
 
   makeGroups(geo: BufferGeometry) {
@@ -101,6 +117,11 @@ class Filler {
       geo.addGroup(3 * si, 3 * (i - si), iv);
     }
   }
+
+  saveUvs() {
+    this.uvs.copyWithin(this.uvpos, 0, this.uvpos);
+    this.vertices.copyWithin(this.pos, 0, this.pos);
+  }
 }
 
 function makePoly(
@@ -110,6 +131,7 @@ function makePoly(
   scale: number,
   ind: number,
   faceArray: number[],
+  facenum: number,
 ): void {
   let ncoords: number[][] = coords;
   if (scale !== 1) {
@@ -121,9 +143,9 @@ function makePoly(
   }
   for (let g = 1; g + 1 < ncoords.length; g++) {
     faceArray.push(filler.ipos);
-    filler.add(ncoords[0], color);
-    filler.add(ncoords[g], color);
-    filler.add(ncoords[g + 1], color);
+    filler.add(ncoords[0], color, facenum);
+    filler.add(ncoords[g], color, facenum);
+    filler.add(ncoords[g + 1], color, facenum);
     filler.setind(ind);
   }
 }
@@ -134,6 +156,8 @@ class StickerDef {
   public faceColor: number;
   public faceArray: number[] = [];
   public twistVal: number = -1;
+  public uvStart: number;
+  public uvEnd: number;
   constructor(
     public filler: Filler,
     stickerDat: StickerDatSticker,
@@ -143,6 +167,7 @@ class StickerDef {
       appearance?: ExperimentalFaceletMeshAppearance;
     },
   ) {
+    this.uvStart = filler.uvpos;
     const sdColor = new Color(stickerDat.color).getHex();
     this.origColor = sdColor;
     this.origColorAppearance = sdColor;
@@ -151,7 +176,7 @@ class StickerDef {
     }
     this.faceColor = sdColor;
     const coords = stickerDat.coords as number[][];
-    makePoly(filler, coords, this.faceColor, 1, 0, this.faceArray);
+    makePoly(filler, coords, this.faceColor, 1, 0, this.faceArray, stickerDat.face);
     if (hintStickers) {
       let highArea = 0;
       let goodFace = null;
@@ -191,8 +216,9 @@ class StickerDef {
           coords[j][2] + norm.z,
         ]);
       }
-      makePoly(filler, hintCoords, this.faceColor, 1, 0, this.faceArray);
+      makePoly(filler, hintCoords, this.faceColor, 1, 0, this.faceArray, stickerDat.face);
     }
+    this.uvEnd = filler.uvpos;
   }
 
   public addFoundation(
@@ -207,6 +233,7 @@ class StickerDef {
       0.999,
       2,
       this.faceArray,
+      -1,
     );
   }
 
@@ -237,7 +264,9 @@ class StickerDef {
     }
   }
 
-  public setColor(c: number): number {
+  public setColor(orig: StickerDef): number {
+    this.filler.uvs.copyWithin(this.uvStart, orig.uvStart + this.filler.uvpos, orig.uvEnd + this.filler.uvpos);
+    const c = orig.origColorAppearance;
     if (this.faceColor !== c) {
       this.faceColor = c;
       const r = c >> 16;
@@ -327,6 +356,7 @@ const PG_SCALE = 0.5;
  *  is visible in only a single mesh.
  */
 export class PG3D extends Object3D implements Twisty3DPuzzle {
+  [x: string]: any;
   private stickers: { [key: string]: StickerDef[][] };
   private axesInfo: { [key: string]: AxisInfo };
 
@@ -339,6 +369,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   protected fixedGeo: BufferGeometry;
   protected lastPos: PuzzlePosition;
   protected lastMove: Transformation;
+  protected texture: Texture;
 
   #pendingStickeringUpdate: boolean = false;
 
@@ -354,6 +385,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   ) {
     super();
 
+ //   this.texture = new TextureLoader().load("/experiments.cubing.net/cubing.js/twisty/mkbhd-sprite-red.png");
+//  this.texture = new TextureLoader().load("/experiments.cubing.net/cubing.js/twisty/supercube-sprite.png");
+    this.texture = new TextureLoader().load("/experiments.cubing.net/cubing.js/twisty/world-map.png");
     this.axesInfo = {};
     const axesDef = this.pgdat.axis as any[];
     for (const axis of axesDef) {
@@ -361,6 +395,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     const stickers = this.pgdat.stickers as any[];
     this.stickers = {};
+    const stickerMaterial = new MeshBasicMaterial({
+      map: this.texture,
+      side: FrontSide,
+    });
     const materialArray1 = [
       stickerMaterial,
       polyMaterial,
@@ -385,7 +423,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const sides = stickers[si].coords.length;
       triangleCount += multiplier * (sides - 2);
     }
-    const filler = new Filler(triangleCount);
+    const filler = new Filler(triangleCount, true, pgdat.textureMapper);
     const black = 0;
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
@@ -447,6 +485,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.add(facedef.cubie);
       this.controlTargets.push(facedef.cubie.children[0]);
     }
+    filler.saveUvs(); // this line must precede addPositionListener!
     cursor!.addPositionListener(this);
   }
 
@@ -507,7 +546,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           const pieces2 = pieces[0];
           for (let i = 0; i < pieces2.length; i++) {
             const ni = pos2.permutation[i];
-            colormods += pieces2[i].setColor(pieces2[ni].origColorAppearance);
+            colormods += pieces2[i].setColor(pieces2[ni]);
           }
         } else {
           for (let ori = 0; ori < orin; ori++) {
@@ -515,9 +554,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
             for (let i = 0; i < pieces2.length; i++) {
               const nori = (ori + orin - pos2.orientation[i]) % orin;
               const ni = pos2.permutation[i];
-              colormods += pieces2[i].setColor(
-                pieces[nori][ni].origColorAppearance,
-              );
+              colormods += pieces2[i].setColor(pieces[nori][ni]);
             }
           }
         }
@@ -584,14 +621,22 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.filler.makeGroups(this.fixedGeo);
     }
     if (colormods) {
+      /*
       (this.fixedGeo.getAttribute("color") as BufferAttribute).updateRange = {
         offset: 0,
         count: 9 * this.foundationBound,
       };
       (this.fixedGeo.getAttribute("color") as BufferAttribute).needsUpdate =
         true;
-    }
-    this.scheduleRenderCallback!();
+        */
+        (this.fixedGeo.getAttribute("uv") as BufferAttribute).updateRange = {
+          offset: 0,
+          count: 6 * this.foundationBound,
+        };
+        (this.fixedGeo.getAttribute("uv") as BufferAttribute).needsUpdate =
+          true;
+      }
+      this.scheduleRenderCallback!();
   }
 
   private ease(fraction: number): number {
