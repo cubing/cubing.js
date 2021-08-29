@@ -1,3 +1,5 @@
+*NB: This information is still in draft form, and should not be relied upon to inform usage of or contribution to `cubing.js`.*
+
 ## Purpose of this document
 
 This document serves to describe `cubing.js`'s approach to documentation in both practical and theoretical terms. Anyone looking to contribute either documentation or new features to `cubing.js` should consult this document.
@@ -24,6 +26,8 @@ This document serves to describe `cubing.js`'s approach to documentation in both
   - Use backticks \` when there is no accompanying link (eg, "`cubing.js` is a project which aims to...")
   - Omit backticks when there is an accompanying link (eg, "Make sure you have [node](https://nodejs.org/en/) installed before...")
   - Reasoning: Universal use of backticks disguises links, leading to confusing navigation
+- Draft documentation should include the following disclaimer at the top of the document:
+  - *NB: This information is still in draft form, and should not be relied upon to inform usage of or contribution to `cubing.js`.*
 
 ## Tooling (TBD)
 
