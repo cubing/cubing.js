@@ -42,7 +42,7 @@ If you want to display algs or solves, the following code is a good way to get s
 You can find more documentation at [js.cubing.net/cubing/](https://js.cubing.net/cubing).  
 The source for the documentation site is currently inside the [docs](./docs/) folder of this repository.
 
-## Development
+## Contributing
 
 Development relies on [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) (installing `node` will install `npm` as well). Once you have installed those, you can run:
 
