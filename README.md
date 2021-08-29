@@ -44,6 +44,8 @@ The source for the documentation site is currently inside the [docs](./docs/) fo
 
 ## Contributing
 
+If you would like to contribute to the development of `cubing.js`, please refer to our [contribution guidelines](CONTRIBUTING.md).
+
 Development relies on [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) (installing `node` will install `npm` as well). Once you have installed those, you can run:
 
 ```shell
