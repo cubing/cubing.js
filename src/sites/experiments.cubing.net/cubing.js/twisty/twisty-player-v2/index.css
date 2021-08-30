@@ -34,12 +34,12 @@ body > #inputs {
   overflow-y: auto;
 }
 
-body > #debuggers {
+body > twisty-player-debugger {
   grid-area: props;
   overflow-y: auto;
 }
 
-#debuggers > div {
+twisty-player-debugger .wrapper {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));

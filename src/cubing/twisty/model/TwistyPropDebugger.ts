@@ -5,6 +5,7 @@ import {
   ManagedCustomElement,
 } from "../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
+import type { TwistyPlayerV2 } from "../views/TwistyPlayerV2";
 import type { AlgIssues } from "./depth-0/AlgProp";
 import type { TwistyPropParent } from "./TwistyProp";
 
@@ -159,3 +160,29 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 }
 
 customElementsShim.define("twisty-prop-debugger", TwistyPropDebugger);
+
+export class TwistyPlayerDebugger extends ManagedCustomElement {
+  constructor(private player: TwistyPlayerV2) {
+    super({ mode: "open" });
+  }
+
+  connectedCallback(): void {
+    this.addCSS(
+      new CSSSource(`
+.wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+}
+`),
+    );
+
+    for (const [key, value] of Object.entries(this.player.model)) {
+      if (key.endsWith("Prop")) {
+        this.addElement(new TwistyPropDebugger(splitFieldName(key), value));
+      }
+    }
+  }
+}
+
+customElementsShim.define("twisty-player-debugger", TwistyPlayerDebugger);
