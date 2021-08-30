@@ -166,7 +166,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     this.valueElem?.animate(
       [
         // keyframes
-        { background: "rgba(140, 190, 250)" },
+        { background: "rgba(90, 160, 253, 0.4)" },
         { background: "transparent" },
       ],
       {
