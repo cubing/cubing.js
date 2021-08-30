@@ -1,5 +1,6 @@
 import type { Alg } from "../../alg";
 import { countMoves } from "../../notation";
+import { ClassListManager } from "../old/dom/element/ClassListManager";
 import {
   CSSSource,
   ManagedCustomElement,
@@ -34,7 +35,7 @@ function truncateAlgForDisplay(alg: Alg): string {
 }
 
 export class TwistyPropDebugger extends ManagedCustomElement {
-  constructor(private name: string, private twistyProp: TwistyPropParent<any>) {
+  constructor(private name: string, public twistyProp: TwistyPropParent<any>) {
     super();
   }
 
@@ -57,34 +58,50 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 .wrapper {
   font-family: Ubuntu, sans-serif;
   display: grid;
-  grid-template-rows: 1.2em 3.5em;
+  grid-template-rows: 1.5em 3.5em;
   max-width: 20em;
 
   border: 1px solid #000;
   overflow: hidden;
-  padding: 0.25em;
   box-sizing: border-box;
 }
 
-.wrapper > * {
+.wrapper > :nth-child(2) {
   border-top: 1px solid #000;
   width: 100%;
   height: 3.5em;
   overflow-wrap: anywhere;
+  padding: 0.25em;
 }
 
 .wrapper > span {
+  padding: 0.25em;
   max-width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+.wrapper.highlight-grandchild-or-further,
+.wrapper.highlight-grandparent-or-further                { background: rgba(0, 0, 0, 0.2); line-height: 1em; }
+.wrapper.highlight-grandparent-or-further > span::before { content: "⏫ "; margin-right: 0.1em; }
+
+.wrapper.highlight-child,
+.wrapper.highlight-parent                { background: rgba(0, 0, 0, 0.6); line-height: 1em; color: white; }
+.wrapper.highlight-parent > span::before { content: "🔼 "; margin-right: 0.1em; }
+
+.wrapper.highlight-self                { background: rgba(0, 0, 0, 0.8); line-height: 1em; color: white; }
+.wrapper.highlight-self > span::before { content: "⭐️ "; margin-right: 0.1em; }
+
+.wrapper.highlight-child > span::before { content: "🔽 "; margin-right: 0.1em; }
+
+.wrapper.highlight-grandchild-or-further > span::before { content: "⏬ "; margin-right: 0.1em; }
     `),
     );
   }
 
   async onPropRaw(): Promise<void> {
     // TODO: Animate `opacity` on overlapping elements for better perf.
-    this.animate(
+    this.valueElem?.animate(
       [
         // keyframes
         { background: "rgba(244, 133, 66, 0.4)" },
@@ -146,7 +163,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     }
 
     // TODO: Animate `opacity` on overlapping elements for better perf.
-    this.contentWrapper.animate(
+    this.valueElem?.animate(
       [
         // keyframes
         { background: "rgba(140, 190, 250)" },
@@ -156,6 +173,27 @@ export class TwistyPropDebugger extends ManagedCustomElement {
         duration: 500,
       },
     );
+  }
+
+  #highlightClassManager = new ClassListManager(this, "highlight-", [
+    "none",
+    "grandparent-or-further",
+    "parent",
+    "self",
+    "child",
+    "grandchild-or-further",
+  ]);
+
+  setHighlight(
+    highlightType:
+      | "none"
+      | "grandparent-or-further"
+      | "parent"
+      | "self"
+      | "child"
+      | "grandchild-or-further",
+  ): void {
+    this.#highlightClassManager.setValue(highlightType);
   }
 }
 
@@ -179,9 +217,83 @@ export class TwistyPlayerDebugger extends ManagedCustomElement {
 
     for (const [key, value] of Object.entries(this.player.model)) {
       if (key.endsWith("Prop")) {
-        this.addElement(new TwistyPropDebugger(splitFieldName(key), value));
+        const twistyPropDebugger = this.addElement(
+          new TwistyPropDebugger(splitFieldName(key), value),
+        );
+        this.twistyPropDebuggers.set(value, twistyPropDebugger);
+        this.parentPropElems.set(twistyPropDebugger, new Set());
+        this.childPropElems.set(twistyPropDebugger, new Set());
+
+        twistyPropDebugger.addEventListener("click", () => {
+          this.highlightFamilyTree(twistyPropDebugger);
+        });
       }
     }
+
+    for (const twistyPropDebuggerParent of this.twistyPropDebuggers.values()) {
+      for (const childProp of twistyPropDebuggerParent.twistyProp.debugGetChildren()) {
+        const childElem = this.twistyPropDebuggers.get(childProp)!;
+        if (!childElem) {
+          throw new Error("inconsistency!");
+        }
+        this.parentPropElems.get(childElem)!.add(twistyPropDebuggerParent);
+        this.childPropElems.get(twistyPropDebuggerParent)!.add(childElem);
+      }
+    }
+  }
+
+  twistyPropDebuggers: Map<TwistyPropParent<any>, TwistyPropDebugger> =
+    new Map();
+
+  parentPropElems: Map<TwistyPropDebugger, Set<TwistyPropDebugger>> = new Map();
+  childPropElems: Map<TwistyPropDebugger, Set<TwistyPropDebugger>> = new Map();
+
+  highlightFamilyTree(prop: TwistyPropDebugger) {
+    for (const propToClear of this.twistyPropDebuggers.values()) {
+      propToClear.setHighlight("none");
+    }
+
+    prop.setHighlight("self");
+
+    const children = this.childPropElems.get(prop)!;
+    for (const descendant of this.getDescendants(prop)) {
+      descendant.setHighlight(
+        children.has(descendant) ? "child" : "grandchild-or-further",
+      );
+    }
+
+    const parents = this.parentPropElems.get(prop)!;
+    for (const ancestor of this.getAncestors(prop)) {
+      ancestor.setHighlight(
+        parents.has(ancestor) ? "parent" : "grandparent-or-further",
+      );
+    }
+  }
+
+  getDescendants(
+    prop: TwistyPropDebugger,
+    accumulator: Set<TwistyPropDebugger> = new Set(),
+  ): Set<TwistyPropDebugger> {
+    for (const child of this.childPropElems.get(prop) ?? []) {
+      if (!accumulator.has(child)) {
+        accumulator.add(child);
+        this.getDescendants(child, accumulator);
+      }
+    }
+    return accumulator;
+  }
+
+  getAncestors(
+    prop: TwistyPropDebugger,
+    accumulator: Set<TwistyPropDebugger> = new Set(),
+  ): Set<TwistyPropDebugger> {
+    for (const child of this.parentPropElems.get(prop) ?? []) {
+      if (!accumulator.has(child)) {
+        accumulator.add(child);
+        this.getAncestors(child, accumulator);
+      }
+    }
+    return accumulator;
   }
 }
 
