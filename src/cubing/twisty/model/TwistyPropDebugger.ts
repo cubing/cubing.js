@@ -83,18 +83,18 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 
 .wrapper.highlight-grandchild-or-further,
 .wrapper.highlight-grandparent-or-further                { background: rgba(0, 0, 0, 0.2); line-height: 1em; }
-.wrapper.highlight-grandparent-or-further > span::before { content: "⏫ "; margin-right: 0.1em; }
+.wrapper.highlight-grandparent-or-further > span::before { content: "⏬ "; margin-right: 0.1em; }
 
 .wrapper.highlight-child,
 .wrapper.highlight-parent                { background: rgba(0, 0, 0, 0.6); line-height: 1em; color: white; }
-.wrapper.highlight-parent > span::before { content: "🔼 "; margin-right: 0.1em; }
+.wrapper.highlight-parent > span::before { content: "🔽 "; margin-right: 0.1em; }
 
 .wrapper.highlight-self                { background: rgba(0, 0, 0, 0.8); line-height: 1em; color: white; }
 .wrapper.highlight-self > span::before { content: "⭐️ "; margin-right: 0.1em; }
 
-.wrapper.highlight-child > span::before { content: "🔽 "; margin-right: 0.1em; }
+.wrapper.highlight-child > span::before { content: "🔼 "; margin-right: 0.1em; }
 
-.wrapper.highlight-grandchild-or-further > span::before { content: "⏬ "; margin-right: 0.1em; }
+.wrapper.highlight-grandchild-or-further > span::before { content: "⏫ "; margin-right: 0.1em; }
     `),
     );
   }
