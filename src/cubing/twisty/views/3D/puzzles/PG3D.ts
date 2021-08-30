@@ -11,7 +11,6 @@ import {
   Triangle,
   Vector3,
 } from "three";
-import type { HintFaceletStyle } from "../../../../../../dist/types/twisty/old/dom/TwistyPlayerConfig";
 import {
   areTransformationsEquivalent,
   KPuzzleDefinition,
