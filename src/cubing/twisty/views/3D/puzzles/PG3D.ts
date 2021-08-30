@@ -228,11 +228,17 @@ class StickerDef {
     this.ind2End = filler.ipos;
   }
 
+  public setHintStickers(hintStickers: boolean): void {
+    let indv = this.isDup || !hintStickers ? 4 : 2;
+    for (let i = this.hintIndStart; i < this.indEnd; i++) {
+      this.filler.ind[i] = indv;
+    }  
+  }
+
   public setAppearance(
     faceletMeshAppearance: ExperimentalFaceletMeshAppearance,
   ): void {
     let c = 0;
-    let indv = this.isDup ? 4 : 2;
     switch (faceletMeshAppearance) {
       case "regular":
         c = this.origColor;
@@ -252,17 +258,14 @@ class StickerDef {
         break;
       case "invisible":
         c = this.origColor;
-        indv = 4;
     }
     this.origColorAppearance = c;
     for (let i = this.colorStart; i < this.colorEnd; i += 3) {
       this.filler.colors[this.filler.pos + i] = c >> 16;
-      this.filler.colors[this.filler.pos + i] = (c >> 8) & 255;
-      this.filler.colors[this.filler.pos + i] = c >> 16;
+      this.filler.colors[this.filler.pos + i + 1] = (c >> 8) & 255;
+      this.filler.colors[this.filler.pos + i + 2] = c & 255;
     }
-    for (let i = this.hintIndStart; i < this.indEnd; i++) {
-      this.filler.ind[i] = indv;
-    }
+    this.setHintStickers(faceletMeshAppearance !== "invisible" && !this.isDup);
   }
 
   public setColor(sd: StickerDef): number {
@@ -658,10 +661,17 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     hintFacelets?: HintFaceletStyle;
     showFoundation?: boolean; // TODO: better name
   }): void {
-    if (options.hintFacelets) {
-      const showHintFacelets = options.hintFacelets !== "none";
-      console.log("should show hint facelets:", showHintFacelets);
+    if (options.hintFacelets === "none") {
+      this.materialArray1[2] = polyMaterial;
+      this.materialArray2[3] = polyMaterial;
+    } else {
+      this.materialArray1[2] = hintMaterial;
+      this.materialArray2[3] = hintMaterial;
     }
-    // ignore unsupported options
+    this.#pendingStickeringUpdate = true;
+    if (this.lastPos) {
+      this.onPositionChange(this.lastPos);
+    }
+    this.scheduleRenderCallback();
   }
 }
