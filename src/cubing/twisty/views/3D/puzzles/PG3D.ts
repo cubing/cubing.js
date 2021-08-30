@@ -30,6 +30,7 @@ import {
 import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
 import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
 import { smootherStep } from "../../../old/animation/easing";
+import type { HintFaceletStyle } from "../../../old/dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
 
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";

@@ -36,6 +36,10 @@ export abstract class TwistyPropParent<T> {
     return false;
   }
 
+  debugGetChildren(): Array<TwistyPropDerived<any, any>> {
+    return Array.from(this.#children.values());
+  }
+
   // Propagation
 
   #children: Set<TwistyPropDerived<any, any>> = new Set();

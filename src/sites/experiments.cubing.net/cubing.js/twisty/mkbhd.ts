@@ -33,6 +33,10 @@ const spriteURL =
 const hintSpriteURL =
   new URL(location.href).searchParams.get("hint-sprite") ?? mkbhdHintSpriteURL;
 
+const foundationOpacity = parseFloat(
+  new URL(location.href).searchParams.get("foundation-opacity") ?? "1",
+);
+
 // Common picture cube demo code.
 
 let haveHadMoveInput = false;
@@ -46,6 +50,9 @@ if (tempo !== null) {
 }
 
 setTimeout(() => {
+  (twistyPlayer.twisty3D as Cube3D).experimentalSetFoundationOpacity(
+    foundationOpacity,
+  );
   twistyPlayer.timeline.play(); // TODO: add autoplay
 }, 1000);
 twistyPlayer.timeline.addActionListener({

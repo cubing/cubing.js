@@ -4,10 +4,7 @@
 import { Alg } from "../../../../../cubing/alg";
 import { TwistyPlayerV2 } from "../../../../../cubing/twisty";
 import { indexerStrategyNames } from "../../../../../cubing/twisty/model/depth-0/IndexerConstructorRequestProp";
-import {
-  splitFieldName,
-  TwistyPropDebugger,
-} from "../../../../../cubing/twisty/model/TwistyPropDebugger";
+import { TwistyPlayerDebugger } from "../../../../../cubing/twisty/model/TwistyPropDebugger";
 import {
   backgroundThemes,
   controlsLocations,
@@ -28,23 +25,6 @@ console.log("Loading stub file.");
 
 showStats(true);
 
-function addDebuggers(player: TwistyPlayerV2): void {
-  const debuggersWrapper = document.body.appendChild(
-    document.createElement("div"),
-  );
-  debuggersWrapper.id = "debuggers";
-  const debuggersGrid = debuggersWrapper.appendChild(
-    document.createElement("div"),
-  );
-  for (const [key, value] of Object.entries(player.model)) {
-    if (key.endsWith("Prop")) {
-      debuggersGrid.appendChild(
-        new TwistyPropDebugger(splitFieldName(key), value),
-      );
-    }
-  }
-}
-
 (async () => {
   const puzzle = (new URL(location.href).searchParams.get("puzzle") ??
     "gigaminx") as PuzzleID;
@@ -53,7 +33,7 @@ function addDebuggers(player: TwistyPlayerV2): void {
     new TwistyPlayerV2({ puzzle }),
   );
 
-  addDebuggers(twistyPlayer);
+  document.body.appendChild(new TwistyPlayerDebugger(twistyPlayer));
 
   const alg =
     puzzle === "gigaminx"
