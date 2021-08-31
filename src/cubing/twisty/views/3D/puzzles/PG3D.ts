@@ -58,10 +58,8 @@ class Filler {
   ind: Uint8Array;
   constructor(public sz: number, public colored: boolean = true) {
     this.vertices = new Float32Array(9 * sz);
-    if (colored) {
-      this.colors = new Uint8Array(18 * sz);
-      this.ind = new Uint8Array(sz);
-    }
+    this.colors = new Uint8Array(18 * sz);
+    this.ind = new Uint8Array(sz);
     this.pos = 0;
     this.ipos = 0;
   }
@@ -89,9 +87,9 @@ class Filler {
 
   setAttributes(geo: BufferGeometry) {
     geo.setAttribute("position", new BufferAttribute(this.vertices, 3));
-    if (this.colored) {
-      geo.setAttribute("color", new BufferAttribute(this.colors, 3, true));
-    }
+    // the geometry only needs the first half of the array
+    const sa = this.colors.subarray(0, 9 * this.sz);
+    geo.setAttribute("color", new BufferAttribute(sa, 3, true));
   }
 
   makeGroups(geo: BufferGeometry) {
@@ -301,7 +299,7 @@ class HitPlaneDef {
   constructor(hitface: any) {
     this.cubie = new Group();
     const coords = hitface.coords as number[][];
-    const filler = new Filler(coords.length - 2, true);
+    const filler = new Filler(coords.length - 2);
     for (let g = 1; g + 1 < coords.length; g++) {
       filler.addUncolored(coords[0]);
       filler.addUncolored(coords[g]);
