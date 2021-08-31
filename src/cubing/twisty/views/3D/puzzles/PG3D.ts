@@ -283,6 +283,11 @@ class StickerDef {
         9 * sd.stickerStart + this.filler.pos,
         9 * sd.stickerEnd + this.filler.pos,
       );
+      this.filler.colors.copyWithin(
+        9 * this.hintStart,
+        9 * sd.hintStart + this.filler.pos,
+        9 * sd.hintEnd + this.filler.pos,
+      );
       return 1;
     } else {
       return 0;
