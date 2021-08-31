@@ -61,9 +61,11 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   grid-template-rows: 1.5em 3.5em;
   max-width: 20em;
 
-  border: 1px solid #000;
+  border: 2px solid #ddd;
   overflow: hidden;
   box-sizing: border-box;
+
+  cursor: pointer;
 }
 
 .wrapper > :nth-child(2) {
@@ -79,22 +81,40 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   max-width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
+  line-height: 1em;
 }
 
+.wrapper.highlight-de-emphasize {
+  opacity: 0.25;
+}
+
+/* .wrapper:hover > span::before { content: "⭐️ "; margin-right: 0.1em; } */
+
 .wrapper.highlight-grandchild-or-further,
-.wrapper.highlight-grandparent-or-further                { background: rgba(0, 0, 0, 0.2); line-height: 1em; }
+.wrapper.highlight-grandparent-or-further                { background: rgba(0, 0, 0, 0.2); }
 .wrapper.highlight-grandparent-or-further > span::before { content: "⏬ "; margin-right: 0.1em; }
 
 .wrapper.highlight-child,
-.wrapper.highlight-parent                { background: rgba(0, 0, 0, 0.6); line-height: 1em; color: white; }
+.wrapper.highlight-parent                { background: rgba(0, 0, 0, 0.6); color: white; }
 .wrapper.highlight-parent > span::before { content: "🔽 "; margin-right: 0.1em; }
 
-.wrapper.highlight-self                { background: rgba(0, 0, 0, 0.8); line-height: 1em; color: white; }
+.wrapper.highlight-self                { background: rgba(0, 0, 0, 0.8); color: white; }
 .wrapper.highlight-self > span::before { content: "⭐️ "; margin-right: 0.1em; }
 
 .wrapper.highlight-child > span::before { content: "🔼 "; margin-right: 0.1em; }
 
 .wrapper.highlight-grandchild-or-further > span::before { content: "⏫ "; margin-right: 0.1em; }
+
+.wrapper:hover {
+  border: 2px solid #000;
+  opacity: 1;
+}
+
+.wrapper.highlight-self:hover {
+  /* border: 2px solid #f00; */
+}
+.wrapper.highlight-self:hover > span::before { content: "🌟 "; margin-right: 0.1em; }
+
     `),
     );
   }
@@ -176,7 +196,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
   }
 
   #highlightClassManager = new ClassListManager(this, "highlight-", [
-    "none",
+    "de-emphasize",
     "grandparent-or-further",
     "parent",
     "self",
@@ -186,14 +206,19 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 
   setHighlight(
     highlightType:
-      | "none"
+      | "de-emphasize"
       | "grandparent-or-further"
       | "parent"
       | "self"
       | "child"
-      | "grandchild-or-further",
+      | "grandchild-or-further"
+      | null,
   ): void {
-    this.#highlightClassManager.setValue(highlightType);
+    if (highlightType !== null) {
+      this.#highlightClassManager.setValue(highlightType);
+    } else {
+      this.#highlightClassManager.clearValue();
+    }
   }
 }
 
@@ -211,6 +236,20 @@ export class TwistyPlayerDebugger extends ManagedCustomElement {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+}
+
+twisty-prop-debugger.hidden {
+  /* display: none; */
+}
+
+twisty-prop-debugger.first-in-group,
+twisty-prop-debugger.highlighted {
+  /* grid-column-start: 1; */
+}
+
+twisty-prop-debugger.highlighted {
+  /* grid-column: 1 / -1; */
+  /* margin: 1em 0; */
 }
 `),
     );
@@ -248,25 +287,55 @@ export class TwistyPlayerDebugger extends ManagedCustomElement {
   parentPropElems: Map<TwistyPropDebugger, Set<TwistyPropDebugger>> = new Map();
   childPropElems: Map<TwistyPropDebugger, Set<TwistyPropDebugger>> = new Map();
 
+  currentHighlighted: TwistyPropDebugger | null = null;
   highlightFamilyTree(prop: TwistyPropDebugger) {
+    if (this.currentHighlighted === prop) {
+      for (const propToClear of this.twistyPropDebuggers.values()) {
+        propToClear.setHighlight(null);
+        propToClear.classList.remove("hidden");
+        propToClear.classList.remove("first-in-group");
+        propToClear.classList.remove("highlighted");
+      }
+      this.currentHighlighted = null;
+      return;
+    }
+
     for (const propToClear of this.twistyPropDebuggers.values()) {
-      propToClear.setHighlight("none");
+      propToClear.setHighlight("de-emphasize");
+      propToClear.classList.add("hidden");
+      propToClear.classList.remove("first-in-group");
+      propToClear.classList.remove("highlighted");
     }
 
     prop.setHighlight("self");
+    prop.classList.remove("hidden");
+    prop.classList.add("highlighted");
+    this.currentHighlighted = prop;
 
     const children = this.childPropElems.get(prop)!;
+    let firstInGroup: boolean = true;
     for (const descendant of this.getDescendants(prop)) {
       descendant.setHighlight(
         children.has(descendant) ? "child" : "grandchild-or-further",
       );
+      descendant.classList.remove("hidden");
+      if (firstInGroup) {
+        descendant.classList.add("first-in-group");
+        firstInGroup = false;
+      }
     }
 
     const parents = this.parentPropElems.get(prop)!;
+    firstInGroup = true;
     for (const ancestor of this.getAncestors(prop)) {
       ancestor.setHighlight(
         parents.has(ancestor) ? "parent" : "grandparent-or-further",
       );
+      ancestor.classList.remove("hidden");
+      if (firstInGroup) {
+        ancestor.classList.add("first-in-group");
+        firstInGroup = false;
+      }
     }
   }
 
