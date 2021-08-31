@@ -45,6 +45,11 @@ import {
 import { centermassface, expandfaces, FaceTree, Quat } from "./Quat";
 
 const DEFAULT_COLOR_FRACTION = 0.77;
+const SVG_2D_SHRINK = 0.92;
+
+export interface TextureMapper {
+  getuv(fn: number, threed: number[]): number[];
+}
 
 export interface StickerDatSticker {
   coords: number[][];
@@ -52,6 +57,7 @@ export interface StickerDatSticker {
   orbit: string;
   ord: number;
   ori: number;
+  face: number;
   isDup?: boolean;
 }
 
@@ -62,6 +68,8 @@ export interface StickerDatFace {
 
 export type StickerDatAxis = [number[], string, number];
 
+
+
 export interface StickerDat {
   stickers: StickerDatSticker[];
   foundations: StickerDatSticker[];
@@ -69,6 +77,7 @@ export interface StickerDat {
   axis: StickerDatAxis[];
   unswizzle(mv: Move): string;
   notationMapper: NotationMapper;
+  textureMapper: TextureMapper;
 }
 
 // TODO: Remove this once we no longer have prefix restrictions.
@@ -509,7 +518,6 @@ export class PuzzleGeometry {
   public duplicatedFaces: number[] = []; // which faces are duplicated
   public duplicatedCubies: number[] = []; // which cubies are duplicated
   public fixedCubie: number = -1; // fixed cubie, if any
-  public svggrips: any[]; // grips from svg generation by svg coordinate
   public net: any = [];
   public colors: any = [];
   public faceorder: any = [];
@@ -660,9 +668,10 @@ export class PuzzleGeometry {
     }
     const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
-    let faces = [getface(planes)];
-    this.edgedistance = faces[0][0].sum(faces[0][1]).smul(0.5).dist(zero);
-    this.vertexdistance = faces[0][0].dist(zero);
+    const firstface = getface(planes);
+    let faces = [firstface];
+    this.edgedistance = firstface[0].sum(firstface[1]).smul(0.5).dist(zero);
+    this.vertexdistance = firstface[0].dist(zero);
     const cutplanes = [];
     const intersects = [];
     let sawface = false; // what cuts did we see?
@@ -706,7 +715,7 @@ export class PuzzleGeometry {
     }
     this.basefaces = [];
     for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(faces[0]);
+      const face = this.baseplanerot[i].rotateface(firstface);
       this.basefaces.push(face);
     }
     //
@@ -721,7 +730,7 @@ export class PuzzleGeometry {
     const faceplanes = [];
     const vertexnames: any[] = [];
     const edgenames: any[] = [];
-    const edgesperface = faces[0].length;
+    const edgesperface = firstface.length;
     function searchaddelement(a: any[], p: Quat, name: any): void {
       for (let i = 0; i < a.length; i++) {
         if (a[i][0].dist(p) < eps) {
@@ -732,7 +741,7 @@ export class PuzzleGeometry {
       a.push([p, name]);
     }
     for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(faces[0]);
+      const face = this.baseplanerot[i].rotateface(firstface);
       for (let j = 0; j < face.length; j++) {
         const jj = (j + 1) % face.length;
         const midpoint = face[j].sum(face[jj]).smul(0.5);
@@ -741,7 +750,7 @@ export class PuzzleGeometry {
     }
     const otherfaces = [];
     for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(faces[0]);
+      const face = this.baseplanerot[i].rotateface(firstface);
       const facelist = [];
       for (let j = 0; j < face.length; j++) {
         const jj = (j + 1) % face.length;
@@ -812,14 +821,14 @@ export class PuzzleGeometry {
       }
     }
     for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(faces[0]);
+      const face = this.baseplanerot[i].rotateface(firstface);
       const faceplane = boundary.rotateplane(this.baseplanerot[i]);
       const facename = faceindextoname[i];
       facenames.push([face, facename]);
       faceplanes.push([faceplane, facename]);
     }
     for (let i = 0; i < this.baseplanerot.length; i++) {
-      const face = this.baseplanerot[i].rotateface(faces[0]);
+      const face = this.baseplanerot[i].rotateface(firstface);
       const facename = faceindextoname[i];
       for (let j = 0; j < face.length; j++) {
         const jj = (j + 1) % face.length;
@@ -935,7 +944,7 @@ export class PuzzleGeometry {
         }
       }
     }
-    let ft = new FaceTree(faces[0]);
+    let ft = new FaceTree(firstface);
     const tar = this.moveplanes2.slice();
     // we want to use Math.random() here but we can't, because when
     // we call multiple times we'll get different orbits/layouts.
@@ -955,6 +964,34 @@ export class PuzzleGeometry {
       console.log("# Faces is now " + faces.length);
     }
     this.stickersperface = faces.length;
+    // the faces when rotated don't preserve the vertex order at this
+    // point.  to improve 3d rendering speed, we would like to preserve
+    // vertex order on rotation.  First, let's see what rotations preserve
+    // the base face; these are the ones we want to work with.
+    const simplerot = [];
+    const cm = centermassface(firstface);
+    for (let i = 0; i < this.rotations.length; i++) {
+      const f = this.rotations[i].rotateface(firstface);
+      if (cm.dist(centermassface(f)) < eps) {
+        simplerot.push(this.rotations[i]);
+      }
+    }
+    const finished = new Array(faces.length);
+    for (let i = 0; i < faces.length; i++) {
+      if (!finished[i]) {
+        finished[i] = true;
+        for (let j = 0; j < simplerot.length; j++) {
+          const f2 = simplerot[j].rotateface(faces[i]);
+          const cm = centermassface(f2);
+          for (let k = i + 1; k < faces.length; k++) {
+            if (!finished[k] && cm.dist(centermassface(faces[k])) < eps) {
+              finished[k] = true;
+              faces[k] = f2;
+            }
+          }
+        }
+      }
+    }
     //  Find and report the shortest edge in any of the faces.  If this
     //  is small the puzzle is probably not practical or displayable.
     let shortedge = 1e99;
@@ -1718,6 +1755,17 @@ export class PuzzleGeometry {
     return r;
   }
 
+  // when adding duplicated faces, we need to ensure we rotate them by one
+  // click, so rendering with textures reflects orientations.
+  private rotateforward(f: any[]): any[] {
+    const r = [];
+    for (let i=1; i < f.length; i++) {
+      r.push(f[i]);
+    }
+    r.push(f[0]);
+    return r;
+  }
+
   public genperms(): void {
     // generate permutations for moves
     if (this.cmovesbyslice.length > 0) {
@@ -1728,6 +1776,7 @@ export class PuzzleGeometry {
     // if orientCenters is set, we find all cubies that have only one
     // sticker and that sticker is in the center of a face, and we
     // introduce duplicate stickers so we can orient them properly.
+    // we rotate the coordinates so texture rendering works properly.
     if (this.orientCenters) {
       for (let k = 0; k < this.cubies.length; k++) {
         if (this.cubies[k].length === 1) {
@@ -1738,8 +1787,8 @@ export class PuzzleGeometry {
             eps
           ) {
             const o = this.basefaces[i].length;
-            for (let m = 0; m < o; m++) {
-              this.cubies[k].push(this.cubies[k][0]);
+            for (let m = 1; m < o; m++) {
+              this.cubies[k].push(this.rotateforward(this.cubies[k][m-1]));
             }
             this.duplicatedFaces[kk] = o;
             this.duplicatedCubies[k] = o;
@@ -1824,8 +1873,7 @@ export class PuzzleGeometry {
         if (
           b.length > 2 &&
           this.orientCenters &&
-          (this.cubies[b[0]].length === 1 ||
-            this.cubies[b[0]][0] === this.cubies[b[0]][1])
+          (this.cubies[b[0]].length === 1 || this.duplicatedCubies[b[0]] > 1)
         ) {
           // is this a real center cubie, around an axis?
           if (
@@ -2506,13 +2554,13 @@ export class PuzzleGeometry {
     return this.getOrientationRotation(rotDesc);
   }
 
-  public generatesvg(
+  public generate2dmapping(
     w: number = 800,
     h: number = 500,
     trim: number = 10,
     threed: boolean = false,
-  ): string {
-    // generate svg to interoperate with Lucas twistysim
+  ): any {
+    // generate a mapping to use for 2D for textures, svg
     w -= 2 * trim;
     h -= 2 * trim;
     function extendedges(a: number[][], n: number): void {
@@ -2526,40 +2574,6 @@ export class PuzzleGeometry {
         dy = dy * cosa - dx * sina;
         dx = ndx;
         a.push([a[i - 1][0] + dx, a[i - 1][1] + dy]);
-      }
-    }
-    // if we don't add this noise to coordinate values, then Safari
-    // doesn't render our polygons correctly.  What a hack.
-    function noise(c: number): number {
-      return c + 0 * (Math.random() - 0.5);
-    }
-    function drawedges(id: string, pts: number[][], color: string): string {
-      return (
-        '<polygon id="' +
-        id +
-        '" class="sticker" style="fill: ' +
-        color +
-        '" points="' +
-        pts.map((p) => noise(p[0]) + " " + noise(p[1])).join(" ") +
-        '"/>\n'
-      );
-    }
-    // What grips do we need?  if rotations, add all grips.
-    let needvertexgrips = this.addrotations;
-    let neededgegrips = this.addrotations;
-    let needfacegrips = this.addrotations;
-    for (let i = 0; i < this.movesetgeos.length; i++) {
-      const msg = this.movesetgeos[i];
-      for (let j = 1; j <= 3; j += 2) {
-        if (msg[j] === "v") {
-          needvertexgrips = true;
-        }
-        if (msg[j] === "f") {
-          needfacegrips = true;
-        }
-        if (msg[j] === "e") {
-          neededgegrips = true;
-        }
       }
     }
     // Find a net from a given face count.  Walk it, assuming we locate
@@ -2686,6 +2700,60 @@ export class PuzzleGeometry {
         }
       }
     }
+    let hix = 0;
+    let hiy = 0;
+    const rot = this.getInitial3DRotation();
+    for (let i = 0; i < this.faces.length; i++) {
+      let face = this.faces[i];
+      if (threed) {
+        face = rot.rotateface(face);
+      }
+      for (let j = 0; j < face.length; j++) {
+        hix = Math.max(hix, Math.abs(face[j].b));
+        hiy = Math.max(hiy, Math.abs(face[j].c));
+      }
+    }
+    const sc2 = Math.min(h / hiy / 2, (w - trim) / hix / 4);
+    const mappt2d = (fn: number, q: Quat): number[] => {
+      if (threed) {
+        q = q.rotatepoint(rot);
+        const xoff2 = 0.5 * trim + 0.25 * w;
+        const xmul = this.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1;
+        return [
+          trim + w * 0.5 + xmul * (xoff2 - q.b * sc2),
+          trim + h * 0.5 + q.c * sc2,
+        ];
+      } else {
+        const g = geos[this.facenames[fn][1]];
+        return [trim + SVG_2D_SHRINK * q.dot(g[0]) + g[2].b,
+                trim + h - SVG_2D_SHRINK * q.dot(g[1]) - g[2].c];
+      }
+    };
+    return mappt2d;
+  }
+
+  public generatesvg(
+    w: number = 800,
+    h: number = 500,
+    trim: number = 10,
+    threed: boolean = false,
+  ): string {
+    const mappt2d = this.generate2dmapping(w, h, trim, threed);
+    // doesn't render our polygons correctly.  What a hack.
+    function noise(c: number): number {
+      return c + 0 * (Math.random() - 0.5);
+    }
+    function drawedges(id: string, pts: number[][], color: string): string {
+      return (
+        '<polygon id="' +
+        id +
+        '" class="sticker" style="fill: ' +
+        color +
+        '" points="' +
+        pts.map((p) => noise(p[0]) + " " + noise(p[1])).join(" ") +
+        '"/>\n'
+      );
+    }
     // Let's build arrays for faster rendering.  We want to map from geo
     // base face number to color, and we want to map from geo face number
     // to 2D geometry.  These can be reused as long as the puzzle overall
@@ -2696,37 +2764,9 @@ export class PuzzleGeometry {
     for (let i = 0; i < this.basefacecount; i++) {
       colormap[i] = this.colors[this.facenames[i][1]];
     }
-    let hix = 0;
-    let hiy = 0;
-    const rot = this.getInitial3DRotation();
-    for (let i = 0; i < this.faces.length; i++) {
-      let face = this.faces[i];
-      face = rot.rotateface(face);
-      for (let j = 0; j < face.length; j++) {
-        hix = Math.max(hix, Math.abs(face[j].b));
-        hiy = Math.max(hiy, Math.abs(face[j].c));
-      }
-    }
-    const sc2 = Math.min(h / hiy / 2, (w - trim) / hix / 4);
-    const mappt2d = (fn: number, q: Quat): number[] => {
-      if (threed) {
-        const xoff2 = 0.5 * trim + 0.25 * w;
-        const xmul = this.baseplanes[fn].rotateplane(rot).d < 0 ? 1 : -1;
-        return [
-          trim + w * 0.5 + xmul * (xoff2 - q.b * sc2),
-          trim + h * 0.5 + q.c * sc2,
-        ];
-      } else {
-        const g = geos[this.facenames[fn][1]];
-        return [trim + q.dot(g[0]) + g[2].b, trim + h - q.dot(g[1]) - g[2].c];
-      }
-    };
     for (let i = 0; i < this.faces.length; i++) {
       let face = this.faces[i];
       const facenum = Math.floor(i / this.stickersperface);
-      if (threed) {
-        face = rot.rotateface(face);
-      }
       facegeo.push(face.map((_: Quat) => mappt2d(facenum, _)));
     }
     const svg = [];
@@ -2753,53 +2793,6 @@ export class PuzzleGeometry {
       }
       svg.push("</g>");
     }
-    const svggrips: any[] = [];
-    function addgrip(
-      onface: number,
-      name: string,
-      pt: Quat,
-      order: number,
-    ): void {
-      const pt2 = mappt2d(onface, pt);
-      for (let i = 0; i < svggrips.length; i++) {
-        if (
-          Math.hypot(pt2[0] - svggrips[i][0], pt2[1] - svggrips[i][1]) < eps
-        ) {
-          return;
-        }
-      }
-      svggrips.push([pt2[0], pt2[1], name, order]);
-    }
-    for (let i = 0; i < this.faceplanes.length; i++) {
-      const baseface = this.facenames[i][0];
-      let facecoords = baseface;
-      if (threed) {
-        facecoords = rot.rotateface(facecoords);
-      }
-      if (needfacegrips) {
-        let pt = this.faceplanes[i][0];
-        if (threed) {
-          pt = pt.rotatepoint(rot);
-        }
-        addgrip(i, this.faceplanes[i][1], pt, polyn);
-      }
-      for (let j = 0; j < baseface.length; j++) {
-        if (neededgegrips) {
-          const mp = baseface[j]
-            .sum(baseface[(j + 1) % baseface.length])
-            .smul(0.5);
-          const ep = findelement(this.edgenames, mp);
-          const mpc = facecoords[j]
-            .sum(facecoords[(j + 1) % baseface.length])
-            .smul(0.5);
-          addgrip(i, this.edgenames[ep][1], mpc, 2);
-        }
-        if (needvertexgrips) {
-          const vp = findelement(this.vertexnames, baseface[j]);
-          addgrip(i, this.vertexnames[vp][1], facecoords[j], this.cornerfaces);
-        }
-      }
-    }
     const html =
       '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n' +
       '<style type="text/css"><![CDATA[' +
@@ -2807,7 +2800,6 @@ export class PuzzleGeometry {
       "]]></style>\n" +
       svg.join("") +
       "</svg>";
-    this.svggrips = svggrips;
     return html;
   }
 
@@ -2854,7 +2846,8 @@ export class PuzzleGeometry {
       avgstickerarea += this.polyarea(faces[i].coords);
     }
     avgstickerarea /= this.faces.length;
-    const trim = (Math.sqrt(avgstickerarea) * (1 - Math.sqrt(colorfrac))) / 2;
+    let trim = (Math.sqrt(avgstickerarea) * (1 - Math.sqrt(colorfrac))) / 2;
+    trim = 0;
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);
       const cubie = this.facetocubies[i][0];
@@ -2885,15 +2878,18 @@ export class PuzzleGeometry {
         orbit: this.cubiesetnames[cubiesetnum],
         ord: cubieord,
         ori: cubieori,
+        face: facenum,
       });
       if (this.duplicatedFaces[i]) {
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
+          coords = this.rotateforward(coords);
           stickers.push({
             coords: toFaceCoords(coords, maxdist),
             color,
             orbit: this.cubiesetnames[cubiesetnum],
             ord: cubieord,
             ori: jj,
+            face: facenum,
             isDup: true,
           });
           foundations.push({
@@ -2902,6 +2898,7 @@ export class PuzzleGeometry {
             orbit: this.cubiesetnames[cubiesetnum],
             ord: cubieord,
             ori: jj,
+            face: facenum,
             isDup: true,
           });
         }
@@ -2928,6 +2925,18 @@ export class PuzzleGeometry {
         return this.unswizzle(mv);
       };
     })().bind(this);
+    const twodmapper = this.generate2dmapping(2880, 2160, 10);
+    const g = (function() {
+      const irot = rot.invrot();
+      return function(facenum: number, coords: number[]): number[] {
+        let q = new Quat(0, coords[0]*maxdist, -coords[1]*maxdist, coords[2]*maxdist);
+        q = q.rotatepoint(irot);
+        const x = twodmapper(facenum, q);
+        x[0] /= 2880 ;
+        x[1] = 1 - x[1] / 2160 ;
+        return x;
+      };
+    })().bind(this);
     return {
       stickers,
       foundations,
@@ -2935,6 +2944,7 @@ export class PuzzleGeometry {
       axis: grips,
       unswizzle: f,
       notationMapper: this.notationMapper,
+      textureMapper: {getuv: g},
     };
   }
 
