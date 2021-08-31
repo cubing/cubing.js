@@ -68,8 +68,6 @@ export interface StickerDatFace {
 
 export type StickerDatAxis = [number[], string, number];
 
-
-
 export interface StickerDat {
   stickers: StickerDatSticker[];
   foundations: StickerDatSticker[];
@@ -1759,7 +1757,7 @@ export class PuzzleGeometry {
   // click, so rendering with textures reflects orientations.
   private rotateforward(f: any[]): any[] {
     const r = [];
-    for (let i=1; i < f.length; i++) {
+    for (let i = 1; i < f.length; i++) {
       r.push(f[i]);
     }
     r.push(f[0]);
@@ -1788,7 +1786,7 @@ export class PuzzleGeometry {
           ) {
             const o = this.basefaces[i].length;
             for (let m = 1; m < o; m++) {
-              this.cubies[k].push(this.rotateforward(this.cubies[k][m-1]));
+              this.cubies[k].push(this.rotateforward(this.cubies[k][m - 1]));
             }
             this.duplicatedFaces[kk] = o;
             this.duplicatedCubies[k] = o;
@@ -2725,8 +2723,10 @@ export class PuzzleGeometry {
         ];
       } else {
         const g = geos[this.facenames[fn][1]];
-        return [trim + SVG_2D_SHRINK * q.dot(g[0]) + g[2].b,
-                trim + h - SVG_2D_SHRINK * q.dot(g[1]) - g[2].c];
+        return [
+          trim + SVG_2D_SHRINK * q.dot(g[0]) + g[2].b,
+          trim + h - SVG_2D_SHRINK * q.dot(g[1]) - g[2].c,
+        ];
       }
     };
     return mappt2d;
@@ -2846,8 +2846,7 @@ export class PuzzleGeometry {
       avgstickerarea += this.polyarea(faces[i].coords);
     }
     avgstickerarea /= this.faces.length;
-    let trim = (Math.sqrt(avgstickerarea) * (1 - Math.sqrt(colorfrac))) / 2;
-    trim = 0;
+    const trim = (Math.sqrt(avgstickerarea) * (1 - Math.sqrt(colorfrac))) / 2;
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);
       const cubie = this.facetocubies[i][0];
@@ -2926,14 +2925,19 @@ export class PuzzleGeometry {
       };
     })().bind(this);
     const twodmapper = this.generate2dmapping(2880, 2160, 10);
-    const g = (function() {
+    const g = (function () {
       const irot = rot.invrot();
-      return function(facenum: number, coords: number[]): number[] {
-        let q = new Quat(0, coords[0]*maxdist, -coords[1]*maxdist, coords[2]*maxdist);
+      return function (facenum: number, coords: number[]): number[] {
+        let q = new Quat(
+          0,
+          coords[0] * maxdist,
+          -coords[1] * maxdist,
+          coords[2] * maxdist,
+        );
         q = q.rotatepoint(irot);
         const x = twodmapper(facenum, q);
-        x[0] /= 2880 ;
-        x[1] = 1 - x[1] / 2160 ;
+        x[0] /= 2880;
+        x[1] = 1 - x[1] / 2160;
         return x;
       };
     })().bind(this);
@@ -2944,7 +2948,7 @@ export class PuzzleGeometry {
       axis: grips,
       unswizzle: f,
       notationMapper: this.notationMapper,
-      textureMapper: {getuv: g},
+      textureMapper: { getuv: g },
     };
   }
 
