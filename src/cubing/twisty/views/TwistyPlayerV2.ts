@@ -169,9 +169,11 @@ export class TwistyPlayerV2
     this.model.visualizationStrategyProp.addFreshListener(
       this.#setVisualizationWrapper.bind(this),
     );
+
+    this.model.puzzleProp.addFreshListener(this.flash.bind(this));
   }
 
-  flashAutoSkip() {
+  flash() {
     this.#visualizationWrapper?.animate([{ opacity: 0.25 }, { opacity: 1 }], {
       duration: 250,
     });

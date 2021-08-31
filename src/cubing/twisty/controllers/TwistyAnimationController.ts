@@ -18,7 +18,7 @@ import { modIntoRange } from "../model/helpers";
 
 // TODO: Figure out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {
-  flashAutoSkip(): void;
+  flash(): void;
 }
 
 // This controls the logic for animation, so that the main controller can focus on the right API abstractions.
@@ -62,7 +62,7 @@ export class TwistyAnimationController {
     this.model.timestampRequestProp.set("start");
     this.pause();
     if (options?.flash) {
-      this.delegate.flashAutoSkip();
+      this.delegate.flash();
     }
   }
 
@@ -71,7 +71,7 @@ export class TwistyAnimationController {
     this.model.timestampRequestProp.set("end");
     this.pause();
     if (options?.flash) {
-      this.delegate.flashAutoSkip();
+      this.delegate.flash();
     }
   }
 
@@ -103,11 +103,11 @@ export class TwistyAnimationController {
     if (options?.autoSkipToOtherEndIfStartingAtBoundary ?? true) {
       if (direction === Direction.Forwards && coarseTimelineInfo.atEnd) {
         this.model.timestampRequestProp.set("start");
-        this.delegate.flashAutoSkip();
+        this.delegate.flash();
       }
       if (direction === Direction.Backwards && coarseTimelineInfo.atStart) {
         this.model.timestampRequestProp.set("end");
-        this.delegate.flashAutoSkip();
+        this.delegate.flash();
       }
     }
     this.model.playingInfoProp.set({
