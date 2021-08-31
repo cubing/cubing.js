@@ -194,12 +194,6 @@ export abstract class TwistyPropDerived<
   // cachedInputs:
   #parents: InputProps<InputTypes>;
 
-  #cachedResult: {
-    inputs: InputTypes;
-    output: Promise<OutputType>;
-    generation: number;
-  } | null = null;
-
   constructor(parents: InputProps<InputTypes>) {
     super();
     this.#parents = parents;
@@ -208,30 +202,35 @@ export abstract class TwistyPropDerived<
     }
   }
 
+  #cachedLastSuccessfulCalculation: {
+    inputs: InputTypes;
+    output: Promise<OutputType>;
+    generation: number;
+  } | null = null;
+
+  #cachedLatestGenerationCalculation: {
+    output: Promise<OutputType>;
+    generation: number;
+  } | null = null;
+
   public async get(): Promise<OutputType> {
     const generation = this.lastSourceGeneration;
 
-    const cachedResult = this.#cachedResult;
-    if (!cachedResult) {
-      return this.#cacheDerive(this.#getParents(), generation);
+    if (this.#cachedLatestGenerationCalculation?.generation === generation) {
+      return this.#cachedLatestGenerationCalculation.output;
     }
 
-    // If the cached result generation matches the last time, the calculation
-    // can't be stale, so we can immediately return (the `Promise` for) it
-    // without doing an equality checks.
-    if (cachedResult.generation === generation) {
-      return cachedResult.output;
-    }
+    const latestGenerationCalculation = {
+      generation,
+      output: this.#cacheDerive(
+        this.#getParents(),
+        generation,
+        this.#cachedLastSuccessfulCalculation,
+      ),
+    };
+    this.#cachedLatestGenerationCalculation = latestGenerationCalculation;
 
-    const inputs = await this.#getParents();
-
-    for (const key in this.#parents) {
-      const parent = this.#parents[key];
-      if (!parent.canReuse(inputs[key], cachedResult.inputs[key])) {
-        return this.#cacheDerive(inputs, generation);
-      }
-    }
-    return cachedResult.output;
+    return latestGenerationCalculation.output;
   }
 
   async #getParents(): Promise<InputTypes> {
@@ -250,14 +249,36 @@ export abstract class TwistyPropDerived<
   async #cacheDerive(
     inputsPromise: PromiseOrValue<InputTypes>,
     generation: number,
+    cachedLatestGenerationCalculation: {
+      inputs: InputTypes;
+      output: Promise<OutputType>;
+      generation: number;
+    } | null = null,
   ): Promise<OutputType> {
-    const output = Promise.resolve(this.derive(await inputsPromise));
-    this.#cachedResult = {
-      inputs: await inputsPromise,
-      output: output,
-      generation,
+    const inputs = await inputsPromise;
+
+    const cache = (output: OutputType): OutputType => {
+      this.#cachedLastSuccessfulCalculation = {
+        inputs,
+        output: Promise.resolve(output),
+        generation,
+      };
+      return output;
     };
-    return output;
+
+    if (!cachedLatestGenerationCalculation) {
+      return cache(await this.derive(inputs));
+    }
+
+    const cachedInputs = cachedLatestGenerationCalculation.inputs;
+    for (const key in this.#parents) {
+      const parent = this.#parents[key];
+      if (!parent.canReuse(inputs[key], cachedInputs[key])) {
+        return cache(await this.derive(inputs));
+      }
+    }
+
+    return cachedLatestGenerationCalculation.output;
   }
 
   protected abstract derive(input: InputTypes): PromiseOrValue<OutputType>;

@@ -17,7 +17,6 @@ export class CurrentLeavesSimplifiedProp extends TwistyPropDerived<
   CurrentLeavesSimplifiedPropInputs,
   CurrentLeavesSimplified
 > {
-  // TODO: Figure out why this is still firing 6 times during stub demo loading.
   derive(inputs: CurrentLeavesSimplifiedPropInputs): CurrentLeavesSimplified {
     return {
       stateIndex: inputs.currentMoveInfo.stateIndex,
