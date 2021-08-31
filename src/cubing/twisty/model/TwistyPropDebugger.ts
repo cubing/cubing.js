@@ -138,7 +138,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 
     function isAlgIssues(v: any): boolean {
       try {
-        return "alg" in v && "issues" in v;
+        return v instanceof Object && "alg" in v && "issues" in v;
       } catch (e) {
         return false;
       }
