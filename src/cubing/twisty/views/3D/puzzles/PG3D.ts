@@ -102,14 +102,17 @@ class Filler {
 
   makeGroups(geo: BufferGeometry) {
     geo.clearGroups();
+    let groupCount = 0;
     for (let i = 0; i < this.ipos; ) {
       const si = i++;
       const iv = this.ind[si];
       while (this.ind[i] === iv) {
         i++;
       }
+      groupCount++;
       geo.addGroup(3 * si, 3 * (i - si), iv);
     }
+    console.log("Group count is " + groupCount);
   }
 
   saveOriginalColors() {
@@ -145,26 +148,22 @@ class StickerDef {
   public origColorAppearance: number;
   public faceColor: number;
   public twistVal: number = -1;
-  public colorStart: number;
-  public colorEnd: number;
-  public hintIndStart: number;
-  public indStart: number;
-  public indEnd: number;
-  public ind2Start: number = 0;
-  public ind2End: number = 0;
+  public stickerStart: number;
+  public stickerEnd: number;
+  public hintStart: number;
+  public hintEnd: number;
+  public foundationStart: number;
+  public foundationEnd: number;
   public isDup: boolean;
   constructor(
     public filler: Filler,
     stickerDat: StickerDatSticker,
-    hintStickers: boolean,
-    hintStickerHeightScale: number,
     options?: {
       appearance?: ExperimentalFaceletMeshAppearance;
     },
   ) {
     this.isDup = !!stickerDat.isDup;
-    this.colorStart = filler.pos;
-    this.indStart = filler.ipos;
+    this.stickerStart = filler.ipos;
     const sdColor = new Color(stickerDat.color).getHex();
     this.origColor = sdColor;
     this.origColorAppearance = sdColor;
@@ -174,7 +173,16 @@ class StickerDef {
     this.faceColor = sdColor;
     const coords = stickerDat.coords as number[][];
     makePoly(filler, coords, this.faceColor, 1, this.isDup ? 4 : 0);
-    this.hintIndStart = filler.ipos;
+    this.stickerEnd = filler.ipos;
+  }
+
+  addHint(
+    stickerDat: StickerDatSticker,
+    hintStickers: boolean,
+    hintStickerHeightScale: number,
+  ): void {
+    this.hintStart = this.filler.ipos;
+    const coords = stickerDat.coords as number[][];
     let highArea = 0;
     let goodFace = null;
     const v0 = new Vector3(coords[0][0], coords[0][1], coords[0][2]);
@@ -202,14 +210,13 @@ class StickerDef {
       ]);
     }
     makePoly(
-      filler,
+      this.filler,
       hintCoords,
       this.faceColor,
       1,
       hintStickers && !this.isDup ? 2 : 4,
     );
-    this.colorEnd = filler.pos;
-    this.indEnd = filler.ipos;
+    this.hintEnd = this.filler.ipos;
   }
 
   public addFoundation(
@@ -217,7 +224,7 @@ class StickerDef {
     foundationDat: StickerDatSticker,
     black: number,
   ) {
-    this.ind2Start = filler.ipos;
+    this.foundationStart = filler.ipos;
     makePoly(
       filler,
       foundationDat.coords as number[][],
@@ -225,14 +232,14 @@ class StickerDef {
       0.999,
       this.isDup ? 4 : 6,
     );
-    this.ind2End = filler.ipos;
+    this.foundationEnd = filler.ipos;
   }
 
   public setHintStickers(hintStickers: boolean): void {
     let indv = this.isDup || !hintStickers ? 4 : 2;
-    for (let i = this.hintIndStart; i < this.indEnd; i++) {
+    for (let i = this.hintStart; i < this.hintEnd; i++) {
       this.filler.ind[i] = indv;
-    }  
+    }
   }
 
   public setAppearance(
@@ -260,7 +267,12 @@ class StickerDef {
         c = this.origColor;
     }
     this.origColorAppearance = c;
-    for (let i = this.colorStart; i < this.colorEnd; i += 3) {
+    for (let i = 9 * this.stickerStart; i < 9 * this.stickerEnd; i += 3) {
+      this.filler.colors[this.filler.pos + i] = c >> 16;
+      this.filler.colors[this.filler.pos + i + 1] = (c >> 8) & 255;
+      this.filler.colors[this.filler.pos + i + 2] = c & 255;
+    }
+    for (let i = 9 * this.hintStart; i < 9 * this.hintEnd; i += 3) {
       this.filler.colors[this.filler.pos + i] = c >> 16;
       this.filler.colors[this.filler.pos + i + 1] = (c >> 8) & 255;
       this.filler.colors[this.filler.pos + i + 2] = c & 255;
@@ -273,9 +285,9 @@ class StickerDef {
     if (this.faceColor !== c) {
       this.faceColor = c;
       this.filler.colors.copyWithin(
-        this.colorStart,
-        sd.colorStart + this.filler.pos,
-        sd.colorEnd + this.filler.pos,
+        9 * this.stickerStart,
+        9 * sd.stickerStart + this.filler.pos,
+        9 * sd.stickerEnd + this.filler.pos,
       );
       return 1;
     } else {
@@ -347,11 +359,8 @@ const PG_SCALE = 0.5;
  *  in the material index.  By moving the foundation triangles separate
  *  from the sticker triangles, we enhance the probability that many
  *  triangles can be rendered in one call speeding up the render.
- *
- *  When we decide to support multiple subsets moving at distinct
- *  angular velocities, we will use more than two meshes, with
- *  larger material arrays, maintaining the invariant that each cubie
- *  is visible in only a single mesh.
+ *  We also get some assistance from puzzleGeometry to try to keep
+ *  nearby stickers close to each other.
  */
 export class PG3D extends Object3D implements Twisty3DPuzzle {
   private stickers: { [key: string]: StickerDef[][] };
@@ -415,9 +424,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     // to support dynamic updating of hint stickers, we always build in hint
     // stickers, but we permit the Material to be toggled on and off.
     multiplier++;
-    if (showFoundation) {
-      multiplier++;
-    }
+    multiplier++;
     for (let si = 0; si < stickers.length; si++) {
       const sides = stickers[si].coords.length;
       triangleCount += multiplier * (sides - 2);
@@ -445,25 +452,28 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           false,
         );
       }
-      const stickerdef = new StickerDef(
-        filler,
+      const stickerdef = new StickerDef(filler, sticker, options);
+      this.stickers[orbit][ori][ord] = stickerdef;
+    }
+    for (let si = 0; si < stickers.length; si++) {
+      const sticker = stickers[si];
+      const orbit = sticker.orbit as number;
+      const ord = sticker.ord as number;
+      const ori = sticker.ori as number;
+      this.stickers[orbit][ori][ord].addHint(
         sticker,
         hintStickers,
         hintStickerHeightScale,
-        options,
       );
-      this.stickers[orbit][ori][ord] = stickerdef;
     }
     this.foundationBound = filler.ipos;
-    if (showFoundation) {
-      for (let si = 0; si < stickers.length; si++) {
-        const sticker = stickers[si];
-        const foundation = this.pgdat.foundations[si];
-        const orbit = sticker.orbit as number;
-        const ord = sticker.ord as number;
-        const ori = sticker.ori as number;
-        this.stickers[orbit][ori][ord].addFoundation(filler, foundation, black);
-      }
+    for (let si = 0; si < stickers.length; si++) {
+      const sticker = stickers[si];
+      const foundation = this.pgdat.foundations[si];
+      const orbit = sticker.orbit as number;
+      const ord = sticker.ord as number;
+      const ori = sticker.ori as number;
+      this.stickers[orbit][ori][ord].addFoundation(filler, foundation, black);
     }
     const fixedGeo = new BufferGeometry();
     filler.setAttributes(fixedGeo);
@@ -600,30 +610,44 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               if (tv !== pieces2[i].twistVal) {
                 if (tv) {
                   for (
-                    let j = pieces2[i].indStart;
-                    j < pieces2[i].indEnd;
+                    let j = pieces2[i].stickerStart;
+                    j < pieces2[i].stickerEnd;
                     j++
                   ) {
                     this.filler.ind[j] |= 1;
                   }
                   for (
-                    let j = pieces2[i].ind2Start;
-                    j < pieces2[i].ind2End;
+                    let j = pieces2[i].hintStart;
+                    j < pieces2[i].hintEnd;
+                    j++
+                  ) {
+                    this.filler.ind[j] |= 1;
+                  }
+                  for (
+                    let j = pieces2[i].foundationStart;
+                    j < pieces2[i].foundationEnd;
                     j++
                   ) {
                     this.filler.ind[j] |= 1;
                   }
                 } else {
                   for (
-                    let j = pieces2[i].indStart;
-                    j < pieces2[i].indEnd;
+                    let j = pieces2[i].stickerStart;
+                    j < pieces2[i].stickerEnd;
                     j++
                   ) {
                     this.filler.ind[j] &= ~1;
                   }
                   for (
-                    let j = pieces2[i].ind2Start;
-                    j < pieces2[i].ind2End;
+                    let j = pieces2[i].hintStart;
+                    j < pieces2[i].hintEnd;
+                    j++
+                  ) {
+                    this.filler.ind[j] &= ~1;
+                  }
+                  for (
+                    let j = pieces2[i].foundationStart;
+                    j < pieces2[i].foundationEnd;
                     j++
                   ) {
                     this.filler.ind[j] &= ~1;
