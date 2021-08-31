@@ -13,6 +13,8 @@ import * as snowpack from "snowpack";
 import * as esbuild from "esbuild";
 
 import { readFile, writeFile } from "fs";
+import { join } from "path";
+import { promisify } from "util";
 
 import {
   sitesSnowpackConfig,
@@ -25,6 +27,28 @@ const PARALLEL = false;
 
 const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "comlink", ...externalNode];
+
+async function writeVersionJSON(siteFolder) {
+  // https://git-scm.com/docs/git-describe
+  const gitDescribeVersion = (
+    await execPromise("git describe --tags || echo v0.0.0")
+  ).trim();
+  const gitBranch = (
+    await execPromise("git rev-parse --abbrev-ref HEAD")
+  ).trim();
+  const date = (await execPromise("date")).trim();
+  const commitHash = (await execPromise("git rev-parse HEAD")).trim();
+  const commitGitHubURL = `https://github.com/cubing/cubing.js/commit/${commitHash}`;
+
+  await promisify(writeFile)(
+    join(siteFolder, "version.json"),
+    JSON.stringify(
+      { gitDescribeVersion, gitBranch, date, commitHash, commitGitHubURL },
+      null,
+      "  ",
+    ),
+  );
+}
 
 export async function build(target, dev) {
   const startDeps = Date.now();
@@ -229,6 +253,10 @@ export const twizzleTarget = {
       ? snowpack.startServer({ config }, { isDev: dev })
       : snowpack.build({ config });
     await snowpackPromise;
+
+    if (!dev) {
+      await writeVersionJSON(config.buildOptions.out);
+    }
   },
 };
 
@@ -243,6 +271,10 @@ export const experimentsTarget = {
       ? snowpack.startServer({ config }, { isDev: dev })
       : snowpack.build({ config });
     await snowpackPromise;
+
+    if (!dev) {
+      await writeVersionJSON(config.buildOptions.out);
+    }
   },
 };
 
