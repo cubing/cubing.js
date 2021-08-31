@@ -46,12 +46,6 @@ const stickerMaterial = new MeshBasicMaterial({
   vertexColors: true,
   //    side: DoubleSide,
 });
-const hintMaterial = new MeshBasicMaterial({
-  vertexColors: true,
-  transparent: true,
-  opacity: 0.5,
-  //    side: DoubleSide,
-});
 const polyMaterial = new MeshBasicMaterial({
   visible: false,
 });
@@ -375,6 +369,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   protected fixedGeo: BufferGeometry;
   protected lastPos: PuzzlePosition;
   protected lastMove: Transformation;
+  protected hintMaterial: MeshBasicMaterial;
   protected materialArray1: MeshBasicMaterial[];
   protected materialArray2: MeshBasicMaterial[];
 
@@ -391,18 +386,23 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private params: PG3DOptions = {},
   ) {
     super();
-
+    this.hintMaterial = new MeshBasicMaterial({
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.5,
+    });
     this.axesInfo = {};
     const axesDef = this.pgdat.axis as any[];
     for (const axis of axesDef) {
       this.axesInfo[axis[1]] = new AxisInfo(axis);
     }
     const stickers = this.pgdat.stickers as any[];
+    console.log("Constructor with " + stickers.length);
     this.stickers = {};
     this.materialArray1 = [
       stickerMaterial,
       polyMaterial,
-      hintMaterial,
+      this.hintMaterial,
       polyMaterial,
       polyMaterial,
       polyMaterial,
@@ -413,12 +413,13 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       polyMaterial,
       stickerMaterial,
       polyMaterial,
-      hintMaterial,
+      this.hintMaterial,
       polyMaterial,
       polyMaterial,
       polyMaterial,
       foundationMaterial,
     ];
+    this.enableFoundation(showFoundation);
     let triangleCount = 0;
     let multiplier = 1;
     // to support dynamic updating of hint stickers, we always build in hint
@@ -680,17 +681,54 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return smootherStep(fraction);
   }
 
+  private enableHintFacelets(v: boolean) {
+    if (v) {
+      this.materialArray1[2] = this.hintMaterial;
+      this.materialArray2[3] = this.hintMaterial;
+    } else {
+      this.materialArray1[2] = polyMaterial;
+      this.materialArray2[3] = polyMaterial;
+    }
+  }
+
+  private enableFoundation(v: boolean) {
+    if (v) {
+      this.materialArray1[6] = foundationMaterial;
+      this.materialArray2[7] = foundationMaterial;
+    } else {
+      this.materialArray1[6] = polyMaterial;
+      this.materialArray2[7] = polyMaterial;
+    }
+  }
+
+  private setHintStickerOpacity(v: number): void {
+    if (v === 0) {
+      this.hintMaterial = polyMaterial;
+    } else if (v === 1) {
+      this.hintMaterial = stickerMaterial;
+    } else {
+      this.hintMaterial = new MeshBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.5,
+      });
+    }
+  }
+
   public experimentalUpdateOptions(options: {
     showMainStickers?: boolean;
     hintFacelets?: HintFaceletStyle;
     showFoundation?: boolean; // TODO: better name
+    hintStickerOpacity?: number;
   }): void {
-    if (options.hintFacelets === "none") {
-      this.materialArray1[2] = polyMaterial;
-      this.materialArray2[3] = polyMaterial;
-    } else {
-      this.materialArray1[2] = hintMaterial;
-      this.materialArray2[3] = hintMaterial;
+    if (options.hintFacelets !== undefined) {
+      this.enableHintFacelets(options.hintFacelets !== "none");
+    }
+    if (options.showFoundation !== undefined) {
+      this.enableFoundation(options.showFoundation);
+    }
+    if (options.hintStickerOpacity !== undefined) {
+      this.setHintStickerOpacity(options.hintStickerOpacity);
     }
     this.#pendingStickeringUpdate = true;
     if (this.lastPos) {
