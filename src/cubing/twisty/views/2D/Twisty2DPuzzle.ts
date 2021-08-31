@@ -17,7 +17,10 @@ import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/TwistyProp";
-import type { ExperimentalStickering } from "../../old/dom/TwistyPlayerConfig";
+import type {
+  ExperimentalStickering,
+  PuzzleID,
+} from "../../old/dom/TwistyPlayerConfig";
 import { twisty2DSVGCSS } from "../../old/dom/viewers/Twisty2DSVGView.css_";
 import type { TwistyViewerElement } from "../../old/dom/viewers/TwistyViewerElement";
 
@@ -48,7 +51,16 @@ export class Twisty2DPuzzle
     this.resetSVG(); // TODO: do this in `connectedCallback()`?
 
     this.#freshListenerManager.addListener(
-      this.model!.currentLeavesProp,
+      this.model!.puzzleProp,
+      (puzzleID: PuzzleID) => {
+        if (puzzleLoader?.id !== puzzleID) {
+          this.disconnect();
+        }
+      },
+    );
+
+    this.#freshListenerManager.addListener(
+      this.model!.legacyPositionProp,
       this.onPositionChange.bind(this),
     );
 
@@ -64,29 +76,38 @@ export class Twisty2DPuzzle
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   onPositionChange(position: PuzzlePosition): void {
-    if (position.movesInProgress.length > 0) {
-      const move = position.movesInProgress[0].move;
+    try {
+      if (position.movesInProgress.length > 0) {
+        const move = position.movesInProgress[0].move;
 
-      const def = this.definition;
-      let partialMove = move;
-      if (position.movesInProgress[0].direction === Direction.Backwards) {
-        partialMove = move.invert();
+        const def = this.definition;
+        let partialMove = move;
+        if (position.movesInProgress[0].direction === Direction.Backwards) {
+          partialMove = move.invert();
+        }
+        const newState = combineTransformations(
+          def,
+          position.state as Transformation,
+          transformationForMove(def, partialMove),
+        );
+        // TODO: move to render()
+        this.svg.draw(
+          this.definition,
+          position.state as Transformation,
+          newState,
+          position.movesInProgress[0].fraction,
+        );
+      } else {
+        this.svg.draw(this.definition, position.state as Transformation);
+        this.#cachedPosition = position;
       }
-      const newState = combineTransformations(
-        def,
-        position.state as Transformation,
-        transformationForMove(def, partialMove),
+    } catch (e) {
+      console.warn(
+        "Bad position. Pre-emptively disconnecting:",
+        this.puzzleLoader?.id,
+        e,
       );
-      // TODO: move to render()
-      this.svg.draw(
-        this.definition,
-        position.state as Transformation,
-        newState,
-        position.movesInProgress[0].fraction,
-      );
-    } else {
-      this.svg.draw(this.definition, position.state as Transformation);
-      this.#cachedPosition = position;
+      this.disconnect();
     }
   }
 

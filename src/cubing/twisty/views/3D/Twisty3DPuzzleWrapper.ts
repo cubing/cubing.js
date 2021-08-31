@@ -1,14 +1,14 @@
-import type { ExperimentalStickering } from "../../../twisty";
 import { puzzles } from "../../../puzzles";
-import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
-import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
-import type { Schedulable } from "../../old/animation/RenderScheduler";
-import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
+import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
 import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
 import type { HintFaceletStyleWithAuto } from "../../model/depth-0/HintFaceletProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { TwistyPropParent } from "../../model/TwistyProp";
+import { FreshListenerManager } from "../../model/TwistyProp";
+import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
+import type { Schedulable } from "../../old/animation/RenderScheduler";
+import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
+import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {
   constructor(
@@ -18,41 +18,37 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
   ) {
     this.twisty3DPuzzle(); // Start constructing.
 
-    let disconnected = false;
     // TODO: Hook up listeners before loading the heavy code in the async constructor, so we get any intermediate updates?
     // Repro: Switch to 40x40x40 a fraction of a second before animation finishes. When it's loaded the itmeline is at the end, but the 40x40x40 is rendered with an earlier position.
-    const addListener = <T>(
-      prop: TwistyPropParent<T>,
-      listener: (value: T) => void,
-    ) => {
-      prop.addFreshListener(listener);
-      this.#disconnectionFunctions.push(() => {
-        prop.removeFreshListener(listener);
-        disconnected = true;
-      });
-    };
 
-    addListener(
+    this.#freshListenerManager.addListener(
+      this.model!.puzzleProp,
+      (puzzleID: PuzzleID) => {
+        if (this.puzzleID !== puzzleID) {
+          this.disconnect();
+        }
+      },
+    );
+    this.#freshListenerManager.addListener(
       this.model.legacyPositionProp,
       async (position: PuzzlePosition) => {
-        if (disconnected) {
-          // TODO: Why does this still fire?
-          console.log(new Error("We should be disconnected!"));
-          return;
+        try {
+          (await this.twisty3DPuzzle()).onPositionChange(position);
+          this.scheduleRender();
+        } catch (e) {
+          console.warn(
+            "Bad position. Pre-emptively disconnecting:",
+            this.puzzleID,
+            e,
+          );
+          this.disconnect();
         }
-        (await this.twisty3DPuzzle()).onPositionChange(position);
-        this.scheduleRender();
       },
     );
 
-    addListener(
+    this.#freshListenerManager.addListener(
       this.model.hintFaceletProp,
       async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
-        if (disconnected) {
-          // TODO: Why does this still fire?
-          console.log(new Error("We should be disconnected!"));
-          return;
-        }
         (
           (await this.twisty3DPuzzle()) as Cube3D | PG3D
         ).experimentalUpdateOptions({
@@ -62,14 +58,9 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         this.scheduleRender();
       },
     );
-    addListener(
+    this.#freshListenerManager.addListener(
       this.model.stickeringProp,
       async (stickering: ExperimentalStickering) => {
-        if (disconnected) {
-          // TODO: Why does this still fire?
-          console.log(new Error("We should be disconnected!"));
-          return;
-        }
         if ("setStickering" in (await this.twisty3DPuzzle())) {
           ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
           this.scheduleRender();
@@ -88,12 +79,9 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     );
   }
 
-  #disconnectionFunctions: (() => void)[] = [];
+  #freshListenerManager = new FreshListenerManager();
   disconnect(): void {
-    for (const fn of this.#disconnectionFunctions) {
-      fn();
-    }
-    this.#disconnectionFunctions = []; // TODO: Encapsulate this.
+    this.#freshListenerManager.disconnect();
   }
 
   scheduleRender(): void {
