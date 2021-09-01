@@ -525,6 +525,7 @@ export class PuzzleGeometry {
   public addNotationMapper: string = "";
   public setReidOrder: boolean = false;
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
+    console.log("Constructing a pg with " + cuts.length + " cuts.");
     function asstructured(v: any): any {
       if (typeof v === "string") {
         return JSON.parse(v);
@@ -982,18 +983,18 @@ export class PuzzleGeometry {
     }
     sortme.sort();
     for (let ii = 0; ii < faces.length; ii++) {
-      const i = sortme[ii][2];
+      const i = sortme[ii][2] as number;
       if (!finished[i]) {
         finished[i] = true;
         for (let j = 0; j < simplerot.length; j++) {
           const f2 = simplerot[j].rotateface(faces[i]);
           const cm = centermassface(f2);
           for (let kk = ii + 1; kk < faces.length; kk++) {
-            if (sortme[kk][0] - sortme[ii][0] > eps) {
+            if ((sortme[kk][0] as number) - (sortme[ii][0] as number) > eps) {
               break;
             }
-            const k = sortme[kk][2];
-            if (!finished[k] && cm.dist(sortme[kk][1]) < eps) {
+            const k = sortme[kk][2] as number;
+            if (!finished[k] && cm.dist(sortme[kk][1] as Quat) < eps) {
               finished[k] = true;
               faces[k] = f2;
               break;
