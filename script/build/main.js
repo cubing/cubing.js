@@ -93,10 +93,14 @@ export const searchWorkerTarget = {
       }
       const { contents } = buildResult.outputFiles[0];
       const contentsString = new TextDecoder("utf-8").decode(contents);
-      const workerContents = `export const workerSource = "${contentsString
-        .replace(/\\/g, "\\\\")
-        .replace(/"/g, '\\"')
-        .replace(/\n/g, "\\n")}";`;
+      if (typeof contentsString !== "string") {
+        throw new Error(
+          "Unexpected non-string for the decoded search worker source.",
+        );
+      }
+      const workerContents = `export const workerSource = ${JSON.stringify(
+        contentsString,
+      )};`;
       console.log("Writing:", SEARCH_WORKER_PATH);
       writeSyncUsingTempFile(
         "worker-inside-generated-string.js",
