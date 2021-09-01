@@ -3,7 +3,7 @@ name: Build
 on: [push, pull_request]
 
 jobs:
-  run:
+  Ubuntu:
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,6 +25,27 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: make build
+      - run: make test-dist-esm-node-import
+      - run: make test-dist-esm-perf
+      - run: make build-site-twizzle
+      - run: make build-site-experiments
+      - run: make test-dist-experiments
+      - run: make test-dist-esm-parcel
+      - run: make clean
+  Windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+      # From https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
