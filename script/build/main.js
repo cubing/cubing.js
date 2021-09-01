@@ -9,19 +9,18 @@
 // short commandline commands. But maybe this file will stick around because it
 // turns out to be too useful.
 
-import * as snowpack from "snowpack";
 import * as esbuild from "esbuild";
-
-import { readFile, writeFile } from "fs";
+import { writeFile } from "fs";
 import { join } from "path";
+import * as snowpack from "snowpack";
 import { promisify } from "util";
-
 import {
+  experimentsSnowpackConfig,
   sitesSnowpackConfig,
   twizzleSnowpackConfig,
-  experimentsSnowpackConfig,
 } from "../../snowpack.config.mjs";
 import { execPromise } from "../lib/execPromise.js";
+import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
 
@@ -76,81 +75,63 @@ export async function build(target, dev) {
   }
 }
 
-function constructStringWrappingPlugin(dev) {
-  return {
-    name: "wrapping",
-    setup(build) {
-      build.onEnd((result) => {
-        return new Promise(async (resolve, _) => {
-          if (result.errors.length !== 0) {
-            await execPromise(
-              "rm -f src/cubing/search/worker-inside-generated.js",
-            );
-
-            if (dev) {
-              writeFile(
-                "src/cubing/search/worker-inside-generated-string.js",
-                'export const workerSource = "throw new Error(\\"Worker build error.\\");";',
-                () => {
-                  console.log(
-                    "Worker generation failed. Generated worker has been replaced with a stub.",
-                  );
-                  resolve();
-                },
-              );
-            } else {
-              await execPromise(
-                "rm -f src/cubing/search/worker-inside-generated-string.js",
-              );
-              console.log(
-                "Worker generation failed. Removed generated worker files.",
-              );
-            }
-          } else {
-            readFile(
-              "src/cubing/search/worker-inside-generated.js",
-              "utf8",
-              (_, contents) => {
-                writeFile(
-                  "src/cubing/search/worker-inside-generated-string.js",
-                  `export const workerSource = "${contents
-                    .replace(/\\/g, "\\\\")
-                    .replace(/"/g, '\\"')
-                    .replace(/\n/g, "\\n")}";`,
-                  async () => {
-                    await execPromise(
-                      "rm -f src/cubing/search/worker-inside-generated.js",
-                    );
-                    console.log("updated worker-inside-generated-string.js");
-                    resolve();
-                  },
-                );
-              },
-            );
-          }
-        });
-      });
-    },
-  };
-}
-
+let latestBuildSymbol = null;
+const SEARCH_WORKER_PATH =
+  "./src/cubing/search/worker-inside-generated-string.js";
 export const searchWorkerTarget = {
   name: "search-worker",
   builtYet: false,
   dependencies: [],
-  buildSelf: (dev) => {
-    return esbuild.build({
+  buildSelf: async (dev) => {
+    const buildSymbol = Symbol("esbuild");
+    latestBuildSymbol = buildSymbol;
+
+    const writeFile = async (buildResult) => {
+      if (latestBuildSymbol !== buildSymbol) {
+        console.warn("Stale `esbuild`?!");
+        return;
+      }
+      const { contents } = buildResult.outputFiles[0];
+      const contentsString = new TextDecoder("utf-8").decode(contents);
+      const workerContents = `export const workerSource = "${contentsString
+        .replace(/\\/g, "\\\\")
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, "\\n")}";`;
+      console.log("Writing:", SEARCH_WORKER_PATH);
+      writeSyncUsingTempFile(
+        "worker-inside-generated-string.js",
+        SEARCH_WORKER_PATH,
+        workerContents,
+      );
+    };
+
+    let watch = dev;
+    if (dev) {
+      watch = {
+        onRebuild(error, result) {
+          if (error) {
+            console.error("Watch build failed:", error);
+          } else {
+            writeFile(result);
+          }
+        },
+      };
+    }
+
+    const initialBuildResult = await esbuild.build({
       entryPoints: ["./src/cubing/search/inside/entry.js"],
-      outfile: "./src/cubing/search/worker-inside-generated.js",
       format: "cjs",
       target: "es2015",
       bundle: true,
-      watch: dev,
+      watch,
+      write: false,
       logLevel: "info",
       external: externalNode,
       minify: !dev,
-      plugins: [constructStringWrappingPlugin(dev)],
     });
+    // Note that we finish writing the initial built file before we return.
+    // This means that the file is in place before any dependent steps(like Snowpack) start.
+    await writeFile(initialBuildResult);
   },
 };
 
