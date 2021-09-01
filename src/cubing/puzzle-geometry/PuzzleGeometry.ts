@@ -966,25 +966,27 @@ export class PuzzleGeometry {
     // point.  to improve 3d rendering speed, we would like to preserve
     // vertex order on rotation.  First, let's see what rotations preserve
     // the base face; these are the ones we want to work with.
-    const simplerot = [];
-    const cm = centermassface(firstface);
-    for (let i = 0; i < this.rotations.length; i++) {
-      const f = this.rotations[i].rotateface(firstface);
-      if (cm.dist(centermassface(f)) < eps) {
-        simplerot.push(this.rotations[i]);
+    if (false) {
+      const simplerot = [];
+      const cm = centermassface(firstface);
+      for (let i = 0; i < this.rotations.length; i++) {
+        const f = this.rotations[i].rotateface(firstface);
+        if (cm.dist(centermassface(f)) < eps) {
+          simplerot.push(this.rotations[i]);
+        }
       }
-    }
-    const finished = new Array(faces.length);
-    for (let i = 0; i < faces.length; i++) {
-      if (!finished[i]) {
-        finished[i] = true;
-        for (let j = 0; j < simplerot.length; j++) {
-          const f2 = simplerot[j].rotateface(faces[i]);
-          const cm = centermassface(f2);
-          for (let k = i + 1; k < faces.length; k++) {
-            if (!finished[k] && cm.dist(centermassface(faces[k])) < eps) {
-              finished[k] = true;
-              faces[k] = f2;
+      const finished = new Array(faces.length);
+      for (let i = 0; i < faces.length; i++) {
+        if (!finished[i]) {
+          finished[i] = true;
+          for (let j = 0; j < simplerot.length; j++) {
+            const f2 = simplerot[j].rotateface(faces[i]);
+            const cm = centermassface(f2);
+            for (let k = i + 1; k < faces.length; k++) {
+              if (!finished[k] && cm.dist(centermassface(faces[k])) < eps) {
+                finished[k] = true;
+                faces[k] = f2;
+              }
             }
           }
         }
