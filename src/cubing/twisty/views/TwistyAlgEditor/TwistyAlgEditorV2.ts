@@ -55,7 +55,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     if (this.#twistyPlayer === null) {
       return null;
     } else {
-      return this.#twistyPlayer.model[this.#twistyPlayerProp];
+      return this.#twistyPlayer.experimentalModel[this.#twistyPlayerProp];
     }
   }
 
@@ -280,7 +280,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       // );
 
       // TODO: listen to puzzle prop?
-      this.#twistyPlayer?.model.puzzleAlgProp.addFreshListener(
+      this.#twistyPlayer?.experimentalModel.puzzleAlgProp.addFreshListener(
         (algWithIssues: AlgWithIssues) => {
           // console.log(JSON.stringify(algWithIssues));
           if (algWithIssues.issues.errors.length === 0) {
@@ -308,7 +308,8 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
             return;
           }
           // TODO: This indexer can be out of date!
-          const indexer = await twistyPlayer.model.indexerProp.get();
+          const indexer =
+            await twistyPlayer.experimentalModel.indexerProp.get();
           const moveStartTimestamp = indexer.indexToMoveStartTimestamp(
             highlightInfo.leafInfo.idx,
           );
@@ -330,13 +331,14 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
             default:
               throw new Error("Invalid where!");
           }
-          twistyPlayer.model.timestampRequestProp.set(newTimestamp);
+          twistyPlayer.experimentalModel.timestampRequestProp.set(newTimestamp);
         },
       );
 
-      twistyPlayer.model.currentLeavesSimplifiedProp.addFreshListener(
+      twistyPlayer.experimentalModel.currentLeavesSimplifiedProp.addFreshListener(
         async (currentLeavesSimplified: CurrentLeavesSimplified) => {
-          const indexer = await twistyPlayer.model.indexerProp.get();
+          const indexer =
+            await twistyPlayer.experimentalModel.indexerProp.get();
           const leaf = indexer.getAnimLeaf(currentLeavesSimplified.stateIndex);
           this.highlightLeaf(leaf as Parsed<Move | Pause> | null);
         },

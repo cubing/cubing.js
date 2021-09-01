@@ -109,7 +109,7 @@ export class TwistyPlayerV2
   implements TwistyAnimationControllerDelegate
 {
   controller: TwistyPlayerController = new TwistyPlayerController(
-    this.model,
+    this.experimentalModel,
     this,
   );
 
@@ -145,13 +145,17 @@ export class TwistyPlayerV2
       "visualization-wrapper",
     );
 
-    const scrubber = new TwistyScrubberV2(this.model);
+    const scrubber = new TwistyScrubberV2(this.experimentalModel);
     this.contentWrapper.appendChild(scrubber);
 
-    this.buttons = new TwistyButtonsV2(this.model, this.controller, this);
+    this.buttons = new TwistyButtonsV2(
+      this.experimentalModel,
+      this.controller,
+      this,
+    );
     this.contentWrapper.appendChild(this.buttons);
 
-    this.model.backgroundProp.addFreshListener(
+    this.experimentalModel.backgroundProp.addFreshListener(
       (backgroundTheme: BackgroundThemeWithAuto) => {
         this.contentWrapper.classList.toggle(
           "checkered",
@@ -160,17 +164,17 @@ export class TwistyPlayerV2
       },
     );
 
-    this.model.controlPanelProp.addFreshListener(
+    this.experimentalModel.controlPanelProp.addFreshListener(
       (controlPanel: ControlPanelThemeWithAuto) => {
         this.#controlsManager.setValue(controlPanel);
       },
     );
 
-    this.model.visualizationStrategyProp.addFreshListener(
+    this.experimentalModel.visualizationStrategyProp.addFreshListener(
       this.#setVisualizationWrapper.bind(this),
     );
 
-    this.model.puzzleProp.addFreshListener(this.flash.bind(this));
+    this.experimentalModel.puzzleProp.addFreshListener(this.flash.bind(this));
   }
 
   flash() {
@@ -191,12 +195,15 @@ export class TwistyPlayerV2
       switch (strategy) {
         case "2D":
         case "experimental-2D-LL":
-          newWrapper = new Twisty2DSceneWrapper(this.model, strategy);
+          newWrapper = new Twisty2DSceneWrapper(
+            this.experimentalModel,
+            strategy,
+          );
           break;
         case "Cube3D":
         case "PG3D":
           // TODO: Properly wire this up so we can set PG3D for the cube.
-          newWrapper = new Twisty3DSceneWrapper(this.model);
+          newWrapper = new Twisty3DSceneWrapper(this.experimentalModel);
           break;
         default:
           throw new Error("Invalid visualization");
@@ -234,9 +241,9 @@ export class TwistyPlayerV2
   // TODO: Animate the new move.
   experimentalAddMove(move: Move): void {
     (async () => {
-      const alg = (await this.model.algProp.get()).alg;
-      this.model.algProp.set(alg.concat([move]));
-      this.model.timestampRequestProp.set("end");
+      const alg = (await this.experimentalModel.algProp.get()).alg;
+      this.experimentalModel.algProp.set(alg.concat([move]));
+      this.experimentalModel.timestampRequestProp.set("end");
     })();
   }
 
@@ -260,7 +267,7 @@ export class TwistyPlayerV2
   // TODO: Make this more ergonomic and flexible.
   // TODO: dimensions.
   async experimentalScreenshot(): Promise<string> {
-    return (await screenshot(this.model)).dataURL;
+    return (await screenshot(this.experimentalModel)).dataURL;
   }
 
   // TODO: Make this more ergonomic and flexible.
@@ -268,7 +275,7 @@ export class TwistyPlayerV2
   async experimentalDownloadScreenshot(filename?: string): Promise<void> {
     if (
       ["2D", "experimental-2D-LL"].includes(
-        await this.model.visualizationStrategyProp.get(),
+        await this.experimentalModel.visualizationStrategyProp.get(),
       )
     ) {
       // TODO: This has lots of async issues. It should also go into the screenshot impl file.
@@ -282,11 +289,11 @@ export class TwistyPlayerV2
       const url = URL.createObjectURL(new Blob([str]));
       downloadURL(
         url,
-        filename ?? (await getDefaultFilename(this.model)),
+        filename ?? (await getDefaultFilename(this.experimentalModel)),
         "svg",
       );
     } else {
-      await (await screenshot(this.model)).download(filename);
+      await (await screenshot(this.experimentalModel)).download(filename);
     }
   }
 }

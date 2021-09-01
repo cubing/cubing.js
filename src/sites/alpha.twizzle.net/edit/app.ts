@@ -177,8 +177,8 @@ export class App {
 
   async solve(): Promise<void> {
     const [puzzleID, currentAlgWithIssues] = await Promise.all([
-      this.twistyPlayer.model.puzzleProp.get(),
-      this.twistyPlayer.model.algProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleProp.get(),
+      this.twistyPlayer.experimentalModel.algProp.get(),
     ]);
     const currentAlg = currentAlgWithIssues.alg;
     let solution: Alg;
@@ -221,8 +221,8 @@ export class App {
 
   async scramble(): Promise<void> {
     const [puzzleID, currentAlgWithIssues] = await Promise.all([
-      this.twistyPlayer.model.puzzleProp.get(),
-      this.twistyPlayer.model.algProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleProp.get(),
+      this.twistyPlayer.experimentalModel.algProp.get(),
     ]);
     const event = SCRAMBLE_EVENTS[puzzleID];
     if (event) {
@@ -407,10 +407,10 @@ class ControlPane {
     let alg: Alg;
     try {
       this.twistyPlayer.experimentalAddMove(move); // TODO
-      alg = (await this.twistyPlayer.model.algProp.get()).alg;
+      alg = (await this.twistyPlayer.experimentalModel.algProp.get()).alg;
     } catch (e) {
       console.info("Ignoring move:", move.toString());
-      alg = (await this.twistyPlayer.model.algProp.get()).alg;
+      alg = (await this.twistyPlayer.experimentalModel.algProp.get()).alg;
     }
     // this.algInput.algString = alg;
     setURLParams({ alg });
@@ -497,11 +497,17 @@ class ControlPane {
   ): Promise<void> {
     switch (e.detail.action) {
       case "expand":
-        this.setAlg((await this.twistyPlayer.model.algProp.get()).alg.expand());
+        this.setAlg(
+          (
+            await this.twistyPlayer.experimentalModel.algProp.get()
+          ).alg.expand(),
+        );
         break;
       case "simplify":
         this.setAlg(
-          (await this.twistyPlayer.model.algProp.get()).alg.simplify(),
+          (
+            await this.twistyPlayer.experimentalModel.algProp.get()
+          ).alg.simplify(),
         );
         break;
       case "clear":
@@ -509,7 +515,11 @@ class ControlPane {
         this.setExperimentalSetupAlg(new Alg());
         break;
       case "invert":
-        this.setAlg((await this.twistyPlayer.model.algProp.get()).alg.invert());
+        this.setAlg(
+          (
+            await this.twistyPlayer.experimentalModel.algProp.get()
+          ).alg.invert(),
+        );
         break;
       case "solve":
         this.solve();

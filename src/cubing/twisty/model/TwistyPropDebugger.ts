@@ -254,7 +254,7 @@ twisty-prop-debugger.highlighted {
 `),
     );
 
-    for (const [key, value] of Object.entries(this.player.model)) {
+    for (const [key, value] of Object.entries(this.player.experimentalModel)) {
       if (key.endsWith("Prop")) {
         const twistyPropDebugger = this.addElement(
           new TwistyPropDebugger(splitFieldName(key), value),
