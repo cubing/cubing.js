@@ -687,7 +687,7 @@ class ControlPane {
   }
 
   setPuzzle(puzzle: string): void {
-    this.hintFaceletCheckbox.disabled = !["3x3x3"].includes(puzzle);
+    this.hintFaceletCheckbox.disabled = ["clock", "square1"].includes(puzzle);
     this.toolGrid.setButtonEnabled(
       "solve",
       ["2x2x2", "3x3x3", "skewb", "pyraminx", "megaminx"].includes(puzzle),
