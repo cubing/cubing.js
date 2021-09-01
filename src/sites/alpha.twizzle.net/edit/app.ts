@@ -3,7 +3,7 @@ import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
 import { KPuzzle } from "../../../cubing/kpuzzle";
 import { puzzles } from "../../../cubing/puzzles";
 import { cube2x2x2KPuzzle } from "../../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
-import { cube3x3x3KPuzzle } from "../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import { experimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../../cubing/kpuzzle";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
 import {
   experimentalSolve2x2x2,

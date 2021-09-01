@@ -1,6 +1,11 @@
+// TODO: This file is here to avoid dependency loops, but it should eventually
+// move back into `cubing/puzzles`. We currently have a few functions that are
+// hardcoded to require synchronous access to this definition, and we need to
+// find a better way to do that.
+
 // TODO: this would be a raw `.json` file, but Parcel runs into an error from
 
-import type { KPuzzleDefinition } from "../../../kpuzzle";
+import type { KPuzzleDefinition } from "..";
 
 // using that as both a sync and async import. Probably https://github.com/parcel-bundler/parcel/issues/2546
 export const cube3x3x3KPuzzle: KPuzzleDefinition = {

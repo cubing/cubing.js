@@ -14,13 +14,13 @@ import {
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.import { BareBlockMove, Sequence } from "../../../../cubing/alg";
 import { Alg, Move } from "../../../../cubing/alg";
-import {} from "../../../../cubing/kpuzzle";
+import { experimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../../../cubing/kpuzzle";
+import { countMoves } from "../../../../cubing/notation";
 import { ProxyEvent, WebSocketProxyReceiver } from "../../../../cubing/stream";
-import { TAU } from "../../../../cubing/twisty/views/3D/TAU";
+import { Cube3D } from "../../../../cubing/twisty";
 import { AlgCursor } from "../../../../cubing/twisty/old/animation/cursor/AlgCursor";
 import { Timeline } from "../../../../cubing/twisty/old/animation/Timeline";
-import { Cube3D } from "../../../../cubing/twisty";
-import { countMoves } from "../../../../cubing/notation";
+import { TAU } from "../../../../cubing/twisty/views/3D/TAU";
 import {
   daydream,
   initialHeight,
@@ -35,7 +35,6 @@ import {
   Status,
   VRInput,
 } from "./vr-input";
-import { cube3x3x3KPuzzle } from "../../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 
 // From `cube3D.ts`
 class AxisInfo {

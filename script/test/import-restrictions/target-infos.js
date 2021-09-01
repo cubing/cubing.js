@@ -22,7 +22,7 @@ export const targetInfos = {
   },
   "kpuzzle": {
     deps: {
-      direct: ["alg", "protocol", "puzzles"],
+      direct: ["alg", "protocol"],
       dynamic: [],
     },
   },

@@ -1,3 +1,5 @@
+// Include 3x3x3 in the main bundle for better performance.
+import { experimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../../kpuzzle";
 import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import type { PuzzleLoader } from "../../PuzzleLoader";
@@ -6,9 +8,6 @@ import {
   cubeAppearance,
   cubeStickerings,
 } from "../../stickerings/cube-stickerings";
-
-// Include 3x3x3 in the main bundle for better performance.
-import { cube3x3x3KPuzzle } from "./3x3x3.kpuzzle.json_";
 
 export const cube3x3x3: PuzzleLoader = {
   id: "3x3x3",

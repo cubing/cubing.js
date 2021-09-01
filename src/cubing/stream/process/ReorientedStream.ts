@@ -1,6 +1,6 @@
 import { experimentalIs, Move } from "../../alg";
 import { KPuzzle } from "../../kpuzzle";
-import { cube3x3x3KPuzzle } from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import { experimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../kpuzzle";
 
 export interface PuzzleStreamMoveEventDetail {
   move: Move;

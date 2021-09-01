@@ -1,6 +1,9 @@
 import { Alg } from "../../alg";
-import { KPuzzle, Transformation } from "../../kpuzzle";
-import { cube3x3x3KPuzzle as def } from "../../puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
+import {
+  KPuzzle,
+  Transformation,
+  experimentalCube3x3x3KPuzzle as def,
+} from "../../kpuzzle";
 import {
   reid3x3x3ToTwizzleBinary,
   twizzleBinaryToReid3x3x3,

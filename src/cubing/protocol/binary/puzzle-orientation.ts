@@ -6,7 +6,7 @@ import {
   Transformation,
 } from "../../kpuzzle";
 // TODO: Should we expose this directly in the `puzzles` package for sync uses?
-import { experimentalCube3x3x3KPuzzle as def } from "../../puzzles";
+import { experimentalCube3x3x3KPuzzle as def } from "../../kpuzzle";
 
 export function puzzleOrientationIdx(state: Transformation): [number, number] {
   const idxU = state["CENTERS"].permutation[0];
