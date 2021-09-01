@@ -967,7 +967,7 @@ export class PuzzleGeometry {
     // point.  to improve 3d rendering speed, we would like to preserve
     // vertex order on rotation.  First, let's see what rotations preserve
     // the base face; these are the ones we want to work with.
-    const simplerot = [];
+    const simplerot: Quat[] = [];
     const cm = centermassface(firstface);
     for (let i = 0; i < this.rotations.length; i++) {
       const f = this.rotations[i].rotateface(firstface);
@@ -975,25 +975,25 @@ export class PuzzleGeometry {
         simplerot.push(this.rotations[i]);
       }
     }
-    const finished = new Array(faces.length);
-    const sortme = [];
+    const finished = new Array<boolean>(faces.length);
+    const sortme: [number, Quat, number][] = [];
     for (let i = 0; i < faces.length; i++) {
       const cm2 = centermassface(faces[i]);
       sortme.push([cm.dist(cm2), cm2, i]);
     }
     sortme.sort();
     for (let ii = 0; ii < faces.length; ii++) {
-      const i = sortme[ii][2] as number;
+      const i = sortme[ii][2];
       if (!finished[i]) {
         finished[i] = true;
         for (let j = 0; j < simplerot.length; j++) {
           const f2 = simplerot[j].rotateface(faces[i]);
           const cm = centermassface(f2);
           for (let kk = ii + 1; kk < faces.length; kk++) {
-            if ((sortme[kk][0] as number) - (sortme[ii][0] as number) > eps) {
+            if (sortme[kk][0] - sortme[ii][0] > eps) {
               break;
             }
-            const k = sortme[kk][2] as number;
+            const k = sortme[kk][2];
             if (!finished[k] && cm.dist(sortme[kk][1] as Quat) < eps) {
               finished[k] = true;
               faces[k] = f2;
