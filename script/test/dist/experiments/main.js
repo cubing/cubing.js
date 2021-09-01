@@ -39,7 +39,10 @@ async function runTest() {
   assert(
     "Time range is correct",
     1000,
-    await page.$eval("twisty-player", (elem) => elem.timeline.timeRange().end),
+    await page.$eval(
+      "twisty-player-v1",
+      (elem) => elem.timeline.timeRange().end,
+    ),
   );
 
   await Promise.all([

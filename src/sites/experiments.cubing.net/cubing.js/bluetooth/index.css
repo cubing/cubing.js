@@ -34,7 +34,7 @@ body {
   grid-area: player;
 }
 
-twisty-player {
+twisty-player-v1 {
   width: 100%;
   height: 100%;
 }

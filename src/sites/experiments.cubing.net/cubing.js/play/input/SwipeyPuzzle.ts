@@ -3,7 +3,7 @@ import { Move, Alg } from "../../../../../cubing/alg";
 import {
   BackViewLayout,
   Twisty3DCanvas,
-  TwistyPlayer,
+  TwistyPlayerV1,
 } from "../../../../../cubing/twisty";
 import { getSetup, PuzzleID } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
@@ -88,11 +88,11 @@ export function actionToUIText(action: Action): string {
   }[action];
 }
 
-function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayer {
+function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayerV1 {
   let backView = new URL(document.location.href).searchParams.get(
     "back-view",
   ) as BackViewLayout | undefined;
-  return new TwistyPlayer({
+  return new TwistyPlayerV1({
     alg: new Alg(),
     puzzle: puzzleName,
     controlPanel: "none",
@@ -103,7 +103,7 @@ function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayer {
 }
 
 export class SwipeyPuzzle extends HTMLElement {
-  public twistyPlayer: TwistyPlayer;
+  public twistyPlayer: TwistyPlayerV1;
 
   theme: ThemeType;
 

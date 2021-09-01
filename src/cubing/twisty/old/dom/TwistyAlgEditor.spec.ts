@@ -4,7 +4,7 @@
 import "../../../alg/test/alg-comparison";
 import { Alg } from "../../../alg";
 import { TwistyAlgEditor } from "./TwistyAlgEditor";
-import { TwistyPlayer } from "./TwistyPlayer";
+import { TwistyPlayerV1 } from "./TwistyPlayer";
 
 class ResizeObserver {
   observe() {
@@ -24,13 +24,13 @@ describe("TwistyAlgEditor", () => {
     expect(twistyAlgEditor.twistyPlayer).toBeNull();
   });
   it("can be constructed with a player", () => {
-    const twistyPlayer = new TwistyPlayer();
+    const twistyPlayer = new TwistyPlayerV1();
     const twistyAlgEditor = new TwistyAlgEditor({ twistyPlayer });
     expect(twistyAlgEditor.twistyPlayer).not.toBeNull();
   });
   it("can have a player set as an attribute", () => {
     // TODO: 2D is to avoid WebGL error. Can we do this in another way?
-    const twistyPlayer = new TwistyPlayer({ visualization: "2D" });
+    const twistyPlayer = new TwistyPlayerV1({ visualization: "2D" });
     twistyPlayer.id = "test-id-1";
     document.body.appendChild(twistyPlayer);
     const twistyAlgEditor = new TwistyAlgEditor();
@@ -38,7 +38,7 @@ describe("TwistyAlgEditor", () => {
     expect(twistyAlgEditor.twistyPlayer).not.toBeNull();
   });
   it("sets timestamp from textarea", async () => {
-    const twistyPlayer = new TwistyPlayer({ alg: "F2", visualization: "2D" });
+    const twistyPlayer = new TwistyPlayerV1({ alg: "F2", visualization: "2D" });
     document.body.appendChild(twistyPlayer);
     expect(twistyPlayer.alg).toBeIdentical(new Alg("F2"));
     const twistyAlgEditor = new TwistyAlgEditor({ twistyPlayer });

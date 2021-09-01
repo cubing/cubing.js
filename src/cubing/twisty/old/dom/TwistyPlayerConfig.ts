@@ -6,7 +6,7 @@ import {
   RangedFloatAttribute,
   StringEnumAttribute,
 } from "./element/ElementConfig";
-import type { TwistyPlayer } from "./TwistyPlayer";
+import type { TwistyPlayerV1 } from "./TwistyPlayer";
 import type { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
@@ -265,7 +265,7 @@ const twistyPlayerAttributeMap: Record<
 export class TwistyPlayerConfig {
   attributes: TwistyPlayerAttributes;
   constructor(
-    private twistyPlayer: TwistyPlayer, // TODO
+    private twistyPlayer: TwistyPlayerV1, // TODO
     initialValues: TwistyPlayerInitialConfig,
   ) {
     this.attributes = {

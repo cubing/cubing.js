@@ -17,7 +17,7 @@ body {
   overflow: hidden;
 }
 
-body > twisty-player {
+body > twisty-player-v1 {
   grid-area: player;
 }
 

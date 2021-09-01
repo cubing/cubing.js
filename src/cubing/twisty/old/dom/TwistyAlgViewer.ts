@@ -14,7 +14,7 @@ import {
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
 import { puzzles } from "../../../puzzles";
-import { TwistyPlayer } from "../../../twisty";
+import { TwistyPlayerV1 } from "../../../twisty";
 import { KPuzzleWrapper } from "../../views/3D/puzzles/KPuzzleWrapper";
 import type { TimeRange } from "../animation/cursor/AlgCursor";
 import type { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
@@ -385,9 +385,9 @@ class MoveHighlighter {
 export class TwistyAlgViewer extends HTMLElementShim {
   highlighter: MoveHighlighter = new MoveHighlighter();
   #domTree: TwistyAlgWrapperElem | TwistyAlgLeafElem;
-  twistyPlayer: TwistyPlayer | null = null;
+  twistyPlayer: TwistyPlayerV1 | null = null;
   lastClickTimestamp: number | null = null;
-  constructor(options?: { twistyPlayer?: TwistyPlayer }) {
+  constructor(options?: { twistyPlayer?: TwistyPlayerV1 }) {
     super();
     if (options?.twistyPlayer) {
       this.setTwistyPlayer(options?.twistyPlayer);
@@ -408,7 +408,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
     this.appendChild(this.#domTree);
   }
 
-  setTwistyPlayer(twistyPlayer: TwistyPlayer): void {
+  setTwistyPlayer(twistyPlayer: TwistyPlayerV1): void {
     if (this.twistyPlayer) {
       console.warn("twisty-player reassignment is not supported");
       return;
@@ -493,7 +493,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
         console.warn("for= elem does not exist");
         return;
       }
-      if (!(elem instanceof TwistyPlayer)) {
+      if (!(elem instanceof TwistyPlayerV1)) {
         console.warn("for= elem is not a twisty-player");
         return;
       }

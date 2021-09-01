@@ -3,7 +3,7 @@
 
 import { Move, QuantumMove } from "../../../../cubing/alg";
 import { AlgBuilder } from "../../../../cubing/alg/AlgBuilder";
-import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
+import { TwistyAlgViewer, TwistyPlayerV1 } from "../../../../cubing/twisty";
 // import { TwistyPlayer } from "../../../../cubing/twisty";
 
 const icsMoves =
@@ -50,7 +50,7 @@ const alg = algBuilder.toAlg();
 // console.log(alg.toString());
 
 setTimeout(() => {
-  const player = new TwistyPlayer({
+  const player = new TwistyPlayerV1({
     puzzle: "40x40x40",
     alg,
     experimentalSetupAnchor: "end",

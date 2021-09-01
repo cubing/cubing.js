@@ -10,7 +10,7 @@ export {
   experimentalShowRenderStats,
   Twisty3DCanvas,
 } from "./old/dom/viewers/Twisty3DCanvas";
-export { TwistyPlayer } from "./old/dom/TwistyPlayer";
+export { TwistyPlayerV1 } from "./old/dom/TwistyPlayer";
 export type {
   TwistyPlayerInitialConfig,
   ExperimentalStickering,

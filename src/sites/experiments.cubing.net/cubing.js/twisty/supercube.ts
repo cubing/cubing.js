@@ -8,7 +8,7 @@ import {
   Cube3D,
   TimelineActionEvent,
   TimestampLocationType,
-  TwistyPlayer,
+  TwistyPlayerV1,
 } from "../../../../cubing/twisty";
 import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/old/dom/viewers/canvas";
 
@@ -32,7 +32,9 @@ const hintSpriteURL =
 
 let haveHadMoveInput = false;
 
-const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
+const twistyPlayer = document.querySelector(
+  "twisty-player-v1",
+)! as TwistyPlayerV1;
 twistyPlayer.experimentalSetCursorIndexer("simultaneous");
 twistyPlayer.timeline.jumpToStart();
 setTimeout(() => {

@@ -15,7 +15,7 @@ import {
   Cube3D,
   TimelineActionEvent,
   Twisty3DCanvas,
-  TwistyPlayer,
+  TwistyPlayerV1,
 } from "../../../../../cubing/twisty";
 import { TAU } from "../../../../../cubing/twisty/views/3D/TAU";
 import type { TimeRange } from "../../../../../cubing/twisty/old/animation/cursor/AlgCursor";
@@ -46,7 +46,7 @@ if (MAX_QUALITY) {
   document.body.classList.add("max-quality");
 }
 
-const twistyPlayer = new TwistyPlayer({
+const twistyPlayer = new TwistyPlayerV1({
   alg: Alg.fromString("(y y')6"),
   controlPanel: "none",
   hintFacelets: "none",

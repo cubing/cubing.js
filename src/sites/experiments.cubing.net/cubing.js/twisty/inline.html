@@ -32,20 +32,20 @@
           justify-content: space-around;
         "
       >
-        <twisty-player
+        <twisty-player-v1
           puzzle="square1"
           visualization="2D"
           style="height: 400px; width: 45%; margin: 0"
           alg="SLICE U3' SLICE D3 SLICE D3' SLICE D3 SLICE U2 SLICE D2 SLICE U2' SLICE U4 SLICE D2' SLICE D2 SLICE U1' D4 SLICE D3' SLICE D3"
         >
-        </twisty-player>
-        <twisty-player
+        </twisty-player-v1>
+        <twisty-player-v1
           puzzle="square1"
           visualization="2D"
           style="height: 400px; width: 45%; margin: 0"
           alg="SLICE U3 D3 SLICE U1 SLICE U2' D2' SLICE U2 SLICE U2 D2 SLICE U1' SLICE U3' D3' SLICE U2' SLICE U3 D3 SLICE U3 SLICE U1' D1' SLICE U3' SLICE U1 D1 SLICE U4' D3'"
         >
-        </twisty-player>
+        </twisty-player-v1>
       </div>
       <p>
         This should become initialized via JS, with a transparent puzzle
@@ -65,10 +65,10 @@
 
       PG3D 3x3x3:
 
-      <twisty-player
+      <twisty-player-v1
         alg="[R U R2', R U2 R2']"
         visualization="PG3D"
-      ></twisty-player>
+      ></twisty-player-v1>
     </div>
   </body>
 </html>

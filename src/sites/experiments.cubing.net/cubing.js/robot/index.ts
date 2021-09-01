@@ -8,7 +8,7 @@ import {
 import { connectSmartRobot } from "../../../../cubing/bluetooth/smart-robot";
 import type { GanRobot } from "../../../../cubing/bluetooth/smart-robot/GanRobot";
 import "../../../../cubing/twisty";
-import type { TwistyPlayer } from "../../../../cubing/twisty";
+import type { TwistyPlayerV1 } from "../../../../cubing/twisty";
 import { TwizzleStreamServer } from "../../../../cubing/stream/twizzle/TwizzleStream";
 import "../../../../cubing/twisty";
 
@@ -16,7 +16,7 @@ const BOGUS_VALUE = "BOGUS";
 
 class RobotDemo {
   // DOM
-  player: TwistyPlayer = document.querySelector("twisty-player")!;
+  player: TwistyPlayerV1 = document.querySelector("twisty-player-v1")!;
   inputButton: HTMLButtonElement = document.querySelector("#input")!;
   getStreamsButton: HTMLButtonElement = document.querySelector("#get-streams")!;
   streamSelect: HTMLSelectElement = document.querySelector("#stream-select")!;

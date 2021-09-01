@@ -19,7 +19,7 @@ button {
   font-size: 2em;
 }
 
-twisty-player {
+twisty-player-v1 {
   grid-column-start: 1;
   grid-column-end: 3;
   width: 100%;
@@ -39,7 +39,7 @@ select {
     grid-template-rows: repeat(6, 1fr);
   }
 
-  twisty-player {
+  twisty-player-v1 {
     grid-column-start: 1;
     grid-column-end: 1;
     grid-row-start: 1;

@@ -9,7 +9,7 @@ import { TimestampLocationType } from "../../../../cubing/twisty";
 import type {
   Cube3D,
   TimelineActionEvent,
-  TwistyPlayer,
+  TwistyPlayerV1,
 } from "../../../../cubing/twisty";
 import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/old/dom/viewers/canvas";
 
@@ -41,7 +41,9 @@ const foundationOpacity = parseFloat(
 
 let haveHadMoveInput = false;
 
-const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
+const twistyPlayer = document.querySelector(
+  "twisty-player-v1",
+)! as TwistyPlayerV1;
 twistyPlayer.experimentalSetCursorIndexer("simultaneous");
 twistyPlayer.timeline.jumpToStart();
 const tempo = new URL(location.href).searchParams.get("tempo");

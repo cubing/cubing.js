@@ -23,7 +23,7 @@ import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
 } from "../../../cubing/twisty/old/dom/viewers/Twisty3DCanvas";
-import { TwistyPlayer } from "../../../cubing/twisty";
+import { TwistyPlayerV1 } from "../../../cubing/twisty";
 import { countMoves } from "../../../cubing/notation";
 import { getURLParam, setURLParams } from "./url-params";
 import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
@@ -37,7 +37,7 @@ if (getURLParam("debugShowRenderStats")) {
 }
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
-let twisty: TwistyPlayer;
+let twisty: TwistyPlayerV1;
 let pg: PuzzleGeometry | undefined;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
@@ -272,7 +272,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
     // it again.  But for now we always do.
     if (!twisty) {
       elem.textContent = "";
-      twisty = new TwistyPlayer(
+      twisty = new TwistyPlayerV1(
         {
           puzzle: "custom",
           alg: new Alg(),

@@ -77,8 +77,7 @@ const indexerMap = {
   simultaneous: SimultaneousMoveIndexer,
 };
 
-// <twisty-player>
-export class TwistyPlayer extends ManagedCustomElement {
+export class TwistyPlayerV1 extends ManagedCustomElement {
   #config: TwistyPlayerConfig;
 
   timeline: Timeline;
@@ -931,4 +930,4 @@ export class TwistyPlayer extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-player", TwistyPlayer);
+customElementsShim.define("twisty-player-v1", TwistyPlayerV1);

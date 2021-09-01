@@ -9,13 +9,13 @@ import {
   viewerLinkPages,
   visualizationFormats,
 } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig"; // TODO
-import { TwistyPlayer } from "../../../../cubing/twisty";
+import { TwistyPlayerV1 } from "../../../../cubing/twisty";
 import { backViewLayouts } from "../../../../cubing/twisty/old/dom/viewers/TwistyViewerWrapper";
 import { Alg } from "../../../../cubing/alg";
 
 const contentElem = document.querySelector(".content")!;
 
-const twistyPlayer: TwistyPlayer = new TwistyPlayer();
+const twistyPlayer: TwistyPlayerV1 = new TwistyPlayerV1();
 contentElem.appendChild(twistyPlayer);
 
 const table = contentElem.appendChild(document.createElement("table"));

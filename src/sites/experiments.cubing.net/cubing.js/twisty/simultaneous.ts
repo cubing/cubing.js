@@ -1,6 +1,6 @@
 import {
   Cube3D,
-  TwistyPlayer,
+  TwistyPlayerV1,
   TwistyPlayerV2,
 } from "../../../../cubing/twisty";
 import { Alg } from "../../../../cubing/alg";
@@ -21,7 +21,7 @@ const supercubeSprite = new URL(
 }
 
 {
-  const player = new TwistyPlayer({
+  const player = new TwistyPlayerV1({
     alg: Alg.fromString("M' R' U' D' M R"),
     experimentalSetupAlg: Alg.fromString("(M' R' U' D' M R)'"),
   });
@@ -34,7 +34,7 @@ const supercubeSprite = new URL(
 }
 
 {
-  const player = new TwistyPlayer({
+  const player = new TwistyPlayerV1({
     alg: Alg.fromString("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     experimentalStickering: "picture",
   });
@@ -51,7 +51,7 @@ const supercubeSprite = new URL(
 }
 
 {
-  const player = new TwistyPlayer({
+  const player = new TwistyPlayerV1({
     alg: Alg.fromString("U' E' r E r2' E r U E"),
   });
   player.experimentalSetCursorIndexer("simultaneous");
@@ -60,7 +60,7 @@ const supercubeSprite = new URL(
 }
 
 {
-  const player = new TwistyPlayer({
+  const player = new TwistyPlayerV1({
     alg: Alg.fromString("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     puzzle: "5x5x5",
   });

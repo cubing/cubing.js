@@ -2,7 +2,7 @@
 
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, Move, Pause } from "../../../alg";
-import { TwistyPlayer } from "../../";
+import { TwistyPlayerV1 } from "../../";
 import type { TimeRange } from "../animation/cursor/AlgCursor";
 import type { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
 import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css_";
@@ -44,7 +44,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     "error",
   ]);
 
-  #twistyPlayer: TwistyPlayer | null = null;
+  #twistyPlayer: TwistyPlayerV1 | null = null;
   #twistyPlayerProp: TwistyPlayerAlgProp;
 
   #observer = new ResizeObserver((entries: ResizeObserverEntry[]) =>
@@ -54,7 +54,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
   #lastObserverRect: DOMRectReadOnly | null = null;
 
   constructor(options?: {
-    twistyPlayer?: TwistyPlayer;
+    twistyPlayer?: TwistyPlayerV1;
     twistyPlayerProp?: TwistyPlayerAlgProp;
   }) {
     super();
@@ -261,12 +261,12 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     this.#carbonCopyHighlight.hidden = false;
   }
 
-  get twistyPlayer(): TwistyPlayer | null {
+  get twistyPlayer(): TwistyPlayerV1 | null {
     return this.#twistyPlayer;
   }
 
   // TODO: spread out this impl over private methods instead of self-listeners.
-  set twistyPlayer(twistyPlayer: TwistyPlayer | null) {
+  set twistyPlayer(twistyPlayer: TwistyPlayerV1 | null) {
     if (this.#twistyPlayer) {
       // TODO: support reassigment/clearing
       console.warn("twisty-player reassignment/clearing is not supported");
@@ -343,7 +343,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
           console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}= elem does not exist`);
           return;
         }
-        if (!(elem instanceof TwistyPlayer)) {
+        if (!(elem instanceof TwistyPlayerV1)) {
           // TODO: avoid assuming single instance of lib?
           console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}=is not a twisty-player`);
           return;

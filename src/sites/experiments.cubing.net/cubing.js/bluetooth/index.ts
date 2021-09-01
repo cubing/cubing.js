@@ -5,9 +5,9 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../../../cubing/bluetooth";
-import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
+import { TwistyAlgViewer, TwistyPlayerV1 } from "../../../../cubing/twisty";
 
-async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
+async function asyncSetup(twistyPlayer: TwistyPlayerV1): Promise<void> {
   console.log("asyncSetup");
   const keyboard = await debugKeyboardConnect(twistyPlayer); // TODO: attach to viewer only?
   console.log("keyboard", twistyPlayer, keyboard);
@@ -20,7 +20,7 @@ async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
 (globalThis as any).puzzle = null;
 
 window.addEventListener("DOMContentLoaded", async () => {
-  const twistyPlayer = new TwistyPlayer({
+  const twistyPlayer = new TwistyPlayerV1({
     alg: new Alg(),
   });
   document.querySelector("#player")!.appendChild(twistyPlayer);
