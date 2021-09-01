@@ -52,6 +52,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: make build
+      - name: Upload dist folder
+        # Note: this can easily eat through our storage quota. Only upload for testing.
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist/
       - run: make test-dist-esm-node-import
       - run: make test-dist-esm-perf
       - run: make build-site-twizzle
