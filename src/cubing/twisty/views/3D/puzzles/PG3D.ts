@@ -434,6 +434,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private params: PG3DOptions = {},
   ) {
     super();
+    if (pgdat.stickers.length === 0) {
+      throw Error("Reuse of stickerdat from pg; please don't do that.");
+    }
     this.hintMaterial = new MeshBasicMaterial({
       vertexColors: true,
       transparent: true,
@@ -526,6 +529,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     filler.saveOriginalColors();
     cursor!.addPositionListener(this);
+    pgdat.stickers = []; // don't need these anymore
+    pgdat.foundations = [];
     /*
     this.experimentalUpdateTexture(
       true,
