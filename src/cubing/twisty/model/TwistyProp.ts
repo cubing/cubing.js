@@ -1,6 +1,8 @@
 import { from } from "../../vendor/p-lazy/p-lazy";
 import { StaleDropper } from "./PromiseFreshener";
 
+let stale = 0;
+
 export type InputProps<T extends Object> = {
   [s in keyof T]: TwistyPropParent<T[s]>;
 };
@@ -19,8 +21,10 @@ type SourceEvent<T> = CustomEvent<SourceEventDetail<T>>;
 
 type PromiseOrValue<T> = T | Promise<T>;
 
+let globalSourceGeneration = 1;
+let globalSourceGenerationFinished = false;
+
 // Values of T must be immutable.
-let globalSourceGeneration = 0; // This is incremented before being used, so 1 will be the first active value.
 export abstract class TwistyPropParent<T> {
   public abstract get(): Promise<T>;
 
@@ -52,10 +56,45 @@ export abstract class TwistyPropParent<T> {
   }
 
   protected lastSourceGeneration: number = 0;
+  // Each generation is a batch of source updates that were all set before any
+  // property was read. Rathenr than incrementing `globalSourceGeneration` on
+  // every source update, we only do so if it is necessary for the correct
+  // functioning of the prop graph.
+  //
+  // TODO:
+  // - Figure out if this is actually saving us significant time or work.We
+  //   already have`.#rawDispatchPending` and fresh listeners that deduplicate a
+  //   lot of work.
+  // - This may not be so efficient if there are a lot of players unless we
+  //   isolate each generation batch to a "universe" (i.e. the props associated
+  //   with a single player). But that might be rather tricky, at which point we
+  //   should probably remove batching.
+  protected getGeneration(): number {
+    // If this is causing any trouble, remove `globalSourceGenerationFinished`
+    // from the file and change this to unconditionally increment
+    // `globalSourceGeneration`.
+    if (globalSourceGenerationFinished) {
+      globalSourceGeneration++;
+      globalSourceGenerationFinished = false;
+    }
+    return globalSourceGeneration;
+  }
+
+  protected finishGeneration(generation: number): void {
+    if (
+      !globalSourceGenerationFinished &&
+      generation === globalSourceGeneration
+    ) {
+      globalSourceGenerationFinished = true;
+    }
+    console.log(generation);
+  }
+
   // Synchronously marks all descendants as stale. This doesn't actually
   // literally mark as stale, but it updates the last source generation, which
   // is used to tell if a cahced result is stale.
   protected markStale(sourceEvent: SourceEvent<any>): void {
+    console.log("stale", ++stale);
     if (sourceEvent.detail.generation !== globalSourceGeneration) {
       // The full stale propagation is synchronous, so there should not be a new one yet.
       throw new Error("A TwistyProp was marked stale too late!");
@@ -146,12 +185,13 @@ export abstract class TwistyPropSource<
   }
 
   set(input: PromiseOrValue<InputType>): void {
-    this.#value = this.deriveFromPromiseOrValue(input, this.#value);
+    this.getGeneration();
 
+    this.#value = this.deriveFromPromiseOrValue(input, this.#value);
     const sourceEventDetail: SourceEventDetail<OutputType> = {
       sourceProp: this,
       value: this.#value,
-      generation: ++globalSourceGeneration,
+      generation: globalSourceGeneration,
     };
     this.markStale(
       new CustomEvent<SourceEventDetail<OutputType>>("stale", {
@@ -182,6 +222,7 @@ export abstract class SimpleTwistyPropSource<
   SimpleType,
 > extends TwistyPropSource<SimpleType> {
   derive(input: SimpleType): PromiseOrValue<SimpleType> {
+    this.finishGeneration(this.lastSourceGeneration);
     return input;
   }
 }
@@ -255,6 +296,7 @@ export abstract class TwistyPropDerived<
       generation: number;
     } | null = null,
   ): Promise<OutputType> {
+    this.finishGeneration(generation);
     const inputs = await inputsPromise;
 
     const cache = (output: OutputType): OutputType => {
