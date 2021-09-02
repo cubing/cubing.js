@@ -2937,7 +2937,7 @@ export class PuzzleGeometry {
         return this.unswizzle(mv);
       };
     })().bind(this);
-    const twodmapper = this.generate2dmapping(2880, 2160, 10);
+    const twodmapper = this.generate2dmapping(2880, 2160, 0);
     const g = (function () {
       const irot = rot.invrot();
       return function (facenum: number, coords: number[]): number[] {

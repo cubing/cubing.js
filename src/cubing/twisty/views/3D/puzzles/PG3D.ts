@@ -841,7 +841,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.stickerMaterial = new MeshBasicMaterial({
         map: stickerTexture,
         side: FrontSide,
-        transparent: true,
+        transparent: false,
       });
       this.stickerMaterialDisposable = true;
     } else {
@@ -855,7 +855,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.hintMaterial = new MeshBasicMaterial({
         map: hintTexture,
         side: FrontSide,
-        transparent: true,
+        transparent: false,
       });
       this.hintMaterialDisposable = true;
     } else {
