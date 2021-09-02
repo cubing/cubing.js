@@ -10,7 +10,6 @@ import {
   MeshBasicMaterial,
   Object3D,
   Texture,
-  TextureLoader,
   Triangle,
   Vector3,
 } from "three";
@@ -177,7 +176,14 @@ class StickerDef {
     }
     this.faceColor = sdColor;
     const coords = stickerDat.coords as number[][];
-    makePoly(filler, coords, this.faceColor, 1, this.isDup ? 4 : 0, this.faceNum);
+    makePoly(
+      filler,
+      coords,
+      this.faceColor,
+      1,
+      this.isDup ? 4 : 0,
+      this.faceNum,
+    );
     this.stickerEnd = filler.ipos;
   }
 
@@ -290,13 +296,13 @@ class StickerDef {
   public setTexture(sd: StickerDef): number {
     this.filler.uvs.copyWithin(
       6 * this.stickerStart,
-      6 * sd.stickerStart + this.filler.pos,
-      6 * sd.stickerEnd + this.filler.pos,
+      6 * sd.stickerStart + this.filler.uvpos,
+      6 * sd.stickerEnd + this.filler.uvpos,
     );
     this.filler.uvs.copyWithin(
       6 * this.hintStart,
-      6 * sd.hintStart + this.filler.pos,
-      6 * sd.hintEnd + this.filler.pos,
+      6 * sd.hintStart + this.filler.uvpos,
+      6 * sd.hintEnd + this.filler.uvpos,
     );
     return 1;
   }
@@ -436,7 +442,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.axesInfo[axis[1]] = new AxisInfo(axis);
     }
     const stickers = this.pgdat.stickers as any[];
-    console.log("Constructor with " + stickers.length);
     this.stickers = {};
     this.materialArray1 = new Array(8);
     this.materialArray2 = new Array(8);
@@ -519,11 +524,17 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     filler.saveOriginalColors();
     cursor!.addPositionListener(this);
+    /*
     this.experimentalUpdateTexture(
-      true, 
-      new TextureLoader().load("/experiments.cubing.net/cubing.js/twisty/mkbhd-sprite-red.png"),
-      new TextureLoader().load("/experiments.cubing.net/cubing.js/twisty/mkbhd-sprite-red-hint.png"),
+      true,
+      new TextureLoader().load(
+        "/experiments.cubing.net/cubing.js/twisty/mkbhd-sprite-red.png",
+      ),
+      new TextureLoader().load(
+        "/experiments.cubing.net/cubing.js/twisty/mkbhd-sprite-red-hint.png",
+      ),
     );
+    */
   }
 
   public dispose(): void {
@@ -741,7 +752,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   private updateMaterialArrays() {
-    for (let i=0; i<8; i++) {
+    for (let i = 0; i < 8; i++) {
       this.materialArray1[i] = invisMaterial;
       this.materialArray2[i] = invisMaterial;
     }
@@ -809,7 +820,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.scheduleRenderCallback();
   }
 
-  public experimentalUpdateTexture(enabled: boolean, stickerTexture?: Texture, hintTexture?: Texture) {
+  public experimentalUpdateTexture(
+    enabled: boolean,
+    stickerTexture?: Texture,
+    hintTexture?: Texture,
+  ) {
     if (!stickerTexture) {
       enabled = false;
     } else if (!hintTexture) {
@@ -821,7 +836,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.stickerMaterialDisposable = false;
     }
     if (enabled) {
-      this.stickerMaterial = new MeshBasicMaterial({ map: stickerTexture, side: FrontSide, transparent: true});
+      this.stickerMaterial = new MeshBasicMaterial({
+        map: stickerTexture,
+        side: FrontSide,
+        transparent: true,
+      });
       this.stickerMaterialDisposable = true;
     } else {
       this.stickerMaterial = basicStickerMaterial;
@@ -831,8 +850,12 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.hintMaterialDisposable = false;
     }
     if (enabled) {
-      this.hintMaterial = new MeshBasicMaterial({ map: hintTexture, side: FrontSide, transparent: true});
-      this.hintMaterialDisposable = true;      
+      this.hintMaterial = new MeshBasicMaterial({
+        map: hintTexture,
+        side: FrontSide,
+        transparent: true,
+      });
+      this.hintMaterialDisposable = true;
     } else {
       this.hintMaterial = basicStickerMaterial;
     }
