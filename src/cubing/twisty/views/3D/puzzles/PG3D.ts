@@ -54,11 +54,11 @@ class Filler {
   uvpos: number;
   vertices: Float32Array;
   colors: Uint8Array;
-  uvs: Float32Array;
+  uvs?: Float32Array;
   ind: Uint8Array;
   constructor(public sz: number, public tm: TextureMapper) {
     this.vertices = new Float32Array(9 * sz);
-    this.uvs = new Float32Array(12 * sz);
+    this.uvs = undefined;
     this.colors = new Uint8Array(18 * sz);
     this.ind = new Uint8Array(sz);
     this.pos = 0;
@@ -66,14 +66,10 @@ class Filler {
     this.ipos = 0;
   }
 
-  add(pt: number[], c: number, fn: number) {
+  add(pt: number[], c: number) {
     this.vertices[this.pos] = pt[0];
     this.vertices[this.pos + 1] = pt[1];
     this.vertices[this.pos + 2] = pt[2];
-    const uv = this.tm.getuv(fn, pt);
-    this.uvs[this.uvpos] = uv[0];
-    this.uvs[this.uvpos + 1] = uv[1];
-    this.uvpos += 2;
     this.colors[this.pos] = c >> 16;
     this.colors[this.pos + 1] = (c >> 8) & 255;
     this.colors[this.pos + 2] = c & 255;
@@ -94,8 +90,6 @@ class Filler {
   setAttributes(geo: BufferGeometry) {
     geo.setAttribute("position", new BufferAttribute(this.vertices, 3));
     // the geometry only needs the first half of the array
-    const sa1 = this.uvs.subarray(0, 6 * this.sz);
-    geo.setAttribute("uv", new BufferAttribute(sa1, 2, true));
     const sa2 = this.colors.subarray(0, 9 * this.sz);
     geo.setAttribute("color", new BufferAttribute(sa2, 3, true));
   }
@@ -116,7 +110,6 @@ class Filler {
   }
 
   saveOriginalColors() {
-    this.uvs.copyWithin(this.uvpos, 0, this.uvpos);
     this.colors.copyWithin(this.pos, 0, this.pos);
   }
 }
@@ -127,7 +120,6 @@ function makePoly(
   color: number,
   scale: number,
   ind: number,
-  facenum: number,
 ): void {
   let ncoords: number[][] = coords;
   if (scale !== 1) {
@@ -138,9 +130,9 @@ function makePoly(
     }
   }
   for (let g = 1; g + 1 < ncoords.length; g++) {
-    filler.add(ncoords[0], color, facenum);
-    filler.add(ncoords[g], color, facenum);
-    filler.add(ncoords[g + 1], color, facenum);
+    filler.add(ncoords[0], color);
+    filler.add(ncoords[g], color);
+    filler.add(ncoords[g + 1], color);
     filler.setind(ind);
   }
 }
@@ -176,14 +168,7 @@ class StickerDef {
     }
     this.faceColor = sdColor;
     const coords = stickerDat.coords as number[][];
-    makePoly(
-      filler,
-      coords,
-      this.faceColor,
-      1,
-      this.isDup ? 4 : 0,
-      this.faceNum,
-    );
+    makePoly(filler, coords, this.faceColor, 1, this.isDup ? 4 : 0);
     this.stickerEnd = filler.ipos;
   }
 
@@ -226,7 +211,6 @@ class StickerDef {
       this.faceColor,
       1,
       hintStickers && !this.isDup ? 2 : 4,
-      this.faceNum,
     );
     this.hintEnd = this.filler.ipos;
   }
@@ -243,7 +227,6 @@ class StickerDef {
       black,
       0.999,
       this.isDup ? 4 : 6,
-      this.faceNum,
     );
     this.foundationEnd = filler.ipos;
   }
@@ -293,13 +276,35 @@ class StickerDef {
     this.setHintStickers(faceletMeshAppearance !== "invisible" && !this.isDup);
   }
 
+  public addUVs(): void {
+    const uvs = this.filler.uvs!;
+    const vert = this.filler.vertices;
+    let coords = new Array(3);
+    for (let i = 3 * this.stickerStart; i < 3 * this.stickerEnd; i++) {
+      coords[0] = vert[3 * i];
+      coords[1] = vert[3 * i + 1];
+      coords[2] = vert[3 * i + 2];
+      const uv = this.filler.tm.getuv(this.faceNum, coords);
+      uvs[2 * i] = uv[0];
+      uvs[2 * i + 1] = uv[1];
+    }
+    for (let i = 3 * this.hintStart; i < 3 * this.hintEnd; i++) {
+      coords[0] = vert[3 * i];
+      coords[1] = vert[3 * i + 1];
+      coords[2] = vert[3 * i + 2];
+      const uv = this.filler.tm.getuv(this.faceNum, coords);
+      uvs[2 * i] = uv[0];
+      uvs[2 * i + 1] = uv[1];
+    }
+  }
+
   public setTexture(sd: StickerDef): number {
-    this.filler.uvs.copyWithin(
+    this.filler.uvs!.copyWithin(
       6 * this.stickerStart,
       6 * sd.stickerStart + this.filler.uvpos,
       6 * sd.stickerEnd + this.filler.uvpos,
     );
-    this.filler.uvs.copyWithin(
+    this.filler.uvs!.copyWithin(
       6 * this.hintStart,
       6 * sd.hintStart + this.filler.uvpos,
       6 * sd.hintEnd + this.filler.uvpos,
@@ -822,6 +827,27 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.scheduleRenderCallback();
   }
 
+  private adduvs() {
+    const filler = this.filler;
+    if (filler.uvs) {
+      return;
+    }
+    this.filler.uvs = new Float32Array(12 * filler.sz);
+    for (const orbit in this.stickers) {
+      const pieces = this.stickers[orbit];
+      const orin = pieces.length;
+      for (let ori = 0; ori < orin; ori++) {
+        const pieces2 = pieces[ori];
+        for (let i = 0; i < pieces2.length; i++) {
+          pieces2[i].addUVs();
+        }
+      }
+    }
+    filler.uvs!.copyWithin(6 * filler.sz, 0, 6 * filler.sz);
+    const sa1 = filler.uvs!.subarray(0, 6 * filler.sz);
+    this.fixedGeo.setAttribute("uv", new BufferAttribute(sa1, 2, true));
+  }
+
   public experimentalUpdateTexture(
     enabled: boolean,
     stickerTexture?: Texture,
@@ -831,6 +857,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       enabled = false;
     } else if (!hintTexture) {
       hintTexture = stickerTexture;
+    }
+    if (enabled && !this.filler.uvs) {
+      this.adduvs();
     }
     this.textured = enabled;
     if (this.stickerMaterialDisposable) {
