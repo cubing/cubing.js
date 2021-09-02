@@ -19,8 +19,10 @@ type SourceEvent<T> = CustomEvent<SourceEventDetail<T>>;
 
 type PromiseOrValue<T> = T | Promise<T>;
 
+let globalSourceGeneration = 1;
+let globalSourceGenerationConsumed = false;
+
 // Values of T must be immutable.
-let globalSourceGeneration = 0; // This is incremented before being used, so 1 will be the first active value.
 export abstract class TwistyPropParent<T> {
   public abstract get(): Promise<T>;
 
@@ -146,12 +148,16 @@ export abstract class TwistyPropSource<
   }
 
   set(input: PromiseOrValue<InputType>): void {
-    this.#value = this.deriveFromPromiseOrValue(input, this.#value);
+    if (globalSourceGenerationConsumed) {
+      globalSourceGeneration++;
+      globalSourceGenerationConsumed = false;
+    }
 
+    this.#value = this.deriveFromPromiseOrValue(input, this.#value);
     const sourceEventDetail: SourceEventDetail<OutputType> = {
       sourceProp: this,
       value: this.#value,
-      generation: ++globalSourceGeneration,
+      generation: globalSourceGeneration,
     };
     this.markStale(
       new CustomEvent<SourceEventDetail<OutputType>>("stale", {
@@ -215,6 +221,9 @@ export abstract class TwistyPropDerived<
 
   public async get(): Promise<OutputType> {
     const generation = this.lastSourceGeneration;
+    if (!globalSourceGenerationConsumed && generation === globalSourceGeneration) {
+      globalSourceGenerationConsumed = true;
+    }
 
     if (this.#cachedLatestGenerationCalculation?.generation === generation) {
       return this.#cachedLatestGenerationCalculation.output;
