@@ -52,7 +52,7 @@ export interface TextureMapper {
 }
 
 export interface StickerDatSticker {
-  coords: number[][];
+  coords: number[];
   color: string;
   orbit: string;
   ord: number;
@@ -62,7 +62,7 @@ export interface StickerDatSticker {
 }
 
 export interface StickerDatFace {
-  coords: number[][];
+  coords: number[];
   name: string;
 }
 
@@ -413,11 +413,14 @@ function toCoords(q: Quat, maxdist: number): number[] {
   return [q.b / maxdist, -q.c / maxdist, q.d / maxdist];
 }
 
-function toFaceCoords(q: Quat[], maxdist: number): number[][] {
+function toFaceCoords(q: Quat[], maxdist: number): number[] {
   const r = [];
   const n = q.length;
   for (let i = 0; i < n; i++) {
-    r[n - i - 1] = toCoords(q[i], maxdist);
+    const pt = toCoords(q[n - i - 1], maxdist);
+    r[3 * i] = pt[0];
+    r[3 * i + 1] = pt[1];
+    r[3 * i + 2] = pt[2];
   }
   return r;
 }
@@ -2816,22 +2819,26 @@ export class PuzzleGeometry {
     return html;
   }
 
-  public dist(a: number[], b: number[]): number {
-    return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+  public dist(coords: number[], a: number, b: number): number {
+    return Math.hypot(
+      coords[3 * a] - coords[3 * b],
+      coords[3 * a + 1] - coords[3 * b + 1],
+      coords[3 * a + 2] - coords[3 * b + 2],
+    );
   }
 
-  public triarea(a: number[], b: number[], c: number[]): number {
-    const ab = this.dist(a, b);
-    const bc = this.dist(b, c);
-    const ac = this.dist(a, c);
+  public triarea(coords: number[], a: number, b: number, c: number): number {
+    const ab = this.dist(coords, a, b);
+    const bc = this.dist(coords, b, c);
+    const ac = this.dist(coords, a, c);
     const p = (ab + bc + ac) / 2;
     return Math.sqrt(p * (p - ab) * (p - bc) * (p - ac));
   }
 
-  public polyarea(coords: number[][]): number {
+  public polyarea(coords: number[]): number {
     let sum = 0;
-    for (let i = 2; i < coords.length; i++) {
-      sum += this.triarea(coords[0], coords[1], coords[i]);
+    for (let i = 2; 3 * i < coords.length; i++) {
+      sum += this.triarea(coords, 0, 1, i);
     }
     return sum;
   }
