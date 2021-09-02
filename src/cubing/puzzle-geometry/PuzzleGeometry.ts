@@ -2859,7 +2859,8 @@ export class PuzzleGeometry {
       avgstickerarea += this.polyarea(faces[i].coords);
     }
     avgstickerarea /= this.faces.length;
-    const trim = (Math.sqrt(avgstickerarea) * (1 - Math.sqrt(colorfrac))) / 2;
+    let trim = (Math.sqrt(avgstickerarea) * (1 - Math.sqrt(colorfrac))) / 2;
+    trim = 0;
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);
       const cubie = this.facetocubies[i][0];
