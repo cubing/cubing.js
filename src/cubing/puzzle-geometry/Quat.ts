@@ -31,17 +31,6 @@ export function centermassface(face: Quat[]): Quat {
   return s.smul(1.0 / face.length);
 }
 
-export function random(): Quat {
-  // generate a random quat
-  const q = new Quat(
-    Math.random() * 2 - 1,
-    Math.random() * 2 - 1,
-    Math.random() * 2 - 1,
-    Math.random() * 2 - 1,
-  );
-  return q.smul(1 / q.len());
-}
-
 export function solvethreeplanes(
   p1: number,
   p2: number,
@@ -268,11 +257,6 @@ export class Quat {
   public rotateface(face: Quat[]): Quat[] {
     // rotate a face by this Q.
     return face.map((_: Quat) => _.rotatepoint(this));
-  }
-
-  public rotatecubie(cubie: Quat[][]): Quat[][] {
-    // rotate a cubie by this Q.
-    return cubie.map((_: Quat[]) => this.rotateface(_));
   }
 
   public intersect3(p2: Quat, p3: Quat): Quat | false {
