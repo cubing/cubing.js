@@ -10,7 +10,6 @@ import {
   MeshBasicMaterial,
   Object3D,
   Texture,
-  Triangle,
   Vector3,
 } from "three";
 import {
@@ -47,6 +46,100 @@ const invisMaterial = new MeshBasicMaterial({
 const basicStickerMaterial = new MeshBasicMaterial({
   vertexColors: true,
 });
+
+function dist(coords: number[], a: number, b: number): number {
+  return Math.hypot(
+    coords[3 * a] - coords[3 * b],
+    coords[3 * a + 1] - coords[3 * b + 1],
+    coords[3 * a + 2] - coords[3 * b + 2],
+  );
+}
+
+function triarea(coords: number[], a: number, b: number, c: number): number {
+  const ab = dist(coords, a, b);
+  const bc = dist(coords, b, c);
+  const ac = dist(coords, a, c);
+  const p = (ab + bc + ac) / 2;
+  return Math.sqrt(p * (p - ab) * (p - bc) * (p - ac));
+}
+
+function polyarea(coords: number[]): number {
+  let sum = 0;
+  for (let i = 2; 3 * i < coords.length; i++) {
+    sum += triarea(coords, 0, 1, i);
+  }
+  return sum;
+}
+
+function normalize(r: number[]): number[] {
+  const m = Math.hypot(r[0], r[1], r[2]);
+  r[0] /= m;
+  r[1] /= m;
+  r[2] /= m;
+  return r;
+}
+
+function cross(a: number[], ai: number, b: number[], bi: number): number[] {
+  const r = new Array(3);
+  r[0] = a[ai + 1] * b[bi + 2] - a[ai + 2] * b[bi + 1];
+  r[1] = a[ai + 2] * b[bi + 0] - a[ai + 0] * b[bi + 2];
+  r[2] = a[ai + 0] * b[bi + 1] - a[ai + 1] * b[bi + 0];
+  return r;
+}
+
+function normal(c: number[]): number[] {
+  const a: number[] = [c[3] - c[0], c[4] - c[1], c[5] - c[2]];
+  const b: number[] = [c[6] - c[3], c[7] - c[4], c[8] - c[5]];
+  const r = cross(a, 0, b, 0);
+  return normalize(r);
+}
+
+function trimEdges(face: number[], tr: number): number[] {
+  const r: number[] = [];
+  const A: number[] = new Array(3);
+  const B: number[] = new Array(3);
+  for (let iter = 1; iter < 10; iter++) {
+    for (let i = 0; i < face.length; i += 3) {
+      const pi = (i + face.length - 3) % face.length;
+      const ni = (i + 3) % face.length;
+      for (let k = 0; k < 3; k++) {
+        A[k] = face[pi + k] - face[i + k];
+        B[k] = face[ni + k] - face[i + k];
+      }
+      const alen = Math.hypot(A[0], A[1], A[2]);
+      const blen = Math.hypot(B[0], B[1], B[2]);
+      for (let k = 0; k < 3; k++) {
+        A[k] /= alen;
+        B[k] /= blen;
+      }
+      const d = A[0] * B[0] + A[1] * B[1] + A[2] * B[2];
+      const m = tr / Math.sqrt(1 - d * d);
+      for (let k = 0; k < 3; k++) {
+        r[i + k] = face[i + k] + (A[k] + B[k]) * m;
+      }
+    }
+    let good = true;
+    for (let i = 0; good && i < r.length; i += 3) {
+      const pi = (i + face.length - 3) % face.length;
+      const ni = (i + 3) % face.length;
+      for (let k = 0; k < 3; k++) {
+        A[k] = face[pi + k] - face[i + k];
+        B[k] = face[ni + k] - face[i + k];
+      }
+      const d = cross(A, 0, B, 0);
+      const t = d[0] * r[i] + d[1] * r[i + 1] + d[2] * r[i + 2];
+      if (t >= 0) {
+        good = false;
+      }
+    }
+    if (good) {
+      return r;
+    }
+    tr /= 2;
+    console.log("Failing; reducing to " + tr);
+  }
+  return face;
+}
 
 class Filler {
   pos: number;
@@ -87,6 +180,16 @@ class Filler {
     this.ind[this.ipos++] = i;
   }
 
+  makePoly(coords: number[], color: number, ind: number): void {
+    let ncoords: number[] = coords;
+    for (let g = 1; 3 * (g + 1) < ncoords.length; g++) {
+      this.add(ncoords, 0, color);
+      this.add(ncoords, g, color);
+      this.add(ncoords, g + 1, color);
+      this.setind(ind);
+    }
+  }
+
   setAttributes(geo: BufferGeometry) {
     geo.setAttribute("position", new BufferAttribute(this.vertices, 3));
     // the geometry only needs the first half of the array
@@ -96,43 +199,18 @@ class Filler {
 
   makeGroups(geo: BufferGeometry) {
     geo.clearGroups();
-    let groupCount = 0;
     for (let i = 0; i < this.ipos; ) {
       const si = i++;
       const iv = this.ind[si];
       while (this.ind[i] === iv) {
         i++;
       }
-      groupCount++;
       geo.addGroup(3 * si, 3 * (i - si), iv);
     }
-    console.log("Group count is " + groupCount);
   }
 
   saveOriginalColors() {
     this.colors.copyWithin(this.pos, 0, this.pos);
-  }
-}
-
-function makePoly(
-  filler: Filler,
-  coords: number[],
-  color: number,
-  scale: number,
-  ind: number,
-): void {
-  let ncoords: number[] = coords;
-  if (scale !== 1) {
-    ncoords = coords.slice();
-    for (let i = 0; i < ncoords.length; i++) {
-      ncoords[i] *= scale;
-    }
-  }
-  for (let g = 1; 3 * (g + 1) < ncoords.length; g++) {
-    filler.add(ncoords, 0, color);
-    filler.add(ncoords, g, color);
-    filler.add(ncoords, g + 1, color);
-    filler.setind(ind);
   }
 }
 
@@ -150,8 +228,9 @@ class StickerDef {
   public isDup: boolean;
   public faceNum: number;
   constructor(
-    public filler: Filler,
+    filler: Filler,
     stickerDat: StickerDatSticker,
+    trim: number,
     options?: {
       appearance?: ExperimentalFaceletMeshAppearance;
     },
@@ -163,83 +242,90 @@ class StickerDef {
     this.origColor = sdColor;
     this.origColorAppearance = sdColor;
     if (options?.appearance) {
-      this.setAppearance(options.appearance);
+      this.setAppearance(filler, options.appearance);
     }
     this.faceColor = sdColor;
-    const coords = stickerDat.coords as number[];
-    makePoly(filler, coords, this.faceColor, 1, this.isDup ? 4 : 0);
+    const coords = this.stickerCoords(stickerDat.coords, trim);
+    filler.makePoly(coords, this.faceColor, this.isDup ? 4 : 0);
     this.stickerEnd = filler.ipos;
   }
 
+  private stickerCoords(coords: number[], trim: number): number[] {
+    return trimEdges(coords.slice(), trim);
+  }
+
+  private hintCoords(
+    coords: number[],
+    hintStickerHeightScale: number,
+    trim: number,
+    normal: number[],
+  ): number[] {
+    coords = this.stickerCoords(coords, trim); // pick up trim from stickers
+    normal = normal.slice();
+    for (let i = 0; i < 3; i++) {
+      normal[i] *= 0.5 * hintStickerHeightScale;
+    }
+    const hCoords = new Array(coords.length);
+    for (let i = 0; 3 * i < coords.length; i++) {
+      const j = coords.length / 3 - 1 - i;
+      hCoords[3 * i] = coords[3 * j] + normal[0];
+      hCoords[3 * i + 1] = coords[3 * j + 1] + normal[1];
+      hCoords[3 * i + 2] = coords[3 * j + 2] + normal[2];
+    }
+    return hCoords;
+  }
+
+  private foundationCoords(coords: number[]): number[] {
+    const ncoords = coords.slice();
+    for (let i = 0; i < coords.length; i++) {
+      ncoords[i] = coords[i] * 0.999;
+    }
+    return ncoords;
+  }
+
   addHint(
+    filler: Filler,
     stickerDat: StickerDatSticker,
     hintStickers: boolean,
     hintStickerHeightScale: number,
+    trim: number,
+    normal: number[],
   ): void {
-    this.hintStart = this.filler.ipos;
-    const coords = stickerDat.coords as number[];
-    let highArea = 0;
-    let goodFace = null;
-    const v0 = new Vector3(coords[0], coords[1], coords[2]);
-    let v1 = new Vector3(coords[3], coords[4], coords[5]);
-    for (let g = 2; 3 * g < coords.length; g++) {
-      const v2 = new Vector3(
-        coords[3 * g],
-        coords[3 * g + 1],
-        coords[3 * g + 2],
-      );
-      const t = new Triangle(v0, v1, v2);
-      const a = t.getArea();
-      if (a > highArea) {
-        highArea = a;
-        goodFace = t;
-      }
-      v1 = v2;
-    }
-    const norm = new Vector3();
-    goodFace!.getNormal(norm);
-    norm.multiplyScalar(0.5 * hintStickerHeightScale);
-    const hintCoords = new Array(coords.length);
-    for (let i = 0; 3 * i < coords.length; i++) {
-      const j = coords.length / 3 - 1 - i;
-      hintCoords[3 * i] = coords[3 * j] + norm.x;
-      hintCoords[3 * i + 1] = coords[3 * j + 1] + norm.y;
-      hintCoords[3 * i + 2] = coords[3 * j + 2] + norm.z;
-    }
-    makePoly(
-      this.filler,
-      hintCoords,
+    this.hintStart = filler.ipos;
+    const coords = this.hintCoords(
+      stickerDat.coords as number[],
+      hintStickerHeightScale,
+      trim,
+      normal,
+    );
+    filler.makePoly(
+      coords,
       this.faceColor,
-      1,
       hintStickers && !this.isDup ? 2 : 4,
     );
-    this.hintEnd = this.filler.ipos;
+    this.hintEnd = filler.ipos;
   }
 
   public addFoundation(
     filler: Filler,
-    foundationDat: StickerDatSticker,
+    stickerDat: StickerDatSticker,
     black: number,
   ) {
     this.foundationStart = filler.ipos;
-    makePoly(
-      filler,
-      foundationDat.coords as number[],
-      black,
-      0.999,
-      this.isDup ? 4 : 6,
-    );
+    const coords = this.foundationCoords(stickerDat.coords as number[]);
+    filler.makePoly(coords, black, this.isDup ? 4 : 6);
     this.foundationEnd = filler.ipos;
   }
 
-  public setHintStickers(hintStickers: boolean): void {
+  public setHintStickers(filler: Filler, hintStickers: boolean): void {
     let indv = this.isDup || !hintStickers ? 4 : 2;
     for (let i = this.hintStart; i < this.hintEnd; i++) {
-      this.filler.ind[i] = indv;
+      filler.ind[i] = indv;
     }
   }
 
   public setAppearance(
+    filler: Filler,
     faceletMeshAppearance: ExperimentalFaceletMeshAppearance,
   ): void {
     let c = 0;
@@ -265,27 +351,30 @@ class StickerDef {
     }
     this.origColorAppearance = c;
     for (let i = 9 * this.stickerStart; i < 9 * this.stickerEnd; i += 3) {
-      this.filler.colors[this.filler.pos + i] = c >> 16;
-      this.filler.colors[this.filler.pos + i + 1] = (c >> 8) & 255;
-      this.filler.colors[this.filler.pos + i + 2] = c & 255;
+      filler.colors[filler.pos + i] = c >> 16;
+      filler.colors[filler.pos + i + 1] = (c >> 8) & 255;
+      filler.colors[filler.pos + i + 2] = c & 255;
     }
     for (let i = 9 * this.hintStart; i < 9 * this.hintEnd; i += 3) {
-      this.filler.colors[this.filler.pos + i] = c >> 16;
-      this.filler.colors[this.filler.pos + i + 1] = (c >> 8) & 255;
-      this.filler.colors[this.filler.pos + i + 2] = c & 255;
+      filler.colors[filler.pos + i] = c >> 16;
+      filler.colors[filler.pos + i + 1] = (c >> 8) & 255;
+      filler.colors[filler.pos + i + 2] = c & 255;
     }
-    this.setHintStickers(faceletMeshAppearance !== "invisible" && !this.isDup);
+    this.setHintStickers(
+      filler,
+      faceletMeshAppearance !== "invisible" && !this.isDup,
+    );
   }
 
-  public addUVs(): void {
-    const uvs = this.filler.uvs!;
-    const vert = this.filler.vertices;
+  public addUVs(filler: Filler): void {
+    const uvs = filler.uvs!;
+    const vert = filler.vertices;
     let coords = new Array(3);
     for (let i = 3 * this.stickerStart; i < 3 * this.stickerEnd; i++) {
       coords[0] = vert[3 * i];
       coords[1] = vert[3 * i + 1];
       coords[2] = vert[3 * i + 2];
-      const uv = this.filler.tm.getuv(this.faceNum, coords);
+      const uv = filler.tm.getuv(this.faceNum, coords);
       uvs[2 * i] = uv[0];
       uvs[2 * i + 1] = uv[1];
     }
@@ -293,39 +382,39 @@ class StickerDef {
       coords[0] = vert[3 * i];
       coords[1] = vert[3 * i + 1];
       coords[2] = vert[3 * i + 2];
-      const uv = this.filler.tm.getuv(this.faceNum, coords);
+      const uv = filler.tm.getuv(this.faceNum, coords);
       uvs[2 * i] = uv[0];
       uvs[2 * i + 1] = uv[1];
     }
   }
 
-  public setTexture(sd: StickerDef): number {
-    this.filler.uvs!.copyWithin(
+  public setTexture(filler: Filler, sd: StickerDef): number {
+    filler.uvs!.copyWithin(
       6 * this.stickerStart,
-      6 * sd.stickerStart + this.filler.uvpos,
-      6 * sd.stickerEnd + this.filler.uvpos,
+      6 * sd.stickerStart + filler.uvpos,
+      6 * sd.stickerEnd + filler.uvpos,
     );
-    this.filler.uvs!.copyWithin(
+    filler.uvs!.copyWithin(
       6 * this.hintStart,
-      6 * sd.hintStart + this.filler.uvpos,
-      6 * sd.hintEnd + this.filler.uvpos,
+      6 * sd.hintStart + filler.uvpos,
+      6 * sd.hintEnd + filler.uvpos,
     );
     return 1;
   }
 
-  public setColor(sd: StickerDef): number {
+  public setColor(filler: Filler, sd: StickerDef): number {
     const c = sd.origColorAppearance;
     if (this.faceColor !== c) {
       this.faceColor = c;
-      this.filler.colors.copyWithin(
+      filler.colors.copyWithin(
         9 * this.stickerStart,
-        9 * sd.stickerStart + this.filler.pos,
-        9 * sd.stickerEnd + this.filler.pos,
+        9 * sd.stickerStart + filler.pos,
+        9 * sd.stickerEnd + filler.pos,
       );
-      this.filler.colors.copyWithin(
+      filler.colors.copyWithin(
         9 * this.hintStart,
-        9 * sd.hintStart + this.filler.pos,
-        9 * sd.hintEnd + this.filler.pos,
+        9 * sd.hintStart + filler.pos,
+        9 * sd.hintEnd + filler.pos,
       );
       return 1;
     } else {
@@ -368,6 +457,14 @@ class AxisInfo {
 export interface PG3DOptions {
   appearance?: ExperimentalPuzzleAppearance;
 }
+
+const DEFAULT_COLOR_FRACTION = 0.77;
+
+/*
+
+
+
+*/
 
 const PG_SCALE = 0.5;
 
@@ -464,11 +561,26 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     const filler = new Filler(triangleCount, pgdat.textureMapper);
     const black = 0;
+    const normals: number[][] = [];
+    let totArea = 0;
+    for (const f of pgdat.faces) {
+      normals.push(normal(f.coords));
+      totArea += polyarea(f.coords);
+    }
+    const colorfrac = DEFAULT_COLOR_FRACTION;
+    let nonDupStickers = 0;
+    for (let si = 0; si < stickers.length; si++) {
+      if (!stickers[si].isDup) {
+        nonDupStickers++;
+      }
+    }
+    const trim =
+      (Math.sqrt(totArea / nonDupStickers) * (1 - Math.sqrt(colorfrac))) / 2;
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
-      const orbit = sticker.orbit as string;
-      const ord = sticker.ord as number;
-      const ori = sticker.ori as number;
+      const orbit = sticker.orbit;
+      const ord = sticker.ord;
+      const ori = sticker.ori;
       if (!this.stickers[orbit]) {
         this.stickers[orbit] = [];
       }
@@ -485,28 +597,30 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           false,
         );
       }
-      const stickerdef = new StickerDef(filler, sticker, options);
+      const stickerdef = new StickerDef(filler, sticker, trim, options);
       this.stickers[orbit][ori][ord] = stickerdef;
     }
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
-      const orbit = sticker.orbit as number;
-      const ord = sticker.ord as number;
-      const ori = sticker.ori as number;
+      const orbit = sticker.orbit;
+      const ord = sticker.ord;
+      const ori = sticker.ori;
       this.stickers[orbit][ori][ord].addHint(
+        filler,
         sticker,
         showHintStickers,
         hintStickerHeightScale,
+        trim,
+        normals[sticker.face],
       );
     }
     this.foundationBound = filler.ipos;
     for (let si = 0; si < stickers.length; si++) {
       const sticker = stickers[si];
-      const foundation = this.pgdat.foundations[si];
-      const orbit = sticker.orbit as number;
-      const ord = sticker.ord as number;
-      const ori = sticker.ori as number;
-      this.stickers[orbit][ori][ord].addFoundation(filler, foundation, black);
+      const orbit = sticker.orbit;
+      const ord = sticker.ord;
+      const ori = sticker.ori;
+      this.stickers[orbit][ori][ord].addFoundation(filler, sticker, black);
     }
     const fixedGeo = new BufferGeometry();
     filler.setAttributes(fixedGeo);
@@ -530,7 +644,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     filler.saveOriginalColors();
     cursor!.addPositionListener(this);
     pgdat.stickers = []; // don't need these anymore
-    pgdat.foundations = [];
     /*
     this.experimentalUpdateTexture(
       true,
@@ -582,7 +695,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
             false,
           );
           const stickerDef = this.stickers[orbitName][faceletIdx][pieceIdx];
-          stickerDef.setAppearance(faceletAppearance);
+          stickerDef.setAppearance(this.filler, faceletAppearance);
         }
       }
     }
@@ -614,9 +727,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           for (let i = 0; i < pieces2.length; i++) {
             const ni = pos2.permutation[i];
             if (this.textured) {
-              colormods += pieces2[i].setTexture(pieces2[ni]);
+              colormods += pieces2[i].setTexture(this.filler, pieces2[ni]);
             } else {
-              colormods += pieces2[i].setColor(pieces2[ni]);
+              colormods += pieces2[i].setColor(this.filler, pieces2[ni]);
             }
           }
         } else {
@@ -626,9 +739,12 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               const nori = (ori + orin - pos2.orientation[i]) % orin;
               const ni = pos2.permutation[i];
               if (this.textured) {
-                colormods += pieces2[i].setTexture(pieces[nori][ni]);
+                colormods += pieces2[i].setTexture(
+                  this.filler,
+                  pieces[nori][ni],
+                );
               } else {
-                colormods += pieces2[i].setColor(pieces[nori][ni]);
+                colormods += pieces2[i].setColor(this.filler, pieces[nori][ni]);
               }
             }
           }
@@ -841,7 +957,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       for (let ori = 0; ori < orin; ori++) {
         const pieces2 = pieces[ori];
         for (let i = 0; i < pieces2.length; i++) {
-          pieces2[i].addUVs();
+          pieces2[i].addUVs(this.filler);
         }
       }
     }

@@ -44,9 +44,6 @@ import {
 } from "./PlatonicGenerator";
 import { centermassface, expandfaces, FaceTree, Quat } from "./Quat";
 
-const DEFAULT_COLOR_FRACTION = 0.77;
-const SVG_2D_SHRINK = 0.92;
-
 export interface TextureMapper {
   getuv(fn: number, threed: number[]): number[];
 }
@@ -70,7 +67,6 @@ export type StickerDatAxis = [number[], string, number];
 
 export interface StickerDat {
   stickers: StickerDatSticker[];
-  foundations: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
   unswizzle(mv: Move): string;
@@ -423,34 +419,6 @@ function toFaceCoords(q: Quat[], maxdist: number): number[] {
     r[3 * i + 2] = pt[2];
   }
   return r;
-}
-
-function trimEdges(face: Quat[], tr: number): Quat[] {
-  const r: Quat[] = [];
-  for (let iter = 1; iter < 10; iter++) {
-    for (let i = 0; i < face.length; i++) {
-      const pi = (i + face.length - 1) % face.length;
-      const ni = (i + 1) % face.length;
-      const A = face[pi].sub(face[i]).normalize();
-      const B = face[ni].sub(face[i]).normalize();
-      const d = A.dot(B);
-      const m = tr / Math.sqrt(1 - d * d);
-      r[i] = face[i].sum(A.sum(B).smul(m));
-    }
-    let good = true;
-    for (let i = 0; good && i < r.length; i++) {
-      const pi = (i + face.length - 1) % face.length;
-      const ni = (i + 1) % face.length;
-      if (r[pi].sub(r[i]).cross(r[ni].sub(r[i])).dot(r[i]) >= 0) {
-        good = false;
-      }
-    }
-    if (good) {
-      return r;
-    }
-    tr /= 2;
-  }
-  return face;
 }
 
 export class PuzzleGeometry {
@@ -2573,6 +2541,7 @@ export class PuzzleGeometry {
     h: number = 500,
     trim: number = 10,
     threed: boolean = false,
+    twodshrink: number = 0.92,
   ): any {
     // generate a mapping to use for 2D for textures, svg
     w -= 2 * trim;
@@ -2740,8 +2709,8 @@ export class PuzzleGeometry {
       } else {
         const g = geos[this.facenames[fn][1]];
         return [
-          trim + SVG_2D_SHRINK * q.dot(g[0]) + g[2].b,
-          trim + h - SVG_2D_SHRINK * q.dot(g[1]) - g[2].c,
+          trim + twodshrink * q.dot(g[0]) + g[2].b,
+          trim + h - twodshrink * q.dot(g[1]) - g[2].c,
         ];
       }
     };
@@ -2819,54 +2788,20 @@ export class PuzzleGeometry {
     return html;
   }
 
-  public dist(coords: number[], a: number, b: number): number {
-    return Math.hypot(
-      coords[3 * a] - coords[3 * b],
-      coords[3 * a + 1] - coords[3 * b + 1],
-      coords[3 * a + 2] - coords[3 * b + 2],
-    );
-  }
-
-  public triarea(coords: number[], a: number, b: number, c: number): number {
-    const ab = this.dist(coords, a, b);
-    const bc = this.dist(coords, b, c);
-    const ac = this.dist(coords, a, c);
-    const p = (ab + bc + ac) / 2;
-    return Math.sqrt(p * (p - ab) * (p - bc) * (p - ac));
-  }
-
-  public polyarea(coords: number[]): number {
-    let sum = 0;
-    for (let i = 2; 3 * i < coords.length; i++) {
-      sum += this.triarea(coords, 0, 1, i);
-    }
-    return sum;
-  }
-
   // The colorfrac parameter says how much of the face should be
   // colored (vs dividing lines); we default to 0.77 which seems
   // to work pretty well.  It should be a number between probably
   // 0.4 and 0.9.
-  public get3d(
-    colorfrac: number = DEFAULT_COLOR_FRACTION,
-    options?: {
-      stickerColors?: string[];
-    },
-  ): StickerDat {
+  public get3d(options?: { stickerColors?: string[] }): StickerDat {
     const stickers: any = [];
-    const foundations: any = [];
     const rot = this.getInitial3DRotation();
     const faces: any = [];
     const maxdist: number = 0.52 * this.basefaces[0][0].len();
-    let avgstickerarea = 0;
     for (let i = 0; i < this.basefaces.length; i++) {
       const coords = rot.rotateface(this.basefaces[i]);
       const name = this.facenames[i][1];
       faces.push({ coords: toFaceCoords(coords, maxdist), name });
-      avgstickerarea += this.polyarea(faces[i].coords);
     }
-    avgstickerarea /= this.faces.length;
-    const trim = (Math.sqrt(avgstickerarea) * (1 - Math.sqrt(colorfrac))) / 2;
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);
       const cubie = this.facetocubies[i][0];
@@ -2880,17 +2815,6 @@ export class PuzzleGeometry {
         color = options.stickerColors[i];
       }
       let coords = rot.rotateface(this.faces[i]);
-      foundations.push({
-        coords: toFaceCoords(coords, maxdist),
-        color,
-        orbit: this.cubiesetnames[cubiesetnum],
-        ord: cubieord,
-        ori: cubieori,
-      });
-      const fcoords = coords;
-      if (trim && trim > 0) {
-        coords = trimEdges(coords, trim);
-      }
       stickers.push({
         coords: toFaceCoords(coords, maxdist),
         color,
@@ -2899,19 +2823,11 @@ export class PuzzleGeometry {
         ori: cubieori,
         face: facenum,
       });
+      const fcoords = coords;
       if (this.duplicatedFaces[i]) {
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
           coords = this.rotateforward(coords);
           stickers.push({
-            coords: toFaceCoords(coords, maxdist),
-            color,
-            orbit: this.cubiesetnames[cubiesetnum],
-            ord: cubieord,
-            ori: jj,
-            face: facenum,
-            isDup: true,
-          });
-          foundations.push({
             coords: toFaceCoords(fcoords, maxdist),
             color,
             orbit: this.cubiesetnames[cubiesetnum],
@@ -2944,7 +2860,7 @@ export class PuzzleGeometry {
         return this.unswizzle(mv);
       };
     })().bind(this);
-    const twodmapper = this.generate2dmapping(2880, 2160, 0);
+    const twodmapper = this.generate2dmapping(2880, 2160, 0, false, 1.0);
     const g = (function () {
       const irot = rot.invrot();
       return function (facenum: number, coords: number[]): number[] {
@@ -2963,7 +2879,6 @@ export class PuzzleGeometry {
     })().bind(this);
     return {
       stickers,
-      foundations,
       faces,
       axis: grips,
       unswizzle: f,
