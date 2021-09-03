@@ -37,7 +37,6 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
   // TODO: Stale dropper?
   async twisty2DPuzzle(): Promise<Twisty2DPuzzle> {
     return (this.#cachedTwisty2DPuzzle ??= (async () => {
-      console.log("fdfdf", this.effectiveVisualization);
       const svgPromise =
         this.effectiveVisualization === "experimental-2D-LL"
           ? puzzles[this.puzzleID].llSVG!()
