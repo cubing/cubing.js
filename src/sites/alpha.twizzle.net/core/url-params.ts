@@ -1,11 +1,13 @@
-import type { TwistyPlayerInitialConfig } from "../../../cubing/twisty";
 import type {
   AlgProp,
   AlgWithIssues,
 } from "../../../cubing/twisty/model/depth-0/AlgProp";
 import type { TwistyPlayerModel } from "../../../cubing/twisty/model/TwistyPlayerModel";
 import type { TwistyPropSource } from "../../../cubing/twisty/model/TwistyProp";
-import type { TwistyPlayerAttribute } from "../../../cubing/twisty/views/TwistyPlayerV2";
+import type {
+  TwistyPlayerAttribute,
+  TwistyPlayerV2Config,
+} from "../../../cubing/twisty/views/TwistyPlayerV2";
 
 export class URLParamUpdater {
   constructor(model: TwistyPlayerModel) {
@@ -60,9 +62,9 @@ const paramKeys: TwistyPlayerAttribute[] = [
   "experimental-stickering",
 ];
 
-export function getConfigFromURL(): TwistyPlayerInitialConfig {
+export function getConfigFromURL(): TwistyPlayerV2Config {
   const params = new URL(location.href).searchParams;
-  const config: TwistyPlayerInitialConfig = {};
+  const config: TwistyPlayerV2Config = {};
   for (const paramKey in paramKeys) {
     const paramValue = params.get(paramKey);
     if (paramValue !== null) {
