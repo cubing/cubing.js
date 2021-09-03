@@ -311,15 +311,11 @@ class ControlPane {
     e: PuzzleStreamMoveEventRegisterCompatible,
   ): Promise<void> {
     const move = e.detail.move;
-    let alg: Alg;
     try {
       this.twistyPlayer.experimentalAddMove(move); // TODO
-      alg = (await this.twistyPlayer.experimentalModel.algProp.get()).alg;
     } catch (e) {
       console.info("Ignoring move:", move.toString());
-      alg = (await this.twistyPlayer.experimentalModel.algProp.get()).alg;
     }
-    this.algInput.algString = alg.toString();
     // setURLParams({ alg });
   }
 

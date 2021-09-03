@@ -308,8 +308,13 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
             return;
           }
           // TODO: This indexer can be out of date!
-          const indexer =
-            await twistyPlayer.experimentalModel.indexerProp.get();
+          const [indexer, timestampRequest] = await Promise.all([
+            await twistyPlayer.experimentalModel.indexerProp.get(),
+            await twistyPlayer.experimentalModel.timestampRequestProp.get(),
+          ]);
+          if (timestampRequest === "end") {
+            return;
+          }
           const moveStartTimestamp = indexer.indexToMoveStartTimestamp(
             highlightInfo.leafInfo.idx,
           );

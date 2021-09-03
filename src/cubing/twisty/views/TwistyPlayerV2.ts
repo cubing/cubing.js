@@ -1,4 +1,4 @@
-import type { Alg, Move } from "../../alg";
+import { Alg, Move } from "../../alg";
 import type { ExperimentalStickering } from "../../twisty";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
@@ -241,7 +241,7 @@ export class TwistyPlayerV2
   experimentalAddMove(move: Move): void {
     (async () => {
       const alg = (await this.experimentalModel.algProp.get()).alg;
-      this.experimentalModel.algProp.set(alg.concat([move]));
+      this.experimentalModel.algProp.set(new Alg(alg.concat([move])));
       this.experimentalModel.timestampRequestProp.set("end");
     })();
   }
