@@ -497,7 +497,6 @@ export class PuzzleGeometry {
   public addNotationMapper: string = "";
   public setReidOrder: boolean = false;
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
-    console.log("Constructing a pg with " + cuts.length + " cuts.");
     function asstructured(v: any): any {
       if (typeof v === "string") {
         return JSON.parse(v);
