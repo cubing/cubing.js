@@ -448,7 +448,8 @@ export class PuzzleGeometry {
   public vertexdistance: number; // vertex distance
   public edgedistance: number; // edge distance
   public orbits: number; // count of cubie orbits
-  public facetocubies: any[]; // map a face to a cubie index and offset
+  public facetocubie: number[]; // map a face to a cubie index
+  public facetoord: number[]; // map a face to a cubie ord
   public moverotations: Quat[][]; // move rotations
   public cubiekey: any; // cubie locator
   public cubiekeys: string[]; // cubie keys
@@ -1417,14 +1418,17 @@ export class PuzzleGeometry {
     }
     //  Build an array that takes each face to a cubie ordinal and a
     //  face number.
-    const facetocubies = [];
+    const facetocubie = [];
+    const facetoord = [];
     for (let i = 0; i < cubies.length; i++) {
       const facelist = facelisthash[cubiekeys[i]];
       for (let j = 0; j < facelist.length; j++) {
-        facetocubies[facelist[j]] = [i, j];
+        facetocubie[facelist[j]] = i;
+        facetoord[facelist[j]] = j;
       }
     }
-    this.facetocubies = facetocubies;
+    this.facetocubie = facetocubie;
+    this.facetoord = facetoord;
     //  Calculate the orbits of each cubie.  Assumes we do all moves.
     //  Also calculates which cubies are identical.
     const typenames = ["?", "CENTERS", "EDGES", "CORNERS", "C4RNER", "C5RNER"];
@@ -1484,9 +1488,9 @@ export class PuzzleGeometry {
           const cm = centermassface(cubies[cind][0]);
           for (let j = 0; j < moverotations.length; j++) {
             const tq =
-              this.facetocubies[
+              this.facetocubie[
                 this.findface2(cm.rotatepoint(moverotations[j][0]))
-              ][0];
+              ];
             if (!seen[tq]) {
               queue.push(tq);
               seen[tq] = true;
@@ -1816,7 +1820,7 @@ export class PuzzleGeometry {
         if (slicenum[i] < 0) {
           continue;
         }
-        const b = this.facetocubies[i].slice();
+        const b = [this.facetocubie[i], this.facetoord[i]];
         let cm = this.facecentermass[i];
         const ocm = cm;
         let fi2 = i;
@@ -1828,8 +1832,7 @@ export class PuzzleGeometry {
             break;
           }
           fi2 = this.findface2(cm2);
-          const c = this.facetocubies[fi2];
-          b.push(c[0], c[1]);
+          b.push(this.facetocubie[fi2], this.facetoord[fi2]);
           cm = cm2;
         }
         // If an oriented center is moving, we need to figure out
@@ -1911,6 +1914,9 @@ export class PuzzleGeometry {
         for (let j = 0; j < b.length; j += 2) {
           cubiedone[b[j]] = true;
         }
+      }
+      for (let kk=0; kk<axiscmoves.length; kk++) {
+        axiscmoves[kk] = axiscmoves[kk].slice();
       }
       cmovesbyslice.push(axiscmoves);
     }
@@ -2073,7 +2079,7 @@ export class PuzzleGeometry {
       return true;
     }
     const fi = set[0];
-    return this.skipbyori(this.facetocubies[fi][0]);
+    return this.skipbyori(this.facetocubie[fi]);
   }
 
   public header(comment: string): string {
@@ -2761,8 +2767,8 @@ export class PuzzleGeometry {
       svg.push("<title>" + this.facenames[j][1] + "</title>\n");
       for (let ii = 0; ii < this.stickersperface; ii++) {
         const i = j * this.stickersperface + ii;
-        const cubie = this.facetocubies[i][0];
-        const cubieori = this.facetocubies[i][1];
+        const cubie = this.facetocubie[i];
+        const cubieori = this.facetoord[i];
         const cubiesetnum = this.cubiesetnums[cubie];
         const cubieord = this.cubieordnums[cubie];
         const color = this.graybyori(cubie) ? "#808080" : colormap[pos.p[i]];
@@ -2804,8 +2810,8 @@ export class PuzzleGeometry {
     }
     for (let i = 0; i < this.faces.length; i++) {
       const facenum = Math.floor(i / this.stickersperface);
-      const cubie = this.facetocubies[i][0];
-      const cubieori = this.facetocubies[i][1];
+      const cubie = this.facetocubie[i];
+      const cubieori = this.facetoord[i];
       const cubiesetnum = this.cubiesetnums[cubie];
       const cubieord = this.cubieordnums[cubie];
       let color = this.graybyori(cubie)
