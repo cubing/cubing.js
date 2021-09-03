@@ -1,0 +1,84 @@
+import type {
+  AlgProp,
+  AlgWithIssues,
+} from "../../../cubing/twisty/model/depth-0/AlgProp";
+import type { TwistyPlayerModel } from "../../../cubing/twisty/model/TwistyPlayerModel";
+import type { TwistyPropSource } from "../../../cubing/twisty/model/TwistyProp";
+import {
+  TwistyPlayerAttribute,
+  twistyPlayerAttributeMap,
+  TwistyPlayerV2Config,
+} from "../../../cubing/twisty/views/TwistyPlayerV2";
+
+// TODO: Find a way to connect this to the `TwistyPlayerV2` constructor?
+
+export class URLParamUpdater {
+  constructor(model: TwistyPlayerModel, private prefix = "") {
+    this.listenToAlgProp(model.algProp, "alg");
+    this.listenToAlgProp(model.setupProp, "experimental-setup-alg");
+    this.listenToStringSourceProp(model.puzzleProp, "puzzle");
+    this.listenToStringSourceProp(
+      model.stickeringProp,
+      "experimental-stickering",
+    );
+    this.listenToStringSourceProp(
+      model.setupAnchorProp,
+      "experimental-setup-anchor",
+    );
+  }
+
+  // TODO: Cache parsed URL?
+  setURLParam(
+    unprefixedKey: string,
+    value: string,
+    defaultString: string,
+  ): void {
+    const prefixedKey = this.prefix + unprefixedKey;
+    const url = new URL(location.href);
+    if (value === defaultString) {
+      url.searchParams.delete(prefixedKey);
+    } else {
+      url.searchParams.set(prefixedKey, value);
+    }
+    window.history.replaceState("", "", url.toString());
+  }
+
+  async listenToStringSourceProp(
+    prop: TwistyPropSource<string>,
+    key: string,
+    defaultString?: string,
+  ): Promise<void> {
+    const actualDefaultString = defaultString ?? (await prop.getDefaultValue());
+    prop.addFreshListener((s: string) => {
+      this.setURLParam(key, s, actualDefaultString);
+    });
+  }
+
+  listenToAlgProp(prop: AlgProp, key: string): void {
+    prop.addFreshListener((algWithIssues: AlgWithIssues) => {
+      this.setURLParam(key, algWithIssues.alg.toString(), "");
+    });
+  }
+}
+
+const paramKeys: TwistyPlayerAttribute[] = [
+  "alg",
+  "experimental-setup-alg",
+  "experimental-setup-anchor",
+  "puzzle",
+  "experimental-stickering",
+];
+
+export function getConfigFromURL(prefix = ""): TwistyPlayerV2Config {
+  const params = new URL(location.href).searchParams;
+  const config: TwistyPlayerV2Config = {};
+  for (const paramKey of paramKeys) {
+    const paramValue = params.get(prefix + paramKey);
+    if (paramValue !== null) {
+      // TODO: type
+      const configKey = twistyPlayerAttributeMap[paramKey];
+      (config as any)[configKey] = paramValue;
+    }
+  }
+  return config;
+}

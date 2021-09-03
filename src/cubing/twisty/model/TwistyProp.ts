@@ -135,7 +135,7 @@ export abstract class TwistyPropSource<
 > extends TwistyPropParent<OutputType> {
   #value: Promise<OutputType>;
 
-  protected abstract getDefaultValue(): PromiseOrValue<OutputType>;
+  public abstract getDefaultValue(): PromiseOrValue<OutputType>;
 
   constructor(initialValue?: PromiseOrValue<InputType>) {
     super();

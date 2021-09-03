@@ -26,7 +26,7 @@ import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
 
 // TODO: I couldn't figure out how to use use more specific types. Ideally, we'd
 // enforce consistency with the model.
-const attributeMap: Record<string, string> = {
+export const twistyPlayerAttributeMap = {
   // TODO: We assume each of these can be set using a string or will be automatically converted by JS (e.g. numbers). Can we enforce
   // that with types? Do we need to add a translation mechanism for things we
   // don't want to leave settable as strings?
@@ -56,12 +56,11 @@ const attributeMap: Record<string, string> = {
   "tempo-scale": "tempoScale",
 };
 
-// TODO: Why isn't this exact?
-type ConfigKey = typeof attributeMap[keyof typeof attributeMap];
+export type TwistyPlayerAttribute = keyof typeof twistyPlayerAttributeMap;
 
-const configKeys: Record<ConfigKey, true> = Object.fromEntries(
-  Object.values(attributeMap).map((s) => [s, true]),
-);
+const configKeys: Record<TwistyPlayerAttribute, true> = Object.fromEntries(
+  Object.values(twistyPlayerAttributeMap).map((s) => [s, true]),
+) as any;
 
 // TODO: Find a way to share this def with `attributeMap`.
 export interface TwistyPlayerV2Config {
@@ -120,7 +119,7 @@ export class TwistyPlayerV2
 
     // TODO: double-check that these are all getting set sync without causing extra work.
     for (const [propName, value] of Object.entries(config)) {
-      if (!configKeys[propName]) {
+      if (!configKeys[propName as TwistyPlayerAttribute]) {
         console.warn(`Invalid config passed to TwistyPlayerV2: ${propName}`);
         break;
       }
@@ -248,7 +247,7 @@ export class TwistyPlayerV2
   }
 
   static get observedAttributes(): string[] {
-    return Object.keys(attributeMap);
+    return Object.keys(twistyPlayerAttributeMap);
   }
 
   attributeChangedCallback(
@@ -256,7 +255,8 @@ export class TwistyPlayerV2
     _oldValue: string,
     newValue: string,
   ): void {
-    const setterName = attributeMap[attributeName];
+    const setterName =
+      twistyPlayerAttributeMap[attributeName as TwistyPlayerAttribute];
     if (!setterName) {
       return;
     }
