@@ -31,11 +31,11 @@ import { URLParamUpdater } from "../core/url-params";
 // import { setURLParams } from "./url-params";
 
 export interface AppData {
-  puzzleName: string;
+  alg: Alg;
   experimentalSetupAlg: Alg;
+  puzzle: string;
   experimentalSetupAnchor: "start" | "end";
   experimentalStickering: ExperimentalStickering;
-  alg: Alg;
 }
 
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
@@ -109,7 +109,7 @@ export class App {
       this.twistyPlayer,
     );
 
-    this.controlPane.setPuzzle(initialData.puzzleName);
+    this.controlPane.setPuzzle(initialData.puzzle);
 
     new URLParamUpdater(this.twistyPlayer.experimentalModel);
   }
@@ -119,7 +119,7 @@ export class App {
       alg: new Alg(),
       viewerLink: "none",
     };
-    const displayablePuzzle = supportedPuzzles[initialData.puzzleName];
+    const displayablePuzzle = supportedPuzzles[initialData.puzzle];
     twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
     twistyConfig.visualization = displayablePuzzle.viz;
     twistyConfig.experimentalSetupAnchor = initialData.experimentalSetupAnchor;
@@ -326,7 +326,7 @@ class ControlPane {
       "puzzle",
       "select",
     );
-    this.initializePuzzleSelect(initialData.puzzleName);
+    this.initializePuzzleSelect(initialData.puzzle);
 
     this.setupAnchorSelect = findOrCreateChildWithClass(
       this.element,
@@ -342,7 +342,7 @@ class ControlPane {
     );
     this.initializeStickeringSelect(
       initialData.experimentalStickering,
-      initialData.puzzleName,
+      initialData.puzzle,
     );
 
     this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));

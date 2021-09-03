@@ -31,7 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
     alg = new Alg([]);
   }
   (window as any).app = new App(appElement, {
-    puzzleName: getURLParam("puzzle"),
+    puzzle: getURLParam("puzzle"),
     experimentalSetupAlg,
     alg,
     experimentalSetupAnchor: getURLParam("experimental-setup-anchor"),
