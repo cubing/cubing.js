@@ -4,8 +4,9 @@ import type {
 } from "../../../cubing/twisty/model/depth-0/AlgProp";
 import type { TwistyPlayerModel } from "../../../cubing/twisty/model/TwistyPlayerModel";
 import type { TwistyPropSource } from "../../../cubing/twisty/model/TwistyProp";
-import type {
+import {
   TwistyPlayerAttribute,
+  twistyPlayerAttributeMap,
   TwistyPlayerV2Config,
 } from "../../../cubing/twisty/views/TwistyPlayerV2";
 
@@ -65,12 +66,14 @@ const paramKeys: TwistyPlayerAttribute[] = [
 export function getConfigFromURL(): TwistyPlayerV2Config {
   const params = new URL(location.href).searchParams;
   const config: TwistyPlayerV2Config = {};
-  for (const paramKey in paramKeys) {
+  for (const paramKey of paramKeys) {
     const paramValue = params.get(paramKey);
     if (paramValue !== null) {
       // TODO: type
-      (config as any)[paramKey] = paramValue;
+      const configKey = twistyPlayerAttributeMap[paramKey];
+      (config as any)[configKey] = paramValue;
     }
   }
+  console.log(config);
   return config;
 }

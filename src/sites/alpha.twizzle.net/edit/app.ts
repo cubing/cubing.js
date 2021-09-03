@@ -98,12 +98,11 @@ export class App {
     new URLParamUpdater(this.twistyPlayer.experimentalModel);
   }
 
+  // TODO: avoid modifying `initialConfig`?
   private initializeTwisty(initialConfig: TwistyPlayerV2Config): void {
-    const appConfig: TwistyPlayerV2Config = {
-      viewerLink: "none",
-    };
-    Object.assign(appConfig, initialConfig);
-    this.twistyPlayer = new TwistyPlayerV2(appConfig);
+    initialConfig.viewerLink = "none";
+    this.twistyPlayer = new TwistyPlayerV2(initialConfig);
+    console.log(initialConfig);
     this.puzzlePane.appendChild(this.twistyPlayer);
   }
 
