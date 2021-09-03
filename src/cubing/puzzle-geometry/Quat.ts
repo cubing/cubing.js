@@ -6,22 +6,6 @@
 
 const eps = 1e-9; // TODO: Deduplicate with `PuzzleGeometry`?
 
-export function expandfaces(rots: Quat[], faces: Quat[][]): Quat[][] {
-  // given a set of faces, expand by rotation set
-  const nfaces = [];
-  for (let i = 0; i < rots.length; i++) {
-    for (let k = 0; k < faces.length; k++) {
-      const face = faces[k];
-      const nface = [];
-      for (let j = 0; j < face.length; j++) {
-        nface.push(face[j].rotateplane(rots[i]));
-      }
-      nfaces.push(nface);
-    }
-  }
-  return nfaces;
-}
-
 export function centermassface(face: Quat[]): Quat {
   // calculate a center of a face by averaging points
   let s = new Quat(0, 0, 0, 0);
@@ -56,41 +40,6 @@ export function solvethreeplanes(
     }
   }
   return p;
-}
-
-export class FaceTree {
-  constructor(
-    public face: Quat[],
-    public left?: FaceTree,
-    public right?: FaceTree,
-  ) {}
-
-  public split(q: Quat): FaceTree {
-    const t = q.cutface(this.face);
-    if (t !== null) {
-      if (this.left === undefined) {
-        this.left = new FaceTree(t[0]);
-        this.right = new FaceTree(t[1]);
-      } else {
-        this.left = this.left?.split(q);
-        this.right = this.right?.split(q);
-      }
-    }
-    return this;
-  }
-
-  public collect(arr: Quat[][], leftfirst: boolean): Quat[][] {
-    if (this.left === undefined) {
-      arr.push(this.face);
-    } else if (leftfirst) {
-      this.left?.collect(arr, false);
-      this.right?.collect(arr, true);
-    } else {
-      this.right?.collect(arr, false);
-      this.left?.collect(arr, true);
-    }
-    return arr;
-  }
 }
 
 export class Quat {
