@@ -27,7 +27,8 @@ import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
-import { setURLParams } from "./url-params";
+import { URLParamUpdater } from "../core/url-params";
+// import { setURLParams } from "./url-params";
 
 export interface AppData {
   puzzleName: string;
@@ -109,6 +110,8 @@ export class App {
     );
 
     this.controlPane.setPuzzle(initialData.puzzleName);
+
+    new URLParamUpdater(this.twistyPlayer.experimentalModel);
   }
 
   private initializeTwisty(initialData: AppData): void {
@@ -132,7 +135,7 @@ export class App {
     try {
       this.twistyPlayer.experimentalSetupAlg = experimentalSetupAlg;
       this.twistyPlayer.jumpToStart();
-      setURLParams({ "experimental-setup-alg": experimentalSetupAlg });
+      // setURLParams({ "experimental-setup-alg": experimentalSetupAlg });
       return true;
     } catch (e) {
       this.twistyPlayer.experimentalSetupAlg = new Alg();
@@ -149,7 +152,7 @@ export class App {
       } else {
         this.twistyPlayer.jumpToStart();
       }
-      setURLParams({ alg });
+      // setURLParams({ alg });
       return true;
     } catch (e) {
       this.twistyPlayer.alg = new Alg();
@@ -158,7 +161,7 @@ export class App {
   }
 
   private setPuzzle(puzzleName: string): boolean {
-    setURLParams({ puzzle: puzzleName });
+    // setURLParams({ puzzle: puzzleName });
     // TODO: Handle 2D/3D transitions
     this.twistyPlayer.puzzle = puzzleName as PuzzleID;
     this.controlPane.setPuzzle(puzzleName);
@@ -166,12 +169,12 @@ export class App {
   }
 
   public setSetupAnchor(setupAnchor: "start" | "end"): void {
-    setURLParams({ "experimental-setup-anchor": setupAnchor });
+    // setURLParams({ "experimental-setup-anchor": setupAnchor });
     this.twistyPlayer.experimentalSetupAnchor = setupAnchor;
   }
 
   public setStickering(stickering: ExperimentalStickering): void {
-    setURLParams({ "experimental-stickering": stickering });
+    // setURLParams({ "experimental-stickering": stickering });
     this.twistyPlayer.experimentalStickering = stickering;
   }
 
@@ -412,8 +415,8 @@ class ControlPane {
       console.info("Ignoring move:", move.toString());
       alg = (await this.twistyPlayer.experimentalModel.algProp.get()).alg;
     }
-    // this.algInput.algString = alg;
-    setURLParams({ alg });
+    this.algInput.algString = alg.toString();
+    // setURLParams({ alg });
   }
 
   private onexperimentalSetupAlgInput(canonicalize: boolean): void {
@@ -677,13 +680,13 @@ class ControlPane {
   setExperimentalSetupAlg(alg: Alg): void {
     this.experimentalSetupAlgInput.algString = alg.toString();
     this.experimentalSetupAlgChangeCallback(alg);
-    setURLParams({ "experimental-setup-alg": alg });
+    // setURLParams({ "experimental-setup-alg": alg });
   }
 
   setAlg(alg: Alg): void {
     this.algInput.algString = alg.toString();
     this.algChangeCallback(alg);
-    setURLParams({ alg });
+    // setURLParams({ alg });
   }
 
   setPuzzle(puzzle: string): void {

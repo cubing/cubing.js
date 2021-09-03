@@ -10,7 +10,7 @@ import type { TwistyPlayerAttribute } from "../../../cubing/twisty/views/TwistyP
 export class URLParamUpdater {
   constructor(model: TwistyPlayerModel) {
     this.listenToAlgProp(model.algProp, "alg");
-    this.listenToAlgProp(model.algProp, "experimental-setup-alg");
+    this.listenToAlgProp(model.setupProp, "experimental-setup-alg");
     this.listenToStringSourceProp(model.puzzleProp, "puzzle");
     this.listenToStringSourceProp(
       model.stickeringProp,
@@ -24,6 +24,7 @@ export class URLParamUpdater {
 
   // TODO: Cache parsed URL?
   setURLParam(key: string, value: string, defaultString: string): void {
+    console.log("setting", key, value, defaultString);
     const url = new URL(location.href);
     if (value === defaultString) {
       url.searchParams.delete(key);
