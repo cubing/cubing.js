@@ -102,7 +102,6 @@ export class App {
   private initializeTwisty(initialConfig: TwistyPlayerV2Config): void {
     initialConfig.viewerLink = "none";
     this.twistyPlayer = new TwistyPlayerV2(initialConfig);
-    console.log(initialConfig);
     this.puzzlePane.appendChild(this.twistyPlayer);
   }
 

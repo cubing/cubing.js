@@ -10,8 +10,10 @@ import {
   TwistyPlayerV2Config,
 } from "../../../cubing/twisty/views/TwistyPlayerV2";
 
+// TODO: Find a way to connect this to the `TwistyPlayerV2` constructor?
+
 export class URLParamUpdater {
-  constructor(model: TwistyPlayerModel) {
+  constructor(model: TwistyPlayerModel, private prefix = "") {
     this.listenToAlgProp(model.algProp, "alg");
     this.listenToAlgProp(model.setupProp, "experimental-setup-alg");
     this.listenToStringSourceProp(model.puzzleProp, "puzzle");
@@ -26,13 +28,17 @@ export class URLParamUpdater {
   }
 
   // TODO: Cache parsed URL?
-  setURLParam(key: string, value: string, defaultString: string): void {
-    console.log("setting", key, value, defaultString);
+  setURLParam(
+    unprefixedKey: string,
+    value: string,
+    defaultString: string,
+  ): void {
+    const prefixedKey = this.prefix + unprefixedKey;
     const url = new URL(location.href);
     if (value === defaultString) {
-      url.searchParams.delete(key);
+      url.searchParams.delete(prefixedKey);
     } else {
-      url.searchParams.set(key, value);
+      url.searchParams.set(prefixedKey, value);
     }
     window.history.replaceState("", "", url.toString());
   }
@@ -63,17 +69,16 @@ const paramKeys: TwistyPlayerAttribute[] = [
   "experimental-stickering",
 ];
 
-export function getConfigFromURL(): TwistyPlayerV2Config {
+export function getConfigFromURL(prefix = ""): TwistyPlayerV2Config {
   const params = new URL(location.href).searchParams;
   const config: TwistyPlayerV2Config = {};
   for (const paramKey of paramKeys) {
-    const paramValue = params.get(paramKey);
+    const paramValue = params.get(prefix + paramKey);
     if (paramValue !== null) {
       // TODO: type
       const configKey = twistyPlayerAttributeMap[paramKey];
       (config as any)[configKey] = paramValue;
     }
   }
-  console.log(config);
   return config;
 }
