@@ -1915,7 +1915,7 @@ export class PuzzleGeometry {
           cubiedone[b[j]] = true;
         }
       }
-      for (let kk=0; kk<axiscmoves.length; kk++) {
+      for (let kk = 0; kk < axiscmoves.length; kk++) {
         axiscmoves[kk] = axiscmoves[kk].slice();
       }
       cmovesbyslice.push(axiscmoves);
