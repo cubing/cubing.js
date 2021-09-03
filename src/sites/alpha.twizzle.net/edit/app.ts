@@ -497,10 +497,10 @@ class ControlPane {
       "scramble",
       Object.keys(SCRAMBLE_EVENTS).includes(puzzle),
     );
-    this.toolGrid.setButtonEnabled(
-      "screenshot",
-      !["clock", "square1"].includes(puzzle),
-    );
+    // this.toolGrid.setButtonEnabled(
+    //   "screenshot",
+    //   !["clock", "square1"].includes(puzzle),
+    // );
   }
 }
 
