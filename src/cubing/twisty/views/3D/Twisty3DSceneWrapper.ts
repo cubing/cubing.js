@@ -1,4 +1,10 @@
 import type { Scene as ThreeScene } from "three";
+import { THREEJS } from "../../heavy-code-imports/3d";
+import type { BackViewLayoutWithAuto } from "../../model/depth-0/BackViewProp";
+import type { VisualizationStrategy } from "../../model/depth-1/VisualizationStrategyProp";
+import { StaleDropper } from "../../model/PromiseFreshener";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import { FreshListenerManager } from "../../model/TwistyProp";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
@@ -6,11 +12,6 @@ import { customElementsShim } from "../../old/dom/element/node-custom-element-sh
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import type { BackViewLayout } from "../../old/dom/viewers/TwistyViewerWrapper";
 import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css_";
-import { THREEJS } from "../../heavy-code-imports/3d";
-import type { BackViewLayoutWithAuto } from "../../model/depth-0/BackViewProp";
-import { StaleDropper } from "../../model/PromiseFreshener";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/TwistyProp";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
 import { Twisty3DVantage } from "./Twisty3DVantage";
 
@@ -40,8 +41,8 @@ export class Twisty3DSceneWrapper
     const vantage = new Twisty3DVantage(this.model, this);
     this.addVantage(vantage);
     if (this.model) {
-      this.#freshListenerManager.addListener(
-        this.model.puzzleProp,
+      this.#freshListenerManager.addMultiListener(
+        [this.model.puzzleProp, this.model.visualizationStrategyProp],
         this.onPuzzle.bind(this),
       );
       this.#freshListenerManager.addListener(
@@ -121,13 +122,15 @@ export class Twisty3DSceneWrapper
   #twisty3DStaleDropper: StaleDropper<[ThreeScene, Twisty3DPuzzleWrapper]> =
     new StaleDropper<[ThreeScene, Twisty3DPuzzleWrapper]>();
 
-  async onPuzzle(puzzle: PuzzleID): Promise<void> {
+  async onPuzzle(
+    inputs: [puzzle: PuzzleID, visualizationStrategy: VisualizationStrategy],
+  ): Promise<void> {
     this.#currentTwisty3DPuzzleWrapper?.disconnect();
     const [scene, twisty3DPuzzleWrapper] =
       await this.#twisty3DStaleDropper.queue(
         Promise.all([
           this.scene(),
-          new Twisty3DPuzzleWrapper(this.model!, this, puzzle), // TODO
+          new Twisty3DPuzzleWrapper(this.model!, this, inputs[0], inputs[1]), // TODO
         ]),
       );
 

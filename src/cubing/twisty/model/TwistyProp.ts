@@ -308,6 +308,36 @@ export class FreshListenerManager {
     });
   }
 
+  addMultiListener<U, V>(
+    props: [TwistyPropParent<U>, TwistyPropParent<V>],
+    listener: (values: [U, V]) => void,
+  ) {
+    let disconnected = false;
+    const wrappedListener = async (_: any) => {
+      if (disconnected) {
+        console.warn("Should be disconnected!");
+        return;
+      }
+      // We rely on `TwistyProp` caching to give us the full set of latest
+      // values efficiently.
+      const values = (await Promise.all(
+        props.map((prop) => prop.get() as Promise<U | V>),
+      )) as [U, V];
+      listener(values);
+    };
+
+    for (const prop of props) {
+      prop.addFreshListener(wrappedListener);
+    }
+
+    this.#disconnectionFunctions.push(() => {
+      for (const prop of props) {
+        prop.removeFreshListener(wrappedListener);
+      }
+      disconnected = true;
+    });
+  }
+
   disconnect(): void {
     for (const disconnectionFunction of this.#disconnectionFunctions) {
       disconnectionFunction();

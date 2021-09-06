@@ -3,6 +3,7 @@ import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
 import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
 import type { HintFaceletStyleWithAuto } from "../../model/depth-0/HintFaceletProp";
+import type { VisualizationStrategy } from "../../model/depth-1/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/TwistyProp";
 import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
@@ -15,6 +16,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     private model: TwistyPlayerModel,
     public schedulable: Schedulable,
     private puzzleID: PuzzleID,
+    private visualizationStrategy: VisualizationStrategy,
   ) {
     this.twisty3DPuzzle(); // Start constructing.
 
@@ -92,15 +94,17 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
   async twisty3DPuzzle(): Promise<Twisty3DPuzzle> {
     return (this.#cachedTwisty3DPuzzle ??= (async () => {
       const proxyPromise = proxy3D();
-      switch (this.puzzleID) {
-        case "3x3x3":
-          return (await proxyPromise).cube3DShim();
-        default:
-          const hintFacelets = await this.model!.hintFaceletProp.get();
-          return (await proxyPromise).pg3dShim(
-            this.puzzleID,
-            hintFacelets === "auto" ? "floating" : hintFacelets,
-          );
+      if (
+        this.puzzleID === "3x3x3" &&
+        this.visualizationStrategy === "Cube3D"
+      ) {
+        return (await proxyPromise).cube3DShim();
+      } else {
+        const hintFacelets = await this.model!.hintFaceletProp.get();
+        return (await proxyPromise).pg3dShim(
+          this.puzzleID,
+          hintFacelets === "auto" ? "floating" : hintFacelets,
+        );
       }
     })());
   }

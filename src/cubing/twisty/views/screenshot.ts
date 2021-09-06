@@ -30,6 +30,7 @@ export async function screenshot(
     model,
     { scheduleRender: () => {} },
     await model.puzzleProp.get(),
+    await model.visualizationStrategyProp.get(),
   );
 
   // TODO: Find a more robust way to do this.
