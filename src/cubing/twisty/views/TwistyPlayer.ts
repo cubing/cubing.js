@@ -1,5 +1,5 @@
 import { Alg, Move } from "../../alg";
-import type { ExperimentalStickering } from "../../twisty";
+import type { ExperimentalStickering } from "..";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
 import type { BackgroundThemeWithAuto } from "../model/depth-0/BackgroundProp";
@@ -63,7 +63,7 @@ const configKeys: Record<TwistyPlayerAttribute, true> = Object.fromEntries(
 ) as any;
 
 // TODO: Find a way to share this def with `attributeMap`.
-export interface TwistyPlayerV2Config {
+export interface TwistyPlayerConfig {
   // Alg
   alg?: Alg | string;
   experimentalSetupAlg?: Alg | string;
@@ -89,21 +89,21 @@ export interface TwistyPlayerV2Config {
 }
 
 /**
- * TwistyPlayerV2 is the heart of `cubing.js`. It can be used to display a puzzle on a web page like this:
+ * TwistyPlayer is the heart of `cubing.js`. It can be used to display a puzzle on a web page like this:
  *
  *     <script src="path/to/cubing/twisty" type="module"></script>
- *     <twisty-player-v2 alg="R U R'"></twisty-player-v2>
+ *     <twisty-player alg="R U R'"></twisty-player>
  *
  * You can also construct it directly in JavaScript:
  *
- *     import { TwistyPlayerV2 } from "cubing/twisty";
- *     const twistyPlayer = new TwistyPlayerV2({alg: "R U R'"});
+ *     import { TwistyPlayer } from "cubing/twisty";
+ *     const twistyPlayer = new TwistyPlayer({alg: "R U R'"});
  *     // Once the page has loaded, you can do this:
  *     document.body.appendChild(twistyPlayer);
  *
  * See {@link https://js.cubing.net/cubing/} for more examples.
  */
-export class TwistyPlayerV2
+export class TwistyPlayer
   extends TwistyPlayerSettable
   implements TwistyAnimationControllerDelegate
 {
@@ -114,13 +114,13 @@ export class TwistyPlayerV2
 
   buttons: TwistyButtonsV2;
 
-  constructor(config: TwistyPlayerV2Config = {}) {
+  constructor(config: TwistyPlayerConfig = {}) {
     super();
 
     // TODO: double-check that these are all getting set sync without causing extra work.
     for (const [propName, value] of Object.entries(config)) {
       if (!configKeys[propName as TwistyPlayerAttribute]) {
-        console.warn(`Invalid config passed to TwistyPlayerV2: ${propName}`);
+        console.warn(`Invalid config passed to TwistyPlayer: ${propName}`);
         break;
       }
       (this as any)[propName] = value;
@@ -298,4 +298,4 @@ export class TwistyPlayerV2
   }
 }
 
-customElementsShim.define("twisty-player-v2", TwistyPlayerV2);
+customElementsShim.define("twisty-player", TwistyPlayer);

@@ -1,5 +1,5 @@
 import { Alg, LineComment, Newline } from "../../../../cubing/alg";
-import { TwistyPlayerV2 } from "../../../../cubing/twisty";
+import { TwistyPlayer } from "../../../../cubing/twisty";
 import {
   ExperimentalStickering,
   experimentalStickerings,
@@ -15,7 +15,7 @@ algsTextarea.addEventListener("input", () => {
   algsTextarea.classList.remove("saved");
 });
 
-const player = new TwistyPlayerV2({});
+const player = new TwistyPlayer({});
 document.querySelector("#display")!.appendChild(player);
 
 async function downloadAlg(alg: Alg, name: string) {

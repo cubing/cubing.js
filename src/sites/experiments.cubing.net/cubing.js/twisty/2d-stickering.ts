@@ -2,7 +2,7 @@ import { Alg } from "../../../../cubing/alg";
 import {
   experimentalSetShareAllNewRenderers,
   ExperimentalStickering,
-  TwistyPlayerV2,
+  TwistyPlayer,
 } from "../../../../cubing/twisty";
 import type { VisualizationFormat } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 
@@ -14,7 +14,7 @@ function demo(visualization: VisualizationFormat): void {
   function addAlg(stickering: ExperimentalStickering, s: string): void {
     const div = content.appendChild(document.createElement("div"));
     div.classList.add("case");
-    const twistyPlayer = new TwistyPlayerV2({
+    const twistyPlayer = new TwistyPlayer({
       alg: Alg.fromString(s),
       experimentalSetupAnchor: "end",
       visualization,

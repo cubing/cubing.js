@@ -4,8 +4,8 @@
  *
  * - The editor can be used in apps without much effort.
  * - The editor handles alg validation and move highlighting *okay* when not
- *   connected to a `<twisty-player-v2>`.
- * - The editor stays in sync if it's connected to a `<twisty-player-v2>`.
+ *   connected to a `<twisty-player>`.
+ * - The editor stays in sync if it's connected to a `<twisty-player>`.
  *
  * The current implementation still has some race conditions and edge cases. A
  * proper rewrite with a better model would be very welcome.
@@ -20,7 +20,7 @@ import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import { twistyAlgEditorCSS } from "../../old/dom/TwistyAlgEditor.css_";
-import { TwistyPlayerV2 } from "../TwistyPlayerV2";
+import { TwistyPlayer } from "../TwistyPlayer";
 import { HighlightInfo, TwistyAlgEditorModel } from "./model";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
@@ -49,7 +49,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     "error",
   ]);
 
-  #twistyPlayer: TwistyPlayerV2 | null = null;
+  #twistyPlayer: TwistyPlayer | null = null;
   #twistyPlayerProp: TwistyPlayerAlgProp;
   get #algProp(): AlgProp | null {
     if (this.#twistyPlayer === null) {
@@ -66,7 +66,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   #lastObserverRect: DOMRectReadOnly | null = null;
 
   constructor(options?: {
-    twistyPlayer?: TwistyPlayerV2;
+    twistyPlayer?: TwistyPlayer;
     twistyPlayerProp?: TwistyPlayerAlgProp;
   }) {
     super();
@@ -255,12 +255,12 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#carbonCopyHighlight.hidden = false;
   }
 
-  get twistyPlayer(): TwistyPlayerV2 | null {
+  get twistyPlayer(): TwistyPlayer | null {
     return this.#twistyPlayer;
   }
 
   // TODO: spread out this impl over private methods instead of self-listeners.
-  set twistyPlayer(twistyPlayer: TwistyPlayerV2 | null) {
+  set twistyPlayer(twistyPlayer: TwistyPlayer | null) {
     if (this.#twistyPlayer) {
       // TODO: support reassigment/clearing
       console.warn("twisty-player reassignment/clearing is not supported");
@@ -363,7 +363,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
           console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}= elem does not exist`);
           return;
         }
-        if (!(elem instanceof TwistyPlayerV2)) {
+        if (!(elem instanceof TwistyPlayer)) {
           // TODO: avoid assuming single instance of lib?
           console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}=is not a twisty-player`);
           return;

@@ -7,10 +7,10 @@ import type { TwistyPropSource } from "../../../cubing/twisty/model/TwistyProp";
 import {
   TwistyPlayerAttribute,
   twistyPlayerAttributeMap,
-  TwistyPlayerV2Config,
-} from "../../../cubing/twisty/views/TwistyPlayerV2";
+  TwistyPlayerConfig,
+} from "../../../cubing/twisty/views/TwistyPlayer";
 
-// TODO: Find a way to connect this to the `TwistyPlayerV2` constructor?
+// TODO: Find a way to connect this to the `TwistyPlayer` constructor?
 
 export class URLParamUpdater {
   constructor(model: TwistyPlayerModel, private prefix = "") {
@@ -69,9 +69,9 @@ const paramKeys: TwistyPlayerAttribute[] = [
   "experimental-stickering",
 ];
 
-export function getConfigFromURL(prefix = ""): TwistyPlayerV2Config {
+export function getConfigFromURL(prefix = ""): TwistyPlayerConfig {
   const params = new URL(location.href).searchParams;
-  const config: TwistyPlayerV2Config = {};
+  const config: TwistyPlayerConfig = {};
   for (const paramKey of paramKeys) {
     const paramValue = params.get(prefix + paramKey);
     if (paramValue !== null) {

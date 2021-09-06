@@ -2,7 +2,7 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { Alg } from "../../../../../cubing/alg";
-import { TwistyPlayerV2 } from "../../../../../cubing/twisty";
+import { TwistyPlayer } from "../../../../../cubing/twisty";
 import { indexerStrategyNames } from "../../../../../cubing/twisty/model/depth-0/IndexerConstructorRequestProp";
 import { TwistyPlayerDebugger } from "../../../../../cubing/twisty/model/TwistyPropDebugger";
 import {
@@ -29,9 +29,7 @@ showStats(true);
   const puzzle = (new URL(location.href).searchParams.get("puzzle") ??
     "gigaminx") as PuzzleID;
 
-  const twistyPlayer = document.body.appendChild(
-    new TwistyPlayerV2({ puzzle }),
-  );
+  const twistyPlayer = document.body.appendChild(new TwistyPlayer({ puzzle }));
 
   document.body.appendChild(new TwistyPlayerDebugger(twistyPlayer));
 
@@ -42,7 +40,7 @@ showStats(true);
   twistyPlayer.alg = alg;
 
   document.body.appendChild(document.createElement("h1")).textContent =
-    "<twisty-player-v2>";
+    "<twisty-player>";
 
   const tableWrapper = document.body.appendChild(document.createElement("div"));
   tableWrapper.id = "inputs";

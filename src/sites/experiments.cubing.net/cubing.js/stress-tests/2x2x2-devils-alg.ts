@@ -3,7 +3,7 @@
 
 import { AlgBuilder, Grouping, Move, Unit } from "../../../../cubing/alg";
 import { countMoves } from "../../../../cubing/notation";
-import { TwistyPlayerV2 } from "../../../../cubing/twisty";
+import { TwistyPlayer } from "../../../../cubing/twisty";
 
 // Note: this file needs to contain code to avoid a Snowpack error.
 // So we put a `console.log` here for now.
@@ -91,7 +91,7 @@ console.log("Loading stub file.");
 
   playerWrapper.textContent = "";
   playerWrapper.appendChild(
-    new TwistyPlayerV2({
+    new TwistyPlayer({
       puzzle: "2x2x2",
       alg: (constructed["z"] as Grouping).alg,
       backView: "top-right",

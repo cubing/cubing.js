@@ -1,5 +1,5 @@
-export { TwistyPlayerV2 } from "./views/TwistyPlayerV2";
-export type { TwistyPlayerV2Config } from "./views/TwistyPlayerV2";
+export { TwistyPlayer } from "./views/TwistyPlayer";
+export type { TwistyPlayerConfig } from "./views/TwistyPlayer";
 
 export { TwistyAlgEditorV2 } from "./views/TwistyAlgEditor/TwistyAlgEditorV2";
 

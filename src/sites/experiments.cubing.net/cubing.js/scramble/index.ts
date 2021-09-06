@@ -7,9 +7,7 @@ const select = document.querySelector("select") as HTMLSelectElement;
 const scrambleStringDiv = document.querySelector(
   "#scramble-string",
 ) as HTMLDivElement;
-const twistyPlayer = document.querySelector(
-  "twisty-player-v2",
-) as TwistyPlayerV1;
+const twistyPlayer = document.querySelector("twisty-player") as TwistyPlayerV1;
 const button = document.querySelector("button") as HTMLButtonElement;
 
 async function newScramble() {

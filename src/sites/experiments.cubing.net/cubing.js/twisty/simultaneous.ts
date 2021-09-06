@@ -1,7 +1,7 @@
 import {
   Cube3D,
   TwistyPlayerV1,
-  TwistyPlayerV2,
+  TwistyPlayer,
 } from "../../../../cubing/twisty";
 import { Alg } from "../../../../cubing/alg";
 
@@ -11,7 +11,7 @@ const supercubeSprite = new URL(
 ).toString();
 
 {
-  const player = new TwistyPlayerV2({
+  const player = new TwistyPlayer({
     alg: Alg.fromString(
       "y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2",
     ),

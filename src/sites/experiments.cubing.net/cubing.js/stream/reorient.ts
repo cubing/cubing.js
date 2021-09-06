@@ -6,15 +6,15 @@ import {
   ReorientedStream,
 } from "../../../../cubing/stream/process/ReorientedStream";
 import "../../../../cubing/twisty";
-import type { TwistyPlayerV2 } from "../../../../cubing/twisty";
+import type { TwistyPlayer } from "../../../../cubing/twisty";
 import "../../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
 import type { TwistyStreamSource } from "../../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
 
 const twistyStreamSource: TwistyStreamSource = document.querySelector(
   "twisty-stream-source",
 )!;
-const reorientedPlayer: TwistyPlayerV2 = document.querySelector("#reoriented")!;
-const unreorientedPlayer: TwistyPlayerV2 =
+const reorientedPlayer: TwistyPlayer = document.querySelector("#reoriented")!;
+const unreorientedPlayer: TwistyPlayer =
   document.querySelector("#unreoriented")!;
 
 const reorienter = new ReorientedStream(twistyStreamSource);

@@ -11,7 +11,7 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
-twisty-player-v2 {
+twisty-player {
   grid-area: player;
   width: 100%;
   height: 100%;
@@ -30,7 +30,7 @@ twisty-alg-editor-v2 {
     grid-template-rows: 1fr 1fr;
   }
 
-  twisty-player-v2 {
+  twisty-player {
     border-top: 1px solid rgba(0, 0, 0, 0.25);
   }
 }

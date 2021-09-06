@@ -6,7 +6,7 @@ import {
   ManagedCustomElement,
 } from "../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
-import type { TwistyPlayerV2 } from "../views/TwistyPlayerV2";
+import type { TwistyPlayer } from "../views/TwistyPlayer";
 import type { AlgIssues } from "./depth-0/AlgProp";
 import type { TwistyPropParent } from "./TwistyProp";
 
@@ -225,7 +225,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 customElementsShim.define("twisty-prop-debugger", TwistyPropDebugger);
 
 export class TwistyPlayerDebugger extends ManagedCustomElement {
-  constructor(private player: TwistyPlayerV2) {
+  constructor(private player: TwistyPlayer) {
     super({ mode: "open" });
   }
 

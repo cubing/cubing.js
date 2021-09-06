@@ -15,8 +15,8 @@ import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/st
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import {
   ExperimentalStickering,
-  TwistyPlayerV2,
-  TwistyPlayerV2Config,
+  TwistyPlayer,
+  TwistyPlayerConfig,
 } from "../../../cubing/twisty";
 import { customElementsShim } from "../../../cubing/twisty/old/dom/element/node-custom-element-shims";
 import "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
@@ -63,10 +63,10 @@ const SCRAMBLE_EVENTS: Partial<Record<PuzzleID, string>> = {
 };
 
 export class App {
-  public twistyPlayer: TwistyPlayerV2;
+  public twistyPlayer: TwistyPlayer;
   private puzzlePane: HTMLElement;
   public controlPane: ControlPane;
-  constructor(public element: Element, initialConfig: TwistyPlayerV2Config) {
+  constructor(public element: Element, initialConfig: TwistyPlayerConfig) {
     this.puzzlePane = findOrCreateChild(
       this.element,
       "puzzle-pane",
@@ -99,9 +99,9 @@ export class App {
   }
 
   // TODO: avoid modifying `initialConfig`?
-  private initializeTwisty(initialConfig: TwistyPlayerV2Config): void {
+  private initializeTwisty(initialConfig: TwistyPlayerConfig): void {
     initialConfig.viewerLink = "none";
-    this.twistyPlayer = new TwistyPlayerV2(initialConfig);
+    this.twistyPlayer = new TwistyPlayer(initialConfig);
     this.puzzlePane.appendChild(this.twistyPlayer);
   }
 
@@ -203,7 +203,7 @@ class ControlPane {
   private twistyStreamSource: TwistyStreamSource;
   constructor(
     private app: App,
-    private twistyPlayer: TwistyPlayerV2,
+    private twistyPlayer: TwistyPlayer,
     public element: Element,
     private solve: () => void,
     private scramble: () => void,
