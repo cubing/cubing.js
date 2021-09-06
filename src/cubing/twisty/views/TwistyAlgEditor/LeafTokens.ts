@@ -64,7 +64,6 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
     dataDown: DataDown,
   ): DataUp {
     const dataUpA = this.traverseAlg(commutator.A, dataDown);
-    console.log("comm", dataDown, dataUpA);
     const dataUpB = this.traverseAlg(commutator.B, {
       numMovesSofar: dataDown.numMovesSofar + dataUpA.numLeavesInside,
     });
