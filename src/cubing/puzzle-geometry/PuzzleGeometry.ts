@@ -549,7 +549,6 @@ export class PuzzleGeometry {
   public facetocubie: number[]; // map a face to a cubie index
   public facetoord: number[]; // map a face to a cubie ord
   public moverotations: Quat[][]; // move rotations
-  public cubiekeys: string[]; // cubie keys
   public facelisthash: any; // face list by key
   public cubiesetnames: any[]; // cubie set names
   public cubieords: number[]; // the size of each orbit
@@ -1429,14 +1428,12 @@ export class PuzzleGeometry {
     //  them up into cubie sets.
     const cubiehash: any = {};
     const facelisthash: any = {};
-    const cubiekeys = [];
     const cubies: Face[][] = [];
     const faces = this.faces;
     for (let i = 0; i < faces.length; i++) {
       const face = faces[i];
       const s = this.keyface(face);
       if (!cubiehash[s]) {
-        cubiekeys.push(s);
         cubiehash[s] = [];
         facelisthash[s] = [];
         cubies.push(cubiehash[s]);
@@ -1454,7 +1451,6 @@ export class PuzzleGeometry {
           const s2 = s + " " + suff;
           facelisthash[s2] = [facelisthash[s][suff]];
           cubiehash[s2] = [cubiehash[s][suff]];
-          cubiekeys.push(s2);
           cubies.push(cubiehash[s2]);
         }
         // don't assign an empty array here; we need to preserve the object.
@@ -1462,7 +1458,6 @@ export class PuzzleGeometry {
       }
     }
     this.facelisthash = facelisthash;
-    this.cubiekeys = cubiekeys;
     if (this.verbose) {
       console.log("# Cubies: " + Object.keys(cubiehash).length);
     }
@@ -1540,10 +1535,11 @@ export class PuzzleGeometry {
     const facetocubie = [];
     const facetoord = [];
     for (let i = 0; i < cubies.length; i++) {
-      const facelist = facelisthash[cubiekeys[i]];
-      for (let j = 0; j < facelist.length; j++) {
-        facetocubie[facelist[j]] = i;
-        facetoord[facelist[j]] = j;
+      for (let j = 0; j < cubies[i].length; j++) {
+        let k = this.findface(cubies[i][j]);
+          facetocubie[k] = i;
+          facetoord[k] = j;
+      
       }
     }
     this.facetocubie = facetocubie;
