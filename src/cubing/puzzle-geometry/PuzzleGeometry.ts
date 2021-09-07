@@ -1168,6 +1168,34 @@ export class PuzzleGeometry {
     return s;
   }
 
+  // same as above, but instead of returning an encoded string, return
+  // an array with offsets.
+  public keyface3(face: Face): number[] {
+    let cm = face.centermass();
+    // take a face and figure out the sides of each move plane
+    let r = [];
+    for (let i = 0; i < this.moveplanesets.length; i++) {
+      if (this.moveplanesets[i].length > 0) {
+        const dv = cm.dot(this.moveplanesets[i][0]);
+        let t = 0;
+        let b = 1;
+        while (b * 2 <= this.moveplanesets[i].length) {
+          b *= 2;
+        }
+        for (; b > 0; b >>= 1) {
+          if (
+            t + b <= this.moveplanesets[i].length &&
+            dv > this.moveplanesets[i][t + b - 1].a
+          ) {
+            t += b;
+          }
+        }
+        r.push(t);
+      }
+    }
+    return r;
+  }
+
   public findface(face: Face): number {
     const cm = face.centermass();
     const key = this.keyface2(cm);
@@ -2078,7 +2106,7 @@ export class PuzzleGeometry {
       }
     }
     if (this.fixedCubie >= 0) {
-      const dep = +this.cubiekeys[this.fixedCubie].trim().split(" ")[k];
+      const dep = this.keyface3(this.cubies[this.fixedCubie][0])[k];
       const newr = [];
       for (let i = 0; i < r.length; i += 2) {
         let o = r[i];
