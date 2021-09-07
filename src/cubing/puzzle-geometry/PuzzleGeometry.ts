@@ -1537,9 +1537,8 @@ export class PuzzleGeometry {
     for (let i = 0; i < cubies.length; i++) {
       for (let j = 0; j < cubies[i].length; j++) {
         let k = this.findface(cubies[i][j]);
-          facetocubie[k] = i;
-          facetoord[k] = j;
-      
+        facetocubie[k] = i;
+        facetoord[k] = j;
       }
     }
     this.facetocubie = facetocubie;
