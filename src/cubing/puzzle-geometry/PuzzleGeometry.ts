@@ -549,7 +549,6 @@ export class PuzzleGeometry {
   public facetocubie: number[]; // map a face to a cubie index
   public facetoord: number[]; // map a face to a cubie ord
   public moverotations: Quat[][]; // move rotations
-  public cubiekey: any; // cubie locator
   public cubiekeys: string[]; // cubie keys
   public facelisthash: any; // face list by key
   public cubiesetnames: any[]; // cubie set names
@@ -1402,7 +1401,6 @@ export class PuzzleGeometry {
     //  them up into cubie sets.
     const cubiehash: any = {};
     const facelisthash: any = {};
-    const cubiekey: any = {};
     const cubiekeys = [];
     const cubies: Face[][] = [];
     const faces = this.faces;
@@ -1410,7 +1408,6 @@ export class PuzzleGeometry {
       const face = faces[i];
       const s = this.keyface(face);
       if (!cubiehash[s]) {
-        cubiekey[s] = cubies.length;
         cubiekeys.push(s);
         cubiehash[s] = [];
         facelisthash[s] = [];
@@ -1430,14 +1427,12 @@ export class PuzzleGeometry {
           facelisthash[s2] = [facelisthash[s][suff]];
           cubiehash[s2] = [cubiehash[s][suff]];
           cubiekeys.push(s2);
-          cubiekey[s2] = cubies.length;
           cubies.push(cubiehash[s2]);
         }
-        cubiehash[s] = [];
-        cubies[cubiekey[s]] = [];
+        // don't assign an empty array here; we need to preserve the object.
+        cubiehash[s].length = 0;
       }
     }
-    this.cubiekey = cubiekey;
     this.facelisthash = facelisthash;
     this.cubiekeys = cubiekeys;
     if (this.verbose) {
@@ -2026,7 +2021,6 @@ export class PuzzleGeometry {
     }
     this.facelisthash = null;
     this.facecentermass = [];
-    this.cubiekey = [];
   }
 
   public getboundarygeometry(): any {
