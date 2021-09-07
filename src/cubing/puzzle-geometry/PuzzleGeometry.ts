@@ -1531,7 +1531,6 @@ export class PuzzleGeometry {
     const cubiesetnums = [];
     const cubieordnums = [];
     const cubieords = [];
-    // var cubiesetnumhash = {} ; // TODO
     const cubievaluemap = [];
     // Later we will make this smarter to use a get color for face function
     // so we support puzzles with multiple faces the same color
@@ -1587,21 +1586,6 @@ export class PuzzleGeometry {
               seen[tq] = true;
             }
           }
-        }
-      }
-      const that = this;
-      queue.sort(function (a: number, b: number): number {
-        if (that.cubiekeys[a] < that.cubiekeys[b]) {
-          return 1;
-        } else if (that.cubiekeys[a] > that.cubiekeys[b]) {
-          return -1;
-        } else {
-          return 0;
-        }
-      });
-      for (let i = 0; i < queue.length; i++) {
-        if (i > 1000000) {
-          cubieordnums[queue[i]] = i;
         }
       }
       cubiesetnum++;
