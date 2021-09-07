@@ -1426,20 +1426,15 @@ export class PuzzleGeometry {
     //  This also works for faces; no face should ever lie on a move
     //  plane.  This allows us to take a set of stickers and break
     //  them up into cubie sets.
-    const cubiehash: any = {};
     const facelisthash: any = {};
-    const cubies: Face[][] = [];
     const faces = this.faces;
     for (let i = 0; i < faces.length; i++) {
       const face = faces[i];
       const s = this.keyface(face);
-      if (!cubiehash[s]) {
-        cubiehash[s] = [];
+      if (!facelisthash[s]) {
         facelisthash[s] = [];
-        cubies.push(cubiehash[s]);
       }
       facelisthash[s].push(i);
-      cubiehash[s].push(face);
       //  If we find a core cubie, split it up into multiple cubies,
       //  because ksolve doesn't handle orientations that are not
       //  cyclic, and the rotation group of the core is not cyclic.
@@ -1450,16 +1445,22 @@ export class PuzzleGeometry {
         for (let suff = 0; suff < this.basefacecount; suff++) {
           const s2 = s + " " + suff;
           facelisthash[s2] = [facelisthash[s][suff]];
-          cubiehash[s2] = [cubiehash[s][suff]];
-          cubies.push(cubiehash[s2]);
         }
         // don't assign an empty array here; we need to preserve the object.
-        cubiehash[s].length = 0;
       }
     }
     this.facelisthash = facelisthash;
     if (this.verbose) {
-      console.log("# Cubies: " + Object.keys(cubiehash).length);
+      console.log("# Cubies: " + Object.keys(facelisthash).length);
+    }
+    const cubies: Face[][] = [];
+    for (const s in facelisthash) {
+      const faceids = facelisthash[s];
+      const r = new Array(faceids.length);
+      for (let i = 0; i < r.length; i++) {
+        r[i] = faces[faceids[i]];
+      }
+      cubies.push(r);
     }
     //  Sort the faces around each corner so they are counterclockwise.  Only
     //  relevant for cubies that actually are corners (three or more
