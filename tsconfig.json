@@ -10,17 +10,20 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "outDir": "./dist/tsc",
     "sourceMap": true,
     "strictNullChecks": true,
     "target": "es2020",
     "module": "esnext",
     "resolveJsonModule": true,
     "importsNotUsedAsValues": "error",
-    "rootDir": "."
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
+  "filesGlob": ["src/**/*"],
   "include": ["src/**/*"],
   "exclude": [
+    "dist",
+    "dist/**/*",
     "*/index.d.ts",
     "src/static/**/*",
     "src/**/*.spec.ts",
