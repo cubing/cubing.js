@@ -1153,14 +1153,23 @@ export class PuzzleGeometry {
             t += b;
           }
         }
-        if (t <= 90) {
-          s = s + String.fromCharCode(34 + t);
-        } else {
+        if (t < 47) {
+          s = s + String.fromCharCode(33 + t);
+        } else if (t < 47 + 47 * 47) {
           s =
             s +
-            "!" +
-            String.fromCharCode(34 + Math.floor(t / 90)) +
-            String.fromCharCode(34 + (t % 90));
+            String.fromCharCode(33 + 47 + Math.floor(t / 47) - 1) +
+            String.fromCharCode(33 + (t % 47));
+        } else if (t < 47 + 47 * 47 + 47 * 47 * 47) {
+          s =
+            s +
+            String.fromCharCode(
+              33 + 47 + Math.floor((t - 47) / (47 * 47) - 1),
+            ) +
+            String.fromCharCode(33 + 47 + (Math.floor((t - 47) / 47) % 47)) +
+            String.fromCharCode(33 + (t % 47));
+        } else {
+          throw Error("Too many slices for cubie encoding");
         }
       }
     }
