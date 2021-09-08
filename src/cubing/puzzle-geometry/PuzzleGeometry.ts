@@ -541,7 +541,7 @@ export class PuzzleGeometry {
   public basefacecount: number; // number of base faces
   public stickersperface: number; // number of stickers per face
   public cornerfaces: number; // number of faces that meet at a corner
-  public cubies: any[]; // the cubies
+  public cubies: number[][]; // the cubies
   public shortedge: number; // shortest edge
   public vertexdistance: number; // vertex distance
   public edgedistance: number; // edge distance
@@ -549,7 +549,7 @@ export class PuzzleGeometry {
   public facetocubie: number[]; // map a face to a cubie index
   public facetoord: number[]; // map a face to a cubie ord
   public moverotations: Quat[][]; // move rotations
-  public facelisthash: any; // face list by key
+  public facelisthash: Map<string, number[]>; // face list by key
   public cubiesetnames: any[]; // cubie set names
   public cubieords: number[]; // the size of each orbit
   public cubiesetnums: number[];
@@ -1207,12 +1207,12 @@ export class PuzzleGeometry {
   public findface(face: Face): number {
     const cm = face.centermass();
     const key = this.keyface2(cm);
-    const arr = this.facelisthash[key];
+    const arr = this.facelisthash.get(key)!;
     if (arr.length === 1) {
       return arr[0];
     }
     for (let i = 0; i + 1 < arr.length; i++) {
-      const face2 = this.facelisthash[key][i];
+      const face2 = this.facelisthash.get(key)![i];
       if (Math.abs(cm.dist(this.facecentermass[face2])) < eps) {
         return face2;
       }
@@ -1222,12 +1222,12 @@ export class PuzzleGeometry {
 
   public findface2(cm: Quat): number {
     const key = this.keyface2(cm);
-    const arr = this.facelisthash[key];
+    const arr = this.facelisthash.get(key)!;
     if (arr.length === 1) {
       return arr[0];
     }
     for (let i = 0; i + 1 < arr.length; i++) {
-      const face2 = this.facelisthash[key][i];
+      const face2 = this.facelisthash.get(key)![i];
       if (Math.abs(cm.dist(this.facecentermass[face2])) < eps) {
         return face2;
       }
@@ -1435,122 +1435,107 @@ export class PuzzleGeometry {
     //  This also works for faces; no face should ever lie on a move
     //  plane.  This allows us to take a set of stickers and break
     //  them up into cubie sets.
-    const facelisthash: any = {};
+    const facelisthash = new Map();
     const faces = this.faces;
     for (let i = 0; i < faces.length; i++) {
       const face = faces[i];
       const s = this.keyface(face);
-      if (!facelisthash[s]) {
-        facelisthash[s] = [];
-      }
-      facelisthash[s].push(i);
-      //  If we find a core cubie, split it up into multiple cubies,
-      //  because ksolve doesn't handle orientations that are not
-      //  cyclic, and the rotation group of the core is not cyclic.
-      if (facelisthash[s].length === this.basefacecount) {
-        if (this.verbose) {
-          console.log("# Splitting core.");
+      if (!facelisthash.get(s)) {
+        facelisthash.set(s, [i]);
+      } else {
+        const arr = facelisthash.get(s)!;
+        arr.push(i);
+        //  If we find a core cubie, split it up into multiple cubies,
+        //  because ksolve doesn't handle orientations that are not
+        //  cyclic, and the rotation group of the core is not cyclic.
+        if (arr.length === this.basefacecount) {
+          if (this.verbose) {
+            console.log("# Splitting core.");
+          }
+          for (let suff = 0; suff < arr.length; suff++) {
+            const s2 = s + " " + suff;
+            facelisthash.set(s2, [arr[suff]]);
+          }
         }
-        for (let suff = 0; suff < this.basefacecount; suff++) {
-          const s2 = s + " " + suff;
-          facelisthash[s2] = [facelisthash[s][suff]];
-        }
-        // don't assign an empty array here; we need to preserve the object.
       }
     }
     this.facelisthash = facelisthash;
     if (this.verbose) {
-      console.log("# Cubies: " + Object.keys(facelisthash).length);
+      console.log("# Cubies: " + facelisthash.size);
     }
-    const cubies: Face[][] = [];
-    for (const s in facelisthash) {
-      const faceids = facelisthash[s];
-      const r = new Array(faceids.length);
-      for (let i = 0; i < r.length; i++) {
-        r[i] = faces[faceids[i]];
-      }
-      cubies.push(r);
-    }
-    //  Sort the faces around each corner so they are counterclockwise.  Only
-    //  relevant for cubies that actually are corners (three or more
-    //  faces).  In general cubies might have many faces; for icosohedrons
-    //  there are five faces on the corner cubies.
-    this.cubies = cubies;
-    for (let k = 0; k < cubies.length; k++) {
-      const cubie = cubies[k];
-      if (cubie.length < 2) {
-        continue;
-      }
-      if (cubie.length === this.basefacecount) {
-        // looks like core?  don't sort
-        continue;
-      }
-      if (cubie.length > 5) {
-        throw new Error(
-          "Bad math; too many faces on this cubie " + cubie.length,
-        );
-      }
-      const cm = cubie.map((_) => _.centermass());
-      const s = this.keyface2(cm[0]);
-      const facelist = facelisthash[s];
-      const cmall = centermassface(cm);
-      for (let looplimit = 0; cubie.length > 2; looplimit++) {
-        let changed = false;
-        for (let i = 0; i < cubie.length; i++) {
-          const j = (i + 1) % cubie.length;
-          // var ttt = cmall.dot(cm[i].cross(cm[j])) ; // TODO
-          if (cmall.dot(cm[i].cross(cm[j])) < 0) {
-            const t = cubie[i];
-            cubie[i] = cubie[j];
-            cubie[j] = t;
-            const u = cm[i];
-            cm[i] = cm[j];
-            cm[j] = u;
-            const v = facelist[i];
-            facelist[i] = facelist[j];
-            facelist[j] = v;
-            changed = true;
-          }
-        }
-        if (!changed) {
-          break;
-        }
-        if (looplimit > 1000) {
-          throw new Error("Bad epsilon math; too close to border");
-        }
-      }
-      let mini = 0;
-      let minf = this.findface(cubie[mini]);
-      for (let i = 1; i < cubie.length; i++) {
-        const temp = this.findface(cubie[i]);
-        if (
-          this.faceprecedence[this.getfaceindex(temp)] <
-          this.faceprecedence[this.getfaceindex(minf)]
-        ) {
-          mini = i;
-          minf = temp;
-        }
-      }
-      if (mini !== 0) {
-        const ocubie = cubie.slice();
-        const ofacelist = facelist.slice();
-        for (let i = 0; i < cubie.length; i++) {
-          cubie[i] = ocubie[(mini + i) % cubie.length];
-          facelist[i] = ofacelist[(mini + i) % cubie.length];
-        }
-      }
-    }
-    //  Build an array that takes each face to a cubie ordinal and a
-    //  face number.
+    const cubies: number[][] = [];
     const facetocubie = [];
     const facetoord = [];
-    for (let i = 0; i < cubies.length; i++) {
-      for (let j = 0; j < cubies[i].length; j++) {
-        let k = this.findface(cubies[i][j]);
-        facetocubie[k] = i;
+    for (const facelist of facelisthash.values()) {
+      const cubie = new Array(facelist.length);
+      if (cubie.length === this.basefacecount) {
+        // this is the original "cubie" of a split core; we ignore it.
+        continue;
+      }
+      for (let i = 0; i < cubie.length; i++) {
+        cubie[i] = faces[facelist[i]];
+      }
+      //  Sort the faces around each corner so they are counterclockwise.  Only
+      //  relevant for cubies that actually are corners (three or more
+      //  faces).  In general cubies might have many faces; for icosohedrons
+      //  there are five faces on the corner cubies.
+      if (cubie.length > 1) {
+        const cm = cubie.map((_) => _.centermass());
+        const cmall = centermassface(cm);
+        for (let looplimit = 0; cubie.length > 2; looplimit++) {
+          let changed = false;
+          for (let i = 0; i < cubie.length; i++) {
+            const j = (i + 1) % cubie.length;
+            // var ttt = cmall.dot(cm[i].cross(cm[j])) ; // TODO
+            if (cmall.dot(cm[i].cross(cm[j])) < 0) {
+              const t = cubie[i];
+              cubie[i] = cubie[j];
+              cubie[j] = t;
+              const u = cm[i];
+              cm[i] = cm[j];
+              cm[j] = u;
+              const v = facelist[i];
+              facelist[i] = facelist[j];
+              facelist[j] = v;
+              changed = true;
+            }
+          }
+          if (!changed) {
+            break;
+          }
+          if (looplimit > 1000) {
+            throw new Error("Bad epsilon math; too close to border");
+          }
+        }
+        let mini = 0;
+        let minf = this.findface(cubie[mini]);
+        for (let i = 1; i < cubie.length; i++) {
+          const temp = this.findface(cubie[i]);
+          if (
+            this.faceprecedence[this.getfaceindex(temp)] <
+            this.faceprecedence[this.getfaceindex(minf)]
+          ) {
+            mini = i;
+            minf = temp;
+          }
+        }
+        if (mini !== 0) {
+          const ocubie = cubie.slice();
+          const ofacelist = facelist.slice();
+          for (let i = 0; i < cubie.length; i++) {
+            cubie[i] = ocubie[(mini + i) % cubie.length];
+            facelist[i] = ofacelist[(mini + i) % cubie.length];
+          }
+        }
+      }
+      for (let j = 0; j < facelist.length; j++) {
+        const k = facelist[j];
+        facetocubie[k] = cubies.length;
         facetoord[k] = j;
       }
+      cubies.push(facelist);
     }
+    this.cubies = cubies;
     this.facetocubie = facetocubie;
     this.facetoord = facetoord;
     //  Calculate the orbits of each cubie.  Assumes we do all moves.
@@ -1568,9 +1553,7 @@ export class PuzzleGeometry {
     // Later we will make this smarter to use a get color for face function
     // so we support puzzles with multiple faces the same color
     const getcolorkey = (cubienum: number): string => {
-      return cubies[cubienum]
-        .map((_) => this.getfaceindex(this.findface(_)))
-        .join(" ");
+      return cubies[cubienum].map((_) => this.getfaceindex(_)).join(" ");
     };
     const cubiesetcubies: any = [];
     for (let i = 0; i < cubies.length; i++) {
@@ -1608,7 +1591,7 @@ export class PuzzleGeometry {
         cubiesetcubies[cubiesetnum].push(cind);
         cubieordnums[cind] = cubieords[cubiesetnum]++;
         if (queue.length < this.rotations.length) {
-          const cm = cubies[cind][0].centermass();
+          const cm = this.faces[cubies[cind][0]].centermass();
           for (let j = 0; j < moverotations.length; j++) {
             const tq =
               this.facetocubie[
@@ -1664,7 +1647,7 @@ export class PuzzleGeometry {
             mask |=
               1 <<
               (this.facenames[
-                this.getfaceindex(this.findface(cubies[cubienum][k]))
+                this.getfaceindex(cubies[cubienum][k])
               ][1].charCodeAt(0) -
                 65);
           }
@@ -1849,17 +1832,6 @@ export class PuzzleGeometry {
     return r;
   }
 
-  // when adding duplicated faces, we need to ensure we rotate them by one
-  // click, so rendering with textures reflects orientations.
-  private rotateforward(f: any[]): any[] {
-    const r = [];
-    for (let i = 1; i < f.length; i++) {
-      r.push(f[i]);
-    }
-    r.push(f[0]);
-    return r;
-  }
-
   public genperms(): void {
     // generate permutations for moves
     if (this.cmovesbyslice.length > 0) {
@@ -1870,18 +1842,17 @@ export class PuzzleGeometry {
     // if orientCenters is set, we find all cubies that have only one
     // sticker and that sticker is in the center of a face, and we
     // introduce duplicate stickers so we can orient them properly.
-    // we rotate the coordinates so texture rendering works properly.
     if (this.orientCenters) {
       for (let k = 0; k < this.cubies.length; k++) {
         if (this.cubies[k].length === 1) {
-          const kk = this.findface(this.cubies[k][0]);
+          const kk = this.cubies[k][0];
           const i = this.getfaceindex(kk);
           if (
             this.basefaces[i].centermass().dist(this.facecentermass[kk]) < eps
           ) {
             const o = this.basefaces[i].length;
             for (let m = 1; m < o; m++) {
-              this.cubies[k].push(this.rotateforward(this.cubies[k][m - 1]));
+              this.cubies[k].push(this.cubies[k][m - 1]);
             }
             this.duplicatedFaces[kk] = o;
             this.duplicatedCubies[k] = o;
@@ -1974,9 +1945,9 @@ export class PuzzleGeometry {
             ) < eps
           ) {
             // how does remapping of the face/point set map to the original?
-            let face1 = this.cubies[b[0]][0];
+            let face1 = this.faces[this.cubies[b[0]][0]];
             for (let ii = 0; ii < b.length; ii += 2) {
-              const face0 = this.cubies[b[ii]][0];
+              const face0 = this.faces[this.cubies[b[ii]][0]];
               let o = -1;
               for (let jj = 0; jj < face1.length; jj++) {
                 if (face0.get(jj).dist(face1.get(0)) < eps) {
@@ -2036,7 +2007,7 @@ export class PuzzleGeometry {
       }
       this.parsedmovelist = parsedmovelist;
     }
-    this.facelisthash = null;
+    this.facelisthash.clear();
     this.facecentermass = [];
   }
 
@@ -2111,7 +2082,7 @@ export class PuzzleGeometry {
       }
     }
     if (this.fixedCubie >= 0) {
-      const dep = this.keyface3(this.cubies[this.fixedCubie][0])[k];
+      const dep = this.keyface3(this.faces[this.cubies[this.fixedCubie][0]])[k];
       const newr = [];
       for (let i = 0; i < r.length; i += 2) {
         let o = r[i];
