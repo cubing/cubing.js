@@ -15,20 +15,13 @@ Twizzle</a> is the spiritual successor to [alg.cubing.net](https://alg.cubing.ne
 
 See the [Twizzle Diaries](https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3NgpDbzN4VkcfjEZSQ_TYQv_OEjbjF) video series for more information on Twizzle's vision and use cases.
 
-## Usage
+## Getting started
 
-If you would like to use cubing.js as a library in your projects, make sure you have [node](node.js) installed.
+If you aren't sure where to get started, you should start with `cdn.cubing.net`, which lets you implement cubing.js in a website. 
 
-With Node installed, run the following command in your terminal:
+If you're already comfortable with writing web apps using `npm`, see the "`Using with Node.js`" section below.
 
-```shell
-npm install cubing
-```
-
-
-## Documentation
-
-If you want to display algs or solves, the following code is a good way to get started:
+The following code is a good way to get started with `cdn.cubing.net`:
 
 ```html
 <script
@@ -41,6 +34,21 @@ If you want to display algs or solves, the following code is a good way to get s
 
 You can find more documentation at [js.cubing.net/cubing/](https://js.cubing.net/cubing).  
 The source for the documentation site is currently inside the [docs](./docs/) folder of this repository.
+
+## Using with Node.js  
+
+If you would like to use cubing.js as a library in your Node projects, make sure you have [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) installed (installing `node` will install `npm` as well). Once you have installed those, you can run:
+
+```shell
+npm install cubing
+```
+
+The following modules are a good starting point: 
+```shell
+import { Alg } from "cubing/alg";
+import { TwistyPlayer } from "cubing/twisty"; 
+```
+
 
 ## Contributing
 
