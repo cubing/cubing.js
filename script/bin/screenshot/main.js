@@ -43,7 +43,7 @@ const args = yargs(hideBin(process.argv))
   })
   .option("width", {
     type: "number",
-    default: 1024,
+    default: 2048,
   })
   .option("height", {
     type: "number",
@@ -94,6 +94,9 @@ options.controlPanel = "none";
   await page.goto(url.toString());
   const path = args["out-file"] ?? `${args.alg || "puzzle"}.png`;
   console.log("Output file:", path);
+
+  page.waitForSelector("#screenshot");
+
   await page.screenshot({
     path,
     omitBackground: true,

@@ -13,15 +13,15 @@ export interface TwistyPlayerScreenshot {
 let cachedCamera: PerspectiveCamera | null = null;
 export async function screenshot(
   model: TwistyPlayerModel,
+  options?: { width: number; height: number },
 ): Promise<TwistyPlayerScreenshot> {
   // TODO: improve async caching
+
+  const width = options?.width ?? 2048;
+  const height = options?.height ?? 2048;
+  const aspectRatio = width / height;
   const camera = (cachedCamera ??= await (async () => {
-    return new (await THREEJS).PerspectiveCamera(
-      20,
-      1, // We rely on the resize logic to handle this.
-      0.1,
-      20,
-    );
+    return new (await THREEJS).PerspectiveCamera(20, aspectRatio, 0.1, 20);
   })());
 
   const scene = new (await THREEJS).Scene();
@@ -45,7 +45,7 @@ export async function screenshot(
     antialias: true,
     alpha: true,
   });
-  renderer.setSize(2048, 2048);
+  renderer.setSize(width, height);
 
   renderer.render(scene, camera);
   const dataURL = renderer.domElement.toDataURL();

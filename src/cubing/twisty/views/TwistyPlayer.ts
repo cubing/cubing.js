@@ -266,8 +266,11 @@ export class TwistyPlayer
 
   // TODO: Make this more ergonomic and flexible.
   // TODO: dimensions.
-  async experimentalScreenshot(): Promise<string> {
-    return (await screenshot(this.experimentalModel)).dataURL;
+  async experimentalScreenshot(options?: {
+    width: number;
+    height: number;
+  }): Promise<string> {
+    return (await screenshot(this.experimentalModel, options)).dataURL;
   }
 
   // TODO: Make this more ergonomic and flexible.
