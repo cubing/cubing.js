@@ -1,4 +1,4 @@
-*NB: This information is still in draft form, and should not be relied upon to inform usage of or contribution to `cubing.js`.*
+*NB: This information is still in draft form. Do not rely on it to use or contribute to `cubing.js`.*
 
 ## Purpose of this document
 
@@ -6,8 +6,8 @@ This document serves to describe `cubing.js`'s approach to documentation in both
 
 ## Documentation guidelines:
 
-- Write API reference documentation inline using [TSDoc-formatted](https://tsdoc.org/) comments 
-    - PR's lacking these comments will be considered incomplete
+- Please include documentation for any new definitions (e.g. classes, functions, types, const exports) that someone using the library may interact with. Write API reference documentation inline using [TSDoc-formatted](https://tsdoc.org/) comments 
+    - If at all possible, we will try to have documentation written before merging a PR. A reviewer may ask you to write documentation for a PR if it isn't already included.
 - PR's do *not* require contributor-generated usage tutorials - API Reference material is sufficient
 - Writing draft documentation is better than writing none at all
 - Documentation can and should begin immediately 
@@ -22,12 +22,10 @@ This document serves to describe `cubing.js`'s approach to documentation in both
 
 ## Style Guidelines
 
-- Technical references (ie, references to files, projects and tools) should be formatted as follows:
-  - Use backticks \` when there is no accompanying link (eg, "`cubing.js` is a project which aims to...")
-  - Omit backticks when there is an accompanying link (eg, "Make sure you have [node](https://nodejs.org/en/) installed before...")
-  - Reasoning: Universal use of backticks disguises links, leading to confusing navigation
+- Technical references (ie, references to files, projects and tools) should be formatted using backticks ("`"), as follows:
+  - "`cubing.js` is a project which aims to...
 - Draft documentation should include the following disclaimer at the top of the document:
-  - *NB: This information is still in draft form, and should not be relied upon to inform usage of or contribution to `cubing.js`.*
+  - *NB: This information is still in draft form. Do not rely on it to use or contribute to `cubing.js`.*
 
 ## Tooling (TBD)
 
@@ -36,3 +34,5 @@ Tooling for documentation is still being discussed among key contributors, and w
 ## Documentation process (TBD)
 
 The documentation process for documentation is still being discussed among key contributors, and will be added to this section once finalised.
+
+[`Example link`](alg/index.html)
