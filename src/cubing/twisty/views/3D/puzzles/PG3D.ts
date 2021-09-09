@@ -458,7 +458,7 @@ export interface PG3DOptions {
   appearance?: ExperimentalPuzzleAppearance;
 }
 
-const DEFAULT_COLOR_FRACTION = 0.77;
+const DEFAULT_COLOR_FRACTION = 0.71;
 
 /*
 
