@@ -15,7 +15,7 @@ If this is your first time contributing to a project on Github, these are the st
 5. Push your changes to your forked `cubing.js` repo
 6. Create a pull request in `cubing.js`, with your new branch from your forked repo as the source.
 
-Youtube has many [beginners guides](https://www.youtube.com/watch?v=RGOj5yH7evk) to Git and Github if you would like more information.
+Youtube has many guides to Git and Github if you would like more information. If you want a thorough overview, consider [Git and GitHub for Beginners - Crash Course](https://www.youtube.com/watch?v=RGOj5yH7evk).
 
 ## Development
 
