@@ -593,7 +593,8 @@ function checkchange_internal(): void {
       if (renderSame && safeKpuzzle) {
         kpuzzledef = safeKpuzzle;
       } else {
-        kpuzzledef = pg.writekpuzzle(true) as KPuzzleDefinition;
+        // the false here means, don't include moves; rely on moveexpander
+        kpuzzledef = pg.writekpuzzle(true, false) as KPuzzleDefinition;
       }
       const newStickerDat = pg.get3d();
       nextShape = p[0];
@@ -632,6 +633,7 @@ function checkchange(): void {
     checkchange_internal();
   } catch (e) {
     console.log("Ignoring " + e);
+    console.log(e);
   }
 }
 

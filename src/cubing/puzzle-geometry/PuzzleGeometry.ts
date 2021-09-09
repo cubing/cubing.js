@@ -578,7 +578,6 @@ export class PuzzleGeometry {
   public killorientation: boolean = false; // eliminate any orientations
   public optimize: boolean = false; // optimize PermOri
   public scramble: number = 0; // scramble?
-  public ksolvemovenames: string[]; // move names from ksolve
   public fixPiece: string = ""; // fix a piece?
   public orientCenters: boolean = false; // orient centers?
   public duplicatedFaces: number[] = []; // which faces are duplicated
@@ -2196,9 +2195,12 @@ export class PuzzleGeometry {
     );
   }
 
-  public writekpuzzle(fortwisty: boolean = true): PGVendoredKPuzzleDefinition {
-    const od = this.getOrbitsDef(fortwisty);
-    const r = od.toKpuzzle() as PGVendoredKPuzzleDefinition;
+  public writekpuzzle(
+    fortwisty: boolean = true,
+    includemoves: boolean = true,
+  ): PGVendoredKPuzzleDefinition {
+    const od = this.getOrbitsDef(fortwisty, includemoves);
+    const r = od.toKpuzzle(includemoves) as PGVendoredKPuzzleDefinition;
     r.moveNotation = new PGNotation(this, od);
     return r;
   }
@@ -2318,7 +2320,10 @@ export class PuzzleGeometry {
     return false;
   }
 
-  public getOrbitsDef(fortwisty: boolean): OrbitsDef {
+  public getOrbitsDef(
+    fortwisty: boolean,
+    includemoves: boolean = true,
+  ): OrbitsDef {
     // generate a representation of the puzzle
     const setmoves = [];
     if (fortwisty) {
@@ -2483,33 +2488,34 @@ export class PuzzleGeometry {
     }
     const movenames: string[] = [];
     const moves: Transformation[] = [];
-    for (let k = 0; k < this.moveplanesets.length; k++) {
-      const moveplaneset = this.moveplanesets[k];
-      const slices = moveplaneset.length;
-      const moveset = mps[k];
-      const movesetgeo = this.movesetgeos[k];
-      for (let i = 0; i < moveset.length; i += 2) {
-        const movebits = moveset[i];
-        const mna = getmovename(movesetgeo, movebits, slices);
-        const movename = mna[0];
-        const inverted = mna[1];
-        if (moveset[i + 1] === 1) {
-          movenames.push(movename);
-        } else {
-          movenames.push(movename + moveset[i + 1]);
+    if (includemoves) {
+      for (let k = 0; k < this.moveplanesets.length; k++) {
+        const moveplaneset = this.moveplanesets[k];
+        const slices = moveplaneset.length;
+        const moveset = mps[k];
+        const movesetgeo = this.movesetgeos[k];
+        for (let i = 0; i < moveset.length; i += 2) {
+          const movebits = moveset[i];
+          const mna = getmovename(movesetgeo, movebits, slices);
+          const movename = mna[0];
+          const inverted = mna[1];
+          if (moveset[i + 1] === 1) {
+            movenames.push(movename);
+          } else {
+            movenames.push(movename + moveset[i + 1]);
+          }
+          const mv = this.getMoveFromBits(
+            movebits,
+            moveset[i + 1],
+            inverted,
+            this.cmovesbyslice[k],
+            setmoves,
+            this.movesetorders[k],
+          );
+          moves.push(mv);
         }
-        const mv = this.getMoveFromBits(
-          movebits,
-          moveset[i + 1],
-          inverted,
-          this.cmovesbyslice[k],
-          setmoves,
-          this.movesetorders[k],
-        );
-        moves.push(mv);
       }
     }
-    this.ksolvemovenames = movenames; // hack!
     let r = new OrbitsDef(
       setnames,
       setdefs,
