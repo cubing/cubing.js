@@ -12,7 +12,7 @@ If this is your first time contributing to a project on Github, these are the st
 2. Install [Git](https://git-scm.com/downloads)
 3. Clone your forked version of `cubing.js` to your computer
 4. Create a new branch in your cloned project, and make the changes you would like to make 
-5. Push your changes to your forked cubing.js repo
+5. Push your changes to your forked `cubing.js` repo
 6. Create a pull request in `cubing.js`, with your new branch from your forked repo as the source.
 
 Youtube has many [beginners guides](https://www.youtube.com/watch?v=RGOj5yH7evk) to Git and Github if you would like more information.
