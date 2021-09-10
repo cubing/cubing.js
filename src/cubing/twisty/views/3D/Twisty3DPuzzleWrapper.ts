@@ -98,7 +98,18 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         this.puzzleID === "3x3x3" &&
         this.visualizationStrategy === "Cube3D"
       ) {
-        return (await proxyPromise).cube3DShim();
+        // TODO: synchronize
+        const [foundationSprite, hintSprite, experimentalStickering] = await Promise.all([
+          this.model.foundationStickerSprite.get(),
+          this.model.hintStickerSprite.get(),
+          this.model.stickeringProp.get()
+        ]);
+        console.log([foundationSprite, hintSprite]);
+        return (await proxyPromise).cube3DShim({
+          foundationSprite,
+          hintSprite,
+          experimentalStickering
+        });
       } else {
         const hintFacelets = await this.model!.hintFaceletProp.get();
         return (await proxyPromise).pg3dShim(

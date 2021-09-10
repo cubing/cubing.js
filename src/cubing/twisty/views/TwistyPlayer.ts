@@ -1,5 +1,5 @@
-import { Alg, Move } from "../../alg";
 import type { ExperimentalStickering } from "..";
+import { Alg, Move } from "../../alg";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
 import type { BackgroundThemeWithAuto } from "../model/depth-0/BackgroundProp";
@@ -54,6 +54,10 @@ export const twistyPlayerAttributeMap = {
   "camera-distance": "cameraDistance",
   "camera-latitude-limit": "cameraLatitudeLimit",
   "tempo-scale": "tempoScale",
+
+  // URL-based
+  "experimental-sprite": "experimentalSprite",
+  "experimental-hint-sprite": "experimentalHintSprite",
 };
 
 export type TwistyPlayerAttribute = keyof typeof twistyPlayerAttributeMap;
@@ -80,12 +84,16 @@ export interface TwistyPlayerConfig {
   // "indexer"?: "indexer";
   viewerLink?: ViewerLinkPageWithAuto;
 
-  // NumberBased
+  // Number-based
   cameraLatitude?: number;
   cameraLongitude?: number;
   cameraDistance?: number;
   cameraLatitudeLimit?: number;
   tempoScale?: number;
+
+  // URL-based
+  experimentalSprite?: string | null;
+  experimentalHintSprite?: string | null;
 }
 
 /**

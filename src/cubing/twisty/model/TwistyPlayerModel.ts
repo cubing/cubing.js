@@ -12,10 +12,12 @@ import { SetupAnchorProp } from "./depth-0/SetupAnchorProp";
 import { StickeringProp } from "./depth-0/StickeringProp";
 import { TempoScaleProp } from "./depth-0/TempoScaleProp";
 import { TimestampRequestProp } from "./depth-0/TimestampRequestProp";
+import { URLProp } from "./depth-0/URLProp";
 import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
 import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
 import { PuzzleDefProp } from "./depth-1/PuzzleDefProp";
+import { SpriteProp } from "./depth-1/SpriteProp";
 import { VisualizationStrategyProp } from "./depth-1/VisualizationStrategyProp";
 import { IndexerConstructorProp } from "./depth-2/IndexerConstructorProp";
 import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
@@ -39,7 +41,9 @@ export class TwistyPlayerModel {
   backgroundProp = new BackgroundProp();
   backViewProp = new BackViewProp();
   controlPanelProp = new ControlPanelProp();
+  foundationStickerSpriteURL = new URLProp();
   hintFaceletProp = new HintFaceletProp();
+  hintStickerSpriteURL = new URLProp();
   indexerConstructorRequestProp = new IndexerConstructorRequestProp();
 
   latitudeLimitProp = new LatitudeLimitProp();
@@ -57,9 +61,12 @@ export class TwistyPlayerModel {
   visualizationFormatProp = new VisualizationFormatProp();
 
   // Depth 1
-  visualizationStrategyProp = new VisualizationStrategyProp({
-    visualizationRequest: this.visualizationFormatProp,
-    puzzleID: this.puzzleProp,
+  foundationStickerSprite = new SpriteProp({
+    spriteURL: this.foundationStickerSpriteURL,
+  });
+
+  hintStickerSprite = new SpriteProp({
+    spriteURL: this.hintStickerSpriteURL,
   });
 
   orbitCoordinatesProp = new OrbitCoordinatesProp({
@@ -69,6 +76,11 @@ export class TwistyPlayerModel {
   });
 
   puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
+
+  visualizationStrategyProp = new VisualizationStrategyProp({
+    visualizationRequest: this.visualizationFormatProp,
+    puzzleID: this.puzzleProp,
+  });
 
   // Depth 2
   indexerConstructorProp = new IndexerConstructorProp({

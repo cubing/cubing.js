@@ -75,4 +75,10 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
 
   set tempoScale(newTempoScale: number) { this.experimentalModel.tempoScaleProp.set(newTempoScale); }
   get tempoScale(): never { throw err("tempoScale"); }
+
+  set experimentalSprite(url: string | URL) { this.experimentalModel.foundationStickerSpriteURL.set(url); }
+  get experimentalSprite(): never { throw err("experimentalSprite"); }
+
+  set experimentalHintSprite(url: string | URL) { this.experimentalModel.hintStickerSpriteURL.set(url); }
+  get experimentalHintSprite(): never { throw err("experimentalHintSprite"); }
 }
