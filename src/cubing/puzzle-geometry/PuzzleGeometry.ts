@@ -1466,30 +1466,23 @@ export class PuzzleGeometry {
     const facetocubie = [];
     const facetoord = [];
     for (const facelist of facelisthash.values()) {
-      const cubie = new Array(facelist.length);
-      if (cubie.length === this.basefacecount) {
+      if (facelist.length === this.basefacecount) {
         // this is the original "cubie" of a split core; we ignore it.
         continue;
-      }
-      for (let i = 0; i < cubie.length; i++) {
-        cubie[i] = faces[facelist[i]];
       }
       //  Sort the faces around each corner so they are counterclockwise.  Only
       //  relevant for cubies that actually are corners (three or more
       //  faces).  In general cubies might have many faces; for icosohedrons
       //  there are five faces on the corner cubies.
-      if (cubie.length > 1) {
-        const cm = cubie.map((_) => _.centermass());
+      if (facelist.length > 1) {
+        const cm = facelist.map((_: number) => faces[_].centermass());
         const cmall = centermassface(cm);
-        for (let looplimit = 0; cubie.length > 2; looplimit++) {
+        for (let looplimit = 0; facelist.length > 2; looplimit++) {
           let changed = false;
-          for (let i = 0; i < cubie.length; i++) {
-            const j = (i + 1) % cubie.length;
+          for (let i = 0; i < facelist.length; i++) {
+            const j = (i + 1) % facelist.length;
             // var ttt = cmall.dot(cm[i].cross(cm[j])) ; // TODO
             if (cmall.dot(cm[i].cross(cm[j])) < 0) {
-              const t = cubie[i];
-              cubie[i] = cubie[j];
-              cubie[j] = t;
               const u = cm[i];
               cm[i] = cm[j];
               cm[j] = u;
@@ -1507,9 +1500,9 @@ export class PuzzleGeometry {
           }
         }
         let mini = 0;
-        let minf = this.findface(cubie[mini]);
-        for (let i = 1; i < cubie.length; i++) {
-          const temp = this.findface(cubie[i]);
+        let minf = facelist[mini];
+        for (let i = 1; i < facelist.length; i++) {
+          const temp = facelist[i];
           if (
             this.faceprecedence[this.getfaceindex(temp)] <
             this.faceprecedence[this.getfaceindex(minf)]
@@ -1519,11 +1512,9 @@ export class PuzzleGeometry {
           }
         }
         if (mini !== 0) {
-          const ocubie = cubie.slice();
           const ofacelist = facelist.slice();
-          for (let i = 0; i < cubie.length; i++) {
-            cubie[i] = ocubie[(mini + i) % cubie.length];
-            facelist[i] = ofacelist[(mini + i) % cubie.length];
+          for (let i = 0; i < facelist.length; i++) {
+            facelist[i] = ofacelist[(mini + i) % facelist.length];
           }
         }
       }
@@ -1590,7 +1581,7 @@ export class PuzzleGeometry {
         cubiesetcubies[cubiesetnum].push(cind);
         cubieordnums[cind] = cubieords[cubiesetnum]++;
         if (queue.length < this.rotations.length) {
-          const cm = this.faces[cubies[cind][0]].centermass();
+          const cm = this.facecentermass[cubies[cind][0]];
           for (let j = 0; j < moverotations.length; j++) {
             const tq =
               this.facetocubie[
