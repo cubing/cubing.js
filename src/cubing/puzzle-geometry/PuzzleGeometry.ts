@@ -2900,10 +2900,10 @@ export class PuzzleGeometry {
         ori: cubieori,
         face: facenum,
       });
-      const fcoords = coords;
+      let fcoords = coords;
       if (this.duplicatedFaces[i]) {
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
-          coords = coords.rotateforward();
+          fcoords = fcoords.rotateforward();
           stickers.push({
             coords: toFaceCoords(fcoords, maxdist),
             color,
