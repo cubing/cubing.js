@@ -966,8 +966,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   public experimentalUpdateTexture(
     enabled: boolean,
-    stickerTexture?: Texture,
-    hintTexture?: Texture,
+    stickerTexture?: Texture | null,
+    hintTexture?: Texture | null,
   ) {
     if (!stickerTexture) {
       enabled = false;

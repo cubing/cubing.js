@@ -1,3 +1,4 @@
+import type { Texture as ThreeTexture } from "three";
 import { puzzles } from "../../../puzzles";
 import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
@@ -79,6 +80,24 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         }
       },
     );
+
+    this.#freshListenerManager.addMultiListener(
+      [this.model.foundationStickerSprite, this.model.hintStickerSprite],
+      async (
+        inputs: [
+          foundationSprite: ThreeTexture | null,
+          hintSprite: ThreeTexture | null,
+        ],
+      ) => {
+        if ("experimentalUpdateTexture" in (await this.twisty3DPuzzle())) {
+          ((await this.twisty3DPuzzle()) as PG3D).experimentalUpdateTexture(
+            true,
+            ...inputs,
+          );
+          this.scheduleRender();
+        }
+      },
+    );
   }
 
   #freshListenerManager = new FreshListenerManager();
@@ -99,23 +118,37 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         this.visualizationStrategy === "Cube3D"
       ) {
         // TODO: synchronize
-        const [foundationSprite, hintSprite, experimentalStickering] = await Promise.all([
-          this.model.foundationStickerSprite.get(),
-          this.model.hintStickerSprite.get(),
-          this.model.stickeringProp.get()
-        ]);
+        const [foundationSprite, hintSprite, experimentalStickering] =
+          await Promise.all([
+            this.model.foundationStickerSprite.get(),
+            this.model.hintStickerSprite.get(),
+            this.model.stickeringProp.get(),
+          ]);
         console.log([foundationSprite, hintSprite]);
         return (await proxyPromise).cube3DShim({
           foundationSprite,
           hintSprite,
-          experimentalStickering
+          experimentalStickering,
         });
       } else {
-        const hintFacelets = await this.model!.hintFaceletProp.get();
-        return (await proxyPromise).pg3dShim(
+        const [hintFacelets, foundationSprite, hintSprite] = await Promise.all([
+          this.model!.hintFaceletProp.get(),
+          this.model.foundationStickerSprite.get(),
+          this.model.hintStickerSprite.get(),
+        ]);
+        const pg3d = (await proxyPromise).pg3dShim(
           this.puzzleID,
           hintFacelets === "auto" ? "floating" : hintFacelets,
         );
+        // TODO: Figure out how to do this in one place using the listener.
+        pg3d.then((p) =>
+          p.experimentalUpdateTexture(
+            true,
+            foundationSprite ?? undefined,
+            hintSprite ?? undefined,
+          ),
+        );
+        return pg3d;
       }
     })());
   }
