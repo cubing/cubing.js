@@ -10,6 +10,7 @@ import {
   MeshBasicMaterial,
   Object3D,
   Texture,
+  TextureLoader,
   Vector3,
 } from "three";
 import {
@@ -142,7 +143,6 @@ function trimEdges(face: number[], tr: number): number[] {
 class Filler {
   pos: number;
   ipos: number;
-  uvpos: number;
   vertices: Float32Array;
   colors: Uint8Array;
   uvs?: Float32Array;
@@ -153,7 +153,6 @@ class Filler {
     this.colors = new Uint8Array(18 * sz);
     this.ind = new Uint8Array(sz);
     this.pos = 0;
-    this.uvpos = 0;
     this.ipos = 0;
   }
 
@@ -389,13 +388,13 @@ class StickerDef {
   public setTexture(filler: Filler, sd: StickerDef): number {
     filler.uvs!.copyWithin(
       6 * this.stickerStart,
-      6 * sd.stickerStart + filler.uvpos,
-      6 * sd.stickerEnd + filler.uvpos,
+      6 * sd.stickerStart + 6 * filler.sz,
+      6 * sd.stickerEnd + 6 * filler.sz,
     );
     filler.uvs!.copyWithin(
       6 * this.hintStart,
-      6 * sd.hintStart + filler.uvpos,
-      6 * sd.hintEnd + filler.uvpos,
+      6 * sd.hintStart + 6 * filler.sz,
+      6 * sd.hintEnd + 6 * filler.sz,
     );
     return 1;
   }
