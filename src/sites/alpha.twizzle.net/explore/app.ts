@@ -49,6 +49,7 @@ let moveInput: HTMLSelectElement;
 let lastval: string = "";
 let lastalgo: string = "";
 let scramble: number = 0;
+let needmovesforscramble: boolean = false;
 let stickerDat: StickerDat;
 const DEFAULT_CAMERA_DISTANCE = 5.5;
 let initialCameraOrbitCoordinates: OrbitCoordinates = {
@@ -553,6 +554,7 @@ function checkchange_internal(): void {
       if (scramble !== 0) {
         if (scramble > 0) {
           options.push("scramble", 100);
+          needmovesforscramble = true;
         }
         scramble = 0;
         algo = "";
@@ -594,7 +596,11 @@ function checkchange_internal(): void {
         kpuzzledef = safeKpuzzle;
       } else {
         // the false here means, don't include moves; rely on moveexpander
-        kpuzzledef = pg.writekpuzzle(true, false) as KPuzzleDefinition;
+        kpuzzledef = pg.writekpuzzle(
+          true,
+          needmovesforscramble,
+        ) as KPuzzleDefinition;
+        needmovesforscramble = false;
       }
       const newStickerDat = pg.get3d();
       nextShape = p[0];
