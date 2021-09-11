@@ -233,11 +233,10 @@ export class TwistyOrbitControls {
     );
     this.onMove(movementX, movementY);
 
-    if (e.timeStamp !== this.lastMouseTimestamp) {
-      this.lastMouseMoveMomentumX =
-        movementX / (e.timeStamp - this.lastMouseTimestamp);
-      this.lastMouseMoveMomentumY =
-        movementY / (e.timeStamp - this.lastMouseTimestamp);
+    const deltaMs = e.timeStamp - this.lastMouseTimestamp;
+    if (deltaMs > 0) {
+      this.lastMouseMoveMomentumX = movementX / deltaMs;
+      this.lastMouseMoveMomentumY = movementY / deltaMs;
       this.lastMouseTimestamp = e.timeStamp;
     }
   }
@@ -296,11 +295,10 @@ export class TwistyOrbitControls {
         this.lastTouchClientX = touch.clientX;
         this.lastTouchClientY = touch.clientY;
 
-        if (e.timeStamp !== this.lastTouchTimestamp) {
-          this.lastTouchMoveMomentumX =
-            movementX / (e.timeStamp - this.lastTouchTimestamp);
-          this.lastTouchMoveMomentumY =
-            movementY / (e.timeStamp - this.lastTouchTimestamp);
+        const deltaMs = e.timeStamp - this.lastTouchTimestamp;
+        if (deltaMs > 0) {
+          this.lastTouchMoveMomentumX = movementX / deltaMs;
+          this.lastTouchMoveMomentumY = movementY / deltaMs;
           this.lastTouchTimestamp = e.timeStamp;
         }
       }
