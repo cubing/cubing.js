@@ -222,7 +222,7 @@ export class TwistyOrbitControls {
 
     if (e.movementX === 0 && e.movementY === 0) {
       // Short-circuit
-      console.log("short-circuit mouse!")
+      console.log("short-circuit mouse!");
       return;
     }
 
@@ -233,7 +233,7 @@ export class TwistyOrbitControls {
     );
     this.onMove(movementX, movementY);
 
-    if (e.timeStamp !== this.lastTouchTimestamp) {
+    if (e.timeStamp !== this.lastMouseTimestamp) {
       this.lastMouseMoveMomentumX =
         movementX / (e.timeStamp - this.lastMouseTimestamp);
       this.lastMouseMoveMomentumY =
@@ -262,7 +262,7 @@ export class TwistyOrbitControls {
     if (this.currentTouchID === null) {
       if (e.touches[0].clientX === 0 && e.touches[0].clientY === 0) {
         // Short-circuit
-        console.log("short-circuit touch!")
+        console.log("short-circuit touch!");
         return;
       }
       this.currentTouchID = e.changedTouches[0].identifier;
@@ -342,7 +342,7 @@ export class TwistyOrbitControls {
     // console.log(movementX, movementY)
 
     const newSpherical = new Spherical();
-     newSpherical.copy(this.#spherical);
+    newSpherical.copy(this.#spherical);
 
     newSpherical.theta += -2 * movementX;
     newSpherical.phi += -2 * movementY;
@@ -354,11 +354,19 @@ export class TwistyOrbitControls {
       newSpherical.phi = Math.min(newSpherical.phi, Math.PI - EPSILON);
     }
 
-    if (isNaN(newSpherical.theta) || newSpherical.theta === Infinity || newSpherical.theta === -Infinity) {
+    if (
+      isNaN(newSpherical.theta) ||
+      newSpherical.theta === Infinity ||
+      newSpherical.theta === -Infinity
+    ) {
       return;
     }
 
-    if (isNaN(newSpherical.phi) || newSpherical.phi === Infinity || newSpherical.phi === -Infinity) {
+    if (
+      isNaN(newSpherical.phi) ||
+      newSpherical.phi === Infinity ||
+      newSpherical.phi === -Infinity
+    ) {
       return;
     }
 
