@@ -10,7 +10,6 @@ import {
   MeshBasicMaterial,
   Object3D,
   Texture,
-  TextureLoader,
   Vector3,
 } from "three";
 import {
