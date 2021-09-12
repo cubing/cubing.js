@@ -567,6 +567,8 @@ class PuzzleGeometryOptionsObject {
   grayCorners: boolean = false; // make corner sets gray
   grayCenters: boolean = false; // make center sets gray
   grayEdges: boolean = false; // make edge sets gray
+
+  public fixedOrientation: boolean = false; // eliminate any orientations
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -613,7 +615,6 @@ export class PuzzleGeometry {
   // options TODO
   public parsedmovelist: any; // parsed move list
   // options
-  public killorientation: boolean = false; // eliminate any orientations
   public optimize: boolean = false; // optimize PermOri
   public scramble: number = 0; // scramble?
   public fixPiece: string = ""; // fix a piece?
@@ -683,7 +684,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "movelist") {
           this.options.moveList = asstructured(optionlist[i + 1]);
         } else if (optionlist[i] === "killorientation") {
-          this.killorientation = asboolean(optionlist[i + 1]);
+          this.options.fixedOrientation = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "optimize") {
           this.optimize = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "scramble") {
@@ -2271,13 +2272,13 @@ export class PuzzleGeometry {
         }
         if (perms[setnum] === iota(this.cubieords[setnum])) {
           perms[setnum] = perms[setnum].slice();
-          if (this.orbitoris[setnum] > 1 && !this.killorientation) {
+          if (this.orbitoris[setnum] > 1 && !this.options.fixedOrientation) {
             oris[setnum] = oris[setnum].slice();
           }
         }
         for (let ii = 0; ii < mperm.length; ii += 2) {
           perms[setnum][mperm[(ii + inc) % mperm.length]] = mperm[ii];
-          if (this.orbitoris[setnum] > 1 && !this.killorientation) {
+          if (this.orbitoris[setnum] > 1 && !this.options.fixedOrientation) {
             oris[setnum][mperm[ii]] =
               (mperm[(ii + oinc) % mperm.length] -
                 mperm[(ii + 1) % mperm.length] +
@@ -2292,7 +2293,7 @@ export class PuzzleGeometry {
       if (setmoves && !setmoves[ii]) {
         continue;
       }
-      if (this.orbitoris[ii] === 1 || this.killorientation) {
+      if (this.orbitoris[ii] === 1 || this.options.fixedOrientation) {
         if (perms[ii] === iota(lastId.perm.length)) {
           if (perms[ii] !== lastId.perm) {
             lastId = new Orbit(perms[ii], oris[ii], 1);
@@ -2494,7 +2495,7 @@ export class PuzzleGeometry {
       setdefs.push(
         new OrbitDef(
           this.cubieords[i],
-          this.killorientation ? 1 : this.orbitoris[i],
+          this.options.fixedOrientation ? 1 : this.orbitoris[i],
         ),
       );
     }
@@ -2518,7 +2519,7 @@ export class PuzzleGeometry {
         o.push(0);
       }
       solved.push(
-        new Orbit(p, o, this.killorientation ? 1 : this.orbitoris[i]),
+        new Orbit(p, o, this.options.fixedOrientation ? 1 : this.orbitoris[i]),
       );
     }
     const movenames: string[] = [];
