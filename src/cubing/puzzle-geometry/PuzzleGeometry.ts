@@ -563,6 +563,10 @@ class PuzzleGeometryOptionsObject {
   includeEdgeOrbits: boolean = true; // include edge orbits
   // Overrides the previous options.
   excludeOrbits: string[] = []; // exclude these orbits
+
+  grayCorners: boolean = false; // make corner sets gray
+  grayCenters: boolean = false; // make center sets gray
+  grayEdges: boolean = false; // make edge sets gray
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -609,9 +613,6 @@ export class PuzzleGeometry {
   // options TODO
   public parsedmovelist: any; // parsed move list
   // options
-  public graycorners: boolean = false; // make corner sets gray
-  public graycenters: boolean = false; // make center sets gray
-  public grayedges: boolean = false; // make edge sets gray
   public killorientation: boolean = false; // eliminate any orientations
   public optimize: boolean = false; // optimize PermOri
   public scramble: number = 0; // scramble?
@@ -674,11 +675,11 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "omit") {
           this.options.excludeOrbits = optionlist[i + 1];
         } else if (optionlist[i] === "graycorners") {
-          this.graycorners = asboolean(optionlist[i + 1]);
+          this.options.grayCorners = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "graycenters") {
-          this.graycenters = asboolean(optionlist[i + 1]);
+          this.options.grayCenters = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "grayedges") {
-          this.grayedges = asboolean(optionlist[i + 1]);
+          this.options.grayEdges = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "movelist") {
           this.options.moveList = asstructured(optionlist[i + 1]);
         } else if (optionlist[i] === "killorientation") {
@@ -2152,9 +2153,12 @@ export class PuzzleGeometry {
       ori = 1;
     }
     return (
-      (ori === 1 && (this.graycenters || !this.options.includeCenterOrbits)) ||
-      (ori === 2 && (this.grayedges || !this.options.includeEdgeOrbits)) ||
-      (ori > 2 && (this.graycorners || !this.options.includeCornerOrbits))
+      (ori === 1 &&
+        (this.options.grayCenters || !this.options.includeCenterOrbits)) ||
+      (ori === 2 &&
+        (this.options.grayEdges || !this.options.includeEdgeOrbits)) ||
+      (ori > 2 &&
+        (this.options.grayCorners || !this.options.includeCornerOrbits))
     );
   }
 
