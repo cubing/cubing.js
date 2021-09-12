@@ -12,14 +12,12 @@ body {
   padding: 1em;
 }
 
-twisty-player-v1,
 twisty-player {
   width: 75%;
   height: 200px;
   margin: 2em auto;
 }
 
-#custom-pg3d twisty-player-v1,
 #custom-pg3d twisty-player {
   height: 400px;
 }
