@@ -21,9 +21,22 @@ export class SpriteProp extends TwistyPropDerived<
     if (textureURL === null) {
       return null;
     }
-    return new Promise(async (resolve, reject) => {
-      // TODO: return `null` in the rejection case?
-      (await loader()).load(textureURL.toString(), resolve, () => {}, reject);
+    return new Promise(async (resolve, _reject) => {
+      const onLoadingError = (): void => {
+        console.warn("Could not load sprite:", textureURL.toString());
+        resolve(null);
+      };
+      // TODO: provide a way to listen for errors?
+      try {
+        (await loader()).load(
+          textureURL.toString(),
+          resolve,
+          onLoadingError,
+          onLoadingError,
+        );
+      } catch (e) {
+        onLoadingError();
+      }
     });
   }
 }
