@@ -556,6 +556,11 @@ class PuzzleGeometryOptionsObject {
   moveList?: string[]; // move list to generate
   puzzleOrientation: FaceBasedOrientationDescription; // single puzzle orientation from options
   puzzleOrientations: FaceBasedOrientationDescriptionLookup; // puzzle orientation override object from options // TODO: is this needed?
+
+  // TODO: Group these into a single object?
+  includeCornerSets: boolean = true; // include corner sets
+  includeCenterSets: boolean = true; // include center sets
+  includeEdgeSets: boolean = true; // include edge sets
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -602,9 +607,6 @@ export class PuzzleGeometry {
   // options TODO
   public parsedmovelist: any; // parsed move list
   // options
-  public cornersets: boolean = true; // include corner sets
-  public centersets: boolean = true; // include center sets
-  public edgesets: boolean = true; // include edge sets
   public omitsets: string[] = []; // omit these sets
   public graycorners: boolean = false; // make corner sets gray
   public graycenters: boolean = false; // make center sets gray
@@ -663,11 +665,11 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "rotations") {
           this.options.addRotations = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "cornersets") {
-          this.cornersets = asboolean(optionlist[i + 1]);
+          this.options.includeCornerSets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "centersets") {
-          this.centersets = asboolean(optionlist[i + 1]);
+          this.options.includeCenterSets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "edgesets") {
-          this.edgesets = asboolean(optionlist[i + 1]);
+          this.options.includeEdgeSets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "omit") {
           this.omitsets = optionlist[i + 1];
         } else if (optionlist[i] === "graycorners") {
@@ -2149,9 +2151,9 @@ export class PuzzleGeometry {
       ori = 1;
     }
     return (
-      (ori === 1 && (this.graycenters || !this.centersets)) ||
-      (ori === 2 && (this.grayedges || !this.edgesets)) ||
-      (ori > 2 && (this.graycorners || !this.cornersets))
+      (ori === 1 && (this.graycenters || !this.options.includeCenterSets)) ||
+      (ori === 2 && (this.grayedges || !this.options.includeEdgeSets)) ||
+      (ori > 2 && (this.graycorners || !this.options.includeCornerSets))
     );
   }
 
@@ -2161,9 +2163,9 @@ export class PuzzleGeometry {
       ori = 1;
     }
     return (
-      (ori === 1 && !this.centersets) ||
-      (ori === 2 && !this.edgesets) ||
-      (ori > 2 && !this.cornersets)
+      (ori === 1 && !this.options.includeCenterSets) ||
+      (ori === 2 && !this.options.includeEdgeSets) ||
+      (ori > 2 && !this.options.includeCornerSets)
     );
   }
 
