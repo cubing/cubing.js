@@ -31,8 +31,8 @@ const demos: Record<string, AnimLeafWithRange[]> = {
     { animLeaf: new Move("z", 2), start: 5500, end: 6500 },
     { animLeaf: new Move("S", 2), start: 6500, end: 7500 },
     { animLeaf: new Move("U"), start: 7500, end: 8000 },
-    { animLeaf: new Move("U"), start: 8000, end: 8500 },
     { animLeaf: new Move("D"), start: 7750, end: 8250 },
+    { animLeaf: new Move("U"), start: 8000, end: 8500 },
     { animLeaf: new Move("D"), start: 8250, end: 8750 },
     { animLeaf: new Move("S", 2), start: 8750, end: 9250 },
     { animLeaf: new Move("F", -2), start: 8750, end: 10000 },
@@ -123,29 +123,49 @@ export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
     };
   }
 
+  // TODO: Caching
   public currentMoveInfo(timestamp: Timestamp): CurrentMoveInfo {
+    // The starting timestamp of the earliest active move.
+    let windowEarliestTimestamp = Infinity;
+    for (const leafWithRange of this.animLeaves) {
+      if (leafWithRange.start <= timestamp && leafWithRange.end >= timestamp) {
+        windowEarliestTimestamp = Math.min(
+          windowEarliestTimestamp,
+          leafWithRange.start,
+        );
+      } else if (leafWithRange.start > timestamp) {
+        break;
+      }
+    }
+
     const currentMoves: CurrentMove[] = [];
     const movesStarting: CurrentMove[] = [];
     const movesFinishing: CurrentMove[] = [];
-    let stateIndex: number = 0;
+    const movesFinished: CurrentMove[] = [];
     let latestStart: number = -Infinity; // TODO: is there a better way to accumulate this?
     let earliestEnd: number = Infinity; // TODO: is there a better way to accumulate this?
+
+    let stateIndex: number = 0;
     for (const leafWithRange of this.animLeaves) {
-      if (leafWithRange.end <= timestamp) {
+      if (leafWithRange.end <= windowEarliestTimestamp) {
         stateIndex++;
-      } else if (
-        leafWithRange.start < timestamp &&
-        timestamp < leafWithRange.end
-      ) {
+      } else if (leafWithRange.start > timestamp) {
+        break;
+      } else {
         const move = leafWithRange.animLeaf.as(Move);
         if (move !== null) {
-          const fraction =
+          let fraction =
             (timestamp - leafWithRange.start) /
             (leafWithRange.end - leafWithRange.start);
+          let moveFinished = false;
+          if (fraction > 1) {
+            fraction = 1;
+            moveFinished = true;
+          }
           const currentMove = {
             move: move,
             direction: Direction.Forwards,
-            fraction,
+            fraction: fraction,
             startTimestamp: leafWithRange.start,
             endTimestamp: leafWithRange.end,
           };
@@ -154,7 +174,12 @@ export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
               movesStarting.push(currentMove);
               break;
             case 1:
-              movesFinishing.push(currentMove);
+              // Generalize this to avoid reordering commuting moves.
+              if (moveFinished) {
+                movesFinished.push(currentMove);
+              } else {
+                movesFinishing.push(currentMove);
+              }
               break;
             default:
               currentMoves.push(currentMove);
@@ -162,8 +187,6 @@ export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
               earliestEnd = Math.min(earliestEnd, leafWithRange.end);
           }
         }
-      } else if (timestamp < leafWithRange.start) {
-        continue; // TODO: break?
       }
     }
     return {
@@ -173,6 +196,7 @@ export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
       earliestEnd,
       movesStarting,
       movesFinishing,
+      movesFinished,
     };
   }
 
