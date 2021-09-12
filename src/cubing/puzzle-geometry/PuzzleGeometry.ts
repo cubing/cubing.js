@@ -525,6 +525,7 @@ class PuzzleGeometryOptionsObject {
   outerBlockMoves: boolean; // generate outer block moves
   vertexMoves: boolean; // generate vertex moves
   addRotations: boolean; // add symmetry information to ksolve output
+  moveList?: string[]; // move list to generate
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -569,7 +570,6 @@ export class PuzzleGeometry {
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
   // options
-  public movelist: any; // move list to generate
   public parsedmovelist: any; // parsed move list
   public puzzleOrientation: any; // single puzzle orientation from options
   public puzzleOrientations: any; // puzzle orientation override list from options
@@ -648,7 +648,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "grayedges") {
           this.grayedges = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "movelist") {
-          this.movelist = asstructured(optionlist[i + 1]);
+          this.options.moveList = asstructured(optionlist[i + 1]);
         } else if (optionlist[i] === "killorientation") {
           this.killorientation = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "optimize") {
@@ -1997,11 +1997,11 @@ export class PuzzleGeometry {
       cmovesbyslice.push(axiscmoves);
     }
     this.cmovesbyslice = cmovesbyslice;
-    if (this.movelist !== undefined) {
+    if (this.options.moveList) {
       const parsedmovelist: any[] = [];
       // make sure the movelist makes sense based on the geos.
-      for (let i = 0; i < this.movelist.length; i++) {
-        parsedmovelist.push(this.parsemove(this.movelist[i]));
+      for (const moveString of this.options.moveList) {
+        parsedmovelist.push(this.parsemove(moveString));
       }
       this.parsedmovelist = parsedmovelist;
     }
@@ -2345,7 +2345,7 @@ export class PuzzleGeometry {
         addrot.push(0);
       }
     }
-    if (this.movelist && this.options.addRotations) {
+    if (this.options.moveList && this.options.addRotations) {
       for (let i = 0; i < this.moverotations.length; i++) {
         addrot[i] = 0;
       }
