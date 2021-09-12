@@ -519,6 +519,12 @@ function toFaceCoords(q: Face, maxdist: number): number[] {
   return r;
 }
 
+class PuzzleGeometryOptionsObject {
+  verbosity: number = 0; // verbosity (console.log)
+}
+
+export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
+
 export class PuzzleGeometry {
   public args: string = "";
   public rotations: Quat[]; // all members of the rotation group
@@ -559,7 +565,6 @@ export class PuzzleGeometry {
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
   // options
-  public verbose: number = 0; // verbosity (console.log)
   public allmoves: boolean = false; // generate all slice moves in ksolve
   public outerblockmoves: boolean; // generate outer block moves
   public vertexmoves: boolean; // generate vertex moves
@@ -591,6 +596,9 @@ export class PuzzleGeometry {
   public notationMapper: NotationMapper = new NullMapper();
   public addNotationMapper: string = "";
   public setReidOrder: boolean = false;
+
+  private options = new PuzzleGeometryOptionsObject();
+
   constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
     function asstructured(v: any): any {
       if (typeof v === "string") {
@@ -614,9 +622,9 @@ export class PuzzleGeometry {
       }
       for (let i = 0; i < optionlist.length; i += 2) {
         if (optionlist[i] === "verbose") {
-          this.verbose++;
+          this.options.verbosity++;
         } else if (optionlist[i] === "quiet") {
-          this.verbose = 0;
+          this.options.verbosity = 0;
         } else if (optionlist[i] === "allmoves") {
           this.allmoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "outerblockmoves") {
@@ -666,7 +674,7 @@ export class PuzzleGeometry {
     if (optionlist) {
       this.args += " " + optionlist.join(" ");
     }
-    if (this.verbose > 0) {
+    if (this.options.verbosity > 0) {
       console.log(this.header("# "));
     }
     this.create(shape, cuts);
@@ -704,7 +712,7 @@ export class PuzzleGeometry {
         throw new Error("Bad shape argument: " + shape);
     }
     this.rotations = closure(g);
-    if (this.verbose) {
+    if (this.options.verbosity) {
       console.log("# Rotations: " + this.rotations.length);
     }
     const baseplane = g[0];
@@ -716,19 +724,19 @@ export class PuzzleGeometry {
     this.net = net;
     this.colors = defaultcolors()[baseplanes.length];
     this.faceorder = defaultfaceorders()[baseplanes.length];
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Base planes: " + baseplanes.length);
     }
     const baseface = getface(baseplanes);
     const zero = new Quat(0, 0, 0, 0);
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Face vertices: " + baseface.length);
     }
     const facenormal = baseplanes[0].makenormal();
     const edgenormal = baseface[0].sum(baseface[1]).makenormal();
     const vertexnormal = baseface[0].makenormal();
     const boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d);
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Boundary is " + boundary);
     }
     const planerot = uniqueplanes(boundary, this.rotations);
@@ -954,7 +962,7 @@ export class PuzzleGeometry {
       }
       vertexnames[i] = [vertexnames[i][0], r];
     }
-    if (this.verbose > 1) {
+    if (this.options.verbosity > 1) {
       console.log("# Face precedence list: " + this.faceorder.join(" "));
       console.log("# Face names: " + facenames.map((_: any) => _[1]).join(" "));
       console.log("# Edge names: " + edgenames.map((_: any) => _[1]).join(" "));
@@ -979,7 +987,7 @@ export class PuzzleGeometry {
     this.geonormals = geonormals;
     const geonormalnames = geonormals.map((_: any) => _[1]);
     this.swizzler.setGripNames(geonormalnames);
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log(
         "# Distances: face " +
           1 +
@@ -1024,7 +1032,7 @@ export class PuzzleGeometry {
     }
     let faces = ft.collect([], true);
     this.faces = faces;
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Faces is now " + faces.length);
     }
     this.stickersperface = faces.length;
@@ -1081,7 +1089,7 @@ export class PuzzleGeometry {
       }
     }
     this.shortedge = shortedge;
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Short edge is " + shortedge);
     }
     // add nxnxn cube notation if it has cube face moves
@@ -1268,7 +1276,7 @@ export class PuzzleGeometry {
     // take our newly split base face and expand it by the rotation matrix.
     // this generates our full set of "stickers".
     this.faces = expandfaces(this.baseplanerot, this.faces);
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Total stickers is now " + this.faces.length);
     }
     this.facecentermass = new Array(this.faces.length);
@@ -1318,7 +1326,7 @@ export class PuzzleGeometry {
     this.moveplanesets = moveplanesets;
     this.moveplanenormals = moveplanenormals;
     const sizes = moveplanesets.map((_) => _.length);
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Move plane sets: " + sizes);
     }
     // for each of the move planes, find the rotations that are relevant
@@ -1448,7 +1456,7 @@ export class PuzzleGeometry {
         //  because ksolve doesn't handle orientations that are not
         //  cyclic, and the rotation group of the core is not cyclic.
         if (arr.length === this.basefacecount) {
-          if (this.verbose) {
+          if (this.options.verbosity > 0) {
             console.log("# Splitting core.");
           }
           for (let suff = 0; suff < arr.length; suff++) {
@@ -1459,7 +1467,7 @@ export class PuzzleGeometry {
       }
     }
     this.facelisthash = facelisthash;
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Cubies: " + facelisthash.size);
     }
     const cubies: number[][] = [];
@@ -1672,7 +1680,7 @@ export class PuzzleGeometry {
       }
     }
     // show the orbits
-    if (this.verbose) {
+    if (this.options.verbosity > 0) {
       console.log("# Cubie orbit sizes " + cubieords);
     }
   }
