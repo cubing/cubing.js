@@ -124,7 +124,6 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
             this.model.hintStickerSprite.get(),
             this.model.stickeringProp.get(),
           ]);
-        console.log([foundationSprite, hintSprite]);
         return (await proxyPromise).cube3DShim({
           foundationSprite,
           hintSprite,
