@@ -42,7 +42,12 @@ export function currentMoveArrayEquals(
 export interface CurrentMoveInfo {
   stateIndex: number;
   currentMoves: CurrentMove[];
+  // Moves that are reaching a fraction of 1 at this exact timestamp.
   movesFinishing: CurrentMove[];
+  // Moves that are reached a fraction of 1 in the past, but are needed to
+  // handle simultaneous move animation (e.g. because a move that started
+  // earlier is still not done).
+  movesFinished: CurrentMove[];
   movesStarting: CurrentMove[];
   latestStart: number;
   earliestEnd: number;

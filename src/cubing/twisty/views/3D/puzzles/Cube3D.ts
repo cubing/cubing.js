@@ -541,9 +541,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   // TODO: Don't overwrite the static function.
   // TODO: This doesn't work dynamically yet.
   setSprite(texture: Texture): void {
-    console.log("setSprite", texture);
     this.sprite = texture;
-    console.log("setSprite", texture);
   }
 
   private setHintSpriteURL: (url: string) => void;
@@ -576,7 +574,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       );
     }
 
-    console.log(options);
     if (options.foundationSprite) {
       this.setSprite(options.foundationSprite);
     }
@@ -796,7 +793,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         this.experimentalHintStickerMeshes.push(hintSticker);
       }
 
-      console.log("prepicture", this.options.experimentalStickering);
       if (
         this.options.experimentalStickering === "picture" &&
         pictureStickerCoords[orbit] &&
