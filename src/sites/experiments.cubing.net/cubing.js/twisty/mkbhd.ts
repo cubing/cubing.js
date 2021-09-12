@@ -85,33 +85,31 @@ play();
   });
 })();
 
-// let lastTimestamp = performance.now();
-// const ROTATION_RATE = (2 * Math.PI) / 15;
-// let haveTriedToSetSpriteURL = false;
-// function rotate() {
-//   if (twistyPlayer.twisty3D && !haveTriedToSetSpriteURL) {
-//     haveTriedToSetSpriteURL = true;
-//     (twistyPlayer.twisty3D as Cube3D).experimentalSetStickerSpriteURL(
-//       spriteURL,
-//     );
-//     (twistyPlayer.twisty3D as Cube3D).experimentalSetHintStickerSpriteURL(
-//       hintSpriteURL,
-//     );
-//   }
+let lastTimestamp = performance.now();
+const CAM_ROTATION_DEG_PER_SEC = -24;
 
-//   const newTimestamp = performance.now();
-//   twistyPlayer.twisty3D?.rotateY(
-//     ((newTimestamp - lastTimestamp) / 1000) * ROTATION_RATE,
-//   );
-//   if (
-//     !(twistyPlayer.viewerElems[0] as any)?.orbitControls
-//       .experimentalHasBeenMoved
-//   ) {
-//     requestAnimationFrame(rotate);
-//     lastTimestamp = newTimestamp;
-//   }
-// }
-// requestAnimationFrame(rotate);
+let rotating = true;
+twistyPlayer.addEventListener("click", () => {
+  rotating = false;
+});
+
+function rotate(timestamp: number): void {
+  if (!rotating) {
+    return;
+  }
+  requestAnimationFrame(rotate);
+  const delta_deg =
+    ((timestamp - lastTimestamp) / 1000) * CAM_ROTATION_DEG_PER_SEC;
+  lastTimestamp = timestamp;
+  twistyPlayer.experimentalModel.orbitCoordinatesRequestProp.set(
+    (async () => {
+      const { longitude } =
+        await twistyPlayer.experimentalModel.orbitCoordinatesProp.get();
+      return { longitude: longitude + delta_deg };
+    })(),
+  );
+}
+requestAnimationFrame(rotate);
 
 async function connectBluetooth(): Promise<void> {
   const bluetoothPuzzle = await connectSmartPuzzle();
