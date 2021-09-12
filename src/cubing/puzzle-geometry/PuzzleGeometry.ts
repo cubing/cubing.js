@@ -561,6 +561,7 @@ class PuzzleGeometryOptionsObject {
   includeCornerSets: boolean = true; // include corner sets
   includeCenterSets: boolean = true; // include center sets
   includeEdgeSets: boolean = true; // include edge sets
+  excludeSets: string[] = []; // omit these sets
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -607,7 +608,6 @@ export class PuzzleGeometry {
   // options TODO
   public parsedmovelist: any; // parsed move list
   // options
-  public omitsets: string[] = []; // omit these sets
   public graycorners: boolean = false; // make corner sets gray
   public graycenters: boolean = false; // make center sets gray
   public grayedges: boolean = false; // make edge sets gray
@@ -671,7 +671,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "edgesets") {
           this.options.includeEdgeSets = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "omit") {
-          this.omitsets = optionlist[i + 1];
+          this.options.excludeSets = optionlist[i + 1];
         } else if (optionlist[i] === "graycorners") {
           this.graycorners = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "graycenters") {
@@ -2313,8 +2313,8 @@ export class PuzzleGeometry {
   }
 
   public omitSet(name: string): boolean {
-    for (let k = 0; k < this.omitsets.length; k++) {
-      if (this.omitsets[k] === name) {
+    for (const excludedSet of this.options.excludeSets) {
+      if (excludedSet === name) {
         return true;
       }
     }
