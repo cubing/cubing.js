@@ -523,6 +523,7 @@ class PuzzleGeometryOptionsObject {
   verbosity: number = 0; // verbosity (console.log)
   allMoves: boolean = false; // generate all slice moves in ksolve
   outerBlockMoves: boolean; // generate outer block moves
+  vertexMoves: boolean; // generate vertex moves
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -567,7 +568,6 @@ export class PuzzleGeometry {
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
   // options
-  public vertexmoves: boolean; // generate vertex moves
   public addrotations: boolean; // add symmetry information to ksolve output
   public movelist: any; // move list to generate
   public parsedmovelist: any; // parsed move list
@@ -630,7 +630,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "outerblockmoves") {
           this.options.outerBlockMoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "vertexmoves") {
-          this.vertexmoves = asboolean(optionlist[i + 1]);
+          this.options.vertexMoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "rotations") {
           this.addrotations = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "cornersets") {
@@ -2041,7 +2041,7 @@ export class PuzzleGeometry {
         }
         r.push(parsedmove[5]);
       }
-    } else if (this.vertexmoves && !this.options.allMoves) {
+    } else if (this.options.vertexMoves && !this.options.allMoves) {
       const msg = this.movesetgeos[k];
       if (msg[1] !== msg[3]) {
         for (let i = 0; i < slices; i++) {
