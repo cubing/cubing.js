@@ -521,6 +521,7 @@ function toFaceCoords(q: Face, maxdist: number): number[] {
 
 class PuzzleGeometryOptionsObject {
   verbosity: number = 0; // verbosity (console.log)
+  allmoves: boolean = false; // generate all slice moves in ksolve
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -565,7 +566,6 @@ export class PuzzleGeometry {
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
   // options
-  public allmoves: boolean = false; // generate all slice moves in ksolve
   public outerblockmoves: boolean; // generate outer block moves
   public vertexmoves: boolean; // generate vertex moves
   public addrotations: boolean; // add symmetry information to ksolve output
@@ -626,7 +626,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "quiet") {
           this.options.verbosity = 0;
         } else if (optionlist[i] === "allmoves") {
-          this.allmoves = asboolean(optionlist[i + 1]);
+          this.options.allmoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "outerblockmoves") {
           this.outerblockmoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "vertexmoves") {
@@ -2041,7 +2041,7 @@ export class PuzzleGeometry {
         }
         r.push(parsedmove[5]);
       }
-    } else if (this.vertexmoves && !this.allmoves) {
+    } else if (this.vertexmoves && !this.options.allmoves) {
       const msg = this.movesetgeos[k];
       if (msg[1] !== msg[3]) {
         for (let i = 0; i < slices; i++) {
@@ -2064,7 +2064,7 @@ export class PuzzleGeometry {
       }
     } else {
       for (let i = 0; i <= slices; i++) {
-        if (!this.allmoves && i + i === slices) {
+        if (!this.options.allmoves && i + i === slices) {
           continue;
         }
         if (this.outerblockmoves) {
