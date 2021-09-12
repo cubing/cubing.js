@@ -521,7 +521,8 @@ function toFaceCoords(q: Face, maxdist: number): number[] {
 
 class PuzzleGeometryOptionsObject {
   verbosity: number = 0; // verbosity (console.log)
-  allmoves: boolean = false; // generate all slice moves in ksolve
+  allMoves: boolean = false; // generate all slice moves in ksolve
+  outerBlockMoves: boolean; // generate outer block moves
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -566,7 +567,6 @@ export class PuzzleGeometry {
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
   // options
-  public outerblockmoves: boolean; // generate outer block moves
   public vertexmoves: boolean; // generate vertex moves
   public addrotations: boolean; // add symmetry information to ksolve output
   public movelist: any; // move list to generate
@@ -626,9 +626,9 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "quiet") {
           this.options.verbosity = 0;
         } else if (optionlist[i] === "allmoves") {
-          this.options.allmoves = asboolean(optionlist[i + 1]);
+          this.options.allMoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "outerblockmoves") {
-          this.outerblockmoves = asboolean(optionlist[i + 1]);
+          this.options.outerBlockMoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "vertexmoves") {
           this.vertexmoves = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "rotations") {
@@ -2041,19 +2041,19 @@ export class PuzzleGeometry {
         }
         r.push(parsedmove[5]);
       }
-    } else if (this.vertexmoves && !this.options.allmoves) {
+    } else if (this.vertexmoves && !this.options.allMoves) {
       const msg = this.movesetgeos[k];
       if (msg[1] !== msg[3]) {
         for (let i = 0; i < slices; i++) {
           if (msg[1] !== "v") {
-            if (this.outerblockmoves) {
+            if (this.options.outerBlockMoves) {
               r.push([i + 1, slices]);
             } else {
               r.push([i + 1]);
             }
             r.push(1);
           } else {
-            if (this.outerblockmoves) {
+            if (this.options.outerBlockMoves) {
               r.push([0, i]);
             } else {
               r.push([i, i]);
@@ -2064,10 +2064,10 @@ export class PuzzleGeometry {
       }
     } else {
       for (let i = 0; i <= slices; i++) {
-        if (!this.options.allmoves && i + i === slices) {
+        if (!this.options.allMoves && i + i === slices) {
           continue;
         }
-        if (this.outerblockmoves) {
+        if (this.options.outerBlockMoves) {
           if (i + i > slices) {
             r.push([i, slices]);
           } else {
