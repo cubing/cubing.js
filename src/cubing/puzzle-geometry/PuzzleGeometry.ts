@@ -568,7 +568,9 @@ class PuzzleGeometryOptionsObject {
   grayCenters: boolean = false; // make center sets gray
   grayEdges: boolean = false; // make edge sets gray
 
-  public fixedOrientation: boolean = false; // eliminate any orientations
+  fixedOrientation: boolean = false; // eliminate any orientations
+
+  optimizeOrbits: boolean = false; // optimize PermOri
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -615,7 +617,6 @@ export class PuzzleGeometry {
   // options TODO
   public parsedmovelist: any; // parsed move list
   // options
-  public optimize: boolean = false; // optimize PermOri
   public scramble: number = 0; // scramble?
   public fixPiece: string = ""; // fix a piece?
   public orientCenters: boolean = false; // orient centers?
@@ -686,7 +687,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "killorientation") {
           this.options.fixedOrientation = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "optimize") {
-          this.optimize = asboolean(optionlist[i + 1]);
+          this.options.optimizeOrbits = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "scramble") {
           this.scramble = optionlist[i + 1];
         } else if (optionlist[i] === "fix") {
@@ -2559,7 +2560,7 @@ export class PuzzleGeometry {
       movenames,
       moves,
     );
-    if (this.optimize) {
+    if (this.options.optimizeOrbits) {
       r = r.optimize();
     }
     if (this.scramble !== 0) {
