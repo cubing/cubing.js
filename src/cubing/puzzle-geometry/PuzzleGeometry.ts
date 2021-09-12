@@ -558,10 +558,11 @@ class PuzzleGeometryOptionsObject {
   puzzleOrientations: FaceBasedOrientationDescriptionLookup; // puzzle orientation override object from options // TODO: is this needed?
 
   // TODO: Group these into a single object?
-  includeCornerSets: boolean = true; // include corner sets
-  includeCenterSets: boolean = true; // include center sets
-  includeEdgeSets: boolean = true; // include edge sets
-  excludeSets: string[] = []; // omit these sets
+  includeCornerOrbits: boolean = true; // include corner orbits
+  includeCenterOrbits: boolean = true; // include center orbits
+  includeEdgeOrbits: boolean = true; // include edge orbits
+  // Overrides the previous options.
+  excludeOrbits: string[] = []; // exclude these orbits
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -665,13 +666,13 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "rotations") {
           this.options.addRotations = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "cornersets") {
-          this.options.includeCornerSets = asboolean(optionlist[i + 1]);
+          this.options.includeCornerOrbits = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "centersets") {
-          this.options.includeCenterSets = asboolean(optionlist[i + 1]);
+          this.options.includeCenterOrbits = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "edgesets") {
-          this.options.includeEdgeSets = asboolean(optionlist[i + 1]);
+          this.options.includeEdgeOrbits = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "omit") {
-          this.options.excludeSets = optionlist[i + 1];
+          this.options.excludeOrbits = optionlist[i + 1];
         } else if (optionlist[i] === "graycorners") {
           this.graycorners = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "graycenters") {
@@ -2151,9 +2152,9 @@ export class PuzzleGeometry {
       ori = 1;
     }
     return (
-      (ori === 1 && (this.graycenters || !this.options.includeCenterSets)) ||
-      (ori === 2 && (this.grayedges || !this.options.includeEdgeSets)) ||
-      (ori > 2 && (this.graycorners || !this.options.includeCornerSets))
+      (ori === 1 && (this.graycenters || !this.options.includeCenterOrbits)) ||
+      (ori === 2 && (this.grayedges || !this.options.includeEdgeOrbits)) ||
+      (ori > 2 && (this.graycorners || !this.options.includeCornerOrbits))
     );
   }
 
@@ -2163,9 +2164,9 @@ export class PuzzleGeometry {
       ori = 1;
     }
     return (
-      (ori === 1 && !this.options.includeCenterSets) ||
-      (ori === 2 && !this.options.includeEdgeSets) ||
-      (ori > 2 && !this.options.includeCornerSets)
+      (ori === 1 && !this.options.includeCenterOrbits) ||
+      (ori === 2 && !this.options.includeEdgeOrbits) ||
+      (ori > 2 && !this.options.includeCornerOrbits)
     );
   }
 
@@ -2313,7 +2314,7 @@ export class PuzzleGeometry {
   }
 
   public omitSet(name: string): boolean {
-    for (const excludedSet of this.options.excludeSets) {
+    for (const excludedSet of this.options.excludeOrbits) {
       if (excludedSet === name) {
         return true;
       }
