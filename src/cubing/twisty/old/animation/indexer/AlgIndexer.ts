@@ -1,4 +1,4 @@
-import type { Move } from "../../../../alg";
+import type { Move } from "../../../../alg/units";
 import { arrayEqualsCompare } from "../../../model/helpers";
 import type {
   PuzzleWrapper,
