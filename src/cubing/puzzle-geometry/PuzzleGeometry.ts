@@ -368,13 +368,41 @@ function defaultfaceorders(): any {
  *  this information is explicitly given in the twizzle app file.
  */
 // TODO: change this back to a const JSON definition.
-function defaultOrientations(): any {
+
+type FaceName = string;
+type OrientationDirection = [number, number, number];
+type FaceBasedOrientationDescription = [
+  [FaceName, OrientationDirection],
+  [FaceName, OrientationDirection],
+];
+type BaseFaceCount = 4 | 6 | 8 | 12 | 20;
+type FaceBasedOrientationDescriptionLookup = Record<
+  BaseFaceCount,
+  FaceBasedOrientationDescription
+>;
+
+function defaultOrientations(): FaceBasedOrientationDescriptionLookup {
   return {
-    4: ["FLR", [0, 1, 0], "F", [0, 0, 1]], // FLR towards viewer
-    6: ["U", [0, 1, 0], "F", [0, 0, 1]], // URF towards viewer
-    8: ["U", [0, 1, 0], "F", [0, 0, 1]], // FLUR towards viewer
-    12: ["U", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
-    20: ["GUQMJ", [0, 1, 0], "F", [0, 0, 1]], // F towards viewer
+    4: [
+      ["FLR", [0, 1, 0]],
+      ["F", [0, 0, 1]],
+    ], // FLR towards viewer
+    6: [
+      ["U", [0, 1, 0]],
+      ["F", [0, 0, 1]],
+    ], // URF towards viewer
+    8: [
+      ["U", [0, 1, 0]],
+      ["F", [0, 0, 1]],
+    ], // FLUR towards viewer
+    12: [
+      ["U", [0, 1, 0]],
+      ["F", [0, 0, 1]],
+    ], // F towards viewer
+    20: [
+      ["GUQMJ", [0, 1, 0]],
+      ["F", [0, 0, 1]],
+    ], // F towards viewer
   };
 }
 
@@ -526,6 +554,8 @@ class PuzzleGeometryOptionsObject {
   vertexMoves: boolean; // generate vertex moves
   addRotations: boolean; // add symmetry information to ksolve output
   moveList?: string[]; // move list to generate
+  puzzleOrientation: FaceBasedOrientationDescription; // single puzzle orientation from options
+  puzzleOrientations: FaceBasedOrientationDescriptionLookup; // puzzle orientation override object from options // TODO: is this needed?
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -549,7 +579,7 @@ export class PuzzleGeometry {
   public basefaces: Face[]; // polytope faces before cuts
   public faces: Face[]; // all the stickers
   public facecentermass: Quat[]; // center of mass of all faces
-  public basefacecount: number; // number of base faces
+  public baseFaceCount: BaseFaceCount; // number of base faces
   public stickersperface: number; // number of stickers per face
   public cornerfaces: number; // number of faces that meet at a corner
   public cubies: number[][]; // the cubies
@@ -569,10 +599,9 @@ export class PuzzleGeometry {
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
-  // options
+  // options TODO
   public parsedmovelist: any; // parsed move list
-  public puzzleOrientation: any; // single puzzle orientation from options
-  public puzzleOrientations: any; // puzzle orientation override list from options
+  // options
   public cornersets: boolean = true; // include corner sets
   public centersets: boolean = true; // include center sets
   public edgesets: boolean = true; // include edge sets
@@ -660,9 +689,9 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "orientcenters") {
           this.orientCenters = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "puzzleorientation") {
-          this.puzzleOrientation = asstructured(optionlist[i + 1]);
+          this.options.puzzleOrientation = asstructured(optionlist[i + 1]);
         } else if (optionlist[i] === "puzzleorientations") {
-          this.puzzleOrientations = asstructured(optionlist[i + 1]);
+          this.options.puzzleOrientations = asstructured(optionlist[i + 1]);
         } else {
           throw new Error(
             "Bad option while processing option list " + optionlist[i],
@@ -719,7 +748,7 @@ export class PuzzleGeometry {
     this.baseplanerot = uniqueplanes(baseplane, this.rotations);
     const baseplanes = this.baseplanerot.map((_) => baseplane.rotateplane(_));
     this.baseplanes = baseplanes;
-    this.basefacecount = baseplanes.length;
+    this.baseFaceCount = baseplanes.length as BaseFaceCount;
     const net = defaultnets()[baseplanes.length];
     this.net = net;
     this.colors = defaultcolors()[baseplanes.length];
@@ -1455,7 +1484,7 @@ export class PuzzleGeometry {
         //  If we find a core cubie, split it up into multiple cubies,
         //  because ksolve doesn't handle orientations that are not
         //  cyclic, and the rotation group of the core is not cyclic.
-        if (arr.length === this.basefacecount) {
+        if (arr.length === this.baseFaceCount) {
           if (this.options.verbosity > 0) {
             console.log("# Splitting core.");
           }
@@ -1474,7 +1503,7 @@ export class PuzzleGeometry {
     const facetocubie = [];
     const facetoord = [];
     for (const facelist of facelisthash.values()) {
-      if (facelist.length === this.basefacecount) {
+      if (facelist.length === this.baseFaceCount) {
         // this is the original "cubie" of a split core; we ignore it.
         continue;
       }
@@ -1569,7 +1598,7 @@ export class PuzzleGeometry {
       const facecnt = cubie.length;
       const typectr = cubietypecounts[facecnt]++;
       let typename = typenames[facecnt];
-      if (typename === undefined || facecnt === this.basefacecount) {
+      if (typename === undefined || facecnt === this.baseFaceCount) {
         typename = "CORE";
       }
       typename = typename + (typectr === 0 ? "" : typectr + 1);
@@ -2545,7 +2574,7 @@ export class PuzzleGeometry {
   public getsolved(): Perm {
     // get a solved position
     const r = [];
-    for (let i = 0; i < this.basefacecount; i++) {
+    for (let i = 0; i < this.baseFaceCount; i++) {
       for (let j = 0; j < this.stickersperface; j++) {
         r.push(i);
       }
@@ -2558,20 +2587,11 @@ export class PuzzleGeometry {
   // with another given vector, return a Quaternion that
   // performs this rotation.
   public getOrientationRotation(desiredRotation: any[]): Quat {
-    const feature1name = desiredRotation[0];
-    const direction1 = new Quat(
-      0,
-      desiredRotation[1][0],
-      -desiredRotation[1][1],
-      desiredRotation[1][2],
-    );
-    const feature2name = desiredRotation[2];
-    const direction2 = new Quat(
-      0,
-      desiredRotation[3][0],
-      -desiredRotation[3][1],
-      desiredRotation[3][2],
-    );
+    const [feature1name, [x1, y1, z1]] = desiredRotation[0];
+    const direction1 = new Quat(0, x1, -y1, z1);
+
+    const [feature2name, [x2, y2, z2]] = desiredRotation[1];
+    const direction2 = new Quat(0, x2, -y2, z2);
     let feature1: Quat | null = null;
     let feature2: Quat | null = null;
     const feature1geoname = this.swizzler.unswizzle(feature1name);
@@ -2599,22 +2619,22 @@ export class PuzzleGeometry {
   }
 
   public getInitial3DRotation(): Quat {
-    const basefacecount = this.basefacecount;
-    let rotDesc: any = null;
-    if (this.puzzleOrientation) {
-      rotDesc = this.puzzleOrientation;
-    } else if (this.puzzleOrientations) {
-      rotDesc = this.puzzleOrientations[basefacecount];
+    const basefacecount = this.baseFaceCount;
+    let orientationDescription: FaceBasedOrientationDescription | null = null;
+    if (this.options.puzzleOrientation) {
+      orientationDescription = this.options.puzzleOrientation;
+    } else if (this.options.puzzleOrientations) {
+      orientationDescription = this.options.puzzleOrientations[basefacecount];
     }
     // either no option specified or no matching key in
     // puzzleOrientations.
-    if (!rotDesc) {
-      rotDesc = defaultOrientations()[basefacecount];
+    if (!orientationDescription) {
+      orientationDescription = defaultOrientations()[basefacecount];
     }
-    if (!rotDesc) {
+    if (!orientationDescription) {
       throw new Error("No default orientation?");
     }
-    return this.getOrientationRotation(rotDesc);
+    return this.getOrientationRotation(orientationDescription);
   }
 
   public generate2dmapping(
@@ -2827,7 +2847,7 @@ export class PuzzleGeometry {
     const pos = this.getsolved();
     const colormap = [];
     const facegeo = [];
-    for (let i = 0; i < this.basefacecount; i++) {
+    for (let i = 0; i < this.baseFaceCount; i++) {
       colormap[i] = this.colors[this.facenames[i][1]];
     }
     for (let i = 0; i < this.faces.length; i++) {
@@ -2841,7 +2861,7 @@ export class PuzzleGeometry {
     }
     const svg = [];
     // group each base face so we can add a hover element
-    for (let j = 0; j < this.basefacecount; j++) {
+    for (let j = 0; j < this.baseFaceCount; j++) {
       svg.push("<g>");
       svg.push("<title>" + this.facenames[j][1] + "</title>\n");
       for (let ii = 0; ii < this.stickersperface; ii++) {
