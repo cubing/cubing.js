@@ -32,13 +32,13 @@ export function externalName(
 export class OrbitsDef {
   constructor(
     public orbitnames: string[],
-    public orbitdefs: OrbitDef[],
+    private orbitdefs: OrbitDef[],
     public solved: VisibleState,
     public movenames: string[],
     public moveops: Transformation[],
   ) {}
 
-  public transformToKPuzzle(t: Transformation): any {
+  private transformToKPuzzle(t: Transformation): any {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < this.orbitnames.length; j++) {
       mp[this.orbitnames[j]] = t.orbits[j].toKpuzzle();
@@ -305,7 +305,7 @@ export class OrbitsDef {
 }
 
 export class Orbit {
-  static kcache: Record<string, unknown>[] = [];
+  private static kcache: Record<string, unknown>[] = [];
 
   public static e(n: number, mod: number): Orbit {
     return new Orbit(iota(n), zeros(n), mod);
@@ -420,7 +420,7 @@ export class Orbit {
     return true;
   }
 
-  public zeroOris(): boolean {
+  private zeroOris(): boolean {
     const n = this.perm.length;
     if (this.ori === zeros(n)) {
       return true;
@@ -505,7 +505,7 @@ export class TransformationBase {
     return newOrbits;
   }
 
-  public internalInv(): Orbit[] {
+  protected internalInv(): Orbit[] {
     const newOrbits: Orbit[] = [];
     for (let i = 0; i < this.orbits.length; i++) {
       newOrbits.push(this.orbits[i].inv());
@@ -522,7 +522,7 @@ export class TransformationBase {
     return true;
   }
 
-  public killOri(): this {
+  protected killOri(): this {
     for (let i = 0; i < this.orbits.length; i++) {
       this.orbits[i].killOri();
     }
@@ -632,7 +632,7 @@ export class VisibleState extends TransformationBase {
 }
 //  Disjoint set union implementation.
 class DisjointUnion {
-  public heads: number[];
+  private  heads: number[];
   constructor(public n: number) {
     this.heads = new Array<number>(n);
     for (let i = 0; i < n; i++) {
