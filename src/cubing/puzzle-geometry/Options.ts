@@ -1,52 +1,56 @@
-export function parseoptions(
-  argv: string[],
-  optionlist: Array<string | boolean | number | Array<string>>,
-): number {
+import { parsePuzzleDescription, PuzzleDescription } from "./PuzzleGeometry";
+
+export function parseOptions(argv: string[]): {
+  puzzleDescription: PuzzleDescription | null;
+  options: PuzzleGeometryOptions;
+} {
   let argp = 0;
+  const options: PuzzleGeometryOptions = {};
   while (argp < argv.length && argv[argp][0] === "-") {
     const option = argv[argp++];
     if (option === "--rotations") {
-      optionlist.push("rotations", true);
+      options.addRotations = true;
     } else if (option === "--allmoves") {
-      optionlist.push("allmoves", true);
+      options.allMoves = true;
     } else if (option === "--outerblockmoves") {
-      optionlist.push("outerblockmoves", true);
+      options.outerBlockMoves = true;
     } else if (option === "--vertexmoves") {
-      optionlist.push("vertexmoves", true);
+      options.vertexMoves = true;
     } else if (option === "--nocorners") {
-      optionlist.push("cornersets", false);
+      options.includeCornerOrbits = false;
     } else if (option === "--noedges") {
-      optionlist.push("edgesets", false);
+      options.includeEdgeOrbits = false;
     } else if (option === "--noorientation") {
-      optionlist.push("killorientation", true);
+      options.fixedOrientation = true;
     } else if (option === "--nocenters") {
-      optionlist.push("centersets", false);
+      options.includeCenterOrbits = false;
     } else if (option === "--omit") {
-      optionlist.push("omit", argv[argp].split(","));
+      options.excludeOrbits = argv[argp].split(",");
       argp++;
     } else if (option === "--moves") {
-      optionlist.push("movelist", argv[argp].split(","));
+      options.moveList = argv[argp].split(",");
       argp++;
     } else if (option === "--optimize") {
-      optionlist.push("optimize", true);
+      options.optimizeOrbits = true;
     } else if (option === "--scramble") {
-      optionlist.push("scramble", 100);
+      options.scrambleAmount = 100;
     } else if (option === "--fixcorner") {
-      optionlist.push("fix", "v");
+      options.fixedPieceType = "v";
     } else if (option === "--fixedge") {
-      optionlist.push("fix", "e");
+      options.fixedPieceType = "e";
     } else if (option === "--fixcenter") {
-      optionlist.push("fix", "f");
+      options.fixedPieceType = "f";
     } else if (option === "--orientcenters") {
-      optionlist.push("orientcenters", true);
+      options.orientCenters = true;
     } else if (option === "--puzzleorientation") {
-      optionlist.push("puzzleorientation", argv[argp]);
+      options.puzzleOrientation = JSON.parse(argv[argp]); // TODO: Validate input.
       argp++;
     } else {
       throw new Error("Bad option: " + option);
     }
   }
-  return argp;
+  const puzzleDescription = parsePuzzleDescription(argv.slice(argp).join(" "));
+  return { puzzleDescription, options };
 }
 
 type FaceName = string;

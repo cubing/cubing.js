@@ -11,7 +11,7 @@ export {
   getPuzzleGeometryByDesc,
   getPuzzleGeometryByName,
   getpuzzles,
-  parsedesc,
+  parsePuzzleDescription,
   PuzzleGeometry,
   useNewFaceNames,
 } from "./PuzzleGeometry";
@@ -21,6 +21,6 @@ export type {
   StickerDatFace,
   StickerDatSticker,
 } from "./PuzzleGeometry";
-export { parseoptions } from "./Options";
+export { parseOptions } from "./Options";
 export { Quat } from "./Quat";
 export { schreierSims } from "./SchreierSims";

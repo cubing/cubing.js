@@ -421,36 +421,48 @@ export function getpuzzle(puzzleName: PuzzleName): PuzzleDescriptionString {
   return PGPuzzles[puzzleName];
 }
 
-export function parsedesc(s: string): any {
+export type PuzzleDescription = {
+  shape: string;
+  cuts: string[][];
+};
+
+export function parsePuzzleDescription(
+  s: PuzzleDescriptionString,
+): PuzzleDescription | null {
   // parse a text description
   const a = s.split(/ /).filter(Boolean);
   if (a.length % 2 === 0) {
-    return false;
+    return null;
   }
+  const shape = a[0];
   if (
-    a[0] !== "o" &&
-    a[0] !== "c" &&
-    a[0] !== "i" &&
-    a[0] !== "d" &&
-    a[0] !== "t"
+    shape !== "o" &&
+    shape !== "c" &&
+    shape !== "i" &&
+    shape !== "d" &&
+    shape !== "t"
   ) {
-    return false;
+    return null;
   }
-  const r = [];
+  const cuts = [];
   for (let i = 1; i < a.length; i += 2) {
     if (a[i] !== "f" && a[i] !== "v" && a[i] !== "e") {
-      return false;
+      return null;
     }
-    r.push([a[i], a[i + 1]]);
+    cuts.push([a[i], a[i + 1]]);
   }
-  return [a[0], r];
+  return { shape, cuts };
 }
 
 export function getPuzzleGeometryByDesc(
   desc: string,
   options: PuzzleGeometryOptions = {},
 ): PuzzleGeometry {
-  const [shape, cuts] = parsedesc(desc);
+  const parsed = parsePuzzleDescription(desc);
+  if (parsed === null) {
+    throw new Error("Could not parse the puzzle description");
+  }
+  const { shape, cuts } = parsed;
   const pg = new PuzzleGeometry(
     shape,
     cuts,
