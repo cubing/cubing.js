@@ -23,9 +23,9 @@ describe("operation", () => {
 
     expect(await sum.get()).toEqual(14);
 
-    sum.addFreshListener((value: number) => {
-      console.log(value);
-    });
+    // sum.addFreshListener((value: number) => {
+    //   console.log(value);
+    // });
 
     a.set(8);
     const savedSum = sum.get();
