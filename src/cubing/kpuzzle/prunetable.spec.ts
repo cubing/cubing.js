@@ -5,8 +5,7 @@ import { PruningTable } from "./pruningtable";
 import { Alg } from "../alg";
 describe("PruneTable", () => {
   it("solve 2x2x2", () => {
-    const options: string[] = [];
-    const pg = getPuzzleGeometryByName("2x2x2", options);
+    const pg = getPuzzleGeometryByName("2x2x2", {});
     const def = pg.writekpuzzle(false) as KPuzzleDefinition;
     const canon = new Canonicalizer(def);
     const a1 = "L' D L2 D' L2 F R' F R' L' F D L2 F2 R' F U B'";

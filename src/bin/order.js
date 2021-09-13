@@ -16,7 +16,7 @@ const algo = process.argv[3];
 /*
  *   Turn a name into a geometry.
  */
-const pg = puzg.getPuzzleGeometryByName(puzname, ["allmoves", true]);
+const pg = puzg.getPuzzleGeometryByName(puzname, { allMoves: true });
 /*
  *   Turn the puzzle geometry into a KPuzzleDefinition.
  */
