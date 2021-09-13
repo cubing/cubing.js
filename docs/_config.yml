@@ -28,12 +28,17 @@ baseurl: "/cubing.js" # the subpath of your site, e.g. /blog
 url: "tydvirtaal.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
 github_username:  jekyll
+include: ["_pages"]
+skin: "dark"
 
 # Build settings
 remote_theme: "mmistakes/minimal-mistakes@4.24.0"
 plugins:
   - jekyll-feed
   - jekyll-include-cache
+
+# Defaults 
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
