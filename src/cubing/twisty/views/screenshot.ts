@@ -29,7 +29,7 @@ export async function screenshot(
   const twisty3DWrapper = new Twisty3DPuzzleWrapper(
     model,
     { scheduleRender: () => {} },
-    await model.puzzleIDProp.get(),
+    await model.puzzleLoaderProp.get(),
     await model.visualizationStrategyProp.get(),
   );
 
