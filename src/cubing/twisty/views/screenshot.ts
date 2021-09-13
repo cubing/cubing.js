@@ -29,7 +29,7 @@ export async function screenshot(
   const twisty3DWrapper = new Twisty3DPuzzleWrapper(
     model,
     { scheduleRender: () => {} },
-    await model.puzzleProp.get(),
+    await model.puzzleIDProp.get(),
     await model.visualizationStrategyProp.get(),
   );
 
@@ -64,7 +64,7 @@ export async function getDefaultFilename(
   model: TwistyPlayerModel,
 ): Promise<string> {
   const [puzzleID, algWithIssues] = await Promise.all([
-    model.puzzleProp.get(),
+    model.puzzleIDProp.get(),
     model.algProp.get(),
   ]);
   return `[${puzzleID}]${

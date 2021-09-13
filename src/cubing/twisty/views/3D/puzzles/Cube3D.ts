@@ -215,11 +215,13 @@ export function experimentalSetDefaultStickerElevation(
   cubieDimensions.stickerElevation = stickerElevation;
 }
 
-interface Cube3DOptions {
+export interface Cube3DOptions {
   showMainStickers?: boolean;
   hintFacelets?: HintFaceletStyle;
   showFoundation?: boolean; // TODO: better name
   experimentalStickering?: ExperimentalStickering;
+  foundationSprite?: Texture | null;
+  hintSprite?: Texture | null;
 }
 
 const cube3DOptionsDefaults: Cube3DOptions = {
@@ -227,6 +229,8 @@ const cube3DOptionsDefaults: Cube3DOptions = {
   hintFacelets: "floating",
   showFoundation: true,
   experimentalStickering: "full",
+  foundationSprite: null,
+  hintSprite: null,
 };
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
@@ -528,18 +532,30 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   private experimentalFoundationMeshes: Mesh[] = [];
 
   private setSpriteURL: (url: string) => void;
-  private sprite: Promise<Texture> = new Promise((resolve) => {
+  private sprite: Texture | Promise<Texture> = new Promise((resolve) => {
     this.setSpriteURL = (url: string): void => {
       svgLoader.load(url, resolve);
     };
   });
 
+  // TODO: Don't overwrite the static function.
+  // TODO: This doesn't work dynamically yet.
+  setSprite(texture: Texture): void {
+    this.sprite = texture;
+  }
+
   private setHintSpriteURL: (url: string) => void;
-  private hintSprite: Promise<Texture> = new Promise((resolve) => {
+  private hintSprite: Texture | Promise<Texture> = new Promise((resolve) => {
     this.setHintSpriteURL = (url: string): void => {
       svgLoader.load(url, resolve);
     };
   });
+
+  // TODO: Don't overwrite the static function.
+  // TODO: This doesn't work dynamically yet.
+  setHintSprite(texture: Texture): void {
+    this.hintSprite = texture;
+  }
 
   constructor(
     private def: KPuzzleDefinition,
@@ -557,6 +573,14 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         `Invalid puzzle for this Cube3D implementation: ${this.def.name}`,
       );
     }
+
+    if (options.foundationSprite) {
+      this.setSprite(options.foundationSprite);
+    }
+    if (options.hintSprite) {
+      this.setHintSprite(options.hintSprite);
+    }
+
     this.kpuzzleFaceletInfo = {};
     for (const orbit in pieceDefs) {
       const orbitFaceletInfo: FaceletInfo[][] = [];

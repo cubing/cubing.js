@@ -3,9 +3,14 @@
 import {
   PuzzleGeometry,
   getpuzzles,
-  parsedesc,
+  parsePuzzleDescription,
   schreierSims,
 } from "../cubing/puzzle-geometry";
+import { parsePGOptionList } from "../cubing/puzzle-geometry/Options";
+import type {
+  CutDescription,
+  PuzzleDescription,
+} from "../cubing/puzzle-geometry/PuzzleGeometry";
 
 let dosvg = false;
 let doss = false;
@@ -150,23 +155,31 @@ if (
       break;
     }
   }
-  let createargs = [];
+  let puzzleDescription: PuzzleDescription;
   if (showargs) {
     console.log("# " + process.argv.join(" "));
   }
   if (desc !== undefined) {
-    createargs = parsedesc(desc);
+    const parsed = parsePuzzleDescription(desc);
+    if (parsed === null) {
+      throw new Error("Could not parse puzzle description!");
+    }
+    puzzleDescription = parsed;
     argp++;
   } else {
-    const cuts = [];
+    const cuts: CutDescription[] = [];
     const cutarg = argp++;
     while (argp + 1 < process.argv.length && process.argv[argp].length === 1) {
-      cuts.push([process.argv[argp], process.argv[argp + 1]]);
+      cuts.push({
+        cutType: process.argv[argp],
+        distance: parseFloat(process.argv[argp + 1]),
+      });
       argp += 2;
     }
-    createargs = [process.argv[cutarg], cuts];
+    puzzleDescription = { shape: process.argv[cutarg], cuts };
   }
-  const pg = new PuzzleGeometry(createargs[0], createargs[1], optionlist);
+  const options = parsePGOptionList(optionlist);
+  const pg = new PuzzleGeometry(puzzleDescription, options);
   pg.allstickers();
   pg.genperms();
   // TODO: if (!optionlist.includes("verbose"))

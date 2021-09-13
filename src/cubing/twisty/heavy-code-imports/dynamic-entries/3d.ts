@@ -1,5 +1,5 @@
 import { cube3x3x3, puzzles } from "../../../puzzles";
-import { Cube3D } from "../../views/3D/puzzles/Cube3D";
+import { Cube3D, Cube3DOptions } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
 import type { AlgCursor } from "../../old/animation/cursor/AlgCursor";
 import type {
@@ -12,10 +12,15 @@ export { PG3D } from "../../views/3D/puzzles/PG3D";
 export { Twisty3DScene } from "../../views/3D/Twisty3DScene";
 export { Twisty3DCanvas } from "../../old/dom/viewers/Twisty3DCanvas";
 
-export async function cube3DShim(): Promise<Cube3D> {
+export async function cube3DShim(options?: Cube3DOptions): Promise<Cube3D> {
   const cursorShim = { addPositionListener: () => {} } as any as AlgCursor; // TODO
   const renderCallbackShim = () => {};
-  return new Cube3D(await cube3x3x3.def(), cursorShim, renderCallbackShim);
+  return new Cube3D(
+    await cube3x3x3.def(),
+    cursorShim,
+    renderCallbackShim,
+    options,
+  );
 }
 
 // TODO: take loader?

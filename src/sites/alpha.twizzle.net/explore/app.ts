@@ -9,28 +9,28 @@ import {
   MoveEvent,
 } from "../../../cubing/bluetooth";
 import type { KPuzzleDefinition } from "../../../cubing/kpuzzle";
+import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
+import { countMoves } from "../../../cubing/notation";
 import {
   getpuzzle,
   getpuzzles,
-  parsedesc,
-  parseoptions,
+  parseOptions,
   PuzzleGeometry,
   schreierSims,
   StickerDat,
 } from "../../../cubing/puzzle-geometry";
+import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
+import { TwistyPlayerV1 } from "../../../cubing/twisty";
 import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/old/dom/TwistyPlayer";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
 } from "../../../cubing/twisty/old/dom/viewers/Twisty3DCanvas";
-import { TwistyPlayerV1 } from "../../../cubing/twisty";
-import { countMoves } from "../../../cubing/notation";
-import { getURLParam, setURLParams } from "./url-params";
-import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
 import {
   OrbitCoordinates,
   positionToOrbitCoordinates,
 } from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControls";
+import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
   experimentalShowRenderStats(true);
@@ -49,6 +49,7 @@ let moveInput: HTMLSelectElement;
 let lastval: string = "";
 let lastalgo: string = "";
 let scramble: number = 0;
+let needmovesforscramble: boolean = false;
 let stickerDat: StickerDat;
 const DEFAULT_CAMERA_DISTANCE = 5.5;
 let initialCameraOrbitCoordinates: OrbitCoordinates = {
@@ -107,19 +108,6 @@ function equalCheckboxes(a: string[], b: any, c: any): boolean {
     }
   }
   return true;
-}
-
-function myparsedesc(
-  desc: string,
-  options: Array<string | number | boolean | Array<string>>,
-) {
-  try {
-    const args = desc.split(" ");
-    const descind = parseoptions(args, options);
-    return parsedesc(args.slice(descind, args.length).join(" "));
-  } catch (e) {
-    return undefined;
-  }
 }
 
 function getModValueForMove(move: Move): number {
@@ -429,35 +417,27 @@ function dowork(cmd: string): void {
     }
     return;
   }
-  const options: Array<number | string | boolean> = [];
   const checkboxes = getCheckboxes(workOptions);
-  if (checkboxes.allmoves) {
-    options.push("allmoves", true);
+  const checkboxOptions: PuzzleGeometryOptions = {
+    allMoves: checkboxes.allmoves,
+    vertexMoves: checkboxes.vertexmoves,
+    includeCornerOrbits: !checkboxes.corners,
+    includeEdgeOrbits: !checkboxes.edges,
+    includeCenterOrbits: !checkboxes.centers,
+    optimizeOrbits: checkboxes.optimize,
+    outerBlockMoves: checkboxes.outerblockmoves,
+    fixedOrientation: checkboxes.killori,
+  };
+  const { puzzleDescription, options: parsedOptions } = parseOptions(
+    descinput.value.split(" "),
+  );
+  if (!puzzleDescription) {
+    throw new Error("Could not parse puzzle description!"); // TODO
   }
-  if (checkboxes.vertexmoves) {
-    options.push("vertexmoves", true);
-  }
-  if (!checkboxes.corners) {
-    options.push("cornersets", false);
-  }
-  if (!checkboxes.edges) {
-    options.push("edgesets", false);
-  }
-  if (!checkboxes.centers) {
-    options.push("centersets", false);
-  }
-  if (checkboxes.optimize) {
-    options.push("optimize", true);
-  }
-  if (checkboxes.blockmoves) {
-    options.push("outerblockmoves", true);
-  }
-  if (checkboxes.killori) {
-    options.push("killorientation", true);
-  }
-  const p = myparsedesc(descinput.value, options);
-  const pg = new PuzzleGeometry(p[0], p[1], options);
-  nextShape = p[0];
+  const options = Object.assign({}, checkboxOptions, parsedOptions);
+
+  const pg = new PuzzleGeometry(puzzleDescription, options);
+  nextShape = puzzleDescription.shape;
   pg.allstickers();
   pg.genperms();
   if (cmd === "gap") {
@@ -527,43 +507,40 @@ function checkchange_internal(): void {
     let savealg = true;
     lastval = descarg;
     lastRender = newRender;
-    const moreoptions: Array<string | number | boolean> = [];
-    const p = myparsedesc(descarg, moreoptions);
-    if (p) {
+    const { puzzleDescription, options: moreOptions } = parseOptions(
+      descarg.split(" "),
+    );
+    if (puzzleDescription) {
       if (savecam) {
         saveCamera();
       }
-      const options: Array<string | number | boolean> = [
-        "allmoves",
-        true,
-        "orientcenters",
-        true,
-        "rotations",
-        true,
-      ];
+      const options: PuzzleGeometryOptions = {
+        allMoves: true,
+        orientCenters: true,
+        addRotations: true,
+      };
       if (!lastRender.corners) {
-        options.push("graycorners", true);
+        options.grayCorners = true;
       }
       if (!lastRender.edges) {
-        options.push("grayedges", true);
+        options.grayEdges = true;
       }
       if (!lastRender.centers) {
-        options.push("graycenters", true);
+        options.grayCenters = true;
       }
       if (scramble !== 0) {
         if (scramble > 0) {
-          options.push("scramble", 100);
+          options.scrambleAmount = 100;
+          needmovesforscramble = true;
         }
         scramble = 0;
         algo = "";
         safeKpuzzle = undefined;
         savealg = false;
       }
-      for (let i = 0; i < moreoptions.length; i++) {
-        options.push(moreoptions[i]);
-      }
-      pg = new PuzzleGeometry(p[0], p[1], options);
-      nextShape = p[0];
+      Object.assign(options, moreOptions);
+      pg = new PuzzleGeometry(puzzleDescription, options);
+      nextShape = puzzleDescription.shape;
       pg.allstickers();
       pg.genperms();
       const sep = "\n";
@@ -593,10 +570,15 @@ function checkchange_internal(): void {
       if (renderSame && safeKpuzzle) {
         kpuzzledef = safeKpuzzle;
       } else {
-        kpuzzledef = pg.writekpuzzle(true) as KPuzzleDefinition;
+        // the false here means, don't include moves; rely on moveexpander
+        kpuzzledef = pg.writekpuzzle(
+          true,
+          needmovesforscramble,
+        ) as KPuzzleDefinition;
+        needmovesforscramble = false;
       }
       const newStickerDat = pg.get3d();
-      nextShape = p[0];
+      nextShape = puzzleDescription.shape;
       initialCameraOrbitCoordinates = cameraCoords(pg);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
       // Twisty constructor currently ignores initial camera position
@@ -632,6 +614,7 @@ function checkchange(): void {
     checkchange_internal();
   } catch (e) {
     console.log("Ignoring " + e);
+    console.log(e);
   }
 }
 

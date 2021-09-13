@@ -107,7 +107,7 @@ export class App {
 
   async solve(): Promise<void> {
     const [puzzleID, currentAlgWithIssues] = await Promise.all([
-      this.twistyPlayer.experimentalModel.puzzleProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleIDProp.get(),
       this.twistyPlayer.experimentalModel.algProp.get(),
     ]);
     const currentAlg = currentAlgWithIssues.alg;
@@ -151,7 +151,7 @@ export class App {
 
   async scramble(): Promise<void> {
     const [puzzleID, currentAlgWithIssues] = await Promise.all([
-      this.twistyPlayer.experimentalModel.puzzleProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleIDProp.get(),
       this.twistyPlayer.experimentalModel.algProp.get(),
     ]);
     const event = SCRAMBLE_EVENTS[puzzleID];
@@ -212,7 +212,7 @@ class ControlPane {
     appTitleElem.textContent = APP_TITLE;
 
     // TODO: validation?
-    twistyPlayer.experimentalModel.puzzleProp.addFreshListener(
+    twistyPlayer.experimentalModel.puzzleIDProp.addFreshListener(
       this.onPuzzle.bind(this),
     );
 
@@ -238,7 +238,7 @@ class ControlPane {
       "puzzle",
       "select",
     );
-    this.twistyPlayer.experimentalModel.puzzleProp
+    this.twistyPlayer.experimentalModel.puzzleIDProp
       .get()
       .then((puzzleID) => this.initializePuzzleSelect(puzzleID));
 
@@ -258,7 +258,7 @@ class ControlPane {
     );
     Promise.all([
       this.twistyPlayer.experimentalModel.stickeringProp.get(),
-      this.twistyPlayer.experimentalModel.puzzleProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleIDProp.get(),
     ]).then(([stickering, puzzleID]) =>
       this.initializeStickeringSelect(stickering, puzzleID),
     );

@@ -42,7 +42,7 @@ export class Twisty3DSceneWrapper
     this.addVantage(vantage);
     if (this.model) {
       this.#freshListenerManager.addMultiListener(
-        [this.model.puzzleProp, this.model.visualizationStrategyProp],
+        [this.model.puzzleIDProp, this.model.visualizationStrategyProp],
         this.onPuzzle.bind(this),
       );
       this.#freshListenerManager.addListener(

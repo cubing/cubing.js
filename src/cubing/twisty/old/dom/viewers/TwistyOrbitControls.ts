@@ -219,6 +219,13 @@ export class TwistyOrbitControls {
       this.onMouseEnd(e);
       return;
     }
+
+    if (e.movementX === 0 && e.movementY === 0) {
+      // Short-circuit
+      console.log("short-circuit mouse!");
+      return;
+    }
+
     const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
     const movementX = this.temperMovement(e.movementX / minDim);
     const movementY = this.temperMovement(
@@ -226,11 +233,10 @@ export class TwistyOrbitControls {
     );
     this.onMove(movementX, movementY);
 
-    if (e.timeStamp !== this.lastTouchTimestamp) {
-      this.lastMouseMoveMomentumX =
-        movementX / (e.timeStamp - this.lastMouseTimestamp);
-      this.lastMouseMoveMomentumY =
-        movementY / (e.timeStamp - this.lastMouseTimestamp);
+    const deltaMs = e.timeStamp - this.lastMouseTimestamp;
+    if (deltaMs > 0) {
+      this.lastMouseMoveMomentumX = movementX / deltaMs;
+      this.lastMouseMoveMomentumY = movementY / deltaMs;
       this.lastMouseTimestamp = e.timeStamp;
     }
   }
@@ -253,6 +259,11 @@ export class TwistyOrbitControls {
   onTouchStart(e: TouchEvent): void {
     this.experimentalHasBeenMoved = true;
     if (this.currentTouchID === null) {
+      if (e.touches[0].clientX === 0 && e.touches[0].clientY === 0) {
+        // Short-circuit
+        console.log("short-circuit touch!");
+        return;
+      }
       this.currentTouchID = e.changedTouches[0].identifier;
       this.lastTouchClientX = e.touches[0].clientX;
       this.lastTouchClientY = e.touches[0].clientY;
@@ -284,11 +295,10 @@ export class TwistyOrbitControls {
         this.lastTouchClientX = touch.clientX;
         this.lastTouchClientY = touch.clientY;
 
-        if (e.timeStamp !== this.lastTouchTimestamp) {
-          this.lastTouchMoveMomentumX =
-            movementX / (e.timeStamp - this.lastTouchTimestamp);
-          this.lastTouchMoveMomentumY =
-            movementY / (e.timeStamp - this.lastTouchTimestamp);
+        const deltaMs = e.timeStamp - this.lastTouchTimestamp;
+        if (deltaMs > 0) {
+          this.lastTouchMoveMomentumX = movementX / deltaMs;
+          this.lastTouchMoveMomentumY = movementY / deltaMs;
           this.lastTouchTimestamp = e.timeStamp;
         }
       }
@@ -327,15 +337,38 @@ export class TwistyOrbitControls {
 
     // this.#pullFromCamera();
 
-    this.#spherical.theta += -2 * movementX;
-    this.#spherical.phi += -2 * movementY;
+    // console.log(movementX, movementY)
+
+    const newSpherical = new Spherical();
+    newSpherical.copy(this.#spherical);
+
+    newSpherical.theta += -2 * movementX;
+    newSpherical.phi += -2 * movementY;
     if (this.experimentalLatitudeLimits !== "none") {
-      this.#spherical.phi = Math.max(this.#spherical.phi, Math.PI * 0.3); // TODO: Arctic circle: 1/6
-      this.#spherical.phi = Math.min(this.#spherical.phi, Math.PI * 0.7); // TODO: Antarctic circle: 5/6
+      newSpherical.phi = Math.max(newSpherical.phi, Math.PI * 0.3); // TODO: Arctic circle: 1/6
+      newSpherical.phi = Math.min(newSpherical.phi, Math.PI * 0.7); // TODO: Antarctic circle: 5/6
     } else {
-      this.#spherical.phi = Math.max(this.#spherical.phi, EPSILON);
-      this.#spherical.phi = Math.min(this.#spherical.phi, Math.PI - EPSILON);
+      newSpherical.phi = Math.max(newSpherical.phi, EPSILON);
+      newSpherical.phi = Math.min(newSpherical.phi, Math.PI - EPSILON);
     }
+
+    if (
+      isNaN(newSpherical.theta) ||
+      newSpherical.theta === Infinity ||
+      newSpherical.theta === -Infinity
+    ) {
+      return;
+    }
+
+    if (
+      isNaN(newSpherical.phi) ||
+      newSpherical.phi === Infinity ||
+      newSpherical.phi === -Infinity
+    ) {
+      return;
+    }
+
+    this.#spherical = newSpherical;
     this.#propagateSpherical();
   }
 

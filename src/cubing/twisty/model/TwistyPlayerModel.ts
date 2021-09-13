@@ -7,15 +7,17 @@ import { IndexerConstructorRequestProp } from "./depth-0/IndexerConstructorReque
 import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
 import { OrbitCoordinatesRequestProp } from "./depth-0/OrbitCoordinatesRequestProp";
 import { PlayingInfoProp } from "./depth-0/PlayingInfoProp";
-import { PuzzleProp } from "./depth-0/PuzzleProp";
+import { PuzzleIDProp } from "./depth-0/PuzzleIDProp";
 import { SetupAnchorProp } from "./depth-0/SetupAnchorProp";
 import { StickeringProp } from "./depth-0/StickeringProp";
 import { TempoScaleProp } from "./depth-0/TempoScaleProp";
 import { TimestampRequestProp } from "./depth-0/TimestampRequestProp";
+import { URLProp } from "./depth-0/URLProp";
 import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
 import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
 import { PuzzleDefProp } from "./depth-1/PuzzleDefProp";
+import { SpriteProp } from "./depth-1/SpriteProp";
 import { VisualizationStrategyProp } from "./depth-1/VisualizationStrategyProp";
 import { IndexerConstructorProp } from "./depth-2/IndexerConstructorProp";
 import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
@@ -39,7 +41,9 @@ export class TwistyPlayerModel {
   backgroundProp = new BackgroundProp();
   backViewProp = new BackViewProp();
   controlPanelProp = new ControlPanelProp();
+  foundationStickerSpriteURL = new URLProp();
   hintFaceletProp = new HintFaceletProp();
+  hintStickerSpriteURL = new URLProp();
   indexerConstructorRequestProp = new IndexerConstructorRequestProp();
 
   latitudeLimitProp = new LatitudeLimitProp();
@@ -47,7 +51,7 @@ export class TwistyPlayerModel {
     new OrbitCoordinatesRequestProp();
 
   playingInfoProp = new PlayingInfoProp();
-  puzzleProp = new PuzzleProp();
+  puzzleIDProp = new PuzzleIDProp();
   setupAnchorProp = new SetupAnchorProp();
   setupProp = new AlgProp();
   stickeringProp = new StickeringProp();
@@ -57,23 +61,31 @@ export class TwistyPlayerModel {
   visualizationFormatProp = new VisualizationFormatProp();
 
   // Depth 1
-  visualizationStrategyProp = new VisualizationStrategyProp({
-    visualizationRequest: this.visualizationFormatProp,
-    puzzleID: this.puzzleProp,
+  foundationStickerSprite = new SpriteProp({
+    spriteURL: this.foundationStickerSpriteURL,
+  });
+
+  hintStickerSprite = new SpriteProp({
+    spriteURL: this.hintStickerSpriteURL,
   });
 
   orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
     latitudeLimit: this.latitudeLimitProp,
-    puzzleID: this.puzzleProp,
+    puzzleID: this.puzzleIDProp,
   });
 
-  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
+  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleIDProp });
+
+  visualizationStrategyProp = new VisualizationStrategyProp({
+    visualizationRequest: this.visualizationFormatProp,
+    puzzleID: this.puzzleIDProp,
+  });
 
   // Depth 2
   indexerConstructorProp = new IndexerConstructorProp({
     alg: this.algProp,
-    puzzle: this.puzzleProp,
+    puzzle: this.puzzleIDProp,
     visualizationStrategy: this.visualizationStrategyProp,
     indexerConstructorRequest: this.indexerConstructorRequestProp,
   });
@@ -160,7 +172,7 @@ export class TwistyPlayerModel {
     const url = new URL("https://alpha.twizzle.net/edit/");
 
     const [puzzle, alg, setup, anchor] = await Promise.all([
-      this.puzzleProp.get(),
+      this.puzzleIDProp.get(),
       this.algProp.get(),
       this.setupProp.get(),
       this.setupAnchorProp.get(),

@@ -1,3 +1,4 @@
+import type { Texture as ThreeTexture } from "three";
 import { puzzles } from "../../../puzzles";
 import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
@@ -24,7 +25,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     // Repro: Switch to 40x40x40 a fraction of a second before animation finishes. When it's loaded the itmeline is at the end, but the 40x40x40 is rendered with an earlier position.
 
     this.#freshListenerManager.addListener(
-      this.model!.puzzleProp,
+      this.model!.puzzleIDProp,
       (puzzleID: PuzzleID) => {
         if (this.puzzleID !== puzzleID) {
           this.disconnect();
@@ -79,6 +80,24 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         }
       },
     );
+
+    this.#freshListenerManager.addMultiListener(
+      [this.model.foundationStickerSprite, this.model.hintStickerSprite],
+      async (
+        inputs: [
+          foundationSprite: ThreeTexture | null,
+          hintSprite: ThreeTexture | null,
+        ],
+      ) => {
+        if ("experimentalUpdateTexture" in (await this.twisty3DPuzzle())) {
+          ((await this.twisty3DPuzzle()) as PG3D).experimentalUpdateTexture(
+            true,
+            ...inputs,
+          );
+          this.scheduleRender();
+        }
+      },
+    );
   }
 
   #freshListenerManager = new FreshListenerManager();
@@ -98,13 +117,37 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         this.puzzleID === "3x3x3" &&
         this.visualizationStrategy === "Cube3D"
       ) {
-        return (await proxyPromise).cube3DShim();
+        // TODO: synchronize
+        const [foundationSprite, hintSprite, experimentalStickering] =
+          await Promise.all([
+            this.model.foundationStickerSprite.get(),
+            this.model.hintStickerSprite.get(),
+            this.model.stickeringProp.get(),
+          ]);
+        return (await proxyPromise).cube3DShim({
+          foundationSprite,
+          hintSprite,
+          experimentalStickering,
+        });
       } else {
-        const hintFacelets = await this.model!.hintFaceletProp.get();
-        return (await proxyPromise).pg3dShim(
+        const [hintFacelets, foundationSprite, hintSprite] = await Promise.all([
+          this.model!.hintFaceletProp.get(),
+          this.model.foundationStickerSprite.get(),
+          this.model.hintStickerSprite.get(),
+        ]);
+        const pg3d = (await proxyPromise).pg3dShim(
           this.puzzleID,
           hintFacelets === "auto" ? "floating" : hintFacelets,
         );
+        // TODO: Figure out how to do this in one place using the listener.
+        pg3d.then((p) =>
+          p.experimentalUpdateTexture(
+            true,
+            foundationSprite ?? undefined,
+            hintSprite ?? undefined,
+          ),
+        );
+        return pg3d;
       }
     })());
   }

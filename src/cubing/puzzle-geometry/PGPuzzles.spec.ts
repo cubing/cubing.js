@@ -88,8 +88,7 @@ const expectedData: { [nam: string]: string } = {
 describe("PuzzleGeometry-Puzzles", () => {
   it("testpuzzles", () => {
     for (const [name, desc] of Object.entries(PGPuzzles)) {
-      const options: string[] = [];
-      const pg = getPuzzleGeometryByDesc(desc, options);
+      const pg = getPuzzleGeometryByDesc(desc, {});
       const kpuzzledef = pg.writekpuzzle(false) as KPuzzleDefinition;
       const sep = ", ";
       const seq = Object.getOwnPropertyNames(kpuzzledef.moves).sort().join(" ");

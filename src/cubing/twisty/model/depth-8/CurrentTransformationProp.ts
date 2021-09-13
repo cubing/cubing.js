@@ -23,11 +23,19 @@ export class CurrentTransformationProp extends TwistyPropDerived<
     ) as any;
     state = combineTransformations(inputs.def, inputs.anchoredStart, state);
     const ksolvePuzzle = new KSolvePuzzle(inputs.def); // TODO: put this elsewhere.
+    // TODO: handle non-commutative finished/finishing/current moves.
     for (const finishingMove of inputs.currentLeavesSimplified.movesFinishing) {
       state = combineTransformations(
         inputs.def,
         state,
         ksolvePuzzle.stateFromMove(finishingMove),
+      );
+    }
+    for (const finishedMove of inputs.currentLeavesSimplified.movesFinished) {
+      state = combineTransformations(
+        inputs.def,
+        state,
+        ksolvePuzzle.stateFromMove(finishedMove),
       );
     }
     return state;

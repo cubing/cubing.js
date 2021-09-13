@@ -113,7 +113,7 @@ export class OrbitsDef {
   }
 
   // TODO: return type.
-  public toKpuzzle(): PGVendoredKPuzzleDefinition {
+  public toKpuzzle(includemoves: boolean): PGVendoredKPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
@@ -124,8 +124,10 @@ export class OrbitsDef {
       start[this.orbitnames[i]] = this.solved.orbits[i].toKpuzzle();
     }
     const moves: { [moveName: string]: any } = {};
-    for (let i = 0; i < this.movenames.length; i++) {
-      moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
+    if (includemoves) {
+      for (let i = 0; i < this.movenames.length; i++) {
+        moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
+      }
     }
     return { name: "PG3D", orbits, startPieces: start, moves };
   }

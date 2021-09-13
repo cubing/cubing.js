@@ -3,12 +3,10 @@ import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
 async function megaminxDefWithoutMO(): Promise<KPuzzleDefinition> {
-  return getPuzzleGeometryByName("megaminx", [
-    "allmoves",
-    "true",
-    "rotations",
-    "true",
-  ]).writekpuzzle(true);
+  return getPuzzleGeometryByName("megaminx", {
+    allMoves: true,
+    addRotations: true,
+  }).writekpuzzle(true);
 }
 
 // TODO: Implement a general lazy Promise/ Promise cache wrapper

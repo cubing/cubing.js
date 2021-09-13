@@ -79,18 +79,18 @@ function normalize(r: number[]): number[] {
   return r;
 }
 
-function cross(a: number[], ai: number, b: number[], bi: number): number[] {
+function cross(a: number[], b: number[]): number[] {
   const r = new Array(3);
-  r[0] = a[ai + 1] * b[bi + 2] - a[ai + 2] * b[bi + 1];
-  r[1] = a[ai + 2] * b[bi + 0] - a[ai + 0] * b[bi + 2];
-  r[2] = a[ai + 0] * b[bi + 1] - a[ai + 1] * b[bi + 0];
+  r[0] = a[1] * b[2] - a[2] * b[1];
+  r[1] = a[2] * b[0] - a[0] * b[2];
+  r[2] = a[0] * b[1] - a[1] * b[0];
   return r;
 }
 
 function normal(c: number[]): number[] {
   const a: number[] = [c[3] - c[0], c[4] - c[1], c[5] - c[2]];
   const b: number[] = [c[6] - c[3], c[7] - c[4], c[8] - c[5]];
-  const r = cross(a, 0, b, 0);
+  const r = cross(a, b);
   return normalize(r);
 }
 
@@ -120,15 +120,14 @@ function trimEdges(face: number[], tr: number): number[] {
     }
     let good = true;
     for (let i = 0; good && i < r.length; i += 3) {
-      const pi = (i + face.length - 3) % face.length;
       const ni = (i + 3) % face.length;
+      let t = 0;
       for (let k = 0; k < 3; k++) {
-        A[k] = face[pi + k] - face[i + k];
-        B[k] = face[ni + k] - face[i + k];
+        const a = face[ni + k] - face[i + k];
+        const b = r[ni + k] - r[i + k];
+        t += a * b;
       }
-      const d = cross(A, 0, B, 0);
-      const t = d[0] * r[i] + d[1] * r[i + 1] + d[2] * r[i + 2];
-      if (t >= 0) {
+      if (t <= 0) {
         good = false;
       }
     }
@@ -136,7 +135,6 @@ function trimEdges(face: number[], tr: number): number[] {
       return r;
     }
     tr /= 2;
-    console.log("Failing; reducing to " + tr);
   }
   return face;
 }
@@ -144,7 +142,6 @@ function trimEdges(face: number[], tr: number): number[] {
 class Filler {
   pos: number;
   ipos: number;
-  uvpos: number;
   vertices: Float32Array;
   colors: Uint8Array;
   uvs?: Float32Array;
@@ -155,7 +152,6 @@ class Filler {
     this.colors = new Uint8Array(18 * sz);
     this.ind = new Uint8Array(sz);
     this.pos = 0;
-    this.uvpos = 0;
     this.ipos = 0;
   }
 
@@ -391,13 +387,13 @@ class StickerDef {
   public setTexture(filler: Filler, sd: StickerDef): number {
     filler.uvs!.copyWithin(
       6 * this.stickerStart,
-      6 * sd.stickerStart + filler.uvpos,
-      6 * sd.stickerEnd + filler.uvpos,
+      6 * sd.stickerStart + 6 * filler.sz,
+      6 * sd.stickerEnd + 6 * filler.sz,
     );
     filler.uvs!.copyWithin(
       6 * this.hintStart,
-      6 * sd.hintStart + filler.uvpos,
-      6 * sd.hintEnd + filler.uvpos,
+      6 * sd.hintStart + 6 * filler.sz,
+      6 * sd.hintEnd + 6 * filler.sz,
     );
     return 1;
   }
@@ -968,8 +964,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   public experimentalUpdateTexture(
     enabled: boolean,
-    stickerTexture?: Texture,
-    hintTexture?: Texture,
+    stickerTexture?: Texture | null,
+    hintTexture?: Texture | null,
   ) {
     if (!stickerTexture) {
       enabled = false;

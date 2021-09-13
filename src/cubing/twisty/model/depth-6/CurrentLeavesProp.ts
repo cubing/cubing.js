@@ -31,6 +31,7 @@ export class CurrentLeavesProp extends TwistyPropDerived<
         stateIndex: idx,
         currentMoves: [],
         movesFinishing: [],
+        movesFinished: [],
         movesStarting: [],
         latestStart: -Infinity,
         earliestEnd: Infinity,
