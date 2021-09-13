@@ -436,12 +436,7 @@ function dowork(cmd: string): void {
   }
   const options = Object.assign({}, checkboxOptions, parsedOptions);
 
-  const pg = new PuzzleGeometry(
-    puzzleDescription.shape,
-    puzzleDescription.cuts,
-    undefined,
-    options,
-  );
+  const pg = new PuzzleGeometry(puzzleDescription, options);
   nextShape = puzzleDescription.shape;
   pg.allstickers();
   pg.genperms();
@@ -544,12 +539,7 @@ function checkchange_internal(): void {
         savealg = false;
       }
       Object.assign(options, moreOptions);
-      pg = new PuzzleGeometry(
-        puzzleDescription.shape,
-        puzzleDescription.cuts,
-        undefined,
-        options,
-      );
+      pg = new PuzzleGeometry(puzzleDescription, options);
       nextShape = puzzleDescription.shape;
       pg.allstickers();
       pg.genperms();

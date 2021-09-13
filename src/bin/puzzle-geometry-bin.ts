@@ -6,6 +6,7 @@ import {
   parsePuzzleDescription,
   schreierSims,
 } from "../cubing/puzzle-geometry";
+import { parsePGOptionList } from "../cubing/puzzle-geometry/Options";
 import type { PuzzleDescription } from "../cubing/puzzle-geometry/PuzzleGeometry";
 
 let dosvg = false;
@@ -171,12 +172,8 @@ if (
     }
     puzzleDescription = { shape: process.argv[cutarg], cuts };
   }
-  const pg = new PuzzleGeometry(
-    puzzleDescription.shape,
-    puzzleDescription.cuts,
-    optionlist,
-    {},
-  );
+  const options = parsePGOptionList(optionlist);
+  const pg = new PuzzleGeometry(puzzleDescription, options);
   pg.allstickers();
   pg.genperms();
   // TODO: if (!optionlist.includes("verbose"))

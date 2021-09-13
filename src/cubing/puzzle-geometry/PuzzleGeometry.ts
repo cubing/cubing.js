@@ -25,7 +25,6 @@ import {
   BaseFaceCount,
   FaceBasedOrientationDescription,
   FaceBasedOrientationDescriptionLookup,
-  optionListToObject,
   PuzzleGeometryOptions,
   PuzzleGeometryOptionsObject,
 } from "./Options";
@@ -462,11 +461,8 @@ export function getPuzzleGeometryByDesc(
   if (parsed === null) {
     throw new Error("Could not parse the puzzle description");
   }
-  const { shape, cuts } = parsed;
   const pg = new PuzzleGeometry(
-    shape,
-    cuts,
-    undefined,
+    parsed,
     Object.assign({}, { allMoves: true } as PuzzleGeometryOptions, options),
   );
   pg.allstickers();
@@ -607,26 +603,27 @@ export class PuzzleGeometry {
   public addNotationMapper: string = "";
   public setReidOrder: boolean = false;
 
-  private options: PuzzleGeometryOptionsObject;
+  private options = new PuzzleGeometryOptionsObject();
 
   constructor(
-    shape: string,
-    cuts: string[][],
-    optionlist: any[] | undefined,
+    puzzleDescription: PuzzleDescription,
     options: PuzzleGeometryOptions,
   ) {
-    this.options = optionListToObject(optionlist, options);
-    this.args = shape + " " + cuts.map((_) => _.join(" ")).join(" ");
-    if (optionlist) {
-      this.args += " " + optionlist.join(" ");
-    }
+    Object.assign(this.options, options);
+    this.args =
+      puzzleDescription.shape +
+      " " +
+      puzzleDescription.cuts.map((_) => _.join(" ")).join(" ");
+    this.args += " " + JSON.stringify(puzzleDescription); // TODO: serialize options
     if (this.options.verbosity > 0) {
       console.log(this.header("# "));
     }
-    this.create(shape, cuts);
+    this.create(puzzleDescription);
   }
 
-  public create(shape: string, cuts: any[]): void {
+  public create(puzzleDescription: PuzzleDescription): void {
+    const { shape, cuts } = puzzleDescription;
+
     // create the shape, doing all the essential geometry
     // create only goes far enough to figure out how many stickers per
     // face, and what the short edge is.  If the short edge is too short,
@@ -718,7 +715,7 @@ export class PuzzleGeometry {
           throw new Error("Bad cut argument: " + cuts[i][0]);
       }
       cutplanes.push(normal.makecut(Number(cuts[i][1])));
-      intersects.push(cuts[i][1] < distance);
+      intersects.push(Number(cuts[i][1]) < distance);
     }
     if (this.options.addRotations) {
       if (!sawface) {

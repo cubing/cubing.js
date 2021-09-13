@@ -114,9 +114,8 @@ export class PuzzleGeometryOptionsObject {
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
 
-export function optionListToObject(
+export function parsePGOptionList(
   optionlist?: any[],
-  options?: PuzzleGeometryOptions,
 ): PuzzleGeometryOptionsObject {
   const optionsObject = new PuzzleGeometryOptionsObject();
   if (optionlist !== undefined) {
@@ -173,6 +172,5 @@ export function optionListToObject(
       }
     }
   }
-  Object.assign(optionsObject, options);
   return optionsObject;
 }
