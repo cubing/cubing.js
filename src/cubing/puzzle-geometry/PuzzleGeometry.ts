@@ -570,6 +570,7 @@ class PuzzleGeometryOptionsObject {
 
   fixedOrientation: boolean = false; // eliminate any orientations
   fixedPieceType: "" | "e" | "v" | "f" = ""; // fix a piece?
+  orientCenters: boolean = false; // orient centers?
 
   optimizeOrbits: boolean = false; // optimize PermOri
 
@@ -620,7 +621,6 @@ export class PuzzleGeometry {
   // options TODO
   public parsedmovelist: any; // parsed move list
   // options
-  public orientCenters: boolean = false; // orient centers?
   public duplicatedFaces: number[] = []; // which faces are duplicated
   public duplicatedCubies: number[] = []; // which cubies are duplicated
   public fixedCubie: number = -1; // fixed cubie, if any
@@ -694,7 +694,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "fix") {
           this.options.fixedPieceType = optionlist[i + 1];
         } else if (optionlist[i] === "orientcenters") {
-          this.orientCenters = asboolean(optionlist[i + 1]);
+          this.options.orientCenters = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "puzzleorientation") {
           this.options.puzzleOrientation = asstructured(optionlist[i + 1]);
         } else if (optionlist[i] === "puzzleorientations") {
@@ -1878,7 +1878,7 @@ export class PuzzleGeometry {
     // if orientCenters is set, we find all cubies that have only one
     // sticker and that sticker is in the center of a face, and we
     // introduce duplicate stickers so we can orient them properly.
-    if (this.orientCenters) {
+    if (this.options.orientCenters) {
       for (let k = 0; k < this.cubies.length; k++) {
         if (this.cubies[k].length === 1) {
           const kk = this.cubies[k][0];
@@ -1971,7 +1971,7 @@ export class PuzzleGeometry {
         // center itself.
         if (
           b.length > 2 &&
-          this.orientCenters &&
+          this.options.orientCenters &&
           (this.cubies[b[0]].length === 1 || this.duplicatedCubies[b[0]] > 1)
         ) {
           // is this a real center cubie, around an axis?
@@ -2005,7 +2005,7 @@ export class PuzzleGeometry {
         // b.length == 2 means a sticker is spinning in place.
         // in this case we add duplicate stickers
         // so that we can make it animate properly in a 3D world.
-        if (b.length === 2 && this.orientCenters) {
+        if (b.length === 2 && this.options.orientCenters) {
           for (let ii = 1; ii < this.movesetorders[k]; ii++) {
             if (sc === 0) {
               b.push(b[0], ii);
