@@ -1,4 +1,4 @@
-import { cube3x3x3, puzzles } from "../../../puzzles";
+import { cube3x3x3, PuzzleLoader, puzzles } from "../../../puzzles";
 import { Cube3D, Cube3DOptions } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
 import type { AlgCursor } from "../../old/animation/cursor/AlgCursor";
@@ -25,7 +25,7 @@ export async function cube3DShim(options?: Cube3DOptions): Promise<Cube3D> {
 
 // TODO: take loader?
 export async function pg3dShim(
-  puzzleID: PuzzleID,
+  puzzleLoader: PuzzleLoader,
   hintFacelets: HintFaceletStyle,
 ): Promise<PG3D> {
   const cursorShim = { addPositionListener: () => {} } as any as AlgCursor; // TODO
@@ -33,8 +33,8 @@ export async function pg3dShim(
   return new PG3D(
     cursorShim,
     renderCallbackShim,
-    await puzzles[puzzleID].def(),
-    (await puzzles[puzzleID].pg!()).get3d(),
+    await puzzleLoader.def(),
+    (await puzzleLoader.pg!()).get3d(),
     true,
     hintFacelets === "floating",
   );

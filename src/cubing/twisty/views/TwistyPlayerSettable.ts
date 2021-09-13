@@ -1,4 +1,5 @@
 import type { Alg } from "../../alg";
+import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { ExperimentalStickering } from "../../twisty";
 import type { BackgroundThemeWithAuto } from "../model/depth-0/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/depth-0/BackViewProp";
@@ -31,8 +32,11 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set experimentalSetupAnchor(anchor: SetupToLocation) { this.experimentalModel.setupAnchorProp.set(anchor); }
   get experimentalSetupAnchor(): never { throw err("anchor"); }
 
-  set puzzle(puzzleID: PuzzleID) { this.experimentalModel.puzzleIDProp.set(puzzleID); }
-  get puzzle(): never { throw err("puzzle"); }
+  set puzzleID(puzzleID: PuzzleID) { this.experimentalModel.puzzleIDRequestProp.set(puzzleID); }
+  get puzzleID(): never { throw err("puzzle"); }
+
+  set puzzleDescription(puzzleDescription: PuzzleDescriptionString) { this.experimentalModel.puzzleDescriptionRequestProp.set(puzzleDescription); }
+  get puzzleDescription(): never { throw err("puzzleDescription"); }
 
   set timestamp(timestamp: TimestampRequest) { this.experimentalModel.timestampRequestProp.set(timestamp); }
   get timestamp(): never { throw err("timestamp"); }

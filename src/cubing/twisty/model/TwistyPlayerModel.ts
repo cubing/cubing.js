@@ -7,7 +7,9 @@ import { IndexerConstructorRequestProp } from "./depth-0/IndexerConstructorReque
 import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
 import { OrbitCoordinatesRequestProp } from "./depth-0/OrbitCoordinatesRequestProp";
 import { PlayingInfoProp } from "./depth-0/PlayingInfoProp";
-import { PuzzleIDProp } from "./depth-0/PuzzleIDProp";
+import { PGPuzzleDescriptionStringProp } from "./depth-0/PuzzleDescriptionProp";
+import { PuzzleIDRequestProp } from "./depth-0/PuzzleIDRequestProp";
+import { PuzzleLoaderProp } from "./depth-0/PuzzleLoaderProp";
 import { SetupAnchorProp } from "./depth-0/SetupAnchorProp";
 import { StickeringProp } from "./depth-0/StickeringProp";
 import { TempoScaleProp } from "./depth-0/TempoScaleProp";
@@ -17,6 +19,7 @@ import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
 import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
 import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
 import { PuzzleDefProp } from "./depth-1/PuzzleDefProp";
+import { PuzzleIDProp } from "./depth-1/PuzzleIDProp";
 import { SpriteProp } from "./depth-1/SpriteProp";
 import { VisualizationStrategyProp } from "./depth-1/VisualizationStrategyProp";
 import { IndexerConstructorProp } from "./depth-2/IndexerConstructorProp";
@@ -51,7 +54,16 @@ export class TwistyPlayerModel {
     new OrbitCoordinatesRequestProp();
 
   playingInfoProp = new PlayingInfoProp();
-  puzzleIDProp = new PuzzleIDProp();
+
+  puzzleIDRequestProp = new PuzzleIDRequestProp();
+  puzzleDescriptionRequestProp = new PGPuzzleDescriptionStringProp();
+  puzzleLoaderProp = new PuzzleLoaderProp({
+    puzzleIDRequest: this.puzzleIDRequestProp,
+    puzzleDescriptionRequest: this.puzzleDescriptionRequestProp,
+  });
+
+  puzzleIDProp = new PuzzleIDProp({ puzzleLoader: this.puzzleLoaderProp });
+
   setupAnchorProp = new SetupAnchorProp();
   setupProp = new AlgProp();
   stickeringProp = new StickeringProp();
@@ -75,7 +87,7 @@ export class TwistyPlayerModel {
     puzzleID: this.puzzleIDProp,
   });
 
-  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleIDProp });
+  puzzleDefProp = new PuzzleDefProp({ puzzleLoader: this.puzzleLoaderProp });
 
   visualizationStrategyProp = new VisualizationStrategyProp({
     visualizationRequest: this.visualizationFormatProp,

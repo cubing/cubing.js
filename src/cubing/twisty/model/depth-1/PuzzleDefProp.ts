@@ -1,13 +1,14 @@
 import type { KPuzzleDefinition } from "../../../kpuzzle";
-import { puzzles } from "../../../puzzles";
-import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
+import type { PuzzleLoader } from "../../../puzzles";
 import { TwistyPropDerived } from "../TwistyProp";
 
 export class PuzzleDefProp extends TwistyPropDerived<
-  { puzzle: PuzzleID },
+  { puzzleLoader: PuzzleLoader },
   KPuzzleDefinition
 > {
-  async derive(inputs: { puzzle: PuzzleID }): Promise<KPuzzleDefinition> {
-    return puzzles[inputs.puzzle].def();
+  async derive(inputs: {
+    puzzleLoader: PuzzleLoader;
+  }): Promise<KPuzzleDefinition> {
+    return inputs.puzzleLoader.def();
   }
 }

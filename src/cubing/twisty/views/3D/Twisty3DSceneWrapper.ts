@@ -1,4 +1,5 @@
 import type { Scene as ThreeScene } from "three";
+import type { PuzzleLoader } from "../../../puzzles";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import type { BackViewLayoutWithAuto } from "../../model/depth-0/BackViewProp";
 import type { VisualizationStrategy } from "../../model/depth-1/VisualizationStrategyProp";
@@ -9,7 +10,6 @@ import type { Schedulable } from "../../old/animation/RenderScheduler";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
-import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import type { BackViewLayout } from "../../old/dom/viewers/TwistyViewerWrapper";
 import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css_";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
@@ -42,7 +42,7 @@ export class Twisty3DSceneWrapper
     this.addVantage(vantage);
     if (this.model) {
       this.#freshListenerManager.addMultiListener(
-        [this.model.puzzleIDProp, this.model.visualizationStrategyProp],
+        [this.model.puzzleLoaderProp, this.model.visualizationStrategyProp],
         this.onPuzzle.bind(this),
       );
       this.#freshListenerManager.addListener(
@@ -123,7 +123,10 @@ export class Twisty3DSceneWrapper
     new StaleDropper<[ThreeScene, Twisty3DPuzzleWrapper]>();
 
   async onPuzzle(
-    inputs: [puzzle: PuzzleID, visualizationStrategy: VisualizationStrategy],
+    inputs: [
+      puzzleLoader: PuzzleLoader,
+      visualizationStrategy: VisualizationStrategy,
+    ],
   ): Promise<void> {
     this.#currentTwisty3DPuzzleWrapper?.disconnect();
     const [scene, twisty3DPuzzleWrapper] =

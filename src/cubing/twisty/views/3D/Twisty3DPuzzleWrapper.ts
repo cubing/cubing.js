@@ -1,5 +1,5 @@
 import type { Texture as ThreeTexture } from "three";
-import { puzzles } from "../../../puzzles";
+import type { PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
 import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
@@ -9,14 +9,13 @@ import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/TwistyProp";
 import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
-import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {
   constructor(
     private model: TwistyPlayerModel,
     public schedulable: Schedulable,
-    private puzzleID: PuzzleID,
+    private puzzleLoader: PuzzleLoader,
     private visualizationStrategy: VisualizationStrategy,
   ) {
     this.twisty3DPuzzle(); // Start constructing.
@@ -25,9 +24,9 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     // Repro: Switch to 40x40x40 a fraction of a second before animation finishes. When it's loaded the itmeline is at the end, but the 40x40x40 is rendered with an earlier position.
 
     this.#freshListenerManager.addListener(
-      this.model!.puzzleIDProp,
-      (puzzleID: PuzzleID) => {
-        if (this.puzzleID !== puzzleID) {
+      this.model!.puzzleLoaderProp,
+      (puzzleLoader: PuzzleLoader) => {
+        if (this.puzzleLoader.id !== puzzleLoader.id) {
           this.disconnect();
         }
       },
@@ -41,7 +40,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         } catch (e) {
           console.warn(
             "Bad position. Pre-emptively disconnecting:",
-            this.puzzleID,
+            this.puzzleLoader.id,
             e,
           );
           this.disconnect();
@@ -69,10 +68,10 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           this.scheduleRender();
         } else {
           // TODO: create a prop to handle this.
-          if ("appearance" in puzzles[puzzleID]!) {
+          if ("appearance" in this.puzzleLoader) {
             const [twisty3D, appearancePromise] = await Promise.all([
               this.twisty3DPuzzle(),
-              puzzles[puzzleID]!.appearance!(stickering ?? "full"),
+              this.puzzleLoader.appearance!(stickering ?? "full"),
             ]);
             (twisty3D as PG3D).experimentalSetAppearance(appearancePromise);
             this.scheduleRender();
@@ -114,7 +113,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     return (this.#cachedTwisty3DPuzzle ??= (async () => {
       const proxyPromise = proxy3D();
       if (
-        this.puzzleID === "3x3x3" &&
+        this.puzzleLoader.id === "3x3x3" &&
         this.visualizationStrategy === "Cube3D"
       ) {
         // TODO: synchronize
@@ -136,7 +135,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           this.model.hintStickerSprite.get(),
         ]);
         const pg3d = (await proxyPromise).pg3dShim(
-          this.puzzleID,
+          this.puzzleLoader,
           hintFacelets === "auto" ? "floating" : hintFacelets,
         );
         // TODO: Figure out how to do this in one place using the listener.
