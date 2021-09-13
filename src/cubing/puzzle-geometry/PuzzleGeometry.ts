@@ -467,7 +467,7 @@ export function getPuzzleGeometryByDesc(
     shape,
     cuts,
     undefined,
-    Object.assign({}, options, { allMoves: true } as PuzzleGeometryOptions),
+    Object.assign({}, { allMoves: true } as PuzzleGeometryOptions, options),
   );
   pg.allstickers();
   pg.genperms();
