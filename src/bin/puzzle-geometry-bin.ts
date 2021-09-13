@@ -7,7 +7,10 @@ import {
   schreierSims,
 } from "../cubing/puzzle-geometry";
 import { parsePGOptionList } from "../cubing/puzzle-geometry/Options";
-import type { PuzzleDescription } from "../cubing/puzzle-geometry/PuzzleGeometry";
+import type {
+  CutDescription,
+  PuzzleDescription,
+} from "../cubing/puzzle-geometry/PuzzleGeometry";
 
 let dosvg = false;
 let doss = false;
@@ -164,10 +167,13 @@ if (
     puzzleDescription = parsed;
     argp++;
   } else {
-    const cuts = [];
+    const cuts: CutDescription[] = [];
     const cutarg = argp++;
     while (argp + 1 < process.argv.length && process.argv[argp].length === 1) {
-      cuts.push([process.argv[argp], process.argv[argp + 1]]);
+      cuts.push({
+        cutType: process.argv[argp],
+        distance: parseFloat(process.argv[argp + 1]),
+      });
       argp += 2;
     }
     puzzleDescription = { shape: process.argv[cutarg], cuts };

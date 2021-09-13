@@ -420,9 +420,10 @@ export function getpuzzle(puzzleName: PuzzleName): PuzzleDescriptionString {
   return PGPuzzles[puzzleName];
 }
 
+export type CutDescription = { cutType: string; distance: number };
 export type PuzzleDescription = {
   shape: string;
-  cuts: string[][];
+  cuts: CutDescription[];
 };
 
 export function parsePuzzleDescription(
@@ -443,12 +444,12 @@ export function parsePuzzleDescription(
   ) {
     return null;
   }
-  const cuts = [];
+  const cuts: CutDescription[] = [];
   for (let i = 1; i < a.length; i += 2) {
     if (a[i] !== "f" && a[i] !== "v" && a[i] !== "e") {
       return null;
     }
-    cuts.push([a[i], a[i + 1]]);
+    cuts.push({ cutType: a[i], distance: parseFloat(a[i + 1]) });
   }
   return { shape, cuts };
 }
@@ -613,7 +614,9 @@ export class PuzzleGeometry {
     this.args =
       puzzleDescription.shape +
       " " +
-      puzzleDescription.cuts.map((_) => _.join(" ")).join(" ");
+      puzzleDescription.cuts
+        .map(({ cutType, distance }) => `${cutType} ${distance}`)
+        .join(" ");
     this.args += " " + JSON.stringify(puzzleDescription); // TODO: serialize options
     if (this.options.verbosity > 0) {
       console.log(this.header("# "));
@@ -692,10 +695,10 @@ export class PuzzleGeometry {
     let sawface = false; // what cuts did we see?
     let sawedge = false;
     let sawvertex = false;
-    for (let i = 0; i < cuts.length; i++) {
+    for (const cut of cuts) {
       let normal = null;
       let distance = 0;
-      switch (cuts[i][0]) {
+      switch (cut.cutType) {
         case "f":
           normal = facenormal;
           distance = 1;
@@ -712,10 +715,10 @@ export class PuzzleGeometry {
           sawedge = true;
           break;
         default:
-          throw new Error("Bad cut argument: " + cuts[i][0]);
+          throw new Error("Bad cut argument: " + cut.cutType);
       }
-      cutplanes.push(normal.makecut(Number(cuts[i][1])));
-      intersects.push(Number(cuts[i][1]) < distance);
+      cutplanes.push(normal.makecut(cut.distance));
+      intersects.push(cut.distance < distance);
     }
     if (this.options.addRotations) {
       if (!sawface) {
