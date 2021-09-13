@@ -632,7 +632,7 @@ export class VisibleState extends TransformationBase {
 }
 //  Disjoint set union implementation.
 class DisjointUnion {
-  private  heads: number[];
+  private heads: number[];
   constructor(public n: number) {
     this.heads = new Array<number>(n);
     for (let i = 0; i < n; i++) {
