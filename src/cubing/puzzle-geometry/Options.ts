@@ -118,57 +118,55 @@ export class PuzzleGeometryFullOptions {
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryFullOptions>;
 
-export function parsePGOptionList(
-  optionlist?: any[],
-): PuzzleGeometryFullOptions {
-  const optionsObject = new PuzzleGeometryFullOptions();
+export function parsePGOptionList(optionlist?: any[]): PuzzleGeometryOptions {
+  const options: PuzzleGeometryOptions = {};
   if (optionlist !== undefined) {
     if (optionlist.length % 2 !== 0) {
       throw new Error("Odd length in option list?");
     }
     for (let i = 0; i < optionlist.length; i += 2) {
       if (optionlist[i] === "verbose") {
-        optionsObject.verbosity++;
+        options.verbosity = (options.verbosity ?? 0) + 1;
       } else if (optionlist[i] === "quiet") {
-        optionsObject.verbosity = 0;
+        options.verbosity = 0;
       } else if (optionlist[i] === "allmoves") {
-        optionsObject.allMoves = asboolean(optionlist[i + 1]);
+        options.allMoves = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "outerblockmoves") {
-        optionsObject.outerBlockMoves = asboolean(optionlist[i + 1]);
+        options.outerBlockMoves = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "vertexmoves") {
-        optionsObject.vertexMoves = asboolean(optionlist[i + 1]);
+        options.vertexMoves = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "rotations") {
-        optionsObject.addRotations = asboolean(optionlist[i + 1]);
+        options.addRotations = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "cornersets") {
-        optionsObject.includeCornerOrbits = asboolean(optionlist[i + 1]);
+        options.includeCornerOrbits = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "centersets") {
-        optionsObject.includeCenterOrbits = asboolean(optionlist[i + 1]);
+        options.includeCenterOrbits = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "edgesets") {
-        optionsObject.includeEdgeOrbits = asboolean(optionlist[i + 1]);
+        options.includeEdgeOrbits = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "omit") {
-        optionsObject.excludeOrbits = optionlist[i + 1];
+        options.excludeOrbits = optionlist[i + 1];
       } else if (optionlist[i] === "graycorners") {
-        optionsObject.grayCorners = asboolean(optionlist[i + 1]);
+        options.grayCorners = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "graycenters") {
-        optionsObject.grayCenters = asboolean(optionlist[i + 1]);
+        options.grayCenters = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "grayedges") {
-        optionsObject.grayEdges = asboolean(optionlist[i + 1]);
+        options.grayEdges = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "movelist") {
-        optionsObject.moveList = asstructured(optionlist[i + 1]);
+        options.moveList = asstructured(optionlist[i + 1]);
       } else if (optionlist[i] === "killorientation") {
-        optionsObject.fixedOrientation = asboolean(optionlist[i + 1]);
+        options.fixedOrientation = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "optimize") {
-        optionsObject.optimizeOrbits = asboolean(optionlist[i + 1]);
+        options.optimizeOrbits = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "scramble") {
-        optionsObject.scrambleAmount = optionlist[i + 1];
+        options.scrambleAmount = optionlist[i + 1];
       } else if (optionlist[i] === "fix") {
-        optionsObject.fixedPieceType = optionlist[i + 1];
+        options.fixedPieceType = optionlist[i + 1];
       } else if (optionlist[i] === "orientcenters") {
-        optionsObject.orientCenters = asboolean(optionlist[i + 1]);
+        options.orientCenters = asboolean(optionlist[i + 1]);
       } else if (optionlist[i] === "puzzleorientation") {
-        optionsObject.puzzleOrientation = asstructured(optionlist[i + 1]);
+        options.puzzleOrientation = asstructured(optionlist[i + 1]);
       } else if (optionlist[i] === "puzzleorientations") {
-        optionsObject.puzzleOrientations = asstructured(optionlist[i + 1]);
+        options.puzzleOrientations = asstructured(optionlist[i + 1]);
       } else {
         throw new Error(
           "Bad option while processing option list " + optionlist[i],
@@ -176,5 +174,5 @@ export function parsePGOptionList(
       }
     }
   }
-  return optionsObject;
+  return options;
 }
