@@ -3,9 +3,10 @@
 import {
   PuzzleGeometry,
   getpuzzles,
-  parsedesc,
+  parsePuzzleDescription,
   schreierSims,
 } from "../cubing/puzzle-geometry";
+import type { PuzzleDescription } from "../cubing/puzzle-geometry/PuzzleGeometry";
 
 let dosvg = false;
 let doss = false;
@@ -150,12 +151,16 @@ if (
       break;
     }
   }
-  let createargs = [];
+  let puzzleDescription: PuzzleDescription;
   if (showargs) {
     console.log("# " + process.argv.join(" "));
   }
   if (desc !== undefined) {
-    createargs = parsedesc(desc);
+    const parsed = parsePuzzleDescription(desc);
+    if (parsed === null) {
+      throw new Error("Could not parse puzzle description!");
+    }
+    puzzleDescription = parsed;
     argp++;
   } else {
     const cuts = [];
@@ -164,9 +169,14 @@ if (
       cuts.push([process.argv[argp], process.argv[argp + 1]]);
       argp += 2;
     }
-    createargs = [process.argv[cutarg], cuts];
+    puzzleDescription = { shape: process.argv[cutarg], cuts };
   }
-  const pg = new PuzzleGeometry(createargs[0], createargs[1], optionlist, {});
+  const pg = new PuzzleGeometry(
+    puzzleDescription.shape,
+    puzzleDescription.cuts,
+    optionlist,
+    {},
+  );
   pg.allstickers();
   pg.genperms();
   // TODO: if (!optionlist.includes("verbose"))
