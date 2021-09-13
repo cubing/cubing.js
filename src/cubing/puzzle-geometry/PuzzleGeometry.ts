@@ -553,7 +553,6 @@ function toFaceCoords(q: Face, maxdist: number): number[] {
 }
 
 export class PuzzleGeometry {
-  public args: string = "";
   public rotations: Quat[]; // all members of the rotation group
   public baseplanerot: Quat[]; // unique rotations of the baseplane
   public baseplanes: Quat[]; // planes, corresponding to faces
@@ -611,13 +610,6 @@ export class PuzzleGeometry {
     options: PuzzleGeometryOptions,
   ) {
     Object.assign(this.options, options);
-    this.args =
-      puzzleDescription.shape +
-      " " +
-      puzzleDescription.cuts
-        .map(({ cutType, distance }) => `${cutType} ${distance}`)
-        .join(" ");
-    this.args += " " + JSON.stringify(puzzleDescription); // TODO: serialize options
     if (this.options.verbosity > 0) {
       console.log(this.header("# "));
     }
@@ -2102,7 +2094,7 @@ export class PuzzleGeometry {
   }
 
   public header(comment: string): string {
-    return comment + copyright + "\n" + comment + this.args + "\n";
+    return comment + copyright + "\n" + comment + "\n";
   }
 
   public writegap(): string {
