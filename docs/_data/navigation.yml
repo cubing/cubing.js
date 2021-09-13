@@ -1,0 +1,12 @@
+# Navigation Settings
+main:
+  - title: "Getting Started"
+    url: https://js.cubing.net/cubing/
+  - title: "API Reference"
+    url: /API-reference
+  - title: "Guides"
+    url: /guides
+  - title: "Experiments"
+    url: https://experiments.cubing.net/cubing.js/
+  - title: "Contributing"
+    url: /contributing
