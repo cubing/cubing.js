@@ -26,6 +26,7 @@ import {
   FaceBasedOrientationDescription,
   FaceBasedOrientationDescriptionLookup,
   optionListToObject,
+  PuzzleGeometryOptions,
   PuzzleGeometryOptionsObject,
 } from "./Options";
 import { iota, Perm, zeros } from "./Perm";
@@ -595,8 +596,13 @@ export class PuzzleGeometry {
 
   private options: PuzzleGeometryOptionsObject;
 
-  constructor(shape: string, cuts: string[][], optionlist: any[] | undefined) {
-    this.options = optionListToObject(optionlist);
+  constructor(
+    shape: string,
+    cuts: string[][],
+    optionlist?: any[],
+    options?: PuzzleGeometryOptions,
+  ) {
+    this.options = optionListToObject(optionlist, options);
     this.args = shape + " " + cuts.map((_) => _.join(" ")).join(" ");
     if (optionlist) {
       this.args += " " + optionlist.join(" ");
