@@ -84,13 +84,16 @@ function asboolean(v: any): boolean {
 
 export class PuzzleGeometryFullOptions {
   verbosity: number = 0; // verbosity (console.log)
+
   allMoves: boolean = false; // generate all slice moves in ksolve
   outerBlockMoves: boolean; // generate outer block moves
   vertexMoves: boolean = false; // generate vertex moves
   addRotations: boolean = false; // add symmetry information to ksolve output
   moveList: string[] | null = null; // move list to generate
-  puzzleOrientation: FaceBasedOrientationDescription | null = null; // single puzzle orientation from options
-  puzzleOrientations: FaceBasedOrientationDescriptionLookup | null = null; // puzzle orientation override object from options // TODO: is this needed?
+
+  fixedOrientation: boolean = false; // eliminate any orientations
+  fixedPieceType: "" | "e" | "v" | "f" = ""; // fix a piece?
+  orientCenters: boolean = false; // orient centers?
 
   // TODO: Group these into a single object?
   includeCornerOrbits: boolean = true; // include corner orbits
@@ -98,16 +101,14 @@ export class PuzzleGeometryFullOptions {
   includeEdgeOrbits: boolean = true; // include edge orbits
   // Overrides the previous options.
   excludeOrbits: string[] = []; // exclude these orbits
+  optimizeOrbits: boolean = false; // optimize PermOri
 
   grayCorners: boolean = false; // make corner sets gray
   grayCenters: boolean = false; // make center sets gray
   grayEdges: boolean = false; // make edge sets gray
 
-  fixedOrientation: boolean = false; // eliminate any orientations
-  fixedPieceType: "" | "e" | "v" | "f" = ""; // fix a piece?
-  orientCenters: boolean = false; // orient centers?
-
-  optimizeOrbits: boolean = false; // optimize PermOri
+  puzzleOrientation: FaceBasedOrientationDescription | null = null; // single puzzle orientation from options
+  puzzleOrientations: FaceBasedOrientationDescriptionLookup | null = null; // puzzle orientation override object from options // TODO: is this needed?
 
   scrambleAmount: number = 0; // scramble?
 
