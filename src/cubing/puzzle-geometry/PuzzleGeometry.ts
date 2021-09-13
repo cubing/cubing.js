@@ -141,9 +141,9 @@ class Face {
 
 export class FaceTree {
   constructor(
-    public face: Quat[],
-    public left?: FaceTree,
-    public right?: FaceTree,
+    private face: Quat[],
+    private left?: FaceTree,
+    private right?: FaceTree,
   ) {}
 
   public split(q: Quat): FaceTree {
@@ -557,42 +557,39 @@ function toFaceCoords(q: Face, maxdist: number): number[] {
 }
 
 export class PuzzleGeometry {
-  public rotations: Quat[]; // all members of the rotation group
-  public baseplanerot: Quat[]; // unique rotations of the baseplane
-  public baseplanes: Quat[]; // planes, corresponding to faces
-  public facenames: [Quat[], string][]; // face names
-  public faceplanes: [Quat, string][]; // face planes
-  public edgenames: [Quat, string][]; // edge names
-  public vertexnames: [Quat, string][]; // vertexnames
-  public geonormals: [Quat, string, string][]; // all geometric directions, with names and types
-  public moveplanes: Quat[]; // the planes that split moves
-  public moveplanes2: Quat[]; // the planes that split moves, filtered
+  private rotations: Quat[]; // all members of the rotation group
+  private baseplanerot: Quat[]; // unique rotations of the baseplane
+  private baseplanes: Quat[]; // planes, corresponding to faces
+  private facenames: [Quat[], string][]; // face names
+  private faceplanes: [Quat, string][]; // face planes
+  private edgenames: [Quat, string][]; // edge names
+  private vertexnames: [Quat, string][]; // vertexnames
+  private geonormals: [Quat, string, string][]; // all geometric directions, with names and types
+  private moveplanes: Quat[]; // the planes that split moves
+  private moveplanes2: Quat[]; // the planes that split moves, filtered
   public moveplanesets: Quat[][]; // the move planes, in parallel sets
-  public moveplanenormals: Quat[]; // one move plane
+  private moveplanenormals: Quat[]; // one move plane
   public movesetorders: number[]; // the order of rotations for each move set
-  public movesetgeos: [string, string, string, string, number][]; // geometric feature information for move sets
-  public basefaces: Face[]; // polytope faces before cuts
-  public faces: Face[]; // all the stickers
-  public facecentermass: Quat[]; // center of mass of all faces
-  public baseFaceCount: BaseFaceCount; // number of base faces
-  public stickersperface: number; // number of stickers per face
-  public cornerfaces: number; // number of faces that meet at a corner
-  public cubies: number[][]; // the cubies
-  public shortedge: number; // shortest edge
-  public vertexdistance: number; // vertex distance
-  public edgedistance: number; // edge distance
-  public orbits: number; // count of cubie orbits
-  public facetocubie: number[]; // map a face to a cubie index
-  public facetoord: number[]; // map a face to a cubie ord
-  public moverotations: Quat[][]; // move rotations
-  public facelisthash: Map<string, number[]>; // face list by key
-  public cubiesetnames: string[]; // cubie set names
-  public cubieords: number[]; // the size of each orbit
-  public cubiesetnums: number[];
-  public cubieordnums: number[];
-  public orbitoris: number[]; // the orientation size of each orbit
-  public cubievaluemap: number[]; // the map for identical cubies
-  public cubiesetcubies: number[][]; // cubies in each cubie set
+  private movesetgeos: [string, string, string, string, number][]; // geometric feature information for move sets
+  private basefaces: Face[]; // polytope faces before cuts
+  private faces: Face[]; // all the stickers
+  private facecentermass: Quat[]; // center of mass of all faces
+  private baseFaceCount: BaseFaceCount; // number of base faces
+  private stickersperface: number; // number of stickers per face
+  private cubies: number[][]; // the cubies
+  private vertexdistance: number; // vertex distance
+  private edgedistance: number; // edge distance
+  private facetocubie: number[]; // map a face to a cubie index
+  private facetoord: number[]; // map a face to a cubie ord
+  private moverotations: Quat[][]; // move rotations
+  private facelisthash: Map<string, number[]>; // face list by key
+  private cubiesetnames: string[]; // cubie set names
+  private cubieords: number[]; // the size of each orbit
+  private cubiesetnums: number[];
+  private cubieordnums: number[];
+  private orbitoris: number[]; // the orientation size of each orbit
+  private cubievaluemap: number[]; // the map for identical cubies
+  private cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
   public parsedmovelist: [
     string | undefined,
@@ -603,17 +600,17 @@ export class PuzzleGeometry {
     number,
   ][]; // parsed move list
 
-  public duplicatedFaces: number[] = []; // which faces are duplicated
-  public duplicatedCubies: number[] = []; // which cubies are duplicated
-  public fixedCubie: number = -1; // fixed cubie, if any
-  public net: string[][] = [];
-  public colors: any = [];
-  public faceorder: string[] = [];
-  public faceprecedence: number[] = [];
-  public swizzler: FaceNameSwizzler;
-  public notationMapper: NotationMapper = new NullMapper();
-  public addNotationMapper: string = "";
-  public setReidOrder: boolean = false;
+  private duplicatedFaces: number[] = []; // which faces are duplicated
+  private duplicatedCubies: number[] = []; // which cubies are duplicated
+  private fixedCubie: number = -1; // fixed cubie, if any
+  private net: string[][] = [];
+  private colors: any = [];
+  private faceorder: string[] = [];
+  private faceprecedence: number[] = [];
+  private swizzler: FaceNameSwizzler;
+  private notationMapper: NotationMapper = new NullMapper();
+  private addNotationMapper: string = "";
+  private setReidOrder: boolean = false;
 
   private options: PuzzleGeometryFullOptions;
 
@@ -882,7 +879,6 @@ export class PuzzleGeometry {
       edgenames[i] = [edgenames[i][0], c1];
     }
     // fix the vertex names; counterclockwise rotations; low face first.
-    this.cornerfaces = vertexnames[0].length - 1;
     for (let i = 0; i < vertexnames.length; i++) {
       if (vertexnames[i].length < 4) {
         throw new Error("Bad length in vertex names");
@@ -1036,7 +1032,6 @@ export class PuzzleGeometry {
         }
       }
     }
-    this.shortedge = shortedge;
     if (this.options.verbosity > 0) {
       console.log("# Short edge is " + shortedge);
     }
@@ -1085,11 +1080,11 @@ export class PuzzleGeometry {
     }
   }
 
-  public keyface(face: Face): string {
+  private keyface(face: Face): string {
     return this.keyface2(face.centermass());
   }
 
-  public keyface2(cm: Quat): string {
+  private keyface2(cm: Quat): string {
     // take a face and figure out the sides of each move plane
     let s = "";
     for (let i = 0; i < this.moveplanesets.length; i++) {
@@ -1133,7 +1128,7 @@ export class PuzzleGeometry {
 
   // same as above, but instead of returning an encoded string, return
   // an array with offsets.
-  public keyface3(face: Face): number[] {
+  private keyface3(face: Face): number[] {
     let cm = face.centermass();
     // take a face and figure out the sides of each move plane
     let r = [];
@@ -1159,7 +1154,7 @@ export class PuzzleGeometry {
     return r;
   }
 
-  public findface(cm: Quat): number {
+  private findface(cm: Quat): number {
     const key = this.keyface2(cm);
     const arr = this.facelisthash.get(key)!;
     if (arr.length === 1) {
@@ -1174,7 +1169,7 @@ export class PuzzleGeometry {
     return arr[arr.length - 1];
   }
 
-  public project2d(
+  private project2d(
     facen: number,
     edgen: number,
     targvec: Quat[],
@@ -1589,7 +1584,6 @@ export class PuzzleGeometry {
         }
       }
     }
-    this.orbits = cubieords.length;
     this.cubiesetnums = cubiesetnums;
     this.cubieordnums = cubieordnums;
     this.cubiesetnames = cubiesetnames;
@@ -1633,7 +1627,7 @@ export class PuzzleGeometry {
 
   // We use an extremely permissive parse here; any character but
   // digits are allowed in a family name.
-  public stringToBlockMove(mv: string): Move {
+  private stringToBlockMove(mv: string): Move {
     // parse a move from the command line
     const re = RegExp("^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$");
     const p = mv.match(re);
@@ -1763,7 +1757,7 @@ export class PuzzleGeometry {
     return [undefined, msi, loslice, hislice, firstgrip, move.amount];
   }
 
-  public parsemove(
+  private parsemove(
     mv: string,
   ): [string | undefined, number, number, number, boolean, number] {
     const r = this.parseMove(this.stringToBlockMove(mv));
@@ -1957,7 +1951,7 @@ export class PuzzleGeometry {
     this.facecentermass = [];
   }
 
-  public getboundarygeometry(): any {
+  private getboundarygeometry(): any {
     // get the boundary geometry
     return {
       baseplanes: this.baseplanes,
@@ -1969,7 +1963,7 @@ export class PuzzleGeometry {
     };
   }
 
-  public getmovesets(k: number): any {
+  private getmovesets(k: number): any {
     // get the move sets we support based on slices
     // for even values we omit the middle "slice".  This isn't perfect
     // but it is what we do for now.
@@ -2062,7 +2056,7 @@ export class PuzzleGeometry {
     return r;
   }
 
-  public graybyori(cubie: number): boolean {
+  private graybyori(cubie: number): boolean {
     let ori = this.cubies[cubie].length;
     if (this.duplicatedCubies[cubie]) {
       ori = 1;
@@ -2077,7 +2071,7 @@ export class PuzzleGeometry {
     );
   }
 
-  public skipbyori(cubie: number): boolean {
+  private skipbyori(cubie: number): boolean {
     let ori = this.cubies[cubie].length;
     if (this.duplicatedCubies[cubie]) {
       ori = 1;
@@ -2089,19 +2083,11 @@ export class PuzzleGeometry {
     );
   }
 
-  public skipcubie(fi: number): boolean {
+  private skipcubie(fi: number): boolean {
     return this.skipbyori(fi);
   }
 
-  public skipset(set: number[]): boolean {
-    if (set.length === 0) {
-      return true;
-    }
-    const fi = set[0];
-    return this.skipbyori(this.facetocubie[fi]);
-  }
-
-  public header(comment: string): string {
+  private header(comment: string): string {
     return comment + copyright + "\n" + comment + "\n";
   }
 
@@ -2232,7 +2218,7 @@ export class PuzzleGeometry {
     return mv;
   }
 
-  public omitSet(name: string): boolean {
+  private omitSet(name: string): boolean {
     for (const excludedSet of this.options.excludeOrbits) {
       if (excludedSet === name) {
         return true;
@@ -2241,7 +2227,7 @@ export class PuzzleGeometry {
     return false;
   }
 
-  public diffmvsets(a: any[], b: any[], slices: number, neg: boolean) {
+  private diffmvsets(a: any[], b: any[], slices: number, neg: boolean) {
     for (let i = 0; i < a.length; i += 2) {
       let found = false;
       for (let j = 0; !found && j < b.length; j += 2) {
@@ -2270,7 +2256,7 @@ export class PuzzleGeometry {
     return false;
   }
 
-  public getOrbitsDef(
+  private getOrbitsDef(
     fortwisty: boolean,
     includemoves: boolean = true,
   ): OrbitsDef {
@@ -2508,7 +2494,7 @@ export class PuzzleGeometry {
   // with a given vector, and then as much as possible feature2
   // with another given vector, return a Quaternion that
   // performs this rotation.
-  public getOrientationRotation(desiredRotation: any[]): Quat {
+  private getOrientationRotation(desiredRotation: any[]): Quat {
     const [feature1name, [x1, y1, z1]] = desiredRotation[0];
     const direction1 = new Quat(0, x1, -y1, z1);
 
@@ -2540,7 +2526,7 @@ export class PuzzleGeometry {
     return r2.mul(r1);
   }
 
-  public getInitial3DRotation(): Quat {
+  private getInitial3DRotation(): Quat {
     const basefacecount = this.baseFaceCount;
     let orientationDescription: FaceBasedOrientationDescription | null = null;
     if (this.options.puzzleOrientation) {
@@ -2559,7 +2545,7 @@ export class PuzzleGeometry {
     return this.getOrientationRotation(orientationDescription);
   }
 
-  public generate2dmapping(
+  private generate2dmapping(
     w: number = 800,
     h: number = 500,
     trim: number = 10,
@@ -2953,8 +2939,8 @@ export class PuzzleGeometry {
 
 class PGNotation implements MoveNotation {
   private cache: { [key: string]: KTransformation } = {};
-  public orbitNames: string[];
-  constructor(public pg: PuzzleGeometry, od: OrbitsDef) {
+  private orbitNames: string[];
+  constructor(private pg: PuzzleGeometry, od: OrbitsDef) {
     this.orbitNames = od.orbitnames;
   }
 
