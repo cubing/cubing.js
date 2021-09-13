@@ -400,7 +400,7 @@ function defaultOrientations(): FaceBasedOrientationDescriptionLookup {
   };
 }
 
-function findelement(a: any[], p: Quat): number {
+function findelement(a: Quat[][], p: Quat): number {
   // find something in facenames, vertexnames, edgenames
   for (let i = 0; i < a.length; i++) {
     if (a[i][0].dist(p) < eps) {
@@ -478,7 +478,11 @@ export function getPuzzleGeometryByName(
   return getPuzzleGeometryByDesc(PGPuzzles[puzzleName], options);
 }
 
-function getmovename(geo: any, bits: number[], slices: number): any {
+function getmovename(
+  geo: any,
+  bits: number[],
+  slices: number,
+): [string, boolean] {
   // generate a move name based on bits, slice, and geo
   // if the move name is from the opposite face, say so.
   // find the face that's turned.
@@ -510,7 +514,7 @@ function getmovename(geo: any, bits: number[], slices: number): any {
 
 // split a geometrical element into face names.  Do greedy match.
 // Permit underscores between names.
-function splitByFaceNames(s: string, facenames: any[]): string[] {
+function splitByFaceNames(s: string, facenames: [Quat[], string][]): string[] {
   const r: string[] = [];
   let at = 0;
   while (at < s.length) {
@@ -556,17 +560,17 @@ export class PuzzleGeometry {
   public rotations: Quat[]; // all members of the rotation group
   public baseplanerot: Quat[]; // unique rotations of the baseplane
   public baseplanes: Quat[]; // planes, corresponding to faces
-  public facenames: any[]; // face names
-  public faceplanes: any; // face planes
-  public edgenames: any[]; // edge names
-  public vertexnames: any[]; // vertexnames
-  public geonormals: any[]; // all geometric directions, with names and types
+  public facenames: [Quat[], string][]; // face names
+  public faceplanes: [Quat, string][]; // face planes
+  public edgenames: [Quat, string][]; // edge names
+  public vertexnames: [Quat, string][]; // vertexnames
+  public geonormals: [Quat, string, string][]; // all geometric directions, with names and types
   public moveplanes: Quat[]; // the planes that split moves
   public moveplanes2: Quat[]; // the planes that split moves, filtered
-  public moveplanesets: any[]; // the move planes, in parallel sets
+  public moveplanesets: Quat[][]; // the move planes, in parallel sets
   public moveplanenormals: Quat[]; // one move plane
-  public movesetorders: any[]; // the order of rotations for each move set
-  public movesetgeos: any[]; // geometric feature information for move sets
+  public movesetorders: number[]; // the order of rotations for each move set
+  public movesetgeos: [string, string, string, string, number][]; // geometric feature information for move sets
   public basefaces: Face[]; // polytope faces before cuts
   public faces: Face[]; // all the stickers
   public facecentermass: Quat[]; // center of mass of all faces
@@ -582,7 +586,7 @@ export class PuzzleGeometry {
   public facetoord: number[]; // map a face to a cubie ord
   public moverotations: Quat[][]; // move rotations
   public facelisthash: Map<string, number[]>; // face list by key
-  public cubiesetnames: any[]; // cubie set names
+  public cubiesetnames: string[]; // cubie set names
   public cubieords: number[]; // the size of each orbit
   public cubiesetnums: number[];
   public cubieordnums: number[];
@@ -590,13 +594,21 @@ export class PuzzleGeometry {
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
-  public parsedmovelist: any; // parsed move list
+  public parsedmovelist: [
+    string | undefined,
+    number,
+    number,
+    number,
+    boolean,
+    number,
+  ][]; // parsed move list
+
   public duplicatedFaces: number[] = []; // which faces are duplicated
   public duplicatedCubies: number[] = []; // which cubies are duplicated
   public fixedCubie: number = -1; // fixed cubie, if any
-  public net: any = [];
+  public net: string[][] = [];
   public colors: any = [];
-  public faceorder: any = [];
+  public faceorder: string[] = [];
   public faceprecedence: number[] = [];
   public swizzler: FaceNameSwizzler;
   public notationMapper: NotationMapper = new NullMapper();
@@ -736,8 +748,8 @@ export class PuzzleGeometry {
     //   n planes meet at a vertex.  We arbitrarily choose the one that is
     //   alphabetically first (and we will probably want to change this).
     //
-    const facenames: any[] = [];
-    const faceplanes = [];
+    const facenames: [Quat[], string][] = [];
+    const faceplanes: [Quat, string][] = [];
     const vertexnames: any[] = [];
     const edgenames: any[] = [];
     const edgesperface = firstface.length;
@@ -777,7 +789,7 @@ export class PuzzleGeometry {
       otherfaces.push(facelist);
     }
     const facenametoindex: any = {};
-    const faceindextoname: any = [];
+    const faceindextoname: string[] = [];
     faceindextoname.push(net[0][0]);
     facenametoindex[net[0][0]] = 0;
     faceindextoname[otherfaces[0][0]] = net[0][1];
@@ -850,7 +862,7 @@ export class PuzzleGeometry {
         searchaddelement(vertexnames, face[jj], [facename, e2, e1]);
       }
     }
-    this.swizzler = new FaceNameSwizzler(facenames.map((_: any) => _[1]));
+    this.swizzler = new FaceNameSwizzler(facenames.map((_) => _[1]));
     const sep = this.swizzler.prefixFree ? "" : "_";
     // fix the edge names; use face precedence order
     for (let i = 0; i < edgenames.length; i++) {
@@ -902,13 +914,11 @@ export class PuzzleGeometry {
     }
     if (this.options.verbosity > 1) {
       console.log("# Face precedence list: " + this.faceorder.join(" "));
-      console.log("# Face names: " + facenames.map((_: any) => _[1]).join(" "));
-      console.log("# Edge names: " + edgenames.map((_: any) => _[1]).join(" "));
-      console.log(
-        "# Vertex names: " + vertexnames.map((_: any) => _[1]).join(" "),
-      );
+      console.log("# Face names: " + facenames.map((_) => _[1]).join(" "));
+      console.log("# Edge names: " + edgenames.map((_) => _[1]).join(" "));
+      console.log("# Vertex names: " + vertexnames.map((_) => _[1]).join(" "));
     }
-    const geonormals = [];
+    const geonormals: [Quat, string, string][] = [];
     for (let i = 0; i < faceplanes.length; i++) {
       geonormals.push([faceplanes[i][0].makenormal(), faceplanes[i][1], "f"]);
     }
@@ -923,7 +933,7 @@ export class PuzzleGeometry {
     this.edgenames = edgenames;
     this.vertexnames = vertexnames;
     this.geonormals = geonormals;
-    const geonormalnames = geonormals.map((_: any) => _[1]);
+    const geonormalnames = geonormals.map((_) => _[1]);
     this.swizzler.setGripNames(geonormalnames);
     if (this.options.verbosity > 0) {
       console.log(
@@ -1164,7 +1174,11 @@ export class PuzzleGeometry {
     return arr[arr.length - 1];
   }
 
-  public project2d(facen: number, edgen: number, targvec: Quat[]): any {
+  public project2d(
+    facen: number,
+    edgen: number,
+    targvec: Quat[],
+  ): [Quat, Quat, Quat] {
     // calculate geometry to map a particular edge of a particular
     //  face to a given 2D vector.  The face is given as an index into the
     //  facenames/baseplane arrays, and the edge is given as an offset into
@@ -1288,7 +1302,7 @@ export class PuzzleGeometry {
     }
     const sizes2 = moverotations.map((_) => 1 + _.length);
     this.movesetorders = sizes2;
-    const movesetgeos = [];
+    const movesetgeos: [string, string, string, string, number][] = [];
     let gtype = "?";
     for (let i = 0; i < moveplanesets.length; i++) {
       const p0 = moveplanenormals[i];
@@ -1650,7 +1664,9 @@ export class PuzzleGeometry {
     return new Move(new QuantumMove(grip, hislice, loslice), amount);
   }
 
-  public parseMove(move: Move): any {
+  public parseMove(
+    move: Move,
+  ): [string | undefined, number, number, number, boolean, number] {
     const bm = this.notationMapper.notationToInternal(move); // pluggable notation
     if (bm === null) {
       throw new Error("Bad move " + move.family);
@@ -1744,11 +1760,12 @@ export class PuzzleGeometry {
         "! full puzzle rotations must be specified with v suffix.",
       );
     }
-    const r = [undefined, msi, loslice, hislice, firstgrip, move.amount];
-    return r;
+    return [undefined, msi, loslice, hislice, firstgrip, move.amount];
   }
 
-  public parsemove(mv: string): any {
+  public parsemove(
+    mv: string,
+  ): [string | undefined, number, number, number, boolean, number] {
     const r = this.parseMove(this.stringToBlockMove(mv));
     r[0] = mv;
     return r;
@@ -1922,7 +1939,14 @@ export class PuzzleGeometry {
     }
     this.cmovesbyslice = cmovesbyslice;
     if (this.options.moveList) {
-      const parsedmovelist: any[] = [];
+      const parsedmovelist: [
+        string | undefined,
+        number,
+        number,
+        number,
+        boolean,
+        number,
+      ][] = [];
       // make sure the movelist makes sense based on the geos.
       for (const moveString of this.options.moveList) {
         parsedmovelist.push(this.parsemove(moveString));
@@ -1951,7 +1975,7 @@ export class PuzzleGeometry {
     // but it is what we do for now.
     // if there was a move list specified, pull values from that
     const slices = this.moveplanesets[k].length;
-    let r = [];
+    let r: any[] = [];
     if (this.parsedmovelist !== undefined) {
       for (let i = 0; i < this.parsedmovelist.length; i++) {
         const parsedmove = this.parsedmovelist[i];
@@ -2796,9 +2820,9 @@ export class PuzzleGeometry {
   // to work pretty well.  It should be a number between probably
   // 0.4 and 0.9.
   public get3d(options?: { stickerColors?: string[] }): StickerDat {
-    const stickers: any = [];
+    const stickers = [];
     const rot = this.getInitial3DRotation();
-    const faces: any = [];
+    const faces = [];
     const maxdist: number = 0.52 * this.basefaces[0].get(0).len();
     for (let i = 0; i < this.basefaces.length; i++) {
       const coords = this.basefaces[i].rotate(rot);
