@@ -51,7 +51,7 @@ export class Twisty2DPuzzle
     this.resetSVG(); // TODO: do this in `connectedCallback()`?
 
     this.#freshListenerManager.addListener(
-      this.model!.puzzleProp,
+      this.model!.puzzleIDProp,
       (puzzleID: PuzzleID) => {
         if (puzzleLoader?.id !== puzzleID) {
           this.disconnect();

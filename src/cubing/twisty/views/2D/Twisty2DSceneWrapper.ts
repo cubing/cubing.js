@@ -29,7 +29,7 @@ export class Twisty2DSceneWrapper
     this.addCSS(twistyViewerWrapperCSS);
     if (this.model) {
       this.#freshListenerManager.addListener(
-        this.model.puzzleProp,
+        this.model.puzzleIDProp,
         this.onPuzzle.bind(this),
       );
     }

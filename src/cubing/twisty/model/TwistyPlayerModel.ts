@@ -7,7 +7,7 @@ import { IndexerConstructorRequestProp } from "./depth-0/IndexerConstructorReque
 import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
 import { OrbitCoordinatesRequestProp } from "./depth-0/OrbitCoordinatesRequestProp";
 import { PlayingInfoProp } from "./depth-0/PlayingInfoProp";
-import { PuzzleProp } from "./depth-0/PuzzleProp";
+import { PuzzleIDProp } from "./depth-0/PuzzleIDProp";
 import { SetupAnchorProp } from "./depth-0/SetupAnchorProp";
 import { StickeringProp } from "./depth-0/StickeringProp";
 import { TempoScaleProp } from "./depth-0/TempoScaleProp";
@@ -51,7 +51,7 @@ export class TwistyPlayerModel {
     new OrbitCoordinatesRequestProp();
 
   playingInfoProp = new PlayingInfoProp();
-  puzzleProp = new PuzzleProp();
+  puzzleIDProp = new PuzzleIDProp();
   setupAnchorProp = new SetupAnchorProp();
   setupProp = new AlgProp();
   stickeringProp = new StickeringProp();
@@ -72,20 +72,20 @@ export class TwistyPlayerModel {
   orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
     latitudeLimit: this.latitudeLimitProp,
-    puzzleID: this.puzzleProp,
+    puzzleID: this.puzzleIDProp,
   });
 
-  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
+  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleIDProp });
 
   visualizationStrategyProp = new VisualizationStrategyProp({
     visualizationRequest: this.visualizationFormatProp,
-    puzzleID: this.puzzleProp,
+    puzzleID: this.puzzleIDProp,
   });
 
   // Depth 2
   indexerConstructorProp = new IndexerConstructorProp({
     alg: this.algProp,
-    puzzle: this.puzzleProp,
+    puzzle: this.puzzleIDProp,
     visualizationStrategy: this.visualizationStrategyProp,
     indexerConstructorRequest: this.indexerConstructorRequestProp,
   });
@@ -172,7 +172,7 @@ export class TwistyPlayerModel {
     const url = new URL("https://alpha.twizzle.net/edit/");
 
     const [puzzle, alg, setup, anchor] = await Promise.all([
-      this.puzzleProp.get(),
+      this.puzzleIDProp.get(),
       this.algProp.get(),
       this.setupProp.get(),
       this.setupAnchorProp.get(),

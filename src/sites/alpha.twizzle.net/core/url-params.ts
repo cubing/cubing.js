@@ -16,7 +16,7 @@ export class URLParamUpdater {
   constructor(model: TwistyPlayerModel, private prefix = "") {
     this.listenToAlgProp(model.algProp, "alg");
     this.listenToAlgProp(model.setupProp, "experimental-setup-alg");
-    this.listenToStringSourceProp(model.puzzleProp, "puzzle");
+    this.listenToStringSourceProp(model.puzzleIDProp, "puzzle");
     this.listenToStringSourceProp(
       model.stickeringProp,
       "experimental-stickering",

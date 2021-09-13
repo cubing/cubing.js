@@ -181,7 +181,7 @@ export class TwistyPlayer
       this.#setVisualizationWrapper.bind(this),
     );
 
-    this.experimentalModel.puzzleProp.addFreshListener(this.flash.bind(this));
+    this.experimentalModel.puzzleIDProp.addFreshListener(this.flash.bind(this));
   }
 
   flash() {

@@ -31,7 +31,7 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set experimentalSetupAnchor(anchor: SetupToLocation) { this.experimentalModel.setupAnchorProp.set(anchor); }
   get experimentalSetupAnchor(): never { throw err("anchor"); }
 
-  set puzzle(puzzleID: PuzzleID) { this.experimentalModel.puzzleProp.set(puzzleID); }
+  set puzzle(puzzleID: PuzzleID) { this.experimentalModel.puzzleIDProp.set(puzzleID); }
   get puzzle(): never { throw err("puzzle"); }
 
   set timestamp(timestamp: TimestampRequest) { this.experimentalModel.timestampRequestProp.set(timestamp); }
