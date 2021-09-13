@@ -507,8 +507,8 @@ export class TransformationBase {
 
   protected internalInv(): Orbit[] {
     const newOrbits: Orbit[] = [];
-    for (let i = 0; i < this.orbits.length; i++) {
-      newOrbits.push(this.orbits[i].inv());
+    for (const orbit of this.orbits) {
+      newOrbits.push(orbit.inv());
     }
     return newOrbits;
   }
@@ -523,8 +523,8 @@ export class TransformationBase {
   }
 
   protected killOri(): this {
-    for (let i = 0; i < this.orbits.length; i++) {
-      this.orbits[i].killOri();
+    for (const orbit of this.orbits) {
+      orbit.killOri();
     }
     return this;
   }
@@ -532,15 +532,14 @@ export class TransformationBase {
   public toPerm(): Perm {
     const perms = new Array<Perm>();
     let n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const p = this.orbits[i].toPerm();
+    for (const orbit of this.orbits) {
+      const p = orbit.toPerm();
       perms.push(p);
       n += p.n;
     }
     const newPerm = new Array<number>(n);
     n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const p = perms[i];
+    for (const p of perms) {
       for (let j = 0; j < p.n; j++) {
         newPerm[n + j] = n + p.p[j];
       }
@@ -552,21 +551,21 @@ export class TransformationBase {
   public identicalPieces(): number[][] {
     const r: number[][] = [];
     let n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const o = this.orbits[i].orimod;
-      const s = this.orbits[i].identicalPieces();
+    for (const orbit of this.orbits) {
+      const o = orbit.orimod;
+      const s = orbit.identicalPieces();
       for (let j = 0; j < s.length; j++) {
         r.push(s[j].map((_) => _ * o + n));
       }
-      n += o * this.orbits[i].perm.length;
+      n += o * orbit.perm.length;
     }
     return r;
   }
 
   public order(): number {
     let r = 1;
-    for (let i = 0; i < this.orbits.length; i++) {
-      r = lcm(r, this.orbits[i].order());
+    for (const orbit of this.orbits) {
+      r = lcm(r, orbit.order());
     }
     return r;
   }
