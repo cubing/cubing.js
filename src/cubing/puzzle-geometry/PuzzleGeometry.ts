@@ -2844,8 +2844,11 @@ export class PuzzleGeometry {
       });
       let fcoords = coords;
       if (this.duplicatedFaces[i]) {
+        let rotdist = fcoords.length / this.duplicatedFaces[i];
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
-          fcoords = fcoords.rotateforward();
+          for (let k = 0; k < rotdist; k++) {
+            fcoords = fcoords.rotateforward();
+          }
           stickers.push({
             coords: toFaceCoords(fcoords, maxdist),
             color,
