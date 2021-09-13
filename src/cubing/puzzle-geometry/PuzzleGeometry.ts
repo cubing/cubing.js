@@ -1600,7 +1600,7 @@ export class PuzzleGeometry {
     this.cubievaluemap = cubievaluemap;
     this.cubiesetcubies = cubiesetcubies;
     // if we fix a cubie, find a cubie to fix
-    if (this.options.fixedPieceType !== "") {
+    if (this.options.fixedPieceType !== null) {
       for (let i = 0; i < cubies.length; i++) {
         if (
           (this.options.fixedPieceType === "v" && cubies[i].length > 2) ||

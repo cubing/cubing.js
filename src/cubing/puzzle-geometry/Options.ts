@@ -92,7 +92,7 @@ export class PuzzleGeometryFullOptions {
   moveList: string[] | null = null; // move list to generate
 
   fixedOrientation: boolean = false; // eliminate any orientations
-  fixedPieceType: "" | "e" | "v" | "f" = ""; // fix a piece?
+  fixedPieceType: null | "e" | "v" | "f" = null; // fix a piece?
   orientCenters: boolean = false; // orient centers?
 
   // TODO: Group these into a single object?
