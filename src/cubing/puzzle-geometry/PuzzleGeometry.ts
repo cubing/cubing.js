@@ -571,6 +571,8 @@ class PuzzleGeometryOptionsObject {
   fixedOrientation: boolean = false; // eliminate any orientations
 
   optimizeOrbits: boolean = false; // optimize PermOri
+
+  scrambleAmount: number = 0; // scramble?
 }
 
 export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
@@ -617,7 +619,6 @@ export class PuzzleGeometry {
   // options TODO
   public parsedmovelist: any; // parsed move list
   // options
-  public scramble: number = 0; // scramble?
   public fixPiece: string = ""; // fix a piece?
   public orientCenters: boolean = false; // orient centers?
   public duplicatedFaces: number[] = []; // which faces are duplicated
@@ -689,7 +690,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "optimize") {
           this.options.optimizeOrbits = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "scramble") {
-          this.scramble = optionlist[i + 1];
+          this.options.scrambleAmount = optionlist[i + 1];
         } else if (optionlist[i] === "fix") {
           this.fixPiece = optionlist[i + 1];
         } else if (optionlist[i] === "orientcenters") {
@@ -2563,8 +2564,8 @@ export class PuzzleGeometry {
     if (this.options.optimizeOrbits) {
       r = r.optimize();
     }
-    if (this.scramble !== 0) {
-      r.scramble(this.scramble);
+    if (this.options.scrambleAmount !== 0) {
+      r.scramble(this.options.scrambleAmount);
     }
     return r;
   }
