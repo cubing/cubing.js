@@ -558,7 +558,7 @@ function toFaceCoords(q: Face, maxdist: number): number[] {
 
 export class PuzzleGeometry {
   private rotations: Quat[]; // all members of the rotation group
-  private baseplanerot: Quat[]; // unique rotations of the baseplane
+  public baseplanerot: Quat[]; // unique rotations of the baseplane
   private baseplanes: Quat[]; // planes, corresponding to faces
   private facenames: [Quat[], string][]; // face names
   private faceplanes: [Quat, string][]; // face planes
@@ -575,8 +575,8 @@ export class PuzzleGeometry {
   private faces: Face[]; // all the stickers
   private facecentermass: Quat[]; // center of mass of all faces
   private baseFaceCount: BaseFaceCount; // number of base faces
-  private stickersperface: number; // number of stickers per face
-  private cubies: number[][]; // the cubies
+  public stickersperface: number; // number of stickers per face
+  public cubies: number[][]; // the cubies
   private vertexdistance: number; // vertex distance
   private edgedistance: number; // edge distance
   private facetocubie: number[]; // map a face to a cubie index
@@ -608,7 +608,7 @@ export class PuzzleGeometry {
   private faceorder: string[] = [];
   private faceprecedence: number[] = [];
   private swizzler: FaceNameSwizzler;
-  private notationMapper: NotationMapper = new NullMapper();
+  public notationMapper: NotationMapper = new NullMapper();
   private addNotationMapper: string = "";
   private setReidOrder: boolean = false;
 
