@@ -618,9 +618,7 @@ export class PuzzleGeometry {
   public cubievaluemap: number[]; // the map for identical cubies
   public cubiesetcubies: number[][]; // cubies in each cubie set
   public cmovesbyslice: number[][][] = []; // cmoves as perms by slice
-  // options TODO
   public parsedmovelist: any; // parsed move list
-  // options
   public duplicatedFaces: number[] = []; // which faces are duplicated
   public duplicatedCubies: number[] = []; // which cubies are duplicated
   public fixedCubie: number = -1; // fixed cubie, if any
