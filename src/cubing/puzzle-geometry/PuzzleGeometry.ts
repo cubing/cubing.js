@@ -569,6 +569,7 @@ class PuzzleGeometryOptionsObject {
   grayEdges: boolean = false; // make edge sets gray
 
   fixedOrientation: boolean = false; // eliminate any orientations
+  fixedPieceType: "" | "e" | "v" | "f" = ""; // fix a piece?
 
   optimizeOrbits: boolean = false; // optimize PermOri
 
@@ -619,7 +620,6 @@ export class PuzzleGeometry {
   // options TODO
   public parsedmovelist: any; // parsed move list
   // options
-  public fixPiece: string = ""; // fix a piece?
   public orientCenters: boolean = false; // orient centers?
   public duplicatedFaces: number[] = []; // which faces are duplicated
   public duplicatedCubies: number[] = []; // which cubies are duplicated
@@ -692,7 +692,7 @@ export class PuzzleGeometry {
         } else if (optionlist[i] === "scramble") {
           this.options.scrambleAmount = optionlist[i + 1];
         } else if (optionlist[i] === "fix") {
-          this.fixPiece = optionlist[i + 1];
+          this.options.fixedPieceType = optionlist[i + 1];
         } else if (optionlist[i] === "orientcenters") {
           this.orientCenters = asboolean(optionlist[i + 1]);
         } else if (optionlist[i] === "puzzleorientation") {
@@ -1698,12 +1698,12 @@ export class PuzzleGeometry {
     this.cubievaluemap = cubievaluemap;
     this.cubiesetcubies = cubiesetcubies;
     // if we fix a cubie, find a cubie to fix
-    if (this.fixPiece !== "") {
+    if (this.options.fixedPieceType !== "") {
       for (let i = 0; i < cubies.length; i++) {
         if (
-          (this.fixPiece === "v" && cubies[i].length > 2) ||
-          (this.fixPiece === "e" && cubies[i].length === 2) ||
-          (this.fixPiece === "f" && cubies[i].length === 1)
+          (this.options.fixedPieceType === "v" && cubies[i].length > 2) ||
+          (this.options.fixedPieceType === "e" && cubies[i].length === 2) ||
+          (this.options.fixedPieceType === "f" && cubies[i].length === 1)
         ) {
           this.fixedCubie = i;
           break;
@@ -1711,7 +1711,9 @@ export class PuzzleGeometry {
       }
       if (this.fixedCubie < 0) {
         throw new Error(
-          "Could not find a cubie of type " + this.fixPiece + " to fix.",
+          "Could not find a cubie of type " +
+            this.options.fixedPieceType +
+            " to fix.",
         );
       }
     }
