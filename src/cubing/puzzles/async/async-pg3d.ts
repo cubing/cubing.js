@@ -11,14 +11,11 @@ export async function asyncGetPuzzleGeometry(
   puzzleName: string,
 ): Promise<PuzzleGeometry> {
   const puzzleGeometry = await import("../../puzzle-geometry");
-  return puzzleGeometry.getPuzzleGeometryByName(puzzleName, [
-    "allmoves",
-    "true",
-    "orientcenters",
-    "true",
-    "rotations",
-    "true",
-  ]);
+  return puzzleGeometry.getPuzzleGeometryByName(puzzleName, {
+    allMoves: true,
+    orientCenters: true,
+    addRotations: true,
+  });
 }
 
 // TODO: can we cache the puzzleGeometry to avoid duplicate calls, without

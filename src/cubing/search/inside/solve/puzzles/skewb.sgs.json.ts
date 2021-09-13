@@ -3,12 +3,10 @@ import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
 async function skewbDefWithoutMO(): Promise<KPuzzleDefinition> {
-  return getPuzzleGeometryByName("skewb", [
-    "allmoves",
-    "true",
-    "rotations",
-    "true",
-  ]).writekpuzzle(true);
+  return getPuzzleGeometryByName("skewb", {
+    allMoves: true,
+    addRotations: true,
+  }).writekpuzzle(true);
 }
 
 // TODO: Implement a general lazy Promise/ Promise cache wrapper

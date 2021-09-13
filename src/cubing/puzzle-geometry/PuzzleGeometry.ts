@@ -448,13 +448,14 @@ export function parsedesc(s: string): any {
 
 export function getPuzzleGeometryByDesc(
   desc: string,
-  options: string[] = [],
+  options: PuzzleGeometryOptions = {},
 ): PuzzleGeometry {
   const [shape, cuts] = parsedesc(desc);
   const pg = new PuzzleGeometry(
     shape,
     cuts,
-    ["allmoves", "true"].concat(options),
+    undefined,
+    Object.assign({}, options, { allMoves: true } as PuzzleGeometryOptions),
   );
   pg.allstickers();
   pg.genperms();
@@ -463,7 +464,7 @@ export function getPuzzleGeometryByDesc(
 
 export function getPuzzleGeometryByName(
   puzzleName: PuzzleName,
-  options: string[] = [],
+  options?: PuzzleGeometryOptions,
 ): PuzzleGeometry {
   return getPuzzleGeometryByDesc(PGPuzzles[puzzleName], options);
 }
@@ -599,8 +600,8 @@ export class PuzzleGeometry {
   constructor(
     shape: string,
     cuts: string[][],
-    optionlist?: any[],
-    options?: PuzzleGeometryOptions,
+    optionlist: any[] | undefined,
+    options: PuzzleGeometryOptions,
   ) {
     this.options = optionListToObject(optionlist, options);
     this.args = shape + " " + cuts.map((_) => _.join(" ")).join(" ");

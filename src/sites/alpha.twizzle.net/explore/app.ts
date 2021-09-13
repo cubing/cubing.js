@@ -457,7 +457,7 @@ function dowork(cmd: string): void {
     options.push("killorientation", true);
   }
   const p = myparsedesc(descinput.value, options);
-  const pg = new PuzzleGeometry(p[0], p[1], options);
+  const pg = new PuzzleGeometry(p[0], p[1], options, {});
   nextShape = p[0];
   pg.allstickers();
   pg.genperms();
@@ -564,7 +564,7 @@ function checkchange_internal(): void {
       for (let i = 0; i < moreoptions.length; i++) {
         options.push(moreoptions[i]);
       }
-      pg = new PuzzleGeometry(p[0], p[1], options);
+      pg = new PuzzleGeometry(p[0], p[1], options, {});
       nextShape = p[0];
       pg.allstickers();
       pg.genperms();

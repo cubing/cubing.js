@@ -166,7 +166,7 @@ if (
     }
     createargs = [process.argv[cutarg], cuts];
   }
-  const pg = new PuzzleGeometry(createargs[0], createargs[1], optionlist);
+  const pg = new PuzzleGeometry(createargs[0], createargs[1], optionlist, {});
   pg.allstickers();
   pg.genperms();
   // TODO: if (!optionlist.includes("verbose"))
