@@ -1149,23 +1149,7 @@ export class PuzzleGeometry {
     return r;
   }
 
-  public findface(face: Face): number {
-    const cm = face.centermass();
-    const key = this.keyface2(cm);
-    const arr = this.facelisthash.get(key)!;
-    if (arr.length === 1) {
-      return arr[0];
-    }
-    for (let i = 0; i + 1 < arr.length; i++) {
-      const face2 = this.facelisthash.get(key)![i];
-      if (Math.abs(cm.dist(this.facecentermass[face2])) < eps) {
-        return face2;
-      }
-    }
-    return arr[arr.length - 1];
-  }
-
-  public findface2(cm: Quat): number {
+  public findface(cm: Quat): number {
     const key = this.keyface2(cm);
     const arr = this.facelisthash.get(key)!;
     if (arr.length === 1) {
@@ -1531,7 +1515,7 @@ export class PuzzleGeometry {
           for (let j = 0; j < moverotations.length; j++) {
             const tq =
               this.facetocubie[
-                this.findface2(cm.rotatepoint(moverotations[j][0]))
+                this.findface(cm.rotatepoint(moverotations[j][0]))
               ];
             if (!seen[tq]) {
               queue.push(tq);
@@ -1847,7 +1831,7 @@ export class PuzzleGeometry {
           if (cm2.dist(ocm) < eps) {
             break;
           }
-          fi2 = this.findface2(cm2);
+          fi2 = this.findface(cm2);
           b.push(this.facetocubie[fi2], this.facetoord[fi2]);
           cm = cm2;
         }
