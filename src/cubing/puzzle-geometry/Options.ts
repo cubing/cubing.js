@@ -82,15 +82,15 @@ function asboolean(v: any): boolean {
   }
 }
 
-export class PuzzleGeometryOptionsObject {
+export class PuzzleGeometryFullOptions {
   verbosity: number = 0; // verbosity (console.log)
   allMoves: boolean = false; // generate all slice moves in ksolve
   outerBlockMoves: boolean; // generate outer block moves
-  vertexMoves: boolean; // generate vertex moves
-  addRotations: boolean; // add symmetry information to ksolve output
-  moveList?: string[]; // move list to generate
-  puzzleOrientation: FaceBasedOrientationDescription; // single puzzle orientation from options
-  puzzleOrientations: FaceBasedOrientationDescriptionLookup; // puzzle orientation override object from options // TODO: is this needed?
+  vertexMoves: boolean = false; // generate vertex moves
+  addRotations: boolean = false; // add symmetry information to ksolve output
+  moveList: string[] | null = null; // move list to generate
+  puzzleOrientation: FaceBasedOrientationDescription | null = null; // single puzzle orientation from options
+  puzzleOrientations: FaceBasedOrientationDescriptionLookup | null = null; // puzzle orientation override object from options // TODO: is this needed?
 
   // TODO: Group these into a single object?
   includeCornerOrbits: boolean = true; // include corner orbits
@@ -110,14 +110,18 @@ export class PuzzleGeometryOptionsObject {
   optimizeOrbits: boolean = false; // optimize PermOri
 
   scrambleAmount: number = 0; // scramble?
+
+  constructor(options: PuzzleGeometryOptions = {}) {
+    Object.assign(this, options);
+  }
 }
 
-export type PuzzleGeometryOptions = Partial<PuzzleGeometryOptionsObject>;
+export type PuzzleGeometryOptions = Partial<PuzzleGeometryFullOptions>;
 
 export function parsePGOptionList(
   optionlist?: any[],
-): PuzzleGeometryOptionsObject {
-  const optionsObject = new PuzzleGeometryOptionsObject();
+): PuzzleGeometryFullOptions {
+  const optionsObject = new PuzzleGeometryFullOptions();
   if (optionlist !== undefined) {
     if (optionlist.length % 2 !== 0) {
       throw new Error("Odd length in option list?");

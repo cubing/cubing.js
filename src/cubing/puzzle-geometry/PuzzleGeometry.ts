@@ -26,7 +26,7 @@ import {
   FaceBasedOrientationDescription,
   FaceBasedOrientationDescriptionLookup,
   PuzzleGeometryOptions,
-  PuzzleGeometryOptionsObject,
+  PuzzleGeometryFullOptions,
 } from "./Options";
 import { iota, Perm, zeros } from "./Perm";
 import {
@@ -603,13 +603,13 @@ export class PuzzleGeometry {
   public addNotationMapper: string = "";
   public setReidOrder: boolean = false;
 
-  private options = new PuzzleGeometryOptionsObject();
+  private options: PuzzleGeometryFullOptions;
 
   constructor(
     puzzleDescription: PuzzleDescription,
     options: PuzzleGeometryOptions,
   ) {
-    Object.assign(this.options, options);
+    this.options = new PuzzleGeometryFullOptions(options);
     if (this.options.verbosity > 0) {
       console.log(this.header("# "));
     }
