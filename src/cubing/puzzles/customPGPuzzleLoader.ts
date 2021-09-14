@@ -1,13 +1,13 @@
-import type { KPuzzleDefinition } from "../../../kpuzzle";
-import type { PuzzleGeometry } from "../../../puzzle-geometry";
-import type { PuzzleDescriptionString } from "../../../puzzle-geometry/PGPuzzles";
-import type { PuzzleLoader } from "../../../puzzles";
+import type { KPuzzleDefinition } from "../kpuzzle";
+import type { PuzzleGeometry } from "../puzzle-geometry";
+import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
+import type { PuzzleLoader } from "./PuzzleLoader";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function descAsyncGetPuzzleGeometry(
   desc: PuzzleDescriptionString,
 ): Promise<PuzzleGeometry> {
-  const puzzleGeometry = await import("../../../puzzle-geometry");
+  const puzzleGeometry = await import("../puzzle-geometry");
   return puzzleGeometry.getPuzzleGeometryByDesc(desc, {
     allMoves: true,
     orientCenters: true,
@@ -24,9 +24,10 @@ export async function dsecAsyncGetDef(
   return (await descAsyncGetPuzzleGeometry(desc)).writekpuzzle(true);
 }
 
+// TODO: Can we avoid relying on IDs to deduplicate work at higher levels?
 let nextCustomID = 1;
 
-export function descGenericPGPuzzleLoader(
+export function customPGPuzzleLoader(
   desc: PuzzleDescriptionString,
   info?: {
     fullName?: string;

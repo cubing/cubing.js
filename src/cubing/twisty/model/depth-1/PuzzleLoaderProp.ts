@@ -1,9 +1,13 @@
 import type { PuzzleDescriptionString } from "../../../puzzle-geometry/PGPuzzles";
-import { cube3x3x3, PuzzleLoader, puzzles } from "../../../puzzles";
+import {
+  cube3x3x3,
+  experimentalCustomPGPuzzleLoader,
+  PuzzleLoader,
+  puzzles,
+} from "../../../puzzles";
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import { NoValueType, NO_VALUE, TwistyPropDerived } from "../TwistyProp";
-import { descGenericPGPuzzleLoader } from "./PuzzleLoader-helper";
-
+8;
 interface PuzzleLoaderPropInputs {
   puzzleIDRequest: PuzzleID | NoValueType;
   puzzleDescriptionRequest: PuzzleDescriptionString | NoValueType;
@@ -21,7 +25,7 @@ export class PuzzleLoaderProp extends TwistyPropDerived<
       inputs.puzzleDescriptionRequest &&
       inputs.puzzleDescriptionRequest !== NO_VALUE
     ) {
-      return descGenericPGPuzzleLoader(inputs.puzzleDescriptionRequest);
+      return experimentalCustomPGPuzzleLoader(inputs.puzzleDescriptionRequest);
     }
     return cube3x3x3;
   }
