@@ -2,7 +2,7 @@ import type { Scene as ThreeScene } from "three";
 import type { PuzzleLoader } from "../../../puzzles";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import type { BackViewLayoutWithAuto } from "../../model/depth-0/BackViewProp";
-import type { VisualizationStrategy } from "../../model/depth-1/VisualizationStrategyProp";
+import type { VisualizationStrategy } from "../../model/depth-3/VisualizationStrategyProp";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/TwistyProp";

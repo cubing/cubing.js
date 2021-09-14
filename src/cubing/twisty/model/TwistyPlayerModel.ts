@@ -9,7 +9,7 @@ import { OrbitCoordinatesRequestProp } from "./depth-0/OrbitCoordinatesRequestPr
 import { PlayingInfoProp } from "./depth-0/PlayingInfoProp";
 import { PGPuzzleDescriptionStringProp } from "./depth-0/PuzzleDescriptionProp";
 import { PuzzleIDRequestProp } from "./depth-0/PuzzleIDRequestProp";
-import { PuzzleLoaderProp } from "./depth-0/PuzzleLoaderProp";
+import { PuzzleLoaderProp } from "./depth-1/PuzzleLoaderProp";
 import { SetupAnchorProp } from "./depth-0/SetupAnchorProp";
 import { StickeringProp } from "./depth-0/StickeringProp";
 import { TempoScaleProp } from "./depth-0/TempoScaleProp";
@@ -17,24 +17,24 @@ import { TimestampRequestProp } from "./depth-0/TimestampRequestProp";
 import { URLProp } from "./depth-0/URLProp";
 import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
 import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
-import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
-import { PuzzleDefProp } from "./depth-1/PuzzleDefProp";
-import { PuzzleIDProp } from "./depth-1/PuzzleIDProp";
+import { OrbitCoordinatesProp } from "./depth-3/OrbitCoordinatesProp";
+import { PuzzleIDProp } from "./depth-2/PuzzleIDProp";
 import { SpriteProp } from "./depth-1/SpriteProp";
-import { VisualizationStrategyProp } from "./depth-1/VisualizationStrategyProp";
-import { IndexerConstructorProp } from "./depth-2/IndexerConstructorProp";
-import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
-import { AlgTransformationProp } from "./depth-3/AlgTransformationProp";
-import { IndexerProp } from "./depth-3/IndexerProp";
-import { AnchoredStartProp } from "./depth-4/AnchoredStartProp";
-import { TimeRangeProp } from "./depth-4/TimeRangeProp";
-import { DetailedTimelineInfoProp } from "./depth-5/DetailedTimelineInfoProp";
-import { CoarseTimelineInfoProp } from "./depth-6/CoarseTimelineInfoProp";
-import { CurrentLeavesProp } from "./depth-6/CurrentLeavesProp";
-import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
-import { CurrentLeavesSimplifiedProp } from "./depth-7/CurrentLeavesSimplified";
-import { CurrentTransformationProp } from "./depth-8/CurrentTransformationProp";
-import { LegacyPositionProp } from "./depth-9/LegacyPositionProp";
+import { VisualizationStrategyProp } from "./depth-3/VisualizationStrategyProp";
+import { IndexerConstructorProp } from "./depth-4/IndexerConstructorProp";
+import { PuzzleAlgProp } from "./depth-3/PuzzleAlgProp";
+import { AlgTransformationProp } from "./depth-4/AlgTransformationProp";
+import { IndexerProp } from "./depth-5/IndexerProp";
+import { AnchoredStartProp } from "./depth-6/AnchoredStartProp";
+import { TimeRangeProp } from "./depth-6/TimeRangeProp";
+import { DetailedTimelineInfoProp } from "./depth-7/DetailedTimelineInfoProp";
+import { CoarseTimelineInfoProp } from "./depth-8/CoarseTimelineInfoProp";
+import { CurrentLeavesProp } from "./depth-8/CurrentLeavesProp";
+import { ButtonAppearanceProp } from "./depth-9/ButtonAppearanceProp";
+import { CurrentLeavesSimplifiedProp } from "./depth-9/CurrentLeavesSimplified";
+import { CurrentTransformationProp } from "./depth-10/CurrentTransformationProp";
+import { LegacyPositionProp } from "./depth-11/LegacyPositionProp";
+import { PuzzleDefProp } from "./depth-2/PuzzleDefProp";
 
 export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
@@ -48,22 +48,13 @@ export class TwistyPlayerModel {
   hintFaceletProp = new HintFaceletProp();
   hintStickerSpriteURL = new URLProp();
   indexerConstructorRequestProp = new IndexerConstructorRequestProp();
-
   latitudeLimitProp = new LatitudeLimitProp();
   orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
 
   playingInfoProp = new PlayingInfoProp();
-
-  puzzleIDRequestProp = new PuzzleIDRequestProp();
   puzzleDescriptionRequestProp = new PGPuzzleDescriptionStringProp();
-  puzzleLoaderProp = new PuzzleLoaderProp({
-    puzzleIDRequest: this.puzzleIDRequestProp,
-    puzzleDescriptionRequest: this.puzzleDescriptionRequestProp,
-  });
-
-  puzzleIDProp = new PuzzleIDProp({ puzzleLoader: this.puzzleLoaderProp });
-
+  puzzleIDRequestProp = new PuzzleIDRequestProp();
   setupAnchorProp = new SetupAnchorProp();
   setupProp = new AlgProp();
   stickeringProp = new StickeringProp();
@@ -81,25 +72,22 @@ export class TwistyPlayerModel {
     spriteURL: this.hintStickerSpriteURL,
   });
 
+  puzzleLoaderProp = new PuzzleLoaderProp({
+    puzzleIDRequest: this.puzzleIDRequestProp,
+    puzzleDescriptionRequest: this.puzzleDescriptionRequestProp,
+  });
+
+  // Depth 2
+  puzzleDefProp = new PuzzleDefProp({ puzzleLoader: this.puzzleLoaderProp });
+
+  puzzleIDProp = new PuzzleIDProp({ puzzleLoader: this.puzzleLoaderProp });
+
+  // Depth 3
+
   orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
     latitudeLimit: this.latitudeLimitProp,
     puzzleID: this.puzzleIDProp,
-  });
-
-  puzzleDefProp = new PuzzleDefProp({ puzzleLoader: this.puzzleLoaderProp });
-
-  visualizationStrategyProp = new VisualizationStrategyProp({
-    visualizationRequest: this.visualizationFormatProp,
-    puzzleID: this.puzzleIDProp,
-  });
-
-  // Depth 2
-  indexerConstructorProp = new IndexerConstructorProp({
-    alg: this.algProp,
-    puzzle: this.puzzleIDProp,
-    visualizationStrategy: this.visualizationStrategyProp,
-    indexerConstructorRequest: this.indexerConstructorRequestProp,
   });
 
   puzzleAlgProp = new PuzzleAlgProp({
@@ -112,11 +100,17 @@ export class TwistyPlayerModel {
     puzzleDef: this.puzzleDefProp,
   });
 
-  // Depth 3
-  indexerProp = new IndexerProp({
-    indexerConstructor: this.indexerConstructorProp,
-    algWithIssues: this.puzzleAlgProp,
-    def: this.puzzleDefProp,
+  visualizationStrategyProp = new VisualizationStrategyProp({
+    visualizationRequest: this.visualizationFormatProp,
+    puzzleID: this.puzzleIDProp,
+  });
+
+  // Depth 4
+  indexerConstructorProp = new IndexerConstructorProp({
+    alg: this.algProp,
+    puzzle: this.puzzleIDProp,
+    visualizationStrategy: this.visualizationStrategyProp,
+    indexerConstructorRequest: this.indexerConstructorRequestProp,
   });
 
   setupTransformationProp = new AlgTransformationProp({
@@ -124,7 +118,14 @@ export class TwistyPlayerModel {
     def: this.puzzleDefProp,
   });
 
-  // Depth 4
+  // Depth 5
+  indexerProp = new IndexerProp({
+    indexerConstructor: this.indexerConstructorProp,
+    algWithIssues: this.puzzleAlgProp,
+    def: this.puzzleDefProp,
+  });
+
+  // Depth 6
   anchoredStartProp = new AnchoredStartProp({
     setupAnchor: this.setupAnchorProp,
     setupTransformation: this.setupTransformationProp,
@@ -136,7 +137,7 @@ export class TwistyPlayerModel {
     indexer: this.indexerProp,
   });
 
-  // Depth 5
+  // Depth 7
   detailedTimelineInfoProp: DetailedTimelineInfoProp =
     new DetailedTimelineInfoProp({
       timestampRequest: this.timestampRequestProp,
@@ -144,18 +145,18 @@ export class TwistyPlayerModel {
       setupAnchor: this.setupAnchorProp,
     });
 
-  // Depth 6
-  currentLeavesProp = new CurrentLeavesProp({
-    indexer: this.indexerProp,
-    detailedTimelineInfo: this.detailedTimelineInfoProp,
-  });
-
+  // Depth 8
   coarseTimelineInfoProp = new CoarseTimelineInfoProp({
     detailedTimelineInfo: this.detailedTimelineInfoProp,
     playingInfo: this.playingInfoProp,
   });
 
-  // Depth 7
+  currentLeavesProp = new CurrentLeavesProp({
+    indexer: this.indexerProp,
+    detailedTimelineInfo: this.detailedTimelineInfoProp,
+  });
+
+  // Depth 9
   // TODO: Inline Twisty3D management.
   buttonAppearanceProp = new ButtonAppearanceProp({
     coarseTimelineInfo: this.coarseTimelineInfoProp,
@@ -166,7 +167,7 @@ export class TwistyPlayerModel {
     currentMoveInfo: this.currentLeavesProp,
   });
 
-  // Depth 8
+  // Depth 10
   currentTransformationProp = new CurrentTransformationProp({
     anchoredStart: this.anchoredStartProp,
     currentLeavesSimplified: this.currentLeavesSimplifiedProp,
@@ -174,7 +175,7 @@ export class TwistyPlayerModel {
     def: this.puzzleDefProp,
   });
 
-  // Depth 9
+  // Depth 11
   legacyPositionProp = new LegacyPositionProp({
     currentMoveInfo: this.currentLeavesProp,
     transformation: this.currentTransformationProp,

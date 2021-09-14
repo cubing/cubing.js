@@ -6,7 +6,7 @@ import { TreeAlgIndexer } from "../../old/animation/indexer/tree/TreeAlgIndexer"
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import type { AlgWithIssues } from "../depth-0/AlgProp";
 import type { IndexerStrategyName } from "../depth-0/IndexerConstructorRequestProp";
-import type { VisualizationStrategy } from "../depth-1/VisualizationStrategyProp";
+import type { VisualizationStrategy } from "../depth-3/VisualizationStrategyProp";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface IndexerConstructorPropInputs {

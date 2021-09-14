@@ -4,7 +4,7 @@ import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
 import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
 import type { HintFaceletStyleWithAuto } from "../../model/depth-0/HintFaceletProp";
-import type { VisualizationStrategy } from "../../model/depth-1/VisualizationStrategyProp";
+import type { VisualizationStrategy } from "../../model/depth-3/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/TwistyProp";
 import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";

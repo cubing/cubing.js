@@ -9,7 +9,7 @@ import type { ControlPanelThemeWithAuto } from "../model/depth-0/ControlPanelPro
 import type { HintFaceletStyleWithAuto } from "../model/depth-0/HintFaceletProp";
 import type { ViewerLinkPageWithAuto } from "../model/depth-0/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/depth-0/VisualizationProp";
-import type { VisualizationStrategy } from "../model/depth-1/VisualizationStrategyProp";
+import type { VisualizationStrategy } from "../model/depth-3/VisualizationStrategyProp";
 import { ClassListManager } from "../old/dom/element/ClassListManager";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../old/dom/TwistyPlayer.css_";
