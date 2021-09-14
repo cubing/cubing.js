@@ -35,8 +35,8 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set puzzleID(puzzleID: PuzzleID) { this.experimentalModel.puzzleIDRequestProp.set(puzzleID); }
   get puzzleID(): never { throw err("puzzle"); }
 
-  set puzzleDescription(puzzleDescription: PuzzleDescriptionString) { this.experimentalModel.puzzleDescriptionRequestProp.set(puzzleDescription); }
-  get puzzleDescription(): never { throw err("puzzleDescription"); }
+  set experimentalPuzzleDescription(puzzleDescription: PuzzleDescriptionString) { this.experimentalModel.puzzleDescriptionRequestProp.set(puzzleDescription); }
+  get experimentalPuzzleDescription(): never { throw err("experimentalPuzzleDescription"); }
 
   set timestamp(timestamp: TimestampRequest) { this.experimentalModel.timestampRequestProp.set(timestamp); }
   get timestamp(): never { throw err("timestamp"); }

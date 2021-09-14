@@ -40,7 +40,7 @@ export const twistyPlayerAttributeMap = {
   // String-based
   "experimental-setup-anchor": "experimentalSetupAnchor",
   "puzzle": "puzzle",
-  "puzzle-description": "puzzleDescription",
+  "experimental-puzzle-description": "experimentalPuzzleDescription",
   "visualization": "visualization",
   "hint-facelets": "hintFacelets",
   "experimental-stickering": "experimentalStickering",
@@ -77,7 +77,7 @@ export interface TwistyPlayerConfig {
   // String-based
   experimentalSetupAnchor?: SetupToLocation; // TODO: "auto"
   puzzle?: PuzzleID;
-  puzzleDescription?: PuzzleDescriptionString;
+  experimentalPuzzleDescription?: PuzzleDescriptionString;
   visualization?: VisualizationFormatWithAuto;
   hintFacelets?: HintFaceletStyleWithAuto;
   experimentalStickering?: ExperimentalStickering;
