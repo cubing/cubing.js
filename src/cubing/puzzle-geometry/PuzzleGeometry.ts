@@ -1082,6 +1082,7 @@ export class PuzzleGeometry {
   private keyface2(cm: Quat): string {
     // take a face and figure out the sides of each move plane
     let s = "";
+    const sfcc = String.fromCharCode;
     for (const moveplaneset of this.moveplanesets) {
       if (moveplaneset.length > 0) {
         const dv = cm.dot(moveplaneset[0]);
@@ -1096,20 +1097,15 @@ export class PuzzleGeometry {
           }
         }
         if (t < 47) {
-          s = s + String.fromCharCode(33 + t);
+          s = s + sfcc(33 + t);
         } else if (t < 47 + 47 * 47) {
-          s =
-            s +
-            String.fromCharCode(33 + 47 + Math.floor(t / 47) - 1) +
-            String.fromCharCode(33 + (t % 47));
+          s = s + sfcc(33 + 47 + Math.floor(t / 47) - 1) + sfcc(33 + (t % 47));
         } else if (t < 47 + 47 * 47 + 47 * 47 * 47) {
           s =
             s +
-            String.fromCharCode(
-              33 + 47 + Math.floor((t - 47) / (47 * 47) - 1),
-            ) +
-            String.fromCharCode(33 + 47 + (Math.floor((t - 47) / 47) % 47)) +
-            String.fromCharCode(33 + (t % 47));
+            sfcc(33 + 47 + Math.floor((t - 47) / (47 * 47) - 1)) +
+            sfcc(33 + 47 + (Math.floor((t - 47) / 47) % 47)) +
+            sfcc(33 + (t % 47));
         } else {
           throw Error("Too many slices for cubie encoding");
         }
