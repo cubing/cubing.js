@@ -12,8 +12,5 @@ RewriteCond %{HTTPS} on
 RewriteCond %{HTTP_HOST} ^www\. [NC]
 RewriteRule ^(.*)$ https://twizzle.net%{REQUEST_URI} [R=302,L]
 
-Header set Cache-Control "max-age=300; must-revalidate"
-
-# This might be redundant, but just to be sure:
-ExpiresActive On
-ExpiresDefault A300
+ExpiresActive off
+Header always set Cache-Control "max-age=300; must-revalidate"
