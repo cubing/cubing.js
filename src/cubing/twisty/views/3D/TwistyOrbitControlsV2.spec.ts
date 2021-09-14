@@ -5,7 +5,7 @@
 import { LatitudeLimitProp } from "../../model/depth-0/LatitudeLimit";
 import { OrbitCoordinatesRequestProp } from "../../model/depth-0/OrbitCoordinatesRequestProp";
 import { PuzzleIDRequestProp } from "../../model/depth-0/PuzzleIDRequestProp";
-import { OrbitCoordinatesProp } from "../../model/depth-1/OrbitCoordinatesProp";
+import { OrbitCoordinatesProp } from "../../model/depth-3/OrbitCoordinatesProp";
 import { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { TwistyPropParent } from "../../model/TwistyProp";
 import { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
