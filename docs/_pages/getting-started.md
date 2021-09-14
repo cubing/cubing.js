@@ -1,7 +1,9 @@
 ---
+title: Getting Started
 permalink: "/getting-started/"
-toc: true
 breadcrumbs: false
+toc: true
+toc_sticky: true
 ---
 
   <script src="https://cdn.cubing.net/esm/cubing/twisty" type="module" defer></script>
@@ -239,14 +241,34 @@ If you have a more advanced use case, you can create a twisty-player using JavaS
 </script> 
 ```
 
+[Try it yourself.](https://codepen.io/cubing/pen/vYyKBMd)
+{: .notice} 
 
+There are more experimental features available — such as `player.timeline.play()` — but many of them will change before version 1.0 of cubing.js. Please consider [contributing](https://js.cubing.net/cubing/#contribute) to help make these features stable.
 
+### Using `npm`
 
-```html
+Install the package:
+
+```shell
+npm install cubing
 ```
-```html
+
+Then you can use:
+```javascript
+import { Alg } from "cubing/alg";
+import { TwistyPlayer } from "cubing/twisty";
 ```
-```html
+
+This should work with most tools. We recommend using [Parcel](https://parceljs.org/) to build your web apps, if you haven't picked a tool yet.
+
+### Debugging and Experimenting
+
+You can run the following in the JavaScript console (for example, in Chrome, Android Chrome, Firefox, Safari, iOS Safari, or Edge) to select the first twisty-player on the page:
+
+```javascript
+document.querySelector("twisty-player")
 ```
-```html
-```
+
+This can be useful for tinkering with the page or trying to understand the behaviour of a `twisty-player`. (Try it with the players on this page!) 
+

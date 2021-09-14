@@ -2,8 +2,9 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-layout: home
+layout: single
 toc: true
+toc_sticky: true
 ---
 
 <img src="assets/cubing.js.jpg" width="480">
