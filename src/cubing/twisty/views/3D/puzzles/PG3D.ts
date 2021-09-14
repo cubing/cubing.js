@@ -316,7 +316,7 @@ class StickerDef {
   public setHintStickers(filler: Filler, hintStickers: boolean): void {
     let indv = this.isDup || !hintStickers ? 4 : 2;
     for (let i = this.hintStart; i < this.hintEnd; i++) {
-      filler.ind[i] = indv;
+      filler.ind[i] = indv | (filler.ind[i] & 1);
     }
   }
 
