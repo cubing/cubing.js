@@ -186,7 +186,11 @@ export abstract class SimpleTwistyPropSource<
   }
 }
 
-// TODO: Can / should we support `null` as a valid output value?
+// TODO: Can we support `null` as a valid output value without loosening type
+// safety?
+export const NO_VALUE = Symbol("no value");
+export type NoValueType = typeof NO_VALUE;
+
 export abstract class TwistyPropDerived<
   InputTypes extends Object,
   OutputType,

@@ -1,8 +1,10 @@
 import type { PuzzleDescriptionString } from "../../../puzzle-geometry/PGPuzzles";
-import { SimpleTwistyPropSource } from "../TwistyProp";
+import { NoValueType, NO_VALUE, SimpleTwistyPropSource } from "../TwistyProp";
 
-export class PGPuzzleDescriptionStringProp extends SimpleTwistyPropSource<PuzzleDescriptionString | null> {
-  getDefaultValue(): PuzzleDescriptionString | null {
-    return null;
+export class PGPuzzleDescriptionStringProp extends SimpleTwistyPropSource<
+  PuzzleDescriptionString | NoValueType
+> {
+  getDefaultValue(): PuzzleDescriptionString | NoValueType {
+    return NO_VALUE;
   }
 }

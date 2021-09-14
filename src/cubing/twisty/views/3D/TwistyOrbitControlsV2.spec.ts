@@ -7,17 +7,21 @@ import { OrbitCoordinatesRequestProp } from "../../model/depth-0/OrbitCoordinate
 import { PuzzleIDRequestProp } from "../../model/depth-0/PuzzleIDRequestProp";
 import { OrbitCoordinatesProp } from "../../model/depth-1/OrbitCoordinatesProp";
 import { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
+import { TwistyPropParent } from "../../model/TwistyProp";
+import { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
 
 describe("TwistyOrbitControlsV2", () => {
   it("should update correctly", async () => {
     const orbitCoordinatesRequestProp = new OrbitCoordinatesRequestProp();
     const latLimit = new LatitudeLimitProp();
-    const puzzleIDRequestProp = new PuzzleIDRequestProp("3x3x3");
+    const puzzleIDRequestProp = new PuzzleIDRequestProp(
+      "3x3x3",
+    ) as TwistyPropParent<PuzzleID>;
     const orbitCoordinatesProp = new OrbitCoordinatesProp({
       orbitCoordinatesRequest: orbitCoordinatesRequestProp,
       latitudeLimit: latLimit,
-      puzzleID: puzzleIDRequestProp, // Note: in the real model, this goes through a puzzle loader, but we use the request prop here directly to keep it simple.
+      puzzleID: puzzleIDRequestProp,
     });
     const mockModel = {
       orbitCoordinatesRequestProp,

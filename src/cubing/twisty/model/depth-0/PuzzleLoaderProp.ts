@@ -1,12 +1,12 @@
 import type { PuzzleDescriptionString } from "../../../puzzle-geometry/PGPuzzles";
 import { cube3x3x3, PuzzleLoader, puzzles } from "../../../puzzles";
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
-import { TwistyPropDerived } from "../TwistyProp";
+import { NoValueType, NO_VALUE, TwistyPropDerived } from "../TwistyProp";
 import { descGenericPGPuzzleLoader } from "./PuzzleLoader-helper";
 
 interface PuzzleLoaderPropInputs {
-  puzzleIDRequest: PuzzleID | null;
-  puzzleDescriptionRequest: PuzzleDescriptionString | null;
+  puzzleIDRequest: PuzzleID | NoValueType;
+  puzzleDescriptionRequest: PuzzleDescriptionString | NoValueType;
 }
 
 export class PuzzleLoaderProp extends TwistyPropDerived<
@@ -14,10 +14,13 @@ export class PuzzleLoaderProp extends TwistyPropDerived<
   PuzzleLoader
 > {
   derive(inputs: PuzzleLoaderPropInputs): PuzzleLoader {
-    if (inputs.puzzleIDRequest) {
+    if (inputs.puzzleIDRequest && inputs.puzzleIDRequest !== NO_VALUE) {
       return puzzles[inputs.puzzleIDRequest];
     }
-    if (inputs.puzzleDescriptionRequest) {
+    if (
+      inputs.puzzleDescriptionRequest &&
+      inputs.puzzleDescriptionRequest !== NO_VALUE
+    ) {
       return descGenericPGPuzzleLoader(inputs.puzzleDescriptionRequest);
     }
     return cube3x3x3;
