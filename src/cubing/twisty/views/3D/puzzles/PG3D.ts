@@ -211,9 +211,10 @@ class Filler {
 }
 
 class StickerDef {
-  public origColor: number;
-  public origColorAppearance: number;
-  public faceColor: number;
+  private origColor: number;
+  private origColorAppearance: number;
+  private faceColor: number;
+  private texturePtr?: StickerDef = undefined;
   public twistVal: number = -1;
   public stickerStart: number;
   public stickerEnd: number;
@@ -221,8 +222,8 @@ class StickerDef {
   public hintEnd: number;
   public foundationStart: number;
   public foundationEnd: number;
-  public isDup: boolean;
-  public faceNum: number;
+  private isDup: boolean;
+  private faceNum: number;
   constructor(
     filler: Filler,
     stickerDat: StickerDatSticker,
@@ -313,7 +314,7 @@ class StickerDef {
     this.foundationEnd = filler.ipos;
   }
 
-  public setHintStickers(filler: Filler, hintStickers: boolean): void {
+  private setHintStickers(filler: Filler, hintStickers: boolean): void {
     let indv = this.isDup || !hintStickers ? 4 : 2;
     for (let i = this.hintStart; i < this.hintEnd; i++) {
       filler.ind[i] = indv | (filler.ind[i] & 1);
@@ -385,15 +386,20 @@ class StickerDef {
   }
 
   public setTexture(filler: Filler, sd: StickerDef): number {
+    if (this.texturePtr === sd) {
+      return 0;
+    }
+    this.texturePtr = sd;
+    const sz = 6 * filler.sz;
     filler.uvs!.copyWithin(
       6 * this.stickerStart,
-      6 * sd.stickerStart + 6 * filler.sz,
-      6 * sd.stickerEnd + 6 * filler.sz,
+      6 * sd.stickerStart + sz,
+      6 * sd.stickerEnd + sz,
     );
     filler.uvs!.copyWithin(
       6 * this.hintStart,
-      6 * sd.hintStart + 6 * filler.sz,
-      6 * sd.hintEnd + 6 * filler.sz,
+      6 * sd.hintStart + sz,
+      6 * sd.hintEnd + sz,
     );
     return 1;
   }
@@ -402,15 +408,16 @@ class StickerDef {
     const c = sd.origColorAppearance;
     if (this.faceColor !== c) {
       this.faceColor = c;
+      const sz = filler.pos;
       filler.colors.copyWithin(
         9 * this.stickerStart,
-        9 * sd.stickerStart + filler.pos,
-        9 * sd.stickerEnd + filler.pos,
+        9 * sd.stickerStart + sz,
+        9 * sd.stickerEnd + sz,
       );
       filler.colors.copyWithin(
         9 * this.hintStart,
-        9 * sd.hintStart + filler.pos,
-        9 * sd.hintEnd + filler.pos,
+        9 * sd.hintStart + sz,
+        9 * sd.hintEnd + sz,
       );
       return 1;
     } else {
@@ -421,7 +428,7 @@ class StickerDef {
 
 class HitPlaneDef {
   public cubie: Group;
-  protected geo: BufferGeometry;
+  private geo: BufferGeometry;
   constructor(hitface: any, tm: TextureMapper) {
     this.cubie = new Group();
     const coords = hitface.coords as number[];
@@ -455,13 +462,6 @@ export interface PG3DOptions {
 }
 
 const DEFAULT_COLOR_FRACTION = 0.71;
-
-/*
-
-
-
-*/
-
 const PG_SCALE = 0.5;
 
 // TODO: Split into "scene model" and "view".
@@ -500,19 +500,19 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private stickerTargets: Object3D[] = [];
   private controlTargets: Object3D[] = [];
 
-  protected movingObj: Object3D;
-  protected filler: Filler;
-  protected foundationBound: number; // before this: colored; after: black
-  protected fixedGeo: BufferGeometry;
-  protected lastPos: PuzzlePosition;
-  protected lastMove: Transformation;
-  protected hintMaterial: MeshBasicMaterial;
-  protected stickerMaterial: MeshBasicMaterial;
-  protected materialArray1: MeshBasicMaterial[];
-  protected materialArray2: MeshBasicMaterial[];
-  protected textured: boolean = false;
-  protected hintMaterialDisposable: boolean;
-  protected stickerMaterialDisposable: boolean;
+  private movingObj: Object3D;
+  private filler: Filler;
+  private foundationBound: number; // before this: colored; after: black
+  private fixedGeo: BufferGeometry;
+  private lastPos: PuzzlePosition;
+  private lastMove: Transformation;
+  private hintMaterial: MeshBasicMaterial;
+  private stickerMaterial: MeshBasicMaterial;
+  private materialArray1: MeshBasicMaterial[];
+  private materialArray2: MeshBasicMaterial[];
+  private textured: boolean = false;
+  private hintMaterialDisposable: boolean;
+  private stickerMaterialDisposable: boolean;
 
   #pendingStickeringUpdate: boolean = false;
 
@@ -521,8 +521,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private scheduleRenderCallback: () => void,
     private definition: KPuzzleDefinition,
     private pgdat: StickerDat,
-    protected showFoundation: boolean = false,
-    protected showHintStickers: boolean = false,
+    private showFoundation: boolean = false,
+    private showHintStickers: boolean = false,
     hintStickerHeightScale: number = 1,
     private params: PG3DOptions = {},
   ) {
@@ -551,8 +551,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.updateMaterialArrays();
     let triangleCount = 0;
     let multiplier = 3;
-    for (let si = 0; si < stickers.length; si++) {
-      const sides = stickers[si].coords.length / 3;
+    for (const sticker of stickers) {
+      const sides = sticker.coords.length / 3;
       triangleCount += multiplier * (sides - 2);
     }
     const filler = new Filler(triangleCount, pgdat.textureMapper);
@@ -565,15 +565,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     const colorfrac = DEFAULT_COLOR_FRACTION;
     let nonDupStickers = 0;
-    for (let si = 0; si < stickers.length; si++) {
-      if (!stickers[si].isDup) {
+    for (const sticker of stickers) {
+      if (!sticker.isDup) {
         nonDupStickers++;
       }
     }
     const trim =
       (Math.sqrt(totArea / nonDupStickers) * (1 - Math.sqrt(colorfrac))) / 2;
-    for (let si = 0; si < stickers.length; si++) {
-      const sticker = stickers[si];
+    for (const sticker of stickers) {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
       const ori = sticker.ori;
@@ -596,8 +595,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const stickerdef = new StickerDef(filler, sticker, trim, options);
       this.stickers[orbit][ori][ord] = stickerdef;
     }
-    for (let si = 0; si < stickers.length; si++) {
-      const sticker = stickers[si];
+    for (const sticker of stickers) {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
       const ori = sticker.ori;
@@ -611,8 +609,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       );
     }
     this.foundationBound = filler.ipos;
-    for (let si = 0; si < stickers.length; si++) {
-      const sticker = stickers[si];
+    for (const sticker of stickers) {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
       const ori = sticker.ori;
@@ -709,6 +706,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     const noRotation = new Euler();
     this.movingObj.rotation.copy(noRotation);
     let colormods = 0;
+    const filler = this.filler;
+    const ind = filler.ind;
     if (
       !this.lastPos ||
       this.#pendingStickeringUpdate ||
@@ -723,9 +722,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           for (let i = 0; i < pieces2.length; i++) {
             const ni = pos2.permutation[i];
             if (this.textured) {
-              colormods += pieces2[i].setTexture(this.filler, pieces2[ni]);
+              colormods += pieces2[i].setTexture(filler, pieces2[ni]);
             } else {
-              colormods += pieces2[i].setColor(this.filler, pieces2[ni]);
+              colormods += pieces2[i].setColor(filler, pieces2[ni]);
             }
           }
         } else {
@@ -735,12 +734,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
               const nori = (ori + orin - pos2.orientation[i]) % orin;
               const ni = pos2.permutation[i];
               if (this.textured) {
-                colormods += pieces2[i].setTexture(
-                  this.filler,
-                  pieces[nori][ni],
-                );
+                colormods += pieces2[i].setTexture(filler, pieces[nori][ni]);
               } else {
-                colormods += pieces2[i].setColor(this.filler, pieces[nori][ni]);
+                colormods += pieces2[i].setColor(filler, pieces[nori][ni]);
               }
             }
           }
@@ -780,58 +776,35 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           for (let ori = 0; ori < orin; ori++) {
             const pieces2 = pieces[ori];
             for (let i = 0; i < pieces2.length; i++) {
+              const p2 = pieces2[i];
               const ni = bmv.permutation[i];
               let tv = 0;
               if (ni !== i || bmv.orientation[i] !== 0) {
                 tv = 1;
               }
-              if (tv !== pieces2[i].twistVal) {
+              if (tv !== p2.twistVal) {
                 if (tv) {
-                  for (
-                    let j = pieces2[i].stickerStart;
-                    j < pieces2[i].stickerEnd;
-                    j++
-                  ) {
-                    this.filler.ind[j] |= 1;
+                  for (let j = p2.stickerStart; j < p2.stickerEnd; j++) {
+                    ind[j] |= 1;
                   }
-                  for (
-                    let j = pieces2[i].hintStart;
-                    j < pieces2[i].hintEnd;
-                    j++
-                  ) {
-                    this.filler.ind[j] |= 1;
+                  for (let j = p2.hintStart; j < p2.hintEnd; j++) {
+                    ind[j] |= 1;
                   }
-                  for (
-                    let j = pieces2[i].foundationStart;
-                    j < pieces2[i].foundationEnd;
-                    j++
-                  ) {
-                    this.filler.ind[j] |= 1;
+                  for (let j = p2.foundationStart; j < p2.foundationEnd; j++) {
+                    ind[j] |= 1;
                   }
                 } else {
-                  for (
-                    let j = pieces2[i].stickerStart;
-                    j < pieces2[i].stickerEnd;
-                    j++
-                  ) {
-                    this.filler.ind[j] &= ~1;
+                  for (let j = p2.stickerStart; j < p2.stickerEnd; j++) {
+                    ind[j] &= ~1;
                   }
-                  for (
-                    let j = pieces2[i].hintStart;
-                    j < pieces2[i].hintEnd;
-                    j++
-                  ) {
-                    this.filler.ind[j] &= ~1;
+                  for (let j = p2.hintStart; j < p2.hintEnd; j++) {
+                    ind[j] &= ~1;
                   }
-                  for (
-                    let j = pieces2[i].foundationStart;
-                    j < pieces2[i].foundationEnd;
-                    j++
-                  ) {
-                    this.filler.ind[j] &= ~1;
+                  for (let j = p2.foundationStart; j < p2.foundationEnd; j++) {
+                    ind[j] &= ~1;
                   }
                 }
-                pieces2[i].twistVal = tv;
+                p2.twistVal = tv;
                 vismods++;
               }
             }
@@ -952,8 +925,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const orin = pieces.length;
       for (let ori = 0; ori < orin; ori++) {
         const pieces2 = pieces[ori];
-        for (let i = 0; i < pieces2.length; i++) {
-          pieces2[i].addUVs(this.filler);
+        for (const piece2 of pieces2) {
+          piece2.addUVs(this.filler);
         }
       }
     }
