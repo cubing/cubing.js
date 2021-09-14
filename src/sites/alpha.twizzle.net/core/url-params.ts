@@ -3,7 +3,11 @@ import type {
   AlgWithIssues,
 } from "../../../cubing/twisty/model/depth-0/AlgProp";
 import type { TwistyPlayerModel } from "../../../cubing/twisty/model/TwistyPlayerModel";
-import type { TwistyPropSource } from "../../../cubing/twisty/model/TwistyProp";
+import {
+  NoValueType,
+  NO_VALUE,
+  TwistyPropSource,
+} from "../../../cubing/twisty/model/TwistyProp";
 import {
   TwistyPlayerAttribute,
   twistyPlayerAttributeMap,
@@ -16,7 +20,6 @@ export class URLParamUpdater {
   constructor(model: TwistyPlayerModel, private prefix = "") {
     this.listenToAlgProp(model.algProp, "alg");
     this.listenToAlgProp(model.setupProp, "experimental-setup-alg");
-    this.listenToStringSourceProp(model.puzzleIDRequestProp, "puzzle");
     this.listenToStringSourceProp(
       model.stickeringProp,
       "experimental-stickering",
@@ -24,6 +27,11 @@ export class URLParamUpdater {
     this.listenToStringSourceProp(
       model.setupAnchorProp,
       "experimental-setup-anchor",
+    );
+    this.listenToPuzzleIDRequestProp(
+      model.puzzleIDRequestProp,
+      "puzzle",
+      "3x3x3",
     );
   }
 
@@ -51,6 +59,19 @@ export class URLParamUpdater {
     const actualDefaultString = defaultString ?? (await prop.getDefaultValue());
     prop.addFreshListener((s: string) => {
       this.setURLParam(key, s, actualDefaultString);
+    });
+  }
+
+  async listenToPuzzleIDRequestProp(
+    prop: TwistyPropSource<string | NoValueType>,
+    key: string,
+    defaultString: string,
+  ): Promise<void> {
+    prop.addFreshListener((s: string | NoValueType) => {
+      if (s === NO_VALUE) {
+        s = defaultString;
+      }
+      this.setURLParam(key, s, defaultString);
     });
   }
 
