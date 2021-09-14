@@ -419,7 +419,7 @@ class ControlPane {
 
   private puzzleSelectChanged(): void {
     const option = this.puzzleSelect.selectedOptions[0];
-    this.twistyPlayer.puzzleID = option.value as PuzzleID;
+    this.twistyPlayer.puzzle = option.value as PuzzleID;
   }
 
   private initializeSetupAnchorSelect(initialSetupAnchor: string): void {
