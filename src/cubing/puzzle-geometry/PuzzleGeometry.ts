@@ -45,6 +45,7 @@ import {
   uniqueplanes,
 } from "./PlatonicGenerator";
 import { centermassface, Quat } from "./Quat";
+import { schreierSims } from "./SchreierSims";
 
 export interface TextureMapper {
   getuv(fn: number, threed: number[]): number[];
@@ -572,7 +573,7 @@ export class PuzzleGeometry {
   public moveplanesets: Quat[][]; // the move planes, in parallel sets
   private moveplanenormals: Quat[]; // one move plane
   public movesetorders: number[]; // the order of rotations for each move set
-  private movesetgeos: [string, string, string, string, number][]; // geometric feature information for move sets
+  public movesetgeos: [string, string, string, string, number][]; // geometric feature information for move sets
   private basefaces: Face[]; // polytope faces before cuts
   private faces: Face[]; // all the stickers
   private facecentermass: Quat[]; // center of mass of all faces
@@ -2913,6 +2914,24 @@ export class PuzzleGeometry {
   private getfaceindex(facenum: number): number {
     const divid = this.stickersperface;
     return Math.floor(facenum / divid);
+  }
+
+  public textForTwizzleExplorer(): string {
+    // TODO: This used to contain `shortedge`. Do we want that?
+    return `Faces ${this.baseplanerot.length}
+Stickers per face ${this.stickersperface}
+Cubies ${this.cubies}.length
+Edge distance ${this.edgedistance}
+Vertex distance ${this.vertexdistance}`;
+  }
+
+  writeSchreierSims(tw: (s: string) => void) {
+    const os = this.getOrbitsDef(false);
+    const as = os.reassemblySize();
+    tw(`Reassembly size is ${as}`);
+    const ss = schreierSims(this.getMovesAsPerms(), tw);
+    const r = as / ss;
+    tw(`Ratio is ${r}`);
   }
 }
 

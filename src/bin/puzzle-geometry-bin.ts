@@ -1,10 +1,9 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
 import {
-  PuzzleGeometry,
   getpuzzles,
   parsePuzzleDescription,
-  schreierSims,
+  PuzzleGeometry,
 } from "../cubing/puzzle-geometry";
 import { parsePGOptionList } from "../cubing/puzzle-geometry/Options";
 import type {
@@ -200,15 +199,7 @@ if (
   } else if (do3d) {
     console.log(JSON.stringify(pg.get3d()));
   } else if (doss) {
-    const os = pg.getOrbitsDef(false);
-    const as = os.reassemblySize();
-    console.log("Reassembly size is " + as);
-    const ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
-      (_) => console.log(_),
-    );
-    const r = as / ss;
-    console.log("Ratio is " + r);
+    pg.writeSchreierSims(console.log);
   } else if (docanon) {
     pg.showcanon((_) => console.log(_));
   }
