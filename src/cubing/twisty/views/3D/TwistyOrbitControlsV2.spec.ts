@@ -13,11 +13,11 @@ describe("TwistyOrbitControlsV2", () => {
   it("should update correctly", async () => {
     const orbitCoordinatesRequestProp = new OrbitCoordinatesRequestProp();
     const latLimit = new LatitudeLimitProp();
-    const puzzleIDRequestProp = new PuzzleIDRequestProp();
+    const puzzleIDRequestProp = new PuzzleIDRequestProp("3x3x3");
     const orbitCoordinatesProp = new OrbitCoordinatesProp({
       orbitCoordinatesRequest: orbitCoordinatesRequestProp,
       latitudeLimit: latLimit,
-      puzzleID: puzzleIDRequestProp,
+      puzzleID: puzzleIDRequestProp, // Note: in the real model, this goes through a puzzle loader, but we use the request prop here directly to keep it simple.
     });
     const mockModel = {
       orbitCoordinatesRequestProp,
