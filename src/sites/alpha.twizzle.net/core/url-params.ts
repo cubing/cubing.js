@@ -1,3 +1,4 @@
+import { EXPERIMENTAL_PROP_NO_VALUE } from "../../../cubing/twisty";
 import type {
   AlgProp,
   AlgWithIssues,
@@ -16,7 +17,6 @@ export class URLParamUpdater {
   constructor(model: TwistyPlayerModel, private prefix = "") {
     this.listenToAlgProp(model.algProp, "alg");
     this.listenToAlgProp(model.setupProp, "experimental-setup-alg");
-    this.listenToStringSourceProp(model.puzzleIDProp, "puzzle");
     this.listenToStringSourceProp(
       model.stickeringProp,
       "experimental-stickering",
@@ -24,6 +24,11 @@ export class URLParamUpdater {
     this.listenToStringSourceProp(
       model.setupAnchorProp,
       "experimental-setup-anchor",
+    );
+    this.listenToPuzzleIDRequestProp(
+      model.puzzleIDRequestProp,
+      "puzzle",
+      "3x3x3",
     );
   }
 
@@ -51,6 +56,19 @@ export class URLParamUpdater {
     const actualDefaultString = defaultString ?? (await prop.getDefaultValue());
     prop.addFreshListener((s: string) => {
       this.setURLParam(key, s, actualDefaultString);
+    });
+  }
+
+  async listenToPuzzleIDRequestProp(
+    prop: TwistyPropSource<string | typeof EXPERIMENTAL_PROP_NO_VALUE>,
+    key: string,
+    defaultString: string,
+  ): Promise<void> {
+    prop.addFreshListener((s: string | typeof EXPERIMENTAL_PROP_NO_VALUE) => {
+      if (s === EXPERIMENTAL_PROP_NO_VALUE) {
+        s = defaultString;
+      }
+      this.setURLParam(key, s, defaultString);
     });
   }
 

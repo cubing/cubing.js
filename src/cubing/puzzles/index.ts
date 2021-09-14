@@ -1,3 +1,4 @@
+export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "./customPGPuzzleLoader";
 export { experimentalCube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle } from "../kpuzzle";
 
 import type { PuzzleID } from "../twisty/old/dom/TwistyPlayerConfig";

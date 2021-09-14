@@ -32,13 +32,13 @@ export function externalName(
 export class OrbitsDef {
   constructor(
     public orbitnames: string[],
-    public orbitdefs: OrbitDef[],
+    private orbitdefs: OrbitDef[],
     public solved: VisibleState,
     public movenames: string[],
     public moveops: Transformation[],
   ) {}
 
-  public transformToKPuzzle(t: Transformation): any {
+  private transformToKPuzzle(t: Transformation): any {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < this.orbitnames.length; j++) {
       mp[this.orbitnames[j]] = t.orbits[j].toKpuzzle();
@@ -305,7 +305,7 @@ export class OrbitsDef {
 }
 
 export class Orbit {
-  static kcache: Record<string, unknown>[] = [];
+  private static kcache: Record<string, unknown>[] = [];
 
   public static e(n: number, mod: number): Orbit {
     return new Orbit(iota(n), zeros(n), mod);
@@ -420,7 +420,7 @@ export class Orbit {
     return true;
   }
 
-  public zeroOris(): boolean {
+  private zeroOris(): boolean {
     const n = this.perm.length;
     if (this.ori === zeros(n)) {
       return true;
@@ -505,10 +505,10 @@ export class TransformationBase {
     return newOrbits;
   }
 
-  public internalInv(): Orbit[] {
+  protected internalInv(): Orbit[] {
     const newOrbits: Orbit[] = [];
-    for (let i = 0; i < this.orbits.length; i++) {
-      newOrbits.push(this.orbits[i].inv());
+    for (const orbit of this.orbits) {
+      newOrbits.push(orbit.inv());
     }
     return newOrbits;
   }
@@ -522,9 +522,9 @@ export class TransformationBase {
     return true;
   }
 
-  public killOri(): this {
-    for (let i = 0; i < this.orbits.length; i++) {
-      this.orbits[i].killOri();
+  protected killOri(): this {
+    for (const orbit of this.orbits) {
+      orbit.killOri();
     }
     return this;
   }
@@ -532,15 +532,14 @@ export class TransformationBase {
   public toPerm(): Perm {
     const perms = new Array<Perm>();
     let n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const p = this.orbits[i].toPerm();
+    for (const orbit of this.orbits) {
+      const p = orbit.toPerm();
       perms.push(p);
       n += p.n;
     }
     const newPerm = new Array<number>(n);
     n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const p = perms[i];
+    for (const p of perms) {
       for (let j = 0; j < p.n; j++) {
         newPerm[n + j] = n + p.p[j];
       }
@@ -552,21 +551,21 @@ export class TransformationBase {
   public identicalPieces(): number[][] {
     const r: number[][] = [];
     let n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const o = this.orbits[i].orimod;
-      const s = this.orbits[i].identicalPieces();
+    for (const orbit of this.orbits) {
+      const o = orbit.orimod;
+      const s = orbit.identicalPieces();
       for (let j = 0; j < s.length; j++) {
         r.push(s[j].map((_) => _ * o + n));
       }
-      n += o * this.orbits[i].perm.length;
+      n += o * orbit.perm.length;
     }
     return r;
   }
 
   public order(): number {
     let r = 1;
-    for (let i = 0; i < this.orbits.length; i++) {
-      r = lcm(r, this.orbits[i].order());
+    for (const orbit of this.orbits) {
+      r = lcm(r, orbit.order());
     }
     return r;
   }
@@ -632,7 +631,7 @@ export class VisibleState extends TransformationBase {
 }
 //  Disjoint set union implementation.
 class DisjointUnion {
-  public heads: number[];
+  private heads: number[];
   constructor(public n: number) {
     this.heads = new Array<number>(n);
     for (let i = 0; i < n; i++) {

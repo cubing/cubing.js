@@ -2,7 +2,7 @@ import { KSolvePuzzle } from "../..";
 import { combineTransformations, KPuzzleDefinition } from "../../../kpuzzle";
 import type { Transformation } from "../../../puzzle-geometry/interfaces";
 import type { AlgIndexer } from "../../old/animation/indexer/AlgIndexer";
-import type { CurrentLeavesSimplified } from "../depth-7/CurrentLeavesSimplified";
+import type { CurrentLeavesSimplified } from "../depth-9/CurrentLeavesSimplified";
 import { TwistyPropDerived } from "../TwistyProp";
 
 interface CurrentTransformationPropInputs {

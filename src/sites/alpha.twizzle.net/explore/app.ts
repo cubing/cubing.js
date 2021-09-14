@@ -16,7 +16,6 @@ import {
   getpuzzles,
   parseOptions,
   PuzzleGeometry,
-  schreierSims,
   StickerDat,
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
@@ -443,13 +442,7 @@ function dowork(cmd: string): void {
   if (cmd === "gap") {
     showtext(pg.writegap());
   } else if (cmd === "ss") {
-    const gtw = gettextwriter();
-    const os = pg.getOrbitsDef(false);
-    const as = os.reassemblySize();
-    gtw("Reassembly size is " + as);
-    const ss = schreierSims(pg.getMovesAsPerms(), gtw);
-    const r = as / ss;
-    gtw("Ratio is " + r);
+    pg.writeSchreierSims(gettextwriter());
   } else if (cmd === "canon") {
     pg.showcanon(gettextwriter());
   } else if (cmd === "ksolve") {
@@ -543,25 +536,7 @@ function checkchange_internal(): void {
       nextShape = puzzleDescription.shape;
       pg.allstickers();
       pg.genperms();
-      const sep = "\n";
-      const text =
-        "Faces " +
-        pg.baseplanerot.length +
-        sep +
-        "Stickers per face " +
-        pg.stickersperface +
-        sep +
-        "Cubies " +
-        pg.cubies.length +
-        sep +
-        "Short edge " +
-        pg.shortedge +
-        sep +
-        "Edge distance " +
-        pg.edgedistance +
-        sep +
-        "Vertex distance " +
-        pg.vertexdistance;
+      const text = pg.textForTwizzleExplorer();
       const el = document.getElementById("data");
       if (el) {
         el.title = text;

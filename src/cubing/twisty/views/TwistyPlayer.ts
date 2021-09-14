@@ -1,5 +1,6 @@
 import type { ExperimentalStickering } from "..";
 import { Alg, Move } from "../../alg";
+import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
 import type { BackgroundThemeWithAuto } from "../model/depth-0/BackgroundProp";
@@ -8,7 +9,7 @@ import type { ControlPanelThemeWithAuto } from "../model/depth-0/ControlPanelPro
 import type { HintFaceletStyleWithAuto } from "../model/depth-0/HintFaceletProp";
 import type { ViewerLinkPageWithAuto } from "../model/depth-0/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/depth-0/VisualizationProp";
-import type { VisualizationStrategy } from "../model/depth-1/VisualizationStrategyProp";
+import type { VisualizationStrategy } from "../model/depth-3/VisualizationStrategyProp";
 import { ClassListManager } from "../old/dom/element/ClassListManager";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../old/dom/TwistyPlayer.css_";
@@ -39,6 +40,7 @@ export const twistyPlayerAttributeMap = {
   // String-based
   "experimental-setup-anchor": "experimentalSetupAnchor",
   "puzzle": "puzzle",
+  "experimental-puzzle-description": "experimentalPuzzleDescription",
   "visualization": "visualization",
   "hint-facelets": "hintFacelets",
   "experimental-stickering": "experimentalStickering",
@@ -75,6 +77,7 @@ export interface TwistyPlayerConfig {
   // String-based
   experimentalSetupAnchor?: SetupToLocation; // TODO: "auto"
   puzzle?: PuzzleID;
+  experimentalPuzzleDescription?: PuzzleDescriptionString;
   visualization?: VisualizationFormatWithAuto;
   hintFacelets?: HintFaceletStyleWithAuto;
   experimentalStickering?: ExperimentalStickering;
