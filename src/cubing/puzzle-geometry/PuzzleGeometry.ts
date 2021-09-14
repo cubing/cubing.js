@@ -82,6 +82,13 @@ export function useNewFaceNames(use: boolean): void {
   NEW_FACE_NAMES = use;
 }
 
+// you can fill these in to help with timing if you want
+function tstart(s: string): string {
+  return s;
+}
+
+function tend(_: string): void {}
+
 class Face {
   private coords: number[];
   public length: number;
@@ -613,11 +620,13 @@ export class PuzzleGeometry {
     puzzleDescription: PuzzleDescription,
     options: PuzzleGeometryOptions,
   ) {
+    const t1 = tstart("genperms");
     this.options = new PuzzleGeometryFullOptions(options);
     if (this.options.verbosity > 0) {
       console.log(this.header("# "));
     }
     this.create(puzzleDescription);
+    tend(t1);
   }
 
   public create(puzzleDescription: PuzzleDescription): void {
@@ -993,7 +1002,7 @@ export class PuzzleGeometry {
       const cm2 = faces[i].centermass();
       sortme.push([cm.dist(cm2), cm2, i]);
     }
-    sortme.sort();
+    sortme.sort((a, b) => a[0] - b[0]);
     for (let ii = 0; ii < faces.length; ii++) {
       const i = sortme[ii][2];
       if (!finished[i]) {
@@ -1187,6 +1196,7 @@ export class PuzzleGeometry {
   }
 
   public allstickers(): void {
+    const t1 = tstart("allstickers");
     // next step is to calculate all the stickers and orbits
     // We do enough work here to display the cube on the screen.
     // take our newly split base face and expand it by the rotation matrix.
@@ -1591,6 +1601,7 @@ export class PuzzleGeometry {
     if (this.options.verbosity > 0) {
       console.log("# Cubie orbit sizes " + cubieords);
     }
+    tend(t1);
   }
 
   public unswizzle(mv: Move): string {
@@ -1742,6 +1753,7 @@ export class PuzzleGeometry {
   }
 
   public genperms(): void {
+    const t1 = tstart("genperms");
     // generate permutations for moves
     if (this.cmovesbyslice.length > 0) {
       // did this already?
@@ -1925,6 +1937,7 @@ export class PuzzleGeometry {
     }
     this.facelisthash.clear();
     this.facecentermass = [];
+    tend(t1);
   }
 
   private getboundarygeometry(): any {
