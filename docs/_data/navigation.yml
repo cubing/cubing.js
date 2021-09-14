@@ -5,10 +5,118 @@ main:
   - title: "Getting Started"
     url: "/getting-started/"
   - title: "API Reference"
-    url: /API-reference
+    url: /api-reference
   # - title: "Guides"
   #   url: /guides
   - title: "Experiments"
-    url: https://experiments.cubing.net/cubing.js/
+    url: "/experiments/"
   - title: "Contributing"
     url: /contributing
+
+
+experiments:
+  - title: Twizzle
+    children:
+      - title: "✍️ Twizzle Editor"
+        url: https://alpha.twizzle.net/edit/
+      - title: "🔭 Twizzle Explorer"
+        url: https://alpha.twizzle.net/explore/
+  - title: Cube Manipulation
+    children:
+      - title: "🌀 Play"
+        url: https://experiments.cubing.net/cubing.js/play/
+      - title: "📶 Bluetooth"
+        url: https://experiments.cubing.net/cubing.js/bluetooth/
+      - title: "🖥 console"
+        url: https://experiments.cubing.net/cubing.js/console/
+
+  - title: Twisty Experiments
+    children:
+      - title: "🔄 twisty/twisty-player-v1" 
+        url: https://experiments.cubing.net/cubing.js/twisty/twisty-player-v1.html
+      - title: "🆕 twisty/twisty-player"
+        url: https://experiments.cubing.net/cubing.js/twisty/twisty-player
+      - title: "🔄 twisty/attributes"
+        url: https://experiments.cubing.net/cubing.js/twisty/attributes.html
+      - title: "🔄 twisty/elements"
+        url: https://experiments.cubing.net/cubing.js/twisty/elements.html
+      - title: "🔄 twisty/inline"
+        url: https://experiments.cubing.net/cubing.js/twisty/inline.html
+      - title: "🔄 twisty/svg"
+        url: https://experiments.cubing.net/cubing.js/twisty/svg.html
+      - title: "🔄 twisty/cube3d"
+        url: https://experiments.cubing.net/cubing.js/twisty/cube3d.html
+      - title: "🔄 twisty/cube3d-stickering"
+        url: https://experiments.cubing.net/cubing.js/twisty/cube3d-stickering.html
+      - title: "🔄 twisty/2d-stickering"
+        url: https://experiments.cubing.net/cubing.js/twisty/2d-stickering.html
+      - title: "🔄 twisty/2d-ll-stickering"
+        url: https://experiments.cubing.net/cubing.js/twisty/2d-ll-stickering.html
+      - title: "🔄 twisty/fto-stickering"
+        url: https://experiments.cubing.net/cubing.js/twisty/fto-stickering.html
+      - title: "🔄 twisty/pg3d"
+        url: https://experiments.cubing.net/cubing.js/twisty/pg3d.html
+      - title: "🔄 twisty/pyraminx"
+        url: https://experiments.cubing.net/cubing.js/twisty/pyraminx.html
+      - title: "🔄 twisty/ll"
+        url: https://experiments.cubing.net/cubing.js/twisty/ll.html
+      - title: "🔄 twisty/mkbhd"
+        url: https://experiments.cubing.net/cubing.js/twisty/mkbhd.html
+      - title: "🔄 twisty/supercube"
+        url: https://experiments.cubing.net/cubing.js/twisty/supercube.html
+      - title: "🔄 twisty/supercube-arrows"
+        url: https://experiments.cubing.net/cubing.js/twisty/supercube-arrows.html
+      - title: "🔄 twisty/puzzle-description"
+        url: https://experiments.cubing.net/cubing.js/twisty/puzzle-description.html
+      - title: "🔄 twisty/simultaneous"
+        url: https://experiments.cubing.net/cubing.js/twisty/simultaneous.html
+      - title: "🔄 twisty/twisty-alg-viewer"
+        url: https://experiments.cubing.net/cubing.js/twisty/twisty-alg-viewer.html
+      - title: "🔄 twisty/twisty-alg-editor"
+        url: https://experiments.cubing.net/cubing.js/twisty/twisty-alg-editor
+
+
+  - title: cubing.js Experiments
+    children:
+      - title: "🎬 twizzle-diaries/intro"
+        url: https://experiments.cubing.net/cubing.js/twizzle-diaries/intro
+      - title: "🖼 KPuzzle SVG"
+        url: https://experiments.cubing.net/cubing.js/KPuzzle SVG.html
+      - title: "🇬🇷 flag/greece"
+        url: https://experiments.cubing.net/cubing.js/flag/greece.html
+      - title: "🕶 VR"
+        url: https://experiments.cubing.net/cubing.js/VR
+      - title: "🕶 VR proxy"
+        url: https://experiments.cubing.net/cubing.js/VR proxy.html
+      - title: "🔍 spec/binary"
+        url: https://experiments.cubing.net/cubing.js/spec/binary
+      - title: "🔢 3x3x3-formats"
+        url: https://experiments.cubing.net/cubing.js/3x3x3-formats
+      - title: "🔠 multi-alg"
+        url: https://experiments.cubing.net/cubing.js/multi-alg
+      - title: "↪️ stream/reorient"
+        url: https://experiments.cubing.net/cubing.js/stream/reorient.html
+      - title: "🤖 robot"
+        url: https://experiments.cubing.net/cubing.js/robot
+      - title: "🤖 robot/logs"
+        url: https://experiments.cubing.net/cubing.js/robot/logs
+      - title: "📸 screenshot"
+        url: https://experiments.cubing.net/cubing.js/screenshot
+      - title: "🔍 alg/inspector"
+        url: https://experiments.cubing.net/cubing.js/alg/inspector.html
+      - title: "🔀 scramble"
+        url: https://experiments.cubing.net/cubing.js/scramble
+      - title: "📃 stub"
+        url: https://experiments.cubing.net/cubing.js/stub
+      - title: "😲 stress-tests/40x40x40"
+        url: https://experiments.cubing.net/cubing.js/stress-tests/40x40x40.html
+      - title: "😲 stress-tests/2x2x2-devils-alg"
+        url: https://experiments.cubing.net/cubing.js/stress-tests/2x2x2-devils-alg.html
+      - title: "📦 applet-wrappers/AnimCube"
+        url: https://experiments.cubing.net/cubing.js/applet-wrappers/AnimCube
+      - title: "🧪 threex"
+        url: https://experiments.cubing.net/cubing.js/threex
+      - title: "🧪 threex/babylon"
+        url: https://experiments.cubing.net/cubing.js/threex/babylon.html
+
+
