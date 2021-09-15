@@ -1,4 +1,5 @@
 export { TwistyPlayer } from "./views/TwistyPlayer";
+export { TwistyAlgViewer } from "./views/TwistyAlgViewer";
 export { TwistyAlgEditorV2 } from "./views/TwistyAlgEditor/TwistyAlgEditorV2";
 export type { TwistyPlayerConfig } from "./views/TwistyPlayer";
 
