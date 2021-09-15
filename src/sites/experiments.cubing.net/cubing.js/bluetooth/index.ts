@@ -5,7 +5,7 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../../../cubing/bluetooth";
-import { TwistyAlgViewer, TwistyPlayerV1 } from "../../../../cubing/twisty";
+import { TwistyAlgViewerV1, TwistyPlayerV1 } from "../../../../cubing/twisty";
 
 async function asyncSetup(twistyPlayer: TwistyPlayerV1): Promise<void> {
   console.log("asyncSetup");
@@ -26,7 +26,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.querySelector("#player")!.appendChild(twistyPlayer);
   document
     .querySelector("#controls")!
-    .appendChild(new TwistyAlgViewer({ twistyPlayer }));
+    .appendChild(new TwistyAlgViewerV1({ twistyPlayer }));
 
   asyncSetup(twistyPlayer);
 

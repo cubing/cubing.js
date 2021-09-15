@@ -14,7 +14,7 @@ import {
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
 import { puzzles } from "../../../puzzles";
-import { TwistyPlayerV1 } from "../../../twisty";
+import { TwistyPlayerV1 } from "../..";
 import { KPuzzleWrapper } from "../../views/3D/puzzles/KPuzzleWrapper";
 import type { TimeRange } from "../animation/cursor/AlgCursor";
 import type { MillisecondTimestamp } from "../animation/cursor/CursorTypes";
@@ -24,22 +24,22 @@ import {
   customElementsShim,
   HTMLElementShim,
 } from "./element/node-custom-element-shims";
-import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css_";
+import { twistyAlgViewerCSS } from "./TwistyAlgViewerV1.css_";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
 
 class DataDown {
   earliestMoveIndex: number;
-  twistyAlgViewer: TwistyAlgViewer;
+  twistyAlgViewer: TwistyAlgViewerV1;
   direction: ExperimentalIterationDirection;
 }
 
 class DataUp {
   moveCount: number;
-  element: TwistyAlgWrapperElem | TwistyAlgLeafElem;
+  element: TwistyAlgWrapperElemV1 | TwistyAlgLeafElemV1;
 }
 
-class TwistyAlgLeafElem extends ManagedCustomElement {
+class TwistyAlgLeafElemV1 extends ManagedCustomElement {
   constructor(
     className: string,
     text: string,
@@ -73,7 +73,9 @@ class TwistyAlgLeafElem extends ManagedCustomElement {
     }
   }
 
-  pathToIndex(_index: number): (TwistyAlgWrapperElem | TwistyAlgLeafElem)[] {
+  pathToIndex(
+    _index: number,
+  ): (TwistyAlgWrapperElemV1 | TwistyAlgLeafElemV1)[] {
     return [];
   }
 
@@ -82,9 +84,9 @@ class TwistyAlgLeafElem extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-alg-leaf-elem", TwistyAlgLeafElem);
+customElementsShim.define("twisty-alg-leaf-elem-v1", TwistyAlgLeafElemV1);
 
-class TwistyAlgWrapperElem extends HTMLElementShim {
+class TwistyAlgWrapperElemV1 extends HTMLElementShim {
   private queue: (Element | Text)[] = [];
 
   constructor(className: string, public algOrUnit: Alg | Unit) {
@@ -110,12 +112,14 @@ class TwistyAlgWrapperElem extends HTMLElementShim {
     this.queue = [];
   }
 
-  pathToIndex(_index: number): (TwistyAlgWrapperElem | TwistyAlgLeafElem)[] {
+  pathToIndex(
+    _index: number,
+  ): (TwistyAlgWrapperElemV1 | TwistyAlgLeafElemV1)[] {
     return [];
   }
 }
 
-customElementsShim.define("twisty-alg-wrapper-elem", TwistyAlgWrapperElem);
+customElementsShim.define("twisty-alg-wrapper-elem-v1", TwistyAlgWrapperElemV1);
 
 function oppositeDirection(
   direction: ExperimentalIterationDirection,
@@ -149,7 +153,7 @@ function maybeReverseList<T>(
 class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-alg", alg); // TODO: pick a better class name.
+    const element = new TwistyAlgWrapperElemV1("twisty-alg-alg", alg); // TODO: pick a better class name.
     let first = true;
     for (const unit of experimentalDirect(alg.units(), dataDown.direction)) {
       if (!first) {
@@ -182,13 +186,13 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       grouping.amount,
     );
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-grouping", grouping);
+    const element = new TwistyAlgWrapperElemV1("twisty-alg-grouping", grouping);
     element.addString("(");
 
     if (square1Tuple) {
       moveCount += element.addElem({
         moveCount: 1,
-        element: new TwistyAlgLeafElem(
+        element: new TwistyAlgLeafElemV1(
           "twisty-alg-move", // TODO: Mark the tuple with a special class?
           square1Tuple[0].amount.toString(),
           dataDown,
@@ -200,7 +204,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       element.addString(", ");
       moveCount += element.addElem({
         moveCount: 1,
-        element: new TwistyAlgLeafElem(
+        element: new TwistyAlgLeafElemV1(
           "twisty-alg-move", // TODO: Mark the tuple with a special class?
           square1Tuple[1].amount.toString(),
           dataDown,
@@ -228,7 +232,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   }
 
   public traverseMove(move: Move, dataDown: DataDown): DataUp {
-    const element = new TwistyAlgLeafElem(
+    const element = new TwistyAlgLeafElemV1(
       "twisty-alg-move",
       move.toString(),
       dataDown,
@@ -251,7 +255,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     dataDown: DataDown,
   ): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem(
+    const element = new TwistyAlgWrapperElemV1(
       "twisty-alg-commutator",
       commutator,
     );
@@ -287,7 +291,10 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
 
   public traverseConjugate(conjugate: Conjugate, dataDown: DataDown): DataUp {
     let moveCount = 0;
-    const element = new TwistyAlgWrapperElem("twisty-alg-conjugate", conjugate);
+    const element = new TwistyAlgWrapperElemV1(
+      "twisty-alg-conjugate",
+      conjugate,
+    );
     element.addString("[");
     const aLen = element.addElem(
       this.traverseAlg(conjugate.A, {
@@ -316,7 +323,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   public traversePause(pause: Pause, dataDown: DataDown): DataUp {
     return {
       moveCount: 1,
-      element: new TwistyAlgLeafElem(
+      element: new TwistyAlgLeafElemV1(
         "twisty-alg-pause",
         ".",
         dataDown,
@@ -328,7 +335,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   }
 
   public traverseNewline(newline: Newline, _dataDown: DataDown): DataUp {
-    const element = new TwistyAlgWrapperElem("twisty-alg-newline", newline);
+    const element = new TwistyAlgWrapperElemV1("twisty-alg-newline", newline);
     element.append(document.createElement("br"));
     return {
       moveCount: 0,
@@ -342,7 +349,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   ): DataUp {
     return {
       moveCount: 0,
-      element: new TwistyAlgLeafElem(
+      element: new TwistyAlgLeafElemV1(
         "twisty-alg-line-comment",
         `//${lineComment.text}`,
         dataDown,
@@ -360,10 +367,10 @@ const algToDOMTree = algToDOMTreeInstance.traverseAlg.bind(
 ) as (alg: Alg, dataDown: DataDown) => DataUp;
 
 class MoveHighlighter {
-  moveCharIndexMap: Map<number, TwistyAlgLeafElem> = new Map();
-  currentElem: TwistyAlgLeafElem | null = null;
+  moveCharIndexMap: Map<number, TwistyAlgLeafElemV1> = new Map();
+  currentElem: TwistyAlgLeafElemV1 | null = null;
 
-  addMove(charIndex: number, elem: TwistyAlgLeafElem): void {
+  addMove(charIndex: number, elem: TwistyAlgLeafElemV1): void {
     this.moveCharIndexMap.set(charIndex, elem);
   }
 
@@ -382,9 +389,9 @@ class MoveHighlighter {
   }
 }
 
-export class TwistyAlgViewer extends HTMLElementShim {
+export class TwistyAlgViewerV1 extends HTMLElementShim {
   highlighter: MoveHighlighter = new MoveHighlighter();
-  #domTree: TwistyAlgWrapperElem | TwistyAlgLeafElem;
+  #domTree: TwistyAlgWrapperElemV1 | TwistyAlgLeafElemV1;
   twistyPlayer: TwistyPlayerV1 | null = null;
   lastClickTimestamp: number | null = null;
   constructor(options?: { twistyPlayer?: TwistyPlayerV1 }) {
@@ -506,4 +513,4 @@ export class TwistyAlgViewer extends HTMLElementShim {
   }
 }
 
-customElementsShim.define("twisty-alg-viewer", TwistyAlgViewer);
+customElementsShim.define("twisty-alg-viewer-v1", TwistyAlgViewerV1);
