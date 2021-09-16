@@ -1,5 +1,6 @@
 import type { Texture as ThreeTexture } from "three";
 import type { PuzzleLoader } from "../../../puzzles";
+import { cubeAppearance } from "../../../puzzles/stickerings/cube-stickerings";
 import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
 import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
@@ -67,6 +68,20 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
           this.scheduleRender();
         } else {
+          if (
+            [
+              "experimental-global-custom-1",
+              "experimental-global-custom-2",
+            ].includes(stickering)
+          ) {
+            const [twisty3D] = await Promise.all([this.twisty3DPuzzle()]);
+            (twisty3D as PG3D).experimentalSetAppearance(
+              await cubeAppearance(this.puzzleLoader, stickering),
+            );
+            this.scheduleRender();
+            return;
+          }
+
           // TODO: create a prop to handle this.
           if ("appearance" in this.puzzleLoader) {
             const [twisty3D, appearancePromise] = await Promise.all([

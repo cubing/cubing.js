@@ -33,6 +33,10 @@ export async function screenshot(
     await model.visualizationStrategyProp.get(),
   );
 
+  // TODO: Pass the stickering to the constructor so we don't have to wait..
+  await model.stickeringProp.get();
+  await new Promise(async (resolve) => setTimeout(resolve, 1000));
+
   // TODO: Find a more robust way to do this.
   await model.legacyPositionProp.get(); // Force the 3D puzzle listeners for the state to fire.
 

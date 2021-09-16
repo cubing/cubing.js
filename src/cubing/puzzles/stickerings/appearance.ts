@@ -57,16 +57,17 @@ export function getFaceletAppearance(
   return faceletAppearance.appearance;
 }
 
+// TODO: Revert this to a normal enum, or write a standard to codify the names?
 export enum PieceStickering {
-  Regular,
-  Dim,
-  Ignored,
-  OrientationStickers,
-  Invisible,
-  Ignoriented,
-  IgnoreNonPrimary,
-  PermuteNonPrimary,
-  OrientationWithoutPermutation,
+  Regular = "Regular",
+  Dim = "Dim",
+  Ignored = "Ignored",
+  OrientationStickers = "OrientationStickers",
+  Invisible = "Invisible",
+  Ignoriented = "Ignoriented",
+  IgnoreNonPrimary = "IgnoreNonPrimary",
+  PermuteNonPrimary = "PermuteNonPrimary",
+  OrientationWithoutPermutation = "OrientationWithoutPermutation",
 }
 
 export class PieceAnnotation<T> {

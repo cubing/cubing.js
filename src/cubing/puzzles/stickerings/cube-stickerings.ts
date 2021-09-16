@@ -7,6 +7,7 @@ import {
   PieceSet,
   PieceStickering,
 } from "./appearance";
+import { useGlobalCustomStickerer } from "./global-custom-stickering-hack";
 
 // TODO: cache calculations?
 export async function cubeAppearance(
@@ -236,6 +237,11 @@ export async function cubeAppearance(
     case "centers-only":
       puzzleStickering.set(m.not(CENTERS()), PieceStickering.Ignored);
       break;
+    case "experimental-global-custom-1":
+    // fallthrough
+    case "experimental-global-custom-2":
+      useGlobalCustomStickerer(puzzleStickering, m);
+      break;
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,
@@ -274,5 +280,7 @@ export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
     "picture",
     "invisible",
     "centers-only",
+    "experimental-global-custom-1",
+    "experimental-global-custom-2",
   ];
 }
