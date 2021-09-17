@@ -46,6 +46,7 @@ export function useGlobalCustomStickerer(
 }
 
 if (
+  typeof location !== "undefined" &&
   new URL(location.href).searchParams.get("global-custom-stickerer") === "true"
 ) {
   (window as any).setGlobalCustomStickerer = setGlobalCustomStickerer;
