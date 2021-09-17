@@ -6,6 +6,7 @@ import {
   Euler,
   FrontSide,
   Group,
+  Material,
   Mesh,
   MeshBasicMaterial,
   Object3D,
@@ -506,10 +507,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private fixedGeo: BufferGeometry;
   private lastPos: PuzzlePosition;
   private lastMove: Transformation;
-  private hintMaterial: MeshBasicMaterial;
-  private stickerMaterial: MeshBasicMaterial;
-  private materialArray1: MeshBasicMaterial[];
-  private materialArray2: MeshBasicMaterial[];
+  private hintMaterial: Material;
+  private stickerMaterial: Material;
+  private materialArray1: Material[];
+  private materialArray2: Material[];
   private textured: boolean = false;
   private hintMaterialDisposable: boolean;
   private stickerMaterialDisposable: boolean;
