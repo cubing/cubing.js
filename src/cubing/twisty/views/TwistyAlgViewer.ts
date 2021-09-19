@@ -431,7 +431,9 @@ export class TwistyAlgViewer extends HTMLElementShim {
 
     twistyPlayer.experimentalModel.currentLeavesProp.addFreshListener(
       (currentMoveInfo: CurrentMoveInfo) => {
-        const moveInfo = currentMoveInfo.currentMoves[0];
+        let moveInfo = currentMoveInfo.currentMoves[0];
+        moveInfo ??= currentMoveInfo.movesStarting[0];
+        moveInfo ??= currentMoveInfo.movesFinishing[0];
         if (!moveInfo) {
           this.highlighter.set(null);
         } else {
