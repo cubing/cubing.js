@@ -2109,6 +2109,8 @@ export class PuzzleGeometry {
         ip.map((_) => "[" + _.map((__) => __ + 1).join(",") + "]").join(",") +
         "];",
     );
+    r.push("# Size(Group(Gen));");
+    r.push("# Size(Stabilizer(Group(Gen), ip, OnTuplesSets));");
     r.push("");
     return this.header("# ") + r.join("\n");
   }
