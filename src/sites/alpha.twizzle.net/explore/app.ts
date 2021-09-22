@@ -420,9 +420,9 @@ function dowork(cmd: string): void {
   const checkboxOptions: PuzzleGeometryOptions = {
     allMoves: checkboxes.allmoves,
     vertexMoves: checkboxes.vertexmoves,
-    includeCornerOrbits: !checkboxes.corners,
-    includeEdgeOrbits: !checkboxes.edges,
-    includeCenterOrbits: !checkboxes.centers,
+    includeCornerOrbits: checkboxes.corners,
+    includeEdgeOrbits: checkboxes.edges,
+    includeCenterOrbits: checkboxes.centers,
     optimizeOrbits: checkboxes.optimize,
     outerBlockMoves: checkboxes.outerblockmoves,
     fixedOrientation: checkboxes.killori,
