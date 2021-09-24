@@ -1,6 +1,6 @@
 export { TwistyPlayer } from "./views/TwistyPlayer";
 export { TwistyAlgViewer } from "./views/TwistyAlgViewer";
-export { TwistyAlgEditorV2 } from "./views/TwistyAlgEditor/TwistyAlgEditorV2";
+export { TwistyAlgEditor } from "./views/TwistyAlgEditor/TwistyAlgEditor";
 export type { TwistyPlayerConfig } from "./views/TwistyPlayer";
 
 export { NO_VALUE as EXPERIMENTAL_PROP_NO_VALUE } from "./model/TwistyProp";

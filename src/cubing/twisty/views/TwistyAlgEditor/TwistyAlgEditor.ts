@@ -1,5 +1,5 @@
 /**
- * Warning: the current implementation of <twisty-alg-editor-v2> is *not good*,
+ * Warning: the current implementation of <twisty-alg-editor> is *not good*,
  * but it is *good enough*. The important parts is that:
  *
  * - The editor can be used in apps without much effort.
@@ -29,7 +29,7 @@ const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
 type TwistyPlayerAlgProp = "algProp" | "setupProp";
 
-export class TwistyAlgEditorV2 extends ManagedCustomElement {
+export class TwistyAlgEditor extends ManagedCustomElement {
   model = new TwistyAlgEditorModel();
 
   // #alg: Alg = new Alg();
@@ -346,4 +346,4 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-alg-editor-v2", TwistyAlgEditorV2);
+customElementsShim.define("twisty-alg-editor", TwistyAlgEditor);

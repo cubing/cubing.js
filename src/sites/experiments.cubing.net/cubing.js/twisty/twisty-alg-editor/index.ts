@@ -1,5 +1,5 @@
 import { TwistyPlayer } from "../../../../../cubing/twisty";
-import { TwistyAlgEditorV2 } from "../../../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditorV2";
+import { TwistyAlgEditor } from "../../../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 
 const alg = `F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2
 
@@ -14,7 +14,7 @@ U // AUF
 const twistyPlayer = document.body.appendChild(new TwistyPlayer({ alg }));
 twistyPlayer.id = "plplpl";
 
-const twistyAlgEditor = new TwistyAlgEditorV2({});
+const twistyAlgEditor = new TwistyAlgEditor({});
 twistyAlgEditor.setAttribute("for-twisty-player", "plplpl");
 // twistyAlgEditor.algString = alg;
 document.body.appendChild(twistyAlgEditor);

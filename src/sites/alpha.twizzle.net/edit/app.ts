@@ -25,7 +25,7 @@ import type {
   PuzzleID,
   SetupToLocation,
 } from "../../../cubing/twisty/old/dom/TwistyPlayerConfig";
-import type { TwistyAlgEditorV2 } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditorV2";
+import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
@@ -190,8 +190,8 @@ class ButtonGrid extends HTMLElement {
 customElementsShim.define("button-grid", ButtonGrid);
 
 class ControlPane {
-  public experimentalSetupAlgInput: TwistyAlgEditorV2;
-  public algInput: TwistyAlgEditorV2;
+  public experimentalSetupAlgInput: TwistyAlgEditor;
+  public algInput: TwistyAlgEditor;
   public puzzleSelect: HTMLSelectElement;
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
@@ -221,15 +221,15 @@ class ControlPane {
     this.experimentalSetupAlgInput = findOrCreateChildWithClass(
       this.element,
       "experimental-setup-alg",
-      "twisty-alg-editor-v2",
-    ) as TwistyAlgEditorV2;
+      "twisty-alg-editor",
+    ) as TwistyAlgEditor;
     this.experimentalSetupAlgInput.twistyPlayer = twistyPlayer;
 
     this.algInput = findOrCreateChildWithClass(
       this.element,
       "alg",
-      "twisty-alg-editor-v2",
-    ) as TwistyAlgEditorV2;
+      "twisty-alg-editor",
+    ) as TwistyAlgEditor;
     this.algInput, { twistyPlayer };
     this.algInput.twistyPlayer = twistyPlayer;
 
