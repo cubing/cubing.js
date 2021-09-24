@@ -93,13 +93,15 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     }
     this.#twistyPlayerProp = options?.twistyPlayerProp ?? "algProp";
 
-    this.model.leafToHighlight.addFreshListener(
-      (highlightInfo: HighlightInfo | null) => {
-        if (highlightInfo) {
-          this.highlightLeaf(highlightInfo.leafInfo.leaf);
-        }
-      },
-    );
+    if (options?.twistyPlayerProp === "algProp") {
+      this.model.leafToHighlight.addFreshListener(
+        (highlightInfo: HighlightInfo | null) => {
+          if (highlightInfo) {
+            this.highlightLeaf(highlightInfo.leafInfo.leaf);
+          }
+        },
+      );
+    }
   }
 
   // TODO
@@ -175,6 +177,9 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
   // TODO: support a primary highlighted move and secondary ones.
   highlightLeaf(leaf: ExperimentalParsed<Move | Pause> | null): void {
+    if (this.#twistyPlayerProp !== "algProp") {
+      return;
+    }
     if (leaf === null) {
       this.#carbonCopyPrefix.textContent = "";
       this.#carbonCopyHighlight.textContent = "";
