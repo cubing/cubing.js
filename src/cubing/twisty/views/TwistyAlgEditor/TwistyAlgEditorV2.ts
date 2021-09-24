@@ -217,7 +217,9 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
       return;
     }
     (async () => {
-      this.algString = (await this.#algProp!.get()).alg.toString();
+      this.algString = this.#algProp
+        ? (await this.#algProp.get()).alg.toString()
+        : "";
     })();
 
     if (this.#twistyPlayerProp === "algProp") {
@@ -280,6 +282,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
               newTimestamp = moveStartTimestamp + duration;
               break;
             default:
+              console.log("invalid where");
               throw new Error("Invalid where!");
           }
           twistyPlayer.experimentalModel.timestampRequestProp.set(newTimestamp);
@@ -321,6 +324,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
         return;
       case ATTRIBUTE_TWISTY_PLAYER_PROP:
         if (this.#twistyPlayer) {
+          console.log("cannot set prop");
           throw new Error("cannot set prop after twisty player");
         }
         this.#twistyPlayerProp = newValue as TwistyPlayerAlgProp;

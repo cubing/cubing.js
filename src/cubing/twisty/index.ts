@@ -20,7 +20,6 @@ export type {
 export { TimestampLocationType } from "./old/animation/Timeline";
 export type { TimelineActionEvent } from "./old/animation/Timeline";
 export { TwistyAlgViewerV1 } from "./old/dom/TwistyAlgViewerV1";
-export { TwistyAlgEditor } from "./old/dom/TwistyAlgEditor";
 
 // Older
 export { Cube3D } from "./views/3D/puzzles/Cube3D";
