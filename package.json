@@ -32,7 +32,7 @@
     "peggy": "^1.1.0",
     "prettier": "^2.2.1",
     "puppeteer": "^8.0.0",
-    "snowpack": "^3.8.3",
+    "snowpack": "^3.8.8",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.2",
     "yargs": "^16.2.0"
