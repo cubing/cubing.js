@@ -60,6 +60,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     super();
     this.#carbonCopy.classList.add("carbon-copy");
     this.addElement(this.#carbonCopy);
+    console.log("rows 1")
     this.#textarea.rows = 1;
     this.addElement(this.#textarea);
     this.#carbonCopyPrefix.classList.add("prefix");
@@ -132,6 +133,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     // textarea without scrolling (but I don't know if this is guaranteed).
     if (this.#textarea.clientHeight < this.#textarea.scrollHeight) {
       while (this.#textarea.clientHeight < this.#textarea.scrollHeight) {
+        console.log("++1")
         this.#textarea.rows++;
       }
       return;
@@ -140,8 +142,10 @@ export class TwistyAlgEditor extends ManagedCustomElement {
         if (this.#textarea.rows === 1) {
           return;
         }
+        console.log("--2")
         this.#textarea.rows--;
       }
+      console.log("++3")
       this.#textarea.rows++;
     }
 

@@ -19,9 +19,9 @@ import type { CurrentLeavesSimplified } from "../../model/depth-9/CurrentLeavesS
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
-import { twistyAlgEditorCSS } from "../../old/dom/TwistyAlgEditor.css_";
 import { TwistyPlayer } from "../TwistyPlayer";
 import { HighlightInfo, TwistyAlgEditorModel } from "./model";
+import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css_";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";
@@ -37,6 +37,7 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
   #carbonCopy: HTMLDivElement = document.createElement("div");
   #carbonCopyPrefix: HTMLSpanElement = document.createElement("span");
   #carbonCopyHighlight: HTMLSpanElement = document.createElement("span");
+  #carbonCopySuffix: HTMLSpanElement = document.createElement("span");
 
   // #textareaClassListManager: ClassListManager<"none" | "warning" | "error"> =
   //   new ClassListManager(this, "issue-", ["none", "warning", "error"]);
@@ -59,12 +60,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     }
   }
 
-  #observer = new ResizeObserver((entries: ResizeObserverEntry[]) =>
-    this.onResize(entries),
-  );
-
-  #lastObserverRect: DOMRectReadOnly | null = null;
-
   constructor(options?: {
     twistyPlayer?: TwistyPlayer;
     twistyPlayerProp?: TwistyPlayerAlgProp;
@@ -78,6 +73,8 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#carbonCopy.appendChild(this.#carbonCopyPrefix);
     this.#carbonCopyHighlight.classList.add("highlight");
     this.#carbonCopy.appendChild(this.#carbonCopyHighlight);
+    this.#carbonCopySuffix.classList.add("suffix");
+    this.#carbonCopy.appendChild(this.#carbonCopySuffix);
 
     // Prevent iOS from defaulting to smart quotes.
     this.#textarea.setAttribute("spellcheck", "false");
@@ -96,7 +93,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     }
     this.#twistyPlayerProp = options?.twistyPlayerProp ?? "algProp";
 
-    this.#observer.observe(this.contentWrapper);
     this.model.leafToHighlight.addFreshListener(
       (highlightInfo: HighlightInfo | null) => {
         if (highlightInfo) {
@@ -104,21 +100,6 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
         }
       },
     );
-  }
-
-  onResize(entries: ResizeObserverEntry[]): void {
-    const rect = entries[0].contentRect;
-    if (
-      rect.height !== this.#lastObserverRect?.height ||
-      rect.width !== this.#lastObserverRect?.width
-    ) {
-      this.#observer.unobserve(this.contentWrapper);
-      this.resizeTextarea();
-      requestAnimationFrame(() => {
-        this.#observer.observe(this.contentWrapper);
-      });
-      this.#lastObserverRect = rect;
-    }
   }
 
   // TODO
@@ -137,55 +118,8 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#textarea.placeholder = placeholderText;
   }
 
-  resizeTextarea(): void {
-    // This seems to be reasonably performant. Direct calculation is tricky
-    // because we're trying to find the least fixed point of recursive constraints:
-    //
-    // - Textarea height depends on line wrapping,
-    // - which depends on textarea width,
-    // - which may depends on parent width,
-    // - which may change if the textarea height is large enough to cause
-    //   scrolling.
-    //
-    // In practice, it seems that `this.#textarea.clientHeight` and
-    // `this.#textarea.scrollHeight` match when the wrapped text fits inside the
-    // textarea without scrolling (but I don't know if this is guaranteed).
-    if (this.#textarea.clientHeight < this.#textarea.scrollHeight) {
-      while (this.#textarea.clientHeight < this.#textarea.scrollHeight) {
-        this.#textarea.rows++;
-      }
-      return;
-    } else {
-      while (this.#textarea.clientHeight === this.#textarea.scrollHeight) {
-        if (this.#textarea.rows === 1) {
-          return;
-        }
-        this.#textarea.rows--;
-      }
-      this.#textarea.rows++;
-    }
-
-    // Here's some old code that almost worked (but doesn't work if the parent scrollbar depends on how long the alg is):
-
-    // this.#textarea.style.maxHeight = "1px";
-    // const computedStyle = getComputedStyle(this.#textarea);
-    // const paddingTop = parsePx(computedStyle.getPropertyValue("padding-top"));
-    // const paddingBottom = parsePx(
-    //   computedStyle.getPropertyValue("padding-bottom"),
-    // );
-    // this.#textarea.style.paddingTop = "0px"; // Workaround for Firefox, which doesn't calculate the same `scrollHeight` as Chromium and WebKit without this. https://bugzilla.mozilla.org/show_bug.cgi?id=576976
-    // this.#textarea.style.paddingBottom = "0px"; // Workaround for Firefox, which doesn't calculate the same `scrollHeight` as Chromium and WebKit without this. https://bugzilla.mozilla.org/show_bug.cgi?id=576976
-    // this.#textarea.style.height = `${
-    //   this.#textarea.scrollHeight + paddingTop + paddingBottom
-    // }px`;
-    // this.#textarea.style.maxHeight = "";
-    // this.#textarea.style.paddingTop = "";
-    // this.#textarea.style.paddingBottom = "";
-  }
-
   onInput(): void {
     this.#carbonCopyHighlight.hidden = true;
-    this.resizeTextarea();
     this.highlightLeaf(null);
 
     // TODO: This is a hack so that the you don't get a warning when the cursor
@@ -232,12 +166,21 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#textareaClassListValidForPuzzleManager.setValue(issues);
   }
 
+  // `white-space: pre;` mostly matches the formatting of the `<textarea>`, *except* when we end with a newline.
+  // So we add an space to ensure that there is a character on the final line (that is very unlikely to trigger extra line wrapping).
+  #padSuffix(s: string): string {
+    return s.endsWith("\n") ? s + " " : s;
+  }
+
   #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
   // TODO: support a primary highlighted move and secondary ones.
   highlightLeaf(leaf: ExperimentalParsed<Move | Pause> | null): void {
     if (leaf === null) {
       this.#carbonCopyPrefix.textContent = "";
       this.#carbonCopyHighlight.textContent = "";
+      this.#carbonCopySuffix.textContent = this.#padSuffix(
+        this.#textarea.value,
+      );
       return;
     }
     if (leaf === this.#highlightedLeaf) {
@@ -251,6 +194,9 @@ export class TwistyAlgEditorV2 extends ManagedCustomElement {
     this.#carbonCopyHighlight.textContent = this.#textarea.value.slice(
       leaf.startCharIndex,
       leaf.endCharIndex,
+    );
+    this.#carbonCopySuffix.textContent = this.#padSuffix(
+      this.#textarea.value.slice(leaf.endCharIndex),
     );
     this.#carbonCopyHighlight.hidden = false;
   }
