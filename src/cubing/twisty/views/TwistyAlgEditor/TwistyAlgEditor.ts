@@ -82,7 +82,10 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     this.addCSS(twistyAlgEditorCSS);
 
     // TODO: What set of events should we register? `change`? `keydown`?
-    this.#textarea.addEventListener("input", () => this.onInput());
+    this.#textarea.addEventListener("input", () => {
+      this.#onInputHasFired = true;
+      this.onInput();
+    });
     this.#textarea.addEventListener("blur", () => this.onBlur());
     document.addEventListener("selectionchange", () =>
       this.onSelectionChange(),
@@ -120,6 +123,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     this.#textarea.placeholder = placeholderText;
   }
 
+  #onInputHasFired = false;
   onInput(): void {
     this.#carbonCopyHighlight.hidden = true;
     this.highlightLeaf(null);
@@ -265,7 +269,10 @@ export class TwistyAlgEditor extends ManagedCustomElement {
             await twistyPlayer.experimentalModel.indexerProp.get(),
             await twistyPlayer.experimentalModel.timestampRequestProp.get(),
           ]);
-          if (timestampRequest === "end") {
+          if (
+            timestampRequest === "opposite-anchor" &&
+            !this.#onInputHasFired
+          ) {
             return;
           }
           const moveStartTimestamp = indexer.indexToMoveStartTimestamp(
