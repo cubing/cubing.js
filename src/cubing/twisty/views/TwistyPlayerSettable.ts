@@ -10,6 +10,7 @@ import type { TimestampRequest } from "../model/depth-0/TimestampRequestProp";
 import type { ViewerLinkPageWithAuto } from "../model/depth-0/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/depth-0/VisualizationProp";
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
+import type { MillisecondTimestamp } from "../old/animation/cursor/CursorTypes";
 import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
 import type { PuzzleID, SetupToLocation } from "../old/dom/TwistyPlayerConfig";
 
@@ -85,4 +86,26 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
 
   set experimentalHintSprite(url: string | URL) { this.experimentalModel.hintStickerSpriteURL.set(url); }
   get experimentalHintSprite(): never { throw err("experimentalHintSprite"); }
+
+  experimentalGet = new ExperimentalGetters(this.experimentalModel)
+}
+
+class ExperimentalGetters {
+  constructor(private model: TwistyPlayerModel) {}
+
+  async alg(): Promise<Alg> {
+    return (await this.model.algProp.get()).alg;
+  }
+
+  async setupAlg(): Promise<Alg> {
+    return (await this.model.setupProp.get()).alg;
+  }
+
+  puzzleID(): Promise<PuzzleID> {
+    return this.model.puzzleIDProp.get();
+  }
+
+  async timestamp(): Promise<MillisecondTimestamp> {
+    return (await this.model.detailedTimelineInfoProp.get()).timestamp;
+  }
 }
