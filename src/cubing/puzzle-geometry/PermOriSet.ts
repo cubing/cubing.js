@@ -77,9 +77,10 @@ export class OrbitsDef {
     result.push("");
     result.push("Solved");
     for (let i = 0; i < this.orbitnames.length; i++) {
-      this.solved.orbits[i].appendConciseDefinition(
+      this.solved.orbits[i].appendDefinition(
         result,
         this.orbitnames[i],
+        false,
         false,
       );
     }
@@ -97,9 +98,9 @@ export class OrbitsDef {
         if (doinv) {
           this.moveops[i].orbits[j]
             .inv()
-            .appendConciseDefinition(result, this.orbitnames[j], true);
+            .appendDefinition(result, this.orbitnames[j], true);
         } else {
-          this.moveops[i].orbits[j].appendConciseDefinition(
+          this.moveops[i].orbits[j].appendDefinition(
             result,
             this.orbitnames[j],
             true,
@@ -459,12 +460,13 @@ export class Orbit {
     return new Orbit(newPerm, newOri, this.orimod);
   }
 
-  public appendConciseDefinition(
+  public appendDefinition(
     result: String[],
     name: string,
     useVS: boolean,
+    concise: boolean = true,
   ): void {
-    if (this.isIdentity()) {
+    if (concise && this.isIdentity()) {
       return;
     }
     result.push(name);
