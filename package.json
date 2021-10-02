@@ -12,6 +12,8 @@
     "@types/web-bluetooth": "0.0.4",
     "comlink": "^4.3.1",
     "http-server": "^13.0.2",
+    "live-server": "^1.2.1",
+    "mirror-directories": "^4.0.1",
     "three": "^0.126.1"
   },
   "devDependencies": {
