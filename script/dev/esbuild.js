@@ -1,13 +1,8 @@
 import * as esbuild from "esbuild";
-import glob from "glob";
 import { join } from "path";
 import { listFilesWithSuffix } from "./ls.js";
 
 let currentBuildResult = null;
-
-export function getEntryPoints() {
-  return glob.sync("src/sites/**/*.ts");
-}
 
 export async function restartEsbuild(entryRootPath, outputRootPath) {
   if (currentBuildResult) {
