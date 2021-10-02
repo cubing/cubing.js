@@ -58,9 +58,11 @@ export class CustomServer {
   }
 
   async tryReadFile(rootPath, normalizedPath) {
-    console.log(rootPath, normalizedPath, process.cwd());
-    const filePath = new URL(join(rootPath, normalizedPath), process.cwd())
-      .pathname;
+    console.log(rootPath, normalizedPath, process.cwd(), import.meta.url);
+    const filePath = new URL(
+      join(rootPath, normalizedPath),
+      `file://${process.cwd()}`,
+    ).pathname;
 
     try {
       return await readFile(filePath);
