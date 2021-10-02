@@ -6,6 +6,7 @@ import {
 } from ".";
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
 import { Alg } from "../alg";
+
 describe("CanonSequences", () => {
   it("should merge sequences (megaminx test)", () => {
     const pg = getPuzzleGeometryByName("megaminx", {});
