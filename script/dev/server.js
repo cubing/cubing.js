@@ -50,7 +50,7 @@ export class CustomServer {
       }
     }
 
-    response.writeHead(404, { "Content-Type": "text/html" });
+    response.writeHead(404, { "Content-Type": "text/plain" });
     response.end("404 Not Found", "utf-8");
   }
 
