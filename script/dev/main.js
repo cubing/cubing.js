@@ -26,6 +26,10 @@ This works well enough, but it has a few consequences:
   - TODO: we could restart the `esbuild` server any time we get a request for a `.js` file that we don't know.
  */
 
+console.log(`Using the new custom dev server.
+If you're having issues, run: make dev-snowpack
+`);
+
 restartEsbuild(SITES_ROOT, ESBUILD_OUTPUT_ROOT);
 new CustomServer({
   rootPaths: [ESBUILD_OUTPUT_ROOT, SITES_ROOT],
