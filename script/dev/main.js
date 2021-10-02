@@ -17,8 +17,13 @@ server as a thin layer on `esbuild` in watch mode. We:
   - Else serve from `src/sites`
 
 This works well enough, but it has a few consequences:
+- You have the reload the browser manually to pick up changes.
+- We don't use any caching.
+  - TODO: We could cache based on `stat` modified time.
 - Since we don't transform our HTML, we have to use `.js` for our script `src` attributes.
-  - To make development easier, we put the corresponding `.ts` path as an `href` attribute.
+  - To make easy to "Follow link" in VSCode, we put the corresponding `.ts` path as an `href` attribute. This attribute is ignored by browsers.
+- `esbuild` will not automatically pick up on new `.ts` entry points. You'll have to restart the server for that.
+  - TODO: we could restart the `esbuild` server any time we get a request for a `.js` file that we don't know.
  */
 
 restartEsbuild(SITES_ROOT, ESBUILD_OUTPUT_ROOT);

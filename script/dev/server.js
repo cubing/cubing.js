@@ -38,6 +38,8 @@ export class CustomServer {
       normalizedPath += "index.html";
     }
 
+    response.setHeader("Cache-Control", "no-store");
+
     for (const rootPath of this.rootPaths) {
       const body = await this.tryReadFile(rootPath, normalizedPath);
       if (body !== null) {
@@ -58,11 +60,7 @@ export class CustomServer {
   }
 
   async tryReadFile(rootPath, normalizedPath) {
-    console.log(rootPath, normalizedPath, process.cwd(), import.meta.url);
-    const filePath = new URL(
-      join(rootPath, normalizedPath),
-      `file://${process.cwd()}`,
-    ).pathname;
+    const filePath = join(process.cwd(), rootPath, normalizedPath);
 
     try {
       return await readFile(filePath);
