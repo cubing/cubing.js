@@ -9,15 +9,15 @@ We have had serious issues with bugs in bundlers, and are rolling our own dev
 server as a thin layer on `esbuild` in watch mode. We: 
 
 - Enumerate all the `.ts` files in `SITES_ROOT` and start `esbuild`:
-  - in watch mode
-  - with those `.ts` files as entry points
+  - in watch mode,
+  - with those `.ts` files as entry points,
   - building to `ESBUILD_OUTPUT_ROOT`.
 - Start a server with two roots:
-  - Serve from `ESBUILD_OUTPUT_ROOT` if possible.
-  - Else serve from `src/sites`
+  - Serve from `ESBUILD_OUTPUT_ROOT` if the file can be found there.
+  - Else serve from `SITES_ROOT`
 
 This works well enough, but it has a few consequences:
-- You have the reload the browser manually to pick up changes.
+- You have the reload the browser manually to pick up `.ts` entry point files that were created after the server was started
 - We don't use any caching.
   - TODO: We could cache based on `stat` modified time.
 - Since we don't transform our HTML, we have to use `.js` for our script `src` attributes.
