@@ -1,5 +1,6 @@
 import * as esbuild from "esbuild";
 import { join } from "path";
+import { build, searchWorkerTarget } from "../build/index.js";
 import { listFilesWithSuffix } from "./ls.js";
 
 let currentBuildResult = null;
@@ -8,6 +9,9 @@ export async function restartEsbuild(entryRootPath, outputRootPath) {
   if (currentBuildResult) {
     (await currentBuildResult).stop();
   }
+
+  await build(searchWorkerTarget, true);
+
   const entryPoints = await listFilesWithSuffix(
     join(process.cwd(), entryRootPath),
     ".ts",
