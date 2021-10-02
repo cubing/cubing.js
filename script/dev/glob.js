@@ -1,5 +1,5 @@
-import * as glob from "glob";
+import glob from "glob";
 
 export function getEntryPoints() {
-  files = glob.sync("src/sites/**/*.ts");
+  return glob.sync("src/sites/**/*.ts");
 }

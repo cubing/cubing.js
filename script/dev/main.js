@@ -1,15 +1,10 @@
-import { mirrorDirectories } from "mirror-directories";
+import { restartEsbuild } from "./esbuild.js";
 import liveServer from "live-server";
+import { watch } from "fs/promises";
+import { mirror } from "./mirror.js";
 
-import "./esbuild.js";
-
-mirrorDirectories([
-  {
-    srcDirs: ["src/sites/", "dist/dev/esbuild/"],
-    destDirs: ["dist/dev/serve"],
-    rename: true,
-  },
-]);
+restartEsbuild();
+mirror();
 
 var params = {
   host: "localhost",
@@ -20,12 +15,18 @@ var params = {
 };
 liveServer.start(params);
 
-// (async () => {
-//   try {
-//     const watcher = watch("src/sites", { recursive: true });
-//     for await (const event of watcher) console.log(event);
-//   } catch (err) {
-//     if (err.name === "AbortError") return;
-//     throw err;
-//   }
-// })();
+(async () => {
+  try {
+    const watcher = watch("src/sites", { recursive: true });
+    for await (const event of watcher) {
+      console.log(event);
+      if (event.filename.endsWith(".ts") && event.eventType !== "change") {
+        restartEsbuild();
+      }
+      // mirror();
+    }
+  } catch (err) {
+    if (err.name === "AbortError") return;
+    throw err;
+  }
+})();
