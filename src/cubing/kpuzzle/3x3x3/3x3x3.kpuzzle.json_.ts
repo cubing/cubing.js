@@ -256,16 +256,16 @@ export const cube3x3x3KPuzzle: KPuzzleDefinition = {
     },
     b: {
       EDGES: {
-        permutation: [8, 5, 2, 1, 9, 7, 6, 3, 4, 0, 10, 11],
-        orientation: [1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0],
+        permutation: [0, 5, 10, 1, 4, 7, 11, 3, 8, 9, 6, 2],
+        orientation: [0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1],
       },
       CORNERS: {
-        permutation: [4, 1, 2, 0, 5, 3, 6, 7],
-        orientation: [1, 0, 0, 2, 2, 1, 0, 0],
+        permutation: [0, 7, 1, 3, 4, 5, 2, 6],
+        orientation: [0, 2, 1, 0, 0, 0, 2, 1],
       },
       CENTERS: {
         permutation: [3, 0, 2, 5, 4, 1],
-        orientation: [3, 3, 3, 3, 0, 3],
+        orientation: [3, 3, 0, 3, 1, 3],
       },
     },
     d: {
