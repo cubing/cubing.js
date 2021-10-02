@@ -1,17 +1,17 @@
 import * as esbuild from "esbuild";
 import { getEntryPoints } from "./glob.js";
 
-let currentServerResult = null;
+let currentBuildResult = null;
 
 export async function restartEsbuild() {
-  if (currentServerResult) {
-    (await currentServerResult).stop();
+  if (currentBuildResult) {
+    (await currentBuildResult).stop();
   }
   const entryPoints = getEntryPoints();
   console.log(
     `Starting esbuild in watch mode with ${entryPoints.length} entry points.`,
   );
-  currentServerResult = esbuild.build({
+  currentBuildResult = esbuild.build({
     entryPoints,
     outdir: "dist/dev/esbuild",
     format: "esm",
