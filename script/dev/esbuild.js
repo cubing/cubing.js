@@ -1,7 +1,11 @@
 import * as esbuild from "esbuild";
-import { getEntryPoints } from "./glob.js";
+import glob from "glob";
 
 let currentBuildResult = null;
+
+export function getEntryPoints() {
+  return glob.sync("src/sites/**/*.ts");
+}
 
 export async function restartEsbuild() {
   if (currentBuildResult) {

@@ -5,6 +5,7 @@ restartEsbuild();
 new CustomServer({
   rootPaths: ["dist/dev/esbuild", "src/sites"],
   port: 3333,
+  // debug: true,
 }).start();
 
 // TODO: Restart `esbuild` when a JS file is missing (in case it was just created)?

@@ -24,6 +24,7 @@ export class CustomServer {
   constructor(options) {
     this.port = options?.port ?? 3333; // number
     this.rootPaths = options.rootPaths; // string[]
+    this.debug = options?.debug ?? false;
   }
 
   start() {
@@ -37,11 +38,12 @@ export class CustomServer {
       normalizedPath += "index.html";
     }
 
-    console.log(normalizedPath);
-
     for (const rootPath of this.rootPaths) {
       const body = await this.tryReadFile(rootPath, normalizedPath);
       if (body !== null) {
+        if (this.debug) {
+          console.log(`200 ${request.url} (from ${rootPath})`);
+        }
         response.writeHead(200, {
           "Content-Type": this.contentType(normalizedPath),
         });
@@ -50,6 +52,7 @@ export class CustomServer {
       }
     }
 
+    console.log(`404 ${request.url}`);
     response.writeHead(404, { "Content-Type": "text/plain" });
     response.end("404 Not Found", "utf-8");
   }
