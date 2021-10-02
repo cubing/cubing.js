@@ -43,7 +43,7 @@ export class CustomServer {
     for (const rootPath of this.rootPaths) {
       const body = await this.tryReadFile(rootPath, normalizedPath);
       if (body !== null) {
-        if (this.debug) {
+        if (this.debug || normalizedPath.endsWith(".html")) {
           console.log(`200 ${request.url} (from ${rootPath})`);
         }
         response.writeHead(200, {
