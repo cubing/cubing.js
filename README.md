@@ -38,13 +38,12 @@ git clone https://github.com/cubing/cubing.js && cd cubing.js
 make dev
 ```
 
-This should run `npm install` and start the server, after which you can open <http://localhost:3333/>. We don't yet have a development guide, so you'll have to search the code to find where features are implemented.
+This should run `npm install` and start the server, after which you can open <http://localhost:3333/>. Some tips:
 
-The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/) To test changes, use:
-
-```shell
-make test
-```
+- See [`src/README.md`](./src/README.md) for the source code structure.
+  - The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/).
+  - The code for Twizzle and dev experiments is in [`src/sites`](./src/sites/).
+- To test changes, run: `make test`
 
 ## License
 
