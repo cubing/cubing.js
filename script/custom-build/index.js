@@ -1,8 +1,7 @@
+import { build, searchWorkerTarget } from "../build/index.js";
 import { restartEsbuild } from "./esbuild.js";
 import { CustomServer } from "./server.js";
-
-const SITES_ROOT = "src/sites/alpha.twizzle.net";
-const ESBUILD_OUTPUT_ROOT = "dist/sites/alpha.twizzle.net";
+import { join } from "path";
 
 /*
 We have had serious issues with bugs in bundlers, and are rolling our own dev
@@ -30,13 +29,27 @@ console.log(`Using the new custom dev server.
 If you're having issues, run: make dev-snowpack
 `);
 
-export function customBuild(options) {
-  const dev = options.dev ?? true;
+function srcFolder(srcPath, dev) {
+  return {
+    root: join("src", srcPath),
+    outDir: join(dev ? "dist/dev" : "dist", srcPath),
+  };
+}
 
-  restartEsbuild(SITES_ROOT, ESBUILD_OUTPUT_ROOT, dev);
+export async function customBuild(options) {
+  const dev = options.dev ?? false;
+  if (!options.srcRoot) {
+    throw new Error("Must specify `srcRoot`");
+  }
+  const { root, outDir } = srcFolder(options.srcRoot, dev);
+
+  console.log("outDir", outDir);
+
+  await build(searchWorkerTarget, dev);
+  restartEsbuild(root, outDir, dev);
   if (dev) {
     new CustomServer({
-      rootPaths: [ESBUILD_OUTPUT_ROOT, SITES_ROOT],
+      rootPaths: [outDir, root],
       port: 3333,
       // debug: true,
     }).start();
