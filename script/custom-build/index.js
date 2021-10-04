@@ -30,6 +30,7 @@ Benefits we've gotten from doing this, so far:
 - Source maps are working again.
 - Safe to deploy to any folder on a server (no absolute resource paths injected by bundlers).
 - No `_snowpack` folder.
+- We don't have to spend 20 seconds (out of 30 seconds) of `make sites` on `babylonjs` transpilation (even though we're barely using it).
 
  */
 
