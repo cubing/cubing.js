@@ -14,11 +14,8 @@ import { writeFile } from "fs";
 import { join } from "path";
 import * as snowpack from "snowpack";
 import { promisify } from "util";
-import {
-  experimentsSnowpackConfig,
-  sitesSnowpackConfig,
-  twizzleSnowpackConfig,
-} from "../../snowpack.config.mjs";
+import { experimentsSnowpackConfig } from "../../snowpack.config.mjs";
+import { customBuild } from "../custom-build/index.js";
 import { execPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
@@ -218,12 +215,17 @@ export const sitesTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(sitesSnowpackConfig);
+    customBuild({
+      srcRoot: "sites/alpha.twizzle.net",
+      isWebsite: true,
+      dev,
+    });
+    // const config = snowpack.createConfiguration(sitesSnowpackConfig);
 
-    const snowpackPromise = dev
-      ? snowpack.startServer({ config }, { isDev: dev })
-      : snowpack.build({ config });
-    await snowpackPromise;
+    // const snowpackPromise = dev
+    //   ? snowpack.startServer({ config }, { isDev: dev })
+    //   : snowpack.build({ config });
+    // await snowpackPromise;
   },
 };
 
@@ -232,15 +234,20 @@ export const twizzleTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(twizzleSnowpackConfig);
+    customBuild({
+      srcRoot: "sites/alpha.twizzle.net",
+      isWebsite: true,
+      dev,
+    });
+    // const config = snowpack.createConfiguration(twizzleSnowpackConfig);
 
-    const snowpackPromise = dev
-      ? snowpack.startServer({ config }, { isDev: dev })
-      : snowpack.build({ config });
-    await snowpackPromise;
+    // const snowpackPromise = dev
+    //   ? snowpack.startServer({ config }, { isDev: dev })
+    //   : snowpack.build({ config });
+    // await snowpackPromise;
 
     if (!dev) {
-      await writeVersionJSON(config.buildOptions.out);
+      await writeVersionJSON("dist/sites/alpha.twizzle.net");
     }
   },
 };

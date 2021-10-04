@@ -2,6 +2,7 @@ import { build, searchWorkerTarget } from "../build/index.js";
 import { restartEsbuild } from "./esbuild.js";
 import { CustomServer } from "./server.js";
 import { join } from "path";
+import { cp } from "fs/promises";
 
 /*
 We have had serious issues with bugs in bundlers, and are rolling our own dev
@@ -38,12 +39,11 @@ function srcFolder(srcPath, dev) {
 
 export async function customBuild(options) {
   const dev = options.dev ?? false;
+  const isWebsite = options?.isWebsite ?? false;
   if (!options.srcRoot) {
     throw new Error("Must specify `srcRoot`");
   }
   const { root, outDir } = srcFolder(options.srcRoot, dev);
-
-  console.log("outDir", outDir);
 
   await build(searchWorkerTarget, dev);
   restartEsbuild(root, outDir, dev);
@@ -53,5 +53,8 @@ export async function customBuild(options) {
       port: 3333,
       // debug: true,
     }).start();
+  } else if (isWebsite) {
+    // TODO: filter out `.ts` if they don't work for source maps?
+    cp(root, outDir, { recursive: true });
   }
 }

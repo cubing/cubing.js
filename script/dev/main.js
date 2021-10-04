@@ -1,14 +1,9 @@
-import { customBuild } from "../custom-build/index.js";
+// import { customBuild } from "../custom-build/index.js";
 
 // const SITES_ROOT = "src/sit/ "dist/sites/alpha.twizzle.net";
 
 // customBuild({
-//   root: "src/sites/",
-//   outDir: "dist/dev/sites",
-//   dev: true,
+//   srcRoot: "sites/alpha.twizzle.net",
+//   isWebsite: true,
+//   dev: false,
 // });
-
-customBuild({
-  srcRoot: "sites",
-  dev: true,
-});
