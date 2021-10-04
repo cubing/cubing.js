@@ -31,8 +31,10 @@ Benefits we've gotten from doing this, so far:
 - Safe to deploy to any folder on a server (no absolute resource paths injected by bundlers).
 - No `_snowpack` folder.
 - We don't have to spend 20 seconds (out of 30 seconds) of `make sites` on `babylonjs` transpilation (even though we're barely using it).
+- This doesn't crash (and immediately recovers) if you move some files around or briefly check out some slightly older code.
+  - You'll have to restart if you need the dev server to change the set of entry points, though (see above).
 
- */
+*/
 
 console.log(`Using the new custom dev server.
 If you're having issues, run: make dev-snowpack
