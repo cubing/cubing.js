@@ -220,12 +220,6 @@ export const sitesTarget = {
       isWebsite: true,
       dev,
     });
-    // const config = snowpack.createConfiguration(sitesSnowpackConfig);
-
-    // const snowpackPromise = dev
-    //   ? snowpack.startServer({ config }, { isDev: dev })
-    //   : snowpack.build({ config });
-    // await snowpackPromise;
   },
 };
 
@@ -239,14 +233,9 @@ export const twizzleTarget = {
       isWebsite: true,
       dev,
     });
-    // const config = snowpack.createConfiguration(twizzleSnowpackConfig);
-
-    // const snowpackPromise = dev
-    //   ? snowpack.startServer({ config }, { isDev: dev })
-    //   : snowpack.build({ config });
-    // await snowpackPromise;
 
     if (!dev) {
+      // TODO: Include this in the custom build process.
       await writeVersionJSON("dist/sites/alpha.twizzle.net");
     }
   },
@@ -257,15 +246,15 @@ export const experimentsTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(experimentsSnowpackConfig);
-
-    const snowpackPromise = dev
-      ? snowpack.startServer({ config }, { isDev: dev })
-      : snowpack.build({ config });
-    await snowpackPromise;
+    customBuild({
+      srcRoot: "sites/alpha.twizzle.net",
+      isWebsite: true,
+      dev,
+    });
 
     if (!dev) {
-      await writeVersionJSON(config.buildOptions.out);
+      // TODO: Include this in the custom build process.
+      await writeVersionJSON("dist/sites/alpha.twizzle.net");
     }
   },
 };

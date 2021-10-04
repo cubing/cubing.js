@@ -1,8 +1,7 @@
-import { build, searchWorkerTarget } from "../build/index.js";
+import { cp } from "fs/promises";
+import { join } from "path";
 import { restartEsbuild } from "./esbuild.js";
 import { CustomServer } from "./server.js";
-import { join } from "path";
-import { cp } from "fs/promises";
 
 /*
 We have had serious issues with bugs in bundlers, and are rolling our own dev
@@ -45,7 +44,7 @@ export async function customBuild(options) {
   }
   const { root, outDir } = srcFolder(options.srcRoot, dev);
 
-  await build(searchWorkerTarget, dev);
+  // await build(searchWorkerTarget, dev);
   restartEsbuild(root, outDir, dev);
   if (dev) {
     new CustomServer({
