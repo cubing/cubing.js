@@ -36,10 +36,6 @@ Benefits we've gotten from doing this, so far:
 
 */
 
-console.log(`Using the new custom dev server.
-If you're having issues, run: make dev-snowpack
-`);
-
 function srcFolder(srcPath, dev) {
   return {
     root: join("src", srcPath),
