@@ -5,10 +5,6 @@ import { AlgBuilder, Grouping, Move, Unit } from "../../../../cubing/alg";
 import { countMoves } from "../../../../cubing/notation";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 
-// Note: this file needs to contain code to avoid a Snowpack error.
-// So we put a `console.log` here for now.
-console.log("Loading stub file.");
-
 (async () => {
   const devilsAlgDef = {
     V: "U'",
