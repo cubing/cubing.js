@@ -20,7 +20,7 @@
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
-    "babel-jest": "^26.6.3",
+    "babel-jest": "^27.2.4",
     "esbuild": "^0.12.29",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
