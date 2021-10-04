@@ -213,7 +213,7 @@ export const sitesTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    customBuild({
+    await customBuild({
       srcRoot: "sites",
       isWebsite: true,
       dev,
@@ -226,7 +226,7 @@ export const twizzleTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    customBuild({
+    await customBuild({
       srcRoot: "sites/alpha.twizzle.net",
       isWebsite: true,
       dev,
@@ -244,7 +244,7 @@ export const experimentsTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    customBuild({
+    await customBuild({
       srcRoot: "sites/experiments.cubing.net/cubing.js",
       isWebsite: true,
       dev,

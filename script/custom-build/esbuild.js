@@ -14,9 +14,9 @@ export async function restartEsbuild(entryRootPath, outputRootPath, dev) {
     ".ts",
   );
   console.log(
-    `Starting esbuild in watch mode with ${entryPoints.length} entry points.`,
+    `Starting esbuild with ${entryPoints.length} entry points.`,
   );
-  currentBuildResult = esbuild.build({
+  return currentBuildResult = esbuild.build({
     entryPoints,
     outdir: outputRootPath,
     format: "esm",

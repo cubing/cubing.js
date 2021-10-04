@@ -53,7 +53,7 @@ export async function customBuild(options) {
   const { root, outDir } = srcFolder(options.srcRoot, dev);
 
   // await build(searchWorkerTarget, dev);
-  restartEsbuild(root, outDir, dev);
+  await restartEsbuild(root, outDir, dev);
   if (dev) {
     new CustomServer({
       rootPaths: [outDir, root],
@@ -62,6 +62,6 @@ export async function customBuild(options) {
     }).start();
   } else if (isWebsite) {
     // TODO: filter out `.ts` if they don't work for source maps?
-    cp(root, outDir, { recursive: true });
+    await cp(root, outDir, { recursive: true });
   }
 }
