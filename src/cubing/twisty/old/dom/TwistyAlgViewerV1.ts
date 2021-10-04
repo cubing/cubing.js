@@ -24,7 +24,7 @@ import {
   customElementsShim,
   HTMLElementShim,
 } from "./element/node-custom-element-shims";
-import { twistyAlgViewerCSS } from "./TwistyAlgViewerV1.css_";
+import { twistyAlgViewerCSS } from "./TwistyAlgViewerV1.css";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
 

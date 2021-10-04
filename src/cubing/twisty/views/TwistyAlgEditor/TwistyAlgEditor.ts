@@ -21,7 +21,7 @@ import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import { TwistyPlayer } from "../TwistyPlayer";
 import { HighlightInfo, TwistyAlgEditorModel } from "./model";
-import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css_";
+import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";

@@ -11,7 +11,7 @@ export const cube2x2x2: PuzzleLoader = {
   id: "2x2x2",
   fullName: "2×2×2 Cube",
   def: async () => {
-    return (await import("./2x2x2.kpuzzle.json_")).cube2x2x2KPuzzle;
+    return (await import("./2x2x2.kpuzzle.json")).cube2x2x2KPuzzle;
   },
   svg: async () => {
     return (await import("./2x2x2.kpuzzle.svg")).default;

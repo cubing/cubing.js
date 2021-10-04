@@ -12,13 +12,8 @@
 import * as esbuild from "esbuild";
 import { writeFile } from "fs";
 import { join } from "path";
-import * as snowpack from "snowpack";
 import { promisify } from "util";
-import {
-  experimentsSnowpackConfig,
-  sitesSnowpackConfig,
-  twizzleSnowpackConfig,
-} from "../../snowpack.config.mjs";
+import { customBuild } from "../custom-build/index.js";
 import { execPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
@@ -218,12 +213,11 @@ export const sitesTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(sitesSnowpackConfig);
-
-    const snowpackPromise = dev
-      ? snowpack.startServer({ config }, { isDev: dev })
-      : snowpack.build({ config });
-    await snowpackPromise;
+    await customBuild({
+      srcRoot: "sites",
+      isWebsite: true,
+      dev,
+    });
   },
 };
 
@@ -232,15 +226,15 @@ export const twizzleTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(twizzleSnowpackConfig);
-
-    const snowpackPromise = dev
-      ? snowpack.startServer({ config }, { isDev: dev })
-      : snowpack.build({ config });
-    await snowpackPromise;
+    await customBuild({
+      srcRoot: "sites/alpha.twizzle.net",
+      isWebsite: true,
+      dev,
+    });
 
     if (!dev) {
-      await writeVersionJSON(config.buildOptions.out);
+      // TODO: Include this in the custom build process.
+      await writeVersionJSON("dist/sites/alpha.twizzle.net");
     }
   },
 };
@@ -250,15 +244,15 @@ export const experimentsTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    const config = snowpack.createConfiguration(experimentsSnowpackConfig);
-
-    const snowpackPromise = dev
-      ? snowpack.startServer({ config }, { isDev: dev })
-      : snowpack.build({ config });
-    await snowpackPromise;
+    await customBuild({
+      srcRoot: "sites/experiments.cubing.net/cubing.js",
+      isWebsite: true,
+      dev,
+    });
 
     if (!dev) {
-      await writeVersionJSON(config.buildOptions.out);
+      // TODO: Include this in the custom build process.
+      await writeVersionJSON("dist/sites/alpha.twizzle.net");
     }
   },
 };

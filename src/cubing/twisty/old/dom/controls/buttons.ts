@@ -14,7 +14,7 @@ import { ClassListManager } from "../element/ClassListManager";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import type { ViewerLinkPage } from "../TwistyPlayerConfig";
-import { buttonCSS, buttonGridCSS } from "./buttons.css_";
+import { buttonCSS, buttonGridCSS } from "./buttons.css";
 import type { TwistyControlElement } from "./TwistyControlElement";
 
 type TimelineCommand =

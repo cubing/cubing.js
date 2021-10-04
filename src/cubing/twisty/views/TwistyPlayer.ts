@@ -12,7 +12,7 @@ import type { VisualizationFormatWithAuto } from "../model/depth-0/Visualization
 import type { VisualizationStrategy } from "../model/depth-3/VisualizationStrategyProp";
 import { ClassListManager } from "../old/dom/element/ClassListManager";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
-import { twistyPlayerCSS } from "../old/dom/TwistyPlayer.css_";
+import { twistyPlayerCSS } from "../old/dom/TwistyPlayer.css";
 import {
   controlsLocations,
   PuzzleID,

@@ -26,7 +26,7 @@ import { TwistyScrubber } from "./controls/TwistyScrubber";
 import { ClassListManager } from "./element/ClassListManager";
 import { ManagedCustomElement } from "./element/ManagedCustomElement";
 import { customElementsShim } from "./element/node-custom-element-shims";
-import { twistyPlayerCSS } from "./TwistyPlayer.css_";
+import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import {
   BackgroundTheme,
   CameraLatitudeLimits,

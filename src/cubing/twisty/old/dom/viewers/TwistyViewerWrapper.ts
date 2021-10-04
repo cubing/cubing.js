@@ -1,7 +1,7 @@
 import { ClassListManager } from "../element/ClassListManager";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
-import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css_";
+import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
 
 export const backViewLayouts = {
   "none": true, // default

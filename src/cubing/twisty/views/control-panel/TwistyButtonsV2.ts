@@ -2,7 +2,7 @@ import {
   BoundaryType,
   Direction,
 } from "../../old/animation/cursor/CursorTypes";
-import { buttonCSS, buttonGridCSS } from "../../old/dom/controls/buttons.css_";
+import { buttonCSS, buttonGridCSS } from "../../old/dom/controls/buttons.css";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";

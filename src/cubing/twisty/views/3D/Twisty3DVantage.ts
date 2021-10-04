@@ -9,7 +9,7 @@ import { RenderScheduler } from "../../old/animation/RenderScheduler";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import { pixelRatio } from "../../old/dom/viewers/canvas";
-import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css_";
+import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";

@@ -19,10 +19,6 @@ import {
 import { backViewLayouts } from "../../../../../cubing/twisty/old/dom/viewers/TwistyViewerWrapper";
 import { showStats } from "../../../../../cubing/twisty/views/3D/Twisty3DVantage";
 
-// Note: this file needs to contain code to avoid a Snowpack error.
-// So we put a `console.log` here for now.
-console.log("Loading stub file.");
-
 showStats(true);
 
 // alg="y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2"
