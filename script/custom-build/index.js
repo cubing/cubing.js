@@ -33,6 +33,7 @@ Benefits we've gotten from doing this, so far:
 - We don't have to spend 20 seconds (out of 30 seconds) of `make sites` on `babylonjs` transpilation (even though we're barely using it).
 - This doesn't crash (and immediately recovers) if you move some files around or briefly check out some slightly older code.
   - You'll have to restart if you need the dev server to change the set of entry points, though (see above).
+- No need to add underscores to `.css.ts` or `.json.ts` file names to prevent bundlers from treating them directly as CSS/JSON.
 
 */
 

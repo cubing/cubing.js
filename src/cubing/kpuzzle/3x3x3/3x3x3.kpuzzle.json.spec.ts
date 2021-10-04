@@ -1,6 +1,6 @@
 import { Alg } from "../../alg";
 import { KPuzzle } from "../kpuzzle";
-import { cube3x3x3KPuzzle } from "./3x3x3.kpuzzle.json_";
+import { cube3x3x3KPuzzle } from "./3x3x3.kpuzzle.json";
 
 function transformationForAlg(alg: string | Alg) {
   const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
