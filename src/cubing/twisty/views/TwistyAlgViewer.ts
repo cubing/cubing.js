@@ -22,7 +22,7 @@ import {
   customElementsShim,
   HTMLElementShim,
 } from "../old/dom/element/node-custom-element-shims";
-import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css_";
+import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css";
 import { TwistyPlayer } from "./TwistyPlayer";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?

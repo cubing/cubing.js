@@ -3,7 +3,7 @@ import type { Schedulable } from "../../old/animation/RenderScheduler";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
-import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css_";
+import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/TwistyProp";

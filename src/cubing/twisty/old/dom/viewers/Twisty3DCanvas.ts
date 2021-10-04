@@ -3,7 +3,7 @@ import type { Twisty3DScene } from "../../../views/3D/Twisty3DScene";
 import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { pixelRatio } from "./canvas";
-import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css_";
+import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
 import { OrbitCoordinates, TwistyOrbitControls } from "./TwistyOrbitControls";
 import type { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";

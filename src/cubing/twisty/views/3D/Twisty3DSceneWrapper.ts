@@ -11,7 +11,7 @@ import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import type { BackViewLayout } from "../../old/dom/viewers/TwistyViewerWrapper";
-import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css_";
+import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
 import { Twisty3DVantage } from "./Twisty3DVantage";
 

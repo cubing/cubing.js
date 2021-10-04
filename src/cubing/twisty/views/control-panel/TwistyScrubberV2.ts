@@ -1,4 +1,4 @@
-import { twistyScrubberCSS } from "../../old/dom/controls/TwistyScrubber.css_";
+import { twistyScrubberCSS } from "../../old/dom/controls/TwistyScrubber.css";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import type { DetailedTimelineInfo } from "../../model/depth-7/DetailedTimelineInfoProp";

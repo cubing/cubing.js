@@ -21,7 +21,7 @@ import type {
   ExperimentalStickering,
   PuzzleID,
 } from "../../old/dom/TwistyPlayerConfig";
-import { twisty2DSVGCSS } from "../../old/dom/viewers/Twisty2DSVGView.css_";
+import { twisty2DSVGCSS } from "../../old/dom/viewers/Twisty2DSVGView.css";
 import type { TwistyViewerElement } from "../../old/dom/viewers/TwistyViewerElement";
 
 export interface Twisty2DPuzzleOptions {
