@@ -5,7 +5,7 @@ import { listFilesWithSuffix } from "./ls.js";
 
 let currentBuildResult = null;
 
-export async function restartEsbuild(entryRootPath, outputRootPath) {
+export async function restartEsbuild(entryRootPath, outputRootPath, dev) {
   if (currentBuildResult) {
     (await currentBuildResult).stop();
   }
@@ -23,12 +23,13 @@ export async function restartEsbuild(entryRootPath, outputRootPath) {
     entryPoints,
     outdir: outputRootPath,
     format: "esm",
-    // target: "es2020",
+    target: "es2020",
     bundle: true,
     splitting: true,
-    watch: true,
+    watch: dev,
     logLevel: "info",
     sourcemap: true,
     external: ["crypto", "worker_threads"],
+    minify: true, // TODO: `!dev`?
   });
 }
