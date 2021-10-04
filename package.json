@@ -61,7 +61,7 @@
     "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src",
     "setup": "npm install",
     "initial-setup-checked": "[ -d \"node_modules\" ] || npm run initial-setup",
-    "initial-setup": "echo $BASH && echo \"Automatically running: npm install\nNote that you have to run this manually in the future there are changes to package-lock.json\" && npm install && npm run setup",
+    "initial-setup": "echo $BASH && echo \"Automatically running: npm install\nNote that you have to run this manually in the future there are changes to package-lock.json\" && env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install && npm run setup",
     "lint": "npx eslint --ext=js,ts .",
     "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import"
   },
