@@ -12,9 +12,7 @@
 import * as esbuild from "esbuild";
 import { writeFile } from "fs";
 import { join } from "path";
-import * as snowpack from "snowpack";
 import { promisify } from "util";
-import { experimentsSnowpackConfig } from "../../snowpack.config.mjs";
 import { customBuild } from "../custom-build/index.js";
 import { execPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
@@ -216,7 +214,7 @@ export const sitesTarget = {
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     customBuild({
-      srcRoot: "sites/alpha.twizzle.net",
+      srcRoot: "sites",
       isWebsite: true,
       dev,
     });
@@ -247,7 +245,7 @@ export const experimentsTarget = {
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     customBuild({
-      srcRoot: "sites/alpha.twizzle.net",
+      srcRoot: "sites/experiments.cubing.net/cubing.js",
       isWebsite: true,
       dev,
     });

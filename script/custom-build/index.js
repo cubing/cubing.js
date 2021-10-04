@@ -15,7 +15,8 @@ server as a thin layer on `esbuild` in watch mode. We:
   - Serve from `ESBUILD_OUTPUT_ROOT` if the file can be found there.
   - Else serve from `SITES_ROOT`
 
-This works well enough, but it has a few consequences:
+This works well enough, but it has a few inconveniences:
+
 - You have the reload the browser manually to pick up `.ts` entry point files that were created after the server was started
 - We don't use any caching.
   - TODO: We could cache based on `stat` modified time.
@@ -23,6 +24,13 @@ This works well enough, but it has a few consequences:
   - To make easy to "Follow link" in VSCode, we put the corresponding `.ts` path as an `href` attribute. This attribute is ignored by browsers.
 - `esbuild` will not automatically pick up on new `.ts` entry points. You'll have to restart the server for that.
   - TODO: we could restart the `esbuild` server any time we get a request for a `.js` file that we don't know.
+
+Benefits we've gotten from doing this, so far:
+
+- Source maps are working again.
+- Safe to deploy to any folder on a server (no absolute resource paths injected by bundlers).
+- No `_snowpack` folder.
+
  */
 
 console.log(`Using the new custom dev server.
