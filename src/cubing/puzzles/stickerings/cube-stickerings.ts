@@ -158,6 +158,25 @@ export async function cubeAppearance(
         PieceStickering.OrientationWithoutPermutation,
       );
       break;
+    case "EOline":
+      puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
+      puzzleStickering.set(
+        EDGES(),
+        PieceStickering.OrientationWithoutPermutation,
+      );
+      puzzleStickering.set(m.and(m.moves(["D", "M"])), PieceStickering.Regular);
+      break;
+    case "EOcross":
+      puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
+      puzzleStickering.set(
+        EDGES(),
+        PieceStickering.OrientationWithoutPermutation,
+      );
+      puzzleStickering.set(
+        m.and([m.move("D"), m.or(m.moves(["D", "S"]))]),
+        PieceStickering.Regular,
+      );
+      break;
     case "CMLL":
       puzzleStickering.set(F2L(), PieceStickering.Dim);
       puzzleStickering.set(L6E(), PieceStickering.Ignored);
@@ -269,6 +288,8 @@ export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
     "VLS",
     "LS",
     "EO",
+    "EOline",
+    "EOcross",
     "CMLL",
     "L6E",
     "L6EO",
