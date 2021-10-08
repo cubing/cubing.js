@@ -3,6 +3,9 @@ import puppeteer from "puppeteer";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { startServer } from "../../lib/experiments-server/index.js";
+import { ensureChromiumDownload } from "../../lib/puppeteer.js";
+
+await ensureChromiumDownload();
 
 const PAGE_URL =
   "http://localhost:4443/experiments.cubing.net/cubing.js/screenshot/";
