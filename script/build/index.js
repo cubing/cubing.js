@@ -242,7 +242,7 @@ export const twizzleTarget = {
 
     if (!dev) {
       // TODO: Include this in the custom build process.
-      await writeVersionJSON("dist/sites/alpha.twizzle.net");
+      await writeVersionJSON("dist/src/sites/alpha.twizzle.net");
     }
   },
 };
@@ -260,7 +260,7 @@ export const experimentsTarget = {
 
     if (!dev) {
       // TODO: Include this in the custom build process.
-      await writeVersionJSON("dist/sites/alpha.twizzle.net");
+      await writeVersionJSON("dist/src/sites/alpha.twizzle.net");
     }
   },
 };
