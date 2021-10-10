@@ -13,7 +13,7 @@ import * as esbuild from "esbuild";
 import { writeFile } from "fs";
 import { join } from "path";
 import { promisify } from "util";
-import { customBuild } from "../custom-build/index.js";
+import { barelyServe } from "barely-a-dev-server";
 import { execPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
@@ -21,6 +21,14 @@ const PARALLEL = false;
 
 const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "comlink", ...externalNode];
+
+const devServerOptions = {
+  port: 3333,
+  esbuildOptions: {
+    external: externalNode,
+    target: "esnext",
+  },
+};
 
 async function writeVersionJSON(siteFolder) {
   // https://git-scm.com/docs/git-describe
@@ -213,10 +221,10 @@ export const sitesTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    await customBuild({
-      srcRoot: "sites",
-      isWebsite: true,
+    await barelyServe({
+      entryRoot: "src/sites",
       dev,
+      ...devServerOptions,
     });
   },
 };
@@ -226,10 +234,10 @@ export const twizzleTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    await customBuild({
-      srcRoot: "sites/alpha.twizzle.net",
-      isWebsite: true,
+    await barelyServe({
+      entryRoot: "src/sites/alpha.twizzle.net",
       dev,
+      ...devServerOptions,
     });
 
     if (!dev) {
@@ -244,10 +252,10 @@ export const experimentsTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    await customBuild({
-      srcRoot: "sites/experiments.cubing.net/cubing.js",
-      isWebsite: true,
+    await barelyServe({
+      entryRoot: "src/sites/experiments.cubing.net/cubing.js",
       dev,
+      ...devServerOptions,
     });
 
     if (!dev) {
