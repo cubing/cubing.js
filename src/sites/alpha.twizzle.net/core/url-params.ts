@@ -11,20 +11,25 @@ import {
   TwistyPlayerConfig,
 } from "../../../cubing/twisty/views/TwistyPlayer";
 
+function updateURL(url: URL): void {
+  window.history.replaceState("", "", url.toString());
+}
+
 // TODO: Find a way to connect this to the `TwistyPlayer` constructor?
 
+export type URLParamUpdaterOptions = {
+  prefix?: string;
+};
+
 export class URLParamUpdater {
-  constructor(model: TwistyPlayerModel, private prefix = "") {
+  #prefix: string;
+  constructor(model: TwistyPlayerModel, options?: URLParamUpdaterOptions) {
+    this.#prefix = options?.prefix ?? "";
+
     this.listenToAlgProp(model.algProp, "alg");
-    this.listenToAlgProp(model.setupProp, "experimental-setup-alg");
-    this.listenToStringSourceProp(
-      model.stickeringProp,
-      "experimental-stickering",
-    );
-    this.listenToStringSourceProp(
-      model.setupAnchorProp,
-      "experimental-setup-anchor",
-    );
+    this.listenToAlgProp(model.setupProp, "setup-alg");
+    this.listenToStringSourceProp(model.stickeringProp, "stickering");
+    this.listenToStringSourceProp(model.setupAnchorProp, "setup-anchor");
     this.listenToPuzzleIDRequestProp(
       model.puzzleIDRequestProp,
       "puzzle",
@@ -38,14 +43,14 @@ export class URLParamUpdater {
     value: string,
     defaultString: string,
   ): void {
-    const prefixedKey = this.prefix + unprefixedKey;
+    const prefixedKey = this.#prefix + unprefixedKey;
     const url = new URL(location.href);
     if (value === defaultString) {
       url.searchParams.delete(prefixedKey);
     } else {
       url.searchParams.set(prefixedKey, value);
     }
-    window.history.replaceState("", "", url.toString());
+    updateURL(url);
   }
 
   async listenToStringSourceProp(
@@ -79,24 +84,45 @@ export class URLParamUpdater {
   }
 }
 
-const paramKeys: TwistyPlayerAttribute[] = [
-  "alg",
-  "experimental-setup-alg",
-  "experimental-setup-anchor",
-  "puzzle",
-  "experimental-stickering",
-];
+const paramMapping: Record<string, TwistyPlayerAttribute> = {
+  "alg": "alg",
+  "setup-alg": "experimental-setup-alg",
+  "setup-anchor": "experimental-setup-anchor",
+  "puzzle": "puzzle",
+  "stickering": "experimental-stickering",
+};
 
 export function getConfigFromURL(prefix = ""): TwistyPlayerConfig {
   const params = new URL(location.href).searchParams;
   const config: TwistyPlayerConfig = {};
-  for (const paramKey of paramKeys) {
-    const paramValue = params.get(prefix + paramKey);
+  for (const [ourParam, twistyPlayerParam] of Object.entries(paramMapping)) {
+    const paramValue = params.get(prefix + ourParam);
     if (paramValue !== null) {
       // TODO: type
-      const configKey = twistyPlayerAttributeMap[paramKey];
+      const configKey = twistyPlayerAttributeMap[twistyPlayerParam];
       (config as any)[configKey] = paramValue;
     }
   }
   return config;
+}
+
+export function remapLegacyURLParams(
+  mapping: Record<string, string | null>,
+): void {
+  const url = new URL(location.href);
+  for (const [oldKey, newKey] of Object.entries(mapping)) {
+    // `null` indicates there is no new key, i.e. just drop the old key
+    if (newKey !== null) {
+      // The new key takes precedents, so we only remap the old key if the new key
+      // is not already set.
+      if (!url.searchParams.has(newKey)) {
+        const value = url.searchParams.get(oldKey);
+        if (value !== null) {
+          url.searchParams.set(newKey, value);
+        }
+      }
+    }
+    url.searchParams.delete(oldKey);
+  }
+  updateURL(url);
 }

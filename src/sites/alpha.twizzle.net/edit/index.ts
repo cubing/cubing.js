@@ -1,9 +1,15 @@
 import { useNewFaceNames } from "../../../cubing/puzzle-geometry";
 import "../../../cubing/twisty";
 import { showStats } from "../../../cubing/twisty/views/3D/Twisty3DVantage";
-import { getConfigFromURL } from "../core/url-params";
+import { getConfigFromURL, remapLegacyURLParams } from "../core/url-params";
 import { App } from "./app";
 import { getURLParam } from "./url-params";
+
+remapLegacyURLParams({
+  "experimental-setup-alg": "setup-alg",
+  "experimental-setup-anchor": "setup-anchor",
+  "experimental-stickering": "stickering",
+});
 
 useNewFaceNames(true);
 
