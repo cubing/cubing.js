@@ -19,7 +19,7 @@ needFolder(
 );
 
 export function startServer(port) {
-  port ??= 4443;
+  port = port ?? 4443;
   console.log("Starting server.");
   createServer(function (request, response) {
     const normalizedPath = new URL(request.url, "http://test/").pathname;
