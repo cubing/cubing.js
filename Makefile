@@ -9,7 +9,7 @@ $(NPM_COMMANDS):
 	npm run $@
 
 # We write the npm commands to the top of the file above to make shell autocompletion work in more places.
-DYNAMIC_NPM_COMMANDS = $(shell cat package.json | jq --raw-output ".scripts | keys_unsorted | join(\" \")")
+DYNAMIC_NPM_COMMANDS = $(shell node -e 'console.log(Object.keys(require("./package.json").scripts).join(" "))')
 UPDATE_MAKEFILE_SED_ARGS = "s/^NPM_COMMANDS = .*$$/NPM_COMMANDS = ${DYNAMIC_NPM_COMMANDS}/" Makefile
 .PHONY: update-Makefile
 update-Makefile:
