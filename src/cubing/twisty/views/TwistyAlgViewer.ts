@@ -474,17 +474,18 @@ export class TwistyAlgViewer extends HTMLElementShim {
     }
   }
 
-  protected attributeChangedCallback(
+  protected async attributeChangedCallback(
     attributeName: string,
     _oldValue: string,
     newValue: string,
-  ): void {
+  ): Promise<void> {
     if (attributeName === "for") {
       const elem = document.getElementById(newValue);
       if (!elem) {
         console.warn("for= elem does not exist");
         return;
       }
+      await customElements.whenDefined("twisty-player");
       if (!(elem instanceof TwistyPlayer)) {
         console.warn("for= elem is not a twisty-player");
         return;
