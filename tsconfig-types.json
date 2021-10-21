@@ -5,6 +5,6 @@
     "removeComments": false,
     "rootDir": "src/cubing"
   },
-  "include": ["src/cubing/**/*"],
+  "include": ["src/cubing"],
   "exclude": ["*.spec.ts"]
 }
