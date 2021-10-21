@@ -24,7 +24,6 @@
     "dist",
     "dist/**/*",
     "*/index.d.ts",
-    "script/test/dist/esm/parcel/parcel-package",
     "src/static/**/*",
     "src/cubing/search/worker-inside-generated*",
     "src/cubing/search/inside/solve/vendor/min2phase/gwt.js",
