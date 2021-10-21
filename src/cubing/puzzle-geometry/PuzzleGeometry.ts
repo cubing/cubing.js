@@ -2247,7 +2247,8 @@ export class PuzzleGeometry {
     return false;
   }
 
-  private getOrbitsDef(
+  // TODO: This is only public for testing; can we make it private again?
+  public getOrbitsDef(
     fortwisty: boolean,
     includemoves: boolean = true,
   ): OrbitsDef {
