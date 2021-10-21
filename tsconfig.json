@@ -16,15 +16,15 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "importsNotUsedAsValues": "error",
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist"
   },
-  "filesGlob": ["src/**/*"],
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "script/*", "script/**/*", "src/**/*.spec.ts"],
   "exclude": [
     "dist",
     "dist/**/*",
     "*/index.d.ts",
+    "script/test/dist/esm/parcel/parcel-package",
     "src/static/**/*",
     "src/**/*.spec.ts",
     "src/cubing/search/worker-inside-generated*",

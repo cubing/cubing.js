@@ -5,6 +5,5 @@
     "removeComments": false,
     "rootDir": "src/cubing"
   },
-  "filesGlob": ["src/cubing/**/*"],
   "include": ["src/cubing/**/*"]
 }
