@@ -19,14 +19,13 @@
     "rootDir": "./",
     "outDir": "./dist"
   },
-  "include": ["src/**/*", "script/*", "script/**/*", "src/**/*.spec.ts"],
+  "include": ["src", "script"],
   "exclude": [
     "dist",
     "dist/**/*",
     "*/index.d.ts",
     "script/test/dist/esm/parcel/parcel-package",
     "src/static/**/*",
-    "src/**/*.spec.ts",
     "src/cubing/search/worker-inside-generated*",
     "src/cubing/search/inside/solve/vendor/min2phase/gwt.js",
     "src/cubing/search/inside/solve/vendor/sq12phase/scramble_sq1.js"
