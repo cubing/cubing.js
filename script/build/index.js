@@ -26,7 +26,7 @@ const devServerOptions = {
   port: 3333,
   esbuildOptions: {
     external: externalNode,
-    target: "esnext",
+    target: "es2020",
   },
 };
 
