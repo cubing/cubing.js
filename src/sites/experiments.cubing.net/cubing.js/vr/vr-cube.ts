@@ -366,7 +366,7 @@ export class VRCube {
 
     for (const controlPlane of this.controlPlanes) {
       if (!closestIntersection || controlPlane !== closestIntersection.object) {
-        ((controlPlane as Mesh).material as Material).opacity = 0;
+        (controlPlane.material as Material).opacity = 0;
       }
     }
 
