@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Alg } from "../../../../../../../../alg";
 import { random333Scramble as getRandomScramble333 } from "../../../../../puzzles/3x3x3";
@@ -98,8 +101,7 @@ function createFromSeed(seedType: number, length_0: number) {
 }
 
 function initDim(arrayClass, castableTypeMap, queryId, length_0, seedType) {
-  let result;
-  result = createFromSeed(seedType, length_0);
+  const result = createFromSeed(seedType, length_0);
   initValues(arrayClass, castableTypeMap, queryId, result);
   return result;
 }
@@ -154,10 +156,6 @@ let expandoNames_0, expandoValues_0;
 
 function canCast(src, dstId) {
   return src.castableTypeMap$ && !!src.castableTypeMap$[dstId];
-}
-
-function canCastUnsafe(src, dstId) {
-  return src.castableTypeMap$ && src.castableTypeMap$[dstId];
 }
 
 function instanceOf(src, dstId) {
@@ -223,8 +221,7 @@ function $getsym(this$static) {
 }
 
 function $move(this$static, m_0) {
-  let key;
-  key = m_0 % 3;
+  const key = m_0 % 3;
   m_0 = ~~(m_0 / 3);
   switch (m_0) {
     case 0:
@@ -360,9 +357,9 @@ function Center1_2(ct) {
 }
 
 function createMoveTable() {
-  let c, d, i_0, m_0;
-  c = new Center1_0();
-  d = new Center1_0();
+  let i_0, m_0;
+  const c = new Center1_0();
+  const d = new Center1_0();
   for (i_0 = 0; i_0 < 15582; ++i_0) {
     $set_0(d, sym2raw[i_0]);
     for (m_0 = 0; m_0 < 36; ++m_0) {
@@ -406,8 +403,8 @@ function createPrun() {
 }
 
 function getSolvedSym(cube) {
-  let c, check, i_0, j;
-  c = new Center1_2(cube.ct);
+  let check, i_0, j;
+  const c = new Center1_2(cube.ct);
   for (j = 0; j < 48; ++j) {
     check = true;
     for (i_0 = 0; i_0 < 24; ++i_0) {
@@ -428,14 +425,14 @@ function getSolvedSym(cube) {
 }
 
 function initSym_0() {
-  let c, d, e, f, i_0, j, k_0;
-  c = new Center1_0();
+  let i_0, j, k_0;
+  const c = new Center1_0();
   for (i_0 = 0; i_0 < 24; ++i_0) {
     c.ct[i_0] = i_0;
   }
-  d = new Center1_2(c.ct);
-  e = new Center1_2(c.ct);
-  f = new Center1_2(c.ct);
+  const d = new Center1_2(c.ct);
+  const e = new Center1_2(c.ct);
+  const f = new Center1_2(c.ct);
   for (i_0 = 0; i_0 < 48; ++i_0) {
     for (j = 0; j < 48; ++j) {
       for (k_0 = 0; k_0 < 48; ++k_0) {
@@ -486,9 +483,9 @@ function initSym_0() {
 }
 
 function initSym2Raw() {
-  let c, count, i_0, idx, j, occ;
-  c = new Center1_0();
-  occ = createArray(22984);
+  let count, i_0, idx, j;
+  const c = new Center1_0();
+  const occ = createArray(22984);
   for (i_0 = 0; i_0 < 22984; i_0++) {
     occ[i_0] = 0;
   }
@@ -511,14 +508,13 @@ function initSym2Raw() {
 }
 
 function raw2sym_0(n) {
-  let m_0;
-  m_0 = binarySearch_0(sym2raw, n);
+  const m_0 = binarySearch_0(sym2raw, n);
   return m_0 >= 0 ? m_0 : -1;
 }
 
 defineSeed(153, 1, makeCastMap([Q$Center1]), Center1_0, Center1_1, Center1_2);
 
-var csprun,
+let csprun,
   ctsmv,
   finish_0,
   raw2sym = null,
@@ -565,9 +561,8 @@ function $getrl(this$static) {
 }
 
 function $move_0(this$static, m_0) {
-  let key;
   this$static.parity ^= pmv[m_0];
-  key = m_0 % 3;
+  const key = m_0 % 3;
   m_0 = ~~(m_0 / 3);
   switch (m_0) {
     case 0:
@@ -687,8 +682,8 @@ function Center2_0() {
 }
 
 function init_3() {
-  let c, ct, ctx, depth, done, i_0, idx, j, m_0, rl, rlx;
-  c = new Center2_0();
+  let ct, ctx, depth, done, i_0, idx, j, m_0, rl, rlx;
+  const c = new Center2_0();
   for (i_0 = 0; i_0 < 70; ++i_0) {
     for (m_0 = 0; m_0 < 28; ++m_0) {
       $setrl(c, i_0);
@@ -780,7 +775,7 @@ function $clinit_Center3() {
 }
 
 function $getct_0(this$static) {
-  let check, i_0, idx, idxrl, r;
+  let i_0, idx, idxrl, r;
   idx = 0;
   r = 4;
   for (i_0 = 6; i_0 >= 0; --i_0) {
@@ -792,7 +787,7 @@ function $getct_0(this$static) {
     this$static.fb[i_0] !== this$static.fb[7] && (idx += Cnk[i_0][r--]);
   }
   idx *= 12;
-  check = this$static.fb[7] ^ this$static.ud[7];
+  const check = this$static.fb[7] ^ this$static.ud[7];
   idxrl = 0;
   r = 4;
   for (i_0 = 7; i_0 >= 0; --i_0) {
@@ -863,8 +858,8 @@ function $move_1(this$static, i_0) {
 }
 
 function $set_3(this$static, c, eXc_parity) {
-  let i_0, parity;
-  parity =
+  let i_0;
+  const parity =
     (c.ct[0] > c.ct[8] ? 1 : 0) ^
     (c.ct[8] > c.ct[16] ? 1 : 0) ^
     (c.ct[0] > c.ct[16] ? 1 : 0)
@@ -923,11 +918,11 @@ function Center3_0() {
 }
 
 function init_4() {
-  let c, depth, done, i_0, m_0;
+  let depth, done, i_0, m_0;
   for (i_0 = 0; i_0 < 12; ++i_0) {
     std2rl[rl2std[i_0]] = i_0;
   }
-  c = new Center3_0();
+  const c = new Center3_0();
   for (i_0 = 0; i_0 < 29400; ++i_0) {
     for (m_0 = 0; m_0 < 20; ++m_0) {
       $setct_0(c, i_0);
@@ -958,15 +953,6 @@ function init_4() {
 defineSeed(155, 1, {}, Center3_0);
 _.parity = 0;
 let ctmove, pmove, prun_0, rl2std, std2rl;
-
-let ran$clinit_CenterCube = false;
-function $clinit_CenterCube() {
-  if (ran$clinit_CenterCube) {
-    return;
-  }
-  ran$clinit_CenterCube = true;
-  center333Map = [0, 4, 2, 1, 5, 3];
-}
 
 function $copy_1(this$static, c) {
   let i_0;
@@ -1052,7 +1038,6 @@ function CenterCube_1(randomUIntBelow) {
 }
 
 defineSeed(156, 1, {}, CenterCube_0, CenterCube_1);
-let center333Map;
 
 let ran$clinit_CornerCube = false;
 function $clinit_CornerCube() {
@@ -2838,7 +2823,6 @@ function init() {
   $clinit_Center2();
   $clinit_Center3();
   $clinit_Edge3();
-  $clinit_CenterCube();
   $clinit_CornerCube();
   $clinit_EdgeCube();
   $clinit_FullCube_0();
