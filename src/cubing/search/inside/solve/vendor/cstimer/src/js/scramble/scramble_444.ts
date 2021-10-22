@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { Alg } from "../../../../../../../../alg";
 import { random333Scramble as getRandomScramble333 } from "../../../../../puzzles/3x3x3";
 import { circle, Cnk, set8Perm } from "../lib/mathlib";
@@ -7,17 +5,16 @@ import { randomUIntBelowFactory } from "../../../../random-uint-below";
 import { mustBeInsideWorker } from "../../../../../../inside-worker";
 
 function createArray(length1: number, length2?: number) {
-  let result, i;
-  result = new Array(length1);
+  const result = new Array<number[]>(length1);
   if (length2 !== undefined) {
-    for (i = 0; i < length1; i++) {
+    for (let i = 0; i < length1; i++) {
       result[i] = new Array(length2);
     }
   }
   return result;
 }
 
-let _,
+const _,
   seedTable = {},
   CM$ = {};
 const Q$Object = 0,
@@ -1165,10 +1162,6 @@ function $clinit_Edge3() {
     return;
   }
   ran$clinit_Edge3 = true;
-  prunValues = [
-    1, 4, 16, 55, 324, 1922, 12275, 77640, 485359, 2778197, 11742425, 27492416,
-    31002941, 31006080,
-  ];
   eprun = createArray(1937880);
   sym2raw_0 = createArray(1538);
   symstate = createArray(1538);
@@ -1693,13 +1686,12 @@ function setPruning_0(table, index, value) {
 defineSeed(158, 1, makeCastMap([Q$Edge3]), Edge3_0);
 _.isStd = true;
 _.temp = null;
-var FullEdgeMap,
+let FullEdgeMap,
   done_0 = 0,
   eprun,
   factX,
   mvrot,
   mvroto,
-  prunValues,
   raw2sym_1,
   sym2raw_0,
   syminv_0,

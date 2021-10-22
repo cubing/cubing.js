@@ -149,7 +149,6 @@
       "/src/static",
       "/src/cubing/search/worker-inside-generated*",
       "/src/cubing/vendor/p-lazy/p-lazy.ts",
-      "src/cubing/search/inside/solve/vendor/cstimer/src/js/scramble/scramble_444.ts",
       "/*/index.d.ts",
       "parser-peggy.js"
     ],
