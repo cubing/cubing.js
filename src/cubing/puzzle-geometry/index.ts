@@ -1,11 +1,3 @@
-export { Perm } from "./Perm";
-export {
-  PGOrbit,
-  PGOrbitDef,
-  PGOrbitsDef,
-  PGTransform,
-  VisibleState,
-} from "./PermOriSet";
 export {
   getpuzzle,
   getPuzzleGeometryByDesc,
