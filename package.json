@@ -232,7 +232,8 @@
     "roots": [
       "<rootDir>/src",
       "<rootDir>/script"
-    ]
+    ],
+    "coverageDirectory": "<rootDir>/.temp/coverage"
   },
   "files": [
     "/LICENSE.md",
