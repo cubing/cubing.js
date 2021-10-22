@@ -25,7 +25,6 @@
     "dist/**/*",
     "*/index.d.ts",
     "src/static/**/*",
-    "src/cubing/search/inside/solve/vendor/cstimer/src/js/lib/mathlib.ts",
     "src/cubing/search/inside/solve/vendor/cstimer/src/js/scramble/scramble_444.ts",
     "src/cubing/search/worker-inside-generated*",
     "src/cubing/vendor/p-lazy/p-lazy.ts"
