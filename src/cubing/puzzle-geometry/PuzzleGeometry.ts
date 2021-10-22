@@ -3,7 +3,7 @@ import { FaceNameSwizzler } from "./FaceNameSwizzler";
 import type {
   MoveNotation,
   PGVendoredKPuzzleDefinition,
-  Transformation as KTransformation,
+  PGVendoredTransformation,
 } from "./interfaces";
 import {
   FaceRenamingMapper,
@@ -916,7 +916,11 @@ export class PuzzleGeometry {
     if (this.options.verbosity > 1) {
       console.log("# Face precedence list: " + this.faceorder.join(" "));
       console.log("# Face names: " + facenames.map((_) => _[1]).join(" "));
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       console.log("# Edge names: " + edgenames.map((_) => _[1]).join(" "));
+      // TODO
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       console.log("# Vertex names: " + vertexnames.map((_) => _[1]).join(" "));
     }
     const geonormals: [Quat, string, string][] = [];
@@ -2042,6 +2046,8 @@ export class PuzzleGeometry {
       }
       r = newr;
     }
+    // TODO
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return r;
   }
 
@@ -2541,7 +2547,7 @@ export class PuzzleGeometry {
     trim: number = 10,
     threed: boolean = false,
     twodshrink: number = 0.92,
-  ): any {
+  ): (fn: number, q: Quat) => number[] {
     // generate a mapping to use for 2D for textures, svg
     w -= 2 * trim;
     h -= 2 * trim;
@@ -2706,6 +2712,8 @@ export class PuzzleGeometry {
         ];
       } else {
         const g = geos[this.facenames[fn][1]];
+        // TODO
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return [
           trim + twodshrink * q.dot(g[0]) + g[2].b,
           trim + h - twodshrink * q.dot(g[1]) - g[2].c,
@@ -2855,11 +2863,9 @@ export class PuzzleGeometry {
         }
       }
     }
-    const f = (function () {
-      return function (mv: Move): string {
-        return this.unswizzle(mv);
-      };
-    })().bind(this);
+    const f = (mv: Move): string => {
+      return this.unswizzle(mv);
+    };
     const twodmapper = this.generate2dmapping(2880, 2160, 0, false, 1.0);
     const g = (function () {
       const irot = rot.invrot();
@@ -2939,13 +2945,13 @@ Vertex distance ${this.vertexdistance}`;
 }
 
 class PGNotation implements MoveNotation {
-  private cache: { [key: string]: KTransformation } = {};
+  private cache: { [key: string]: PGVendoredTransformation } = {};
   private orbitNames: string[];
   constructor(private pg: PuzzleGeometry, od: OrbitsDef) {
     this.orbitNames = od.orbitnames;
   }
 
-  public lookupMove(move: Move): KTransformation | undefined {
+  public lookupMove(move: Move): PGVendoredTransformation | undefined {
     const key = this.moveToKeyString(move);
     if (key in this.cache) {
       return this.cache[key];
@@ -2982,6 +2988,9 @@ class PGNotation implements MoveNotation {
       this.pg.movesetorders[mv[1]],
     );
     const r = OrbitsDef.transformToKPuzzle(this.orbitNames, pgmv);
+    if (!r) {
+      throw new Error("Missing transformation!");
+    }
     this.cache[key] = r;
     return r;
   }

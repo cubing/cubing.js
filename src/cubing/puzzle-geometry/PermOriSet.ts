@@ -1,5 +1,9 @@
+import { Move } from "../alg";
+import type {
+  PGVendoredKPuzzleDefinition,
+  PGVendoredTransformation,
+} from "./interfaces"; // TODO
 import { NullMapper } from "./notation-mapping";
-import type { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
@@ -9,7 +13,6 @@ import type { NotationMapper } from "./notation-mapping/NotationMapper";
   Perm,
   zeros,
 } from "./Perm";
-import { Move } from "../alg";
 export class OrbitDef {
   constructor(public size: number, public mod: number) {}
   public reassemblySize(): number {
@@ -49,7 +52,7 @@ export class OrbitsDef {
   public static transformToKPuzzle(
     orbitnames: string[],
     t: Transformation,
-  ): any {
+  ): PGVendoredTransformation | undefined {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
       mp[orbitnames[j]] = t.orbits[j].toKpuzzle();

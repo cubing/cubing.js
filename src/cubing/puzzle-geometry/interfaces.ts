@@ -7,7 +7,7 @@
 import type { Move } from "../alg";
 
 export interface MoveNotation {
-  lookupMove(move: Move): Transformation | undefined;
+  lookupMove(move: Move): PGVendoredTransformation | undefined;
 }
 
 export interface PGVendoredOrbitTransformation {
@@ -15,7 +15,10 @@ export interface PGVendoredOrbitTransformation {
   orientation: number[];
 }
 
-export type Transformation = Record<string, PGVendoredOrbitTransformation>;
+export type PGVendoredTransformation = Record<
+  string,
+  PGVendoredOrbitTransformation
+>;
 
 export interface PGVendoredOrbitDefinition {
   numPieces: number;
@@ -25,8 +28,8 @@ export interface PGVendoredOrbitDefinition {
 export interface PGVendoredKPuzzleDefinition {
   name: string;
   orbits: { [key: string]: PGVendoredOrbitDefinition };
-  startPieces: Transformation;
-  moves: { [key: string]: Transformation };
+  startPieces: PGVendoredTransformation;
+  moves: { [key: string]: PGVendoredTransformation };
   svg?: string;
   moveNotation?: MoveNotation;
 }
