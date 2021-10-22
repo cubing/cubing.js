@@ -1,9 +1,9 @@
 export { Perm } from "./Perm";
 export {
-  Orbit,
-  OrbitDef,
-  OrbitsDef,
-  PGTransform as Transformation,
+  PGOrbit,
+  PGOrbitDef,
+  PGOrbitsDef,
+  PGTransform,
   VisibleState,
 } from "./PermOriSet";
 export {

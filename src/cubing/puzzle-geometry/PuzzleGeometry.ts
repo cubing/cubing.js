@@ -22,9 +22,9 @@ import {
 import { iota, Perm, zeros } from "./Perm";
 import {
   externalName,
-  Orbit,
-  OrbitDef,
-  OrbitsDef,
+  PGOrbit,
+  PGOrbitDef,
+  PGOrbitsDef,
   showcanon,
   PGTransform,
   VisibleState,
@@ -2149,7 +2149,7 @@ export class PuzzleGeometry {
     setmoves: number[] | undefined,
     movesetorder: number,
   ): PGTransform {
-    const moveorbits: Orbit[] = [];
+    const moveorbits: PGOrbit[] = [];
     const perms = [];
     const oris = [];
     for (const len of this.cubieords) {
@@ -2188,7 +2188,7 @@ export class PuzzleGeometry {
         }
       }
     }
-    let lastId = new Orbit(iota(24), zeros(24), 1);
+    let lastId = new PGOrbit(iota(24), zeros(24), 1);
     for (let ii = 0; ii < this.cubiesetnames.length; ii++) {
       if (setmoves && !setmoves[ii]) {
         continue;
@@ -2196,11 +2196,11 @@ export class PuzzleGeometry {
       if (this.orbitoris[ii] === 1 || this.options.fixedOrientation) {
         if (perms[ii] === iota(lastId.perm.length)) {
           if (perms[ii] !== lastId.perm) {
-            lastId = new Orbit(perms[ii], oris[ii], 1);
+            lastId = new PGOrbit(perms[ii], oris[ii], 1);
           }
           moveorbits.push(lastId);
         } else {
-          moveorbits.push(new Orbit(perms[ii], oris[ii], 1));
+          moveorbits.push(new PGOrbit(perms[ii], oris[ii], 1));
         }
       } else {
         const no = new Array<number>(oris[ii].length);
@@ -2208,7 +2208,7 @@ export class PuzzleGeometry {
         for (let jj = 0; jj < perms[ii].length; jj++) {
           no[jj] = oris[ii][perms[ii][jj]];
         }
-        moveorbits.push(new Orbit(perms[ii], no, this.orbitoris[ii]));
+        moveorbits.push(new PGOrbit(perms[ii], no, this.orbitoris[ii]));
       }
     }
     let mv = new PGTransform(moveorbits);
@@ -2260,7 +2260,7 @@ export class PuzzleGeometry {
   public getOrbitsDef(
     fortwisty: boolean,
     includemoves: boolean = true,
-  ): OrbitsDef {
+  ): PGOrbitsDef {
     // generate a representation of the puzzle
     const setmoves = [];
     if (fortwisty) {
@@ -2269,7 +2269,7 @@ export class PuzzleGeometry {
       }
     }
     const setnames: string[] = [];
-    const setdefs: OrbitDef[] = [];
+    const setdefs: PGOrbitDef[] = [];
     // if both a movelist and rotations are needed, eliminate rotations
     // that do not preserve the movelist.
     const mps = [];
@@ -2392,13 +2392,13 @@ export class PuzzleGeometry {
       }
       setnames.push(this.cubiesetnames[i]);
       setdefs.push(
-        new OrbitDef(
+        new PGOrbitDef(
           this.cubieords[i],
           this.options.fixedOrientation ? 1 : this.orbitoris[i],
         ),
       );
     }
-    const solved: Orbit[] = [];
+    const solved: PGOrbit[] = [];
     for (let i = 0; i < this.cubiesetnames.length; i++) {
       if (!setmoves[i]) {
         continue;
@@ -2418,7 +2418,11 @@ export class PuzzleGeometry {
         o.push(0);
       }
       solved.push(
-        new Orbit(p, o, this.options.fixedOrientation ? 1 : this.orbitoris[i]),
+        new PGOrbit(
+          p,
+          o,
+          this.options.fixedOrientation ? 1 : this.orbitoris[i],
+        ),
       );
     }
     const movenames: string[] = [];
@@ -2451,7 +2455,7 @@ export class PuzzleGeometry {
         }
       }
     }
-    let r = new OrbitsDef(
+    let r = new PGOrbitsDef(
       setnames,
       setdefs,
       new VisibleState(solved),
@@ -2943,7 +2947,7 @@ Vertex distance ${this.vertexdistance}`;
 class PGNotation implements MoveNotation {
   private cache: { [key: string]: KTransformation } = {};
   private orbitNames: string[];
-  constructor(private pg: PuzzleGeometry, od: OrbitsDef) {
+  constructor(private pg: PuzzleGeometry, od: PGOrbitsDef) {
     this.orbitNames = od.orbitnames;
   }
 
@@ -2983,7 +2987,7 @@ class PGNotation implements MoveNotation {
       undefined,
       this.pg.movesetorders[mv[1]],
     );
-    const r = OrbitsDef.transformToKPuzzle(this.orbitNames, pgmv);
+    const r = PGOrbitsDef.transformToKPuzzle(this.orbitNames, pgmv);
     this.cache[key] = r;
     return r;
   }
