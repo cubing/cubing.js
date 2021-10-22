@@ -52,7 +52,7 @@ export class OrbitsDef {
   public static transformToKPuzzle(
     orbitnames: string[],
     t: PGTransform,
-  ): KTransformation | undefined {
+  ): KTransformation {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
       mp[orbitnames[j]] = t.orbits[j].toKPuzzle();
@@ -304,7 +304,7 @@ export class OrbitsDef {
 }
 
 export class Orbit {
-  private static kcache: Record<string, unknown>[] = [];
+  private static kcache: Record<string, number[]>[] = [];
 
   public static e(n: number, mod: number): Orbit {
     return new Orbit(iota(n), zeros(n), mod);
@@ -483,7 +483,7 @@ export class Orbit {
   }
 
   // TODO: return type
-  public toKPuzzle(): Record<string, unknown> {
+  public toKPuzzle(): Record<string, number[]> {
     const n = this.perm.length;
     if (this.isIdentity()) {
       if (!Orbit.kcache[n]) {

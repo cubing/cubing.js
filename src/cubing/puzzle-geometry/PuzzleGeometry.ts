@@ -2613,7 +2613,7 @@ export class PuzzleGeometry {
     const sc = Math.min(w / (maxx - minx), h / (maxy - miny));
     const xoff = 0.5 * (w - sc * (maxx + minx));
     const yoff = 0.5 * (h - sc * (maxy + miny));
-    const geos: any = {};
+    const geos: Record<string, Quat[]> = {};
     const bg = this.getboundarygeometry();
     const edges2: any = {};
     const initv = [
@@ -2713,8 +2713,6 @@ export class PuzzleGeometry {
         ];
       } else {
         const g = geos[this.facenames[fn][1]];
-        // TODO
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return [
           trim + twodshrink * q.dot(g[0]) + g[2].b,
           trim + h - twodshrink * q.dot(g[1]) - g[2].c,
@@ -2986,9 +2984,6 @@ class PGNotation implements MoveNotation {
       this.pg.movesetorders[mv[1]],
     );
     const r = OrbitsDef.transformToKPuzzle(this.orbitNames, pgmv);
-    if (!r) {
-      throw new Error("Missing transformation!");
-    }
     this.cache[key] = r;
     return r;
   }
