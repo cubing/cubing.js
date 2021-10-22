@@ -1,10 +1,6 @@
 import { Move, QuantumMove } from "../alg";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
-import type {
-  MoveNotation,
-  PGVendoredKPuzzleDefinition,
-  PGVendoredTransformation,
-} from "./interfaces";
+import type { MoveNotation } from "./interfaces";
 import {
   FaceRenamingMapper,
   FTONotationMapper,
@@ -46,6 +42,10 @@ import {
 } from "./PlatonicGenerator";
 import { centermassface, Quat } from "./Quat";
 import { schreierSims } from "./SchreierSims";
+import type {
+  KPuzzleDefinition,
+  Transformation as KTransformation,
+} from "../kpuzzle";
 
 export interface TextureMapper {
   getuv(fn: number, threed: number[]): number[];
@@ -2131,7 +2131,7 @@ export class PuzzleGeometry {
   public writekpuzzle(
     fortwisty: boolean = true,
     includemoves: boolean = true,
-  ): PGVendoredKPuzzleDefinition {
+  ): KPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty, includemoves);
     const r = od.toKpuzzle(includemoves);
     r.moveNotation = new PGNotation(this, od);
@@ -2945,13 +2945,13 @@ Vertex distance ${this.vertexdistance}`;
 }
 
 class PGNotation implements MoveNotation {
-  private cache: { [key: string]: PGVendoredTransformation } = {};
+  private cache: { [key: string]: KTransformation } = {};
   private orbitNames: string[];
   constructor(private pg: PuzzleGeometry, od: OrbitsDef) {
     this.orbitNames = od.orbitnames;
   }
 
-  public lookupMove(move: Move): PGVendoredTransformation | undefined {
+  public lookupMove(move: Move): KTransformation | undefined {
     const key = this.moveToKeyString(move);
     if (key in this.cache) {
       return this.cache[key];

@@ -1,8 +1,8 @@
 import { Move } from "../alg";
 import type {
-  PGVendoredKPuzzleDefinition,
-  PGVendoredTransformation,
-} from "./interfaces"; // TODO
+  KPuzzleDefinition,
+  Transformation as KTransformation,
+} from "../kpuzzle"; // TODO
 import { NullMapper } from "./notation-mapping";
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
@@ -52,7 +52,7 @@ export class OrbitsDef {
   public static transformToKPuzzle(
     orbitnames: string[],
     t: Transformation,
-  ): PGVendoredTransformation | undefined {
+  ): KTransformation | undefined {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
       mp[orbitnames[j]] = t.orbits[j].toKpuzzle();
@@ -112,7 +112,7 @@ export class OrbitsDef {
   }
 
   // TODO: return type.
-  public toKpuzzle(includemoves: boolean): PGVendoredKPuzzleDefinition {
+  public toKpuzzle(includemoves: boolean): KPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
