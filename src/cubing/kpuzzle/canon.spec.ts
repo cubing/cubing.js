@@ -1,9 +1,5 @@
 import { getPuzzleGeometryByName } from "../puzzle-geometry";
-import {
-  KPuzzleDefinition,
-  areStatesEquivalent,
-  combineTransformations,
-} from ".";
+import { areStatesEquivalent, combineTransformations } from ".";
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
 import { Alg } from "../alg";
 

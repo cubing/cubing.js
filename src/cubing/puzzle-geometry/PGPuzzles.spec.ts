@@ -1,10 +1,6 @@
 import { getPuzzleGeometryByDesc } from ".";
 import { PGPuzzles } from "./PGPuzzles";
-import {
-  KPuzzleDefinition,
-  transformationOrder,
-  Transformation,
-} from "../kpuzzle";
+import { transformationOrder, Transformation } from "../kpuzzle";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
 import { Alg, Move } from "../alg";
 /**

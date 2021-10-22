@@ -1,5 +1,4 @@
 import { getPuzzleGeometryByName } from "../puzzle-geometry";
-import type { KPuzzleDefinition } from ".";
 import { Canonicalizer } from "./canonicalize";
 import { PruningTable } from "./pruningtable";
 import { Alg } from "../alg";
