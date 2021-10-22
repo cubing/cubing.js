@@ -10,7 +10,7 @@ import { Alg } from "../alg";
 describe("CanonSequences", () => {
   it("should merge sequences (megaminx test)", () => {
     const pg = getPuzzleGeometryByName("megaminx", {});
-    const def = pg.writekpuzzle(false) as KPuzzleDefinition;
+    const def = pg.writekpuzzle(false);
     const canon = new Canonicalizer(def);
     const a1 = "U F2 BL R3 L3";
     const a2 = "L2 BL2 F' U2";
@@ -33,7 +33,7 @@ describe("CanonSequences", () => {
   });
   it("should generate canonical sequences (3x3x3 test)", () => {
     const pg = getPuzzleGeometryByName("3x3x3", { allMoves: false });
-    const def = pg.writekpuzzle(false) as KPuzzleDefinition;
+    const def = pg.writekpuzzle(false);
     const canon = new Canonicalizer(def);
     const cnts = [0, 0, 0, 0];
     const csi = new CanonicalSequenceIterator(canon);

@@ -44,7 +44,7 @@ export class OrbitsDef {
   private transformToKPuzzle(t: Transformation): any {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < this.orbitnames.length; j++) {
-      mp[this.orbitnames[j]] = t.orbits[j].toKpuzzle();
+      mp[this.orbitnames[j]] = t.orbits[j].toKPuzzle();
     }
     return mp;
   }
@@ -55,7 +55,7 @@ export class OrbitsDef {
   ): KTransformation | undefined {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
-      mp[orbitnames[j]] = t.orbits[j].toKpuzzle();
+      mp[orbitnames[j]] = t.orbits[j].toKPuzzle();
     }
     return mp;
   }
@@ -112,7 +112,7 @@ export class OrbitsDef {
   }
 
   // TODO: return type.
-  public toKpuzzle(includemoves: boolean): KPuzzleDefinition {
+  public toKPuzzle(includemoves: boolean): KPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
@@ -120,7 +120,7 @@ export class OrbitsDef {
         numPieces: this.orbitdefs[i].size,
         orientations: this.orbitdefs[i].mod,
       };
-      start[this.orbitnames[i]] = this.solved.orbits[i].toKpuzzle();
+      start[this.orbitnames[i]] = this.solved.orbits[i].toKPuzzle();
     }
     const moves: { [moveName: string]: any } = {};
     if (includemoves) {
@@ -483,7 +483,7 @@ export class Orbit {
   }
 
   // TODO: return type
-  public toKpuzzle(): Record<string, unknown> {
+  public toKPuzzle(): Record<string, unknown> {
     const n = this.perm.length;
     if (this.isIdentity()) {
       if (!Orbit.kcache[n]) {

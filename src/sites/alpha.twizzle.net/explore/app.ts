@@ -546,10 +546,7 @@ function checkchange_internal(): void {
         kpuzzledef = safeKpuzzle;
       } else {
         // the false here means, don't include moves; rely on moveexpander
-        kpuzzledef = pg.writekpuzzle(
-          true,
-          needmovesforscramble,
-        ) as KPuzzleDefinition;
+        kpuzzledef = pg.writekpuzzle(true, needmovesforscramble);
         needmovesforscramble = false;
       }
       const newStickerDat = pg.get3d();

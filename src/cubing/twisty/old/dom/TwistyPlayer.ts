@@ -772,7 +772,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
               if (pendingPuzzleUpdate.cancelled) {
                 return;
               }
-              def = pg.writekpuzzle(true) as KPuzzleDefinition; // TODO
+              def = pg.writekpuzzle(true); // TODO
               stickerDat = pg.get3d();
             } else {
               throw "Unimplemented!";

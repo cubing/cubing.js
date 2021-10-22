@@ -89,7 +89,7 @@ describe("PuzzleGeometry-Puzzles", () => {
   it("testpuzzles", () => {
     for (const [name, desc] of Object.entries(PGPuzzles)) {
       const pg = getPuzzleGeometryByDesc(desc, {});
-      const kpuzzledef = pg.writekpuzzle(false) as KPuzzleDefinition;
+      const kpuzzledef = pg.writekpuzzle(false);
       const sep = ", ";
       const seq = Object.getOwnPropertyNames(kpuzzledef.moves).sort().join(" ");
       let algo = Alg.fromString(seq);

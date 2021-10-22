@@ -2133,7 +2133,10 @@ export class PuzzleGeometry {
     includemoves: boolean = true,
   ): KPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty, includemoves);
-    const r = od.toKpuzzle(includemoves);
+    const r = od.toKPuzzle(includemoves);
+    if (!r) {
+      throw new Error("Missing definition!");
+    }
     r.moveNotation = new PGNotation(this, od);
     return r;
   }
