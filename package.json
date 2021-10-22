@@ -144,16 +144,8 @@
       }
     ],
     "ignorePatterns": [
-      "/coverage",
-      "/dist",
       "/src/static",
-      "/src/cubing/search/inside/solve/vendor/min2phase/gwt.js",
-      "/src/cubing/search/inside/solve/vendor/sq12phase/scramble_sq1.js",
       "/src/cubing/search/worker-inside-generated*",
-      "/src/cubing/vendor/p-lazy/p-lazy.ts",
-      "src/cubing/search/inside/solve/vendor/cstimer/src/js/lib/mathlib.ts",
-      "src/cubing/search/inside/solve/vendor/cstimer/src/js/scramble/scramble_444.ts",
-      "/*/index.d.ts",
       "parser-peggy.js"
     ],
     "globals": {
@@ -241,9 +233,7 @@
       "<rootDir>/src",
       "<rootDir>/script"
     ],
-    "modulePathIgnorePatterns": [
-      "<rootDir>/script/test/experiments/"
-    ]
+    "coverageDirectory": "<rootDir>/.temp/coverage"
   },
   "files": [
     "/LICENSE.md",
