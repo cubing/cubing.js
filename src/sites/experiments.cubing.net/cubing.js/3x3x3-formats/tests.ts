@@ -73,7 +73,7 @@ const testString = JSON.stringify(
     if (v instanceof Array && typeof v[0] === "number") {
       return `##[${v.join(", ")}]##`;
     } else {
-      return v;
+      return v as string;
     }
   },
   "  ",
@@ -81,4 +81,5 @@ const testString = JSON.stringify(
   .replace(/"##\[/g, "[")
   .replace(/\]##"/g, "]");
 
-document.querySelector("#test-string")!.value = testString;
+(document.querySelector("#test-string") as HTMLTextAreaElement).value =
+  testString;

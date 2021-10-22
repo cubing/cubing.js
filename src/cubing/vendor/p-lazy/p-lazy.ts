@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 // TODO: Use private class fields when ESLint support it.
 
 export class PLazy<T> extends Promise<T> {
