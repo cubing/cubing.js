@@ -36,7 +36,7 @@ export abstract class AlgCommon<T extends Alg | Unit>
     super();
     if (writeAlgDebugField) {
       Object.defineProperty(this, "_debugStr", {
-        get: function () {
+        get: () => {
           return this.toString();
         },
       });
@@ -46,7 +46,9 @@ export abstract class AlgCommon<T extends Alg | Unit>
   get log(): (message?: any) => void {
     // By returning a (bound) version of `console.log`, we ensure that DevTools
     // logs the call site instead of this function.
-    return console.log.bind(console, this, this.toString());
+    return console.log.bind(console, this, this.toString()) as (
+      message?: any,
+    ) => void;
   }
 
   abstract toString(): string;

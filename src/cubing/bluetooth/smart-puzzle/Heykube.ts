@@ -158,7 +158,7 @@ export class HeykubeCube extends BluetoothPuzzle {
 
 // // TODO: Move this into a factory?
 export const heykubeConfig: BluetoothConfig<BluetoothPuzzle> = {
-  connect: HeykubeCube.connect,
+  connect: HeykubeCube.connect.bind(HeykubeCube),
   prefixes: ["HEYKUBE"],
   filters: [{ namePrefix: "HEYKUBE" }],
   optionalServices: [UUIDs.heykubeService],
