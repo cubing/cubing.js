@@ -10,11 +10,11 @@ import {
 } from "fs";
 import { join } from "path";
 
-const TEMP_ROOT = "./.temp/";
+const TEMP_ROOT = "./.temp/build/";
 
 function tempDirUncached() {
   if (!existsSync(TEMP_ROOT)) {
-    mkdirSync(TEMP_ROOT);
+    mkdirSync(TEMP_ROOT, { recursive: true });
   }
   const tempDir = mkdtempSync(TEMP_ROOT);
 
@@ -37,7 +37,7 @@ function tempDirUncached() {
 let cachedTempDir = null;
 export function tempDir() {
   // TODO: When can we use `??=`?
-  return cachedTempDir ? cachedTempDir : tempDirUncached();
+  return (cachedTempDir = cachedTempDir ? cachedTempDir : tempDirUncached());
 }
 
 // We write using a temp file and move it, so that the target file only ever
