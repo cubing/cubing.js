@@ -573,6 +573,7 @@ export class PuzzleGeometry {
   private facecentermass: Quat[]; // center of mass of all faces
   private baseFaceCount: BaseFaceCount; // number of base faces
   public stickersperface: number; // number of stickers per face
+  public shortedge: number; // number of stickers per face
   public cubies: number[][]; // the cubies
   private vertexdistance: number; // vertex distance
   private edgedistance: number; // edge distance
@@ -1024,18 +1025,18 @@ export class PuzzleGeometry {
     }
     //  Find and report the shortest edge in any of the faces.  If this
     //  is small the puzzle is probably not practical or displayable.
-    let shortedge = 1e99;
+    this.shortedge = 1e99;
     for (const face of faces) {
       for (let j = 0; j < face.length; j++) {
         const k = (j + 1) % face.length;
         const t = face.get(j).dist(face.get(k));
-        if (t < shortedge) {
-          shortedge = t;
+        if (t < this.shortedge) {
+          this.shortedge = t;
         }
       }
     }
     if (this.options.verbosity > 0) {
-      console.log("# Short edge is " + shortedge);
+      console.log("# Short edge is " + this.shortedge);
     }
     // add nxnxn cube notation if it has cube face moves
     if (shape === "c" && sawface && !sawedge && !sawvertex) {
@@ -2919,10 +2920,10 @@ export class PuzzleGeometry {
   }
 
   public textForTwizzleExplorer(): string {
-    // TODO: This used to contain `shortedge`. Do we want that?
     return `Faces ${this.baseplanerot.length}
 Stickers per face ${this.stickersperface}
-Cubies ${this.cubies}.length
+Short edge ${this.shortedge}
+Cubies ${this.cubies.length}
 Edge distance ${this.edgedistance}
 Vertex distance ${this.vertexdistance}`;
   }

@@ -181,12 +181,6 @@ if (
   const pg = new PuzzleGeometry(puzzleDescription, options);
   pg.allstickers();
   pg.genperms();
-  // TODO: if (!optionlist.includes("verbose"))
-  // if (this.verbose) {
-  //    console.log("# Stickers " + pg.stickersperface + " cubies " +
-  //       pg.cubies.length + " orbits " + pg.orbits +
-  //       " shortedge " + pg.shortedge);
-  // }
   if (argp < process.argv.length) {
     throw new Error("Unprocessed content at end of command line");
   }
