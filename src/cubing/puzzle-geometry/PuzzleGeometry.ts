@@ -638,7 +638,6 @@ export class PuzzleGeometry {
     // face, and what the short edge is.  If the short edge is too short,
     // we probably don't want to display or manipulate this one.  How
     // short is too short is hard to say.
-    // var that = this ; // TODO
     this.moveplanes = [];
     this.moveplanes2 = [];
     this.faces = [];
