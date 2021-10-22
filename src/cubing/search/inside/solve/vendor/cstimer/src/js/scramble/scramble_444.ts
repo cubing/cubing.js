@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Alg } from "../../../../../../../../alg";
 import { random333Scramble as getRandomScramble333 } from "../../../../../puzzles/3x3x3";
 import { circle, Cnk, set8Perm } from "../lib/mathlib";
@@ -14,8 +15,8 @@ function createArray(length1: number, length2?: number) {
   return result;
 }
 
-const _,
-  seedTable = {},
+let _: any;
+const seedTable: Record<number, any> = {},
   CM$ = {};
 const Q$Object = 0,
   Q$Serializable = 30,
@@ -28,11 +29,16 @@ const Q$Object = 0,
   Q$Search_0 = 26,
   Q$Object_$1 = 40;
 
-function newSeed(id) {
+function newSeed(id: number) {
   return new seedTable[id]();
 }
 
-function defineSeed(id, superSeed, castableTypeMap, ...moreArgs) {
+function defineSeed(
+  id: number,
+  superSeed: number,
+  castableTypeMap: any, // TODO
+  ...moreArgs: any[]
+) {
   let seed = seedTable[id];
   if (seed && !seed.___clazz$) {
     _ = seed.prototype;
@@ -41,8 +47,8 @@ function defineSeed(id, superSeed, castableTypeMap, ...moreArgs) {
     _ = seed.prototype = superSeed < 0 ? {} : newSeed(superSeed);
     _.castableTypeMap$ = castableTypeMap;
   }
-  for (let i_0 = 3; i_0 < arguments.length; ++i_0) {
-    arguments[i_0].prototype = _;
+  for (const arg of moreArgs) {
+    arg.prototype = _;
   }
   if (seed.___clazz$) {
     _.___clazz$ = seed.___clazz$;
@@ -50,15 +56,13 @@ function defineSeed(id, superSeed, castableTypeMap, ...moreArgs) {
   }
 }
 
-function makeCastMap(a) {
-  const result = {};
+function makeCastMap(a: number[]) {
+  const result: Record<number, number> = {};
   for (let i_0 = 0, c = a.length; i_0 < c; ++i_0) {
     result[a[i_0]] = 1;
   }
   return result;
 }
-
-function nullMethod() {}
 
 defineSeed(1, -1, CM$);
 
@@ -66,18 +70,16 @@ _.value = null;
 
 function Array_0() {}
 
-function createFrom(array, length_0) {
-  let a, result;
-  a = array;
-  result = createFromSeed(0, length_0);
+function createFrom(a: any, length_0: number) {
+  const result = createFromSeed(0, length_0);
   initValues(a.___clazz$, a.castableTypeMap$, a.queryId$, result);
   return result;
 }
 
-function createFromSeed(seedType, length_0) {
+function createFromSeed(seedType: number, length_0: number) {
   const array = new Array(length_0);
   if (seedType === 3) {
-    for (var i_0 = 0; i_0 < length_0; ++i_0) {
+    for (let i_0 = 0; i_0 < length_0; ++i_0) {
       const value = {
         m: 0,
         l: 0,
@@ -88,7 +90,7 @@ function createFromSeed(seedType, length_0) {
     }
   } else if (seedType > 0) {
     const value = [null, 0, false][seedType];
-    for (var i_0 = 0; i_0 < length_0; ++i_0) {
+    for (let i_0 = 0; i_0 < length_0; ++i_0) {
       array[i_0] = value;
     }
   }
