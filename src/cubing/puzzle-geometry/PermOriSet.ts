@@ -66,12 +66,7 @@ export class OrbitsDef {
     result.push("");
     for (let i = 0; i < this.orbitnames.length; i++) {
       result.push(
-        "Set " +
-          this.orbitnames[i] +
-          " " +
-          this.orbitdefs[i].size +
-          " " +
-          this.orbitdefs[i].mod,
+        `"Set ${this.orbitnames[i]} ${this.orbitdefs[i].size} ${this.orbitdefs[i].mod}`,
       );
     }
     result.push("");
@@ -232,7 +227,7 @@ export class OrbitsDef {
           }
         }
         if (multiple) {
-          neworbitnames.push(this.orbitnames[i] + "_p" + j);
+          neworbitnames.push(`${this.orbitnames[i]}_p${j}`);
         } else {
           neworbitnames.push(this.orbitnames[i]);
         }
@@ -708,7 +703,7 @@ export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
         }
       }
     }
-    disp("" + d + ": canonseq " + sum + " states " + uniq);
+    disp(`${d}: canonseq ${sum} states ${uniq}`);
     curlev = nextlev;
   }
 }
@@ -738,7 +733,7 @@ export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
     commutes.push(bits);
   }
   let curlev: any = {};
-  disp("" + 0 + ": canonseq " + 1);
+  disp("0: canonseq 1");
   for (let x = 0; x < orders.length; x++) {
     curlev[x] = orders[x] - 1;
   }
@@ -761,7 +756,7 @@ export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
         nextlev[mv] += (orders[mv] - 1) * cnt;
       }
     }
-    disp("" + d + ": canonseq " + sum + " states " + uniq);
+    disp(`${d}": canonseq ${sum} states ${uniq}`);
     curlev = nextlev;
   }
 }

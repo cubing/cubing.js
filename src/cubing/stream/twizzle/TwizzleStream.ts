@@ -31,15 +31,18 @@ class TwizzleStream extends EventTarget {
   }
 }
 
+type StreamsField = {
+  streamID: string;
+  senders: { name: string; twizzleUserID: string; wcaID: string | null }[];
+}[];
+
 export class TwizzleStreamServer {
-  async streams(): Promise<
-    {
-      streamID: string;
-      senders: { name: string; twizzleUserID: string; wcaID: string | null }[];
-    }[]
-  > {
-    return (await (await fetch("https://api.twizzle.net/v0/streams")).json())
-      .streams;
+  async streams(): Promise<StreamsField> {
+    return (
+      (await (await fetch("https://api.twizzle.net/v0/streams")).json()) as {
+        streams: StreamsField;
+      }
+    ).streams;
   }
 
   connect(streamID: string): TwizzleStream {

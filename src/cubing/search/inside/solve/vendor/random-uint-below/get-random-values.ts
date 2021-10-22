@@ -13,9 +13,8 @@ export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction>
     typeof crypto.getRandomValues !== "undefined";
 
   if (hasWebCrypto) {
-    return crypto.getRandomValues.bind(crypto);
+    return crypto.getRandomValues.bind(crypto) as GetRandomValuesFunction;
   } else {
-    // @ts-ignore
     const nodeCrypto = await (cryptoPromise ??= import("crypto"));
     return (arr: Uint32Array) => {
       if (!(arr instanceof Uint32Array)) {

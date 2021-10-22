@@ -40,6 +40,7 @@ function calculateMoves(
       );
     }
     kpuzzle.reset();
+    // eslint-disable-next-line no-constant-condition
     for (let i = 1; true; i++) {
       kpuzzle.applyMove(rootMove);
       // console.log(kpuzzle.state, identityTransformation(def));
@@ -116,8 +117,8 @@ export class TrembleSolver {
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
           if (DEBUG) {
-            console.log(`New best (${len} moves): ${newAlg}`);
-            console.log(`Tremble moves are: ${sofar}`);
+            console.log(`New best (${len} moves): ${newAlg.toString()}`);
+            console.log(`Tremble moves are: ${sofar.toString()}`);
           }
           bestAlg = newAlg;
           bestLen = len;
@@ -167,11 +168,7 @@ export class TrembleSolver {
         const loc = cubieSeq[i];
         const orbitName = loc.orbitName;
         const idx = loc.permutationIdx;
-        key +=
-          " " +
-          inverseState[orbitName].permutation[idx] +
-          " " +
-          inverseState[orbitName].orientation[idx];
+        key += ` ${inverseState[orbitName].permutation[idx]} ${inverseState[orbitName].orientation[idx]}`;
       }
       const info = step.lookup[key];
       if (!info) {

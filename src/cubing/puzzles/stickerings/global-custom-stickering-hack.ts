@@ -16,7 +16,9 @@ function setGlobalCustomStickerer(stickerer: Stickerer): void {
   (async () => {
     globalCustomStickerer = stickerer;
 
-    const players = Array.from(document.body.querySelectorAll("twisty-player"));
+    const players: TwistyPlayer[] = Array.from(
+      document.body.querySelectorAll("twisty-player"),
+    );
     console.log(`Setting the custom stickering for ${players.length} players!`);
     const successPromises = [];
     for (const player of players) {

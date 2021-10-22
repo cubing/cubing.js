@@ -40,8 +40,7 @@ export class WebSocketProxySender {
     console.error("WebSocket sender error:", error);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental, @typescript-eslint/no-empty-function
-  protected onmessage(e: MessageEvent): void {}
+  protected onmessage(_e: MessageEvent): void {}
 }
 
 export abstract class WebSocketProxyReceiver {
@@ -70,6 +69,5 @@ export abstract class WebSocketProxyReceiver {
     this.onProxyEvent(JSON.parse(e.data));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   abstract onProxyEvent(e: ProxyEvent): void;
 }

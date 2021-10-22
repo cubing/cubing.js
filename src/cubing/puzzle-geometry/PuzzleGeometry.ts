@@ -496,7 +496,7 @@ function getmovename(
     bits = [slices - bits[1], slices - bits[0]];
     inverted = true;
   }
-  let movenameFamily = geo[0];
+  let movenameFamily = geo[0] as string;
   let movenamePrefix = "";
   if (bits[0] === 0 && bits[1] === slices) {
     movenameFamily = movenameFamily + "v";
@@ -510,7 +510,7 @@ function getmovename(
       movenamePrefix = String(bits[1] + 1);
     }
   } else {
-    throw "We only support slice and outer block moves right now. " + bits;
+    throw `We only support slice and outer block moves right now. ${bits}`;
   }
   return [movenamePrefix + movenameFamily, inverted];
 }

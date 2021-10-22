@@ -95,7 +95,7 @@ options.controlPanel = "none";
   }
 
   await page.goto(url.toString());
-  const path = args["out-file"] ?? `${args.alg || "puzzle"}.png`;
+  const path = args["out-file"] ?? `${(args.alg ?? "puzzle") as string}.png`;
   console.log("Output file:", path);
 
   page.waitForSelector("#screenshot");

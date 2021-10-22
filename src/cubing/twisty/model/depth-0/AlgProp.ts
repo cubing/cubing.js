@@ -54,7 +54,9 @@ export function algWithIssuesFromString(s: string): AlgWithIssues {
   } catch (e) {
     return {
       alg: new Alg(),
-      issues: new AlgIssues({ errors: [`Malformed alg: ${e}`] }),
+      issues: new AlgIssues({
+        errors: [`Malformed alg: ${(e as Error).toString()}`],
+      }),
     };
   }
 }

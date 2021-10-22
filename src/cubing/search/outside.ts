@@ -1,4 +1,3 @@
-/** @ts-ignore */
 import { Alg } from "../alg";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.

@@ -10,6 +10,7 @@ import type { esmTestAPIImplementation } from "./esm-test-worker";
 type ESMTestAPI = typeof esmTestAPIImplementation;
 
 export async function instantiateRelativeURLWorker(): Promise<void> {
+  // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     setTimeout(() => {
       reject();
