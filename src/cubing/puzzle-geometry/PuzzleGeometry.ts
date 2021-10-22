@@ -2866,9 +2866,6 @@ export class PuzzleGeometry {
         }
       }
     }
-    const f = (mv: Move): string => {
-      return this.unswizzle(mv);
-    };
     const twodmapper = this.generate2dmapping(2880, 2160, 0, false, 1.0);
     const g = (function () {
       const irot = rot.invrot();
@@ -2890,7 +2887,7 @@ export class PuzzleGeometry {
       stickers,
       faces,
       axis: grips,
-      unswizzle: f,
+      unswizzle: this.unswizzle.bind(this),
       notationMapper: this.notationMapper,
       textureMapper: { getuv: g },
     };
