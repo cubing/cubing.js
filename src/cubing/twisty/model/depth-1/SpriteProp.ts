@@ -21,6 +21,7 @@ export class SpriteProp extends TwistyPropDerived<
     if (textureURL === null) {
       return null;
     }
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, _reject) => {
       const onLoadingError = (): void => {
         console.warn("Could not load sprite:", textureURL.toString());

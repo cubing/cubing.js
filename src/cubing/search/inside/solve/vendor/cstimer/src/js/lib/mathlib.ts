@@ -439,12 +439,12 @@ CubieCube.prototype.edgeCycles = function () {
       continue;
     }
     let length = -1;
-    const flip: number | boolean = false;
+    let flip: number | boolean = false;
     let y = x;
     do {
       visited[y] = true;
       ++length;
-      (flip as unknown as number) ^= this.ea[y] & 1;
+      flip ^= this.ea[y] & 1;
       y = this.ea[y] >> 1;
     } while (y !== x);
     cycles += length >> 1;

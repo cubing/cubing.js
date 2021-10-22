@@ -25,7 +25,7 @@ export function puzzleOrientationIdx(state: Transformation): [number, number] {
 const puzzleOrientationCache: Transformation[][] = new Array(6)
   .fill(0)
   .map(() => {
-    return new Array(6);
+    return new Array<Transformation>(6);
   });
 
 // We use a new block to avoid keeping a reference to temporary vars.

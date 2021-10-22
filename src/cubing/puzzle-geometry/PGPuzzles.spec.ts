@@ -105,20 +105,21 @@ describe("PuzzleGeometry-Puzzles", () => {
       const tai = new TreeAlgIndexer(ksp, algo);
       const tr = tai.transformAtIndex(tai.numAnimatedLeaves());
       const o = transformationOrder(kpuzzledef, tr as Transformation);
-      const dat =
-        name +
-        sep +
-        pg.baseplanerot.length +
-        sep +
-        pg.stickersperface +
-        sep +
-        pg.cubies.length +
-        sep +
-        Object.getOwnPropertyNames(kpuzzledef.orbits).length +
-        sep +
-        Object.getOwnPropertyNames(kpuzzledef.moves).length +
-        sep +
-        o;
+      const dat = [
+        name,
+        sep,
+        pg.baseplanerot.length,
+        sep,
+        pg.stickersperface,
+        sep,
+        pg.cubies.length,
+        sep,
+        Object.getOwnPropertyNames(kpuzzledef.orbits).length,
+        sep,
+        Object.getOwnPropertyNames(kpuzzledef.moves).length,
+        sep,
+        o,
+      ].join("");
       const exp = expectedData[name];
       expect(dat).toBe(exp);
     }

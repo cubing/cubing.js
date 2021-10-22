@@ -7,6 +7,6 @@ export class PuzzleIDProp extends TwistyPropDerived<
   PuzzleID
 > {
   async derive(inputs: { puzzleLoader: PuzzleLoader }): Promise<PuzzleID> {
-    return inputs.puzzleLoader.id as any; // TODO: type
+    return inputs.puzzleLoader.id as PuzzleID;
   }
 }

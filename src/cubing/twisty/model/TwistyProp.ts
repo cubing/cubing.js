@@ -211,7 +211,7 @@ export abstract class TwistyPropDerived<
   }
 
   #cachedLastSuccessfulCalculation: {
-    inputs: InputProps<InputTypes>;
+    inputs: InputTypes;
     output: Promise<OutputType>;
     generation: number;
   } | null = null;
@@ -241,24 +241,28 @@ export abstract class TwistyPropDerived<
     return latestGenerationCalculation.output;
   }
 
-  async #getParents(): Promise<InputProps<InputTypes>> {
+  async #getParents(): Promise<InputTypes> {
     const inputValuePromises: InputPromises<InputRecord> = {} as any; // TODO
     for (const [key, parent] of Object.entries(this.#parents)) {
-      inputValuePromises[key] = parent.get();
+      (inputValuePromises as Record<string, Promise<unknown>>)[key] = (
+        parent as TwistyPropParent<unknown>
+      ).get();
     }
 
-    const inputs: InputProps<InputTypes> = {} as any; // TODO
+    const inputs: InputTypes = {} as any; // TODO
     for (const key in this.#parents) {
-      inputs[key] = (await inputValuePromises[key]) as any;
+      inputs[key] = (await (
+        inputValuePromises as Record<string, Promise<unknown>>
+      )[key]) as any;
     }
     return inputs;
   }
 
   async #cacheDerive(
-    inputsPromise: PromiseOrValue<InputProps<InputTypes>>,
+    inputsPromise: PromiseOrValue<InputTypes>,
     generation: number,
     cachedLatestGenerationCalculation: {
-      inputs: InputProps<InputTypes>;
+      inputs: InputTypes;
       output: Promise<OutputType>;
       generation: number;
     } | null = null,
@@ -289,9 +293,7 @@ export abstract class TwistyPropDerived<
     return cachedLatestGenerationCalculation.output;
   }
 
-  protected abstract derive(
-    input: InputProps<InputTypes>,
-  ): PromiseOrValue<OutputType>;
+  protected abstract derive(input: InputTypes): PromiseOrValue<OutputType>;
 }
 
 export class FreshListenerManager {

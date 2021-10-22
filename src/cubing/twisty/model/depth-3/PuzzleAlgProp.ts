@@ -19,7 +19,9 @@ export class PuzzleAlgProp extends TwistyPropDerived<
     } catch (e) {
       return {
         alg: new Alg(),
-        issues: new AlgIssues({ errors: [`Invalid alg for puzzle: ${e}`] }),
+        issues: new AlgIssues({
+          errors: [`Invalid alg for puzzle: ${(e as Error).toString()}`],
+        }),
       };
     }
   }
