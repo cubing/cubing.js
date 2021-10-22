@@ -21,7 +21,7 @@ var Stats = function () {
 
   function addPanel(panel) {
     container.appendChild(panel.dom);
-    return panel as unknown;
+    return panel;
   }
 
   function showPanel(id) {

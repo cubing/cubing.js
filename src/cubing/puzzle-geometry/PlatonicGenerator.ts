@@ -109,7 +109,7 @@ export function getface(planes: Quat[]): Quat[] {
   // in the given array, that are on the surface of the polytope defined
   // by all the planes, and will be returned in clockwise order.
   // This is O(planes^2 * return size + return_size^2).
-  const face = [];
+  const face: Quat[] = [];
   for (let i = 1; i < planes.length; i++) {
     for (let j = i + 1; j < planes.length; j++) {
       const p = solvethreeplanes(0, i, j, planes);
