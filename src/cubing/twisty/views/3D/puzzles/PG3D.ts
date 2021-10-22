@@ -81,7 +81,7 @@ function normalize(r: number[]): number[] {
 }
 
 function cross(a: number[], b: number[]): number[] {
-  const r = new Array(3);
+  const r = new Array<number>(3);
   r[0] = a[1] * b[2] - a[2] * b[1];
   r[1] = a[2] * b[0] - a[0] * b[2];
   r[2] = a[0] * b[1] - a[1] * b[0];
@@ -263,7 +263,7 @@ class StickerDef {
     for (let i = 0; i < 3; i++) {
       normal[i] *= 0.5 * hintStickerHeightScale;
     }
-    const hCoords = new Array(coords.length);
+    const hCoords = new Array<number>(coords.length);
     for (let i = 0; 3 * i < coords.length; i++) {
       const j = coords.length / 3 - 1 - i;
       hCoords[3 * i] = coords[3 * j] + normal[0];

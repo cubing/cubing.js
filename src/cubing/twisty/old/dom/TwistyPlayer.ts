@@ -655,7 +655,6 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     this.experimentalSetCursorIndexer(this.#cursorIndexerName);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   async updatePuzzleDOM(initial: boolean = false): Promise<void> {
     if (!this.#connected) {
       return;

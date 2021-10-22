@@ -1,15 +1,9 @@
-// @ts-ignore
 import { Move } from "../../../../../alg";
 import {
-  // @ts-ignore
   KPuzzle,
-  // @ts-ignore
   areOrbitTransformationsEquivalent,
-  // @ts-ignore
   KPuzzleDefinition,
-  // @ts-ignore
   Transformation,
-  // @ts-ignore
 } from "../../../../../kpuzzle";
 
 export function isEquivalentTranformationIgnoringCENTERS(

@@ -17,8 +17,7 @@ export interface MoveProgress {
   fraction: number;
 }
 
-// tslint:disable-next-line no-empty-interfaces
-// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars-experimental
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
 export interface State<T extends PuzzleWrapper> {}
 
 export abstract class PuzzleWrapper {

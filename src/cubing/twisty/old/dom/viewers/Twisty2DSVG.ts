@@ -2,7 +2,6 @@ import {
   combineTransformations,
   KPuzzleDefinition,
   KPuzzleSVGWrapper,
-  Transformation,
   transformationForMove,
 } from "../../../../kpuzzle";
 import type { PuzzleLoader } from "../../../../puzzles/PuzzleLoader";
@@ -51,7 +50,6 @@ export class Twisty2DSVG
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   onPositionChange(position: PuzzlePosition): void {
     if (position.movesInProgress.length > 0) {
       const move = position.movesInProgress[0].move;
