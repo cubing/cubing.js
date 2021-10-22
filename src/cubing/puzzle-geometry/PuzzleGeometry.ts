@@ -2468,7 +2468,7 @@ export class PuzzleGeometry {
   }
 
   public getMovesAsPerms(): Perm[] {
-    return this.getOrbitsDef(false).moveops.map((_: PGTransform) => _.toPerm());
+    return this.getOrbitsDef(false).moveops.map((_) => _.toPerm());
   }
 
   public showcanon(disp: (s: string) => void): void {
