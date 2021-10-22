@@ -67,7 +67,7 @@ function algWithIssuesEquals(a1: AlgWithIssues, a2: AlgWithIssues): boolean {
   );
 }
 
-export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
+export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | string> {
   getDefaultValue(): AlgWithIssues {
     return { alg: new Alg(), issues: new AlgIssues() };
   }

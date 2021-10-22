@@ -183,7 +183,7 @@ class ButtonGrid extends HTMLElement {
 
   setButtonEnabled(id: string, enabled: boolean): void {
     // TODO: better button binding
-    (this.querySelector(`#${id}`)! as HTMLButtonElement).disabled = !enabled;
+    this.querySelector(`#${id}`)!.disabled = !enabled;
   }
 }
 
@@ -222,14 +222,14 @@ class ControlPane {
       this.element,
       "experimental-setup-alg",
       "twisty-alg-editor",
-    ) as TwistyAlgEditor;
+    );
     this.experimentalSetupAlgInput.twistyPlayer = twistyPlayer;
 
     this.algInput = findOrCreateChildWithClass(
       this.element,
       "alg",
       "twisty-alg-editor",
-    ) as TwistyAlgEditor;
+    );
     this.algInput, { twistyPlayer };
     this.algInput.twistyPlayer = twistyPlayer;
 

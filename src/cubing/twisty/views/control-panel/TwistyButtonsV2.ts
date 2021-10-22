@@ -107,7 +107,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
       // TODO: Propagate button info to `ButtonAppearanceProp`.
       this.buttons?.fullscreen.setIcon("exit-fullscreen");
 
-      requestFullscreen(this.fullscreenElement!);
+      requestFullscreen(this.fullscreenElement);
 
       const onFullscreen = (): void => {
         if (documentFullscreenElement() !== this.fullscreenElement) {

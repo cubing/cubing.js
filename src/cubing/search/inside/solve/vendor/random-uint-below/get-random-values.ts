@@ -23,9 +23,9 @@ export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction>
           "The getRandomValues() shim only takes unsigned 32-bit int arrays",
         );
       }
-      var bytes = nodeCrypto.randomBytes(arr.length * 4);
-      var uint32_list = [];
-      for (var i = 0; i < arr.length; i++) {
+      const bytes = nodeCrypto.randomBytes(arr.length * 4);
+      const uint32_list = [];
+      for (let i = 0; i < arr.length; i++) {
         uint32_list.push(
           (bytes[i * 4 + 0] << 24) +
             (bytes[i * 4 + 1] << 16) +

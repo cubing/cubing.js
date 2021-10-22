@@ -103,7 +103,7 @@ export class Canonicalizer {
   ): SearchSequence {
     const ss = new SearchSequence(this, tr);
     for (const move of alg.experimentalLeafMoves()) {
-      ss.appendOneMove(this.blockMoveToInternalMove(move as Move));
+      ss.appendOneMove(this.blockMoveToInternalMove(move));
     }
     return ss;
   }

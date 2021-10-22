@@ -105,7 +105,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       const tai = new TreeAlgIndexer(ksp, algo);
       const tr = tai.transformAtIndex(tai.numAnimatedLeaves());
       const o = transformationOrder(kpuzzledef, tr as Transformation);
-      let dat =
+      const dat =
         name +
         sep +
         pg.baseplanerot.length +
@@ -119,7 +119,7 @@ describe("PuzzleGeometry-Puzzles", () => {
         Object.getOwnPropertyNames(kpuzzledef.moves).length +
         sep +
         o;
-      let exp = expectedData[name];
+      const exp = expectedData[name];
       expect(dat).toBe(exp);
     }
   });

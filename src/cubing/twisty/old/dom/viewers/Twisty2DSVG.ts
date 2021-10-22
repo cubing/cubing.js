@@ -63,18 +63,18 @@ export class Twisty2DSVG
       }
       const newState = combineTransformations(
         def,
-        position.state as Transformation,
+        position.state,
         transformationForMove(def, partialMove),
       );
       // TODO: move to render()
       this.svg.draw(
         this.definition,
-        position.state as Transformation,
+        position.state,
         newState,
         position.movesInProgress[0].fraction,
       );
     } else {
-      this.svg.draw(this.definition, position.state as Transformation);
+      this.svg.draw(this.definition, position.state);
       this.#cachedPosition = position;
     }
   }

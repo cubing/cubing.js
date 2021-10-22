@@ -38,7 +38,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
       kpuzzle.applyAlg(alg);
       sgsActions.push({ alg: alg, transformation: kpuzzle.state });
     } else if (line.startsWith("SubgroupSizes ")) {
-      for (var j = 1; j < lineTokens.length; j++) {
+      for (let j = 1; j < lineTokens.length; j++) {
         subgroupSizes.push(parseInt(lineTokens[j]));
       }
     }

@@ -71,7 +71,7 @@ async function randomizeOrbit(
   if (options && "orientationSum" in options) {
     // console.log("sfdsf", options!.orientationSum),
     ori[0] =
-      (((ori[0] + options!.orientationSum! - sum) % orbitDef.orientations) +
+      (((ori[0] + options.orientationSum! - sum) % orbitDef.orientations) +
         orbitDef.orientations) %
       orbitDef.orientations;
   }

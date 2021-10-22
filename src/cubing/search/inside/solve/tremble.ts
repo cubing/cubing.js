@@ -96,7 +96,7 @@ export class TrembleSolver {
     quantumMoveOrder?: (quantumMove: QuantumMove) => number,
   ): Promise<Alg> {
     let bestAlg: Alg | null = null;
-    var bestLen = 1000000;
+    let bestLen = 1000000;
     const recur = (
       recursiveState: Transformation,
       togo: number,
@@ -136,7 +136,7 @@ export class TrembleSolver {
         );
       }
     };
-    for (var d = 0; d <= stage1DepthLimit; d++) {
+    for (let d = 0; d <= stage1DepthLimit; d++) {
       recur(state, d, new Alg());
     }
     if (bestAlg === null) {

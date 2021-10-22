@@ -41,7 +41,7 @@ class DisplayablePG3D {
   }
 
   public puzzleName(): string {
-    return this.name as string;
+    return this.name;
   }
 
   // public async kpuzzleDefinition(): Promise<KPuzzleDefinition> {

@@ -438,7 +438,7 @@ export class TwistyAlgViewerV1 extends HTMLElementShim {
     this.setAlg(parsedAlg);
     (async () => {
       const wrapper = new KPuzzleWrapper(
-        await puzzles[twistyPlayer!.puzzle].def(),
+        await puzzles[twistyPlayer.puzzle].def(),
       );
       const indexer = new TreeAlgIndexer(wrapper, parsedAlg);
       twistyPlayer.timeline.addTimestampListener({

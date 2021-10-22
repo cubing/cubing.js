@@ -178,7 +178,7 @@ class Filler {
   }
 
   makePoly(coords: number[], color: number, ind: number): void {
-    let ncoords: number[] = coords;
+    const ncoords: number[] = coords;
     for (let g = 1; 3 * (g + 1) < ncoords.length; g++) {
       this.add(ncoords, 0, color);
       this.add(ncoords, g, color);
@@ -291,7 +291,7 @@ class StickerDef {
   ): void {
     this.hintStart = filler.ipos;
     const coords = this.hintCoords(
-      stickerDat.coords as number[],
+      stickerDat.coords,
       hintStickerHeightScale,
       trim,
       normal,
@@ -310,13 +310,13 @@ class StickerDef {
     black: number,
   ) {
     this.foundationStart = filler.ipos;
-    const coords = this.foundationCoords(stickerDat.coords as number[]);
+    const coords = this.foundationCoords(stickerDat.coords);
     filler.makePoly(coords, black, this.isDup ? 4 : 6);
     this.foundationEnd = filler.ipos;
   }
 
   private setHintStickers(filler: Filler, hintStickers: boolean): void {
-    let indv = this.isDup || !hintStickers ? 4 : 2;
+    const indv = this.isDup || !hintStickers ? 4 : 2;
     for (let i = this.hintStart; i < this.hintEnd; i++) {
       filler.ind[i] = indv | (filler.ind[i] & 1);
     }
@@ -367,7 +367,7 @@ class StickerDef {
   public addUVs(filler: Filler): void {
     const uvs = filler.uvs!;
     const vert = filler.vertices;
-    let coords = new Array(3);
+    const coords = new Array(3);
     for (let i = 3 * this.stickerStart; i < 3 * this.stickerEnd; i++) {
       coords[0] = vert[3 * i];
       coords[1] = vert[3 * i + 1];
@@ -551,7 +551,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.enableFoundation(showFoundation);
     this.updateMaterialArrays();
     let triangleCount = 0;
-    let multiplier = 3;
+    const multiplier = 3;
     for (const sticker of stickers) {
       const sides = sticker.coords.length / 3;
       triangleCount += multiplier * (sides - 2);
@@ -636,7 +636,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.controlTargets.push(facedef.cubie.children[0]);
     }
     filler.saveOriginalColors();
-    cursor!.addPositionListener(this);
+    cursor.addPositionListener(this);
     pgdat.stickers = []; // don't need these anymore
     /*
     this.experimentalUpdateTexture(
@@ -703,7 +703,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   public onPositionChange(p: PuzzlePosition): void {
-    const state = p.state as Transformation;
+    const state = p.state;
     const noRotation = new Euler();
     this.movingObj.rotation.copy(noRotation);
     let colormods = 0;
@@ -834,7 +834,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           true;
       }
     }
-    this.scheduleRenderCallback!();
+    this.scheduleRenderCallback();
   }
 
   private ease(fraction: number): number {

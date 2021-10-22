@@ -7,7 +7,7 @@ import { globalSafeDocument } from "../document";
 
 const SLOW_DOWN_SCRUBBING = false;
 
-var isMouseDown = false;
+let isMouseDown = false;
 
 globalSafeDocument?.addEventListener(
   "mousedown",
@@ -26,7 +26,7 @@ globalSafeDocument?.addEventListener(
 );
 
 // var x = 0;
-var y = 0;
+let y = 0;
 let clickNum = 0;
 
 globalSafeDocument?.addEventListener(
@@ -46,7 +46,7 @@ function onMouseUpdate(e: MouseEvent) {
   // console.log(x, y);
 }
 
-let lastVal = 0;
+const lastVal = 0;
 let lastPreval = 0;
 let scaling: boolean = false;
 let currentClickNum = 0;

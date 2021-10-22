@@ -87,10 +87,7 @@ export class KPuzzleSVGWrapper {
     }
     svgElem.style.maxWidth = "100%";
     svgElem.style.maxHeight = "100%";
-    this.gradientDefs = document.createElementNS(
-      xmlns,
-      "defs",
-    ) as SVGDefsElement;
+    this.gradientDefs = document.createElementNS(xmlns, "defs");
     svgElem.insertBefore(this.gradientDefs, svgElem.firstChild);
 
     for (const orbitName in kPuzzleDefinition.orbits) {
@@ -135,7 +132,7 @@ export class KPuzzleSVGWrapper {
               }
             })();
           } else {
-            originalColor = elem.style.fill as string;
+            originalColor = elem.style.fill;
           }
           this.originalColors[id] = originalColor;
           this.gradients[id] = this.newGradient(id, originalColor);
@@ -165,9 +162,7 @@ export class KPuzzleSVGWrapper {
       const orbitDefinition = definition.orbits[orbitName];
 
       const curOrbitState = state[orbitName];
-      const nextOrbitState = nextState
-        ? (nextState as Transformation)[orbitName]
-        : null;
+      const nextOrbitState = nextState ? nextState[orbitName] : null;
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (
           let orientation = 0;
@@ -271,7 +266,7 @@ export class KPuzzleSVGWrapper {
       { offset: 100, color: originalColor },
     ];
     for (const stopDef of stopDefs) {
-      const stop = document.createElementNS(xmlns, "stop") as SVGStopElement;
+      const stop = document.createElementNS(xmlns, "stop");
       stop.setAttribute("offset", `${stopDef.offset}%`);
       stop.setAttribute("stop-color", stopDef.color);
       stop.setAttribute("stop-opacity", "1");

@@ -24,7 +24,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     // Repro: Switch to 40x40x40 a fraction of a second before animation finishes. When it's loaded the itmeline is at the end, but the 40x40x40 is rendered with an earlier position.
 
     this.#freshListenerManager.addListener(
-      this.model!.puzzleLoaderProp,
+      this.model.puzzleLoaderProp,
       (puzzleLoader: PuzzleLoader) => {
         if (this.puzzleLoader.id !== puzzleLoader.id) {
           this.disconnect();
@@ -144,7 +144,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         });
       } else {
         const [hintFacelets, foundationSprite, hintSprite] = await Promise.all([
-          this.model!.hintFaceletProp.get(),
+          this.model.hintFaceletProp.get(),
           this.model.foundationStickerSprite.get(),
           this.model.hintStickerSprite.get(),
         ]);

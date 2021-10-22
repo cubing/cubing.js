@@ -197,8 +197,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
 
   /** @deprecated */
   get experimentalSetupAnchor(): SetupToLocation {
-    return this.#config.attributes["experimental-setup-anchor"]
-      .value as SetupToLocation;
+    return this.#config.attributes["experimental-setup-anchor"].value;
   }
 
   set puzzle(puzzle: PuzzleID) {
@@ -208,7 +207,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get puzzle(): PuzzleID {
-    return this.#config.attributes["puzzle"].value as PuzzleID;
+    return this.#config.attributes["puzzle"].value;
   }
 
   set visualization(visualization: VisualizationFormat) {
@@ -218,8 +217,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get visualization(): VisualizationFormat {
-    return this.#config.attributes["visualization"]
-      .value as VisualizationFormat;
+    return this.#config.attributes["visualization"].value;
   }
 
   set hintFacelets(hintFacelets: HintFaceletStyle) {
@@ -232,7 +230,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get hintFacelets(): HintFaceletStyle {
-    return this.#config.attributes["hint-facelets"].value as HintFaceletStyle;
+    return this.#config.attributes["hint-facelets"].value;
   }
 
   // TODO: Implement for PG3D
@@ -256,7 +254,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
         })();
       }
       if (this.viewerElems[0] instanceof Twisty2DSVG) {
-        (this.viewerElems[0] as Twisty2DSVG).experimentalSetStickering(
+        this.viewerElems[0].experimentalSetStickering(
           this.experimentalStickering,
         );
       }
@@ -266,8 +264,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   // TODO: Implement for PG3D
   /** @deprecated */
   get experimentalStickering(): ExperimentalStickering {
-    return this.#config.attributes["experimental-stickering"]
-      .value as ExperimentalStickering;
+    return this.#config.attributes["experimental-stickering"].value;
   }
 
   set background(background: BackgroundTheme) {
@@ -280,7 +277,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get background(): BackgroundTheme {
-    return this.#config.attributes["background"].value as BackgroundTheme;
+    return this.#config.attributes["background"].value;
   }
 
   set controlPanel(controlPanel: ControlsLocation) {
@@ -289,7 +286,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get controlPanel(): ControlsLocation {
-    return this.#config.attributes["control-panel"].value as ControlsLocation;
+    return this.#config.attributes["control-panel"].value;
   }
 
   /** @deprecated use `controlPanel */
@@ -318,7 +315,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get backView(): BackViewLayout {
-    return this.#config.attributes["back-view"].value as BackViewLayout;
+    return this.#config.attributes["back-view"].value;
   }
 
   #orbitControls(): TwistyOrbitControls | null {
@@ -396,8 +393,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
 
   get experimentalCameraLatitudeLimits(): CameraLatitudeLimits {
     // TODO: sync with orbit controls
-    return this.#config.attributes["experimental-camera-latitude-limits"]
-      .value as CameraLatitudeLimits;
+    return this.#config.attributes["experimental-camera-latitude-limits"].value;
   }
 
   set viewerLink(viewerLinkPage: ViewerLinkPage) {
@@ -426,7 +422,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
 
   /** @deprecated */
   experimentalDerivedCameraOrbitCoordinates(): OrbitCoordinates {
-    let defaultCoordinatesForPuzzle = defaultCameraOrbitCoordinates(
+    const defaultCoordinatesForPuzzle = defaultCameraOrbitCoordinates(
       this.puzzle,
     );
 
@@ -495,9 +491,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     // TODO: Are there any SVGs where we'd want a separate back view?
     const setBackView: boolean =
       this.backView && is3DVisualization(this.visualization);
-    const backView: BackViewLayout = setBackView
-      ? (this.backView as BackViewLayout)
-      : "none";
+    const backView: BackViewLayout = setBackView ? this.backView : "none";
     this.#viewerWrapper = new TwistyViewerWrapper({
       backView,
     });

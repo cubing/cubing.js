@@ -147,7 +147,7 @@ export function invertTransformation(
       const newPerm = new Array(oDef.numPieces);
       const newOri = new Array(oDef.numPieces);
       for (let idx = 0; idx < oDef.numPieces; idx++) {
-        const fromIdx = o.permutation[idx] as number;
+        const fromIdx = o.permutation[idx];
         newPerm[fromIdx] = idx;
         newOri[fromIdx] =
           (oDef.orientations - o.orientation[idx] + oDef.orientations) %

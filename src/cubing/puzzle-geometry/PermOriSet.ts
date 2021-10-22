@@ -461,7 +461,7 @@ export class Orbit {
   }
 
   public appendDefinition(
-    result: String[],
+    result: string[],
     name: string,
     useVS: boolean,
     concise: boolean = true,

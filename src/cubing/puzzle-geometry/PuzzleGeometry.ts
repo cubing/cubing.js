@@ -979,7 +979,7 @@ export class PuzzleGeometry {
       tar[j] = tar[i];
       rval = (rval * 1657 + 101) % 65536;
     }
-    let faces = ft.collect([], true);
+    const faces = ft.collect([], true);
     this.faces = faces;
     if (this.options.verbosity > 0) {
       console.log("# Faces is now " + faces.length);
@@ -1016,7 +1016,7 @@ export class PuzzleGeometry {
               break;
             }
             const k = sortme[kk][2];
-            if (!finished[k] && cm.dist(sortme[kk][1] as Quat) < eps) {
+            if (!finished[k] && cm.dist(sortme[kk][1]) < eps) {
               finished[k] = true;
               faces[k] = f2;
               break;
@@ -1127,9 +1127,9 @@ export class PuzzleGeometry {
   // same as above, but instead of returning an encoded string, return
   // an array with offsets.
   private keyface3(face: Face): number[] {
-    let cm = face.centermass();
+    const cm = face.centermass();
     // take a face and figure out the sides of each move plane
-    let r = [];
+    const r = [];
     for (const moveplaneset of this.moveplanesets) {
       if (moveplaneset.length > 0) {
         const dv = cm.dot(moveplaneset[0]);
@@ -2127,7 +2127,7 @@ export class PuzzleGeometry {
     includemoves: boolean = true,
   ): PGVendoredKPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty, includemoves);
-    const r = od.toKpuzzle(includemoves) as PGVendoredKPuzzleDefinition;
+    const r = od.toKpuzzle(includemoves);
     r.moveNotation = new PGNotation(this, od);
     return r;
   }
@@ -2302,7 +2302,7 @@ export class PuzzleGeometry {
             if (found < 0) {
               throw new Error("Could not find rotation");
             }
-            let cmp = mps[found];
+            const cmp = mps[found];
             if (
               cmp.length !== mps[k].length ||
               this.moveplanesets[k].length !==
@@ -2744,7 +2744,7 @@ export class PuzzleGeometry {
       colormap[i] = this.colors[this.facenames[i][1]];
     }
     for (let i = 0; i < this.faces.length; i++) {
-      let face = this.faces[i];
+      const face = this.faces[i];
       const facenum = Math.floor(i / this.stickersperface);
       const fg = [];
       for (let j = 0; j < face.length; j++) {
@@ -2812,7 +2812,7 @@ export class PuzzleGeometry {
       if (options?.stickerColors) {
         color = options.stickerColors[i];
       }
-      let coords = this.faces[i].rotate(rot);
+      const coords = this.faces[i].rotate(rot);
       stickers.push({
         coords: toFaceCoords(coords, maxdist),
         color,
@@ -2823,7 +2823,7 @@ export class PuzzleGeometry {
       });
       let fcoords = coords;
       if (this.duplicatedFaces[i]) {
-        let rotdist = fcoords.length / this.duplicatedFaces[i];
+        const rotdist = fcoords.length / this.duplicatedFaces[i];
         for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
           for (let k = 0; k < rotdist; k++) {
             fcoords = fcoords.rotateforward();
