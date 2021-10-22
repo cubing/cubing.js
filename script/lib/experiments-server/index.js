@@ -5,7 +5,7 @@ import { createServer } from "http";
 import { extname, join } from "path";
 import { needFolder } from "../need-folder.js";
 
-const DIST_SITES_ROOT = "../../../dist/src/sites/";
+const DIST_SITES_ROOT = "../../../dist/sites/";
 
 const DIST_SITES_ROOT_EXPANDED = new URL(DIST_SITES_ROOT, import.meta.url)
   .pathname;

@@ -31,7 +31,7 @@ deploy-twizzle: build-site-twizzle
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/src/sites/alpha.twizzle.net/ \
+		./dist/sites/alpha.twizzle.net/ \
 		${TWIZZLE_SFTP_PATH}
 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
 
@@ -43,7 +43,7 @@ deploy-experiments: build-site-experiments
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
-		./dist/src/sites/experiments.cubing.net/cubing.js/ \
+		./dist/sites/experiments.cubing.net/cubing.js/ \
 		${EXPERIMENTS_SFTP_PATH}
 	echo "\nDone deploying. Go to ${EXPERIMENTS_URL}\n"
 

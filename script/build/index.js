@@ -22,13 +22,18 @@ const PARALLEL = false;
 const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "comlink", ...externalNode];
 
-const devServerOptions = {
-  port: 3333,
-  esbuildOptions: {
-    external: externalNode,
-    target: "es2020",
-  },
-};
+function devServerOptions(srcFolder, dev) {
+  return {
+    entryRoot: join("src", srcFolder),
+    outDir: dev ? join(".temp/dev", srcFolder) : join("dist", srcFolder),
+    dev,
+    port: 3333,
+    esbuildOptions: {
+      external: externalNode,
+      target: "es2020",
+    },
+  };
+}
 
 async function writeVersionJSON(siteFolder) {
   // https://git-scm.com/docs/git-describe
@@ -221,11 +226,7 @@ export const sitesTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    await barelyServe({
-      entryRoot: "src/sites",
-      dev,
-      ...devServerOptions,
-    });
+    await barelyServe(devServerOptions("sites", dev));
   },
 };
 
@@ -234,15 +235,10 @@ export const twizzleTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    await barelyServe({
-      entryRoot: "src/sites/alpha.twizzle.net",
-      dev,
-      ...devServerOptions,
-    });
-
+    await barelyServe(devServerOptions("sites/alpha.twizzle.net", dev));
     if (!dev) {
       // TODO: Include this in the custom build process.
-      await writeVersionJSON("dist/src/sites/alpha.twizzle.net");
+      await writeVersionJSON("dist/sites/alpha.twizzle.net");
     }
   },
 };
@@ -252,15 +248,13 @@ export const experimentsTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    await barelyServe({
-      entryRoot: "src/sites/experiments.cubing.net/cubing.js",
-      dev,
-      ...devServerOptions,
-    });
+    await barelyServe(
+      devServerOptions("sites/experiments.cubing.net/cubing.js", dev),
+    );
 
     if (!dev) {
       // TODO: Include this in the custom build process.
-      await writeVersionJSON("dist/src/sites/alpha.twizzle.net");
+      await writeVersionJSON("dist/sites/alpha.twizzle.net");
     }
   },
 };
