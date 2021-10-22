@@ -96,7 +96,18 @@
     "overrides": [
       {
         "files": "**/*.js",
-        "parser": "@babel/eslint-parser"
+        "parser": "@babel/eslint-parser",
+        "extends": [
+          "eslint:recommended"
+        ],
+        "rules": {
+          "no-unused-vars": [
+            "error",
+            {
+              "argsIgnorePattern": "^_"
+            }
+          ]
+        }
       },
       {
         "files": "**/*.ts",
@@ -145,6 +156,11 @@
       "/*/index.d.ts",
       "parser-peggy.js"
     ],
+    "globals": {
+      "globalThis": false,
+      "Promise": false,
+      "Symbol": false
+    },
     "env": {
       "commonjs": true,
       "browser": true,
