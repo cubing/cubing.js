@@ -183,7 +183,7 @@ class ButtonGrid extends HTMLElement {
 
   setButtonEnabled(id: string, enabled: boolean): void {
     // TODO: better button binding
-    this.querySelector(`#${id}`)!.disabled = !enabled;
+    (this.querySelector(`#${id}`) as HTMLButtonElement).disabled = !enabled;
   }
 }
 

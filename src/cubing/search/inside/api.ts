@@ -1,5 +1,4 @@
 import type { Alg } from "../../alg";
-import type { Transformation } from "../../puzzle-geometry/interfaces";
 import {
   preInitialize222,
   random222Scramble,
@@ -30,6 +29,7 @@ import { setIsInsideWorker } from "./inside-worker";
 import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
 import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
+import type { Transformation } from "../../kpuzzle";
 
 setIsInsideWorker(true);
 

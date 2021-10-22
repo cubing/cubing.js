@@ -1,6 +1,5 @@
 import type { Alg } from "../../../alg";
-import type { KPuzzleDefinition } from "../../../kpuzzle";
-import type { Transformation } from "../../../puzzle-geometry/interfaces";
+import type { KPuzzleDefinition, Transformation } from "../../../kpuzzle";
 import { KPuzzleWrapper } from "../../views/3D/puzzles/KPuzzleWrapper";
 import { TreeAlgIndexer } from "../../old/animation/indexer/tree/TreeAlgIndexer";
 import type { AlgWithIssues } from "../depth-0/AlgProp";

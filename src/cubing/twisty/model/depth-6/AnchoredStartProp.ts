@@ -2,8 +2,8 @@ import {
   combineTransformations,
   invertTransformation,
   KPuzzleDefinition,
+  Transformation,
 } from "../../../kpuzzle";
-import type { Transformation } from "../../../puzzle-geometry/interfaces";
 import type { AlgIndexer } from "../../old/animation/indexer/AlgIndexer";
 import type { SetupToLocation } from "../../old/dom/TwistyPlayerConfig";
 import { TwistyPropDerived } from "../TwistyProp";

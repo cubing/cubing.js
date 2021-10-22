@@ -4,7 +4,7 @@ import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TOD
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import { instantiateWorker } from "./instantiator";
 import type { WorkerInsideAPI } from "./inside/api";
-import type { Transformation } from "../puzzle-geometry/interfaces";
+import type { Transformation } from "../kpuzzle";
 
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
 async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
