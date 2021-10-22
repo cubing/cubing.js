@@ -106,7 +106,7 @@ async function decodeState(data: Uint8Array): Promise<Uint8Array> {
   if (!probablyEncrypted(data)) {
     return data;
   }
-  return await decryptState(data);
+  return decryptState(data);
   // TODO: Check that the decrypted state is a valid staet.
 }
 
@@ -257,7 +257,7 @@ export class GiiKERCube extends BluetoothPuzzle {
 
 // TODO: Move this into a factory?
 export const giiKERConfig: BluetoothConfig<BluetoothPuzzle> = {
-  connect: GiiKERCube.connect,
+  connect: GiiKERCube.connect.bind(GiiKERCube),
   prefixes: ["Gi", ""], // Hack
   filters: [
     // Known prefixes: GiC, GiS (3x3x3), Gi2 (2x2x2)

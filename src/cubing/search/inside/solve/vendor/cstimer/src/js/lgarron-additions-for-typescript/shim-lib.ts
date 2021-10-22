@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 export const DEBUG = false;
 
 // import {rndProb} from "../lib/mathlib"

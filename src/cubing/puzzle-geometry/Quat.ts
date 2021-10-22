@@ -61,7 +61,7 @@ export class Quat {
   }
 
   public toString(): string {
-    return "Q[" + this.a + "," + this.b + "," + this.c + "," + this.d + "]";
+    return `Q[${this.a},${this.b},${this.c},${this.d}]`;
   }
 
   public dist(q: Quat): number {

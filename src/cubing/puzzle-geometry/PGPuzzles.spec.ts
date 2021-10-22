@@ -1,10 +1,6 @@
 import { getPuzzleGeometryByDesc } from ".";
 import { PGPuzzles } from "./PGPuzzles";
-import {
-  KPuzzleDefinition,
-  transformationOrder,
-  Transformation,
-} from "../kpuzzle";
+import { transformationOrder, Transformation } from "../kpuzzle";
 import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
 import { Alg, Move } from "../alg";
 /**
@@ -89,7 +85,7 @@ describe("PuzzleGeometry-Puzzles", () => {
   it("testpuzzles", () => {
     for (const [name, desc] of Object.entries(PGPuzzles)) {
       const pg = getPuzzleGeometryByDesc(desc, {});
-      const kpuzzledef = pg.writekpuzzle(false) as KPuzzleDefinition;
+      const kpuzzledef = pg.writekpuzzle(false);
       const sep = ", ";
       const seq = Object.getOwnPropertyNames(kpuzzledef.moves).sort().join(" ");
       let algo = Alg.fromString(seq);
@@ -105,21 +101,22 @@ describe("PuzzleGeometry-Puzzles", () => {
       const tai = new TreeAlgIndexer(ksp, algo);
       const tr = tai.transformAtIndex(tai.numAnimatedLeaves());
       const o = transformationOrder(kpuzzledef, tr as Transformation);
-      let dat =
-        name +
-        sep +
-        pg.baseplanerot.length +
-        sep +
-        pg.stickersperface +
-        sep +
-        pg.cubies.length +
-        sep +
-        Object.getOwnPropertyNames(kpuzzledef.orbits).length +
-        sep +
-        Object.getOwnPropertyNames(kpuzzledef.moves).length +
-        sep +
-        o;
-      let exp = expectedData[name];
+      const dat = [
+        name,
+        sep,
+        pg.baseplanerot.length,
+        sep,
+        pg.stickersperface,
+        sep,
+        pg.cubies.length,
+        sep,
+        Object.getOwnPropertyNames(kpuzzledef.orbits).length,
+        sep,
+        Object.getOwnPropertyNames(kpuzzledef.moves).length,
+        sep,
+        o,
+      ].join("");
+      const exp = expectedData[name];
       expect(dat).toBe(exp);
     }
   });

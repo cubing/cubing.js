@@ -322,7 +322,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("mousedown", mouseCallback);
   document.body.addEventListener("touchstart", swipeCallback);
 
-  let go = new URL(document.location.href).searchParams.get("go");
+  const go = new URL(document.location.href).searchParams.get("go");
   switch (go) {
     case "keyboard":
       keyboardCallback();
@@ -340,6 +340,10 @@ window.addEventListener("DOMContentLoaded", () => {
 // Initialize ahead of time so that it can render more quickly.
 const swipeyPuzzle = new SwipeyPuzzle(
   getPuzzleID(),
-  () => {},
-  () => {},
+  () => {
+    /* */
+  },
+  () => {
+    /* */
+  },
 );

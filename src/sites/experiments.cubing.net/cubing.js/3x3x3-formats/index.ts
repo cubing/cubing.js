@@ -26,11 +26,11 @@ const def: KPuzzleDefinition = defJSON;
 
 export function bufferToSpacedHex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
-  return Array.prototype.map
-    .call(new Uint8Array(buffer), (x: number) =>
+  return (
+    Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
       ("00" + x.toString(16)).slice(-2),
-    )
-    .join(" ");
+    ) as string[]
+  ).join(" ");
 }
 
 export function spacedHexToBuffer(hex: string): Uint8Array {
@@ -40,23 +40,21 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
 class App {
   kpuzzle = new KPuzzle(def);
   svg = new KPuzzleSVGWrapper(def, svgSource);
-  algTextarea = document.querySelector("#alg")! as HTMLTextAreaElement;
-  kpuzzleTextarea = document.querySelector("#kpuzzle")! as HTMLTextAreaElement;
+  algTextarea = document.querySelector("#alg") as HTMLTextAreaElement;
+  kpuzzleTextarea = document.querySelector("#kpuzzle") as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
     "#reid-string",
-  )! as HTMLTextAreaElement;
+  ) as HTMLTextAreaElement;
 
-  orderElem = document.querySelector("#order")! as HTMLSpanElement;
+  orderElem = document.querySelector("#order")!;
 
-  stickersTextarea = document.querySelector(
-    "#stickers",
-  )! as HTMLTextAreaElement;
+  stickersTextarea = document.querySelector("#stickers") as HTMLTextAreaElement;
 
   componentsTextarea = document.querySelector(
     "#components",
-  )! as HTMLTextAreaElement;
+  ) as HTMLTextAreaElement;
 
-  binaryTextarea = document.querySelector("#binary")! as HTMLTextAreaElement;
+  binaryTextarea = document.querySelector("#binary") as HTMLTextAreaElement;
   constructor() {
     document.querySelector("#viewer")!.appendChild(this.svg.element);
 

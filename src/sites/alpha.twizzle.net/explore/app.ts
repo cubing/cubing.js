@@ -114,10 +114,10 @@ function getModValueForMove(move: Move): number {
     console.log("Bailing on mod; pg is null");
     return 1;
   }
-  let family = stickerDat.unswizzle(move);
+  const family = stickerDat.unswizzle(move);
   for (const axis of stickerDat.axis) {
     if (family === axis[1]) {
-      return axis[2] as number;
+      return axis[2];
     }
   }
   console.log("Bailing on mod for " + family + "; no axis match");
@@ -174,12 +174,12 @@ function LucasSetup(
   savealgo: boolean,
 ): void {
   safeKpuzzle = kpuzzledef; // this holds the scrambled position
-  puzzle = kpuzzledef as KPuzzleDefinition;
+  puzzle = kpuzzledef;
   const mps = pg.movesetgeos;
   gripdepth = {};
   for (const mp of mps) {
-    const grip1 = mp[0] as string;
-    const grip2 = mp[2] as string;
+    const grip1 = mp[0];
+    const grip2 = mp[2];
     // angle compatibility hack
     gripdepth[grip1] = mp[4];
     gripdepth[grip2] = mp[4];
@@ -201,7 +201,7 @@ function updateMoveCount(alg?: Alg): void {
   const len = countMoves(alg ? alg : Alg.fromString(lastalgo));
   const mc = document.getElementById("movecount");
   if (mc) {
-    mc.innerText = "Moves: " + len;
+    mc.innerText = `Moves: ${len}`;
   }
 }
 
@@ -546,10 +546,7 @@ function checkchange_internal(): void {
         kpuzzledef = safeKpuzzle;
       } else {
         // the false here means, don't include moves; rely on moveexpander
-        kpuzzledef = pg.writekpuzzle(
-          true,
-          needmovesforscramble,
-        ) as KPuzzleDefinition;
+        kpuzzledef = pg.writekpuzzle(true, needmovesforscramble);
         needmovesforscramble = false;
       }
       const newStickerDat = pg.get3d();
@@ -588,8 +585,7 @@ function checkchange(): void {
   try {
     checkchange_internal();
   } catch (e) {
-    console.log("Ignoring " + e);
-    console.log(e);
+    console.log("Ignoring error", e);
   }
 }
 
@@ -750,10 +746,10 @@ function settempo(fromURL: any): void {
   let sliderval = Math.floor(50 * (1 + Math.log10(tempomult)) + 0.5);
   sliderval = Math.min(sliderval, 100);
   sliderval = Math.max(sliderval, 0);
-  tempo.value = "" + sliderval;
+  tempo.value = sliderval.toString();
   const tempodisp = document.getElementById("tempodisplay");
   if (tempodisp) {
-    tempodisp.textContent = "" + tempomult + "x";
+    tempodisp.textContent = tempomult.toString() + "x";
   }
   if (twisty) {
     twisty.timeline.tempoScale = tempomult;
@@ -765,10 +761,10 @@ function checktempo(): void {
   const val = tempo.value; // 0..100
   tempomult = Math.pow(10, (+val - 50) / 50);
   tempomult = Math.floor(tempomult * 100 + 0.5) / 100;
-  setURLParams({ tempo: "" + tempomult });
+  setURLParams({ tempo: tempomult.toString() });
   const tempodisp = document.getElementById("tempodisplay");
   if (tempodisp) {
-    tempodisp.textContent = "" + tempomult + "x";
+    tempodisp.textContent = tempomult.toString() + "x";
   }
   if (twisty) {
     twisty.timeline.tempoScale = tempomult;
@@ -787,7 +783,7 @@ export function setup(): void {
   let optionFor3x3x3: HTMLOptionElement;
 
   for (const [name, desc] of Object.entries(puzzles)) {
-    const opt = document.createElement("option") as HTMLOptionElement;
+    const opt = document.createElement("option");
     opt.value = desc;
     opt.textContent = name;
     if (puzdesc === "" && puz === name) {

@@ -54,7 +54,9 @@ export function algWithIssuesFromString(s: string): AlgWithIssues {
   } catch (e) {
     return {
       alg: new Alg(),
-      issues: new AlgIssues({ errors: [`Malformed alg: ${e}`] }),
+      issues: new AlgIssues({
+        errors: [`Malformed alg: ${(e as Error).toString()}`],
+      }),
     };
   }
 }
@@ -67,7 +69,7 @@ function algWithIssuesEquals(a1: AlgWithIssues, a2: AlgWithIssues): boolean {
   );
 }
 
-export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | String> {
+export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | string> {
   getDefaultValue(): AlgWithIssues {
     return { alg: new Alg(), issues: new AlgIssues() };
   }

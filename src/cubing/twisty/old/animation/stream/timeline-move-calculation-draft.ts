@@ -74,7 +74,7 @@ export function toAxes(
             prev.event.move.innerLayer,
             prev.event.move.outerLayer,
           ),
-          prev.event.move.amount + newEntry.event.move.amount,
+          (prev.event.move.amount as number) + newEntry.event.move.amount,
         );
       } else {
         axes[axes.length - 1].push(newEntry);

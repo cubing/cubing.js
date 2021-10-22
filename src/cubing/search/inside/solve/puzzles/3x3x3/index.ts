@@ -1,7 +1,5 @@
 import { Alg, AlgBuilder } from "../../../../../alg";
-// @ts-ignore
 import { KPuzzle, Transformation } from "../../../../../kpuzzle";
-// @ts-ignore
 import { puzzles } from "../../../../../puzzles";
 import { mustBeInsideWorker } from "../../../inside-worker";
 import { addOrientationSuffix } from "../../addOrientationSuffix";

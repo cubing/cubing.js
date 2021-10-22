@@ -44,7 +44,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     } catch (e) {
       console.error("Unable to get initial state", e);
     }
-    connectButton.textContent = `Connected: ${puzzle.name()}`;
+    connectButton.textContent = `Connected: ${puzzle.name() ?? "[unknown"}`;
     connectButton.disabled = true;
 
     puzzle.addMoveListener((e: MoveEvent) => {

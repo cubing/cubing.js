@@ -5,7 +5,7 @@
 import { isArray, DEBUG } from "../lgarron-additions-for-typescript/shim-lib";
 // import { randomUIntBelow } from "random-uint-below";
 
-var Cnk = [],
+const Cnk = [],
   fact = [1];
 for (var i = 0; i < 32; ++i) {
   Cnk[i] = [];
@@ -22,7 +22,7 @@ for (var i = 0; i < 32; ++i) {
 }
 
 function circleOri(arr, a, b, c, d, ori) {
-  var temp = arr[a];
+  const temp = arr[a];
   arr[a] = arr[d] ^ ori;
   arr[d] = arr[c] ^ ori;
   arr[c] = arr[b] ^ ori;
@@ -30,9 +30,9 @@ function circleOri(arr, a, b, c, d, ori) {
 }
 
 function circle(arr, ...moreArgs: any) {
-  var length = arguments.length - 1,
+  const length = arguments.length - 1,
     temp = arr[arguments[length]];
-  for (var i = length; i > 1; i--) {
+  for (let i = length; i > 1; i--) {
     arr[arguments[i]] = arr[arguments[i - 1]];
   }
   arr[arguments[1]] = temp;
@@ -45,13 +45,13 @@ function circle(arr, ...moreArgs: any) {
 // arr[perm[idx2]] = arr[perm[idx1]] + ori[idx2] - ori[idx1] + base
 function acycle(arr, perm, pow?: any, ori?: any) {
   pow = pow || 1;
-  var plen = perm.length;
-  var tmp = [];
+  const plen = perm.length;
+  const tmp = [];
   for (var i = 0; i < plen; i++) {
     tmp[i] = arr[perm[i]];
   }
   for (var i = 0; i < plen; i++) {
-    var j = (i + pow) % plen;
+    const j = (i + pow) % plen;
     arr[perm[j]] = tmp[i];
     if (ori) {
       arr[perm[j]] += ori[j] - ori[i] + ori[ori.length - 1];
@@ -65,7 +65,7 @@ function getPruning(table, index) {
 }
 
 function setNPerm(arr, idx, n) {
-  var i, j;
+  let i, j;
   arr[n - 1] = 0;
   for (i = n - 2; i >= 0; --i) {
     arr[i] = idx % (n - i);
@@ -77,7 +77,7 @@ function setNPerm(arr, idx, n) {
 }
 
 function getNPerm(arr, n) {
-  var i, idx, j;
+  let i, idx, j;
   idx = 0;
   for (i = 0; i < n; ++i) {
     idx *= n - i;
@@ -89,7 +89,7 @@ function getNPerm(arr, n) {
 }
 
 function getNParity(idx, n) {
-  var i, p;
+  let i, p;
   p = 0;
   for (i = n - 2; i >= 0; --i) {
     p ^= idx % (n - i);
@@ -100,10 +100,10 @@ function getNParity(idx, n) {
 
 function get8Perm(arr, n?: number, even?: any) {
   n = n || 8;
-  var idx = 0;
-  var val = 0x76543210;
-  for (var i = 0; i < n - 1; ++i) {
-    var v = arr[i] << 2;
+  let idx = 0;
+  let val = 0x76543210;
+  for (let i = 0; i < n - 1; ++i) {
+    const v = arr[i] << 2;
     idx = (n - i) * idx + ((val >> v) & 7);
     val -= 0x11111110 << v;
   }
@@ -112,19 +112,19 @@ function get8Perm(arr, n?: number, even?: any) {
 
 function set8Perm(arr, idx, n?: number, even?: number) {
   n = (n || 8) - 1;
-  var val = 0x76543210;
-  var prt = 0;
+  let val = 0x76543210;
+  let prt = 0;
   if (even < 0) {
     idx <<= 1;
   }
-  for (var i = 0; i < n; ++i) {
-    var p = fact[n - i];
-    var v = ~~(idx / p);
+  for (let i = 0; i < n; ++i) {
+    const p = fact[n - i];
+    let v = ~~(idx / p);
     prt ^= v;
     idx %= p;
     v <<= 2;
     arr[i] = (val >> v) & 7;
-    var m = (1 << v) - 1;
+    const m = (1 << v) - 1;
     val = (val & m) + ((val >> 4) & ~m);
   }
   if (even < 0 && (prt & 1) !== 0) {
@@ -137,18 +137,18 @@ function set8Perm(arr, idx, n?: number, even?: number) {
 }
 
 function getNOri(arr, n, evenbase) {
-  var base = Math.abs(evenbase);
-  var idx = evenbase < 0 ? 0 : arr[0] % base;
-  for (var i = n - 1; i > 0; i--) {
+  const base = Math.abs(evenbase);
+  let idx = evenbase < 0 ? 0 : arr[0] % base;
+  for (let i = n - 1; i > 0; i--) {
     idx = idx * base + (arr[i] % base);
   }
   return idx;
 }
 
 function setNOri(arr, idx, n, evenbase) {
-  var base = Math.abs(evenbase);
-  var parity = base * n;
-  for (var i = 1; i < n; i++) {
+  const base = Math.abs(evenbase);
+  let parity = base * n;
+  for (let i = 1; i < n; i++) {
     arr[i] = idx % base;
     parity -= arr[i];
     idx = ~~(idx / base);
@@ -181,8 +181,8 @@ function coord(type, length, evenbase) {
 }
 
 function fillFacelet(facelets, f, perm, ori, divcol) {
-  for (var i = 0; i < facelets.length; i++) {
-    for (var j = 0; j < facelets[i].length; j++) {
+  for (let i = 0; i < facelets.length; i++) {
+    for (let j = 0; j < facelets[i].length; j++) {
       f[facelets[i][(j + ori[i]) % facelets[i].length]] = ~~(
         facelets[perm[i]][j] / divcol
       );
@@ -193,12 +193,12 @@ function fillFacelet(facelets, f, perm, ori, divcol) {
 function createMove(moveTable, size, doMove, N_MOVES) {
   N_MOVES = N_MOVES || 6;
   if (isArray(doMove)) {
-    var cord = new coord(doMove[1], doMove[2], doMove[3]);
+    const cord = new coord(doMove[1], doMove[2], doMove[3]);
     doMove = doMove[0];
     for (var j = 0; j < N_MOVES; j++) {
       moveTable[j] = [];
       for (var i = 0; i < size; i++) {
-        var arr = cord.set([], i);
+        const arr = cord.set([], i);
         doMove(arr, j);
         moveTable[j][i] = cord.get(arr);
       }
@@ -241,14 +241,14 @@ function CubieCube() {
 }
 
 CubieCube.EdgeMult = function (a, b, prod) {
-  for (var ed = 0; ed < 12; ed++) {
+  for (let ed = 0; ed < 12; ed++) {
     prod.ea[ed] = a.ea[b.ea[ed] >> 1] ^ (b.ea[ed] & 1);
   }
 };
 
 CubieCube.CornMult = function (a, b, prod) {
-  for (var corn = 0; corn < 8; corn++) {
-    var ori = ((a.ca[b.ca[corn] & 7] >> 3) + (b.ca[corn] >> 3)) % 3;
+  for (let corn = 0; corn < 8; corn++) {
+    const ori = ((a.ca[b.ca[corn] & 7] >> 3) + (b.ca[corn] >> 3)) % 3;
     prod.ca[corn] = (a.ca[b.ca[corn] & 7] & 7) | (ori << 3);
   }
 };
@@ -278,7 +278,7 @@ CubieCube.prototype.isEqual = function (c) {
   return true;
 };
 
-var cornerFacelet = [
+const cornerFacelet = [
   [8, 9, 20],
   [6, 18, 38],
   [0, 36, 47],
@@ -288,7 +288,7 @@ var cornerFacelet = [
   [33, 53, 42],
   [35, 17, 51],
 ];
-var edgeFacelet = [
+const edgeFacelet = [
   [5, 10],
   [7, 19],
   [3, 37],
@@ -306,18 +306,18 @@ var edgeFacelet = [
 CubieCube.prototype.toFaceCube = function (cFacelet, eFacelet) {
   cFacelet = cFacelet || cornerFacelet;
   eFacelet = eFacelet || edgeFacelet;
-  var ts = "URFDLB";
-  var f = [];
-  for (var i = 0; i < 54; i++) {
+  const ts = "URFDLB";
+  const f = [];
+  for (let i = 0; i < 54; i++) {
     f[i] = ts[~~(i / 9)];
   }
-  for (var c = 0; c < 8; c++) {
+  for (let c = 0; c < 8; c++) {
     var j = this.ca[c] & 0x7; // cornercubie with index j is at
     var ori = this.ca[c] >> 3; // Orientation of this cubie
     for (var n = 0; n < 3; n++)
       f[cFacelet[c][(n + ori) % 3]] = ts[~~(cFacelet[j][n] / 9)];
   }
-  for (var e = 0; e < 12; e++) {
+  for (let e = 0; e < 12; e++) {
     var j = this.ea[e] >> 1; // edgecubie with index j is at edgeposition
     var ori = this.ea[e] & 1; // Orientation of this cubie
     for (var n = 0; n < 2; n++)
@@ -327,10 +327,10 @@ CubieCube.prototype.toFaceCube = function (cFacelet, eFacelet) {
 };
 
 CubieCube.prototype.invFrom = function (cc) {
-  for (var edge = 0; edge < 12; edge++) {
+  for (let edge = 0; edge < 12; edge++) {
     this.ea[cc.ea[edge] >> 1] = (edge << 1) | (cc.ea[edge] & 1);
   }
-  for (var corn = 0; corn < 8; corn++) {
+  for (let corn = 0; corn < 8; corn++) {
     this.ca[cc.ca[corn] & 0x7] = corn | ((0x20 >> (cc.ca[corn] >> 3)) & 0x18);
   }
   return this;
@@ -339,9 +339,9 @@ CubieCube.prototype.invFrom = function (cc) {
 CubieCube.prototype.fromFacelet = function (facelet, cFacelet, eFacelet) {
   cFacelet = cFacelet || cornerFacelet;
   eFacelet = eFacelet || edgeFacelet;
-  var count = 0;
-  var f = [];
-  var centers =
+  let count = 0;
+  const f = [];
+  const centers =
     facelet[4] +
     facelet[13] +
     facelet[22] +
@@ -358,7 +358,7 @@ CubieCube.prototype.fromFacelet = function (facelet, cFacelet, eFacelet) {
   if (count !== 0x999999) {
     return -1;
   }
-  var col1, col2, i, j, ori;
+  let col1, col2, i, j, ori;
   for (i = 0; i < 8; ++i) {
     for (ori = 0; ori < 3; ++ori)
       if (f[cFacelet[i][ori]] === 0 || f[cFacelet[i][ori]] === 3) break;
@@ -392,7 +392,7 @@ CubieCube.prototype.fromFacelet = function (facelet, cFacelet, eFacelet) {
   return this;
 };
 
-var moveCube = [];
+const moveCube = [];
 for (var i = 0; i < 18; i++) {
   moveCube[i] = new CubieCube();
 }
@@ -420,8 +420,8 @@ moveCube[15].init(
   [0, 1, 11, 23, 4, 5, 18, 14],
   [0, 2, 4, 23, 8, 10, 12, 21, 16, 18, 7, 15],
 );
-for (var a = 0; a < 18; a += 3) {
-  for (var p = 0; p < 2; p++) {
+for (let a = 0; a < 18; a += 3) {
+  for (let p = 0; p < 2; p++) {
     CubieCube.EdgeMult(moveCube[a + p], moveCube[a], moveCube[a + p + 1]);
     CubieCube.CornMult(moveCube[a + p], moveCube[a], moveCube[a + p + 1]);
   }
@@ -430,21 +430,21 @@ for (var a = 0; a < 18; a += 3) {
 CubieCube.moveCube = moveCube;
 
 CubieCube.prototype.edgeCycles = function () {
-  var visited = [];
-  var small_cycles = [0, 0, 0];
-  var cycles = 0;
-  var parity: number | boolean = false;
-  for (var x = 0; x < 12; ++x) {
+  const visited = [];
+  const small_cycles = [0, 0, 0];
+  let cycles = 0;
+  let parity: number | boolean = false;
+  for (let x = 0; x < 12; ++x) {
     if (visited[x]) {
       continue;
     }
-    var length = -1;
-    var flip: number | boolean = false;
-    var y = x;
+    let length = -1;
+    let flip: number | boolean = false;
+    let y = x;
     do {
       visited[y] = true;
       ++length;
-      (flip as unknown as number) ^= this.ea[y] & 1;
+      flip ^= this.ea[y] & 1;
       y = this.ea[y] >> 1;
     } while (y !== x);
     cycles += length >> 1;
@@ -466,7 +466,7 @@ CubieCube.prototype.edgeCycles = function () {
   if (small_cycles[0] < small_cycles[1]) {
     cycles += (small_cycles[0] + small_cycles[1]) >> 1;
   } else {
-    var flip_cycles = [0, 2, 3, 5, 6, 8, 9];
+    const flip_cycles = [0, 2, 3, 5, 6, 8, 9];
     cycles +=
       small_cycles[1] + flip_cycles[(small_cycles[0] - small_cycles[1]) >> 1];
   }
@@ -474,25 +474,25 @@ CubieCube.prototype.edgeCycles = function () {
 };
 
 function createPrun(prun, init, size, maxd, doMove, N_MOVES, N_POWER, N_INV) {
-  var isMoveTable = isArray(doMove);
+  const isMoveTable = isArray(doMove);
   N_MOVES = N_MOVES || 6;
   N_POWER = N_POWER || 3;
   N_INV = N_INV || 256;
   maxd = maxd || 256;
-  for (var i = 0, len = (size + 7) >>> 3; i < len; i++) {
+  for (let i = 0, len = (size + 7) >>> 3; i < len; i++) {
     prun[i] = -1;
   }
   prun[init >> 3] ^= 15 << ((init & 7) << 2);
-  var val = 0;
+  let val = 0;
   // var t = +new Date;
-  for (var l = 0; l <= maxd; l++) {
-    var done = 0;
-    var inv = l >= N_INV;
-    var fill = (l + 1) ^ 15;
-    var find = inv ? 0xf : l;
-    var check = inv ? l : 0xf;
+  for (let l = 0; l <= maxd; l++) {
+    let done = 0;
+    const inv = l >= N_INV;
+    const fill = (l + 1) ^ 15;
+    const find = inv ? 0xf : l;
+    const check = inv ? l : 0xf;
 
-    out: for (var p = 0; p < size; p++, val >>= 4) {
+    out: for (let p = 0; p < size; p++, val >>= 4) {
       if ((p & 7) === 0) {
         val = prun[p >> 3];
         if (!inv && val === -1) {
@@ -503,9 +503,9 @@ function createPrun(prun, init, size, maxd, doMove, N_MOVES, N_POWER, N_INV) {
       if ((val & 0xf) !== find) {
         continue;
       }
-      for (var m = 0; m < N_MOVES; m++) {
-        var q = p;
-        for (var c = 0; c < N_POWER; c++) {
+      for (let m = 0; m < N_MOVES; m++) {
+        let q = p;
+        for (let c = 0; c < N_POWER; c++) {
           q = isMoveTable ? doMove[m][q] : doMove(q, m);
           if (getPruning(prun, q) !== check) {
             continue;
@@ -535,20 +535,20 @@ function Solver(N_MOVES, N_POWER, state_params) {
   this.inited = false;
 }
 
-var _ = Solver.prototype;
+let _ = Solver.prototype;
 
 _.search = function (state, minl, MAXL) {
   MAXL = (MAXL || 99) + 1;
   if (!this.inited) {
     this.move = [];
     this.prun = [];
-    for (var i = 0; i < this.N_STATES; i++) {
-      var state_param = this.state_params[i];
-      var init = state_param[0];
-      var doMove = state_param[1];
-      var size = state_param[2];
-      var maxd = state_param[3];
-      var N_INV = state_param[4];
+    for (let i = 0; i < this.N_STATES; i++) {
+      const state_param = this.state_params[i];
+      const init = state_param[0];
+      const doMove = state_param[1];
+      const size = state_param[2];
+      const maxd = state_param[3];
+      const N_INV = state_param[4];
       this.move[i] = [];
       this.prun[i] = [];
       createMove(this.move[i], size, doMove, this.N_MOVES);
@@ -575,15 +575,15 @@ _.search = function (state, minl, MAXL) {
 };
 
 _.toStr = function (sol, move_map, power_map) {
-  var ret = [];
-  for (var i = 0; i < sol.length; i++) {
+  const ret = [];
+  for (let i = 0; i < sol.length; i++) {
     ret.push(move_map[sol[i][0]] + power_map[sol[i][1]]);
   }
   return ret.join(" ").replace(/ +/g, " ");
 };
 
 _.idaSearch = function (state, maxl, lm) {
-  var N_STATES = this.N_STATES;
+  const N_STATES = this.N_STATES;
   for (var i = 0; i < N_STATES; i++) {
     if (getPruning(this.prun[i], state[i]) > maxl) {
       return false;
@@ -592,14 +592,14 @@ _.idaSearch = function (state, maxl, lm) {
   if (maxl === 0) {
     return true;
   }
-  var offset = state[0] + maxl + lm + 1;
-  for (var move0 = 0; move0 < this.N_MOVES; move0++) {
-    var move = (move0 + offset) % this.N_MOVES;
+  const offset = state[0] + maxl + lm + 1;
+  for (let move0 = 0; move0 < this.N_MOVES; move0++) {
+    const move = (move0 + offset) % this.N_MOVES;
     if (move === lm) {
       continue;
     }
-    var cur_state = state.slice();
-    for (var power = 0; power < this.N_POWER; power++) {
+    const cur_state = state.slice();
+    for (let power = 0; power < this.N_POWER; power++) {
       for (var i = 0; i < N_STATES; i++) {
         cur_state[i] = this.move[i][move][cur_state[i]];
       }
@@ -629,11 +629,11 @@ _ = gSolver.prototype;
 
 _.updatePrun = function (targetDepth) {
   targetDepth = targetDepth === undefined ? this.prunDepth + 1 : targetDepth;
-  for (var depth = this.prunDepth + 1; depth <= targetDepth; depth++) {
-    var t = +new Date();
-    var prevSize = this.prunTableSize;
+  for (let depth = this.prunDepth + 1; depth <= targetDepth; depth++) {
+    const t = +new Date();
+    const prevSize = this.prunTableSize;
     if (depth < 8) {
-      for (var i = 0; i < this.solvedStates.length; i++) {
+      for (let i = 0; i < this.solvedStates.length; i++) {
         this.updatePrunDFS(this.solvedStates[i], depth, 0, null);
       }
     } else {
@@ -645,12 +645,12 @@ _.updatePrun = function (targetDepth) {
 };
 
 _.updatePrunBFS = function (fromDepth) {
-  for (var state in this.prunTable) {
+  for (const state in this.prunTable) {
     if (this.prunTable[state][0] !== fromDepth) {
       continue;
     }
-    for (var move in this.moves) {
-      var newState = this.doMove(state, move);
+    for (const move in this.moves) {
+      const newState = this.doMove(state, move);
       if (!newState || newState in this.prunTable) {
         continue;
       }
@@ -668,13 +668,13 @@ _.updatePrunDFS = function (state, maxl, depth, lm) {
   if (maxl <= 0 || this.prunTable[state][1] !== lm) {
     return;
   }
-  var lastAxisFace = lm === null ? -1 : this.moves[lm];
-  for (var move in this.moves) {
-    var axisface = this.moves[move] ^ lastAxisFace;
+  const lastAxisFace = lm === null ? -1 : this.moves[lm];
+  for (const move in this.moves) {
+    const axisface = this.moves[move] ^ lastAxisFace;
     if (axisface === 0 || ((axisface & 0xf) === 0 && move < lm)) {
       continue;
     }
-    var newState = this.doMove(state, move);
+    const newState = this.doMove(state, move);
     if (!newState || newState === state) {
       continue;
     }
@@ -688,7 +688,7 @@ _.search = function (state, minl, MAXL, nsol) {
   this.sols = [];
   this.nsol = nsol || 1;
   this.minl = minl || 0;
-  for (var maxl = minl; maxl < MAXL; maxl++) {
+  for (let maxl = minl; maxl < MAXL; maxl++) {
     this.updatePrun(Math.ceil(maxl / 2));
     this.visited = {};
     if (this.idaSearch(state, maxl, null)) {
@@ -699,7 +699,7 @@ _.search = function (state, minl, MAXL, nsol) {
 };
 
 _.getPruning = function (state) {
-  var prun = this.prunTable[state];
+  const prun = this.prunTable[state];
   return prun === undefined ? this.prunDepth + 1 : prun[0];
 };
 
@@ -712,13 +712,13 @@ _.idaSearch = function (state, maxl, lm) {
     this.sols.push(this.sol.slice());
     return this.sols.length >= this.nsol;
   }
-  var lastAxisFace = lm === null ? -1 : this.moves[lm];
-  for (var move in this.moves) {
-    var axisface = this.moves[move] ^ lastAxisFace;
+  const lastAxisFace = lm === null ? -1 : this.moves[lm];
+  for (const move in this.moves) {
+    const axisface = this.moves[move] ^ lastAxisFace;
     if (axisface === 0 || ((axisface & 0xf) === 0 && move < lm)) {
       continue;
     }
-    var newState = this.doMove(state, move);
+    const newState = this.doMove(state, move);
     if (!newState || newState === state) {
       continue;
     }
@@ -751,9 +751,9 @@ _.idaSearch = function (state, maxl, lm) {
 // }
 
 function rndProb(plist) {
-  var cum = 0;
-  var curIdx = 0;
-  for (var i = 0; i < plist.length; i++) {
+  let cum = 0;
+  let curIdx = 0;
+  for (let i = 0; i < plist.length; i++) {
     if (plist[i] === 0) {
       continue;
     }
@@ -770,7 +770,7 @@ function time2str(unix, format) {
     return "N/A";
   }
   format = format || "%Y-%M-%D %h:%m:%s";
-  var date = new Date(unix * 1000);
+  const date = new Date(unix * 1000);
   return format
     .replace("%Y", date.getFullYear())
     .replace("%M", ("0" + (date.getMonth() + 1)).slice(-2))
@@ -780,14 +780,14 @@ function time2str(unix, format) {
     .replace("%s", ("0" + date.getSeconds()).slice(-2));
 }
 
-var timeRe = /^\s*(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)\s*$/;
+const timeRe = /^\s*(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)\s*$/;
 
 function str2time(val) {
-  var m = timeRe.exec(val);
+  const m = timeRe.exec(val);
   if (!m) {
     return null;
   }
-  var date = new Date(0);
+  const date = new Date(0);
   date.setFullYear(~~m[1]);
   date.setMonth(~~m[2] - 1);
   date.setDate(~~m[3]);
@@ -812,8 +812,8 @@ function str2obj(val) {
 }
 
 function valuedArray(len, val) {
-  var ret = [];
-  for (var i = 0; i < len; i++) {
+  const ret = [];
+  for (let i = 0; i < len; i++) {
     ret[i] = val;
   }
   return ret;

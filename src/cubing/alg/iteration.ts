@@ -33,7 +33,7 @@ export function* directedGenerator<T>(
   g: Generator<T>,
   direction: IterationDirection,
 ): Generator<T> {
-  return direction === IterationDirection.Backwards
+  direction === IterationDirection.Backwards
     ? yield* reverseGenerator(g)
     : yield* g;
 }

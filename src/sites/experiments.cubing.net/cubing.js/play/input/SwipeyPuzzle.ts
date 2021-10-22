@@ -89,7 +89,7 @@ export function actionToUIText(action: Action): string {
 }
 
 function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayerV1 {
-  let backView = new URL(document.location.href).searchParams.get(
+  const backView = new URL(document.location.href).searchParams.get(
     "back-view",
   ) as BackViewLayout | undefined;
   return new TwistyPlayerV1({

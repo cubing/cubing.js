@@ -77,7 +77,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
     const w = this.contentWrapper.clientWidth;
     const h = this.contentWrapper.clientHeight;
-    let off = 0;
+    const off = 0;
     let yoff = 0;
     let excess = 0;
     if (h > w) {

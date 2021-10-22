@@ -2,7 +2,6 @@ import {
   combineTransformations,
   KPuzzleDefinition,
   KPuzzleSVGWrapper,
-  Transformation,
   transformationForMove,
 } from "../../../../kpuzzle";
 import type { PuzzleLoader } from "../../../../puzzles/PuzzleLoader";
@@ -51,7 +50,6 @@ export class Twisty2DSVG
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   onPositionChange(position: PuzzlePosition): void {
     if (position.movesInProgress.length > 0) {
       const move = position.movesInProgress[0].move;
@@ -63,18 +61,18 @@ export class Twisty2DSVG
       }
       const newState = combineTransformations(
         def,
-        position.state as Transformation,
+        position.state,
         transformationForMove(def, partialMove),
       );
       // TODO: move to render()
       this.svg.draw(
         this.definition,
-        position.state as Transformation,
+        position.state,
         newState,
         position.movesInProgress[0].fraction,
       );
     } else {
-      this.svg.draw(this.definition, position.state as Transformation);
+      this.svg.draw(this.definition, position.state);
       this.#cachedPosition = position;
     }
   }

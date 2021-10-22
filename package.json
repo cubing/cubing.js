@@ -14,19 +14,20 @@
     "three": "^0.126.1"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.11.5",
+    "@babel/eslint-parser": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
     "@babel/preset-typescript": "^7.13.0",
     "@babylonjs/core": "^5.0.0-alpha.24",
     "@types/jest": "^26.0.23",
-    "@typescript-eslint/eslint-plugin": "^4.17.0",
-    "@typescript-eslint/parser": "^4.17.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
     "babel-jest": "^27.2.4",
     "barely-a-dev-server": "^0.2.3",
     "esbuild": "^0.12.29",
-    "eslint": "^7.21.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-html": "^6.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.0.5",
     "jszip": "^3.5.0",
     "peggy": "^1.1.0",
@@ -88,29 +89,60 @@
     "rubik's"
   ],
   "eslintConfig": {
-    "root": true,
+    "parser": "@babel/eslint-parser",
     "parserOptions": {
       "project": "./tsconfig-eslint.json"
     },
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "rules": {
-      "@typescript-eslint/no-unused-vars-experimental": "error",
-      "eqeqeq": "error",
-      "quote-props": [
-        "error",
-        "consistent-as-needed"
-      ],
-      "lines-between-class-members": [
-        "error",
-        "always",
-        {
-          "exceptAfterSingleLine": true
+    "overrides": [
+      {
+        "files": "**/*.js",
+        "parser": "@babel/eslint-parser",
+        "extends": [
+          "eslint:recommended"
+        ],
+        "rules": {
+          "no-unused-vars": [
+            "error",
+            {
+              "argsIgnorePattern": "^_"
+            }
+          ]
         }
-      ]
-    },
+      },
+      {
+        "files": "**/*.ts",
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+          "@typescript-eslint"
+        ],
+        "extends": [
+          "eslint:recommended",
+          "plugin:@typescript-eslint/recommended",
+          "plugin:@typescript-eslint/recommended-requiring-type-checking"
+        ],
+        "rules": {
+          "@typescript-eslint/no-inferrable-types": "off",
+          "@typescript-eslint/no-floating-promises": "off",
+          "@typescript-eslint/no-unsafe-assignment": "off",
+          "@typescript-eslint/no-unsafe-member-access": "off",
+          "@typescript-eslint/no-explicit-any": "off",
+          "@typescript-eslint/no-misused-promises": "off",
+          "@typescript-eslint/require-await": "off",
+          "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+              "argsIgnorePattern": "^_"
+            }
+          ],
+          "@typescript-eslint/no-unsafe-argument": "off",
+          "@typescript-eslint/no-non-null-assertion": "off",
+          "@typescript-eslint/no-unsafe-call": "off",
+          "@typescript-eslint/no-empty-function": "off",
+          "@typescript-eslint/restrict-plus-operands": "off",
+          "@typescript-eslint/restrict-template-expressions": "off"
+        }
+      }
+    ],
     "ignorePatterns": [
       "/coverage",
       "/dist",
@@ -118,9 +150,17 @@
       "/src/cubing/search/inside/solve/vendor/min2phase/gwt.js",
       "/src/cubing/search/inside/solve/vendor/sq12phase/scramble_sq1.js",
       "/src/cubing/search/worker-inside-generated*",
+      "/src/cubing/vendor/p-lazy/p-lazy.ts",
+      "src/cubing/search/inside/solve/vendor/cstimer/src/js/lib/mathlib.ts",
+      "src/cubing/search/inside/solve/vendor/cstimer/src/js/scramble/scramble_444.ts",
       "/*/index.d.ts",
       "parser-peggy.js"
     ],
+    "globals": {
+      "globalThis": false,
+      "Promise": false,
+      "Symbol": false
+    },
     "env": {
       "commonjs": true,
       "browser": true,

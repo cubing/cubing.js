@@ -16,10 +16,7 @@ import {
   Vector2,
   Vector3,
 } from "three";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { BlockMove } from "../../../../alg";
-import type { KPuzzleDefinition, Transformation } from "../../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import type {
   FaceletMeshAppearance,
@@ -719,7 +716,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   }
 
   public onPositionChange(p: PuzzlePosition): void {
-    const reid333 = p.state as Transformation;
+    const reid333 = p.state;
     for (const orbit in pieceDefs) {
       const pieces = pieceDefs[orbit];
       for (let i = 0; i < pieces.length; i++) {
@@ -839,7 +836,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                 [v1, v2, v3, v4] = [v4, v1, v2, v3];
                 break;
             }
-            (mesh.geometry as BufferGeometry).setAttribute(
+            mesh.geometry.setAttribute(
               "uv",
               new BufferAttribute(
                 new Float32Array([

@@ -34,7 +34,8 @@ function updateInspector(s: string): void {
     }
   } catch (e) {
     console.error(e);
-    inspectorElem.textContent += "\n--------\nERROR:\n" + e;
+    inspectorElem.textContent +=
+      "\n--------\nERROR:\n" + (e as Error).toString();
   }
 }
 

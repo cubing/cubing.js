@@ -55,7 +55,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
     for (const nestedUnit of alg.units()) {
       processed.push(this.traverseUnit(nestedUnit));
     }
-    return Array.prototype.concat(...processed);
+    return Array.prototype.concat(...processed) as LocalAnimLeavesWithRange[];
   }
 
   public traverseGroupingOnce(alg: Alg): LocalAnimLeavesWithRange[] {
@@ -105,7 +105,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
     for (let i = 0; i < Math.abs(grouping.amount); i++) {
       processed.push(this.traverseGroupingOnce(segmentOnce));
     }
-    return Array.prototype.concat(...processed);
+    return Array.prototype.concat(...processed) as LocalAnimLeavesWithRange[];
   }
 
   public traverseMove(move: Move): LocalAnimLeavesWithRange[] {
@@ -132,7 +132,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
     for (const segment of segmentsOnce) {
       processed.push(this.traverseGroupingOnce(segment));
     }
-    return Array.prototype.concat(...processed);
+    return Array.prototype.concat(...processed) as LocalAnimLeavesWithRange[];
   }
 
   public traverseConjugate(conjugate: Conjugate): LocalAnimLeavesWithRange[] {
@@ -145,7 +145,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
     for (const segment of segmentsOnce) {
       processed.push(this.traverseGroupingOnce(segment));
     }
-    return Array.prototype.concat(...processed);
+    return Array.prototype.concat(...processed) as LocalAnimLeavesWithRange[];
   }
 
   public traversePause(pause: Pause): LocalAnimLeavesWithRange[] {

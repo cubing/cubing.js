@@ -8,7 +8,7 @@ if (pixelRatio !== null) {
   setGlobalPixelRatioOverride(parseFloat(pixelRatio));
 }
 
-const twistyPlayer = document.querySelector("twisty-player")! as TwistyPlayer;
+const twistyPlayer = document.querySelector("twisty-player") as TwistyPlayer;
 
 const tempo = new URL(location.href).searchParams.get("tempo");
 if (tempo !== null) {

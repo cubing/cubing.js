@@ -62,7 +62,7 @@ async function randomizeOrbit(
 
   let sum = 0;
   for (let i = 0; i < orbitDef.numPieces; i++) {
-    const o = await randomUIntBelow(orbitDef.orientations);
+    const o = randomUIntBelow(orbitDef.orientations);
     ori[i] = o;
     sum += o;
   }
@@ -71,7 +71,7 @@ async function randomizeOrbit(
   if (options && "orientationSum" in options) {
     // console.log("sfdsf", options!.orientationSum),
     ori[0] =
-      (((ori[0] + options!.orientationSum! - sum) % orbitDef.orientations) +
+      (((ori[0] + options.orientationSum! - sum) % orbitDef.orientations) +
         orbitDef.orientations) %
       orbitDef.orientations;
   }
@@ -82,7 +82,7 @@ export async function random222State(): Promise<Transformation> {
   const nonExtensibleDef = await puzzles["2x2x2"].def();
   const def = Object.assign({}, nonExtensibleDef);
   const kpuzzle = new KPuzzle(def);
-  const stateCopy = JSON.parse(JSON.stringify(kpuzzle.state)); // TODO
+  const stateCopy: Transformation = JSON.parse(JSON.stringify(kpuzzle.state)); // TODO
   await randomizeOrbit(def, "CORNERS", stateCopy, { orientationSum: 0 });
   return stateCopy;
 }

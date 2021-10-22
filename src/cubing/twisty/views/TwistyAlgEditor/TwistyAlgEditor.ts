@@ -318,7 +318,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     newValue: string,
   ): void {
     switch (attributeName) {
-      case ATTRIBUTE_FOR_TWISTY_PLAYER:
+      case ATTRIBUTE_FOR_TWISTY_PLAYER: {
         const elem = document.getElementById(newValue);
         if (!elem) {
           console.warn(`${ATTRIBUTE_FOR_TWISTY_PLAYER}= elem does not exist`);
@@ -331,6 +331,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
         }
         this.twistyPlayer = elem;
         return;
+      }
       case ATTRIBUTE_PLACEHOLDER:
         this.placeholder = newValue;
         return;

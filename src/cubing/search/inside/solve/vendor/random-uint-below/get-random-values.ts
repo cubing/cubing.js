@@ -13,9 +13,8 @@ export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction>
     typeof crypto.getRandomValues !== "undefined";
 
   if (hasWebCrypto) {
-    return crypto.getRandomValues.bind(crypto);
+    return crypto.getRandomValues.bind(crypto) as GetRandomValuesFunction;
   } else {
-    // @ts-ignore
     const nodeCrypto = await (cryptoPromise ??= import("crypto"));
     return (arr: Uint32Array) => {
       if (!(arr instanceof Uint32Array)) {
@@ -23,9 +22,9 @@ export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction>
           "The getRandomValues() shim only takes unsigned 32-bit int arrays",
         );
       }
-      var bytes = nodeCrypto.randomBytes(arr.length * 4);
-      var uint32_list = [];
-      for (var i = 0; i < arr.length; i++) {
+      const bytes = nodeCrypto.randomBytes(arr.length * 4);
+      const uint32_list = [];
+      for (let i = 0; i < arr.length; i++) {
         uint32_list.push(
           (bytes[i * 4 + 0] << 24) +
             (bytes[i * 4 + 1] << 16) +

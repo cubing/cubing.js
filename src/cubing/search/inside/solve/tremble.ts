@@ -40,6 +40,7 @@ function calculateMoves(
       );
     }
     kpuzzle.reset();
+    // eslint-disable-next-line no-constant-condition
     for (let i = 1; true; i++) {
       kpuzzle.applyMove(rootMove);
       // console.log(kpuzzle.state, identityTransformation(def));
@@ -96,7 +97,7 @@ export class TrembleSolver {
     quantumMoveOrder?: (quantumMove: QuantumMove) => number,
   ): Promise<Alg> {
     let bestAlg: Alg | null = null;
-    var bestLen = 1000000;
+    let bestLen = 1000000;
     const recur = (
       recursiveState: Transformation,
       togo: number,
@@ -116,8 +117,8 @@ export class TrembleSolver {
         const len = countMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
           if (DEBUG) {
-            console.log(`New best (${len} moves): ${newAlg}`);
-            console.log(`Tremble moves are: ${sofar}`);
+            console.log(`New best (${len} moves): ${newAlg.toString()}`);
+            console.log(`Tremble moves are: ${sofar.toString()}`);
           }
           bestAlg = newAlg;
           bestLen = len;
@@ -136,7 +137,7 @@ export class TrembleSolver {
         );
       }
     };
-    for (var d = 0; d <= stage1DepthLimit; d++) {
+    for (let d = 0; d <= stage1DepthLimit; d++) {
       recur(state, d, new Alg());
     }
     if (bestAlg === null) {
@@ -167,11 +168,7 @@ export class TrembleSolver {
         const loc = cubieSeq[i];
         const orbitName = loc.orbitName;
         const idx = loc.permutationIdx;
-        key +=
-          " " +
-          inverseState[orbitName].permutation[idx] +
-          " " +
-          inverseState[orbitName].orientation[idx];
+        key += ` ${inverseState[orbitName].permutation[idx]} ${inverseState[orbitName].orientation[idx]}`;
       }
       const info = step.lookup[key];
       if (!info) {

@@ -8,17 +8,17 @@ import {
  * `max` must be at most 2^53.
  */
 
-var MAX_JS_PRECISE_INT = 9007199254740992;
+const MAX_JS_PRECISE_INT = 9007199254740992;
 
-var UPPER_HALF_MULTIPLIER = 2097152; // 2^21. We have to use multiplication because bit shifts truncate to 32 bits.
-var LOWER_HALF_DIVIDER = 2048;
+const UPPER_HALF_MULTIPLIER = 2097152; // 2^21. We have to use multiplication because bit shifts truncate to 32 bits.
+const LOWER_HALF_DIVIDER = 2048;
 
 function random53BitValue(getRandomValues: GetRandomValuesFunction): number {
   // Construct a random 53-bit value from a 32-bit upper half and a 21-bit lower half.
-  var arr = new Uint32Array(2);
+  const arr = new Uint32Array(2);
   getRandomValues(arr);
-  var upper = arr[0];
-  var lower = arr[1];
+  const upper = arr[0];
+  const lower = arr[1];
   return (
     Math.floor(upper * UPPER_HALF_MULTIPLIER) +
     Math.floor(lower / LOWER_HALF_DIVIDER)
@@ -33,9 +33,7 @@ function validateMax(max: number): void {
   }
   if (max > MAX_JS_PRECISE_INT) {
     throw new Error(
-      "Called randomInt.below() with max == " +
-        max +
-        ", which is larger than Javascript can handle with integer precision.",
+      `Called randomInt.below() with max == ${max}, which is larger than Javascript can handle with integer precision.`,
     );
   }
 }
@@ -48,8 +46,8 @@ export async function randomUIntBelowFactory(): Promise<
   const randomUIntBelow = (max: number): number => {
     validateMax(max);
 
-    var val = random53BitValue(getRandomValues);
-    var maxUniformSamplingRange = Math.floor(MAX_JS_PRECISE_INT / max) * max;
+    const val = random53BitValue(getRandomValues);
+    const maxUniformSamplingRange = Math.floor(MAX_JS_PRECISE_INT / max) * max;
 
     // Rejection sampling:
     if (val < maxUniformSamplingRange) {

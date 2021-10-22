@@ -15,7 +15,7 @@ describe("PuzzleGeometry-OrientCenters", () => {
     });
     let os = pg.getOrbitsDef(false);
     let ss = schreierSims(
-      os.moveops.map((_: any) => _.toPerm()),
+      os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
     expect(ss).toBe(768);
@@ -25,7 +25,7 @@ describe("PuzzleGeometry-OrientCenters", () => {
     });
     os = pg.getOrbitsDef(false);
     ss = schreierSims(
-      os.moveops.map((_: any) => _.toPerm()),
+      os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
     expect(ss).toBe(11520);
@@ -37,7 +37,7 @@ describe("PuzzleGeometry-OrientCenters", () => {
     });
     os = pg.getOrbitsDef(false);
     ss = schreierSims(
-      os.moveops.map((_: any) => _.toPerm()),
+      os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
     expect(ss).toBe(60);
@@ -47,7 +47,7 @@ describe("PuzzleGeometry-OrientCenters", () => {
     });
     os = pg.getOrbitsDef(false);
     ss = schreierSims(
-      os.moveops.map((_: any) => _.toPerm()),
+      os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
     expect(ss).toBe(58471875000000000);

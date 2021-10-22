@@ -116,7 +116,7 @@ Stats.Panel = function (name, fg, bg) {
   canvas.style.cssText = "width:80px;height:48px";
 
   var context = canvas.getContext("2d");
-  context.font = "bold " + 9 * PR + "px Helvetica,Arial,sans-serif";
+  context.font = `bold ${9 * PR}px Helvetica,Arial,sans-serif`;
   context.textBaseline = "top";
 
   context.fillStyle = bg;
@@ -142,6 +142,7 @@ Stats.Panel = function (name, fg, bg) {
       context.fillRect(0, 0, WIDTH, GRAPH_Y);
       context.fillStyle = fg;
       context.fillText(
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         round(value) + " " + name + " (" + round(min) + "-" + round(max) + ")",
         TEXT_X,
         TEXT_Y,

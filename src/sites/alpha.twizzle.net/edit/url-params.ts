@@ -116,6 +116,7 @@ export function setURLParams(newParams: Partial<URLParamValues>): void {
         break;
       case "debug-show-render-stats":
         setParam(key, (value as boolean).toString());
+        break;
       default:
         console.warn("Unknown param", key, value);
     }

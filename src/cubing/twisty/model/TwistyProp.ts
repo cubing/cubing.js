@@ -1,11 +1,14 @@
 import { from } from "../../vendor/p-lazy/p-lazy";
 import { StaleDropper } from "./PromiseFreshener";
 
-export type InputProps<T extends Object> = {
+/*eslint @typescript-eslint/ban-types:off */
+type InputRecord = {};
+
+export type InputProps<T extends InputRecord> = {
   [s in keyof T]: TwistyPropParent<T[s]>;
 };
 
-type InputPromises<T extends Object> = {
+type InputPromises<T extends InputRecord> = {
   [s in keyof T]: Promise<T[s]>;
 };
 
@@ -31,8 +34,7 @@ export abstract class TwistyPropParent<T> {
 
   // Overwrite with a cheap semantic comparison when possible.
   // Note that this is not called if `v1 === v2` (in which case the value is automatically reused).
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-  canReuseValue(v1: T, v2: T): boolean {
+  canReuseValue(_v1: T, _v2: T): boolean {
     return false;
   }
 
@@ -192,7 +194,7 @@ export const NO_VALUE = Symbol("no value");
 export type NoValueType = typeof NO_VALUE;
 
 export abstract class TwistyPropDerived<
-  InputTypes extends Object,
+  InputTypes extends InputRecord,
   OutputType,
 > extends TwistyPropParent<OutputType> {
   // cachedInputs:
@@ -202,7 +204,9 @@ export abstract class TwistyPropDerived<
     super();
     this.#parents = parents;
     for (const parent of Object.values(parents)) {
-      parent.addChild(this);
+      (
+        parent as TwistyPropDerived<InputProps<InputTypes>, OutputType>
+      ).addChild(this);
     }
   }
 
@@ -238,14 +242,18 @@ export abstract class TwistyPropDerived<
   }
 
   async #getParents(): Promise<InputTypes> {
-    const inputValuePromises: InputPromises<InputTypes> = {} as any; // TODO
-    for (const key in this.#parents) {
-      inputValuePromises[key] = this.#parents[key].get();
+    const inputValuePromises: InputPromises<InputRecord> = {} as any; // TODO
+    for (const [key, parent] of Object.entries(this.#parents)) {
+      (inputValuePromises as Record<string, Promise<unknown>>)[key] = (
+        parent as TwistyPropParent<unknown>
+      ).get();
     }
 
     const inputs: InputTypes = {} as any; // TODO
     for (const key in this.#parents) {
-      inputs[key] = await inputValuePromises[key];
+      inputs[key] = (await (
+        inputValuePromises as Record<string, Promise<unknown>>
+      )[key]) as any;
     }
     return inputs;
   }
@@ -289,7 +297,7 @@ export abstract class TwistyPropDerived<
 }
 
 export class FreshListenerManager {
-  #disconnectionFunctions: Function[] = [];
+  #disconnectionFunctions: (() => void)[] = [];
 
   addListener<T>(
     prop: TwistyPropParent<T>,

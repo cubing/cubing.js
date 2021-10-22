@@ -46,7 +46,7 @@ export class TwistyScrubber
   }
 
   private onInput(): void {
-    this.timeline!.setTimestamp(parseInt(this.range.value, 10));
+    this.timeline.setTimestamp(parseInt(this.range.value, 10));
   }
 }
 

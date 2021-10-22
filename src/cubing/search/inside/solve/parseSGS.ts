@@ -38,7 +38,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
       kpuzzle.applyAlg(alg);
       sgsActions.push({ alg: alg, transformation: kpuzzle.state });
     } else if (line.startsWith("SubgroupSizes ")) {
-      for (var j = 1; j < lineTokens.length; j++) {
+      for (let j = 1; j < lineTokens.length; j++) {
         subgroupSizes.push(parseInt(lineTokens[j]));
       }
     }
@@ -59,10 +59,9 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
   }
   if (sgsActions.length !== sum) {
     throw Error(
-      "Bad sgs; expected " +
-        (sum - subgroupSizes.length) +
-        " algs but saw " +
-        (sgsActions.length - subgroupSizes.length),
+      `Bad sgs; expected ${sum - subgroupSizes.length} algs but saw ${
+        sgsActions.length - subgroupSizes.length
+      }`,
     );
   }
   const processedPieces: Record<string, boolean[]> = {};
@@ -100,12 +99,9 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
       let key = "";
       for (let k = 0; k < pieceOrdering.length; k++) {
         const loc = pieceOrdering[k];
-        key =
-          key +
-          " " +
-          transformation[loc.orbitName].permutation[loc.permutationIdx] +
-          " " +
-          transformation[loc.orbitName].orientation[loc.permutationIdx];
+        key = `${key} ${
+          transformation[loc.orbitName].permutation[loc.permutationIdx]
+        } ${transformation[loc.orbitName].orientation[loc.permutationIdx]}`;
       }
       lookup[key] = sgsActions[j];
       sgsActions[j].alg = sgsActions[j].alg.invert();

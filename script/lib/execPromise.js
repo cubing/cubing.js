@@ -10,7 +10,9 @@ export function killAllChildProcesses() {
         console.log("Killing child process with pid:", childProcess.pid);
         console.log("Killed successfully:", childProcess.kill("SIGKILL"));
       }
-    } catch (e) {}
+    } catch (e) {
+      /* */
+    }
   }
 }
 

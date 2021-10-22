@@ -61,7 +61,7 @@ export class AlgCursor
   ) {
     this.ksolvePuzzle = new KPuzzleWrapper(def);
     if (indexerConstructor) {
-      this.indexerConstructor = this.indexerConstructor;
+      this.indexerConstructor = indexerConstructor;
     }
     this.instantiateIndexer(alg);
     this.startState = startStateAlg
@@ -135,7 +135,10 @@ export class AlgCursor
       position = this.indexer.timestampToPosition(timestamp, this.startState);
     } else {
       const idx = this.indexer.timestampToIndex(timestamp);
-      const state = this.indexer.stateAtIndex(idx, this.startState) as any; // TODO
+      const state = this.indexer.stateAtIndex(
+        idx,
+        this.startState,
+      ) as Transformation; // TODO
       position = {
         state,
         movesInProgress: [],

@@ -31,8 +31,8 @@ export class QuantumMove extends Comparable {
     if (
       this.#innerLayer !== null &&
       (!Number.isInteger(this.#innerLayer) ||
-        this.#innerLayer! < 1 ||
-        this.#innerLayer! > MAX_INT)
+        this.#innerLayer < 1 ||
+        this.#innerLayer > MAX_INT)
     ) {
       throw new Error(
         `QuantumMove inner layer must be a positive integer below ${MAX_INT_DESCRIPTION}.`,
@@ -53,7 +53,7 @@ export class QuantumMove extends Comparable {
     if (
       this.#outerLayer !== null &&
       this.#innerLayer !== null &&
-      this.#innerLayer! <= this.#outerLayer!
+      this.#innerLayer <= this.#outerLayer
     ) {
       throw new Error(
         "QuantumMove outer layer must be smaller than inner layer.",
@@ -81,7 +81,7 @@ export class QuantumMove extends Comparable {
   }
 
   isIdentical(other: QuantumMove): boolean {
-    const otherAsQuantumMove = other as QuantumMove;
+    const otherAsQuantumMove = other;
     return (
       other.is(QuantumMove) &&
       this.#family === otherAsQuantumMove.#family &&

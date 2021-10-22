@@ -31,7 +31,7 @@ export class OrbitCoordinatesProp extends TwistyPropDerived<
       return defaultCameraOrbitCoordinates(inputs.puzzleID);
     }
 
-    const req = Object.assign(
+    const req: OrbitCoordinatesV2 = Object.assign(
       Object.assign(
         {},
         defaultCameraOrbitCoordinates(inputs.puzzleID),

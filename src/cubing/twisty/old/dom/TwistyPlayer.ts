@@ -85,7 +85,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   scene: Twisty3DScene | null = null;
   twisty3D: Twisty3DPuzzle | null = null;
 
-  #connected: boolean = false;
+  #connected = false;
   #legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null =
     null;
 
@@ -96,7 +96,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   viewerElems: TwistyViewerElement[] = []; // TODO: can we represent the intermediate state better?
   controlElems: TwistyControlElement[] = []; // TODO: can we represent the intermediate state better?
 
-  #hackyPendingFinalMoveCoalesce: boolean = false;
+  #hackyPendingFinalMoveCoalesce = false;
 
   #viewerWrapper: TwistyViewerWrapper;
   public legacyExperimentalCoalesceModFunc: (move: Move) => number = (
@@ -107,7 +107,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     new ClassListManager(this, "controls-", ["none", "bottom-row"]);
 
   #experimentalInvalidInitialAlgCallback: (alg: Alg) => void;
-  #initialized: boolean = false;
+  #initialized = false;
 
   // TODO: support config from DOM.
   constructor(
@@ -197,8 +197,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
 
   /** @deprecated */
   get experimentalSetupAnchor(): SetupToLocation {
-    return this.#config.attributes["experimental-setup-anchor"]
-      .value as SetupToLocation;
+    return this.#config.attributes["experimental-setup-anchor"].value;
   }
 
   set puzzle(puzzle: PuzzleID) {
@@ -208,7 +207,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get puzzle(): PuzzleID {
-    return this.#config.attributes["puzzle"].value as PuzzleID;
+    return this.#config.attributes["puzzle"].value;
   }
 
   set visualization(visualization: VisualizationFormat) {
@@ -218,8 +217,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get visualization(): VisualizationFormat {
-    return this.#config.attributes["visualization"]
-      .value as VisualizationFormat;
+    return this.#config.attributes["visualization"].value;
   }
 
   set hintFacelets(hintFacelets: HintFaceletStyle) {
@@ -232,7 +230,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get hintFacelets(): HintFaceletStyle {
-    return this.#config.attributes["hint-facelets"].value as HintFaceletStyle;
+    return this.#config.attributes["hint-facelets"].value;
   }
 
   // TODO: Implement for PG3D
@@ -256,7 +254,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
         })();
       }
       if (this.viewerElems[0] instanceof Twisty2DSVG) {
-        (this.viewerElems[0] as Twisty2DSVG).experimentalSetStickering(
+        this.viewerElems[0].experimentalSetStickering(
           this.experimentalStickering,
         );
       }
@@ -266,8 +264,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   // TODO: Implement for PG3D
   /** @deprecated */
   get experimentalStickering(): ExperimentalStickering {
-    return this.#config.attributes["experimental-stickering"]
-      .value as ExperimentalStickering;
+    return this.#config.attributes["experimental-stickering"].value;
   }
 
   set background(background: BackgroundTheme) {
@@ -280,7 +277,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get background(): BackgroundTheme {
-    return this.#config.attributes["background"].value as BackgroundTheme;
+    return this.#config.attributes["background"].value;
   }
 
   set controlPanel(controlPanel: ControlsLocation) {
@@ -289,7 +286,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get controlPanel(): ControlsLocation {
-    return this.#config.attributes["control-panel"].value as ControlsLocation;
+    return this.#config.attributes["control-panel"].value;
   }
 
   /** @deprecated use `controlPanel */
@@ -318,7 +315,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   }
 
   get backView(): BackViewLayout {
-    return this.#config.attributes["back-view"].value as BackViewLayout;
+    return this.#config.attributes["back-view"].value;
   }
 
   #orbitControls(): TwistyOrbitControls | null {
@@ -396,8 +393,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
 
   get experimentalCameraLatitudeLimits(): CameraLatitudeLimits {
     // TODO: sync with orbit controls
-    return this.#config.attributes["experimental-camera-latitude-limits"]
-      .value as CameraLatitudeLimits;
+    return this.#config.attributes["experimental-camera-latitude-limits"].value;
   }
 
   set viewerLink(viewerLinkPage: ViewerLinkPage) {
@@ -426,7 +422,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
 
   /** @deprecated */
   experimentalDerivedCameraOrbitCoordinates(): OrbitCoordinates {
-    let defaultCoordinatesForPuzzle = defaultCameraOrbitCoordinates(
+    const defaultCoordinatesForPuzzle = defaultCameraOrbitCoordinates(
       this.puzzle,
     );
 
@@ -495,9 +491,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     // TODO: Are there any SVGs where we'd want a separate back view?
     const setBackView: boolean =
       this.backView && is3DVisualization(this.visualization);
-    const backView: BackViewLayout = setBackView
-      ? (this.backView as BackViewLayout)
-      : "none";
+    const backView: BackViewLayout = setBackView ? this.backView : "none";
     this.#viewerWrapper = new TwistyViewerWrapper({
       backView,
     });
@@ -661,8 +655,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     this.experimentalSetCursorIndexer(this.#cursorIndexerName);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-  async updatePuzzleDOM(initial: boolean = false): Promise<void> {
+  async updatePuzzleDOM(initial = false): Promise<void> {
     if (!this.#connected) {
       return;
     }
@@ -673,7 +666,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
         id: "custom",
         fullName: "Custom (PG3D)",
         def: () => Promise.resolve(this.#legacyExperimentalPG3DViewConfig!.def),
-        svg: async () => {
+        svg: () => {
           throw "unimplemented";
         },
       };
@@ -779,7 +772,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
               if (pendingPuzzleUpdate.cancelled) {
                 return;
               }
-              def = pg.writekpuzzle(true) as KPuzzleDefinition; // TODO
+              def = pg.writekpuzzle(true); // TODO
               stickerDat = pg.get3d();
             } else {
               throw "Unimplemented!";
@@ -864,8 +857,8 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   // Note: setting `coalesce`
   experimentalAddMove(
     move: Move,
-    coalesce: boolean = false,
-    coalesceDelayed: boolean = false,
+    coalesce = false,
+    coalesceDelayed = false,
   ): void {
     if (this.#hackyPendingFinalMoveCoalesce) {
       this.#hackyCoalescePending();

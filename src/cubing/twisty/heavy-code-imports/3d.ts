@@ -13,6 +13,6 @@ export async function proxy3D(): Promise<
   return (cachedConstructorProxy ??= import("./dynamic-entries/3d"));
 }
 
-export const THREEJS = from(async () => (await proxy3D()).T3I) as Promise<
-  typeof import("three")
->;
+export const THREEJS: Promise<typeof import("three")> = from(
+  async () => (await proxy3D()).T3I,
+);

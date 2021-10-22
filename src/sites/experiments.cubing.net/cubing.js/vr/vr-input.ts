@@ -166,7 +166,7 @@ export class VRInput {
     const buttonStates: ButtonStates = {};
 
     // // TODO: is it more performant if we don't read all gamepads/button states, but only the ones we're listening for?
-    for (const i in gamepads) {
+    for (let i = 0; gamepads.length; i++) {
       const gamepad = gamepads[i] || { buttons: [] };
       buttonStates[i] = [];
       const buttons = gamepad.buttons || [];

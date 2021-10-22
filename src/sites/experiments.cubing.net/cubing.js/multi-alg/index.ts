@@ -5,7 +5,7 @@ import {
   experimentalStickerings,
 } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 
-const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
+const algsTextarea = document.querySelector("#algs") as HTMLTextAreaElement;
 if (localStorage["multi-alg-textarea"]) {
   algsTextarea.value = localStorage["multi-alg-textarea"];
   algsTextarea.classList.add("saved");
@@ -28,11 +28,11 @@ async function downloadAlg(alg: Alg, name: string) {
 
 const stickeringSelect = document.querySelector(
   "#stickering",
-)! as HTMLSelectElement;
+) as HTMLSelectElement;
 for (const stickering of Object.keys(experimentalStickerings)) {
-  const option: HTMLOptionElement = stickeringSelect!.appendChild(
+  const option: HTMLOptionElement = stickeringSelect.appendChild(
     document.createElement("option"),
-  )! as HTMLOptionElement;
+  )!;
   option.value = stickering;
   option.textContent = stickering;
 }
