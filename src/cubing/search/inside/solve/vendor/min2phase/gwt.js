@@ -2,7 +2,6 @@ var $intern_3 = { 3: 1 },
   $intern_9 = 4194303,
   $intern_10 = 1048575,
   $intern_11 = 524288,
-  $intern_12 = 65536,
   $intern_20 = 65535,
   $intern_26 = { 11: 1, 3: 1 },
   $intern_27 = { 17: 1, 3: 1 },
@@ -23,8 +22,6 @@ function portableObjCreate(obj) {
 function maybeGetClassLiteralFromPlaceHolder_0(entry) {
   return entry instanceof Array ? entry[0] : null;
 }
-
-function emptyMethod() {}
 
 function defineClass(typeId, superTypeId, castableTypeMap) {
   var prototypesByTypeId = prototypesByTypeId_0;
@@ -54,65 +51,15 @@ function createSubclassPrototype_0(superTypeId) {
   return portableObjCreate(prototypesByTypeId[superTypeId]);
 }
 
-function registerEntry() {
-  return entry_0;
-}
-
-function gwtOnLoad_0(errFn, modName, modBase, softPermutationId) {
-  ensureModuleInit();
-  var initFnList = initFnList_0;
-  $moduleName = modName;
-  $moduleBase = modBase;
-  permutationId = softPermutationId;
-  function initializeModules() {
-    for (var i = 0; i < initFnList.length; i++) {
-      initFnList[i]();
-    }
-  }
-
-  if (errFn) {
-    try {
-      $entry(initializeModules)();
-    } catch (e) {
-      errFn(modName, e);
-    }
-  } else {
-    $entry(initializeModules)();
-  }
-}
-
-function addInitFunctions() {
-  ensureModuleInit();
-  var initFnList = initFnList_0;
-  for (var i = 0; i < arguments.length; i++) {
-    initFnList.push(arguments[i]);
-  }
-}
-
 function Object_0() {}
 
 defineClass(1, null, {}, Object_0);
-function canCast(src_0, dstId) {
-  return (
-    (isJavaString(src_0) && !!stringCastMap[dstId]) ||
-    (src_0.castableTypeMap$ && !!src_0.castableTypeMap$[dstId])
-  );
-}
-
-function instanceOf(src_0, dstId) {
-  return src_0 != null && canCast(src_0, dstId);
-}
-
-function isJavaString(src_0) {
-  return typeof src_0 === "string";
-}
 
 function narrow_byte(x_0) {
   return (x_0 << 24) >> 24;
 }
 
 function Class() {
-  ++nextSequentialId;
   this.typeName = null;
   this.simpleName = null;
   this.packageName = null;
@@ -171,7 +118,6 @@ function getPrototypeForClass(clazz) {
 }
 
 function maybeSetClassLiteral(typeId, clazz) {
-  var proto;
   if (!typeId) {
     return;
   }
@@ -197,38 +143,6 @@ _.createClassLiteralForArray = function createClassLiteralForArray(dimensions) {
 _.isPrimitive = function isPrimitive() {
   return (this.modifiers & 1) != 0;
 };
-var nextSequentialId = 1;
-
-function $clinit_JavaScriptException() {
-  $clinit_JavaScriptException = emptyMethod;
-  NOT_SET = new Object_0();
-}
-
-function JavaScriptException(e) {
-  $clinit_JavaScriptException();
-  this.cause = null;
-  this.detailMessage = null;
-  this.description = "";
-  this.e = e;
-  this.description = "";
-}
-
-function entry_0(jsFunction) {
-  return function () {
-    return entry0(jsFunction, this, arguments);
-    var __0;
-  };
-}
-
-function entry0(jsFunction, thisObj, args) {
-  var initialEntry;
-  initialEntry = enter();
-  try {
-    return apply_0(jsFunction, thisObj, args);
-  } finally {
-    exit(initialEntry);
-  }
-}
 
 function getClassLiteralForArray(clazz, dimensions) {
   return getClassLiteralForArray_0(clazz, dimensions);
@@ -346,35 +260,6 @@ function initializeArrayElementsWithDefaults(elementTypeCategory, length_0) {
     array[i] = initValue;
   }
   return array;
-}
-
-function unwrap(e) {
-  var jse;
-  if (instanceOf(e, 26)) {
-    jse = dynamicCast(e, 26);
-    if (
-      maskUndefined(jse.e) !==
-      maskUndefined(($clinit_JavaScriptException(), NOT_SET))
-    ) {
-      return maskUndefined(jse.e) === maskUndefined(NOT_SET) ? null : jse.e;
-    }
-  }
-  return e;
-}
-
-function wrap(e) {
-  var jse;
-  if (instanceOf(e, 6)) {
-    return e;
-  }
-  jse = e && e.__gwt$exception;
-  if (!jse) {
-    jse = new JavaScriptException(e);
-    // TODO
-    // captureStackTrace(jse, e);
-    // cacheJavaScriptException(e, jse);
-  }
-  return jse;
 }
 
 function create(value_0) {
@@ -532,23 +417,10 @@ function __valueOf(x_0, start_0, end) {
 }
 
 function fromCodePoint(codePoint) {
-  var hiSurrogate, loSurrogate;
-  if (codePoint >= $intern_12) {
-    hiSurrogate =
-      (55296 + (((codePoint - $intern_12) >> 10) & 1023)) & $intern_20;
-    loSurrogate = (56320 + ((codePoint - $intern_12) & 1023)) & $intern_20;
-    return valueOf_0(hiSurrogate) + valueOf_0(loSurrogate);
-  } else {
-    return String.fromCharCode(codePoint & $intern_20);
-  }
+  return String.fromCharCode(codePoint & $intern_20);
 }
 
 var Ljava_lang_String_2_classLit = createForClass("java.lang", "String", 2);
-function $clinit_String$HashCache() {
-  $clinit_String$HashCache = emptyMethod;
-  back_0 = {};
-  front = {};
-}
 
 function $append(this$static) {
   this$static.string += " ";
@@ -580,8 +452,12 @@ function equals_7(array1, array2) {
   return true;
 }
 
+let $clinit_CoordCube_ran = false;
 function $clinit_CoordCube() {
-  $clinit_CoordCube = emptyMethod;
+  if ($clinit_CoordCube_ran) {
+    return;
+  }
+  $clinit_CoordCube_ran = true;
   UDSliceMove = initDims(
     C_classLit,
     [$intern_3, $intern_26],
@@ -963,7 +839,6 @@ function initRawSymPrun(
     SYM_SHIFT,
     check,
     depth,
-    done,
     flip,
     fsym,
     i,
@@ -999,14 +874,13 @@ function initRawSymPrun(
   N_MOVES = IS_PHASE2 ? 10 : 18;
   NEXT_AXIS_MAGIC = N_MOVES == 10 ? 66 : 599186;
   depth = ((PrunTable[N_SIZE >> 3] >> (N_SIZE << 2)) & 15) - 1;
-  done = 0;
+
   if (depth == -1) {
     for (i = 0; i < ~~(N_SIZE / 8) + 1; i++) {
       PrunTable[i] = $intern_29;
     }
     PrunTable[0] ^= 1;
     depth = 0;
-    done = 1;
   }
   while (depth < SEARCH_DEPTH) {
     mask = ((depth + 1) * $intern_29) ^ -1;
@@ -1063,7 +937,6 @@ function initRawSymPrun(
           prun < depth - 1 && (m += (NEXT_AXIS_MAGIC >> m) & 3);
           continue;
         }
-        ++done;
         if (inv) {
           PrunTable[i >> 3] ^= xorVal << (i << 2);
           break;
@@ -1079,7 +952,6 @@ function initRawSymPrun(
             : (idxx += RawConj[rawx][j ^ ((SYM_E2C_MAGIC >> (j << 1)) & 3)]);
           if (((PrunTable[idxx >> 3] >> (idxx << 2)) & 15) == check) {
             PrunTable[idxx >> 3] ^= xorVal << (idxx << 2);
-            ++done;
           }
         }
       }
@@ -1156,8 +1028,12 @@ var Lorg_cubing_min2phase_client_CoordCube_2_classLit = createForClass(
   "CoordCube",
   31,
 );
+let $clinit_CubieCube_ran = false;
 function $clinit_CubieCube() {
-  $clinit_CubieCube = emptyMethod;
+  if ($clinit_CubieCube_ran) {
+    return;
+  }
+  $clinit_CubieCube_ran = true;
   CubeSym = initDim(
     Lorg_cubing_min2phase_client_CubieCube_2_classLit,
     $intern_3,
@@ -1534,15 +1410,15 @@ function getPermSymInv(idx, sym, isCorner) {
   return (idxi & 65520) | SymMult[idxi & 15][sym];
 }
 
-function getSkipMoves(ssym) {
+function getSkipMoves() {
   $clinit_CubieCube();
-  var i, ret;
-  ret = 0;
-  for (i = 1; neq((ssym = shr(ssym, 1)), { l: 0, m: 0, h: 0 }); i++) {
-    eq(and(ssym, { l: 1, m: 0, h: 0 }), { l: 1, m: 0, h: 0 }) &&
-      (ret |= firstMoveSym[i]);
-  }
-  return ret;
+  // var i, ret;
+  // ret = 0;
+  // for (i = 1; neq((ssym = shr(ssym, 1)), { l: 0, m: 0, h: 0 }); i++) {
+  //   eq(and(ssym, { l: 1, m: 0, h: 0 }), { l: 1, m: 0, h: 0 }) &&
+  //     (ret |= firstMoveSym[i]);
+  // }
+  return 0;
 }
 
 function initMove() {
@@ -2219,31 +2095,31 @@ function $verify_0(this$static, facelets) {
   var center, count, f, i;
   count = 0;
   f = initDim(B_classLit, $intern_30, 0, 54, 7, 1);
-  try {
-    center = _String(
-      initValues(getClassLiteralForArray(C_classLit, 1), $intern_26, 0, 7, [
-        facelets.charCodeAt(4),
-        facelets.charCodeAt(13),
-        facelets.charCodeAt(22),
-        facelets.charCodeAt(31),
-        facelets.charCodeAt(40),
-        facelets.charCodeAt(49),
-      ]),
-    );
-    for (i = 0; i < 54; i++) {
-      f[i] =
-        ($indexOf_0(center, fromCodePoint(facelets.charCodeAt(i))) << 24) >> 24;
-      if (f[i] == -1) {
-        return -1;
-      }
-      count += 1 << (f[i] << 2);
-    }
-  } catch ($e0) {
-    $e0 = wrap($e0);
-    if (instanceOf($e0, 9)) {
+  // try {
+  center = _String(
+    initValues(getClassLiteralForArray(C_classLit, 1), $intern_26, 0, 7, [
+      facelets.charCodeAt(4),
+      facelets.charCodeAt(13),
+      facelets.charCodeAt(22),
+      facelets.charCodeAt(31),
+      facelets.charCodeAt(40),
+      facelets.charCodeAt(49),
+    ]),
+  );
+  for (i = 0; i < 54; i++) {
+    f[i] =
+      ($indexOf_0(center, fromCodePoint(facelets.charCodeAt(i))) << 24) >> 24;
+    if (f[i] == -1) {
       return -1;
-    } else throw unwrap($e0);
+    }
+    count += 1 << (f[i] << 2);
   }
+  // } catch ($e0) {
+  //   $e0 = wrap($e0);
+  //   if (instanceOf($e0, 9)) {
+  //     return -1;
+  //   } else throw unwrap($e0);
+  // }
   if (count != 10066329) {
     return -1;
   }
@@ -2346,13 +2222,12 @@ _.valid1 = 0;
 _.verbose = 0;
 var MAX_DEPTH2 = 12,
   MIN_P1LENGTH_PRE = 7;
-var Lorg_cubing_min2phase_client_Search_2_classLit = createForClass(
-  "org.cubing.min2phase.client",
-  "Search",
-  72,
-);
+let $clinit_Util_ran = false;
 function $clinit_Util() {
-  $clinit_Util = emptyMethod;
+  if ($clinit_Util_ran) {
+    return;
+  }
+  $clinit_Util_ran = true;
   var i, i0, i1, ix, j, jx;
   cornerFacelet = initValues(
     getClassLiteralForArray(B_classLit, 2),
@@ -2788,8 +2663,6 @@ function $toString_2(this$static) {
         ((sb.string += ".  "), sb);
     }
   }
-  (this$static.verbose & 4) != 0 &&
-    $append_1($append_0(((sb.string += "("), sb), this$static.length_0), "f)");
   return sb.string;
 }
 
@@ -2798,58 +2671,25 @@ function Util$Solution() {
 }
 
 defineClass(150, 1, {}, Util$Solution);
-_.toString$ = function toString_17() {
-  return $toString_2(this);
-};
 _.depth1 = 0;
 _.length_0 = 0;
 _.urfIdx = 0;
 _.verbose = 0;
-var Lorg_cubing_min2phase_client_Util$Solution_2_classLit = createForClass(
-  "org.cubing.min2phase.client",
-  "Util/Solution",
-  150,
-);
-function isValidName(name_0) {
-  if (name_0 == null) {
-    return false;
-  }
-  return name_0.length > 3;
-}
+var I_classLit = createForPrimitive("int", "I");
+createForClass("com.google.gwt.lang", "CollapsedPropertyHolder", 252);
 
-var I_classLit = createForPrimitive("int", "I"),
-  Lcom_google_gwt_lang_CollapsedPropertyHolder_2_classLit = createForClass(
-    "com.google.gwt.lang",
-    "CollapsedPropertyHolder",
-    252,
-  ),
-  Lcom_google_gwt_lang_JavaClassHierarchySetupUtil_2_classLit = createForClass(
-    "com.google.gwt.lang",
-    "JavaClassHierarchySetupUtil",
-    254,
-  ),
-  Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit = createForClass(
-    "com.google.gwt.lang",
-    "LongLibBase/LongEmul",
-    null,
-  ),
-  Lcom_google_gwt_lang_ModuleUtils_2_classLit = createForClass(
-    "com.google.gwt.lang",
-    "ModuleUtils",
-    257,
-  ),
-  B_classLit = createForPrimitive("byte", "B"),
+createForClass("com.google.gwt.lang", "JavaClassHierarchySetupUtil", 254);
+const Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit = createForClass(
+  "com.google.gwt.lang",
+  "LongLibBase/LongEmul",
+  null,
+);
+createForClass("com.google.gwt.lang", "ModuleUtils", 257);
+var B_classLit = createForPrimitive("byte", "B"),
   J_classLit = createForPrimitive("long", "J"),
-  C_classLit = createForPrimitive("char", "C"),
-  Lcom_google_gwt_user_client_rpc_XsrfToken_2_classLit = createForClass(
-    "com.google.gwt.user.client.rpc",
-    "XsrfToken",
-    null,
-  ),
-  Ljava_util_Map$Entry_2_classLit = createForInterface(
-    "java.util",
-    "Map/Entry",
-  );
+  C_classLit = createForPrimitive("char", "C");
+createForClass("com.google.gwt.user.client.rpc", "XsrfToken", null),
+  createForInterface("java.util", "Map/Entry");
 
 export const initialize = function () {
   init_0(false);
