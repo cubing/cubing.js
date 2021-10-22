@@ -14,6 +14,7 @@
     "three": "^0.126.1"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.15.8",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.13.0",
     "@babylonjs/core": "^5.0.0-alpha.24",
@@ -88,7 +89,18 @@
     "rubik's"
   ],
   "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
+    "parser": "@babel/eslint-parser",
+    "overrides": [
+      {
+        "files": "**/*.ts",
+        "parser": "@typescript-eslint/parser",
+        "extends": [
+          "eslint:recommended",
+          "plugin:@typescript-eslint/recommended",
+          "plugin:@typescript-eslint/recommended-requiring-type-checking"
+        ]
+      }
+    ],
     "plugins": [
       "@typescript-eslint"
     ],
@@ -112,11 +124,6 @@
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/restrict-plus-operands": "warn"
     },
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:@typescript-eslint/recommended-requiring-type-checking"
-    ],
     "parserOptions": {
       "project": "./tsconfig-eslint.json"
     },

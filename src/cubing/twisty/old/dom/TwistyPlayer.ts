@@ -85,7 +85,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   scene: Twisty3DScene | null = null;
   twisty3D: Twisty3DPuzzle | null = null;
 
-  #connected: boolean = false;
+  #connected = false;
   #legacyExperimentalPG3DViewConfig: LegacyExperimentalPG3DViewConfig | null =
     null;
 
@@ -96,7 +96,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   viewerElems: TwistyViewerElement[] = []; // TODO: can we represent the intermediate state better?
   controlElems: TwistyControlElement[] = []; // TODO: can we represent the intermediate state better?
 
-  #hackyPendingFinalMoveCoalesce: boolean = false;
+  #hackyPendingFinalMoveCoalesce = false;
 
   #viewerWrapper: TwistyViewerWrapper;
   public legacyExperimentalCoalesceModFunc: (move: Move) => number = (
@@ -107,7 +107,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     new ClassListManager(this, "controls-", ["none", "bottom-row"]);
 
   #experimentalInvalidInitialAlgCallback: (alg: Alg) => void;
-  #initialized: boolean = false;
+  #initialized = false;
 
   // TODO: support config from DOM.
   constructor(
@@ -655,7 +655,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     this.experimentalSetCursorIndexer(this.#cursorIndexerName);
   }
 
-  async updatePuzzleDOM(initial: boolean = false): Promise<void> {
+  async updatePuzzleDOM(initial = false): Promise<void> {
     if (!this.#connected) {
       return;
     }
@@ -666,7 +666,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
         id: "custom",
         fullName: "Custom (PG3D)",
         def: () => Promise.resolve(this.#legacyExperimentalPG3DViewConfig!.def),
-        svg: async () => {
+        svg: () => {
           throw "unimplemented";
         },
       };
@@ -857,8 +857,8 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   // Note: setting `coalesce`
   experimentalAddMove(
     move: Move,
-    coalesce: boolean = false,
-    coalesceDelayed: boolean = false,
+    coalesce = false,
+    coalesceDelayed = false,
   ): void {
     if (this.#hackyPendingFinalMoveCoalesce) {
       this.#hackyCoalescePending();
