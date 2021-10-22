@@ -3,7 +3,7 @@ export {
   Orbit,
   OrbitDef,
   OrbitsDef,
-  Transformation,
+  PGTransform as Transformation,
   VisibleState,
 } from "./PermOriSet";
 export {

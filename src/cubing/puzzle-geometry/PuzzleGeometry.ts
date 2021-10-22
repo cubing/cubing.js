@@ -26,7 +26,7 @@ import {
   OrbitDef,
   OrbitsDef,
   showcanon,
-  Transformation,
+  PGTransform,
   VisibleState,
 } from "./PermOriSet";
 import { PGPuzzles, PuzzleDescriptionString, PuzzleName } from "./PGPuzzles";
@@ -2148,7 +2148,7 @@ export class PuzzleGeometry {
     axiscmoves: number[][],
     setmoves: number[] | undefined,
     movesetorder: number,
-  ): Transformation {
+  ): PGTransform {
     const moveorbits: Orbit[] = [];
     const perms = [];
     const oris = [];
@@ -2211,7 +2211,7 @@ export class PuzzleGeometry {
         moveorbits.push(new Orbit(perms[ii], no, this.orbitoris[ii]));
       }
     }
-    let mv = new Transformation(moveorbits);
+    let mv = new PGTransform(moveorbits);
     if (amount !== 1) {
       mv = mv.mulScalar(amount);
     }
@@ -2422,7 +2422,7 @@ export class PuzzleGeometry {
       );
     }
     const movenames: string[] = [];
-    const moves: Transformation[] = [];
+    const moves: PGTransform[] = [];
     if (includemoves) {
       for (let k = 0; k < this.moveplanesets.length; k++) {
         const moveplaneset = this.moveplanesets[k];
@@ -2468,9 +2468,7 @@ export class PuzzleGeometry {
   }
 
   public getMovesAsPerms(): Perm[] {
-    return this.getOrbitsDef(false).moveops.map((_: Transformation) =>
-      _.toPerm(),
-    );
+    return this.getOrbitsDef(false).moveops.map((_: PGTransform) => _.toPerm());
   }
 
   public showcanon(disp: (s: string) => void): void {

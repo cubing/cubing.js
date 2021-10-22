@@ -38,10 +38,10 @@ export class OrbitsDef {
     private orbitdefs: OrbitDef[],
     public solved: VisibleState,
     public movenames: string[],
-    public moveops: Transformation[],
+    public moveops: PGTransform[],
   ) {}
 
-  private transformToKPuzzle(t: Transformation): any {
+  private transformToKPuzzle(t: PGTransform): any {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < this.orbitnames.length; j++) {
       mp[this.orbitnames[j]] = t.orbits[j].toKPuzzle();
@@ -51,7 +51,7 @@ export class OrbitsDef {
 
   public static transformToKPuzzle(
     orbitnames: string[],
-    t: Transformation,
+    t: PGTransform,
   ): KTransformation | undefined {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
@@ -256,7 +256,7 @@ export class OrbitsDef {
       neworbitdefs,
       new VisibleState(newsolved),
       this.movenames,
-      newmoveops.map((_) => new Transformation(_)),
+      newmoveops.map((_) => new PGTransform(_)),
     );
   }
 
@@ -264,7 +264,7 @@ export class OrbitsDef {
   // we use an algorithm that should be faster for large puzzles than
   // just picking random moves.
   public scramble(n: number): void {
-    const pool: Transformation[] = [];
+    const pool: PGTransform[] = [];
     for (let i = 0; i < this.moveops.length; i++) {
       pool[i] = this.moveops[i];
     }
@@ -495,9 +495,9 @@ export class Orbit {
     }
   }
 }
-export class TransformationBase {
+export class PGTransformBase {
   constructor(public orbits: Orbit[]) {}
-  public internalMul(b: TransformationBase): Orbit[] {
+  public internalMul(b: PGTransformBase): Orbit[] {
     const newOrbits: Orbit[] = [];
     for (let i = 0; i < this.orbits.length; i++) {
       newOrbits.push(this.orbits[i].mul(b.orbits[i]));
@@ -513,7 +513,7 @@ export class TransformationBase {
     return newOrbits;
   }
 
-  public equal(b: TransformationBase): boolean {
+  public equal(b: PGTransformBase): boolean {
     for (let i = 0; i < this.orbits.length; i++) {
       if (!this.orbits[i].equal(b.orbits[i])) {
         return false;
@@ -570,21 +570,21 @@ export class TransformationBase {
     return r;
   }
 }
-export class Transformation extends TransformationBase {
+export class PGTransform extends PGTransformBase {
   constructor(orbits: Orbit[]) {
     super(orbits);
   }
 
-  public mul(b: Transformation): Transformation {
-    return new Transformation(this.internalMul(b));
+  public mul(b: PGTransform): PGTransform {
+    return new PGTransform(this.internalMul(b));
   }
 
-  public mulScalar(n: number): Transformation {
+  public mulScalar(n: number): PGTransform {
     if (n === 0) {
       return this.e();
     }
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let t: Transformation = this;
+    let t: PGTransform = this;
     if (n < 0) {
       t = t.inv();
       n = -n;
@@ -610,22 +610,22 @@ export class Transformation extends TransformationBase {
     return r;
   }
 
-  public inv(): Transformation {
-    return new Transformation(this.internalInv());
+  public inv(): PGTransform {
+    return new PGTransform(this.internalInv());
   }
 
-  public e(): Transformation {
-    return new Transformation(
+  public e(): PGTransform {
+    return new PGTransform(
       this.orbits.map((_: Orbit) => Orbit.e(_.perm.length, _.orimod)),
     );
   }
 }
-export class VisibleState extends TransformationBase {
+export class VisibleState extends PGTransformBase {
   constructor(orbits: Orbit[]) {
     super(orbits);
   }
 
-  public mul(b: Transformation): VisibleState {
+  public mul(b: PGTransform): VisibleState {
     return new VisibleState(this.internalMul(b));
   }
 }
