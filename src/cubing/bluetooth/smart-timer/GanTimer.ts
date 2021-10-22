@@ -134,7 +134,7 @@ export class GanTimer extends EventTarget {
 
 // // TODO: Move this into a factory?
 export const ganTimerConfig: BluetoothConfig<GanTimer> = {
-  connect: GanTimer.connect,
+  connect: GanTimer.connect.bind(GanTimer),
   prefixes: ["GAN"],
   filters: [{ namePrefix: "GAN" }],
   optionalServices: [UUIDs.ganTimerService],

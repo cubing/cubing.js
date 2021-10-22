@@ -136,6 +136,7 @@
       "/coverage",
       "/dist",
       "/src/static",
+      "/src/cubing/puzzle-geometry/PuzzleGeometry.ts",
       "/src/cubing/search/inside/solve/vendor/min2phase/gwt.js",
       "/src/cubing/search/inside/solve/vendor/sq12phase/scramble_sq1.js",
       "/src/cubing/search/worker-inside-generated*",

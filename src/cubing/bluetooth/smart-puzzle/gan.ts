@@ -163,11 +163,11 @@ const commands: { [cmd: string]: BufferSource } = {
 
 function buf2hex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
-  return Array.prototype.map
-    .call(new Uint8Array(buffer), (x: number) =>
+  return (
+    Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
       ("00" + x.toString(16)).slice(-2),
-    )
-    .join(" ");
+    ) as string[]
+  ).join(" ");
 }
 
 const reidEdgeOrder = "UF UR UB UL DF DR DB DL FR FL BR BL".split(" ");
@@ -474,7 +474,7 @@ export class GanCube extends BluetoothPuzzle {
 
 // // TODO: Move this into a factory?
 export const ganConfig: BluetoothConfig<BluetoothPuzzle> = {
-  connect: GanCube.connect,
+  connect: GanCube.connect.bind(GanCube),
   prefixes: ["GAN"],
   filters: [{ namePrefix: "GAN" }],
   optionalServices: [UUIDs.ganCubeService, UUIDs.infoService],

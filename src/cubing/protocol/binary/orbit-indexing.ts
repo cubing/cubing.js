@@ -1,5 +1,5 @@
 export function identityPermutation(numElems: number): number[] {
-  const arr = new Array(numElems);
+  const arr = new Array<number>(numElems);
   for (let i = 0; i < numElems; i++) {
     arr[i] = i;
   }
@@ -30,7 +30,7 @@ export function maskToOrientations(
     arr.push(mask % radix);
     mask = Math.floor(mask / radix);
   }
-  return new Array(numElems - arr.length).fill(0).concat(arr.reverse());
+  return new Array<number>(numElems - arr.length).fill(0).concat(arr.reverse());
 }
 
 // From https://www.jaapsch.net/puzzles/compindx.htm#perm
