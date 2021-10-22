@@ -5,7 +5,6 @@ export {
   getpuzzles,
   parsePuzzleDescription,
   PuzzleGeometry,
-  useNewFaceNames,
 } from "./PuzzleGeometry";
 export type {
   StickerDat,

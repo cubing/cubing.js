@@ -1,9 +1,6 @@
 import { Alg } from "../../../../cubing/alg";
-import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 import "../../../../cubing/twisty/old/dom/TwistyPlayer";
-
-useNewFaceNames(true);
 
 window.addEventListener("DOMContentLoaded", () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

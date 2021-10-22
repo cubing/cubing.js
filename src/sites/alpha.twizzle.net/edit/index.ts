@@ -1,4 +1,3 @@
-import { useNewFaceNames } from "../../../cubing/puzzle-geometry";
 import "../../../cubing/twisty";
 import { showStats } from "../../../cubing/twisty/views/3D/Twisty3DVantage";
 import { getConfigFromURL, remapLegacyURLParams } from "../core/url-params";
@@ -10,8 +9,6 @@ remapLegacyURLParams({
   "experimental-setup-anchor": "setup-anchor",
   "experimental-stickering": "stickering",
 });
-
-useNewFaceNames(true);
 
 window.addEventListener("DOMContentLoaded", () => {
   if (!getURLParam("debug-js")) {

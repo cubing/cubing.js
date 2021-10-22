@@ -1,11 +1,9 @@
 import { Alg } from "../../../../cubing/alg";
-import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
 import {
   experimentalSetShareAllNewRenderers,
   TwistyPlayerV1,
 } from "../../../../cubing/twisty";
 
-useNewFaceNames(true);
 experimentalSetShareAllNewRenderers(true);
 
 {

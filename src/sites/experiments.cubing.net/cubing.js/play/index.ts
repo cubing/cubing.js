@@ -13,7 +13,6 @@ import {
   Twisty3DCanvas,
   Twisty3DPuzzle,
 } from "../../../../cubing/twisty";
-import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
   DEFAULT_PUZZLE_ID,
@@ -30,8 +29,6 @@ import type { AlgCubingNetOptions } from "../../../../cubing/alg";
 
 const bluetoothSVG = new URL("./bluetooth.svg", import.meta.url).toString();
 const clearSVG = new URL("./clear.svg", import.meta.url).toString();
-
-useNewFaceNames(true);
 
 experimentalShowRenderStats(debugShowRenderStats());
 // experimentalShowJumpingFlash(false); // TODO

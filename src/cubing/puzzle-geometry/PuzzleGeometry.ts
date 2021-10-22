@@ -77,12 +77,6 @@ export interface StickerDat {
   textureMapper: TextureMapper;
 }
 
-// TODO: Remove this once we no longer have prefix restrictions.
-let NEW_FACE_NAMES = true;
-export function useNewFaceNames(use: boolean): void {
-  NEW_FACE_NAMES = use;
-}
-
 // you can fill these in to help with timing if you want
 function tstart(s: string): string {
   return s;
@@ -1057,7 +1051,7 @@ export class PuzzleGeometry {
     if (shape === "t" && (sawvertex || sawface) && !sawedge) {
       this.addNotationMapper = "PyraminxOrTetraminxMapper";
     }
-    if (shape === "o" && sawface && NEW_FACE_NAMES) {
+    if (shape === "o" && sawface) {
       this.notationMapper = new FaceRenamingMapper(
         this.swizzler,
         new FaceNameSwizzler(["F", "D", "L", "BL", "R", "U", "BR", "B"]),
@@ -1066,7 +1060,7 @@ export class PuzzleGeometry {
         this.addNotationMapper = "FTOMapper";
       }
     }
-    if (shape === "d" && sawface && NEW_FACE_NAMES) {
+    if (shape === "d" && sawface) {
       this.addNotationMapper = "MegaminxMapper";
       this.notationMapper = new FaceRenamingMapper(
         this.swizzler,
