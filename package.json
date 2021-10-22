@@ -144,11 +144,8 @@
       }
     ],
     "ignorePatterns": [
-      "/coverage",
-      "/dist",
       "/src/static",
       "/src/cubing/search/worker-inside-generated*",
-      "/*/index.d.ts",
       "parser-peggy.js"
     ],
     "globals": {
@@ -235,9 +232,6 @@
     "roots": [
       "<rootDir>/src",
       "<rootDir>/script"
-    ],
-    "modulePathIgnorePatterns": [
-      "<rootDir>/script/test/experiments/"
     ]
   },
   "files": [

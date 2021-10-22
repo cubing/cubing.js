@@ -20,11 +20,5 @@
     "outDir": "./dist"
   },
   "include": ["src", "script"],
-  "exclude": [
-    "dist",
-    "dist/**/*",
-    "*/index.d.ts",
-    "src/static/**/*",
-    "src/cubing/search/worker-inside-generated*"
-  ]
+  "exclude": ["src/static", "src/cubing/search/worker-inside-generated*"]
 }
