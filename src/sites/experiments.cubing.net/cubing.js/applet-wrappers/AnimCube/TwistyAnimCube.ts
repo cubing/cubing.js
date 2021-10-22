@@ -79,7 +79,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
       process("initmove", (value: string) => {
         if (value === "#") {
           twistyPlayerConfig.experimentalSetupAlg = new Alg(
-            twistyPlayerConfig.alg!,
+            twistyPlayerConfig.alg,
           ).invert();
         } else {
           twistyPlayerConfig.experimentalSetupAlg = Alg.fromString(value ?? "");
@@ -90,7 +90,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
       process("initrevmove", (value: string) => {
         if (value === "#") {
           twistyPlayerConfig.experimentalSetupAlg = new Alg(
-            twistyPlayerConfig.alg!,
+            twistyPlayerConfig.alg,
           ).invert();
         } else {
           twistyPlayerConfig.experimentalSetupAlg = Alg.fromString(

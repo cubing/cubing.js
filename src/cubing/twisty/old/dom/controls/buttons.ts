@@ -78,7 +78,7 @@ export class TwistyControlButton
     this.addElement(this.button);
     this.addEventListener("click", this.onPress.bind(this));
 
-    switch (this.timelineCommand!) {
+    switch (this.timelineCommand) {
       case "fullscreen":
         if (!document.fullscreenEnabled) {
           this.button.disabled = true;
@@ -93,7 +93,7 @@ export class TwistyControlButton
     if (this.timeline) {
       // TODO
       this.timeline.addActionListener(this);
-      switch (this.timelineCommand!) {
+      switch (this.timelineCommand) {
         case "play-pause":
         case "play-step-backwards":
         case "play-step":
@@ -107,7 +107,7 @@ export class TwistyControlButton
 
   // TODO: Can we avoid duplicate calculations?
   private autoSetTimelineBasedDisabled(): void {
-    switch (this.timelineCommand!) {
+    switch (this.timelineCommand) {
       case "jump-to-start":
       case "play-pause":
       case "play-step-backwards":
@@ -118,7 +118,7 @@ export class TwistyControlButton
           this.button.disabled = true;
           return;
         }
-        switch (this.timelineCommand!) {
+        switch (this.timelineCommand) {
           case "jump-to-start":
           case "play-step-backwards":
             this.button.disabled =
@@ -179,7 +179,7 @@ export class TwistyControlButton
   }
 
   onPress(): void {
-    switch (this.timelineCommand!) {
+    switch (this.timelineCommand) {
       case "fullscreen":
         if (document.fullscreenElement === this.fullscreenElement) {
           document.exitFullscreen();
@@ -221,7 +221,7 @@ export class TwistyControlButton
   }
 
   onTimelineAction(actionEvent: TimelineActionEvent): void {
-    switch (this.timelineCommand!) {
+    switch (this.timelineCommand) {
       case "jump-to-start":
         // TODO: what if you're already playing?
         this.button.disabled =
@@ -298,17 +298,17 @@ export class TwistyControlButtonPanel
 
     // this.addElement(new TwistyControlButton(timeline!, fullscreenElement!));
     this.addElement(
-      new TwistyControlButton(timeline!, "fullscreen", {
+      new TwistyControlButton(timeline, "fullscreen", {
         fullscreenElement: options?.fullscreenElement,
       }),
     );
-    this.addElement(new TwistyControlButton(timeline!, "jump-to-start"));
-    this.addElement(new TwistyControlButton(timeline!, "play-step-backwards"));
-    this.addElement(new TwistyControlButton(timeline!, "play-pause"));
-    this.addElement(new TwistyControlButton(timeline!, "play-step"));
-    this.addElement(new TwistyControlButton(timeline!, "jump-to-end"));
+    this.addElement(new TwistyControlButton(timeline, "jump-to-start"));
+    this.addElement(new TwistyControlButton(timeline, "play-step-backwards"));
+    this.addElement(new TwistyControlButton(timeline, "play-pause"));
+    this.addElement(new TwistyControlButton(timeline, "play-step"));
+    this.addElement(new TwistyControlButton(timeline, "jump-to-end"));
     this.addElement(
-      new TwistyControlButton(timeline!, "twizzle-link", {
+      new TwistyControlButton(timeline, "twizzle-link", {
         visitTwizzleLinkCallback: options?.viewerLinkCallback,
       }),
     ).classList.add("twizzle-link-button");

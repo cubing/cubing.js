@@ -70,7 +70,9 @@ class RobotDemo {
       const puzzle = await connectSmartPuzzle();
       this.inputs.push(puzzle);
       puzzle.addMoveListener(this.recordMove.bind(this));
-      this.recorderButton.textContent = `Recorder: ${puzzle.name()}`;
+      this.recorderButton.textContent = `Recorder: ${
+        puzzle.name() ?? "[unknown]"
+      }`;
     } catch {
       this.recorderButton.disabled = false;
     }
@@ -118,7 +120,7 @@ class RobotDemo {
       const puzzle = await connectSmartPuzzle();
       this.inputs.push(puzzle);
       puzzle.addMoveListener(this.onMove.bind(this));
-      this.inputButton.textContent = `Input: ${puzzle.name()}`;
+      this.inputButton.textContent = `Input: ${puzzle.name() ?? "[unknown]"}`;
     } catch {
       this.inputButton.disabled = false;
     }
@@ -136,11 +138,13 @@ class RobotDemo {
       this.output.experimentalOptions.xAngle = false;
       this.output.experimentalDebugOnSend = (alg: Alg) => {
         localStorage[this.sentStorageName] =
-          (localStorage[this.sentStorageName] ?? "") +
+          ((localStorage[this.sentStorageName] ?? "") as string) +
           alg.toString() +
           ` // ${Date.now()}\n`;
       };
-      this.outputButton.textContent = `Output: ${this.output.name()}`;
+      this.outputButton.textContent = `Output: ${
+        this.output.name() ?? "[unknown]"
+      }`;
     } catch {
       this.outputButton.disabled = false;
     }
@@ -165,7 +169,7 @@ class RobotDemo {
 
   recordMove(moveEvent: MoveEvent): void {
     localStorage[this.recorderStorageName] =
-      (localStorage[this.recorderStorageName] ?? "") +
+      ((localStorage[this.recorderStorageName] ?? "") as string) +
       moveEvent.latestMove.toString() +
       ` // ${Date.now()}\n`;
   }

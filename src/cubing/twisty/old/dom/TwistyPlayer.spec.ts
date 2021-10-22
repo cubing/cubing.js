@@ -19,7 +19,6 @@ describe("TwistyPlayer", () => {
       alg: "R U R'",
     });
     // TODO(https://github.com/microsoft/TypeScript/pull/42425): remove `@ts-ignore`.
-    // @ts-ignore
     twistyPlayer.alg = "F2";
     expect(twistyPlayer.alg).toBeIdentical(new Alg("F2"));
   });

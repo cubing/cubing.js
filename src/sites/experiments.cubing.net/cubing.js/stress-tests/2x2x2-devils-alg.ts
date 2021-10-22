@@ -50,9 +50,9 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
   for (const [varName, def] of Object.entries(devilsAlgDef)) {
     const update = progress.appendChild(document.createElement("div"));
     update.textContent = `${varName} = // ...`;
-    await new Promise(async (resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 10));
     const algBuilder = new AlgBuilder();
-    for (let tidbit of def.split(" ")) {
+    for (const tidbit of def.split(" ")) {
       // let inverted = false
       // if (tidbit.endsWith("'")) {
       //   inverted = true
@@ -62,7 +62,7 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
       if (!existing) {
         throw `aaaargh ${tidbit}`;
       }
-      let toPush = existing;
+      const toPush = existing;
       // if (inverted) {
       //   toPush = toPush.invert();
       // }
@@ -78,12 +78,10 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
       c === 1 ? "" : "s"
     }`;
     update.scrollIntoView();
-    await new Promise(async (resolve) => setTimeout(resolve, 1));
+    await new Promise((resolve) => setTimeout(resolve, 1));
   }
 
-  const playerWrapper = document.querySelector(
-    "#player-wrapper",
-  )! as HTMLDivElement;
+  const playerWrapper = document.querySelector("#player-wrapper")!;
 
   playerWrapper.textContent = "";
   playerWrapper.appendChild(

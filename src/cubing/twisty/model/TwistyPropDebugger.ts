@@ -149,9 +149,10 @@ export class TwistyPropDebugger extends ManagedCustomElement {
       if (typeof value === "undefined") {
         str = "(undefined)";
       } else if (isAlgIssues(value)) {
+        const typedAlgIssues = value.issues as AlgIssues;
         str = `Alg`;
-        if ((value.issues as AlgIssues).errors.length > 0) {
-          str += ` 🚨 ${value.issues.errors[0]}`;
+        if (typedAlgIssues.errors.length > 0) {
+          str += ` 🚨 ${typedAlgIssues.errors[0]}`;
         } else {
           const numMoves = countMoves(value.alg);
           str += ` (${numMoves} moves)`;
@@ -159,14 +160,14 @@ export class TwistyPropDebugger extends ManagedCustomElement {
             str += `: ${truncateAlgForDisplay(value.alg)}`;
           }
         }
-        if ((value.issues as AlgIssues).warnings.length > 0) {
-          str += ` ⚠️ ${value.issues.warnings[0]}`;
+        if (typedAlgIssues.warnings.length > 0) {
+          str += ` ⚠️ ${typedAlgIssues.warnings[0]}`;
         }
       } else {
         const str1 = JSON.stringify(value);
         if (typeof str1 === "undefined") {
           if (value.name) {
-            str = `${value.name} (constructor)`;
+            str = `${value.name as string} (constructor)`;
           } else {
             str = "(undefined)";
           }

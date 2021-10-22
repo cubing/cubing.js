@@ -18,15 +18,15 @@
     "@babel/preset-typescript": "^7.13.0",
     "@babylonjs/core": "^5.0.0-alpha.24",
     "@types/jest": "^26.0.23",
-    "@typescript-eslint/eslint-plugin": "^4.17.0",
-    "@typescript-eslint/parser": "^4.17.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
     "babel-jest": "^27.2.4",
     "barely-a-dev-server": "^0.2.3",
     "esbuild": "^0.12.29",
-    "eslint": "^7.21.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-html": "^6.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.0.5",
     "jszip": "^3.5.0",
     "peggy": "^1.1.0",
@@ -95,12 +95,21 @@
     "rules": {
       "@typescript-eslint/no-inferrable-types": "off",
       "@typescript-eslint/no-floating-promises": "off",
-      "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-misused-promises": "off",
-      "@typescript-eslint/require-await": "off"
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_"
+        }
+      ],
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-empty-function": "off"
     },
     "extends": [
       "eslint:recommended",

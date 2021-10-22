@@ -60,7 +60,7 @@ export class TwistyAlgEditorSelectionProp extends TwistyPropSource<
     input: SelectionInfoPropInput,
     oldValue: Promise<SelectionInfo>,
   ): Promise<SelectionInfo> {
-    let { selectionStart, selectionEnd } = input;
+    const { selectionStart, selectionEnd } = input;
     const lastResult = await oldValue;
     const endChangedMostRecently =
       input.selectionStart === lastResult.selectionStart &&
