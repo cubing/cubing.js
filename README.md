@@ -19,7 +19,7 @@ If you want to display algs or solves, the following code is a good way to get s
 
 ```html
 <script
-  src="https://cdn.cubing.net/esm/cubing/twisty"
+  src="https://cdn.cubing.net/js/cubing/twisty"
   type="module"
   defer
 ></script>
