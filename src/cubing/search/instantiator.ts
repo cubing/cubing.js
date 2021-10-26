@@ -42,11 +42,12 @@ export async function relativeURLWorkerTest(): Promise<void> {
 }
 
 export async function instantiateWorker(): Promise<WorkerInsideAPI> {
-  await relativeURLWorkerTest();
-
   const { workerSource } = await import("./worker-inside-generated-string.js");
   // console.log({ workerSource });
 
   const worker = await constructWorkerFromString(workerSource);
+
+  relativeURLWorkerTest(); // do not wait for the result
+
   return wrap(worker);
 }
