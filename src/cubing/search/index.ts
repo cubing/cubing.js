@@ -5,6 +5,7 @@ export {
   solveSkewb,
   solvePyraminx,
   solveMegaminx,
+  setDebug,
 } from "./outside";
 
 // TODO: handle centers properly.

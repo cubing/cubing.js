@@ -101,3 +101,10 @@ export async function solveMegaminx(s: Transformation): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solveMegaminxToString(s));
 }
+
+export function setDebug(options: { logPerf?: boolean }): void {
+  const { logPerf } = options;
+  if (typeof logPerf !== "undefined") {
+    getCachedWorkerInstance().then((cwi) => cwi.setDebugMeasurePerf(logPerf));
+  }
+}

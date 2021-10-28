@@ -161,6 +161,10 @@ export const insideAPI = {
   solveMegaminxToString: async (s: Transformation): Promise<string> => {
     return (await solveMegaminx(s)).toString();
   },
+
+  setDebugMeasurePerf: async (measure: boolean): Promise<void> => {
+    setDebugMeasurePerf(measure);
+  },
 };
 
 export type WorkerInsideAPI = typeof insideAPI;
