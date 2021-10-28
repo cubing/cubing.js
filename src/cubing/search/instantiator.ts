@@ -9,6 +9,11 @@ import {
 import type { esmTestAPIImplementation } from "./esm-test-worker";
 type ESMTestAPI = typeof esmTestAPIImplementation;
 
+// Blocked on:
+// - https://github.com/evanw/esbuild/issues/312
+// - https://bugzilla.mozilla.org/show_bug.cgi?id=1558780
+const TEST_RELATIVE_URL_WORKER = false;
+
 export async function instantiateRelativeURLWorker(): Promise<void> {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
@@ -47,7 +52,9 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
 
   const worker = await constructWorkerFromString(workerSource);
 
-  relativeURLWorkerTest(); // do not wait for the result
+  if (TEST_RELATIVE_URL_WORKER) {
+    relativeURLWorkerTest(); // do not wait for the result
+  }
 
   return wrap(worker);
 }
