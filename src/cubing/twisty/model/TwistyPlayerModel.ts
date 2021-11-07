@@ -195,10 +195,10 @@ export class TwistyPlayerModel {
       url.searchParams.set("alg", alg.alg.toString());
     }
     if (!setup.alg.experimentalIsEmpty()) {
-      url.searchParams.set("experimental-setup-alg", setup.alg.toString());
+      url.searchParams.set("setup-alg", setup.alg.toString());
     }
     if (anchor !== "start") {
-      url.searchParams.set("experimental-setup-anchor", anchor);
+      url.searchParams.set("setup-anchor", anchor);
     }
     // if (this.experimentalStickering !== "full") {
     //   url.searchParams.set(
