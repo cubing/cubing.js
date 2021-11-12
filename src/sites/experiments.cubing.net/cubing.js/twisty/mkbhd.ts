@@ -15,9 +15,9 @@ if (tempo !== null) {
   twistyPlayer.tempoScale = parseFloat(tempo);
 }
 
-twistyPlayer.experimentalModel.playingInfoProp.set({
-  playing: true,
-  loop: true,
-});
+// twistyPlayer.experimentalModel.playingInfoProp.set({
+//   playing: true,
+//   loop: true,
+// });
 
-demoSpinCamera(twistyPlayer);
+// demoSpinCamera(twistyPlayer);
