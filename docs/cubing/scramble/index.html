@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8">
+  <title>cubing.js</title>
+  <meta name="theme-color" content="#4285f4">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../main.css">
+</head>
+
+<body>
+  <content>
+    <!-- Tip: Avoid using specialized terminology (e.g. "element", "attribute") where possible. -->
+    <div id="heading">
+      <code><a href="../">cubing</a>/scramble</code>
+    </div>
+    <section class="no-header">
+      <p>
+        <code>cubing/scramble</code> is the part of <code>cubing.js</code> that lets you generate fair random-state scrambles.
+      </p>
+    </section>
+
+    <section id="random-scramble">
+      <h1><a href="#random-scramble">Random Scramble</a></h1>
+      <p>Use <code>randomScrambleForEvent</code> to get a scramble. This returns a JavaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> for an <a href="../alg/"><code>Alg</code></a>, which is easiest to use with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>await</code></a>.</p>
+      <div class="code-demo">
+        <div>
+          <code class="sample">
+            <span>import { randomScrambleForEvent } from &quot;cubing/alg&quot;<br>
+<br>
+const scramble = await randomScrambleForEvent("333");
+scramble.log();</span>
+          </code>
+        </div>
+        <code class="sample output">
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;F' R' F' U2 B D' L' U F R B' R2 F' L2 F2 L2 D2 B R2 L2 F'&quot;</span>
+        </code>
+      </div>
+      <p>You can generate scrambles for all official WCA events:</p>
+      <div class="code-demo">
+        <div>
+          <code class="sample">
+            <span>import { randomScrambleForEvent } from &quot;cubing/alg&quot;<br>
+<br>
+(await randomScrambleForEvent("333")).log();<br>
+(await randomScrambleForEvent("333bf")).log();<br>
+(await randomScrambleForEvent("333fm")).log();<br>
+(await randomScrambleForEvent("222")).log();<br>
+(await randomScrambleForEvent("444")).log();<br>
+(await randomScrambleForEvent("777")).log();<br>
+(await randomScrambleForEvent("sq1")).log();<br>
+(await randomScrambleForEvent("minx")).log();<br>
+(await randomScrambleForEvent("clock")).log();</span>
+          </code>
+        </div>
+        <code class="sample output">
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R' F2 …  L U'&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R' B2 … R Fw' Dw&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R' U' F D … L' R' U' F&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;Fw2 Lw2 L …&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;(-2, 6) / …&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R-- D++ R++ D-- …&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;UR1- DR1+ …&quot;</span>
+        </code>
+      </div>
+      <p>Note that:
+        <ul>
+          <li>The <code>Alg</code> class supports all WCA notation. If you call <code>.toString()</code> on a scramble, you will get a string compatible with WCA notation for the event.</li>
+          <li>The only current way to get scrambles is by WCA event code. Note that different events for the same puzzle may use different kinds of scrambles.</li>
+          <li>All scrambles are random-state, as defined by <a href="https://www.worldcubeassociation.org/regulations/#4b3">WCA Regulation 4b3.</a>
+            <ul>
+              <li>This includes 4x4x4 events!</li>
+              <li>Exception: scramble filtering is not implemented yet. It will be implemented in the future for full compatibility with the WCA Regulations.</li>
+            </ul>
+          </li>
+          <li>Scrambles for 3x3x3 Fewest Moves include <code>R' U' F</code> at the beginning and end, matching TNoodle. However, these added moves can currently produce cancellations. This will be fixed in the future.</li>
+          <li>2x2x2 scrambles may include &lt;D, B, L&gt; moves so that there is no fixed piece in the resulting scramble. This is compatible with the WCA Regulations, but be aware that it does not match TNoodle (which only uses &lt;U, F, R&gt; moves).</li>
+          <li>Only use <code>cubing.js</code> to generate scrambles for unofficial software/competitions/events. Official WCA competitions must use the current version of <a href="https://www.worldcubeassociation.org/regulations/scrambles/">the official scramble program</a>.</li>
+        </ul>
+      </p>
+    </section>
+
+    <section id="with-twisty-player">
+      <h1><a href="#with-twisty-player">With <code>&lt;twisty-player&gt;</code></a></h1>
+      <p>You can assign a scramble or a scramble Promise to <code>&lt;twisty-player&gt;</code>. Here is a simple way to display a scramble alg with an associated player:
+      <div class="code-demo">
+        <div>
+          <code class="sample">
+            <span>&lt;twisty-alg-viewer for=&quot;main-player&quot;&gt;&lt;/twisty-alg-viewer&gt;<br>
+              &lt;twisty-player id=&quot;main-player&quot;&gt;&lt;/twisty-player&gt;<br>
+<br>
+&lt;script type=&quot;module&quot;&gt;<br>
+&nbsp;&nbsp;import &quot;cubing/twisty&quot;;<br>
+&nbsp;&nbsp;import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;const scramblePromise = randomScrambleForEvent(&quot;333&quot;);<br>
+&nbsp;&nbsp;document.querySelector(&quot;#main-player&quot;).alg = scramblePromise;<br>
+&lt;/script&gt;</span>
+          </code>
+        </div>
+        <code class="sample output">
+<twisty-alg-viewer for="main-player"></twisty-alg-viewer>
+<twisty-player id="main-player" style="height: 256px;"></twisty-player>
+
+<script type="module">
+  import "https://cdn.cubing.net/js/cubing/twisty";
+  import { randomScrambleForEvent } from "https://cdn.cubing.net/js/cubing/scramble";
+  
+  const scramblePromise = randomScrambleForEvent("333");
+  document.querySelector("#main-player").alg = scramblePromise;
+</script>
+        </code>
+      </div>
+      <p>
+        <a href="https://codepen.io/cubing/pen/abyRpPE?editors=1010">Try it</a>.
+      </p>
+    </section>
+  </content>
+</body>
+
+</html>
