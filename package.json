@@ -66,11 +66,11 @@
     "test-import-restrictions": "node ./script/test/import-restrictions/main.js",
     "test-jest": "npx jest --collectCoverage",
     "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
-    "format": "npx eslint --fix --ext=js,ts .; npx prettier --write src script",
+    "format": "npx eslint --fix --ext=js,ts src script; npx prettier --write src script",
     "setup": "npm install",
     "initial-setup-checked": "[ -d \"node_modules\" ] || npm run initial-setup",
     "initial-setup": "node ./script/initial-setup/main.js",
-    "lint": "npx eslint --ext=js,ts .",
+    "lint": "npx eslint --ext=js,ts src script",
     "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import"
   },
   "targets": {
