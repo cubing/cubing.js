@@ -17,7 +17,7 @@ import { TimestampRequestProp } from "./depth-0/TimestampRequestProp";
 import { URLProp } from "./depth-0/URLProp";
 import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
 import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
-import { OrbitCoordinatesProp } from "./depth-3/OrbitCoordinatesProp";
+import { OrbitCoordinatesProp } from "./depth-4/OrbitCoordinatesProp";
 import { PuzzleIDProp } from "./depth-2/PuzzleIDProp";
 import { SpriteProp } from "./depth-1/SpriteProp";
 import { VisualizationStrategyProp } from "./depth-3/VisualizationStrategyProp";
@@ -84,12 +84,6 @@ export class TwistyPlayerModel {
 
   // Depth 3
 
-  orbitCoordinatesProp = new OrbitCoordinatesProp({
-    orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
-    latitudeLimit: this.latitudeLimitProp,
-    puzzleID: this.puzzleIDProp,
-  });
-
   puzzleAlgProp = new PuzzleAlgProp({
     algWithIssues: this.algProp,
     puzzleDef: this.puzzleDefProp,
@@ -111,6 +105,13 @@ export class TwistyPlayerModel {
     puzzle: this.puzzleIDProp,
     visualizationStrategy: this.visualizationStrategyProp,
     indexerConstructorRequest: this.indexerConstructorRequestProp,
+  });
+
+  orbitCoordinatesProp = new OrbitCoordinatesProp({
+    orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
+    latitudeLimit: this.latitudeLimitProp,
+    puzzleID: this.puzzleIDProp,
+    strategy: this.visualizationStrategyProp,
   });
 
   setupTransformationProp = new AlgTransformationProp({

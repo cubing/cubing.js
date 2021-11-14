@@ -9,11 +9,13 @@ import {
   OrbitCoordinatesV2,
 } from "../depth-0/OrbitCoordinatesRequestProp";
 import { TwistyPropDerived } from "../TwistyProp";
+import type { VisualizationStrategy } from "../depth-3/VisualizationStrategyProp";
 
 interface OrbitCoordinatesPropInputs {
   orbitCoordinatesRequest: OrbitCoordinatesRequest;
   latitudeLimit: CoordinateDegrees;
   puzzleID: PuzzleID;
+  strategy: VisualizationStrategy;
 }
 
 export class OrbitCoordinatesProp extends TwistyPropDerived<
@@ -28,13 +30,13 @@ export class OrbitCoordinatesProp extends TwistyPropDerived<
     inputs: OrbitCoordinatesPropInputs,
   ): Promise<OrbitCoordinatesV2> {
     if (inputs.orbitCoordinatesRequest === "auto") {
-      return defaultCameraOrbitCoordinates(inputs.puzzleID);
+      return defaultCameraOrbitCoordinates(inputs.puzzleID, inputs.strategy);
     }
 
     const req: OrbitCoordinatesV2 = Object.assign(
       Object.assign(
         {},
-        defaultCameraOrbitCoordinates(inputs.puzzleID),
+        defaultCameraOrbitCoordinates(inputs.puzzleID, inputs.strategy),
         inputs.orbitCoordinatesRequest,
       ),
     );

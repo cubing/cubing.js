@@ -5,7 +5,9 @@
 import { LatitudeLimitProp } from "../../model/depth-0/LatitudeLimit";
 import { OrbitCoordinatesRequestProp } from "../../model/depth-0/OrbitCoordinatesRequestProp";
 import { PuzzleIDRequestProp } from "../../model/depth-0/PuzzleIDRequestProp";
-import { OrbitCoordinatesProp } from "../../model/depth-3/OrbitCoordinatesProp";
+import { VisualizationFormatProp } from "../../model/depth-0/VisualizationProp";
+import { VisualizationStrategyProp } from "../../model/depth-3/VisualizationStrategyProp";
+import { OrbitCoordinatesProp } from "../../model/depth-4/OrbitCoordinatesProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { TwistyPropParent } from "../../model/TwistyProp";
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
@@ -18,10 +20,16 @@ describe("TwistyOrbitControlsV2", () => {
     const puzzleIDRequestProp = new PuzzleIDRequestProp(
       "3x3x3",
     ) as TwistyPropParent<PuzzleID>;
+    const visualizationRequestProp = new VisualizationFormatProp();
+    const visualizationStrategyProp = new VisualizationStrategyProp({
+      puzzleID: puzzleIDRequestProp,
+      visualizationRequest: visualizationRequestProp,
+    });
     const orbitCoordinatesProp = new OrbitCoordinatesProp({
       orbitCoordinatesRequest: orbitCoordinatesRequestProp,
       latitudeLimit: latLimit,
       puzzleID: puzzleIDRequestProp,
+      strategy: visualizationStrategyProp,
     });
     const mockModel = {
       orbitCoordinatesRequestProp,
@@ -32,9 +40,15 @@ describe("TwistyOrbitControlsV2", () => {
     // mockModel.orbitCoordinatesProp.addFreshListener(console.log);
 
     expect(await orbitCoordinatesProp.get()).toEqual({
-      latitude: 34.44990198795349,
-      longitude: 30.96375653207353,
-      distance: 5.656854249492381,
+      latitude: 35,
+      longitude: 30,
+      distance: 6,
+    });
+
+    expect(await orbitCoordinatesProp.get()).toEqual({
+      latitude: 35,
+      longitude: 30,
+      distance: 6,
     });
 
     // Values are:true if currently set, false if previously set, undefined otherwise.
@@ -70,9 +84,9 @@ describe("TwistyOrbitControlsV2", () => {
     expect(windowEventListenersRegistered).toEqual({});
 
     expect(await orbitCoordinatesProp.get()).toEqual({
-      latitude: 34.44990198795349,
-      longitude: 30.96375653207353,
-      distance: 5.656854249492381,
+      latitude: 35,
+      longitude: 30,
+      distance: 6,
     });
 
     let preventedDefault = false;
@@ -93,9 +107,9 @@ describe("TwistyOrbitControlsV2", () => {
     });
 
     expect(await orbitCoordinatesProp.get()).toEqual({
-      latitude: 34.44990198795349,
-      longitude: 30.96375653207353,
-      distance: 5.656854249492381,
+      latitude: 35,
+      longitude: 30,
+      distance: 6,
     });
 
     orbitControls.onMouseMove({
@@ -106,8 +120,8 @@ describe("TwistyOrbitControlsV2", () => {
 
     expect(await orbitCoordinatesProp.get()).toEqual({
       latitude: 35,
-      longitude: 17.72562052291437,
-      distance: 5.656854249492381,
+      longitude: 16.76186399084088,
+      distance: 6,
     });
 
     orbitControls.onMouseMove({
@@ -118,8 +132,8 @@ describe("TwistyOrbitControlsV2", () => {
 
     expect(await orbitCoordinatesProp.get()).toEqual({
       latitude: 24.312125734137396,
-      longitude: 15.905330173774018,
-      distance: 5.656854249492381,
+      longitude: 14.941573641700643,
+      distance: 6,
     });
 
     orbitControls.onMouseMove({
@@ -130,8 +144,8 @@ describe("TwistyOrbitControlsV2", () => {
 
     expect(await orbitCoordinatesProp.get()).toEqual({
       latitude: 24.312125734137396,
-      longitude: 15.905330173774018,
-      distance: 5.656854249492381,
+      longitude: 14.941573641700643,
+      distance: 6,
     });
 
     orbitControls.onMouseMove({
@@ -142,8 +156,8 @@ describe("TwistyOrbitControlsV2", () => {
 
     expect(await orbitCoordinatesProp.get()).toEqual({
       latitude: 25.69334862750623,
-      longitude: 12.423244934257923,
-      distance: 5.656854249492381,
+      longitude: 11.459488402184547,
+      distance: 6,
     });
 
     orbitControls.onMouseMove({
@@ -157,8 +171,8 @@ describe("TwistyOrbitControlsV2", () => {
 
     expect(await orbitCoordinatesProp.get()).toEqual({
       latitude: 27.07457152087506,
-      longitude: -0.8148910749011975,
-      distance: 5.656854249492381,
+      longitude: -1.7786476069745731,
+      distance: 6,
     });
 
     orbitControls.onMouseMove({
@@ -168,8 +182,8 @@ describe("TwistyOrbitControlsV2", () => {
     } as MouseEvent);
     expect(await orbitCoordinatesProp.get()).toEqual({
       latitude: 29.743827999090797,
-      longitude: 4.195897274779327,
-      distance: 5.656854249492381,
+      longitude: 3.232140742705951,
+      distance: 6,
     });
 
     orbitControls.onMouseEnd({
@@ -178,8 +192,8 @@ describe("TwistyOrbitControlsV2", () => {
     } as MouseEvent);
     expect(await orbitCoordinatesProp.get()).toEqual({
       latitude: 29.743827999090797,
-      longitude: 4.195897274779327,
-      distance: 5.656854249492381,
+      longitude: 3.232140742705951,
+      distance: 6,
     });
     expect(canvasEventListenersRegistered).toEqual({
       mousedown: true,

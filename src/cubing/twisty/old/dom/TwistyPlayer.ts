@@ -424,6 +424,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
   experimentalDerivedCameraOrbitCoordinates(): OrbitCoordinates {
     const defaultCoordinatesForPuzzle = defaultCameraOrbitCoordinates(
       this.puzzle,
+      this.twisty3D instanceof PG3D ? "PG3D" : "Cube3D",
     );
 
     return {

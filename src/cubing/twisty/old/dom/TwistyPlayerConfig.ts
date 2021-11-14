@@ -1,5 +1,6 @@
 import { Vector3 } from "three";
 import type { Alg } from "../../../alg";
+import type { VisualizationStrategy } from "../../model/depth-3/VisualizationStrategyProp";
 import { DEGREES_PER_RADIAN } from "../../views/3D/TAU";
 import {
   AlgAttribute,
@@ -19,10 +20,18 @@ export const centeredCameraOrbitCoordinates: OrbitCoordinates = {
   distance: 5.877852522924731,
 };
 
-export const cubeCameraOrbitCoordinates: OrbitCoordinates = {
-  latitude: 34.44990198795349,
-  longitude: 30.96375653207353,
-  distance: 5.656854249492381,
+// This is tuned so that the hint facelets for 3x3x3 always fit in the canvas.
+export const cubeCube3DCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: 35,
+  longitude: 30,
+  distance: 6,
+};
+
+// This is tuned so that the hint facelets always fit in the canvas.
+export const cubePG3DCameraOrbitCoordinates: OrbitCoordinates = {
+  latitude: 35,
+  longitude: 30,
+  distance: 6.25,
 };
 
 export const megaminxCameraOrbitCoordinates: OrbitCoordinates = {
@@ -48,9 +57,14 @@ export const pyraminxLookAt = new Vector3(0, 1 / 6, 0);
 // TODO
 export function defaultCameraOrbitCoordinates(
   puzzleID: PuzzleID,
+  strategy: VisualizationStrategy,
 ): OrbitCoordinates {
   if (puzzleID[1] === "x") {
-    return cubeCameraOrbitCoordinates;
+    if (strategy === "Cube3D") {
+      return cubeCube3DCameraOrbitCoordinates;
+    } else {
+      return cubePG3DCameraOrbitCoordinates;
+    }
   } else {
     switch (puzzleID) {
       case "megaminx":
@@ -60,7 +74,7 @@ export function defaultCameraOrbitCoordinates(
       case "master_tetraminx":
         return pyraminxCameraOrbitCoordinates;
       case "skewb":
-        return cubeCameraOrbitCoordinates;
+        return cubePG3DCameraOrbitCoordinates;
       default:
         return centeredCameraOrbitCoordinates;
     }
