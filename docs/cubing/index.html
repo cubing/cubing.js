@@ -62,11 +62,12 @@
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { Alg } from &quot;cubing/alg&quot;;<br>
+<code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
+import { Alg } from &quot;https://cdn.cubing.net/js/cubing/alg&quot;;<br>
 <br>
 const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
-commutator.invert().expand().log();
-</span>
+commutator.invert().expand().log();<br>
+<code class="boilerplate">&lt;/script&gt;</code>
           </code>
         </div>
         <code class="sample output">
@@ -85,10 +86,12 @@ commutator.invert().expand().log();
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;cubing/alg&quot;<br>
+<code class="boilerplate">&lt;script type=&quot;module&quot;&gt;<br></code>
+import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 <br>
-const scramble = await randomScrambleForEvent("333");
-scramble.log();</span>
+const scramble = await randomScrambleForEvent("333");<br>
+scramble.log();<br>
+<code class="boilerplate">&lt;/script&gt;</code>
           </code>
         </div>
         <code class="sample output">
@@ -121,13 +124,11 @@ import { TwistyPlayer } from &quot;cubing/twisty&quot;;
       href="https://parceljs.org/">Parcel</a> to build your web apps, if you
       haven't picked a tool yet.</p>
       <p>
-        If you aren't using <code>npm</code>, you can use our CDN directly on a website, by adding <code>https://cdn.cubing.net/js/</code> before every imported package:
+        If you aren't using <code>npm</code>, you can use our CDN directly, by adding <code>https://cdn.cubing.net/js/</code> before every imported package (like in the examples above):
       </p>
       <code class="sample">
-        <span>
 import { Alg } from &quot;https://cdn.cubing.net/js/cubing/alg&quot;;<br>
 import { TwistyPlayer } from &quot;https://cdn.cubing.net/js/cubing/twisty&quot;;
-        </span>
       </code>
     </section>
 

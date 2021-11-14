@@ -186,3 +186,7 @@ code.sample span.js-object {
   margin: -0.2em -0.1em;
   border-radius: 0.3em;
 }
+
+.boilerplate {
+  color: #559BD4;
+}
