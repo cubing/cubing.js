@@ -10,7 +10,7 @@ import {
   ButtonAppearances,
   ButtonIcon,
   buttonIcons,
-} from "../../model/depth-9/ButtonAppearanceProp";
+} from "../../model/props/viewer/ButtonAppearanceProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
 import {

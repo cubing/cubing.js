@@ -1,6 +1,6 @@
 import { Vector3 } from "three";
 import type { Alg } from "../../../alg";
-import type { VisualizationStrategy } from "../../model/depth-3/VisualizationStrategyProp";
+import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import { DEGREES_PER_RADIAN } from "../../views/3D/TAU";
 import {
   AlgAttribute,

@@ -5,7 +5,7 @@ import type { Parsed } from "../../../alg/parse";
 import {
   AlgWithIssues,
   algWithIssuesFromString,
-} from "../../model/depth-0/AlgProp";
+} from "../../model/props/puzzle/state/AlgProp";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,

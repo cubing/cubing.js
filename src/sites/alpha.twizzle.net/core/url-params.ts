@@ -2,7 +2,7 @@ import { EXPERIMENTAL_PROP_NO_VALUE } from "../../../cubing/twisty";
 import type {
   AlgProp,
   AlgWithIssues,
-} from "../../../cubing/twisty/model/depth-0/AlgProp";
+} from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
 import type { TwistyPlayerModel } from "../../../cubing/twisty/model/TwistyPlayerModel";
 import type { TwistyPropSource } from "../../../cubing/twisty/model/TwistyProp";
 import {

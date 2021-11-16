@@ -3,7 +3,7 @@
 
 import { Alg } from "../../../../../cubing/alg";
 import { TwistyPlayer } from "../../../../../cubing/twisty";
-import { indexerStrategyNames } from "../../../../../cubing/twisty/model/depth-0/IndexerConstructorRequestProp";
+import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/puzzle/state/IndexerConstructorRequestProp";
 import { TwistyPlayerDebugger } from "../../../../../cubing/twisty/model/TwistyPropDebugger";
 import {
   backgroundThemes,

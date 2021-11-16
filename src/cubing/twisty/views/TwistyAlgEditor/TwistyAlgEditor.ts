@@ -14,8 +14,11 @@
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, Move, Pause } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
-import type { AlgProp, AlgWithIssues } from "../../model/depth-0/AlgProp";
-import type { CurrentLeavesSimplified } from "../../model/depth-9/CurrentLeavesSimplified";
+import type {
+  AlgProp,
+  AlgWithIssues,
+} from "../../model/props/puzzle/state/AlgProp";
+import type { CurrentLeavesSimplified } from "../../model/props/puzzle/state/CurrentLeavesSimplified";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";

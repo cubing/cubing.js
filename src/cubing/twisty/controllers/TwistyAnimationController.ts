@@ -9,11 +9,11 @@ import { RenderScheduler } from "../old/animation/RenderScheduler";
 import type {
   PlayingInfo,
   SimpleDirection,
-} from "../model/depth-0/PlayingInfoProp";
+} from "../model/props/timeline/PlayingInfoProp";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { StaleDropper } from "../model/PromiseFreshener";
 import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
-import type { TimestampRequest } from "../model/depth-0/TimestampRequestProp";
+import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
 import { modIntoRange } from "../model/helpers";
 
 // TODO: Figure out a better way for the controller to instruct the player.

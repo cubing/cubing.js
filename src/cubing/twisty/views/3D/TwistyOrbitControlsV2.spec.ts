@@ -2,12 +2,12 @@
  * @jest-environment jsdom
  */
 
-import { LatitudeLimitProp } from "../../model/depth-0/LatitudeLimit";
-import { OrbitCoordinatesRequestProp } from "../../model/depth-0/OrbitCoordinatesRequestProp";
-import { PuzzleIDRequestProp } from "../../model/depth-0/PuzzleIDRequestProp";
-import { VisualizationFormatProp } from "../../model/depth-0/VisualizationProp";
-import { VisualizationStrategyProp } from "../../model/depth-3/VisualizationStrategyProp";
-import { OrbitCoordinatesProp } from "../../model/depth-4/OrbitCoordinatesProp";
+import { LatitudeLimitProp } from "../../model/props/viewer/LatitudeLimit";
+import { OrbitCoordinatesRequestProp } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
+import { PuzzleIDRequestProp } from "../../model/props/puzzle/structure/PuzzleIDRequestProp";
+import { VisualizationFormatProp } from "../../model/props/viewer/VisualizationProp";
+import { VisualizationStrategyProp } from "../../model/props/viewer/VisualizationStrategyProp";
+import { OrbitCoordinatesProp } from "../../model/props/viewer/OrbitCoordinatesProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { TwistyPropParent } from "../../model/TwistyProp";
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";

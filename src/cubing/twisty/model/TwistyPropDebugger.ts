@@ -7,7 +7,7 @@ import {
 } from "../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
 import type { TwistyPlayer } from "../views/TwistyPlayer";
-import type { AlgIssues } from "./depth-0/AlgProp";
+import type { AlgIssues } from "./props/puzzle/state/AlgProp";
 import type { TwistyPropParent } from "./TwistyProp";
 
 export function splitFieldName(s: string): string {

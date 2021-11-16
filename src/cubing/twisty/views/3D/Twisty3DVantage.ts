@@ -1,7 +1,7 @@
 import type { PerspectiveCamera, WebGLRenderer } from "three";
 import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
 import { THREEJS } from "../../heavy-code-imports/3d";
-import type { OrbitCoordinatesV2 } from "../../model/depth-0/OrbitCoordinatesRequestProp";
+import type { OrbitCoordinatesV2 } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { TwistyPropParent } from "../../model/TwistyProp";
