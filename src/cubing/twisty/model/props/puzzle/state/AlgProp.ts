@@ -1,6 +1,6 @@
 import { Alg } from "../../../../../alg";
 import { arrayEquals } from "../../../helpers";
-import { TwistyPropSource } from "../../../TwistyProp";
+import { TwistyPropSource } from "../../TwistyProp";
 
 export class AlgIssues {
   // TODO: (string | Error)[]

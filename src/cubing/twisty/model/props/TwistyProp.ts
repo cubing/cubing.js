@@ -1,5 +1,5 @@
-import { from } from "../../vendor/p-lazy/p-lazy";
-import { StaleDropper } from "./PromiseFreshener";
+import { from } from "../../../vendor/p-lazy/p-lazy";
+import { StaleDropper } from "../PromiseFreshener";
 
 /*eslint @typescript-eslint/ban-types:off */
 type InputRecord = {};

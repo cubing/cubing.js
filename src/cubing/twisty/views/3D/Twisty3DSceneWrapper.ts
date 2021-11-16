@@ -5,7 +5,7 @@ import type { BackViewLayoutWithAuto } from "../../model/props/viewer/BackViewPr
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/TwistyProp";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";

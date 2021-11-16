@@ -6,7 +6,7 @@ import {
 } from "../../../../../kpuzzle";
 import type { AlgIndexer } from "../../../../old/animation/indexer/AlgIndexer";
 import type { SetupToLocation } from "../../../../old/dom/TwistyPlayerConfig";
-import { TwistyPropDerived } from "../../../TwistyProp";
+import { TwistyPropDerived } from "../../TwistyProp";
 
 interface AnchoredStartPropInputs {
   setupAnchor: SetupToLocation;

@@ -3,7 +3,7 @@ import {
   NoValueType,
   NO_VALUE,
   SimpleTwistyPropSource,
-} from "../../../TwistyProp";
+} from "../../TwistyProp";
 
 export class PGPuzzleDescriptionStringProp extends SimpleTwistyPropSource<
   PuzzleDescriptionString | NoValueType

@@ -1,5 +1,5 @@
 import { mod } from "../../helpers";
-import { TwistyPropSource } from "../../TwistyProp";
+import { TwistyPropSource } from "../TwistyProp";
 
 export type CoordinateDegrees = number;
 

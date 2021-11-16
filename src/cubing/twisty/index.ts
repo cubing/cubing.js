@@ -3,7 +3,7 @@ export { TwistyAlgViewer } from "./views/TwistyAlgViewer";
 export { TwistyAlgEditor } from "./views/TwistyAlgEditor/TwistyAlgEditor";
 export type { TwistyPlayerConfig } from "./views/TwistyPlayer";
 
-export { NO_VALUE as EXPERIMENTAL_PROP_NO_VALUE } from "./model/TwistyProp";
+export { NO_VALUE as EXPERIMENTAL_PROP_NO_VALUE } from "./model/props/TwistyProp";
 
 // Old
 export type { Twisty3DPuzzle } from "./views/3D/puzzles/Twisty3DPuzzle";

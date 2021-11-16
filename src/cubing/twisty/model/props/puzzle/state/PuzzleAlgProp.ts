@@ -1,7 +1,7 @@
 import { Alg } from "../../../../../alg";
 import { KPuzzle, KPuzzleDefinition } from "../../../../../kpuzzle";
 import { AlgIssues, AlgWithIssues } from "./AlgProp";
-import { TwistyPropDerived } from "../../../TwistyProp";
+import { TwistyPropDerived } from "../../TwistyProp";
 
 export class PuzzleAlgProp extends TwistyPropDerived<
   { algWithIssues: AlgWithIssues; puzzleDef: KPuzzleDefinition },

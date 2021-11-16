@@ -4,7 +4,7 @@ import type {
   AlgWithIssues,
 } from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
 import type { TwistyPlayerModel } from "../../../cubing/twisty/model/TwistyPlayerModel";
-import type { TwistyPropSource } from "../../../cubing/twisty/model/TwistyProp";
+import type { TwistyPropSource } from "../../../cubing/twisty/model/props/TwistyProp";
 import {
   TwistyPlayerAttribute,
   twistyPlayerAttributeMap,

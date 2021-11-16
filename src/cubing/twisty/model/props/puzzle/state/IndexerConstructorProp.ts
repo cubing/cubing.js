@@ -7,7 +7,7 @@ import type { PuzzleID } from "../../../../old/dom/TwistyPlayerConfig";
 import type { AlgWithIssues } from "./AlgProp";
 import type { IndexerStrategyName } from "./IndexerConstructorRequestProp";
 import type { VisualizationStrategy } from "../../viewer/VisualizationStrategyProp";
-import { TwistyPropDerived } from "../../../TwistyProp";
+import { TwistyPropDerived } from "../../TwistyProp";
 
 interface IndexerConstructorPropInputs {
   puzzle: PuzzleID;

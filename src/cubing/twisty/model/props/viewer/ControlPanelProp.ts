@@ -1,5 +1,5 @@
 import type { ControlsLocation } from "../../../old/dom/TwistyPlayerConfig";
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import { SimpleTwistyPropSource } from "../TwistyProp";
 
 export type ControlPanelThemeWithAuto = ControlsLocation | "auto";
 

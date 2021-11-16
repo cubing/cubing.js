@@ -2,7 +2,7 @@ import type { Scene as ThreeScene } from "three";
 import type { PuzzleLoader } from "../../../puzzles";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/TwistyProp";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";

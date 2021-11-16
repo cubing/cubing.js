@@ -1,5 +1,5 @@
 import type { ViewerLinkPage } from "../../../old/dom/TwistyPlayerConfig";
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import { SimpleTwistyPropSource } from "../TwistyProp";
 
 export type ViewerLinkPageWithAuto = ViewerLinkPage | "auto";
 

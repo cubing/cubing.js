@@ -5,7 +5,7 @@ import type {
   CurrentMoveInfo,
 } from "../../../../old/animation/indexer/AlgIndexer";
 import type { DetailedTimelineInfo } from "../../timeline/DetailedTimelineInfoProp";
-import { TwistyPropDerived } from "../../../TwistyProp";
+import { TwistyPropDerived } from "../../TwistyProp";
 
 interface PositionPropInputs {
   indexer: AlgIndexer<any>;

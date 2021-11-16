@@ -1,4 +1,4 @@
-import { TwistyPropSource } from "../../TwistyProp";
+import { TwistyPropSource } from "../TwistyProp";
 
 export class URLProp extends TwistyPropSource<URL | null, URL | string | null> {
   getDefaultValue(): URL | null {

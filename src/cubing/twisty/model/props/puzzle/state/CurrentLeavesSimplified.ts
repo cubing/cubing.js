@@ -1,7 +1,7 @@
 import type { Move } from "../../../../../alg";
 import type { CurrentMoveInfo } from "../../../../old/animation/indexer/AlgIndexer";
 import { arrayEqualsCompare } from "../../../helpers";
-import { TwistyPropDerived } from "../../../TwistyProp";
+import { TwistyPropDerived } from "../../TwistyProp";
 
 interface CurrentLeavesSimplifiedPropInputs {
   currentMoveInfo: CurrentMoveInfo;

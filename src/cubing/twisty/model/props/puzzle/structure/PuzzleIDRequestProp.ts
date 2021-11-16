@@ -3,7 +3,7 @@ import {
   NoValueType,
   NO_VALUE,
   SimpleTwistyPropSource,
-} from "../../../TwistyProp";
+} from "../../TwistyProp";
 
 // TODO: Ideally we'd use `null` to mean "no value", but `null` has a special meaning
 // for `TwistyProp` and might mess with caching.

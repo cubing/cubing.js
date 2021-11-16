@@ -9,7 +9,7 @@ import { VisualizationFormatProp } from "../../model/props/viewer/VisualizationP
 import { VisualizationStrategyProp } from "../../model/props/viewer/VisualizationStrategyProp";
 import { OrbitCoordinatesProp } from "../../model/props/viewer/OrbitCoordinatesProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { TwistyPropParent } from "../../model/TwistyProp";
+import type { TwistyPropParent } from "../../model/props/TwistyProp";
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
 

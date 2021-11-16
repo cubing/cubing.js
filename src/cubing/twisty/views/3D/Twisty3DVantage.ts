@@ -4,7 +4,7 @@ import { THREEJS } from "../../heavy-code-imports/3d";
 import type { OrbitCoordinatesV2 } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { TwistyPropParent } from "../../model/TwistyProp";
+import type { TwistyPropParent } from "../../model/props/TwistyProp";
 import { RenderScheduler } from "../../old/animation/RenderScheduler";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";

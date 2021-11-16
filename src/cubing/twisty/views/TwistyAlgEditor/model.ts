@@ -10,7 +10,7 @@ import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
   TwistyPropSource,
-} from "../../model/TwistyProp";
+} from "../../model/props/TwistyProp";
 import {
   AnimatedLeafUnitInfo,
   leafTokens,

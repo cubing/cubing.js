@@ -2,7 +2,7 @@ import {
   BoundaryType,
   Direction,
 } from "../../../old/animation/cursor/CursorTypes";
-import { TwistyPropSource } from "../../TwistyProp";
+import { TwistyPropSource } from "../TwistyProp";
 
 export type SimpleDirection = Direction.Forwards | Direction.Backwards;
 

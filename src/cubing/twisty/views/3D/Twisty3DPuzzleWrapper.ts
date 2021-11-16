@@ -6,7 +6,7 @@ import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/TwistyProp";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";

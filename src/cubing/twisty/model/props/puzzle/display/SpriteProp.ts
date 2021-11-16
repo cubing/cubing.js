@@ -1,6 +1,6 @@
 import type { Texture, TextureLoader } from "three";
 import { THREEJS } from "../../../../heavy-code-imports/3d";
-import { TwistyPropDerived } from "../../../TwistyProp";
+import { TwistyPropDerived } from "../../TwistyProp";
 
 let cachedLoader: TextureLoader | null = null;
 async function loader(): Promise<TextureLoader> {

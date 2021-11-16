@@ -1,5 +1,5 @@
 import type { MillisecondTimestamp } from "../../../old/animation/cursor/CursorTypes";
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import { SimpleTwistyPropSource } from "../TwistyProp";
 
 const smartTimestamps = {
   "start": true,

@@ -15,7 +15,7 @@ import { RenderScheduler } from "../../old/animation/RenderScheduler";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/TwistyProp";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type {
   ExperimentalStickering,
   PuzzleID,

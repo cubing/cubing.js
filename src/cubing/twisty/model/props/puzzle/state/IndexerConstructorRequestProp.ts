@@ -1,4 +1,4 @@
-import { SimpleTwistyPropSource } from "../../../TwistyProp";
+import { SimpleTwistyPropSource } from "../../TwistyProp";
 
 export const indexerStrategyNames = {
   auto: true,

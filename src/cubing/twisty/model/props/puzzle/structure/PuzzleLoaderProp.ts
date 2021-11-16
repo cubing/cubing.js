@@ -6,7 +6,7 @@ import {
   puzzles,
 } from "../../../../../puzzles";
 import type { PuzzleID } from "../../../../old/dom/TwistyPlayerConfig";
-import { NoValueType, NO_VALUE, TwistyPropDerived } from "../../../TwistyProp";
+import { NoValueType, NO_VALUE, TwistyPropDerived } from "../../TwistyProp";
 8;
 interface PuzzleLoaderPropInputs {
   puzzleIDRequest: PuzzleID | NoValueType;

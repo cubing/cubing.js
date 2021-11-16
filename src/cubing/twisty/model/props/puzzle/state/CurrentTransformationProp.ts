@@ -6,7 +6,7 @@ import {
 } from "../../../../../kpuzzle";
 import type { AlgIndexer } from "../../../../old/animation/indexer/AlgIndexer";
 import type { CurrentLeavesSimplified } from "./CurrentLeavesSimplified";
-import { TwistyPropDerived } from "../../../TwistyProp";
+import { TwistyPropDerived } from "../../TwistyProp";
 
 interface CurrentTransformationPropInputs {
   anchoredStart: Transformation;

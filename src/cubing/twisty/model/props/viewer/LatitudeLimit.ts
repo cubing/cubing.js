@@ -1,4 +1,4 @@
-import { SimpleTwistyPropSource } from "../../TwistyProp";
+import { SimpleTwistyPropSource } from "../TwistyProp";
 import type { CoordinateDegrees } from "./OrbitCoordinatesRequestProp";
 
 // Similar to https://alg.cubing.net/

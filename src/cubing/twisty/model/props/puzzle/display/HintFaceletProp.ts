@@ -1,5 +1,5 @@
 import type { HintFaceletStyle } from "../../../../old/dom/TwistyPlayerConfig";
-import { SimpleTwistyPropSource } from "../../../TwistyProp";
+import { SimpleTwistyPropSource } from "../../TwistyProp";
 
 export type HintFaceletStyleWithAuto = HintFaceletStyle | "auto";
 

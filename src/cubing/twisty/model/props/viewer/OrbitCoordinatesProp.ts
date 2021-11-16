@@ -8,7 +8,7 @@ import {
   OrbitCoordinatesRequest,
   OrbitCoordinatesV2,
 } from "./OrbitCoordinatesRequestProp";
-import { TwistyPropDerived } from "../../TwistyProp";
+import { TwistyPropDerived } from "../TwistyProp";
 import type { VisualizationStrategy } from "./VisualizationStrategyProp";
 
 interface OrbitCoordinatesPropInputs {
