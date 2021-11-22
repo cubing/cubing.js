@@ -69,7 +69,7 @@ export class PGOrbitsDef {
     result.push("");
     for (let i = 0; i < this.orbitnames.length; i++) {
       result.push(
-        `"Set ${this.orbitnames[i]} ${this.orbitdefs[i].size} ${this.orbitdefs[i].mod}`,
+        `Set ${this.orbitnames[i]} ${this.orbitdefs[i].size} ${this.orbitdefs[i].mod}`,
       );
     }
     result.push("");
