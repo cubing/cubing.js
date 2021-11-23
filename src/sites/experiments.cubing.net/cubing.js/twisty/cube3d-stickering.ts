@@ -1,9 +1,8 @@
 import { Alg } from "../../../../cubing/alg";
 import {
-  Cube3D,
   experimentalSetShareAllNewRenderers,
   ExperimentalStickering,
-  TwistyPlayerV1,
+  TwistyPlayer,
 } from "../../../../cubing/twisty";
 import type { VisualizationFormat } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 
@@ -12,10 +11,10 @@ function demo(visualization: VisualizationFormat): void {
 
   const content = document.querySelector(".content")!;
 
-  function addAlg(stickering: ExperimentalStickering, s: string): Cube3D {
+  function addAlg(stickering: ExperimentalStickering, s: string): void {
     const div = content.appendChild(document.createElement("div"));
     div.classList.add("case");
-    const twistyPlayer = new TwistyPlayerV1({
+    const twistyPlayer = new TwistyPlayer({
       experimentalSetupAnchor: "end",
       alg: Alg.fromString(s),
       visualization,
@@ -23,7 +22,6 @@ function demo(visualization: VisualizationFormat): void {
     });
     div.appendChild(document.createElement("h2")).textContent = stickering;
     div.appendChild(twistyPlayer);
-    return twistyPlayer.twisty3D as Cube3D;
   }
 
   addAlg("full", "y L' U R' F' U L2 U2' L' U' L U2' D R' D' F2 R2 U'");
