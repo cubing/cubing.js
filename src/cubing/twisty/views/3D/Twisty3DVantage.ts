@@ -121,7 +121,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
       const bloomPass = new UnrealBloomPass(
         new Vector2(window.innerWidth, window.innerHeight),
         1.5,
-        0.4,
+        0.8,
         0.85,
       );
       this.composer = new EffectComposer(renderer);

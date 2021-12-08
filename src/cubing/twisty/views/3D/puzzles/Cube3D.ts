@@ -232,13 +232,13 @@ const cube3DOptionsDefaults: Cube3DOptions = {
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
 const blackMesh = new MeshBasicMaterial({
-  color: 0x000000,
+  color: 0x0000ff,
   opacity: 1,
   transparent: true,
 });
 
 const blackTranslucentMesh = new MeshBasicMaterial({
-  color: 0x000000,
+  color: 0xffffff,
   opacity: 0.3,
   transparent: true,
 });
