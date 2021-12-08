@@ -1,7 +1,9 @@
 import {
+  Color,
   PerspectiveCamera,
   ShaderMaterial,
   Vector2,
+  Vector3,
   WebGLRenderer,
 } from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
@@ -131,9 +133,16 @@ export class Twisty3DVantage extends ManagedCustomElement {
       const bloomPass = new UnrealBloomPass(
         new Vector2(window.innerWidth, window.innerHeight),
         1.5,
-        0.8,
-        0.85,
+        2,
+        0.15,
       );
+      bloomPass.bloomTintColors = [
+        new Vector3(0.6, 0.8, 1),
+        new Vector3(0.6, 0.8, 1),
+        new Vector3(0.6, 0.8, 1),
+        new Vector3(0.6, 0.8, 1),
+        new Vector3(0.6, 0.8, 1),
+      ];
       this.bloomComposer = new EffectComposer(renderer);
       const scene = await this.scene!.scene();
 
@@ -275,8 +284,8 @@ export class Twisty3DVantage extends ManagedCustomElement {
     const camera = await this.camera();
     camera.layers.set(BLOOM_SCENE_LAYER);
     this.bloomComposer.render(); // TODO
-    camera.layers.set(ENTIRE_SCENE_LAYER);
-    this.mainComposer.render(); // TODO
+    // camera.layers.set(ENTIRE_SCENE_LAYER);
+    // this.mainComposer.render(); // TODO
 
     this.stats?.end();
   }
