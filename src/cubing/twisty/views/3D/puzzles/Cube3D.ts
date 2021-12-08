@@ -131,7 +131,7 @@ const axesInfo: AxisInfo[] = [
     0x884400,
     1,
   ),
-  new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ee00, 0x008800, 1),
+  new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ff00, 0x008800, 1),
   new AxisInfo(
     new Vector3(1, 0, 0),
     new Euler(0, TAU / 4, 0),
@@ -771,7 +771,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     const cubie = new Group();
     if (this.options.showFoundation) {
       const foundation = this.createCubieFoundation();
-      foundation.layers.toggle(BLOOM_SCENE_LAYER);
       cubie.add(foundation);
       this.experimentalFoundationMeshes.push(foundation);
     }
@@ -781,6 +780,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
         axesInfo[piece.stickerFaces[i]],
         false,
       );
+      sticker.layers.toggle(BLOOM_SCENE_LAYER);
+
       const faceletInfo: FaceletInfo = {
         faceIdx: piece.stickerFaces[i],
         facelet: sticker,
