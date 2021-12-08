@@ -2,7 +2,6 @@ import {
   PerspectiveCamera,
   ShaderMaterial,
   Vector2,
-  Vector3,
   WebGLRenderer,
 } from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
