@@ -1,5 +1,4 @@
 import {
-  Color,
   PerspectiveCamera,
   ShaderMaterial,
   Vector2,
@@ -132,9 +131,9 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
       const bloomPass = new UnrealBloomPass(
         new Vector2(window.innerWidth, window.innerHeight),
-        1.5,
-        2,
-        0.15,
+        0.3,
+        1,
+        0,
       );
       bloomPass.bloomTintColors = [
         new Vector3(0.6, 0.8, 1),
@@ -284,8 +283,8 @@ export class Twisty3DVantage extends ManagedCustomElement {
     const camera = await this.camera();
     camera.layers.set(BLOOM_SCENE_LAYER);
     this.bloomComposer.render(); // TODO
-    // camera.layers.set(ENTIRE_SCENE_LAYER);
-    // this.mainComposer.render(); // TODO
+    camera.layers.set(ENTIRE_SCENE_LAYER);
+    this.mainComposer.render(); // TODO
 
     this.stats?.end();
   }
