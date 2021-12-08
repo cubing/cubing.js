@@ -1,10 +1,13 @@
-import type { PerspectiveCamera, WebGLRenderer } from "three";
+import { PerspectiveCamera, Vector2, WebGLRenderer } from "three";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
 import { THREEJS } from "../../heavy-code-imports/3d";
-import type { OrbitCoordinatesV2 } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import { StaleDropper } from "../../model/PromiseFreshener";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";
+import type { OrbitCoordinatesV2 } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { RenderScheduler } from "../../old/animation/RenderScheduler";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
@@ -96,10 +99,14 @@ export class Twisty3DVantage extends ManagedCustomElement {
     // } else {
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(w, h, true);
+    this.composer.setSize(w, h);
+    this.composer.setPixelRatio(pixelRatio());
     // }
 
     this.scheduleRender();
   }
+
+  composer: EffectComposer;
 
   #cachedRenderer: Promise<WebGLRenderer> | null = null;
   async renderer(): Promise<WebGLRenderer> {
@@ -110,6 +117,19 @@ export class Twisty3DVantage extends ManagedCustomElement {
         alpha: true,
       });
       renderer.setPixelRatio(pixelRatio());
+
+      const bloomPass = new UnrealBloomPass(
+        new Vector2(window.innerWidth, window.innerHeight),
+        1.5,
+        0.4,
+        0.85,
+      );
+      this.composer = new EffectComposer(renderer);
+      const scene = await this.scene!.scene();
+
+      const renderScene = new RenderPass(scene, await this.camera());
+      this.composer.addPass(renderScene);
+      this.composer.addPass(bloomPass);
       return renderer;
     })());
   }
@@ -197,13 +217,14 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
     this.stats?.begin();
 
-    const [renderer, scene, camera] = await Promise.all([
-      this.renderer(),
-      this.scene.scene(),
-      this.camera(),
-    ]);
+    // const [renderer, scene, camera] = await Promise.all([
+    //   this.renderer(),
+    //   this.scene.scene(),
+    //   this.camera(),
+    // ]);
+    await this.renderer();
     // console.log("rendering!!!!", renderer, scene, camera);
-    renderer.render(scene, camera); // TODO
+    this.composer.render(); // TODO
 
     this.stats?.end();
   }

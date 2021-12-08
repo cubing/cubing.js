@@ -30,7 +30,7 @@ function devServerOptions(srcFolder, dev) {
     port: 3333,
     esbuildOptions: {
       external: externalNode,
-      target: "es2020",
+      target: "esnext",
     },
   };
 }
