@@ -131,7 +131,7 @@ const axesInfo: AxisInfo[] = [
     0x884400,
     1,
   ),
-  new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ff00, 0x008800, 1),
+  new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ee00, 0x008800, 1),
   new AxisInfo(
     new Vector3(1, 0, 0),
     new Euler(0, TAU / 4, 0),
