@@ -1,6 +1,12 @@
-import { PerspectiveCamera, Vector2, WebGLRenderer } from "three";
+import {
+  PerspectiveCamera,
+  ShaderMaterial,
+  Vector2,
+  WebGLRenderer,
+} from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
 import { THREEJS } from "../../heavy-code-imports/3d";
@@ -13,6 +19,7 @@ import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import { pixelRatio } from "../../old/dom/viewers/canvas";
 import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css";
+import { BLOOM_SCENE_LAYER, ENTIRE_SCENE_LAYER } from "./puzzles/Cube3D";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
@@ -99,14 +106,17 @@ export class Twisty3DVantage extends ManagedCustomElement {
     // } else {
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(w, h, true);
-    this.composer.setSize(w, h);
-    this.composer.setPixelRatio(pixelRatio());
+    this.bloomComposer.setSize(w, h);
+    this.bloomComposer.setPixelRatio(pixelRatio());
+    this.mainComposer.setSize(w, h);
+    this.mainComposer.setPixelRatio(pixelRatio());
     // }
 
     this.scheduleRender();
   }
 
-  composer: EffectComposer;
+  bloomComposer: EffectComposer;
+  mainComposer: EffectComposer;
 
   #cachedRenderer: Promise<WebGLRenderer> | null = null;
   async renderer(): Promise<WebGLRenderer> {
@@ -124,12 +134,49 @@ export class Twisty3DVantage extends ManagedCustomElement {
         0.8,
         0.85,
       );
-      this.composer = new EffectComposer(renderer);
+      this.bloomComposer = new EffectComposer(renderer);
       const scene = await this.scene!.scene();
 
       const renderScene = new RenderPass(scene, await this.camera());
-      this.composer.addPass(renderScene);
-      this.composer.addPass(bloomPass);
+      this.bloomComposer.addPass(renderScene);
+      this.bloomComposer.addPass(bloomPass);
+
+      const finalPass = new ShaderPass(
+        new ShaderMaterial({
+          uniforms: {
+            baseTexture: { value: null },
+            bloomTexture: { value: this.bloomComposer.renderTarget2.texture },
+          },
+          vertexShader: `		varying vec2 vUv;
+
+			void main() {
+
+				vUv = uv;
+
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			}`,
+          fragmentShader: `uniform sampler2D baseTexture;
+			uniform sampler2D bloomTexture;
+
+			varying vec2 vUv;
+
+			void main() {
+
+				gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
+
+			}
+`,
+          defines: {},
+        }),
+        "baseTexture",
+      );
+      finalPass.needsSwap = true;
+
+      this.mainComposer = new EffectComposer(renderer);
+      this.mainComposer.addPass(renderScene);
+      this.mainComposer.addPass(finalPass);
+
       return renderer;
     })());
   }
@@ -224,7 +271,12 @@ export class Twisty3DVantage extends ManagedCustomElement {
     // ]);
     await this.renderer();
     // console.log("rendering!!!!", renderer, scene, camera);
-    this.composer.render(); // TODO
+
+    const camera = await this.camera();
+    camera.layers.set(BLOOM_SCENE_LAYER);
+    this.bloomComposer.render(); // TODO
+    camera.layers.set(ENTIRE_SCENE_LAYER);
+    this.mainComposer.render(); // TODO
 
     this.stats?.end();
   }

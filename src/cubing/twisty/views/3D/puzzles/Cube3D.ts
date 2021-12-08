@@ -6,6 +6,7 @@ import {
   DoubleSide,
   Euler,
   Group,
+  Layers,
   Matrix4,
   Mesh,
   MeshBasicMaterial,
@@ -519,6 +520,11 @@ function sharedStickerGeometry(): BufferGeometry {
   );
 }
 
+export const ENTIRE_SCENE_LAYER = 0;
+export const BLOOM_SCENE_LAYER = 1;
+const bloomLayer = new Layers();
+bloomLayer.set(BLOOM_SCENE_LAYER);
+
 // TODO: Split into "scene model" and "view".
 export class Cube3D extends Object3D implements Twisty3DPuzzle {
   kpuzzleFaceletInfo: Record<string, FaceletInfo[][]>;
@@ -765,6 +771,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     const cubie = new Group();
     if (this.options.showFoundation) {
       const foundation = this.createCubieFoundation();
+      foundation.layers.toggle(BLOOM_SCENE_LAYER);
       cubie.add(foundation);
       this.experimentalFoundationMeshes.push(foundation);
     }
