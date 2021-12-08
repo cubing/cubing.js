@@ -239,7 +239,7 @@ const blackMesh = new MeshBasicMaterial({
 });
 
 const blackTranslucentMesh = new MeshBasicMaterial({
-  color: 0x4488ff,
+  color: 0x3344ff,
   opacity: 0.3,
   transparent: true,
 });
