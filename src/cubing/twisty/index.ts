@@ -2,13 +2,13 @@ export { TwistyPlayer } from "./views/TwistyPlayer";
 export { TwistyAlgViewer } from "./views/TwistyAlgViewer";
 export { TwistyAlgEditor } from "./views/TwistyAlgEditor/TwistyAlgEditor";
 export type { TwistyPlayerConfig } from "./views/TwistyPlayer";
+export { experimentalSetShareAllNewRenderers } from "./views/3D/Twisty3DVantage";
 
 export { NO_VALUE as EXPERIMENTAL_PROP_NO_VALUE } from "./model/props/TwistyProp";
 
 // Old
 export type { Twisty3DPuzzle } from "./views/3D/puzzles/Twisty3DPuzzle";
 export {
-  experimentalSetShareAllNewRenderers,
   experimentalShowRenderStats,
   Twisty3DCanvas,
 } from "./old/dom/viewers/Twisty3DCanvas";

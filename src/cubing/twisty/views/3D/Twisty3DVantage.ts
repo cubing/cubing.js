@@ -35,8 +35,20 @@ export async function setCameraFromOrbitCoordinates(
   camera.lookAt(0, 0, 0);
 }
 
+let shareAllNewRenderers: boolean | null = null;
+
+// WARNING: The current shared renderer implementation is not every efficient.
+// Avoid using for players that are likely to have dimensions approaching 1 megapixel or higher.
+// TODO: use a dedicated renderer while fullscreen?
+export function experimentalSetShareAllNewRenderers(share: boolean): void {
+  shareAllNewRenderers = share;
+}
+
 let anyRenderersSofar = false;
 function shareRenderer(): boolean {
+  if (shareAllNewRenderers !== null) {
+    return shareAllNewRenderers;
+  }
   if (!anyRenderersSofar) {
     anyRenderersSofar = true;
     return false;
