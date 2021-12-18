@@ -15,10 +15,69 @@ import { StaleDropper } from "../model/PromiseFreshener";
 import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
 import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
 import { modIntoRange } from "../model/helpers";
+import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp";
 
 // TODO: Figure out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {
   flash(): void;
+}
+
+// We use a separate helper to separate the anim frame callbacks (and their cancellations).
+// TODO: fold this into the main controller
+class CatchUpHelper {
+  catchingUp: boolean = false;
+  pendingFrame = false;
+
+  constructor(private model: TwistyPlayerModel) {}
+
+  private scheduler: RenderScheduler = new RenderScheduler(
+    this.animFrame.bind(this),
+  );
+
+  start(): void {
+    if (!this.catchingUp) {
+      this.lastTimestamp = performance.now();
+    }
+    this.catchingUp = true;
+    this.pendingFrame = true;
+    this.scheduler.requestAnimFrame();
+  }
+
+  stop(): void {
+    this.catchingUp = false;
+    this.scheduler.cancelAnimFrame();
+  }
+
+  lastTimestamp = 0;
+  animFrame(timestamp: MillisecondTimestamp): void {
+    this.scheduler.requestAnimFrame();
+    const delta = (timestamp - this.lastTimestamp) / 1000;
+    console.log("delta", delta, timestamp, this.lastTimestamp);
+    this.lastTimestamp = timestamp;
+
+    console.log("delta", delta);
+
+    this.model.catchUpMoveProp.set(
+      (async () => {
+        const previousCatchUpMove = await this.model.catchUpMoveProp.get();
+        const amount = previousCatchUpMove.amount + delta; // TODO: use tempo scale?
+        console.log("amount", amount);
+        if (amount >= 1) {
+          this.pendingFrame = true;
+          this.stop();
+          return {
+            move: null,
+            amount: 0,
+          };
+        }
+        this.pendingFrame = false;
+        return {
+          move: previousCatchUpMove.move,
+          amount: amount,
+        };
+      })(),
+    );
+  }
 }
 
 // This controls the logic for animation, so that the main controller can focus on the right API abstractions.
@@ -26,6 +85,8 @@ export class TwistyAnimationController {
   // TODO: #private?
   private playing: boolean = false;
   private direction: Direction = Direction.Forwards;
+
+  private catchUpHelper: CatchUpHelper;
 
   private model: TwistyPlayerModel;
 
@@ -44,6 +105,11 @@ export class TwistyAnimationController {
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
     this.model.playingInfoProp.addFreshListener(this.onPlayingProp.bind(this)); // TODO
+
+    this.catchUpHelper = new CatchUpHelper(this.model);
+    this.model.catchUpMoveProp.addFreshListener(
+      this.onCatchUpMoveProp.bind(this),
+    ); // TODO
   }
 
   // TODO: Do we need this?
@@ -51,6 +117,16 @@ export class TwistyAnimationController {
     if (playingInfo.playing !== this.playing) {
       playingInfo.playing ? this.play(playingInfo) : this.pause();
     }
+  }
+
+  // TODO: Do we need this?
+  async onCatchUpMoveProp(catchUpMove: CatchUpMove): Promise<void> {
+    console.log("onCatchupMoveProp");
+    const catchingUp = catchUpMove.move !== null;
+    if (catchingUp !== this.catchUpHelper.catchingUp) {
+      catchingUp ? this.catchUpHelper.start() : this.catchUpHelper.stop();
+    }
+    this.scheduler.requestAnimFrame();
   }
 
   async #effectiveTimestampMilliseconds(): Promise<MillisecondTimestamp> {
@@ -141,6 +217,7 @@ export class TwistyAnimationController {
   >();
 
   async animFrame(frameDatestamp: MillisecondTimestamp): Promise<void> {
+    console.log("animFrame main");
     if (this.playing) {
       this.scheduler.requestAnimFrame();
     }
@@ -161,7 +238,7 @@ export class TwistyAnimationController {
       freshenerResult;
 
     // TODO: Get this without wasting time on the others?
-    if (playingInfo.playing === false) {
+    if (playingInfo.playing === false && !this.catchUpHelper.pendingFrame) {
       this.playing = false;
       // TODO: Ideally we'd cancel the anim frame from the top of this method.
       // But `this.scheduler.cancelAnimFrame();` might accidentally cancel a
