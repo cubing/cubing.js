@@ -53,10 +53,7 @@ class CatchUpHelper {
   animFrame(timestamp: MillisecondTimestamp): void {
     this.scheduler.requestAnimFrame();
     const delta = (timestamp - this.lastTimestamp) / this.catchUpMs;
-    console.log("delta", delta, timestamp, this.lastTimestamp);
     this.lastTimestamp = timestamp;
-
-    console.log("delta", delta);
 
     this.model.catchUpMoveProp.set(
       (async () => {
@@ -66,20 +63,15 @@ class CatchUpHelper {
         }
 
         const amount = previousCatchUpMove.amount + delta; // TODO: use tempo scale?
-        console.log("amount", amount);
         if (amount >= 1) {
           this.pendingFrame = true;
           this.stop();
-          console.log("setting end");
-          console.log("setting end");
-          console.log("setting end");
           this.model.timestampRequestProp.set("end");
           return {
             move: null,
             amount: 0,
           };
         }
-        console.log("setting unend");
         this.pendingFrame = false;
         return {
           move: previousCatchUpMove.move,
@@ -120,10 +112,6 @@ export class TwistyAnimationController {
     this.model.catchUpMoveProp.addFreshListener(
       this.onCatchUpMoveProp.bind(this),
     ); // TODO
-
-    this.model.detailedTimelineInfoProp.addFreshListener((v) => {
-      console.log("timestamp", v.timestamp);
-    });
   }
 
   // TODO: Do we need this?
@@ -135,7 +123,6 @@ export class TwistyAnimationController {
 
   // TODO: Do we need this?
   async onCatchUpMoveProp(catchUpMove: CatchUpMove): Promise<void> {
-    console.log("onCatchupMoveProp");
     const catchingUp = catchUpMove.move !== null;
     if (catchingUp !== this.catchUpHelper.catchingUp) {
       catchingUp ? this.catchUpHelper.start() : this.catchUpHelper.stop();
@@ -231,7 +218,6 @@ export class TwistyAnimationController {
   >();
 
   async animFrame(frameDatestamp: MillisecondTimestamp): Promise<void> {
-    console.log("animFrame main");
     if (this.playing) {
       this.scheduler.requestAnimFrame();
     }
@@ -330,7 +316,6 @@ export class TwistyAnimationController {
         });
       }
     }
-    console.log({ newTimestamp });
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
     this.model.timestampRequestProp.set(

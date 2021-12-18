@@ -33,7 +33,6 @@ export class CurrentLeavesProp extends TwistyPropDerived<
           endTimestamp: -1, // TODO
         });
       }
-      console.log(currentMoveInfo);
       return currentMoveInfo;
     }
 
