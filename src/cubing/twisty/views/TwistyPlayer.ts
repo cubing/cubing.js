@@ -281,7 +281,12 @@ export class TwistyPlayer
   }
 
   // TODO: Animate the new move.
-  experimentalAddMove(move: Move, options: { coalesce?: boolean } = {}): void {
+  experimentalAddMove(
+    flexibleMove: Move | string,
+    options: { coalesce?: boolean } = {},
+  ): void {
+    const move =
+      typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
     (async () => {
       const alg = (await this.experimentalModel.algProp.get()).alg;
       const newAlg = experimentalAppendMove(alg, move, {
