@@ -238,7 +238,7 @@ export class TwistyAnimationController {
       freshenerResult;
 
     // TODO: Get this without wasting time on the others?
-    if (playingInfo.playing) {
+    if (!playingInfo.playing) {
       this.playing = false;
       // TODO: Ideally we'd cancel the anim frame from the top of this method.
       // But `this.scheduler.cancelAnimFrame();` might accidentally cancel a

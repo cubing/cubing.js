@@ -10,12 +10,15 @@ player.experimentalAddMove(new Move("R"));
 
 setTimeout(() => {
   player.experimentalAddMove(new Move("U"));
-  player.timestamp = "end";
-  player.experimentalModel.catchUpMoveProp.set({
-    move: new Move("U"),
-    amount: 0,
-  });
 }, 1000);
+
+setTimeout(() => {
+  player.experimentalAddMove(new Move("U"));
+}, 1200);
+
+setTimeout(() => {
+  player.experimentalAddMove(new Move("U'"));
+}, 1300);
 
 // setTimeout(() => {
 //   player.experimentalAddMove(new Move("U"));
