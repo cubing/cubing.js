@@ -2,7 +2,6 @@ import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
 import { KPuzzle } from "../../../cubing/kpuzzle";
 import { puzzles } from "../../../cubing/puzzles";
-import { experimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../../cubing/kpuzzle";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
 import {
   experimentalSolve2x2x2,
@@ -26,11 +25,11 @@ import type {
   SetupToLocation,
 } from "../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
+import { URLParamUpdater } from "../core/url-params";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
-import { URLParamUpdater } from "../core/url-params";
 // import { setURLParams } from "./url-params";
 
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
@@ -112,33 +111,30 @@ export class App {
     ]);
     const currentAlg = currentAlgWithIssues.alg;
     let solution: Alg;
+    const kpuzzle = new KPuzzle(await puzzles[puzzleID].def());
+    console.log(kpuzzle);
     switch (puzzleID) {
       case "2x2x2": {
-        const kpuzzle = new KPuzzle(await puzzles["2x2x2"].def());
         kpuzzle.applyAlg(currentAlg);
         solution = await experimentalSolve2x2x2(kpuzzle.state);
         break;
       }
       case "3x3x3": {
-        const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
         kpuzzle.applyAlg(currentAlg);
         solution = await experimentalSolve3x3x3IgnoringCenters(kpuzzle.state);
         break;
       }
       case "skewb": {
-        const kpuzzle = new KPuzzle(await puzzles.skewb.def());
         kpuzzle.applyAlg(currentAlg);
         solution = await solveSkewb(kpuzzle.state);
         break;
       }
       case "pyraminx": {
-        const kpuzzle = new KPuzzle(await puzzles.pyraminx.def());
         kpuzzle.applyAlg(currentAlg);
         solution = await solvePyraminx(kpuzzle.state);
         break;
       }
       case "megaminx": {
-        const kpuzzle = new KPuzzle(await puzzles.megaminx.def());
         kpuzzle.applyAlg(currentAlg);
         solution = await solveMegaminx(kpuzzle.state);
         break;
