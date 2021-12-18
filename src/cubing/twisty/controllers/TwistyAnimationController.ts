@@ -16,6 +16,7 @@ import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
 import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
 import { modIntoRange } from "../model/helpers";
 import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp";
+import { CubeMapToSphericalPolynomialTools } from "@babylonjs/core";
 
 // TODO: Figure out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {
@@ -48,10 +49,11 @@ class CatchUpHelper {
     this.scheduler.cancelAnimFrame();
   }
 
+  catchUpMs = 500;
   lastTimestamp = 0;
   animFrame(timestamp: MillisecondTimestamp): void {
     this.scheduler.requestAnimFrame();
-    const delta = (timestamp - this.lastTimestamp) / 1000;
+    const delta = (timestamp - this.lastTimestamp) / this.catchUpMs;
     console.log("delta", delta, timestamp, this.lastTimestamp);
     this.lastTimestamp = timestamp;
 
@@ -65,6 +67,10 @@ class CatchUpHelper {
         if (amount >= 1) {
           this.pendingFrame = true;
           this.stop();
+          console.log("setting end");
+          console.log("setting end");
+          console.log("setting end");
+          this.model.timestampRequestProp.set("end");
           return {
             move: null,
             amount: 0,
