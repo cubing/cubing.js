@@ -1,4 +1,4 @@
-import type { ExperimentalStickering } from "..";
+import type { ExperimentalStickering, PG3D } from "..";
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
@@ -148,7 +148,12 @@ export class TwistyPlayer
     );
 
   #visualizationWrapperElem = document.createElement("div"); // TODO: Better pattern.
+  #alreadyConnected = false; // TODO: support resetting
   async connectedCallback(): Promise<void> {
+    if (this.#alreadyConnected) {
+      return;
+    }
+    this.#alreadyConnected = true;
     this.addCSS(twistyPlayerCSS);
 
     this.addElement(this.#visualizationWrapperElem).classList.add(
@@ -222,6 +227,28 @@ export class TwistyPlayer
       this.#visualizationWrapper = newWrapper;
       this.#visualizationStrategy = strategy;
     }
+  }
+
+  async experimentalCurrentCanvases(): Promise<HTMLCanvasElement[]> {
+    this.connectedCallback();
+    const wrapper = this.#visualizationWrapper;
+    const canvases: HTMLCanvasElement[] = [];
+    if (wrapper instanceof Twisty3DSceneWrapper) {
+      const vantages = wrapper.experimentalVantages();
+      for (const vantage of vantages) {
+        canvases.push(await vantage.canvas());
+      }
+    }
+    return canvases;
+  }
+
+  async experimentalPG3D(): Promise<PG3D | null> {
+    this.connectedCallback();
+    const wrapper = this.#visualizationWrapper;
+    if (wrapper instanceof Twisty3DSceneWrapper) {
+      wrapper;
+    }
+    return null;
   }
 
   jumpToStart(options?: { flash: boolean }): void {
