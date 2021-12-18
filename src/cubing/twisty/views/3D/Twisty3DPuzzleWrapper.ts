@@ -39,7 +39,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           this.scheduleRender();
         } catch (e) {
           console.warn(
-            "Bad position. Pre-emptively disconnecting:",
+            "Bad position (this doesn't necessarily mean something is wrong). Pre-emptively disconnecting:",
             this.puzzleLoader.id,
             e,
           );
