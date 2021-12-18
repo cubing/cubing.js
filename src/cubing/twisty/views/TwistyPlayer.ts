@@ -125,6 +125,11 @@ export class TwistyPlayer
 
   buttons: TwistyButtonsV2;
 
+  experimentalCanvasClickCallback: (...args: any) => void = () => {};
+  // #onCanvasClick() {
+
+  // }
+
   constructor(config: TwistyPlayerConfig = {}) {
     super();
 
