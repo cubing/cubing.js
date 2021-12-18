@@ -20,7 +20,6 @@ import {
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
 import { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
-import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/old/dom/TwistyPlayer";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
@@ -29,12 +28,21 @@ import {
   OrbitCoordinates,
   positionToOrbitCoordinates,
 } from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControls";
+import {
+  getConfigFromURL,
+  remapLegacyURLParams,
+  URLParamUpdater,
+} from "../core/url-params";
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
   experimentalShowRenderStats(true);
 }
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
+
+remapLegacyURLParams({
+  puzzlegeometry: "puzzle-description",
+});
 
 let twisty: TwistyPlayer;
 let pg: PuzzleGeometry | undefined;
@@ -260,11 +268,17 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
     // it again.  But for now we always do.
     if (!twisty) {
       elem.textContent = "";
-      twisty = new TwistyPlayer({
-        experimentalPuzzleDescription: (
-          document.getElementById("desc")! as HTMLInputElement
-        ).value, // TODO
-        alg: new Alg(),
+
+      const config = getConfigFromURL();
+      console.log(config);
+      if ("puzzle" in config) {
+        config.experimentalPuzzleDescription = getpuzzle(config.puzzle!);
+        delete config["puzzle"];
+      }
+      Object.assign(config, {
+        // experimentalPuzzleDescription: (
+        //   document.getElementById("desc")! as HTMLInputElement
+        // ).value, // TODO
         visualization: "PG3D",
         backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
         cameraLatitude: initialCameraOrbitCoordinates.latitude,
@@ -273,6 +287,9 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         // TODO: distance?
         viewerLink: "none",
       });
+      twisty = new TwistyPlayer(config);
+      new URLParamUpdater(twisty.experimentalModel);
+
       (document.querySelector("#editor") as TwistyAlgEditor).twistyPlayer =
         twisty;
       twisty.tempoScale = tempomult;
@@ -613,12 +630,12 @@ function setpuzzleparams(desc: string): void {
   for (const [name, s] of Object.entries(puzzles)) {
     if (s === desc) {
       updateMoveCount();
-      setURLParams({ puzzle: name, puzzlegeometry: "" });
+      setURLParams({ "puzzle": name, "puzzle-description": "" });
       return;
     }
   }
   updateMoveCount();
-  setURLParams({ puzzle: "", puzzlegeometry: desc });
+  setURLParams({ "puzzle": "", "puzzle-description": desc });
 }
 
 function doselection(el: any): void {
@@ -740,7 +757,7 @@ function addMove(move: Move): void {
   twisty.experimentalAddMove(move, { coalesce: true }); // TODO: mod
   algoinput.value = lastalgo;
   updateMoveCount(newAlg);
-  setURLParams({ alg: newAlg });
+  // setURLParams({ alg: newAlg });
 }
 
 function settempo(fromURL: any): void {
@@ -784,7 +801,8 @@ export function setup(): void {
   const puzzles = getpuzzles();
   lastRender = getCheckboxes(renderOptions);
   const puz = getURLParam("puzzle");
-  const puzdesc = getURLParam("puzzlegeometry");
+  const puzdesc =
+    getURLParam("puzzle-description") ?? getURLParam("puzzlegeometry");
   let found = false;
   let optionFor3x3x3: HTMLOptionElement;
 
@@ -822,11 +840,11 @@ export function setup(): void {
         dowork(command);
       };
   }
-  const qalg = getURLParam("alg").toString();
-  if (qalg !== "") {
-    algoinput.value = qalg;
-    lastalgo = qalg;
-  }
+  // const qalg = getURLParam("alg").toString();
+  // if (qalg !== "") {
+  //   algoinput.value = qalg;
+  //   lastalgo = qalg;
+  // }
   const tempo = document.getElementById("tempo") as HTMLInputElement;
   tempo.oninput = checktempo;
   settempo(getURLParam("tempo"));
