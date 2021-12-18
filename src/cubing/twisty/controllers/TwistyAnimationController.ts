@@ -120,6 +120,10 @@ export class TwistyAnimationController {
     this.model.catchUpMoveProp.addFreshListener(
       this.onCatchUpMoveProp.bind(this),
     ); // TODO
+
+    this.model.detailedTimelineInfoProp.addFreshListener((v) => {
+      console.log("timestamp", v.timestamp);
+    });
   }
 
   // TODO: Do we need this?
@@ -248,7 +252,7 @@ export class TwistyAnimationController {
       freshenerResult;
 
     // TODO: Get this without wasting time on the others?
-    if (playingInfo.playing === false && !this.catchUpHelper.pendingFrame) {
+    if (playingInfo.playing) {
       this.playing = false;
       // TODO: Ideally we'd cancel the anim frame from the top of this method.
       // But `this.scheduler.cancelAnimFrame();` might accidentally cancel a
@@ -326,6 +330,7 @@ export class TwistyAnimationController {
         });
       }
     }
+    console.log({ newTimestamp });
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
     this.model.timestampRequestProp.set(

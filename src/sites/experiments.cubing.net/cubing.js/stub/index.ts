@@ -10,7 +10,9 @@ player.experimentalAddMove(new Move("R"));
 
 setTimeout(() => {
   player.experimentalAddMove(new Move("U"));
+  console.log("pre-end");
   player.timestamp = "end";
+  console.log("post-end");
   player.experimentalModel.catchUpMoveProp.set({
     move: new Move("U"),
     amount: 0,
