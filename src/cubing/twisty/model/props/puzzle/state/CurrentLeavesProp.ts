@@ -6,10 +6,12 @@ import type {
 } from "../../../../old/animation/indexer/AlgIndexer";
 import type { DetailedTimelineInfo } from "../../timeline/DetailedTimelineInfoProp";
 import { TwistyPropDerived } from "../../TwistyProp";
+import type { CatchUpMove } from "./CatchUpMoveProp";
 
 interface PositionPropInputs {
   indexer: AlgIndexer<any>;
   detailedTimelineInfo: DetailedTimelineInfo;
+  catchUpMove: CatchUpMove;
 }
 
 // TODO: Rename "current" (implies a single one) to "active"?
@@ -18,10 +20,27 @@ export class CurrentLeavesProp extends TwistyPropDerived<
   CurrentMoveInfo
 > {
   derive(inputs: PositionPropInputs): CurrentMoveInfo {
+    function addCatchUpMove(currentMoveInfo: CurrentMoveInfo): CurrentMoveInfo {
+      if (
+        inputs.detailedTimelineInfo.atEnd &&
+        inputs.catchUpMove.move !== null
+      ) {
+        currentMoveInfo.currentMoves.push({
+          move: inputs.catchUpMove.move,
+          direction: Direction.Backwards,
+          fraction: 1 - inputs.catchUpMove.amount,
+          startTimestamp: -1, // TODO
+          endTimestamp: -1, // TODO
+        });
+      }
+      console.log(currentMoveInfo);
+      return currentMoveInfo;
+    }
+
     // Copied from AlgCursor
     if (inputs.indexer.currentMoveInfo) {
-      return inputs.indexer.currentMoveInfo(
-        inputs.detailedTimelineInfo.timestamp,
+      return addCatchUpMove(
+        inputs.indexer.currentMoveInfo(inputs.detailedTimelineInfo.timestamp),
       );
     } else {
       const idx = inputs.indexer.timestampToIndex(
@@ -40,7 +59,7 @@ export class CurrentLeavesProp extends TwistyPropDerived<
       if (inputs.indexer.numAnimatedLeaves() > 0) {
         const move = inputs.indexer.getAnimLeaf(idx)?.as(Move);
         if (!move) {
-          return currentMoveInfo;
+          return addCatchUpMove(currentMoveInfo);
         }
         const start = inputs.indexer.indexToMoveStartTimestamp(idx);
         const duration = inputs.indexer.moveDuration(idx);
@@ -85,7 +104,7 @@ export class CurrentLeavesProp extends TwistyPropDerived<
         // }
         // }
       }
-      return currentMoveInfo;
+      return addCatchUpMove(currentMoveInfo);
     }
   }
 }

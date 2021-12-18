@@ -35,6 +35,7 @@ import { CurrentLeavesSimplifiedProp } from "./props/puzzle/state/CurrentLeavesS
 import { CurrentTransformationProp } from "./props/puzzle/state/CurrentTransformationProp";
 import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
 import { PuzzleDefProp } from "./props/puzzle/structure/PuzzleDefProp";
+import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
 
 export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
@@ -44,6 +45,7 @@ export class TwistyPlayerModel {
   backgroundProp = new BackgroundProp();
   backViewProp = new BackViewProp();
   controlPanelProp = new ControlPanelProp();
+  catchUpMoveProp = new CatchUpMoveProp();
   foundationStickerSpriteURL = new URLProp();
   hintFaceletProp = new HintFaceletProp();
   hintStickerSpriteURL = new URLProp();
@@ -155,6 +157,7 @@ export class TwistyPlayerModel {
   currentLeavesProp = new CurrentLeavesProp({
     indexer: this.indexerProp,
     detailedTimelineInfo: this.detailedTimelineInfoProp,
+    catchUpMove: this.catchUpMoveProp,
   });
 
   // Depth 9
