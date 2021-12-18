@@ -306,7 +306,8 @@ export class FreshListenerManager {
     let disconnected = false;
     const wrappedListener = (value: T) => {
       if (disconnected) {
-        console.warn("Should be disconnected!");
+        // TODO
+        // console.warn("Should be disconnected!");
         return;
       }
       listener(value);
@@ -327,7 +328,8 @@ export class FreshListenerManager {
     let disconnected = false;
     const wrappedListener = async (_: any) => {
       if (disconnected) {
-        console.warn("Should be disconnected!");
+        // TODO
+        // console.warn("Should be disconnected!");
         return;
       }
       // We rely on `TwistyProp` caching to give us the full set of latest

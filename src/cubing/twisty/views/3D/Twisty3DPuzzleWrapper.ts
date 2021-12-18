@@ -38,11 +38,12 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           (await this.twisty3DPuzzle()).onPositionChange(position);
           this.scheduleRender();
         } catch (e) {
-          console.warn(
-            "Bad position (this doesn't necessarily mean something is wrong). Pre-emptively disconnecting:",
-            this.puzzleLoader.id,
-            e,
-          );
+          // TODO
+          // console.warn(
+          //   "Bad position (this doesn't necessarily mean something is wrong). Pre-emptively disconnecting:",
+          //   this.puzzleLoader.id,
+          //   e,
+          // );
           this.disconnect();
         }
       },
