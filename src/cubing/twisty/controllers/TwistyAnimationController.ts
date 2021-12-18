@@ -16,7 +16,6 @@ import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
 import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
 import { modIntoRange } from "../model/helpers";
 import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp";
-import { CubeMapToSphericalPolynomialTools } from "@babylonjs/core";
 
 // TODO: Figure out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {
@@ -62,6 +61,10 @@ class CatchUpHelper {
     this.model.catchUpMoveProp.set(
       (async () => {
         const previousCatchUpMove = await this.model.catchUpMoveProp.get();
+        if (previousCatchUpMove.move === null) {
+          return previousCatchUpMove;
+        }
+
         const amount = previousCatchUpMove.amount + delta; // TODO: use tempo scale?
         console.log("amount", amount);
         if (amount >= 1) {
@@ -76,6 +79,7 @@ class CatchUpHelper {
             amount: 0,
           };
         }
+        console.log("setting unend");
         this.pendingFrame = false;
         return {
           move: previousCatchUpMove.move,
