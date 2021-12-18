@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 @font-face {
   font-family: "Ubuntu";
   src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
@@ -49,12 +53,9 @@ body {
 }
 
 .algarea {
-  font-family: "Ubuntu";
-  padding: 0.5em;
-}
-
-.controls #algorithm {
-  max-width: 90%;
+  --font-family: "Ubuntu";
+  width: 100%;
+  background-color: white;
 }
 
 #twisty-wrapper {

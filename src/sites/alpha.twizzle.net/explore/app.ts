@@ -19,7 +19,7 @@ import {
   StickerDat,
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
-import { TwistyPlayer } from "../../../cubing/twisty";
+import { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/old/dom/TwistyPlayer";
 import {
   experimentalShowRenderStats,
@@ -273,6 +273,8 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         // TODO: distance?
         viewerLink: "none",
       });
+      (document.querySelector("#editor") as TwistyAlgEditor).twistyPlayer =
+        twisty;
       twisty.tempoScale = tempomult;
       // lastShape = nextShape; // TODO
       elem.appendChild(twisty);
