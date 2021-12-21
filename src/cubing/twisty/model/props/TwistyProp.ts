@@ -57,7 +57,10 @@ export abstract class TwistyPropParent<T> {
   // Synchronously marks all descendants as stale. This doesn't actually
   // literally mark as stale, but it updates the last source generation, which
   // is used to tell if a cahced result is stale.
-  protected markStale(sourceEvent: SourceEvent<any>): void {
+  protected markStale(
+    sourceEvent: SourceEvent<any>,
+    dispatchSignal: Promise<void>,
+  ): void {
     if (sourceEvent.detail.generation !== globalSourceGeneration) {
       // The full stale propagation is synchronous, so there should not be a new one yet.
       throw new Error("A TwistyProp was marked stale too late!");
@@ -68,11 +71,11 @@ export abstract class TwistyPropParent<T> {
     }
     this.lastSourceGeneration = sourceEvent.detail.generation;
     for (const child of this.#children) {
-      child.markStale(sourceEvent);
+      child.markStale(sourceEvent, dispatchSignal);
     }
     // We schedule sending out events *after* the (synchronous) propagation has happened, in
     // case one of the listeners updates a source again.
-    this.#scheduleRawDispatch();
+    this.#scheduleRawDispatch(dispatchSignal);
   }
 
   #rawListeners: Set<() => void> = new Set();
@@ -90,10 +93,11 @@ export abstract class TwistyPropParent<T> {
   }
 
   /** @deprecated */
-  #scheduleRawDispatch(): void {
+  async #scheduleRawDispatch(dispatchSignal: Promise<void>): Promise<void> {
     if (!this.#rawDispatchPending) {
       this.#rawDispatchPending = true;
-      setTimeout(() => this.#dispatchRawListeners(), 0);
+      await dispatchSignal;
+      this.#dispatchRawListeners();
     }
   }
 
@@ -155,11 +159,18 @@ export abstract class TwistyPropSource<
       value: this.#value,
       generation: ++globalSourceGeneration,
     };
+
+    let savedResolve: () => void;
+    const dispatchSignal = new Promise<void>((resolve, _) => {
+      savedResolve = resolve;
+    });
     this.markStale(
       new CustomEvent<SourceEventDetail<OutputType>>("stale", {
         detail: sourceEventDetail,
       }),
+      dispatchSignal,
     );
+    savedResolve!(); // TS thinks this may be used before being assigned, but native `Promise`s will always set `savedResolve` ahead of this.
   }
 
   async get(): Promise<OutputType> {
