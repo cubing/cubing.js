@@ -334,10 +334,11 @@ export class FreshListenerManager {
       }
       // We rely on `TwistyProp` caching to give us the full set of latest
       // values efficiently.
-      const values = (await Promise.all(
-        props.map((prop) => prop.get() as Promise<U | V>),
-      )) as [U, V];
-      listener(values);
+      const promises = (props as TwistyPropParent<any>[]).map((prop) =>
+        prop.get(),
+      );
+      const values = await Promise.all(promises);
+      listener(values as any); // TODO: fix up types
     };
 
     for (const prop of props) {
