@@ -15,14 +15,17 @@ export class PuzzleAlgProp extends TwistyPropDerived<
       const kpuzzle = new KPuzzle(inputs.puzzleDef);
       kpuzzle.applyAlg(inputs.algWithIssues.alg);
       // Looks like we could apply the alg!
-      return inputs.algWithIssues;
+      this.userVisibleErrorTracker!.reset();
+      return this.userVisibleErrorTracker!.setAlgWithIssues(
+        inputs.algWithIssues,
+      );
     } catch (e) {
-      return {
+      return this.userVisibleErrorTracker!.setAlgWithIssues({
         alg: new Alg(),
         issues: new AlgIssues({
           errors: [`Invalid alg for puzzle: ${(e as Error).toString()}`],
         }),
-      };
+      });
     }
   }
 }

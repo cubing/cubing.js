@@ -140,7 +140,10 @@ export abstract class TwistyPropSource<
 
   public abstract getDefaultValue(): PromiseOrValue<OutputType>;
 
-  constructor(initialValue?: PromiseOrValue<InputType>) {
+  constructor(
+    initialValue?: PromiseOrValue<InputType>,
+    protected userVisibleErrorTracker?: UserVisibleErrorTracker,
+  ) {
     super();
     this.#value = from(() => this.getDefaultValue());
     if (initialValue) {

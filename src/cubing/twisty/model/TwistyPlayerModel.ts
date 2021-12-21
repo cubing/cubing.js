@@ -45,7 +45,7 @@ export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
 
   // Depth 0
-  algProp = new AlgProp();
+  algProp = new AlgProp(undefined, this.userVisibleErrorTracker);
   backgroundProp = new BackgroundProp();
   backViewProp = new BackViewProp();
   controlPanelProp = new ControlPanelProp();
@@ -92,10 +92,13 @@ export class TwistyPlayerModel {
 
   // Depth 3
 
-  puzzleAlgProp = new PuzzleAlgProp({
-    algWithIssues: this.algProp,
-    puzzleDef: this.puzzleDefProp,
-  });
+  puzzleAlgProp = new PuzzleAlgProp(
+    {
+      algWithIssues: this.algProp,
+      puzzleDef: this.puzzleDefProp,
+    },
+    this.userVisibleErrorTracker,
+  );
 
   puzzleSetupProp = new PuzzleAlgProp({
     algWithIssues: this.setupProp,

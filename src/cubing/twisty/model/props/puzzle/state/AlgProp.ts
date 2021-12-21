@@ -55,7 +55,7 @@ export function algWithIssuesFromString(s: string): AlgWithIssues {
     return {
       alg: new Alg(),
       issues: new AlgIssues({
-        errors: [`Malformed alg: ${(e as Error).toString()}`],
+        errors: [`Invalid alg: ${(e as Error).toString()}`],
       }),
     };
   }
@@ -80,12 +80,14 @@ export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | string> {
 
   async derive(newAlg: Alg | string): Promise<AlgWithIssues> {
     if (typeof newAlg === "string") {
-      return algWithIssuesFromString(newAlg);
+      return this.userVisibleErrorTracker!.setAlgWithIssues(
+        algWithIssuesFromString(newAlg),
+      );
     } else {
-      return {
+      return this.userVisibleErrorTracker!.setAlgWithIssues({
         alg: newAlg,
         issues: new AlgIssues(),
-      };
+      });
     }
   }
 }
