@@ -14,7 +14,7 @@ import { writeFile } from "fs";
 import { join } from "path";
 import { promisify } from "util";
 import { barelyServe } from "barely-a-dev-server";
-import { execPromise } from "../lib/execPromise.js";
+import { execPromise, spawnPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
@@ -270,7 +270,7 @@ export const typesTarget = {
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");
     }
-    await execPromise("npx tsc --build ./tsconfig-types.json");
+    await spawnPromise("npx", ["tsc", "--build", "./tsconfig-types.json"]);
   },
 };
 
