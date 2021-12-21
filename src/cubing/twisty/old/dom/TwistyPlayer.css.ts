@@ -47,4 +47,24 @@ twisty-scrubber {
   width: 100%;
   height: 100%;
 }
+
+.error-elem {
+  width: 100%;
+  height: 100%;
+  display: none;
+  place-content: center;
+  font-family: sans-serif;
+  box-shadow: inset 0 0 2em rgb(255, 0, 0);
+  color: red;
+  text-shadow: 0 0 0.2em white;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.wrapper.error .visualization-wrapper {
+  display: none;
+}
+
+.wrapper.error .error-elem {
+  display: grid;
+}
 `);

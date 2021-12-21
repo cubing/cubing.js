@@ -1,5 +1,6 @@
 import { from } from "../../../vendor/p-lazy/p-lazy";
 import { StaleDropper } from "../PromiseFreshener";
+import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
 
 /*eslint @typescript-eslint/ban-types:off */
 type InputRecord = {};
@@ -200,7 +201,10 @@ export abstract class TwistyPropDerived<
   // cachedInputs:
   #parents: InputProps<InputTypes>;
 
-  constructor(parents: InputProps<InputTypes>) {
+  constructor(
+    parents: InputProps<InputTypes>,
+    protected userVisibleErrorTracker?: UserVisibleErrorTracker,
+  ) {
     super();
     this.#parents = parents;
     for (const parent of Object.values(parents)) {
@@ -238,6 +242,7 @@ export abstract class TwistyPropDerived<
     };
     this.#cachedLatestGenerationCalculation = latestGenerationCalculation;
 
+    this.userVisibleErrorTracker?.reset();
     return latestGenerationCalculation.output;
   }
 

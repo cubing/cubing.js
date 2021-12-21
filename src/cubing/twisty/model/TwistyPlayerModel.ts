@@ -35,8 +35,13 @@ import { CurrentLeavesSimplifiedProp } from "./props/puzzle/state/CurrentLeavesS
 import { CurrentTransformationProp } from "./props/puzzle/state/CurrentTransformationProp";
 import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
 import { PuzzleDefProp } from "./props/puzzle/structure/PuzzleDefProp";
+import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
 
 export class TwistyPlayerModel {
+  // TODO: incorporate error handling into the entire prop graph.
+  // TODO: Make this something that can't get confused with normal props?
+  userVisibleErrorTracker = new UserVisibleErrorTracker();
+
   // TODO: Redistribute and group props with controllers.
 
   // Depth 0
@@ -72,10 +77,13 @@ export class TwistyPlayerModel {
     spriteURL: this.hintStickerSpriteURL,
   });
 
-  puzzleLoaderProp = new PuzzleLoaderProp({
-    puzzleIDRequest: this.puzzleIDRequestProp,
-    puzzleDescriptionRequest: this.puzzleDescriptionRequestProp,
-  });
+  puzzleLoaderProp = new PuzzleLoaderProp(
+    {
+      puzzleIDRequest: this.puzzleIDRequestProp,
+      puzzleDescriptionRequest: this.puzzleDescriptionRequestProp,
+    },
+    this.userVisibleErrorTracker,
+  );
 
   // Depth 2
   puzzleDefProp = new PuzzleDefProp({ puzzleLoader: this.puzzleLoaderProp });

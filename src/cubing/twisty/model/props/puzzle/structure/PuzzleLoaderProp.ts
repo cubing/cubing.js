@@ -19,7 +19,13 @@ export class PuzzleLoaderProp extends TwistyPropDerived<
 > {
   derive(inputs: PuzzleLoaderPropInputs): PuzzleLoader {
     if (inputs.puzzleIDRequest && inputs.puzzleIDRequest !== NO_VALUE) {
-      return puzzles[inputs.puzzleIDRequest];
+      const puzzleLoader = puzzles[inputs.puzzleIDRequest];
+      if (!puzzleLoader) {
+        this.userVisibleErrorTracker!.set({
+          errors: [`Invalid puzzle ID: ${inputs.puzzleIDRequest}`],
+        });
+      }
+      return puzzleLoader;
     }
     if (
       inputs.puzzleDescriptionRequest &&

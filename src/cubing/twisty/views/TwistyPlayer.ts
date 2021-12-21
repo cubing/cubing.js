@@ -148,11 +148,23 @@ export class TwistyPlayer
     );
 
   #visualizationWrapperElem = document.createElement("div"); // TODO: Better pattern.
+  #errorElem = document.createElement("div"); // TODO: Better pattern.
   async connectedCallback(): Promise<void> {
     this.addCSS(twistyPlayerCSS);
 
     this.addElement(this.#visualizationWrapperElem).classList.add(
       "visualization-wrapper",
+    );
+    this.addElement(this.#errorElem).classList.add("error-elem");
+    this.#errorElem.textContent = "Error";
+    this.experimentalModel.userVisibleErrorTracker.addFreshListener(
+      (userVisibleError) => {
+        const errorString: string | null = userVisibleError.errors[0] ?? null;
+        this.contentWrapper.classList.toggle("error", !!errorString);
+        if (errorString) {
+          this.#errorElem.textContent = errorString;
+        }
+      },
     );
 
     const scrubber = new TwistyScrubberV2(this.experimentalModel);
