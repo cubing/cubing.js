@@ -8,7 +8,7 @@
   "license": "GPL-3.0-or-later",
   "repository": "github:cubing/cubing.js",
   "dependencies": {
-    "@types/three": "^0.126.1",
+    "@types/three": "^0.135.0",
     "@types/web-bluetooth": "0.0.4",
     "comlink": "^4.3.1",
     "three": "^0.126.1"
