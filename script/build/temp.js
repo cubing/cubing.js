@@ -21,14 +21,14 @@ function tempDirUncached() {
   // Try to clean up.
   // https://stackoverflow.com/a/49392671
   for (const eventName of ["exit", "SIGINT", "SIGTERM"]) {
-    process.on(eventName, () => {
+    process.on(eventName, (exitCode) => {
       if (existsSync(tempDir)) {
         console.log(
           `Build process is exiting (${eventName}). Removing: ${tempDir}`,
         );
         rmdirSync(tempDir);
       }
-      process.exit(eventName === "exit" ? 0 : 1);
+      process.exit(exitCode);
     });
   }
   return tempDir;
