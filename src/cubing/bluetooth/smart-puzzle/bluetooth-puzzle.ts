@@ -36,7 +36,7 @@ export interface BluetoothConfig<T> {
   ) => Promise<T>;
   // TODO: Can we reuse `filters`?
   prefixes: string[]; // `[""]` for GiiKER
-  filters: BluetoothRequestDeviceFilter[];
+  filters: BluetoothLEScanFilter[];
   optionalServices: BluetoothServiceUUID[];
 }
 
