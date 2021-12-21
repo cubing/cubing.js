@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-var Stats = function () {
+export const Stats = function () {
   var mode = 0;
 
   var container = document.createElement("div");
@@ -38,11 +38,11 @@ var Stats = function () {
     prevTime = beginTime,
     frames = 0;
 
-  var fpsPanel = addPanel(new Stats.Panel("FPS", "#0ff", "#002"));
-  var msPanel = addPanel(new Stats.Panel("MS", "#0f0", "#020"));
+  var fpsPanel = addPanel(new StatsPanel("FPS", "#0ff", "#002"));
+  var msPanel = addPanel(new StatsPanel("MS", "#0f0", "#020"));
 
   if (self.performance && self.performance.memory) {
-    var memPanel = addPanel(new Stats.Panel("MB", "#f08", "#201"));
+    var memPanel = addPanel(new StatsPanel("MB", "#f08", "#201"));
   }
 
   showPanel(0);
@@ -95,7 +95,7 @@ var Stats = function () {
   };
 };
 
-Stats.Panel = function (name, fg, bg) {
+export const StatsPanel = function (name, fg, bg) {
   var min = Infinity,
     max = 0,
     round = Math.round;
@@ -173,7 +173,3 @@ Stats.Panel = function (name, fg, bg) {
     },
   };
 };
-
-// This has been changed from `export default` because otherwise `npx jest`
-// trips up on it.
-export { Stats };

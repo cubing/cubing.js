@@ -1,5 +1,5 @@
 import type { PerspectiveCamera, WebGLRenderer } from "three";
-import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
+import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.modified.module";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";
@@ -72,7 +72,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.scene = scene ?? null;
 
     if (SHOW_STATS) {
-      this.stats = Stats();
+      this.stats = new Stats();
       this.stats.dom.style.position = "absolute";
       this.contentWrapper.appendChild(this.stats.dom);
     }

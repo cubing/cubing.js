@@ -7,7 +7,7 @@ import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
 import { OrbitCoordinates, TwistyOrbitControls } from "./TwistyOrbitControls";
 import type { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
-import { Stats } from "../../../../vendor/three/examples/jsm/libs/stats.module";
+import { Stats } from "../../../../vendor/three/examples/jsm/libs/stats.modified.module";
 import type { CameraLatitudeLimits } from "../TwistyPlayerConfig";
 
 let SHOW_STATS = false;
@@ -65,7 +65,7 @@ export class Twisty3DCanvas
     this.scene = scene!;
     this.scene?.addRenderTarget(this); // TODO
     if (SHOW_STATS) {
-      this.stats = Stats();
+      this.stats = new Stats();
       this.stats.dom.style.position = "absolute";
       this.addElement(this.stats.dom);
     }

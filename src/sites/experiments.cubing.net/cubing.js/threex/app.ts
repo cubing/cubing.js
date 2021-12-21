@@ -11,7 +11,7 @@ import {
   Object3D,
   BufferAttribute,
 } from "three";
-import { Stats } from "../../../../cubing/vendor/three/examples/jsm/libs/stats.module";
+import { Stats } from "../../../../cubing/vendor/three/examples/jsm/libs/stats.modified.module";
 
 let scene: Scene,
   camera: PerspectiveCamera,
@@ -217,7 +217,7 @@ function render() {
   }
 }
 function createStats() {
-  stats = Stats();
+  stats = new Stats();
   stats.setMode(0);
   stats.domElement.style.position = "absolute";
   stats.domElement.style.left = "0";
