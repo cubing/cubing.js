@@ -9,9 +9,9 @@
   "repository": "github:cubing/cubing.js",
   "dependencies": {
     "@types/three": "^0.135.0",
-    "@types/web-bluetooth": "0.0.4",
+    "@types/web-bluetooth": "^0.0.12",
     "comlink": "^4.3.1",
-    "three": "^0.126.1"
+    "three": "^0.135.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.15.8",
