@@ -36,7 +36,7 @@ function init() {
   document.body.appendChild(renderer.domElement);
   if (useStats) {
     stats = createStats();
-    document.body.appendChild(stats.domElement);
+    document.body.appendChild(stats.dom);
   }
   requestAnimationFrame(render);
 }
@@ -218,10 +218,10 @@ function render() {
 }
 function createStats() {
   stats = new Stats();
-  stats.setMode(0);
-  stats.domElement.style.position = "absolute";
-  stats.domElement.style.left = "0";
-  stats.domElement.style.top = "0";
+  stats.showPanel(0);
+  stats.dom.style.position = "absolute";
+  stats.dom.style.left = "0";
+  stats.dom.style.top = "0";
   return stats;
 }
 export function setup(): void {
