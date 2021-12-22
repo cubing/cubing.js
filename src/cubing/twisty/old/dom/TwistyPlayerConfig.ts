@@ -151,6 +151,7 @@ export const experimentalStickerings = {
   "experimental-fto-sc": true,
   "experimental-fto-l2c": true,
   "experimental-fto-lbt": true,
+  "experimental-fto-l3t": true,
   "experimental-global-custom-1": true,
   "experimental-global-custom-2": true,
 };
