@@ -97,6 +97,10 @@ export class Twisty3DSceneWrapper
     this.#currentTwisty3DPuzzleWrapper?.disconnect();
   }
 
+  experimentalVantages(): Iterable<Twisty3DVantage> {
+    return this.#vantages.values();
+  }
+
   scheduleRender(): void {
     for (const vantage of this.#vantages) {
       vantage.scheduleRender();

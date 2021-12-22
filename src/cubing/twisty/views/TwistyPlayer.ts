@@ -1,12 +1,12 @@
-import type { ExperimentalStickering } from "..";
-import { Alg, Move } from "../../alg";
+import type { ExperimentalStickering, PG3D } from "..";
+import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
+import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
-import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
@@ -125,6 +125,11 @@ export class TwistyPlayer
 
   buttons: TwistyButtonsV2;
 
+  experimentalCanvasClickCallback: (...args: any) => void = () => {};
+  // #onCanvasClick() {
+
+  // }
+
   constructor(config: TwistyPlayerConfig = {}) {
     super();
 
@@ -149,7 +154,12 @@ export class TwistyPlayer
 
   #visualizationWrapperElem = document.createElement("div"); // TODO: Better pattern.
   #errorElem = document.createElement("div"); // TODO: Better pattern.
+  #alreadyConnected = false; // TODO: support resetting
   async connectedCallback(): Promise<void> {
+    if (this.#alreadyConnected) {
+      return;
+    }
+    this.#alreadyConnected = true;
     this.addCSS(twistyPlayerCSS);
 
     this.addElement(this.#visualizationWrapperElem).classList.add(
@@ -236,6 +246,28 @@ export class TwistyPlayer
     }
   }
 
+  async experimentalCurrentCanvases(): Promise<HTMLCanvasElement[]> {
+    this.connectedCallback();
+    const wrapper = this.#visualizationWrapper;
+    const canvases: HTMLCanvasElement[] = [];
+    if (wrapper instanceof Twisty3DSceneWrapper) {
+      const vantages = wrapper.experimentalVantages();
+      for (const vantage of vantages) {
+        canvases.push(await vantage.canvas());
+      }
+    }
+    return canvases;
+  }
+
+  async experimentalPG3D(): Promise<PG3D | null> {
+    this.connectedCallback();
+    const wrapper = this.#visualizationWrapper;
+    if (wrapper instanceof Twisty3DSceneWrapper) {
+      wrapper;
+    }
+    return null;
+  }
+
   jumpToStart(options?: { flash: boolean }): void {
     this.controller.jumpToStart(options);
   }
@@ -261,11 +293,23 @@ export class TwistyPlayer
   }
 
   // TODO: Animate the new move.
-  experimentalAddMove(move: Move): void {
+  experimentalAddMove(
+    flexibleMove: Move | string,
+    options: { coalesce?: boolean } = {},
+  ): void {
+    const move =
+      typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
     (async () => {
       const alg = (await this.experimentalModel.algProp.get()).alg;
-      this.experimentalModel.algProp.set(new Alg(alg.concat([move])));
+      const newAlg = experimentalAppendMove(alg, move, {
+        coalesce: options?.coalesce,
+      });
+      this.experimentalModel.algProp.set(newAlg);
       this.experimentalModel.timestampRequestProp.set("end");
+      this.experimentalModel.catchUpMoveProp.set({
+        move: move,
+        amount: 0,
+      });
     })();
   }
 

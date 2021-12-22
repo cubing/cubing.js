@@ -41,6 +41,7 @@ export function currentMoveArrayEquals(
 
 export interface CurrentMoveInfo {
   stateIndex: number;
+  // Note: some moves may not be part of the alg!
   currentMoves: CurrentMove[];
   // Moves that are reaching a fraction of 1 at this exact timestamp.
   movesFinishing: CurrentMove[];

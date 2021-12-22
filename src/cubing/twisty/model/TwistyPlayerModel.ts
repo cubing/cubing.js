@@ -36,6 +36,7 @@ import { CurrentTransformationProp } from "./props/puzzle/state/CurrentTransform
 import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
 import { PuzzleDefProp } from "./props/puzzle/structure/PuzzleDefProp";
 import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
+import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -49,6 +50,7 @@ export class TwistyPlayerModel {
   backgroundProp = new BackgroundProp();
   backViewProp = new BackViewProp();
   controlPanelProp = new ControlPanelProp();
+  catchUpMoveProp = new CatchUpMoveProp();
   foundationStickerSpriteURL = new URLProp();
   hintFaceletProp = new HintFaceletProp();
   hintStickerSpriteURL = new URLProp();
@@ -163,6 +165,7 @@ export class TwistyPlayerModel {
   currentLeavesProp = new CurrentLeavesProp({
     indexer: this.indexerProp,
     detailedTimelineInfo: this.detailedTimelineInfoProp,
+    catchUpMove: this.catchUpMoveProp,
   });
 
   // Depth 9

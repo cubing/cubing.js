@@ -30,10 +30,15 @@ export class URLParamUpdater {
     this.listenToAlgProp(model.setupProp, "setup-alg");
     this.listenToStringSourceProp(model.stickeringProp, "stickering");
     this.listenToStringSourceProp(model.setupAnchorProp, "setup-anchor");
-    this.listenToPuzzleIDRequestProp(
+    this.listenToStringOrNoValueProp(
       model.puzzleIDRequestProp,
       "puzzle",
-      "3x3x3",
+      EXPERIMENTAL_PROP_NO_VALUE,
+    );
+    this.listenToStringOrNoValueProp(
+      model.puzzleDescriptionRequestProp,
+      "puzzle-description",
+      EXPERIMENTAL_PROP_NO_VALUE,
     );
   }
 
@@ -64,16 +69,20 @@ export class URLParamUpdater {
     });
   }
 
-  async listenToPuzzleIDRequestProp(
+  async listenToStringOrNoValueProp(
     prop: TwistyPropSource<string | typeof EXPERIMENTAL_PROP_NO_VALUE>,
     key: string,
-    defaultString: string,
+    defaultString: string | typeof EXPERIMENTAL_PROP_NO_VALUE,
   ): Promise<void> {
     prop.addFreshListener((s: string | typeof EXPERIMENTAL_PROP_NO_VALUE) => {
       if (s === EXPERIMENTAL_PROP_NO_VALUE) {
         s = defaultString;
       }
-      this.setURLParam(key, s, defaultString);
+      if (s === EXPERIMENTAL_PROP_NO_VALUE) {
+        this.setURLParam(key, "", "");
+      } else {
+        this.setURLParam(key, s, ""); // TODO
+      }
     });
   }
 
@@ -90,6 +99,7 @@ const paramMapping: Record<string, TwistyPlayerAttribute> = {
   "setup-anchor": "experimental-setup-anchor",
   "puzzle": "puzzle",
   "stickering": "experimental-stickering",
+  "puzzle-description": "experimental-puzzle-description",
 };
 
 export function getConfigFromURL(prefix = ""): TwistyPlayerConfig {

@@ -79,6 +79,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     this.#carbonCopySuffix.classList.add("suffix");
     this.#carbonCopy.appendChild(this.#carbonCopySuffix);
 
+    this.#textarea.placeholder = "Alg";
     // Prevent iOS from defaulting to smart quotes.
     this.#textarea.setAttribute("spellcheck", "false");
 
