@@ -5,7 +5,7 @@ import type { PuzzleAppearance } from "./stickerings/appearance";
 
 export interface PuzzleLoader {
   id: string;
-  // shortname?: string;
+  // shortName?: string;
   fullName: string;
   inventedBy?: string[];
   inventionYear?: number; // TODO: date?
