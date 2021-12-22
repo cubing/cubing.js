@@ -1,7 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
 @font-face {
   font-family: "Ubuntu";
   src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
@@ -53,9 +49,12 @@ body {
 }
 
 .algarea {
-  --font-family: "Ubuntu";
-  width: 100%;
-  background-color: white;
+  font-family: "Ubuntu";
+  padding: 0.5em;
+}
+
+.controls #algorithm {
+  max-width: 90%;
 }
 
 #twisty-wrapper {
@@ -87,7 +86,7 @@ body > #twisty-wrapper {
 }
 
 #twisty-wrapper,
-#twisty-wrapper twisty-player {
+#twisty-wrapper twisty-player-v1 {
   width: 100%;
   height: 100%;
   overflow: hidden;
