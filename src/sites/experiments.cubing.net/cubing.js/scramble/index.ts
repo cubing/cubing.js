@@ -1,4 +1,4 @@
-import { puzzleIDForWCAEvent } from "../../../../cubing/puzzles";
+import { wcaEventInfo } from "../../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import "../../../../cubing/twisty";
 import type { TwistyPlayerV1 } from "../../../../cubing/twisty";
@@ -23,7 +23,7 @@ window.addEventListener("DOMContentLoaded", () => {
   select.addEventListener("change", () => {
     twistyPlayer.alg = "";
     try {
-      twistyPlayer.puzzle = puzzleIDForWCAEvent(select.value)!;
+      twistyPlayer.puzzle = wcaEventInfo(select.value)!.puzzleID;
     } finally {
       // TODO
     }

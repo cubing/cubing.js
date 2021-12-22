@@ -87,6 +87,6 @@ const wcaEvents: Record<string, WCAEventInfo> = {
   "333mb": { puzzleID: "3x3x3", eventName: " 3x3x3 Multi-Blind" },
 };
 
-export function puzzleIDForWCAEvent(event: string): PuzzleID | null {
-  return wcaEvents[event]?.puzzleID ?? null;
+export function wcaEventInfo(event: string): WCAEventInfo | null {
+  return wcaEvents[event] ?? null;
 }
