@@ -31,7 +31,10 @@ export function execPromise(cmd, options) {
 
 export function spawnPromise(cmd, args) {
   return new Promise((resolve, reject) => {
-    const childProcess = spawn(cmd, args, {stdio: "inherit", stderr: "inherit"}); // Output to shell.
+    const childProcess = spawn(cmd, args, {
+      stdio: "inherit",
+      stderr: "inherit",
+    }); // Output to shell.
     childProcess.on("error", (error) => {
       console.error(error);
       reject();
