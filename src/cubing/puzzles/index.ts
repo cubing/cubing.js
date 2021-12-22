@@ -62,24 +62,31 @@ export type {
   PuzzleAppearance as ExperimentalPuzzleAppearance,
 } from "./stickerings/appearance";
 
-const wcaEvents: Record<string, PuzzleID> = {
-  "333": "3x3x3",
-  "222": "2x2x2",
-  "444": "4x4x4",
-  "555": "5x5x5",
-  "666": "6x6x6",
-  "777": "7x7x7",
-  "333bf": "3x3x3",
-  "333fm": "3x3x3",
-  "333oh": "3x3x3",
-  "clock": "clock",
-  "minx": "megaminx",
-  "pyram": "pyraminx",
-  "skewb": "skewb",
-  "sq1": "square1",
-  "444bf": "4x4x4",
-  "555bf": "5x5x5",
+interface WCAEventInfo {
+  puzzleID: PuzzleID;
+  eventName: string;
+}
+
+const wcaEvents: Record<string, WCAEventInfo> = {
+  "333": { puzzleID: "3x3x3", eventName: "3x3x3 Cube" },
+  "222": { puzzleID: "2x2x2", eventName: "2x2x2 Cube" },
+  "444": { puzzleID: "4x4x4", eventName: "4x4x4 Cube" },
+  "555": { puzzleID: "5x5x5", eventName: "5x5x5 Cube" },
+  "666": { puzzleID: "6x6x6", eventName: "6x6x6 Cube" },
+  "777": { puzzleID: "7x7x7", eventName: "7x7x7 Cube" },
+  "333bf": { puzzleID: "3x3x3", eventName: "3x3x3 Blindfolded" },
+  "333fm": { puzzleID: "3x3x3", eventName: "3x3x3 Fewest Moves" },
+  "333oh": { puzzleID: "3x3x3", eventName: "3x3x3 One-Handed" },
+  "clock": { puzzleID: "clock", eventName: "Clock" },
+  "minx": { puzzleID: "megaminx", eventName: "Megaminx" },
+  "pyram": { puzzleID: "pyraminx", eventName: "Pyraminx" },
+  "skewb": { puzzleID: "skewb", eventName: "Skewb" },
+  "sq1": { puzzleID: "square1", eventName: "Square-1" },
+  "444bf": { puzzleID: "4x4x4", eventName: "4x4x4 Blindfolded" },
+  "555bf": { puzzleID: "5x5x5", eventName: "5x5x5 Blindfolded" },
+  "333mb": { puzzleID: "3x3x3", eventName: " 3x3x3 Multi-Blind" },
 };
+
 export function puzzleIDForWCAEvent(event: string): PuzzleID | null {
-  return wcaEvents[event] ?? null;
+  return wcaEvents[event]?.puzzleID ?? null;
 }

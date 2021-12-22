@@ -90,6 +90,7 @@ export const insideAPI = {
           random333FewestMovesScramble,
         );
       case "333bf":
+      case "333mb":
         return measurePerf(
           "random333OrientedScramble",
           random333OrientedScramble,

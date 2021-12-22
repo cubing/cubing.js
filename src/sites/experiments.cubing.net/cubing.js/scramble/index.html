@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf8" />
-    <title>cubing.js | Scramble</title>
-    <script src="./index.js" href="./index.ts" type="module"></script>
-  </head>
-  <body>
-    <select>
-      <option value="333" selected>3x3x3</option>
-      <option value="222">2x2x2</option>
-      <option value="444">4x4x4</option>
-      <option value="555">5x5x5</option>
-      <option value="666">6x6x6</option>
-      <option value="777">7x7x7</option>
-      <option value="333bf">3x3x3 Blindfolded</option>
-      <option value="333fm">3x3x3 Fewest Moves</option>
-      <option value="333oh">3x3x3 One-Handed</option>
-      <option value="clock">Clock</option>
-      <option value="minx">Megaminx</option>
-      <option value="pyram">Pyraminx</option>
-      <option value="skewb">Skewb</option>
-      <option value="sq1">Square-1</option>
-      <option value="444bf">4x4x4 Blindfolded</option>
-      <option value="555bf">5x5x5 Blindfolded</option>
-    </select>
-    <button>New scramble</button>
-    <br /><br />
-    <div id="scramble-string" style="font-family: sans-serif"></div>
-    <br />
-    <twisty-player control-panel="none"></twisty-player>
-  </body>
+
+<head>
+  <meta charset="utf8" />
+  <title>cubing.js | Scramble</title>
+  <script src="./index.js" href="./index.ts" type="module"></script>
+</head>
+
+<body>
+  <select>
+    <option value="333" selected>3x3x3</option>
+    <option value="222">2x2x2</option>
+    <option value="444">4x4x4</option>
+    <option value="555">5x5x5</option>
+    <option value="666">6x6x6</option>
+    <option value="777">7x7x7</option>
+    <option value="333bf">3x3x3 Blindfolded</option>
+    <option value="333fm">3x3x3 Fewest Moves</option>
+    <option value="333oh">3x3x3 One-Handed</option>
+    <option value="clock">Clock</option>
+    <option value="minx">Megaminx</option>
+    <option value="pyram">Pyraminx</option>
+    <option value="skewb">Skewb</option>
+    <option value="sq1">Square-1</option>
+    <option value="444bf">4x4x4 Blindfolded</option>
+    <option value="555bf">5x5x5 Blindfolded</option>
+    <option value="333mb">3x3x3 Multi-Blind</option>
+  </select>
+  <button>New scramble</button>
+  <br /><br />
+  <div id="scramble-string" style="font-family: sans-serif"></div>
+  <br />
+  <twisty-player control-panel="none"></twisty-player>
+</body>
+
 </html>
