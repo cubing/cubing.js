@@ -17,17 +17,22 @@
     </div>
     <section class="no-header">
       <p>
-        <code>cubing/scramble</code> is the part of <code>cubing.js</code> that lets you generate fair random-state scrambles.
+        <code>cubing/scramble</code> is the part of <code>cubing.js</code> that lets you generate fair random-state
+        scrambles.
       </p>
     </section>
 
     <section id="random-scramble">
       <h1><a href="#random-scramble">Random Scramble</a></h1>
-      <p>Use <code>randomScrambleForEvent</code> to get a scramble. This returns a JavaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> for an <a href="../alg/"><code>Alg</code></a>, which is easiest to use with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>await</code></a>.</p>
+      <p>Use <code>randomScrambleForEvent</code> to get a scramble. This returns a JavaScript <a
+          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>
+        for an <a href="../alg/"><code>Alg</code></a>, which is easiest to use with <a
+          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><code>await</code></a>.
+      </p>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;cubing/alg&quot;<br>
+            <span>import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;<br>
 <br>
 const scramble = await randomScrambleForEvent("333");
 console.log(scramble.toString());</span>
@@ -41,7 +46,7 @@ console.log(scramble.toString());</span>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;cubing/alg&quot;<br>
+            <span>import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;<br>
 <br>
 (await randomScrambleForEvent("333")).log();<br>
 (await randomScrambleForEvent("333bf")).log();<br>
@@ -65,25 +70,36 @@ console.log(scramble.toString());</span>
         </code>
       </div>
       <p>Note that:
-        <ul>
-          <li>The <code>Alg</code> class supports all WCA notation. If you call <code>.toString()</code> on a scramble, you will get a string compatible with WCA notation for the event.</li>
-          <li>The only current way to get scrambles is by WCA event code. Note that different events for the same puzzle may use different kinds of scrambles.</li>
-          <li>All scrambles are random-state, as defined by <a href="https://www.worldcubeassociation.org/regulations/#4b3">WCA Regulation 4b3.</a>
-            <ul>
-              <li>This includes 4x4x4 events!</li>
-              <li>Exception: scramble filtering is not implemented yet. It will be implemented in the future for full compatibility with the WCA Regulations.</li>
-            </ul>
-          </li>
-          <li>Scrambles for 3x3x3 Fewest Moves include <code>R' U' F</code> at the beginning and end, matching TNoodle. However, these added moves can currently produce cancellations. This will be fixed in the future.</li>
-          <li>2x2x2 scrambles may include &lt;D, B, L&gt; moves so that there is no fixed piece in the resulting scramble. This is compatible with the WCA Regulations, but be aware that it does not match TNoodle (which only uses &lt;U, F, R&gt; moves).</li>
-          <li>Only use <code>cubing.js</code> to generate scrambles for unofficial software/competitions/events. Official WCA competitions must use the current version of <a href="https://www.worldcubeassociation.org/regulations/scrambles/">the official scramble program</a>.</li>
-        </ul>
+      <ul>
+        <li>The <code>Alg</code> class supports all WCA notation. If you call <code>.toString()</code> on a scramble,
+          you will get a string compatible with WCA notation for the event.</li>
+        <li>The only current way to get scrambles is by WCA event code. Note that different events for the same puzzle
+          may use different kinds of scrambles.</li>
+        <li>All scrambles are random-state where required by <a
+            href="https://www.worldcubeassociation.org/regulations/#4b3">WCA Regulation 4b3 (i.e. all events except for
+            Megaminx and big cubes).</a>
+          <ul>
+            <li>This includes 4x4x4 events!</li>
+            <li>Exception: scramble filtering is not implemented yet. It will be implemented in the future for full
+              compatibility with the WCA Regulations.</li>
+          </ul>
+        </li>
+        <li>Scrambles for 3x3x3 Fewest Moves include <code>R' U' F</code> at the beginning and end, matching TNoodle.
+          However, these added moves can currently produce cancellations. This will be fixed in the future.</li>
+        <li>2x2x2 scrambles may include &lt;D, B, L&gt; moves so that there is no fixed piece in the resulting scramble.
+          This is compatible with the WCA Regulations, but be aware that it does not match TNoodle (which only uses
+          &lt;U, F, R&gt; moves).</li>
+        <li>Only use <code>cubing.js</code> to generate scrambles for unofficial software/competitions/events. Official
+          WCA competitions must use the current version of <a
+            href="https://www.worldcubeassociation.org/regulations/scrambles/">the official scramble program</a>.</li>
+      </ul>
       </p>
     </section>
 
     <section id="with-twisty-player">
       <h1><a href="#with-twisty-player">With <code>&lt;twisty-player&gt;</code></a></h1>
-      <p>You can assign a scramble or a scramble Promise to <code>&lt;twisty-player&gt;</code>. Here is a simple way to display a scramble alg with an associated player:
+      <p>You can assign a scramble or a scramble <code>Promise</code> to <code>&lt;twisty-player&gt;</code>. Here is a
+        simple way to display a scramble alg with an associated player:
       <div class="code-demo">
         <div>
           <code class="sample">
@@ -106,7 +122,7 @@ console.log(scramble.toString());</span>
 <script type="module">
   import "https://cdn.cubing.net/js/cubing/twisty";
   import { randomScrambleForEvent } from "https://cdn.cubing.net/js/cubing/scramble";
-  
+
   const scramblePromise = randomScrambleForEvent("333");
   document.querySelector("#main-player").alg = scramblePromise;
 </script>
