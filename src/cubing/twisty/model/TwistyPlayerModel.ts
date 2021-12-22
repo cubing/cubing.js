@@ -92,13 +92,10 @@ export class TwistyPlayerModel {
 
   // Depth 3
 
-  puzzleAlgProp = new PuzzleAlgProp(
-    {
-      algWithIssues: this.algProp,
-      puzzleDef: this.puzzleDefProp,
-    },
-    this.userVisibleErrorTracker,
-  );
+  puzzleAlgProp = new PuzzleAlgProp({
+    algWithIssues: this.algProp,
+    puzzleDef: this.puzzleDefProp,
+  });
 
   puzzleSetupProp = new PuzzleAlgProp({
     algWithIssues: this.setupProp,

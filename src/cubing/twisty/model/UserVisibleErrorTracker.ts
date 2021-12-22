@@ -3,10 +3,11 @@ import type { AlgWithIssues } from "./props/puzzle/state/AlgProp";
 import { SimpleTwistyPropSource } from "./props/TwistyProp";
 
 interface UserVisibleError {
-  errors: string[];
+  puzzleError: string | null;
+  algError: string | null;
 }
 
-const EMPTY_ERRORS = { errors: [] };
+const EMPTY_ERRORS: UserVisibleError = { puzzleError: null, algError: null };
 
 export class UserVisibleErrorTracker extends SimpleTwistyPropSource<UserVisibleError> {
   override getDefaultValue(): UserVisibleError {
@@ -18,7 +19,7 @@ export class UserVisibleErrorTracker extends SimpleTwistyPropSource<UserVisibleE
   }
 
   canReuseValue(_v1: UserVisibleError, _v2: UserVisibleError): boolean {
-    return arrayEquals(_v1.errors, _v2.errors);
+    return _v1.puzzleError === _v2.puzzleError && _v1.algError === _v2.algError;
   }
 
   setAlgWithIssues(algWithIssues: AlgWithIssues): AlgWithIssues {

@@ -80,14 +80,12 @@ export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | string> {
 
   async derive(newAlg: Alg | string): Promise<AlgWithIssues> {
     if (typeof newAlg === "string") {
-      return this.userVisibleErrorTracker!.setAlgWithIssues(
-        algWithIssuesFromString(newAlg),
-      );
+      return algWithIssuesFromString(newAlg);
     } else {
-      return this.userVisibleErrorTracker!.setAlgWithIssues({
+      return {
         alg: newAlg,
         issues: new AlgIssues(),
-      });
+      };
     }
   }
 }
