@@ -19,8 +19,7 @@ import {
   StickerDat,
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
-import { TwistyPlayerV1 } from "../../../cubing/twisty";
-import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/old/dom/TwistyPlayer";
+import { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import {
   experimentalShowRenderStats,
   Twisty3DCanvas,
@@ -29,6 +28,11 @@ import {
   OrbitCoordinates,
   positionToOrbitCoordinates,
 } from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControls";
+import {
+  getConfigFromURL,
+  remapLegacyURLParams,
+  URLParamUpdater,
+} from "../core/url-params";
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
@@ -36,7 +40,11 @@ if (getURLParam("debugShowRenderStats")) {
 }
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
-let twisty: TwistyPlayerV1;
+remapLegacyURLParams({
+  puzzlegeometry: "puzzle-description",
+});
+
+let twisty: TwistyPlayer;
 let pg: PuzzleGeometry | undefined;
 let puzzle: KPuzzleDefinition;
 let puzzleSelected = false;
@@ -56,14 +64,14 @@ let initialCameraOrbitCoordinates: OrbitCoordinates = {
   longitude: 0,
   distance: DEFAULT_CAMERA_DISTANCE,
 };
-let savedCameraOrbitCoordinates: OrbitCoordinates = {
+const savedCameraOrbitCoordinates: OrbitCoordinates = {
   latitude: 0,
   longitude: 0,
   distance: DEFAULT_CAMERA_DISTANCE,
 };
 let haveSavedCamera = false;
-let lastShape: string = "";
-let nextShape: string = "";
+// const lastShape: string = "";
+// let nextShape: string = "";
 let tempomult: number = 1.0;
 const renderOptions = [
   "centers",
@@ -206,8 +214,9 @@ function updateMoveCount(alg?: Alg): void {
 }
 
 function saveCamera(): void {
-  savedCameraOrbitCoordinates =
-    twisty.experimentalDerivedCameraOrbitCoordinates();
+  // TODO
+  // savedCameraOrbitCoordinates =
+  //   twisty.experimentalDerivedCameraOrbitCoordinates();
   haveSavedCamera = true;
 }
 //  This function is *not* idempotent when we save the
@@ -241,15 +250,15 @@ function cameraCoords(pg: PuzzleGeometry): OrbitCoordinates {
   );
 }
 
-function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
-  return {
-    def: puzzle,
-    stickerDat,
-    experimentalPolarVantages: true,
-    showFoundation: getCheckbox("showfoundation"),
-    hintStickers: getCheckbox("hintstickers"),
-  };
-}
+// function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
+//   return {
+//     def: puzzle,
+//     stickerDat,
+//     experimentalPolarVantages: true,
+//     showFoundation: getCheckbox("showfoundation"),
+//     hintStickers: getCheckbox("hintstickers"),
+//   };
+// }
 
 async function setAlgo(str: string, writeback: boolean): Promise<void> {
   let alg: Alg = new Alg();
@@ -259,54 +268,61 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
     // it again.  But for now we always do.
     if (!twisty) {
       elem.textContent = "";
-      twisty = new TwistyPlayerV1(
-        {
-          puzzle: "custom",
-          alg: new Alg(),
-          visualization: "PG3D",
-          backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
-          experimentalCameraLatitude: initialCameraOrbitCoordinates.latitude,
-          experimentalCameraLongitude: initialCameraOrbitCoordinates.longitude,
-          experimentalCameraLatitudeLimits: "none",
-          // TODO: distance?
-          viewerLink: "none",
-        },
-        legacyExperimentalPG3DViewConfig(),
-        (alg: Alg) => {
-          markInvalidAlg(alg.toString());
-        },
-      );
-      twisty.timeline.tempoScale = tempomult;
-      lastShape = nextShape;
-      elem.appendChild(twisty);
-      twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
 
-      const twisty3DCanvases: Twisty3DCanvas[] =
-        twisty.viewerElems as Twisty3DCanvas[];
+      const config = getConfigFromURL();
+      console.log(config);
+      if ("puzzle" in config) {
+        config.experimentalPuzzleDescription = getpuzzle(config.puzzle!);
+        delete config["puzzle"];
+      }
+      Object.assign(config, {
+        // experimentalPuzzleDescription: (
+        //   document.getElementById("desc")! as HTMLInputElement
+        // ).value, // TODO
+        visualization: "PG3D",
+        backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
+        cameraLatitude: initialCameraOrbitCoordinates.latitude,
+        cameraLongitude: initialCameraOrbitCoordinates.longitude,
+        // cameraLatitudeLimit: "none",
+        // TODO: distance?
+        viewerLink: "none",
+      });
+      twisty = new TwistyPlayer(config);
+      new URLParamUpdater(twisty.experimentalModel);
+
+      (document.querySelector("#editor") as TwistyAlgEditor).twistyPlayer =
+        twisty;
+      twisty.tempoScale = tempomult;
+      // lastShape = nextShape; // TODO
+      elem.appendChild(twisty);
+      // twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
+
+      const twisty3DCanvases: HTMLCanvasElement[] =
+        await twisty.experimentalCurrentCanvases();
       // TODO: This is a hack.
       // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
       // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
       setTimeout(() => {
-        twisty.experimentalSetCameraOrbitCoordinates(
-          initialCameraOrbitCoordinates,
-        );
+        // twisty.experimentalSetCameraOrbitCoordinates(
+        //   initialCameraOrbitCoordinates,
+        // );
         for (const twisty3DCanvas of twisty3DCanvases) {
-          twisty3DCanvas.canvas.addEventListener(
+          twisty3DCanvas.addEventListener(
             "mouseup",
             onMouseClick.bind(onMouseClick, twisty3DCanvas, "U"),
             false,
           );
-          twisty3DCanvas.canvas.addEventListener(
+          twisty3DCanvas.addEventListener(
             "mousedown",
             onMouseClick.bind(onMouseClick, twisty3DCanvas, "D"),
             false,
           );
-          twisty3DCanvas.canvas.addEventListener(
+          twisty3DCanvas.addEventListener(
             "contextmenu",
             onMouseClick.bind(onMouseClick, twisty3DCanvas, "C"),
             false,
           );
-          twisty3DCanvas.canvas.addEventListener(
+          twisty3DCanvas.addEventListener(
             "mousemove",
             onMouseMove.bind(onMouseMove, twisty3DCanvas),
             false,
@@ -316,14 +332,17 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
 
       puzzleSelected = false;
     } else if (puzzleSelected) {
-      await twisty.setCustomPuzzleGeometry(legacyExperimentalPG3DViewConfig());
-      if (nextShape !== lastShape) {
-        twisty.experimentalCameraLatitude =
-          initialCameraOrbitCoordinates.latitude;
-        twisty.experimentalCameraLongitude =
-          initialCameraOrbitCoordinates.longitude;
-        lastShape = nextShape;
-      }
+      twisty.experimentalPuzzleDescription = (
+        document.getElementById("desc")! as HTMLInputElement
+      ).value; // TODO
+      // await twisty.setCustomPuzzleGeometry(legacyExperimentalPG3DViewConfig());
+      // if (nextShape !== lastShape) {
+      //   twisty.experimentalCameraLatitude =
+      //     initialCameraOrbitCoordinates.latitude;
+      //   twisty.experimentalCameraLongitude =
+      //     initialCameraOrbitCoordinates.longitude;
+      //   lastShape = nextShape;
+      // }
       puzzleSelected = false;
     }
     twisty.backView = getCheckbox("sidebyside") ? "side-by-side" : "top-right";
@@ -334,7 +353,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       str = alg.toString();
       twisty.alg = alg;
       if (!writeback) {
-        twisty.timeline.jumpToEnd();
+        twisty.jumpToEnd();
       }
       updateMoveCount(alg);
       setURLParams({ alg: alg });
@@ -436,7 +455,7 @@ function dowork(cmd: string): void {
   const options = Object.assign({}, checkboxOptions, parsedOptions);
 
   const pg = new PuzzleGeometry(puzzleDescription, options);
-  nextShape = puzzleDescription.shape;
+  // nextShape = puzzleDescription.shape;
   pg.allstickers();
   pg.genperms();
   if (cmd === "gap") {
@@ -450,27 +469,28 @@ function dowork(cmd: string): void {
   } else if (cmd === "svgcmd") {
     showtext(pg.generatesvg(800, 500, 10, getCheckbox("threed")));
   } else if (cmd === "screenshot" || cmd === "screenshot-back") {
-    const back = cmd === "screenshot-back";
-    console.log(cmd, back);
-    const elem = twisty.viewerElems[back ? 1 : 0] as Twisty3DCanvas | undefined;
-    if (elem) {
-      const url = elem.renderToDataURL({
-        squareCrop: true,
-        minWidth: 2048,
-        minHeight: 2048,
-      });
-      const a = document.createElement("a");
-      a.href = url;
-      console.log(getURLParam("puzzlegeometry"));
-      a.download = `[${
-        getURLParam("puzzle")
-          ? getURLParam("puzzle")
-          : getURLParam("puzzlegeometry") ?? "twizzle"
-      }${back ? " (back)" : ""}]${
-        algoinput.value ? " " + algoinput.value : ""
-      }.png`; // TODO: this is super hacky.
-      a.click();
-    }
+    twisty.experimentalDownloadScreenshot(); // TODO: back!
+    // const back = cmd === "screenshot-back";
+    // console.log(cmd, back);
+    // const elem = twisty.viewerElems[back ? 1 : 0] as Twisty3DCanvas | undefined;
+    // if (elem) {
+    //   const url = elem.renderToDataURL({
+    //     squareCrop: true,
+    //     minWidth: 2048,
+    //     minHeight: 2048,
+    //   });
+    //   const a = document.createElement("a");
+    //   a.href = url;
+    //   console.log(getURLParam("puzzlegeometry"));
+    //   a.download = `[${
+    //     getURLParam("puzzle")
+    //       ? getURLParam("puzzle")
+    //       : getURLParam("puzzlegeometry") ?? "twizzle"
+    //   }${back ? " (back)" : ""}]${
+    //     algoinput.value ? " " + algoinput.value : ""
+    //   }.png`; // TODO: this is super hacky.
+    //   a.click();
+    // }
   } else {
     alert("Command " + cmd + " not handled yet.");
   }
@@ -533,7 +553,7 @@ function checkchange_internal(): void {
       }
       Object.assign(options, moreOptions);
       pg = new PuzzleGeometry(puzzleDescription, options);
-      nextShape = puzzleDescription.shape;
+      // nextShape = puzzleDescription.shape;
       pg.allstickers();
       pg.genperms();
       const text = pg.textForTwizzleExplorer();
@@ -550,15 +570,15 @@ function checkchange_internal(): void {
         needmovesforscramble = false;
       }
       const newStickerDat = pg.get3d();
-      nextShape = puzzleDescription.shape;
+      // nextShape = puzzleDescription.shape;
       initialCameraOrbitCoordinates = cameraCoords(pg);
       LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
       // Twisty constructor currently ignores initial camera position
       if (firstLoad) {
-        twisty.experimentalSetCameraOrbitCoordinates(
-          initialCameraOrbitCoordinates,
-        );
-        twisty.timeline.jumpToEnd();
+        // twisty.experimentalSetCameraOrbitCoordinates(
+        //   initialCameraOrbitCoordinates,
+        // );
+        twisty.jumpToEnd();
       }
       setpuzzleparams(descarg);
     }
@@ -610,12 +630,12 @@ function setpuzzleparams(desc: string): void {
   for (const [name, s] of Object.entries(puzzles)) {
     if (s === desc) {
       updateMoveCount();
-      setURLParams({ puzzle: name, puzzlegeometry: "" });
+      setURLParams({ "puzzle": name, "puzzle-description": "" });
       return;
     }
   }
   updateMoveCount();
-  setURLParams({ puzzle: "", puzzlegeometry: desc });
+  setURLParams({ "puzzle": "", "puzzle-description": desc });
 }
 
 function doselection(el: any): void {
@@ -677,7 +697,10 @@ function onMouseClick(
   }
 }
 
-function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
+async function onMouseMove(
+  twisty3DCanvas: Twisty3DCanvas,
+  event: MouseEvent,
+): Promise<void> {
   // notice drags, since we don't want drags to do click moves
   if (dragX === -1 && dragY === -1) {
     dragX = event.offsetX;
@@ -700,7 +723,7 @@ function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
   raycaster.setFromCamera(mouse, camera);
 
   // calculate objects intersecting the picking ray
-  const pg3d = twisty.legacyExperimentalPG3D!;
+  const pg3d = await twisty.experimentalPG3D();
   const targets = event.shiftKey
     ? pg3d.experimentalGetStickerTargets()
     : pg3d.experimentalGetControlTargets();
@@ -731,10 +754,10 @@ function addMove(move: Move): void {
   });
   // TODO: Avoid round-trip through string?
   lastalgo = newAlg.toString();
-  twisty.experimentalAddMove(move, true, true);
+  twisty.experimentalAddMove(move, { coalesce: true }); // TODO: mod
   algoinput.value = lastalgo;
   updateMoveCount(newAlg);
-  setURLParams({ alg: newAlg });
+  // setURLParams({ alg: newAlg });
 }
 
 function settempo(fromURL: any): void {
@@ -752,7 +775,7 @@ function settempo(fromURL: any): void {
     tempodisp.textContent = tempomult.toString() + "x";
   }
   if (twisty) {
-    twisty.timeline.tempoScale = tempomult;
+    twisty.tempoScale = tempomult;
   }
 }
 
@@ -767,7 +790,7 @@ function checktempo(): void {
     tempodisp.textContent = tempomult.toString() + "x";
   }
   if (twisty) {
-    twisty.timeline.tempoScale = tempomult;
+    twisty.tempoScale = tempomult;
   }
 }
 
@@ -778,7 +801,8 @@ export function setup(): void {
   const puzzles = getpuzzles();
   lastRender = getCheckboxes(renderOptions);
   const puz = getURLParam("puzzle");
-  const puzdesc = getURLParam("puzzlegeometry");
+  const puzdesc =
+    getURLParam("puzzle-description") ?? getURLParam("puzzlegeometry");
   let found = false;
   let optionFor3x3x3: HTMLOptionElement;
 
@@ -816,11 +840,11 @@ export function setup(): void {
         dowork(command);
       };
   }
-  const qalg = getURLParam("alg").toString();
-  if (qalg !== "") {
-    algoinput.value = qalg;
-    lastalgo = qalg;
-  }
+  // const qalg = getURLParam("alg").toString();
+  // if (qalg !== "") {
+  //   algoinput.value = qalg;
+  //   lastalgo = qalg;
+  // }
   const tempo = document.getElementById("tempo") as HTMLInputElement;
   tempo.oninput = checktempo;
   settempo(getURLParam("tempo"));
