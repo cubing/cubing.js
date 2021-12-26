@@ -5,8 +5,8 @@
 interface DragInfo {
   attachedInfo: Record<any, any>;
   hasMoved: boolean;
-  lastScreenX: number;
-  lastScreenY: number;
+  lastClientX: number;
+  lastClientY: number;
   lastTimeStamp: number;
 }
 
@@ -64,13 +64,13 @@ export class DragTracker extends EventTarget {
     } else {
       movementInfo = {
         attachedInfo: existing.attachedInfo,
-        movementX: e.screenX - existing.lastScreenX,
-        movementY: e.screenY - existing.lastScreenY,
+        movementX: e.clientX - existing.lastClientX,
+        movementY: e.clientY - existing.lastClientY,
         elapsedMs: e.timeStamp - existing.lastTimeStamp,
       };
     }
-    existing.lastScreenX = e.screenX;
-    existing.lastScreenY = e.screenY;
+    existing.lastClientX = e.clientX;
+    existing.lastClientY = e.clientY;
     existing.lastTimeStamp = e.timeStamp;
     if (movementInfo.movementX === 0 || movementInfo.movementY === 0) {
       return { movementInfo: null, hasMoved: existing.hasMoved };
@@ -84,8 +84,8 @@ export class DragTracker extends EventTarget {
     const newDragInfo: DragInfo = {
       attachedInfo: {},
       hasMoved: false,
-      lastScreenX: e.screenX,
-      lastScreenY: e.screenY,
+      lastClientX: e.clientX,
+      lastClientY: e.clientY,
       lastTimeStamp: e.timeStamp,
     };
     this.lastCoordinates.set(e.pointerId, newDragInfo);
