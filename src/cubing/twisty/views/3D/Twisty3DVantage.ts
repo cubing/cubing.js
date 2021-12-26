@@ -96,7 +96,8 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.#onResize();
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
-    // this.orbitControls(); // TODO
+    this.orbitControls(); // TODO
+
     this.scheduleRender();
   }
 
@@ -155,6 +156,13 @@ export class Twisty3DVantage extends ManagedCustomElement {
     })());
   }
 
+  #cachedDragTracker: Promise<DragTracker> | null = null;
+  async #dragTracker(): Promise<DragTracker> {
+    return (this.#cachedDragTracker ??= (async () => {
+      return new DragTracker(await this.canvas());
+    })());
+  }
+
   #cachedCamera: Promise<PerspectiveCamera> | null = null;
   async camera(): Promise<PerspectiveCamera> {
     return (this.#cachedCamera ??= (async () => {
@@ -178,13 +186,11 @@ export class Twisty3DVantage extends ManagedCustomElement {
   #cachedOrbitControls: Promise<TwistyOrbitControlsV2> | null = null;
   async orbitControls(): Promise<TwistyOrbitControlsV2> {
     return (this.#cachedOrbitControls ??= (async () => {
-      const dragTracker = new DragTracker(await this.canvas());
-      dragTracker.addEventListener("up", console.log);
-      dragTracker.addEventListener("click", console.log);
       const orbitControls = new TwistyOrbitControlsV2(
         this.model!,
         !!this.options?.backView,
         await this.canvas(),
+        await this.#dragTracker(),
       );
 
       if (this.model) {

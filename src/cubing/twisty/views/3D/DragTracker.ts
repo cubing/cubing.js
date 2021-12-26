@@ -7,14 +7,16 @@ interface DragInfo {
   hasMoved: boolean;
   lastScreenX: number;
   lastScreenY: number;
+  lastTimeStamp: number;
 }
 
 type PointerID = number;
 
-interface MovementInfo {
+export interface DragMovementInfo {
   attachedInfo: Record<any, any>;
   movementX: number;
   movementY: number;
+  elapsedMs: number;
 }
 
 export class DragTracker extends EventTarget {
@@ -33,7 +35,7 @@ export class DragTracker extends EventTarget {
 
   // `null`: means: ignore this result (no movement, or not
   #trackDrag(e: PointerEvent): {
-    movementInfo: MovementInfo | null;
+    movementInfo: DragMovementInfo | null;
     hasMoved: boolean;
   } {
     const existing = this.lastCoordinates.get(e.pointerId);
@@ -49,7 +51,8 @@ export class DragTracker extends EventTarget {
     // - `"movementX" in e`
     // - `e.movementX !== "undefined"`
     // - `e.hasOwnProperty("movementX")`
-    let movementInfo: MovementInfo;
+
+    let movementInfo: DragMovementInfo;
     if (e.movementX !== 0 || e.movementY !== 0) {
       // We optimistically try to catch sub-pixel movements in Chrome.
       movementInfo = {
@@ -62,10 +65,12 @@ export class DragTracker extends EventTarget {
         attachedInfo: existing.attachedInfo,
         movementX: e.screenX - existing.lastScreenX,
         movementY: e.screenY - existing.lastScreenY,
+        elapsedMs: e.timeStamp - existing.lastTimeStamp,
       };
     }
     existing.lastScreenX = e.screenX;
     existing.lastScreenY = e.screenY;
+    existing.lastTimeStamp = e.timeStamp;
     if (movementInfo.movementX === 0 || movementInfo.movementY === 0) {
       return { movementInfo: null, hasMoved: existing.hasMoved };
     } else {
@@ -80,6 +85,7 @@ export class DragTracker extends EventTarget {
       hasMoved: false,
       lastScreenX: e.screenX,
       lastScreenY: e.screenY,
+      lastTimeStamp: e.timeStamp,
     };
     this.lastCoordinates.set(e.pointerId, newDragInfo);
     this.target.setPointerCapture(e.pointerId);
