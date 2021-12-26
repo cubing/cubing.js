@@ -59,6 +59,7 @@ export class DragTracker extends EventTarget {
         attachedInfo: existing.attachedInfo,
         movementX: e.movementX,
         movementY: e.movementY,
+        elapsedMs: e.timeStamp - existing.lastTimeStamp,
       };
     } else {
       movementInfo = {
