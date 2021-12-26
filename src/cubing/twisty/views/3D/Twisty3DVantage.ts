@@ -14,6 +14,7 @@ import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
+import { DragTracker } from "./DragTracker";
 
 let SHOW_STATS = false;
 export function showStats(enable: boolean): void {
@@ -95,7 +96,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.#onResize();
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
-    this.orbitControls(); // TODO
+    // this.orbitControls(); // TODO
     this.scheduleRender();
   }
 
@@ -177,6 +178,9 @@ export class Twisty3DVantage extends ManagedCustomElement {
   #cachedOrbitControls: Promise<TwistyOrbitControlsV2> | null = null;
   async orbitControls(): Promise<TwistyOrbitControlsV2> {
     return (this.#cachedOrbitControls ??= (async () => {
+      const dragTracker = new DragTracker(await this.canvas());
+      dragTracker.addEventListener("up", console.log);
+      dragTracker.addEventListener("click", console.log);
       const orbitControls = new TwistyOrbitControlsV2(
         this.model!,
         !!this.options?.backView,
