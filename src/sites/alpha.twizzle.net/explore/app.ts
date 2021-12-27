@@ -20,14 +20,12 @@ import {
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
 import { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
-import {
-  experimentalShowRenderStats,
-  Twisty3DCanvas,
-} from "../../../cubing/twisty/old/dom/viewers/Twisty3DCanvas";
+import type { Twisty3DCanvas } from "../../../cubing/twisty/old/dom/viewers/Twisty3DCanvas";
 import {
   OrbitCoordinates,
   positionToOrbitCoordinates,
 } from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControls";
+import { showStats } from "../../../cubing/twisty/views/3D/Twisty3DVantage";
 import {
   getConfigFromURL,
   remapLegacyURLParams,
@@ -36,7 +34,7 @@ import {
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
-  experimentalShowRenderStats(true);
+  showStats(true);
 }
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
@@ -784,7 +782,7 @@ function checktempo(): void {
   const val = tempo.value; // 0..100
   tempomult = Math.pow(10, (+val - 50) / 50);
   tempomult = Math.floor(tempomult * 100 + 0.5) / 100;
-  setURLParams({ tempo: tempomult.toString() });
+  // setURLParams({ tempo: tempomult.toString() });
   const tempodisp = document.getElementById("tempodisplay");
   if (tempodisp) {
     tempodisp.textContent = tempomult.toString() + "x";
