@@ -53,7 +53,6 @@ export class DragTracker extends EventTarget {
     // - `e.hasOwnProperty("movementX")`
 
     let movementInfo: DragMovementInfo;
-    console.log("prremomvoevmoevmeov", e.movementX, e.movementY);
     if ((e.movementX ?? 0) !== 0 || (e.movementY ?? 0) !== 0) {
       // We optimistically try to catch sub-pixel movements in Chrome.
       movementInfo = {
@@ -76,7 +75,6 @@ export class DragTracker extends EventTarget {
     if (movementInfo.movementX === 0 && movementInfo.movementY === 0) {
       return { movementInfo: null, hasMoved: existing.hasMoved };
     } else {
-      console.log("flooping", movementInfo);
       existing.hasMoved = true;
       return { movementInfo, hasMoved: existing.hasMoved };
     }
@@ -95,6 +93,7 @@ export class DragTracker extends EventTarget {
   }
 
   private onPointerMove(e: PointerEvent) {
+    e.preventDefault();
     const movementInfo = this.#trackDrag(e).movementInfo;
     if (movementInfo) {
       this.dispatchEvent(
