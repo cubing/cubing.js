@@ -16,7 +16,7 @@ import { promisify } from "util";
 import { barelyServe } from "barely-a-dev-server";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
-import { execSync } from "child_process";
+import { exec } from "child_process";
 
 const PARALLEL = false;
 
@@ -33,7 +33,7 @@ if (process.env["EXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS"] === "1") {
     name: "refresh",
     setup(build) {
       build.onEnd(() => {
-        execSync(
+        exec(
           `osascript -e 'tell application "Google Chrome" to tell the active tab of its first window to reload'`,
         );
       });
