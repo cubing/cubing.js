@@ -87,6 +87,12 @@ export function positionToOrbitCoordinates(
   };
 }
 
+interface TwistyOrbitControlsDragAttachedInfo {
+  lastTemperedX: number;
+  lastTemperedY: number;
+  timestamp: number;
+}
+
 // TODO: change mouse cursor while moving.
 export class TwistyOrbitControlsV2 {
   /** @deprecated */
@@ -96,7 +102,7 @@ export class TwistyOrbitControlsV2 {
   // private lastTouchClientX: number = 0;
   // private lastTouchClientY: number = 0;
   // private currentTouchID: number | null = null; // TODO: support multiple touches?
-  // private onMoveBound = this.onMove.bind(this);
+  private onMovementBound = this.onMovement.bind(this);
   // private onMouseMoveBound = this.onMouseMove.bind(this);
   // private onMouseEndBound = this.onMouseEnd.bind(this);
   // private onTouchMoveBound = this.onTouchMove.bind(this);
@@ -115,6 +121,7 @@ export class TwistyOrbitControlsV2 {
     private dragTracker: DragTracker,
   ) {
     this.dragTracker.addEventListener("move", this.onMove.bind(this));
+    this.dragTracker.addEventListener("up", this.onUp.bind(this));
   }
 
   // f is the fraction of the canvas traversed per ms.
@@ -236,22 +243,40 @@ export class TwistyOrbitControlsV2 {
   //     );
   //   }
   // }
+  onMove(e: CustomEvent<DragMovementInfo>): void {
+    e.detail.attachedInfo ??= {};
+    // const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
 
-  async onMove(e: CustomEvent<DragMovementInfo>): Promise<void> {
+    const { temperedX, temperedY } = this.onMovement(
+      e.detail.movementX,
+      e.detail.movementY,
+    );
+    const attachedInfo = e.detail
+      .attachedInfo as TwistyOrbitControlsDragAttachedInfo;
+    attachedInfo.lastTemperedX = temperedX * 10;
+    attachedInfo.lastTemperedY = temperedY * 10;
+    attachedInfo.timestamp = e.timeStamp; // TODO
+  }
+
+  onMovement(
+    movementX: number,
+    movementY: number,
+  ): {
+    temperedX: number;
+    temperedY: number;
+  } {
     const scale = this.mirror ? -1 : 1;
+
+    // TODO: refactor
+    const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
+
+    const temperedX = this.temperMovement(movementX / minDim);
+    const temperedY = this.temperMovement(
+      (movementY / minDim) * VERTICAL_MOVEMENT_BASE_SCALE,
+    );
     this.model.orbitCoordinatesRequestProp.set(
       (async () => {
         const prevCoords = await this.model.orbitCoordinatesProp.get();
-
-        // TODO: refactor
-        const minDim = Math.min(
-          this.canvas.offsetWidth,
-          this.canvas.offsetHeight,
-        );
-        const temperedX = this.temperMovement(e.detail.movementX / minDim);
-        const temperedY = this.temperMovement(
-          (e.detail.movementY / minDim) * VERTICAL_MOVEMENT_BASE_SCALE,
-        );
 
         const newCoords = {
           latitude:
@@ -262,9 +287,28 @@ export class TwistyOrbitControlsV2 {
         return newCoords;
       })(),
     );
+    return { temperedX, temperedY };
   }
 
-  onEnd(e: MouseEvent | TouchEvent): void {
+  onUp(e: CustomEvent<DragMovementInfo>): void {
+    console.log(e, e.detail.attachedInfo.timestamp - e.timeStamp);
     e.preventDefault();
+    if (
+      "lastTemperedX" in e.detail.attachedInfo &&
+      "lastTemperedY" in e.detail.attachedInfo &&
+      "timestamp" in e.detail.attachedInfo &&
+      e.timeStamp - e.detail.attachedInfo.timestamp < 60 // TODO
+    ) {
+      new Inertia(
+        e.timeStamp, // TODO
+        (
+          e.detail.attachedInfo as TwistyOrbitControlsDragAttachedInfo
+        ).lastTemperedX,
+        (
+          e.detail.attachedInfo as TwistyOrbitControlsDragAttachedInfo
+        ).lastTemperedY,
+        this.onMovementBound,
+      ); // TODO: cancel inertia
+    }
   }
 }

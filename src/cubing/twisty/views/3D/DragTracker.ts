@@ -20,17 +20,20 @@ export interface DragMovementInfo {
 }
 
 export class DragTracker extends EventTarget {
-  lastCoordinates: Map<PointerID, DragInfo> = new Map();
+  #dragInfoMap: Map<PointerID, DragInfo> = new Map();
 
   constructor(public readonly target: HTMLElement) {
     super();
     target.addEventListener("pointerdown", this.onPointerDown.bind(this));
-    target.addEventListener("pointermove", this.onPointerMove.bind(this));
+    target.addEventListener("pointermove", this.onPointerMove.bind(this)); // TODO: only register this after pointer down.
     target.addEventListener("pointerup", this.onPointerUp.bind(this));
+
+    // Prevent touch scrolling (preventing default on `pointermove` doesn't work).
+    target.addEventListener("touchmove", (e) => e.preventDefault());
   }
 
   #clear(e: PointerEvent): void {
-    this.lastCoordinates.delete(e.pointerId);
+    this.#dragInfoMap.delete(e.pointerId);
   }
 
   // `null`: means: ignore this result (no movement, or not
@@ -38,7 +41,7 @@ export class DragTracker extends EventTarget {
     movementInfo: DragMovementInfo | null;
     hasMoved: boolean;
   } {
-    const existing = this.lastCoordinates.get(e.pointerId);
+    const existing = this.#dragInfoMap.get(e.pointerId);
     if (!existing) {
       return { movementInfo: null, hasMoved: false };
     }
@@ -88,7 +91,7 @@ export class DragTracker extends EventTarget {
       lastClientY: e.clientY,
       lastTimeStamp: e.timeStamp,
     };
-    this.lastCoordinates.set(e.pointerId, newDragInfo);
+    this.#dragInfoMap.set(e.pointerId, newDragInfo);
     this.target.setPointerCapture(e.pointerId);
   }
 
@@ -106,12 +109,14 @@ export class DragTracker extends EventTarget {
 
   private onPointerUp(e: PointerEvent) {
     const trackDragResult = this.#trackDrag(e);
+    const existing = this.#dragInfoMap.get(e.pointerId)!; // TODO
     this.#clear(e);
     this.target.releasePointerCapture(e.pointerId); // TODO: unnecessary?
     let event: CustomEvent;
     if (trackDragResult.hasMoved) {
+      // TODO: send proper movement/momentum since last move event.
       event = new CustomEvent("up", {
-        detail: trackDragResult.movementInfo,
+        detail: { attachedInfo: existing.attachedInfo },
       });
     } else {
       event = new CustomEvent("click", {
