@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { getPuzzleGeometryByDesc } from ".";
 import { PGPuzzles } from "./PGPuzzles";
 import { transformationOrder, Transformation } from "../kpuzzle";
