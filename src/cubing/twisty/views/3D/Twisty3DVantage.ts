@@ -40,20 +40,30 @@ let shareAllNewRenderers: boolean | null = null;
 // WARNING: The current shared renderer implementation is not every efficient.
 // Avoid using for players that are likely to have dimensions approaching 1 megapixel or higher.
 // TODO: use a dedicated renderer while fullscreen?
-export function experimentalSetShareAllNewRenderers(share: boolean): void {
+// - true: Force all new (i.e. constructed in the future) renderers to be shared
+// - false: Force all new (i.e. constructed in the future) renderers to be dedicated
+// - null: Reset to the default heuristics.
+export function experimentalForceNewRendererSharing(
+  share: boolean | null,
+): void {
   shareAllNewRenderers = share;
 }
 
-let anyRenderersSofar = false;
+let dedicatedRenderersSoFar = 0;
+const DEFAULT_MAX_DEDICATED_RENDERERS = 2; // This allows for a front view and a back view (or two separate front views).
 function shareRenderer(): boolean {
   if (shareAllNewRenderers !== null) {
+    if (!shareAllNewRenderers) {
+      dedicatedRenderersSoFar++;
+    }
     return shareAllNewRenderers;
   }
-  if (!anyRenderersSofar) {
-    anyRenderersSofar = true;
+  if (dedicatedRenderersSoFar < DEFAULT_MAX_DEDICATED_RENDERERS) {
+    dedicatedRenderersSoFar++;
     return false;
+  } else {
+    return true;
   }
-  return true;
 }
 
 export class Twisty3DVantage extends ManagedCustomElement {

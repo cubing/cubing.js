@@ -1,14 +1,11 @@
 import { Alg } from "../../../../cubing/alg";
 import {
-  experimentalSetShareAllNewRenderers,
   ExperimentalStickering,
   TwistyPlayer,
 } from "../../../../cubing/twisty";
 import type { VisualizationFormat } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 
 function demo(visualization: VisualizationFormat): void {
-  experimentalSetShareAllNewRenderers(true);
-
   const content = document.querySelector(".content")!;
 
   function addAlg(stickering: ExperimentalStickering, s: string): void {

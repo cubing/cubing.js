@@ -1,10 +1,5 @@
 import { Alg } from "../../../../cubing/alg";
-import {
-  experimentalSetShareAllNewRenderers,
-  TwistyPlayerV1,
-} from "../../../../cubing/twisty";
-
-experimentalSetShareAllNewRenderers(true);
+import { TwistyPlayerV1 } from "../../../../cubing/twisty";
 
 {
   document.querySelector("#no-attributes")!.appendChild(new TwistyPlayerV1());
