@@ -88,7 +88,7 @@ interface TwistyOrbitControlsDragAttachedInfo {
 }
 
 // TODO: change mouse cursor while moving.
-export class TwistyOrbitControlsV2 {
+export class TwistyOrbitControls {
   /** @deprecated */
   experimentalInertia: boolean = INERTIA_DEFAULT;
   /** @deprecated */

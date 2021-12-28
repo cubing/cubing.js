@@ -13,7 +13,7 @@ import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css";
 import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
-import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
+import { TwistyOrbitControls } from "./TwistyOrbitControls";
 import { DragTracker, PressInfo } from "./DragTracker";
 
 let SHOW_STATS = false;
@@ -198,10 +198,10 @@ export class Twisty3DVantage extends ManagedCustomElement {
     })());
   }
 
-  #cachedOrbitControls: Promise<TwistyOrbitControlsV2> | null = null;
-  async orbitControls(): Promise<TwistyOrbitControlsV2> {
+  #cachedOrbitControls: Promise<TwistyOrbitControls> | null = null;
+  async orbitControls(): Promise<TwistyOrbitControls> {
     return (this.#cachedOrbitControls ??= (async () => {
-      const orbitControls = new TwistyOrbitControlsV2(
+      const orbitControls = new TwistyOrbitControls(
         this.model!,
         !!this.options?.backView,
         await this.canvas(),
