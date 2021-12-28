@@ -26,6 +26,7 @@ export interface UpInfo {
 export interface PressInfo {
   normalizedX: number;
   normalizedY: number;
+  rightClick: boolean;
 }
 
 // Chrome can report movements as low as `0.0000152587890625` even if the cursor did not move at all. So we need a treshold insteadl.
@@ -38,6 +39,7 @@ export class DragTracker extends EventTarget {
     super();
     target.addEventListener("pointerdown", this.onPointerDown.bind(this));
     // Prevent right-click on desktop (only tested on macOS Chrome/Safari/Firefox) so we can detect right-click moves.
+    // TODO: Can we do this selectively, e.g. only on the puzzle? That way we could allow right-click to download the canvas. Unfortunately, it would probably require a sync calculation.
     this.target.addEventListener("contextmenu", (e) => {
       if (e.buttons & 2) {
         e.preventDefault();
@@ -157,10 +159,12 @@ export class DragTracker extends EventTarget {
         detail: { attachedInfo: existing.attachedInfo },
       });
     } else {
+      console.log(e, e.buttons);
       event = new CustomEvent<PressInfo>("press", {
         detail: {
           normalizedX: (e.offsetX / this.target.offsetWidth) * 2 - 1,
           normalizedY: (e.offsetY / this.target.offsetHeight) * 2 - 1,
+          rightClick: !!(e.button & 2),
         },
       });
     }
