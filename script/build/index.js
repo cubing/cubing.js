@@ -16,11 +16,30 @@ import { promisify } from "util";
 import { barelyServe } from "barely-a-dev-server";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
+import { execSync } from "child_process";
 
 const PARALLEL = false;
 
 const externalNode = ["crypto", "worker_threads"];
 const external = ["three", "comlink", ...externalNode];
+
+const plugins = [];
+// TODO: convenience hack for @lgarron; figure out how to either generalize this or add light auto-refresh to `barely-a-dev-server`
+if (process.env["EXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS"] === "1") {
+  console.log(
+    "\nEXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS is set. The current Chrome tab will refresh after every build.\n",
+  );
+  plugins.push({
+    name: "refresh",
+    setup(build) {
+      build.onEnd(() => {
+        execSync(
+          `osascript -e 'tell application "Google Chrome" to tell the active tab of its first window to reload'`,
+        );
+      });
+    },
+  });
+}
 
 function devServerOptions(srcFolder, dev) {
   return {
@@ -31,6 +50,7 @@ function devServerOptions(srcFolder, dev) {
     esbuildOptions: {
       external: externalNode,
       target: "es2020",
+      plugins,
     },
   };
 }
