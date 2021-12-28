@@ -288,6 +288,9 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       twisty = new TwistyPlayer(config);
       new URLParamUpdater(twisty.experimentalModel);
 
+      (
+        document.querySelector("#editor") as TwistyAlgEditor
+      ).debugNeverRequestTimestamp = true;
       (document.querySelector("#editor") as TwistyAlgEditor).twistyPlayer =
         twisty;
       twisty.tempoScale = tempomult;

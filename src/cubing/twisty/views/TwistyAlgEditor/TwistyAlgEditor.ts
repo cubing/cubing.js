@@ -63,6 +63,9 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     }
   }
 
+  // Temporary Workaround for Twizzle Explorer
+  debugNeverRequestTimestamp: boolean = false;
+
   constructor(options?: {
     twistyPlayer?: TwistyPlayer;
     twistyPlayerProp?: TwistyPlayerAlgProp;
@@ -301,7 +304,11 @@ export class TwistyAlgEditor extends ManagedCustomElement {
               console.log("invalid where");
               throw new Error("Invalid where!");
           }
-          twistyPlayer.experimentalModel.timestampRequestProp.set(newTimestamp);
+          if (!this.debugNeverRequestTimestamp) {
+            twistyPlayer.experimentalModel.timestampRequestProp.set(
+              newTimestamp,
+            );
+          }
         },
       );
 
