@@ -191,7 +191,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       if (invert) {
         move = move.invert();
       }
-      this.model.experimentalAddMove(move);
+      this.model.experimentalAddMove(move, { coalesce: true });
 
       // if (pg) {
       //   const mv2 = pg.notationMapper.notationToExternal(
