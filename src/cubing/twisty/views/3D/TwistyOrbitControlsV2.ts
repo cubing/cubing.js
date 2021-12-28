@@ -69,12 +69,6 @@ class Inertia {
   }
 }
 
-// export interface OrbitCoordinates {
-//   latitude: number;
-//   longitude: number;
-//   distance: number;
-// }
-
 export function positionToOrbitCoordinates(
   position: Vector3,
 ): OrbitCoordinatesV2 {
@@ -99,20 +93,7 @@ export class TwistyOrbitControlsV2 {
   experimentalInertia: boolean = INERTIA_DEFAULT;
   /** @deprecated */
   experimentalLatitudeLimits: CameraLatitudeLimits = LATITUDE_LIMITS_DEFAULT;
-  // private lastTouchClientX: number = 0;
-  // private lastTouchClientY: number = 0;
-  // private currentTouchID: number | null = null; // TODO: support multiple touches?
   private onMovementBound = this.onMovement.bind(this);
-  // private onMouseMoveBound = this.onMouseMove.bind(this);
-  // private onMouseEndBound = this.onMouseEnd.bind(this);
-  // private onTouchMoveBound = this.onTouchMove.bind(this);
-  // private onTouchEndBound = this.onTouchEnd.bind(this);
-  // private lastTouchTimestamp: number = 0;
-  // private lastTouchMoveMomentumX: number = 0;
-  // private lastTouchMoveMomentumY: number = 0;
-  // private lastMouseTimestamp: number = 0;
-  // private lastMouseMoveMomentumX: number = 0;
-  // private lastMouseMoveMomentumY: number = 0;
   public experimentalHasBeenMoved: boolean = false;
   constructor(
     private model: TwistyPlayerModel,
@@ -131,121 +112,8 @@ export class TwistyOrbitControlsV2 {
     return (Math.sign(f) * Math.log(Math.abs(f * 10) + 1)) / 6;
   }
 
-  // onMove(e: CustomEvent<DragMovementInfo>): void {
-  //   // TODO
-  //   // if (e.buttons === 0) {
-  //   //   // Certain elements (e.g. disabled buttons) can capture the `mouseup`
-  //   //   // event. So if we notice that there are no mouse buttons pressed, we stop
-  //   //   // the movement.
-  //   //   this.onMouseEnd(e);
-  //   //   return;
-  //   // }
-
-  //   if (e.movementX === 0 && e.movementY === 0) {
-  //     // Short-circuit
-  //     return;
-  //   }
-
-  //   const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
-  //   const movementX = this.temperMovement(e.movementX / minDim);
-  //   const movementY = this.temperMovement(
-  //     (e.movementY / minDim) * VERTICAL_MOVEMENT_BASE_SCALE,
-  //   );
-  //   this.onMove(movementX, movementY);
-
-  //   const deltaMs = e.timeStamp - this.lastMouseTimestamp;
-  //   if (deltaMs > 0) {
-  //     this.lastMouseMoveMomentumX = movementX / deltaMs;
-  //     this.lastMouseMoveMomentumY = movementY / deltaMs;
-  //     this.lastMouseTimestamp = e.timeStamp;
-  //   }
-  // }
-
-  // onMouseEnd(e: MouseEvent): void {
-  //   window.removeEventListener("mousemove", this.onMouseMoveBound);
-  //   window.removeEventListener("mouseup", this.onMouseEndBound);
-  //   this.onEnd(e);
-
-  //   if (this.experimentalInertia) {
-  //     new Inertia(
-  //       this.lastMouseTimestamp,
-  //       this.lastMouseMoveMomentumX,
-  //       this.lastMouseMoveMomentumY,
-  //       this.onMoveBound,
-  //     );
-  //   }
-  // }
-
-  // onTouchStart(e: TouchEvent): void {
-  //   if (this.currentTouchID === null) {
-  //     if (e.touches[0].clientX === 0 && e.touches[0].clientY === 0) {
-  //       // Short-circuit
-  //       return;
-  //     }
-  //     this.currentTouchID = e.changedTouches[0].identifier;
-  //     this.lastTouchClientX = e.touches[0].clientX;
-  //     this.lastTouchClientY = e.touches[0].clientY;
-  //     window.addEventListener("touchmove", this.onTouchMoveBound);
-  //     window.addEventListener("touchend", this.onTouchEndBound);
-  //     window.addEventListener("touchcancel", this.onTouchEndBound);
-
-  //     this.lastTouchTimestamp = e.timeStamp;
-  //   }
-  // }
-
-  // onTouchMove(e: TouchEvent): void {
-  //   for (let i = 0; i < e.changedTouches.length; i++) {
-  //     const touch = e.changedTouches[i];
-  //     if (touch.identifier === this.currentTouchID) {
-  //       const minDim = Math.min(
-  //         this.canvas.offsetWidth,
-  //         this.canvas.offsetHeight,
-  //       );
-  //       const movementX = this.temperMovement(
-  //         (touch.clientX - this.lastTouchClientX) / minDim,
-  //       );
-  //       const movementY = this.temperMovement(
-  //         ((touch.clientY - this.lastTouchClientY) / minDim) *
-  //           VERTICAL_MOVEMENT_BASE_SCALE,
-  //       );
-  //       this.onMove(movementX, movementY);
-  //       this.lastTouchClientX = touch.clientX;
-  //       this.lastTouchClientY = touch.clientY;
-
-  //       const deltaMs = e.timeStamp - this.lastTouchTimestamp;
-  //       if (deltaMs > 0) {
-  //         this.lastTouchMoveMomentumX = movementX / deltaMs;
-  //         this.lastTouchMoveMomentumY = movementY / deltaMs;
-  //         this.lastTouchTimestamp = e.timeStamp;
-  //       }
-  //     }
-  //   }
-  // }
-
-  // onTouchEnd(e: TouchEvent): void {
-  //   for (let i = 0; i < e.changedTouches.length; i++) {
-  //     const touch = e.changedTouches[i];
-  //     if (touch.identifier === this.currentTouchID) {
-  //       this.currentTouchID = null;
-  //       window.removeEventListener("touchmove", this.onTouchMoveBound);
-  //       window.removeEventListener("touchend", this.onTouchEndBound);
-  //       window.removeEventListener("touchcancel", this.onTouchEndBound);
-  //       this.onEnd(e);
-  //     }
-  //   }
-
-  //   if (this.experimentalInertia) {
-  //     new Inertia(
-  //       this.lastTouchTimestamp,
-  //       this.lastTouchMoveMomentumX,
-  //       this.lastTouchMoveMomentumY,
-  //       this.onMoveBound,
-  //     );
-  //   }
-  // }
   onMove(e: CustomEvent<DragMovementInfo>): void {
     e.detail.attachedInfo ??= {};
-    // const minDim = Math.min(this.canvas.offsetWidth, this.canvas.offsetHeight);
 
     const { temperedX, temperedY } = this.onMovement(
       e.detail.movementX,
@@ -283,7 +151,6 @@ export class TwistyOrbitControlsV2 {
             prevCoords.latitude + 2 * temperedY * DEGREES_PER_RADIAN * scale,
           longitude: prevCoords.longitude - 2 * temperedX * DEGREES_PER_RADIAN,
         };
-        // console.log("coords", prevCoords, newCoords);
         return newCoords;
       })(),
     );
