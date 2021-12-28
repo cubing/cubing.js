@@ -25,11 +25,20 @@ export class DragTracker extends EventTarget {
   constructor(public readonly target: HTMLElement) {
     super();
     target.addEventListener("pointerdown", this.onPointerDown.bind(this));
-    target.addEventListener("pointermove", this.onPointerMove.bind(this)); // TODO: only register this after pointer down.
-    target.addEventListener("pointerup", this.onPointerUp.bind(this));
-
     // Prevent touch scrolling (preventing default on `pointermove` doesn't work).
-    target.addEventListener("touchmove", (e) => e.preventDefault());
+    this.target.addEventListener("touchmove", (e) => e.preventDefault());
+  }
+
+  // This allows us to avoid getting a callback every time the pointer moves over the canvas, until we have a down event.
+  // TODO: Ideally we'd also support unregistering when we're certain there are no more active touches. But this means we need to properly handle every way a pointer "click" can end, which is tricky across environments (due to e.g. mouse vs. touch vs. stylues, canvas/viewport/window/scroll boundaries, right-click and other ways of losing focus, etc.), so we conservatively leave the listeners on.
+  #lazyListenersRegistered: boolean = false;
+  #registerLazyListeners(): void {
+    if (this.#lazyListenersRegistered) {
+      return;
+    }
+    this.target.addEventListener("pointermove", this.onPointerMove.bind(this)); // TODO: only register this after pointer down.
+    this.target.addEventListener("pointerup", this.onPointerUp.bind(this));
+    this.#lazyListenersRegistered = true;
   }
 
   #clear(e: PointerEvent): void {
@@ -84,6 +93,7 @@ export class DragTracker extends EventTarget {
   }
 
   private onPointerDown(e: PointerEvent) {
+    this.#registerLazyListeners();
     const newDragInfo: DragInfo = {
       attachedInfo: {},
       hasMoved: false,

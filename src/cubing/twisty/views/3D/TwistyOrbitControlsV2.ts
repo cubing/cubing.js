@@ -291,7 +291,6 @@ export class TwistyOrbitControlsV2 {
   }
 
   onUp(e: CustomEvent<DragMovementInfo>): void {
-    console.log(e, e.detail.attachedInfo.timestamp - e.timeStamp);
     e.preventDefault();
     if (
       "lastTemperedX" in e.detail.attachedInfo &&
