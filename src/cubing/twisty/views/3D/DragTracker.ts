@@ -30,6 +30,9 @@ export class DragTracker extends EventTarget {
     target.addEventListener("pointerdown", this.onPointerDown.bind(this));
     // Prevent touch scrolling (preventing default on `pointermove` doesn't work).
     this.target.addEventListener("touchmove", (e) => e.preventDefault());
+    // Prevent zooming on double-tap (iOS).
+    // This is because `dblclick` works to zoom in, but does *not* work to zoom out. So the user can get stuck zoomed into the player without a way to zoom out.
+    this.target.addEventListener("dblclick", (e) => e.preventDefault());
   }
 
   // This allows us to avoid getting a callback every time the pointer moves over the canvas, until we have a down event.
