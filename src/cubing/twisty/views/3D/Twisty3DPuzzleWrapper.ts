@@ -4,13 +4,12 @@ import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
 import { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
-import type { Move } from "../../../alg";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {
   constructor(
@@ -183,26 +182,11 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
 
     const intersects = raycaster.intersectObjects(targets);
     if (intersects.length > 0) {
-      let move = intersects[0].object.userData.quantumMove as Move | undefined;
-      if (!move) {
-        throw new Error("expected move");
-      }
-
+      let move = puzzle.getClosestAxisMove(intersects[0].point);
       if (invert) {
         move = move.invert();
       }
       this.model.experimentalAddMove(move, { coalesce: true });
-
-      // if (pg) {
-      //   const mv2 = pg.notationMapper.notationToExternal(
-      //     new Move(intersects[0].object.userData.name),
-      //   );
-      //   if (mv2 !== null) {
-      //     canvas.title = mv2.family;
-      //   }
-      // }
-      // } else {
-      //   canvas.title = "";
     }
   }
 }

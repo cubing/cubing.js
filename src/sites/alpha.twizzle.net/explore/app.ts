@@ -1,4 +1,4 @@
-import { Raycaster, Vector2, Vector3 } from "three";
+import { Vector3 } from "three";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import { Alg, Move } from "../../../cubing/alg";
@@ -20,7 +20,6 @@ import {
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
 import { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
-import type { Twisty3DCanvas } from "../../../cubing/twisty/old/dom/viewers/Twisty3DCanvas";
 import {
   OrbitCoordinates,
   positionToOrbitCoordinates,
@@ -77,6 +76,7 @@ const renderOptions = [
   "corners",
   "blockmoves",
   "vertexmoves",
+  "threed",
   "sidebyside",
   "hintstickers",
   "showfoundation",
@@ -122,56 +122,56 @@ function getModValueForMove(move: Move): number {
   }
   const family = stickerDat.unswizzle(move);
   for (const axis of stickerDat.axis) {
-    if (family === axis[1]) {
-      return axis[2];
+    if (family === axis.quantumMove.family) {
+      return axis.order;
     }
   }
   console.log("Bailing on mod for " + family + "; no axis match");
   return 1;
 }
 
-function intersectionToMove(
-  point: Vector3,
-  event: MouseEvent,
-  rightClick: boolean,
-): Move | null {
-  const allowRotatingGrips = event.ctrlKey || event.metaKey;
-  let bestGrip: string = stickerDat.axis[0][1];
-  let bestProduct: number = 0;
-  for (const axis of stickerDat.axis) {
-    const product = point.dot(new Vector3(...axis[0]));
-    if (
-      (gripdepth[axis[1]] > 1 || allowRotatingGrips) &&
-      product > bestProduct
-    ) {
-      bestProduct = product;
-      bestGrip = axis[1];
-    }
-  }
-  let move = new Move(bestGrip);
-  if (bestProduct > 0) {
-    if (event.shiftKey) {
-      if (getCheckbox("blockmoves")) {
-        move = move.modified({ family: bestGrip.toLowerCase() });
-      } else {
-        move = move.modified({ innerLayer: 2 });
-      }
-    } else if ((event.ctrlKey || event.metaKey) && gripdepth[bestGrip]) {
-      move = move.modified({ family: bestGrip + "v" });
-    }
-  }
-  if (pg) {
-    const move2 = pg.notationMapper.notationToExternal(move);
-    if (move2 === null) {
-      return null;
-    }
-    move = move2;
-  }
-  if (getModValueForMove(move) !== 2 && !rightClick) {
-    move = move.invert();
-  }
-  return move;
-}
+// function intersectionToMove(
+//   point: Vector3,
+//   event: MouseEvent,
+//   rightClick: boolean,
+// ): Move | null {
+//   const allowRotatingGrips = event.ctrlKey || event.metaKey;
+//   let bestGrip: string = stickerDat.axis[0].family;
+//   let bestProduct: number = 0;
+//   for (const axis of stickerDat.axis) {
+//     const product = point.dot(new Vector3(...axis[0]));
+//     if (
+//       (gripdepth[axis.quantumMove.family] > 1 || allowRotatingGrips) &&
+//       product > bestProduct
+//     ) {
+//       bestProduct = product;
+//       bestGrip = axis.quantumMove.family;
+//     }
+//   }
+//   let move = new Move(bestGrip);
+//   if (bestProduct > 0) {
+//     if (event.shiftKey) {
+//       if (getCheckbox("blockmoves")) {
+//         move = move.modified({ family: bestGrip.toLowerCase() });
+//       } else {
+//         move = move.modified({ innerLayer: 2 });
+//       }
+//     } else if ((event.ctrlKey || event.metaKey) && gripdepth[bestGrip]) {
+//       move = move.modified({ family: bestGrip + "v" });
+//     }
+//   }
+//   if (pg) {
+//     const move2 = pg.notationMapper.notationToExternal(move);
+//     if (move2 === null) {
+//       return null;
+//     }
+//     move = move2;
+//   }
+//   if (getModValueForMove(move) !== 2 && !rightClick) {
+//     move = move.invert();
+//   }
+//   return move;
+// }
 
 function LucasSetup(
   pg: PuzzleGeometry,
@@ -277,7 +277,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         // experimentalPuzzleDescription: (
         //   document.getElementById("desc")! as HTMLInputElement
         // ).value, // TODO
-        visualization: "PG3D",
+        visualization: getCheckbox("threed") ? "PG3D" : "2D",
         backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
         cameraLatitude: initialCameraOrbitCoordinates.latitude,
         cameraLongitude: initialCameraOrbitCoordinates.longitude,
@@ -298,38 +298,38 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       elem.appendChild(twisty);
       // twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
 
-      const twisty3DCanvases: HTMLCanvasElement[] =
-        await twisty.experimentalCurrentCanvases();
-      // TODO: This is a hack.
-      // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
-      // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
-      setTimeout(() => {
-        // twisty.experimentalSetCameraOrbitCoordinates(
-        //   initialCameraOrbitCoordinates,
-        // );
-        for (const twisty3DCanvas of twisty3DCanvases) {
-          twisty3DCanvas.addEventListener(
-            "mouseup",
-            onMouseClick.bind(onMouseClick, twisty3DCanvas, "U"),
-            false,
-          );
-          twisty3DCanvas.addEventListener(
-            "mousedown",
-            onMouseClick.bind(onMouseClick, twisty3DCanvas, "D"),
-            false,
-          );
-          twisty3DCanvas.addEventListener(
-            "contextmenu",
-            onMouseClick.bind(onMouseClick, twisty3DCanvas, "C"),
-            false,
-          );
-          twisty3DCanvas.addEventListener(
-            "mousemove",
-            onMouseMove.bind(onMouseMove, twisty3DCanvas),
-            false,
-          );
-        }
-      }, 1);
+      // const twisty3DCanvases: HTMLCanvasElement[] =
+      //   await twisty.experimentalCurrentCanvases();
+      // // TODO: This is a hack.
+      // // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
+      // // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
+      // setTimeout(() => {
+      //   // twisty.experimentalSetCameraOrbitCoordinates(
+      //   //   initialCameraOrbitCoordinates,
+      //   // );
+      //   for (const twisty3DCanvas of twisty3DCanvases) {
+      //     twisty3DCanvas.addEventListener(
+      //       "mouseup",
+      //       onMouseClick.bind(onMouseClick, twisty3DCanvas, "U"),
+      //       false,
+      //     );
+      //     twisty3DCanvas.addEventListener(
+      //       "mousedown",
+      //       onMouseClick.bind(onMouseClick, twisty3DCanvas, "D"),
+      //       false,
+      //     );
+      //     twisty3DCanvas.addEventListener(
+      //       "contextmenu",
+      //       onMouseClick.bind(onMouseClick, twisty3DCanvas, "C"),
+      //       false,
+      //     );
+      //     twisty3DCanvas.addEventListener(
+      //       "mousemove",
+      //       onMouseMove.bind(onMouseMove, twisty3DCanvas),
+      //       false,
+      //     );
+      //   }
+      // }, 1);
 
       puzzleSelected = false;
     } else if (puzzleSelected) {
@@ -346,6 +346,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       // }
       puzzleSelected = false;
     }
+    twisty.visualization = getCheckbox("threed") ? "PG3D" : "2D";
     twisty.backView = getCheckbox("sidebyside") ? "side-by-side" : "top-right";
     str = str.trim();
     algoinput.style.backgroundColor = "";
@@ -357,7 +358,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         twisty.jumpToEnd();
       }
       updateMoveCount(alg);
-      setURLParams({ alg: alg });
+      // setURLParams({ alg: alg });
     } catch (e) {
       markInvalidAlg(str);
     }
@@ -647,101 +648,101 @@ function doselection(el: any): void {
   }
 }
 
-let dragX = -1;
-let dragY = -1;
-let dragMoved = false;
+// const dragX = -1;
+// const dragY = -1;
+// const dragMoved = false;
 
-function onMouseClick(
-  twisty3DCanvas: Twisty3DCanvas,
-  eventType: string,
-  event: MouseEvent,
-): void {
-  if (eventType === "C") {
-    event.preventDefault();
-    return;
-  }
-  if (eventType === "D") {
-    dragMoved = false;
-    dragX = -1;
-    dragY = -1;
-    return;
-  }
-  // at this point event must be U
-  if (dragMoved) {
-    return;
-  }
-  if (event.button === 1) {
-    // ignore middle mouse button
-    return;
-  }
-  const rightClick = event.button === 2;
-  const raycaster = new Raycaster();
-  const mouse = new Vector2();
-  const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
-  // calculate mouse position in normalized device coordinates
-  // (-1 to +1) for both components
-  mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
-  mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
-  const camera = twisty3DCanvas.camera;
-  raycaster.setFromCamera(mouse, camera);
+// function onMouseClick(
+//   twisty3DCanvas: Twisty3DCanvas,
+//   eventType: string,
+//   event: MouseEvent,
+// ): void {
+//   if (eventType === "C") {
+//     event.preventDefault();
+//     return;
+//   }
+//   if (eventType === "D") {
+//     dragMoved = false;
+//     dragX = -1;
+//     dragY = -1;
+//     return;
+//   }
+//   // at this point event must be U
+//   if (dragMoved) {
+//     return;
+//   }
+//   if (event.button === 1) {
+//     // ignore middle mouse button
+//     return;
+//   }
+//   const rightClick = event.button === 2;
+//   const raycaster = new Raycaster();
+//   const mouse = new Vector2();
+//   const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
+//   // calculate mouse position in normalized device coordinates
+//   // (-1 to +1) for both components
+//   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
+//   mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
+//   const camera = twisty3DCanvas.camera;
+//   raycaster.setFromCamera(mouse, camera);
 
-  // calculate objects intersecting the picking ray
-  const controlTargets =
-    twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
-  const intersects = raycaster.intersectObjects(controlTargets);
-  if (intersects.length > 0) {
-    event.preventDefault();
-    const mv = intersectionToMove(intersects[0].point, event, rightClick);
-    if (mv !== null) {
-      addMove(mv);
-    }
-  }
-}
+//   // calculate objects intersecting the picking ray
+//   const controlTargets =
+//     twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
+//   const intersects = raycaster.intersectObjects(controlTargets);
+//   if (intersects.length > 0) {
+//     event.preventDefault();
+//     const mv = intersectionToMove(intersects[0].point, event, rightClick);
+//     if (mv !== null) {
+//       addMove(mv);
+//     }
+//   }
+// }
 
-async function onMouseMove(
-  twisty3DCanvas: Twisty3DCanvas,
-  event: MouseEvent,
-): Promise<void> {
-  // notice drags, since we don't want drags to do click moves
-  if (dragX === -1 && dragY === -1) {
-    dragX = event.offsetX;
-    dragY = event.offsetY;
-  } else if (dragX !== event.offsetX || dragY !== event.offsetY) {
-    dragMoved = true;
-  }
-  //
-  const raycaster = new Raycaster();
-  const mouse = new Vector2();
-  const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
-  if (!canvas) {
-    return;
-  }
-  // calculate mouse position in normalized device coordinates
-  // (-1 to +1) for both components
-  mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
-  mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
-  const camera = twisty3DCanvas.camera;
-  raycaster.setFromCamera(mouse, camera);
+// async function onMouseMove(
+//   twisty3DCanvas: Twisty3DCanvas,
+//   event: MouseEvent,
+// ): Promise<void> {
+//   // notice drags, since we don't want drags to do click moves
+//   if (dragX === -1 && dragY === -1) {
+//     dragX = event.offsetX;
+//     dragY = event.offsetY;
+//   } else if (dragX !== event.offsetX || dragY !== event.offsetY) {
+//     dragMoved = true;
+//   }
+//   //
+//   const raycaster = new Raycaster();
+//   const mouse = new Vector2();
+//   const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
+//   if (!canvas) {
+//     return;
+//   }
+//   // calculate mouse position in normalized device coordinates
+//   // (-1 to +1) for both components
+//   mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
+//   mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
+//   const camera = twisty3DCanvas.camera;
+//   raycaster.setFromCamera(mouse, camera);
 
-  // calculate objects intersecting the picking ray
-  const pg3d = await twisty.experimentalPG3D();
-  const targets = event.shiftKey
-    ? pg3d.experimentalGetStickerTargets()
-    : pg3d.experimentalGetControlTargets();
-  const intersects = raycaster.intersectObjects(targets);
-  if (intersects.length > 0) {
-    if (pg) {
-      const mv2 = pg.notationMapper.notationToExternal(
-        new Move(intersects[0].object.userData.name),
-      );
-      if (mv2 !== null) {
-        canvas.title = mv2.family;
-      }
-    }
-  } else {
-    canvas.title = "";
-  }
-}
+//   // calculate objects intersecting the picking ray
+//   const pg3d = await twisty.experimentalPG3D();
+//   const targets = event.shiftKey
+//     ? pg3d.experimentalGetStickerTargets()
+//     : pg3d.experimentalGetControlTargets();
+//   const intersects = raycaster.intersectObjects(targets);
+//   if (intersects.length > 0) {
+//     if (pg) {
+//       const mv2 = pg.notationMapper.notationToExternal(
+//         new Move(intersects[0].object.userData.name),
+//       );
+//       if (mv2 !== null) {
+//         canvas.title = mv2.family;
+//       }
+//     }
+//   } else {
+//     canvas.title = "";
+//   }
+// }
 
 // TODO: Animate latest move but cancel algorithm moves.
 function addMove(move: Move): void {
