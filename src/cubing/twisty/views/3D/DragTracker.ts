@@ -106,9 +106,9 @@ export class DragTracker extends EventTarget {
   }
 
   private onPointerMove(e: PointerEvent) {
-    e.preventDefault();
     const movementInfo = this.#trackDrag(e).movementInfo;
     if (movementInfo) {
+      e.preventDefault();
       this.dispatchEvent(
         new CustomEvent("move", {
           detail: movementInfo,
