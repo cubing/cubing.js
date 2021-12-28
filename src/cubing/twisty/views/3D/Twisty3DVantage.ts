@@ -97,8 +97,16 @@ export class Twisty3DVantage extends ManagedCustomElement {
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
     this.orbitControls(); // TODO
+    this.#testBasicPresses();
 
     this.scheduleRender();
+  }
+
+  async #testBasicPresses(): Promise<void> {
+    const dragTracker = await this.#dragTracker();
+    dragTracker.addEventListener("press", (e) => {
+      console.log(e);
+    });
   }
 
   #onResizeStaleDropper = new StaleDropper<PerspectiveCamera>();

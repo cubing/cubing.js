@@ -19,6 +19,9 @@ export interface DragMovementInfo {
   elapsedMs: number;
 }
 
+// Chrome can report movements as low as `0.0000152587890625` even if the cursor did not move at all. So we need a treshold insteadl.
+const MOVEMENT_EPSILON = 0.1; // px
+
 export class DragTracker extends EventTarget {
   #dragInfoMap: Map<PointerID, DragInfo> = new Map();
 
@@ -50,6 +53,10 @@ export class DragTracker extends EventTarget {
     movementInfo: DragMovementInfo | null;
     hasMoved: boolean;
   } {
+    // TODO: Find a way to detect if this is an active press, in a way that works cross-platform.
+    // if (e.buttons === 0) {
+    //   return { movementInfo: null, hasMoved: false };
+    // }
     const existing = this.#dragInfoMap.get(e.pointerId);
     if (!existing) {
       return { movementInfo: null, hasMoved: false };
@@ -84,7 +91,10 @@ export class DragTracker extends EventTarget {
     existing.lastClientX = e.clientX;
     existing.lastClientY = e.clientY;
     existing.lastTimeStamp = e.timeStamp;
-    if (movementInfo.movementX === 0 && movementInfo.movementY === 0) {
+    if (
+      Math.abs(movementInfo.movementX) < MOVEMENT_EPSILON &&
+      Math.abs(movementInfo.movementY) < MOVEMENT_EPSILON
+    ) {
       return { movementInfo: null, hasMoved: existing.hasMoved };
     } else {
       existing.hasMoved = true;
@@ -129,7 +139,7 @@ export class DragTracker extends EventTarget {
         detail: { attachedInfo: existing.attachedInfo },
       });
     } else {
-      event = new CustomEvent("click", {
+      event = new CustomEvent("press", {
         detail: {
           offsetX: e.offsetX,
           offsetY: e.offsetY,
