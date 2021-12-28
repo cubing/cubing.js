@@ -1,5 +1,5 @@
 import type { ExperimentalStickering, PG3D } from "..";
-import { Alg, experimentalAppendMove, Move } from "../../alg";
+import type { Alg, Move } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
@@ -297,20 +297,7 @@ export class TwistyPlayer
     flexibleMove: Move | string,
     options: { coalesce?: boolean } = {},
   ): void {
-    const move =
-      typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
-    (async () => {
-      const alg = (await this.experimentalModel.algProp.get()).alg;
-      const newAlg = experimentalAppendMove(alg, move, {
-        coalesce: options?.coalesce,
-      });
-      this.experimentalModel.algProp.set(newAlg);
-      this.experimentalModel.timestampRequestProp.set("end");
-      this.experimentalModel.catchUpMoveProp.set({
-        move: move,
-        amount: 0,
-      });
-    })();
+    this.experimentalModel.experimentalAddMove(flexibleMove, options);
   }
 
   static get observedAttributes(): string[] {

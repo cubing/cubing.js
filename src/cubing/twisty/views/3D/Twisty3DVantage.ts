@@ -105,7 +105,14 @@ export class Twisty3DVantage extends ManagedCustomElement {
   async #testBasicPresses(): Promise<void> {
     const dragTracker = await this.#dragTracker();
     dragTracker.addEventListener("press", (e: CustomEvent<PressInfo>) => {
-      console.log(e.detail, "hi");
+      this.dispatchEvent(
+        new CustomEvent("press", {
+          detail: {
+            pressInfo: e.detail,
+            cameraPromise: this.camera(),
+          },
+        }),
+      );
     });
   }
 

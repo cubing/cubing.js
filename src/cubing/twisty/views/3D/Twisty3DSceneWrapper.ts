@@ -1,17 +1,18 @@
-import type { Scene as ThreeScene } from "three";
+import { PerspectiveCamera, Scene as ThreeScene, Vector2 } from "three";
 import type { PuzzleLoader } from "../../../puzzles";
 import { THREEJS } from "../../heavy-code-imports/3d";
+import { StaleDropper } from "../../model/PromiseFreshener";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { BackViewLayoutWithAuto } from "../../model/props/viewer/BackViewProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
-import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import type { BackViewLayout } from "../../old/dom/viewers/TwistyViewerWrapper";
 import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css";
+import type { PressInfo } from "./DragTracker";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
 import { Twisty3DVantage } from "./Twisty3DVantage";
 
@@ -79,6 +80,39 @@ export class Twisty3DSceneWrapper
     this.setBackView(backView);
   }
 
+  async onPress(
+    e: CustomEvent<{
+      pressInfo: PressInfo;
+      cameraPromise: Promise<PerspectiveCamera>;
+    }>,
+  ): Promise<void> {
+    const twisty3DPuzzleWrapper = this.#currentTwisty3DPuzzleWrapper;
+    if (!twisty3DPuzzleWrapper) {
+      console.info("no wrapper; skipping scene wrapper press!");
+      return;
+    }
+
+    const raycasterPromise = (async () => {
+      const [camera, three] = await Promise.all([
+        e.detail.cameraPromise,
+        THREEJS,
+      ]);
+
+      const raycaster = new three.Raycaster();
+      const mouse = new Vector2(
+        e.detail.pressInfo.normalizedX,
+        e.detail.pressInfo.normalizedY,
+      );
+      raycaster.setFromCamera(mouse, camera);
+      return raycaster;
+    })();
+
+    twisty3DPuzzleWrapper.raycastMove(
+      raycasterPromise,
+      !e.detail.pressInfo.rightClick,
+    );
+  }
+
   #cachedScene: Promise<ThreeScene> | null;
   async scene(): Promise<ThreeScene> {
     return (this.#cachedScene ??= (async () => new (await THREEJS).Scene())());
@@ -86,6 +120,7 @@ export class Twisty3DSceneWrapper
 
   #vantages: Set<Twisty3DVantage> = new Set();
   addVantage(vantage: Twisty3DVantage) {
+    vantage.addEventListener("press", this.onPress.bind(this));
     this.#vantages.add(vantage);
     this.contentWrapper.appendChild(vantage);
   }

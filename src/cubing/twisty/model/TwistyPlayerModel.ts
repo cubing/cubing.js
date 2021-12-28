@@ -37,6 +37,7 @@ import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
 import { PuzzleDefProp } from "./props/puzzle/structure/PuzzleDefProp";
 import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
 import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
+import { experimentalAppendMove, Move } from "../../alg";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -221,5 +222,26 @@ export class TwistyPlayerModel {
       url.searchParams.set("puzzle", puzzle);
     }
     return url.toString();
+  }
+
+  // TODO: Animate the new move.
+  experimentalAddMove(
+    flexibleMove: Move | string,
+    options: { coalesce?: boolean } = {},
+  ): void {
+    const move =
+      typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
+    (async () => {
+      const alg = (await this.algProp.get()).alg;
+      const newAlg = experimentalAppendMove(alg, move, {
+        coalesce: options?.coalesce,
+      });
+      this.algProp.set(newAlg);
+      this.timestampRequestProp.set("end");
+      this.catchUpMoveProp.set({
+        move: move,
+        amount: 0,
+      });
+    })();
   }
 }

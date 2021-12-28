@@ -159,11 +159,10 @@ export class DragTracker extends EventTarget {
         detail: { attachedInfo: existing.attachedInfo },
       });
     } else {
-      console.log(e, e.buttons);
       event = new CustomEvent<PressInfo>("press", {
         detail: {
           normalizedX: (e.offsetX / this.target.offsetWidth) * 2 - 1,
-          normalizedY: (e.offsetY / this.target.offsetHeight) * 2 - 1,
+          normalizedY: 1 - (e.offsetY / this.target.offsetHeight) * 2,
           rightClick: !!(e.button & 2),
         },
       });

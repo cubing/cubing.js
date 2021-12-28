@@ -1,8 +1,8 @@
-import type { Texture as ThreeTexture } from "three";
+import type { Raycaster, Texture as ThreeTexture } from "three";
 import { experimentalCubeAppearance, PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
-import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
+import { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
@@ -10,6 +10,7 @@ import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
+import type { Move } from "../../../alg";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {
   constructor(
@@ -164,5 +165,44 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         return pg3d;
       }
     })());
+  }
+
+  async raycastMove(
+    raycasterPromise: Promise<Raycaster>,
+    invert: boolean,
+  ): Promise<void> {
+    const puzzle = await this.twisty3DPuzzle();
+    // TODO: check this differently.
+    if (!(puzzle instanceof PG3D)) {
+      console.info("not PG3D! skipping raycast");
+      return;
+    }
+
+    const targets = puzzle.experimentalGetControlTargets(); // TODO: sticker targets
+    const [raycaster] = await Promise.all([raycasterPromise]);
+
+    const intersects = raycaster.intersectObjects(targets);
+    if (intersects.length > 0) {
+      let move = intersects[0].object.userData.quantumMove as Move | undefined;
+      if (!move) {
+        throw new Error("expected move");
+      }
+
+      if (invert) {
+        move = move.invert();
+      }
+      this.model.experimentalAddMove(move);
+
+      // if (pg) {
+      //   const mv2 = pg.notationMapper.notationToExternal(
+      //     new Move(intersects[0].object.userData.name),
+      //   );
+      //   if (mv2 !== null) {
+      //     canvas.title = mv2.family;
+      //   }
+      // }
+      // } else {
+      //   canvas.title = "";
+    }
   }
 }

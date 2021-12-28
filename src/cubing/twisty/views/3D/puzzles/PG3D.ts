@@ -13,6 +13,7 @@ import {
   Texture,
   Vector3,
 } from "three";
+import { Move } from "../../../../alg";
 import {
   areTransformationsEquivalent,
   KPuzzleDefinition,
@@ -430,7 +431,7 @@ class StickerDef {
 class HitPlaneDef {
   public cubie: Group;
   private geo: BufferGeometry;
-  constructor(hitface: any, tm: TextureMapper) {
+  constructor(hitface: any, tm: TextureMapper, pgdat: StickerDat) {
     this.cubie = new Group();
     const coords = hitface.coords as number[];
     const filler = new Filler(coords.length / 3 - 2, tm);
@@ -442,7 +443,9 @@ class HitPlaneDef {
     this.geo = new BufferGeometry();
     filler.setAttributes(this.geo);
     const obj = new Mesh(this.geo, invisMaterial);
-    obj.userData.name = hitface.name;
+    obj.userData.quantumMove = pgdat.notationMapper.notationToExternal(
+      new Move(hitface.name),
+    );
     this.cubie.scale.setScalar(0.99);
     this.cubie.add(obj);
   }
@@ -630,7 +633,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.fixedGeo = fixedGeo;
     this.filler = filler;
     for (const hitface of hitfaces) {
-      const facedef = new HitPlaneDef(hitface, pgdat.textureMapper);
+      const facedef = new HitPlaneDef(hitface, pgdat.textureMapper, this.pgdat);
       facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
       this.add(facedef.cubie);
       this.controlTargets.push(facedef.cubie.children[0]);
