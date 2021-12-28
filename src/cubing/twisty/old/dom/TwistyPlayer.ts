@@ -46,8 +46,8 @@ import { Twisty2DSVG, Twisty2DSVGOptions } from "./viewers/Twisty2DSVG";
 import { Twisty3DCanvas } from "./viewers/Twisty3DCanvas";
 import type {
   OrbitCoordinates,
-  TwistyOrbitControls,
-} from "./viewers/TwistyOrbitControls";
+  TwistyOrbitControlsV1,
+} from "./viewers/TwistyOrbitControlsV1";
 import type { TwistyViewerElement } from "./viewers/TwistyViewerElement";
 import {
   BackViewLayout,
@@ -318,7 +318,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     return this.#config.attributes["back-view"].value;
   }
 
-  #orbitControls(): TwistyOrbitControls | null {
+  #orbitControls(): TwistyOrbitControlsV1 | null {
     if (
       !["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
     ) {
@@ -327,7 +327,7 @@ export class TwistyPlayerV1 extends ManagedCustomElement {
     return (this.viewerElems[0] as Twisty3DCanvas)?.orbitControls ?? null;
   }
 
-  #backOrbitControls(): TwistyOrbitControls | null {
+  #backOrbitControls(): TwistyOrbitControlsV1 | null {
     if (
       !["3D", "PG3D"].includes(this.#config.attributes["visualization"].value)
     ) {

@@ -23,7 +23,7 @@ import { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import {
   OrbitCoordinates,
   positionToOrbitCoordinates,
-} from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControls";
+} from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControlsV1";
 import { showStats } from "../../../cubing/twisty/views/3D/Twisty3DVantage";
 import {
   getConfigFromURL,

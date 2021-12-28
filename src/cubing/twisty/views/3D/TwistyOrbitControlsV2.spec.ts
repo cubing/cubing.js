@@ -12,6 +12,7 @@ import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";
 import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
+import type { DragTracker } from "./DragTracker";
 
 describe("TwistyOrbitControlsV2", () => {
   it("should update correctly", async () => {
@@ -72,10 +73,13 @@ describe("TwistyOrbitControlsV2", () => {
       },
     } as any as HTMLCanvasElement;
 
+    const mockDragTracker = {} as DragTracker;
+
     const orbitControls = new TwistyOrbitControlsV2(
       mockModel as TwistyPlayerModel,
       false,
       mockCanvas,
+      mockDragTracker,
     );
     expect(canvasEventListenersRegistered).toEqual({
       mousedown: true,

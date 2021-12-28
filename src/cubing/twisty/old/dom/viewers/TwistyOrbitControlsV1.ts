@@ -90,7 +90,7 @@ export function positionToOrbitCoordinates(
 }
 
 // TODO: change mouse cursor while moving.
-export class TwistyOrbitControls {
+export class TwistyOrbitControlsV1 {
   // TODO: should we store as lat/long directly and stick to more rounded values in degrees?
   #spherical: Spherical = new Spherical();
   #lookAt: Vector3 = new Vector3(0, 0, 0);
@@ -168,7 +168,7 @@ export class TwistyOrbitControls {
   experimentalInertia: boolean = INERTIA_DEFAULT;
   /** @deprecated */
   experimentalLatitudeLimits: CameraLatitudeLimits = LATITUDE_LIMITS_DEFAULT;
-  private mirrorControls?: TwistyOrbitControls;
+  private mirrorControls?: TwistyOrbitControlsV1;
   private lastTouchClientX: number = 0;
   private lastTouchClientY: number = 0;
   private currentTouchID: number | null = null; // TODO: support multiple touches?
@@ -403,7 +403,7 @@ export class TwistyOrbitControls {
     e.preventDefault();
   }
 
-  public setMirror(m: TwistyOrbitControls): void {
+  public setMirror(m: TwistyOrbitControlsV1): void {
     this.mirrorControls = m;
   }
 
