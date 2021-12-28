@@ -28,6 +28,12 @@ export class DragTracker extends EventTarget {
   constructor(public readonly target: HTMLElement) {
     super();
     target.addEventListener("pointerdown", this.onPointerDown.bind(this));
+    // Prevent right-click on desktop (only tested on macOS Chrome/Safari/Firefox) so we can detect right-click moves.
+    this.target.addEventListener("contextmenu", (e) => {
+      if (e.buttons & 2) {
+        e.preventDefault();
+      }
+    });
     // Prevent touch scrolling (preventing default on `pointermove` doesn't work).
     this.target.addEventListener("touchmove", (e) => e.preventDefault());
     // Prevent zooming on double-tap (iOS).
