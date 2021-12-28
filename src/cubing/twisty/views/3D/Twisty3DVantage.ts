@@ -14,7 +14,7 @@ import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
-import { DragTracker } from "./DragTracker";
+import { DragTracker, PressInfo } from "./DragTracker";
 
 let SHOW_STATS = false;
 export function showStats(enable: boolean): void {
@@ -104,8 +104,8 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
   async #testBasicPresses(): Promise<void> {
     const dragTracker = await this.#dragTracker();
-    dragTracker.addEventListener("press", (e) => {
-      console.log(e);
+    dragTracker.addEventListener("press", (e: CustomEvent<PressInfo>) => {
+      console.log(e.detail);
     });
   }
 

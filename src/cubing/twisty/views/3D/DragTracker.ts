@@ -19,6 +19,15 @@ export interface DragMovementInfo {
   elapsedMs: number;
 }
 
+export interface UpInfo {
+  attachedInfo: Record<any, any>;
+}
+
+export interface PressInfo {
+  normalizedX: number;
+  normalizedY: number;
+}
+
 // Chrome can report movements as low as `0.0000152587890625` even if the cursor did not move at all. So we need a treshold insteadl.
 const MOVEMENT_EPSILON = 0.1; // px
 
@@ -144,14 +153,14 @@ export class DragTracker extends EventTarget {
     let event: CustomEvent;
     if (trackDragResult.hasMoved) {
       // TODO: send proper movement/momentum since last move event.
-      event = new CustomEvent("up", {
+      event = new CustomEvent<UpInfo>("up", {
         detail: { attachedInfo: existing.attachedInfo },
       });
     } else {
-      event = new CustomEvent("press", {
+      event = new CustomEvent<PressInfo>("press", {
         detail: {
-          offsetX: e.offsetX,
-          offsetY: e.offsetY,
+          normalizedX: (e.offsetX / this.target.offsetWidth) * 2 - 1,
+          normalizedY: (e.offsetY / this.target.offsetHeight) * 2 - 1,
         },
       });
     }
