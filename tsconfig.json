@@ -19,6 +19,13 @@
     "rootDir": "./",
     "outDir": "./dist"
   },
-  "include": ["src", "script"],
+  "include": [
+    "src",
+    "src/**/*.ts", // Workaround from https://github.com/microsoft/TypeScript/issues/45721
+    "src/**/*.js", // Workaround from https://github.com/microsoft/TypeScript/issues/45721
+    "script",
+    "script/**/*.ts", // Workaround from https://github.com/microsoft/TypeScript/issues/45721
+    "script/**/*.js" // Workaround from https://github.com/microsoft/TypeScript/issues/45721
+  ],
   "exclude": ["src/static", "src/cubing/search/worker-inside-generated*"]
 }
