@@ -10,7 +10,7 @@ import * as stream from "./stream";
 import * as search from "./search";
 import * as twisty from "./twisty";
 
-export const cubing = {
+const cubing = {
   alg,
   bluetooth,
   kpuzzle,
@@ -28,4 +28,8 @@ try {
   (globalThis as any).cubing = cubing;
 } catch (e) {
   console.log("Unable to set `cubing` on the global object.");
+}
+
+if (globalThis.module?.exports) {
+  globalThis.module.exports = cubing;
 }
