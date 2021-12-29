@@ -10,7 +10,6 @@ import {
 } from "../../../cubing/bluetooth";
 import type { KPuzzleDefinition } from "../../../cubing/kpuzzle";
 import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
-import { countMoves } from "../../../cubing/notation";
 import {
   getpuzzle,
   getpuzzles,
@@ -207,11 +206,10 @@ function trimEq(a: string, b: string): boolean {
   return a.trim() === b.trim();
 }
 
-function updateMoveCount(alg?: Alg): void {
-  const len = countMoves(alg ? alg : Alg.fromString(lastalgo));
+function updateMoveCount(moveCount: number | null): void {
   const mc = document.getElementById("movecount");
   if (mc) {
-    mc.innerText = `Moves: ${len}`;
+    mc.innerText = `Moves: ${moveCount ?? "(N/A)"}`;
   }
 }
 
@@ -291,6 +289,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         viewerLink: "none",
       } as TwistyPlayerConfig);
       twisty = new TwistyPlayer(config);
+      twisty.experimentalModel.moveCountProp.addFreshListener(updateMoveCount);
       new URLParamUpdater(twisty.experimentalModel);
 
       (
@@ -362,7 +361,6 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       if (!writeback) {
         twisty.jumpToEnd();
       }
-      updateMoveCount(alg);
       // setURLParams({ alg: alg });
     } catch (e) {
       markInvalidAlg(str);
@@ -636,12 +634,10 @@ function setpuzzleparams(desc: string): void {
   const puzzles = getpuzzles();
   for (const [name, s] of Object.entries(puzzles)) {
     if (s === desc) {
-      updateMoveCount();
       setURLParams({ "puzzle": name, "puzzle-description": "" });
       return;
     }
   }
-  updateMoveCount();
   setURLParams({ "puzzle": "", "puzzle-description": desc });
 }
 
@@ -763,7 +759,6 @@ function addMove(move: Move): void {
   lastalgo = newAlg.toString();
   twisty.experimentalAddMove(move, { coalesce: true }); // TODO: mod
   algoinput.value = lastalgo;
-  updateMoveCount(newAlg);
   // setURLParams({ alg: newAlg });
 }
 

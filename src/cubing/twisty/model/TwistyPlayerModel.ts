@@ -38,6 +38,7 @@ import { PuzzleDefProp } from "./props/puzzle/structure/PuzzleDefProp";
 import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
 import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
 import { experimentalAppendMove, Move } from "../../alg";
+import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -117,6 +118,8 @@ export class TwistyPlayerModel {
     visualizationStrategy: this.visualizationStrategyProp,
     indexerConstructorRequest: this.indexerConstructorRequestProp,
   });
+
+  moveCountProp = new NaiveMoveCountProp({ alg: this.puzzleAlgProp });
 
   orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
