@@ -189,7 +189,6 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         intersects[0].point,
         transformations,
       );
-      console.log({ closestMove }, closestMove?.toString());
       if (closestMove) {
         this.model.experimentalAddMove(closestMove, { coalesce: true });
       } else {
