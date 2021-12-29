@@ -76,7 +76,6 @@ const renderOptions = [
   "vertexmoves",
   "threed",
   "sidebyside",
-  "hintstickers",
   "showfoundation",
 ];
 const workOptions = [
