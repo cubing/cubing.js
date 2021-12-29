@@ -320,7 +320,6 @@ class StickerDef {
   }
 
   private setHintStickers(filler: Filler, hintStickers: boolean): void {
-    console.log("setHintStickers");
     const indv = this.isDup || !hintStickers ? 4 : 2;
     for (let i = this.hintStart; i < this.hintEnd; i++) {
       filler.ind[i] = indv | (filler.ind[i] & 1);
@@ -519,6 +518,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private materialArray1: Material[];
   private materialArray2: Material[];
   private textured: boolean = false;
+  private showHintStickers: boolean = false;
+  private showFoundations: boolean = false;
   private hintMaterialDisposable: boolean;
   private stickerMaterialDisposable: boolean;
 
@@ -529,8 +530,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private scheduleRenderCallback: () => void,
     private definition: KPuzzleDefinition,
     private stickerDat: StickerDat,
-    private showFoundation: boolean = false,
-    private showHintStickers: boolean = false,
+    enableFoundationOpt: boolean = false,
+    enableHintStickersOpt: boolean = false,
     hintStickerHeightScale: number = 1,
     private params: PG3DOptions = {},
   ) {
@@ -555,8 +556,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.stickers = {};
     this.materialArray1 = new Array(8);
     this.materialArray2 = new Array(8);
-    this.enableFoundation(showFoundation);
-    this.updateMaterialArrays();
+    // TODO: the argument enableFoundationOpt really means, do we ever want to display
+    // foundations.  But it is presently *used* to mean, show foundations initially
+    // (and maybe experimentalSetAppearance changes this).  So for now we set up the
+    // show flag from the enable flag, and turn on the enable flag so later when it's
+    // used we will get the foundations.  What this means is the geometry always "pays"
+    // for foundations, even if they aren't displayed.
+    this.showFoundation(enableFoundationOpt);
+    enableFoundationOpt = true;
     let triangleCount = 0;
     const multiplier = 3;
     for (const sticker of stickers) {
@@ -603,6 +610,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const stickerdef = new StickerDef(filler, sticker, trim, options);
       this.stickers[orbit][ori][ord] = stickerdef;
     }
+    // TODO: the argument enableHintStickersOpt really means, do we ever want to display
+    // hint stickers.  But it is presently *used* to mean, show hint stickers initially
+    // (and maybe experimentalSetAppearance changes this).  So for now we set up the
+    // show flag from the enable flag, and turn on the enable flag so later when it's
+    // used we will get the hint stickers.  What this means is the geometry always "pays"
+    // for hint stickers, even if they aren't displayed.
+    this.showHintStickers = enableHintStickersOpt;
+    enableHintStickersOpt = true;
     for (const sticker of stickers) {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
@@ -610,7 +625,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.stickers[orbit][ori][ord].addHint(
         filler,
         sticker,
-        showHintStickers,
+        enableHintStickersOpt,
         hintStickerHeightScale,
         trim,
         normals[sticker.face],
@@ -621,7 +636,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
       const ori = sticker.ori;
-      this.stickers[orbit][ori][ord].addFoundation(filler, sticker, black);
+      if (enableFoundationOpt) {
+        this.stickers[orbit][ori][ord].addFoundation(filler, sticker, black);
+      }
     }
     const fixedGeo = new BufferGeometry();
     filler.setAttributes(fixedGeo);
@@ -649,6 +666,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     filler.saveOriginalColors();
     cursor.addPositionListener(this);
     stickerDat.stickers = []; // don't need these anymore
+    this.updateMaterialArrays();
     /*
     this.experimentalUpdateTexture(
       true,
@@ -705,7 +723,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       invert: boolean;
       depth?: "secondSlice" | "rotation" | "none";
     },
-  ): { move: Move; order: number } | null {
+  ): {move: Move, order: number} | null {
     let closestMove: Move | null = null;
     let closestMoveDotProduct: number = 0;
 
@@ -746,7 +764,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.#kpuzzle.reset();
     this.#kpuzzle.applyMove(closestMove);
     const order = transformationOrder(this.definition, this.#kpuzzle.state);
-    return { move: closestMove, order }; // TODO: push this down
+    return {move: closestMove, order}; // TODO: push this down
   }
 
   experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
@@ -916,10 +934,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return smootherStep(fraction);
   }
 
-  private enableHintFacelets(v: boolean) {
-    console.log("enableHintFacelets", v);
+  private showHintFacelets(v: boolean) {
     this.showHintStickers = v;
-    this.updateMaterialArrays();
   }
 
   private updateMaterialArrays() {
@@ -936,7 +952,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.materialArray1[2] = invisMaterial;
       this.materialArray2[3] = invisMaterial;
     }
-    if (this.showFoundation) {
+    if (this.showFoundations) {
       this.materialArray1[6] = foundationMaterial;
       this.materialArray2[7] = foundationMaterial;
     } else {
@@ -945,9 +961,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
   }
 
-  private enableFoundation(v: boolean) {
-    this.showFoundation = v;
-    this.updateMaterialArrays();
+  private showFoundation(v: boolean) {
+    this.showFoundations = v;
   }
 
   private setHintStickerOpacity(v: number): void {
@@ -955,6 +970,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.hintMaterial.dispose();
       this.hintMaterialDisposable = false;
     }
+    console.log("hint sticker opacity " + v);
     if (v === 0) {
       this.hintMaterial = invisMaterial;
     } else if (v === 1) {
@@ -976,10 +992,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     hintStickerOpacity?: number;
   }): void {
     if (options.hintFacelets !== undefined) {
-      this.enableHintFacelets(options.hintFacelets !== "none");
+      this.showHintFacelets(options.hintFacelets !== "none");
     }
     if (options.showFoundation !== undefined) {
-      this.enableFoundation(options.showFoundation);
+      this.showFoundation(options.showFoundation);
     }
     if (options.hintStickerOpacity !== undefined) {
       this.setHintStickerOpacity(options.hintStickerOpacity);
