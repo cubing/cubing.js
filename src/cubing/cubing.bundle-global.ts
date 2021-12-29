@@ -27,9 +27,5 @@ const cubing = {
 try {
   (globalThis as any).cubing = cubing;
 } catch (e) {
-  console.log("Unable to set `cubing` on the global object.");
-}
-
-if (globalThis.module?.exports) {
-  globalThis.module.exports = cubing;
+  console.error("Unable to set `cubing` on the global object.");
 }
