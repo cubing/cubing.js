@@ -231,7 +231,7 @@ export class TwistyPlayerModel {
   // TODO: Animate the new move.
   experimentalAddMove(
     flexibleMove: Move | string,
-    options: { coalesce?: boolean } = {},
+    options: { coalesce?: boolean, mod?: number } = {},
   ): void {
     const move =
       typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
@@ -239,6 +239,7 @@ export class TwistyPlayerModel {
       const alg = (await this.algProp.get()).alg;
       const newAlg = experimentalAppendMove(alg, move, {
         coalesce: options?.coalesce,
+        mod: options?.mod
       });
       this.algProp.set(newAlg);
       this.timestampRequestProp.set("end");

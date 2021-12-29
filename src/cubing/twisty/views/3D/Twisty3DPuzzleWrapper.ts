@@ -190,7 +190,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         transformations,
       );
       if (closestMove) {
-        this.model.experimentalAddMove(closestMove, { coalesce: true });
+        this.model.experimentalAddMove(closestMove.move, { coalesce: true, mod: closestMove.order });
       } else {
         console.info("Skipping move!");
       }

@@ -19,6 +19,7 @@ import {
   KPuzzle,
   KPuzzleDefinition,
   Transformation,
+  transformationOrder,
 } from "../../../../kpuzzle";
 import { experimentalTransformationForQuantumMove } from "../../../../kpuzzle";
 import type {
@@ -685,10 +686,12 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   #cachedKPuzzle: KPuzzle | null;
+  get #kpuzzle() {
+    return (this.#cachedKPuzzle ??= new KPuzzle(this.definition));
+  }
   #isValidMove(move: Move): boolean {
-    const kpuzzle = (this.#cachedKPuzzle ??= new KPuzzle(this.definition));
     try {
-      kpuzzle.applyMove(move);
+      this.#kpuzzle.applyMove(move);
       return true;
     } catch (_) {
       return false;
@@ -701,7 +704,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       invert: boolean;
       depth?: "secondSlice" | "rotation" | "none";
     },
-  ): Move | null {
+  ): {move: Move, order: number} | null {
     let closestMove: Move | null = null;
     let closestMoveDotProduct: number = 0;
 
@@ -738,7 +741,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (transformations.invert) {
       closestMove = closestMove.invert();
     }
-    return closestMove; // TODO: push this down
+    // TODO: cache order or make this lookup more efficient.
+    this.#kpuzzle.reset();
+    this.#kpuzzle.applyMove(closestMove);
+    const order = transformationOrder(this.definition, this.#kpuzzle.state);
+    return {move: closestMove, order}; // TODO: push this down
   }
 
   experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
