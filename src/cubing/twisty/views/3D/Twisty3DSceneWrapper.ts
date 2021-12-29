@@ -107,10 +107,14 @@ export class Twisty3DSceneWrapper
       return raycaster;
     })();
 
-    twisty3DPuzzleWrapper.raycastMove(
-      raycasterPromise,
-      !e.detail.pressInfo.rightClick,
-    );
+    twisty3DPuzzleWrapper.raycastMove(raycasterPromise, {
+      invert: !e.detail.pressInfo.rightClick,
+      depth: e.detail.pressInfo.keys.ctrlOrMetaKey
+        ? "rotation"
+        : e.detail.pressInfo.keys.shiftKey
+        ? "secondSlice"
+        : "none",
+    });
   }
 
   #cachedScene: Promise<ThreeScene> | null;

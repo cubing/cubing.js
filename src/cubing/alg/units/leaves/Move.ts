@@ -126,7 +126,7 @@ export class QuantumMove extends Comparable {
   }
 }
 
-interface MoveModifications {
+export interface MoveModifications {
   outerLayer?: number;
   innerLayer?: number;
   family?: string;

@@ -16,6 +16,7 @@ import {
 import { Move } from "../../../../alg";
 import {
   areTransformationsEquivalent,
+  KPuzzle,
   KPuzzleDefinition,
   Transformation,
 } from "../../../../kpuzzle";
@@ -683,17 +684,61 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return this.controlTargets;
   }
 
-  getClosestAxisMove(point: Vector3): Move {
-    let bestGrip: Move = this.stickerDat.axis[0].quantumMove;
-    let bestProduct: number = 0;
+  #cachedKPuzzle: KPuzzle | null;
+  #isValidMove(move: Move): boolean {
+    const kpuzzle = (this.#cachedKPuzzle ??= new KPuzzle(this.definition));
+    try {
+      kpuzzle.applyMove(move);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  getClosestMoveToAxis(
+    point: Vector3,
+    transformations: {
+      invert: boolean;
+      depth?: "secondSlice" | "rotation" | "none";
+    },
+  ): Move | null {
+    let closestMove: Move | null = null;
+    let closestMoveDotProduct: number = 0;
+
+    let modify: (move: Move) => Move = (m) => m;
+    switch (transformations.depth) {
+      case "secondSlice":
+        modify = (m: Move) => m.modified({ innerLayer: 2 });
+        break;
+      case "rotation":
+        modify = (m: Move) => m.modified({ family: m.family + "v" });
+        break;
+    }
+
     for (const axis of this.stickerDat.axis) {
       const product = point.dot(new Vector3(...axis.coordinates));
-      if (product > bestProduct) {
-        bestProduct = product;
-        bestGrip = axis.quantumMove;
+      if (product > closestMoveDotProduct) {
+        const modified = this.stickerDat.notationMapper.notationToExternal(
+          modify(axis.quantumMove),
+        );
+        if (!modified) {
+          continue;
+        }
+        if (this.#isValidMove(modified)) {
+          closestMoveDotProduct = product;
+          closestMove = modified;
+        }
       }
     }
-    return this.stickerDat.notationMapper.notationToExternal(bestGrip)!; // TODO: push this down
+
+    if (!closestMove) {
+      return null;
+    }
+
+    if (transformations.invert) {
+      closestMove = closestMove.invert();
+    }
+    return closestMove; // TODO: push this down
   }
 
   experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {

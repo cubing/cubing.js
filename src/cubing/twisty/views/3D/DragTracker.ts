@@ -27,6 +27,12 @@ export interface PressInfo {
   normalizedX: number;
   normalizedY: number;
   rightClick: boolean;
+  keys: {
+    // TODO: group these
+    altKey: boolean;
+    ctrlOrMetaKey: boolean;
+    shiftKey: boolean;
+  };
 }
 
 // Chrome can report movements as low as `0.0000152587890625` even if the cursor did not move at all. So we need a treshold insteadl.
@@ -159,11 +165,17 @@ export class DragTracker extends EventTarget {
         detail: { attachedInfo: existing.attachedInfo },
       });
     } else {
+      const { altKey, ctrlKey, metaKey, shiftKey } = e;
       event = new CustomEvent<PressInfo>("press", {
         detail: {
           normalizedX: (e.offsetX / this.target.offsetWidth) * 2 - 1,
           normalizedY: 1 - (e.offsetY / this.target.offsetHeight) * 2,
           rightClick: !!(e.button & 2),
+          keys: {
+            altKey,
+            ctrlOrMetaKey: ctrlKey || metaKey,
+            shiftKey,
+          },
         },
       });
     }

@@ -168,7 +168,10 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
 
   async raycastMove(
     raycasterPromise: Promise<Raycaster>,
-    invert: boolean,
+    transformations: {
+      invert: boolean;
+      depth?: "secondSlice" | "rotation" | "none";
+    },
   ): Promise<void> {
     const puzzle = await this.twisty3DPuzzle();
     // TODO: check this differently.
@@ -182,11 +185,16 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
 
     const intersects = raycaster.intersectObjects(targets);
     if (intersects.length > 0) {
-      let move = puzzle.getClosestAxisMove(intersects[0].point);
-      if (invert) {
-        move = move.invert();
+      const closestMove = puzzle.getClosestMoveToAxis(
+        intersects[0].point,
+        transformations,
+      );
+      console.log({ closestMove }, closestMove?.toString());
+      if (closestMove) {
+        this.model.experimentalAddMove(closestMove, { coalesce: true });
+      } else {
+        console.info("Skipping move!");
       }
-      this.model.experimentalAddMove(move, { coalesce: true });
     }
   }
 }
