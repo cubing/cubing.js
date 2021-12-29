@@ -36,17 +36,12 @@ async function runTest() {
   //   fullPage: true,
   // });
 
-  const puzzle = new URL(page.url()).searchParams.get("puzzle");
-  assert("Default puzzle is set in the URL parameter", "3x3x3", puzzle);
+  await page.$eval("twisty-player", (elem) => (elem.puzzle = "2x2x2"));
 
-  assert(
-    "Time range is correct",
-    1000,
-    await page.$eval(
-      "twisty-player-v1",
-      (elem) => elem.timeline.timeRange().end,
-    ),
-  );
+  await page.waitForNavigation();
+
+  const puzzle = new URL(page.url()).searchParams.get("puzzle");
+  assert("Puzzle is set in the URL parameter", "2x2x2", puzzle);
 
   await Promise.all([
     page.waitForNavigation(),
@@ -57,15 +52,6 @@ async function runTest() {
     "New puzzle is set in the URL parameter",
     "FTO",
     new URL(page.url()).searchParams.get("puzzle"),
-  );
-
-  await page.$eval("textarea", (elem) => (elem.value = "BADMOVE"));
-  await page.waitForTimeout(100);
-
-  assert(
-    "Alg is marked as bad.",
-    "rgb(255, 128, 128)",
-    await page.$eval("textarea", (elem) => elem.style.backgroundColor),
   );
 
   if (OPEN_REPL) {
