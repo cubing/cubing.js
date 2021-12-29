@@ -267,7 +267,8 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         // TODO: distance?
         cameraLatitudeLimit: 90,
         viewerLink: "none",
-        experimentalMovePressInput: "basic"
+        experimentalMovePressInput: "basic",
+        hintFacelets: "none"
       } ;
       Object.assign(config, explorerConfig);
       twistyPlayer = new TwistyPlayer(config);
