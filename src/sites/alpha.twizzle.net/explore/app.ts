@@ -74,12 +74,8 @@ const renderOptions = [
   "corners",
   "blockmoves",
   "vertexmoves",
-  "threed",
-  "sidebyside",
-  "showfoundation",
 ];
 const workOptions = [
-  "threed",
   "centers",
   "edges",
   "corners",
