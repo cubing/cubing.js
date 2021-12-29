@@ -271,7 +271,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         // cameraLatitudeLimit: "none",
         // TODO: distance?
         cameraLatitudeLimit: 90,
-        viewerLink: "none",
+        viewerLink: "none"
       } as TwistyPlayerConfig);
       twistyPlayer = new TwistyPlayer(config);
 
