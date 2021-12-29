@@ -3,6 +3,7 @@ import { experimentalCubeAppearance, PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
 import { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
+import type { FoundationDisplay } from "../../model/props/puzzle/display/FoundationDisplayProp";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
@@ -57,6 +58,17 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         ).experimentalUpdateOptions({
           hintFacelets:
             hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
+        });
+        this.scheduleRender();
+      },
+    );
+    this.#freshListenerManager.addListener(
+      this.model.foundationDisplayProp,
+      async (foundationDisplay: FoundationDisplay) => {
+        (
+          (await this.twisty3DPuzzle()) as Cube3D | PG3D
+        ).experimentalUpdateOptions({
+          showFoundation: foundationDisplay !== "none",
         });
         this.scheduleRender();
       },
@@ -190,7 +202,10 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         transformations,
       );
       if (closestMove) {
-        this.model.experimentalAddMove(closestMove.move, { coalesce: true, mod: closestMove.order });
+        this.model.experimentalAddMove(closestMove.move, {
+          coalesce: true,
+          mod: closestMove.order,
+        });
       } else {
         console.info("Skipping move!");
       }

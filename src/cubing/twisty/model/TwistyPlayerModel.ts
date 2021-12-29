@@ -40,6 +40,7 @@ import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
 import { experimentalAppendMove, Move } from "../../alg";
 import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
+import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -54,6 +55,7 @@ export class TwistyPlayerModel {
   backViewProp = new BackViewProp();
   controlPanelProp = new ControlPanelProp();
   catchUpMoveProp = new CatchUpMoveProp();
+  foundationDisplayProp = new FoundationDisplayProp();
   foundationStickerSpriteURL = new URLProp();
   hintFaceletProp = new HintFaceletProp();
   hintStickerSpriteURL = new URLProp();
@@ -231,7 +233,7 @@ export class TwistyPlayerModel {
   // TODO: Animate the new move.
   experimentalAddMove(
     flexibleMove: Move | string,
-    options: { coalesce?: boolean, mod?: number } = {},
+    options: { coalesce?: boolean; mod?: number } = {},
   ): void {
     const move =
       typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
@@ -239,7 +241,7 @@ export class TwistyPlayerModel {
       const alg = (await this.algProp.get()).alg;
       const newAlg = experimentalAppendMove(alg, move, {
         coalesce: options?.coalesce,
-        mod: options?.mod
+        mod: options?.mod,
       });
       this.algProp.set(newAlg);
       this.timestampRequestProp.set("end");

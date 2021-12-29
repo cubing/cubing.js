@@ -33,7 +33,12 @@ import {
   remapLegacyURLParams,
   URLParamUpdater,
 } from "../core/url-params";
-import { setup3DCheckbox, setupHintFaceletsCheckbox, setupSideBySideCheckbox } from "./inputs";
+import {
+  setup3DCheckbox,
+  setupFoundationDisplayCheckbox,
+  setupHintFaceletsCheckbox,
+  setupSideBySideCheckbox,
+} from "./inputs";
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
@@ -268,13 +273,14 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         cameraLatitudeLimit: 90,
         viewerLink: "none",
         experimentalMovePressInput: "basic",
-        hintFacelets: "none"
-      } ;
+        // hintFacelets: "none"
+      };
       Object.assign(config, explorerConfig);
       twistyPlayer = new TwistyPlayer(config);
 
-      setup3DCheckbox("threed", twistyPlayer)
-      setupSideBySideCheckbox("sidebyside", twistyPlayer)
+      setup3DCheckbox("threed", twistyPlayer);
+      setupSideBySideCheckbox("sidebyside", twistyPlayer);
+      setupFoundationDisplayCheckbox("showfoundation", twistyPlayer);
       setupHintFaceletsCheckbox("hintstickers", twistyPlayer);
       twistyPlayer.experimentalModel.moveCountProp.addFreshListener(
         updateMoveCount,

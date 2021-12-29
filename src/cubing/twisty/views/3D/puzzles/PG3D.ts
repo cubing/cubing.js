@@ -320,6 +320,7 @@ class StickerDef {
   }
 
   private setHintStickers(filler: Filler, hintStickers: boolean): void {
+    console.log("setHintStickers")
     const indv = this.isDup || !hintStickers ? 4 : 2;
     for (let i = this.hintStart; i < this.hintEnd; i++) {
       filler.ind[i] = indv | (filler.ind[i] & 1);
@@ -916,6 +917,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   private enableHintFacelets(v: boolean) {
+    console.log("enableHintFacelets", v)
     this.showHintStickers = v;
     this.updateMaterialArrays();
   }

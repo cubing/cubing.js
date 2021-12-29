@@ -34,6 +34,24 @@ export function setupSideBySideCheckbox(
 }
 
 // TODO: Consolidate
+export function setupFoundationDisplayCheckbox(
+  domID: string,
+  twistyPlayer: TwistyPlayer,
+): void {
+  const elem = document.getElementById(domID) as HTMLInputElement;
+  twistyPlayer.experimentalModel.foundationDisplayProp.addFreshListener(
+    (foundationDisplay) => {
+      elem.checked = !["none"].includes(foundationDisplay);
+    },
+  );
+  elem.addEventListener("change", () => {
+    twistyPlayer.experimentalModel.foundationDisplayProp.set(
+      elem.checked ? "opaque" : "none",
+    );
+  });
+}
+
+// TODO: Consolidate
 export function setupHintFaceletsCheckbox(
   domID: string,
   twistyPlayer: TwistyPlayer,
