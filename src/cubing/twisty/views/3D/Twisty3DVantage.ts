@@ -97,14 +97,18 @@ export class Twisty3DVantage extends ManagedCustomElement {
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
     this.orbitControls(); // TODO
-    this.#testBasicPresses();
+    this.#setupBasicPresses();
 
     this.scheduleRender();
   }
 
-  async #testBasicPresses(): Promise<void> {
+  async #setupBasicPresses(): Promise<void> {
     const dragTracker = await this.#dragTracker();
-    dragTracker.addEventListener("press", (e: CustomEvent<PressInfo>) => {
+    dragTracker.addEventListener("press", async (e: CustomEvent<PressInfo>) => {
+      const movePressInput = await this.model!.movePressInputProp.get();
+      if (movePressInput !== "basic") {
+        return;
+      }
       this.dispatchEvent(
         new CustomEvent("press", {
           detail: {

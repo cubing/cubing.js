@@ -39,6 +39,7 @@ import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
 import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
 import { experimentalAppendMove, Move } from "../../alg";
 import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
+import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -58,9 +59,9 @@ export class TwistyPlayerModel {
   hintStickerSpriteURL = new URLProp();
   indexerConstructorRequestProp = new IndexerConstructorRequestProp();
   latitudeLimitProp = new LatitudeLimitProp();
+  movePressInputProp = new MovePressInputProp();
   orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
-
   playingInfoProp = new PlayingInfoProp();
   puzzleDescriptionRequestProp = new PGPuzzleDescriptionStringProp();
   puzzleIDRequestProp = new PuzzleIDRequestProp();

@@ -260,7 +260,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         config.experimentalPuzzleDescription = getpuzzle(config.puzzle!);
         delete config["puzzle"];
       }
-      Object.assign(config, {
+      const explorerConfig: TwistyPlayerConfig = {
         // experimentalPuzzleDescription: (
         //   document.getElementById("desc")! as HTMLInputElement
         // ).value, // TODO
@@ -271,8 +271,10 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         // cameraLatitudeLimit: "none",
         // TODO: distance?
         cameraLatitudeLimit: 90,
-        viewerLink: "none"
-      } as TwistyPlayerConfig);
+        viewerLink: "none",
+        experimentalMovePressInput: "basic"
+      } ;
+      Object.assign(config, explorerConfig);
       twistyPlayer = new TwistyPlayer(config);
 
       setupHintFaceletsCheckbox("hintstickers", twistyPlayer);
