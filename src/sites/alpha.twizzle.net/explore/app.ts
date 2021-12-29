@@ -33,7 +33,7 @@ import {
   remapLegacyURLParams,
   URLParamUpdater,
 } from "../core/url-params";
-import { setupHintFaceletsCheckbox } from "./inputs";
+import { setup3DCheckbox, setupHintFaceletsCheckbox, setupSideBySideCheckbox } from "./inputs";
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
@@ -272,6 +272,8 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       Object.assign(config, explorerConfig);
       twistyPlayer = new TwistyPlayer(config);
 
+      setup3DCheckbox("threed", twistyPlayer)
+      setupSideBySideCheckbox("sidebyside", twistyPlayer)
       setupHintFaceletsCheckbox("hintstickers", twistyPlayer);
       twistyPlayer.experimentalModel.moveCountProp.addFreshListener(
         updateMoveCount,
