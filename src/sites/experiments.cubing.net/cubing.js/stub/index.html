@@ -1,10 +1,14 @@
-<div id="log" style="background: #90B8DF; width: 90%; height: 90%">(Waiting for data.)</div>
+<div id="log" style="background: #90b8df; width: 90%; height: 90%">
+  (Waiting for data.)
+</div>
 <script>
   window.addEventListener("load", () => {
     document.body.addEventListener("pointermove", (e) => {
       console.log(e);
-      e.hasOwnProperty("screenX")
-      document.querySelector("#log").textContent = `{screenX: ${e.screenX}, screenY: ${e.screenY}} at ${Math.round(performance.now()) / 1000}sec`
-    })
-  })
+      e.hasOwnProperty("screenX");
+      document.querySelector("#log").textContent = `{screenX: ${
+        e.screenX
+      }, screenY: ${e.screenY}} at ${Math.round(performance.now()) / 1000}sec`;
+    });
+  });
 </script>

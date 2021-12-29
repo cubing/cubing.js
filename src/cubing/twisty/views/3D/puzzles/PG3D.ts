@@ -320,7 +320,7 @@ class StickerDef {
   }
 
   private setHintStickers(filler: Filler, hintStickers: boolean): void {
-    console.log("setHintStickers")
+    console.log("setHintStickers");
     const indv = this.isDup || !hintStickers ? 4 : 2;
     for (let i = this.hintStart; i < this.hintEnd; i++) {
       filler.ind[i] = indv | (filler.ind[i] & 1);
@@ -705,7 +705,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       invert: boolean;
       depth?: "secondSlice" | "rotation" | "none";
     },
-  ): {move: Move, order: number} | null {
+  ): { move: Move; order: number } | null {
     let closestMove: Move | null = null;
     let closestMoveDotProduct: number = 0;
 
@@ -746,7 +746,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.#kpuzzle.reset();
     this.#kpuzzle.applyMove(closestMove);
     const order = transformationOrder(this.definition, this.#kpuzzle.state);
-    return {move: closestMove, order}; // TODO: push this down
+    return { move: closestMove, order }; // TODO: push this down
   }
 
   experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
@@ -917,7 +917,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   private enableHintFacelets(v: boolean) {
-    console.log("enableHintFacelets", v)
+    console.log("enableHintFacelets", v);
     this.showHintStickers = v;
     this.updateMaterialArrays();
   }
