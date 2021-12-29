@@ -19,7 +19,11 @@ import {
   StickerDat,
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
-import { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
+import {
+  TwistyAlgEditor,
+  TwistyPlayer,
+  TwistyPlayerConfig,
+} from "../../../cubing/twisty";
 import {
   OrbitCoordinates,
   positionToOrbitCoordinates,
@@ -283,8 +287,9 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         cameraLongitude: initialCameraOrbitCoordinates.longitude,
         // cameraLatitudeLimit: "none",
         // TODO: distance?
+        cameraLatitudeLimit: 90,
         viewerLink: "none",
-      });
+      } as TwistyPlayerConfig);
       twisty = new TwistyPlayer(config);
       new URLParamUpdater(twisty.experimentalModel);
 
