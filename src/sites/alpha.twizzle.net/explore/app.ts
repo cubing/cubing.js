@@ -65,12 +65,6 @@ let initialCameraOrbitCoordinates: OrbitCoordinates = {
   longitude: 0,
   distance: DEFAULT_CAMERA_DISTANCE,
 };
-const savedCameraOrbitCoordinates: OrbitCoordinates = {
-  latitude: 0,
-  longitude: 0,
-  distance: DEFAULT_CAMERA_DISTANCE,
-};
-let haveSavedCamera = false;
 // const lastShape: string = "";
 // let nextShape: string = "";
 let tempomult: number = 1.0;
@@ -214,19 +208,9 @@ function updateMoveCount(moveCount: number | null): void {
   }
 }
 
-function saveCamera(): void {
-  // TODO
-  // savedCameraOrbitCoordinates =
-  //   twisty.experimentalDerivedCameraOrbitCoordinates();
-  haveSavedCamera = true;
-}
 //  This function is *not* idempotent when we save the
 //  camera position.
 function cameraCoords(pg: PuzzleGeometry): OrbitCoordinates {
-  if (haveSavedCamera) {
-    haveSavedCamera = false;
-    return savedCameraOrbitCoordinates;
-  }
   const faceCount = pg.baseplanerot.length;
   let geoTowardsViewer = "?";
   if (faceCount === 4) {
@@ -528,7 +512,6 @@ function checkchange_internal(): void {
   const firstLoad = !twistyPlayer;
   if (scramble !== 0 || lastval !== descarg || !renderSame) {
     puzzleSelected = true;
-    const savecam = lastval === descarg;
     let savealg = true;
     lastval = descarg;
     lastRender = newRender;
@@ -536,9 +519,6 @@ function checkchange_internal(): void {
       descarg.split(" "),
     );
     if (puzzleDescription) {
-      if (savecam) {
-        saveCamera();
-      }
       const options: PuzzleGeometryOptions = {
         allMoves: true,
         orientCenters: true,
