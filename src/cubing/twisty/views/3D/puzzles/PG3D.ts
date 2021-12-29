@@ -986,6 +986,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (this.lastPos) {
       this.onPositionChange(this.lastPos);
     }
+    this.updateMaterialArrays();
     this.scheduleRenderCallback();
   }
 
