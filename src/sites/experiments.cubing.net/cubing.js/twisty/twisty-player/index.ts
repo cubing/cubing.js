@@ -6,6 +6,7 @@ import { backViewLayouts, TwistyPlayer } from "../../../../../cubing/twisty";
 import { hintFaceletStyles } from "../../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
 import { experimentalStickerings } from "../../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/puzzle/state/IndexerConstructorRequestProp";
+import { movePressInputNames } from "../../../../../cubing/twisty/model/props/puzzle/state/MovePressInputProp";
 import { setupToLocations } from "../../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import {
   PuzzleID,
@@ -86,7 +87,11 @@ debugShowRenderStats(true);
       "hint-facelets",
       Object.assign({ auto: true }, hintFaceletStyles),
     ],
-    ["experimentalStickering", "stickering", experimentalStickerings],
+    [
+      "experimentalStickering",
+      "experimental-stickering",
+      experimentalStickerings,
+    ],
 
     [
       "background",
@@ -102,11 +107,12 @@ debugShowRenderStats(true);
     ["backView", "back-view", Object.assign({ auto: true }, backViewLayouts)],
 
     ["indexer", "indexer", Object.assign({ auto: true }, indexerStrategyNames)],
-    // [
-    //   "experimentalCameraLatitudeLimits",
-    //   "experimental-camera-latitude-limits",
-    //   cameraLatitudeLimits,
-    // ],
+
+    [
+      "experimentalMovePressInput",
+      "experimental-move-press-input",
+      Object.assign({ auto: true }, movePressInputNames),
+    ],
 
     [
       "viewerLink",
