@@ -1,12 +1,12 @@
-import type { KeyboardPuzzle } from "../../../../bluetooth/keyboard";
+import type { KeyboardPuzzle } from "../../../bluetooth/keyboard";
 import type {
   BluetoothPuzzle,
   MoveEvent,
-} from "../../../../bluetooth/smart-puzzle/bluetooth-puzzle";
-import type { TwizzleStreamServer } from "../../../../stream";
-import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../../stream/process/ReorientedStream";
-import { ManagedCustomElement } from "../../../views/ManagedCustomElement";
-import { customElementsShim } from "../../../views/node-custom-element-shims";
+} from "../../../bluetooth/smart-puzzle/bluetooth-puzzle";
+import type { TwizzleStreamServer } from "../../../stream";
+import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../stream/process/ReorientedStream";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
 import { twistyStreamSourceCSS } from "./TwistyStreamSource.css";
 
 interface StreamSource extends EventTarget {
@@ -28,7 +28,7 @@ class BluetoothStreamSource extends EventTarget {
   }
 
   static async connect(): Promise<BluetoothStreamSource> {
-    const bluetooth = await import("../../../../bluetooth");
+    const bluetooth = await import("../../../bluetooth");
     const puzzle = await bluetooth.connectSmartPuzzle();
     return new BluetoothStreamSource(puzzle);
   }
@@ -53,7 +53,7 @@ class KeyboardStreamSource extends EventTarget {
   }
 
   static async connect(): Promise<KeyboardStreamSource> {
-    const bluetooth = await import("../../../../bluetooth");
+    const bluetooth = await import("../../../bluetooth");
     const puzzle = await bluetooth.debugKeyboardConnect();
     return new KeyboardStreamSource(puzzle);
   }
@@ -116,7 +116,7 @@ export class TwistyStreamSource extends ManagedCustomElement {
 
     let streamServer: TwizzleStreamServer | null = null;
     button.addEventListener("click", async () => {
-      const TwizzleStreamServer = (await import("../../../../stream"))
+      const TwizzleStreamServer = (await import("../../../stream"))
         .TwizzleStreamServer;
       streamServer ||= new TwizzleStreamServer();
       const streams = await streamServer.streams();

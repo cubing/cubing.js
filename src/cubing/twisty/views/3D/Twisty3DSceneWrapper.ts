@@ -13,7 +13,7 @@ import type { Schedulable } from "../../controllers/RenderScheduler";
 import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
-import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css";
+import { twistyViewerWrapperCSS } from "../TwistyViewerWrapper.css";
 import type { PressInfo } from "./DragTracker";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";
 import { Twisty3DVantage } from "./Twisty3DVantage";

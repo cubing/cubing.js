@@ -1,4 +1,4 @@
-import { CSSSource } from "../../../views/ManagedCustomElement";
+import { CSSSource } from "../ManagedCustomElement";
 
 // TODO: Can we do this without so much nesting, and styling all the nested elems?
 export const twisty2DSVGCSS = new CSSSource(`

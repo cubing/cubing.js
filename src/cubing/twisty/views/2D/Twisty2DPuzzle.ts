@@ -16,8 +16,7 @@ import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
-import { twisty2DSVGCSS } from "../../old/dom/viewers/Twisty2DSVGView.css";
-import type { TwistyViewerElement } from "../../old/dom/viewers/TwistyViewerElement";
+import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
 import type { ExperimentalStickering, PuzzleID } from "../..";
 
 export interface Twisty2DPuzzleOptions {
@@ -27,7 +26,7 @@ export interface Twisty2DPuzzleOptions {
 // <twisty-2d-svg>
 export class Twisty2DPuzzle
   extends ManagedCustomElement
-  implements TwistyViewerElement, PositionListener
+  implements PositionListener
 {
   private definition: KPuzzleDefinition;
   public svg: KPuzzleSVGWrapper;

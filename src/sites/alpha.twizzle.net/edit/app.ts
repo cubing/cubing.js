@@ -19,8 +19,8 @@ import {
   TwistyPlayerConfig,
 } from "../../../cubing/twisty";
 import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
-import "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
-import type { TwistyStreamSource } from "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
+import "../../../cubing/twisty/views/stream/TwistyStreamSource";
+import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import { URLParamUpdater } from "../core/url-params";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";

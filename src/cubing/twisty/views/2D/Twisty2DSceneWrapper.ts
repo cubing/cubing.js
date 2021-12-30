@@ -6,7 +6,7 @@ import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { Schedulable } from "../../controllers/RenderScheduler";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
-import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css";
+import { twistyViewerWrapperCSS } from "../TwistyViewerWrapper.css";
 import { Twisty2DPuzzleWrapper } from "./Twisty2DPuzzleWrapper";
 
 export class Twisty2DSceneWrapper

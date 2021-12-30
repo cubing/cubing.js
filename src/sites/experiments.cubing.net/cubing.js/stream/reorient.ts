@@ -7,8 +7,8 @@ import {
 } from "../../../../cubing/stream/process/ReorientedStream";
 import "../../../../cubing/twisty";
 import type { TwistyPlayer } from "../../../../cubing/twisty";
-import "../../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
-import type { TwistyStreamSource } from "../../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
+import "../../../../cubing/twisty/views/stream/TwistyStreamSource";
+import type { TwistyStreamSource } from "../../../../cubing/twisty/views/stream/TwistyStreamSource";
 
 const twistyStreamSource: TwistyStreamSource = document.querySelector(
   "twisty-stream-source",

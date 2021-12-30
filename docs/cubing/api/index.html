@@ -17,8 +17,9 @@
     </div>
 
     <section class="no-header">
-      Note: These documents are still in early draft stage. Each method and should have enough examples to demonstrate all possible arguments.
-        </section>
+      Note: These documents are still in early draft stage. Each method and should have enough examples to demonstrate
+      all possible arguments.
+    </section>
 
     <section id="alg">
       <h1><a href="#alg"><code>cubing/alg</code></a></h1>
@@ -58,7 +59,7 @@
 &nbsp;&nbsp;experimentalNumUnits(): number;<br>
 }</code>
 
-<p>Example:</p>
+      <p>Example:</p>
       <div class="code-demo">
         <div>
           <code class="sample">
@@ -72,16 +73,17 @@ antiSune.<b><u>expand()</u></b>.log();<br>
 antiSune.expand().<b><u>simplify()</u></b>.log();</span>
           </code>
         </div>
-          <code class="sample output">
+        <code class="sample output">
             <span>Alg{}&nbsp;&quot;[[R: U], R U R2']&quot;</span>
             <span>Alg{}&nbsp;&quot;R U R' R U R2' R U' R' R2 U' R'&quot;</span>
             <span>Alg{}&nbsp;&quot;R U2 R' U' R U' R'&quot;</span>
           </code>
       </div>
 
-<p>A <code>Move</code> is a <code>QuantumMove</code> (like <code>R</code> or <code>UL</code>) with an amount (any integer).</p>
+      <p>A <code>Move</code> is a <code>QuantumMove</code> (like <code>R</code> or <code>UL</code>) with an amount (any
+        integer).</p>
 
-<code class="sample">class Move {<br>
+      <code class="sample">class Move {<br>
 &nbsp;&nbsp;// Constructors<br>
 &nbsp;&nbsp;constructor(s: string);<br>
 &nbsp;&nbsp;constructor(quantumMove: string, amount: number);<br>
@@ -108,7 +110,7 @@ antiSune.expand().<b><u>simplify()</u></b>.log();</span>
 &nbsp;&nbsp;get amount(): number;<br>
 &nbsp;&nbsp;log(message?: string): Alg;<br>
 }</code>
-<code class="sample">class QuantumMove {<br>
+      <code class="sample">class QuantumMove {<br>
 &nbsp;&nbsp;// Constructors<br>
 &nbsp;&nbsp;constructor(family: string, innerLayer?: number | null, outerLayer?: number | null);<br>
 <br>
@@ -141,53 +143,10 @@ antiSune.expand().<b><u>simplify()</u></b>.log();</span>
       </p>
 
       <code class="sample">class TwistyPlayer {<br>
-&nbsp;&nbsp;// Constructor<br>
-&nbsp;&nbsp;constructor(initialConfig?: {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;// Note that any of the config options can be accessed<br>
-&nbsp;&nbsp;&nbsp;&nbsp;// or updated as properties on a TwistyPlayer instance directly.<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;alg?: Alg | string;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;experimentalSetupAlg?: Alg | string;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;experimentalSetupAnchor?: "start" | "end";<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;puzzle?: PuzzleID;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;visualization?: "3D" | "2D" | "experimental-2D-LL" | "PG3D";<br>
-&nbsp;&nbsp;&nbsp;&nbsp;hintFacelets?: "floating" | "none";<br>
-&nbsp;&nbsp;&nbsp;&nbsp;experimentalStickering?: ExperimentalStickering;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;background?: BackgroundTheme;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;controlPanel?: "bottom-row" | "none";<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;backView?: BackViewLayout;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;experimentalCameraLatitude?: Vector3;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;experimentalCameraLongitude?: Vector3;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;experimentalCameraLatitudeLimits?: "auto" | "none";<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;viewerLink?: "twizzle" | "none";<br>
-&nbsp;&nbsp;})<br>
-<br>
-&nbsp;&nbsp;// Structure<br>
-&nbsp;&nbsp;timeline: Timeline;<br>
-&nbsp;&nbsp;cursor: AlgCursor | null;<br>
-&nbsp;&nbsp;viewerElems: TwistyViewerElement[];<br>
-&nbsp;&nbsp;controlElems: TwistyControlElement[];<br>
-&nbsp;&nbsp;fullscreen(): void;<br>
-<br>
-&nbsp;&nbsp;// Twizzle<br>
-&nbsp;&nbsp;twizzleLink(): string;<br>
-&nbsp;&nbsp;visitTwizzleLink(): void;<br>
-<br>
-&nbsp;&nbsp;// 3D code<br>
-&nbsp;&nbsp;scene: Twisty3DScene | null;<br>
-&nbsp;&nbsp;twisty3D: Twisty3DPuzzle | null;<br>
-<br>
-&nbsp;&nbsp;// Experimental methods<br>
-&nbsp;&nbsp;experimentalSetStartStateOverride(state: Transformation | null): void;<br>
-&nbsp;&nbsp;experimentalSetCursorIndexer(cursorName: "simple" | "tree" | "simultaneous"): void;<br>
-&nbsp;&nbsp;experimentalAddMove(move: Move, coalesce?: boolean, coalesceDelayed?: boolean): void;<br>
+&nbsp;&nbsp;// TODO<br>
 }
 </code>
-</section>
+    </section>
 
     <section id="methods">
       <h1><a href="#methods">Examples</a></h1>
