@@ -5,7 +5,7 @@ import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";
 import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { RenderScheduler } from "../../old/animation/RenderScheduler";
+import { RenderScheduler } from "../../controllers/RenderScheduler";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { pixelRatio } from "../canvas";

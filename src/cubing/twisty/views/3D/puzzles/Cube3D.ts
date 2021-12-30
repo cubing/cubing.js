@@ -28,8 +28,7 @@ import {
   hintFaceletStyles,
 } from "../../../model/props/puzzle/display/HintFaceletProp";
 import { experimentalStickerings } from "../../../model/props/puzzle/display/StickeringProp";
-import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
-import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
+import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
 import { TAU } from "../TAU";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
@@ -556,7 +555,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
   constructor(
     private def: KPuzzleDefinition,
-    cursor?: AlgCursor,
     private scheduleRenderCallback?: () => void,
     options: Cube3DOptions = {},
   ) {
@@ -592,8 +590,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     if (this.options.experimentalStickering) {
       this.setStickering(this.options.experimentalStickering);
     }
-
-    cursor?.addPositionListener(this);
   }
 
   // Can only be called once.

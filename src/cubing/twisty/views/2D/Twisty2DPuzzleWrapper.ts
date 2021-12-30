@@ -2,7 +2,7 @@ import type { PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickering } from "../../../twisty";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type { Schedulable } from "../../old/animation/RenderScheduler";
+import type { Schedulable } from "../../controllers/RenderScheduler";
 import { Twisty2DPuzzle } from "./Twisty2DPuzzle";
 
 export class Twisty2DPuzzleWrapper implements Schedulable {

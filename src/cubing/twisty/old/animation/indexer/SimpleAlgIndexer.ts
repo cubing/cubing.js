@@ -4,7 +4,7 @@ import type {
   PuzzleWrapper,
   State,
 } from "../../../views/3D/puzzles/KPuzzleWrapper";
-import type { Duration, Timestamp } from "../cursor/CursorTypes";
+import type { Duration, Timestamp } from "../../../controllers/AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
 import type { AlgIndexer } from "./AlgIndexer";
 

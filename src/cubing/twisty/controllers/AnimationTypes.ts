@@ -1,5 +1,5 @@
-import type { Move } from "../../../../alg";
-import type { Transformation as KPuzzleState } from "../../../../kpuzzle";
+import type { Move } from "../../alg";
+import type { Transformation as KPuzzleState } from "../../kpuzzle";
 
 export type MillisecondTimestamp = number;
 
@@ -38,4 +38,13 @@ export enum BoundaryType {
   EntireTimeline = "entire-timeline",
 }
 
+export interface TimeRange {
+  start: MillisecondTimestamp;
+  end: MillisecondTimestamp;
+}
+
 // export type DurationForAmount = (amount: number) => Duration;
+
+export interface PositionListener {
+  onPositionChange(position: PuzzlePosition): void;
+}

@@ -3,7 +3,7 @@ import {
   ExperimentalStickering,
   TwistyPlayer,
 } from "../../../../cubing/twisty";
-import type { VisualizationFormat } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
+import type { VisualizationFormat } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
 
 function demo(visualization: VisualizationFormat): void {
   const content = document.querySelector(".content")!;

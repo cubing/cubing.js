@@ -1,5 +1,5 @@
 import type { Transformation } from "../../../../../kpuzzle";
-import type { PuzzlePosition } from "../../../../old/animation/cursor/CursorTypes";
+import type { PuzzlePosition } from "../../../../controllers/AnimationTypes";
 import type { CurrentMoveInfo } from "../../../../old/animation/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
 

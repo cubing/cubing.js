@@ -1,7 +1,7 @@
 import { Spherical, Vector3 } from "three";
 import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { RenderScheduler } from "../../old/animation/RenderScheduler";
+import { RenderScheduler } from "../../controllers/RenderScheduler";
 import type { DragMovementInfo, DragTracker } from "./DragTracker";
 import { DEGREES_PER_RADIAN } from "./TAU";
 

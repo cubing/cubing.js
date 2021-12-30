@@ -1,5 +1,7 @@
-import type { TimeRange } from "../../../old/animation/cursor/AlgCursor";
-import type { MillisecondTimestamp } from "../../../old/animation/cursor/CursorTypes";
+import type {
+  MillisecondTimestamp,
+  TimeRange,
+} from "../../../controllers/AnimationTypes";
 import type { TimestampRequest } from "./TimestampRequestProp";
 import { TwistyPropDerived } from "../TwistyProp";
 import type { SetupToLocation } from "../puzzle/state/SetupAnchorProp";

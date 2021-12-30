@@ -9,7 +9,7 @@ import {
   Grouping,
   Newline,
 } from "../../../../../alg";
-import type { MillisecondTimestamp } from "../../cursor/CursorTypes";
+import type { MillisecondTimestamp } from "../../../../controllers/AnimationTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
 export type AnimatedLeafUnit = Move | Pause;

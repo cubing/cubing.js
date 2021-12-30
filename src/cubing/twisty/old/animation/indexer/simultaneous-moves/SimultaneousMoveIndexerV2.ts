@@ -8,7 +8,7 @@ import {
   Duration,
   PuzzlePosition,
   Timestamp,
-} from "../../cursor/CursorTypes";
+} from "../../../../controllers/AnimationTypes";
 import type { AlgIndexer, CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import { AnimatedLeafUnit, AnimLeafWithRange, simulMoves } from "./simul-moves";
 

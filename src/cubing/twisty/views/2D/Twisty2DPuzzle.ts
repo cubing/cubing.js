@@ -6,12 +6,12 @@ import {
 } from "../../../kpuzzle";
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
 import type { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
-import type { PositionListener } from "../../old/animation/cursor/AlgCursor";
 import {
   Direction,
+  PositionListener,
   PuzzlePosition,
-} from "../../old/animation/cursor/CursorTypes";
-import { RenderScheduler } from "../../old/animation/RenderScheduler";
+} from "../../controllers/AnimationTypes";
+import { RenderScheduler } from "../../controllers/RenderScheduler";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";

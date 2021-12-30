@@ -10,7 +10,7 @@ import type {
   MillisecondTimestamp,
   PuzzlePosition,
   Timestamp,
-} from "../cursor/CursorTypes";
+} from "../../../controllers/AnimationTypes";
 import type { AnimatedLeafUnit } from "./simultaneous-moves/simul-moves";
 
 export interface CurrentMove {

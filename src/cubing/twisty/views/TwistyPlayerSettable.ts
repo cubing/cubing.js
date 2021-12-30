@@ -10,7 +10,7 @@ import type { TimestampRequest } from "../model/props/timeline/TimestampRequestP
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
-import type { MillisecondTimestamp } from "../old/animation/cursor/CursorTypes";
+import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";

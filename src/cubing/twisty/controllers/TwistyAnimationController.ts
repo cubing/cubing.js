@@ -1,11 +1,11 @@
-import type { TimeRange } from "../old/animation/cursor/AlgCursor";
 import {
   BoundaryType,
   Direction,
   directionScalar,
   MillisecondTimestamp,
-} from "../old/animation/cursor/CursorTypes";
-import { RenderScheduler } from "../old/animation/RenderScheduler";
+  TimeRange,
+} from "./AnimationTypes";
+import { RenderScheduler } from "./RenderScheduler";
 import type {
   PlayingInfo,
   SimpleDirection,

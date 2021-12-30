@@ -1,5 +1,5 @@
 import { Move } from "../../../../../alg";
-import { Direction } from "../../../../old/animation/cursor/CursorTypes";
+import { Direction } from "../../../../controllers/AnimationTypes";
 import type {
   AlgIndexer,
   CurrentMoveInfo,

@@ -9,7 +9,7 @@ import type {
 } from "../../model/props/viewer/BackViewProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { Schedulable } from "../../old/animation/RenderScheduler";
+import type { Schedulable } from "../../controllers/RenderScheduler";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";

@@ -34,8 +34,7 @@ import {
   ExperimentalPuzzleAppearance,
 } from "../../../../puzzles";
 import type { HintFaceletStyle } from "../../../model/props/puzzle/display/HintFaceletProp";
-import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
-import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
+import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
 import { TAU } from "../TAU";
 
@@ -526,7 +525,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   #pendingStickeringUpdate: boolean = false;
 
   constructor(
-    cursor: AlgCursor,
     private scheduleRenderCallback: () => void,
     private definition: KPuzzleDefinition,
     private stickerDat: StickerDat,
@@ -664,7 +662,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.controlTargets.push(facedef.cubie.children[0]);
     }
     filler.saveOriginalColors();
-    cursor.addPositionListener(this);
     stickerDat.stickers = []; // don't need these anymore
     this.updateMaterialArrays();
     /*
