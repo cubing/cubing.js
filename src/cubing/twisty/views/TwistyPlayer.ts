@@ -17,8 +17,8 @@ import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkPro
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
 import { ClassListManager } from "../old/dom/element/ClassListManager";
-import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
-import { twistyPlayerCSS } from "../old/dom/TwistyPlayer.css";
+import { customElementsShim } from "./node-custom-element-shims";
+import { twistyPlayerCSS } from "./TwistyPlayer.css";
 
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";

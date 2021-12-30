@@ -1,4 +1,4 @@
-import { CSSSource } from "./element/ManagedCustomElement";
+import { CSSSource } from "./ManagedCustomElement";
 
 // TODO: figure out why `:host(twisty-player):fullscreen { background-color: white }` doesn't work.
 export const twistyPlayerCSS = new CSSSource(`

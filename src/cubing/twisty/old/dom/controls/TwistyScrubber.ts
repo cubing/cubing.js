@@ -6,8 +6,8 @@ import type {
   Timeline,
   TimelineTimestampListener,
 } from "../../animation/Timeline";
-import { ManagedCustomElement } from "../element/ManagedCustomElement";
-import { customElementsShim } from "../element/node-custom-element-shims";
+import { ManagedCustomElement } from "../../../views/ManagedCustomElement";
+import { customElementsShim } from "../../../views/node-custom-element-shims";
 import type { TwistyControlElement } from "./TwistyControlElement";
 import { twistyScrubberCSS } from "./TwistyScrubber.css";
 

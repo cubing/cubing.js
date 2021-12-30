@@ -14,22 +14,20 @@ import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/st
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import {
   ExperimentalStickering,
+  PuzzleID,
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../cubing/twisty";
-import { customElementsShim } from "../../../cubing/twisty/old/dom/element/node-custom-element-shims";
+import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
 import "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
 import type { TwistyStreamSource } from "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
-import type {
-  PuzzleID,
-  SetupToLocation,
-} from "../../../cubing/twisty/old/dom/TwistyPlayerConfig";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import { URLParamUpdater } from "../core/url-params";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
+import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 // import { setURLParams } from "./url-params";
 
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {

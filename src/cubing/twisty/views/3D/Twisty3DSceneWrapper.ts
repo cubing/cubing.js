@@ -3,14 +3,16 @@ import type { PuzzleLoader } from "../../../puzzles";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type { BackViewLayoutWithAuto } from "../../model/props/viewer/BackViewProp";
+import type {
+  BackViewLayout,
+  BackViewLayoutWithAuto,
+} from "../../model/props/viewer/BackViewProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import { ClassListManager } from "../../old/dom/element/ClassListManager";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
-import type { BackViewLayout } from "../../old/dom/viewers/TwistyViewerWrapper";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
 import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css";
 import type { PressInfo } from "./DragTracker";
 import { Twisty3DPuzzleWrapper } from "./Twisty3DPuzzleWrapper";

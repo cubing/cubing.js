@@ -33,10 +33,10 @@ import {
   experimentalGetFaceletAppearance,
   ExperimentalPuzzleAppearance,
 } from "../../../../puzzles";
+import type { HintFaceletStyle } from "../../../model/props/puzzle/display/HintFaceletProp";
 import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
 import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
 import { smootherStep } from "../../../old/animation/easing";
-import type { HintFaceletStyle } from "../../../old/dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
 
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
@@ -723,7 +723,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       invert: boolean;
       depth?: "secondSlice" | "rotation" | "none";
     },
-  ): {move: Move, order: number} | null {
+  ): { move: Move; order: number } | null {
     let closestMove: Move | null = null;
     let closestMoveDotProduct: number = 0;
 
@@ -764,7 +764,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.#kpuzzle.reset();
     this.#kpuzzle.applyMove(closestMove);
     const order = transformationOrder(this.definition, this.#kpuzzle.state);
-    return {move: closestMove, order}; // TODO: push this down
+    return { move: closestMove, order }; // TODO: push this down
   }
 
   experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {

@@ -5,8 +5,8 @@ import type {
 } from "../../../../bluetooth/smart-puzzle/bluetooth-puzzle";
 import type { TwizzleStreamServer } from "../../../../stream";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../../stream/process/ReorientedStream";
-import { ManagedCustomElement } from "../element/ManagedCustomElement";
-import { customElementsShim } from "../element/node-custom-element-shims";
+import { ManagedCustomElement } from "../../../views/ManagedCustomElement";
+import { customElementsShim } from "../../../views/node-custom-element-shims";
 import { twistyStreamSourceCSS } from "./TwistyStreamSource.css";
 
 interface StreamSource extends EventTarget {

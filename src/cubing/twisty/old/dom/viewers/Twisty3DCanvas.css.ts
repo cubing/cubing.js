@@ -1,4 +1,4 @@
-import { CSSSource } from "../element/ManagedCustomElement";
+import { CSSSource } from "../../../views/ManagedCustomElement";
 
 // The `position` values are a hack for a bug in Safari where the canvas either
 // grows infinitely, or takes up the full `fr` of any encompassing grid (making

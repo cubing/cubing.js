@@ -1,4 +1,4 @@
-import { CSSSource } from "../old/dom/element/ManagedCustomElement";
+import { CSSSource } from "./ManagedCustomElement";
 
 export const twistyAlgViewerCSS = new CSSSource(`
 :host {

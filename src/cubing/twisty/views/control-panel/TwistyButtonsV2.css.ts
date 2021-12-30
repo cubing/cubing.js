@@ -1,4 +1,4 @@
-import { CSSSource } from "../element/ManagedCustomElement";
+import { CSSSource } from "../ManagedCustomElement";
 
 export const buttonGridCSS = new CSSSource(`
 :host {

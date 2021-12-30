@@ -11,7 +11,7 @@ import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkPro
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import type { MillisecondTimestamp } from "../old/animation/cursor/CursorTypes";
-import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
+import { ManagedCustomElement } from "./ManagedCustomElement";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
 
