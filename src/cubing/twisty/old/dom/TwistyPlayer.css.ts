@@ -6,6 +6,9 @@ export const twistyPlayerCSS = new CSSSource(`
   width: 384px;
   height: 256px;
   display: grid;
+
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .wrapper {

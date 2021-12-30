@@ -13,15 +13,19 @@ import {
   Texture,
   Vector3,
 } from "three";
+import { Move } from "../../../../alg";
 import {
   areTransformationsEquivalent,
+  KPuzzle,
   KPuzzleDefinition,
   Transformation,
+  transformationOrder,
 } from "../../../../kpuzzle";
 import { experimentalTransformationForQuantumMove } from "../../../../kpuzzle";
 import type {
   StickerDat,
   StickerDatSticker,
+  StickerDatAxis,
 } from "../../../../puzzle-geometry";
 import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry";
 import {
@@ -430,7 +434,7 @@ class StickerDef {
 class HitPlaneDef {
   public cubie: Group;
   private geo: BufferGeometry;
-  constructor(hitface: any, tm: TextureMapper) {
+  constructor(hitface: any, tm: TextureMapper, stickerDat: StickerDat) {
     this.cubie = new Group();
     const coords = hitface.coords as number[];
     const filler = new Filler(coords.length / 3 - 2, tm);
@@ -442,7 +446,9 @@ class HitPlaneDef {
     this.geo = new BufferGeometry();
     filler.setAttributes(this.geo);
     const obj = new Mesh(this.geo, invisMaterial);
-    obj.userData.name = hitface.name;
+    obj.userData.quantumMove = stickerDat.notationMapper.notationToExternal(
+      new Move(hitface.name),
+    );
     this.cubie.scale.setScalar(0.99);
     this.cubie.add(obj);
   }
@@ -451,10 +457,10 @@ class HitPlaneDef {
 class AxisInfo {
   public axis: Vector3;
   public order: number;
-  constructor(axisDat: any) {
-    const vec = axisDat[0] as number[];
+  constructor(axisDat: StickerDatAxis) {
+    const vec = axisDat.coordinates;
     this.axis = new Vector3(vec[0], vec[1], vec[2]);
-    this.order = axisDat[2];
+    this.order = axisDat.order;
   }
 }
 
@@ -512,6 +518,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private materialArray1: Material[];
   private materialArray2: Material[];
   private textured: boolean = false;
+  private showHintStickers: boolean = false;
+  private showFoundations: boolean = false;
   private hintMaterialDisposable: boolean;
   private stickerMaterialDisposable: boolean;
 
@@ -521,14 +529,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     cursor: AlgCursor,
     private scheduleRenderCallback: () => void,
     private definition: KPuzzleDefinition,
-    private pgdat: StickerDat,
-    private showFoundation: boolean = false,
-    private showHintStickers: boolean = false,
+    private stickerDat: StickerDat,
+    enableFoundationOpt: boolean = false,
+    enableHintStickersOpt: boolean = false,
     hintStickerHeightScale: number = 1,
     private params: PG3DOptions = {},
   ) {
     super();
-    if (pgdat.stickers.length === 0) {
+    if (stickerDat.stickers.length === 0) {
       throw Error("Reuse of stickerdat from pg; please don't do that.");
     }
     this.hintMaterial = new MeshBasicMaterial({
@@ -540,27 +548,33 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.stickerMaterial = basicStickerMaterial;
     this.stickerMaterialDisposable = false;
     this.axesInfo = {};
-    const axesDef = this.pgdat.axis as any[];
+    const axesDef = this.stickerDat.axis;
     for (const axis of axesDef) {
-      this.axesInfo[axis[1]] = new AxisInfo(axis);
+      this.axesInfo[axis.quantumMove.family] = new AxisInfo(axis);
     }
-    const stickers = this.pgdat.stickers as any[];
+    const stickers = this.stickerDat.stickers as any[];
     this.stickers = {};
     this.materialArray1 = new Array(8);
     this.materialArray2 = new Array(8);
-    this.enableFoundation(showFoundation);
-    this.updateMaterialArrays();
+    // TODO: the argument enableFoundationOpt really means, do we ever want to display
+    // foundations.  But it is presently *used* to mean, show foundations initially
+    // (and maybe experimentalSetAppearance changes this).  So for now we set up the
+    // show flag from the enable flag, and turn on the enable flag so later when it's
+    // used we will get the foundations.  What this means is the geometry always "pays"
+    // for foundations, even if they aren't displayed.
+    this.showFoundation(enableFoundationOpt);
+    enableFoundationOpt = true;
     let triangleCount = 0;
     const multiplier = 3;
     for (const sticker of stickers) {
       const sides = sticker.coords.length / 3;
       triangleCount += multiplier * (sides - 2);
     }
-    const filler = new Filler(triangleCount, pgdat.textureMapper);
+    const filler = new Filler(triangleCount, stickerDat.textureMapper);
     const black = 0;
     const normals: number[][] = [];
     let totArea = 0;
-    for (const f of pgdat.faces) {
+    for (const f of stickerDat.faces) {
       normals.push(normal(f.coords));
       totArea += polyarea(f.coords);
     }
@@ -596,6 +610,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const stickerdef = new StickerDef(filler, sticker, trim, options);
       this.stickers[orbit][ori][ord] = stickerdef;
     }
+    // TODO: the argument enableHintStickersOpt really means, do we ever want to display
+    // hint stickers.  But it is presently *used* to mean, show hint stickers initially
+    // (and maybe experimentalSetAppearance changes this).  So for now we set up the
+    // show flag from the enable flag, and turn on the enable flag so later when it's
+    // used we will get the hint stickers.  What this means is the geometry always "pays"
+    // for hint stickers, even if they aren't displayed.
+    this.showHintStickers = enableHintStickersOpt;
+    enableHintStickersOpt = true;
     for (const sticker of stickers) {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
@@ -603,7 +625,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.stickers[orbit][ori][ord].addHint(
         filler,
         sticker,
-        showHintStickers,
+        enableHintStickersOpt,
         hintStickerHeightScale,
         trim,
         normals[sticker.face],
@@ -614,7 +636,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
       const ori = sticker.ori;
-      this.stickers[orbit][ori][ord].addFoundation(filler, sticker, black);
+      if (enableFoundationOpt) {
+        this.stickers[orbit][ori][ord].addFoundation(filler, sticker, black);
+      }
     }
     const fixedGeo = new BufferGeometry();
     filler.setAttributes(fixedGeo);
@@ -625,19 +649,24 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     const obj2 = new Mesh(fixedGeo, this.materialArray2);
     obj2.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
     this.add(obj2);
-    const hitfaces = this.pgdat.faces as any[];
+    const hitfaces = this.stickerDat.faces as any[];
     this.movingObj = obj2;
     this.fixedGeo = fixedGeo;
     this.filler = filler;
     for (const hitface of hitfaces) {
-      const facedef = new HitPlaneDef(hitface, pgdat.textureMapper);
+      const facedef = new HitPlaneDef(
+        hitface,
+        stickerDat.textureMapper,
+        this.stickerDat,
+      );
       facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
       this.add(facedef.cubie);
       this.controlTargets.push(facedef.cubie.children[0]);
     }
     filler.saveOriginalColors();
     cursor.addPositionListener(this);
-    pgdat.stickers = []; // don't need these anymore
+    stickerDat.stickers = []; // don't need these anymore
+    this.updateMaterialArrays();
     /*
     this.experimentalUpdateTexture(
       true,
@@ -673,6 +702,69 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   public experimentalGetControlTargets(): Object3D[] {
     return this.controlTargets;
+  }
+
+  #cachedKPuzzle: KPuzzle | null;
+  get #kpuzzle() {
+    return (this.#cachedKPuzzle ??= new KPuzzle(this.definition));
+  }
+  #isValidMove(move: Move): boolean {
+    try {
+      this.#kpuzzle.applyMove(move);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  getClosestMoveToAxis(
+    point: Vector3,
+    transformations: {
+      invert: boolean;
+      depth?: "secondSlice" | "rotation" | "none";
+    },
+  ): {move: Move, order: number} | null {
+    let closestMove: Move | null = null;
+    let closestMoveDotProduct: number = 0;
+
+    let modify: (move: Move) => Move = (m) => m;
+    switch (transformations.depth) {
+      case "secondSlice":
+        modify = (m: Move) => m.modified({ innerLayer: 2 });
+        break;
+      case "rotation":
+        modify = (m: Move) => m.modified({ family: m.family + "v" });
+        break;
+    }
+
+    for (const axis of this.stickerDat.axis) {
+      const product = point.dot(new Vector3(...axis.coordinates));
+      if (product > closestMoveDotProduct) {
+        const modified = this.stickerDat.notationMapper.notationToExternal(
+          modify(axis.quantumMove),
+        );
+        if (!modified) {
+          continue;
+        }
+        if (this.#isValidMove(modified)) {
+          closestMoveDotProduct = product;
+          closestMove = modified;
+        }
+      }
+    }
+
+    if (!closestMove) {
+      return null;
+    }
+
+    if (transformations.invert) {
+      closestMove = closestMove.invert();
+    }
+    // TODO: cache order or make this lookup more efficient.
+    this.#kpuzzle.reset();
+    this.#kpuzzle.applyMove(closestMove);
+    const order = transformationOrder(this.definition, this.#kpuzzle.state);
+    return {move: closestMove, order}; // TODO: push this down
   }
 
   experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
@@ -751,8 +843,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const externalMove = moveProgress.move;
       // TODO: unswizzle goes external to internal, and so does the call after that
       // and so does the stateForBlockMove call
-      const unswizzled = this.pgdat.unswizzle(externalMove);
-      const move = this.pgdat.notationMapper.notationToInternal(externalMove);
+      const unswizzled = this.stickerDat.unswizzle(externalMove);
+      const move =
+        this.stickerDat.notationMapper.notationToInternal(externalMove);
       if (move === null) {
         throw Error("Bad blockmove " + externalMove.family);
       }
@@ -841,9 +934,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return smootherStep(fraction);
   }
 
-  private enableHintFacelets(v: boolean) {
+  private showHintFacelets(v: boolean) {
     this.showHintStickers = v;
-    this.updateMaterialArrays();
   }
 
   private updateMaterialArrays() {
@@ -860,7 +952,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.materialArray1[2] = invisMaterial;
       this.materialArray2[3] = invisMaterial;
     }
-    if (this.showFoundation) {
+    if (this.showFoundations) {
       this.materialArray1[6] = foundationMaterial;
       this.materialArray2[7] = foundationMaterial;
     } else {
@@ -869,9 +961,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
   }
 
-  private enableFoundation(v: boolean) {
-    this.showFoundation = v;
-    this.updateMaterialArrays();
+  private showFoundation(v: boolean) {
+    this.showFoundations = v;
   }
 
   private setHintStickerOpacity(v: number): void {
@@ -879,6 +970,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.hintMaterial.dispose();
       this.hintMaterialDisposable = false;
     }
+    console.log("hint sticker opacity " + v);
     if (v === 0) {
       this.hintMaterial = invisMaterial;
     } else if (v === 1) {
@@ -900,10 +992,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     hintStickerOpacity?: number;
   }): void {
     if (options.hintFacelets !== undefined) {
-      this.enableHintFacelets(options.hintFacelets !== "none");
+      this.showHintFacelets(options.hintFacelets !== "none");
     }
     if (options.showFoundation !== undefined) {
-      this.enableFoundation(options.showFoundation);
+      this.showFoundation(options.showFoundation);
     }
     if (options.hintStickerOpacity !== undefined) {
       this.setHintStickerOpacity(options.hintStickerOpacity);
@@ -912,6 +1004,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (this.lastPos) {
       this.onPositionChange(this.lastPos);
     }
+    this.updateMaterialArrays();
     this.scheduleRenderCallback();
   }
 

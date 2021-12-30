@@ -13,7 +13,8 @@ import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css";
 import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
-import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
+import { TwistyOrbitControls } from "./TwistyOrbitControls";
+import { DragTracker, PressInfo } from "./DragTracker";
 
 let SHOW_STATS = false;
 export function showStats(enable: boolean): void {
@@ -96,7 +97,27 @@ export class Twisty3DVantage extends ManagedCustomElement {
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
     this.orbitControls(); // TODO
+    this.#setupBasicPresses();
+
     this.scheduleRender();
+  }
+
+  async #setupBasicPresses(): Promise<void> {
+    const dragTracker = await this.#dragTracker();
+    dragTracker.addEventListener("press", async (e: CustomEvent<PressInfo>) => {
+      const movePressInput = await this.model!.movePressInputProp.get();
+      if (movePressInput !== "basic") {
+        return;
+      }
+      this.dispatchEvent(
+        new CustomEvent("press", {
+          detail: {
+            pressInfo: e.detail,
+            cameraPromise: this.camera(),
+          },
+        }),
+      );
+    });
   }
 
   #onResizeStaleDropper = new StaleDropper<PerspectiveCamera>();
@@ -124,12 +145,16 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
     if (this.rendererIsShared) {
       const canvas = await this.canvas();
+      const context = canvas.getContext("2d")!;
+      context.clearRect(0, 0, canvas.width, canvas.height);
       canvas.width = w * pixelRatio();
       canvas.height = h * pixelRatio();
       canvas.style.width = w.toString();
       canvas.style.height = w.toString();
     } else {
-      (await this.renderer()).setSize(w, h, true);
+      const renderer = await this.renderer();
+      renderer.context.clear(renderer.context.COLOR_BUFFER_BIT);
+      renderer.setSize(w, h, true);
     }
 
     this.scheduleRender();
@@ -154,6 +179,13 @@ export class Twisty3DVantage extends ManagedCustomElement {
     })());
   }
 
+  #cachedDragTracker: Promise<DragTracker> | null = null;
+  async #dragTracker(): Promise<DragTracker> {
+    return (this.#cachedDragTracker ??= (async () => {
+      return new DragTracker(await this.canvas());
+    })());
+  }
+
   #cachedCamera: Promise<PerspectiveCamera> | null = null;
   async camera(): Promise<PerspectiveCamera> {
     return (this.#cachedCamera ??= (async () => {
@@ -174,13 +206,14 @@ export class Twisty3DVantage extends ManagedCustomElement {
     })());
   }
 
-  #cachedOrbitControls: Promise<TwistyOrbitControlsV2> | null = null;
-  async orbitControls(): Promise<TwistyOrbitControlsV2> {
+  #cachedOrbitControls: Promise<TwistyOrbitControls> | null = null;
+  async orbitControls(): Promise<TwistyOrbitControls> {
     return (this.#cachedOrbitControls ??= (async () => {
-      const orbitControls = new TwistyOrbitControlsV2(
+      const orbitControls = new TwistyOrbitControls(
         this.model!,
         !!this.options?.backView,
         await this.canvas(),
+        await this.#dragTracker(),
       );
 
       if (this.model) {

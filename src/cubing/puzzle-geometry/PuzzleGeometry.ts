@@ -66,7 +66,11 @@ export interface StickerDatFace {
   name: string;
 }
 
-export type StickerDatAxis = [number[], string, number];
+export type StickerDatAxis = {
+  coordinates: number[];
+  quantumMove: Move;
+  order: number;
+};
 
 export interface StickerDat {
   stickers: StickerDatSticker[];
@@ -2851,12 +2855,16 @@ export class PuzzleGeometry {
       const order = this.movesetorders[i];
       for (const gn of this.geonormals) {
         if (msg[0] === gn[1] && msg[1] === gn[2]) {
-          grips.push([toCoords(gn[0].rotatepoint(rot), 1), msg[0], order]);
-          grips.push([
-            toCoords(gn[0].rotatepoint(rot).smul(-1), 1),
-            msg[2],
+          grips.push({
+            coordinates: toCoords(gn[0].rotatepoint(rot), 1),
+            quantumMove: new Move(msg[0]),
             order,
-          ]);
+          });
+          grips.push({
+            coordinates: toCoords(gn[0].rotatepoint(rot).smul(-1), 1),
+            quantumMove: new Move(msg[2]),
+            order,
+          });
         }
       }
     }

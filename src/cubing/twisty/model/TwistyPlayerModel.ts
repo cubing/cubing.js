@@ -37,6 +37,10 @@ import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
 import { PuzzleDefProp } from "./props/puzzle/structure/PuzzleDefProp";
 import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
 import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
+import { experimentalAppendMove, Move } from "../../alg";
+import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
+import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
+import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -51,14 +55,15 @@ export class TwistyPlayerModel {
   backViewProp = new BackViewProp();
   controlPanelProp = new ControlPanelProp();
   catchUpMoveProp = new CatchUpMoveProp();
+  foundationDisplayProp = new FoundationDisplayProp();
   foundationStickerSpriteURL = new URLProp();
   hintFaceletProp = new HintFaceletProp();
   hintStickerSpriteURL = new URLProp();
   indexerConstructorRequestProp = new IndexerConstructorRequestProp();
   latitudeLimitProp = new LatitudeLimitProp();
+  movePressInputProp = new MovePressInputProp();
   orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
-
   playingInfoProp = new PlayingInfoProp();
   puzzleDescriptionRequestProp = new PGPuzzleDescriptionStringProp();
   puzzleIDRequestProp = new PuzzleIDRequestProp();
@@ -116,6 +121,8 @@ export class TwistyPlayerModel {
     visualizationStrategy: this.visualizationStrategyProp,
     indexerConstructorRequest: this.indexerConstructorRequestProp,
   });
+
+  moveCountProp = new NaiveMoveCountProp({ alg: this.puzzleAlgProp });
 
   orbitCoordinatesProp = new OrbitCoordinatesProp({
     orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
@@ -221,5 +228,27 @@ export class TwistyPlayerModel {
       url.searchParams.set("puzzle", puzzle);
     }
     return url.toString();
+  }
+
+  // TODO: Animate the new move.
+  experimentalAddMove(
+    flexibleMove: Move | string,
+    options: { coalesce?: boolean; mod?: number } = {},
+  ): void {
+    const move =
+      typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
+    (async () => {
+      const alg = (await this.algProp.get()).alg;
+      const newAlg = experimentalAppendMove(alg, move, {
+        coalesce: options?.coalesce,
+        mod: options?.mod,
+      });
+      this.algProp.set(newAlg);
+      this.timestampRequestProp.set("end");
+      this.catchUpMoveProp.set({
+        move: move,
+        amount: 0,
+      });
+    })();
   }
 }

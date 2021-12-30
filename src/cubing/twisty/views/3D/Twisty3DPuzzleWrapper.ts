@@ -1,12 +1,13 @@
-import type { Texture as ThreeTexture } from "three";
+import type { Raycaster, Texture as ThreeTexture } from "three";
 import { experimentalCubeAppearance, PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
-import type { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
+import { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
+import type { FoundationDisplay } from "../../model/props/puzzle/display/FoundationDisplayProp";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
 import type { Schedulable } from "../../old/animation/RenderScheduler";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
@@ -57,6 +58,17 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         ).experimentalUpdateOptions({
           hintFacelets:
             hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
+        });
+        this.scheduleRender();
+      },
+    );
+    this.#freshListenerManager.addListener(
+      this.model.foundationDisplayProp,
+      async (foundationDisplay: FoundationDisplay) => {
+        (
+          (await this.twisty3DPuzzle()) as Cube3D | PG3D
+        ).experimentalUpdateOptions({
+          showFoundation: foundationDisplay !== "none",
         });
         this.scheduleRender();
       },
@@ -164,5 +176,39 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         return pg3d;
       }
     })());
+  }
+
+  async raycastMove(
+    raycasterPromise: Promise<Raycaster>,
+    transformations: {
+      invert: boolean;
+      depth?: "secondSlice" | "rotation" | "none";
+    },
+  ): Promise<void> {
+    const puzzle = await this.twisty3DPuzzle();
+    // TODO: check this differently.
+    if (!(puzzle instanceof PG3D)) {
+      console.info("not PG3D! skipping raycast");
+      return;
+    }
+
+    const targets = puzzle.experimentalGetControlTargets(); // TODO: sticker targets
+    const [raycaster] = await Promise.all([raycasterPromise]);
+
+    const intersects = raycaster.intersectObjects(targets);
+    if (intersects.length > 0) {
+      const closestMove = puzzle.getClosestMoveToAxis(
+        intersects[0].point,
+        transformations,
+      );
+      if (closestMove) {
+        this.model.experimentalAddMove(closestMove.move, {
+          coalesce: true,
+          mod: closestMove.order,
+        });
+      } else {
+        console.info("Skipping move!");
+      }
+    }
   }
 }

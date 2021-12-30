@@ -8,7 +8,7 @@ import {
   StringEnumAttribute,
 } from "./element/ElementConfig";
 import type { TwistyPlayerV1 } from "./TwistyPlayer";
-import type { OrbitCoordinates } from "./viewers/TwistyOrbitControls";
+import type { OrbitCoordinates } from "./viewers/TwistyOrbitControlsV1";
 import { BackViewLayout, backViewLayouts } from "./viewers/TwistyViewerWrapper";
 
 // const DEFAULT_CAMERA_Z = 5;

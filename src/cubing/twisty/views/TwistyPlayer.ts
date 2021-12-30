@@ -1,9 +1,10 @@
 import type { ExperimentalStickering, PG3D } from "..";
-import { Alg, experimentalAppendMove, Move } from "../../alg";
+import type { Alg, Move } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
 import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
+import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
@@ -49,6 +50,7 @@ export const twistyPlayerAttributeMap = {
   "back-view": "backView",
   // "indexer": "indexer",
   "viewer-link": "viewerLink",
+  "experimental-move-press-input": "experimentalMovePressInput",
 
   // Number-based
   "camera-latitude": "cameraLatitude",
@@ -86,6 +88,7 @@ export interface TwistyPlayerConfig {
   backView?: BackViewLayoutWithAuto;
   // "indexer"?: "indexer";
   viewerLink?: ViewerLinkPageWithAuto;
+  experimentalMovePressInput?: MovePressInput;
 
   // Number-based
   cameraLatitude?: number;
@@ -297,20 +300,7 @@ export class TwistyPlayer
     flexibleMove: Move | string,
     options: { coalesce?: boolean } = {},
   ): void {
-    const move =
-      typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
-    (async () => {
-      const alg = (await this.experimentalModel.algProp.get()).alg;
-      const newAlg = experimentalAppendMove(alg, move, {
-        coalesce: options?.coalesce,
-      });
-      this.experimentalModel.algProp.set(newAlg);
-      this.experimentalModel.timestampRequestProp.set("end");
-      this.experimentalModel.catchUpMoveProp.set({
-        move: move,
-        amount: 0,
-      });
-    })();
+    this.experimentalModel.experimentalAddMove(flexibleMove, options);
   }
 
   static get observedAttributes(): string[] {

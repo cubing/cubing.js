@@ -4,7 +4,10 @@ import { RenderScheduler } from "../../animation/RenderScheduler";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { pixelRatio } from "./canvas";
 import { twisty3DCanvasCSS } from "./Twisty3DCanvas.css";
-import { OrbitCoordinates, TwistyOrbitControls } from "./TwistyOrbitControls";
+import {
+  OrbitCoordinates,
+  TwistyOrbitControlsV1,
+} from "./TwistyOrbitControlsV1";
 import type { TwistyViewerElement } from "./TwistyViewerElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import { Stats } from "../../../../vendor/three/examples/jsm/libs/stats.modified.module";
@@ -39,7 +42,7 @@ export class Twisty3DCanvas
   public canvas: HTMLCanvasElement;
   public camera: PerspectiveCamera;
   private legacyExperimentalShift: number = 0;
-  orbitControls: TwistyOrbitControls;
+  orbitControls: TwistyOrbitControlsV1;
   private scheduler = new RenderScheduler(this.render.bind(this));
   private resizePending: boolean = false;
 
@@ -86,7 +89,7 @@ export class Twisty3DCanvas
       20,
     );
     this.camera.position.copy(new Vector3(2, 4, 4));
-    this.orbitControls = new TwistyOrbitControls(
+    this.orbitControls = new TwistyOrbitControlsV1(
       this.camera,
       this.canvas,
       this.scheduleRender.bind(this),

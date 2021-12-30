@@ -1,9 +1,12 @@
-import { Spherical, Vector3 } from "three";
-import { DEGREES_PER_RADIAN } from "./TAU";
-import { RenderScheduler } from "../../old/animation/RenderScheduler";
-import type { OrbitCoordinatesV2 } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { CameraLatitudeLimits } from "../../old/dom/TwistyPlayerConfig";
+import { Camera, Spherical, Vector3 } from "three";
+import { DEGREES_PER_RADIAN } from "../../../views/3D/TAU";
+import { RenderScheduler } from "../../animation/RenderScheduler";
+import type { CameraLatitudeLimits } from "../TwistyPlayerConfig";
+
+// Buffer at the end values of the latitude (phi), to prevent gymbal lock.
+// Without this, the puzzle would flip every frame if you try to push past the
+// end, or snap to a standard longitude (theta).
+const EPSILON = 0.00000001;
 
 const INERTIA_DEFAULT: boolean = true;
 const LATITUDE_LIMITS_DEFAULT: CameraLatitudeLimits = "auto";
@@ -68,15 +71,15 @@ class Inertia {
   }
 }
 
-// export interface OrbitCoordinates {
-//   latitude: number;
-//   longitude: number;
-//   distance: number;
-// }
+export interface OrbitCoordinates {
+  latitude: number;
+  longitude: number;
+  distance: number;
+}
 
 export function positionToOrbitCoordinates(
   position: Vector3,
-): OrbitCoordinatesV2 {
+): OrbitCoordinates {
   const spherical = new Spherical();
   spherical.setFromVector3(position);
   return {
@@ -87,11 +90,85 @@ export function positionToOrbitCoordinates(
 }
 
 // TODO: change mouse cursor while moving.
-export class TwistyOrbitControlsV2 {
+export class TwistyOrbitControlsV1 {
+  // TODO: should we store as lat/long directly and stick to more rounded values in degrees?
+  #spherical: Spherical = new Spherical();
+  #lookAt: Vector3 = new Vector3(0, 0, 0);
+  // longitude: number;
+  // latitude: number;
+  // altitude: number;
+
+  lookAt(v: Vector3): void {
+    if (!this.#acceptPropagation) {
+      return;
+    }
+    this.#lookAt = v;
+
+    this.#acceptPropagation = false;
+    this.#adjust();
+    this.scheduleRender();
+    try {
+      if (this.mirrorControls) {
+        // TODO: will these ever need to be separate?
+        this.mirrorControls.lookAt(v);
+      }
+    } finally {
+      this.#acceptPropagation = true;
+    }
+  }
+
+  set latitude(newLatitude: number) {
+    // this.#pullFromCamera();
+    this.#spherical.phi = (90 - newLatitude) / DEGREES_PER_RADIAN;
+    this.#propagateSpherical();
+  }
+
+  get latitude(): number {
+    return 90 - this.#spherical.phi * DEGREES_PER_RADIAN;
+  }
+
+  set longitude(newLongitude: number) {
+    // this.#pullFromCamera();
+    this.#spherical.theta = newLongitude / DEGREES_PER_RADIAN;
+    this.#propagateSpherical();
+  }
+
+  // TODO: Wrap into [-180, 180]
+  get longitude(): number {
+    return this.#spherical.theta * DEGREES_PER_RADIAN;
+  }
+
+  set distance(newDistance: number) {
+    // this.#pullFromCamera();
+    this.#spherical.radius = newDistance;
+    this.#propagateSpherical();
+  }
+
+  get distance(): number {
+    return this.#spherical.radius;
+  }
+
+  /** @deprecated */
+  get orbitCoordinates(): OrbitCoordinates {
+    return {
+      latitude: this.latitude,
+      longitude: this.longitude,
+      distance: this.distance,
+    };
+  }
+
+  /** @deprecated */
+  set orbitCoordinates(orbitCoordinates: OrbitCoordinates) {
+    this.latitude = orbitCoordinates.latitude;
+    this.longitude = orbitCoordinates.longitude;
+    this.distance = orbitCoordinates.distance;
+  }
+
   /** @deprecated */
   experimentalInertia: boolean = INERTIA_DEFAULT;
   /** @deprecated */
   experimentalLatitudeLimits: CameraLatitudeLimits = LATITUDE_LIMITS_DEFAULT;
+  private mirrorControls?: TwistyOrbitControlsV1;
   private lastTouchClientX: number = 0;
   private lastTouchClientY: number = 0;
   private currentTouchID: number | null = null; // TODO: support multiple touches?
@@ -108,10 +185,12 @@ export class TwistyOrbitControlsV2 {
   private lastMouseMoveMomentumY: number = 0;
   public experimentalHasBeenMoved: boolean = false;
   constructor(
-    private model: TwistyPlayerModel,
-    private mirror: boolean,
+    private camera: Camera,
     private canvas: HTMLCanvasElement,
+    private scheduleRender: () => void,
   ) {
+    this.#spherical.setFromVector3(camera.position);
+    this.#propagateSpherical();
     canvas.addEventListener("mousedown", this.onMouseStart.bind(this));
     canvas.addEventListener("touchstart", this.onTouchStart.bind(this));
   }
@@ -124,6 +203,7 @@ export class TwistyOrbitControlsV2 {
   }
 
   onMouseStart(e: MouseEvent): void {
+    this.experimentalHasBeenMoved = true;
     window.addEventListener("mousemove", this.onMouseMoveBound);
     window.addEventListener("mouseup", this.onMouseEndBound);
     this.onStart(e);
@@ -142,6 +222,7 @@ export class TwistyOrbitControlsV2 {
 
     if (e.movementX === 0 && e.movementY === 0) {
       // Short-circuit
+      console.log("short-circuit mouse!");
       return;
     }
 
@@ -176,9 +257,11 @@ export class TwistyOrbitControlsV2 {
   }
 
   onTouchStart(e: TouchEvent): void {
+    this.experimentalHasBeenMoved = true;
     if (this.currentTouchID === null) {
       if (e.touches[0].clientX === 0 && e.touches[0].clientY === 0) {
         // Short-circuit
+        console.log("short-circuit touch!");
         return;
       }
       this.currentTouchID = e.changedTouches[0].identifier;
@@ -248,23 +331,90 @@ export class TwistyOrbitControlsV2 {
     e.preventDefault();
   }
 
-  async onMove(movementX: number, movementY: number): Promise<void> {
-    const scale = this.mirror ? -1 : 1;
-    this.model.orbitCoordinatesRequestProp.set(
-      (async () => {
-        const prevCoords = await this.model.orbitCoordinatesProp.get();
-        const newCoords = {
-          latitude:
-            prevCoords.latitude + 2 * movementY * DEGREES_PER_RADIAN * scale,
-          longitude: prevCoords.longitude - 2 * movementX * DEGREES_PER_RADIAN,
-        };
-        // console.log("coords", prevCoords, newCoords);
-        return newCoords;
-      })(),
-    );
+  onMove(movementX: number, movementY: number): void {
+    // TODO: optimize, e.g. by caching or using the spherical coordinates
+    // directly if they are still fresh.
+
+    // this.#pullFromCamera();
+
+    // console.log(movementX, movementY)
+
+    const newSpherical = new Spherical();
+    newSpherical.copy(this.#spherical);
+
+    newSpherical.theta += -2 * movementX;
+    newSpherical.phi += -2 * movementY;
+    if (this.experimentalLatitudeLimits !== "none") {
+      newSpherical.phi = Math.max(newSpherical.phi, Math.PI * 0.3); // TODO: Arctic circle: 1/6
+      newSpherical.phi = Math.min(newSpherical.phi, Math.PI * 0.7); // TODO: Antarctic circle: 5/6
+    } else {
+      newSpherical.phi = Math.max(newSpherical.phi, EPSILON);
+      newSpherical.phi = Math.min(newSpherical.phi, Math.PI - EPSILON);
+    }
+
+    if (
+      isNaN(newSpherical.theta) ||
+      newSpherical.theta === Infinity ||
+      newSpherical.theta === -Infinity
+    ) {
+      return;
+    }
+
+    if (
+      isNaN(newSpherical.phi) ||
+      newSpherical.phi === Infinity ||
+      newSpherical.phi === -Infinity
+    ) {
+      return;
+    }
+
+    this.#spherical = newSpherical;
+    this.#propagateSpherical();
+  }
+
+  #adjust(): void {
+    this.#spherical.makeSafe(); // TODO: IS this close enouh for all purposes? Can we set exact using e.g. matrices?
+    this.camera.position.setFromSpherical(this.#spherical);
+    this.camera.lookAt(this.#lookAt);
+  }
+
+  #acceptPropagation: boolean = true;
+  // #lastTranslation = 0;
+  #propagateSpherical(): void {
+    this.#acceptPropagation = false;
+    try {
+      this.#adjust();
+
+      this.scheduleRender();
+      this.mirrorControls?.updateMirroredCamera({
+        latitude: this.latitude,
+        longitude: this.longitude,
+        distance: this.distance,
+      });
+      // We would take the event in the arguments, and try to call
+      // `preventDefault()` on it, but Chrome logs an error event if we try to
+      // catch it, because it enforces a passive listener.
+    } finally {
+      this.#acceptPropagation = true;
+    }
   }
 
   onEnd(e: MouseEvent | TouchEvent): void {
     e.preventDefault();
+  }
+
+  public setMirror(m: TwistyOrbitControlsV1): void {
+    this.mirrorControls = m;
+  }
+
+  updateMirroredCamera(orbitCoordinates: OrbitCoordinates): void {
+    if (this.#acceptPropagation) {
+      this.latitude = -orbitCoordinates.latitude;
+      this.longitude = orbitCoordinates.longitude + 180;
+      this.distance = orbitCoordinates.distance;
+
+      this.#adjust();
+      this.scheduleRender();
+    }
   }
 }

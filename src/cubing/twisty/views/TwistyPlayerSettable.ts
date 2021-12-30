@@ -13,6 +13,7 @@ import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import type { MillisecondTimestamp } from "../old/animation/cursor/CursorTypes";
 import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
 import type { PuzzleID, SetupToLocation } from "../old/dom/TwistyPlayerConfig";
+import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 
 function err(propName: string): Error {
   return new Error(
@@ -55,25 +56,28 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   get background(): never { throw err("background"); }
 
   set controlPanel(newControlPanel: ControlPanelThemeWithAuto) { this.experimentalModel.controlPanelProp.set(newControlPanel); }
-  get controlPanel(): never { throw new Error( "Cannot get `.controlPanel` directly from a `TwistyPlayer`."); }
+  get controlPanel(): never { throw err("controlPanel"); }
 
   set visualization(visualizationFormat: VisualizationFormatWithAuto) { this.experimentalModel.visualizationFormatProp.set(visualizationFormat); }
-  get visualization(): never { throw new Error( "Cannot get `.visualization` directly from a `TwistyPlayer`."); }
+  get visualization(): never { throw err("visualization"); }
 
   set viewerLink(viewerLinkPage: ViewerLinkPageWithAuto) { this.experimentalModel.viewerLinkProp.set(viewerLinkPage); }
   get viewerLink(): never { throw err("viewerLink"); }
 
+  set experimentalMovePressInput(movePressInput: MovePressInput) { this.experimentalModel.movePressInputProp.set(movePressInput); }
+  get experimentalMovePressInput(): never { throw err("experimentalMovePressInput"); }
+
   set cameraLatitude(latitude: number) { this.experimentalModel.orbitCoordinatesRequestProp.set({ latitude }); }
-  get cameraLatitude(): never { throw new Error( "Cannot get `.cameraLatitude` directly from a `TwistyPlayer`."); }
+  get cameraLatitude(): never { throw err("cameraLatitude"); }
 
   set cameraLongitude(longitude: number) { this.experimentalModel.orbitCoordinatesRequestProp.set({ longitude }); }
-  get cameraLongitude(): never { throw new Error( "Cannot get `.cameraLongitude` directly from a `TwistyPlayer`."); }
+  get cameraLongitude(): never { throw err("cameraLongitude"); }
 
   set cameraDistance(distance: number) { this.experimentalModel.orbitCoordinatesRequestProp.set({ distance }); }
-  get cameraDistance(): never { throw new Error( "Cannot get `.cameraDistance` directly from a `TwistyPlayer`."); }
+  get cameraDistance(): never { throw err("cameraDistance"); }
 
   set cameraLatitudeLimit(latitudeLimit: number) { this.experimentalModel.latitudeLimitProp.set(latitudeLimit); }
-  get cameraLatitudeLimit(): never { throw new Error( "Cannot get `.cameraLatitudeLimit` directly from a `TwistyPlayer`."); }
+  get cameraLatitudeLimit(): never { throw err("cameraLatitudeLimit"); }
 
   set indexer(indexer: IndexerStrategyName) { this.experimentalModel.indexerConstructorRequestProp.set(indexer); }
   get indexer(): never { throw err("indexer"); }

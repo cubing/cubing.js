@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 @font-face {
   font-family: "Ubuntu";
   src: url("../vendor/fonts/ubuntu/Ubuntu-Regular.ttf");
@@ -49,12 +53,9 @@ body {
 }
 
 .algarea {
-  font-family: "Ubuntu";
-  padding: 0.5em;
-}
-
-.controls #algorithm {
-  max-width: 90%;
+  --font-family: "Ubuntu";
+  width: 100%;
+  background-color: white;
 }
 
 #twisty-wrapper {
@@ -86,7 +87,7 @@ body > #twisty-wrapper {
 }
 
 #twisty-wrapper,
-#twisty-wrapper twisty-player-v1 {
+#twisty-wrapper twisty-player {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -95,4 +96,8 @@ body > #twisty-wrapper {
 body > .algarea {
   grid-row: 3 / 4;
   grid-column: 3 / 4;
+}
+
+.disabled {
+  opacity: 0.3333;
 }
