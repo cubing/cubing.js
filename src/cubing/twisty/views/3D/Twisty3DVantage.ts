@@ -8,7 +8,7 @@ import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { RenderScheduler } from "../../old/animation/RenderScheduler";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
-import { pixelRatio } from "../../old/dom/viewers/canvas";
+import { pixelRatio } from "../canvas";
 import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css";
 import { DragTracker, PressInfo } from "./DragTracker";
 import { newRenderer, renderPooled } from "./RendererPool";

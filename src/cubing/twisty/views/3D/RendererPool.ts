@@ -13,7 +13,7 @@
 
 import { THREEJS } from "../../heavy-code-imports/3d";
 import type { Camera, Scene, WebGLRenderer } from "three";
-import { pixelRatio } from "../../old/dom/viewers/canvas";
+import { pixelRatio } from "../canvas";
 
 const renderers: Promise<WebGLRenderer>[] = [];
 

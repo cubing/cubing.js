@@ -36,7 +36,7 @@ import {
 import type { HintFaceletStyle } from "../../../model/props/puzzle/display/HintFaceletProp";
 import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
 import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
-import { smootherStep } from "../../../old/animation/easing";
+import { smootherStep } from "../../../controllers/easing";
 import { TAU } from "../TAU";
 
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
