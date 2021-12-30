@@ -37,6 +37,7 @@ export async function renderPooled(
   renderer.setSize(width, height); // TODO: is it faster if we cache values and only call this when necessary?
   renderer.render(scene, camera);
 
+  // TODO: Should we cache this? Seems to take about 0.0001ms to get.
   const context = canvas.getContext("2d")!;
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.drawImage(renderer.domElement, 0, 0);

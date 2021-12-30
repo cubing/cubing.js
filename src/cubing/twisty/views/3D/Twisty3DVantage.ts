@@ -145,12 +145,16 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
     if (this.rendererIsShared) {
       const canvas = await this.canvas();
+      const context = canvas.getContext("2d")!;
+      context.clearRect(0, 0, canvas.width, canvas.height);
       canvas.width = w * pixelRatio();
       canvas.height = h * pixelRatio();
       canvas.style.width = w.toString();
       canvas.style.height = w.toString();
     } else {
-      (await this.renderer()).setSize(w, h, true);
+      const renderer = await this.renderer();
+      renderer.context.clear(renderer.context.COLOR_BUFFER_BIT);
+      renderer.setSize(w, h, true);
     }
 
     this.scheduleRender();
