@@ -9,13 +9,13 @@ import {
   viewerLinkPages,
   visualizationFormats,
 } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig"; // TODO
-import { TwistyPlayerV1 } from "../../../../cubing/twisty";
 import { backViewLayouts } from "../../../../cubing/twisty/old/dom/viewers/TwistyViewerWrapper";
 import { Alg } from "../../../../cubing/alg";
+import { TwistyPlayer } from "../../../../cubing/twisty";
 
 const contentElem = document.querySelector(".content")!;
 
-const twistyPlayer: TwistyPlayerV1 = new TwistyPlayerV1();
+const twistyPlayer: TwistyPlayer = new TwistyPlayer();
 contentElem.appendChild(twistyPlayer);
 
 const table = contentElem.appendChild(document.createElement("table"));
@@ -58,11 +58,6 @@ const enumOptions: [string, string, Record<string, any>][] = [
   ["controlPanel", "control-panel", controlsLocations],
 
   ["backView", "back-view", backViewLayouts],
-  [
-    "experimentalCameraLatitudeLimits",
-    "experimental-camera-latitude-limits",
-    cameraLatitudeLimits,
-  ],
 
   ["viewerLink", "viewer-link", viewerLinkPages],
 ];
@@ -90,8 +85,9 @@ for (const [propName, attrName, valueMap] of enumOptions) {
 }
 
 const numberOptions: [string, string, number][] = [
-  ["experimentalCameraLatitude", "experimental-camera-latitude", 0],
-  ["experimentalCameraLongitude", "experimental-camera-longitude", 0],
+  ["cameraLatitude", "camera-latitude", 0],
+  ["cameraLongitude", "camera-longitude", 0],
+  ["cameraLatitudeLimit", "camera-latitude-limit", 35],
 ];
 
 for (const [propName, attrName, alg] of numberOptions) {
