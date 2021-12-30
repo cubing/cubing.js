@@ -1,5 +1,5 @@
 import type { Move } from "../../../../../alg";
-import type { CurrentMoveInfo } from "../../../../old/animation/indexer/AlgIndexer";
+import type { CurrentMoveInfo } from "../../../../controllers/indexer/AlgIndexer";
 import { arrayEqualsCompare } from "../../../helpers";
 import { TwistyPropDerived } from "../../TwistyProp";
 

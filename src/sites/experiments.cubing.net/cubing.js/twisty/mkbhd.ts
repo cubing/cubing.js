@@ -1,6 +1,6 @@
 import "../../../../cubing/twisty";
 import type { TwistyPlayer } from "../../../../cubing/twisty";
-import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/old/dom/viewers/canvas";
+import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/views/canvas";
 import { demoSpinCamera } from "./demo-spin-camera";
 
 const pixelRatio = new URL(location.href).searchParams.get("pixelRatio");

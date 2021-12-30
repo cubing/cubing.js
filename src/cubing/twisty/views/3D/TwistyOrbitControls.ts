@@ -1,13 +1,11 @@
 import { Spherical, Vector3 } from "three";
-import type { OrbitCoordinatesV2 } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
+import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { RenderScheduler } from "../../old/animation/RenderScheduler";
-import type { CameraLatitudeLimits } from "../../old/dom/TwistyPlayerConfig";
+import { RenderScheduler } from "../../controllers/RenderScheduler";
 import type { DragMovementInfo, DragTracker } from "./DragTracker";
 import { DEGREES_PER_RADIAN } from "./TAU";
 
 const INERTIA_DEFAULT: boolean = true;
-const LATITUDE_LIMITS_DEFAULT: CameraLatitudeLimits = "auto";
 
 const INERTIA_DURATION_MS = 500;
 // If the first inertial render is this long after the last move, we assume the
@@ -71,7 +69,7 @@ class Inertia {
 
 export function positionToOrbitCoordinates(
   position: Vector3,
-): OrbitCoordinatesV2 {
+): OrbitCoordinates {
   const spherical = new Spherical();
   spherical.setFromVector3(position);
   return {
@@ -91,8 +89,6 @@ interface TwistyOrbitControlsDragAttachedInfo {
 export class TwistyOrbitControls {
   /** @deprecated */
   experimentalInertia: boolean = INERTIA_DEFAULT;
-  /** @deprecated */
-  experimentalLatitudeLimits: CameraLatitudeLimits = LATITUDE_LIMITS_DEFAULT;
   private onMovementBound = this.onMovement.bind(this);
   public experimentalHasBeenMoved: boolean = false;
   constructor(

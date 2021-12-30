@@ -1,11 +1,11 @@
 import type { Alg } from "../../../alg";
 import { countMoves } from "../../../notation";
-import { ClassListManager } from "../../old/dom/element/ClassListManager";
+import { ClassListManager } from "../../views/ClassListManager";
 import {
   CSSSource,
   ManagedCustomElement,
-} from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
+} from "../../views/ManagedCustomElement";
+import { customElementsShim } from "../../views/node-custom-element-shims";
 import type { TwistyPlayer } from "../../views/TwistyPlayer";
 import type { AlgIssues } from "./puzzle/state/AlgProp";
 import type { TwistyPropParent } from "./TwistyProp";

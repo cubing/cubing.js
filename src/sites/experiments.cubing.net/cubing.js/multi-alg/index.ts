@@ -3,7 +3,7 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
 import {
   ExperimentalStickering,
   experimentalStickerings,
-} from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
+} from "../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 
 const algsTextarea = document.querySelector("#algs") as HTMLTextAreaElement;
 if (localStorage["multi-alg-textarea"]) {

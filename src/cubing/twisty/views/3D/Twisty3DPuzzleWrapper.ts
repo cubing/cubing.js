@@ -8,8 +8,8 @@ import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { PuzzlePosition } from "../../old/animation/cursor/CursorTypes";
-import type { Schedulable } from "../../old/animation/RenderScheduler";
+import type { PuzzlePosition } from "../../controllers/AnimationTypes";
+import type { Schedulable } from "../../controllers/RenderScheduler";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {

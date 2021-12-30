@@ -1,5 +1,5 @@
-import type { TimeRange } from "../../../old/animation/cursor/AlgCursor";
-import type { AlgIndexer } from "../../../old/animation/indexer/AlgIndexer";
+import type { TimeRange } from "../../../controllers/AnimationTypes";
+import type { AlgIndexer } from "../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../TwistyProp";
 
 export class TimeRangeProp extends TwistyPropDerived<

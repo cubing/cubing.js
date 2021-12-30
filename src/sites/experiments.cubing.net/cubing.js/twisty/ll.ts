@@ -1,7 +1,7 @@
 import { Alg } from "../../../../cubing/alg";
 import { KPuzzle, KPuzzleSVGWrapper } from "../../../../cubing/kpuzzle";
 import { puzzles } from "../../../../cubing/puzzles";
-import "../../../../cubing/twisty/old/dom/TwistyPlayer";
+import "../../../../cubing/twisty";
 
 window.addEventListener("DOMContentLoaded", async () => {
   const def = await puzzles["3x3x3"].def();

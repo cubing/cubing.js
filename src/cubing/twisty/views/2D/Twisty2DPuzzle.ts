@@ -6,22 +6,18 @@ import {
 } from "../../../kpuzzle";
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
 import type { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
-import type { PositionListener } from "../../old/animation/cursor/AlgCursor";
 import {
   Direction,
+  PositionListener,
   PuzzlePosition,
-} from "../../old/animation/cursor/CursorTypes";
-import { RenderScheduler } from "../../old/animation/RenderScheduler";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
+} from "../../controllers/AnimationTypes";
+import { RenderScheduler } from "../../controllers/RenderScheduler";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type {
-  ExperimentalStickering,
-  PuzzleID,
-} from "../../old/dom/TwistyPlayerConfig";
-import { twisty2DSVGCSS } from "../../old/dom/viewers/Twisty2DSVGView.css";
-import type { TwistyViewerElement } from "../../old/dom/viewers/TwistyViewerElement";
+import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
+import type { ExperimentalStickering, PuzzleID } from "../..";
 
 export interface Twisty2DPuzzleOptions {
   experimentalStickering?: ExperimentalStickering;
@@ -30,7 +26,7 @@ export interface Twisty2DPuzzleOptions {
 // <twisty-2d-svg>
 export class Twisty2DPuzzle
   extends ManagedCustomElement
-  implements TwistyViewerElement, PositionListener
+  implements PositionListener
 {
   private definition: KPuzzleDefinition;
   public svg: KPuzzleSVGWrapper;

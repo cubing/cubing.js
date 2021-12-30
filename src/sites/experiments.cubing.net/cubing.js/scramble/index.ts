@@ -1,13 +1,13 @@
 import { wcaEventInfo } from "../../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import "../../../../cubing/twisty";
-import type { TwistyPlayerV1 } from "../../../../cubing/twisty";
+import type { TwistyPlayer } from "../../../../cubing/twisty";
 
 const select = document.querySelector("select") as HTMLSelectElement;
 const scrambleStringDiv = document.querySelector(
   "#scramble-string",
 ) as HTMLDivElement;
-const twistyPlayer = document.querySelector("twisty-player") as TwistyPlayerV1;
+const twistyPlayer = document.querySelector("twisty-player") as TwistyPlayer;
 const button = document.querySelector("button") as HTMLButtonElement;
 
 async function newScramble() {

@@ -1,5 +1,5 @@
 import "../../../cubing/twisty";
-import { showStats } from "../../../cubing/twisty/views/3D/Twisty3DVantage";
+import { experimentalDebugShowRenderStats } from "../../../cubing/twisty";
 import { getConfigFromURL, remapLegacyURLParams } from "../core/url-params";
 import { App } from "./app";
 import { getURLParam } from "./url-params";
@@ -16,7 +16,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   if (getURLParam("debug-show-render-stats")) {
-    showStats(true);
+    experimentalDebugShowRenderStats(true);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

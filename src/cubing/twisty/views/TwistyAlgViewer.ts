@@ -15,13 +15,13 @@ import {
 import type { Parsed } from "../../alg/parse";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
 import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp";
-import type { MillisecondTimestamp } from "../old/animation/cursor/CursorTypes";
-import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
-import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
+import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
+import type { CurrentMoveInfo } from "../controllers/indexer/AlgIndexer";
+import { ManagedCustomElement } from "./ManagedCustomElement";
 import {
   customElementsShim,
   HTMLElementShim,
-} from "../old/dom/element/node-custom-element-shims";
+} from "./node-custom-element-shims";
 import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css";
 import { TwistyPlayer } from "./TwistyPlayer";
 

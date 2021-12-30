@@ -1,3 +1,4 @@
+import type { AlgCubingNetOptions } from "../../../../cubing/alg";
 import { Alg, algCubingNetLink } from "../../../../cubing/alg";
 import {
   BluetoothPuzzle,
@@ -8,29 +9,23 @@ import {
   OrientationEvent,
 } from "../../../../cubing/bluetooth";
 import { ProxyEvent, WebSocketProxySender } from "../../../../cubing/stream";
-import {
-  experimentalShowRenderStats,
-  Twisty3DCanvas,
-  Twisty3DPuzzle,
-} from "../../../../cubing/twisty";
+import { experimentalDebugShowRenderStats } from "../../../../cubing/twisty";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
+  coalesce,
+  debugShowRenderStats,
   DEFAULT_PUZZLE_ID,
   getPuzzleID,
   PuzzleID,
-  sendingSocketOrigin,
   receivingSocketOrigin,
-  coalesce,
-  debugShowRenderStats,
+  sendingSocketOrigin,
 } from "./url-params";
 import { CallbackProxyReceiver } from "./websocket-proxy";
-import type { Quaternion } from "three";
-import type { AlgCubingNetOptions } from "../../../../cubing/alg";
 
 const bluetoothSVG = new URL("./bluetooth.svg", import.meta.url).toString();
 const clearSVG = new URL("./clear.svg", import.meta.url).toString();
 
-experimentalShowRenderStats(debugShowRenderStats());
+experimentalDebugShowRenderStats(debugShowRenderStats());
 // experimentalShowJumpingFlash(false); // TODO
 
 let trackingOrientation: boolean = false;
@@ -124,10 +119,11 @@ const fn = async (
       const opts: AlgCubingNetOptions = {
         alg: alg,
       };
-      const setup = swipeyPuzzle.twistyPlayer.experimentalSetupAlg;
-      if (!setup.experimentalIsEmpty()) {
-        opts.setup = setup;
-      }
+      /// TODO
+      // const setup = swipeyPuzzle.twistyPlayer.experimentalSetupAlg;
+      // if (!setup.experimentalIsEmpty()) {
+      //   opts.setup = setup;
+      // }
       return algCubingNetLink(opts);
     } else {
       url.searchParams.set("puzzle", puzzleID);
@@ -161,9 +157,7 @@ const fn = async (
 
   function resetCamera() {
     if (trackingOrientation) {
-      (
-        swipeyPuzzle.twistyPlayer.viewerElems[0] as Twisty3DCanvas
-      ).camera.position.set(0, 4, 5);
+      // TODO
     }
   }
 
@@ -173,13 +167,14 @@ const fn = async (
       trackingOrientation = true;
       resetCamera();
     }
-    swipeyPuzzle.twistyPlayer.scene!.twisty3Ds.forEach(
-      (twisty3DPuzzle: Twisty3DPuzzle) => {
-        twisty3DPuzzle.quaternion.copy(event.quaternion as Quaternion); // TODO
-      },
-    );
-    // TODO: expose a way to scheduler renders on objects.
-    (swipeyPuzzle.twistyPlayer.timeline as any).dispatchTimestamp(); // TODO
+    // TODO
+    // swipeyPuzzle.twistyPlayer.scene!.twisty3Ds.forEach(
+    //   (twisty3DPuzzle: Twisty3DPuzzle) => {
+    //     twisty3DPuzzle.quaternion.copy(event.quaternion as Quaternion); // TODO
+    //   },
+    // );
+    // // TODO: expose a way to scheduler renders on objects.
+    // (swipeyPuzzle.twistyPlayer.timeline as any).dispatchTimestamp(); // TODO
 
     if (sender) {
       sender.sendOrientationEvent(event);

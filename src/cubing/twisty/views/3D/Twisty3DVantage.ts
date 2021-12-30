@@ -3,27 +3,27 @@ import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.modified.mo
 import { THREEJS } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";
-import type { OrbitCoordinatesV2 } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
+import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { RenderScheduler } from "../../old/animation/RenderScheduler";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
-import { pixelRatio } from "../../old/dom/viewers/canvas";
-import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css";
+import { RenderScheduler } from "../../controllers/RenderScheduler";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
+import { pixelRatio } from "../canvas";
+import { twisty3DVantageCSS } from "./Twisty3DVantage.css";
+import { DragTracker, PressInfo } from "./DragTracker";
 import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyOrbitControls } from "./TwistyOrbitControls";
-import { DragTracker, PressInfo } from "./DragTracker";
 
 let SHOW_STATS = false;
-export function showStats(enable: boolean): void {
+export function debugShowRenderStats(enable: boolean): void {
   SHOW_STATS = enable;
 }
 
 export async function setCameraFromOrbitCoordinates(
   camera: PerspectiveCamera,
-  orbitCoordinates: OrbitCoordinatesV2,
+  orbitCoordinates: OrbitCoordinates,
   backView: boolean = false,
 ): Promise<void> {
   const spherical = new (await THREEJS).Spherical(
@@ -90,7 +90,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
   }
 
   async connectedCallback(): Promise<void> {
-    this.addCSS(twisty3DCanvasCSS);
+    this.addCSS(twisty3DVantageCSS);
     this.addElement((await this.canvasInfo()).canvas);
 
     this.#onResize();
@@ -244,7 +244,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
       if (this.model) {
         this.addListener(
           this.model.orbitCoordinatesProp,
-          async (orbitCoordinates: OrbitCoordinatesV2) => {
+          async (orbitCoordinates: OrbitCoordinates) => {
             const camera = await this.camera();
             setCameraFromOrbitCoordinates(
               camera,
@@ -309,4 +309,4 @@ export class Twisty3DVantage extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-3d-vantage-v2", Twisty3DVantage);
+customElementsShim.define("twisty-3d-vantage", Twisty3DVantage);

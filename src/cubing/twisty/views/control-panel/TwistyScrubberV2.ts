@@ -1,6 +1,6 @@
-import { twistyScrubberCSS } from "../../old/dom/controls/TwistyScrubber.css";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
+import { twistyScrubberCSS } from "./TwistyScrubber.css";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
 import type { DetailedTimelineInfo } from "../../model/props/timeline/DetailedTimelineInfoProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { globalSafeDocument } from "../document";

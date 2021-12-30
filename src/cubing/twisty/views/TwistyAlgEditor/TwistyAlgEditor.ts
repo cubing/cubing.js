@@ -19,9 +19,9 @@ import type {
   AlgWithIssues,
 } from "../../model/props/puzzle/state/AlgProp";
 import type { CurrentLeavesSimplified } from "../../model/props/puzzle/state/CurrentLeavesSimplified";
-import { ClassListManager } from "../../old/dom/element/ClassListManager";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
+import { ClassListManager } from "../ClassListManager";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
 import { TwistyPlayer } from "../TwistyPlayer";
 import { HighlightInfo, TwistyAlgEditorModel } from "./model";
 import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css";

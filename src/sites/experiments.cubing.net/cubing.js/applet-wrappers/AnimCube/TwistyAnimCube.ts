@@ -1,7 +1,7 @@
 import { Alg } from "../../../../../cubing/alg";
 import { TwistyPlayer, TwistyPlayerConfig } from "../../../../../cubing/twisty";
-import { ManagedCustomElement } from "../../../../../cubing/twisty/old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../../../../cubing/twisty/old/dom/element/node-custom-element-shims";
+import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement";
+import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
 
 const DEBUG = false;
 

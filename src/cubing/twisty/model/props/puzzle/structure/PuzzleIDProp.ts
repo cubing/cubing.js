@@ -1,6 +1,6 @@
 import type { PuzzleLoader } from "../../../../../puzzles";
-import type { PuzzleID } from "../../../../old/dom/TwistyPlayerConfig";
 import { TwistyPropDerived } from "../../TwistyProp";
+import type { PuzzleID } from "./PuzzleIDRequestProp";
 
 export class PuzzleIDProp extends TwistyPropDerived<
   { puzzleLoader: PuzzleLoader },
