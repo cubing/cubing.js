@@ -4,7 +4,7 @@ import {
   KPuzzleDefinition,
   Transformation,
 } from "../../../../../kpuzzle";
-import type { AlgIndexer } from "../../../../old/animation/indexer/AlgIndexer";
+import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { SetupToLocation } from "./SetupAnchorProp";
 

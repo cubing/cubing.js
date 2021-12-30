@@ -1,7 +1,7 @@
 import type { Alg } from "../../../../../alg";
 import type { KPuzzleDefinition, Transformation } from "../../../../../kpuzzle";
 import { KPuzzleWrapper } from "../../../../views/3D/puzzles/KPuzzleWrapper";
-import { TreeAlgIndexer } from "../../../../old/animation/indexer/tree/TreeAlgIndexer";
+import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";
 import type { AlgWithIssues } from "./AlgProp";
 import { TwistyPropDerived } from "../../TwistyProp";
 

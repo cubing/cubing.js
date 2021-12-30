@@ -1,6 +1,6 @@
 import type { KPuzzleDefinition } from "../../../../../kpuzzle";
 import { KPuzzleWrapper } from "../../../../views/3D/puzzles/KPuzzleWrapper";
-import type { AlgIndexer } from "../../../../old/animation/indexer/AlgIndexer";
+import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer";
 import type { AlgWithIssues } from "./AlgProp";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { IndexerConstructor } from "./IndexerConstructorProp";

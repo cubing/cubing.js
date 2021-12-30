@@ -8,8 +8,8 @@ import {
   Newline,
   Pause,
   TraversalUp,
-} from "../../../../alg";
-import type { Duration } from "../../../controllers/AnimationTypes";
+} from "../../../alg";
+import type { Duration } from "../AnimationTypes";
 
 export function constantDurationForAmount(_amount: number): Duration {
   return 1000;

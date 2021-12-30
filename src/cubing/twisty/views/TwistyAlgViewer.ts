@@ -16,7 +16,7 @@ import type { Parsed } from "../../alg/parse";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
 import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
-import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
+import type { CurrentMoveInfo } from "../controllers/indexer/AlgIndexer";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 import {
   customElementsShim,

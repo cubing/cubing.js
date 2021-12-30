@@ -1,5 +1,5 @@
-import { Move, QuantumMove } from "../../../../alg";
-import type { Duration, Timestamp } from "../../../controllers/AnimationTypes";
+import { Move, QuantumMove } from "../../../alg";
+import type { Duration, Timestamp } from "../AnimationTypes";
 
 interface Event {
   timeStamp: Timestamp;

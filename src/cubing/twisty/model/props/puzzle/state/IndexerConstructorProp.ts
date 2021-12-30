@@ -1,7 +1,7 @@
 import { countMoves } from "../../../../../notation";
-import { SimpleAlgIndexer } from "../../../../old/animation/indexer/SimpleAlgIndexer";
-import { SimultaneousMoveIndexerV2 } from "../../../../old/animation/indexer/simultaneous-moves/SimultaneousMoveIndexerV2";
-import { TreeAlgIndexer } from "../../../../old/animation/indexer/tree/TreeAlgIndexer";
+import { SimpleAlgIndexer } from "../../../../controllers/indexer/SimpleAlgIndexer";
+import { SimultaneousMoveIndexerV2 } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexerV2";
+import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";
 import type { AlgWithIssues } from "./AlgProp";
 import type { IndexerStrategyName } from "./IndexerConstructorRequestProp";
 import type { VisualizationStrategy } from "../../viewer/VisualizationStrategyProp";

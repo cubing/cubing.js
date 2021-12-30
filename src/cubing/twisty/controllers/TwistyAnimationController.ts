@@ -12,7 +12,7 @@ import type {
 } from "../model/props/timeline/PlayingInfoProp";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { StaleDropper } from "../model/PromiseFreshener";
-import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
+import type { CurrentMoveInfo } from "./indexer/AlgIndexer";
 import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
 import { modIntoRange } from "../model/helpers";
 import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp";

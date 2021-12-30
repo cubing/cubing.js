@@ -18,7 +18,7 @@ export { debugShowRenderStats as experimentalDebugShowRenderStats } from "./view
 // Older
 export { Cube3D } from "./views/3D/puzzles/Cube3D";
 export { PG3D } from "./views/3D/puzzles/PG3D";
-export type { AlgIndexer } from "./old/animation/indexer/AlgIndexer";
-export { SimpleAlgIndexer } from "./old/animation/indexer/SimpleAlgIndexer";
-export { TreeAlgIndexer } from "./old/animation/indexer/tree/TreeAlgIndexer";
+export type { AlgIndexer } from "./controllers/indexer/AlgIndexer";
+export { SimpleAlgIndexer } from "./controllers/indexer/SimpleAlgIndexer";
+export { TreeAlgIndexer } from "./controllers/indexer/tree/TreeAlgIndexer";
 export { KPuzzleWrapper as KSolvePuzzle } from "./views/3D/puzzles/KPuzzleWrapper";

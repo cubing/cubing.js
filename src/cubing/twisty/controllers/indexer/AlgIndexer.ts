@@ -1,16 +1,16 @@
-import type { Move } from "../../../../alg/units";
-import { arrayEqualsCompare } from "../../../model/helpers";
+import type { Move } from "../../../alg/units";
+import { arrayEqualsCompare } from "../../model/helpers";
 import type {
   PuzzleWrapper,
   State,
-} from "../../../views/3D/puzzles/KPuzzleWrapper";
+} from "../../views/3D/puzzles/KPuzzleWrapper";
 import type {
   Direction,
   Duration,
   MillisecondTimestamp,
   PuzzlePosition,
   Timestamp,
-} from "../../../controllers/AnimationTypes";
+} from "../AnimationTypes";
 import type { AnimatedLeafUnit } from "./simultaneous-moves/simul-moves";
 
 export interface CurrentMove {

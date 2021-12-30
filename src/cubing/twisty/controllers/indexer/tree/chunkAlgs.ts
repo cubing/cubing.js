@@ -9,8 +9,8 @@ import {
   Pause,
   TraversalUp,
   Unit,
-} from "../../../../../alg";
-import { AlgBuilder } from "../../../../../alg";
+} from "../../../../alg";
+import { AlgBuilder } from "../../../../alg";
 
 const MIN_CHUNKING_THRESHOLD = 16;
 

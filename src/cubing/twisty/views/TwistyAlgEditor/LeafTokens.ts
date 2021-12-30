@@ -10,7 +10,7 @@ import {
   TraversalDownUp,
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
-import type { AnimatedLeafUnit } from "../../old/animation/indexer/simultaneous-moves/simul-moves";
+import type { AnimatedLeafUnit } from "../../controllers/indexer/simultaneous-moves/simul-moves";
 
 export type AnimatedLeafUnitInfo = {
   leaf: Parsed<AnimatedLeafUnit>;

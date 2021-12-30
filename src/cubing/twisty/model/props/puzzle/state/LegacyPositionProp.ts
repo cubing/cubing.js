@@ -1,6 +1,6 @@
 import type { Transformation } from "../../../../../kpuzzle";
 import type { PuzzlePosition } from "../../../../controllers/AnimationTypes";
-import type { CurrentMoveInfo } from "../../../../old/animation/indexer/AlgIndexer";
+import type { CurrentMoveInfo } from "../../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
 
 export interface LegacyPositionPropInputs {

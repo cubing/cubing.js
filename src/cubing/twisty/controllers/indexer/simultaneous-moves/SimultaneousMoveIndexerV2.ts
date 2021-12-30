@@ -1,15 +1,15 @@
-import { Alg, Move } from "../../../../../alg";
+import { Alg, Move } from "../../../../alg";
 import type {
   PuzzleWrapper,
   State,
-} from "../../../../views/3D/puzzles/KPuzzleWrapper";
+} from "../../../views/3D/puzzles/KPuzzleWrapper";
 import {
   Direction,
   Duration,
   PuzzlePosition,
   Timestamp,
-} from "../../../../controllers/AnimationTypes";
-import type { AlgIndexer } from "../AlgIndexer";
+} from "../../AnimationTypes";
+import type { AlgIndexer, CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import { AnimatedLeafUnit, AnimLeafWithRange, simulMoves } from "./simul-moves";
 
 const demos: Record<string, AnimLeafWithRange[]> = {
@@ -31,8 +31,8 @@ const demos: Record<string, AnimLeafWithRange[]> = {
     { animLeaf: new Move("z", 2), start: 5500, end: 6500 },
     { animLeaf: new Move("S", 2), start: 6500, end: 7500 },
     { animLeaf: new Move("U"), start: 7500, end: 8000 },
-    { animLeaf: new Move("U"), start: 8000, end: 8500 },
     { animLeaf: new Move("D"), start: 7750, end: 8250 },
+    { animLeaf: new Move("U"), start: 8000, end: 8500 },
     { animLeaf: new Move("D"), start: 8250, end: 8750 },
     { animLeaf: new Move("S", 2), start: 8750, end: 9250 },
     { animLeaf: new Move("F", -2), start: 8750, end: 10000 },
@@ -59,7 +59,7 @@ const demos: Record<string, AnimLeafWithRange[]> = {
   ],
 };
 
-export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
+export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
   implements AlgIndexer<P>
 {
   private animLeaves: AnimLeafWithRange[];
@@ -104,38 +104,100 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
     timestamp: Timestamp,
     startTransformation?: State<P>,
   ): PuzzlePosition {
-    const position: PuzzlePosition = {
-      state: startTransformation ?? (this.puzzle.identity() as any),
-      movesInProgress: [],
-    };
-    for (const leafWithRange of this.animLeaves) {
-      if (leafWithRange.end <= timestamp) {
-        const move = leafWithRange.animLeaf.as(Move);
-        if (move !== null) {
-          position.state = this.puzzle.combine(
-            position.state,
-            this.puzzle.stateFromMove(move),
-          ) as any;
-        }
-      } else if (
-        leafWithRange.start < timestamp &&
-        timestamp < leafWithRange.end
-      ) {
-        const move = leafWithRange.animLeaf.as(Move);
-        if (move !== null) {
-          position.movesInProgress.push({
-            move: move,
-            direction: Direction.Forwards,
-            fraction:
-              (timestamp - leafWithRange.start) /
-              (leafWithRange.end - leafWithRange.start),
-          });
-        }
-      } else if (timestamp < leafWithRange.start) {
-        continue;
+    const currentMoveInfo = this.currentMoveInfo(timestamp);
+
+    let state = startTransformation ?? this.puzzle.identity();
+    for (const leafWithRange of this.animLeaves.slice(
+      0,
+      currentMoveInfo.stateIndex,
+    )) {
+      const move = leafWithRange.animLeaf.as(Move);
+      if (move !== null) {
+        state = this.puzzle.combine(state, this.puzzle.stateFromMove(move));
       }
     }
-    return position;
+
+    return {
+      state: state as any,
+      movesInProgress: currentMoveInfo.currentMoves,
+    };
+  }
+
+  // TODO: Caching
+  public currentMoveInfo(timestamp: Timestamp): CurrentMoveInfo {
+    // The starting timestamp of the earliest active move.
+    let windowEarliestTimestamp = Infinity;
+    for (const leafWithRange of this.animLeaves) {
+      if (leafWithRange.start <= timestamp && leafWithRange.end >= timestamp) {
+        windowEarliestTimestamp = Math.min(
+          windowEarliestTimestamp,
+          leafWithRange.start,
+        );
+      } else if (leafWithRange.start > timestamp) {
+        break;
+      }
+    }
+
+    const currentMoves: CurrentMove[] = [];
+    const movesStarting: CurrentMove[] = [];
+    const movesFinishing: CurrentMove[] = [];
+    const movesFinished: CurrentMove[] = [];
+    let latestStart: number = -Infinity; // TODO: is there a better way to accumulate this?
+    let earliestEnd: number = Infinity; // TODO: is there a better way to accumulate this?
+
+    let stateIndex: number = 0;
+    for (const leafWithRange of this.animLeaves) {
+      if (leafWithRange.end <= windowEarliestTimestamp) {
+        stateIndex++;
+      } else if (leafWithRange.start > timestamp) {
+        break;
+      } else {
+        const move = leafWithRange.animLeaf.as(Move);
+        if (move !== null) {
+          let fraction =
+            (timestamp - leafWithRange.start) /
+            (leafWithRange.end - leafWithRange.start);
+          let moveFinished = false;
+          if (fraction > 1) {
+            fraction = 1;
+            moveFinished = true;
+          }
+          const currentMove = {
+            move: move,
+            direction: Direction.Forwards,
+            fraction: fraction,
+            startTimestamp: leafWithRange.start,
+            endTimestamp: leafWithRange.end,
+          };
+          switch (fraction) {
+            case 0:
+              movesStarting.push(currentMove);
+              break;
+            case 1:
+              // Generalize this to avoid reordering commuting moves.
+              if (moveFinished) {
+                movesFinished.push(currentMove);
+              } else {
+                movesFinishing.push(currentMove);
+              }
+              break;
+            default:
+              currentMoves.push(currentMove);
+              latestStart = Math.max(latestStart, leafWithRange.start);
+              earliestEnd = Math.min(earliestEnd, leafWithRange.end);
+          }
+        }
+      }
+    }
+    return {
+      stateIndex,
+      currentMoves,
+      latestStart,
+      earliestEnd,
+      movesStarting,
+      movesFinishing,
+      movesFinished,
+    };
   }
 
   public stateAtIndex(index: number, startTransformation?: State<P>): State<P> {

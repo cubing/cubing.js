@@ -3,7 +3,7 @@ import { Direction } from "../../../../controllers/AnimationTypes";
 import type {
   AlgIndexer,
   CurrentMoveInfo,
-} from "../../../../old/animation/indexer/AlgIndexer";
+} from "../../../../controllers/indexer/AlgIndexer";
 import type { DetailedTimelineInfo } from "../../timeline/DetailedTimelineInfoProp";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { CatchUpMove } from "./CatchUpMoveProp";

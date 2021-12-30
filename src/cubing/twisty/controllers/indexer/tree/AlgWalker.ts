@@ -10,16 +10,16 @@ import {
   TraversalDownUp,
   TraversalUp,
   Unit,
-} from "../../../../../alg";
+} from "../../../../alg";
 import {
   experimentalDirectedGenerator,
   ExperimentalIterationDirection,
-} from "../../../../../alg";
+} from "../../../../alg";
 import type {
   PuzzleWrapper,
   State,
-} from "../../../../views/3D/puzzles/KPuzzleWrapper";
-import type { Duration } from "../../../../controllers/AnimationTypes";
+} from "../../../views/3D/puzzles/KPuzzleWrapper";
+import type { Duration } from "../../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
 
 export class AlgPartDecoration<P extends PuzzleWrapper> {

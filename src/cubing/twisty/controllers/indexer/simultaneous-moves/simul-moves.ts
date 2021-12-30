@@ -8,8 +8,8 @@ import {
   Alg,
   Grouping,
   Newline,
-} from "../../../../../alg";
-import type { MillisecondTimestamp } from "../../../../controllers/AnimationTypes";
+} from "../../../../alg";
+import type { MillisecondTimestamp } from "../../AnimationTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
 export type AnimatedLeafUnit = Move | Pause;
