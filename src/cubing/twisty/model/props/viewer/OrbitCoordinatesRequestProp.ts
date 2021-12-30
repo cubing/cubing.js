@@ -3,15 +3,15 @@ import { TwistyPropSource } from "../TwistyProp";
 
 export type CoordinateDegrees = number;
 
-export interface OrbitCoordinatesV2 {
+export interface OrbitCoordinates {
   latitude: CoordinateDegrees;
   longitude: CoordinateDegrees;
   distance: number;
 }
 
 export function orbitCoordinatesEqual(
-  c1: OrbitCoordinatesV2,
-  c2: OrbitCoordinatesV2,
+  c1: OrbitCoordinates,
+  c2: OrbitCoordinates,
 ): boolean {
   return (
     c1.latitude === c2.latitude &&
@@ -27,23 +27,23 @@ export function orbitCoordinatesEqual(
 //   distance: 6,
 // });
 
-export type OrbitCoordinatesRequest = Partial<OrbitCoordinatesV2> | "auto";
+export type OrbitCoordinatesRequest = Partial<OrbitCoordinates> | "auto";
 
 // TODO: Put the "auto" calculations in a separate place.
 export class OrbitCoordinatesRequestProp extends TwistyPropSource<
   OrbitCoordinatesRequest,
-  Partial<OrbitCoordinatesV2> | "auto"
+  Partial<OrbitCoordinates> | "auto"
 > {
   getDefaultValue(): OrbitCoordinatesRequest {
     return "auto";
   }
 
-  canReuseValue(v1: OrbitCoordinatesV2, v2: OrbitCoordinatesV2) {
+  canReuseValue(v1: OrbitCoordinates, v2: OrbitCoordinates) {
     return v1 === v2 || orbitCoordinatesEqual(v1, v2);
   }
 
   async derive(
-    newCoordinates: Partial<OrbitCoordinatesV2> | "auto",
+    newCoordinates: Partial<OrbitCoordinates> | "auto",
     oldValuePromise: Promise<OrbitCoordinatesRequest>,
   ): Promise<OrbitCoordinatesRequest> {
     if (newCoordinates === "auto") {
@@ -55,7 +55,7 @@ export class OrbitCoordinatesRequestProp extends TwistyPropSource<
       oldValue = {};
     }
 
-    const newValue: Partial<OrbitCoordinatesV2> = Object.assign({}, oldValue);
+    const newValue: Partial<OrbitCoordinates> = Object.assign({}, oldValue);
     Object.assign(newValue, newCoordinates);
 
     if (typeof newValue.latitude !== "undefined") {

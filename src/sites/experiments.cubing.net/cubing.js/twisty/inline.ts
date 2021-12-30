@@ -1,6 +1,5 @@
 import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayer } from "../../../../cubing/twisty";
-import "../../../../cubing/twisty/old/dom/TwistyPlayer";
 
 window.addEventListener("DOMContentLoaded", () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

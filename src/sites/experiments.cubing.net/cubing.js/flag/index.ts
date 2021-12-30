@@ -2,7 +2,7 @@ import { Alg } from "../../../../cubing/alg";
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 import { puzzles } from "../../../../cubing/puzzles";
-import { Cube3D, Twisty3DCanvas } from "../../../../cubing/twisty";
+import { Cube3D } from "../../../../cubing/twisty";
 import { Twisty3DScene } from "../../../../cubing/twisty/views/3D/Twisty3DScene";
 import { AlgCursor } from "../../../../cubing/twisty/old/animation/cursor/AlgCursor";
 import { Timeline } from "../../../../cubing/twisty/old/animation/Timeline";
@@ -13,13 +13,14 @@ const TRANSLATE_SCALE = 1.1;
 const WOBBLE = 0.2;
 
 const scene = new Twisty3DScene();
-const canvas = new Twisty3DCanvas(scene, {
-  orbitCoordinates: {
-    latitude: 90,
-    longitude: 0,
-    distance: 24,
-  },
-});
+const canvas = null as any; // TODO
+//   new Twisty3DVantage(scene, {
+//   orbitCoordinates: {
+//     latitude: 90,
+//     longitude: 0,
+//     distance: 24,
+//   },
+// });
 canvas.camera.position.y = 24;
 canvas.camera.far = 100; // Document this for others.
 canvas.experimentalSetLatitudeLimits("none");

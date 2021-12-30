@@ -5,20 +5,21 @@ import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAni
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
 import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
+import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
+import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
-import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
+import {
+  ControlPanelThemeWithAuto,
+  controlsLocations,
+} from "../model/props/viewer/ControlPanelProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
 import { ClassListManager } from "../old/dom/element/ClassListManager";
 import { customElementsShim } from "../old/dom/element/node-custom-element-shims";
 import { twistyPlayerCSS } from "../old/dom/TwistyPlayer.css";
-import {
-  controlsLocations,
-  PuzzleID,
-  SetupToLocation,
-} from "../old/dom/TwistyPlayerConfig";
+
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";

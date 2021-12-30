@@ -2,24 +2,23 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { Alg } from "../../../../../cubing/alg";
-import { TwistyPlayer } from "../../../../../cubing/twisty";
+import { backViewLayouts, TwistyPlayer } from "../../../../../cubing/twisty";
+import { hintFaceletStyles } from "../../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
+import { experimentalStickerings } from "../../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/puzzle/state/IndexerConstructorRequestProp";
-import { TwistyPlayerDebugger } from "../../../../../cubing/twisty/model/props/TwistyPropDebugger";
+import { setupToLocations } from "../../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import {
-  backgroundThemes,
-  controlsLocations,
-  experimentalStickerings,
-  hintFaceletStyles,
   PuzzleID,
   puzzleIDs,
-  setupToLocations,
-  viewerLinkPages,
-  visualizationFormats,
-} from "../../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
-import { backViewLayouts } from "../../../../../cubing/twisty/old/dom/viewers/TwistyViewerWrapper";
-import { showStats } from "../../../../../cubing/twisty/views/3D/Twisty3DVantage";
+} from "../../../../../cubing/twisty/model/props/puzzle/structure/PuzzleIDRequestProp";
+import { TwistyPlayerDebugger } from "../../../../../cubing/twisty/model/props/TwistyPropDebugger";
+import { backgroundThemes } from "../../../../../cubing/twisty/model/props/viewer/BackgroundProp";
+import { controlsLocations } from "../../../../../cubing/twisty/model/props/viewer/ControlPanelProp";
+import { viewerLinkPages } from "../../../../../cubing/twisty/model/props/viewer/ViewerLinkProp";
+import { visualizationFormats } from "../../../../../cubing/twisty/model/props/viewer/VisualizationProp";
+import { debugShowRenderStats } from "../../../../../cubing/twisty/views/3D/Twisty3DVantage";
 
-showStats(true);
+debugShowRenderStats(true);
 
 // alg="y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2"
 // control-panelly="none"

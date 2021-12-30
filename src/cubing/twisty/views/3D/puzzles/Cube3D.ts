@@ -16,21 +16,21 @@ import {
   Vector2,
   Vector3,
 } from "three";
+import type { ExperimentalStickering } from "../../..";
 import type { KPuzzleDefinition } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
 } from "../../../../puzzles/stickerings/appearance";
+import {
+  HintFaceletStyle,
+  hintFaceletStyles,
+} from "../../../model/props/puzzle/display/HintFaceletProp";
+import { experimentalStickerings } from "../../../model/props/puzzle/display/StickeringProp";
 import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
 import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
 import { smootherStep } from "../../../old/animation/easing";
-import {
-  ExperimentalStickering,
-  experimentalStickerings,
-  HintFaceletStyle,
-  hintFaceletStyles,
-} from "../../../old/dom/TwistyPlayerConfig";
 import { TAU } from "../TAU";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 

@@ -1,14 +1,11 @@
+import {
+  BackViewLayout,
+  backViewLayouts,
+} from "../../../model/props/viewer/BackViewProp";
 import { ClassListManager } from "../element/ClassListManager";
 import { ManagedCustomElement } from "../element/ManagedCustomElement";
 import { customElementsShim } from "../element/node-custom-element-shims";
 import { twistyViewerWrapperCSS } from "./TwistyViewerWrapper.css";
-
-export const backViewLayouts = {
-  "none": true, // default
-  "side-by-side": true,
-  "top-right": true,
-};
-export type BackViewLayout = keyof typeof backViewLayouts;
 
 export interface TwistyViewerWrapperConfig {
   backView?: BackViewLayout;

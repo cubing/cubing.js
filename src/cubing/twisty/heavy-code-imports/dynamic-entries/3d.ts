@@ -1,13 +1,12 @@
 import { cube3x3x3, PuzzleLoader } from "../../../puzzles";
+import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFaceletProp";
 import type { AlgCursor } from "../../old/animation/cursor/AlgCursor";
-import type { HintFaceletStyle } from "../../old/dom/TwistyPlayerConfig";
 import { Cube3D, Cube3DOptions } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
 
 // Mangled to avoid autocompleting.
 // This must not be imported directly.
 export * as T3I from "three";
-export { Twisty3DCanvas } from "../../old/dom/viewers/Twisty3DCanvas";
 export { Cube3D } from "../../views/3D/puzzles/Cube3D";
 export { PG3D } from "../../views/3D/puzzles/PG3D";
 export { Twisty3DScene } from "../../views/3D/Twisty3DScene";

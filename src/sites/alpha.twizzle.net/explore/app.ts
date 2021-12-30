@@ -23,11 +23,9 @@ import {
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../cubing/twisty";
-import {
-  OrbitCoordinates,
-  positionToOrbitCoordinates,
-} from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControlsV1";
-import { showStats } from "../../../cubing/twisty/views/3D/Twisty3DVantage";
+import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
+import { experimentalDebugShowRenderStats } from "../../../cubing/twisty";
+import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";
 import {
   getConfigFromURL,
   remapLegacyURLParams,
@@ -42,7 +40,7 @@ import {
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
-  showStats(true);
+  experimentalDebugShowRenderStats(true);
 }
 //experimentalShowJumpingFlash(false); // TODO: Re-implement this
 
