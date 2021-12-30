@@ -1,6 +1,6 @@
 import type { Alg } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
-import type { ExperimentalStickering } from "../../twisty";
+import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
@@ -12,8 +12,8 @@ import type { VisualizationFormatWithAuto } from "../model/props/viewer/Visualiz
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import type { MillisecondTimestamp } from "../old/animation/cursor/CursorTypes";
 import { ManagedCustomElement } from "../old/dom/element/ManagedCustomElement";
-import type { PuzzleID, SetupToLocation } from "../old/dom/TwistyPlayerConfig";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
+import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
 
 function err(propName: string): Error {
   return new Error(

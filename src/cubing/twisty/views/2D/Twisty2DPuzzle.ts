@@ -16,12 +16,9 @@ import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement
 import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type {
-  ExperimentalStickering,
-  PuzzleID,
-} from "../../old/dom/TwistyPlayerConfig";
 import { twisty2DSVGCSS } from "../../old/dom/viewers/Twisty2DSVGView.css";
 import type { TwistyViewerElement } from "../../old/dom/viewers/TwistyViewerElement";
+import type { ExperimentalStickering, PuzzleID } from "../..";
 
 export interface Twisty2DPuzzleOptions {
   experimentalStickering?: ExperimentalStickering;

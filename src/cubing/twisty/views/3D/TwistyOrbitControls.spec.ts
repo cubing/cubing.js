@@ -2,14 +2,16 @@
  * @jest-environment jsdom
  */
 
-import { PuzzleIDRequestProp } from "../../model/props/puzzle/structure/PuzzleIDRequestProp";
+import {
+  PuzzleID,
+  PuzzleIDRequestProp,
+} from "../../model/props/puzzle/structure/PuzzleIDRequestProp";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";
 import { LatitudeLimitProp } from "../../model/props/viewer/LatitudeLimit";
 import { OrbitCoordinatesProp } from "../../model/props/viewer/OrbitCoordinatesProp";
 import { OrbitCoordinatesRequestProp } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import { VisualizationFormatProp } from "../../model/props/viewer/VisualizationProp";
 import { VisualizationStrategyProp } from "../../model/props/viewer/VisualizationStrategyProp";
-import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
 
 describe("TwistyOrbitControls", () => {
   it("should update correctly", async () => {

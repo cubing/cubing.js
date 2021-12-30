@@ -1,8 +1,8 @@
 import type { TimeRange } from "../../../old/animation/cursor/AlgCursor";
 import type { MillisecondTimestamp } from "../../../old/animation/cursor/CursorTypes";
-import type { SetupToLocation } from "../../../old/dom/TwistyPlayerConfig";
 import type { TimestampRequest } from "./TimestampRequestProp";
 import { TwistyPropDerived } from "../TwistyProp";
+import type { SetupToLocation } from "../puzzle/state/SetupAnchorProp";
 
 interface DetailedTimelineInfoInputs {
   timestampRequest: TimestampRequest;

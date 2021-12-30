@@ -7,6 +7,7 @@ export { experimentalForceNewRendererSharing } from "./views/3D/Twisty3DVantage"
 export { NO_VALUE as EXPERIMENTAL_PROP_NO_VALUE } from "./model/props/TwistyProp";
 export { ExperimentalStickering } from "./model/props/puzzle/display/StickeringProp";
 export { backViewLayouts } from "./model/props/viewer/BackViewProp";
+export type { PuzzleID } from "./model/props/puzzle/structure/PuzzleIDRequestProp";
 
 export { debugShowRenderStats as experimentalDebugShowRenderStats } from "./views/3D/Twisty3DVantage";
 
