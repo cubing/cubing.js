@@ -16,7 +16,3 @@ body {
 body > * {
   justify-self: center;
 }
-
-twisty-player-v1 {
-  max-width: 100%;
-}
