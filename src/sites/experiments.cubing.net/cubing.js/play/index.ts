@@ -1,5 +1,4 @@
-import type { AlgCubingNetOptions } from "../../../../cubing/alg";
-import { Alg, algCubingNetLink } from "../../../../cubing/alg";
+import { Alg } from "../../../../cubing/alg";
 import {
   BluetoothPuzzle,
   connectSmartPuzzle,
@@ -12,7 +11,6 @@ import { ProxyEvent, WebSocketProxySender } from "../../../../cubing/stream";
 import { experimentalDebugShowRenderStats } from "../../../../cubing/twisty";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
-  coalesce,
   debugShowRenderStats,
   DEFAULT_PUZZLE_ID,
   getPuzzleID,
@@ -38,10 +36,6 @@ function puzzleName(puzzleID: PuzzleID): string {
     megaminx: "Megaminx",
   };
   return puzzleNameMap[puzzleID] ?? puzzleID;
-}
-
-function maybeCoalesce(alg: Alg): Alg {
-  return coalesce() ? alg.simplify() : alg;
 }
 
 const fn = async (
@@ -112,40 +106,41 @@ const fn = async (
   controlBar.appendChild(clearButton);
   clearButton.addEventListener("click", space);
 
-  function toLink(alg: Alg): string {
-    const url = new URL("../edit/", import.meta.url);
-    const puzzleID = getPuzzleID();
-    if (puzzleID === "3x3x3") {
-      const opts: AlgCubingNetOptions = {
-        alg: alg,
-      };
-      /// TODO
-      // const setup = swipeyPuzzle.twistyPlayer.experimentalSetupAlg;
-      // if (!setup.experimentalIsEmpty()) {
-      //   opts.setup = setup;
-      // }
-      return algCubingNetLink(opts);
-    } else {
-      url.searchParams.set("puzzle", puzzleID);
-      url.searchParams.set("alg", alg.toString());
-      return url.toString();
-    }
-  }
+  // function toLink(alg: Alg): string {
+  //   const url = new URL("../edit/", import.meta.url);
+  //   const puzzleID = getPuzzleID();
+  //   if (puzzleID === "3x3x3") {
+  //     const opts: AlgCubingNetOptions = {
+  //       alg: alg,
+  //     };
+  //     /// TODO
+  //     // const setup = swipeyPuzzle.twistyPlayer.experimentalSetupAlg;
+  //     // if (!setup.experimentalIsEmpty()) {
+  //     //   opts.setup = setup;
+  //     // }
+  //     return algCubingNetLink(opts);
+  //   } else {
+  //     url.searchParams.set("puzzle", puzzleID);
+  //     url.searchParams.set("alg", alg.toString());
+  //     return url.toString();
+  //   }
+  // }
 
   const algLink = document.createElement("a");
   const instructions =
     fromKeyboard || fromMouse ? "Type to add moves" : "Swipe to add moves.";
   algLink.textContent = instructions;
   controlBar.appendChild(algLink);
-  function updateAlgLink(): void {
-    const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
-    const alg = seq.toString();
-    if (alg === "") {
+  async function updateAlgLink(): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    const alg = await swipeyPuzzle.twistyPlayer.experimentalGet.alg();
+    if (alg.experimentalIsEmpty()) {
       algLink.textContent = instructions;
       algLink.removeAttribute("href");
     } else {
-      algLink.textContent = alg;
-      algLink.href = toLink(seq);
+      algLink.textContent = alg.toString();
+      algLink.href =
+        await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
     }
   }
 
@@ -228,10 +223,11 @@ const fn = async (
     clearButton.blur();
   }
 
-  function enter() {
-    const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
+  async function enter() {
+    const url = await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
+    // const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
     const a = document.createElement("a");
-    a.href = toLink(seq);
+    a.href = url;
     a.click();
   }
 
@@ -257,14 +253,13 @@ const fn = async (
 
   swipeyPuzzle.setAlgListener(updateAlgLink);
 
-  document.addEventListener("copy", (e) => {
-    const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg); // TODO
-    const alg = seq.toString();
-    e.clipboardData!.setData("text/plain", alg);
+  document.addEventListener("copy", async (e) => {
+    const alg = await swipeyPuzzle.twistyPlayer.experimentalGet.alg(); // TODO
+    e.clipboardData!.setData("text/plain", alg.toString());
 
     const a = document.createElement("a");
-    a.href = toLink(seq);
-    a.textContent = alg;
+    a.href = await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
+    a.textContent = alg.toString();
     const html = new XMLSerializer().serializeToString(a);
     e.clipboardData!.setData("text/html", html);
 

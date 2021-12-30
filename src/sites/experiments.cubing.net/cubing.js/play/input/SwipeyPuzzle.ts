@@ -1,7 +1,11 @@
 import { Alg, Move } from "../../../../../cubing/alg";
 // import { BackViewLayout } from "../../../../../cubing/twisty";
-import { BackViewLayout, TwistyPlayer } from "../../../../../cubing/twisty";
-import { getSetup, PuzzleID } from "../url-params";
+import {
+  BackViewLayout,
+  TwistyPlayer,
+  TwistyPlayerConfig,
+} from "../../../../../cubing/twisty";
+import { coalesce, getSetup, PuzzleID } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 
 const DEFAULT_THEME: ThemeType = "transparent-grid";
@@ -85,17 +89,20 @@ export function actionToUIText(action: Action): string {
 }
 
 function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayer {
-  const backView = new URL(document.location.href).searchParams.get(
-    "back-view",
-  ) as BackViewLayout | undefined;
-  return new TwistyPlayer({
+  const config: TwistyPlayerConfig = {
     alg: new Alg(),
     puzzle: puzzleName,
     controlPanel: "none",
     background: "none",
-    backView,
     experimentalSetupAlg: getSetup(),
-  });
+  };
+  const backView = new URL(document.location.href).searchParams.get(
+    "back-view",
+  ) as BackViewLayout | undefined;
+  if (backView) {
+    config.backView = backView;
+  }
+  return new TwistyPlayer(config);
 }
 
 export class SwipeyPuzzle extends HTMLElement {
@@ -182,7 +189,7 @@ export class SwipeyPuzzle extends HTMLElement {
   public addMove(move: Move): void {
     try {
       // TODO: allow`TwistyPlayer` to handle this directly.
-      this.twistyPlayer.experimentalAddMove(move);
+      this.twistyPlayer.experimentalAddMove(move, { coalesce: coalesce() });
     } catch (e) {
       console.warn("Invalid move");
       // this.twistyPlayer.alg = oldAlg;
