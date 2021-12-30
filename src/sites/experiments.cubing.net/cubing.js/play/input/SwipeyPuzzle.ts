@@ -1,10 +1,6 @@
-import { Move, Alg } from "../../../../../cubing/alg";
+import { Alg, Move } from "../../../../../cubing/alg";
 // import { BackViewLayout } from "../../../../../cubing/twisty";
-import {
-  BackViewLayout,
-  Twisty3DCanvas,
-  TwistyPlayerV1,
-} from "../../../../../cubing/twisty";
+import { BackViewLayout, TwistyPlayer } from "../../../../../cubing/twisty";
 import { getSetup, PuzzleID } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 
@@ -88,11 +84,11 @@ export function actionToUIText(action: Action): string {
   }[action];
 }
 
-function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayerV1 {
+function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayer {
   const backView = new URL(document.location.href).searchParams.get(
     "back-view",
   ) as BackViewLayout | undefined;
-  return new TwistyPlayerV1({
+  return new TwistyPlayer({
     alg: new Alg(),
     puzzle: puzzleName,
     controlPanel: "none",
@@ -103,7 +99,7 @@ function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayerV1 {
 }
 
 export class SwipeyPuzzle extends HTMLElement {
-  public twistyPlayer: TwistyPlayerV1;
+  public twistyPlayer: TwistyPlayer;
 
   theme: ThemeType;
 
@@ -135,15 +131,16 @@ export class SwipeyPuzzle extends HTMLElement {
 
   protected connectedCallback() {
     this.appendChild(this.twistyPlayer);
-    this.twistyPlayer.timeline.tempoScale = 3;
+    this.twistyPlayer.tempoScale = 3;
 
     if (this.puzzleName !== "3x3x3") {
-      setTimeout(() => {
-        const icon = (
-          this.twistyPlayer.viewerElems[0] as Twisty3DCanvas
-        ).renderToDataURL({
-          squareCrop: true,
-        });
+      setTimeout(async () => {
+        const icon = await this.twistyPlayer.experimentalScreenshot();
+        // const icon = (
+        //   this.twistyPlayer.viewerElems[0] as Twisty3DCanvas
+        // ).renderToDataURL({
+        //   squareCrop: true,
+        // });
         console.log("Setting touch icon from canvas.");
         (
           document.querySelector(
@@ -183,13 +180,12 @@ export class SwipeyPuzzle extends HTMLElement {
 
   // TODO: move this somewhere better.
   public addMove(move: Move): void {
-    const oldAlg = this.twistyPlayer.alg;
     try {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddMove(move);
-      this.twistyPlayer.cursor!.setAlg(this.twistyPlayer.alg);
     } catch (e) {
-      this.twistyPlayer.alg = oldAlg;
+      console.warn("Invalid move");
+      // this.twistyPlayer.alg = oldAlg;
     }
   }
 }
