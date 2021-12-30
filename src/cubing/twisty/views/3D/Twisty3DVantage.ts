@@ -91,7 +91,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
   async connectedCallback(): Promise<void> {
     this.addCSS(twisty3DCanvasCSS);
-    this.addElement(await this.canvas());
+    this.addElement((await this.canvasInfo()).canvas);
 
     this.#onResize();
     const observer = new ResizeObserver(this.#onResize.bind(this));
@@ -122,6 +122,22 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
   #onResizeStaleDropper = new StaleDropper<PerspectiveCamera>();
 
+  async clearCanvas(): Promise<void> {
+    if (this.rendererIsShared) {
+      const canvasInfo = await this.canvasInfo();
+      canvasInfo.context.clearRect(
+        0,
+        0,
+        canvasInfo.canvas.width,
+        canvasInfo.canvas.height,
+      );
+    } else {
+      const renderer = await this.renderer();
+      const context = renderer.getContext();
+      context.clear(context.COLOR_BUFFER_BIT);
+    }
+  }
+
   // TODO: Why doesn't this work for the top-right back view height?
   #width: number = 0;
   #height: number = 0;
@@ -143,17 +159,16 @@ export class Twisty3DVantage extends ManagedCustomElement {
     camera.setViewOffset(w, h - excess, off, yoff, w, h);
     camera.updateProjectionMatrix(); // TODO
 
+    this.clearCanvas();
     if (this.rendererIsShared) {
-      const canvas = await this.canvas();
-      const context = canvas.getContext("2d")!;
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      canvas.width = w * pixelRatio();
-      canvas.height = h * pixelRatio();
-      canvas.style.width = w.toString();
-      canvas.style.height = w.toString();
+      const canvasInfo = await this.canvasInfo();
+
+      canvasInfo.canvas.width = w * pixelRatio();
+      canvasInfo.canvas.height = h * pixelRatio();
+      canvasInfo.canvas.style.width = w.toString();
+      canvasInfo.canvas.style.height = w.toString();
     } else {
       const renderer = await this.renderer();
-      renderer.context.clear(renderer.context.COLOR_BUFFER_BIT);
       renderer.setSize(w, h, true);
     }
 
@@ -168,21 +183,31 @@ export class Twisty3DVantage extends ManagedCustomElement {
     return (this.#cachedRenderer ??= newRenderer());
   }
 
-  #cachedCanvas: Promise<HTMLCanvasElement> | null = null;
-  async canvas(): Promise<HTMLCanvasElement> {
+  #cachedCanvas: Promise<{
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
+  }> | null = null;
+  async canvasInfo(): Promise<{
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
+  }> {
     return (this.#cachedCanvas ??= (async () => {
+      let canvas: HTMLCanvasElement;
       if (this.rendererIsShared) {
-        return this.addElement(document.createElement("canvas"));
+        canvas = this.addElement(document.createElement("canvas"));
+      } else {
+        const renderer = await this.renderer();
+        canvas = this.addElement(renderer.domElement);
       }
-      const renderer = await this.renderer();
-      return this.addElement(renderer.domElement);
+      const context = canvas.getContext("2d")!;
+      return { canvas, context };
     })());
   }
 
   #cachedDragTracker: Promise<DragTracker> | null = null;
   async #dragTracker(): Promise<DragTracker> {
     return (this.#cachedDragTracker ??= (async () => {
-      return new DragTracker(await this.canvas());
+      return new DragTracker((await this.canvasInfo()).canvas);
     })());
   }
 
@@ -212,7 +237,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
       const orbitControls = new TwistyOrbitControls(
         this.model!,
         !!this.options?.backView,
-        await this.canvas(),
+        (await this.canvasInfo()).canvas,
         await this.#dragTracker(),
       );
 
@@ -266,10 +291,10 @@ export class Twisty3DVantage extends ManagedCustomElement {
     const [scene, camera, canvas] = await Promise.all([
       this.scene.scene(),
       this.camera(),
-      this.canvas(),
+      this.canvasInfo(),
     ]);
     if (this.rendererIsShared) {
-      renderPooled(this.#width, this.#height, canvas, scene, camera);
+      renderPooled(this.#width, this.#height, canvas.canvas, scene, camera);
     } else {
       (await this.renderer()).render(scene, camera);
     }

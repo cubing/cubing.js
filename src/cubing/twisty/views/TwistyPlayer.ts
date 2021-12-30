@@ -256,7 +256,7 @@ export class TwistyPlayer
     if (wrapper instanceof Twisty3DSceneWrapper) {
       const vantages = wrapper.experimentalVantages();
       for (const vantage of vantages) {
-        canvases.push(await vantage.canvas());
+        canvases.push((await vantage.canvasInfo()).canvas);
       }
     }
     return canvases;
