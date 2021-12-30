@@ -9,7 +9,7 @@ import { RenderScheduler } from "../../controllers/RenderScheduler";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { pixelRatio } from "../canvas";
-import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css";
+import { twisty3DVantageCSS } from "./Twisty3DVantage.css";
 import { DragTracker, PressInfo } from "./DragTracker";
 import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
@@ -90,7 +90,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
   }
 
   async connectedCallback(): Promise<void> {
-    this.addCSS(twisty3DCanvasCSS);
+    this.addCSS(twisty3DVantageCSS);
     this.addElement((await this.canvasInfo()).canvas);
 
     this.#onResize();
@@ -309,4 +309,4 @@ export class Twisty3DVantage extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-3d-vantage-v2", Twisty3DVantage);
+customElementsShim.define("twisty-3d-vantage", Twisty3DVantage);
