@@ -1,9 +1,5 @@
-import {
-  Cube3D,
-  TwistyPlayerV1,
-  TwistyPlayer,
-} from "../../../../cubing/twisty";
 import { Alg } from "../../../../cubing/alg";
+import { TwistyPlayer } from "../../../../cubing/twisty";
 
 const supercubeSprite = new URL(
   "./supercube-sprite.png",
@@ -21,49 +17,37 @@ const supercubeSprite = new URL(
 }
 
 {
-  const player = new TwistyPlayerV1({
+  const player = new TwistyPlayer({
     alg: Alg.fromString("M' R' U' D' M R"),
     experimentalSetupAlg: Alg.fromString("(M' R' U' D' M R)'"),
   });
-  player.experimentalSetCursorIndexer("simultaneous");
+  // player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo2")!.appendChild(player);
-  player.timeline.tempoScale = 2;
-  setTimeout(() => {
-    player.timeline.jumpToStart();
-  }, 0);
+  player.tempoScale = 2;
 }
 
 {
-  const player = new TwistyPlayerV1({
+  const player = new TwistyPlayer({
     alg: Alg.fromString("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     experimentalStickering: "picture",
+    experimentalSprite: supercubeSprite,
   });
-  player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo3")!.appendChild(player);
-  setTimeout(() => {
-    (player.twisty3D as Cube3D).experimentalSetStickerSpriteURL(
-      supercubeSprite,
-    );
-    setTimeout(() => {
-      player.timeline.jumpToStart();
-    }, 1000);
-  }, 0);
 }
 
 {
-  const player = new TwistyPlayerV1({
+  const player = new TwistyPlayer({
     alg: Alg.fromString("U' E' r E r2' E r U E"),
   });
-  player.experimentalSetCursorIndexer("simultaneous");
   document.querySelector(".demo4")!.appendChild(player);
-  player.timeline.tempoScale = 4;
+  player.tempoScale = 4;
 }
 
 {
-  const player = new TwistyPlayerV1({
+  const player = new TwistyPlayer({
     alg: Alg.fromString("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     puzzle: "5x5x5",
   });
-  player.experimentalSetCursorIndexer("simultaneous");
+  player.experimentalModel.indexerConstructorRequestProp.set("simultaneous");
   document.querySelector(".demo5")!.appendChild(player);
 }
