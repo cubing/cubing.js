@@ -1,4 +1,4 @@
-import type { ManagedCustomElement } from "../../../views/ManagedCustomElement";
+import type { ManagedCustomElement } from "./ManagedCustomElement";
 
 export class ClassListManager<SuffixType extends string> {
   #currentClassName: string | null = null;

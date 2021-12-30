@@ -1,6 +1,6 @@
 import type { Alg } from "../../../alg";
 import { countMoves } from "../../../notation";
-import { ClassListManager } from "../../old/dom/element/ClassListManager";
+import { ClassListManager } from "../../views/ClassListManager";
 import {
   CSSSource,
   ManagedCustomElement,

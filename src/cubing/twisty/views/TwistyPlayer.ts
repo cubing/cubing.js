@@ -16,7 +16,7 @@ import {
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
-import { ClassListManager } from "../old/dom/element/ClassListManager";
+import { ClassListManager } from "./ClassListManager";
 import { customElementsShim } from "./node-custom-element-shims";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
 

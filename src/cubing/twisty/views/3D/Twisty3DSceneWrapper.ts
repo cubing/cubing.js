@@ -10,7 +10,7 @@ import type {
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { Schedulable } from "../../controllers/RenderScheduler";
-import { ClassListManager } from "../../old/dom/element/ClassListManager";
+import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css";

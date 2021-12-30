@@ -1,6 +1,6 @@
 import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
 import { buttonCSS, buttonGridCSS } from "./TwistyButtonsV2.css";
-import { ClassListManager } from "../../old/dom/element/ClassListManager";
+import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import {
