@@ -53,6 +53,12 @@ const args = yargs(hideBin(process.argv))
     default: null,
     description: "Defaults to width",
   })
+  .option("camera-latitude", {
+    type: "number",
+  })
+  .option("camera-longitude", {
+    type: "number",
+  })
   .strictOptions()
   .demandCommand(1).argv;
 
@@ -65,7 +71,15 @@ const options = {
   experimentalSetupAnchor: args.anchor,
   hintFacelets: args["hint-facelets"],
   visualization: args.visualization,
+  cameraLatitudeLimit: 90,
 };
+
+if ("camera-latitude" in args) {
+  options.cameraLatitude = args["camera-latitude"];
+}
+if ("camera-longitude" in args) {
+  options.cameraLongitude = args["camera-longitude"];
+}
 
 for (const key in options) {
   if (typeof options[key] === "undefined") {
