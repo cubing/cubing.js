@@ -171,10 +171,7 @@ export async function cubeAppearance(
         EDGES(),
         PieceStickering.OrientationWithoutPermutation,
       );
-      puzzleStickering.set(
-        m.and([m.move("D"), m.or(m.moves(["D", "S"]))]),
-        PieceStickering.Regular,
-      );
+      puzzleStickering.set(m.move("D"), PieceStickering.Regular);
       puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
       break;
     case "CMLL":
