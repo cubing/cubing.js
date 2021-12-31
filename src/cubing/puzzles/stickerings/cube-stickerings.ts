@@ -167,7 +167,6 @@ export async function cubeAppearance(
       puzzleStickering.set(m.and(m.moves(["D", "M"])), PieceStickering.Regular);
       break;
     case "EOcross":
-      puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
       puzzleStickering.set(
         EDGES(),
         PieceStickering.OrientationWithoutPermutation,
@@ -176,6 +175,7 @@ export async function cubeAppearance(
         m.and([m.move("D"), m.or(m.moves(["D", "S"]))]),
         PieceStickering.Regular,
       );
+      puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
       break;
     case "CMLL":
       puzzleStickering.set(F2L(), PieceStickering.Dim);
