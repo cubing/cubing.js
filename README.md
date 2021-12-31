@@ -18,26 +18,23 @@ Twizzle</a> is based on `cubing.js`, and is currently being developed at [`src/s
 If you want to display algs or solves, the following code is a good way to get started:
 
 ```html
-<script
-  src="https://cdn.cubing.net/js/cubing/twisty"
-  type="module"
-></script>
+<script src="https://cdn.cubing.net/js/cubing/twisty" type="module"></script>
 <twisty-player alg="R U R' U R U2' R'"></twisty-player>
 ```
 
 You can find more documentation at [`js.cubing.net/cubing/`](https://js.cubing.net/cubing).  
 The source for the documentation site is currently inside the [`docs`](./docs/) folder of this repository.
 
-## Development
+## Developing `cubing.js`
 
-Development relies on [`node`](https://nodejs.org/en/) and [`npm`](https://docs.npmjs.com/getting-started). Once you have installed those, you can run:
+Development of `cubing.js` relies on [`node`](https://nodejs.org/en/) and [`npm`](https://docs.npmjs.com/getting-started). Once you have installed those, you can run:
 
 ```shell
 git clone https://github.com/cubing/cubing.js && cd cubing.js
 make dev
 ```
 
-This should run `npm install` and start the server, after which you can open <http://localhost:3333/>. Some tips:
+This should install a few dependencies and start the server, after which you can open <http://localhost:3333/>. Some tips:
 
 - See [`src/README.md`](./src/README.md) for the source code structure.
   - The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/).
