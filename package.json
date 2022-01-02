@@ -8,6 +8,7 @@
   "license": "GPL-3.0-or-later",
   "repository": "github:cubing/cubing.js",
   "dependencies": {
+    "@types/offscreencanvas": "^2019.6.4",
     "@types/three": "^0.135.0",
     "@types/web-bluetooth": "^0.0.12",
     "comlink": "^4.3.1",
@@ -17,7 +18,7 @@
     "@babel/eslint-parser": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
     "@babel/preset-typescript": "^7.13.0",
-    "@babylonjs/core": "^5.0.0-alpha.24",
+    "@babylonjs/core": "^5.0.0-alpha.8",
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
