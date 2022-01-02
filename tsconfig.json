@@ -27,5 +27,9 @@
     "script/**/*.ts", // Workaround from https://github.com/microsoft/TypeScript/issues/45721
     "script/**/*.js" // Workaround from https://github.com/microsoft/TypeScript/issues/45721
   ],
-  "exclude": ["src/static", "src/cubing/search/worker-inside-generated*"]
+  "exclude": [
+    "src/static",
+    "src/cubing/search/worker-inside-generated*",
+    "**/threex/*"
+  ]
 }
