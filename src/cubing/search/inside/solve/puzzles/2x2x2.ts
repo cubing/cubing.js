@@ -9,7 +9,7 @@ import { mustBeInsideWorker } from "../../inside-worker";
 import {
   randomPermute,
   randomUIntBelowFactory,
-} from "../vendor/random-uint-below";
+} from "../../../../vendor/random-uint-below";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 

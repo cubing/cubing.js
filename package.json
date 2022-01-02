@@ -35,7 +35,7 @@
     "typescript": "^4.5.4",
     "yargs": "^16.2.0"
   },
-  "mainDevDependencies": [
+  "minimalDevDependencies": [
     "barely-a-dev-server",
     "esbuild",
     "jszip"

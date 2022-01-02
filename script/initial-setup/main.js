@@ -23,7 +23,7 @@ Note that you have to run \`npm install\` manually if you pull new code or want 
 const json = JSON.parse(readFileSync("package.json", "utf8"));
 const oldDevDependencies = json.devDependencies;
 json.devDependencies = {};
-for (const name of json.mainDevDependencies) {
+for (const name of json.minimalDevDependencies) {
   json.devDependencies[name] = oldDevDependencies[name];
 }
 mkdirSync(TEMP_ROOT, { recursive: true });

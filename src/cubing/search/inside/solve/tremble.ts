@@ -10,7 +10,7 @@ import {
 } from "../../../kpuzzle";
 import { countMoves } from "../../../notation";
 import type { SGSAction, SGSCachedData } from "./parseSGS";
-import { randomChoiceFactory } from "./vendor/random-uint-below";
+import { randomChoiceFactory } from "../../../vendor/random-uint-below";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 

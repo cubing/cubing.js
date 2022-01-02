@@ -1,4 +1,4 @@
-import { randomUIntBelowFactory } from "./random-int";
+import { randomUIntBelowFactory } from "./random53BitValue";
 
 // Inspired by https://reference.wolfram.com/language/ref/RandomChoice.html
 // This library itself should be kept small, but a wrapper library may want to implement selecting multiple element without replacement as with replacement:
