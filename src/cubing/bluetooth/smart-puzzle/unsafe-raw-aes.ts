@@ -17,16 +17,15 @@ async function unsafeEncryptBlockWithIV(
   plaintextBlock: ArrayBuffer,
   iv: ArrayBuffer,
 ): Promise<ArrayBuffer> {
-  return (
-    await window.crypto.subtle.encrypt(
-      {
-        name: AES_CBC,
-        iv,
-      },
-      key,
-      plaintextBlock,
-    )
-  ).slice(0, blockSize);
+  const cryptoResult: ArrayBuffer = await window.crypto.subtle.encrypt(
+    {
+      name: AES_CBC,
+      iv,
+    },
+    key,
+    plaintextBlock,
+  );
+  return cryptoResult.slice(0, blockSize);
 }
 
 export async function unsafeEncryptBlock(
@@ -53,14 +52,13 @@ export async function unsafeDecryptBlock(
   cbcCiphertext.set(new Uint8Array(ciphertextBlock), 0);
   cbcCiphertext.set(new Uint8Array(paddingBlock), blockSize);
 
-  return (
-    await window.crypto.subtle.decrypt(
-      {
-        name: AES_CBC,
-        iv: zeros,
-      },
-      key,
-      cbcCiphertext,
-    )
-  ).slice(0, blockSize);
+  const cryptoResult: ArrayBuffer = await window.crypto.subtle.decrypt(
+    {
+      name: AES_CBC,
+      iv: zeros,
+    },
+    key,
+    cbcCiphertext,
+  );
+  return cryptoResult.slice(0, blockSize);
 }
