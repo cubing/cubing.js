@@ -9,7 +9,8 @@ Compiled to Javascript using GWT.
 
 */
 
-import { randomUIntBelowFactory } from "../../../../../vendor/random-uint-below";
+import { randomUIntBelowFactory } from "../random-uint-below";
+
 
 function FullCube_copy(obj, c) {
   obj.ul = c.ul;

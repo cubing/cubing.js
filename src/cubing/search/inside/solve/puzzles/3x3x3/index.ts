@@ -3,11 +3,11 @@ import { KPuzzle, Transformation } from "../../../../../kpuzzle";
 import { puzzles } from "../../../../../puzzles";
 import { mustBeInsideWorker } from "../../../inside-worker";
 import { addOrientationSuffix } from "../../addOrientationSuffix";
-import { initialize, solveState } from "../../vendor/min2phase/gwt";
 import { randomChoiceFactory } from "../../../../../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
 import { sgs3x3x3 } from "./legacy-sgs";
+import { initialize, solveState } from "../../../../../vendor/min2phase/gwt";
 
 export async function random333State(): Promise<Transformation> {
   const def = await puzzles["3x3x3"].def();
