@@ -92,7 +92,7 @@
   "eslintConfig": {
     "parser": "@babel/eslint-parser",
     "parserOptions": {
-      "project": "./tsconfig-eslint.json"
+      "project": "./tsconfig.json"
     },
     "overrides": [
       {
