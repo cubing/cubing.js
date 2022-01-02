@@ -31,10 +31,6 @@ debugShowRenderStats(true);
     "gigaminx") as PuzzleID;
 
   const twistyPlayer = document.body.appendChild(new TwistyPlayer({ puzzle }));
-  twistyPlayer.experimentalModel.currentLeavesProp.addFreshListener((d) =>
-    console.log(JSON.stringify(d, null, "  ")),
-  );
-
   document.body.appendChild(new TwistyPlayerDebugger(twistyPlayer));
 
   const alg =
