@@ -4,7 +4,7 @@ import {
   constructWorkerFromString,
   workerFileConstructor,
   wrap,
-} from "./vendor/comlink-everywhere/outside";
+} from "../vendor/comlink-everywhere/outside";
 
 import type { esmTestAPIImplementation } from "./esm-test-worker";
 type ESMTestAPI = typeof esmTestAPIImplementation;
