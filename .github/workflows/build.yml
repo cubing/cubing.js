@@ -37,4 +37,5 @@ jobs:
       - run: make build-site-experiments
       - run: make test-dist-experiments
       - run: make test-dist-esm-parcel
+      - run: make test-dist-not-imported-from-src
       - run: make clean

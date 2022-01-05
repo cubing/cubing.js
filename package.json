@@ -61,6 +61,7 @@
     "test-dist-esm-parcel": "node ./script/test/dist/esm/parcel/main.js",
     "test-dist-esm-perf": "node script/test/dist/esm/perf/*.mjs",
     "test-dist-experiments": "node ./script/test/dist/experiments/main.js",
+    "test-dist-not-imported-from-src": "node ./script/test/dist/not-imported-from-src/main.js",
     "test-import-restrictions": "node ./script/test/import-restrictions/main.js",
     "test-jest": "npx jest --collectCoverage",
     "test-tsc": "npm run build-types && npx tsc --project ./tsconfig.json",
