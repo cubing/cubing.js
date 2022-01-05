@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf8">
   <title>cubing.js</title>
@@ -12,6 +13,7 @@
     experimentalSetShareAllNewRenderers(true);
   </script>
 </head>
+
 <body>
   <content>
     <!-- Tip: Avoid using specialized terminology (e.g. "element", "attribute") where possible. -->
@@ -29,13 +31,14 @@
         puzzles.
       </p>
       <p>You may use it for free in any website or app, for any personal use or if you <a
-      href="https://github.com/cubing/cubing.js/blob/main/LICENSE.md">publicly
-      share any code that uses it</a>.</p>
+          href="https://github.com/cubing/cubing.js/blob/main/LICENSE.md">publicly
+          share any code that uses it</a>.</p>
     </section>
 
     <section id="twisty">
       <h1><a href="./twisty/">cubing/twisty</a></h1>
-      <p>The main feature of <code>cubing.js</code> is the <code>&lt;twisty-player&gt;</code> element that can be used on any website:</p>
+      <p>The main feature of <code>cubing.js</code> is the <code>&lt;twisty-player&gt;</code> element that can be used
+        on any website:</p>
 
       <div class="code-demo">
         <div>
@@ -57,17 +60,18 @@
 
     <section id="alg">
       <h1><a href="./alg/">cubing/alg</a></h1>
-      <p>At the core of <code>cubing.js</code> is a powerful <code>Alg</code> class that is compatible with all SiGN and WCA notation.</p>
+      <p>At the core of <code>cubing.js</code> is a powerful <code>Alg</code> class that is compatible with all SiGN and
+        WCA notation.</p>
 
       <div class="code-demo">
         <div>
           <code class="sample">
 <code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
-import { Alg } from &quot;https://cdn.cubing.net/js/cubing/alg&quot;;<br>
-<br>
-const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
-commutator.invert().expand().log();<br>
-<code class="boilerplate">&lt;/script&gt;</code>
+          import { Alg } from &quot;https://cdn.cubing.net/js/cubing/alg&quot;;<br>
+          <br>
+          const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
+          commutator.invert().expand().log();<br>
+          <code class="boilerplate">&lt;/script&gt;</code>
           </code>
         </div>
         <code class="sample output">
@@ -87,11 +91,11 @@ commutator.invert().expand().log();<br>
         <div>
           <code class="sample">
 <code class="boilerplate">&lt;script type=&quot;module&quot;&gt;<br></code>
-import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
-<br>
-const scramble = await randomScrambleForEvent("333");<br>
-scramble.log();<br>
-<code class="boilerplate">&lt;/script&gt;</code>
+          import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
+          <br>
+          const scramble = await randomScrambleForEvent("333");<br>
+          scramble.log();<br>
+          <code class="boilerplate">&lt;/script&gt;</code>
           </code>
         </div>
         <code class="sample output">
@@ -106,7 +110,8 @@ scramble.log();<br>
     <section id="javascript">
       <h1><a href="#javascript"><code>npm</code> package</a></h1>
       <p>
-        <code>cubing.js</code> is published <a href="https://www.npmjs.com/package/cubing">as an <code>npm</code> package</a>.
+        <code>cubing.js</code> is published <a href="https://www.npmjs.com/package/cubing">as
+          <code>cubing</code>on <code>npm</code></a>.
         If you are familiar with tools like JavaScript bundlers, you can use this for development.
         Install the package:
       </p>
@@ -120,32 +125,67 @@ import { Alg } from &quot;cubing/alg&quot;;<br>
 import { TwistyPlayer } from &quot;cubing/twisty&quot;;
         </span>
       </code>
-      <p>This should work with most tools. We recommend using <a
-      href="https://parceljs.org/">Parcel</a> to build your web apps, if you
-      haven't picked a tool yet.</p>
-      <p>
-        If you aren't using <code>npm</code>, you can use our CDN directly, by adding <code>https://cdn.cubing.net/js/</code> before every imported package (like in the examples above):
+      <p>This should work with most tools. We recommend using <a href="https://parceljs.org/">Parcel</a> to build your
+        web apps, if you
+        haven't picked a tool yet.</p>
       </p>
-      <code class="sample">
-import { Alg } from &quot;https://cdn.cubing.net/js/cubing/alg&quot;;<br>
-import { TwistyPlayer } from &quot;https://cdn.cubing.net/js/cubing/twisty&quot;;
+      <div id="translating-cdn-paths">
+        <h2><a href="#translating-cdn-paths">Translating package paths to the CDN</a></h2>
+        <p>
+          If you aren't using <code>npm</code>, you can use our CDN directly, by adding
+          <code>https://cdn.cubing.net/js/</code> before every imported package (like in the examples above):
+        </p>
+        <p>
+          <code class="sample">
+import { Alg } from &quot;<b><u>https://cdn.cubing.net/js/</u></b>cubing/alg&quot;;<br>
+import { TwistyPlayer } from &quot;<b><u>https://cdn.cubing.net/js/</u></b>cubing/twisty&quot;;
       </code>
+        </p>
+      </div>
+
+      <div id="npm-package-troubleshooting">
+        <h2><a href="#npm-package-troubleshooting">Troubleshooting</a></h2>
+
+        <div id="ignoring-built-in-node-modules">
+          <h3><a href="#ignoring-built-in-node-modules">Ignoring built-in <code>node</code> modules</a></h3>
+          The <code>cubing.js</code> library on <code>npm</code> has several dependencies, which are listed
+          in its <code>package.json</code>. In addition, it contains dynamic imports that are used when the code is
+          running
+          in <code>node</code>, currently:
+          <ul>
+            <li><a href="https://nodejs.org/api/crypto.html"><code>crypto</code></a></li>
+            <li><a href="https://nodejs.org/api/worker_threads.html"><code>worker_threads</code></a></li>
+          </ul>
+
+          <p>
+            You may need to tell your tools to ignore (e.g. "exclude" or mark as
+            "external") these imports for the browser. For example, when using <a
+              href="https://esbuild.github.io/api/#external"><code>esbuild</code></a>:
+
+            <code class="sample">
+              esbuild <b><u>--external:crypto</u></b> <b><u>--external:worker_threads</u></b> [other arguments]
+          </code>
+          </p>
+        </div>
+      </div>
+
     </section>
 
     <section id="code-experiments">
       <h1><a href="#code-experiments">Code Experiments</a></h1>
-      <p>For a taste of upcoming features, check out the <a href="https://experiments.cubing.net/cubing.js/">development experiments</a> site.</p>
+      <p>For a taste of upcoming features, check out the <a href="https://experiments.cubing.net/cubing.js/">development
+          experiments</a> site.</p>
     </section>
 
     <section id="contribute">
       <h1><a href="#contribute">Contribute</a></h1>
       <p>If you have any questions or ideas, please visit the
-      project source on GitHub:</p>
+        project source on GitHub:</p>
       <div style="font-size: 1.25em; word-break: break-all;">
-        <a
-        href="https://github.com/cubing/cubing.js">https://github.com/cubing/cubing.js</a>
+        <a href="https://github.com/cubing/cubing.js">https://github.com/cubing/cubing.js</a>
       </div>
     </section>
   </content>
 </body>
+
 </html>

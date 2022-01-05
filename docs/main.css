@@ -82,26 +82,27 @@ section:not(:first-child) {
   border-top: 1px solid #4285f466;
 }
 
-section:target {
+section:target,
+div:target {
   background: #00448811;
 }
 
-section h1 {
+section :is(h1, h2, h3) {
   margin-top: 0;
 }
 
-section h1 a:hover::before {
+section :is(h1, h2, h3) a:hover::before {
   position: absolute;
   transform: translateX(-1.25em);
   font-size: 0.75em;
   content: "🔗";
 }
 
-section h1 a {
+section :is(h1, h2, h3) a {
   color: inherit;
 }
 
-section h1 a:not(:hover) {
+section :is(h1, h2, h3) a:not(:hover) {
   text-decoration: none;
 }
 
@@ -188,5 +189,5 @@ code.sample span.js-object {
 }
 
 .boilerplate {
-  color: #559BD4;
+  color: #559bd4;
 }
