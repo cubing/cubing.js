@@ -227,8 +227,8 @@ export const binTarget = {
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
-      entryPoints: ["src/bin/puzzle-geometry-bin.ts"],
-      outfile: "dist/bin/puzzle-geometry-bin.js",
+      entryPoints: ["src/bin/order.ts", "src/bin/puzzle-geometry-bin.ts"],
+      outdir: "dist/bin/",
       format: "esm",
       target: "es2020",
       bundle: true,
