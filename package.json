@@ -63,7 +63,7 @@
     "test-dist-experiments": "node ./script/test/dist/experiments/main.js",
     "test-import-restrictions": "node ./script/test/import-restrictions/main.js",
     "test-jest": "npx jest --collectCoverage",
-    "test-tsc": "npm run build-types && npx tsc --build ./tsconfig.json",
+    "test-tsc": "npm run build-types && npx tsc --project ./tsconfig.json",
     "format": "npx eslint --fix --ext=js,ts src script; npx prettier --write src script",
     "setup": "npm install",
     "initial-setup-checked": "[ -d \"node_modules\" ] || npm run initial-setup",
