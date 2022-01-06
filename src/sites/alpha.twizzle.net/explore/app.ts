@@ -19,24 +19,19 @@ import {
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleGeometryOptions } from "../../../cubing/puzzle-geometry/Options";
 import {
+  experimentalDebugShowRenderStats,
   TwistyAlgEditor,
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../cubing/twisty";
 import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
-import { experimentalDebugShowRenderStats } from "../../../cubing/twisty";
 import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";
 import {
   getConfigFromURL,
   remapLegacyURLParams,
   URLParamUpdater,
 } from "../core/url-params";
-import {
-  setup3DCheckbox,
-  setupFoundationDisplayCheckbox,
-  setupHintFaceletsCheckbox,
-  setupSideBySideCheckbox,
-} from "./inputs";
+import { setupCheckboxes } from "./inputs";
 import { getURLParam, setURLParams } from "./url-params";
 
 if (getURLParam("debugShowRenderStats")) {
@@ -262,8 +257,10 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
         // experimentalPuzzleDescription: (
         //   document.getElementById("desc")! as HTMLInputElement
         // ).value, // TODO
-        visualization: getCheckbox("threed") ? "PG3D" : "2D",
-        backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
+        visualization: getCheckbox("visualization-3D") ? "PG3D" : "2D",
+        backView: getCheckbox("back-view-side-by-side")
+          ? "side-by-side"
+          : "top-right",
         cameraLatitude: initialCameraOrbitCoordinates.latitude,
         cameraLongitude: initialCameraOrbitCoordinates.longitude,
         // cameraLatitudeLimit: "none",
@@ -275,11 +272,7 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       };
       Object.assign(config, explorerConfig);
       twistyPlayer = new TwistyPlayer(config);
-
-      setup3DCheckbox("threed", twistyPlayer);
-      setupSideBySideCheckbox("sidebyside", twistyPlayer);
-      setupFoundationDisplayCheckbox("showfoundation", twistyPlayer);
-      setupHintFaceletsCheckbox("hintstickers", twistyPlayer);
+      setupCheckboxes(twistyPlayer);
       twistyPlayer.experimentalModel.moveCountProp.addFreshListener(
         updateMoveCount,
       );
@@ -343,10 +336,6 @@ async function setAlgo(str: string, writeback: boolean): Promise<void> {
       // }
       puzzleSelected = false;
     }
-    twistyPlayer.visualization = getCheckbox("threed") ? "PG3D" : "2D";
-    twistyPlayer.backView = getCheckbox("sidebyside")
-      ? "side-by-side"
-      : "top-right";
     str = str.trim();
     algoinput.style.backgroundColor = "";
     try {

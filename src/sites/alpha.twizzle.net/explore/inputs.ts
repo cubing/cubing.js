@@ -1,68 +1,44 @@
 import type { TwistyPlayer } from "../../../cubing/twisty";
+import type { TwistyPropSource } from "../../../cubing/twisty/model/props/TwistyProp";
 
-// TODO: Consolidate
-export function setup3DCheckbox(
+function setupPropCheckbox<T extends string>(
   domID: string,
-  twistyPlayer: TwistyPlayer,
-): void {
+  prop: TwistyPropSource<T>,
+  checkedValue: T,
+  uncheckedValue: T,
+) {
   const elem = document.getElementById(domID) as HTMLInputElement;
-  twistyPlayer.experimentalModel.visualizationFormatProp.addFreshListener(
-    (visualizationFormat) => {
-      elem.checked = !["2D"].includes(visualizationFormat);
-    },
-  );
+  prop.addFreshListener((value) => {
+    elem.checked = ![uncheckedValue].includes(value);
+  });
   elem.addEventListener("change", () => {
-    console.log("change", elem.checked);
-    twistyPlayer.visualization = elem.checked ? "PG3D" : "2D";
+    prop.set(elem.checked ? checkedValue : uncheckedValue);
   });
 }
 
-// TODO: Consolidate
-export function setupSideBySideCheckbox(
-  domID: string,
-  twistyPlayer: TwistyPlayer,
-): void {
-  const elem = document.getElementById(domID) as HTMLInputElement;
-  twistyPlayer.experimentalModel.backViewProp.addFreshListener(
-    (backViewLayout) => {
-      elem.checked = !["top-right"].includes(backViewLayout);
-    },
+export function setupCheckboxes(twistyPlayer: TwistyPlayer): void {
+  setupPropCheckbox(
+    "visualization-3D",
+    twistyPlayer.experimentalModel.visualizationFormatProp,
+    "PG3D",
+    "2D",
   );
-  elem.addEventListener("change", () => {
-    twistyPlayer.backView = elem.checked ? "side-by-side" : "top-right";
-  });
-}
-
-// TODO: Consolidate
-export function setupFoundationDisplayCheckbox(
-  domID: string,
-  twistyPlayer: TwistyPlayer,
-): void {
-  const elem = document.getElementById(domID) as HTMLInputElement;
-  twistyPlayer.experimentalModel.foundationDisplayProp.addFreshListener(
-    (foundationDisplay) => {
-      elem.checked = !["none"].includes(foundationDisplay);
-    },
+  setupPropCheckbox(
+    "back-view-side-by-side",
+    twistyPlayer.experimentalModel.backViewProp,
+    "side-by-side",
+    "top-right",
   );
-  elem.addEventListener("change", () => {
-    twistyPlayer.experimentalModel.foundationDisplayProp.set(
-      elem.checked ? "opaque" : "none",
-    );
-  });
-}
-
-// TODO: Consolidate
-export function setupHintFaceletsCheckbox(
-  domID: string,
-  twistyPlayer: TwistyPlayer,
-): void {
-  const elem = document.getElementById(domID) as HTMLInputElement;
-  twistyPlayer.experimentalModel.hintFaceletProp.addFreshListener(
-    (hintFaceletStyle) => {
-      elem.checked = !["none"].includes(hintFaceletStyle);
-    },
+  setupPropCheckbox(
+    "foundation-display-opaque",
+    twistyPlayer.experimentalModel.foundationDisplayProp,
+    "opaque",
+    "none",
   );
-  elem.addEventListener("change", () => {
-    twistyPlayer.hintFacelets = elem.checked ? "floating" : "none";
-  });
+  setupPropCheckbox(
+    "hint-facelets-floating",
+    twistyPlayer.experimentalModel.hintFaceletProp,
+    "floating",
+    "none",
+  );
 }
