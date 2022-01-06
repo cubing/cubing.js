@@ -34,7 +34,7 @@ export function startServer(port) {
       filePath += "index.html";
     }
 
-    var extension = String(extname(filePath)).toLowerCase();
+    var extension = extname(filePath).toLowerCase();
     var mimeTypes = {
       ".html": "text/html",
       ".js": "text/javascript",
