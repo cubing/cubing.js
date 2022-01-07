@@ -27,7 +27,7 @@ const plugins = [];
 // TODO: convenience hack for @lgarron; figure out how to either generalize this or add light auto-refresh to `barely-a-dev-server`
 if (process.env["EXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS"] === "1") {
   console.log(
-    "\nEXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS is set. The current Chrome tab will refresh after every build.\n",
+    "\nEXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS is set. In dev mode, the current Chrome tab will refresh after every build.\n",
   );
   plugins.push({
     name: "refresh",
