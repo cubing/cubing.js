@@ -22,6 +22,7 @@ export class TwizzleExplorerApp {
     document.querySelector("#twisty-wrapper")?.appendChild(this.twistyPlayer);
 
     this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
+    this.twistyAlgEditor.debugNeverRequestTimestamp = true; // TODO
     this.twistyAlgEditor.twistyPlayer = this.twistyPlayer;
 
     this.configUI = new ConfigUI(this);
