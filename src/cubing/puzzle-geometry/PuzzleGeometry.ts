@@ -411,7 +411,9 @@ function findelement(a: Quat[][], p: Quat): number {
   throw new Error("Element not found");
 }
 
-export function getpuzzles(): { [s: string]: PuzzleDescriptionString } {
+export function getPG3DNamedPuzzles(): {
+  [s: string]: PuzzleDescriptionString;
+} {
   // get some simple definitions of basic puzzles
   return PGPuzzles;
 }

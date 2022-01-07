@@ -1,5 +1,6 @@
 import {
   getPuzzleDescriptionString,
+  getPG3DNamedPuzzles,
   PuzzleGeometry,
 } from "../../../cubing/puzzle-geometry";
 import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
@@ -15,7 +16,7 @@ export class TwizzleExplorerApp {
     this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
     this.twistyAlgEditor.twistyPlayer = this.twistyPlayer;
 
-    new ConfigUI();
+    new ConfigUI(this);
     new ActionsDropdown(this);
   }
 
@@ -43,9 +44,9 @@ export class TwizzleExplorerApp {
 }
 
 class ConfigUI {
-  puzzleNameInput = document.body.querySelector(
-    "puzzle-name",
-  ) as HTMLButtonElement;
+  puzzleNameSelect = document.body.querySelector(
+    "#puzzle-name",
+  ) as HTMLSelectElement;
   toggleButton = document.body.querySelector(
     "#config-toggle",
   ) as HTMLButtonElement;
@@ -62,9 +63,16 @@ class ConfigUI {
       this.optionsContainer.toggleAttribute("hidden");
     });
 
+    for (const name of Object.keys(getPG3DNamedPuzzles())) {
+      const optionElem = document.createElement("option");
+      optionElem.value = name;
+      optionElem.textContent = name;
+      this.puzzleNameSelect.appendChild(optionElem);
+    }
+
     // TODO: connect this to the checkboxes?
-    this.puzzleNameInput.addEventListener("change", () => {
-      this.app.setPuzzleName(this.puzzleNameInput.value);
+    this.puzzleNameSelect.addEventListener("change", () => {
+      this.app.setPuzzleName(this.puzzleNameSelect.value);
     });
   }
 }

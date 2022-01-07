@@ -2,7 +2,7 @@ export {
   getPuzzleDescriptionString,
   getPuzzleGeometryByDesc,
   getPuzzleGeometryByName,
-  getpuzzles,
+  getPG3DNamedPuzzles,
   parsePuzzleDescription,
   PuzzleGeometry,
 } from "./PuzzleGeometry";
