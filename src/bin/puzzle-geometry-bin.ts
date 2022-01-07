@@ -1,7 +1,7 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
 import {
-  getpuzzles,
+  getPG3DNamedPuzzles,
   parsePuzzleDescription,
   PuzzleGeometry,
 } from "../cubing/puzzle-geometry";
@@ -82,7 +82,7 @@ if (
   process.argv.length >= 3
 ) {
   let desc;
-  const puzzleList = getpuzzles();
+  const puzzleList = getPG3DNamedPuzzles();
   let argp = 2;
   const optionlist = [];
   let showargs = true;

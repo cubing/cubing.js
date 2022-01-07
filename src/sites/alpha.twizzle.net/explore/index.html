@@ -14,7 +14,7 @@
         display: block;
       }
 
-      #optionsspan label {
+      #main-config label {
         white-space: nowrap;
       }
     </style>
@@ -31,25 +31,27 @@
     </div>
     <div class="controls-wrapper">
       <div class="controls">
-        <select id="puzzleoptions">
+        <select id="puzzle-name">
           <option value="">custom</option>
         </select>
-        <span style="display: none" id="data"
-          >Desc <input type="text" id="desc" value="" size="50"
+        <span id="puzzle-description-wrapper" hidden
+          >Desc
+          <input type="text" id="puzzle-description-string" value="" size="50"
         /></span>
 
         <input disabled type="button" id="scramble" value="Scramble" />
         <input type="button" id="reset" value="Reset" />
-        <input type="button" id="options" value="Options" />
-        <select id="action">
+        <input type="button" id="config-toggle" value="Config" />
+        <select id="actions">
           <option value="">Actions</option>
           <option value="ksolve">KSolve</option>
           <option value="ss">Schreier-Sims</option>
           <option value="canon">Canon Seq</option>
           <option value="gap">GAP</option>
-          <option value="svgcmd">SVG</option>
+          <option value="svg">SVG</option>
           <option value="screenshot">Screenshot (front)</option>
-          <option value="screenshot-back">Screenshot (back)</option>
+          <!-- <option value="screenshot-back">Screenshot (back)</option> -->
+          <!-- TODO -->
         </select>
         <select id="move-input">
           <option value="">Input</option>
@@ -59,7 +61,7 @@
         <a href="./help.html" target="_blank"
           ><input type="button" id="help" value="Help"
         /></a>
-        <span id="optionsspan" style="display: none">
+        <span id="main-config" hidden>
           <label class="disabled" for="corners"
             ><input
               disabled

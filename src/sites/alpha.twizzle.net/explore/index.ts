@@ -1,3 +1,3 @@
-import { setup } from "./app";
+import { TwizzleExplorerApp } from "./app";
 
-window.addEventListener("DOMContentLoaded", setup);
+new TwizzleExplorerApp();

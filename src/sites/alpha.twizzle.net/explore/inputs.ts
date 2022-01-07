@@ -1,6 +1,7 @@
 import type { TwistyPlayer } from "../../../cubing/twisty";
 import type { TwistyPropSource } from "../../../cubing/twisty/model/props/TwistyProp";
 
+// Returns the initial value.
 function setupPropCheckbox<T extends string>(
   domID: string,
   prop: TwistyPropSource<T>,
@@ -8,12 +9,14 @@ function setupPropCheckbox<T extends string>(
   uncheckedValue: T,
 ) {
   const elem = document.getElementById(domID) as HTMLInputElement;
+  const update = () => {
+    prop.set(elem.checked ? checkedValue : uncheckedValue);
+  };
+  update();
   prop.addFreshListener((value) => {
     elem.checked = ![uncheckedValue].includes(value);
   });
-  elem.addEventListener("change", () => {
-    prop.set(elem.checked ? checkedValue : uncheckedValue);
-  });
+  elem.addEventListener("change", update);
 }
 
 export function setupCheckboxes(twistyPlayer: TwistyPlayer): void {
