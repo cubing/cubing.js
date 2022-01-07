@@ -41,7 +41,8 @@ deploy-twizzle: build-site-twizzle
 		./dist/sites/alpha.twizzle.net/ \
 		--delete \
 		"${TWIZZLE_SSH_SERVER}:${TWIZZLE_SFTP_VERSION_PATH}/"
-	ssh "${TWIZZLE_SSH_SERVER}" "ln -s ${TWIZZLE_SFTP_VERSIONS_PATH} ${TWIZZLE_SFTP_VERSION_PATH}/deploy-versions && ln -sf ${TWIZZLE_SFTP_VERSION_PATH} ${TWIZZLE_SFTP_PATH}"
+	ssh "${TWIZZLE_SSH_SERVER}" "ln -s ${TWIZZLE_SFTP_VERSIONS_PATH} ${TWIZZLE_SFTP_VERSION_PATH}/deploy-versions && rm ${TWIZZLE_SFTP_PATH} && ln -s ${TWIZZLE_SFTP_VERSION_PATH} ${TWIZZLE_SFTP_PATH}"
+	curl "https://alpha.twizzle.net/version.json"
 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
 
 EXPERIMENTS_SFTP_PATH = "cubing_deploy@towns.dreamhost.com:~/experiments.cubing.net/cubing.js"
