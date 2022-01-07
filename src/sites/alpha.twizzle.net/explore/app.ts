@@ -12,6 +12,7 @@ export class TwizzleExplorerApp {
     this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
     this.twistyAlgEditor.twistyPlayer = this.twistyPlayer;
 
+    new ExpandedOptions(this);
     new ActionsDropdown(this);
   }
 
@@ -30,6 +31,23 @@ export class TwizzleExplorerApp {
     // TODO
     console.log(text);
     navigator.clipboard.writeText(text);
+  }
+}
+
+class ExpandedOptions {
+  toggleButton = document.body.querySelector("#options") as HTMLButtonElement;
+  descWrapper = document.body.querySelector(
+    "#desc-wrapper",
+  ) as HTMLInputElement;
+  optionsContainer = document.body.querySelector(
+    "#optionsspan",
+  ) as HTMLInputElement;
+  constructor(private TwistyPlayer) {
+    this.toggleButton.addEventListener("click", () => {
+      // TODO: Handle this with a single CSS class on the whole app.
+      this.descWrapper.toggleAttribute("hidden");
+      this.optionsContainer.toggleAttribute("hidden");
+    });
   }
 }
 

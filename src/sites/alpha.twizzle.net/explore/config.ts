@@ -2,13 +2,22 @@ import { Vector3 } from "three";
 import { getpuzzle } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
-import { TwistyPlayer, TwistyPlayerConfig } from "../../../cubing/twisty";
+import {
+  experimentalDebugShowRenderStats,
+  TwistyPlayer,
+  TwistyPlayerConfig,
+} from "../../../cubing/twisty";
 import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
 import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";
 import { getConfigFromURL } from "../core/url-params";
 import { setupCheckboxes } from "./inputs";
+import { getURLParam } from "./url-params";
 
 export function constructTwistyPlayer(): TwistyPlayer {
+  if (getURLParam("debug-show-render-stats")) {
+    experimentalDebugShowRenderStats(true);
+  }
+
   const config = getConfigFromURL();
   console.log(config);
   if ("puzzle" in config) {

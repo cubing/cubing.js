@@ -7,7 +7,7 @@ export interface PartialURLParamValues {
   "puzzle"?: string;
   "puzzlegeometry"?: string;
   "puzzle-description": string;
-  "debugShowRenderStats"?: boolean;
+  "debug-show-render-stats"?: boolean;
   "tempo"?: string;
 }
 export type ParamName = keyof typeof paramDefaults;
@@ -17,7 +17,7 @@ interface CompleteURLParamValues extends PartialURLParamValues {
   "puzzle": string;
   "puzzlegeometry"?: string;
   "puzzle-description": string;
-  "debugShowRenderStats"?: boolean;
+  "debug-show-render-stats"?: boolean;
   "tempo"?: string;
 }
 
@@ -26,7 +26,7 @@ const paramDefaults: CompleteURLParamValues = {
   "puzzle": "",
   "puzzlegeometry": "",
   "puzzle-description": "",
-  "debugShowRenderStats": false,
+  "debug-show-render-stats": false,
   "tempo": "1",
 };
 
@@ -36,7 +36,7 @@ const paramDefaultStrings: { [s: string]: string } = {
   "puzzle": "",
   "puzzlegeometry": "",
   "puzzle-description": "",
-  "debugShowRenderStats": "",
+  "debug-show-render-stats": "",
   "tempo": "1",
 };
 
@@ -58,7 +58,7 @@ export function getURLParam<K extends ParamName>(
     case "puzzle-description":
       // TODO: can we avoid the `as` cast?
       return str as CompleteURLParamValues[K];
-    case "debugShowRenderStats":
+    case "debug-show-render-stats":
       // TODO: can we avoid the `as` cast?
       return (str === "true") as CompleteURLParamValues[K];
     case "tempo":
@@ -90,7 +90,7 @@ export function setURLParams(newParams: PartialURLParamValues): void {
       case "puzzle-description":
         setParam(key, value);
         break;
-      case "debugShowRenderStats":
+      case "debug-show-render-stats":
         setParam(key, value ? "true" : "");
         break;
       case "tempo":
