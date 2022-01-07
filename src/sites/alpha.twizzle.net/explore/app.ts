@@ -94,13 +94,18 @@ class ConfigUI {
       optionElem.textContent = name;
       this.puzzleNameSelect.appendChild(optionElem);
     }
-    const puzzleName = getURLParam("puzzle");
-    if (puzzleName) {
+
+    const puzzleDescriptionString = getURLParam("puzzle-description");
+    if (getURLParam("puzzle-description")) {
+      this.descInput.value = puzzleDescriptionString;
+      this.descWrapper.hidden = false;
+    } else {
+      let puzzleName = getURLParam("puzzle");
+      if (!puzzleName) {
+        puzzleName = "3x3x3";
+      }
       this.puzzleNameSelect.value = puzzleName;
       this.descInput.value = getPuzzleDescriptionString(puzzleName);
-    } else {
-      this.descInput.value = getURLParam("puzzle-description");
-      this.descWrapper.hidden = false;
     }
 
     // TODO: connect this to the checkboxes?
