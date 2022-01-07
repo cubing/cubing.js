@@ -30,8 +30,9 @@ export class TwizzleExplorerApp {
     return puzzleLoader.pg();
   }
 
-  setPuzzleName(): void {
-    getPuzzleDescriptionString;
+  setPuzzleName(puzzleName: string): void {
+    const descString = getPuzzleDescriptionString(puzzleName);
+    this.twistyPlayer.experimentalPuzzleDescription = descString;
   }
 
   showText(text: string): void {
@@ -54,15 +55,16 @@ class ConfigUI {
   optionsContainer = document.body.querySelector(
     "#main-config",
   ) as HTMLInputElement;
-  constructor(app: TwizzleExplorerApp) {
+  constructor(private app: TwizzleExplorerApp) {
     this.toggleButton.addEventListener("click", () => {
       // TODO: Handle this with a single CSS class on the whole app.
       this.descWrapper.toggleAttribute("hidden");
       this.optionsContainer.toggleAttribute("hidden");
     });
+
     // TODO: connect this to the checkboxes?
     this.puzzleNameInput.addEventListener("change", () => {
-      this.app.setPuzzleName();
+      this.app.setPuzzleName(this.puzzleNameInput.value);
     });
   }
 }
