@@ -40,6 +40,7 @@ for (const line of output.trim().split("\n")) {
 const expectedPrefixes = [
   "node_modules/@babel",
   "node_modules/@types",
+  "node_modules/barely-a-dev-server",
   "node_modules/comlink",
   "node_modules/esbuild",
   "node_modules/jest-diff",
