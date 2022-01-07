@@ -12,7 +12,7 @@ export class TwizzleExplorerApp {
     this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
     this.twistyAlgEditor.twistyPlayer = this.twistyPlayer;
 
-    new ExpandedOptions();
+    new ConfigUI();
     new ActionsDropdown(this);
   }
 
@@ -34,13 +34,15 @@ export class TwizzleExplorerApp {
   }
 }
 
-class ExpandedOptions {
-  toggleButton = document.body.querySelector("#options") as HTMLButtonElement;
+class ConfigUI {
+  toggleButton = document.body.querySelector(
+    "#config-toggle",
+  ) as HTMLButtonElement;
   descWrapper = document.body.querySelector(
     "#desc-wrapper",
   ) as HTMLInputElement;
   optionsContainer = document.body.querySelector(
-    "#optionsspan",
+    "#main-config",
   ) as HTMLInputElement;
   constructor() {
     this.toggleButton.addEventListener("click", () => {

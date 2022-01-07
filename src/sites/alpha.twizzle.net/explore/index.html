@@ -14,7 +14,7 @@
         display: block;
       }
 
-      #optionsspan label {
+      #main-config label {
         white-space: nowrap;
       }
     </style>
@@ -40,7 +40,7 @@
 
         <input disabled type="button" id="scramble" value="Scramble" />
         <input type="button" id="reset" value="Reset" />
-        <input type="button" id="options" value="Options" />
+        <input type="button" id="config-toggle" value="Config" />
         <select id="actions">
           <option value="">Actions</option>
           <option value="ksolve">KSolve</option>
@@ -60,7 +60,7 @@
         <a href="./help.html" target="_blank"
           ><input type="button" id="help" value="Help"
         /></a>
-        <span id="optionsspan" hidden>
+        <span id="main-config" hidden>
           <label class="disabled" for="corners"
             ><input
               disabled
