@@ -48,6 +48,7 @@ class ExpandedOptions {
       this.descWrapper.toggleAttribute("hidden");
       this.optionsContainer.toggleAttribute("hidden");
     });
+    // TODO: connect this to the checkboxes?
   }
 }
 
