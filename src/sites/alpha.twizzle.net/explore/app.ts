@@ -12,7 +12,7 @@ export class TwizzleExplorerApp {
     this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
     this.twistyAlgEditor.twistyPlayer = this.twistyPlayer;
 
-    new ExpandedOptions(this);
+    new ExpandedOptions();
     new ActionsDropdown(this);
   }
 
@@ -42,7 +42,7 @@ class ExpandedOptions {
   optionsContainer = document.body.querySelector(
     "#optionsspan",
   ) as HTMLInputElement;
-  constructor(private TwistyPlayer) {
+  constructor() {
     this.toggleButton.addEventListener("click", () => {
       // TODO: Handle this with a single CSS class on the whole app.
       this.descWrapper.toggleAttribute("hidden");
