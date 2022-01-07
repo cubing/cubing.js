@@ -108,7 +108,7 @@ class ActionsDropdown {
           (await this.app.puzzleGeometry()).writeksolve("TwizzlePuzzle"),
         );
         break;
-      case "svgcmd": {
+      case "svg": {
         const is3D =
           (await this.app.twistyPlayer.experimentalModel.visualizationFormatProp.get()) !==
           "2D"; // TODO
