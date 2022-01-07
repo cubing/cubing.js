@@ -32,7 +32,6 @@ export function constructTwistyPlayer(): TwistyPlayer {
   return twistyPlayer;
 }
 
-const DEFAULT_CAMERA_DISTANCE = 5; // TODO
 const platonicShapeToGeoTowardsViewer: Record<string, string> = {
   t: "FLR",
   c: "URF",
@@ -40,9 +39,6 @@ const platonicShapeToGeoTowardsViewer: Record<string, string> = {
   d: "F",
   i: "F",
 };
-
-//  This function is *not* idempotent when we save the
-//  camera position.
 function cameraCoords(desc: PuzzleDescriptionString): OrbitCoordinates {
   const pg = getPuzzleGeometryByDesc(desc); // TODO: Avoid this
   const platonicShape = desc[0];
@@ -53,11 +49,7 @@ function cameraCoords(desc: PuzzleDescriptionString): OrbitCoordinates {
   }
   const norm = pg.getGeoNormal(geoTowardsViewer);
   if (!norm) {
-    return positionToOrbitCoordinates(
-      new Vector3(0, 0, DEFAULT_CAMERA_DISTANCE), // TODO: async import?
-    );
+    throw new Error("invalid normal");
   }
-  return positionToOrbitCoordinates(
-    new Vector3(...norm).multiplyScalar(DEFAULT_CAMERA_DISTANCE),
-  );
+  return positionToOrbitCoordinates(new Vector3(...norm));
 }
