@@ -3,12 +3,15 @@ import {
   getPG3DNamedPuzzles,
   PuzzleGeometry,
 } from "../../../cubing/puzzle-geometry";
+import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import { constructTwistyPlayer } from "./twisty-player";
+import { getURLParam, setURLParams } from "./url-params";
 
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;
   twistyAlgEditor: TwistyAlgEditor;
+  configUI: ConfigUI;
   constructor() {
     this.twistyPlayer = constructTwistyPlayer();
     document.querySelector("#twisty-wrapper")?.appendChild(this.twistyPlayer);
@@ -16,7 +19,7 @@ export class TwizzleExplorerApp {
     this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
     this.twistyAlgEditor.twistyPlayer = this.twistyPlayer;
 
-    new ConfigUI(this);
+    this.configUI = new ConfigUI(this);
     new ActionsDropdown(this);
   }
 
@@ -33,7 +36,17 @@ export class TwizzleExplorerApp {
 
   setPuzzleName(puzzleName: string): void {
     const descString = getPuzzleDescriptionString(puzzleName);
+    this.configUI.descInput.value = descString;
     this.twistyPlayer.experimentalPuzzleDescription = descString;
+    setURLParams({ "puzzle": puzzleName, "puzzle-description": "" });
+  }
+
+  setPuzzleDescription(descString: PuzzleDescriptionString): void {
+    this.twistyPlayer.experimentalPuzzleDescription = descString;
+    setURLParams({
+      "puzzle": "",
+      "puzzle-description": descString,
+    });
   }
 
   showText(text: string): void {
@@ -51,16 +64,21 @@ class ConfigUI {
     "#config-toggle",
   ) as HTMLButtonElement;
   descWrapper = document.body.querySelector(
-    "#desc-wrapper",
+    "#puzzle-description-wrapper",
+  ) as HTMLInputElement;
+  descInput = document.body.querySelector(
+    "#puzzle-description-string",
   ) as HTMLInputElement;
   optionsContainer = document.body.querySelector(
     "#main-config",
   ) as HTMLInputElement;
+  showing: boolean = false;
   constructor(private app: TwizzleExplorerApp) {
     this.toggleButton.addEventListener("click", () => {
+      this.showing = !this.showing;
       // TODO: Handle this with a single CSS class on the whole app.
-      this.descWrapper.toggleAttribute("hidden");
-      this.optionsContainer.toggleAttribute("hidden");
+      this.descWrapper.toggleAttribute("hidden", !this.showing);
+      this.optionsContainer.toggleAttribute("hidden", !this.showing);
     });
 
     for (const name of Object.keys(getPG3DNamedPuzzles())) {
@@ -69,10 +87,23 @@ class ConfigUI {
       optionElem.textContent = name;
       this.puzzleNameSelect.appendChild(optionElem);
     }
+    const puzzleName = getURLParam("puzzle");
+    if (puzzleName) {
+      this.puzzleNameSelect.value = puzzleName;
+      this.descInput.value = getPuzzleDescriptionString(puzzleName);
+    } else {
+      this.descInput.value = getURLParam("puzzle-description");
+      this.descWrapper.hidden = false;
+    }
 
     // TODO: connect this to the checkboxes?
     this.puzzleNameSelect.addEventListener("change", () => {
       this.app.setPuzzleName(this.puzzleNameSelect.value);
+    });
+
+    // TODO: connect this to the checkboxes?
+    this.descInput.addEventListener("input", () => {
+      this.app.setPuzzleDescription(this.descInput.value);
     });
   }
 }

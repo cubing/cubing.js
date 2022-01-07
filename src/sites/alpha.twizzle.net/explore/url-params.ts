@@ -33,7 +33,7 @@ const paramDefaults: CompleteURLParamValues = {
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
   "alg": "",
-  "puzzle": "",
+  "puzzle": "", // TODO: puzzle-name?
   "puzzlegeometry": "",
   "puzzle-description": "",
   "debug-show-render-stats": "",
