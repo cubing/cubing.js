@@ -36,21 +36,25 @@ async function runTest() {
   //   fullPage: true,
   // });
 
-  await page.$eval("twisty-player", (elem) => (elem.puzzle = "2x2x2"));
+  const nav = page.waitForNavigation();
 
-  await page.waitForNavigation();
+  await page.evaluate(() => {
+    globalThis.app.setPuzzleName("2x2x2");
+  });
+
+  await nav;
 
   const puzzle = new URL(page.url()).searchParams.get("puzzle");
   assert("Puzzle is set in the URL parameter", "2x2x2", puzzle);
 
   await Promise.all([
     page.waitForNavigation(),
-    page.select("#puzzleoptions", "o f 0.333333333333333"),
+    page.select("#puzzle-name", "4x4x4"),
   ]);
 
   assert(
     "New puzzle is set in the URL parameter",
-    "FTO",
+    "4x4x4",
     new URL(page.url()).searchParams.get("puzzle"),
   );
 

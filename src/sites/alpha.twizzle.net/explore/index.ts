@@ -1,3 +1,4 @@
 import { TwizzleExplorerApp } from "./app";
 
-new TwizzleExplorerApp();
+// Expose as a global for debugging.
+(globalThis as any).app = new TwizzleExplorerApp();
