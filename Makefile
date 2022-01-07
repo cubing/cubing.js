@@ -20,11 +20,17 @@ update-Makefile:
 publish:
 	npm publish
 
+
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
 
-TWIZZLE_SFTP_PATH = "cubing_deploy@towns.dreamhost.com:~/alpha.twizzle.net/"
-TWIZZLE_URL       = "https://alpha.twizzle.net/"
+GIT_DESCRIBE_VERSION       = $(shell git describe --tags)
+VERSION_FOLDER_NAME        = $(shell date "+%Y-%m-%d@%H-%M-%S-%Z@${GIT_DESCRIBE_VERSION}@unixtime%s")
+TWIZZLE_SSH_SERVER         = cubing_deploy@towns.dreamhost.com
+TWIZZLE_SFTP_PATH          = ~/alpha.twizzle.net
+TWIZZLE_SFTP_VERSIONS_PATH = ~/alpha.twizzle.net-deploy-versions
+TWIZZLE_SFTP_VERSION_PATH  = ${TWIZZLE_SFTP_VERSIONS_PATH}/${VERSION_FOLDER_NAME}
+TWIZZLE_URL                = https://alpha.twizzle.net/
 
 .PHONY: deploy-twizzle
 deploy-twizzle: build-site-twizzle
@@ -32,10 +38,11 @@ deploy-twizzle: build-site-twizzle
 		--exclude .DS_Store \
 		--exclude .git \
 		./dist/sites/alpha.twizzle.net/ \
-		${TWIZZLE_SFTP_PATH}
+		"${TWIZZLE_SSH_SERVER}:${TWIZZLE_SFTP_VERSION_PATH}"
+	ssh "${TWIZZLE_SSH_SERVER}" "ln -s ${TWIZZLE_SFTP_VERSIONS_PATH} ${TWIZZLE_SFTP_VERSION_PATH}/deploy-versions && ln -sf ${TWIZZLE_SFTP_VERSION_PATH} ${TWIZZLE_SFTP_PATH}"
 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
 
-EXPERIMENTS_SFTP_PATH = "cubing_deploy@towns.dreamhost.com:~/experiments.cubing.net/cubing.js/"
+EXPERIMENTS_SFTP_PATH = "cubing_deploy@towns.dreamhost.com:~/experiments.cubing.net/cubing.js"
 EXPERIMENTS_URL       = "https://experiments.cubing.net/cubing.js/"
 
 .PHONY: deploy-experiments
