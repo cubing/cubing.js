@@ -27,6 +27,12 @@ export class TwizzleExplorerApp {
 
     this.configUI = new ConfigUI(this);
     new SelectUI(this);
+    const moveCountElem = document.querySelector("#move-count")!;
+    this.twistyPlayer.experimentalModel.moveCountProp.addFreshListener(
+      (moveCount) => {
+        moveCountElem.textContent = `Moves: ${moveCount}`;
+      },
+    );
   }
 
   // TODO: Find out how to avoid the need for this.
