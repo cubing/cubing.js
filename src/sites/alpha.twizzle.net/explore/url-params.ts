@@ -69,6 +69,18 @@ export function getURLParam<K extends ParamName>(
   }
 }
 
+// TODO
+export function setAlgParam(key: ParamName, s: string): void {
+  const url = new URL(window.location.href);
+  const params = url.searchParams;
+  if (s === "") {
+    params.delete(key);
+  } else {
+    params.set(key, s);
+  }
+  window.history.replaceState("", "", url.toString());
+}
+
 export function setURLParams(newParams: PartialURLParamValues): void {
   const url = new URL(window.location.href);
   const params = url.searchParams;

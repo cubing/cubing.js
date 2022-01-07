@@ -11,7 +11,7 @@ import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer
 import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";
 import { getConfigFromURL } from "../core/url-params";
 import { setupCheckboxes } from "./inputs";
-import { getURLParam } from "./url-params";
+import { getURLParam, setAlgParam } from "./url-params";
 
 export function constructTwistyPlayer(): TwistyPlayer {
   if (getURLParam("debug-show-render-stats")) {
@@ -40,6 +40,9 @@ export function constructTwistyPlayer(): TwistyPlayer {
   Object.assign(config, explorerConfig);
   const twistyPlayer = new TwistyPlayer(config);
   setupCheckboxes(twistyPlayer);
+  twistyPlayer.experimentalModel.algProp.addFreshListener((algWithIssues) => {
+    setAlgParam("alg", algWithIssues.alg.toString());
+  });
   return twistyPlayer;
 }
 
