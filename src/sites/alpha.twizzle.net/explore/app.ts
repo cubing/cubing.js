@@ -48,6 +48,7 @@ export class TwizzleExplorerApp {
   }
 
   setPuzzleDescription(descString: PuzzleDescriptionString): void {
+    this.configUI.puzzleNameSelect.value = "";
     this.twistyPlayer.experimentalPuzzleDescription = descString;
     setURLParams({
       "puzzle": "",
