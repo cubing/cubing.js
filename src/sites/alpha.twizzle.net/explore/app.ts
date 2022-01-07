@@ -1,4 +1,9 @@
 import {
+  connectSmartPuzzle,
+  debugKeyboardConnect,
+  MoveEvent,
+} from "../../../cubing/bluetooth";
+import {
   getPuzzleDescriptionString,
   getPG3DNamedPuzzles,
   PuzzleGeometry,
@@ -20,7 +25,7 @@ export class TwizzleExplorerApp {
     this.twistyAlgEditor.twistyPlayer = this.twistyPlayer;
 
     this.configUI = new ConfigUI(this);
-    new ActionsDropdown(this);
+    new SelectUI(this);
   }
 
   // TODO: Find out how to avoid the need for this.
@@ -108,14 +113,18 @@ class ConfigUI {
   }
 }
 
-class ActionsDropdown {
-  element = document.body.querySelector("#actions") as HTMLInputElement;
+class SelectUI {
   constructor(private app: TwizzleExplorerApp) {
-    this.element.addEventListener("change", this.onChange.bind(this));
+    (
+      document.body.querySelector("#actions") as HTMLSelectElement
+    ).addEventListener("change", this.onChange.bind(this));
+    (
+      document.body.querySelector("#move-input") as HTMLSelectElement
+    ).addEventListener("change", this.onChange.bind(this));
   }
 
-  async onChange() {
-    const action = this.element.value;
+  async onChange(e: MouseEvent) {
+    const action = (e.target as HTMLSelectElement).value;
     switch (action) {
       case "gap":
         this.app.showText((await this.app.puzzleGeometry()).writegap());
@@ -152,6 +161,18 @@ class ActionsDropdown {
       case "screenshot-back":
         this.app.twistyPlayer.experimentalDownloadScreenshot(); // TODO: back!
         break;
+      case "bluetooth":
+      case "keyboard": {
+        (async (): Promise<void> => {
+          const inputPuzzle = await (action === "bluetooth"
+            ? connectSmartPuzzle
+            : debugKeyboardConnect)();
+          inputPuzzle.addMoveListener((e: MoveEvent) => {
+            this.app.twistyPlayer.experimentalAddMove(e.latestMove);
+          });
+        })();
+        break;
+      }
       default:
         alert(`Action ${action} not handled yet.`);
     }
