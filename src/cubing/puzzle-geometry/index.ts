@@ -1,5 +1,5 @@
 export {
-  getpuzzle,
+  getPuzzleDescriptionString,
   getPuzzleGeometryByDesc,
   getPuzzleGeometryByName,
   getpuzzles,

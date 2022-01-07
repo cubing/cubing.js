@@ -1,6 +1,9 @@
-import type { PuzzleGeometry } from "../../../cubing/puzzle-geometry";
+import {
+  getPuzzleDescriptionString,
+  PuzzleGeometry,
+} from "../../../cubing/puzzle-geometry";
 import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
-import { constructTwistyPlayer } from "./config";
+import { constructTwistyPlayer } from "./twisty-player";
 
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;
@@ -27,6 +30,10 @@ export class TwizzleExplorerApp {
     return puzzleLoader.pg();
   }
 
+  setPuzzleName(): void {
+    getPuzzleDescriptionString;
+  }
+
   showText(text: string): void {
     // TODO
     console.log(text);
@@ -35,6 +42,9 @@ export class TwizzleExplorerApp {
 }
 
 class ConfigUI {
+  puzzleNameInput = document.body.querySelector(
+    "puzzle-name",
+  ) as HTMLButtonElement;
   toggleButton = document.body.querySelector(
     "#config-toggle",
   ) as HTMLButtonElement;
@@ -44,13 +54,16 @@ class ConfigUI {
   optionsContainer = document.body.querySelector(
     "#main-config",
   ) as HTMLInputElement;
-  constructor() {
+  constructor(app: TwizzleExplorerApp) {
     this.toggleButton.addEventListener("click", () => {
       // TODO: Handle this with a single CSS class on the whole app.
       this.descWrapper.toggleAttribute("hidden");
       this.optionsContainer.toggleAttribute("hidden");
     });
     // TODO: connect this to the checkboxes?
+    this.puzzleNameInput.addEventListener("change", () => {
+      this.app.setPuzzleName();
+    });
   }
 }
 

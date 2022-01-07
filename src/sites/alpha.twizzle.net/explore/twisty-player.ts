@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { getpuzzle } from "../../../cubing/puzzle-geometry";
+import { getPuzzleDescriptionString } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
 import {
@@ -21,7 +21,9 @@ export function constructTwistyPlayer(): TwistyPlayer {
   const config = getConfigFromURL();
   console.log(config);
   if ("puzzle" in config) {
-    config.experimentalPuzzleDescription = getpuzzle(config.puzzle!);
+    config.experimentalPuzzleDescription = getPuzzleDescriptionString(
+      config.puzzle!,
+    );
     delete config["puzzle"];
   }
   const initialCameraOrbitCoordinates = cameraCoords(

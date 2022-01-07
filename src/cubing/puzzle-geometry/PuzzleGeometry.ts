@@ -416,7 +416,9 @@ export function getpuzzles(): { [s: string]: PuzzleDescriptionString } {
   return PGPuzzles;
 }
 
-export function getpuzzle(puzzleName: PuzzleName): PuzzleDescriptionString {
+export function getPuzzleDescriptionString(
+  puzzleName: PuzzleName,
+): PuzzleDescriptionString {
   // get some simple definitions of basic puzzles
   return PGPuzzles[puzzleName];
 }
