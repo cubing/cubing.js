@@ -11,9 +11,9 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const sgs = await import("./even-parity-fto.sgs.json");
-      const json: SGSCachedData = await sgs.sgsDataEvenParityFTO();
-      return new TrembleSolver(await sgs.evenParityFTODef(), json, [
+      const sgs = await import("./fto.sgs.json");
+      const json: SGSCachedData = await sgs.sgsDataFTO();
+      return new TrembleSolver(await sgs.FTODef(), json, [
         "U",
         "R",
         "F",
@@ -27,12 +27,12 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   );
 }
 
-export async function preInitializeEvenParityFTO(): Promise<void> {
+export async function preInitializeFTO(): Promise<void> {
   await getCachedTrembleSolver();
 }
 
 // TODO: centers
-export async function solveEvenParityFTO(state: Transformation): Promise<Alg> {
+export async function solveFTO(state: Transformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(
@@ -44,18 +44,15 @@ export async function solveEvenParityFTO(state: Transformation): Promise<Alg> {
 }
 
 let warned = false;
-export async function randomEvenParityFTOScramble(): Promise<Alg> {
+export async function randomFTOScramble(): Promise<Alg> {
   if (!warned) {
     console.warn(
       "FTO scrambles are not yet optimized. They may be much too long (≈90 moves).",
     );
     warned = true;
   }
-  const sgs = await import("./even-parity-fto.sgs.json");
-  return solveEvenParityFTO(
-    await randomStateFromSGS(
-      await sgs.evenParityFTODef(),
-      await sgs.sgsDataEvenParityFTO(),
-    ),
+  const sgs = await import("./fto.sgs.json");
+  return solveFTO(
+    await randomStateFromSGS(await sgs.FTODef(), await sgs.sgsDataFTO()),
   );
 }

@@ -30,7 +30,7 @@ import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
 import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
 import type { Transformation } from "../../kpuzzle";
-import { randomEvenParityFTOScramble } from "./solve/puzzles/even-parity-fto";
+import { randomFTOScramble } from "./solve/puzzles/fto";
 
 setIsInsideWorker(true);
 
@@ -136,10 +136,7 @@ export const insideAPI = {
           getRandomSquare1Scramble,
         );
       case "fto":
-        return measurePerf(
-          "randomEvenParityFTOScramble",
-          randomEvenParityFTOScramble,
-        );
+        return measurePerf("randomFTOScramble", randomFTOScramble);
       default:
         throw new Error(`unsupported event: ${eventID}`);
     }

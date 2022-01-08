@@ -2,32 +2,48 @@ import type { KPuzzleDefinition } from "../../../../kpuzzle";
 import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
-export async function evenParityFTODef(): Promise<KPuzzleDefinition> {
-  return getPuzzleGeometryByName("FTO").writekpuzzle(true);
+export async function FTODef(): Promise<KPuzzleDefinition> {
+  return getPuzzleGeometryByName("FTO", {
+    allMoves: true,
+    orientCenters: true,
+    addRotations: true,
+  }).writekpuzzle(true);
 }
 
 let cachedData: Promise<SGSCachedData> | null = null;
-export async function sgsDataEvenParityFTO() {
-  return (cachedData ??= uncachedSGSDataEvenParityFTO());
+export async function sgsDataFTO() {
+  return (cachedData ??= uncachedSGSDataFTO());
 }
 
 // TODO: Reduce info.
-async function uncachedSGSDataEvenParityFTO(): Promise<SGSCachedData> {
+async function uncachedSGSDataFTO(): Promise<SGSCachedData> {
   return parseSGS(
-    await evenParityFTODef(),
-    `SubgroupSizes 12 12 11 12 12 11 10 9 11 8 10 9 7 8 10 10 6 9 8 5 7 6 5 4 4 8 7 3 6 6 2 5 3 4 3
+    await FTODef(),
+    `SubgroupSizes 24 12 11 12 12 11 10 9 11 8 10 9 7 8 10 10 6 9 8 5 7 6 5 4 4 8 7 3 6 6 2 5 3 4 3
 
+Alg T
 Alg B
+Alg B T
 Alg B'
+Alg B' T
 Alg U
+Alg U T
 Alg U'
+Alg U' T
 Alg B BL
+Alg B BL T
 Alg B BL'
+Alg B BL' T
 Alg B' BR
+Alg B' BR T
 Alg B' BR'
+Alg B' BR' T
 Alg U R'
+Alg U R' T
 Alg U' L
+Alg U' L T
 Alg B BL' D
+Alg B BL' D T
 
 Alg R
 Alg R'
