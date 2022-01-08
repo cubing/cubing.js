@@ -7,7 +7,7 @@ needFolder(
 (async () => {
   const { Alg } = await import("cubing/alg");
 
-  if (typeof performance === "undefined") {
+  if (!globalThis.performance) {
     console.log("Setting `globalThis.performance = Date;`");
     globalThis.performance = Date; // Workaround for CI.
   }

@@ -5,7 +5,7 @@
 class HTMLElementStub {}
 
 let HTMLElementShim: typeof HTMLElement;
-if (typeof HTMLElement !== "undefined") {
+if (globalThis.HTMLElement) {
   HTMLElementShim = HTMLElement;
 } else {
   HTMLElementShim = HTMLElementStub as any;
@@ -21,7 +21,7 @@ class CustomElementsStub {
 
 let customElementsShim: typeof customElements;
 
-if (typeof customElements !== "undefined") {
+if (globalThis.customElements) {
   customElementsShim = customElements;
 } else {
   customElementsShim = new CustomElementsStub() as any;

@@ -17,11 +17,7 @@ let doksolve = false;
 let dogap = false;
 let docanon = false;
 let do3d = false;
-if (
-  typeof process !== "undefined" &&
-  process.argv &&
-  process.argv.length <= 2
-) {
+if (globalThis.process && process.argv && process.argv.length <= 2) {
   console.log(`Usage:  puzzle-geometry [options] [puzzle]
 
 Options:
@@ -76,11 +72,7 @@ Examples:
    puzzlegeometry --gap --noedges megaminx
 `);
 }
-if (
-  typeof process !== "undefined" &&
-  process.argv &&
-  process.argv.length >= 3
-) {
+if (globalThis.process && process.argv && process.argv.length >= 3) {
   let desc;
   const puzzleList = getPG3DNamedPuzzles();
   let argp = 2;
