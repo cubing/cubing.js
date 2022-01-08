@@ -13,7 +13,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
       const sgs = await import("./fto.sgs.json");
       const json: SGSCachedData = await sgs.sgsDataFTO();
-      return new TrembleSolver(await sgs.FTODef(), json, [
+      return new TrembleSolver(await sgs.ftoDef(), json, [
         "U",
         "R",
         "F",
@@ -53,6 +53,6 @@ export async function randomFTOScramble(): Promise<Alg> {
   }
   const sgs = await import("./fto.sgs.json");
   return solveFTO(
-    await randomStateFromSGS(await sgs.FTODef(), await sgs.sgsDataFTO()),
+    await randomStateFromSGS(await sgs.ftoDef(), await sgs.sgsDataFTO()),
   );
 }
