@@ -170,6 +170,7 @@ export class TrembleSolver {
         const idx = loc.permutationIdx;
         key += ` ${inverseState[orbitName].permutation[idx]} ${inverseState[orbitName].orientation[idx]}`;
       }
+      // console.log(key, step.lookup);
       const info = step.lookup[key];
       if (!info) {
         throw new Error("Missing algorithm in sgs or esgs?");
