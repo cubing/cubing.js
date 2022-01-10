@@ -1,4 +1,5 @@
 import type { TwistyPlayer } from "../../../cubing/twisty";
+import type { TempoScaleProp } from "../../../cubing/twisty/model/props/timeline/TempoScaleProp";
 import type { TwistyPropSource } from "../../../cubing/twisty/model/props/TwistyProp";
 
 // Returns the initial value.
@@ -19,7 +20,24 @@ function setupPropCheckbox<T extends string>(
   elem.addEventListener("change", update);
 }
 
-export function setupCheckboxes(twistyPlayer: TwistyPlayer): void {
+function setupTempoScale(tempoScaleProp: TempoScaleProp): void {
+  const tempoScaleInput = document.querySelector(
+    "#tempo-scale",
+  ) as HTMLInputElement;
+  const tempoScaleDisplay = document.querySelector(
+    "#tempo-scale-display",
+  ) as HTMLSpanElement;
+  tempoScaleInput.addEventListener("input", () => {
+    tempoScaleProp.set(parseFloat(tempoScaleInput.value));
+    tempoScaleDisplay.textContent = `${tempoScaleInput.value}×`;
+  });
+  tempoScaleProp.addFreshListener((tempoScale) => {
+    tempoScaleInput.value = tempoScale.toString();
+    tempoScaleDisplay.textContent = `${tempoScale}×`;
+  });
+}
+
+export function setupPropInputs(twistyPlayer: TwistyPlayer): void {
   setupPropCheckbox(
     "visualization-3D",
     twistyPlayer.experimentalModel.visualizationFormatProp,
@@ -44,4 +62,5 @@ export function setupCheckboxes(twistyPlayer: TwistyPlayer): void {
     "floating",
     "none",
   );
+  setupTempoScale(twistyPlayer.experimentalModel.tempoScaleProp);
 }

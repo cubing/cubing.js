@@ -10,7 +10,7 @@ import {
 import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
 import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";
 import { getConfigFromURL } from "../core/url-params";
-import { setupCheckboxes } from "./inputs";
+import { setupPropInputs } from "./prop-inputs";
 import { getURLParam, setAlgParam } from "./url-params";
 
 export function constructTwistyPlayer(): TwistyPlayer {
@@ -39,7 +39,7 @@ export function constructTwistyPlayer(): TwistyPlayer {
   };
   Object.assign(config, explorerConfig);
   const twistyPlayer = new TwistyPlayer(config);
-  setupCheckboxes(twistyPlayer);
+  setupPropInputs(twistyPlayer);
   twistyPlayer.experimentalModel.algProp.addFreshListener((algWithIssues) => {
     setAlgParam("alg", algWithIssues.alg.toString());
   });
