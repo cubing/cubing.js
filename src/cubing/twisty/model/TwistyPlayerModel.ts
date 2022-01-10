@@ -203,11 +203,12 @@ export class TwistyPlayerModel {
   public async twizzleLink(): Promise<string> {
     const url = new URL("https://alpha.twizzle.net/edit/");
 
-    const [puzzle, alg, setup, anchor] = await Promise.all([
+    const [puzzle, alg, setup, anchor, experimentalStickering] = await Promise.all([
       this.puzzleIDProp.get(),
       this.algProp.get(),
       this.setupProp.get(),
       this.setupAnchorProp.get(),
+      this.stickeringProp.get(),
     ]);
 
     if (!alg.alg.experimentalIsEmpty()) {
@@ -219,11 +220,12 @@ export class TwistyPlayerModel {
     if (anchor !== "start") {
       url.searchParams.set("setup-anchor", anchor);
     }
-    // if (this.experimentalStickering !== "full") {
-    //   url.searchParams.set(
-    //     "experimental-stickering",
-    //     this.experimentalStickering,
-    //   );
+    if (experimentalStickering !== "full") {
+      url.searchParams.set(
+        "experimental-stickering",
+        experimentalStickering,
+      );
+    }
     if (puzzle !== "3x3x3") {
       url.searchParams.set("puzzle", puzzle);
     }
