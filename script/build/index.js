@@ -12,13 +12,7 @@
 import { barelyServe } from "barely-a-dev-server";
 import { exec } from "child_process";
 import * as esbuild from "esbuild";
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  writeFile,
-  writeFileSync,
-} from "fs";
+import { exists, mkdir, readFile, writeFile } from "fs";
 import { basename, join } from "path";
 import { promisify } from "util";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
@@ -204,10 +198,12 @@ export const staticPackageMetadataTarget = {
   dependencies: [],
   buildSelf: async (_) => {
     // TODO: use `fs/promises` once we can use a recent enough version of `node`.
-    const exports = JSON.parse(readFileSync("./package.json")).exports;
+    const exports = JSON.parse(
+      await promisify(readFile)("./package.json"),
+    ).exports;
     for (const folder of Object.keys(exports)) {
-      if (!existsSync(folder)) {
-        mkdirSync(folder);
+      if (!(await promisify(exists)(folder))) {
+        await promisify(mkdir)(folder);
       }
       const folderBasename = basename(folder);
       const subpackageJSON = {
@@ -216,7 +212,7 @@ export const staticPackageMetadataTarget = {
       };
       const packageJSONFilePath = join(folder, "package.json");
       console.log(`Writing: ${packageJSONFilePath}`);
-      writeFileSync(
+      await promisify(writeFile)(
         packageJSONFilePath,
         JSON.stringify(subpackageJSON, null, "  "),
       );
@@ -226,11 +222,11 @@ export const staticPackageMetadataTarget = {
         const typesJS = `export * from "../../types/${folderBasename}";\n`;
         const typesJSFolder = join(`./dist/esm/`, typesFileName);
         const typesJSFilePath = join(typesJSFolder, "index.d.ts");
-        if (!existsSync(typesJSFolder)) {
-          mkdirSync(typesJSFolder);
+        if (!(await promisify(exists)(typesJSFolder))) {
+          await promisify(mkdir)(typesJSFolder);
         }
         console.log(`Writing: ${typesJSFilePath}`);
-        writeFileSync(typesJSFilePath, typesJS);
+        await promisify(writeFile)(typesJSFilePath, typesJS);
       } catch (e) {
         console.log(e);
       }
