@@ -9,14 +9,20 @@
 // short commandline commands. But maybe this file will stick around because it
 // turns out to be too useful.
 
-import * as esbuild from "esbuild";
-import { writeFile } from "fs";
-import { join } from "path";
-import { promisify } from "util";
 import { barelyServe } from "barely-a-dev-server";
+import { exec } from "child_process";
+import * as esbuild from "esbuild";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFile,
+  writeFileSync,
+} from "fs";
+import { basename, join } from "path";
+import { promisify } from "util";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
-import { exec } from "child_process";
 
 const PARALLEL = false;
 
@@ -192,12 +198,53 @@ export const bundleGlobalTarget = {
   },
 };
 
+export const staticPackageMetadataTarget = {
+  name: "static-package-metadata",
+  builtYet: false,
+  dependencies: [],
+  buildSelf: async (_) => {
+    // TODO: use `fs/promises` once we can use a recent enough version of `node`.
+    const exports = JSON.parse(readFileSync("./package.json")).exports;
+    for (const folder of Object.keys(exports)) {
+      if (!existsSync(folder)) {
+        mkdirSync(folder);
+      }
+      const folderBasename = basename(folder);
+      const subpackageJSON = {
+        main: `../dist/esm/${folderBasename}/index.js`,
+        types: `../dist/types/${folderBasename}/index.d.ts`,
+      };
+      const packageJSONFilePath = join(folder, "package.json");
+      console.log(`Writing: ${packageJSONFilePath}`);
+      writeFileSync(
+        packageJSONFilePath,
+        JSON.stringify(subpackageJSON, null, "  "),
+      );
+
+      try {
+        const typesFileName = join(folder, "package.json");
+        const typesJS = `export * from "../../types/${folderBasename}";\n`;
+        const typesJSFolder = join(`./dist/esm/`, typesFileName);
+        const typesJSFilePath = join(typesJSFolder, "index.d.ts");
+        if (!existsSync(typesJSFolder)) {
+          mkdirSync(typesJSFolder);
+        }
+        console.log(`Writing: ${typesJSFilePath}`);
+        writeFileSync(typesJSFilePath, typesJS);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  },
+};
+
 export const esmTarget = {
   name: "esm",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [searchWorkerTarget, staticPackageMetadataTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
+      // TODO: construct entry points based on `exports` (see `staticPackageMetadataTarget`) and add tests.
       entryPoints: [
         "src/cubing/alg/index.ts",
         "src/cubing/bluetooth/index.ts",
@@ -223,7 +270,6 @@ export const esmTarget = {
       //
       external,
     });
-    await execPromise("cp -R src/static/* ./");
   },
 };
 
@@ -317,6 +363,7 @@ export const targets /*: Record<String, SolverWorker>*/ = {
   "twizzle": twizzleTarget,
   "experiments": experimentsTarget,
   "bundle-global": bundleGlobalTarget,
+  "static-package-metadata": staticPackageMetadataTarget,
   "esm": esmTarget,
   "types": typesTarget,
   "bin": binTarget,
