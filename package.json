@@ -165,10 +165,6 @@
     "quoteProps": "consistent"
   },
   "exports": {
-    ".": {
-      "import": "./index.js",
-      "types": "./types/types/index.d.ts"
-    },
     "./alg": {
       "import": "./dist/esm/alg/index.js",
       "types": "./dist/types/alg/index.d.ts"
