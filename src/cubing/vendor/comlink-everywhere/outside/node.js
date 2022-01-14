@@ -11,6 +11,7 @@ function construct(imports, url, nodeOptions) {
   // https://nodejs.org/api/worker_threads.html#worker_threads_broadcastchannel_unref
   worker.unref();
   const wrappedWorker = imports.nodeEndpoint(worker);
+  wrappedWorker.nodeWorker = worker; // TODO
   return wrappedWorker;
 }
 

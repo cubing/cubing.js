@@ -10,6 +10,10 @@ const MODULE_WORKER_TIMEOUT_MILLISECONDS = 5000;
 export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise<WorkerInsideAPI>(async (resolve, reject) => {
+    const timeoutID = setTimeout(() => {
+      reject(new Error("module instantiation timeout"));
+    }, MODULE_WORKER_TIMEOUT_MILLISECONDS);
+
     try {
       const workerEntryFileURL = await getWorkerEntryFileURL();
       if (!workerEntryFileURL) {
@@ -29,33 +33,44 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
         // Needed for `node`
         url = new URL(workerEntryFileURL);
       }
-      const Worker = await workerFileConstructor();
-      const worker = new Worker(url, { type: "module" });
-      const listener = (e: ErrorEvent) => {
+
+      const constructor = await workerFileConstructor();
+      const worker = new constructor(url, {
+        type: "module",
+      }) as Worker & {
+        nodeWorker?: import("worker_threads").Worker;
+      };
+
+      const onError = (e: ErrorEvent) => {
+        // TODO: Remove fallback when Firefox implements module workers: https://bugzilla.mozilla.org/show_bug.cgi?id=1247687
         if (e.message?.startsWith("SyntaxError")) {
           reject(e);
         }
-        // TODO: We remove the listener because the `node` adapter for `comlink` actually registered us for "message" instead(!). For now, we just clean up.
-        // https://github.com/GoogleChromeLabs/comlink/issues/574
-        worker.removeEventListener("error", listener);
       };
-      worker.addEventListener("error", listener, { once: true });
-      worker.addEventListener(
-        "message",
-        (e) => {
-          if (e.data === "comlink-exposed") {
-            resolve(wrap<WorkerInsideAPI>(worker));
-          } else {
-            reject(new Error("wrong module instantiation message"));
-          }
-        },
-        {
+
+      const onFirstMessage = (messageData: string) => {
+        if (messageData === "comlink-exposed") {
+          // We need to clear the timeout so that we don't prevent `node` from exiting in the meantime.
+          clearTimeout(timeoutID);
+          resolve(wrap<WorkerInsideAPI>(worker));
+        } else {
+          reject(
+            new Error("wrong module instantiation message " + messageData),
+          );
+        }
+      };
+
+      if (worker.nodeWorker) {
+        // We have to use `once` so the `unref()` from `comlink-everywhere` allows the process to quite as expected.
+        worker.nodeWorker.once("message", onFirstMessage);
+      } else {
+        worker.addEventListener("error", onError, {
           once: true,
-        },
-      );
-      setTimeout(() => {
-        reject(new Error("module instantiation timeout"));
-      }, MODULE_WORKER_TIMEOUT_MILLISECONDS);
+        });
+        worker.addEventListener("message", (e) => onFirstMessage(e.data), {
+          once: true,
+        });
+      }
     } catch (e) {
       reject(e);
     }
