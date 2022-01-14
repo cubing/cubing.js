@@ -17,6 +17,10 @@ const PATH_TO_SRC_CUBING = resolve(
   new URL(".", import.meta.url).pathname,
   "../../../src/cubing",
 );
+const PATH_TO_SRC_CUBING_VENDOR = resolve(
+  new URL(".", import.meta.url).pathname,
+  "../../../src/cubing/vendor",
+);
 
 class Target {
   constructor(name, targetInfo) {
@@ -87,10 +91,10 @@ class Target {
         if (resolved.startsWith(forTarget.dirPath + "/")) {
           return undefined;
         }
-
-        console.error(
-          "Bad import! Imports between targets must reference each other's top-level folders.",
-        );
+        // `src/cubing/vendor` subdirs can be imported directly.
+        if (resolved.startsWith(PATH_TO_SRC_CUBING_VENDOR)) {
+          return undefined;
+        }
         console.log("From: ", args.importer);
         console.log("Import path: ", args.path);
         process.exit(1);
