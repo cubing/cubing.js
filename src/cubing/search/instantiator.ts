@@ -12,6 +12,10 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
   return new Promise<WorkerInsideAPI>(async (resolve, reject) => {
     try {
       const workerEntryFileURL = await getWorkerEntryFileURL();
+      if (!workerEntryFileURL) {
+        // This happens in `bundle-global`.
+        reject(new Error("Could not get worker entry file URL."));
+      }
       let url: string | URL;
       if (globalThis.Blob) {
         // Standard browser-like environment.
@@ -64,7 +68,7 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
     return await instantiateModuleWorker();
   } catch (e) {
     console.warn(
-      "Could not instantiate module worker (this is expected in Firefox). Falling back to string worker.",
+      "Could not instantiate module worker (this is expected in Firefox and `bundle-global`). Falling back to string worker.",
       e,
     );
     const { workerSource } = await import(
