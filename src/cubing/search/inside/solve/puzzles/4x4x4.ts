@@ -1,15 +1,29 @@
 import type { Alg } from "../../../../alg";
 import { addOrientationSuffix } from "../addOrientationSuffix";
-import { random444Scramble } from "../../../../vendor/cstimer/src/js/scramble/scramble_444";
-export {
-  initialize as initialize444,
-  random444Scramble,
-} from "../../../../vendor/cstimer/src/js/scramble/scramble_444";
 
 const randomSuffixes = [
   [null, "x", "x2", "x'", "z", "z'"],
   [null, "y", "y2", "y'"],
 ];
+
+let cachedImport: Promise<
+  typeof import("../../../../vendor/cstimer/src/js/scramble/scramble_444")
+> | null = null;
+function dynamicScramble444(): Promise<
+  typeof import("../../../../vendor/cstimer/src/js/scramble/scramble_444")
+> {
+  return (cachedImport ??= import(
+    "../../../../vendor/cstimer/src/js/scramble/scramble_444"
+  ));
+}
+
+export async function initialize444(): Promise<void> {
+  return (await dynamicScramble444()).initialize();
+}
+
+export async function random444Scramble(): Promise<Alg> {
+  return (await dynamicScramble444()).random444Scramble();
+}
 
 export async function random444OrientedScramble(): Promise<Alg> {
   return addOrientationSuffix(await random444Scramble(), randomSuffixes);
