@@ -1,5 +1,6 @@
 import {
   constructWorkerFromString,
+  workerFileConstructor,
   wrap,
 } from "../vendor/comlink-everywhere/outside";
 import type { WorkerInsideAPI } from "./inside/api";
@@ -11,30 +12,43 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
   return new Promise<WorkerInsideAPI>(async (resolve, reject) => {
     try {
       const workerEntryFileURL = await getWorkerEntryFileURL();
-      const importSrc = `import "${workerEntryFileURL}";`;
-      const blob = new Blob([importSrc], {
-        type: "text/javascript",
-      });
-      const worker = new Worker(URL.createObjectURL(blob), { type: "module" });
+      let url: string | URL;
+      if (globalThis.Blob) {
+        // Standard browser-like environment.
+        const importSrc = `import "${workerEntryFileURL}";`;
+        const blob = new Blob([importSrc], {
+          type: "text/javascript",
+        });
+        url = URL.createObjectURL(blob);
+      } else {
+        // `node` doesn't have `Blob`. We can keep the original entry file URL there, but we have to wrap it.
+        // Needed for `node`
+        url = new URL(workerEntryFileURL);
+      }
+      const Worker = await workerFileConstructor();
+      const worker = new Worker(url, { type: "module" });
+      const listener = (e: ErrorEvent) => {
+        if (e.message?.startsWith("SyntaxError")) {
+          reject(e);
+        }
+        // TODO: We remove the listener because the `node` adapter for `comlink` actually registered us for "message" instead(!). For now, we just clean up.
+        // https://github.com/GoogleChromeLabs/comlink/issues/574
+        worker.removeEventListener("error", listener);
+      };
+      worker.addEventListener("error", listener, { once: true });
       worker.addEventListener(
-        "error",
+        "message",
         (e) => {
-          if (e.message.startsWith("SyntaxError")) {
-            reject(e);
+          if (e.data === "comlink-exposed") {
+            resolve(wrap<WorkerInsideAPI>(worker));
+          } else {
+            reject(new Error("wrong module instantiation message"));
           }
         },
-        { once: true },
-      );
-      worker.addEventListener("message", (e) => {
-        if (e.data === "comlink-exposed") {
-          resolve(wrap<WorkerInsideAPI>(worker));
-        } else {
-          reject(new Error("wrong module instantiation message"));
-        }
-      }),
         {
           once: true,
-        };
+        },
+      );
       setTimeout(() => {
         reject(new Error("module instantiation timeout"));
       }, MODULE_WORKER_TIMEOUT_MILLISECONDS);
