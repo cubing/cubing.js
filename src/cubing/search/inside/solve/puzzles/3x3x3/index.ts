@@ -7,7 +7,6 @@ import { randomChoiceFactory } from "../../../../../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
 import { sgs3x3x3 } from "./legacy-sgs";
-import { initialize, solveState } from "../../../../../vendor/min2phase/gwt";
 
 export async function random333State(): Promise<Transformation> {
   const def = await puzzles["3x3x3"].def();
@@ -23,9 +22,20 @@ export async function random333State(): Promise<Transformation> {
   return kpuzzle.state;
 }
 
+let cachedImport: Promise<
+  typeof import("../../../../../vendor/min2phase/gwt")
+> | null = null;
+function dynamicMin2phaseGWT(): Promise<
+  typeof import("../../../../../vendor/min2phase/gwt")
+> {
+  return (cachedImport ??= import("../../../../../vendor/min2phase/gwt"));
+}
+
 export async function solve333(s: Transformation): Promise<Alg> {
   mustBeInsideWorker();
-  return Alg.fromString(solveState(toMin2PhaseState(s)));
+  return Alg.fromString(
+    (await dynamicMin2phaseGWT()).solveState(toMin2PhaseState(s)),
+  );
 }
 
 export async function random333Scramble(): Promise<Alg> {
@@ -33,7 +43,7 @@ export async function random333Scramble(): Promise<Alg> {
 }
 
 export async function initialize333(): Promise<void> {
-  initialize();
+  (await dynamicMin2phaseGWT()).initialize();
 }
 
 const randomSuffixes = [
