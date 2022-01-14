@@ -159,7 +159,7 @@ export const searchWorkerTarget = {
     const initialBuildResult = await esbuild.build({
       entryPoints: ["./src/cubing/search/inside/entry.js"],
       format: "cjs",
-      target: "es2015",
+      target: "es2020",
       bundle: true,
       watch,
       write: false,
