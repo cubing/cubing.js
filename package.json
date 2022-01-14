@@ -1,7 +1,7 @@
 {
   "name": "cubing",
   "version": "0.22.1",
-  "description": "A collection of Javascript cubing libraries.",
+  "description": "A collection of JavaScript cubing libraries.",
   "author": "The js.cubing.net team",
   "type": "module",
   "types": "dist/types/index.d.ts",

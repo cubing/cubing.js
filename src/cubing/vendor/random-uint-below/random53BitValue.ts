@@ -33,7 +33,7 @@ function validateMax(max: number): void {
   }
   if (max > MAX_JS_PRECISE_INT) {
     throw new Error(
-      `Called randomInt.below() with max == ${max}, which is larger than Javascript can handle with integer precision.`,
+      `Called randomInt.below() with max == ${max}, which is larger than JavaScript can handle with integer precision.`,
     );
   }
 }

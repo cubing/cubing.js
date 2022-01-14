@@ -2,10 +2,10 @@
 
 scramble_sq1.js
 
-Square-1 Solver / Scramble Generator in Javascript.
+Square-1 Solver / Scramble Generator in JavaScript.
 
 Code by by Shuang Chen.
-Compiled to Javascript using GWT.
+Compiled to JavaScript using GWT.
 
 */
 
