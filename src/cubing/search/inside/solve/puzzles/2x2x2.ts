@@ -1,18 +1,14 @@
 import type { Alg } from "../../../../alg";
-import {
-  OldKPuzzle,
-  OldKPuzzleDefinition,
-  OldTransformation,
-} from "../../../../kpuzzle";
+import type { KPuzzle } from "../../../../kpuzzle";
+import { KState } from "../../../../kpuzzle/KState";
 import { puzzles } from "../../../../puzzles";
-import { mustBeInsideWorker } from "../../inside-worker";
 import {
   randomPermute,
   randomUIntBelowFactory,
 } from "../../../../vendor/random-uint-below";
+import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
-import type { KState } from "../../../../kpuzzle/KState";
 
 // Empirical ly determined depth:
 // - ≈11 moves on average (as opposed to >13 moves for depth 2),
@@ -49,17 +45,17 @@ export async function solve222(state: KState): Promise<Alg> {
 }
 
 // TODO: factor out and test.
-async function randomizeOrbit(
-  def: OldKPuzzleDefinition,
+async function mutatingRandomizeOrbit(
+  kpuzzle: KPuzzle,
   orbitName: string,
-  state: OldTransformation,
+  state: KState,
   options?: { orientationSum?: number },
 ): Promise<void> {
   const randomUIntBelow = await randomUIntBelowFactory();
-  await randomPermute(state[orbitName].permutation);
+  await randomPermute(state.stateData[orbitName].pieces);
 
-  const orbitDef = def.orbits[orbitName];
-  const ori = state[orbitName].orientation;
+  const orbitDef = kpuzzle.definition.orbits[orbitName];
+  const ori = state.stateData[orbitName].orientation;
 
   let sum = 0;
   for (let i = 0; i < orbitDef.numPieces; i++) {
@@ -79,14 +75,15 @@ async function randomizeOrbit(
 }
 
 // TODO: Use SGS?
-export async function random222State(): Promise<OldTransformation> {
-  const nonExtensibleDef = await puzzles["2x2x2"].def();
-  const def = Object.assign({}, nonExtensibleDef);
-  const kpuzzle = new OldKPuzzle(def);
-  const stateCopy: OldTransformation = JSON.parse(
-    JSON.stringify(kpuzzle.state),
+export async function random222State(): Promise<KState> {
+  const kpuzzle = await puzzles["2x2x2"].kpuzzle();
+  const stateCopy: KState = new KState(
+    kpuzzle,
+    JSON.parse(JSON.stringify(kpuzzle.startState().stateData)),
   ); // TODO
-  await randomizeOrbit(def, "CORNERS", stateCopy, { orientationSum: 0 });
+  await mutatingRandomizeOrbit(kpuzzle, "CORNERS", stateCopy, {
+    orientationSum: 0,
+  });
   return stateCopy;
 }
 

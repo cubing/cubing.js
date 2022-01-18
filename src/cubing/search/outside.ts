@@ -4,6 +4,7 @@ import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TOD
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import { instantiateWorker } from "./instantiator";
 import type { WorkerInsideAPI } from "./inside/api";
+import type { KState } from "../kpuzzle/KState";
 
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
 async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
@@ -75,30 +76,30 @@ export async function randomScrambleStringForEvent(
 }
 
 export async function experimentalSolve3x3x3IgnoringCenters(
-  s: KState,
+  state: KState,
 ): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solve333ToString(s));
+  return Alg.fromString(await cwi.solve333ToString(state.stateData));
 }
 
-export async function experimentalSolve2x2x2(s: KState): Promise<Alg> {
+export async function experimentalSolve2x2x2(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solve222ToString(s));
+  return Alg.fromString(await cwi.solve222ToString(state.stateData));
 }
 
-export async function solveSkewb(s: KState): Promise<Alg> {
+export async function solveSkewb(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solveSkewbToString(s));
+  return Alg.fromString(await cwi.solveSkewbToString(state.stateData));
 }
 
-export async function solvePyraminx(s: KState): Promise<Alg> {
+export async function solvePyraminx(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solvePyraminxToString(s));
+  return Alg.fromString(await cwi.solvePyraminxToString(state.stateData));
 }
 
-export async function solveMegaminx(s: KState): Promise<Alg> {
+export async function solveMegaminx(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solveMegaminxToString(s));
+  return Alg.fromString(await cwi.solveMegaminxToString(state.stateData));
 }
 
 export function setDebug(options: { logPerf?: boolean }): void {

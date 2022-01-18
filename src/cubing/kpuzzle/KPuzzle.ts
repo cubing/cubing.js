@@ -20,6 +20,8 @@ export class KPuzzle {
 
   #cachedIdentityTransformationData: KTransformationData | null = null;
   identityTransformation(): KTransformation {
+    // TODO: Can we safely cache the `KTransformation` itself?
+    // TODO: construct so the `KTransformation` already caches that it's the identity.
     return new KTransformation(
       this,
       (this.#cachedIdentityTransformationData ??=

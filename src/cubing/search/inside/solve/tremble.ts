@@ -1,19 +1,9 @@
 import { Alg, AlgBuilder, Move, QuantumMove } from "../../../alg";
-import {
-  KPuzzle,
-  KTransformation,
-  oldAreStatesEquivalent,
-  oldCombineTransformations,
-  oldIdentityTransformation,
-  oldInvertTransformation,
-  OldKPuzzle,
-  OldKPuzzleDefinition,
-  OldTransformation,
-} from "../../../kpuzzle";
-import { countMoves } from "../../../notation";
-import type { SGSAction, SGSCachedData } from "./parseSGS";
-import { randomChoiceFactory } from "../../../vendor/random-uint-below";
+import type { KPuzzle, KTransformation } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
+import { countMoves } from "../../../notation";
+import { randomChoiceFactory } from "../../../vendor/random-uint-below";
+import type { SGSAction, SGSCachedData } from "./parseSGS";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
@@ -103,7 +93,7 @@ export class TrembleSolver {
     let bestAlg: Alg | null = null;
     let bestLen = 1000000;
     const recur = (
-      recursiveTransformation: KTransformation,
+      recursiveTransformation: KTransformation, // TODO: Support KStatq1
       togo: number,
       sofar: Alg,
     ) => {
@@ -149,7 +139,7 @@ export class TrembleSolver {
   }
 
   private sgsPhaseSolve(
-    initialTransformation: KTransformation,
+    initialTransformation: KTransformation, // TODO: Handle KState
     bestLenSofar: number,
   ): Alg | null {
     // const pieceNames = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
@@ -165,12 +155,12 @@ export class TrembleSolver {
     for (const step of this.sgs.ordering) {
       const cubieSeq = step.pieceOrdering;
       let key = "";
-      const inverseState = transformation.invert();
+      const inverseTransformation = transformation.invert();
       for (let i = 0; i < cubieSeq.length; i++) {
         const loc = cubieSeq[i];
         const orbitName = loc.orbitName;
         const idx = loc.permutationIdx;
-        key += ` ${inverseState[orbitName].permutation[idx]} ${inverseState[orbitName].orientation[idx]}`;
+        key += ` ${inverseTransformation.transformationData[orbitName].permutation[idx]} ${inverseTransformation.transformationData[orbitName].orientation[idx]}`;
       }
       // console.log(key, step.lookup);
       const info = step.lookup[key];
@@ -181,19 +171,16 @@ export class TrembleSolver {
       if (algBuilder.experimentalNumUnits() >= bestLenSofar) {
         return null;
       }
-      transformation = oldCombineTransformations(
-        this.def,
-        transformation,
-        info.transformation,
-      );
+      transformation = transformation.applyTransformation(info.transformation);
       if (DOUBLECHECK_PLACED_PIECES) {
         for (let i = 0; i < cubieSeq.length; i++) {
           const location = cubieSeq[i];
           const orbitName = location.orbitName;
           const idx = location.permutationIdx;
           if (
-            transformation[orbitName].permutation[idx] !== idx ||
-            transformation[orbitName].orientation[idx] !== 0
+            transformation.transformationData[orbitName].permutation[idx] !==
+              idx ||
+            transformation.transformationData[orbitName].orientation[idx] !== 0
           ) {
             throw new Error("bad SGS :-(");
           }
@@ -207,13 +194,15 @@ export class TrembleSolver {
 export async function randomStateFromSGS(
   kpuzzle: KPuzzle,
   sgs: SGSCachedData,
-): Promise<OldTransformation> {
+): Promise<KState> {
   const randomChoice = await randomChoiceFactory<SGSAction>(); // TODO: make this sync by putting the factory into a TLA
 
-  let state = oldIdentityTransformation(kpuzzle);
+  let transformation = kpuzzle.identityTransformation();
   for (const step of sgs.ordering) {
     const sgsAction = randomChoice(Object.values(step.lookup));
-    state = oldCombineTransformations(kpuzzle, state, sgsAction.transformation);
+    transformation = transformation.applyTransformation(
+      sgsAction.transformation,
+    );
   }
-  return state;
+  return transformation.toKState();
 }
