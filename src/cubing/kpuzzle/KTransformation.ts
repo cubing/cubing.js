@@ -1,4 +1,7 @@
-import { isTransformationDataIdentical } from "./calculate";
+import {
+  invertTransformation,
+  isTransformationDataIdentical,
+} from "./calculate";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
 import type { KTransformationData } from "./KPuzzleDefinition";
@@ -8,6 +11,13 @@ export class KTransformation {
     public readonly kpuzzle: KPuzzle,
     public readonly data: KTransformationData,
   ) {}
+
+  invert(): KTransformation {
+    return new KTransformation(
+      this.kpuzzle,
+      invertTransformation(this.kpuzzle, this.data),
+    );
+  }
 
   // @deprecated
   #cachedIsIdentity: boolean | undefined; // TODO: is `null` worse here?

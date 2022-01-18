@@ -1,3 +1,14 @@
+import {
+  Alg,
+  Commutator,
+  Conjugate,
+  Grouping,
+  LineComment,
+  Move,
+  Newline,
+  Pause,
+  TraversalDownUp,
+} from "../alg";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
 import type {
@@ -5,6 +16,7 @@ import type {
   KOrbitTransformationData,
   KTransformationData,
 } from "./KPuzzleDefinition";
+import { KTransformation } from "./KTransformation";
 
 export function isOrbitTransformationDataIdentityUncached(
   numOrientations: number,
@@ -170,3 +182,64 @@ export function selfMultiplyTransformationUncached(
     );
   }
 }
+
+class AlgToTransformationTraversal extends TraversalDownUp<
+  KPuzzle,
+  KTransformation
+> {
+  traverseAlg(alg: Alg, kpuzzle: KPuzzle): KTransformation {
+    let transformation = kpuzzle.identityTransformation();
+    for (const unit of alg.units()) {
+      transformation = transformation.applyTransformation(
+        this.traverseUnit(unit, kpuzzle),
+      );
+    }
+    return transformation;
+  }
+  traverseGrouping(grouping: Grouping, kpuzzle: KPuzzle): KTransformation {
+    const algTransformation = this.traverseAlg(grouping.alg, kpuzzle);
+    return new KTransformation(
+      kpuzzle,
+      selfMultiplyTransformationUncached(
+        kpuzzle,
+        algTransformation.data,
+        grouping.amount,
+      ),
+    );
+  }
+  traverseMove(move: Move, kpuzzle: KPuzzle): KTransformation {
+    return kpuzzle.moveToTransformation(move);
+  }
+  traverseCommutator(
+    commutator: Commutator,
+    kpuzzle: KPuzzle,
+  ): KTransformation {
+    const aTransformation = this.traverseAlg(commutator.A, kpuzzle);
+    const bTransformation = this.traverseAlg(commutator.B, kpuzzle);
+    return aTransformation
+      .applyTransformation(bTransformation)
+      .applyTransformation(aTransformation.invert())
+      .applyTransformation(bTransformation.invert());
+  }
+  traverseConjugate(conjugate: Conjugate, kpuzzle: KPuzzle): KTransformation {
+    const aTransformation = this.traverseAlg(conjugate.A, kpuzzle);
+    const bTransformation = this.traverseAlg(conjugate.B, kpuzzle);
+    return aTransformation
+      .applyTransformation(bTransformation)
+      .applyTransformation(aTransformation.invert());
+  }
+  traversePause(_: Pause, kpuzzle: KPuzzle): KTransformation {
+    return kpuzzle.identityTransformation();
+  }
+  traverseNewline(_: Newline, kpuzzle: KPuzzle): KTransformation {
+    return kpuzzle.identityTransformation();
+  }
+  traverseLineComment(_: LineComment, kpuzzle: KPuzzle): KTransformation {
+    return kpuzzle.identityTransformation();
+  }
+}
+
+const algToTransformationInstance = new AlgToTransformationTraversal();
+export const algToTransformation = algToTransformationInstance.traverseAlg.bind(
+  algToTransformationInstance,
+) as (alg: Alg, kpuzzle: KPuzzle) => KTransformation;

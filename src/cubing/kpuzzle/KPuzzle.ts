@@ -1,4 +1,5 @@
-import { Move } from "../alg";
+import { Alg, Move } from "../alg";
+import { algToTransformation } from "./calculate";
 import {
   constructIdentityTransformationDataUncached,
   moveToTransformationUncached,
@@ -40,5 +41,12 @@ export class KPuzzle {
     const transformationData = moveToTransformationUncached(this, move);
     this.#moveToTransformationDataCache.set(cacheKey, transformationData);
     return new KTransformation(this, transformationData);
+  }
+
+  algToTransformation(alg: Alg | string): KTransformation {
+    if (typeof alg === "string") {
+      alg = new Alg(alg);
+    }
+    return algToTransformation(alg, this);
   }
 }

@@ -13,5 +13,6 @@ import { puzzles } from "../../../../cubing/puzzles";
   const t2 = t1.applyTransformation(kpuzzle.moveToTransformation("R'"));
   console.log(t2.isIdentity());
 
-  console.log(t2);
+  const tt = kpuzzle.algToTransformation("((R U)100)10000");
+  console.log(tt.isIdentity());
 })();
