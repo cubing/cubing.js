@@ -1,5 +1,5 @@
+import type { KPuzzleDefinition } from "../kpuzzle/KPuzzleDefinition";
 import type { PuzzleGeometry } from "../puzzle-geometry";
-import type { OldKPuzzleDefinition } from "../kpuzzle";
 import type { ExperimentalStickering } from "../twisty";
 import type { PuzzleAppearance } from "./stickerings/appearance";
 
@@ -9,7 +9,7 @@ export interface PuzzleLoader {
   fullName: string;
   inventedBy?: string[];
   inventionYear?: number; // TODO: date?
-  def: () => Promise<OldKPuzzleDefinition>;
+  def: () => Promise<KPuzzleDefinition>;
   svg: () => Promise<string>;
   llSVG?: () => Promise<string>;
   pg?: () => Promise<PuzzleGeometry>;
