@@ -3,7 +3,7 @@
  *  combining moves (fully respecting commuting moves), and you can
  *  generate canonical sequences efficiently.
  */
-import type { Alg, Move } from "../alg";
+import type { Alg, Move } from "../../alg";
 import type { KPuzzleDefinition, Transformation } from "./definition_types";
 import {
   areTransformationsEquivalent,

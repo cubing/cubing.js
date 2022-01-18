@@ -1,4 +1,4 @@
-import { Alg } from "../../alg";
+import { Alg } from "../../../alg";
 import { KPuzzle } from "../kpuzzle";
 import { cube3x3x3KPuzzle } from "./3x3x3.kpuzzle.json";
 

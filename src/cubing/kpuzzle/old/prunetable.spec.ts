@@ -1,7 +1,7 @@
-import { getPuzzleGeometryByName } from "../puzzle-geometry";
+import { getPuzzleGeometryByName } from "../../puzzle-geometry";
 import { Canonicalizer } from "./canonicalize";
 import { PruningTable } from "./pruningtable";
-import { Alg } from "../alg";
+import { Alg } from "../../alg";
 describe("PruneTable", () => {
   it("solve 2x2x2", () => {
     const pg = getPuzzleGeometryByName("2x2x2", {});

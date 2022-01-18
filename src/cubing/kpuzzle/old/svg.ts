@@ -1,7 +1,7 @@
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
-} from "../puzzles/stickerings/appearance"; // TODO
+} from "../../puzzles/stickerings/appearance"; // TODO
 import type { KPuzzleDefinition, Transformation } from "./definition_types";
 import type { KPuzzle } from "./kpuzzle";
 

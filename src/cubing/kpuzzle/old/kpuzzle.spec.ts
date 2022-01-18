@@ -1,5 +1,5 @@
-import { Move } from "../alg";
-import { puzzles } from "../puzzles";
+import { Move } from "../../alg";
+import { puzzles } from "../../puzzles";
 import { KPuzzle } from "./kpuzzle";
 
 describe("applyBlockMove()", () => {

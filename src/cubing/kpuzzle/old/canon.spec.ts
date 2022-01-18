@@ -1,7 +1,7 @@
-import { getPuzzleGeometryByName } from "../puzzle-geometry";
-import { oldAreStatesEquivalent, oldCombineTransformations } from ".";
+import { getPuzzleGeometryByName } from "../../puzzle-geometry";
+import { oldAreStatesEquivalent, oldCombineTransformations } from "../";
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
-import { Alg } from "../alg";
+import { Alg } from "../../alg";
 
 describe("CanonSequences", () => {
   it("should merge sequences (megaminx test)", () => {
