@@ -1,13 +1,13 @@
 // TODO: Use a list instead of an object for performance?
-export type KTransformationData = Record<string, KOrbitTransformationData>;
-export interface KOrbitTransformationData {
+export type KTransformationData = Record<string, KTransformationOrbitData>;
+export interface KTransformationOrbitData {
   permutation: number[];
   orientation: number[];
 }
 
 // TODO: Use a list instead of an object for performance?
-export type KStateData = Record<string, KOrbitStateData>;
-export interface KOrbitStateData {
+export type KStateData = Record<string, KStateOrbitData>;
+export interface KStateOrbitData {
   pieces: number[];
   orientation: number[];
 }

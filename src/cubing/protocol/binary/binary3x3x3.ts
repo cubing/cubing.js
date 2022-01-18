@@ -1,4 +1,5 @@
-import type { KState } from "../../kpuzzle/KState";
+import { experimental3x3x3KPuzzle } from "../../kpuzzle";
+import { KState } from "../../kpuzzle/KState";
 import {
   identityPermutation,
   lexToPermutation,
@@ -89,13 +90,22 @@ export function reid3x3x3ToBinaryComponents(
 ): Binary3x3x3Components {
   const normedState = normalizePuzzleOrientation(state);
 
-  const epLex = permutationToLex(normedState["EDGES"].permutation);
-  const eoMask = orientationsToMask(2, normedState["EDGES"].orientation);
-  const cpLex = permutationToLex(normedState["CORNERS"].permutation);
-  const coMask = orientationsToMask(3, normedState["CORNERS"].orientation);
+  const epLex = permutationToLex(normedState.stateData["EDGES"].pieces);
+  const eoMask = orientationsToMask(
+    2,
+    normedState.stateData["EDGES"].orientation,
+  );
+  const cpLex = permutationToLex(normedState.stateData["CORNERS"].pieces);
+  const coMask = orientationsToMask(
+    3,
+    normedState.stateData["CORNERS"].orientation,
+  );
   const [poIdxU, poIdxL] = puzzleOrientationIdx(state);
   const moSupport = 1; // Required for now.
-  const moMask = orientationsToMask(4, normedState["CENTERS"].orientation);
+  const moMask = orientationsToMask(
+    4,
+    normedState.stateData["CENTERS"].orientation,
+  );
 
   return {
     epLex,
@@ -152,25 +162,25 @@ export function twizzleBinaryToBinaryComponents(
 
 export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
-): OldTransformation {
+): KState {
   if (components.moSupport !== 1) {
     throw new Error("Must support center orientation.");
   }
 
-  const normedState = {
+  const normedState = new KState(experimental3x3x3KPuzzle, {
     EDGES: {
-      permutation: lexToPermutation(12, components.epLex),
+      pieces: lexToPermutation(12, components.epLex),
       orientation: maskToOrientations(2, 12, components.eoMask),
     },
     CORNERS: {
-      permutation: lexToPermutation(8, components.cpLex),
+      pieces: lexToPermutation(8, components.cpLex),
       orientation: maskToOrientations(3, 8, components.coMask),
     },
     CENTERS: {
-      permutation: identityPermutation(6),
+      pieces: identityPermutation(6),
       orientation: maskToOrientations(4, 6, components.moMask),
     },
-  };
+  });
 
   if (!supportsPuzzleOrientation(components)) {
     return normedState;
@@ -214,9 +224,7 @@ function validateComponents(components: Binary3x3x3Components): string[] {
   return errors;
 }
 
-export function twizzleBinaryToReid3x3x3(
-  buffy: ArrayBuffer,
-): OldTransformation {
+export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): KState {
   const components = twizzleBinaryToBinaryComponents(buffy);
   const errors = validateComponents(components);
   if (errors.length !== 0) {

@@ -1,11 +1,14 @@
 import { KPuzzle } from "./KPuzzle";
 export { KPuzzle };
 export type { KTransformation } from "./KTransformation";
-export { KPuzzleDefinition } from "./KPuzzleDefinition";
+export {
+  KPuzzleDefinition,
+  KTransformationData,
+  KStateData,
+} from "./KPuzzleDefinition";
 
 import { cube3x3x3KPuzzleDefinition } from "./3x3x3/3x3x3.kpuzzle.json";
-const experimental3x3x3KPuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);
-export { experimental3x3x3KPuzzle };
+export const experimental3x3x3KPuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);
 
 export type {
   OldKPuzzleDefinition as OldKPuzzleDefinition,
@@ -39,6 +42,6 @@ export { parseKPuzzleDefinition as oldParseKPuzzleDefinition } from "./old/parse
 
 export { KPuzzleSVGWrapper as OldKPuzzleSVGWrapper } from "./old/svg";
 
-export { experimentalIs3x3x3Solved as oldExperimentalIs3x3x3Solved } from "./old/puzzle-orientation";
+export { experimentalIs3x3x3Solved as oldExperimentalIs3x3x3Solved } from "./3x3x3/puzzle-orientation";
 
 export { transformationForQuantumMove as oldExperimentalTransformationForQuantumMove } from "./old/kpuzzle";

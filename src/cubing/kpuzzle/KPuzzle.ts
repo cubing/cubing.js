@@ -54,4 +54,27 @@ export class KPuzzle {
   startState(): KState {
     return new KState(this, this.definition.startStateData);
   }
+
+  #cachedCanConvertStateToUniqueTransformation: boolean | undefined;
+  // TODO: Handle incomplete start state data
+  canConvertStateToUniqueTransformation(): boolean {
+    return (this.#cachedCanConvertStateToUniqueTransformation ??=
+      ((): boolean => {
+        for (const [orbitName, orbitDefinition] of Object.entries(
+          this.definition.orbits,
+        )) {
+          const pieces = new Array(orbitDefinition.numPieces).fill(false);
+          for (const piece of this.definition.startStateData[orbitName]
+            .pieces) {
+            pieces[piece] = true;
+          }
+          for (const piece of pieces) {
+            if (!piece) {
+              return false;
+            }
+          }
+        }
+        return true;
+      })());
+  }
 }

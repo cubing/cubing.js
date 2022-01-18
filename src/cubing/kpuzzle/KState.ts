@@ -1,4 +1,5 @@
-import type { KPuzzle, KTransformation } from ".";
+import type { KPuzzle, KTransformationData } from ".";
+import { KTransformation } from "./KTransformation";
 import type { Alg, Move } from "../alg";
 import { applyTransformationDataToStateData } from "./combine";
 import type { KStateData } from "./KPuzzleDefinition";
@@ -33,5 +34,18 @@ export class KState {
 
   applyAlg(alg: Alg | string): KState {
     return this.applyTransformation(this.kpuzzle.algToTransformation(alg));
+  }
+
+  // @deprecated
+  experimentalToTransformation(): KTransformation | null {
+    if (!this.kpuzzle.canConvertStateToUniqueTransformation()) {
+      return null;
+    }
+    const transformationData: KTransformationData = {};
+    for (const [orbitName, stateOrbitData] of Object.entries(this.stateData)) {
+      transformationData[orbitName].permutation = stateOrbitData.pieces;
+      transformationData[orbitName].orientation = stateOrbitData.orientation;
+    }
+    return new KTransformation(this.kpuzzle, transformationData);
   }
 }

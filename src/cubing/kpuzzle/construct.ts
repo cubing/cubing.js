@@ -2,17 +2,17 @@ import type { Move } from "../alg";
 import { selfMultiplyTransformationUncached } from "./calculate";
 import type { KPuzzle } from "./KPuzzle";
 import type {
-  KOrbitTransformationData,
+  KTransformationOrbitData,
   KPuzzleDefinition,
   KTransformationData,
 } from "./KPuzzleDefinition";
 
 const FREEZE: boolean = false;
 
-const identityOrbitCache = new Map<number, KOrbitTransformationData>();
+const identityOrbitCache = new Map<number, KTransformationOrbitData>();
 function constructIdentityOrbitTransformation(
   numPieces: number,
-): KOrbitTransformationData {
+): KTransformationOrbitData {
   const cached = identityOrbitCache.get(numPieces);
   if (cached) {
     return cached;

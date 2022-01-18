@@ -1,6 +1,5 @@
 import { experimentalIs, Move } from "../../alg";
-import { OldKPuzzle } from "../../kpuzzle";
-import { oldExperimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../kpuzzle";
 
 export interface PuzzleStreamMoveEventDetail {
   move: Move;
@@ -40,12 +39,12 @@ const rotationMap: Record<string, [Move, string]> = {
 };
 
 class OrientationTracker {
-  kpuzzle = new OldKPuzzle(cube3x3x3KPuzzle); // TODO: can we do centers only (less data) with little code?
+  state = experimental3x3x3KPuzzle.startState();
 
   processMove(move: Move): Move[] {
     // TODO: validation
     if ("xyz".includes(move.family)) {
-      this.kpuzzle.applyMove(move);
+      this.state = this.state.applyMove(move);
       return [move];
     } else if (move.family.slice(-1) === "w") {
       const [rotation, family] = rotationMap[move.family.slice(-1)];
@@ -60,7 +59,7 @@ class OrientationTracker {
     } else {
       const faceIdx = faces.indexOf(move.family);
       const family =
-        faces[this.kpuzzle.state["CENTERS"].permutation.indexOf(faceIdx)];
+        faces[this.state.stateData["CENTERS"].pieces.indexOf(faceIdx)];
       return [move.modified({ family })];
     }
   }

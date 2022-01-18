@@ -1,3 +1,4 @@
+import type { KPuzzleDefinition } from ".";
 import {
   Alg,
   Commutator,
@@ -13,14 +14,14 @@ import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
 import type {
   KOrbitDefinition,
-  KOrbitTransformationData,
+  KTransformationOrbitData,
   KTransformationData,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
 
 export function isOrbitTransformationDataIdentityUncached(
   numOrientations: number,
-  orbitTransformationData: KOrbitTransformationData,
+  orbitTransformationData: KTransformationOrbitData,
 ): boolean {
   // TODO
   // if (o === lasto) {
@@ -47,8 +48,8 @@ export function isOrbitTransformationDataIdentityUncached(
 
 export function isOrbitTransformationDataIdentical(
   orbitDefinition: KOrbitDefinition,
-  orbitTransformationData1: KOrbitTransformationData,
-  orbitTransformationData2: KOrbitTransformationData,
+  orbitTransformationData1: KTransformationOrbitData,
+  orbitTransformationData2: KTransformationOrbitData,
   options: {
     ignoreOrientation?: boolean;
     ignorePermutation?: boolean;
@@ -245,3 +246,20 @@ const algToTransformationInstance = new AlgToTransformationTraversal();
 export const algToTransformation = algToTransformationInstance.traverseAlg.bind(
   algToTransformationInstance,
 ) as (alg: Alg, kpuzzle: KPuzzle) => KTransformation;
+
+export function canConvertStateToUniqueTransformationUncached(
+  definition: KPuzzleDefinition,
+): boolean {
+  for (const [orbitName, orbitDefinition] of Object.entries(definition)) {
+    const pieces = new Array(orbitDefinition.numPieces).fill(false);
+    for (const piece of this.definition.startStateData[orbitName].pieces) {
+      pieces[piece] = true;
+    }
+    for (const piece of pieces) {
+      if (!piece) {
+        return false;
+      }
+    }
+  }
+  return true;
+}

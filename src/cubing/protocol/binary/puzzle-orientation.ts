@@ -1,19 +1,11 @@
 import { Alg } from "../../alg";
-import {
-  oldCombineTransformations,
-  oldInvertTransformation,
-  OldKPuzzle,
-  OldTransformation,
-} from "../../kpuzzle";
-// TODO: Should we expose this directly in the `puzzles` package for sync uses?
-import { experimental3x3x3KPuzzle } from "../../kpuzzle";
+import { experimental3x3x3KPuzzle, KTransformation } from "../../kpuzzle";
+import type { KState } from "../../kpuzzle/KState";
 
-export function puzzleOrientationIdx(
-  state: OldTransformation,
-): [number, number] {
-  const idxU = state["CENTERS"].permutation[0];
-  const idxD = state["CENTERS"].permutation[5];
-  const unadjustedIdxL = state["CENTERS"].permutation[1];
+export function puzzleOrientationIdx(state: KState): [number, number] {
+  const idxU = state.stateData["CENTERS"].pieces[0];
+  const idxD = state.stateData["CENTERS"].pieces[5];
+  const unadjustedIdxL = state.stateData["CENTERS"].pieces[1];
   let idxL = unadjustedIdxL;
   if (idxU < unadjustedIdxL) {
     idxL--;
@@ -24,50 +16,39 @@ export function puzzleOrientationIdx(
   return [idxU, idxL];
 }
 
-const puzzleOrientationCache: OldTransformation[][] = new Array(6)
+const puzzleOrientationCache: KTransformation[][] = new Array(6)
   .fill(0)
   .map(() => {
-    return new Array<OldTransformation>(6);
+    return new Array<KTransformation>(6);
   });
 
 // We use a new block to avoid keeping a reference to temporary vars.
 {
-  const orientationKpuzzle = experimental3x3x3KPuzzle;
   const uAlgs: Alg[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
     Alg.fromString(s),
   );
   const yAlg = new Alg("y");
   for (const uAlg of uAlgs) {
-    orientationKpuzzle.reset();
-    orientationKpuzzle.applyAlg(uAlg);
+    let transformation = experimental3x3x3KPuzzle.algToTransformation(uAlg);
     for (let i = 0; i < 4; i++) {
-      orientationKpuzzle.applyAlg(yAlg);
-      const [idxU, idxL] = puzzleOrientationIdx(orientationKpuzzle.state);
-      puzzleOrientationCache[idxU][idxL] = oldInvertTransformation(
-        def,
-        orientationKpuzzle.state,
-      );
+      transformation = transformation.applyAlg(yAlg);
+      const [idxU, idxL] = puzzleOrientationIdx(transformation.toKState());
+      puzzleOrientationCache[idxU][idxL] = transformation.invert();
     }
   }
 }
 
-export function normalizePuzzleOrientation(
-  s: OldTransformation,
-): OldTransformation {
-  const [idxU, idxL] = puzzleOrientationIdx(s);
+export function normalizePuzzleOrientation(state: KState): KState {
+  const [idxU, idxL] = puzzleOrientationIdx(state);
   const orientationTransformation = puzzleOrientationCache[idxU][idxL];
-  return oldCombineTransformations(def, s, orientationTransformation);
+  return state.applyTransformation(orientationTransformation);
 }
 
 // TODO: combine with `orientPuzzle`?
 export function reorientPuzzle(
-  s: OldTransformation,
+  state: KState,
   idxU: number,
   idxL: number,
-): OldTransformation {
-  const orientationTransformation = oldInvertTransformation(
-    def,
-    puzzleOrientationCache[idxU][idxL],
-  );
-  return oldCombineTransformations(def, s, orientationTransformation);
+): KState {
+  return state.applyTransformation(puzzleOrientationCache[idxU][idxL].invert());
 }
