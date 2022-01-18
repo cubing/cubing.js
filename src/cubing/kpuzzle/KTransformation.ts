@@ -1,3 +1,4 @@
+import type { Alg, Move } from "../alg";
 import {
   invertTransformation,
   isTransformationDataIdentical,
@@ -21,7 +22,7 @@ export class KTransformation {
 
   // @deprecated
   #cachedIsIdentity: boolean | undefined; // TODO: is `null` worse here?
-  isIdentity(): boolean {
+  isIdentityTransformation(): boolean {
     return (this.#cachedIsIdentity ??= this.isIdentical(
       this.kpuzzle.identityTransformation(),
     ));
@@ -42,5 +43,13 @@ export class KTransformation {
       this.kpuzzle,
       combineTransformationData(this.kpuzzle.definition, this.data, t2.data),
     );
+  }
+
+  applyMove(move: Move | string): KTransformation {
+    return this.applyTransformation(this.kpuzzle.moveToTransformation(move));
+  }
+
+  applyAlg(alg: Alg | string): KTransformation {
+    return this.applyTransformation(this.kpuzzle.algToTransformation(alg));
   }
 }
