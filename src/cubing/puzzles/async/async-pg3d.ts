@@ -1,10 +1,11 @@
-import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
+import type { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   cubeAppearance,
   cubeStickerings,
 } from "../stickerings/cube-stickerings";
+import { lazyKPuzzle } from "./lazy-cached-kpuzzle";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
@@ -36,13 +37,10 @@ export function genericPGPuzzleLoader(
   },
 ): PuzzleLoader {
   const defPromise = asyncGetDef(id);
-  let cachedKPuzzle: Promise<KPuzzle> | null = null;
   const puzzleLoader: PuzzleLoader = {
     id: id,
     fullName: fullName,
-    kpuzzle: async () => {
-      return (cachedKPuzzle ??= (async () => new KPuzzle(await defPromise))());
-    },
+    kpuzzle: lazyKPuzzle(() => defPromise),
     svg: async () => {
       const pg = await asyncGetPuzzleGeometry(id);
       return pg.generatesvg();
