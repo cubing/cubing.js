@@ -4,7 +4,6 @@ import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TOD
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import { instantiateWorker } from "./instantiator";
 import type { WorkerInsideAPI } from "./inside/api";
-import type { OldTransformation } from "../kpuzzle";
 
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
 async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
@@ -76,30 +75,28 @@ export async function randomScrambleStringForEvent(
 }
 
 export async function experimentalSolve3x3x3IgnoringCenters(
-  s: OldTransformation,
+  s: KState,
 ): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solve333ToString(s));
 }
 
-export async function experimentalSolve2x2x2(
-  s: OldTransformation,
-): Promise<Alg> {
+export async function experimentalSolve2x2x2(s: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solve222ToString(s));
 }
 
-export async function solveSkewb(s: OldTransformation): Promise<Alg> {
+export async function solveSkewb(s: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solveSkewbToString(s));
 }
 
-export async function solvePyraminx(s: OldTransformation): Promise<Alg> {
+export async function solvePyraminx(s: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solvePyraminxToString(s));
 }
 
-export async function solveMegaminx(s: OldTransformation): Promise<Alg> {
+export async function solveMegaminx(s: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solveMegaminxToString(s));
 }

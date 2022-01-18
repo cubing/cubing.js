@@ -1,6 +1,7 @@
 import { Alg, AlgBuilder, Move, QuantumMove } from "../../../alg";
 import {
   KPuzzle,
+  KTransformation,
   oldAreStatesEquivalent,
   oldCombineTransformations,
   oldIdentityTransformation,
@@ -12,6 +13,7 @@ import {
 import { countMoves } from "../../../notation";
 import type { SGSAction, SGSCachedData } from "./parseSGS";
 import { randomChoiceFactory } from "../../../vendor/random-uint-below";
+import type { KState } from "../../../kpuzzle/KState";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
@@ -20,18 +22,17 @@ const DEBUG = false;
 
 // TODO: Take moves instead of move names?
 function calculateMoves(
-  def: OldKPuzzleDefinition,
+  kpuzzle: KPuzzle,
   moveNames: string[],
 ): {
   move: Move;
-  transformation: OldTransformation;
+  transformation: KTransformation;
 }[] {
   const searchMoves: {
     move: Move;
-    transformation: OldTransformation;
+    transformation: KTransformation;
   }[] = [];
   // const identity = identityTransformation(def); // TODO
-  const kpuzzle = new OldKPuzzle(def);
   // TODO: Make it easy to filter moves.
   moveNames.forEach(function (moveName) {
     const rootMove = new Move(moveName);
@@ -40,24 +41,16 @@ function calculateMoves(
         "SGS cannot handle def moves with an amount other than 1 yet.",
       );
     }
-    kpuzzle.reset();
+    let transformation = kpuzzle.identityTransformation();
     // eslint-disable-next-line no-constant-condition
     for (let i = 1; true; i++) {
-      kpuzzle.applyMove(rootMove);
-      // console.log(kpuzzle.state, identityTransformation(def));
-      if (
-        // TODO: Use cached identity.
-        oldAreStatesEquivalent(
-          def,
-          kpuzzle.state,
-          oldIdentityTransformation(def),
-        )
-      ) {
+      transformation = transformation.applyMove(rootMove);
+      if (transformation.isIdentityTransformation()) {
         break;
       }
       searchMoves.push({
         move: rootMove.modified({ amount: i }),
-        transformation: kpuzzle.state, // TODO: make this safe through the KPuzzle API
+        transformation,
       });
     }
   });
@@ -78,7 +71,7 @@ function calculateMoves(
 export class TrembleSolver {
   private searchMoves: {
     move: Move;
-    transformation: OldTransformation;
+    transformation: KTransformation;
   }[];
 
   constructor(
@@ -87,8 +80,8 @@ export class TrembleSolver {
     trembleMoveNames?: string[],
   ) {
     this.searchMoves = calculateMoves(
-      this.def,
-      trembleMoveNames ?? Object.keys(this.def.moves),
+      this.kpuzzle,
+      trembleMoveNames ?? Object.keys(this.kpuzzle.definition.moves),
     );
   }
 
@@ -97,20 +90,26 @@ export class TrembleSolver {
   // }
 
   public async solve(
-    state: OldTransformation,
+    state: KState,
     stage1DepthLimit: number = DEFAULT_STAGE1_DEPTH_LIMIT,
     quantumMoveOrder?: (quantumMove: QuantumMove) => number,
   ): Promise<Alg> {
+    const transformation = state.experimentalToTransformation();
+    if (!transformation) {
+      throw new Error(
+        "distinguishable pieces are not supported in tremble solver yt",
+      );
+    }
     let bestAlg: Alg | null = null;
     let bestLen = 1000000;
     const recur = (
-      recursiveState: OldTransformation,
+      recursiveTransformation: KTransformation,
       togo: number,
       sofar: Alg,
     ) => {
       // console.log("recur");
       if (togo === 0) {
-        const sgsAlg = this.sgsPhaseSolve(recursiveState, bestLen);
+        const sgsAlg = this.sgsPhaseSolve(recursiveTransformation, bestLen);
         if (!sgsAlg) {
           return;
         }
@@ -132,9 +131,7 @@ export class TrembleSolver {
       }
       for (const searchMove of this.searchMoves) {
         recur(
-          oldCombineTransformations(
-            this.def,
-            recursiveState,
+          recursiveTransformation.applyTransformation(
             searchMove.transformation,
           ),
           togo - 1,
@@ -143,7 +140,7 @@ export class TrembleSolver {
       }
     };
     for (let d = 0; d <= stage1DepthLimit; d++) {
-      recur(state, d, new Alg());
+      recur(transformation, d, new Alg());
     }
     if (bestAlg === null) {
       throw new Error("SGS search failed.");
@@ -152,7 +149,7 @@ export class TrembleSolver {
   }
 
   private sgsPhaseSolve(
-    initialState: OldTransformation,
+    initialTransformation: KTransformation,
     bestLenSofar: number,
   ): Alg | null {
     // const pieceNames = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
@@ -164,11 +161,11 @@ export class TrembleSolver {
 
     // console.log("sgsPhaseSolve");
     const algBuilder = new AlgBuilder();
-    let state = initialState;
+    let transformation = initialTransformation;
     for (const step of this.sgs.ordering) {
       const cubieSeq = step.pieceOrdering;
       let key = "";
-      const inverseState = oldInvertTransformation(this.def, state);
+      const inverseState = transformation.invert();
       for (let i = 0; i < cubieSeq.length; i++) {
         const loc = cubieSeq[i];
         const orbitName = loc.orbitName;
@@ -184,15 +181,19 @@ export class TrembleSolver {
       if (algBuilder.experimentalNumUnits() >= bestLenSofar) {
         return null;
       }
-      state = oldCombineTransformations(this.def, state, info.transformation);
+      transformation = oldCombineTransformations(
+        this.def,
+        transformation,
+        info.transformation,
+      );
       if (DOUBLECHECK_PLACED_PIECES) {
         for (let i = 0; i < cubieSeq.length; i++) {
           const location = cubieSeq[i];
           const orbitName = location.orbitName;
           const idx = location.permutationIdx;
           if (
-            state[orbitName].permutation[idx] !== idx ||
-            state[orbitName].orientation[idx] !== 0
+            transformation[orbitName].permutation[idx] !== idx ||
+            transformation[orbitName].orientation[idx] !== 0
           ) {
             throw new Error("bad SGS :-(");
           }

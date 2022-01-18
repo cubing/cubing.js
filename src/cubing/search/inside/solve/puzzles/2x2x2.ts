@@ -12,6 +12,7 @@ import {
 } from "../../../../vendor/random-uint-below";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
+import type { KState } from "../../../../kpuzzle/KState";
 
 // Empirical ly determined depth:
 // - ≈11 moves on average (as opposed to >13 moves for depth 2),
@@ -27,7 +28,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
         await import("./2x2x2.sgs.json")
       ).cachedData222();
       return new TrembleSolver(
-        await puzzles["2x2x2"].def(),
+        await puzzles["2x2x2"].kpuzzle(),
         json,
         "URFLBD".split(""),
       );
@@ -40,7 +41,7 @@ export async function preInitialize222(): Promise<void> {
 }
 
 // TODO: fix def consistency.
-export async function solve222(state: OldTransformation): Promise<Alg> {
+export async function solve222(state: KState): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(state, TREMBLE_DEPTH, () => 4); // TODO: Attach quantum move order lookup to puzzle.

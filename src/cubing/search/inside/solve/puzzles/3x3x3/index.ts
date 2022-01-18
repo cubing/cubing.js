@@ -1,25 +1,25 @@
 import { Alg, AlgBuilder } from "../../../../../alg";
+import type { KState } from "../../../../../kpuzzle/KState";
 import { puzzles } from "../../../../../puzzles";
+import { randomChoiceFactory } from "../../../../../vendor/random-uint-below";
 import { mustBeInsideWorker } from "../../../inside-worker";
 import { addOrientationSuffix } from "../../addOrientationSuffix";
-import { randomChoiceFactory } from "../../../../../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
 import { sgs3x3x3 } from "./legacy-sgs";
-import type { KTransformation } from "../../../../../kpuzzle";
 
-export async function random333State(): Promise<KTransformation> {
+export async function random333State(): Promise<KState> {
   const kpuzzle = await puzzles["3x3x3"].kpuzzle();
-  let transformation = kpuzzle.identityTransformation();
+  let state = kpuzzle.startState();
   for (const piece of sgs3x3x3) {
-    transformation = transformation.applyAlg(
+    state = state.applyAlg(
       Alg.fromString(((await randomChoiceFactory()) as any)(piece)),
     );
   }
-  if (!passesFilter(kpuzzle, transformation)) {
+  if (!passesFilter(kpuzzle, state)) {
     return random333State();
   }
-  return transformation;
+  return state;
 }
 
 let cachedImport: Promise<
@@ -31,7 +31,7 @@ function dynamicMin2phaseGWT(): Promise<
   return (cachedImport ??= import("../../../../../vendor/min2phase/gwt"));
 }
 
-export async function solve333(s: KTransformation): Promise<Alg> {
+export async function solve333(s: KState): Promise<Alg> {
   mustBeInsideWorker();
   return Alg.fromString(
     (await dynamicMin2phaseGWT()).solveState(toMin2PhaseState(s)),
