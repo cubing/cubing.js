@@ -1,34 +1,32 @@
-import { Alg } from "../../../../cubing/alg";
-import { OldKPuzzle, OldKPuzzleSVGWrapper } from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle";
 import { puzzles } from "../../../../cubing/puzzles";
 import "../../../../cubing/twisty";
+import { KPuzzleSVGWrapper } from "../../../../cubing/twisty/views/2D/KPuzzleSVGWrapper";
 
 window.addEventListener("DOMContentLoaded", async () => {
-  const def = await puzzles["3x3x3"].def();
+  const kpuzzle = experimental3x3x3KPuzzle;
   const llSVG = await puzzles["3x3x3"].llSVG!(); // TODO: Avoid the need for an assertion?
-  const kpuzzle = new OldKPuzzle(def);
 
   {
-    const svg = new OldKPuzzleSVGWrapper(def, llSVG);
-    kpuzzle.reset();
-    kpuzzle.applyAlg(Alg.fromString("R U R' U' R' F R2 U' R' U' R U R' F'"));
-    svg.draw(def, kpuzzle.state);
+    const svg = new KPuzzleSVGWrapper(kpuzzle, llSVG);
+    const state = kpuzzle
+      .algToTransformation("R U R' U' R' F R2 U' R' U' R U R' F'")
+      .toKState();
+    svg.draw(state);
     document.body.appendChild(svg.element);
   }
 
   {
-    const svg = new OldKPuzzleSVGWrapper(def, llSVG);
-    kpuzzle.reset();
-    kpuzzle.applyAlg(Alg.fromString("((M' U')4 x y)3"));
-    svg.draw(def, kpuzzle.state);
+    const svg = new KPuzzleSVGWrapper(kpuzzle, llSVG);
+    const state = kpuzzle.algToTransformation("((M' U')4 x y)3").toKState();
+    svg.draw(state);
     document.body.appendChild(svg.element);
   }
 
   {
-    const svg = new OldKPuzzleSVGWrapper(def, llSVG);
-    kpuzzle.reset();
-    kpuzzle.applyAlg(Alg.fromString("r U R' U R U2 r'"));
-    svg.draw(def, kpuzzle.state);
+    const svg = new KPuzzleSVGWrapper(kpuzzle, llSVG);
+    const state = kpuzzle.algToTransformation("r U R' U R U2 r'").toKState();
+    svg.draw(state);
     document.body.appendChild(svg.element);
   }
 });

@@ -66,4 +66,8 @@ export class KTransformation {
   toKState(): KState {
     return KState.fromTransformation(this);
   }
+
+  repetitionOrder(): number {
+    return 1; // kpuzzle todo
+  }
 }

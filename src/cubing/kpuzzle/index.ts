@@ -40,8 +40,6 @@ export {
 
 export { parseKPuzzleDefinition as oldParseKPuzzleDefinition } from "./old/parser";
 
-export { KPuzzleSVGWrapper as OldKPuzzleSVGWrapper } from "./old/svg";
-
 export { experimentalIs3x3x3Solved as oldExperimentalIs3x3x3Solved } from "./3x3x3/puzzle-orientation";
 
 export { transformationForQuantumMove as oldExperimentalTransformationForQuantumMove } from "./old/kpuzzle";

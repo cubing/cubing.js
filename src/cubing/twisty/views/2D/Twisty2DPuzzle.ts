@@ -1,9 +1,3 @@
-import {
-  oldCombineTransformations,
-  OldKPuzzleDefinition,
-  OldKPuzzleSVGWrapper,
-  oldTransformationForMove,
-} from "../../../kpuzzle";
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
 import type { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
 import {
@@ -18,6 +12,8 @@ import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
 import type { ExperimentalStickering, PuzzleID } from "../..";
+import type { KPuzzle } from "../../../kpuzzle";
+import { KPuzzleSVGWrapper } from "./KPuzzleSVGWrapper";
 
 export interface Twisty2DPuzzleOptions {
   experimentalStickering?: ExperimentalStickering;
@@ -28,13 +24,12 @@ export class Twisty2DPuzzle
   extends ManagedCustomElement
   implements PositionListener
 {
-  private definition: OldKPuzzleDefinition;
-  public svg: OldKPuzzleSVGWrapper;
+  public svg: KPuzzleSVGWrapper;
   private scheduler = new RenderScheduler(this.render.bind(this));
   #cachedPosition: PuzzlePosition | null = null; // TODO: pull when needed.
   constructor(
     private model?: TwistyPlayerModel,
-    def?: OldKPuzzleDefinition,
+    private kpuzzle?: KPuzzle,
     private svgSource?: string,
     private options?: Twisty2DPuzzleOptions,
     private puzzleLoader?: PuzzleLoader,
@@ -42,7 +37,6 @@ export class Twisty2DPuzzle
     super();
     this.addCSS(twisty2DSVGCSS);
 
-    this.definition = def!;
     this.resetSVG(); // TODO: do this in `connectedCallback()`?
 
     this.#freshListenerManager.addListener(
@@ -74,25 +68,19 @@ export class Twisty2DPuzzle
       if (position.movesInProgress.length > 0) {
         const move = position.movesInProgress[0].move;
 
-        const def = this.definition;
         let partialMove = move;
         if (position.movesInProgress[0].direction === Direction.Backwards) {
           partialMove = move.invert();
         }
-        const newState = oldCombineTransformations(
-          def,
-          position.state,
-          oldTransformationForMove(def, partialMove),
-        );
+        const newState = position.state.applyMove(partialMove);
         // TODO: move to render()
         this.svg.draw(
-          this.definition,
           position.state,
           newState,
           position.movesInProgress[0].fraction,
         );
       } else {
-        this.svg.draw(this.definition, position.state);
+        this.svg.draw(position.state);
         this.#cachedPosition = position;
       }
     } catch (e) {
@@ -124,14 +112,10 @@ export class Twisty2DPuzzle
     if (this.svg) {
       this.removeElement(this.svg.element);
     }
-    if (!this.definition) {
+    if (!this.kpuzzle) {
       return; // TODO
     }
-    this.svg = new OldKPuzzleSVGWrapper(
-      this.definition,
-      this.svgSource!,
-      appearance,
-    ); // TODO
+    this.svg = new KPuzzleSVGWrapper(this.kpuzzle, this.svgSource!, appearance); // TODO
     this.addElement(this.svg.element);
     if (this.#cachedPosition) {
       this.onPositionChange(this.#cachedPosition);

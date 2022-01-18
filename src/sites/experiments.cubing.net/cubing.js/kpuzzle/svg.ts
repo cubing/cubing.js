@@ -1,17 +1,12 @@
 import { Alg } from "../../../../cubing/alg";
-import {
-  OldKPuzzle,
-  OldKPuzzleDefinition,
-  OldKPuzzleSVGWrapper,
-} from "../../../../cubing/kpuzzle";
+import type { KPuzzle } from "../../../../cubing/kpuzzle";
 import { puzzles } from "../../../../cubing/puzzles";
+import { ExperimentalKPuzzleSVGWrapper } from "../../../../cubing/twisty";
 
 class SVGDisplay {
-  private svg: OldKPuzzleSVGWrapper;
-  private kpuzzle: OldKPuzzle;
-  constructor(private def: OldKPuzzleDefinition, svg: string) {
-    this.svg = new OldKPuzzleSVGWrapper(def, svg);
-    this.kpuzzle = new OldKPuzzle(this.def);
+  private svg: ExperimentalKPuzzleSVGWrapper;
+  constructor(private kpuzzle: KPuzzle, svg: string) {
+    this.svg = new ExperimentalKPuzzleSVGWrapper(kpuzzle, svg);
   }
 
   public element(): HTMLElement {
@@ -19,15 +14,13 @@ class SVGDisplay {
   }
 
   public setAlg(alg: Alg): void {
-    this.kpuzzle.reset();
-    this.kpuzzle.applyAlg(alg);
-    this.svg.drawKPuzzle(this.kpuzzle);
+    this.svg.draw(this.kpuzzle.algToTransformation(alg).toKState());
   }
 }
 
 (async () => {
   const puzzle = puzzles["3x3x3"];
-  const svgDisplay = new SVGDisplay(await puzzle.def(), await puzzle.svg());
+  const svgDisplay = new SVGDisplay(await puzzle.kpuzzle(), await puzzle.svg());
   document.body.appendChild(svgDisplay.element());
   svgDisplay.setAlg(Alg.fromString("R U R'"));
 })();

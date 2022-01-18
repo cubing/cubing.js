@@ -1,8 +1,8 @@
 import type { KPuzzle, KTransformationData } from ".";
-import { KTransformation } from "./KTransformation";
 import type { Alg, Move } from "../alg";
 import { applyTransformationDataToStateData } from "./combine";
-import type { KStateData } from "./KPuzzleDefinition";
+import type { KStateData, KTransformationOrbitData } from "./KPuzzleDefinition";
+import { KTransformation } from "./KTransformation";
 
 export class KState {
   constructor(
@@ -43,8 +43,11 @@ export class KState {
     }
     const transformationData: KTransformationData = {};
     for (const [orbitName, stateOrbitData] of Object.entries(this.stateData)) {
-      transformationData[orbitName].permutation = stateOrbitData.pieces;
-      transformationData[orbitName].orientation = stateOrbitData.orientation;
+      const transformationOrbit: KTransformationOrbitData = {
+        permutation: stateOrbitData.pieces,
+        orientation: stateOrbitData.orientation,
+      };
+      transformationData[orbitName] = transformationOrbit;
     }
     return new KTransformation(this.kpuzzle, transformationData);
   }

@@ -1,12 +1,5 @@
 import { Alg } from "../../../../cubing/alg";
-import {
-  experimental3x3x3KPuzzle,
-  OldKPuzzle,
-  OldKPuzzleDefinition,
-  OldKPuzzleSVGWrapper,
-  OldTransformation,
-  oldTransformationOrder,
-} from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle";
 import type { KState } from "../../../../cubing/kpuzzle/KState";
 import {
   binaryComponentsToReid3x3x3,
@@ -15,6 +8,7 @@ import {
   twizzleBinaryToReid3x3x3,
 } from "../../../../cubing/protocol/binary/binary3x3x3";
 import svgSource from "../../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.svg";
+import { ExperimentalKPuzzleSVGWrapper } from "../../../../cubing/twisty";
 import {
   kpuzzleToReidString,
   kpuzzleToStickers,
@@ -38,7 +32,7 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
 
 class App {
   state = experimental3x3x3KPuzzle.startState();
-  svg = new OldKPuzzleSVGWrapper(def, svgSource);
+  svg = new ExperimentalKPuzzleSVGWrapper(experimental3x3x3KPuzzle, svgSource);
   algTextarea = document.querySelector("#alg") as HTMLTextAreaElement;
   kpuzzleTextarea = document.querySelector("#kpuzzle") as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
@@ -119,7 +113,7 @@ class App {
 
   setState(state: KState): void {
     this.state = state;
-    this.svg.draw(def, state);
+    this.svg.draw(state);
     this.kpuzzleTextarea.value = stateToString(state);
     this.reidStringTextarea.value = kpuzzleToReidString(state);
     this.stickersTextarea.value = JSON.stringify(kpuzzleToStickers(state));
@@ -131,7 +125,10 @@ class App {
     this.binaryTextarea.value = bufferToSpacedHex(
       reid3x3x3ToTwizzleBinary(state),
     );
-    this.orderElem.textContent = oldTransformationOrder(def, state).toString();
+    this.orderElem.textContent = state
+      .experimentalToTransformation()!
+      .repetitionOrder()
+      .toString();
   }
 }
 
