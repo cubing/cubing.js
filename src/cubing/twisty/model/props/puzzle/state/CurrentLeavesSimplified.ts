@@ -19,7 +19,6 @@ export class CurrentLeavesSimplifiedProp extends TwistyPropDerived<
   CurrentLeavesSimplified
 > {
   derive(inputs: CurrentLeavesSimplifiedPropInputs): CurrentLeavesSimplified {
-    console.log(inputs);
     return {
       stateIndex: inputs.currentMoveInfo.stateIndex,
       movesFinishing: inputs.currentMoveInfo.movesFinishing.map(

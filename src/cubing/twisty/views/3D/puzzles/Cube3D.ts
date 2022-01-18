@@ -716,10 +716,10 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     for (const orbit in pieceDefs) {
       const pieces = pieceDefs[orbit];
       for (let i = 0; i < pieces.length; i++) {
-        const j = reid333[orbit].permutation[i];
+        const j = reid333.stateData[orbit].pieces[i];
         this.pieces[orbit][j].matrix.copy(pieceDefs[orbit][i].matrix);
         this.pieces[orbit][j].matrix.multiply(
-          orientationRotation[orbit][reid333[orbit].orientation[i]],
+          orientationRotation[orbit][reid333.stateData[orbit].orientation[i]],
         );
       }
       for (const moveProgress of p.movesInProgress) {
@@ -739,7 +739,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
             i !== k ||
             this.def.moves[move.family][orbit].orientation[i] !== 0
           ) {
-            const j = reid333[orbit].permutation[i];
+            const j = reid333.stateData[orbit].pieces[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);
           }
         }

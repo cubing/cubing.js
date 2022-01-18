@@ -19,7 +19,6 @@ export class CurrentStateProp extends TwistyPropDerived<
     let transformation: KTransformation = inputs.indexer.transformationAtIndex(
       inputs.currentLeavesSimplified.stateIndex,
     );
-    console.log("t", inputs.anchoredStart, transformation);
     transformation = inputs.anchoredStart.applyTransformation(transformation);
 
     // TODO: handle non-commutative finished/finishing/current moves.
