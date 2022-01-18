@@ -20,12 +20,12 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const json: SGSCachedData = await (
+      const sgsCachedData: SGSCachedData = await (
         await import("./2x2x2.sgs.json")
       ).cachedData222();
       return new TrembleSolver(
         await puzzles["2x2x2"].kpuzzle(),
-        json,
+        sgsCachedData,
         "URFLBD".split(""),
       );
     })())

@@ -114,26 +114,32 @@ export class App {
     switch (puzzleID) {
       case "2x2x2": {
         solution = await experimentalSolve2x2x2(
-          kpuzzle.algToTransformation(currentAlg),
+          kpuzzle.algToTransformation(currentAlg).toKState(),
         );
         break;
       }
       case "3x3x3": {
         solution = await experimentalSolve3x3x3IgnoringCenters(
-          kpuzzle.algToTransformation(currentAlg),
+          kpuzzle.algToTransformation(currentAlg).toKState(),
         );
         break;
       }
       case "skewb": {
-        solution = await solveSkewb(kpuzzle.algToTransformation(currentAlg));
+        solution = await solveSkewb(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "pyraminx": {
-        solution = await solvePyraminx(kpuzzle.algToTransformation(currentAlg));
+        solution = await solvePyraminx(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "megaminx": {
-        solution = await solveMegaminx(kpuzzle.algToTransformation(currentAlg));
+        solution = await solveMegaminx(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       default:
