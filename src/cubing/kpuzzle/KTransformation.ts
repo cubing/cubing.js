@@ -3,6 +3,7 @@ import {
   invertTransformation,
   isTransformationDataIdentical,
   repeatTransformationUncached,
+  transformationRepetitionOrder,
 } from "./calculate";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
@@ -45,6 +46,13 @@ export class KTransformation {
       );
     }
 
+    if (this.isIdentityTransformation()) {
+      return new KTransformation(this.kpuzzle, t2.transformationData);
+    }
+    if (t2.isIdentityTransformation()) {
+      return new KTransformation(this.kpuzzle, this.transformationData);
+    }
+
     return new KTransformation(
       this.kpuzzle,
       combineTransformationData(
@@ -69,7 +77,7 @@ export class KTransformation {
   }
 
   repetitionOrder(): number {
-    return 1; // kpuzzle todo
+    return transformationRepetitionOrder(this.kpuzzle.definition, this);
   }
 
   selfMultiply(amount: number): KTransformation {
