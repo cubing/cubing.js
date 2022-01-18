@@ -3,7 +3,7 @@ import type {
   PuzzleAppearance,
 } from "../../puzzles/stickerings/appearance"; // TODO
 import type { OldKPuzzleDefinition, Transformation } from "./definition_types";
-import type { KPuzzle } from "./kpuzzle";
+import type { OldKPuzzle } from "./kpuzzle";
 
 const xmlns = "http://www.w3.org/2000/svg";
 
@@ -144,7 +144,7 @@ export class KPuzzleSVGWrapper {
   }
 
   public drawKPuzzle(
-    kpuzzle: KPuzzle,
+    kpuzzle: OldKPuzzle,
     nextState?: Transformation,
     fraction?: number,
   ): void {

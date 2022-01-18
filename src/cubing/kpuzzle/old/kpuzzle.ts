@@ -79,7 +79,7 @@ class KPuzzleMoveNotation implements MoveNotation {
   }
 }
 
-export class KPuzzle {
+export class OldKPuzzle {
   public state: Transformation;
   constructor(public definition: OldKPuzzleDefinition) {
     this.state = identityTransformation(definition);

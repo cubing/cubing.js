@@ -1,5 +1,4 @@
 import { Alg, AlgBuilder } from "../../../../../alg";
-import { OldKPuzzle, OldTransformation } from "../../../../../kpuzzle";
 import { puzzles } from "../../../../../puzzles";
 import { mustBeInsideWorker } from "../../../inside-worker";
 import { addOrientationSuffix } from "../../addOrientationSuffix";
@@ -7,10 +6,11 @@ import { randomChoiceFactory } from "../../../../../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
 import { sgs3x3x3 } from "./legacy-sgs";
+import type { KTransformation } from "../../../../../kpuzzle";
 
-export async function random333State(): Promise<OldTransformation> {
+export async function random333State(): Promise<KTransformation> {
   const def = await puzzles["3x3x3"].def();
-  const kpuzzle = new OldKPuzzle(def);
+  const transformation = 
   for (const piece of sgs3x3x3) {
     kpuzzle.applyAlg(
       Alg.fromString(((await randomChoiceFactory()) as any)(piece)),

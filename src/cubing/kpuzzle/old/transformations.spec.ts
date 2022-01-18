@@ -2,7 +2,7 @@ import type { OldKPuzzleDefinition } from "../";
 import { Alg } from "../../alg";
 import { puzzles } from "../../puzzles";
 import type { Transformation } from "./definition_types";
-import { KPuzzle } from "./kpuzzle";
+import { OldKPuzzle } from "./kpuzzle";
 import {
   areOrbitTransformationsEquivalent,
   areTransformationsEquivalent,
@@ -28,9 +28,9 @@ function isEquivalentTranformationIgnoringOrientationForCENTERS(
 describe("tranformations", () => {
   it("correctly compares orbits", async () => {
     const def = await puzzles["3x3x3"].def();
-    const kpuzzle1 = new KPuzzle(def);
+    const kpuzzle1 = new OldKPuzzle(def);
     kpuzzle1.applyAlg(Alg.fromString(""));
-    const kpuzzle2 = new KPuzzle(def);
+    const kpuzzle2 = new OldKPuzzle(def);
     kpuzzle2.applyAlg(Alg.fromString("(R' U' R U')5"));
 
     expect(
@@ -55,9 +55,9 @@ describe("tranformations", () => {
 
   it("correctly compares transformations", async () => {
     const def = await puzzles["3x3x3"].def();
-    const kpuzzle1 = new KPuzzle(def);
+    const kpuzzle1 = new OldKPuzzle(def);
     kpuzzle1.applyAlg(Alg.fromString(""));
-    const kpuzzle2 = new KPuzzle(def);
+    const kpuzzle2 = new OldKPuzzle(def);
     kpuzzle2.applyAlg(Alg.fromString("(R' U' R U')5"));
 
     expect(

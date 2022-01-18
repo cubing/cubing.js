@@ -2,6 +2,8 @@ export { KPuzzle } from "./KPuzzle";
 export type { KTransformation } from "./KTransformation";
 export { KPuzzleDefinition } from "./KPuzzleDefinition";
 
+export { cube3x3x3KPuzzleDefinition as experimental3x3x3KPuzzleDefinition } from "./3x3x3/3x3x3.kpuzzle.json";
+
 // export type {
 //   OldKPuzzleDefinition as OldKPuzzleDefinition,
 //   OldOrbitTransformation as OldOrbitTransformation,

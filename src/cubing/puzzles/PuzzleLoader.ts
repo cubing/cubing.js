@@ -1,3 +1,4 @@
+import type { KPuzzle } from "../kpuzzle";
 import type { KPuzzleDefinition } from "../kpuzzle/KPuzzleDefinition";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { ExperimentalStickering } from "../twisty";
@@ -10,6 +11,7 @@ export interface PuzzleLoader {
   inventedBy?: string[];
   inventionYear?: number; // TODO: date?
   def: () => Promise<KPuzzleDefinition>;
+  kpuzzle: () => Promise<KPuzzle>; // TODO
   svg: () => Promise<string>;
   llSVG?: () => Promise<string>;
   pg?: () => Promise<PuzzleGeometry>;
