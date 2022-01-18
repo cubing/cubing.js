@@ -1,5 +1,4 @@
 import type { KPuzzle } from "../kpuzzle";
-import type { KPuzzleDefinition } from "../kpuzzle/KPuzzleDefinition";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { ExperimentalStickering } from "../twisty";
 import type { PuzzleAppearance } from "./stickerings/appearance";

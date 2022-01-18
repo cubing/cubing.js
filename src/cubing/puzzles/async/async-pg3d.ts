@@ -25,7 +25,11 @@ export async function asyncGetPuzzleGeometry(
 export async function asyncGetDef(
   puzzleName: string,
 ): Promise<KPuzzleDefinition> {
-  return (await asyncGetPuzzleGeometry(puzzleName)).writekpuzzle(true);
+  const kpuzzleDefinition = (
+    await asyncGetPuzzleGeometry(puzzleName)
+  ).writekpuzzle(true);
+  kpuzzleDefinition.name = puzzleName;
+  return kpuzzleDefinition;
 }
 
 export function genericPGPuzzleLoader(

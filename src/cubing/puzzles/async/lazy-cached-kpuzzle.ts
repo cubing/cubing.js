@@ -1,12 +1,14 @@
 import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
-import { PLazy } from "../../vendor/p-lazy/p-lazy";
 
 export function lazyKPuzzle(
   getDef: () => Promise<KPuzzleDefinition>,
 ): () => Promise<KPuzzle> {
+  let cachedKPuzzlePromise: Promise<KPuzzle> | null = null;
   const getKPuzzle = async () => {
-    return new KPuzzle(await getDef());
+    const kpuzzle = new KPuzzle(await getDef());
+    return kpuzzle;
   };
-  const lazy = new PLazy<KPuzzle>(getKPuzzle) as Promise<KPuzzle>;
-  return () => lazy;
+  return (): Promise<KPuzzle> => {
+    return (cachedKPuzzlePromise ??= getKPuzzle());
+  };
 }

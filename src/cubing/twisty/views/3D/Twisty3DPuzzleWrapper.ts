@@ -161,6 +161,8 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
           this.model.foundationStickerSprite.get(),
           this.model.hintStickerSprite.get(),
         ]);
+        console.log("wrappy");
+        console.log("wrapper", await this.puzzleLoader.kpuzzle());
         const pg3d = (await proxyPromise).pg3dShim(
           this.puzzleLoader,
           hintFacelets === "auto" ? "floating" : hintFacelets,
