@@ -1,5 +1,6 @@
 import { Alg, AlgBuilder, Move, QuantumMove } from "../../../alg";
 import {
+  KPuzzle,
   oldAreStatesEquivalent,
   oldCombineTransformations,
   oldIdentityTransformation,
@@ -81,7 +82,7 @@ export class TrembleSolver {
   }[];
 
   constructor(
-    private def: OldKPuzzleDefinition,
+    private kpuzzle: KPuzzle,
     private sgs: SGSCachedData,
     trembleMoveNames?: string[],
   ) {
@@ -203,15 +204,15 @@ export class TrembleSolver {
 }
 
 export async function randomStateFromSGS(
-  def: OldKPuzzleDefinition,
+  kpuzzle: KPuzzle,
   sgs: SGSCachedData,
 ): Promise<OldTransformation> {
   const randomChoice = await randomChoiceFactory<SGSAction>(); // TODO: make this sync by putting the factory into a TLA
 
-  let state = oldIdentityTransformation(def);
+  let state = oldIdentityTransformation(kpuzzle);
   for (const step of sgs.ordering) {
     const sgsAction = randomChoice(Object.values(step.lookup));
-    state = oldCombineTransformations(def, state, sgsAction.transformation);
+    state = oldCombineTransformations(kpuzzle, state, sgsAction.transformation);
   }
   return state;
 }

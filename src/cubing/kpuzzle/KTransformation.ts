@@ -2,7 +2,7 @@ import type { Alg, Move } from "../alg";
 import {
   invertTransformation,
   isTransformationDataIdentical,
-  selfMultiplyTransformationUncached,
+  repeatTransformationUncached,
 } from "./calculate";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
@@ -75,7 +75,7 @@ export class KTransformation {
   selfMultiply(amount: number): KTransformation {
     return new KTransformation(
       this.kpuzzle,
-      selfMultiplyTransformationUncached(
+      repeatTransformationUncached(
         this.kpuzzle,
         this.transformationData,
         amount,

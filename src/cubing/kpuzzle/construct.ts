@@ -1,5 +1,5 @@
 import type { Move } from "../alg";
-import { selfMultiplyTransformationUncached } from "./calculate";
+import { repeatTransformationUncached } from "./calculate";
 import type { KPuzzle } from "./KPuzzle";
 import type {
   KTransformationOrbitData,
@@ -63,7 +63,7 @@ export function moveToTransformationUncached(
     | KTransformationData
     | undefined;
   if (quantumMoveDefinition) {
-    return selfMultiplyTransformationUncached(
+    return repeatTransformationUncached(
       kpuzzle,
       quantumMoveDefinition,
       move.amount,
@@ -82,11 +82,7 @@ export function moveToTransformationUncached(
   const inverseMoveDefinition =
     kpuzzle.definition.moves[move.invert().toString()];
   if (inverseMoveDefinition) {
-    return selfMultiplyTransformationUncached(
-      kpuzzle,
-      inverseMoveDefinition,
-      -1,
-    );
+    return repeatTransformationUncached(kpuzzle, inverseMoveDefinition, -1);
   }
 
   throw new Error(`Invalid move for KPuzzle (${kpuzzle.name()}): ${move}`);

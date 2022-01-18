@@ -10,7 +10,7 @@ export interface PuzzleLoader {
   fullName: string;
   inventedBy?: string[];
   inventionYear?: number; // TODO: date?
-  def: () => Promise<KPuzzleDefinition>;
+  def?: never;
   kpuzzle: () => Promise<KPuzzle>; // TODO
   svg: () => Promise<string>;
   llSVG?: () => Promise<string>;

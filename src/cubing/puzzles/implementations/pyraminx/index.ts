@@ -1,4 +1,5 @@
 import { asyncGetDef, asyncGetPuzzleGeometry } from "../../async/async-pg3d";
+import { lazyKPuzzle } from "../../async/lazy-cached-kpuzzle";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 
 export const pyraminx: PuzzleLoader = {
@@ -6,9 +7,7 @@ export const pyraminx: PuzzleLoader = {
   fullName: "Pyraminx",
   inventedBy: ["Uwe Meffert"],
   inventionYear: 1970, // https://en.wikipedia.org/wiki/Pyraminx#Description
-  def: async () => {
-    return asyncGetDef("pyraminx");
-  },
+  kpuzzle: lazyKPuzzle(async () => asyncGetDef("pyraminx")),
   svg: async () => {
     return (await import("./pyraminx.kpuzzle.svg")).default;
   },

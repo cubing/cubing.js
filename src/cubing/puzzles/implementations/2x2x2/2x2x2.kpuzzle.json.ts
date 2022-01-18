@@ -1,13 +1,13 @@
-import type { OldKPuzzleDefinition } from "../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../kpuzzle";
 
-export const cube2x2x2KPuzzle: OldKPuzzleDefinition = {
+export const cube2x2x2KPuzzle: KPuzzleDefinition = {
   name: "2x2x2",
   orbits: {
     CORNERS: { numPieces: 8, orientations: 3 },
   },
-  startPieces: {
+  startStateData: {
     CORNERS: {
-      permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+      pieces: [0, 1, 2, 3, 4, 5, 6, 7],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0],
     },
   },

@@ -141,7 +141,7 @@ export function invertTransformation(
   return newTransformationData;
 }
 
-export function selfMultiplyTransformationUncached(
+export function repeatTransformationUncached(
   kpuzzle: KPuzzle,
   transformationData: KTransformationData,
   amount: number,
@@ -151,7 +151,7 @@ export function selfMultiplyTransformationUncached(
     return transformationData;
   }
   if (amount < 0) {
-    return selfMultiplyTransformationUncached(
+    return repeatTransformationUncached(
       kpuzzle,
       invertTransformation(kpuzzle, transformationData),
       -amount,
@@ -164,7 +164,7 @@ export function selfMultiplyTransformationUncached(
   }
   let halfish = transformationData;
   if (amount !== 2) {
-    halfish = selfMultiplyTransformationUncached(
+    halfish = repeatTransformationUncached(
       kpuzzle,
       transformationData,
       Math.floor(amount / 2),
@@ -203,7 +203,7 @@ class AlgToTransformationTraversal extends TraversalDownUp<
     const algTransformation = this.traverseAlg(grouping.alg, kpuzzle);
     return new KTransformation(
       kpuzzle,
-      selfMultiplyTransformationUncached(
+      repeatTransformationUncached(
         kpuzzle,
         algTransformation.transformationData,
         grouping.amount,
@@ -262,4 +262,45 @@ export function canConvertStateToUniqueTransformationUncached(
     }
   }
   return true;
+}
+
+function gcd(a: number, b: number): number {
+  if (b) {
+    return gcd(b, a % b);
+  }
+  return a;
+}
+
+/* calculate the order of a particular transformation. */
+export function transformationRepetitionOrder(
+  def: KPuzzleDefinition,
+  t: KTransformation,
+): number {
+  let r: number = 1;
+  for (const orbitName in def.orbits) {
+    const oDef = def.orbits[orbitName];
+    const o = t.transformationData[orbitName];
+    const d = new Array(oDef.numPieces);
+    for (let idx = 0; idx < oDef.numPieces; idx++) {
+      if (!d[idx]) {
+        let w = idx;
+        let om = 0;
+        let pm = 0;
+        for (;;) {
+          d[w] = true;
+          om = om + o.orientation[w];
+          pm = pm + 1;
+          w = o.permutation[w];
+          if (w === idx) {
+            break;
+          }
+        }
+        if (om !== 0) {
+          pm = (pm * oDef.orientations) / gcd(oDef.orientations, om);
+        }
+        r = (r * pm) / gcd(r, pm);
+      }
+    }
+  }
+  return r;
 }

@@ -14,18 +14,11 @@ import {
   Vector3,
 } from "three";
 import { Move } from "../../../../alg";
-import {
-  oldAreTransformationsEquivalent,
-  OldKPuzzle,
-  OldKPuzzleDefinition,
-  OldTransformation,
-  oldTransformationOrder,
-} from "../../../../kpuzzle";
-import { oldExperimentalTransformationForQuantumMove } from "../../../../kpuzzle";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type {
   StickerDat,
-  StickerDatSticker,
   StickerDatAxis,
+  StickerDatSticker,
 } from "../../../../puzzle-geometry";
 import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry";
 import {
@@ -33,11 +26,10 @@ import {
   experimentalGetFaceletAppearance,
   ExperimentalPuzzleAppearance,
 } from "../../../../puzzles";
-import type { HintFaceletStyle } from "../../../model/props/puzzle/display/HintFaceletProp";
 import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
+import type { HintFaceletStyle } from "../../../model/props/puzzle/display/HintFaceletProp";
 import { TAU } from "../TAU";
-
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const foundationMaterial = new MeshBasicMaterial({
@@ -511,7 +503,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private foundationBound: number; // before this: colored; after: black
   private fixedGeo: BufferGeometry;
   private lastPos: PuzzlePosition;
-  private lastMove: OldTransformation;
+  private lastMoveTransformation: KTransformation;
   private hintMaterial: Material;
   private stickerMaterial: Material;
   private materialArray1: Material[];
@@ -526,7 +518,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   constructor(
     private scheduleRenderCallback: () => void,
-    private definition: OldKPuzzleDefinition,
+    private kpuzzle: KPuzzle,
     private stickerDat: StickerDat,
     enableFoundationOpt: boolean = false,
     enableHintStickersOpt: boolean = false,
@@ -701,13 +693,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return this.controlTargets;
   }
 
-  #cachedKPuzzle: OldKPuzzle | null;
-  get #kpuzzle() {
-    return (this.#cachedKPuzzle ??= new OldKPuzzle(this.definition));
-  }
   #isValidMove(move: Move): boolean {
     try {
-      this.#kpuzzle.applyMove(move);
+      this.kpuzzle.moveToTransformation(move);
       return true;
     } catch (_) {
       return false;
@@ -757,17 +745,17 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (transformations.invert) {
       closestMove = closestMove.invert();
     }
-    // TODO: cache order or make this lookup more efficient.
-    this.#kpuzzle.reset();
-    this.#kpuzzle.applyMove(closestMove);
-    const order = oldTransformationOrder(this.definition, this.#kpuzzle.state);
+    const order = this.kpuzzle
+      .moveToTransformation(closestMove)
+      .repetitionOrder();
     return { move: closestMove, order }; // TODO: push this down
   }
 
   experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
     this.params.appearance = appearance;
-    for (const orbitName in this.definition.orbits) {
-      const { numPieces, orientations } = this.definition.orbits[orbitName];
+    for (const orbitName in this.kpuzzle.definition.orbits) {
+      const { numPieces, orientations } =
+        this.kpuzzle.definition.orbits[orbitName];
       for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
         for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {
           const faceletAppearance = experimentalGetFaceletAppearance(
@@ -792,7 +780,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   }
 
   public onPositionChange(p: PuzzlePosition): void {
-    const state = p.state;
+    const transformation = p.state.experimentalToTransformation();
+    if (!transformation) {
+      throw new Error("indistinguishable pieces are not supported by PG3D yet");
+    }
     const noRotation = new Euler();
     this.movingObj.rotation.copy(noRotation);
     let colormods = 0;
@@ -801,15 +792,13 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (
       !this.lastPos ||
       this.#pendingStickeringUpdate ||
-      !oldAreTransformationsEquivalent(
-        this.definition,
-        this.lastPos.state,
-        state,
-      )
+      !this.lastPos.state
+        .experimentalToTransformation()!
+        .isIdentical(transformation)
     ) {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
-        const pos2 = state[orbit];
+        const pos2 = transformation.transformationData[orbit];
         const orin = pieces.length;
         if (orin === 1) {
           const pieces2 = pieces[0];
@@ -850,10 +839,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (move === null) {
         throw Error("Bad blockmove " + externalMove.family);
       }
-      const quantumTransformation = oldExperimentalTransformationForQuantumMove(
-        this.definition,
-        externalMove.quantum,
-      );
+      const quantumTransformation = this.kpuzzle.moveToTransformation(
+        move.modified({ amount: 1 }),
+      ); // TODO
+
       const ax = this.axesInfo[unswizzled];
       const turnNormal = ax.axis;
       const angle =
@@ -863,11 +852,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           TAU) /
         ax.order;
       this.movingObj.rotateOnAxis(turnNormal, angle);
-      if (this.lastMove !== quantumTransformation) {
+      if (this.lastMoveTransformation !== quantumTransformation) {
         for (const orbit in this.stickers) {
           const pieces = this.stickers[orbit];
           const orin = pieces.length;
-          const bmv = quantumTransformation[orbit];
+          const bmv = quantumTransformation.transformationData[orbit];
           for (let ori = 0; ori < orin; ori++) {
             const pieces2 = pieces[ori];
             for (let i = 0; i < pieces2.length; i++) {
@@ -905,7 +894,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
             }
           }
         }
-        this.lastMove = quantumTransformation;
+        this.lastMoveTransformation = quantumTransformation;
       }
     }
     if (vismods) {

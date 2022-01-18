@@ -1,5 +1,6 @@
 import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
+import { lazyKPuzzle } from "../../async/lazy-cached-kpuzzle";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 import type { PuzzleAppearance } from "../../stickerings/appearance";
 import {
@@ -10,9 +11,9 @@ import {
 export const cube2x2x2: PuzzleLoader = {
   id: "2x2x2",
   fullName: "2×2×2 Cube",
-  def: async () => {
-    return (await import("./2x2x2.kpuzzle.json")).cube2x2x2KPuzzle;
-  },
+  kpuzzle: lazyKPuzzle(
+    async () => (await import("./2x2x2.kpuzzle.json")).cube2x2x2KPuzzle,
+  ),
   svg: async () => {
     return (await import("./2x2x2.kpuzzle.svg")).default;
   },

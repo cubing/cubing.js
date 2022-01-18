@@ -7,7 +7,6 @@ export class KPuzzleProp extends TwistyPropDerived<
   KPuzzle
 > {
   async derive(inputs: { puzzleLoader: PuzzleLoader }): Promise<KPuzzle> {
-    console.log(inputs.puzzleLoader);
     return inputs.puzzleLoader.kpuzzle();
   }
 }

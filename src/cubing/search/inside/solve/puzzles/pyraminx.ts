@@ -16,7 +16,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
       const sgs = await import("./pyraminx.sgs.json");
       const json: SGSCachedData = await sgs.sgsDataPyraminx();
       return new TrembleSolver(
-        await puzzles.pyraminx.def(),
+        await puzzles.pyraminx.kpuzzle(),
         json,
         "RLUB".split(""),
       );
@@ -38,7 +38,7 @@ export async function solvePyraminx(state: OldTransformation): Promise<Alg> {
 export async function randomPyraminxStateFixedOrientation(): Promise<OldTransformation> {
   // Note: this sets all center orientations to 0.
   return randomStateFromSGS(
-    await puzzles.pyraminx.def(),
+    await puzzles.pyraminx.kpuzzle(),
     await sgsDataPyraminxFixedOrientation(),
   );
 }
