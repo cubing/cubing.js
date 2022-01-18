@@ -1,6 +1,6 @@
 import { Alg, Move } from "../../alg";
 import type { QuantumMove } from "../../alg/units/leaves/Move";
-import type { KPuzzleDefinition, Transformation } from "./definition_types";
+import type { OldKPuzzleDefinition, Transformation } from "./definition_types";
 import type { MoveNotation } from "./move_notation";
 import {
   combineTransformations,
@@ -10,7 +10,7 @@ import {
 
 // TODO: Move other helpers into the definition.
 export function transformationForQuantumMove(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   quantumMove: QuantumMove,
 ): Transformation {
   const transformation = getNotationLayer(def).lookupMove(
@@ -24,7 +24,7 @@ export function transformationForQuantumMove(
 
 // TODO: Move other helpers into the definition.
 export function transformationForMove(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   move: Move,
 ): Transformation {
   const transformation = getNotationLayer(def).lookupMove(move);
@@ -34,7 +34,7 @@ export function transformationForMove(
   return transformation;
 }
 
-export function getNotationLayer(def: KPuzzleDefinition): MoveNotation {
+export function getNotationLayer(def: OldKPuzzleDefinition): MoveNotation {
   if (!def.moveNotation) {
     def.moveNotation = new KPuzzleMoveNotation(def);
   }
@@ -43,7 +43,7 @@ export function getNotationLayer(def: KPuzzleDefinition): MoveNotation {
 
 class KPuzzleMoveNotation implements MoveNotation {
   private cache: { [key: string]: Transformation } = {};
-  constructor(public def: KPuzzleDefinition) {}
+  constructor(public def: OldKPuzzleDefinition) {}
 
   public lookupMove(move: Move): Transformation | undefined {
     const key = move.toString();
@@ -81,7 +81,7 @@ class KPuzzleMoveNotation implements MoveNotation {
 
 export class KPuzzle {
   public state: Transformation;
-  constructor(public definition: KPuzzleDefinition) {
+  constructor(public definition: OldKPuzzleDefinition) {
     this.state = identityTransformation(definition);
   }
 

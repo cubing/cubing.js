@@ -2,7 +2,7 @@ import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
 } from "../../puzzles/stickerings/appearance"; // TODO
-import type { KPuzzleDefinition, Transformation } from "./definition_types";
+import type { OldKPuzzleDefinition, Transformation } from "./definition_types";
 import type { KPuzzle } from "./kpuzzle";
 
 const xmlns = "http://www.w3.org/2000/svg";
@@ -61,7 +61,7 @@ export class KPuzzleSVGWrapper {
   private gradients: { [type: string]: SVGGradientElement } = {};
   private svgID: string;
   constructor(
-    public kPuzzleDefinition: KPuzzleDefinition,
+    public kPuzzleDefinition: OldKPuzzleDefinition,
     svgSource: string,
     experimentalAppearance?: PuzzleAppearance,
   ) {
@@ -153,7 +153,7 @@ export class KPuzzleSVGWrapper {
 
   // TODO: save definition in the constructor?
   public draw(
-    definition: KPuzzleDefinition,
+    definition: OldKPuzzleDefinition,
     state: Transformation,
     nextState?: Transformation,
     fraction?: number,

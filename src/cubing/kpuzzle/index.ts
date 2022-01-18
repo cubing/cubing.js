@@ -1,6 +1,6 @@
 export type {
-  KPuzzleDefinition as OldKPuzzleDefinition,
-  OrbitTransformation as OldOrbitTransformation,
+  OldKPuzzleDefinition as OldKPuzzleDefinition,
+  OldOrbitTransformation as OldOrbitTransformation,
   Transformation as OldTransformation,
 } from "./old/definition_types";
 

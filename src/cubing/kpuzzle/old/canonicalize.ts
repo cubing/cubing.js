@@ -4,7 +4,7 @@
  *  generate canonical sequences efficiently.
  */
 import type { Alg, Move } from "../../alg";
-import type { KPuzzleDefinition, Transformation } from "./definition_types";
+import type { OldKPuzzleDefinition, Transformation } from "./definition_types";
 import {
   areTransformationsEquivalent,
   combineTransformations,
@@ -49,7 +49,7 @@ export class Canonicalizer {
   public transforms: Transformation[][] = [];
   public moveindex: { [key: string]: number } = {};
   public baseMoveCount: number;
-  constructor(public def: KPuzzleDefinition) {
+  constructor(public def: OldKPuzzleDefinition) {
     const basemoves = def.moves;
     const id = identityTransformation(def);
     for (const mv1 in basemoves) {

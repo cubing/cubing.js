@@ -1,13 +1,13 @@
 import type {
-  KPuzzleDefinition,
-  OrbitTransformation,
+  OldKPuzzleDefinition,
+  OldOrbitTransformation,
   Transformation,
 } from "./definition_types";
 
 // this is the last identity orbit transformation we saw or looked at.
-let lasto: OrbitTransformation | null;
+let lasto: OldOrbitTransformation | null;
 
-function isIdentity(omod: number, o: OrbitTransformation): boolean {
+function isIdentity(omod: number, o: OldOrbitTransformation): boolean {
   if (o === lasto) {
     return true;
   }
@@ -31,7 +31,7 @@ function isIdentity(omod: number, o: OrbitTransformation): boolean {
 }
 
 export function combineTransformations(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
 ): Transformation {
@@ -71,7 +71,7 @@ export function combineTransformations(
 }
 
 export function multiplyTransformations(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   t: Transformation,
   amount: number,
 ): Transformation {
@@ -96,7 +96,7 @@ export function multiplyTransformations(
   }
 }
 export function identityTransformation(
-  definition: KPuzzleDefinition,
+  definition: OldKPuzzleDefinition,
 ): Transformation {
   const transformation = {} as Transformation;
   for (const orbitName in definition.orbits) {
@@ -125,7 +125,7 @@ export function identityTransformation(
 }
 
 export function invertTransformation(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   t: Transformation,
 ): Transformation {
   const newTrans: Transformation = {} as Transformation;
@@ -168,7 +168,7 @@ function gcd(a: number, b: number): number {
 
 /* calculate the order of a particular transformation. */
 export function transformationOrder(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   t: Transformation,
 ): number {
   let r: number = 1;
@@ -201,7 +201,7 @@ export function transformationOrder(
 }
 
 export function areOrbitTransformationsEquivalent(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   orbitName: string,
   t1: Transformation,
   t2: Transformation,
@@ -231,7 +231,7 @@ export function areOrbitTransformationsEquivalent(
 }
 
 export function areTransformationsEquivalent(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
 ): boolean {
@@ -244,7 +244,7 @@ export function areTransformationsEquivalent(
 }
 
 export function areStatesEquivalent(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
 ): boolean {
