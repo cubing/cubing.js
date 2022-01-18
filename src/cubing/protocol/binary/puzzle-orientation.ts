@@ -6,7 +6,7 @@ import {
   OldTransformation,
 } from "../../kpuzzle";
 // TODO: Should we expose this directly in the `puzzles` package for sync uses?
-import { oldExperimentalCube3x3x3KPuzzle as def } from "../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../kpuzzle";
 
 export function puzzleOrientationIdx(
   state: OldTransformation,
@@ -32,7 +32,7 @@ const puzzleOrientationCache: OldTransformation[][] = new Array(6)
 
 // We use a new block to avoid keeping a reference to temporary vars.
 {
-  const orientationKpuzzle = new OldKPuzzle(def);
+  const orientationKpuzzle = experimental3x3x3KPuzzle;
   const uAlgs: Alg[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
     Alg.fromString(s),
   );

@@ -1,32 +1,25 @@
 import { Move } from "../../../../../alg";
-import {
-  OldKPuzzle,
-  oldAreOrbitTransformationsEquivalent,
-  OldKPuzzleDefinition,
-  OldTransformation,
-} from "../../../../../kpuzzle";
+import { KTransformation, KPuzzle } from "../../../../../kpuzzle";
 
 export function isEquivalentTranformationIgnoringCENTERS(
-  def: OldKPuzzleDefinition,
-  t1: OldTransformation,
-  t2: OldTransformation,
+  kpuzzle: KPuzzle,
+  t1: KTransformation,
+  t2: KTransformation,
 ): boolean {
-  for (const orbitName in def.orbits) {
-    if (
-      !oldAreOrbitTransformationsEquivalent(def, orbitName, t1, t2, {
-        ignoreOrientation: orbitName === "CENTERS",
-      })
-    ) {
-      return false;
-    }
+  for (const orbitName in kpuzzle.definition.orbits) {
+    throw new Error("kpuzzle todo");
+    // if (
+    //   !oldAreOrbitTransformationsEquivalent(def, orbitName, t1, t2, {
+    //     ignoreOrientation: orbitName === "CENTERS",
+    //   })
+    // ) {
+    //   return false;
+    // }
   }
   return true;
 }
 
-export function passesFilter(
-  def: OldKPuzzleDefinition,
-  state: OldTransformation,
-): boolean {
+export function passesFilter(def: KPuzzle, state: KTransformation): boolean {
   const kpuzzle = new OldKPuzzle(def);
   if (isEquivalentTranformationIgnoringCENTERS(def, kpuzzle.state, state)) {
     return false;

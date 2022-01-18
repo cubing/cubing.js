@@ -1,4 +1,4 @@
-import type { OldTransformation } from "../../kpuzzle";
+import type { KState } from "../../kpuzzle/KState";
 import {
   identityPermutation,
   lexToPermutation,
@@ -85,7 +85,7 @@ function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
 }
 
 export function reid3x3x3ToBinaryComponents(
-  state: OldTransformation,
+  state: KState,
 ): Binary3x3x3Components {
   const normedState = normalizePuzzleOrientation(state);
 
@@ -127,9 +127,7 @@ export function binaryComponentsToTwizzleBinary(
   ]);
 }
 
-export function reid3x3x3ToTwizzleBinary(
-  state: OldTransformation,
-): Binary3x3x3State {
+export function reid3x3x3ToTwizzleBinary(state: KState): Binary3x3x3State {
   const components: Binary3x3x3Components = reid3x3x3ToBinaryComponents(state);
   return binaryComponentsToTwizzleBinary(components);
 }

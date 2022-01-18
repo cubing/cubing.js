@@ -9,17 +9,17 @@ import { sgs3x3x3 } from "./legacy-sgs";
 import type { KTransformation } from "../../../../../kpuzzle";
 
 export async function random333State(): Promise<KTransformation> {
-  const def = await puzzles["3x3x3"].def();
-  const transformation = 
+  const kpuzzle = await puzzles["3x3x3"].kpuzzle();
+  let transformation = kpuzzle.identityTransformation();
   for (const piece of sgs3x3x3) {
-    kpuzzle.applyAlg(
+    transformation = transformation.applyAlg(
       Alg.fromString(((await randomChoiceFactory()) as any)(piece)),
     );
   }
-  if (!passesFilter(def, kpuzzle.state)) {
+  if (!passesFilter(kpuzzle, transformation)) {
     return random333State();
   }
-  return kpuzzle.state;
+  return transformation;
 }
 
 let cachedImport: Promise<
@@ -31,7 +31,7 @@ function dynamicMin2phaseGWT(): Promise<
   return (cachedImport ??= import("../../../../../vendor/min2phase/gwt"));
 }
 
-export async function solve333(s: OldTransformation): Promise<Alg> {
+export async function solve333(s: KTransformation): Promise<Alg> {
   mustBeInsideWorker();
   return Alg.fromString(
     (await dynamicMin2phaseGWT()).solveState(toMin2PhaseState(s)),

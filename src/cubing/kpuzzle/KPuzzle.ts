@@ -8,6 +8,7 @@ import type {
   KPuzzleDefinition,
   KTransformationData,
 } from "./KPuzzleDefinition";
+import { KState } from "./KState";
 import { KTransformation } from "./KTransformation";
 
 export class KPuzzle {
@@ -48,5 +49,9 @@ export class KPuzzle {
       alg = new Alg(alg);
     }
     return algToTransformation(alg, this);
+  }
+
+  startState(): KState {
+    return new KState(this, this.definition.startStateData);
   }
 }

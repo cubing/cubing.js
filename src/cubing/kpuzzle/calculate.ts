@@ -157,7 +157,9 @@ export function selfMultiplyTransformationUncached(
     );
   }
   if (amount === 0) {
-    return kpuzzle.identityTransformation().data; // TODO
+    // TODO
+    const { transformationData } = kpuzzle.identityTransformation();
+    return transformationData;
   }
   let halfish = transformationData;
   if (amount !== 2) {
@@ -202,7 +204,7 @@ class AlgToTransformationTraversal extends TraversalDownUp<
       kpuzzle,
       selfMultiplyTransformationUncached(
         kpuzzle,
-        algTransformation.data,
+        algTransformation.transformationData,
         grouping.amount,
       ),
     );

@@ -15,17 +15,17 @@ export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
     CORNERS: { numPieces: 8, orientations: 3 },
     CENTERS: { numPieces: 6, orientations: 4 },
   },
-  startState: {
+  startStateData: {
     EDGES: {
-      permutation: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      pieces: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     CORNERS: {
-      permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+      pieces: [0, 1, 2, 3, 4, 5, 6, 7],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0],
     },
     CENTERS: {
-      permutation: [0, 1, 2, 3, 4, 5],
+      pieces: [0, 1, 2, 3, 4, 5],
       orientation: [0, 0, 0, 0, 0, 0],
     },
   },

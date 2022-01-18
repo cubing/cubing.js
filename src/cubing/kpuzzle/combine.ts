@@ -1,6 +1,7 @@
 import { isOrbitTransformationDataIdentityUncached } from "./calculate";
 import type {
   KPuzzleDefinition,
+  KStateData,
   KTransformationData,
 } from "./KPuzzleDefinition";
 
@@ -56,4 +57,51 @@ export function combineTransformationData(
     }
   }
   return newTransformationData;
+}
+
+export function applyTransformationDataToStateData(
+  definition: KPuzzleDefinition,
+  stateData: KStateData,
+  transformationData: KTransformationData,
+): KStateData {
+  const newStateData = {} as KStateData;
+  const def = definition;
+  for (const orbitName in def.orbits) {
+    const orbitDefinition = def.orbits[orbitName];
+    const o1 = stateData[orbitName];
+    const o2 = transformationData[orbitName];
+    if (
+      isOrbitTransformationDataIdentityUncached(
+        orbitDefinition.orientations,
+        o2,
+      )
+    ) {
+      // common case for big cubes
+      newStateData[orbitName] = o1;
+    } else {
+      const newPieces = new Array(orbitDefinition.numPieces);
+      if (orbitDefinition.orientations === 1) {
+        for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
+          newPieces[idx] = o1.pieces[o2.permutation[idx]];
+        }
+        newStateData[orbitName] = {
+          pieces: newPieces,
+          orientation: o1.orientation,
+        };
+      } else {
+        const newOri = new Array(orbitDefinition.numPieces);
+        for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
+          newOri[idx] =
+            (o1.orientation[o2.permutation[idx]] + o2.orientation[idx]) %
+            orbitDefinition.orientations;
+          newPieces[idx] = o1.pieces[o2.permutation[idx]];
+        }
+        newStateData[orbitName] = {
+          pieces: newPieces,
+          orientation: newOri,
+        };
+      }
+    }
+  }
+  return newStateData;
 }

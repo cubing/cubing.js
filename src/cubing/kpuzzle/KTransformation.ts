@@ -6,17 +6,18 @@ import {
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
 import type { KTransformationData } from "./KPuzzleDefinition";
+import { KState } from "./KState";
 
 export class KTransformation {
   constructor(
     public readonly kpuzzle: KPuzzle,
-    public readonly data: KTransformationData,
+    public readonly transformationData: KTransformationData,
   ) {}
 
   invert(): KTransformation {
     return new KTransformation(
       this.kpuzzle,
-      invertTransformation(this.kpuzzle, this.data),
+      invertTransformation(this.kpuzzle, this.transformationData),
     );
   }
 
@@ -29,7 +30,11 @@ export class KTransformation {
   }
 
   isIdentical(t2: KTransformation): boolean {
-    return isTransformationDataIdentical(this.kpuzzle, this.data, t2.data);
+    return isTransformationDataIdentical(
+      this.kpuzzle,
+      this.transformationData,
+      t2.transformationData,
+    );
   }
 
   applyTransformation(t2: KTransformation): KTransformation {
@@ -41,7 +46,11 @@ export class KTransformation {
 
     return new KTransformation(
       this.kpuzzle,
-      combineTransformationData(this.kpuzzle.definition, this.data, t2.data),
+      combineTransformationData(
+        this.kpuzzle.definition,
+        this.transformationData,
+        t2.transformationData,
+      ),
     );
   }
 
@@ -51,5 +60,10 @@ export class KTransformation {
 
   applyAlg(alg: Alg | string): KTransformation {
     return this.applyTransformation(this.kpuzzle.algToTransformation(alg));
+  }
+
+  // Convenience. Useful for chaining.
+  toKState(): KState {
+    return KState.fromTransformation(this);
   }
 }
