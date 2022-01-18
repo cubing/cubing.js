@@ -526,7 +526,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private params: PG3DOptions = {},
   ) {
     super();
-    console.log(kpuzzle);
     if (stickerDat.stickers.length === 0) {
       throw Error("Reuse of stickerdat from pg; please don't do that.");
     }

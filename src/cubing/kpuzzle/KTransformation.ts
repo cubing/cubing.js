@@ -23,7 +23,10 @@ export class KTransformation {
     );
   }
 
-  // @deprecated
+  // For optimizations, we want to make it cheap to rely on optimizations when a
+  // transformation is an identity. Here, we try to make it cheaper by:
+  // - only calculating when needed, and
+  // - caching the result.
   #cachedIsIdentity: boolean | undefined; // TODO: is `null` worse here?
   isIdentityTransformation(): boolean {
     return (this.#cachedIsIdentity ??= this.isIdentical(

@@ -20,6 +20,9 @@ export class KState {
   }
 
   applyTransformation(transformation: KTransformation): KState {
+    if (transformation.isIdentityTransformation()) {
+      return new KState(this.kpuzzle, this.stateData);
+    }
     const newStateData = applyTransformationDataToStateData(
       this.kpuzzle.definition,
       this.stateData,
