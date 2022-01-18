@@ -120,7 +120,11 @@ export class PGOrbitsDef {
         numPieces: this.orbitdefs[i].size,
         orientations: this.orbitdefs[i].mod,
       };
-      start[this.orbitnames[i]] = this.solved.orbits[i].toKPuzzle();
+      const startTransformation = this.solved.orbits[i].toKPuzzle();
+      start[this.orbitnames[i]] = {
+        pieces: startTransformation.permutation,
+        orientation: startTransformation.orientation,
+      };
     }
     const moves: { [moveName: string]: any } = {};
     if (includemoves) {

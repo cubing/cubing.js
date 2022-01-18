@@ -40,9 +40,6 @@ export function genericPGPuzzleLoader(
   const puzzleLoader: PuzzleLoader = {
     id: id,
     fullName: fullName,
-    def: async () => {
-      return defPromise;
-    },
     kpuzzle: async () => {
       return (cachedKPuzzle ??= (async () => new KPuzzle(await defPromise))());
     },

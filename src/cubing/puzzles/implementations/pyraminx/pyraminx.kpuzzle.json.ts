@@ -1,17 +1,17 @@
-import type { OldKPuzzleDefinition } from "../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../kpuzzle";
 
-export const pyraminxKPuzzle: OldKPuzzleDefinition = {
+export const pyraminxKPuzzle: KPuzzleDefinition = {
   name: "Pyraminx",
   orbits: {
     CENTERS: { numPieces: 4, orientations: 3 },
     TIPS: { numPieces: 4, orientations: 3 },
     EDGES: { numPieces: 6, orientations: 2 },
   },
-  startPieces: {
-    CENTERS: { permutation: [0, 1, 2, 3], orientation: [0, 0, 0, 0] },
-    TIPS: { permutation: [0, 1, 2, 3], orientation: [0, 0, 0, 0] },
+  startStateData: {
+    CENTERS: { pieces: [0, 1, 2, 3], orientation: [0, 0, 0, 0] },
+    TIPS: { pieces: [0, 1, 2, 3], orientation: [0, 0, 0, 0] },
     EDGES: {
-      permutation: [0, 1, 2, 3, 4, 5],
+      pieces: [0, 1, 2, 3, 4, 5],
       orientation: [0, 0, 0, 0, 0, 0],
     },
   },
