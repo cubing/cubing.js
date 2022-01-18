@@ -1,39 +1,28 @@
-import {
-  oldCombineTransformations,
-  oldInvertTransformation,
-  OldKPuzzleDefinition,
-  OldTransformation,
-} from "../../../../../kpuzzle";
+import type { KTransformation } from "../../../../../kpuzzle";
 import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { SetupToLocation } from "./SetupAnchorProp";
 
 interface AnchoredStartPropInputs {
   setupAnchor: SetupToLocation;
-  setupTransformation: OldTransformation;
-  indexer: AlgIndexer<any>;
-  def: OldKPuzzleDefinition;
+  setupTransformation: KTransformation;
+  indexer: AlgIndexer;
 }
 
 export class AnchoredStartProp extends TwistyPropDerived<
   AnchoredStartPropInputs,
-  OldTransformation
+  KTransformation
 > {
-  derive(inputs: AnchoredStartPropInputs): OldTransformation {
+  derive(inputs: AnchoredStartPropInputs): KTransformation {
     switch (inputs.setupAnchor) {
       case "start":
         return inputs.setupTransformation;
       case "end": {
-        const algTransformation = inputs.indexer.transformAtIndex(
+        const algTransformation = inputs.indexer.transformationAtIndex(
           inputs.indexer.numAnimatedLeaves(),
-        ) as OldTransformation;
-        const inverseAlgTransformation = oldInvertTransformation(
-          inputs.def,
-          algTransformation,
         );
-        return oldCombineTransformations(
-          inputs.def,
-          inputs.setupTransformation,
+        const inverseAlgTransformation = algTransformation.invert();
+        return inputs.setupTransformation.applyTransformation(
           inverseAlgTransformation,
         );
       }

@@ -1,4 +1,4 @@
-import type { OldKPuzzleDefinition } from "../kpuzzle";
+import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
 import type { PuzzleLoader } from "./PuzzleLoader";
@@ -20,7 +20,7 @@ export async function descAsyncGetPuzzleGeometry(
 // same puzzle?
 export async function dsecAsyncGetDef(
   desc: PuzzleDescriptionString,
-): Promise<OldKPuzzleDefinition> {
+): Promise<KPuzzleDefinition> {
   return (await descAsyncGetPuzzleGeometry(desc)).writekpuzzle(true);
 }
 
@@ -36,11 +36,16 @@ export function customPGPuzzleLoader(
   },
 ): PuzzleLoader {
   const customID = nextCustomID++;
+  const defPromise = dsecAsyncGetDef(desc);
+  let cachedKPuzzle: Promise<KPuzzle> | null = null;
   const puzzleLoader: PuzzleLoader = {
     id: `custom-${customID}`,
     fullName: info?.fullName ?? `Custom Puzzle (instance #${customID})`,
     def: async () => {
-      return dsecAsyncGetDef(desc);
+      return defPromise;
+    },
+    kpuzzle: async () => {
+      return (cachedKPuzzle ??= (async () => new KPuzzle(await defPromise))());
     },
     svg: async () => {
       const pg = await descAsyncGetPuzzleGeometry(desc);

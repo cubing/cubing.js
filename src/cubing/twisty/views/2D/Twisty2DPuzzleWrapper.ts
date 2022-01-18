@@ -42,7 +42,7 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
           : this.puzzleLoader.svg();
       return new Twisty2DPuzzle(
         this.model,
-        await this.puzzleLoader.def(),
+        await this.puzzleLoader.kpuzzle(),
         await svgPromise,
         {},
         this.puzzleLoader,

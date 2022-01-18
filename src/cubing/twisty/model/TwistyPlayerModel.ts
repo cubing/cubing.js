@@ -29,12 +29,12 @@ import { AnchoredStartProp } from "./props/puzzle/state/AnchoredStartProp";
 import { TimeRangeProp } from "./props/viewer/TimeRangeProp";
 import { DetailedTimelineInfoProp } from "./props/timeline/DetailedTimelineInfoProp";
 import { CoarseTimelineInfoProp } from "./props/timeline/CoarseTimelineInfoProp";
-import { CurrentLeavesProp } from "./props/puzzle/state/CurrentLeavesProp";
+import { CurrentMoveInfoProp } from "./props/puzzle/state/CurrentMoveInfoProp";
 import { ButtonAppearanceProp } from "./props/viewer/ButtonAppearanceProp";
 import { CurrentLeavesSimplifiedProp } from "./props/puzzle/state/CurrentLeavesSimplified";
-import { CurrentTransformationProp } from "./props/puzzle/state/CurrentTransformationProp";
+import { CurrentStateProp as CurrentStateProp } from "./props/puzzle/state/CurrentStateProp";
 import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
-import { PuzzleDefProp } from "./props/puzzle/structure/PuzzleDefProp";
+import { KPuzzleProp } from "./props/puzzle/structure/KPuzzleProp";
 import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
 import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
 import { experimentalAppendMove, Move } from "../../alg";
@@ -93,7 +93,7 @@ export class TwistyPlayerModel {
   );
 
   // Depth 2
-  puzzleDefProp = new PuzzleDefProp({ puzzleLoader: this.puzzleLoaderProp });
+  kpuzzleProp = new KPuzzleProp({ puzzleLoader: this.puzzleLoaderProp });
 
   puzzleIDProp = new PuzzleIDProp({ puzzleLoader: this.puzzleLoaderProp });
 
@@ -101,12 +101,12 @@ export class TwistyPlayerModel {
 
   puzzleAlgProp = new PuzzleAlgProp({
     algWithIssues: this.algProp,
-    puzzleDef: this.puzzleDefProp,
+    kpuzzle: this.kpuzzleProp,
   });
 
   puzzleSetupProp = new PuzzleAlgProp({
     algWithIssues: this.setupProp,
-    puzzleDef: this.puzzleDefProp,
+    kpuzzle: this.kpuzzleProp,
   });
 
   visualizationStrategyProp = new VisualizationStrategyProp({
@@ -133,14 +133,14 @@ export class TwistyPlayerModel {
 
   setupTransformationProp = new AlgTransformationProp({
     alg: this.puzzleSetupProp,
-    def: this.puzzleDefProp,
+    kpuzzle: this.kpuzzleProp,
   });
 
   // Depth 5
   indexerProp = new IndexerProp({
     indexerConstructor: this.indexerConstructorProp,
     algWithIssues: this.puzzleAlgProp,
-    def: this.puzzleDefProp,
+    kpuzzle: this.kpuzzleProp,
   });
 
   // Depth 6
@@ -148,7 +148,6 @@ export class TwistyPlayerModel {
     setupAnchor: this.setupAnchorProp,
     setupTransformation: this.setupTransformationProp,
     indexer: this.indexerProp,
-    def: this.puzzleDefProp,
   });
 
   timeRangeProp = new TimeRangeProp({
@@ -169,7 +168,7 @@ export class TwistyPlayerModel {
     playingInfo: this.playingInfoProp,
   });
 
-  currentLeavesProp = new CurrentLeavesProp({
+  currentMoveInfoProp = new CurrentMoveInfoProp({
     indexer: this.indexerProp,
     detailedTimelineInfo: this.detailedTimelineInfoProp,
     catchUpMove: this.catchUpMoveProp,
@@ -183,33 +182,33 @@ export class TwistyPlayerModel {
   });
 
   currentLeavesSimplifiedProp = new CurrentLeavesSimplifiedProp({
-    currentMoveInfo: this.currentLeavesProp,
+    currentMoveInfo: this.currentMoveInfoProp,
   });
 
   // Depth 10
-  currentTransformationProp = new CurrentTransformationProp({
+  currentStateProp = new CurrentStateProp({
     anchoredStart: this.anchoredStartProp,
     currentLeavesSimplified: this.currentLeavesSimplifiedProp,
     indexer: this.indexerProp,
-    def: this.puzzleDefProp,
   });
 
   // Depth 11
   legacyPositionProp = new LegacyPositionProp({
-    currentMoveInfo: this.currentLeavesProp,
-    transformation: this.currentTransformationProp,
+    currentMoveInfo: this.currentMoveInfoProp,
+    state: this.currentStateProp,
   });
 
   public async twizzleLink(): Promise<string> {
     const url = new URL("https://alpha.twizzle.net/edit/");
 
-    const [puzzle, alg, setup, anchor, experimentalStickering] = await Promise.all([
-      this.puzzleIDProp.get(),
-      this.algProp.get(),
-      this.setupProp.get(),
-      this.setupAnchorProp.get(),
-      this.stickeringProp.get(),
-    ]);
+    const [puzzle, alg, setup, anchor, experimentalStickering] =
+      await Promise.all([
+        this.puzzleIDProp.get(),
+        this.algProp.get(),
+        this.setupProp.get(),
+        this.setupAnchorProp.get(),
+        this.stickeringProp.get(),
+      ]);
 
     if (!alg.alg.experimentalIsEmpty()) {
       url.searchParams.set("alg", alg.alg.toString());
@@ -221,10 +220,7 @@ export class TwistyPlayerModel {
       url.searchParams.set("setup-anchor", anchor);
     }
     if (experimentalStickering !== "full") {
-      url.searchParams.set(
-        "experimental-stickering",
-        experimentalStickering,
-      );
+      url.searchParams.set("experimental-stickering", experimentalStickering);
     }
     if (puzzle !== "3x3x3") {
       url.searchParams.set("puzzle", puzzle);

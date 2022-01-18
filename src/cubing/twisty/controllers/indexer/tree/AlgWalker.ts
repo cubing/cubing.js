@@ -1,9 +1,11 @@
 import {
   Alg,
-  Grouping,
-  LineComment,
   Commutator,
   Conjugate,
+  experimentalDirectedGenerator,
+  ExperimentalIterationDirection,
+  Grouping,
+  LineComment,
   Move,
   Newline,
   Pause,
@@ -11,43 +13,32 @@ import {
   TraversalUp,
   Unit,
 } from "../../../../alg";
-import {
-  experimentalDirectedGenerator,
-  ExperimentalIterationDirection,
-} from "../../../../alg";
-import type {
-  PuzzleWrapper,
-  State,
-} from "../../../views/3D/puzzles/KPuzzleWrapper";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { Duration } from "../../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
 
-export class AlgPartDecoration<P extends PuzzleWrapper> {
+export class AlgPartDecoration {
   constructor(
-    _puz: PuzzleWrapper,
     public moveCount: number,
     public duration: number,
-    public forward: State<P>,
-    public backward: State<P>,
-    public children: Array<AlgPartDecoration<P>> = [],
+    public forward: KTransformation,
+    public backward: KTransformation,
+    public children: Array<AlgPartDecoration> = [],
   ) {}
 }
-export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
-  AlgPartDecoration<P>
-> {
-  private identity: State<P>;
-  private dummyLeaf: AlgPartDecoration<P>;
+export class DecoratorConstructor extends TraversalUp<AlgPartDecoration> {
+  private identity: KTransformation;
+  private dummyLeaf: AlgPartDecoration;
   private durationFn: TraversalUp<Duration> = new AlgDuration(
     defaultDurationForAmount,
   );
 
-  private cache: { [key: string]: AlgPartDecoration<P> } = {};
+  private cache: { [key: string]: AlgPartDecoration } = {};
 
-  constructor(private puz: PuzzleWrapper) {
+  constructor(private kpuzzle: KPuzzle) {
     super();
-    this.identity = puz.identity();
-    this.dummyLeaf = new AlgPartDecoration<P>(
-      puz,
+    this.identity = kpuzzle.identityTransformation();
+    this.dummyLeaf = new AlgPartDecoration(
       0,
       0,
       this.identity,
@@ -56,90 +47,86 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     );
   }
 
-  public traverseAlg(alg: Alg): AlgPartDecoration<P> {
+  public traverseAlg(alg: Alg): AlgPartDecoration {
     let moveCount = 0;
     let duration = 0;
-    let state = this.identity;
-    const child: Array<AlgPartDecoration<P>> = [];
+    let transformation = this.identity;
+    const child: Array<AlgPartDecoration> = [];
     for (const unit of alg.units()) {
       const apd = this.traverseUnit(unit);
       moveCount += apd.moveCount;
       duration += apd.duration;
-      if (state === this.identity) {
-        state = apd.forward;
+      if (transformation === this.identity) {
+        transformation = apd.forward;
       } else {
-        state = this.puz.combine(state, apd.forward);
+        transformation = transformation.applyTransformation(apd.forward);
       }
       child.push(apd);
     }
-    return new AlgPartDecoration<P>(
-      this.puz,
+    return new AlgPartDecoration(
       moveCount,
       duration,
-      state,
-      this.puz.invert(state),
+      transformation,
+      transformation.invert(),
       child,
     );
   }
 
-  public traverseGrouping(grouping: Grouping): AlgPartDecoration<P> {
+  public traverseGrouping(grouping: Grouping): AlgPartDecoration {
     const dec = this.traverseAlg(grouping.alg);
     return this.mult(dec, grouping.amount, [dec]);
   }
 
-  public traverseMove(move: Move): AlgPartDecoration<P> {
+  public traverseMove(move: Move): AlgPartDecoration {
     const key = move.toString();
-    let r: AlgPartDecoration<P> | undefined = this.cache[key];
+    let r: AlgPartDecoration | undefined = this.cache[key];
     if (r) {
       return r;
     }
-    r = new AlgPartDecoration<P>(
-      this.puz,
+    const transformation = this.kpuzzle.moveToTransformation(move);
+    r = new AlgPartDecoration(
       1,
       this.durationFn.traverseUnit(move),
-      this.puz.stateFromMove(move),
-      this.puz.stateFromMove(move.invert()),
+      transformation,
+      transformation.invert(),
     );
     this.cache[key] = r;
     return r;
   }
 
-  public traverseCommutator(commutator: Commutator): AlgPartDecoration<P> {
+  public traverseCommutator(commutator: Commutator): AlgPartDecoration {
     const decA = this.traverseAlg(commutator.A);
     const decB = this.traverseAlg(commutator.B);
-    const AB = this.puz.combine(decA.forward, decB.forward);
-    const ApBp = this.puz.combine(decA.backward, decB.backward);
-    const ABApBp = this.puz.combine(AB, ApBp);
-    const dec = new AlgPartDecoration<P>(
-      this.puz,
+    const AB = decA.forward.applyTransformation(decB.forward);
+    const ApBp = decA.backward.applyTransformation(decB.backward);
+    const ABApBp = AB.applyTransformation(ApBp);
+    const dec = new AlgPartDecoration(
       2 * (decA.moveCount + decB.moveCount),
       2 * (decA.duration + decB.duration),
       ABApBp,
-      this.puz.invert(ABApBp),
+      ABApBp.invert(),
       [decA, decB],
     );
     return this.mult(dec, 1, [dec, decA, decB]);
   }
 
-  public traverseConjugate(conjugate: Conjugate): AlgPartDecoration<P> {
+  public traverseConjugate(conjugate: Conjugate): AlgPartDecoration {
     const decA = this.traverseAlg(conjugate.A);
     const decB = this.traverseAlg(conjugate.B);
-    const AB = this.puz.combine(decA.forward, decB.forward);
-    const ABAp = this.puz.combine(AB, decA.backward);
-    const dec = new AlgPartDecoration<P>(
-      this.puz,
+    const AB = decA.forward.applyTransformation(decB.forward);
+    const ABAp = AB.applyTransformation(decA.backward);
+    const dec = new AlgPartDecoration(
       2 * decA.moveCount + decB.moveCount,
       2 * decA.duration + decB.duration,
       ABAp,
-      this.puz.invert(ABAp),
+      ABAp.invert(),
       [decA, decB],
     );
     return this.mult(dec, 1, [dec, decA, decB]);
   }
 
-  public traversePause(pause: Pause): AlgPartDecoration<P> {
-    return new AlgPartDecoration<P>(
-      this.puz,
+  public traversePause(pause: Pause): AlgPartDecoration {
+    return new AlgPartDecoration(
       1,
       this.durationFn.traverseUnit(pause),
       this.identity,
@@ -147,53 +134,49 @@ export class DecoratorConstructor<P extends PuzzleWrapper> extends TraversalUp<
     );
   }
 
-  public traverseNewline(_newline: Newline): AlgPartDecoration<P> {
+  public traverseNewline(_newline: Newline): AlgPartDecoration {
     return this.dummyLeaf;
   }
 
-  public traverseLineComment(_comment: LineComment): AlgPartDecoration<P> {
+  public traverseLineComment(_comment: LineComment): AlgPartDecoration {
     return this.dummyLeaf;
   }
 
   private mult(
-    apd: AlgPartDecoration<P>,
+    apd: AlgPartDecoration,
     n: number,
-    child: Array<AlgPartDecoration<P>>,
-  ): AlgPartDecoration<P> {
+    child: Array<AlgPartDecoration>,
+  ): AlgPartDecoration {
     const absn = Math.abs(n);
-    const st = this.puz.multiply(apd.forward, n);
-    return new AlgPartDecoration<P>(
-      this.puz,
+    const st = apd.forward.selfMultiply(n);
+    return new AlgPartDecoration(
       apd.moveCount * absn,
       apd.duration * absn,
       st,
-      this.puz.invert(st),
+      st.invert(),
       child,
     );
   }
 }
-class WalkerDown<P extends PuzzleWrapper> {
-  constructor(public apd: AlgPartDecoration<P>, public back: boolean) {
+class WalkerDown {
+  constructor(public apd: AlgPartDecoration, public back: boolean) {
     /**/
   }
 }
-export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
-  WalkerDown<P>,
-  boolean
-> {
+export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
   public move?: Unit;
   public moveDuration: number;
   public back: boolean;
-  public st: State<P>;
-  public root: WalkerDown<P>;
+  public st: KTransformation;
+  public root: WalkerDown;
   public i: number;
   public dur: number;
   private goali: number;
   private goaldur: number;
   constructor(
-    public puz: P,
+    public kpuzzle: KPuzzle,
     public algOrUnit: Alg | Unit, // TODO: can we keep these separate?
-    public apd: AlgPartDecoration<P>,
+    public apd: AlgPartDecoration,
   ) {
     super();
     this.i = -1;
@@ -203,7 +186,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     this.move = undefined;
     this.back = false;
     this.moveDuration = 0;
-    this.st = this.puz.identity();
+    this.st = this.kpuzzle.identityTransformation();
     this.root = new WalkerDown(this.apd, false);
   }
 
@@ -233,14 +216,14 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     this.move = undefined;
     this.moveDuration = 0;
     this.back = false;
-    this.st = this.puz.identity();
+    this.st = this.kpuzzle.identityTransformation();
     const r = this.algOrUnit.is(Alg)
       ? this.traverseAlg(this.algOrUnit as Alg, this.root)
       : this.traverseUnit(this.algOrUnit as Unit, this.root); // TODO
     return r;
   }
 
-  public traverseAlg(alg: Alg, wd: WalkerDown<P>): boolean {
+  public traverseAlg(alg: Alg, wd: WalkerDown): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
@@ -261,7 +244,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     return false;
   }
 
-  public traverseGrouping(grouping: Grouping, wd: WalkerDown<P>): boolean {
+  public traverseGrouping(grouping: Grouping, wd: WalkerDown): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
@@ -272,7 +255,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     );
   }
 
-  public traverseMove(move: Move, wd: WalkerDown<P>): boolean {
+  public traverseMove(move: Move, wd: WalkerDown): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
@@ -282,10 +265,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     return true;
   }
 
-  public traverseCommutator(
-    commutator: Commutator,
-    wd: WalkerDown<P>,
-  ): boolean {
+  public traverseCommutator(commutator: Commutator, wd: WalkerDown): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
@@ -328,7 +308,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     }
   }
 
-  public traverseConjugate(conjugate: Conjugate, wd: WalkerDown<P>): boolean {
+  public traverseConjugate(conjugate: Conjugate, wd: WalkerDown): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
@@ -360,7 +340,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     }
   }
 
-  public traversePause(pause: Pause, wd: WalkerDown<P>): boolean {
+  public traversePause(pause: Pause, wd: WalkerDown): boolean {
     if (!this.firstcheck(wd)) {
       return false;
     }
@@ -370,18 +350,18 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     return true;
   }
 
-  public traverseNewline(_newline: Newline, _wd: WalkerDown<P>): boolean {
+  public traverseNewline(_newline: Newline, _wd: WalkerDown): boolean {
     return false;
   }
 
   public traverseLineComment(
     _lineComment: LineComment,
-    _wd: WalkerDown<P>,
+    _wd: WalkerDown,
   ): boolean {
     return false;
   }
 
-  private firstcheck(wd: WalkerDown<P>): boolean {
+  private firstcheck(wd: WalkerDown): boolean {
     if (
       wd.apd.moveCount + this.i <= this.goali &&
       wd.apd.duration + this.dur < this.goaldur
@@ -391,7 +371,7 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
     return true;
   }
 
-  private domult(wd: WalkerDown<P>, amount: number): boolean {
+  private domult(wd: WalkerDown, amount: number): boolean {
     let back = wd.back;
     if (amount === 0) {
       // I don't believe this will ever happen
@@ -407,31 +387,27 @@ export class AlgWalker<P extends PuzzleWrapper> extends TraversalDownUp<
       Math.ceil((this.goaldur - this.dur) / base.duration - 1),
     );
     if (full > 0) {
-      this.keepgoing(new WalkerDown<P>(base, back), full);
+      this.keepgoing(new WalkerDown(base, back), full);
     }
     return back;
   }
 
-  private keepgoing(wd: WalkerDown<P>, mul: number = 1): boolean {
+  private keepgoing(wd: WalkerDown, mul: number = 1): boolean {
     this.i += mul * wd.apd.moveCount;
     this.dur += mul * wd.apd.duration;
     if (mul !== 1) {
       if (wd.back) {
-        this.st = this.puz.combine(
-          this.st,
-          this.puz.multiply(wd.apd.backward, mul),
+        this.st = this.st.applyTransformation(
+          wd.apd.backward.selfMultiply(mul),
         );
       } else {
-        this.st = this.puz.combine(
-          this.st,
-          this.puz.multiply(wd.apd.forward, mul),
-        );
+        this.st = this.st.applyTransformation(wd.apd.forward.selfMultiply(mul));
       }
     } else {
       if (wd.back) {
-        this.st = this.puz.combine(this.st, wd.apd.backward);
+        this.st = this.st.applyTransformation(wd.apd.backward);
       } else {
-        this.st = this.puz.combine(this.st, wd.apd.forward);
+        this.st = this.st.applyTransformation(wd.apd.forward);
       }
     }
     return false;

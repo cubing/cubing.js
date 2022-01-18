@@ -2,6 +2,7 @@ import type { Alg, Move } from "../alg";
 import {
   invertTransformation,
   isTransformationDataIdentical,
+  selfMultiplyTransformationUncached,
 } from "./calculate";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
@@ -69,5 +70,16 @@ export class KTransformation {
 
   repetitionOrder(): number {
     return 1; // kpuzzle todo
+  }
+
+  selfMultiply(amount: number): KTransformation {
+    return new KTransformation(
+      this.kpuzzle,
+      selfMultiplyTransformationUncached(
+        this.kpuzzle,
+        this.transformationData,
+        amount,
+      ),
+    );
   }
 }

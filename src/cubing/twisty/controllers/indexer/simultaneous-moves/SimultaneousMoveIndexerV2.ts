@@ -1,15 +1,13 @@
 import { Alg, Move } from "../../../../alg";
-import type {
-  PuzzleWrapper,
-  State,
-} from "../../../views/3D/puzzles/KPuzzleWrapper";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
+import type { KState } from "../../../../kpuzzle/KState";
 import {
   Direction,
   Duration,
   PuzzlePosition,
   Timestamp,
 } from "../../AnimationTypes";
-import type { AlgIndexer, CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
+import type { CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import { AnimatedLeafUnit, AnimLeafWithRange, simulMoves } from "./simul-moves";
 
 const demos: Record<string, AnimLeafWithRange[]> = {
@@ -59,13 +57,11 @@ const demos: Record<string, AnimLeafWithRange[]> = {
   ],
 };
 
-export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
-  implements AlgIndexer<P>
-{
+export class SimultaneousMoveIndexerV2 {
   private animLeaves: AnimLeafWithRange[];
   // TODO: Allow custom `durationFn`.
 
-  constructor(private puzzle: P, alg: Alg) {
+  constructor(private kpuzzle: KPuzzle, alg: Alg) {
     this.animLeaves = demos[alg.toString()] ?? simulMoves(alg);
     // TODO: Avoid assuming all base moves are block moves.
   }
@@ -102,23 +98,23 @@ export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
 
   public timestampToPosition(
     timestamp: Timestamp,
-    startTransformation?: State<P>,
+    startState?: KState,
   ): PuzzlePosition {
     const currentMoveInfo = this.currentMoveInfo(timestamp);
 
-    let state = startTransformation ?? this.puzzle.identity();
+    let state = startState ?? this.kpuzzle.identityTransformation().toKState();
     for (const leafWithRange of this.animLeaves.slice(
       0,
       currentMoveInfo.stateIndex,
     )) {
       const move = leafWithRange.animLeaf.as(Move);
       if (move !== null) {
-        state = this.puzzle.combine(state, this.puzzle.stateFromMove(move));
+        state = state.applyMove(move);
       }
     }
 
     return {
-      state: state as any,
+      state,
       movesInProgress: currentMoveInfo.currentMoves,
     };
   }
@@ -200,27 +196,27 @@ export class SimultaneousMoveIndexerV2<P extends PuzzleWrapper>
     };
   }
 
-  public stateAtIndex(index: number, startTransformation?: State<P>): State<P> {
-    let state = startTransformation ?? this.puzzle.startState();
+  public stateAtIndex(index: number, startState?: KState): KState {
+    let state = startState ?? this.kpuzzle.startState();
     for (let i = 0; i < this.animLeaves.length && i < index; i++) {
       const leafWithRange = this.animLeaves[i];
       const move = leafWithRange.animLeaf.as(Move);
       if (move !== null) {
-        state = this.puzzle.combine(state, this.puzzle.stateFromMove(move));
+        state = state.applyMove(move);
       }
     }
     return state;
   }
 
-  public transformAtIndex(index: number): State<P> {
-    let state = this.puzzle.identity();
+  public transformationAtIndex(index: number): KTransformation {
+    let transformation = this.kpuzzle.identityTransformation();
     for (const leafWithRange of this.animLeaves.slice(0, index)) {
       const move = leafWithRange.animLeaf.as(Move);
       if (move !== null) {
-        state = this.puzzle.combine(state, this.puzzle.stateFromMove(move));
+        transformation = transformation.applyMove(move);
       }
     }
-    return state;
+    return transformation;
   }
 
   public algDuration(): Duration {

@@ -1,31 +1,17 @@
-import type { Alg } from "../../../../../alg";
-import type {
-  OldKPuzzleDefinition,
-  OldTransformation,
-} from "../../../../../kpuzzle";
-import { KPuzzleWrapper } from "../../../../views/3D/puzzles/KPuzzleWrapper";
-import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";
-import type { AlgWithIssues } from "./AlgProp";
+import type { KPuzzle, KTransformation } from "../../../../../kpuzzle";
 import { TwistyPropDerived } from "../../TwistyProp";
+import type { AlgWithIssues } from "./AlgProp";
 
 type AlgTransformationPropInputs = {
   alg: AlgWithIssues;
-  def: OldKPuzzleDefinition;
+  kpuzzle: KPuzzle;
 };
 
 export class AlgTransformationProp extends TwistyPropDerived<
   AlgTransformationPropInputs,
-  OldTransformation
+  KTransformation
 > {
-  derive(input: AlgTransformationPropInputs): OldTransformation {
-    return this.applyAlg(input.def, input.alg.alg);
-  }
-
-  applyAlg(def: OldKPuzzleDefinition, alg: Alg): OldTransformation {
-    const kpuzzleWrapper = new KPuzzleWrapper(def); // TODO: Remove this layer.
-    const indexer = new TreeAlgIndexer(kpuzzleWrapper, alg); // TODO: Use a direct efficient traversal in `cubing/kpuzzle` instead of instantiating a whole indexer.
-    return indexer.transformAtIndex(
-      indexer.numAnimatedLeaves(),
-    ) as OldTransformation;
+  derive(input: AlgTransformationPropInputs): KTransformation {
+    return input.kpuzzle.algToTransformation(input.alg.alg);
   }
 }

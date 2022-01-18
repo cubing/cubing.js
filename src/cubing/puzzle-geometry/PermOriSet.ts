@@ -1,6 +1,6 @@
 import { Move } from "../alg";
 import type {
-  OldKPuzzleDefinition,
+  KPuzzleDefinition,
   OldTransformation as KTransformation,
 } from "../kpuzzle"; // TODO
 import { NullMapper } from "./notation-mapping";
@@ -112,7 +112,7 @@ export class PGOrbitsDef {
   }
 
   // TODO: return type.
-  public toKPuzzle(includemoves: boolean): OldKPuzzleDefinition {
+  public toKPuzzle(includemoves: boolean): KPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
@@ -128,7 +128,7 @@ export class PGOrbitsDef {
         moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
       }
     }
-    return { name: "PG3D", orbits, startPieces: start, moves };
+    return { name: "PG3D", orbits, startStateData: start, moves };
   }
 
   public optimize(): PGOrbitsDef {

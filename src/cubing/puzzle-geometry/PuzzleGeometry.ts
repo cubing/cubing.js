@@ -1,4 +1,8 @@
 import { Move, QuantumMove } from "../alg";
+import type {
+  KPuzzleDefinition,
+  OldTransformation as KTransformation,
+} from "../kpuzzle";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
 import type { MoveNotation } from "./interfaces";
 import {
@@ -16,8 +20,8 @@ import {
   BaseFaceCount,
   FaceBasedOrientationDescription,
   FaceBasedOrientationDescriptionLookup,
-  PuzzleGeometryOptions,
   PuzzleGeometryFullOptions,
+  PuzzleGeometryOptions,
 } from "./Options";
 import { iota, Perm, zeros } from "./Perm";
 import {
@@ -25,8 +29,8 @@ import {
   PGOrbit,
   PGOrbitDef,
   PGOrbitsDef,
-  showcanon,
   PGTransform,
+  showcanon,
   VisibleState,
 } from "./PermOriSet";
 import { PGPuzzles, PuzzleDescriptionString, PuzzleName } from "./PGPuzzles";
@@ -42,10 +46,6 @@ import {
 } from "./PlatonicGenerator";
 import { centermassface, Quat } from "./Quat";
 import { schreierSims } from "./SchreierSims";
-import type {
-  OldKPuzzleDefinition,
-  OldTransformation as KTransformation,
-} from "../kpuzzle";
 
 export interface TextureMapper {
   getuv(fn: number, threed: number[]): number[];
@@ -2133,13 +2133,13 @@ export class PuzzleGeometry {
   public writekpuzzle(
     fortwisty: boolean = true,
     includemoves: boolean = true,
-  ): OldKPuzzleDefinition {
+  ): KPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty, includemoves);
     const r = od.toKPuzzle(includemoves);
     if (!r) {
       throw new Error("Missing definition!");
     }
-    r.moveNotation = new PGNotation(this, od);
+    // r.moveNotation = new PGNotation(this, od); // kpuzzle TODO
     return r;
   }
 
