@@ -1,10 +1,6 @@
 import { Move, QuantumMove } from "../alg";
-import type {
-  KPuzzleDefinition,
-  OldTransformation as KTransformation,
-} from "../kpuzzle";
+import type { KPuzzleDefinition } from "../kpuzzle";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
-import type { MoveNotation } from "./interfaces";
 import {
   FaceRenamingMapper,
   FTONotationMapper,

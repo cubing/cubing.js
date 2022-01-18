@@ -1,8 +1,5 @@
 import { Move } from "../alg";
-import type {
-  KPuzzleDefinition,
-  OldTransformation as KTransformation,
-} from "../kpuzzle"; // TODO
+import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle"; // TODO
 import { NullMapper } from "./notation-mapping";
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
@@ -41,7 +38,7 @@ export class PGOrbitsDef {
     public moveops: PGTransform[],
   ) {}
 
-  private transformToKPuzzle(t: PGTransform): any {
+  private transformToKTransformationData(t: PGTransform): KTransformationData {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < this.orbitnames.length; j++) {
       mp[this.orbitnames[j]] = t.orbits[j].toKPuzzle();
@@ -49,10 +46,10 @@ export class PGOrbitsDef {
     return mp;
   }
 
-  public static transformToKPuzzle(
+  public static transformToKTransformationData(
     orbitnames: string[],
     t: PGTransform,
-  ): KTransformation {
+  ): KTransformationData {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
       mp[orbitnames[j]] = t.orbits[j].toKPuzzle();
@@ -129,7 +126,9 @@ export class PGOrbitsDef {
     const moves: { [moveName: string]: any } = {};
     if (includemoves) {
       for (let i = 0; i < this.movenames.length; i++) {
-        moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
+        moves[this.movenames[i]] = this.transformToKTransformationData(
+          this.moveops[i],
+        );
       }
     }
     return { name: "PG3D", orbits, startStateData: start, moves };
