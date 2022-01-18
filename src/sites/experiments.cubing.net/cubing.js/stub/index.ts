@@ -8,11 +8,7 @@ import { puzzles } from "../../../../cubing/puzzles";
   const def = await puzzles["4x4x4"].def();
   const kpuzzle = new KPuzzle(def);
 
-  const t1 = kpuzzle.moveToTransformation("R");
-  console.log(t1.isIdentity());
-  const t2 = t1.applyTransformation(kpuzzle.moveToTransformation("R'"));
-  console.log(t2.isIdentity());
+  const tt = kpuzzle.algToTransformation("R U R'").applyAlg("R U' R'");
 
-  const tt = kpuzzle.algToTransformation("((R U)100)10000");
-  console.log(tt.isIdentity());
+  console.log(tt.isIdentityTransformation());
 })();
