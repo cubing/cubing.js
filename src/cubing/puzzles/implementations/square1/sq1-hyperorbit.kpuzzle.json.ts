@@ -1,14 +1,14 @@
-import type { OldKPuzzleDefinition } from "../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../kpuzzle";
 
-export const sq1HyperOrbitKPuzzle: OldKPuzzleDefinition = {
+export const sq1HyperOrbitKPuzzle: KPuzzleDefinition = {
   name: "Square-1",
   orbits: {
     WEDGES: { numPieces: 24, orientations: 9 },
     EQUATOR: { numPieces: 2, orientations: 6 },
   },
-  startPieces: {
+  startStateData: {
     WEDGES: {
-      permutation: [
+      pieces: [
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
         20, 21, 22, 23,
       ],
@@ -16,7 +16,7 @@ export const sq1HyperOrbitKPuzzle: OldKPuzzleDefinition = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       ],
     },
-    EQUATOR: { permutation: [0, 1], orientation: [0, 0] },
+    EQUATOR: { pieces: [0, 1], orientation: [0, 0] },
   },
   moves: {
     U_SQ_: {
