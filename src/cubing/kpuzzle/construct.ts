@@ -2,9 +2,9 @@ import type { Move } from "../alg";
 import { repeatTransformationUncached } from "./calculate";
 import type { KPuzzle } from "./KPuzzle";
 import type {
-  KTransformationOrbitData,
   KPuzzleDefinition,
   KTransformationData,
+  KTransformationOrbitData,
 } from "./KPuzzleDefinition";
 
 const FREEZE: boolean = false;
@@ -62,6 +62,7 @@ export function moveToTransformationUncached(
   const quantumMoveDefinition = kpuzzle.definition.moves[quantumKey] as
     | KTransformationData
     | undefined;
+
   if (quantumMoveDefinition) {
     return repeatTransformationUncached(
       kpuzzle,
