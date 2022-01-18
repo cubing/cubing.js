@@ -41,9 +41,6 @@ export function customPGPuzzleLoader(
   const puzzleLoader: PuzzleLoader = {
     id: `custom-${customID}`,
     fullName: info?.fullName ?? `Custom Puzzle (instance #${customID})`,
-    def: async () => {
-      return defPromise;
-    },
     kpuzzle: async () => {
       return (cachedKPuzzle ??= (async () => new KPuzzle(await defPromise))());
     },

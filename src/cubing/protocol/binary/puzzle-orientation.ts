@@ -1,4 +1,4 @@
-import { KTransformation } from "../../kpuzzle";
+import type { KTransformation } from "../../kpuzzle";
 import type { KState } from "../../kpuzzle/KState";
 
 export function puzzleOrientationIdx(state: KState): [number, number] {

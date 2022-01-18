@@ -1,13 +1,10 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import type { OldTransformation } from "../../kpuzzle";
-import {
-  BluetoothConfig,
-  BluetoothPuzzle,
-  PuzzleState,
-} from "./bluetooth-puzzle";
+import { experimental3x3x3KPuzzle, KStateData } from "../../kpuzzle";
+import { KState } from "../../kpuzzle/KState";
 import { debugLog } from "../debug";
+import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
 const MESSAGE_LENGTH = 20;
 
@@ -56,7 +53,7 @@ function giikerStateStr(giikerState: number[]): string {
 // };
 
 const Reid333SolvedCenters = {
-  permutation: [0, 1, 2, 3, 4, 5],
+  pieces: [0, 1, 2, 3, 4, 5],
   orientation: [0, 0, 0, 0, 0, 0],
 };
 
@@ -155,7 +152,7 @@ export class GiiKERCube extends BluetoothPuzzle {
     this.server.disconnect();
   }
 
-  public async getState(): Promise<PuzzleState> {
+  public async getState(): Promise<KState> {
     return this.toReid333(
       new Uint8Array((await this.cubeCharacteristic.readValue()).buffer),
     );
@@ -167,14 +164,14 @@ export class GiiKERCube extends BluetoothPuzzle {
     return (val[n] >> shift) & 1;
   }
 
-  private toReid333(val: Uint8Array): OldTransformation {
-    const state = {
+  private toReid333(val: Uint8Array): KState {
+    const state: KStateData = {
       EDGES: {
-        permutation: new Array(12),
+        pieces: new Array(12),
         orientation: new Array(12),
       },
       CORNERS: {
-        permutation: new Array(8),
+        pieces: new Array(8),
         orientation: new Array(8),
       },
       CENTERS: Reid333SolvedCenters,
@@ -182,23 +179,20 @@ export class GiiKERCube extends BluetoothPuzzle {
 
     for (let i = 0; i < 12; i++) {
       const gi = epReid333toGiiKER[i];
-      state.EDGES.permutation[i] =
-        epGiiKERtoReid333[getNibble(val, gi + 16) - 1];
+      state.EDGES.pieces[i] = epGiiKERtoReid333[getNibble(val, gi + 16) - 1];
       state.EDGES.orientation[i] =
-        this.getBit(val, gi + 112) ^
-        preEO[state.EDGES.permutation[i]] ^
-        postEO[i];
+        this.getBit(val, gi + 112) ^ preEO[state.EDGES.pieces[i]] ^ postEO[i];
     }
     for (let i = 0; i < 8; i++) {
       const gi = cpReid333toGiiKER[i];
-      state.CORNERS.permutation[i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
+      state.CORNERS.pieces[i] = cpGiiKERtoReid333[getNibble(val, gi) - 1];
       state.CORNERS.orientation[i] =
         (getNibble(val, gi + 8) * coFlip[gi] +
-          preCO[state.CORNERS.permutation[i]] +
+          preCO[state.CORNERS.pieces[i]] +
           postCO[i]) %
         3;
     }
-    return state;
+    return new KState(experimental3x3x3KPuzzle, state);
   }
 
   private async onCubeCharacteristicChanged(event: any): Promise<void> {

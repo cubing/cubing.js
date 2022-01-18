@@ -1,23 +1,19 @@
 import { Alg, Move, TraversalUp } from "../../../alg";
+import type { KPuzzle, KTransformation } from "../../../kpuzzle";
+import type { KState } from "../../../kpuzzle/KState";
 import { countAnimatedLeaves } from "../../../notation";
-import type {
-  PuzzleWrapper,
-  State,
-} from "../../views/3D/puzzles/KPuzzleWrapper";
 import type { Duration, Timestamp } from "../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
 import type { AlgIndexer } from "./AlgIndexer";
 
-export class SimpleAlgIndexer<P extends PuzzleWrapper>
-  implements AlgIndexer<P>
-{
+export class SimpleAlgIndexer implements AlgIndexer {
   private moves: Alg;
   // TODO: Allow custom `durationFn`.
   private durationFn: TraversalUp<Duration> = new AlgDuration(
     defaultDurationForAmount,
   );
 
-  constructor(private puzzle: P, alg: Alg) {
+  constructor(private kpuzzle: KPuzzle, alg: Alg) {
     // TODO: Avoid assuming all base moves are block moves.
     this.moves = new Alg(alg.experimentalExpand());
   }
@@ -43,20 +39,17 @@ export class SimpleAlgIndexer<P extends PuzzleWrapper>
     return i;
   }
 
-  public stateAtIndex(index: number): State<P> {
-    return this.puzzle.combine(
-      this.puzzle.startState(),
-      this.transformAtIndex(index),
-    );
+  public stateAtIndex(index: number): KState {
+    return this.kpuzzle
+      .startState()
+      .applyTransformation(this.transformationAtIndex(index));
   }
 
-  public transformAtIndex(index: number): State<P> {
-    let state = this.puzzle.identity();
+  public transformationAtIndex(index: number): KTransformation {
+    let state = this.kpuzzle.identityTransformation();
     for (const move of Array.from(this.moves.units()).slice(0, index)) {
-      state = this.puzzle.combine(
-        state,
-        this.puzzle.stateFromMove(move as Move),
-      );
+      // TODO
+      state = state.applyMove(move as Move);
     }
     return state;
   }

@@ -2950,64 +2950,65 @@ Vertex distance ${this.vertexdistance}`;
   }
 }
 
-class PGNotation implements MoveNotation {
-  private cache: { [key: string]: KTransformation } = {};
-  private orbitNames: string[];
-  constructor(private pg: PuzzleGeometry, od: PGOrbitsDef) {
-    this.orbitNames = od.orbitnames;
-  }
+// kpuzzle todo
+// class PGNotation implements MoveNotation {
+//   private cache: { [key: string]: KTransformation } = {};
+//   private orbitNames: string[];
+//   constructor(private pg: PuzzleGeometry, od: PGOrbitsDef) {
+//     this.orbitNames = od.orbitnames;
+//   }
 
-  public lookupMove(move: Move): KTransformation | undefined {
-    const key = this.moveToKeyString(move);
-    if (key in this.cache) {
-      return this.cache[key];
-    }
-    const mv = this.pg.parseMove(move);
-    // if a move list subset is defined, don't return moves outside the subset.
-    if (this.pg.parsedmovelist) {
-      let found = false;
-      for (const parsedmove of this.pg.parsedmovelist) {
-        if (
-          parsedmove[1] === mv[1] &&
-          parsedmove[2] === mv[2] &&
-          parsedmove[3] === mv[3] &&
-          parsedmove[4] === mv[4]
-        ) {
-          found = true;
-        }
-      }
-      if (!found) {
-        return undefined;
-      }
-    }
-    let bits = [mv[2], mv[3]];
-    if (!mv[4]) {
-      const slices = this.pg.moveplanesets[mv[1]].length;
-      bits = [slices - mv[3], slices - mv[2]];
-    }
-    const pgmv = this.pg.getMoveFromBits(
-      bits,
-      mv[5],
-      !mv[4],
-      this.pg.cmovesbyslice[mv[1]],
-      undefined,
-      this.pg.movesetorders[mv[1]],
-    );
-    const r = PGOrbitsDef.transformToKPuzzle(this.orbitNames, pgmv);
-    this.cache[key] = r;
-    return r;
-  }
+//   public lookupMove(move: Move): KTransformation | undefined {
+//     const key = this.moveToKeyString(move);
+//     if (key in this.cache) {
+//       return this.cache[key];
+//     }
+//     const mv = this.pg.parseMove(move);
+//     // if a move list subset is defined, don't return moves outside the subset.
+//     if (this.pg.parsedmovelist) {
+//       let found = false;
+//       for (const parsedmove of this.pg.parsedmovelist) {
+//         if (
+//           parsedmove[1] === mv[1] &&
+//           parsedmove[2] === mv[2] &&
+//           parsedmove[3] === mv[3] &&
+//           parsedmove[4] === mv[4]
+//         ) {
+//           found = true;
+//         }
+//       }
+//       if (!found) {
+//         return undefined;
+//       }
+//     }
+//     let bits = [mv[2], mv[3]];
+//     if (!mv[4]) {
+//       const slices = this.pg.moveplanesets[mv[1]].length;
+//       bits = [slices - mv[3], slices - mv[2]];
+//     }
+//     const pgmv = this.pg.getMoveFromBits(
+//       bits,
+//       mv[5],
+//       !mv[4],
+//       this.pg.cmovesbyslice[mv[1]],
+//       undefined,
+//       this.pg.movesetorders[mv[1]],
+//     );
+//     const r = PGOrbitsDef.transformToKPuzzle(this.orbitNames, pgmv);
+//     this.cache[key] = r;
+//     return r;
+//   }
 
-  // This is only used to construct keys, so does not need to be beautiful.
-  private moveToKeyString(move: Move): string {
-    let r = "";
-    if (move.outerLayer) {
-      r = r + move.outerLayer + ",";
-    }
-    if (move.innerLayer) {
-      r = r + move.innerLayer + ",";
-    }
-    r = r + move.family + "," + move.amount;
-    return r;
-  }
-}
+//   // This is only used to construct keys, so does not need to be beautiful.
+//   private moveToKeyString(move: Move): string {
+//     let r = "";
+//     if (move.outerLayer) {
+//       r = r + move.outerLayer + ",";
+//     }
+//     if (move.innerLayer) {
+//       r = r + move.innerLayer + ",";
+//     }
+//     r = r + move.family + "," + move.amount;
+//     return r;
+//   }
+// }
