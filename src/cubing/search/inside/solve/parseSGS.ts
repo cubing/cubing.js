@@ -1,10 +1,10 @@
 import { Alg } from "../../../alg";
 import {
-  identityTransformation,
-  invertTransformation,
-  KPuzzle,
-  KPuzzleDefinition,
-  Transformation,
+  oldIdentityTransformation,
+  oldInvertTransformation,
+  OldKPuzzle,
+  OldKPuzzleDefinition,
+  OldTransformation,
 } from "../../../kpuzzle";
 
 interface PieceReference {
@@ -14,7 +14,7 @@ interface PieceReference {
 
 export interface SGSAction {
   alg: Alg;
-  transformation: Transformation;
+  transformation: OldTransformation;
 }
 
 export interface SGSCachedData {
@@ -24,7 +24,10 @@ export interface SGSCachedData {
   }[];
 }
 
-export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
+export function parseSGS(
+  def: OldKPuzzleDefinition,
+  sgs: string,
+): SGSCachedData {
   const subgroupSizes: number[] = [];
   const sgsActions: SGSAction[] = [];
   for (const line of sgs.split("\n")) {
@@ -33,7 +36,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
       // ignore
     } else if (line.startsWith("Alg ")) {
       const alg = Alg.fromString(line.substring(4));
-      const kpuzzle = new KPuzzle(def);
+      const kpuzzle = new OldKPuzzle(def);
       kpuzzle.reset();
       kpuzzle.applyAlg(alg);
       sgsActions.push({ alg: alg, transformation: kpuzzle.state });
@@ -51,7 +54,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
   let sum = 0;
   subgroupAlgOffsets.push(0);
   const emptyAlg = Alg.fromString("");
-  const identity = identityTransformation(def);
+  const identity = oldIdentityTransformation(def);
   for (let i = 0; i < subgroupSizes.length; i++) {
     sum += subgroupSizes[i];
     subgroupAlgOffsets.push(sum);
@@ -92,7 +95,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
     }
     const lookup: Record<string, SGSAction> = {};
     for (let j = subgroupAlgOffsets[i]; j < subgroupAlgOffsets[i + 1]; j++) {
-      const transformation = invertTransformation(
+      const transformation = oldInvertTransformation(
         def,
         sgsActions[j].transformation,
       );
@@ -105,7 +108,7 @@ export function parseSGS(def: KPuzzleDefinition, sgs: string): SGSCachedData {
       }
       lookup[key] = sgsActions[j];
       sgsActions[j].alg = sgsActions[j].alg.invert();
-      sgsActions[j].transformation = invertTransformation(
+      sgsActions[j].transformation = oldInvertTransformation(
         def,
         sgsActions[j].transformation,
       );

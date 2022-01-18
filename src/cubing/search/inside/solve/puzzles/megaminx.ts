@@ -1,5 +1,5 @@
 import type { Alg } from "../../../../alg";
-import type { Transformation } from "../../../../kpuzzle";
+import type { OldTransformation } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { cachedMegaminxDefWithoutMO } from "./megaminx.sgs.json";
@@ -37,10 +37,10 @@ export async function preInitializeMegaminx(): Promise<void> {
 }
 
 // TODO: centers
-export async function solveMegaminx(state: Transformation): Promise<Alg> {
+export async function solveMegaminx(state: OldTransformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
-  const stateWithoutMO: Transformation = JSON.parse(JSON.stringify(state));
+  const stateWithoutMO: OldTransformation = JSON.parse(JSON.stringify(state));
   stateWithoutMO.CENTERS.orientation = new Array(12).fill(0);
   const alg = await trembleSolver.solve(
     stateWithoutMO,

@@ -1,11 +1,11 @@
 import type { Move } from "../../alg";
-import type { Transformation } from "../../kpuzzle";
+import type { OldTransformation } from "../../kpuzzle";
 import { BasicRotationTransformer, StreamTransformer } from "../transformer";
 
 /******** BluetoothPuzzle ********/
 
 // TODO: Make compatible with Twisty.
-export type PuzzleState = Transformation;
+export type PuzzleState = OldTransformation;
 
 // TODO: Use actual `CustomEvent`s?
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent

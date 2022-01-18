@@ -1,33 +1,36 @@
 export type {
-  KPuzzleDefinition,
-  OrbitTransformation,
-  Transformation,
+  KPuzzleDefinition as OldKPuzzleDefinition,
+  OrbitTransformation as OldOrbitTransformation,
+  Transformation as OldTransformation,
 } from "./definition_types";
 
-export { KPuzzle, transformationForMove } from "./kpuzzle";
+export {
+  KPuzzle as OldKPuzzle,
+  transformationForMove as oldTransformationForMove,
+} from "./kpuzzle";
 
 export {
-  Canonicalizer,
-  SearchSequence,
-  CanonicalSequenceIterator,
+  Canonicalizer as OldCanonicalizer,
+  SearchSequence as OldSearchSequence,
+  CanonicalSequenceIterator as OldCanonicalSequenceIterator,
 } from "./canonicalize";
 
 export {
-  combineTransformations,
-  multiplyTransformations,
-  identityTransformation,
-  invertTransformation,
-  areTransformationsEquivalent,
-  areOrbitTransformationsEquivalent,
-  areStatesEquivalent,
-  transformationOrder,
+  combineTransformations as oldCombineTransformations,
+  multiplyTransformations as oldMultiplyTransformations,
+  identityTransformation as oldIdentityTransformation,
+  invertTransformation as oldInvertTransformation,
+  areTransformationsEquivalent as oldAreTransformationsEquivalent,
+  areOrbitTransformationsEquivalent as oldAreOrbitTransformationsEquivalent,
+  areStatesEquivalent as oldAreStatesEquivalent,
+  transformationOrder as oldTransformationOrder,
 } from "./transformations";
 
-export { parseKPuzzleDefinition } from "./parser";
+export { parseKPuzzleDefinition as oldParseKPuzzleDefinition } from "./parser";
 
-export { KPuzzleSVGWrapper } from "./svg";
+export { KPuzzleSVGWrapper as OldKPuzzleSVGWrapper } from "./svg";
 
-export { cube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle } from "./3x3x3/3x3x3.kpuzzle.json";
-export { experimentalIs3x3x3Solved } from "./puzzle-orientation";
+export { cube3x3x3KPuzzle as oldExperimentalCube3x3x3KPuzzle } from "./3x3x3/3x3x3.kpuzzle.json";
+export { experimentalIs3x3x3Solved as oldExperimentalIs3x3x3Solved } from "./puzzle-orientation";
 
-export { transformationForQuantumMove as experimentalTransformationForQuantumMove } from "./kpuzzle";
+export { transformationForQuantumMove as oldExperimentalTransformationForQuantumMove } from "./kpuzzle";

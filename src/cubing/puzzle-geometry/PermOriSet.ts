@@ -1,7 +1,7 @@
 import { Move } from "../alg";
 import type {
-  KPuzzleDefinition,
-  Transformation as KTransformation,
+  OldKPuzzleDefinition,
+  OldTransformation as KTransformation,
 } from "../kpuzzle"; // TODO
 import { NullMapper } from "./notation-mapping";
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
@@ -112,7 +112,7 @@ export class PGOrbitsDef {
   }
 
   // TODO: return type.
-  public toKPuzzle(includemoves: boolean): KPuzzleDefinition {
+  public toKPuzzle(includemoves: boolean): OldKPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {

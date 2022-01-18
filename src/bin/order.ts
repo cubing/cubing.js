@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 import { Alg } from "../cubing/alg";
-import { transformationOrder } from "../cubing/kpuzzle";
+import { oldTransformationOrder } from "../cubing/kpuzzle";
 import { getPuzzleGeometryByName } from "../cubing/puzzle-geometry";
 import { KSolvePuzzle, TreeAlgIndexer } from "../cubing/twisty";
 
@@ -41,5 +41,5 @@ const tr = tai.transformAtIndex(tai.numAnimatedLeaves());
 /*
  *   We calculate its order and display it.
  */
-const o = transformationOrder(puzzle, tr as any);
+const o = oldTransformationOrder(puzzle, tr as any);
 console.log(o);

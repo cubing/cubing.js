@@ -1,4 +1,4 @@
-import type { KPuzzleDefinition } from "../kpuzzle";
+import type { OldKPuzzleDefinition } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
 import type { PuzzleLoader } from "./PuzzleLoader";
@@ -20,7 +20,7 @@ export async function descAsyncGetPuzzleGeometry(
 // same puzzle?
 export async function dsecAsyncGetDef(
   desc: PuzzleDescriptionString,
-): Promise<KPuzzleDefinition> {
+): Promise<OldKPuzzleDefinition> {
   return (await descAsyncGetPuzzleGeometry(desc)).writekpuzzle(true);
 }
 

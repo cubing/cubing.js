@@ -1,5 +1,5 @@
 import type { Alg } from "../../../../alg";
-import type { Transformation } from "../../../../kpuzzle";
+import type { OldTransformation } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
@@ -28,14 +28,14 @@ export async function preInitializePyraminx(): Promise<void> {
   await getCachedTrembleSolver();
 }
 
-export async function solvePyraminx(state: Transformation): Promise<Alg> {
+export async function solvePyraminx(state: OldTransformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(state, TREMBLE_DEPTH, () => 3); // TODO: Attach quantum move order lookup to puzzle.
   return alg;
 }
 
-export async function randomPyraminxStateFixedOrientation(): Promise<Transformation> {
+export async function randomPyraminxStateFixedOrientation(): Promise<OldTransformation> {
   // Note: this sets all center orientations to 0.
   return randomStateFromSGS(
     await puzzles.pyraminx.def(),

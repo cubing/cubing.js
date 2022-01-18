@@ -1,6 +1,6 @@
-import type { KPuzzleDefinition } from "../../../kpuzzle";
+import type { OldKPuzzleDefinition } from "../../../kpuzzle";
 
-export const pyraminxKPuzzle: KPuzzleDefinition = {
+export const pyraminxKPuzzle: OldKPuzzleDefinition = {
   name: "Pyraminx",
   orbits: {
     CENTERS: { numPieces: 4, orientations: 3 },

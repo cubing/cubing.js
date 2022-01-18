@@ -1,5 +1,5 @@
 import { getPuzzleGeometryByName } from "../puzzle-geometry";
-import { areStatesEquivalent, combineTransformations } from ".";
+import { oldAreStatesEquivalent, oldCombineTransformations } from ".";
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
 import { Alg } from "../alg";
 
@@ -20,10 +20,10 @@ describe("CanonSequences", () => {
     expect(ss3.moveseq.length).toBe(6);
     expect(ss3.getSequenceAsString()).toBe("U F2 BL2' R2' F' U2");
     expect(
-      areStatesEquivalent(
+      oldAreStatesEquivalent(
         def,
         ss3.trans,
-        combineTransformations(def, ss1.trans, ss2.trans),
+        oldCombineTransformations(def, ss1.trans, ss2.trans),
       ),
     ).toBeTruthy();
   });

@@ -17,7 +17,7 @@ import {
   Vector3,
 } from "three";
 import type { ExperimentalStickering } from "../../..";
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
+import type { OldKPuzzleDefinition } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import type {
   FaceletMeshAppearance,
@@ -554,7 +554,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   }
 
   constructor(
-    private def: KPuzzleDefinition,
+    private def: OldKPuzzleDefinition,
     private scheduleRenderCallback?: () => void,
     options: Cube3DOptions = {},
   ) {

@@ -43,8 +43,8 @@ import {
 import { centermassface, Quat } from "./Quat";
 import { schreierSims } from "./SchreierSims";
 import type {
-  KPuzzleDefinition,
-  Transformation as KTransformation,
+  OldKPuzzleDefinition,
+  OldTransformation as KTransformation,
 } from "../kpuzzle";
 
 export interface TextureMapper {
@@ -2133,7 +2133,7 @@ export class PuzzleGeometry {
   public writekpuzzle(
     fortwisty: boolean = true,
     includemoves: boolean = true,
-  ): KPuzzleDefinition {
+  ): OldKPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty, includemoves);
     const r = od.toKPuzzle(includemoves);
     if (!r) {

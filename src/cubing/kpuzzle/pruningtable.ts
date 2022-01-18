@@ -1,8 +1,8 @@
 import { Canonicalizer, CanonicalSequenceIterator } from "./canonicalize";
-import type { KPuzzleDefinition, Transformation } from ".";
+import type { OldKPuzzleDefinition, OldTransformation } from ".";
 import { areStatesEquivalent } from "./transformations";
 const mask = 0x7fffffff;
-function hash(def: KPuzzleDefinition, s: Transformation): number {
+function hash(def: OldKPuzzleDefinition, s: OldTransformation): number {
   let r = 0;
   for (const orbitName in def.orbits) {
     const oDef = def.orbits[orbitName];
@@ -19,7 +19,7 @@ export class PruningTable {
   private tab: Uint8Array;
   private population: number = 0;
   private lookups: number = 0;
-  private def: KPuzzleDefinition;
+  private def: OldKPuzzleDefinition;
   private filled: number = -1;
   constructor(
     public canon: Canonicalizer,
@@ -33,7 +33,7 @@ export class PruningTable {
     this.filllevel();
   }
 
-  public solve(s: Transformation): string {
+  public solve(s: OldTransformation): string {
     for (let d = 0; ; d++) {
       if (
         this.lookups > this.population &&
@@ -87,7 +87,7 @@ export class PruningTable {
     }
   }
 
-  private lookup(s: Transformation): number {
+  private lookup(s: OldTransformation): number {
     this.lookups++;
     const v = this.tab[hash(this.def, s) % this.memsize];
     if (v === 255) {

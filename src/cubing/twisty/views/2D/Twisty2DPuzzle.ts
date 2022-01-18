@@ -1,8 +1,8 @@
 import {
-  combineTransformations,
-  KPuzzleDefinition,
-  KPuzzleSVGWrapper,
-  transformationForMove,
+  oldCombineTransformations,
+  OldKPuzzleDefinition,
+  OldKPuzzleSVGWrapper,
+  oldTransformationForMove,
 } from "../../../kpuzzle";
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
 import type { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
@@ -28,13 +28,13 @@ export class Twisty2DPuzzle
   extends ManagedCustomElement
   implements PositionListener
 {
-  private definition: KPuzzleDefinition;
-  public svg: KPuzzleSVGWrapper;
+  private definition: OldKPuzzleDefinition;
+  public svg: OldKPuzzleSVGWrapper;
   private scheduler = new RenderScheduler(this.render.bind(this));
   #cachedPosition: PuzzlePosition | null = null; // TODO: pull when needed.
   constructor(
     private model?: TwistyPlayerModel,
-    def?: KPuzzleDefinition,
+    def?: OldKPuzzleDefinition,
     private svgSource?: string,
     private options?: Twisty2DPuzzleOptions,
     private puzzleLoader?: PuzzleLoader,
@@ -79,10 +79,10 @@ export class Twisty2DPuzzle
         if (position.movesInProgress[0].direction === Direction.Backwards) {
           partialMove = move.invert();
         }
-        const newState = combineTransformations(
+        const newState = oldCombineTransformations(
           def,
           position.state,
-          transformationForMove(def, partialMove),
+          oldTransformationForMove(def, partialMove),
         );
         // TODO: move to render()
         this.svg.draw(
@@ -127,7 +127,7 @@ export class Twisty2DPuzzle
     if (!this.definition) {
       return; // TODO
     }
-    this.svg = new KPuzzleSVGWrapper(
+    this.svg = new OldKPuzzleSVGWrapper(
       this.definition,
       this.svgSource!,
       appearance,

@@ -1,8 +1,8 @@
 import { Alg } from "../../alg";
 import {
-  KPuzzle,
-  Transformation,
-  experimentalCube3x3x3KPuzzle as def,
+  OldKPuzzle,
+  OldTransformation,
+  oldExperimentalCube3x3x3KPuzzle as def,
 } from "../../kpuzzle";
 import {
   reid3x3x3ToTwizzleBinary,
@@ -10,8 +10,8 @@ import {
 } from "./binary3x3x3";
 import { bufferToSpacedHex } from "./hex";
 
-function stateForAlg(alg: string): Transformation {
-  const kpuzzle = new KPuzzle(def);
+function stateForAlg(alg: string): OldTransformation {
+  const kpuzzle = new OldKPuzzle(def);
   kpuzzle.applyAlg(new Alg(alg));
   return kpuzzle.state;
 }

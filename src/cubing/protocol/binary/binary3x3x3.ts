@@ -1,4 +1,4 @@
-import type { Transformation } from "../../kpuzzle";
+import type { OldTransformation } from "../../kpuzzle";
 import {
   identityPermutation,
   lexToPermutation,
@@ -85,7 +85,7 @@ function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
 }
 
 export function reid3x3x3ToBinaryComponents(
-  state: Transformation,
+  state: OldTransformation,
 ): Binary3x3x3Components {
   const normedState = normalizePuzzleOrientation(state);
 
@@ -128,7 +128,7 @@ export function binaryComponentsToTwizzleBinary(
 }
 
 export function reid3x3x3ToTwizzleBinary(
-  state: Transformation,
+  state: OldTransformation,
 ): Binary3x3x3State {
   const components: Binary3x3x3Components = reid3x3x3ToBinaryComponents(state);
   return binaryComponentsToTwizzleBinary(components);
@@ -154,7 +154,7 @@ export function twizzleBinaryToBinaryComponents(
 
 export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
-): Transformation {
+): OldTransformation {
   if (components.moSupport !== 1) {
     throw new Error("Must support center orientation.");
   }
@@ -216,7 +216,9 @@ function validateComponents(components: Binary3x3x3Components): string[] {
   return errors;
 }
 
-export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): Transformation {
+export function twizzleBinaryToReid3x3x3(
+  buffy: ArrayBuffer,
+): OldTransformation {
   const components = twizzleBinaryToBinaryComponents(buffy);
   const errors = validateComponents(components);
   if (errors.length !== 0) {

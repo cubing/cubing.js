@@ -1,19 +1,19 @@
 import { Move } from "../../../../../alg";
 import {
-  KPuzzle,
-  areOrbitTransformationsEquivalent,
-  KPuzzleDefinition,
-  Transformation,
+  OldKPuzzle,
+  oldAreOrbitTransformationsEquivalent,
+  OldKPuzzleDefinition,
+  OldTransformation,
 } from "../../../../../kpuzzle";
 
 export function isEquivalentTranformationIgnoringCENTERS(
-  def: KPuzzleDefinition,
-  t1: Transformation,
-  t2: Transformation,
+  def: OldKPuzzleDefinition,
+  t1: OldTransformation,
+  t2: OldTransformation,
 ): boolean {
   for (const orbitName in def.orbits) {
     if (
-      !areOrbitTransformationsEquivalent(def, orbitName, t1, t2, {
+      !oldAreOrbitTransformationsEquivalent(def, orbitName, t1, t2, {
         ignoreOrientation: orbitName === "CENTERS",
       })
     ) {
@@ -24,10 +24,10 @@ export function isEquivalentTranformationIgnoringCENTERS(
 }
 
 export function passesFilter(
-  def: KPuzzleDefinition,
-  state: Transformation,
+  def: OldKPuzzleDefinition,
+  state: OldTransformation,
 ): boolean {
-  const kpuzzle = new KPuzzle(def);
+  const kpuzzle = new OldKPuzzle(def);
   if (isEquivalentTranformationIgnoringCENTERS(def, kpuzzle.state, state)) {
     return false;
   }

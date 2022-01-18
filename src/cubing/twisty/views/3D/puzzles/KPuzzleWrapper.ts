@@ -1,12 +1,12 @@
 import type { Move } from "../../../../alg";
 import {
-  combineTransformations,
-  areStatesEquivalent,
-  identityTransformation,
-  invertTransformation,
-  KPuzzleDefinition,
-  transformationForMove,
-  Transformation,
+  oldCombineTransformations,
+  oldAreStatesEquivalent,
+  oldIdentityTransformation,
+  oldInvertTransformation,
+  OldKPuzzleDefinition,
+  oldTransformationForMove,
+  OldTransformation,
 } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 
@@ -65,7 +65,7 @@ export abstract class PuzzleWrapper {
 }
 
 export interface KSolvePuzzleState
-  extends Transformation,
+  extends OldTransformation,
     State<KPuzzleWrapper> {}
 
 export class KPuzzleWrapper extends PuzzleWrapper {
@@ -74,8 +74,8 @@ export class KPuzzleWrapper extends PuzzleWrapper {
     return new KPuzzleWrapper(await puzzles[id].def());
   }
 
-  public moveCache: { [key: string]: Transformation } = {};
-  constructor(private definition: KPuzzleDefinition) {
+  public moveCache: { [key: string]: OldTransformation } = {};
+  constructor(private definition: OldKPuzzleDefinition) {
     super();
   }
 
@@ -84,30 +84,30 @@ export class KPuzzleWrapper extends PuzzleWrapper {
   }
 
   public invert(state: KSolvePuzzleState): KSolvePuzzleState {
-    return invertTransformation(this.definition, state);
+    return oldInvertTransformation(this.definition, state);
   }
 
   public combine(
     s1: KSolvePuzzleState,
     s2: KSolvePuzzleState,
   ): KSolvePuzzleState {
-    return combineTransformations(this.definition, s1, s2);
+    return oldCombineTransformations(this.definition, s1, s2);
   }
 
   public stateFromMove(move: Move): KSolvePuzzleState {
     const key = move.toString();
     if (!this.moveCache[key]) {
-      this.moveCache[key] = transformationForMove(this.definition, move);
+      this.moveCache[key] = oldTransformationForMove(this.definition, move);
     }
     return this.moveCache[key];
   }
 
   public identity(): KSolvePuzzleState {
-    return identityTransformation(this.definition);
+    return oldIdentityTransformation(this.definition);
   }
 
   public equivalent(s1: KSolvePuzzleState, s2: KSolvePuzzleState): boolean {
-    return areStatesEquivalent(this.definition, s1, s2);
+    return oldAreStatesEquivalent(this.definition, s1, s2);
   }
 }
 

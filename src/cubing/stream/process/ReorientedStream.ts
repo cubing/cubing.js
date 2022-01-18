@@ -1,6 +1,6 @@
 import { experimentalIs, Move } from "../../alg";
-import { KPuzzle } from "../../kpuzzle";
-import { experimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../kpuzzle";
+import { OldKPuzzle } from "../../kpuzzle";
+import { oldExperimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../kpuzzle";
 
 export interface PuzzleStreamMoveEventDetail {
   move: Move;
@@ -40,7 +40,7 @@ const rotationMap: Record<string, [Move, string]> = {
 };
 
 class OrientationTracker {
-  kpuzzle = new KPuzzle(cube3x3x3KPuzzle); // TODO: can we do centers only (less data) with little code?
+  kpuzzle = new OldKPuzzle(cube3x3x3KPuzzle); // TODO: can we do centers only (less data) with little code?
 
   processMove(move: Move): Move[] {
     // TODO: validation

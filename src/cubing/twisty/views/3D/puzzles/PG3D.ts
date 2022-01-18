@@ -15,13 +15,13 @@ import {
 } from "three";
 import { Move } from "../../../../alg";
 import {
-  areTransformationsEquivalent,
-  KPuzzle,
-  KPuzzleDefinition,
-  Transformation,
-  transformationOrder,
+  oldAreTransformationsEquivalent,
+  OldKPuzzle,
+  OldKPuzzleDefinition,
+  OldTransformation,
+  oldTransformationOrder,
 } from "../../../../kpuzzle";
-import { experimentalTransformationForQuantumMove } from "../../../../kpuzzle";
+import { oldExperimentalTransformationForQuantumMove } from "../../../../kpuzzle";
 import type {
   StickerDat,
   StickerDatSticker,
@@ -511,7 +511,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   private foundationBound: number; // before this: colored; after: black
   private fixedGeo: BufferGeometry;
   private lastPos: PuzzlePosition;
-  private lastMove: Transformation;
+  private lastMove: OldTransformation;
   private hintMaterial: Material;
   private stickerMaterial: Material;
   private materialArray1: Material[];
@@ -526,7 +526,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   constructor(
     private scheduleRenderCallback: () => void,
-    private definition: KPuzzleDefinition,
+    private definition: OldKPuzzleDefinition,
     private stickerDat: StickerDat,
     enableFoundationOpt: boolean = false,
     enableHintStickersOpt: boolean = false,
@@ -701,9 +701,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return this.controlTargets;
   }
 
-  #cachedKPuzzle: KPuzzle | null;
+  #cachedKPuzzle: OldKPuzzle | null;
   get #kpuzzle() {
-    return (this.#cachedKPuzzle ??= new KPuzzle(this.definition));
+    return (this.#cachedKPuzzle ??= new OldKPuzzle(this.definition));
   }
   #isValidMove(move: Move): boolean {
     try {
@@ -760,7 +760,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     // TODO: cache order or make this lookup more efficient.
     this.#kpuzzle.reset();
     this.#kpuzzle.applyMove(closestMove);
-    const order = transformationOrder(this.definition, this.#kpuzzle.state);
+    const order = oldTransformationOrder(this.definition, this.#kpuzzle.state);
     return { move: closestMove, order }; // TODO: push this down
   }
 
@@ -801,7 +801,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (
       !this.lastPos ||
       this.#pendingStickeringUpdate ||
-      !areTransformationsEquivalent(this.definition, this.lastPos.state, state)
+      !oldAreTransformationsEquivalent(
+        this.definition,
+        this.lastPos.state,
+        state,
+      )
     ) {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
@@ -846,7 +850,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (move === null) {
         throw Error("Bad blockmove " + externalMove.family);
       }
-      const quantumTransformation = experimentalTransformationForQuantumMove(
+      const quantumTransformation = oldExperimentalTransformationForQuantumMove(
         this.definition,
         externalMove.quantum,
       );

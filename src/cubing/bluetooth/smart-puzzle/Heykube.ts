@@ -1,7 +1,7 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import type { KPuzzleDefinition } from "../../kpuzzle";
+import type { OldKPuzzleDefinition } from "../../kpuzzle";
 import {
   experimentalBinaryComponentsToReid3x3x3,
   experimentalTwizzleBinaryToBinaryComponents,
@@ -47,7 +47,7 @@ export class HeykubeCube extends BluetoothPuzzle {
   }
 
   private constructor(
-    _def: KPuzzleDefinition,
+    _def: OldKPuzzleDefinition,
     _service: BluetoothRemoteGATTService,
     device: BluetoothDevice,
     private server: BluetoothRemoteGATTServer,

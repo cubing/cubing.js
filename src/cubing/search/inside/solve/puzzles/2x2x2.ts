@@ -1,8 +1,8 @@
 import type { Alg } from "../../../../alg";
 import {
-  KPuzzle,
-  KPuzzleDefinition,
-  Transformation,
+  OldKPuzzle,
+  OldKPuzzleDefinition,
+  OldTransformation,
 } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../inside-worker";
@@ -40,7 +40,7 @@ export async function preInitialize222(): Promise<void> {
 }
 
 // TODO: fix def consistency.
-export async function solve222(state: Transformation): Promise<Alg> {
+export async function solve222(state: OldTransformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(state, TREMBLE_DEPTH, () => 4); // TODO: Attach quantum move order lookup to puzzle.
@@ -49,9 +49,9 @@ export async function solve222(state: Transformation): Promise<Alg> {
 
 // TODO: factor out and test.
 async function randomizeOrbit(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   orbitName: string,
-  state: Transformation,
+  state: OldTransformation,
   options?: { orientationSum?: number },
 ): Promise<void> {
   const randomUIntBelow = await randomUIntBelowFactory();
@@ -78,11 +78,13 @@ async function randomizeOrbit(
 }
 
 // TODO: Use SGS?
-export async function random222State(): Promise<Transformation> {
+export async function random222State(): Promise<OldTransformation> {
   const nonExtensibleDef = await puzzles["2x2x2"].def();
   const def = Object.assign({}, nonExtensibleDef);
-  const kpuzzle = new KPuzzle(def);
-  const stateCopy: Transformation = JSON.parse(JSON.stringify(kpuzzle.state)); // TODO
+  const kpuzzle = new OldKPuzzle(def);
+  const stateCopy: OldTransformation = JSON.parse(
+    JSON.stringify(kpuzzle.state),
+  ); // TODO
   await randomizeOrbit(def, "CORNERS", stateCopy, { orientationSum: 0 });
   return stateCopy;
 }

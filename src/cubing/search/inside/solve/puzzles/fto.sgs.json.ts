@@ -1,8 +1,8 @@
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
+import type { OldKPuzzleDefinition } from "../../../../kpuzzle";
 import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
-export async function ftoDef(): Promise<KPuzzleDefinition> {
+export async function ftoDef(): Promise<OldKPuzzleDefinition> {
   return getPuzzleGeometryByName("FTO", {
     allMoves: true,
     orientCenters: true,

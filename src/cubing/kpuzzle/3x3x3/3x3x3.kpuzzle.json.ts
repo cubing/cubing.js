@@ -5,10 +5,10 @@
 
 // TODO: this would be a raw `.json` file, but Parcel runs into an error from
 
-import type { KPuzzleDefinition } from "..";
+import type { OldKPuzzleDefinition } from "..";
 
 // using that as both a sync and async import. Probably https://github.com/parcel-bundler/parcel/issues/2546
-export const cube3x3x3KPuzzle: KPuzzleDefinition = {
+export const cube3x3x3KPuzzle: OldKPuzzleDefinition = {
   name: "3x3x3",
   orbits: {
     EDGES: { numPieces: 12, orientations: 2 },

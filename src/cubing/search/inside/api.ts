@@ -29,7 +29,7 @@ import { setIsInsideWorker } from "./inside-worker";
 import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
 import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
-import type { Transformation } from "../../kpuzzle";
+import type { OldTransformation } from "../../kpuzzle";
 import { randomFTOScramble } from "./solve/puzzles/fto";
 
 setIsInsideWorker(true);
@@ -146,23 +146,23 @@ export const insideAPI = {
     return (await insideAPI.randomScrambleForEvent(eventID)).toString();
   },
 
-  solve333ToString: async (s: Transformation): Promise<string> => {
+  solve333ToString: async (s: OldTransformation): Promise<string> => {
     return (await solve333(s)).toString();
   },
 
-  solve222ToString: async (s: Transformation): Promise<string> => {
+  solve222ToString: async (s: OldTransformation): Promise<string> => {
     return (await solve222(s)).toString();
   },
 
-  solveSkewbToString: async (s: Transformation): Promise<string> => {
+  solveSkewbToString: async (s: OldTransformation): Promise<string> => {
     return (await solveSkewb(s)).toString();
   },
 
-  solvePyraminxToString: async (s: Transformation): Promise<string> => {
+  solvePyraminxToString: async (s: OldTransformation): Promise<string> => {
     return (await solvePyraminx(s)).toString();
   },
 
-  solveMegaminxToString: async (s: Transformation): Promise<string> => {
+  solveMegaminxToString: async (s: OldTransformation): Promise<string> => {
     return (await solveMegaminx(s)).toString();
   },
 

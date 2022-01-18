@@ -1,11 +1,11 @@
 import { Alg } from "../../../../cubing/alg";
 import {
-  experimentalCube3x3x3KPuzzle as defJSON,
-  KPuzzle,
-  KPuzzleDefinition,
-  KPuzzleSVGWrapper,
-  Transformation,
-  transformationOrder,
+  oldExperimentalCube3x3x3KPuzzle as defJSON,
+  OldKPuzzle,
+  OldKPuzzleDefinition,
+  OldKPuzzleSVGWrapper,
+  OldTransformation,
+  oldTransformationOrder,
 } from "../../../../cubing/kpuzzle";
 import {
   binaryComponentsToReid3x3x3,
@@ -22,7 +22,7 @@ import {
   stickersToKPuzzle,
 } from "./convert";
 
-const def: KPuzzleDefinition = defJSON;
+const def: OldKPuzzleDefinition = defJSON;
 
 export function bufferToSpacedHex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
@@ -38,8 +38,8 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
 }
 
 class App {
-  kpuzzle = new KPuzzle(def);
-  svg = new KPuzzleSVGWrapper(def, svgSource);
+  kpuzzle = new OldKPuzzle(def);
+  svg = new OldKPuzzleSVGWrapper(def, svgSource);
   algTextarea = document.querySelector("#alg") as HTMLTextAreaElement;
   kpuzzleTextarea = document.querySelector("#kpuzzle") as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
@@ -121,7 +121,7 @@ class App {
     this.setState(twizzleBinaryToReid3x3x3(spacedHexToBuffer(s)));
   }
 
-  setState(state: Transformation): void {
+  setState(state: OldTransformation): void {
     this.kpuzzle.state = state;
     this.svg.draw(def, state);
     this.kpuzzleTextarea.value = kpuzzleToString(state);
@@ -135,7 +135,7 @@ class App {
     this.binaryTextarea.value = bufferToSpacedHex(
       reid3x3x3ToTwizzleBinary(state),
     );
-    this.orderElem.textContent = transformationOrder(def, state).toString();
+    this.orderElem.textContent = oldTransformationOrder(def, state).toString();
   }
 }
 

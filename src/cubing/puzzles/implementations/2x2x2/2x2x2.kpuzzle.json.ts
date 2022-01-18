@@ -1,6 +1,6 @@
-import type { KPuzzleDefinition } from "../../../kpuzzle";
+import type { OldKPuzzleDefinition } from "../../../kpuzzle";
 
-export const cube2x2x2KPuzzle: KPuzzleDefinition = {
+export const cube2x2x2KPuzzle: OldKPuzzleDefinition = {
   name: "2x2x2",
   orbits: {
     CORNERS: { numPieces: 8, orientations: 3 },

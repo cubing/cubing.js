@@ -2,7 +2,7 @@
 
 import { Move } from "../../alg";
 import { experimentalIs } from "../../alg";
-import { KPuzzleDefinition, transformationForMove } from "../../kpuzzle";
+import { OldKPuzzleDefinition, oldTransformationForMove } from "../../kpuzzle";
 
 export type FaceletMeshAppearance =
   | "regular"
@@ -72,7 +72,7 @@ export enum PieceStickering {
 
 export class PieceAnnotation<T> {
   stickerings: Map<string, T[]> = new Map();
-  constructor(def: KPuzzleDefinition, defaultValue: T) {
+  constructor(def: OldKPuzzleDefinition, defaultValue: T) {
     for (const [orbitName, orbitDef] of Object.entries(def.orbits)) {
       this.stickerings.set(
         orbitName,
@@ -159,7 +159,7 @@ export function getPieceAppearance(
 }
 
 export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
-  constructor(def: KPuzzleDefinition) {
+  constructor(def: OldKPuzzleDefinition) {
     super(def, PieceStickering.Regular);
   }
 
@@ -193,7 +193,7 @@ export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
 export type PieceSet = PieceAnnotation<boolean>;
 
 export class StickeringManager {
-  constructor(private def: KPuzzleDefinition) {}
+  constructor(private def: OldKPuzzleDefinition) {}
 
   and(pieceSets: PieceSet[]): PieceSet {
     const newPieceSet = new PieceAnnotation<boolean>(this.def, false);
@@ -244,7 +244,7 @@ export class StickeringManager {
   }
 
   move(moveSource: Move | string): PieceSet {
-    const transformation = transformationForMove(
+    const transformation = oldTransformationForMove(
       this.def,
       experimentalIs(moveSource, Move)
         ? (moveSource as Move)

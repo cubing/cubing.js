@@ -1,6 +1,6 @@
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
-import { KPuzzle } from "../../../cubing/kpuzzle";
+import { OldKPuzzle } from "../../../cubing/kpuzzle";
 import { puzzles } from "../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
 import {
@@ -110,7 +110,7 @@ export class App {
     ]);
     const currentAlg = currentAlgWithIssues.alg;
     let solution: Alg;
-    const kpuzzle = new KPuzzle(await puzzles[puzzleID].def());
+    const kpuzzle = new OldKPuzzle(await puzzles[puzzleID].def());
     console.log(kpuzzle);
     switch (puzzleID) {
       case "2x2x2": {

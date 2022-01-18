@@ -17,7 +17,7 @@ LFRB
          |51|52|53|
 */
 
-import type { Transformation } from "../../../../../kpuzzle";
+import type { OldTransformation } from "../../../../../kpuzzle";
 
 const reidEdgeOrder = "UF UR UB UL DF DR DB DL FR FL BR BL".split(" ");
 const reidCornerOrder = "UFR URB UBL ULF DRF DFL DLB DBR".split(" ");
@@ -98,7 +98,7 @@ function rotateLeft(s: string, i: number): string {
   return s.slice(i) + s.slice(0, i);
 }
 
-function toReid333Struct(state: Transformation): string[][] {
+function toReid333Struct(state: OldTransformation): string[][] {
   const output: string[][] = [[], []];
   for (let i = 0; i < 6; i++) {
     if (state["CENTERS"].permutation[i] !== i) {
@@ -131,7 +131,7 @@ function toReid333Struct(state: Transformation): string[][] {
 //     .join(" ");
 // }
 
-export function toMin2PhaseState(state: Transformation): string {
+export function toMin2PhaseState(state: OldTransformation): string {
   const reid = toReid333Struct(state);
   return map.map(([orbit, perm, ori]) => reid[orbit][perm][ori]).join("");
 }

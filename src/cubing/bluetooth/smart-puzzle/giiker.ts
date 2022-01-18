@@ -1,7 +1,7 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import type { Transformation } from "../../kpuzzle";
+import type { OldTransformation } from "../../kpuzzle";
 import {
   BluetoothConfig,
   BluetoothPuzzle,
@@ -167,7 +167,7 @@ export class GiiKERCube extends BluetoothPuzzle {
     return (val[n] >> shift) & 1;
   }
 
-  private toReid333(val: Uint8Array): Transformation {
+  private toReid333(val: Uint8Array): OldTransformation {
     const state = {
       EDGES: {
         permutation: new Array(12),

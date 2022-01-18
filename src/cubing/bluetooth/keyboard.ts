@@ -1,11 +1,11 @@
 import { keyToMove } from "../alg";
-import { KPuzzle } from "../kpuzzle";
+import { OldKPuzzle } from "../kpuzzle";
 import { puzzles } from "../puzzles";
 import { BluetoothPuzzle, PuzzleState } from "./smart-puzzle/bluetooth-puzzle";
 
 export class KeyboardPuzzle extends BluetoothPuzzle {
-  public puzzle: Promise<KPuzzle> = (async () =>
-    new KPuzzle(await puzzles["3x3x3"].def()))();
+  public puzzle: Promise<OldKPuzzle> = (async () =>
+    new OldKPuzzle(await puzzles["3x3x3"].def()))();
 
   listener: (e: KeyboardEvent) => Promise<void>;
 

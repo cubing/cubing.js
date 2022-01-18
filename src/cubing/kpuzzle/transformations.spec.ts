@@ -1,4 +1,4 @@
-import type { KPuzzleDefinition } from ".";
+import type { OldKPuzzleDefinition } from ".";
 import { Alg } from "../alg";
 import { puzzles } from "../puzzles";
 import type { Transformation } from "./definition_types";
@@ -9,7 +9,7 @@ import {
 } from "./transformations";
 
 function isEquivalentTranformationIgnoringOrientationForCENTERS(
-  def: KPuzzleDefinition,
+  def: OldKPuzzleDefinition,
   t1: Transformation,
   t2: Transformation,
 ): boolean {

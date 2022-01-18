@@ -1,6 +1,6 @@
 import type { Move } from "../alg";
-import type { Transformation } from "../kpuzzle";
+import type { OldTransformation } from "../kpuzzle";
 
 export interface MoveNotation {
-  lookupMove(move: Move): Transformation | undefined;
+  lookupMove(move: Move): OldTransformation | undefined;
 }

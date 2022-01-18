@@ -1,17 +1,17 @@
 import { Alg } from "../../../../cubing/alg";
 import {
-  KPuzzle,
-  KPuzzleDefinition,
-  KPuzzleSVGWrapper,
+  OldKPuzzle,
+  OldKPuzzleDefinition,
+  OldKPuzzleSVGWrapper,
 } from "../../../../cubing/kpuzzle";
 import { puzzles } from "../../../../cubing/puzzles";
 
 class SVGDisplay {
-  private svg: KPuzzleSVGWrapper;
-  private kpuzzle: KPuzzle;
-  constructor(private def: KPuzzleDefinition, svg: string) {
-    this.svg = new KPuzzleSVGWrapper(def, svg);
-    this.kpuzzle = new KPuzzle(this.def);
+  private svg: OldKPuzzleSVGWrapper;
+  private kpuzzle: OldKPuzzle;
+  constructor(private def: OldKPuzzleDefinition, svg: string) {
+    this.svg = new OldKPuzzleSVGWrapper(def, svg);
+    this.kpuzzle = new OldKPuzzle(this.def);
   }
 
   public element(): HTMLElement {

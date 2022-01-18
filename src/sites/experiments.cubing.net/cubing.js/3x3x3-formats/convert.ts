@@ -1,17 +1,17 @@
 import type {
-  Transformation,
-  OrbitTransformation,
-  KPuzzleDefinition,
+  OldTransformation,
+  OldOrbitTransformation,
+  OldKPuzzleDefinition,
 } from "../../../../cubing/kpuzzle";
 
-export function kpuzzleToString(state: Transformation): string {
+export function kpuzzleToString(state: OldTransformation): string {
   return JSON.stringify(state, null, "  ")
     .replace(/\n +(\d+),/g, "$1, ")
     .replace(/\n +(\d+)\n +/g, "$1");
 }
 
-import { experimentalCube3x3x3KPuzzle as defJSON } from "../../../../cubing/kpuzzle";
-const def: KPuzzleDefinition = defJSON;
+import { oldExperimentalCube3x3x3KPuzzle as defJSON } from "../../../../cubing/kpuzzle";
+const def: OldKPuzzleDefinition = defJSON;
 
 const pieceNames: Record<string, string[]> = {
   EDGES: "UF UR UB UL DF DR DB DL FR FL BR BL".split(" "),
@@ -46,7 +46,7 @@ for (const orbit of orbits) {
   });
 }
 
-export function kpuzzleToReidString(state: Transformation): string {
+export function kpuzzleToReidString(state: OldTransformation): string {
   const pieces: string[] = [];
 
   const addOrbit = (orbitName: string): void => {
@@ -97,19 +97,19 @@ export function stickersToReidString(stickers: number[]): string {
   return reidStringChars.join("");
 }
 
-export function kpuzzleToStickers(state: Transformation): number[] {
+export function kpuzzleToStickers(state: OldTransformation): number[] {
   return reidStringToStickers(kpuzzleToReidString(state));
 }
 
-export function stickersToKPuzzle(stickers: number[]): Transformation {
+export function stickersToKPuzzle(stickers: number[]): OldTransformation {
   return reidStringToKPuzzle(stickersToReidString(stickers));
 }
 
-export function reidStringToKPuzzle(s: string): Transformation {
+export function reidStringToKPuzzle(s: string): OldTransformation {
   const pieces = s.split(" ");
 
-  const orbit = (pieces: string[]): OrbitTransformation => {
-    const orbitTransformation: OrbitTransformation = {
+  const orbit = (pieces: string[]): OldOrbitTransformation => {
+    const orbitTransformation: OldOrbitTransformation = {
       permutation: [],
       orientation: [],
     };

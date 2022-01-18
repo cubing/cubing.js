@@ -1,5 +1,5 @@
 import type { Alg } from "../../../../alg";
-import type { Transformation } from "../../../../kpuzzle";
+import type { OldTransformation } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { randomStateFromSGS, TrembleSolver } from "../tremble";
@@ -32,7 +32,7 @@ export async function preInitializeFTO(): Promise<void> {
 }
 
 // TODO: centers
-export async function solveFTO(state: Transformation): Promise<Alg> {
+export async function solveFTO(state: OldTransformation): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(

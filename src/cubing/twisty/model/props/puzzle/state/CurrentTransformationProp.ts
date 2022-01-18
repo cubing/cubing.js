@@ -1,41 +1,41 @@
 import { KSolvePuzzle } from "../../../..";
 import {
-  combineTransformations,
-  KPuzzleDefinition,
-  Transformation,
+  oldCombineTransformations,
+  OldKPuzzleDefinition,
+  OldTransformation,
 } from "../../../../../kpuzzle";
 import type { AlgIndexer } from "../../../../controllers/indexer/AlgIndexer";
 import type { CurrentLeavesSimplified } from "./CurrentLeavesSimplified";
 import { TwistyPropDerived } from "../../TwistyProp";
 
 interface CurrentTransformationPropInputs {
-  anchoredStart: Transformation;
+  anchoredStart: OldTransformation;
   currentLeavesSimplified: CurrentLeavesSimplified;
   indexer: AlgIndexer<any>;
-  def: KPuzzleDefinition;
+  def: OldKPuzzleDefinition;
 }
 
 // TODO: Make this so we don't have to handle the finishing moves?
 export class CurrentTransformationProp extends TwistyPropDerived<
   CurrentTransformationPropInputs,
-  Transformation
+  OldTransformation
 > {
-  derive(inputs: CurrentTransformationPropInputs): Transformation {
-    let state: Transformation = inputs.indexer.transformAtIndex(
+  derive(inputs: CurrentTransformationPropInputs): OldTransformation {
+    let state: OldTransformation = inputs.indexer.transformAtIndex(
       inputs.currentLeavesSimplified.stateIndex,
     ) as any;
-    state = combineTransformations(inputs.def, inputs.anchoredStart, state);
+    state = oldCombineTransformations(inputs.def, inputs.anchoredStart, state);
     const ksolvePuzzle = new KSolvePuzzle(inputs.def); // TODO: put this elsewhere.
     // TODO: handle non-commutative finished/finishing/current moves.
     for (const finishingMove of inputs.currentLeavesSimplified.movesFinishing) {
-      state = combineTransformations(
+      state = oldCombineTransformations(
         inputs.def,
         state,
         ksolvePuzzle.stateFromMove(finishingMove),
       );
     }
     for (const finishedMove of inputs.currentLeavesSimplified.movesFinished) {
-      state = combineTransformations(
+      state = oldCombineTransformations(
         inputs.def,
         state,
         ksolvePuzzle.stateFromMove(finishedMove),
