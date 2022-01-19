@@ -1,5 +1,4 @@
-import { experimental3x3x3KPuzzle } from "../../kpuzzle";
-import { KState } from "../../kpuzzle/KState";
+import { experimental3x3x3KPuzzle, KState } from "../../kpuzzle";
 import {
   identityPermutation,
   lexToPermutation,

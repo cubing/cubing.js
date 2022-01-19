@@ -1,10 +1,10 @@
 import type { Alg } from "../../../../alg";
+import type { KStateData } from "../../../../kpuzzle";
+import { KState } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
-import { cachedMegaminxKPuzzleWithoutMO } from "./megaminx.sgs.json";
 import { TrembleSolver } from "../tremble";
-import { KState } from "../../../../kpuzzle/KState";
-import type { KStateData } from "../../../../kpuzzle";
+import { cachedMegaminxKPuzzleWithoutMO } from "./megaminx.sgs.json";
 
 const TREMBLE_DEPTH = 2;
 

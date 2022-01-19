@@ -1,5 +1,5 @@
 import type { Alg, QuantumMove } from "../../../../alg";
-import { KState } from "../../../../kpuzzle/KState";
+import { KState } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { randomStateFromSGS, TrembleSolver } from "../tremble";

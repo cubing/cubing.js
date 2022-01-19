@@ -1,6 +1,6 @@
 import type { Alg } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
-import { KState } from "../../../../kpuzzle/KState";
+import { KState } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import {
   randomPermute,

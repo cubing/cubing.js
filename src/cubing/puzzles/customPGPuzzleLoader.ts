@@ -1,7 +1,6 @@
 import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
-import { PGNotation } from "../puzzle-geometry/PuzzleGeometry";
 import type { PuzzleLoader } from "./PuzzleLoader";
 
 // TODO: modify this to handle TwistyPlayer options
@@ -23,7 +22,11 @@ export async function asyncGetKPuzzle(
   const pg = await descAsyncGetPuzzleGeometry(desc);
   const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
   kpuzzleDefinition.name = `description: ${desc}`;
-  const pgNotation = new PGNotation(pg, pg.getOrbitsDef(true));
+  const puzzleGeometry = await import("../puzzle-geometry");
+  const pgNotation = new puzzleGeometry.ExperimentalPGNotation(
+    pg,
+    pg.getOrbitsDef(true),
+  );
   return new KPuzzle(kpuzzleDefinition, {
     experimentalPGNotation: pgNotation,
   });

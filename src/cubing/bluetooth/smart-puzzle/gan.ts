@@ -2,15 +2,15 @@
 
 import { Quaternion } from "three";
 import { Move } from "../../alg";
+import type { KPuzzle, KStateData } from "../../kpuzzle";
+import { KState } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
-import { debugLog } from "../debug";
-import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import {
   importKey,
   unsafeDecryptBlock,
 } from "../../vendor/unsafe-raw-aes/unsafe-raw-aes";
-import { KState } from "../../kpuzzle/KState";
-import type { KPuzzle, KStateData } from "../../kpuzzle";
+import { debugLog } from "../debug";
+import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
 const DEFAULT_INTERVAL_MS = 150;

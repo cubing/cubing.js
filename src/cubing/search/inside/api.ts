@@ -1,4 +1,8 @@
 import type { Alg } from "../../alg";
+import type { KStateData } from "../../kpuzzle";
+import { KState } from "../../kpuzzle";
+import { puzzles } from "../../puzzles";
+import { setIsInsideWorker } from "./inside-worker";
 import {
   preInitialize222,
   random222Scramble,
@@ -16,6 +20,9 @@ import {
   random444OrientedScramble,
   random444Scramble,
 } from "./solve/puzzles/4x4x4";
+import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
+import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
+import { randomFTOScramble } from "./solve/puzzles/fto";
 import { solveMegaminx } from "./solve/puzzles/megaminx";
 import {
   randomPyraminxScrambleFixedOrientation,
@@ -25,14 +32,7 @@ import {
   randomSkewbFixedCornerScramble,
   solveSkewb,
 } from "./solve/puzzles/skewb";
-import { setIsInsideWorker } from "./inside-worker";
-import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
-import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
-import type { KStateData } from "../../kpuzzle";
-import { randomFTOScramble } from "./solve/puzzles/fto";
-import { KState } from "../../kpuzzle/KState";
-import { puzzles } from "../../puzzles";
 
 setIsInsideWorker(true);
 

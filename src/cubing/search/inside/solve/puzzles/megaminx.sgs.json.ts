@@ -1,6 +1,8 @@
 import { KPuzzle } from "../../../../kpuzzle";
-import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
-import { PGNotation } from "../../../../puzzle-geometry/PuzzleGeometry";
+import {
+  ExperimentalPGNotation,
+  getPuzzleGeometryByName,
+} from "../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
 async function megaminxKPuzzleWithoutMO(): Promise<KPuzzle> {
@@ -9,7 +11,10 @@ async function megaminxKPuzzleWithoutMO(): Promise<KPuzzle> {
     addRotations: true,
   });
   const kpuzzle = new KPuzzle(pg.getKPuzzleDefinition(true), {
-    experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
+    experimentalPGNotation: new ExperimentalPGNotation(
+      pg,
+      pg.getOrbitsDef(true),
+    ),
   });
   kpuzzle.definition.name = "megaminx";
   return kpuzzle;

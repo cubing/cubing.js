@@ -1,6 +1,6 @@
 import { Move } from "../../../../../alg";
 import type { KPuzzle } from "../../../../../kpuzzle";
-import { KState } from "../../../../../kpuzzle/KState";
+import { KState } from "../../../../../kpuzzle";
 
 export function isEquivalentTranformationIgnoringCENTERS(
   t1: KState,

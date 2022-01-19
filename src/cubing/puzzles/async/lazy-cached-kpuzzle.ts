@@ -1,4 +1,4 @@
-import { KPuzzle } from "../../kpuzzle";
+import type { KPuzzle } from "../../kpuzzle";
 
 // TODO
 export function lazyKPuzzle(

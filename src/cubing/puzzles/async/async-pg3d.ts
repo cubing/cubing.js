@@ -1,6 +1,5 @@
 import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
-import { PGNotation } from "../../puzzle-geometry/PuzzleGeometry";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   cubeAppearance,
@@ -27,7 +26,11 @@ export async function asyncGetKPuzzle(puzzleName: string): Promise<KPuzzle> {
   const pg = await asyncGetPuzzleGeometry(puzzleName);
   const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
   kpuzzleDefinition.name = puzzleName;
-  const pgNotation = new PGNotation(pg, pg.getOrbitsDef(true));
+  const puzzleGeometry = await import("../../puzzle-geometry");
+  const pgNotation = new puzzleGeometry.ExperimentalPGNotation(
+    pg,
+    pg.getOrbitsDef(true),
+  );
   return new KPuzzle(kpuzzleDefinition, {
     experimentalPGNotation: pgNotation,
   });
