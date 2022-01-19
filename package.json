@@ -235,9 +235,8 @@
     "/README.md",
     "/package.json",
     "/package-lock.json",
-    "/dist/**/*",
-    "/src/cubing/**/*",
-    "/docs/**/*",
+    "/dist/esm/**/*",
+    "/dist/types/**/*",
     "/*/package.json",
     "/*/index.d.ts"
   ]

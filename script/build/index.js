@@ -281,7 +281,7 @@ export const binTarget = {
       bundle: true,
       watch: dev,
       logLevel: "info",
-      sourcemap: true,
+      sourcemap: dev,
       //
       external,
     });
