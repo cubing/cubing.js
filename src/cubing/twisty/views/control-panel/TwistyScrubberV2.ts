@@ -64,6 +64,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
     const inputElem = await this.inputElem();
     inputElem.min = detailedTimelineInfo.timeRange.start.toString();
     inputElem.max = detailedTimelineInfo.timeRange.end.toString();
+    inputElem.disabled = inputElem.min === inputElem.max;
     inputElem.value = detailedTimelineInfo.timestamp.toString();
   }
 
@@ -78,6 +79,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
     return (this.#inputElem ??= (async () => {
       const elem = document.createElement("input");
       elem.type = "range";
+      elem.disabled = true;
 
       // console.log("1");
       this.model?.detailedTimelineInfoProp.addFreshListener(
