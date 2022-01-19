@@ -27,7 +27,7 @@ export async function asyncGetKPuzzle(puzzleName: string): Promise<KPuzzle> {
   const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
   kpuzzleDefinition.name = puzzleName;
   return new KPuzzle(kpuzzleDefinition, {
-    pgNotationMapper: pg.notationMapper,
+    experimentalPGNotationMapper: pg.notationMapper,
   });
 }
 

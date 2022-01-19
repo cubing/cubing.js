@@ -15,12 +15,12 @@ import { KTransformation } from "./KTransformation";
 export type KTransformationSource = Alg | Move | string | KTransformation;
 
 export class KPuzzle {
-  private pgNotationMapper: NotationMapper | undefined;
+  private experimentalPGNotationMapper: NotationMapper | undefined;
   constructor(
     public readonly definition: KPuzzleDefinition,
-    options?: { pgNotationMapper?: NotationMapper },
+    options?: { experimentalPGNotationMapper?: NotationMapper },
   ) {
-    this.pgNotationMapper = options?.pgNotationMapper;
+    this.experimentalPGNotationMapper = options?.experimentalPGNotationMapper;
   }
 
   name(): string {
@@ -48,6 +48,16 @@ export class KPuzzle {
       this.#moveToTransformationDataCache.get(cacheKey);
     if (cachedTransformationData) {
       return new KTransformation(this, cachedTransformationData);
+    }
+
+    if (this.experimentalPGNotationMapper) {
+      const internalMove =
+        this.experimentalPGNotationMapper.notationToInternal(move);
+      if (!internalMove) {
+        throw new Error(`could not map to internal move: ${move}`);
+      }
+      console.log("remapped", move.toString(), internalMove.toString());
+      move = internalMove;
     }
 
     const transformationData = moveToTransformationUncached(this, move);
