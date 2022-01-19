@@ -40,11 +40,10 @@ export function genericPGPuzzleLoader(
     inventionYear?: number;
   },
 ): PuzzleLoader {
-  const defPromise = asyncGetDef(id);
   const puzzleLoader: PuzzleLoader = {
     id: id,
     fullName: fullName,
-    kpuzzle: lazyKPuzzle(() => defPromise),
+    kpuzzle: lazyKPuzzle(() => asyncGetDef(id)),
     svg: async () => {
       const pg = await asyncGetPuzzleGeometry(id);
       return pg.generatesvg();

@@ -17,7 +17,6 @@ export function remapKPuzzleDefinition(
   for (const [internalMoveName, moveTransformation] of Object.entries(
     internalDefinition.moves,
   )) {
-    console.log("fsdf", internalMoveName);
     externalDefinition.moves[
       notationMapper.notationToExternal(new Move(internalMoveName))!.toString()
     ] = moveTransformation;
