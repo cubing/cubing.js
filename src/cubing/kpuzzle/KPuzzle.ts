@@ -1,5 +1,6 @@
 import { Alg, Move } from "../alg";
 import type { NotationMapper } from "../puzzle-geometry/notation-mapping";
+import type { PGNotation } from "../puzzle-geometry/PuzzleGeometry";
 import { algToTransformation } from "./calculate";
 import {
   constructIdentityTransformationDataUncached,
@@ -16,11 +17,19 @@ export type KTransformationSource = Alg | Move | string | KTransformation;
 
 export class KPuzzle {
   private experimentalPGNotationMapper: NotationMapper | undefined;
+  private experimentalPGUnswizzle: ((move: Move) => string) | undefined;
+  private experimentalPGNotation: PGNotation | undefined;
   constructor(
     public readonly definition: KPuzzleDefinition,
-    options?: { experimentalPGNotationMapper?: NotationMapper },
+    options?: {
+      experimentalPGNotationMapper?: NotationMapper;
+      experimentalPGUnswizzle?: (move: Move) => string;
+      experimentalPGNotation?: PGNotation;
+    },
   ) {
     this.experimentalPGNotationMapper = options?.experimentalPGNotationMapper;
+    this.experimentalPGUnswizzle = options?.experimentalPGUnswizzle;
+    this.experimentalPGNotation = options?.experimentalPGNotation;
   }
 
   name(): string {
@@ -50,14 +59,33 @@ export class KPuzzle {
       return new KTransformation(this, cachedTransformationData);
     }
 
-    if (this.experimentalPGNotationMapper) {
-      const internalMove =
-        this.experimentalPGNotationMapper.notationToInternal(move);
-      if (!internalMove) {
+    // if (this.experimentalPGUnswizzle) {
+    //   const unswizzledFamily = this.experimentalPGUnswizzle(move);
+    //   if (unswizzledFamily === "") {
+    //     throw new Error(`could not unswizzle to internal move: ${move}`);
+    //   }
+    //   console.log("premapped", move.toString(), unswizzledFamily);
+    //   move = move.modified({ family: unswizzledFamily });
+    //   console.log("remapped", move.toString(), unswizzledFamily);
+    // }
+
+    // if (this.experimentalPGNotationMapper) {
+    //   const internalMove =
+    //     this.experimentalPGNotationMapper.notationToInternal(move);
+    //   if (!internalMove) {
+    //     throw new Error(`could not map to internal move: ${move}`);
+    //   }
+    //   console.log("remapped", move.toString(), internalMove.toString());
+    //   move = internalMove;
+    // }
+
+    if (this.experimentalPGNotation) {
+      const transformationData = this.experimentalPGNotation.lookupMove(move);
+      if (!transformationData) {
         throw new Error(`could not map to internal move: ${move}`);
       }
-      console.log("remapped", move.toString(), internalMove.toString());
-      move = internalMove;
+      this.#moveToTransformationDataCache.set(cacheKey, transformationData);
+      return new KTransformation(this, transformationData);
     }
 
     const transformationData = moveToTransformationUncached(this, move);

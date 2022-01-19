@@ -2947,7 +2947,7 @@ Vertex distance ${this.vertexdistance}`;
   }
 }
 
-export class PGNotationUncachedLookup {
+export class PGNotation {
   private orbitNames: string[];
   constructor(private pg: PuzzleGeometry, od: PGOrbitsDef) {
     this.orbitNames = od.orbitnames;
