@@ -1,6 +1,6 @@
 import type { KPuzzleDefinition } from "../../../kpuzzle";
 
-export const clockKPuzzle: KPuzzleDefinition = {
+export const clockKPuzzleDefinition: KPuzzleDefinition = {
   name: "Clock",
   orbits: {
     DIALS: { numPieces: 18, orientations: 12 },
