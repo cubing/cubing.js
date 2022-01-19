@@ -7,17 +7,17 @@ export interface NotationMapper {
 }
 
 export function remapKPuzzleDefinition(
-  internatlDefinition: KPuzzleDefinition,
+  internalDefinition: KPuzzleDefinition,
   notationMapper: NotationMapper,
 ): KPuzzleDefinition {
   const externalDefinition: KPuzzleDefinition = {
-    ...internatlDefinition,
+    ...internalDefinition,
     moves: {},
   };
   for (const [internalMoveName, moveTransformation] of Object.entries(
-    internatlDefinition.moves,
+    internalDefinition.moves,
   )) {
-    internalMoveName;
+    console.log("fsdf", internalMoveName);
     externalDefinition.moves[
       notationMapper.notationToExternal(new Move(internalMoveName))!.toString()
     ] = moveTransformation;

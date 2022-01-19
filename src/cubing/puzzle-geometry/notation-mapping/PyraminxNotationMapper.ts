@@ -96,6 +96,7 @@ export class PyraminxNotationMapper implements NotationMapper {
       }
     }
     for (const [external, internal] of Object.entries(this.map)) {
+      console.log("pyram", external, internal);
       if (this.child.spinmatch(move.family, internal)) {
         return new Move(
           new QuantumMove(external, move.innerLayer, move.outerLayer),
