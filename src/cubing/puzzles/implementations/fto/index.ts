@@ -1,6 +1,9 @@
 import type { PuzzleLoader } from "../..";
 import type { ExperimentalStickering } from "../../../twisty";
-import { asyncGetDef, asyncGetPuzzleGeometry } from "../../async/async-pg3d";
+import {
+  asyncGetPuzzleGeometry,
+  asyncLazyKPuzzleGetter,
+} from "../../async/async-pg3d";
 import type { PuzzleAppearance } from "../../stickerings/appearance";
 import {
   ftoStickering,
@@ -12,9 +15,7 @@ export const fto: PuzzleLoader = {
   fullName: "Face-Turning Octahedron",
   inventedBy: ["Karl Rohrbach", "David Pitcher"], // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
   inventionYear: 1983, // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
-  def: async () => {
-    return asyncGetDef("FTO");
-  },
+  kpuzzle: asyncLazyKPuzzleGetter("FTO"),
   svg: async () => {
     const pg = await asyncGetPuzzleGeometry("FTO");
     return pg.generatesvg();

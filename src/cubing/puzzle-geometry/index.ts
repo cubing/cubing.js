@@ -15,3 +15,6 @@ export type {
 export { parseOptions } from "./Options";
 export { Quat } from "./Quat";
 export { schreierSims } from "./SchreierSims";
+
+// TODO: expose this from PG.
+export { PGNotation as ExperimentalPGNotation } from "./PuzzleGeometry";

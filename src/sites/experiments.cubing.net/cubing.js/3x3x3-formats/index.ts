@@ -1,12 +1,6 @@
 import { Alg } from "../../../../cubing/alg";
-import {
-  experimentalCube3x3x3KPuzzle as defJSON,
-  KPuzzle,
-  KPuzzleDefinition,
-  KPuzzleSVGWrapper,
-  Transformation,
-  transformationOrder,
-} from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle";
+import type { KState } from "../../../../cubing/kpuzzle/KState";
 import {
   binaryComponentsToReid3x3x3,
   reid3x3x3ToBinaryComponents,
@@ -14,15 +8,14 @@ import {
   twizzleBinaryToReid3x3x3,
 } from "../../../../cubing/protocol/binary/binary3x3x3";
 import svgSource from "../../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.svg";
+import { ExperimentalKPuzzleSVGWrapper } from "../../../../cubing/twisty";
 import {
   kpuzzleToReidString,
   kpuzzleToStickers,
-  kpuzzleToString,
-  reidStringToKPuzzle,
+  stateToString,
+  reidStringToKState,
   stickersToKPuzzle,
 } from "./convert";
-
-const def: KPuzzleDefinition = defJSON;
 
 export function bufferToSpacedHex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
@@ -38,8 +31,8 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
 }
 
 class App {
-  kpuzzle = new KPuzzle(def);
-  svg = new KPuzzleSVGWrapper(def, svgSource);
+  state = experimental3x3x3KPuzzle.startState();
+  svg = new ExperimentalKPuzzleSVGWrapper(experimental3x3x3KPuzzle, svgSource);
   algTextarea = document.querySelector("#alg") as HTMLTextAreaElement;
   kpuzzleTextarea = document.querySelector("#kpuzzle") as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
@@ -82,8 +75,6 @@ class App {
       this.setBinary(this.binaryTextarea.value);
     });
 
-    this.setState(this.kpuzzle.state);
-
     // const scene = new Twisty3DScene();
     // const cube3D = new Cube3D();
     // scene.add(cube3D);
@@ -92,13 +83,12 @@ class App {
   }
 
   reset(): void {
-    this.kpuzzle.reset();
-    this.setState(this.kpuzzle.state);
+    this.setState(experimental3x3x3KPuzzle.startState());
   }
 
   applyAlg(s: string): void {
-    this.kpuzzle.applyAlg(Alg.fromString(s));
-    this.setState(this.kpuzzle.state);
+    this.state.applyAlg(Alg.fromString(s));
+    this.setState(this.state);
   }
 
   setKPuzzle(s: string): void {
@@ -106,7 +96,7 @@ class App {
   }
 
   setReidString(s: string): void {
-    this.setState(reidStringToKPuzzle(s));
+    this.setState(reidStringToKState(s));
   }
 
   setStickers(s: string): void {
@@ -121,10 +111,10 @@ class App {
     this.setState(twizzleBinaryToReid3x3x3(spacedHexToBuffer(s)));
   }
 
-  setState(state: Transformation): void {
-    this.kpuzzle.state = state;
-    this.svg.draw(def, state);
-    this.kpuzzleTextarea.value = kpuzzleToString(state);
+  setState(state: KState): void {
+    this.state = state;
+    this.svg.draw(state);
+    this.kpuzzleTextarea.value = stateToString(state);
     this.reidStringTextarea.value = kpuzzleToReidString(state);
     this.stickersTextarea.value = JSON.stringify(kpuzzleToStickers(state));
     this.componentsTextarea.value = JSON.stringify(
@@ -135,7 +125,10 @@ class App {
     this.binaryTextarea.value = bufferToSpacedHex(
       reid3x3x3ToTwizzleBinary(state),
     );
-    this.orderElem.textContent = transformationOrder(def, state).toString();
+    this.orderElem.textContent = state
+      .experimentalToTransformation()!
+      .repetitionOrder()
+      .toString();
   }
 }
 

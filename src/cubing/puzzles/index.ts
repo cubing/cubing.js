@@ -1,5 +1,5 @@
 export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "./customPGPuzzleLoader";
-export { experimentalCube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle } from "../kpuzzle";
+export { experimental3x3x3KPuzzle } from "../kpuzzle";
 
 export { cubeAppearance as experimentalCubeAppearance } from "./stickerings/cube-stickerings";
 

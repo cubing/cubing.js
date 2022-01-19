@@ -1,19 +1,18 @@
 import { Alg } from "../../../../../alg";
-import { KPuzzle, KPuzzleDefinition } from "../../../../../kpuzzle";
-import { AlgIssues, AlgWithIssues } from "./AlgProp";
+import type { KPuzzle } from "../../../../../kpuzzle";
 import { TwistyPropDerived } from "../../TwistyProp";
+import { AlgIssues, AlgWithIssues } from "./AlgProp";
 
 export class PuzzleAlgProp extends TwistyPropDerived<
-  { algWithIssues: AlgWithIssues; puzzleDef: KPuzzleDefinition },
+  { algWithIssues: AlgWithIssues; kpuzzle: KPuzzle },
   AlgWithIssues
 > {
   async derive(inputs: {
     algWithIssues: AlgWithIssues;
-    puzzleDef: KPuzzleDefinition;
+    kpuzzle: KPuzzle;
   }): Promise<AlgWithIssues> {
     try {
-      const kpuzzle = new KPuzzle(inputs.puzzleDef);
-      kpuzzle.applyAlg(inputs.algWithIssues.alg);
+      inputs.kpuzzle.algToTransformation(inputs.algWithIssues.alg);
       // Looks like we could apply the alg!
       return inputs.algWithIssues;
     } catch (e) {

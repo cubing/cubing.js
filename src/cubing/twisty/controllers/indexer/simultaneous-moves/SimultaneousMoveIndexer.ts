@@ -1,8 +1,6 @@
 import { Alg, Move } from "../../../../alg";
-import type {
-  PuzzleWrapper,
-  State,
-} from "../../../views/3D/puzzles/KPuzzleWrapper";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
+import type { KState } from "../../../../kpuzzle/KState";
 import {
   Direction,
   Duration,
@@ -59,13 +57,11 @@ const demos: Record<string, AnimLeafWithRange[]> = {
   ],
 };
 
-export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
-  implements AlgIndexer<P>
-{
+export class SimultaneousMoveIndexer implements AlgIndexer {
   private animLeaves: AnimLeafWithRange[];
   // TODO: Allow custom `durationFn`.
 
-  constructor(private puzzle: P, alg: Alg) {
+  constructor(private kpuzzle: KPuzzle, alg: Alg) {
     this.animLeaves = demos[alg.toString()] ?? simulMoves(alg);
     // TODO: Avoid assuming all base moves are block moves.
   }
@@ -102,20 +98,17 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
 
   public timestampToPosition(
     timestamp: Timestamp,
-    startTransformation?: State<P>,
+    startTransformation?: KState,
   ): PuzzlePosition {
     const position: PuzzlePosition = {
-      state: startTransformation ?? (this.puzzle.identity() as any),
+      state: startTransformation ?? this.kpuzzle.startState(),
       movesInProgress: [],
     };
     for (const leafWithRange of this.animLeaves) {
       if (leafWithRange.end <= timestamp) {
         const move = leafWithRange.animLeaf.as(Move);
         if (move !== null) {
-          position.state = this.puzzle.combine(
-            position.state,
-            this.puzzle.stateFromMove(move),
-          ) as any;
+          position.state = position.state.applyMove(move);
         }
       } else if (
         leafWithRange.start < timestamp &&
@@ -138,27 +131,27 @@ export class SimultaneousMoveIndexer<P extends PuzzleWrapper>
     return position;
   }
 
-  public stateAtIndex(index: number, startTransformation?: State<P>): State<P> {
-    let state = startTransformation ?? this.puzzle.startState();
+  public stateAtIndex(index: number, startTransformation?: KState): KState {
+    let state = startTransformation ?? this.kpuzzle.startState();
     for (let i = 0; i < this.animLeaves.length && i < index; i++) {
       const leafWithRange = this.animLeaves[i];
       const move = leafWithRange.animLeaf.as(Move);
       if (move !== null) {
-        state = this.puzzle.combine(state, this.puzzle.stateFromMove(move));
+        state = state.applyMove(move);
       }
     }
     return state;
   }
 
-  public transformAtIndex(index: number): State<P> {
-    let state = this.puzzle.identity();
+  public transformationAtIndex(index: number): KTransformation {
+    let transformation = this.kpuzzle.identityTransformation();
     for (const leafWithRange of this.animLeaves.slice(0, index)) {
       const move = leafWithRange.animLeaf.as(Move);
       if (move !== null) {
-        state = this.puzzle.combine(state, this.puzzle.stateFromMove(move));
+        transformation = transformation.applyMove(move);
       }
     }
-    return state;
+    return transformation;
   }
 
   public algDuration(): Duration {

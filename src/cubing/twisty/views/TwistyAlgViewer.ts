@@ -429,7 +429,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
         : Alg.fromString(sourceAlg.toString());
     this.setAlg(parsedAlg);
 
-    twistyPlayer.experimentalModel.currentLeavesProp.addFreshListener(
+    twistyPlayer.experimentalModel.currentMoveInfoProp.addFreshListener(
       (currentMoveInfo: CurrentMoveInfo) => {
         let moveInfo = currentMoveInfo.currentMoves[0];
         moveInfo ??= currentMoveInfo.movesStarting[0];

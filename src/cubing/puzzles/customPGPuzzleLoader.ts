@@ -1,4 +1,4 @@
-import type { KPuzzleDefinition } from "../kpuzzle";
+import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
 import type { PuzzleLoader } from "./PuzzleLoader";
@@ -15,13 +15,21 @@ export async function descAsyncGetPuzzleGeometry(
   });
 }
 
-// TODO: can we cache the puzzleGeometry to avoid duplicate calls, without
-// wasting memory? Maybe just save the latest one for successive calls about the
-// same puzzle?
-export async function dsecAsyncGetDef(
+// TODO: dedup with `cubing/puzzles`
+export async function asyncGetKPuzzle(
   desc: PuzzleDescriptionString,
-): Promise<KPuzzleDefinition> {
-  return (await descAsyncGetPuzzleGeometry(desc)).writekpuzzle(true);
+): Promise<KPuzzle> {
+  const pg = await descAsyncGetPuzzleGeometry(desc);
+  const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
+  kpuzzleDefinition.name = `description: ${desc}`;
+  const puzzleGeometry = await import("../puzzle-geometry");
+  const pgNotation = new puzzleGeometry.ExperimentalPGNotation(
+    pg,
+    pg.getOrbitsDef(true),
+  );
+  return new KPuzzle(kpuzzleDefinition, {
+    experimentalPGNotation: pgNotation,
+  });
 }
 
 // TODO: Can we avoid relying on IDs to deduplicate work at higher levels?
@@ -36,11 +44,12 @@ export function customPGPuzzleLoader(
   },
 ): PuzzleLoader {
   const customID = nextCustomID++;
+  let cachedKPuzzle: Promise<KPuzzle> | null = null;
   const puzzleLoader: PuzzleLoader = {
     id: `custom-${customID}`,
     fullName: info?.fullName ?? `Custom Puzzle (instance #${customID})`,
-    def: async () => {
-      return dsecAsyncGetDef(desc);
+    kpuzzle: async () => {
+      return (cachedKPuzzle ??= asyncGetKPuzzle(desc));
     },
     svg: async () => {
       const pg = await descAsyncGetPuzzleGeometry(desc);

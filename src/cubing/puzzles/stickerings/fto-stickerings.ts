@@ -12,9 +12,9 @@ export async function ftoStickering(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<PuzzleAppearance> {
-  const def = await puzzleLoader.def();
-  const puzzleStickering = new PuzzleStickering(def);
-  const m = new StickeringManager(def);
+  const kpuzzle = await puzzleLoader.kpuzzle();
+  const puzzleStickering = new PuzzleStickering(kpuzzle);
+  const m = new StickeringManager(kpuzzle);
 
   const experimentalFTO_FC = (): PieceSet =>
     m.and([m.move("U"), m.not(m.or(m.moves(["F", "BL", "BR"])))]);

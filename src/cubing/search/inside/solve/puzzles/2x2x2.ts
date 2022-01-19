@@ -1,15 +1,12 @@
 import type { Alg } from "../../../../alg";
-import {
-  KPuzzle,
-  KPuzzleDefinition,
-  Transformation,
-} from "../../../../kpuzzle";
+import type { KPuzzle } from "../../../../kpuzzle";
+import { KState } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
-import { mustBeInsideWorker } from "../../inside-worker";
 import {
   randomPermute,
   randomUIntBelowFactory,
 } from "../../../../vendor/random-uint-below";
+import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 
@@ -23,12 +20,12 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const json: SGSCachedData = await (
+      const sgsCachedData: SGSCachedData = await (
         await import("./2x2x2.sgs.json")
       ).cachedData222();
       return new TrembleSolver(
-        await puzzles["2x2x2"].def(),
-        json,
+        await puzzles["2x2x2"].kpuzzle(),
+        sgsCachedData,
         "URFLBD".split(""),
       );
     })())
@@ -40,7 +37,7 @@ export async function preInitialize222(): Promise<void> {
 }
 
 // TODO: fix def consistency.
-export async function solve222(state: Transformation): Promise<Alg> {
+export async function solve222(state: KState): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(state, TREMBLE_DEPTH, () => 4); // TODO: Attach quantum move order lookup to puzzle.
@@ -48,17 +45,17 @@ export async function solve222(state: Transformation): Promise<Alg> {
 }
 
 // TODO: factor out and test.
-async function randomizeOrbit(
-  def: KPuzzleDefinition,
+async function mutatingRandomizeOrbit(
+  kpuzzle: KPuzzle,
   orbitName: string,
-  state: Transformation,
+  state: KState,
   options?: { orientationSum?: number },
 ): Promise<void> {
   const randomUIntBelow = await randomUIntBelowFactory();
-  await randomPermute(state[orbitName].permutation);
+  await randomPermute(state.stateData[orbitName].pieces);
 
-  const orbitDef = def.orbits[orbitName];
-  const ori = state[orbitName].orientation;
+  const orbitDef = kpuzzle.definition.orbits[orbitName];
+  const ori = state.stateData[orbitName].orientation;
 
   let sum = 0;
   for (let i = 0; i < orbitDef.numPieces; i++) {
@@ -78,12 +75,15 @@ async function randomizeOrbit(
 }
 
 // TODO: Use SGS?
-export async function random222State(): Promise<Transformation> {
-  const nonExtensibleDef = await puzzles["2x2x2"].def();
-  const def = Object.assign({}, nonExtensibleDef);
-  const kpuzzle = new KPuzzle(def);
-  const stateCopy: Transformation = JSON.parse(JSON.stringify(kpuzzle.state)); // TODO
-  await randomizeOrbit(def, "CORNERS", stateCopy, { orientationSum: 0 });
+export async function random222State(): Promise<KState> {
+  const kpuzzle = await puzzles["2x2x2"].kpuzzle();
+  const stateCopy: KState = new KState(
+    kpuzzle,
+    JSON.parse(JSON.stringify(kpuzzle.startState().stateData)),
+  ); // TODO
+  await mutatingRandomizeOrbit(kpuzzle, "CORNERS", stateCopy, {
+    orientationSum: 0,
+  });
   return stateCopy;
 }
 

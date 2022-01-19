@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-import { Alg } from "../cubing/alg";
-import { transformationOrder } from "../cubing/kpuzzle";
+import { KPuzzle } from "../cubing/kpuzzle";
 import { getPuzzleGeometryByName } from "../cubing/puzzle-geometry";
-import { KSolvePuzzle, TreeAlgIndexer } from "../cubing/twisty";
 
 /*
  *   Given a puzzle name and an algorithm, calculate the order of that
@@ -12,34 +10,19 @@ import { KSolvePuzzle, TreeAlgIndexer } from "../cubing/twisty";
  */
 
 const puzname = process.argv[2];
-const algo = process.argv[3];
+const algString = process.argv[3];
+
+if (!puzname || !algString) {
+  console.log("Usage: order <puzzle-geometry-id> <alg>");
+  console.log("");
+  console.log("Example: order 3x3x3 \"R U R' U R U2' R'\"");
+  process.exit(0);
+}
 
 /*
  *   Turn a name into a geometry.
  */
 const pg = getPuzzleGeometryByName(puzname, { allMoves: true });
-/*
- *   Turn the puzzle geometry into a KPuzzleDefinition.
- */
-const puzzle = pg.writekpuzzle();
-/*
- *   From the operable puzzle, make a twisty.  The twisty gives us
- *   access to an algorithm indexer.  This is a good way to get
- *   support for repetitions and conjugates in the algorithm.
- */
-const ksp = new KSolvePuzzle(puzzle);
-/*
- *   We parse the algorithm and get an indexer.
- */
-const parsedAlgo = new Alg(algo);
-const tai = new TreeAlgIndexer(ksp, parsedAlgo);
-/*
- *   Then, we get the transform (not the state!) at the end of the
- *   algorithm.
- */
-const tr = tai.transformAtIndex(tai.numAnimatedLeaves());
-/*
- *   We calculate its order and display it.
- */
-const o = transformationOrder(puzzle, tr as any);
-console.log(o);
+const kpuzzle = new KPuzzle(pg.getKPuzzleDefinition(true));
+const order = kpuzzle.algToTransformation(algString).repetitionOrder();
+console.log(order);

@@ -1,8 +1,5 @@
 import { Move } from "../alg";
-import type {
-  KPuzzleDefinition,
-  Transformation as KTransformation,
-} from "../kpuzzle"; // TODO
+import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle"; // TODO
 import { NullMapper } from "./notation-mapping";
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
@@ -19,6 +16,8 @@ export class PGOrbitDef {
     return factorial(this.size) * Math.pow(this.mod, this.size);
   }
 }
+
+let lastGlobalDefinitionCounter = 0;
 
 export function externalName(
   mapper: NotationMapper,
@@ -41,7 +40,7 @@ export class PGOrbitsDef {
     public moveops: PGTransform[],
   ) {}
 
-  private transformToKPuzzle(t: PGTransform): any {
+  private transformToKTransformationData(t: PGTransform): KTransformationData {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < this.orbitnames.length; j++) {
       mp[this.orbitnames[j]] = t.orbits[j].toKPuzzle();
@@ -49,10 +48,10 @@ export class PGOrbitsDef {
     return mp;
   }
 
-  public static transformToKPuzzle(
+  public static transformToKTransformationData(
     orbitnames: string[],
     t: PGTransform,
-  ): KTransformation {
+  ): KTransformationData {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
       mp[orbitnames[j]] = t.orbits[j].toKPuzzle();
@@ -112,7 +111,7 @@ export class PGOrbitsDef {
   }
 
   // TODO: return type.
-  public toKPuzzle(includemoves: boolean): KPuzzleDefinition {
+  public toKPuzzleDefinition(includemoves: boolean): KPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
@@ -120,15 +119,26 @@ export class PGOrbitsDef {
         numPieces: this.orbitdefs[i].size,
         orientations: this.orbitdefs[i].mod,
       };
-      start[this.orbitnames[i]] = this.solved.orbits[i].toKPuzzle();
+      const startTransformation = this.solved.orbits[i].toKPuzzle();
+      start[this.orbitnames[i]] = {
+        pieces: startTransformation.permutation,
+        orientation: startTransformation.orientation,
+      };
     }
     const moves: { [moveName: string]: any } = {};
     if (includemoves) {
       for (let i = 0; i < this.movenames.length; i++) {
-        moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
+        moves[this.movenames[i]] = this.transformToKTransformationData(
+          this.moveops[i],
+        );
       }
     }
-    return { name: "PG3D", orbits, startPieces: start, moves };
+    return {
+      name: `PG3D #${++lastGlobalDefinitionCounter}`,
+      orbits,
+      startStateData: start,
+      moves,
+    };
   }
 
   public optimize(): PGOrbitsDef {

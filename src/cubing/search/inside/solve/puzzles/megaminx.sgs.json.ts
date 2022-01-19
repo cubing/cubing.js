@@ -1,18 +1,29 @@
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
-import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
+import { KPuzzle } from "../../../../kpuzzle";
+import {
+  ExperimentalPGNotation,
+  getPuzzleGeometryByName,
+} from "../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
-async function megaminxDefWithoutMO(): Promise<KPuzzleDefinition> {
-  return getPuzzleGeometryByName("megaminx", {
+async function megaminxKPuzzleWithoutMO(): Promise<KPuzzle> {
+  const pg = getPuzzleGeometryByName("megaminx", {
     allMoves: true,
     addRotations: true,
-  }).writekpuzzle(true);
+  });
+  const kpuzzle = new KPuzzle(pg.getKPuzzleDefinition(true), {
+    experimentalPGNotation: new ExperimentalPGNotation(
+      pg,
+      pg.getOrbitsDef(true),
+    ),
+  });
+  kpuzzle.definition.name = "megaminx";
+  return kpuzzle;
 }
 
 // TODO: Implement a general lazy Promise/ Promise cache wrapper
-let defCache: Promise<KPuzzleDefinition> | null = null;
-export async function cachedMegaminxDefWithoutMO(): Promise<KPuzzleDefinition> {
-  return (defCache ??= megaminxDefWithoutMO());
+let defCache: Promise<KPuzzle> | null = null;
+export async function cachedMegaminxKPuzzleWithoutMO(): Promise<KPuzzle> {
+  return (defCache ??= megaminxKPuzzleWithoutMO());
 }
 
 let cachedData: Promise<SGSCachedData> | null = null;
@@ -23,7 +34,7 @@ export async function cachedSGSDataMegaminx() {
 // TODO: Reduce info.
 export async function sgsDataMegaminx(): Promise<SGSCachedData> {
   return parseSGS(
-    await cachedMegaminxDefWithoutMO(),
+    await cachedMegaminxKPuzzleWithoutMO(),
     `SubgroupSizes 12 5 60 58 60 56 54 57 52 50 54 48 46 51 44 42 48 40 45 38 36 42 34 32 39 30 36 28 26 33 24 30 22 20 27 18 24 16 14 21 12 18 10 15 8 6 2 12 9 3
 
 Alg Rv

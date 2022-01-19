@@ -1,33 +1,12 @@
-export type {
+export { KPuzzle } from "./KPuzzle";
+export type { KTransformation } from "./KTransformation";
+export {
   KPuzzleDefinition,
-  OrbitTransformation,
-  Transformation,
-} from "./definition_types";
+  KTransformationData,
+  KStateData,
+} from "./KPuzzleDefinition";
+export { KState } from "./KState";
 
-export { KPuzzle, transformationForMove } from "./kpuzzle";
-
-export {
-  Canonicalizer,
-  SearchSequence,
-  CanonicalSequenceIterator,
-} from "./canonicalize";
-
-export {
-  combineTransformations,
-  multiplyTransformations,
-  identityTransformation,
-  invertTransformation,
-  areTransformationsEquivalent,
-  areOrbitTransformationsEquivalent,
-  areStatesEquivalent,
-  transformationOrder,
-} from "./transformations";
-
-export { parseKPuzzleDefinition } from "./parser";
-
-export { KPuzzleSVGWrapper } from "./svg";
-
-export { cube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle } from "./3x3x3/3x3x3.kpuzzle.json";
-export { experimentalIs3x3x3Solved } from "./puzzle-orientation";
-
-export { transformationForQuantumMove as experimentalTransformationForQuantumMove } from "./kpuzzle";
+import { KPuzzle } from "./KPuzzle";
+import { cube3x3x3KPuzzleDefinition } from "./3x3x3/3x3x3.kpuzzle.json";
+export const experimental3x3x3KPuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);

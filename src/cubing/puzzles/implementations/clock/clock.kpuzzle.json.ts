@@ -1,26 +1,22 @@
 import type { KPuzzleDefinition } from "../../../kpuzzle";
 
-export const clockKPuzzle: KPuzzleDefinition = {
+export const clockKPuzzleDefinition: KPuzzleDefinition = {
   name: "Clock",
   orbits: {
     DIALS: { numPieces: 18, orientations: 12 },
     FACES: { numPieces: 18, orientations: 1 },
     FRAME: { numPieces: 1, orientations: 2 },
   },
-  startPieces: {
+  startStateData: {
     DIALS: {
-      permutation: [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-      ],
+      pieces: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     FACES: {
-      permutation: [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-      ],
+      pieces: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
-    FRAME: { permutation: [0], orientation: [0] },
+    FRAME: { pieces: [0], orientation: [0] },
   },
   moves: {
     UR_PLUS_: {

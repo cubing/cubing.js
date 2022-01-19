@@ -1,6 +1,6 @@
 import { Move, QuantumMove } from "../alg";
+import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle";
 import { FaceNameSwizzler } from "./FaceNameSwizzler";
-import type { MoveNotation } from "./interfaces";
 import {
   FaceRenamingMapper,
   FTONotationMapper,
@@ -16,8 +16,8 @@ import {
   BaseFaceCount,
   FaceBasedOrientationDescription,
   FaceBasedOrientationDescriptionLookup,
-  PuzzleGeometryOptions,
   PuzzleGeometryFullOptions,
+  PuzzleGeometryOptions,
 } from "./Options";
 import { iota, Perm, zeros } from "./Perm";
 import {
@@ -25,8 +25,8 @@ import {
   PGOrbit,
   PGOrbitDef,
   PGOrbitsDef,
-  showcanon,
   PGTransform,
+  showcanon,
   VisibleState,
 } from "./PermOriSet";
 import { PGPuzzles, PuzzleDescriptionString, PuzzleName } from "./PGPuzzles";
@@ -42,10 +42,6 @@ import {
 } from "./PlatonicGenerator";
 import { centermassface, Quat } from "./Quat";
 import { schreierSims } from "./SchreierSims";
-import type {
-  KPuzzleDefinition,
-  Transformation as KTransformation,
-} from "../kpuzzle";
 
 export interface TextureMapper {
   getuv(fn: number, threed: number[]): number[];
@@ -621,7 +617,7 @@ export class PuzzleGeometry {
   private options: PuzzleGeometryFullOptions;
 
   constructor(
-    puzzleDescription: PuzzleDescription,
+    private puzzleDescription: PuzzleDescription,
     options: PuzzleGeometryOptions,
   ) {
     const t1 = tstart("genperms");
@@ -2130,17 +2126,18 @@ export class PuzzleGeometry {
     );
   }
 
-  public writekpuzzle(
+  public getKPuzzleDefinition(
     fortwisty: boolean = true,
     includemoves: boolean = true,
   ): KPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty, includemoves);
-    const r = od.toKPuzzle(includemoves);
-    if (!r) {
+    const internalDefinition = od.toKPuzzleDefinition(includemoves);
+    (internalDefinition as any).exprimentalPuzzleDescription =
+      this.puzzleDescription;
+    if (!internalDefinition) {
       throw new Error("Missing definition!");
     }
-    r.moveNotation = new PGNotation(this, od);
-    return r;
+    return internalDefinition;
   }
 
   public getMoveFromBits(
@@ -2950,18 +2947,13 @@ Vertex distance ${this.vertexdistance}`;
   }
 }
 
-class PGNotation implements MoveNotation {
-  private cache: { [key: string]: KTransformation } = {};
+export class PGNotation {
   private orbitNames: string[];
   constructor(private pg: PuzzleGeometry, od: PGOrbitsDef) {
     this.orbitNames = od.orbitnames;
   }
 
-  public lookupMove(move: Move): KTransformation | undefined {
-    const key = this.moveToKeyString(move);
-    if (key in this.cache) {
-      return this.cache[key];
-    }
+  public lookupMove(move: Move): KTransformationData | null {
     const mv = this.pg.parseMove(move);
     // if a move list subset is defined, don't return moves outside the subset.
     if (this.pg.parsedmovelist) {
@@ -2977,7 +2969,7 @@ class PGNotation implements MoveNotation {
         }
       }
       if (!found) {
-        return undefined;
+        return null;
       }
     }
     let bits = [mv[2], mv[3]];
@@ -2993,21 +2985,7 @@ class PGNotation implements MoveNotation {
       undefined,
       this.pg.movesetorders[mv[1]],
     );
-    const r = PGOrbitsDef.transformToKPuzzle(this.orbitNames, pgmv);
-    this.cache[key] = r;
-    return r;
-  }
-
-  // This is only used to construct keys, so does not need to be beautiful.
-  private moveToKeyString(move: Move): string {
-    let r = "";
-    if (move.outerLayer) {
-      r = r + move.outerLayer + ",";
-    }
-    if (move.innerLayer) {
-      r = r + move.innerLayer + ",";
-    }
-    r = r + move.family + "," + move.amount;
+    const r = PGOrbitsDef.transformToKTransformationData(this.orbitNames, pgmv);
     return r;
   }
 }

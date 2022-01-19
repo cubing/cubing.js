@@ -57,6 +57,7 @@ function devServerOptions(srcFolder, dev) {
       external: externalNode,
       target: "es2020",
       plugins: plugins(dev),
+      minify: !dev,
     },
   };
 }

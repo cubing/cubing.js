@@ -1,11 +1,8 @@
 import type { Move } from "../../alg";
-import type { Transformation } from "../../kpuzzle";
+import type { KState } from "../../kpuzzle/KState";
 import { BasicRotationTransformer, StreamTransformer } from "../transformer";
 
 /******** BluetoothPuzzle ********/
-
-// TODO: Make compatible with Twisty.
-export type PuzzleState = Transformation;
 
 // TODO: Use actual `CustomEvent`s?
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
@@ -13,7 +10,7 @@ export interface MoveEvent {
   latestMove: Move;
   timeStamp: number;
   debug?: Record<string, unknown>;
-  state?: PuzzleState;
+  state?: KState;
   quaternion?: any; // TODO: Unused
 }
 
@@ -50,7 +47,7 @@ export abstract class BluetoothPuzzle extends EventTarget {
   public abstract disconnect(): void; // TODO: Can we make this reutrn (async) on success?
 
   // TODO: require subclasses to implement this?
-  public async getState(): Promise<PuzzleState> {
+  public async getState(): Promise<KState> {
     throw new Error("cannot get state");
   }
 

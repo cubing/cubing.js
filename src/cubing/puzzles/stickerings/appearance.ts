@@ -1,8 +1,7 @@
 // TODO: figure out where to house this permanently.
 
-import { Move } from "../../alg";
-import { experimentalIs } from "../../alg";
-import { KPuzzleDefinition, transformationForMove } from "../../kpuzzle";
+import type { Move } from "../../alg";
+import type { KPuzzle } from "../../kpuzzle";
 
 export type FaceletMeshAppearance =
   | "regular"
@@ -72,8 +71,10 @@ export enum PieceStickering {
 
 export class PieceAnnotation<T> {
   stickerings: Map<string, T[]> = new Map();
-  constructor(def: KPuzzleDefinition, defaultValue: T) {
-    for (const [orbitName, orbitDef] of Object.entries(def.orbits)) {
+  constructor(kpuzzle: KPuzzle, defaultValue: T) {
+    for (const [orbitName, orbitDef] of Object.entries(
+      kpuzzle.definition.orbits,
+    )) {
       this.stickerings.set(
         orbitName,
         new Array(orbitDef.numPieces).fill(defaultValue),
@@ -159,8 +160,8 @@ export function getPieceAppearance(
 }
 
 export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
-  constructor(def: KPuzzleDefinition) {
-    super(def, PieceStickering.Regular);
+  constructor(kpuzzle: KPuzzle) {
+    super(kpuzzle, PieceStickering.Regular);
   }
 
   set(pieceSet: PieceSet, pieceStickering: PieceStickering): PuzzleStickering {
@@ -193,11 +194,13 @@ export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
 export type PieceSet = PieceAnnotation<boolean>;
 
 export class StickeringManager {
-  constructor(private def: KPuzzleDefinition) {}
+  constructor(private kpuzzle: KPuzzle) {}
 
   and(pieceSets: PieceSet[]): PieceSet {
-    const newPieceSet = new PieceAnnotation<boolean>(this.def, false);
-    for (const [orbitName, orbitDef] of Object.entries(this.def.orbits)) {
+    const newPieceSet = new PieceAnnotation<boolean>(this.kpuzzle, false);
+    for (const [orbitName, orbitDef] of Object.entries(
+      this.kpuzzle.definition.orbits,
+    )) {
       pieceLoop: for (let i = 0; i < orbitDef.numPieces; i++) {
         newPieceSet.stickerings.get(orbitName)![i] = true;
         for (const pieceSet of pieceSets) {
@@ -213,8 +216,10 @@ export class StickeringManager {
 
   or(pieceSets: PieceSet[]): PieceSet {
     // TODO: unify impl with and?
-    const newPieceSet = new PieceAnnotation<boolean>(this.def, false);
-    for (const [orbitName, orbitDef] of Object.entries(this.def.orbits)) {
+    const newPieceSet = new PieceAnnotation<boolean>(this.kpuzzle, false);
+    for (const [orbitName, orbitDef] of Object.entries(
+      this.kpuzzle.definition.orbits,
+    )) {
       pieceLoop: for (let i = 0; i < orbitDef.numPieces; i++) {
         newPieceSet.stickerings.get(orbitName)![i] = false;
         for (const pieceSet of pieceSets) {
@@ -229,8 +234,10 @@ export class StickeringManager {
   }
 
   not(pieceSet: PieceSet): PieceSet {
-    const newPieceSet = new PieceAnnotation<boolean>(this.def, false);
-    for (const [orbitName, orbitDef] of Object.entries(this.def.orbits)) {
+    const newPieceSet = new PieceAnnotation<boolean>(this.kpuzzle, false);
+    for (const [orbitName, orbitDef] of Object.entries(
+      this.kpuzzle.definition.orbits,
+    )) {
       for (let i = 0; i < orbitDef.numPieces; i++) {
         newPieceSet.stickerings.get(orbitName)![i] =
           !pieceSet.stickerings.get(orbitName)![i];
@@ -244,18 +251,15 @@ export class StickeringManager {
   }
 
   move(moveSource: Move | string): PieceSet {
-    const transformation = transformationForMove(
-      this.def,
-      experimentalIs(moveSource, Move)
-        ? (moveSource as Move)
-        : Move.fromString(moveSource as string),
-    );
-    const newPieceSet = new PieceAnnotation<boolean>(this.def, false);
-    for (const [orbitName, orbitDef] of Object.entries(this.def.orbits)) {
+    const transformation = this.kpuzzle.moveToTransformation(moveSource);
+    const newPieceSet = new PieceAnnotation<boolean>(this.kpuzzle, false);
+    for (const [orbitName, orbitDef] of Object.entries(
+      this.kpuzzle.definition.orbits,
+    )) {
       for (let i = 0; i < orbitDef.numPieces; i++) {
         if (
-          transformation[orbitName].permutation[i] !== i ||
-          transformation[orbitName].orientation[i] !== 0
+          transformation.transformationData[orbitName].permutation[i] !== i ||
+          transformation.transformationData[orbitName].orientation[i] !== 0
         ) {
           newPieceSet.stickerings.get(orbitName)![i] = true;
         }

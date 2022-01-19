@@ -5,27 +5,27 @@
 
 // TODO: this would be a raw `.json` file, but Parcel runs into an error from
 
-import type { KPuzzleDefinition } from "..";
+import type { KPuzzleDefinition } from "../KPuzzleDefinition";
 
 // using that as both a sync and async import. Probably https://github.com/parcel-bundler/parcel/issues/2546
-export const cube3x3x3KPuzzle: KPuzzleDefinition = {
+export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
   name: "3x3x3",
   orbits: {
     EDGES: { numPieces: 12, orientations: 2 },
     CORNERS: { numPieces: 8, orientations: 3 },
     CENTERS: { numPieces: 6, orientations: 4 },
   },
-  startPieces: {
+  startStateData: {
     EDGES: {
-      permutation: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      pieces: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     CORNERS: {
-      permutation: [0, 1, 2, 3, 4, 5, 6, 7],
+      pieces: [0, 1, 2, 3, 4, 5, 6, 7],
       orientation: [0, 0, 0, 0, 0, 0, 0, 0],
     },
     CENTERS: {
-      permutation: [0, 1, 2, 3, 4, 5],
+      pieces: [0, 1, 2, 3, 4, 5],
       orientation: [0, 0, 0, 0, 0, 0],
     },
   },
@@ -285,17 +285,17 @@ export const cube3x3x3KPuzzle: KPuzzleDefinition = {
   },
 };
 
-cube3x3x3KPuzzle.moves["Uw"] = cube3x3x3KPuzzle.moves["u"];
-cube3x3x3KPuzzle.moves["Lw"] = cube3x3x3KPuzzle.moves["l"];
-cube3x3x3KPuzzle.moves["Fw"] = cube3x3x3KPuzzle.moves["f"];
-cube3x3x3KPuzzle.moves["Rw"] = cube3x3x3KPuzzle.moves["r"];
-cube3x3x3KPuzzle.moves["Bw"] = cube3x3x3KPuzzle.moves["b"];
-cube3x3x3KPuzzle.moves["Dw"] = cube3x3x3KPuzzle.moves["d"];
+cube3x3x3KPuzzleDefinition.moves["Uw"] = cube3x3x3KPuzzleDefinition.moves["u"];
+cube3x3x3KPuzzleDefinition.moves["Lw"] = cube3x3x3KPuzzleDefinition.moves["l"];
+cube3x3x3KPuzzleDefinition.moves["Fw"] = cube3x3x3KPuzzleDefinition.moves["f"];
+cube3x3x3KPuzzleDefinition.moves["Rw"] = cube3x3x3KPuzzleDefinition.moves["r"];
+cube3x3x3KPuzzleDefinition.moves["Bw"] = cube3x3x3KPuzzleDefinition.moves["b"];
+cube3x3x3KPuzzleDefinition.moves["Dw"] = cube3x3x3KPuzzleDefinition.moves["d"];
 
-cube3x3x3KPuzzle.moves["Rv"] = cube3x3x3KPuzzle.moves["x"];
-cube3x3x3KPuzzle.moves["Uv"] = cube3x3x3KPuzzle.moves["y"];
-cube3x3x3KPuzzle.moves["Fv"] = cube3x3x3KPuzzle.moves["z"];
-cube3x3x3KPuzzle.moves["Lv"] = {
+cube3x3x3KPuzzleDefinition.moves["Rv"] = cube3x3x3KPuzzleDefinition.moves["x"];
+cube3x3x3KPuzzleDefinition.moves["Uv"] = cube3x3x3KPuzzleDefinition.moves["y"];
+cube3x3x3KPuzzleDefinition.moves["Fv"] = cube3x3x3KPuzzleDefinition.moves["z"];
+cube3x3x3KPuzzleDefinition.moves["Lv"] = {
   EDGES: {
     permutation: [2, 10, 6, 11, 0, 8, 4, 9, 1, 3, 5, 7],
     orientation: [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0],
@@ -309,7 +309,7 @@ cube3x3x3KPuzzle.moves["Lv"] = {
     orientation: [2, 1, 0, 3, 2, 0],
   },
 };
-cube3x3x3KPuzzle.moves["Dv"] = {
+cube3x3x3KPuzzleDefinition.moves["Dv"] = {
   EDGES: {
     permutation: [3, 0, 1, 2, 7, 4, 5, 6, 9, 11, 8, 10],
     orientation: [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
@@ -323,7 +323,7 @@ cube3x3x3KPuzzle.moves["Dv"] = {
     orientation: [3, 0, 0, 0, 0, 1],
   },
 };
-cube3x3x3KPuzzle.moves["Bv"] = {
+cube3x3x3KPuzzleDefinition.moves["Bv"] = {
   EDGES: {
     permutation: [8, 5, 10, 1, 9, 7, 11, 3, 4, 0, 6, 2],
     orientation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],

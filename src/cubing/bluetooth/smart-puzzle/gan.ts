@@ -2,18 +2,15 @@
 
 import { Quaternion } from "three";
 import { Move } from "../../alg";
-import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
+import type { KPuzzle, KStateData } from "../../kpuzzle";
+import { KState } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
-import { debugLog } from "../debug";
-import {
-  BluetoothConfig,
-  BluetoothPuzzle,
-  PuzzleState,
-} from "./bluetooth-puzzle";
 import {
   importKey,
   unsafeDecryptBlock,
 } from "../../vendor/unsafe-raw-aes/unsafe-raw-aes";
+import { debugLog } from "../debug";
+import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
 const DEFAULT_INTERVAL_MS = 150;
@@ -280,7 +277,7 @@ export class GanCube extends BluetoothPuzzle {
     ).moveCounter();
     debugLog("Initial Move Counter:", initialMoveCounter);
     const cube = new GanCube(
-      await puzzles["3x3x3"].def(),
+      await puzzles["3x3x3"].kpuzzle(),
       ganCubeService,
       server,
       physicalStateCharacteristic,
@@ -292,7 +289,7 @@ export class GanCube extends BluetoothPuzzle {
 
   public INTERVAL_MS: number = DEFAULT_INTERVAL_MS;
   private intervalHandle: number | null = null;
-  private kpuzzle: KPuzzle;
+  private state: KState;
   private cachedFaceletStatus1Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
 
   private cachedFaceletStatus2Characteristic: Promise<BluetoothRemoteGATTCharacteristic>;
@@ -300,7 +297,7 @@ export class GanCube extends BluetoothPuzzle {
   private cachedActualAngleAndBatteryCharacteristic: Promise<BluetoothRemoteGATTCharacteristic>;
 
   private constructor(
-    def: KPuzzleDefinition,
+    private kpuzzle: KPuzzle,
     private service: BluetoothRemoteGATTService,
     private server: BluetoothRemoteGATTServer,
     private physicalStateCharacteristic: BluetoothRemoteGATTCharacteristic,
@@ -308,7 +305,7 @@ export class GanCube extends BluetoothPuzzle {
     private aesKey: CryptoKey | null,
   ) {
     super();
-    this.kpuzzle = new KPuzzle(def);
+    this.state = kpuzzle.startState();
     this.startTrackingMoves();
   }
 
@@ -355,12 +352,12 @@ export class GanCube extends BluetoothPuzzle {
     }
     for (const move of physicalState.latestMoves(numInterveningMoves)) {
       // console.log(move);
-      this.kpuzzle.applyMove(move);
+      this.state = this.state.applyMove(move);
       this.dispatchMove({
         latestMove: move,
         timeStamp: physicalState.timeStamp,
         debug: physicalState.debugInfo(),
-        state: this.kpuzzle.state,
+        state: this.state,
         // quaternion: physicalState.rotQuat(),
       });
     }
@@ -377,7 +374,7 @@ export class GanCube extends BluetoothPuzzle {
     )[7];
   }
 
-  public async getState(): Promise<PuzzleState> {
+  public async getState(): Promise<KState> {
     const arr: Uint8Array = await decryptState(
       new Uint8Array(await this.readFaceletStatus1Characteristic()),
       this.aesKey,
@@ -391,17 +388,17 @@ export class GanCube extends BluetoothPuzzle {
       }
     }
 
-    const state: PuzzleState = {
+    const stateData: KStateData = {
       CORNERS: {
-        permutation: [],
+        pieces: [],
         orientation: [],
       },
       EDGES: {
-        permutation: [],
+        pieces: [],
         orientation: [],
       },
       CENTERS: {
-        permutation: [0, 1, 2, 3, 4, 5],
+        pieces: [0, 1, 2, 3, 4, 5],
         orientation: [0, 0, 0, 0, 0, 0],
       },
     };
@@ -409,18 +406,18 @@ export class GanCube extends BluetoothPuzzle {
     for (const cornerMapping of gan356iCornerMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[cornerMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      state.CORNERS.permutation.push(pieceInfo.piece);
-      state.CORNERS.orientation.push(pieceInfo.orientation);
+      stateData.CORNERS.pieces.push(pieceInfo.piece);
+      stateData.CORNERS.orientation.push(pieceInfo.orientation);
     }
 
     for (const edgeMapping of gan356iEdgeMappings) {
       const pieceInfo: PieceInfo =
         pieceMap[edgeMapping.map((i) => faceOrder[stickers[i]]).join("")];
-      state.EDGES.permutation.push(pieceInfo.piece);
-      state.EDGES.orientation.push(pieceInfo.orientation);
+      stateData.EDGES.pieces.push(pieceInfo.piece);
+      stateData.EDGES.orientation.push(pieceInfo.orientation);
     }
 
-    return state;
+    return new KState(this.kpuzzle, stateData);
   }
 
   public async faceletStatus1Characteristic(): Promise<BluetoothRemoteGATTCharacteristic> {

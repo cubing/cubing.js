@@ -1,14 +1,5 @@
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
-import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
+import { puzzles } from "../../../../puzzles";
 import { parseSGS, SGSCachedData } from "../parseSGS";
-
-export async function ftoDef(): Promise<KPuzzleDefinition> {
-  return getPuzzleGeometryByName("FTO", {
-    allMoves: true,
-    orientCenters: true,
-    addRotations: true,
-  }).writekpuzzle(true);
-}
 
 let cachedData: Promise<SGSCachedData> | null = null;
 export async function sgsDataFTO() {
@@ -18,7 +9,7 @@ export async function sgsDataFTO() {
 // TODO: Reduce info.
 async function uncachedSGSDataFTO(): Promise<SGSCachedData> {
   return parseSGS(
-    await ftoDef(),
+    await puzzles["fto"].kpuzzle(),
     `SubgroupSizes 24 12 11 12 12 11 10 9 11 8 10 9 7 8 10 10 6 9 8 5 7 6 5 4 4 8 7 3 6 6 360
 
 Alg T

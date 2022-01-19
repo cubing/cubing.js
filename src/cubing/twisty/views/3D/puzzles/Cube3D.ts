@@ -17,19 +17,19 @@ import {
   Vector3,
 } from "three";
 import type { ExperimentalStickering } from "../../..";
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
+import type { KPuzzle } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
 } from "../../../../puzzles/stickerings/appearance";
+import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
+import { smootherStep } from "../../../controllers/easing";
 import {
   HintFaceletStyle,
   hintFaceletStyles,
 } from "../../../model/props/puzzle/display/HintFaceletProp";
 import { experimentalStickerings } from "../../../model/props/puzzle/display/StickeringProp";
-import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
-import { smootherStep } from "../../../controllers/easing";
 import { TAU } from "../TAU";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
@@ -554,7 +554,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   }
 
   constructor(
-    private def: KPuzzleDefinition,
+    private kpuzzle: KPuzzle,
     private scheduleRenderCallback?: () => void,
     options: Cube3DOptions = {},
   ) {
@@ -563,9 +563,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     this.options = { ...cube3DOptionsDefaults };
     Object.assign(this.options, options); // TODO: check if this works
 
-    if (this.def.name !== "3x3x3") {
+    if (this.kpuzzle.name() !== "3x3x3") {
       throw new Error(
-        `Invalid puzzle for this Cube3D implementation: ${this.def.name}`,
+        `Invalid puzzle for this Cube3D implementation: ${this.kpuzzle.name()}`,
       );
     }
 
@@ -716,10 +716,10 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     for (const orbit in pieceDefs) {
       const pieces = pieceDefs[orbit];
       for (let i = 0; i < pieces.length; i++) {
-        const j = reid333[orbit].permutation[i];
+        const j = reid333.stateData[orbit].pieces[i];
         this.pieces[orbit][j].matrix.copy(pieceDefs[orbit][i].matrix);
         this.pieces[orbit][j].matrix.multiply(
-          orientationRotation[orbit][reid333[orbit].orientation[i]],
+          orientationRotation[orbit][reid333.stateData[orbit].orientation[i]],
         );
       }
       for (const moveProgress of p.movesInProgress) {
@@ -734,12 +734,14 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
             4,
         );
         for (let i = 0; i < pieces.length; i++) {
-          const k = this.def.moves[move.family][orbit].permutation[i];
+          const k =
+            this.kpuzzle.definition.moves[move.family][orbit].permutation[i];
           if (
             i !== k ||
-            this.def.moves[move.family][orbit].orientation[i] !== 0
+            this.kpuzzle.definition.moves[move.family][orbit].orientation[i] !==
+              0
           ) {
-            const j = reid333[orbit].permutation[i];
+            const j = reid333.stateData[orbit].pieces[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);
           }
         }

@@ -1,40 +1,79 @@
-import { Alg } from "../../alg";
-import { KPuzzle } from "../kpuzzle";
-import { cube3x3x3KPuzzle } from "./3x3x3.kpuzzle.json";
+import { KPuzzle } from "..";
+import { cube3x3x3KPuzzleDefinition } from "./3x3x3.kpuzzle.json";
 
-function transformationForAlg(alg: string | Alg) {
-  const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
-  kpuzzle.applyAlg(new Alg(alg));
-  return kpuzzle.state;
-}
+const kpuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);
 
 describe("3x3x3 definition", () => {
   it("should have consistent moves", () => {
-    expect(transformationForAlg("r")).not.toEqual(transformationForAlg("R M"));
+    expect(kpuzzle.algToTransformation("r")).not.toEqual(
+      kpuzzle.algToTransformation("R M"),
+    );
 
-    expect(transformationForAlg("u")).toEqual(transformationForAlg("U E'"));
-    expect(transformationForAlg("l")).toEqual(transformationForAlg("L M"));
-    expect(transformationForAlg("f")).toEqual(transformationForAlg("F S"));
-    expect(transformationForAlg("r")).toEqual(transformationForAlg("R M'"));
-    expect(transformationForAlg("b")).toEqual(transformationForAlg("B S'"));
-    expect(transformationForAlg("d")).toEqual(transformationForAlg("D E"));
+    expect(kpuzzle.algToTransformation("u")).toEqual(
+      kpuzzle.algToTransformation("U E'"),
+    );
+    expect(kpuzzle.algToTransformation("l")).toEqual(
+      kpuzzle.algToTransformation("L M"),
+    );
+    expect(kpuzzle.algToTransformation("f")).toEqual(
+      kpuzzle.algToTransformation("F S"),
+    );
+    expect(kpuzzle.algToTransformation("r")).toEqual(
+      kpuzzle.algToTransformation("R M'"),
+    );
+    expect(kpuzzle.algToTransformation("b")).toEqual(
+      kpuzzle.algToTransformation("B S'"),
+    );
+    expect(kpuzzle.algToTransformation("d")).toEqual(
+      kpuzzle.algToTransformation("D E"),
+    );
 
-    expect(transformationForAlg("u")).toEqual(transformationForAlg("Uw"));
-    expect(transformationForAlg("l")).toEqual(transformationForAlg("Lw"));
-    expect(transformationForAlg("f")).toEqual(transformationForAlg("Fw"));
-    expect(transformationForAlg("r")).toEqual(transformationForAlg("Rw"));
-    expect(transformationForAlg("b")).toEqual(transformationForAlg("Bw"));
-    expect(transformationForAlg("d")).toEqual(transformationForAlg("Dw"));
+    expect(kpuzzle.algToTransformation("u")).toEqual(
+      kpuzzle.algToTransformation("Uw"),
+    );
+    expect(kpuzzle.algToTransformation("l")).toEqual(
+      kpuzzle.algToTransformation("Lw"),
+    );
+    expect(kpuzzle.algToTransformation("f")).toEqual(
+      kpuzzle.algToTransformation("Fw"),
+    );
+    expect(kpuzzle.algToTransformation("r")).toEqual(
+      kpuzzle.algToTransformation("Rw"),
+    );
+    expect(kpuzzle.algToTransformation("b")).toEqual(
+      kpuzzle.algToTransformation("Bw"),
+    );
+    expect(kpuzzle.algToTransformation("d")).toEqual(
+      kpuzzle.algToTransformation("Dw"),
+    );
 
-    expect(transformationForAlg("x")).toEqual(transformationForAlg("R M' L'"));
-    expect(transformationForAlg("y")).toEqual(transformationForAlg("U E' D'"));
-    expect(transformationForAlg("z")).toEqual(transformationForAlg("F S B'"));
+    expect(kpuzzle.algToTransformation("x")).toEqual(
+      kpuzzle.algToTransformation("R M' L'"),
+    );
+    expect(kpuzzle.algToTransformation("y")).toEqual(
+      kpuzzle.algToTransformation("U E' D'"),
+    );
+    expect(kpuzzle.algToTransformation("z")).toEqual(
+      kpuzzle.algToTransformation("F S B'"),
+    );
 
-    expect(transformationForAlg("Uv")).toEqual(transformationForAlg("y"));
-    expect(transformationForAlg("Lv")).toEqual(transformationForAlg("x'"));
-    expect(transformationForAlg("Fv")).toEqual(transformationForAlg("z"));
-    expect(transformationForAlg("Rv")).toEqual(transformationForAlg("x"));
-    expect(transformationForAlg("Bv")).toEqual(transformationForAlg("z'"));
-    expect(transformationForAlg("Dv")).toEqual(transformationForAlg("y'"));
+    expect(kpuzzle.algToTransformation("Uv")).toEqual(
+      kpuzzle.algToTransformation("y"),
+    );
+    expect(kpuzzle.algToTransformation("Lv")).toEqual(
+      kpuzzle.algToTransformation("x'"),
+    );
+    expect(kpuzzle.algToTransformation("Fv")).toEqual(
+      kpuzzle.algToTransformation("z"),
+    );
+    expect(kpuzzle.algToTransformation("Rv")).toEqual(
+      kpuzzle.algToTransformation("x"),
+    );
+    expect(kpuzzle.algToTransformation("Bv")).toEqual(
+      kpuzzle.algToTransformation("z'"),
+    );
+    expect(kpuzzle.algToTransformation("Dv")).toEqual(
+      kpuzzle.algToTransformation("y'"),
+    );
   });
 });

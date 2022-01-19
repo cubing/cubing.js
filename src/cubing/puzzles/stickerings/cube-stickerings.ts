@@ -14,9 +14,9 @@ export async function cubeAppearance(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<PuzzleAppearance> {
-  const def = await puzzleLoader.def();
-  const puzzleStickering = new PuzzleStickering(def);
-  const m = new StickeringManager(def);
+  const kpuzzle = await puzzleLoader.kpuzzle();
+  const puzzleStickering = new PuzzleStickering(kpuzzle);
+  const m = new StickeringManager(kpuzzle);
 
   const LL = (): PieceSet => m.move("U");
   const orUD = (): PieceSet => m.or(m.moves(["U", "D"]));

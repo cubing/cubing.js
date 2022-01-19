@@ -1,6 +1,5 @@
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
-import { KPuzzle } from "../../../cubing/kpuzzle";
 import { puzzles } from "../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
 import {
@@ -110,32 +109,37 @@ export class App {
     ]);
     const currentAlg = currentAlgWithIssues.alg;
     let solution: Alg;
-    const kpuzzle = new KPuzzle(await puzzles[puzzleID].def());
+    const kpuzzle = await puzzles[puzzleID].kpuzzle();
     console.log(kpuzzle);
     switch (puzzleID) {
       case "2x2x2": {
-        kpuzzle.applyAlg(currentAlg);
-        solution = await experimentalSolve2x2x2(kpuzzle.state);
+        solution = await experimentalSolve2x2x2(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "3x3x3": {
-        kpuzzle.applyAlg(currentAlg);
-        solution = await experimentalSolve3x3x3IgnoringCenters(kpuzzle.state);
+        solution = await experimentalSolve3x3x3IgnoringCenters(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "skewb": {
-        kpuzzle.applyAlg(currentAlg);
-        solution = await solveSkewb(kpuzzle.state);
+        solution = await solveSkewb(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "pyraminx": {
-        kpuzzle.applyAlg(currentAlg);
-        solution = await solvePyraminx(kpuzzle.state);
+        solution = await solvePyraminx(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "megaminx": {
-        kpuzzle.applyAlg(currentAlg);
-        solution = await solveMegaminx(kpuzzle.state);
+        solution = await solveMegaminx(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       default:

@@ -1,5 +1,5 @@
 // Include 3x3x3 in the main bundle for better performance.
-import { experimentalCube3x3x3KPuzzle as cube3x3x3KPuzzle } from "../../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../kpuzzle";
 import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import type { PuzzleLoader } from "../../PuzzleLoader";
@@ -14,9 +14,8 @@ export const cube3x3x3: PuzzleLoader = {
   fullName: "3×3×3 Cube",
   inventedBy: ["Ernő Rubik"],
   inventionYear: 1974, // https://en.wikipedia.org/wiki/Rubik%27s_Cube#Conception_and_development
-  def: async () => {
-    // return await import("./3x3x3.kpuzzle.json");
-    return cube3x3x3KPuzzle;
+  kpuzzle: async () => {
+    return experimental3x3x3KPuzzle;
   },
   svg: async () => {
     return (await import("./3x3x3.kpuzzle.svg")).default;

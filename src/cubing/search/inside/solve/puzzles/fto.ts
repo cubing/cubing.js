@@ -1,5 +1,6 @@
 import type { Alg } from "../../../../alg";
-import type { Transformation } from "../../../../kpuzzle";
+import type { KState } from "../../../../kpuzzle/KState";
+import { puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { randomStateFromSGS, TrembleSolver } from "../tremble";
@@ -13,7 +14,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
       const sgs = await import("./fto.sgs.json");
       const json: SGSCachedData = await sgs.sgsDataFTO();
-      return new TrembleSolver(await sgs.ftoDef(), json, [
+      return new TrembleSolver(await puzzles["fto"].kpuzzle(), json, [
         "U",
         "R",
         "F",
@@ -32,7 +33,7 @@ export async function preInitializeFTO(): Promise<void> {
 }
 
 // TODO: centers
-export async function solveFTO(state: Transformation): Promise<Alg> {
+export async function solveFTO(state: KState): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(
@@ -53,6 +54,9 @@ export async function randomFTOScramble(): Promise<Alg> {
   }
   const sgs = await import("./fto.sgs.json");
   return solveFTO(
-    await randomStateFromSGS(await sgs.ftoDef(), await sgs.sgsDataFTO()),
+    await randomStateFromSGS(
+      await puzzles["fto"].kpuzzle(),
+      await sgs.sgsDataFTO(),
+    ),
   );
 }

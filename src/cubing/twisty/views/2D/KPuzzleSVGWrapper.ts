@@ -1,10 +1,9 @@
+import type { KPuzzle } from "../../../kpuzzle";
+import type { KState } from "../../../kpuzzle/KState";
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
-} from "../puzzles/stickerings/appearance"; // TODO
-import type { KPuzzleDefinition, Transformation } from "./definition_types";
-import type { KPuzzle } from "./kpuzzle";
-
+} from "../../../puzzles/stickerings/appearance"; // TODO
 const xmlns = "http://www.w3.org/2000/svg";
 
 // Unique ID mechanism to keep SVG gradient element IDs unique. TODO: Is there
@@ -61,14 +60,12 @@ export class KPuzzleSVGWrapper {
   private gradients: { [type: string]: SVGGradientElement } = {};
   private svgID: string;
   constructor(
-    public kPuzzleDefinition: KPuzzleDefinition,
+    public kpuzzle: KPuzzle,
     svgSource: string,
     experimentalAppearance?: PuzzleAppearance,
   ) {
     if (!svgSource) {
-      throw new Error(
-        `No SVG definition for puzzle type: ${kPuzzleDefinition.name}`,
-      );
+      throw new Error(`No SVG definition for puzzle type: ${kpuzzle.name()}`);
     }
 
     this.svgID = nextSVGID();
@@ -90,8 +87,8 @@ export class KPuzzleSVGWrapper {
     this.gradientDefs = document.createElementNS(xmlns, "defs");
     svgElem.insertBefore(this.gradientDefs, svgElem.firstChild);
 
-    for (const orbitName in kPuzzleDefinition.orbits) {
-      const orbitDefinition = kPuzzleDefinition.orbits[orbitName];
+    for (const orbitName in kpuzzle.definition.orbits) {
+      const orbitDefinition = kpuzzle.definition.orbits[orbitName];
 
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (
@@ -143,26 +140,27 @@ export class KPuzzleSVGWrapper {
     }
   }
 
-  public drawKPuzzle(
-    kpuzzle: KPuzzle,
-    nextState?: Transformation,
-    fraction?: number,
-  ): void {
-    this.draw(kpuzzle.definition, kpuzzle.state, nextState, fraction);
+  public drawState(state: KState, nextState?: KState, fraction?: number): void {
+    this.draw(state, nextState, fraction);
   }
 
   // TODO: save definition in the constructor?
-  public draw(
-    definition: KPuzzleDefinition,
-    state: Transformation,
-    nextState?: Transformation,
-    fraction?: number,
-  ): void {
-    for (const orbitName in definition.orbits) {
-      const orbitDefinition = definition.orbits[orbitName];
+  public draw(state: KState, nextState?: KState, fraction?: number): void {
+    const transformation = state.experimentalToTransformation();
+    const nextTransformation = nextState?.experimentalToTransformation();
+    if (!transformation) {
+      throw new Error("Distinguishable pieces are not handled for SVG yet!");
+    }
 
-      const curOrbitState = state[orbitName];
-      const nextOrbitState = nextState ? nextState[orbitName] : null;
+    for (const orbitName in transformation.kpuzzle.definition.orbits) {
+      const orbitDefinition =
+        transformation.kpuzzle.definition.orbits[orbitName];
+
+      const curTransformationOrbit =
+        transformation.transformationData[orbitName];
+      const nextTransformationOrbit = nextTransformation
+        ? nextTransformation.transformationData[orbitName]
+        : null;
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (
           let orientation = 0;
@@ -172,19 +170,19 @@ export class KPuzzleSVGWrapper {
           const id = this.elementID(orbitName, idx, orientation);
           const fromCur = this.elementID(
             orbitName,
-            curOrbitState.permutation[idx],
+            curTransformationOrbit.permutation[idx],
             (orbitDefinition.orientations -
-              curOrbitState.orientation[idx] +
+              curTransformationOrbit.orientation[idx] +
               orientation) %
               orbitDefinition.orientations,
           );
           let singleColor = false;
-          if (nextOrbitState) {
+          if (nextTransformationOrbit) {
             const fromNext = this.elementID(
               orbitName,
-              nextOrbitState.permutation[idx],
+              nextTransformationOrbit.permutation[idx],
               (orbitDefinition.orientations -
-                nextOrbitState.orientation[idx] +
+                nextTransformationOrbit.orientation[idx] +
                 orientation) %
                 orbitDefinition.orientations,
             );

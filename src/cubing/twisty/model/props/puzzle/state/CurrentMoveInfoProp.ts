@@ -9,13 +9,13 @@ import { TwistyPropDerived } from "../../TwistyProp";
 import type { CatchUpMove } from "./CatchUpMoveProp";
 
 interface PositionPropInputs {
-  indexer: AlgIndexer<any>;
+  indexer: AlgIndexer;
   detailedTimelineInfo: DetailedTimelineInfo;
   catchUpMove: CatchUpMove;
 }
 
 // TODO: Rename "current" (implies a single one) to "active"?
-export class CurrentLeavesProp extends TwistyPropDerived<
+export class CurrentMoveInfoProp extends TwistyPropDerived<
   PositionPropInputs,
   CurrentMoveInfo
 > {

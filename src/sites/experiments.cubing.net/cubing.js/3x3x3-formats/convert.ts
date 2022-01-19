@@ -1,17 +1,12 @@
-import type {
-  Transformation,
-  OrbitTransformation,
-  KPuzzleDefinition,
-} from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle";
+import type { KStateOrbitData } from "../../../../cubing/kpuzzle/KPuzzleDefinition";
+import { KState } from "../../../../cubing/kpuzzle/KState";
 
-export function kpuzzleToString(state: Transformation): string {
+export function stateToString(state: KState): string {
   return JSON.stringify(state, null, "  ")
     .replace(/\n +(\d+),/g, "$1, ")
     .replace(/\n +(\d+)\n +/g, "$1");
 }
-
-import { experimentalCube3x3x3KPuzzle as defJSON } from "../../../../cubing/kpuzzle";
-const def: KPuzzleDefinition = defJSON;
 
 const pieceNames: Record<string, string[]> = {
   EDGES: "UF UR UB UL DF DR DB DL FR FL BR BL".split(" "),
@@ -31,10 +26,13 @@ function rotateLeft(s: string, i: number): string {
 const pieceMap: { [s: string]: PieceInfo } = {};
 // TODO: Condense the for loops.
 
-const orbits = Object.keys(def.orbits);
+const orbits = Object.keys(experimental3x3x3KPuzzle.definition.orbits);
 for (const orbit of orbits) {
   pieceNames[orbit].forEach((piece, idx) => {
-    const numOri = orbit === "CENTERS" ? 1 : def.orbits[orbit].orientations;
+    const numOri =
+      orbit === "CENTERS"
+        ? 1
+        : experimental3x3x3KPuzzle.definition.orbits[orbit].orientations;
     for (let i = 0; i < numOri; i++) {
       const name = rotateLeft(piece, i);
       pieceMap[name] = { piece: idx, orientation: i };
@@ -46,15 +44,15 @@ for (const orbit of orbits) {
   });
 }
 
-export function kpuzzleToReidString(state: Transformation): string {
+export function kpuzzleToReidString(state: KState): string {
   const pieces: string[] = [];
 
   const addOrbit = (orbitName: string): void => {
-    for (let i = 0; i < state[orbitName].permutation.length; i++) {
+    for (let i = 0; i < state.stateData[orbitName].pieces.length; i++) {
       pieces.push(
         rotateLeft(
-          pieceNames[orbitName][state[orbitName].permutation[i]],
-          state[orbitName].orientation[i],
+          pieceNames[orbitName][state.stateData[orbitName].pieces[i]],
+          state.stateData[orbitName].orientation[i],
         ),
       );
     }
@@ -97,33 +95,33 @@ export function stickersToReidString(stickers: number[]): string {
   return reidStringChars.join("");
 }
 
-export function kpuzzleToStickers(state: Transformation): number[] {
+export function kpuzzleToStickers(state: KState): number[] {
   return reidStringToStickers(kpuzzleToReidString(state));
 }
 
-export function stickersToKPuzzle(stickers: number[]): Transformation {
-  return reidStringToKPuzzle(stickersToReidString(stickers));
+export function stickersToKPuzzle(stickers: number[]): KState {
+  return reidStringToKState(stickersToReidString(stickers));
 }
 
-export function reidStringToKPuzzle(s: string): Transformation {
+export function reidStringToKState(s: string): KState {
   const pieces = s.split(" ");
 
-  const orbit = (pieces: string[]): OrbitTransformation => {
-    const orbitTransformation: OrbitTransformation = {
-      permutation: [],
+  const orbit = (pieces: string[]): KStateOrbitData => {
+    const orbitState: KStateOrbitData = {
+      pieces: [],
       orientation: [],
     };
     for (const piece of pieces) {
-      orbitTransformation.permutation.push(pieceMap[piece].piece);
-      orbitTransformation.orientation.push(pieceMap[piece].orientation);
+      orbitState.pieces.push(pieceMap[piece].piece);
+      orbitState.orientation.push(pieceMap[piece].orientation);
     }
-    return orbitTransformation;
+    return orbitState;
   };
 
-  const x = {
+  const stateData = {
     EDGES: orbit(pieces.slice(0, 12)),
     CORNERS: orbit(pieces.slice(12, 20)),
     CENTERS: orbit(pieces.slice(20, 26)),
   };
-  return x;
+  return new KState(experimental3x3x3KPuzzle, stateData);
 }

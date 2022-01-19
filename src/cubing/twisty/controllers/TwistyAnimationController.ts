@@ -230,7 +230,7 @@ export class TwistyAnimationController {
           this.lastTimestampPromise,
           this.model.timeRangeProp.get(),
           this.model.tempoScaleProp.get(),
-          this.model.currentLeavesProp.get(),
+          this.model.currentMoveInfoProp.get(),
         ]),
       );
 

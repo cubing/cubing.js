@@ -3,10 +3,10 @@
  */
 
 import { getPuzzleGeometryByDesc } from ".";
-import { PGPuzzles } from "./PGPuzzles";
-import { transformationOrder, Transformation } from "../kpuzzle";
-import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
 import { Alg, Move } from "../alg";
+import { KPuzzle } from "../kpuzzle";
+import { PGPuzzles } from "./PGPuzzles";
+import { PGNotation } from "./PuzzleGeometry";
 /**
  *   Test basic things about puzzles created by puzzle
  *   geometry.  We check stickers per face, face count
@@ -89,9 +89,11 @@ describe("PuzzleGeometry-Puzzles", () => {
   it("testpuzzles", () => {
     for (const [name, desc] of Object.entries(PGPuzzles)) {
       const pg = getPuzzleGeometryByDesc(desc, {});
-      const kpuzzledef = pg.writekpuzzle(false);
+      const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
       const sep = ", ";
-      const seq = Object.getOwnPropertyNames(kpuzzledef.moves).sort().join(" ");
+      const seq = Object.getOwnPropertyNames(kpuzzleDefinition.moves)
+        .sort()
+        .join(" ");
       let algo = Alg.fromString(seq);
       // TODO:  likely a temporary hack until we resolve how notations are
       // added or set in puzzle geometry.
@@ -101,10 +103,11 @@ describe("PuzzleGeometry-Puzzles", () => {
       }
       // console.log(algo.toString(), bms);
       algo = new Alg(bms);
-      const ksp = new KSolvePuzzle(kpuzzledef);
-      const tai = new TreeAlgIndexer(ksp, algo);
-      const tr = tai.transformAtIndex(tai.numAnimatedLeaves());
-      const o = transformationOrder(kpuzzledef, tr as Transformation);
+      const o = new KPuzzle(kpuzzleDefinition, {
+        experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
+      })
+        .algToTransformation(algo)
+        .repetitionOrder();
       const dat = [
         name,
         sep,
@@ -114,9 +117,9 @@ describe("PuzzleGeometry-Puzzles", () => {
         sep,
         pg.cubies.length,
         sep,
-        Object.getOwnPropertyNames(kpuzzledef.orbits).length,
+        Object.getOwnPropertyNames(kpuzzleDefinition.orbits).length,
         sep,
-        Object.getOwnPropertyNames(kpuzzledef.moves).length,
+        Object.getOwnPropertyNames(kpuzzleDefinition.moves).length,
         sep,
         o,
       ].join("");

@@ -1,4 +1,8 @@
 import type { Alg } from "../../alg";
+import type { KStateData } from "../../kpuzzle";
+import { KState } from "../../kpuzzle";
+import { puzzles } from "../../puzzles";
+import { setIsInsideWorker } from "./inside-worker";
 import {
   preInitialize222,
   random222Scramble,
@@ -16,6 +20,9 @@ import {
   random444OrientedScramble,
   random444Scramble,
 } from "./solve/puzzles/4x4x4";
+import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
+import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
+import { randomFTOScramble } from "./solve/puzzles/fto";
 import { solveMegaminx } from "./solve/puzzles/megaminx";
 import {
   randomPyraminxScrambleFixedOrientation,
@@ -25,12 +32,7 @@ import {
   randomSkewbFixedCornerScramble,
   solveSkewb,
 } from "./solve/puzzles/skewb";
-import { setIsInsideWorker } from "./inside-worker";
-import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
-import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
-import type { Transformation } from "../../kpuzzle";
-import { randomFTOScramble } from "./solve/puzzles/fto";
 
 setIsInsideWorker(true);
 
@@ -146,24 +148,29 @@ export const insideAPI = {
     return (await insideAPI.randomScrambleForEvent(eventID)).toString();
   },
 
-  solve333ToString: async (s: Transformation): Promise<string> => {
-    return (await solve333(s)).toString();
+  solve333ToString: async (stateData: KStateData): Promise<string> => {
+    const state = new KState(await puzzles["3x3x3"].kpuzzle(), stateData);
+    return (await solve333(state)).toString();
   },
 
-  solve222ToString: async (s: Transformation): Promise<string> => {
-    return (await solve222(s)).toString();
+  solve222ToString: async (stateData: KStateData): Promise<string> => {
+    const state = new KState(await puzzles["2x2x2"].kpuzzle(), stateData);
+    return (await solve222(state)).toString();
   },
 
-  solveSkewbToString: async (s: Transformation): Promise<string> => {
-    return (await solveSkewb(s)).toString();
+  solveSkewbToString: async (stateData: KStateData): Promise<string> => {
+    const state = new KState(await puzzles["skewb"].kpuzzle(), stateData);
+    return (await solveSkewb(state)).toString();
   },
 
-  solvePyraminxToString: async (s: Transformation): Promise<string> => {
-    return (await solvePyraminx(s)).toString();
+  solvePyraminxToString: async (stateData: KStateData): Promise<string> => {
+    const state = new KState(await puzzles["pyraminx"].kpuzzle(), stateData);
+    return (await solvePyraminx(state)).toString();
   },
 
-  solveMegaminxToString: async (s: Transformation): Promise<string> => {
-    return (await solveMegaminx(s)).toString();
+  solveMegaminxToString: async (stateData: KStateData): Promise<string> => {
+    const state = new KState(await puzzles["megaminx"].kpuzzle(), stateData);
+    return (await solveMegaminx(state)).toString();
   },
 
   setDebugMeasurePerf: async (measure: boolean): Promise<void> => {

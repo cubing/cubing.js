@@ -1,18 +1,27 @@
-import type { KPuzzleDefinition } from "../../../../kpuzzle";
-import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
+import { KPuzzle } from "../../../../kpuzzle";
+import {
+  getPuzzleGeometryByName,
+  ExperimentalPGNotation,
+} from "../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
-async function skewbDefWithoutMO(): Promise<KPuzzleDefinition> {
-  return getPuzzleGeometryByName("skewb", {
+async function skewbKPuzzleWithoutMO(): Promise<KPuzzle> {
+  const pg = getPuzzleGeometryByName("skewb", {
     allMoves: true,
     addRotations: true,
-  }).writekpuzzle(true);
+  });
+  return new KPuzzle(pg.getKPuzzleDefinition(true), {
+    experimentalPGNotation: new ExperimentalPGNotation(
+      pg,
+      pg.getOrbitsDef(true),
+    ),
+  });
 }
 
 // TODO: Implement a general lazy Promise/ Promise cache wrapper
-let defCache: Promise<KPuzzleDefinition> | null = null;
-export async function skewbDefWithoutMOCached(): Promise<KPuzzleDefinition> {
-  return (defCache ??= skewbDefWithoutMO());
+let defCache: Promise<KPuzzle> | null = null;
+export async function skewbKPuzzleWithoutMOCached(): Promise<KPuzzle> {
+  return (defCache ??= skewbKPuzzleWithoutMO());
 }
 
 let cachedData: Promise<SGSCachedData> | null = null;
@@ -29,7 +38,7 @@ export async function sgsDataSkewbFixedCorner(): Promise<SGSCachedData> {
 // TODO: Reduce info.
 async function uncachedSGSDataSkewb(): Promise<SGSCachedData> {
   return parseSGS(
-    await skewbDefWithoutMOCached(),
+    await skewbKPuzzleWithoutMOCached(),
     `SubgroupSizes 24 6 5 12 9 3 4 9 3 3
 
 Alg y

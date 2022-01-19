@@ -1,20 +1,17 @@
+import type { AlgIndexer } from "../../../..";
+import type { Alg } from "../../../../../alg";
+import type { KPuzzle } from "../../../../../kpuzzle";
 import { countMoves } from "../../../../../notation";
 import { SimpleAlgIndexer } from "../../../../controllers/indexer/SimpleAlgIndexer";
 import { SimultaneousMoveIndexerV2 } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexerV2";
 import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";
+import { TwistyPropDerived } from "../../TwistyProp";
+import type { VisualizationStrategy } from "../../viewer/VisualizationStrategyProp";
+import type { PuzzleID } from "../structure/PuzzleIDRequestProp";
 import type { AlgWithIssues } from "./AlgProp";
 import type { IndexerStrategyName } from "./IndexerConstructorRequestProp";
-import type { VisualizationStrategy } from "../../viewer/VisualizationStrategyProp";
-import { TwistyPropDerived } from "../../TwistyProp";
-import type { PuzzleID } from "../structure/PuzzleIDRequestProp";
-import type { KPuzzleWrapper } from "../../../../views/3D/puzzles/KPuzzleWrapper";
-import type { Alg } from "../../../../../alg";
-import type { AlgIndexer } from "../../../..";
 
-export type IndexerConstructor = new (
-  puzzle: KPuzzleWrapper,
-  alg: Alg,
-) => AlgIndexer<KPuzzleWrapper>;
+export type IndexerConstructor = new (kpuzzle: KPuzzle, alg: Alg) => AlgIndexer;
 
 interface IndexerConstructorPropInputs {
   puzzle: PuzzleID;

@@ -21,4 +21,5 @@ export { PG3D } from "./views/3D/puzzles/PG3D";
 export type { AlgIndexer } from "./controllers/indexer/AlgIndexer";
 export { SimpleAlgIndexer } from "./controllers/indexer/SimpleAlgIndexer";
 export { TreeAlgIndexer } from "./controllers/indexer/tree/TreeAlgIndexer";
-export { KPuzzleWrapper as KSolvePuzzle } from "./views/3D/puzzles/KPuzzleWrapper";
+
+export { KPuzzleSVGWrapper as ExperimentalKPuzzleSVGWrapper } from "./views/2D/KPuzzleSVGWrapper";

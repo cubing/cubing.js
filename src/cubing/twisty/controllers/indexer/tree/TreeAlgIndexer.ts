@@ -1,31 +1,25 @@
 import type { Alg, Move } from "../../../../alg";
-import type {
-  PuzzleWrapper,
-  State,
-} from "../../../views/3D/puzzles/KPuzzleWrapper";
+import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
+import type { KState } from "../../../../kpuzzle/KState";
 import type { Duration, Timestamp } from "../../AnimationTypes";
 import type { AlgIndexer } from "../AlgIndexer";
-import { chunkAlgs } from "./chunkAlgs";
 import {
   AlgPartDecoration,
   AlgWalker,
   DecoratorConstructor,
 } from "./AlgWalker";
+import { chunkAlgs } from "./chunkAlgs";
 
-export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
-  private decoration: AlgPartDecoration<PuzzleWrapper>;
-  private walker: AlgWalker<PuzzleWrapper>;
-  constructor(private puzzle: PuzzleWrapper, alg: Alg) {
-    const deccon = new DecoratorConstructor<PuzzleWrapper>(this.puzzle);
+export class TreeAlgIndexer implements AlgIndexer {
+  private decoration: AlgPartDecoration;
+  private walker: AlgWalker;
+  constructor(private kpuzzle: KPuzzle, alg: Alg) {
+    const deccon = new DecoratorConstructor(this.kpuzzle);
 
     const chunkedAlg = chunkAlgs(alg);
 
     this.decoration = deccon.traverseAlg(chunkedAlg);
-    this.walker = new AlgWalker<PuzzleWrapper>(
-      this.puzzle,
-      chunkedAlg,
-      this.decoration,
-    );
+    this.walker = new AlgWalker(this.kpuzzle, chunkedAlg, this.decoration);
   }
 
   public getAnimLeaf(index: number): Move | null {
@@ -58,13 +52,9 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
     throw new Error(`Out of algorithm: index ${index}`);
   }
 
-  public stateAtIndex(
-    index: number,
-    startTransformation?: State<PuzzleWrapper>,
-  ): State<PuzzleWrapper> {
+  public stateAtIndex(index: number, startState?: KState): KState {
     this.walker.moveByIndex(index);
-    return this.puzzle.combine(
-      startTransformation ?? this.puzzle.startState(),
+    return (startState ?? this.kpuzzle.startState()).applyTransformation(
       this.walker.st,
     );
   }
@@ -72,7 +62,7 @@ export class TreeAlgIndexer implements AlgIndexer<PuzzleWrapper> {
   // TransformAtIndex does not reflect the start state; it only reflects
   // the change from the start state to the current move index.  If you
   // want the actual state, use stateAtIndex.
-  public transformAtIndex(index: number): State<PuzzleWrapper> {
+  public transformationAtIndex(index: number): KTransformation {
     this.walker.moveByIndex(index);
     return this.walker.st;
   }

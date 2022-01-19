@@ -12,7 +12,7 @@ export { Twisty3DScene } from "../../views/3D/Twisty3DScene";
 
 export async function cube3DShim(options?: Cube3DOptions): Promise<Cube3D> {
   const renderCallbackShim = () => {};
-  return new Cube3D(await cube3x3x3.def(), renderCallbackShim, options);
+  return new Cube3D(await cube3x3x3.kpuzzle(), renderCallbackShim, options);
 }
 
 // TODO: take loader?
@@ -23,7 +23,7 @@ export async function pg3dShim(
   const renderCallbackShim = () => {};
   return new PG3D(
     renderCallbackShim,
-    await puzzleLoader.def(),
+    await puzzleLoader.kpuzzle(),
     (await puzzleLoader.pg!()).get3d(),
     true,
     hintFacelets === "floating",
