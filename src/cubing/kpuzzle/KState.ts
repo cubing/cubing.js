@@ -1,6 +1,7 @@
 import type { KPuzzle, KTransformationData } from ".";
 import type { Alg, Move } from "../alg";
 import { applyTransformationDataToStateData } from "./combine";
+import type { KTransformationSource } from "./KPuzzle";
 import type { KStateData, KTransformationOrbitData } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
 
@@ -17,6 +18,12 @@ export class KState {
       transformation.transformationData,
     );
     return new KState(transformation.kpuzzle, newStateData);
+  }
+
+  // Convenience function
+  // @deprecated
+  apply(source: KTransformationSource): KState {
+    return this.applyTransformation(this.kpuzzle.toTransformation(source));
   }
 
   applyTransformation(transformation: KTransformation): KState {

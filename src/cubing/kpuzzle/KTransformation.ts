@@ -6,7 +6,7 @@ import {
   transformationRepetitionOrder,
 } from "./calculate";
 import { combineTransformationData } from "./combine";
-import type { KPuzzle } from "./KPuzzle";
+import type { KPuzzle, KTransformationSource } from "./KPuzzle";
 import type { KTransformationData } from "./KPuzzleDefinition";
 import { KState } from "./KState";
 
@@ -40,6 +40,12 @@ export class KTransformation {
       this.transformationData,
       t2.transformationData,
     );
+  }
+
+  // Convenience function
+  // @deprecated
+  apply(source: KTransformationSource): KTransformation {
+    return this.applyTransformation(this.kpuzzle.toTransformation(source));
   }
 
   applyTransformation(t2: KTransformation): KTransformation {

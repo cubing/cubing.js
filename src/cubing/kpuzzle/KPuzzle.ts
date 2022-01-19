@@ -11,6 +11,8 @@ import type {
 import { KState } from "./KState";
 import { KTransformation } from "./KTransformation";
 
+export type KTransformationSource = Alg | Move | string | KTransformation;
+
 export class KPuzzle {
   constructor(public readonly definition: KPuzzleDefinition) {}
 
@@ -51,6 +53,19 @@ export class KPuzzle {
       alg = new Alg(alg);
     }
     return algToTransformation(alg, this);
+  }
+
+  // @deprecated
+  toTransformation(source: KTransformationSource): KTransformation {
+    if (typeof source === "string") {
+      return this.algToTransformation(source);
+    } else if ((source as Alg | null)?.is?.(Alg)) {
+      return this.algToTransformation(source as Alg);
+    } else if ((source as Move | null)?.is?.(Move)) {
+      return this.moveToTransformation(source as Move);
+    } else {
+      return source as KTransformation;
+    }
   }
 
   startState(): KState {
