@@ -12,7 +12,6 @@ import {
   SkewbNotationMapper,
   TetraminxNotationMapper,
 } from "./notation-mapping";
-import { remapKPuzzleDefinition } from "./notation-mapping/NotationMapper";
 import {
   BaseFaceCount,
   FaceBasedOrientationDescription,
@@ -2138,11 +2137,7 @@ export class PuzzleGeometry {
     if (!internalDefinition) {
       throw new Error("Missing definition!");
     }
-    const externalDefinition = remapKPuzzleDefinition(
-      internalDefinition,
-      this.notationMapper,
-    );
-    return externalDefinition;
+    return internalDefinition;
   }
 
   public getMoveFromBits(

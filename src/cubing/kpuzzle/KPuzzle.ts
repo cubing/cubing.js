@@ -1,4 +1,5 @@
 import { Alg, Move } from "../alg";
+import type { NotationMapper } from "../puzzle-geometry/notation-mapping";
 import { algToTransformation } from "./calculate";
 import {
   constructIdentityTransformationDataUncached,
@@ -14,7 +15,13 @@ import { KTransformation } from "./KTransformation";
 export type KTransformationSource = Alg | Move | string | KTransformation;
 
 export class KPuzzle {
-  constructor(public readonly definition: KPuzzleDefinition) {}
+  private pgNotationMapper: NotationMapper | undefined;
+  constructor(
+    public readonly definition: KPuzzleDefinition,
+    options?: { pgNotationMapper?: NotationMapper },
+  ) {
+    this.pgNotationMapper = options?.pgNotationMapper;
+  }
 
   name(): string {
     return this.definition.name; // TODO

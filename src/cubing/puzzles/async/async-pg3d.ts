@@ -1,4 +1,4 @@
-import type { KPuzzleDefinition } from "../../kpuzzle";
+import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
@@ -22,14 +22,19 @@ export async function asyncGetPuzzleGeometry(
 // TODO: can we cache the puzzleGeometry to avoid duplicate calls, without
 // wasting memory? Maybe just save the latest one for successive calls about the
 // same puzzle?
-export async function asyncGetDef(
-  puzzleName: string,
-): Promise<KPuzzleDefinition> {
-  const kpuzzleDefinition: KPuzzleDefinition = (
-    await asyncGetPuzzleGeometry(puzzleName)
-  ).getKPuzzleDefinition(true);
+export async function asyncGetKPuzzle(puzzleName: string): Promise<KPuzzle> {
+  const pg = await asyncGetPuzzleGeometry(puzzleName);
+  const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
   kpuzzleDefinition.name = puzzleName;
-  return kpuzzleDefinition;
+  return new KPuzzle(kpuzzleDefinition, {
+    pgNotationMapper: pg.notationMapper,
+  });
+}
+
+export function asyncLazyKPuzzleGetter(
+  puzzleName: string,
+): () => Promise<KPuzzle> {
+  return lazyKPuzzle(() => asyncGetKPuzzle(puzzleName));
 }
 
 export function genericPGPuzzleLoader(
@@ -43,7 +48,7 @@ export function genericPGPuzzleLoader(
   const puzzleLoader: PuzzleLoader = {
     id: id,
     fullName: fullName,
-    kpuzzle: lazyKPuzzle(() => asyncGetDef(id)),
+    kpuzzle: asyncLazyKPuzzleGetter(id),
     svg: async () => {
       const pg = await asyncGetPuzzleGeometry(id);
       return pg.generatesvg();
