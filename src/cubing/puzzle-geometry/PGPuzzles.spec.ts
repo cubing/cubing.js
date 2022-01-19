@@ -6,6 +6,7 @@ import { getPuzzleGeometryByDesc } from ".";
 import { Alg, Move } from "../alg";
 import { KPuzzle } from "../kpuzzle";
 import { PGPuzzles } from "./PGPuzzles";
+import { PGNotation } from "./PuzzleGeometry";
 /**
  *   Test basic things about puzzles created by puzzle
  *   geometry.  We check stickers per face, face count
@@ -102,7 +103,9 @@ describe("PuzzleGeometry-Puzzles", () => {
       }
       // console.log(algo.toString(), bms);
       algo = new Alg(bms);
-      const o = new KPuzzle(kpuzzleDefinition)
+      const o = new KPuzzle(kpuzzleDefinition, {
+        experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
+      })
         .algToTransformation(algo)
         .repetitionOrder();
       const dat = [
