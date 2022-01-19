@@ -17,6 +17,8 @@ export class PGOrbitDef {
   }
 }
 
+let lastGlobalDefinitionCounter = 0;
+
 export function externalName(
   mapper: NotationMapper,
   moveString: string,
@@ -109,7 +111,7 @@ export class PGOrbitsDef {
   }
 
   // TODO: return type.
-  public toKPuzzle(includemoves: boolean): KPuzzleDefinition {
+  public toKPuzzleDefinition(includemoves: boolean): KPuzzleDefinition {
     const orbits: { [orbitName: string]: any } = {};
     const start: { [orbitName: string]: any } = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
@@ -131,7 +133,12 @@ export class PGOrbitsDef {
         );
       }
     }
-    return { name: "PG3D", orbits, startStateData: start, moves };
+    return {
+      name: `PG3D #${++lastGlobalDefinitionCounter}`,
+      orbits,
+      startStateData: start,
+      moves,
+    };
   }
 
   public optimize(): PGOrbitsDef {

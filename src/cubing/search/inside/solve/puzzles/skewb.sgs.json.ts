@@ -7,7 +7,7 @@ async function skewbKPuzzleWithoutMO(): Promise<KPuzzle> {
     getPuzzleGeometryByName("skewb", {
       allMoves: true,
       addRotations: true,
-    }).writekpuzzle(true),
+    }).getKPuzzleDefinition(true),
   );
 }
 

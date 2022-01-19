@@ -21,7 +21,11 @@ export async function descAsyncGetPuzzleGeometry(
 export async function dsecAsyncGetDef(
   desc: PuzzleDescriptionString,
 ): Promise<KPuzzleDefinition> {
-  return (await descAsyncGetPuzzleGeometry(desc)).writekpuzzle(true);
+  const definition = (
+    await descAsyncGetPuzzleGeometry(desc)
+  ).getKPuzzleDefinition(true);
+  definition.name = `description: ${desc}`;
+  return definition;
 }
 
 // TODO: Can we avoid relying on IDs to deduplicate work at higher levels?

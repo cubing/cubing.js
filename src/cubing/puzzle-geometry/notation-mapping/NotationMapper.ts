@@ -22,6 +22,5 @@ export function remapKPuzzleDefinition(
       notationMapper.notationToExternal(new Move(internalMoveName))!.toString()
     ] = moveTransformation;
   }
-  console.log(externalDefinition);
   return externalDefinition;
 }

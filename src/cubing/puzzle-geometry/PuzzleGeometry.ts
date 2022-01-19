@@ -618,7 +618,7 @@ export class PuzzleGeometry {
   private options: PuzzleGeometryFullOptions;
 
   constructor(
-    puzzleDescription: PuzzleDescription,
+    private puzzleDescription: PuzzleDescription,
     options: PuzzleGeometryOptions,
   ) {
     const t1 = tstart("genperms");
@@ -2127,16 +2127,17 @@ export class PuzzleGeometry {
     );
   }
 
-  public writekpuzzle(
+  public getKPuzzleDefinition(
     fortwisty: boolean = true,
     includemoves: boolean = true,
   ): KPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty, includemoves);
-    const internalDefinition = od.toKPuzzle(includemoves);
+    const internalDefinition = od.toKPuzzleDefinition(includemoves);
+    (internalDefinition as any).exprimentalPuzzleDescription =
+      this.puzzleDescription;
     if (!internalDefinition) {
       throw new Error("Missing definition!");
     }
-    console.log("nm", this.notationMapper);
     const externalDefinition = remapKPuzzleDefinition(
       internalDefinition,
       this.notationMapper,

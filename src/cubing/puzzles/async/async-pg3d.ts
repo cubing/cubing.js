@@ -1,6 +1,5 @@
 import type { KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
-import type { NotationMapper } from "../../puzzle-geometry/notation-mapping";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   cubeAppearance,
@@ -26,9 +25,9 @@ export async function asyncGetPuzzleGeometry(
 export async function asyncGetDef(
   puzzleName: string,
 ): Promise<KPuzzleDefinition> {
-  const kpuzzleDefinition = (
+  const kpuzzleDefinition: KPuzzleDefinition = (
     await asyncGetPuzzleGeometry(puzzleName)
-  ).writekpuzzle(true);
+  ).getKPuzzleDefinition(true);
   kpuzzleDefinition.name = puzzleName;
   return kpuzzleDefinition;
 }
@@ -40,7 +39,6 @@ export function genericPGPuzzleLoader(
     inventedBy?: string[];
     inventionYear?: number;
   },
-  notationMapper?: NotationMapper,
 ): PuzzleLoader {
   const defPromise = asyncGetDef(id);
   const puzzleLoader: PuzzleLoader = {

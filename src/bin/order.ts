@@ -23,6 +23,6 @@ if (!puzname || !algString) {
  *   Turn a name into a geometry.
  */
 const pg = getPuzzleGeometryByName(puzname, { allMoves: true });
-const kpuzzle = new KPuzzle(pg.writekpuzzle(true));
+const kpuzzle = new KPuzzle(pg.getKPuzzleDefinition(true));
 const order = kpuzzle.algToTransformation(algString).repetitionOrder();
 console.log(order);
