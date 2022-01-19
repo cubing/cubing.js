@@ -834,11 +834,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       // TODO: unswizzle goes external to internal, and so does the call after that
       // and so does the stateForBlockMove call
       const unswizzled = this.stickerDat.unswizzle(externalMove);
-      const move =
-        this.stickerDat.notationMapper.notationToInternal(externalMove);
-      if (move === null) {
-        throw Error("Bad blockmove " + externalMove.family);
-      }
+      const move = externalMove;
       const quantumTransformation = this.kpuzzle.moveToTransformation(
         move.modified({ amount: 1 }),
       ); // TODO
