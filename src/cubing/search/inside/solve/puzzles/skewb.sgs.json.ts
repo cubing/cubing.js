@@ -1,14 +1,16 @@
 import { KPuzzle } from "../../../../kpuzzle";
 import { getPuzzleGeometryByName } from "../../../../puzzle-geometry";
+import { PGNotation } from "../../../../puzzle-geometry/PuzzleGeometry";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
 async function skewbKPuzzleWithoutMO(): Promise<KPuzzle> {
-  return new KPuzzle(
-    getPuzzleGeometryByName("skewb", {
-      allMoves: true,
-      addRotations: true,
-    }).getKPuzzleDefinition(true),
-  );
+  const pg = getPuzzleGeometryByName("skewb", {
+    allMoves: true,
+    addRotations: true,
+  });
+  return new KPuzzle(pg.getKPuzzleDefinition(true), {
+    experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
+  });
 }
 
 // TODO: Implement a general lazy Promise/ Promise cache wrapper

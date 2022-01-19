@@ -1,4 +1,4 @@
-import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
+import { KPuzzle } from "../../kpuzzle";
 
 // TODO
 export function lazyKPuzzle(
@@ -8,11 +8,4 @@ export function lazyKPuzzle(
   return (): Promise<KPuzzle> => {
     return (cachedKPuzzlePromise ??= getKPuzzle());
   };
-}
-
-// TODO
-export function lazyKPuzzleFromDef(
-  getDef: () => Promise<KPuzzleDefinition>,
-): () => Promise<KPuzzle> {
-  return lazyKPuzzle(async () => new KPuzzle(await getDef()));
 }
