@@ -1,5 +1,4 @@
 import { Alg, Move } from "../alg";
-import type { NotationMapper } from "../puzzle-geometry/notation-mapping";
 import type { PGNotation } from "../puzzle-geometry/PuzzleGeometry";
 import { algToTransformation } from "./calculate";
 import {
@@ -16,19 +15,13 @@ import { KTransformation } from "./KTransformation";
 export type KTransformationSource = Alg | Move | string | KTransformation;
 
 export class KPuzzle {
-  private experimentalPGNotationMapper: NotationMapper | undefined;
-  private experimentalPGUnswizzle: ((move: Move) => string) | undefined;
   private experimentalPGNotation: PGNotation | undefined;
   constructor(
     public readonly definition: KPuzzleDefinition,
     options?: {
-      experimentalPGNotationMapper?: NotationMapper;
-      experimentalPGUnswizzle?: (move: Move) => string;
       experimentalPGNotation?: PGNotation;
     },
   ) {
-    this.experimentalPGNotationMapper = options?.experimentalPGNotationMapper;
-    this.experimentalPGUnswizzle = options?.experimentalPGUnswizzle;
     this.experimentalPGNotation = options?.experimentalPGNotation;
   }
 
