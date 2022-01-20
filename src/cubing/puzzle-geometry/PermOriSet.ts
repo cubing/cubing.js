@@ -1,10 +1,5 @@
 import { Move } from "../alg";
-import type {
-  KPuzzle,
-  KPuzzleDefinition,
-  KTransformationData,
-} from "../kpuzzle"; // TODO
-import type { KOrbitDefinition } from "../kpuzzle/KPuzzleDefinition";
+import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle"; // TODO
 import { NullMapper } from "./notation-mapping";
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
