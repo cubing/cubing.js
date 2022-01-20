@@ -273,34 +273,37 @@ function gcd(a: number, b: number): number {
 
 /* calculate the order of a particular transformation. */
 export function transformationRepetitionOrder(
-  def: KPuzzleDefinition,
-  t: KTransformation,
+  definition: KPuzzleDefinition,
+  transformation: KTransformation,
 ): number {
-  let r: number = 1;
-  for (const orbitName in def.orbits) {
-    const oDef = def.orbits[orbitName];
-    const o = t.transformationData[orbitName];
-    const d = new Array(oDef.numPieces);
-    for (let idx = 0; idx < oDef.numPieces; idx++) {
-      if (!d[idx]) {
-        let w = idx;
-        let om = 0;
-        let pm = 0;
+  let order: number = 1;
+  for (const orbitName in definition.orbits) {
+    const orbitDefinition = definition.orbits[orbitName];
+    const transformationOrbit = transformation.transformationData[orbitName];
+    const orbitPieces = new Array(orbitDefinition.numPieces);
+    for (let startIdx = 0; startIdx < orbitDefinition.numPieces; startIdx++) {
+      if (!orbitPieces[startIdx]) {
+        let currentIdx = startIdx;
+        let orientationSum = 0;
+        let cycleLength = 0;
         for (;;) {
-          d[w] = true;
-          om = om + o.orientation[w];
-          pm = pm + 1;
-          w = o.permutation[w];
-          if (w === idx) {
+          orbitPieces[currentIdx] = true;
+          orientationSum =
+            orientationSum + transformationOrbit.orientation[currentIdx];
+          cycleLength = cycleLength + 1;
+          currentIdx = transformationOrbit.permutation[currentIdx];
+          if (currentIdx === startIdx) {
             break;
           }
         }
-        if (om !== 0) {
-          pm = (pm * oDef.orientations) / gcd(oDef.orientations, om);
+        if (orientationSum !== 0) {
+          cycleLength =
+            (cycleLength * orbitDefinition.orientations) /
+            gcd(orbitDefinition.orientations, orientationSum);
         }
-        r = (r * pm) / gcd(r, pm);
+        order = (order * cycleLength) / gcd(order, cycleLength);
       }
     }
   }
-  return r;
+  return order;
 }
