@@ -1,10 +1,7 @@
 import { Alg, Move } from "../alg";
 import type { PGNotation } from "../puzzle-geometry/PuzzleGeometry";
 import { algToTransformation } from "./calculate";
-import {
-  constructIdentityTransformationDataUncached,
-  moveToTransformationUncached,
-} from "./construct";
+import { moveToTransformationUncached } from "./construct";
 import type {
   KPuzzleDefinition,
   KTransformationData,
@@ -29,15 +26,8 @@ export class KPuzzle {
     return this.definition.name; // TODO
   }
 
-  #cachedIdentityTransformationData: KTransformationData | null = null;
   identityTransformation(): KTransformation {
-    // TODO: Can we safely cache the `KTransformation` itself?
-    // TODO: construct so the `KTransformation` already caches that it's the identity.
-    return new KTransformation(
-      this,
-      (this.#cachedIdentityTransformationData ??=
-        constructIdentityTransformationDataUncached(this.definition)),
-    );
+    return KTransformation.experimentalConstructIdentity(this);
   }
 
   #moveToTransformationDataCache = new Map<string, KTransformationData>();

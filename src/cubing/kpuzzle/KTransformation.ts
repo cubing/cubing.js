@@ -6,6 +6,7 @@ import {
   transformationRepetitionOrder,
 } from "./calculate";
 import { combineTransformationData } from "./combine";
+import { constructIdentityTransformationDataUncached } from "./construct";
 import type { KPuzzle, KTransformationSource } from "./KPuzzle";
 import type { KTransformationData } from "./KPuzzleDefinition";
 import { KState } from "./KState";
@@ -34,6 +35,16 @@ export class KTransformation {
     ));
   }
 
+  /** @deprecated */
+  static experimentalConstructIdentity(kpuzzle: KPuzzle) {
+    const transformation = new KTransformation(
+      kpuzzle,
+      constructIdentityTransformationDataUncached(kpuzzle.definition),
+    );
+    transformation.#cachedIsIdentity = true;
+    return transformation;
+  }
+
   isIdentical(t2: KTransformation): boolean {
     return isTransformationDataIdentical(
       this.kpuzzle,
@@ -55,10 +66,10 @@ export class KTransformation {
       );
     }
 
-    if (this.isIdentityTransformation()) {
+    if (this.#cachedIsIdentity) {
       return new KTransformation(this.kpuzzle, t2.transformationData);
     }
-    if (t2.isIdentityTransformation()) {
+    if (t2.#cachedIsIdentity) {
       return new KTransformation(this.kpuzzle, this.transformationData);
     }
 
