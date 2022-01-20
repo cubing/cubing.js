@@ -93,7 +93,7 @@ export class KPuzzle {
     return algToTransformation(alg, this);
   }
 
-  // @deprecated
+  /** @deprecated */
   toTransformation(source: KTransformationSource): KTransformation {
     if (typeof source === "string") {
       return this.algToTransformation(source);
@@ -134,19 +134,19 @@ export class KPuzzle {
   }
 
   // TODO: Remove completely with v0.25
-  // @deprecated
+  /** @deprecated */
   get state(): never {
     throw new Error("KPuzzle is now a different (stateless) class.");
   }
 
   // TODO: Remove completely with v0.25
-  // @deprecated
+  /** @deprecated */
   reset(): never {
     throw new Error("KPuzzle is now a different (stateless) class.");
   }
 
   // TODO: Remove completely with v0.25
-  // @deprecated
+  /** @deprecated */
   applyMove(_move: Move): never {
     throw new Error(
       "KPuzzle is now a different class. Try `.moveToTransformation()` to get the transformation for a move.",
@@ -154,7 +154,7 @@ export class KPuzzle {
   }
 
   // TODO: Remove completely with v0.25
-  // @deprecated
+  /** @deprecated */
   applyAlg(_alg: Alg): never {
     throw new Error(
       "KPuzzle is now a different class. Try `.algToTransformation()` to get the transformation for an alg.",

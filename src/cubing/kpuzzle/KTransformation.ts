@@ -43,7 +43,7 @@ export class KTransformation {
   }
 
   // Convenience function
-  // @deprecated
+  /** @deprecated */
   apply(source: KTransformationSource): KTransformation {
     return this.applyTransformation(this.kpuzzle.toTransformation(source));
   }

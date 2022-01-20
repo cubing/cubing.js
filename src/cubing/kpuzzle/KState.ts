@@ -21,7 +21,7 @@ export class KState {
   }
 
   // Convenience function
-  // @deprecated
+  /** @deprecated */
   apply(source: KTransformationSource): KState {
     return this.applyTransformation(this.kpuzzle.toTransformation(source));
   }
@@ -46,7 +46,7 @@ export class KState {
     return this.applyTransformation(this.kpuzzle.algToTransformation(alg));
   }
 
-  // @deprecated
+  /** @deprecated */
   experimentalToTransformation(): KTransformation | null {
     if (!this.kpuzzle.canConvertStateToUniqueTransformation()) {
       return null;

@@ -9,7 +9,7 @@ export interface PuzzleLoader {
   fullName: string;
   inventedBy?: string[];
   inventionYear?: number; // TODO: date?
-  // @deprecated
+  /** @deprecated */
   def?: never;
   kpuzzle: () => Promise<KPuzzle>; // TODO
   svg: () => Promise<string>;
