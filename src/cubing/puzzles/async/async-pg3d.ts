@@ -7,7 +7,7 @@ import {
   cubeAppearance,
   cubeStickerings,
 } from "../stickerings/cube-stickerings";
-import { lazyCached } from "./lazy-cached";
+import { getCached } from "./lazy-cached";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
@@ -46,7 +46,7 @@ export function asyncLazyKPuzzleGetter(
   pgPromise: Promise<PuzzleGeometry>,
   puzzleName: string,
 ): () => Promise<KPuzzle> {
-  return lazyCached(() => asyncGetKPuzzle(pgPromise, puzzleName));
+  return getCached(() => asyncGetKPuzzle(pgPromise, puzzleName));
 }
 
 type PuzzleLoaderConstructorArgs = {
@@ -86,13 +86,8 @@ export class PGPuzzleLoader implements PuzzleLoader {
 }
 
 export class CubePGPuzzleLoader extends PGPuzzleLoader {
-  constructor(...info: ConstructorParameters<typeof PGPuzzleLoader>) {
-    super(...info);
-  }
-
   appearance(stickering: ExperimentalStickering): Promise<PuzzleAppearance> {
     return cubeAppearance(this, stickering);
   }
-
   stickerings = cubeStickerings;
 }

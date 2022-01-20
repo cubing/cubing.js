@@ -1,5 +1,5 @@
 import { KPuzzle } from "../../../kpuzzle";
-import { lazyCached } from "../../async/lazy-cached";
+import { getCached } from "../../async/lazy-cached";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 
 export const clock: PuzzleLoader = {
@@ -7,13 +7,13 @@ export const clock: PuzzleLoader = {
   fullName: "Clock",
   inventedBy: ["Christopher C. Wiggs", "Christopher J. Taylor"],
   inventionYear: 1988, // Patent application year: https://www.jaapsch.net/puzzles/patents/us4869506.pdf
-  kpuzzle: lazyCached(
+  kpuzzle: getCached(
     async () =>
       new KPuzzle(
         (await import("./clock.kpuzzle.json")).clockKPuzzleDefinition,
       ),
   ),
-  svg: async () => {
+  svg: getCached(async () => {
     return (await import("./clock.kpuzzle.svg")).default;
-  },
+  }),
 };

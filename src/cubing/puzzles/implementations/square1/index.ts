@@ -1,5 +1,5 @@
 import { KPuzzle } from "../../../kpuzzle";
-import { lazyCached } from "../../async/lazy-cached";
+import { getCached } from "../../async/lazy-cached";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 
 export const square1: PuzzleLoader = {
@@ -7,7 +7,7 @@ export const square1: PuzzleLoader = {
   fullName: "Square-1",
   inventedBy: ["Karel Hršel", "Vojtech Kopský"],
   inventionYear: 1990, // Czech patent application year: http://spisy.upv.cz/Patents/FullDocuments/277/277266.pdf
-  kpuzzle: lazyCached(
+  kpuzzle: getCached(
     async () =>
       new KPuzzle(
         (
@@ -15,7 +15,7 @@ export const square1: PuzzleLoader = {
         ).sq1HyperOrbitKPuzzleDefinition,
       ),
   ),
-  svg: async () => {
+  svg: getCached(async () => {
     return (await import("./sq1-hyperorbit.kpuzzle.svg")).default;
-  },
+  }),
 };

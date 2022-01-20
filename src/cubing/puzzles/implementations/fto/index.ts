@@ -1,29 +1,24 @@
-import type { PuzzleLoader } from "../..";
 import type { ExperimentalStickering } from "../../../twisty";
-import {
-  asyncGetPuzzleGeometry,
-  asyncLazyKPuzzleGetter,
-} from "../../async/async-pg3d";
+import { PGPuzzleLoader } from "../../async/async-pg3d";
 import type { PuzzleAppearance } from "../../stickerings/appearance";
 import {
   ftoStickering,
   ftoStickerings,
 } from "../../stickerings/fto-stickerings";
 
-export const fto: PuzzleLoader = {
-  id: "fto",
-  fullName: "Face-Turning Octahedron",
-  inventedBy: ["Karl Rohrbach", "David Pitcher"], // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
-  inventionYear: 1983, // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
-  kpuzzle: asyncLazyKPuzzleGetter("FTO"),
-  svg: async () => {
-    const pg = await asyncGetPuzzleGeometry("FTO");
-    return pg.generatesvg();
-  },
-  pg: async () => {
-    return asyncGetPuzzleGeometry("FTO");
-  },
-  appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
-    ftoStickering(fto, stickering),
-  stickerings: ftoStickerings,
-};
+class FTOPuzzleLoader extends PGPuzzleLoader {
+  constructor() {
+    super({
+      id: "fto",
+      fullName: "Face-Turning Octahedron",
+      inventedBy: ["Karl Rohrbach", "David Pitcher"], // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
+      inventionYear: 1983, // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
+    });
+  }
+  appearance(stickering: ExperimentalStickering): Promise<PuzzleAppearance> {
+    return ftoStickering(this, stickering);
+  }
+  stickerings = ftoStickerings;
+}
+
+export const fto = new FTOPuzzleLoader();

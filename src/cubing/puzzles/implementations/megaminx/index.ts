@@ -6,17 +6,19 @@ import {
   megaminxStickerings,
 } from "../../stickerings/megaminx-stickerings";
 
-const megaminx = new PGPuzzleLoader({
-  id: "megaminx",
-  fullName: "Megaminx",
-  // Too many simultaneous inventors to name.
-  inventionYear: 1981, // Earliest date from https://www.jaapsch.net/puzzles/megaminx.htm
-});
+class MegaminxPuzzleLoader extends PGPuzzleLoader {
+  constructor() {
+    super({
+      id: "megaminx",
+      fullName: "Megaminx",
+      // Too many simultaneous inventors to name.
+      inventionYear: 1981, // Earliest date from https://www.jaapsch.net/puzzles/megaminx.htm
+    });
+  }
+  appearance(stickering: ExperimentalStickering): Promise<PuzzleAppearance> {
+    return megaminxAppearance(this, stickering);
+  }
+  stickerings = megaminxStickerings;
+}
 
-// TODO: loading the stickering code async.
-megaminx.appearance = (
-  stickering: ExperimentalStickering,
-): Promise<PuzzleAppearance> => megaminxAppearance(megaminx, stickering);
-megaminx.stickerings = megaminxStickerings;
-
-export { megaminx };
+export const megaminx = new MegaminxPuzzleLoader();
