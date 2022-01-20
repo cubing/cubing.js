@@ -3,6 +3,11 @@ import type { KPuzzle } from "../../../../../kpuzzle";
 import { TwistyPropDerived } from "../../TwistyProp";
 import { AlgIssues, AlgWithIssues } from "./AlgProp";
 
+let validate: boolean = true;
+export function experimentalSetPuzzleAlgValidation(newValidate: boolean): void {
+  validate = newValidate;
+}
+
 export class PuzzleAlgProp extends TwistyPropDerived<
   { algWithIssues: AlgWithIssues; kpuzzle: KPuzzle },
   AlgWithIssues
@@ -12,7 +17,10 @@ export class PuzzleAlgProp extends TwistyPropDerived<
     kpuzzle: KPuzzle;
   }): Promise<AlgWithIssues> {
     try {
-      inputs.kpuzzle.algToTransformation(inputs.algWithIssues.alg);
+      if (validate) {
+        inputs.kpuzzle.algToTransformation(inputs.algWithIssues.alg);
+      }
+
       // Looks like we could apply the alg!
       return inputs.algWithIssues;
     } catch (e) {
