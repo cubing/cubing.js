@@ -84,6 +84,26 @@ function baseMetric(move: Move): number {
   }
 }
 
+// TODO: Implement a puzzle-specific way to calculate this.
+function quantumMetric(move: Move): number {
+  const fam = move.family;
+  if (
+    (isCharUppercase(fam[0]) && fam[fam.length - 1] === "v") ||
+    fam === "x" ||
+    fam === "y" ||
+    fam === "z" ||
+    fam === "T"
+  ) {
+    return 0;
+  } else {
+    return Math.abs(move.amount);
+  }
+}
+
 const countMovesInstance = new CountMoves(baseMetric);
 export const countMoves: (alg: Alg) => number =
   countMovesInstance.traverseAlg.bind(countMovesInstance);
+
+const countQuantumMovesInstance = new CountMoves(quantumMetric);
+export const countQuantumMoves: (alg: Alg) => number =
+  countQuantumMovesInstance.traverseAlg.bind(countQuantumMovesInstance);
