@@ -42,26 +42,6 @@ export class KPuzzle {
       return new KTransformation(this, cachedTransformationData);
     }
 
-    // if (this.experimentalPGUnswizzle) {
-    //   const unswizzledFamily = this.experimentalPGUnswizzle(move);
-    //   if (unswizzledFamily === "") {
-    //     throw new Error(`could not unswizzle to internal move: ${move}`);
-    //   }
-    //   console.log("premapped", move.toString(), unswizzledFamily);
-    //   move = move.modified({ family: unswizzledFamily });
-    //   console.log("remapped", move.toString(), unswizzledFamily);
-    // }
-
-    // if (this.experimentalPGNotationMapper) {
-    //   const internalMove =
-    //     this.experimentalPGNotationMapper.notationToInternal(move);
-    //   if (!internalMove) {
-    //     throw new Error(`could not map to internal move: ${move}`);
-    //   }
-    //   console.log("remapped", move.toString(), internalMove.toString());
-    //   move = internalMove;
-    // }
-
     if (this.experimentalPGNotation) {
       const transformationData = this.experimentalPGNotation.lookupMove(move);
       if (!transformationData) {
