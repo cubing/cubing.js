@@ -64,9 +64,10 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
     }
 
     for (const unit of alg.units()) {
-      if (!unit.is(Move))
+      if (!unit.is(Move)) {
         // TODO: define the type statically on the class?
         return this.traverseAlg(alg);
+      }
     }
 
     const moves = Array.from(alg.units()) as Move[];

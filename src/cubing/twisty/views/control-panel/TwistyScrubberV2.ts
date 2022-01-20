@@ -12,7 +12,9 @@ let isMouseDown = false;
 globalSafeDocument?.addEventListener(
   "mousedown",
   function (event) {
-    if (event.which) isMouseDown = true;
+    if (event.which) {
+      isMouseDown = true;
+    }
   },
   true,
 );
@@ -20,7 +22,9 @@ globalSafeDocument?.addEventListener(
 globalSafeDocument?.addEventListener(
   "mouseup",
   function (event) {
-    if (event.which) isMouseDown = false;
+    if (event.which) {
+      isMouseDown = false;
+    }
   },
   true,
 );

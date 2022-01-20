@@ -213,7 +213,9 @@ function $getsym(this$static) {
   }
   for (j = 0; j < 48; ++j) {
     cord = raw2sym_0($get_1(this$static));
-    if (cord !== -1) return cord * 64 + j;
+    if (cord !== -1) {
+      return cord * 64 + j;
+    }
     $rot(this$static, 0);
     j % 2 === 1 && $rot(this$static, 1);
     j % 8 === 7 && $rot(this$static, 2);
