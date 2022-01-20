@@ -3,9 +3,9 @@ import type { KPuzzleDefinition } from "../../../kpuzzle";
 export const pyraminxKPuzzle: KPuzzleDefinition = {
   name: "Pyraminx",
   orbits: {
-    CENTERS: { numPieces: 4, orientations: 3 },
-    TIPS: { numPieces: 4, orientations: 3 },
-    EDGES: { numPieces: 6, orientations: 2 },
+    CENTERS: { numPieces: 4, numOrientations: 3 },
+    TIPS: { numPieces: 4, numOrientations: 3 },
+    EDGES: { numPieces: 6, numOrientations: 2 },
   },
   startStateData: {
     CENTERS: { pieces: [0, 1, 2, 3], orientation: [0, 0, 0, 0] },

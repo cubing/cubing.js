@@ -754,7 +754,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
     this.params.appearance = appearance;
     for (const orbitName in this.kpuzzle.definition.orbits) {
-      const { numPieces, orientations } =
+      const { numPieces, numOrientations: orientations } =
         this.kpuzzle.definition.orbits[orbitName];
       for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
         for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {

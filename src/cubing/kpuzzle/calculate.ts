@@ -106,12 +106,12 @@ export function invertTransformation(
     const orbitTransformationData = transformationData[orbitName];
     if (
       isOrbitTransformationDataIdentityUncached(
-        orbitDefinition.orientations,
+        orbitDefinition.numOrientations,
         orbitTransformationData,
       )
     ) {
       newTransformationData[orbitName] = orbitTransformationData;
-    } else if (orbitDefinition.orientations === 1) {
+    } else if (orbitDefinition.numOrientations === 1) {
       const newPerm = new Array(orbitDefinition.numPieces);
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         newPerm[orbitTransformationData.permutation[idx]] = idx;
@@ -127,10 +127,10 @@ export function invertTransformation(
         const fromIdx = orbitTransformationData.permutation[idx];
         newPerm[fromIdx] = idx;
         newOri[fromIdx] =
-          (orbitDefinition.orientations -
+          (orbitDefinition.numOrientations -
             orbitTransformationData.orientation[idx] +
-            orbitDefinition.orientations) %
-          orbitDefinition.orientations;
+            orbitDefinition.numOrientations) %
+          orbitDefinition.numOrientations;
       }
       newTransformationData[orbitName] = {
         permutation: newPerm,
@@ -298,8 +298,8 @@ export function transformationRepetitionOrder(
         }
         if (orientationSum !== 0) {
           cycleLength =
-            (cycleLength * orbitDefinition.orientations) /
-            gcd(orbitDefinition.orientations, orientationSum);
+            (cycleLength * orbitDefinition.numOrientations) /
+            gcd(orbitDefinition.numOrientations, orientationSum);
         }
         order = (order * cycleLength) / gcd(order, cycleLength);
       }

@@ -59,7 +59,7 @@ async function mutatingRandomizeOrbit(
 
   let sum = 0;
   for (let i = 0; i < orbitDef.numPieces; i++) {
-    const o = randomUIntBelow(orbitDef.orientations);
+    const o = randomUIntBelow(orbitDef.numOrientations);
     ori[i] = o;
     sum += o;
   }
@@ -68,9 +68,9 @@ async function mutatingRandomizeOrbit(
   if (options && "orientationSum" in options) {
     // console.log("sfdsf", options!.orientationSum),
     ori[0] =
-      (((ori[0] + options.orientationSum! - sum) % orbitDef.orientations) +
-        orbitDef.orientations) %
-      orbitDef.orientations;
+      (((ori[0] + options.orientationSum! - sum) % orbitDef.numOrientations) +
+        orbitDef.numOrientations) %
+      orbitDef.numOrientations;
   }
 }
 

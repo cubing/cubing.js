@@ -1,5 +1,10 @@
 import { Move } from "../alg";
-import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle"; // TODO
+import type {
+  KPuzzle,
+  KPuzzleDefinition,
+  KTransformationData,
+} from "../kpuzzle"; // TODO
+import type { KOrbitDefinition } from "../kpuzzle/KPuzzleDefinition";
 import { NullMapper } from "./notation-mapping";
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
@@ -112,12 +117,12 @@ export class PGOrbitsDef {
 
   // TODO: return type.
   public toKPuzzleDefinition(includemoves: boolean): KPuzzleDefinition {
-    const orbits: { [orbitName: string]: any } = {};
-    const start: { [orbitName: string]: any } = {};
+    const orbits: KPuzzleDefinition["orbits"] = {};
+    const start: KPuzzleDefinition["startStateData"] = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
       orbits[this.orbitnames[i]] = {
         numPieces: this.orbitdefs[i].size,
-        orientations: this.orbitdefs[i].mod,
+        numOrientations: this.orbitdefs[i].mod,
       };
       const startTransformation = this.solved.orbits[i].toKPuzzle();
       start[this.orbitnames[i]] = {

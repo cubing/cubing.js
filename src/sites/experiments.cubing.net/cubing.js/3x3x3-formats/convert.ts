@@ -32,7 +32,7 @@ for (const orbit of orbits) {
     const numOri =
       orbit === "CENTERS"
         ? 1
-        : experimental3x3x3KPuzzle.definition.orbits[orbit].orientations;
+        : experimental3x3x3KPuzzle.definition.orbits[orbit].numOrientations;
     for (let i = 0; i < numOri; i++) {
       const name = rotateLeft(piece, i);
       pieceMap[name] = { piece: idx, orientation: i };

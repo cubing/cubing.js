@@ -3,8 +3,8 @@ import type { KPuzzleDefinition } from "../../../kpuzzle";
 export const sq1HyperOrbitKPuzzleDefinition: KPuzzleDefinition = {
   name: "Square-1",
   orbits: {
-    WEDGES: { numPieces: 24, orientations: 9 },
-    EQUATOR: { numPieces: 2, orientations: 6 },
+    WEDGES: { numPieces: 24, numOrientations: 9 },
+    EQUATOR: { numPieces: 2, numOrientations: 6 },
   },
   startStateData: {
     WEDGES: {

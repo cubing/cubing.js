@@ -93,7 +93,7 @@ export class KPuzzleSVGWrapper {
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (
           let orientation = 0;
-          orientation < orbitDefinition.orientations;
+          orientation < orbitDefinition.numOrientations;
           orientation++
         ) {
           const id = this.elementID(orbitName, idx, orientation);
@@ -164,27 +164,27 @@ export class KPuzzleSVGWrapper {
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
         for (
           let orientation = 0;
-          orientation < orbitDefinition.orientations;
+          orientation < orbitDefinition.numOrientations;
           orientation++
         ) {
           const id = this.elementID(orbitName, idx, orientation);
           const fromCur = this.elementID(
             orbitName,
             curTransformationOrbit.permutation[idx],
-            (orbitDefinition.orientations -
+            (orbitDefinition.numOrientations -
               curTransformationOrbit.orientation[idx] +
               orientation) %
-              orbitDefinition.orientations,
+              orbitDefinition.numOrientations,
           );
           let singleColor = false;
           if (nextTransformationOrbit) {
             const fromNext = this.elementID(
               orbitName,
               nextTransformationOrbit.permutation[idx],
-              (orbitDefinition.orientations -
+              (orbitDefinition.numOrientations -
                 nextTransformationOrbit.orientation[idx] +
                 orientation) %
-                orbitDefinition.orientations,
+                orbitDefinition.numOrientations,
             );
             if (fromCur === fromNext) {
               singleColor = true; // TODO: Avoid redundant work during move.

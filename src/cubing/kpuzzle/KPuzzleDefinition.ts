@@ -14,7 +14,7 @@ export interface KStateOrbitData {
 
 export interface KOrbitDefinition {
   numPieces: number;
-  orientations: number;
+  numOrientations: number;
 }
 export interface KPuzzleDefinition {
   name: string;

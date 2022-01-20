@@ -17,7 +17,7 @@ export function combineTransformationData(
     const orbit2 = transformationData2[orbitName];
     if (
       isOrbitTransformationDataIdentityUncached(
-        orbitDefinition.orientations,
+        orbitDefinition.numOrientations,
         orbit2,
       )
     ) {
@@ -25,14 +25,14 @@ export function combineTransformationData(
       newTransformationData[orbitName] = orbit1;
     } else if (
       isOrbitTransformationDataIdentityUncached(
-        orbitDefinition.orientations,
+        orbitDefinition.numOrientations,
         orbit1,
       )
     ) {
       newTransformationData[orbitName] = orbit2;
     } else {
       const newPerm = new Array(orbitDefinition.numPieces);
-      if (orbitDefinition.orientations === 1) {
+      if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newPerm[idx] = orbit1.permutation[orbit2.permutation[idx]];
         }
@@ -46,7 +46,7 @@ export function combineTransformationData(
           newOri[idx] =
             (orbit1.orientation[orbit2.permutation[idx]] +
               orbit2.orientation[idx]) %
-            orbitDefinition.orientations;
+            orbitDefinition.numOrientations;
           newPerm[idx] = orbit1.permutation[orbit2.permutation[idx]];
         }
         newTransformationData[orbitName] = {
@@ -71,7 +71,7 @@ export function applyTransformationDataToStateData(
     const orbit2 = transformationData[orbitName];
     if (
       isOrbitTransformationDataIdentityUncached(
-        orbitDefinition.orientations,
+        orbitDefinition.numOrientations,
         orbit2,
       )
     ) {
@@ -79,7 +79,7 @@ export function applyTransformationDataToStateData(
       newStateData[orbitName] = orbit1;
     } else {
       const newPieces = new Array(orbitDefinition.numPieces);
-      if (orbitDefinition.orientations === 1) {
+      if (orbitDefinition.numOrientations === 1) {
         for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
           newPieces[idx] = orbit1.pieces[orbit2.permutation[idx]];
         }
@@ -93,7 +93,7 @@ export function applyTransformationDataToStateData(
           newOri[idx] =
             (orbit1.orientation[orbit2.permutation[idx]] +
               orbit2.orientation[idx]) %
-            orbitDefinition.orientations;
+            orbitDefinition.numOrientations;
           newPieces[idx] = orbit1.pieces[orbit2.permutation[idx]];
         }
         newStateData[orbitName] = {

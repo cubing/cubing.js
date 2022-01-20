@@ -11,9 +11,9 @@ import type { KPuzzleDefinition } from "../KPuzzleDefinition";
 export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
   name: "3x3x3",
   orbits: {
-    EDGES: { numPieces: 12, orientations: 2 },
-    CORNERS: { numPieces: 8, orientations: 3 },
-    CENTERS: { numPieces: 6, orientations: 4 },
+    EDGES: { numPieces: 12, numOrientations: 2 },
+    CORNERS: { numPieces: 8, numOrientations: 3 },
+    CENTERS: { numPieces: 6, numOrientations: 4 },
   },
   startStateData: {
     EDGES: {

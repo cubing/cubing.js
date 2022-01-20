@@ -3,9 +3,9 @@ import type { KPuzzleDefinition } from "../../../kpuzzle";
 export const clockKPuzzleDefinition: KPuzzleDefinition = {
   name: "Clock",
   orbits: {
-    DIALS: { numPieces: 18, orientations: 12 },
-    FACES: { numPieces: 18, orientations: 1 },
-    FRAME: { numPieces: 1, orientations: 2 },
+    DIALS: { numPieces: 18, numOrientations: 12 },
+    FACES: { numPieces: 18, numOrientations: 1 },
+    FRAME: { numPieces: 1, numOrientations: 2 },
   },
   startStateData: {
     DIALS: {
