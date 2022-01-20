@@ -1,5 +1,6 @@
-import { PerspectiveCamera, Scene as ThreeScene, Vector2 } from "three";
+import type { PerspectiveCamera, Scene as ThreeScene } from "three";
 import type { PuzzleLoader } from "../../../puzzles";
+import type { Schedulable } from "../../controllers/RenderScheduler";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
@@ -9,7 +10,6 @@ import type {
 } from "../../model/props/viewer/BackViewProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { Schedulable } from "../../controllers/RenderScheduler";
 import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
@@ -101,7 +101,7 @@ export class Twisty3DSceneWrapper
       ]);
 
       const raycaster = new three.Raycaster();
-      const mouse = new Vector2(
+      const mouse = new (await THREEJS).Vector2(
         e.detail.pressInfo.normalizedX,
         e.detail.pressInfo.normalizedY,
       );

@@ -16,8 +16,8 @@ export { VisualizationFormat } from "./model/props/viewer/VisualizationProp";
 export { debugShowRenderStats as experimentalDebugShowRenderStats } from "./views/3D/Twisty3DVantage";
 
 // Older
-export { Cube3D } from "./views/3D/puzzles/Cube3D";
-export { PG3D } from "./views/3D/puzzles/PG3D";
+// export { Cube3D } from "./views/3D/puzzles/Cube3D";
+// export { PG3D } from "./views/3D/puzzles/PG3D";
 export type { AlgIndexer } from "./controllers/indexer/AlgIndexer";
 export { SimpleAlgIndexer } from "./controllers/indexer/SimpleAlgIndexer";
 export { TreeAlgIndexer } from "./controllers/indexer/tree/TreeAlgIndexer";

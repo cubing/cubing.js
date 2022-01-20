@@ -1,4 +1,4 @@
-import type { ExperimentalStickering, PG3D } from "..";
+import type { ExperimentalStickering } from "..";
 import type { Alg, Move } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
@@ -16,15 +16,15 @@ import {
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
-import { ClassListManager } from "./ClassListManager";
-import { customElementsShim } from "./node-custom-element-shims";
-import { twistyPlayerCSS } from "./TwistyPlayer.css";
-
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
+import type { PG3D } from "./3D/puzzles/PG3D";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
+import { ClassListManager } from "./ClassListManager";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
 import { TwistyScrubberV2 } from "./control-panel/TwistyScrubberV2";
+import { customElementsShim } from "./node-custom-element-shims";
 import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
+import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
 
 // TODO: I couldn't figure out how to use use more specific types. Ideally, we'd

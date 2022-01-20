@@ -2,7 +2,6 @@ import type { Raycaster, Texture as ThreeTexture } from "three";
 import { experimentalCubeAppearance, PuzzleLoader } from "../../../puzzles";
 import type { ExperimentalStickering } from "../../../twisty";
 import { proxy3D } from "../../heavy-code-imports/3d";
-import { Cube3D, PG3D } from "../../heavy-code-imports/dynamic-entries/3d";
 import type { FoundationDisplay } from "../../model/props/puzzle/display/FoundationDisplayProp";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
@@ -11,6 +10,8 @@ import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { PuzzlePosition } from "../../controllers/AnimationTypes";
 import type { Schedulable } from "../../controllers/RenderScheduler";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
+import type { Cube3D } from "./puzzles/Cube3D";
+import type { PG3D } from "./puzzles/PG3D";
 
 export class Twisty3DPuzzleWrapper implements Schedulable {
   constructor(
@@ -185,9 +186,9 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       depth?: "secondSlice" | "rotation" | "none";
     },
   ): Promise<void> {
-    const puzzle = await this.twisty3DPuzzle();
+    const puzzle = (await this.twisty3DPuzzle()) as Cube3D | PG3D;
     // TODO: check this differently.
-    if (!(puzzle instanceof PG3D)) {
+    if (!("experimentalGetControlTargets" in puzzle)) {
       console.info("not PG3D! skipping raycast");
       return;
     }

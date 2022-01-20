@@ -1,4 +1,4 @@
-import { PerspectiveCamera, WebGLRenderer } from "three";
+import type { PerspectiveCamera } from "three";
 import { THREEJS } from "../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { Twisty3DPuzzleWrapper } from "./3D/Twisty3DPuzzleWrapper";
@@ -45,7 +45,7 @@ export async function screenshot(
   const orbitCoordinates = await model.orbitCoordinatesProp.get();
   await setCameraFromOrbitCoordinates(camera, orbitCoordinates);
 
-  const renderer = new WebGLRenderer({
+  const renderer = new (await THREEJS).WebGLRenderer({
     antialias: true,
     alpha: true,
   });

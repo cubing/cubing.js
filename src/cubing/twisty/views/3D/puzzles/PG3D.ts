@@ -516,6 +516,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   #pendingStickeringUpdate: boolean = false;
 
+  public isPG3DForTwisty3DPuzzleWrapper: true;
+
   constructor(
     private scheduleRenderCallback: () => void,
     private kpuzzle: KPuzzle,

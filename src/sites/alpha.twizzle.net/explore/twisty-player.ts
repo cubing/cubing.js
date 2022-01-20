@@ -26,12 +26,7 @@ export function constructTwistyPlayer(): TwistyPlayer {
     );
     delete config["puzzle"];
   }
-  const initialCameraOrbitCoordinates = cameraCoords(
-    config.experimentalPuzzleDescription ?? "c", // TODO
-  );
   const explorerConfig: TwistyPlayerConfig = {
-    cameraLatitude: initialCameraOrbitCoordinates.latitude,
-    cameraLongitude: initialCameraOrbitCoordinates.longitude,
     cameraLatitudeLimit: 90,
     viewerLink: "none",
     experimentalMovePressInput: "basic",
@@ -39,6 +34,15 @@ export function constructTwistyPlayer(): TwistyPlayer {
   };
   Object.assign(config, explorerConfig);
   const twistyPlayer = new TwistyPlayer(config);
+
+  const initialCameraOrbitCoordinatesPromise = cameraCoords(
+    config.experimentalPuzzleDescription ?? "c", // TODO
+  );
+  // TODO
+  twistyPlayer.experimentalModel.orbitCoordinatesRequestProp.set(
+    initialCameraOrbitCoordinatesPromise,
+  );
+
   setupPropInputs(twistyPlayer);
   twistyPlayer.experimentalModel.algProp.addFreshListener((algWithIssues) => {
     setAlgParam("alg", algWithIssues.alg.toString());
@@ -53,7 +57,9 @@ const platonicShapeToGeoTowardsViewer: Record<string, string> = {
   d: "F",
   i: "F",
 };
-function cameraCoords(desc: PuzzleDescriptionString): OrbitCoordinates {
+async function cameraCoords(
+  desc: PuzzleDescriptionString,
+): Promise<OrbitCoordinates> {
   const pg = getPuzzleGeometryByDesc(desc); // TODO: Avoid this
   const platonicShape = desc[0];
   const geoTowardsViewer = platonicShapeToGeoTowardsViewer[platonicShape];
