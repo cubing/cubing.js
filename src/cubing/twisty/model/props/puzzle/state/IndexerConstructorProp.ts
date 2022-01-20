@@ -1,7 +1,7 @@
 import type { AlgIndexer } from "../../../..";
 import type { Alg } from "../../../../../alg";
 import type { KPuzzle } from "../../../../../kpuzzle";
-import { countMoves } from "../../../../../notation";
+import { experimentalCountMoves } from "../../../../../notation";
 import { SimpleAlgIndexer } from "../../../../controllers/indexer/SimpleAlgIndexer";
 import { SimultaneousMoveIndexerV2 } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexerV2";
 import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";
@@ -29,7 +29,7 @@ export class IndexerConstructorProp extends TwistyPropDerived<
     switch (inputs.indexerConstructorRequest) {
       case "auto":
         if (
-          countMoves(inputs.alg.alg) < 100 &&
+          experimentalCountMoves(inputs.alg.alg) < 100 &&
           inputs.puzzle === "3x3x3" &&
           inputs.visualizationStrategy === "Cube3D"
         ) {

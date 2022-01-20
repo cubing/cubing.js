@@ -1,7 +1,7 @@
 import { Alg, AlgBuilder, Move, QuantumMove } from "../../../alg";
 import type { KPuzzle, KTransformation } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
-import { countMoves } from "../../../notation";
+import { experimentalCountMoves } from "../../../notation";
 import { randomChoiceFactory } from "../../../vendor/random-uint-below";
 import type { SGSAction, SGSCachedData } from "./parseSGS";
 
@@ -108,7 +108,7 @@ export class TrembleSolver {
           .concat(sgsAlg)
           .simplify({ collapseMoves: true, quantumMoveOrder });
 
-        const len = countMoves(newAlg);
+        const len = experimentalCountMoves(newAlg);
         if (bestAlg === null || len < bestLen) {
           if (DEBUG) {
             console.log(`New best (${len} moves): ${newAlg.toString()}`);

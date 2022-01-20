@@ -1,7 +1,7 @@
 // Note: this folder is purposely not built as a package entry point (yet).
 
 export {
-  countMoves,
+  countMoves as experimentalCountMoves,
   countQuantumMoves as experimentalCountQuantumMoves,
 } from "./CountMoves";
-export { countAnimatedLeaves } from "./CountAnimatedLeaves";
+export { countAnimatedLeaves as experimentalCountAnimatedLeaves } from "./CountAnimatedLeaves";

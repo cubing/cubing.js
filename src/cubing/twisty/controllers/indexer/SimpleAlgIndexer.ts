@@ -1,7 +1,7 @@
 import { Alg, Move, TraversalUp } from "../../../alg";
 import type { KPuzzle, KTransformation } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
-import { countAnimatedLeaves } from "../../../notation";
+import { experimentalCountAnimatedLeaves } from "../../../notation";
 import type { Duration, Timestamp } from "../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "./AlgDuration";
 import type { AlgIndexer } from "./AlgIndexer";
@@ -60,7 +60,7 @@ export class SimpleAlgIndexer implements AlgIndexer {
 
   public numAnimatedLeaves(): number {
     // TODO: Cache internally once performance matters.
-    return countAnimatedLeaves(this.moves);
+    return experimentalCountAnimatedLeaves(this.moves);
   }
 
   public moveDuration(index: number): number {

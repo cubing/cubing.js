@@ -1,5 +1,5 @@
 import type { Alg } from "../../../alg";
-import { countMoves } from "../../../notation";
+import { experimentalCountMoves } from "../../../notation";
 import { ClassListManager } from "../../views/ClassListManager";
 import {
   CSSSource,
@@ -154,7 +154,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
         if (typedAlgIssues.errors.length > 0) {
           str += ` 🚨 ${typedAlgIssues.errors[0]}`;
         } else {
-          const numMoves = countMoves(value.alg);
+          const numMoves = experimentalCountMoves(value.alg);
           str += ` (${numMoves} moves)`;
           if (numMoves > 0) {
             str += `: ${truncateAlgForDisplay(value.alg)}`;

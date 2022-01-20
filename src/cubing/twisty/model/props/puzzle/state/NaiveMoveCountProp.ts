@@ -1,4 +1,4 @@
-import { countMoves } from "../../../../../notation";
+import { experimentalCountMoves } from "../../../../../notation";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { AlgWithIssues } from "./AlgProp";
 
@@ -15,6 +15,6 @@ export class NaiveMoveCountProp extends TwistyPropDerived<
     if (inputs.alg.issues.errors.length > 0) {
       return null;
     }
-    return countMoves(inputs.alg.alg);
+    return experimentalCountMoves(inputs.alg.alg);
   }
 }

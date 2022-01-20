@@ -2,7 +2,7 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { AlgBuilder, Grouping, Move, Unit } from "../../../../cubing/alg";
-import { countMoves } from "../../../../cubing/notation";
+import { experimentalCountMoves } from "../../../../cubing/notation";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 
 (async () => {
@@ -72,7 +72,7 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
     const grouping = new Grouping(algBuilder.toAlg());
     constructed[varName] = grouping;
     constructed[varName + "'"] = grouping.invert();
-    const c = countMoves(alg);
+    const c = experimentalCountMoves(alg);
     console.log(`Alg ${varName} has ${c} move${c === 1 ? "" : "s"}`);
     update.textContent = `${varName} = ${def} // ${c} move${
       c === 1 ? "" : "s"
