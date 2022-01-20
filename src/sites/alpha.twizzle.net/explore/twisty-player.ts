@@ -71,5 +71,5 @@ async function cameraCoords(
   if (!norm) {
     throw new Error("invalid normal");
   }
-  return positionToOrbitCoordinates(new Vector3(...norm));
+  return positionToOrbitCoordinates(new Vector3(...norm).multiplyScalar(6));
 }
