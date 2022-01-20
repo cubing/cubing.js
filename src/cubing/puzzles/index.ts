@@ -4,7 +4,7 @@ export { experimental3x3x3KPuzzle } from "../kpuzzle";
 export { cubeAppearance as experimentalCubeAppearance } from "./stickerings/cube-stickerings";
 
 import type { PuzzleID } from "../twisty";
-import { cubePGPuzzleLoader, genericPGPuzzleLoader } from "./async/async-pg3d";
+import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
 import { clock } from "./implementations/clock";
@@ -20,18 +20,23 @@ export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,
-  "4x4x4": cubePGPuzzleLoader("4x4x4", "4×4×4 Cube"),
-  "5x5x5": cubePGPuzzleLoader("5x5x5", "5×5×5 Cube"),
-  "6x6x6": cubePGPuzzleLoader("6x6x6", "6×6×6 Cube"),
-  "7x7x7": cubePGPuzzleLoader("7x7x7", "7×7×7 Cube"),
-  "40x40x40": cubePGPuzzleLoader("40x40x40", "40×40×40 Cube"),
+  "4x4x4": new CubePGPuzzleLoader({ id: "4x4x4", fullName: "4×4×4 Cube" }),
+  "5x5x5": new CubePGPuzzleLoader({ id: "5x5x5", fullName: "5×5×5 Cube" }),
+  "6x6x6": new CubePGPuzzleLoader({ id: "6x6x6", fullName: "6×6×6 Cube" }),
+  "7x7x7": new CubePGPuzzleLoader({ id: "7x7x7", fullName: "7×7×7 Cube" }),
+  "40x40x40": new CubePGPuzzleLoader({
+    id: "40x40x40",
+    fullName: "40×40×40 Cube",
+  }),
   // 3x3x3 Blindfolded
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
   clock,
   "megaminx": megaminx,
   pyraminx,
-  "skewb": genericPGPuzzleLoader("skewb", "Skewb", {
+  "skewb": new PGPuzzleLoader({
+    id: "skewb",
+    fullName: "Skewb",
     inventedBy: ["Tony Durham"], // https://www.jaapsch.net/puzzles/skewb.htm
     // inventionYear: 1982, // 1982 is actually the year of Hofstadter's column.
   }),
@@ -40,18 +45,18 @@ export const puzzles: Record<string, PuzzleLoader> = {
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
   "fto": fto,
-  "gigaminx": genericPGPuzzleLoader("gigaminx", "Gigaminx", {
+  "gigaminx": new PGPuzzleLoader({
+    id: "gigaminx",
+    fullName: "Gigaminx",
     inventedBy: ["Tyler Fox"],
     inventionYear: 2006, // Earliest date from https://www.twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1475
   }),
-  "master_tetraminx": genericPGPuzzleLoader(
-    "master tetraminx",
-    "Master Tetraminx",
-    {
-      inventedBy: ["Katsuhiko Okamoto"], // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
-      inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
-    },
-  ),
+  "master_tetraminx": new PGPuzzleLoader({
+    id: "master tetraminx",
+    fullName: "Master Tetraminx",
+    inventedBy: ["Katsuhiko Okamoto"], // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
+    inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
+  }),
 };
 
 export { cube2x2x2, cube3x3x3 };

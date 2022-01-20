@@ -1,16 +1,19 @@
 import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
+import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
+import type { PuzzleAppearance } from "../stickerings/appearance";
 import {
   cubeAppearance,
   cubeStickerings,
 } from "../stickerings/cube-stickerings";
-import { lazyKPuzzle } from "./lazy-cached-kpuzzle";
+import { lazyCached } from "./lazy-cached";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
   puzzleName: string,
 ): Promise<PuzzleGeometry> {
+  console.log(puzzleName);
   const puzzleGeometry = await import("../../puzzle-geometry");
   return puzzleGeometry.getPuzzleGeometryByName(puzzleName, {
     allMoves: true,
@@ -22,8 +25,11 @@ export async function asyncGetPuzzleGeometry(
 // TODO: can we cache the puzzleGeometry to avoid duplicate calls, without
 // wasting memory? Maybe just save the latest one for successive calls about the
 // same puzzle?
-export async function asyncGetKPuzzle(puzzleName: string): Promise<KPuzzle> {
-  const pg = await asyncGetPuzzleGeometry(puzzleName);
+export async function asyncGetKPuzzle(
+  pgPromise: Promise<PuzzleGeometry>,
+  puzzleName: string,
+): Promise<KPuzzle> {
+  const pg = await pgPromise;
   const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
   kpuzzleDefinition.name = puzzleName;
   const puzzleGeometry = await import("../../puzzle-geometry");
@@ -37,50 +43,56 @@ export async function asyncGetKPuzzle(puzzleName: string): Promise<KPuzzle> {
 }
 
 export function asyncLazyKPuzzleGetter(
+  pgPromise: Promise<PuzzleGeometry>,
   puzzleName: string,
 ): () => Promise<KPuzzle> {
-  return lazyKPuzzle(() => asyncGetKPuzzle(puzzleName));
+  return lazyCached(() => asyncGetKPuzzle(pgPromise, puzzleName));
 }
 
-export function genericPGPuzzleLoader(
-  id: string,
-  fullName: string,
-  info?: {
-    inventedBy?: string[];
-    inventionYear?: number;
-  },
-): PuzzleLoader {
-  const puzzleLoader: PuzzleLoader = {
-    id: id,
-    fullName: fullName,
-    kpuzzle: asyncLazyKPuzzleGetter(id),
-    svg: async () => {
-      const pg = await asyncGetPuzzleGeometry(id);
-      return pg.generatesvg();
-    },
-    pg: async () => {
-      return asyncGetPuzzleGeometry(id);
-    },
-  };
-  if (info?.inventedBy) {
-    puzzleLoader.inventedBy = info.inventedBy;
+type PuzzleLoaderConstructorArgs = {
+  id: string;
+  fullName: string;
+  inventedBy?: string[];
+  inventionYear?: number;
+};
+
+export class PGPuzzleLoader implements PuzzleLoader {
+  id: string;
+  fullName: string;
+  inventedBy?: string[];
+  inventionYear?: number;
+  constructor(info: PuzzleLoaderConstructorArgs) {
+    this.id = info.id;
+    this.fullName = info.fullName;
+    this.inventedBy = info.inventedBy;
+    this.inventionYear = info.inventionYear;
   }
-  if (info?.inventionYear) {
-    puzzleLoader.inventionYear = info.inventionYear;
+
+  #cachedPG: Promise<PuzzleGeometry> | undefined;
+  pg(): Promise<PuzzleGeometry> {
+    return (this.#cachedPG ??= asyncGetPuzzleGeometry(this.id));
   }
-  return puzzleLoader;
+
+  #cachedKPuzzle: Promise<KPuzzle> | undefined;
+  kpuzzle(): Promise<KPuzzle> {
+    return (this.#cachedKPuzzle ??= asyncGetKPuzzle(this.pg(), this.id));
+  }
+
+  #cachedSVG: Promise<string> | undefined;
+  svg(): Promise<string> {
+    return (this.#cachedSVG ??= (async () =>
+      (await this.pg()).generatesvg())());
+  }
 }
 
-export function cubePGPuzzleLoader(
-  id: string,
-  fullName: string,
-  info?: {
-    inventedBy?: string[];
-    inventionYear?: number;
-  },
-): PuzzleLoader {
-  const puzzleLoader: PuzzleLoader = genericPGPuzzleLoader(id, fullName, info);
-  puzzleLoader.appearance = cubeAppearance.bind(cubeAppearance, puzzleLoader);
-  puzzleLoader.stickerings = cubeStickerings;
-  return puzzleLoader;
+export class CubePGPuzzleLoader extends PGPuzzleLoader {
+  constructor(...info: ConstructorParameters<typeof PGPuzzleLoader>) {
+    super(...info);
+  }
+
+  appearance(stickering: ExperimentalStickering): Promise<PuzzleAppearance> {
+    return cubeAppearance(this, stickering);
+  }
+
+  stickerings = cubeStickerings;
 }

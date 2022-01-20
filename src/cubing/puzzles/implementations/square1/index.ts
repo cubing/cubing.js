@@ -1,5 +1,5 @@
 import { KPuzzle } from "../../../kpuzzle";
-import { lazyKPuzzle } from "../../async/lazy-cached-kpuzzle";
+import { lazyCached } from "../../async/lazy-cached";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 
 export const square1: PuzzleLoader = {
@@ -7,7 +7,7 @@ export const square1: PuzzleLoader = {
   fullName: "Square-1",
   inventedBy: ["Karel Hršel", "Vojtech Kopský"],
   inventionYear: 1990, // Czech patent application year: http://spisy.upv.cz/Patents/FullDocuments/277/277266.pdf
-  kpuzzle: lazyKPuzzle(
+  kpuzzle: lazyCached(
     async () =>
       new KPuzzle(
         (
