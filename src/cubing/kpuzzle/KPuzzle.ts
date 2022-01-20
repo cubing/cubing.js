@@ -132,4 +132,32 @@ export class KPuzzle {
         return true;
       })());
   }
+
+  // TODO: Remove completely with v0.25
+  // @deprecated
+  get state(): never {
+    throw new Error("KPuzzle is now a different (stateless) class.");
+  }
+
+  // TODO: Remove completely with v0.25
+  // @deprecated
+  reset(): never {
+    throw new Error("KPuzzle is now a different (stateless) class.");
+  }
+
+  // TODO: Remove completely with v0.25
+  // @deprecated
+  applyMove(_move: Move): never {
+    throw new Error(
+      "KPuzzle is now a different class. Try `.moveToTransformation()` to get the transformation for a move.",
+    );
+  }
+
+  // TODO: Remove completely with v0.25
+  // @deprecated
+  applyAlg(_alg: Alg): never {
+    throw new Error(
+      "KPuzzle is now a different class. Try `.algToTransformation()` to get the transformation for an alg.",
+    );
+  }
 }
