@@ -34,11 +34,13 @@ const def: KPuzzleDefinition = {
 
 const kpuzzle = new KPuzzle(def);
 
+const R = new Alg("R");
+const L = new Alg("L");
 const A = new Alg("R9 L R");
 const B = new Alg("R9 L2 R L R4");
 const C = A.concat(new Alg("L3 R7"));
 
-for (const alg of [A, B, C]) {
+for (const alg of [R, L, A, B, C]) {
   alg.log();
   const transformation = kpuzzle.algToTransformation(alg);
   console.log("Quantum moves:", experimentalCountQuantumMoves(alg));
