@@ -155,12 +155,15 @@ export class Twisty3DSceneWrapper
     twisty3DPuzzleWrapper: Twisty3DPuzzleWrapper,
   ): Promise<void> {
     const old = this.#currentTwisty3DPuzzleWrapper;
-    this.#currentTwisty3DPuzzleWrapper = twisty3DPuzzleWrapper;
-    old?.disconnect();
-    scene.add(await twisty3DPuzzleWrapper.twisty3DPuzzle());
-    if (old) {
-      // We wait for the new puzzle to be in place before removing the old one.
-      scene.remove(await old.twisty3DPuzzle());
+    try {
+      this.#currentTwisty3DPuzzleWrapper = twisty3DPuzzleWrapper;
+      old?.disconnect();
+      scene.add(await twisty3DPuzzleWrapper.twisty3DPuzzle());
+    } finally {
+      if (old) {
+        // We wait for the new puzzle to be in place before removing the old one.
+        scene.remove(await old.twisty3DPuzzle());
+      }
     }
   }
 
