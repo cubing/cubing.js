@@ -13,7 +13,6 @@ import { getCached } from "./lazy-cached";
 export async function asyncGetPuzzleGeometry(
   puzzleName: string,
 ): Promise<PuzzleGeometry> {
-  console.log(puzzleName);
   const puzzleGeometry = await import("../../puzzle-geometry");
   return puzzleGeometry.getPuzzleGeometryByName(puzzleName, {
     allMoves: true,
