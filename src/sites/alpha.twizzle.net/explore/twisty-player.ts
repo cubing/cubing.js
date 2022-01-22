@@ -9,7 +9,7 @@ import {
 } from "../../../cubing/twisty";
 import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
 import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";
-import { getConfigFromURL } from "../core/url-params";
+import { getConfigFromURL } from "../../../cubing/twisty/views/twizzle/url-params";
 import { setupPropInputs } from "./prop-inputs";
 import { getURLParam, setAlgParam } from "./url-params";
 

@@ -1,6 +1,9 @@
 import "../../../cubing/twisty";
 import { experimentalDebugShowRenderStats } from "../../../cubing/twisty";
-import { getConfigFromURL, remapLegacyURLParams } from "../core/url-params";
+import {
+  getConfigFromURL,
+  remapLegacyURLParams,
+} from "../../../cubing/twisty/views/twizzle/url-params";
 import { App } from "./app";
 import { getURLParam } from "./url-params";
 

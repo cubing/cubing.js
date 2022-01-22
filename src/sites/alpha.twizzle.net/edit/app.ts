@@ -21,12 +21,12 @@ import { customElementsShim } from "../../../cubing/twisty/views/node-custom-ele
 import "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
-import { URLParamUpdater } from "../core/url-params";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
 import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
+import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
 // import { setURLParams } from "./url-params";
 
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {

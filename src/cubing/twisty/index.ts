@@ -1,6 +1,7 @@
 export { TwistyPlayer } from "./views/TwistyPlayer";
 export { TwistyAlgViewer } from "./views/TwistyAlgViewer";
 export { TwistyAlgEditor } from "./views/TwistyAlgEditor/TwistyAlgEditor";
+export { TwizzleLink } from "./views/twizzle/TwizzleLink";
 export type { TwistyPlayerConfig } from "./views/TwistyPlayer";
 export { experimentalForceNewRendererSharing } from "./views/3D/Twisty3DVantage";
 

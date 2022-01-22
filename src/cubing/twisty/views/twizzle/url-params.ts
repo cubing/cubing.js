@@ -1,15 +1,15 @@
-import { EXPERIMENTAL_PROP_NO_VALUE } from "../../../cubing/twisty";
+import { EXPERIMENTAL_PROP_NO_VALUE } from "../../../../cubing/twisty";
 import type {
   AlgProp,
   AlgWithIssues,
-} from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
-import type { TwistyPlayerModel } from "../../../cubing/twisty/model/TwistyPlayerModel";
-import type { TwistyPropSource } from "../../../cubing/twisty/model/props/TwistyProp";
+} from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
+import type { TwistyPropSource } from "../../../../cubing/twisty/model/props/TwistyProp";
 import {
   TwistyPlayerAttribute,
   twistyPlayerAttributeMap,
   TwistyPlayerConfig,
-} from "../../../cubing/twisty/views/TwistyPlayer";
+} from "../../../../cubing/twisty/views/TwistyPlayer";
 
 function updateURL(url: URL): void {
   window.history.replaceState("", "", url.toString());
@@ -93,18 +93,23 @@ export class URLParamUpdater {
   }
 }
 
-const paramMapping: Record<string, TwistyPlayerAttribute> = {
-  "alg": "alg",
-  "setup-alg": "experimental-setup-alg",
-  "setup-anchor": "experimental-setup-anchor",
-  "puzzle": "puzzle",
-  "stickering": "experimental-stickering",
-  "puzzle-description": "experimental-puzzle-description",
-};
+export function getConfigFromURL(
+  prefix = "",
+  url: string = location.href,
+): TwistyPlayerConfig {
+  // TODO: Why does `Object.entries(paramMapping)` crash if this is defined elswhere?
+  const paramMapping: Record<string, TwistyPlayerAttribute> = {
+    "alg": "alg",
+    "setup-alg": "experimental-setup-alg",
+    "setup-anchor": "experimental-setup-anchor",
+    "puzzle": "puzzle",
+    "stickering": "experimental-stickering",
+    "puzzle-description": "experimental-puzzle-description",
+  };
 
-export function getConfigFromURL(prefix = ""): TwistyPlayerConfig {
-  const params = new URL(location.href).searchParams;
+  const params = new URL(url).searchParams;
   const config: TwistyPlayerConfig = {};
+  console.log(paramMapping);
   for (const [ourParam, twistyPlayerParam] of Object.entries(paramMapping)) {
     const paramValue = params.get(prefix + ourParam);
     if (paramValue !== null) {
