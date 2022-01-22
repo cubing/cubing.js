@@ -6,16 +6,16 @@ If you have any thoughts about bigger contributions, please consider [filing an 
 
 ## First-Time Contributors
 
-If this is your first time contributing to a project on Github, these are the steps you need to take to contribute code:
+If this is your first time contributing to a project on GitHub, here are steps to contribute code:
 
 1. Create a fork of `cubing.js`.
 2. Install [Git](https://git-scm.com/downloads).
 3. Clone your forked version of `cubing.js` to your computer.
-4. Create a new branch in your cloned project, and make the changes you would like to make. 
+4. Create a new branch in your cloned project, and make the changes you would like to make.
 5. Push your changes to your forked `cubing.js` repo.
 6. Create a pull request in `cubing.js`, with your new branch from your forked repo as the source.
 
-Youtube has many guides to Git and Github if you would like more information. If you want a thorough overview, consider [Git and GitHub for Beginners - Crash Course](https://www.youtube.com/watch?v=RGOj5yH7evk).
+YouTube has many guides about Git and GitHub if you would like more information. If you want a thorough overview, consider [Git and GitHub for Beginners - Crash Course](https://www.youtube.com/watch?v=RGOj5yH7evk).
 
 ## Development
 
