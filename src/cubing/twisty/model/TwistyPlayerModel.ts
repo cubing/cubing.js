@@ -1,188 +1,280 @@
-import { AlgProp } from "./depth-0/AlgProp";
-import { BackgroundProp } from "./depth-0/BackgroundProp";
-import { BackViewProp } from "./depth-0/BackViewProp";
-import { ControlPanelProp } from "./depth-0/ControlPanelProp";
-import { HintFaceletProp } from "./depth-0/HintFaceletProp";
-import { IndexerConstructorRequestProp } from "./depth-0/IndexerConstructorRequestProp";
-import { LatitudeLimitProp } from "./depth-0/LatitudeLimit";
-import { OrbitCoordinatesRequestProp } from "./depth-0/OrbitCoordinatesRequestProp";
-import { PlayingInfoProp } from "./depth-0/PlayingInfoProp";
-import { PuzzleProp } from "./depth-0/PuzzleProp";
-import { SetupAnchorProp } from "./depth-0/SetupAnchorProp";
-import { StickeringProp } from "./depth-0/StickeringProp";
-import { TempoScaleProp } from "./depth-0/TempoScaleProp";
-import { TimestampRequestProp } from "./depth-0/TimestampRequestProp";
-import { ViewerLinkProp } from "./depth-0/ViewerLinkProp";
-import { VisualizationFormatProp } from "./depth-0/VisualizationProp";
-import { OrbitCoordinatesProp } from "./depth-1/OrbitCoordinatesProp";
-import { PuzzleDefProp } from "./depth-1/PuzzleDefProp";
-import { VisualizationStrategyProp } from "./depth-1/VisualizationStrategyProp";
-import { IndexerConstructorProp } from "./depth-2/IndexerConstructorProp";
-import { PuzzleAlgProp } from "./depth-2/PuzzleAlgProp";
-import { AlgTransformationProp } from "./depth-3/AlgTransformationProp";
-import { IndexerProp } from "./depth-3/IndexerProp";
-import { AnchoredStartProp } from "./depth-4/AnchoredStartProp";
-import { TimeRangeProp } from "./depth-4/TimeRangeProp";
-import { DetailedTimelineInfoProp } from "./depth-5/DetailedTimelineInfoProp";
-import { CoarseTimelineInfoProp } from "./depth-6/CoarseTimelineInfoProp";
-import { CurrentLeavesProp } from "./depth-6/CurrentLeavesProp";
-import { ButtonAppearanceProp } from "./depth-7/ButtonAppearanceProp";
-import { CurrentLeavesSimplifiedProp } from "./depth-7/CurrentLeavesSimplified";
-import { CurrentTransformationProp } from "./depth-8/CurrentTransformationProp";
-import { LegacyPositionProp } from "./depth-9/LegacyPositionProp";
+import { AlgProp } from "./props/puzzle/state/AlgProp";
+import { BackgroundProp } from "./props/viewer/BackgroundProp";
+import { BackViewProp } from "./props/viewer/BackViewProp";
+import { ControlPanelProp } from "./props/viewer/ControlPanelProp";
+import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
+import { IndexerConstructorRequestProp } from "./props/puzzle/state/IndexerConstructorRequestProp";
+import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
+import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp";
+import { PlayingInfoProp } from "./props/timeline/PlayingInfoProp";
+import { PGPuzzleDescriptionStringProp } from "./props/puzzle/structure/PuzzleDescriptionProp";
+import { PuzzleIDRequestProp } from "./props/puzzle/structure/PuzzleIDRequestProp";
+import { PuzzleLoaderProp } from "./props/puzzle/structure/PuzzleLoaderProp";
+import { SetupAnchorProp } from "./props/puzzle/state/SetupAnchorProp";
+import { StickeringProp } from "./props/puzzle/display/StickeringProp";
+import { TempoScaleProp } from "./props/timeline/TempoScaleProp";
+import { TimestampRequestProp } from "./props/timeline/TimestampRequestProp";
+import { URLProp } from "./props/general/URLProp";
+import { ViewerLinkProp } from "./props/viewer/ViewerLinkProp";
+import { VisualizationFormatProp } from "./props/viewer/VisualizationProp";
+import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
+import { PuzzleIDProp } from "./props/puzzle/structure/PuzzleIDProp";
+import { SpriteProp } from "./props/puzzle/display/SpriteProp";
+import { VisualizationStrategyProp } from "./props/viewer/VisualizationStrategyProp";
+import { IndexerConstructorProp } from "./props/puzzle/state/IndexerConstructorProp";
+import { PuzzleAlgProp } from "./props/puzzle/state/PuzzleAlgProp";
+import { AlgTransformationProp } from "./props/puzzle/state/AlgTransformationProp";
+import { IndexerProp } from "./props/puzzle/state/IndexerProp";
+import { AnchorTransformationProp } from "./props/puzzle/state/AnchorTransformationProp";
+import { TimeRangeProp } from "./props/viewer/TimeRangeProp";
+import { DetailedTimelineInfoProp } from "./props/timeline/DetailedTimelineInfoProp";
+import { CoarseTimelineInfoProp } from "./props/timeline/CoarseTimelineInfoProp";
+import { CurrentMoveInfoProp } from "./props/puzzle/state/CurrentMoveInfoProp";
+import { ButtonAppearanceProp } from "./props/viewer/ButtonAppearanceProp";
+import { CurrentLeavesSimplifiedProp } from "./props/puzzle/state/CurrentLeavesSimplified";
+import { CurrentStateProp as CurrentStateProp } from "./props/puzzle/state/CurrentStateProp";
+import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
+import { KPuzzleProp } from "./props/puzzle/structure/KPuzzleProp";
+import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
+import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
+import { experimentalAppendMove, Move } from "../../alg";
+import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
+import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
+import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
+import { NO_VALUE } from "./props/TwistyProp";
 
 export class TwistyPlayerModel {
+  // TODO: incorporate error handling into the entire prop graph.
+  // TODO: Make this something that can't get confused with normal props?
+  userVisibleErrorTracker = new UserVisibleErrorTracker();
+
   // TODO: Redistribute and group props with controllers.
 
   // Depth 0
-  algProp = new AlgProp();
-  backgroundProp = new BackgroundProp();
-  backViewProp = new BackViewProp();
-  controlPanelProp = new ControlPanelProp();
-  hintFaceletProp = new HintFaceletProp();
-  indexerConstructorRequestProp = new IndexerConstructorRequestProp();
-
-  latitudeLimitProp = new LatitudeLimitProp();
-  orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
+  alg = new AlgProp();
+  background = new BackgroundProp();
+  backView = new BackViewProp();
+  controlPanel = new ControlPanelProp();
+  catchUpMove = new CatchUpMoveProp();
+  foundationDisplay = new FoundationDisplayProp();
+  foundationStickerSpriteURL = new URLProp();
+  hintFacelet = new HintFaceletProp();
+  hintStickerSpriteURL = new URLProp();
+  indexerConstructorRequest = new IndexerConstructorRequestProp();
+  latitudeLimit = new LatitudeLimitProp();
+  movePressInput = new MovePressInputProp();
+  orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
-
-  playingInfoProp = new PlayingInfoProp();
-  puzzleProp = new PuzzleProp();
-  setupAnchorProp = new SetupAnchorProp();
-  setupProp = new AlgProp();
-  stickeringProp = new StickeringProp();
-  tempoScaleProp = new TempoScaleProp();
-  timestampRequestProp = new TimestampRequestProp();
-  viewerLinkProp = new ViewerLinkProp();
-  visualizationFormatProp = new VisualizationFormatProp();
+  playingInfo = new PlayingInfoProp();
+  puzzleDescriptionRequest = new PGPuzzleDescriptionStringProp();
+  puzzleIDRequest = new PuzzleIDRequestProp();
+  setupAnchor = new SetupAnchorProp();
+  setupAlg = new AlgProp();
+  stickering = new StickeringProp();
+  tempoScale = new TempoScaleProp();
+  timestampRequest = new TimestampRequestProp();
+  viewerLink = new ViewerLinkProp();
+  visualizationFormat = new VisualizationFormatProp();
 
   // Depth 1
-  visualizationStrategyProp = new VisualizationStrategyProp({
-    visualizationRequest: this.visualizationFormatProp,
-    puzzleID: this.puzzleProp,
+  foundationStickerSprite = new SpriteProp({
+    spriteURL: this.foundationStickerSpriteURL,
   });
 
-  orbitCoordinatesProp = new OrbitCoordinatesProp({
-    orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
-    latitudeLimit: this.latitudeLimitProp,
-    puzzleID: this.puzzleProp,
+  hintStickerSprite = new SpriteProp({
+    spriteURL: this.hintStickerSpriteURL,
   });
 
-  puzzleDefProp = new PuzzleDefProp({ puzzle: this.puzzleProp });
+  puzzleLoader = new PuzzleLoaderProp(
+    {
+      puzzleIDRequest: this.puzzleIDRequest,
+      puzzleDescriptionRequest: this.puzzleDescriptionRequest,
+    },
+    this.userVisibleErrorTracker,
+  );
 
   // Depth 2
-  indexerConstructorProp = new IndexerConstructorProp({
-    alg: this.algProp,
-    puzzle: this.puzzleProp,
-    visualizationStrategy: this.visualizationStrategyProp,
-    indexerConstructorRequest: this.indexerConstructorRequestProp,
-  });
+  kpuzzle = new KPuzzleProp({ puzzleLoader: this.puzzleLoader });
 
-  puzzleAlgProp = new PuzzleAlgProp({
-    algWithIssues: this.algProp,
-    puzzleDef: this.puzzleDefProp,
-  });
-
-  puzzleSetupProp = new PuzzleAlgProp({
-    algWithIssues: this.setupProp,
-    puzzleDef: this.puzzleDefProp,
-  });
+  puzzleID = new PuzzleIDProp({ puzzleLoader: this.puzzleLoader });
 
   // Depth 3
-  indexerProp = new IndexerProp({
-    indexerConstructor: this.indexerConstructorProp,
-    algWithIssues: this.puzzleAlgProp,
-    def: this.puzzleDefProp,
+
+  puzzleAlg = new PuzzleAlgProp({
+    algWithIssues: this.alg,
+    kpuzzle: this.kpuzzle,
   });
 
-  setupTransformationProp = new AlgTransformationProp({
-    alg: this.puzzleSetupProp,
-    def: this.puzzleDefProp,
+  puzzleSetupAlg = new PuzzleAlgProp({
+    algWithIssues: this.setupAlg,
+    kpuzzle: this.kpuzzle,
+  });
+
+  visualizationStrategy = new VisualizationStrategyProp({
+    visualizationRequest: this.visualizationFormat,
+    puzzleID: this.puzzleID,
   });
 
   // Depth 4
-  anchoredStartProp = new AnchoredStartProp({
-    setupAnchor: this.setupAnchorProp,
-    setupTransformation: this.setupTransformationProp,
-    indexer: this.indexerProp,
-    def: this.puzzleDefProp,
+  indexerConstructor = new IndexerConstructorProp({
+    alg: this.alg,
+    puzzle: this.puzzleID,
+    visualizationStrategy: this.visualizationStrategy,
+    indexerConstructorRequest: this.indexerConstructorRequest,
   });
 
-  timeRangeProp = new TimeRangeProp({
-    indexer: this.indexerProp,
+  moveCount = new NaiveMoveCountProp({ alg: this.puzzleAlg });
+
+  orbitCoordinates = new OrbitCoordinatesProp({
+    orbitCoordinatesRequest: this.orbitCoordinatesRequest,
+    latitudeLimit: this.latitudeLimit,
+    puzzleID: this.puzzleID,
+    strategy: this.visualizationStrategy,
+  });
+
+  setupAlgTransformation = new AlgTransformationProp({
+    setupAlg: this.puzzleSetupAlg,
+    kpuzzle: this.kpuzzle,
   });
 
   // Depth 5
-  detailedTimelineInfoProp: DetailedTimelineInfoProp =
-    new DetailedTimelineInfoProp({
-      timestampRequest: this.timestampRequestProp,
-      timeRange: this.timeRangeProp,
-      setupAnchor: this.setupAnchorProp,
-    });
-
-  // Depth 6
-  currentLeavesProp = new CurrentLeavesProp({
-    indexer: this.indexerProp,
-    detailedTimelineInfo: this.detailedTimelineInfoProp,
+  indexer = new IndexerProp({
+    indexerConstructor: this.indexerConstructor,
+    algWithIssues: this.puzzleAlg,
+    kpuzzle: this.kpuzzle,
   });
 
-  coarseTimelineInfoProp = new CoarseTimelineInfoProp({
-    detailedTimelineInfo: this.detailedTimelineInfoProp,
-    playingInfo: this.playingInfoProp,
+  // Depth 6
+  anchorTransformation = new AnchorTransformationProp({
+    setupAnchor: this.setupAnchor,
+    setupTransformation: this.setupAlgTransformation,
+    indexer: this.indexer,
+  });
+
+  timeRange = new TimeRangeProp({
+    indexer: this.indexer,
   });
 
   // Depth 7
-  // TODO: Inline Twisty3D management.
-  buttonAppearanceProp = new ButtonAppearanceProp({
-    coarseTimelineInfo: this.coarseTimelineInfoProp,
-    viewerLink: this.viewerLinkProp,
-  });
-
-  currentLeavesSimplifiedProp = new CurrentLeavesSimplifiedProp({
-    currentMoveInfo: this.currentLeavesProp,
-  });
+  detailedTimelineInfo: DetailedTimelineInfoProp = new DetailedTimelineInfoProp(
+    {
+      timestampRequest: this.timestampRequest,
+      timeRange: this.timeRange,
+      setupAnchor: this.setupAnchor,
+    },
+  );
 
   // Depth 8
-  currentTransformationProp = new CurrentTransformationProp({
-    anchoredStart: this.anchoredStartProp,
-    currentLeavesSimplified: this.currentLeavesSimplifiedProp,
-    indexer: this.indexerProp,
-    def: this.puzzleDefProp,
+  coarseTimelineInfo = new CoarseTimelineInfoProp({
+    detailedTimelineInfo: this.detailedTimelineInfo,
+    playingInfo: this.playingInfo,
+  });
+
+  currentMoveInfo = new CurrentMoveInfoProp({
+    indexer: this.indexer,
+    detailedTimelineInfo: this.detailedTimelineInfo,
+    catchUpMove: this.catchUpMove,
   });
 
   // Depth 9
-  legacyPositionProp = new LegacyPositionProp({
-    currentMoveInfo: this.currentLeavesProp,
-    transformation: this.currentTransformationProp,
+  // TODO: Inline Twisty3D management.
+  buttonAppearance = new ButtonAppearanceProp({
+    coarseTimelineInfo: this.coarseTimelineInfo,
+    viewerLink: this.viewerLink,
+  });
+
+  currentLeavesSimplified = new CurrentLeavesSimplifiedProp({
+    currentMoveInfo: this.currentMoveInfo,
+  });
+
+  // Depth 10
+  currentState = new CurrentStateProp({
+    anchoredStart: this.anchorTransformation,
+    currentLeavesSimplified: this.currentLeavesSimplified,
+    indexer: this.indexer,
+  });
+
+  // Depth 11
+  legacyPosition = new LegacyPositionProp({
+    currentMoveInfo: this.currentMoveInfo,
+    state: this.currentState,
   });
 
   public async twizzleLink(): Promise<string> {
-    const url = new URL("https://alpha.twizzle.net/edit/");
-
-    const [puzzle, alg, setup, anchor] = await Promise.all([
-      this.puzzleProp.get(),
-      this.algProp.get(),
-      this.setupProp.get(),
-      this.setupAnchorProp.get(),
+    const [
+      viewerLink,
+      puzzleID,
+      puzzleDescription,
+      alg,
+      setup,
+      anchor,
+      experimentalStickering,
+    ] = await Promise.all([
+      this.viewerLink.get(),
+      this.puzzleID.get(),
+      this.puzzleDescriptionRequest.get(),
+      this.alg.get(),
+      this.setupAlg.get(),
+      this.setupAnchor.get(),
+      this.stickering.get(),
     ]);
+
+    const isExplorer = viewerLink === "experimental-twizzle-explorer";
+
+    console.log({ isExplorer, viewerLink });
+
+    const url = new URL(
+      `https://alpha.twizzle.net/${isExplorer ? "explore" : "edit"}/`,
+    );
 
     if (!alg.alg.experimentalIsEmpty()) {
       url.searchParams.set("alg", alg.alg.toString());
     }
     if (!setup.alg.experimentalIsEmpty()) {
-      url.searchParams.set("experimental-setup-alg", setup.toString());
+      url.searchParams.set("setup-alg", setup.alg.toString());
     }
     if (anchor !== "start") {
-      url.searchParams.set("experimental-setup-anchor", anchor);
+      url.searchParams.set("setup-anchor", anchor);
     }
-    // if (this.experimentalStickering !== "full") {
-    //   url.searchParams.set(
-    //     "experimental-stickering",
-    //     this.experimentalStickering,
-    //   );
-    if (puzzle !== "3x3x3") {
-      url.searchParams.set("puzzle", puzzle);
+    if (experimentalStickering !== "full") {
+      url.searchParams.set("experimental-stickering", experimentalStickering);
+    }
+    if (isExplorer && puzzleDescription !== NO_VALUE) {
+      url.searchParams.set("puzzle-description", puzzleDescription);
+    } else if (puzzleID !== "3x3x3") {
+      url.searchParams.set("puzzle", puzzleID);
     }
     return url.toString();
+  }
+
+  // TODO: Animate the new move.
+  experimentalAddMove(
+    flexibleMove: Move | string,
+    options: { coalesce?: boolean; mod?: number } = {},
+  ): void {
+    const move =
+      typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
+    (async () => {
+      const alg = (await this.alg.get()).alg;
+      const newAlg = experimentalAppendMove(alg, move, {
+        coalesce: options?.coalesce,
+        mod: options?.mod,
+      });
+      this.alg.set(newAlg);
+      this.timestampRequest.set("end");
+      this.catchUpMove.set({
+        move: move,
+        amount: 0,
+      });
+    })();
+  }
+
+  // TODO: Remove after https://github.com/Odder/pyraminx.tips/pull/1 lands
+  /** @deprecated */
+  get playingInfoProp(): PlayingInfoProp {
+    console.warn(
+      "Using deprecated prop: `playingInfoProp`. Please switch to: `playingInfo`",
+    );
+    return this.playingInfo;
   }
 }

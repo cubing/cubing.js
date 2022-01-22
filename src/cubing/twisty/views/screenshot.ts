@@ -1,4 +1,4 @@
-import { PerspectiveCamera, WebGLRenderer } from "three";
+import type { PerspectiveCamera } from "three";
 import { THREEJS } from "../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { Twisty3DPuzzleWrapper } from "./3D/Twisty3DPuzzleWrapper";
@@ -13,15 +13,15 @@ export interface TwistyPlayerScreenshot {
 let cachedCamera: PerspectiveCamera | null = null;
 export async function screenshot(
   model: TwistyPlayerModel,
+  options?: { width: number; height: number },
 ): Promise<TwistyPlayerScreenshot> {
   // TODO: improve async caching
+
+  const width = options?.width ?? 2048;
+  const height = options?.height ?? 2048;
+  const aspectRatio = width / height;
   const camera = (cachedCamera ??= await (async () => {
-    return new (await THREEJS).PerspectiveCamera(
-      20,
-      1, // We rely on the resize logic to handle this.
-      0.1,
-      20,
-    );
+    return new (await THREEJS).PerspectiveCamera(20, aspectRatio, 0.1, 20);
   })());
 
   const scene = new (await THREEJS).Scene();
@@ -29,22 +29,27 @@ export async function screenshot(
   const twisty3DWrapper = new Twisty3DPuzzleWrapper(
     model,
     { scheduleRender: () => {} },
-    await model.puzzleProp.get(),
+    await model.puzzleLoader.get(),
+    await model.visualizationStrategy.get(),
   );
 
+  // TODO: Pass the stickering to the constructor so we don't have to wait..
+  await model.stickering.get();
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   // TODO: Find a more robust way to do this.
-  await model.legacyPositionProp.get(); // Force the 3D puzzle listeners for the state to fire.
+  await model.legacyPosition.get(); // Force the 3D puzzle listeners for the state to fire.
 
   scene.add(await twisty3DWrapper.twisty3DPuzzle());
 
-  const orbitCoordinates = await model.orbitCoordinatesProp.get();
+  const orbitCoordinates = await model.orbitCoordinates.get();
   await setCameraFromOrbitCoordinates(camera, orbitCoordinates);
 
-  const renderer = new WebGLRenderer({
+  const renderer = new (await THREEJS).WebGLRenderer({
     antialias: true,
     alpha: true,
   });
-  renderer.setSize(2048, 2048);
+  renderer.setSize(width, height);
 
   renderer.render(scene, camera);
   const dataURL = renderer.domElement.toDataURL();
@@ -54,24 +59,23 @@ export async function screenshot(
   return {
     dataURL,
     download: async (filename?: string) => {
-      await downloadURL(dataURL, filename ?? defaultFilename);
+      downloadURL(dataURL, filename ?? defaultFilename);
     },
   };
 }
 
 export async function getDefaultFilename(
   model: TwistyPlayerModel,
-  extension: string = "png",
 ): Promise<string> {
   const [puzzleID, algWithIssues] = await Promise.all([
-    model.puzzleProp.get(),
-    model.algProp.get(),
+    model.puzzleID.get(),
+    model.alg.get(),
   ]);
   return `[${puzzleID}]${
     algWithIssues.alg.experimentalNumUnits() === 0
       ? ""
       : " " + algWithIssues.alg.toString()
-  }.${extension}`;
+  }`;
 }
 
 export function downloadURL(

@@ -8,9 +8,13 @@ needFolder(
   "make build-esm",
 );
 
+import { ensureChromiumDownload } from "../../../../lib/puppeteer.js";
+
 import puppeteer from "puppeteer";
 import { installServer, port, startServer } from "./serve-parcel.js";
 import { killAllChildProcesses } from "../../../../lib/execPromise.js";
+
+await ensureChromiumDownload();
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;

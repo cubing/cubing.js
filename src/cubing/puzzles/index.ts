@@ -1,7 +1,10 @@
-export { cube3x3x3KPuzzle as experimentalCube3x3x3KPuzzle } from "./implementations/3x3x3/3x3x3.kpuzzle.json_";
+export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "./customPGPuzzleLoader";
+export { experimental3x3x3KPuzzle } from "../kpuzzle";
 
-import type { PuzzleID } from "../twisty/old/dom/TwistyPlayerConfig";
-import { cubePGPuzzleLoader, genericPGPuzzleLoader } from "./async/async-pg3d";
+export { cubeAppearance as experimentalCubeAppearance } from "./stickerings/cube-stickerings";
+
+import type { PuzzleID } from "../twisty";
+import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
 import { clock } from "./implementations/clock";
@@ -17,18 +20,23 @@ export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,
-  "4x4x4": cubePGPuzzleLoader("4x4x4", "4×4×4 Cube"),
-  "5x5x5": cubePGPuzzleLoader("5x5x5", "5×5×5 Cube"),
-  "6x6x6": cubePGPuzzleLoader("6x6x6", "6×6×6 Cube"),
-  "7x7x7": cubePGPuzzleLoader("7x7x7", "7×7×7 Cube"),
-  "40x40x40": cubePGPuzzleLoader("40x40x40", "40×40×40 Cube"),
+  "4x4x4": new CubePGPuzzleLoader({ id: "4x4x4", fullName: "4×4×4 Cube" }),
+  "5x5x5": new CubePGPuzzleLoader({ id: "5x5x5", fullName: "5×5×5 Cube" }),
+  "6x6x6": new CubePGPuzzleLoader({ id: "6x6x6", fullName: "6×6×6 Cube" }),
+  "7x7x7": new CubePGPuzzleLoader({ id: "7x7x7", fullName: "7×7×7 Cube" }),
+  "40x40x40": new CubePGPuzzleLoader({
+    id: "40x40x40",
+    fullName: "40×40×40 Cube",
+  }),
   // 3x3x3 Blindfolded
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
   clock,
   "megaminx": megaminx,
   pyraminx,
-  "skewb": genericPGPuzzleLoader("skewb", "Skewb", {
+  "skewb": new PGPuzzleLoader({
+    id: "skewb",
+    fullName: "Skewb",
     inventedBy: ["Tony Durham"], // https://www.jaapsch.net/puzzles/skewb.htm
     // inventionYear: 1982, // 1982 is actually the year of Hofstadter's column.
   }),
@@ -37,18 +45,18 @@ export const puzzles: Record<string, PuzzleLoader> = {
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
   "fto": fto,
-  "gigaminx": genericPGPuzzleLoader("gigaminx", "Gigaminx", {
+  "gigaminx": new PGPuzzleLoader({
+    id: "gigaminx",
+    fullName: "Gigaminx",
     inventedBy: ["Tyler Fox"],
     inventionYear: 2006, // Earliest date from https://www.twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1475
   }),
-  "master_tetraminx": genericPGPuzzleLoader(
-    "master tetraminx",
-    "Master Tetraminx",
-    {
-      inventedBy: ["Katsuhiko Okamoto"], // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
-      inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
-    },
-  ),
+  "master_tetraminx": new PGPuzzleLoader({
+    id: "master tetraminx",
+    fullName: "Master Tetraminx",
+    inventedBy: ["Katsuhiko Okamoto"], // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
+    inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
+  }),
 };
 
 export { cube2x2x2, cube3x3x3 };
@@ -59,24 +67,31 @@ export type {
   PuzzleAppearance as ExperimentalPuzzleAppearance,
 } from "./stickerings/appearance";
 
-const wcaEvents: Record<string, PuzzleID> = {
-  "333": "3x3x3",
-  "222": "2x2x2",
-  "444": "4x4x4",
-  "555": "5x5x5",
-  "666": "6x6x6",
-  "777": "7x7x7",
-  "333bf": "3x3x3",
-  "333fm": "3x3x3",
-  "333oh": "3x3x3",
-  "clock": "clock",
-  "minx": "megaminx",
-  "pyram": "pyraminx",
-  "skewb": "skewb",
-  "sq1": "square1",
-  "444bf": "4x4x4",
-  "555bf": "5x5x5",
+interface WCAEventInfo {
+  puzzleID: PuzzleID;
+  eventName: string;
+}
+
+const wcaEvents: Record<string, WCAEventInfo> = {
+  "333": { puzzleID: "3x3x3", eventName: "3x3x3 Cube" },
+  "222": { puzzleID: "2x2x2", eventName: "2x2x2 Cube" },
+  "444": { puzzleID: "4x4x4", eventName: "4x4x4 Cube" },
+  "555": { puzzleID: "5x5x5", eventName: "5x5x5 Cube" },
+  "666": { puzzleID: "6x6x6", eventName: "6x6x6 Cube" },
+  "777": { puzzleID: "7x7x7", eventName: "7x7x7 Cube" },
+  "333bf": { puzzleID: "3x3x3", eventName: "3x3x3 Blindfolded" },
+  "333fm": { puzzleID: "3x3x3", eventName: "3x3x3 Fewest Moves" },
+  "333oh": { puzzleID: "3x3x3", eventName: "3x3x3 One-Handed" },
+  "clock": { puzzleID: "clock", eventName: "Clock" },
+  "minx": { puzzleID: "megaminx", eventName: "Megaminx" },
+  "pyram": { puzzleID: "pyraminx", eventName: "Pyraminx" },
+  "skewb": { puzzleID: "skewb", eventName: "Skewb" },
+  "sq1": { puzzleID: "square1", eventName: "Square-1" },
+  "444bf": { puzzleID: "4x4x4", eventName: "4x4x4 Blindfolded" },
+  "555bf": { puzzleID: "5x5x5", eventName: "5x5x5 Blindfolded" },
+  "333mb": { puzzleID: "3x3x3", eventName: " 3x3x3 Multi-Blind" },
 };
-export function puzzleIDForWCAEvent(event: string): PuzzleID | null {
+
+export function wcaEventInfo(event: string): WCAEventInfo | null {
   return wcaEvents[event] ?? null;
 }

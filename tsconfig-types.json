@@ -3,7 +3,9 @@
   "compilerOptions": {
     "emitDeclarationOnly": true,
     "removeComments": false,
-    "rootDir": "src/cubing"
+    "rootDir": "src/cubing",
+    "declarationMap": false
   },
-  "include": ["src/cubing/**/*"]
+  "include": ["src/cubing"],
+  "exclude": ["*.spec.ts"]
 }

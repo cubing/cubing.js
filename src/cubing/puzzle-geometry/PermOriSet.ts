@@ -1,5 +1,6 @@
+import { Move } from "../alg";
+import type { KPuzzleDefinition, KTransformationData } from "../kpuzzle"; // TODO
 import { NullMapper } from "./notation-mapping";
-import type { PGVendoredKPuzzleDefinition } from "./interfaces"; // TODO
 import type { NotationMapper } from "./notation-mapping/NotationMapper";
 /* tslint:disable no-bitwise */
 /* tslint:disable prefer-for-of */ import {
@@ -9,13 +10,14 @@ import type { NotationMapper } from "./notation-mapping/NotationMapper";
   Perm,
   zeros,
 } from "./Perm";
-import { Move } from "../alg";
-export class OrbitDef {
+export class PGOrbitDef {
   constructor(public size: number, public mod: number) {}
   public reassemblySize(): number {
     return factorial(this.size) * Math.pow(this.mod, this.size);
   }
 }
+
+let lastGlobalDefinitionCounter = 0;
 
 export function externalName(
   mapper: NotationMapper,
@@ -29,30 +31,30 @@ export function externalName(
   return mv2.toString();
 }
 
-export class OrbitsDef {
+export class PGOrbitsDef {
   constructor(
     public orbitnames: string[],
-    public orbitdefs: OrbitDef[],
+    private orbitdefs: PGOrbitDef[],
     public solved: VisibleState,
     public movenames: string[],
-    public moveops: Transformation[],
+    public moveops: PGTransform[],
   ) {}
 
-  public transformToKPuzzle(t: Transformation): any {
+  private transformToKTransformationData(t: PGTransform): KTransformationData {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < this.orbitnames.length; j++) {
-      mp[this.orbitnames[j]] = t.orbits[j].toKpuzzle();
+      mp[this.orbitnames[j]] = t.orbits[j].toKPuzzle();
     }
     return mp;
   }
 
-  public static transformToKPuzzle(
+  public static transformToKTransformationData(
     orbitnames: string[],
-    t: Transformation,
-  ): any {
+    t: PGTransform,
+  ): KTransformationData {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < orbitnames.length; j++) {
-      mp[orbitnames[j]] = t.orbits[j].toKpuzzle();
+      mp[orbitnames[j]] = t.orbits[j].toKPuzzle();
     }
     return mp;
   }
@@ -66,20 +68,16 @@ export class OrbitsDef {
     result.push("");
     for (let i = 0; i < this.orbitnames.length; i++) {
       result.push(
-        "Set " +
-          this.orbitnames[i] +
-          " " +
-          this.orbitdefs[i].size +
-          " " +
-          this.orbitdefs[i].mod,
+        `Set ${this.orbitnames[i]} ${this.orbitdefs[i].size} ${this.orbitdefs[i].mod}`,
       );
     }
     result.push("");
     result.push("Solved");
     for (let i = 0; i < this.orbitnames.length; i++) {
-      this.solved.orbits[i].appendConciseDefinition(
+      this.solved.orbits[i].appendDefinition(
         result,
         this.orbitnames[i],
+        false,
         false,
       );
     }
@@ -97,9 +95,9 @@ export class OrbitsDef {
         if (doinv) {
           this.moveops[i].orbits[j]
             .inv()
-            .appendConciseDefinition(result, this.orbitnames[j], true);
+            .appendDefinition(result, this.orbitnames[j], true);
         } else {
-          this.moveops[i].orbits[j].appendConciseDefinition(
+          this.moveops[i].orbits[j].appendDefinition(
             result,
             this.orbitnames[j],
             true,
@@ -113,28 +111,41 @@ export class OrbitsDef {
   }
 
   // TODO: return type.
-  public toKpuzzle(): PGVendoredKPuzzleDefinition {
-    const orbits: { [orbitName: string]: any } = {};
-    const start: { [orbitName: string]: any } = {};
+  public toKPuzzleDefinition(includemoves: boolean): KPuzzleDefinition {
+    const orbits: KPuzzleDefinition["orbits"] = {};
+    const start: KPuzzleDefinition["startStateData"] = {};
     for (let i = 0; i < this.orbitnames.length; i++) {
       orbits[this.orbitnames[i]] = {
         numPieces: this.orbitdefs[i].size,
-        orientations: this.orbitdefs[i].mod,
+        numOrientations: this.orbitdefs[i].mod,
       };
-      start[this.orbitnames[i]] = this.solved.orbits[i].toKpuzzle();
+      const startTransformation = this.solved.orbits[i].toKPuzzle();
+      start[this.orbitnames[i]] = {
+        pieces: startTransformation.permutation,
+        orientation: startTransformation.orientation,
+      };
     }
     const moves: { [moveName: string]: any } = {};
-    for (let i = 0; i < this.movenames.length; i++) {
-      moves[this.movenames[i]] = this.transformToKPuzzle(this.moveops[i]);
+    if (includemoves) {
+      for (let i = 0; i < this.movenames.length; i++) {
+        moves[this.movenames[i]] = this.transformToKTransformationData(
+          this.moveops[i],
+        );
+      }
     }
-    return { name: "PG3D", orbits, startPieces: start, moves };
+    return {
+      name: `PG3D #${++lastGlobalDefinitionCounter}`,
+      orbits,
+      startStateData: start,
+      moves,
+    };
   }
 
-  public optimize(): OrbitsDef {
+  public optimize(): PGOrbitsDef {
     const neworbitnames: string[] = [];
-    const neworbitdefs: OrbitDef[] = [];
-    const newsolved: Orbit[] = [];
-    const newmoveops: Orbit[][] = [];
+    const neworbitdefs: PGOrbitDef[] = [];
+    const newsolved: PGOrbit[] = [];
+    const newmoveops: PGOrbit[][] = [];
     for (let j = 0; j < this.moveops.length; j++) {
       newmoveops.push([]);
     }
@@ -229,18 +240,18 @@ export class OrbitsDef {
           }
         }
         if (multiple) {
-          neworbitnames.push(this.orbitnames[i] + "_p" + j);
+          neworbitnames.push(`${this.orbitnames[i]}_p${j}`);
         } else {
           neworbitnames.push(this.orbitnames[i]);
         }
         if (keepori) {
-          neworbitdefs.push(new OrbitDef(nv, this.orbitdefs[i].mod));
+          neworbitdefs.push(new PGOrbitDef(nv, this.orbitdefs[i].mod));
           newsolved.push(this.solved.orbits[i].remapVS(no, nv));
           for (let k = 0; k < this.moveops.length; k++) {
             newmoveops[k].push(this.moveops[k].orbits[i].remap(no, on, nv));
           }
         } else {
-          neworbitdefs.push(new OrbitDef(nv, 1));
+          neworbitdefs.push(new PGOrbitDef(nv, 1));
           newsolved.push(this.solved.orbits[i].remapVS(no, nv).killOri());
           for (let k = 0; k < this.moveops.length; k++) {
             newmoveops[k].push(
@@ -250,12 +261,12 @@ export class OrbitsDef {
         }
       }
     }
-    return new OrbitsDef(
+    return new PGOrbitsDef(
       neworbitnames,
       neworbitdefs,
       new VisibleState(newsolved),
       this.movenames,
-      newmoveops.map((_) => new Transformation(_)),
+      newmoveops.map((_) => new PGTransform(_)),
     );
   }
 
@@ -263,7 +274,7 @@ export class OrbitsDef {
   // we use an algorithm that should be faster for large puzzles than
   // just picking random moves.
   public scramble(n: number): void {
-    const pool: Transformation[] = [];
+    const pool: PGTransform[] = [];
     for (let i = 0; i < this.moveops.length; i++) {
       pool[i] = this.moveops[i];
     }
@@ -302,11 +313,11 @@ export class OrbitsDef {
   }
 }
 
-export class Orbit {
-  static kcache: Record<string, unknown>[] = [];
+export class PGOrbit {
+  private static kcache: Record<string, number[]>[] = [];
 
-  public static e(n: number, mod: number): Orbit {
-    return new Orbit(iota(n), zeros(n), mod);
+  public static e(n: number, mod: number): PGOrbit {
+    return new PGOrbit(iota(n), zeros(n), mod);
   }
 
   constructor(
@@ -315,25 +326,25 @@ export class Orbit {
     public orimod: number,
   ) {}
 
-  public mul(b: Orbit): Orbit {
+  public mul(b: PGOrbit): PGOrbit {
     const n = this.perm.length;
     const newPerm = new Array<number>(n);
     if (this.orimod === 1) {
       for (let i = 0; i < n; i++) {
         newPerm[i] = this.perm[b.perm[i]];
       }
-      return new Orbit(newPerm, this.ori, this.orimod);
+      return new PGOrbit(newPerm, this.ori, this.orimod);
     } else {
       const newOri = new Array<number>(n);
       for (let i = 0; i < n; i++) {
         newPerm[i] = this.perm[b.perm[i]];
         newOri[i] = (this.ori[b.perm[i]] + b.ori[i]) % this.orimod;
       }
-      return new Orbit(newPerm, newOri, this.orimod);
+      return new PGOrbit(newPerm, newOri, this.orimod);
     }
   }
 
-  public inv(): Orbit {
+  public inv(): PGOrbit {
     const n = this.perm.length;
     const newPerm = new Array<number>(n);
     const newOri = new Array<number>(n);
@@ -341,10 +352,10 @@ export class Orbit {
       newPerm[this.perm[i]] = i;
       newOri[this.perm[i]] = (this.orimod - this.ori[i]) % this.orimod;
     }
-    return new Orbit(newPerm, newOri, this.orimod);
+    return new PGOrbit(newPerm, newOri, this.orimod);
   }
 
-  public equal(b: Orbit): boolean {
+  public equal(b: PGOrbit): boolean {
     const n = this.perm.length;
     for (let i = 0; i < n; i++) {
       if (this.perm[i] !== b.perm[i] || this.ori[i] !== b.ori[i]) {
@@ -418,7 +429,7 @@ export class Orbit {
     return true;
   }
 
-  public zeroOris(): boolean {
+  private zeroOris(): boolean {
     const n = this.perm.length;
     if (this.ori === zeros(n)) {
       return true;
@@ -431,17 +442,17 @@ export class Orbit {
     return true;
   }
 
-  public remap(no: number[], on: number[], nv: number): Orbit {
+  public remap(no: number[], on: number[], nv: number): PGOrbit {
     const newPerm = new Array<number>(nv);
     const newOri = new Array<number>(nv);
     for (let i = 0; i < nv; i++) {
       newPerm[i] = on[this.perm[no[i]]];
       newOri[i] = this.ori[no[i]];
     }
-    return new Orbit(newPerm, newOri, this.orimod);
+    return new PGOrbit(newPerm, newOri, this.orimod);
   }
 
-  public remapVS(no: number[], nv: number): Orbit {
+  public remapVS(no: number[], nv: number): PGOrbit {
     const newPerm = new Array<number>(nv);
     const newOri = new Array<number>(nv);
     let nextNew = 0;
@@ -454,15 +465,16 @@ export class Orbit {
       newPerm[i] = reassign[ov];
       newOri[i] = this.ori[no[i]];
     }
-    return new Orbit(newPerm, newOri, this.orimod);
+    return new PGOrbit(newPerm, newOri, this.orimod);
   }
 
-  public appendConciseDefinition(
-    result: String[],
+  public appendDefinition(
+    result: string[],
     name: string,
     useVS: boolean,
+    concise: boolean = true,
   ): void {
-    if (this.isIdentity()) {
+    if (concise && this.isIdentity()) {
       return;
     }
     result.push(name);
@@ -481,37 +493,37 @@ export class Orbit {
   }
 
   // TODO: return type
-  public toKpuzzle(): Record<string, unknown> {
+  public toKPuzzle(): Record<string, number[]> {
     const n = this.perm.length;
     if (this.isIdentity()) {
-      if (!Orbit.kcache[n]) {
-        Orbit.kcache[n] = { permutation: iota(n), orientation: zeros(n) };
+      if (!PGOrbit.kcache[n]) {
+        PGOrbit.kcache[n] = { permutation: iota(n), orientation: zeros(n) };
       }
-      return Orbit.kcache[n];
+      return PGOrbit.kcache[n];
     } else {
       return { permutation: this.perm, orientation: this.ori };
     }
   }
 }
-export class TransformationBase {
-  constructor(public orbits: Orbit[]) {}
-  public internalMul(b: TransformationBase): Orbit[] {
-    const newOrbits: Orbit[] = [];
+export class PGTransformBase {
+  constructor(public orbits: PGOrbit[]) {}
+  public internalMul(b: PGTransformBase): PGOrbit[] {
+    const newOrbits: PGOrbit[] = [];
     for (let i = 0; i < this.orbits.length; i++) {
       newOrbits.push(this.orbits[i].mul(b.orbits[i]));
     }
     return newOrbits;
   }
 
-  public internalInv(): Orbit[] {
-    const newOrbits: Orbit[] = [];
-    for (let i = 0; i < this.orbits.length; i++) {
-      newOrbits.push(this.orbits[i].inv());
+  protected internalInv(): PGOrbit[] {
+    const newOrbits: PGOrbit[] = [];
+    for (const orbit of this.orbits) {
+      newOrbits.push(orbit.inv());
     }
     return newOrbits;
   }
 
-  public equal(b: TransformationBase): boolean {
+  public equal(b: PGTransformBase): boolean {
     for (let i = 0; i < this.orbits.length; i++) {
       if (!this.orbits[i].equal(b.orbits[i])) {
         return false;
@@ -520,9 +532,9 @@ export class TransformationBase {
     return true;
   }
 
-  public killOri(): this {
-    for (let i = 0; i < this.orbits.length; i++) {
-      this.orbits[i].killOri();
+  protected killOri(): this {
+    for (const orbit of this.orbits) {
+      orbit.killOri();
     }
     return this;
   }
@@ -530,15 +542,14 @@ export class TransformationBase {
   public toPerm(): Perm {
     const perms = new Array<Perm>();
     let n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const p = this.orbits[i].toPerm();
+    for (const orbit of this.orbits) {
+      const p = orbit.toPerm();
       perms.push(p);
       n += p.n;
     }
     const newPerm = new Array<number>(n);
     n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const p = perms[i];
+    for (const p of perms) {
       for (let j = 0; j < p.n; j++) {
         newPerm[n + j] = n + p.p[j];
       }
@@ -550,40 +561,40 @@ export class TransformationBase {
   public identicalPieces(): number[][] {
     const r: number[][] = [];
     let n = 0;
-    for (let i = 0; i < this.orbits.length; i++) {
-      const o = this.orbits[i].orimod;
-      const s = this.orbits[i].identicalPieces();
+    for (const orbit of this.orbits) {
+      const o = orbit.orimod;
+      const s = orbit.identicalPieces();
       for (let j = 0; j < s.length; j++) {
         r.push(s[j].map((_) => _ * o + n));
       }
-      n += o * this.orbits[i].perm.length;
+      n += o * orbit.perm.length;
     }
     return r;
   }
 
   public order(): number {
     let r = 1;
-    for (let i = 0; i < this.orbits.length; i++) {
-      r = lcm(r, this.orbits[i].order());
+    for (const orbit of this.orbits) {
+      r = lcm(r, orbit.order());
     }
     return r;
   }
 }
-export class Transformation extends TransformationBase {
-  constructor(orbits: Orbit[]) {
+export class PGTransform extends PGTransformBase {
+  constructor(orbits: PGOrbit[]) {
     super(orbits);
   }
 
-  public mul(b: Transformation): Transformation {
-    return new Transformation(this.internalMul(b));
+  public mul(b: PGTransform): PGTransform {
+    return new PGTransform(this.internalMul(b));
   }
 
-  public mulScalar(n: number): Transformation {
+  public mulScalar(n: number): PGTransform {
     if (n === 0) {
       return this.e();
     }
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let t: Transformation = this;
+    let t: PGTransform = this;
     if (n < 0) {
       t = t.inv();
       n = -n;
@@ -609,28 +620,28 @@ export class Transformation extends TransformationBase {
     return r;
   }
 
-  public inv(): Transformation {
-    return new Transformation(this.internalInv());
+  public inv(): PGTransform {
+    return new PGTransform(this.internalInv());
   }
 
-  public e(): Transformation {
-    return new Transformation(
-      this.orbits.map((_: Orbit) => Orbit.e(_.perm.length, _.orimod)),
+  public e(): PGTransform {
+    return new PGTransform(
+      this.orbits.map((_: PGOrbit) => PGOrbit.e(_.perm.length, _.orimod)),
     );
   }
 }
-export class VisibleState extends TransformationBase {
-  constructor(orbits: Orbit[]) {
+export class VisibleState extends PGTransformBase {
+  constructor(orbits: PGOrbit[]) {
     super(orbits);
   }
 
-  public mul(b: Transformation): VisibleState {
+  public mul(b: PGTransform): VisibleState {
     return new VisibleState(this.internalMul(b));
   }
 }
 //  Disjoint set union implementation.
 class DisjointUnion {
-  public heads: number[];
+  private heads: number[];
   constructor(public n: number) {
     this.heads = new Array<number>(n);
     for (let i = 0; i < n; i++) {
@@ -658,7 +669,7 @@ class DisjointUnion {
     }
   }
 }
-export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
+export function showcanon(g: PGOrbitsDef, disp: (s: string) => void): void {
   // show information for canonical move derivation
   const n = g.moveops.length;
   if (n > 30) {
@@ -705,13 +716,13 @@ export function showcanon(g: OrbitsDef, disp: (s: string) => void): void {
         }
       }
     }
-    disp("" + d + ": canonseq " + sum + " states " + uniq);
+    disp(`${d}: canonseq ${sum} states ${uniq}`);
     curlev = nextlev;
   }
 }
 // This is a less effective canonicalization (that happens to work fine
 // for the 3x3x3).  We include this only for comparison.
-export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
+export function showcanon0(g: PGOrbitsDef, disp: (s: string) => void): void {
   // show information for canonical move derivation
   const n = g.moveops.length;
   if (n > 30) {
@@ -735,7 +746,7 @@ export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
     commutes.push(bits);
   }
   let curlev: any = {};
-  disp("" + 0 + ": canonseq " + 1);
+  disp("0: canonseq 1");
   for (let x = 0; x < orders.length; x++) {
     curlev[x] = orders[x] - 1;
   }
@@ -758,7 +769,7 @@ export function showcanon0(g: OrbitsDef, disp: (s: string) => void): void {
         nextlev[mv] += (orders[mv] - 1) * cnt;
       }
     }
-    disp("" + d + ": canonseq " + sum + " states " + uniq);
+    disp(`${d}": canonseq ${sum} states ${uniq}`);
     curlev = nextlev;
   }
 }

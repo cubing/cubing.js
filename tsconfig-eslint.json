@@ -1,5 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "include": ["src/**/*", "script/*", "script/**/*", "src/**/*.spec.ts"],
-  "exclude": ["script/test/dist/esm/parcel/parcel-package/**/*"]
-}

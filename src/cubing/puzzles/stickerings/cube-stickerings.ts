@@ -7,15 +7,16 @@ import {
   PieceSet,
   PieceStickering,
 } from "./appearance";
+import { useGlobalCustomStickerer } from "./global-custom-stickering-hack";
 
 // TODO: cache calculations?
 export async function cubeAppearance(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<PuzzleAppearance> {
-  const def = await puzzleLoader.def();
-  const puzzleStickering = new PuzzleStickering(def);
-  const m = new StickeringManager(def);
+  const kpuzzle = await puzzleLoader.kpuzzle();
+  const puzzleStickering = new PuzzleStickering(kpuzzle);
+  const m = new StickeringManager(kpuzzle);
 
   const LL = (): PieceSet => m.move("U");
   const orUD = (): PieceSet => m.or(m.moves(["U", "D"]));
@@ -157,6 +158,22 @@ export async function cubeAppearance(
         PieceStickering.OrientationWithoutPermutation,
       );
       break;
+    case "EOline":
+      puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
+      puzzleStickering.set(
+        EDGES(),
+        PieceStickering.OrientationWithoutPermutation,
+      );
+      puzzleStickering.set(m.and(m.moves(["D", "M"])), PieceStickering.Regular);
+      break;
+    case "EOcross":
+      puzzleStickering.set(
+        EDGES(),
+        PieceStickering.OrientationWithoutPermutation,
+      );
+      puzzleStickering.set(m.move("D"), PieceStickering.Regular);
+      puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
+      break;
     case "CMLL":
       puzzleStickering.set(F2L(), PieceStickering.Dim);
       puzzleStickering.set(L6E(), PieceStickering.Ignored);
@@ -236,6 +253,11 @@ export async function cubeAppearance(
     case "centers-only":
       puzzleStickering.set(m.not(CENTERS()), PieceStickering.Ignored);
       break;
+    case "experimental-global-custom-1":
+    // fallthrough
+    case "experimental-global-custom-2":
+      useGlobalCustomStickerer(puzzleStickering, m);
+      break;
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,
@@ -263,6 +285,8 @@ export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
     "VLS",
     "LS",
     "EO",
+    "EOline",
+    "EOcross",
     "CMLL",
     "L6E",
     "L6EO",

@@ -1,9 +1,6 @@
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
-import { KPuzzle } from "../../../cubing/kpuzzle";
 import { puzzles } from "../../../cubing/puzzles";
-import { cube2x2x2KPuzzle } from "../../../cubing/puzzles/implementations/2x2x2/2x2x2.kpuzzle.json_";
-import { cube3x3x3KPuzzle } from "../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
 import {
   experimentalSolve2x2x2,
@@ -16,27 +13,21 @@ import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/st
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import {
   ExperimentalStickering,
-  TwistyPlayerV2,
-  TwistyPlayerV2Config,
+  PuzzleID,
+  TwistyPlayer,
+  TwistyPlayerConfig,
 } from "../../../cubing/twisty";
-import { customElementsShim } from "../../../cubing/twisty/old/dom/element/node-custom-element-shims";
-import "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
-import type { TwistyStreamSource } from "../../../cubing/twisty/old/dom/stream/TwistyStreamSource";
-import type { PuzzleID } from "../../../cubing/twisty/old/dom/TwistyPlayerConfig";
-import type { TwistyAlgEditorV2 } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditorV2";
+import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
+import "../../../cubing/twisty/views/stream/TwistyStreamSource";
+import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
+import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
-import { setURLParams } from "./url-params";
-
-export interface AppData {
-  puzzleName: string;
-  experimentalSetupAlg: Alg;
-  experimentalSetupAnchor: "start" | "end";
-  experimentalStickering: ExperimentalStickering;
-  alg: Alg;
-}
+import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
+import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
+// import { setURLParams } from "./url-params";
 
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
   const newAlgBuilder = new AlgBuilder();
@@ -65,16 +56,14 @@ const SCRAMBLE_EVENTS: Partial<Record<PuzzleID, string>> = {
   "pyraminx": "pyram",
   "skewb": "skewb",
   "square1": "sq1",
+  "fto": "fto", // TODO: Very inefficient
 };
 
 export class App {
-  public twistyPlayer: TwistyPlayerV2;
+  public twistyPlayer: TwistyPlayer;
   private puzzlePane: HTMLElement;
-  private cachedSetupAnchor: "start" | "end";
-  private controlPane: ControlPane;
-  constructor(public element: Element, initialData: AppData) {
-    this.cachedSetupAnchor = initialData.experimentalSetupAnchor;
-
+  public controlPane: ControlPane;
+  constructor(public element: Element, initialConfig: TwistyPlayerConfig) {
     this.puzzlePane = findOrCreateChild(
       this.element,
       "puzzle-pane",
@@ -86,7 +75,7 @@ export class App {
       this.puzzlePane.removeChild(spinner);
     }
 
-    this.initializeTwisty(initialData);
+    this.initializeTwisty(initialConfig);
 
     const controlPaneElem = findOrCreateChild(
       this.element,
@@ -97,153 +86,83 @@ export class App {
     // tslint:disable-next-line: no-unused-expression
     this.controlPane = new ControlPane(
       this,
+      this.twistyPlayer,
       controlPaneElem,
-      initialData,
-      this.setExperimentalSetupAlg.bind(this),
-      this.setAlg.bind(this),
-      this.setPuzzle.bind(this),
-      this.setSetupAnchor.bind(this),
-      this.setStickering.bind(this),
       this.solve.bind(this),
       this.scramble.bind(this),
-      this.twistyPlayer,
     );
 
-    this.controlPane.setPuzzle(initialData.puzzleName);
+    new URLParamUpdater(this.twistyPlayer.experimentalModel);
   }
 
-  private initializeTwisty(initialData: AppData): void {
-    const twistyConfig: TwistyPlayerV2Config = {
-      alg: new Alg(),
-      viewerLink: "none",
-    };
-    const displayablePuzzle = supportedPuzzles[initialData.puzzleName];
-    twistyConfig.puzzle = displayablePuzzle.puzzleName() as any; // TODO
-    twistyConfig.visualization = displayablePuzzle.viz;
-    twistyConfig.experimentalSetupAnchor = initialData.experimentalSetupAnchor;
-    twistyConfig.experimentalStickering = initialData.experimentalStickering;
-    this.twistyPlayer = new TwistyPlayerV2(twistyConfig);
-    this.setExperimentalSetupAlg(initialData.experimentalSetupAlg);
-    this.setAlg(initialData.alg);
+  // TODO: avoid modifying `initialConfig`?
+  private initializeTwisty(initialConfig: TwistyPlayerConfig): void {
+    initialConfig.viewerLink = "none";
+    this.twistyPlayer = new TwistyPlayer(initialConfig);
     this.puzzlePane.appendChild(this.twistyPlayer);
-  }
-
-  // Boolean indicates success (e.g. alg is valid).
-  private setExperimentalSetupAlg(experimentalSetupAlg: Alg): boolean {
-    try {
-      this.twistyPlayer.experimentalSetupAlg = experimentalSetupAlg;
-      this.twistyPlayer.jumpToStart();
-      setURLParams({ "experimental-setup-alg": experimentalSetupAlg });
-      return true;
-    } catch (e) {
-      this.twistyPlayer.experimentalSetupAlg = new Alg();
-      return false;
-    }
-  }
-
-  // Boolean indicates success (e.g. alg is valid).
-  private setAlg(alg: Alg): boolean {
-    try {
-      this.twistyPlayer.alg = alg;
-      if (this.cachedSetupAnchor === "start") {
-        this.twistyPlayer.jumpToEnd();
-      } else {
-        this.twistyPlayer.jumpToStart();
-      }
-      setURLParams({ alg });
-      return true;
-    } catch (e) {
-      this.twistyPlayer.alg = new Alg();
-      return false;
-    }
-  }
-
-  private setPuzzle(puzzleName: string): boolean {
-    setURLParams({ puzzle: puzzleName });
-    // TODO: Handle 2D/3D transitions
-    this.twistyPlayer.puzzle = puzzleName as PuzzleID;
-    this.controlPane.setPuzzle(puzzleName);
-    return true;
-  }
-
-  public setSetupAnchor(setupAnchor: "start" | "end"): void {
-    setURLParams({ "experimental-setup-anchor": setupAnchor });
-    this.twistyPlayer.experimentalSetupAnchor = setupAnchor;
-  }
-
-  public setStickering(stickering: ExperimentalStickering): void {
-    setURLParams({ "experimental-stickering": stickering });
-    this.twistyPlayer.experimentalStickering = stickering;
   }
 
   async solve(): Promise<void> {
     const [puzzleID, currentAlgWithIssues] = await Promise.all([
-      this.twistyPlayer.model.puzzleProp.get(),
-      this.twistyPlayer.model.algProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleID.get(),
+      this.twistyPlayer.experimentalModel.alg.get(),
     ]);
     const currentAlg = currentAlgWithIssues.alg;
     let solution: Alg;
+    const kpuzzle = await puzzles[puzzleID].kpuzzle();
+    console.log(kpuzzle);
     switch (puzzleID) {
       case "2x2x2": {
-        const kpuzzle = new KPuzzle(cube2x2x2KPuzzle);
-        kpuzzle.applyAlg(currentAlg);
-        solution = await experimentalSolve2x2x2(kpuzzle.state);
+        solution = await experimentalSolve2x2x2(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "3x3x3": {
-        const kpuzzle = new KPuzzle(cube3x3x3KPuzzle);
-        kpuzzle.applyAlg(currentAlg);
-        solution = await experimentalSolve3x3x3IgnoringCenters(kpuzzle.state);
+        solution = await experimentalSolve3x3x3IgnoringCenters(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "skewb": {
-        const kpuzzle = new KPuzzle(await puzzles.skewb.def());
-        kpuzzle.applyAlg(currentAlg);
-        solution = await solveSkewb(kpuzzle.state);
+        solution = await solveSkewb(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "pyraminx": {
-        const kpuzzle = new KPuzzle(await puzzles.pyraminx.def());
-        kpuzzle.applyAlg(currentAlg);
-        solution = await solvePyraminx(kpuzzle.state);
+        solution = await solvePyraminx(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       case "megaminx": {
-        const kpuzzle = new KPuzzle(await puzzles.megaminx.def());
-        kpuzzle.applyAlg(currentAlg);
-        solution = await solveMegaminx(kpuzzle.state);
+        solution = await solveMegaminx(
+          kpuzzle.algToTransformation(currentAlg).toKState(),
+        );
         break;
       }
       default:
         return;
     }
-    this.controlPane.setAlg(algAppend(currentAlg, " Solution", solution));
+    this.twistyPlayer.alg = algAppend(currentAlg, " Solution", solution);
   }
 
   async scramble(): Promise<void> {
     const [puzzleID, currentAlgWithIssues] = await Promise.all([
-      this.twistyPlayer.model.puzzleProp.get(),
-      this.twistyPlayer.model.algProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleID.get(),
+      this.twistyPlayer.experimentalModel.alg.get(),
     ]);
     const event = SCRAMBLE_EVENTS[puzzleID];
     if (event) {
-      this.controlPane.setAlg(
-        algAppend(
-          currentAlgWithIssues.alg,
-          " Scramble",
-          await randomScrambleForEvent(event),
-        ),
+      this.twistyPlayer.alg = algAppend(
+        currentAlgWithIssues.alg,
+        " Scramble",
+        await randomScrambleForEvent(event),
       );
     }
   }
 }
-
-// TODO: Generate type from list.
-type AlgElemStatusClass = "status-warning" | "status-bad";
-const algElemStatusClasses: AlgElemStatusClass[] = [
-  "status-warning",
-  "status-bad",
-];
 
 class ButtonGrid extends HTMLElement {
   constructor() {
@@ -263,15 +182,15 @@ class ButtonGrid extends HTMLElement {
 
   setButtonEnabled(id: string, enabled: boolean): void {
     // TODO: better button binding
-    (this.querySelector(`#${id}`)! as HTMLButtonElement).disabled = !enabled;
+    (this.querySelector(`#${id}`) as HTMLButtonElement).disabled = !enabled;
   }
 }
 
 customElementsShim.define("button-grid", ButtonGrid);
 
 class ControlPane {
-  public experimentalSetupAlgInput: TwistyAlgEditorV2;
-  public algInput: TwistyAlgEditorV2;
+  public experimentalSetupAlgInput: TwistyAlgEditor;
+  public algInput: TwistyAlgEditor;
   public puzzleSelect: HTMLSelectElement;
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
@@ -283,68 +202,65 @@ class ControlPane {
   private twistyStreamSource: TwistyStreamSource;
   constructor(
     private app: App,
+    private twistyPlayer: TwistyPlayer,
     public element: Element,
-    initialData: AppData,
-    private experimentalSetupAlgChangeCallback: (alg: Alg) => boolean,
-    private algChangeCallback: (alg: Alg) => boolean,
-    private setPuzzleCallback: (puzzleName: string) => boolean,
-    private setSetupAnchorCallback: (setupAnchor: string) => boolean,
-    private setStickeringCallback: (
-      stickering: ExperimentalStickering,
-    ) => boolean,
     private solve: () => void,
     private scramble: () => void,
-    private twistyPlayer: TwistyPlayerV2,
   ) {
     const appTitleElem = findOrCreateChildWithClass(this.element, "title");
     appTitleElem.textContent = APP_TITLE;
 
+    // TODO: validation?
+    twistyPlayer.experimentalModel.puzzleID.addFreshListener(
+      this.onPuzzle.bind(this),
+    );
+
+    /*******/
+
     this.experimentalSetupAlgInput = findOrCreateChildWithClass(
       this.element,
       "experimental-setup-alg",
-      "twisty-alg-editor-v2",
-    ) as TwistyAlgEditorV2;
+      "twisty-alg-editor",
+    );
     this.experimentalSetupAlgInput.twistyPlayer = twistyPlayer;
-    this.experimentalSetupAlgInput.algString =
-      initialData.experimentalSetupAlg.toString();
-    this.setExperimentalSetupAlgElemStatus(null);
 
     this.algInput = findOrCreateChildWithClass(
       this.element,
       "alg",
-      "twisty-alg-editor-v2",
-    ) as TwistyAlgEditorV2;
+      "twisty-alg-editor",
+    );
     this.algInput, { twistyPlayer };
     this.algInput.twistyPlayer = twistyPlayer;
-    this.algInput.algString = initialData.alg.toString();
-    this.setAlgElemStatus(null);
 
     this.puzzleSelect = findOrCreateChildWithClass(
       this.element,
       "puzzle",
       "select",
     );
-    this.initializePuzzleSelect(initialData.puzzleName);
+    this.twistyPlayer.experimentalModel.puzzleID
+      .get()
+      .then((puzzleID) => this.initializePuzzleSelect(puzzleID));
 
     this.setupAnchorSelect = findOrCreateChildWithClass(
       this.element,
       "setup-anchor",
       "select",
     );
-    this.initializeSetupAnchorSelect(initialData.experimentalSetupAnchor);
+    this.twistyPlayer.experimentalModel.setupAnchor
+      .get()
+      .then((anchor) => this.initializeSetupAnchorSelect(anchor));
 
     this.stickeringSelect = findOrCreateChildWithClass(
       this.element,
       "stickering",
       "select",
     );
-    this.initializeStickeringSelect(
-      initialData.experimentalStickering,
-      initialData.puzzleName,
+    Promise.all([
+      this.twistyPlayer.experimentalModel.stickering.get(),
+      this.twistyPlayer.experimentalModel.puzzleID.get(),
+    ]).then(([stickering, puzzleID]) =>
+      this.initializeStickeringSelect(stickering, puzzleID),
     );
-
-    this.algInput.addEventListener("input", this.onAlgInput.bind(this, false));
-    this.algInput.addEventListener("change", this.onAlgInput.bind(this, true));
 
     this.tempoInput = findOrCreateChildWithClass(
       this.element,
@@ -384,17 +300,6 @@ class ControlPane {
       this.onExampleAction.bind(this),
     );
 
-    this.experimentalSetupAlgInput.addEventListener(
-      "input",
-      this.onexperimentalSetupAlgInput.bind(this, false),
-    );
-    this.experimentalSetupAlgInput.addEventListener(
-      "change",
-      this.onexperimentalSetupAlgInput.bind(this, true),
-    );
-
-    this.onAlgInput(true);
-
     this.twistyStreamSource = app.element.querySelector(
       "twisty-stream-source",
     ) as TwistyStreamSource;
@@ -405,80 +310,12 @@ class ControlPane {
     e: PuzzleStreamMoveEventRegisterCompatible,
   ): Promise<void> {
     const move = e.detail.move;
-    let alg: Alg;
     try {
       this.twistyPlayer.experimentalAddMove(move); // TODO
-      alg = (await this.twistyPlayer.model.algProp.get()).alg;
     } catch (e) {
       console.info("Ignoring move:", move.toString());
-      alg = (await this.twistyPlayer.model.algProp.get()).alg;
     }
-    // this.algInput.algString = alg;
-    setURLParams({ alg });
-  }
-
-  private onexperimentalSetupAlgInput(canonicalize: boolean): void {
-    try {
-      const experimentalSetupAlgString =
-        this.experimentalSetupAlgInput.algString;
-      const parsedexperimentalSetupAlg = Alg.fromString(
-        experimentalSetupAlgString,
-      );
-      this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg);
-
-      const restringifiedexperimentalSetupAlg =
-        parsedexperimentalSetupAlg.toString();
-      const experimentalSetupAlgIsCanonical =
-        restringifiedexperimentalSetupAlg === experimentalSetupAlgString;
-
-      if (canonicalize && !experimentalSetupAlgIsCanonical) {
-        this.experimentalSetupAlgInput.algString =
-          restringifiedexperimentalSetupAlg;
-      }
-      // Set status before passing to the `Twisty`.
-      this.setExperimentalSetupAlgElemStatus(
-        canonicalize || experimentalSetupAlgIsCanonical
-          ? null
-          : "status-warning",
-      );
-
-      // TODO: cache last alg to avoid unnecessary updates?
-      // Or should that be in the `Twisty` layer?
-      if (
-        !this.experimentalSetupAlgChangeCallback(parsedexperimentalSetupAlg)
-      ) {
-        this.setExperimentalSetupAlgElemStatus("status-bad");
-      }
-    } catch (e) {
-      this.setExperimentalSetupAlgElemStatus("status-bad");
-    }
-  }
-
-  private onAlgInput(canonicalize: boolean): void {
-    try {
-      const algString = this.algInput.algString;
-      const parsedAlg = Alg.fromString(algString);
-      this.algChangeCallback(parsedAlg);
-
-      const restringifiedAlg = parsedAlg.toString();
-      const algIsCanonical = restringifiedAlg === algString;
-
-      if (canonicalize && !algIsCanonical) {
-        this.algInput.algString = restringifiedAlg;
-      }
-      // Set status before passing to the `Twisty`.
-      this.setAlgElemStatus(
-        canonicalize || algIsCanonical ? null : "status-warning",
-      );
-
-      // TODO: cache last alg to avoid unnecessary updates?
-      // Or should that be in the `Twisty` layer?
-      if (!this.algChangeCallback(parsedAlg)) {
-        this.setAlgElemStatus("status-bad");
-      }
-    } catch (e) {
-      this.setAlgElemStatus("status-bad");
-    }
+    // setURLParams({ alg });
   }
 
   private onTempoInput(): void {
@@ -498,19 +335,23 @@ class ControlPane {
   ): Promise<void> {
     switch (e.detail.action) {
       case "expand":
-        this.setAlg((await this.twistyPlayer.model.algProp.get()).alg.expand());
+        this.twistyPlayer.alg = (
+          await this.twistyPlayer.experimentalModel.alg.get()
+        ).alg.expand();
         break;
       case "simplify":
-        this.setAlg(
-          (await this.twistyPlayer.model.algProp.get()).alg.simplify(),
-        );
+        this.twistyPlayer.alg = (
+          await this.twistyPlayer.experimentalModel.alg.get()
+        ).alg.simplify();
         break;
       case "clear":
-        this.setAlg(new Alg());
-        this.setExperimentalSetupAlg(new Alg());
+        this.twistyPlayer.alg = new Alg();
+        this.twistyPlayer.experimentalSetupAlg = new Alg();
         break;
       case "invert":
-        this.setAlg((await this.twistyPlayer.model.algProp.get()).alg.invert());
+        this.twistyPlayer.alg = (
+          await this.twistyPlayer.experimentalModel.alg.get()
+        ).alg.invert();
         break;
       case "solve":
         this.solve();
@@ -539,39 +380,15 @@ class ControlPane {
 
   private onExampleAction(e: CustomEvent<{ action: string }>): void {
     const config = examples[e.detail.action];
-    this.setAlg(experimentalEnsureAlg(config.alg!));
-    this.setExperimentalSetupAlg(
-      experimentalEnsureAlg(config.experimentalSetupAlg!),
+    this.twistyPlayer.alg = experimentalEnsureAlg(config.alg!);
+    this.twistyPlayer.experimentalSetupAlg = experimentalEnsureAlg(
+      config.experimentalSetupAlg!,
     );
     // this.app.setSetupAnchor(config.experimentalSetupAnchor!, false);
     // this.app.setStickering(config.experimentalStickering!, false);
     // if (config.puzzle) {
     //   this.setPuzzle(config.puzzle);
     // }
-  }
-
-  // Set to `null` to clear.
-  private setExperimentalSetupAlgElemStatus(
-    latestStatusClass: AlgElemStatusClass | null,
-  ): void {
-    for (const statusClass of algElemStatusClasses) {
-      if (statusClass === latestStatusClass) {
-        this.experimentalSetupAlgInput.classList.add(statusClass);
-      } else {
-        this.experimentalSetupAlgInput.classList.remove(statusClass);
-      }
-    }
-  }
-
-  // Set to `null` to clear.
-  private setAlgElemStatus(latestStatusClass: AlgElemStatusClass | null): void {
-    for (const statusClass of algElemStatusClasses) {
-      if (statusClass === latestStatusClass) {
-        this.algInput.classList.add(statusClass);
-      } else {
-        this.algInput.classList.remove(statusClass);
-      }
-    }
   }
 
   private initializePuzzleSelect(initialPuzzleName: string): void {
@@ -601,7 +418,7 @@ class ControlPane {
 
   private puzzleSelectChanged(): void {
     const option = this.puzzleSelect.selectedOptions[0];
-    this.setPuzzleCallback(option.value);
+    this.twistyPlayer.puzzle = option.value as PuzzleID;
   }
 
   private initializeSetupAnchorSelect(initialSetupAnchor: string): void {
@@ -623,7 +440,7 @@ class ControlPane {
 
   private setupAnchorSelectChanged(): void {
     const option = this.setupAnchorSelect.selectedOptions[0];
-    this.setSetupAnchorCallback(option.value);
+    this.twistyPlayer.experimentalSetupAnchor = option.value as SetupToLocation;
   }
 
   private async initializeStickeringSelect(
@@ -661,24 +478,12 @@ class ControlPane {
   }
 
   private stickeringChanged(): void {
-    const option = this.stickeringSelect.selectedOptions[0];
-    this.setStickeringCallback(option.value as ExperimentalStickering);
+    this.twistyPlayer.experimentalStickering = this.stickeringSelect
+      .selectedOptions[0].value as ExperimentalStickering;
   }
 
-  setExperimentalSetupAlg(alg: Alg): void {
-    this.experimentalSetupAlgInput.algString = alg.toString();
-    this.experimentalSetupAlgChangeCallback(alg);
-    setURLParams({ "experimental-setup-alg": alg });
-  }
-
-  setAlg(alg: Alg): void {
-    this.algInput.algString = alg.toString();
-    this.algChangeCallback(alg);
-    setURLParams({ alg });
-  }
-
-  setPuzzle(puzzle: string): void {
-    this.hintFaceletCheckbox.disabled = !["3x3x3"].includes(puzzle);
+  onPuzzle(puzzle: PuzzleID): void {
+    this.hintFaceletCheckbox.disabled = ["clock", "square1"].includes(puzzle);
     this.toolGrid.setButtonEnabled(
       "solve",
       ["2x2x2", "3x3x3", "skewb", "pyraminx", "megaminx"].includes(puzzle),
@@ -687,10 +492,10 @@ class ControlPane {
       "scramble",
       Object.keys(SCRAMBLE_EVENTS).includes(puzzle),
     );
-    this.toolGrid.setButtonEnabled(
-      "screenshot",
-      !["clock", "square1"].includes(puzzle),
-    );
+    // this.toolGrid.setButtonEnabled(
+    //   "screenshot",
+    //   !["clock", "square1"].includes(puzzle),
+    // );
   }
 }
 

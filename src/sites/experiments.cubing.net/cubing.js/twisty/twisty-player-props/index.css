@@ -1,0 +1,54 @@
+/* Add CSS below. */
+
+html {
+  height: 100%;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  grid-template-areas: "player props" "title props" "inputs props";
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: auto auto 1fr;
+  gap: 1em;
+
+  height: 100%;
+  overflow: hidden;
+}
+
+body > twisty-player {
+  grid-area: player;
+  width: 100%;
+}
+
+body > h1 {
+  grid-area: title;
+  font-size: 2em;
+  margin: 0 auto;
+  font-family: monospace;
+}
+
+body > #inputs {
+  grid-area: inputs;
+  height: 100%;
+  overflow-y: auto;
+}
+
+body > twisty-player-debugger {
+  grid-area: props;
+  overflow-y: auto;
+}
+
+twisty-player-debugger .wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+}
+
+#inputs table td:first-child {
+  text-align: right;
+}
+#inputs table td:first-child::after {
+  content: " =";
+}

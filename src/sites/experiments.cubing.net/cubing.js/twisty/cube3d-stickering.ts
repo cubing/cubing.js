@@ -1,18 +1,14 @@
 import { Alg } from "../../../../cubing/alg";
 import {
-  Cube3D,
-  experimentalSetShareAllNewRenderers,
   ExperimentalStickering,
   TwistyPlayer,
 } from "../../../../cubing/twisty";
-import type { VisualizationFormat } from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
+import type { VisualizationFormat } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
 
 function demo(visualization: VisualizationFormat): void {
-  experimentalSetShareAllNewRenderers(true);
-
   const content = document.querySelector(".content")!;
 
-  function addAlg(stickering: ExperimentalStickering, s: string): Cube3D {
+  function addAlg(stickering: ExperimentalStickering, s: string): void {
     const div = content.appendChild(document.createElement("div"));
     div.classList.add("case");
     const twistyPlayer = new TwistyPlayer({
@@ -23,7 +19,6 @@ function demo(visualization: VisualizationFormat): void {
     });
     div.appendChild(document.createElement("h2")).textContent = stickering;
     div.appendChild(twistyPlayer);
-    return twistyPlayer.twisty3D as Cube3D;
   }
 
   addAlg("full", "y L' U R' F' U L2 U2' L' U' L U2' D R' D' F2 R2 U'");
@@ -44,6 +39,8 @@ function demo(visualization: VisualizationFormat): void {
   addAlg("VLS", "R' F2 R F2' L' U2 L");
   addAlg("LS", "U' R U' R' U R U R'");
   addAlg("EO", "R' F R");
+  addAlg("EOline", "B U B' D F R' L D'");
+  addAlg("EOcross", "B U B' D F R' L D'");
   addAlg("CMLL", "F R U R' U' F'");
   addAlg("L6E", "U M2' U' M2'");
   addAlg("L6EO", "(U' M U' M')2");

@@ -22,7 +22,7 @@ export const targetInfos = {
   },
   "kpuzzle": {
     deps: {
-      direct: ["alg", "protocol", "puzzles"],
+      direct: ["alg", "protocol"],
       dynamic: [],
     },
   },
@@ -58,7 +58,7 @@ export const targetInfos = {
   },
   "search": {
     deps: {
-      direct: ["alg", "kpuzzle", "puzzles"],
+      direct: ["alg", "kpuzzle", "notation", "puzzle-geometry", "puzzles"],
       dynamic: [],
     },
   },
@@ -71,7 +71,9 @@ export const targetInfos = {
   "twisty": {
     deps: {
       direct: ["alg", "kpuzzle", "notation", "puzzles"],
-      dynamic: [],
+      dynamic: [
+        "puzzle-geometry", // TODO: remove (workaround for getting Twizzle links)
+      ],
     },
   },
 };

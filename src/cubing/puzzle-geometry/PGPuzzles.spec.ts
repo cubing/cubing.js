@@ -1,12 +1,12 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { getPuzzleGeometryByDesc } from ".";
-import { PGPuzzles } from "./PGPuzzles";
-import {
-  KPuzzleDefinition,
-  transformationOrder,
-  Transformation,
-} from "../kpuzzle";
-import { TreeAlgIndexer, KSolvePuzzle } from "../twisty";
 import { Alg, Move } from "../alg";
+import { KPuzzle } from "../kpuzzle";
+import { PGPuzzles } from "./PGPuzzles";
+import { PGNotation } from "./PuzzleGeometry";
 /**
  *   Test basic things about puzzles created by puzzle
  *   geometry.  We check stickers per face, face count
@@ -32,9 +32,9 @@ const expectedData: { [nam: string]: string } = {
   "skewb": "skewb, 6, 5, 14, 3, 8, 9",
   "master skewb": "master skewb, 6, 13, 50, 6, 12, 2520",
   "professor skewb": "professor skewb, 6, 25, 110, 11, 16, 360",
-  "compy cube": "compy cube, 6, 9, 27, 4, 12, 42",
+  "compy cube": "compy cube, 6, 9, 26, 4, 12, 42",
   "helicopter": "helicopter, 6, 8, 32, 2, 18, 18",
-  "curvy copter": "curvy copter, 6, 13, 51, 4, 18, 18",
+  "curvy copter": "curvy copter, 6, 13, 50, 4, 18, 18",
   "dino": "dino, 6, 4, 12, 1, 12, 7",
   "little chop": "little chop, 6, 4, 24, 1, 12, 5",
   "pyramorphix": "pyramorphix, 4, 4, 8, 2, 6, 3",
@@ -46,7 +46,7 @@ const expectedData: { [nam: string]: string } = {
   "professor pyraminx": "professor pyraminx, 4, 25, 54, 7, 20, 90",
   "professor tetraminx": "professor tetraminx, 4, 22, 50, 6, 16, 90",
   "Jing pyraminx": "Jing pyraminx, 4, 7, 14, 3, 8, 45",
-  "master pyramorphix": "master pyramorphix, 4, 10, 27, 8, 9, 6",
+  "master pyramorphix": "master pyramorphix, 4, 10, 26, 8, 9, 6",
   "megaminx": "megaminx, 12, 11, 62, 3, 18, 702",
   "gigaminx": "gigaminx, 12, 31, 242, 6, 30, 18181800",
   "teraminx": "teraminx, 12, 61, 542, 11, 42, 18181800",
@@ -57,7 +57,7 @@ const expectedData: { [nam: string]: string } = {
   "pentultimate": "pentultimate, 12, 6, 32, 2, 12, 132",
   "master pentultimate": "master pentultimate, 12, 16, 122, 4, 18, 1741740",
   "elite pentultimate": "elite pentultimate, 12, 31, 272, 6, 24, 6832980",
-  "starminx": "starminx, 12, 11, 63, 3, 30, 48",
+  "starminx": "starminx, 12, 11, 62, 3, 30, 48",
   "starminx 2": "starminx 2, 12, 11, 102, 3, 18, 158340",
   "pyraminx crystal": "pyraminx crystal, 12, 10, 50, 2, 18, 9828",
   "chopasaurus": "chopasaurus, 12, 11, 92, 3, 20, 115710",
@@ -73,7 +73,7 @@ const expectedData: { [nam: string]: string } = {
   "icosahedron 2": "icosahedron 2, 20, 9, 102, 3, 18, 12240",
   "icosahedron 3": "icosahedron 3, 20, 18, 360, 6, 48, 2162160",
   "icosahedron static faces":
-    "icosahedron static faces, 20, 7, 63, 3, 18, 6300",
+    "icosahedron static faces, 20, 7, 62, 3, 18, 6300",
   "icosahedron moving faces":
     "icosahedron moving faces, 20, 7, 62, 3, 18, 107100",
   "Eitan's star": "Eitan's star, 20, 13, 152, 4, 30, 384560",
@@ -88,11 +88,12 @@ const expectedData: { [nam: string]: string } = {
 describe("PuzzleGeometry-Puzzles", () => {
   it("testpuzzles", () => {
     for (const [name, desc] of Object.entries(PGPuzzles)) {
-      const options: string[] = [];
-      const pg = getPuzzleGeometryByDesc(desc, options);
-      const kpuzzledef = pg.writekpuzzle(false) as KPuzzleDefinition;
+      const pg = getPuzzleGeometryByDesc(desc, {});
+      const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
       const sep = ", ";
-      const seq = Object.getOwnPropertyNames(kpuzzledef.moves).sort().join(" ");
+      const seq = Object.getOwnPropertyNames(kpuzzleDefinition.moves)
+        .sort()
+        .join(" ");
       let algo = Alg.fromString(seq);
       // TODO:  likely a temporary hack until we resolve how notations are
       // added or set in puzzle geometry.
@@ -102,25 +103,27 @@ describe("PuzzleGeometry-Puzzles", () => {
       }
       // console.log(algo.toString(), bms);
       algo = new Alg(bms);
-      const ksp = new KSolvePuzzle(kpuzzledef);
-      const tai = new TreeAlgIndexer(ksp, algo);
-      const tr = tai.transformAtIndex(tai.numAnimatedLeaves());
-      const o = transformationOrder(kpuzzledef, tr as Transformation);
-      let dat =
-        name +
-        sep +
-        pg.baseplanerot.length +
-        sep +
-        pg.stickersperface +
-        sep +
-        pg.cubies.length +
-        sep +
-        Object.getOwnPropertyNames(kpuzzledef.orbits).length +
-        sep +
-        Object.getOwnPropertyNames(kpuzzledef.moves).length +
-        sep +
-        o;
-      let exp = expectedData[name];
+      const o = new KPuzzle(kpuzzleDefinition, {
+        experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
+      })
+        .algToTransformation(algo)
+        .repetitionOrder();
+      const dat = [
+        name,
+        sep,
+        pg.baseplanerot.length,
+        sep,
+        pg.stickersperface,
+        sep,
+        pg.cubies.length,
+        sep,
+        Object.getOwnPropertyNames(kpuzzleDefinition.orbits).length,
+        sep,
+        Object.getOwnPropertyNames(kpuzzleDefinition.moves).length,
+        sep,
+        o,
+      ].join("");
+      const exp = expectedData[name];
       expect(dat).toBe(exp);
     }
   });

@@ -1,4 +1,4 @@
-import type { MillisecondTimestamp } from "../../twisty/old/animation/cursor/CursorTypes";
+import type { MillisecondTimestamp } from "../../twisty/controllers/AnimationTypes";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 // TODO: Short IDs
@@ -134,7 +134,7 @@ export class GanTimer extends EventTarget {
 
 // // TODO: Move this into a factory?
 export const ganTimerConfig: BluetoothConfig<GanTimer> = {
-  connect: GanTimer.connect,
+  connect: GanTimer.connect.bind(GanTimer),
   prefixes: ["GAN"],
   filters: [{ namePrefix: "GAN" }],
   optionalServices: [UUIDs.ganTimerService],

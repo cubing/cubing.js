@@ -1,4 +1,4 @@
-import { puzzleIDForWCAEvent } from "../../../../cubing/puzzles";
+import { wcaEventInfo } from "../../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import "../../../../cubing/twisty";
 import type { TwistyPlayer } from "../../../../cubing/twisty";
@@ -7,7 +7,7 @@ const select = document.querySelector("select") as HTMLSelectElement;
 const scrambleStringDiv = document.querySelector(
   "#scramble-string",
 ) as HTMLDivElement;
-const twistyPlayer = document.querySelector("twisty-player-v2") as TwistyPlayer;
+const twistyPlayer = document.querySelector("twisty-player") as TwistyPlayer;
 const button = document.querySelector("button") as HTMLButtonElement;
 
 async function newScramble() {
@@ -23,7 +23,7 @@ window.addEventListener("DOMContentLoaded", () => {
   select.addEventListener("change", () => {
     twistyPlayer.alg = "";
     try {
-      twistyPlayer.puzzle = puzzleIDForWCAEvent(select.value)!;
+      twistyPlayer.puzzle = wcaEventInfo(select.value)!.puzzleID;
     } finally {
       // TODO
     }

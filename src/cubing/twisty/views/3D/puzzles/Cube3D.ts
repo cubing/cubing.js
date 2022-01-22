@@ -16,24 +16,20 @@ import {
   Vector2,
   Vector3,
 } from "three";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { BlockMove } from "../../../../alg";
-import type { KPuzzleDefinition, Transformation } from "../../../../kpuzzle";
+import type { ExperimentalStickering } from "../../..";
+import type { KPuzzle } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
 } from "../../../../puzzles/stickerings/appearance";
-import type { AlgCursor } from "../../../old/animation/cursor/AlgCursor";
-import type { PuzzlePosition } from "../../../old/animation/cursor/CursorTypes";
-import { smootherStep } from "../../../old/animation/easing";
+import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
+import { smootherStep } from "../../../controllers/easing";
 import {
-  ExperimentalStickering,
-  experimentalStickerings,
   HintFaceletStyle,
   hintFaceletStyles,
-} from "../../../old/dom/TwistyPlayerConfig";
+} from "../../../model/props/puzzle/display/HintFaceletProp";
+import { experimentalStickerings } from "../../../model/props/puzzle/display/StickeringProp";
 import { TAU } from "../TAU";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
@@ -215,11 +211,13 @@ export function experimentalSetDefaultStickerElevation(
   cubieDimensions.stickerElevation = stickerElevation;
 }
 
-interface Cube3DOptions {
+export interface Cube3DOptions {
   showMainStickers?: boolean;
   hintFacelets?: HintFaceletStyle;
   showFoundation?: boolean; // TODO: better name
   experimentalStickering?: ExperimentalStickering;
+  foundationSprite?: Texture | null;
+  hintSprite?: Texture | null;
 }
 
 const cube3DOptionsDefaults: Cube3DOptions = {
@@ -227,6 +225,8 @@ const cube3DOptionsDefaults: Cube3DOptions = {
   hintFacelets: "floating",
   showFoundation: true,
   experimentalStickering: "full",
+  foundationSprite: null,
+  hintSprite: null,
 };
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
@@ -528,22 +528,33 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   private experimentalFoundationMeshes: Mesh[] = [];
 
   private setSpriteURL: (url: string) => void;
-  private sprite: Promise<Texture> = new Promise((resolve) => {
+  private sprite: Texture | Promise<Texture> = new Promise((resolve) => {
     this.setSpriteURL = (url: string): void => {
       svgLoader.load(url, resolve);
     };
   });
 
+  // TODO: Don't overwrite the static function.
+  // TODO: This doesn't work dynamically yet.
+  setSprite(texture: Texture): void {
+    this.sprite = texture;
+  }
+
   private setHintSpriteURL: (url: string) => void;
-  private hintSprite: Promise<Texture> = new Promise((resolve) => {
+  private hintSprite: Texture | Promise<Texture> = new Promise((resolve) => {
     this.setHintSpriteURL = (url: string): void => {
       svgLoader.load(url, resolve);
     };
   });
 
+  // TODO: Don't overwrite the static function.
+  // TODO: This doesn't work dynamically yet.
+  setHintSprite(texture: Texture): void {
+    this.hintSprite = texture;
+  }
+
   constructor(
-    private def: KPuzzleDefinition,
-    cursor?: AlgCursor,
+    private kpuzzle: KPuzzle,
     private scheduleRenderCallback?: () => void,
     options: Cube3DOptions = {},
   ) {
@@ -552,11 +563,19 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     this.options = { ...cube3DOptionsDefaults };
     Object.assign(this.options, options); // TODO: check if this works
 
-    if (this.def.name !== "3x3x3") {
+    if (this.kpuzzle.name() !== "3x3x3") {
       throw new Error(
-        `Invalid puzzle for this Cube3D implementation: ${this.def.name}`,
+        `Invalid puzzle for this Cube3D implementation: ${this.kpuzzle.name()}`,
       );
     }
+
+    if (options.foundationSprite) {
+      this.setSprite(options.foundationSprite);
+    }
+    if (options.hintSprite) {
+      this.setHintSprite(options.hintSprite);
+    }
+
     this.kpuzzleFaceletInfo = {};
     for (const orbit in pieceDefs) {
       const orbitFaceletInfo: FaceletInfo[][] = [];
@@ -571,8 +590,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     if (this.options.experimentalStickering) {
       this.setStickering(this.options.experimentalStickering);
     }
-
-    cursor?.addPositionListener(this);
   }
 
   // Can only be called once.
@@ -695,14 +712,14 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   }
 
   public onPositionChange(p: PuzzlePosition): void {
-    const reid333 = p.state as Transformation;
+    const reid333 = p.state;
     for (const orbit in pieceDefs) {
       const pieces = pieceDefs[orbit];
       for (let i = 0; i < pieces.length; i++) {
-        const j = reid333[orbit].permutation[i];
+        const j = reid333.stateData[orbit].pieces[i];
         this.pieces[orbit][j].matrix.copy(pieceDefs[orbit][i].matrix);
         this.pieces[orbit][j].matrix.multiply(
-          orientationRotation[orbit][reid333[orbit].orientation[i]],
+          orientationRotation[orbit][reid333.stateData[orbit].orientation[i]],
         );
       }
       for (const moveProgress of p.movesInProgress) {
@@ -717,12 +734,14 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
             4,
         );
         for (let i = 0; i < pieces.length; i++) {
-          const k = this.def.moves[move.family][orbit].permutation[i];
+          const k =
+            this.kpuzzle.definition.moves[move.family][orbit].permutation[i];
           if (
             i !== k ||
-            this.def.moves[move.family][orbit].orientation[i] !== 0
+            this.kpuzzle.definition.moves[move.family][orbit].orientation[i] !==
+              0
           ) {
-            const j = reid333[orbit].permutation[i];
+            const j = reid333.stateData[orbit].pieces[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);
           }
         }
@@ -815,7 +834,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
                 [v1, v2, v3, v4] = [v4, v1, v2, v3];
                 break;
             }
-            (mesh.geometry as BufferGeometry).setAttribute(
+            mesh.geometry.setAttribute(
               "uv",
               new BufferAttribute(
                 new Float32Array([

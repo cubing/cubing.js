@@ -1,24 +1,18 @@
-import { Alg } from "../../../../cubing/alg";
 import {
-  KPuzzle,
-  KPuzzleDefinition,
-  Transformation,
+  experimental3x3x3KPuzzle,
+  KStateData,
 } from "../../../../cubing/kpuzzle";
 import { reid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol";
 import {
   Binary3x3x3Components,
   reid3x3x3ToBinaryComponents,
 } from "../../../../cubing/protocol/binary/binary3x3x3";
-import { cube3x3x3KPuzzle as defJSON } from "../../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.json_";
 import { kpuzzleToReidString, kpuzzleToStickers } from "./convert";
-
-const def: KPuzzleDefinition = defJSON;
-const kpuzzle = new KPuzzle(def);
 
 const tests: {
   name: string;
   alg: string;
-  kpuzzle: Transformation;
+  kpuzzle: KStateData;
   binaryComponents: Binary3x3x3Components;
   binaryBytes: number[];
   reidString: string;
@@ -26,18 +20,15 @@ const tests: {
 }[] = [];
 
 function addTest(name: string, alg: string): void {
-  kpuzzle.reset();
-  kpuzzle.applyAlg(Alg.fromString(alg));
+  const state = experimental3x3x3KPuzzle.algToTransformation(alg).toKState();
   tests.push({
     name: name,
     alg: alg,
-    kpuzzle: kpuzzle.state,
-    binaryComponents: reid3x3x3ToBinaryComponents(kpuzzle.state),
-    binaryBytes: Array.from(
-      new Uint8Array(reid3x3x3ToTwizzleBinary(kpuzzle.state)),
-    ),
-    reidString: kpuzzleToReidString(kpuzzle.state),
-    stickers: kpuzzleToStickers(kpuzzle.state),
+    kpuzzle: state.stateData,
+    binaryComponents: reid3x3x3ToBinaryComponents(state),
+    binaryBytes: Array.from(new Uint8Array(reid3x3x3ToTwizzleBinary(state))),
+    reidString: kpuzzleToReidString(state),
+    stickers: kpuzzleToStickers(state),
   });
 }
 
@@ -73,7 +64,7 @@ const testString = JSON.stringify(
     if (v instanceof Array && typeof v[0] === "number") {
       return `##[${v.join(", ")}]##`;
     } else {
-      return v;
+      return v as string;
     }
   },
   "  ",
@@ -81,5 +72,5 @@ const testString = JSON.stringify(
   .replace(/"##\[/g, "[")
   .replace(/\]##"/g, "]");
 
-(document.querySelector("#test-string")! as HTMLTextAreaElement).value =
+(document.querySelector("#test-string") as HTMLTextAreaElement).value =
   testString;

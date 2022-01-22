@@ -1,18 +1,20 @@
-import { twistyScrubberCSS } from "../../old/dom/controls/TwistyScrubber.css_";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
-import type { DetailedTimelineInfo } from "../../model/depth-5/DetailedTimelineInfoProp";
+import { twistyScrubberCSS } from "./TwistyScrubber.css";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
+import type { DetailedTimelineInfo } from "../../model/props/timeline/DetailedTimelineInfoProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { globalSafeDocument } from "../document";
 
 const SLOW_DOWN_SCRUBBING = false;
 
-var isMouseDown = false;
+let isMouseDown = false;
 
 globalSafeDocument?.addEventListener(
   "mousedown",
   function (event) {
-    if (event.which) isMouseDown = true;
+    if (event.which) {
+      isMouseDown = true;
+    }
   },
   true,
 );
@@ -20,13 +22,15 @@ globalSafeDocument?.addEventListener(
 globalSafeDocument?.addEventListener(
   "mouseup",
   function (event) {
-    if (event.which) isMouseDown = false;
+    if (event.which) {
+      isMouseDown = false;
+    }
   },
   true,
 );
 
 // var x = 0;
-var y = 0;
+let y = 0;
 let clickNum = 0;
 
 globalSafeDocument?.addEventListener(
@@ -46,7 +50,7 @@ function onMouseUpdate(e: MouseEvent) {
   // console.log(x, y);
 }
 
-let lastVal = 0;
+const lastVal = 0;
 let lastPreval = 0;
 let scaling: boolean = false;
 let currentClickNum = 0;
@@ -64,6 +68,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
     const inputElem = await this.inputElem();
     inputElem.min = detailedTimelineInfo.timeRange.start.toString();
     inputElem.max = detailedTimelineInfo.timeRange.end.toString();
+    inputElem.disabled = inputElem.min === inputElem.max;
     inputElem.value = detailedTimelineInfo.timestamp.toString();
   }
 
@@ -78,9 +83,10 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
     return (this.#inputElem ??= (async () => {
       const elem = document.createElement("input");
       elem.type = "range";
+      elem.disabled = true;
 
       // console.log("1");
-      this.model?.detailedTimelineInfoProp.addFreshListener(
+      this.model?.detailedTimelineInfo.addFreshListener(
         this.onDetailedTimelineInfo.bind(this),
       );
       // console.log("3");
@@ -99,8 +105,8 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
     const value = parseInt(inputElem.value);
     // console.log("on input", value);
-    this.model?.playingInfoProp.set({ playing: false });
-    this.model?.timestampRequestProp.set(value);
+    this.model?.playingInfo.set({ playing: false });
+    this.model?.timestampRequest.set(value);
   }
 
   async slowDown(e: Event, inputElem: HTMLInputElement): Promise<void> {

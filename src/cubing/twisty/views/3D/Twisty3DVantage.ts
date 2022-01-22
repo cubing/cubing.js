@@ -1,27 +1,29 @@
 import type { PerspectiveCamera, WebGLRenderer } from "three";
-import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.module";
+import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.modified.module";
 import { THREEJS } from "../../heavy-code-imports/3d";
-import type { OrbitCoordinatesV2 } from "../../model/depth-0/OrbitCoordinatesRequestProp";
 import { StaleDropper } from "../../model/PromiseFreshener";
+import type { TwistyPropParent } from "../../model/props/TwistyProp";
+import type { OrbitCoordinates } from "../../model/props/viewer/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { TwistyPropParent } from "../../model/TwistyProp";
-import { RenderScheduler } from "../../old/animation/RenderScheduler";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
-import { pixelRatio } from "../../old/dom/viewers/canvas";
-import { twisty3DCanvasCSS } from "../../old/dom/viewers/Twisty3DCanvas.css_";
+import { RenderScheduler } from "../../controllers/RenderScheduler";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
+import { pixelRatio } from "../canvas";
+import { twisty3DVantageCSS } from "./Twisty3DVantage.css";
+import { DragTracker, PressInfo } from "./DragTracker";
+import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
-import { TwistyOrbitControlsV2 } from "./TwistyOrbitControlsV2";
+import { TwistyOrbitControls } from "./TwistyOrbitControls";
 
 let SHOW_STATS = false;
-export function showStats(enable: boolean): void {
+export function debugShowRenderStats(enable: boolean): void {
   SHOW_STATS = enable;
 }
 
 export async function setCameraFromOrbitCoordinates(
   camera: PerspectiveCamera,
-  orbitCoordinates: OrbitCoordinatesV2,
+  orbitCoordinates: OrbitCoordinates,
   backView: boolean = false,
 ): Promise<void> {
   const spherical = new (await THREEJS).Spherical(
@@ -34,10 +36,43 @@ export async function setCameraFromOrbitCoordinates(
   camera.lookAt(0, 0, 0);
 }
 
+let shareAllNewRenderers: boolean | null = null;
+
+// WARNING: The current shared renderer implementation is not every efficient.
+// Avoid using for players that are likely to have dimensions approaching 1 megapixel or higher.
+// TODO: use a dedicated renderer while fullscreen?
+// - true: Force all new (i.e. constructed in the future) renderers to be shared
+// - false: Force all new (i.e. constructed in the future) renderers to be dedicated
+// - null: Reset to the default heuristics.
+export function experimentalForceNewRendererSharing(
+  share: boolean | null,
+): void {
+  shareAllNewRenderers = share;
+}
+
+let dedicatedRenderersSoFar = 0;
+const DEFAULT_MAX_DEDICATED_RENDERERS = 2; // This allows for a front view and a back view (or two separate front views).
+function shareRenderer(): boolean {
+  if (shareAllNewRenderers !== null) {
+    if (!shareAllNewRenderers) {
+      dedicatedRenderersSoFar++;
+    }
+    return shareAllNewRenderers;
+  }
+  if (dedicatedRenderersSoFar < DEFAULT_MAX_DEDICATED_RENDERERS) {
+    dedicatedRenderersSoFar++;
+    return false;
+  } else {
+    return true;
+  }
+}
+
 export class Twisty3DVantage extends ManagedCustomElement {
   scene: Twisty3DSceneWrapper | null = null;
 
   stats: Stats | null = null;
+
+  private rendererIsShared: boolean = shareRenderer();
 
   constructor(
     private model?: TwistyPlayerModel,
@@ -48,36 +83,72 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.scene = scene ?? null;
 
     if (SHOW_STATS) {
-      this.stats = Stats();
+      this.stats = new Stats();
       this.stats.dom.style.position = "absolute";
       this.contentWrapper.appendChild(this.stats.dom);
     }
   }
 
   async connectedCallback(): Promise<void> {
-    this.addCSS(twisty3DCanvasCSS);
-    this.addElement(await this.canvas());
+    this.addCSS(twisty3DVantageCSS);
+    this.addElement((await this.canvasInfo()).canvas);
 
     this.#onResize();
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
     this.orbitControls(); // TODO
+    this.#setupBasicPresses();
+
     this.scheduleRender();
   }
 
-  #onResizeStaleDropper = new StaleDropper<
-    [PerspectiveCamera, WebGLRenderer]
-  >();
+  async #setupBasicPresses(): Promise<void> {
+    const dragTracker = await this.#dragTracker();
+    dragTracker.addEventListener("press", async (e: CustomEvent<PressInfo>) => {
+      const movePressInput = await this.model!.movePressInput.get();
+      if (movePressInput !== "basic") {
+        return;
+      }
+      this.dispatchEvent(
+        new CustomEvent("press", {
+          detail: {
+            pressInfo: e.detail,
+            cameraPromise: this.camera(),
+          },
+        }),
+      );
+    });
+  }
+
+  #onResizeStaleDropper = new StaleDropper<PerspectiveCamera>();
+
+  async clearCanvas(): Promise<void> {
+    if (this.rendererIsShared) {
+      const canvasInfo = await this.canvasInfo();
+      canvasInfo.context.clearRect(
+        0,
+        0,
+        canvasInfo.canvas.width,
+        canvasInfo.canvas.height,
+      );
+    } else {
+      const renderer = await this.renderer();
+      const context = renderer.getContext();
+      context.clear(context.COLOR_BUFFER_BIT);
+    }
+  }
 
   // TODO: Why doesn't this work for the top-right back view height?
+  #width: number = 0;
+  #height: number = 0;
   async #onResize(): Promise<void> {
-    const [camera, renderer] = await this.#onResizeStaleDropper.queue(
-      Promise.all([this.camera(), this.renderer()]),
-    );
+    const camera = await this.#onResizeStaleDropper.queue(this.camera());
 
     const w = this.contentWrapper.clientWidth;
     const h = this.contentWrapper.clientHeight;
-    let off = 0;
+    this.#width = w;
+    this.#height = h;
+    const off = 0;
     let yoff = 0;
     let excess = 0;
     if (h > w) {
@@ -88,36 +159,55 @@ export class Twisty3DVantage extends ManagedCustomElement {
     camera.setViewOffset(w, h - excess, off, yoff, w, h);
     camera.updateProjectionMatrix(); // TODO
 
-    // if (this.rendererIsShared) {
-    //   canvas.width = w * pixelRatio();
-    //   canvas.height = h * pixelRatio();
-    //   canvas.style.width = w.toString();
-    //   canvas.style.height = w.toString();
-    // } else {
-    renderer.setPixelRatio(pixelRatio());
-    renderer.setSize(w, h, true);
-    // }
+    this.clearCanvas();
+    if (this.rendererIsShared) {
+      const canvasInfo = await this.canvasInfo();
+
+      canvasInfo.canvas.width = w * pixelRatio();
+      canvasInfo.canvas.height = h * pixelRatio();
+      canvasInfo.canvas.style.width = w.toString();
+      canvasInfo.canvas.style.height = w.toString();
+    } else {
+      const renderer = await this.renderer();
+      renderer.setSize(w, h, true);
+    }
 
     this.scheduleRender();
   }
 
   #cachedRenderer: Promise<WebGLRenderer> | null = null;
   async renderer(): Promise<WebGLRenderer> {
-    return (this.#cachedRenderer ??= (async () => {
-      const rendererConstructor = (await THREEJS).WebGLRenderer;
-      const renderer = new rendererConstructor({
-        antialias: true,
-        alpha: true,
-      });
-      renderer.setPixelRatio(pixelRatio());
-      return renderer;
+    if (this.rendererIsShared) {
+      throw new Error("renderer expected to be shared.");
+    }
+    return (this.#cachedRenderer ??= newRenderer());
+  }
+
+  #cachedCanvas: Promise<{
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
+  }> | null = null;
+  async canvasInfo(): Promise<{
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
+  }> {
+    return (this.#cachedCanvas ??= (async () => {
+      let canvas: HTMLCanvasElement;
+      if (this.rendererIsShared) {
+        canvas = this.addElement(document.createElement("canvas"));
+      } else {
+        const renderer = await this.renderer();
+        canvas = this.addElement(renderer.domElement);
+      }
+      const context = canvas.getContext("2d")!;
+      return { canvas, context };
     })());
   }
 
-  #cachedCanvas: Promise<HTMLCanvasElement> | null = null;
-  async canvas(): Promise<HTMLCanvasElement> {
-    return (this.#cachedCanvas ??= (async () => {
-      return (await this.renderer()).domElement;
+  #cachedDragTracker: Promise<DragTracker> | null = null;
+  async #dragTracker(): Promise<DragTracker> {
+    return (this.#cachedDragTracker ??= (async () => {
+      return new DragTracker((await this.canvasInfo()).canvas);
     })());
   }
 
@@ -141,19 +231,20 @@ export class Twisty3DVantage extends ManagedCustomElement {
     })());
   }
 
-  #cachedOrbitControls: Promise<TwistyOrbitControlsV2> | null = null;
-  async orbitControls(): Promise<TwistyOrbitControlsV2> {
+  #cachedOrbitControls: Promise<TwistyOrbitControls> | null = null;
+  async orbitControls(): Promise<TwistyOrbitControls> {
     return (this.#cachedOrbitControls ??= (async () => {
-      const orbitControls = new TwistyOrbitControlsV2(
+      const orbitControls = new TwistyOrbitControls(
         this.model!,
         !!this.options?.backView,
-        await this.canvas(),
+        (await this.canvasInfo()).canvas,
+        await this.#dragTracker(),
       );
 
       if (this.model) {
         this.addListener(
-          this.model.orbitCoordinatesProp,
-          async (orbitCoordinates: OrbitCoordinatesV2) => {
+          this.model.orbitCoordinates,
+          async (orbitCoordinates: OrbitCoordinates) => {
             const camera = await this.camera();
             setCameraFromOrbitCoordinates(
               camera,
@@ -197,13 +288,16 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
     this.stats?.begin();
 
-    const [renderer, scene, camera] = await Promise.all([
-      this.renderer(),
+    const [scene, camera, canvas] = await Promise.all([
       this.scene.scene(),
       this.camera(),
+      this.canvasInfo(),
     ]);
-    // console.log("rendering!!!!", renderer, scene, camera);
-    renderer.render(scene, camera); // TODO
+    if (this.rendererIsShared) {
+      renderPooled(this.#width, this.#height, canvas.canvas, scene, camera);
+    } else {
+      (await this.renderer()).render(scene, camera);
+    }
 
     this.stats?.end();
   }
@@ -215,4 +309,4 @@ export class Twisty3DVantage extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-3d-vantage-v2", Twisty3DVantage);
+customElementsShim.define("twisty-3d-vantage", Twisty3DVantage);

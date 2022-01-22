@@ -1,11 +1,15 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
 import {
+  getPG3DNamedPuzzles,
+  parsePuzzleDescription,
   PuzzleGeometry,
-  getpuzzles,
-  parsedesc,
-  schreierSims,
 } from "../cubing/puzzle-geometry";
+import { parsePGOptionList } from "../cubing/puzzle-geometry/Options";
+import type {
+  CutDescription,
+  PuzzleDescription,
+} from "../cubing/puzzle-geometry/PuzzleGeometry";
 
 let dosvg = false;
 let doss = false;
@@ -13,11 +17,7 @@ let doksolve = false;
 let dogap = false;
 let docanon = false;
 let do3d = false;
-if (
-  typeof process !== "undefined" &&
-  process.argv &&
-  process.argv.length <= 2
-) {
+if (globalThis.process && process.argv && process.argv.length <= 2) {
   console.log(`Usage:  puzzle-geometry [options] [puzzle]
 
 Options:
@@ -72,13 +72,9 @@ Examples:
    puzzlegeometry --gap --noedges megaminx
 `);
 }
-if (
-  typeof process !== "undefined" &&
-  process.argv &&
-  process.argv.length >= 3
-) {
+if (globalThis.process && process.argv && process.argv.length >= 3) {
   let desc;
-  const puzzleList = getpuzzles();
+  const puzzleList = getPG3DNamedPuzzles();
   let argp = 2;
   const optionlist = [];
   let showargs = true;
@@ -150,31 +146,33 @@ if (
       break;
     }
   }
-  let createargs = [];
+  let puzzleDescription: PuzzleDescription;
   if (showargs) {
     console.log("# " + process.argv.join(" "));
   }
   if (desc !== undefined) {
-    createargs = parsedesc(desc);
+    const parsed = parsePuzzleDescription(desc);
+    if (parsed === null) {
+      throw new Error("Could not parse puzzle description!");
+    }
+    puzzleDescription = parsed;
     argp++;
   } else {
-    const cuts = [];
+    const cuts: CutDescription[] = [];
     const cutarg = argp++;
     while (argp + 1 < process.argv.length && process.argv[argp].length === 1) {
-      cuts.push([process.argv[argp], process.argv[argp + 1]]);
+      cuts.push({
+        cutType: process.argv[argp],
+        distance: parseFloat(process.argv[argp + 1]),
+      });
       argp += 2;
     }
-    createargs = [process.argv[cutarg], cuts];
+    puzzleDescription = { shape: process.argv[cutarg], cuts };
   }
-  const pg = new PuzzleGeometry(createargs[0], createargs[1], optionlist);
+  const options = parsePGOptionList(optionlist);
+  const pg = new PuzzleGeometry(puzzleDescription, options);
   pg.allstickers();
   pg.genperms();
-  // TODO: if (!optionlist.includes("verbose"))
-  // if (this.verbose) {
-  //    console.log("# Stickers " + pg.stickersperface + " cubies " +
-  //       pg.cubies.length + " orbits " + pg.orbits +
-  //       " shortedge " + pg.shortedge);
-  // }
   if (argp < process.argv.length) {
     throw new Error("Unprocessed content at end of command line");
   }
@@ -187,15 +185,7 @@ if (
   } else if (do3d) {
     console.log(JSON.stringify(pg.get3d()));
   } else if (doss) {
-    const os = pg.getOrbitsDef(false);
-    const as = os.reassemblySize();
-    console.log("Reassembly size is " + as);
-    const ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
-      (_) => console.log(_),
-    );
-    const r = as / ss;
-    console.log("Ratio is " + r);
+    pg.writeSchreierSims(console.log);
   } else if (docanon) {
     pg.showcanon((_) => console.log(_));
   }

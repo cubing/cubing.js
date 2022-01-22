@@ -1,4 +1,4 @@
-import { randomUIntBelowFactory } from "../vendor/random-uint-below";
+import { randomUIntBelowFactory } from "../../../../vendor/random-uint-below";
 
 const pins = ["UR", "DR", "DL", "UL"];
 const backMoves = ["U", "R", "D", "L", "ALL"];

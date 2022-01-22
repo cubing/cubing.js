@@ -1,33 +1,41 @@
 import { Alg, AlgBuilder } from "../../../../../alg";
-// @ts-ignore
-import { KPuzzle, Transformation } from "../../../../../kpuzzle";
-// @ts-ignore
+import type { KState } from "../../../../../kpuzzle/KState";
 import { puzzles } from "../../../../../puzzles";
+import { randomChoiceFactory } from "../../../../../vendor/random-uint-below";
 import { mustBeInsideWorker } from "../../../inside-worker";
 import { addOrientationSuffix } from "../../addOrientationSuffix";
-import { initialize, solveState } from "../../vendor/min2phase/gwt";
-import { randomChoiceFactory } from "../../vendor/random-uint-below";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
 import { sgs3x3x3 } from "./legacy-sgs";
 
-export async function random333State(): Promise<Transformation> {
-  const def = await puzzles["3x3x3"].def();
-  const kpuzzle = new KPuzzle(def);
+export async function random333State(): Promise<KState> {
+  const kpuzzle = await puzzles["3x3x3"].kpuzzle();
+  let state = kpuzzle.startState();
   for (const piece of sgs3x3x3) {
-    kpuzzle.applyAlg(
+    state = state.applyAlg(
       Alg.fromString(((await randomChoiceFactory()) as any)(piece)),
     );
   }
-  if (!passesFilter(def, kpuzzle.state)) {
+  if (!passesFilter(kpuzzle, state)) {
     return random333State();
   }
-  return kpuzzle.state;
+  return state;
 }
 
-export async function solve333(s: Transformation): Promise<Alg> {
+let cachedImport: Promise<
+  typeof import("../../../../../vendor/min2phase/gwt")
+> | null = null;
+function dynamicMin2phaseGWT(): Promise<
+  typeof import("../../../../../vendor/min2phase/gwt")
+> {
+  return (cachedImport ??= import("../../../../../vendor/min2phase/gwt"));
+}
+
+export async function solve333(s: KState): Promise<Alg> {
   mustBeInsideWorker();
-  return Alg.fromString(solveState(toMin2PhaseState(s)));
+  return Alg.fromString(
+    (await dynamicMin2phaseGWT()).solveState(toMin2PhaseState(s)),
+  );
 }
 
 export async function random333Scramble(): Promise<Alg> {
@@ -35,7 +43,7 @@ export async function random333Scramble(): Promise<Alg> {
 }
 
 export async function initialize333(): Promise<void> {
-  initialize();
+  (await dynamicMin2phaseGWT()).initialize();
 }
 
 const randomSuffixes = [

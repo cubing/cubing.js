@@ -1,6 +1,6 @@
-import type { TwistyPlayerInitialConfig } from "../../../cubing/twisty";
+import type { TwistyPlayerConfig } from "../../../cubing/twisty";
 
-export const examples: Record<string, TwistyPlayerInitialConfig> = {
+export const examples: Record<string, TwistyPlayerConfig> = {
   wr: {
     experimentalSetupAlg: `F U2 L2 B2 F' U L2 U R2 D2 L' B L2 B' R2 U2`,
     alg: `y x' // inspection

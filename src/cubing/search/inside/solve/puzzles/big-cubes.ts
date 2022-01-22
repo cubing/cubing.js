@@ -2,7 +2,7 @@ import { Alg, AlgBuilder, Move, QuantumMove } from "../../../../alg";
 import {
   randomChoiceFactory,
   randomUIntBelowFactory,
-} from "../vendor/random-uint-below";
+} from "../../../../vendor/random-uint-below";
 
 function numMoves(n: number): number {
   switch (n) {

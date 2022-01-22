@@ -4,12 +4,7 @@
     <meta charset="utf8" />
     <title>TwistyPlayer attributes | twisty.js</title>
     <link href="./inline.css" rel="stylesheet" type="text/css" />
-    <script
-      src="./attributes.js"
-      href="./attributes.ts"
-      type="module"
-      defer
-    ></script>
+    <script src="./attributes.js" href="./attributes.ts" type="module"></script>
     <style>
       .multi {
         display: grid;
@@ -212,51 +207,52 @@
 
     <div class="content">
       <h2>
-        <code>experimental-camera-latitude=&quot;0&quot;</code><br />
+        <code>camera-latitude=&quot;0&quot;</code><br />
         <code class="dim">alg=&quot;R U R' U R U2' R'&quot;</code>
       </h2>
-      <div class="multi" id="experimental-camera-latitude">
+      <div class="multi" id="camera-latitude">
         <span>DOM attributes:</span>
         <span>Constructor config object:</span>
         <span>Dynamic property setter:</span>
         <twisty-player
           alg="R U R' U R U2' R'"
-          experimental-camera-latitude="0"
+          camera-latitude="0"
         ></twisty-player>
       </div>
     </div>
 
     <div class="content">
       <h2>
-        <code>experimental-camera-longitude=&quot;0&quot;</code><br />
+        <code>camera-longitude=&quot;0&quot;</code><br />
         <code class="dim">alg=&quot;R U R' U R U2' R'&quot;</code>
       </h2>
-      <div class="multi" id="experimental-camera-longitude">
+      <div class="multi" id="camera-longitude">
         <span>DOM attributes:</span>
         <span>Constructor config object:</span>
         <span>Dynamic property setter:</span>
         <twisty-player
           alg="R U R' U R U2' R'"
-          experimental-camera-longitude="0"
+          camera-longitude="0"
         ></twisty-player>
       </div>
     </div>
 
     <div class="content">
       <h2>
-        <code>experimental-camera-latitude-limits=&quot;none&quot;</code><br />
+        <code>camera-latitude-limits=&quot;90&quot;</code><br />
         <code class="dim">alg=&quot;R U R' U R U2' R'&quot;</code><br />
-        <code class="dim">experimental-camera-latitude=&quot;80&quot;</code>
+        <code class="dim">camera-latitude=&quot;80&quot;</code>
       </h2>
-      <div class="multi" id="experimental-camera-latitude-limits">
+      <div class="multi" id="camera-latitude-limit">
         <span>DOM attributes:</span>
         <span>Constructor config object:</span>
         <span>Dynamic property setter:</span>
         <twisty-player
           alg="R U R' U R U2' R'"
-          experimental-camera-latitude-limits="none"
-          experimental-camera-latitude="80"
-        ></twisty-player>
+          camera-latitude-limit="90"
+          camera-latitude="80"
+        >
+        </twisty-player>
       </div>
     </div>
 

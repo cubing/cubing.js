@@ -1,5 +1,8 @@
 import puppeteer from "puppeteer";
 import { startServer } from "../../../lib/experiments-server/index.js";
+import { ensureChromiumDownload } from "../../../lib/puppeteer.js";
+
+await ensureChromiumDownload();
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;
@@ -33,33 +36,26 @@ async function runTest() {
   //   fullPage: true,
   // });
 
-  const puzzle = new URL(page.url()).searchParams.get("puzzle");
-  assert("Default puzzle is set in the URL parameter", "3x3x3", puzzle);
+  const nav = page.waitForNavigation();
 
-  assert(
-    "Time range is correct",
-    1000,
-    await page.$eval("twisty-player", (elem) => elem.timeline.timeRange().end),
-  );
+  await page.evaluate(() => {
+    globalThis.app.setPuzzleName("2x2x2");
+  });
+
+  await nav;
+
+  const puzzle = new URL(page.url()).searchParams.get("puzzle");
+  assert("Puzzle is set in the URL parameter", "2x2x2", puzzle);
 
   await Promise.all([
     page.waitForNavigation(),
-    page.select("#puzzleoptions", "o f 0.333333333333333"),
+    page.select("#puzzle-name", "4x4x4"),
   ]);
 
   assert(
     "New puzzle is set in the URL parameter",
-    "FTO",
+    "4x4x4",
     new URL(page.url()).searchParams.get("puzzle"),
-  );
-
-  await page.$eval("textarea", (elem) => (elem.value = "BADMOVE"));
-  await page.waitForTimeout(100);
-
-  assert(
-    "Alg is marked as bad.",
-    "rgb(255, 128, 128)",
-    await page.$eval("textarea", (elem) => elem.style.backgroundColor),
   );
 
   if (OPEN_REPL) {

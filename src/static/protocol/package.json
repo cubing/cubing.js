@@ -1,6 +1,0 @@
-{
-  "name": "protocol",
-  "type": "module",
-  "main": "../dist/esm/protocol/index.js",
-  "types": "../dist/types/protocol/index.d.ts"
-}

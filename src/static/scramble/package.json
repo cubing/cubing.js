@@ -1,6 +1,0 @@
-{
-  "name": "scramble",
-  "type": "module",
-  "main": "../dist/esm/scramble/index.js",
-  "types": "../dist/types/scramble/index.d.ts"
-}

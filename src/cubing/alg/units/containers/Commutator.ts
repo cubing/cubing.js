@@ -80,6 +80,6 @@ export class Commutator extends AlgCommon<Commutator> {
   }
 
   toString(): string {
-    return `[${this.#A}, ${this.#B}]`;
+    return `[${this.#A.toString()}, ${this.#B.toString()}]`;
   }
 }

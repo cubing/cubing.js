@@ -11,11 +11,11 @@ const UUIDs = {
 // https://stackoverflow.com/a/40031979
 function buf2hex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
-  return Array.prototype.map
-    .call(new Uint8Array(buffer), (x: number) =>
+  return (
+    Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
       ("00" + x.toString(16)).slice(-2),
-    )
-    .join(" ");
+    ) as string[]
+  ).join(" ");
 }
 
 function bufferToString(buffer: ArrayBuffer): string {
@@ -160,7 +160,7 @@ const rotateTowardsRate = 0.5;
 
 // TODO: Move this into a factory?
 export const goCubeConfig: BluetoothConfig<BluetoothPuzzle> = {
-  connect: GoCube.connect,
+  connect: GoCube.connect.bind(GoCube),
   prefixes: ["GoCube", "Rubik"],
   filters: [{ namePrefix: "GoCube" }, { namePrefix: "Rubik" }],
   optionalServices: [UUIDs.goCubeService],

@@ -1,10 +1,7 @@
 import { Alg } from "../../../../../cubing/alg";
-import {
-  TwistyPlayerV2,
-  TwistyPlayerV2Config,
-} from "../../../../../cubing/twisty";
-import { ManagedCustomElement } from "../../../../../cubing/twisty/old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../../../../cubing/twisty/old/dom/element/node-custom-element-shims";
+import { TwistyPlayer, TwistyPlayerConfig } from "../../../../../cubing/twisty";
+import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement";
+import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
 
 const DEBUG = false;
 
@@ -44,7 +41,7 @@ const paramsNotImplementedYet: Record<string, true> = {
 };
 
 export class TwistyAnimCube extends ManagedCustomElement {
-  twistyPlayer: TwistyPlayerV2;
+  twistyPlayer: TwistyPlayer;
   constructor(
     private finishConnectedCallback?: (twistyAnimCube: TwistyAnimCube) => void,
   ) {
@@ -54,7 +51,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
   protected connectedCallback(): void {
     // We set timeout so that we can access the children.
     setTimeout(() => {
-      const twistyPlayerConfig: TwistyPlayerV2Config = {
+      const twistyPlayerConfig: TwistyPlayerConfig = {
         alg: new Alg(),
       };
 
@@ -82,7 +79,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
       process("initmove", (value: string) => {
         if (value === "#") {
           twistyPlayerConfig.experimentalSetupAlg = new Alg(
-            twistyPlayerConfig.alg!,
+            twistyPlayerConfig.alg,
           ).invert();
         } else {
           twistyPlayerConfig.experimentalSetupAlg = Alg.fromString(value ?? "");
@@ -93,7 +90,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
       process("initrevmove", (value: string) => {
         if (value === "#") {
           twistyPlayerConfig.experimentalSetupAlg = new Alg(
-            twistyPlayerConfig.alg!,
+            twistyPlayerConfig.alg,
           ).invert();
         } else {
           twistyPlayerConfig.experimentalSetupAlg = Alg.fromString(
@@ -132,7 +129,7 @@ export class TwistyAnimCube extends ManagedCustomElement {
       if (DEBUG) {
         console.info(twistyPlayerConfig);
       }
-      this.twistyPlayer = new TwistyPlayerV2(twistyPlayerConfig);
+      this.twistyPlayer = new TwistyPlayer(twistyPlayerConfig);
 
       process("speed", (value: string) => {
         let speed = parseFloat(value);

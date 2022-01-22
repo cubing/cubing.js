@@ -1,24 +1,85 @@
-import type { TimeRange } from "../old/animation/cursor/AlgCursor";
 import {
   BoundaryType,
   Direction,
   directionScalar,
   MillisecondTimestamp,
-} from "../old/animation/cursor/CursorTypes";
-import { RenderScheduler } from "../old/animation/RenderScheduler";
+  TimeRange,
+} from "./AnimationTypes";
+import { RenderScheduler } from "./RenderScheduler";
 import type {
   PlayingInfo,
   SimpleDirection,
-} from "../model/depth-0/PlayingInfoProp";
+} from "../model/props/timeline/PlayingInfoProp";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { StaleDropper } from "../model/PromiseFreshener";
-import type { CurrentMoveInfo } from "../old/animation/indexer/AlgIndexer";
-import type { TimestampRequest } from "../model/depth-0/TimestampRequestProp";
+import type { CurrentMoveInfo } from "./indexer/AlgIndexer";
+import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
 import { modIntoRange } from "../model/helpers";
+import type { CatchUpMove } from "../model/props/puzzle/state/CatchUpMoveProp";
 
 // TODO: Figure out a better way for the controller to instruct the player.
 export interface TwistyAnimationControllerDelegate {
-  flashAutoSkip(): void;
+  flash(): void;
+}
+
+// We use a separate helper to separate the anim frame callbacks (and their cancellations).
+// TODO: fold this into the main controller
+class CatchUpHelper {
+  catchingUp: boolean = false;
+  pendingFrame = false;
+
+  constructor(private model: TwistyPlayerModel) {}
+
+  private scheduler: RenderScheduler = new RenderScheduler(
+    this.animFrame.bind(this),
+  );
+
+  start(): void {
+    if (!this.catchingUp) {
+      this.lastTimestamp = performance.now();
+    }
+    this.catchingUp = true;
+    this.pendingFrame = true;
+    this.scheduler.requestAnimFrame();
+  }
+
+  stop(): void {
+    this.catchingUp = false;
+    this.scheduler.cancelAnimFrame();
+  }
+
+  catchUpMs = 500;
+  lastTimestamp = 0;
+  animFrame(timestamp: MillisecondTimestamp): void {
+    this.scheduler.requestAnimFrame();
+    const delta = (timestamp - this.lastTimestamp) / this.catchUpMs;
+    this.lastTimestamp = timestamp;
+
+    this.model.catchUpMove.set(
+      (async () => {
+        const previousCatchUpMove = await this.model.catchUpMove.get();
+        if (previousCatchUpMove.move === null) {
+          return previousCatchUpMove;
+        }
+
+        const amount = previousCatchUpMove.amount + delta; // TODO: use tempo scale?
+        if (amount >= 1) {
+          this.pendingFrame = true;
+          this.stop();
+          this.model.timestampRequest.set("end");
+          return {
+            move: null,
+            amount: 0,
+          };
+        }
+        this.pendingFrame = false;
+        return {
+          move: previousCatchUpMove.move,
+          amount: amount,
+        };
+      })(),
+    );
+  }
 }
 
 // This controls the logic for animation, so that the main controller can focus on the right API abstractions.
@@ -26,6 +87,8 @@ export class TwistyAnimationController {
   // TODO: #private?
   private playing: boolean = false;
   private direction: Direction = Direction.Forwards;
+
+  private catchUpHelper: CatchUpHelper;
 
   private model: TwistyPlayerModel;
 
@@ -43,7 +106,10 @@ export class TwistyAnimationController {
     this.model = model;
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
-    this.model.playingInfoProp.addFreshListener(this.onPlayingProp.bind(this)); // TODO
+    this.model.playingInfo.addFreshListener(this.onPlayingProp.bind(this)); // TODO
+
+    this.catchUpHelper = new CatchUpHelper(this.model);
+    this.model.catchUpMove.addFreshListener(this.onCatchUpMoveProp.bind(this)); // TODO
   }
 
   // TODO: Do we need this?
@@ -53,25 +119,34 @@ export class TwistyAnimationController {
     }
   }
 
+  // TODO: Do we need this?
+  async onCatchUpMoveProp(catchUpMove: CatchUpMove): Promise<void> {
+    const catchingUp = catchUpMove.move !== null;
+    if (catchingUp !== this.catchUpHelper.catchingUp) {
+      catchingUp ? this.catchUpHelper.start() : this.catchUpHelper.stop();
+    }
+    this.scheduler.requestAnimFrame();
+  }
+
   async #effectiveTimestampMilliseconds(): Promise<MillisecondTimestamp> {
-    return (await this.model.detailedTimelineInfoProp.get()).timestamp;
+    return (await this.model.detailedTimelineInfo.get()).timestamp;
   }
 
   // TODO: Return the animation we've switched to.
   jumpToStart(options?: { flash: boolean }): void {
-    this.model.timestampRequestProp.set("start");
+    this.model.timestampRequest.set("start");
     this.pause();
     if (options?.flash) {
-      this.delegate.flashAutoSkip();
+      this.delegate.flash();
     }
   }
 
   // TODO: Return the animation we've switched to.
   jumpToEnd(options?: { flash: boolean }): void {
-    this.model.timestampRequestProp.set("end");
+    this.model.timestampRequest.set("end");
     this.pause();
     if (options?.flash) {
-      this.delegate.flashAutoSkip();
+      this.delegate.flash();
     }
   }
 
@@ -99,18 +174,18 @@ export class TwistyAnimationController {
 
     const direction = options?.direction ?? Direction.Forwards;
 
-    const coarseTimelineInfo = await this.model.coarseTimelineInfoProp.get(); // TODO: Why do we need to read this if we don't use it?
+    const coarseTimelineInfo = await this.model.coarseTimelineInfo.get(); // TODO: Why do we need to read this if we don't use it?
     if (options?.autoSkipToOtherEndIfStartingAtBoundary ?? true) {
       if (direction === Direction.Forwards && coarseTimelineInfo.atEnd) {
-        this.model.timestampRequestProp.set("start");
-        this.delegate.flashAutoSkip();
+        this.model.timestampRequest.set("start");
+        this.delegate.flash();
       }
       if (direction === Direction.Backwards && coarseTimelineInfo.atStart) {
-        this.model.timestampRequestProp.set("end");
-        this.delegate.flashAutoSkip();
+        this.model.timestampRequest.set("end");
+        this.delegate.flash();
       }
     }
-    this.model.playingInfoProp.set({
+    this.model.playingInfo.set({
       playing: true,
       direction,
       untilBoundary: options?.untilBoundary ?? BoundaryType.EntireTimeline,
@@ -128,7 +203,7 @@ export class TwistyAnimationController {
   pause(): void {
     this.playing = false;
     this.scheduler.cancelAnimFrame();
-    this.model.playingInfoProp.set({
+    this.model.playingInfo.set({
       playing: false,
       untilBoundary: BoundaryType.EntireTimeline,
     });
@@ -149,11 +224,11 @@ export class TwistyAnimationController {
     const freshenerResult =
       await this.#animFrameEffectiveTimestampStaleDropper.queue(
         Promise.all([
-          this.model.playingInfoProp.get(),
+          this.model.playingInfo.get(),
           this.lastTimestampPromise,
-          this.model.timeRangeProp.get(),
-          this.model.tempoScaleProp.get(),
-          this.model.currentLeavesProp.get(),
+          this.model.timeRange.get(),
+          this.model.tempoScale.get(),
+          this.model.currentMoveInfo.get(),
         ]),
       );
 
@@ -161,7 +236,7 @@ export class TwistyAnimationController {
       freshenerResult;
 
     // TODO: Get this without wasting time on the others?
-    if (playingInfo.playing === false) {
+    if (!playingInfo.playing) {
       this.playing = false;
       // TODO: Ideally we'd cancel the anim frame from the top of this method.
       // But `this.scheduler.cancelAnimFrame();` might accidentally cancel a
@@ -216,7 +291,7 @@ export class TwistyAnimationController {
           newTimestamp = end;
         }
         this.playing = false;
-        this.model.playingInfoProp.set({
+        this.model.playingInfo.set({
           playing: false,
         });
       }
@@ -234,15 +309,13 @@ export class TwistyAnimationController {
           newTimestamp = start;
         }
         this.playing = false;
-        this.model.playingInfoProp.set({
+        this.model.playingInfo.set({
           playing: false,
         });
       }
     }
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
-    this.model.timestampRequestProp.set(
-      newSmartTimestampRequest ?? newTimestamp,
-    );
+    this.model.timestampRequest.set(newSmartTimestampRequest ?? newTimestamp);
   }
 }

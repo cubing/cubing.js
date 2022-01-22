@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <meta name="theme-color" value="#141414" />
+    <title>cubing.js | Puzzle Description</title>
+    <style>
+      html,
+      body,
+      twisty-player {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+    </style>
+    <script
+      src="./puzzle-description.js"
+      href="./puzzle-description.ts"
+      type="module"
+    ></script>
+  </head>
+  <body>
+    <twisty-player
+      experimental-puzzle-description="c f 0.333333333333333 v 0"
+      alg="F2 UFL R B' R UBR' L' D' UBL L U2 B' UBR U2 L2 UFL F B UBL R2 B UFL' D2 DBL R2 UFL U2 F' DBL' U UFL F'"
+      experimental-sprite="../twisty/world.png"
+    ></twisty-player>
+  </body>
+</html>

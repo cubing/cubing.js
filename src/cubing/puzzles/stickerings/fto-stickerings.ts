@@ -12,9 +12,9 @@ export async function ftoStickering(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<PuzzleAppearance> {
-  const def = await puzzleLoader.def();
-  const puzzleStickering = new PuzzleStickering(def);
-  const m = new StickeringManager(def);
+  const kpuzzle = await puzzleLoader.kpuzzle();
+  const puzzleStickering = new PuzzleStickering(kpuzzle);
+  const m = new StickeringManager(kpuzzle);
 
   const experimentalFTO_FC = (): PieceSet =>
     m.and([m.move("U"), m.not(m.or(m.moves(["F", "BL", "BR"])))]);
@@ -39,6 +39,7 @@ export async function ftoStickering(
       m.or([
         m.and([m.move("F"), m.move("BL")]),
         m.and([m.move("F"), m.move("BR")]),
+        m.and([m.move("BL"), m.move("BR")]),
       ]),
     );
 
@@ -56,24 +57,31 @@ export async function ftoStickering(
         m.not(experimentalFTO_F2T()),
         PieceStickering.Ignored,
       );
+      puzzleStickering.set(experimentalFTO_FC(), PieceStickering.Dim);
       break;
     case "experimental-fto-sc":
       puzzleStickering.set(
         m.not(experimentalFTO_SC()),
         PieceStickering.Ignored,
       );
+      puzzleStickering.set(experimentalFTO_F2T(), PieceStickering.Dim);
       break;
     case "experimental-fto-l2c":
       puzzleStickering.set(
         m.not(experimentalFTO_L2C()),
         PieceStickering.Ignored,
       );
+      puzzleStickering.set(experimentalFTO_SC(), PieceStickering.Dim);
       break;
     case "experimental-fto-lbt":
       puzzleStickering.set(
         m.not(experimentalFTO_LBT()),
         PieceStickering.Ignored,
       );
+      puzzleStickering.set(experimentalFTO_L2C(), PieceStickering.Dim);
+      break;
+    case "experimental-fto-l3t":
+      puzzleStickering.set(experimentalFTO_LBT(), PieceStickering.Dim);
       break;
     default:
       console.warn(
@@ -92,5 +100,6 @@ export async function ftoStickerings(): Promise<ExperimentalStickering[]> {
     "experimental-fto-sc",
     "experimental-fto-l2c",
     "experimental-fto-lbt",
+    "experimental-fto-l3t",
   ];
 }
