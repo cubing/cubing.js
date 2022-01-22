@@ -39,12 +39,12 @@ export function constructTwistyPlayer(): TwistyPlayer {
     config.experimentalPuzzleDescription ?? "c", // TODO
   );
   // TODO
-  twistyPlayer.experimentalModel.orbitCoordinatesRequestProp.set(
+  twistyPlayer.experimentalModel.orbitCoordinatesRequest.set(
     initialCameraOrbitCoordinatesPromise,
   );
 
   setupPropInputs(twistyPlayer);
-  twistyPlayer.experimentalModel.algProp.addFreshListener((algWithIssues) => {
+  twistyPlayer.experimentalModel.alg.addFreshListener((algWithIssues) => {
     setAlgParam("alg", algWithIssues.alg.toString());
   });
   return twistyPlayer;

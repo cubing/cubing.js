@@ -25,7 +25,7 @@ import { IndexerConstructorProp } from "./props/puzzle/state/IndexerConstructorP
 import { PuzzleAlgProp } from "./props/puzzle/state/PuzzleAlgProp";
 import { AlgTransformationProp } from "./props/puzzle/state/AlgTransformationProp";
 import { IndexerProp } from "./props/puzzle/state/IndexerProp";
-import { AnchoredStartProp } from "./props/puzzle/state/AnchoredStartProp";
+import { AnchorTransformationProp } from "./props/puzzle/state/AnchorTransformationProp";
 import { TimeRangeProp } from "./props/viewer/TimeRangeProp";
 import { DetailedTimelineInfoProp } from "./props/timeline/DetailedTimelineInfoProp";
 import { CoarseTimelineInfoProp } from "./props/timeline/CoarseTimelineInfoProp";
@@ -51,30 +51,30 @@ export class TwistyPlayerModel {
   // TODO: Redistribute and group props with controllers.
 
   // Depth 0
-  algProp = new AlgProp();
-  backgroundProp = new BackgroundProp();
-  backViewProp = new BackViewProp();
-  controlPanelProp = new ControlPanelProp();
-  catchUpMoveProp = new CatchUpMoveProp();
-  foundationDisplayProp = new FoundationDisplayProp();
+  alg = new AlgProp();
+  background = new BackgroundProp();
+  backView = new BackViewProp();
+  controlPanel = new ControlPanelProp();
+  catchUpMove = new CatchUpMoveProp();
+  foundationDisplay = new FoundationDisplayProp();
   foundationStickerSpriteURL = new URLProp();
-  hintFaceletProp = new HintFaceletProp();
+  hintFacelet = new HintFaceletProp();
   hintStickerSpriteURL = new URLProp();
-  indexerConstructorRequestProp = new IndexerConstructorRequestProp();
-  latitudeLimitProp = new LatitudeLimitProp();
-  movePressInputProp = new MovePressInputProp();
-  orbitCoordinatesRequestProp: OrbitCoordinatesRequestProp =
+  indexerConstructorRequest = new IndexerConstructorRequestProp();
+  latitudeLimit = new LatitudeLimitProp();
+  movePressInput = new MovePressInputProp();
+  orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
-  playingInfoProp = new PlayingInfoProp();
-  puzzleDescriptionRequestProp = new PGPuzzleDescriptionStringProp();
-  puzzleIDRequestProp = new PuzzleIDRequestProp();
-  setupAnchorProp = new SetupAnchorProp();
-  setupProp = new AlgProp();
-  stickeringProp = new StickeringProp();
-  tempoScaleProp = new TempoScaleProp();
-  timestampRequestProp = new TimestampRequestProp();
-  viewerLinkProp = new ViewerLinkProp();
-  visualizationFormatProp = new VisualizationFormatProp();
+  playingInfo = new PlayingInfoProp();
+  puzzleDescriptionRequest = new PGPuzzleDescriptionStringProp();
+  puzzleIDRequest = new PuzzleIDRequestProp();
+  setupAnchor = new SetupAnchorProp();
+  setupAlg = new AlgProp();
+  stickering = new StickeringProp();
+  tempoScale = new TempoScaleProp();
+  timestampRequest = new TimestampRequestProp();
+  viewerLink = new ViewerLinkProp();
+  visualizationFormat = new VisualizationFormatProp();
 
   // Depth 1
   foundationStickerSprite = new SpriteProp({
@@ -85,118 +85,119 @@ export class TwistyPlayerModel {
     spriteURL: this.hintStickerSpriteURL,
   });
 
-  puzzleLoaderProp = new PuzzleLoaderProp(
+  puzzleLoader = new PuzzleLoaderProp(
     {
-      puzzleIDRequest: this.puzzleIDRequestProp,
-      puzzleDescriptionRequest: this.puzzleDescriptionRequestProp,
+      puzzleIDRequest: this.puzzleIDRequest,
+      puzzleDescriptionRequest: this.puzzleDescriptionRequest,
     },
     this.userVisibleErrorTracker,
   );
 
   // Depth 2
-  kpuzzleProp = new KPuzzleProp({ puzzleLoader: this.puzzleLoaderProp });
+  kpuzzle = new KPuzzleProp({ puzzleLoader: this.puzzleLoader });
 
-  puzzleIDProp = new PuzzleIDProp({ puzzleLoader: this.puzzleLoaderProp });
+  puzzleID = new PuzzleIDProp({ puzzleLoader: this.puzzleLoader });
 
   // Depth 3
 
-  puzzleAlgProp = new PuzzleAlgProp({
-    algWithIssues: this.algProp,
-    kpuzzle: this.kpuzzleProp,
+  puzzleAlg = new PuzzleAlgProp({
+    algWithIssues: this.alg,
+    kpuzzle: this.kpuzzle,
   });
 
-  puzzleSetupProp = new PuzzleAlgProp({
-    algWithIssues: this.setupProp,
-    kpuzzle: this.kpuzzleProp,
+  puzzleSetupAlg = new PuzzleAlgProp({
+    algWithIssues: this.setupAlg,
+    kpuzzle: this.kpuzzle,
   });
 
-  visualizationStrategyProp = new VisualizationStrategyProp({
-    visualizationRequest: this.visualizationFormatProp,
-    puzzleID: this.puzzleIDProp,
+  visualizationStrategy = new VisualizationStrategyProp({
+    visualizationRequest: this.visualizationFormat,
+    puzzleID: this.puzzleID,
   });
 
   // Depth 4
-  indexerConstructorProp = new IndexerConstructorProp({
-    alg: this.algProp,
-    puzzle: this.puzzleIDProp,
-    visualizationStrategy: this.visualizationStrategyProp,
-    indexerConstructorRequest: this.indexerConstructorRequestProp,
+  indexerConstructor = new IndexerConstructorProp({
+    alg: this.alg,
+    puzzle: this.puzzleID,
+    visualizationStrategy: this.visualizationStrategy,
+    indexerConstructorRequest: this.indexerConstructorRequest,
   });
 
-  moveCountProp = new NaiveMoveCountProp({ alg: this.puzzleAlgProp });
+  moveCount = new NaiveMoveCountProp({ alg: this.puzzleAlg });
 
-  orbitCoordinatesProp = new OrbitCoordinatesProp({
-    orbitCoordinatesRequest: this.orbitCoordinatesRequestProp,
-    latitudeLimit: this.latitudeLimitProp,
-    puzzleID: this.puzzleIDProp,
-    strategy: this.visualizationStrategyProp,
+  orbitCoordinates = new OrbitCoordinatesProp({
+    orbitCoordinatesRequest: this.orbitCoordinatesRequest,
+    latitudeLimit: this.latitudeLimit,
+    puzzleID: this.puzzleID,
+    strategy: this.visualizationStrategy,
   });
 
-  setupTransformationProp = new AlgTransformationProp({
-    alg: this.puzzleSetupProp,
-    kpuzzle: this.kpuzzleProp,
+  setupAlgTransformation = new AlgTransformationProp({
+    setupAlg: this.puzzleSetupAlg,
+    kpuzzle: this.kpuzzle,
   });
 
   // Depth 5
-  indexerProp = new IndexerProp({
-    indexerConstructor: this.indexerConstructorProp,
-    algWithIssues: this.puzzleAlgProp,
-    kpuzzle: this.kpuzzleProp,
+  indexer = new IndexerProp({
+    indexerConstructor: this.indexerConstructor,
+    algWithIssues: this.puzzleAlg,
+    kpuzzle: this.kpuzzle,
   });
 
   // Depth 6
-  anchoredStartProp = new AnchoredStartProp({
-    setupAnchor: this.setupAnchorProp,
-    setupTransformation: this.setupTransformationProp,
-    indexer: this.indexerProp,
+  anchorTransformation = new AnchorTransformationProp({
+    setupAnchor: this.setupAnchor,
+    setupTransformation: this.setupAlgTransformation,
+    indexer: this.indexer,
   });
 
-  timeRangeProp = new TimeRangeProp({
-    indexer: this.indexerProp,
+  timeRange = new TimeRangeProp({
+    indexer: this.indexer,
   });
 
   // Depth 7
-  detailedTimelineInfoProp: DetailedTimelineInfoProp =
-    new DetailedTimelineInfoProp({
-      timestampRequest: this.timestampRequestProp,
-      timeRange: this.timeRangeProp,
-      setupAnchor: this.setupAnchorProp,
-    });
+  detailedTimelineInfo: DetailedTimelineInfoProp = new DetailedTimelineInfoProp(
+    {
+      timestampRequest: this.timestampRequest,
+      timeRange: this.timeRange,
+      setupAnchor: this.setupAnchor,
+    },
+  );
 
   // Depth 8
-  coarseTimelineInfoProp = new CoarseTimelineInfoProp({
-    detailedTimelineInfo: this.detailedTimelineInfoProp,
-    playingInfo: this.playingInfoProp,
+  coarseTimelineInfo = new CoarseTimelineInfoProp({
+    detailedTimelineInfo: this.detailedTimelineInfo,
+    playingInfo: this.playingInfo,
   });
 
-  currentMoveInfoProp = new CurrentMoveInfoProp({
-    indexer: this.indexerProp,
-    detailedTimelineInfo: this.detailedTimelineInfoProp,
-    catchUpMove: this.catchUpMoveProp,
+  currentMoveInfo = new CurrentMoveInfoProp({
+    indexer: this.indexer,
+    detailedTimelineInfo: this.detailedTimelineInfo,
+    catchUpMove: this.catchUpMove,
   });
 
   // Depth 9
   // TODO: Inline Twisty3D management.
-  buttonAppearanceProp = new ButtonAppearanceProp({
-    coarseTimelineInfo: this.coarseTimelineInfoProp,
-    viewerLink: this.viewerLinkProp,
+  buttonAppearance = new ButtonAppearanceProp({
+    coarseTimelineInfo: this.coarseTimelineInfo,
+    viewerLink: this.viewerLink,
   });
 
-  currentLeavesSimplifiedProp = new CurrentLeavesSimplifiedProp({
-    currentMoveInfo: this.currentMoveInfoProp,
+  currentLeavesSimplified = new CurrentLeavesSimplifiedProp({
+    currentMoveInfo: this.currentMoveInfo,
   });
 
   // Depth 10
-  currentStateProp = new CurrentStateProp({
-    anchoredStart: this.anchoredStartProp,
-    currentLeavesSimplified: this.currentLeavesSimplifiedProp,
-    indexer: this.indexerProp,
+  currentState = new CurrentStateProp({
+    anchoredStart: this.anchorTransformation,
+    currentLeavesSimplified: this.currentLeavesSimplified,
+    indexer: this.indexer,
   });
 
   // Depth 11
-  legacyPositionProp = new LegacyPositionProp({
-    currentMoveInfo: this.currentMoveInfoProp,
-    state: this.currentStateProp,
+  legacyPosition = new LegacyPositionProp({
+    currentMoveInfo: this.currentMoveInfo,
+    state: this.currentState,
   });
 
   public async twizzleLink(): Promise<string> {
@@ -209,13 +210,13 @@ export class TwistyPlayerModel {
       anchor,
       experimentalStickering,
     ] = await Promise.all([
-      this.viewerLinkProp.get(),
-      this.puzzleIDProp.get(),
-      this.puzzleDescriptionRequestProp.get(),
-      this.algProp.get(),
-      this.setupProp.get(),
-      this.setupAnchorProp.get(),
-      this.stickeringProp.get(),
+      this.viewerLink.get(),
+      this.puzzleID.get(),
+      this.puzzleDescriptionRequest.get(),
+      this.alg.get(),
+      this.setupAlg.get(),
+      this.setupAnchor.get(),
+      this.stickering.get(),
     ]);
 
     const isExplorer = viewerLink === "experimental-twizzle-explorer";
@@ -254,14 +255,14 @@ export class TwistyPlayerModel {
     const move =
       typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
     (async () => {
-      const alg = (await this.algProp.get()).alg;
+      const alg = (await this.alg.get()).alg;
       const newAlg = experimentalAppendMove(alg, move, {
         coalesce: options?.coalesce,
         mod: options?.mod,
       });
-      this.algProp.set(newAlg);
-      this.timestampRequestProp.set("end");
-      this.catchUpMoveProp.set({
+      this.alg.set(newAlg);
+      this.timestampRequest.set("end");
+      this.catchUpMove.set({
         move: move,
         amount: 0,
       });

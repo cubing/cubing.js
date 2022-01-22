@@ -244,7 +244,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
       // );
 
       // TODO: listen to puzzle prop?
-      this.#twistyPlayer?.experimentalModel.puzzleAlgProp.addFreshListener(
+      this.#twistyPlayer?.experimentalModel.puzzleAlg.addFreshListener(
         (algWithIssues: AlgWithIssues) => {
           // console.log(JSON.stringify(algWithIssues));
           if (algWithIssues.issues.errors.length === 0) {
@@ -273,8 +273,8 @@ export class TwistyAlgEditor extends ManagedCustomElement {
           }
           // TODO: This indexer can be out of date!
           const [indexer, timestampRequest] = await Promise.all([
-            await twistyPlayer.experimentalModel.indexerProp.get(),
-            await twistyPlayer.experimentalModel.timestampRequestProp.get(),
+            await twistyPlayer.experimentalModel.indexer.get(),
+            await twistyPlayer.experimentalModel.timestampRequest.get(),
           ]);
           if (
             timestampRequest === "opposite-anchor" &&
@@ -305,17 +305,14 @@ export class TwistyAlgEditor extends ManagedCustomElement {
               throw new Error("Invalid where!");
           }
           if (!this.debugNeverRequestTimestamp) {
-            twistyPlayer.experimentalModel.timestampRequestProp.set(
-              newTimestamp,
-            );
+            twistyPlayer.experimentalModel.timestampRequest.set(newTimestamp);
           }
         },
       );
 
-      twistyPlayer.experimentalModel.currentLeavesSimplifiedProp.addFreshListener(
+      twistyPlayer.experimentalModel.currentLeavesSimplified.addFreshListener(
         async (currentLeavesSimplified: CurrentLeavesSimplified) => {
-          const indexer =
-            await twistyPlayer.experimentalModel.indexerProp.get();
+          const indexer = await twistyPlayer.experimentalModel.indexer.get();
           const leaf = indexer.getAnimLeaf(currentLeavesSimplified.stateIndex);
           this.highlightLeaf(leaf as Parsed<Move | Pause> | null);
         },

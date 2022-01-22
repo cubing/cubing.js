@@ -48,6 +48,6 @@ const supercubeSprite = new URL(
     alg: Alg.fromString("(L R) U2 (L' R') U (L R) U2 (L' R') U"),
     puzzle: "5x5x5",
   });
-  player.experimentalModel.indexerConstructorRequestProp.set("simultaneous");
+  player.experimentalModel.indexerConstructorRequest.set("simultaneous");
   document.querySelector(".demo5")!.appendChild(player);
 }

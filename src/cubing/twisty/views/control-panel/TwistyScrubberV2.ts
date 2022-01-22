@@ -86,7 +86,7 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
       elem.disabled = true;
 
       // console.log("1");
-      this.model?.detailedTimelineInfoProp.addFreshListener(
+      this.model?.detailedTimelineInfo.addFreshListener(
         this.onDetailedTimelineInfo.bind(this),
       );
       // console.log("3");
@@ -105,8 +105,8 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
 
     const value = parseInt(inputElem.value);
     // console.log("on input", value);
-    this.model?.playingInfoProp.set({ playing: false });
-    this.model?.timestampRequestProp.set(value);
+    this.model?.playingInfo.set({ playing: false });
+    this.model?.timestampRequest.set(value);
   }
 
   async slowDown(e: Event, inputElem: HTMLInputElement): Promise<void> {

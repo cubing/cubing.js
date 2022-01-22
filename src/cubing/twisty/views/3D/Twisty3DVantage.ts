@@ -105,7 +105,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
   async #setupBasicPresses(): Promise<void> {
     const dragTracker = await this.#dragTracker();
     dragTracker.addEventListener("press", async (e: CustomEvent<PressInfo>) => {
-      const movePressInput = await this.model!.movePressInputProp.get();
+      const movePressInput = await this.model!.movePressInput.get();
       if (movePressInput !== "basic") {
         return;
       }
@@ -243,7 +243,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
       if (this.model) {
         this.addListener(
-          this.model.orbitCoordinatesProp,
+          this.model.orbitCoordinates,
           async (orbitCoordinates: OrbitCoordinates) => {
             const camera = await this.camera();
             setCameraFromOrbitCoordinates(

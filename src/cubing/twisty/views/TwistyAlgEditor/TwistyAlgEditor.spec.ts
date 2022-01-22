@@ -40,7 +40,7 @@ describe("TwistyAlgEditor", () => {
   it("sets timestamp from textarea", async () => {
     const twistyPlayer = new TwistyPlayer({ alg: "F2", visualization: "2D" });
     const alg = async () =>
-      (await twistyPlayer.experimentalModel.algProp.get()).alg;
+      (await twistyPlayer.experimentalModel.alg.get()).alg;
     document.body.appendChild(twistyPlayer);
     expect(await alg()).toBeIdentical(new Alg("F2"));
     const twistyAlgEditor = new TwistyAlgEditor({ twistyPlayer });

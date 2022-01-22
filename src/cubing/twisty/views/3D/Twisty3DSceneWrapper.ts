@@ -45,11 +45,11 @@ export class Twisty3DSceneWrapper
     this.addVantage(vantage);
     if (this.model) {
       this.#freshListenerManager.addMultiListener(
-        [this.model.puzzleLoaderProp, this.model.visualizationStrategyProp],
+        [this.model.puzzleLoader, this.model.visualizationStrategy],
         this.onPuzzle.bind(this),
       );
       this.#freshListenerManager.addListener(
-        this.model.backViewProp,
+        this.model.backView,
         this.onBackView.bind(this),
       );
     }

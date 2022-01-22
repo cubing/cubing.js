@@ -104,8 +104,8 @@ export class App {
 
   async solve(): Promise<void> {
     const [puzzleID, currentAlgWithIssues] = await Promise.all([
-      this.twistyPlayer.experimentalModel.puzzleIDProp.get(),
-      this.twistyPlayer.experimentalModel.algProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleID.get(),
+      this.twistyPlayer.experimentalModel.alg.get(),
     ]);
     const currentAlg = currentAlgWithIssues.alg;
     let solution: Alg;
@@ -150,8 +150,8 @@ export class App {
 
   async scramble(): Promise<void> {
     const [puzzleID, currentAlgWithIssues] = await Promise.all([
-      this.twistyPlayer.experimentalModel.puzzleIDProp.get(),
-      this.twistyPlayer.experimentalModel.algProp.get(),
+      this.twistyPlayer.experimentalModel.puzzleID.get(),
+      this.twistyPlayer.experimentalModel.alg.get(),
     ]);
     const event = SCRAMBLE_EVENTS[puzzleID];
     if (event) {
@@ -211,7 +211,7 @@ class ControlPane {
     appTitleElem.textContent = APP_TITLE;
 
     // TODO: validation?
-    twistyPlayer.experimentalModel.puzzleIDProp.addFreshListener(
+    twistyPlayer.experimentalModel.puzzleID.addFreshListener(
       this.onPuzzle.bind(this),
     );
 
@@ -237,7 +237,7 @@ class ControlPane {
       "puzzle",
       "select",
     );
-    this.twistyPlayer.experimentalModel.puzzleIDProp
+    this.twistyPlayer.experimentalModel.puzzleID
       .get()
       .then((puzzleID) => this.initializePuzzleSelect(puzzleID));
 
@@ -246,7 +246,7 @@ class ControlPane {
       "setup-anchor",
       "select",
     );
-    this.twistyPlayer.experimentalModel.setupAnchorProp
+    this.twistyPlayer.experimentalModel.setupAnchor
       .get()
       .then((anchor) => this.initializeSetupAnchorSelect(anchor));
 
@@ -256,8 +256,8 @@ class ControlPane {
       "select",
     );
     Promise.all([
-      this.twistyPlayer.experimentalModel.stickeringProp.get(),
-      this.twistyPlayer.experimentalModel.puzzleIDProp.get(),
+      this.twistyPlayer.experimentalModel.stickering.get(),
+      this.twistyPlayer.experimentalModel.puzzleID.get(),
     ]).then(([stickering, puzzleID]) =>
       this.initializeStickeringSelect(stickering, puzzleID),
     );
@@ -336,12 +336,12 @@ class ControlPane {
     switch (e.detail.action) {
       case "expand":
         this.twistyPlayer.alg = (
-          await this.twistyPlayer.experimentalModel.algProp.get()
+          await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.expand();
         break;
       case "simplify":
         this.twistyPlayer.alg = (
-          await this.twistyPlayer.experimentalModel.algProp.get()
+          await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.simplify();
         break;
       case "clear":
@@ -350,7 +350,7 @@ class ControlPane {
         break;
       case "invert":
         this.twistyPlayer.alg = (
-          await this.twistyPlayer.experimentalModel.algProp.get()
+          await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.invert();
         break;
       case "solve":

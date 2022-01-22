@@ -54,7 +54,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
     }
     this.buttons = buttons as Record<ButtonCommand, TwistyButtonV2>;
 
-    this.model?.buttonAppearanceProp.addFreshListener(this.update.bind(this));
+    this.model?.buttonAppearance.addFreshListener(this.update.bind(this));
   }
 
   #onCommand(command: ButtonCommand) {

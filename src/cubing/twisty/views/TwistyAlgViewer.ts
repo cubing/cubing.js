@@ -414,14 +414,13 @@ export class TwistyAlgViewer extends HTMLElementShim {
     }
     this.twistyPlayer = twistyPlayer;
 
-    this.twistyPlayer.experimentalModel.algProp.addFreshListener(
+    this.twistyPlayer.experimentalModel.alg.addFreshListener(
       (algWithIssues: AlgWithIssues) => {
         this.setAlg(algWithIssues.alg);
       },
     );
 
-    const sourceAlg = (await this.twistyPlayer.experimentalModel.algProp.get())
-      .alg;
+    const sourceAlg = (await this.twistyPlayer.experimentalModel.alg.get()).alg;
     // TODO: Use proper architecture instead of a heuristic to ensure we have a parsed alg annotated with char indices.
     const parsedAlg =
       "startCharIndex" in (sourceAlg as Partial<Parsed<Alg>>)
@@ -429,7 +428,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
         : Alg.fromString(sourceAlg.toString());
     this.setAlg(parsedAlg);
 
-    twistyPlayer.experimentalModel.currentMoveInfoProp.addFreshListener(
+    twistyPlayer.experimentalModel.currentMoveInfo.addFreshListener(
       (currentMoveInfo: CurrentMoveInfo) => {
         let moveInfo = currentMoveInfo.currentMoves[0];
         moveInfo ??= currentMoveInfo.movesStarting[0];
@@ -443,7 +442,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
       },
     );
 
-    twistyPlayer.experimentalModel.detailedTimelineInfoProp.addFreshListener(
+    twistyPlayer.experimentalModel.detailedTimelineInfo.addFreshListener(
       (detailedTimelineInfo: DetailedTimelineInfo) => {
         if (detailedTimelineInfo.timestamp !== this.lastClickTimestamp) {
           this.lastClickTimestamp = null;
@@ -458,11 +457,11 @@ export class TwistyAlgViewer extends HTMLElementShim {
     if (twistyPlayer) {
       twistyPlayer.pause();
       const timestampPromise = (async (): Promise<MillisecondTimestamp> => {
-        const indexer = await twistyPlayer.experimentalModel.indexerProp.get();
+        const indexer = await twistyPlayer.experimentalModel.indexer.get();
         const offset = offsetIntoMove ? DEFAULT_OFFSET_MS : 0;
         return (indexer.indexToMoveStartTimestamp(index) ?? -offset) + offset;
       })();
-      twistyPlayer.experimentalModel.timestampRequestProp.set(
+      twistyPlayer.experimentalModel.timestampRequest.set(
         await timestampPromise, // TODO
       );
       if (this.lastClickTimestamp === (await timestampPromise)) {

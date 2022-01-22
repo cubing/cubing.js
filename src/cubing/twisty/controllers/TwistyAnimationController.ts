@@ -55,9 +55,9 @@ class CatchUpHelper {
     const delta = (timestamp - this.lastTimestamp) / this.catchUpMs;
     this.lastTimestamp = timestamp;
 
-    this.model.catchUpMoveProp.set(
+    this.model.catchUpMove.set(
       (async () => {
-        const previousCatchUpMove = await this.model.catchUpMoveProp.get();
+        const previousCatchUpMove = await this.model.catchUpMove.get();
         if (previousCatchUpMove.move === null) {
           return previousCatchUpMove;
         }
@@ -66,7 +66,7 @@ class CatchUpHelper {
         if (amount >= 1) {
           this.pendingFrame = true;
           this.stop();
-          this.model.timestampRequestProp.set("end");
+          this.model.timestampRequest.set("end");
           return {
             move: null,
             amount: 0,
@@ -106,12 +106,10 @@ export class TwistyAnimationController {
     this.model = model;
     this.lastTimestampPromise = this.#effectiveTimestampMilliseconds();
 
-    this.model.playingInfoProp.addFreshListener(this.onPlayingProp.bind(this)); // TODO
+    this.model.playingInfo.addFreshListener(this.onPlayingProp.bind(this)); // TODO
 
     this.catchUpHelper = new CatchUpHelper(this.model);
-    this.model.catchUpMoveProp.addFreshListener(
-      this.onCatchUpMoveProp.bind(this),
-    ); // TODO
+    this.model.catchUpMove.addFreshListener(this.onCatchUpMoveProp.bind(this)); // TODO
   }
 
   // TODO: Do we need this?
@@ -131,12 +129,12 @@ export class TwistyAnimationController {
   }
 
   async #effectiveTimestampMilliseconds(): Promise<MillisecondTimestamp> {
-    return (await this.model.detailedTimelineInfoProp.get()).timestamp;
+    return (await this.model.detailedTimelineInfo.get()).timestamp;
   }
 
   // TODO: Return the animation we've switched to.
   jumpToStart(options?: { flash: boolean }): void {
-    this.model.timestampRequestProp.set("start");
+    this.model.timestampRequest.set("start");
     this.pause();
     if (options?.flash) {
       this.delegate.flash();
@@ -145,7 +143,7 @@ export class TwistyAnimationController {
 
   // TODO: Return the animation we've switched to.
   jumpToEnd(options?: { flash: boolean }): void {
-    this.model.timestampRequestProp.set("end");
+    this.model.timestampRequest.set("end");
     this.pause();
     if (options?.flash) {
       this.delegate.flash();
@@ -176,18 +174,18 @@ export class TwistyAnimationController {
 
     const direction = options?.direction ?? Direction.Forwards;
 
-    const coarseTimelineInfo = await this.model.coarseTimelineInfoProp.get(); // TODO: Why do we need to read this if we don't use it?
+    const coarseTimelineInfo = await this.model.coarseTimelineInfo.get(); // TODO: Why do we need to read this if we don't use it?
     if (options?.autoSkipToOtherEndIfStartingAtBoundary ?? true) {
       if (direction === Direction.Forwards && coarseTimelineInfo.atEnd) {
-        this.model.timestampRequestProp.set("start");
+        this.model.timestampRequest.set("start");
         this.delegate.flash();
       }
       if (direction === Direction.Backwards && coarseTimelineInfo.atStart) {
-        this.model.timestampRequestProp.set("end");
+        this.model.timestampRequest.set("end");
         this.delegate.flash();
       }
     }
-    this.model.playingInfoProp.set({
+    this.model.playingInfo.set({
       playing: true,
       direction,
       untilBoundary: options?.untilBoundary ?? BoundaryType.EntireTimeline,
@@ -205,7 +203,7 @@ export class TwistyAnimationController {
   pause(): void {
     this.playing = false;
     this.scheduler.cancelAnimFrame();
-    this.model.playingInfoProp.set({
+    this.model.playingInfo.set({
       playing: false,
       untilBoundary: BoundaryType.EntireTimeline,
     });
@@ -226,11 +224,11 @@ export class TwistyAnimationController {
     const freshenerResult =
       await this.#animFrameEffectiveTimestampStaleDropper.queue(
         Promise.all([
-          this.model.playingInfoProp.get(),
+          this.model.playingInfo.get(),
           this.lastTimestampPromise,
-          this.model.timeRangeProp.get(),
-          this.model.tempoScaleProp.get(),
-          this.model.currentMoveInfoProp.get(),
+          this.model.timeRange.get(),
+          this.model.tempoScale.get(),
+          this.model.currentMoveInfo.get(),
         ]),
       );
 
@@ -293,7 +291,7 @@ export class TwistyAnimationController {
           newTimestamp = end;
         }
         this.playing = false;
-        this.model.playingInfoProp.set({
+        this.model.playingInfo.set({
           playing: false,
         });
       }
@@ -311,15 +309,13 @@ export class TwistyAnimationController {
           newTimestamp = start;
         }
         this.playing = false;
-        this.model.playingInfoProp.set({
+        this.model.playingInfo.set({
           playing: false,
         });
       }
     }
     this.lastDatestamp = frameDatestamp;
     this.lastTimestampPromise = Promise.resolve(newTimestamp); // TODO: Save this earlier? / Do we need to worry about the effecitve timestamp disagreeing?
-    this.model.timestampRequestProp.set(
-      newSmartTimestampRequest ?? newTimestamp,
-    );
+    this.model.timestampRequest.set(newSmartTimestampRequest ?? newTimestamp);
   }
 }

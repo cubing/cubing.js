@@ -3,7 +3,7 @@ import { TwistyPropDerived } from "../../TwistyProp";
 import type { AlgWithIssues } from "./AlgProp";
 
 type AlgTransformationPropInputs = {
-  alg: AlgWithIssues;
+  setupAlg: AlgWithIssues;
   kpuzzle: KPuzzle;
 };
 
@@ -12,6 +12,6 @@ export class AlgTransformationProp extends TwistyPropDerived<
   KTransformation
 > {
   derive(input: AlgTransformationPropInputs): KTransformation {
-    return input.kpuzzle.algToTransformation(input.alg.alg);
+    return input.kpuzzle.algToTransformation(input.setupAlg.alg);
   }
 }

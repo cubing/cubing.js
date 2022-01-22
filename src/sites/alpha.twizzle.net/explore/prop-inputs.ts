@@ -40,27 +40,27 @@ function setupTempoScale(tempoScaleProp: TempoScaleProp): void {
 export function setupPropInputs(twistyPlayer: TwistyPlayer): void {
   setupPropCheckbox(
     "visualization-3D",
-    twistyPlayer.experimentalModel.visualizationFormatProp,
+    twistyPlayer.experimentalModel.visualizationFormat,
     "PG3D",
     "2D",
   );
   setupPropCheckbox(
     "back-view-side-by-side",
-    twistyPlayer.experimentalModel.backViewProp,
+    twistyPlayer.experimentalModel.backView,
     "side-by-side",
     "top-right",
   );
   setupPropCheckbox(
     "foundation-display-opaque",
-    twistyPlayer.experimentalModel.foundationDisplayProp,
+    twistyPlayer.experimentalModel.foundationDisplay,
     "opaque",
     "none",
   );
   setupPropCheckbox(
     "hint-facelets-floating",
-    twistyPlayer.experimentalModel.hintFaceletProp,
+    twistyPlayer.experimentalModel.hintFacelet,
     "floating",
     "none",
   );
-  setupTempoScale(twistyPlayer.experimentalModel.tempoScaleProp);
+  setupTempoScale(twistyPlayer.experimentalModel.tempoScale);
 }

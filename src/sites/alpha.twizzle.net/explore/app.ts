@@ -28,7 +28,7 @@ export class TwizzleExplorerApp {
     this.configUI = new ConfigUI(this);
     new SelectUI(this);
     const moveCountElem = document.querySelector("#move-count")!;
-    this.twistyPlayer.experimentalModel.moveCountProp.addFreshListener(
+    this.twistyPlayer.experimentalModel.moveCount.addFreshListener(
       (moveCount) => {
         moveCountElem.textContent = `Moves: ${moveCount}`;
       },
@@ -38,7 +38,7 @@ export class TwizzleExplorerApp {
   // TODO: Find out how to avoid the need for this.
   async puzzleGeometry(): Promise<PuzzleGeometry> {
     const puzzleLoader =
-      await this.twistyPlayer.experimentalModel.puzzleLoaderProp.get();
+      await this.twistyPlayer.experimentalModel.puzzleLoader.get();
 
     if (!puzzleLoader.pg) {
       throw new Error("could not get PG from puzzle loader");
@@ -163,7 +163,7 @@ class SelectUI {
         break;
       case "svg": {
         const is3D =
-          (await this.app.twistyPlayer.experimentalModel.visualizationFormatProp.get()) !==
+          (await this.app.twistyPlayer.experimentalModel.visualizationFormat.get()) !==
           "2D"; // TODO
         this.app.showText(
           (await this.app.puzzleGeometry()).generatesvg(800, 500, 10, is3D),

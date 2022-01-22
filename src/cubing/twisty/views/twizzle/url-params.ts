@@ -26,17 +26,17 @@ export class URLParamUpdater {
   constructor(model: TwistyPlayerModel, options?: URLParamUpdaterOptions) {
     this.#prefix = options?.prefix ?? "";
 
-    this.listenToAlgProp(model.algProp, "alg");
-    this.listenToAlgProp(model.setupProp, "setup-alg");
-    this.listenToStringSourceProp(model.stickeringProp, "stickering");
-    this.listenToStringSourceProp(model.setupAnchorProp, "setup-anchor");
+    this.listenToAlgProp(model.alg, "alg");
+    this.listenToAlgProp(model.setupAlg, "setup-alg");
+    this.listenToStringSourceProp(model.stickering, "stickering");
+    this.listenToStringSourceProp(model.setupAnchor, "setup-anchor");
     this.listenToStringOrNoValueProp(
-      model.puzzleIDRequestProp,
+      model.puzzleIDRequest,
       "puzzle",
       EXPERIMENTAL_PROP_NO_VALUE,
     );
     this.listenToStringOrNoValueProp(
-      model.puzzleDescriptionRequestProp,
+      model.puzzleDescriptionRequest,
       "puzzle-description",
       EXPERIMENTAL_PROP_NO_VALUE,
     );

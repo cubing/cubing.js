@@ -191,7 +191,7 @@ export class TwistyPlayer
     );
     this.contentWrapper.appendChild(this.buttons);
 
-    this.experimentalModel.backgroundProp.addFreshListener(
+    this.experimentalModel.background.addFreshListener(
       (backgroundTheme: BackgroundThemeWithAuto) => {
         this.contentWrapper.classList.toggle(
           "checkered",
@@ -200,17 +200,17 @@ export class TwistyPlayer
       },
     );
 
-    this.experimentalModel.controlPanelProp.addFreshListener(
+    this.experimentalModel.controlPanel.addFreshListener(
       (controlPanel: ControlPanelThemeWithAuto) => {
         this.#controlsManager.setValue(controlPanel);
       },
     );
 
-    this.experimentalModel.visualizationStrategyProp.addFreshListener(
+    this.experimentalModel.visualizationStrategy.addFreshListener(
       this.#setVisualizationWrapper.bind(this),
     );
 
-    this.experimentalModel.puzzleIDProp.addFreshListener(this.flash.bind(this));
+    this.experimentalModel.puzzleID.addFreshListener(this.flash.bind(this));
   }
 
   flash() {
@@ -336,7 +336,7 @@ export class TwistyPlayer
   async experimentalDownloadScreenshot(filename?: string): Promise<void> {
     if (
       ["2D", "experimental-2D-LL"].includes(
-        await this.experimentalModel.visualizationStrategyProp.get(),
+        await this.experimentalModel.visualizationStrategy.get(),
       )
     ) {
       // TODO: This has lots of async issues. It should also go into the screenshot impl file.

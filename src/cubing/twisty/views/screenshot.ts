@@ -29,20 +29,20 @@ export async function screenshot(
   const twisty3DWrapper = new Twisty3DPuzzleWrapper(
     model,
     { scheduleRender: () => {} },
-    await model.puzzleLoaderProp.get(),
-    await model.visualizationStrategyProp.get(),
+    await model.puzzleLoader.get(),
+    await model.visualizationStrategy.get(),
   );
 
   // TODO: Pass the stickering to the constructor so we don't have to wait..
-  await model.stickeringProp.get();
+  await model.stickering.get();
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // TODO: Find a more robust way to do this.
-  await model.legacyPositionProp.get(); // Force the 3D puzzle listeners for the state to fire.
+  await model.legacyPosition.get(); // Force the 3D puzzle listeners for the state to fire.
 
   scene.add(await twisty3DWrapper.twisty3DPuzzle());
 
-  const orbitCoordinates = await model.orbitCoordinatesProp.get();
+  const orbitCoordinates = await model.orbitCoordinates.get();
   await setCameraFromOrbitCoordinates(camera, orbitCoordinates);
 
   const renderer = new (await THREEJS).WebGLRenderer({
@@ -68,8 +68,8 @@ export async function getDefaultFilename(
   model: TwistyPlayerModel,
 ): Promise<string> {
   const [puzzleID, algWithIssues] = await Promise.all([
-    model.puzzleIDProp.get(),
-    model.algProp.get(),
+    model.puzzleID.get(),
+    model.alg.get(),
   ]);
   return `[${puzzleID}]${
     algWithIssues.alg.experimentalNumUnits() === 0

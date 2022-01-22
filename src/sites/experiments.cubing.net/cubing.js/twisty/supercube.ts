@@ -15,7 +15,7 @@ if (tempo !== null) {
   twistyPlayer.tempoScale = parseFloat(tempo);
 }
 
-twistyPlayer.experimentalModel.playingInfoProp.set({
+twistyPlayer.experimentalModel.playingInfo.set({
   playing: true,
   loop: true,
 });

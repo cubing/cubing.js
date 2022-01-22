@@ -40,7 +40,7 @@ export class Twisty2DPuzzle
     this.resetSVG(); // TODO: do this in `connectedCallback()`?
 
     this.#freshListenerManager.addListener(
-      this.model!.puzzleIDProp,
+      this.model!.puzzleID,
       (puzzleID: PuzzleID) => {
         if (puzzleLoader?.id !== puzzleID) {
           this.disconnect();
@@ -49,7 +49,7 @@ export class Twisty2DPuzzle
     );
 
     this.#freshListenerManager.addListener(
-      this.model!.legacyPositionProp,
+      this.model!.legacyPosition,
       this.onPositionChange.bind(this),
     );
 
