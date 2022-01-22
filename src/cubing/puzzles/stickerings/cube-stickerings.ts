@@ -298,7 +298,5 @@ export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
     "picture",
     "invisible",
     "centers-only",
-    "experimental-global-custom-1",
-    "experimental-global-custom-2",
   ];
 }
