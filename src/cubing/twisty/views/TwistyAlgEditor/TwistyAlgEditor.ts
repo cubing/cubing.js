@@ -30,7 +30,7 @@ const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";
 const ATTRIBUTE_PLACEHOLDER = "placeholder";
 const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
-type TwistyPlayerAlgProp = "algProp" | "setupProp";
+type TwistyPlayerAlgProp = "alg" | "setupAlg";
 
 export class TwistyAlgEditor extends ManagedCustomElement {
   model = new TwistyAlgEditorModel();
@@ -101,9 +101,9 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     if (options?.twistyPlayer) {
       this.twistyPlayer = options.twistyPlayer;
     }
-    this.#twistyPlayerProp = options?.twistyPlayerProp ?? "algProp";
+    this.#twistyPlayerProp = options?.twistyPlayerProp ?? "alg";
 
-    if (options?.twistyPlayerProp === "algProp") {
+    if (options?.twistyPlayerProp === "alg") {
       this.model.leafToHighlight.addFreshListener(
         (highlightInfo: HighlightInfo | null) => {
           if (highlightInfo) {
@@ -152,7 +152,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     ) {
       return;
     }
-    if (this.#twistyPlayerProp !== "algProp") {
+    if (this.#twistyPlayerProp !== "alg") {
       return;
     }
 
@@ -188,7 +188,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
   #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;
   // TODO: support a primary highlighted move and secondary ones.
   highlightLeaf(leaf: ExperimentalParsed<Move | Pause> | null): void {
-    if (this.#twistyPlayerProp !== "algProp") {
+    if (this.#twistyPlayerProp !== "alg") {
       return;
     }
     if (leaf === null) {
@@ -238,7 +238,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
         : "";
     })();
 
-    if (this.#twistyPlayerProp === "algProp") {
+    if (this.#twistyPlayerProp === "alg") {
       // this.model.leafToHighlight.addFreshListener(
       //   this.highlightLeaf.bind(this),
       // );
