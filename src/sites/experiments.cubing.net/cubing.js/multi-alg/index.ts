@@ -1,11 +1,11 @@
 import { Alg, LineComment, Newline } from "../../../../cubing/alg";
-import { TwistyPlayerV2 } from "../../../../cubing/twisty";
+import { TwistyPlayer } from "../../../../cubing/twisty";
 import {
   ExperimentalStickering,
   experimentalStickerings,
-} from "../../../../cubing/twisty/old/dom/TwistyPlayerConfig";
+} from "../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 
-const algsTextarea = document.querySelector("#algs")! as HTMLTextAreaElement;
+const algsTextarea = document.querySelector("#algs") as HTMLTextAreaElement;
 if (localStorage["multi-alg-textarea"]) {
   algsTextarea.value = localStorage["multi-alg-textarea"];
   algsTextarea.classList.add("saved");
@@ -15,7 +15,7 @@ algsTextarea.addEventListener("input", () => {
   algsTextarea.classList.remove("saved");
 });
 
-const player = new TwistyPlayerV2({});
+const player = new TwistyPlayer({});
 document.querySelector("#display")!.appendChild(player);
 
 async function downloadAlg(alg: Alg, name: string) {
@@ -28,11 +28,11 @@ async function downloadAlg(alg: Alg, name: string) {
 
 const stickeringSelect = document.querySelector(
   "#stickering",
-)! as HTMLSelectElement;
+) as HTMLSelectElement;
 for (const stickering of Object.keys(experimentalStickerings)) {
-  const option: HTMLOptionElement = stickeringSelect!.appendChild(
+  const option: HTMLOptionElement = stickeringSelect.appendChild(
     document.createElement("option"),
-  )! as HTMLOptionElement;
+  )!;
   option.value = stickering;
   option.textContent = stickering;
 }

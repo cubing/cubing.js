@@ -1,11 +1,13 @@
 import { keyToMove } from "../alg";
-import { KPuzzle } from "../kpuzzle";
+import type { KPuzzle } from "../kpuzzle";
+import type { KState } from "../kpuzzle/KState";
 import { puzzles } from "../puzzles";
-import { BluetoothPuzzle, PuzzleState } from "./smart-puzzle/bluetooth-puzzle";
+import { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle";
 
 export class KeyboardPuzzle extends BluetoothPuzzle {
-  public puzzle: Promise<KPuzzle> = (async () =>
-    new KPuzzle(await puzzles["3x3x3"].def()))();
+  private puzzle: Promise<KPuzzle> = puzzles["3x3x3"].kpuzzle();
+  private state: Promise<KState> = (async () =>
+    (await this.puzzle).startState())();
 
   listener: (e: KeyboardEvent) => Promise<void>;
 
@@ -25,8 +27,8 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
     this.target.removeEventListener("keydown", this.listener);
   }
 
-  public async getState(): Promise<PuzzleState> {
-    return (await this.puzzle).state;
+  public async getState(): Promise<KState> {
+    return this.state;
   }
 
   private async onKeyDown(e: KeyboardEvent): Promise<void> {
@@ -36,11 +38,12 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
 
     const move = keyToMove(e);
     if (move) {
-      (await this.puzzle).applyMove(move);
+      const newState = (await this.state).applyMove(move);
+      this.state = Promise.resolve(newState);
       this.dispatchMove({
         latestMove: move,
         timeStamp: e.timeStamp,
-        state: (await this.puzzle).state,
+        state: newState,
       });
       e.preventDefault();
     }

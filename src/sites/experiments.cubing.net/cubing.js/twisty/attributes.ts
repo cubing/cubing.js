@@ -1,12 +1,5 @@
 import { Alg } from "../../../../cubing/alg";
-import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
-import {
-  experimentalSetShareAllNewRenderers,
-  TwistyPlayer,
-} from "../../../../cubing/twisty";
-
-useNewFaceNames(true);
-experimentalSetShareAllNewRenderers(true);
+import { TwistyPlayer } from "../../../../cubing/twisty";
 
 {
   document.querySelector("#no-attributes")!.appendChild(new TwistyPlayer());
@@ -140,46 +133,44 @@ experimentalSetShareAllNewRenderers(true);
 }
 
 {
-  document.querySelector("#experimental-camera-latitude")!.appendChild(
+  document.querySelector("#camera-latitude")!.appendChild(
     new TwistyPlayer({
       alg: "R U R' U R U2' R'",
-      experimentalCameraLatitude: 0,
+      cameraLatitude: 0,
     }),
   );
   const tw = new TwistyPlayer();
-  document.querySelector("#experimental-camera-latitude")!.appendChild(tw);
+  document.querySelector("#camera-latitude")!.appendChild(tw);
   tw.alg = new Alg("R U R' U R U2' R'");
-  tw.experimentalCameraLatitude = 0;
+  tw.cameraLatitude = 0;
 }
 
 {
-  document.querySelector("#experimental-camera-longitude")!.appendChild(
+  document.querySelector("#camera-longitude")!.appendChild(
     new TwistyPlayer({
       alg: "R U R' U R U2' R'",
-      experimentalCameraLongitude: 0,
+      cameraLongitude: 0,
     }),
   );
   const tw = new TwistyPlayer();
-  document.querySelector("#experimental-camera-longitude")!.appendChild(tw);
+  document.querySelector("#camera-longitude")!.appendChild(tw);
   tw.alg = new Alg("R U R' U R U2' R'");
-  tw.experimentalCameraLongitude = 0;
+  tw.cameraLongitude = 0;
 }
 
 {
-  document.querySelector("#experimental-camera-latitude-limits")!.appendChild(
+  document.querySelector("#camera-latitude-limit")!.appendChild(
     new TwistyPlayer({
       alg: "R U R' U R U2' R'",
-      experimentalCameraLatitudeLimits: "none",
-      experimentalCameraLatitude: 80,
+      cameraLatitudeLimit: 90,
+      cameraLatitude: 80,
     }),
   );
   const tw = new TwistyPlayer();
-  document
-    .querySelector("#experimental-camera-latitude-limits")!
-    .appendChild(tw);
+  document.querySelector("#camera-latitude-limit")!.appendChild(tw);
   tw.alg = new Alg("R U R' U R U2' R'");
-  tw.experimentalCameraLatitudeLimits = "none";
-  tw.experimentalCameraLatitude = 80;
+  tw.cameraLatitudeLimit = 90;
+  tw.cameraLatitude = 80;
 }
 
 {

@@ -1,18 +1,15 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import type { KPuzzleDefinition } from "../../kpuzzle";
+import type { KPuzzle } from "../../kpuzzle";
+import type { KState } from "../../kpuzzle/KState";
 import {
   experimentalBinaryComponentsToReid3x3x3,
   experimentalTwizzleBinaryToBinaryComponents,
 } from "../../protocol";
 import { puzzles } from "../../puzzles";
 import { debugLog } from "../debug";
-import {
-  BluetoothConfig,
-  BluetoothPuzzle,
-  PuzzleState,
-} from "./bluetooth-puzzle";
+import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { flipBitOrder } from "./endianness";
 
 // TODO: Short IDs
@@ -37,7 +34,7 @@ export class HeykubeCube extends BluetoothPuzzle {
     debugLog("Characteristic:", stateCharacteristic);
 
     const cube = new HeykubeCube(
-      await puzzles["3x3x3"].def(),
+      await puzzles["3x3x3"].kpuzzle(),
       service,
       device,
       server,
@@ -47,7 +44,7 @@ export class HeykubeCube extends BluetoothPuzzle {
   }
 
   private constructor(
-    _def: KPuzzleDefinition,
+    _kpuzzle: KPuzzle,
     _service: BluetoothRemoteGATTService,
     device: BluetoothDevice,
     private server: BluetoothRemoteGATTServer,
@@ -104,7 +101,7 @@ export class HeykubeCube extends BluetoothPuzzle {
     });
   }
 
-  private decodeState(dv: DataView): { state: PuzzleState; latestMove: Move } {
+  private decodeState(dv: DataView): { state: KState; latestMove: Move } {
     const moves = [
       new Move("U"),
       new Move("U'"),
@@ -150,7 +147,7 @@ export class HeykubeCube extends BluetoothPuzzle {
     };
   }
 
-  public async getState(): Promise<PuzzleState> {
+  public async getState(): Promise<KState> {
     const b1 = await this.stateCharacteristic.readValue();
     return this.decodeState(b1).state;
   }
@@ -158,7 +155,7 @@ export class HeykubeCube extends BluetoothPuzzle {
 
 // // TODO: Move this into a factory?
 export const heykubeConfig: BluetoothConfig<BluetoothPuzzle> = {
-  connect: HeykubeCube.connect,
+  connect: HeykubeCube.connect.bind(HeykubeCube),
   prefixes: ["HEYKUBE"],
   filters: [{ namePrefix: "HEYKUBE" }],
   optionalServices: [UUIDs.heykubeService],

@@ -1,16 +1,13 @@
-import {
-  BoundaryType,
-  Direction,
-} from "../../old/animation/cursor/CursorTypes";
-import { buttonCSS, buttonGridCSS } from "../../old/dom/controls/buttons.css_";
-import { ClassListManager } from "../../old/dom/element/ClassListManager";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
+import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
+import { buttonCSS, buttonGridCSS } from "./TwistyButtonsV2.css";
+import { ClassListManager } from "../ClassListManager";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
 import {
   ButtonAppearances,
   ButtonIcon,
   buttonIcons,
-} from "../../model/depth-7/ButtonAppearanceProp";
+} from "../../model/props/viewer/ButtonAppearanceProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
 import {
@@ -57,7 +54,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
     }
     this.buttons = buttons as Record<ButtonCommand, TwistyButtonV2>;
 
-    this.model?.buttonAppearanceProp.addFreshListener(this.update.bind(this));
+    this.model?.buttonAppearance.addFreshListener(this.update.bind(this));
   }
 
   #onCommand(command: ButtonCommand) {
@@ -107,7 +104,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
       // TODO: Propagate button info to `ButtonAppearanceProp`.
       this.buttons?.fullscreen.setIcon("exit-fullscreen");
 
-      requestFullscreen(this.fullscreenElement!);
+      requestFullscreen(this.fullscreenElement);
 
       const onFullscreen = (): void => {
         if (documentFullscreenElement() !== this.fullscreenElement) {

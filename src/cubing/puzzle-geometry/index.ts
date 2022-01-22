@@ -1,19 +1,10 @@
-export { Perm } from "./Perm";
 export {
-  Orbit,
-  OrbitDef,
-  OrbitsDef,
-  Transformation,
-  VisibleState,
-} from "./PermOriSet";
-export {
-  getpuzzle,
+  getPuzzleDescriptionString,
   getPuzzleGeometryByDesc,
   getPuzzleGeometryByName,
-  getpuzzles,
-  parsedesc,
+  getPG3DNamedPuzzles,
+  parsePuzzleDescription,
   PuzzleGeometry,
-  useNewFaceNames,
 } from "./PuzzleGeometry";
 export type {
   StickerDat,
@@ -21,6 +12,9 @@ export type {
   StickerDatFace,
   StickerDatSticker,
 } from "./PuzzleGeometry";
-export { parseoptions } from "./Options";
+export { parseOptions } from "./Options";
 export { Quat } from "./Quat";
 export { schreierSims } from "./SchreierSims";
+
+// TODO: expose this from PG.
+export { PGNotation as ExperimentalPGNotation } from "./PuzzleGeometry";

@@ -1,12 +1,12 @@
 import type { Scene as ThreeScene } from "three";
-import type { Schedulable } from "../../old/animation/RenderScheduler";
-import { ManagedCustomElement } from "../../old/dom/element/ManagedCustomElement";
-import { customElementsShim } from "../../old/dom/element/node-custom-element-shims";
-import type { PuzzleID } from "../../old/dom/TwistyPlayerConfig";
-import { twistyViewerWrapperCSS } from "../../old/dom/viewers/TwistyViewerWrapper.css_";
+import type { PuzzleLoader } from "../../../puzzles";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/TwistyProp";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
+import type { Schedulable } from "../../controllers/RenderScheduler";
+import { ManagedCustomElement } from "../ManagedCustomElement";
+import { customElementsShim } from "../node-custom-element-shims";
+import { twistyViewerWrapperCSS } from "../TwistyViewerWrapper.css";
 import { Twisty2DPuzzleWrapper } from "./Twisty2DPuzzleWrapper";
 
 export class Twisty2DSceneWrapper
@@ -29,8 +29,8 @@ export class Twisty2DSceneWrapper
     this.addCSS(twistyViewerWrapperCSS);
     if (this.model) {
       this.#freshListenerManager.addListener(
-        this.model.puzzleProp,
-        this.onPuzzle.bind(this),
+        this.model.puzzleLoader,
+        this.onPuzzleLoader.bind(this),
       );
     }
   }
@@ -61,12 +61,12 @@ export class Twisty2DSceneWrapper
     this.addElement(await twisty2DPuzzlePromise);
   }
 
-  async onPuzzle(puzzle: PuzzleID): Promise<void> {
+  async onPuzzleLoader(puzzleLoader: PuzzleLoader): Promise<void> {
     this.#currentTwisty2DPuzzleWrapper?.disconnect();
     const twisty2DPuzzleWrapper = new Twisty2DPuzzleWrapper(
       this.model!,
       this,
-      puzzle,
+      puzzleLoader,
       this.effectiveVisualization!,
     );
 

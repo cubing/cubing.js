@@ -9,7 +9,7 @@ function getURLParamChecked<T>(
   defaultValue: T,
   validValues: T[],
 ): T {
-  let value = new URL(document.location.href).searchParams.get(name);
+  const value = new URL(document.location.href).searchParams.get(name);
   return validValues.includes(value as unknown as T)
     ? (value as unknown as T)
     : defaultValue;

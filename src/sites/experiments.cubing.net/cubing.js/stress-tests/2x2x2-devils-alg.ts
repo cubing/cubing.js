@@ -2,12 +2,8 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { AlgBuilder, Grouping, Move, Unit } from "../../../../cubing/alg";
-import { countMoves } from "../../../../cubing/notation";
+import { experimentalCountMoves } from "../../../../cubing/notation";
 import { TwistyPlayer } from "../../../../cubing/twisty";
-
-// Note: this file needs to contain code to avoid a Snowpack error.
-// So we put a `console.log` here for now.
-console.log("Loading stub file.");
 
 (async () => {
   const devilsAlgDef = {
@@ -54,9 +50,9 @@ console.log("Loading stub file.");
   for (const [varName, def] of Object.entries(devilsAlgDef)) {
     const update = progress.appendChild(document.createElement("div"));
     update.textContent = `${varName} = // ...`;
-    await new Promise(async (resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 10));
     const algBuilder = new AlgBuilder();
-    for (let tidbit of def.split(" ")) {
+    for (const tidbit of def.split(" ")) {
       // let inverted = false
       // if (tidbit.endsWith("'")) {
       //   inverted = true
@@ -66,7 +62,7 @@ console.log("Loading stub file.");
       if (!existing) {
         throw `aaaargh ${tidbit}`;
       }
-      let toPush = existing;
+      const toPush = existing;
       // if (inverted) {
       //   toPush = toPush.invert();
       // }
@@ -76,18 +72,16 @@ console.log("Loading stub file.");
     const grouping = new Grouping(algBuilder.toAlg());
     constructed[varName] = grouping;
     constructed[varName + "'"] = grouping.invert();
-    const c = countMoves(alg);
+    const c = experimentalCountMoves(alg);
     console.log(`Alg ${varName} has ${c} move${c === 1 ? "" : "s"}`);
     update.textContent = `${varName} = ${def} // ${c} move${
       c === 1 ? "" : "s"
     }`;
     update.scrollIntoView();
-    await new Promise(async (resolve) => setTimeout(resolve, 1));
+    await new Promise((resolve) => setTimeout(resolve, 1));
   }
 
-  const playerWrapper = document.querySelector(
-    "#player-wrapper",
-  )! as HTMLDivElement;
+  const playerWrapper = document.querySelector("#player-wrapper")!;
 
   playerWrapper.textContent = "";
   playerWrapper.appendChild(

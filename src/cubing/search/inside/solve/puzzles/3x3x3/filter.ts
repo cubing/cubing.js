@@ -1,48 +1,41 @@
-// @ts-ignore
 import { Move } from "../../../../../alg";
-import {
-  // @ts-ignore
-  KPuzzle,
-  // @ts-ignore
-  areOrbitTransformationsEquivalent,
-  // @ts-ignore
-  KPuzzleDefinition,
-  // @ts-ignore
-  Transformation,
-  // @ts-ignore
-} from "../../../../../kpuzzle";
+import type { KPuzzle } from "../../../../../kpuzzle";
+import { KState } from "../../../../../kpuzzle";
 
 export function isEquivalentTranformationIgnoringCENTERS(
-  def: KPuzzleDefinition,
-  t1: Transformation,
-  t2: Transformation,
+  t1: KState,
+  t2: KState,
 ): boolean {
-  for (const orbitName in def.orbits) {
-    if (
-      !areOrbitTransformationsEquivalent(def, orbitName, t1, t2, {
-        ignoreOrientation: orbitName === "CENTERS",
-      })
-    ) {
-      return false;
-    }
-  }
-  return true;
+  const t1NoCenterOri = new KState(t1.kpuzzle, {
+    EDGES: t1.stateData.EDGES,
+    CORNERS: t1.stateData.CORNERS,
+    CENTERS: {
+      pieces: t1.stateData.CENTERS.pieces,
+      orientation: new Array(6).fill(0),
+    },
+  }).experimentalToTransformation()!;
+  const t2NoCenterOri = new KState(t2.kpuzzle, {
+    EDGES: t2.stateData.EDGES,
+    CORNERS: t2.stateData.CORNERS,
+    CENTERS: {
+      pieces: t2.stateData.CENTERS.pieces,
+      orientation: new Array(6).fill(0),
+    },
+  }).experimentalToTransformation()!;
+  return t1NoCenterOri.isIdentical(t2NoCenterOri);
 }
 
-export function passesFilter(
-  def: KPuzzleDefinition,
-  state: Transformation,
-): boolean {
-  const kpuzzle = new KPuzzle(def);
-  if (isEquivalentTranformationIgnoringCENTERS(def, kpuzzle.state, state)) {
+export function passesFilter(kpuzzle: KPuzzle, state: KState): boolean {
+  if (isEquivalentTranformationIgnoringCENTERS(kpuzzle.startState(), state)) {
     return false;
   }
 
   for (const face of "ULFRBD") {
     for (let amount = 1; amount < 4; amount++) {
-      kpuzzle.reset();
-      kpuzzle.applyMove(new Move(face, amount));
-      if (isEquivalentTranformationIgnoringCENTERS(def, kpuzzle.state, state)) {
+      const transformation = kpuzzle
+        .moveToTransformation(new Move(face, amount))
+        .toKState();
+      if (isEquivalentTranformationIgnoringCENTERS(transformation, state)) {
         return false;
       }
     }

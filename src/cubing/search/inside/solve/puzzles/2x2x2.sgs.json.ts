@@ -9,7 +9,7 @@ export async function cachedData222() {
 // TODO: Reduce info.
 export async function data222(): Promise<SGSCachedData> {
   return parseSGS(
-    await cube2x2x2.def(),
+    await cube2x2x2.kpuzzle(),
     `SubgroupSizes 24 21 18 15 12 9 6
 
 Alg F

@@ -1,10 +1,10 @@
 export function bufferToSpacedHex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
-  return Array.prototype.map
-    .call(new Uint8Array(buffer), (x: number) =>
+  return (
+    Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
       ("00" + x.toString(16)).slice(-2),
-    )
-    .join(" ");
+    ) as string[]
+  ).join(" ");
 }
 
 export function spacedHexToBuffer(hex: string): Uint8Array {

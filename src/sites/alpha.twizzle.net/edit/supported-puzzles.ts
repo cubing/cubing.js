@@ -3,10 +3,7 @@ import {
   StickerDat,
 } from "../../../cubing/puzzle-geometry";
 import { puzzles } from "../../../cubing/puzzles";
-import type {
-  PuzzleID,
-  VisualizationFormat,
-} from "../../../cubing/twisty/old/dom/TwistyPlayerConfig";
+import type { PuzzleID, VisualizationFormat } from "../../../cubing/twisty";
 
 class DisplayableKPuzzle {
   public type: "kpuzzle" = "kpuzzle";
@@ -41,7 +38,7 @@ class DisplayablePG3D {
   }
 
   public puzzleName(): string {
-    return this.name as string;
+    return this.name;
   }
 
   // public async kpuzzleDefinition(): Promise<KPuzzleDefinition> {
@@ -50,7 +47,7 @@ class DisplayablePG3D {
 
   public stickerDat(): StickerDat {
     // TODO: Remove `as` cast.
-    const pg = getPuzzleGeometryByDesc(this.desc, ["orientcenters", "true"]);
+    const pg = getPuzzleGeometryByDesc(this.desc, { orientCenters: true });
     return pg.get3d();
   }
 }

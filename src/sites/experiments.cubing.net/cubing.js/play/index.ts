@@ -1,4 +1,4 @@
-import { Alg, algCubingNetLink } from "../../../../cubing/alg";
+import { Alg } from "../../../../cubing/alg";
 import {
   BluetoothPuzzle,
   connectSmartPuzzle,
@@ -8,32 +8,22 @@ import {
   OrientationEvent,
 } from "../../../../cubing/bluetooth";
 import { ProxyEvent, WebSocketProxySender } from "../../../../cubing/stream";
-import {
-  experimentalShowRenderStats,
-  Twisty3DCanvas,
-  Twisty3DPuzzle,
-} from "../../../../cubing/twisty";
-import { useNewFaceNames } from "../../../../cubing/puzzle-geometry";
+import { experimentalDebugShowRenderStats } from "../../../../cubing/twisty";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
+  debugShowRenderStats,
   DEFAULT_PUZZLE_ID,
   getPuzzleID,
   PuzzleID,
-  sendingSocketOrigin,
   receivingSocketOrigin,
-  coalesce,
-  debugShowRenderStats,
+  sendingSocketOrigin,
 } from "./url-params";
 import { CallbackProxyReceiver } from "./websocket-proxy";
-import type { Quaternion } from "three";
-import type { AlgCubingNetOptions } from "../../../../cubing/alg";
 
 const bluetoothSVG = new URL("./bluetooth.svg", import.meta.url).toString();
 const clearSVG = new URL("./clear.svg", import.meta.url).toString();
 
-useNewFaceNames(true);
-
-experimentalShowRenderStats(debugShowRenderStats());
+experimentalDebugShowRenderStats(debugShowRenderStats());
 // experimentalShowJumpingFlash(false); // TODO
 
 let trackingOrientation: boolean = false;
@@ -46,10 +36,6 @@ function puzzleName(puzzleID: PuzzleID): string {
     megaminx: "Megaminx",
   };
   return puzzleNameMap[puzzleID] ?? puzzleID;
-}
-
-function maybeCoalesce(alg: Alg): Alg {
-  return coalesce() ? alg.simplify() : alg;
 }
 
 const fn = async (
@@ -120,39 +106,41 @@ const fn = async (
   controlBar.appendChild(clearButton);
   clearButton.addEventListener("click", space);
 
-  function toLink(alg: Alg): string {
-    const url = new URL("../edit/", import.meta.url);
-    const puzzleID = getPuzzleID();
-    if (puzzleID === "3x3x3") {
-      const opts: AlgCubingNetOptions = {
-        alg: alg,
-      };
-      const setup = swipeyPuzzle.twistyPlayer.experimentalSetupAlg;
-      if (!setup.experimentalIsEmpty()) {
-        opts.setup = setup;
-      }
-      return algCubingNetLink(opts);
-    } else {
-      url.searchParams.set("puzzle", puzzleID);
-      url.searchParams.set("alg", alg.toString());
-      return url.toString();
-    }
-  }
+  // function toLink(alg: Alg): string {
+  //   const url = new URL("../edit/", import.meta.url);
+  //   const puzzleID = getPuzzleID();
+  //   if (puzzleID === "3x3x3") {
+  //     const opts: AlgCubingNetOptions = {
+  //       alg: alg,
+  //     };
+  //     /// TODO
+  //     // const setup = swipeyPuzzle.twistyPlayer.experimentalSetupAlg;
+  //     // if (!setup.experimentalIsEmpty()) {
+  //     //   opts.setup = setup;
+  //     // }
+  //     return algCubingNetLink(opts);
+  //   } else {
+  //     url.searchParams.set("puzzle", puzzleID);
+  //     url.searchParams.set("alg", alg.toString());
+  //     return url.toString();
+  //   }
+  // }
 
   const algLink = document.createElement("a");
   const instructions =
     fromKeyboard || fromMouse ? "Type to add moves" : "Swipe to add moves.";
   algLink.textContent = instructions;
   controlBar.appendChild(algLink);
-  function updateAlgLink(): void {
-    const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
-    const alg = seq.toString();
-    if (alg === "") {
+  async function updateAlgLink(): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    const alg = await swipeyPuzzle.twistyPlayer.experimentalGet.alg();
+    if (alg.experimentalIsEmpty()) {
       algLink.textContent = instructions;
       algLink.removeAttribute("href");
     } else {
-      algLink.textContent = alg;
-      algLink.href = toLink(seq);
+      algLink.textContent = alg.toString();
+      algLink.href =
+        await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
     }
   }
 
@@ -164,9 +152,7 @@ const fn = async (
 
   function resetCamera() {
     if (trackingOrientation) {
-      (
-        swipeyPuzzle.twistyPlayer.viewerElems[0] as Twisty3DCanvas
-      ).camera.position.set(0, 4, 5);
+      // TODO
     }
   }
 
@@ -176,13 +162,14 @@ const fn = async (
       trackingOrientation = true;
       resetCamera();
     }
-    swipeyPuzzle.twistyPlayer.scene!.twisty3Ds.forEach(
-      (twisty3DPuzzle: Twisty3DPuzzle) => {
-        twisty3DPuzzle.quaternion.copy(event.quaternion as Quaternion); // TODO
-      },
-    );
-    // TODO: expose a way to scheduler renders on objects.
-    (swipeyPuzzle.twistyPlayer.timeline as any).dispatchTimestamp(); // TODO
+    // TODO
+    // swipeyPuzzle.twistyPlayer.scene!.twisty3Ds.forEach(
+    //   (twisty3DPuzzle: Twisty3DPuzzle) => {
+    //     twisty3DPuzzle.quaternion.copy(event.quaternion as Quaternion); // TODO
+    //   },
+    // );
+    // // TODO: expose a way to scheduler renders on objects.
+    // (swipeyPuzzle.twistyPlayer.timeline as any).dispatchTimestamp(); // TODO
 
     if (sender) {
       sender.sendOrientationEvent(event);
@@ -236,10 +223,11 @@ const fn = async (
     clearButton.blur();
   }
 
-  function enter() {
-    const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
+  async function enter() {
+    const url = await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
+    // const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
     const a = document.createElement("a");
-    a.href = toLink(seq);
+    a.href = url;
     a.click();
   }
 
@@ -265,14 +253,13 @@ const fn = async (
 
   swipeyPuzzle.setAlgListener(updateAlgLink);
 
-  document.addEventListener("copy", (e) => {
-    const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg); // TODO
-    const alg = seq.toString();
-    e.clipboardData!.setData("text/plain", alg);
+  document.addEventListener("copy", async (e) => {
+    const alg = await swipeyPuzzle.twistyPlayer.experimentalGet.alg(); // TODO
+    e.clipboardData!.setData("text/plain", alg.toString());
 
     const a = document.createElement("a");
-    a.href = toLink(seq);
-    a.textContent = alg;
+    a.href = await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
+    a.textContent = alg.toString();
     const html = new XMLSerializer().serializeToString(a);
     e.clipboardData!.setData("text/html", html);
 
@@ -322,7 +309,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("mousedown", mouseCallback);
   document.body.addEventListener("touchstart", swipeCallback);
 
-  let go = new URL(document.location.href).searchParams.get("go");
+  const go = new URL(document.location.href).searchParams.get("go");
   switch (go) {
     case "keyboard":
       keyboardCallback();
@@ -340,6 +327,10 @@ window.addEventListener("DOMContentLoaded", () => {
 // Initialize ahead of time so that it can render more quickly.
 const swipeyPuzzle = new SwipeyPuzzle(
   getPuzzleID(),
-  () => {},
-  () => {},
+  () => {
+    /* */
+  },
+  () => {
+    /* */
+  },
 );

@@ -1,4 +1,4 @@
-const stub = document.querySelector("#stub")! as HTMLElement;
+const stub = document.querySelector("#stub") as HTMLElement;
 
 function newTable(
   stub: HTMLElement,

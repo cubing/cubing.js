@@ -19,7 +19,7 @@ needFolder(
 );
 
 export function startServer(port) {
-  port ??= 4443;
+  port = port ?? 4443;
   console.log("Starting server.");
   createServer(function (request, response) {
     const normalizedPath = new URL(request.url, "http://test/").pathname;
@@ -34,7 +34,7 @@ export function startServer(port) {
       filePath += "index.html";
     }
 
-    var extension = String(extname(filePath)).toLowerCase();
+    var extension = extname(filePath).toLowerCase();
     var mimeTypes = {
       ".html": "text/html",
       ".js": "text/javascript",

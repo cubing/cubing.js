@@ -10,20 +10,20 @@
   <body>
     <div class="content">
       <p>Default puzzle should be 3x3x3:</p>
-      <twisty-player-v2
+      <twisty-player
         alg="U R U' R' U' R U' r2' u r U r2' u' r2 U' r' U r' U2 r"
-      ></twisty-player-v2>
+      ></twisty-player>
       <p>This should be 2D:</p>
-      <twisty-player-v2
+      <twisty-player
         puzzle="4x4x4"
         alg="R U R' U' R' F R2 U' R' U' R U R' F'"
-      ></twisty-player-v2>
+      ></twisty-player>
       <p>Pyraminx 2D:</p>
-      <twisty-player-v2
+      <twisty-player
         puzzle="pyraminx"
         visualization="2D"
         alg="R U R' U R U R'"
-      ></twisty-player-v2>
+      ></twisty-player>
       <p>Square-1 parity:</p>
       <div
         style="
@@ -36,14 +36,14 @@
           puzzle="square1"
           visualization="2D"
           style="height: 400px; width: 45%; margin: 0"
-          alg="SLICE U3' SLICE D3 SLICE D3' SLICE D3 SLICE U2 SLICE D2 SLICE U2' SLICE U4 SLICE D2' SLICE D2 SLICE U1' D4 SLICE D3' SLICE D3"
+          alg="/ (-3, 0) / (0, 3) / (0, -3) / (0, 3) / (2, 0) / (0, 2) / (-2, 0) / (4, 0) / (0, -2) / (0, 2) / (-1, 4) / (0, -3) / (0, 3)"
         >
         </twisty-player>
         <twisty-player
           puzzle="square1"
           visualization="2D"
           style="height: 400px; width: 45%; margin: 0"
-          alg="SLICE U3 D3 SLICE U1 SLICE U2' D2' SLICE U2 SLICE U2 D2 SLICE U1' SLICE U3' D3' SLICE U2' SLICE U3 D3 SLICE U3 SLICE U1' D1' SLICE U3' SLICE U1 D1 SLICE U4' D3'"
+          alg="/ (3, 3) / (1, 0) / (-2, -2) / (2, 0) / (2, 2) / (-1, 0) / (-3, -3) / (-2, 0) / (3, 3) / (3, 0) / (-1, -1) / (-3, 0) / (1, 1) / (-4, 3)"
         >
         </twisty-player>
       </div>
@@ -54,11 +54,11 @@
       <div id="js-init-example"></div>
 
       <p>FTO PG3D:</p>
-      <twisty-player-v2
+      <twisty-player
         puzzle="fto"
         visualization="PG3D"
         alg="[bl: [R, B'] [L', B]]"
-      ></twisty-player-v2>
+      ></twisty-player>
 
       <p>Custom PG3D:</p>
       <div id="custom-pg3d"></div>
@@ -68,6 +68,13 @@
       <twisty-player
         alg="[R U R2', R U2 R2']"
         visualization="PG3D"
+      ></twisty-player>
+
+      Custom puzzle description:
+
+      <twisty-player
+        experimental-puzzle-description="c e 0.707106781186547"
+        alg="(UF UR UB UL)3"
       ></twisty-player>
     </div>
   </body>

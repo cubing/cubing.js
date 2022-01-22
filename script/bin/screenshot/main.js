@@ -3,6 +3,9 @@ import puppeteer from "puppeteer";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { startServer } from "../../lib/experiments-server/index.js";
+import { ensureChromiumDownload } from "../../lib/puppeteer.js";
+
+await ensureChromiumDownload();
 
 const PAGE_URL =
   "http://localhost:4443/experiments.cubing.net/cubing.js/screenshot/";
@@ -43,12 +46,18 @@ const args = yargs(hideBin(process.argv))
   })
   .option("width", {
     type: "number",
-    default: 1024,
+    default: 2048,
   })
   .option("height", {
     type: "number",
     default: null,
     description: "Defaults to width",
+  })
+  .option("camera-latitude", {
+    type: "number",
+  })
+  .option("camera-longitude", {
+    type: "number",
   })
   .strictOptions()
   .demandCommand(1).argv;
@@ -62,7 +71,15 @@ const options = {
   experimentalSetupAnchor: args.anchor,
   hintFacelets: args["hint-facelets"],
   visualization: args.visualization,
+  cameraLatitudeLimit: 90,
 };
+
+if ("camera-latitude" in args) {
+  options.cameraLatitude = args["camera-latitude"];
+}
+if ("camera-longitude" in args) {
+  options.cameraLongitude = args["camera-longitude"];
+}
 
 for (const key in options) {
   if (typeof options[key] === "undefined") {
@@ -92,8 +109,11 @@ options.controlPanel = "none";
   }
 
   await page.goto(url.toString());
-  const path = args["out-file"] ?? `${args.alg || "puzzle"}.png`;
+  const path = args["out-file"] ?? `${args.alg ?? "puzzle"}.png`;
   console.log("Output file:", path);
+
+  await page.waitForSelector("#screenshot");
+
   await page.screenshot({
     path,
     omitBackground: true,

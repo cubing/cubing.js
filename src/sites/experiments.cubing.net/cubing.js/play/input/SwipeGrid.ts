@@ -140,7 +140,7 @@ export class SwipeGrid extends HTMLElement {
       ) {
         return;
       }
-      for (let i in this.sectors) {
+      for (let i = 0; i < this.sectors.length; i++) {
         const targetSector = this.sectors[i];
         if (targetSector !== swipe.sourceSector) {
           targetSector.textContent = this.moveUIText(

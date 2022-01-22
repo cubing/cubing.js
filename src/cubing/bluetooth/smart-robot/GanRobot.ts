@@ -4,11 +4,11 @@ import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 // TODO: Remove this. It's only used for debugging.
 function buf2hex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
-  return Array.prototype.map
-    .call(new Uint8Array(buffer), (x: number) =>
+  return (
+    Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
       ("00" + x.toString(16)).slice(-2),
-    )
-    .join(" ");
+    ) as string[]
+  ).join(" ");
 }
 
 const MAX_NIBBLES_PER_WRITE = 18 * 2;
@@ -304,7 +304,7 @@ export class GanRobot extends EventTarget {
 
 // // TODO: Move this into a factory?
 export const ganTimerConfig: BluetoothConfig<GanRobot> = {
-  connect: GanRobot.connect,
+  connect: GanRobot.connect.bind(GanRobot),
   prefixes: ["GAN"],
   filters: [{ namePrefix: "GAN" }],
   optionalServices: [UUIDs.ganRobotService],

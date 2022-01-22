@@ -17,6 +17,7 @@ const events = [
   "sq1",
   "444bf",
   "555bf",
+  "333mb",
 ];
 
 setDebugMeasurePerf(false);

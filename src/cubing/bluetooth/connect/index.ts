@@ -13,7 +13,7 @@ function requestOptions<T>(
         optionalServices: [] as BluetoothServiceUUID[],
       }
     : {
-        filters: [] as BluetoothRequestDeviceFilter[],
+        filters: [] as BluetoothLEScanFilter[],
         optionalServices: [] as BluetoothServiceUUID[],
       };
   for (const config of configs) {

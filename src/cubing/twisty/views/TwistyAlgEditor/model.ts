@@ -5,12 +5,12 @@ import type { Parsed } from "../../../alg/parse";
 import {
   AlgWithIssues,
   algWithIssuesFromString,
-} from "../../model/depth-0/AlgProp";
+} from "../../model/props/puzzle/state/AlgProp";
 import {
   SimpleTwistyPropSource,
   TwistyPropDerived,
   TwistyPropSource,
-} from "../../model/TwistyProp";
+} from "../../model/props/TwistyProp";
 import {
   AnimatedLeafUnitInfo,
   leafTokens,
@@ -60,7 +60,7 @@ export class TwistyAlgEditorSelectionProp extends TwistyPropSource<
     input: SelectionInfoPropInput,
     oldValue: Promise<SelectionInfo>,
   ): Promise<SelectionInfo> {
-    let { selectionStart, selectionEnd } = input;
+    const { selectionStart, selectionEnd } = input;
     const lastResult = await oldValue;
     const endChangedMostRecently =
       input.selectionStart === lastResult.selectionStart &&

@@ -39,6 +39,6 @@ export function requestFullscreen(element: Element): Promise<void> {
   if (element.requestFullscreen) {
     return element.requestFullscreen();
   } else {
-    return element.webkitRequestFullscreen!();
+    return element.webkitRequestFullscreen();
   }
 }

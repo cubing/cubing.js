@@ -1,8 +1,10 @@
 import * as three from "three";
-import { cubing } from "../../../../cubing/cubing.bundle-global";
+import { cubingBundleGlobalExports } from "../../../../cubing/cubing.bundle-global.exports";
 
-console.log("cubing", cubing);
-for (const [moduleName, moduleExport] of Object.entries(cubing)) {
+console.log("cubing", cubingBundleGlobalExports);
+for (const [moduleName, moduleExport] of Object.entries(
+  cubingBundleGlobalExports,
+)) {
   console.log(moduleName, moduleExport);
   (window as any)[moduleName] = moduleExport;
 }

@@ -35,7 +35,7 @@ class FactoredNumber {
         }
         r += i;
         if (this.mult[i] > 1) {
-          r += "^" + this.mult[i];
+          r += `^${this.mult[i]}`;
         }
       }
     }
@@ -135,18 +135,7 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): number {
         sollen += avg;
       }
       disp(
-        "" +
-          i +
-          ": sz " +
-          sz +
-          " T " +
-          tks +
-          " sol " +
-          sollen +
-          " none " +
-          none +
-          " mults " +
-          mults,
+        `${i}: sz ${sz} T ${tks} sol ${sollen} none ${none} mults ${mults.toString()}`,
       );
     }
     return sz;

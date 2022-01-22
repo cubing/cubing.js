@@ -1,6 +1,0 @@
-{
-  "name": "puzzle-geometry",
-  "type": "module",
-  "main": "../dist/esm/puzzle-geometry/index.js",
-  "types": "../dist/types/puzzle-geometry/index.d.ts"
-}

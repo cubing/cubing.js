@@ -7,53 +7,47 @@ import { getPuzzleGeometryByName, schreierSims } from ".";
  */
 describe("PuzzleGeometry-OrientCenters", () => {
   it("testcenterorientation", () => {
-    let options = [
-      "orientcenters",
-      "true",
-      "movelist",
-      '["2U","2R","2F"]',
-      "edgesets",
-      "false",
-      "cornersets",
-      "false",
-    ];
-    let pg = getPuzzleGeometryByName("3x3x3", options);
+    let pg = getPuzzleGeometryByName("3x3x3", {
+      orientCenters: true,
+      moveList: ["2U", "2R", "2F"],
+      includeEdgeOrbits: false,
+      includeCornerOrbits: false,
+    });
     let os = pg.getOrbitsDef(false);
     let ss = schreierSims(
-      os.moveops.map((_: any) => _.toPerm()),
+      os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
     expect(ss).toBe(768);
-    options = ["orientcenters", "true", "cornersets", "false"];
-    pg = getPuzzleGeometryByName("skewb", options);
+    pg = getPuzzleGeometryByName("skewb", {
+      orientCenters: true,
+      includeCornerOrbits: false,
+    });
     os = pg.getOrbitsDef(false);
     ss = schreierSims(
-      os.moveops.map((_: any) => _.toPerm()),
+      os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
     expect(ss).toBe(11520);
-    options = [
-      "orientcenters",
-      "true",
-      "cornersets",
-      "false",
-      "edgesets",
-      "false",
-      "allmoves",
-      "true",
-    ];
-    pg = getPuzzleGeometryByName("starminx", options);
+    pg = getPuzzleGeometryByName("starminx", {
+      orientCenters: true,
+      includeCornerOrbits: false,
+      includeEdgeOrbits: false,
+      allMoves: true,
+    });
     os = pg.getOrbitsDef(false);
     ss = schreierSims(
-      os.moveops.map((_: any) => _.toPerm()),
+      os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
     expect(ss).toBe(60);
-    options = ["orientcenters", "true", "cornersets", "false"];
-    pg = getPuzzleGeometryByName("pentultimate", options);
+    pg = getPuzzleGeometryByName("pentultimate", {
+      orientCenters: true,
+      includeCornerOrbits: false,
+    });
     os = pg.getOrbitsDef(false);
     ss = schreierSims(
-      os.moveops.map((_: any) => _.toPerm()),
+      os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
     expect(ss).toBe(58471875000000000);

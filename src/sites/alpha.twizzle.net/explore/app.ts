@@ -1,875 +1,193 @@
-import { Raycaster, Vector2, Vector3 } from "three";
-// Import index files from source.
-// This allows Parcel to be faster while only using values exported in the final distribution.
-import { Alg, Move } from "../../../cubing/alg";
-import { experimentalAppendMove } from "../../../cubing/alg/operation";
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
   MoveEvent,
 } from "../../../cubing/bluetooth";
-import type { KPuzzleDefinition } from "../../../cubing/kpuzzle";
 import {
-  getpuzzle,
-  getpuzzles,
-  parsedesc,
-  parseoptions,
+  getPuzzleDescriptionString,
+  getPG3DNamedPuzzles,
   PuzzleGeometry,
-  schreierSims,
-  StickerDat,
 } from "../../../cubing/puzzle-geometry";
-import type { LegacyExperimentalPG3DViewConfig } from "../../../cubing/twisty/old/dom/TwistyPlayer";
-import {
-  experimentalShowRenderStats,
-  Twisty3DCanvas,
-} from "../../../cubing/twisty/old/dom/viewers/Twisty3DCanvas";
-import { TwistyPlayer } from "../../../cubing/twisty";
-import { countMoves } from "../../../cubing/notation";
+import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
+import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
+import { constructTwistyPlayer } from "./twisty-player";
 import { getURLParam, setURLParams } from "./url-params";
-import { getNotationLayer } from "../../../cubing/kpuzzle/kpuzzle";
-import {
-  OrbitCoordinates,
-  positionToOrbitCoordinates,
-} from "../../../cubing/twisty/old/dom/viewers/TwistyOrbitControls";
 
-if (getURLParam("debugShowRenderStats")) {
-  experimentalShowRenderStats(true);
-}
-//experimentalShowJumpingFlash(false); // TODO: Re-implement this
+export class TwizzleExplorerApp {
+  twistyPlayer: TwistyPlayer;
+  twistyAlgEditor: TwistyAlgEditor;
+  configUI: ConfigUI;
+  constructor() {
+    this.twistyPlayer = constructTwistyPlayer();
+    document.querySelector("#twisty-wrapper")?.appendChild(this.twistyPlayer);
 
-let twisty: TwistyPlayer;
-let pg: PuzzleGeometry | undefined;
-let puzzle: KPuzzleDefinition;
-let puzzleSelected = false;
-let safeKpuzzle: KPuzzleDefinition | undefined;
-let descinput: HTMLInputElement;
-let algoinput: HTMLInputElement;
-let actions: HTMLSelectElement;
-let moveInput: HTMLSelectElement;
-let lastval: string = "";
-let lastalgo: string = "";
-let scramble: number = 0;
-let stickerDat: StickerDat;
-const DEFAULT_CAMERA_DISTANCE = 5.5;
-let initialCameraOrbitCoordinates: OrbitCoordinates = {
-  latitude: 0,
-  longitude: 0,
-  distance: DEFAULT_CAMERA_DISTANCE,
-};
-let savedCameraOrbitCoordinates: OrbitCoordinates = {
-  latitude: 0,
-  longitude: 0,
-  distance: DEFAULT_CAMERA_DISTANCE,
-};
-let haveSavedCamera = false;
-let lastShape: string = "";
-let nextShape: string = "";
-let tempomult: number = 1.0;
-const renderOptions = [
-  "centers",
-  "edges",
-  "corners",
-  "blockmoves",
-  "vertexmoves",
-  "sidebyside",
-  "hintstickers",
-  "showfoundation",
-];
-const workOptions = [
-  "threed",
-  "centers",
-  "edges",
-  "corners",
-  "optimize",
-  "blockmoves",
-  "allmoves",
-  "vertexmoves",
-  "killori",
-];
-let lastRender: any;
-let gripdepth: any;
-function getCheckbox(a: string): boolean {
-  return (document.getElementById(a) as HTMLInputElement).checked;
-}
+    this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
+    this.twistyAlgEditor.debugNeverRequestTimestamp = true; // TODO
+    this.twistyAlgEditor.twistyPlayer = this.twistyPlayer;
 
-function getCheckboxes(a: string[]): any {
-  const r: any = {};
-  for (const s of a) {
-    r[s] = getCheckbox(s);
-  }
-  return r;
-}
-
-function equalCheckboxes(a: string[], b: any, c: any): boolean {
-  for (const s of a) {
-    if (b[s] !== c[s]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function myparsedesc(
-  desc: string,
-  options: Array<string | number | boolean | Array<string>>,
-) {
-  try {
-    const args = desc.split(" ");
-    const descind = parseoptions(args, options);
-    return parsedesc(args.slice(descind, args.length).join(" "));
-  } catch (e) {
-    return undefined;
-  }
-}
-
-function getModValueForMove(move: Move): number {
-  if (!pg) {
-    console.log("Bailing on mod; pg is null");
-    return 1;
-  }
-  let family = stickerDat.unswizzle(move);
-  for (const axis of stickerDat.axis) {
-    if (family === axis[1]) {
-      return axis[2] as number;
-    }
-  }
-  console.log("Bailing on mod for " + family + "; no axis match");
-  return 1;
-}
-
-function intersectionToMove(
-  point: Vector3,
-  event: MouseEvent,
-  rightClick: boolean,
-): Move | null {
-  const allowRotatingGrips = event.ctrlKey || event.metaKey;
-  let bestGrip: string = stickerDat.axis[0][1];
-  let bestProduct: number = 0;
-  for (const axis of stickerDat.axis) {
-    const product = point.dot(new Vector3(...axis[0]));
-    if (
-      (gripdepth[axis[1]] > 1 || allowRotatingGrips) &&
-      product > bestProduct
-    ) {
-      bestProduct = product;
-      bestGrip = axis[1];
-    }
-  }
-  let move = new Move(bestGrip);
-  if (bestProduct > 0) {
-    if (event.shiftKey) {
-      if (getCheckbox("blockmoves")) {
-        move = move.modified({ family: bestGrip.toLowerCase() });
-      } else {
-        move = move.modified({ innerLayer: 2 });
-      }
-    } else if ((event.ctrlKey || event.metaKey) && gripdepth[bestGrip]) {
-      move = move.modified({ family: bestGrip + "v" });
-    }
-  }
-  if (pg) {
-    const move2 = pg.notationMapper.notationToExternal(move);
-    if (move2 === null) {
-      return null;
-    }
-    move = move2;
-  }
-  if (getModValueForMove(move) !== 2 && !rightClick) {
-    move = move.invert();
-  }
-  return move;
-}
-
-function LucasSetup(
-  pg: PuzzleGeometry,
-  kpuzzledef: KPuzzleDefinition,
-  newStickerDat: StickerDat,
-  savealgo: boolean,
-): void {
-  safeKpuzzle = kpuzzledef; // this holds the scrambled position
-  puzzle = kpuzzledef as KPuzzleDefinition;
-  const mps = pg.movesetgeos;
-  gripdepth = {};
-  for (const mp of mps) {
-    const grip1 = mp[0] as string;
-    const grip2 = mp[2] as string;
-    // angle compatibility hack
-    gripdepth[grip1] = mp[4];
-    gripdepth[grip2] = mp[4];
-  }
-  algoinput.style.backgroundColor = "";
-  stickerDat = newStickerDat;
-  if (savealgo && !trimEq(lastalgo, "")) {
-    setAlgo(lastalgo, true);
-  } else {
-    setAlgo("", true);
-  }
-}
-
-function trimEq(a: string, b: string): boolean {
-  return a.trim() === b.trim();
-}
-
-function updateMoveCount(alg?: Alg): void {
-  const len = countMoves(alg ? alg : Alg.fromString(lastalgo));
-  const mc = document.getElementById("movecount");
-  if (mc) {
-    mc.innerText = "Moves: " + len;
-  }
-}
-
-function saveCamera(): void {
-  savedCameraOrbitCoordinates =
-    twisty.experimentalDerivedCameraOrbitCoordinates();
-  haveSavedCamera = true;
-}
-//  This function is *not* idempotent when we save the
-//  camera position.
-function cameraCoords(pg: PuzzleGeometry): OrbitCoordinates {
-  if (haveSavedCamera) {
-    haveSavedCamera = false;
-    return savedCameraOrbitCoordinates;
-  }
-  const faceCount = pg.baseplanerot.length;
-  let geoTowardsViewer = "?";
-  if (faceCount === 4) {
-    geoTowardsViewer = "FLR";
-  } else if (faceCount === 6) {
-    geoTowardsViewer = "URF";
-  } else if (faceCount === 8) {
-    geoTowardsViewer = "FLUR";
-  } else if (faceCount === 12) {
-    geoTowardsViewer = "F";
-  } else if (faceCount === 20) {
-    geoTowardsViewer = "F";
-  }
-  const norm = pg.getGeoNormal(geoTowardsViewer);
-  if (norm === undefined) {
-    return positionToOrbitCoordinates(
-      new Vector3(0, 0, DEFAULT_CAMERA_DISTANCE),
+    this.configUI = new ConfigUI(this);
+    new SelectUI(this);
+    const moveCountElem = document.querySelector("#move-count")!;
+    this.twistyPlayer.experimentalModel.moveCount.addFreshListener(
+      (moveCount) => {
+        moveCountElem.textContent = `Moves: ${moveCount}`;
+      },
     );
   }
-  return positionToOrbitCoordinates(
-    new Vector3(...norm).multiplyScalar(DEFAULT_CAMERA_DISTANCE),
-  );
-}
 
-function legacyExperimentalPG3DViewConfig(): LegacyExperimentalPG3DViewConfig {
-  return {
-    def: puzzle,
-    stickerDat,
-    experimentalPolarVantages: true,
-    showFoundation: getCheckbox("showfoundation"),
-    hintStickers: getCheckbox("hintstickers"),
-  };
-}
+  // TODO: Find out how to avoid the need for this.
+  async puzzleGeometry(): Promise<PuzzleGeometry> {
+    const puzzleLoader =
+      await this.twistyPlayer.experimentalModel.puzzleLoader.get();
 
-async function setAlgo(str: string, writeback: boolean): Promise<void> {
-  let alg: Alg = new Alg();
-  const elem = document.querySelector("#twisty-wrapper");
-  if (elem) {
-    // this part should never throw, and we should not need to do
-    // it again.  But for now we always do.
-    if (!twisty) {
-      elem.textContent = "";
-      twisty = new TwistyPlayer(
-        {
-          puzzle: "custom",
-          alg: new Alg(),
-          visualization: "PG3D",
-          backView: getCheckbox("sidebyside") ? "side-by-side" : "top-right",
-          experimentalCameraLatitude: initialCameraOrbitCoordinates.latitude,
-          experimentalCameraLongitude: initialCameraOrbitCoordinates.longitude,
-          experimentalCameraLatitudeLimits: "none",
-          // TODO: distance?
-          viewerLink: "none",
-        },
-        legacyExperimentalPG3DViewConfig(),
-        (alg: Alg) => {
-          markInvalidAlg(alg.toString());
-        },
-      );
-      twisty.timeline.tempoScale = tempomult;
-      lastShape = nextShape;
-      elem.appendChild(twisty);
-      twisty.legacyExperimentalCoalesceModFunc = getModValueForMove;
-
-      const twisty3DCanvases: Twisty3DCanvas[] =
-        twisty.viewerElems as Twisty3DCanvas[];
-      // TODO: This is a hack.
-      // The `Vantage`s are constructed async right now, so we wait until they (probably) exist and then register listeners.
-      // `Vantage` should provide a way to register this immediately (or `Twisty` should provide a click handler abstraction).
-      setTimeout(() => {
-        twisty.experimentalSetCameraOrbitCoordinates(
-          initialCameraOrbitCoordinates,
-        );
-        for (const twisty3DCanvas of twisty3DCanvases) {
-          twisty3DCanvas.canvas.addEventListener(
-            "mouseup",
-            onMouseClick.bind(onMouseClick, twisty3DCanvas, "U"),
-            false,
-          );
-          twisty3DCanvas.canvas.addEventListener(
-            "mousedown",
-            onMouseClick.bind(onMouseClick, twisty3DCanvas, "D"),
-            false,
-          );
-          twisty3DCanvas.canvas.addEventListener(
-            "contextmenu",
-            onMouseClick.bind(onMouseClick, twisty3DCanvas, "C"),
-            false,
-          );
-          twisty3DCanvas.canvas.addEventListener(
-            "mousemove",
-            onMouseMove.bind(onMouseMove, twisty3DCanvas),
-            false,
-          );
-        }
-      }, 1);
-
-      puzzleSelected = false;
-    } else if (puzzleSelected) {
-      await twisty.setCustomPuzzleGeometry(legacyExperimentalPG3DViewConfig());
-      if (nextShape !== lastShape) {
-        twisty.experimentalCameraLatitude =
-          initialCameraOrbitCoordinates.latitude;
-        twisty.experimentalCameraLongitude =
-          initialCameraOrbitCoordinates.longitude;
-        lastShape = nextShape;
-      }
-      puzzleSelected = false;
+    if (!puzzleLoader.pg) {
+      throw new Error("could not get PG from puzzle loader");
     }
-    twisty.backView = getCheckbox("sidebyside") ? "side-by-side" : "top-right";
-    str = str.trim();
-    algoinput.style.backgroundColor = "";
-    try {
-      alg = Alg.fromString(str);
-      str = alg.toString();
-      twisty.alg = alg;
-      if (!writeback) {
-        twisty.timeline.jumpToEnd();
-      }
-      updateMoveCount(alg);
-      setURLParams({ alg: alg });
-    } catch (e) {
-      markInvalidAlg(str);
-    }
-    if (writeback) {
-      algoinput.value = str;
-      lastalgo = str;
-    }
+    return puzzleLoader.pg();
   }
-}
-function markInvalidAlg(str: string): void {
-  algoinput.style.backgroundColor = "#ff8080";
-  console.log("Could not parse " + str);
-}
-// this is so horrible.  there has to be a better way.
-function showtext(s: string): void {
-  const wnd = window.open("", "_blank");
-  if (wnd) {
-    wnd.document.open("text/plain", "replace");
-    wnd.document.write("<pre>");
-    s = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    wnd.document.write(s);
-    wnd.document.write("</pre>");
-    wnd.document.close();
+
+  setPuzzleName(puzzleName: string): void {
+    const descString = getPuzzleDescriptionString(puzzleName);
+    this.configUI.descInput.value = descString;
+    this.twistyPlayer.experimentalPuzzleDescription = descString;
+    setURLParams({ "puzzle": puzzleName, "puzzle-description": "" });
+  }
+
+  setPuzzleDescription(descString: PuzzleDescriptionString): void {
+    this.configUI.puzzleNameSelect.value = "";
+    this.twistyPlayer.experimentalPuzzleDescription = descString;
+    setURLParams({
+      "puzzle": "",
+      "puzzle-description": descString,
+    });
+  }
+
+  showText(text: string): void {
+    // TODO
+    console.log(text);
+    navigator.clipboard.writeText(text);
   }
 }
 
-function gettextwriter(): (s: string) => void {
-  const wnd = window.open("", "_blank");
-  if (wnd) {
-    wnd.document.open("text/plain", "replace");
-    wnd.document.write("<pre>");
-    return (s: string): void => {
-      s = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      if (wnd && wnd.document) {
-        wnd.document.write(s + "\n");
-      }
-    };
-  }
-  throw new Error("Could not open window");
-}
+class ConfigUI {
+  puzzleNameSelect = document.body.querySelector(
+    "#puzzle-name",
+  ) as HTMLSelectElement;
+  toggleButton = document.body.querySelector(
+    "#config-toggle",
+  ) as HTMLButtonElement;
+  descWrapper = document.body.querySelector(
+    "#puzzle-description-wrapper",
+  ) as HTMLInputElement;
+  descInput = document.body.querySelector(
+    "#puzzle-description-string",
+  ) as HTMLInputElement;
+  optionsContainer = document.body.querySelector(
+    "#main-config",
+  ) as HTMLInputElement;
+  showing: boolean = false;
+  constructor(private app: TwizzleExplorerApp) {
+    this.toggleButton.addEventListener("click", () => {
+      this.showing = !this.showing;
+      // TODO: Handle this with a single CSS class on the whole app.
+      this.descWrapper.toggleAttribute("hidden", !this.showing);
+      this.optionsContainer.toggleAttribute("hidden", !this.showing);
+    });
 
-function dowork(cmd: string): void {
-  if (cmd === "scramble") {
-    scramble = 100;
-    checkchange();
-    return;
-  }
-  if (cmd === "reset") {
-    scramble = -1;
-    algoinput.value = "";
-    checkchange();
-    return;
-  }
-  if (cmd === "bluetooth" || cmd === "keyboard") {
-    (async (): Promise<void> => {
-      const inputPuzzle = await (cmd === "bluetooth"
-        ? connectSmartPuzzle
-        : debugKeyboardConnect)();
-      inputPuzzle.addMoveListener((e: MoveEvent) => {
-        addMove(e.latestMove);
-      });
-    })();
-    return;
-  }
-  if (cmd === "options") {
-    const el = document.getElementById("optionsspan");
-    const el2 = document.getElementById("data");
-    if (el && el2) {
-      if (el.style.display !== "none") {
-        el.style.display = "none";
-        el2.style.display = "none";
-      } else {
-        el.style.display = "inline";
-        el2.style.display = "inline";
-      }
+    for (const name of Object.keys(getPG3DNamedPuzzles())) {
+      const optionElem = document.createElement("option");
+      optionElem.value = name;
+      optionElem.textContent = name;
+      this.puzzleNameSelect.appendChild(optionElem);
     }
-    return;
-  }
-  const options: Array<number | string | boolean> = [];
-  const checkboxes = getCheckboxes(workOptions);
-  if (checkboxes.allmoves) {
-    options.push("allmoves", true);
-  }
-  if (checkboxes.vertexmoves) {
-    options.push("vertexmoves", true);
-  }
-  if (!checkboxes.corners) {
-    options.push("cornersets", false);
-  }
-  if (!checkboxes.edges) {
-    options.push("edgesets", false);
-  }
-  if (!checkboxes.centers) {
-    options.push("centersets", false);
-  }
-  if (checkboxes.optimize) {
-    options.push("optimize", true);
-  }
-  if (checkboxes.blockmoves) {
-    options.push("outerblockmoves", true);
-  }
-  if (checkboxes.killori) {
-    options.push("killorientation", true);
-  }
-  const p = myparsedesc(descinput.value, options);
-  const pg = new PuzzleGeometry(p[0], p[1], options);
-  nextShape = p[0];
-  pg.allstickers();
-  pg.genperms();
-  if (cmd === "gap") {
-    showtext(pg.writegap());
-  } else if (cmd === "ss") {
-    const gtw = gettextwriter();
-    const os = pg.getOrbitsDef(false);
-    const as = os.reassemblySize();
-    gtw("Reassembly size is " + as);
-    const ss = schreierSims(pg.getMovesAsPerms(), gtw);
-    const r = as / ss;
-    gtw("Ratio is " + r);
-  } else if (cmd === "canon") {
-    pg.showcanon(gettextwriter());
-  } else if (cmd === "ksolve") {
-    showtext(pg.writeksolve("TwizzlePuzzle"));
-  } else if (cmd === "svgcmd") {
-    showtext(pg.generatesvg(800, 500, 10, getCheckbox("threed")));
-  } else if (cmd === "screenshot" || cmd === "screenshot-back") {
-    const back = cmd === "screenshot-back";
-    console.log(cmd, back);
-    const elem = twisty.viewerElems[back ? 1 : 0] as Twisty3DCanvas | undefined;
-    if (elem) {
-      const url = elem.renderToDataURL({
-        squareCrop: true,
-        minWidth: 2048,
-        minHeight: 2048,
-      });
-      const a = document.createElement("a");
-      a.href = url;
-      console.log(getURLParam("puzzlegeometry"));
-      a.download = `[${
-        getURLParam("puzzle")
-          ? getURLParam("puzzle")
-          : getURLParam("puzzlegeometry") ?? "twizzle"
-      }${back ? " (back)" : ""}]${
-        algoinput.value ? " " + algoinput.value : ""
-      }.png`; // TODO: this is super hacky.
-      a.click();
-    }
-  } else {
-    alert("Command " + cmd + " not handled yet.");
-  }
-}
 
-function checkchange_internal(): void {
-  // for some reason we need to do this repeatedly
-  const descarg = descinput.value;
-  if (descarg === null) {
-    return;
-  }
-  let algo = algoinput.value;
-  if (algo === null) {
-    return;
-  }
-  const newRender = getCheckboxes(renderOptions);
-  const renderSame =
-    trimEq(descarg, lastval) &&
-    equalCheckboxes(renderOptions, lastRender, newRender);
-  if (scramble === 0 && trimEq(algo, lastalgo) && renderSame) {
-    return;
-  }
-  const firstLoad = !twisty;
-  if (scramble !== 0 || lastval !== descarg || !renderSame) {
-    puzzleSelected = true;
-    const savecam = lastval === descarg;
-    let savealg = true;
-    lastval = descarg;
-    lastRender = newRender;
-    const moreoptions: Array<string | number | boolean> = [];
-    const p = myparsedesc(descarg, moreoptions);
-    if (p) {
-      if (savecam) {
-        saveCamera();
-      }
-      const options: Array<string | number | boolean> = [
-        "allmoves",
-        true,
-        "orientcenters",
-        true,
-        "rotations",
-        true,
-      ];
-      if (!lastRender.corners) {
-        options.push("graycorners", true);
-      }
-      if (!lastRender.edges) {
-        options.push("grayedges", true);
-      }
-      if (!lastRender.centers) {
-        options.push("graycenters", true);
-      }
-      if (scramble !== 0) {
-        if (scramble > 0) {
-          options.push("scramble", 100);
-        }
-        scramble = 0;
-        algo = "";
-        safeKpuzzle = undefined;
-        savealg = false;
-      }
-      for (let i = 0; i < moreoptions.length; i++) {
-        options.push(moreoptions[i]);
-      }
-      pg = new PuzzleGeometry(p[0], p[1], options);
-      nextShape = p[0];
-      pg.allstickers();
-      pg.genperms();
-      const sep = "\n";
-      const text =
-        "Faces " +
-        pg.baseplanerot.length +
-        sep +
-        "Stickers per face " +
-        pg.stickersperface +
-        sep +
-        "Cubies " +
-        pg.cubies.length +
-        sep +
-        "Short edge " +
-        pg.shortedge +
-        sep +
-        "Edge distance " +
-        pg.edgedistance +
-        sep +
-        "Vertex distance " +
-        pg.vertexdistance;
-      const el = document.getElementById("data");
-      if (el) {
-        el.title = text;
-      }
-      let kpuzzledef: KPuzzleDefinition;
-      if (renderSame && safeKpuzzle) {
-        kpuzzledef = safeKpuzzle;
-      } else {
-        kpuzzledef = pg.writekpuzzle(true) as KPuzzleDefinition;
-      }
-      const newStickerDat = pg.get3d();
-      nextShape = p[0];
-      initialCameraOrbitCoordinates = cameraCoords(pg);
-      LucasSetup(pg, kpuzzledef, newStickerDat, savealg);
-      // Twisty constructor currently ignores initial camera position
-      if (firstLoad) {
-        twisty.experimentalSetCameraOrbitCoordinates(
-          initialCameraOrbitCoordinates,
-        );
-        twisty.timeline.jumpToEnd();
-      }
-      setpuzzleparams(descarg);
-    }
-    if (!savealg) {
-      lastalgo = "";
-      algo = algoinput.value;
-    }
-  }
-  if (!trimEq(lastalgo, algo)) {
-    lastalgo = algo;
-    let toparse = "";
-    if (algo.trim().length > 0) {
-      toparse = algo;
+    const puzzleDescriptionString = getURLParam("puzzle-description");
+    if (getURLParam("puzzle-description")) {
+      this.descInput.value = puzzleDescriptionString;
+      this.descWrapper.hidden = false;
     } else {
-      toparse = "";
-    }
-    if (puzzle) {
-      setAlgo(toparse, false);
-    }
-  }
-}
-
-function checkchange(): void {
-  try {
-    checkchange_internal();
-  } catch (e) {
-    console.log("Ignoring " + e);
-  }
-}
-
-function doaction(el: any): void {
-  const s = el.target.value;
-  if (s !== "") {
-    actions.selectedIndex = 0;
-    dowork(s);
-  }
-}
-
-function doMoveInputSelection(el: any): void {
-  const s = el.target.value;
-  if (s !== "") {
-    actions.selectedIndex = 0;
-    dowork(s);
-  }
-}
-
-function setpuzzleparams(desc: string): void {
-  const puzzles = getpuzzles();
-  for (const [name, s] of Object.entries(puzzles)) {
-    if (s === desc) {
-      updateMoveCount();
-      setURLParams({ puzzle: name, puzzlegeometry: "" });
-      return;
-    }
-  }
-  updateMoveCount();
-  setURLParams({ puzzle: "", puzzlegeometry: desc });
-}
-
-function doselection(el: any): void {
-  if (el.target.value !== "") {
-    puzzleSelected = true;
-    descinput.value = el.target.value;
-    checkchange();
-  }
-}
-
-let dragX = -1;
-let dragY = -1;
-let dragMoved = false;
-
-function onMouseClick(
-  twisty3DCanvas: Twisty3DCanvas,
-  eventType: string,
-  event: MouseEvent,
-): void {
-  if (eventType === "C") {
-    event.preventDefault();
-    return;
-  }
-  if (eventType === "D") {
-    dragMoved = false;
-    dragX = -1;
-    dragY = -1;
-    return;
-  }
-  // at this point event must be U
-  if (dragMoved) {
-    return;
-  }
-  if (event.button === 1) {
-    // ignore middle mouse button
-    return;
-  }
-  const rightClick = event.button === 2;
-  const raycaster = new Raycaster();
-  const mouse = new Vector2();
-  const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
-  // calculate mouse position in normalized device coordinates
-  // (-1 to +1) for both components
-  mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
-  mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
-  const camera = twisty3DCanvas.camera;
-  raycaster.setFromCamera(mouse, camera);
-
-  // calculate objects intersecting the picking ray
-  const controlTargets =
-    twisty.legacyExperimentalPG3D!.experimentalGetControlTargets();
-  const intersects = raycaster.intersectObjects(controlTargets);
-  if (intersects.length > 0) {
-    event.preventDefault();
-    const mv = intersectionToMove(intersects[0].point, event, rightClick);
-    if (mv !== null) {
-      addMove(mv);
-    }
-  }
-}
-
-function onMouseMove(twisty3DCanvas: Twisty3DCanvas, event: MouseEvent): void {
-  // notice drags, since we don't want drags to do click moves
-  if (dragX === -1 && dragY === -1) {
-    dragX = event.offsetX;
-    dragY = event.offsetY;
-  } else if (dragX !== event.offsetX || dragY !== event.offsetY) {
-    dragMoved = true;
-  }
-  //
-  const raycaster = new Raycaster();
-  const mouse = new Vector2();
-  const canvas: HTMLCanvasElement = twisty3DCanvas.canvas;
-  if (!canvas) {
-    return;
-  }
-  // calculate mouse position in normalized device coordinates
-  // (-1 to +1) for both components
-  mouse.x = (event.offsetX / canvas.offsetWidth) * 2 - 1;
-  mouse.y = -((event.offsetY / canvas.offsetHeight) * 2 - 1);
-  const camera = twisty3DCanvas.camera;
-  raycaster.setFromCamera(mouse, camera);
-
-  // calculate objects intersecting the picking ray
-  const pg3d = twisty.legacyExperimentalPG3D!;
-  const targets = event.shiftKey
-    ? pg3d.experimentalGetStickerTargets()
-    : pg3d.experimentalGetControlTargets();
-  const intersects = raycaster.intersectObjects(targets);
-  if (intersects.length > 0) {
-    if (pg) {
-      const mv2 = pg.notationMapper.notationToExternal(
-        new Move(intersects[0].object.userData.name),
-      );
-      if (mv2 !== null) {
-        canvas.title = mv2.family;
+      let puzzleName = getURLParam("puzzle");
+      if (!puzzleName) {
+        puzzleName = "3x3x3";
       }
+      this.puzzleNameSelect.value = puzzleName;
+      this.descInput.value = getPuzzleDescriptionString(puzzleName);
     }
-  } else {
-    canvas.title = "";
+
+    // TODO: connect this to the checkboxes?
+    this.puzzleNameSelect.addEventListener("change", () => {
+      this.app.setPuzzleName(this.puzzleNameSelect.value);
+    });
+
+    // TODO: connect this to the checkboxes?
+    this.descInput.addEventListener("input", () => {
+      this.app.setPuzzleDescription(this.descInput.value);
+    });
   }
 }
 
-// TODO: Animate latest move but cancel algorithm moves.
-function addMove(move: Move): void {
-  if (puzzle && getNotationLayer(puzzle).lookupMove(move) === undefined) {
-    return;
+class SelectUI {
+  constructor(private app: TwizzleExplorerApp) {
+    (
+      document.body.querySelector("#actions") as HTMLSelectElement
+    ).addEventListener("change", this.onChange.bind(this));
+    (
+      document.body.querySelector("#move-input") as HTMLSelectElement
+    ).addEventListener("change", this.onChange.bind(this));
   }
-  const currentAlg = Alg.fromString(algoinput.value);
-  const newAlg = experimentalAppendMove(currentAlg, move, {
-    coalesce: true,
-    mod: getModValueForMove(move),
-  });
-  // TODO: Avoid round-trip through string?
-  lastalgo = newAlg.toString();
-  twisty.experimentalAddMove(move, true, true);
-  algoinput.value = lastalgo;
-  updateMoveCount(newAlg);
-  setURLParams({ alg: newAlg });
-}
 
-function settempo(fromURL: any): void {
-  if (!fromURL) {
-    return;
-  }
-  const tempo = document.getElementById("tempo") as HTMLInputElement;
-  tempomult = +fromURL;
-  let sliderval = Math.floor(50 * (1 + Math.log10(tempomult)) + 0.5);
-  sliderval = Math.min(sliderval, 100);
-  sliderval = Math.max(sliderval, 0);
-  tempo.value = "" + sliderval;
-  const tempodisp = document.getElementById("tempodisplay");
-  if (tempodisp) {
-    tempodisp.textContent = "" + tempomult + "x";
-  }
-  if (twisty) {
-    twisty.timeline.tempoScale = tempomult;
-  }
-}
-
-function checktempo(): void {
-  const tempo = document.getElementById("tempo") as HTMLInputElement;
-  const val = tempo.value; // 0..100
-  tempomult = Math.pow(10, (+val - 50) / 50);
-  tempomult = Math.floor(tempomult * 100 + 0.5) / 100;
-  setURLParams({ tempo: "" + tempomult });
-  const tempodisp = document.getElementById("tempodisplay");
-  if (tempodisp) {
-    tempodisp.textContent = "" + tempomult + "x";
-  }
-  if (twisty) {
-    twisty.timeline.tempoScale = tempomult;
-  }
-}
-
-export function setup(): void {
-  const select = document.getElementById("puzzleoptions") as HTMLSelectElement;
-  descinput = document.getElementById("desc") as HTMLInputElement;
-  algoinput = document.getElementById("algorithm") as HTMLInputElement;
-  const puzzles = getpuzzles();
-  lastRender = getCheckboxes(renderOptions);
-  const puz = getURLParam("puzzle");
-  const puzdesc = getURLParam("puzzlegeometry");
-  let found = false;
-  let optionFor3x3x3: HTMLOptionElement;
-
-  for (const [name, desc] of Object.entries(puzzles)) {
-    const opt = document.createElement("option") as HTMLOptionElement;
-    opt.value = desc;
-    opt.textContent = name;
-    if (puzdesc === "" && puz === name) {
-      opt.selected = true;
-      descinput.value = desc;
-      found = true;
+  async onChange(e: MouseEvent) {
+    const action = (e.target as HTMLSelectElement).value;
+    switch (action) {
+      case "gap":
+        this.app.showText((await this.app.puzzleGeometry()).writegap());
+        break;
+      case "ss": {
+        const lines: string[] = [];
+        (await this.app.puzzleGeometry()).writeSchreierSims((line) =>
+          lines.push(line),
+        );
+        this.app.showText(lines.join("\n"));
+        break;
+      }
+      case "canon": {
+        const lines: string[] = [];
+        (await this.app.puzzleGeometry()).showcanon((line) => lines.push(line));
+        this.app.showText(lines.join("\n"));
+        break;
+      }
+      case "ksolve":
+        this.app.showText(
+          (await this.app.puzzleGeometry()).writeksolve("TwizzlePuzzle"),
+        );
+        break;
+      case "svg": {
+        const is3D =
+          (await this.app.twistyPlayer.experimentalModel.visualizationFormat.get()) !==
+          "2D"; // TODO
+        this.app.showText(
+          (await this.app.puzzleGeometry()).generatesvg(800, 500, 10, is3D),
+        );
+        break;
+      }
+      case "screenshot":
+      case "screenshot-back":
+        this.app.twistyPlayer.experimentalDownloadScreenshot(); // TODO: back!
+        break;
+      case "bluetooth":
+      case "keyboard": {
+        (async (): Promise<void> => {
+          const inputPuzzle = await (action === "bluetooth"
+            ? connectSmartPuzzle
+            : debugKeyboardConnect)();
+          inputPuzzle.addMoveListener((e: MoveEvent) => {
+            this.app.twistyPlayer.experimentalAddMove(e.latestMove);
+          });
+        })();
+        break;
+      }
+      default:
+        alert(`Action ${action} not handled yet.`);
     }
-    if ("3x3x3" === name) {
-      optionFor3x3x3 = opt;
-    }
-    select.add(opt);
   }
-  if (puzdesc !== "") {
-    select.selectedIndex = 0;
-    descinput.value = puzdesc ?? "";
-  } else if (!found) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    optionFor3x3x3!.selected = true;
-    descinput.value = getpuzzle("3x3x3");
-  }
-  select.onchange = doselection;
-  actions = document.getElementById("action") as HTMLSelectElement;
-  actions.onchange = doaction;
-  moveInput = document.getElementById("move-input") as HTMLSelectElement;
-  moveInput.onchange = doMoveInputSelection;
-  const commands = ["scramble", "reset", "options"];
-  for (const command of commands) {
-    (document.getElementById(command) as HTMLInputElement).onclick =
-      (): void => {
-        dowork(command);
-      };
-  }
-  const qalg = getURLParam("alg").toString();
-  if (qalg !== "") {
-    algoinput.value = qalg;
-    lastalgo = qalg;
-  }
-  const tempo = document.getElementById("tempo") as HTMLInputElement;
-  tempo.oninput = checktempo;
-  settempo(getURLParam("tempo"));
-  checkchange();
-  setInterval(checkchange, 0.5);
 }

@@ -9,6 +9,3 @@ import type { Pause } from "./leaves/Pause";
 export type LeafUnit = Move | LineComment | Newline | Pause;
 
 export type Unit = LeafUnit | Grouping | Conjugate | Commutator;
-
-// @ts-ignore https://github.com/snowpackjs/snowpack/discussions/1589#discussioncomment-130176
-const _SNOWPACK_HACK = true;

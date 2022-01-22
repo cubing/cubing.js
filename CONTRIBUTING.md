@@ -4,6 +4,19 @@ Pull requests are welcome for any part of this project. Please feel free to send
 
 If you have any thoughts about bigger contributions, please consider [filing an issue](https://github.com/cubing/cubing.js/issues/new) to discuss it before sending a pull request. (Since we're still [below version 1.0](https://semver.org/#spec-item-4), some relevant design choices are still not settled or written down yet.)
 
+## First-Time Contributors
+
+If this is your first time contributing to a project on GitHub, here are steps to contribute code:
+
+1. Create a fork of `cubing.js`.
+2. Install [Git](https://git-scm.com/downloads).
+3. Clone your forked version of `cubing.js` to your computer.
+4. Create a new branch in your cloned project, and make the changes you would like to make.
+5. Push your changes to your forked `cubing.js` repo.
+6. Create a pull request in `cubing.js`, with your new branch from your forked repo as the source.
+
+YouTube has many guides about Git and GitHub if you would like more information. If you want a thorough overview, consider [Git and GitHub for Beginners - Crash Course](https://www.youtube.com/watch?v=RGOj5yH7evk).
+
 ## Development
 
 Please see the [development instruction in `README.md`](./README.md#development) for how to work on `cubing.js`.
@@ -24,7 +37,7 @@ This means the library and the UI must be:
 
 Some examples of what this means:
 
-- ` cubing.js` must work out of the box with minimal dependencies. We need to maintain a common API that works with `node`, directly in browsers, and with bundlers. (Easy & Compatible)
+- `cubing.js` must work out of the box with minimal dependencies. We need to maintain a common API that works with `node`, directly in browsers, and with bundlers. (Easy & Compatible).
 - We need good documentation before we do a "full" release.
 - We make `cubing.js` [available under `cdn.cubing.net`](https://github.com/cubing/cdn.cubing.net) so that people can use the most efficient version of the code on their websites even if they don't know how to use bundlers, but we also provide builds that make it possible to host the code directly.
 - We should use native APIs where possible, e.g. web components.
@@ -35,4 +48,4 @@ Some examples of what this means:
   - If you just need to draw freeze frames (like VisualCube), you should be able to use `<twisty-player>` without worrying about the "extra work" it does to prepare for animation.
 - For speed or simplicity, it is often valuable to require features that are only available in modern browsers/environments. In general, we are willing to require the most recent version of a modern browser, as long as the relevant feature is available across Chromium-based browsers (including Edge), Firefox, and Safari. We don't support Internet Explorer or Edge Spartan.
 
-In addition, it's valuable to apply some of these principles to the codebase itself. For example, we try to make it as easy as possible to get started, and generally use more verbose names to avoid any ambiguity when a shorter name could be ambiguous.
+In addition, it's valuable to apply some of these principles to the codebase itself. For example, we try to make it as easy as possible to get started, and generally use more verbose names when a shorter name could be ambiguous.

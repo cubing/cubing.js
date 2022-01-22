@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf8" />
     <title>cubing.js | Scramble</title>
-    <script src="./index.js" href="./index.ts" type="module" defer></script>
+    <script src="./index.js" href="./index.ts" type="module"></script>
   </head>
+
   <body>
     <select>
       <option value="333" selected>3x3x3</option>
@@ -23,11 +24,12 @@
       <option value="sq1">Square-1</option>
       <option value="444bf">4x4x4 Blindfolded</option>
       <option value="555bf">5x5x5 Blindfolded</option>
+      <option value="333mb">3x3x3 Multi-Blind</option>
     </select>
     <button>New scramble</button>
     <br /><br />
     <div id="scramble-string" style="font-family: sans-serif"></div>
     <br />
-    <twisty-player-v2 control-panel="none"></twisty-player-v2>
+    <twisty-player control-panel="none"></twisty-player>
   </body>
 </html>
