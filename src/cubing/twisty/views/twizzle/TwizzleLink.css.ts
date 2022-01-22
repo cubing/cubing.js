@@ -20,6 +20,8 @@ export const twizzleLinkCSS = new CSSSource(`
 
 twisty-player {
   width: 100%;
+  resize: vertical;
+  overflow-y: hidden;
 }
 
 twisty-player + .heading {
