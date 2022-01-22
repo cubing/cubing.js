@@ -54,7 +54,7 @@ import { TwistyPlayer } from "cubing/twisty";
 
 If you would like to contribute to the development of `cubing.js`, please refer to our [contribution guidelines](CONTRIBUTING.md).
 
-Development relies on [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) (installing `node` will install `npm` as well). Once you have installed those, you can run:
+To work on the `cubing.js` source code, you'll need to install [`node`](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) (installing `node` will install `npm` as well). Once you have installed those, you can run:
 
 ```shell
 git clone https://github.com/cubing/cubing.js && cd cubing.js
