@@ -20,7 +20,7 @@ export class TwizzleLink extends ManagedCustomElement {
       const span = this.contentWrapper.appendChild(
         document.createElement("span"),
       );
-      span.textContent = "🚫";
+      span.textContent = "❗️";
       span.title = "Could not show a player for link";
       this.addElement(this.a);
     }
