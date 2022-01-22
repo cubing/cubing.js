@@ -1,6 +1,5 @@
 import { TwistyPlayer } from "../..";
 import { Alg } from "../../../alg";
-import { getPuzzleDescriptionString } from "../../../puzzle-geometry";
 import { puzzles } from "../../../puzzles";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
@@ -14,7 +13,7 @@ export class TwizzleLink extends ManagedCustomElement {
   constructor() {
     super({ mode: "open" });
   }
-  connectedCallback() {
+  async connectedCallback() {
     this.addCSS(twizzleLinkCSS);
     this.a = this.querySelector("a");
     if (!this.a) {
@@ -33,7 +32,9 @@ export class TwizzleLink extends ManagedCustomElement {
       const isExplorer = pathname === "/explore/";
 
       if (config.puzzle && !(config.puzzle in puzzles)) {
-        const puzzleDescription = getPuzzleDescriptionString(config.puzzle);
+        const puzzleDescription = (
+          await import("../../../puzzle-geometry")
+        ).getPuzzleDescriptionString(config.puzzle);
         delete config.puzzle;
         config.experimentalPuzzleDescription = puzzleDescription;
       }

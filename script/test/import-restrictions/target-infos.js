@@ -71,7 +71,9 @@ export const targetInfos = {
   "twisty": {
     deps: {
       direct: ["alg", "kpuzzle", "notation", "puzzles"],
-      dynamic: [],
+      dynamic: [
+        "puzzle-geometry", // TODO: remove (workaround for getting Twizzle links)
+      ],
     },
   },
 };
