@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8">
+  <title>cubing.js</title>
+  <meta name="theme-color" content="#4285f4">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../main.css">
+</head>
+
+<body>
+  <content>
+    <!-- Tip: Avoid using specialized terminology (e.g. "element", "attribute") where possible. -->
+    <div id="heading">
+      <code><a href="../">cubing</a>/kpuzzle</code>
+    </div>
+    <section class="no-header">
+      <p>
+        <code>cubing/kpuzzle</code> is the part of <code>cubing.js</code> that lets you calculate transformations and states for puzzles using the KPuzzle definition format (based on <a href="https://github.com/cubing/ksolve++">ksolve</a>).
+      </p>
+    </section>
+
+    <section id="string-conversion">
+      <h1><a href="#KTransformation">KTransformation</a></h1>
+      <p>A <code>KTransformation</code> contains information about how to move pieces around a puzzle.</p>
+      <div class="code-demo">
+        <div>
+          <code class="sample">
+            <span>import { cube3x3x3 } from &quot;cubing/puzzles&quot;;<br>
+<br>
+const kpuzzle = await cube3x3x3.kpuzzle();<br>
+const suneTransformation =<br>
+&nbsp;&nbsp;kpuzzle.algToTransformation(&quot;R U R' U R U2' R'&quot;);<br>
+<br>
+console.log(suneTransformation.repetitionOrder());</span>
+          </code>
+        </div>
+        <code class="sample output">
+          <span>6</span>
+        </code>
+      </div>
+    </section>
+  </content>
+</body>
+
+</html>
