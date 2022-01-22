@@ -70,7 +70,8 @@ export class PGPuzzleLoader implements PuzzleLoader {
 
   #cachedPG: Promise<PuzzleGeometry> | undefined;
   pg(): Promise<PuzzleGeometry> {
-    return (this.#cachedPG ??= asyncGetPuzzleGeometry(this.id));
+    const id = this.id === "fto" ? "FTO" : this.id;
+    return (this.#cachedPG ??= asyncGetPuzzleGeometry(id));
   }
 
   #cachedKPuzzle: Promise<KPuzzle> | undefined;
