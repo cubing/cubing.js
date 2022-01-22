@@ -13,8 +13,25 @@ export class TwizzleLink extends ManagedCustomElement {
   constructor() {
     super({ mode: "open" });
   }
+
+  fallback() {
+    this.contentWrapper.textContent = "";
+    if (this.a) {
+      const span = this.contentWrapper.appendChild(
+        document.createElement("span"),
+      );
+      span.textContent = "🚫";
+      span.title = "Could not show a player for link";
+      this.addElement(this.a);
+    }
+    if (this.#cssElem) {
+      this.#cssElem.remove();
+    }
+  }
+
+  #cssElem: HTMLStyleElement | undefined;
   async connectedCallback() {
-    this.addCSS(twizzleLinkCSS);
+    this.#cssElem = this.addCSS(twizzleLinkCSS);
     this.a = this.querySelector("a");
     if (!this.a) {
       return;
@@ -26,6 +43,7 @@ export class TwizzleLink extends ManagedCustomElement {
     const { hostname, pathname } = new URL(href);
 
     if (hostname !== "alpha.twizzle.net") {
+      this.fallback();
       return;
     }
     if (["/edit/", "/explore/"].includes(pathname)) {
@@ -60,6 +78,8 @@ export class TwizzleLink extends ManagedCustomElement {
         new TwistyAlgViewer({ twistyPlayer: this.twistyPlayer }),
       );
       twistyAlgViewer.part.add("twisty-alg-viewer");
+    } else {
+      this.fallback();
     }
   }
 

@@ -35,9 +35,11 @@ export class ManagedCustomElement extends HTMLElementShim {
   }
 
   // Add the source, if not already added.
-  public addCSS(cssSource: CSSSource): void {
-    if (this.#cssSourceMap.get(cssSource)) {
-      return;
+  // Returns the existing if it's already on the element.
+  public addCSS(cssSource: CSSSource): HTMLStyleElement {
+    const existing = this.#cssSourceMap.get(cssSource);
+    if (existing) {
+      return existing;
     }
 
     const cssElem: HTMLStyleElement = document.createElement("style");
@@ -45,6 +47,7 @@ export class ManagedCustomElement extends HTMLElementShim {
 
     this.#cssSourceMap.set(cssSource, cssElem);
     this.shadow.appendChild(cssElem);
+    return cssElem;
   }
 
   // Remove the source, if it's currently added.
