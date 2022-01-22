@@ -1,7 +1,6 @@
 export { TwistyPlayer } from "./views/TwistyPlayer";
 export { TwistyAlgViewer } from "./views/TwistyAlgViewer";
 export { TwistyAlgEditor } from "./views/TwistyAlgEditor/TwistyAlgEditor";
-export { TwizzleLink } from "./views/twizzle/TwizzleLink";
 export type { TwistyPlayerConfig } from "./views/TwistyPlayer";
 export { experimentalForceNewRendererSharing } from "./views/3D/Twisty3DVantage";
 
@@ -13,6 +12,8 @@ export {
 } from "./model/props/viewer/BackViewProp";
 export type { PuzzleID } from "./model/props/puzzle/structure/PuzzleIDRequestProp";
 export { VisualizationFormat } from "./model/props/viewer/VisualizationProp";
+
+export { TwizzleLink } from "./views/twizzle/TwizzleLink";
 
 export { debugShowRenderStats as experimentalDebugShowRenderStats } from "./views/3D/Twisty3DVantage";
 

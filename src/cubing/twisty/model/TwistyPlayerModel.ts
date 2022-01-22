@@ -41,6 +41,7 @@ import { experimentalAppendMove, Move } from "../../alg";
 import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
+import { NO_VALUE } from "./props/TwistyProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -199,16 +200,31 @@ export class TwistyPlayerModel {
   });
 
   public async twizzleLink(): Promise<string> {
-    const url = new URL("https://alpha.twizzle.net/edit/");
+    const [
+      viewerLink,
+      puzzleID,
+      puzzleDescription,
+      alg,
+      setup,
+      anchor,
+      experimentalStickering,
+    ] = await Promise.all([
+      this.viewerLinkProp.get(),
+      this.puzzleIDProp.get(),
+      this.puzzleDescriptionRequestProp.get(),
+      this.algProp.get(),
+      this.setupProp.get(),
+      this.setupAnchorProp.get(),
+      this.stickeringProp.get(),
+    ]);
 
-    const [puzzle, alg, setup, anchor, experimentalStickering] =
-      await Promise.all([
-        this.puzzleIDProp.get(),
-        this.algProp.get(),
-        this.setupProp.get(),
-        this.setupAnchorProp.get(),
-        this.stickeringProp.get(),
-      ]);
+    const isExplorer = viewerLink === "experimental-twizzle-explorer";
+
+    console.log({ isExplorer, viewerLink });
+
+    const url = new URL(
+      `https://alpha.twizzle.net/${isExplorer ? "explore" : "edit"}/`,
+    );
 
     if (!alg.alg.experimentalIsEmpty()) {
       url.searchParams.set("alg", alg.alg.toString());
@@ -222,8 +238,10 @@ export class TwistyPlayerModel {
     if (experimentalStickering !== "full") {
       url.searchParams.set("experimental-stickering", experimentalStickering);
     }
-    if (puzzle !== "3x3x3") {
-      url.searchParams.set("puzzle", puzzle);
+    if (isExplorer && puzzleDescription !== NO_VALUE) {
+      url.searchParams.set("puzzle-description", puzzleDescription);
+    } else if (puzzleID !== "3x3x3") {
+      url.searchParams.set("puzzle", puzzleID);
     }
     return url.toString();
   }

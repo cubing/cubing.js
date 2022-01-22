@@ -109,7 +109,6 @@ export function getConfigFromURL(
 
   const params = new URL(url).searchParams;
   const config: TwistyPlayerConfig = {};
-  console.log(paramMapping);
   for (const [ourParam, twistyPlayerParam] of Object.entries(paramMapping)) {
     const paramValue = params.get(prefix + ourParam);
     if (paramValue !== null) {
