@@ -42,6 +42,7 @@ const expectedPrefixes = [
   "node_modules/@types",
   "node_modules/barely-a-dev-server",
   "node_modules/comlink",
+  "node_modules/devtools-protocol", // Puppeteer
   "node_modules/esbuild",
   "node_modules/jest-diff",
   "node_modules/jszip",
