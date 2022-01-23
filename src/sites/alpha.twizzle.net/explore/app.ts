@@ -3,6 +3,7 @@ import {
   debugKeyboardConnect,
   MoveEvent,
 } from "../../../cubing/bluetooth";
+import { KTransformation } from "../../../cubing/kpuzzle";
 import {
   getPuzzleDescriptionString,
   getPG3DNamedPuzzles,
@@ -49,12 +50,14 @@ export class TwizzleExplorerApp {
   setPuzzleName(puzzleName: string): void {
     const descString = getPuzzleDescriptionString(puzzleName);
     this.configUI.descInput.value = descString;
+    this.twistyPlayer.experimentalModel.setupTransformation.set(null);
     this.twistyPlayer.experimentalPuzzleDescription = descString;
     setURLParams({ "puzzle": puzzleName, "puzzle-description": "" });
   }
 
   setPuzzleDescription(descString: PuzzleDescriptionString): void {
     this.configUI.puzzleNameSelect.value = "";
+    this.twistyPlayer.experimentalModel.setupTransformation.set(null);
     this.twistyPlayer.experimentalPuzzleDescription = descString;
     setURLParams({
       "puzzle": "",
@@ -73,6 +76,10 @@ class ConfigUI {
   puzzleNameSelect = document.body.querySelector(
     "#puzzle-name",
   ) as HTMLSelectElement;
+  scrambleButton = document.body.querySelector(
+    "#scramble",
+  ) as HTMLButtonElement;
+  resetButton = document.body.querySelector("#reset") as HTMLButtonElement;
   toggleButton = document.body.querySelector(
     "#config-toggle",
   ) as HTMLButtonElement;
@@ -113,6 +120,24 @@ class ConfigUI {
       this.puzzleNameSelect.value = puzzleName;
       this.descInput.value = getPuzzleDescriptionString(puzzleName);
     }
+
+    this.scrambleButton.addEventListener("click", async () => {
+      this.app.twistyPlayer.experimentalModel.setupTransformation.set(
+        (async () => {
+          const loader =
+            await this.app.twistyPlayer.experimentalModel.puzzleLoader.get();
+          const pg = await loader.pg!();
+          const kpuzzle = await loader.kpuzzle();
+          const scrambleTransformationData = pg.getScramble();
+          return new KTransformation(kpuzzle, scrambleTransformationData);
+        })(),
+      );
+    });
+
+    this.resetButton.addEventListener("click", () => {
+      this.app.twistyPlayer.alg = "";
+      this.app.twistyPlayer.experimentalModel.setupTransformation.set(null);
+    });
 
     // TODO: connect this to the checkboxes?
     this.puzzleNameSelect.addEventListener("change", () => {

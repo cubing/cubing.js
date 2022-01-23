@@ -42,6 +42,7 @@ import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 import { NO_VALUE } from "./props/TwistyProp";
+import { SetupTransformationProp } from "./props/puzzle/state/SetupTransformationProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -70,6 +71,7 @@ export class TwistyPlayerModel {
   puzzleIDRequest = new PuzzleIDRequestProp();
   setupAnchor = new SetupAnchorProp();
   setupAlg = new AlgProp();
+  setupTransformation = new SetupTransformationProp();
   stickering = new StickeringProp();
   tempoScale = new TempoScaleProp();
   timestampRequest = new TimestampRequestProp();
@@ -146,8 +148,9 @@ export class TwistyPlayerModel {
 
   // Depth 6
   anchorTransformation = new AnchorTransformationProp({
+    setupTransformation: this.setupTransformation,
     setupAnchor: this.setupAnchor,
-    setupTransformation: this.setupAlgTransformation,
+    setupAlgTransformation: this.setupAlgTransformation,
     indexer: this.indexer,
   });
 

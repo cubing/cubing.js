@@ -4,8 +4,9 @@ import { TwistyPropDerived } from "../../TwistyProp";
 import type { SetupToLocation } from "./SetupAnchorProp";
 
 interface AnchorTransformationPropInputs {
+  setupTransformation: KTransformation | null;
   setupAnchor: SetupToLocation;
-  setupTransformation: KTransformation;
+  setupAlgTransformation: KTransformation;
   indexer: AlgIndexer;
 }
 
@@ -14,15 +15,18 @@ export class AnchorTransformationProp extends TwistyPropDerived<
   KTransformation
 > {
   derive(inputs: AnchorTransformationPropInputs): KTransformation {
+    if (inputs.setupTransformation) {
+      return inputs.setupTransformation;
+    }
     switch (inputs.setupAnchor) {
       case "start":
-        return inputs.setupTransformation;
+        return inputs.setupAlgTransformation;
       case "end": {
         const algTransformation = inputs.indexer.transformationAtIndex(
           inputs.indexer.numAnimatedLeaves(),
         );
         const inverseAlgTransformation = algTransformation.invert();
-        return inputs.setupTransformation.applyTransformation(
+        return inputs.setupAlgTransformation.applyTransformation(
           inverseAlgTransformation,
         );
       }
