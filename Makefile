@@ -30,18 +30,19 @@ TWIZZLE_SSH_SERVER         = cubing_deploy@towns.dreamhost.com
 TWIZZLE_SFTP_PATH          = ~/alpha.twizzle.net
 TWIZZLE_SFTP_VERSIONS_PATH = ~/_deploy-versions/alpha.twizzle.net
 TWIZZLE_SFTP_VERSION_PATH  = ${TWIZZLE_SFTP_VERSIONS_PATH}/${VERSION_FOLDER_NAME}
+TWIZZLE_SFTP_UPLOAD_PATH   = ${TWIZZLE_SFTP_VERSIONS_PATH}/rsync-incomplete/${VERSION_FOLDER_NAME}
 TWIZZLE_URL                = https://alpha.twizzle.net/
 
 .PHONY: deploy-twizzle
 deploy-twizzle: build-site-twizzle
-	ssh "${TWIZZLE_SSH_SERVER}" "mkdir ${TWIZZLE_SFTP_VERSION_PATH} && [ ! -d ${TWIZZLE_SFTP_PATH} ] || { cp -R ${TWIZZLE_SFTP_PATH}/* ${TWIZZLE_SFTP_VERSION_PATH} && rm ${TWIZZLE_SFTP_VERSION_PATH}/deploy-versions }"
+	ssh "${TWIZZLE_SSH_SERVER}" "mkdir -p ${TWIZZLE_SFTP_UPLOAD_PATH} && [ ! -d ${TWIZZLE_SFTP_PATH} ] || { cp -R ${TWIZZLE_SFTP_PATH}/* ${TWIZZLE_SFTP_UPLOAD_PATH} && rm ${TWIZZLE_SFTP_UPLOAD_PATH}/deploy-versions }"
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
 		./dist/sites/alpha.twizzle.net/ \
 		--delete \
-		"${TWIZZLE_SSH_SERVER}:${TWIZZLE_SFTP_VERSION_PATH}/"
-	ssh "${TWIZZLE_SSH_SERVER}" "ln -s ${TWIZZLE_SFTP_VERSIONS_PATH} ${TWIZZLE_SFTP_VERSION_PATH}/deploy-versions && rm ${TWIZZLE_SFTP_PATH} && ln -s ${TWIZZLE_SFTP_VERSION_PATH} ${TWIZZLE_SFTP_PATH}"
+		"${TWIZZLE_SSH_SERVER}:${TWIZZLE_SFTP_UPLOAD_PATH}/"
+	ssh "${TWIZZLE_SSH_SERVER}" "mkdir -p ${TWIZZLE_SFTP_VERSIONS_PATH} && mv ${TWIZZLE_SFTP_UPLOAD_PATH} ${TWIZZLE_SFTP_VERSION_PATH} && ln -s ${TWIZZLE_SFTP_VERSIONS_PATH} ${TWIZZLE_SFTP_VERSION_PATH}/deploy-versions && rm ${TWIZZLE_SFTP_PATH} && ln -s ${TWIZZLE_SFTP_VERSION_PATH} ${TWIZZLE_SFTP_PATH}"
 	curl "https://alpha.twizzle.net/version.json"
 	echo "\nDone deploying. Go to ${TWIZZLE_URL}\n"
 
