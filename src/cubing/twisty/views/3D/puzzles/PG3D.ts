@@ -958,7 +958,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.hintMaterial.dispose();
       this.hintMaterialDisposable = false;
     }
-    console.log("hint sticker opacity " + v);
     if (v === 0) {
       this.hintMaterial = invisMaterial;
     } else if (v === 1) {
