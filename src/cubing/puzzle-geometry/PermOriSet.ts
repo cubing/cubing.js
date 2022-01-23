@@ -40,7 +40,7 @@ export class PGOrbitsDef {
     public moveops: PGTransform[],
   ) {}
 
-  private transformToKTransformationData(t: PGTransform): KTransformationData {
+  public transformToKTransformationData(t: PGTransform): KTransformationData {
     const mp: { [orbitName: string]: any } = {};
     for (let j = 0; j < this.orbitnames.length; j++) {
       mp[this.orbitnames[j]] = t.orbits[j].toKPuzzle();
@@ -270,10 +270,19 @@ export class PGOrbitsDef {
     );
   }
 
-  // generate a new "solved" position based on scrambling
-  // we use an algorithm that should be faster for large puzzles than
-  // just picking random moves.
+  // replace the solved state with a new scrambled state.
   public scramble(n: number): void {
+    this.solved = this.solved.mul(this.getScrambleTransformation(n));
+  }
+
+  // generate a new "random" position based on an entropy pool
+  // this should be significantly faster and more random than just
+  // doing a large number of random moves, especially on big puzzles.
+  public getScrambleTransformation(n: number): PGTransform {
+    // don't let n be too tiny
+    if (n < 100) {
+      n = 100;
+    }
     const pool: PGTransform[] = [];
     for (let i = 0; i < this.moveops.length; i++) {
       pool[i] = this.moveops[i];
@@ -301,7 +310,7 @@ export class PGOrbitsDef {
     for (let i = 1; i < pool.length; i++) {
       s = s.mul(pool[i]);
     }
-    this.solved = this.solved.mul(s);
+    return s;
   }
 
   public reassemblySize(): number {

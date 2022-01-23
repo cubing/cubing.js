@@ -2470,6 +2470,11 @@ export class PuzzleGeometry {
     return r;
   }
 
+  public getScramble(n: number = 0): KTransformationData {
+    const od = this.getOrbitsDef(false);
+    return od.transformToKTransformationData(od.getScrambleTransformation(n));
+  }
+
   public getMovesAsPerms(): Perm[] {
     return this.getOrbitsDef(false).moveops.map((_) => _.toPerm());
   }
