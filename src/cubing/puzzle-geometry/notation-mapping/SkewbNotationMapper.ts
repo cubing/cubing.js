@@ -24,10 +24,13 @@ const skewbFamilyMap: Record<string, string> = {
 // TODO: combine using a similar table.
 const skewbExternalQuantumX = new QuantumMove("x");
 const skewbInternalQuantumX = new QuantumMove("Rv");
+const skewbInternalQuantumXPrime = new QuantumMove("Lv");
 const skewbExternalQuantumY = new QuantumMove("y");
 const skewbInternalQuantumY = new QuantumMove("Uv");
+const skewbInternalQuantumYPrime = new QuantumMove("Dv");
 const skewbExternalQuantumZ = new QuantumMove("z");
 const skewbInternalQuantumZ = new QuantumMove("Fv");
+const skewbInternalQuantumZPrime = new QuantumMove("Bv");
 
 export class SkewbNotationMapper implements NotationMapper {
   constructor(private child: FaceNameSwizzler) {}
@@ -69,7 +72,7 @@ export class SkewbNotationMapper implements NotationMapper {
   // we never rewrite click moves to these moves.
   public notationToExternal(move: Move): Move | null {
     for (const [external, internal] of Object.entries(skewbFamilyMap)) {
-      if (this.child.spinmatch(move.family, internal)) {
+      if (this.child.spinmatchv(move.family, internal)) {
         return new Move(
           new QuantumMove(external, move.innerLayer, move.outerLayer),
           move.amount,
@@ -79,11 +82,20 @@ export class SkewbNotationMapper implements NotationMapper {
     if (skewbInternalQuantumX.isIdentical(move.quantum)) {
       return new Move(skewbExternalQuantumX, move.amount);
     }
+    if (skewbInternalQuantumXPrime.isIdentical(move.quantum)) {
+      return new Move(skewbExternalQuantumX, -move.amount);
+    }
     if (skewbInternalQuantumY.isIdentical(move.quantum)) {
       return new Move(skewbExternalQuantumY, move.amount);
     }
+    if (skewbInternalQuantumYPrime.isIdentical(move.quantum)) {
+      return new Move(skewbExternalQuantumY, -move.amount);
+    }
     if (skewbInternalQuantumZ.isIdentical(move.quantum)) {
       return new Move(skewbExternalQuantumZ, move.amount);
+    }
+    if (skewbInternalQuantumZPrime.isIdentical(move.quantum)) {
+      return new Move(skewbExternalQuantumZ, -move.amount);
     }
     return null;
     /*

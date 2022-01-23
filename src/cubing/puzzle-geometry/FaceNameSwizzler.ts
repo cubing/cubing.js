@@ -132,6 +132,18 @@ export class FaceNameSwizzler {
     }
   }
 
+  /* same as above, but permit both to have v's on the end. */
+  public spinmatchv(userinput: string, longname: string): boolean {
+    if (userinput.endsWith("v") && longname.endsWith("v")) {
+      return this.spinmatch(
+        userinput.slice(0, userinput.length - 1),
+        longname.slice(0, longname.length - 1),
+      );
+    } else {
+      return this.spinmatch(userinput, longname);
+    }
+  }
+
   public unswizzle(s: string): string {
     if ((s.endsWith("v") || s.endsWith("w")) && s[0] <= "Z") {
       s = s.slice(0, s.length - 1);
