@@ -12,7 +12,7 @@ import {
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import { constructTwistyPlayer } from "./twisty-player";
-import { getURLParam, setURLParams } from "./url-params";
+import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params";
 
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;
@@ -51,6 +51,7 @@ export class TwizzleExplorerApp {
     const descString = getPuzzleDescriptionString(puzzleName);
     this.configUI.descInput.value = descString;
     this.twistyPlayer.experimentalModel.setupTransformation.set(null);
+    setAlgParamEnabled(true);
     this.twistyPlayer.experimentalPuzzleDescription = descString;
     setURLParams({ "puzzle": puzzleName, "puzzle-description": "" });
   }
@@ -58,6 +59,7 @@ export class TwizzleExplorerApp {
   setPuzzleDescription(descString: PuzzleDescriptionString): void {
     this.configUI.puzzleNameSelect.value = "";
     this.twistyPlayer.experimentalModel.setupTransformation.set(null);
+    setAlgParamEnabled(true);
     this.twistyPlayer.experimentalPuzzleDescription = descString;
     setURLParams({
       "puzzle": "",
@@ -129,6 +131,7 @@ class ConfigUI {
           const pg = await loader.pg!();
           const kpuzzle = await loader.kpuzzle();
           const scrambleTransformationData = pg.getScramble();
+          setAlgParamEnabled(false);
           return new KTransformation(kpuzzle, scrambleTransformationData);
         })(),
       );
@@ -137,6 +140,7 @@ class ConfigUI {
     this.resetButton.addEventListener("click", () => {
       this.app.twistyPlayer.alg = "";
       this.app.twistyPlayer.experimentalModel.setupTransformation.set(null);
+      setAlgParamEnabled(true);
     });
 
     // TODO: connect this to the checkboxes?

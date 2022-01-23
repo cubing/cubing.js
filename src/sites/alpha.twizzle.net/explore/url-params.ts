@@ -71,6 +71,9 @@ export function getURLParam<K extends ParamName>(
 
 // TODO
 export function setAlgParam(key: ParamName, s: string): void {
+  if (!algParamEnabled) {
+    return;
+  }
   const url = new URL(window.location.href);
   const params = url.searchParams;
   if (s === "") {
@@ -79,6 +82,17 @@ export function setAlgParam(key: ParamName, s: string): void {
     params.set(key, s);
   }
   window.history.replaceState("", "", url.toString());
+}
+
+let algParamEnabled: boolean = true;
+export function setAlgParamEnabled(enabled: boolean) {
+  algParamEnabled = enabled;
+  if (!algParamEnabled) {
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+    params.delete("alg");
+    window.history.replaceState("", "", url.toString());
+  }
 }
 
 export function setURLParams(newParams: PartialURLParamValues): void {
@@ -95,7 +109,10 @@ export function setURLParams(newParams: PartialURLParamValues): void {
   for (const [key, value] of Object.entries(newParams)) {
     switch (key) {
       case "alg":
-        setParam(key, value.toString());
+        if (algParamEnabled) {
+          setParam(key, value.toString());
+        }
+        setAlgParamEnabled;
         break;
       case "puzzle":
       case "puzzlegeometry":
