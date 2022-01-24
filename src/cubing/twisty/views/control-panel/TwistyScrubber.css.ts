@@ -19,6 +19,9 @@ export const twistyScrubberCSS = new CSSSource(`
 
 input {
   background: none;
+}
+
+input:not(:disabled) {
   cursor: ew-resize;
 }
 `);
