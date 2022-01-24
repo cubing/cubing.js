@@ -24,6 +24,11 @@ export const twisty3DVantageCSS = new CSSSource(`
 .wrapper > canvas {
   max-width: 100%;
   max-height: 100%;
+  cursor: grab;
+}
+
+.wrapper > canvas:active {
+  cursor: grabbing;
 }
 
 .wrapper.invisible {
