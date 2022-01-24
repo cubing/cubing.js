@@ -57,7 +57,7 @@ const demos: Record<string, AnimLeafWithRange[]> = {
   ],
 };
 
-export class SimultaneousMoveIndexerV2 {
+export class SimultaneousMoveIndexer {
   private animLeaves: AnimLeafWithRange[];
   // TODO: Allow custom `durationFn`.
 

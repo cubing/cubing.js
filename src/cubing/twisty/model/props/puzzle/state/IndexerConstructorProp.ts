@@ -3,7 +3,7 @@ import type { Alg } from "../../../../../alg";
 import type { KPuzzle } from "../../../../../kpuzzle";
 import { experimentalCountMoves } from "../../../../../notation";
 import { SimpleAlgIndexer } from "../../../../controllers/indexer/SimpleAlgIndexer";
-import { SimultaneousMoveIndexerV2 } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexerV2";
+import { SimultaneousMoveIndexer } from "../../../../controllers/indexer/simultaneous-moves/SimultaneousMoveIndexer";
 import { TreeAlgIndexer } from "../../../../controllers/indexer/tree/TreeAlgIndexer";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { VisualizationStrategy } from "../../viewer/VisualizationStrategyProp";
@@ -33,7 +33,7 @@ export class IndexerConstructorProp extends TwistyPropDerived<
           inputs.puzzle === "3x3x3" &&
           inputs.visualizationStrategy === "Cube3D"
         ) {
-          return SimultaneousMoveIndexerV2;
+          return SimultaneousMoveIndexer;
         } else {
           return TreeAlgIndexer;
         }
@@ -42,7 +42,7 @@ export class IndexerConstructorProp extends TwistyPropDerived<
       case "simple":
         return SimpleAlgIndexer;
       case "simultaneous":
-        return SimultaneousMoveIndexerV2;
+        return SimultaneousMoveIndexer;
       default:
         throw new Error("Invalid indexer request!");
     }
