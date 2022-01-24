@@ -17,10 +17,6 @@ export const twistyScrubberCSS = new CSSSource(`
   background: rgba(196, 196, 196, 0.75)
 }
 
-input {
-  background: none;
-}
-
 input:not(:disabled) {
   cursor: ew-resize;
 }
