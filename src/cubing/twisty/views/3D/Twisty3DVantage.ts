@@ -74,6 +74,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
   private rendererIsShared: boolean = shareRenderer();
 
+  loadingElement: HTMLDivElement | null = null;
   constructor(
     private model?: TwistyPlayerModel,
     scene?: Twisty3DSceneWrapper,
@@ -81,6 +82,9 @@ export class Twisty3DVantage extends ManagedCustomElement {
   ) {
     super();
     this.scene = scene ?? null;
+
+    this.loadingElement = this.addElement(document.createElement("div"));
+    this.loadingElement.classList.add("loading");
 
     if (SHOW_STATS) {
       this.stats = new Stats();
@@ -199,6 +203,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
         const renderer = await this.renderer();
         canvas = this.addElement(renderer.domElement);
       }
+      this.loadingElement?.remove();
       const context = canvas.getContext("2d")!;
       return { canvas, context };
     })());

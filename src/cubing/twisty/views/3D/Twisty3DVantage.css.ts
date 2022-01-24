@@ -18,7 +18,29 @@ export const twisty3DVantageCSS = new CSSSource(`
   height: 100%;
   display: grid;
   overflow: hidden;
+  place-content: center;
 }
+
+.loading {
+  width: 4em;
+  height: 4em;
+  border-radius: 2.5em;
+  border: 0.5em solid rgba(0, 0, 0, 0);
+  border-top: 0.5em solid rgba(0, 0, 0, 0.7);
+  border-right: 0.5em solid rgba(0, 0, 0, 0.7);
+  animation: fade-in 1s, rotate 1s linear infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 
 /* TODO: This is due to stats hack. Replace with \`canvas\`. */
 .wrapper > canvas {
