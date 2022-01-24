@@ -3,11 +3,8 @@
 // hardcoded to require synchronous access to this definition, and we need to
 // find a better way to do that.
 
-// TODO: this would be a raw `.json` file, but Parcel runs into an error from
-
 import type { KPuzzleDefinition } from "../KPuzzleDefinition";
 
-// using that as both a sync and async import. Probably https://github.com/parcel-bundler/parcel/issues/2546
 export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
   name: "3x3x3",
   orbits: {
