@@ -23,4 +23,13 @@ svg {
   display: grid;
   min-height: 0;
 }
+
+svg {
+  animation: fade-in 0.25s ease-in;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 `);
