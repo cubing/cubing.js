@@ -21,7 +21,7 @@ import type { PG3D } from "./3D/puzzles/PG3D";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { ClassListManager } from "./ClassListManager";
 import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
-import { TwistyScrubberV2 } from "./control-panel/TwistyScrubberV2";
+import { TwistyScrubber } from "./control-panel/TwistyScrubber";
 import { customElementsShim } from "./node-custom-element-shims";
 import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
@@ -181,7 +181,7 @@ export class TwistyPlayer
       },
     );
 
-    const scrubber = new TwistyScrubberV2(this.experimentalModel);
+    const scrubber = new TwistyScrubber(this.experimentalModel);
     this.contentWrapper.appendChild(scrubber);
 
     this.buttons = new TwistyButtonsV2(

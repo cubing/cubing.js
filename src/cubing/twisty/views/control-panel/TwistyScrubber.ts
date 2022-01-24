@@ -56,7 +56,7 @@ let scaling: boolean = false;
 let currentClickNum = 0;
 
 // Values are integers.
-export class TwistyScrubberV2 extends ManagedCustomElement {
+export class TwistyScrubber extends ManagedCustomElement {
   constructor(public model?: TwistyPlayerModel) {
     super();
   }
@@ -148,4 +148,4 @@ export class TwistyScrubberV2 extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-scrubber-v2", TwistyScrubberV2);
+customElementsShim.define("twisty-scrubber", TwistyScrubber);
