@@ -47,7 +47,7 @@ export const twisty3DVantageCSS = new CSSSource(`
   max-width: 100%;
   max-height: 100%;
   cursor: grab;
-  animation: fade-in 0.5s ease-in;
+  animation: fade-in 0.25s ease-in;
 }
 
 @keyframes fade-in {
