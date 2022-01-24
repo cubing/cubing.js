@@ -1,6 +1,10 @@
+// Mangled so that bundlers don't try to inline the source.
+const worker_threads_mangled = "w-orker-_threa-ds";
+const worker_threads_unmangled = () => worker_threads_mangled.replace(/-/g, "");
+
 async function getImports() {
   return {
-    NodeWorker: (await import("worker_threads")).Worker,
+    NodeWorker: (await import(worker_threads_unmangled())).Worker,
     nodeEndpoint: (await import("comlink/dist/esm/node-adapter.mjs")).default,
   };
 }

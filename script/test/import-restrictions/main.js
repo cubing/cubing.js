@@ -2,8 +2,6 @@ import { build } from "esbuild";
 import { resolve } from "path";
 import { existsSync } from "fs";
 
-const externalNode = ["crypto", "worker_threads"];
-
 import { targetInfos } from "./target-infos.js";
 import { execPromise } from "../../lib/execPromise.js";
 
@@ -124,7 +122,7 @@ for (const [name, targetInfo] of Object.entries(targetInfos)) {
       format: "esm",
       // sourcemap: true,
       outdir: currentTarget.outdir,
-      external: ["three", ...externalNode],
+      external: ["three"],
       entryPoints: [currentTarget.dirPath],
       plugins: targets.map((t) => t.plugin(currentTarget)),
     });

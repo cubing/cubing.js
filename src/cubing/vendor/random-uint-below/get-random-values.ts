@@ -11,10 +11,14 @@ type NodeWebCrypto = typeof import("crypto").webcrypto & {
   getRandomValues: GetRandomValuesFunction;
 };
 
+// Mangled so that bundlers don't try to inline the source.
+const cryptoMangled = "cr-yp-to";
+const cryptoUnmangled = () => cryptoMangled.replace(/-/g, "");
+
 // We could use top-level await to define this more statically, but that has limited transpilation support.
 export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction> {
   if (!globalThis?.crypto?.getRandomValues) {
-    const nodeWebcrypto = (await (cryptoPromise ??= import("crypto")))
+    const nodeWebcrypto = (await (cryptoPromise ??= import(cryptoUnmangled())))
       .webcrypto as NodeWebCrypto;
     return nodeWebcrypto.getRandomValues;
   } else {

@@ -20,8 +20,7 @@ import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
 
-const externalNode = ["crypto", "worker_threads"];
-const external = ["three", "comlink", ...externalNode];
+const external = ["three", "comlink"];
 
 function plugins(dev) {
   const plugins = [];
@@ -54,7 +53,6 @@ function devServerOptions(srcFolder, dev) {
     dev,
     port: 3333,
     esbuildOptions: {
-      external: externalNode,
       target: "es2020",
       plugins: plugins(dev),
       minify: !dev,
@@ -165,7 +163,6 @@ export const searchWorkerTarget = {
       watch,
       write: false,
       logLevel: "info",
-      external: externalNode,
       minify: !dev,
     });
     // Note that we finish writing the initial built file before we return.
@@ -188,7 +185,6 @@ export const bundleGlobalTarget = {
       minify: true,
       watch: dev,
       logLevel: "info",
-      external: externalNode,
     });
   },
 };
