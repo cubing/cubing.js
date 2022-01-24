@@ -20,7 +20,7 @@ import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import type { PG3D } from "./3D/puzzles/PG3D";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { ClassListManager } from "./ClassListManager";
-import { TwistyButtonsV2 } from "./control-panel/TwistyButtonsV2";
+import { TwistyButtons } from "./control-panel/TwistyButtons";
 import { TwistyScrubber } from "./control-panel/TwistyScrubber";
 import { customElementsShim } from "./node-custom-element-shims";
 import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
@@ -127,7 +127,7 @@ export class TwistyPlayer
     this,
   );
 
-  buttons: TwistyButtonsV2;
+  buttons: TwistyButtons;
 
   experimentalCanvasClickCallback: (...args: any) => void = () => {};
   // #onCanvasClick() {
@@ -184,7 +184,7 @@ export class TwistyPlayer
     const scrubber = new TwistyScrubber(this.experimentalModel);
     this.contentWrapper.appendChild(scrubber);
 
-    this.buttons = new TwistyButtonsV2(
+    this.buttons = new TwistyButtons(
       this.experimentalModel,
       this.controller,
       this,

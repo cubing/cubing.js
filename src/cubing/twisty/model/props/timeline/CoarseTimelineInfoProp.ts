@@ -1,4 +1,4 @@
-import type { ButtonCommand } from "../../../views/control-panel/TwistyButtonsV2";
+import type { ButtonCommand } from "../../../views/control-panel/TwistyButtons";
 import type { PlayingInfo } from "./PlayingInfoProp";
 import type { DetailedTimelineInfo } from "./DetailedTimelineInfoProp";
 import { TwistyPropDerived } from "../TwistyProp";

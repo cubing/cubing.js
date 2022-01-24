@@ -24,7 +24,7 @@ export const buttonGridCSS = new CSSSource(`
   display: none;
 }
 
-.wrapper twisty-button-v2,
+.wrapper twisty-button,
 .wrapper twisty-control-button {
   width: inherit;
   height: inherit;

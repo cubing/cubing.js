@@ -1,5 +1,5 @@
 import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
-import { buttonCSS, buttonGridCSS } from "./TwistyButtonsV2.css";
+import { buttonCSS, buttonGridCSS } from "./TwistyButtons.css";
 import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
@@ -28,8 +28,8 @@ const buttonCommands = {
 
 export type ButtonCommand = keyof typeof buttonCommands;
 
-export class TwistyButtonsV2 extends ManagedCustomElement {
-  buttons: Record<ButtonCommand, TwistyButtonV2> | null = null;
+export class TwistyButtons extends ManagedCustomElement {
+  buttons: Record<ButtonCommand, TwistyButton> | null = null;
 
   // TODO: Privacy
   constructor(
@@ -42,9 +42,9 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
 
   connectedCallback(): void {
     this.addCSS(buttonGridCSS);
-    const buttons: Partial<Record<ButtonCommand, TwistyButtonV2>> = {};
+    const buttons: Partial<Record<ButtonCommand, TwistyButton>> = {};
     for (const command in buttonCommands) {
-      const button = new TwistyButtonV2();
+      const button = new TwistyButton();
       buttons[command as ButtonCommand] = button;
       // Why does this still fire with the `disabled` attribute?
       button.addEventListener("click", () =>
@@ -52,7 +52,7 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
       );
       this.addElement(button);
     }
-    this.buttons = buttons as Record<ButtonCommand, TwistyButtonV2>;
+    this.buttons = buttons as Record<ButtonCommand, TwistyButton>;
 
     this.model?.buttonAppearance.addFreshListener(this.update.bind(this));
   }
@@ -132,9 +132,9 @@ export class TwistyButtonsV2 extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-buttons-v2", TwistyButtonsV2);
+customElementsShim.define("twisty-buttons", TwistyButtons);
 
-class TwistyButtonV2 extends ManagedCustomElement {
+class TwistyButton extends ManagedCustomElement {
   button: HTMLButtonElement = document.createElement("button"); // TODO: async?
 
   connectedCallback() {
@@ -153,4 +153,4 @@ class TwistyButtonV2 extends ManagedCustomElement {
   }
 }
 
-customElementsShim.define("twisty-button-v2", TwistyButtonV2);
+customElementsShim.define("twisty-button", TwistyButton);
