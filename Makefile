@@ -35,7 +35,7 @@ TWIZZLE_URL                = https://alpha.twizzle.net/
 
 .PHONY: deploy-twizzle
 deploy-twizzle: build-site-twizzle
-	ssh "${TWIZZLE_SSH_SERVER}" "mkdir -p ${TWIZZLE_SFTP_UPLOAD_PATH} && [ ! -d ${TWIZZLE_SFTP_PATH} ] || { cp -R ${TWIZZLE_SFTP_PATH}/* ${TWIZZLE_SFTP_UPLOAD_PATH} && rm ${TWIZZLE_SFTP_UPLOAD_PATH}/deploy-versions }"
+	ssh "${TWIZZLE_SSH_SERVER}" "mkdir -p ${TWIZZLE_SFTP_UPLOAD_PATH} && [ ! -d ${TWIZZLE_SFTP_PATH} ] || { cp -R ${TWIZZLE_SFTP_PATH}/* ${TWIZZLE_SFTP_UPLOAD_PATH} && rm -f ${TWIZZLE_SFTP_UPLOAD_PATH}/deploy-versions }"
 	rsync -avz \
 		--exclude .DS_Store \
 		--exclude .git \
