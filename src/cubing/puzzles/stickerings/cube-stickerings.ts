@@ -79,6 +79,7 @@ export async function cubeAppearance(
         PieceStickering.Regular,
       );
       puzzleStickering.set(LL(), PieceStickering.Ignoriented);
+      puzzleStickering.set(m.and([LL(), M(), S()]), PieceStickering.Dim);
       puzzleStickering.set(
         m.and([LL(), CORNERS()]),
         PieceStickering.IgnoreNonPrimary,
