@@ -19,5 +19,6 @@ export const twistyScrubberCSS = new CSSSource(`
 
 input {
   background: none;
+  cursor: ew-resize;
 }
 `);
