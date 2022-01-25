@@ -1,9 +1,9 @@
-import type { Alg } from "../../../../alg";
+import { Alg } from "../../../../alg";
 import type { KState } from "../../../../kpuzzle/KState";
 import { puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
-import { randomStateFromSGS, TrembleSolver } from "../tremble";
+import { TrembleSolver } from "../tremble";
 
 const TREMBLE_DEPTH = 3;
 
@@ -47,16 +47,11 @@ export async function solveFTO(state: KState): Promise<Alg> {
 let warned = false;
 export async function randomFTOScramble(): Promise<Alg> {
   if (!warned) {
-    console.warn(
-      "FTO scrambles are not yet optimized. They may be much too long (≈90 moves).",
-    );
+    console.warn("FTO scrambles are not yet optimized.");
     warned = true;
   }
-  const sgs = await import("./fto.sgs.json");
-  return solveFTO(
-    await randomStateFromSGS(
-      await puzzles["fto"].kpuzzle(),
-      await sgs.sgsDataFTO(),
-    ),
+  const { randomFTOScrambleString } = await import(
+    "../../../../vendor/xyzzy/ftosolver-smaller-phase3-table"
   );
+  return new Alg(randomFTOScrambleString());
 }

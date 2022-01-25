@@ -17,7 +17,7 @@ See the [Twizzle Diaries](https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3
 
 ## Getting started
 
-If you aren't sure where to get started, you should start with `cdn.cubing.net`, which lets you implement cubing.js in a website. 
+If you aren't sure where to get started, you should start with `cdn.cubing.net`, which lets you implement cubing.js in a website.
 
 If you're already comfortable with writing web apps using `npm`, see the "`Using with Node.js`" section below.
 
@@ -31,7 +31,7 @@ The following code is a good way to get started with `cdn.cubing.net`:
 You can find more documentation at [js.cubing.net/cubing/](https://js.cubing.net/cubing).  
 The source for the documentation site is currently inside the [docs](./docs/) folder of this repository.
 
-## Using with Node.js  
+## Using with Node.js
 
 If you would like to use cubing.js as a library in your Node projects, make sure you have [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) installed (installing `node` will install `npm` as well). Once you have installed those, you can run:
 
@@ -39,12 +39,12 @@ If you would like to use cubing.js as a library in your Node projects, make sure
 npm install cubing
 ```
 
-The following modules are a good starting point: 
+The following modules are a good starting point:
+
 ```shell
 import { Alg } from "cubing/alg";
-import { TwistyPlayer } from "cubing/twisty"; 
+import { TwistyPlayer } from "cubing/twisty";
 ```
-
 
 ## Contributing
 
@@ -70,6 +70,13 @@ make test
 - See [`src/README.md`](./src/README.md) for the source code structure.
   - The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/).
   - The code for Twizzle and dev experiments is in [`src/sites`](./src/sites/).
+
+## Acknowledgments
+
+As of this time, `cubing.js` primarily contains code by [Lucas Garron (@lgarron)](https://github.com/lgarron) and [Tom Rokicki (@rokicki)](https://github.com/rokicki). Significant parts of the cubing code also are from:
+
+- [Chen Shuang (@cs0x7f)](https://github.com/cs0x7f): Scramblers for 3x3x3, 4x4x4, and Square-1
+- [`xyxxy` (@torchlight)](https://github.com/torchlight): Scramblers for unofficial events
 
 ## License
 
