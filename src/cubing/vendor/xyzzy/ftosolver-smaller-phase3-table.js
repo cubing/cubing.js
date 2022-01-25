@@ -12,7 +12,7 @@ This is targeted at Firefox / Spidermonkey releases from 2019 and onwards. It mi
 JavaScript engines. Recent Chrome / Node releases should also work, but are not tested as much.
 */
 
-'use strict';
+import { randomUIntBelowFactory } from "../random-uint-below";
 
 /* Helper functions */
 
@@ -22,56 +22,6 @@ function counter(A)
 	for (let a of A) counts[a] = (counts[a] || 0) + 1;
 	return counts;
 }
-
-let rng = (() => {
-
-let entropy = 0;
-let entropy_size = 1;
-// invariant: 1 <= entropy_size <= 2**53 and 0 <= entropy < entropy_size
-
-let random_bit = globalThis.crypto ? () => crypto.getRandomValues(new Uint8Array(1))[0] & 1 : () => Math.round(Math.random());
-
-const SAFETY_MARGIN = 10000;
-const MAX_ITERATIONS = 20;
-/*
-The probability of using a fallback nonuniform RNG is bounded by 1 / SAFETY_MARGIN ** MAX_ITERATIONS
-assuming the underlying RNG used is free from bias. With these values, this means that there is at
-most a 1/10^80 chance of using the fallback, which is basically zero.
-
-Note: SAFETY_MARGIN must be at most 2**20.
-*/
-
-function next(bound)
-{
-	if (bound <= 0 || bound > 2**32 || bound !== Math.floor(bound)) {throw 'invalid bound';}
-	for (let it = 0; it <= MAX_ITERATIONS; it++)
-	{
-		for (let i = 0; i < 53 && entropy_size <= 2**52 && entropy_size < bound*SAFETY_MARGIN; i++)
-		{
-			entropy += random_bit() * entropy_size;
-			entropy_size *= 2;
-		}
-		let limit = entropy_size - entropy_size%bound; // = floor(entropy_size / bound) * bound
-		if (entropy < limit || it === MAX_ITERATIONS)
-		{
-			let result = entropy % bound;
-			entropy = (entropy - result) / bound;
-			entropy_size = limit / bound;
-			if (entropy === entropy_size)
-			{
-				// this can happen only if we've exceeded the iteration limit
-				entropy = 0;
-				entropy_size = 1;
-			}
-			return result;
-		}
-		entropy -= limit;
-		entropy_size -= limit;
-	}
-}
-
-return {next, is_crypto: !!globalThis.crypto};
-})();
 
 /* Combinatoric functions */
 
@@ -242,21 +192,21 @@ return [evenpermutation8_to_index, index_to_evenpermutation8];
 
 })();
 
-function random_permutation(n)
+function random_permutation(n, randomUintBelow)
 {
 	let p = [0];
 	for (let i = 1; i < n; i++)
 	{
-		let r = rng.next(i + 1);
+		let r =randomUintBelow(i + 1);
 		p[i] = p[r];
 		p[r] = i;
 	}
 	return p;
 }
 
-function random_even_permutation(n)
+function random_even_permutation(n, randomUintBelow)
 {
-	let p = random_permutation(n);
+	let p = random_permutation(n, randomUintBelow);
 	if (permutation_parity(p) === 1) {[p[0], p[1]] = [p[1], p[0]];}
 	return p;
 }
@@ -736,12 +686,12 @@ let commute_table = (function () {
 */
 
 // generate a random state with the BR-BL corner solved
-function random_state()
+function random_state(randomUintBelow)
 {
 	let facelets = Array(72);
-	let cp = random_even_permutation(5);
+	let cp = random_even_permutation(5, randomUintBelow);
 	cp.push(5);
-	let co = Array(4).fill().map(_ => rng.next(2));
+	let co = Array(4).fill().map(_ => randomUintBelow(2));
 	co.push(co.reduce((x, y) => x^y));
 	co.push(0);
 	for (let i = 0; i < 6; i++)
@@ -749,14 +699,14 @@ function random_state()
 		set_corner_piece(facelets, i, cp[i], co[i]);
 	}
 
-	let ep = random_even_permutation(12);
+	let ep = random_even_permutation(12, randomUintBelow);
 	for (let i = 0; i < 12; i++)
 	{
 		set_edge_piece(facelets, i, ep[i]);
 	}
 
-	let a = random_permutation(12).map(x => (x/3)|0);
-	let b = random_permutation(12).map(x => 4+((x/3)|0));
+	let a = random_permutation(12, randomUintBelow).map(x => (x/3)|0);
+	let b = random_permutation(12, randomUintBelow).map(x => 4+((x/3)|0));
 	for (let i = 0; i < 12; i++)
 	{
 		facelets[centreA_piece_facelets[i]] = a[i];
@@ -861,9 +811,9 @@ function simplify_move_sequence(move_sequence, make_noise=false)
 	return simplified;
 }
 
-function generate_random_state_scramble()
+function generate_random_state_scramble(randomUintBelow)
 {
-	return stringify_move_sequence(invert_move_sequence(solve(random_state(), true)), true);
+	return stringify_move_sequence(invert_move_sequence(solve(random_state(randomUintBelow), true)), true);
 }
 
 function generate_multiple_random_state_scrambles(n)
@@ -2322,4 +2272,7 @@ console.log(`mean move count: ${move_counts.reduce((x, y) => x+y) / some_scrambl
 //let sorted_solve_times = solve_times.slice().sort((x, y) => x-y);
 }
 
-export const randomFTOScrambleString = generate_random_state_scramble;
+const randomUintBelow = randomUIntBelowFactory();
+export async function randomFTOScrambleString() {
+  return generate_random_state_scramble(await randomUintBelow);
+}

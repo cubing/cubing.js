@@ -48,5 +48,5 @@ export async function randomFTOScramble(): Promise<Alg> {
   const { randomFTOScrambleString } = await import(
     "../../../../vendor/xyzzy/ftosolver-smaller-phase3-table"
   );
-  return new Alg(randomFTOScrambleString());
+  return new Alg(await randomFTOScrambleString());
 }
