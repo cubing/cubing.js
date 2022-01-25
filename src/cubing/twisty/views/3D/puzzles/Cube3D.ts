@@ -102,7 +102,7 @@ class AxisInfo {
         opacity: 0.5 * hintOpacityScale,
       }),
       dim: new MeshBasicMaterial({
-        color: options?.hintDimColor ?? color,
+        color: options?.hintDimColor ?? dimColor,
         side: BackSide,
         transparent: true,
         opacity: 0.5 * hintOpacityScale,
@@ -128,14 +128,23 @@ const axesInfo: AxisInfo[] = [
     0xff8800,
     0x884400,
     1,
+    { hintDimColor: 0x996600 },
   ),
-  new AxisInfo(new Vector3(0, 0, 1), new Euler(0, 0, 0), 0x00ff00, 0x008800, 1),
+  new AxisInfo(
+    new Vector3(0, 0, 1),
+    new Euler(0, 0, 0),
+    0x00ff00,
+    0x008800,
+    1,
+    { hintDimColor: 0x009900 },
+  ),
   new AxisInfo(
     new Vector3(1, 0, 0),
     new Euler(0, TAU / 4, 0),
     0xff0000,
     0x660000,
     1,
+    { hintDimColor: 0x990000 },
   ),
   new AxisInfo(
     new Vector3(0, 0, -1),
@@ -143,7 +152,7 @@ const axesInfo: AxisInfo[] = [
     0x0000ff,
     0x000088,
     0.75,
-    { hintColor: 0x0044ff, hintDimColor: 0x002288 },
+    { hintColor: 0x0044ff, hintDimColor: 0x001866 },
   ),
   new AxisInfo(
     new Vector3(0, -1, 0),
@@ -151,6 +160,7 @@ const axesInfo: AxisInfo[] = [
     0xffff00,
     0x888800,
     1.25,
+    { hintDimColor: 0xbbbb00 },
   ),
 ];
 
