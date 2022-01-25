@@ -44,12 +44,7 @@ export async function solveFTO(state: KState): Promise<Alg> {
   return alg;
 }
 
-let warned = false;
 export async function randomFTOScramble(): Promise<Alg> {
-  if (!warned) {
-    console.warn("FTO scrambles are not yet optimized.");
-    warned = true;
-  }
   const { randomFTOScrambleString } = await import(
     "../../../../vendor/xyzzy/ftosolver-smaller-phase3-table"
   );
