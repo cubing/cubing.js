@@ -61,6 +61,15 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set visualization(visualizationFormat: VisualizationFormatWithAuto) { this.experimentalModel.visualizationFormat.set(visualizationFormat); }
   get visualization(): never { throw err("visualization"); }
 
+  set experimentalTitle(title: string | null) { this.experimentalModel.title.set(title); }
+  get experimentalTitle(): never { throw err("experimentalTitle"); }
+
+  set experimentalVideoURL(videoURL: string | null) { this.experimentalModel.videoURL.set(videoURL); }
+  get experimentalVideoURL(): never { throw err("experimentalVideoURL"); }
+
+  set experimentalCompetitionID(competitionID: string | null) { this.experimentalModel.competitionID.set(competitionID); }
+  get experimentalCompetitionID(): never { throw err("experimentalCompetitionID"); }
+
   set viewerLink(viewerLinkPage: ViewerLinkPageWithAuto) { this.experimentalModel.viewerLink.set(viewerLinkPage); }
   get viewerLink(): never { throw err("viewerLink"); }
 

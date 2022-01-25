@@ -29,6 +29,7 @@ control-pane.loading {
 control-pane .title {
   font-size: 2em;
   font-weight: bold;
+  white-space: pre;
 }
 
 control-pane h2 {
@@ -36,6 +37,10 @@ control-pane h2 {
   padding: 0.25em 0.5em;
   background: rgba(255, 230, 210, 1);
   border-top: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+control-pane .metadata-url {
+  display: grid;
 }
 
 control-pane twisty-alg-editor {

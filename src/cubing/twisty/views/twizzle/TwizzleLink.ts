@@ -64,6 +64,13 @@ export class TwizzleLink extends ManagedCustomElement {
         }),
       );
 
+      if (config.experimentalTitle) {
+        this.addHeading(config.experimentalTitle).classList.add("title");
+        // const setupAlgDiv = this.addElement(document.createElement("div"));
+        // setupAlgDiv.classList.add("setup-alg");
+        // setupAlgDiv.textContent = puzzles[config.puzzle ?? "3x3x3"].fullName;
+      }
+
       if (config.experimentalSetupAlg) {
         this.addHeading("Setup");
 
@@ -83,10 +90,11 @@ export class TwizzleLink extends ManagedCustomElement {
     }
   }
 
-  addHeading(text: string): void {
+  addHeading(text: string): HTMLElement {
     const headingDiv = this.addElement(document.createElement("div"));
     headingDiv.classList.add("heading");
     headingDiv.textContent = text;
+    return headingDiv;
   }
 }
 

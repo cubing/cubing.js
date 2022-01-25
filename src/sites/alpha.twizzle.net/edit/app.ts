@@ -208,12 +208,35 @@ class ControlPane {
     private solve: () => void,
     private scramble: () => void,
   ) {
-    const appTitleElem = findOrCreateChildWithClass(this.element, "title");
+    const appTitleElem: HTMLAnchorElement = findOrCreateChildWithClass(
+      this.element,
+      "title",
+    );
     appTitleElem.textContent = APP_TITLE;
 
     // TODO: validation?
     twistyPlayer.experimentalModel.puzzleID.addFreshListener(
       this.onPuzzle.bind(this),
+    );
+    twistyPlayer.experimentalModel.title.addFreshListener((title) => {
+      appTitleElem.textContent = title ?? APP_TITLE;
+    });
+    twistyPlayer.experimentalModel.videoURL.addFreshListener((url) => {
+      const a = document.querySelector(".video-url") as HTMLAnchorElement;
+      const urlString = url?.toString();
+      a.href = urlString ? urlString : "";
+      a.textContent = urlString ? "🎥 Video" : "";
+    });
+    twistyPlayer.experimentalModel.competitionID.addFreshListener(
+      (competitionID) => {
+        const a = document.querySelector(
+          ".competition-url",
+        ) as HTMLAnchorElement;
+        a.href = competitionID
+          ? `https://www.worldcubeassociation.org/competitions/${competitionID}`
+          : "";
+        a.textContent = competitionID ? "🏆 Competition" : "";
+      },
     );
 
     /*******/

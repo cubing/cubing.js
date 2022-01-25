@@ -18,6 +18,12 @@ export const twizzleLinkCSS = new CSSSource(`
   padding: 0.25em 0.5em;
 }
 
+.heading.title {
+  background: rgb(255, 245, 235);
+  font-size: 150%;
+  white-space: pre;
+}
+
 twisty-player {
   width: 100%;
   resize: vertical;

@@ -43,6 +43,7 @@ import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 import { NO_VALUE } from "./props/TwistyProp";
 import { SetupTransformationProp } from "./props/puzzle/state/SetupTransformationProp";
+import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -77,6 +78,10 @@ export class TwistyPlayerModel {
   timestampRequest = new TimestampRequestProp();
   viewerLink = new ViewerLinkProp();
   visualizationFormat = new VisualizationFormatProp();
+  // Metadata
+  title = new ArbitraryStringProp();
+  videoURL = new URLProp();
+  competitionID = new ArbitraryStringProp();
 
   // Depth 1
   foundationStickerSprite = new SpriteProp({

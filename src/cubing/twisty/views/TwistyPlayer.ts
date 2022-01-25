@@ -53,6 +53,11 @@ export const twistyPlayerAttributeMap = {
   "viewer-link": "viewerLink",
   "experimental-move-press-input": "experimentalMovePressInput",
 
+  // Metadata
+  "experimental-title": "experimentalTitle",
+  "experimental-video-url": "experimentalVideoURL",
+  "experimental-competition-id": "experimentalCompetitionID",
+
   // Number-based
   "camera-latitude": "cameraLatitude",
   "camera-longitude": "cameraLongitude",
@@ -90,6 +95,11 @@ export interface TwistyPlayerConfig {
   // "indexer"?: "indexer";
   viewerLink?: ViewerLinkPageWithAuto;
   experimentalMovePressInput?: MovePressInput;
+
+  // Metadata
+  experimentalTitle?: string;
+  experimentalVideoURL?: string;
+  experimentalCompetitionID?: string;
 
   // Number-based
   cameraLatitude?: number;

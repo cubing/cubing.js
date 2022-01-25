@@ -105,6 +105,9 @@ export function getConfigFromURL(
     "puzzle": "puzzle",
     "stickering": "experimental-stickering",
     "puzzle-description": "experimental-puzzle-description",
+    "title": "experimental-title",
+    "video-url": "experimental-video-url",
+    "competition": "experimental-competition-id",
   };
 
   const params = new URL(url).searchParams;

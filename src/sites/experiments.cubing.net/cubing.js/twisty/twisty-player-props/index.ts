@@ -48,7 +48,7 @@ debugShowRenderStats(true);
 
   const algOptions: [string, string, Alg][] = [
     ["alg", "alg", Alg.fromString(alg)],
-    ["experimentalSetupAlg", "setup-alg", Alg.fromString("")],
+    ["experimentalSetupAlg", "setupAlg", Alg.fromString("")],
   ];
 
   for (const [propName, attrName, alg] of algOptions) {

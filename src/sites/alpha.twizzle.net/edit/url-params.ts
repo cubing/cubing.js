@@ -4,7 +4,7 @@ import { Alg } from "../../../cubing/alg";
 import type { ExperimentalStickering } from "../../../cubing/twisty";
 
 interface URLParamValues {
-  "experimental-setup-alg": Alg;
+  "setup-alg": Alg;
   "experimental-setup-anchor": "end" | "start";
   "experimental-stickering": ExperimentalStickering;
   "alg": Alg;
@@ -12,10 +12,13 @@ interface URLParamValues {
   "debug-js": boolean;
   "debug-simultaneous": boolean;
   "debug-show-render-stats": boolean;
+  "title": string | null;
+  "video-url": string | null;
+  "competition": string | null;
 }
 
 const paramDefaults: URLParamValues = {
-  "experimental-setup-alg": new Alg(),
+  "setup-alg": new Alg(),
   "experimental-setup-anchor": "start",
   "experimental-stickering": "full",
   "alg": new Alg(),
@@ -23,13 +26,16 @@ const paramDefaults: URLParamValues = {
   "debug-js": true,
   "debug-simultaneous": false,
   "debug-show-render-stats": false,
+  "title": null,
+  "video-url": null,
+  "competition": null,
 };
 
 export type ParamName = keyof typeof paramDefaults;
 
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
-  "experimental-setup-alg": "",
+  "setup-alg": "",
   "experimental-setup-anchor": "start",
   "experimental-stickering": "full",
   "alg": "",
@@ -37,6 +43,9 @@ const paramDefaultStrings: { [s: string]: string } = {
   "debug-js": "true",
   "debug-simultaneous": "false",
   "debug-show-render-stats": "false",
+  "title": "",
+  "video-url": "",
+  "competition": "",
 };
 
 export function getURLParam<K extends ParamName>(
@@ -52,7 +61,7 @@ export function getURLParam<K extends ParamName>(
     case "alg":
       // TODO: can we avoid the `as` cast?
       return Alg.fromString(str) as URLParamValues[K];
-    case "experimental-setup-alg":
+    case "setup-alg":
       // TODO: can we avoid the `as` cast?
       return Alg.fromString(str) as URLParamValues[K];
     case "experimental-setup-anchor":
@@ -73,6 +82,10 @@ export function getURLParam<K extends ParamName>(
     case "debug-show-render-stats":
       // TODO: can we avoid the `as` cast?
       return (str !== ("false" as unknown)) as URLParamValues[K];
+    case "title":
+    case "video-url":
+    case "competition":
+      return str as URLParamValues[K];
     default:
       // TODO: can we avoid the `as` cast?
       return str as URLParamValues[K];
@@ -93,7 +106,7 @@ export function setURLParams(newParams: Partial<URLParamValues>): void {
 
   for (const [key, value] of Object.entries(newParams)) {
     switch (key) {
-      case "experimental-setup-alg":
+      case "setup-alg":
         setParam(key, (value as Alg).toString());
         break;
       case "experimental-setup-anchor":
