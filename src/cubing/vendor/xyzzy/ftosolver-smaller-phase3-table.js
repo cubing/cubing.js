@@ -29,7 +29,7 @@ let entropy = 0;
 let entropy_size = 1;
 // invariant: 1 <= entropy_size <= 2**53 and 0 <= entropy < entropy_size
 
-let random_bit = this.crypto ? () => crypto.getRandomValues(new Uint8Array(1))[0] & 1 : () => Math.round(Math.random());
+let random_bit = globalThis.crypto ? () => crypto.getRandomValues(new Uint8Array(1))[0] & 1 : () => Math.round(Math.random());
 
 const SAFETY_MARGIN = 10000;
 const MAX_ITERATIONS = 20;
@@ -70,7 +70,7 @@ function next(bound)
 	}
 }
 
-return {next, is_crypto: !!this.crypto};
+return {next, is_crypto: !!globalThis.crypto};
 })();
 
 /* Combinatoric functions */
@@ -2321,3 +2321,5 @@ console.log(`mean solve time: ${solve_times.reduce((x, y) => x+y) / some_scrambl
 console.log(`mean move count: ${move_counts.reduce((x, y) => x+y) / some_scrambles.length}`);
 //let sorted_solve_times = solve_times.slice().sort((x, y) => x-y);
 }
+
+export const randomFTOScrambleString = generate_random_state_scramble;
