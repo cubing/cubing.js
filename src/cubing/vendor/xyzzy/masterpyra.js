@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* master pyraminx scramble generator */
 // From https://gist.github.com/torchlight/9a5c53da09d8e090756a228f4b5f3471
 // Added to `cubing.js` under the GPL license by permission from the author (@torchlight/xyzzy).

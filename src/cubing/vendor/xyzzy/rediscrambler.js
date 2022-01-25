@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* Redi cube scramble generator */
 // From https://torchlight.github.io/rediscrambler.js
 // Added to `cubing.js` under the GPL license by permission from the author (@torchlight/xyzzy).
