@@ -52,7 +52,8 @@ export const puzzles: Record<string, PuzzleLoader> = {
     inventionYear: 2006, // Earliest date from https://www.twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1475
   }),
   "master_tetraminx": new PGPuzzleLoader({
-    id: "master tetraminx",
+    pgID: "master tetraminx",
+    id: "master_tetraminx",
     fullName: "Master Tetraminx",
     inventedBy: ["Katsuhiko Okamoto"], // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
     inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352

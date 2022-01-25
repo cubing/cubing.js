@@ -49,6 +49,7 @@ export function asyncLazyKPuzzleGetter(
 }
 
 type PuzzleLoaderConstructorArgs = {
+  pgID?: string;
   id: string;
   fullName: string;
   inventedBy?: string[];
@@ -56,11 +57,13 @@ type PuzzleLoaderConstructorArgs = {
 };
 
 export class PGPuzzleLoader implements PuzzleLoader {
+  pgId?: string;
   id: string;
   fullName: string;
   inventedBy?: string[];
   inventionYear?: number;
   constructor(info: PuzzleLoaderConstructorArgs) {
+    this.pgId = info.pgID;
     this.id = info.id;
     this.fullName = info.fullName;
     this.inventedBy = info.inventedBy;
@@ -69,8 +72,7 @@ export class PGPuzzleLoader implements PuzzleLoader {
 
   #cachedPG: Promise<PuzzleGeometry> | undefined;
   pg(): Promise<PuzzleGeometry> {
-    const id = this.id === "fto" ? "FTO" : this.id;
-    return (this.#cachedPG ??= asyncGetPuzzleGeometry(id));
+    return (this.#cachedPG ??= asyncGetPuzzleGeometry(this.pgId ?? this.id));
   }
 
   #cachedKPuzzle: Promise<KPuzzle> | undefined;

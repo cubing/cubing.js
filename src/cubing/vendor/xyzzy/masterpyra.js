@@ -5,6 +5,8 @@
 
 "use strict";
 
+import { randomUIntBelowFactory } from "../random-uint-below";
+
 function counter(A) {
   let counts = [];
   for (let a of A) counts[a] = (counts[a] || 0) + 1;
@@ -548,7 +550,7 @@ let moves = [
   move_R,
   move_B,
 ];
-let move_names = ["Uw", "Lw", "Rw", "Bw", "U", "L", "R", "B"];
+let move_names = ["u", "l", "r", "b", "U", "L", "R", "B"];
 const N_MOVES = 8; // number of moves
 const N_MOVES_PHASE2 = 4; // number of moves for phase 2
 
@@ -582,52 +584,35 @@ function print_move_sequence(move_sequence) {
   console.log(stringify_move_sequence(move_sequence));
 }
 
-function generate_random_move_sequence(length = 20) {
-  // this isn't completely "correct", but it's correct enough to be useful for unit tests?
-  let seq = [];
-  for (let i = 0; i < length; i++) {
-    seq[i] = [
-      Math.floor(Math.random() * N_MOVES),
-      Math.floor(Math.random() * 2) + 1,
-    ];
-  }
-  return seq;
-}
-
-function generate_random_state() {
+function generate_random_state(randomUintBelow) {
   // master pyra has no "nontrivial" restrictions, beyond the usual parity stuff
   let co = Array(4);
   for (let i = 0; i < 4; i++) {
-    co[i] = Math.floor(Math.random() * 3);
+    co[i] = randomUintBelow(3);
   }
-  let mp = index_to_evenpermutation(
-    Math.floor((Math.random() * factorial(6)) / 2),
-    6,
-  );
+  let mp = index_to_evenpermutation(randomUintBelow(factorial(6) / 2), 6);
   for (let i = 0, parity = 0; i < 6; i++) {
-    let eo = i === 5 ? parity : Math.floor(Math.random() * 2);
+    let eo = i === 5 ? parity : randomUintBelow(2);
     parity ^= eo;
     mp[i] += eo * 6;
     mp[i + 6] = (mp[i] + 6) % 12;
   }
-  let wp = index_to_evenpermutation(
-    Math.floor((Math.random() * factorial(12)) / 2),
-    12,
-  );
-  let cp = index_to_evenpermutation(
-    Math.floor((Math.random() * factorial(4)) / 2),
-    4,
-  );
+  let wp = index_to_evenpermutation(randomUintBelow(factorial(12) / 2), 12);
+  let cp = index_to_evenpermutation(randomUintBelow(factorial(4) / 2), 4);
   return { co: co, mp: mp, wp: wp, cp: cp };
 }
 
-function generate_random_state_scramble() {
-  return solve(generate_random_state());
+function generate_random_state_scramble(randomUintBelow) {
+  return solve(generate_random_state(randomUintBelow));
 }
 
-function generate_scramble_sequence(tips = true, obfuscate_tips = false) {
+function generate_scramble_sequence(
+  randomUintBelow,
+  tips = true,
+  obfuscate_tips = false,
+) {
   let scramble_string = stringify_move_sequence(
-    generate_random_state_scramble(),
+    generate_random_state_scramble(randomUintBelow),
   );
   if (!tips) {
     return scramble_string;
@@ -636,7 +621,7 @@ function generate_scramble_sequence(tips = true, obfuscate_tips = false) {
   let suffixes = ["0", "", "'"];
   if (!obfuscate_tips) {
     for (let i = 0; i < 4; i++) {
-      let x = Math.floor(Math.random() * 3);
+      let x = randomUintBelow(3);
       if (x !== 0) {
         scramble_string += " " + tip_names[i] + suffixes[x];
       }
@@ -647,8 +632,8 @@ function generate_scramble_sequence(tips = true, obfuscate_tips = false) {
     amount_pre = [],
     amount_post = [];
   for (let i = 0; i < 4; i++) {
-    amount[i] = Math.floor(Math.random() * 3);
-    amount_pre[i] = Math.floor(Math.random() * 3);
+    amount[i] = randomUintBelow(3);
+    amount_pre[i] = randomUintBelow(3);
     amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
   }
   let weight = (arr) => arr.filter((x) => x !== 0).length;
@@ -660,7 +645,7 @@ function generate_scramble_sequence(tips = true, obfuscate_tips = false) {
     )
   ) {
     for (let i = 0; i < 4; i++) {
-      amount_pre[i] = Math.floor(Math.random() * 3);
+      amount_pre[i] = randomUintBelow(3);
       amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
     }
   }
@@ -699,7 +684,7 @@ function solve(state) {
     }
     let stringified_state = JSON.stringify(new_state);
     if (intermediate_states.has(stringified_state)) {
-      console.log("skip");
+      // console.log("skip");
       continue;
     } else intermediate_states.add(stringified_state);
     let phase2_indices = index_phase2(new_state);
@@ -712,14 +697,14 @@ function solve(state) {
       moves_left,
     ).next().value;
     if (sol2 === undefined) {
-      console.log("prune");
+      // console.log("prune");
       continue;
     }
-    console.log(
-      `to ${stringified_state} in ${sol1.length} moves; total move count ${
-        sol1.length + sol2.length
-      }`,
-    );
+    // console.log(
+    //   `to ${stringified_state} in ${sol1.length} moves; total move count ${
+    //     sol1.length + sol2.length
+    //   }`,
+    // );
     if (best === undefined || best.length > sol1.length + sol2.length) {
       best = sol1.concat(sol2);
     }
@@ -1261,3 +1246,12 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
     }
   }
 }
+
+const randomUintBelow = randomUIntBelowFactory();
+export async function randomMasterTetraminxScrambleString() {
+  return generate_scramble_sequence(await randomUintBelow, false);
+}
+
+(async () => {
+  console.log(await randomMasterTetraminxScrambleString());
+})();

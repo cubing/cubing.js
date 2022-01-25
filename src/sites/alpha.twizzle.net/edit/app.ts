@@ -56,7 +56,8 @@ const SCRAMBLE_EVENTS: Partial<Record<PuzzleID, string>> = {
   "pyraminx": "pyram",
   "skewb": "skewb",
   "square1": "sq1",
-  "fto": "fto", // TODO: Very inefficient
+  "fto": "fto",
+  "master_tetraminx": "master_tetraminx",
 };
 
 export class App {

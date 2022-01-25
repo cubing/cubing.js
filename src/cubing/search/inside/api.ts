@@ -23,6 +23,7 @@ import {
 import { oriented555RandomMoves } from "./solve/puzzles/5x5x5";
 import { bigCubeRandomMoves } from "./solve/puzzles/big-cubes";
 import { randomFTOScramble } from "./solve/puzzles/fto";
+import { randomMasterTetraminxScramble } from "./solve/puzzles/master_tetraminx";
 import { solveMegaminx } from "./solve/puzzles/megaminx";
 import {
   randomPyraminxScrambleFixedOrientation,
@@ -139,6 +140,11 @@ export const insideAPI = {
         );
       case "fto":
         return measurePerf("randomFTOScramble", randomFTOScramble);
+      case "master_tetraminx":
+        return measurePerf(
+          "randomMasterTetraminxScramble",
+          randomMasterTetraminxScramble,
+        );
       default:
         throw new Error(`unsupported event: ${eventID}`);
     }

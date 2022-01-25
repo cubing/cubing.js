@@ -9,6 +9,7 @@ import {
 class FTOPuzzleLoader extends PGPuzzleLoader {
   constructor() {
     super({
+      pgID: "FTO",
       id: "fto",
       fullName: "Face-Turning Octahedron",
       inventedBy: ["Karl Rohrbach", "David Pitcher"], // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
