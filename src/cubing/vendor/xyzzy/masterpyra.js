@@ -3,213 +3,193 @@
 // From https://gist.github.com/torchlight/9a5c53da09d8e090756a228f4b5f3471
 // Added to `cubing.js` under the GPL license by permission from the author (@torchlight/xyzzy).
 
-'use strict';
+"use strict";
 
-function counter(A)
-{
-	let counts = [];
-	for (let a of A) counts[a] = (counts[a] || 0) + 1;
-	return counts;
+function counter(A) {
+  let counts = [];
+  for (let a of A) counts[a] = (counts[a] || 0) + 1;
+  return counts;
 }
 
 /* Combinatoric functions */
 
-function factorial(n)
-{
-	if (n < 2) return n;
-	let f = 1;
-	for (let i = 2; i <= n; i++) f *= i;
-	return f;
+function factorial(n) {
+  if (n < 2) return n;
+  let f = 1;
+  for (let i = 2; i <= n; i++) f *= i;
+  return f;
 }
 
-function identity_permutation(n)
-{
-	let a = Array(n);
-	for (let i = 0; i < n; i++) {a[i] = i;}
-	return a;
+function identity_permutation(n) {
+  let a = Array(n);
+  for (let i = 0; i < n; i++) {
+    a[i] = i;
+  }
+  return a;
 }
 
-function permutation_to_index(perm)
-{
-	perm = perm.slice();
-	let n = perm.length;
-	let f = factorial(n-1);
-	let ind = 0;
-	while (n > 1)
-	{
-		n--;
-		// invariant: f == factorial(n)
-		// also, perm stores meaningful values up to perm[n]
-		let e = perm[0];
-		ind += e * f;
-		for (let i = 0; i < n; i++)
-		{
-			let x = perm[i+1];
-			perm[i] = x - (x > e);
-		}
-		f /= n;
-	}
-	return ind;
+function permutation_to_index(perm) {
+  perm = perm.slice();
+  let n = perm.length;
+  let f = factorial(n - 1);
+  let ind = 0;
+  while (n > 1) {
+    n--;
+    // invariant: f == factorial(n)
+    // also, perm stores meaningful values up to perm[n]
+    let e = perm[0];
+    ind += e * f;
+    for (let i = 0; i < n; i++) {
+      let x = perm[i + 1];
+      perm[i] = x - (x > e);
+    }
+    f /= n;
+  }
+  return ind;
 }
 
-function index_to_permutation(ind, n)
-{
-	let perm = [];
-	let f = factorial(n-1);
-	for (let i = 0; i < n; i++)
-	{
-		perm[i] = (ind / f) | 0;
-		ind %= f;
-		f /= n-1-i;
-	}
-	for (let i = n-2; i >= 0; i--)
-	{
-		for (let j = i+1; j < n; j++)
-		{
-			perm[j] += +(perm[j] >= perm[i]);
-		}
-	}
-	return perm;
+function index_to_permutation(ind, n) {
+  let perm = [];
+  let f = factorial(n - 1);
+  for (let i = 0; i < n; i++) {
+    perm[i] = (ind / f) | 0;
+    ind %= f;
+    f /= n - 1 - i;
+  }
+  for (let i = n - 2; i >= 0; i--) {
+    for (let j = i + 1; j < n; j++) {
+      perm[j] += +(perm[j] >= perm[i]);
+    }
+  }
+  return perm;
 }
 
-function permutation_parity(A)
-{
-	let n = A.length;
-	let parity = 0;
-	for (let i = 0; i < n-1; i++)
-	{
-		for (let j = i; j < n; j++)
-		{
-			if (A[i] > A[j]) parity ^= 1;
-		}
-	}
-	return parity;	
+function permutation_parity(A) {
+  let n = A.length;
+  let parity = 0;
+  for (let i = 0; i < n - 1; i++) {
+    for (let j = i; j < n; j++) {
+      if (A[i] > A[j]) parity ^= 1;
+    }
+  }
+  return parity;
 }
 
-function index_to_evenpermutation(ind, n)
-{
-	let perm = [];
-	let f = factorial(n-1) / 2;
-	let parity = 0;
-	for (let i = 0; i < n-1; i++)
-	{
-		perm[i] = (ind / f) | 0;
-		ind %= f;
-		f /= n-1-i;
-	}
-	perm[n-1] = 0;
-	for (let i = n-2; i >= 0; i--)
-	{
-		for (let j = i+1; j < n; j++)
-		{
-			if (perm[j] >= perm[i]) perm[j]++;
-			else parity ^= 1;
-		}
-	}
-	if (parity === 1) [perm[n-2], perm[n-1]] = [perm[n-1], perm[n-2]];
-	return perm;
+function index_to_evenpermutation(ind, n) {
+  let perm = [];
+  let f = factorial(n - 1) / 2;
+  let parity = 0;
+  for (let i = 0; i < n - 1; i++) {
+    perm[i] = (ind / f) | 0;
+    ind %= f;
+    f /= n - 1 - i;
+  }
+  perm[n - 1] = 0;
+  for (let i = n - 2; i >= 0; i--) {
+    for (let j = i + 1; j < n; j++) {
+      if (perm[j] >= perm[i]) perm[j]++;
+      else parity ^= 1;
+    }
+  }
+  if (parity === 1) [perm[n - 2], perm[n - 1]] = [perm[n - 1], perm[n - 2]];
+  return perm;
 }
 
-function evenpermutation_to_index(perm)
-{
-	return permutation_to_index(perm) >> 1;
+function evenpermutation_to_index(perm) {
+  return permutation_to_index(perm) >> 1;
 }
 
 let [evenpermutation12_to_index, index_to_evenpermutation12] = (() => {
+  let index_in_set_bits = new Int8Array(4096 * 12);
+  let look_up_set_bits = new Int8Array(4096 * 12);
+  for (let i = 0; i < 4096; i++) {
+    for (let j = 0, counter = 0; j < 12; j++) {
+      if (((i >>> j) & 1) === 0) {
+        continue;
+      }
+      index_in_set_bits[(j << 12) | i] = counter;
+      look_up_set_bits[(counter << 12) | i] = j;
+      counter++;
+    }
+  }
 
-let index_in_set_bits = new Int8Array(4096 * 12);
-let look_up_set_bits = new Int8Array(4096 * 12);
-for (let i = 0; i < 4096; i++)
-{
-	for (let j = 0, counter = 0; j < 12; j++)
-	{
-		if (((i >>> j) & 1) === 0) {continue;}
-		index_in_set_bits[(j << 12) | i] = counter;
-		look_up_set_bits[(counter << 12) | i] = j;
-		counter++;
-	}
-}
+  function evenpermutation12_to_index(perm) {
+    let unused = 0xfff; // track which values in 0..11 haven't been used so far
+    let f = 19958400; // = 11!/2
+    let ind = 0;
+    for (let i = 0; i < 10; i++) {
+      let v = perm[i];
+      ind += index_in_set_bits[unused | (v << 12)] * f;
+      unused &= ~(1 << v);
+      f /= 11 - i;
+    }
+    return ind;
+  }
 
-function evenpermutation12_to_index(perm)
-{
-	let unused = 0xfff; // track which values in 0..11 haven't been used so far
-	let f = 19958400; // = 11!/2
-	let ind = 0;
-	for (let i = 0; i < 10; i++)
-	{
-		let v = perm[i];
-		ind += index_in_set_bits[unused | (v << 12)] * f;
-		unused &= ~(1 << v);
-		f /= 11-i;
-	}
-	return ind;
-}
+  function index_to_evenpermutation12(ind, perm) {
+    let unused = 0xfff;
+    let f = 19958400; // = 11!/2
+    let parity = 0;
+    for (let i = 0; i < 10; i++) {
+      let a = (ind / f) | 0;
+      ind -= a * f;
+      parity ^= a & 1;
+      let v = look_up_set_bits[unused | (a << 12)];
+      perm[i] = v;
+      unused &= ~(1 << v);
+      f /= 11 - i;
+    }
+    // the last two elements are uniquely determined by the other ten
+    perm[10] = look_up_set_bits[unused | (parity << 12)];
+    perm[11] = look_up_set_bits[unused | ((parity ^ 1) << 12)];
+    return perm;
+  }
 
-function index_to_evenpermutation12(ind, perm)
-{
-	let unused = 0xfff;
-	let f = 19958400; // = 11!/2
-	let parity = 0;
-	for (let i = 0; i < 10; i++)
-	{
-		let a = (ind / f) | 0;
-		ind -= a * f;
-		parity ^= (a & 1);
-		let v = look_up_set_bits[unused | (a << 12)];
-		perm[i] = v;
-		unused &= ~(1 << v);
-		f /= 11-i;
-	}
-	// the last two elements are uniquely determined by the other ten
-	perm[10] = look_up_set_bits[unused | (parity << 12)];
-	perm[11] = look_up_set_bits[unused | ((parity^1) << 12)];
-	return perm;
-}
+  // these functions could be significantly faster with SWAR, but we can't SWAR here without 64-bit
+  // bitwise ops. :<
 
-// these functions could be significantly faster with SWAR, but we can't SWAR here without 64-bit
-// bitwise ops. :<
-
-return [evenpermutation12_to_index, index_to_evenpermutation12];
-
+  return [evenpermutation12_to_index, index_to_evenpermutation12];
 })();
 
-function compose(A, B)
-{
-	let C = [];
-	for (let i = 0; i < B.length; i++) C[i] = A[B[i]];
-	return C;
+function compose(A, B) {
+  let C = [];
+  for (let i = 0; i < B.length; i++) C[i] = A[B[i]];
+  return C;
 }
 
-function double_compose(A, B, C)
-{
-	let D = [];
-	for (let i = 0; i < C.length; i++) {D[i] = A[B[C[i]]];}
-	return D;
+function double_compose(A, B, C) {
+  let D = [];
+  for (let i = 0; i < C.length; i++) {
+    D[i] = A[B[C[i]]];
+  }
+  return D;
 }
 
-function invert(perm)
-{
-	let inv = [];
-	for (let i = 0; i < perm.length; i++) {inv[perm[i]] = i;}
-	return inv;
+function invert(perm) {
+  let inv = [];
+  for (let i = 0; i < perm.length; i++) {
+    inv[perm[i]] = i;
+  }
+  return inv;
 }
 
-function permutation_from_cycle(cycle, n)
-{
-	let perm = [];
-	for (let i = 0; i < n; i++) perm[i] = i;
-	for (let i = 0; i < cycle.length; i++)
-	{
-		perm[cycle[i]] = cycle[(i + 1) % cycle.length];
-	}
-	return perm;
+function permutation_from_cycle(cycle, n) {
+  let perm = [];
+  for (let i = 0; i < n; i++) perm[i] = i;
+  for (let i = 0; i < cycle.length; i++) {
+    perm[cycle[i]] = cycle[(i + 1) % cycle.length];
+  }
+  return perm;
 }
 
-function permutation_from_cycles(cycles, n)
-{
-	if (cycles.length === 0) {return identity_permutation(n);}
-	return cycles.map(cycle => permutation_from_cycle(cycle, n)).reduce(compose);
-	// not very efficient, but this function is only called during init so it's fine
+function permutation_from_cycles(cycles, n) {
+  if (cycles.length === 0) {
+    return identity_permutation(n);
+  }
+  return cycles
+    .map((cycle) => permutation_from_cycle(cycle, n))
+    .reduce(compose);
+  // not very efficient, but this function is only called during init so it's fine
 }
 
 /* puzzle-specific stuff */
@@ -429,272 +409,352 @@ phase 2 state:
 ]
 */
 
-function compose_state(state1, state2)
-{
-	let co = Array(4);
-	for (let i = 0; i < 4; i++)
-	{
-		co[i] = (state1.co[i] + state2.co[i]) % 3;
-	}
-	let mp = compose(state1.mp, state2.mp);
-	let wp = compose(state1.wp, state2.wp);
-	let cp = compose(state1.cp, state2.cp);
-	return {co: co, mp: mp, wp: wp, cp: cp};
+function compose_state(state1, state2) {
+  let co = Array(4);
+  for (let i = 0; i < 4; i++) {
+    co[i] = (state1.co[i] + state2.co[i]) % 3;
+  }
+  let mp = compose(state1.mp, state2.mp);
+  let wp = compose(state1.wp, state2.wp);
+  let cp = compose(state1.cp, state2.cp);
+  return { co: co, mp: mp, wp: wp, cp: cp };
 }
 
-function invert_state(state)
-{
-	let co = Array(4);
-	for (let i = 0; i < 4; i++)
-	{
-		co[i] = (3 - state.co[i]) % 3;
-	}
-	let mp = invert(state.mp);
-	let wp = invert(state.wp);
-	let cp = invert(state.cp);
-	return {co: co, mp: mp, wp: wp, cp: cp};
+function invert_state(state) {
+  let co = Array(4);
+  for (let i = 0; i < 4; i++) {
+    co[i] = (3 - state.co[i]) % 3;
+  }
+  let mp = invert(state.mp);
+  let wp = invert(state.wp);
+  let cp = invert(state.cp);
+  return { co: co, mp: mp, wp: wp, cp: cp };
 }
 
 let solved = {
-	co: [0, 0, 0, 0],
-	mp: identity_permutation(12),
-	wp: identity_permutation(12),
-	cp: [0, 1, 2, 3]
+  co: [0, 0, 0, 0],
+  mp: identity_permutation(12),
+  wp: identity_permutation(12),
+  cp: [0, 1, 2, 3],
 };
 
 // the single-layer moves don't affect midges (mp) or centres (cp)
 let move_U = {
-	co: [2, 0, 0, 0],
-	mp: identity_permutation(12),
-	wp: permutation_from_cycle([1, 9, 11], 12),
-	cp: [0, 1, 2, 3]
+  co: [2, 0, 0, 0],
+  mp: identity_permutation(12),
+  wp: permutation_from_cycle([1, 9, 11], 12),
+  cp: [0, 1, 2, 3],
 };
 let move_L = {
-	co: [0, 2, 0, 0],
-	mp: identity_permutation(12),
-	wp: permutation_from_cycle([0, 7, 2], 12),
-	cp: [0, 1, 2, 3]
+  co: [0, 2, 0, 0],
+  mp: identity_permutation(12),
+  wp: permutation_from_cycle([0, 7, 2], 12),
+  cp: [0, 1, 2, 3],
 };
 let move_R = {
-	co: [0, 0, 2, 0],
-	mp: identity_permutation(12),
-	wp: permutation_from_cycle([3, 6, 10], 12),
-	cp: [0, 1, 2, 3]
+  co: [0, 0, 2, 0],
+  mp: identity_permutation(12),
+  wp: permutation_from_cycle([3, 6, 10], 12),
+  cp: [0, 1, 2, 3],
 };
 let move_B = {
-	co: [0, 0, 0, 2],
-	mp: identity_permutation(12),
-	wp: permutation_from_cycle([4, 8, 5], 12),
-	cp: [0, 1, 2, 3]
+  co: [0, 0, 0, 2],
+  mp: identity_permutation(12),
+  wp: permutation_from_cycle([4, 8, 5], 12),
+  cp: [0, 1, 2, 3],
 };
 
 // the double-layer moves affect everything, but permute the midges and wings identically
 let move_Uw = {
-	co: [2, 0, 0, 0],
-	mp: permutation_from_cycles([[1, 9, 11], [7, 3, 5]], 12),
-	wp: permutation_from_cycles([[1, 9, 11], [7, 3, 5]], 12),
-	cp: [0, 2, 3, 1]
+  co: [2, 0, 0, 0],
+  mp: permutation_from_cycles(
+    [
+      [1, 9, 11],
+      [7, 3, 5],
+    ],
+    12,
+  ),
+  wp: permutation_from_cycles(
+    [
+      [1, 9, 11],
+      [7, 3, 5],
+    ],
+    12,
+  ),
+  cp: [0, 2, 3, 1],
 };
 let move_Lw = {
-	co: [0, 2, 0, 0],
-	mp: permutation_from_cycles([[0, 7, 2], [6, 1, 8]], 12),
-	wp: permutation_from_cycles([[0, 7, 2], [6, 1, 8]], 12),
-	cp: [3, 1, 0, 2]
+  co: [0, 2, 0, 0],
+  mp: permutation_from_cycles(
+    [
+      [0, 7, 2],
+      [6, 1, 8],
+    ],
+    12,
+  ),
+  wp: permutation_from_cycles(
+    [
+      [0, 7, 2],
+      [6, 1, 8],
+    ],
+    12,
+  ),
+  cp: [3, 1, 0, 2],
 };
 let move_Rw = {
-	co: [0, 0, 2, 0],
-	mp: permutation_from_cycles([[3, 6, 10], [9, 0, 4]], 12),
-	wp: permutation_from_cycles([[3, 6, 10], [9, 0, 4]], 12),
-	cp: [1, 3, 2, 0]
+  co: [0, 0, 2, 0],
+  mp: permutation_from_cycles(
+    [
+      [3, 6, 10],
+      [9, 0, 4],
+    ],
+    12,
+  ),
+  wp: permutation_from_cycles(
+    [
+      [3, 6, 10],
+      [9, 0, 4],
+    ],
+    12,
+  ),
+  cp: [1, 3, 2, 0],
 };
 let move_Bw = {
-	co: [0, 0, 0, 2],
-	mp: permutation_from_cycles([[4, 8, 5], [10, 2, 11]], 12),
-	wp: permutation_from_cycles([[4, 8, 5], [10, 2, 11]], 12),
-	cp: [2, 0, 1, 3]
+  co: [0, 0, 0, 2],
+  mp: permutation_from_cycles(
+    [
+      [4, 8, 5],
+      [10, 2, 11],
+    ],
+    12,
+  ),
+  wp: permutation_from_cycles(
+    [
+      [4, 8, 5],
+      [10, 2, 11],
+    ],
+    12,
+  ),
+  cp: [2, 0, 1, 3],
 };
 
-let moves = [move_Uw, move_Lw, move_Rw, move_Bw, move_U, move_L, move_R, move_B];
-let move_names = ['Uw', 'Lw', 'Rw', 'Bw', 'U', 'L', 'R', 'B'];
+let moves = [
+  move_Uw,
+  move_Lw,
+  move_Rw,
+  move_Bw,
+  move_U,
+  move_L,
+  move_R,
+  move_B,
+];
+let move_names = ["Uw", "Lw", "Rw", "Bw", "U", "L", "R", "B"];
 const N_MOVES = 8; // number of moves
 const N_MOVES_PHASE2 = 4; // number of moves for phase 2
 
-function moves_commute(i, j)
-{
-	// single-layer moves always commute with each other
-	if (i >= 4 && j >= 4) {return true;}
-	// double-layer moves commute iff they are equal
-	if (i < 4 && j < 4) {return i === j;}
-	// a single-layer and a double-layer move commute iff they're on the same axis
-	return (i ^ j) === 4;
+function moves_commute(i, j) {
+  // single-layer moves always commute with each other
+  if (i >= 4 && j >= 4) {
+    return true;
+  }
+  // double-layer moves commute iff they are equal
+  if (i < 4 && j < 4) {
+    return i === j;
+  }
+  // a single-layer and a double-layer move commute iff they're on the same axis
+  return (i ^ j) === 4;
 }
 
-
-function apply_move_sequence(state, move_sequence)
-{
-	for (let [m, r] of move_sequence)
-	{
-		for (let i = 0; i < r; i++) state = compose_state(state, moves[m]);
-	}
-	return state;
+function apply_move_sequence(state, move_sequence) {
+  for (let [m, r] of move_sequence) {
+    for (let i = 0; i < r; i++) state = compose_state(state, moves[m]);
+  }
+  return state;
 }
 
-function stringify_move_sequence(move_sequence)
-{
-	let suffixes = ["0", "", "'"];
-	let s = move_sequence.map(([m, r]) => (move_names[m] + suffixes[r]));
-	return s.join(' ');
+function stringify_move_sequence(move_sequence) {
+  let suffixes = ["0", "", "'"];
+  let s = move_sequence.map(([m, r]) => move_names[m] + suffixes[r]);
+  return s.join(" ");
 }
 
-function print_move_sequence(move_sequence)
-{
-	console.log(stringify_move_sequence(move_sequence));
+function print_move_sequence(move_sequence) {
+  console.log(stringify_move_sequence(move_sequence));
 }
 
-function generate_random_move_sequence(length = 20)
-{
-	// this isn't completely "correct", but it's correct enough to be useful for unit tests?
-	let seq = [];
-	for (let i = 0; i < length; i++)
-	{
-		seq[i] = [Math.floor(Math.random()*N_MOVES), Math.floor(Math.random()*2)+1];
-	}
-	return seq;
+function generate_random_move_sequence(length = 20) {
+  // this isn't completely "correct", but it's correct enough to be useful for unit tests?
+  let seq = [];
+  for (let i = 0; i < length; i++) {
+    seq[i] = [
+      Math.floor(Math.random() * N_MOVES),
+      Math.floor(Math.random() * 2) + 1,
+    ];
+  }
+  return seq;
 }
 
-function generate_random_state()
-{
-	// master pyra has no "nontrivial" restrictions, beyond the usual parity stuff
-	let co = Array(4);
-	for (let i = 0; i < 4; i++) {co[i] = Math.floor(Math.random() * 3);}
-	let mp = index_to_evenpermutation(Math.floor(Math.random() * factorial(6)/2), 6);
-	for (let i = 0, parity = 0; i < 6; i++)
-	{
-		let eo = (i === 5) ? parity : Math.floor(Math.random()*2);
-		parity ^= eo;
-		mp[i] += eo * 6;
-		mp[i+6] = (mp[i] + 6) % 12;
-	}
-	let wp = index_to_evenpermutation(Math.floor(Math.random() * factorial(12)/2), 12);
-	let cp = index_to_evenpermutation(Math.floor(Math.random() * factorial(4)/2), 4);
-	return {co: co, mp: mp, wp: wp, cp: cp};
+function generate_random_state() {
+  // master pyra has no "nontrivial" restrictions, beyond the usual parity stuff
+  let co = Array(4);
+  for (let i = 0; i < 4; i++) {
+    co[i] = Math.floor(Math.random() * 3);
+  }
+  let mp = index_to_evenpermutation(
+    Math.floor((Math.random() * factorial(6)) / 2),
+    6,
+  );
+  for (let i = 0, parity = 0; i < 6; i++) {
+    let eo = i === 5 ? parity : Math.floor(Math.random() * 2);
+    parity ^= eo;
+    mp[i] += eo * 6;
+    mp[i + 6] = (mp[i] + 6) % 12;
+  }
+  let wp = index_to_evenpermutation(
+    Math.floor((Math.random() * factorial(12)) / 2),
+    12,
+  );
+  let cp = index_to_evenpermutation(
+    Math.floor((Math.random() * factorial(4)) / 2),
+    4,
+  );
+  return { co: co, mp: mp, wp: wp, cp: cp };
 }
 
-function generate_random_state_scramble()
-{
-	return solve(generate_random_state());
+function generate_random_state_scramble() {
+  return solve(generate_random_state());
 }
 
-function generate_scramble_sequence(tips = true, obfuscate_tips = false)
-{
-	let scramble_string = stringify_move_sequence(generate_random_state_scramble());
-	if (!tips) {return scramble_string;}
-	let tip_names = ['u', 'l', 'r', 'b'];
-	let suffixes = ['0', '', "'"];
-	if (!obfuscate_tips)
-	{
-		for (let i = 0; i < 4; i++)
-		{
-			let x = Math.floor(Math.random() * 3);
-			if (x !== 0)
-			{
-				scramble_string += ' ' + tip_names[i] + suffixes[x];
-			}
-		}
-		return scramble_string.trim();
-	}
-	let amount = [], amount_pre = [], amount_post = [];
-	for (let i = 0; i < 4; i++)
-	{
-		amount[i] = Math.floor(Math.random() * 3);
-		amount_pre[i] = Math.floor(Math.random() * 3);
-		amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
-	}
-	let weight = arr => arr.filter(x => x !== 0).length;
-	while (!(weight(amount_pre) >= 1 && weight(amount_post) >= 1 && weight(amount_pre) + weight(amount_post) >= 4))
-	{
-		for (let i = 0; i < 4; i++)
-		{
-			amount_pre[i] = Math.floor(Math.random() * 3);
-			amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
-		}
-	}
-	let prepend = amount_pre.map((x, i) => x !== 0 ? tip_names[i] + suffixes[x] + ' ' : '').join('');
-	let append = amount_post.map((x, i) => x !== 0 ? ' ' + tip_names[i] + suffixes[x] : '').join('');
-	return prepend + scramble_string + append;
-	// this technically has the extremely edge case of the original no-tip scramble being the
-	// trivial scramble and the resulting string will have a double space, but this is Very Rare
+function generate_scramble_sequence(tips = true, obfuscate_tips = false) {
+  let scramble_string = stringify_move_sequence(
+    generate_random_state_scramble(),
+  );
+  if (!tips) {
+    return scramble_string;
+  }
+  let tip_names = ["u", "l", "r", "b"];
+  let suffixes = ["0", "", "'"];
+  if (!obfuscate_tips) {
+    for (let i = 0; i < 4; i++) {
+      let x = Math.floor(Math.random() * 3);
+      if (x !== 0) {
+        scramble_string += " " + tip_names[i] + suffixes[x];
+      }
+    }
+    return scramble_string.trim();
+  }
+  let amount = [],
+    amount_pre = [],
+    amount_post = [];
+  for (let i = 0; i < 4; i++) {
+    amount[i] = Math.floor(Math.random() * 3);
+    amount_pre[i] = Math.floor(Math.random() * 3);
+    amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
+  }
+  let weight = (arr) => arr.filter((x) => x !== 0).length;
+  while (
+    !(
+      weight(amount_pre) >= 1 &&
+      weight(amount_post) >= 1 &&
+      weight(amount_pre) + weight(amount_post) >= 4
+    )
+  ) {
+    for (let i = 0; i < 4; i++) {
+      amount_pre[i] = Math.floor(Math.random() * 3);
+      amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
+    }
+  }
+  let prepend = amount_pre
+    .map((x, i) => (x !== 0 ? tip_names[i] + suffixes[x] + " " : ""))
+    .join("");
+  let append = amount_post
+    .map((x, i) => (x !== 0 ? " " + tip_names[i] + suffixes[x] : ""))
+    .join("");
+  return prepend + scramble_string + append;
+  // this technically has the extremely edge case of the original no-tip scramble being the
+  // trivial scramble and the resulting string will have a double space, but this is Very Rare
 }
 
-function solve(state)
-{
-	let phase1_indices = index_phase1(state);
-	let phase2_mtables = [generate_phase2_permutation_mtable(), generate_phase2_orientation_mtable()];
-	let phase2_ptables = [generate_phase2_permutation_ptable(), generate_phase2_orientation_ptable()];
-	
-	let phase1gen = phase1_ida_solve_gen(phase1_indices);
-	let best = undefined;
-	let intermediate_states = new Set();
-	let start_time = performance.now();
-	for (let i = 0; i < 22; i++)
-	{
-		let {value: sol1, done} = phase1gen.next();
-		let new_state = state;
-		for (let [m, r] of sol1)
-		{
-			for (let i = 0; i < r; i++) new_state = compose_state(new_state, moves[m]);
-		}
-		let stringified_state = JSON.stringify(new_state)
-		if (intermediate_states.has(stringified_state))
-		{
-			console.log('skip');
-			continue;
-		}
-		else intermediate_states.add(stringified_state);
-		let phase2_indices = index_phase2(new_state);
-		//let sol2 = [];
-		let moves_left = best ? best.length - sol1.length - 1 : 999999;
-		let sol2 = ida_solve_gen(phase2_indices, phase2_mtables, phase2_ptables, moves_left).next().value;
-		if (sol2 === undefined)
-		{
-			console.log('prune');
-			continue;
-		}
-		console.log(`to ${stringified_state} in ${sol1.length} moves; total move count ${sol1.length + sol2.length}`);
-		if (best === undefined || best.length > sol1.length + sol2.length)
-		{
-			best = sol1.concat(sol2);
-		}
-		// bail if we've spent too much time
-		if (performance.now() - start_time > 300) break;
-	}
-	return best;
+function solve(state) {
+  let phase1_indices = index_phase1(state);
+  let phase2_mtables = [
+    generate_phase2_permutation_mtable(),
+    generate_phase2_orientation_mtable(),
+  ];
+  let phase2_ptables = [
+    generate_phase2_permutation_ptable(),
+    generate_phase2_orientation_ptable(),
+  ];
+
+  let phase1gen = phase1_ida_solve_gen(phase1_indices);
+  let best = undefined;
+  let intermediate_states = new Set();
+  let start_time = performance.now();
+  for (let i = 0; i < 22; i++) {
+    let { value: sol1, done } = phase1gen.next();
+    let new_state = state;
+    for (let [m, r] of sol1) {
+      for (let i = 0; i < r; i++)
+        new_state = compose_state(new_state, moves[m]);
+    }
+    let stringified_state = JSON.stringify(new_state);
+    if (intermediate_states.has(stringified_state)) {
+      console.log("skip");
+      continue;
+    } else intermediate_states.add(stringified_state);
+    let phase2_indices = index_phase2(new_state);
+    //let sol2 = [];
+    let moves_left = best ? best.length - sol1.length - 1 : 999999;
+    let sol2 = ida_solve_gen(
+      phase2_indices,
+      phase2_mtables,
+      phase2_ptables,
+      moves_left,
+    ).next().value;
+    if (sol2 === undefined) {
+      console.log("prune");
+      continue;
+    }
+    console.log(
+      `to ${stringified_state} in ${sol1.length} moves; total move count ${
+        sol1.length + sol2.length
+      }`,
+    );
+    if (best === undefined || best.length > sol1.length + sol2.length) {
+      best = sol1.concat(sol2);
+    }
+    // bail if we've spent too much time
+    if (performance.now() - start_time > 300) break;
+  }
+  return best;
 }
 
-function determine_V_coset(p)
-{
-	// p: even permutation on 4 elements
-	// NOTE: the formula depends on the centre ordering and corner orientation conventions
-	// V itself is 0, ccw coset is 1, cw coset is 2.
-	return p[3 ^ p.indexOf(3)];
+function determine_V_coset(p) {
+  // p: even permutation on 4 elements
+  // NOTE: the formula depends on the centre ordering and corner orientation conventions
+  // V itself is 0, ccw coset is 1, cw coset is 2.
+  return p[3 ^ p.indexOf(3)];
 }
 
-function index_phase1(state)
-{
-	let w = compose(invert(state.mp), state.wp);
-	let c = (state.co.reduce((x, y) => x + y) - determine_V_coset(state.cp) + 3) % 3;
-	return [0,1,2,3,4,5].map(i => i + 6*w.indexOf(i) + 72*w.indexOf(i+6) + 864*c);
+function index_phase1(state) {
+  let w = compose(invert(state.mp), state.wp);
+  let c =
+    (state.co.reduce((x, y) => x + y) - determine_V_coset(state.cp) + 3) % 3;
+  return [0, 1, 2, 3, 4, 5].map(
+    (i) => i + 6 * w.indexOf(i) + 72 * w.indexOf(i + 6) + 864 * c,
+  );
 }
 
-let phase1_permtable_m = [], phase1_permtable_minv = [];
-let phase1_permtable_w = [], phase1_permtable_winv = [];
-for (let i = 0; i < N_MOVES; i++)
-{
-	let move = moves[i];
-	phase1_permtable_m[i] = move.mp;
-	phase1_permtable_minv[i] = invert(move.mp);
-	phase1_permtable_w[i] = move.wp;
-	phase1_permtable_winv[i] = invert(move.wp);
+let phase1_permtable_m = [],
+  phase1_permtable_minv = [];
+let phase1_permtable_w = [],
+  phase1_permtable_winv = [];
+for (let i = 0; i < N_MOVES; i++) {
+  let move = moves[i];
+  phase1_permtable_m[i] = move.mp;
+  phase1_permtable_minv[i] = invert(move.mp);
+  phase1_permtable_w[i] = move.wp;
+  phase1_permtable_winv[i] = invert(move.wp);
 }
 let phase1_c_update = [0, 0, 0, 0, 2, 2, 2, 2];
 
@@ -724,446 +784,480 @@ js> sum_by_score
 */
 
 let phase1_score_ptable = [
-	//-12        -9  -8  -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9         12
-	[14, -1, -1, 11, 11, 10, 9, 8, 8, 7, 7, 6, 4, 5, 5, 3, 4, 4, 2, 3, 4, 3, -1, -1, 0],
-	[13, -1, -1, 11, 10, 10, 9, 8, 8, 7, 7, 6, 4, 5, 5, 3, 4, 4, 2, 3, 3, 1, -1, -1, 6]
+  //-12        -9  -8  -7 -6 -5 -4 -3 -2 -1  0  1  2  3  4  5  6  7  8  9         12
+  [
+    14, -1, -1, 11, 11, 10, 9, 8, 8, 7, 7, 6, 4, 5, 5, 3, 4, 4, 2, 3, 4, 3, -1,
+    -1, 0,
+  ],
+  [
+    13, -1, -1, 11, 10, 10, 9, 8, 8, 7, 7, 6, 4, 5, 5, 3, 4, 4, 2, 3, 3, 1, -1,
+    -1, 6,
+  ],
 ];
 let phase1_score_ptable_condensed = new Int8Array(55);
-for (let i = 0; i < 25; i++)
-{
-	phase1_score_ptable_condensed[i] = phase1_score_ptable[0][i];
-	phase1_score_ptable_condensed[i+30] = phase1_score_ptable[1][i];
+for (let i = 0; i < 25; i++) {
+  phase1_score_ptable_condensed[i] = phase1_score_ptable[0][i];
+  phase1_score_ptable_condensed[i + 30] = phase1_score_ptable[1][i];
 }
-let phase1_coord_to_score = new Int8Array(6*12*12*3);
-for (let i = 0; i < 6; i++) for (let j = 0; j < 12; j++) for (let k = 0; k < 12; k++)
-{
-	let index = i + 6*j + 72*k;
-	let score = 2;
-	if (j === i) {score++;}
-	else if (j === (i+6) % 12) {score--;}
-	if (k === (i+6) % 12) {score++;}
-	else if (k === i) {score--;}
-	phase1_coord_to_score[index] = score;
-	phase1_coord_to_score[index+6*12*12] = phase1_coord_to_score[index+2*6*12*12] = score+5;
+let phase1_coord_to_score = new Int8Array(6 * 12 * 12 * 3);
+for (let i = 0; i < 6; i++)
+  for (let j = 0; j < 12; j++)
+    for (let k = 0; k < 12; k++) {
+      let index = i + 6 * j + 72 * k;
+      let score = 2;
+      if (j === i) {
+        score++;
+      } else if (j === (i + 6) % 12) {
+        score--;
+      }
+      if (k === (i + 6) % 12) {
+        score++;
+      } else if (k === i) {
+        score--;
+      }
+      phase1_coord_to_score[index] = score;
+      phase1_coord_to_score[index + 6 * 12 * 12] = phase1_coord_to_score[
+        index + 2 * 6 * 12 * 12
+      ] = score + 5;
+    }
+
+function phase1_benchmark() {
+  /* some 13-move phase 1 states*/
+  let phase1_test_states = [
+    [1836, 2551, 1922, 1947, 2440, 2063],
+    [1674, 1153, 1058, 1353, 1000, 1271],
+    [1764, 2497, 1904, 2001, 2242, 2087],
+    [582, 301, 566, 273, 40, 431],
+    [600, 217, 200, 477, 136, 431],
+    [60, 613, 98, 273, 214, 407],
+    [36, 265, 98, 777, 190, 431],
+    [1764, 1987, 2402, 1881, 2368, 2159],
+    [36, 277, 194, 129, 334, 431],
+    [1764, 1843, 1928, 2499, 2158, 2039],
+    [528, 721, 194, 429, 112, 275],
+    [840, 115, 182, 219, 346, 425],
+    [1752, 1831, 2498, 1989, 2416, 1943],
+    [324, 133, 554, 231, 58, 431],
+    [18, 331, 194, 495, 658, 431],
+    [1764, 1987, 1880, 2337, 2578, 2081],
+    [1776, 1855, 1934, 1989, 2050, 2231],
+    [396, 811, 194, 297, 712, 47],
+    [816, 115, 482, 273, 148, 425],
+    [972, 907, 1070, 1281, 1174, 1511],
+  ];
+  generate_phase1_pairing2c_ptable();
+  let start = performance.now();
+  for (let coords of phase1_test_states) {
+    phase1_ida_solve_gen(coords).next();
+  }
+  return performance.now() - start;
 }
 
-function phase1_benchmark()
-{
-	/* some 13-move phase 1 states*/
-	let phase1_test_states = [
-	[1836,2551,1922,1947,2440,2063],
-	[1674,1153,1058,1353,1000,1271],
-	[1764,2497,1904,2001,2242,2087],
-	[582,301,566,273,40,431],
-	[600,217,200,477,136,431],
-	[60,613,98,273,214,407],
-	[36,265,98,777,190,431],
-	[1764,1987,2402,1881,2368,2159],
-	[36,277,194,129,334,431],
-	[1764,1843,1928,2499,2158,2039],
-	[528,721,194,429,112,275],
-	[840,115,182,219,346,425],
-	[1752,1831,2498,1989,2416,1943],
-	[324,133,554,231,58,431],
-	[18,331,194,495,658,431],
-	[1764,1987,1880,2337,2578,2081],
-	[1776,1855,1934,1989,2050,2231],
-	[396,811,194,297,712,47],
-	[816,115,482,273,148,425],
-	[972,907,1070,1281,1174,1511]
-	];
-	generate_phase1_pairing2c_ptable();
-	let start = performance.now();
-	for (let coords of phase1_test_states)
-	{
-		phase1_ida_solve_gen(coords).next();
-	}
-	return performance.now() - start;
+function* phase1_ida_solve_gen(coords) {
+  let bound = 0;
+  let mtable = generate_phase1_pairingc_mtable();
+  let ptable = generate_phase1_pairing2c_ptable();
+  while (true) {
+    yield* phase1_ida_search_gen(...coords, mtable, ptable, bound, -1);
+    bound++;
+  }
 }
 
-function* phase1_ida_solve_gen(coords)
-{
-	let bound = 0;
-	let mtable = generate_phase1_pairingc_mtable();
-	let ptable = generate_phase1_pairing2c_ptable();
-	while (true)
-	{
-		yield* phase1_ida_search_gen(...coords, mtable, ptable, bound, -1);
-		bound++;
-	}
+function* phase1_ida_search_gen(a, b, c, d, e, f, mtable, ptable, bound, last) {
+  let nmoves = N_MOVES; // = 8
+  let score =
+    phase1_coord_to_score[a] +
+    phase1_coord_to_score[b] +
+    phase1_coord_to_score[c] +
+    phase1_coord_to_score[d] +
+    phase1_coord_to_score[e] +
+    phase1_coord_to_score[f];
+  let heuristic = Math.max(
+    ptable[(a % 864) + b * 864],
+    ptable[(c % 864) + b * 864],
+    ptable[(e % 864) + b * 864],
+    ptable[(a % 864) + d * 864],
+    ptable[(c % 864) + d * 864],
+    ptable[(e % 864) + d * 864],
+    ptable[(a % 864) + f * 864],
+    ptable[(c % 864) + f * 864],
+    ptable[(e % 864) + f * 864],
+    ptable[(a % 864) + c * 864],
+    ptable[(a % 864) + e * 864],
+    ptable[(c % 864) + e * 864],
+    ptable[(b % 864) + d * 864],
+    ptable[(b % 864) + f * 864],
+    ptable[(d % 864) + f * 864],
+    phase1_score_ptable_condensed[score],
+  );
+  if (heuristic > bound) return;
+  if (bound === 0) {
+    yield [];
+    return;
+  }
+  if (heuristic === 0 && bound === 1) return;
+  for (let m = 0; m < nmoves; m++) {
+    if (m === last) continue;
+    if (m < last && moves_commute(m, last)) continue;
+    let A = a,
+      B = b,
+      C = c,
+      D = d,
+      E = e,
+      F = f;
+    for (let r = 1; r <= 2; r++) {
+      A = mtable[A][m];
+      B = mtable[B][m];
+      C = mtable[C][m];
+      D = mtable[D][m];
+      E = mtable[E][m];
+      F = mtable[F][m];
+      let subpath_gen = phase1_ida_search_gen(
+        A,
+        B,
+        C,
+        D,
+        E,
+        F,
+        mtable,
+        ptable,
+        bound - 1,
+        m,
+      );
+      while (true) {
+        let { value: subpath, done } = subpath_gen.next();
+        if (done) break;
+        yield [[m, r]].concat(subpath);
+      }
+    }
+  }
 }
 
-function* phase1_ida_search_gen(a, b, c, d, e, f, mtable, ptable, bound, last)
-{
-	let nmoves = N_MOVES; // = 8
-	let score = (
-		phase1_coord_to_score[a] +
-		phase1_coord_to_score[b] +
-		phase1_coord_to_score[c] +
-		phase1_coord_to_score[d] +
-		phase1_coord_to_score[e] +
-		phase1_coord_to_score[f]
-	);
-	let heuristic = Math.max(
-		ptable[a%864 + b*864],
-		ptable[c%864 + b*864],
-		ptable[e%864 + b*864],
-		ptable[a%864 + d*864],
-		ptable[c%864 + d*864],
-		ptable[e%864 + d*864],
-		ptable[a%864 + f*864],
-		ptable[c%864 + f*864],
-		ptable[e%864 + f*864],
-		ptable[a%864 + c*864],
-		ptable[a%864 + e*864],
-		ptable[c%864 + e*864],
-		ptable[b%864 + d*864],
-		ptable[b%864 + f*864],
-		ptable[d%864 + f*864],
-		phase1_score_ptable_condensed[score]
-	);
-	if (heuristic > bound) return;
-	if (bound === 0)
-	{
-		yield [];
-		return;
-	}
-	if (heuristic === 0 && bound === 1) return;
-	for (let m = 0; m < nmoves; m++)
-	{
-		if (m === last) continue;
-		if (m < last && moves_commute(m, last)) continue;
-		let A = a, B = b, C = c, D = d, E = e, F = f;
-		for (let r = 1; r <= 2; r++)
-		{
-			A = mtable[A][m];
-			B = mtable[B][m];
-			C = mtable[C][m];
-			D = mtable[D][m];
-			E = mtable[E][m];
-			F = mtable[F][m];
-			let subpath_gen = phase1_ida_search_gen(A, B, C, D, E, F, mtable, ptable, bound-1, m);
-			while (true)
-			{
-				let {value: subpath, done} = subpath_gen.next();
-				if (done) break;
-				yield [[m, r]].concat(subpath);
-			}
-		}
-	}
-}
-
-function index_phase2(state)
-{
-	let edges = state.mp;
-	let ep = evenpermutation_to_index(edges.slice(0, 6).map(x => x % 6));
-	let eo = edges.slice(0, 5).map((x, i) => (x >= 6) * 2**i).reduce((x, y) => x + y);
-	let co = state.co.map((x, i) => x * 3**i).reduce((x, y) => x + y);
-	let cloc = state.cp.indexOf(0);
-	return [ep + 360*cloc, eo + 32*co];
+function index_phase2(state) {
+  let edges = state.mp;
+  let ep = evenpermutation_to_index(edges.slice(0, 6).map((x) => x % 6));
+  let eo = edges
+    .slice(0, 5)
+    .map((x, i) => (x >= 6) * 2 ** i)
+    .reduce((x, y) => x + y);
+  let co = state.co.map((x, i) => x * 3 ** i).reduce((x, y) => x + y);
+  let cloc = state.cp.indexOf(0);
+  return [ep + 360 * cloc, eo + 32 * co];
 }
 
 let tables = {};
 
-function generate_phase1_pairing_mtable()
-{
-	if (tables.phase1pm) {return tables.phase1pm;}
-	let mtable = Array(6*12*12).fill().map(() => Array(N_MOVES).fill(-1));
-	for (let midge = 0; midge < 6; midge++)
-	{
-		for (let wingl = 0; wingl < 12; wingl++)
-		{
-			for (let wingh = 0; wingh < 12; wingh++)
-			{
-				if (wingl === wingh) {continue;}
-				let index = midge + 6*wingl + 72*wingh;
-				for (let m = 0; m < N_MOVES; m++)
-				{
-					let new_midge = phase1_permtable_minv[m][midge];
-					let new_wingl = phase1_permtable_winv[m][wingl];
-					let new_wingh = phase1_permtable_winv[m][wingh];
-					if (new_midge < 6)
-					{
-						mtable[index][m] = new_midge + 6*new_wingl + 72*new_wingh;
-					}
-					else
-					{
-						mtable[index][m] = (new_midge-6) + 6*new_wingh + 72*new_wingl;
-					}
-				}
-			}
-		}
-	}
-	return tables.phase1pm = mtable;
+function generate_phase1_pairing_mtable() {
+  if (tables.phase1pm) {
+    return tables.phase1pm;
+  }
+  let mtable = Array(6 * 12 * 12)
+    .fill()
+    .map(() => Array(N_MOVES).fill(-1));
+  for (let midge = 0; midge < 6; midge++) {
+    for (let wingl = 0; wingl < 12; wingl++) {
+      for (let wingh = 0; wingh < 12; wingh++) {
+        if (wingl === wingh) {
+          continue;
+        }
+        let index = midge + 6 * wingl + 72 * wingh;
+        for (let m = 0; m < N_MOVES; m++) {
+          let new_midge = phase1_permtable_minv[m][midge];
+          let new_wingl = phase1_permtable_winv[m][wingl];
+          let new_wingh = phase1_permtable_winv[m][wingh];
+          if (new_midge < 6) {
+            mtable[index][m] = new_midge + 6 * new_wingl + 72 * new_wingh;
+          } else {
+            mtable[index][m] = new_midge - 6 + 6 * new_wingh + 72 * new_wingl;
+          }
+        }
+      }
+    }
+  }
+  return (tables.phase1pm = mtable);
 }
 
-function generate_phase1_pairingc_mtable()
-{
-	if (tables.phase1pcm) {return tables.phase1pcm;}
-	let mtable_pairing = generate_phase1_pairing_mtable();
-	let mtable = Array(mtable_pairing.length * 3).fill().map(() => Array(N_MOVES).fill(-1));
-	for (let index = 0; index < mtable_pairing.length; index++)
-	{
-		for (let m = 0; m < N_MOVES; m++)
-		{
-			let new_index = mtable_pairing[index][m];
-			mtable[index][m] = new_index + 6*12*12*phase1_c_update[m];
-			mtable[index+6*12*12][m] = new_index + 6*12*12*((phase1_c_update[m]+1)%3);
-			mtable[index+2*6*12*12][m] = new_index + 6*12*12*((phase1_c_update[m]+2)%3);
-		}
-	}
-	return tables.phase1pcm = mtable;
+function generate_phase1_pairingc_mtable() {
+  if (tables.phase1pcm) {
+    return tables.phase1pcm;
+  }
+  let mtable_pairing = generate_phase1_pairing_mtable();
+  let mtable = Array(mtable_pairing.length * 3)
+    .fill()
+    .map(() => Array(N_MOVES).fill(-1));
+  for (let index = 0; index < mtable_pairing.length; index++) {
+    for (let m = 0; m < N_MOVES; m++) {
+      let new_index = mtable_pairing[index][m];
+      mtable[index][m] = new_index + 6 * 12 * 12 * phase1_c_update[m];
+      mtable[index + 6 * 12 * 12][m] =
+        new_index + 6 * 12 * 12 * ((phase1_c_update[m] + 1) % 3);
+      mtable[index + 2 * 6 * 12 * 12][m] =
+        new_index + 6 * 12 * 12 * ((phase1_c_update[m] + 2) % 3);
+    }
+  }
+  return (tables.phase1pcm = mtable);
 }
 
-function generate_phase1_pairing2c_ptable()
-{
-	if (tables.phase1p2cp) {return tables.phase1p2cp;}
-	let mtable_noc = generate_phase1_pairing_mtable();
-	let mtable = generate_phase1_pairingc_mtable();
-	let ptable = new Int8Array((6*12*12)**2 * 3);
-	ptable.fill(-1);
-	let g = [0,1,2,3,4,5].map(x => x + 6*x + 72*(x+6));
-	for (let i = 0; i < 6; i++) for (let j = 0; j < 6; j++)
-	{
-		if (i === j) continue;
-		ptable[g[i] + 864*g[j]] = 0;
-	}
-	let dist = 0;
-	while (true)
-	{
-		let changed = false;
-		for (let index = 0; index < ptable.length; index++)
-		{
-			if (ptable[index] !== dist) {continue;}
-			let index0 = index % 864, index1 = Math.floor(index / 864);
-			for (let m = 0; m < N_MOVES; m++)
-			{
-				let new_index0 = index0, new_index1 = index1;
-				for (let r = 1; r <= 2; r++)
-				{
-					new_index0 = mtable_noc[new_index0][m];
-					new_index1 = mtable[new_index1][m];
-					let new_index = new_index0 + 864*new_index1;
-					if (ptable[new_index] === -1)
-					{
-						changed = true;
-						ptable[new_index] = dist+1;
-					}
-				}
-			}
-		}
-		if (!changed) {break;}
-		dist++;
-	}
-	return tables.phase1p2cp = ptable;
+function generate_phase1_pairing2c_ptable() {
+  if (tables.phase1p2cp) {
+    return tables.phase1p2cp;
+  }
+  let mtable_noc = generate_phase1_pairing_mtable();
+  let mtable = generate_phase1_pairingc_mtable();
+  let ptable = new Int8Array((6 * 12 * 12) ** 2 * 3);
+  ptable.fill(-1);
+  let g = [0, 1, 2, 3, 4, 5].map((x) => x + 6 * x + 72 * (x + 6));
+  for (let i = 0; i < 6; i++)
+    for (let j = 0; j < 6; j++) {
+      if (i === j) continue;
+      ptable[g[i] + 864 * g[j]] = 0;
+    }
+  let dist = 0;
+  while (true) {
+    let changed = false;
+    for (let index = 0; index < ptable.length; index++) {
+      if (ptable[index] !== dist) {
+        continue;
+      }
+      let index0 = index % 864,
+        index1 = Math.floor(index / 864);
+      for (let m = 0; m < N_MOVES; m++) {
+        let new_index0 = index0,
+          new_index1 = index1;
+        for (let r = 1; r <= 2; r++) {
+          new_index0 = mtable_noc[new_index0][m];
+          new_index1 = mtable[new_index1][m];
+          let new_index = new_index0 + 864 * new_index1;
+          if (ptable[new_index] === -1) {
+            changed = true;
+            ptable[new_index] = dist + 1;
+          }
+        }
+      }
+    }
+    if (!changed) {
+      break;
+    }
+    dist++;
+  }
+  return (tables.phase1p2cp = ptable);
 }
 
-function generate_phase1_full_ptable()
-{
-	// extremely slow, do not use
-	if (tables.phase1p) {return tables.phase1p;}
-	const HALFFACT12 = factorial(12)/2;
-	const SIZE = HALFFACT12 * 3;
-	let ptable = new Int8Array(SIZE).fill(-1);
-	ptable[0] = 0;
-	let dist = 0;
-	let perm = new Int8Array(12), new_perm = new Int8Array(12);
-	while (true)
-	{
-		let changed = false;
-		let count = 0;
-		for (let index = 0; index < SIZE; index++)
-		{
-			if (ptable[index] !== dist) {continue;}
-			count++;
-			let cindex = index % 3;
-			let windex = (index - cindex) / 3;
-			index_to_evenpermutation12(windex, perm);
-			for (let m = 0; m < N_MOVES; m++)
-			{			
-				let move_m = phase1_permtable_m[m], move_minv = phase1_permtable_minv[m];
-				let move_w = phase1_permtable_w[m], move_winv = phase1_permtable_winv[m];
-				{ // clockwise move
-					let new_cindex = (cindex + phase1_c_update[m]) % 3;
-					for (let i = 0; i < 12; i++)
-					{
-						new_perm[i] = move_minv[perm[move_w[i]]];
-					}
-					let new_windex = evenpermutation12_to_index(new_perm);
-					let new_index = new_cindex + 3*new_windex;
-					if (ptable[new_index] === -1)
-					{
-						changed = true;
-						ptable[new_index] = dist+1;
-					}
-				}
-				{ // anticlockwise move
-					let new_cindex = (cindex + 3 - phase1_c_update[m]) % 3;
-					for (let i = 0; i < 12; i++)
-					{
-						new_perm[i] = move_m[perm[move_winv[i]]];
-					}
-					let new_windex = evenpermutation12_to_index(new_perm);
-					let new_index = new_cindex + 3*new_windex;
-					if (ptable[new_index] === -1)
-					{
-						changed = true;
-						ptable[new_index] = dist+1;
-					}
-				}
-			}
-		}
-		console.log(`${count} nodes at depth ${dist}`);
-		if (!changed) {break;}
-		dist++;
-	}
-	return tables.phase1p = ptable;
+function generate_phase1_full_ptable() {
+  // extremely slow, do not use
+  if (tables.phase1p) {
+    return tables.phase1p;
+  }
+  const HALFFACT12 = factorial(12) / 2;
+  const SIZE = HALFFACT12 * 3;
+  let ptable = new Int8Array(SIZE).fill(-1);
+  ptable[0] = 0;
+  let dist = 0;
+  let perm = new Int8Array(12),
+    new_perm = new Int8Array(12);
+  while (true) {
+    let changed = false;
+    let count = 0;
+    for (let index = 0; index < SIZE; index++) {
+      if (ptable[index] !== dist) {
+        continue;
+      }
+      count++;
+      let cindex = index % 3;
+      let windex = (index - cindex) / 3;
+      index_to_evenpermutation12(windex, perm);
+      for (let m = 0; m < N_MOVES; m++) {
+        let move_m = phase1_permtable_m[m],
+          move_minv = phase1_permtable_minv[m];
+        let move_w = phase1_permtable_w[m],
+          move_winv = phase1_permtable_winv[m];
+        {
+          // clockwise move
+          let new_cindex = (cindex + phase1_c_update[m]) % 3;
+          for (let i = 0; i < 12; i++) {
+            new_perm[i] = move_minv[perm[move_w[i]]];
+          }
+          let new_windex = evenpermutation12_to_index(new_perm);
+          let new_index = new_cindex + 3 * new_windex;
+          if (ptable[new_index] === -1) {
+            changed = true;
+            ptable[new_index] = dist + 1;
+          }
+        }
+        {
+          // anticlockwise move
+          let new_cindex = (cindex + 3 - phase1_c_update[m]) % 3;
+          for (let i = 0; i < 12; i++) {
+            new_perm[i] = move_m[perm[move_winv[i]]];
+          }
+          let new_windex = evenpermutation12_to_index(new_perm);
+          let new_index = new_cindex + 3 * new_windex;
+          if (ptable[new_index] === -1) {
+            changed = true;
+            ptable[new_index] = dist + 1;
+          }
+        }
+      }
+    }
+    console.log(`${count} nodes at depth ${dist}`);
+    if (!changed) {
+      break;
+    }
+    dist++;
+  }
+  return (tables.phase1p = ptable);
 }
 
-function generate_phase2_permutation_mtable()
-{
-	if (tables.phase2pm) {return tables.phase2pm;}
-	let mtable = Array(1440).fill().map(() => Array(N_MOVES_PHASE2));
-	for (let ep = 0; ep < 360; ep++)
-	{
-		let perm = index_to_evenpermutation(ep, 6);
-		// fill in the "opposite" values
-		for (let i = 0; i < 6; i++) {perm[i+6] = perm[i]+6;}
-		for (let m = 0; m < N_MOVES_PHASE2; m++)
-		{
-			let new_perm = compose(perm, moves[m].mp);
-			let new_ep = evenpermutation_to_index(new_perm.slice(0, 6).map(x => x % 6));
-			for (let new_cloc = 0; new_cloc < 4; new_cloc++)
-			{
-				let cloc = moves[m].cp[new_cloc];
-				mtable[ep + 360*cloc][m] = new_ep + 360*new_cloc;
-			}
-		}
-	}
-	return tables.phase2pm = mtable;
+function generate_phase2_permutation_mtable() {
+  if (tables.phase2pm) {
+    return tables.phase2pm;
+  }
+  let mtable = Array(1440)
+    .fill()
+    .map(() => Array(N_MOVES_PHASE2));
+  for (let ep = 0; ep < 360; ep++) {
+    let perm = index_to_evenpermutation(ep, 6);
+    // fill in the "opposite" values
+    for (let i = 0; i < 6; i++) {
+      perm[i + 6] = perm[i] + 6;
+    }
+    for (let m = 0; m < N_MOVES_PHASE2; m++) {
+      let new_perm = compose(perm, moves[m].mp);
+      let new_ep = evenpermutation_to_index(
+        new_perm.slice(0, 6).map((x) => x % 6),
+      );
+      for (let new_cloc = 0; new_cloc < 4; new_cloc++) {
+        let cloc = moves[m].cp[new_cloc];
+        mtable[ep + 360 * cloc][m] = new_ep + 360 * new_cloc;
+      }
+    }
+  }
+  return (tables.phase2pm = mtable);
 }
 
-function generate_phase2_orientation_mtable()
-{
-	if (tables.phase2om) {return tables.phase2om;}
-	let mtable = Array(32*81).fill().map(() => Array(N_MOVES_PHASE2));
-	for (let eo = 0; eo < 32; eo++)
-	{
-		let eo_array = [0,1,2,3,4].map(i => ((eo >> i) & 1));
-		eo_array[5] = eo_array.reduce((x, y) => x^y);
-		let perm = [];
-		for (let i = 0; i < 6; i++)
-		{
-			perm[i] = i + 6*eo_array[i];
-			perm[i+6] = i + 6*(eo_array[i]^1);
-		}
-		for (let co = 0; co < 81; co++)
-		{
-			let co_array = [0,1,2,3].map(i => Math.floor(co/3**i)%3);
-			for (let m = 0; m < N_MOVES_PHASE2; m++)
-			{
-				let new_perm = compose(perm, moves[m].mp);
-				let new_eo_array = new_perm.slice(0, 5).map(x => +(x >= 6));
-				let new_eo = 0;
-				for (let i = 0; i < 5; i++) {new_eo += new_eo_array[i] << i;}
-				let new_co_array = co_array.map((x, i) => (x + moves[m].co[i]) % 3);
-				let new_co = 0;
-				for (let i = 0; i < 4; i++) {new_co += new_co_array[i] * 3**i;}
-				mtable[eo + 32*co][m] = new_eo + 32*new_co;
-			}
-		}
-	}
-	return tables.phase2om = mtable;
+function generate_phase2_orientation_mtable() {
+  if (tables.phase2om) {
+    return tables.phase2om;
+  }
+  let mtable = Array(32 * 81)
+    .fill()
+    .map(() => Array(N_MOVES_PHASE2));
+  for (let eo = 0; eo < 32; eo++) {
+    let eo_array = [0, 1, 2, 3, 4].map((i) => (eo >> i) & 1);
+    eo_array[5] = eo_array.reduce((x, y) => x ^ y);
+    let perm = [];
+    for (let i = 0; i < 6; i++) {
+      perm[i] = i + 6 * eo_array[i];
+      perm[i + 6] = i + 6 * (eo_array[i] ^ 1);
+    }
+    for (let co = 0; co < 81; co++) {
+      let co_array = [0, 1, 2, 3].map((i) => Math.floor(co / 3 ** i) % 3);
+      for (let m = 0; m < N_MOVES_PHASE2; m++) {
+        let new_perm = compose(perm, moves[m].mp);
+        let new_eo_array = new_perm.slice(0, 5).map((x) => +(x >= 6));
+        let new_eo = 0;
+        for (let i = 0; i < 5; i++) {
+          new_eo += new_eo_array[i] << i;
+        }
+        let new_co_array = co_array.map((x, i) => (x + moves[m].co[i]) % 3);
+        let new_co = 0;
+        for (let i = 0; i < 4; i++) {
+          new_co += new_co_array[i] * 3 ** i;
+        }
+        mtable[eo + 32 * co][m] = new_eo + 32 * new_co;
+      }
+    }
+  }
+  return (tables.phase2om = mtable);
 }
 
-function generate_phase2_permutation_ptable()
-{
-	if (tables.phase2pp) {return tables.phase2pp;}
-	return tables.phase2pp = bfs(generate_phase2_permutation_mtable(), [0]);
+function generate_phase2_permutation_ptable() {
+  if (tables.phase2pp) {
+    return tables.phase2pp;
+  }
+  return (tables.phase2pp = bfs(generate_phase2_permutation_mtable(), [0]));
 }
 
-function generate_phase2_orientation_ptable()
-{
-	if (tables.phase2op) {return tables.phase2op;}
-	return tables.phase2op = bfs(generate_phase2_orientation_mtable(), [0]);
+function generate_phase2_orientation_ptable() {
+  if (tables.phase2op) {
+    return tables.phase2op;
+  }
+  return (tables.phase2op = bfs(generate_phase2_orientation_mtable(), [0]));
 }
 
-function bfs(mtable, goal_states)
-{
-	let N = mtable.length;
-	let nmoves = mtable[0].length;
-	let ptable = Array(N).fill(-1);
-	let queue = goal_states.slice(), new_queue = [];
-	let depth = 0;
-	while (queue.length > 0)
-	{
-		new_queue.length = 0;
-		for (let state of queue)
-		{
-			if (ptable[state] !== -1) continue;
-			ptable[state] = depth;
-			for (let move_index = 0; move_index < nmoves; move_index++)
-			{
-				let new_state = mtable[state][move_index];
-				while (new_state != state)
-				{
-					new_queue.push(new_state);
-					new_state = mtable[new_state][move_index];
-				}
-			}
-		}
-		[queue, new_queue] = [new_queue, queue];
-		depth += 1;
-	}
-	return ptable;
+function bfs(mtable, goal_states) {
+  let N = mtable.length;
+  let nmoves = mtable[0].length;
+  let ptable = Array(N).fill(-1);
+  let queue = goal_states.slice(),
+    new_queue = [];
+  let depth = 0;
+  while (queue.length > 0) {
+    new_queue.length = 0;
+    for (let state of queue) {
+      if (ptable[state] !== -1) continue;
+      ptable[state] = depth;
+      for (let move_index = 0; move_index < nmoves; move_index++) {
+        let new_state = mtable[state][move_index];
+        while (new_state != state) {
+          new_queue.push(new_state);
+          new_state = mtable[new_state][move_index];
+        }
+      }
+    }
+    [queue, new_queue] = [new_queue, queue];
+    depth += 1;
+  }
+  return ptable;
 }
 
-function* ida_solve_gen(indices, mtables, ptables, moves_left)
-{
-	let ncoords = indices.length;
-	let bound = 0;
-	for (let i = 0; i < ncoords; i++) bound = Math.max(bound, ptables[i][indices[i]]);
-	while (bound <= moves_left)
-	{
-		yield* ida_search_gen(indices, mtables, ptables, bound, -1);
-		bound++;
-	}
+function* ida_solve_gen(indices, mtables, ptables, moves_left) {
+  let ncoords = indices.length;
+  let bound = 0;
+  for (let i = 0; i < ncoords; i++)
+    bound = Math.max(bound, ptables[i][indices[i]]);
+  while (bound <= moves_left) {
+    yield* ida_search_gen(indices, mtables, ptables, bound, -1);
+    bound++;
+  }
 }
 
-function* ida_search_gen(indices, mtables, ptables, bound, last)
-{
-	let ncoords = indices.length;
-	let nmoves = mtables[0][0].length;
-	let heuristic = 0;
-	for (let i = 0; i < ncoords; i++) heuristic = Math.max(heuristic, ptables[i][indices[i]]);
-	if (heuristic > bound) return;
-	if (bound === 0)
-	{
-		yield [];
-		return;
-	}
-	if (heuristic === 0 && bound === 1) return;
-	for (let m = 0; m < nmoves; m++)
-	{
-		if (m === last) continue;
-		if (m < last && moves_commute(m, last)) continue;
-		let new_indices = indices.slice();
-		for (let c = 0; c < ncoords; c++) new_indices[c] = mtables[c][indices[c]][m];
-		let r = 1;
-		while (indices.some((_, i) => indices[i] != new_indices[i]))
-		{
-			let subpath_gen = ida_search_gen(new_indices, mtables, ptables, bound-1, m);
-			while (true)
-			{
-				let {value: subpath, done} = subpath_gen.next();
-				if (done) break;
-				yield [[m, r]].concat(subpath);
-			}
-			for (let c = 0; c < ncoords; c++)
-			{
-				new_indices[c] = mtables[c][new_indices[c]][m];
-			}
-			r++;
-		}
-	}
+function* ida_search_gen(indices, mtables, ptables, bound, last) {
+  let ncoords = indices.length;
+  let nmoves = mtables[0][0].length;
+  let heuristic = 0;
+  for (let i = 0; i < ncoords; i++)
+    heuristic = Math.max(heuristic, ptables[i][indices[i]]);
+  if (heuristic > bound) return;
+  if (bound === 0) {
+    yield [];
+    return;
+  }
+  if (heuristic === 0 && bound === 1) return;
+  for (let m = 0; m < nmoves; m++) {
+    if (m === last) continue;
+    if (m < last && moves_commute(m, last)) continue;
+    let new_indices = indices.slice();
+    for (let c = 0; c < ncoords; c++)
+      new_indices[c] = mtables[c][indices[c]][m];
+    let r = 1;
+    while (indices.some((_, i) => indices[i] != new_indices[i])) {
+      let subpath_gen = ida_search_gen(
+        new_indices,
+        mtables,
+        ptables,
+        bound - 1,
+        m,
+      );
+      while (true) {
+        let { value: subpath, done } = subpath_gen.next();
+        if (done) break;
+        yield [[m, r]].concat(subpath);
+      }
+      for (let c = 0; c < ncoords; c++) {
+        new_indices[c] = mtables[c][new_indices[c]][m];
+      }
+      r++;
+    }
+  }
 }
