@@ -1251,7 +1251,3 @@ const randomUintBelow = randomUIntBelowFactory();
 export async function randomMasterTetraminxScrambleString() {
   return generate_scramble_sequence(await randomUintBelow, false);
 }
-
-(async () => {
-  console.log(await randomMasterTetraminxScrambleString());
-})();
