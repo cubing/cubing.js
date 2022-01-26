@@ -47,9 +47,7 @@ export class DragTracker extends EventTarget {
     // Prevent right-click on desktop (only tested on macOS Chrome/Safari/Firefox) so we can detect right-click moves.
     // TODO: Can we do this selectively, e.g. only on the puzzle? That way we could allow right-click to download the canvas. Unfortunately, it would probably require a sync calculation.
     this.target.addEventListener("contextmenu", (e) => {
-      if (e.buttons & 2) {
-        e.preventDefault();
-      }
+      e.preventDefault();
     });
     // Prevent touch scrolling (preventing default on `pointermove` doesn't work).
     this.target.addEventListener("touchmove", (e) => e.preventDefault());
