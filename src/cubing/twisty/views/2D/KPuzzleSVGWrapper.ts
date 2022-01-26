@@ -28,12 +28,12 @@ const colorMaps: Partial<
     "yellow": "#888800",
   },
   oriented: {
-    "white": "#ff88ff",
-    "orange": "#ff88ff",
-    "limegreen": "#ff88ff",
-    "red": "#ff88ff",
-    "rgb(34, 102, 255)": "#ff88ff", // TODO
-    "yellow": "#ff88ff",
+    "white": "#44ddcc",
+    "orange": "#44ddcc",
+    "limegreen": "#44ddcc",
+    "red": "#44ddcc",
+    "rgb(34, 102, 255)": "#44ddcc", // TODO
+    "yellow": "#44ddcc",
   },
   ignored: {
     "white": "#444444",

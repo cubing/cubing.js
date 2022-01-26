@@ -52,11 +52,11 @@ const invisibleMaterial = new MeshBasicMaterial({
 });
 
 const orientedMaterial = new MeshBasicMaterial({
-  color: 0xff88ff,
+  color: 0x44ddcc,
 });
 
 const orientedMaterialHint = new MeshBasicMaterial({
-  color: 0xff88ff,
+  color: 0x44ddcc,
   side: BackSide,
   transparent: true,
   opacity: 0.5,
