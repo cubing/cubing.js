@@ -8,18 +8,7 @@ import {
 import { customElementsShim } from "../../views/node-custom-element-shims";
 import type { TwistyPlayer } from "../../views/TwistyPlayer";
 import type { AlgIssues } from "./puzzle/state/AlgProp";
-import type { TwistyPropParent } from "./TwistyProp";
-
-export function splitFieldName(s: string): string {
-  let out = "";
-  for (const c of s.slice(0, -4)) {
-    if (c.toUpperCase() === c && out.slice(-1)[0] !== "3") {
-      out += " ";
-    }
-    out += c.toLowerCase();
-  }
-  return out;
-}
+import { TwistyPropParent } from "./TwistyProp";
 
 function truncateAlgForDisplay(alg: Alg): string {
   let str = alg.toString();
@@ -256,9 +245,9 @@ twisty-prop-debugger.highlighted {
     );
 
     for (const [key, value] of Object.entries(this.player.experimentalModel)) {
-      if (key.endsWith("Prop")) {
+      if (value instanceof TwistyPropParent) {
         const twistyPropDebugger = this.addElement(
-          new TwistyPropDebugger(splitFieldName(key), value),
+          new TwistyPropDebugger(key, value),
         );
         this.twistyPropDebuggers.set(value, twistyPropDebugger);
         this.parentPropElems.set(twistyPropDebugger, new Set());
