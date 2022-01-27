@@ -331,7 +331,14 @@ export class FreshListenerManager {
     listener: (values: [U, V]) => void,
   ) {
     let disconnected = false;
+
+    // We're going to get one initial call per prop. We'll ignore all but one.
+    let initialIgnoresLeft = props.length - 1;
     const wrappedListener = async (_: any) => {
+      if (initialIgnoresLeft > 0) {
+        initialIgnoresLeft--;
+        return;
+      }
       if (disconnected) {
         // TODO
         // console.warn("Should be disconnected!");
