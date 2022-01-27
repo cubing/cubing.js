@@ -15,7 +15,9 @@ import type { Worker as NodeWorker } from "worker_threads";
 
 type EventHandler = EventListenerObject | ((event: any) => void);
 
-function nodeEndpoint(nep: NodeWorker): Worker {
+function nodeEndpoint(nep: NodeWorker): Worker & {
+  nodeWorker?: import("worker_threads").Worker;
+} {
   const listeners = new WeakMap();
   return {
     postMessage: nep.postMessage.bind(nep),
@@ -38,8 +40,11 @@ function nodeEndpoint(nep: NodeWorker): Worker {
       nep.off("message", l);
       listeners.delete(eh);
     },
+    nodeWorker: nep,
     // start: nep.start && nep.start.bind(nep),
-  } as Worker;
+  } as Worker & {
+    nodeWorker?: import("worker_threads").Worker;
+  };
 }
 
 export default nodeEndpoint;

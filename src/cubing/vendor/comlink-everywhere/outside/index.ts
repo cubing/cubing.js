@@ -15,7 +15,9 @@ async function nodeWorker(
   options?: { eval?: boolean },
 ): Promise<Worker> {
   const { Worker: NodeWorker } = await import(worker_threads_unmangled());
-  return nodeEndpoint(new NodeWorker(source, options));
+  const worker = new NodeWorker(source, options);
+  worker.unref();
+  return nodeEndpoint(worker);
 }
 
 export async function constructWorker(
