@@ -1,9 +1,15 @@
-export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "./customPGPuzzleLoader";
 export { experimental3x3x3KPuzzle } from "../kpuzzle";
-
+export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "./customPGPuzzleLoader";
+export { eventInfo, wcaEventInfo } from "./events";
+export { getFaceletAppearance as experimentalGetFaceletAppearance } from "./stickerings/appearance";
+export type {
+  FaceletMeshAppearance as ExperimentalFaceletMeshAppearance,
+  PuzzleAppearance as ExperimentalPuzzleAppearance,
+} from "./stickerings/appearance";
 export { cubeAppearance as experimentalCubeAppearance } from "./stickerings/cube-stickerings";
+export type { PuzzleLoader };
+export { cube2x2x2, cube3x3x3 };
 
-import type { PuzzleID } from "../twisty";
 import { CubePGPuzzleLoader, PGPuzzleLoader } from "./async/async-pg3d";
 import { cube2x2x2 } from "./implementations/2x2x2";
 import { cube3x3x3 } from "./implementations/3x3x3";
@@ -13,8 +19,6 @@ import { megaminx } from "./implementations/megaminx";
 import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
 import type { PuzzleLoader } from "./PuzzleLoader";
-
-export type { PuzzleLoader };
 
 export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
@@ -59,40 +63,3 @@ export const puzzles: Record<string, PuzzleLoader> = {
     inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
   }),
 };
-
-export { cube2x2x2, cube3x3x3 };
-
-export { getFaceletAppearance as experimentalGetFaceletAppearance } from "./stickerings/appearance";
-export type {
-  FaceletMeshAppearance as ExperimentalFaceletMeshAppearance,
-  PuzzleAppearance as ExperimentalPuzzleAppearance,
-} from "./stickerings/appearance";
-
-interface WCAEventInfo {
-  puzzleID: PuzzleID;
-  eventName: string;
-}
-
-const wcaEvents: Record<string, WCAEventInfo> = {
-  "333": { puzzleID: "3x3x3", eventName: "3x3x3 Cube" },
-  "222": { puzzleID: "2x2x2", eventName: "2x2x2 Cube" },
-  "444": { puzzleID: "4x4x4", eventName: "4x4x4 Cube" },
-  "555": { puzzleID: "5x5x5", eventName: "5x5x5 Cube" },
-  "666": { puzzleID: "6x6x6", eventName: "6x6x6 Cube" },
-  "777": { puzzleID: "7x7x7", eventName: "7x7x7 Cube" },
-  "333bf": { puzzleID: "3x3x3", eventName: "3x3x3 Blindfolded" },
-  "333fm": { puzzleID: "3x3x3", eventName: "3x3x3 Fewest Moves" },
-  "333oh": { puzzleID: "3x3x3", eventName: "3x3x3 One-Handed" },
-  "clock": { puzzleID: "clock", eventName: "Clock" },
-  "minx": { puzzleID: "megaminx", eventName: "Megaminx" },
-  "pyram": { puzzleID: "pyraminx", eventName: "Pyraminx" },
-  "skewb": { puzzleID: "skewb", eventName: "Skewb" },
-  "sq1": { puzzleID: "square1", eventName: "Square-1" },
-  "444bf": { puzzleID: "4x4x4", eventName: "4x4x4 Blindfolded" },
-  "555bf": { puzzleID: "5x5x5", eventName: "5x5x5 Blindfolded" },
-  "333mb": { puzzleID: "3x3x3", eventName: "3x3x3 Multi-Blind" },
-};
-
-export function wcaEventInfo(event: string): WCAEventInfo | null {
-  return wcaEvents[event] ?? null;
-}
