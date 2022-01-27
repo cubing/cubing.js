@@ -5,7 +5,7 @@ import {
   LineSegments,
   Scene,
 } from "three";
-import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry";
+import { BoxLineGeometry } from "three/examples/jsm/geometries/BoxLineGeometry.js";
 import type { VRInput } from "./vr-input";
 import type { VRPuzzle } from "./vr-puzzle";
 
