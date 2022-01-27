@@ -78,6 +78,8 @@ As of this time, `cubing.js` primarily contains code by [Lucas Garron (@lgarron)
 - [Chen Shuang (@cs0x7f)](https://github.com/cs0x7f): Scramblers for 3x3x3, 4x4x4, and Square-1
 - [`xyxxy` (@torchlight)](https://github.com/torchlight): Scramblers for unofficial events
 
+It also uses the [`three.js`](https://github.com/mrdoob/three.js), [`comlink`](https://github.com/GoogleChromeLabs/comlink), and [`p-lazy`](https://github.com/sindresorhus/p-lazy) libraries.
+
 ## License
 
 This project is licensed under the GPL license (version 3 or later). This means that this library is **free to use**, although you **must publish any code that uses it** (e.g. also put it on GitHub). See [the full license](./LICENSE.md) for exact details.
