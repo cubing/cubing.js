@@ -1,8 +1,4 @@
-import {
-  constructWorkerFromString,
-  workerFileConstructor,
-  wrap,
-} from "../vendor/comlink-everywhere/outside";
+import { constructWorker, wrap } from "../vendor/comlink-everywhere/outside";
 import type { WorkerInsideAPI } from "./inside/api";
 import { getWorkerEntryFileURL } from "./inside/search-worker-entry-path-getter";
 
@@ -34,10 +30,9 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
         url = new URL(workerEntryFileURL);
       }
 
-      const constructor = await workerFileConstructor();
-      const worker = new constructor(url, {
+      const worker = (await constructWorker(url, {
         type: "module",
-      }) as Worker & {
+      })) as Worker & {
         nodeWorker?: import("worker_threads").Worker;
       };
 
@@ -89,7 +84,7 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
     const { workerSource } = await import(
       "./worker-inside-generated-string.js"
     );
-    const worker = await constructWorkerFromString(workerSource);
+    const worker = await constructWorker(workerSource, { eval: true });
     return wrap(worker);
   }
 }

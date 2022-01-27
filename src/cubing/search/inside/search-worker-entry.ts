@@ -1,9 +1,4 @@
-// TODO: can we avoid this?
-async function getNodeMessagePort() {
-  return (
-    await import("../../vendor/comlink-everywhere/inside/node.js")
-  ).port();
-}
+import { nodeEndpointPort } from "../../vendor/comlink-everywhere/inside/index.js";
 
 if (!(globalThis as any).DO_NOT_EXPOSE_API) {
   (async () => {
@@ -12,7 +7,7 @@ if (!(globalThis as any).DO_NOT_EXPOSE_API) {
     // // Workaround for `node`
     const messagePort = (globalThis as any).postMessage
       ? globalThis
-      : await getNodeMessagePort();
+      : await nodeEndpointPort();
     messagePort.postMessage("comlink-exposed");
   })();
 }
