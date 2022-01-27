@@ -23,12 +23,14 @@ export async function random333State(): Promise<KState> {
 }
 
 let cachedImport: Promise<
-  typeof import("../../../../../vendor/min2phase/gwt")
+  typeof import("../../../../../vendor/min2phase/3x3x3-min2phase")
 > | null = null;
 function dynamicMin2phaseGWT(): Promise<
-  typeof import("../../../../../vendor/min2phase/gwt")
+  typeof import("../../../../../vendor/min2phase/3x3x3-min2phase")
 > {
-  return (cachedImport ??= import("../../../../../vendor/min2phase/gwt"));
+  return (cachedImport ??= import(
+    "../../../../../vendor/min2phase/3x3x3-min2phase"
+  ));
 }
 
 export async function solve333(s: KState): Promise<Alg> {
