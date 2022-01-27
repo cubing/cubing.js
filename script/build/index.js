@@ -249,7 +249,6 @@ export const esmTarget = {
         "src/cubing/stream/index.ts",
         "src/cubing/search/index.ts",
         "src/cubing/twisty/index.ts",
-        "src/cubing/esm-test-worker.js",
       ],
       outdir: "dist/esm",
       format: "esm",

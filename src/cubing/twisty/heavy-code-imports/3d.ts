@@ -4,15 +4,13 @@ import { from } from "../../vendor/p-lazy/p-lazy";
 
 // In theory we can, but we've run into situations where imports are not properly cached.
 let cachedConstructorProxy: Promise<
-  typeof import("./dynamic-entries/3d-dynamic-inside")
+  typeof import("./dynamic-entries/3d-dynamic")
 > | null = null;
 
 export async function proxy3D(): Promise<
-  typeof import("./dynamic-entries/3d-dynamic-inside")
+  typeof import("./dynamic-entries/3d-dynamic")
 > {
-  return (cachedConstructorProxy ??= import(
-    "./dynamic-entries/3d-dynamic-inside"
-  ));
+  return (cachedConstructorProxy ??= import("./dynamic-entries/3d-dynamic"));
 }
 
 export const THREEJS: Promise<typeof import("three")> = from(

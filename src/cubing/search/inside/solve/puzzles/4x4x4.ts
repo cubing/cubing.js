@@ -7,13 +7,13 @@ const randomSuffixes = [
 ];
 
 let cachedImport: Promise<
-  typeof import("../../../../vendor/cstimer/src/js/scramble/scramble_444")
+  typeof import("../../../../vendor/cstimer/src/js/scramble/444-solver")
 > | null = null;
 function dynamicScramble444(): Promise<
-  typeof import("../../../../vendor/cstimer/src/js/scramble/scramble_444")
+  typeof import("../../../../vendor/cstimer/src/js/scramble/444-solver")
 > {
   return (cachedImport ??= import(
-    "../../../../vendor/cstimer/src/js/scramble/scramble_444"
+    "../../../../vendor/cstimer/src/js/scramble/444-solver"
   ));
 }
 

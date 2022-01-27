@@ -12,7 +12,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const sgs = await import("./fto.sgs.json");
+      const sgs = await import("./fto.dynamic");
       const json: SGSCachedData = await sgs.sgsDataFTO();
       return new TrembleSolver(await puzzles["fto"].kpuzzle(), json, [
         "U",
@@ -45,8 +45,6 @@ export async function solveFTO(state: KState): Promise<Alg> {
 }
 
 export async function randomFTOScramble(): Promise<Alg> {
-  const { randomFTOScrambleString } = await import(
-    "../../../../vendor/xyzzy/ftosolver-smaller-phase3-table"
-  );
+  const { randomFTOScrambleString } = await import("./fto.dynamic");
   return new Alg(await randomFTOScrambleString());
 }
