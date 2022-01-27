@@ -1,6 +1,13 @@
 import { puzzles } from "../../../../puzzles";
 import { parseSGS, SGSCachedData } from "../parseSGS";
 
+export async function randomFTOScrambleString(): Promise<string> {
+  const { randomFTOScrambleString } = await import(
+    "../../../../vendor/xyzzy/fto-solver"
+  );
+  return randomFTOScrambleString() as Promise<string>;
+}
+
 let cachedData: Promise<SGSCachedData> | null = null;
 export async function sgsDataFTO() {
   return (cachedData ??= uncachedSGSDataFTO());
