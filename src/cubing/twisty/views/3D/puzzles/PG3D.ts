@@ -777,7 +777,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (this.lastPos) {
         this.onPositionChange(this.lastPos);
       }
-      this.scheduleRenderCallback();
     }
   }
 
@@ -828,7 +827,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         }
       }
       this.lastPos = p;
-      this.#pendingStickeringUpdate = false;
     }
     let vismods = 0;
     for (const moveProgress of p.movesInProgress) {
@@ -895,10 +893,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         this.lastMoveTransformation = quantumTransformation;
       }
     }
-    if (vismods) {
+    if (this.#pendingStickeringUpdate || vismods) {
       this.filler.makeGroups(this.fixedGeo);
     }
-    if (colormods) {
+    if (this.#pendingStickeringUpdate || colormods) {
       if (this.textured) {
         (this.fixedGeo.getAttribute("uv") as BufferAttribute).updateRange = {
           offset: 0,
@@ -906,7 +904,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         };
         (this.fixedGeo.getAttribute("uv") as BufferAttribute).needsUpdate =
           true;
-      } else {
+      }
+      if (this.#pendingStickeringUpdate || !this.textured) {
         (this.fixedGeo.getAttribute("color") as BufferAttribute).updateRange = {
           offset: 0,
           count: 9 * this.foundationBound,
@@ -916,6 +915,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       }
     }
     this.scheduleRenderCallback();
+    this.#pendingStickeringUpdate = false;
   }
 
   private ease(fraction: number): number {
