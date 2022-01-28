@@ -2132,7 +2132,7 @@ export class PuzzleGeometry {
   ): KPuzzleDefinition {
     const od = this.getOrbitsDef(fortwisty, includemoves);
     const internalDefinition = od.toKPuzzleDefinition(includemoves);
-    (internalDefinition as any).exprimentalPuzzleDescription =
+    (internalDefinition as any).experimentalPuzzleDescription =
       this.puzzleDescription;
     if (!internalDefinition) {
       throw new Error("Missing definition!");

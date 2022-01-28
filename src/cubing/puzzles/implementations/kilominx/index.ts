@@ -22,7 +22,7 @@ export const kilominx: PuzzleLoader = {
       delete (moveDefinition as any).CENTERS2;
     }
     kpuzzleDefinition.name = "kilominx";
-    delete kpuzzleDefinition.exprimentalPuzzleDescription;
+    delete kpuzzleDefinition.experimentalPuzzleDescription;
     const puzzleGeometry = await import("../../../puzzle-geometry");
     const pgNotation = new puzzleGeometry.ExperimentalPGNotation(
       pg,
