@@ -18,6 +18,7 @@ import { fto } from "./implementations/fto";
 import { megaminx } from "./implementations/megaminx";
 import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
+import { kilominx } from "./implementations/kilominx";
 import type { PuzzleLoader } from "./PuzzleLoader";
 
 export const puzzles: Record<string, PuzzleLoader> = {
@@ -62,4 +63,5 @@ export const puzzles: Record<string, PuzzleLoader> = {
     inventedBy: ["Katsuhiko Okamoto"], // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
     inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
   }),
+  kilominx,
 };

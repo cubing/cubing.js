@@ -100,6 +100,11 @@ const puzzleData: Partial<
     optgroup: OptGroup.Other,
     symbol: GeometrySymbol.TriangleUp,
   },
+  "kilominx": {
+    "2D": true,
+    "optgroup": OptGroup.Other,
+    "symbol": GeometrySymbol.Pentagon,
+  },
 };
 
 const puzzleGroups: Record<string, { name: string; symbol: string }[]> = {};

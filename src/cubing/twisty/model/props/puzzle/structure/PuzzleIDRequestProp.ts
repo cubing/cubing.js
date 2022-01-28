@@ -21,6 +21,7 @@ export const puzzleIDs = {
   "fto": true,
   "gigaminx": true,
   "master_tetraminx": true,
+  "kilominx": true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 
