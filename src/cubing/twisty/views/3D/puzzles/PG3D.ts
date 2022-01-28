@@ -768,7 +768,15 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
             false,
           );
           const stickerDef = this.stickers[orbitName][faceletIdx][pieceIdx];
-          stickerDef.setAppearance(this.filler, faceletAppearance);
+          if (
+            this.textured &&
+            this.hintMaterialDisposable &&
+            faceletAppearance === "invisible"
+          ) {
+            // ignore "invisible" if textured hints
+          } else {
+            stickerDef.setAppearance(this.filler, faceletAppearance);
+          }
         }
       }
     }
@@ -1023,8 +1031,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
   ) {
     if (!stickerTexture) {
       enabled = false;
-    } else if (!hintTexture) {
-      hintTexture = stickerTexture;
     }
     if (enabled && !this.filler.uvs) {
       this.adduvs();
@@ -1058,6 +1064,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     } else {
       this.hintMaterial = basicStickerMaterial;
     }
+    this.showHintFacelets(enabled && this.hintMaterial !== null);
     this.updateMaterialArrays();
     this.#pendingStickeringUpdate = true;
     if (this.lastPos) {
