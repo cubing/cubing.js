@@ -1062,7 +1062,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     } else {
       this.hintMaterial = basicStickerMaterial;
     }
-    this.showHintFacelets(enabled && this.hintMaterial !== null);
+    if (enabled) {
+      this.showHintFacelets(hintTexture !== null);
+    }
     this.updateMaterialArrays();
     this.#pendingStickeringUpdate = true;
     if (this.lastPos) {
