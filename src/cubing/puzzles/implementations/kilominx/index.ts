@@ -31,7 +31,7 @@ export const kilominx: PuzzleLoader = {
     const kpuzzle = new KPuzzle(kpuzzleDefinition, {
       experimentalPGNotation: {
         lookupMove: (move: Move): KTransformationData | null => {
-          if (move.toString() === "x2") {
+          if (move.toString() === "x2" || move.toString() === "x2'") {
             return x2Transformation.transformationData;
           }
           return pgNotation.lookupMove(move);
