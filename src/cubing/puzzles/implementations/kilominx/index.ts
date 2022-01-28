@@ -5,6 +5,7 @@ import type { ExperimentalPGNotation } from "../../../puzzle-geometry";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
 
+// TODO: Make this consistent with Megaminx corners
 export const kilominx: PuzzleLoader = {
   id: "kilominx",
   fullName: "Kilominx",
