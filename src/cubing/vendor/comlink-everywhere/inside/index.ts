@@ -1,4 +1,5 @@
 import { expose as comlinkExpose } from "comlink";
+import nodeEndpoint from "../node-adapter";
 
 const useNodeWorkarounds =
   typeof globalThis.Worker === "undefined" &&
@@ -8,12 +9,12 @@ const useNodeWorkarounds =
 const worker_threads_mangled = "w-orker-_threa-ds";
 const worker_threads_unmangled = () => worker_threads_mangled.replace(/-/g, "");
 
-export async function nodeEndpointPort(): Promise<MessagePort> {
+export async function nodeEndpointPort(): Promise<
+  Worker & {
+    nodeWorker?: import("worker_threads").Worker;
+  }
+> {
   const { parentPort } = await import(worker_threads_unmangled()).catch();
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const nodeEndpoint = (await import("comlink/dist/esm/node-adapter.mjs"))
-    .default as (_: any) => MessagePort;
   return nodeEndpoint(parentPort);
 }
 
