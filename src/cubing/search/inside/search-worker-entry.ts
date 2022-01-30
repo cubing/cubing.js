@@ -1,4 +1,4 @@
-import { nodeEndpointPort } from "../../vendor/comlink-everywhere/inside/index.js";
+import { nodeEndpointPort } from "../../vendor/comlink-everywhere/inside/index";
 
 if (!(globalThis as any).DO_NOT_EXPOSE_API) {
   (async () => {
