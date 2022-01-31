@@ -335,7 +335,7 @@ class ControlPane {
   ): Promise<void> {
     const move = e.detail.move;
     try {
-      this.twistyPlayer.experimentalAddMove(move); // TODO
+      this.twistyPlayer.experimentalAddMove(move, { coalesce: true }); // TODO
     } catch (e) {
       console.info("Ignoring move:", move.toString());
     }
