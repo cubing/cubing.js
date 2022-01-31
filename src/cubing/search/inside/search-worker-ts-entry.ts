@@ -3,7 +3,7 @@ import { exposeAPI } from "./worker-guard";
 
 if (exposeAPI.expose) {
   (async () => {
-    await import("./entry.js");
+    await import("./search-worker-js-entry.js");
 
     // // Workaround for `node`
     const messagePort = (globalThis as any).postMessage

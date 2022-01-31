@@ -1,6 +1,6 @@
 import { constructWorker, wrap } from "../vendor/comlink-everywhere/outside";
 import type { WorkerInsideAPI } from "./inside/api";
-import { getWorkerEntryFileURL } from "./inside/search-worker-entry-path-getter";
+import { getWorkerEntryFileURL } from "./inside/search-worker-ts-entry-path-getter";
 
 const MODULE_WORKER_TIMEOUT_MILLISECONDS = 5000;
 export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
