@@ -87,7 +87,7 @@ div:target {
   background: #00448811;
 }
 
-section :is(h1, h2, h3) {
+section :is(h1) {
   margin-top: 0;
 }
 
