@@ -69,11 +69,28 @@ console.log(scramble.toString());</span>
           <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;UR1- DR1+ …&quot;</span>
         </code>
       </div>
+      <p>
+        In addition, several unofficial events are supported:
+      </p>
+      <div class="code-demo">
+        <div>
+          <code class="sample">
+            <span>import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;<br>
+<br>
+(await randomScrambleForEvent("fto")).log();<br>
+(await randomScrambleForEvent("master_tetraminx")).log();</span>
+          </code>
+        </div>
+        <code class="sample output">
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;U L' BL' B' U' …&quot;</span>
+          <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;L' b B' r' …&quot;</span>
+        </code>
+      </div>
       <p>Note that:
       <ul>
         <li>The <code>Alg</code> class supports all WCA notation. If you call <code>.toString()</code> on a scramble,
           you will get a string compatible with WCA notation for the event.</li>
-        <li>The only current way to get scrambles is by WCA event code. Note that different events for the same puzzle
+        <li>The only current way to get scrambles is by event code. Note that different events for the same puzzle
           may use different kinds of scrambles.</li>
         <li>All scrambles are random-state where required by <a
             href="https://www.worldcubeassociation.org/regulations/#4b3">WCA Regulation 4b3 (i.e. all events except for
