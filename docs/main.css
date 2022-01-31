@@ -91,18 +91,18 @@ section :is(h1) {
   margin-top: 0;
 }
 
-section :is(h1, h2, h3) a:hover::before {
+section :is(h1, h2, h3) a:not(.separate-page):hover::before {
   position: absolute;
   transform: translateX(-1.25em);
   font-size: 0.75em;
   content: "🔗";
 }
 
-section :is(h1, h2, h3) a {
+section :is(h1, h2, h3) a:not(.separate-page) {
   color: inherit;
 }
 
-section :is(h1, h2, h3) a:not(:hover) {
+section :is(h1, h2, h3) a:not(:hover, .separate-page) {
   text-decoration: none;
 }
 
