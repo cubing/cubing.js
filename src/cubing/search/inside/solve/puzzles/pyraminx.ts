@@ -36,6 +36,7 @@ export async function solvePyraminx(state: KState): Promise<Alg> {
 }
 
 export async function randomPyraminxStateFixedOrientation(): Promise<KState> {
+  mustBeInsideWorker();
   // Note: this sets all center orientations to 0.
   return randomStateFromSGS(
     await puzzles.pyraminx.kpuzzle(),

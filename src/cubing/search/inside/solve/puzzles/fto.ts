@@ -45,6 +45,7 @@ export async function solveFTO(state: KState): Promise<Alg> {
 }
 
 export async function randomFTOScramble(): Promise<Alg> {
+  mustBeInsideWorker();
   const { randomFTOScrambleString } = await import("./fto.dynamic");
   return new Alg(await randomFTOScrambleString());
 }
