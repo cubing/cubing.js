@@ -11,65 +11,47 @@
 
 <a href="https://alpha.twizzle.net/"><img src="./src/sites/alpha.twizzle.net/twizzle-social-media-image.png" width="256">
 
-Twizzle</a> is the spiritual successor to [alg.cubing.net](https://alg.cubing.net/), based on `cubing.js`. It is currently being developed at [src/sites/alpha.twizzle.net](./src/sites/alpha.twizzle.net/).
-
-See the [Twizzle Diaries](https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3NgpDbzN4VkcfjEZSQ_TYQv_OEjbjF) video series for more information on Twizzle's vision and use cases.
+Twizzle</a> is the spiritual successor to [alg.cubing.net](https://alg.cubing.net/), based on `cubing.js`. It is currently being developed at [src/sites/alpha.twizzle.net](./src/sites/alpha.twizzle.net/). See the [Twizzle Diaries](https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3NgpDbzN4VkcfjEZSQ_TYQv_OEjbjF) video series for more information on Twizzle's vision and use cases.
 
 ## Getting started
 
-If you aren't sure where to get started, you should start with `cdn.cubing.net`, which lets you implement cubing.js in a website.
-
-If you're already comfortable with writing web apps using `npm`, see the "`Using with Node.js`" section below.
-
-The following code is a good way to get started with `cdn.cubing.net`:
+If you're just getting started, the easiest way to use `cubing.js` is throught `cdn.cubing.net`:
 
 ```html
 <script src="https://cdn.cubing.net/js/cubing/twisty" type="module"></script>
 <twisty-player alg="R U R' U R U2' R'"></twisty-player>
 ```
 
-You can find more documentation at [js.cubing.net/cubing/](https://js.cubing.net/cubing).  
-The source for the documentation site is currently inside the [docs](./docs/) folder of this repository.
+You can find more documentation at [js.cubing.net/cubing/](https://js.cubing.net/cubing).
 
-## Using with Node.js
+## Using with `node` and `npm`
 
-If you would like to use cubing.js as a library in your Node projects, make sure you have [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) installed (installing `node` will install `npm` as well). Once you have installed those, you can run:
+If you would like to use cubing.js as a library in your package-based projects, make sure you have [node](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) installed (installing `node` will install `npm` as well). Once you have installed those, you can run:
 
 ```shell
 npm install cubing
 ```
 
-The following modules are a good starting point:
+Then you can use modules like this:
 
-```shell
+```js
 import { Alg } from "cubing/alg";
 import { TwistyPlayer } from "cubing/twisty";
 ```
 
 ## Contributing
 
-## Developing `cubing.js`
+If you would like to contribute to the development of `cubing.js`, please refer to our [contribution guidelines](./CONTRIBUTING.md).
 
-If you would like to contribute to the development of `cubing.js`, please refer to our [contribution guidelines](CONTRIBUTING.md).
+## Developing `cubing.js` itself
 
-To work on the `cubing.js` source code, you'll need to install [`node`](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) (installing `node` will install `npm` as well). Once you have installed those, you can run:
+If you have `git`, `node`, and `npm` installed, you can run the `cubing.js` source like this (see the [contribution guidelines](./CONTRIBUTING.md) for more details):
 
 ```shell
 git clone https://github.com/cubing/cubing.js && cd cubing.js
 make dev
+# Now visit http://localhost:3333
 ```
-
-This should install a few dependencies and start the server, after which you can open <http://localhost:3333/>. Some tips:
-
-The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/). To test changes, use:
-
-```shell
-make test
-```
-
-- See [`src/README.md`](./src/README.md) for the source code structure.
-  - The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/).
-  - The code for Twizzle and dev experiments is in [`src/sites`](./src/sites/).
 
 ## Acknowledgments
 

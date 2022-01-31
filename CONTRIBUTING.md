@@ -25,6 +25,27 @@ Please see the [development instruction in `README.md`](./README.md#development)
 
 Please see [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
 
+## Working on `cubing.js`
+
+To work on the `cubing.js` source code, you'll need to install [`node`](https://nodejs.org/en/) and [npm](https://docs.npmjs.com/getting-started) (installing `node` will install `npm` as well). Once you have installed those, you can run:
+
+```shell
+git clone https://github.com/cubing/cubing.js && cd cubing.js
+make dev
+```
+
+This should install a few dependencies and start the server, after which you can open <http://localhost:3333/>. Some tips:
+
+The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/). To test changes, use:
+
+```shell
+make test
+```
+
+- See [`src/README.md`](./src/README.md) for the source code structure.
+  - The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/).
+  - The code for Twizzle and dev experiments is in [`src/sites`](./src/sites/).
+
 ## Goals and Principles
 
 The goal of `cubing.js` to make it easier to write _any_ cubing application. `cubing.js` should make it easy to do the right thing, and it should be reasonably compatible with any use case out of the box.
