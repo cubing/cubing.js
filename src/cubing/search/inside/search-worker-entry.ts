@@ -1,6 +1,7 @@
 import { nodeEndpointPort } from "../../vendor/comlink-everywhere/inside/index";
+import { exposeAPI } from "./worker-guard";
 
-if (!(globalThis as any).DO_NOT_EXPOSE_API) {
+if (exposeAPI.expose) {
   (async () => {
     await import("./entry.js");
 
