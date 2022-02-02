@@ -545,9 +545,9 @@ let move_Z = Array(72)
   .map((_, i) => (i + 36) % 72);
 
 // Z changes sign, so this is really setting up to U' rather than U
-let move_L = compose3(move_Z, move_Ui, move_Z);
-let move_F = compose3(move_X, move_U, move_X);
-let move_R = compose3(move_X, move_L, move_X);
+move_L = compose3(move_Z, move_Ui, move_Z);
+move_F = compose3(move_X, move_U, move_X);
+move_R = compose3(move_X, move_L, move_X);
 
 //let move_BR = compose3(move_Y, move_U, move_Y);
 //let move_BL = compose3(move_Y, move_F, move_Y);
@@ -726,17 +726,8 @@ function convert_move_to_permutations(move) {
   return { cp: cp, ep: ep, ap: ap, bp: bp };
 }
 
-let moves = [
-  move_U,
-  move_L,
-  move_F,
-  move_R,
-  move_Uw,
-  move_Lw,
-  move_Fw,
-  move_Rw,
-];
-let move_names = ["U", "L", "F", "R", "u", "l", "f", "r"];
+moves = [move_U, move_L, move_F, move_R, move_Uw, move_Lw, move_Fw, move_Rw];
+move_names = ["U", "L", "F", "R", "u", "l", "f", "r"];
 
 let move_permutations = moves.map(convert_move_to_permutations);
 

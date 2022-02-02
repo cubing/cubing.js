@@ -207,7 +207,7 @@ let move_f = [
 let solved = [index_to_permutation(0, 12), Array(8).fill(0)];
 
 let moves = [move_L, move_B, move_R, move_F, move_l, move_b, move_r, move_f];
-let move_names = "LBRFlbrf".split("");
+move_names = "LBRFlbrf".split("");
 let tetrad = [0, 1, 0, 1, 1, 0, 1, 0];
 
 function apply_move_sequence(state, move_sequence) {
