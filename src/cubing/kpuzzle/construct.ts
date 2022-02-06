@@ -59,9 +59,20 @@ export function moveToTransformationUncached(
   move: Move,
 ): KTransformationData {
   const quantumKey = move.quantum.toString();
-  const quantumMoveDefinition = kpuzzle.definition.moves[quantumKey] as
+  let quantumMoveDefinition = kpuzzle.definition.moves[quantumKey] as
     | KTransformationData
     | undefined;
+
+  if (!quantumMoveDefinition) {
+    const derivedFrom =
+      kpuzzle.definition.experimentalDerivedMoves?.[quantumKey];
+
+    if (derivedFrom) {
+      // TODO: avoid the round trip?
+      quantumMoveDefinition =
+        kpuzzle.algToTransformation(derivedFrom).transformationData;
+    }
+  }
 
   if (quantumMoveDefinition) {
     return repeatTransformationUncached(

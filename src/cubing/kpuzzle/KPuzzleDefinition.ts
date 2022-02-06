@@ -21,4 +21,6 @@ export interface KPuzzleDefinition {
   orbits: Record<string, KOrbitDefinition>;
   startStateData: KStateData;
   moves: Record<string, KTransformationData>;
+
+  experimentalDerivedMoves?: Record<string, string>;
 }

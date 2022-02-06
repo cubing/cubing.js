@@ -105,6 +105,11 @@ const puzzleData: Partial<
     "optgroup": OptGroup.Other,
     "symbol": GeometrySymbol.Pentagon,
   },
+  "redi_cube": {
+    "2D": true,
+    "optgroup": OptGroup.Other,
+    "symbol": GeometrySymbol.Square,
+  },
 };
 
 const puzzleGroups: Record<string, { name: string; symbol: string }[]> = {};

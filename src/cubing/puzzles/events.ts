@@ -40,6 +40,10 @@ const events: Record<string, EventInfo> = {
     puzzleID: "kilominx",
     eventName: "Kilominx",
   },
+  redi_cube: {
+    puzzleID: "redi_cube",
+    eventName: "Redi Cube",
+  },
 };
 
 export function eventInfo(event: string): EventInfo | null {

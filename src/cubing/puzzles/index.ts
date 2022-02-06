@@ -20,6 +20,7 @@ import { pyraminx } from "./implementations/pyraminx";
 import { square1 } from "./implementations/square1";
 import { kilominx } from "./implementations/kilominx";
 import type { PuzzleLoader } from "./PuzzleLoader";
+import { rediCube } from "./implementations/redi-cube";
 
 export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
@@ -64,4 +65,5 @@ export const puzzles: Record<string, PuzzleLoader> = {
     inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
   }),
   kilominx,
+  "redi_cube": rediCube,
 };

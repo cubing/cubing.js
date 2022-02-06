@@ -22,6 +22,7 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
       case "clock":
       case "square1":
       case "kilominx":
+      case "redi_cube":
         return "2D";
       case "3x3x3":
         switch (inputs.visualizationRequest) {
