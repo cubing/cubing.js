@@ -176,6 +176,10 @@ export class Twisty3DSceneWrapper
       visualizationStrategy: VisualizationStrategy,
     ],
   ): Promise<void> {
+    if (inputs[1] === "2D") {
+      // We are being asked to render with stale info. Ignore.
+      return;
+    }
     this.#currentTwisty3DPuzzleWrapper?.disconnect();
     const [scene, twisty3DPuzzleWrapper] =
       await this.#twisty3DStaleDropper.queue(
