@@ -1,5 +1,5 @@
 export const rediCubeSVG = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="506px" height="378px" viewBox="0 0 506 378" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="546px" height="418px" viewBox="-20 -20 546 418" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <title>redi-cube</title>
 <g istroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
   <g transform="translate(1.000000, 1.000000)" fill-rule="nonzero" stroke="#000000" stroke-width="1.6">
