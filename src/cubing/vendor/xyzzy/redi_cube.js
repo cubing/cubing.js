@@ -5,6 +5,9 @@
 
 "use strict";
 
+import { Alg } from "../../alg";
+import { randomUIntBelowFactory } from "../random-uint-below";
+
 function counter(A) {
   let counts = [];
   for (let a of A) counts[a] = (counts[a] || 0) + 1;
@@ -171,15 +174,15 @@ function compose_state(state1, state2) {
   return [compose(state1[0], state2[0]), o];
 }
 
-let move_L = [
+let move_UL = [
   permutation_from_cycle([0, 1, 4], 12),
   unsparsify_list({ 0: 2 }, 8),
 ];
-let move_B = [
+let move_U = [
   permutation_from_cycle([1, 2, 5], 12),
   unsparsify_list({ 1: 2 }, 8),
 ];
-let move_R = [
+let move_UR = [
   permutation_from_cycle([2, 3, 6], 12),
   unsparsify_list({ 2: 2 }, 8),
 ];
@@ -187,27 +190,27 @@ let move_F = [
   permutation_from_cycle([3, 0, 7], 12),
   unsparsify_list({ 3: 2 }, 8),
 ];
-let move_l = [
+let move_L = [
   permutation_from_cycle([9, 8, 4], 12),
   unsparsify_list({ 4: 2 }, 8),
 ];
-let move_b = [
+let move_B = [
   permutation_from_cycle([10, 9, 5], 12),
   unsparsify_list({ 5: 2 }, 8),
 ];
-let move_r = [
+let move_R = [
   permutation_from_cycle([11, 10, 6], 12),
   unsparsify_list({ 6: 2 }, 8),
 ];
-let move_f = [
+let move_D = [
   permutation_from_cycle([8, 11, 7], 12),
   unsparsify_list({ 7: 2 }, 8),
 ];
 
 let solved = [index_to_permutation(0, 12), Array(8).fill(0)];
 
-let moves = [move_L, move_B, move_R, move_F, move_l, move_b, move_r, move_f];
-move_names = "LBRFlbrf".split("");
+let moves = [move_UL, move_U, move_UR, move_F, move_L, move_B, move_R, move_D];
+let move_names = ["UL", "U", "UR", "F", "L", "B", "R", "D"];
 let tetrad = [0, 1, 0, 1, 1, 0, 1, 0];
 
 function apply_move_sequence(state, move_sequence) {
@@ -227,18 +230,18 @@ function print_move_sequence(move_sequence) {
   console.log(stringify_move_sequence(move_sequence));
 }
 
-function generate_random_state() {
+function generate_random_state(randomUintBelow) {
   let p = index_to_evenpermutation(
-    Math.floor((Math.random() * factorial(12)) / 2),
+    Math.floor(randomUintBelow(factorial(12)) / 2),
     12,
   );
   let o = Array(8);
-  for (let i = 0; i < 8; i++) o[i] = Math.floor(Math.random() * 3);
+  for (let i = 0; i < 8; i++) o[i] = randomUintBelow(3);
   return [p, o];
 }
 
-function generate_random_state_scramble() {
-  return solve(generate_random_state());
+function generate_random_state_scramble(randomUintBelow) {
+  return solve(generate_random_state(randomUintBelow));
 }
 
 function generate_scramble_sequence() {
@@ -276,7 +279,7 @@ function solve(state) {
         new_state = compose_state(new_state, moves[m]);
     }
     if (intermediate_states.has(new_state.toString())) {
-      console.log("skip");
+      // console.log("skip");
       continue;
     } else intermediate_states.add(new_state.toString());
     let edge_ind = evenpermutation_to_index(new_state[0].slice(0, 8));
@@ -292,14 +295,14 @@ function solve(state) {
       moves_left,
     );
     if (sol2 === undefined) {
-      console.log("prune");
+      // console.log("prune");
       continue;
     }
-    console.log(
-      `to ${new_state} in ${sol1.length} moves; total move count ${
-        sol1.length + sol2.length
-      }`,
-    );
+    // console.log(
+    //   `to ${new_state} in ${sol1.length} moves; total move count ${
+    //     sol1.length + sol2.length
+    //   }`,
+    // );
     if (best === undefined || best.length > sol1.length + sol2.length) {
       best = sol1.concat(sol2);
     }
@@ -596,4 +599,13 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
       r++;
     }
   }
+}
+
+const randomUintBelow = randomUIntBelowFactory();
+export async function getRandomRediCubeScramble() {
+  return new Alg(
+    stringify_move_sequence(
+      generate_random_state_scramble(await randomUintBelow),
+    ),
+  );
 }

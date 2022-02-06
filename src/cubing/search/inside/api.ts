@@ -30,6 +30,7 @@ import {
   randomPyraminxScrambleFixedOrientation,
   solvePyraminx,
 } from "./solve/puzzles/pyraminx";
+import { randomRediCubeScramble } from "./solve/puzzles/redi_cube";
 import {
   randomSkewbFixedCornerScramble,
   solveSkewb,
@@ -148,6 +149,8 @@ export const insideAPI = {
         );
       case "kilominx":
         return measurePerf("randomKilominxScramble", randomKilominxScramble);
+      case "redi_cube":
+        return measurePerf("randomRediCubeScramble", randomRediCubeScramble);
       default:
         throw new Error(`unsupported event: ${eventID}`);
     }
