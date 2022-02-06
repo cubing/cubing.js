@@ -279,16 +279,19 @@ function unsparsify_list(d, n) {
 
 /* The basic moves */
 
-move_U = [permutation_from_cycle([0, 1, 2, 3, 4], 20), unsparsify_list({}, 20)];
-move_R = [
+const move_U = [
+  permutation_from_cycle([0, 1, 2, 3, 4], 20),
+  unsparsify_list({}, 20),
+];
+const move_R = [
   permutation_from_cycle([4, 3, 11, 12, 13], 20),
   unsparsify_list({ 4: 2, 3: 1, 11: 1, 12: 1, 13: 1 }, 20),
 ];
-move_F = [
+const move_F = [
   permutation_from_cycle([3, 2, 9, 10, 11], 20),
   unsparsify_list({ 3: 2, 2: 1, 9: 1, 10: 1, 11: 1 }, 20),
 ];
-move_L = [
+const move_L = [
   permutation_from_cycle([2, 1, 7, 8, 9], 20),
   unsparsify_list({ 2: 2, 1: 1, 7: 1, 8: 1, 9: 1 }, 20),
 ];
@@ -313,8 +316,8 @@ let move_rot = [
   [2, 0, 1, 2, 1, 2, 2, 0, 1, 1, 1, 1, 0, 2, 2, 1, 2, 1, 2, 0],
 ];
 
-moves = [move_U, move_R, move_F, move_L, move_BL, move_BR, move_x2];
-move_names = ["U", "R", "F", "L", "BL", "BR", "flip"];
+const moves = [move_U, move_R, move_F, move_L, move_BL, move_BR, move_x2];
+const move_names = ["U", "R", "F", "L", "BL", "BR", "flip"];
 
 let id = compose_o(move_x2, move_x2);
 
@@ -859,7 +862,7 @@ function cn_solve(state) {
   return shortest_sol;
 }
 
-tables = {};
+const tables = {};
 
 function generate_phase23_orientation_mtable() {
   if (tables.phase23om) return tables.phase23om;
