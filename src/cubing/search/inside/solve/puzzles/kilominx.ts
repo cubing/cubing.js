@@ -6,5 +6,5 @@ export async function randomKilominxScramble(): Promise<Alg> {
   const { getRandomKilominxScramble } = await import(
     "../../../../vendor/xyzzy/kilosolver"
   );
-  return await getRandomKilominxScramble();
+  return getRandomKilominxScramble();
 }
