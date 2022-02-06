@@ -54,6 +54,9 @@ also work with recent versions of Edge, Safari, etc.
 
 "use strict";
 
+import { Alg } from "../../alg";
+import { randomUIntBelowFactory } from "../random-uint-below";
+
 let PHASE4_THRESHOLD = 7;
 // change this to 8 to make the individual solves faster, at the cost of slower initialisation
 
@@ -317,7 +320,7 @@ let move_rot = [
 ];
 
 const moves = [move_U, move_R, move_F, move_L, move_BL, move_BR, move_x2];
-const move_names = ["U", "R", "F", "L", "BL", "BR", "flip"];
+const move_names = ["U", "R", "F", "L", "BL", "BR", "x2"];
 
 let id = compose_o(move_x2, move_x2);
 
@@ -328,17 +331,17 @@ for (let i = 0; i < moves.length; i++) {
     moves_full[i][j] = compose_o(moves_full[i][j - 1], moves[i]);
 }
 
-function random_state() {
+function random_state(randomUintBelow) {
   let p = [0];
   for (let i = 1; i < 20; i++) {
-    let r = Math.floor(Math.random() * (i + 1));
+    let r = randomUintBelow(i + 1);
     p[i] = p[r];
     p[r] = i;
   }
   if (permutation_parity(p) === 1) [p[0], p[1]] = [p[1], p[0]];
   let o = Array(20).fill(0);
   for (let i = 0; i < 19; i++) {
-    o[i] = Math.floor(Math.random() * 3);
+    o[i] = randomUintBelow(3);
     o[19] += 3 - o[i];
   }
   o[19] %= 3;
@@ -364,8 +367,8 @@ function apply_move_sequence(state, move_sequence) {
   return state;
 }
 
-function generate_random_state_scramble() {
-  return solve(random_state());
+function generate_random_state_scramble(randomUintBelow) {
+  return solve(random_state(randomUintBelow));
 }
 
 function generate_random_move_scramble(M, N) {
@@ -1538,3 +1541,14 @@ function bfs5(mtable, goal_states) {
   }
   return ptable;
 }
+
+const randomUintBelow = randomUIntBelowFactory();
+export async function getRandomKilominxScramble() {
+  return new Alg(
+    stringify_move_sequence(
+      generate_random_state_scramble(await randomUintBelow),
+    ),
+  );
+}
+
+getRandomKilominxScramble().then((alg) => alg.log());

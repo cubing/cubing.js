@@ -36,6 +36,10 @@ const events: Record<string, EventInfo> = {
     puzzleID: "master_tetraminx",
     eventName: "Master Tetraminx",
   },
+  kilominx: {
+    puzzleID: "kilominx",
+    eventName: "Kilominx",
+  },
 };
 
 export function eventInfo(event: string): EventInfo | null {

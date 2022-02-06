@@ -58,6 +58,7 @@ const SCRAMBLE_EVENTS: Partial<Record<PuzzleID, string>> = {
   "square1": "sq1",
   "fto": "fto",
   "master_tetraminx": "master_tetraminx",
+  "kilominx": "kilominx",
 };
 
 export class App {
