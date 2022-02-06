@@ -6,5 +6,6 @@ export async function randomRediCubeScramble(): Promise<Alg> {
   const { getRandomRediCubeScramble } = await import(
     "../../../../vendor/xyzzy/redi_cube"
   );
-  return getRandomRediCubeScramble() as Promise<Alg>;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return getRandomRediCubeScramble();
 }
