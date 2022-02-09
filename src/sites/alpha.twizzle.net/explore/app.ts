@@ -219,6 +219,15 @@ class SelectUI {
         );
         break;
       }
+      case "summary":
+        this.app.showText(
+          (
+            await (
+              await this.app.twistyPlayer.experimentalModel.puzzleLoader.get()
+            ).pg!()
+          ).textForTwizzleExplorer(),
+        );
+        break;
       case "screenshot":
       case "screenshot-back":
         this.app.twistyPlayer.experimentalDownloadScreenshot(); // TODO: back!
