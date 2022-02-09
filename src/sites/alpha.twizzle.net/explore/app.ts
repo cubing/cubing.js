@@ -18,6 +18,7 @@ export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;
   twistyAlgEditor: TwistyAlgEditor;
   configUI: ConfigUI;
+  dialog: Dialog;
   constructor() {
     this.twistyPlayer = constructTwistyPlayer();
     document.querySelector("#twisty-wrapper")?.appendChild(this.twistyPlayer);
@@ -34,6 +35,8 @@ export class TwizzleExplorerApp {
         moveCountElem.textContent = `Moves: ${moveCount}`;
       },
     );
+
+    this.dialog = new Dialog();
   }
 
   // TODO: Find out how to avoid the need for this.
@@ -68,9 +71,23 @@ export class TwizzleExplorerApp {
   }
 
   showText(text: string): void {
-    // TODO
-    console.log(text);
     navigator.clipboard.writeText(text);
+    this.dialog.show(text);
+  }
+}
+
+class Dialog {
+  dialogElement = document.querySelector(
+    "#stuff-for-nerds",
+  ) as HTMLDialogElement;
+  textarea = this.dialogElement.querySelector(
+    "textarea",
+  ) as HTMLTextAreaElement;
+  constructor() {}
+
+  show(text: string): void {
+    this.textarea.value = text;
+    (this.dialogElement as any).showModal();
   }
 }
 
@@ -167,6 +184,9 @@ class SelectUI {
 
   async onChange(e: MouseEvent) {
     const action = (e.target as HTMLSelectElement).value;
+    (document.body.querySelector("#actions") as HTMLSelectElement).value = "";
+    (document.body.querySelector("#move-input") as HTMLSelectElement).value =
+      "";
     switch (action) {
       case "gap":
         this.app.showText((await this.app.puzzleGeometry()).writegap());

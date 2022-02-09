@@ -105,3 +105,41 @@ body > .algarea {
 .disabled {
   opacity: 0.3333;
 }
+
+dialog#stuff-for-nerds {
+  width: 80%;
+  height: 80%;
+  margin: 10vh 10vw;
+  overflow-y: auto;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "copy done" "text text";
+  gap: 1em;
+  display: none;
+}
+
+dialog#stuff-for-nerds::backdrop {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+dialog#stuff-for-nerds[open] {
+  display: grid;
+}
+
+dialog#stuff-for-nerds form {
+  grid-area: done;
+}
+
+dialog#stuff-for-nerds form span {
+  width: 100%;
+}
+
+dialog#stuff-for-nerds #copy {
+  grid-area: copy;
+}
+
+dialog#stuff-for-nerds textarea {
+  width: 100%;
+  height: 100%;
+  grid-area: text;
+}
