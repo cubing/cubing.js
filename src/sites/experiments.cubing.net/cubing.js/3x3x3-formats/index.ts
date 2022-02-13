@@ -80,6 +80,7 @@ class App {
     // scene.add(cube3D);
     // const canvas = new Twisty3DCanvas(scene);
     // document.body.appendChild(canvas);
+    this.reset();
   }
 
   reset(): void {
@@ -87,7 +88,7 @@ class App {
   }
 
   applyAlg(s: string): void {
-    this.state.applyAlg(Alg.fromString(s));
+    this.state = this.state.applyAlg(Alg.fromString(s));
     this.setState(this.state);
   }
 
