@@ -1,6 +1,9 @@
 import { Alg } from "../../../../cubing/alg";
-import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle";
-import type { KState } from "../../../../cubing/kpuzzle/KState";
+import {
+  experimental3x3x3KPuzzle,
+  KStateData,
+} from "../../../../cubing/kpuzzle";
+import { KState } from "../../../../cubing/kpuzzle/KState";
 import {
   binaryComponentsToReid3x3x3,
   reid3x3x3ToBinaryComponents,
@@ -12,7 +15,7 @@ import { ExperimentalKPuzzleSVGWrapper } from "../../../../cubing/twisty";
 import {
   kpuzzleToReidString,
   kpuzzleToStickers,
-  stateToString,
+  stateToString as kstateToString,
   reidStringToKState,
   stickersToKPuzzle,
 } from "./convert";
@@ -34,7 +37,7 @@ class App {
   state = experimental3x3x3KPuzzle.startState();
   svg = new ExperimentalKPuzzleSVGWrapper(experimental3x3x3KPuzzle, svgSource);
   algTextarea = document.querySelector("#alg") as HTMLTextAreaElement;
-  kpuzzleTextarea = document.querySelector("#kpuzzle") as HTMLTextAreaElement;
+  kstateTextarea = document.querySelector("#kstate") as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
     "#reid-string",
   ) as HTMLTextAreaElement;
@@ -69,7 +72,7 @@ class App {
       this.setComponents(this.componentsTextarea.value);
     });
     document.querySelector("#set-kpuzzle")!.addEventListener("click", () => {
-      this.setKPuzzle(this.kpuzzleTextarea.value);
+      this.setKStateData(JSON.parse(this.kstateTextarea.value));
     });
     document.querySelector("#set-binary")!.addEventListener("click", () => {
       this.setBinary(this.binaryTextarea.value);
@@ -92,8 +95,8 @@ class App {
     this.setState(this.state);
   }
 
-  setKPuzzle(s: string): void {
-    this.setState(JSON.parse(s));
+  setKStateData(kstateData: KStateData): void {
+    this.setState(new KState(experimental3x3x3KPuzzle, kstateData));
   }
 
   setReidString(s: string): void {
@@ -115,7 +118,7 @@ class App {
   setState(state: KState): void {
     this.state = state;
     this.svg.draw(state);
-    this.kpuzzleTextarea.value = stateToString(state);
+    this.kstateTextarea.value = kstateToString(state);
     this.reidStringTextarea.value = kpuzzleToReidString(state);
     this.stickersTextarea.value = JSON.stringify(kpuzzleToStickers(state));
     this.componentsTextarea.value = JSON.stringify(

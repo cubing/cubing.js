@@ -3,7 +3,7 @@ import type { KStateOrbitData } from "../../../../cubing/kpuzzle/KPuzzleDefiniti
 import { KState } from "../../../../cubing/kpuzzle/KState";
 
 export function stateToString(state: KState): string {
-  return JSON.stringify(state, null, "  ")
+  return JSON.stringify(state.stateData, null, "  ")
     .replace(/\n +(\d+),/g, "$1, ")
     .replace(/\n +(\d+)\n +/g, "$1");
 }
