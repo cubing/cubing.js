@@ -11,6 +11,13 @@ export class KState {
     public readonly stateData: KStateData,
   ) {}
 
+  toJSON(): any {
+    return {
+      puzzleName: this.kpuzzle.name(),
+      stateData: this.stateData,
+    };
+  }
+
   static fromTransformation(transformation: KTransformation): KState {
     const newStateData = applyTransformationDataToStateData(
       transformation.kpuzzle.definition,

@@ -17,6 +17,13 @@ export class KTransformation {
     public readonly transformationData: KTransformationData,
   ) {}
 
+  toJSON(): any {
+    return {
+      puzzleName: this.kpuzzle.name(),
+      transformationData: this.transformationData,
+    };
+  }
+
   invert(): KTransformation {
     return new KTransformation(
       this.kpuzzle,
