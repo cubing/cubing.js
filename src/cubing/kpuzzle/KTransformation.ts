@@ -19,7 +19,7 @@ export class KTransformation {
 
   toJSON(): any {
     return {
-      puzzleName: this.kpuzzle.name(),
+      experimentalPuzzleName: this.kpuzzle.name(),
       transformationData: this.transformationData,
     };
   }

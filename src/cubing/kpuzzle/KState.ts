@@ -13,7 +13,7 @@ export class KState {
 
   toJSON(): any {
     return {
-      puzzleName: this.kpuzzle.name(),
+      experimentalPuzzleName: this.kpuzzle.name(),
       stateData: this.stateData,
     };
   }
