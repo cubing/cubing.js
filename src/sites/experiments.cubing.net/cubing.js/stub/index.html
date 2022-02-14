@@ -1,11 +1,54 @@
 <!DOCTYPE html>
 <html>
   <head>
+<style>
+div {
+   width: 400px;
+   height: 400px;
+   padding: 0px;
+   resize: both;
+   overflow: auto;
+}
+twisty-player {
+   width: 100%;
+   height: 100%;
+}
+</style>
     <meta charset="utf8" />
-    <title>cubing.js | Stub</title>
-    <script src="./stub.js" href="./stub.ts" type="module"></script>
-    <link rel="stylesheet" href="./index.css" />
+    <title>TwistyPlayer</title>
+     <script src="./main.js" type="module"></script>
   </head>
+  <body>
 
-  <body></body>
+<table width="200" border="1">
+  <tbody>
+    <tr>
+      <td><div>
+  <twisty-player
+     id = "twisty-player-left"
+     visualization="PG3D"
+     experimental-move-press-input="basic"
+     experimental-stickering="picture"
+     experimental-sprite="./full-cube.png"
+   ></twisty-player></div></td>
+      <td><div>
+  <twisty-player
+     id = "twisty-player-center"
+     visualization="PG3D"
+     experimental-move-press-input="basic"
+     experimental-stickering="picture"
+     experimental-sprite="./G2-reused-colors.png"
+   ></twisty-player></div></td>
+ <td><div>
+  <twisty-player
+     id = "twisty-player-right"
+     visualization="PG3D"
+     experimental-move-press-input="basic"
+     experimental-stickering="picture"
+     experimental-sprite="./G2-reused-colors.png"
+   ></twisty-player></div></td>
+    </tr>
+  </tbody>
+</table>     
+  </body>
 </html>
