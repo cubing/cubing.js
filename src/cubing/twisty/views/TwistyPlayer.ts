@@ -27,6 +27,8 @@ import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
 import { TwistyPlayerSettable } from "./TwistyPlayerSettable";
 
+const DATA_ATTRIBUTE_PREFIX = "data-";
+
 // TODO: I couldn't figure out how to use use more specific types. Ideally, we'd
 // enforce consistency with the model.
 export const twistyPlayerAttributeMap = {
@@ -315,7 +317,11 @@ export class TwistyPlayer
   }
 
   static get observedAttributes(): string[] {
-    return Object.keys(twistyPlayerAttributeMap);
+    const observed = [];
+    for (const key of Object.keys(twistyPlayerAttributeMap)) {
+      observed.push(key, DATA_ATTRIBUTE_PREFIX + key);
+    }
+    return observed;
   }
 
   attributeChangedCallback(
@@ -323,6 +329,9 @@ export class TwistyPlayer
     _oldValue: string,
     newValue: string,
   ): void {
+    if (attributeName.startsWith("data-")) {
+      attributeName = attributeName.slice("data-".length);
+    }
     const setterName =
       twistyPlayerAttributeMap[attributeName as TwistyPlayerAttribute];
     if (!setterName) {
