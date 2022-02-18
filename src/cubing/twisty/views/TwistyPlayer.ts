@@ -203,7 +203,7 @@ export class TwistyPlayer
     );
     this.contentWrapper.appendChild(this.buttons);
 
-    this.experimentalModel.twistyViewerModel.background.addFreshListener(
+    this.experimentalModel.twistySceneModel.background.addFreshListener(
       (backgroundTheme: BackgroundThemeWithAuto) => {
         this.contentWrapper.classList.toggle(
           "checkered",
@@ -244,7 +244,7 @@ export class TwistyPlayer
         case "2D":
         case "experimental-2D-LL":
           newWrapper = new Twisty2DSceneWrapper(
-            this.experimentalModel.twistyViewerModel,
+            this.experimentalModel.twistySceneModel,
             strategy,
           );
           break;

@@ -10,9 +10,7 @@ import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
 import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp";
 import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 
-export class TwistyViewerModel {
-  /******** Per visualization instance (e.g. vantage) ********/
-
+export class TwistySceneModel {
   // Depth 0
   background = new BackgroundProp();
   foundationDisplay = new FoundationDisplayProp();

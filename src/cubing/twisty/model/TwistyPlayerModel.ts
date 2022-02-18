@@ -34,7 +34,7 @@ import { TimeRangeProp } from "./props/viewer/TimeRangeProp";
 import { ViewerLinkProp } from "./props/viewer/ViewerLinkProp";
 import { VisualizationFormatProp } from "./props/viewer/VisualizationProp";
 import { VisualizationStrategyProp } from "./props/viewer/VisualizationStrategyProp";
-import { TwistyViewerModel } from "./TwistyViewerModel";
+import { TwistySceneModel } from "./TwistySceneModel";
 import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
 
 export class TwistyPlayerModel {
@@ -175,7 +175,7 @@ export class TwistyPlayerModel {
     state: this.currentState,
   });
 
-  twistyViewerModel = new TwistyViewerModel(this);
+  twistySceneModel = new TwistySceneModel(this);
 
   public async twizzleLink(): Promise<string> {
     const [
@@ -193,7 +193,7 @@ export class TwistyPlayerModel {
       this.alg.get(),
       this.setupAlg.get(),
       this.setupAnchor.get(),
-      this.twistyViewerModel.stickering.get(),
+      this.twistySceneModel.stickering.get(),
     ]);
 
     const isExplorer = viewerLink === "experimental-twizzle-explorer";

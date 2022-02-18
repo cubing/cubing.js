@@ -3,7 +3,7 @@ import type { PuzzleLoader } from "../../../puzzles";
 import type { Schedulable } from "../../controllers/RenderScheduler";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
-import type { TwistyViewerModel } from "../../model/TwistyViewerModel";
+import type { TwistySceneModel } from "../../model/TwistySceneModel";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { twistyViewerWrapperCSS } from "../TwistyViewerWrapper.css";
@@ -19,7 +19,7 @@ export class Twisty2DSceneWrapper
   }
 
   constructor(
-    public model?: TwistyViewerModel,
+    public model?: TwistySceneModel,
     private effectiveVisualization?: "2D" | "experimental-2D-LL",
   ) {
     super();

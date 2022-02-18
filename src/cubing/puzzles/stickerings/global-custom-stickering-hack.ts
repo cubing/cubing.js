@@ -25,7 +25,7 @@ function setGlobalCustomStickerer(stickerer: Stickerer): void {
       successPromises.push(
         (async () => {
           const stickering =
-            await player.experimentalModel.twistyViewerModel.stickering.get();
+            await player.experimentalModel.twistySceneModel.stickering.get();
           player.experimentalStickering =
             stickering === "experimental-global-custom-1"
               ? "experimental-global-custom-2"

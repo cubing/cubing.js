@@ -43,16 +43,16 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set timestamp(timestamp: TimestampRequest) { this.experimentalModel.timestampRequest.set(timestamp); }
   get timestamp(): never { throw err("timestamp"); }
 
-  set hintFacelets(hintFaceletStyle: HintFaceletStyleWithAuto) { this.experimentalModel.twistyViewerModel.hintFacelet.set(hintFaceletStyle); }
+  set hintFacelets(hintFaceletStyle: HintFaceletStyleWithAuto) { this.experimentalModel.twistySceneModel.hintFacelet.set(hintFaceletStyle); }
   get hintFacelets(): never { throw err("hintFacelets"); }
 
-  set experimentalStickering(stickering: ExperimentalStickering) { this.experimentalModel.twistyViewerModel.stickering.set(stickering); }
+  set experimentalStickering(stickering: ExperimentalStickering) { this.experimentalModel.twistySceneModel.stickering.set(stickering); }
   get experimentalStickering(): never { throw err("stickering"); }
 
   set backView(backView: BackViewLayoutWithAuto) { this.experimentalModel.backView.set(backView); }
   get backView(): never { throw err("backView"); }
 
-  set background(backgroundTheme: BackgroundThemeWithAuto) { this.experimentalModel.twistyViewerModel.background.set(backgroundTheme); }
+  set background(backgroundTheme: BackgroundThemeWithAuto) { this.experimentalModel.twistySceneModel.background.set(backgroundTheme); }
   get background(): never { throw err("background"); }
 
   set controlPanel(newControlPanel: ControlPanelThemeWithAuto) { this.experimentalModel.controlPanel.set(newControlPanel); }
@@ -73,19 +73,19 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set viewerLink(viewerLinkPage: ViewerLinkPageWithAuto) { this.experimentalModel.viewerLink.set(viewerLinkPage); }
   get viewerLink(): never { throw err("viewerLink"); }
 
-  set experimentalMovePressInput(movePressInput: MovePressInput) { this.experimentalModel.twistyViewerModel.movePressInput.set(movePressInput); }
+  set experimentalMovePressInput(movePressInput: MovePressInput) { this.experimentalModel.twistySceneModel.movePressInput.set(movePressInput); }
   get experimentalMovePressInput(): never { throw err("experimentalMovePressInput"); }
 
-  set cameraLatitude(latitude: number) { this.experimentalModel.twistyViewerModel.orbitCoordinatesRequest.set({ latitude }); }
+  set cameraLatitude(latitude: number) { this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({ latitude }); }
   get cameraLatitude(): never { throw err("cameraLatitude"); }
 
-  set cameraLongitude(longitude: number) { this.experimentalModel.twistyViewerModel.orbitCoordinatesRequest.set({ longitude }); }
+  set cameraLongitude(longitude: number) { this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({ longitude }); }
   get cameraLongitude(): never { throw err("cameraLongitude"); }
 
-  set cameraDistance(distance: number) { this.experimentalModel.twistyViewerModel.orbitCoordinatesRequest.set({ distance }); }
+  set cameraDistance(distance: number) { this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({ distance }); }
   get cameraDistance(): never { throw err("cameraDistance"); }
 
-  set cameraLatitudeLimit(latitudeLimit: number) { this.experimentalModel.twistyViewerModel.latitudeLimit.set(latitudeLimit); }
+  set cameraLatitudeLimit(latitudeLimit: number) { this.experimentalModel.twistySceneModel.latitudeLimit.set(latitudeLimit); }
   get cameraLatitudeLimit(): never { throw err("cameraLatitudeLimit"); }
 
   set indexer(indexer: IndexerStrategyName) { this.experimentalModel.indexerConstructorRequest.set(indexer); }
@@ -94,10 +94,10 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   set tempoScale(newTempoScale: number) { this.experimentalModel.tempoScale.set(newTempoScale); }
   get tempoScale(): never { throw err("tempoScale"); }
 
-  set experimentalSprite(url: string | URL) { this.experimentalModel.twistyViewerModel.foundationStickerSpriteURL.set(url); }
+  set experimentalSprite(url: string | URL) { this.experimentalModel.twistySceneModel.foundationStickerSpriteURL.set(url); }
   get experimentalSprite(): never { throw err("experimentalSprite"); }
 
-  set experimentalHintSprite(url: string | URL) { this.experimentalModel.twistyViewerModel.hintStickerSpriteURL.set(url); }
+  set experimentalHintSprite(url: string | URL) { this.experimentalModel.twistySceneModel.hintStickerSpriteURL.set(url); }
   get experimentalHintSprite(): never { throw err("experimentalHintSprite"); }
 
   experimentalGet = new ExperimentalGetters(this.experimentalModel)

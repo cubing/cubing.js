@@ -52,13 +52,13 @@ export function setupPropInputs(twistyPlayer: TwistyPlayer): void {
   );
   setupPropCheckbox(
     "foundation-display-opaque",
-    twistyPlayer.experimentalModel.twistyViewerModel.foundationDisplay,
+    twistyPlayer.experimentalModel.twistySceneModel.foundationDisplay,
     "opaque",
     "none",
   );
   setupPropCheckbox(
     "hint-facelets-floating",
-    twistyPlayer.experimentalModel.twistyViewerModel.hintFacelet,
+    twistyPlayer.experimentalModel.twistySceneModel.hintFacelet,
     "floating",
     "none",
   );

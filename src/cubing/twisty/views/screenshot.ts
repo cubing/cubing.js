@@ -34,7 +34,7 @@ export async function screenshot(
   );
 
   // TODO: Pass the stickering to the constructor so we don't have to wait..
-  await model.twistyViewerModel.stickering.get();
+  await model.twistySceneModel.stickering.get();
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // TODO: Find a more robust way to do this.
@@ -42,7 +42,7 @@ export async function screenshot(
 
   scene.add(await twisty3DWrapper.twisty3DPuzzle());
 
-  const orbitCoordinates = await model.twistyViewerModel.orbitCoordinates.get();
+  const orbitCoordinates = await model.twistySceneModel.orbitCoordinates.get();
   await setCameraFromOrbitCoordinates(camera, orbitCoordinates);
 
   const renderer = new (await THREEJS).WebGLRenderer({

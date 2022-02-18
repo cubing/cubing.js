@@ -282,7 +282,7 @@ class ControlPane {
       "select",
     );
     Promise.all([
-      this.twistyPlayer.experimentalModel.twistyViewerModel.stickering.get(),
+      this.twistyPlayer.experimentalModel.twistySceneModel.stickering.get(),
       this.twistyPlayer.experimentalModel.puzzleID.get(),
     ]).then(([stickering, puzzleID]) =>
       this.initializeStickeringSelect(stickering, puzzleID),
