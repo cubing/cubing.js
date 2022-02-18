@@ -4,12 +4,11 @@ import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
 import { SpriteProp } from "./props/puzzle/display/SpriteProp";
 import { StickeringProp } from "./props/puzzle/display/StickeringProp";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
-import type { PuzzleIDProp } from "./props/puzzle/structure/PuzzleIDProp";
 import { BackgroundProp } from "./props/viewer/BackgroundProp";
 import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
 import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
 import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp";
-import type { VisualizationStrategyProp } from "./props/viewer/VisualizationStrategyProp";
+import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 
 export class TwistyViewerModel {
   /******** Per visualization instance (e.g. vantage) ********/
@@ -38,15 +37,12 @@ export class TwistyViewerModel {
   // Depth 4
   orbitCoordinates: OrbitCoordinatesProp;
 
-  constructor(inputs: {
-    puzzleID: PuzzleIDProp;
-    visualizationStrategy: VisualizationStrategyProp;
-  }) {
+  constructor(public twistyPlayerModel: TwistyPlayerModel) {
     this.orbitCoordinates = new OrbitCoordinatesProp({
       orbitCoordinatesRequest: this.orbitCoordinatesRequest,
       latitudeLimit: this.latitudeLimit,
-      puzzleID: inputs.puzzleID,
-      strategy: inputs.visualizationStrategy,
+      puzzleID: twistyPlayerModel.puzzleID,
+      strategy: twistyPlayerModel.visualizationStrategy,
     });
   }
 }

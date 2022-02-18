@@ -175,10 +175,7 @@ export class TwistyPlayerModel {
     state: this.currentState,
   });
 
-  twistyViewerModel = new TwistyViewerModel({
-    puzzleID: this.puzzleID,
-    visualizationStrategy: this.visualizationStrategy,
-  });
+  twistyViewerModel = new TwistyViewerModel(this);
 
   public async twizzleLink(): Promise<string> {
     const [

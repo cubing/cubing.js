@@ -244,7 +244,7 @@ export class TwistyPlayer
         case "2D":
         case "experimental-2D-LL":
           newWrapper = new Twisty2DSceneWrapper(
-            this.experimentalModel,
+            this.experimentalModel.twistyViewerModel,
             strategy,
           );
           break;
