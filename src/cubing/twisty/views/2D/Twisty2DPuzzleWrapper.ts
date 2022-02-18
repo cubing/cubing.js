@@ -15,7 +15,7 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
     this.twisty2DPuzzle(); // Start constructing.
 
     this.#freshListenerManager.addListener(
-      this.model.stickering,
+      this.model.twistyViewerModel.stickering,
       async (stickering: ExperimentalStickering) => {
         (await this.twisty2DPuzzle()).experimentalSetStickering(stickering);
       },

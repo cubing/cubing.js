@@ -203,7 +203,7 @@ export class TwistyPlayer
     );
     this.contentWrapper.appendChild(this.buttons);
 
-    this.experimentalModel.background.addFreshListener(
+    this.experimentalModel.twistyViewerModel.background.addFreshListener(
       (backgroundTheme: BackgroundThemeWithAuto) => {
         this.contentWrapper.classList.toggle(
           "checkered",

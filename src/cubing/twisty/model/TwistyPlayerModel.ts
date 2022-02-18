@@ -1,49 +1,41 @@
+import { experimentalAppendMove, Move } from "../../alg";
+import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
+import { URLProp } from "./props/general/URLProp";
 import { AlgProp } from "./props/puzzle/state/AlgProp";
-import { BackgroundProp } from "./props/viewer/BackgroundProp";
-import { BackViewProp } from "./props/viewer/BackViewProp";
-import { ControlPanelProp } from "./props/viewer/ControlPanelProp";
-import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
+import { AlgTransformationProp } from "./props/puzzle/state/AlgTransformationProp";
+import { AnchorTransformationProp } from "./props/puzzle/state/AnchorTransformationProp";
+import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
+import { CurrentLeavesSimplifiedProp } from "./props/puzzle/state/CurrentLeavesSimplified";
+import { CurrentMoveInfoProp } from "./props/puzzle/state/CurrentMoveInfoProp";
+import { CurrentStateProp as CurrentStateProp } from "./props/puzzle/state/CurrentStateProp";
+import { IndexerConstructorProp } from "./props/puzzle/state/IndexerConstructorProp";
 import { IndexerConstructorRequestProp } from "./props/puzzle/state/IndexerConstructorRequestProp";
-import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
-import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp";
-import { PlayingInfoProp } from "./props/timeline/PlayingInfoProp";
+import { IndexerProp } from "./props/puzzle/state/IndexerProp";
+import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
+import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
+import { PuzzleAlgProp } from "./props/puzzle/state/PuzzleAlgProp";
+import { SetupAnchorProp } from "./props/puzzle/state/SetupAnchorProp";
+import { SetupTransformationProp } from "./props/puzzle/state/SetupTransformationProp";
+import { KPuzzleProp } from "./props/puzzle/structure/KPuzzleProp";
 import { PGPuzzleDescriptionStringProp } from "./props/puzzle/structure/PuzzleDescriptionProp";
+import { PuzzleIDProp } from "./props/puzzle/structure/PuzzleIDProp";
 import { PuzzleIDRequestProp } from "./props/puzzle/structure/PuzzleIDRequestProp";
 import { PuzzleLoaderProp } from "./props/puzzle/structure/PuzzleLoaderProp";
-import { SetupAnchorProp } from "./props/puzzle/state/SetupAnchorProp";
-import { StickeringProp } from "./props/puzzle/display/StickeringProp";
+import { CoarseTimelineInfoProp } from "./props/timeline/CoarseTimelineInfoProp";
+import { DetailedTimelineInfoProp } from "./props/timeline/DetailedTimelineInfoProp";
+import { PlayingInfoProp } from "./props/timeline/PlayingInfoProp";
 import { TempoScaleProp } from "./props/timeline/TempoScaleProp";
 import { TimestampRequestProp } from "./props/timeline/TimestampRequestProp";
-import { URLProp } from "./props/general/URLProp";
+import { NO_VALUE } from "./props/TwistyProp";
+import { BackViewProp } from "./props/viewer/BackViewProp";
+import { ButtonAppearanceProp } from "./props/viewer/ButtonAppearanceProp";
+import { ControlPanelProp } from "./props/viewer/ControlPanelProp";
+import { TimeRangeProp } from "./props/viewer/TimeRangeProp";
 import { ViewerLinkProp } from "./props/viewer/ViewerLinkProp";
 import { VisualizationFormatProp } from "./props/viewer/VisualizationProp";
-import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
-import { PuzzleIDProp } from "./props/puzzle/structure/PuzzleIDProp";
-import { SpriteProp } from "./props/puzzle/display/SpriteProp";
 import { VisualizationStrategyProp } from "./props/viewer/VisualizationStrategyProp";
-import { IndexerConstructorProp } from "./props/puzzle/state/IndexerConstructorProp";
-import { PuzzleAlgProp } from "./props/puzzle/state/PuzzleAlgProp";
-import { AlgTransformationProp } from "./props/puzzle/state/AlgTransformationProp";
-import { IndexerProp } from "./props/puzzle/state/IndexerProp";
-import { AnchorTransformationProp } from "./props/puzzle/state/AnchorTransformationProp";
-import { TimeRangeProp } from "./props/viewer/TimeRangeProp";
-import { DetailedTimelineInfoProp } from "./props/timeline/DetailedTimelineInfoProp";
-import { CoarseTimelineInfoProp } from "./props/timeline/CoarseTimelineInfoProp";
-import { CurrentMoveInfoProp } from "./props/puzzle/state/CurrentMoveInfoProp";
-import { ButtonAppearanceProp } from "./props/viewer/ButtonAppearanceProp";
-import { CurrentLeavesSimplifiedProp } from "./props/puzzle/state/CurrentLeavesSimplified";
-import { CurrentStateProp as CurrentStateProp } from "./props/puzzle/state/CurrentStateProp";
-import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
-import { KPuzzleProp } from "./props/puzzle/structure/KPuzzleProp";
+import { TwistyViewerModel } from "./TwistyViewerModel";
 import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
-import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
-import { experimentalAppendMove, Move } from "../../alg";
-import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
-import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
-import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
-import { NO_VALUE } from "./props/TwistyProp";
-import { SetupTransformationProp } from "./props/puzzle/state/SetupTransformationProp";
-import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -54,26 +46,16 @@ export class TwistyPlayerModel {
 
   // Depth 0
   alg = new AlgProp();
-  background = new BackgroundProp();
   backView = new BackViewProp();
   controlPanel = new ControlPanelProp();
   catchUpMove = new CatchUpMoveProp();
-  foundationDisplay = new FoundationDisplayProp();
-  foundationStickerSpriteURL = new URLProp();
-  hintFacelet = new HintFaceletProp();
-  hintStickerSpriteURL = new URLProp();
   indexerConstructorRequest = new IndexerConstructorRequestProp();
-  latitudeLimit = new LatitudeLimitProp();
-  movePressInput = new MovePressInputProp();
-  orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
-    new OrbitCoordinatesRequestProp();
   playingInfo = new PlayingInfoProp();
   puzzleDescriptionRequest = new PGPuzzleDescriptionStringProp();
   puzzleIDRequest = new PuzzleIDRequestProp();
   setupAnchor = new SetupAnchorProp();
   setupAlg = new AlgProp();
   setupTransformation = new SetupTransformationProp();
-  stickering = new StickeringProp();
   tempoScale = new TempoScaleProp();
   timestampRequest = new TimestampRequestProp();
   viewerLink = new ViewerLinkProp();
@@ -84,14 +66,6 @@ export class TwistyPlayerModel {
   competitionID = new ArbitraryStringProp();
 
   // Depth 1
-  foundationStickerSprite = new SpriteProp({
-    spriteURL: this.foundationStickerSpriteURL,
-  });
-
-  hintStickerSprite = new SpriteProp({
-    spriteURL: this.hintStickerSpriteURL,
-  });
-
   puzzleLoader = new PuzzleLoaderProp(
     {
       puzzleIDRequest: this.puzzleIDRequest,
@@ -131,13 +105,6 @@ export class TwistyPlayerModel {
   });
 
   moveCount = new NaiveMoveCountProp({ alg: this.puzzleAlg });
-
-  orbitCoordinates = new OrbitCoordinatesProp({
-    orbitCoordinatesRequest: this.orbitCoordinatesRequest,
-    latitudeLimit: this.latitudeLimit,
-    puzzleID: this.puzzleID,
-    strategy: this.visualizationStrategy,
-  });
 
   setupAlgTransformation = new AlgTransformationProp({
     setupAlg: this.puzzleSetupAlg,
@@ -208,6 +175,11 @@ export class TwistyPlayerModel {
     state: this.currentState,
   });
 
+  twistyViewerModel = new TwistyViewerModel({
+    puzzleID: this.puzzleID,
+    visualizationStrategy: this.visualizationStrategy,
+  });
+
   public async twizzleLink(): Promise<string> {
     const [
       viewerLink,
@@ -224,7 +196,7 @@ export class TwistyPlayerModel {
       this.alg.get(),
       this.setupAlg.get(),
       this.setupAnchor.get(),
-      this.stickering.get(),
+      this.twistyViewerModel.stickering.get(),
     ]);
 
     const isExplorer = viewerLink === "experimental-twizzle-explorer";

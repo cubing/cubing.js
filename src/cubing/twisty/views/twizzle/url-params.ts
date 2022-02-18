@@ -28,7 +28,10 @@ export class URLParamUpdater {
 
     this.listenToAlgProp(model.alg, "alg");
     this.listenToAlgProp(model.setupAlg, "setup-alg");
-    this.listenToStringSourceProp(model.stickering, "stickering");
+    this.listenToStringSourceProp(
+      model.twistyViewerModel.stickering,
+      "stickering",
+    );
     this.listenToStringSourceProp(model.setupAnchor, "setup-anchor");
     this.listenToStringOrNoValueProp(
       model.puzzleIDRequest,

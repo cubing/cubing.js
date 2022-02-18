@@ -21,10 +21,10 @@ export function demoSpinCamera(twistyPlayer: TwistyPlayer): void {
     const delta_deg =
       ((timestamp - lastTimestamp) / 1000) * CAM_ROTATION_DEG_PER_SEC;
     lastTimestamp = timestamp;
-    twistyPlayer.experimentalModel.orbitCoordinatesRequest.set(
+    twistyPlayer.experimentalModel.twistyViewerModel.orbitCoordinatesRequest.set(
       (async () => {
         const { longitude } =
-          await twistyPlayer.experimentalModel.orbitCoordinates.get();
+          await twistyPlayer.experimentalModel.twistyViewerModel.orbitCoordinates.get();
         return { longitude: longitude + delta_deg };
       })(),
     );

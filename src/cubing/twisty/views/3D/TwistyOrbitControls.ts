@@ -139,9 +139,10 @@ export class TwistyOrbitControls {
     const temperedY = this.temperMovement(
       (movementY / minDim) * VERTICAL_MOVEMENT_BASE_SCALE,
     );
-    this.model.orbitCoordinatesRequest.set(
+    this.model.twistyViewerModel.orbitCoordinatesRequest.set(
       (async () => {
-        const prevCoords = await this.model.orbitCoordinates.get();
+        const prevCoords =
+          await this.model.twistyViewerModel.orbitCoordinates.get();
 
         const newCoords = {
           latitude:

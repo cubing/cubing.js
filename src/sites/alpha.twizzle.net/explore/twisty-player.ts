@@ -39,7 +39,7 @@ export function constructTwistyPlayer(): TwistyPlayer {
     config.experimentalPuzzleDescription ?? "c", // TODO
   );
   // TODO
-  twistyPlayer.experimentalModel.orbitCoordinatesRequest.set(
+  twistyPlayer.experimentalModel.twistyViewerModel.orbitCoordinatesRequest.set(
     initialCameraOrbitCoordinatesPromise,
   );
 

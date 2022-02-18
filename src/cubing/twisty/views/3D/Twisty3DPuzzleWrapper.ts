@@ -52,7 +52,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     );
 
     this.#freshListenerManager.addListener(
-      this.model.hintFacelet,
+      this.model.twistyViewerModel.hintFacelet,
       async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
         (
           (await this.twisty3DPuzzle()) as Cube3D | PG3D
@@ -64,7 +64,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       },
     );
     this.#freshListenerManager.addListener(
-      this.model.foundationDisplay,
+      this.model.twistyViewerModel.foundationDisplay,
       async (foundationDisplay: FoundationDisplay) => {
         (
           (await this.twisty3DPuzzle()) as Cube3D | PG3D
@@ -75,7 +75,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
       },
     );
     this.#freshListenerManager.addListener(
-      this.model.stickering,
+      this.model.twistyViewerModel.stickering,
       async (stickering: ExperimentalStickering) => {
         if ("setStickering" in (await this.twisty3DPuzzle())) {
           ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
@@ -109,7 +109,10 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
     );
 
     this.#freshListenerManager.addMultiListener(
-      [this.model.foundationStickerSprite, this.model.hintStickerSprite],
+      [
+        this.model.twistyViewerModel.foundationStickerSprite,
+        this.model.twistyViewerModel.hintStickerSprite,
+      ],
       async (
         inputs: [
           foundationSprite: ThreeTexture | null,
@@ -147,9 +150,9 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         // TODO: synchronize
         const [foundationSprite, hintSprite, experimentalStickering] =
           await Promise.all([
-            this.model.foundationStickerSprite.get(),
-            this.model.hintStickerSprite.get(),
-            this.model.stickering.get(),
+            this.model.twistyViewerModel.foundationStickerSprite.get(),
+            this.model.twistyViewerModel.hintStickerSprite.get(),
+            this.model.twistyViewerModel.stickering.get(),
           ]);
         return (await proxyPromise).cube3DShim({
           foundationSprite,
@@ -158,9 +161,9 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
         });
       } else {
         const [hintFacelets, foundationSprite, hintSprite] = await Promise.all([
-          this.model.hintFacelet.get(),
-          this.model.foundationStickerSprite.get(),
-          this.model.hintStickerSprite.get(),
+          this.model.twistyViewerModel.hintFacelet.get(),
+          this.model.twistyViewerModel.foundationStickerSprite.get(),
+          this.model.twistyViewerModel.hintStickerSprite.get(),
         ]);
         const pg3d = (await proxyPromise).pg3dShim(
           this.puzzleLoader,
