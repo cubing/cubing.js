@@ -48,9 +48,7 @@ export function experimentalSetScramblePrefetchLevel(
   prefetchLevel: PrefetchLevel,
 ): void {
   (async () => {
-    await (
-      await getCachedWorkerInstance()
-    ).setScramblePrefetchLevel(prefetchLevel);
+    (await getCachedWorkerInstance()).setScramblePrefetchLevel(prefetchLevel);
   })();
 }
 
