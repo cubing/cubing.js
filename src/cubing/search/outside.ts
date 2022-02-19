@@ -3,7 +3,7 @@ import { Alg } from "../alg";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import { instantiateWorker } from "./instantiator";
-import { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
+import type { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
 import type { KState } from "../kpuzzle/KState";
 
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
@@ -43,16 +43,6 @@ export function _preInitializationHintForEvent(
     await (await getCachedWorkerInstance()).initialize(eventID);
   })();
 }
-
-export function experimentalSetScramblePrefetchLevel(
-  prefetchLevel: PrefetchLevel,
-): void {
-  (async () => {
-    (await getCachedWorkerInstance()).setScramblePrefetchLevel(prefetchLevel);
-  })();
-}
-
-export const ExperimentalPrefetchLevel = PrefetchLevel;
 
 export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
   switch (eventID) {
@@ -112,9 +102,17 @@ export async function solveMegaminx(state: KState): Promise<Alg> {
   return Alg.fromString(await cwi.solveMegaminxToString(state.stateData));
 }
 
-export function setDebug(options: { logPerf?: boolean }): void {
-  const { logPerf } = options;
+export function setDebug(options: {
+  logPerf?: boolean;
+  scramblePrefetchLevel?: `${PrefetchLevel}`;
+}): void {
+  const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
     getCachedWorkerInstance().then((cwi) => cwi.setDebugMeasurePerf(logPerf));
+  }
+  if (typeof scramblePrefetchLevel !== "undefined") {
+    getCachedWorkerInstance().then((cwi) =>
+      cwi.setScramblePrefetchLevel(scramblePrefetchLevel as PrefetchLevel),
+    );
   }
 }

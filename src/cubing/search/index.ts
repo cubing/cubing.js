@@ -1,7 +1,5 @@
 export {
   randomScrambleForEvent as experimentalRandomScrambleForEvent,
-  experimentalSetScramblePrefetchLevel,
-  ExperimentalPrefetchLevel,
   experimentalSolve3x3x3IgnoringCenters,
   experimentalSolve2x2x2,
   solveSkewb,
