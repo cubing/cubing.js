@@ -167,8 +167,9 @@ async function randomScrambleForEvent(
 }
 
 export enum PrefetchLevel {
-  None = "none",
   Auto = "auto",
+  None = "none",
+  Immediate = "immediate",
 }
 
 let currentPrefetchLevel = PrefetchLevel.Auto;
@@ -200,7 +201,7 @@ export const insideAPI = {
     } else {
       promise = randomScrambleForEvent(eventID);
     }
-    if (currentPrefetchLevel === PrefetchLevel.Auto) {
+    if (currentPrefetchLevel !== PrefetchLevel.None) {
       promise.then(() => {
         // `queuedPrefetch` could be 0, but:
         // > Passing an invalid ID to clearTimeout() silently does nothing; no exception is thrown.
@@ -208,14 +209,19 @@ export const insideAPI = {
         if (queuedPrefetchTimeoutID) {
           clearTimeout(queuedPrefetchTimeoutID);
         }
-        queuedPrefetchTimeoutID = setTimeout(() => {
-          prefetchPromises.set(
-            eventID,
-            randomScrambleForEvent(eventID, {
-              isPrefetch: true,
-            }),
-          );
-        }, IDLE_PREFETCH_TIMEOUT_MS);
+        queuedPrefetchTimeoutID = setTimeout(
+          () => {
+            prefetchPromises.set(
+              eventID,
+              randomScrambleForEvent(eventID, {
+                isPrefetch: true,
+              }),
+            );
+          },
+          currentPrefetchLevel === PrefetchLevel.Immediate
+            ? 0
+            : IDLE_PREFETCH_TIMEOUT_MS,
+        );
       });
     }
     return promise;
