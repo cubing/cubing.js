@@ -3,7 +3,7 @@ import { Alg } from "../alg";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import { instantiateWorker } from "./instantiator";
-import type { WorkerInsideAPI } from "./inside/api";
+import { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
 import type { KState } from "../kpuzzle/KState";
 
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
@@ -43,6 +43,18 @@ export function _preInitializationHintForEvent(
     await (await getCachedWorkerInstance()).initialize(eventID);
   })();
 }
+
+export function experimentalSetScramblePrefetchLevel(
+  prefetchLevel: PrefetchLevel,
+): void {
+  (async () => {
+    await (
+      await getCachedWorkerInstance()
+    ).setScramblePrefetchLevel(prefetchLevel);
+  })();
+}
+
+export const ExperimentalPrefetchLevel = PrefetchLevel;
 
 export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
   switch (eventID) {
