@@ -1,6 +1,7 @@
 import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
 import { randomScrambleForEvent } from "../../../../cubing/scramble";
 import type { AlgWithIssues } from "../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+import type { CatchUpMove } from "../../../../cubing/twisty/model/props/puzzle/state/CatchUpMoveProp";
 class App {
   // Example of getting an element from the page.
   twistyPlayer: TwistyPlayer = document.querySelector("#twisty-player-left")!;
@@ -22,6 +23,12 @@ class App {
       (algWithIssues: AlgWithIssues) => {
         this.tpc.alg = algWithIssues.alg;
         this.tpr.alg = algWithIssues.alg;
+      },
+    );
+    this.twistyPlayer.experimentalModel.catchUpMove.addFreshListener(
+      (catchUpMove: CatchUpMove) => {
+        this.tpc.experimentalModel.catchUpMove.set(catchUpMove);
+        this.tpr.experimentalModel.catchUpMove.set(catchUpMove);
       },
     );
   }
