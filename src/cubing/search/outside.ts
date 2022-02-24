@@ -2,7 +2,7 @@ import { Alg } from "../alg";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
-import { instantiateWorker } from "./instantiator";
+import { instantiateWorker, setForceStringWorker } from "./instantiator";
 import type { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
 import type { KState } from "../kpuzzle/KState";
 
@@ -105,6 +105,7 @@ export async function solveMegaminx(state: KState): Promise<Alg> {
 export function setDebug(options: {
   logPerf?: boolean;
   scramblePrefetchLevel?: `${PrefetchLevel}`;
+  forceStringWorker: boolean;
 }): void {
   const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
@@ -114,5 +115,8 @@ export function setDebug(options: {
     getCachedWorkerInstance().then((cwi) =>
       cwi.setScramblePrefetchLevel(scramblePrefetchLevel as PrefetchLevel),
     );
+  }
+  if ("forceStringWorker" in options) {
+    setForceStringWorker(options.forceStringWorker);
   }
 }

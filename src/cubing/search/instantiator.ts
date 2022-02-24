@@ -3,6 +3,12 @@ import type { WorkerInsideAPI } from "./inside/api";
 import { getWorkerEntryFileURL } from "./inside/search-worker-ts-entry-path-getter";
 
 const MODULE_WORKER_TIMEOUT_MILLISECONDS = 5000;
+
+let forceStringWorker: boolean = false;
+export function setForceStringWorker(force: boolean): void {
+  forceStringWorker = force;
+}
+
 export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise<WorkerInsideAPI>(async (resolve, reject) => {
@@ -72,19 +78,27 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
   });
 }
 
+async function instantiateClassicWorker(): Promise<WorkerInsideAPI> {
+  const { workerSource } = await import("./worker-inside-generated-string.js");
+  const worker = await constructWorker(workerSource, { eval: true });
+  return wrap(worker);
+}
+
 export async function instantiateWorker(): Promise<WorkerInsideAPI> {
+  if (forceStringWorker) {
+    console.warn(
+      "Using the `forceStringWorker` workaround for search worker instantiation. This will require downloading significantly more code than necessary, but the functionality will be the same.",
+    );
+    return instantiateClassicWorker();
+  }
   try {
     // `await` is important for `catch` to work.
     return await instantiateModuleWorker();
   } catch (e) {
     console.warn(
-      "Could not instantiate module worker (this is expected in Firefox and `bundle-global`). Falling back to string worker.",
+      "Could not instantiate module worker (this may happen in Firefox, with `bundle-global`, or when using Parcel). Falling back to string worker.",
       e,
     );
-    const { workerSource } = await import(
-      "./worker-inside-generated-string.js"
-    );
-    const worker = await constructWorker(workerSource, { eval: true });
-    return wrap(worker);
+    return instantiateClassicWorker();
   }
 }
