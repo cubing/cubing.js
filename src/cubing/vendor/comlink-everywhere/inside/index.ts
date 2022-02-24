@@ -14,7 +14,9 @@ export async function nodeEndpointPort(): Promise<
     nodeWorker?: import("worker_threads").Worker;
   }
 > {
-  const { parentPort } = await import(worker_threads_unmangled()).catch();
+  const { parentPort } = await import(
+    /* @vite-ignore */ worker_threads_unmangled()
+  ).catch();
   return nodeEndpoint(parentPort);
 }
 

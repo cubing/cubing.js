@@ -18,8 +18,9 @@ const cryptoUnmangled = () => cryptoMangled.replace(/-/g, "");
 // We could use top-level await to define this more statically, but that has limited transpilation support.
 export async function getRandomValuesFactory(): Promise<GetRandomValuesFunction> {
   if (!globalThis?.crypto?.getRandomValues) {
-    const nodeWebcrypto = (await (cryptoPromise ??= import(cryptoUnmangled())))
-      .webcrypto as NodeWebCrypto;
+    const nodeWebcrypto = (
+      await (cryptoPromise ??= import(/* @vite-ignore */ cryptoUnmangled()))
+    ).webcrypto as NodeWebCrypto;
     return nodeWebcrypto.getRandomValues;
   } else {
     return crypto.getRandomValues.bind(crypto) as GetRandomValuesFunction;
