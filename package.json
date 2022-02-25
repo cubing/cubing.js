@@ -110,6 +110,7 @@
     "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
     "dev": "npm run initial-setup && node ./script/build/main.js sites dev",
+    "link": "npm run build && npm link",
     "clean": "rm -rf dist .temp coverage src/cubing/search/worker-inside-generated* ./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty",
     "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml in sync with this",
     "test-dist-esm-node-import": "node script/test/dist/esm/node-import/main.mjs",
