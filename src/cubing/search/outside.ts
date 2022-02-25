@@ -105,7 +105,7 @@ export async function solveMegaminx(state: KState): Promise<Alg> {
 export function setDebug(options: {
   logPerf?: boolean;
   scramblePrefetchLevel?: `${PrefetchLevel}`;
-  forceStringWorker: boolean;
+  forceStringWorker?: boolean;
 }): void {
   const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
@@ -117,6 +117,6 @@ export function setDebug(options: {
     );
   }
   if ("forceStringWorker" in options) {
-    setForceStringWorker(options.forceStringWorker);
+    setForceStringWorker(!!options.forceStringWorker);
   }
 }
