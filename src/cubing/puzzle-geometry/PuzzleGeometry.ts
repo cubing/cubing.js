@@ -72,7 +72,7 @@ export interface StickerDat {
   stickers: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
-  unswizzle(mv: Move): Move;
+  unswizzle(mv: Move): Move | null;
   notationMapper: NotationMapper;
   textureMapper: TextureMapper;
 }
