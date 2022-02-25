@@ -72,7 +72,7 @@ export interface StickerDat {
   stickers: StickerDatSticker[];
   faces: StickerDatFace[];
   axis: StickerDatAxis[];
-  unswizzle(mv: Move): string;
+  unswizzle(mv: Move): Move;
   notationMapper: NotationMapper;
   textureMapper: TextureMapper;
 }
@@ -1607,12 +1607,12 @@ export class PuzzleGeometry {
     tend(t1);
   }
 
-  public unswizzle(mv: Move): string {
+  public unswizzle(mv: Move): Move | null {
     const newmv = this.notationMapper.notationToInternal(mv);
     if (newmv === null) {
-      return "";
+      return null;
     }
-    return this.swizzler.unswizzle(newmv.family);
+    return newmv.modified({ family: this.swizzler.unswizzle(newmv.family) });
   }
 
   // We use an extremely permissive parse here; any character but
