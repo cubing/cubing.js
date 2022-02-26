@@ -384,11 +384,8 @@ class MoveHighlighter {
       return;
     }
     if (newElem?.parentElement?.classList.contains('execution')) {
-      console.log('slow down');
       twistyPlayer.tempoScale = 10;
     } else {
-      console.log("reset to one")
-      console.log(newElem?.parentElement?.classList);
       twistyPlayer.tempoScale = 1;
     }
     this.currentElem?.classList.remove("twisty-alg-current-move");
@@ -448,7 +445,6 @@ export class TwistyAlgViewer extends HTMLElementShim {
 
     twistyPlayer.experimentalModel.currentMoveInfo.addFreshListener(
       (currentMoveInfo: CurrentMoveInfo) => {
-        // console.log('WPHT', currentMoveInfo);
         let moveInfo = currentMoveInfo.currentMoves[0];
         moveInfo ??= currentMoveInfo.movesStarting[0];
         moveInfo ??= currentMoveInfo.movesFinishing[0];
@@ -456,7 +452,6 @@ export class TwistyAlgViewer extends HTMLElementShim {
           this.highlighter.set(null, twistyPlayer);
         } else {
           const mainCurrentMove = moveInfo.move; // TODO
-          // console.log('WPHT', mainCurrentMove);
           this.highlighter.set(mainCurrentMove as Parsed<Move>, twistyPlayer);
         }
       },
