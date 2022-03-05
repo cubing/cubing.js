@@ -19,6 +19,7 @@ export const twisty3DVantageCSS = new CSSSource(`
   display: grid;
   overflow: hidden;
   place-content: center;
+  contain: strict;
 }
 
 .loading {
