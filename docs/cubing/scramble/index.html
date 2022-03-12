@@ -32,7 +32,7 @@
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;<br>
+            <span>import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 <br>
 const scramble = await randomScrambleForEvent("333");
 console.log(scramble.toString());</span>
@@ -46,7 +46,7 @@ console.log(scramble.toString());</span>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;<br>
+            <span>import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 <br>
 (await randomScrambleForEvent("333")).log();<br>
 (await randomScrambleForEvent("333bf")).log();<br>
@@ -75,7 +75,7 @@ console.log(scramble.toString());</span>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;<br>
+            <span>import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 <br>
 (await randomScrambleForEvent("fto")).log();<br>
 (await randomScrambleForEvent("master_tetraminx")).log();</span>
@@ -129,8 +129,8 @@ console.log(scramble.toString());</span>
               &lt;twisty-player id=&quot;main-player&quot;&gt;&lt;/twisty-player&gt;<br>
 <br>
 &lt;script type=&quot;module&quot;&gt;<br>
-&nbsp;&nbsp;import &quot;cubing/twisty&quot;;<br>
-&nbsp;&nbsp;import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;<br>
+&nbsp;&nbsp;import &quot;https://cdn.cubing.net/js/cubing/twisty&quot;;<br>
+&nbsp;&nbsp;import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 &nbsp;&nbsp;<br>
 &nbsp;&nbsp;const scramblePromise = randomScrambleForEvent(&quot;333&quot;);<br>
 &nbsp;&nbsp;document.querySelector(&quot;#main-player&quot;).alg = scramblePromise;<br>
