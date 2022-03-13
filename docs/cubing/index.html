@@ -146,32 +146,6 @@ import { TwistyPlayer } from &quot;<b><u>https://cdn.cubing.net/js/</u></b>cubin
         </p>
       </div>
 
-      <div id="npm-package-troubleshooting">
-        <h2><a href="#npm-package-troubleshooting">Troubleshooting</a></h2>
-
-        <div id="ignoring-built-in-node-modules">
-          <h3><a href="#ignoring-built-in-node-modules">Ignoring built-in <code>node</code> modules</a></h3>
-          The <code>cubing.js</code> library on <code>npm</code> has several dependencies, which are listed
-          in its <code>package.json</code>. In addition, it contains dynamic imports that are used when the code is
-          running
-          in <code>node</code>, currently:
-          <ul>
-            <li><code>crypto</code></li>
-            <li><code>worker_threads</code></li>
-          </ul>
-
-          <p>
-            You may need to tell your tools to ignore (e.g. "exclude" or mark as
-            "external") these imports for the browser. For example, when using <a
-              href="https://esbuild.github.io/api/#external"><code>esbuild</code></a>:
-
-            <code class="sample">
-              esbuild <b><u>--external:crypto</u></b> <b><u>--external:worker_threads</u></b> [other arguments]
-          </code>
-          </p>
-        </div>
-      </div>
-
     </section>
 
     <section id="code-experiments">
