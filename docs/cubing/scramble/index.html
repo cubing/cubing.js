@@ -32,10 +32,12 @@
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
+            <span><code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
+import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 <br>
 const scramble = await randomScrambleForEvent("333");
-console.log(scramble.toString());</span>
+console.log(scramble.toString());<br>
+<code class="boilerplate">&lt;/script&gt;</code></span>
           </code>
         </div>
         <code class="sample output">
@@ -46,7 +48,8 @@ console.log(scramble.toString());</span>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
+            <span><code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
+import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 <br>
 (await randomScrambleForEvent("333")).log();<br>
 (await randomScrambleForEvent("333bf")).log();<br>
@@ -56,7 +59,8 @@ console.log(scramble.toString());</span>
 (await randomScrambleForEvent("777")).log();<br>
 (await randomScrambleForEvent("sq1")).log();<br>
 (await randomScrambleForEvent("minx")).log();<br>
-(await randomScrambleForEvent("clock")).log();</span>
+(await randomScrambleForEvent("clock")).log();<br>
+<code class="boilerplate">&lt;/script&gt;</code></span>
           </code>
         </div>
         <code class="sample output">
@@ -75,10 +79,12 @@ console.log(scramble.toString());</span>
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
+            <span><code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
+import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 <br>
 (await randomScrambleForEvent("fto")).log();<br>
-(await randomScrambleForEvent("master_tetraminx")).log();</span>
+(await randomScrambleForEvent("master_tetraminx")).log();<br>
+<code class="boilerplate">&lt;/script&gt;</code></span>
           </code>
         </div>
         <code class="sample output">
@@ -128,13 +134,13 @@ console.log(scramble.toString());</span>
             <span>&lt;twisty-alg-viewer for=&quot;main-player&quot;&gt;&lt;/twisty-alg-viewer&gt;<br>
               &lt;twisty-player id=&quot;main-player&quot;&gt;&lt;/twisty-player&gt;<br>
 <br>
-&lt;script type=&quot;module&quot;&gt;<br>
+<code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
 &nbsp;&nbsp;import &quot;https://cdn.cubing.net/js/cubing/twisty&quot;;<br>
 &nbsp;&nbsp;import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
 &nbsp;&nbsp;<br>
 &nbsp;&nbsp;const scramblePromise = randomScrambleForEvent(&quot;333&quot;);<br>
 &nbsp;&nbsp;document.querySelector(&quot;#main-player&quot;).alg = scramblePromise;<br>
-&lt;/script&gt;</span>
+<code class="boilerplate">&lt;/script&gt;</code></span>
           </code>
         </div>
         <code class="sample output">
