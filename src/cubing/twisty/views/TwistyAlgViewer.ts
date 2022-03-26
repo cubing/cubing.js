@@ -384,12 +384,12 @@ class MoveHighlighter {
 export class TwistyAlgViewer extends HTMLElementShim {
   highlighter: MoveHighlighter = new MoveHighlighter();
   #domTree: TwistyAlgWrapperElem | TwistyAlgLeafElem;
-  twistyPlayer: TwistyPlayer | null = null;
+  #twistyPlayer: TwistyPlayer | null = null;
   lastClickTimestamp: number | null = null;
   constructor(options?: { twistyPlayer?: TwistyPlayer }) {
     super();
     if (options?.twistyPlayer) {
-      this.setTwistyPlayer(options?.twistyPlayer);
+      this.twistyPlayer = options?.twistyPlayer;
     }
   }
 
@@ -407,20 +407,33 @@ export class TwistyAlgViewer extends HTMLElementShim {
     this.appendChild(this.#domTree);
   }
 
-  async setTwistyPlayer(twistyPlayer: TwistyPlayer): Promise<void> {
-    if (this.twistyPlayer) {
+  get twistyPlayer(): TwistyPlayer | null {
+    return this.#twistyPlayer;
+  }
+
+  set twistyPlayer(twistyPlayer: TwistyPlayer | null) {
+    this.#setTwistyPlayer(twistyPlayer);
+  }
+
+  async #setTwistyPlayer(twistyPlayer: TwistyPlayer | null) {
+    if (this.#twistyPlayer) {
       console.warn("twisty-player reassignment is not supported");
       return;
     }
-    this.twistyPlayer = twistyPlayer;
+    if (twistyPlayer === null) {
+      throw new Error("clearing twistyPlayer is not supported");
+    }
+    this.#twistyPlayer = twistyPlayer;
 
-    this.twistyPlayer.experimentalModel.alg.addFreshListener(
+    this.#twistyPlayer.experimentalModel.alg.addFreshListener(
       (algWithIssues: AlgWithIssues) => {
+        console.log("setting alg from ", algWithIssues);
         this.setAlg(algWithIssues.alg);
       },
     );
 
-    const sourceAlg = (await this.twistyPlayer.experimentalModel.alg.get()).alg;
+    const sourceAlg = (await this.#twistyPlayer.experimentalModel.alg.get())
+      .alg;
     // TODO: Use proper architecture instead of a heuristic to ensure we have a parsed alg annotated with char indices.
     const parsedAlg =
       "startCharIndex" in (sourceAlg as Partial<Parsed<Alg>>)
@@ -453,7 +466,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
 
   async jumpToIndex(index: number, offsetIntoMove: boolean): Promise<void> {
     // TODO: Fix async issues.
-    const twistyPlayer = this.twistyPlayer;
+    const twistyPlayer = this.#twistyPlayer;
     if (twistyPlayer) {
       twistyPlayer.pause();
       const timestampPromise = (async (): Promise<MillisecondTimestamp> => {
@@ -489,7 +502,7 @@ export class TwistyAlgViewer extends HTMLElementShim {
         console.warn("for= elem is not a twisty-player");
         return;
       }
-      this.setTwistyPlayer(elem);
+      this.twistyPlayer = elem;
     }
   }
 
