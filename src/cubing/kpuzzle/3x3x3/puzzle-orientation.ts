@@ -5,20 +5,23 @@ import { KState } from "../KState";
 // with a general way to specify different kinds of solved for the same puzle.
 export function experimentalIs3x3x3Solved(
   state: KState,
-  options: { ignoreCenterOrientation: boolean },
+  options: {
+    ignorePuzzleOrientation: boolean;
+    ignoreCenterOrientation: boolean;
+  },
 ): boolean {
-  let normalized = normalize3x3x3Orientation(state);
+  if (options.ignorePuzzleOrientation) {
+    state = normalize3x3x3Orientation(state);
+  }
   if (options.ignoreCenterOrientation) {
-    normalized = new KState(state.kpuzzle, {
-      EDGES: normalized.stateData.EDGES,
-      CORNERS: normalized.stateData.CORNERS,
+    state = new KState(state.kpuzzle, {
+      EDGES: state.stateData.EDGES,
+      CORNERS: state.stateData.CORNERS,
       CENTERS: {
-        pieces: normalized.stateData.CENTERS.pieces,
+        pieces: state.stateData.CENTERS.pieces,
         orientation: new Array(6).fill(0),
       },
     });
   }
-  return !!normalized
-    .experimentalToTransformation()
-    ?.isIdentityTransformation(); // TODO: Compare to start state instead?
+  return !!state.experimentalToTransformation()?.isIdentityTransformation(); // TODO: Compare to start state instead?
 }

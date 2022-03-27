@@ -71,6 +71,7 @@ export class KState {
   }
 
   experimentalIs3x3x3Solved(options: {
+    ignorePuzzleOrientation: boolean;
     ignoreCenterOrientation: boolean;
   }): boolean {
     if (this.kpuzzle.name() !== "3x3x3") {
