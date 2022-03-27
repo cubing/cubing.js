@@ -125,7 +125,8 @@
     "setup": "npm install",
     "initial-setup": "node ./script/initial-setup/main.js",
     "lint": "npx eslint --ext=js,ts src script",
-    "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import"
+    "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import",
+    "postpublish": "echo -e '\n\nConsider updating `cdn.cubing.net` if you have access:\nhttps://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version\n'"
   },
   "keywords": [
     "cubing",
