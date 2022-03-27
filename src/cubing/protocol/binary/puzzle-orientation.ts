@@ -16,32 +16,38 @@ export function puzzleOrientationIdx(state: KState): [number, number] {
   return [idxU, idxL];
 }
 
-const puzzleOrientationCache: KTransformation[][] = new Array(6)
+const puzzleOrientationCacheRaw: KTransformation[][] = new Array(6)
   .fill(0)
   .map(() => {
     return new Array<KTransformation>(6);
   });
 
-// We use a new block to avoid keeping a reference to temporary vars.
-// kpuzzle todo
-{
-  const uAlgs: Alg[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
-    Alg.fromString(s),
-  );
-  const yAlg = new Alg("y");
-  for (const uAlg of uAlgs) {
-    let transformation = experimental3x3x3KPuzzle.algToTransformation(uAlg);
-    for (let i = 0; i < 4; i++) {
-      transformation = transformation.applyAlg(yAlg);
-      const [idxU, idxL] = puzzleOrientationIdx(transformation.toKState());
-      puzzleOrientationCache[idxU][idxL] = transformation.invert();
+const puzzleOrientationCacheInitialized = false;
+function puzzleOrientationCache(): KTransformation[][] {
+  if (!puzzleOrientationCacheInitialized) {
+    // We use a new block to avoid keeping a reference to temporary vars.
+    // kpuzzle todo
+    {
+      const uAlgs: Alg[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
+        Alg.fromString(s),
+      );
+      const yAlg = new Alg("y");
+      for (const uAlg of uAlgs) {
+        let transformation = experimental3x3x3KPuzzle.algToTransformation(uAlg);
+        for (let i = 0; i < 4; i++) {
+          transformation = transformation.applyAlg(yAlg);
+          const [idxU, idxL] = puzzleOrientationIdx(transformation.toKState());
+          puzzleOrientationCacheRaw[idxU][idxL] = transformation.invert();
+        }
+      }
     }
   }
+  return puzzleOrientationCacheRaw;
 }
 
 export function normalizePuzzleOrientation(state: KState): KState {
   const [idxU, idxL] = puzzleOrientationIdx(state);
-  const orientationTransformation = puzzleOrientationCache[idxU][idxL];
+  const orientationTransformation = puzzleOrientationCache()[idxU][idxL];
   return state.applyTransformation(orientationTransformation);
 }
 
@@ -51,5 +57,7 @@ export function reorientPuzzle(
   idxU: number,
   idxL: number,
 ): KState {
-  return state.applyTransformation(puzzleOrientationCache[idxU][idxL].invert());
+  return state.applyTransformation(
+    puzzleOrientationCache()[idxU][idxL].invert(),
+  );
 }
