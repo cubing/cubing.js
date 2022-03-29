@@ -8,10 +8,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../main.css">
   <script src="https://cdn.cubing.net/js/cubing/twisty" type="module"></script>
-  <script type="module">
-    import { experimentalSetShareAllNewRenderers } from "https://cdn.cubing.net/js/cubing/twisty";
-    experimentalSetShareAllNewRenderers(true);
-  </script>
 </head>
 
 <body>
@@ -43,7 +39,7 @@
       <div class="code-demo">
         <div>
           <code class="sample">
-            <span>&lt;script
+            &lt;script
               src=&quot;https://cdn.cubing.net/js/cubing/twisty&quot;
               type=&quot;module&quot;&gt;&lt;/script&gt;<br>
 <br>
@@ -67,7 +63,7 @@
         <div>
           <code class="sample">
 <code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
-          import { Alg } from &quot;https://cdn.cubing.net/js/cubing/alg&quot;;<br>
+          import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
           <br>
           const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
           commutator.invert().expand().log();<br>
@@ -90,12 +86,12 @@
       <div class="code-demo">
         <div>
           <code class="sample">
-<code class="boilerplate">&lt;script type=&quot;module&quot;&gt;<br></code>
-          import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/scramble&quot;;<br>
-          <br>
-          const scramble = await randomScrambleForEvent("333");<br>
-          scramble.log();<br>
-          <code class="boilerplate">&lt;/script&gt;</code>
+<code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
+import { randomScrambleForEvent } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/scramble&quot;;<br>
+<br>
+const scramble = await randomScrambleForEvent("333");<br>
+scramble.log();<br>
+<code class="boilerplate">&lt;/script&gt;</code>
           </code>
         </div>
         <code class="sample output">
@@ -125,27 +121,16 @@
       <code class="sample">
         <span>
 import { Alg } from &quot;cubing/alg&quot;;<br>
-import { TwistyPlayer } from &quot;cubing/twisty&quot;;
+import { TwistyPlayer } from &quot;cubing/twisty&quot;;<br>
+import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;
         </span>
       </code>
-      <p>This should work with most tools. We recommend using <a href="https://parceljs.org/">Parcel</a> to build your
-        web apps, if you
-        haven't picked a tool yet.</p>
+      <p>
+        The examples in this documentation use CDN import paths for convenient copy-and-pasting. To import from <code>npm</code>, remove the <code class="boilerplate">https://cdn.cubing.net/js/</code> prefix from any relevant imports.
       </p>
-      <div id="translating-cdn-paths">
-        <h2><a href="#translating-cdn-paths">Translating package paths to the CDN</a></h2>
-        <p>
-          If you aren't using <code>npm</code>, you can use our CDN directly, by adding
-          <code>https://cdn.cubing.net/js/</code> before every imported package (like in the examples above):
-        </p>
-        <p>
-          <code class="sample">
-import { Alg } from &quot;<b><u>https://cdn.cubing.net/js/</u></b>cubing/alg&quot;;<br>
-import { TwistyPlayer } from &quot;<b><u>https://cdn.cubing.net/js/</u></b>cubing/twisty&quot;;
-      </code>
-        </p>
-      </div>
-
+      <p>
+        The <code>npm</code> package should work with any modern bundlers and tools. If you are having trouble, make sure your tool is compatible with ES2020 syntax. We recommend using <a href="https://esbuild.github.io/"><code>esbuild</code></a> or tools based on <code>esbuild</code>.
+      </p>
     </section>
 
     <section id="code-experiments">

@@ -7,10 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../../main.css">
   <script src="https://cdn.cubing.net/js/cubing/twisty" type="module"></script>
-  <script type="module">
-    import { experimentalSetShareAllNewRenderers } from "https://cdn.cubing.net/js/cubing/twisty";
-    experimentalSetShareAllNewRenderers(true);
-  </script>
 </head>
 <body>
   <content>
@@ -38,7 +34,7 @@
           <p>Include this once on your page:</p>
           <code class="sample">
             <span>&lt;script
-              src=&quot;https://cdn.cubing.net/js/cubing/twisty&quot;
+              src=&quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/twisty&quot;
               type=&quot;module&quot;&gt;&lt;/script&gt;
             </span>
           </code>
@@ -83,8 +79,8 @@
       </p>
       <p>
         You can view and try out more options <a
-        href="https://experiments.cubing.net/cubing.js/twisty/twisty-player.html">here</a>.
-        Note that some combinations are not supported yet (for example, most
+        href="https://experiments.cubing.net/cubing.js/twisty/twisty-player-config.html">here</a>.
+        Note that some combinations are not supported yet (for example, some
         puzzles do not work with <code>visualization="2D"</code> yet).
       </p>
     </section>
@@ -268,48 +264,32 @@
       </p>
       <code class="sample">
         <span>
-&lt;script type=&quot;module&quot;&gt;<br>
-&nbsp;&nbsp;import { parseAlg } from &quot;https://cdn.cubing.net/js/cubing/alg&quot;;<br>
-&nbsp;&nbsp;import { TwistyPlayer } from &quot;https://cdn.cubing.net/js/cubing/twisty&quot;;<br>
+          <code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
+import { parseAlg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
+import { TwistyPlayer } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/twisty&quot;;<br>
 <br>
-&nbsp;&nbsp;const player = new TwistyPlayer({<br>
-&nbsp;&nbsp;&nbsp;&nbsp;puzzle: &quot;4x4x4&quot;,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;alg: parseAlg(&quot;R U R'&quot;),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;hintFacelets: &quot;none&quot;,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;backView: &quot;top-right&quot;,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;background: &quot;none&quot;<br>
-&nbsp;&nbsp;});<br>
-&nbsp;&nbsp;document.body.appendChild(player);<br>
+const player = new TwistyPlayer({<br>
+&nbsp;&nbsp;puzzle: &quot;4x4x4&quot;,<br>
+&nbsp;&nbsp;alg: parseAlg(&quot;R U R'&quot;),<br>
+&nbsp;&nbsp;hintFacelets: &quot;none&quot;,<br>
+&nbsp;&nbsp;backView: &quot;top-right&quot;,<br>
+&nbsp;&nbsp;background: &quot;none&quot;<br>
+});<br>
+document.body.appendChild(player);<br>
 <br>
-&nbsp;&nbsp;// You can also change parameters after you've constructed the player:<br>
-&nbsp;&nbsp;player.backView = &quot;side-by-side&quot;;<br>
-&lt;/script&gt;
+// You can also change parameters after you've constructed the player:<br>
+player.backView = &quot;side-by-side&quot;;<br>
+<code class="boilerplate">&lt;/script&gt;</code>
         </span>
       </code>
       <p>
         <a href="https://codepen.io/cubing/pen/vYyKBMd">Try it</a>.
       </p>
       <p>There are more experimental features available &mdash; such as
-      <code>player.timeline.play()</code> &mdash; but many of them will change before
+      <code>twistyPlayer.play()</code> &mdash; but many of them will change before
       version <code>1.0</code> of <code>cubing.js</code>. Please consider <a
       href="#contribute">contributing</a> to help make these features
       stable.</p>
-
-      <h3>Using <code>npm</code></h3>
-      Install the package:
-      <code class="sample">
-        <span>npm install cubing</span>
-      </code>
-      Then you can use:
-      <code class="sample">
-        <span>
-import { Alg } from &quot;cubing/alg&quot;;<br>
-import { TwistyPlayer } from &quot;cubing/twisty&quot;;
-        </span>
-      </code>
-      <p>This should work with most tools. We recommend using <a
-      href="https://parceljs.org/">Parcel</a> to build your web apps, if you
-      haven't picked a tool yet.</p>
 
       <h3>Debugging and Experimenting</h3>
       You can run the following in the JavaScript console (for example, in <a
@@ -321,7 +301,7 @@ import { TwistyPlayer } from &quot;cubing/twisty&quot;;
       href="https://support.apple.com/guide/safari/use-the-developer-tools-in-the-develop-menu-sfri20948/mac">Safari</a>,
       <a href="https://www.browserstack.com/guide/how-to-debug-on-iphone">iOS Safari</a>,
       or <a href="https://docs.microsoft.com/en-us/microsoft-edge/devtools-guide-chromium/">Edge</a>) to select the first
-      <code>twisty-player</code> on the page:
+      <code>&lt;twisty-player&gt;</code> on the page:
       <code class="sample">
         document.querySelector(&quot;twisty-player&quot;)
       </code>
