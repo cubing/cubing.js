@@ -124,6 +124,35 @@ import { randomScrambleForEvent } from &quot;https://cdn.cubing.net/js/cubing/sc
       </p>
     </section>
 
+    <section id="prefetching">
+      <h1><a href="#prefetching">Prefetching and debug options</a></h1>
+      <p>
+        By default, <code>cubing.js</code> will <i>prefetch</i> a new scramble under these conditions:
+        <ul>
+          <li>A scramble has been generated.</li>
+          <li>A second has elapsed since the last scramble finished generating.</li>
+          <li>No new scramble has been requested in the meantime.</li>
+        </ul>
+        <code>cubing.js</code> will then start generating a scramble for the same event as the previous request, which will be available more quickly (often almost instantly) to answer the next scramble request for that event. This is particularly useful for timer apps, where the next scramble can be prepared while the cuber is solving.
+      </p>
+      <p>
+        Scramble generation always happens in a worker, so this will not affect
+        the performance of your app. However, it can waste a little bit of time/work if you request a scramble for a new event while the one for the previous event is still being prefetched. This is unlikely to be a serious concern for apps, but you can turn off this functionality setting <code>scramblePrefetchLevel</code> as follows:
+      </p>
+      <code class="sample"><code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
+// Note that this is `cubing/search`, not `cubing/scramble`.<br>
+import { setDebug } from &quot;<code class="boilerplate">https://cdn.cubing.net/js/</code>cubing/search&quot;;<br>
+<br>
+// You can specify any subset of debug options.<br>
+setDebug({<br>
+&nbsp;&nbsp;logPerf: false, // Disable console info like scramble generation durations.<br>
+&nbsp;&nbsp;scramblePrefetchLevel: "none", // Never prefetch scrambles.<br>
+&nbsp;&nbsp;forceStringWorker: true // Workaround for bundlers that mangle worker instantiation.<br>
+});<br>
+<code class="boilerplate">&lt;/script&gt;</code><br>
+      </code>
+    </section>
+
     <section id="with-twisty-player">
       <h1><a href="#with-twisty-player">With <code>&lt;twisty-player&gt;</code></a></h1>
       <p>You can assign a scramble or a scramble <code>Promise</code> to <code>&lt;twisty-player&gt;</code>. Here is a
