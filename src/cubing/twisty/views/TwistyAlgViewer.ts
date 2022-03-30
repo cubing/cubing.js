@@ -427,7 +427,6 @@ export class TwistyAlgViewer extends HTMLElementShim {
 
     this.#twistyPlayer.experimentalModel.alg.addFreshListener(
       (algWithIssues: AlgWithIssues) => {
-        console.log("setting alg from ", algWithIssues);
         this.setAlg(algWithIssues.alg);
       },
     );
