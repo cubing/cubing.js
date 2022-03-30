@@ -225,10 +225,18 @@ export class TwistyPlayer
     this.experimentalModel.puzzleID.addFreshListener(this.flash.bind(this));
   }
 
+  #flashLevel: "auto" | "none" = "auto";
+  /** @deprecated */
+  experimentalSetFlashLevel(newLevel: "auto" | "none"): void {
+    this.#flashLevel = newLevel
+  }
+
   flash() {
-    this.#visualizationWrapper?.animate([{ opacity: 0.25 }, { opacity: 1 }], {
-      duration: 250,
-    });
+    if (this.#flashLevel === "auto") {
+      this.#visualizationWrapper?.animate([{ opacity: 0.25 }, { opacity: 1 }], {
+        duration: 250,
+      });
+    }
   }
 
   #visualizationWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper | null =
