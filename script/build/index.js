@@ -32,7 +32,7 @@ const LIBRARY_ENTRY_POINTS = [
   "src/cubing/stream/index.ts",
   "src/cubing/search/index.ts",
   "src/cubing/twisty/index.ts",
-]
+];
 
 const external = ["three", "comlink"];
 
@@ -329,13 +329,17 @@ export const typesTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    console.warn(
-      "Note: The `types` target is slow. Expect several seconds.",
-    );
+    console.warn("Note: The `types` target is slow. Expect several seconds.");
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");
     }
-    await spawnPromise("npx", ["tsup", ...LIBRARY_ENTRY_POINTS, "--dts-only", "--out-dir", "dist/types"]);
+    await spawnPromise("npx", [
+      "tsup",
+      ...LIBRARY_ENTRY_POINTS,
+      "--dts-only",
+      "--out-dir",
+      "dist/types",
+    ]);
   },
 };
 

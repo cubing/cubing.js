@@ -228,7 +228,7 @@ export class TwistyPlayer
   #flashLevel: "auto" | "none" = "auto";
   /** @deprecated */
   experimentalSetFlashLevel(newLevel: "auto" | "none"): void {
-    this.#flashLevel = newLevel
+    this.#flashLevel = newLevel;
   }
 
   flash() {
