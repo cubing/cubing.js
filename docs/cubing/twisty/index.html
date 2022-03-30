@@ -265,12 +265,11 @@
       <code class="sample">
         <span>
           <code class="boilerplate">&lt;script type=&quot;module&quot;&gt;</code><br>
-import { parseAlg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
 import { TwistyPlayer } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/twisty&quot;;<br>
 <br>
 const player = new TwistyPlayer({<br>
 &nbsp;&nbsp;puzzle: &quot;4x4x4&quot;,<br>
-&nbsp;&nbsp;alg: parseAlg(&quot;R U R'&quot;),<br>
+&nbsp;&nbsp;alg: &quot;R U R'&quot;,<br>
 &nbsp;&nbsp;hintFacelets: &quot;none&quot;,<br>
 &nbsp;&nbsp;backView: &quot;top-right&quot;,<br>
 &nbsp;&nbsp;background: &quot;none&quot;<br>
