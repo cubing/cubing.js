@@ -20,6 +20,20 @@ import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
 
+const LIBRARY_ENTRY_POINTS = [
+  "src/cubing/alg/index.ts",
+  "src/cubing/bluetooth/index.ts",
+  "src/cubing/kpuzzle/index.ts",
+  "src/cubing/notation/index.ts",
+  "src/cubing/protocol/index.ts",
+  "src/cubing/puzzle-geometry/index.ts",
+  "src/cubing/puzzles/index.ts",
+  "src/cubing/scramble/index.ts",
+  "src/cubing/stream/index.ts",
+  "src/cubing/search/index.ts",
+  "src/cubing/twisty/index.ts",
+]
+
 const external = ["three", "comlink"];
 
 function plugins(dev) {
@@ -237,19 +251,7 @@ export const esmTarget = {
   buildSelf: async (dev) => {
     await esbuild.build({
       // TODO: construct entry points based on `exports` (see `staticPackageMetadataTarget`) and add tests.
-      entryPoints: [
-        "src/cubing/alg/index.ts",
-        "src/cubing/bluetooth/index.ts",
-        "src/cubing/kpuzzle/index.ts",
-        "src/cubing/notation/index.ts",
-        "src/cubing/protocol/index.ts",
-        "src/cubing/puzzle-geometry/index.ts",
-        "src/cubing/puzzles/index.ts",
-        "src/cubing/scramble/index.ts",
-        "src/cubing/stream/index.ts",
-        "src/cubing/search/index.ts",
-        "src/cubing/twisty/index.ts",
-      ],
+      entryPoints: LIBRARY_ENTRY_POINTS,
       outdir: "dist/esm",
       format: "esm",
       target: "es2020",
@@ -328,12 +330,12 @@ export const typesTarget = {
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     console.warn(
-      "Note: The `types` target uses `tsc`, which is slow. Expect ≈10 seconds or more.",
+      "Note: The `types` target is slow. Expect several seconds.",
     );
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");
     }
-    await spawnPromise("npx", ["tsc", "--build", "./tsconfig-types.json"]);
+    await spawnPromise("npx", ["tsup", ...LIBRARY_ENTRY_POINTS, "--dts-only", "--out-dir", "dist/types"]);
   },
 };
 

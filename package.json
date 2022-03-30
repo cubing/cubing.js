@@ -78,6 +78,7 @@
     "peggy": "^1.2.0",
     "prettier": "^2.5.1",
     "puppeteer": "^13.3.2",
+    "tsup": "^5.12.1",
     "typescript": "^4.6.0-dev.20220131",
     "yargs": "^17.3.1"
   },
