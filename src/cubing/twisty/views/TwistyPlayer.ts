@@ -387,3 +387,8 @@ export class TwistyPlayer
 }
 
 customElementsShim.define("twisty-player", TwistyPlayer);
+declare global {
+  interface HTMLElementTagNameMap {
+    "twisty-player": TwistyPlayer;
+  }
+}

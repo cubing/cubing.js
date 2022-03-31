@@ -363,3 +363,8 @@ export class TwistyAlgEditor extends ManagedCustomElement {
 }
 
 customElementsShim.define("twisty-alg-editor", TwistyAlgEditor);
+declare global {
+  interface HTMLElementTagNameMap {
+    "twisty-alg-editor": TwistyAlgEditor;
+  }
+}

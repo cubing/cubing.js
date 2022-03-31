@@ -99,3 +99,8 @@ export class TwizzleLink extends ManagedCustomElement {
 }
 
 customElementsShim.define("twizzle-link", TwizzleLink);
+declare global {
+  interface HTMLElementTagNameMap {
+    "twizzle-link": TwizzleLink;
+  }
+}

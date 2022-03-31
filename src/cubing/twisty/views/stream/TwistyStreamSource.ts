@@ -153,3 +153,8 @@ export class TwistyStreamSource extends ManagedCustomElement {
 }
 
 customElementsShim.define("twisty-stream-source", TwistyStreamSource);
+declare global {
+  interface HTMLElementTagNameMap {
+    "twisty-stream-source": TwistyStreamSource;
+  }
+}

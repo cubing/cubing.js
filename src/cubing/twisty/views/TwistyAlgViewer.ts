@@ -511,3 +511,8 @@ export class TwistyAlgViewer extends HTMLElementShim {
 }
 
 customElementsShim.define("twisty-alg-viewer", TwistyAlgViewer);
+declare global {
+  interface HTMLElementTagNameMap {
+    "twisty-alg-viewer": TwistyAlgViewer;
+  }
+}
