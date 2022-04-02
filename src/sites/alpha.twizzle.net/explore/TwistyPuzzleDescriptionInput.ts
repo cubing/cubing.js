@@ -5,6 +5,28 @@ import {
   ExperimentalPuzzleDescription,
   EXPERIMENTAL_PUZZLE_CUT_TYPES,
 } from "../../../cubing/puzzle-geometry";
+
+const MAX_DISTANCE_PLACEHOLDER = {
+  f: 2,
+  v: 2,
+  e: 2,
+};
+
+const MAX_DISTANCE_TABLE: Record<
+  ExperimentalPuzzleBaseShape,
+  Record<ExperimentalPuzzleCutType, number>
+> = {
+  c: {
+    f: 1,
+    v: Math.sqrt(3),
+    e: Math.sqrt(2),
+  },
+  t: MAX_DISTANCE_PLACEHOLDER,
+  o: MAX_DISTANCE_PLACEHOLDER,
+  d: MAX_DISTANCE_PLACEHOLDER,
+  i: MAX_DISTANCE_PLACEHOLDER,
+};
+
 export class TwistyPuzzleDescriptionInput extends HTMLElement {
   puzzleShapeSelect: HTMLInputElement = this.querySelector("#puzzle-shape")!;
   sectionElems: Record<ExperimentalPuzzleCutType, HTMLElement> = {
@@ -72,7 +94,10 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     section.prepend(input);
     input.type = "range";
     input.min = "0";
-    input.max = "2"; // TODO: adjust based on puzzle and cut type
+    input.max = (
+      Math.ceil(MAX_DISTANCE_TABLE[this.puzzleShape][cut.cutType] * 1000 - 1) /
+      1000
+    ).toString(); // TODO: adjust based on puzzle and cut type
     input.step = "0.001";
     input.value = cut.distance.toString();
     input.addEventListener("input", () => {
