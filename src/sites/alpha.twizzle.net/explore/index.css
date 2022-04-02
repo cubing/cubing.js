@@ -168,3 +168,11 @@ panel-tabs *[hidden] {
 twisty-puzzle-description-input {
   padding: 1em;
 }
+
+twisty-puzzle-description-input h2 {
+  margin-bottom: 0.25em;
+}
+
+twisty-puzzle-description-input section {
+  display: grid;
+}

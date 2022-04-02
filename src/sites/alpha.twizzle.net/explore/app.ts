@@ -42,6 +42,9 @@ export class TwizzleExplorerApp {
     this.dialog = new Dialog();
 
     const twistyPuzzleDescriptionInput = document.querySelector("twisty-puzzle-description-input")!;
+    this.twistyPlayer.experimentalModel.puzzleDescriptionRequest.addFreshListener((puzzleDescriptionString: string) => {
+      twistyPuzzleDescriptionInput.puzzleDescriptionString = puzzleDescriptionString
+    })
     twistyPuzzleDescriptionInput.addEventListener("puzzle-change", (e: CustomEvent<{
       descriptionString: string
     }>) => {

@@ -421,7 +421,9 @@ export function getPuzzleDescriptionString(
   return PGPuzzles[puzzleName];
 }
 
-export type CutDescription = { cutType: string; distance: number };
+const CUT_TYPES = ["f", "v", "e"] as const;
+type CutTypeString = typeof CUT_TYPES[number];
+export type CutDescription = { cutType: CutTypeString; distance: number };
 export type PuzzleDescription = {
   shape: string;
   cuts: CutDescription[];
@@ -450,7 +452,10 @@ export function parsePuzzleDescription(
     if (a[i] !== "f" && a[i] !== "v" && a[i] !== "e") {
       return null;
     }
-    cuts.push({ cutType: a[i], distance: parseFloat(a[i + 1]) });
+    cuts.push({
+      cutType: a[i] as CutTypeString,
+      distance: parseFloat(a[i + 1]),
+    });
   }
   return { shape, cuts };
 }
