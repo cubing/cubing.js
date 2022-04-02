@@ -7,7 +7,7 @@ import {
 } from "../../../cubing/puzzle-geometry";
 
 const MAX_DISTANCE_PLACEHOLDER = {
-  f: 2,
+  f: 1,
   v: 2,
   e: 2,
 };
