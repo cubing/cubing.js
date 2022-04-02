@@ -6,25 +6,38 @@ import {
   EXPERIMENTAL_PUZZLE_CUT_TYPES,
 } from "../../../cubing/puzzle-geometry";
 
-const MAX_DISTANCE_PLACEHOLDER = {
-  f: 1,
-  v: 2,
-  e: 2,
-};
+const sqrt = Math.sqrt.bind(Math);
 
+// Each value needs at least 4 digits of precision.
 const MAX_DISTANCE_TABLE: Record<
   ExperimentalPuzzleBaseShape,
   Record<ExperimentalPuzzleCutType, number>
 > = {
   c: {
     f: 1,
-    v: Math.sqrt(3),
-    e: Math.sqrt(2),
+    v: sqrt(3),
+    e: sqrt(2),
   },
-  t: MAX_DISTANCE_PLACEHOLDER,
-  o: MAX_DISTANCE_PLACEHOLDER,
-  d: MAX_DISTANCE_PLACEHOLDER,
-  i: MAX_DISTANCE_PLACEHOLDER,
+  t: {
+    f: 1,
+    v: 3,
+    e: sqrt(3),
+  },
+  o: {
+    f: 1,
+    v: sqrt(3),
+    e: sqrt(3 / 2),
+  },
+  d: {
+    f: 1,
+    v: 1.2584,
+    e: 1.1756,
+  },
+  i: {
+    f: 1,
+    v: 1.2584,
+    e: 1.0705,
+  },
 };
 
 export class TwistyPuzzleDescriptionInput extends HTMLElement {
