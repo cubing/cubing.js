@@ -77,6 +77,12 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     );
   }
 
+  inputMax(cutType: ExperimentalPuzzleCutType): number {
+    return (
+      Math.ceil(MAX_DISTANCE_TABLE[this.puzzleShape][cutType] * 1000 - 1) / 1000
+    );
+  }
+
   addInput(cut: ExperimentalPuzzleCutDescription): HTMLInputElement {
     const section = this.sectionElems[cut.cutType];
 
@@ -94,10 +100,7 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     section.prepend(input);
     input.type = "range";
     input.min = "0";
-    input.max = (
-      Math.ceil(MAX_DISTANCE_TABLE[this.puzzleShape][cut.cutType] * 1000 - 1) /
-      1000
-    ).toString(); // TODO: adjust based on puzzle and cut type
+    input.max = this.inputMax(cut.cutType).toString(); // TODO: adjust based on puzzle and cut type
     input.step = "0.001";
     input.value = cut.distance.toString();
     input.addEventListener("input", () => {
@@ -124,6 +127,7 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
       ].splice(0, 1)[0];
       if (existingInput) {
         existingInput.value = cut.distance.toString();
+        existingInput.max = this.inputMax(cut.cutType).toString();
       } else {
         this.addInput(cut);
       }
