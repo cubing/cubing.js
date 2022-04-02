@@ -289,11 +289,9 @@ class SidePanel extends HTMLElement {
   }
 
   showTab(id: string) {
-    console.log(id);
     for (const child of Array.from(
       this.querySelector("panel-tabs")!.children,
     ) as HTMLElement[]) {
-      console.log(child);
       child.hidden = true;
     }
     document.getElementById(id)!.hidden = false;
