@@ -62,10 +62,6 @@ body {
   border-top: 1px solid rgba(0, 0, 0, 0.5);
 }
 
-twisty-alg-editor {
-  overflow-y: scroll;
-}
-
 /* Layout */
 
 body {
@@ -142,4 +138,29 @@ dialog#stuff-for-nerds textarea {
   width: 100%;
   height: 100%;
   grid-area: text;
+}
+
+side-panel {
+  display: grid;
+  grid-template-rows: 2em 1fr;
+  overflow: hidden;
+}
+
+panel-selector {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+panel-tabs {
+  overflow-y: scroll;
+  display: grid;
+  height: 100%;
+}
+
+twisty-alg-editor {
+  height: 100%;
+}
+
+panel-tabs *[hidden] {
+  display: none !important;
 }
