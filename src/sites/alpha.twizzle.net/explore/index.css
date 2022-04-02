@@ -152,7 +152,7 @@ panel-selector {
 }
 
 panel-tabs {
-  overflow-y: scroll;
+  overflow-y: auto;
   display: grid;
   height: 100%;
 }
@@ -172,6 +172,7 @@ panel-tabs *[hidden] {
 
 twisty-puzzle-description-input {
   padding: 1em;
+  border-left: rgba(0, 0, 0, 0.25) solid;
 }
 
 twisty-puzzle-description-input h2 {
