@@ -5,6 +5,7 @@ type CutTypeString = typeof CUT_TYPES[number];
 import type { PuzzleDescription } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
 
 export class TwistyPuzzleDescriptionInput extends HTMLElement {
+  puzzleShapeSelect: HTMLInputElement = this.querySelector("#puzzle-shape")!;
   sectionElems: Record<CutTypeString, HTMLElement> = {
     f: this.querySelector("#f-cuts")!,
     v: this.querySelector("#v-cuts")!,
@@ -20,10 +21,14 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
         this.dispatchPuzzleDescription();
       });
     }
+
+    this.puzzleShapeSelect.addEventListener("change", () => {
+      this.dispatchPuzzleDescription();
+    });
   }
 
   dispatchPuzzleDescription() {
-    const descriptionStringParts = [`c`];
+    const descriptionStringParts = [this.puzzleShapeSelect.value];
     for (const cutType of CUT_TYPES) {
       for (const input of Array.from(
         this.sectionElems[cutType].querySelectorAll("input")!,
@@ -76,6 +81,8 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
       v: Array.from(this.sectionElems["v"].querySelectorAll("input")),
       e: Array.from(this.sectionElems["e"].querySelectorAll("input")),
     };
+
+    this.puzzleShapeSelect.value = puzzleDescription.shape;
 
     for (const cut of puzzleDescription.cuts) {
       const existingInput: HTMLInputElement | undefined = existingInputs[

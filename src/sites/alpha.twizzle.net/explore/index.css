@@ -165,6 +165,11 @@ panel-tabs *[hidden] {
   display: none !important;
 }
 
+#puzzle-shape {
+  font-size: 1.25em;
+  width: 100%;
+}
+
 twisty-puzzle-description-input {
   padding: 1em;
 }
