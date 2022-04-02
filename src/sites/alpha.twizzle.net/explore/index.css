@@ -164,3 +164,7 @@ twisty-alg-editor {
 panel-tabs *[hidden] {
   display: none !important;
 }
+
+twisty-puzzle-description-input {
+  padding: 1em;
+}

@@ -151,11 +151,12 @@
         <button data-tab-id="puzzle-cuts">Puzzle Cuts</button>
       </panel-selector>
       <panel-tabs>
-        <twisty-alg-editor class="algarea" id="editor"></twisty-alg-editor>
-        <div id="puzzle-cuts" hidden>
-          Slide some slices!
-          <input type="range" />
-        </div>
+        <twisty-alg-editor class="algarea" id="editor" hidden></twisty-alg-editor>
+        <twisty-puzzle-description-input id="puzzle-cuts">
+          <h2>Parallel to faces</h2>
+          <input class="f" type="range" min="0" max="0.999" value="0" step="0.001"/>
+          <input class="v" type="range" min="0" max="1.732" value="0" step="0.001"/>
+        </twisty-puzzle-description-input>
       </panel-tabs>
     </side-panel>
   </body>

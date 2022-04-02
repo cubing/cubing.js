@@ -14,6 +14,8 @@ import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import { constructTwistyPlayer } from "./twisty-player";
 import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params";
 
+import "./TwistyPuzzleDescriptionInput";
+
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;
   twistyAlgEditor: TwistyAlgEditor;
@@ -21,6 +23,7 @@ export class TwizzleExplorerApp {
   dialog: Dialog;
   constructor() {
     this.twistyPlayer = constructTwistyPlayer();
+    this.twistyPlayer.experimentalSetFlashLevel("none")
     document.querySelector("#twisty-wrapper")?.appendChild(this.twistyPlayer);
 
     this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
@@ -37,6 +40,14 @@ export class TwizzleExplorerApp {
     );
 
     this.dialog = new Dialog();
+
+    const twistyPuzzleDescriptionInput = document.querySelector("twisty-puzzle-description-input")!;
+    twistyPuzzleDescriptionInput.addEventListener("puzzle-change", (e: CustomEvent<{
+      descriptionString: string
+    }>) => {
+      // console.log(e.detail!.descriptionString)
+      this.setPuzzleDescription(e.detail.descriptionString)
+    })
   }
 
   // TODO: Find out how to avoid the need for this.
@@ -64,6 +75,7 @@ export class TwizzleExplorerApp {
     this.twistyPlayer.experimentalModel.setupTransformation.set(null);
     setAlgParamEnabled(true);
     this.twistyPlayer.experimentalPuzzleDescription = descString;
+    this.configUI.descInput.value = descString
     setURLParams({
       "puzzle": "",
       "puzzle-description": descString,
