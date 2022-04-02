@@ -45,8 +45,20 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
   }
 
   addInput(cut: PuzzleDescription["cuts"][number]): HTMLInputElement {
+    const section = this.sectionElems[cut.cutType];
+
+    const removeButton = document.createElement("button");
+    section.prepend(removeButton);
+    removeButton.textContent = "❌";
+    removeButton.title = "Remove this cut";
+    removeButton.addEventListener("click", () => {
+      input.remove();
+      removeButton.remove();
+      this.dispatchPuzzleDescription();
+    });
+
     const input = document.createElement("input");
-    this.sectionElems[cut.cutType].prepend(input);
+    section.prepend(input);
     input.type = "range";
     input.min = "0";
     input.max = "2"; // TODO: adjust based on puzzle and cut type

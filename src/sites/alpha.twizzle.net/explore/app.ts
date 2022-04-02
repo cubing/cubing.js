@@ -47,11 +47,10 @@ export class TwizzleExplorerApp {
     )!;
     this.twistyPlayer.experimentalModel.puzzleLoader.addFreshListener(
       async (puzzleLoader: PuzzleLoader) => {
+        // TODO: debounce?
         twistyPuzzleDescriptionInput.puzzleDescription = (
           await puzzleLoader.pg!()
         ).puzzleDescription;
-        // twistyPuzzleDescriptionInput.puzzleDescriptionString =
-        //   puzzleDescriptionString;
       },
     );
     twistyPuzzleDescriptionInput.addEventListener(
