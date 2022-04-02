@@ -1,12 +1,13 @@
-// TODO: deduplicate this with `PuzzleGeometry`.
-const CUT_TYPES = ["f", "v", "e"] as const;
-type CutTypeString = typeof CUT_TYPES[number];
-
-import type { PuzzleDescription } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
-
+import {
+  ExperimentalPuzzleBaseShape,
+  ExperimentalPuzzleCutDescription,
+  ExperimentalPuzzleCutType,
+  ExperimentalPuzzleDescription,
+  EXPERIMENTAL_PUZZLE_CUT_TYPES,
+} from "../../../cubing/puzzle-geometry";
 export class TwistyPuzzleDescriptionInput extends HTMLElement {
   puzzleShapeSelect: HTMLInputElement = this.querySelector("#puzzle-shape")!;
-  sectionElems: Record<CutTypeString, HTMLElement> = {
+  sectionElems: Record<ExperimentalPuzzleCutType, HTMLElement> = {
     f: this.querySelector("#f-cuts")!,
     v: this.querySelector("#v-cuts")!,
     e: this.querySelector("#e-cuts")!,
@@ -15,7 +16,7 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     for (const [cutType, section] of Object.entries(this.sectionElems)) {
       section.querySelector("button")?.addEventListener("click", () => {
         this.addInput({
-          cutType: cutType as CutTypeString,
+          cutType: cutType as ExperimentalPuzzleCutType,
           distance: 0,
         });
         this.dispatchPuzzleDescription();
@@ -27,9 +28,14 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     });
   }
 
+  get puzzleShape(): ExperimentalPuzzleBaseShape {
+    const shape = this.puzzleShapeSelect.value as ExperimentalPuzzleBaseShape;
+    return shape;
+  }
+
   dispatchPuzzleDescription() {
-    const descriptionStringParts = [this.puzzleShapeSelect.value];
-    for (const cutType of CUT_TYPES) {
+    const descriptionStringParts: string[] = [this.puzzleShape];
+    for (const cutType of EXPERIMENTAL_PUZZLE_CUT_TYPES) {
       for (const input of Array.from(
         this.sectionElems[cutType].querySelectorAll("input")!,
       )) {
@@ -49,7 +55,7 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     );
   }
 
-  addInput(cut: PuzzleDescription["cuts"][number]): HTMLInputElement {
+  addInput(cut: ExperimentalPuzzleCutDescription): HTMLInputElement {
     const section = this.sectionElems[cut.cutType];
 
     const removeButton = document.createElement("button");
@@ -75,8 +81,11 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     return input;
   }
 
-  set puzzleDescription(puzzleDescription: PuzzleDescription) {
-    const existingInputs: Record<CutTypeString, HTMLInputElement[]> = {
+  set puzzleDescription(puzzleDescription: ExperimentalPuzzleDescription) {
+    const existingInputs: Record<
+      ExperimentalPuzzleCutType,
+      HTMLInputElement[]
+    > = {
       f: Array.from(this.sectionElems["f"].querySelectorAll("input")),
       v: Array.from(this.sectionElems["v"].querySelectorAll("input")),
       e: Array.from(this.sectionElems["e"].querySelectorAll("input")),
