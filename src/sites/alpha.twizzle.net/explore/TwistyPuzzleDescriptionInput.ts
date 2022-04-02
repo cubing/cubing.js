@@ -2,7 +2,6 @@
 const CUT_TYPES = ["f", "v", "e"] as const;
 type CutTypeString = typeof CUT_TYPES[number];
 
-import { parsePuzzleDescription } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescription } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
 
 export class TwistyPuzzleDescriptionInput extends HTMLElement {
@@ -59,16 +58,14 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     return input;
   }
 
-  set puzzleDescriptionString(newString: string) {
-    const parsedDescription = parsePuzzleDescription(newString)!;
-
+  set puzzleDescription(puzzleDescription: PuzzleDescription) {
     const existingInputs: Record<CutTypeString, HTMLInputElement[]> = {
       f: Array.from(this.sectionElems["f"].querySelectorAll("input")),
       v: Array.from(this.sectionElems["v"].querySelectorAll("input")),
       e: Array.from(this.sectionElems["e"].querySelectorAll("input")),
     };
 
-    for (const cut of parsedDescription.cuts) {
+    for (const cut of puzzleDescription.cuts) {
       const existingInput: HTMLInputElement | undefined = existingInputs[
         cut.cutType
       ].splice(0, 1)[0];

@@ -622,7 +622,7 @@ export class PuzzleGeometry {
   private options: PuzzleGeometryFullOptions;
 
   constructor(
-    private puzzleDescription: PuzzleDescription,
+    public puzzleDescription: PuzzleDescription,
     options: PuzzleGeometryOptions,
   ) {
     const t1 = tstart("genperms");
