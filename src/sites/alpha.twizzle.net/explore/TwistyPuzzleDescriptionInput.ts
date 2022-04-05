@@ -115,19 +115,10 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
 
   addInput(cut: ExperimentalPuzzleCutDescription): HTMLInputElement {
     const section = this.sectionElems[cut.cutType];
-
-    const removeButton = document.createElement("button");
-    section.prepend(removeButton);
-    removeButton.textContent = "❌";
-    removeButton.title = "Remove this cut";
-    removeButton.addEventListener("click", () => {
-      input.remove();
-      removeButton.remove();
-      this.dispatchPuzzleDescription();
-    });
+    const inputsGoBeforeHere = section.querySelector(".inputs-go-before-here")
 
     const input = document.createElement("input");
-    section.prepend(input);
+    section.insertBefore(input, inputsGoBeforeHere);
     input.type = "range";
     input.min = "0";
     input.max = this.inputMax(cut.cutType).toString(); // TODO: adjust based on puzzle and cut type
@@ -136,6 +127,17 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     input.addEventListener("input", () => {
       this.dispatchPuzzleDescription();
     });
+
+    const removeButton = document.createElement("button");
+    section.insertBefore(removeButton, inputsGoBeforeHere);
+    removeButton.textContent = "❌";
+    removeButton.title = "Remove this cut";
+    removeButton.addEventListener("click", () => {
+      input.remove();
+      removeButton.remove();
+      this.dispatchPuzzleDescription();
+    });
+
     return input;
   }
 
@@ -160,6 +162,12 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
         existingInput.max = this.inputMax(cut.cutType).toString();
       } else {
         this.addInput(cut);
+      }
+    }
+    for (const extraInputs of Object.values(existingInputs)) {
+      for (const extraInput of extraInputs) {
+        extraInput.nextElementSibling!.remove();
+        extraInput.remove();
       }
     }
   }
