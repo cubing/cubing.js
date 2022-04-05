@@ -421,10 +421,16 @@ export function getPuzzleDescriptionString(
   return PGPuzzles[puzzleName];
 }
 
-export type CutDescription = { cutType: string; distance: number };
+export const PUZZLE_BASE_SHAPES = ["c", "t", "o", "d", "i"] as const;
+export type PuzzleBaseShape = typeof PUZZLE_BASE_SHAPES[number];
+
+export const PUZZLE_CUT_TYPES = ["f", "v", "e"] as const;
+export type PuzzleCutType = typeof PUZZLE_CUT_TYPES[number];
+
+export type PuzzleCutDescription = { cutType: PuzzleCutType; distance: number };
 export type PuzzleDescription = {
-  shape: string;
-  cuts: CutDescription[];
+  shape: PuzzleBaseShape;
+  cuts: PuzzleCutDescription[];
 };
 
 export function parsePuzzleDescription(
@@ -445,12 +451,15 @@ export function parsePuzzleDescription(
   ) {
     return null;
   }
-  const cuts: CutDescription[] = [];
+  const cuts: PuzzleCutDescription[] = [];
   for (let i = 1; i < a.length; i += 2) {
     if (a[i] !== "f" && a[i] !== "v" && a[i] !== "e") {
       return null;
     }
-    cuts.push({ cutType: a[i], distance: parseFloat(a[i + 1]) });
+    cuts.push({
+      cutType: a[i] as PuzzleCutType,
+      distance: parseFloat(a[i + 1]),
+    });
   }
   return { shape, cuts };
 }
@@ -617,7 +626,7 @@ export class PuzzleGeometry {
   private options: PuzzleGeometryFullOptions;
 
   constructor(
-    private puzzleDescription: PuzzleDescription,
+    public puzzleDescription: PuzzleDescription,
     options: PuzzleGeometryOptions,
   ) {
     const t1 = tstart("genperms");

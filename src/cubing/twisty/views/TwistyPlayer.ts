@@ -235,6 +235,7 @@ export class TwistyPlayer
     if (this.#flashLevel === "auto") {
       this.#visualizationWrapper?.animate([{ opacity: 0.25 }, { opacity: 1 }], {
         duration: 250,
+        easing: "ease-out",
       });
     }
   }

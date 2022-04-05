@@ -145,11 +145,35 @@
       </div>
     </div>
     <div id="twisty-wrapper"></div>
-    <twisty-alg-editor class="algarea" id="editor"></twisty-alg-editor>
-    <textarea
-      placeholder="Moves"
-      id="algorithm"
-      style="display: none"
-    ></textarea>
+    <side-panel>
+      <panel-selector>
+        <button data-tab-id="editor">Edit Alg</button>
+        <button data-tab-id="puzzle-cuts">Puzzle Cuts</button>
+      </panel-selector>
+      <panel-tabs>
+        <twisty-alg-editor class="algarea" id="editor"></twisty-alg-editor>
+        <twisty-puzzle-description-input id="puzzle-cuts" hidden>
+          <select id="puzzle-shape">
+            <option value="c" selected>■ Cube</option>
+            <option value="t">▲ Tetrahedron</option>
+            <option value="o">▼ Octahedron</option>
+            <option value="d">⬟ Dodecahedron</option>
+            <option value="i">▼ Icosahedron</option>
+          </select>
+          <h2>Face cuts</h2>
+          <section id="f-cuts">
+            <button class="add inputs-go-before-here">➕ Add face cut</button>
+          </section>
+          <h2>Vertex cuts</h2>
+          <section id="v-cuts">
+            <button class="add inputs-go-before-here">➕ Add vertex cut</button>
+          </section>
+          <h2>Edge cuts</h2>
+          <section id="e-cuts">
+            <button class="add inputs-go-before-here">➕ Add edge cut</button>
+          </section>
+        </twisty-puzzle-description-input>
+      </panel-tabs>
+    </side-panel>
   </body>
 </html>

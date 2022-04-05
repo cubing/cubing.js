@@ -14,6 +14,9 @@ import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
 import { constructTwistyPlayer } from "./twisty-player";
 import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params";
 
+import "./TwistyPuzzleDescriptionInput";
+import type { PuzzleLoader } from "../../../cubing/puzzles";
+
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;
   twistyAlgEditor: TwistyAlgEditor;
@@ -21,6 +24,7 @@ export class TwizzleExplorerApp {
   dialog: Dialog;
   constructor() {
     this.twistyPlayer = constructTwistyPlayer();
+    this.twistyPlayer.experimentalSetFlashLevel("none");
     document.querySelector("#twisty-wrapper")?.appendChild(this.twistyPlayer);
 
     this.twistyAlgEditor = document.querySelector("twisty-alg-editor")!;
@@ -37,6 +41,29 @@ export class TwizzleExplorerApp {
     );
 
     this.dialog = new Dialog();
+
+    const twistyPuzzleDescriptionInput = document.querySelector(
+      "twisty-puzzle-description-input",
+    )!;
+    this.twistyPlayer.experimentalModel.puzzleLoader.addFreshListener(
+      async (puzzleLoader: PuzzleLoader) => {
+        // TODO: debounce?
+        twistyPuzzleDescriptionInput.puzzleDescription = (
+          await puzzleLoader.pg!()
+        ).puzzleDescription;
+      },
+    );
+    twistyPuzzleDescriptionInput.addEventListener(
+      "puzzle-change",
+      (
+        e: CustomEvent<{
+          descriptionString: string;
+        }>,
+      ) => {
+        // console.log(e.detail!.descriptionString)
+        this.setPuzzleDescription(e.detail.descriptionString);
+      },
+    );
   }
 
   // TODO: Find out how to avoid the need for this.
@@ -64,6 +91,7 @@ export class TwizzleExplorerApp {
     this.twistyPlayer.experimentalModel.setupTransformation.set(null);
     setAlgParamEnabled(true);
     this.twistyPlayer.experimentalPuzzleDescription = descString;
+    this.configUI.descInput.value = descString;
     setURLParams({
       "puzzle": "",
       "puzzle-description": descString,
@@ -249,3 +277,24 @@ class SelectUI {
     }
   }
 }
+
+class SidePanel extends HTMLElement {
+  connectedCallback() {
+    const buttons = this.querySelectorAll("panel-selector button");
+    for (const button of Array.from(buttons)) {
+      button.addEventListener("click", () => {
+        this.showTab(button.getAttribute("data-tab-id")!);
+      });
+    }
+  }
+
+  showTab(id: string) {
+    for (const child of Array.from(
+      this.querySelector("panel-tabs")!.children,
+    ) as HTMLElement[]) {
+      child.hidden = true;
+    }
+    document.getElementById(id)!.hidden = false;
+  }
+}
+customElements.define("side-panel", SidePanel);

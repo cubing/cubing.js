@@ -1,13 +1,15 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
 import {
+  ExperimentalPuzzleBaseShape,
+  ExperimentalPuzzleCutType,
   getPG3DNamedPuzzles,
   parsePuzzleDescription,
   PuzzleGeometry,
 } from "../cubing/puzzle-geometry";
 import { parsePGOptionList } from "../cubing/puzzle-geometry/Options";
 import type {
-  CutDescription,
+  PuzzleCutDescription,
   PuzzleDescription,
 } from "../cubing/puzzle-geometry/PuzzleGeometry";
 
@@ -158,16 +160,21 @@ if (globalThis.process && process.argv && process.argv.length >= 3) {
     puzzleDescription = parsed;
     argp++;
   } else {
-    const cuts: CutDescription[] = [];
+    const cuts: PuzzleCutDescription[] = [];
     const cutarg = argp++;
     while (argp + 1 < process.argv.length && process.argv[argp].length === 1) {
+      // TODO: validate cut type
       cuts.push({
-        cutType: process.argv[argp],
+        cutType: process.argv[argp] as ExperimentalPuzzleCutType,
         distance: parseFloat(process.argv[argp + 1]),
       });
       argp += 2;
     }
-    puzzleDescription = { shape: process.argv[cutarg], cuts };
+    // TODO: validate shape
+    puzzleDescription = {
+      shape: process.argv[cutarg] as ExperimentalPuzzleBaseShape,
+      cuts,
+    };
   }
   const options = parsePGOptionList(optionlist);
   const pg = new PuzzleGeometry(puzzleDescription, options);
