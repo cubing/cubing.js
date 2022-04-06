@@ -20,6 +20,7 @@ U // AUF
     alg: `R U R' U' R' F R2 U' R' U' R U R' F'`,
     experimentalStickering: "PLL",
     experimentalSetupAnchor: "end",
+    experimentalTitle: "T-Perm",
   },
 
   sune: {

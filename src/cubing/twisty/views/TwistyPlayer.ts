@@ -99,7 +99,7 @@ export interface TwistyPlayerConfig {
   experimentalMovePressInput?: MovePressInput;
 
   // Metadata
-  experimentalTitle?: string;
+  experimentalTitle?: string | null;
   experimentalVideoURL?: string;
   experimentalCompetitionID?: string;
 

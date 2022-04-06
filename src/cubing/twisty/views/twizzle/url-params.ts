@@ -33,6 +33,7 @@ export class URLParamUpdater {
       "stickering",
     );
     this.listenToStringSourceProp(model.setupAnchor, "setup-anchor");
+    this.listenToStringOrNullProp(model.title, "title");
     this.listenToStringOrNoValueProp(
       model.puzzleIDRequest,
       "puzzle",
@@ -69,6 +70,16 @@ export class URLParamUpdater {
     const actualDefaultString = defaultString ?? (await prop.getDefaultValue());
     prop.addFreshListener((s: string) => {
       this.setURLParam(key, s, actualDefaultString);
+    });
+  }
+
+  async listenToStringOrNullProp(
+    prop: TwistyPropSource<string | null>,
+    key: string,
+    defaultString: string = "",
+  ): Promise<void> {
+    prop.addFreshListener((s: string | null) => {
+      this.setURLParam(key, s ?? defaultString, defaultString);
     });
   }
 

@@ -410,6 +410,7 @@ class ControlPane {
     this.twistyPlayer.experimentalSetupAlg = experimentalEnsureAlg(
       config.experimentalSetupAlg!,
     );
+    this.twistyPlayer.experimentalTitle = config.experimentalTitle ?? null;
     // this.app.setSetupAnchor(config.experimentalSetupAnchor!, false);
     // this.app.setStickering(config.experimentalStickering!, false);
     // if (config.puzzle) {
