@@ -373,6 +373,7 @@ class ControlPane {
       case "clear":
         this.twistyPlayer.alg = new Alg();
         this.twistyPlayer.experimentalSetupAlg = new Alg();
+        this.twistyPlayer.experimentalTitle = null;
         break;
       case "invert":
         this.twistyPlayer.alg = (
