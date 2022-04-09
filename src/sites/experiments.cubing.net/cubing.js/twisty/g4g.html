@@ -47,8 +47,39 @@ U // AUF
 )4" -->
     <!-- alg="y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2" -->
 
+    <style>
+      body {
+        display: grid;
+        grid-template-columns: 1.2fr 100vh;
+        background: rgba(0, 0, 0, 0.7);
+      }
+      talk-title {
+        color: white;
+        font-size: 6em;
+        font-family: Ubuntu;
+        display: grid;
+        place-content: center;
+        padding-left: 1em;
+      }
+      hr {
+        width: 100%;
+        border: 2px solid white;
+      }
+    </style>
+    <talk-title>
+Browsers,<br>
+Bluetooth,<br>
+Virtual Reality<br>
+<hr>
+From physical to<br>virtual twisty puzzles
+<hr>
+Lucas Garron
+<br>
+G4G14, 2022-04-08
+    </talk-title>
     <twisty-player
       alg="R M' L' y R M' L' y R M' L' U E' D"
+      background="none"
       control-panel="none"
       experimental-stickering="picture"
       experimental-sprite="./g4g-logo-sprite.png"

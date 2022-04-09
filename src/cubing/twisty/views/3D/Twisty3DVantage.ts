@@ -160,7 +160,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
       excess = h - w;
       yoff = -Math.floor(0.5 * excess);
     }
-    const s = 500;
+    const s = 700;
     camera.left = -w / 2 / s;
     camera.right = w / 2 / s;
     camera.top = h / 2 / s;
