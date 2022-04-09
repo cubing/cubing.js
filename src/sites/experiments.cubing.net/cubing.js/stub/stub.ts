@@ -30,9 +30,16 @@ document.body.onclick = function () {
 
 const kpuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);
 const player = document.querySelector("twisty-player")!;
+const alternativeListElem = document.querySelector("alternative-list")!;
 
 recognition.onresult = function (event) {
   const latestResult = event.results.item(event.results.length - 1);
+  alternativeListElem.textContent =
+    "Raw alternatives: " +
+    Array.from(latestResult)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      .map((alternative) => alternative.transcript)
+      .join(" / ");
   for (const alternative of Array.from(latestResult)) {
     let transcript = alternative.transcript.trim().toUpperCase();
     console.log(alternative);
