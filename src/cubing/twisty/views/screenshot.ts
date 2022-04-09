@@ -1,4 +1,4 @@
-import type { PerspectiveCamera } from "three";
+import type { OrthographicCamera } from "three";
 import { THREEJS } from "../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import { Twisty3DPuzzleWrapper } from "./3D/Twisty3DPuzzleWrapper";
@@ -10,7 +10,7 @@ export interface TwistyPlayerScreenshot {
 }
 
 // TODO: cache
-let cachedCamera: PerspectiveCamera | null = null;
+let cachedCamera: OrthographicCamera | null = null;
 export async function screenshot(
   model: TwistyPlayerModel,
   options?: { width: number; height: number },
@@ -21,7 +21,7 @@ export async function screenshot(
   const height = options?.height ?? 2048;
   const aspectRatio = width / height;
   const camera = (cachedCamera ??= await (async () => {
-    return new (await THREEJS).PerspectiveCamera(20, aspectRatio, 0.1, 20);
+    return new (await THREEJS).OrthographicCamera(20, aspectRatio, 0.1, 20);
   })());
 
   const scene = new (await THREEJS).Scene();

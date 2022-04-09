@@ -1,4 +1,4 @@
-import type { PerspectiveCamera, WebGLRenderer } from "three";
+import type { OrthographicCamera, WebGLRenderer } from "three";
 import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.modified.module";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
@@ -22,7 +22,7 @@ export function debugShowRenderStats(enable: boolean): void {
 }
 
 export async function setCameraFromOrbitCoordinates(
-  camera: PerspectiveCamera,
+  camera: OrthographicCamera,
   orbitCoordinates: OrbitCoordinates,
   backView: boolean = false,
 ): Promise<void> {
@@ -125,7 +125,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
     });
   }
 
-  #onResizeStaleDropper = new StaleDropper<PerspectiveCamera>();
+  #onResizeStaleDropper = new StaleDropper<OrthographicCamera>();
 
   async clearCanvas(): Promise<void> {
     if (this.rendererIsShared) {
@@ -160,8 +160,12 @@ export class Twisty3DVantage extends ManagedCustomElement {
       excess = h - w;
       yoff = -Math.floor(0.5 * excess);
     }
-    camera.aspect = w / h;
-    camera.setViewOffset(w, h - excess, off, yoff, w, h);
+    const s = 500;
+    camera.left = -w / 2 / s;
+    camera.right = w / 2 / s;
+    camera.top = h / 2 / s;
+    camera.bottom = -h / 2 / s;
+    // camera.setViewOffset(w, h - excess, off, yoff, w, h);
     camera.updateProjectionMatrix(); // TODO
 
     this.clearCanvas();
@@ -217,15 +221,10 @@ export class Twisty3DVantage extends ManagedCustomElement {
     })());
   }
 
-  #cachedCamera: Promise<PerspectiveCamera> | null = null;
-  async camera(): Promise<PerspectiveCamera> {
+  #cachedCamera: Promise<OrthographicCamera> | null = null;
+  async camera(): Promise<OrthographicCamera> {
     return (this.#cachedCamera ??= (async () => {
-      const camera = new (await THREEJS).PerspectiveCamera(
-        20,
-        1, // We rely on the resize logic to handle this.
-        0.1,
-        20,
-      );
+      const camera = new (await THREEJS).OrthographicCamera();
       camera.position.copy(
         new (await THREEJS).Vector3(2, 4, 4).multiplyScalar(
           this.options?.backView ? -1 : 1,

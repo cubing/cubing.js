@@ -1,7 +1,7 @@
 import "../../../../cubing/twisty";
 import type { TwistyPlayer } from "../../../../cubing/twisty";
 import { setGlobalPixelRatioOverride } from "../../../../cubing/twisty/views/canvas";
-import { demoSpinCamera } from "./demo-spin-camera";
+// import { demoSpinCamera } from "./demo-spin-camera";
 
 const pixelRatio = new URL(location.href).searchParams.get("pixelRatio");
 if (pixelRatio !== null) {
@@ -13,6 +13,8 @@ const twistyPlayer = document.querySelector("twisty-player") as TwistyPlayer;
 const tempo = new URL(location.href).searchParams.get("tempo");
 if (tempo !== null) {
   twistyPlayer.tempoScale = parseFloat(tempo);
+} else {
+  twistyPlayer.tempoScale = 1.25;
 }
 
 twistyPlayer.experimentalModel.playingInfo.set({
@@ -20,4 +22,4 @@ twistyPlayer.experimentalModel.playingInfo.set({
   loop: true,
 });
 
-demoSpinCamera(twistyPlayer);
+// demoSpinCamera(twistyPlayer);

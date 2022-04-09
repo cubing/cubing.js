@@ -10,19 +10,53 @@ import {
 import type { CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import { AnimatedLeafUnit, AnimLeafWithRange, simulMoves } from "./simul-moves";
 
+const b = 2000;
+
 const demos: Record<string, AnimLeafWithRange[]> = {
+  "R M' L' y R M' L' y R M' L' U E' D": [
+    { animLeaf: new Move("R"), start: b + 0, end: b + 1000 },
+    { animLeaf: new Move("M", -1), start: b + 250, end: b + 1200 },
+    { animLeaf: new Move("L", -1), start: b + 400, end: b + 1400 },
+    { animLeaf: new Move("y"), start: b + 600, end: b + 2000 },
+    { animLeaf: new Move("R"), start: b + 2000 + 0, end: b + 2000 + 1000 },
+    {
+      animLeaf: new Move("M", -1),
+      start: b + 2000 + 250,
+      end: b + 2000 + 1200,
+    },
+    {
+      animLeaf: new Move("L", -1),
+      start: b + 2000 + 400,
+      end: b + 2000 + 1400,
+    },
+    { animLeaf: new Move("y"), start: b + 2000 + 600, end: b + 2000 + 2000 },
+    { animLeaf: new Move("R"), start: b + 4000 + 0, end: b + 4000 + 1000 },
+    {
+      animLeaf: new Move("M", -1),
+      start: b + 4000 + 250,
+      end: b + 4000 + 1200,
+    },
+    {
+      animLeaf: new Move("L", -1),
+      start: b + 4000 + 400,
+      end: b + 4000 + 1400,
+    },
+    { animLeaf: new Move("U"), start: b + 5400, end: b + 6400 },
+    { animLeaf: new Move("E'"), start: b + 5800, end: b + 6800 },
+    { animLeaf: new Move("D'"), start: b + 6200, end: b + 7200 },
+  ],
   "y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2": [
     { animLeaf: new Move("y", -1), start: 0, end: 1000 },
     { animLeaf: new Move("y", -1), start: 1000, end: 2000 },
     { animLeaf: new Move("U", -1), start: 1000, end: 1600 },
-    { animLeaf: new Move("E", 1), start: 1200, end: 1800 },
+    { animLeaf: new Move("E"), start: 1200, end: 1800 },
     { animLeaf: new Move("D"), start: 1400, end: 2000 },
     { animLeaf: new Move("R", 2), start: 2000, end: 3500 },
     { animLeaf: new Move("r", 2), start: 2000, end: 3500 },
     { animLeaf: new Move("F", 2), start: 3500, end: 4200 },
     { animLeaf: new Move("B", 2), start: 3800, end: 4500 },
-    { animLeaf: new Move("U", 1), start: 4500, end: 5500 },
-    { animLeaf: new Move("E", 1), start: 4500, end: 5500 },
+    { animLeaf: new Move("U"), start: 4500, end: 5500 },
+    { animLeaf: new Move("E"), start: 4500, end: 5500 },
     { animLeaf: new Move("D", -1), start: 4500, end: 5500 },
     { animLeaf: new Move("R", 2), start: 5500, end: 6500 },
     { animLeaf: new Move("L", -2), start: 5500, end: 6500 },
@@ -46,7 +80,7 @@ const demos: Record<string, AnimLeafWithRange[]> = {
   ],
   "U' E' r E r2' E r U E": [
     { animLeaf: new Move("U", -1), start: 0, end: 1000 },
-    { animLeaf: new Move("E", -1), start: 0, end: 1000 },
+    { animLeaf: new Move("E'"), start: 0, end: 1000 },
     { animLeaf: new Move("r"), start: 1000, end: 2500 },
     { animLeaf: new Move("E"), start: 2500, end: 3500 },
     { animLeaf: new Move("r", -2), start: 3500, end: 5000 },

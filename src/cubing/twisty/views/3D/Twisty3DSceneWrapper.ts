@@ -1,4 +1,4 @@
-import type { PerspectiveCamera, Scene as ThreeScene } from "three";
+import type { OrthographicCamera, Scene as ThreeScene } from "three";
 import type { PuzzleLoader } from "../../../puzzles";
 import type { Schedulable } from "../../controllers/RenderScheduler";
 import { THREEJS } from "../../heavy-code-imports/3d";
@@ -85,7 +85,7 @@ export class Twisty3DSceneWrapper
   async onPress(
     e: CustomEvent<{
       pressInfo: PressInfo;
-      cameraPromise: Promise<PerspectiveCamera>;
+      cameraPromise: Promise<OrthographicCamera>;
     }>,
   ): Promise<void> {
     const twisty3DPuzzleWrapper = this.#currentTwisty3DPuzzleWrapper;
