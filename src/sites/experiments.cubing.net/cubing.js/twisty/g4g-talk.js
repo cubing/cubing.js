@@ -46891,7 +46891,7 @@ _cssElem = new WeakMap();
 customElementsShim.define("twizzle-link", TwizzleLink);
 
 // src/sites/experiments.cubing.net/cubing.js/twisty/g4g-talk.ts
-var pixelRatio2 = new URL(location.href).searchParams.get("pixelRatio");
+var pixelRatio2 = new URL(location.href).searchParams.get("pixelRatio") ?? "0.5";
 if (pixelRatio2 !== null) {
   setGlobalPixelRatioOverride(parseFloat(pixelRatio2));
 }
