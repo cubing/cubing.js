@@ -1,0 +1,34 @@
+/* Add CSS below. */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: Ubuntu;
+}
+
+body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto 2em 1fr auto;
+  gap: 1em;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+twisty-player {
+  grid-row: 1 / 5;
+  width: 100%;
+  height: 100%;
+}
+
+h2 {
+  margin: 0;
+}
+
+twisty-alg-viewer {
+  font-size: 2em;
+}
+
+alternative-list {
+  opacity: 0.25;
+}
