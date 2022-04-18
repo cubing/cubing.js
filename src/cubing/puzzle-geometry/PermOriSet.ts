@@ -12,8 +12,8 @@ import type { NotationMapper } from "./notation-mapping/NotationMapper";
 } from "./Perm";
 export class PGOrbitDef {
   constructor(public size: number, public mod: number) {}
-  public reassemblySize(): number {
-    return factorial(this.size) * Math.pow(this.mod, this.size);
+  public reassemblySize(): bigint {
+    return factorial(this.size) * BigInt(this.mod) ** BigInt(this.size);
   }
 }
 
@@ -313,8 +313,8 @@ export class PGOrbitsDef {
     return s;
   }
 
-  public reassemblySize(): number {
-    let n = 1;
+  public reassemblySize(): bigint {
+    let n = 1n;
     for (let i = 0; i < this.orbitdefs.length; i++) {
       n *= this.orbitdefs[i].reassemblySize();
     }

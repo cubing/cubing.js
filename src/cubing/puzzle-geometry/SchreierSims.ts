@@ -43,7 +43,7 @@ class FactoredNumber {
   }
 }
 
-export function schreierSims(g: Perm[], disp: (s: string) => void): number {
+export function schreierSims(g: Perm[], disp: (s: string) => void): bigint {
   const n = g[0].p.length;
   const e = identity(n);
   let sgs: Perm[][] = [];
@@ -88,7 +88,7 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): number {
       knutha(k - 1, p2, len + sgslen[k][j]);
     }
   }
-  function getsgs(): number {
+  function getsgs(): bigint {
     sgs = [];
     sgsi = [];
     Tk = [];
@@ -105,10 +105,10 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): number {
       sgslen[i][i] = 0;
     }
     let none = 0;
-    let sz = 1;
+    let sz = 1n;
     for (let i = 0; i < g.length; i++) {
       knutha(n - 1, g[i], 1);
-      sz = 1;
+      sz = 1n;
       let tks = 0;
       let sollen = 0;
       const avgs = [];
@@ -126,7 +126,7 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): number {
           }
         }
         tks += Tk[j].length;
-        sz *= cnt;
+        sz *= BigInt(cnt);
         if (cnt > 1) {
           mults.multiply(cnt);
         }

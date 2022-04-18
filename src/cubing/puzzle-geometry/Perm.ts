@@ -42,10 +42,10 @@ export function random(n: number): Perm {
   return new Perm(c);
 }
 
-export function factorial(a: number): number {
-  let r = 1;
+export function factorial(a: number): bigint {
+  let r = 1n;
   while (a > 1) {
-    r *= a;
+    r *= BigInt(a);
     a--;
   }
   return r;
