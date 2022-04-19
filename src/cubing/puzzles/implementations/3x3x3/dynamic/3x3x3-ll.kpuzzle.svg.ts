@@ -1,4 +1,4 @@
-export default `<?xml version="1.0" encoding="UTF-8"?>
+export const cube3x3x3LLSVG = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="288px" height="288px" viewBox="-16 -16 288 288" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <title>3x3x3 LL</title>
   <defs>
