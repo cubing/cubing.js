@@ -1,6 +1,6 @@
-import type { KPuzzleDefinition } from "../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../../kpuzzle";
 
-export const cube2x2x2KPuzzleDefinition: KPuzzleDefinition = {
+export const cube2x2x2JSON: KPuzzleDefinition = {
   name: "2x2x2",
   orbits: {
     CORNERS: { numPieces: 8, numOrientations: 3 },
@@ -69,22 +69,22 @@ export const cube2x2x2KPuzzleDefinition: KPuzzleDefinition = {
   },
 };
 
-cube2x2x2KPuzzleDefinition.moves["Rv"] = cube2x2x2KPuzzleDefinition.moves["x"];
-cube2x2x2KPuzzleDefinition.moves["Uv"] = cube2x2x2KPuzzleDefinition.moves["y"];
-cube2x2x2KPuzzleDefinition.moves["Fv"] = cube2x2x2KPuzzleDefinition.moves["z"];
-cube2x2x2KPuzzleDefinition.moves["Lv"] = {
+cube2x2x2JSON.moves["Rv"] = cube2x2x2JSON.moves["x"];
+cube2x2x2JSON.moves["Uv"] = cube2x2x2JSON.moves["y"];
+cube2x2x2JSON.moves["Fv"] = cube2x2x2JSON.moves["z"];
+cube2x2x2JSON.moves["Lv"] = {
   CORNERS: {
     permutation: [1, 7, 6, 2, 0, 3, 5, 4],
     orientation: [2, 1, 2, 1, 1, 2, 1, 2],
   },
 };
-cube2x2x2KPuzzleDefinition.moves["Dv"] = {
+cube2x2x2JSON.moves["Dv"] = {
   CORNERS: {
     permutation: [3, 0, 1, 2, 5, 6, 7, 4],
     orientation: [0, 0, 0, 0, 0, 0, 0, 0],
   },
 };
-cube2x2x2KPuzzleDefinition.moves["Bv"] = {
+cube2x2x2JSON.moves["Bv"] = {
   CORNERS: {
     permutation: [4, 7, 1, 0, 5, 3, 2, 6],
     orientation: [1, 2, 1, 2, 2, 1, 2, 1],

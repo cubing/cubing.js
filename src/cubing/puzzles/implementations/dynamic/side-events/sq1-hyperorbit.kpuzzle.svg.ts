@@ -1,4 +1,4 @@
-export default `<?xml version="1.0" encoding="UTF-8"?>
+export const sq1HyperOrbitSVG = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="360px" height="552px" viewBox="0 0 360 552" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
     <title>sq1-fancy</title>

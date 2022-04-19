@@ -1,6 +1,6 @@
-import type { KPuzzleDefinition } from "../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../../kpuzzle";
 
-export const rediCubeKPuzzleDefinition: KPuzzleDefinition = {
+export const rediCubeJSON: KPuzzleDefinition = {
   name: "redi_cube",
   orbits: {
     EDGES: { numPieces: 12, numOrientations: 2 },

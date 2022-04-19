@@ -1,6 +1,6 @@
-import type { KPuzzleDefinition } from "../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../../kpuzzle";
 
-export const sq1HyperOrbitKPuzzleDefinition: KPuzzleDefinition = {
+export const sq1HyperOrbitJSON: KPuzzleDefinition = {
   name: "Square-1",
   orbits: {
     WEDGES: { numPieces: 24, numOrientations: 9 },

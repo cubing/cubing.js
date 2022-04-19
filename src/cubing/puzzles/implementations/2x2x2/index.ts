@@ -15,11 +15,14 @@ export const cube2x2x2: PuzzleLoader = {
   kpuzzle: getCached(
     async () =>
       new KPuzzle(
-        (await import("./dynamic/2x2x2-dynamic")).cube2x2x2KPuzzleDefinition,
+        (
+          await import("../dynamic/side-events/dynamic-side-events")
+        ).cube2x2x2JSON,
       ),
   ),
   svg: async () => {
-    return (await import("./dynamic/2x2x2-dynamic")).cube2x2x2SVG;
+    return (await import("../dynamic/side-events/dynamic-side-events"))
+      .cube2x2x2SVG;
   },
   pg: getCached(async () => {
     return asyncGetPuzzleGeometry("2x2x2");
