@@ -1,4 +1,4 @@
-import type { KPuzzleDefinition } from "../../../kpuzzle";
+import type { KPuzzleDefinition } from "../../../../kpuzzle";
 
 export const clockKPuzzleDefinition: KPuzzleDefinition = {
   name: "Clock",
