@@ -44,16 +44,19 @@ recognition.onresult = function (event) {
     let transcript = alternative.transcript.trim().toUpperCase();
     console.log(alternative);
     transcript = transcript
+      .replace("YOUTUBE", "U2")
       .replace("YOU", "U")
       .replace(" PRIME", "'")
       .replace(" WIDE", "w")
       .replace(" TWO", "2")
       .replace(" TO", "2")
       .replace("WHY", "Y")
-      .replace("ALL", "Y")
-      .replace("EL", "Y")
+      .replace("DEEP", "D")
+      .replace("DEE", "D")
       .replace("ARE", "R")
-      .replace("OUR", "R");
+      .replace("OUR", "R")
+      .replace("ALL", "L")
+      .replace("EL", "L");
     switch (transcript) {
       case "UNDO":
         player.experimentalModel.alg.set(
