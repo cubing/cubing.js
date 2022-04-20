@@ -1,10 +1,8 @@
 import type { Alg } from "../../../../alg";
 import { mustBeInsideWorker } from "../../inside-worker";
+import { dynamicKilominxSolver } from "./dynamic/kilominx";
 
 export async function randomKilominxScramble(): Promise<Alg> {
   mustBeInsideWorker();
-  const { getRandomKilominxScramble } = await import(
-    "../../../../vendor/xyzzy/kilosolver"
-  );
-  return getRandomKilominxScramble();
+  return (await dynamicKilominxSolver).getRandomKilominxScramble();
 }
