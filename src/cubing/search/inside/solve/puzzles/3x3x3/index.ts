@@ -4,6 +4,7 @@ import { puzzles } from "../../../../../puzzles";
 import { randomChoiceFactory } from "../../../../../vendor/random-uint-below";
 import { mustBeInsideWorker } from "../../../inside-worker";
 import { addOrientationSuffix } from "../../addOrientationSuffix";
+import { dynamic3x3x3min2phase } from "../dynamic/3x3x3";
 import { toMin2PhaseState } from "./convert";
 import { passesFilter } from "./filter";
 import { sgs3x3x3 } from "./legacy-sgs";
@@ -22,21 +23,10 @@ export async function random333State(): Promise<KState> {
   return state;
 }
 
-let cachedImport: Promise<
-  typeof import("../../../../../vendor/min2phase/3x3x3-min2phase")
-> | null = null;
-function dynamicMin2phaseGWT(): Promise<
-  typeof import("../../../../../vendor/min2phase/3x3x3-min2phase")
-> {
-  return (cachedImport ??= import(
-    "../../../../../vendor/min2phase/3x3x3-min2phase"
-  ));
-}
-
 export async function solve333(s: KState): Promise<Alg> {
   mustBeInsideWorker();
   return Alg.fromString(
-    (await dynamicMin2phaseGWT()).solveState(toMin2PhaseState(s)),
+    (await dynamic3x3x3min2phase).solveState(toMin2PhaseState(s)),
   );
 }
 
@@ -45,7 +35,7 @@ export async function random333Scramble(): Promise<Alg> {
 }
 
 export async function initialize333(): Promise<void> {
-  (await dynamicMin2phaseGWT()).initialize();
+  (await dynamic3x3x3min2phase).initialize();
 }
 
 const randomSuffixes = [

@@ -90,7 +90,10 @@ class Target {
           return undefined;
         }
         // `src/cubing/vendor` subdirs can be imported directly.
-        if (resolved.startsWith(PATH_TO_SRC_CUBING_VENDOR)) {
+        if (
+          args.kind === "import-statement" &&
+          resolved.startsWith(PATH_TO_SRC_CUBING_VENDOR)
+        ) {
           return undefined;
         }
         console.log("From: ", args.importer);

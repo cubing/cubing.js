@@ -4,7 +4,7 @@ import { puzzles } from "../../../../puzzles";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { randomStateFromSGS, TrembleSolver } from "../tremble";
-import { sgsDataPyraminxFixedOrientation } from "./pyraminx.sgs.json";
+import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
 
 const TREMBLE_DEPTH = 3;
 
@@ -13,8 +13,9 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const sgs = await import("./pyraminx.sgs.json");
-      const json: SGSCachedData = await sgs.sgsDataPyraminx();
+      const json: SGSCachedData = await (
+        await searchDynamicSideEvents
+      ).sgsDataPyraminx();
       return new TrembleSolver(
         await puzzles.pyraminx.kpuzzle(),
         json,
@@ -40,7 +41,7 @@ export async function randomPyraminxStateFixedOrientation(): Promise<KState> {
   // Note: this sets all center orientations to 0.
   return randomStateFromSGS(
     await puzzles.pyraminx.kpuzzle(),
-    await sgsDataPyraminxFixedOrientation(),
+    await (await searchDynamicSideEvents).sgsDataPyraminxFixedOrientation(),
   );
 }
 

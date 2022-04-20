@@ -19,10 +19,12 @@ export const cube3x3x3: PuzzleLoader = {
     return experimental3x3x3KPuzzle;
   }),
   svg: getCached(async () => {
-    return (await import("./3x3x3.kpuzzle.svg")).default;
+    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3"))
+      .cube3x3x3SVG;
   }),
   llSVG: getCached(async () => {
-    return (await import("./3x3x3-ll.kpuzzle.svg")).default;
+    return (await import("../dynamic/3x3x3/puzzles-dynamic-3x3x3"))
+      .cube3x3x3LLSVG;
   }),
   pg: getCached(async () => {
     return asyncGetPuzzleGeometry("3x3x3");

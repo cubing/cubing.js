@@ -22,7 +22,8 @@ class FTOPuzzleLoader extends PGPuzzleLoader {
   }
   stickerings = ftoStickerings;
   svg = getCached(async () => {
-    return (await import("./fto.kpuzzle.svg")).ftoSVG;
+    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
+      .ftoSVG;
   });
 }
 

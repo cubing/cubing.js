@@ -10,7 +10,8 @@ class PyraminxPuzzleLoader extends PGPuzzleLoader {
     });
   }
   svg = getCached(async () => {
-    return (await import("./pyraminx.kpuzzle.svg")).default;
+    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+      .pyraminxSVG;
   });
 }
 

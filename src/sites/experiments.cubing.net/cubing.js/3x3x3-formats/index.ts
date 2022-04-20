@@ -10,7 +10,7 @@ import {
   reid3x3x3ToTwizzleBinary,
   twizzleBinaryToReid3x3x3,
 } from "../../../../cubing/protocol/binary/binary3x3x3";
-import svgSource from "../../../../cubing/puzzles/implementations/3x3x3/3x3x3.kpuzzle.svg";
+import { cube3x3x3 } from "../../../../cubing/puzzles";
 import { ExperimentalKPuzzleSVGWrapper } from "../../../../cubing/twisty";
 import {
   kpuzzleToReidString,
@@ -35,7 +35,12 @@ export function spacedHexToBuffer(hex: string): Uint8Array {
 
 class App {
   state = experimental3x3x3KPuzzle.startState();
-  svg = new ExperimentalKPuzzleSVGWrapper(experimental3x3x3KPuzzle, svgSource);
+  svg = (async () => {
+    return new ExperimentalKPuzzleSVGWrapper(
+      experimental3x3x3KPuzzle,
+      await cube3x3x3.svg(),
+    );
+  })();
   algTextarea = document.querySelector("#alg") as HTMLTextAreaElement;
   kstateTextarea = document.querySelector("#kstate") as HTMLTextAreaElement;
   reidStringTextarea = document.querySelector(
@@ -52,7 +57,12 @@ class App {
 
   binaryTextarea = document.querySelector("#binary") as HTMLTextAreaElement;
   constructor() {
-    document.querySelector("#viewer")!.appendChild(this.svg.element);
+    const svgWrapper = document
+      .querySelector("#viewer")!
+      .appendChild(document.createElement("div"));
+    (async () => {
+      svgWrapper.appendChild((await this.svg).element);
+    })();
 
     document.querySelector("#reset")!.addEventListener("click", () => {
       this.reset();
@@ -117,7 +127,9 @@ class App {
 
   setState(state: KState): void {
     this.state = state;
-    this.svg.draw(state);
+    (async () => {
+      (await this.svg).draw(state);
+    })();
     this.kstateTextarea.value = kstateToString(state);
     this.reidStringTextarea.value = kpuzzleToReidString(state);
     this.stickersTextarea.value = JSON.stringify(kpuzzleToStickers(state));

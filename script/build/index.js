@@ -124,7 +124,7 @@ export async function build(target, dev) {
 
 let latestBuildSymbol = null;
 const SEARCH_WORKER_PATH =
-  "./src/cubing/search/worker-inside-generated-string.js";
+  "./src/cubing/search/search-worker-inside-generated-string.js";
 export const searchWorkerTarget = {
   name: "search-worker",
   builtYet: false,
@@ -150,7 +150,7 @@ export const searchWorkerTarget = {
       )};`;
       console.log("Writing:", SEARCH_WORKER_PATH);
       writeSyncUsingTempFile(
-        "worker-inside-generated-string.js",
+        "search-worker-inside-generated-string.js",
         SEARCH_WORKER_PATH,
         workerContents,
       );
