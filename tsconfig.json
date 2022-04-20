@@ -30,6 +30,6 @@
   "exclude": [
     "src/static",
     "script/test/dist/esm", // Avoid indexing `dist`.
-    "src/cubing/search/worker-inside-generated*"
+    "src/cubing/search/search-worker-inside-generated*"
   ]
 }
