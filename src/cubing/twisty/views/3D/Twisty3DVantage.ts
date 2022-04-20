@@ -217,14 +217,20 @@ export class Twisty3DVantage extends ManagedCustomElement {
       const dragTracker = new DragTracker((await this.canvasInfo()).canvas);
       this.model?.twistySceneModel.dragInput.addFreshListener(
         (dragInputMode: DragInputMode) => {
+          let dragInputEnabled = false;
           switch (dragInputMode) {
             case "auto":
               dragTracker.start();
+              dragInputEnabled = true;
               break;
             case "none":
               dragTracker.stop();
               break;
           }
+          this.contentWrapper.classList.toggle(
+            "drag-input-enabled",
+            dragInputEnabled,
+          );
         },
       );
       return dragTracker;

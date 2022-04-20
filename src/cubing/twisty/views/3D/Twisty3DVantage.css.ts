@@ -47,7 +47,6 @@ export const twisty3DVantageCSS = new CSSSource(`
 .wrapper > canvas {
   max-width: 100%;
   max-height: 100%;
-  cursor: grab;
   animation: fade-in 0.25s ease-in;
 }
 
@@ -56,11 +55,15 @@ export const twisty3DVantageCSS = new CSSSource(`
   to { opacity: 1; }
 }
 
-.wrapper > canvas:active {
-  cursor: grabbing;
-}
-
 .wrapper.invisible {
   opacity: 0;
+}
+
+.wrapper.drag-input-enabled > canvas {
+  cursor: grab;
+}
+
+.wrapper.drag-input-enabled > canvas:active {
+  cursor: grabbing;
 }
 `);
