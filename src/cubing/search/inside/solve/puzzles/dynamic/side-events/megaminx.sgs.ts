@@ -1,9 +1,9 @@
-import { KPuzzle } from "../../../../kpuzzle";
+import { KPuzzle } from "../../../../../../kpuzzle";
 import {
   ExperimentalPGNotation,
   getPuzzleGeometryByName,
-} from "../../../../puzzle-geometry";
-import { parseSGS, SGSCachedData } from "../parseSGS";
+} from "../../../../../../puzzle-geometry";
+import { parseSGS, SGSCachedData } from "../../../parseSGS";
 
 async function megaminxKPuzzleWithoutMO(): Promise<KPuzzle> {
   const pg = getPuzzleGeometryByName("megaminx", {

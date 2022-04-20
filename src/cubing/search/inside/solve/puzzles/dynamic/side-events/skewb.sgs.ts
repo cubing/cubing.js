@@ -1,9 +1,9 @@
-import { KPuzzle } from "../../../../kpuzzle";
+import { KPuzzle } from "../../../../../../kpuzzle";
 import {
   getPuzzleGeometryByName,
   ExperimentalPGNotation,
-} from "../../../../puzzle-geometry";
-import { parseSGS, SGSCachedData } from "../parseSGS";
+} from "../../../../../../puzzle-geometry";
+import { parseSGS, SGSCachedData } from "../../../parseSGS";
 
 async function skewbKPuzzleWithoutMO(): Promise<KPuzzle> {
   const pg = getPuzzleGeometryByName("skewb", {

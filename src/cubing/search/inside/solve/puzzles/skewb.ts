@@ -1,12 +1,13 @@
 import type { Alg, QuantumMove } from "../../../../alg";
 import { KState } from "../../../../kpuzzle";
+import { from } from "../../../../vendor/p-lazy/p-lazy";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { randomStateFromSGS, TrembleSolver } from "../tremble";
-import {
-  sgsDataSkewbFixedCorner,
-  skewbKPuzzleWithoutMOCached,
-} from "./skewb.sgs.json";
+
+const dynamic = from<
+  typeof import("./dynamic/side-events/search-dynamic-side-events")
+>(() => import("./dynamic/side-events/search-dynamic-side-events"));
 
 const TREMBLE_DEPTH = 3;
 
@@ -15,10 +16,9 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const sgs = await import("./skewb.sgs.json");
-      const json: SGSCachedData = await sgs.sgsDataSkewb();
+      const json: SGSCachedData = await (await dynamic).sgsDataSkewb();
       return new TrembleSolver(
-        await sgs.skewbKPuzzleWithoutMOCached(),
+        await (await dynamic).skewbKPuzzleWithoutMOCached(),
         json,
         "RLUB".split(""),
       );
@@ -55,8 +55,8 @@ export async function solveSkewb(state: KState): Promise<Alg> {
 export async function randomSkewbFixedCornerState(): Promise<KState> {
   // Note: this sets all center orientations to 0.
   return randomStateFromSGS(
-    await skewbKPuzzleWithoutMOCached(),
-    await sgsDataSkewbFixedCorner(),
+    await (await dynamic).skewbKPuzzleWithoutMOCached(),
+    await (await dynamic).sgsDataSkewbFixedCorner(),
   );
 }
 

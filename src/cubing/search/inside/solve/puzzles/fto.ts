@@ -1,9 +1,14 @@
 import { Alg } from "../../../../alg";
 import type { KState } from "../../../../kpuzzle/KState";
 import { puzzles } from "../../../../puzzles";
+import { from } from "../../../../vendor/p-lazy/p-lazy";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
+
+const dynamic = from<
+  typeof import("./dynamic/unofficial/search-dynamic-unofficial")
+>(() => import("./dynamic/unofficial/search-dynamic-unofficial"));
 
 const TREMBLE_DEPTH = 3;
 
@@ -12,8 +17,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
   return (
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
-      const sgs = await import("./fto.dynamic");
-      const json: SGSCachedData = await sgs.sgsDataFTO();
+      const json: SGSCachedData = await (await dynamic).sgsDataFTO();
       return new TrembleSolver(await puzzles["fto"].kpuzzle(), json, [
         "U",
         "R",
@@ -46,6 +50,8 @@ export async function solveFTO(state: KState): Promise<Alg> {
 
 export async function randomFTOScramble(): Promise<Alg> {
   mustBeInsideWorker();
-  const { randomFTOScrambleString } = await import("./fto.dynamic");
+  const { randomFTOScrambleString } = await import(
+    "../../../../vendor/xyzzy/fto-solver"
+  );
   return new Alg(await randomFTOScrambleString());
 }

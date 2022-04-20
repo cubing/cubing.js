@@ -2,6 +2,7 @@ import type { Alg } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { KState } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
+import { from } from "../../../../vendor/p-lazy/p-lazy";
 import {
   randomPermute,
   randomUIntBelowFactory,
@@ -9,6 +10,10 @@ import {
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
+
+const dynamic = from<
+  typeof import("./dynamic/side-events/search-dynamic-side-events")
+>(() => import("./dynamic/side-events/search-dynamic-side-events"));
 
 // Empirical ly determined depth:
 // - ≈11 moves on average (as opposed to >13 moves for depth 2),
@@ -21,7 +26,7 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
     cachedTrembleSolver ||
     (cachedTrembleSolver = (async (): Promise<TrembleSolver> => {
       const sgsCachedData: SGSCachedData = await (
-        await import("./2x2x2.sgs.json")
+        await dynamic
       ).cachedData222();
       return new TrembleSolver(
         await puzzles["2x2x2"].kpuzzle(),
