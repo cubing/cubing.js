@@ -3,6 +3,7 @@ import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayP
 import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
 import { SpriteProp } from "./props/puzzle/display/SpriteProp";
 import { StickeringProp } from "./props/puzzle/display/StickeringProp";
+import { DragInputProp } from "./props/puzzle/state/DragInputProp";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 import { BackgroundProp } from "./props/viewer/BackgroundProp";
 import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
@@ -13,6 +14,7 @@ import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 export class TwistySceneModel {
   // Depth 0
   background = new BackgroundProp();
+  dragInput = new DragInputProp();
   foundationDisplay = new FoundationDisplayProp();
   foundationStickerSpriteURL = new URLProp();
   hintFacelet = new HintFaceletProp();

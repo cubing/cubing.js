@@ -43,17 +43,37 @@ export class DragTracker extends EventTarget {
 
   constructor(public readonly target: HTMLElement) {
     super();
-    target.addEventListener("pointerdown", this.onPointerDown.bind(this));
+  }
+
+  // Idempotent
+  start() {
+    this.addTargetListener("pointerdown", this.onPointerDown.bind(this));
     // Prevent right-click on desktop (only tested on macOS Chrome/Safari/Firefox) so we can detect right-click moves.
     // TODO: Can we do this selectively, e.g. only on the puzzle? That way we could allow right-click to download the canvas. Unfortunately, it would probably require a sync calculation.
-    this.target.addEventListener("contextmenu", (e) => {
+    this.addTargetListener("contextmenu", (e) => {
       e.preventDefault();
     });
     // Prevent touch scrolling (preventing default on `pointermove` doesn't work).
-    this.target.addEventListener("touchmove", (e) => e.preventDefault());
+    this.addTargetListener("touchmove", (e) => e.preventDefault());
     // Prevent zooming on double-tap (iOS).
     // This is because `dblclick` works to zoom in, but does *not* work to zoom out. So the user can get stuck zoomed into the player without a way to zoom out.
-    this.target.addEventListener("dblclick", (e) => e.preventDefault());
+    this.addTargetListener("dblclick", (e) => e.preventDefault());
+  }
+
+  // Idempotent
+  stop(): void {
+    for (const [eventType, listener] of this.#targetListeners.entries()) {
+      this.target.removeEventListener(eventType, listener);
+    }
+    this.#targetListeners.clear();
+  }
+
+  #targetListeners = new Map<string, (e: MouseEvent) => any>();
+  addTargetListener(eventType: string, listener: (e: MouseEvent) => any) {
+    if (!this.#targetListeners.has(eventType)) {
+      this.target.addEventListener(eventType, listener);
+      this.#targetListeners.set(eventType, listener);
+    }
   }
 
   // This allows us to avoid getting a callback every time the pointer moves over the canvas, until we have a down event.
@@ -63,8 +83,8 @@ export class DragTracker extends EventTarget {
     if (this.#lazyListenersRegistered) {
       return;
     }
-    this.target.addEventListener("pointermove", this.onPointerMove.bind(this)); // TODO: only register this after pointer down.
-    this.target.addEventListener("pointerup", this.onPointerUp.bind(this));
+    this.addTargetListener("pointermove", this.onPointerMove.bind(this)); // TODO: only register this after pointer down.
+    this.addTargetListener("pointerup", this.onPointerUp.bind(this));
     this.#lazyListenersRegistered = true;
   }
 

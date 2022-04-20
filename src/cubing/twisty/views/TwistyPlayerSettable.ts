@@ -14,6 +14,7 @@ import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import { ManagedCustomElement } from "./ManagedCustomElement";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
+import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
 
 function err(propName: string): Error {
   return new Error(
@@ -99,6 +100,9 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
 
   set experimentalHintSprite(url: string | URL) { this.experimentalModel.twistySceneModel.hintStickerSpriteURL.set(url); }
   get experimentalHintSprite(): never { throw err("experimentalHintSprite"); }
+
+  set experimentalDragInput(dragInputMode: DragInputMode) { this.experimentalModel.twistySceneModel.dragInput.set(dragInputMode); }
+  get experimentalDragInput(): never { throw err("experimentalDragInput"); }
 
   experimentalGet = new ExperimentalGetters(this.experimentalModel)
 }

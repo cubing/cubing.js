@@ -4,6 +4,7 @@ import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
 import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
+import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
 import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestProp";
@@ -54,6 +55,7 @@ export const twistyPlayerAttributeMap = {
   // "indexer": "indexer",
   "viewer-link": "viewerLink",
   "experimental-move-press-input": "experimentalMovePressInput",
+  "experimental-drag-input": "experimentalDragInput",
 
   // Metadata
   "experimental-title": "experimentalTitle",
@@ -97,6 +99,7 @@ export interface TwistyPlayerConfig {
   // "indexer"?: "indexer";
   viewerLink?: ViewerLinkPageWithAuto;
   experimentalMovePressInput?: MovePressInput;
+  experimentalDragInput?: DragInputMode;
 
   // Metadata
   experimentalTitle?: string | null;

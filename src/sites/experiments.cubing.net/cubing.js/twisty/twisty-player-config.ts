@@ -8,6 +8,7 @@ import { backgroundThemes } from "../../../../cubing/twisty/model/props/viewer/B
 import { controlsLocations } from "../../../../cubing/twisty/model/props/viewer/ControlPanelProp";
 import { viewerLinkPages } from "../../../../cubing/twisty/model/props/viewer/ViewerLinkProp";
 import { visualizationFormats } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
+import { dragInputModes } from "../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";
 
 const contentElem = document.querySelector(".content")!;
 
@@ -54,6 +55,12 @@ const enumOptions: [string, string, Record<string, any>][] = [
   ["controlPanel", "control-panel", controlsLocations],
 
   ["backView", "back-view", backViewLayouts],
+
+  [
+    "experimentalDragInput",
+    "experimental-drag-input",
+    Object.assign({ auto: true }, dragInputModes),
+  ],
 
   ["viewerLink", "viewer-link", viewerLinkPages],
 ];

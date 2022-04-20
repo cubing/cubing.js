@@ -15,6 +15,7 @@ import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";
 import { TwistyOrbitControls } from "./TwistyOrbitControls";
+import type { DragInputMode } from "../../model/props/puzzle/state/DragInputProp";
 
 let SHOW_STATS = false;
 export function debugShowRenderStats(enable: boolean): void {
@@ -100,7 +101,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.#onResize();
     const observer = new ResizeObserver(this.#onResize.bind(this));
     observer.observe(this.contentWrapper);
-    this.orbitControls(); // TODO
+    this.orbitControls(); // Instantiate orbit controls
     this.#setupBasicPresses();
 
     this.scheduleRender();
@@ -213,7 +214,20 @@ export class Twisty3DVantage extends ManagedCustomElement {
   #cachedDragTracker: Promise<DragTracker> | null = null;
   async #dragTracker(): Promise<DragTracker> {
     return (this.#cachedDragTracker ??= (async () => {
-      return new DragTracker((await this.canvasInfo()).canvas);
+      const dragTracker = new DragTracker((await this.canvasInfo()).canvas);
+      this.model?.twistySceneModel.dragInput.addFreshListener(
+        (dragInputMode: DragInputMode) => {
+          switch (dragInputMode) {
+            case "auto":
+              dragTracker.start();
+              break;
+            case "none":
+              dragTracker.stop();
+              break;
+          }
+        },
+      );
+      return dragTracker;
     })());
   }
 

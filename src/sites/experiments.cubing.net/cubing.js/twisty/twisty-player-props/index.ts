@@ -5,6 +5,7 @@ import { Alg } from "../../../../../cubing/alg";
 import { backViewLayouts, TwistyPlayer } from "../../../../../cubing/twisty";
 import { hintFaceletStyles } from "../../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
 import { experimentalStickerings } from "../../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
+import { dragInputModes } from "../../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";
 import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/puzzle/state/IndexerConstructorRequestProp";
 import { movePressInputNames } from "../../../../../cubing/twisty/model/props/puzzle/state/MovePressInputProp";
 import { setupToLocations } from "../../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
@@ -101,6 +102,12 @@ debugShowRenderStats(true);
     ],
 
     ["backView", "back-view", Object.assign({ auto: true }, backViewLayouts)],
+
+    [
+      "experimentalDragInput",
+      "experimental-drag-input",
+      Object.assign({ auto: true }, dragInputModes),
+    ],
 
     ["indexer", "indexer", Object.assign({ auto: true }, indexerStrategyNames)],
 
