@@ -66,6 +66,7 @@ export class DragTracker extends EventTarget {
       this.target.removeEventListener(eventType, listener);
     }
     this.#targetListeners.clear();
+    this.#lazyListenersRegistered = false;
   }
 
   #targetListeners = new Map<string, (e: MouseEvent) => any>();
