@@ -12,11 +12,13 @@ export const rediCube: PuzzleLoader = {
   kpuzzle: getCached(
     async () =>
       new KPuzzle(
-        (await import("../dynamic/unofficial/dynamic-unofficial")).rediCubeJSON,
+        (
+          await import("../dynamic/unofficial/puzzles-dynamic-unofficial")
+        ).rediCubeJSON,
       ),
   ),
   svg: async () => {
-    return (await import("../dynamic/unofficial/dynamic-unofficial"))
+    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
       .rediCubeSVG;
   },
 };

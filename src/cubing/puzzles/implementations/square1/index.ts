@@ -11,12 +11,12 @@ export const square1: PuzzleLoader = {
     async () =>
       new KPuzzle(
         (
-          await import("../dynamic/side-events/dynamic-side-events")
+          await import("../dynamic/side-events/puzzles-dynamic-side-events")
         ).sq1HyperOrbitJSON,
       ),
   ),
   svg: getCached(async () => {
-    return (await import("../dynamic/side-events/dynamic-side-events"))
+    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
       .sq1HyperOrbitSVG;
   }),
 };

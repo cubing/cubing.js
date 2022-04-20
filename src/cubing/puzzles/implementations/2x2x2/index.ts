@@ -16,12 +16,12 @@ export const cube2x2x2: PuzzleLoader = {
     async () =>
       new KPuzzle(
         (
-          await import("../dynamic/side-events/dynamic-side-events")
+          await import("../dynamic/side-events/puzzles-dynamic-side-events")
         ).cube2x2x2JSON,
       ),
   ),
   svg: async () => {
-    return (await import("../dynamic/side-events/dynamic-side-events"))
+    return (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
       .cube2x2x2SVG;
   },
   pg: getCached(async () => {

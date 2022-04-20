@@ -44,7 +44,7 @@ export const kilominx: PuzzleLoader = {
     return kpuzzle;
   }),
   svg: getCached(async () => {
-    return (await import("../dynamic/unofficial/dynamic-unofficial"))
+    return (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
       .kilominxSVG;
   }),
 };
