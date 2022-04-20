@@ -4,7 +4,7 @@ import { KState } from "../../../../kpuzzle";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
-import { searchDynamicSideEvents } from "./dynamic/side-events";
+import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
 
 const TREMBLE_DEPTH = 2;
 

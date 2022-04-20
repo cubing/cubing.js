@@ -8,8 +8,8 @@ import { TrembleSolver } from "../tremble";
 import { dynamicFTOSolver } from "./dynamic/fto";
 
 const dynamic = from<
-  typeof import("./dynamic/unofficial/search-dynamic-unofficial")
->(() => import("./dynamic/unofficial/search-dynamic-unofficial"));
+  typeof import("./dynamic/sgs-unofficial/search-dynamic-sgs-unofficial")
+>(() => import("./dynamic/sgs-unofficial/search-dynamic-sgs-unofficial"));
 
 const TREMBLE_DEPTH = 3;
 

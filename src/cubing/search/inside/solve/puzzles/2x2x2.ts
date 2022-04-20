@@ -9,7 +9,7 @@ import {
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
-import { searchDynamicSideEvents } from "./dynamic/side-events";
+import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
 
 // Empirical ly determined depth:
 // - ≈11 moves on average (as opposed to >13 moves for depth 2),
