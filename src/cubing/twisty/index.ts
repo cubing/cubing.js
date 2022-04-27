@@ -17,6 +17,8 @@ export { TwizzleLink } from "./views/twizzle/TwizzleLink";
 
 export { debugShowRenderStats as experimentalDebugShowRenderStats } from "./views/3D/Twisty3DVantage";
 
+export { MillisecondTimestamp as ExperimentalMillisecondTimestamp } from "./controllers/AnimationTypes";
+
 // Older
 // export { Cube3D } from "./views/3D/puzzles/Cube3D";
 // export { PG3D } from "./views/3D/puzzles/PG3D";
