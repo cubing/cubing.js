@@ -6,12 +6,12 @@ const useNodeWorkarounds =
   typeof (globalThis as any).WorkerNavigator === "undefined";
 
 // Mangled so that bundlers don't try to inline the source.
-const worker_threads_mangled = "w-orker-_threa-ds";
+const worker_threads_mangled = "node:w-orker-_threa-ds";
 const worker_threads_unmangled = () => worker_threads_mangled.replace(/-/g, "");
 
 export async function nodeEndpointPort(): Promise<
   Worker & {
-    nodeWorker?: import("worker_threads").Worker;
+    nodeWorker?: import("node:worker_threads").Worker;
   }
 > {
   const { parentPort } = await import(

@@ -3,7 +3,7 @@ import nodeEndpoint from "../node-adapter";
 export { wrap } from "comlink";
 // Mangled so that bundlers don't try to inline the source.
 
-const worker_threads_mangled = "w-orker-_threa-ds";
+const worker_threads_mangled = "node:w-orker-_threa-ds";
 const worker_threads_unmangled = () => worker_threads_mangled.replace(/-/g, "");
 
 const useNodeWorkarounds =
