@@ -48,10 +48,10 @@ export function experimentalEnsureAlg(alg: FlexibleAlgSource): Alg {
 }
 
 /**
- * Alg is a class that encapsulated a structured alg. To create an alg from a string, use:
+ * Alg is a class that encapsulates a structured alg. To create an alg from a string, use:
  *
  *     new Alg("R U R'"); // Convenient
- *     Alg.fromString(dynamicString); // Recommended when handling dynamic input.
+ *     Alg.fromString(dynamicString); // Recommended when user-provided string input.
  *
  * Once you have an Alg, you can call methods to transform it:
  *
