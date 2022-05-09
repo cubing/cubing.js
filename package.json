@@ -88,6 +88,9 @@
     "esbuild",
     "jszip"
   ],
+  "engines": {
+    "node": "^14.18 || ^16.13 || >=18"
+  },
   "files": [
     "/LICENSE.md",
     "/README.md",
