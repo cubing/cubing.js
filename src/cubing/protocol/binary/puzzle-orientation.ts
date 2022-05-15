@@ -1,5 +1,6 @@
 import { Alg } from "../../alg";
-import { experimental3x3x3KPuzzle, KTransformation } from "../../kpuzzle";
+import type { KTransformation } from "../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../kpuzzle/cubing-private";
 import type { KState } from "../../kpuzzle/KState";
 
 export function puzzleOrientationIdx(state: KState): [number, number] {

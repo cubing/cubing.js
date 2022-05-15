@@ -1,7 +1,8 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import { experimental3x3x3KPuzzle, KState, KStateData } from "../../kpuzzle";
+import { KState, KStateData } from "../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../kpuzzle/cubing-private";
 import { debugLog } from "../debug";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 

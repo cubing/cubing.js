@@ -1,7 +1,5 @@
-import {
-  experimental3x3x3KPuzzle,
-  KStateData,
-} from "../../../../cubing/kpuzzle";
+import type { KStateData } from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle/cubing-private";
 import { reid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol";
 import {
   Binary3x3x3Components,

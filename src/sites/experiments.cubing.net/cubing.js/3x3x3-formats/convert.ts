@@ -1,4 +1,4 @@
-import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle/cubing-private";
 import type { KStateOrbitData } from "../../../../cubing/kpuzzle/KPuzzleDefinition";
 import { KState } from "../../../../cubing/kpuzzle/KState";
 

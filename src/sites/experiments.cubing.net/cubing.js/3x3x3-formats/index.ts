@@ -1,8 +1,6 @@
 import { Alg } from "../../../../cubing/alg";
-import {
-  experimental3x3x3KPuzzle,
-  KStateData,
-} from "../../../../cubing/kpuzzle";
+import type { KStateData } from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle/cubing-private";
 import { KState } from "../../../../cubing/kpuzzle/KState";
 import {
   binaryComponentsToReid3x3x3,

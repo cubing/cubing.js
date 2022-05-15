@@ -1,5 +1,5 @@
 // Include 3x3x3 in the main bundle for better performance.
-import { experimental3x3x3KPuzzle } from "../../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../kpuzzle/cubing-private";
 import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";

@@ -1,4 +1,4 @@
-import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/kpuzzle/cubing-private";
 import { puzzles } from "../../../../cubing/puzzles";
 import "../../../../cubing/twisty";
 import { KPuzzleSVGWrapper } from "../../../../cubing/twisty/views/2D/KPuzzleSVGWrapper";

@@ -1,4 +1,5 @@
-import { experimental3x3x3KPuzzle, KState } from "../../kpuzzle";
+import { KState } from "../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../kpuzzle/cubing-private";
 import {
   identityPermutation,
   lexToPermutation,
