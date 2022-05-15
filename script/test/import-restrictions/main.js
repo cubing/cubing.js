@@ -10,6 +10,8 @@ const TARGET_INFOS_PATH = resolve(
   "./target-infos.js",
 );
 
+const CUBING_PRIVATE_SUFFIX = "/cubing-private";
+
 // Note that we have to use an extra `..` to back out of the file name
 const PATH_TO_SRC_CUBING = resolve(
   new URL(".", import.meta.url).pathname,
@@ -75,6 +77,11 @@ class Target {
         ) {
           // TODO
           return undefined;
+        }
+
+        // Allow cubing-private cross-package exports.
+        if (args.path.endsWith(CUBING_PRIVATE_SUFFIX)) {
+          args.path = args.path.slice(0, -CUBING_PRIVATE_SUFFIX.length);
         }
 
         const resolved = resolve(args.resolveDir, args.path);

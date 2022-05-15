@@ -1,1 +1,1 @@
-export { experimentalRandomScrambleForEvent as randomScrambleForEvent } from "../search";
+export { randomScrambleForEvent } from "../search/cubing-private";
