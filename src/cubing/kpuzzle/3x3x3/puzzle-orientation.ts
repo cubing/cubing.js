@@ -1,4 +1,4 @@
-import { experimentalNormalizePuzzleOrientation as normalize3x3x3Orientation } from "../../protocol";
+import { cubingInternalNormalize3x3x3Orientation } from "../../protocol/cubing-private";
 import { KState } from "../KState";
 
 // The `options` argument is required for now, because we haven't yet come up
@@ -11,7 +11,7 @@ export function experimentalIs3x3x3Solved(
   },
 ): boolean {
   if (options.ignorePuzzleOrientation) {
-    state = normalize3x3x3Orientation(state);
+    state = cubingInternalNormalize3x3x3Orientation(state);
   }
   if (options.ignoreCenterOrientation) {
     state = new KState(state.kpuzzle, {
