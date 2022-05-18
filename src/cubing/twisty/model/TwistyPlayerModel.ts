@@ -7,7 +7,7 @@ import { AnchorTransformationProp } from "./props/puzzle/state/AnchorTransformat
 import { CatchUpMoveProp } from "./props/puzzle/state/CatchUpMoveProp";
 import { CurrentLeavesSimplifiedProp } from "./props/puzzle/state/CurrentLeavesSimplified";
 import { CurrentMoveInfoProp } from "./props/puzzle/state/CurrentMoveInfoProp";
-import { CurrentStateProp as CurrentStateProp } from "./props/puzzle/state/CurrentStateProp";
+import { CurrentStateProp } from "./props/puzzle/state/CurrentStateProp";
 import { IndexerConstructorProp } from "./props/puzzle/state/IndexerConstructorProp";
 import { IndexerConstructorRequestProp } from "./props/puzzle/state/IndexerConstructorRequestProp";
 import { IndexerProp } from "./props/puzzle/state/IndexerProp";
