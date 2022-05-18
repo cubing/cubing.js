@@ -198,8 +198,6 @@ export class TwistyPlayerModel {
 
     const isExplorer = viewerLink === "experimental-twizzle-explorer";
 
-    console.log({ isExplorer, viewerLink });
-
     const url = new URL(
       `https://alpha.twizzle.net/${isExplorer ? "explore" : "edit"}/`,
     );
