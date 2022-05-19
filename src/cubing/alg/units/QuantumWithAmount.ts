@@ -17,7 +17,7 @@ export class QuantumWithAmount<Q extends Repeatable> {
       this.amount > MAX_INT
     ) {
       throw new Error(
-        `Unit amount absolute value must be a non-negative integer from ${MAX_INT_DESCRIPTION} to ${MAX_INT_DESCRIPTION}.`,
+        `Unit amount absolute value must be a non-negative integer below ${MAX_INT_DESCRIPTION}.`,
       );
     }
   }
