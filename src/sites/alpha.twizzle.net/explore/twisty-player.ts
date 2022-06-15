@@ -25,6 +25,8 @@ export function constructTwistyPlayer(): TwistyPlayer {
       config.puzzle!,
     );
     delete config["puzzle"];
+  } else {
+    config.experimentalPuzzleDescription = getPuzzleDescriptionString("3x3x3");
   }
   const explorerConfig: TwistyPlayerConfig = {
     cameraLatitudeLimit: 90,
