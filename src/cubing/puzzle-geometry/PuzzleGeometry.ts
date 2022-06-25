@@ -2435,6 +2435,7 @@ export class PuzzleGeometry {
     }
     const movenames: string[] = [];
     const moves: PGTransform[] = [];
+    const isrots: boolean[] = [];
     if (includemoves) {
       for (let k = 0; k < this.moveplanesets.length; k++) {
         const moveplaneset = this.moveplanesets[k];
@@ -2451,6 +2452,7 @@ export class PuzzleGeometry {
           } else {
             movenames.push(movename + moveset[i + 1]);
           }
+          isrots.push(movebits[0] === 0 && movebits[1] === slices);
           const mv = this.getMoveFromBits(
             movebits,
             moveset[i + 1],
@@ -2469,6 +2471,7 @@ export class PuzzleGeometry {
       new VisibleState(solved),
       movenames,
       moves,
+      isrots,
     );
     if (this.options.optimizeOrbits) {
       r = r.optimize();

@@ -38,6 +38,7 @@ export class PGOrbitsDef {
     public solved: VisibleState,
     public movenames: string[],
     public moveops: PGTransform[],
+    public isRotation: boolean[],
   ) {}
 
   public transformToKTransformationData(t: PGTransform): KTransformationData {
@@ -157,14 +158,17 @@ export class PGOrbitsDef {
       for (let k = 0; k < n; k++) {
         changed[k] = false;
       }
+      // don't consider rotations when optimizing
       for (let j = 0; j < this.moveops.length; j++) {
-        for (let k = 0; k < n; k++) {
-          if (
-            this.moveops[j].orbits[i].perm[k] !== k ||
-            this.moveops[j].orbits[i].ori[k] !== 0
-          ) {
-            changed[k] = true;
-            du.union(k, this.moveops[j].orbits[i].perm[k]);
+        if (!this.isRotation[j]) {
+          for (let k = 0; k < n; k++) {
+            if (
+              this.moveops[j].orbits[i].perm[k] !== k ||
+              this.moveops[j].orbits[i].ori[k] !== 0
+            ) {
+              changed[k] = true;
+              du.union(k, this.moveops[j].orbits[i].perm[k]);
+            }
           }
         }
       }
@@ -267,6 +271,7 @@ export class PGOrbitsDef {
       new VisibleState(newsolved),
       this.movenames,
       newmoveops.map((_) => new PGTransform(_)),
+      this.isRotation,
     );
   }
 
