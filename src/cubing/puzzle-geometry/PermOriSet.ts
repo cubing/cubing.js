@@ -39,6 +39,7 @@ export class PGOrbitsDef {
     public movenames: string[],
     public moveops: PGTransform[],
     public isRotation: boolean[],
+    public forcenames: boolean[],
   ) {}
 
   public transformToKTransformationData(t: PGTransform): KTransformationData {
@@ -85,7 +86,10 @@ export class PGOrbitsDef {
     result.push("End");
     for (let i = 0; i < this.movenames.length; i++) {
       result.push("");
-      let name = externalName(mapper, this.movenames[i]);
+      let name = this.movenames[i];
+      if (!this.forcenames[i]) {
+        name = externalName(mapper, this.movenames[i]);
+      }
       let doinv = false;
       if (name[name.length - 1] === "'") {
         doinv = true;
@@ -272,6 +276,7 @@ export class PGOrbitsDef {
       this.movenames,
       newmoveops.map((_) => new PGTransform(_)),
       this.isRotation,
+      this.forcenames,
     );
   }
 
