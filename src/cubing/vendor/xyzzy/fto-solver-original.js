@@ -43,7 +43,7 @@ Note: SAFETY_MARGIN must be at most 2**20.
 
   function next(bound) {
     if (bound <= 0 || bound > 2 ** 32 || bound !== Math.floor(bound)) {
-      throw "invalid bound";
+      throw new Error("invalid bound");
     }
     for (let it = 0; it <= MAX_ITERATIONS; it++) {
       for (
@@ -342,7 +342,7 @@ function generate_comb4_lookup_tables(n, k0, k1, k2, k3) {
   k2 |= 0;
   k3 |= 0;
   if (n !== k0 + k1 + k2 + k3) {
-    throw "generate_comb4_lookup_tables: invalid parameters";
+    throw new Error("generate_comb4_lookup_tables: invalid parameters");
   }
   let key = [n, k0, k1, k2, k3].join(" ");
   if (comb4_lookup_tables[key]) {
@@ -646,7 +646,7 @@ function identify_corner_piece(colourA, colourB) {
       return [i, 1];
     }
   }
-  throw "unknown corner piece";
+  throw new Error("unknown corner piece");
 }
 
 function identify_edge_piece(colourA, colourB) {
@@ -666,7 +666,7 @@ function identify_edge_piece(colourA, colourB) {
       return i;
     }
   }
-  throw "unknown edge piece";
+  throw new Error("unknown edge piece");
 }
 
 function get_corner_piece(facelets, location) {
@@ -1050,7 +1050,7 @@ function reduce_to_quotient(mtable, origins) {
       preimages.push(new_equiv_class);
       for (let x of new_equiv_class) {
         if (quotient_map[x] !== -1) {
-          throw "quotienting failed";
+          throw new Error("quotienting failed");
         }
         quotient_map[x] = new_image;
       }
@@ -1096,7 +1096,7 @@ function generate_mirrored_coordinate_table(mtable, a, b) {
           mirror_map[new_i] = new_I;
           mirror_map[new_I] = new_i;
         } else if (mirror_map[new_i] !== new_I) {
-          throw "mirroring failed - is the initial map correct?";
+          throw new Error("mirroring failed - is the initial map correct?");
         }
       }
     }
