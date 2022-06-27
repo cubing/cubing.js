@@ -60,7 +60,7 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
       // }
       const existing = constructed[tidbit];
       if (!existing) {
-        throw `aaaargh ${tidbit}`;
+        throw new Error(`aaaargh ${tidbit}`);
       }
       const toPush = existing;
       // if (inverted) {

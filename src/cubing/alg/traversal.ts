@@ -51,7 +51,7 @@ function assertIsUnit(t: Comparable): Unit {
   ) {
     return t as Unit;
   }
-  throw "internal error: expected unit"; // TODO: Make more helpful, add tests
+  throw new Error("internal error: expected unit"); // TODO: Make more helpful, add tests
 }
 
 export abstract class TraversalDownUp<

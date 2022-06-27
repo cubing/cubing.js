@@ -184,6 +184,7 @@
         ],
         "rules": {
           "curly": "error",
+          "no-throw-literal": "error",
           "@typescript-eslint/no-inferrable-types": "off",
           "@typescript-eslint/no-floating-promises": "off",
           "@typescript-eslint/no-unsafe-assignment": "off",

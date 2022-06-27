@@ -36,7 +36,7 @@ function toIterable(input?: FlexibleAlgSource): Iterable<Unit> {
     return iter; // TODO: avoid allocations
   }
 
-  throw "Invalid unit";
+  throw new Error("Invalid unit");
 }
 
 // Preserves the alg if it's already an `Alg`.

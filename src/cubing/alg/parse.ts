@@ -199,7 +199,7 @@ class AlgParser {
             algEndIdx = this.#idx;
             continue mainLoop;
           default:
-            throw "unexpected parsing error";
+            throw new Error("unexpected parsing error");
         }
       } else if (this.tryConsumeNext("\n")) {
         algBuilder.push(

@@ -517,7 +517,7 @@ function getmovename(
       movenamePrefix = String(bits[1] + 1);
     }
   } else {
-    throw `We only support slice and outer block moves right now. ${bits}`;
+    throw new Error(`We only support slice and outer block moves right now. ${bits}`);
   }
   return [movenamePrefix + movenameFamily, inverted];
 }
