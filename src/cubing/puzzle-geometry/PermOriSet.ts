@@ -61,6 +61,29 @@ export class PGOrbitsDef {
     return mp;
   }
 
+  private describeSet(s: number, r: string[]): void { // FIXME:  make protected
+    const n = this.orbitdefs[s].size;
+    const m = new Array(n);
+    for (let i = 0; i < n; i++) {
+      m[i] = [];
+    }
+    for (let i = 0; i < this.movenames.length; i++) {
+      const mvname = this.movenames[i];
+      if (this.isRotation[i]) {
+        continue;
+      }
+      const pd = this.moveops[i].orbits[s];
+      for (let j = 0; j < n; j++) {
+        if (pd.perm[j] != j || pd.ori[j] != 0) {
+          m[j].push(mvname);
+        }
+      }
+    }
+    for (let j = 0; j < n; j++) {
+      r.push('# ' + (j+1) + ' ' + m[j].join(" "));
+    }
+  }
+
   public toKsolve(
     name: string,
     mapper: NotationMapper = new NullMapper(),
@@ -72,6 +95,7 @@ export class PGOrbitsDef {
       result.push(
         `Set ${this.orbitnames[i]} ${this.orbitdefs[i].size} ${this.orbitdefs[i].mod}`,
       );
+      this.describeSet(i, result);
     }
     result.push("");
     result.push("Solved");
