@@ -2291,21 +2291,26 @@ export class PuzzleGeometry {
         addrot.push(0);
       }
     }
+    const hasrotation = [];
+    for (let k = 0; k < this.moveplanesets.length; k++) {
+      const slices = this.moveplanesets[k].length;
+      // if the move set includes a rotation around this axis, don't add any more
+      let sawone = false;
+      const moveset = mps[k];
+      for (let i = 0; i < moveset.length; i += 2) {
+        if (moveset[i][0] === 0 && moveset[i][1] === slices) {
+          sawone = true;
+        }
+      }
+      hasrotation[k] = sawone;
+    }
     if (this.options.moveList && this.options.addRotations) {
       for (let i = 0; i < this.moverotations.length; i++) {
         addrot[i] = 0;
       }
       for (let k = 0; k < this.moveplanesets.length; k++) {
-        const slices = this.moveplanesets[k].length;
         // if the move set includes a rotation around this axis, don't add any more
-        let skip = false;
-        const moveset = mps[k];
-        for (let i = 0; i < moveset.length; i += 2) {
-          if (moveset[i][0] === 0 && moveset[i][1] === slices) {
-            skip = true;
-          }
-        }
-        if (skip) {
+        if (hasrotation[k]) {
           addrot[k] = 3;
           continue;
         }
@@ -2366,7 +2371,7 @@ export class PuzzleGeometry {
       }
     }
     for (let k = 0; k < this.moveplanesets.length; k++) {
-      if (addrot[k] !== 0) {
+      if (addrot[k] !== 0 && !hasrotation[k]) {
         mps[k].push([0, this.moveplanesets[k].length]);
         mps[k].push(addrot[k]);
       }
