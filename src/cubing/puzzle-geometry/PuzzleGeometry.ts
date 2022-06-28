@@ -2386,7 +2386,6 @@ export class PuzzleGeometry {
             moveset[i][0] === moveset[j][0] &&
             moveset[i][1] === moveset[j][1]
           ) {
-            // FIXME we want this error but tests fail with it
             throw new Error("Redundant moves in moveset.");
           }
         }
