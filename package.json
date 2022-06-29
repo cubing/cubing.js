@@ -56,7 +56,7 @@
     "@types/three": "^0.137.0",
     "@types/web-bluetooth": "^0.0.12",
     "comlink": "^4.3.1",
-    "three": "^0.137.5"
+    "three": "^0.142.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
