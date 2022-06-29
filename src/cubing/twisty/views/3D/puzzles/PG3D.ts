@@ -846,10 +846,30 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       }
 
       const move = externalMove;
-      const quantumTransformation = this.kpuzzle.moveToTransformation(
-        move.modified({ amount: 1 }),
-      ); // TODO
-
+      let quantumTransformation;
+      try {
+        quantumTransformation = this.kpuzzle.moveToTransformation(
+          move.modified({ amount: 1 }),
+        );
+      } catch (e) {
+        // couldn't get it from a quantum of the external move.  Let's try
+        // getting it from a quantum of the internal move, translated back
+        // to external so we can get the transformation.  This happens for
+        // instance when working with "x2" on megaminx.
+        const move1 = this.stickerDat.notationMapper.notationToInternal(move);
+        if (move1) {
+          const move2 = this.stickerDat.notationMapper.notationToExternal(
+            move1.modified({ amount: 1 }),
+          );
+          if (move2) {
+            quantumTransformation = this.kpuzzle.moveToTransformation(move2);
+          }
+        }
+        if (!quantumTransformation) {
+          console.log(e);
+          throw e;
+        }
+      }
       const ax = this.axesInfo[unswizzled.family];
       const turnNormal = ax.axis;
       const angle =
