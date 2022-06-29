@@ -62,8 +62,9 @@ export class CurrentMoveInfoProp extends TwistyPropDerived<
         }
         const start = inputs.indexer.indexToMoveStartTimestamp(idx);
         const duration = inputs.indexer.moveDuration(idx);
-        const fraction =
-          (inputs.detailedTimelineInfo.timestamp - start) / duration;
+        const fraction = duration
+          ? (inputs.detailedTimelineInfo.timestamp - start) / duration
+          : 0;
         const end = start + duration;
         const currentMove = {
           move,
