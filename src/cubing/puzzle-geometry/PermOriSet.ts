@@ -61,16 +61,22 @@ export class PGOrbitsDef {
     return mp;
   }
 
-  private describeSet(s: number, r: string[]): void { // FIXME:  make protected
+  private describeSet(s: number, r: string[], mapper: NotationMapper): void {
     const n = this.orbitdefs[s].size;
     const m = new Array(n);
     for (let i = 0; i < n; i++) {
       m[i] = [];
     }
     for (let i = 0; i < this.movenames.length; i++) {
-      const mvname = this.movenames[i];
       if (this.isRotation[i]) {
         continue;
+      }
+      let mvname = this.movenames[i];
+      if (!this.forcenames[i]) {
+        mvname = externalName(mapper, mvname);
+        if (mvname[mvname.length - 1] === "'") {
+          mvname = mvname.substring(0, mvname.length - 1);
+        }
       }
       const pd = this.moveops[i].orbits[s];
       for (let j = 0; j < n; j++) {
@@ -80,7 +86,7 @@ export class PGOrbitsDef {
       }
     }
     for (let j = 0; j < n; j++) {
-      r.push('# ' + (j+1) + ' ' + m[j].join(" "));
+      r.push("# " + (j + 1) + " " + m[j].join(" "));
     }
   }
 
@@ -95,7 +101,7 @@ export class PGOrbitsDef {
       result.push(
         `Set ${this.orbitnames[i]} ${this.orbitdefs[i].size} ${this.orbitdefs[i].mod}`,
       );
-      this.describeSet(i, result);
+      this.describeSet(i, result, mapper);
     }
     result.push("");
     result.push("Solved");
