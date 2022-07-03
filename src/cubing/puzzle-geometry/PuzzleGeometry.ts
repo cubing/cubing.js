@@ -326,41 +326,184 @@ function defaultcolors(): any {
   };
 }
 
-// the default precedence of the faces is given here.  This permits
-// the orientations to be reasonably predictable.  There are tradeoffs;
-// some face precedence orders do better things to the edge orientations
-// than the corner orientations and some are the opposite.
-// TODO: change this back to a const JSON definition.
-function defaultfaceorders(): any {
-  return {
-    4: ["F", "D", "L", "R"],
-    6: ["U", "D", "F", "B", "L", "R"],
-    8: ["F", "BB", "D", "U", "BR", "L", "R", "BL"],
-    12: ["L", "E", "F", "BF", "R", "I", "U", "D", "BR", "A", "BL", "C"],
-    20: [
-      "L",
-      "S",
-      "E",
-      "O",
-      "F",
-      "B",
-      "I",
-      "P",
-      "R",
-      "K",
-      "U",
-      "D",
-      "J",
-      "A",
-      "Q",
-      "H",
-      "G",
-      "N",
-      "M",
-      "C",
+// Orientation conventions are specified here.  For each of the five platonic
+// solids, by face count, we have three lists of "cubie names" consisting of
+// a concatenation of face names.  For vertex (corner) and edge cubies, the
+// first face in the concatenated name is the one that will be marked.
+// For center orientations, the first face specifies which center we are
+// referring to, and the second face specifies the direction of the mark for
+// that face.
+
+const orientationDefaults = {
+  4: {
+    v: ["DFR", "DLF", "DRL", "FLR"],
+    e: ["FR", "LF", "DF", "DL", "RD", "RL"],
+    c: ["DF", "FD", "RL", "LR"],
+  },
+  6: {
+    v: ["URF", "UBR", "ULB", "UFL", "DFR", "DRB", "DBL", "DLF"],
+    e: ["UF", "UR", "UB", "UL", "DF", "DR", "DB", "DL", "FR", "FL", "BR", "BL"],
+    c: ["UB", "LU", "FU", "RU", "BU", "DF"],
+  },
+  8: {
+    v: ["UBBBRR", "URFL", "ULBLBB", "DBRBBBL", "DBLLF", "DFRBR"],
+    e: [
+      "UL",
+      "UBB",
+      "UR",
+      "BRD",
+      "BLD",
+      "FD",
+      "BRR",
+      "FR",
+      "FL",
+      "BLL",
+      "BLBB",
+      "BRBB",
     ],
-  };
-}
+    c: ["BBU", "LU", "RU", "BRD", "FD", "BLD", "DF", "UBB"],
+  },
+  12: {
+    v: [
+      "URF",
+      "UFL",
+      "ULBL",
+      "UBLBR",
+      "UBRR",
+      "DEBF",
+      "DBFI",
+      "DIA",
+      "DAC",
+      "DCE",
+      "LAI",
+      "ALF",
+      "FCA",
+      "CFR",
+      "REC",
+      "ERBR",
+      "BRBFE",
+      "BFBRBL",
+      "BLIBF",
+      "IBLL",
+    ],
+    e: [
+      "UF",
+      "UR",
+      "UBR",
+      "UBL",
+      "UL",
+      "ER",
+      "EBR",
+      "EBF",
+      "ED",
+      "EC",
+      "IBF",
+      "IBL",
+      "IL",
+      "IA",
+      "ID",
+      "AC",
+      "CF",
+      "FA",
+      "BFBR",
+      "BRBL",
+      "BLBF",
+      "CD",
+      "AD",
+      "AL",
+      "FL",
+      "FR",
+      "CR",
+      "BFD",
+      "BRR",
+      "BLL",
+    ],
+    c: [
+      "UF",
+      "FU",
+      "DBF",
+      "BFD",
+      "AD",
+      "CD",
+      "BRU",
+      "BLU",
+      "LA",
+      "RA",
+      "EBR",
+      "IBL",
+    ],
+  },
+  20: {
+    v: [
+      "FLPQU",
+      "FUGER",
+      "FRCAL",
+      "HCREI",
+      "ISBDH",
+      "JSIEG",
+      "BSJMK",
+      "MQPOK",
+      "ONDBK",
+      "NOPLA",
+      "UQMJG",
+      "DNACH",
+    ],
+    e: [
+      "FU",
+      "FL",
+      "FR",
+      "EG",
+      "ER",
+      "EI",
+      "SJ",
+      "SI",
+      "SB",
+      "KM",
+      "KB",
+      "KO",
+      "PQ",
+      "PO",
+      "PL",
+      "UG",
+      "JG",
+      "MQ",
+      "UQ",
+      "HC",
+      "HD",
+      "ND",
+      "NA",
+      "JM",
+      "CA",
+      "AL",
+      "CR",
+      "HI",
+      "DB",
+      "NO",
+    ],
+    c: [
+      "FU",
+      "UF",
+      "GE",
+      "EG",
+      "JS",
+      "SJ",
+      "MK",
+      "KM",
+      "QP",
+      "PQ",
+      "LA",
+      "AL",
+      "RC",
+      "CR",
+      "IH",
+      "HI",
+      "BD",
+      "DB",
+      "DN",
+      "ND",
+    ],
+  },
+};
 
 /*
  *  Default orientations for the puzzles in 3D space.  Can be overridden
@@ -589,6 +732,7 @@ export class PuzzleGeometry {
   private baseFaceCount: BaseFaceCount; // number of base faces
   public stickersperface: number; // number of stickers per face
   public shortedge: number; // number of stickers per face
+  private markedface: number[]; // given a bitmap of faces, identify the marked one
   public cubies: number[][]; // the cubies
   private vertexdistance: number; // vertex distance
   private edgedistance: number; // edge distance
@@ -618,8 +762,6 @@ export class PuzzleGeometry {
   private fixedCubie: number = -1; // fixed cubie, if any
   private net: string[][] = [];
   private colors: any = [];
-  private faceorder: string[] = [];
-  private faceprecedence: number[] = [];
   private swizzler: FaceNameSwizzler;
   public notationMapper: NotationMapper = new NullMapper();
   private addNotationMapper: string = "";
@@ -684,7 +826,6 @@ export class PuzzleGeometry {
     const net = defaultnets()[baseplanes.length];
     this.net = net;
     this.colors = defaultcolors()[baseplanes.length];
-    this.faceorder = defaultfaceorders()[baseplanes.length];
     if (this.options.verbosity > 0) {
       console.log("# Base planes: " + baseplanes.length);
     }
@@ -755,9 +896,9 @@ export class PuzzleGeometry {
     //   Determine names for edges, vertices, and planes.  Planes are defined
     //   by the plane normal/distance; edges are defined by the midpoint;
     //   vertices are defined by actual point.  In each case we define a name.
-    //   Note that edges have two potential names, and corners have n where
-    //   n planes meet at a vertex.  We arbitrarily choose the one that is
-    //   alphabetically first (and we will probably want to change this).
+    //   Note that edges have two potential names, and corners have n! where
+    //   n planes meet at a vertex.  We set names by choosing the marked face
+    //   first, and going counterclockwise around.
     //
     const facenames: [Quat[], string][] = [];
     const faceplanes: [Quat, string][] = [];
@@ -835,24 +976,6 @@ export class PuzzleGeometry {
         facenametoindex[neti[j]] = of;
       }
     }
-    for (let i = 0; i < faceindextoname.length; i++) {
-      let found = false;
-      for (let j = 0; j < this.faceorder.length; j++) {
-        if (faceindextoname[i] === this.faceorder[j]) {
-          this.faceprecedence[i] = j;
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        throw new Error(
-          "Could not find face " +
-            faceindextoname[i] +
-            " in face order list " +
-            this.faceorder,
-        );
-      }
-    }
     for (let i = 0; i < this.baseplanerot.length; i++) {
       const face = this.baseplanerot[i].rotateface(firstface);
       const faceplane = boundary.rotateplane(this.baseplanerot[i]);
@@ -876,35 +999,78 @@ export class PuzzleGeometry {
     this.swizzler = new FaceNameSwizzler(facenames.map((_) => _[1]));
     const sep = this.swizzler.prefixFree ? "" : "_";
     // fix the edge names; use face precedence order
+    const oridata = orientationDefaults[this.baseFaceCount];
+    const markedface = [];
+    for (let i = 0; i < this.baseFaceCount; i++) {
+      markedface[1 << i] = i;
+    }
+    // FIXME  eliminate the duplications below
+    {
+      const oriprefs = oridata["v"];
+      for (const name of oriprefs) {
+        const fn = this.swizzler.splitByFaceNames(name);
+        let bits = 0;
+        for (const i of fn) {
+          bits |= 1 << i;
+        }
+        markedface[bits] = fn[0];
+      }
+    }
+    {
+      const oriprefs = oridata["e"];
+      for (const name of oriprefs) {
+        const fn = this.swizzler.splitByFaceNames(name);
+        let bits = 0;
+        for (const i of fn) {
+          bits |= 1 << i;
+        }
+        markedface[bits] = fn[0];
+      }
+    }
+    {
+      const oriprefs = oridata["c"];
+      for (const name of oriprefs) {
+        const fn = this.swizzler.splitByFaceNames(name);
+        const bits = (1 << fn[0]) | (1 << this.baseFaceCount);
+        markedface[bits] = fn[1];
+      }
+    }
     for (let i = 0; i < edgenames.length; i++) {
       if (edgenames[i].length !== 3) {
         throw new Error("Bad length in edge names " + edgenames[i]);
       }
-      let c1 = faceindextoname[edgenames[i][1]];
-      const c2 = faceindextoname[edgenames[i][2]];
-      if (
-        this.faceprecedence[edgenames[i][1]] <
-        this.faceprecedence[edgenames[i][2]]
-      ) {
+      const f1 = edgenames[i][1];
+      const f2 = edgenames[i][2];
+      let c1 = faceindextoname[f1];
+      const c2 = faceindextoname[f2];
+      const bits = (1 << f1) | (1 << f2);
+      if (markedface[bits] == f1) {
         c1 = c1 + sep + c2;
       } else {
         c1 = c2 + sep + c1;
       }
       edgenames[i] = [edgenames[i][0], c1];
     }
-    // fix the vertex names; counterclockwise rotations; low face first.
+    // fix the vertex names; counterclockwise rotations; proper orientation.
     for (let i = 0; i < vertexnames.length; i++) {
+      let bits = 0;
       if (vertexnames[i].length < 4) {
         throw new Error("Bad length in vertex names");
       }
-      let st = 1;
-      for (let j = 2; j < vertexnames[i].length; j++) {
-        if (
-          this.faceprecedence[facenametoindex[vertexnames[i][j][0]]] <
-          this.faceprecedence[facenametoindex[vertexnames[i][st][0]]]
-        ) {
+      for (let j = 1; j < vertexnames[i].length; j++) {
+        bits |= 1 << facenametoindex[vertexnames[i][j][0]];
+      }
+      const fi = markedface[bits];
+      let st = -1;
+      for (let j = 1; j < vertexnames[i].length; j++) {
+        if (fi === facenametoindex[vertexnames[i][j][0]]) {
           st = j;
         }
+      }
+      if (st < 0) {
+        throw new Error(
+          "Internal error; couldn't find face name when fixing corners",
+        );
       }
       let r = "";
       for (let j = 1; j < vertexnames[i].length; j++) {
@@ -922,8 +1088,8 @@ export class PuzzleGeometry {
       }
       vertexnames[i] = [vertexnames[i][0], r];
     }
+    this.markedface = markedface;
     if (this.options.verbosity > 1) {
-      console.log("# Face precedence list: " + this.faceorder.join(" "));
       console.log("# Face names: " + facenames.map((_) => _[1]).join(" "));
       // TODO
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -1444,17 +1610,20 @@ export class PuzzleGeometry {
             throw new Error("Bad epsilon math; too close to border");
           }
         }
-        let mini = 0;
-        let minf = facelist[mini];
-        for (let i = 1; i < facelist.length; i++) {
-          const temp = facelist[i];
-          if (
-            this.faceprecedence[this.getfaceindex(temp)] <
-            this.faceprecedence[this.getfaceindex(minf)]
-          ) {
+        // set the orientations by finding the marked face and putting it first.
+        let bits = 0;
+        for (const f of facelist) {
+          bits |= 1 << Math.floor(f / this.stickersperface);
+        }
+        const markedface = this.markedface[bits]!;
+        let mini = -1;
+        for (let i = 0; i < facelist.length; i++) {
+          if (Math.floor(facelist[i] / this.stickersperface) === markedface) {
             mini = i;
-            minf = temp;
           }
+        }
+        if (mini < 0) {
+          throw new Error("Could not find marked face in list");
         }
         if (mini !== 0) {
           const ofacelist = facelist.slice();
@@ -1492,11 +1661,11 @@ export class PuzzleGeometry {
     };
     const cubiesetcubies: any = [];
     for (let i = 0; i < cubies.length; i++) {
-      if (seen[i]) {
-        continue;
-      }
       const cubie = cubies[i];
       if (cubie.length === 0) {
+        continue;
+      }
+      if (seen[i]) {
         continue;
       }
       const cubiekeymap: any = {};
@@ -1777,14 +1946,45 @@ export class PuzzleGeometry {
     // if orientCenters is set, we find all cubies that have only one
     // sticker and that sticker is in the center of a face, and we
     // introduce duplicate stickers so we can orient them properly.
+    //
+    //  We also rotate the vertices of the face to enforce the orientation
+    //  preferences for the oriented center stickers.
     if (this.options.orientCenters) {
       for (let k = 0; k < this.cubies.length; k++) {
         if (this.cubies[k].length === 1) {
           const kk = this.cubies[k][0];
           const i = this.getfaceindex(kk);
-          if (
-            this.basefaces[i].centermass().dist(this.facecentermass[kk]) < eps
-          ) {
+          const center = this.basefaces[i].centermass();
+          if (center.dist(this.facecentermass[kk]) < eps) {
+            const bits = (1 << i) | (1 << this.baseFaceCount);
+            const towards = this.markedface[bits];
+            const normal = this.baseplanes[towards].makenormal();
+            let hiv = -1;
+            let hii = -1;
+            for (let ii = 0; ii < this.faces[kk].length; ii++) {
+              const pt = this.faces[kk].get(ii);
+              const t = normal.dot(pt.sub(center));
+              if (t > hiv) {
+                hiv = t;
+                hii = ii;
+              }
+            }
+            // if two pts have the same distance, prefer the second
+            const hii2 = (hii + 1) % this.faces[kk].length;
+            if (
+              Math.abs(normal.dot(this.faces[kk].get(hii2).sub(center)) - hiv) <
+              eps
+            ) {
+              hii = hii2;
+            }
+            // remake the face to preserve orientations
+            if (hii != 0) {
+              const qs = [];
+              for (let ii = 0; ii < this.faces[kk].length; ii++) {
+                qs.push(this.faces[kk].get((ii + hii) % this.faces[kk].length));
+              }
+              this.faces[kk] = new Face(qs);
+            }
             const o = this.basefaces[i].length;
             for (let m = 1; m < o; m++) {
               this.cubies[k].push(this.cubies[k][m - 1]);
@@ -2485,7 +2685,7 @@ export class PuzzleGeometry {
               }
               if (r[0] === movebits[0] && r[1] === movebits[1]) {
                 nameoverride = parsedmove[0];
-                inverted = parsedmove[4];
+                inverted = !parsedmove[4];
               }
             }
           }
