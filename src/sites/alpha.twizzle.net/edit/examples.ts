@@ -28,6 +28,7 @@ U // AUF
     alg: `[[R: U]: [U, R]]`,
     experimentalStickering: "PLL",
     experimentalSetupAnchor: "end",
+    experimentalTitle: "Sune",
   },
 
   notation: {
