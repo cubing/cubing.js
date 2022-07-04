@@ -24,10 +24,44 @@
 
   <body>
     <dialog id="stuff-for-nerds">
-      <span>The following has been copied to the clipboard.</span>
       <form method="dialog">
+        <label for="rotations" title="Include all puzzle rotations"
+          ><input type="checkbox" id="rotations" />Rotations</label>
+        <label for="allmoves" title=
+               "Include all single slice moves (like center slices on 3x3x3)"
+          ><input type="checkbox" id="allmoves" />All Moves</label>
+        <label for="outerblockmoves" title=
+               "Use wide moves instead of slice moves"
+        ><input type="checkbox" id="outerblockmoves" />Outer Block Moves</label>
+        <label for="vertexmoves" title=
+               "Prefer vertex to face moves on tetrahedron"
+        ><input type="checkbox" id="vertexmoves" />Vertex Moves</label>
+        <label for="nocorners" title="Eliminate all corner orbits"
+        ><input type="checkbox" id="nocorners" />No Corners</label>
+        <label for="noedges" title="Eliminate all edges orbits"
+        ><input type="checkbox" id="noedges" />No Edges</label>
+        <label for="nocenters" title="Eliminate all center orbits"
+        ><input type="checkbox" id="nocorners" />No Centers</label>
+        <label for="noorientation" title="Eliminate all orientations"
+        ><input type="checkbox" id="noorientation" />No Orientations</label>
+        <label for="orientcenters" title="Add center orientations"
+        ><input type="checkbox" id="orientcenters" />Orient Centers</label>
+        <label for="optimize" title="Optimize output"
+        ><input type="checkbox" id="optimize" />Optimize</label>
+        <label for="fixcorner" title="Choose moves to fix a corner in place"
+        ><input type="checkbox" id="fixcorner" />Fix corner</label>
+        <label for="fixedge" title="Choose moves to fix an edge in place"
+        ><input type="checkbox" id="fixedge" />Fix Edge</label>
+        <label for="fixcenter" title="Choose moves to fix a center in place"
+        ><input type="checkbox" id="fixcenter" />Fix Center</label>
+        <label for="moves" title="Comma-separated list of moves to include"
+        >Moves: <input type=text name="moves"></label>
+        <label for="omit" title="Comma-separated list of orbits to exclude"
+        >Omit orbits: <input type=text name="omit"></label>
+        <button type="submit">Regenerate</button>
         <button type="submit">Close</button>
       </form>
+      <!-- <div>The following has been copied to the clipboard.</div> -->
       <textarea></textarea>
     </dialog>
     <div class="title">
