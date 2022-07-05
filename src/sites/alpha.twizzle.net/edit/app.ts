@@ -255,7 +255,6 @@ class ControlPane {
       "alg",
       "twisty-alg-editor",
     );
-    this.algInput, { twistyPlayer };
     this.algInput.twistyPlayer = twistyPlayer;
 
     this.puzzleSelect = findOrCreateChildWithClass(
