@@ -300,12 +300,14 @@ class ControlPane {
       "stickering",
       "select",
     );
-    Promise.all([
-      this.twistyPlayer.experimentalModel.twistySceneModel.stickering.get(),
-      this.twistyPlayer.experimentalModel.puzzleID.get(),
-    ]).then(([stickering, puzzleID]) =>
-      this.initializeStickeringSelect(stickering, puzzleID),
-    );
+    this.twistyPlayer.experimentalModel.puzzleID.addFreshListener(() => {
+      Promise.all([
+        this.twistyPlayer.experimentalModel.twistySceneModel.stickering.get(),
+        this.twistyPlayer.experimentalModel.puzzleID.get(),
+      ]).then(([stickering, puzzleID]) =>
+        this.updateStickeringSelect(stickering, puzzleID),
+      );
+    });
 
     this.tempoInput = findOrCreateChildWithClass(
       this.element,
@@ -490,7 +492,7 @@ class ControlPane {
     this.twistyPlayer.experimentalSetupAnchor = option.value as SetupToLocation;
   }
 
-  private async initializeStickeringSelect(
+  private async updateStickeringSelect(
     initialStickering: string,
     puzzleName: string,
   ): Promise<void> {
@@ -505,7 +507,12 @@ class ControlPane {
       }
     } else {
       appearances = { full: {} } as any;
-      this.stickeringSelect.disabled = true;
+    }
+
+    if (!(initialStickering in appearances)) {
+      // TODO
+      (appearances as any)["(unsupported stickering)"] = {};
+      initialStickering = "(unsupported stickering)";
     }
 
     this.stickeringSelect.textContent = "";
