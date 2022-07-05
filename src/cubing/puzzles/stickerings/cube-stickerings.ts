@@ -24,12 +24,12 @@ export async function cubeAppearance(
   // const E = (): PieceSet => m.not(orUD());
   const orLR = (): PieceSet => m.or(m.moves(["L", "R"]));
   const M = (): PieceSet => m.not(orLR());
-  const orFB = (): PieceSet => m.or(m.moves(["F", "B"]));
-  const S = (): PieceSet => m.not(orFB());
+  // const orFB = (): PieceSet => m.or(m.moves(["F", "B"]));
+  // const S = (): PieceSet => m.not(orFB());
 
   const F2L = (): PieceSet => m.not(LL());
 
-  const centerU = (): PieceSet => m.and([LL(), M(), S()]);
+  const centerLL = (): PieceSet => m.and([LL(), m.orbits(["CENTERS"])]);
 
   const CENTERS = (): PieceSet => m.orbits(["CENTERS"]);
   const EDGES = (): PieceSet => m.orbits(["EDGES"]);
@@ -47,15 +47,17 @@ export async function cubeAppearance(
 
   function setPLL(): void {
     puzzleStickering.set(LL(), PieceStickering.PermuteNonPrimary);
+    puzzleStickering.set(centerLL(), PieceStickering.Dim); // For PG
   }
 
   function setOLL(): void {
     puzzleStickering.set(LL(), PieceStickering.IgnoreNonPrimary);
+    puzzleStickering.set(centerLL(), PieceStickering.Regular); // For PG
   }
 
   function dimOLL(): void {
     puzzleStickering.set(LL(), PieceStickering.Ignoriented);
-    puzzleStickering.set(centerU(), PieceStickering.Dim); // TODO: why is this needed?
+    puzzleStickering.set(centerLL(), PieceStickering.Dim); // For PG
   }
 
   switch (stickering) {
@@ -120,7 +122,7 @@ export async function cubeAppearance(
     case "ZBLL":
       dimF2L();
       puzzleStickering.set(LL(), PieceStickering.PermuteNonPrimary);
-      puzzleStickering.set(centerU(), PieceStickering.Dim); // why is this needed?
+      puzzleStickering.set(centerLL(), PieceStickering.Dim); // For PG
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Regular);
       break;
     case "ZBLS":
@@ -140,7 +142,7 @@ export async function cubeAppearance(
       dimF2L();
       puzzleStickering.set(slotFR(), PieceStickering.Regular);
       puzzleStickering.set(LL(), PieceStickering.Ignored);
-      puzzleStickering.set(centerU(), PieceStickering.Dim);
+      puzzleStickering.set(centerLL(), PieceStickering.Dim);
       break;
     case "EO":
       puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
@@ -182,7 +184,7 @@ export async function cubeAppearance(
       puzzleStickering.set(
         m.and([CENTERS(), orUD()]),
         PieceStickering.OrientationStickers,
-      ); // TODO: why is this needed?
+      ); // For PG
       break;
     case "Daisy":
       puzzleStickering.set(m.all(), PieceStickering.Ignored);
