@@ -27,6 +27,8 @@ import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
 import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
+import type { AlgWithIssues } from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+import { experimentalCountMoves } from "../../../cubing/notation";
 // import { setURLParams } from "./url-params";
 
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
@@ -194,6 +196,7 @@ customElementsShim.define("button-grid", ButtonGrid);
 class ControlPane {
   public experimentalSetupAlgInput: TwistyAlgEditor;
   public algInput: TwistyAlgEditor;
+  public moveCountDisplay: HTMLElement;
   public puzzleSelect: HTMLSelectElement;
   public setupAnchorSelect: HTMLSelectElement;
   public stickeringSelect: HTMLSelectElement;
@@ -249,6 +252,23 @@ class ControlPane {
       "twisty-alg-editor",
     );
     this.experimentalSetupAlgInput.twistyPlayer = twistyPlayer;
+
+    this.moveCountDisplay = findOrCreateChildWithClass(
+      this.element,
+      "move-count",
+      "span",
+    );
+    this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener(
+      (algWithIssues: AlgWithIssues) => {
+        if (algWithIssues.issues.errors.length == 0) {
+          this.moveCountDisplay.textContent = ` (${experimentalCountMoves(
+            algWithIssues.alg,
+          )} ETM)`;
+        } else {
+          this.moveCountDisplay.textContent = "";
+        }
+      },
+    );
 
     this.algInput = findOrCreateChildWithClass(
       this.element,

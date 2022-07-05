@@ -156,3 +156,7 @@ twisty-stream-source {
   height: auto;
   padding: 2em;
 }
+
+.move-count {
+  opacity: 0.3;
+}
