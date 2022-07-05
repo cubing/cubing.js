@@ -16,7 +16,7 @@ export async function megaminxAppearance(
     case "PLL":
     case "ELS":
     case "CLS":
-      return cubeAppearance(puzzleLoader, stickering, true);
+      return cubeAppearance(puzzleLoader, stickering);
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,

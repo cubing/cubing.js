@@ -13,7 +13,6 @@ import { useGlobalCustomStickerer } from "./global-custom-stickering-hack";
 export async function cubeAppearance(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
-  forMega: boolean = false, // TODO
 ): Promise<PuzzleAppearance> {
   const kpuzzle = await puzzleLoader.kpuzzle();
   const puzzleStickering = new PuzzleStickering(kpuzzle);
@@ -38,7 +37,7 @@ export async function cubeAppearance(
 
   const edgeFR = (): PieceSet => m.and([m.and(m.moves(["F", "R"])), EDGES()]);
   const cornerDFR = (): PieceSet =>
-    m.and(m.moves([forMega ? "FR" : "D", "R", "F"]));
+    m.and([m.and(m.moves(["F", "R"])), CORNERS(), m.not(LL())]);
   const slotFR = (): PieceSet => m.or([cornerDFR(), edgeFR()]);
 
   function dimF2L(): void {
