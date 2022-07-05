@@ -13,6 +13,7 @@ import { useGlobalCustomStickerer } from "./global-custom-stickering-hack";
 export async function cubeAppearance(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
+  forMega: boolean = false, // TODO
 ): Promise<PuzzleAppearance> {
   const kpuzzle = await puzzleLoader.kpuzzle();
   const puzzleStickering = new PuzzleStickering(kpuzzle);
@@ -20,7 +21,7 @@ export async function cubeAppearance(
 
   const LL = (): PieceSet => m.move("U");
   const orUD = (): PieceSet => m.or(m.moves(["U", "D"]));
-  const E = (): PieceSet => m.not(orUD());
+  // const E = (): PieceSet => m.not(orUD());
   const orLR = (): PieceSet => m.or(m.moves(["L", "R"]));
   const M = (): PieceSet => m.not(orLR());
   const orFB = (): PieceSet => m.or(m.moves(["F", "B"]));
@@ -30,21 +31,15 @@ export async function cubeAppearance(
 
   const centerU = (): PieceSet => m.and([LL(), M(), S()]);
 
-  const edgeFR = (): PieceSet =>
-    m.and([m.and(m.moves(["F", "R"])), m.not(orUD())]);
-  const cornerDFR = (): PieceSet => m.and(m.moves(["D", "R", "F"]));
-  const slotFR = (): PieceSet => m.or([cornerDFR(), edgeFR()]);
-
-  const CENTERS = (): PieceSet =>
-    m.or([m.and([M(), E()]), m.and([M(), S()]), m.and([E(), S()])]);
-  const EDGES = (): PieceSet =>
-    m.or([
-      m.and([M(), orUD(), orFB()]),
-      m.and([E(), orLR(), orFB()]),
-      m.and([S(), orUD(), orLR()]),
-    ]);
-  const CORNERS = (): PieceSet => m.not(m.or([CENTERS(), EDGES()]));
+  const CENTERS = (): PieceSet => m.orbits(["CENTERS"]);
+  const EDGES = (): PieceSet => m.orbits(["EDGES"]);
+  const CORNERS = (): PieceSet => m.orbits(["CORNERS"]);
   const L6E = (): PieceSet => m.or([M(), m.and([LL(), EDGES()])]);
+
+  const edgeFR = (): PieceSet => m.and([m.and(m.moves(["F", "R"])), EDGES()]);
+  const cornerDFR = (): PieceSet =>
+    m.and(m.moves([forMega ? "FR" : "D", "R", "F"]));
+  const slotFR = (): PieceSet => m.or([cornerDFR(), edgeFR()]);
 
   function dimF2L(): void {
     puzzleStickering.set(F2L(), PieceStickering.Dim);
@@ -52,12 +47,10 @@ export async function cubeAppearance(
 
   function setPLL(): void {
     puzzleStickering.set(LL(), PieceStickering.PermuteNonPrimary);
-    puzzleStickering.set(centerU(), PieceStickering.Dim); // TODO: why is this needed?
   }
 
   function setOLL(): void {
     puzzleStickering.set(LL(), PieceStickering.IgnoreNonPrimary);
-    puzzleStickering.set(centerU(), PieceStickering.Regular); // TODO: why is this needed?
   }
 
   function dimOLL(): void {
@@ -74,12 +67,9 @@ export async function cubeAppearance(
       break;
     case "CLS":
       dimF2L();
-      puzzleStickering.set(
-        m.and(m.moves(["D", "R", "F"])),
-        PieceStickering.Regular,
-      );
+      puzzleStickering.set(cornerDFR(), PieceStickering.Regular);
       puzzleStickering.set(LL(), PieceStickering.Ignoriented);
-      puzzleStickering.set(m.and([LL(), M(), S()]), PieceStickering.Dim);
+      puzzleStickering.set(m.and([LL(), CENTERS()]), PieceStickering.Dim);
       puzzleStickering.set(
         m.and([LL(), CORNERS()]),
         PieceStickering.IgnoreNonPrimary,

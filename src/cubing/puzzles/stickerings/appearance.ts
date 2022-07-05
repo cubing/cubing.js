@@ -272,13 +272,13 @@ export class StickeringManager {
     return moveSources.map((moveSource) => this.move(moveSource));
   }
 
-  // orbits(orbitNames: string[]): PieceSet {
-  //   const pieceSet = new PieceAnnotation<boolean>(this.def, false);
-  //   for (const orbitName of orbitNames) {
-  //     pieceSet.stickerings.get(orbitName)!.fill(true);
-  //   }
-  //   return pieceSet;
-  // }
+  orbits(orbitNames: string[]): PieceSet {
+    const pieceSet = new PieceAnnotation<boolean>(this.kpuzzle, false);
+    for (const orbitName of orbitNames) {
+      pieceSet.stickerings.get(orbitName)!.fill(true);
+    }
+    return pieceSet;
+  }
 
   // trueCounts(pieceSet: PieceSet): Record<string, number> {
   //   const counts: Record<string, number> = {};

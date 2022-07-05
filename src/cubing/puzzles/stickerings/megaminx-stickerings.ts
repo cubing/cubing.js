@@ -12,7 +12,11 @@ export async function megaminxAppearance(
     case "full":
     case "F2L":
     case "LL":
-      return cubeAppearance(puzzleLoader, stickering);
+    case "OLL":
+    case "PLL":
+    case "ELS":
+    case "CLS":
+      return cubeAppearance(puzzleLoader, stickering, true);
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,
@@ -22,5 +26,5 @@ export async function megaminxAppearance(
 }
 
 export async function megaminxStickerings(): Promise<ExperimentalStickering[]> {
-  return ["full", "F2L", "LL"];
+  return ["full", "F2L", "LL", "OLL", "PLL", "ELS", "CLS"];
 }
