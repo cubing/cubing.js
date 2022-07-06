@@ -8,6 +8,7 @@ import {
   getPuzzleDescriptionString,
   getPG3DNamedPuzzles,
   PuzzleGeometry,
+  PuzzleGeometryOptions,
 } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import type { TwistyAlgEditor, TwistyPlayer } from "../../../cubing/twisty";
@@ -16,6 +17,53 @@ import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params";
 
 import "./TwistyPuzzleDescriptionInput";
 import type { PuzzleLoader } from "../../../cubing/puzzles";
+
+function getCheckBox(s: string): boolean {
+  const el = document.getElementById(s) as HTMLInputElement;
+  return el && el.checked;
+}
+
+function getCSV(s: string): string[] | null {
+  console.log("In getCSV with " + s);
+  const el = document.getElementById(s) as HTMLInputElement;
+  if (el) {
+    console.log("Found element");
+    if (el.value.trim() === "") {
+      return null;
+    }
+    const r = el.value.split(",");
+    for (let i = 0; i < r.length; i++) {
+      r[i] = r[i].trim();
+    }
+    console.log(r);
+    return r;
+  } else {
+    return null;
+  }
+}
+function getPGOptionsFromUI(): PuzzleGeometryOptions {
+  return {
+    allMoves: getCheckBox("allmoves"),
+    addRotations: getCheckBox("rotations"),
+    outerBlockMoves: getCheckBox("outerblockmoves"),
+    vertexMoves: getCheckBox("vertexmoves"),
+    includeCornerOrbits: !getCheckBox("nocorners"),
+    includeEdgeOrbits: !getCheckBox("noedges"),
+    includeCenterOrbits: !getCheckBox("nocenters"),
+    fixedOrientation: getCheckBox("noorientation"),
+    orientCenters: getCheckBox("orientcenters"),
+    optimizeOrbits: getCheckBox("optimize"),
+    fixedPieceType: getCheckBox("fixcorner")
+      ? "v"
+      : getCheckBox("fixedge")
+      ? "e"
+      : getCheckBox("fixcenter")
+      ? "f"
+      : null,
+    moveList: getCSV("moves"),
+    excludeOrbits: getCSV("orbits") || [],
+  };
+}
 
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;
@@ -78,13 +126,11 @@ export class TwizzleExplorerApp {
   }
 
   async nerdPuzzleGeometry(): Promise<PuzzleGeometry> {
-    const puzzleLoader =
-      await this.twistyPlayer.experimentalModel.puzzleLoader.get();
-
-    if (!puzzleLoader.pg) {
-      throw new Error("could not get PG from puzzle loader");
-    }
-    return puzzleLoader.pg();
+    const puzzleGeometry = await import("../../../cubing/puzzle-geometry");
+    return puzzleGeometry.getPuzzleGeometryByDesc(
+      this.configUI.descInput.value,
+      getPGOptionsFromUI(),
+    );
   }
 
   setPuzzleName(puzzleName: string): void {
@@ -239,7 +285,9 @@ class SelectUI {
       }
       case "canon": {
         const lines: string[] = [];
-        (await this.app.nerdPuzzleGeometry()).showcanon((line) => lines.push(line));
+        (await this.app.nerdPuzzleGeometry()).showcanon((line) =>
+          lines.push(line),
+        );
         this.app.showText(lines.join("\n"));
         break;
       }
