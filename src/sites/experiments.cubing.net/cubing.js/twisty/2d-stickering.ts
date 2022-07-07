@@ -41,6 +41,7 @@ function demo(visualization: VisualizationFormat): void {
   addAlg("EOline", "B U B' D F R' L D'");
   addAlg("EOcross", "B U B' D F R' L D'");
   addAlg("CMLL", "F R U R' U' F'");
+  addAlg("L10P", "r U' r' F R' F' R");
   addAlg("L6E", "U M2' U' M2'");
   addAlg("L6EO", "(U' M U' M')2");
   addAlg("Daisy", "S2 R2 L2");
