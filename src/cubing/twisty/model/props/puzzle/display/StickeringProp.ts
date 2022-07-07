@@ -24,6 +24,7 @@ export const experimentalStickerings = {
   "EOline": true,
   "EOcross": true,
   "CMLL": true,
+  "L10P": true,
   "L6E": true,
   "L6EO": true,
   "Daisy": true,

@@ -171,6 +171,10 @@ export async function cubeAppearance(
       puzzleStickering.set(L6E(), PieceStickering.Ignored);
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Regular);
       break;
+    case "L10P":
+      puzzleStickering.set(m.not(L6E()), PieceStickering.Dim);
+      puzzleStickering.set(m.and([CORNERS(), LL()]), PieceStickering.Regular);
+      break;
     case "L6E":
       puzzleStickering.set(m.not(L6E()), PieceStickering.Dim);
       break;
@@ -280,6 +284,7 @@ export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
     "EOline",
     "EOcross",
     "CMLL",
+    "L10P",
     "L6E",
     "L6EO",
     "Daisy",
