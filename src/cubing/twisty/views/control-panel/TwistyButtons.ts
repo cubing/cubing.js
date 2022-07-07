@@ -46,8 +46,7 @@ export class TwistyButtons extends ManagedCustomElement {
     for (const command in buttonCommands) {
       const button = new TwistyButton();
       buttons[command as ButtonCommand] = button;
-      // Why does this still fire with the `disabled` attribute?
-      button.addEventListener("click", () =>
+      button.htmlButton.addEventListener("click", () =>
         this.#onCommand(command as ButtonCommand),
       );
       this.addElement(button);
@@ -123,8 +122,8 @@ export class TwistyButtons extends ManagedCustomElement {
       const button = this.buttons![command as ButtonCommand];
       // TODO: track individual changes?
       const info = buttonAppearances[command as ButtonCommand];
-      button.button.disabled = !info.enabled;
-      button.button.title = info.title;
+      button.htmlButton.disabled = !info.enabled;
+      button.htmlButton.title = info.title;
       button.setIcon(info.icon);
       button.hidden = !!info.hidden;
       // button.textContent = info.icon;
@@ -135,11 +134,11 @@ export class TwistyButtons extends ManagedCustomElement {
 customElementsShim.define("twisty-buttons", TwistyButtons);
 
 class TwistyButton extends ManagedCustomElement {
-  button: HTMLButtonElement = document.createElement("button"); // TODO: async?
+  htmlButton: HTMLButtonElement = document.createElement("button"); // TODO: async?
 
   connectedCallback() {
     this.addCSS(buttonCSS);
-    this.addElement(this.button);
+    this.addElement(this.htmlButton);
   }
 
   #iconManager: ClassListManager<ButtonIcon> = new ClassListManager(
