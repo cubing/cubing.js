@@ -56,7 +56,10 @@ recognition.onresult = function (event) {
       .replace("ARE", "R")
       .replace("OUR", "R")
       .replace("ALL", "L")
-      .replace("EL", "L");
+      .replace("EL", "L")
+      .replace("WHITE", "WIDE")
+      .replace("WHY DO", "WIDE")
+      .replace("WHY ARE", "WIDE R");
     switch (transcript) {
       case "UNDO":
         player.experimentalModel.alg.set(
@@ -94,7 +97,13 @@ recognition.onresult = function (event) {
     transcript = transcript
       .replace("X", "x")
       .replace("Y", "y")
-      .replace("Z", "z");
+      .replace("Z", "z")
+      .replace("WIDE U", "Uw")
+      .replace("WIDE F", "Fw")
+      .replace("WIDE L", "Lw")
+      .replace("WIDE R", "Rw")
+      .replace("WIDE B", "Bw")
+      .replace("WIDE D", "Dw");
     try {
       kpuzzle.moveToTransformation(transcript);
       player.experimentalAddMove(transcript);
