@@ -1,8 +1,7 @@
 import { Alg, LineComment, Newline } from "../../../../cubing/alg";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 import {
-  ExperimentalStickering,
-  experimentalStickerings,
+  experimentalStickerings
 } from "../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 
 const algsTextarea = document.querySelector("#algs") as HTMLTextAreaElement;
@@ -39,7 +38,7 @@ for (const stickering of Object.keys(experimentalStickerings)) {
 const stickering = new URL(location.href).searchParams.get("stickering");
 if (stickering) {
   if (stickering in experimentalStickerings) {
-    player.experimentalStickering = stickering as ExperimentalStickering;
+    player.experimentalStickering = stickering ;
     stickeringSelect.value = stickering;
   } else {
     console.error("Invalid stickering:", stickering);
@@ -47,7 +46,7 @@ if (stickering) {
 }
 
 stickeringSelect?.addEventListener("change", () => {
-  const stickering = stickeringSelect.value as ExperimentalStickering;
+  const stickering = stickeringSelect.value ;
   player.experimentalStickering = stickering;
 
   const url = new URL(location.href);
