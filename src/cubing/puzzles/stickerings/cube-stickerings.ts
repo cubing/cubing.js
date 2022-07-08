@@ -2,9 +2,10 @@ import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   PieceSet,
-  PieceStickering, PuzzleAppearance,
+  PieceStickering,
+  PuzzleAppearance,
   PuzzleStickering,
-  StickeringManager
+  StickeringManager,
 } from "./appearance";
 import { experimentalStickerings } from "./puzzle-stickerings";
 
@@ -135,13 +136,16 @@ export async function cubeAppearance(
       puzzleStickering.set(slotFR(), PieceStickering.Regular);
       setOLL();
       break;
-      case "WVLS":
-        dimF2L();
-        puzzleStickering.set(slotFR(), PieceStickering.Regular);
-        puzzleStickering.set(m.and([LL(), EDGES()]), PieceStickering.Ignoriented);
-        puzzleStickering.set(m.and([LL(), CENTERS()]), PieceStickering.Dim);
-        puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.IgnoreNonPrimary);
-        break;
+    case "WVLS":
+      dimF2L();
+      puzzleStickering.set(slotFR(), PieceStickering.Regular);
+      puzzleStickering.set(m.and([LL(), EDGES()]), PieceStickering.Ignoriented);
+      puzzleStickering.set(m.and([LL(), CENTERS()]), PieceStickering.Dim);
+      puzzleStickering.set(
+        m.and([LL(), CORNERS()]),
+        PieceStickering.IgnoreNonPrimary,
+      );
+      break;
     case "LS":
       dimF2L();
       puzzleStickering.set(slotFR(), PieceStickering.Regular);
@@ -267,7 +271,7 @@ export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
   const stickerings: ExperimentalStickering[] = [];
   for (const [name, info] of Object.entries(experimentalStickerings)) {
     if (info.groups && "3x3x3" in info.groups) {
-      stickerings.push(name)
+      stickerings.push(name);
     }
   }
   return stickerings;

@@ -520,11 +520,16 @@ class ControlPane {
     }
 
     this.stickeringSelect.textContent = "";
-    let currentOptGroup: HTMLOptGroupElement | null = null
+    let currentOptGroup: HTMLOptGroupElement | null = null;
     for (const [appearanceName, appearance] of Object.entries(appearances)) {
-      const stickeringGroup = appearanceName === UNSUPPORTED_STICKERING ? "Unsupported" : getStickeringGroup(appearanceName, puzzleName as PuzzleID);
+      const stickeringGroup =
+        appearanceName === UNSUPPORTED_STICKERING
+          ? "Unsupported"
+          : getStickeringGroup(appearanceName, puzzleName as PuzzleID);
       if (!currentOptGroup || currentOptGroup.label !== stickeringGroup) {
-        currentOptGroup = this.stickeringSelect.appendChild(document.createElement("optgroup"));
+        currentOptGroup = this.stickeringSelect.appendChild(
+          document.createElement("optgroup"),
+        );
         currentOptGroup.label = stickeringGroup;
       }
       const option = document.createElement("option");
@@ -542,8 +547,8 @@ class ControlPane {
   }
 
   private stickeringChanged(): void {
-    this.twistyPlayer.experimentalStickering = this.stickeringSelect
-      .selectedOptions[0].value ;
+    this.twistyPlayer.experimentalStickering =
+      this.stickeringSelect.selectedOptions[0].value;
   }
 
   onPuzzle(puzzle: PuzzleID): void {

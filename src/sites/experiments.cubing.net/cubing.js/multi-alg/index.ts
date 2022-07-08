@@ -36,7 +36,7 @@ for (const stickering of Object.keys(experimentalStickerings)) {
 const stickering = new URL(location.href).searchParams.get("stickering");
 if (stickering) {
   if (stickering in experimentalStickerings) {
-    player.experimentalStickering = stickering ;
+    player.experimentalStickering = stickering;
     stickeringSelect.value = stickering;
   } else {
     console.error("Invalid stickering:", stickering);
@@ -44,7 +44,7 @@ if (stickering) {
 }
 
 stickeringSelect?.addEventListener("change", () => {
-  const stickering = stickeringSelect.value ;
+  const stickering = stickeringSelect.value;
   player.experimentalStickering = stickering;
 
   const url = new URL(location.href);
