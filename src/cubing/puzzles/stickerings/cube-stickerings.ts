@@ -131,13 +131,18 @@ export async function cubeAppearance(
       setOLL();
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Ignored);
       break;
-    case "WVLS":
-    // fallthrough
     case "VLS":
       dimF2L();
       puzzleStickering.set(slotFR(), PieceStickering.Regular);
       setOLL();
       break;
+      case "WVLS":
+        dimF2L();
+        puzzleStickering.set(slotFR(), PieceStickering.Regular);
+        puzzleStickering.set(m.and([LL(), EDGES()]), PieceStickering.Ignoriented);
+        puzzleStickering.set(m.and([LL(), CENTERS()]), PieceStickering.Dim);
+        puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.IgnoreNonPrimary);
+        break;
     case "LS":
       dimF2L();
       puzzleStickering.set(slotFR(), PieceStickering.Regular);

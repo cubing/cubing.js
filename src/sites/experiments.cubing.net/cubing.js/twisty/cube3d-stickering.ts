@@ -34,9 +34,9 @@ function demo(visualization: VisualizationFormat): void {
   addAlg("LL", "R' F R F2' U F R U R' F' U' F");
   addAlg("F2L", "R2' u R2 u' R2'");
   addAlg("ZBLL", "R' F R U' R' U' R U R' F' R U R' U' R' F R F' R");
-  addAlg("ZBLS", "x' R2 U' R' U l'");
-  addAlg("WVLS", "R' F R U R U' R' F'");
-  addAlg("VLS", "R' F2 R F2' L' U2 L");
+  addAlg("ZBLS", "r' R U' R U (R2' r)");
+  addAlg("VLS", "x' R2 U' R' U l'");
+  addAlg("WVLS", "R' F2 R F2' L' U2 L");
   addAlg("LS", "U' R U' R' U R U R'");
   addAlg("EO", "R' F R");
   addAlg("EOline", "B U B' D F R' L D'");
