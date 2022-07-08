@@ -1,4 +1,4 @@
-export { experimental3x3x3KPuzzle } from "../kpuzzle";
+export { experimental3x3x3KPuzzle } from "./cubing-private";
 export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "./customPGPuzzleLoader";
 export { eventInfo, wcaEventInfo } from "./events";
 export { getFaceletAppearance as experimentalGetFaceletAppearance } from "./stickerings/appearance";

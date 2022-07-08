@@ -1,4 +1,10 @@
-import { experimental3x3x3KPuzzle, KState } from "../../kpuzzle";
+import { KState } from "../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../puzzles";
+import {
+  experimentalNormalize3x3x3Orientation,
+  experimentalPuzzleOrientation3x3x3Cache,
+  experimentalPuzzleOrientation3x3x3Idx,
+} from "../../puzzles/cubing-private";
 import {
   identityPermutation,
   lexToPermutation,
@@ -6,11 +12,17 @@ import {
   orientationsToMask,
   permutationToLex,
 } from "./orbit-indexing";
-import {
-  normalizePuzzleOrientation,
-  puzzleOrientationIdx,
-  reorientPuzzle,
-} from "./puzzle-orientation";
+
+// TODO: combine with `orientPuzzle`?
+export function reorientPuzzle(
+  state: KState,
+  idxU: number,
+  idxL: number,
+): KState {
+  return state.applyTransformation(
+    experimentalPuzzleOrientation3x3x3Cache()[idxU][idxL].invert(),
+  );
+}
 
 type Binary3x3x3State = ArrayBuffer;
 
@@ -87,7 +99,7 @@ function supportsPuzzleOrientation(components: Binary3x3x3Components): boolean {
 export function reid3x3x3ToBinaryComponents(
   state: KState,
 ): Binary3x3x3Components {
-  const normedState = normalizePuzzleOrientation(state);
+  const normedState = experimentalNormalize3x3x3Orientation(state);
 
   const epLex = permutationToLex(normedState.stateData["EDGES"].pieces);
   const eoMask = orientationsToMask(
@@ -99,7 +111,7 @@ export function reid3x3x3ToBinaryComponents(
     3,
     normedState.stateData["CORNERS"].orientation,
   );
-  const [poIdxU, poIdxL] = puzzleOrientationIdx(state);
+  const [poIdxU, poIdxL] = experimentalPuzzleOrientation3x3x3Idx(state);
   const moSupport = 1; // Required for now.
   const moMask = orientationsToMask(
     4,

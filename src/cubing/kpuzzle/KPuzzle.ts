@@ -130,4 +130,17 @@ export class KPuzzle {
       "KPuzzle is now a different class. Try `.algToTransformation()` to get the transformation for an alg.",
     );
   }
+
+  // Note: the options are intentionally required for now, since we haven't yet
+  // figured out how to make sure there is no unexpected behaviour with the
+  // defaults.
+  experimentalIsStateSolved:
+    | ((
+        kstate: KState,
+        options: {
+          ignorePuzzleOrientation: boolean;
+          ignoreCenterOrientation: boolean;
+        },
+      ) => boolean)
+    | null = null;
 }

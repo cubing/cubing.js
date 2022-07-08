@@ -1,4 +1,4 @@
-import  { experimentalStickerings } from "../../../../../puzzles/cubing-private";
+import { experimentalStickerings } from "../../../../../puzzles/cubing-private";
 import { SimpleTwistyPropSource } from "../../TwistyProp";
 import type { PuzzleID } from "../structure/PuzzleIDRequestProp";
 
@@ -7,10 +7,13 @@ import type { PuzzleID } from "../structure/PuzzleIDRequestProp";
 
 export type ExperimentalStickering = keyof typeof experimentalStickerings;
 
-export function getStickeringGroup(stickering: ExperimentalStickering, puzzleID: PuzzleID): string  {
+export function getStickeringGroup(
+  stickering: ExperimentalStickering,
+  puzzleID: PuzzleID,
+): string {
   const groups = experimentalStickerings[stickering]?.groups;
   if (!groups) {
-    return "Stickering"
+    return "Stickering";
   }
   return groups[puzzleID] ?? "Stickering";
 }

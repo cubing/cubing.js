@@ -1,5 +1,5 @@
 import { experimentalIs, Move } from "../../alg";
-import { experimental3x3x3KPuzzle } from "../../kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../puzzles";
 
 export interface PuzzleStreamMoveEventDetail {
   move: Move;

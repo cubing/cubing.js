@@ -3,7 +3,7 @@
 
 import { Alg } from "../../../../cubing/alg";
 import { KPuzzle } from "../../../../cubing/kpuzzle";
-import { cube3x3x3KPuzzleDefinition } from "../../../../cubing/kpuzzle/3x3x3/3x3x3.kpuzzle.json";
+import { experimentalCube3x3x3KPuzzleDefinition } from "../../../../cubing/puzzles/cubing-private";
 import "../../../../cubing/twisty";
 
 const AnySpeechRecognition = webkitSpeechRecognition;
@@ -28,7 +28,7 @@ document.body.onclick = function () {
   console.log("Ready to receive a color command.");
 };
 
-const kpuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);
+const kpuzzle = new KPuzzle(experimentalCube3x3x3KPuzzleDefinition);
 const player = document.querySelector("twisty-player")!;
 const alternativeListElem = document.querySelector("alternative-list")!;
 

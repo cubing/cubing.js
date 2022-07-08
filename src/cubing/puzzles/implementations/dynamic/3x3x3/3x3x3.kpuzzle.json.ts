@@ -1,9 +1,4 @@
-// TODO: This file is here to avoid dependency loops, but it should eventually
-// move back into `cubing/puzzles`. We currently have a few functions that are
-// hardcoded to require synchronous access to this definition, and we need to
-// find a better way to do that.
-
-import type { KPuzzleDefinition } from "../KPuzzleDefinition";
+import type { KPuzzleDefinition } from "../../../../kpuzzle";
 
 export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
   name: "3x3x3",
