@@ -73,11 +73,11 @@ export class KState {
     ignorePuzzleOrientation: boolean;
     ignoreCenterOrientation: boolean;
   }): boolean {
-    if (!this.kpuzzle.experimentalIsStateSolved) {
+    if (!this.kpuzzle.definition.experimentalIsStateSolved) {
       throw new Error(
-        "`KState.experimentalIs3x3x3Solved()` is not supported for this puzzle at the moment.",
+        "`KState.experimentalIsSolved()` is not supported for this puzzle at the moment.",
       );
     }
-    return this.kpuzzle.experimentalIsStateSolved(this, options);
+    return this.kpuzzle.definition.experimentalIsStateSolved(this, options);
   }
 }

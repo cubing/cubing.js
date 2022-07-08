@@ -7,7 +7,8 @@ export { experimentalCube3x3x3KPuzzleDefinition };
 export const experimental3x3x3KPuzzle = new KPuzzle(
   experimentalCube3x3x3KPuzzleDefinition,
 );
-experimental3x3x3KPuzzle.experimentalIsStateSolved = experimentalIs3x3x3Solved;
+experimentalCube3x3x3KPuzzleDefinition.experimentalIsStateSolved =
+  experimentalIs3x3x3Solved;
 
 export {
   experimentalIs3x3x3Solved,
