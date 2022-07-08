@@ -48,6 +48,12 @@ class App {
   ) as HTMLTextAreaElement;
 
   orderElem = document.querySelector("#order")!;
+  isSolvedWithCenterOriElem = document.querySelector(
+    "#is-solved-with-center-ori",
+  )!;
+  isSolvedIgnoringCenterOriElem = document.querySelector(
+    "#is-solved-ignoring-center-ori",
+  )!;
 
   stickersTextarea = document.querySelector("#stickers") as HTMLTextAreaElement;
 
@@ -145,8 +151,19 @@ class App {
       .experimentalToTransformation()!
       .repetitionOrder()
       .toString();
+    this.isSolvedIgnoringCenterOriElem.textContent = state
+      .experimentalIsSolved({
+        ignoreCenterOrientation: true,
+        ignorePuzzleOrientation: true,
+      })
+      .toString();
+    this.isSolvedWithCenterOriElem.textContent = state
+      .experimentalIsSolved({
+        ignoreCenterOrientation: false,
+        ignorePuzzleOrientation: true,
+      })
+      .toString();
   }
 }
-
 const app = new App();
 (window as any).app = app;
