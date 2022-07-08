@@ -6,7 +6,6 @@ import {
   PuzzleStickering,
   StickeringManager
 } from "./appearance";
-import { useGlobalCustomStickerer } from "./global-custom-stickering-hack";
 import { experimentalStickerings } from "./puzzle-stickerings";
 
 // TODO: cache calculations?
@@ -254,11 +253,6 @@ export async function cubeAppearance(
       break;
     case "centers-only":
       puzzleStickering.set(m.not(CENTERS()), PieceStickering.Ignored);
-      break;
-    case "experimental-global-custom-1":
-    // fallthrough
-    case "experimental-global-custom-2":
-      useGlobalCustomStickerer(puzzleStickering, m);
       break;
     default:
       console.warn(

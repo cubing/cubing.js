@@ -43,6 +43,4 @@ export const experimentalStickerings: Record<string, {groups?: Partial<Record<Pu
   "experimental-fto-l2c": {groups: {"fto": "Bencisco"}},
   "experimental-fto-lbt": {groups: {"fto": "Bencisco"}},
   "experimental-fto-l3t": {groups: {"fto": "Bencisco"}},
-  "experimental-global-customs-1": {},
-  "experimental-global-customs-2": {},
 };
