@@ -16,3 +16,10 @@ export {
   puzzleOrientation3x3x3Idx as experimentalPuzzleOrientation3x3x3Idx,
 } from "../implementations/dynamic/3x3x3/puzzle-orientation";
 export { experimentalStickerings } from "../stickerings/puzzle-stickerings";
+
+export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "../customPGPuzzleLoader";
+export { getFaceletAppearance as experimentalGetFaceletAppearance } from "../stickerings/appearance";
+export type {
+  FaceletMeshAppearance as ExperimentalFaceletMeshAppearance,
+  PuzzleAppearance as ExperimentalPuzzleAppearance,
+} from "../stickerings/appearance";

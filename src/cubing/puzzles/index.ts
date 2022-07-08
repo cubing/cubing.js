@@ -1,11 +1,4 @@
-export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "./customPGPuzzleLoader";
 export { eventInfo, wcaEventInfo } from "./events";
-export { getFaceletAppearance as experimentalGetFaceletAppearance } from "./stickerings/appearance";
-export type {
-  FaceletMeshAppearance as ExperimentalFaceletMeshAppearance,
-  PuzzleAppearance as ExperimentalPuzzleAppearance,
-} from "./stickerings/appearance";
-export { cubeAppearance as experimentalCubeAppearance } from "./stickerings/cube-stickerings";
 export type { PuzzleLoader };
 export { cube2x2x2, cube3x3x3 };
 

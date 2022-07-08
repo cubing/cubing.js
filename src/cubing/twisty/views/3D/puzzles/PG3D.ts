@@ -25,7 +25,7 @@ import {
   ExperimentalFaceletMeshAppearance,
   experimentalGetFaceletAppearance,
   ExperimentalPuzzleAppearance,
-} from "../../../../puzzles";
+} from "../../../../puzzles/cubing-private";
 import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
 import type { HintFaceletStyle } from "../../../model/props/puzzle/display/HintFaceletProp";
