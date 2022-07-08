@@ -1,11 +1,11 @@
 import type { ExperimentalStickering } from "../../twisty";
+import { experimentalStickerings } from "../../twisty/model/props/puzzle/display/StickeringProp";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
-  PuzzleAppearance,
-  PuzzleStickering,
-  StickeringManager,
   PieceSet,
-  PieceStickering,
+  PieceStickering, PuzzleAppearance,
+  PuzzleStickering,
+  StickeringManager
 } from "./appearance";
 import { useGlobalCustomStickerer } from "./global-custom-stickering-hack";
 
@@ -264,36 +264,11 @@ export async function cubeAppearance(
 }
 
 export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
-  return [
-    "full",
-    "PLL",
-    "CLS",
-    "OLL",
-    "COLL",
-    "OCLL",
-    "ELL",
-    "ELS",
-    "LL",
-    "F2L",
-    "ZBLL",
-    "ZBLS",
-    "WVLS",
-    "VLS",
-    "LS",
-    "EO",
-    "EOline",
-    "EOcross",
-    "CMLL",
-    "L10P",
-    "L6E",
-    "L6EO",
-    "Daisy",
-    "Cross",
-    "2x2x2",
-    "2x2x3",
-    "Void Cube",
-    "picture",
-    "invisible",
-    "centers-only",
-  ];
+  const stickerings: ExperimentalStickering[] = [];
+  for (const [name, info] of Object.entries(experimentalStickerings)) {
+    if (info.groups && "3x3x3" in info.groups) {
+      stickerings.push(name)
+    }
+  }
+  return stickerings;
 }

@@ -29,7 +29,11 @@ import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/
 import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
 import type { AlgWithIssues } from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
 import { experimentalCountMoves } from "../../../cubing/notation";
+import { getStickeringGroup } from "../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 // import { setURLParams } from "./url-params";
+
+// TODO: introduce concepts in `cubing/twisty` for "this is a valid twisty-player value, but not for the current puzzle".
+const UNSUPPORTED_STICKERING = "(unsupported stickering)";
 
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
   const newAlgBuilder = new AlgBuilder();
@@ -511,16 +515,22 @@ class ControlPane {
 
     if (!(initialStickering in appearances)) {
       // TODO
-      (appearances as any)["(unsupported stickering)"] = {};
-      initialStickering = "(unsupported stickering)";
+      (appearances as any)[UNSUPPORTED_STICKERING] = {};
+      initialStickering = UNSUPPORTED_STICKERING;
     }
 
     this.stickeringSelect.textContent = "";
+    let currentOptGroup: HTMLOptGroupElement | null = null
     for (const [appearanceName, appearance] of Object.entries(appearances)) {
+      const stickeringGroup = appearanceName === UNSUPPORTED_STICKERING ? "Unsupported" : getStickeringGroup(appearanceName, puzzleName as PuzzleID);
+      if (!currentOptGroup || currentOptGroup.label !== stickeringGroup) {
+        currentOptGroup = this.stickeringSelect.appendChild(document.createElement("optgroup"));
+        currentOptGroup.label = stickeringGroup;
+      }
       const option = document.createElement("option");
       option.value = appearanceName;
       option.textContent = appearance?.name ?? appearanceName;
-      this.stickeringSelect.appendChild(option);
+      currentOptGroup.appendChild(option);
       if (appearanceName === initialStickering) {
         option.selected = true;
       }
@@ -533,7 +543,7 @@ class ControlPane {
 
   private stickeringChanged(): void {
     this.twistyPlayer.experimentalStickering = this.stickeringSelect
-      .selectedOptions[0].value as ExperimentalStickering;
+      .selectedOptions[0].value ;
   }
 
   onPuzzle(puzzle: PuzzleID): void {
