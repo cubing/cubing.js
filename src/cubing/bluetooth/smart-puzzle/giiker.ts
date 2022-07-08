@@ -1,7 +1,8 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import { experimental3x3x3KPuzzle, KState, KStateData } from "../../kpuzzle";
+import { KState, KStateData } from "../../kpuzzle";
+import { experimentalCube3x3x3KPuzzleDefinition } from "../../puzzles/cubing-private";
 import { debugLog } from "../debug";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
@@ -191,7 +192,7 @@ export class GiiKERCube extends BluetoothPuzzle {
           postCO[i]) %
         3;
     }
-    return new KState(experimental3x3x3KPuzzle, state);
+    return new KState(experimentalCube3x3x3KPuzzleDefinition, state);
   }
 
   private async onCubeCharacteristicChanged(event: any): Promise<void> {

@@ -1,12 +1,10 @@
-import {
-  experimental3x3x3KPuzzle,
-  KStateData,
-} from "../../../../cubing/kpuzzle";
+import type { KStateData } from "../../../../cubing/kpuzzle";
 import { reid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol";
 import {
   Binary3x3x3Components,
   reid3x3x3ToBinaryComponents,
 } from "../../../../cubing/protocol/binary/binary3x3x3";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles";
 import { kpuzzleToReidString, kpuzzleToStickers } from "./convert";
 
 const tests: {

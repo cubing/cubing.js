@@ -1,6 +1,7 @@
 import { Alg } from "../../alg";
-import { experimental3x3x3KPuzzle, KTransformation } from "../../kpuzzle";
+import { KTransformation } from "../../kpuzzle";
 import type { KState } from "../../kpuzzle/KState";
+import { experimental3x3x3KPuzzle } from "../../puzzles";
 
 export function puzzleOrientationIdx(state: KState): [number, number] {
   const idxU = state.stateData["CENTERS"].pieces[0];

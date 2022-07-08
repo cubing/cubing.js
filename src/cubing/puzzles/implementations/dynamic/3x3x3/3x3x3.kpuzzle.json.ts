@@ -1,4 +1,5 @@
 import type { KPuzzleDefinition } from "../../../../kpuzzle";
+import { experimentalIs3x3x3Solved } from "./puzzle-orientation";
 
 export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
   name: "3x3x3",
@@ -275,6 +276,7 @@ export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
       },
     },
   },
+  experimentalIsSolved: experimentalIs3x3x3Solved,
 };
 
 cube3x3x3KPuzzleDefinition.moves["Uw"] = cube3x3x3KPuzzleDefinition.moves["u"];

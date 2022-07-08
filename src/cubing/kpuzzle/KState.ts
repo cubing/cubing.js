@@ -1,6 +1,5 @@
 import type { KPuzzle, KTransformationData } from ".";
 import type { Alg, Move } from "../alg";
-import { experimentalIs3x3x3Solved } from "../puzzles/cubing-private";
 import { applyTransformationDataToStateData } from "./combine";
 import type { KTransformationSource } from "./KPuzzle";
 import type { KStateData, KTransformationOrbitData } from "./KPuzzleDefinition";
@@ -74,11 +73,11 @@ export class KState {
     ignorePuzzleOrientation: boolean;
     ignoreCenterOrientation: boolean;
   }): boolean {
-    if (this.kpuzzle.name() !== "3x3x3") {
+    if (!this.kpuzzle.definition.experimentalIsSolved) {
       throw new Error(
-        "`KState.experimentalIs3x3x3Solved()` only supports 3x3x3 states.",
+        "`KState.experimentalIs3x3x3Solved()` is not supported for this puzzle at the moment.",
       );
     }
-    return experimentalIs3x3x3Solved(this, options);
+    return this.kpuzzle.definition.experimentalIsSolved(this, options);
   }
 }

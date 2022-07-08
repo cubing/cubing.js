@@ -1,3 +1,5 @@
+import type { KState } from "./KState";
+
 // TODO: Use a list instead of an object for performance?
 export type KTransformationData = Record<string, KTransformationOrbitData>;
 export interface KTransformationOrbitData {
@@ -23,4 +25,14 @@ export interface KPuzzleDefinition {
   moves: Record<string, KTransformationData>;
 
   experimentalDerivedMoves?: Record<string, string>;
+  // Note: the options are intentionally required for now, since we haven't yet
+  // figured out how to make sure there is no unexpected behaviour with the
+  // defaults.
+  experimentalIsSolved?: (
+    kstate: KState,
+    options: {
+      ignorePuzzleOrientation: boolean;
+      ignoreCenterOrientation: boolean;
+    },
+  ) => boolean;
 }
