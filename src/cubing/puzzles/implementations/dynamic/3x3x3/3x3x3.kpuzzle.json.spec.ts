@@ -1,4 +1,4 @@
-import { KPuzzle } from "..";
+import { KPuzzle } from "../../../../kpuzzle";
 import { cube3x3x3KPuzzleDefinition } from "./3x3x3.kpuzzle.json";
 
 const kpuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);

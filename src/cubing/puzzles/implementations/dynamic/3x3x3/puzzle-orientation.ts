@@ -1,5 +1,5 @@
-import { experimentalNormalizePuzzleOrientation as normalize3x3x3Orientation } from "../../protocol";
-import { KState } from "../KState";
+import { KState } from "../../../../kpuzzle";
+import { experimentalNormalizePuzzleOrientation as normalize3x3x3Orientation } from "../../../../protocol";
 
 // The `options` argument is required for now, because we haven't yet come up
 // with a general way to specify different kinds of solved for the same puzle.

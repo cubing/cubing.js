@@ -1,6 +1,6 @@
 import type { KPuzzle, KTransformationData } from ".";
 import type { Alg, Move } from "../alg";
-import { experimentalIs3x3x3Solved } from "./3x3x3/puzzle-orientation";
+import { experimentalIs3x3x3Solved } from "../puzzles/cubing-private";
 import { applyTransformationDataToStateData } from "./combine";
 import type { KTransformationSource } from "./KPuzzle";
 import type { KStateData, KTransformationOrbitData } from "./KPuzzleDefinition";

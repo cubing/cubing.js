@@ -7,6 +7,7 @@ export type {
 export { KState } from "./KState";
 export { KTransformation } from "./KTransformation";
 
-import { cube3x3x3KPuzzleDefinition } from "./3x3x3/3x3x3.kpuzzle.json";
+import { experimentalCube3x3x3KPuzzleDefinition } from "../puzzles/cubing-private";
 import { KPuzzle } from "./KPuzzle";
-export const experimental3x3x3KPuzzle = new KPuzzle(cube3x3x3KPuzzleDefinition);
+/** @deprecated */
+export const experimental3x3x3KPuzzle = new KPuzzle(experimentalCube3x3x3KPuzzleDefinition);
