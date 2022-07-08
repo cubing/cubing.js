@@ -1,9 +1,9 @@
-import { experimental3x3x3KPuzzle, puzzles } from "../../../../cubing/puzzles";
+import { puzzles } from "../../../../cubing/puzzles";
 import "../../../../cubing/twisty";
 import { KPuzzleSVGWrapper } from "../../../../cubing/twisty/views/2D/KPuzzleSVGWrapper";
 
 window.addEventListener("DOMContentLoaded", async () => {
-  const kpuzzle = experimental3x3x3KPuzzle;
+  const kpuzzle = await puzzles["3x3x3"].kpuzzle();
   const llSVG = await puzzles["3x3x3"].llSVG!(); // TODO: Avoid the need for an assertion?
 
   {

@@ -1,6 +1,6 @@
 import { KState } from "../../kpuzzle";
-import { experimental3x3x3KPuzzle } from "../../puzzles";
 import {
+  experimental3x3x3KPuzzle,
   experimentalNormalize3x3x3Orientation,
   experimentalPuzzleOrientation3x3x3Cache,
   experimentalPuzzleOrientation3x3x3Idx,

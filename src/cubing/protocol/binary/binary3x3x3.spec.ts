@@ -1,5 +1,5 @@
 import type { KState } from "../../kpuzzle/KState";
-import { experimental3x3x3KPuzzle } from "../../puzzles";
+import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import {
   reid3x3x3ToTwizzleBinary,
   twizzleBinaryToReid3x3x3,

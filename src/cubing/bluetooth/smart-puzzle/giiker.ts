@@ -2,7 +2,7 @@
 
 import { Move } from "../../alg";
 import { KState, KStateData } from "../../kpuzzle";
-import { experimental3x3x3KPuzzle } from "../../puzzles";
+import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import { debugLog } from "../debug";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 

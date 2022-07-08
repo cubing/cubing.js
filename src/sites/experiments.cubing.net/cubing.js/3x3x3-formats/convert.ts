@@ -1,6 +1,6 @@
 import type { KStateOrbitData } from "../../../../cubing/kpuzzle/KPuzzleDefinition";
-import { KState } from "../../../../cubing/kpuzzle/KState";
-import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles";
+import { KState } from "../../../../cubing/kpuzzle";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
 
 export function stateToString(state: KState): string {
   return JSON.stringify(state.stateData, null, "  ")

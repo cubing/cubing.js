@@ -7,10 +7,8 @@ import {
   reid3x3x3ToTwizzleBinary,
   twizzleBinaryToReid3x3x3,
 } from "../../../../cubing/protocol/binary/binary3x3x3";
-import {
-  cube3x3x3,
-  experimental3x3x3KPuzzle,
-} from "../../../../cubing/puzzles";
+import { cube3x3x3 } from "../../../../cubing/puzzles";
+import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
 import { ExperimentalKPuzzleSVGWrapper } from "../../../../cubing/twisty";
 import {
   kpuzzleToReidString,
