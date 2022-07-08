@@ -82,7 +82,8 @@ export async function cubeAppearance(
       break;
     case "COLL":
       dimF2L();
-      setPLL();
+      puzzleStickering.set(m.and([LL(), EDGES()]), PieceStickering.Ignoriented);
+      puzzleStickering.set(m.and([LL(), CENTERS()]), PieceStickering.Dim);
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Regular);
       break;
     case "OCLL":
