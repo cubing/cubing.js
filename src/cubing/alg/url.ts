@@ -40,7 +40,6 @@ export interface AlgCubingNetOptions {
     | "PLL"
     | "CLS"
     | "ELS"
-    | "L10P"
     | "L6E"
     | "CMLL"
     | "WV"
@@ -100,7 +99,6 @@ export function algCubingNetLink(options: AlgCubingNetOptions): string {
         "PLL",
         "CLS",
         "ELS",
-        "L10P",
         "L6E",
         "CMLL",
         "WV",
