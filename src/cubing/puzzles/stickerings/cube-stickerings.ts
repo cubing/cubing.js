@@ -1,5 +1,4 @@
 import type { ExperimentalStickering } from "../../twisty";
-import { experimentalStickerings } from "../../twisty/model/props/puzzle/display/StickeringProp";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   PieceSet,
@@ -8,6 +7,7 @@ import {
   StickeringManager
 } from "./appearance";
 import { useGlobalCustomStickerer } from "./global-custom-stickering-hack";
+import { experimentalStickerings } from "./puzzle-stickerings";
 
 // TODO: cache calculations?
 export async function cubeAppearance(

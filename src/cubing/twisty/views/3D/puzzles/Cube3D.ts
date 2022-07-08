@@ -19,6 +19,7 @@ import {
 import type { ExperimentalStickering } from "../../..";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
+import { experimentalStickerings } from "../../../../puzzles/cubing-private";
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
@@ -29,7 +30,6 @@ import {
   HintFaceletStyle,
   hintFaceletStyles,
 } from "../../../model/props/puzzle/display/HintFaceletProp";
-import { experimentalStickerings } from "../../../model/props/puzzle/display/StickeringProp";
 import { TAU } from "../TAU";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 

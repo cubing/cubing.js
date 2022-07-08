@@ -2,9 +2,9 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { Alg } from "../../../../../cubing/alg";
+import { experimentalStickerings } from "../../../../../cubing/puzzles/cubing-private";
 import { backViewLayouts, TwistyPlayer } from "../../../../../cubing/twisty";
 import { hintFaceletStyles } from "../../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
-import { experimentalStickerings } from "../../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 import { dragInputModes } from "../../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";
 import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/puzzle/state/IndexerConstructorRequestProp";
 import { movePressInputNames } from "../../../../../cubing/twisty/model/props/puzzle/state/MovePressInputProp";

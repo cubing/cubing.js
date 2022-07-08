@@ -1,8 +1,6 @@
 import { Alg, LineComment, Newline } from "../../../../cubing/alg";
+import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private";
 import { TwistyPlayer } from "../../../../cubing/twisty";
-import {
-  experimentalStickerings
-} from "../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 
 const algsTextarea = document.querySelector("#algs") as HTMLTextAreaElement;
 if (localStorage["multi-alg-textarea"]) {

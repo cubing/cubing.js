@@ -3,12 +3,12 @@ import { backViewLayouts, TwistyPlayer } from "../../../../cubing/twisty";
 import { setupToLocations } from "../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import { puzzleIDs } from "../../../../cubing/twisty/model/props/puzzle/structure/PuzzleIDRequestProp";
 import { hintFaceletStyles } from "../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
-import { experimentalStickerings } from "../../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
 import { backgroundThemes } from "../../../../cubing/twisty/model/props/viewer/BackgroundProp";
 import { controlsLocations } from "../../../../cubing/twisty/model/props/viewer/ControlPanelProp";
 import { viewerLinkPages } from "../../../../cubing/twisty/model/props/viewer/ViewerLinkProp";
 import { visualizationFormats } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
 import { dragInputModes } from "../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";
+import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private";
 
 const contentElem = document.querySelector(".content")!;
 
