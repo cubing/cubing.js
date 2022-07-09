@@ -318,9 +318,10 @@ export class TwistyPlayer
     const puzzleWrapper =
       await sceneWrapper.experimentalTwisty3DPuzzleWrapper();
     const twisty3DPuzzlePromise = puzzleWrapper.twisty3DPuzzle();
-    const setTimeoutPromise = new Promise((resolve, _) =>
-      setTimeout(resolve, 0),
-    );
+    const safeToCallback = new Promise(async (resolve, _) => {
+      await twisty3DPuzzlePromise;
+      setTimeout(resolve, 0);
+    });
     if (puzzleChangeCallback) {
       // We want to notify the callback when the render is *scheduled* (once per
       // render), not when it is run. So we have a stub callback for the
@@ -331,8 +332,7 @@ export class TwistyPlayer
         if (!scheduler.requestIsPending()) {
           scheduler.requestAnimFrame();
           (async () => {
-            // await twisty3DPuzzlePromise;
-            await setTimeoutPromise;
+            await safeToCallback;
             puzzleChangeCallback();
           })();
         }
