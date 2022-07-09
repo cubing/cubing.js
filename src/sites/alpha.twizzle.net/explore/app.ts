@@ -23,6 +23,14 @@ function getCheckBox(s: string): boolean {
   return el && el.checked;
 }
 
+function getSelect(s: string): "e" | "v" | "f" | null {
+  const el = document.getElementById(s) as HTMLInputElement;
+  if (!el || el.value === "") {
+    return null;
+  }
+  return el.value as "e" | "v" | "f";
+}
+
 function getCSV(s: string): string[] | null {
   console.log("In getCSV with " + s);
   const el = document.getElementById(s) as HTMLInputElement;
@@ -41,6 +49,7 @@ function getCSV(s: string): string[] | null {
     return null;
   }
 }
+
 function getPGOptionsFromUI(): PuzzleGeometryOptions {
   return {
     allMoves: getCheckBox("allmoves"),
@@ -53,13 +62,7 @@ function getPGOptionsFromUI(): PuzzleGeometryOptions {
     fixedOrientation: getCheckBox("noorientation"),
     orientCenters: getCheckBox("orientcenters"),
     optimizeOrbits: getCheckBox("optimize"),
-    fixedPieceType: getCheckBox("fixcorner")
-      ? "v"
-      : getCheckBox("fixedge")
-      ? "e"
-      : getCheckBox("fixcenter")
-      ? "f"
-      : null,
+    fixedPieceType: getSelect("fixcubie"),
     moveList: getCSV("moves"),
     excludeOrbits: getCSV("orbits") || [],
   };

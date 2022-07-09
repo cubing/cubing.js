@@ -62,15 +62,14 @@
         <label for="optimize" title="Optimize output"
           ><input type="checkbox" id="optimize" />Optimize</label
         >
-        <label for="fixcorner" title="Choose moves to fix a corner in place"
-          ><input type="checkbox" id="fixcorner" />Fix corner</label
-        >
-        <label for="fixedge" title="Choose moves to fix an edge in place"
-          ><input type="checkbox" id="fixedge" />Fix Edge</label
-        >
-        <label for="fixcenter" title="Choose moves to fix a center in place"
-          ><input type="checkbox" id="fixcenter" />Fix Center</label
-        >
+        <label for="fixcubie" title="Choose moves to fix a cubie in place"
+          ><select id="fixcubie">
+            <option value="" selected>Fix no cubie</option>
+            <option value="v">Fix corner</option>
+            <option value="e">Fix edge</option>
+            <option value="f">Fix center</option>
+          </select>
+        </label>
         <label for="moves" title="Comma-separated list of moves to include"
           >Moves: <input type="text" id="moves"
         /></label>
