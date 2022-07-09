@@ -13,13 +13,14 @@ import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 import type { Cube3D } from "./puzzles/Cube3D";
 import type { PG3D } from "./puzzles/PG3D";
 
-export class Twisty3DPuzzleWrapper implements Schedulable {
+export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
   constructor(
     private model: TwistyPlayerModel,
     public schedulable: Schedulable,
     private puzzleLoader: PuzzleLoader,
     private visualizationStrategy: VisualizationStrategy,
   ) {
+    super();
     this.twisty3DPuzzle(); // Start constructing.
 
     // TODO: Hook up listeners before loading the heavy code in the async constructor, so we get any intermediate updates?
@@ -123,6 +124,7 @@ export class Twisty3DPuzzleWrapper implements Schedulable {
 
   scheduleRender(): void {
     this.schedulable.scheduleRender();
+    this.dispatchEvent(new CustomEvent("render-scheduled"));
   }
 
   #cachedTwisty3DPuzzle: Promise<Twisty3DPuzzle> | null = null;

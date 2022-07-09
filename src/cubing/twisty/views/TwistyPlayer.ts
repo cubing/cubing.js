@@ -2,6 +2,7 @@ import type { Object3D } from "three";
 import type { ExperimentalStickering } from "..";
 import type { Alg, Move } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
+import { RenderScheduler } from "../controllers/RenderScheduler";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
 import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
@@ -296,21 +297,48 @@ export class TwistyPlayer
      `TwistyPlayer`'s scenes while still allowing the `TwistyPlayer` to animate
      it.
 
-     Note: the architecture of `cubing.js` may change significantly, so it is
-     not guaranteed that a `three.js` `Object3D` will be available from the main
-     thread in the future.
-
-     Also note that this may never resolve if the player never creates the
-     relevant 3D object under the hood (e.g. if the config is set to 2D, or is
-     not valid for rendering a puzzle). 
+     Note:
+     - This may never resolve if the player never creates the relevant 3D object
+       under the hood (e.g. if the config is set to 2D, or is not valid for
+       rendering a puzzle)
+     - The architecture of `cubing.js` may change significantly, so it is not
+       guaranteed that a `three.js` `Object3D` will be available from the main
+       thread in the future.
+     - This function only returns the current `three.js` puzzle object (once one
+       exists). If you change e.g. the `puzzle` config for the player, then the
+       object will currently become stale. This may be replaced with more
+       convenient behaviour in the future.
   */
   /** @deprecated */
-  async experimentalThreeJSPuzzleObject(): Promise<Object3D> {
+  async experimentalCurrentThreeJSPuzzleObject(
+    puzzleChangeCallback?: () => void,
+  ): Promise<Object3D> {
     this.connectedCallback();
     const sceneWrapper = await this.#initial3DVisualizationWrapper.promise;
     const puzzleWrapper =
       await sceneWrapper.experimentalTwisty3DPuzzleWrapper();
-    return puzzleWrapper.twisty3DPuzzle();
+    const twisty3DPuzzlePromise = puzzleWrapper.twisty3DPuzzle();
+    const setTimeoutPromise = new Promise((resolve, _) =>
+      setTimeout(resolve, 0),
+    );
+    if (puzzleChangeCallback) {
+      // We want to notify the callback when the render is *scheduled* (once per
+      // render), not when it is run. So we have a stub callback for the
+      // scheduler itself, and rely on `scheduler.requestIsPending()` to dedup
+      // requests below.
+      const scheduler = new RenderScheduler(async () => {});
+      puzzleWrapper.addEventListener("render-scheduled", async () => {
+        if (!scheduler.requestIsPending()) {
+          scheduler.requestAnimFrame();
+          (async () => {
+            // await twisty3DPuzzlePromise;
+            await setTimeoutPromise;
+            puzzleChangeCallback();
+          })();
+        }
+      });
+    }
+    return twisty3DPuzzlePromise;
   }
 
   jumpToStart(options?: { flash: boolean }): void {
