@@ -1,3 +1,4 @@
+import type { Object3D } from "three";
 import type { ExperimentalStickering } from "..";
 import type { Alg, Move } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
@@ -18,11 +19,11 @@ import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkPro
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
-import type { PG3D } from "./3D/puzzles/PG3D";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { ClassListManager } from "./ClassListManager";
 import { TwistyButtons } from "./control-panel/TwistyButtons";
 import { TwistyScrubber } from "./control-panel/TwistyScrubber";
+import { InitialValueTracker } from "./InitialValueTracker";
 import { customElementsShim } from "./node-custom-element-shims";
 import { downloadURL, getDefaultFilename, screenshot } from "./screenshot";
 import { twistyPlayerCSS } from "./TwistyPlayer.css";
@@ -245,6 +246,8 @@ export class TwistyPlayer
 
   #visualizationWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper | null =
     null;
+  #initial3DVisualizationWrapper =
+    new InitialValueTracker<Twisty3DSceneWrapper>();
 
   #visualizationStrategy: VisualizationStrategy | null = null;
   #setVisualizationWrapper(strategy: VisualizationStrategy): void {
@@ -264,6 +267,7 @@ export class TwistyPlayer
         case "PG3D":
           // TODO: Properly wire this up so we can set PG3D for the cube.
           newWrapper = new Twisty3DSceneWrapper(this.experimentalModel);
+          this.#initial3DVisualizationWrapper.handleNewValue(newWrapper);
           break;
         default:
           throw new Error("Invalid visualization");
@@ -287,13 +291,26 @@ export class TwistyPlayer
     return canvases;
   }
 
-  async experimentalPG3D(): Promise<PG3D | null> {
+  /* Get the first available puzzle `Object3D`. This can be inserted into
+     another `three.js` scene, essentially "adopting" it from the
+     `TwistyPlayer`'s scenes while still allowing the `TwistyPlayer` to animate
+     it.
+
+     Note: the architecture of `cubing.js` may change significantly, so it is
+     not guaranteed that a `three.js` `Object3D` will be available from the main
+     thread in the future.
+
+     Also note that this may never resolve if the player never creates the
+     relevant 3D object under the hood (e.g. if the config is set to 2D, or is
+     not valid for rendering a puzzle). 
+  */
+  /** @deprecated */
+  async experimentalThreeJSPuzzleObject(): Promise<Object3D> {
     this.connectedCallback();
-    const wrapper = this.#visualizationWrapper;
-    if (wrapper instanceof Twisty3DSceneWrapper) {
-      wrapper;
-    }
-    return null;
+    const sceneWrapper = await this.#initial3DVisualizationWrapper.promise;
+    const puzzleWrapper =
+      await sceneWrapper.experimentalTwisty3DPuzzleWrapper();
+    return puzzleWrapper.twisty3DPuzzle();
   }
 
   jumpToStart(options?: { flash: boolean }): void {

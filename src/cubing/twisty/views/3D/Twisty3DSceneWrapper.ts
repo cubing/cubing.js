@@ -11,6 +11,7 @@ import type {
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ClassListManager } from "../ClassListManager";
+import { InitialValueTracker } from "../InitialValueTracker";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { twistyViewerWrapperCSS } from "../TwistyViewerWrapper.css";
@@ -165,6 +166,15 @@ export class Twisty3DSceneWrapper
         scene.remove(await old.twisty3DPuzzle());
       }
     }
+    this.#initialWrapperTracker.handleNewValue(twisty3DPuzzleWrapper);
+  }
+
+  #initialWrapperTracker = new InitialValueTracker<Twisty3DPuzzleWrapper>();
+  /** @deprecated */
+  async experimentalTwisty3DPuzzleWrapper(): Promise<Twisty3DPuzzleWrapper> {
+    return (
+      this.#currentTwisty3DPuzzleWrapper || this.#initialWrapperTracker.promise
+    );
   }
 
   #twisty3DStaleDropper: StaleDropper<[ThreeScene, Twisty3DPuzzleWrapper]> =
