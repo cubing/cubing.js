@@ -134,8 +134,9 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): bigint {
         avgs.push(avg);
         sollen += avg;
       }
+      const digs = sz.toString().length;
       disp(
-        `${i}: sz ${sz} T ${tks} sol ${sollen} none ${none} mults ${mults.toString()}`,
+        `${i}: sz ${sz} (${digs} digs) T ${tks} factored ${mults.toString()}`,
       );
     }
     return sz;
