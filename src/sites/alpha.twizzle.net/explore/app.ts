@@ -260,6 +260,7 @@ class ConfigUI {
 }
 
 class SelectUI {
+  lastAction = "";
   constructor(private app: TwizzleExplorerApp) {
     (
       document.body.querySelector("#actions") as HTMLSelectElement
@@ -267,10 +268,17 @@ class SelectUI {
     (
       document.body.querySelector("#move-input") as HTMLSelectElement
     ).addEventListener("change", this.onChange.bind(this));
+    const regen = document.getElementById("regenerate") as HTMLInputElement;
+    regen.addEventListener("click", this.onChange.bind(this));
   }
 
   async onChange(e: MouseEvent) {
-    const action = (e.target as HTMLSelectElement).value;
+    let action = (e.target as HTMLSelectElement).value;
+    if (action == "regen") {
+      action = this.lastAction;
+    } else {
+      this.lastAction = action;
+    }
     (document.body.querySelector("#actions") as HTMLSelectElement).value = "";
     (document.body.querySelector("#move-input") as HTMLSelectElement).value =
       "";
