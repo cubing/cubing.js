@@ -331,10 +331,8 @@ export class TwistyPlayer
       puzzleWrapper.addEventListener("render-scheduled", async () => {
         if (!scheduler.requestIsPending()) {
           scheduler.requestAnimFrame();
-          (async () => {
-            await safeToCallback;
-            puzzleChangeCallback();
-          })();
+          await safeToCallback;
+          puzzleChangeCallback();
         }
       });
     }
