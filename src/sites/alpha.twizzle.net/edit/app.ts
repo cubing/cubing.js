@@ -30,6 +30,7 @@ import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params
 import type { AlgWithIssues } from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
 import { experimentalCountMoves } from "../../../cubing/notation";
 import { getStickeringGroup } from "../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
+import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
 // import { setURLParams } from "./url-params";
 
 // TODO: introduce concepts in `cubing/twisty` for "this is a valid twisty-player value, but not for the current puzzle".
@@ -304,14 +305,15 @@ class ControlPane {
       "stickering",
       "select",
     );
-    this.twistyPlayer.experimentalModel.puzzleID.addFreshListener(() => {
-      Promise.all([
-        this.twistyPlayer.experimentalModel.twistySceneModel.stickering.get(),
-        this.twistyPlayer.experimentalModel.puzzleID.get(),
-      ]).then(([stickering, puzzleID]) =>
+    const freshListenerManager = new FreshListenerManager();
+    freshListenerManager.addMultiListener(
+      [
+        this.twistyPlayer.experimentalModel.twistySceneModel.stickering,
+        this.twistyPlayer.experimentalModel.puzzleID,
+      ],
+      ([stickering, puzzleID]) =>
         this.updateStickeringSelect(stickering, puzzleID),
-      );
-    });
+    );
 
     this.tempoInput = findOrCreateChildWithClass(
       this.element,
