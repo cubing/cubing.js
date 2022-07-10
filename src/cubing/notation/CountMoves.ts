@@ -84,6 +84,10 @@ function baseMetric(move: Move): number {
   }
 }
 
+function etmMetric(_move: Move): number {
+  return 1;
+}
+
 // TODO: Implement a puzzle-specific way to calculate this.
 function quantumMetric(move: Move): number {
   const fam = move.family;
@@ -103,6 +107,10 @@ function quantumMetric(move: Move): number {
 const countMovesInstance = new CountMoves(baseMetric);
 export const countMoves: (alg: Alg) => number =
   countMovesInstance.traverseAlg.bind(countMovesInstance);
+
+const countMovesETMInstance = new CountMoves(etmMetric);
+export const countMovesETM: (alg: Alg) => number =
+  countMovesInstance.traverseAlg.bind(countMovesETMInstance);
 
 const countQuantumMovesInstance = new CountMoves(quantumMetric);
 export const countQuantumMoves: (alg: Alg) => number =

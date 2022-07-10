@@ -1,5 +1,6 @@
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
+import { experimentalCountMovesETM } from "../../../cubing/notation";
 import { puzzles } from "../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
 import {
@@ -17,20 +18,19 @@ import {
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../cubing/twisty";
+import { getStickeringGroup } from "../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
+import type { AlgWithIssues } from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
+import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
 import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
 import "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
+import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
 import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
-import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
-import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
-import type { AlgWithIssues } from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
-import { experimentalCountMoves } from "../../../cubing/notation";
-import { getStickeringGroup } from "../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
-import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
 // import { setURLParams } from "./url-params";
 
 // TODO: introduce concepts in `cubing/twisty` for "this is a valid twisty-player value, but not for the current puzzle".
@@ -266,7 +266,7 @@ class ControlPane {
     this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener(
       (algWithIssues: AlgWithIssues) => {
         if (algWithIssues.issues.errors.length == 0) {
-          this.moveCountDisplay.textContent = ` (${experimentalCountMoves(
+          this.moveCountDisplay.textContent = ` (${experimentalCountMovesETM(
             algWithIssues.alg,
           )} ETM)`;
         } else {
