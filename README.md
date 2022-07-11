@@ -38,17 +38,17 @@ Then you can use modules like this:
 import { Alg } from "cubing/alg";
 import { TwistyPlayer } from "cubing/twisty";
 ```
-Note that `cubing.js` requires `es2020` or higher. If you are using vite, then you will have to put this in your `vite.config.ts`:
-```ts
-import {UserConfig} from "vite";
 
-const config: UserConfig = {
+## Using with bundlers
+
+Note that `cubing.js` requires `es2020` or higher. If you are using a bundler that transpiles your code for compatibility, you must specify a build target of at least `es2020` or higher. For example, if you are using `vite`, put this in your `vite.config.js`:
+```js
+
+export default {
     build: {
         target: "es2020"
     }
 }
-
-export default config
 ```
 
 ## Contributing
