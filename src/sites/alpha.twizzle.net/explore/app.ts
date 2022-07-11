@@ -161,6 +161,31 @@ export class TwizzleExplorerApp {
     navigator.clipboard.writeText(text);
     this.dialog.show(text);
   }
+
+  sprite(pg: PuzzleGeometry): void {
+    const width = 2880;
+    const height = 2160;
+    const svg = pg.generatesvg(width, height, 0, false, 1.0);
+    const img = document.createElement("img");
+    const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+    img.src = url;
+    img.onload = function onload() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d")!;
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+      const src = canvas.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.href = src;
+      const extension = "png";
+      a.download = `sprite.${extension}`;
+      a.click();
+      img.remove();
+      URL.revokeObjectURL(url);
+    };
+    document.body.appendChild(img);
+  }
 }
 
 class Dialog {
@@ -328,6 +353,14 @@ class SelectUI {
       case "screenshot":
       case "screenshot-back":
         this.app.twistyPlayer.experimentalDownloadScreenshot(); // TODO: back!
+        break;
+      case "sprite":
+        {
+          const pg = await (
+            await this.app.twistyPlayer.experimentalModel.puzzleLoader.get()
+          ).pg!();
+          this.app.sprite(pg);
+        }
         break;
       case "bluetooth":
       case "keyboard": {

@@ -43,6 +43,8 @@ import {
 import { centermassface, Quat } from "./Quat";
 import { schreierSims } from "./SchreierSims";
 
+const DEFAULT_TWOD_SHRINK = 0.92;
+
 export interface TextureMapper {
   getuv(fn: number, threed: number[]): number[];
 }
@@ -2819,7 +2821,7 @@ export class PuzzleGeometry {
     h: number = 500,
     trim: number = 10,
     threed: boolean = false,
-    twodshrink: number = 0.92,
+    twodshrink: number = DEFAULT_TWOD_SHRINK,
   ): (fn: number, q: Quat) => number[] {
     // generate a mapping to use for 2D for textures, svg
     w -= 2 * trim;
@@ -2999,8 +3001,9 @@ export class PuzzleGeometry {
     h: number = 500,
     trim: number = 10,
     threed: boolean = false,
+    twodshrink: number = DEFAULT_TWOD_SHRINK,
   ): string {
-    const mappt2d = this.generate2dmapping(w, h, trim, threed);
+    const mappt2d = this.generate2dmapping(w, h, trim, threed, twodshrink);
     function drawedges(id: string, pts: number[][], color: string): string {
       return (
         '<polygon id="' +
@@ -3056,7 +3059,11 @@ export class PuzzleGeometry {
       svg.push("</g>");
     }
     const html =
-      '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n' +
+      '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ' +
+      w +
+      " " +
+      h +
+      '">\n' +
       '<style type="text/css"><![CDATA[' +
       ".sticker { stroke: #000000; stroke-width: 1px; }" +
       "]]></style>\n" +
