@@ -499,8 +499,8 @@ const orientationDefaults = {
       "HI",
       "BD",
       "DB",
-      "DN",
-      "ND",
+      "ON",
+      "NO",
     ],
   },
 };
