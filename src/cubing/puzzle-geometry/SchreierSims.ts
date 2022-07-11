@@ -104,25 +104,17 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): bigint {
       sgsi[i][i] = e;
       sgslen[i][i] = 0;
     }
-    let none = 0;
     let sz = 1n;
     for (let i = 0; i < g.length; i++) {
       knutha(n - 1, g[i], 1);
       sz = 1n;
       let tks = 0;
-      let sollen = 0;
-      const avgs = [];
       const mults = new FactoredNumber();
       for (let j = 0; j < n; j++) {
         let cnt = 0;
-        let lensum = 0;
         for (let k = 0; k < n; k++) {
           if (sgs[j][k]) {
             cnt++;
-            lensum += sgslen[j][k];
-            if (j !== k) {
-              none++;
-            }
           }
         }
         tks += Tk[j].length;
@@ -130,9 +122,6 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): bigint {
         if (cnt > 1) {
           mults.multiply(cnt);
         }
-        const avg = lensum / cnt;
-        avgs.push(avg);
-        sollen += avg;
       }
       const digs = sz.toString().length;
       disp(
