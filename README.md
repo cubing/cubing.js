@@ -45,7 +45,9 @@ Note that `cubing.js` requires `es2020` or higher. If you are using a bundler th
 ```js
 
 export default {
+    // ...
     build: {
+        // ...
         target: "es2020"
     }
 }
