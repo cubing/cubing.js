@@ -39,20 +39,6 @@ import { Alg } from "cubing/alg";
 import { TwistyPlayer } from "cubing/twisty";
 ```
 
-## Using with bundlers
-
-Note that `cubing.js` requires `es2020` or higher. If you are using a bundler that transpiles your code for compatibility, you must specify a build target of at least `es2020` or higher. For example, if you are using `vite`, put this in your `vite.config.js`:
-```js
-
-export default {
-    // ...
-    build: {
-        // ...
-        target: "es2020"
-    }
-}
-```
-
 ## Contributing
 
 If you would like to contribute to the development of `cubing.js`, please refer to our [contribution guidelines](./CONTRIBUTING.md).
