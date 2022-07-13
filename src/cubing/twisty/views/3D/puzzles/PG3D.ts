@@ -604,6 +604,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       trim =
         (Math.sqrt(totArea / nonDupStickers) * (1 - Math.sqrt(colorfrac))) / 2;
     }
+    console.log("Using trim of " + trim);
     for (const sticker of stickers) {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
@@ -650,6 +651,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     filler.makeGroups(this.fixedGeo);
     filler.saveOriginalColors();
     this.updateMaterialArrays();
+    (this.fixedGeo.getAttribute("position") as BufferAttribute).needsUpdate = true;
+    (this.fixedGeo.getAttribute("color") as BufferAttribute).needsUpdate = true;
+    if (this.filler.uvs) {
+      (this.fixedGeo.getAttribute("uvs") as BufferAttribute).needsUpdate = true;
+    }
   }
 
   public dispose(): void {
@@ -1033,6 +1039,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     stickerTexture?: Texture | null,
     hintTexture?: Texture | null,
   ) {
+    console.log("Update texture with " + enabled + " " + stickerTexture + " " + hintTexture);
     if (!stickerTexture) {
       enabled = false;
     }
@@ -1073,6 +1080,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.showHintFacelets(hintTexture !== null);
     }
     if (mustrecalc) {
+      console.log("Calling recalculate");
       this.recalculate();
     }
     if (enabled && !this.filler.uvs) {

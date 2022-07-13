@@ -20,6 +20,35 @@ function setupPropCheckbox<T extends string>(
   elem.addEventListener("change", update);
 }
 
+function setupSpriteCheckbox(
+  domID: string,
+  twistyPlayer: TwistyPlayer,
+) {
+  const elem = document.getElementById(domID) as HTMLInputElement;
+  const update = () => {
+    if (elem.checked) {
+      twistyPlayer.setAttribute("experimental-stickering", "picture");
+      twistyPlayer.setAttribute(
+        "experimental-sprite",
+        "/experiments.cubing.net/cubing.js/twisty/megaminx2.png",
+      );
+      twistyPlayer.setAttribute(
+        "experimental-hint-sprite",
+        "/experiments.cubing.net/cubing.js/twisty/megaminx2.png",
+      );
+    } else {
+      twistyPlayer.setAttribute("experimental-stickering", "full");
+    }
+  };
+  update();
+  /*  TODO:  close this loop somehow?
+  prop.addFreshListener((value) => {
+    elem.checked = ![uncheckedValue].includes(value);
+  });
+  */
+  elem.addEventListener("change", update);
+}
+
 function setupTempoScale(tempoScaleProp: TempoScaleProp): void {
   const tempoScaleInput = document.querySelector(
     "#tempo-scale",
@@ -62,5 +91,9 @@ export function setupPropInputs(twistyPlayer: TwistyPlayer): void {
     "floating",
     "none",
   );
+  setupSpriteCheckbox(
+    "supercube",
+    twistyPlayer,
+  )
   setupTempoScale(twistyPlayer.experimentalModel.tempoScale);
 }

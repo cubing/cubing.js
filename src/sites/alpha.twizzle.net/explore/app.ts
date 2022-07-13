@@ -115,6 +115,17 @@ export class TwizzleExplorerApp {
         this.setPuzzleDescription(e.detail.descriptionString);
       },
     );
+    /*
+    this.twistyPlayer.setAttribute("experimental-stickering", "picture");
+    this.twistyPlayer.setAttribute(
+      "experimental-sprite",
+      "/experiments.cubing.net/cubing.js/twisty/megaminx2.png",
+    );
+    this.twistyPlayer.setAttribute(
+      "experimental-hint-sprite",
+      "/experiments.cubing.net/cubing.js/twisty/megaminx2.png",
+    );
+    */
   }
 
   // TODO: Find out how to avoid the need for this.
