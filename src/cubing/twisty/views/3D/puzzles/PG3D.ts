@@ -151,6 +151,10 @@ class Filler {
     this.ipos = 0;
   }
 
+  reset() {
+    this.pos = 0;
+    this.ipos = 0;
+  }
   add(pt: number[], i: number, c: number) {
     this.vertices[this.pos] = pt[3 * i + 0];
     this.vertices[this.pos + 1] = pt[3 * i + 1];
@@ -522,14 +526,18 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     private scheduleRenderCallback: () => void,
     private kpuzzle: KPuzzle,
     private stickerDat: StickerDat,
-    enableFoundationOpt: boolean = false,
-    enableHintStickersOpt: boolean = false,
-    hintStickerHeightScale: number = 1,
+    showFoundationOpt: boolean = false,
+    showHintStickersOpt: boolean = false,
+    private hintStickerHeightScale: number = 1,
     private params: PG3DOptions = {},
   ) {
     super();
-    if (stickerDat.stickers.length === 0) {
-      throw Error("Reuse of stickerdat from pg; please don't do that.");
+    this.showFoundation(showFoundationOpt);
+    this.showHintStickers = showHintStickersOpt;
+    this.axesInfo = {};
+    const axesDef = this.stickerDat.axis;
+    for (const axis of axesDef) {
+      this.axesInfo[axis.quantumMove.family] = new AxisInfo(axis);
     }
     this.hintMaterial = new MeshBasicMaterial({
       vertexColors: true,
@@ -539,46 +547,63 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.hintMaterialDisposable = true;
     this.stickerMaterial = basicStickerMaterial;
     this.stickerMaterialDisposable = false;
-    this.axesInfo = {};
-    const axesDef = this.stickerDat.axis;
-    for (const axis of axesDef) {
-      this.axesInfo[axis.quantumMove.family] = new AxisInfo(axis);
-    }
-    const stickers = this.stickerDat.stickers as any[];
-    this.stickers = {};
     this.materialArray1 = new Array(8);
     this.materialArray2 = new Array(8);
-    // TODO: the argument enableFoundationOpt really means, do we ever want to display
-    // foundations.  But it is presently *used* to mean, show foundations initially
-    // (and maybe experimentalSetAppearance changes this).  So for now we set up the
-    // show flag from the enable flag, and turn on the enable flag so later when it's
-    // used we will get the foundations.  What this means is the geometry always "pays"
-    // for foundations, even if they aren't displayed.
-    this.showFoundation(enableFoundationOpt);
-    enableFoundationOpt = true;
     let triangleCount = 0;
-    const multiplier = 3;
+    const stickers = this.stickerDat.stickers as any[];
     for (const sticker of stickers) {
       const sides = sticker.coords.length / 3;
-      triangleCount += multiplier * (sides - 2);
+      triangleCount += 3 * (sides - 2);
     }
-    const filler = new Filler(triangleCount, stickerDat.textureMapper);
+    this.filler = new Filler(triangleCount, this.stickerDat.textureMapper);
+    this.fixedGeo = new BufferGeometry();
+    this.filler.setAttributes(this.fixedGeo);
+    this.recalculate();
+    const obj = new Mesh(this.fixedGeo, this.materialArray1);
+    obj.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
+    this.add(obj);
+    const obj2 = new Mesh(this.fixedGeo, this.materialArray2);
+    obj2.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
+    this.add(obj2);
+    this.movingObj = obj2;
+    const hitfaces = this.stickerDat.faces as any[];
+    for (const hitface of hitfaces) {
+      const facedef = new HitPlaneDef(
+        hitface,
+        this.stickerDat.textureMapper,
+        this.stickerDat,
+      );
+      facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
+      this.add(facedef.cubie);
+      this.controlTargets.push(facedef.cubie.children[0]);
+    }
+  }
+
+  private recalculate() {
+    const filler = this.filler;
+    filler.reset();
+    this.stickers = {};
     const black = 0;
+    let trim = 0;
+    const stickers = this.stickerDat.stickers as any[];
     const normals: number[][] = [];
     let totArea = 0;
-    for (const f of stickerDat.faces) {
+    for (const f of this.stickerDat.faces) {
       normals.push(normal(f.coords));
       totArea += polyarea(f.coords);
     }
-    const colorfrac = DEFAULT_COLOR_FRACTION;
-    let nonDupStickers = 0;
-    for (const sticker of stickers) {
-      if (!sticker.isDup) {
-        nonDupStickers++;
+    // if textured, no gutters between stickers
+    if (!this.textured) {
+      const colorfrac = DEFAULT_COLOR_FRACTION;
+      let nonDupStickers = 0;
+      for (const sticker of stickers) {
+        if (!sticker.isDup) {
+          nonDupStickers++;
+        }
       }
+      trim =
+        (Math.sqrt(totArea / nonDupStickers) * (1 - Math.sqrt(colorfrac))) / 2;
     }
-    const trim =
-      (Math.sqrt(totArea / nonDupStickers) * (1 - Math.sqrt(colorfrac))) / 2;
     for (const sticker of stickers) {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
@@ -590,9 +615,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         this.stickers[orbit][ori] = [];
       }
       const options: { appearance?: ExperimentalFaceletMeshAppearance } = {};
-      if (params.appearance) {
+      if (this.params.appearance) {
         options.appearance = experimentalGetFaceletAppearance(
-          params.appearance,
+          this.params.appearance,
           orbit,
           ord,
           ori,
@@ -602,14 +627,6 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const stickerdef = new StickerDef(filler, sticker, trim, options);
       this.stickers[orbit][ori][ord] = stickerdef;
     }
-    // TODO: the argument enableHintStickersOpt really means, do we ever want to display
-    // hint stickers.  But it is presently *used* to mean, show hint stickers initially
-    // (and maybe experimentalSetAppearance changes this).  So for now we set up the
-    // show flag from the enable flag, and turn on the enable flag so later when it's
-    // used we will get the hint stickers.  What this means is the geometry always "pays"
-    // for hint stickers, even if they aren't displayed.
-    this.showHintStickers = enableHintStickersOpt;
-    enableHintStickersOpt = true;
     for (const sticker of stickers) {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
@@ -617,8 +634,8 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.stickers[orbit][ori][ord].addHint(
         filler,
         sticker,
-        enableHintStickersOpt,
-        hintStickerHeightScale,
+        true,
+        this.hintStickerHeightScale,
         trim,
         normals[sticker.face],
       );
@@ -628,47 +645,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       const orbit = sticker.orbit;
       const ord = sticker.ord;
       const ori = sticker.ori;
-      if (enableFoundationOpt) {
-        this.stickers[orbit][ori][ord].addFoundation(filler, sticker, black);
-      }
+      this.stickers[orbit][ori][ord].addFoundation(filler, sticker, black);
     }
-    const fixedGeo = new BufferGeometry();
-    filler.setAttributes(fixedGeo);
-    filler.makeGroups(fixedGeo);
-    const obj = new Mesh(fixedGeo, this.materialArray1);
-    obj.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
-    this.add(obj);
-    const obj2 = new Mesh(fixedGeo, this.materialArray2);
-    obj2.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
-    this.add(obj2);
-    const hitfaces = this.stickerDat.faces as any[];
-    this.movingObj = obj2;
-    this.fixedGeo = fixedGeo;
-    this.filler = filler;
-    for (const hitface of hitfaces) {
-      const facedef = new HitPlaneDef(
-        hitface,
-        stickerDat.textureMapper,
-        this.stickerDat,
-      );
-      facedef.cubie.scale.set(PG_SCALE, PG_SCALE, PG_SCALE);
-      this.add(facedef.cubie);
-      this.controlTargets.push(facedef.cubie.children[0]);
-    }
+    filler.makeGroups(this.fixedGeo);
     filler.saveOriginalColors();
-    stickerDat.stickers = []; // don't need these anymore
     this.updateMaterialArrays();
-    /*
-    this.experimentalUpdateTexture(
-      true,
-      new TextureLoader().load(
-        "/experiments.cubing.net/cubing.js/twisty/mkbhd-sprite-red.png",
-      ),
-      new TextureLoader().load(
-        "/experiments.cubing.net/cubing.js/twisty/mkbhd-sprite-red-hint.png",
-      ),
-    );
-    */
   }
 
   public dispose(): void {
@@ -1055,13 +1036,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (!stickerTexture) {
       enabled = false;
     }
-    if (enabled && !this.filler.uvs) {
-      this.adduvs();
-    }
-    this.textured = enabled;
     if (this.stickerMaterialDisposable) {
       this.stickerMaterial.dispose();
       this.stickerMaterialDisposable = false;
+    }
+    let mustrecalc = false;
+    if (this.textured != enabled) {
+      this.textured = enabled;
+      mustrecalc = true;
     }
     if (enabled) {
       this.stickerMaterial = new MeshBasicMaterial({
@@ -1089,6 +1071,12 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     if (enabled) {
       this.showHintFacelets(hintTexture !== null);
+    }
+    if (mustrecalc) {
+      this.recalculate();
+    }
+    if (enabled && !this.filler.uvs) {
+      this.adduvs();
     }
     this.updateMaterialArrays();
     this.#pendingStickeringUpdate = true;
