@@ -10,7 +10,7 @@ class SVGDisplay {
   }
 
   public element(): HTMLElement {
-    return this.svg.element;
+    return this.svg.wrapperElement;
   }
 
   public setAlg(alg: Alg): void {

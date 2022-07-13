@@ -419,7 +419,7 @@ export class TwistyPlayer
         .currentTwisty2DPuzzleWrapper()!
         .twisty2DPuzzle();
       const str = new XMLSerializer().serializeToString(
-        twisty2DPuzzle.svg.element,
+        twisty2DPuzzle.svgWrapper.svgElement,
       );
       const url = URL.createObjectURL(new Blob([str]));
       downloadURL(

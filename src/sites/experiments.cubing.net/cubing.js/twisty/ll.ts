@@ -12,20 +12,20 @@ window.addEventListener("DOMContentLoaded", async () => {
       .algToTransformation("R U R' U' R' F R2 U' R' U' R U R' F'")
       .toKState();
     svg.draw(state);
-    document.body.appendChild(svg.element);
+    document.body.appendChild(svg.wrapperElement);
   }
 
   {
     const svg = new KPuzzleSVGWrapper(kpuzzle, llSVG);
     const state = kpuzzle.algToTransformation("((M' U')4 x y)3").toKState();
     svg.draw(state);
-    document.body.appendChild(svg.element);
+    document.body.appendChild(svg.wrapperElement);
   }
 
   {
     const svg = new KPuzzleSVGWrapper(kpuzzle, llSVG);
     const state = kpuzzle.algToTransformation("r U R' U R U2 r'").toKState();
     svg.draw(state);
-    document.body.appendChild(svg.element);
+    document.body.appendChild(svg.wrapperElement);
   }
 });

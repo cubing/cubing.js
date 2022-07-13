@@ -24,7 +24,7 @@ export class Twisty2DPuzzle
   extends ManagedCustomElement
   implements PositionListener
 {
-  public svg: KPuzzleSVGWrapper;
+  public svgWrapper: KPuzzleSVGWrapper;
   private scheduler = new RenderScheduler(this.render.bind(this));
   #cachedPosition: PuzzlePosition | null = null; // TODO: pull when needed.
   constructor(
@@ -74,13 +74,13 @@ export class Twisty2DPuzzle
         }
         const newState = position.state.applyMove(partialMove);
         // TODO: move to render()
-        this.svg.draw(
+        this.svgWrapper.draw(
           position.state,
           newState,
           position.movesInProgress[0].fraction,
         );
       } else {
-        this.svg.draw(position.state);
+        this.svgWrapper.draw(position.state);
         this.#cachedPosition = position;
       }
     } catch (e) {
@@ -109,14 +109,18 @@ export class Twisty2DPuzzle
 
   // TODO: do this without constructing a new SVG.
   private resetSVG(appearance?: PuzzleAppearance): void {
-    if (this.svg) {
-      this.removeElement(this.svg.element);
+    if (this.svgWrapper) {
+      this.removeElement(this.svgWrapper.wrapperElement);
     }
     if (!this.kpuzzle) {
       return; // TODO
     }
-    this.svg = new KPuzzleSVGWrapper(this.kpuzzle, this.svgSource!, appearance); // TODO
-    this.addElement(this.svg.element);
+    this.svgWrapper = new KPuzzleSVGWrapper(
+      this.kpuzzle,
+      this.svgSource!,
+      appearance,
+    ); // TODO
+    this.addElement(this.svgWrapper.wrapperElement);
     if (this.#cachedPosition) {
       this.onPositionChange(this.#cachedPosition);
     }

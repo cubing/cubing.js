@@ -54,7 +54,8 @@ const colorMaps: Partial<
 };
 
 export class KPuzzleSVGWrapper {
-  public element: HTMLElement;
+  public wrapperElement: HTMLElement;
+  public svgElement: SVGElement;
   public gradientDefs: SVGDefsElement;
   private originalColors: { [type: string]: string } = {};
   private gradients: { [type: string]: SVGGradientElement } = {};
@@ -70,15 +71,16 @@ export class KPuzzleSVGWrapper {
 
     this.svgID = nextSVGID();
 
-    this.element = document.createElement("div");
-    this.element.classList.add("svg-wrapper");
+    this.wrapperElement = document.createElement("div");
+    this.wrapperElement.classList.add("svg-wrapper");
     // TODO: Sanitization.
-    this.element.innerHTML = svgSource;
+    this.wrapperElement.innerHTML = svgSource;
 
-    const svgElem = this.element.querySelector("svg");
+    const svgElem = this.wrapperElement.querySelector("svg");
     if (!svgElem) {
       throw new Error("Could not get SVG element");
     }
+    this.svgElement = svgElem;
     if (xmlns !== svgElem.namespaceURI) {
       throw new Error("Unexpected XML namespace");
     }
@@ -283,6 +285,6 @@ export class KPuzzleSVGWrapper {
 
   private elementByID(id: string): HTMLElement {
     // TODO: Use classes and scope selector to SVG element.
-    return this.element.querySelector("#" + id) as HTMLElement;
+    return this.wrapperElement.querySelector("#" + id) as HTMLElement;
   }
 }

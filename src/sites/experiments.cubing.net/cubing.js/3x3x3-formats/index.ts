@@ -65,7 +65,7 @@ class App {
       .querySelector("#viewer")!
       .appendChild(document.createElement("div"));
     (async () => {
-      svgWrapper.appendChild((await this.svg).element);
+      svgWrapper.appendChild((await this.svg).wrapperElement);
     })();
 
     document.querySelector("#reset")!.addEventListener("click", () => {
