@@ -20,6 +20,7 @@ import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkPro
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
+import type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
 import { ClassListManager } from "./ClassListManager";
 import { TwistyButtons } from "./control-panel/TwistyButtons";
@@ -317,7 +318,7 @@ export class TwistyPlayer
     const sceneWrapper = await this.#initial3DVisualizationWrapper.promise;
     const puzzleWrapper =
       await sceneWrapper.experimentalTwisty3DPuzzleWrapper();
-    const twisty3DPuzzlePromise = puzzleWrapper.twisty3DPuzzle();
+    const twisty3DPuzzlePromise: Promise<Twisty3DPuzzle> = puzzleWrapper.twisty3DPuzzle();
     const safeToCallback = (async () => {
       await twisty3DPuzzlePromise;
       await new Promise((resolve) => setTimeout(resolve, 0));
