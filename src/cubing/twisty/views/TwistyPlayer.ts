@@ -324,7 +324,8 @@ export class TwistyPlayer
     const sceneWrapper = await this.#initial3DVisualizationWrapper.promise;
     const puzzleWrapper =
       await sceneWrapper.experimentalTwisty3DPuzzleWrapper();
-    const twisty3DPuzzlePromise: Promise<Twisty3DPuzzle> = puzzleWrapper.twisty3DPuzzle();
+    const twisty3DPuzzlePromise: Promise<Twisty3DPuzzle> =
+      puzzleWrapper.twisty3DPuzzle();
     const safeToCallback = (async () => {
       await twisty3DPuzzlePromise;
       await new Promise((resolve) => setTimeout(resolve, 0));
