@@ -2,11 +2,10 @@
  * @jest-environment jsdom
  */
 
-import { getPuzzleGeometryByDesc } from ".";
 import { Alg, Move } from "../alg";
 import { KPuzzle } from "../kpuzzle";
 import { PGPuzzles } from "./PGPuzzles";
-import { PGNotation } from "./PuzzleGeometry";
+import { getPuzzleGeometryByDesc, PGNotation } from "./PuzzleGeometry";
 /**
  *   Test basic things about puzzles created by puzzle
  *   geometry.  We check stickers per face, face count
