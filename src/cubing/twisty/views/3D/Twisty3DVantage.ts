@@ -307,6 +307,11 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.#disconnectionFunctions = []; // TODO: Encapsulate this.
   }
 
+  #experimentalNextRenderFinishedCallback: (() => void) | null = null;
+  experimentalNextRenderFinishedCallback(callback: () => void): void {
+    this.#experimentalNextRenderFinishedCallback = callback;
+  }
+
   async render(): Promise<void> {
     if (!this.scene) {
       throw new Error("Attempted to render without a scene");
@@ -326,6 +331,8 @@ export class Twisty3DVantage extends ManagedCustomElement {
     }
 
     this.stats?.end();
+    this.#experimentalNextRenderFinishedCallback?.();
+    this.#experimentalNextRenderFinishedCallback = null;
   }
 
   #scheduler = new RenderScheduler(this.render.bind(this));

@@ -22,6 +22,7 @@ import type { VisualizationStrategy } from "../model/props/viewer/VisualizationS
 import { Twisty2DSceneWrapper } from "./2D/Twisty2DSceneWrapper";
 import type { Twisty3DPuzzle } from "./3D/puzzles/Twisty3DPuzzle";
 import { Twisty3DSceneWrapper } from "./3D/Twisty3DSceneWrapper";
+import type { Twisty3DVantage } from "./3D/Twisty3DVantage";
 import { ClassListManager } from "./ClassListManager";
 import { TwistyButtons } from "./control-panel/TwistyButtons";
 import { TwistyScrubber } from "./control-panel/TwistyScrubber";
@@ -280,15 +281,20 @@ export class TwistyPlayer
     }
   }
 
-  async experimentalCurrentCanvases(): Promise<HTMLCanvasElement[]> {
+  async experimentalCurrentVantages(): Promise<Iterable<Twisty3DVantage>> {
     this.connectedCallback();
     const wrapper = this.#visualizationWrapper;
-    const canvases: HTMLCanvasElement[] = [];
     if (wrapper instanceof Twisty3DSceneWrapper) {
-      const vantages = wrapper.experimentalVantages();
-      for (const vantage of vantages) {
-        canvases.push((await vantage.canvasInfo()).canvas);
-      }
+      return wrapper.experimentalVantages();
+    }
+    return [];
+  }
+
+  async experimentalCurrentCanvases(): Promise<HTMLCanvasElement[]> {
+    const vantages = await this.experimentalCurrentVantages();
+    const canvases: HTMLCanvasElement[] = [];
+    for (const vantage of vantages) {
+      canvases.push((await vantage.canvasInfo()).canvas);
     }
     return canvases;
   }
