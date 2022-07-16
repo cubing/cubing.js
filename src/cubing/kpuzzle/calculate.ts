@@ -1,4 +1,3 @@
-import type { KPuzzleDefinition } from ".";
 import {
   Alg,
   Commutator,
@@ -16,6 +15,7 @@ import type {
   KOrbitDefinition,
   KTransformationOrbitData,
   KTransformationData,
+  KPuzzleDefinition,
 } from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
 

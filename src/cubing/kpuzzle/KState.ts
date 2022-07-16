@@ -1,8 +1,12 @@
-import type { KPuzzle, KTransformationData } from ".";
+import type { KPuzzle } from "./KPuzzle";
 import type { Alg, Move } from "../alg";
 import { applyTransformationDataToStateData } from "./combine";
 import type { KTransformationSource } from "./KPuzzle";
-import type { KStateData, KTransformationOrbitData } from "./KPuzzleDefinition";
+import type {
+  KStateData,
+  KTransformationData,
+  KTransformationOrbitData,
+} from "./KPuzzleDefinition";
 import { KTransformation } from "./KTransformation";
 
 export class KState {
