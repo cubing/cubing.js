@@ -2,7 +2,11 @@ import { Alg } from "../alg";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
-import { instantiateWorker, setForceStringWorker } from "./instantiator";
+import {
+  instantiateWorker,
+  setDisableStringWorker,
+  setForceStringWorker,
+} from "./instantiator";
 import type { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
 import type { KState } from "../kpuzzle/KState";
 
@@ -106,6 +110,7 @@ export function setDebug(options: {
   logPerf?: boolean;
   scramblePrefetchLevel?: `${PrefetchLevel}`;
   forceStringWorker?: boolean;
+  disableStringWorker?: boolean;
 }): void {
   const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
@@ -118,5 +123,8 @@ export function setDebug(options: {
   }
   if ("forceStringWorker" in options) {
     setForceStringWorker(!!options.forceStringWorker);
+  }
+  if ("disableStringWorker" in options) {
+    setDisableStringWorker(!!options.disableStringWorker);
   }
 }

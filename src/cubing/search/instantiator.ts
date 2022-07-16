@@ -8,6 +8,10 @@ let forceStringWorker: boolean = false;
 export function setForceStringWorker(force: boolean): void {
   forceStringWorker = force;
 }
+let disableStringWorker: boolean = false;
+export function setDisableStringWorker(disable: boolean): void {
+  disableStringWorker = disable;
+}
 
 export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
   // eslint-disable-next-line no-async-promise-executor
@@ -100,10 +104,16 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
     // `await` is important for `catch` to work.
     return await instantiateModuleWorker();
   } catch (e) {
-    console.warn(
-      "Could not instantiate module worker (this may happen in Firefox, with `bundle-global`, or when using Parcel). Falling back to string worker.",
-      e,
-    );
+    const commonErrorPrefix =
+      "Could not instantiate module worker (this may happen in Firefox, with `bundle-global`, or when using Parcel).";
+    if (disableStringWorker) {
+      console.error(
+        `${commonErrorPrefix} Fallback to string worker is disabled.`,
+        e,
+      );
+      throw new Error(`Module worker instantiation failed.`);
+    }
+    console.warn(`${commonErrorPrefix} Falling back to string worker.`, e);
     return instantiateClassicWorker();
   }
 }

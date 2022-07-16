@@ -10,6 +10,9 @@ import "cubing/search";
 import "cubing/stream";
 import "cubing/twisty";
 
+import { setDebug } from "cubing/search";
+setDebug({ disableStringWorker: true });
+
 import { randomScrambleForEvent } from "cubing/scramble";
 
 (async () => {
