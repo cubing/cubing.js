@@ -1,5 +1,6 @@
 import { Alg } from "./Alg";
 import { AlgBuilder } from "./AlgBuilder";
+import { algDebugGlobals } from "./debug";
 import type { Unit } from "./units";
 import { Commutator } from "./units/containers/Commutator";
 import { Conjugate } from "./units/containers/Conjugate";
@@ -69,13 +70,20 @@ type MoveSuffix = "+" | "++" | "-" | "--";
 class AlgParser {
   #input: string = "";
   #idx: number = 0;
+  #nissQueue: Grouping[] = [];
 
   parseAlg(input: string): Parsed<Alg> {
     this.#input = input;
     this.#idx = 0;
     const alg = this.parseAlgWithStopping([]);
     this.mustBeAtEndOfInput();
-    return alg;
+    const units = Array.from(alg.units());
+    if (this.#nissQueue.length > 0) {
+      for (const nissGrouping of this.#nissQueue.reverse()) {
+        units.push(nissGrouping);
+      }
+    }
+    return new Alg(units) as Parsed<Alg>;
   }
 
   parseMove(input: string): Parsed<Move> {
@@ -177,6 +185,25 @@ class AlgParser {
           algEndIdx = this.#idx;
           continue mainLoop;
         }
+      } else if (this.tryConsumeNext("^")) {
+        if (!algDebugGlobals.caratNISSNotationEnabled) {
+          throw new Error(
+            "Alg contained a carat but carat NISS notation is not enabled.",
+          );
+        }
+
+        this.mustConsumeNext("(");
+        const alg = this.parseAlgWithStopping([")"]);
+        this.popNext();
+
+        const grouping = new Grouping(alg, -1);
+        const placeholder = new Pause();
+
+        grouping.experimentalNISSPlaceholder = placeholder;
+        placeholder.experimentalNISSGrouping = grouping;
+
+        this.#nissQueue.push(grouping);
+        algBuilder.push(placeholder);
       } else if (this.tryConsumeNext("[")) {
         mustNotBeCrowded(savedCharIndex);
         const A = this.parseAlgWithStopping([",", ":"]);

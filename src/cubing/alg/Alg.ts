@@ -3,6 +3,7 @@ import { experimentalIs, experimentalIsUnit } from "./is";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
 import { simplify, SimplifyOptions } from "./traversal";
+import { Grouping, Pause } from "./units";
 import { LineComment } from "./units/leaves/LineComment";
 import { Move } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
@@ -249,14 +250,24 @@ export class Alg extends AlgCommon<Alg> {
    */
   toString(): string {
     let output = "";
-    let previousUnit: Unit | null = null;
+    let previousVisibleUnit: Unit | null = null;
     for (const unit of this.#units) {
-      if (previousUnit) {
-        output += spaceBetween(previousUnit, unit);
+      if (previousVisibleUnit) {
+        output += spaceBetween(previousVisibleUnit, unit);
         // console.log("l", previousUnit.toString(), unit.toString(), output);
       }
-      output += unit.toString();
-      previousUnit = unit;
+      const nissGrouping = unit.as(Pause)?.experimentalNISSGrouping;
+      if (nissGrouping) {
+        if (nissGrouping.amount !== -1) {
+          throw new Error("Invalid NISS Grouping amount!");
+        }
+        output += `^(${nissGrouping.alg.toString()})`;
+      } else if (unit.as(Grouping)?.experimentalNISSPlaceholder) {
+        // do not serialize (rely on the placeholder instead)
+      } else {
+        output += unit.toString();
+      }
+      previousVisibleUnit = unit;
     }
     return output;
   }
@@ -282,6 +293,9 @@ export class Alg extends AlgCommon<Alg> {
 function spaceBetween(u1: Unit, u2: Unit): string {
   if (u1.is(Newline) || u2.is(Newline)) {
     return "";
+  }
+  if (u2.as(Grouping)?.experimentalNISSPlaceholder) {
+    return ""
   }
   if (u1.is(LineComment) && !u2.is(Newline)) {
     return "\n"; /// TODO

@@ -19,3 +19,5 @@ export {
 
 // TODO: Find a better way to track parsed algs.
 export type { Parsed as ExperimentalParsed } from "./parse";
+
+export { setAlgDebug } from "./debug";

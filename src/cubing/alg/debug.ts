@@ -25,3 +25,16 @@ export function setAlgPartTypeMismatchReportingLevel(
 ): void {
   currentReportingLevel = level;
 }
+
+export const algDebugGlobals: { caratNISSNotationEnabled: boolean } = {
+  caratNISSNotationEnabled: false,
+};
+
+export function setAlgDebug(options: {
+  caratNISSNotationEnabled?: boolean;
+}): void {
+  if ("caratNISSNotationEnabled" in options) {
+    algDebugGlobals.caratNISSNotationEnabled =
+      !!options.caratNISSNotationEnabled;
+  }
+}

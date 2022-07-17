@@ -126,6 +126,9 @@ export class DecoratorConstructor extends TraversalUp<AlgPartDecoration> {
   }
 
   public traversePause(pause: Pause): AlgPartDecoration {
+    if (pause.experimentalNISSGrouping) {
+      return this.dummyLeaf;
+    }
     return new AlgPartDecoration(
       1,
       this.durationFn.traverseUnit(pause),
