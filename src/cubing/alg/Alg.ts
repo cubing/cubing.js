@@ -250,10 +250,10 @@ export class Alg extends AlgCommon<Alg> {
    */
   toString(): string {
     let output = "";
-    let previousUnit: Unit | null = null;
+    let previousVisibleUnit: Unit | null = null;
     for (const unit of this.#units) {
-      if (previousUnit) {
-        output += spaceBetween(previousUnit, unit);
+      if (previousVisibleUnit) {
+        output += spaceBetween(previousVisibleUnit, unit);
         // console.log("l", previousUnit.toString(), unit.toString(), output);
       }
       const nissGrouping = unit.as(Pause)?.experimentalNISSGrouping;
@@ -267,7 +267,7 @@ export class Alg extends AlgCommon<Alg> {
       } else {
         output += unit.toString();
       }
-      previousUnit = unit;
+      previousVisibleUnit = unit;
     }
     return output;
   }
@@ -293,6 +293,9 @@ export class Alg extends AlgCommon<Alg> {
 function spaceBetween(u1: Unit, u2: Unit): string {
   if (u1.is(Newline) || u2.is(Newline)) {
     return "";
+  }
+  if (u2.as(Grouping)?.experimentalNISSPlaceholder) {
+    return ""
   }
   if (u1.is(LineComment) && !u2.is(Newline)) {
     return "\n"; /// TODO
