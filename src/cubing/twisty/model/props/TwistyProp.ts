@@ -326,6 +326,14 @@ export class FreshListenerManager {
     });
   }
 
+  // TODO: Figure out the signature to let us do overloads
+  /** @deprecated */
+  addMultiListener3<U, V, W>(
+    props: [TwistyPropParent<U>, TwistyPropParent<V>, TwistyPropParent<W>],
+    listener: (values: [U, V, W]) => void,
+  ): void {
+    this.addMultiListener(props as any, listener as any); // TODO
+  }
   addMultiListener<U, V>(
     props: [TwistyPropParent<U>, TwistyPropParent<V>],
     listener: (values: [U, V]) => void,

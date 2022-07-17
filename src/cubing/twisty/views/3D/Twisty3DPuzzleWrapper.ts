@@ -95,21 +95,24 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       },
     );
 
-    this.#freshListenerManager.addMultiListener(
+    this.#freshListenerManager.addMultiListener3(
       [
+        this.model.twistySceneModel.stickering,
         this.model.twistySceneModel.foundationStickerSprite,
         this.model.twistySceneModel.hintStickerSprite,
       ],
       async (
         inputs: [
+          stickering: ExperimentalStickering,
           foundationSprite: ThreeTexture | null,
           hintSprite: ThreeTexture | null,
         ],
       ) => {
         if ("experimentalUpdateTexture" in (await this.twisty3DPuzzle())) {
           ((await this.twisty3DPuzzle()) as PG3D).experimentalUpdateTexture(
-            true,
-            ...inputs,
+            inputs[0] === "picture",
+            inputs[1],
+            inputs[2],
           );
           this.scheduleRender();
         }
