@@ -15,12 +15,12 @@ function parseIntWithEmptyFallback<T>(n: string, emptyFallback: T): number | T {
   return n ? parseInt(n) : emptyFallback;
 }
 
-const amountRegex = /^(\d+)?('?)/;
-const moveStartRegex = /^[_\dA-Za-z]/; // TODO: Handle slash
-const quantumMoveRegex = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
-const commentTextRegex = /^[^\n]*/;
-const square1PairStart = /^(-?\d+), ?/; // TODO: match up with other whitespace handling?
-const square1PairEnd = /^(-?\d+)\)/; // TODO: match up with other whitespace handling?
+const AMOUNT_REGEX = /^(\d+)?('?)/;
+const MOVE_START_REGEX = /^[_\dA-Za-z]/; // TODO: Handle slash
+const QUANTUM_MOVE_REGEX = /^((([1-9]\d*)-)?([1-9]\d*))?([_A-Za-z]+)?/;
+const COMMENT_TEXT_REGEX = /^[^\n]*/;
+const SQUARE1_PAIR_START_REGEX = /^(-?\d+), ?/; // TODO: match up with other whitespace handling?
+const SQUARE1_PAIR_END_REGEX = /^(-?\d+)\)/; // TODO: match up with other whitespace handling?
 
 export function parseAlg(s: string): Alg {
   return new AlgParser().parseAlg(s);
@@ -127,7 +127,7 @@ class AlgParser {
           algStartIdx = this.#idx;
         }
         continue mainLoop;
-      } else if (moveStartRegex.test(this.#input[this.#idx])) {
+      } else if (MOVE_START_REGEX.test(this.#input[this.#idx])) {
         mustNotBeCrowded(savedCharIndex);
         const move = this.parseMoveImpl();
         algBuilder.push(move);
@@ -136,11 +136,11 @@ class AlgParser {
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
         mustNotBeCrowded(savedCharIndex);
-        const sq1PairStartMatch = this.tryRegex(square1PairStart);
+        const sq1PairStartMatch = this.tryRegex(SQUARE1_PAIR_START_REGEX);
         if (sq1PairStartMatch) {
           const topAmountString = sq1PairStartMatch[1];
           const savedCharIndexD = this.#idx;
-          const sq1PairEndMatch = this.parseRegex(square1PairEnd);
+          const sq1PairEndMatch = this.parseRegex(SQUARE1_PAIR_END_REGEX);
           const uMove = addCharIndices(
             new Move(new QuantumMove("U_SQ_"), parseInt(topAmountString)),
             savedCharIndex + 1,
@@ -211,7 +211,7 @@ class AlgParser {
       } else if (this.tryConsumeNext("/")) {
         if (this.tryConsumeNext("/")) {
           mustNotBeCrowded(savedCharIndex);
-          const [text] = this.parseRegex(commentTextRegex);
+          const [text] = this.parseRegex(COMMENT_TEXT_REGEX);
           algBuilder.push(
             addCharIndices(new LineComment(text), savedCharIndex, this.#idx),
           );
@@ -249,7 +249,7 @@ class AlgParser {
 
   private parseQuantumMoveImpl(): QuantumMove {
     const [, , , outerLayerStr, innerLayerStr, family] =
-      this.parseRegex(quantumMoveRegex);
+      this.parseRegex(QUANTUM_MOVE_REGEX);
 
     return new QuantumMove(
       family,
@@ -334,7 +334,7 @@ class AlgParser {
 
   private parseAmountAndTrackEmptyAbsAmount(): [number, boolean] {
     const savedIdx = this.#idx;
-    const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
+    const [, absAmountStr, primeStr] = this.parseRegex(AMOUNT_REGEX);
     if (absAmountStr?.startsWith("0") && absAmountStr !== "0") {
       throw new Error(
         `Error at char index ${savedIdx}: An amount can only start with 0 if it's exactly the digit 0.`,
@@ -348,7 +348,7 @@ class AlgParser {
 
   private parseAmount(): number {
     const savedIdx = this.#idx;
-    const [, absAmountStr, primeStr] = this.parseRegex(amountRegex);
+    const [, absAmountStr, primeStr] = this.parseRegex(AMOUNT_REGEX);
     if (absAmountStr?.startsWith("0") && absAmountStr !== "0") {
       throw new Error(
         `Error at char index ${savedIdx}: An amount number can only start with 0 if it's exactly the digit 0.`,
