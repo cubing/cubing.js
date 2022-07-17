@@ -151,7 +151,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
 
   public traversePause(pause: Pause): LocalAnimLeavesWithRange[] {
     if (pause.experimentalNISSGrouping) {
-      return []
+      return [];
     }
     const duration = defaultDurationForAmount(1);
     return [

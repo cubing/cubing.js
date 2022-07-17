@@ -129,7 +129,7 @@ export interface SimplifyOptions {
 
 // TODO: Test that inverses are bijections.
 class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
-  #newPlaceholderAssociationsMap? : Map<Grouping, Pause>;
+  #newPlaceholderAssociationsMap?: Map<Grouping, Pause>;
   #newPlaceholderAssociations(): Map<Grouping, Pause> {
     return (this.#newPlaceholderAssociationsMap ??= new Map<Grouping, Pause>());
   }
@@ -219,15 +219,18 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
     const newOptions = {
       depth: options.depth ? options.depth - 1 : null,
     }; // TODO: avoid allocations?
-    const newGrouping = new Grouping(this.traverseAlg(grouping.alg, newOptions), grouping.amount);
-    
+    const newGrouping = new Grouping(
+      this.traverseAlg(grouping.alg, newOptions),
+      grouping.amount,
+    );
+
     const newPlaceholder = this.#newPlaceholderAssociations().get(grouping);
     if (newPlaceholder) {
       newGrouping.experimentalNISSPlaceholder = newPlaceholder;
       newPlaceholder.experimentalNISSGrouping = newGrouping;
     }
 
-    yield newGrouping
+    yield newGrouping;
   }
 
   public *traverseMove(move: Move, _options: SimplifyOptions): Generator<Unit> {
@@ -274,7 +277,10 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   ): Generator<Unit> {
     if (pause.experimentalNISSGrouping) {
       const newPause = new Pause();
-      this.#newPlaceholderAssociations().set(pause.experimentalNISSGrouping, newPause)
+      this.#newPlaceholderAssociations().set(
+        pause.experimentalNISSGrouping,
+        newPause,
+      );
       yield newPause;
     } else {
       yield pause;

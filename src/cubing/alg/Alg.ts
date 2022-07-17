@@ -295,7 +295,7 @@ function spaceBetween(u1: Unit, u2: Unit): string {
     return "";
   }
   if (u2.as(Grouping)?.experimentalNISSPlaceholder) {
-    return ""
+    return "";
   }
   if (u1.is(LineComment) && !u2.is(Newline)) {
     return "\n"; /// TODO
