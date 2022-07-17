@@ -2,6 +2,7 @@ import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { Move, QuantumMove } from "../leaves/Move";
+import type { Pause } from "../leaves/Pause";
 import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { LeafUnit } from "../Unit";
 
@@ -45,6 +46,7 @@ const square1TupleFormatterInstance = new Square1TupleFormatter();
 
 export class Grouping extends AlgCommon<Grouping> {
   readonly #quantumWithAmount: QuantumWithAmount<Alg>;
+  experimentalNISSPlaceholder?: Pause; // TODO: tie this to the alg
 
   constructor(algSource: FlexibleAlgSource, amount?: number) {
     super();

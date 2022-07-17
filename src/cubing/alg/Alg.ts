@@ -3,6 +3,7 @@ import { experimentalIs, experimentalIsUnit } from "./is";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
 import { simplify, SimplifyOptions } from "./traversal";
+import { Grouping, Pause } from "./units";
 import { LineComment } from "./units/leaves/LineComment";
 import { Move } from "./units/leaves/Move";
 import { Newline } from "./units/leaves/Newline";
@@ -255,7 +256,17 @@ export class Alg extends AlgCommon<Alg> {
         output += spaceBetween(previousUnit, unit);
         // console.log("l", previousUnit.toString(), unit.toString(), output);
       }
-      output += unit.toString();
+      const nissGrouping = unit.as(Pause)?.experimentalNISSGrouping;
+      if (nissGrouping) {
+        if (nissGrouping.amount !== -1) {
+          throw new Error("Invalid NISS Grouping amount!");
+        }
+        output += `^(${nissGrouping.alg.toString()})`;
+      } else if (unit.as(Grouping)?.experimentalNISSPlaceholder) {
+        // do not serialize (rely on the placeholder instead)
+      } else {
+        output += unit.toString();
+      }
       previousUnit = unit;
     }
     return output;

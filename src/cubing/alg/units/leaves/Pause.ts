@@ -1,8 +1,11 @@
+import type { Grouping } from "..";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import type { LeafUnit } from "../Unit";
 
 export class Pause extends AlgCommon<Pause> {
+  experimentalNISSGrouping?: Grouping; // TODO: tie this to the alg
+
   toString(): string {
     return `.`;
   }
