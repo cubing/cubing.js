@@ -12,6 +12,7 @@ interface URLParamValues {
   "debug-js": boolean;
   "debug-simultaneous": boolean;
   "debug-show-render-stats": boolean;
+  "debug-carat-niss-notation": boolean;
   "title": string | null;
   "video-url": string | null;
   "competition": string | null;
@@ -26,6 +27,7 @@ const paramDefaults: URLParamValues = {
   "debug-js": true,
   "debug-simultaneous": false,
   "debug-show-render-stats": false,
+  "debug-carat-niss-notation": false,
   "title": null,
   "video-url": null,
   "competition": null,
@@ -43,6 +45,7 @@ const paramDefaultStrings: { [s: string]: string } = {
   "debug-js": "true",
   "debug-simultaneous": "false",
   "debug-show-render-stats": "false",
+  "debug-carat-niss-notation": "false",
   "title": "",
   "video-url": "",
   "competition": "",

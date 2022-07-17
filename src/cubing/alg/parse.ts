@@ -1,5 +1,6 @@
 import { Alg } from "./Alg";
 import { AlgBuilder } from "./AlgBuilder";
+import { algDebugGlobals } from "./debug";
 import type { Unit } from "./units";
 import { Commutator } from "./units/containers/Commutator";
 import { Conjugate } from "./units/containers/Conjugate";
@@ -185,6 +186,12 @@ class AlgParser {
           continue mainLoop;
         }
       } else if (this.tryConsumeNext("^")) {
+        if (!algDebugGlobals.caratNISSNotationEnabled) {
+          throw new Error(
+            "Alg contained a carat but carat NISS notation is not enabled.",
+          );
+        }
+
         this.mustConsumeNext("(");
         const alg = this.parseAlgWithStopping([")"]);
         this.popNext();

@@ -1,3 +1,4 @@
+import { setAlgDebug } from "../../../cubing/alg";
 import "../../../cubing/twisty";
 import { experimentalDebugShowRenderStats } from "../../../cubing/twisty";
 import {
@@ -20,6 +21,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (getURLParam("debug-show-render-stats")) {
     experimentalDebugShowRenderStats(true);
+  }
+
+  if (getURLParam("debug-carat-niss-notation")) {
+    setAlgDebug({ caratNISSNotationEnabled: true });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
