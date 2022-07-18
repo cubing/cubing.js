@@ -38,19 +38,29 @@ for (const line of output.trim().split("\n")) {
 }
 
 const expectedPrefixes = [
-  "node_modules/@babel",
-  "node_modules/@types",
-  "node_modules/barely-a-dev-server",
-  "node_modules/comlink",
-  "node_modules/devtools-protocol", // Puppeteer
-  "node_modules/esbuild",
-  "node_modules/jest-diff",
-  "node_modules/jszip",
-  "node_modules/pretty-format",
-  "node_modules/puppeteer",
-  "node_modules/typescript",
-  "script",
+  // Library
   "src",
+  "node_modules/@types",
+  "node_modules/comlink",
+  // Experiments site
+  "node_modules/jszip",
+  // Building
+  "script",
+  "node_modules/esbuild",
+  "node_modules/barely-a-dev-server",
+  "node_modules/typescript",
+  // Puppeteer
+  "node_modules/puppeteer",
+  "node_modules/devtools-protocol",
+  // Jest
+  "node_modules/@jest",
+  "node_modules/@sinclair",
+  "node_modules/chalk",
+  "node_modules/jest-diff",
+  "node_modules/jest-matcher-utils",
+  "node_modules/pretty-format",
+  // ??? (probably Jest)
+  "node_modules/@babel",
 ];
 
 for (const file of Object.values(files)) {
