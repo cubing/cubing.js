@@ -1,3 +1,11 @@
+/**
+ * For a walkthrough, see:
+ *
+ * https://js.cubing.net/cubing/twisty/
+ *
+ * @packageDocumentation
+ */
+
 export { TwistyPlayer } from "./views/TwistyPlayer";
 export { TwistyAlgViewer } from "./views/TwistyAlgViewer";
 export { TwistyAlgEditor } from "./views/TwistyAlgEditor/TwistyAlgEditor";

@@ -1,3 +1,11 @@
+/**
+ * For a walkthrough, see:
+ *
+ * https://js.cubing.net/cubing/alg/
+ *
+ * @packageDocumentation
+ */
+
 export { Alg } from "./Alg";
 export { AlgBuilder } from "./AlgBuilder";
 export { TraversalDownUp, TraversalUp } from "./traversal";
