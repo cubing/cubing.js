@@ -231,33 +231,33 @@ export class GanRobot extends EventTarget {
       .concat(moves)
       .simplify({ collapseMoves: true, quantumMoveOrder: (_) => 4 });
     if (!this.locked) {
-      // TODO: We're currently iterating over units instead of leaves to avoid "zip bomps".
+      // TODO: We're currently iterating over alg nodes instead of leaves to avoid "zip bomps".
       try {
         this.locked = true;
-        if (this.moveQueue.experimentalNumUnits() === 1) {
+        if (this.moveQueue.experimentalNumChildAlgNodes() === 1) {
           await sleep(this.experimentalOptions.bufferQueue);
         }
         // await this.writeNibbles([0xf, 0xf]);
-        while (this.moveQueue.experimentalNumUnits() > 0) {
-          let units = Array.from(this.moveQueue.units());
+        while (this.moveQueue.experimentalNumChildAlgNodes() > 0) {
+          let algNodes = Array.from(this.moveQueue.childAlgNodes());
           if (
             this.experimentalOptions.singleMoveFixHack &&
-            units.length === 1
+            algNodes.length === 1
           ) {
-            const move = units[0] as Move;
+            const move = algNodes[0] as Move;
             if (move.amount === 2) {
-              units = [
+              algNodes = [
                 move.modified({ amount: 1 }),
                 move.modified({ amount: 1 }),
               ];
             } else {
-              units = [
+              algNodes = [
                 move.modified({ amount: -move.amount }),
                 move.modified({ amount: 2 }),
               ];
             }
           }
-          const moves = units.splice(0, MAX_NIBBLES_PER_WRITE);
+          const moves = algNodes.splice(0, MAX_NIBBLES_PER_WRITE);
           const nibbles: number[] = moves.map(this.moveToNibble.bind(this));
           const sending = new Alg(moves);
           this.experimentalDebugLog("SENDING", sending.toString());
@@ -265,7 +265,7 @@ export class GanRobot extends EventTarget {
             this.experimentalDebugOnSend(sending);
           }
           const write = this.writeNibbles(nibbles);
-          this.moveQueue = new Alg(units);
+          this.moveQueue = new Alg(algNodes);
           await write;
         }
       } finally {

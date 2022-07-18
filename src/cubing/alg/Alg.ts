@@ -1,45 +1,39 @@
 // https://js.cubing.net/cubing/alg/
 
 import { AlgCommon, Comparable } from "./common";
-import { experimentalIs, experimentalIsUnit } from "./is";
+import { experimentalIs, experimentalIsAlgNode } from "./is";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parse";
 import { simplify, SimplifyOptions } from "./traversal";
-import { Grouping, Pause } from "./units";
-import { LineComment } from "./units/leaves/LineComment";
-import { Move } from "./units/leaves/Move";
-import { Newline } from "./units/leaves/Newline";
-import type { LeafUnit, Unit } from "./units/Unit";
+import { Grouping, Pause } from "./alg-nodes";
+import { LineComment } from "./alg-nodes/leaves/LineComment";
+import { Move } from "./alg-nodes/leaves/Move";
+import { Newline } from "./alg-nodes/leaves/Newline";
+import type { AlgLeafNode, AlgNode } from "./alg-nodes/AlgNode";
 import { warnOnce } from "./warnOnce";
 
-export type FlexibleAlgSource = string | Iterable<Unit> | Alg;
+export type FlexibleAlgSource = string | Iterable<AlgNode> | Alg;
 
 // TODO: validate
-function toIterable(input?: FlexibleAlgSource): Iterable<Unit> {
+function toIterable(input?: FlexibleAlgSource): Iterable<AlgNode> {
   if (!input) {
     return [];
   }
 
   if (experimentalIs(input, Alg)) {
-    return (input as Alg).units();
+    return (input as Alg).childAlgNodes();
   }
 
   if (typeof input === "string") {
-    return parseAlg(input).units(); // TODO: something more direct?
+    return parseAlg(input).childAlgNodes(); // TODO: something more direct?
   }
 
-  // const seq = inputUnits as Sequence;
-  // if (seq.type === "sequence" && seq.nestedUnits) {
-  //   throw new Error("unimplemented");
-  //   // return seq.nestedUnits;
-  // }
-
-  const iter = input as Iterable<Unit>;
+  const iter = input as Iterable<AlgNode>;
   if (typeof iter[Symbol.iterator] === "function") {
     return iter; // TODO: avoid allocations
   }
 
-  throw new Error("Invalid unit");
+  throw new Error("Invalid AlgNode");
 }
 
 // Preserves the alg if it's already an `Alg`.
@@ -76,15 +70,15 @@ export function experimentalEnsureAlg(alg: FlexibleAlgSource): Alg {
  */
 export class Alg extends AlgCommon<Alg> {
   // #debugString: string;
-  #units: Iterable<Unit>; // TODO: freeze?
+  #algNodes: Iterable<AlgNode>; // TODO: freeze?
   constructor(alg?: FlexibleAlgSource) {
     super();
-    this.#units = Array.from(toIterable(alg)); // TODO: can we avoid array-casting?
+    this.#algNodes = Array.from(toIterable(alg)); // TODO: can we avoid array-casting?
     // this.#debugString = this.toString();
 
-    for (const unit of this.#units) {
-      if (!experimentalIsUnit(unit)) {
-        throw new Error("An alg can only contain units.");
+    for (const algNode of this.#algNodes) {
+      if (!experimentalIsAlgNode(algNode)) {
+        throw new Error("An alg can only contain alg nodes.");
       }
     }
   }
@@ -126,8 +120,8 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     // TODO: avoid converting to array
-    const l1 = Array.from(this.#units);
-    const l2 = Array.from(otherAsAlg.#units);
+    const l1 = Array.from(this.#algNodes);
+    const l2 = Array.from(otherAsAlg.#algNodes);
     if (l1.length !== l2.length) {
       return false;
     }
@@ -152,17 +146,17 @@ export class Alg extends AlgCommon<Alg> {
   invert(): Alg {
     // TODO: Handle newLines and comments correctly
     // TODO: Make more efficient.
-    return new Alg(reverse(Array.from(this.#units).map((u) => u.invert())));
+    return new Alg(reverse(Array.from(this.#algNodes).map((u) => u.invert())));
   }
 
   /** @deprecated Use {@link Alg.expand} instead. */
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
     depth?: number,
-  ): Generator<LeafUnit> {
+  ): Generator<AlgLeafNode> {
     depth ??= Infinity;
-    for (const unit of direct(this.#units, iterDir)) {
-      yield* unit.experimentalExpand(iterDir, depth);
+    for (const algNode of direct(this.#algNodes, iterDir)) {
+      yield* algNode.experimentalExpand(iterDir, depth);
     }
   }
 
@@ -204,14 +198,14 @@ export class Alg extends AlgCommon<Alg> {
 
   concat(input: FlexibleAlgSource): Alg {
     return new Alg(
-      Array.from(this.#units).concat(Array.from(toIterable(input))),
+      Array.from(this.#algNodes).concat(Array.from(toIterable(input))),
     );
   }
 
   /** @deprecated */
   experimentalIsEmpty(): boolean {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const _ of this.#units) {
+    for (const _ of this.#algNodes) {
       return false;
     }
     return true;
@@ -221,14 +215,24 @@ export class Alg extends AlgCommon<Alg> {
     return parseAlg(s);
   }
 
-  *units(): Generator<Unit> {
-    for (const unit of this.#units) {
-      yield unit;
+  /** @deprecated */
+  units(): Generator<AlgNode> {
+    return this.childAlgNodes();
+  }
+
+  *childAlgNodes(): Generator<AlgNode> {
+    for (const algNode of this.#algNodes) {
+      yield algNode;
     }
   }
 
+  /** @deprecated */
   experimentalNumUnits(): number {
-    return Array.from(this.#units).length;
+    return this.experimentalNumChildAlgNodes();
+  }
+
+  experimentalNumChildAlgNodes(): number {
+    return Array.from(this.#algNodes).length;
   }
 
   /** @deprecated */
@@ -236,13 +240,6 @@ export class Alg extends AlgCommon<Alg> {
     warnOnce("deprecated: type");
     return "sequence";
   }
-
-  // toJSON(): AlgJSON {
-  //   return {
-  //     type: "alg",
-  //     units: Array.from(this.#units) as UnitJSON[],
-  //   };
-  // }
 
   /**
    * Converts the Alg to a string:
@@ -253,47 +250,33 @@ export class Alg extends AlgCommon<Alg> {
    */
   toString(): string {
     let output = "";
-    let previousVisibleUnit: Unit | null = null;
-    for (const unit of this.#units) {
-      if (previousVisibleUnit) {
-        output += spaceBetween(previousVisibleUnit, unit);
-        // console.log("l", previousUnit.toString(), unit.toString(), output);
+    let previousVisibleAlgNode: AlgNode | null = null;
+    for (const algNode of this.#algNodes) {
+      if (previousVisibleAlgNode) {
+        output += spaceBetween(previousVisibleAlgNode, algNode);
       }
-      const nissGrouping = unit.as(Pause)?.experimentalNISSGrouping;
+      const nissGrouping = algNode.as(Pause)?.experimentalNISSGrouping;
       if (nissGrouping) {
         if (nissGrouping.amount !== -1) {
           throw new Error("Invalid NISS Grouping amount!");
         }
         output += `^(${nissGrouping.alg.toString()})`;
-      } else if (unit.as(Grouping)?.experimentalNISSPlaceholder) {
+      } else if (algNode.as(Grouping)?.experimentalNISSPlaceholder) {
         // do not serialize (rely on the placeholder instead)
       } else {
-        output += unit.toString();
+        output += algNode.toString();
       }
-      previousVisibleUnit = unit;
+      previousVisibleAlgNode = algNode;
     }
     return output;
   }
-
-  // *experimentalExpand(options: ExperimentalExpandOptions): Generator<Unit> {
-  //   // if (options.depth === 0) {
-  //   //   yield* this.units();
-  //   //   return;
-  //   // }
-  //   // const newOptions = {
-  //   //   depth: options.depth ? options.depth - 1 : null,
-  //   // }; // TODO: avoid allocations?
-  //   // for (const unit of this.#units) {
-  //   //   yield* unit.experimentalExpandIntoAlg(newOptions);
-  //   // }
-  // }
 
   simplify(options?: SimplifyOptions): Alg {
     return new Alg(simplify(this, options ?? {}));
   }
 }
 
-function spaceBetween(u1: Unit, u2: Unit): string {
+function spaceBetween(u1: AlgNode, u2: AlgNode): string {
   if (u1.is(Newline) || u2.is(Newline)) {
     return "";
   }

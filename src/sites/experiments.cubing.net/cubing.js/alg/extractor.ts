@@ -8,47 +8,51 @@ import {
   Newline,
   Pause,
   TraversalUp,
-  Unit,
+  AlgNode,
 } from "../../../../cubing/alg";
 
-class Extractor extends TraversalUp<Generator<[string, Unit | Alg]>> {
-  *traverseAlg(alg: Alg): Generator<[string, Unit | Alg]> {
+class Extractor extends TraversalUp<Generator<[string, AlgNode | Alg]>> {
+  *traverseAlg(alg: Alg): Generator<[string, AlgNode | Alg]> {
     yield ["Alg", alg];
-    for (const unit of alg.units()) {
-      yield* this.traverseUnit(unit);
+    for (const algNode of alg.childAlgNodes()) {
+      yield* this.traverseAlgNode(algNode);
     }
   }
 
-  *traverseGrouping(grouping: Grouping): Generator<[string, Unit | Alg]> {
+  *traverseGrouping(grouping: Grouping): Generator<[string, AlgNode | Alg]> {
     yield ["Grouping", grouping];
     yield* this.traverseAlg(grouping.alg);
   }
 
-  *traverseMove(move: Move): Generator<[string, Unit | Alg]> {
+  *traverseMove(move: Move): Generator<[string, AlgNode | Alg]> {
     yield ["Move", move];
   }
 
-  *traverseCommutator(commutator: Commutator): Generator<[string, Unit | Alg]> {
+  *traverseCommutator(
+    commutator: Commutator,
+  ): Generator<[string, AlgNode | Alg]> {
     yield ["Commutator", commutator];
     yield* this.traverseAlg(commutator.A);
     yield* this.traverseAlg(commutator.B);
   }
 
-  *traverseConjugate(conjugate: Conjugate): Generator<[string, Unit | Alg]> {
+  *traverseConjugate(conjugate: Conjugate): Generator<[string, AlgNode | Alg]> {
     yield ["Conjugate", conjugate];
     yield* this.traverseAlg(conjugate.A);
     yield* this.traverseAlg(conjugate.B);
   }
 
-  *traversePause(pause: Pause): Generator<[string, Unit | Alg]> {
+  *traversePause(pause: Pause): Generator<[string, AlgNode | Alg]> {
     yield ["Pause", pause];
   }
 
-  *traverseNewline(newline: Newline): Generator<[string, Unit | Alg]> {
+  *traverseNewline(newline: Newline): Generator<[string, AlgNode | Alg]> {
     yield ["Newline", newline];
   }
 
-  *traverseLineComment(comment: LineComment): Generator<[string, Unit | Alg]> {
+  *traverseLineComment(
+    comment: LineComment,
+  ): Generator<[string, AlgNode | Alg]> {
     yield ["Comment", comment];
   }
 }
@@ -56,4 +60,4 @@ class Extractor extends TraversalUp<Generator<[string, Unit | Alg]>> {
 const extractorInstance = new Extractor();
 export const extract = extractorInstance.traverseAlg.bind(
   extractorInstance,
-) as (alg: Alg) => Generator<[string, Unit | Alg]>;
+) as (alg: Alg) => Generator<[string, AlgNode | Alg]>;

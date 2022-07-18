@@ -8,7 +8,11 @@ import {
   Timestamp,
 } from "../../AnimationTypes";
 import type { CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
-import { AnimatedLeafUnit, AnimLeafWithRange, simulMoves } from "./simul-moves";
+import {
+  AnimatedLeafAlgNode,
+  AnimLeafWithRange,
+  simulMoves,
+} from "./simul-moves";
 
 const demos: Record<string, AnimLeafWithRange[]> = {
   "y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2": [
@@ -66,7 +70,7 @@ export class SimultaneousMoveIndexer {
     // TODO: Avoid assuming all base moves are block moves.
   }
 
-  public getAnimLeaf(index: number): AnimatedLeafUnit | null {
+  public getAnimLeaf(index: number): AnimatedLeafAlgNode | null {
     return (
       this.animLeaves[Math.min(index, this.animLeaves.length - 1)]?.animLeaf ??
       null

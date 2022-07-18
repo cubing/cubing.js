@@ -95,7 +95,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       // TODO:  likely a temporary hack until we resolve how notations are
       // added or set in puzzle geometry.
       const bms = [];
-      for (const move of algo.units()) {
+      for (const move of algo.childAlgNodes()) {
         bms.push(pg.notationMapper.notationToExternal(move as Move) as Move);
       }
       // console.log(algo.toString(), bms);

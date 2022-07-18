@@ -57,7 +57,7 @@ export async function bigCubeRandomMoves(n: number): Promise<Alg> {
   const algBuilder = new AlgBuilder();
   let currentAxisIdx = 0;
   const currentAxisQuantumMoves = new Set();
-  while (algBuilder.experimentalNumUnits() < cachedNumMoves) {
+  while (algBuilder.experimentalNumAlgNodes() < cachedNumMoves) {
     const newAxisIdx = randomUintBelow(3);
     if (newAxisIdx !== currentAxisIdx) {
       currentAxisQuantumMoves.clear();

@@ -11,8 +11,8 @@ export { AlgBuilder } from "./AlgBuilder";
 export { TraversalDownUp, TraversalUp } from "./traversal";
 export { Example } from "./example";
 export { keyToMove } from "./keyboard";
-export * from "./units";
-export { MoveModifications } from "./units/leaves/Move";
+export * from "./alg-nodes";
+export { MoveModifications } from "./alg-nodes/leaves/Move";
 
 export { algCubingNetLink } from "./url";
 export type { AlgCubingNetOptions } from "./url";

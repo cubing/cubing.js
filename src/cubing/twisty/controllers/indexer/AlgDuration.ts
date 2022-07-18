@@ -56,8 +56,8 @@ export class AlgDuration extends TraversalUp<Duration> {
 
   public traverseAlg(alg: Alg): Duration {
     let total = 0;
-    for (const unit of alg.units()) {
-      total += this.traverseUnit(unit);
+    for (const algNode of alg.childAlgNodes()) {
+      total += this.traverseAlgNode(algNode);
     }
     return total;
   }

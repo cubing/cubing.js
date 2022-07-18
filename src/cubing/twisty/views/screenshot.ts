@@ -72,7 +72,7 @@ export async function getDefaultFilename(
     model.alg.get(),
   ]);
   return `[${puzzleID}]${
-    algWithIssues.alg.experimentalNumUnits() === 0
+    algWithIssues.alg.experimentalNumChildAlgNodes() === 0
       ? ""
       : " " + algWithIssues.alg.toString()
   }`;

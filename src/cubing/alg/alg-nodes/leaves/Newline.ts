@@ -1,8 +1,8 @@
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import type { LeafUnit } from "../Unit";
+import type { AlgLeafNode } from "../AlgNode";
 
-/** @category Alg Units */
+/** @category Alg Nodes */
 export class Newline extends AlgCommon<Newline> {
   toString(): string {
     return `\n`;
@@ -19,7 +19,7 @@ export class Newline extends AlgCommon<Newline> {
   *experimentalExpand(
     _iterDir: IterationDirection = IterationDirection.Forwards,
     _depth: number = Infinity,
-  ): Generator<LeafUnit> {
+  ): Generator<AlgLeafNode> {
     yield this;
   }
 }

@@ -7,7 +7,7 @@ import {
   Move,
   Newline,
   Pause,
-} from "./units";
+} from "./alg-nodes";
 
 export function experimentalIs(
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -25,7 +25,7 @@ export function experimentalIs(
   return v instanceof c;
 }
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function experimentalIsUnit(v: any): boolean {
+export function experimentalIsAlgNode(v: any): boolean {
   return (
     experimentalIs(v, Grouping) ||
     experimentalIs(v, LineComment) ||

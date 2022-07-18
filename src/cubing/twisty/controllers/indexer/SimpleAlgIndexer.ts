@@ -19,11 +19,11 @@ export class SimpleAlgIndexer implements AlgIndexer {
   }
 
   public getAnimLeaf(index: number): Move {
-    return Array.from(this.moves.units())[index] as Move; // TODO: perf
+    return Array.from(this.moves.childAlgNodes())[index] as Move; // TODO: perf
   }
 
   public indexToMoveStartTimestamp(index: number): Timestamp {
-    const alg = new Alg(Array.from(this.moves.units()).slice(0, index)); // TODO
+    const alg = new Alg(Array.from(this.moves.childAlgNodes()).slice(0, index)); // TODO
     return this.durationFn.traverseAlg(alg);
   }
 
@@ -47,7 +47,7 @@ export class SimpleAlgIndexer implements AlgIndexer {
 
   public transformationAtIndex(index: number): KTransformation {
     let state = this.kpuzzle.identityTransformation();
-    for (const move of Array.from(this.moves.units()).slice(0, index)) {
+    for (const move of Array.from(this.moves.childAlgNodes()).slice(0, index)) {
       // TODO
       state = state.applyMove(move as Move);
     }

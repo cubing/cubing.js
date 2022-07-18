@@ -8,28 +8,28 @@ import {
   Newline,
   Pause,
   TraversalDownUp,
-  Unit,
+  AlgNode,
 } from "../../../../../cubing/alg";
 import type { SimplifyOptions } from "../../../../../cubing/alg/traversal";
 
 // TODO: Test that inverses are bijections.
-class Normalize extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
+class Normalize extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
   // TODO: Handle
-  public *traverseAlg(alg: Alg, options: SimplifyOptions): Generator<Unit> {
+  public *traverseAlg(alg: Alg, options: SimplifyOptions): Generator<AlgNode> {
     if (options.depth === 0) {
-      yield* alg.units();
+      yield* alg.childAlgNodes();
       return;
     }
 
-    const newUnits: Unit[] = [];
-    let lastUnit: Unit | null = null;
+    const newAlgNodes: AlgNode[] = [];
+    let lastAlgNode: AlgNode | null = null;
     const collapseMoves = options?.collapseMoves ?? true;
-    function appendCollapsed(newUnit: Unit) {
-      if (collapseMoves && lastUnit?.is(Move) && newUnit.is(Move)) {
-        const lastMove = lastUnit as Move;
-        const newMove = newUnit as Move;
+    function appendCollapsed(newAlgNode: AlgNode) {
+      if (collapseMoves && lastAlgNode?.is(Move) && newAlgNode.is(Move)) {
+        const lastMove = lastAlgNode as Move;
+        const newMove = newAlgNode as Move;
         if (lastMove.quantum.isIdentical(newMove.quantum)) {
-          newUnits.pop();
+          newAlgNodes.pop();
           let newAmount = lastMove.amount + newMove.amount;
           if (options?.quantumMoveOrder) {
             const order = options.quantumMoveOrder(lastMove.quantum);
@@ -37,40 +37,40 @@ class Normalize extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
           }
           if (newAmount !== 0) {
             const coalescedMove = new Move(lastMove.quantum, newAmount);
-            newUnits.push(coalescedMove);
-            lastUnit = coalescedMove;
+            newAlgNodes.push(coalescedMove);
+            lastAlgNode = coalescedMove;
           } else {
-            lastUnit = newUnits.slice(-1)[0];
+            lastAlgNode = newAlgNodes.slice(-1)[0];
           }
         } else {
           // TODO: handle quantum move order
-          newUnits.push(newUnit);
-          lastUnit = newUnit;
+          newAlgNodes.push(newAlgNode);
+          lastAlgNode = newAlgNode;
         }
       } else {
         // TODO: handle quantum move order
-        newUnits.push(newUnit);
-        lastUnit = newUnit;
+        newAlgNodes.push(newAlgNode);
+        lastAlgNode = newAlgNode;
       }
     }
 
     const newOptions = {
       depth: options.depth ? options.depth - 1 : null,
     }; // TODO: avoid allocations?
-    for (const unit of alg.units()) {
-      for (const ancestorUnit of this.traverseUnit(unit, newOptions)) {
-        appendCollapsed(ancestorUnit);
+    for (const algNode of alg.childAlgNodes()) {
+      for (const ancestorAlgNode of this.traverseAlgNode(algNode, newOptions)) {
+        appendCollapsed(ancestorAlgNode);
       }
     }
-    for (const unit of newUnits) {
-      yield unit;
+    for (const newAlgNode of newAlgNodes) {
+      yield newAlgNode;
     }
   }
 
   public *traverseGrouping(
     grouping: Grouping,
     options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     if (options.depth === 0) {
       yield grouping;
       return;
@@ -81,7 +81,10 @@ class Normalize extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
     yield new Grouping(this.traverseAlg(grouping.alg, newOptions));
   }
 
-  public *traverseMove(move: Move, _options: SimplifyOptions): Generator<Unit> {
+  public *traverseMove(
+    move: Move,
+    _options: SimplifyOptions,
+  ): Generator<AlgNode> {
     if (move.amount === -2) {
       yield move.modified({ amount: 2 });
     } else {
@@ -92,7 +95,7 @@ class Normalize extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   public *traverseCommutator(
     commutator: Commutator,
     options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     if (options.depth === 0) {
       yield commutator;
       return;
@@ -109,7 +112,7 @@ class Normalize extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   public *traverseConjugate(
     conjugate: Conjugate,
     options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     if (options.depth === 0) {
       yield conjugate;
       return;
@@ -126,21 +129,21 @@ class Normalize extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   public *traversePause(
     _pause: Pause,
     _options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     // Nothing!
   }
 
   public *traverseNewline(
     _newline: Newline,
     _options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     // Nothing!
   }
 
   public *traverseLineComment(
     _comment: LineComment,
     _options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     // Nothing!
   }
 }
@@ -149,4 +152,4 @@ const normalizeInstance = new Normalize();
 export const normalize: (
   alg: Alg,
   options: SimplifyOptions,
-) => Generator<Unit> = normalizeInstance.traverseAlg.bind(normalizeInstance);
+) => Generator<AlgNode> = normalizeInstance.traverseAlg.bind(normalizeInstance);

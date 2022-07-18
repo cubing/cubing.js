@@ -5,4 +5,8 @@ export { Conjugate } from "./containers/Conjugate";
 export { Move, QuantumMove } from "./leaves/Move";
 export { Newline } from "./leaves/Newline";
 export { Pause } from "./leaves/Pause";
-export type { Unit } from "./Unit";
+import type { AlgNode } from "./AlgNode";
+
+export { AlgNode };
+/** @deprecated */
+export type Unit = AlgNode;

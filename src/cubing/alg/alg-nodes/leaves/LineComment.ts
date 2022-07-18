@@ -1,10 +1,10 @@
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import type { LeafUnit } from "../Unit";
+import type { AlgLeafNode } from "../AlgNode";
 
 // TODO: hash
 // TODO: this conflicts with the HTML `LineComment` class
-/** @category Alg Units */
+/** @category Alg Nodes */
 export class LineComment extends AlgCommon<LineComment> {
   readonly #text: string;
 
@@ -32,7 +32,7 @@ export class LineComment extends AlgCommon<LineComment> {
   *experimentalExpand(
     _iterDir: IterationDirection = IterationDirection.Forwards,
     _depth: number = Infinity,
-  ): Generator<LeafUnit> {
+  ): Generator<AlgLeafNode> {
     yield this;
   }
 

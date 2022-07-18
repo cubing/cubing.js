@@ -1,7 +1,7 @@
 import type { Repeatable } from "../common";
 import { IterationDirection, toggleDirection } from "../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION, MIN_INT } from "../limits";
-import type { LeafUnit } from "./Unit";
+import type { AlgLeafNode } from "./AlgNode";
 
 export class QuantumWithAmount<Q extends Repeatable> {
   readonly quantum: Q;
@@ -17,7 +17,7 @@ export class QuantumWithAmount<Q extends Repeatable> {
       this.amount > MAX_INT
     ) {
       throw new Error(
-        `Unit amount absolute value must be a non-negative integer below ${MAX_INT_DESCRIPTION}.`,
+        `AlgNode amount absolute value must be a non-negative integer below ${MAX_INT_DESCRIPTION}.`,
       );
     }
   }
@@ -45,7 +45,7 @@ export class QuantumWithAmount<Q extends Repeatable> {
   *experimentalExpand(
     iterDir: IterationDirection,
     depth: number,
-  ): Generator<LeafUnit> {
+  ): Generator<AlgLeafNode> {
     const absAmount = Math.abs(this.amount);
     const newIterDir = toggleDirection(iterDir, this.amount < 0);
     for (let i = 0; i < absAmount; i++) {

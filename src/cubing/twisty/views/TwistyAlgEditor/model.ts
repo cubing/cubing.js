@@ -12,7 +12,7 @@ import {
   TwistyPropSource,
 } from "../../model/props/TwistyProp";
 import {
-  AnimatedLeafUnitInfo,
+  AnimatedLeafAlgNodeInfo,
   leafTokens,
   OrderedLeafTokens,
 } from "./LeafTokens";
@@ -108,7 +108,7 @@ interface LeafToHighlightPropInputs {
 }
 type HighlightWhere = "before" | "start" | "inside" | "end" | "after";
 export interface HighlightInfo {
-  leafInfo: AnimatedLeafUnitInfo;
+  leafInfo: AnimatedLeafAlgNodeInfo;
   where: HighlightWhere;
 }
 class LeafToHighlightProp extends TwistyPropDerived<
@@ -117,7 +117,7 @@ class LeafToHighlightProp extends TwistyPropDerived<
 > {
   derive(inputs: LeafToHighlightPropInputs): HighlightInfo | null {
     function withWhere(
-      leafInfo: AnimatedLeafUnitInfo | null,
+      leafInfo: AnimatedLeafAlgNodeInfo | null,
     ): HighlightInfo | null {
       if (leafInfo === null) {
         return null;
@@ -140,7 +140,7 @@ class LeafToHighlightProp extends TwistyPropDerived<
       };
     }
 
-    let lastLeafInfo: AnimatedLeafUnitInfo | null = null;
+    let lastLeafInfo: AnimatedLeafAlgNodeInfo | null = null;
     // TODO: binary search
     for (const leafInfo of inputs.leafTokens) {
       if (

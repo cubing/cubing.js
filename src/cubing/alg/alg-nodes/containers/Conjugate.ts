@@ -1,9 +1,9 @@
 import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import type { LeafUnit } from "../Unit";
+import type { AlgLeafNode } from "../AlgNode";
 
-/** @category Alg Units */
+/** @category Alg Nodes */
 export class Conjugate extends AlgCommon<Conjugate> {
   readonly #A: Alg;
   readonly #B: Alg;
@@ -37,7 +37,7 @@ export class Conjugate extends AlgCommon<Conjugate> {
   *experimentalExpand(
     iterDir: IterationDirection,
     depth?: number,
-  ): Generator<LeafUnit> {
+  ): Generator<AlgLeafNode> {
     depth ??= Infinity;
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();

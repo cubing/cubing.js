@@ -12,15 +12,15 @@ import {
 import type { MillisecondTimestamp } from "../../AnimationTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
-export type AnimatedLeafUnit = Move | Pause;
+export type AnimatedLeafAlgNode = Move | Pause;
 export interface LocalAnimLeavesWithRange {
-  animLeafUnit: AnimatedLeafUnit;
+  animLeafAlgNode: AnimatedLeafAlgNode;
   msUntilNext: MillisecondTimestamp;
   duration: MillisecondTimestamp;
 }
 
 export interface AnimLeafWithRange {
-  animLeaf: AnimatedLeafUnit;
+  animLeaf: AnimatedLeafAlgNode;
   start: MillisecondTimestamp;
   end: MillisecondTimestamp;
 }
@@ -52,8 +52,8 @@ function isSameAxis(move1: Move, move2: Move): boolean {
 export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
   public traverseAlg(alg: Alg): LocalAnimLeavesWithRange[] {
     const processed: LocalAnimLeavesWithRange[][] = [];
-    for (const nestedUnit of alg.units()) {
-      processed.push(this.traverseUnit(nestedUnit));
+    for (const childAlgNode of alg.childAlgNodes()) {
+      processed.push(this.traverseAlgNode(childAlgNode));
     }
     return Array.prototype.concat(...processed) as LocalAnimLeavesWithRange[];
   }
@@ -63,14 +63,14 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
       return [];
     }
 
-    for (const unit of alg.units()) {
-      if (!unit.is(Move)) {
+    for (const algNode of alg.childAlgNodes()) {
+      if (!algNode.is(Move)) {
         // TODO: define the type statically on the class?
         return this.traverseAlg(alg);
       }
     }
 
-    const moves = Array.from(alg.units()) as Move[];
+    const moves = Array.from(alg.childAlgNodes()) as Move[];
     let maxSimulDur = defaultDurationForAmount(moves[0].amount);
     for (let i = 0; i < moves.length - 1; i++) {
       for (let j = 1; j < moves.length; j++) {
@@ -87,7 +87,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
     const localMovesWithRange: LocalAnimLeavesWithRange[] = moves.map(
       (blockMove): LocalAnimLeavesWithRange => {
         return {
-          animLeafUnit: blockMove,
+          animLeafAlgNode: blockMove,
           msUntilNext: 0,
           duration: maxSimulDur,
         };
@@ -113,7 +113,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
     const duration = defaultDurationForAmount(move.amount);
     return [
       {
-        animLeafUnit: move,
+        animLeafAlgNode: move,
         msUntilNext: duration,
         duration,
       },
@@ -156,7 +156,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
     const duration = defaultDurationForAmount(1);
     return [
       {
-        animLeafUnit: pause,
+        animLeafAlgNode: pause,
         msUntilNext: duration, // TODO
         duration,
       },
@@ -185,7 +185,7 @@ export function simulMoves(a: Alg): AnimLeafWithRange[] {
   const l = localSimulMoves(a).map(
     (localSimulMove: LocalAnimLeavesWithRange): AnimLeafWithRange => {
       const leafWithRange = {
-        animLeaf: localSimulMove.animLeafUnit,
+        animLeaf: localSimulMove.animLeafAlgNode,
         start: timestamp,
         end: timestamp + localSimulMove.duration,
       };

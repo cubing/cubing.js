@@ -1,45 +1,45 @@
 import type { Alg } from "./Alg";
-import { Grouping } from "./units/containers/Grouping";
+import { Grouping } from "./alg-nodes/containers/Grouping";
 import type { Comparable } from "./common";
-import { Commutator } from "./units/containers/Commutator";
-import { Move, QuantumMove } from "./units/leaves/Move";
-import { Newline } from "./units/leaves/Newline";
-import { Pause } from "./units/leaves/Pause";
-import { Conjugate } from "./units/containers/Conjugate";
-import { LineComment } from "./units/leaves/LineComment";
-import type { Unit } from "./units/Unit";
+import { Commutator } from "./alg-nodes/containers/Commutator";
+import { Move, QuantumMove } from "./alg-nodes/leaves/Move";
+import { Newline } from "./alg-nodes/leaves/Newline";
+import { Pause } from "./alg-nodes/leaves/Pause";
+import { Conjugate } from "./alg-nodes/containers/Conjugate";
+import { LineComment } from "./alg-nodes/leaves/LineComment";
+import type { AlgNode } from "./alg-nodes/AlgNode";
 
-function dispatch<DataDown, DataAlgUp, DataUnitUp>(
-  t: TraversalDownUp<DataDown, DataAlgUp, DataUnitUp>,
-  unit: Unit,
+function dispatch<DataDown, DataAlgUp, DataAlgNodeUp>(
+  t: TraversalDownUp<DataDown, DataAlgUp, DataAlgNodeUp>,
+  algNode: AlgNode,
   dataDown: DataDown,
-): DataUnitUp {
+): DataAlgNodeUp {
   // TODO: Can we turn this back into a `switch` or something more efficiently?
-  if (unit.is(Grouping)) {
-    return t.traverseGrouping(unit as Grouping, dataDown);
+  if (algNode.is(Grouping)) {
+    return t.traverseGrouping(algNode as Grouping, dataDown);
   }
-  if (unit.is(Move)) {
-    return t.traverseMove(unit as Move, dataDown);
+  if (algNode.is(Move)) {
+    return t.traverseMove(algNode as Move, dataDown);
   }
-  if (unit.is(Commutator)) {
-    return t.traverseCommutator(unit as Commutator, dataDown);
+  if (algNode.is(Commutator)) {
+    return t.traverseCommutator(algNode as Commutator, dataDown);
   }
-  if (unit.is(Conjugate)) {
-    return t.traverseConjugate(unit as Conjugate, dataDown);
+  if (algNode.is(Conjugate)) {
+    return t.traverseConjugate(algNode as Conjugate, dataDown);
   }
-  if (unit.is(Pause)) {
-    return t.traversePause(unit as Pause, dataDown);
+  if (algNode.is(Pause)) {
+    return t.traversePause(algNode as Pause, dataDown);
   }
-  if (unit.is(Newline)) {
-    return t.traverseNewline(unit as Newline, dataDown);
+  if (algNode.is(Newline)) {
+    return t.traverseNewline(algNode as Newline, dataDown);
   }
-  if (unit.is(LineComment)) {
-    return t.traverseLineComment(unit as LineComment, dataDown);
+  if (algNode.is(LineComment)) {
+    return t.traverseLineComment(algNode as LineComment, dataDown);
   }
-  throw new Error(`unknown unit`);
+  throw new Error(`unknown AlgNode`);
 }
 
-function assertIsUnit(t: Comparable): Unit {
+function mustBeAlgNode(t: Comparable): AlgNode {
   if (
     t.is(Grouping) ||
     t.is(Move) ||
@@ -49,23 +49,23 @@ function assertIsUnit(t: Comparable): Unit {
     t.is(Newline) ||
     t.is(LineComment)
   ) {
-    return t as Unit;
+    return t as AlgNode;
   }
-  throw new Error("internal error: expected unit"); // TODO: Make more helpful, add tests
+  throw new Error("internal error: expected AlgNode"); // TODO: Make more helpful, add tests
 }
 
 export abstract class TraversalDownUp<
   DataDown,
   DataAlgUp,
-  DataUnitUp = DataAlgUp,
+  DataAlgNodeUp = DataAlgUp,
 > {
   // Immediate subclasses should overwrite this.
-  public traverseUnit(unit: Unit, dataDown: DataDown): DataUnitUp {
-    return dispatch(this, unit, dataDown);
+  public traverseAlgNode(algNode: AlgNode, dataDown: DataDown): DataAlgNodeUp {
+    return dispatch(this, algNode, dataDown);
   }
 
-  public traverseIntoUnit(unit: Unit, dataDown: DataDown): Unit {
-    return assertIsUnit(this.traverseUnit(unit, dataDown) as any);
+  public traverseIntoAlgNode(algNode: AlgNode, dataDown: DataDown): AlgNode {
+    return mustBeAlgNode(this.traverseAlgNode(algNode, dataDown) as any);
   }
 
   public abstract traverseAlg(alg: Alg, dataDown: DataDown): DataAlgUp;
@@ -73,52 +73,59 @@ export abstract class TraversalDownUp<
   public abstract traverseGrouping(
     grouping: Grouping,
     dataDown: DataDown,
-  ): DataUnitUp;
+  ): DataAlgNodeUp;
 
-  public abstract traverseMove(move: Move, dataDown: DataDown): DataUnitUp;
+  public abstract traverseMove(move: Move, dataDown: DataDown): DataAlgNodeUp;
 
   public abstract traverseCommutator(
     commutator: Commutator,
     dataDown: DataDown,
-  ): DataUnitUp;
+  ): DataAlgNodeUp;
 
   public abstract traverseConjugate(
     conjugate: Conjugate,
     dataDown: DataDown,
-  ): DataUnitUp;
+  ): DataAlgNodeUp;
 
-  public abstract traversePause(pause: Pause, dataDown: DataDown): DataUnitUp;
+  public abstract traversePause(
+    pause: Pause,
+    dataDown: DataDown,
+  ): DataAlgNodeUp;
   public abstract traverseNewline(
     newline: Newline,
     dataDown: DataDown,
-  ): DataUnitUp;
+  ): DataAlgNodeUp;
 
   public abstract traverseLineComment(
     comment: LineComment,
     dataDown: DataDown,
-  ): DataUnitUp;
+  ): DataAlgNodeUp;
 }
 
 export abstract class TraversalUp<
   DataAlgUp,
-  DataUnitUp = DataAlgUp,
-> extends TraversalDownUp<undefined, DataAlgUp, DataUnitUp> {
-  public traverseUnit(unit: Unit): DataUnitUp {
-    return dispatch<unknown, DataAlgUp, DataUnitUp>(this, unit, undefined);
+  DataAlgNodeUp = DataAlgUp,
+> extends TraversalDownUp<undefined, DataAlgUp, DataAlgNodeUp> {
+  public traverseAlgNode(algNode: AlgNode): DataAlgNodeUp {
+    return dispatch<unknown, DataAlgUp, DataAlgNodeUp>(
+      this,
+      algNode,
+      undefined,
+    );
   }
 
-  public traverseIntoUnit(unit: Unit): Unit {
-    return assertIsUnit(this.traverseUnit(unit) as any);
+  public traverseIntoAlgNode(algNode: AlgNode): AlgNode {
+    return mustBeAlgNode(this.traverseAlgNode(algNode) as any);
   }
 
   public abstract traverseAlg(alg: Alg): DataAlgUp;
-  public abstract traverseGrouping(grouping: Grouping): DataUnitUp;
-  public abstract traverseMove(move: Move): DataUnitUp;
-  public abstract traverseCommutator(commutator: Commutator): DataUnitUp;
-  public abstract traverseConjugate(conjugate: Conjugate): DataUnitUp;
-  public abstract traversePause(pause: Pause): DataUnitUp;
-  public abstract traverseNewline(newline: Newline): DataUnitUp;
-  public abstract traverseLineComment(comment: LineComment): DataUnitUp;
+  public abstract traverseGrouping(grouping: Grouping): DataAlgNodeUp;
+  public abstract traverseMove(move: Move): DataAlgNodeUp;
+  public abstract traverseCommutator(commutator: Commutator): DataAlgNodeUp;
+  public abstract traverseConjugate(conjugate: Conjugate): DataAlgNodeUp;
+  public abstract traversePause(pause: Pause): DataAlgNodeUp;
+  public abstract traverseNewline(newline: Newline): DataAlgNodeUp;
+  public abstract traverseLineComment(comment: LineComment): DataAlgNodeUp;
 }
 
 export interface SimplifyOptions {
@@ -128,7 +135,7 @@ export interface SimplifyOptions {
 }
 
 // TODO: Test that inverses are bijections.
-class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
+class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
   #newPlaceholderAssociationsMap?: Map<Grouping, Pause>;
   #newPlaceholderAssociations(): Map<Grouping, Pause> {
     return (this.#newPlaceholderAssociationsMap ??= new Map<Grouping, Pause>());
@@ -153,14 +160,14 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   }
 
   // TODO: Handle
-  public *traverseAlg(alg: Alg, options: SimplifyOptions): Generator<Unit> {
+  public *traverseAlg(alg: Alg, options: SimplifyOptions): Generator<AlgNode> {
     if (options.depth === 0) {
-      yield* alg.units();
+      yield* alg.childAlgNodes();
       return;
     }
 
-    const newUnits: Unit[] = [];
-    let lastUnit: Unit | null = null;
+    const newAlgNodes: AlgNode[] = [];
+    let lastAlgNode: AlgNode | null = null;
     const collapseMoves = options?.collapseMoves ?? true;
     function appendMoveWithNewAmount(move: Move, deltaAmount: number): boolean {
       const newAmount = Simplify.#newAmount(move, deltaAmount, options);
@@ -168,29 +175,32 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
         return false;
       }
       const newMove = new Move(move.quantum, newAmount);
-      newUnits.push(newMove);
-      lastUnit = newMove;
+      newAlgNodes.push(newMove);
+      lastAlgNode = newMove;
       return true;
     }
-    function appendCollapsed(newUnit: Unit) {
+    function appendCollapsed(newAlgNode: AlgNode) {
       if (
         collapseMoves &&
-        lastUnit?.is(Move) &&
-        newUnit.is(Move) &&
-        (lastUnit as Move).quantum.isIdentical((newUnit as Move).quantum)
+        lastAlgNode?.is(Move) &&
+        newAlgNode.is(Move) &&
+        (lastAlgNode as Move).quantum.isIdentical((newAlgNode as Move).quantum)
       ) {
-        newUnits.pop();
+        newAlgNodes.pop();
         if (
-          !appendMoveWithNewAmount(lastUnit as Move, (newUnit as Move).amount)
+          !appendMoveWithNewAmount(
+            lastAlgNode as Move,
+            (newAlgNode as Move).amount,
+          )
         ) {
-          lastUnit = newUnits.slice(-1)[0];
+          lastAlgNode = newAlgNodes.slice(-1)[0];
         }
       } else {
-        if (newUnit.is(Move)) {
-          appendMoveWithNewAmount(newUnit as Move, 0);
+        if (newAlgNode.is(Move)) {
+          appendMoveWithNewAmount(newAlgNode as Move, 0);
         } else {
-          newUnits.push(newUnit);
-          lastUnit = newUnit;
+          newAlgNodes.push(newAlgNode);
+          lastAlgNode = newAlgNode;
         }
       }
     }
@@ -198,20 +208,20 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
     const newOptions = {
       depth: options.depth ? options.depth - 1 : null,
     }; // TODO: avoid allocations?
-    for (const unit of alg.units()) {
-      for (const ancestorUnit of this.traverseUnit(unit, newOptions)) {
-        appendCollapsed(ancestorUnit);
+    for (const algNode of alg.childAlgNodes()) {
+      for (const ancestorAlgNode of this.traverseAlgNode(algNode, newOptions)) {
+        appendCollapsed(ancestorAlgNode);
       }
     }
-    for (const unit of newUnits) {
-      yield unit;
+    for (const newAlgNode of newAlgNodes) {
+      yield newAlgNode;
     }
   }
 
   public *traverseGrouping(
     grouping: Grouping,
     options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     if (options.depth === 0) {
       yield grouping;
       return;
@@ -233,14 +243,17 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
     yield newGrouping;
   }
 
-  public *traverseMove(move: Move, _options: SimplifyOptions): Generator<Unit> {
+  public *traverseMove(
+    move: Move,
+    _options: SimplifyOptions,
+  ): Generator<AlgNode> {
     yield move;
   }
 
   public *traverseCommutator(
     commutator: Commutator,
     options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     if (options.depth === 0) {
       yield commutator;
       return;
@@ -257,7 +270,7 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   public *traverseConjugate(
     conjugate: Conjugate,
     options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     if (options.depth === 0) {
       yield conjugate;
       return;
@@ -274,7 +287,7 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   public *traversePause(
     pause: Pause,
     _options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     if (pause.experimentalNISSGrouping) {
       const newPause = new Pause();
       this.#newPlaceholderAssociations().set(
@@ -290,14 +303,14 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<Unit>> {
   public *traverseNewline(
     newline: Newline,
     _options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     yield newline;
   }
 
   public *traverseLineComment(
     comment: LineComment,
     _options: SimplifyOptions,
-  ): Generator<Unit> {
+  ): Generator<AlgNode> {
     yield comment;
   }
 }
@@ -306,4 +319,4 @@ const simplifyInstance = new Simplify();
 export const simplify = simplifyInstance.traverseAlg.bind(simplifyInstance) as (
   alg: Alg,
   options: SimplifyOptions,
-) => Generator<Unit>;
+) => Generator<AlgNode>;

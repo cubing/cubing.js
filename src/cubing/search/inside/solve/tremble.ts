@@ -168,7 +168,7 @@ export class TrembleSolver {
         throw new Error("Missing algorithm in sgs or esgs?");
       }
       algBuilder.experimentalPushAlg(info.alg);
-      if (algBuilder.experimentalNumUnits() >= bestLenSofar) {
+      if (algBuilder.experimentalNumAlgNodes() >= bestLenSofar) {
         return null;
       }
       transformation = transformation.applyTransformation(info.transformation);

@@ -1,7 +1,7 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { AlgBuilder, Grouping, Move, Unit } from "../../../../cubing/alg";
+import { AlgBuilder, Grouping, Move, AlgNode } from "../../../../cubing/alg";
 import { experimentalCountMoves } from "../../../../cubing/notation";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 
@@ -37,7 +37,7 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
     z: "v v v v v v u u u u u u x",
   };
 
-  const constructed: Record<string, Unit> = {
+  const constructed: Record<string, AlgNode> = {
     "U": new Move("U"),
     "R": new Move("R"),
     "F": new Move("F"),

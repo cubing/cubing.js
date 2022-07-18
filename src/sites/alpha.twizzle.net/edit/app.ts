@@ -41,7 +41,7 @@ function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
   newAlgBuilder.experimentalPushAlg(oldAlg);
   if (
     !oldAlg.experimentalIsEmpty() &&
-    !Array.from(oldAlg.units()).slice(-1)[0].is(Newline)
+    !Array.from(oldAlg.childAlgNodes()).slice(-1)[0].is(Newline)
   ) {
     newAlgBuilder.push(new Newline());
   }

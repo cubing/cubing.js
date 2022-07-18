@@ -1,6 +1,6 @@
 import { Alg } from "./Alg";
 import { experimentalAppendMove } from "./operation";
-import { Move } from "./units";
+import { Move } from "./alg-nodes";
 import "./test/alg-comparison";
 
 describe("operation", () => {
@@ -39,7 +39,8 @@ describe("operation", () => {
       new Alg("R U2 F' D"),
     );
     expect(
-      Array.from(new Alg("R U2").concat(new Alg("U R'")).units()).length,
+      Array.from(new Alg("R U2").concat(new Alg("U R'")).childAlgNodes())
+        .length,
     ).toBe(4);
     expect(new Alg("R U2").concat(new Alg("U R'"))).toBeIdentical(
       new Alg("R U2 U R'"),

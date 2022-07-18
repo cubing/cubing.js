@@ -22,15 +22,13 @@ class CountMoves extends TraversalUp<number> {
 
   public traverseAlg(alg: Alg): number {
     let r = 0;
-    for (const unit of alg.units()) {
-      r += this.traverseUnit(unit);
+    for (const algNode of alg.childAlgNodes()) {
+      r += this.traverseAlgNode(algNode);
     }
     return r;
   }
 
   public traverseGrouping(grouping: Grouping): number {
-    // const unit: Unit = Alg.fromString("SDf");
-    // console.log(unit);
     const alg: Alg = grouping.alg;
     return this.traverseAlg(alg) * Math.abs(grouping.amount);
   }

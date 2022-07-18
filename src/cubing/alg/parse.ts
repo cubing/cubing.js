@@ -1,14 +1,14 @@
 import { Alg } from "./Alg";
 import { AlgBuilder } from "./AlgBuilder";
 import { algDebugGlobals } from "./debug";
-import type { Unit } from "./units";
-import { Commutator } from "./units/containers/Commutator";
-import { Conjugate } from "./units/containers/Conjugate";
-import { Grouping } from "./units/containers/Grouping";
-import { LineComment } from "./units/leaves/LineComment";
-import { Move, QuantumMove } from "./units/leaves/Move";
-import { Newline } from "./units/leaves/Newline";
-import { Pause } from "./units/leaves/Pause";
+import type { AlgNode } from "./alg-nodes";
+import { Commutator } from "./alg-nodes/containers/Commutator";
+import { Conjugate } from "./alg-nodes/containers/Conjugate";
+import { Grouping } from "./alg-nodes/containers/Grouping";
+import { LineComment } from "./alg-nodes/leaves/LineComment";
+import { Move, QuantumMove } from "./alg-nodes/leaves/Move";
+import { Newline } from "./alg-nodes/leaves/Newline";
+import { Pause } from "./alg-nodes/leaves/Pause";
 
 type StoppingChar = "," | ":" | "]" | ")";
 
@@ -40,10 +40,10 @@ export interface ParserIndexed {
   endCharIndex: number;
 }
 
-export type Parsed<T extends Alg | Unit> = T & ParserIndexed;
+export type Parsed<T extends Alg | AlgNode> = T & ParserIndexed;
 
 // TODO: attach to parser so the end char index can default to `this.#idx`?
-function addCharIndices<T extends Alg | Unit>(
+function addCharIndices<T extends Alg | AlgNode>(
   t: T,
   startCharIndex: number,
   endCharIndex: number,
@@ -54,7 +54,7 @@ function addCharIndices<T extends Alg | Unit>(
   return parsedT;
 }
 
-export function transferCharIndex<T extends Alg | Unit>(from: T, to: T): T {
+export function transferCharIndex<T extends Alg | AlgNode>(from: T, to: T): T {
   if ("startCharIndex" in from) {
     (to as Parsed<T>).startCharIndex = (from as Parsed<T>).startCharIndex;
   }
@@ -77,13 +77,13 @@ class AlgParser {
     this.#idx = 0;
     const alg = this.parseAlgWithStopping([]);
     this.mustBeAtEndOfInput();
-    const units = Array.from(alg.units());
+    const algNodes = Array.from(alg.childAlgNodes());
     if (this.#nissQueue.length > 0) {
       for (const nissGrouping of this.#nissQueue.reverse()) {
-        units.push(nissGrouping);
+        algNodes.push(nissGrouping);
       }
     }
-    return new Alg(units) as Parsed<Alg>;
+    return new Alg(algNodes) as Parsed<Alg>;
   }
 
   parseMove(input: string): Parsed<Move> {
@@ -113,7 +113,7 @@ class AlgParser {
     let algEndIdx = this.#idx;
     const algBuilder = new AlgBuilder();
 
-    // We're "crowded" if there was not a space or newline since the last unit.
+    // We're "crowded" if there was not a space or newline since the last alg node.
     let crowded = false;
 
     const mustNotBeCrowded = (idx: number): void => {
@@ -131,7 +131,7 @@ class AlgParser {
       }
       if (this.tryConsumeNext(" ")) {
         crowded = false;
-        if (algBuilder.experimentalNumUnits() === 0) {
+        if (algBuilder.experimentalNumAlgNodes() === 0) {
           algStartIdx = this.#idx;
         }
         continue mainLoop;

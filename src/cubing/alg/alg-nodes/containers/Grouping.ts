@@ -4,7 +4,7 @@ import { IterationDirection } from "../../iteration";
 import { Move, QuantumMove } from "../leaves/Move";
 import type { Pause } from "../leaves/Pause";
 import { QuantumWithAmount } from "../QuantumWithAmount";
-import type { LeafUnit } from "../Unit";
+import type { AlgLeafNode } from "../AlgNode";
 
 // This is a workaround for `jest`, which doesn't handle cycles of imports inside `cubing/alg`.
 // We need to lazy-initialize the reusable quantum moves for Square-1, so we create this wrapper for it.
@@ -25,8 +25,8 @@ class Square1TupleFormatter {
     this.quantumD_SQ_ ||= new QuantumMove("D_SQ_");
 
     const quantumAlg = grouping.alg;
-    if (quantumAlg.experimentalNumUnits() === 2) {
-      const [U, D] = quantumAlg.units();
+    if (quantumAlg.experimentalNumChildAlgNodes() === 2) {
+      const [U, D] = quantumAlg.childAlgNodes();
       if (
         U.as(Move)?.quantum.isIdentical(this.quantumU_SQ_) &&
         D.as(Move)?.quantum.isIdentical(this.quantumD_SQ_)
@@ -44,7 +44,7 @@ class Square1TupleFormatter {
 }
 const square1TupleFormatterInstance = new Square1TupleFormatter();
 
-/** @category Alg Units */
+/** @category Alg Nodes */
 export class Grouping extends AlgCommon<Grouping> {
   readonly #quantumWithAmount: QuantumWithAmount<Alg>;
   experimentalNISSPlaceholder?: Pause; // TODO: tie this to the alg
@@ -86,7 +86,7 @@ export class Grouping extends AlgCommon<Grouping> {
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
     depth?: number,
-  ): Generator<LeafUnit> {
+  ): Generator<AlgLeafNode> {
     depth ??= Infinity;
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();

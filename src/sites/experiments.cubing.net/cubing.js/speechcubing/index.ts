@@ -65,8 +65,8 @@ recognition.onresult = function (event) {
         player.experimentalModel.alg.set(
           (async () => {
             const alg = (await player.experimentalModel.alg.get()).alg;
-            const units = Array.from(alg.units());
-            return new Alg(units.slice(0, units.length - 1));
+            const algNode = Array.from(alg.childAlgNodes());
+            return new Alg(algNode.slice(0, algNode.length - 1));
           })(),
         );
         return;

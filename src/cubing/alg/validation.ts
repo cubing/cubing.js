@@ -9,7 +9,7 @@ import type {
   Move,
   Newline,
   Pause,
-} from "./units";
+} from "./alg-nodes";
 
 export class ValidationError extends Error {}
 
@@ -19,8 +19,8 @@ export abstract class ValidatorTraversal extends TraversalUp<void> {}
 export class FlatAlgValidator extends ValidatorTraversal {
   public traverseAlg(alg: Alg): void {
     // TODO: Handle newlines and comments correctly
-    for (const unit of alg.units()) {
-      this.traverseUnit(unit);
+    for (const algNode of alg.childAlgNodes()) {
+      this.traverseAlgNode(algNode);
     }
     return;
   }

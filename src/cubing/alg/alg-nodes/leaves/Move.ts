@@ -4,7 +4,7 @@ import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
 import { parseMove, parseQuantumMove, transferCharIndex } from "../../parse";
 import { warnOnce } from "../../warnOnce";
 import { QuantumWithAmount } from "../QuantumWithAmount";
-import type { LeafUnit } from "../Unit";
+import type { AlgLeafNode } from "../AlgNode";
 
 interface QuantumMoveModifications {
   outerLayer?: number;
@@ -108,7 +108,7 @@ export class QuantumMove extends Comparable {
     return this.#innerLayer;
   }
 
-  experimentalExpand(): Generator<LeafUnit> {
+  experimentalExpand(): Generator<AlgLeafNode> {
     throw new Error(
       "experimentalExpand() cannot be called on a `QuantumMove` directly.",
     );
@@ -133,7 +133,7 @@ export interface MoveModifications {
   amount?: number;
 }
 
-/** @category Alg Units */
+/** @category Alg Nodes */
 export class Move extends AlgCommon<Move> {
   readonly #quantumWithAmount: QuantumWithAmount<QuantumMove>;
 
@@ -167,7 +167,7 @@ export class Move extends AlgCommon<Move> {
   }
 
   invert(): Move {
-    // TODO: handle char indices more consistently among units.
+    // TODO: handle char indices more consistently among alg nodes.
     return transferCharIndex(
       this,
       new Move(this.#quantumWithAmount.quantum, -this.amount),
@@ -176,7 +176,7 @@ export class Move extends AlgCommon<Move> {
 
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
-  ): Generator<LeafUnit> {
+  ): Generator<AlgLeafNode> {
     if (iterDir === IterationDirection.Forwards) {
       yield this;
     } else {

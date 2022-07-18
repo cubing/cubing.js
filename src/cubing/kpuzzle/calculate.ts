@@ -192,13 +192,13 @@ class AlgToTransformationTraversal extends TraversalDownUp<
 > {
   traverseAlg(alg: Alg, kpuzzle: KPuzzle): KTransformation {
     let transformation: KTransformation | null = null;
-    for (const unit of alg.units()) {
+    for (const algNode of alg.childAlgNodes()) {
       if (transformation) {
         transformation = transformation.applyTransformation(
-          this.traverseUnit(unit, kpuzzle),
+          this.traverseAlgNode(algNode, kpuzzle),
         );
       } else {
-        transformation = this.traverseUnit(unit, kpuzzle);
+        transformation = this.traverseAlgNode(algNode, kpuzzle);
       }
     }
     return transformation ?? kpuzzle.identityTransformation();

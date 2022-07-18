@@ -10,13 +10,13 @@ import {
   TraversalDownUp,
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parse";
-import type { AnimatedLeafUnit } from "../../controllers/indexer/simultaneous-moves/simul-moves";
+import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous-moves/simul-moves";
 
-export type AnimatedLeafUnitInfo = {
-  leaf: Parsed<AnimatedLeafUnit>;
+export type AnimatedLeafAlgNodeInfo = {
+  leaf: Parsed<AnimatedLeafAlgNode>;
   idx: number;
 };
-export type OrderedLeafTokens = AnimatedLeafUnitInfo[];
+export type OrderedLeafTokens = AnimatedLeafAlgNodeInfo[];
 
 interface DataUp {
   tokens: OrderedLeafTokens;
@@ -29,17 +29,17 @@ interface DataDown {
 
 class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
   public traverseAlg(alg: Alg, dataDown: DataDown): DataUp {
-    const unitArrays: OrderedLeafTokens[] = [];
+    const algNodeArrays: OrderedLeafTokens[] = [];
     let numMovesInside = 0;
-    for (const unit of alg.units()) {
-      const dataUp = this.traverseUnit(unit, {
+    for (const algNode of alg.childAlgNodes()) {
+      const dataUp = this.traverseAlgNode(algNode, {
         numMovesSofar: dataDown.numMovesSofar + numMovesInside,
       });
-      unitArrays.push(dataUp.tokens);
+      algNodeArrays.push(dataUp.tokens);
       numMovesInside += dataUp.numLeavesInside;
     }
     return {
-      tokens: Array.prototype.concat(...unitArrays),
+      tokens: Array.prototype.concat(...algNodeArrays),
       numLeavesInside: numMovesInside,
     };
   }

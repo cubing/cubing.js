@@ -14,8 +14,8 @@ import {
 class CountAnimatedLeaves extends TraversalUp<number, number> {
   public traverseAlg(alg: Alg): number {
     let total = 0;
-    for (const part of alg.units()) {
-      total += this.traverseUnit(part);
+    for (const part of alg.childAlgNodes()) {
+      total += this.traverseAlgNode(part);
     }
     return total;
   }

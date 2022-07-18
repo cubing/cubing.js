@@ -1,4 +1,4 @@
-import { Alg, Unit } from "../../../../cubing/alg";
+import { Alg, AlgNode } from "../../../../cubing/alg";
 import type { Parsed } from "../../../../cubing/alg/parse";
 import { extract } from "./extractor";
 
@@ -6,6 +6,7 @@ const algElem = document.querySelector("#alg") as HTMLTextAreaElement;
 const inspectorElem = document.querySelector("#inspector") as HTMLPreElement;
 
 function bracket(n: number): string {
+  console.log({ n });
   if (n < 2) {
     return Array(n).fill("␣").join("");
   }
@@ -18,7 +19,7 @@ function updateInspector(s: string): void {
   try {
     const parsed = Alg.fromString(s);
     for (const [name, v] of extract(parsed)) {
-      const parsed = v as Parsed<Alg | Unit>;
+      const parsed = v as Parsed<Alg | AlgNode>;
       inspectorElem.textContent += "\n";
       inspectorElem.textContent += ("" + name + ": ").padStart(12, " ");
       inspectorElem.textContent += "".padStart(parsed.startCharIndex, " ");

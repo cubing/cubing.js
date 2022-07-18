@@ -1,4 +1,4 @@
-import { Move } from "./units/leaves/Move";
+import { Move } from "./alg-nodes/leaves/Move";
 
 const cubeKeyMapping: { [key: number]: Move } = {
   73: new Move("R"),

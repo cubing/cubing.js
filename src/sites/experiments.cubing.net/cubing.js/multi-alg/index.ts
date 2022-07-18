@@ -60,17 +60,17 @@ document.querySelector("#download")?.addEventListener("click", async () => {
     alg: Alg;
     name: string;
   }[] = [];
-  for (const unit of allAlgs.units()) {
-    if (unit.is(LineComment)) {
+  for (const algNode of allAlgs.childAlgNodes()) {
+    if (algNode.is(LineComment)) {
       algList.push({
         alg: currentAlg,
-        name: (unit as LineComment).text.trim(),
+        name: (algNode as LineComment).text.trim(),
       });
       currentAlg = new Alg();
-    } else if (unit.is(Newline)) {
+    } else if (algNode.is(Newline)) {
       // skip
     } else {
-      currentAlg = currentAlg.concat([unit]);
+      currentAlg = currentAlg.concat([algNode]);
     }
   }
 

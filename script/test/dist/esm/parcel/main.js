@@ -48,7 +48,7 @@ async function runTest() {
   const textContent = await elem.evaluate((node) => node.textContent);
   console.log("Generated scramble:", textContent);
   const alg = (await import("cubing/alg")).Alg.fromString(textContent);
-  const algLength = alg.experimentalNumUnits();
+  const algLength = alg.experimentalNumChildAlgNodes();
   assert("algLength > 12", true, algLength > 12);
   assert("algLength < 30", true, algLength < 30);
   if (OPEN_REPL) {

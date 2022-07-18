@@ -1,5 +1,7 @@
 import {
   Alg,
+  AlgBuilder,
+  AlgNode,
   Commutator,
   Conjugate,
   Grouping,
@@ -8,18 +10,16 @@ import {
   Newline,
   Pause,
   TraversalUp,
-  Unit,
 } from "../../../../alg";
-import { AlgBuilder } from "../../../../alg";
 
 const MIN_CHUNKING_THRESHOLD = 16;
 
 function chunkifyAlg(alg: Alg, chunkMaxLength: number): Alg {
   const mainAlgBuilder = new AlgBuilder();
   const chunkAlgBuilder = new AlgBuilder();
-  for (const unit of alg.units()) {
-    chunkAlgBuilder.push(unit);
-    if (chunkAlgBuilder.experimentalNumUnits() >= chunkMaxLength) {
+  for (const algNode of alg.childAlgNodes()) {
+    chunkAlgBuilder.push(algNode);
+    if (chunkAlgBuilder.experimentalNumAlgNodes() >= chunkMaxLength) {
       mainAlgBuilder.push(new Grouping(chunkAlgBuilder.toAlg()));
       chunkAlgBuilder.reset();
     }
@@ -28,49 +28,49 @@ function chunkifyAlg(alg: Alg, chunkMaxLength: number): Alg {
   return mainAlgBuilder.toAlg();
 }
 
-class ChunkAlgs extends TraversalUp<Alg, Unit> {
+class ChunkAlgs extends TraversalUp<Alg, AlgNode> {
   traverseAlg(alg: Alg): Alg {
-    const algLength = alg.experimentalNumUnits();
+    const algLength = alg.experimentalNumChildAlgNodes();
     if (algLength < MIN_CHUNKING_THRESHOLD) {
       return alg;
     }
     return chunkifyAlg(alg, Math.ceil(Math.sqrt(algLength)));
   }
 
-  traverseGrouping(grouping: Grouping): Unit {
+  traverseGrouping(grouping: Grouping): AlgNode {
     return new Grouping(
       this.traverseAlg(grouping.alg),
       grouping.amount, // TODO
     );
   }
 
-  traverseMove(move: Move): Unit {
+  traverseMove(move: Move): AlgNode {
     return move;
   }
 
-  traverseCommutator(commutator: Commutator): Unit {
+  traverseCommutator(commutator: Commutator): AlgNode {
     return new Conjugate(
       this.traverseAlg(commutator.A),
       this.traverseAlg(commutator.B),
     );
   }
 
-  traverseConjugate(conjugate: Conjugate): Unit {
+  traverseConjugate(conjugate: Conjugate): AlgNode {
     return new Conjugate(
       this.traverseAlg(conjugate.A),
       this.traverseAlg(conjugate.B),
     );
   }
 
-  traversePause(pause: Pause): Unit {
+  traversePause(pause: Pause): AlgNode {
     return pause;
   }
 
-  traverseNewline(newline: Newline): Unit {
+  traverseNewline(newline: Newline): AlgNode {
     return newline;
   }
 
-  traverseLineComment(comment: LineComment): Unit {
+  traverseLineComment(comment: LineComment): AlgNode {
     return comment;
   }
 }

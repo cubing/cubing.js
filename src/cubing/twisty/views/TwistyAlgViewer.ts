@@ -8,7 +8,7 @@ import {
   Newline,
   Pause,
   TraversalDownUp,
-  Unit,
+  AlgNode,
 } from "../../alg";
 import type { Parsed } from "../../alg/parse";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
@@ -45,7 +45,7 @@ class TwistyAlgLeafElem extends ManagedCustomElement {
     className: string,
     text: string,
     dataDown: DataDown,
-    public algOrUnit: Alg | Unit,
+    public algOrAlgNode: Alg | AlgNode,
     offsetIntoMove: boolean,
     clickable: boolean,
   ) {
@@ -88,7 +88,7 @@ customElementsShim.define("twisty-alg-leaf-elem", TwistyAlgLeafElem);
 class TwistyAlgWrapperElem extends HTMLElementShim {
   private queue: (Element | Text)[] = [];
 
-  constructor(className: string, public algOrUnit: Alg | Unit) {
+  constructor(className: string, public algOrAlgNode: Alg | AlgNode) {
     super();
     this.classList.add(className);
   }
@@ -152,25 +152,28 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
     let moveCount = 0;
     const element = new TwistyAlgWrapperElem("twisty-alg-alg", alg); // TODO: pick a better class name.
     let first = true;
-    for (const unit of experimentalDirect(alg.units(), dataDown.direction)) {
+    for (const algNode of experimentalDirect(
+      alg.childAlgNodes(),
+      dataDown.direction,
+    )) {
       if (!first) {
         element.addString(" ");
       }
       first = false;
-      if (unit.as(Pause)?.experimentalNISSGrouping) {
+      if (algNode.as(Pause)?.experimentalNISSGrouping) {
         element.addString("^("); // TODO: Handle this lower down.
       }
       // TODO: Handle this check lower down.
-      if (!unit.as(Grouping)?.experimentalNISSPlaceholder) {
+      if (!algNode.as(Grouping)?.experimentalNISSPlaceholder) {
         moveCount += element.addElem(
-          this.traverseUnit(unit, {
+          this.traverseAlgNode(algNode, {
             earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
             twistyAlgViewer: dataDown.twistyAlgViewer,
             direction: dataDown.direction,
           }),
         );
       }
-      if (unit.as(Pause)?.experimentalNISSGrouping) {
+      if (algNode.as(Pause)?.experimentalNISSGrouping) {
         element.addString(")"); // TODO: Handle this lower down.
       }
     }

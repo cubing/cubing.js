@@ -20,10 +20,3 @@
 //   A: AlgJSON;
 //   B: AlgJSON;
 // }
-
-// export type UnitJSON = MoveJSON | GroupingJSON;
-
-// export interface AlgJSON {
-//   type: "alg";
-//   units: UnitJSON[];
-// }

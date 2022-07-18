@@ -6,7 +6,7 @@ import type { Move } from "./leaves/Move";
 import type { Newline } from "./leaves/Newline";
 import type { Pause } from "./leaves/Pause";
 
-export type LeafUnit = Move | LineComment | Newline | Pause;
+export type AlgLeafNode = Move | LineComment | Newline | Pause;
 
 /** @category Alg */
-export type Unit = LeafUnit | Grouping | Conjugate | Commutator;
+export type AlgNode = AlgLeafNode | Grouping | Conjugate | Commutator;

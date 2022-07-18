@@ -1,9 +1,9 @@
 import type { Grouping } from "..";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import type { LeafUnit } from "../Unit";
+import type { AlgLeafNode } from "../AlgNode";
 
-/** @category Alg Units */
+/** @category Alg Nodes */
 export class Pause extends AlgCommon<Pause> {
   experimentalNISSGrouping?: Grouping; // TODO: tie this to the alg
 
@@ -22,7 +22,7 @@ export class Pause extends AlgCommon<Pause> {
   *experimentalExpand(
     _iterDir: IterationDirection = IterationDirection.Forwards,
     _depth: number = Infinity,
-  ): Generator<LeafUnit> {
+  ): Generator<AlgLeafNode> {
     yield this;
   }
 }

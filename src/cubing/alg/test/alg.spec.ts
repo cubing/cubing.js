@@ -1,7 +1,7 @@
 import { Alg } from "../Alg";
 import { setAlgPartTypeMismatchReportingLevel } from "../debug";
 import { Example as Ex } from "../example";
-import { Commutator, Grouping, Move, QuantumMove, Pause } from "../units";
+import { Commutator, Grouping, Move, QuantumMove, Pause } from "../alg-nodes";
 import "./alg-comparison";
 
 setAlgPartTypeMismatchReportingLevel("error");
@@ -18,7 +18,7 @@ describe("Alg", () => {
 
   it("throws an error for a nested Alg", () => {
     expect(() => new Alg([new Alg([new Move("R", 1)])])).toThrowError(
-      /An alg can only contain units./,
+      /An alg can only contain alg nodes./,
     );
   });
 });
@@ -179,7 +179,7 @@ describe("expand()", () => {
     expect(Ex.FURURFCompact.expand()).not.toBeIdentical(Ex.SuneCommutator);
   });
 
-  it("correctly expands a group with two units", () => {
+  it("correctly expands a group with two alg nodes", () => {
     expect(new Alg("(R U)2").expand()).toBeIdentical(new Alg("R U R U"));
   });
 
@@ -227,11 +227,6 @@ describe("Object Freezing", () => {
     // for (const a of Ex.AllAlgParts) {
     //   expect(Object.isFrozen(a)).toBe(true);
     // }
-  });
-
-  it("freezes `nestedUnits` list on Alg", () => {
-    // // Update this based on the length of AllAlgParts.
-    // expect(Object.isFrozen(new Alg([new Move("R", 1)]).nestedUnits)).toBe(true);
   });
 
   // it("makes it impossible to modify a BaseMove", () => {
