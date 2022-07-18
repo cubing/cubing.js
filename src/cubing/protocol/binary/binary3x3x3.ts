@@ -148,11 +148,13 @@ export function binaryComponentsToTwizzleBinary(
   ]);
 }
 
+/** @category Binary 3x3x3 Format */
 export function reid3x3x3ToTwizzleBinary(state: KState): Binary3x3x3State {
   const components: Binary3x3x3Components = reid3x3x3ToBinaryComponents(state);
   return binaryComponentsToTwizzleBinary(components);
 }
 
+/** @category Binary 3x3x3 Format */
 export function twizzleBinaryToBinaryComponents(
   buffer: ArrayBuffer,
 ): Binary3x3x3Components {
@@ -171,6 +173,7 @@ export function twizzleBinaryToBinaryComponents(
   };
 }
 
+/** @category Binary 3x3x3 Format */
 export function binaryComponentsToReid3x3x3(
   components: Binary3x3x3Components,
 ): KState {
@@ -235,6 +238,7 @@ function validateComponents(components: Binary3x3x3Components): string[] {
   return errors;
 }
 
+/** @category Binary 3x3x3 Format */
 export function twizzleBinaryToReid3x3x3(buffy: ArrayBuffer): KState {
   const components = twizzleBinaryToBinaryComponents(buffy);
   const errors = validateComponents(components);
