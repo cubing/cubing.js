@@ -2,8 +2,6 @@ import {
   Alg,
   Commutator,
   Conjugate,
-  experimentalDirectedGenerator,
-  ExperimentalIterationDirection,
   Grouping,
   LineComment,
   Move,
@@ -13,6 +11,10 @@ import {
   TraversalUp,
   Unit,
 } from "../../../../alg";
+import {
+  experimentalDirectedGenerator,
+  ExperimentalIterationDirection,
+} from "../../../../alg/cubing-private";
 import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { Duration } from "../../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";

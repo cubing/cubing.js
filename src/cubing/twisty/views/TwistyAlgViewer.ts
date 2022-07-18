@@ -2,8 +2,6 @@ import {
   Alg,
   Commutator,
   Conjugate,
-  experimentalDirect,
-  ExperimentalIterationDirection,
   Grouping,
   LineComment,
   Move,
@@ -24,6 +22,10 @@ import {
 } from "./node-custom-element-shims";
 import { twistyAlgViewerCSS } from "./TwistyAlgViewer.css";
 import { TwistyPlayer } from "./TwistyPlayer";
+import {
+  experimentalDirect,
+  ExperimentalIterationDirection,
+} from "../../alg/cubing-private";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
 
