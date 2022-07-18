@@ -1,3 +1,5 @@
+import { Alg } from "./Alg";
+import { setAlgDebug } from "./debug";
 import { parseAlg } from "./parse";
 import "./test/alg-comparison";
 
@@ -71,5 +73,17 @@ describe("Square-1", () => {
     expect(() => parseAlg("(3, 4) /(1, 2)").toString()).toThrow(
       "Unexpected character at index 8. Are you missing a space?",
     );
+  });
+});
+
+describe("NISS", () => {
+  it("does not allow carat NISS notation by default", () => {
+    expect(() => parseAlg("R ^(U) D").toString()).toThrow(
+      "Alg contained a carat but carat NISS notation is not enabled.",
+    );
+  });
+  it("parses carat NISS notation", () => {
+    setAlgDebug({ caratNISSNotationEnabled: true });
+    expect(parseAlg("R ^(U L) D")).toBeIdentical(new Alg("R . D (U L)'"));
   });
 });
