@@ -1,5 +1,5 @@
 import type { KStateData } from "../../../../cubing/kpuzzle";
-import { reid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol";
+import { experimentalReid3x3x3ToTwizzleBinary } from "../../../../cubing/protocol";
 import {
   Binary3x3x3Components,
   reid3x3x3ToBinaryComponents,
@@ -24,7 +24,9 @@ function addTest(name: string, alg: string): void {
     alg: alg,
     kpuzzle: state.stateData,
     binaryComponents: reid3x3x3ToBinaryComponents(state),
-    binaryBytes: Array.from(new Uint8Array(reid3x3x3ToTwizzleBinary(state))),
+    binaryBytes: Array.from(
+      new Uint8Array(experimentalReid3x3x3ToTwizzleBinary(state)),
+    ),
     reidString: kpuzzleToReidString(state),
     stickers: kpuzzleToStickers(state),
   });
