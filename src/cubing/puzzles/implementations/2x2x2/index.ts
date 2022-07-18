@@ -9,6 +9,7 @@ import {
   cubeStickerings,
 } from "../../stickerings/cube-stickerings";
 
+/** @category Specific Puzzles */
 export const cube2x2x2: PuzzleLoader = {
   id: "2x2x2",
   fullName: "2×2×2 Cube",

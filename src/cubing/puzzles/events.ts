@@ -25,6 +25,7 @@ const wcaEvents: Record<string, EventInfo> = {
   "333mb": { puzzleID: "3x3x3", eventName: "3x3x3 Multi-Blind" },
 };
 
+/** @category Event Info */
 export function wcaEventInfo(event: string): EventInfo | null {
   return wcaEvents[event] ?? null;
 }
@@ -46,6 +47,7 @@ const events: Record<string, EventInfo> = {
   },
 };
 
+/** @category Event Info */
 export function eventInfo(event: string): EventInfo | null {
   return events[event] ?? null;
 }

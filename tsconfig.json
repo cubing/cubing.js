@@ -36,10 +36,16 @@
     "out": "dist/sites/typedoc",
     "categorizeByGroup": false,
     "categoryOrder": [
+      // alg
       "Alg",
       "Alg Units",
+      // twisty
       "TwistyPlayer",
       "Other Custom Elements",
+      // puzzles
+      "All Puzzles",
+      "Specific Puzzles",
+      // Other
       "*"
     ],
     "readme": "./src/cubing/typedoc-readme.md"

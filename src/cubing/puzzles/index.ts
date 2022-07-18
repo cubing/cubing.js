@@ -14,6 +14,7 @@ import { kilominx } from "./implementations/kilominx";
 import type { PuzzleLoader } from "./PuzzleLoader";
 import { rediCube } from "./implementations/redi-cube";
 
+/** @category All Puzzles */
 export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,
