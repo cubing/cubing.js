@@ -142,7 +142,7 @@ setDebug({<br>
         By default, <code>cubing.js</code> will <i>prefetch</i> a new scramble under these conditions:
         <ul>
           <li>A scramble has been generated.</li>
-          <li>A second has elapsed since the last scramble finished generating.</li>
+          <li>One second has elapsed since the last scramble finished generating.</li>
           <li>No new scramble has been requested in the meantime.</li>
         </ul>
         <code>cubing.js</code> will then start generating a scramble for the same event as the previous request, which will be available more quickly (often almost instantly) to answer the next scramble request for that event. This is particularly useful for timer apps, where the next scramble can be prepared while the cuber is solving.
