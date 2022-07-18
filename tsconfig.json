@@ -33,7 +33,7 @@
     "src/cubing/search/search-worker-inside-generated*"
   ],
   "typedocOptions": {
-    "out": "dist/typedoc",
+    "out": "dist/sites/typedoc",
     "categorizeByGroup": false,
     "categoryOrder": [
       "Alg",
