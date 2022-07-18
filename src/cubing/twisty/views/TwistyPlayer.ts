@@ -85,6 +85,7 @@ const configKeys: Record<TwistyPlayerAttribute, true> = Object.fromEntries(
 ) as any;
 
 // TODO: Find a way to share this def with `attributeMap`.
+/** @category TwistyPlayer */
 export interface TwistyPlayerConfig {
   // Alg
   alg?: Alg | string;
@@ -137,6 +138,7 @@ export interface TwistyPlayerConfig {
  *
  * See {@link https://js.cubing.net/cubing/} for more examples.
  */
+/** @category TwistyPlayer */
 export class TwistyPlayer
   extends TwistyPlayerSettable
   implements TwistyAnimationControllerDelegate

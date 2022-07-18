@@ -7,6 +7,7 @@ import { TwistyAlgViewer } from "../TwistyAlgViewer";
 import { twizzleLinkCSS } from "./TwizzleLink.css";
 import { getConfigFromURL } from "./url-params";
 
+/** @category Other Custom Elements */
 export class TwizzleLink extends ManagedCustomElement {
   twistyPlayer: TwistyPlayer | null = null;
   a: HTMLAnchorElement | null = null;

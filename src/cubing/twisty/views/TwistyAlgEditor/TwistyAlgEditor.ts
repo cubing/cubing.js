@@ -32,6 +32,7 @@ const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
 type TwistyPlayerAlgProp = "alg" | "setupAlg";
 
+/** @category Other Custom Elements */
 export class TwistyAlgEditor extends ManagedCustomElement {
   model = new TwistyAlgEditorModel();
 

@@ -2,6 +2,7 @@ import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import type { LeafUnit } from "../Unit";
 
+/** @category Alg Units */
 export class Newline extends AlgCommon<Newline> {
   toString(): string {
     return `\n`;

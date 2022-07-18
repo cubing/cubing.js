@@ -1,6 +1,7 @@
 import { Alg } from "./Alg";
 import type { Unit } from "./units/Unit";
 
+/** @category Alg */
 export class AlgBuilder {
   #units: Unit[] = [];
 

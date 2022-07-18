@@ -4,6 +4,7 @@ import type { LeafUnit } from "../Unit";
 
 // TODO: hash
 // TODO: this conflicts with the HTML `LineComment` class
+/** @category Alg Units */
 export class LineComment extends AlgCommon<LineComment> {
   readonly #text: string;
 

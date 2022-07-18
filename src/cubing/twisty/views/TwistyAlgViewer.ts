@@ -381,6 +381,7 @@ class MoveHighlighter {
   }
 }
 
+/** @category Other Custom Elements */
 export class TwistyAlgViewer extends HTMLElementShim {
   highlighter: MoveHighlighter = new MoveHighlighter();
   #domTree: TwistyAlgWrapperElem | TwistyAlgLeafElem;

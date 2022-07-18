@@ -31,5 +31,16 @@
     "src/static",
     "script/test/dist/esm", // Avoid indexing `dist`.
     "src/cubing/search/search-worker-inside-generated*"
-  ]
+  ],
+  "typedocOptions": {
+    "out": "dist/typedoc",
+    "categorizeByGroup": false,
+    "categoryOrder": [
+      "Alg",
+      "Alg Units",
+      "TwistyPlayer",
+      "Other Custom Elements",
+      "*"
+    ]
+  }
 }

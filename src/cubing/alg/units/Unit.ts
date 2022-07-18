@@ -8,4 +8,5 @@ import type { Pause } from "./leaves/Pause";
 
 export type LeafUnit = Move | LineComment | Newline | Pause;
 
+/** @category Alg */
 export type Unit = LeafUnit | Grouping | Conjugate | Commutator;

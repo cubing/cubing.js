@@ -3,6 +3,7 @@ import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import type { LeafUnit } from "../Unit";
 
+/** @category Alg Units */
 export class Conjugate extends AlgCommon<Conjugate> {
   readonly #A: Alg;
   readonly #B: Alg;

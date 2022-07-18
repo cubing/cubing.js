@@ -44,6 +44,7 @@ class Square1TupleFormatter {
 }
 const square1TupleFormatterInstance = new Square1TupleFormatter();
 
+/** @category Alg Units */
 export class Grouping extends AlgCommon<Grouping> {
   readonly #quantumWithAmount: QuantumWithAmount<Alg>;
   experimentalNISSPlaceholder?: Pause; // TODO: tie this to the alg

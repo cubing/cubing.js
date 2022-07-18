@@ -71,6 +71,7 @@ export function experimentalEnsureAlg(alg: FlexibleAlgSource): Alg {
  * For more information, see: {@link https://js.cubing.net/cubing/alg/}
  *
  */
+/** @category Alg */
 export class Alg extends AlgCommon<Alg> {
   // #debugString: string;
   #units: Iterable<Unit>; // TODO: freeze?

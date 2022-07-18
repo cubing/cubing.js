@@ -133,6 +133,7 @@ export interface MoveModifications {
   amount?: number;
 }
 
+/** @category Alg Units */
 export class Move extends AlgCommon<Move> {
   readonly #quantumWithAmount: QuantumWithAmount<QuantumMove>;
 
