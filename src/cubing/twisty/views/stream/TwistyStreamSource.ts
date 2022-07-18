@@ -3,7 +3,7 @@ import type {
   BluetoothPuzzle,
   MoveEvent,
 } from "../../../bluetooth/smart-puzzle/bluetooth-puzzle";
-import type { TwizzleStreamServer } from "../../../stream";
+import type { ExperimentalTwizzleStreamServer } from "../../../stream";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../stream/process/ReorientedStream";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
@@ -114,10 +114,10 @@ export class TwistyStreamSource extends ManagedCustomElement {
       "Streams";
     select.disabled = true;
 
-    let streamServer: TwizzleStreamServer | null = null;
+    let streamServer: ExperimentalTwizzleStreamServer | null = null;
     button.addEventListener("click", async () => {
       const TwizzleStreamServer = (await import("../../../stream"))
-        .TwizzleStreamServer;
+        .ExperimentalTwizzleStreamServer;
       streamServer ||= new TwizzleStreamServer();
       const streams = await streamServer.streams();
       select.textContent = "";

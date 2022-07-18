@@ -1,11 +1,17 @@
-import { WebSocketProxyReceiver, ProxyEvent } from "../../../../cubing/stream";
+import {
+  ExperimentalProxyEvent,
+  ExperimentalWebSocketProxyReceiver,
+} from "../../../../cubing/stream";
 
-export class CallbackProxyReceiver extends WebSocketProxyReceiver {
-  constructor(url: string, private callback: (e: ProxyEvent) => void) {
+export class CallbackProxyReceiver extends ExperimentalWebSocketProxyReceiver {
+  constructor(
+    url: string,
+    private callback: (e: ExperimentalProxyEvent) => void,
+  ) {
     super(url, url);
   }
 
-  onProxyEvent(e: ProxyEvent): void {
+  onProxyEvent(e: ExperimentalProxyEvent): void {
     this.callback(e);
   }
 }

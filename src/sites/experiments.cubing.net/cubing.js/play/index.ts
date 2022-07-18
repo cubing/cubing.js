@@ -7,7 +7,10 @@ import {
   MoveEvent,
   OrientationEvent,
 } from "../../../../cubing/bluetooth";
-import { ProxyEvent, WebSocketProxySender } from "../../../../cubing/stream";
+import {
+  ExperimentalProxyEvent,
+  ExperimentalWebSocketProxySender,
+} from "../../../../cubing/stream";
 import { experimentalDebugShowRenderStats } from "../../../../cubing/twisty";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
@@ -29,7 +32,7 @@ experimentalDebugShowRenderStats(debugShowRenderStats());
 let trackingOrientation: boolean = false;
 let bluetoothPuzzle: BluetoothPuzzle | null = null;
 // let callbackProxyReceiver: CallbackProxyReceiver | null = null;
-let sender: WebSocketProxySender | null = null;
+let sender: ExperimentalWebSocketProxySender | null = null;
 
 function puzzleName(puzzleID: PuzzleID): string {
   const puzzleNameMap: Record<string, string> = {
@@ -275,7 +278,7 @@ const fn = async (
     console.log("Registering receiver");
     const url = new URL(receivingOrigin);
     url.pathname = "/register-receiver";
-    new CallbackProxyReceiver(url.toString(), (e: ProxyEvent) => {
+    new CallbackProxyReceiver(url.toString(), (e: ExperimentalProxyEvent) => {
       console.log(e);
       switch (e.event) {
         case "move":
@@ -296,7 +299,7 @@ const fn = async (
     console.log("Registering senter");
     const url = new URL(sendingOrigin);
     url.pathname = "/register-sender";
-    sender = new WebSocketProxySender(url.toString());
+    sender = new ExperimentalWebSocketProxySender(url.toString());
   }
 };
 
