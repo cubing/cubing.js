@@ -126,18 +126,16 @@ import { randomScrambleForEvent } from &quot;cubing/scramble&quot;;
       <p>
         Most examples on this site use CDN import paths for convenient copy-and-pasting. To import from <code>npm</code>, remove the <code class="boilerplate">https://cdn.cubing.net/js/</code> prefix from any relevant imports.
       </p>
+      <h2>Compatibility</h2>
       <p>
-        The <code>npm</code> package should work with any modern bundlers and tools. If you are having trouble, make sure your tool is compatible with ES2020 syntax. We recommend using <a href="https://esbuild.github.io/"><code>esbuild</code></a> or tools based on <code>esbuild</code>, and you may find <a href="https://github.com/cubing/cubing-app-template">this project template</a> a helpful start.
+        The <code>npm</code> package should work with any modern bundlers and tools. If you are having trouble, <b>make sure your tool is compatible with ES2020 syntax</b>. We recommend using <a href="https://esbuild.github.io/"><code>esbuild</code></a> or tools based on <code>esbuild</code>, and you may find <a href="https://github.com/cubing/cubing-app-template">this project template</a> a helpful start.
       </p>
-    </section>
-    <section id="vite">
-      <h1>Using with Vite</h1>
-      <p>
-        By default, <a href="https://vitejs.dev/">Vite</a>, an <code>esbuild</code>-based bundler, transpiles code to ES2019. To use the <code>npm</code> package with Vite, add this to your <code>vite.config.js</code>:
-        <code class="sample">
-          <span>export default {build: {target: "es2020"}}</span>
-        </code>
-      </p>
+      <h3>Known Issues</h3>
+      <p><a href="https://vitejs.dev/">Vite</a> 3 does not support full ES2020 by default. Use the following config:</p>
+      <code class="sample">
+// vite.config.js<br>
+export default {build: {target: "es2020"}}
+      </code>
     </section>
 
     <section id="code-experiments">
