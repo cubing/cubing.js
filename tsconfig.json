@@ -41,6 +41,7 @@
       "TwistyPlayer",
       "Other Custom Elements",
       "*"
-    ]
+    ],
+    "readme": "./src/cubing/typedoc-readme.md"
   }
 }
