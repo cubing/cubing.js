@@ -5,6 +5,11 @@
     <title>&lt;twisty-alg-viewer&gt; | twisty.js</title>
     <link href="./inline.css" rel="stylesheet" type="text/css" />
     <script src="./twisty.js" href="./twisty.ts" type="module"></script>
+    <script
+      src="./twisty-alg-viewer.js"
+      href="./twisty-alg-viewer.ts"
+      type="module"
+    ></script>
     <style>
       .content {
         padding-bottom: 4em;
@@ -81,6 +86,14 @@ R-- D++ R++ D-- R-- D-- R-- D-- R-- D-- U'"
       ></twisty-player>
       <div class="alg-example">
         <twisty-alg-viewer for="clock-scramble"></twisty-alg-viewer>
+      </div>
+
+      <twisty-player
+        id="carat-niss-notation"
+        experimental-setup-alg="R B U L' U' B U2 D2 F D R L D B2 L2 D' F2 D2 L2 D"
+      ></twisty-player>
+      <div class="alg-example">
+        <twisty-alg-viewer for="carat-niss-notation"></twisty-alg-viewer>
       </div>
     </div>
   </body>

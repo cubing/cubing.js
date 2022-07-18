@@ -157,13 +157,22 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
         element.addString(" ");
       }
       first = false;
-      moveCount += element.addElem(
-        this.traverseUnit(unit, {
-          earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
-          twistyAlgViewer: dataDown.twistyAlgViewer,
-          direction: dataDown.direction,
-        }),
-      );
+      if (unit.as(Pause)?.experimentalNISSGrouping) {
+        element.addString("^("); // TODO: Handle this lower down.
+      }
+      // TODO: Handle this check lower down.
+      if (!unit.as(Grouping)?.experimentalNISSPlaceholder) {
+        moveCount += element.addElem(
+          this.traverseUnit(unit, {
+            earliestMoveIndex: dataDown.earliestMoveIndex + moveCount,
+            twistyAlgViewer: dataDown.twistyAlgViewer,
+            direction: dataDown.direction,
+          }),
+        );
+      }
+      if (unit.as(Pause)?.experimentalNISSGrouping) {
+        element.addString(")"); // TODO: Handle this lower down.
+      }
     }
     element.flushQueue(dataDown.direction);
     return {
@@ -315,6 +324,9 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   }
 
   public traversePause(pause: Pause, dataDown: DataDown): DataUp {
+    if (pause.experimentalNISSGrouping) {
+      return this.traverseAlg(pause.experimentalNISSGrouping.alg, dataDown);
+    }
     return {
       moveCount: 1,
       element: new TwistyAlgLeafElem(
