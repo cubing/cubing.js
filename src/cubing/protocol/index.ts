@@ -4,4 +4,7 @@ export {
   twizzleBinaryToBinaryComponents as experimentalTwizzleBinaryToBinaryComponents,
   twizzleBinaryToReid3x3x3,
 } from "./binary/binary3x3x3";
-export { bufferToSpacedHex, spacedHexToBuffer } from "./binary/hex";
+export {
+  bufferToSpacedHex as experimentalBufferToSpacedHex,
+  spacedHexToBuffer as experimentalSpacedHexToBuffer,
+} from "./binary/hex";
