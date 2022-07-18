@@ -2,7 +2,11 @@ import { CSSSource } from "./ManagedCustomElement";
 
 export const twistyAlgViewerCSS = new CSSSource(`
 :host {
-  display: inline-grid;
+  display: inline;
+}
+
+.wrapper {
+  display: inline;
 }
 
 a:not(:hover) {
