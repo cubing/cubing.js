@@ -1,3 +1,5 @@
+// https://js.cubing.net/cubing/alg/
+
 import { AlgCommon, Comparable } from "./common";
 import { experimentalIs, experimentalIsUnit } from "./is";
 import { direct, IterationDirection, reverse } from "./iteration";
@@ -70,8 +72,8 @@ export function experimentalEnsureAlg(alg: FlexibleAlgSource): Alg {
  *
  * For more information, see: {@link https://js.cubing.net/cubing/alg/}
  *
+ * @category Alg
  */
-/** @category Alg */
 export class Alg extends AlgCommon<Alg> {
   // #debugString: string;
   #units: Iterable<Unit>; // TODO: freeze?

@@ -137,8 +137,9 @@ export interface TwistyPlayerConfig {
  *     document.body.appendChild(twistyPlayer);
  *
  * See {@link https://js.cubing.net/cubing/} for more examples.
+ *
+ * @category TwistyPlayer
  */
-/** @category TwistyPlayer */
 export class TwistyPlayer
   extends TwistyPlayerSettable
   implements TwistyAnimationControllerDelegate
