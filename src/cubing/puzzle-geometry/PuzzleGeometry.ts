@@ -711,6 +711,7 @@ function toFaceCoords(q: Face, maxdist: number): number[] {
   return r;
 }
 
+/** @category PuzzleGeometry */
 export class PuzzleGeometry {
   private rotations: Quat[]; // all members of the rotation group
   public baseplanerot: Quat[]; // unique rotations of the baseplane

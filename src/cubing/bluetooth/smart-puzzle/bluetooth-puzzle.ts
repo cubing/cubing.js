@@ -6,6 +6,7 @@ import { BasicRotationTransformer, StreamTransformer } from "../transformer";
 
 // TODO: Use actual `CustomEvent`s?
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
+/** @category Smart Puzzles */
 export interface MoveEvent {
   latestMove: Move;
   timeStamp: number;
@@ -15,6 +16,7 @@ export interface MoveEvent {
 }
 
 // TODO: Only use the `quaternion` field in the `MoveEvent`?
+/** @category Smart Puzzles */
 export interface OrientationEvent {
   quaternion: {
     x: number;
@@ -38,6 +40,8 @@ export interface BluetoothConfig<T> {
 }
 
 // TODO: Expose device name (and/or globally unique identifier)?
+
+/** @category Smart Puzzles */
 export abstract class BluetoothPuzzle extends EventTarget {
   public transformers: StreamTransformer[] = [];
   protected listeners: Array<(e: MoveEvent) => void> = []; // TODO: type

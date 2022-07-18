@@ -19,6 +19,7 @@ const UUIDs = {
   batteryCharacteristic: "fd51b3ba-99c7-49c6-9f85-5644ff56a378",
 };
 
+/** @category Smart Puzzles */
 export class HeykubeCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
   public static async connect(

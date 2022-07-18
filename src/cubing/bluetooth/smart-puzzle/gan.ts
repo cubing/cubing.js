@@ -257,6 +257,7 @@ async function getKey(
   return importKey(key);
 }
 
+/** @category Smart Puzzles */
 export class GanCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
   public static async connect(

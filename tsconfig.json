@@ -39,6 +39,13 @@
       // alg
       "Alg",
       "Alg Units",
+      // bluetooth
+      "Smart Puzzles",
+      "Keyboard Puzzles",
+      "Timers",
+      "Robots",
+      // puzzle-geometry
+      "PuzzleGeometry",
       // twisty
       "TwistyPlayer",
       "Other Custom Elements",

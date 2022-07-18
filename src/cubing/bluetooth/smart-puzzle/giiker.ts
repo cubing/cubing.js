@@ -107,6 +107,7 @@ async function decodeState(data: Uint8Array): Promise<Uint8Array> {
   // TODO: Check that the decrypted state is a valid staet.
 }
 
+/** @category Smart Puzzles */
 export class GiiKERCube extends BluetoothPuzzle {
   public static async connect(
     server: BluetoothRemoteGATTServer,

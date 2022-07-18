@@ -4,6 +4,7 @@ import type { KState } from "../kpuzzle/KState";
 import { puzzles } from "../puzzles";
 import { BluetoothPuzzle } from "./smart-puzzle/bluetooth-puzzle";
 
+/** @category Keyboard Puzzles */
 export class KeyboardPuzzle extends BluetoothPuzzle {
   private puzzle: Promise<KPuzzle> = puzzles["3x3x3"].kpuzzle();
   private state: Promise<KState> = (async () =>
@@ -51,6 +52,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
 }
 
 // TODO: Type
+/** @category Keyboard Puzzles */
 export async function debugKeyboardConnect(
   target: any = window,
 ): Promise<KeyboardPuzzle> {

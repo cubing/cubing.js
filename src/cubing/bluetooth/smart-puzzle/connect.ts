@@ -12,6 +12,7 @@ const smartPuzzleConfigs = [
   giiKERConfig, // GiiKER must be last, due to Xiaomi naming. TODO: enforce this using tests.
 ];
 
+/** @category Smart Puzzles */
 export async function connectSmartPuzzle(
   options?: BluetoothConnectOptions,
 ): Promise<BluetoothPuzzle> {

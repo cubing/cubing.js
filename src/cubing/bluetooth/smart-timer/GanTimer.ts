@@ -16,6 +16,7 @@ interface GanTimerDetail {
   ];
 }
 
+/** @category Timers */
 export class GanTimer extends EventTarget {
   private polling = false;
   private previousDetail: GanTimerDetail | null = null;

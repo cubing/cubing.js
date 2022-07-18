@@ -103,6 +103,7 @@ interface GanRobotOptions {
   postSleep: number;
 }
 
+/** @category Robots */
 export class GanRobot extends EventTarget {
   experimentalDebugOnSend: ((alg: Alg) => void) | null = null;
   experimentalDebugLog: typeof console.log = () => {};

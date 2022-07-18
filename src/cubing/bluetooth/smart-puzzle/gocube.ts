@@ -42,6 +42,7 @@ const moveMap: Move[] = [
   new Move("L", -1),
 ];
 
+/** @category Smart Puzzles */
 export class GoCube extends BluetoothPuzzle {
   // We have to perform async operations before we call the constructor.
   public static async connect(
