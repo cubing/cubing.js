@@ -1,6 +1,6 @@
 import { targetInfos } from "../../script/test/import-restrictions/target-infos";
 
-console.log("graph TD");
+console.log("graph BT");
 for (const [target, targetInfo] of Object.entries(targetInfos)) {
   for (const direct of targetInfo.deps.direct) {
     console.log(`  ${target} --> ${direct}`);
