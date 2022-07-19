@@ -1,11 +1,10 @@
 import { KPuzzle } from "../../../../../../kpuzzle";
-import {
-  ExperimentalPGNotation,
-  getPuzzleGeometryByName,
-} from "../../../../../../puzzle-geometry";
 import { parseSGS, SGSCachedData } from "../../../parseSGS";
 
 async function megaminxKPuzzleWithoutMO(): Promise<KPuzzle> {
+  const { getPuzzleGeometryByName, ExperimentalPGNotation } = await import(
+    "../../../../../../puzzle-geometry"
+  );
   const pg = getPuzzleGeometryByName("megaminx", {
     allMoves: true,
     addRotations: true,

@@ -58,8 +58,8 @@ export const targetInfos = {
   },
   "search": {
     deps: {
-      direct: ["alg", "kpuzzle", "notation", "puzzle-geometry", "puzzles"],
-      dynamic: [],
+      direct: ["alg", "kpuzzle", "notation", "puzzles"],
+      dynamic: ["puzzle-geometry"],
     },
   },
   "stream": {
