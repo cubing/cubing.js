@@ -83,7 +83,10 @@ class AlgParser {
         algNodes.push(nissGrouping);
       }
     }
-    return new Alg(algNodes) as Parsed<Alg>;
+    const newAlg = new Alg(algNodes) as Parsed<Alg>;
+    const { startCharIndex, endCharIndex } = alg;
+    addCharIndices(newAlg, startCharIndex, endCharIndex);
+    return newAlg;
   }
 
   parseMove(input: string): Parsed<Move> {
