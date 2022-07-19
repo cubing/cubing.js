@@ -1,10 +1,10 @@
 import { Alg } from "./Alg";
-import { algCubingNetLink } from "./url";
+import { experimentalAlgCubingNetLink } from "./url";
 
-describe("algCubingNetLink", () => {
-  it("algCubingNetLink to generate proper URLs", () => {
-    expect(algCubingNetLink({ alg: Alg.fromString("R U R'") })).toEqual(
-      "https://alg.cubing.net/?alg=R_U_R-",
-    );
+describe("experimentalAlgCubingNetLink", () => {
+  it("experimentalAlgCubingNetLink to generate proper URLs", () => {
+    expect(
+      experimentalAlgCubingNetLink({ alg: Alg.fromString("R U R'") }),
+    ).toEqual("https://alg.cubing.net/?alg=R_U_R-");
   });
 });
