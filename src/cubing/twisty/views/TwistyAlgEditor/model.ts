@@ -1,7 +1,7 @@
 // TODO: Move this?
 
 import type { Alg } from "../../../alg";
-import type { Parsed } from "../../../alg/parse";
+import type { Parsed } from "../../../alg/parseAlg";
 import {
   AlgWithIssues,
   algWithIssuesFromString,

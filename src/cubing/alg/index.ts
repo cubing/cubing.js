@@ -21,6 +21,6 @@ export { experimentalAppendMove } from "./operation";
 export { experimentalIs } from "./is";
 
 // TODO: Find a better way to track parsed algs.
-export type { Parsed as ExperimentalParsed } from "./parse";
+export type { Parsed as ExperimentalParsed } from "./parseAlg";
 
 export { setAlgDebug } from "./debug";

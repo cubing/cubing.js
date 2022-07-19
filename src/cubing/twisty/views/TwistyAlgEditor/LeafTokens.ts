@@ -9,7 +9,7 @@ import {
   Pause,
   TraversalDownUp,
 } from "../../../alg";
-import type { Parsed } from "../../../alg/parse";
+import type { Parsed } from "../../../alg/parseAlg";
 import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous-moves/simul-moves";
 
 export type AnimatedLeafAlgNodeInfo = {

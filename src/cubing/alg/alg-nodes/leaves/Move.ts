@@ -1,7 +1,7 @@
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
-import { parseMove, parseQuantumMove, transferCharIndex } from "../../parse";
+import { parseMove, parseQuantumMove, transferCharIndex } from "../../parseAlg";
 import { warnOnce } from "../../warnOnce";
 import { QuantumWithAmount } from "../QuantumWithAmount";
 import type { AlgLeafNode } from "../AlgNode";

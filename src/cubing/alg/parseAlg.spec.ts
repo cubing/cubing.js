@@ -1,6 +1,6 @@
 import { Alg } from "./Alg";
 import { setAlgDebug } from "./debug";
-import { parseAlg } from "./parse";
+import { parseAlg } from "./parseAlg";
 import "./test/alg-comparison";
 
 describe("amount", () => {

@@ -10,7 +10,7 @@ import {
   TraversalDownUp,
   AlgNode,
 } from "../../alg";
-import type { Parsed } from "../../alg/parse";
+import type { Parsed } from "../../alg/parseAlg";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";
 import type { DetailedTimelineInfo } from "../model/props/timeline/DetailedTimelineInfoProp";
 import type { MillisecondTimestamp } from "../controllers/AnimationTypes";

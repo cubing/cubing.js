@@ -1,5 +1,5 @@
 import { Alg, AlgNode } from "../../../../cubing/alg";
-import type { Parsed } from "../../../../cubing/alg/parse";
+import type { Parsed } from "../../../../cubing/alg/parseAlg";
 import { extract } from "./extractor";
 
 const algElem = document.querySelector("#alg") as HTMLTextAreaElement;

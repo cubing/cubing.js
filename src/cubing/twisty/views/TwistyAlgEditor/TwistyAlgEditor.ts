@@ -13,7 +13,7 @@
 
 import type { ExperimentalParsed } from "../../../alg";
 import { Alg, Move, Pause } from "../../../alg";
-import type { Parsed } from "../../../alg/parse";
+import type { Parsed } from "../../../alg/parseAlg";
 import type {
   AlgProp,
   AlgWithIssues,

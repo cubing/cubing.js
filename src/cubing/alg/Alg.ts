@@ -3,7 +3,7 @@
 import { AlgCommon, Comparable } from "./common";
 import { experimentalIs, experimentalIsAlgNode } from "./is";
 import { direct, IterationDirection, reverse } from "./iteration";
-import { parseAlg } from "./parse";
+import { parseAlg } from "./parseAlg";
 import { simplify, SimplifyOptions } from "./traversal";
 import { Grouping, Pause } from "./alg-nodes";
 import { LineComment } from "./alg-nodes/leaves/LineComment";
