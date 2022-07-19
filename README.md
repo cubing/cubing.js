@@ -15,7 +15,7 @@ Twizzle</a> is the spiritual successor to [alg.cubing.net](https://alg.cubing.ne
 
 ## Getting started
 
-If you're just getting started, the easiest way to use `cubing.js` is throught `cdn.cubing.net`:
+If you're just getting started, the easiest way to use `cubing.js` is through `cdn.cubing.net`:
 
 ```html
 <script src="https://cdn.cubing.net/js/cubing/twisty" type="module"></script>
