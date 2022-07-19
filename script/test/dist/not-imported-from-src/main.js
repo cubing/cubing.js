@@ -1,5 +1,6 @@
 import { exit, stderr } from "process";
 import { execPromise } from "../../../lib/execPromise.js";
+import { expectedPrefixes } from "./expected-import-prefixes.js";
 
 // Test that the `dist` dir is not imported from the source (which causes unwanted autocompletion in VSCode).
 // In theory we could test this together with import restrictions, but `npx tsc --explainFiles` lets us test directly against the completions.
@@ -37,32 +38,6 @@ for (const line of output.trim().split("\n")) {
   }
 }
 
-const expectedPrefixes = [
-  // Library
-  "src",
-  "node_modules/@types",
-  "node_modules/comlink",
-  // Experiments site
-  "node_modules/jszip",
-  // Building
-  "script",
-  "node_modules/esbuild",
-  "node_modules/barely-a-dev-server",
-  "node_modules/typescript",
-  // Puppeteer
-  "node_modules/puppeteer",
-  "node_modules/devtools-protocol",
-  // Jest
-  "node_modules/@jest",
-  "node_modules/@sinclair",
-  "node_modules/chalk",
-  "node_modules/jest-diff",
-  "node_modules/jest-matcher-utils",
-  "node_modules/pretty-format",
-  // ??? (probably Jest)
-  "node_modules/@babel",
-];
-
 for (const file of Object.values(files)) {
   // We special-case this, since we use `anyImportsNotFromDist` to filter for a more helpful output.
   if (file.path.startsWith("dist/") && file.anyImportsNotFromDist) {
@@ -71,11 +46,20 @@ for (const file of Object.values(files)) {
     stderr.write(file.from.join("\n"));
     exit(1);
   }
-  let prefix = file.path.startsWith("node_modules/")
-    ? file.path.split("/").slice(0, 2).join("/")
-    : file.path.split("/")[0];
-  if (!expectedPrefixes.includes(prefix)) {
-    stderr.write("Indexed file outside expected prefixes:\n");
+  let match = false;
+  // TODO: Allow any length match?
+  for (let num_path_parts = 1; num_path_parts <= 3; num_path_parts++) {
+    const potential_prefix = file.path
+      .split("/")
+      .slice(0, num_path_parts)
+      .join("/");
+    if (expectedPrefixes.includes(potential_prefix)) {
+      match = true;
+      break;
+    }
+  }
+  if (!match) {
+    stderr.write("❌ Indexed file outside expected prefixes:\n");
     stderr.write(file.path + "\n");
     stderr.write(file.from.join("\n"));
     exit(1);
