@@ -272,7 +272,11 @@ export const binTarget = {
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
-      entryPoints: ["src/bin/order.ts", "src/bin/puzzle-geometry-bin.ts"],
+      entryPoints: [
+        "src/bin/order.ts",
+        "src/bin/puzzle-geometry-bin.ts",
+        "src/bin/import-restrictions-mermaid-diagram.js",
+      ],
       outdir: "dist/bin/",
       format: "esm",
       target: "es2020",
