@@ -24,13 +24,18 @@ import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
 } from "../../../../puzzles/stickerings/appearance";
-import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
+import type {
+  MillisecondTimestamp,
+  PuzzlePosition,
+} from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
+import { twistyDebugGlobals } from "../../../debug";
 import {
   HintFaceletStyle,
   hintFaceletStyles,
 } from "../../../model/props/puzzle/display/HintFaceletProp";
 import { TAU } from "../TAU";
+import { haveStartedSharingRenderers } from "../Twisty3DVantage";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
 
 const svgLoader = new TextureLoader();
@@ -600,6 +605,49 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     if (this.options.experimentalStickering) {
       this.setStickering(this.options.experimentalStickering);
     }
+    this.#animateRaiseHintFacelets();
+  }
+
+  #sharedHintStickerGeometryCache: BufferGeometry | null = null;
+  #sharedHintStickerGeometry(): BufferGeometry {
+    return (this.#sharedHintStickerGeometryCache ??= newStickerGeometry());
+  }
+
+  // TODO: Generalize this into an animation mechanism.
+  #animateRaiseHintFacelets(): void {
+    if (
+      !twistyDebugGlobals.animateRaiseHintFacelets ||
+      haveStartedSharingRenderers()
+    ) {
+      return;
+    }
+    const translationRange =
+      cubieDimensions.hintStickerElevation - cubieDimensions.stickerElevation;
+    this.#sharedHintStickerGeometry().translate(0, 0, -translationRange);
+    setTimeout(() => {
+      const hintStartTime = performance.now();
+      let lastTranslation = 0;
+      const translationDuration: MillisecondTimestamp = 1000;
+      function ease(x: number) {
+        return x * (2 - x);
+      }
+      const animateRaiseHintSticker = () => {
+        const elapsed = performance.now() - hintStartTime;
+        const newTranslation =
+          ease(elapsed / translationDuration) * translationRange;
+        this.#sharedHintStickerGeometry().translate(
+          0,
+          0,
+          newTranslation - lastTranslation,
+        );
+        lastTranslation = newTranslation;
+        if (elapsed < translationDuration) {
+          requestAnimationFrame(animateRaiseHintSticker);
+          this.scheduleRenderCallback?.();
+        }
+      };
+      animateRaiseHintSticker();
+    }, 500);
   }
 
   // Can only be called once.
@@ -916,6 +964,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     const geo =
       this.options.experimentalStickering === "picture"
         ? newStickerGeometry()
+        : isHint
+        ? this.#sharedHintStickerGeometry()
         : sharedStickerGeometry();
     const stickerMesh = new Mesh(
       geo,

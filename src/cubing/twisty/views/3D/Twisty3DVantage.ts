@@ -53,6 +53,7 @@ export function experimentalForceNewRendererSharing(
 
 let dedicatedRenderersSoFar = 0;
 const DEFAULT_MAX_DEDICATED_RENDERERS = 2; // This allows for a front view and a back view (or two separate front views).
+let sharingRenderers = false;
 function shareRenderer(): boolean {
   if (shareAllNewRenderers !== null) {
     if (!shareAllNewRenderers) {
@@ -64,8 +65,13 @@ function shareRenderer(): boolean {
     dedicatedRenderersSoFar++;
     return false;
   } else {
+    sharingRenderers = true;
     return true;
   }
+}
+
+export function haveStartedSharingRenderers(): boolean {
+  return sharingRenderers;
 }
 
 export class Twisty3DVantage extends ManagedCustomElement {
