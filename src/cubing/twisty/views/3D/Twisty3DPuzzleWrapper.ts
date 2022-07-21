@@ -145,11 +145,14 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
             this.model.twistySceneModel.hintStickerSprite.get(),
             this.model.twistySceneModel.stickering.get(),
           ]);
-        return (await proxyPromise).cube3DShim({
-          foundationSprite,
-          hintSprite,
-          experimentalStickering,
-        });
+        return (await proxyPromise).cube3DShim(
+          () => this.schedulable.scheduleRender(),
+          {
+            foundationSprite,
+            hintSprite,
+            experimentalStickering,
+          },
+        );
       } else {
         const [hintFacelets, foundationSprite, hintSprite] = await Promise.all([
           this.model.twistySceneModel.hintFacelet.get(),
@@ -157,6 +160,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
           this.model.twistySceneModel.hintStickerSprite.get(),
         ]);
         const pg3d = (await proxyPromise).pg3dShim(
+          () => this.schedulable.scheduleRender(),
           this.puzzleLoader,
           hintFacelets === "auto" ? "floating" : hintFacelets,
         );
