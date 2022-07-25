@@ -8,7 +8,6 @@
 
 export { setTwistyDebug } from "./debug";
 // TODO: move these into `setTwistyDebug`.
-export { experimentalForceNewRendererSharing } from "./views/3D/Twisty3DVantage";
 export { debugShowRenderStats as experimentalDebugShowRenderStats } from "./views/3D/Twisty3DVantage";
 
 export { TwistyPlayer } from "./views/TwistyPlayer";
