@@ -3,7 +3,11 @@
 
 import { Alg } from "../../../../../cubing/alg";
 import { experimentalStickerings } from "../../../../../cubing/puzzles/cubing-private";
-import { backViewLayouts, TwistyPlayer } from "../../../../../cubing/twisty";
+import {
+  backViewLayouts,
+  setTwistyDebug,
+  TwistyPlayer,
+} from "../../../../../cubing/twisty";
 import { hintFaceletStyles } from "../../../../../cubing/twisty/model/props/puzzle/display/HintFaceletProp";
 import { dragInputModes } from "../../../../../cubing/twisty/model/props/puzzle/state/DragInputProp";
 import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/puzzle/state/IndexerConstructorRequestProp";
@@ -18,9 +22,8 @@ import { backgroundThemes } from "../../../../../cubing/twisty/model/props/viewe
 import { controlsLocations } from "../../../../../cubing/twisty/model/props/viewer/ControlPanelProp";
 import { viewerLinkPages } from "../../../../../cubing/twisty/model/props/viewer/ViewerLinkProp";
 import { visualizationFormats } from "../../../../../cubing/twisty/model/props/viewer/VisualizationProp";
-import { debugShowRenderStats } from "../../../../../cubing/twisty/views/3D/Twisty3DVantage";
 
-debugShowRenderStats(true);
+setTwistyDebug({ showRenderStats: true });
 
 // alg="y' y' U' E D R2 r2 F2 B2 U E D' R2 L2' z2 S2 U U D D S2 F2' B2"
 // control-panelly="none"

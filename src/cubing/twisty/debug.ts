@@ -7,9 +7,11 @@ export const twistyDebugGlobals: {
   // - "always": Force all new (i.e. constructed in the future) renderers to be shared
   // - "never": Force all new (i.e. constructed in the future) renderers to be dedicated
   shareAllNewRenderers: "auto" | "always" | "never";
+  showRenderStats: boolean;
 } = {
   animateRaiseHintFacelets: true,
   shareAllNewRenderers: "auto",
+  showRenderStats: false,
 };
 
 export function setTwistyDebug(

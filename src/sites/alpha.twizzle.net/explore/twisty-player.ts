@@ -3,7 +3,7 @@ import { getPuzzleDescriptionString } from "../../../cubing/puzzle-geometry";
 import type { PuzzleDescriptionString } from "../../../cubing/puzzle-geometry/PGPuzzles";
 import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleGeometry";
 import {
-  experimentalDebugShowRenderStats,
+  setTwistyDebug,
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../cubing/twisty";
@@ -15,7 +15,7 @@ import { getURLParam, setAlgParam } from "./url-params";
 
 export function constructTwistyPlayer(): TwistyPlayer {
   if (getURLParam("debug-show-render-stats")) {
-    experimentalDebugShowRenderStats(true);
+    setTwistyDebug({ showRenderStats: true });
   }
 
   const config = getConfigFromURL();

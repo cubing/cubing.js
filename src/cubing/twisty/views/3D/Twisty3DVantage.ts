@@ -18,11 +18,6 @@ import { TwistyOrbitControls } from "./TwistyOrbitControls";
 import type { DragInputMode } from "../../model/props/puzzle/state/DragInputProp";
 import { twistyDebugGlobals } from "../../debug";
 
-let SHOW_STATS = false;
-export function debugShowRenderStats(enable: boolean): void {
-  SHOW_STATS = enable;
-}
-
 export async function setCameraFromOrbitCoordinates(
   camera: PerspectiveCamera,
   orbitCoordinates: OrbitCoordinates,
@@ -80,7 +75,7 @@ export class Twisty3DVantage extends ManagedCustomElement {
     this.loadingElement = this.addElement(document.createElement("div"));
     this.loadingElement.classList.add("loading");
 
-    if (SHOW_STATS) {
+    if (twistyDebugGlobals.showRenderStats) {
       this.stats = new Stats();
       this.stats.dom.style.position = "absolute";
       this.contentWrapper.appendChild(this.stats.dom);

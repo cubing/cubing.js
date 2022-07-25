@@ -11,7 +11,7 @@ import {
   ExperimentalProxyEvent,
   ExperimentalWebSocketProxySender,
 } from "../../../../cubing/stream";
-import { experimentalDebugShowRenderStats } from "../../../../cubing/twisty";
+import { setTwistyDebug } from "../../../../cubing/twisty";
 import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
   debugShowRenderStats,
@@ -26,7 +26,7 @@ import { CallbackProxyReceiver } from "./websocket-proxy";
 const bluetoothSVG = new URL("./bluetooth.svg", import.meta.url).toString();
 const clearSVG = new URL("./clear.svg", import.meta.url).toString();
 
-experimentalDebugShowRenderStats(debugShowRenderStats());
+setTwistyDebug({ showRenderStats: debugShowRenderStats() });
 // experimentalShowJumpingFlash(false); // TODO
 
 let trackingOrientation: boolean = false;

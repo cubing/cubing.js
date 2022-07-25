@@ -1,6 +1,6 @@
 import { setAlgDebug } from "../../../cubing/alg";
 import "../../../cubing/twisty";
-import { experimentalDebugShowRenderStats } from "../../../cubing/twisty";
+import { setTwistyDebug } from "../../../cubing/twisty";
 import {
   getConfigFromURL,
   remapLegacyURLParams,
@@ -20,7 +20,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   if (getURLParam("debug-show-render-stats")) {
-    experimentalDebugShowRenderStats(true);
+    setTwistyDebug({ showRenderStats: true });
   }
 
   if (getURLParam("debug-carat-niss-notation")) {

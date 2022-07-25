@@ -7,8 +7,6 @@
  */
 
 export { setTwistyDebug } from "./debug";
-// TODO: move these into `setTwistyDebug`.
-export { debugShowRenderStats as experimentalDebugShowRenderStats } from "./views/3D/Twisty3DVantage";
 
 export { TwistyPlayer } from "./views/TwistyPlayer";
 export { TwistyAlgViewer } from "./views/TwistyAlgViewer";
