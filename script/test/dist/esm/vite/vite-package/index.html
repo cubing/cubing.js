@@ -1,0 +1,13 @@
+<script type="module">
+  import { setDebug } from "../../search";
+  setDebug({ disableStringWorker: true });
+
+  import { randomScrambleForEvent } from "../../scramble"; // Relative to `.temp/vite-package` from the `cubing.js` root, NOT from the `vite-package` folder.
+  (async () => {
+    const scramble = await randomScrambleForEvent("333");
+    const elem = document.createElement("div");
+    elem.id = "scramble-test";
+    elem.textContent = scramble;
+    document.body.appendChild(elem);
+  })();
+</script>

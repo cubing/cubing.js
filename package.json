@@ -124,6 +124,7 @@
     "test-dist-esm-node-import": "node script/test/dist/esm/node-import/main.mjs",
     "test-dist-esm-scramble-all-events": "node script/test/dist/esm/scramble-all-events/main.mjs",
     "test-dist-esm-parcel": "node ./script/test/dist/esm/parcel/main.js",
+    "test-dist-esm-vite": "node ./script/test/dist/esm/vite/main.js",
     "test-dist-esm-perf": "node script/test/dist/esm/perf/*.mjs",
     "test-dist-esm-plain-esbuild-compat": "node script/test/dist/esm/plain-esbuild-compat/main.js",
     "test-dist-experiments": "node ./script/test/dist/experiments/main.js",
