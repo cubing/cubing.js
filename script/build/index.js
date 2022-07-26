@@ -16,6 +16,7 @@ import { exists, mkdir, readFile, writeFile } from "fs";
 import { basename, join } from "path";
 import { promisify } from "util";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
+import { packageEntryPoints } from "../lib/packages.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
@@ -32,20 +33,6 @@ const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
       "class-private-static-method": true,
     }
   : {};
-
-const LIBRARY_ENTRY_POINTS = [
-  "src/cubing/alg/index.ts",
-  "src/cubing/bluetooth/index.ts",
-  "src/cubing/kpuzzle/index.ts",
-  "src/cubing/notation/index.ts",
-  "src/cubing/protocol/index.ts",
-  "src/cubing/puzzle-geometry/index.ts",
-  "src/cubing/puzzles/index.ts",
-  "src/cubing/scramble/index.ts",
-  "src/cubing/stream/index.ts",
-  "src/cubing/search/index.ts",
-  "src/cubing/twisty/index.ts",
-];
 
 const external = ["three", "comlink"];
 
@@ -265,7 +252,7 @@ export const esmTarget = {
   buildSelf: async (dev) => {
     await esbuild.build({
       // TODO: construct entry points based on `exports` (see `staticPackageMetadataTarget`) and add tests.
-      entryPoints: LIBRARY_ENTRY_POINTS,
+      entryPoints: packageEntryPoints,
       outdir: "dist/esm",
       format: "esm",
       target: "es2020",
@@ -355,7 +342,7 @@ export const typesTarget = {
     }
     await spawnPromise("npx", [
       "tsup",
-      ...LIBRARY_ENTRY_POINTS,
+      ...packageEntryPoints,
       "--dts-only",
       "--out-dir",
       "dist/types",

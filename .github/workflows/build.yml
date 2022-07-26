@@ -32,6 +32,7 @@ jobs:
       - run: npm install
       - run: make build
       - run: make test-dist-esm-node-import
+      - run: make test-dist-esm-plain-esbuild-compat
       - run: make test-dist-esm-perf
       - run: make build-site-twizzle
       - run: make build-site-experiments

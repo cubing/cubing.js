@@ -120,10 +120,11 @@
     "dev": "npm run initial-setup && node ./script/build/main.js sites dev",
     "link": "npm run build && npm link",
     "clean": "rm -rf dist .temp coverage src/cubing/search/search-worker-inside-generated* ./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty",
-    "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml in sync with this",
+    "test": "npm run test-jest && npm run lint && npm run test-import-restrictions && npm run test-tsc # keep test.yml & build.yml in sync with this",
     "test-dist-esm-node-import": "node script/test/dist/esm/node-import/main.mjs",
     "test-dist-esm-parcel": "node ./script/test/dist/esm/parcel/main.js",
     "test-dist-esm-perf": "node script/test/dist/esm/perf/*.mjs",
+    "test-dist-esm-plain-esbuild-compat": "node script/test/dist/esm/plain-esbuild-compat/main.js",
     "test-dist-experiments": "node ./script/test/dist/experiments/main.js",
     "test-dist-not-imported-from-src": "node ./script/test/dist/not-imported-from-src/main.js",
     "test-import-restrictions": "node ./script/test/import-restrictions/main.js",
@@ -133,7 +134,7 @@
     "setup": "npm install",
     "initial-setup": "node ./script/initial-setup/main.js",
     "lint": "npx eslint --ext=js,ts src script",
-    "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import",
+    "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import && npm run test-dist-esm-plain-esbuild-compat",
     "postpublish": "echo -e '\n\nConsider updating `cdn.cubing.net` if you have access:\nhttps://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version\n'"
   },
   "keywords": [
