@@ -68,7 +68,7 @@
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
     "babel-jest": "^28.1.3",
-    "barely-a-dev-server": "^0.3.0",
+    "barely-a-dev-server": "^0.3.3",
     "esbuild": "^0.14.49",
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
