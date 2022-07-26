@@ -19,6 +19,19 @@ import { execPromise, spawnPromise } from "../lib/execPromise.js";
 import { writeSyncUsingTempFile } from "./temp.js";
 
 const PARALLEL = false;
+const PUBLISH_WITH_PRIVATE_FIELDS = true;
+
+const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
+  ? {
+      "class-private-accessor": true,
+      "class-private-brand-check": true,
+      "class-private-field": true,
+      "class-private-method": true,
+      "class-private-static-accessor": true,
+      "class-private-static-field": true,
+      "class-private-static-method": true,
+    }
+  : {};
 
 const LIBRARY_ENTRY_POINTS = [
   "src/cubing/alg/index.ts",
@@ -70,6 +83,7 @@ function devServerOptions(srcFolder, dev) {
       target: "es2020",
       plugins: plugins(dev),
       minify: !dev,
+      supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
     },
   };
 }
@@ -262,6 +276,7 @@ export const esmTarget = {
       sourcemap: true,
       //
       external,
+      supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
     });
   },
 };
@@ -286,6 +301,7 @@ export const binTarget = {
       sourcemap: dev,
       //
       external,
+      supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
     });
   },
 };
