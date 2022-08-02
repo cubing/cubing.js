@@ -395,8 +395,8 @@ export class TwistyPlayer
     _oldValue: string,
     newValue: string,
   ): void {
-    if (attributeName.startsWith("data-")) {
-      attributeName = attributeName.slice("data-".length);
+    if (attributeName.startsWith(DATA_ATTRIBUTE_PREFIX)) {
+      attributeName = attributeName.slice(DATA_ATTRIBUTE_PREFIX.length);
     }
     const setterName =
       twistyPlayerAttributeMap[attributeName as TwistyPlayerAttribute];
