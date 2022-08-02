@@ -1,24 +1,8 @@
 import { insideAPI, setDebugMeasurePerf } from "./api";
 
-const events = [
-  "333",
-  "222",
-  "444",
-  "555",
-  "666",
-  "777",
-  "333bf",
-  "333fm",
-  "333oh",
-  // "clock",
-  // "minx",
-  "pyram",
-  "skewb",
-  "sq1",
-  "444bf",
-  "555bf",
-  "333mb",
-];
+// To keep things fast, we only test a subset of events.
+// Other events are handled by `make test-dist-esm-scramble-all-events`
+const events = ["222", "333"];
 
 setDebugMeasurePerf(false);
 
