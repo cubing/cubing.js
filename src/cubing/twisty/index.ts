@@ -14,17 +14,17 @@ export { TwistyAlgEditor } from "./views/TwistyAlgEditor/TwistyAlgEditor";
 export type { TwistyPlayerConfig } from "./views/TwistyPlayer";
 
 export { NO_VALUE as EXPERIMENTAL_PROP_NO_VALUE } from "./model/props/TwistyProp";
-export { ExperimentalStickering } from "./model/props/puzzle/display/StickeringProp";
+export type { ExperimentalStickering } from "./model/props/puzzle/display/StickeringProp";
 export {
-  BackViewLayout,
+  type BackViewLayout,
   backViewLayouts,
 } from "./model/props/viewer/BackViewProp";
 export type { PuzzleID } from "./model/props/puzzle/structure/PuzzleIDRequestProp";
-export { VisualizationFormat } from "./model/props/viewer/VisualizationProp";
+export type { VisualizationFormat } from "./model/props/viewer/VisualizationProp";
 
 export { TwizzleLink } from "./views/twizzle/TwizzleLink";
 
-export { MillisecondTimestamp as ExperimentalMillisecondTimestamp } from "./controllers/AnimationTypes";
+export type { MillisecondTimestamp as ExperimentalMillisecondTimestamp } from "./controllers/AnimationTypes";
 
 // Older
 // export { Cube3D } from "./views/3D/puzzles/Cube3D";

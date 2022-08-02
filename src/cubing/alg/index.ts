@@ -12,7 +12,7 @@ export { TraversalDownUp, TraversalUp } from "./traversal";
 export { Example } from "./example";
 export { keyToMove } from "./keyboard";
 export * from "./alg-nodes";
-export { MoveModifications } from "./alg-nodes/leaves/Move";
+export type { MoveModifications } from "./alg-nodes/leaves/Move";
 
 export { experimentalAlgCubingNetLink } from "./url";
 export type { AlgCubingNetOptions } from "./url";

@@ -20,10 +20,10 @@ export { schreierSims } from "./SchreierSims";
 export { PGNotation as ExperimentalPGNotation } from "./PuzzleGeometry";
 
 export {
-  PuzzleCutDescription as ExperimentalPuzzleCutDescription,
-  PuzzleDescription as ExperimentalPuzzleDescription,
+  type PuzzleCutDescription as ExperimentalPuzzleCutDescription,
+  type PuzzleDescription as ExperimentalPuzzleDescription,
   PUZZLE_CUT_TYPES as EXPERIMENTAL_PUZZLE_CUT_TYPES,
-  PuzzleCutType as ExperimentalPuzzleCutType,
+  type PuzzleCutType as ExperimentalPuzzleCutType,
   PUZZLE_BASE_SHAPES as EXPERIMENTAL_PUZZLE_BASE_SHAPES,
-  PuzzleBaseShape as ExperimentalPuzzleBaseShape,
+  type PuzzleBaseShape as ExperimentalPuzzleBaseShape,
 } from "./PuzzleGeometry";

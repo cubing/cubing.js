@@ -1,8 +1,8 @@
 // To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
 
 import {
-  ExperimentalPuzzleBaseShape,
-  ExperimentalPuzzleCutType,
+  type ExperimentalPuzzleBaseShape,
+  type ExperimentalPuzzleCutType,
   getPG3DNamedPuzzles,
   parsePuzzleDescription,
   PuzzleGeometry,
