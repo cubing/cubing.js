@@ -105,7 +105,7 @@ export class Alg extends AlgCommon<Alg> {
    * containing a large repetition. In general, you should use `cubing/kpuzzle`
    * to compare if two algs have the same effect on a puzzle.
    *
-   * Also note that parser annotations are not take into account while comparing
+   * Also note that parser annotations are not taken into account while comparing
    * algs:
    *
    *     const alg = new Alg([new Move("R"), new Move("U2")]);
