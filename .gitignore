@@ -1,12 +1,15 @@
-# /.cache is for Parcel 1, but the folder might stick around if you switch to an
-# old checkout.
-/.cache
-/.parcel-cache
-/.rpt2_cache
 /.temp
 /coverage
 /dist
 /node_modules
+
+# Legacy cache dirs (may appear when building old checkouts)
+# Parcel 1
+/.cache
+# Parcel 2
+/.parcel-cache
+# rollup-plugin-typescript2
+/.rpt2_cache
 
 # Legacy package folders.
 # We can hopefully get rid of this once enough bundlers support the `exports` field in `package.json`.
