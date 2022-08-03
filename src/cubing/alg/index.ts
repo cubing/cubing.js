@@ -14,6 +14,8 @@ export { keyToMove } from "./keyboard";
 export * from "./alg-nodes";
 export type { MoveModifications } from "./alg-nodes/leaves/Move";
 
+export type { AlgLeaf, AlgBranch, AlgNode } from "./alg-nodes/AlgNode";
+
 export { experimentalAlgCubingNetLink } from "./url";
 export type { AlgCubingNetOptions } from "./url";
 
