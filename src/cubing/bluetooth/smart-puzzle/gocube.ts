@@ -121,7 +121,7 @@ export class GoCube extends BluetoothPuzzle {
       for (let i = 3; i < buffer.byteLength - 4; i += 2) {
         const move = moveMap[buffer.getUint8(i)];
         this.alg = experimentalAppendMove(this.alg, move);
-        this.dispatchLeaf({
+        this.dispatchAlgLeaf({
           latestAlgLeaf: moveMap[buffer.getUint8(i)],
           timeStamp: event.timeStamp,
           debug: {

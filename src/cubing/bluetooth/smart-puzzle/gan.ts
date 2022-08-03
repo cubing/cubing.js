@@ -354,7 +354,7 @@ export class GanCube extends BluetoothPuzzle {
     for (const move of physicalState.latestMoves(numInterveningMoves)) {
       // console.log(move);
       this.state = this.state.applyMove(move);
-      this.dispatchLeaf({
+      this.dispatchAlgLeaf({
         latestAlgLeaf: move,
         timeStamp: physicalState.timeStamp,
         debug: physicalState.debugInfo(),

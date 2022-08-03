@@ -95,7 +95,7 @@ export class HeykubeCube extends BluetoothPuzzle {
   }): void {
     const state = this.decodeState(event.target.value!);
     // console.log(event, state.latestMove.toString(), state);
-    this.dispatchLeaf({
+    this.dispatchAlgLeaf({
       latestAlgLeaf: state.latestMove,
       timeStamp: event.timeStamp,
       state: state.state,

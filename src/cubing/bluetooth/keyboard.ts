@@ -41,7 +41,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
     if (algLeaf) {
       const newState = (await this.state).applyAlg(new Alg([algLeaf])); // TODO
       this.state = Promise.resolve(newState);
-      this.dispatchLeaf({
+      this.dispatchAlgLeaf({
         latestAlgLeaf: algLeaf,
         timeStamp: e.timeStamp,
         state: newState,

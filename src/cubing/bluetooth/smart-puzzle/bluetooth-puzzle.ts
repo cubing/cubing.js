@@ -67,7 +67,7 @@ export abstract class BluetoothPuzzle extends EventTarget {
     this.transformers.push(new BasicRotationTransformer());
   }
 
-  protected dispatchLeaf(algLeaf: AlgLeafEvent): void {
+  protected dispatchAlgLeaf(algLeaf: AlgLeafEvent): void {
     for (const transformer of this.transformers) {
       transformer.transformAlgLeaf(algLeaf);
     }
