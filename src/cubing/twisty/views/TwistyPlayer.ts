@@ -85,7 +85,36 @@ const configKeys: Record<TwistyPlayerAttribute, true> = Object.fromEntries(
 ) as any;
 
 // TODO: Find a way to share this def with `attributeMap`.
-/** @category TwistyPlayer */
+/**
+ * The config argument passed to {@link TwistyPlayer} when calling the
+ * constructor. This interface type be useful for avoiding bugs when you would
+ * like to create a {@link TwistyPlayer} using a dynamic config, or by combining
+ * configs.
+ *
+ * ```js
+ * import { TwistyPlayer, type TwistyPlayerConfig } from "cubing/twisty";
+ *
+ * const MY_DEFAULT_CONFIG: TwistyPlayerConfig = {
+ *   puzzle: "megaminx",
+ *   alg: "R U R'"
+ * };
+ * export function createTwistyPlayer(overrideConfig: TwistyPlayerConfig) {
+ *   const options = { ...MY_DEFAULT_CONFIG, ...overrideConfig };
+ *   return new TwistyPlayer(options);
+ * }
+ *
+ * // Example: if the current page is https://alpha.twizzle.net/edit/?alg=M2+E2+S2
+ * // then this gives us the "alg" param value "M2 E2 S2".
+ * const myOverrideConfig: TwistyPlayerConfig = {};
+ * const algParam = new URL(location.href).searchParams.get("alg");
+ * if (algParam) {
+ *   myOverrideConfig.alg = algParam;
+ * }
+ * createTwistyPlayer(myOverrideConfig);
+ * ```
+ *
+ * @category TwistyPlayer
+ */
 export interface TwistyPlayerConfig {
   // Alg
   alg?: Alg | string;
@@ -131,10 +160,12 @@ export interface TwistyPlayerConfig {
  *
  * You can also construct it directly in JavaScript:
  *
- *     import { TwistyPlayer } from "cubing/twisty";
- *     const twistyPlayer = new TwistyPlayer({alg: "R U R'"});
- *     // Once the page has loaded, you can do this:
- *     document.body.appendChild(twistyPlayer);
+ * ```js
+ * import { TwistyPlayer } from "cubing/twisty";
+ * const twistyPlayer = new TwistyPlayer({alg: "R U R'"});
+ * // Once the page has loaded, you can do this:
+ * document.body.appendChild(twistyPlayer);
+ * ```
  *
  * See {@link https://js.cubing.net/cubing/} for more examples.
  *
