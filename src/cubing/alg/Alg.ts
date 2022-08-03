@@ -9,7 +9,7 @@ import { Grouping, Pause } from "./alg-nodes";
 import { LineComment } from "./alg-nodes/leaves/LineComment";
 import { Move } from "./alg-nodes/leaves/Move";
 import { Newline } from "./alg-nodes/leaves/Newline";
-import type { AlgLeafNode, AlgNode } from "./alg-nodes/AlgNode";
+import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
 import { warnOnce } from "./warnOnce";
 
 export type FlexibleAlgSource = string | Iterable<AlgNode> | Alg;
@@ -153,7 +153,7 @@ export class Alg extends AlgCommon<Alg> {
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
     depth?: number,
-  ): Generator<AlgLeafNode> {
+  ): Generator<AlgLeaf> {
     depth ??= Infinity;
     for (const algNode of direct(this.#algNodes, iterDir)) {
       yield* algNode.experimentalExpand(iterDir, depth);

@@ -1,7 +1,7 @@
 import type { Grouping } from "..";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import type { AlgLeafNode } from "../AlgNode";
+import type { AlgLeaf } from "../AlgNode";
 
 /** @category Alg Nodes */
 export class Pause extends AlgCommon<Pause> {
@@ -22,7 +22,7 @@ export class Pause extends AlgCommon<Pause> {
   *experimentalExpand(
     _iterDir: IterationDirection = IterationDirection.Forwards,
     _depth: number = Infinity,
-  ): Generator<AlgLeafNode> {
+  ): Generator<AlgLeaf> {
     yield this;
   }
 }

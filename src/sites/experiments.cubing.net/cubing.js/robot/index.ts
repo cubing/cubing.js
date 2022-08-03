@@ -159,7 +159,7 @@ class RobotDemo {
   }
 
   onAlgLeaf(algLeafEvent: algLeafEvent): void {
-    this.player.experimentalAddAlgLeafNode(algLeafEvent.latestAlgLeaf);
+    this.player.experimentalAddAlgLeaf(algLeafEvent.latestAlgLeaf);
     if (this.paused) {
       console.log("Paused. Not sending moves.");
     } else {

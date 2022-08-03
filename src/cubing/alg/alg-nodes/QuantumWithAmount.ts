@@ -1,7 +1,7 @@
 import type { Repeatable } from "../common";
 import { IterationDirection, toggleDirection } from "../iteration";
 import { MAX_INT, MAX_INT_DESCRIPTION, MIN_INT } from "../limits";
-import type { AlgLeafNode } from "./AlgNode";
+import type { AlgLeaf } from "./AlgNode";
 
 export class QuantumWithAmount<Q extends Repeatable> {
   readonly quantum: Q;
@@ -45,7 +45,7 @@ export class QuantumWithAmount<Q extends Repeatable> {
   *experimentalExpand(
     iterDir: IterationDirection,
     depth: number,
-  ): Generator<AlgLeafNode> {
+  ): Generator<AlgLeaf> {
     const absAmount = Math.abs(this.amount);
     const newIterDir = toggleDirection(iterDir, this.amount < 0);
     for (let i = 0; i < absAmount; i++) {

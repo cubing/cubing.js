@@ -1,4 +1,4 @@
-import type { AlgLeafNode } from "../../alg/alg-nodes/AlgNode";
+import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { KState } from "../../kpuzzle/KState";
 import { BasicRotationTransformer, StreamTransformer } from "../transformer";
 
@@ -8,7 +8,7 @@ import { BasicRotationTransformer, StreamTransformer } from "../transformer";
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
 /** @category Smart Puzzles */
 export interface AlgLeafEvent {
-  latestAlgLeaf: AlgLeafNode;
+  latestAlgLeaf: AlgLeaf;
   timeStamp: number;
   debug?: Record<string, unknown>;
   state?: KState;

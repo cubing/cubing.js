@@ -267,7 +267,7 @@ class SelectUI {
             ? connectSmartPuzzle
             : debugKeyboardConnect)();
           inputPuzzle.addAlgLeafListener((e: MoveEvent) => {
-            this.app.twistyPlayer.experimentalAddAlgLeafNode(e.latestAlgLeaf);
+            this.app.twistyPlayer.experimentalAddAlgLeaf(e.latestAlgLeaf);
           });
         })();
         break;

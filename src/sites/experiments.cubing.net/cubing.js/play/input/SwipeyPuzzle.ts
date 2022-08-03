@@ -1,5 +1,5 @@
-import { Alg, Move as AlgLeaf } from "../../../../../cubing/alg";
-import type { AlgLeafNode } from "../../../../../cubing/alg/alg-nodes/AlgNode";
+import { Alg } from "../../../../../cubing/alg";
+import type { AlgLeaf } from "../../../../../cubing/alg/alg-nodes/AlgNode";
 // import { BackViewLayout } from "../../../../../cubing/twisty";
 import {
   BackViewLayout,
@@ -187,10 +187,10 @@ export class SwipeyPuzzle extends HTMLElement {
   }
 
   // TODO: move this somewhere better.
-  public addAlgLeaf(algLeaf: AlgLeafNode): void {
+  public addAlgLeaf(algLeaf: AlgLeaf): void {
     try {
       // TODO: allow`TwistyPlayer` to handle this directly.
-      this.twistyPlayer.experimentalAddAlgLeafNode(algLeaf, {
+      this.twistyPlayer.experimentalAddAlgLeaf(algLeaf, {
         coalesce: coalesce(),
       });
     } catch (e) {

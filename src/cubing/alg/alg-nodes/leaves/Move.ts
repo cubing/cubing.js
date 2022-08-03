@@ -4,7 +4,7 @@ import { MAX_INT, MAX_INT_DESCRIPTION } from "../../limits";
 import { parseMove, parseQuantumMove, transferCharIndex } from "../../parseAlg";
 import { warnOnce } from "../../warnOnce";
 import { QuantumWithAmount } from "../QuantumWithAmount";
-import type { AlgLeafNode } from "../AlgNode";
+import type { AlgLeaf } from "../AlgNode";
 
 interface QuantumMoveModifications {
   outerLayer?: number;
@@ -108,7 +108,7 @@ export class QuantumMove extends Comparable {
     return this.#innerLayer;
   }
 
-  experimentalExpand(): Generator<AlgLeafNode> {
+  experimentalExpand(): Generator<AlgLeaf> {
     throw new Error(
       "experimentalExpand() cannot be called on a `QuantumMove` directly.",
     );
@@ -176,7 +176,7 @@ export class Move extends AlgCommon<Move> {
 
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
-  ): Generator<AlgLeafNode> {
+  ): Generator<AlgLeaf> {
     if (iterDir === IterationDirection.Forwards) {
       yield this;
     } else {

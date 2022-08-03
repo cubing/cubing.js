@@ -1,7 +1,7 @@
 import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
-import type { AlgLeafNode } from "../AlgNode";
+import type { AlgLeaf } from "../AlgNode";
 
 /** @category Alg Nodes */
 export class Commutator extends AlgCommon<Commutator> {
@@ -37,7 +37,7 @@ export class Commutator extends AlgCommon<Commutator> {
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
     depth?: number,
-  ): Generator<AlgLeafNode> {
+  ): Generator<AlgLeaf> {
     depth ??= Infinity;
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();

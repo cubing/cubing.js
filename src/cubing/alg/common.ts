@@ -1,6 +1,6 @@
 import type { Alg } from "./Alg";
 import type { IterationDirection } from "./iteration";
-import type { AlgLeafNode, AlgNode } from "./alg-nodes/AlgNode";
+import type { AlgLeaf, AlgNode } from "./alg-nodes/AlgNode";
 
 let writeAlgDebugField = false;
 export function setAlgDebugField(debug: boolean): void {
@@ -24,7 +24,7 @@ export interface Repeatable extends Comparable {
   experimentalExpand(
     iterDir?: IterationDirection,
     depth?: number,
-  ): Generator<AlgLeafNode>;
+  ): Generator<AlgLeaf>;
 }
 
 // Common to `Alg` or `AlgNode` classes.
@@ -55,7 +55,5 @@ export abstract class AlgCommon<T extends Alg | AlgNode>
 
   abstract invert(): T;
 
-  abstract experimentalExpand(
-    iterDir: IterationDirection,
-  ): Generator<AlgLeafNode>;
+  abstract experimentalExpand(iterDir: IterationDirection): Generator<AlgLeaf>;
 }

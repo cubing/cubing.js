@@ -4,7 +4,7 @@ import { IterationDirection } from "../../iteration";
 import { Move, QuantumMove } from "../leaves/Move";
 import type { Pause } from "../leaves/Pause";
 import { QuantumWithAmount } from "../QuantumWithAmount";
-import type { AlgLeafNode } from "../AlgNode";
+import type { AlgLeaf } from "../AlgNode";
 
 // This is a workaround for `jest`, which doesn't handle cycles of imports inside `cubing/alg`.
 // We need to lazy-initialize the reusable quantum moves for Square-1, so we create this wrapper for it.
@@ -86,7 +86,7 @@ export class Grouping extends AlgCommon<Grouping> {
   *experimentalExpand(
     iterDir: IterationDirection = IterationDirection.Forwards,
     depth?: number,
-  ): Generator<AlgLeafNode> {
+  ): Generator<AlgLeaf> {
     depth ??= Infinity;
     if (depth === 0) {
       yield iterDir === IterationDirection.Forwards ? this : this.invert();

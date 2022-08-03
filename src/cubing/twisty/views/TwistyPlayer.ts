@@ -1,7 +1,7 @@
 import type { Object3D } from "three";
 import type { ExperimentalStickering } from "..";
 import type { Alg, Move } from "../../alg";
-import type { AlgLeafNode } from "../../alg/alg-nodes/AlgNode";
+import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import { RenderScheduler } from "../controllers/RenderScheduler";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
@@ -415,11 +415,11 @@ export class TwistyPlayer
   }
 
   // TODO: Animate the new move.
-  experimentalAddAlgLeafNode(
-    algLeafNode: AlgLeafNode,
+  experimentalAddAlgLeaf(
+    algLeaf: AlgLeaf,
     options: { coalesce?: boolean } = {},
   ): void {
-    this.experimentalModel.experimentalAddAlgLeafNode(algLeafNode, options);
+    this.experimentalModel.experimentalAddAlgLeaf(algLeaf, options);
   }
 
   static get observedAttributes(): string[] {
