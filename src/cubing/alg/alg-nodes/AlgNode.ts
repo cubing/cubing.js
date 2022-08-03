@@ -6,6 +6,7 @@ import type { Move } from "./leaves/Move";
 import type { Newline } from "./leaves/Newline";
 import type { Pause } from "./leaves/Pause";
 
+// TODO: Just `AlgLeaf`?
 export type AlgLeafNode = Move | LineComment | Newline | Pause;
 
 /** @category Alg */

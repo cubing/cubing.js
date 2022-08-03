@@ -28,7 +28,7 @@ class App {
       .querySelector("#connect-bluetooth")!
       .addEventListener("click", async () => {
         this.puzzle = await connectSmartPuzzle();
-        this.puzzle.addMoveListener(
+        this.puzzle.addAlgLeafListener(
           this.proxySender.sendMoveEvent.bind(this.proxySender),
         );
         this.puzzle.addOrientationListener(
@@ -42,7 +42,7 @@ class App {
       .querySelector("#connect-keyboard")!
       .addEventListener("click", async () => {
         this.puzzle = await debugKeyboardConnect();
-        this.puzzle.addMoveListener(
+        this.puzzle.addAlgLeafListener(
           this.proxySender.sendMoveEvent.bind(this.proxySender),
         );
         console.log("Keyboard connected!", this.puzzle);

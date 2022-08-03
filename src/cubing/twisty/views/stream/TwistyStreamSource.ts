@@ -1,7 +1,8 @@
+import { Move } from "../../../alg";
 import type { KeyboardPuzzle } from "../../../bluetooth/keyboard";
 import type {
   BluetoothPuzzle,
-  MoveEvent,
+  AlgLeafEvent,
 } from "../../../bluetooth/smart-puzzle/bluetooth-puzzle";
 import type { ExperimentalTwizzleStreamServer } from "../../../stream";
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../stream/process/ReorientedStream";
@@ -16,11 +17,15 @@ interface StreamSource extends EventTarget {
 class BluetoothStreamSource extends EventTarget {
   private constructor(private puzzle: BluetoothPuzzle) {
     super();
-    puzzle.addMoveListener((e: MoveEvent) => {
+    puzzle.addAlgLeafListener((e: AlgLeafEvent): void => {
+      const move = e.latestAlgLeaf.as(Move);
+      if (!move) {
+        return;
+      }
       this.dispatchEvent(
         new CustomEvent("move", {
           detail: {
-            move: e.latestMove,
+            move,
           },
         }),
       );
@@ -41,11 +46,15 @@ class BluetoothStreamSource extends EventTarget {
 class KeyboardStreamSource extends EventTarget {
   private constructor(private puzzle: KeyboardPuzzle) {
     super();
-    puzzle.addMoveListener((e: MoveEvent) => {
+    puzzle.addAlgLeafListener((e: AlgLeafEvent) => {
+      const move = e.latestAlgLeaf.as(Move);
+      if (!move) {
+        return;
+      }
       this.dispatchEvent(
         new CustomEvent("move", {
           detail: {
-            move: e.latestMove,
+            move,
           },
         }),
       );

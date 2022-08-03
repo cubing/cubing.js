@@ -266,8 +266,8 @@ class SelectUI {
           const inputPuzzle = await (action === "bluetooth"
             ? connectSmartPuzzle
             : debugKeyboardConnect)();
-          inputPuzzle.addMoveListener((e: MoveEvent) => {
-            this.app.twistyPlayer.experimentalAddMove(e.latestMove);
+          inputPuzzle.addAlgLeafListener((e: MoveEvent) => {
+            this.app.twistyPlayer.experimentalAddAlgLeafNode(e.latestAlgLeaf);
           });
         })();
         break;

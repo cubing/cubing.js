@@ -7,9 +7,11 @@ async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
   console.log("asyncSetup");
   const keyboard = await debugKeyboardConnect(twistyPlayer); // TODO: attach to viewer only?
   console.log("keyboard", twistyPlayer, keyboard);
-  keyboard.addMoveListener((e: MoveEvent) => {
+  keyboard.addAlgLeafListener((e: MoveEvent) => {
     console.log("listener", e);
-    twistyPlayer.experimentalAddMove(e.latestMove, { coalesce: true });
+    twistyPlayer.experimentalAddAlgLeafNode(e.latestAlgLeaf, {
+      coalesce: true,
+    });
   });
 }
 
@@ -44,8 +46,10 @@ window.addEventListener("DOMContentLoaded", async () => {
     connectButton.textContent = `Connected: ${puzzle.name() ?? "[unknown"}`;
     connectButton.disabled = true;
 
-    puzzle.addMoveListener((e: MoveEvent) => {
-      twistyPlayer.experimentalAddMove(e.latestMove, { coalesce: true });
+    puzzle.addAlgLeafListener((e: MoveEvent) => {
+      twistyPlayer.experimentalAddAlgLeafNode(e.latestAlgLeaf, {
+        coalesce: true,
+      });
     });
 
     const resetButton = document.querySelector(

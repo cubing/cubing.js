@@ -1,12 +1,12 @@
-import { Alg } from "../../../../cubing/alg";
+import { Alg, Move } from "../../../../cubing/alg";
 import {
   BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
   GoCube,
-  MoveEvent,
   OrientationEvent,
 } from "../../../../cubing/bluetooth";
+import type { AlgLeafEvent } from "../../../../cubing/bluetooth/smart-puzzle/bluetooth-puzzle";
 import {
   ExperimentalProxyEvent,
   ExperimentalWebSocketProxySender,
@@ -69,31 +69,35 @@ const fn = async (
   controlBar.classList.add("control-bar");
   swipeWrapper.appendChild(controlBar);
 
-  function moveListener(e: MoveEvent) {
+  function algLeafListener(e: AlgLeafEvent) {
     // TODO: This is a total hack. Needs to be pushed down into the keyboard map.
     if (getPuzzleID() !== "3x3x3") {
-      // TODO: allmoves
-      switch (e.latestMove.family) {
-        // case "x":
-        //   // TODO: distinguish between Rv and Lv
-        //   e.latestMove = modifiedBlockMove(e.latestMove, {
-        //     family: "Rv"
-        //   })
-        //   break;
-        case "y":
-          e.latestMove = e.latestMove.modified({
-            family: "Uv",
-          });
-          break;
-        // case "z":
-        //   // TODO: map this to a corner turn for FTO
-        //   e.latestMove = modifiedBlockMove(e.latestMove, {
-        //     family: "Fv"
-        //   })
-        //   break;
+      const move = e.latestAlgLeaf.as(Move);
+      if (move) {
+        // TODO: allmoves
+        switch (move.family) {
+          // case "x":
+          //   // TODO: distinguish between Rv and Lv
+          //   e.latestAlgLeaf = modifiedBlockMove(e.latestAlgLeaf, {
+          //     family: "Rv"
+          //   })
+          //   break;
+          case "y":
+            e = { ...e }; // Copy
+            e.latestAlgLeaf = move.modified({
+              family: "Uv",
+            });
+            break;
+          // case "z":
+          //   // TODO: map this to a corner turn for FTO
+          //   e.latestAlgLeaf = modifiedBlockMove(e.latestAlgLeaf, {
+          //     family: "Fv"
+          //   })
+          //   break;
+        }
       }
     }
-    swipeyPuzzle.addMove(e.latestMove);
+    swipeyPuzzle.addAlgLeaf(e.latestAlgLeaf);
 
     if (sender) {
       sender.sendMoveEvent(e);
@@ -182,7 +186,7 @@ const fn = async (
   bluetoothButton.addEventListener("click", async () => {
     try {
       bluetoothPuzzle = await connectSmartPuzzle();
-      bluetoothPuzzle.addMoveListener(moveListener);
+      bluetoothPuzzle.addAlgLeafListener(algLeafListener);
       bluetoothButton.style.display = "none";
       bluetoothPuzzle?.addOrientationListener(orientationEventListener);
     } finally {
@@ -204,7 +208,7 @@ const fn = async (
   }
 
   const kbp = await debugKeyboardConnect(document.body);
-  kbp.addMoveListener(moveListener);
+  kbp.addAlgLeafListener(algLeafListener);
 
   window.removeEventListener("keydown", keyboardCallback);
   document.body.removeEventListener("mousedown", mouseCallback);
@@ -282,7 +286,7 @@ const fn = async (
       console.log(e);
       switch (e.event) {
         case "move":
-          moveListener(e.data);
+          algLeafListener(e.data);
           break;
         case "orientation":
           orientationEventListener(e.data);

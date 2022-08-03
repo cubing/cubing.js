@@ -215,8 +215,8 @@ export class GiiKERCube extends BluetoothPuzzle {
     const str = giikerStateStr(giikerState);
     debugLog(str);
 
-    this.dispatchMove({
-      latestMove: giikerMoveToAlgMove(giikerState[32], giikerState[33]),
+    this.dispatchLeaf({
+      latestAlgLeaf: giikerMoveToAlgMove(giikerState[32], giikerState[33]),
       timeStamp: event.timeStamp,
       debug: {
         stateStr: str,

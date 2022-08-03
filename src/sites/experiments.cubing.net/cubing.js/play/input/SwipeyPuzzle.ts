@@ -1,4 +1,5 @@
-import { Alg, Move } from "../../../../../cubing/alg";
+import { Alg, Move as AlgLeaf } from "../../../../../cubing/alg";
+import type { AlgLeafNode } from "../../../../../cubing/alg/alg-nodes/AlgNode";
 // import { BackViewLayout } from "../../../../../cubing/twisty";
 import {
   BackViewLayout,
@@ -161,7 +162,7 @@ export class SwipeyPuzzle extends HTMLElement {
   public showGrid(): void {
     const swipeGrid: SwipeGrid = new SwipeGrid(
       this.puzzleName,
-      this.onMove.bind(this),
+      this.onAlgLeaf.bind(this),
       (action: Action) => this.actionListener(action),
       true,
       this.theme === "grid-back" ? "blank" : this.theme,
@@ -171,7 +172,7 @@ export class SwipeyPuzzle extends HTMLElement {
     if (this.theme === "transparent-grid" || this.theme === "grid-back") {
       const swipeGridExtra: SwipeGrid = new SwipeGrid(
         this.puzzleName,
-        this.onMove.bind(this),
+        this.onAlgLeaf.bind(this),
         (action: Action) => this.actionListener(action),
         false,
         "transparent-grid-back",
@@ -180,18 +181,20 @@ export class SwipeyPuzzle extends HTMLElement {
     }
   }
 
-  private onMove(move: Move): void {
-    this.addMove(move);
+  private onAlgLeaf(algLeaf: AlgLeaf): void {
+    this.addAlgLeaf(algLeaf);
     this.algListener();
   }
 
   // TODO: move this somewhere better.
-  public addMove(move: Move): void {
+  public addAlgLeaf(algLeaf: AlgLeafNode): void {
     try {
       // TODO: allow`TwistyPlayer` to handle this directly.
-      this.twistyPlayer.experimentalAddMove(move, { coalesce: coalesce() });
+      this.twistyPlayer.experimentalAddAlgLeafNode(algLeaf, {
+        coalesce: coalesce(),
+      });
     } catch (e) {
-      console.warn("Invalid move");
+      console.warn("Invalid alg leaf");
       // this.twistyPlayer.alg = oldAlg;
     }
   }

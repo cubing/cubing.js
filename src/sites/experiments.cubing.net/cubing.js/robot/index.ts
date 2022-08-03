@@ -1,10 +1,11 @@
-import { Alg } from "../../../../cubing/alg";
+import { Alg, Move } from "../../../../cubing/alg";
 import {
   BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
-  MoveEvent,
+  MoveEvent as algLeafEvent,
 } from "../../../../cubing/bluetooth";
+import type { AlgLeafEvent } from "../../../../cubing/bluetooth/smart-puzzle/bluetooth-puzzle";
 import { connectSmartRobot } from "../../../../cubing/bluetooth/smart-robot";
 import type { GanRobot } from "../../../../cubing/bluetooth/smart-robot/GanRobot";
 import { TwizzleStreamServer } from "../../../../cubing/stream/twizzle/TwizzleStream";
@@ -60,7 +61,7 @@ class RobotDemo {
 
   async connectKeyboardInput(): Promise<void> {
     const kb = await debugKeyboardConnect();
-    kb.addMoveListener(this.onMove.bind(this));
+    kb.addAlgLeafListener(this.onAlgLeaf.bind(this));
   }
 
   async connectRecorder(): Promise<void> {
@@ -68,7 +69,7 @@ class RobotDemo {
     try {
       const puzzle = await connectSmartPuzzle();
       this.inputs.push(puzzle);
-      puzzle.addMoveListener(this.recordMove.bind(this));
+      puzzle.addAlgLeafListener(this.recordAlgLeaf.bind(this));
       this.recorderButton.textContent = `Recorder: ${
         puzzle.name() ?? "[unknown]"
       }`;
@@ -106,8 +107,8 @@ class RobotDemo {
     const stream = this.streamServer.connect(streamID);
     stream.addEventListener("move", (moveEvent: CustomEvent) => {
       console.log("Incoming stream move:", moveEvent.detail.move.toString());
-      this.onMove({
-        latestMove: moveEvent.detail.move,
+      this.onAlgLeaf({
+        latestAlgLeaf: moveEvent.detail.move,
         timeStamp: Date.now(),
       });
     });
@@ -118,7 +119,7 @@ class RobotDemo {
     try {
       const puzzle = await connectSmartPuzzle();
       this.inputs.push(puzzle);
-      puzzle.addMoveListener(this.onMove.bind(this));
+      puzzle.addAlgLeafListener(this.onAlgLeaf.bind(this));
       this.inputButton.textContent = `Input: ${puzzle.name() ?? "[unknown]"}`;
     } catch {
       this.inputButton.disabled = false;
@@ -157,19 +158,23 @@ class RobotDemo {
     this.output?.applyMoves(Array.from(alg.experimentalLeafMoves()));
   }
 
-  onMove(move: MoveEvent): void {
-    this.player.experimentalAddMove(move.latestMove);
+  onAlgLeaf(algLeafEvent: algLeafEvent): void {
+    this.player.experimentalAddAlgLeafNode(algLeafEvent.latestAlgLeaf);
     if (this.paused) {
       console.log("Paused. Not sending moves.");
     } else {
-      this.output?.applyMoves([move.latestMove]);
+      const move = algLeafEvent.latestAlgLeaf.as(Move);
+      if (!move) {
+        return;
+      }
+      this.output?.applyMoves([move]);
     }
   }
 
-  recordMove(moveEvent: MoveEvent): void {
+  recordAlgLeaf(algLeafEvent: AlgLeafEvent): void {
     localStorage[this.recorderStorageName] =
       ((localStorage[this.recorderStorageName] ?? "") as string) +
-      moveEvent.latestMove.toString() +
+      algLeafEvent.latestAlgLeaf.toString() +
       ` // ${Date.now()}\n`;
   }
 

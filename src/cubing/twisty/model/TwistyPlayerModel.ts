@@ -1,4 +1,5 @@
-import { experimentalAppendMove, Move } from "../../alg";
+import { Alg, experimentalAppendMove, Move } from "../../alg";
+import type { AlgLeafNode } from "../../alg/alg-nodes/AlgNode";
 import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
 import { URLProp } from "./props/general/URLProp";
 import { AlgProp } from "./props/puzzle/state/AlgProp";
@@ -220,6 +221,23 @@ export class TwistyPlayerModel {
       url.searchParams.set("puzzle", puzzleID);
     }
     return url.toString();
+  }
+
+  experimentalAddAlgLeafNode(
+    algLeafNode: AlgLeafNode,
+    options: { coalesce?: boolean; mod?: number } = {},
+  ): void {
+    const maybeMove = algLeafNode.as(Move);
+    if (maybeMove) {
+      this.experimentalAddMove(maybeMove, options);
+    } else {
+      (async () => {
+        const alg = (await this.alg.get()).alg;
+        const newAlg = alg.concat(new Alg([algLeafNode]));
+        this.alg.set(newAlg);
+        this.timestampRequest.set("end");
+      })();
+    }
   }
 
   // TODO: Animate the new move.

@@ -1,4 +1,4 @@
-import type { Move } from "../../alg";
+import type { AlgLeafNode } from "../../alg/alg-nodes/AlgNode";
 import type { KState } from "../../kpuzzle/KState";
 import { BasicRotationTransformer, StreamTransformer } from "../transformer";
 
@@ -7,15 +7,15 @@ import { BasicRotationTransformer, StreamTransformer } from "../transformer";
 // TODO: Use actual `CustomEvent`s?
 // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
 /** @category Smart Puzzles */
-export interface MoveEvent {
-  latestMove: Move;
+export interface AlgLeafEvent {
+  latestAlgLeaf: AlgLeafNode;
   timeStamp: number;
   debug?: Record<string, unknown>;
   state?: KState;
   quaternion?: any; // TODO: Unused
 }
 
-// TODO: Only use the `quaternion` field in the `MoveEvent`?
+// TODO: Only use the `quaternion` field in the `AlgLeafEvent`?
 /** @category Smart Puzzles */
 export interface OrientationEvent {
   quaternion: {
@@ -44,7 +44,7 @@ export interface BluetoothConfig<T> {
 /** @category Smart Puzzles */
 export abstract class BluetoothPuzzle extends EventTarget {
   public transformers: StreamTransformer[] = [];
-  protected listeners: Array<(e: MoveEvent) => void> = []; // TODO: type
+  protected listeners: Array<(e: AlgLeafEvent) => void> = []; // TODO: type
   protected orientationListeners: Array<(e: OrientationEvent) => void> = []; // TODO: type
 
   public abstract name(): string | undefined;
@@ -55,7 +55,7 @@ export abstract class BluetoothPuzzle extends EventTarget {
     throw new Error("cannot get state");
   }
 
-  public addMoveListener(listener: (e: MoveEvent) => void): void {
+  public addAlgLeafListener(listener: (e: AlgLeafEvent) => void): void {
     this.listeners.push(listener);
   }
 
@@ -67,12 +67,12 @@ export abstract class BluetoothPuzzle extends EventTarget {
     this.transformers.push(new BasicRotationTransformer());
   }
 
-  protected dispatchMove(moveEvent: MoveEvent): void {
+  protected dispatchLeaf(algLeaf: AlgLeafEvent): void {
     for (const transformer of this.transformers) {
-      transformer.transformMove(moveEvent);
+      transformer.transformAlgLeaf(algLeaf);
     }
     for (const l of this.listeners) {
-      l(moveEvent);
+      l(algLeaf);
     }
   }
 

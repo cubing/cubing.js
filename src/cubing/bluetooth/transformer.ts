@@ -1,13 +1,13 @@
 import { Quaternion, Vector3 } from "three";
 import type {
-  MoveEvent,
+  AlgLeafEvent,
   OrientationEvent,
 } from "./smart-puzzle/bluetooth-puzzle";
 
-// TODO: Combine orientation and moves into a single event to handle quaternion remapping.
+// TODO: Combine orientation and alg leavess into a single event to handle quaternion remapping.
 export interface StreamTransformer {
   // Modifies the input.
-  transformMove(moveEvent: MoveEvent): void;
+  transformAlgLeaf(algLeafEvent: AlgLeafEvent): void;
 
   // Modifies the input.
   transformOrientation(orientationEvent: OrientationEvent): void;
@@ -45,7 +45,7 @@ const m: { [s: string]: Quaternion } = {
 export class BasicRotationTransformer implements StreamTransformer {
   // private reorientQuat = new Quaternion();
 
-  public transformMove(_moveEvent: MoveEvent): void {
+  public transformAlgLeaf(_algLeafEvent: AlgLeafEvent): void {
     // Nothing to do.
   }
 

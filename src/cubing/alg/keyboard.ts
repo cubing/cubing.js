@@ -1,6 +1,8 @@
+import { Pause } from "./alg-nodes";
+import type { AlgLeafNode } from "./alg-nodes/AlgNode";
 import { Move } from "./alg-nodes/leaves/Move";
 
-const cubeKeyMapping: { [key: number]: Move } = {
+const cubeKeyMapping: { [key: number]: AlgLeafNode } = {
   73: new Move("R"),
   75: new Move("R'"),
   87: new Move("B"),
@@ -34,12 +36,14 @@ const cubeKeyMapping: { [key: number]: Move } = {
 
   90: new Move("M'"),
   190: new Move("M'"),
+
+  192: new Pause(),
 };
 
 // TODO: options about whether to ignore modifier keys (e.g. alt, ctrl).
 // TODO: Support different mappings.
 // TODO: Return BaseMove instead?
-export function keyToMove(e: KeyboardEvent): Move | null {
+export function keyToMove(e: KeyboardEvent): AlgLeafNode | null {
   if (e.altKey || e.ctrlKey) {
     return null;
   }

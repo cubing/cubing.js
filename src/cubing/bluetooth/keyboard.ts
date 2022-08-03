@@ -1,4 +1,4 @@
-import { keyToMove } from "../alg";
+import { Alg, keyToMove } from "../alg";
 import type { KPuzzle } from "../kpuzzle";
 import type { KState } from "../kpuzzle/KState";
 import { puzzles } from "../puzzles";
@@ -37,12 +37,12 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
       return;
     }
 
-    const move = keyToMove(e);
-    if (move) {
-      const newState = (await this.state).applyMove(move);
+    const algLeaf = keyToMove(e);
+    if (algLeaf) {
+      const newState = (await this.state).applyAlg(new Alg([algLeaf])); // TODO
       this.state = Promise.resolve(newState);
-      this.dispatchMove({
-        latestMove: move,
+      this.dispatchLeaf({
+        latestAlgLeaf: algLeaf,
         timeStamp: e.timeStamp,
         state: newState,
       });
