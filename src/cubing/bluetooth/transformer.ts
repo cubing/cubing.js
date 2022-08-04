@@ -4,7 +4,7 @@ import type {
   OrientationEvent,
 } from "./smart-puzzle/bluetooth-puzzle";
 
-// TODO: Combine orientation and alg leavess into a single event to handle quaternion remapping.
+// TODO: Combine orientation and alg leaves into a single event to handle quaternion remapping.
 export interface StreamTransformer {
   // Modifies the input.
   transformAlgLeaf(algLeafEvent: AlgLeafEvent): void;
