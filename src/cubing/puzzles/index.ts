@@ -13,13 +13,14 @@ import { square1 } from "./implementations/square1";
 import { kilominx } from "./implementations/kilominx";
 import type { PuzzleLoader } from "./PuzzleLoader";
 import { rediCube } from "./implementations/redi-cube";
+import { cube4x4x4 } from "./implementations/4x4x4";
 
 /** @category All Puzzles */
 export const puzzles: Record<string, PuzzleLoader> = {
   /******** Start of WCA Puzzles *******/
   "3x3x3": cube3x3x3,
   "2x2x2": cube2x2x2,
-  "4x4x4": new CubePGPuzzleLoader({ id: "4x4x4", fullName: "4×4×4 Cube" }),
+  "4x4x4": cube4x4x4,
   "5x5x5": new CubePGPuzzleLoader({ id: "5x5x5", fullName: "5×5×5 Cube" }),
   "6x6x6": new CubePGPuzzleLoader({ id: "6x6x6", fullName: "6×6×6 Cube" }),
   "7x7x7": new CubePGPuzzleLoader({ id: "7x7x7", fullName: "7×7×7 Cube" }),
