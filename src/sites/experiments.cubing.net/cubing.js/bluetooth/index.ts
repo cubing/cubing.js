@@ -1,5 +1,8 @@
 import { Alg } from "../../../../cubing/alg";
-import type { OrientationEvent } from "../../../../cubing/bluetooth";
+import {
+  connectSmartPuzzle,
+  OrientationEvent,
+} from "../../../../cubing/bluetooth";
 import { debugKeyboardConnect, MoveEvent } from "../../../../cubing/bluetooth";
 import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
 
@@ -33,7 +36,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     // const acceptAllDevices = (document.querySelector(
     //   "#acceptAllDevices",
     // ) as HTMLInputElement).checked;
-    const puzzle = await debugKeyboardConnect();
+    const puzzle = await connectSmartPuzzle();
     (globalThis as any).puzzle = puzzle;
     // TODO
     // try {
