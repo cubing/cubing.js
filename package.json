@@ -53,6 +53,7 @@
     }
   },
   "dependencies": {
+    "@types/chai": "^4.3.3",
     "@types/three": "^0.141.0",
     "@types/web-bluetooth": "^0.0.14",
     "comlink": "^4.3.1",
