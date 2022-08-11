@@ -1,5 +1,4 @@
-import * as chai from "chai";
-const { expect } = chai;
+const { expect } = await import("@esm-bundle/chai");
 
 import { Alg } from "../Alg";
 import { setAlgPartTypeMismatchReportingLevel } from "../debug";
