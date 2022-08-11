@@ -60,6 +60,8 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
+    "@babel/preset-env": "^7.18.10",
+    "@babel/preset-typescript": "^7.18.6",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/chai": "^4.3.3",
     "@types/dom-speech-recognition": "^0.0.1",
@@ -227,5 +229,18 @@
       "browser": true,
       "node": true
     }
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-typescript"
+    ]
   }
 }
