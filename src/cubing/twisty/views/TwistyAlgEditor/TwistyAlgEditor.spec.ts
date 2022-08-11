@@ -1,5 +1,4 @@
-const { expect: untypedExpect } = await import("@esm-bundle/chai");
-const expect: typeof import("chai").expect = untypedExpect;
+import { expect } from "../../../../test/chai-workaround";
 
 import { Alg } from "../../../alg";
 import { TwistyAlgEditor } from "./TwistyAlgEditor";

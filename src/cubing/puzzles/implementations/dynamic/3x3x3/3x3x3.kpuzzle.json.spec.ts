@@ -1,5 +1,4 @@
-const { expect: untypedExpect } = await import("@esm-bundle/chai");
-const expect: typeof import("chai").expect = untypedExpect;
+import { expect } from "../../../../../test/chai-workaround";
 
 import { KPuzzle } from "../../../../kpuzzle";
 import { cube3x3x3KPuzzleDefinition } from "./3x3x3.kpuzzle.json";

@@ -30,8 +30,7 @@
   "exclude": [
     "src/static",
     "script/test/dist/esm", // Avoid indexing `dist`.
-    "src/cubing/search/search-worker-inside-generated*",
-    "node_modules"
+    "src/cubing/search/search-worker-inside-generated*"
   ],
   "typedocOptions": {
     "out": "dist/sites/typedoc",

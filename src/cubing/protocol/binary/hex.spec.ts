@@ -1,5 +1,5 @@
-const { expect: untypedExpect } = await import("@esm-bundle/chai");
-const expect: typeof import("chai").expect = untypedExpect;
+import { expect } from "../../../test/chai-workaround";
+
 import { bufferToSpacedHex, spacedHexToBuffer } from "./hex";
 
 describe("hex", () => {
