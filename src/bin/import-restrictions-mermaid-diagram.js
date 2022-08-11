@@ -1,4 +1,4 @@
-import { targetInfos } from "../../script/test/import-restrictions/target-infos";
+import { targetInfos } from "../../script/test/src/internal-import-restrictions/target-infos";
 
 console.log("graph BT");
 for (const [target, targetInfo] of Object.entries(targetInfos)) {

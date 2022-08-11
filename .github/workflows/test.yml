@@ -32,7 +32,8 @@ jobs:
       - run: npm install
       - run: make test-spec
       - run: make lint
-      - run: make test-import-restrictions
+      - run: make test-src-internal-import-restrictions
+      - run: make test-src-does-not-import-dist
       - run: make test-tsc
       - run: make format
       - run: make clean

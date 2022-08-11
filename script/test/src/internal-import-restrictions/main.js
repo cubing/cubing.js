@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { existsSync } from "fs";
 
 import { targetInfos } from "./target-infos.js";
-import { execPromise } from "../../lib/execPromise.js";
+import { execPromise } from "../../../lib/execPromise.js";
 
 const TARGET_INFOS_PATH = resolve(
   new URL(".", import.meta.url).pathname,
@@ -15,18 +15,18 @@ const CUBING_PRIVATE_SUFFIX = "/cubing-private";
 // Note that we have to use an extra `..` to back out of the file name
 const PATH_TO_SRC_CUBING = resolve(
   new URL(".", import.meta.url).pathname,
-  "../../../src/cubing",
+  "../../../../src/cubing",
 );
 const PATH_TO_SRC_CUBING_VENDOR = resolve(
   new URL(".", import.meta.url).pathname,
-  "../../../src/cubing/vendor",
+  "../../../../src/cubing/vendor",
 );
 
 class Target {
   constructor(name, targetInfo) {
     this.name = name;
     // this.outdir = `./${this.name}`
-    this.outdir = `./dist/test-import-restrictions/${this.name}`;
+    this.outdir = `./dist/test-src-internal-import-restrictions/${this.name}`;
 
     this.deps = targetInfo.deps;
 
