@@ -1,7 +1,5 @@
-/**
- * @jest-environment jsdom
- */
-import "../../../alg/test/alg-comparison";
+import { expect } from "../../../../test/chai-workaround";
+
 import { Alg } from "../../../alg";
 import { TwistyAlgEditor } from "./TwistyAlgEditor";
 import { TwistyPlayer } from "../TwistyPlayer";
@@ -21,12 +19,12 @@ class ResizeObserver {
 describe("TwistyAlgEditor", () => {
   it("can be constructed without arguments", () => {
     const twistyAlgEditor = new TwistyAlgEditor();
-    expect(twistyAlgEditor.twistyPlayer).toBeNull();
+    expect(twistyAlgEditor.twistyPlayer).to.be.null;
   });
   it("can be constructed with a player", () => {
     const twistyPlayer = new TwistyPlayer();
     const twistyAlgEditor = new TwistyAlgEditor({ twistyPlayer });
-    expect(twistyAlgEditor.twistyPlayer).not.toBeNull();
+    expect(twistyAlgEditor.twistyPlayer).not.to.be.null;
   });
   it("can have a player set as an attribute", () => {
     // TODO: 2D is to avoid WebGL error. Can we do this in another way?
@@ -35,17 +33,17 @@ describe("TwistyAlgEditor", () => {
     document.body.appendChild(twistyPlayer);
     const twistyAlgEditor = new TwistyAlgEditor();
     twistyAlgEditor.setAttribute("for-twisty-player", "test-id-1");
-    expect(twistyAlgEditor.twistyPlayer).not.toBeNull();
+    expect(twistyAlgEditor.twistyPlayer).not.to.be.null;
   });
   it("sets timestamp from textarea", async () => {
     const twistyPlayer = new TwistyPlayer({ alg: "F2", visualization: "2D" });
     const alg = async () =>
       (await twistyPlayer.experimentalModel.alg.get()).alg;
     document.body.appendChild(twistyPlayer);
-    expect(await alg()).toBeIdentical(new Alg("F2"));
+    expect((await alg()).isIdentical(new Alg("F2"))).to.be.true;
     const twistyAlgEditor = new TwistyAlgEditor({ twistyPlayer });
     twistyAlgEditor.algString = "R      U R' D2";
-    expect(await alg()).toBeIdentical(new Alg("R U R' D2"));
+    expect((await alg()).isIdentical(new Alg("R U R' D2"))).to.be.true;
 
     // TODO: get this working.
     // const textarea = TwistyAlgEditor.shadow.querySelector("textarea");

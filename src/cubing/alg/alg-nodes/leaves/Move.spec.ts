@@ -1,8 +1,10 @@
+import { expect } from "../../../../test/chai-workaround";
+
 import { Move } from "./Move";
 
 describe("Move", () => {
   it("can be modified", () => {
-    expect(new Move("R").modified({ amount: 2 }).toString()).toBe("R2");
+    expect(new Move("R").modified({ amount: 2 }).toString()).to.equal("R2");
     expect(
       new Move("4r", 3)
         .modified({
@@ -10,6 +12,6 @@ describe("Move", () => {
           outerLayer: 2,
         })
         .toString(),
-    ).toBe("2-4u3");
+    ).to.equal("2-4u3");
   });
 });

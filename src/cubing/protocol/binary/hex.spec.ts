@@ -1,3 +1,5 @@
+import { expect } from "../../../test/chai-workaround";
+
 import { bufferToSpacedHex, spacedHexToBuffer } from "./hex";
 
 describe("hex", () => {
@@ -6,11 +8,11 @@ describe("hex", () => {
       bufferToSpacedHex(
         new Uint8Array([0, 0, 0, 0, 32, 0, 0, 0, 255, 250, 170]),
       ),
-    ).toBe("00 00 00 00 20 00 00 00 ff fa aa");
+    ).to.equal("00 00 00 00 20 00 00 00 ff fa aa");
   });
 
   it("converts to buffer", () => {
-    expect(spacedHexToBuffer("00 00 00 00 20 00 00 00 ff fa aa")).toEqual(
+    expect(spacedHexToBuffer("00 00 00 00 20 00 00 00 ff fa aa")).to.deep.equal(
       new Uint8Array([0, 0, 0, 0, 32, 0, 0, 0, 255, 250, 170]),
     );
   });

@@ -1,6 +1,4 @@
-/**
- * @jest-environment jsdom
- */
+import { expect } from "../../../../test/chai-workaround";
 
 import { SimpleTwistyPropSource, TwistyPropDerived } from "./TwistyProp";
 
@@ -21,7 +19,7 @@ describe("operation", () => {
     const b = new NumProp(10);
     const sum = new AddProp({ a, b });
 
-    expect(await sum.get()).toEqual(14);
+    expect(await sum.get()).to.equal(14);
 
     // sum.addFreshListener((value: number) => {
     //   console.log(value);
@@ -30,8 +28,8 @@ describe("operation", () => {
     a.set(8);
     const savedSum = sum.get();
     a.set(10);
-    expect(await savedSum).toEqual(18);
-    expect(await sum.get()).toEqual(20);
+    expect(await savedSum).to.equal(18);
+    expect(await sum.get()).to.equal(20);
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
   });

@@ -1,6 +1,4 @@
-/**
- * @jest-environment jsdom
- */
+import { expect } from "../../test/chai-workaround";
 
 import { Alg, Move } from "../alg";
 import { KPuzzle } from "../kpuzzle";
@@ -121,7 +119,7 @@ describe("PuzzleGeometry-Puzzles", () => {
         o,
       ].join("");
       const exp = expectedData[name];
-      expect(dat).toBe(exp);
+      expect(dat).to.equal(exp);
     }
   });
 });
