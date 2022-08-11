@@ -77,9 +77,8 @@ class Cube {
     for (const orbitName in orbits) {
       const orbitVal = orbits[orbitName];
 
-      // TODO redo these loops
-      for (const orientation of Array(orbitVal.numOrientations).keys()) {
-        for (const piece of Array(orbitVal.numPieces).keys()) {
+      for (let orientation = 0; orientation < orbitVal.numOrientations; orientation++) {    
+        for (let piece = 0; piece < orbitVal.numPieces; piece++) {
           const facelet = new Facelet(orbitName, piece, orientation);
           if (!this.pieces.get(orbitName)) {
             this.pieces.set(orbitName, {});
@@ -130,7 +129,6 @@ class Cube {
     }
 
     const offset = facelet2.orientation - facelet1.orientation;
-   
 
     const { orbits } = (await this.puzzle.kpuzzle()).definition;
 
