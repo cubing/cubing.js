@@ -1,6 +1,5 @@
-/**
- * @jest-environment jsdom
- */
+const { expect: untypedExpect } = await import("@esm-bundle/chai");
+const expect: typeof import("chai").expect = untypedExpect;
 
 import {
   PuzzleID,
@@ -39,13 +38,13 @@ describe("TwistyOrbitControls", () => {
     // Uncomment to watch changes.
     // mockModel.orbitCoordinatesProp.addFreshListener(console.log);
 
-    expect(await orbitCoordinatesProp.get()).toEqual({
+    expect(await orbitCoordinatesProp.get()).to.deep.equal({
       latitude: 35,
       longitude: 30,
       distance: 6,
     });
 
-    expect(await orbitCoordinatesProp.get()).toEqual({
+    expect(await orbitCoordinatesProp.get()).to.deep.equal({
       latitude: 35,
       longitude: 30,
       distance: 6,

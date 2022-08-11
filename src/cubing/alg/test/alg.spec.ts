@@ -1,4 +1,5 @@
-const { expect } = await import("@esm-bundle/chai");
+const { expect: untypedExpect } = await import("@esm-bundle/chai");
+const expect: typeof import("chai").expect = untypedExpect;
 
 import { Alg } from "../Alg";
 import { setAlgPartTypeMismatchReportingLevel } from "../debug";
@@ -12,13 +13,13 @@ const U2 = new Alg([new Move("U", 2)]);
 
 describe("Alg", () => {
   it("allows an empty Alg", () => {
-    expect(() => new Alg()).not.throw();
-    expect(() => new Alg([])).not.throw();
-    expect(() => new Commutator(new Alg(), new Alg([]))).not.throw();
+    expect(() => new Alg()).not.to.throw();
+    expect(() => new Alg([])).not.to.throw();
+    expect(() => new Commutator(new Alg(), new Alg([]))).not.to.throw();
   });
 
   it("throws an error for a nested Alg", () => {
-    expect(() => new Alg([new Alg([new Move("R", 1)])])).throw(
+    expect(() => new Alg([new Alg([new Move("R", 1)])])).to.throw(
       /An alg can only contain alg nodes./,
     );
   });
@@ -39,7 +40,7 @@ describe("BlockMove", () => {
   });
 
   it("prevents constructing: [-2]U, [-2]u", () => {
-    expect(() => new QuantumMove("U", -2)).throw(
+    expect(() => new QuantumMove("U", -2)).to.throw(
       /QuantumMove inner layer must be a positive integer/,
     );
   });
@@ -51,22 +52,22 @@ describe("BlockMove", () => {
   it("prevents constructing: 2-3x, 2-3U, [-2]-3u, 4-3u", () => {
     // expect(() =>
     //   validateSiGNMoves(new Alg([new Move(new QuantumMove("x",  3, 2, 1)])),
-    // ).throwError(/cannot have an outer and inner layer/);
+    // ).to.throwError(/cannot have an outer and inner layer/);
     // expect(() =>
     //   validateSiGNMoves(new Alg([new Move(new QuantumMove("U",  3, 2, 1)])),
-    // ).throwError(/cannot have an outer and inner layer/);
+    // ).to.throwError(/cannot have an outer and inner layer/);
     // expect(() =>
     //   validateSiGNMoves(new Alg([new Move(new QuantumMove("u", 3, -2), 1)])),
-    // ).throwError(/Cannot have an outer layer of 0 or less/);
+    // ).to.throwError(/Cannot have an outer layer of 0 or less/);
     // expect(() =>
     //   validateSiGNMoves(new Alg([new Move(new QuantumMove("u", 3, 4), 1)])),
-    // ).throwError(/The outer layer must be less than the inner layer/);
+    // ).to.throwError(/The outer layer must be less than the inner layer/);
   });
 
   it("prevents constructing: w, 2T, 2-3q", () => {
-    // expect(() =>algPartToStringForTesting(new Move("w", 1))).throwError(/Invalid SiGN plain move family: w/);
-    // expect(() =>algPartToStringForTesting(new Move(new QuantumMove("T", 2), 1))).throwError(/The provided SiGN move family is invalid, or cannot have an inner slice: T/);
-    // expect(() =>algPartToStringForTesting(new Move(new QuantumMove("q",  3, 2, 1))).throwError(/The provided SiGN move family is invalid, or cannot have an outer and inner layer: q/);
+    // expect(() =>algPartToStringForTesting(new Move("w", 1))).to.throwError(/Invalid SiGN plain move family: w/);
+    // expect(() =>algPartToStringForTesting(new Move(new QuantumMove("T", 2), 1))).to.throwError(/The provided SiGN move family is invalid, or cannot have an inner slice: T/);
+    // expect(() =>algPartToStringForTesting(new Move(new QuantumMove("q",  3, 2, 1))).to.throwError(/The provided SiGN move family is invalid, or cannot have an outer and inner layer: q/);
   });
 
   it("supports a default amount of 1.", () => {
@@ -75,7 +76,7 @@ describe("BlockMove", () => {
   });
 
   it("throws an error for an invalid family", () => {
-    // expect(() => new Move("Q", 1)).throwError(/Invalid SiGN plain move family/);
+    // expect(() => new Move("Q", 1)).to.throwError(/Invalid SiGN plain move family/);
   });
 
   it("has a default amount of 1", () => {
@@ -97,27 +98,27 @@ describe("BlockMove", () => {
   });
 
   it("catches invalid moves with parseSiGN().", () => {
-    // expect(() => parseSiGN("R")).not.throwError();
-    // expect(() => parseSiGN("g")).throwError(/Invalid SiGN plain move family/);
-    // expect(() => parseSiGN("2Ww")).throwError(
+    // expect(() => parseSiGN("R")).not.to.throwError();
+    // expect(() => parseSiGN("g")).to.throwError(/Invalid SiGN plain move family/);
+    // expect(() => parseSiGN("2Ww")).to.throwError(
     //   /The provided SiGN move family is invalid/,
     // );
-    // expect(() => parseSiGN("2-3T")).throwError(
+    // expect(() => parseSiGN("2-3T")).to.throwError(
     //   /The provided SiGN move family is invalid/,
     // );
-    // expect(() => parseSiGN("2-3UF")).throwError(
+    // expect(() => parseSiGN("2-3UF")).to.throwError(
     //   /The provided SiGN move family is invalid/,
     // );
-    // expect(() => parseSiGN("4TEST_Hello")).throwError(
+    // expect(() => parseSiGN("4TEST_Hello")).to.throwError(
     //   /The provided SiGN move family is invalid/,
     // );
-    // expect(() => parseSiGN("_R")).throwError(
+    // expect(() => parseSiGN("_R")).to.throwError(
     //   /Invalid SiGN plain move family/,
     // );
   });
 
   it("prevents construction a move quantum with only outer layer", () => {
-    expect(() => new QuantumMove("R", undefined, 1)).throw();
+    expect(() => new QuantumMove("R", undefined, 1)).to.throw();
   });
 });
 
@@ -314,39 +315,39 @@ describe("Validator", () => {
   // it("can validate flat algs", () => {
   //   expect(
   //     () => new Alg("(R)", { validators: [validateFlatAlg] }),
-  //   ).throwError(/cannot contain a group/); // toThrowError(ValidationError, /cannot contain a group/);
+  //   ).to.throwError(/cannot contain a group/); // toThrowError(ValidationError, /cannot contain a group/);
   //   expect(
   //     () => new Alg("Qw", { validators: [validateFlatAlg] }),
-  //   ).not.throw(); // not.throwError();
+  //   ).not.to.throw(); // not.to.throwError();
   //   expect(
   //     () => new Alg("(Qw)", { validators: [validateFlatAlg] }),
-  //   ).throwError(/cannot contain a group/); // toThrowError(ValidationError, );
+  //   ).to.throwError(/cannot contain a group/); // toThrowError(ValidationError, );
   // });
   // it("can validate cube base moves alg", () => {
   //   expect(
   //     () => new Alg("(R)", { validators: [validateSiGNMoves] }),
-  //   ).not.throwError();
+  //   ).not.to.throwError();
   //   expect(
   //     () => new Alg("Qw", { validators: [validateSiGNMoves] }),
-  //   ).throwError(/Invalid SiGN plain move family/);
+  //   ).to.throwError(/Invalid SiGN plain move family/);
   //   expect(
   //     () => new Alg("(Qw)", { validators: [validateSiGNMoves] }),
-  //   ).throwError(/Invalid SiGN plain move family/);
+  //   ).to.throwError(/Invalid SiGN plain move family/);
   // });
   // it("can validate cube algs", () => {
   //   expect(
   //     () => new Alg("(R)", { validators: [validateSiGNAlg] }),
-  //   ).throwError(/cannot contain a group/);
-  //   expect(() => new Alg("Qw", { validators: [validateSiGNAlg] })).throwError(
+  //   ).to.throwError(/cannot contain a group/);
+  //   expect(() => new Alg("Qw", { validators: [validateSiGNAlg] })).to.throwError(
   //     /Invalid SiGN plain move family/,
   //   );
   //   expect(
   //     () => new Alg("(Qw)", { validators: [validateSiGNAlg] }),
-  //   ).throwError(ValidationError);
+  //   ).to.throwError(ValidationError);
   // });
   // it("throws ValidationError", () => {
   //   expect(
   //     () => new Alg("(R)", { validators: [validateFlatAlg] }),
-  //   ).throwError(ValidationError);
+  //   ).to.throwError(ValidationError);
   // });
 });

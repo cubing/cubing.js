@@ -1,8 +1,10 @@
+const { expect: untypedExpect } = await import("@esm-bundle/chai");
+const expect: typeof import("chai").expect = untypedExpect;
+
 import { Alg } from "./Alg";
-import "./test/alg-comparison";
 
 describe("operation", () => {
   it("can be constructed from a string", () => {
-    expect(new Alg("R U R'").toString()).toEqual("R U R'");
+    expect(new Alg("R U R'").toString()).to.equal("R U R'");
   });
 });

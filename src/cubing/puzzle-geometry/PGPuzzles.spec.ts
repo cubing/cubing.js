@@ -1,6 +1,5 @@
-/**
- * @jest-environment jsdom
- */
+const { expect: untypedExpect } = await import("@esm-bundle/chai");
+const expect: typeof import("chai").expect = untypedExpect;
 
 import { Alg, Move } from "../alg";
 import { KPuzzle } from "../kpuzzle";
@@ -121,7 +120,7 @@ describe("PuzzleGeometry-Puzzles", () => {
         o,
       ].join("");
       const exp = expectedData[name];
-      expect(dat).toBe(exp);
+      expect(dat).to.equal(exp);
     }
   });
 });

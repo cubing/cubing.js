@@ -1,4 +1,7 @@
+const { expect: untypedExpect } = await import("@esm-bundle/chai");
+const expect: typeof import("chai").expect = untypedExpect;
 import { getPuzzleGeometryByName } from "./PuzzleGeometry";
+
 import { schreierSims } from "./SchreierSims";
 
 /**
@@ -20,7 +23,7 @@ describe("PuzzleGeometry-OrientCenters", () => {
       os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
-    expect(Number(ss)).toBe(768);
+    expect(Number(ss)).to.equal(768);
     pg = getPuzzleGeometryByName("skewb", {
       orientCenters: true,
       includeCornerOrbits: false,
@@ -30,7 +33,7 @@ describe("PuzzleGeometry-OrientCenters", () => {
       os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
-    expect(Number(ss)).toBe(11520);
+    expect(Number(ss)).to.equal(11520);
     pg = getPuzzleGeometryByName("starminx", {
       orientCenters: true,
       includeCornerOrbits: false,
@@ -42,7 +45,7 @@ describe("PuzzleGeometry-OrientCenters", () => {
       os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
-    expect(Number(ss)).toBe(60);
+    expect(Number(ss)).to.equal(60);
     pg = getPuzzleGeometryByName("pentultimate", {
       orientCenters: true,
       includeCornerOrbits: false,
@@ -52,6 +55,6 @@ describe("PuzzleGeometry-OrientCenters", () => {
       os.moveops.map((_) => _.toPerm()),
       (_) => null,
     );
-    expect(Number(ss)).toBe(58471875000000000);
+    expect(Number(ss)).to.equal(58471875000000000);
   });
 });

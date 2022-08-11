@@ -1,3 +1,6 @@
+const { expect: untypedExpect } = await import("@esm-bundle/chai");
+const expect: typeof import("chai").expect = untypedExpect;
+
 import { LineComment } from "./LineComment";
 
 describe("LineComment", () => {
@@ -6,8 +9,8 @@ describe("LineComment", () => {
   it("throws an error when a newline is provided in the input", () => {
     expect(
       () => new LineComment("This is a comment \n with a newline"),
-    ).toThrow(expectedErrorMessage);
-    expect(() => new LineComment("A newline character \r")).toThrow(
+    ).to.throw(expectedErrorMessage);
+    expect(() => new LineComment("A newline character \r")).to.throw(
       expectedErrorMessage,
     );
   });
@@ -15,7 +18,7 @@ describe("LineComment", () => {
   it("does not throw an error when emojis are provided in the input", () => {
     expect(
       () => new LineComment("This string contains emojis 😀 😅"),
-    ).not.toThrow(expectedErrorMessage);
+    ).not.to.throw(expectedErrorMessage);
   });
 
   it("does not throw an error when text characters are provided in the input", () => {
@@ -24,11 +27,11 @@ describe("LineComment", () => {
         new LineComment(
           "This is just a bunch of text characters in a comment.",
         ),
-    ).not.toThrow(expectedErrorMessage);
+    ).not.to.throw(expectedErrorMessage);
   });
 
   it("does not throw an error when special characters are provided in the input", () => {
-    expect(() => new LineComment("Th!s cont@in$ $pec!@l ch@r$")).not.toThrow(
+    expect(() => new LineComment("Th!s cont@in$ $pec!@l ch@r$")).not.to.throw(
       expectedErrorMessage,
     );
   });
