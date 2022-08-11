@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import * as chai from "chai";
+const { expect } = chai;
 
 import { Alg } from "../Alg";
 import { setAlgPartTypeMismatchReportingLevel } from "../debug";
