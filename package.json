@@ -132,6 +132,7 @@
     "test-dist-not-imported-from-src": "node ./script/test/dist/not-imported-from-src/main.js",
     "test-import-restrictions": "node ./script/test/import-restrictions/main.js",
     "test-spec": "npx web-test-runner",
+    "test-spec-watch": "npx web-test-runner --watch",
     "test-tsc": "npm run build-types && npx tsc --project ./tsconfig.json",
     "format": "npx eslint --fix --ext=js,ts src script; npx prettier --write src script",
     "setup": "npm install",
