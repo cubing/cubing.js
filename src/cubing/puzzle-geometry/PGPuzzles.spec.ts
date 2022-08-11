@@ -81,8 +81,8 @@ const expectedData: { [nam: string]: string } = {
   "starminx combo": "starminx combo, 12, 11, 102, 3, 48, 2520",
 };
 describe("PuzzleGeometry-Puzzles", () => {
-  it("testpuzzles", () => {
-    for (const [name, desc] of Object.entries(PGPuzzles)) {
+  for (const [name, desc] of Object.entries(PGPuzzles)) {
+    it(`testpuzzles ${name}`, () => {
       const pg = getPuzzleGeometryByDesc(desc, {});
       const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
       const sep = ", ";
@@ -120,6 +120,6 @@ describe("PuzzleGeometry-Puzzles", () => {
       ].join("");
       const exp = expectedData[name];
       expect(dat).to.equal(exp);
-    }
-  });
+    });
+  }
 });
