@@ -265,13 +265,4 @@ export class TwistyPlayerModel {
       })(),
     );
   }
-
-  // TODO: Remove after https://github.com/Odder/pyraminx.tips/pull/1 lands
-  /** @deprecated */
-  get playingInfoProp(): PlayingInfoProp {
-    console.warn(
-      "Using deprecated prop: `playingInfoProp`. Please switch to: `playingInfo`",
-    );
-    return this.playingInfo;
-  }
 }
