@@ -55,6 +55,8 @@ make dev
 # Now visit http://localhost:3333
 ```
 
+To quickly check any changes for issues, try `make test-fast`. Run `make test` for more thorough testing options.
+
 ## Acknowledgments
 
 As of this time, `cubing.js` primarily contains code by [Lucas Garron (@lgarron)](https://github.com/lgarron) and [Tom Rokicki (@rokicki)](https://github.com/rokicki). Significant parts of the cubing code also are from:
