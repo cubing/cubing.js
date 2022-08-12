@@ -231,12 +231,14 @@ export class TwistyPlayerModel {
     if (maybeMove) {
       this.experimentalAddMove(maybeMove, options);
     } else {
-      (async () => {
-        const alg = (await this.alg.get()).alg;
-        const newAlg = alg.concat(new Alg([algLeaf]));
-        this.alg.set(newAlg);
-        this.timestampRequest.set("end");
-      })();
+      this.alg.set(
+        (async () => {
+          const alg = (await this.alg.get()).alg;
+          const newAlg = alg.concat(new Alg([algLeaf]));
+          this.timestampRequest.set("end");
+          return newAlg;
+        })(),
+      );
     }
   }
 
@@ -247,19 +249,21 @@ export class TwistyPlayerModel {
   ): void {
     const move =
       typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
-    (async () => {
-      const alg = (await this.alg.get()).alg;
-      const newAlg = experimentalAppendMove(alg, move, {
-        coalesce: options?.coalesce,
-        mod: options?.mod,
-      });
-      this.alg.set(newAlg);
-      this.timestampRequest.set("end");
-      this.catchUpMove.set({
-        move: move,
-        amount: 0,
-      });
-    })();
+    this.alg.set(
+      (async () => {
+        const alg = (await this.alg.get()).alg;
+        const newAlg = experimentalAppendMove(alg, move, {
+          coalesce: options?.coalesce,
+          mod: options?.mod,
+        });
+        this.timestampRequest.set("end");
+        this.catchUpMove.set({
+          move: move,
+          amount: 0,
+        });
+        return newAlg;
+      })(),
+    );
   }
 
   // TODO: Remove after https://github.com/Odder/pyraminx.tips/pull/1 lands
