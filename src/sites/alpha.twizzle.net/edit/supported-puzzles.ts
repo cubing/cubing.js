@@ -6,7 +6,7 @@ import { puzzles } from "../../../cubing/puzzles";
 import type { PuzzleID, VisualizationFormat } from "../../../cubing/twisty";
 
 class DisplayableKPuzzle {
-  public type: "kpuzzle" = "kpuzzle";
+  public type: "kpuzzle" = "kpuzzle" as const;
   // TODO: push display name into the KSolve defition.
   constructor(private kpuzzleName: string, public viz: VisualizationFormat) {}
 
@@ -24,7 +24,7 @@ class DisplayableKPuzzle {
 }
 
 class DisplayablePG3D {
-  public type: "pg3d" = "pg3d";
+  public type: "pg3d" = "pg3d" as const;
   public viz: VisualizationFormat = "PG3D";
   constructor(
     private displayNameStr: string,
