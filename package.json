@@ -118,7 +118,7 @@
     "generate-js": "npm run generate-js-parsers && npm run generate-js-svg",
     "generate-js-parsers": "npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy",
     "generate-js-svg": "echo \"TODO: Generating JS for SVGs is not implemented yet.\"",
-    "dev": "npm run initial-setup && node ./script/build/main.js sites dev",
+    "dev": "npm run quick-setup && node ./script/build/main.js sites dev",
     "link": "npm run build && npm link",
     "clean": "rm -rf dist .temp coverage src/cubing/search/search-worker-inside-generated* ./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty",
     "test": "echo \"Run one of the following.\n(Time estimates are based on a fast computer.)\n\n    make test-spec (≈4s, \\`*.spec.ts\\` files only)\n\n    make test-src   (≈30s, includes \\`make test-spec\\`)\n    make test-build (≈10s)\n    make test-dist  (≈30s)\n\n    make test-full (≈70s, runs all of the above)\n    make test-fast (≈6s, runs a subset of the above)\n\"",
@@ -141,7 +141,7 @@
     "test-dist-experiments": "node ./script/test/dist/experiments/main.js",
     "format": "npx eslint --fix --ext=js,ts src script; npx prettier --write src script",
     "setup": "npm install",
-    "initial-setup": "node ./script/initial-setup/main.js",
+    "quick-setup": "node ./script/quick-setup/main.js",
     "lint": "npx eslint --ext=js,ts src script",
     "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import && npm run test-dist-esm-plain-esbuild-compat",
     "postpublish": "echo -e '\n\nConsider updating \\`cdn.cubing.net\\` if you have access:\nhttps://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version\n'"
