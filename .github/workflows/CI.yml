@@ -3,46 +3,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
-
-    steps:
-      - uses: actions/checkout@v2
-      # From https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
-      - name: Cache node_modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: make build
-      - run: make test-dist-esm-node-import
-      - run: make test-dist-esm-scramble-all-events
-      - run: make test-dist-esm-plain-esbuild-compat
-      - run: make test-dist-esm-perf
-      - run: make build-site-twizzle
-      - run: make build-site-experiments
-      - run: make test-dist-experiments
-      - run: make test-dist-esm-parcel
-      - run: make test-dist-esm-vite
-      - run: make clean
-
-  Test:
+  test-src:
     runs-on: ubuntu-latest
 
     strategy:
@@ -75,4 +36,73 @@ jobs:
       - run: make test-src-does-not-import-dist
       - run: make test-tsc
       - run: make format
+      - run: make clean
+
+  test-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      # From https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: make build
+      - run: make build-site-twizzle
+      - run: make build-site-experiments
+      - run: make clean
+
+  test-dist:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      # From https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: make build-esm
+      - run: make test-dist-esm-node-import
+      - run: make test-dist-esm-scramble-all-events
+      - run: make test-dist-esm-plain-esbuild-compat
+      - run: make test-dist-esm-perf
+      - run: make test-dist-experiments
+      - run: make test-dist-esm-parcel
+      - run: make test-dist-esm-vite
       - run: make clean
