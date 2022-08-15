@@ -32,10 +32,10 @@ jobs:
       - run: npm ci
       - run: make test-spec
       - run: make lint
+      - run: make test-src-tsc
       - run: make test-src-internal-import-restrictions
       - run: make test-src-does-not-import-dist
-      - run: make test-tsc
-      - run: make format
+      - run: make format # note: not in `test-src` in `package.json`, only in CI
       - run: make clean
 
   test-build:
@@ -65,9 +65,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: make build
-      - run: make build-site-twizzle
-      - run: make build-site-experiments
+      - run: make build-esm
+      - run: make build-bin
+      - run: make build-bundle-global
+      - run: make build-types
+      - run: make build-sites
+      - run: make build-site-typedoc
       - run: make clean
 
   test-dist:
@@ -98,12 +101,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: make build-esm
-      - run: make build-sites
       - run: make test-dist-esm-node-import
-      - run: make test-dist-esm-scramble-all-events
-      - run: make test-dist-esm-plain-esbuild-compat
       - run: make test-dist-esm-perf
-      - run: make test-dist-experiments
+      - run: make test-dist-esm-plain-esbuild-compat
+      - run: make test-dist-esm-scramble-all-events
       - run: make test-dist-esm-parcel
       - run: make test-dist-esm-vite
+      - run: make build-sites
+      - run: make test-dist-sites-experiments
       - run: make clean

@@ -16,7 +16,7 @@ try {
   output = await execPromise("npx tsc --explainFiles -p ./tsconfig.json");
 } catch (e) {
   stderr.write(
-    "`npx tsc --explainFiles` failed. Please run `make test-tsc` to debug.",
+    "`npx tsc --explainFiles` failed. Please run `make test-src-tsc` to debug.",
   );
   exit(1);
 }
