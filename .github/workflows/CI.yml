@@ -98,6 +98,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: make build-esm
+      - run: make build-sites
       - run: make test-dist-esm-node-import
       - run: make test-dist-esm-scramble-all-events
       - run: make test-dist-esm-plain-esbuild-compat
