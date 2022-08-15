@@ -31,5 +31,5 @@ writeFileSync(
   join(TEMP_ROOT, "package.json"),
   JSON.stringify(json, null, "  "),
 );
-console.log(await execPromise(`cd ${TEMP_ROOT} && npm install`));
+console.log(await execPromise(`cd ${TEMP_ROOT} && npm ci`));
 renameSync(join(TEMP_ROOT, "node_modules"), TARGET_NODE_MODULES_PATH);

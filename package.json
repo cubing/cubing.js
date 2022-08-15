@@ -140,7 +140,7 @@
     "test-dist-esm-plain-esbuild-compat": "node script/test/dist/esm/plain-esbuild-compat/main.js",
     "test-dist-experiments": "node ./script/test/dist/experiments/main.js",
     "format": "npx eslint --fix --ext=js,ts src script; npx prettier --write src script",
-    "setup": "npm install",
+    "setup": "npm ci",
     "quick-setup": "node ./script/quick-setup/main.js",
     "lint": "npx eslint --ext=js,ts src script",
     "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import && npm run test-dist-esm-plain-esbuild-compat",
