@@ -72,7 +72,7 @@
     "@web/test-runner": "^0.14.0",
     "barely-a-dev-server": "^0.3.4",
     "chai": "^4.3.6",
-    "esbuild": "^0.15.1",
+    "esbuild": "^0.15.3",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-html": "^7.1.0",
