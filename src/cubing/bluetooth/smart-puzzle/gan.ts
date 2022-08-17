@@ -108,7 +108,7 @@ class PhysicalState {
     const quat = new Quaternion(x, y, z, w);
 
     if (!homeQuatInverse) {
-      homeQuatInverse = quat.clone().inverse();
+      homeQuatInverse = quat.clone().invert();
     }
 
     return quat.clone().multiply(homeQuatInverse.clone());

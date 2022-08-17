@@ -104,7 +104,7 @@ export class GoCube extends BluetoothPuzzle {
   }
 
   public resetOrientation(): void {
-    this.homeQuatInverse = this.lastRawQuat.clone().inverse();
+    this.homeQuatInverse = this.lastRawQuat.clone().invert();
     this.currentQuat = new Quaternion(0, 0, 0, 1);
     this.lastTarget = new Quaternion(0, 0, 0, 1);
   }
@@ -140,7 +140,7 @@ export class GoCube extends BluetoothPuzzle {
       this.lastRawQuat = quat.clone();
 
       if (!this.homeQuatInverse) {
-        this.homeQuatInverse = quat.clone().inverse();
+        this.homeQuatInverse = quat.clone().invert();
       }
 
       const targetQuat = quat.clone().multiply(this.homeQuatInverse.clone());
