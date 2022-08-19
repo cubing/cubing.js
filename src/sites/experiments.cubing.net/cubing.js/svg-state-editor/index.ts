@@ -3,6 +3,7 @@ import { puzzles, PuzzleLoader } from "../../../../cubing/puzzles";
 interface Piece {
   [orientation: number]: Facelet;
 }
+
 type Mode = 'swap' | 'twist';
 
 class App {
@@ -50,7 +51,7 @@ class App {
 
 class Cube {
   selectedFacelet: Facelet | null;
-  pieces = new Map();
+  pieces = new Map<string, {[position: number]: Piece}>();
 
   puzzle: PuzzleLoader;
   
@@ -83,8 +84,8 @@ class Cube {
           if (!this.pieces.get(orbitName)) {
             this.pieces.set(orbitName, {});
           }
-          this.pieces.get(orbitName)[piece] = {
-            ...this.pieces.get(orbitName)[piece],
+          this.pieces.get(orbitName)![piece] = {
+            ...this.pieces.get(orbitName)![piece],
             [orientation]: facelet,
           };
         }
@@ -97,7 +98,7 @@ class Cube {
   }
 
   getPieceByFacelet({position, type}: Facelet) {
-    return this.pieces.get(type)[position];
+    return this.pieces.get(type)![position];
   }
 
   swapFacelets(facelet1: Facelet, facelet2: Facelet) {
