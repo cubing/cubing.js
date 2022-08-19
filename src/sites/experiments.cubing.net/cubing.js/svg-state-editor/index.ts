@@ -105,7 +105,7 @@ class Cube {
     const temp = facelet1.element.style.fill;
     facelet1.element.style.fill = facelet2.element.style.fill;
     facelet2.element.style.fill = temp;
-  };
+  }
 
   async twist(facelet: Facelet) {
     const piece = this.getPieceByFacelet(facelet);
@@ -119,7 +119,7 @@ class Cube {
       const facelet2Orientation = (numOrientations + facelet.orientation + 1) % numOrientations;
       this.swapFacelets(facelet, this.getFaceletByOrientation(piece, facelet2Orientation));
     }
-  };
+  }
 
   async swap(facelet1: Facelet, facelet2: Facelet) {
     const piece1 = this.getPieceByFacelet(facelet1);
@@ -141,7 +141,7 @@ class Cube {
       const facelet2Orientation = (numOrientations + facelet.orientation + offset) % numOrientations;
       this.swapFacelets(facelet, this.getFaceletByOrientation(piece2, facelet2Orientation));
     }
-  };
+  }
 }
 
 class Facelet {
@@ -165,7 +165,7 @@ class Facelet {
   deselect() {
     app.cube.selectedFacelet = null;
     this.element.style.opacity = '1';
-  };
+  }
 
   select() {
     if (app.cube.selectedFacelet) {
@@ -174,7 +174,7 @@ class Facelet {
 
     app.cube.selectedFacelet = this;
     this.element.style.opacity = '0.7';
-  };
+  }
 
   click() {
     switch (app.mode) {
@@ -194,7 +194,7 @@ class Facelet {
         console.error('unexpected mode', app.mode);
         break;
     }
-  };
+  }
 }
 
 
