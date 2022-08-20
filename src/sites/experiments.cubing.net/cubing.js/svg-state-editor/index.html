@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>cubing.js | svg-state-editor</title>
+    <script src="./index.js" href="./index.ts" type="module"></script>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+
+  <body>
+    <div class="panel">
+      <h1>SVG State Editor</h1>
+      <div id="puzzle"></div>
+    </div>
+    <div class="panel">
+      <select id="puzzles"></select>
+      <form id="mode" name="mode">
+        <label>
+          <input type="radio" name="mode" value="swap" checked />
+          Swap
+        </label>
+        <label>
+          <input type="radio" name="mode" value="twist" />
+          Twist
+        </label>
+      </form>
+    </div>
+  </body>
+</html>

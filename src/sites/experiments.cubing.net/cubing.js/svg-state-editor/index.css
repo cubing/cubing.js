@@ -1,0 +1,25 @@
+body {
+  display: flex;
+}
+
+#puzzle {
+  background: black; 
+  margin-top: 20px;
+}
+
+#puzzles { 
+  margin-top: 56px;
+}
+
+#mode {
+  margin-top: 15px;
+}
+
+.panel {
+  width: 50%;
+  padding: 20px;
+}
+
+h1 {
+  margin: 0;
+}
