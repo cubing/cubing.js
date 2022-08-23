@@ -24,9 +24,7 @@ async function downloadAlg(alg: Alg, name: string) {
   await player.experimentalDownloadScreenshot(name);
 }
 
-const puzzleSelect = document.querySelector(
-  "#puzzle",
-) as HTMLSelectElement;
+const puzzleSelect = document.querySelector("#puzzle") as HTMLSelectElement;
 for (const [puzzleID, puzzleManager] of Object.entries(puzzles)) {
   const option: HTMLOptionElement = puzzleSelect.appendChild(
     document.createElement("option"),

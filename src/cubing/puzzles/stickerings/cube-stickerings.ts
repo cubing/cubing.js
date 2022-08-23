@@ -27,8 +27,13 @@ export async function cubeAppearance(
 
   const CENTERS = (): PieceSet => m.orbitPrefix("CENTER");
   const EDGES = (): PieceSet => m.orbitPrefix("EDGE");
-  const CORNERS = (): PieceSet => m.or([m.orbitPrefix("CORNER"), m.orbitPrefix("C4RNER"), m.orbitPrefix("C5RNER")]);
-  
+  const CORNERS = (): PieceSet =>
+    m.or([
+      m.orbitPrefix("CORNER"),
+      m.orbitPrefix("C4RNER"),
+      m.orbitPrefix("C5RNER"),
+    ]);
+
   const L6E = (): PieceSet => m.or([M(), m.and([LL(), EDGES()])]);
   const centerLL = (): PieceSet => m.and([LL(), CENTERS()]);
 
