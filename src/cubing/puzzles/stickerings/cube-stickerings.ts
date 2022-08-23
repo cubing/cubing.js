@@ -20,20 +20,17 @@ export async function cubeAppearance(
 
   const LL = (): PieceSet => m.move("U");
   const orUD = (): PieceSet => m.or(m.moves(["U", "D"]));
-  // const E = (): PieceSet => m.not(orUD());
   const orLR = (): PieceSet => m.or(m.moves(["L", "R"]));
   const M = (): PieceSet => m.not(orLR());
-  // const orFB = (): PieceSet => m.or(m.moves(["F", "B"]));
-  // const S = (): PieceSet => m.not(orFB());
 
   const F2L = (): PieceSet => m.not(LL());
 
-  const centerLL = (): PieceSet => m.and([LL(), m.orbits(["CENTERS"])]);
-
-  const CENTERS = (): PieceSet => m.orbits(["CENTERS"]);
-  const EDGES = (): PieceSet => m.orbits(["EDGES"]);
-  const CORNERS = (): PieceSet => m.orbits(["CORNERS"]);
+  const CENTERS = (): PieceSet => m.orbitPrefix("CENTER");
+  const EDGES = (): PieceSet => m.orbitPrefix("EDGE");
+  const CORNERS = (): PieceSet => m.or([m.orbitPrefix("CORNER"), m.orbitPrefix("C4RNER"), m.orbitPrefix("C5RNER")]);
+  
   const L6E = (): PieceSet => m.or([M(), m.and([LL(), EDGES()])]);
+  const centerLL = (): PieceSet => m.and([LL(), CENTERS()]);
 
   const edgeFR = (): PieceSet => m.and([m.and(m.moves(["F", "R"])), EDGES()]);
   const cornerDFR = (): PieceSet =>

@@ -280,6 +280,16 @@ export class StickeringManager {
     return pieceSet;
   }
 
+  orbitPrefix(orbitPrefix: string): PieceSet {
+    const pieceSet = new PieceAnnotation<boolean>(this.kpuzzle, false);
+    for (const orbitName in this.kpuzzle.definition.orbits) {
+      if (orbitName.startsWith(orbitPrefix)) {
+        pieceSet.stickerings.get(orbitName)!.fill(true);
+      }
+    }
+    return pieceSet;
+  }
+
   // trueCounts(pieceSet: PieceSet): Record<string, number> {
   //   const counts: Record<string, number> = {};
   //   for (const [orbitName, orbitDef] of Object.entries(this.def.orbits)) {
