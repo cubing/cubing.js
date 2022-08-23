@@ -1,6 +1,7 @@
 import { Alg, LineComment, Newline } from "../../../../cubing/alg";
+import { puzzles } from "../../../../cubing/puzzles";
 import { experimentalStickerings } from "../../../../cubing/puzzles/cubing-private";
-import { TwistyPlayer } from "../../../../cubing/twisty";
+import { PuzzleID, TwistyPlayer } from "../../../../cubing/twisty";
 
 const algsTextarea = document.querySelector("#algs") as HTMLTextAreaElement;
 if (localStorage["multi-alg-textarea"]) {
@@ -22,6 +23,35 @@ async function downloadAlg(alg: Alg, name: string) {
 
   await player.experimentalDownloadScreenshot(name);
 }
+
+const puzzleSelect = document.querySelector(
+  "#puzzle",
+) as HTMLSelectElement;
+for (const [puzzleID, puzzleManager] of Object.entries(puzzles)) {
+  const option: HTMLOptionElement = puzzleSelect.appendChild(
+    document.createElement("option"),
+  )!;
+  option.value = puzzleID;
+  option.textContent = puzzleManager.fullName;
+}
+const puzzleID = new URL(location.href).searchParams.get("puzzle");
+if (puzzleID) {
+  if (puzzleID in puzzles) {
+    player.puzzle = puzzleID as PuzzleID;
+    puzzleSelect.value = puzzleID;
+  } else {
+    console.error("Invalid puzzle:", puzzleID);
+  }
+}
+
+puzzleSelect.addEventListener("change", () => {
+  const puzzleID = puzzleSelect.value;
+  player.puzzle = puzzleID as PuzzleID;
+
+  const url = new URL(location.href);
+  url.searchParams.set("puzzle", puzzleID);
+  window.history.replaceState("", "", url.toString());
+});
 
 const stickeringSelect = document.querySelector(
   "#stickering",
