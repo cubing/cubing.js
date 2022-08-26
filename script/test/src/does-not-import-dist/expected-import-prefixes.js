@@ -12,9 +12,9 @@ export const expectedPrefixes = [
   "node_modules/esbuild",
   "node_modules/typescript",
   "script",
-  // Puppeteer
-  "node_modules/devtools-protocol",
-  "node_modules/puppeteer",
+  // Playwright
+	"node_modules/playwright-core",
+	"node_modules/playwright",
   // Jest
   "node_modules/@babel/parser",
   "node_modules/@babel/types",

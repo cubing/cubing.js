@@ -8,13 +8,9 @@ needFolder(
   "make build-esm",
 );
 
-import { ensureChromiumDownload } from "../../../../lib/puppeteer.js";
-
-import puppeteer from "puppeteer";
+import { chromium } from 'playwright';
 import { installServer, port, startServer } from "./serve-vite.js";
 import { killAllChildProcesses } from "../../../../lib/execPromise.js";
-
-await ensureChromiumDownload();
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;
@@ -32,11 +28,12 @@ function assert(description, expected, observed) {
 }
 
 async function runTest() {
-  const browser = await puppeteer.launch({
+  const browser = await chromium.launch({
     headless: HEADLESS,
   });
-  const page = await browser.newPage();
-  page.setViewport({
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  page.setViewportSize({
     width: 1024,
     height: 1024,
   });

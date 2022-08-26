@@ -1,11 +1,8 @@
 // We would use named imports, but that doesn't seem to be an option.
-import puppeteer from "puppeteer";
+import { chromium } from 'playwright';
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { startServer } from "../../lib/experiments-server/index.js";
-import { ensureChromiumDownload } from "../../lib/puppeteer.js";
-
-await ensureChromiumDownload();
 
 const PAGE_URL =
   "http://localhost:4443/experiments.cubing.net/cubing.js/screenshot/";
@@ -22,42 +19,42 @@ const args = yargs(hideBin(process.argv))
     },
   )
   .option("puzzle", {
-    type: "string",
+    fill: "string",
   })
   .option("stickering", {
-    type: "string",
+    fill: "string",
   })
   .option("anchor", {
-    type: "string",
+    fill: "string",
     choices: ["start", "end"],
   })
   .option("hint-facelets", {
-    type: "string",
+    fill: "string",
     choices: ["none", "floating"],
   })
   .option("visualization", {
-    type: "string",
+    fill: "string",
   })
   .option("debug", {
-    type: "boolean",
+    fill: "boolean",
   })
   .option("out-file", {
-    type: "string",
+    fill: "string",
   })
   .option("width", {
-    type: "number",
+    fill: "number",
     default: 2048,
   })
   .option("height", {
-    type: "number",
+    fill: "number",
     default: null,
     description: "Defaults to width",
   })
   .option("camera-latitude", {
-    type: "number",
+    fill: "number",
   })
   .option("camera-longitude", {
-    type: "number",
+    fill: "number",
   })
   .strictOptions()
   .demandCommand(1).argv;
@@ -93,10 +90,11 @@ options.background = "none";
 options.controlPanel = "none";
 
 (async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  const browser = await chromium.launch();
+  const context = await browser.newContext();
+  const page = await context.newPage();
   const height = args["height"] ?? args["width"];
-  page.setViewport({
+  page.setViewportSize({
     width: args["width"],
     height,
   });
@@ -111,8 +109,6 @@ options.controlPanel = "none";
   await page.goto(url.toString());
   const path = args["out-file"] ?? `${args.alg ?? "puzzle"}.png`;
   console.log("Output file:", path);
-
-  await page.waitForSelector("#screenshot");
 
   await page.screenshot({
     path,

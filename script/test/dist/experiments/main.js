@@ -1,8 +1,5 @@
-import puppeteer from "puppeteer";
+import { chromium } from 'playwright';
 import { startServer } from "../../../lib/experiments-server/index.js";
-import { ensureChromiumDownload } from "../../../lib/puppeteer.js";
-
-await ensureChromiumDownload();
 
 const OPEN_REPL = false; // Set to `true` for testing.
 const HEADLESS = !OPEN_REPL;
@@ -20,11 +17,12 @@ function assert(description, expected, observed) {
 }
 
 async function runTest() {
-  const browser = await puppeteer.launch({
+  const browser = await chromium.launch({
     headless: HEADLESS,
   });
-  const page = await browser.newPage();
-  page.setViewport({
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  page.setViewportSize({
     width: 1024,
     height: 1024,
   });
@@ -36,20 +34,16 @@ async function runTest() {
   //   fullPage: true,
   // });
 
-  const nav = page.waitForNavigation();
-
   await page.evaluate(() => {
     globalThis.app.setPuzzleName("2x2x2");
   });
-
-  await nav;
 
   const puzzle = new URL(page.url()).searchParams.get("puzzle");
   assert("Puzzle is set in the URL parameter", "2x2x2", puzzle);
 
   await Promise.all([
     page.waitForNavigation(),
-    page.select("#puzzle-name", "4x4x4"),
+    page.selectOption("#puzzle-name", "4x4x4"),
   ]);
 
   assert(
