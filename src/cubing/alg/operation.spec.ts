@@ -41,6 +41,29 @@ describe("operation", () => {
     ).to.be.true;
   });
 
+  it("computes mod offsets correctly", () => {
+    expect(
+      experimentalAppendMove(new Alg("L3"), new Move("L"), {
+        coalesce: true, mod: 4,
+      }).isIdentical(new Alg("")),
+    ).to.be.true;
+    expect(
+      experimentalAppendMove(new Alg("L3"), new Move("L3"), {
+        coalesce: true, mod: 4,
+      }).isIdentical(new Alg("L2")),
+    ).to.be.true;
+    expect(
+      experimentalAppendMove(new Alg("L3"), new Move("L6"), {
+        coalesce: true, mod: 4,
+      }).isIdentical(new Alg("L")),
+    ).to.be.true;
+    expect(
+      experimentalAppendMove(new Alg("L"), new Move("L"), {
+        coalesce: true, mod: 3,
+      }).isIdentical(new Alg("L'")),
+    ).to.be.true;
+  });
+
   it("can concat algs", () => {
     expect(
       new Alg("R U2").concat(new Alg("F' D")).isIdentical(new Alg("R U2 F' D")),
