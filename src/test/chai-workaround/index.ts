@@ -7,5 +7,8 @@
  * So we work around both issues here.
  */
 
-const { expect: untypedExpect } = await import("@esm-bundle" + "/chai");
+const { expect: untypedExpect, use: untypedUse } = await import(
+  "@esm-bundle" + "/chai"
+);
 export const expect: typeof import("chai").expect = untypedExpect;
+export const use: typeof import("chai").use = untypedUse;
