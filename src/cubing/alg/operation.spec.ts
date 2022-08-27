@@ -6,7 +6,7 @@ import { Move } from "./alg-nodes";
 
 use(function (chai, utils) {
   chai.Assertion.overwriteMethod("equal", function (_super) {
-    return function compareAlgs(other) {
+    return function compareAlgs(other: any) {
       const obj = this._obj;
       if (obj && obj instanceof Alg) {
         const actualString = obj.toString();
