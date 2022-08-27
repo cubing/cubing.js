@@ -8,7 +8,7 @@ needFolder(
   "make build-esm",
 );
 
-import { chromium } from 'playwright';
+import { chromium } from "playwright";
 import { installServer, port, startServer } from "./serve-parcel.js";
 import { killAllChildProcesses } from "../../../../lib/execPromise.js";
 

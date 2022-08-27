@@ -13,8 +13,8 @@ export const expectedPrefixes = [
   "node_modules/typescript",
   "script",
   // Playwright
-	"node_modules/playwright-core",
-	"node_modules/playwright",
+  "node_modules/playwright-core",
+  "node_modules/playwright",
   // Jest
   "node_modules/@babel/parser",
   "node_modules/@babel/types",

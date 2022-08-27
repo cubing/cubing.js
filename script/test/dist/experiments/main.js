@@ -1,4 +1,4 @@
-import { chromium } from 'playwright';
+import { chromium } from "playwright";
 import { startServer } from "../../../lib/experiments-server/index.js";
 
 const OPEN_REPL = false; // Set to `true` for testing.
