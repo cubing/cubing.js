@@ -262,7 +262,15 @@ export class TwistyPlayerModel {
     this.alg.set(
       (async () => {
         const alg = (await this.alg.get()).alg;
-        const newAlg = experimentalAppendMove(alg, move, options);
+        const addOptions = {
+          sliceMoves: options?.sliceMoves,
+          wideMoves: options?.wideMoves,
+          quantumMoveOrder: options?.mod,
+          sameDirection: options?.coalesce,
+          oppositeDirection: options?.coalesce,
+        };
+
+        const newAlg = experimentalAppendMove(alg, move, addOptions);
         this.timestampRequest.set("end");
         this.catchUpMove.set({
           move: move,

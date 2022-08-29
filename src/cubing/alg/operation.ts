@@ -1,19 +1,23 @@
 import { Alg } from "./Alg";
 import type { Move } from "./alg-nodes/leaves/Move";
 
+export interface ExperimentalCollapseOptions {
+  sameDirection?: boolean;
+  oppositeDirection?: boolean;
+  wideMoves?: boolean;
+  sliceMoves?: boolean;
+  quantumMoveOrder?: number;
+}
+
 export function experimentalAppendMove(
   alg: Alg,
   newMove: Move,
-  options?: {
-    coalesce?: boolean; // defaults to false
-    wideMoves?: boolean; // defaults to false
-    sliceMoves?: boolean; // defaults to false
-    mod?: number;
-  },
+  options?: ExperimentalCollapseOptions,
 ): Alg {
   const oldAlgNodes = Array.from(alg.childAlgNodes());
   const lastMove = oldAlgNodes[oldAlgNodes.length - 1] as Move | undefined;
   const preLastMove = oldAlgNodes[oldAlgNodes.length - 2] as Move | undefined;
+  const directionsAligned = lastMove && lastMove.amount * newMove.amount > 0;
   if (
     options?.sliceMoves &&
     "xyz".indexOf(newMove.family) !== -1 &&
@@ -73,14 +77,15 @@ export function experimentalAppendMove(
     }
   }
   if (
-    options?.coalesce &&
+    ((directionsAligned && options?.sameDirection) ||
+      (!directionsAligned && options?.oppositeDirection)) &&
     lastMove &&
     lastMove.quantum &&
     lastMove.quantum.isIdentical(newMove.quantum)
   ) {
     const newAlgNodes = oldAlgNodes.slice(0, oldAlgNodes.length - 1);
     let newAmount = lastMove.amount + newMove.amount;
-    const mod = options?.mod;
+    const mod = options?.quantumMoveOrder;
     if (mod) {
       newAmount = ((newAmount % mod) + mod) % mod;
       if (newAmount * 2 > mod) {
