@@ -66,6 +66,18 @@ describe("operation", () => {
         mod: 3,
       }),
     ).to.be.identicalAlg(new Alg("L'"));
+    expect(
+      experimentalAppendMove(new Alg("L3"), new Move("L3"), {
+        coalesce: true,
+        mod: 3,
+      }),
+    ).to.be.identicalAlg(new Alg(""));
+    expect(
+      experimentalAppendMove(new Alg("L3"), new Move("L6"), {
+        coalesce: true,
+        mod: 3,
+      }),
+    ).to.be.identicalAlg(new Alg(""));
   });
 
   it("can concat algs", () => {
