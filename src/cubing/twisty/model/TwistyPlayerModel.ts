@@ -225,7 +225,12 @@ export class TwistyPlayerModel {
 
   experimentalAddAlgLeaf(
     algLeaf: AlgLeaf,
-    options: { coalesce?: boolean; mod?: number } = {},
+    options: {
+      coalesce?: boolean;
+      sliceMoves?: boolean;
+      wideMoves?: boolean;
+      mod?: number;
+    } = {},
   ): void {
     const maybeMove = algLeaf.as(Move);
     if (maybeMove) {
@@ -245,17 +250,19 @@ export class TwistyPlayerModel {
   // TODO: Animate the new move.
   experimentalAddMove(
     flexibleMove: Move | string,
-    options: { coalesce?: boolean; mod?: number } = {},
+    options: {
+      coalesce?: boolean;
+      sliceMoves?: boolean;
+      wideMoves?: boolean;
+      mod?: number;
+    } = {},
   ): void {
     const move =
       typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
     this.alg.set(
       (async () => {
         const alg = (await this.alg.get()).alg;
-        const newAlg = experimentalAppendMove(alg, move, {
-          coalesce: options?.coalesce,
-          mod: options?.mod,
-        });
+        const newAlg = experimentalAppendMove(alg, move, options);
         this.timestampRequest.set("end");
         this.catchUpMove.set({
           move: move,

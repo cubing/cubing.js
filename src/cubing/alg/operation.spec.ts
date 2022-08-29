@@ -80,6 +80,78 @@ describe("operation", () => {
     ).to.be.identicalAlg(new Alg(""));
   });
 
+  it("wide moves not processed by default", () => {
+    expect(
+      experimentalAppendMove(new Alg("L"), new Move("x")),
+    ).to.be.identicalAlg(new Alg("L x"));
+  });
+
+  it("wide moves", () => {
+    expect(
+      experimentalAppendMove(new Alg("L"), new Move("x"), {
+        wideMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("r"));
+    expect(
+      experimentalAppendMove(new Alg("L'"), new Move("x'"), {
+        wideMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("r'"));
+    expect(
+      experimentalAppendMove(new Alg("R"), new Move("x'"), {
+        wideMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("l"));
+    expect(
+      experimentalAppendMove(new Alg("R"), new Move("x"), {
+        wideMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("R x"));
+    expect(
+      experimentalAppendMove(new Alg("R'"), new Move("x"), {
+        wideMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("l'"));
+    expect(
+      experimentalAppendMove(new Alg("R' R"), new Move("x"), {
+        wideMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("R' R x"));
+  });
+
+  it("slice moves", () => {
+    expect(
+      experimentalAppendMove(new Alg("R' R"), new Move("x"), {
+        wideMoves: true,
+        sliceMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("R' R x"));
+    expect(
+      experimentalAppendMove(new Alg("L' R"), new Move("x'"), {
+        wideMoves: true,
+        sliceMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("M"));
+    expect(
+      experimentalAppendMove(new Alg("L R'"), new Move("x"), {
+        wideMoves: true,
+        sliceMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("M'"));
+    expect(
+      experimentalAppendMove(new Alg("L' R"), new Move("x"), {
+        wideMoves: true,
+        sliceMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("L' R x"));
+    expect(
+      experimentalAppendMove(new Alg("U' D"), new Move("y"), {
+        wideMoves: true,
+        sliceMoves: true,
+      }),
+    ).to.be.identicalAlg(new Alg("E'"));
+  });
+
   it("can concat algs", () => {
     expect(
       new Alg("R U2").concat(new Alg("F' D")).isIdentical(new Alg("R U2 F' D")),

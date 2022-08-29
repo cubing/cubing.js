@@ -64,6 +64,24 @@ export function coalesce(): boolean {
   );
 }
 
+export function sliceMoves(): boolean {
+  return (
+    getURLParamChecked<"true" | "false">("sliceMoves", "true", [
+      "true",
+      "false",
+    ]) === "true"
+  );
+}
+
+export function wideMoves(): boolean {
+  return (
+    getURLParamChecked<"true" | "false">("wideMoves", "true", [
+      "true",
+      "false",
+    ]) === "true"
+  );
+}
+
 export function sendingSocketOrigin(): string | null {
   return new URL(document.location.href).searchParams.get(
     "sendingSocketOrigin",

@@ -6,7 +6,13 @@ import {
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../../../cubing/twisty";
-import { coalesce, getSetup, PuzzleID } from "../url-params";
+import {
+  coalesce,
+  getSetup,
+  PuzzleID,
+  sliceMoves,
+  wideMoves,
+} from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 
 const DEFAULT_THEME: ThemeType = "transparent-grid";
@@ -192,6 +198,8 @@ export class SwipeyPuzzle extends HTMLElement {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddAlgLeaf(algLeaf, {
         coalesce: coalesce(),
+        wideMoves: wideMoves(),
+        sliceMoves: sliceMoves(),
       });
     } catch (e) {
       console.warn("Invalid alg leaf");
