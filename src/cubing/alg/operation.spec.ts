@@ -44,22 +44,26 @@ describe("operation", () => {
   it("computes mod offsets correctly", () => {
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L"), {
-        coalesce: true, mod: 4,
+        coalesce: true,
+        mod: 4,
       }).isIdentical(new Alg("")),
     ).to.be.true;
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L3"), {
-        coalesce: true, mod: 4,
+        coalesce: true,
+        mod: 4,
       }).isIdentical(new Alg("L2")),
     ).to.be.true;
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L6"), {
-        coalesce: true, mod: 4,
+        coalesce: true,
+        mod: 4,
       }).isIdentical(new Alg("L")),
     ).to.be.true;
     expect(
       experimentalAppendMove(new Alg("L"), new Move("L"), {
-        coalesce: true, mod: 3,
+        coalesce: true,
+        mod: 3,
       }).isIdentical(new Alg("L'")),
     ).to.be.true;
   });
