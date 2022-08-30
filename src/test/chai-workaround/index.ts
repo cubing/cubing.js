@@ -10,3 +10,4 @@
 import type {} from "mocha";
 
 export * from "./chai";
+import "./Alg.chai";
