@@ -64,18 +64,18 @@ export function coalesce(): boolean {
   );
 }
 
-export function sliceMoves(): boolean {
+export function sliceMoves333(): boolean {
   return (
-    getURLParamChecked<"true" | "false">("sliceMoves", "true", [
+    getURLParamChecked<"true" | "false">("sliceMoves333", "true", [
       "true",
       "false",
     ]) === "true"
   );
 }
 
-export function wideMoves(): boolean {
+export function wideMoves333(): boolean {
   return (
-    getURLParamChecked<"true" | "false">("wideMoves", "true", [
+    getURLParamChecked<"true" | "false">("wideMoves333", "true", [
       "true",
       "false",
     ]) === "true"

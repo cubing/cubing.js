@@ -227,8 +227,8 @@ export class TwistyPlayerModel {
     algLeaf: AlgLeaf,
     options: {
       coalesce?: boolean;
-      sliceMoves?: boolean;
-      wideMoves?: boolean;
+      sliceMoves333?: boolean;
+      wideMoves333?: boolean;
       mod?: number;
     } = {},
   ): void {
@@ -252,8 +252,8 @@ export class TwistyPlayerModel {
     flexibleMove: Move | string,
     options: {
       coalesce?: boolean;
-      sliceMoves?: boolean;
-      wideMoves?: boolean;
+      sliceMoves333?: boolean;
+      wideMoves333?: boolean;
       mod?: number;
     } = {},
   ): void {
@@ -263,8 +263,8 @@ export class TwistyPlayerModel {
       (async () => {
         const alg = (await this.alg.get()).alg;
         const addOptions = {
-          sliceMoves: options?.sliceMoves,
-          wideMoves: options?.wideMoves,
+          sliceMoves333: options?.sliceMoves333,
+          wideMoves333: options?.wideMoves333,
           quantumMoveOrder: options?.mod,
           sameDirection: options?.coalesce,
           oppositeDirection: options?.coalesce,

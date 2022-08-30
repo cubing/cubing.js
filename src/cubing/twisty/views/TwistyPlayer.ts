@@ -411,8 +411,8 @@ export class TwistyPlayer
     flexibleMove: Move | string,
     options: {
       coalesce?: boolean;
-      wideMoves?: boolean;
-      sliceMoves?: boolean;
+      wideMoves333?: boolean;
+      sliceMoves333?: boolean;
     } = {},
   ): void {
     this.experimentalModel.experimentalAddMove(flexibleMove, options);
@@ -423,8 +423,8 @@ export class TwistyPlayer
     algLeaf: AlgLeaf,
     options: {
       coalesce?: boolean;
-      wideMoves?: boolean;
-      sliceMoves?: boolean;
+      wideMoves333?: boolean;
+      sliceMoves333?: boolean;
     } = {},
   ): void {
     this.experimentalModel.experimentalAddAlgLeaf(algLeaf, options);

@@ -101,32 +101,32 @@ describe("operation", () => {
   it("wide moves", () => {
     expect(
       experimentalAppendMove(new Alg("L"), new Move("x"), {
-        wideMoves: true,
+        wideMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("r"));
     expect(
       experimentalAppendMove(new Alg("L'"), new Move("x'"), {
-        wideMoves: true,
+        wideMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("r'"));
     expect(
       experimentalAppendMove(new Alg("R"), new Move("x'"), {
-        wideMoves: true,
+        wideMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("l"));
     expect(
       experimentalAppendMove(new Alg("R"), new Move("x"), {
-        wideMoves: true,
+        wideMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("R x"));
     expect(
       experimentalAppendMove(new Alg("R'"), new Move("x"), {
-        wideMoves: true,
+        wideMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("l'"));
     expect(
       experimentalAppendMove(new Alg("R' R"), new Move("x"), {
-        wideMoves: true,
+        wideMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("R' R x"));
   });
@@ -134,32 +134,32 @@ describe("operation", () => {
   it("slice moves", () => {
     expect(
       experimentalAppendMove(new Alg("R' R"), new Move("x"), {
-        wideMoves: true,
-        sliceMoves: true,
+        wideMoves333: true,
+        sliceMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("R' R x"));
     expect(
       experimentalAppendMove(new Alg("L' R"), new Move("x'"), {
-        wideMoves: true,
-        sliceMoves: true,
+        wideMoves333: true,
+        sliceMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("M"));
     expect(
       experimentalAppendMove(new Alg("L R'"), new Move("x"), {
-        wideMoves: true,
-        sliceMoves: true,
+        wideMoves333: true,
+        sliceMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("M'"));
     expect(
       experimentalAppendMove(new Alg("L' R"), new Move("x"), {
-        wideMoves: true,
-        sliceMoves: true,
+        wideMoves333: true,
+        sliceMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("L' R x"));
     expect(
       experimentalAppendMove(new Alg("U' D"), new Move("y"), {
-        wideMoves: true,
-        sliceMoves: true,
+        wideMoves333: true,
+        sliceMoves333: true,
       }),
     ).to.be.identicalAlg(new Alg("E'"));
   });

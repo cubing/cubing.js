@@ -10,8 +10,8 @@ import {
   coalesce,
   getSetup,
   PuzzleID,
-  sliceMoves,
-  wideMoves,
+  sliceMoves333,
+  wideMoves333,
 } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 
@@ -198,8 +198,8 @@ export class SwipeyPuzzle extends HTMLElement {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddAlgLeaf(algLeaf, {
         coalesce: coalesce(),
-        wideMoves: wideMoves(),
-        sliceMoves: sliceMoves(),
+        wideMoves333: wideMoves333(),
+        sliceMoves333: sliceMoves333(),
       });
     } catch (e) {
       console.warn("Invalid alg leaf");

@@ -4,8 +4,8 @@ import type { Move } from "./alg-nodes/leaves/Move";
 export interface ExperimentalCollapseOptions {
   sameDirection?: boolean;
   oppositeDirection?: boolean;
-  wideMoves?: boolean;
-  sliceMoves?: boolean;
+  wideMoves333?: boolean;
+  sliceMoves333?: boolean;
   quantumMoveOrder?: number;
 }
 
@@ -19,7 +19,7 @@ export function experimentalAppendMove(
   const preLastMove = oldAlgNodes[oldAlgNodes.length - 2] as Move | undefined;
   const directionsAligned = lastMove && lastMove.amount * newMove.amount > 0;
   if (
-    options?.sliceMoves &&
+    options?.sliceMoves333 &&
     "xyz".indexOf(newMove.family) !== -1 &&
     lastMove &&
     lastMove.quantum &&
@@ -51,7 +51,7 @@ export function experimentalAppendMove(
     }
   }
   if (
-    options?.wideMoves &&
+    options?.wideMoves333 &&
     "xyz".indexOf(newMove.family) !== -1 &&
     lastMove &&
     lastMove.quantum
