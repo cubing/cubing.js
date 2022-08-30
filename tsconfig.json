@@ -17,7 +17,8 @@
     "resolveJsonModule": true,
     "importsNotUsedAsValues": "error",
     "rootDir": "./",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "types": ["web-bluetooth", "dom-speech-recognition"]
   },
   "include": [
     "src",
@@ -30,7 +31,8 @@
   "exclude": [
     "src/static",
     "script/test/dist/esm", // Avoid indexing `dist`.
-    "src/cubing/search/search-worker-inside-generated*"
+    "src/cubing/search/search-worker-inside-generated*",
+    "src/cubing/alg/Alg.chai.spec.ts"
   ],
   "typedocOptions": {
     "out": "dist/sites/typedoc",

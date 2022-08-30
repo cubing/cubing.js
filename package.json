@@ -80,6 +80,7 @@
     "eslint-plugin-html": "^7.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jszip": "^3.10.1",
+    "mocha": "^10.0.0",
     "peggy": "^2.0.1",
     "playwright": "^1.25.1",
     "prettier": "^2.7.1",
@@ -218,7 +219,8 @@
           "@typescript-eslint/no-unsafe-call": "off",
           "@typescript-eslint/no-empty-function": "off",
           "@typescript-eslint/restrict-plus-operands": "off",
-          "@typescript-eslint/restrict-template-expressions": "off"
+          "@typescript-eslint/restrict-template-expressions": "off",
+          "@typescript-eslint/no-unsafe-return": "off"
         }
       }
     ],
