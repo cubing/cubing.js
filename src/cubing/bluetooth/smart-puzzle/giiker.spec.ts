@@ -10,17 +10,15 @@ describe("GiiKerCube", () => {
 
   it("should calculate giikerMoveToAlgMove() correctly", () => {
     // console.log(new Alg([giikerMoveToAlgMoveForTesting(1, 1)]).toString());
-    expect(
-      new Alg([giikerMoveToAlgMoveForTesting(1, 1)]).isIdentical(new Alg("B")),
-    ).to.be.true;
-    expect(
-      new Alg([giikerMoveToAlgMoveForTesting(2, 3)]).isIdentical(new Alg("D'")),
-    ).to.be.true;
-    expect(
-      new Alg([giikerMoveToAlgMoveForTesting(3, 9)]).isIdentical(
-        new Alg("L2'"),
-      ),
-    ).to.be.true;
+    expect(new Alg([giikerMoveToAlgMoveForTesting(1, 1)])).to.be.identicalAlg(
+      new Alg("B"),
+    );
+    expect(new Alg([giikerMoveToAlgMoveForTesting(2, 3)])).to.be.identicalAlg(
+      new Alg("D'"),
+    );
+    expect(new Alg([giikerMoveToAlgMoveForTesting(3, 9)])).to.be.identicalAlg(
+      new Alg("L2'"),
+    );
   });
 });
 

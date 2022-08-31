@@ -1,6 +1,4 @@
 import { expect } from "../../test/chai-workaround";
-
-import { Alg } from "./Alg";
 import { setAlgDebug } from "./debug";
 import { parseAlg } from "./parseAlg";
 
@@ -85,7 +83,6 @@ describe("NISS", () => {
   });
   it("parses carat NISS notation", () => {
     setAlgDebug({ caratNISSNotationEnabled: true });
-    expect(parseAlg("R ^(U L) D").isIdentical(new Alg("R . D (U L)'"))).to.be
-      .true;
+    expect(parseAlg("R ^(U L) D")).to.be.identicalAlg("R . D (U L)'");
   });
 });

@@ -1,8 +1,7 @@
 import { expect } from "../../../../test/chai-workaround";
 
-import { Alg } from "../../../alg";
-import { TwistyAlgEditor } from "./TwistyAlgEditor";
 import { TwistyPlayer } from "../TwistyPlayer";
+import { TwistyAlgEditor } from "./TwistyAlgEditor";
 
 class ResizeObserver {
   observe() {
@@ -40,10 +39,10 @@ describe("TwistyAlgEditor", () => {
     const alg = async () =>
       (await twistyPlayer.experimentalModel.alg.get()).alg;
     document.body.appendChild(twistyPlayer);
-    expect((await alg()).isIdentical(new Alg("F2"))).to.be.true;
+    expect(await alg()).to.be.identicalAlg("F2");
     const twistyAlgEditor = new TwistyAlgEditor({ twistyPlayer });
     twistyAlgEditor.algString = "R      U R' D2";
-    expect((await alg()).isIdentical(new Alg("R U R' D2"))).to.be.true;
+    expect(await alg()).to.be.identicalAlg("R U R' D2");
 
     // TODO: get this working.
     // const textarea = TwistyAlgEditor.shadow.querySelector("textarea");

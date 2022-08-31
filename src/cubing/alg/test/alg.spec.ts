@@ -70,8 +70,9 @@ describe("BlockMove", () => {
   });
 
   it("supports a default amount of 1.", () => {
-    expect(new Alg([new Move("U")]).isIdentical(new Alg([new Move("U", 1)]))).to
-      .be.true;
+    expect(new Alg([new Move("U")])).to.be.identicalAlg(
+      new Alg([new Move("U", 1)]),
+    );
   });
 
   it("throws an error for an invalid family", () => {
@@ -167,55 +168,49 @@ describe("algToString()", () => {
 
 describe("invert()", () => {
   it("correctly inverts", () => {
-    expect(Ex.Sune.invert().isIdentical(Ex.AntiSune)).to.be.true;
-    expect(Ex.Sune.invert().invert().isIdentical(Ex.Sune)).to.be.true;
-    expect(Ex.Sune.invert().invert().isIdentical(Ex.AntiSune)).to.be.false;
+    expect(Ex.Sune.invert()).to.be.identicalAlg(Ex.AntiSune);
+    expect(Ex.Sune.invert().invert()).to.be.identicalAlg(Ex.Sune);
+    expect(Ex.Sune.invert().invert()).not.to.be.identicalAlg(Ex.AntiSune);
   });
 });
 
 describe("expand()", () => {
   it("correctly expands", () => {
-    expect(Ex.FURURFCompact.expand().isIdentical(Ex.FURURFMoves)).to.be.true;
-    expect(Ex.Sune.expand().isIdentical(Ex.Sune)).to.be.true;
-    expect(Ex.SuneCommutator.expand().isIdentical(Ex.Sune)).to.be.false;
-    expect(Ex.FURURFCompact.expand().isIdentical(Ex.SuneCommutator)).to.be
-      .false;
+    expect(Ex.FURURFCompact.expand()).to.be.identicalAlg(Ex.FURURFMoves);
+    expect(Ex.Sune.expand()).to.be.identicalAlg(Ex.Sune);
+    expect(Ex.SuneCommutator.expand()).not.to.be.identicalAlg(Ex.Sune);
+    expect(Ex.FURURFCompact.expand()).not.to.identicalAlg(Ex.SuneCommutator);
   });
 
   it("correctly expands a group with two alg nodes", () => {
-    expect(new Alg("(R U)2").expand().isIdentical(new Alg("R U R U"))).to.be
-      .true;
+    expect(new Alg("(R U)2").expand()).to.be.identicalAlg("R U R U");
   });
 
   it("correctly expands an E-Perm", () => {
-    expect(
-      Ex.EPerm.expand().isIdentical(
-        new Alg("x' R U' R' D R U R' D' R U R' D R U' R' D' x"),
-      ),
-    ).to.be.true;
+    expect(Ex.EPerm.expand()).to.be.identicalAlg(
+      new Alg("x' R U' R' D R U R' D' R U R' D R U' R' D' x"),
+    );
   });
 });
 
 describe("toBeIdentical", () => {
   it("correctly compares algs", () => {
-    expect(Ex.FURURFCompact.isIdentical(Ex.FURURFMoves)).to.be.false;
-    expect(Ex.FURURFMoves.isIdentical(Ex.FURURFCompact)).to.be.false;
-    expect(Ex.FURURFMoves.isIdentical(Ex.FURURFMoves)).to.be.true;
-    expect(Ex.FURURFCompact.isIdentical(Ex.FURURFCompact)).to.be.true;
+    expect(Ex.FURURFCompact).not.to.be.identicalAlg(Ex.FURURFMoves);
+    expect(Ex.FURURFMoves).not.to.be.identicalAlg(Ex.FURURFCompact);
+    expect(Ex.FURURFMoves).to.be.identicalAlg(Ex.FURURFMoves);
+    expect(Ex.FURURFCompact).to.be.identicalAlg(Ex.FURURFCompact);
   });
 });
 
 describe("move collapsing ()", () => {
   it("coalesces U U to U2", () => {
-    expect(UU.simplify({ collapseMoves: true }).isIdentical(U2)).to.be.true;
+    expect(UU.simplify({ collapseMoves: true })).to.be.identicalAlg(U2);
   });
 
   it("coalesces expanded commutator Sune corectly", () => {
     expect(
-      Ex.SuneCommutator.expand()
-        .simplify({ collapseMoves: true })
-        .isIdentical(Ex.Sune),
-    ).to.be.true;
+      Ex.SuneCommutator.expand().simplify({ collapseMoves: true }),
+    ).to.be.identicalAlg(Ex.Sune);
   });
 });
 
@@ -251,24 +246,22 @@ describe("Object Freezing", () => {
 
 describe("Parser", () => {
   it("parses an empty Alg", () => {
-    expect(new Alg("").isIdentical(new Alg())).to.be.true;
-    expect(
-      Alg.fromString("()").isIdentical(new Alg([new Grouping(new Alg([]))])),
-    ).to.be.true;
-    expect(new Alg("").isIdentical(new Alg())).to.be.true;
-    expect(
-      Alg.fromString("()").isIdentical(new Alg([new Grouping(new Alg([]))])),
-    ).to.be.true;
+    expect(new Alg("")).to.be.identicalAlg(new Alg());
+    expect(Alg.fromString("()")).to.be.identicalAlg(
+      new Alg([new Grouping(new Alg([]))]),
+    );
+    expect(new Alg("")).to.be.identicalAlg(new Alg());
+    expect(Alg.fromString("()")).to.be.identicalAlg(
+      new Alg([new Grouping(new Alg([]))]),
+    );
   });
 
   it("parses a Sune", () => {
-    expect(new Alg("R U R' U R U2' R'").isIdentical(Ex.Sune)).to.be.true;
-    expect(Alg.fromString("R U R' U R U2' R'").isIdentical(Ex.Sune)).to.be.true;
-    expect(
-      new Alg("R U R' U R U2' R'").isIdentical(
-        Alg.fromString("R U R' U R U2' R'"),
-      ),
-    ).to.be.true;
+    expect(new Alg("R U R' U R U2' R'")).to.be.identicalAlg(Ex.Sune);
+    expect(Alg.fromString("R U R' U R U2' R'")).to.be.identicalAlg(Ex.Sune);
+    expect(new Alg("R U R' U R U2' R'")).to.be.identicalAlg(
+      Alg.fromString("R U R' U R U2' R'"),
+    );
   });
 
   it("parses U u Uw x 2U 2u 2Uw 2-3u 2-3Uw", () => {
@@ -278,34 +271,39 @@ describe("Parser", () => {
 
   it("parses . . .", () => {
     const p = new Pause();
-    expect(new Alg(". . .").isIdentical(new Alg([p, p, p]))).to.be.true;
+    expect(new Alg(". . .")).to.be.identicalAlg(new Alg([p, p, p]));
   });
 
   // TODO: Should these be parsed differently?
   it("parses R and R1 as the same (for now)", () => {
-    expect(new Alg("R").isIdentical(new Alg("R1"))).to.be.true;
+    expect(new Alg("R")).to.be.identicalAlg("R1");
   });
 
   it("round-trips algs through a string", () => {
-    expect(new Alg(Ex.SuneCommutator.toString()).isIdentical(Ex.SuneCommutator))
-      .to.be.true;
-    expect(new Alg(Ex.Niklas.toString()).isIdentical(Ex.Niklas)).to.be.true;
-    expect(new Alg(Ex.FURURFCompact.toString()).isIdentical(Ex.FURURFCompact))
-      .to.be.true;
-    expect(new Alg(Ex.APermCompact.toString()).isIdentical(Ex.APermCompact)).to
-      .be.true;
-    expect(new Alg(Ex.TPerm.toString()).isIdentical(Ex.TPerm)).to.be.true;
-    expect(new Alg(Ex.HeadlightSwaps.toString()).isIdentical(Ex.HeadlightSwaps))
-      .to.be.true;
-    expect(new Alg(Ex.TriplePause.toString()).isIdentical(Ex.TriplePause)).to.be
-      .true;
+    expect(new Alg(Ex.SuneCommutator.toString())).to.be.identicalAlg(
+      Ex.SuneCommutator,
+    );
+    expect(new Alg(Ex.Niklas.toString())).be.identicalAlg(Ex.Niklas);
+    expect(new Alg(Ex.FURURFCompact.toString())).to.be.identicalAlg(
+      Ex.FURURFCompact,
+    );
+    expect(new Alg(Ex.APermCompact.toString())).to.be.identicalAlg(
+      Ex.APermCompact,
+    );
+    expect(new Alg(Ex.TPerm.toString())).to.be.identicalAlg(Ex.TPerm);
+    expect(new Alg(Ex.HeadlightSwaps.toString())).to.be.identicalAlg(
+      Ex.HeadlightSwaps,
+    );
+    expect(new Alg(Ex.TriplePause.toString())).to.be.identicalAlg(
+      Ex.TriplePause,
+    );
   });
 
   // it("round-trips all alg types through a string", () => {
   //   // Update this based on the length of AllAlgParts.
   //   for (const a of Ex.AllAlgParts) {
   //     const seq = matchesAlgType(a, "Alg") ? (a as Alg) : new Alg([a]);
-  //     expect(new Alg(algToString(seq)).isIdentical(seq)).to.be.true;
+  //     expect(new Alg(algToString(seq))).to.be.identicalAlg(seq);
   //   }
   // });
 });

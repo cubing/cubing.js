@@ -22,29 +22,25 @@ it("adds alg leaves and moves properly", async () => {
   twistyPlayerModel.alg.set("R U R'");
 
   twistyPlayerModel.experimentalAddAlgLeaf(new Move("D2"));
-  expect(
-    (await twistyPlayerModel.alg.get()).alg.isIdentical(new Alg("R U R' D2")),
-  ).to.be.true;
+  expect((await twistyPlayerModel.alg.get()).alg).to.be.identicalAlg(
+    new Alg("R U R' D2"),
+  );
 
   // This should be the same as `.experimentalAddAlgLeaf()`;
   twistyPlayerModel.experimentalAddMove(new Move("F'"));
-  expect(
-    (await twistyPlayerModel.alg.get()).alg.isIdentical(
-      new Alg("R U R' D2 F'"),
-    ),
-  ).to.be.true;
+  expect((await twistyPlayerModel.alg.get()).alg).to.be.identicalAlg(
+    new Alg("R U R' D2 F'"),
+  );
 
   twistyPlayerModel.experimentalAddMove(new Move("F2"), {
     coalesce: true,
   });
-  expect(
-    (await twistyPlayerModel.alg.get()).alg.isIdentical(new Alg("R U R' D2 F")),
-  ).to.be.true;
+  expect((await twistyPlayerModel.alg.get()).alg).to.be.identicalAlg(
+    new Alg("R U R' D2 F"),
+  );
 
   twistyPlayerModel.experimentalAddAlgLeaf(new Pause());
-  expect(
-    (await twistyPlayerModel.alg.get()).alg.isIdentical(
-      new Alg("R U R' D2 F ."),
-    ),
-  ).to.be.true;
+  expect((await twistyPlayerModel.alg.get()).alg).to.be.identicalAlg(
+    new Alg("R U R' D2 F ."),
+  );
 });
