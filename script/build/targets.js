@@ -60,7 +60,7 @@ function plugins(dev) {
   return plugins;
 }
 
-function devServerOptions(srcFolder, dev) {
+function siteOptions(srcFolder, dev) {
   return {
     entryRoot: join("src", srcFolder),
     outDir: dev ? join(".temp/dev", srcFolder) : join("dist", srcFolder),
@@ -70,6 +70,10 @@ function devServerOptions(srcFolder, dev) {
       target: "es2020",
       plugins: plugins(dev),
       minify: !dev,
+      loader: {
+        ".svg": "copy",
+        ".png": "copy",
+      },
       supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
     },
   };
@@ -296,9 +300,9 @@ export const binTarget = {
 export const sitesTarget = {
   name: "sites",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
-    await barelyServe(devServerOptions("sites", dev));
+    await barelyServe(siteOptions("sites", dev, true));
   },
 };
 
@@ -307,7 +311,7 @@ export const twizzleTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    await barelyServe(devServerOptions("sites/alpha.twizzle.net", dev));
+    await barelyServe(siteOptions("sites/alpha.twizzle.net", dev, true));
     if (!dev) {
       // TODO: Include this in the custom build process.
       await writeVersionJSON("dist/sites/alpha.twizzle.net");
@@ -321,7 +325,7 @@ export const experimentsTarget = {
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     await barelyServe(
-      devServerOptions("sites/experiments.cubing.net/cubing.js", dev),
+      siteOptions("sites/experiments.cubing.net/cubing.js", dev, true),
     );
 
     if (!dev) {
