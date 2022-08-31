@@ -302,7 +302,7 @@ export const sitesTarget = {
   builtYet: false,
   dependencies: [],
   buildSelf: async (dev) => {
-    await barelyServe(siteOptions("sites", dev, true));
+    await barelyServe(siteOptions("sites", dev));
   },
 };
 
@@ -311,7 +311,7 @@ export const twizzleTarget = {
   builtYet: false,
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
-    await barelyServe(siteOptions("sites/alpha.twizzle.net", dev, true));
+    await barelyServe(siteOptions("sites/alpha.twizzle.net", dev));
     if (!dev) {
       // TODO: Include this in the custom build process.
       await writeVersionJSON("dist/sites/alpha.twizzle.net");
@@ -325,7 +325,7 @@ export const experimentsTarget = {
   dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     await barelyServe(
-      siteOptions("sites/experiments.cubing.net/cubing.js", dev, true),
+      siteOptions("sites/experiments.cubing.net/cubing.js", dev),
     );
 
     if (!dev) {
