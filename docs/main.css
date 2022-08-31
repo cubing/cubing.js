@@ -155,7 +155,7 @@ twisty-player {
   grid-template-columns: 1fr 1fr;
   gap: 0.5em;
   padding: 0.5em;
-  border: 1px solid #00000022;
+  background: #4285f411;
   overflow-x: hidden;
   box-sizing: border-box;
 }
