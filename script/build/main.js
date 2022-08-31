@@ -1,4 +1,4 @@
-import { build, targets } from "./index.js";
+import { build, targets } from "./targets.js";
 
 const targetName = process.argv[2];
 if (!targetName) {
