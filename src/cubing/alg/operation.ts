@@ -44,8 +44,11 @@ export function experimentalAppendMove(
         if (checkMove.amount === -newMove.amount) {
           const family = "MES"[index];
           const amount = family === "S" ? newMove.amount : -newMove.amount;
-          newAlgNodes.push(newMove.modified({ family, amount }));
-          return new Alg(newAlgNodes);
+          return experimentalAppendMove(
+            new Alg(newAlgNodes),
+            newMove.modified({ family, amount }),
+            options,
+          );
         }
       }
     }
@@ -66,13 +69,19 @@ export function experimentalAppendMove(
     if (checkMove === lastFamily) {
       if (lastMove.amount === newMove.amount) {
         const family = "ruf"[index];
-        newAlgNodes.push(lastMove.modified({ family }));
-        return new Alg(newAlgNodes);
+        return experimentalAppendMove(
+          new Alg(newAlgNodes),
+          lastMove.modified({ family }),
+          options,
+        );
       }
       if (lastMove.amount === -newMove.amount) {
         const family = "ldb"[index];
-        newAlgNodes.push(lastMove.modified({ family }));
-        return new Alg(newAlgNodes);
+        return experimentalAppendMove(
+          new Alg(newAlgNodes),
+          lastMove.modified({ family }),
+          options,
+        );
       }
     }
   }
