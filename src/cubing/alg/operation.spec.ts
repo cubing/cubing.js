@@ -7,65 +7,65 @@ import { Move } from "./alg-nodes";
 describe("operation", () => {
   it("can append moves", () => {
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("U2")).isIdentical(
-        new Alg("R U R' U2"),
-      ),
-    ).to.be.true;
+      experimentalAppendMove(new Alg("R U R'"), new Move("U2")),
+    ).to.be.identicalAlg(new Alg("R U R' U2"));
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("R", -2)).isIdentical(
-        new Alg("R U R' R2'"),
-      ),
-    ).to.be.true;
+      experimentalAppendMove(new Alg("R U R'"), new Move("R2'")),
+    ).to.be.identicalAlg(new Alg("R U R' R2'"));
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("R")).isIdentical(
-        new Alg("R U R' R"),
-      ),
-    ).to.be.true;
+      experimentalAppendMove(new Alg("R U R'"), new Move("R")),
+    ).to.be.identicalAlg(new Alg("R U R' R"));
   });
 
   it("can coalesce appended moves", () => {
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("U2"), {
         coalesce: true,
-      }).isIdentical(new Alg("R U R' U2")),
-    ).to.be.true;
+      }),
+    ).to.be.identicalAlg(new Alg("R U R' U2"));
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("R", -2), {
+      experimentalAppendMove(new Alg("R U R'"), new Move("R2'"), {
         coalesce: true,
-      }).isIdentical(new Alg("R U R3'")),
-    ).to.be.true;
+      }),
+    ).to.be.identicalAlg(new Alg("R U R3'"));
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("R"), {
         coalesce: true,
-      }).isIdentical(new Alg("R U")),
-    ).to.be.true;
+      }),
+    ).to.be.identicalAlg(new Alg("R U"));
+    expect(
+      experimentalAppendMove(new Alg("r"), new Move("r"), { coalesce: true }),
+    ).to.be.identicalAlg(new Alg("r2"));
   });
 
-  it("computes mod offsets correctly", () => {
+  it("mod 4 works as expected", () => {
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L"), {
         coalesce: true,
         mod: 4,
-      }).isIdentical(new Alg("")),
-    ).to.be.true;
+      }),
+    ).to.be.identicalAlg(new Alg(""));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L3"), {
         coalesce: true,
         mod: 4,
-      }).isIdentical(new Alg("L2")),
-    ).to.be.true;
+      }),
+    ).to.be.identicalAlg(new Alg("L2"));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L6"), {
         coalesce: true,
         mod: 4,
-      }).isIdentical(new Alg("L")),
-    ).to.be.true;
+      }),
+    ).to.be.identicalAlg(new Alg("L"));
+  });
+
+  it("mod 3 works as expected", () => {
     expect(
       experimentalAppendMove(new Alg("L"), new Move("L"), {
         coalesce: true,
         mod: 3,
-      }).isIdentical(new Alg("L'")),
-    ).to.be.true;
+      }),
+    ).to.be.identicalAlg(new Alg("L'"));
   });
 
   it("can concat algs", () => {
