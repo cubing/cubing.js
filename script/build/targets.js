@@ -190,24 +190,6 @@ export const searchWorkerTarget = {
   },
 };
 
-export const bundleGlobalTarget = {
-  name: "bundle-global",
-  builtYet: false,
-  dependencies: [searchWorkerTarget],
-  buildSelf: (dev) => {
-    return esbuild.build({
-      entryPoints: ["src/cubing/cubing.bundle-global.ts"],
-      outfile: "dist/bundle-global/cubing.bundle-global.js",
-      format: "cjs",
-      target: "es2020",
-      bundle: true,
-      minify: true,
-      watch: dev,
-      logLevel: "info",
-    });
-  },
-};
-
 export const staticPackageMetadataTarget = {
   name: "static-package-metadata",
   builtYet: false,
@@ -357,7 +339,7 @@ export const typesTarget = {
 export const allTarget = {
   name: "all",
   builtYet: false,
-  dependencies: [esmTarget, bundleGlobalTarget, typesTarget, binTarget],
+  dependencies: [esmTarget, typesTarget, binTarget],
   buildSelf: async (dev) => {
     if (dev) {
       throw new Error("Cannot build `types` target in dev mode.");
@@ -370,7 +352,6 @@ export const targets /*: Record<String, SolverWorker>*/ = {
   "sites": sitesTarget,
   "twizzle": twizzleTarget,
   "experiments": experimentsTarget,
-  "bundle-global": bundleGlobalTarget,
   "static-package-metadata": staticPackageMetadataTarget,
   "esm": esmTarget,
   "types": typesTarget,

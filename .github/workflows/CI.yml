@@ -67,7 +67,6 @@ jobs:
       - run: npm ci
       - run: make build-esm
       - run: make build-bin
-      - run: make build-bundle-global
       - run: make build-types
       - run: make build-sites
       - run: make build-site-typedoc

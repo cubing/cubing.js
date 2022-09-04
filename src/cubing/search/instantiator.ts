@@ -23,7 +23,6 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
     try {
       const workerEntryFileURL = await getWorkerEntryFileURL();
       if (!workerEntryFileURL) {
-        // This happens in `bundle-global`.
         reject(new Error("Could not get worker entry file URL."));
       }
       let url: string | URL;
@@ -105,7 +104,7 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
     return await instantiateModuleWorker();
   } catch (e) {
     const commonErrorPrefix =
-      "Could not instantiate module worker (this may happen in Firefox, with `bundle-global`, or when using Parcel).";
+      "Could not instantiate module worker (this may happen in Firefox, or when using Parcel).";
     if (disableStringWorker) {
       console.error(
         `${commonErrorPrefix} Fallback to string worker is disabled.`,

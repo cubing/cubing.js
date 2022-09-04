@@ -110,7 +110,6 @@
   "scripts": {
     "build": "npm run clean && node ./script/build/main.js all",
     "build-esm": "node ./script/build/main.js esm",
-    "build-bundle-global": "node ./script/build/main.js bundle-global",
     "build-types": "node ./script/build/main.js types",
     "build-bin": "node ./script/build/main.js bin",
     "build-sites": "npm run build-site-twizzle && npm run build-site-experiments",
@@ -133,7 +132,7 @@
     "test-src-internal-import-restrictions": "node ./script/test/src/internal-import-restrictions/main.js",
     "test-src-does-not-import-dist": "node ./script/test/src/does-not-import-dist/main.js",
     "test-src-tsc": "npm run build-types && npx tsc --project ./tsconfig.json",
-    "test-build": "npm run build-esm && npm run build-bin && npm run build-bundle-global && npm run build-types && npm run build-sites && npm run build-site-typedoc # keep CI.yml in sync with this",
+    "test-build": "npm run build-esm && npm run build-bin && npm run build-types && npm run build-sites && npm run build-site-typedoc # keep CI.yml in sync with this",
     "test-dist": "npm run build-esm && npm run test-dist-esm-node-import && npm run test-dist-esm-scramble-all-events && npm run test-dist-esm-perf && npm run test-dist-esm-plain-esbuild-compat && npm run test-dist-esm-parcel && npm run test-dist-esm-vite && npm run test-dist-sites-experiments && npm run build-sites && npm run test-dist-sites-experiments # keep CI.yml in sync with this",
     "test-dist-esm-node-import": "node script/test/dist/esm/node-import/main.mjs",
     "test-dist-esm-scramble-all-events": "node script/test/dist/esm/scramble-all-events/main.mjs",
