@@ -354,7 +354,7 @@ export class PGOrbitsDef {
   }
 
   public reassemblySize(): bigint {
-    let n = 1n;
+    let n = BigInt(1);
     for (let i = 0; i < this.orbitdefs.length; i++) {
       n *= this.orbitdefs[i].reassemblySize();
     }

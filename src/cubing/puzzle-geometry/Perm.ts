@@ -43,7 +43,7 @@ export function random(n: number): Perm {
 }
 
 export function factorial(a: number): bigint {
-  let r = 1n;
+  let r = BigInt(1);
   while (a > 1) {
     r *= BigInt(a);
     a--;

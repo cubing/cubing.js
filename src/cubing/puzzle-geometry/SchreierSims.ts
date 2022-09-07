@@ -105,10 +105,10 @@ export function schreierSims(g: Perm[], disp: (s: string) => void): bigint {
       sgslen[i][i] = 0;
     }
     let none = 0;
-    let sz = 1n;
+    let sz = BigInt(1);
     for (let i = 0; i < g.length; i++) {
       knutha(n - 1, g[i], 1);
-      sz = 1n;
+      sz = BigInt(1);
       let tks = 0;
       let sollen = 0;
       const avgs = [];
