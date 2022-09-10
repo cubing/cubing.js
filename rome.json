@@ -9,19 +9,19 @@
       "js": {
         "recommended": true,
         "noDelete": "off",
+        "noNegationElse": "off",
+        "noShoutyConstants": "off",
         "noUnusedVariables": "off",
+        "noUnnecessaryContinue": "off",
         "useSingleCaseStatement": "off",
         "noUnusedTemplateLiteral": "off",
         "useTemplate": "off",
         "useSimplifiedLogicExpression": "off",
-        "noNegationElse": "off",
         "useSingleVarDeclarator": "off",
         "useBlockStatements": "off",
         "noDoubleEquals": "off",
         "noArguments": "off",
-        "noAsyncPromiseExecutor": "off",
-        "noShoutyConstants": "off",
-        "noUnnecessaryContinue": "off"
+        "noAsyncPromiseExecutor": "off"
       },
       "ts": {
         "recommended": true,
