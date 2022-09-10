@@ -26,7 +26,6 @@ export class SwipeTracker {
       sector.addEventListener("touchmove", this.touchMove.bind(this));
       sector.addEventListener("touchend", this.touchEnd.bind(this, sector));
       sector.addEventListener("touchcancel", this.touchEnd.bind(this, sector));
-
       // sector.addEventListener("mousedown", this.swipeStart.bind(this, sector));
       // sector.addEventListener("mouseup", this.swipeStop.bind(this, sector));
       // window.addEventListener("mouseup", this.globalMouseup.bind(this));
@@ -130,7 +129,6 @@ export class SwipeTracker {
 
     this.dispatchTouchChange();
   }
-
   // globalMouseup(): void {}
 
   // swipeStart(sector: HTMLElement): void {
@@ -141,7 +139,6 @@ export class SwipeTracker {
   //   console.log("stop", sector, this.idx(sector));
   // }
 }
-
 // const sector = document.createElement("div");
 // if (this.active) {
 //   sector.addEventListener("touchstart", this.swipeStart.bind(this, i, sector));

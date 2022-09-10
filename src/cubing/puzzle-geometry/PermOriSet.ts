@@ -128,9 +128,11 @@ export class PGOrbitsDef {
       result.push("Move " + name);
       for (let j = 0; j < this.orbitnames.length; j++) {
         if (doinv) {
-          this.moveops[i].orbits[j]
-            .inv()
-            .appendDefinition(result, this.orbitnames[j], true);
+          this.moveops[i].orbits[j].inv().appendDefinition(
+            result,
+            this.orbitnames[j],
+            true,
+          );
         } else {
           this.moveops[i].orbits[j].appendDefinition(
             result,

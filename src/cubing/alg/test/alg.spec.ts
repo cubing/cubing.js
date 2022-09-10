@@ -144,9 +144,8 @@ describe("algToString()", () => {
     expect(new Alg([]).toString()).to.eq("");
     expect(new Grouping(new Alg([])).toString()).to.eq("()");
     // TODO: Should this be "[,]"
-    expect(
-      new Alg([new Commutator(new Alg([]), new Alg([]))]).toString(),
-    ).to.eq("[, ]");
+    expect(new Alg([new Commutator(new Alg([]), new Alg([]))]).toString()).to
+      .eq("[, ]");
   });
 
   it("converts Sune to string", () => {
@@ -231,7 +230,6 @@ describe("Object Freezing", () => {
     //   expect(Object.isFrozen(a)).to.eq(true);
     // }
   });
-
   // it("makes it impossible to modify a BaseMove", () => {
   //   const b = new Move("R", 4);
   //   let caughtErr: Error | undefined;
@@ -298,7 +296,6 @@ describe("Parser", () => {
       Ex.TriplePause,
     );
   });
-
   // it("round-trips all alg types through a string", () => {
   //   // Update this based on the length of AllAlgParts.
   //   for (const a of Ex.AllAlgParts) {

@@ -43,7 +43,6 @@ describe("TwistyAlgEditor", () => {
     const twistyAlgEditor = new TwistyAlgEditor({ twistyPlayer });
     twistyAlgEditor.algString = "R      U R' D2";
     expect(await alg()).to.be.identicalAlg("R U R' D2");
-
     // TODO: get this working.
     // const textarea = TwistyAlgEditor.shadow.querySelector("textarea");
     // expect(textarea).toBeInstanceOf(HTMLTextAreaElement);

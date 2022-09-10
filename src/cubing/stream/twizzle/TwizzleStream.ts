@@ -39,7 +39,9 @@ type StreamsField = {
 export class TwizzleStreamServer {
   async streams(): Promise<StreamsField> {
     return (
-      (await (await fetch("https://api.twizzle.net/v0/streams")).json()) as {
+      (await (
+        await fetch("https://api.twizzle.net/v0/streams")
+      ).json()) as {
         streams: StreamsField;
       }
     ).streams;

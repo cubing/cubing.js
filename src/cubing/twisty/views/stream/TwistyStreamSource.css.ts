@@ -1,6 +1,7 @@
 import { CSSSource } from "../ManagedCustomElement";
 
-export const twistyStreamSourceCSS = new CSSSource(`
+export const twistyStreamSourceCSS = new CSSSource(
+  `
 :host {
   width: 384px;
   height: 256px;
@@ -14,4 +15,5 @@ export const twistyStreamSourceCSS = new CSSSource(`
   place-content: center;
   gap: 0.5em;
 }
-`);
+`,
+);

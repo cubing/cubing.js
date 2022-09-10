@@ -1,0 +1,32 @@
+{
+  "formatter": {
+    "indentStyle": "space",
+    "indentSize": 2
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "js": {
+        "recommended": true,
+        "noDelete": "off",
+        "noUnusedVariables": "off",
+        "useSingleCaseStatement": "off",
+        "noUnusedTemplateLiteral": "off",
+        "useTemplate": "off",
+        "useSimplifiedLogicExpression": "off",
+        "noNegationElse": "off",
+        "useSingleVarDeclarator": "off",
+        "useBlockStatements": "off",
+        "noDoubleEquals": "off",
+        "noArguments": "off",
+        "noAsyncPromiseExecutor": "off",
+        "noShoutyConstants": "off",
+        "noUnnecessaryContinue": "off"
+      },
+      "ts": {
+        "recommended": true,
+        "useShorthandArrayType": "off"
+      }
+    }
+  }
+}

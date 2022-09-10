@@ -5,4 +5,6 @@ export {
   countMoves as experimentalCountMoves,
   countQuantumMoves as experimentalCountQuantumMoves,
 } from "./CountMoves";
-export { countAnimatedLeaves as experimentalCountAnimatedLeaves } from "./CountAnimatedLeaves";
+export {
+  countAnimatedLeaves as experimentalCountAnimatedLeaves,
+} from "./CountAnimatedLeaves";

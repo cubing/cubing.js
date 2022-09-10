@@ -1,9 +1,9 @@
 import { SimpleTwistyPropSource } from "../TwistyProp";
 
 export const viewerLinkPages = {
-  "twizzle": true, // default
+  twizzle: true, // default
   "experimental-twizzle-explorer": true,
-  "none": true,
+  none: true,
 };
 export type ViewerLinkPage = keyof typeof viewerLinkPages;
 export type ViewerLinkPageWithAuto = ViewerLinkPage | "auto";

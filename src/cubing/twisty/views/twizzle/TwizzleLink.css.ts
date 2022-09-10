@@ -1,6 +1,7 @@
 import { CSSSource } from "../ManagedCustomElement";
 
-export const twizzleLinkCSS = new CSSSource(`
+export const twizzleLinkCSS = new CSSSource(
+  `
 .wrapper {
   background: rgb(255, 245, 235);
   display: grid;
@@ -33,4 +34,5 @@ twisty-player {
 twisty-player + .heading {
   padding-top: 0.5em;
 }
-`);
+`,
+);

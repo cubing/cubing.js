@@ -44,7 +44,9 @@ export function _preInitializationHintForEvent(
       return _preInitializationHintForEvent("333");
   }
   (async () => {
-    await (await getCachedWorkerInstance()).initialize(eventID);
+    await (
+      await getCachedWorkerInstance()
+    ).initialize(eventID);
   })();
 }
 
@@ -117,8 +119,9 @@ export function setDebug(options: {
     getCachedWorkerInstance().then((cwi) => cwi.setDebugMeasurePerf(logPerf));
   }
   if (typeof scramblePrefetchLevel !== "undefined") {
-    getCachedWorkerInstance().then((cwi) =>
-      cwi.setScramblePrefetchLevel(scramblePrefetchLevel as PrefetchLevel),
+    getCachedWorkerInstance().then(
+      (cwi) =>
+        cwi.setScramblePrefetchLevel(scramblePrefetchLevel as PrefetchLevel),
     );
   }
   if ("forceStringWorker" in options) {

@@ -12,6 +12,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: rome/setup-rome@v0.4
+        with:
+          version: latest
       # From https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
       - name: Cache node_modules
         uses: actions/cache@v2
@@ -31,7 +34,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: make test-spec
-      - run: make lint
+      - run: make lint-ci
       - run: make test-src-tsc
       - run: make test-src-internal-import-restrictions
       - run: make test-src-does-not-import-dist

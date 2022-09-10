@@ -38,9 +38,9 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
   };
 
   const constructed: Record<string, AlgNode> = {
-    "U": new Move("U"),
-    "R": new Move("R"),
-    "F": new Move("F"),
+    U: new Move("U"),
+    R: new Move("R"),
+    F: new Move("F"),
     "U'": new Move("U'"),
     "R'": new Move("R'"),
     "F'": new Move("F'"),

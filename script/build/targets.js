@@ -349,12 +349,12 @@ export const allTarget = {
 
 export const targets /*: Record<String, SolverWorker>*/ = {
   "search-worker": searchWorkerTarget,
-  "sites": sitesTarget,
-  "twizzle": twizzleTarget,
-  "experiments": experimentsTarget,
+  sites: sitesTarget,
+  twizzle: twizzleTarget,
+  experiments: experimentsTarget,
   "static-package-metadata": staticPackageMetadataTarget,
-  "esm": esmTarget,
-  "types": typesTarget,
-  "bin": binTarget,
-  "all": allTarget,
+  esm: esmTarget,
+  types: typesTarget,
+  bin: binTarget,
+  all: allTarget,
 };

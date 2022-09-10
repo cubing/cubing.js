@@ -8,31 +8,31 @@ Some notes:
 
 */
 export const targetInfos = {
-  "alg": {
+  alg: {
     deps: {
       direct: [],
       dynamic: [],
     },
   },
-  "bluetooth": {
+  bluetooth: {
     deps: {
       direct: ["alg", "kpuzzle", "protocol", "puzzles"],
       dynamic: [],
     },
   },
-  "kpuzzle": {
+  kpuzzle: {
     deps: {
       direct: ["alg"],
       dynamic: [],
     },
   },
-  "notation": {
+  notation: {
     deps: {
       direct: ["alg"],
       dynamic: [],
     },
   },
-  "protocol": {
+  protocol: {
     deps: {
       direct: ["alg", "kpuzzle", "puzzles"],
       dynamic: [],
@@ -44,31 +44,31 @@ export const targetInfos = {
       dynamic: [],
     },
   },
-  "puzzles": {
+  puzzles: {
     deps: {
       direct: ["alg", "kpuzzle"],
       dynamic: ["puzzle-geometry"],
     },
   },
-  "scramble": {
+  scramble: {
     deps: {
       direct: ["alg", "search"],
       dynamic: [],
     },
   },
-  "search": {
+  search: {
     deps: {
       direct: ["alg", "kpuzzle", "notation", "puzzles"],
       dynamic: ["puzzle-geometry"],
     },
   },
-  "stream": {
+  stream: {
     deps: {
       direct: ["alg"],
       dynamic: [],
     },
   },
-  "twisty": {
+  twisty: {
     deps: {
       direct: ["alg", "kpuzzle", "notation", "puzzles"],
       dynamic: ["puzzle-geometry"],

@@ -747,9 +747,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (transformations.invert) {
       closestMove = closestMove.invert();
     }
-    const order = this.kpuzzle
-      .moveToTransformation(closestMove)
-      .repetitionOrder();
+    const order = this.kpuzzle.moveToTransformation(
+      closestMove,
+    ).repetitionOrder();
     return { move: closestMove, order }; // TODO: push this down
   }
 
@@ -799,9 +799,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (
       !this.lastPos ||
       this.#pendingStickeringUpdate ||
-      !this.lastPos.state
-        .experimentalToTransformation()!
-        .isIdentical(transformation)
+      !this.lastPos.state.experimentalToTransformation()!.isIdentical(
+        transformation,
+      )
     ) {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];
@@ -933,16 +933,18 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           offset: 0,
           count: 6 * this.foundationBound,
         };
-        (this.fixedGeo.getAttribute("uv") as BufferAttribute).needsUpdate =
-          true;
+        (
+          this.fixedGeo.getAttribute("uv") as BufferAttribute
+        ).needsUpdate = true;
       }
       if (this.#pendingStickeringUpdate || !this.textured) {
         (this.fixedGeo.getAttribute("color") as BufferAttribute).updateRange = {
           offset: 0,
           count: 9 * this.foundationBound,
         };
-        (this.fixedGeo.getAttribute("color") as BufferAttribute).needsUpdate =
-          true;
+        (
+          this.fixedGeo.getAttribute("color") as BufferAttribute
+        ).needsUpdate = true;
       }
     }
     this.scheduleRenderCallback();

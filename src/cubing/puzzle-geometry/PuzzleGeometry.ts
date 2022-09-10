@@ -845,7 +845,10 @@ export class PuzzleGeometry {
     const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
     const firstface = getface(planes);
-    this.edgedistance = firstface[0].sum(firstface[1]).smul(0.5).dist(zero);
+    this.edgedistance = firstface[0]
+      .sum(firstface[1])
+      .smul(0.5)
+      .dist(zero);
     this.vertexdistance = firstface[0].dist(zero);
     const cutplanes = [];
     const intersects = [];
@@ -1365,8 +1368,14 @@ export class PuzzleGeometry {
     delta = delta.normalize();
     const cosr = delta.b;
     const sinr = delta.c;
-    const x1 = x0.smul(cosr).sub(y0.smul(sinr)).smul(len);
-    const y1 = y0.smul(cosr).sum(x0.smul(sinr)).smul(len);
+    const x1 = x0
+      .smul(cosr)
+      .sub(y0.smul(sinr))
+      .smul(len);
+    const y1 = y0
+      .smul(cosr)
+      .sum(x0.smul(sinr))
+      .smul(len);
     const off = new Quat(
       0,
       targvec[0].b - x1.dot(face[edgen]),
@@ -2790,9 +2799,9 @@ export class PuzzleGeometry {
     }
     const r1 = feature1.pointrotation(direction1);
     const feature2rot = feature2.rotatepoint(r1);
-    const r2 = feature2rot
-      .unproject(direction1)
-      .pointrotation(direction2.unproject(direction1));
+    const r2 = feature2rot.unproject(direction1).pointrotation(
+      direction2.unproject(direction1),
+    );
     return r2.mul(r1);
   }
 
@@ -2929,9 +2938,9 @@ export class PuzzleGeometry {
         extendedges(edges2[f1], polyn);
         // what edge are we at?
         const caf0 = connectat[gfi];
-        const mp = thisface[(caf0 + j) % polyn]
-          .sum(thisface[(caf0 + j + polyn - 1) % polyn])
-          .smul(0.5);
+        const mp = thisface[(caf0 + j) % polyn].sum(
+          thisface[(caf0 + j + polyn - 1) % polyn],
+        ).smul(0.5);
         const epi = findelement(bg.edgenames, mp);
         const edgename = bg.edgenames[epi][1];
         const el = splitByFaceNames(edgename, this.facenames);

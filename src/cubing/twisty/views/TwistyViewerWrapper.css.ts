@@ -1,6 +1,7 @@
 import { CSSSource } from "./ManagedCustomElement";
 
-export const twistyViewerWrapperCSS = new CSSSource(`
+export const twistyViewerWrapperCSS = new CSSSource(
+  `
 :host {
   width: 384px;
   height: 256px;
@@ -38,4 +39,5 @@ export const twistyViewerWrapperCSS = new CSSSource(`
   grid-row: 1 / 2;
   grid-column: 2 / 3;
 }
-`);
+`,
+);

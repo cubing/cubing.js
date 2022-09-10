@@ -42,7 +42,8 @@ export class TwistyPropDebugger extends ManagedCustomElement {
     this.twistyProp.addFreshListener(this.onProp.bind(this));
 
     this.addCSS(
-      new CSSSource(`
+      new CSSSource(
+        `
 
 .wrapper {
   font-family: Ubuntu, sans-serif;
@@ -104,7 +105,8 @@ export class TwistyPropDebugger extends ManagedCustomElement {
 }
 .wrapper.highlight-self:hover > span::before { content: "🌟 "; margin-right: 0.1em; }
 
-    `),
+    `,
+      ),
     );
   }
 
@@ -221,7 +223,8 @@ export class TwistyPlayerDebugger extends ManagedCustomElement {
 
   connectedCallback(): void {
     this.addCSS(
-      new CSSSource(`
+      new CSSSource(
+        `
 .wrapper {
   width: 100%;
   display: grid;
@@ -241,7 +244,8 @@ twisty-prop-debugger.highlighted {
   /* grid-column: 1 / -1; */
   /* margin: 1em 0; */
 }
-`),
+`,
+      ),
     );
 
     for (const [key, value] of Object.entries(this.player.experimentalModel)) {

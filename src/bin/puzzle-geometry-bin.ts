@@ -20,7 +20,8 @@ let dogap = false;
 let docanon = false;
 let do3d = false;
 if (globalThis.process && process.argv && process.argv.length <= 2) {
-  console.log(`Usage:  puzzle-geometry [options] [puzzle]
+  console.log(
+    `Usage:  puzzle-geometry [options] [puzzle]
 
 Options:
 --ksolve: write ksolve (tws) file
@@ -72,7 +73,8 @@ Examples:
    puzzlegeometry --ss --moves U,F2,r 4x4x4
    puzzlegeometry --ksolve --optimize --moves U,F,R megaminx
    puzzlegeometry --gap --noedges megaminx
-`);
+`,
+  );
 }
 if (globalThis.process && process.argv && process.argv.length >= 3) {
   let desc;

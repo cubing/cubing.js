@@ -1,5 +1,7 @@
 import { KPuzzle } from "../../kpuzzle";
-import { cube3x3x3KPuzzleDefinition as experimentalCube3x3x3KPuzzleDefinition } from "../implementations/dynamic/3x3x3/3x3x3.kpuzzle.json";
+import {
+  cube3x3x3KPuzzleDefinition as experimentalCube3x3x3KPuzzleDefinition,
+} from "../implementations/dynamic/3x3x3/3x3x3.kpuzzle.json";
 import { experimentalIs3x3x3Solved } from "../implementations/dynamic/3x3x3/puzzle-orientation";
 export { experimentalCube3x3x3KPuzzleDefinition };
 
@@ -18,8 +20,12 @@ export {
 } from "../implementations/dynamic/3x3x3/puzzle-orientation";
 export { experimentalStickerings } from "../stickerings/puzzle-stickerings";
 
-export { customPGPuzzleLoader as experimentalCustomPGPuzzleLoader } from "../customPGPuzzleLoader";
-export { getFaceletAppearance as experimentalGetFaceletAppearance } from "../stickerings/appearance";
+export {
+  customPGPuzzleLoader as experimentalCustomPGPuzzleLoader,
+} from "../customPGPuzzleLoader";
+export {
+  getFaceletAppearance as experimentalGetFaceletAppearance,
+} from "../stickerings/appearance";
 export type {
   FaceletMeshAppearance as ExperimentalFaceletMeshAppearance,
   PuzzleAppearance as ExperimentalPuzzleAppearance,

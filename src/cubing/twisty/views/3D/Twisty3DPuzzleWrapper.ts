@@ -26,74 +26,66 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
     // TODO: Hook up listeners before loading the heavy code in the async constructor, so we get any intermediate updates?
     // Repro: Switch to 40x40x40 a fraction of a second before animation finishes. When it's loaded the itmeline is at the end, but the 40x40x40 is rendered with an earlier position.
 
-    this.#freshListenerManager.addListener(
-      this.model.puzzleLoader,
-      (puzzleLoader: PuzzleLoader) => {
-        if (this.puzzleLoader.id !== puzzleLoader.id) {
-          this.disconnect();
-        }
-      },
-    );
-    this.#freshListenerManager.addListener(
-      this.model.legacyPosition,
-      async (position: PuzzlePosition) => {
-        try {
-          (await this.twisty3DPuzzle()).onPositionChange(position);
-          this.scheduleRender();
-        } catch (e) {
-          // TODO
-          // console.warn(
-          //   "Bad position (this doesn't necessarily mean something is wrong). Pre-emptively disconnecting:",
-          //   this.puzzleLoader.id,
-          //   e,
-          // );
-          this.disconnect();
-        }
-      },
-    );
+    this.#freshListenerManager.addListener(this.model.puzzleLoader, (
+      puzzleLoader: PuzzleLoader,
+    ) => {
+      if (this.puzzleLoader.id !== puzzleLoader.id) {
+        this.disconnect();
+      }
+    });
+    this.#freshListenerManager.addListener(this.model.legacyPosition, async (
+      position: PuzzlePosition,
+    ) => {
+      try {
+        (await this.twisty3DPuzzle()).onPositionChange(position);
+        this.scheduleRender();
+      } catch (e) {
+        // TODO
+        // console.warn(
+        //   "Bad position (this doesn't necessarily mean something is wrong). Pre-emptively disconnecting:",
+        //   this.puzzleLoader.id,
+        //   e,
+        // );
+        this.disconnect();
+      }
+    });
 
-    this.#freshListenerManager.addListener(
-      this.model.twistySceneModel.hintFacelet,
-      async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
-        (
-          (await this.twisty3DPuzzle()) as Cube3D | PG3D
-        ).experimentalUpdateOptions({
-          hintFacelets:
-            hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
-        });
+    this.#freshListenerManager.addListener(this.model.twistySceneModel
+      .hintFacelet, async (hintFaceletStyle: HintFaceletStyleWithAuto) => {
+      (
+        (await this.twisty3DPuzzle()) as Cube3D | PG3D
+      ).experimentalUpdateOptions({
+        hintFacelets:
+          hintFaceletStyle === "auto" ? "floating" : hintFaceletStyle,
+      });
+      this.scheduleRender();
+    });
+    this.#freshListenerManager.addListener(this.model.twistySceneModel
+      .foundationDisplay, async (foundationDisplay: FoundationDisplay) => {
+      (
+        (await this.twisty3DPuzzle()) as Cube3D | PG3D
+      ).experimentalUpdateOptions({
+        showFoundation: foundationDisplay !== "none",
+      });
+      this.scheduleRender();
+    });
+    this.#freshListenerManager.addListener(this.model.twistySceneModel
+      .stickering, async (stickering: ExperimentalStickering) => {
+      if ("setStickering" in (await this.twisty3DPuzzle())) {
+        ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
         this.scheduleRender();
-      },
-    );
-    this.#freshListenerManager.addListener(
-      this.model.twistySceneModel.foundationDisplay,
-      async (foundationDisplay: FoundationDisplay) => {
-        (
-          (await this.twisty3DPuzzle()) as Cube3D | PG3D
-        ).experimentalUpdateOptions({
-          showFoundation: foundationDisplay !== "none",
-        });
-        this.scheduleRender();
-      },
-    );
-    this.#freshListenerManager.addListener(
-      this.model.twistySceneModel.stickering,
-      async (stickering: ExperimentalStickering) => {
-        if ("setStickering" in (await this.twisty3DPuzzle())) {
-          ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
+      } else {
+        // TODO: create a prop to handle this.
+        if ("appearance" in this.puzzleLoader) {
+          const [twisty3D, appearancePromise] = await Promise.all([
+            this.twisty3DPuzzle(),
+            this.puzzleLoader.appearance!(stickering ?? "full"),
+          ]);
+          (twisty3D as PG3D).experimentalSetAppearance(appearancePromise);
           this.scheduleRender();
-        } else {
-          // TODO: create a prop to handle this.
-          if ("appearance" in this.puzzleLoader) {
-            const [twisty3D, appearancePromise] = await Promise.all([
-              this.twisty3DPuzzle(),
-              this.puzzleLoader.appearance!(stickering ?? "full"),
-            ]);
-            (twisty3D as PG3D).experimentalSetAppearance(appearancePromise);
-            this.scheduleRender();
-          }
         }
-      },
-    );
+      }
+    });
 
     this.#freshListenerManager.addMultiListener3(
       [
@@ -145,14 +137,12 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
             this.model.twistySceneModel.hintStickerSprite.get(),
             this.model.twistySceneModel.stickering.get(),
           ]);
-        return (await proxyPromise).cube3DShim(
-          () => this.schedulable.scheduleRender(),
-          {
-            foundationSprite,
-            hintSprite,
-            experimentalStickering,
-          },
-        );
+        return (await proxyPromise).cube3DShim(() =>
+          this.schedulable.scheduleRender(), {
+          foundationSprite,
+          hintSprite,
+          experimentalStickering,
+        });
       } else {
         const [hintFacelets, foundationSprite, hintSprite] = await Promise.all([
           this.model.twistySceneModel.hintFacelet.get(),
@@ -165,12 +155,13 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
           hintFacelets === "auto" ? "floating" : hintFacelets,
         );
         // TODO: Figure out how to do this in one place using the listener.
-        pg3d.then((p) =>
-          p.experimentalUpdateTexture(
-            true,
-            foundationSprite ?? undefined,
-            hintSprite ?? undefined,
-          ),
+        pg3d.then(
+          (p) =>
+            p.experimentalUpdateTexture(
+              true,
+              foundationSprite ?? undefined,
+              hintSprite ?? undefined,
+            ),
         );
         return pg3d;
       }

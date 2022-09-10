@@ -86,7 +86,7 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
 
 async function instantiateClassicWorker(): Promise<WorkerInsideAPI> {
   const { workerSource } = await import(
-    "./search-worker-inside-generated-string.js"
+    "./search-worker-inside-generated-string.js",
   );
   const worker = await constructWorker(workerSource, { eval: true });
   return wrap(worker);

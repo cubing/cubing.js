@@ -8,9 +8,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   {
     const svg = new KPuzzleSVGWrapper(kpuzzle, llSVG);
-    const state = kpuzzle
-      .algToTransformation("R U R' U' R' F R2 U' R' U' R U R' F'")
-      .toKState();
+    const state = kpuzzle.algToTransformation(
+      "R U R' U' R' F R2 U' R' U' R U R' F'",
+    ).toKState();
     svg.draw(state);
     document.body.appendChild(svg.wrapperElement);
   }

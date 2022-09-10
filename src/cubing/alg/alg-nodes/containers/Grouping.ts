@@ -109,7 +109,6 @@ export class Grouping extends AlgCommon<Grouping> {
   experimentalAsSquare1Tuple(): [moveU: Move, moveD: Move] | null {
     return square1TupleFormatterInstance.tuple(this);
   }
-
   // toJSON(): GroupingJSON {
   //   return {
   //     type: "grouping",

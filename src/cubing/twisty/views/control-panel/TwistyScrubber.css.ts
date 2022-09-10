@@ -1,6 +1,7 @@
 import { CSSSource } from "../ManagedCustomElement";
 
-export const twistyScrubberCSS = new CSSSource(`
+export const twistyScrubberCSS = new CSSSource(
+  `
 :host {
   width: 384px;
   height: 16px;
@@ -20,4 +21,5 @@ export const twistyScrubberCSS = new CSSSource(`
 input:not(:disabled) {
   cursor: ew-resize;
 }
-`);
+`,
+);

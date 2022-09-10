@@ -164,8 +164,9 @@ const commands: { [cmd: string]: BufferSource } = {
 function buf2hex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
   return (
-    Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
-      ("00" + x.toString(16)).slice(-2),
+    Array.prototype.map.call(
+      new Uint8Array(buffer),
+      (x: number) => ("00" + x.toString(16)).slice(-2),
     ) as string[]
   ).join(" ");
 }
@@ -465,7 +466,6 @@ export class GanCube extends BluetoothPuzzle {
       await this.actualAngleAndBatteryCharacteristic();
     return (await actualAngleAndBatteryCharacteristic.readValue()).buffer;
   }
-
   // TODO
   // private onphysicalStateCharacteristicChanged(event: any): void {
   //   var val = event.target.value;

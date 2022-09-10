@@ -6,23 +6,23 @@ import {
 
 export const puzzleIDs = {
   "3x3x3": true, // default
-  "custom": true,
+  custom: true,
   "2x2x2": true,
   "4x4x4": true,
   "5x5x5": true,
   "6x6x6": true,
   "7x7x7": true,
   "40x40x40": true,
-  "megaminx": true,
-  "pyraminx": true,
-  "square1": true,
-  "clock": true,
-  "skewb": true,
-  "fto": true,
-  "gigaminx": true,
-  "master_tetraminx": true,
-  "kilominx": true,
-  "redi_cube": true,
+  megaminx: true,
+  pyraminx: true,
+  square1: true,
+  clock: true,
+  skewb: true,
+  fto: true,
+  gigaminx: true,
+  master_tetraminx: true,
+  kilominx: true,
+  redi_cube: true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 

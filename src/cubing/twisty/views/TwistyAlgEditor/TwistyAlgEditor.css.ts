@@ -1,6 +1,7 @@
 import { CSSSource } from "../ManagedCustomElement";
 
-export const twistyAlgEditorCSS = new CSSSource(`
+export const twistyAlgEditorCSS = new CSSSource(
+  `
 :host {
   width: 384px;
   display: grid;
@@ -69,4 +70,5 @@ textarea {
   border: 1px solid red;
   background: rgba(255, 0, 0, 0.1);
 }
-`);
+`,
+);

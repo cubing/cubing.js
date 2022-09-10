@@ -113,15 +113,15 @@ export function getConfigFromURL(
 ): TwistyPlayerConfig {
   // TODO: Why does `Object.entries(paramMapping)` crash if this is defined elswhere?
   const paramMapping: Record<string, TwistyPlayerAttribute> = {
-    "alg": "alg",
+    alg: "alg",
     "setup-alg": "experimental-setup-alg",
     "setup-anchor": "experimental-setup-anchor",
-    "puzzle": "puzzle",
-    "stickering": "experimental-stickering",
+    puzzle: "puzzle",
+    stickering: "experimental-stickering",
     "puzzle-description": "experimental-puzzle-description",
-    "title": "experimental-title",
+    title: "experimental-title",
     "video-url": "experimental-video-url",
-    "competition": "experimental-competition-id",
+    competition: "experimental-competition-id",
   };
 
   const params = new URL(url).searchParams;

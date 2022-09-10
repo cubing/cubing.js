@@ -253,7 +253,6 @@ export class Move extends AlgCommon<Move> {
       this.#quantumWithAmount.suffix()
     );
   }
-
   // // TODO: Serialize as a string?
   // toJSON(): MoveJSON {
   //   return {

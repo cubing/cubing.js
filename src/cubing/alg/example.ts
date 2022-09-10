@@ -137,7 +137,6 @@ export const Example = {
   ]),
 
   TriplePause: new Alg([new Pause(), new Pause(), new Pause()]),
-
   // AllAlgParts: [
   //   new Alg([new Move("R", 1), new Move("U", -1)]),
   //   new Grouping(new Alg([new Move("F", 1)]), 2),

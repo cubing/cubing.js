@@ -33,7 +33,6 @@ class AlgEditorAlgWithIssuesProp extends TwistyPropDerived<
   derive(input: AlgEditorAlgWithIssuesPropInput): AlgWithIssues {
     return algWithIssuesFromString(input.value);
   }
-
   // TODO: canReuse needs to take the source string into account.
 }
 

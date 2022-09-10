@@ -1,6 +1,7 @@
 import { CSSSource } from "./ManagedCustomElement";
 
-export const twistyAlgViewerCSS = new CSSSource(`
+export const twistyAlgViewerCSS = new CSSSource(
+  `
 :host {
   display: inline;
 }
@@ -26,4 +27,5 @@ twisty-alg-leaf-elem.twisty-alg-comment {
   padding-right: 0.1em;
   border-radius: 0.1em;
 }
-`);
+`,
+);

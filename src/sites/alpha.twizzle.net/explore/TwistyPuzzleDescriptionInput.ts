@@ -162,9 +162,8 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
     this.puzzleShapeSelect.value = puzzleDescription.shape;
 
     for (const cut of puzzleDescription.cuts) {
-      const existingInput: HTMLInputElement | undefined = existingInputs[
-        cut.cutType
-      ].splice(0, 1)[0];
+      const existingInput: HTMLInputElement | undefined = existingInputs[cut
+        .cutType].splice(0, 1)[0];
       if (existingInput) {
         existingInput.value = cut.distance.toString();
         existingInput.max = this.inputMax(cut.cutType).toString();

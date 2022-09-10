@@ -44,17 +44,17 @@ export const twistyPlayerAttributeMap = {
   // TODO: Enum validation.
 
   // Alg
-  "alg": "alg",
+  alg: "alg",
   "experimental-setup-alg": "experimentalSetupAlg",
 
   // String-based
   "experimental-setup-anchor": "experimentalSetupAnchor",
-  "puzzle": "puzzle",
+  puzzle: "puzzle",
   "experimental-puzzle-description": "experimentalPuzzleDescription",
-  "visualization": "visualization",
+  visualization: "visualization",
   "hint-facelets": "hintFacelets",
   "experimental-stickering": "experimentalStickering",
-  "background": "background",
+  background: "background",
   "control-panel": "controlPanel",
   "back-view": "backView",
   // "indexer": "indexer",
@@ -120,7 +120,6 @@ export interface TwistyPlayerConfig {
   // Alg
   alg?: Alg | string;
   experimentalSetupAlg?: Alg | string;
-
   // String-based
   experimentalSetupAnchor?: SetupToLocation; // TODO: "auto"
   puzzle?: PuzzleID;
@@ -135,19 +134,16 @@ export interface TwistyPlayerConfig {
   viewerLink?: ViewerLinkPageWithAuto;
   experimentalMovePressInput?: MovePressInput;
   experimentalDragInput?: DragInputMode;
-
   // Metadata
   experimentalTitle?: string | null;
   experimentalVideoURL?: string;
   experimentalCompetitionID?: string;
-
   // Number-based
   cameraLatitude?: number;
   cameraLongitude?: number;
   cameraDistance?: number;
   cameraLatitudeLimit?: number;
   tempoScale?: number;
-
   // URL-based
   experimentalSprite?: string | null;
   experimentalHintSprite?: string | null;
@@ -225,15 +221,15 @@ export class TwistyPlayer
     );
     this.addElement(this.#errorElem).classList.add("error-elem");
     this.#errorElem.textContent = "Error";
-    this.experimentalModel.userVisibleErrorTracker.addFreshListener(
-      (userVisibleError) => {
-        const errorString: string | null = userVisibleError.errors[0] ?? null;
-        this.contentWrapper.classList.toggle("error", !!errorString);
-        if (errorString) {
-          this.#errorElem.textContent = errorString;
-        }
-      },
-    );
+    this.experimentalModel.userVisibleErrorTracker.addFreshListener((
+      userVisibleError,
+    ) => {
+      const errorString: string | null = userVisibleError.errors[0] ?? null;
+      this.contentWrapper.classList.toggle("error", !!errorString);
+      if (errorString) {
+        this.#errorElem.textContent = errorString;
+      }
+    });
 
     const scrubber = new TwistyScrubber(this.experimentalModel);
     this.contentWrapper.appendChild(scrubber);
@@ -245,20 +241,20 @@ export class TwistyPlayer
     );
     this.contentWrapper.appendChild(this.buttons);
 
-    this.experimentalModel.twistySceneModel.background.addFreshListener(
-      (backgroundTheme: BackgroundThemeWithAuto) => {
-        this.contentWrapper.classList.toggle(
-          "checkered",
-          backgroundTheme !== "none",
-        );
-      },
-    );
+    this.experimentalModel.twistySceneModel.background.addFreshListener((
+      backgroundTheme: BackgroundThemeWithAuto,
+    ) => {
+      this.contentWrapper.classList.toggle(
+        "checkered",
+        backgroundTheme !== "none",
+      );
+    });
 
-    this.experimentalModel.controlPanel.addFreshListener(
-      (controlPanel: ControlPanelThemeWithAuto) => {
-        this.#controlsManager.setValue(controlPanel);
-      },
-    );
+    this.experimentalModel.controlPanel.addFreshListener((
+      controlPanel: ControlPanelThemeWithAuto,
+    ) => {
+      this.#controlsManager.setValue(controlPanel);
+    });
 
     this.experimentalModel.visualizationStrategy.addFreshListener(
       this.#setVisualizationWrapper.bind(this),
@@ -466,9 +462,8 @@ export class TwistyPlayer
     ) {
       // TODO: This has lots of async issues. It should also go into the screenshot impl file.
       const wrapper2D = this.#visualizationWrapper as Twisty2DSceneWrapper;
-      const twisty2DPuzzle = await wrapper2D
-        .currentTwisty2DPuzzleWrapper()!
-        .twisty2DPuzzle();
+      const twisty2DPuzzle =
+        await wrapper2D.currentTwisty2DPuzzleWrapper()!.twisty2DPuzzle();
       const str = new XMLSerializer().serializeToString(
         twisty2DPuzzle.svgWrapper.svgElement,
       );
@@ -479,7 +474,9 @@ export class TwistyPlayer
         "svg",
       );
     } else {
-      await (await screenshot(this.experimentalModel)).download(filename);
+      await (
+        await screenshot(this.experimentalModel)
+      ).download(filename);
     }
   }
 }

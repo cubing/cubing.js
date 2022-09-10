@@ -7,30 +7,30 @@ interface URLParamValues {
   "setup-alg": Alg;
   "experimental-setup-anchor": "end" | "start";
   "experimental-stickering": ExperimentalStickering;
-  "alg": Alg;
-  "puzzle": string;
+  alg: Alg;
+  puzzle: string;
   "debug-js": boolean;
   "debug-simultaneous": boolean;
   "debug-show-render-stats": boolean;
   "debug-carat-niss-notation": boolean;
-  "title": string | null;
+  title: string | null;
   "video-url": string | null;
-  "competition": string | null;
+  competition: string | null;
 }
 
 const paramDefaults: URLParamValues = {
   "setup-alg": new Alg(),
   "experimental-setup-anchor": "start",
   "experimental-stickering": "full",
-  "alg": new Alg(),
-  "puzzle": "3x3x3",
+  alg: new Alg(),
+  puzzle: "3x3x3",
   "debug-js": true,
   "debug-simultaneous": false,
   "debug-show-render-stats": false,
   "debug-carat-niss-notation": false,
-  "title": null,
+  title: null,
   "video-url": null,
-  "competition": null,
+  competition: null,
 };
 
 export type ParamName = keyof typeof paramDefaults;
@@ -40,15 +40,15 @@ const paramDefaultStrings: { [s: string]: string } = {
   "setup-alg": "",
   "experimental-setup-anchor": "start",
   "experimental-stickering": "full",
-  "alg": "",
-  "puzzle": "3x3x3",
+  alg: "",
+  puzzle: "3x3x3",
   "debug-js": "true",
   "debug-simultaneous": "false",
   "debug-show-render-stats": "false",
   "debug-carat-niss-notation": "false",
-  "title": "",
+  title: "",
   "video-url": "",
-  "competition": "",
+  competition: "",
 };
 
 export function getURLParam<K extends ParamName>(

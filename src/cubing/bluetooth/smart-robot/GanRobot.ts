@@ -5,8 +5,9 @@ import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 function buf2hex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
   return (
-    Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
-      ("00" + x.toString(16)).slice(-2),
+    Array.prototype.map.call(
+      new Uint8Array(buffer),
+      (x: number) => ("00" + x.toString(16)).slice(-2),
     ) as string[]
   ).join(" ");
 }
@@ -28,47 +29,47 @@ const UUIDs = {
 };
 
 const moveMap: Record<string, number> = {
-  "R": 0,
-  "R2": 1,
+  R: 0,
+  R2: 1,
   "R2'": 1,
   "R'": 2,
-  "F": 3,
-  "F2": 4,
+  F: 3,
+  F2: 4,
   "F2'": 4,
   "F'": 5,
-  "D": 6,
-  "D2": 7,
+  D: 6,
+  D2: 7,
   "D2'": 7,
   "D'": 8,
-  "L": 9,
-  "L2": 10,
+  L: 9,
+  L2: 10,
   "L2'": 10,
   "L'": 11,
-  "B": 12,
-  "B2": 13,
+  B: 12,
+  B2: 13,
   "B2'": 13,
   "B'": 14,
 };
 
 const moveMapX: Record<string, number> = {
-  "R": 0,
-  "R2": 1,
+  R: 0,
+  R2: 1,
   "R2'": 1,
   "R'": 2,
-  "U": 3,
-  "U2": 4,
+  U: 3,
+  U2: 4,
   "U2'": 4,
   "U'": 5,
-  "F": 6,
-  "F2": 7,
+  F: 6,
+  F2: 7,
   "F2'": 7,
   "F'": 8,
-  "L": 9,
-  "L2": 10,
+  L: 9,
+  L2: 10,
   "L2'": 10,
   "L'": 11,
-  "D": 12,
-  "D2": 13,
+  D: 12,
+  D2: 13,
   "D2'": 13,
   "D'": 14,
 };
@@ -227,9 +228,10 @@ export class GanRobot extends EventTarget {
   private moveQueue: Alg = new Alg();
   // TODO: Don't let this resolve until the move is done?
   private async queueMoves(moves: Alg): Promise<void> {
-    this.moveQueue = this.moveQueue
-      .concat(moves)
-      .simplify({ collapseMoves: true, quantumMoveOrder: (_) => 4 });
+    this.moveQueue = this.moveQueue.concat(moves).simplify({
+      collapseMoves: true,
+      quantumMoveOrder: (_) => 4,
+    });
     if (!this.locked) {
       // TODO: We're currently iterating over alg nodes instead of leaves to avoid "zip bomps".
       try {

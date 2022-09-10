@@ -84,10 +84,12 @@ export class Twisty3DSceneWrapper
   }
 
   async onPress(
-    e: CustomEvent<{
-      pressInfo: PressInfo;
-      cameraPromise: Promise<PerspectiveCamera>;
-    }>,
+    e: CustomEvent<
+      {
+        pressInfo: PressInfo;
+        cameraPromise: Promise<PerspectiveCamera>;
+      }
+    >,
   ): Promise<void> {
     const twisty3DPuzzleWrapper = this.#currentTwisty3DPuzzleWrapper;
     if (!twisty3DPuzzleWrapper) {

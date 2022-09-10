@@ -1,7 +1,7 @@
 import { SimpleTwistyPropSource } from "../TwistyProp";
 
 export const backViewLayouts = {
-  "none": true, // default
+  none: true, // default
   "side-by-side": true,
   "top-right": true,
 };

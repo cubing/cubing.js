@@ -218,8 +218,8 @@ function comb_to_index(l) {
     bits--;
     if (l[i] === 0) {
       b = (b * --zeros) / bits;
-    } // l[i] === 1
-    else {
+    } else {
+      // l[i] === 1
       ind += b;
       b = (b * ones--) / bits;
     }
@@ -887,7 +887,8 @@ function generate_phase23_orientation_mtable() {
         if (comb[k] === 1) {
           orient_full[k] = ((j / THREE[l]) | 0) % 3;
           l++;
-        } else orient_full[k] = 99; // some irrelevant garbage value
+        } else
+          orient_full[k] = 99; // some irrelevant garbage value
       }
       for (let move_index = 0; move_index < 6; move_index++) {
         let move = moves[move_index];

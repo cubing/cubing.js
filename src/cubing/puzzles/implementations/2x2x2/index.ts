@@ -16,9 +16,8 @@ export const cube2x2x2: PuzzleLoader = {
   kpuzzle: getCached(
     async () =>
       new KPuzzle(
-        (
-          await import("../dynamic/side-events/puzzles-dynamic-side-events")
-        ).cube2x2x2JSON,
+        (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+          .cube2x2x2JSON,
       ),
   ),
   svg: async () => {

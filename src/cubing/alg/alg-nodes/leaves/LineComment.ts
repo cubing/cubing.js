@@ -39,7 +39,6 @@ export class LineComment extends AlgCommon<LineComment> {
   toString(): string {
     return `//${this.#text}`;
   }
-
   // toJSON(): LineCommentJSON {
   //   return {
   //     type: "comment",

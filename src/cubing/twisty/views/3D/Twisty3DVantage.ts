@@ -98,8 +98,8 @@ export class Twisty3DVantage extends ManagedCustomElement {
   async #setupBasicPresses(): Promise<void> {
     const dragTracker = await this.#dragTracker();
     dragTracker.addEventListener("press", async (e: CustomEvent<PressInfo>) => {
-      const movePressInput =
-        await this.model!.twistySceneModel.movePressInput.get();
+      const movePressInput = await this
+        .model!.twistySceneModel.movePressInput.get();
       if (movePressInput !== "basic") {
         return;
       }
@@ -177,14 +177,20 @@ export class Twisty3DVantage extends ManagedCustomElement {
     return (this.#cachedRenderer ??= newRenderer());
   }
 
-  #cachedCanvas: Promise<{
-    canvas: HTMLCanvasElement;
-    context: CanvasRenderingContext2D;
-  }> | null = null;
-  async canvasInfo(): Promise<{
-    canvas: HTMLCanvasElement;
-    context: CanvasRenderingContext2D;
-  }> {
+  #cachedCanvas:
+    | Promise<
+      {
+        canvas: HTMLCanvasElement;
+        context: CanvasRenderingContext2D;
+      }
+    >
+    | null = null;
+  async canvasInfo(): Promise<
+    {
+      canvas: HTMLCanvasElement;
+      context: CanvasRenderingContext2D;
+    }
+  > {
     return (this.#cachedCanvas ??= (async () => {
       let canvas: HTMLCanvasElement;
       if (this.rendererIsShared) {
@@ -203,24 +209,24 @@ export class Twisty3DVantage extends ManagedCustomElement {
   async #dragTracker(): Promise<DragTracker> {
     return (this.#cachedDragTracker ??= (async () => {
       const dragTracker = new DragTracker((await this.canvasInfo()).canvas);
-      this.model?.twistySceneModel.dragInput.addFreshListener(
-        (dragInputMode: DragInputMode) => {
-          let dragInputEnabled = false;
-          switch (dragInputMode) {
-            case "auto":
-              dragTracker.start();
-              dragInputEnabled = true;
-              break;
-            case "none":
-              dragTracker.stop();
-              break;
-          }
-          this.contentWrapper.classList.toggle(
-            "drag-input-enabled",
-            dragInputEnabled,
-          );
-        },
-      );
+      this.model?.twistySceneModel.dragInput.addFreshListener((
+        dragInputMode: DragInputMode,
+      ) => {
+        let dragInputEnabled = false;
+        switch (dragInputMode) {
+          case "auto":
+            dragTracker.start();
+            dragInputEnabled = true;
+            break;
+          case "none":
+            dragTracker.stop();
+            break;
+        }
+        this.contentWrapper.classList.toggle(
+          "drag-input-enabled",
+          dragInputEnabled,
+        );
+      });
       return dragTracker;
     })());
   }
@@ -256,20 +262,19 @@ export class Twisty3DVantage extends ManagedCustomElement {
       );
 
       if (this.model) {
-        this.addListener(
-          this.model.twistySceneModel.orbitCoordinates,
-          async (orbitCoordinates: OrbitCoordinates) => {
-            const camera = await this.camera();
-            setCameraFromOrbitCoordinates(
-              camera,
-              orbitCoordinates,
-              this.options?.backView,
-            );
-            // TODO: Wrap in StaleDropper?
+        this.addListener(this.model.twistySceneModel.orbitCoordinates, async (
+          orbitCoordinates: OrbitCoordinates,
+        ) => {
+          const camera = await this.camera();
+          setCameraFromOrbitCoordinates(
+            camera,
+            orbitCoordinates,
+            this.options?.backView,
+          );
+          // TODO: Wrap in StaleDropper?
 
-            this.scheduleRender();
-          },
-        );
+          this.scheduleRender();
+        });
       }
 
       return orbitControls;

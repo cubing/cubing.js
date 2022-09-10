@@ -118,8 +118,8 @@ function comb_to_index(l) {
     bits--;
     if (l[i] === 0) {
       b = (b * --zeros) / bits;
-    } // l[i] === 1
-    else {
+    } else {
+      // l[i] === 1
       ind += b;
       b = (b * ones--) / bits;
     }

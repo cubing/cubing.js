@@ -19,20 +19,14 @@ describe("PuzzleGeometry-OrientCenters", () => {
       includeCornerOrbits: false,
     });
     let os = pg.getOrbitsDef(false);
-    let ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
-      (_) => null,
-    );
+    let ss = schreierSims(os.moveops.map((_) => _.toPerm()), (_) => null);
     expect(Number(ss)).to.equal(768);
     pg = getPuzzleGeometryByName("skewb", {
       orientCenters: true,
       includeCornerOrbits: false,
     });
     os = pg.getOrbitsDef(false);
-    ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
-      (_) => null,
-    );
+    ss = schreierSims(os.moveops.map((_) => _.toPerm()), (_) => null);
     expect(Number(ss)).to.equal(11520);
     pg = getPuzzleGeometryByName("starminx", {
       orientCenters: true,
@@ -41,20 +35,14 @@ describe("PuzzleGeometry-OrientCenters", () => {
       allMoves: true,
     });
     os = pg.getOrbitsDef(false);
-    ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
-      (_) => null,
-    );
+    ss = schreierSims(os.moveops.map((_) => _.toPerm()), (_) => null);
     expect(Number(ss)).to.equal(60);
     pg = getPuzzleGeometryByName("pentultimate", {
       orientCenters: true,
       includeCornerOrbits: false,
     });
     os = pg.getOrbitsDef(false);
-    ss = schreierSims(
-      os.moveops.map((_) => _.toPerm()),
-      (_) => null,
-    );
+    ss = schreierSims(os.moveops.map((_) => _.toPerm()), (_) => null);
     expect(Number(ss)).to.equal(58471875000000000);
   });
 });

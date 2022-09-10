@@ -1,7 +1,8 @@
 import { CSSSource } from "../ManagedCustomElement";
 
 // TODO: Can we do this without so much nesting, and styling all the nested elems?
-export const twisty2DSVGCSS = new CSSSource(`
+export const twisty2DSVGCSS = new CSSSource(
+  `
 :host {
   width: 384px;
   height: 256px;
@@ -32,4 +33,5 @@ svg {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-`);
+`,
+);

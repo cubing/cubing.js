@@ -58,15 +58,15 @@ const SCRAMBLE_EVENTS: Partial<Record<PuzzleID, string>> = {
   "5x5x5": "555",
   "6x6x6": "666",
   "7x7x7": "777",
-  "clock": "clock",
-  "megaminx": "minx",
-  "pyraminx": "pyram",
-  "skewb": "skewb",
-  "square1": "sq1",
-  "fto": "fto",
-  "master_tetraminx": "master_tetraminx",
-  "kilominx": "kilominx",
-  "redi_cube": "redi_cube",
+  clock: "clock",
+  megaminx: "minx",
+  pyraminx: "pyram",
+  skewb: "skewb",
+  square1: "sq1",
+  fto: "fto",
+  master_tetraminx: "master_tetraminx",
+  kilominx: "kilominx",
+  redi_cube: "redi_cube",
 };
 
 export class App {
@@ -237,17 +237,15 @@ class ControlPane {
       a.href = urlString ? urlString : "";
       a.textContent = urlString ? "🎥 Video" : "";
     });
-    twistyPlayer.experimentalModel.competitionID.addFreshListener(
-      (competitionID) => {
-        const a = document.querySelector(
-          ".competition-url",
-        ) as HTMLAnchorElement;
-        a.href = competitionID
-          ? `https://www.worldcubeassociation.org/competitions/${competitionID}`
-          : "";
-        a.textContent = competitionID ? "🏆 Competition" : "";
-      },
-    );
+    twistyPlayer.experimentalModel.competitionID.addFreshListener((
+      competitionID,
+    ) => {
+      const a = document.querySelector(".competition-url") as HTMLAnchorElement;
+      a.href = competitionID
+        ? `https://www.worldcubeassociation.org/competitions/${competitionID}`
+        : "";
+      a.textContent = competitionID ? "🏆 Competition" : "";
+    });
 
     /*******/
 
@@ -263,17 +261,17 @@ class ControlPane {
       "move-count",
       "span",
     );
-    this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener(
-      (algWithIssues: AlgWithIssues) => {
-        if (algWithIssues.issues.errors.length == 0) {
-          this.moveCountDisplay.textContent = ` (${experimentalCountMovesETM(
-            algWithIssues.alg,
-          )} ETM)`;
-        } else {
-          this.moveCountDisplay.textContent = "";
-        }
-      },
-    );
+    this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener((
+      algWithIssues: AlgWithIssues,
+    ) => {
+      if (algWithIssues.issues.errors.length == 0) {
+        this.moveCountDisplay.textContent = ` (${experimentalCountMovesETM(
+          algWithIssues.alg,
+        )} ETM)`;
+      } else {
+        this.moveCountDisplay.textContent = "";
+      }
+    });
 
     this.algInput = findOrCreateChildWithClass(
       this.element,
@@ -287,18 +285,18 @@ class ControlPane {
       "puzzle",
       "select",
     );
-    this.twistyPlayer.experimentalModel.puzzleID
-      .get()
-      .then((puzzleID) => this.initializePuzzleSelect(puzzleID));
+    this.twistyPlayer.experimentalModel.puzzleID.get().then(
+      (puzzleID) => this.initializePuzzleSelect(puzzleID),
+    );
 
     this.setupAnchorSelect = findOrCreateChildWithClass(
       this.element,
       "setup-anchor",
       "select",
     );
-    this.twistyPlayer.experimentalModel.setupAnchor
-      .get()
-      .then((anchor) => this.initializeSetupAnchorSelect(anchor));
+    this.twistyPlayer.experimentalModel.setupAnchor.get().then(
+      (anchor) => this.initializeSetupAnchorSelect(anchor),
+    );
 
     this.stickeringSelect = findOrCreateChildWithClass(
       this.element,
@@ -456,9 +454,9 @@ class ControlPane {
       for (const puzzleOptInfo of puzzles) {
         const option = document.createElement("option");
         option.value = puzzleOptInfo.name;
-        option.textContent = `${puzzleOptInfo.symbol} ${supportedPuzzles[
-          puzzleOptInfo.name
-        ].displayName()}`;
+        option.textContent = `${
+          puzzleOptInfo.symbol
+        } ${supportedPuzzles[puzzleOptInfo.name].displayName()}`;
         optgroup.appendChild(option);
         if (puzzleOptInfo.name === initialPuzzleName) {
           option.selected = true;

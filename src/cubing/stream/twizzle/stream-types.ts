@@ -36,10 +36,10 @@ export interface ResetEvent {
 export type StreamMessageEvent =
   | { event: "move"; data: MoveEvent }
   | {
-      event: "orientation";
-      data: OrientationEvent;
-    }
+    event: "orientation";
+    data: OrientationEvent;
+  }
   | {
-      event: "reset";
-      data: ResetEvent;
-    };
+    event: "reset";
+    data: ResetEvent;
+  };

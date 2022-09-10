@@ -26,85 +26,195 @@ function err(propName: string): Error {
 export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   experimentalModel: TwistyPlayerModel = new TwistyPlayerModel();
 
-  set alg(newAlg: Alg | string) { this.experimentalModel.alg.set(newAlg); }
-  get alg(): never { throw err("alg"); }
+  set alg(newAlg: Alg | string) {
+    this.experimentalModel.alg.set(newAlg);
+  }
+  get alg(): never {
+    throw err("alg");
+  }
 
-  set experimentalSetupAlg(newSetup: Alg | string) { this.experimentalModel.setupAlg.set(newSetup); }
-  get experimentalSetupAlg(): never { throw err("setup"); }
+  set experimentalSetupAlg(newSetup: Alg | string) {
+    this.experimentalModel.setupAlg.set(newSetup);
+  }
+  get experimentalSetupAlg(): never {
+    throw err("setup");
+  }
 
-  set experimentalSetupAnchor(anchor: SetupToLocation) { this.experimentalModel.setupAnchor.set(anchor); }
-  get experimentalSetupAnchor(): never { throw err("anchor"); }
+  set experimentalSetupAnchor(anchor: SetupToLocation) {
+    this.experimentalModel.setupAnchor.set(anchor);
+  }
+  get experimentalSetupAnchor(): never {
+    throw err("anchor");
+  }
 
-  set puzzle(puzzleID: PuzzleID) { this.experimentalModel.puzzleIDRequest.set(puzzleID); }
-  get puzzle(): never { throw err("puzzle"); }
+  set puzzle(puzzleID: PuzzleID) {
+    this.experimentalModel.puzzleIDRequest.set(puzzleID);
+  }
+  get puzzle(): never {
+    throw err("puzzle");
+  }
 
-  set experimentalPuzzleDescription(puzzleDescription: PuzzleDescriptionString) { this.experimentalModel.puzzleDescriptionRequest.set(puzzleDescription); }
-  get experimentalPuzzleDescription(): never { throw err("experimentalPuzzleDescription"); }
+  set experimentalPuzzleDescription(puzzleDescription: PuzzleDescriptionString) {
+    this.experimentalModel.puzzleDescriptionRequest.set(puzzleDescription);
+  }
+  get experimentalPuzzleDescription(): never {
+    throw err("experimentalPuzzleDescription");
+  }
 
-  set timestamp(timestamp: TimestampRequest) { this.experimentalModel.timestampRequest.set(timestamp); }
-  get timestamp(): never { throw err("timestamp"); }
+  set timestamp(timestamp: TimestampRequest) {
+    this.experimentalModel.timestampRequest.set(timestamp);
+  }
+  get timestamp(): never {
+    throw err("timestamp");
+  }
 
-  set hintFacelets(hintFaceletStyle: HintFaceletStyleWithAuto) { this.experimentalModel.twistySceneModel.hintFacelet.set(hintFaceletStyle); }
-  get hintFacelets(): never { throw err("hintFacelets"); }
+  set hintFacelets(hintFaceletStyle: HintFaceletStyleWithAuto) {
+    this.experimentalModel.twistySceneModel.hintFacelet.set(hintFaceletStyle);
+  }
+  get hintFacelets(): never {
+    throw err("hintFacelets");
+  }
 
-  set experimentalStickering(stickering: ExperimentalStickering) { this.experimentalModel.twistySceneModel.stickering.set(stickering); }
-  get experimentalStickering(): never { throw err("stickering"); }
+  set experimentalStickering(stickering: ExperimentalStickering) {
+    this.experimentalModel.twistySceneModel.stickering.set(stickering);
+  }
+  get experimentalStickering(): never {
+    throw err("stickering");
+  }
 
-  set backView(backView: BackViewLayoutWithAuto) { this.experimentalModel.backView.set(backView); }
-  get backView(): never { throw err("backView"); }
+  set backView(backView: BackViewLayoutWithAuto) {
+    this.experimentalModel.backView.set(backView);
+  }
+  get backView(): never {
+    throw err("backView");
+  }
 
-  set background(backgroundTheme: BackgroundThemeWithAuto) { this.experimentalModel.twistySceneModel.background.set(backgroundTheme); }
-  get background(): never { throw err("background"); }
+  set background(backgroundTheme: BackgroundThemeWithAuto) {
+    this.experimentalModel.twistySceneModel.background.set(backgroundTheme);
+  }
+  get background(): never {
+    throw err("background");
+  }
 
-  set controlPanel(newControlPanel: ControlPanelThemeWithAuto) { this.experimentalModel.controlPanel.set(newControlPanel); }
-  get controlPanel(): never { throw err("controlPanel"); }
+  set controlPanel(newControlPanel: ControlPanelThemeWithAuto) {
+    this.experimentalModel.controlPanel.set(newControlPanel);
+  }
+  get controlPanel(): never {
+    throw err("controlPanel");
+  }
 
-  set visualization(visualizationFormat: VisualizationFormatWithAuto) { this.experimentalModel.visualizationFormat.set(visualizationFormat); }
-  get visualization(): never { throw err("visualization"); }
+  set visualization(visualizationFormat: VisualizationFormatWithAuto) {
+    this.experimentalModel.visualizationFormat.set(visualizationFormat);
+  }
+  get visualization(): never {
+    throw err("visualization");
+  }
 
-  set experimentalTitle(title: string | null) { this.experimentalModel.title.set(title); }
-  get experimentalTitle(): never { throw err("experimentalTitle"); }
+  set experimentalTitle(title: string | null) {
+    this.experimentalModel.title.set(title);
+  }
+  get experimentalTitle(): never {
+    throw err("experimentalTitle");
+  }
 
-  set experimentalVideoURL(videoURL: string | null) { this.experimentalModel.videoURL.set(videoURL); }
-  get experimentalVideoURL(): never { throw err("experimentalVideoURL"); }
+  set experimentalVideoURL(videoURL: string | null) {
+    this.experimentalModel.videoURL.set(videoURL);
+  }
+  get experimentalVideoURL(): never {
+    throw err("experimentalVideoURL");
+  }
 
-  set experimentalCompetitionID(competitionID: string | null) { this.experimentalModel.competitionID.set(competitionID); }
-  get experimentalCompetitionID(): never { throw err("experimentalCompetitionID"); }
+  set experimentalCompetitionID(competitionID: string | null) {
+    this.experimentalModel.competitionID.set(competitionID);
+  }
+  get experimentalCompetitionID(): never {
+    throw err("experimentalCompetitionID");
+  }
 
-  set viewerLink(viewerLinkPage: ViewerLinkPageWithAuto) { this.experimentalModel.viewerLink.set(viewerLinkPage); }
-  get viewerLink(): never { throw err("viewerLink"); }
+  set viewerLink(viewerLinkPage: ViewerLinkPageWithAuto) {
+    this.experimentalModel.viewerLink.set(viewerLinkPage);
+  }
+  get viewerLink(): never {
+    throw err("viewerLink");
+  }
 
-  set experimentalMovePressInput(movePressInput: MovePressInput) { this.experimentalModel.twistySceneModel.movePressInput.set(movePressInput); }
-  get experimentalMovePressInput(): never { throw err("experimentalMovePressInput"); }
+  set experimentalMovePressInput(movePressInput: MovePressInput) {
+    this.experimentalModel.twistySceneModel.movePressInput.set(movePressInput);
+  }
+  get experimentalMovePressInput(): never {
+    throw err("experimentalMovePressInput");
+  }
 
-  set cameraLatitude(latitude: number) { this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({ latitude }); }
-  get cameraLatitude(): never { throw err("cameraLatitude"); }
+  set cameraLatitude(latitude: number) {
+    this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({
+      latitude,
+    });
+  }
+  get cameraLatitude(): never {
+    throw err("cameraLatitude");
+  }
 
-  set cameraLongitude(longitude: number) { this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({ longitude }); }
-  get cameraLongitude(): never { throw err("cameraLongitude"); }
+  set cameraLongitude(longitude: number) {
+    this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({
+      longitude,
+    });
+  }
+  get cameraLongitude(): never {
+    throw err("cameraLongitude");
+  }
 
-  set cameraDistance(distance: number) { this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({ distance }); }
-  get cameraDistance(): never { throw err("cameraDistance"); }
+  set cameraDistance(distance: number) {
+    this.experimentalModel.twistySceneModel.orbitCoordinatesRequest.set({
+      distance,
+    });
+  }
+  get cameraDistance(): never {
+    throw err("cameraDistance");
+  }
 
-  set cameraLatitudeLimit(latitudeLimit: number) { this.experimentalModel.twistySceneModel.latitudeLimit.set(latitudeLimit); }
-  get cameraLatitudeLimit(): never { throw err("cameraLatitudeLimit"); }
+  set cameraLatitudeLimit(latitudeLimit: number) {
+    this.experimentalModel.twistySceneModel.latitudeLimit.set(latitudeLimit);
+  }
+  get cameraLatitudeLimit(): never {
+    throw err("cameraLatitudeLimit");
+  }
 
-  set indexer(indexer: IndexerStrategyName) { this.experimentalModel.indexerConstructorRequest.set(indexer); }
-  get indexer(): never { throw err("indexer"); }
+  set indexer(indexer: IndexerStrategyName) {
+    this.experimentalModel.indexerConstructorRequest.set(indexer);
+  }
+  get indexer(): never {
+    throw err("indexer");
+  }
 
-  set tempoScale(newTempoScale: number) { this.experimentalModel.tempoScale.set(newTempoScale); }
-  get tempoScale(): never { throw err("tempoScale"); }
+  set tempoScale(newTempoScale: number) {
+    this.experimentalModel.tempoScale.set(newTempoScale);
+  }
+  get tempoScale(): never {
+    throw err("tempoScale");
+  }
 
-  set experimentalSprite(url: string | URL) { this.experimentalModel.twistySceneModel.foundationStickerSpriteURL.set(url); }
-  get experimentalSprite(): never { throw err("experimentalSprite"); }
+  set experimentalSprite(url: string | URL) {
+    this.experimentalModel.twistySceneModel.foundationStickerSpriteURL.set(url);
+  }
+  get experimentalSprite(): never {
+    throw err("experimentalSprite");
+  }
 
-  set experimentalHintSprite(url: string | URL) { this.experimentalModel.twistySceneModel.hintStickerSpriteURL.set(url); }
-  get experimentalHintSprite(): never { throw err("experimentalHintSprite"); }
+  set experimentalHintSprite(url: string | URL) {
+    this.experimentalModel.twistySceneModel.hintStickerSpriteURL.set(url);
+  }
+  get experimentalHintSprite(): never {
+    throw err("experimentalHintSprite");
+  }
 
-  set experimentalDragInput(dragInputMode: DragInputMode) { this.experimentalModel.twistySceneModel.dragInput.set(dragInputMode); }
-  get experimentalDragInput(): never { throw err("experimentalDragInput"); }
+  set experimentalDragInput(dragInputMode: DragInputMode) {
+    this.experimentalModel.twistySceneModel.dragInput.set(dragInputMode);
+  }
+  get experimentalDragInput(): never {
+    throw err("experimentalDragInput");
+  }
 
-  experimentalGet = new ExperimentalGetters(this.experimentalModel)
+  experimentalGet = new ExperimentalGetters(this.experimentalModel);
 }
 
 class ExperimentalGetters {

@@ -26,47 +26,47 @@ const expectedData: { [nam: string]: string } = {
   "20x20x20": "20x20x20, 6, 400, 2168, 91, 60, 420",
   "30x30x30": "30x30x30, 6, 900, 5048, 211, 90, 420",
   "40x40x40": "40x40x40, 6, 1600, 9128, 381, 120, 420",
-  "skewb": "skewb, 6, 5, 14, 3, 8, 9",
+  skewb: "skewb, 6, 5, 14, 3, 8, 9",
   "master skewb": "master skewb, 6, 13, 50, 6, 12, 2520",
   "professor skewb": "professor skewb, 6, 25, 110, 11, 16, 360",
   "compy cube": "compy cube, 6, 9, 26, 4, 12, 42",
-  "helicopter": "helicopter, 6, 8, 32, 2, 18, 18",
+  helicopter: "helicopter, 6, 8, 32, 2, 18, 18",
   "curvy copter": "curvy copter, 6, 13, 50, 4, 18, 18",
-  "dino": "dino, 6, 4, 12, 1, 12, 7",
+  dino: "dino, 6, 4, 12, 1, 12, 7",
   "little chop": "little chop, 6, 4, 24, 1, 12, 5",
-  "pyramorphix": "pyramorphix, 4, 4, 8, 2, 6, 1",
-  "mastermorphix": "mastermorphix, 4, 10, 26, 8, 9, 2",
-  "pyraminx": "pyraminx, 4, 9, 14, 3, 12, 9",
-  "tetraminx": "tetraminx, 4, 6, 10, 2, 8, 30",
+  pyramorphix: "pyramorphix, 4, 4, 8, 2, 6, 1",
+  mastermorphix: "mastermorphix, 4, 10, 26, 8, 9, 2",
+  pyraminx: "pyraminx, 4, 9, 14, 3, 12, 9",
+  tetraminx: "tetraminx, 4, 6, 10, 2, 8, 30",
   "master pyraminx": "master pyraminx, 4, 16, 30, 5, 16, 99",
   "master tetraminx": "master tetraminx, 4, 13, 26, 4, 12, 33",
   "professor pyraminx": "professor pyraminx, 4, 25, 54, 7, 20, 198",
   "professor tetraminx": "professor tetraminx, 4, 22, 50, 6, 16, 264",
   "Jing pyraminx": "Jing pyraminx, 4, 7, 14, 3, 8, 30",
   "master pyramorphix": "master pyramorphix, 4, 10, 26, 8, 9, 2",
-  "megaminx": "megaminx, 12, 11, 62, 3, 18, 702",
-  "gigaminx": "gigaminx, 12, 31, 242, 6, 30, 18181800",
-  "teraminx": "teraminx, 12, 61, 542, 11, 42, 18181800",
-  "petaminx": "petaminx, 12, 101, 962, 18, 54, 18181800",
-  "examinx": "examinx, 12, 151, 1502, 27, 66, 18181800",
-  "zetaminx": "zetaminx, 12, 211, 2162, 38, 78, 18181800",
-  "yottaminx": "yottaminx, 12, 281, 2942, 51, 90, 18181800",
-  "pentultimate": "pentultimate, 12, 6, 32, 2, 12, 132",
+  megaminx: "megaminx, 12, 11, 62, 3, 18, 702",
+  gigaminx: "gigaminx, 12, 31, 242, 6, 30, 18181800",
+  teraminx: "teraminx, 12, 61, 542, 11, 42, 18181800",
+  petaminx: "petaminx, 12, 101, 962, 18, 54, 18181800",
+  examinx: "examinx, 12, 151, 1502, 27, 66, 18181800",
+  zetaminx: "zetaminx, 12, 211, 2162, 38, 78, 18181800",
+  yottaminx: "yottaminx, 12, 281, 2942, 51, 90, 18181800",
+  pentultimate: "pentultimate, 12, 6, 32, 2, 12, 132",
   "master pentultimate": "master pentultimate, 12, 16, 122, 4, 18, 1741740",
   "elite pentultimate": "elite pentultimate, 12, 31, 272, 6, 24, 6832980",
-  "starminx": "starminx, 12, 11, 62, 3, 30, 660",
+  starminx: "starminx, 12, 11, 62, 3, 30, 660",
   "starminx 2": "starminx 2, 12, 11, 102, 3, 18, 158340",
   "pyraminx crystal": "pyraminx crystal, 12, 10, 50, 2, 18, 9828",
-  "chopasaurus": "chopasaurus, 12, 11, 92, 3, 20, 63954",
+  chopasaurus: "chopasaurus, 12, 11, 92, 3, 20, 63954",
   "big chop": "big chop, 12, 10, 120, 2, 30, 24633",
   "skewb diamond": "skewb diamond, 8, 4, 14, 3, 8, 6",
-  "FTO": "FTO, 8, 9, 42, 4, 12, 990",
+  FTO: "FTO, 8, 9, 42, 4, 12, 990",
   "master FTO": "master FTO, 8, 16, 86, 9, 16, 330",
   "Christopher's jewel": "Christopher's jewel, 8, 6, 18, 2, 9, 24",
-  "octastar": "octastar, 8, 6, 24, 1, 12, 117",
+  octastar: "octastar, 8, 6, 24, 1, 12, 117",
   "Trajber's octahedron": "Trajber's octahedron, 8, 7, 26, 3, 9, 120",
   "radio chop": "radio chop, 20, 10, 92, 3, 20, 41580",
-  "icosamate": "icosamate, 20, 4, 32, 2, 12, 720",
+  icosamate: "icosamate, 20, 4, 32, 2, 12, 720",
   "icosahedron 2": "icosahedron 2, 20, 9, 102, 3, 18, 432630",
   "icosahedron 3": "icosahedron 3, 20, 18, 360, 6, 48, 1615854240",
   "icosahedron static faces": "icosahedron static faces, 20, 7, 62, 3, 18, 180",
@@ -86,9 +86,9 @@ describe("PuzzleGeometry-Puzzles", () => {
       const pg = getPuzzleGeometryByDesc(desc, {});
       const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
       const sep = ", ";
-      const seq = Object.getOwnPropertyNames(kpuzzleDefinition.moves)
-        .sort()
-        .join(" ");
+      const seq = Object.getOwnPropertyNames(
+        kpuzzleDefinition.moves,
+      ).sort().join(" ");
       let algo = Alg.fromString(seq);
       // TODO:  likely a temporary hack until we resolve how notations are
       // added or set in puzzle geometry.
@@ -100,9 +100,7 @@ describe("PuzzleGeometry-Puzzles", () => {
       algo = new Alg(bms);
       const o = new KPuzzle(kpuzzleDefinition, {
         experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
-      })
-        .algToTransformation(algo)
-        .repetitionOrder();
+      }).algToTransformation(algo).repetitionOrder();
       const dat = [
         name,
         sep,

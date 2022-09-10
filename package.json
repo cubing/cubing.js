@@ -59,31 +59,22 @@
     "three": "^0.143.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.18.9",
-    "@babel/preset-env": "^7.18.10",
-    "@babel/preset-typescript": "^7.18.6",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/chai": "^4.3.3",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.7.2",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
     "@web/dev-server-esbuild": "^0.3.2",
     "@web/test-runner": "^0.14.0",
     "@web/test-runner-playwright": "^0.8.10",
     "barely-a-dev-server": "^0.3.4",
     "chai": "^4.3.6",
     "esbuild": "^0.15.3",
-    "eslint": "^8.21.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-html": "^7.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "jszip": "^3.10.1",
     "mocha": "^10.0.0",
     "peggy": "^2.0.1",
     "playwright": "^1.25.1",
-    "prettier": "^2.7.1",
+    "rome": "^0.9.2-next",
     "tsup": "^6.2.2",
     "typedoc": "^0.23.10",
     "typescript": "^4.7.4",
@@ -124,7 +115,7 @@
     "link": "npm run build && npm link",
     "clean": "rm -rf dist .temp coverage src/cubing/search/search-worker-inside-generated* ./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty",
     "test": "echo \"Run one of the following.\n(Time estimates are based on a fast computer.)\n\n    make test-spec (≈4s, \\`*.spec.ts\\` files only)\n\n    make test-src   (≈30s, includes \\`make test-spec\\`)\n    make test-build (≈10s)\n    make test-dist  (≈30s)\n\n    make test-all  (≈70s, runs all of the above)\n    make test-fast (≈6s, runs a subset of the above)\n\"",
-    "test-fast": "npm run build-esm && npm run build-sites && npm run build-bin && npm run test-spec",
+    "test-fast": "npm run build-esm && npm run lint && npm run build-sites && npm run build-bin && npm run test-spec",
     "test-all": "npm run test-src && npm run test-build && npm run test-dist",
     "test-src": "npm run test-spec && npm run lint && npm run test-src-tsc && npm run test-src-internal-import-restrictions && npm run test-src-does-not-import-dist # keep CI.yml in sync with this",
     "test-spec": "npx @web/test-runner --playwright",
@@ -141,10 +132,11 @@
     "test-dist-esm-parcel": "node ./script/test/dist/esm/parcel/main.js",
     "test-dist-esm-vite": "node ./script/test/dist/esm/vite/main.js",
     "test-dist-sites-experiments": "node ./script/test/dist/experiments/main.js",
-    "format": "npx eslint --fix --ext=js,ts src script; npx prettier --write src script",
+    "format": "npx rome format --write ./script ./src",
     "setup": "npm ci",
     "quick-setup": "node ./script/quick-setup/main.js",
-    "lint": "npx eslint --ext=js,ts src script",
+    "lint": "npx rome check ./script ./src",
+    "lint-ci": "npx rome ci ./script ./src",
     "prepack": "npm run clean && npm run build && npm run test-dist-esm-node-import && npm run test-dist-esm-plain-esbuild-compat",
     "postpublish": "echo -e '\n\nConsider updating \\`cdn.cubing.net\\` if you have access:\nhttps://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version\n'"
   },
@@ -158,98 +150,5 @@
     "bluetooth",
     "rubik",
     "rubik's"
-  ],
-  "prettier": {
-    "semi": true,
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "quoteProps": "consistent"
-  },
-  "eslintConfig": {
-    "parser": "@babel/eslint-parser",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
-    "overrides": [
-      {
-        "files": "**/*.js",
-        "parser": "@babel/eslint-parser",
-        "extends": [
-          "eslint:recommended"
-        ],
-        "rules": {
-          "no-unused-vars": [
-            "error",
-            {
-              "argsIgnorePattern": "^_"
-            }
-          ]
-        }
-      },
-      {
-        "files": "**/*.ts",
-        "parser": "@typescript-eslint/parser",
-        "plugins": [
-          "@typescript-eslint"
-        ],
-        "extends": [
-          "eslint:recommended",
-          "plugin:@typescript-eslint/recommended",
-          "plugin:@typescript-eslint/recommended-requiring-type-checking"
-        ],
-        "rules": {
-          "curly": "error",
-          "no-throw-literal": "error",
-          "@typescript-eslint/no-inferrable-types": "off",
-          "@typescript-eslint/no-floating-promises": "off",
-          "@typescript-eslint/no-unsafe-assignment": "off",
-          "@typescript-eslint/no-unsafe-member-access": "off",
-          "@typescript-eslint/no-explicit-any": "off",
-          "@typescript-eslint/no-misused-promises": "off",
-          "@typescript-eslint/require-await": "off",
-          "@typescript-eslint/no-unused-vars": [
-            "error",
-            {
-              "argsIgnorePattern": "^_"
-            }
-          ],
-          "@typescript-eslint/no-unsafe-argument": "off",
-          "@typescript-eslint/no-non-null-assertion": "off",
-          "@typescript-eslint/no-unsafe-call": "off",
-          "@typescript-eslint/no-empty-function": "off",
-          "@typescript-eslint/restrict-plus-operands": "off",
-          "@typescript-eslint/restrict-template-expressions": "off",
-          "@typescript-eslint/no-unsafe-return": "off"
-        }
-      }
-    ],
-    "ignorePatterns": [
-      "/src/static",
-      "/src/cubing/search/search-worker-inside-generated*",
-      "parser-peggy.js"
-    ],
-    "globals": {
-      "globalThis": false,
-      "Promise": false,
-      "Symbol": false
-    },
-    "env": {
-      "commonjs": true,
-      "browser": true,
-      "node": true
-    }
-  },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ],
-      "@babel/preset-typescript"
-    ]
-  }
+  ]
 }
