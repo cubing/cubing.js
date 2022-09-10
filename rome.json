@@ -1,0 +1,27 @@
+{
+  "formatter": {
+    "indentStyle": "space",
+    "indentSize": 2
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "js": {
+        "recommended": true,
+        "rules": {
+          "noDelete": "off",
+          "noUnusedVariables": "off",
+          "useSingleCaseStatement": "off",
+          "noUnusedTemplateLiteral": "off",
+          "useTemplate": "off"
+        }
+      },
+      "ts": {
+        "recommended": true,
+        "rules": {
+          "useShorthandArrayType": "off"
+        }
+      }
+    }
+  }
+}
