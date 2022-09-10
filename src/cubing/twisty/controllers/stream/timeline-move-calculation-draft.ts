@@ -120,7 +120,7 @@ eventsToTimeline(events):
   for e of events:
     add event to timeline with range {start: e.centerTime - radius, end: e.centerTime + radius}
     for each event d of the frontier:
-      if d.base == e.base && sign(d.amount) == sign(e.amount): # d and e have the same base move in the same direction:
+      if d.base === e.base && sign(d.amount) === sign(e.amount): # d and e have the same base move in the same direction:
         coalesce(d, e)
         continue outer loop
       if d.end > e.start and conflicts(d, e):
@@ -143,7 +143,7 @@ coalesce(d, e):
   }
 
 conflicts(d, e):
-  if d.base == e.base && sign(d.amount) != sign(e.amount):
+  if d.base === e.base && sign(d.amount) !== sign(e.amount):
     return true
   # else, depends on the puzzle
 

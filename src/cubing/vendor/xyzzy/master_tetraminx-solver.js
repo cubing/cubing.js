@@ -37,7 +37,7 @@ function permutation_to_index(perm) {
   let ind = 0;
   while (n > 1) {
     n--;
-    // invariant: f == factorial(n)
+    // invariant: f === factorial(n)
     // also, perm stores meaningful values up to perm[n]
     let e = perm[0];
     ind += e * f;
@@ -1184,7 +1184,7 @@ function bfs(mtable, goal_states) {
       ptable[state] = depth;
       for (let move_index = 0; move_index < nmoves; move_index++) {
         let new_state = mtable[state][move_index];
-        while (new_state != state) {
+        while (new_state !== state) {
           new_queue.push(new_state);
           new_state = mtable[new_state][move_index];
         }
@@ -1226,7 +1226,7 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
     for (let c = 0; c < ncoords; c++)
       new_indices[c] = mtables[c][indices[c]][m];
     let r = 1;
-    while (indices.some((_, i) => indices[i] != new_indices[i])) {
+    while (indices.some((_, i) => indices[i] !== new_indices[i])) {
       let subpath_gen = ida_search_gen(
         new_indices,
         mtables,

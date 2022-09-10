@@ -1048,7 +1048,7 @@ export class PuzzleGeometry {
       let c1 = faceindextoname[f1];
       const c2 = faceindextoname[f2];
       const bits = (1 << f1) | (1 << f2);
-      if (markedface[bits] == f1) {
+      if (markedface[bits] === f1) {
         c1 = c1 + sep + c2;
       } else {
         c1 = c2 + sep + c1;
@@ -1988,7 +1988,7 @@ export class PuzzleGeometry {
               hii = hii2;
             }
             // remake the face to preserve orientations
-            if (hii != 0) {
+            if (hii !== 0) {
               const qs = [];
               for (let ii = 0; ii < this.faces[kk].length; ii++) {
                 qs.push(this.faces[kk].get((ii + hii) % this.faces[kk].length));
@@ -2111,7 +2111,7 @@ export class PuzzleGeometry {
             }
           }
         }
-        // b.length == 2 means a sticker is spinning in place.
+        // b.length === 2 means a sticker is spinning in place.
         // in this case we add duplicate stickers
         // so that we can make it animate properly in a 3D world.
         if (b.length === 2 && this.options.orientCenters) {

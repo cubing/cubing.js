@@ -19,7 +19,6 @@
         "useSimplifiedLogicExpression": "off",
         "useSingleVarDeclarator": "off",
         "useBlockStatements": "off",
-        "noDoubleEquals": "off",
         "noArguments": "off",
         "noAsyncPromiseExecutor": "off"
       },

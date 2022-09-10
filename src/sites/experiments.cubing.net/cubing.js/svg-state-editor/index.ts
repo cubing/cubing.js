@@ -197,7 +197,7 @@ class Facelet {
       case "swap":
         if (
           app.cube.selectedFacelet &&
-          app.cube.selectedFacelet.type == this.type
+          app.cube.selectedFacelet.type === this.type
         ) {
           app.cube.swap(app.cube.selectedFacelet, this);
 

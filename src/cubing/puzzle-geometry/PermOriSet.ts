@@ -80,7 +80,7 @@ export class PGOrbitsDef {
       }
       const pd = this.moveops[i].orbits[s];
       for (let j = 0; j < n; j++) {
-        if (pd.perm[j] != j || pd.ori[j] != 0) {
+        if (pd.perm[j] !== j || pd.ori[j] !== 0) {
           m[j].push(mvname);
         }
       }

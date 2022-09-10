@@ -264,7 +264,7 @@ class ControlPane {
     this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener((
       algWithIssues: AlgWithIssues,
     ) => {
-      if (algWithIssues.issues.errors.length == 0) {
+      if (algWithIssues.issues.errors.length === 0) {
         this.moveCountDisplay.textContent = ` (${experimentalCountMovesETM(
           algWithIssues.alg,
         )} ETM)`;

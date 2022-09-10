@@ -109,7 +109,7 @@ export class TwistyPuzzleDescriptionInput extends HTMLElement {
         best = v;
       }
     }
-    if (best != 1000) {
+    if (best !== 1000) {
       return best;
     }
     return ival;

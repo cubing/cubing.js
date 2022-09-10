@@ -106,7 +106,7 @@ function permutation_to_index(perm) {
   let ind = 0;
   while (n > 1) {
     n--;
-    // invariant: f == factorial(n)
+    // invariant: f === factorial(n)
     // also, perm stores meaningful values up to perm[n]
     let e = perm[0];
     ind += e * f;
@@ -1166,7 +1166,7 @@ function* ida_search_gen(indices, mtables, ptables, bound, last, commute) {
     for (let c = 0; c < ncoords; c++)
       new_indices[c] = mtables[c][m][indices[c]];
     let r = 1;
-    while (indices.some((_, i) => indices[i] != new_indices[i])) {
+    while (indices.some((_, i) => indices[i] !== new_indices[i])) {
       let subpath_gen = ida_search_gen(
         new_indices,
         mtables,
@@ -1349,7 +1349,7 @@ function* phase1_ida_search_gen(indices, mtables, ptables, bound, last) {
     new_indices[1] = mtables[1][m][indices[1]];
     new_indices[2] = mtables[2][m][indices[2]];
     let r = 1;
-    while (indices.some((_, i) => indices[i] != new_indices[i])) {
+    while (indices.some((_, i) => indices[i] !== new_indices[i])) {
       let subpath_gen = phase1_ida_search_gen(
         new_indices,
         mtables,

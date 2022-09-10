@@ -92,7 +92,7 @@ function permutation_to_index(perm) {
   let ind = 0;
   while (n > 1) {
     n--;
-    // invariant: f == factorial(n)
+    // invariant: f === factorial(n)
     // also, perm stores meaningful values up to perm[n]
     let e = perm[0];
     ind += e * f;
@@ -721,7 +721,7 @@ function solve_phase1(state) {
 }
 
 function search_phase1(flags, depth, last) {
-  if (depth == 0) {
+  if (depth === 0) {
     if (flags.slice(0, 5).some((x) => x)) return;
     return [];
   }
@@ -1212,7 +1212,7 @@ function ida_search(indices, mtables, ptables, bound, last) {
     for (let c = 0; c < ncoords; c++)
       new_indices[c] = mtables[c][indices[c]][m];
     let r = 1;
-    while (indices.some((_, i) => indices[i] != new_indices[i])) {
+    while (indices.some((_, i) => indices[i] !== new_indices[i])) {
       let subpath = ida_search(new_indices, mtables, ptables, bound - 1, m);
       if (subpath !== undefined) return [[m, r]].concat(subpath);
       for (let c = 0; c < ncoords; c++) {
