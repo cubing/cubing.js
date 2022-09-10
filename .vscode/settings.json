@@ -3,6 +3,5 @@
   "editor.defaultFormatter": "rome.rome",
   "[typescript]": {
     "editor.defaultFormatter": "rome.rome"
-  },
-  "rome.lspBin": "node_modules/rome/bin/rome"
+  }
 }
