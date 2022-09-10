@@ -282,7 +282,7 @@ export const binTarget = {
 export const sitesTarget = {
   name: "sites",
   builtYet: false,
-  dependencies: [],
+  dependencies: [searchWorkerTarget],
   buildSelf: async (dev) => {
     await barelyServe(siteOptions("sites", dev));
   },
