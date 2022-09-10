@@ -1,4 +1,4 @@
-import { expect } from "../../../test/chai-workaround";
+import { expect } from "../../../test/chai-workarounds";
 
 import type { KState } from "../../kpuzzle/KState";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";

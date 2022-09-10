@@ -1,4 +1,4 @@
-import { expect } from "../../../test/chai-workaround";
+import { expect } from "../../../test/chai-workarounds";
 import { Alg, Move, Pause } from "../../alg";
 import { TwistyPlayerModel } from "./TwistyPlayerModel";
 

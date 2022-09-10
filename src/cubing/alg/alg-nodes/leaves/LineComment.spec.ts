@@ -1,4 +1,4 @@
-import { expect } from "../../../../test/chai-workaround";
+import { expect } from "../../../../test/chai-workarounds";
 import { LineComment } from "./LineComment";
 
 describe("LineComment", () => {

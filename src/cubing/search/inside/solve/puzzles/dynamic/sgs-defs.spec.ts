@@ -1,4 +1,4 @@
-import { expect } from "../../../../../../test/chai-workaround";
+import { expect } from "../../../../../../test/chai-workarounds";
 
 import { cachedData222 } from "./sgs-side-events/search-dynamic-sgs-side-events";
 import { cachedSGSDataMegaminx } from "./sgs-side-events/search-dynamic-sgs-side-events";

@@ -1,4 +1,4 @@
-import { expect } from "../../../../../test/chai-workaround";
+import { expect } from "../../../../../test/chai-workarounds";
 
 import { KPuzzle } from "../../../../kpuzzle";
 import { cube3x3x3KPuzzleDefinition } from "./3x3x3.kpuzzle.json";
