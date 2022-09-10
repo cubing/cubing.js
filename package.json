@@ -83,7 +83,8 @@
   "minimalDevDependencies": [
     "barely-a-dev-server",
     "esbuild",
-    "jszip"
+    "jszip",
+    "rome"
   ],
   "engines": {
     "node": "^16.13 || >=18"
