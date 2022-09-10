@@ -31,7 +31,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: make test-spec
-      - run: make lint
+      - run: make lint-ci
       - run: make test-src-tsc
       - run: make test-src-internal-import-restrictions
       - run: make test-src-does-not-import-dist
