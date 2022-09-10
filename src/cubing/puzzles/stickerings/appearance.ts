@@ -144,9 +144,11 @@ export function getPieceAppearance(
       return d;
     case PieceStickering.Ignored:
       return i;
-    case PieceStickering.OrientationStickers: // TODO: Hack for centers. This shouldn't be needed.
+    case PieceStickering.OrientationStickers:
+      // TODO: Hack for centers. This shouldn't be needed.
       return o;
-    case PieceStickering.Invisible: // TODO: Hack for centers. This shouldn't be needed.
+    case PieceStickering.Invisible:
+      // TODO: Hack for centers. This shouldn't be needed.
       return invisiblePiece;
     case PieceStickering.IgnoreNonPrimary:
       return riiii;
@@ -239,8 +241,9 @@ export class StickeringManager {
       this.kpuzzle.definition.orbits,
     )) {
       for (let i = 0; i < orbitDef.numPieces; i++) {
-        newPieceSet.stickerings.get(orbitName)![i] =
-          !pieceSet.stickerings.get(orbitName)![i];
+        newPieceSet.stickerings.get(orbitName)![i] = !pieceSet.stickerings.get(
+          orbitName,
+        )![i];
       }
     }
     return newPieceSet;
@@ -289,7 +292,6 @@ export class StickeringManager {
     }
     return pieceSet;
   }
-
   // trueCounts(pieceSet: PieceSet): Record<string, number> {
   //   const counts: Record<string, number> = {};
   //   for (const [orbitName, orbitDef] of Object.entries(this.def.orbits)) {

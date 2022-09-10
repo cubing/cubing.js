@@ -40,9 +40,9 @@ export class SimpleAlgIndexer implements AlgIndexer {
   }
 
   public stateAtIndex(index: number): KState {
-    return this.kpuzzle
-      .startState()
-      .applyTransformation(this.transformationAtIndex(index));
+    return this.kpuzzle.startState().applyTransformation(
+      this.transformationAtIndex(index),
+    );
   }
 
   public transformationAtIndex(index: number): KTransformation {

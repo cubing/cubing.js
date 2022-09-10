@@ -20,8 +20,8 @@ const puzzleIDs = {
   "3x3x3": true,
   "4x4x4": true,
   "5x5x5": true,
-  "fto": true,
-  "megaminx": true,
+  fto: true,
+  megaminx: true,
 };
 export const DEFAULT_PUZZLE_ID = "3x3x3";
 export type PuzzleID = keyof typeof puzzleIDs;

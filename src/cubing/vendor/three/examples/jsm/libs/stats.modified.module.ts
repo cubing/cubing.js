@@ -6,11 +6,11 @@
 const performance:
   | null
   | (Performance & {
-      memory?: {
-        usedJSHeapSize: number;
-        jsHeapSizeLimit: number;
-      };
-    }) = globalThis.performance;
+    memory?: {
+      usedJSHeapSize: number;
+      jsHeapSizeLimit: number;
+    };
+  }) = globalThis.performance;
 
 export class Stats {
   mode = 0;

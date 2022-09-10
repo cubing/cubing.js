@@ -95,8 +95,9 @@ export class TwistyAlgEditor extends ManagedCustomElement {
       this.onInput();
     });
     this.#textarea.addEventListener("blur", () => this.onBlur());
-    document.addEventListener("selectionchange", () =>
-      this.onSelectionChange(),
+    document.addEventListener(
+      "selectionchange",
+      () => this.onSelectionChange(),
     );
 
     if (options?.twistyPlayer) {
@@ -105,13 +106,13 @@ export class TwistyAlgEditor extends ManagedCustomElement {
     this.#twistyPlayerProp = options?.twistyPlayerProp ?? "alg";
 
     if (options?.twistyPlayerProp === "alg") {
-      this.model.leafToHighlight.addFreshListener(
-        (highlightInfo: HighlightInfo | null) => {
-          if (highlightInfo) {
-            this.highlightLeaf(highlightInfo.leafInfo.leaf);
-          }
-        },
-      );
+      this.model.leafToHighlight.addFreshListener((
+        highlightInfo: HighlightInfo | null,
+      ) => {
+        if (highlightInfo) {
+          this.highlightLeaf(highlightInfo.leafInfo.leaf);
+        }
+      });
     }
   }
 
@@ -245,71 +246,68 @@ export class TwistyAlgEditor extends ManagedCustomElement {
       // );
 
       // TODO: listen to puzzle prop?
-      this.#twistyPlayer?.experimentalModel.puzzleAlg.addFreshListener(
-        (algWithIssues: AlgWithIssues) => {
-          // console.log(JSON.stringify(algWithIssues));
-          if (algWithIssues.issues.errors.length === 0) {
-            this.setAlgIssueClassForPuzzle(
-              // TODO: Allow trailing spaces.
-              algWithIssues.issues.warnings.length === 0 ? "none" : "warning",
-            );
-            const newAlg = algWithIssues.alg;
-            const oldAlg = Alg.fromString(this.algString);
-            if (!newAlg.isIdentical(oldAlg)) {
-              this.algString = newAlg.toString();
-              this.onInput();
-            } else {
-              // this.model.algInputProp.set(oldAlg);
-            }
-          } else {
-            this.setAlgIssueClassForPuzzle("error");
-          }
-        },
-      );
-
-      this.model.leafToHighlight.addFreshListener(
-        async (highlightInfo: HighlightInfo | null) => {
-          if (highlightInfo === null) {
-            return;
-          }
-          // TODO: This indexer can be out of date!
-          const [indexer, timestampRequest] = await Promise.all([
-            await twistyPlayer.experimentalModel.indexer.get(),
-            await twistyPlayer.experimentalModel.timestampRequest.get(),
-          ]);
-          if (
-            timestampRequest === "opposite-anchor" &&
-            !this.#onInputHasFired
-          ) {
-            return;
-          }
-          const moveStartTimestamp = indexer.indexToMoveStartTimestamp(
-            highlightInfo.leafInfo.idx,
+      this.#twistyPlayer?.experimentalModel.puzzleAlg.addFreshListener((
+        algWithIssues: AlgWithIssues,
+      ) => {
+        // console.log(JSON.stringify(algWithIssues));
+        if (algWithIssues.issues.errors.length === 0) {
+          this.setAlgIssueClassForPuzzle(
+            // TODO: Allow trailing spaces.
+            algWithIssues.issues.warnings.length === 0 ? "none" : "warning",
           );
-          const duration = indexer.moveDuration(highlightInfo.leafInfo.idx);
+          const newAlg = algWithIssues.alg;
+          const oldAlg = Alg.fromString(this.algString);
+          if (!newAlg.isIdentical(oldAlg)) {
+            this.algString = newAlg.toString();
+            this.onInput();
+          } else {
+            // this.model.algInputProp.set(oldAlg);
+          }
+        } else {
+          this.setAlgIssueClassForPuzzle("error");
+        }
+      });
 
-          let newTimestamp: number;
-          switch (highlightInfo.where) {
-            case "before":
-              newTimestamp = moveStartTimestamp;
-              break;
-            case "start":
-            case "inside":
-              newTimestamp = moveStartTimestamp + duration / 4;
-              break;
-            case "end":
-            case "after":
-              newTimestamp = moveStartTimestamp + duration;
-              break;
-            default:
-              console.log("invalid where");
-              throw new Error("Invalid where!");
-          }
-          if (!this.debugNeverRequestTimestamp) {
-            twistyPlayer.experimentalModel.timestampRequest.set(newTimestamp);
-          }
-        },
-      );
+      this.model.leafToHighlight.addFreshListener(async (
+        highlightInfo: HighlightInfo | null,
+      ) => {
+        if (highlightInfo === null) {
+          return;
+        }
+        // TODO: This indexer can be out of date!
+        const [indexer, timestampRequest] = await Promise.all([
+          await twistyPlayer.experimentalModel.indexer.get(),
+          await twistyPlayer.experimentalModel.timestampRequest.get(),
+        ]);
+        if (timestampRequest === "opposite-anchor" && !this.#onInputHasFired) {
+          return;
+        }
+        const moveStartTimestamp = indexer.indexToMoveStartTimestamp(
+          highlightInfo.leafInfo.idx,
+        );
+        const duration = indexer.moveDuration(highlightInfo.leafInfo.idx);
+
+        let newTimestamp: number;
+        switch (highlightInfo.where) {
+          case "before":
+            newTimestamp = moveStartTimestamp;
+            break;
+          case "start":
+          case "inside":
+            newTimestamp = moveStartTimestamp + duration / 4;
+            break;
+          case "end":
+          case "after":
+            newTimestamp = moveStartTimestamp + duration;
+            break;
+          default:
+            console.log("invalid where");
+            throw new Error("Invalid where!");
+        }
+        if (!this.debugNeverRequestTimestamp) {
+          twistyPlayer.experimentalModel.timestampRequest.set(newTimestamp);
+        }
+      });
 
       twistyPlayer.experimentalModel.currentLeavesSimplified.addFreshListener(
         async (currentLeavesSimplified: CurrentLeavesSimplified) => {

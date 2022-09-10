@@ -17,7 +17,7 @@ import {
 } from "./webkit-fullscreen";
 
 const buttonCommands = {
-  "fullscreen": true,
+  fullscreen: true,
   "jump-to-start": true,
   "play-step-backwards": true,
   "play-pause": true,
@@ -46,8 +46,9 @@ export class TwistyButtons extends ManagedCustomElement {
     for (const command in buttonCommands) {
       const button = new TwistyButton();
       buttons[command as ButtonCommand] = button;
-      button.htmlButton.addEventListener("click", () =>
-        this.#onCommand(command as ButtonCommand),
+      button.htmlButton.addEventListener(
+        "click",
+        () => this.#onCommand(command as ButtonCommand),
       );
       this.addElement(button);
     }

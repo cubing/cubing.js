@@ -17,7 +17,6 @@ class DisplayableKPuzzle {
   public puzzleName(): string {
     return this.kpuzzleName;
   }
-
   // public async kpuzzleDefinition(): Promise<KPuzzleDefinition> {
   //   return await puzzles[this.kpuzzleName].def();
   // }
@@ -71,7 +70,7 @@ enum GeometrySymbol {
 const puzzleData: Partial<
   Record<
     PuzzleID,
-    { "2D"?: boolean; "optgroup": OptGroup; "symbol": GeometrySymbol }
+    { "2D"?: boolean; optgroup: OptGroup; symbol: GeometrySymbol }
   >
 > = {
   "2x2x2": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
@@ -81,34 +80,34 @@ const puzzleData: Partial<
   "6x6x6": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
   "7x7x7": { optgroup: OptGroup.WCACubes, symbol: GeometrySymbol.Square },
   // Note: the order is important! It matches the WCA website.
-  "clock": {
+  clock: {
     "2D": true,
-    "optgroup": OptGroup.WCAMore,
-    "symbol": GeometrySymbol.Circle,
+    optgroup: OptGroup.WCAMore,
+    symbol: GeometrySymbol.Circle,
   },
-  "megaminx": { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.Pentagon },
-  "pyraminx": { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.TriangleUp },
-  "skewb": { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.Diamond },
-  "square1": {
+  megaminx: { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.Pentagon },
+  pyraminx: { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.TriangleUp },
+  skewb: { optgroup: OptGroup.WCAMore, symbol: GeometrySymbol.Diamond },
+  square1: {
     "2D": true,
-    "optgroup": OptGroup.WCAMore,
-    "symbol": GeometrySymbol.Diamond,
+    optgroup: OptGroup.WCAMore,
+    symbol: GeometrySymbol.Diamond,
   },
-  "gigaminx": { optgroup: OptGroup.Other, symbol: GeometrySymbol.Pentagon },
-  "fto": { optgroup: OptGroup.Other, symbol: GeometrySymbol.TriangleDown },
-  "master_tetraminx": {
+  gigaminx: { optgroup: OptGroup.Other, symbol: GeometrySymbol.Pentagon },
+  fto: { optgroup: OptGroup.Other, symbol: GeometrySymbol.TriangleDown },
+  master_tetraminx: {
     optgroup: OptGroup.Other,
     symbol: GeometrySymbol.TriangleUp,
   },
-  "kilominx": {
+  kilominx: {
     "2D": true,
-    "optgroup": OptGroup.Other,
-    "symbol": GeometrySymbol.Pentagon,
+    optgroup: OptGroup.Other,
+    symbol: GeometrySymbol.Pentagon,
   },
-  "redi_cube": {
+  redi_cube: {
     "2D": true,
-    "optgroup": OptGroup.Other,
-    "symbol": GeometrySymbol.Square,
+    optgroup: OptGroup.Other,
+    symbol: GeometrySymbol.Square,
   },
 };
 

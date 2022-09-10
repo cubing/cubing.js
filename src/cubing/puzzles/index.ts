@@ -32,9 +32,9 @@ export const puzzles: Record<string, PuzzleLoader> = {
   // 3x3x3 Fewest Moves
   // 3x3x3 One-Handed
   clock,
-  "megaminx": megaminx,
+  megaminx: megaminx,
   pyraminx,
-  "skewb": new PGPuzzleLoader({
+  skewb: new PGPuzzleLoader({
     id: "skewb",
     fullName: "Skewb",
     inventedBy: ["Tony Durham"], // https://www.jaapsch.net/puzzles/skewb.htm
@@ -44,14 +44,14 @@ export const puzzles: Record<string, PuzzleLoader> = {
   // 4x4x4 Blindfolded
   // 5x5x5 Blindfolded
   /******** End of WCA puzzles ********/
-  "fto": fto,
-  "gigaminx": new PGPuzzleLoader({
+  fto: fto,
+  gigaminx: new PGPuzzleLoader({
     id: "gigaminx",
     fullName: "Gigaminx",
     inventedBy: ["Tyler Fox"],
     inventionYear: 2006, // Earliest date from https://www.twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1475
   }),
-  "master_tetraminx": new PGPuzzleLoader({
+  master_tetraminx: new PGPuzzleLoader({
     pgID: "master tetraminx",
     id: "master_tetraminx",
     fullName: "Master Tetraminx",
@@ -59,5 +59,5 @@ export const puzzles: Record<string, PuzzleLoader> = {
     inventionYear: 2002, // Using master pyraminx: https://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1352
   }),
   kilominx,
-  "redi_cube": rediCube,
+  redi_cube: rediCube,
 };

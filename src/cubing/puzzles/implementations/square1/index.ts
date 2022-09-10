@@ -10,9 +10,8 @@ export const square1: PuzzleLoader = {
   kpuzzle: getCached(
     async () =>
       new KPuzzle(
-        (
-          await import("../dynamic/side-events/puzzles-dynamic-side-events")
-        ).sq1HyperOrbitJSON,
+        (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+          .sq1HyperOrbitJSON,
       ),
   ),
   svg: getCached(async () => {

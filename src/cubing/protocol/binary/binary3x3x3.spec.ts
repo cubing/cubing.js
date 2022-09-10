@@ -21,31 +21,32 @@ describe("Binary 3x3x3", () => {
     // Superflip (without center rotation)
     expect(
       reid3x3x3ToTwizzleBinary(stateForAlg("((M' U')4 [U2, M' E2 M] x y)3")),
-    ).to.deep.equal(new Uint8Array([0, 0, 0, 7, 255, 128, 0, 0, 0, 16, 0]));
+    ).to.deep
+      .equal(new Uint8Array([0, 0, 0, 7, 255, 128, 0, 0, 0, 16, 0]));
 
     // Simple superflip (with center rotation)
-    expect(
-      reid3x3x3ToTwizzleBinary(stateForAlg("((M' U')4 x y)3")),
-    ).to.deep.equal(new Uint8Array([0, 0, 0, 7, 255, 128, 0, 0, 0, 26, 170]));
+    expect(reid3x3x3ToTwizzleBinary(stateForAlg("((M' U')4 x y)3"))).to.deep
+      .equal(new Uint8Array([0, 0, 0, 7, 255, 128, 0, 0, 0, 26, 170]));
 
     // Swap last 2 edges and last 2 corner
     expect(
       reid3x3x3ToTwizzleBinary(
         stateForAlg("L2 F2 U' R2 U F2 L2 D2 L2 D2 L2 U B2 D B2 U'"),
       ),
-    ).to.deep.equal(new Uint8Array([0, 0, 0, 8, 0, 0, 0, 128, 0, 16, 33]));
+    ).to.deep
+      .equal(new Uint8Array([0, 0, 0, 8, 0, 0, 0, 128, 0, 16, 33]));
 
     // Rotate top center 180°
-    expect(
-      reid3x3x3ToTwizzleBinary(stateForAlg("(R' U' R U')5")),
-    ).to.deep.equal(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0]));
+    expect(reid3x3x3ToTwizzleBinary(stateForAlg("(R' U' R U')5"))).to.deep
+      .equal(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0]));
 
     // CO
     expect(
       reid3x3x3ToTwizzleBinary(
         stateForAlg("(L U L' U L U2 L' R' U' R U' R' U2' R z)4"),
       ),
-    ).to.deep.equal(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 66, 128, 16, 0]));
+    ).to.deep
+      .equal(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 66, 128, 16, 0]));
   });
 
   it("handles rotations", () => {
@@ -70,7 +71,8 @@ describe("Binary 3x3x3", () => {
       twizzleBinaryToReid3x3x3(
         new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
       );
-    }).to.throw();
+    }).to
+      .throw();
 
     expect(() => {
       // 0x111 (idxU)

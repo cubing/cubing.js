@@ -20,36 +20,36 @@ const colorMaps: Partial<
   Record<FaceletMeshAppearance, Record<string, string>>
 > = {
   dim: {
-    "white": "#dddddd",
-    "orange": "#884400",
-    "limegreen": "#008800",
-    "red": "#660000",
+    white: "#dddddd",
+    orange: "#884400",
+    limegreen: "#008800",
+    red: "#660000",
     "rgb(34, 102, 255)": "#000088", // TODO
-    "yellow": "#888800",
+    yellow: "#888800",
   },
   oriented: {
-    "white": "#44ddcc",
-    "orange": "#44ddcc",
-    "limegreen": "#44ddcc",
-    "red": "#44ddcc",
+    white: "#44ddcc",
+    orange: "#44ddcc",
+    limegreen: "#44ddcc",
+    red: "#44ddcc",
     "rgb(34, 102, 255)": "#44ddcc", // TODO
-    "yellow": "#44ddcc",
+    yellow: "#44ddcc",
   },
   ignored: {
-    "white": "#444444",
-    "orange": "#444444",
-    "limegreen": "#444444",
-    "red": "#444444",
+    white: "#444444",
+    orange: "#444444",
+    limegreen: "#444444",
+    red: "#444444",
     "rgb(34, 102, 255)": "#444444", // TODO
-    "yellow": "#444444",
+    yellow: "#444444",
   },
   invisible: {
-    "white": "#00000000",
-    "orange": "#00000000",
-    "limegreen": "#00000000",
-    "red": "#00000000",
+    white: "#00000000",
+    orange: "#00000000",
+    limegreen: "#00000000",
+    red: "#00000000",
     "rgb(34, 102, 255)": "#00000000", // TODO
-    "yellow": "#00000000",
+    yellow: "#00000000",
   },
 };
 

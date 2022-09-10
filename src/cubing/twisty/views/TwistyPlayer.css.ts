@@ -1,7 +1,8 @@
 import { CSSSource } from "./ManagedCustomElement";
 
 // TODO: figure out why `:host(twisty-player):fullscreen { background-color: white }` doesn't work.
-export const twistyPlayerCSS = new CSSSource(`
+export const twistyPlayerCSS = new CSSSource(
+  `
 :host {
   width: 384px;
   height: 256px;
@@ -70,4 +71,5 @@ twisty-scrubber {
 .wrapper.error .error-elem {
   display: grid;
 }
-`);
+`,
+);

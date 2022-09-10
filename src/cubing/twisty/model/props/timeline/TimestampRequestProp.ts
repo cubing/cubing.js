@@ -2,9 +2,9 @@ import type { MillisecondTimestamp } from "../../../controllers/AnimationTypes";
 import { SimpleTwistyPropSource } from "../TwistyProp";
 
 const smartTimestamps = {
-  "start": true,
-  "end": true,
-  "anchor": true,
+  start: true,
+  end: true,
+  anchor: true,
   "opposite-anchor": true,
 };
 

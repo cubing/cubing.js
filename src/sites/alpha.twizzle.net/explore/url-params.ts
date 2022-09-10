@@ -3,41 +3,41 @@
 import { Alg } from "../../../cubing/alg";
 
 export interface PartialURLParamValues {
-  "alg"?: Alg;
-  "puzzle"?: string;
-  "puzzlegeometry"?: string;
+  alg?: Alg;
+  puzzle?: string;
+  puzzlegeometry?: string;
   "puzzle-description": string;
   "debug-show-render-stats"?: boolean;
-  "tempo"?: string;
+  tempo?: string;
 }
 export type ParamName = keyof typeof paramDefaults;
 
 interface CompleteURLParamValues extends PartialURLParamValues {
-  "alg": Alg;
-  "puzzle": string;
-  "puzzlegeometry"?: string;
+  alg: Alg;
+  puzzle: string;
+  puzzlegeometry?: string;
   "puzzle-description": string;
   "debug-show-render-stats"?: boolean;
-  "tempo"?: string;
+  tempo?: string;
 }
 
 const paramDefaults: CompleteURLParamValues = {
-  "alg": new Alg(),
-  "puzzle": "",
-  "puzzlegeometry": "",
+  alg: new Alg(),
+  puzzle: "",
+  puzzlegeometry: "",
   "puzzle-description": "",
   "debug-show-render-stats": false,
-  "tempo": "1",
+  tempo: "1",
 };
 
 // TODO: Encapsulate and deduplicate this.
 const paramDefaultStrings: { [s: string]: string } = {
-  "alg": "",
-  "puzzle": "", // TODO: puzzle-name?
-  "puzzlegeometry": "",
+  alg: "",
+  puzzle: "", // TODO: puzzle-name?
+  puzzlegeometry: "",
   "puzzle-description": "",
   "debug-show-render-stats": "",
-  "tempo": "1",
+  tempo: "1",
 };
 
 export function getURLParam<K extends ParamName>(

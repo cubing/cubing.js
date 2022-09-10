@@ -443,11 +443,11 @@ export class TwistyAlgViewer extends HTMLElementShim {
     }
     this.#twistyPlayer = twistyPlayer;
 
-    this.#twistyPlayer.experimentalModel.alg.addFreshListener(
-      (algWithIssues: AlgWithIssues) => {
-        this.setAlg(algWithIssues.alg);
-      },
-    );
+    this.#twistyPlayer.experimentalModel.alg.addFreshListener((
+      algWithIssues: AlgWithIssues,
+    ) => {
+      this.setAlg(algWithIssues.alg);
+    });
 
     const sourceAlg = (await this.#twistyPlayer.experimentalModel.alg.get())
       .alg;
@@ -458,27 +458,27 @@ export class TwistyAlgViewer extends HTMLElementShim {
         : Alg.fromString(sourceAlg.toString());
     this.setAlg(parsedAlg);
 
-    twistyPlayer.experimentalModel.currentMoveInfo.addFreshListener(
-      (currentMoveInfo: CurrentMoveInfo) => {
-        let moveInfo = currentMoveInfo.currentMoves[0];
-        moveInfo ??= currentMoveInfo.movesStarting[0];
-        moveInfo ??= currentMoveInfo.movesFinishing[0];
-        if (!moveInfo) {
-          this.highlighter.set(null);
-        } else {
-          const mainCurrentMove = moveInfo.move; // TODO
-          this.highlighter.set(mainCurrentMove as Parsed<Move>);
-        }
-      },
-    );
+    twistyPlayer.experimentalModel.currentMoveInfo.addFreshListener((
+      currentMoveInfo: CurrentMoveInfo,
+    ) => {
+      let moveInfo = currentMoveInfo.currentMoves[0];
+      moveInfo ??= currentMoveInfo.movesStarting[0];
+      moveInfo ??= currentMoveInfo.movesFinishing[0];
+      if (!moveInfo) {
+        this.highlighter.set(null);
+      } else {
+        const mainCurrentMove = moveInfo.move; // TODO
+        this.highlighter.set(mainCurrentMove as Parsed<Move>);
+      }
+    });
 
-    twistyPlayer.experimentalModel.detailedTimelineInfo.addFreshListener(
-      (detailedTimelineInfo: DetailedTimelineInfo) => {
-        if (detailedTimelineInfo.timestamp !== this.lastClickTimestamp) {
-          this.lastClickTimestamp = null;
-        }
-      },
-    );
+    twistyPlayer.experimentalModel.detailedTimelineInfo.addFreshListener((
+      detailedTimelineInfo: DetailedTimelineInfo,
+    ) => {
+      if (detailedTimelineInfo.timestamp !== this.lastClickTimestamp) {
+        this.lastClickTimestamp = null;
+      }
+    });
   }
 
   async jumpToIndex(index: number, offsetIntoMove: boolean): Promise<void> {

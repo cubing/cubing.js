@@ -102,12 +102,11 @@ export class TwistyStreamSource extends ManagedCustomElement {
       const source = await sourceClass.connect();
       button.disabled = true;
       button.textContent += " ✅";
-      source.addEventListener(
-        "move",
-        (e: PuzzleStreamMoveEventRegisterCompatible) => {
-          this.dispatchEvent(new CustomEvent("move", e));
-        },
-      );
+      source.addEventListener("move", (
+        e: PuzzleStreamMoveEventRegisterCompatible,
+      ) => {
+        this.dispatchEvent(new CustomEvent("move", e));
+      });
       // TODO: Hook up UI for disconnection.
     });
     return button;
@@ -150,13 +149,12 @@ export class TwistyStreamSource extends ManagedCustomElement {
         return;
       }
       const stream = streamServer!.connect(streamID);
-      stream.addEventListener(
-        "move",
-        (moveEvent: PuzzleStreamMoveEventRegisterCompatible) => {
-          console.log(moveEvent);
-          this.dispatchEvent(new CustomEvent("move", moveEvent));
-        },
-      );
+      stream.addEventListener("move", (
+        moveEvent: PuzzleStreamMoveEventRegisterCompatible,
+      ) => {
+        console.log(moveEvent);
+        this.dispatchEvent(new CustomEvent("move", moveEvent));
+      });
     });
   }
 }

@@ -15,10 +15,12 @@ if (existsSync(TARGET_NODE_MODULES_PATH)) {
   process.exit(0);
 }
 
-console.log(`
+console.log(
+  `
 Automatically installing a subset of dependencies.
 
-Note that you have to run \`npm install\` manually if you pull new code or want to run any tests.`);
+Note that you have to run \`npm install\` manually if you pull new code or want to run any tests.`,
+);
 
 const json = JSON.parse(readFileSync("package.json", "utf8"));
 const oldDevDependencies = json.devDependencies;

@@ -49,10 +49,9 @@ for (const file of Object.values(files)) {
   let match = false;
   // TODO: Allow any length match?
   for (let num_path_parts = 1; num_path_parts <= 3; num_path_parts++) {
-    const potential_prefix = file.path
-      .split("/")
-      .slice(0, num_path_parts)
-      .join("/");
+    const potential_prefix = file.path.split("/").slice(0, num_path_parts).join(
+      "/",
+    );
     if (expectedPrefixes.includes(potential_prefix)) {
       match = true;
       break;

@@ -34,36 +34,35 @@ export class TwizzleExplorerApp {
     this.configUI = new ConfigUI(this);
     new SelectUI(this);
     const moveCountElem = document.querySelector("#move-count")!;
-    this.twistyPlayer.experimentalModel.moveCount.addFreshListener(
-      (moveCount) => {
-        moveCountElem.textContent = `Moves: ${moveCount}`;
-      },
-    );
+    this.twistyPlayer.experimentalModel.moveCount.addFreshListener((
+      moveCount,
+    ) => {
+      moveCountElem.textContent = `Moves: ${moveCount}`;
+    });
 
     this.dialog = new Dialog();
 
     const twistyPuzzleDescriptionInput = document.querySelector(
       "twisty-puzzle-description-input",
     )!;
-    this.twistyPlayer.experimentalModel.puzzleLoader.addFreshListener(
-      async (puzzleLoader: PuzzleLoader) => {
-        // TODO: debounce?
-        twistyPuzzleDescriptionInput.puzzleDescription = (
-          await puzzleLoader.pg!()
-        ).puzzleDescription;
-      },
-    );
-    twistyPuzzleDescriptionInput.addEventListener(
-      "puzzle-change",
-      (
-        e: CustomEvent<{
+    this.twistyPlayer.experimentalModel.puzzleLoader.addFreshListener(async (
+      puzzleLoader: PuzzleLoader,
+    ) => {
+      // TODO: debounce?
+      twistyPuzzleDescriptionInput.puzzleDescription = (
+        await puzzleLoader.pg!()
+      ).puzzleDescription;
+    });
+    twistyPuzzleDescriptionInput.addEventListener("puzzle-change", (
+      e: CustomEvent<
+        {
           descriptionString: string;
-        }>,
-      ) => {
-        // console.log(e.detail!.descriptionString)
-        this.setPuzzleDescription(e.detail.descriptionString);
-      },
-    );
+        }
+      >,
+    ) => {
+      // console.log(e.detail!.descriptionString)
+      this.setPuzzleDescription(e.detail.descriptionString);
+    });
   }
 
   // TODO: Find out how to avoid the need for this.
@@ -83,7 +82,7 @@ export class TwizzleExplorerApp {
     this.twistyPlayer.experimentalModel.setupTransformation.set(null);
     setAlgParamEnabled(true);
     this.twistyPlayer.experimentalPuzzleDescription = descString;
-    setURLParams({ "puzzle": puzzleName, "puzzle-description": "" });
+    setURLParams({ puzzle: puzzleName, "puzzle-description": "" });
   }
 
   setPuzzleDescription(descString: PuzzleDescriptionString): void {
@@ -93,7 +92,7 @@ export class TwizzleExplorerApp {
     this.twistyPlayer.experimentalPuzzleDescription = descString;
     this.configUI.descInput.value = descString;
     setURLParams({
-      "puzzle": "",
+      puzzle: "",
       "puzzle-description": descString,
     });
   }
@@ -221,8 +220,8 @@ class SelectUI {
         break;
       case "ss": {
         const lines: string[] = [];
-        (await this.app.puzzleGeometry()).writeSchreierSims((line) =>
-          lines.push(line),
+        (await this.app.puzzleGeometry()).writeSchreierSims(
+          (line) => lines.push(line),
         );
         this.app.showText(lines.join("\n"));
         break;

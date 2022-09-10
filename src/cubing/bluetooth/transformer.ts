@@ -8,7 +8,6 @@ import type {
 export interface StreamTransformer {
   // Modifies the input.
   transformAlgLeaf(algLeafEvent: AlgLeafEvent): void;
-
   // Modifies the input.
   transformOrientation(orientationEvent: OrientationEvent): void;
 }

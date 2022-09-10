@@ -107,7 +107,6 @@ export function toTimeline(
   // console.log(axes);
   return axes.flat();
 }
-
 /*
 
 Input: list of {move: {base, amount}}, centerTime} events sorted by centerTime of halfway through "quarter" turns.

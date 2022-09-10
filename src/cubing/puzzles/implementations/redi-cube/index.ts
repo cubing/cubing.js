@@ -12,9 +12,8 @@ export const rediCube: PuzzleLoader = {
   kpuzzle: getCached(
     async () =>
       new KPuzzle(
-        (
-          await import("../dynamic/unofficial/puzzles-dynamic-unofficial")
-        ).rediCubeJSON,
+        (await import("../dynamic/unofficial/puzzles-dynamic-unofficial"))
+          .rediCubeJSON,
       ),
   ),
   svg: async () => {

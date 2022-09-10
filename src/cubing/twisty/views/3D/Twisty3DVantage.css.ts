@@ -6,7 +6,8 @@ import { CSSSource } from "../ManagedCustomElement";
 // content` is a good fix for this, but there is no indication that Safari will
 // support it soon. https://developer.mozilla.org/en-US/docs/Web/CSS/contain
 
-export const twisty3DVantageCSS = new CSSSource(`
+export const twisty3DVantageCSS = new CSSSource(
+  `
 :host {
   width: 384px;
   height: 256px;
@@ -66,4 +67,5 @@ export const twisty3DVantageCSS = new CSSSource(`
 .wrapper.drag-input-enabled > canvas:active {
   cursor: grabbing;
 }
-`);
+`,
+);
