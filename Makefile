@@ -1,25 +1,121 @@
-# This Makefile is a wrapper around the scripts from `package.json`.
-# https://github.com/lgarron/Makefile-scripts
+MAKEFLAGS += --always-make # Make everything `.PHONY`
 
-# Note: the first command becomes the default `make` target.
-NPM_COMMANDS = build build-esm build-types build-bin build-sites build-site-twizzle build-site-experiments build-site-typedoc build-search-worker generate-js generate-js-parsers generate-js-svg dev link clean test test-fast test-all test-src test-spec test-spec-watch test-src-internal-import-restrictions test-src-does-not-import-dist test-src-tsc test-build test-dist test-dist-esm-node-import test-dist-esm-scramble-all-events test-dist-esm-perf test-dist-esm-plain-esbuild-compat test-dist-esm-parcel test-dist-esm-vite test-dist-sites-experiments format setup quick-setup lint lint-ci prepack postpublish
+# TODO: see if we can make everything compatible with `bun`
+NODE=node
+ROME=./node_modules/.bin/rome
+WEB_TEST_RUNNER=./node_modules/.bin/wtr
 
-.PHONY: $(NPM_COMMANDS)
-$(NPM_COMMANDS):
-	npm run $@
+######## Shared with `package.json` ########
 
-# We write the npm commands to the top of the file above to make shell autocompletion work in more places.
-DYNAMIC_NPM_COMMANDS = $(shell node -e 'console.log(Object.keys(require("./package.json").scripts).join(" "))')
-UPDATE_MAKEFILE_SED_ARGS = "s/^NPM_COMMANDS = .*$$/NPM_COMMANDS = ${DYNAMIC_NPM_COMMANDS}/" Makefile
-.PHONY: update-Makefile
-update-Makefile:
-	if [ "$(shell uname -s)" = "Darwin" ] ; then sed -i "" ${UPDATE_MAKEFILE_SED_ARGS} ; fi
-	if [ "$(shell uname -s)" != "Darwin" ] ; then sed -i"" ${UPDATE_MAKEFILE_SED_ARGS} ; fi
-
-.PHONY: publish
+build: clean
+	${NODE} ./script/build/main.js all
+build-esm:
+	${NODE} ./script/build/main.js esm
+build-types:
+	${NODE} ./script/build/main.js types
+build-bin:
+	${NODE} ./script/build/main.js bin
+build-sites: build-site-twizzle build-site-experiments
+build-site-twizzle:
+	${NODE} ./script/build/main.js twizzle
+build-site-experiments:
+	${NODE} ./script/build/main.js experiments
+build-site-typedoc:
+	npx typedoc src/cubing/*/index.ts
+build-search-worker:
+	${NODE} ./script/build/main.js search-worker
+generate-js: generate-js-parsers generate-js-svg
+generate-js-parsers:
+	npx peggy --format es src/cubing/kpuzzle/parser/parser-peggy.peggy
+generate-js-svg:
+	@echo "TODO: Generating JS for SVGs is not implemented yet."
+dev: quick-setup
+	${NODE} ./script/build/main.js sites dev
+link: build
+	npm link
+clean:
+	rm -rf \
+		dist .temp coverage src/cubing/search/search-worker-inside-generated* \
+		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
+test:
+	@echo "Run one of the following."
+	@echo "(Time estimates are based on a fast computer.)"
+	@echo ""
+	@echo "    make test-spec (≈4s, \`*.spec.ts\` files only)"
+	@echo ""
+	@echo "    make test-src   (≈20s, includes \`make test-spec\`)"
+	@echo "    make test-build (≈8s)"
+	@echo "    make test-dist  (≈30s)"
+	@echo ""
+	@echo "    make test-all  (≈50s, runs all of the above)"
+	@echo "    make test-fast (≈5s, runs a subset of the above)"
+	@echo ""
+test-fast: build-esm lint build-sites build-bin test-spec
+test-all: test-src test-build test-dist
+test-src: \
+	test-spec \
+	lint \
+	test-src-tsc \
+	test-src-internal-import-restrictions \
+	test-src-does-not-import-dist # keep CI.yml in sync with this
+test-spec:
+	${WEB_TEST_RUNNER} --playwright
+test-spec-watch:
+	${WEB_TEST_RUNNER} --playwright --watch
+test-src-internal-import-restrictions:
+	${NODE} ./script/test/src/internal-import-restrictions/main.js
+test-src-does-not-import-dist:
+	${NODE} ./script/test/src/does-not-import-dist/main.js
+test-src-tsc: build-types
+	npx tsc --project ./tsconfig.json
+test-build: \
+	build-esm \
+	build-bin \
+	build-types \
+	build-sites \
+	build-site-typedoc # keep CI.yml in sync with this
+test-dist: \
+	test-dist-esm-node-import \
+	test-dist-esm-scramble-all-events \
+	test-dist-esm-perf \
+	test-dist-esm-plain-esbuild-compat \
+	test-dist-esm-parcel \
+	test-dist-esm-vite \
+	test-dist-sites-experiments # keep CI.yml in sync with this
+test-dist-esm-node-import: build-esm
+	${NODE} script/test/dist/esm/node-import/main.js
+test-dist-esm-scramble-all-events: build-esm
+	${NODE} script/test/dist/esm/scramble-all-events/main.js
+test-dist-esm-perf: build-esm
+	${NODE} script/test/dist/esm/perf/*.js
+test-dist-esm-plain-esbuild-compat: build-esm
+	${NODE} script/test/dist/esm/plain-esbuild-compat/main.js
+test-dist-esm-parcel: build-esm
+	${NODE} ./script/test/dist/esm/parcel/main.js
+test-dist-esm-vite: build-esm
+	${NODE} ./script/test/dist/esm/vite/main.js
+test-dist-sites-experiments: build-sites
+	${NODE} ./script/test/dist/experiments/main.js
+format:
+	${ROME} format --write ./script ./src
+setup:
+	npm ci
+quick-setup:
+	${NODE} ./script/quick-setup/main.js
+lint:
+	${ROME} check ./script ./src
+lint-ci:
+	${ROME} ci ./script ./src
+prepack: clean test-fast build test-dist-esm-node-import test-dist-esm-plain-esbuild-compat
+postpublish:
+	@echo ""
+	@echo ""
+	@echo "Consider updating \`cdn.cubing.net\` if you have access:"
+	@echo "https://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version"
 publish:
 	npm publish
 
+######## Only in `Makefile` ########
 
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
