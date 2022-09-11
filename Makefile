@@ -35,7 +35,7 @@ link: build
 	npm link
 clean:
 	rm -rf \
-		dist .temp coverage src/cubing/search/search-worker-inside-generated* \
+		dist .temp coverage src/cubing/search/search-worker-inside-generated* script/bin/screenshot-src/main.js \
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
 test:
 	@echo "Run one of the following."

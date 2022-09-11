@@ -64,6 +64,7 @@
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.7.2",
+    "@types/yargs": "^17.0.12",
     "@web/dev-server-esbuild": "^0.3.2",
     "@web/test-runner": "^0.14.0",
     "@web/test-runner-playwright": "^0.8.10",
