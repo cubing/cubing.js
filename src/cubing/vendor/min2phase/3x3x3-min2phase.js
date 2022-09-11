@@ -290,7 +290,7 @@ function fromInt(value_0) {
   var rebase, result;
   if (value_0 > -129 && value_0 < 128) {
     rebase = value_0 + 128;
-    boxedValues === null &&
+    boxedValues == null &&
       (boxedValues = initDim(
         Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit,
         $intern_3,

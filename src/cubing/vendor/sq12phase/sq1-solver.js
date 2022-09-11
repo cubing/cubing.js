@@ -821,7 +821,7 @@ var square1SolverInitialize = function (doneCallback, _, statusCallback) {
   }
 
   square1Solver_initialized = true;
-  if (doneCallback !== null) {
+  if (doneCallback != null) {
     doneCallback();
   }
 };
