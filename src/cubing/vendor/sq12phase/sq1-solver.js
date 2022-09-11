@@ -101,12 +101,14 @@ function FullCube_getSquare(obj, sq) {
   sq.cornperm = get8Perm(obj.prm);
   sq.topEdgeFirst = FullCube_pieceAt(obj, 0) === FullCube_pieceAt(obj, 1);
   a = sq.topEdgeFirst ? 2 : 0;
-  for (b = 0; b < 4; a += 3, ++b)
+  for (b = 0; b < 4; a += 3, ++b) {
     obj.prm[b] = ~~((~~FullCube_pieceAt(obj, a) >> 1) << 24) >> 24;
+  }
   sq.botEdgeFirst = FullCube_pieceAt(obj, 12) === FullCube_pieceAt(obj, 13);
   a = sq.botEdgeFirst ? 14 : 12;
-  for (; b < 8; a += 3, ++b)
+  for (; b < 8; a += 3, ++b) {
     obj.prm[b] = ~~((~~FullCube_pieceAt(obj, a) >> 1) << 24) >> 24;
+  }
   sq.edgeperm = get8Perm(obj.prm);
   sq.ml = obj.ml;
 }
@@ -656,7 +658,9 @@ function Square_$clinit() {
   Square_BottomMove = [];
   fact = [1, 1, 2, 6, 24, 120, 720, 5040];
   Cnk = [];
-  for (var i = 0; i < 12; ++i) Cnk[i] = [];
+  for (var i = 0; i < 12; ++i) {
+    Cnk[i] = [];
+  }
   Square_init();
 }
 
@@ -728,7 +732,9 @@ function Square_init() {
         if (SquarePrun[idxx] === check) {
           ++done;
           SquarePrun[inv ? i : idxx] = ~~(depth << 24) >> 24;
-          if (inv) continue OUT;
+          if (inv) {
+            continue OUT;
+          }
         }
         idxx = idx;
         for (m = 0; m < 4; ++m) {
@@ -736,7 +742,9 @@ function Square_init() {
           if (SquarePrun[(idxx << 1) | ml] === check) {
             ++done;
             SquarePrun[inv ? i : (idxx << 1) | ml] = ~~(depth << 24) >> 24;
-            if (inv) continue OUT;
+            if (inv) {
+              continue OUT;
+            }
           }
         }
         for (m = 0; m < 4; ++m) {
@@ -744,7 +752,9 @@ function Square_init() {
           if (SquarePrun[(idxx << 1) | ml] === check) {
             ++done;
             SquarePrun[inv ? i : (idxx << 1) | ml] = ~~(depth << 24) >> 24;
-            if (inv) continue OUT;
+            if (inv) {
+              continue OUT;
+            }
           }
         }
       }

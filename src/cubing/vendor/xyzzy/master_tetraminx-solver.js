@@ -9,16 +9,22 @@ import { randomUIntBelowFactory } from "../random-uint-below";
 
 function counter(A) {
   let counts = [];
-  for (let a of A) counts[a] = (counts[a] || 0) + 1;
+  for (let a of A) {
+    counts[a] = (counts[a] || 0) + 1;
+  }
   return counts;
 }
 
 /* Combinatoric functions */
 
 function factorial(n) {
-  if (n < 2) return n;
+  if (n < 2) {
+    return n;
+  }
   let f = 1;
-  for (let i = 2; i <= n; i++) f *= i;
+  for (let i = 2; i <= n; i++) {
+    f *= i;
+  }
   return f;
 }
 
@@ -71,7 +77,9 @@ function permutation_parity(A) {
   let parity = 0;
   for (let i = 0; i < n - 1; i++) {
     for (let j = i; j < n; j++) {
-      if (A[i] > A[j]) parity ^= 1;
+      if (A[i] > A[j]) {
+        parity ^= 1;
+      }
     }
   }
   return parity;
@@ -89,11 +97,16 @@ function index_to_evenpermutation(ind, n) {
   perm[n - 1] = 0;
   for (let i = n - 2; i >= 0; i--) {
     for (let j = i + 1; j < n; j++) {
-      if (perm[j] >= perm[i]) perm[j]++;
-      else parity ^= 1;
+      if (perm[j] >= perm[i]) {
+        perm[j]++;
+      } else {
+        parity ^= 1;
+      }
     }
   }
-  if (parity === 1) [perm[n - 2], perm[n - 1]] = [perm[n - 1], perm[n - 2]];
+  if (parity === 1) {
+    [perm[n - 2], perm[n - 1]] = [perm[n - 1], perm[n - 2]];
+  }
   return perm;
 }
 
@@ -155,7 +168,9 @@ let [evenpermutation12_to_index, index_to_evenpermutation12] = (() => {
 
 function compose(A, B) {
   let C = [];
-  for (let i = 0; i < B.length; i++) C[i] = A[B[i]];
+  for (let i = 0; i < B.length; i++) {
+    C[i] = A[B[i]];
+  }
   return C;
 }
 
@@ -177,7 +192,9 @@ function invert(perm) {
 
 function permutation_from_cycle(cycle, n) {
   let perm = [];
-  for (let i = 0; i < n; i++) perm[i] = i;
+  for (let i = 0; i < n; i++) {
+    perm[i] = i;
+  }
   for (let i = 0; i < cycle.length; i++) {
     perm[cycle[i]] = cycle[(i + 1) % cycle.length];
   }
@@ -569,7 +586,9 @@ function moves_commute(i, j) {
 
 function apply_move_sequence(state, move_sequence) {
   for (let [m, r] of move_sequence) {
-    for (let i = 0; i < r; i++) state = compose_state(state, moves[m]);
+    for (let i = 0; i < r; i++) {
+      state = compose_state(state, moves[m]);
+    }
   }
   return state;
 }
@@ -679,14 +698,17 @@ function solve(state) {
     let { value: sol1, done } = phase1gen.next();
     let new_state = state;
     for (let [m, r] of sol1) {
-      for (let i = 0; i < r; i++)
+      for (let i = 0; i < r; i++) {
         new_state = compose_state(new_state, moves[m]);
+      }
     }
     let stringified_state = JSON.stringify(new_state);
     if (intermediate_states.has(stringified_state)) {
       // console.log("skip");
       continue;
-    } else intermediate_states.add(stringified_state);
+    } else {
+      intermediate_states.add(stringified_state);
+    }
     let phase2_indices = index_phase2(new_state);
     //let sol2 = [];
     let moves_left = best ? best.length - sol1.length - 1 : 999999;
@@ -709,7 +731,9 @@ function solve(state) {
       best = sol1.concat(sol2);
     }
     // bail if we've spent too much time
-    if (performance.now() - start_time > 300) break;
+    if (performance.now() - start_time > 300) {
+      break;
+    }
   }
   return best;
 }
@@ -785,8 +809,8 @@ for (let i = 0; i < 25; i++) {
   phase1_score_ptable_condensed[i + 30] = phase1_score_ptable[1][i];
 }
 let phase1_coord_to_score = new Int8Array(6 * 12 * 12 * 3);
-for (let i = 0; i < 6; i++)
-  for (let j = 0; j < 12; j++)
+for (let i = 0; i < 6; i++) {
+  for (let j = 0; j < 12; j++) {
     for (let k = 0; k < 12; k++) {
       let index = i + 6 * j + 72 * k;
       let score = 2;
@@ -805,6 +829,8 @@ for (let i = 0; i < 6; i++)
         index + 2 * 6 * 12 * 12
       ] = score + 5;
     }
+  }
+}
 
 function phase1_benchmark() {
   /* some 13-move phase 1 states*/
@@ -875,15 +901,23 @@ function* phase1_ida_search_gen(a, b, c, d, e, f, mtable, ptable, bound, last) {
     ptable[(d % 864) + f * 864],
     phase1_score_ptable_condensed[score],
   );
-  if (heuristic > bound) return;
+  if (heuristic > bound) {
+    return;
+  }
   if (bound === 0) {
     yield [];
     return;
   }
-  if (heuristic === 0 && bound === 1) return;
+  if (heuristic === 0 && bound === 1) {
+    return;
+  }
   for (let m = 0; m < nmoves; m++) {
-    if (m === last) continue;
-    if (m < last && moves_commute(m, last)) continue;
+    if (m === last) {
+      continue;
+    }
+    if (m < last && moves_commute(m, last)) {
+      continue;
+    }
     let A = a,
       B = b,
       C = c,
@@ -911,7 +945,9 @@ function* phase1_ida_search_gen(a, b, c, d, e, f, mtable, ptable, bound, last) {
       );
       while (true) {
         let { value: subpath, done } = subpath_gen.next();
-        if (done) break;
+        if (done) {
+          break;
+        }
         yield [[m, r]].concat(subpath);
       }
     }
@@ -992,11 +1028,14 @@ function generate_phase1_pairing2c_ptable() {
   let ptable = new Int8Array((6 * 12 * 12) ** 2 * 3);
   ptable.fill(-1);
   let g = [0, 1, 2, 3, 4, 5].map((x) => x + 6 * x + 72 * (x + 6));
-  for (let i = 0; i < 6; i++)
+  for (let i = 0; i < 6; i++) {
     for (let j = 0; j < 6; j++) {
-      if (i === j) continue;
+      if (i === j) {
+        continue;
+      }
       ptable[g[i] + 864 * g[j]] = 0;
     }
+  }
   let dist = 0;
   while (true) {
     let changed = false;
@@ -1180,7 +1219,9 @@ function bfs(mtable, goal_states) {
   while (queue.length > 0) {
     new_queue.length = 0;
     for (let state of queue) {
-      if (ptable[state] !== -1) continue;
+      if (ptable[state] !== -1) {
+        continue;
+      }
       ptable[state] = depth;
       for (let move_index = 0; move_index < nmoves; move_index++) {
         let new_state = mtable[state][move_index];
@@ -1199,8 +1240,9 @@ function bfs(mtable, goal_states) {
 function* ida_solve_gen(indices, mtables, ptables, moves_left) {
   let ncoords = indices.length;
   let bound = 0;
-  for (let i = 0; i < ncoords; i++)
+  for (let i = 0; i < ncoords; i++) {
     bound = Math.max(bound, ptables[i][indices[i]]);
+  }
   while (bound <= moves_left) {
     yield* ida_search_gen(indices, mtables, ptables, bound, -1);
     bound++;
@@ -1211,20 +1253,30 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
   let ncoords = indices.length;
   let nmoves = mtables[0][0].length;
   let heuristic = 0;
-  for (let i = 0; i < ncoords; i++)
+  for (let i = 0; i < ncoords; i++) {
     heuristic = Math.max(heuristic, ptables[i][indices[i]]);
-  if (heuristic > bound) return;
+  }
+  if (heuristic > bound) {
+    return;
+  }
   if (bound === 0) {
     yield [];
     return;
   }
-  if (heuristic === 0 && bound === 1) return;
+  if (heuristic === 0 && bound === 1) {
+    return;
+  }
   for (let m = 0; m < nmoves; m++) {
-    if (m === last) continue;
-    if (m < last && moves_commute(m, last)) continue;
+    if (m === last) {
+      continue;
+    }
+    if (m < last && moves_commute(m, last)) {
+      continue;
+    }
     let new_indices = indices.slice();
-    for (let c = 0; c < ncoords; c++)
+    for (let c = 0; c < ncoords; c++) {
       new_indices[c] = mtables[c][indices[c]][m];
+    }
     let r = 1;
     while (indices.some((_, i) => indices[i] !== new_indices[i])) {
       let subpath_gen = ida_search_gen(
@@ -1236,7 +1288,9 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
       );
       while (true) {
         let { value: subpath, done } = subpath_gen.next();
-        if (done) break;
+        if (done) {
+          break;
+        }
         yield [[m, r]].concat(subpath);
       }
       for (let c = 0; c < ncoords; c++) {

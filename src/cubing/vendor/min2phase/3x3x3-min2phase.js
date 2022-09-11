@@ -1729,7 +1729,9 @@ function $initPhase2Pre(this$static) {
       );
       if (ret === 0 || ret > 2) {
         break;
-      } else ret === 2 && (p2switchMask &= 4 << p2switch);
+      } else {
+        ret === 2 && (p2switchMask &= 4 << p2switch);
+      }
     }
     if (p2switchMask === 0) {
       break;
@@ -2432,8 +2434,9 @@ function toCubieCube(f, ccRet) {
   }
   for (i2 = 0; i2 < 8; i2++) {
     for (ori = 0; ori < 3; ori++) {
-      if (f[cornerFacelet[i2][ori]] === 0 || f[cornerFacelet[i2][ori]] === 3)
+      if (f[cornerFacelet[i2][ori]] === 0 || f[cornerFacelet[i2][ori]] === 3) {
         break;
+      }
     }
     col1 = f[cornerFacelet[i2][(ori + 1) % 3]];
     col2 = f[cornerFacelet[i2][(ori + 2) % 3]];

@@ -62,22 +62,22 @@ let PHASE4_THRESHOLD = 7;
 
 function counter(A) {
   let counts = [];
-  for (let a of A) counts[a] = (counts[a] || 0) + 1;
+  for (let a of A) { counts[a] = (counts[a] || 0) + 1; }
   return counts;
 }
 
 /* Combinatoric functions */
 
 function factorial(n) {
-  if (n < 2) return n;
+  if (n < 2) { return n; }
   let f = 1;
-  for (let i = 2; i <= n; i++) f *= i;
+  for (let i = 2; i <= n; i++) { f *= i; }
   return f;
 }
 
 function C(n, k) {
-  if (k < 0 || k > n) return 0;
-  if (k === 0 || k === n) return 1;
+  if (k < 0 || k > n) { return 0; }
+  if (k === 0 || k === n) { return 1; }
   let c = 1;
   for (let i = 0; i < k; i++) {
     c = ((c * (n - i)) / (i + 1)) | 0;
@@ -126,7 +126,7 @@ function permutation_parity(A) {
   let parity = 0;
   for (let i = 0; i < n - 1; i++) {
     for (let j = i; j < n; j++) {
-      if (A[i] > A[j]) parity ^= 1;
+      if (A[i] > A[j]) { parity ^= 1; }
     }
   }
   return parity;
@@ -144,11 +144,11 @@ function index_to_evenpermutation(ind, n) {
   perm[n - 1] = 0;
   for (let i = n - 2; i >= 0; i--) {
     for (let j = i + 1; j < n; j++) {
-      if (perm[j] >= perm[i]) perm[j]++;
-      else parity ^= 1;
+      if (perm[j] >= perm[i]) { perm[j]++; }
+      else { parity ^= 1; }
     }
   }
-  if (parity === 1) [perm[n - 2], perm[n - 1]] = [perm[n - 1], perm[n - 2]];
+  if (parity === 1) { [perm[n - 2], perm[n - 1]] = [perm[n - 1], perm[n - 2]]; }
   return perm;
 }
 
@@ -209,9 +209,9 @@ let [evenpermutation10_to_index, index_to_evenpermutation10] = (() => {
 function comb_to_index(l) {
   let bits = l.length;
   let ones = 0;
-  for (let i = 0; i < bits; i++) ones += +(l[i] === 1);
+  for (let i = 0; i < bits; i++) { ones += +(l[i] === 1); }
   let zeros = bits - ones;
-  if (zeros === 0 || ones === 0 || bits === 1) return 0;
+  if (zeros === 0 || ones === 0 || bits === 1) { return 0; }
   let b = C(bits - 1, ones);
   let ind = 0;
   for (let i = 0; zeros > 0 && ones > 0 && bits > 1; i++) {
@@ -249,7 +249,7 @@ function index_to_comb(ind, ones, bits) {
 
 function compose(A, B) {
   let C = [];
-  for (let i = 0; i < B.length; i++) C[i] = A[B[i]];
+  for (let i = 0; i < B.length; i++) { C[i] = A[B[i]]; }
   return C;
 }
 
@@ -267,7 +267,7 @@ function compose_o(A, B) {
 
 function permutation_from_cycle(cycle, n) {
   let perm = [];
-  for (let i = 0; i < n; i++) perm[i] = i;
+  for (let i = 0; i < n; i++) { perm[i] = i; }
   for (let i = 0; i < cycle.length; i++) {
     perm[cycle[i]] = cycle[(i + 1) % cycle.length];
   }
@@ -276,7 +276,7 @@ function permutation_from_cycle(cycle, n) {
 
 function unsparsify_list(d, n) {
   let l = Array(n).fill(0);
-  for (let k in d) l[k] = d[k];
+  for (let k in d) { l[k] = d[k]; }
   return l;
 }
 
@@ -327,8 +327,9 @@ let id = compose_o(move_x2, move_x2);
 let moves_full = [];
 for (let i = 0; i < moves.length; i++) {
   moves_full[i] = [id];
-  for (let j = 1; j < 5; j++)
+  for (let j = 1; j < 5; j++) {
     moves_full[i][j] = compose_o(moves_full[i][j - 1], moves[i]);
+  }
 }
 
 function random_state(randomUintBelow) {
@@ -338,7 +339,7 @@ function random_state(randomUintBelow) {
     p[i] = p[r];
     p[r] = i;
   }
-  if (permutation_parity(p) === 1) [p[0], p[1]] = [p[1], p[0]];
+  if (permutation_parity(p) === 1) { [p[0], p[1]] = [p[1], p[0]]; }
   let o = Array(20).fill(0);
   for (let i = 0; i < 19; i++) {
     o[i] = randomUintBelow(3);
@@ -362,7 +363,7 @@ function print_move_sequence(move_sequence) {
 
 function apply_move_sequence(state, move_sequence) {
   for (let [m, r] of move_sequence) {
-    for (let i = 0; i < r; i++) state = compose_o(state, moves[m]);
+    for (let i = 0; i < r; i++) { state = compose_o(state, moves[m]); }
   }
   return state;
 }
@@ -384,13 +385,14 @@ function generate_random_move_scramble(M, N) {
       while (true) {
         m = Math.floor(Math.random() * 6);
         // don't output stuff like U2 U
-        if (m === last) continue;
+        if (m === last) { continue; }
         // U move never commutes with the others
-        else if (m === 0) break;
+        else if (m === 0) { break; }
         // don't output stuff like L R L because L and R commute
-        else if (m === lastlast && ((m - last) * (m - last)) % 5 === 4)
+        else if (m === lastlast && ((m - last) * (m - last)) % 5 === 4) {
           continue;
-        else break;
+        }
+        else { break; }
       }
       // make 144-deg moves twice as likely as 72-deg moves
       move_sequence.push([m, 1 + Math.round(Math.random() * 3)]);
@@ -398,7 +400,7 @@ function generate_random_move_scramble(M, N) {
     }
     // flip after every set of moves on the hemisphere except the last because that would be
     // kind of pointless
-    if (i < M) move_sequence.push([6, 1]);
+    if (i < M) { move_sequence.push([6, 1]); }
   }
   return move_sequence;
 }
@@ -642,7 +644,7 @@ function create_svg_template(state, colour_scheme) {
 
 function draw_state(svgel, state, colour_scheme) {
   colour_scheme = colour_scheme || default_colour_scheme;
-  if (!svgel) return create_svg_template(state, colour_scheme);
+  if (!svgel) { return create_svg_template(state, colour_scheme); }
   for (let i = 0; i < 20; i++) {
     for (let j = 0; j < 3; j++) {
       let el = svgel.querySelector(".loc" + i + "_" + j);
@@ -707,8 +709,8 @@ function solve_phase1(state) {
   // we don't care about orientation.
   let p = state[0];
   // x < 15 tests if a piece is non-grey.
-  if (p.slice(15, 20).every((x) => x < 15)) return [];
-  if (p.slice(0, 5).every((x) => x < 15)) return [[6, 1]];
+  if (p.slice(15, 20).every((x) => x < 15)) { return []; }
+  if (p.slice(0, 5).every((x) => x < 15)) { return [[6, 1]]; }
   let flags = p.map((x) => x >= 15);
   let depth = 0,
     sol;
@@ -722,15 +724,15 @@ function solve_phase1(state) {
 
 function search_phase1(flags, depth, last) {
   if (depth === 0) {
-    if (flags.slice(0, 5).some((x) => x)) return;
+    if (flags.slice(0, 5).some((x) => x)) { return; }
     return [];
   }
   for (let move_index = 0; move_index < 6; move_index++) {
-    if (move_index === last) continue;
+    if (move_index === last) { continue; }
     for (let r = 1; r < 5; r++) {
       let new_flags = compose(flags, moves_full[move_index][r][0]);
       let sol = search_phase1(new_flags, depth - 1, move_index);
-      if (sol !== undefined) return [[move_index, r]].concat(sol);
+      if (sol !== undefined) { return [[move_index, r]].concat(sol); }
     }
   }
   return;
@@ -742,7 +744,7 @@ function index_phase2(state) {
   let index_c = comb_to_index(p.map((x) => +(x >= 15)));
   let index_o = 243 * index_c;
   for (let i = 0, j = 0; i < 15; i++) {
-    if (p[i] < 15) continue;
+    if (p[i] < 15) { continue; }
     index_o += o[i] * Math.pow(3, j);
     // as it so happens, my JS shell is too outdated and doesn't support **
     j++;
@@ -773,7 +775,7 @@ function index_phase3(state) {
   let index_c = comb_to_index(p.map((x) => +(pieces.indexOf(x) !== -1)));
   let index_o = 243 * index_c;
   for (let i = 0, j = 0; i < 15; i++) {
-    if (pieces.indexOf(p[i]) === -1) continue;
+    if (pieces.indexOf(p[i]) === -1) { continue; }
     index_o += o[i] * Math.pow(3, j);
     j++;
   }
@@ -803,7 +805,7 @@ function index_phase4(state) {
     perm = [];
   let j = 0;
   for (let i of [0, 1, 2, 3, 4, 9, 10, 11, 12, 13]) {
-    if (i !== 13) index_o += o[i] * Math.pow(3, j);
+    if (i !== 13) { index_o += o[i] * Math.pow(3, j); }
     perm[j] = p[i] < 5 ? p[i] : p[i] - 4;
     j++;
   }
@@ -868,7 +870,7 @@ function cn_solve(state) {
 const tables = {};
 
 function generate_phase23_orientation_mtable() {
-  if (tables.phase23om) return tables.phase23om;
+  if (tables.phase23om) { return tables.phase23om; }
   const C15_5 = C(15, 5),
     THREE = [1, 3, 9, 27, 81, 243];
   let phase23om = Array(C(15, 5) * THREE[5]);
@@ -887,8 +889,8 @@ function generate_phase23_orientation_mtable() {
         if (comb[k] === 1) {
           orient_full[k] = ((j / THREE[l]) | 0) % 3;
           l++;
-        } else
-          orient_full[k] = 99; // some irrelevant garbage value
+        } else {
+          orient_full[k] = 99; // some irrelevant garbage value }
       }
       for (let move_index = 0; move_index < 6; move_index++) {
         let move = moves[move_index];
@@ -910,19 +912,19 @@ function generate_phase23_orientation_mtable() {
 }
 
 function generate_phase2_orientation_ptable() {
-  if (tables.phase2op) return tables.phase2op;
+  if (tables.phase2op) { return tables.phase2op; }
   let mtable = generate_phase23_orientation_mtable();
   return (tables.phase2op = bfs(mtable, [243 * 3002]));
 }
 
 function generate_phase3_orientation_ptable() {
-  if (tables.phase3op) return tables.phase3op;
+  if (tables.phase3op) { return tables.phase3op; }
   let mtable = generate_phase23_orientation_mtable();
   return (tables.phase3op = bfs(mtable, [243 * 246]));
 }
 
 function generate_phase23_permutation_mtable() {
-  if (tables.phase23pm) return tables.phase23pm;
+  if (tables.phase23pm) { return tables.phase23pm; }
   const FIFTEEN = [
     1,
     15,
@@ -961,19 +963,19 @@ function generate_phase23_permutation_mtable() {
 }
 
 function generate_phase2_permutation_ptable() {
-  if (tables.phase2pp) return tables.phase2pp;
+  if (tables.phase2pp) { return tables.phase2pp; }
   let mtable = generate_phase23_permutation_mtable();
   return (tables.phase2pp = bfs(mtable, [213090]));
 }
 
 function generate_phase3_permutation_ptable() {
-  if (tables.phase3pp) return tables.phase3pp;
+  if (tables.phase3pp) { return tables.phase3pp; }
   let mtable = generate_phase23_permutation_mtable();
   return (tables.phase3pp = bfs(mtable, [737420]));
 }
 
 function generate_phase4_orientation_mtable() {
-  if (tables.phase4om) return tables.phase4om;
+  if (tables.phase4om) { return tables.phase4om; }
   const THREE = [1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683, 59049];
   let mtable = Array(THREE[9]);
   for (let i = 0; i < THREE[9]; i++) {
@@ -991,7 +993,7 @@ function generate_phase4_orientation_mtable() {
         (i) => o[move[0][i]] + move[1][i],
       );
       let new_i = 0;
-      for (let j = 0; j < 9; j++) new_i += (new_o[j] % 3) * THREE[j];
+      for (let j = 0; j < 9; j++) { new_i += (new_o[j] % 3) * THREE[j]; }
       mtable[i][move_index] = new_i;
     }
   }
@@ -999,7 +1001,7 @@ function generate_phase4_orientation_mtable() {
 }
 
 function generate_phase4_permutation_mtable() {
-  if (tables.phase4pm) return tables.phase4pm;
+  if (tables.phase4pm) { return tables.phase4pm; }
   const HALFFACT10 = factorial(10) / 2,
     n = 10;
   let pre = [0, 1, 2, 3, 4, -1, -1, -1, -1, 5, 6, 7, 8, 9];
@@ -1023,20 +1025,21 @@ function generate_phase4_permutation_mtable() {
 }
 
 function generate_phase4_orientation_ptable() {
-  if (tables.phase4op) return tables.phase4op;
+  if (tables.phase4op) { return tables.phase4op; }
   let mtable = generate_phase4_orientation_mtable();
   return (tables.phase4op = bfs(mtable, [0]));
 }
 
 function generate_phase4_permutation_ptable() {
-  if (tables.phase4pp) return tables.phase4pp;
+  if (tables.phase4pp) { return tables.phase4pp; }
   let mtable = generate_phase4_permutation_mtable();
   return (tables.phase4pp = bfs(mtable, [0]));
 }
 
 function generate_phase4_near_ptable_list(threshold) {
-  if (tables.phase4np_list && tables.phase4np_list.threshold === threshold)
+  if (tables.phase4np_list && tables.phase4np_list.threshold === threshold) {
     return tables.phase4np_list;
+  }
   let mtables = [
     generate_phase4_orientation_mtable(),
     generate_phase4_permutation_mtable(),
@@ -1046,10 +1049,10 @@ function generate_phase4_near_ptable_list(threshold) {
   populate(threshold, [0, 0], -1);
   function populate(depth, state, last) {
     states.push(state[0] + base * state[1]);
-    if (depth === 0) return;
+    if (depth === 0) { return; }
     let new_state = [];
     for (let move_index = 0; move_index < 3; move_index++) {
-      if (move_index === last) continue;
+      if (move_index === last) { continue; }
       new_state[0] = state[0];
       new_state[1] = state[1];
       for (let r = 1; r < 5; r++) {
@@ -1063,8 +1066,9 @@ function generate_phase4_near_ptable_list(threshold) {
   states.sort((x, y) => x - y);
   let unique_states = [],
     last = -1;
-  for (let state of states)
-    if (state !== last) unique_states.push((last = state));
+  for (let state of states) {
+    if (state !== last) { unique_states.push((last = state)); }
+  }
   unique_states.threshold = threshold;
   return (tables.phase4np_list = unique_states);
 }
@@ -1075,8 +1079,8 @@ function binary_search(A, x) {
   while (hi - lo > 1) {
     // invariants: hi - lo >= 2; x > A[lo-1]; x < A[hi+1]
     let mid = (lo + hi) >> 1; // lo < mid < hi
-    if (x > A[mid]) lo = mid + 1;
-    else hi = mid;
+    if (x > A[mid]) { lo = mid + 1; }
+    else { hi = mid; }
   }
   return x === A[lo] || x === A[hi];
 }
@@ -1189,11 +1193,12 @@ function bfs(mtable, goal_states) {
 function ida_solve(indices, mtables, ptables) {
   let ncoords = indices.length;
   let bound = 0;
-  for (let i = 0; i < ncoords; i++)
+  for (let i = 0; i < ncoords; i++) {
     bound = Math.max(bound, ptables[i][indices[i]]);
+  }
   while (true) {
     let path = ida_search(indices, mtables, ptables, bound, -1);
-    if (path !== undefined) return path;
+    if (path !== undefined) { return path; }
     bound++;
   }
 }
@@ -1202,19 +1207,21 @@ function ida_search(indices, mtables, ptables, bound, last) {
   let ncoords = indices.length;
   let nmoves = mtables[0][0].length;
   let heuristic = 0;
-  for (let i = 0; i < ncoords; i++)
+  for (let i = 0; i < ncoords; i++) {
     heuristic = Math.max(heuristic, ptables[i][indices[i]]);
-  if (heuristic > bound) return;
-  if (bound === 0 || heuristic === 0) return [];
+  }
+  if (heuristic > bound) { return; }
+  if (bound === 0 || heuristic === 0) { return []; }
   for (let m = 0; m < nmoves; m++) {
-    if (m === last) continue;
+    if (m === last) { continue; }
     let new_indices = indices.slice();
-    for (let c = 0; c < ncoords; c++)
+    for (let c = 0; c < ncoords; c++) {
       new_indices[c] = mtables[c][indices[c]][m];
+    }
     let r = 1;
     while (indices.some((_, i) => indices[i] !== new_indices[i])) {
       let subpath = ida_search(new_indices, mtables, ptables, bound - 1, m);
-      if (subpath !== undefined) return [[m, r]].concat(subpath);
+      if (subpath !== undefined) { return [[m, r]].concat(subpath); }
       for (let c = 0; c < ncoords; c++) {
         new_indices[c] = mtables[c][new_indices[c]][m];
       }
@@ -1242,7 +1249,7 @@ function phase4_ida_solve(indices) {
       ptable_p,
       ptable_n,
     );
-    if (path !== undefined) return path;
+    if (path !== undefined) { return path; }
     bound++;
   }
 }
@@ -1258,16 +1265,17 @@ function phase4_ida_search(
   ptable_n,
 ) {
   let heuristic = Math.max(ptable_o[indices[0]], ptable_p[indices[1]]);
-  if (heuristic > bound) return;
+  if (heuristic > bound) { return; }
   if (
     heuristic <= PHASE4_THRESHOLD &&
     !binary_search(ptable_n, indices[0] + 19683 * indices[1])
-  )
+  ) {
     heuristic = PHASE4_THRESHOLD + 1;
-  if (heuristic > bound) return;
-  if (bound === 0 || heuristic === 0) return [];
+  }
+  if (heuristic > bound) { return; }
+  if (bound === 0 || heuristic === 0) { return []; }
   for (let m = 0; m < 3; m++) {
-    if (m === last) continue;
+    if (m === last) { continue; }
     let new_indices = indices.slice();
     for (let r = 1; r < 5; r++) {
       new_indices[0] = mtable_o[new_indices[0]][m];
@@ -1282,7 +1290,7 @@ function phase4_ida_search(
         ptable_p,
         ptable_n,
       );
-      if (subpath !== undefined) return [[m, r]].concat(subpath);
+      if (subpath !== undefined) { return [[m, r]].concat(subpath); }
     }
   }
   return;
@@ -1321,16 +1329,17 @@ function* phase4_ida_search_gen(
   ptable_n,
 ) {
   let heuristic = Math.max(ptable_o[indices[0]], ptable_p[indices[1]]);
-  if (heuristic > bound) return;
+  if (heuristic > bound) { return; }
   if (
     heuristic <= PHASE4_THRESHOLD &&
     !binary_search(ptable_n, indices[0] + 19683 * indices[1])
-  )
+  ) {
     heuristic = PHASE4_THRESHOLD + 1;
-  if (heuristic > bound) return;
-  if (bound === 0 || heuristic === 0) yield [];
+  }
+  if (heuristic > bound) { return; }
+  if (bound === 0 || heuristic === 0) { yield []; }
   for (let m = 0; m < 3; m++) {
-    if (m === last) continue;
+    if (m === last) { continue; }
     let new_indices = indices.slice();
     for (let r = 1; r < 5; r++) {
       new_indices[0] = mtable_o[new_indices[0]][m];
@@ -1347,7 +1356,7 @@ function* phase4_ida_search_gen(
       );
       while (true) {
         let { value: subpath, done } = subpath_gen.next();
-        if (done) break;
+        if (done) { break; }
         yield [[m, r]].concat(subpath);
       }
     }
@@ -1368,7 +1377,7 @@ for all intents and purposes, this should be as good as a random-state scramble.
 */
 
 function generate_hs_mtable() {
-  if (tables.hsm) return tables.hsm;
+  if (tables.hsm) { return tables.hsm; }
   const C20_5 = C(20, 5); // = 15504
   let mtable = Array(C20_5);
   for (let i = 0; i < C20_5; i++) {
@@ -1383,13 +1392,13 @@ function generate_hs_mtable() {
 }
 
 function generate_hs_u_ptable() {
-  if (tables.hsup) return tables.hsup;
+  if (tables.hsup) { return tables.hsup; }
   let mtable = generate_hs_mtable();
   return (tables.hsup = bfs(mtable, [15503]));
 }
 
 function generate_hs_d_ptable() {
-  if (tables.hsdp) return tables.hsdp;
+  if (tables.hsdp) { return tables.hsdp; }
   let mtable = generate_hs_mtable();
   return (tables.hsdp = bfs(mtable, [0]));
 }
@@ -1441,7 +1450,7 @@ function generate_hybrid_scramble() {
 }
 
 function generate_fullseparate_mtable() {
-  if (tables.fsm) return tables.fsm;
+  if (tables.fsm) { return tables.fsm; }
   const C20_10 = C(20, 10); // = 184756
   const C19_9 = C(19, 9); // = 92378
   let moves12 = moves.slice(0, 6);
@@ -1460,8 +1469,8 @@ function generate_fullseparate_mtable() {
     let comb = index_to_comb(i, 10, 20);
     let perm = [];
     for (let j = 0, k = 0; j < 20; j++) {
-      if (comb[j] === 0) perm[j] = -1;
-      else perm[j] = k++;
+      if (comb[j] === 0) { perm[j] = -1; }
+      else { perm[j] = k++; }
     }
     for (let m = 0; m < 15; m++) {
       let new_perm = compose(perm, moves15[m][0]);
@@ -1482,7 +1491,7 @@ function generate_fullseparate_mtable() {
 }
 
 function generate_fullseparate_ptable() {
-  if (tables.fsp) return tables.fsp;
+  if (tables.fsp) { return tables.fsp; }
   let mtable = generate_fullseparate_mtable();
   /*
 	let separations = [
@@ -1510,7 +1519,7 @@ function generate_fullseparate_ptable() {
         }
       }
     }
-    if (goal_states.length === l) break;
+    if (goal_states.length === l) { break; }
     l = goal_states.length;
   }
   print(goal_states.toSource());
@@ -1527,12 +1536,12 @@ function bfs5(mtable, goal_states) {
   while (queue.length > 0) {
     new_queue.length = 0;
     for (let state of queue) {
-      if (ptable[state] !== -1) continue;
+      if (ptable[state] !== -1) { continue; }
       ptable[state] = depth;
       for (let move_index = 0; move_index < nmoves; move_index++) {
         let new_state = mtable[state][move_index];
         for (let r = 1; r <= 4; r++) {
-          if (r === 1 || r === 4) new_queue.push(new_state);
+          if (r === 1 || r === 4) { new_queue.push(new_state); }
           new_state = mtable[new_state][move_index];
         }
       }
