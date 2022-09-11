@@ -41,14 +41,14 @@ test:
 	@echo "Run one of the following."
 	@echo "(Time estimates are based on a fast computer.)"
 	@echo ""
-	@echo "    make test-spec (≈4s, \`*.spec.ts\` files only)"
+	@echo "    make test-spec (≈3s, \`*.spec.ts\` files only)"
 	@echo ""
 	@echo "    make test-src   (≈20s, includes \`make test-spec\`)"
 	@echo "    make test-build (≈8s)"
 	@echo "    make test-dist  (≈30s)"
 	@echo ""
 	@echo "    make test-all  (≈50s, runs all of the above)"
-	@echo "    make test-fast (≈5s, runs a subset of the above)"
+	@echo "    make test-fast (45s, runs a subset of the above)"
 	@echo ""
 test-fast: build-esm lint build-sites build-bin test-spec
 test-all: test-src test-build test-dist
@@ -60,6 +60,8 @@ test-src: \
 	test-src-does-not-import-dist # keep CI.yml in sync with this
 test-spec:
 	${WEB_TEST_RUNNER} --playwright
+test-spec-with-coverage:
+	${WEB_TEST_RUNNER} --playwright --coverage
 test-spec-watch:
 	${WEB_TEST_RUNNER} --playwright --watch
 test-src-internal-import-restrictions:
