@@ -1,6 +1,5 @@
 // @ts-nocheck
 
-
 export class PLazy<T> extends Promise<T> {
   constructor(executor) {
     super((resolve) => {
