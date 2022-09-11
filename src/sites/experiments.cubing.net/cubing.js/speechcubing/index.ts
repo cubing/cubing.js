@@ -35,12 +35,12 @@ const alternativeListElem = document.querySelector("alternative-list")!;
 
 recognition.onresult = function (event) {
   const latestResult = event.results.item(event.results.length - 1);
-  alternativeListElem.textContent = `Raw alternatives: ${Array.from(
-    latestResult,
-  )
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    .map((alternative) => alternative.transcript)
-    .join(" / ")}`;
+  alternativeListElem.textContent =
+    // rome-ignore lint(js/useTemplate): Using a template would make this more confusing.
+    "Raw alternatives: " +
+    Array.from(latestResult)
+      .map((alternative) => alternative.transcript)
+      .join(" / ");
   for (const alternative of Array.from(latestResult)) {
     let transcript = alternative.transcript.trim().toUpperCase();
     console.log(alternative);
