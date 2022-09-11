@@ -141,7 +141,7 @@ export class TwistyPropDebugger extends ManagedCustomElement {
         str = "(undefined)";
       } else if (isAlgIssues(value)) {
         const typedAlgIssues = value.issues as AlgIssues;
-        str = `Alg`;
+        str = "Alg";
         if (typedAlgIssues.errors.length > 0) {
           str += ` 🚨 ${typedAlgIssues.errors[0]}`;
         } else {

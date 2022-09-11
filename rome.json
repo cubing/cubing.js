@@ -13,8 +13,7 @@
         "noShoutyConstants": "off",
         "noUnusedVariables": "off",
         "noUnnecessaryContinue": "off",
-        "useSingleCaseStatement": "off",
-        "noUnusedTemplateLiteral": "off"
+        "useSingleCaseStatement": "off"
       },
       "ts": {
         "recommended": true,

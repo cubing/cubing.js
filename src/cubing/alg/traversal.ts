@@ -36,7 +36,7 @@ function dispatch<DataDown, DataAlgUp, DataAlgNodeUp>(
   if (algNode.is(LineComment)) {
     return t.traverseLineComment(algNode as LineComment, dataDown);
   }
-  throw new Error(`unknown AlgNode`);
+  throw new Error("unknown AlgNode");
 }
 
 function mustBeAlgNode(t: Comparable): AlgNode {

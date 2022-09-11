@@ -217,7 +217,7 @@ export const staticPackageMetadataTarget = {
 
       try {
         const typesJS = `export * from "../../types/${folderBasename}";\n`;
-        const typesJSFolder = join(`./dist/esm/`, folder);
+        const typesJSFolder = join("./dist/esm/", folder);
         const typesJSFilePath = join(typesJSFolder, "index.d.ts");
         if (!(await promisify(exists)(typesJSFolder))) {
           await promisify(mkdir)(typesJSFolder, { recursive: true });

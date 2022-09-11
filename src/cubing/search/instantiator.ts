@@ -110,7 +110,7 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
         `${commonErrorPrefix} Fallback to string worker is disabled.`,
         e,
       );
-      throw new Error(`Module worker instantiation failed.`);
+      throw new Error("Module worker instantiation failed.");
     }
     console.warn(`${commonErrorPrefix} Falling back to string worker.`, e);
     return instantiateClassicWorker();

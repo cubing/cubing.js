@@ -5,7 +5,7 @@ import type { AlgLeaf } from "../AlgNode";
 /** @category Alg Nodes */
 export class Newline extends AlgCommon<Newline> {
   toString(): string {
-    return `\n`;
+    return "\n";
   }
 
   isIdentical(other: Comparable): boolean {

@@ -45,7 +45,7 @@ export function algWithIssuesFromString(s: string): AlgWithIssues {
     const warnings = [];
     if (alg.toString() !== s) {
       // TODO: Push this check into the parser and return semantic info (so they can be e.g. highlighted).
-      warnings.push(`Alg is non-canonical!`);
+      warnings.push("Alg is non-canonical!");
     }
     return {
       alg,

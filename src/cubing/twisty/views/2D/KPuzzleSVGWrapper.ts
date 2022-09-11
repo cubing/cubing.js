@@ -238,10 +238,10 @@ export class KPuzzleSVGWrapper {
               "stop-color",
               this.originalColors[fromCur],
             );
-            this.gradients[id].children[1].setAttribute("offset", `100%`);
-            this.gradients[id].children[2].setAttribute("offset", `100%`);
-            this.gradients[id].children[3].setAttribute("offset", `100%`);
-            this.gradients[id].children[4].setAttribute("offset", `100%`);
+            this.gradients[id].children[1].setAttribute("offset", "100%");
+            this.gradients[id].children[2].setAttribute("offset", "100%");
+            this.gradients[id].children[3].setAttribute("offset", "100%");
+            this.gradients[id].children[4].setAttribute("offset", "100%");
           }
           // this.gradients[id]
           // this.elementByID(id).style.fill = this.originalColors[from];
@@ -256,7 +256,7 @@ export class KPuzzleSVGWrapper {
       "radialGradient",
     ) as SVGGradientElement;
     grad.setAttribute("id", `grad-${this.svgID}-${id}`);
-    grad.setAttribute("r", `70.7107%`); // TODO: Adapt to puzzle.
+    grad.setAttribute("r", "70.7107%"); // TODO: Adapt to puzzle.
     const stopDefs = [
       { offset: 0, color: originalColor },
       { offset: 0, color: originalColor },
