@@ -4,6 +4,5 @@ import { searchDynamicUnofficial } from "./dynamic/sgs-unofficial";
 
 export async function randomRediCubeScramble(): Promise<Alg> {
   mustBeInsideWorker();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return (await searchDynamicUnofficial).getRandomRediCubeScramble();
 }

@@ -1104,10 +1104,8 @@ export class PuzzleGeometry {
     if (this.options.verbosity > 1) {
       console.log(`# Face names: ${facenames.map((_) => _[1]).join(" ")}`);
       // TODO
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       console.log(`# Edge names: ${edgenames.map((_) => _[1]).join(" ")}`);
       // TODO
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       console.log(`# Vertex names: ${vertexnames.map((_) => _[1]).join(" ")}`);
     }
     const geonormals: [Quat, string, string][] = [];
@@ -2264,7 +2262,6 @@ export class PuzzleGeometry {
       r = newr;
     }
     // TODO
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return r;
   }
 

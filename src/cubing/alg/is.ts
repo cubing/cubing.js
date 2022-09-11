@@ -10,7 +10,6 @@ import {
 } from "./alg-nodes";
 
 export function experimentalIs(
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   v: any,
   c:
     | typeof Alg
@@ -24,7 +23,6 @@ export function experimentalIs(
 ): boolean {
   return v instanceof c;
 }
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function experimentalIsAlgNode(v: any): boolean {
   return (
     experimentalIs(v, Grouping) ||

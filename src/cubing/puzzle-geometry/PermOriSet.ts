@@ -644,7 +644,6 @@ export class PGTransform extends PGTransformBase {
     if (n === 0) {
       return this.e();
     }
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let t: PGTransform = this;
     if (n < 0) {
       t = t.inv();

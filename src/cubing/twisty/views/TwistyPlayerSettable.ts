@@ -22,7 +22,6 @@ function err(propName: string): Error {
   );
 }
 
-// prettier-ignore
 export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   experimentalModel: TwistyPlayerModel = new TwistyPlayerModel();
 

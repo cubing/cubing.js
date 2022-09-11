@@ -2,7 +2,6 @@ import { from } from "../../../vendor/p-lazy/p-lazy";
 import { StaleDropper } from "../PromiseFreshener";
 import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
 
-/*eslint @typescript-eslint/ban-types:off */
 type InputRecord = {};
 
 export type InputProps<T extends InputRecord> = {

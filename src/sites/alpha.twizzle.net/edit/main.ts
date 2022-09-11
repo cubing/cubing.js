@@ -27,7 +27,6 @@ window.addEventListener("DOMContentLoaded", () => {
     setAlgDebug({ caratNISSNotationEnabled: true });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const appElement = document.querySelector("app")!;
   (window as any).app = new App(appElement, getConfigFromURL());
 });

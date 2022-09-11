@@ -204,7 +204,6 @@ export class Alg extends AlgCommon<Alg> {
 
   /** @deprecated */
   experimentalIsEmpty(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const _ of this.#algNodes) {
       return false;
     }

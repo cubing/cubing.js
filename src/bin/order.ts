@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 import { KPuzzle } from "../cubing/kpuzzle";
 import { getPuzzleGeometryByName } from "../cubing/puzzle-geometry";
 

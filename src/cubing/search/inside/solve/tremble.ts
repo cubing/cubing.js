@@ -32,7 +32,6 @@ function calculateMoves(
       );
     }
     let transformation = kpuzzle.identityTransformation();
-    // eslint-disable-next-line no-constant-condition
     for (let i = 1; true; i++) {
       transformation = transformation.applyMove(rootMove);
       if (transformation.isIdentityTransformation()) {

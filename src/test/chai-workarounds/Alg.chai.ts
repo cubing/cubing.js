@@ -35,7 +35,6 @@ declare global {
   // be confusing and throw off tools). But we're doing this for now because
   // it's what works.
 
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   export namespace Chai {
     interface Assertion {
       identicalAlg(expected: Alg | string): Promise<void>;

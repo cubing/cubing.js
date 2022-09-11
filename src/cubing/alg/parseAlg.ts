@@ -318,7 +318,6 @@ class AlgParser {
 
     let quantumMove = this.parseQuantumMoveImpl();
     // Only `hadEmptyAbsAmount` is `const`.
-    // eslint-disable-next-line prefer-const
     let [amount, hadEmptyAbsAmount] = this.parseAmountAndTrackEmptyAbsAmount();
     const suffix = this.parseMoveSuffix();
 

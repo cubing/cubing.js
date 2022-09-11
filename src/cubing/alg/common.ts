@@ -8,7 +8,6 @@ export function setAlgDebugField(debug: boolean): void {
 }
 
 export abstract class Comparable {
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   is(c: any): boolean {
     return this instanceof c;
   }

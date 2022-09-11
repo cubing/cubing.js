@@ -1,4 +1,3 @@
-/* eslint-disable */
 /* kilosolver.js - A kilominx solver
 version 0.7 (2021-04-03)
 Copyright (c) 2016, 2020, 2021

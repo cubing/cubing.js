@@ -7,7 +7,6 @@ import { Conjugate } from "./alg-nodes/containers/Conjugate";
 import { Move } from "./alg-nodes/leaves/Move";
 import { Pause } from "./alg-nodes/leaves/Pause";
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export const Example = {
   Sune: new Alg([
     new Move("R", 1),

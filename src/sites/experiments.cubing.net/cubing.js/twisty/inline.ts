@@ -2,7 +2,6 @@ import { Alg } from "../../../../cubing/alg";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 
 window.addEventListener("DOMContentLoaded", () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const elem = document.querySelector("#js-init-example")!;
   // tslint:disable-next-line: no-unused-expression
   elem.appendChild(
@@ -18,7 +17,6 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const elem = document.querySelector("#custom-pg3d")!;
   // tslint:disable-next-line: no-unused-expression
   elem.appendChild(

@@ -754,7 +754,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     ) {
       this.options.experimentalStickering = experimentalStickering;
       // TODO
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.setStickering(experimentalStickering);
       this.scheduleRenderCallback!(); // TODO

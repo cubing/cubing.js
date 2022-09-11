@@ -18,7 +18,6 @@ function requestOptions<T>(
       };
   for (const config of configs) {
     if (!acceptAllDevices) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       options.filters = options.filters!.concat(config.filters);
     }
     options.optionalServices = options.optionalServices.concat(

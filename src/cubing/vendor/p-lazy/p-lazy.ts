@@ -1,7 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-// TODO: Use private class fields when ESLint support it.
 
 export class PLazy<T> extends Promise<T> {
   constructor(executor) {
@@ -33,14 +31,12 @@ export class PLazy<T> extends Promise<T> {
   then(onFulfilled, onRejected) {
     this._promise = this._promise || new Promise(this._executor);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._promise.then(onFulfilled, onRejected);
   }
 
   catch(onRejected) {
     this._promise = this._promise || new Promise(this._executor);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._promise.catch(onRejected);
   }
 }

@@ -27,7 +27,6 @@ export function defaultDurationForAmount(amount: number): Duration {
       return 2000;
   }
 }
-// eslint-disable-next-line no-inner-declarations
 export function ExperimentalScaledDefaultDurationForAmount(
   scale: number,
   amount: number,

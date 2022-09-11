@@ -1,8 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-/*eslint no-implicit-globals: "error"*/
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Alg } from "../../../../../alg";
 import {
   random333Scramble as getRandomScramble333,

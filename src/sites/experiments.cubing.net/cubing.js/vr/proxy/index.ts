@@ -23,7 +23,6 @@ class App {
     const url = new URL(socketOrigin);
     url.pathname = "/register-sender";
     this.proxySender = new ExperimentalWebSocketProxySender(url.toString());
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.querySelector("#connect-bluetooth")!.addEventListener(
       "click",
       async () => {
@@ -38,7 +37,6 @@ class App {
       },
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.querySelector("#connect-keyboard")!.addEventListener(
       "click",
       async () => {
@@ -50,7 +48,6 @@ class App {
       },
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.querySelector("#reset")!.addEventListener("click", async () => {
       this.proxySender.sendResetEvent();
       if ("reset" in this.puzzle) {
