@@ -19,8 +19,7 @@
         "useSimplifiedLogicExpression": "off",
         "useSingleVarDeclarator": "off",
         "useBlockStatements": "off",
-        "noArguments": "off",
-        "noAsyncPromiseExecutor": "off"
+        "noArguments": "off"
       },
       "ts": {
         "recommended": true,
