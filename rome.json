@@ -11,8 +11,7 @@
         "noDelete": "off",
         "noNegationElse": "off",
         "noShoutyConstants": "off",
-        "noUnusedVariables": "off",
-        "noUnnecessaryContinue": "off"
+        "noUnusedVariables": "off"
       },
       "ts": {
         "recommended": true,
