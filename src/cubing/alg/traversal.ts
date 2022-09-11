@@ -128,9 +128,23 @@ export abstract class TraversalUp<
   public abstract traverseLineComment(comment: LineComment): DataAlgNodeUp;
 }
 
+// TOOD: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
+export interface PuzzleSpecificAlgSimplificationInfo {
+  quantumMoveOrder?: (quantumMove: QuantumMove) => number;
+  doQuantumMovesCommute?: (
+    quantumMove1: QuantumMove,
+    quantumMove2: QuantumMove,
+  ) => boolean;
+  areQuantumMovesSameAxis?: (
+    quantumMove1: QuantumMove,
+    quantumMove2: QuantumMove,
+  ) => boolean;
+  simplifySameAxisMoves?: (moves: Move[]) => Move[];
+}
+
 export interface SimplifyOptions {
   collapseMoves?: boolean;
-  quantumMoveOrder?: (quantumMove: QuantumMove) => number;
+  puzzleSpecificAlgSimplificationInfo?: PuzzleSpecificAlgSimplificationInfo;
   depth?: number | null; // TODO: test
 }
 
@@ -147,8 +161,11 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
     options: SimplifyOptions,
   ): number {
     let newAmount = move.amount + deltaAmount;
-    if (options?.quantumMoveOrder) {
-      const order = options.quantumMoveOrder(move.quantum);
+    if (options?.puzzleSpecificAlgSimplificationInfo?.quantumMoveOrder) {
+      const order =
+        options.puzzleSpecificAlgSimplificationInfo.quantumMoveOrder(
+          move.quantum,
+        );
       // Examples:
       // • order 4 → min -1 (e.g. cube)
       // • order 5 → min -2 (e.g. Megaminx)

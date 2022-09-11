@@ -1,14 +1,15 @@
 // Include 3x3x3 in the main bundle for better performance.
-import { experimental3x3x3KPuzzle } from "../../cubing-private";
 import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
+import { experimental3x3x3KPuzzle } from "../../cubing-private";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 import type { PuzzleAppearance } from "../../stickerings/appearance";
 import {
   cubeAppearance,
   cubeStickerings,
 } from "../../stickerings/cube-stickerings";
+import { puzzleSpecificAlgSimplificationInfo333 } from "./puzzle-specific-simplifications";
 
 /** @category Specific Puzzles */
 export const cube3x3x3: PuzzleLoader = {
@@ -33,4 +34,5 @@ export const cube3x3x3: PuzzleLoader = {
   appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
     cubeAppearance(cube3x3x3, stickering),
   stickerings: cubeStickerings,
+  puzzleSpecificAlgSimplificationInfo: puzzleSpecificAlgSimplificationInfo333,
 };

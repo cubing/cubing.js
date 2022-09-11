@@ -1,4 +1,5 @@
 import { Alg, Move } from "../../alg";
+import { cube3x3x3 } from "../../puzzles";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 // TODO: Remove this. It's only used for debugging.
@@ -230,7 +231,8 @@ export class GanRobot extends EventTarget {
   private async queueMoves(moves: Alg): Promise<void> {
     this.moveQueue = this.moveQueue.concat(moves).simplify({
       collapseMoves: true,
-      quantumMoveOrder: (_) => 4,
+      puzzleSpecificAlgSimplificationInfo:
+        cube3x3x3.puzzleSpecificAlgSimplificationInfo,
     });
     if (!this.locked) {
       // TODO: We're currently iterating over alg nodes instead of leaves to avoid "zip bomps".
