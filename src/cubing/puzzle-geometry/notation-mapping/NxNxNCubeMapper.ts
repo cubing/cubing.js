@@ -6,7 +6,7 @@ export class NxNxNCubeMapper implements NotationMapper {
 
   public notationToInternal(move: Move): Move {
     const grip = move.family;
-    if (!move.innerLayer && !move.outerLayer) {
+    if (!(move.innerLayer || move.outerLayer)) {
       if (grip === "x") {
         move = new Move("Rv", move.amount);
       } else if (grip === "y") {
@@ -57,7 +57,7 @@ export class NxNxNCubeMapper implements NotationMapper {
   // do we want to map slice moves to E/M/S instead of 2U/etc.?
   public notationToExternal(move: Move): Move {
     const grip = move.family;
-    if (!move.innerLayer && !move.outerLayer) {
+    if (!(move.innerLayer || move.outerLayer)) {
       if (grip === "Rv") {
         return new Move("x", move.amount);
       } else if (grip === "Uv") {

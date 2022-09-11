@@ -1242,7 +1242,7 @@ export class PuzzleGeometry {
         this.swizzler,
         new FaceNameSwizzler(["F", "D", "L", "BL", "R", "U", "BR", "B"]),
       );
-      if (!sawedge && !sawvertex) {
+      if (!(sawedge || sawvertex)) {
         this.addNotationMapper = "FTOMapper";
       }
     }

@@ -12,7 +12,7 @@ import { getPuzzleGeometryByName } from "../cubing/puzzle-geometry";
 const puzname = process.argv[2];
 const algString = process.argv[3];
 
-if (!puzname || !algString) {
+if (!(puzname && algString)) {
   console.log("Usage: order <puzzle-geometry-id> <alg>");
   console.log("");
   console.log("Example: order 3x3x3 \"R U R' U R U2' R'\"");

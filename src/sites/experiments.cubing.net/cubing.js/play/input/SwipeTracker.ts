@@ -82,7 +82,7 @@ export class SwipeTracker {
         touch.pageY,
       ) as HTMLElement | null;
 
-      if (!sectorUnderSwipe || !this.sectorIndices.has(sectorUnderSwipe)) {
+      if (!(sectorUnderSwipe && this.sectorIndices.has(sectorUnderSwipe))) {
         continue;
       }
 

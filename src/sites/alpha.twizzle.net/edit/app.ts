@@ -40,8 +40,10 @@ function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
   const newAlgBuilder = new AlgBuilder();
   newAlgBuilder.experimentalPushAlg(oldAlg);
   if (
-    !oldAlg.experimentalIsEmpty() &&
-    !Array.from(oldAlg.childAlgNodes()).slice(-1)[0].is(Newline)
+    !(
+      oldAlg.experimentalIsEmpty() ||
+      Array.from(oldAlg.childAlgNodes()).slice(-1)[0].is(Newline)
+    )
   ) {
     newAlgBuilder.push(new Newline());
   }

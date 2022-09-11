@@ -203,7 +203,7 @@ const fn = async (
   });
   swipeWrapper.appendChild(swipeyPuzzle);
 
-  if (!fromKeyboard && !fromMouse) {
+  if (!(fromKeyboard || fromMouse)) {
     swipeyPuzzle.showGrid();
   }
 

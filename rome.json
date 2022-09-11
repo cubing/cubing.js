@@ -15,8 +15,7 @@
         "noUnnecessaryContinue": "off",
         "useSingleCaseStatement": "off",
         "noUnusedTemplateLiteral": "off",
-        "useTemplate": "off",
-        "useSimplifiedLogicExpression": "off"
+        "useTemplate": "off"
       },
       "ts": {
         "recommended": true,
