@@ -58,7 +58,7 @@ test-src: \
 	test-src-tsc \
 	test-src-internal-import-restrictions \
 	test-src-does-not-import-dist \
-	test-src-package-json-scripts-match-Makefile # keep CI.yml in sync with this
+	test-src-scripts-consistency # keep CI.yml in sync with this
 test-spec:
 	${WEB_TEST_RUNNER} --playwright
 test-spec-with-coverage:
@@ -71,8 +71,10 @@ test-src-does-not-import-dist:
 	${NODE} ./script/test/src/does-not-import-dist/main.js
 test-src-tsc: build-types
 	npx tsc --project ./tsconfig.json
-test-src-package-json-scripts-match-Makefile:
-	${NODE} ./script/test/src/package-json-scripts-match-Makefile/main.js
+test-src-scripts-consistency:
+	${NODE} ./script/test/src/scripts-consistency/main.js
+fix-src-scripts-consistency:
+	${NODE} ./script/test/src/scripts-consistency/main.js --fix
 test-build: \
 	build-esm \
 	build-bin \

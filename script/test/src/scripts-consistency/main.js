@@ -1,12 +1,15 @@
-import { readFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
+
+const MAKEFILE_PATH = new URL("../../../../Makefile", import.meta.url);
+const PACKAGE_JSON_PATH = new URL("../../../../package.json", import.meta.url);
+
+const fix = process.argv[2] === "--fix";
 
 let exitCode = 0;
+let needsFix = false;
 const SIMPLE_MAKEFILE_TARGET_MATCH = /^([A-Za-z\-]+):/;
 
-const makefileText = await readFile(
-  new URL("../../../../Makefile", import.meta.url),
-  "utf-8",
-);
+const makefileText = await readFile(MAKEFILE_PATH, "utf-8");
 let inScriptsSection = true;
 const makefileScriptTargets = [];
 for (const line of makefileText.split("\n")) {
@@ -24,16 +27,16 @@ for (const line of makefileText.split("\n")) {
   }
 }
 
-const packageJSON = JSON.parse(
-  await readFile(new URL("../../../../package.json", import.meta.url), "utf-8"),
-);
+const packageJSON = JSON.parse(await readFile(PACKAGE_JSON_PATH, "utf-8"));
 const packageJSONScripts = [];
 for (const [scriptName, shell] of Object.entries(packageJSON.scripts)) {
   if (shell !== `make ${scriptName}`) {
     console.error(
       `Script in \`package.json\` does not have the correct shell: ${scriptName}`,
     );
-    exitCode = 1;
+    if (!fix) {
+      exitCode = 1;
+    }
   }
   packageJSONScripts.push(scriptName);
 }
@@ -48,7 +51,11 @@ function logDifference(from, subtract) {
   if (output.length === 0) {
     console.log("  (none)");
   } else {
-    exitCode = 1;
+    if (fix) {
+      needsFix = true;
+    } else {
+      exitCode = 1;
+    }
     console.log(output.map((entry) => `  ${entry}`).join("\n"));
   }
 }
@@ -58,4 +65,14 @@ logDifference(makefileScriptTargets, packageJSONScripts);
 console.log("package.json scripts that are not Makefile targets:");
 logDifference(packageJSONScripts, makefileScriptTargets);
 
-process.exit(exitCode);
+if (exitCode !== 0) {
+  process.exit(exitCode);
+}
+
+if (fix && needsFix) {
+  console.log("Fixing...");
+  packageJSON.scripts = Object.fromEntries(
+    makefileScriptTargets.map((target) => [target, `make ${target}`]),
+  );
+  writeFile(PACKAGE_JSON_PATH, JSON.stringify(packageJSON, null, "  ") + "\n");
+}

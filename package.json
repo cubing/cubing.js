@@ -125,6 +125,8 @@
     "test-src-internal-import-restrictions": "make test-src-internal-import-restrictions",
     "test-src-does-not-import-dist": "make test-src-does-not-import-dist",
     "test-src-tsc": "make test-src-tsc",
+    "test-src-scripts-consistency": "make test-src-scripts-consistency",
+    "fix-src-scripts-consistency": "make fix-src-scripts-consistency",
     "test-build": "make test-build",
     "test-dist": "make test-dist",
     "test-dist-esm-node-import": "make test-dist-esm-node-import",
