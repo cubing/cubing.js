@@ -2,9 +2,6 @@
 
 # `cubing.js`
 
-![make test](https://github.com/cubing/cubing.js/workflows/make%20test/badge.svg)  
-![make build](https://github.com/cubing/cubing.js/workflows/make%20build/badge.svg)
-
 `cubing.js` is a collection of JavaScript libraries, still under development.
 
 ## Twizzle
