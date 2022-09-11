@@ -38,6 +38,7 @@ jobs:
       - run: make test-src-tsc
       - run: make test-src-internal-import-restrictions
       - run: make test-src-does-not-import-dist
+      - run: make test-src-package-json-scripts-match-Makefile
       - run: make format # note: not in `test-src` in `package.json`, only in CI
       - run: make clean
 

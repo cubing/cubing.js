@@ -57,7 +57,8 @@ test-src: \
 	lint \
 	test-src-tsc \
 	test-src-internal-import-restrictions \
-	test-src-does-not-import-dist # keep CI.yml in sync with this
+	test-src-does-not-import-dist \
+	test-src-package-json-scripts-match-Makefile # keep CI.yml in sync with this
 test-spec:
 	${WEB_TEST_RUNNER} --playwright
 test-spec-with-coverage:
@@ -70,6 +71,8 @@ test-src-does-not-import-dist:
 	${NODE} ./script/test/src/does-not-import-dist/main.js
 test-src-tsc: build-types
 	npx tsc --project ./tsconfig.json
+test-src-package-json-scripts-match-Makefile:
+	${NODE} ./script/test/src/package-json-scripts-match-Makefile/main.js
 test-build: \
 	build-esm \
 	build-bin \
@@ -114,10 +117,12 @@ postpublish:
 	@echo ""
 	@echo "Consider updating \`cdn.cubing.net\` if you have access:"
 	@echo "https://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version"
-publish:
-	npm publish
 
 ######## Only in `Makefile` ########
+
+.PHONY: publish
+publish:
+	npm publish
 
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
