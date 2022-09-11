@@ -1,0 +1,56 @@
+name: cubing.js issue
+description: Let us know an issue with <twisty-player> or cubing.js
+title: "[cubing.js issue] "
+labels: ["🐞 bug"]
+body:
+- type: markdown
+  id: thanks
+  attributes:
+    value: "Thanks for filing an issue! Please help us by filling out the following details."
+- type: textarea
+  id: repro
+  attributes:
+    label: Steps to reproduce the issue
+    description: What were you trying to do?
+    placeholder: "1. Try to use `cubing.js` in a project. (Please include sample code if possible!)\n2. ..."
+  validations:
+    required: true
+- type: textarea
+  id: observed
+  attributes:
+    label: Observed behaviour
+    description: What issue did you observe?
+    placeholder: "Example: An error message: ..."
+  validations:
+    required: true
+- type: textarea
+  id: expected
+  attributes:
+    label: Expected behaviour
+    description: What did you expect?
+    placeholder: "Example: No error."
+  validations:
+    required: true
+- type: textarea
+  id: environment
+  attributes:
+    label: Environment
+    description: How are you running the code?
+    placeholder: "Examples: a specific version of `node`, a specific browser, etc."
+  validations:
+    required: true
+- type: textarea
+  id: screenshots
+  attributes:
+    label: "🖼 Screenshots"
+    description: "Do you have any screenshots that demonstrate the issue?"
+    placeholder: "Click here and then drag any screenshots into the editor."
+  validations:
+    required: false
+- type: textarea
+  id: additional
+  attributes:
+    label: Additional info
+    description: Anything else that might be useful for us to know?
+  validations:
+    required: false

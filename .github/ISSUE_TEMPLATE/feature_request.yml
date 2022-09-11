@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest an idea
+title: "[Feature request] "
+labels: ["enhancement"]
+body:
+- type: textarea
+  id: goal
+  attributes:
+    label: Goal
+    description: What goal would you like this feature to meet?
+    placeholder: "Example: I'd like to be able to do ______ with cubing.js (or with Twizzle)."
+  validations:
+    required: true
+- type: textarea
+  id: solution
+  attributes:
+    label: Possible solution
+    description: What would a useful solution look like?
+    placeholder: "Example: Implement a function in a specific `cubing.js` subpackage."
+  validations:
+    required: true
+- type: textarea
+  id: alternatives
+  attributes:
+    label: Alternatives
+    description: Are there any alternatives or related features that might also meet your goal?
+  validations:
+    required: false

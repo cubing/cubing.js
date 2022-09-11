@@ -1,0 +1,54 @@
+name: Twizzle issue
+description: Let us know an issue with Twizzle
+title: "[Twizzle issue] "
+labels: ["🐞 bug", "Twizzle"]
+body:
+- type: markdown
+  id: thanks
+  attributes:
+    value: "Thanks for filing an issue! Please help us by filling out the following details."
+- type: textarea
+  id: repro
+  attributes:
+    label: Steps to reproduce the issue
+    description: What were you trying to do?
+    placeholder: "1. Go to alpha.twizzle.net\n2. Click on ...\n3. ..."
+  validations:
+    required: true
+- type: textarea
+  id: observed
+  attributes:
+    label: Observed behaviour
+    description: What issue did you observe?
+  validations:
+    required: true
+- type: textarea
+  id: expected
+  attributes:
+    label: Expected behaviour
+    description: What did you expect?
+  validations:
+    required: true
+- type: input
+  id: browser
+  attributes:
+    label: Browser & operating system
+    description: What browser(s) are you using? If possible, include your browser version and OS version.
+    placeholder: "Example: Chrome 105 on macOS 12.5.1"
+  validations:
+    required: true
+- type: textarea
+  id: screenshots
+  attributes:
+    label: "🖼 Screenshots"
+    description: "Do you have any screenshots that demonstrate the issue?"
+    placeholder: "Click here and then drag any screenshots into the editor."
+  validations:
+    required: false
+- type: textarea
+  id: additional
+  attributes:
+    label: Additional info
+    description: Anything else that might be useful for us to know?
+  validations:
+    required: false
