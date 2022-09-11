@@ -1,13 +1,13 @@
-var $intern_3 = { 3: 1 },
-  $intern_9 = 4194303,
-  $intern_10 = 1048575,
-  $intern_11 = 524288,
-  $intern_20 = 65535,
-  $intern_26 = { 11: 1, 3: 1 },
-  $intern_27 = { 17: 1, 3: 1 },
-  $intern_28 = 14540032,
-  $intern_29 = 286331153,
-  $intern_30 = { 10: 1, 3: 1 };
+var $intern_3 = { 3: 1 };
+var $intern_9 = 4194303;
+var $intern_10 = 1048575;
+var $intern_11 = 524288;
+var $intern_20 = 65535;
+var $intern_26 = { 11: 1, 3: 1 };
+var $intern_27 = { 17: 1, 3: 1 };
+var $intern_28 = 14540032;
+var $intern_29 = 286331153;
+var $intern_30 = { 10: 1, 3: 1 };
 var _;
 var prototypesByTypeId_0 = {};
 function typeMarkerFn() {}
@@ -40,7 +40,9 @@ function defineClass(typeId, superTypeId, castableTypeMap) {
     _.constructor = _;
     !superTypeId && (_.typeMarker$ = typeMarkerFn);
   }
+  // rome-ignore lint(js/noArguments): Legacy code
   for (var i = 3; i < arguments.length; ++i) {
+    // rome-ignore lint(js/noArguments): Legacy code
     arguments[i].prototype = _;
   }
   clazz && (_.___clazz$ = clazz);
@@ -141,7 +143,7 @@ _.createClassLiteralForArray = function createClassLiteralForArray(dimensions) {
   return clazz;
 };
 _.isPrimitive = function isPrimitive() {
-  return (this.modifiers & 1) != 0;
+  return (this.modifiers & 1) !== 0;
 };
 
 function getClassLiteralForArray(clazz, dimensions) {
@@ -196,9 +198,13 @@ function initDims_0(
   index_0,
   count,
 ) {
-  var elementTypeCategory, i, isLastDim, length_0, result;
+  var elementTypeCategory;
+  var i;
+  var isLastDim;
+  var length_0;
+  var result;
   length_0 = dimExprs[index_0];
-  isLastDim = index_0 == count - 1;
+  isLastDim = index_0 === count - 1;
   elementTypeCategory = isLastDim ? leafElementTypeCategory : 0;
   result = initializeArrayElementsWithDefaults(elementTypeCategory, length_0);
   initValues(
@@ -244,15 +250,18 @@ function initializeArrayElementsWithDefaults(elementTypeCategory, length_0) {
   var array = new Array(length_0);
   var initValue;
   switch (elementTypeCategory) {
-    case 6:
+    case 6: {
       initValue = { l: 0, m: 0, h: 0 };
       break;
-    case 7:
+    }
+    case 7: {
       initValue = 0;
       break;
-    case 8:
+    }
+    case 8: {
       initValue = false;
       break;
+    }
     default:
       return array;
   }
@@ -263,7 +272,9 @@ function initializeArrayElementsWithDefaults(elementTypeCategory, length_0) {
 }
 
 function create(value_0) {
-  var a0, a1, a2;
+  var a0;
+  var a1;
+  var a2;
   a0 = value_0 & $intern_9;
   a1 = (value_0 >> 22) & $intern_9;
   a2 = value_0 < 0 ? $intern_10 : 0;
@@ -275,7 +286,9 @@ function create0(l, m, h) {
 }
 
 function add_1(a, b) {
-  var sum0, sum1, sum2;
+  var sum0;
+  var sum1;
+  var sum2;
   sum0 = a.l + b.l;
   sum1 = a.m + b.m + (sum0 >> 22);
   sum2 = a.h + b.h + (sum1 >> 22);
@@ -287,7 +300,8 @@ function and(a, b) {
 }
 
 function fromInt(value_0) {
-  var rebase, result;
+  var rebase;
+  var result;
   if (value_0 > -129 && value_0 < 128) {
     rebase = value_0 + 128;
     boxedValues == null &&
@@ -307,24 +321,25 @@ function fromInt(value_0) {
 }
 
 function gte(a, b) {
-  var signa, signb;
+  var signa;
+  var signb;
   signa = a.h >> 19;
   signb = b.h >> 19;
-  return signa == 0
-    ? signb != 0 ||
+  return signa === 0
+    ? signb !== 0 ||
         a.h > b.h ||
-        (a.h == b.h && a.m > b.m) ||
-        (a.h == b.h && a.m == b.m && a.l >= b.l)
+        (a.h === b.h && a.m > b.m) ||
+        (a.h === b.h && a.m === b.m && a.l >= b.l)
     : !(
-        signb == 0 ||
+        signb === 0 ||
         a.h < b.h ||
-        (a.h == b.h && a.m < b.m) ||
-        (a.h == b.h && a.m == b.m && a.l < b.l)
+        (a.h === b.h && a.m < b.m) ||
+        (a.h === b.h && a.m === b.m && a.l < b.l)
       );
 }
 
 function neq(a, b) {
-  return a.l != b.l || a.m != b.m || a.h != b.h;
+  return a.l !== b.l || a.m !== b.m || a.h !== b.h;
 }
 
 function or(a, b) {
@@ -332,7 +347,9 @@ function or(a, b) {
 }
 
 function shl(a, n) {
-  var res0, res1, res2;
+  var res0;
+  var res1;
+  var res2;
   n &= 63;
   if (n < 22) {
     res0 = a.l << n;
@@ -351,10 +368,14 @@ function shl(a, n) {
 }
 
 function shr(a, n) {
-  var a2, negative, res0, res1, res2;
+  var a2;
+  var negative;
+  var res0;
+  var res1;
+  var res2;
   n &= 63;
   a2 = a.h;
-  negative = (a2 & $intern_11) != 0;
+  negative = (a2 & $intern_11) !== 0;
   negative && (a2 |= -1048576);
   if (n < 22) {
     res2 = a2 >> n;
@@ -373,7 +394,9 @@ function shr(a, n) {
 }
 
 function sub_0(a, b) {
-  var sum0, sum1, sum2;
+  var sum0;
+  var sum1;
+  var sum2;
   sum0 = a.l - b.l;
   sum1 = a.m - b.m + (sum0 >> 22);
   sum2 = a.h - b.h + (sum1 >> 22);
@@ -441,11 +464,11 @@ function equals_7(array1, array2) {
   if (array1 === array2) {
     return true;
   }
-  if (array1.length != array2.length) {
+  if (array1.length !== array2.length) {
     return false;
   }
   for (i = 0; i < array1.length; ++i) {
-    if (array1[i] != array2[i]) {
+    if (array1[i] !== array2[i]) {
       return false;
     }
   }
@@ -646,10 +669,10 @@ function getPruning(table, index_0) {
 
 function init_0(fullInit) {
   $clinit_CoordCube();
-  if (initLevel == 2 || (initLevel == 1 && !fullInit)) {
+  if (initLevel === 2 || (initLevel === 1 && !fullInit)) {
     return;
   }
-  if (initLevel == 0) {
+  if (initLevel === 0) {
     initPermSym2Raw();
     initCPermMove();
     initEPermMove();
@@ -723,7 +746,10 @@ function init_0(fullInit) {
 }
 
 function initCPermMove() {
-  var c, d, i, j;
+  var c;
+  var d;
+  var i;
+  var j;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 2768; i++) {
@@ -737,7 +763,11 @@ function initCPermMove() {
 }
 
 function initCombPMoveConj() {
-  var c, d, i, j, j0;
+  var c;
+  var d;
+  var i;
+  var j;
+  var j0;
   c = new CubieCube();
   d = new CubieCube();
   CCombPMove = initDims(
@@ -769,7 +799,10 @@ function initCombPMoveConj() {
 }
 
 function initEPermMove() {
-  var c, d, i, j;
+  var c;
+  var d;
+  var i;
+  var j;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 2768; i++) {
@@ -782,7 +815,10 @@ function initEPermMove() {
 }
 
 function initFlipMove() {
-  var c, d, i, j;
+  var c;
+  var d;
+  var i;
+  var j;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 336; i++) {
@@ -795,7 +831,11 @@ function initFlipMove() {
 }
 
 function initMPermMoveConj() {
-  var c, d, i, j, j0;
+  var c;
+  var d;
+  var i;
+  var j;
+  var j0;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 24; i++) {
@@ -824,58 +864,58 @@ function initRawSymPrun(
   PrunFlag,
   fullInit,
 ) {
-  var INV_DEPTH,
-    ISTFP,
-    IS_PHASE2,
-    MAX_DEPTH,
-    MIN_DEPTH,
-    NEXT_AXIS_MAGIC,
-    N_MOVES,
-    N_RAW,
-    N_SIZE,
-    SEARCH_DEPTH,
-    SYM_E2C_MAGIC,
-    SYM_MASK,
-    SYM_SHIFT,
-    check,
-    depth,
-    flip,
-    fsym,
-    i,
-    i0,
-    idx,
-    idxx,
-    inv,
-    j,
-    m,
-    mask,
-    prun,
-    raw,
-    rawx,
-    selArrMask,
-    select,
-    sym,
-    symState,
-    symx,
-    val,
-    val0,
-    xorVal;
+  var INV_DEPTH;
+  var ISTFP;
+  var IS_PHASE2;
+  var MAX_DEPTH;
+  var MIN_DEPTH;
+  var NEXT_AXIS_MAGIC;
+  var N_MOVES;
+  var N_RAW;
+  var N_SIZE;
+  var SEARCH_DEPTH;
+  var SYM_E2C_MAGIC;
+  var SYM_MASK;
+  var SYM_SHIFT;
+  var check;
+  var depth;
+  var flip;
+  var fsym;
+  var i;
+  var i0;
+  var idx;
+  var idxx;
+  var inv;
+  var j;
+  var m;
+  var mask;
+  var prun;
+  var raw;
+  var rawx;
+  var selArrMask;
+  var select;
+  var sym;
+  var symState;
+  var symx;
+  var val;
+  var val0;
+  var xorVal;
   SYM_SHIFT = PrunFlag & 15;
-  SYM_E2C_MAGIC = ((PrunFlag >> 4) & 1) == 1 ? $intern_28 : 0;
-  IS_PHASE2 = ((PrunFlag >> 5) & 1) == 1;
+  SYM_E2C_MAGIC = ((PrunFlag >> 4) & 1) === 1 ? $intern_28 : 0;
+  IS_PHASE2 = ((PrunFlag >> 5) & 1) === 1;
   INV_DEPTH = (PrunFlag >> 8) & 15;
   MAX_DEPTH = (PrunFlag >> 12) & 15;
   MIN_DEPTH = (PrunFlag >> 16) & 15;
   SEARCH_DEPTH = fullInit ? MAX_DEPTH : MIN_DEPTH;
   SYM_MASK = (1 << SYM_SHIFT) - 1;
-  ISTFP = RawMove == null;
+  ISTFP = RawMove === null;
   N_RAW = ISTFP ? 2048 : RawMove.length;
   N_SIZE = N_RAW * SymMove.length;
   N_MOVES = IS_PHASE2 ? 10 : 18;
-  NEXT_AXIS_MAGIC = N_MOVES == 10 ? 66 : 599186;
+  NEXT_AXIS_MAGIC = N_MOVES === 10 ? 66 : 599186;
   depth = ((PrunTable[N_SIZE >> 3] >> (N_SIZE << 2)) & 15) - 1;
 
-  if (depth == -1) {
+  if (depth === -1) {
     for (i = 0; i < ~~(N_SIZE / 8) + 1; i++) {
       PrunTable[i] = $intern_29;
     }
@@ -897,19 +937,19 @@ function initRawSymPrun(
     xorVal = depth ^ (depth + 1);
     val = 0;
     for (i = 0; i < N_SIZE; ++i, val >>= 4) {
-      if ((i & 7) == 0) {
+      if ((i & 7) === 0) {
         val = PrunTable[i >> 3];
         if (
           (((val ^ selArrMask) - $intern_29) &
             ~(val ^ selArrMask) &
-            -2004318072) ==
+            -2004318072) ===
           0
         ) {
           i += 7;
           continue;
         }
       }
-      if ((val & 15) != select) {
+      if ((val & 15) !== select) {
         continue;
       }
       raw = i % N_RAW;
@@ -933,7 +973,7 @@ function initRawSymPrun(
         symx >>= SYM_SHIFT;
         idx = symx * N_RAW + rawx;
         prun = (PrunTable[idx >> 3] >> (idx << 2)) & 15;
-        if (prun != check) {
+        if (prun !== check) {
           prun < depth - 1 && (m += (NEXT_AXIS_MAGIC >> m) & 3);
           continue;
         }
@@ -942,15 +982,15 @@ function initRawSymPrun(
           break;
         }
         PrunTable[idx >> 3] ^= xorVal << (idx << 2);
-        for (j = 1, symState = SymState[symx]; (symState >>= 1) != 0; j++) {
-          if ((symState & 1) != 1) {
+        for (j = 1, symState = SymState[symx]; (symState >>= 1) !== 0; j++) {
+          if ((symState & 1) !== 1) {
             continue;
           }
           idxx = symx * N_RAW;
           ISTFP
             ? (idxx += ($clinit_CubieCube(), FlipS2RF)[FlipR2S[rawx] ^ j])
             : (idxx += RawConj[rawx][j ^ ((SYM_E2C_MAGIC >> (j << 1)) & 3)]);
-          if (((PrunTable[idxx >> 3] >> (idxx << 2)) & 15) == check) {
+          if (((PrunTable[idxx >> 3] >> (idxx << 2)) & 15) === check) {
             PrunTable[idxx >> 3] ^= xorVal << (idxx << 2);
           }
         }
@@ -960,7 +1000,10 @@ function initRawSymPrun(
 }
 
 function initTwistMove() {
-  var c, d, i, j;
+  var c;
+  var d;
+  var i;
+  var j;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 324; i++) {
@@ -973,7 +1016,14 @@ function initTwistMove() {
 }
 
 function initUDSliceMoveConj() {
-  var c, d, i, i0, j, j0, k, udslice;
+  var c;
+  var d;
+  var i;
+  var i0;
+  var j;
+  var j0;
+  var k;
+  var udslice;
   c = new CubieCube();
   d = new CubieCube();
   for (i0 = 0; i0 < 495; i0++) {
@@ -1007,22 +1057,22 @@ _.slice_0 = 0;
 _.tsym = 0;
 _.twist = 0;
 _.twistc = 0;
-var CCombPConj,
-  CCombPMove,
-  CPermMove,
-  EPermCCombPPrun,
-  EPermMove,
-  FlipMove,
-  MCPermPrun,
-  MPermConj,
-  MPermMove,
-  TwistFlipPrun,
-  TwistMove,
-  UDSliceConj,
-  UDSliceFlipPrun,
-  UDSliceMove,
-  UDSliceTwistPrun,
-  initLevel = 0;
+var CCombPConj;
+var CCombPMove;
+var CPermMove;
+var EPermCCombPPrun;
+var EPermMove;
+var FlipMove;
+var MCPermPrun;
+var MPermConj;
+var MPermMove;
+var TwistFlipPrun;
+var TwistMove;
+var UDSliceConj;
+var UDSliceFlipPrun;
+var UDSliceMove;
+var UDSliceTwistPrun;
+var initLevel = 0;
 var Lorg_cubing_min2phase_client_CoordCube_2_classLit = createForClass(
   "org.cubing.min2phase.client",
   "CoordCube",
@@ -1144,7 +1194,8 @@ function $URFConjugate(this$static) {
 }
 
 function $copy(this$static, c) {
-  var i, i0;
+  var i;
+  var i0;
   for (i0 = 0; i0 < 8; i0++) {
     this$static.ca[i0] = c.ca[i0];
   }
@@ -1162,7 +1213,8 @@ function $getEPermSym(this$static) {
 }
 
 function $getFlip(this$static) {
-  var i, idx;
+  var i;
+  var idx;
   idx = 0;
   for (i = 0; i < 11; i++) {
     idx = (idx << 1) | (this$static.ea[i] & 1);
@@ -1171,7 +1223,8 @@ function $getFlip(this$static) {
 }
 
 function $getTwist(this$static) {
-  var i, idx;
+  var i;
+  var idx;
   idx = 0;
   for (i = 0; i < 7; i++) {
     idx += (idx << 1) + (this$static.ca[i] >> 3);
@@ -1180,7 +1233,8 @@ function $getTwist(this$static) {
 }
 
 function $invCubieCube(this$static) {
-  var corn, edge;
+  var corn;
+  var edge;
   !this$static.temps && (this$static.temps = new CubieCube());
   for (edge = 0; edge < 12; edge++) {
     this$static.temps.ea[this$static.ea[edge] >> 1] =
@@ -1194,14 +1248,20 @@ function $invCubieCube(this$static) {
 }
 
 function $selfSymmetry(this$static) {
-  var c, cperm, cpermx, d, i, sym, urfInv;
+  var c;
+  var cperm;
+  var cpermx;
+  var d;
+  var i;
+  var sym;
+  var urfInv;
   c = new CubieCube_1(this$static);
   d = new CubieCube();
   cperm = ESym2CSym(EPermR2S[getNPerm(c.ca, 8, false)]) >> 4;
   sym = { l: 0, m: 0, h: 0 };
   for (urfInv = 0; urfInv < 6; urfInv++) {
     cpermx = ESym2CSym(EPermR2S[getNPerm(c.ca, 8, false)]) >> 4;
-    if (cperm == cpermx) {
+    if (cperm === cpermx) {
       for (i = 0; i < 16; i++) {
         CornConjugate(c, SymMultInv[0][i], d);
         if (equals_7(d.ca, this$static.ca)) {
@@ -1218,7 +1278,7 @@ function $selfSymmetry(this$static) {
       }
     }
     $URFConjugate(c);
-    urfInv % 3 == 2 && $invCubieCube(c);
+    urfInv % 3 === 2 && $invCubieCube(c);
   }
   return sym;
 }
@@ -1232,7 +1292,9 @@ function $setEPerm(this$static, idx) {
 }
 
 function $setFlip(this$static, idx) {
-  var i, parity, val;
+  var i;
+  var parity;
+  var val;
   parity = 0;
   for (i = 10; i >= 0; --i, idx >>= 1) {
     parity ^= val = idx & 1;
@@ -1242,7 +1304,9 @@ function $setFlip(this$static, idx) {
 }
 
 function $setTwist(this$static, idx) {
-  var i, twst, val;
+  var i;
+  var twst;
+  var val;
   twst = 15;
   for (i = 6; i >= 0; --i, idx = ~~(idx / 3)) {
     twst -= val = idx % 3;
@@ -1253,17 +1317,21 @@ function $setTwist(this$static, idx) {
 }
 
 function $verify(this$static) {
-  var c, cornMask, e, edgeMask, sum;
+  var c;
+  var cornMask;
+  var e;
+  var edgeMask;
+  var sum;
   sum = 0;
   edgeMask = 0;
   for (e = 0; e < 12; e++) {
     edgeMask |= 1 << (this$static.ea[e] >> 1);
     sum ^= this$static.ea[e] & 1;
   }
-  if (edgeMask != 4095) {
+  if (edgeMask !== 4095) {
     return -2;
   }
-  if (sum != 0) {
+  if (sum !== 0) {
     return -3;
   }
   cornMask = 0;
@@ -1272,15 +1340,15 @@ function $verify(this$static) {
     cornMask |= 1 << (this$static.ca[c] & 7);
     sum += this$static.ca[c] >> 3;
   }
-  if (cornMask != 255) {
+  if (cornMask !== 255) {
     return -4;
   }
-  if (sum % 3 != 0) {
+  if (sum % 3 !== 0) {
     return -5;
   }
   if (
     (getNParity(getNPerm(this$static.ea, 12, true), 12) ^
-      getNParity(getNPerm(this$static.ca, 8, false), 8)) !=
+      getNParity(getNPerm(this$static.ca, 8, false), 8)) !==
     0
   ) {
     return -6;
@@ -1290,7 +1358,12 @@ function $verify(this$static) {
 
 function CornConjugate(a, idx, b) {
   $clinit_CubieCube();
-  var corn, ori, oriA, oriB, s, sinv;
+  var corn;
+  var ori;
+  var oriA;
+  var oriB;
+  var s;
+  var sinv;
   sinv = CubeSym[SymMultInv[0][idx]];
   s = CubeSym[idx];
   for (corn = 0; corn < 8; corn++) {
@@ -1304,7 +1377,9 @@ function CornConjugate(a, idx, b) {
 
 function CornMult(a, b, prod) {
   $clinit_CubieCube();
-  var corn, oriA, oriB;
+  var corn;
+  var oriA;
+  var oriB;
   for (corn = 0; corn < 8; corn++) {
     oriA = a.ca[b.ca[corn] & 7] >> 3;
     oriB = b.ca[corn] >> 3;
@@ -1314,12 +1389,15 @@ function CornMult(a, b, prod) {
 }
 
 function CornMultFull(a, b, prod) {
-  var corn, ori, oriA, oriB;
+  var corn;
+  var ori;
+  var oriA;
+  var oriB;
   for (corn = 0; corn < 8; corn++) {
     oriA = a.ca[b.ca[corn] & 7] >> 3;
     oriB = b.ca[corn] >> 3;
     ori = oriA + (oriA < 3 ? oriB : 6 - oriB);
-    ori = (ori % 3) + (oriA < 3 == oriB < 3 ? 0 : 3);
+    ori = (ori % 3) + (oriA < 3 === oriB < 3 ? 0 : 3);
     prod.ca[corn] = (((a.ca[b.ca[corn] & 7] & 7) | (ori << 3)) << 24) >> 24;
   }
 }
@@ -1349,7 +1427,9 @@ function ESym2CSym(idx) {
 
 function EdgeConjugate(a, idx, b) {
   $clinit_CubieCube();
-  var ed, s, sinv;
+  var ed;
+  var s;
+  var sinv;
   sinv = CubeSym[SymMultInv[0][idx]];
   s = CubeSym[idx];
   for (ed = 0; ed < 12; ed++) {
@@ -1390,7 +1470,8 @@ function getSkipMoves() {
 }
 
 function initMove() {
-  var a, p;
+  var a;
+  var p;
   moveCube[0] = new CubieCube_0(15120, 0, 119750400, 0);
   moveCube[3] = new CubieCube_0(21021, 1494, 323403417, 0);
   moveCube[6] = new CubieCube_0(8064, 1236, 29441808, 550);
@@ -1408,7 +1489,9 @@ function initMove() {
 
 function initPermSym2Raw() {
   $clinit_CubieCube();
-  var cc, i, i0;
+  var cc;
+  var i;
+  var i0;
   initSym2Raw(
     40320,
     EPermS2R,
@@ -1433,7 +1516,22 @@ function initPermSym2Raw() {
 }
 
 function initSym() {
-  var c, d, f2, i, i0, i1, i2, j, j0, j1, k, lr2, m, s, t, u4;
+  var c;
+  var d;
+  var f2;
+  var i;
+  var i0;
+  var i1;
+  var i2;
+  var j;
+  var j0;
+  var j1;
+  var k;
+  var lr2;
+  var m;
+  var s;
+  var t;
+  var u4;
   c = new CubieCube();
   d = new CubieCube();
   f2 = new CubieCube_0(28783, 0, 259268407, 0);
@@ -1449,14 +1547,14 @@ function initSym() {
     t = d;
     d = c;
     c = t;
-    if (i1 % 4 == 3) {
+    if (i1 % 4 === 3) {
       CornMultFull(t, lr2, d);
       EdgeMult(t, lr2, d);
       t = d;
       d = c;
       c = t;
     }
-    if (i1 % 8 == 7) {
+    if (i1 % 8 === 7) {
       CornMultFull(t, f2, d);
       EdgeMult(t, f2, d);
       t = d;
@@ -1486,7 +1584,7 @@ function initSym() {
           break;
         }
       }
-      s % 2 == 0 && (Sym8Move[(j1 << 3) | (s >> 1)] = SymMove_0[s][j1]);
+      s % 2 === 0 && (Sym8Move[(j1 << 3) | (s >> 1)] = SymMove_0[s][j1]);
     }
   }
   for (i = 0; i < 18; i++) {
@@ -1494,48 +1592,60 @@ function initSym() {
     j = i;
     for (s = 0; s < 48; s++) {
       SymMove_0[s % 16][j] < i && (firstMoveSym[s] |= 1 << i);
-      s % 16 == 15 && (j = urfMove[2][j]);
+      s % 16 === 15 && (j = urfMove[2][j]);
     }
   }
 }
 
 function initSym2Raw(N_RAW, Sym2Raw, Raw2Sym, SymState, coord) {
   $clinit_CubieCube();
-  var c, count, d, i, idx, isEdge, s, symIdx, sym_inc;
+  var c;
+  var count;
+  var d;
+  var i;
+  var idx;
+  var isEdge;
+  var s;
+  var symIdx;
+  var sym_inc;
   c = new CubieCube();
   d = new CubieCube();
   count = 0;
   idx = 0;
   sym_inc = coord >= 2 ? 1 : 2;
-  isEdge = coord != 1;
+  isEdge = coord !== 1;
   for (i = 0; i < N_RAW; i++) {
-    if (Raw2Sym[i] != 0) {
+    if (Raw2Sym[i] !== 0) {
       continue;
     }
     switch (coord) {
-      case 0:
+      case 0: {
         $setFlip(c, i);
         break;
-      case 1:
+      }
+      case 1: {
         $setTwist(c, i);
         break;
+      }
       case 2:
         setNPerm(c.ea, i, 8, true);
     }
     for (s = 0; s < 16; s += sym_inc) {
       isEdge ? EdgeConjugate(c, s, d) : CornConjugate(c, s, d);
       switch (coord) {
-        case 0:
+        case 0: {
           idx = $getFlip(d);
           break;
-        case 1:
+        }
+        case 1: {
           idx = $getTwist(d);
           break;
+        }
         case 2:
           idx = getNPerm(d.ea, 8, true);
       }
-      coord == 0 && (FlipS2RF[(count << 3) | (s >> 1)] = idx & $intern_20);
-      idx == i &&
+      coord === 0 && (FlipS2RF[(count << 3) | (s >> 1)] = idx & $intern_20);
+      idx === i &&
         (SymState[count] =
           (SymState[count] | (1 << ~~(s / sym_inc))) & $intern_20);
       symIdx = ~~(((count << 4) | s) / sym_inc);
@@ -1546,31 +1656,31 @@ function initSym2Raw(N_RAW, Sym2Raw, Raw2Sym, SymState, coord) {
   return count;
 }
 
-var CubeSym,
-  EPermR2S,
-  EPermS2R,
-  FlipR2S,
-  FlipS2R,
-  FlipS2RF,
-  MPermInv,
-  Perm2CombP,
-  PermInvEdgeSym,
-  Sym8Move,
-  SymMove_0,
-  SymMoveUD,
-  SymMult,
-  SymMultInv,
-  SymStateFlip,
-  SymStatePerm,
-  SymStateTwist,
-  TwistR2S,
-  TwistS2R,
-  firstMoveSym,
-  moveCube,
-  moveCubeSym,
-  urf1,
-  urf2,
-  urfMove;
+var CubeSym;
+var EPermR2S;
+var EPermS2R;
+var FlipR2S;
+var FlipS2R;
+var FlipS2RF;
+var MPermInv;
+var Perm2CombP;
+var PermInvEdgeSym;
+var Sym8Move;
+var SymMove_0;
+var SymMoveUD;
+var SymMult;
+var SymMultInv;
+var SymStateFlip;
+var SymStatePerm;
+var SymStateTwist;
+var TwistR2S;
+var TwistS2R;
+var firstMoveSym;
+var moveCube;
+var moveCubeSym;
+var urf1;
+var urf2;
+var urfMove;
 var Lorg_cubing_min2phase_client_CubieCube_2_classLit = createForClass(
   "org.cubing.min2phase.client",
   "CubieCube",
@@ -1587,7 +1697,11 @@ function $initPhase2(
   edgei,
   corni,
 ) {
-  var depth2, i, i0, prun, ret;
+  var depth2;
+  var i;
+  var i0;
+  var prun;
+  var ret;
   prun = max_0(
     getPruning(
       ($clinit_CoordCube(), EPermCCombPPrun),
@@ -1640,7 +1754,7 @@ function $initPhase2(
     }
     this$static.solLen = this$static.solution.length_0;
   }
-  if (depth2 != this$static.maxDep2) {
+  if (depth2 !== this$static.maxDep2) {
     this$static.maxDep2 = min_0(
       MAX_DEPTH2,
       this$static.solLen - this$static.length1 - 1,
@@ -1651,21 +1765,21 @@ function $initPhase2(
 }
 
 function $initPhase2Pre(this$static) {
-  var corni,
-    edgei,
-    i,
-    lastMove,
-    lastPre,
-    m,
-    p2corn,
-    p2csym,
-    p2edge,
-    p2esym,
-    p2mid,
-    p2switch,
-    p2switchMask,
-    p2switchMax,
-    ret;
+  var corni;
+  var edgei;
+  var i;
+  var lastMove;
+  var lastPre;
+  var m;
+  var p2corn;
+  var p2csym;
+  var p2edge;
+  var p2esym;
+  var p2mid;
+  var p2switch;
+  var p2switchMask;
+  var p2switchMax;
+  var ret;
   this$static.isRec = false;
   if (
     gte(
@@ -1700,20 +1814,20 @@ function $initPhase2Pre(this$static) {
   edgei = getPermSymInv(p2edge, p2esym, false);
   corni = getPermSymInv(p2corn, p2csym, true);
   lastMove =
-    this$static.depth1 == 0 ? -1 : this$static.move[this$static.depth1 - 1];
+    this$static.depth1 === 0 ? -1 : this$static.move[this$static.depth1 - 1];
   lastPre =
-    this$static.preMoveLen == 0
+    this$static.preMoveLen === 0
       ? -1
       : this$static.preMoves[this$static.preMoveLen - 1];
   ret = 0;
   p2switchMax =
-    (this$static.preMoveLen == 0 ? 1 : 2) * (this$static.depth1 == 0 ? 1 : 2);
+    (this$static.preMoveLen === 0 ? 1 : 2) * (this$static.depth1 === 0 ? 1 : 2);
   for (
     p2switch = 0, p2switchMask = (1 << p2switchMax) - 1;
     p2switch < p2switchMax;
     p2switch++
   ) {
-    if (((p2switchMask >> p2switch) & 1) != 0) {
+    if (((p2switchMask >> p2switch) & 1) !== 0) {
       p2switchMask &= ~(1 << p2switch);
       ret = $initPhase2(
         this$static,
@@ -1725,14 +1839,16 @@ function $initPhase2Pre(this$static) {
         edgei,
         corni,
       );
-      if (ret == 0 || ret > 2) {
+      if (ret === 0 || ret > 2) {
         break;
-      } else ret == 2 && (p2switchMask &= 4 << p2switch);
+      } else {
+        ret === 2 && (p2switchMask &= 4 << p2switch);
+      }
     }
-    if (p2switchMask == 0) {
+    if (p2switchMask === 0) {
       break;
     }
-    if ((p2switch & 1) == 0 && this$static.depth1 > 0) {
+    if ((p2switch & 1) === 0 && this$static.depth1 > 0) {
       m = ($clinit_Util(), std2ud)[~~(lastMove / 3) * 3 + 1];
       this$static.move[this$static.depth1 - 1] =
         ud2std[m] * 2 - this$static.move[this$static.depth1 - 1];
@@ -1768,7 +1884,7 @@ function $initPhase2Pre(this$static) {
     (this$static.move[this$static.depth1 - 1] = lastMove);
   this$static.preMoveLen > 0 &&
     (this$static.preMoves[this$static.preMoveLen - 1] = lastPre);
-  return ret == 0 ? 0 : 2;
+  return ret === 0 ? 0 : 2;
 }
 
 function $initSearch(this$static) {
@@ -1806,14 +1922,19 @@ function $initSearch(this$static) {
     $copy(this$static.urfCubieCube[i], this$static.cc);
     $setWithPrun(this$static.urfCoordCube[i], this$static.urfCubieCube[i], 20);
     $URFConjugate(this$static.cc);
-    i % 3 == 2 && $invCubieCube(this$static.cc);
+    i % 3 === 2 && $invCubieCube(this$static.cc);
   }
 }
 
 function $phase1(this$static, node, ssym, maxl, lm) {
-  var axis_0, m, power, prun, ret, skipMoves;
-  if (node.prun == 0 && maxl < 5) {
-    if (this$static.allowShorter || maxl == 0) {
+  var axis_0;
+  var m;
+  var power;
+  var prun;
+  var ret;
+  var skipMoves;
+  if (node.prun === 0 && maxl < 5) {
+    if (this$static.allowShorter || maxl === 0) {
       this$static.depth1 -= maxl;
       ret = $initPhase2Pre(this$static);
       this$static.depth1 += maxl;
@@ -1824,28 +1945,28 @@ function $phase1(this$static, node, ssym, maxl, lm) {
   }
   skipMoves = getSkipMoves(fromInt(ssym));
   for (axis_0 = 0; axis_0 < 18; axis_0 += 3) {
-    if (axis_0 == lm || axis_0 == lm - 9) {
+    if (axis_0 === lm || axis_0 === lm - 9) {
       continue;
     }
     for (power = 0; power < 3; power++) {
       m = axis_0 + power;
       if (
         (this$static.isRec &&
-          m != this$static.move[this$static.depth1 - maxl]) ||
-        (skipMoves != 0 && (skipMoves & (1 << m)) != 0)
+          m !== this$static.move[this$static.depth1 - maxl]) ||
+        (skipMoves !== 0 && (skipMoves & (1 << m)) !== 0)
       ) {
         continue;
       }
       prun = $doMovePrun(this$static.nodeUD[maxl], node, m);
       if (prun > maxl) {
         break;
-      } else if (prun == maxl) {
+      } else if (prun === maxl) {
         continue;
       }
       prun = $doMovePrunConj(this$static.nodeUD[maxl], node, m);
       if (prun > maxl) {
         break;
-      } else if (prun == maxl) {
+      } else if (prun === maxl) {
         continue;
       }
       this$static.move[this$static.depth1 - maxl] = m;
@@ -1857,7 +1978,7 @@ function $phase1(this$static, node, ssym, maxl, lm) {
         maxl - 1,
         axis_0,
       );
-      if (ret == 0) {
+      if (ret === 0) {
         return 0;
       } else if (ret >= 2) {
         break;
@@ -1868,17 +1989,19 @@ function $phase1(this$static, node, ssym, maxl, lm) {
 }
 
 function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
-  var m, ret, skipMoves;
+  var m;
+  var ret;
+  var skipMoves;
   this$static.preMoveLen = this$static.maxPreMoves - maxl;
   if (
     this$static.isRec
-      ? this$static.depth1 == this$static.length1 - this$static.preMoveLen
-      : this$static.preMoveLen == 0 || ((225207 >> lm) & 1) == 0
+      ? this$static.depth1 === this$static.length1 - this$static.preMoveLen
+      : this$static.preMoveLen === 0 || ((225207 >> lm) & 1) === 0
   ) {
     this$static.depth1 = this$static.length1 - this$static.preMoveLen;
     this$static.phase1Cubie[0] = cc;
     this$static.allowShorter =
-      this$static.depth1 == MIN_P1LENGTH_PRE && this$static.preMoveLen != 0;
+      this$static.depth1 === MIN_P1LENGTH_PRE && this$static.preMoveLen !== 0;
     if (
       $setWithPrun(
         this$static.nodeUD[this$static.depth1 + 1],
@@ -1891,31 +2014,31 @@ function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
         ssym,
         this$static.depth1,
         -1,
-      ) == 0
+      ) === 0
     ) {
       return 0;
     }
   }
   if (
-    maxl == 0 ||
+    maxl === 0 ||
     this$static.preMoveLen + MIN_P1LENGTH_PRE >= this$static.length1
   ) {
     return 1;
   }
   skipMoves = getSkipMoves(fromInt(ssym));
-  (maxl == 1 ||
+  (maxl === 1 ||
     this$static.preMoveLen + 1 + MIN_P1LENGTH_PRE >= this$static.length1) &&
     (skipMoves |= 225207);
   lm = ~~(lm / 3) * 3;
   for (m = 0; m < 18; m++) {
-    if (m == lm || m == lm - 9 || m == lm + 9) {
+    if (m === lm || m === lm - 9 || m === lm + 9) {
       m += 2;
       continue;
     }
     if (
       (this$static.isRec &&
-        m != this$static.preMoves[this$static.maxPreMoves - maxl]) ||
-      (skipMoves & (1 << m)) != 0
+        m !== this$static.preMoves[this$static.maxPreMoves - maxl]) ||
+      (skipMoves & (1 << m)) !== 0
     ) {
       continue;
     }
@@ -1933,7 +2056,7 @@ function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
       this$static.preMoveCubes[maxl],
       ssym & toInt(moveCubeSym[m]),
     );
-    if (ret == 0) {
+    if (ret === 0) {
       return 0;
     }
   }
@@ -1941,13 +2064,23 @@ function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
 }
 
 function $phase2(this$static, edge, esym, corn, csym, mid, maxl, depth, lm) {
-  var corni, cornx, csymx, edgei, edgex, esymx, m, midx, moveMask, prun, ret;
-  if (edge == 0 && corn == 0 && mid == 0) {
+  var corni;
+  var cornx;
+  var csymx;
+  var edgei;
+  var edgex;
+  var esymx;
+  var m;
+  var midx;
+  var moveMask;
+  var prun;
+  var ret;
+  if (edge === 0 && corn === 0 && mid === 0) {
     return maxl;
   }
   moveMask = ($clinit_Util(), ckmv2bit)[lm];
   for (m = 0; m < 10; m++) {
-    if (((moveMask >> m) & 1) != 0) {
+    if (((moveMask >> m) & 1) !== 0) {
       m += (66 >> m) & 3;
       continue;
     }
@@ -2023,7 +2156,7 @@ function $search(this$static) {
       this$static.urfIdx < 6;
       this$static.urfIdx++
     ) {
-      if ((this$static.conjMask & (1 << this$static.urfIdx)) != 0) {
+      if ((this$static.conjMask & (1 << this$static.urfIdx)) !== 0) {
         continue;
       }
       if (
@@ -2033,7 +2166,7 @@ function $search(this$static) {
           -30,
           this$static.urfCubieCube[this$static.urfIdx],
           toInt(and(this$static.selfSym, { l: $intern_20, m: 0, h: 0 })),
-        ) == 0
+        ) === 0
       ) {
         return !this$static.solution
           ? "Error 8"
@@ -2047,8 +2180,8 @@ function $search(this$static) {
 function $solution(this$static, facelets) {
   var check;
   check = $verify_0(this$static, facelets);
-  if (check != 0) {
-    return "Error " + (check < 0 ? -check : check);
+  if (check !== 0) {
+    return `Error ${check < 0 ? -check : check}`;
   }
   this$static.solLen = 22;
   this$static.probe = { l: 0, m: 0, h: 0 };
@@ -2063,7 +2196,10 @@ function $solution(this$static, facelets) {
 }
 
 function $verify_0(this$static, facelets) {
-  var center, count, f, i;
+  var center;
+  var count;
+  var f;
+  var i;
   count = 0;
   f = initDim(B_classLit, $intern_30, 0, 54, 7, 1);
   // try {
@@ -2080,7 +2216,7 @@ function $verify_0(this$static, facelets) {
   for (i = 0; i < 54; i++) {
     f[i] =
       ($indexOf_0(center, fromCodePoint(facelets.charCodeAt(i))) << 24) >> 24;
-    if (f[i] == -1) {
+    if (f[i] === -1) {
       return -1;
     }
     count += 1 << (f[i] << 2);
@@ -2091,7 +2227,7 @@ function $verify_0(this$static, facelets) {
   //     return -1;
   //   } else throw unwrap($e0);
   // }
-  if (count != 10066329) {
+  if (count !== 10066329) {
     return -1;
   }
   toCubieCube(f, this$static.cc);
@@ -2099,7 +2235,9 @@ function $verify_0(this$static, facelets) {
 }
 
 function Search() {
-  var i, i0, i1;
+  var i;
+  var i0;
+  var i1;
   this.move = initDim(I_classLit, $intern_27, 0, 31, 7, 1);
   this.nodeUD = initDim(
     Lorg_cubing_min2phase_client_CoordCube_2_classLit,
@@ -2191,15 +2329,20 @@ _.solLen = 0;
 _.urfIdx = 0;
 _.valid1 = 0;
 _.verbose = 0;
-var MAX_DEPTH2 = 12,
-  MIN_P1LENGTH_PRE = 7;
+var MAX_DEPTH2 = 12;
+var MIN_P1LENGTH_PRE = 7;
 let $clinit_Util_ran = false;
 function $clinit_Util() {
   if ($clinit_Util_ran) {
     return;
   }
   $clinit_Util_ran = true;
-  var i, i0, i1, ix, j, jx;
+  var i;
+  var i0;
+  var i1;
+  var ix;
+  var j;
+  var jx;
   cornerFacelet = initValues(getClassLiteralForArray(
     B_classLit,
     2,
@@ -2310,7 +2453,8 @@ function $clinit_Util() {
     ckmv2bit[i1] = 0;
     for (j = 0; j < 10; j++) {
       jx = ~~(ud2std[j] / 3);
-      ckmv2bit[i1] |= (ix == jx || (ix % 3 == jx % 3 && ix >= jx) ? 1 : 0) << j;
+      ckmv2bit[i1] |=
+        (ix === jx || (ix % 3 === jx % 3 && ix >= jx) ? 1 : 0) << j;
     }
   }
   ckmv2bit[10] = 0;
@@ -2324,20 +2468,25 @@ function $clinit_Util() {
 
 function getComb(arr, mask, isEdge) {
   $clinit_Util();
-  var end, i, idxC, perm, r;
+  var end;
+  var i;
+  var idxC;
+  var perm;
+  var r;
   end = arr.length - 1;
   idxC = 0;
   r = 4;
   for (i = end; i >= 0; i--) {
     perm = getVal(arr[i], isEdge);
-    (perm & 12) == mask && (idxC += Cnk[i][r--]);
+    (perm & 12) === mask && (idxC += Cnk[i][r--]);
   }
   return idxC;
 }
 
 function getNParity(idx, n) {
   $clinit_Util();
-  var i, p;
+  var i;
+  var p;
   p = 0;
   for (i = n - 2; i >= 0; i--) {
     p ^= idx % (n - i);
@@ -2348,7 +2497,10 @@ function getNParity(idx, n) {
 
 function getNPerm(arr, n, isEdge) {
   $clinit_Util();
-  var i, idx, v, val;
+  var i;
+  var idx;
+  var v;
+  var val;
   idx = 0;
   val = { l: 1323536, m: 2777561, h: 1043915 };
   for (i = 0; i < n - 1; i++) {
@@ -2365,7 +2517,10 @@ function getVal(val0, isEdge) {
 
 function setComb(arr, idxC, mask, isEdge) {
   $clinit_Util();
-  var end, fill, i, r;
+  var end;
+  var fill;
+  var i;
+  var r;
   end = arr.length - 1;
   r = 4;
   fill = end;
@@ -2374,7 +2529,7 @@ function setComb(arr, idxC, mask, isEdge) {
       idxC -= Cnk[i][r--];
       arr[i] = setVal(arr[i], r | mask, isEdge);
     } else {
-      (fill & 12) == mask && (fill -= 4);
+      (fill & 12) === mask && (fill -= 4);
       arr[i] = setVal(arr[i], fill--, isEdge);
     }
   }
@@ -2382,7 +2537,12 @@ function setComb(arr, idxC, mask, isEdge) {
 
 function setNPerm(arr, idx, n, isEdge) {
   $clinit_Util();
-  var extract, i, m, p, v, val;
+  var extract;
+  var i;
+  var m;
+  var p;
+  var v;
+  var val;
   val = { l: 1323536, m: 2777561, h: 1043915 };
   extract = { l: 0, m: 0, h: 0 };
   for (p = 2; p <= n; p++) {
@@ -2420,7 +2580,14 @@ function setVal(val0, val, isEdge) {
 
 function toCubieCube(f, ccRet) {
   $clinit_Util();
-  var col1, col2, i, i0, i1, i2, j, ori;
+  var col1;
+  var col2;
+  var i;
+  var i0;
+  var i1;
+  var i2;
+  var j;
+  var ori;
   for (i0 = 0; i0 < 8; i0++) {
     ccRet.ca[i0] = 0;
   }
@@ -2429,15 +2596,16 @@ function toCubieCube(f, ccRet) {
   }
   for (i2 = 0; i2 < 8; i2++) {
     for (ori = 0; ori < 3; ori++) {
-      if (f[cornerFacelet[i2][ori]] == 0 || f[cornerFacelet[i2][ori]] == 3)
+      if (f[cornerFacelet[i2][ori]] === 0 || f[cornerFacelet[i2][ori]] === 3) {
         break;
+      }
     }
     col1 = f[cornerFacelet[i2][(ori + 1) % 3]];
     col2 = f[cornerFacelet[i2][(ori + 2) % 3]];
     for (j = 0; j < 8; j++) {
       if (
-        col1 == ~~(cornerFacelet[j][1] / 9) &&
-        col2 == ~~(cornerFacelet[j][2] / 9)
+        col1 === ~~(cornerFacelet[j][1] / 9) &&
+        col2 === ~~(cornerFacelet[j][2] / 9)
       ) {
         ccRet.ca[i2] = narrow_byte(((ori % 3) << 3) | j);
         break;
@@ -2447,15 +2615,15 @@ function toCubieCube(f, ccRet) {
   for (i = 0; i < 12; i++) {
     for (j = 0; j < 12; j++) {
       if (
-        f[edgeFacelet[i][0]] == ~~(edgeFacelet[j][0] / 9) &&
-        f[edgeFacelet[i][1]] == ~~(edgeFacelet[j][1] / 9)
+        f[edgeFacelet[i][0]] === ~~(edgeFacelet[j][0] / 9) &&
+        f[edgeFacelet[i][1]] === ~~(edgeFacelet[j][1] / 9)
       ) {
         ccRet.ea[i] = narrow_byte(j << 1);
         break;
       }
       if (
-        f[edgeFacelet[i][0]] == ~~(edgeFacelet[j][1] / 9) &&
-        f[edgeFacelet[i][1]] == ~~(edgeFacelet[j][0] / 9)
+        f[edgeFacelet[i][0]] === ~~(edgeFacelet[j][1] / 9) &&
+        f[edgeFacelet[i][1]] === ~~(edgeFacelet[j][0] / 9)
       ) {
         ccRet.ea[i] = narrow_byte((j << 1) | 1);
         break;
@@ -2464,33 +2632,41 @@ function toCubieCube(f, ccRet) {
   }
 }
 
-var Cnk, ckmv2bit, cornerFacelet, edgeFacelet, move2str, std2ud, ud2std;
+var Cnk;
+var ckmv2bit;
+var cornerFacelet;
+var edgeFacelet;
+var move2str;
+var std2ud;
+var ud2std;
 function $appendSolMove(this$static, curMove) {
-  var axisCur, axisLast, pow_0;
-  if (this$static.length_0 == 0) {
+  var axisCur;
+  var axisLast;
+  var pow_0;
+  if (this$static.length_0 === 0) {
     this$static.moves[this$static.length_0++] = curMove;
     return;
   }
   axisCur = ~~(curMove / 3);
   axisLast = ~~(this$static.moves[this$static.length_0 - 1] / 3);
-  if (axisCur == axisLast) {
+  if (axisCur === axisLast) {
     pow_0 =
       ((curMove % 3) + (this$static.moves[this$static.length_0 - 1] % 3) + 1) %
       4;
-    pow_0 == 3
+    pow_0 === 3
       ? --this$static.length_0
       : (this$static.moves[this$static.length_0 - 1] = axisCur * 3 + pow_0);
     return;
   }
   if (
     this$static.length_0 > 1 &&
-    axisCur % 3 == axisLast % 3 &&
-    axisCur == ~~(this$static.moves[this$static.length_0 - 2] / 3)
+    axisCur % 3 === axisLast % 3 &&
+    axisCur === ~~(this$static.moves[this$static.length_0 - 2] / 3)
   ) {
     pow_0 =
       ((curMove % 3) + (this$static.moves[this$static.length_0 - 2] % 3) + 1) %
       4;
-    if (pow_0 == 3) {
+    if (pow_0 === 3) {
       this$static.moves[this$static.length_0 - 2] =
         this$static.moves[this$static.length_0 - 1];
       --this$static.length_0;
@@ -2509,16 +2685,18 @@ function $setArgs(this$static, verbose, urfIdx, depth1) {
 }
 
 function $toString_2(this$static) {
-  var s, sb, urf;
+  var s;
+  var sb;
+  var urf;
   sb = new StringBuffer();
   urf =
-    (this$static.verbose & 2) != 0
+    (this$static.verbose & 2) !== 0
       ? (this$static.urfIdx + 3) % 6
       : this$static.urfIdx;
   if (urf < 3) {
     for (s = 0; s < this$static.length_0; s++) {
-      (this$static.verbose & 1) != 0 &&
-        s == this$static.depth1 &&
+      (this$static.verbose & 1) !== 0 &&
+        s === this$static.depth1 &&
         ((sb.string += ".  "), sb);
       $append(
         $append_1(
@@ -2539,8 +2717,8 @@ function $toString_2(this$static) {
           ],
         ),
       );
-      (this$static.verbose & 1) != 0 &&
-        s == this$static.depth1 &&
+      (this$static.verbose & 1) !== 0 &&
+        s === this$static.depth1 &&
         ((sb.string += ".  "), sb);
     }
   }
@@ -2566,9 +2744,9 @@ const Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit = createForClass(
   null,
 );
 createForClass("com.google.gwt.lang", "ModuleUtils", 257);
-var B_classLit = createForPrimitive("byte", "B"),
-  J_classLit = createForPrimitive("long", "J"),
-  C_classLit = createForPrimitive("char", "C");
+var B_classLit = createForPrimitive("byte", "B");
+var J_classLit = createForPrimitive("long", "J");
+var C_classLit = createForPrimitive("char", "C");
 createForClass("com.google.gwt.user.client.rpc", "XsrfToken", null),
   createForInterface("java.util", "Map/Entry");
 

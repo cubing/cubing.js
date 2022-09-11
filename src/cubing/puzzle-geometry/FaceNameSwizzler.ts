@@ -45,7 +45,7 @@ export class FaceNameSwizzler {
         r.push(currentMatch);
         at += this.facenames[currentMatch].length;
       } else {
-        throw new Error("Could not split " + s + " into face names.");
+        throw new Error(`Could not split ${s} into face names.`);
       }
     }
     return r;

@@ -8,7 +8,7 @@ export class Pause extends AlgCommon<Pause> {
   experimentalNISSGrouping?: Grouping; // TODO: tie this to the alg
 
   toString(): string {
-    return `.`;
+    return ".";
   }
 
   isIdentical(other: Comparable): boolean {

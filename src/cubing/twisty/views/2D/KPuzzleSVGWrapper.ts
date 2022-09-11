@@ -12,7 +12,7 @@ const xmlns = "http://www.w3.org/2000/svg";
 let svgCounter = 0;
 function nextSVGID(): string {
   svgCounter += 1;
-  return "svg" + svgCounter.toString();
+  return `svg${svgCounter.toString()}`;
 }
 
 // TODO: This is hardcoded to 3x3x3 SVGs
@@ -238,10 +238,10 @@ export class KPuzzleSVGWrapper {
               "stop-color",
               this.originalColors[fromCur],
             );
-            this.gradients[id].children[1].setAttribute("offset", `100%`);
-            this.gradients[id].children[2].setAttribute("offset", `100%`);
-            this.gradients[id].children[3].setAttribute("offset", `100%`);
-            this.gradients[id].children[4].setAttribute("offset", `100%`);
+            this.gradients[id].children[1].setAttribute("offset", "100%");
+            this.gradients[id].children[2].setAttribute("offset", "100%");
+            this.gradients[id].children[3].setAttribute("offset", "100%");
+            this.gradients[id].children[4].setAttribute("offset", "100%");
           }
           // this.gradients[id]
           // this.elementByID(id).style.fill = this.originalColors[from];
@@ -256,7 +256,7 @@ export class KPuzzleSVGWrapper {
       "radialGradient",
     ) as SVGGradientElement;
     grad.setAttribute("id", `grad-${this.svgID}-${id}`);
-    grad.setAttribute("r", `70.7107%`); // TODO: Adapt to puzzle.
+    grad.setAttribute("r", "70.7107%"); // TODO: Adapt to puzzle.
     const stopDefs = [
       { offset: 0, color: originalColor },
       { offset: 0, color: originalColor },
@@ -280,11 +280,11 @@ export class KPuzzleSVGWrapper {
     idx: number,
     orientation: number,
   ): string {
-    return orbitName + "-l" + idx + "-o" + orientation;
+    return `${orbitName}-l${idx}-o${orientation}`;
   }
 
   private elementByID(id: string): HTMLElement {
     // TODO: Use classes and scope selector to SVG element.
-    return this.wrapperElement.querySelector("#" + id) as HTMLElement;
+    return this.wrapperElement.querySelector(`#${id}`) as HTMLElement;
   }
 }

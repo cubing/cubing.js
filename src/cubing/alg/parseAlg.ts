@@ -137,6 +137,7 @@ class AlgParser {
         if (algBuilder.experimentalNumAlgNodes() === 0) {
           algStartIdx = this.#idx;
         }
+        // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
         continue mainLoop;
       } else if (MOVE_START_REGEX.test(this.#input[this.#idx])) {
         mustNotBeCrowded(savedCharIndex);
@@ -144,6 +145,8 @@ class AlgParser {
         algBuilder.push(move);
         crowded = true;
         algEndIdx = this.#idx;
+
+        // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
         continue mainLoop;
       } else if (this.tryConsumeNext("(")) {
         mustNotBeCrowded(savedCharIndex);
@@ -172,6 +175,8 @@ class AlgParser {
           );
           crowded = true;
           algEndIdx = this.#idx;
+
+          // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
           continue mainLoop;
         } else {
           const alg = this.parseAlgWithStopping([")"]);
@@ -186,6 +191,8 @@ class AlgParser {
           );
           crowded = true;
           algEndIdx = this.#idx;
+
+          // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
           continue mainLoop;
         }
       } else if (this.tryConsumeNext("^")) {
@@ -214,20 +221,26 @@ class AlgParser {
         const B = this.parseAlgWithStopping(["]"]);
         this.mustConsumeNext("]");
         switch (separator) {
-          case ":":
+          case ":": {
             algBuilder.push(
               addCharIndices(new Conjugate(A, B), savedCharIndex, this.#idx),
             );
             crowded = true;
             algEndIdx = this.#idx;
+
+            // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
             continue mainLoop;
-          case ",":
+          }
+          case ",": {
             algBuilder.push(
               addCharIndices(new Commutator(A, B), savedCharIndex, this.#idx),
             );
             crowded = true;
             algEndIdx = this.#idx;
+
+            // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
             continue mainLoop;
+          }
           default:
             throw new Error("unexpected parsing error");
         }
@@ -237,6 +250,8 @@ class AlgParser {
         );
         crowded = false;
         algEndIdx = this.#idx;
+
+        // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
         continue mainLoop;
       } else if (this.tryConsumeNext("/")) {
         if (this.tryConsumeNext("/")) {
@@ -247,6 +262,8 @@ class AlgParser {
           );
           crowded = false;
           algEndIdx = this.#idx;
+
+          // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
           continue mainLoop;
         } else {
           // We allow crowding here to account for csTimer scrambles, which don't have a space between a Square-1 tuple and the following slash.
@@ -255,6 +272,8 @@ class AlgParser {
           );
           crowded = true;
           algEndIdx = this.#idx;
+
+          // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
           continue mainLoop;
         }
       } else if (this.tryConsumeNext(".")) {
@@ -262,6 +281,8 @@ class AlgParser {
         algBuilder.push(addCharIndices(new Pause(), savedCharIndex, this.#idx));
         crowded = true;
         algEndIdx = this.#idx;
+
+        // rome-ignore lint(js/noUnnecessaryContinue): This line allows for more robust refactoring.
         continue mainLoop;
       } else {
         throw new Error(`Unexpected character: ${this.popNext()}`);

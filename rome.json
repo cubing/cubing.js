@@ -11,21 +11,10 @@
         "noDelete": "off",
         "noNegationElse": "off",
         "noShoutyConstants": "off",
-        "noUnusedVariables": "off",
-        "noUnnecessaryContinue": "off",
-        "useSingleCaseStatement": "off",
-        "noUnusedTemplateLiteral": "off",
-        "useTemplate": "off",
-        "useSimplifiedLogicExpression": "off",
-        "useSingleVarDeclarator": "off",
-        "useBlockStatements": "off",
-        "noDoubleEquals": "off",
-        "noArguments": "off",
-        "noAsyncPromiseExecutor": "off"
+        "noUnusedVariables": "off"
       },
       "ts": {
-        "recommended": true,
-        "useShorthandArrayType": "off"
+        "recommended": true
       }
     }
   }

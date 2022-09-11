@@ -170,10 +170,11 @@ export class SimultaneousMoveIndexer {
             endTimestamp: leafWithRange.end,
           };
           switch (fraction) {
-            case 0:
+            case 0: {
               movesStarting.push(currentMove);
               break;
-            case 1:
+            }
+            case 1: {
               // Generalize this to avoid reordering commuting moves.
               if (moveFinished) {
                 movesFinished.push(currentMove);
@@ -181,6 +182,7 @@ export class SimultaneousMoveIndexer {
                 movesFinishing.push(currentMove);
               }
               break;
+            }
             default:
               currentMoves.push(currentMove);
               latestStart = Math.max(latestStart, leafWithRange.start);

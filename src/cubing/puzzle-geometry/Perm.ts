@@ -79,7 +79,7 @@ export class Perm {
 
   public toString(): string {
     // stringify
-    return "Perm[" + this.p.join(" ") + "]";
+    return `Perm[${this.p.join(" ")}]`;
   }
 
   public mul(p2: Perm): Perm {
@@ -130,7 +130,7 @@ export class Perm {
         incyc.push(1 + j);
         seen[j] = true;
       }
-      cyc.push("(" + incyc.join(",") + ")");
+      cyc.push(`(${incyc.join(",")})`);
     }
     return cyc.join("");
   }

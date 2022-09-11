@@ -39,7 +39,7 @@ export abstract class TwistyPropParent<T> {
     return false;
   }
 
-  debugGetChildren(): Array<TwistyPropDerived<any, any>> {
+  debugGetChildren(): TwistyPropDerived<any, any>[] {
     return Array.from(this.#children.values());
   }
 

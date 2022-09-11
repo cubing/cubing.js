@@ -1,5 +1,5 @@
-const Cnk: number[][] = [],
-  fact = [1];
+const Cnk: number[][] = [];
+const fact = [1];
 for (let i = 0; i < 32; ++i) {
   Cnk[i] = [];
   for (let j = 0; j < 32; ++j) {
@@ -15,8 +15,8 @@ for (let i = 0; i < 32; ++i) {
 }
 
 function circle(arr: number[], ...moreArgs: number[]) {
-  const length = moreArgs.length,
-    temp = arr[moreArgs[length - 1]];
+  const length = moreArgs.length;
+  const temp = arr[moreArgs[length - 1]];
   for (let i = length; i > 0; i--) {
     arr[moreArgs[i]] = arr[moreArgs[i - 1]];
   }

@@ -93,14 +93,14 @@ export class Stats {
 
 const PR = Math.round(globalThis?.window?.devicePixelRatio ?? 1);
 
-const WIDTH = 80 * PR,
-  HEIGHT = 48 * PR,
-  TEXT_X = 3 * PR,
-  TEXT_Y = 2 * PR,
-  GRAPH_X = 3 * PR,
-  GRAPH_Y = 15 * PR,
-  GRAPH_WIDTH = 74 * PR,
-  GRAPH_HEIGHT = 30 * PR;
+const WIDTH = 80 * PR;
+const HEIGHT = 48 * PR;
+const TEXT_X = 3 * PR;
+const TEXT_Y = 2 * PR;
+const GRAPH_X = 3 * PR;
+const GRAPH_Y = 15 * PR;
+const GRAPH_WIDTH = 74 * PR;
+const GRAPH_HEIGHT = 30 * PR;
 
 export class StatsPanel {
   min = Infinity;
@@ -136,14 +136,9 @@ export class StatsPanel {
     this.context.fillRect(0, 0, WIDTH, GRAPH_Y);
     this.context.fillStyle = this.fg;
     this.context.fillText(
-      Math.round(value) +
-        " " +
-        this.name +
-        " (" +
-        Math.round(this.min) +
-        "-" +
-        Math.round(this.max) +
-        ")",
+      `${Math.round(value)} ${this.name} (${Math.round(this.min)}-${Math.round(
+        this.max,
+      )})`,
       TEXT_X,
       TEXT_Y,
     );

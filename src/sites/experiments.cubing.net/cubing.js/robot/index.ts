@@ -137,10 +137,9 @@ class RobotDemo {
       this.output.experimentalOptions.singleMoveFixHack = true;
       this.output.experimentalOptions.xAngle = false;
       this.output.experimentalDebugOnSend = (alg: Alg) => {
-        localStorage[this.sentStorageName] =
-          ((localStorage[this.sentStorageName] ?? "") as string) +
-          alg.toString() +
-          ` // ${Date.now()}\n`;
+        localStorage[this.sentStorageName] = `${
+          (localStorage[this.sentStorageName] ?? "") as string
+        }${alg.toString()} // ${Date.now()}\n`;
       };
       this.outputButton.textContent = `Output: ${
         this.output.name() ?? "[unknown]"
@@ -172,10 +171,9 @@ class RobotDemo {
   }
 
   recordAlgLeaf(algLeafEvent: AlgLeafEvent): void {
-    localStorage[this.recorderStorageName] =
-      ((localStorage[this.recorderStorageName] ?? "") as string) +
-      algLeafEvent.latestAlgLeaf.toString() +
-      ` // ${Date.now()}\n`;
+    localStorage[this.recorderStorageName] = `${
+      (localStorage[this.recorderStorageName] ?? "") as string
+    }${algLeafEvent.latestAlgLeaf.toString()} // ${Date.now()}\n`;
   }
 
   togglePause(newPause?: boolean): void {

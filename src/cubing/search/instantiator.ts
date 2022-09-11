@@ -14,7 +14,7 @@ export function setDisableStringWorker(disable: boolean): void {
 }
 
 export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
-  // eslint-disable-next-line no-async-promise-executor
+  // rome-ignore lint(js/noAsyncPromiseExecutor): TODO
   return new Promise<WorkerInsideAPI>(async (resolve, reject) => {
     const timeoutID = setTimeout(() => {
       reject(new Error("module instantiation timeout"));
@@ -62,7 +62,7 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
           resolve(wrap<WorkerInsideAPI>(worker));
         } else {
           reject(
-            new Error("wrong module instantiation message " + messageData),
+            new Error(`wrong module instantiation message ${messageData}`),
           );
         }
       };
@@ -110,7 +110,7 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
         `${commonErrorPrefix} Fallback to string worker is disabled.`,
         e,
       );
-      throw new Error(`Module worker instantiation failed.`);
+      throw new Error("Module worker instantiation failed.");
     }
     console.warn(`${commonErrorPrefix} Falling back to string worker.`, e);
     return instantiateClassicWorker();

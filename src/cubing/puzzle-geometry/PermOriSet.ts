@@ -80,13 +80,13 @@ export class PGOrbitsDef {
       }
       const pd = this.moveops[i].orbits[s];
       for (let j = 0; j < n; j++) {
-        if (pd.perm[j] != j || pd.ori[j] != 0) {
+        if (pd.perm[j] !== j || pd.ori[j] !== 0) {
           m[j].push(mvname);
         }
       }
     }
     for (let j = 0; j < n; j++) {
-      r.push("# " + (j + 1) + " " + m[j].join(" "));
+      r.push(`# ${j + 1} ${m[j].join(" ")}`);
     }
   }
 
@@ -95,7 +95,7 @@ export class PGOrbitsDef {
     mapper: NotationMapper = new NullMapper(),
   ): string[] {
     const result = [];
-    result.push("Name " + name);
+    result.push(`Name ${name}`);
     result.push("");
     for (let i = 0; i < this.orbitnames.length; i++) {
       result.push(
@@ -125,7 +125,7 @@ export class PGOrbitsDef {
         doinv = true;
         name = name.substring(0, name.length - 1);
       }
-      result.push("Move " + name);
+      result.push(`Move ${name}`);
       for (let j = 0; j < this.orbitnames.length; j++) {
         if (doinv) {
           this.moveops[i].orbits[j].inv().appendDefinition(

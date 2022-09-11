@@ -40,8 +40,10 @@ function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
   const newAlgBuilder = new AlgBuilder();
   newAlgBuilder.experimentalPushAlg(oldAlg);
   if (
-    !oldAlg.experimentalIsEmpty() &&
-    !Array.from(oldAlg.childAlgNodes()).slice(-1)[0].is(Newline)
+    !(
+      oldAlg.experimentalIsEmpty() ||
+      Array.from(oldAlg.childAlgNodes()).slice(-1)[0].is(Newline)
+    )
   ) {
     newAlgBuilder.push(new Newline());
   }
@@ -264,7 +266,7 @@ class ControlPane {
     this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener((
       algWithIssues: AlgWithIssues,
     ) => {
-      if (algWithIssues.issues.errors.length == 0) {
+      if (algWithIssues.issues.errors.length === 0) {
         this.moveCountDisplay.textContent = ` (${experimentalCountMovesETM(
           algWithIssues.alg,
         )} ETM)`;
@@ -385,38 +387,46 @@ class ControlPane {
     e: CustomEvent<{ action: string }>,
   ): Promise<void> {
     switch (e.detail.action) {
-      case "expand":
+      case "expand": {
         this.twistyPlayer.alg = (
           await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.expand();
         break;
-      case "simplify":
+      }
+      case "simplify": {
         this.twistyPlayer.alg = (
           await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.simplify();
         break;
-      case "clear":
+      }
+      case "clear": {
         this.twistyPlayer.alg = new Alg();
         this.twistyPlayer.experimentalSetupAlg = new Alg();
         this.twistyPlayer.experimentalTitle = null;
         break;
-      case "invert":
+      }
+      case "invert": {
         this.twistyPlayer.alg = (
           await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.invert();
         break;
-      case "solve":
+      }
+      case "solve": {
         this.solve();
         break;
-      case "scramble":
+      }
+      case "scramble": {
         this.scramble();
         break;
-      case "screenshot":
+      }
+      case "screenshot": {
         this.screenshot();
         break;
-      case "connect-input":
+      }
+      case "connect-input": {
         this.connectInput();
         break;
+      }
       default:
         throw new Error(`Unknown tool action! ${e.detail.action}`);
     }
@@ -479,7 +489,7 @@ class ControlPane {
     for (const setupAnchor of ["start", "end"]) {
       const option = document.createElement("option");
       option.value = setupAnchor;
-      option.textContent = "anchored at " + setupAnchor; // TODO
+      option.textContent = `anchored at ${setupAnchor}`; // TODO
       this.setupAnchorSelect.appendChild(option);
       if (setupAnchor === initialSetupAnchor) {
         option.selected = true;

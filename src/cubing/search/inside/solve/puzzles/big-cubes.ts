@@ -49,7 +49,7 @@ function cachedAxesMoves(n: number): QuantumMove[][] {
 export async function bigCubeRandomMoves(n: number): Promise<Alg> {
   const randomUintBelow = await randomUIntBelowFactory();
   const randomChoice = await randomChoiceFactory<QuantumMove>();
-  const randomNumChoice = randomChoice as any as (arr: Array<number>) => number; // TODO: Avoid needing multiple instantiations or recasting.
+  const randomNumChoice = randomChoice as any as (arr: number[]) => number; // TODO: Avoid needing multiple instantiations or recasting.
 
   const axesMoves = cachedAxesMoves(n);
 

@@ -25,7 +25,7 @@ export class AlgWalkterDecoration {
     public duration: number,
     public forward: KTransformation,
     public backward: KTransformation,
-    public children: Array<AlgWalkterDecoration> = [],
+    public children: AlgWalkterDecoration[] = [],
   ) {}
 }
 export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
@@ -53,7 +53,7 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     let moveCount = 0;
     let duration = 0;
     let transformation = this.identity;
-    const child: Array<AlgWalkterDecoration> = [];
+    const child: AlgWalkterDecoration[] = [];
     for (const algNode of alg.childAlgNodes()) {
       const apd = this.traverseAlgNode(algNode);
       moveCount += apd.moveCount;
@@ -144,7 +144,7 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
   private mult(
     apd: AlgWalkterDecoration,
     n: number,
-    child: Array<AlgWalkterDecoration>,
+    child: AlgWalkterDecoration[],
   ): AlgWalkterDecoration {
     const absn = Math.abs(n);
     const st = apd.forward.selfMultiply(n);

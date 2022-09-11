@@ -109,30 +109,38 @@ export function setURLParams(newParams: Partial<URLParamValues>): void {
 
   for (const [key, value] of Object.entries(newParams)) {
     switch (key) {
-      case "setup-alg":
+      case "setup-alg": {
         setParam(key, (value as Alg).toString());
         break;
-      case "experimental-setup-anchor":
+      }
+      case "experimental-setup-anchor": {
         setParam(key, (value as "start" | "end").toString());
         break;
-      case "experimental-stickering":
+      }
+      case "experimental-stickering": {
         setParam(key, (value as ExperimentalStickering).toString());
         break;
-      case "alg":
+      }
+      case "alg": {
         setParam(key, (value as Alg).toString());
         break;
-      case "puzzle":
+      }
+      case "puzzle": {
         setParam(key, value as string);
         break;
-      case "debug-js":
+      }
+      case "debug-js": {
         setParam(key, (value as boolean).toString());
         break;
-      case "debug-simultaneous":
+      }
+      case "debug-simultaneous": {
         setParam(key, (value as boolean).toString());
         break;
-      case "debug-show-render-stats":
+      }
+      case "debug-show-render-stats": {
         setParam(key, (value as boolean).toString());
         break;
+      }
       default:
         console.warn("Unknown param", key, value);
     }

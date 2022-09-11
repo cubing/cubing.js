@@ -16,7 +16,7 @@ U // AUF
   },
 
   tperm: {
-    experimentalSetupAlg: ``,
+    experimentalSetupAlg: "",
     alg: `R U R' U' R' F R2 U' R' U' R U R' F'`,
     experimentalStickering: "PLL",
     experimentalSetupAnchor: "end",
@@ -24,15 +24,15 @@ U // AUF
   },
 
   sune: {
-    experimentalSetupAlg: ``,
-    alg: `[[R: U]: [U, R]]`,
+    experimentalSetupAlg: "",
+    alg: "[[R: U]: [U, R]]",
     experimentalStickering: "PLL",
     experimentalSetupAnchor: "end",
     experimentalTitle: "Sune",
   },
 
   notation: {
-    experimentalSetupAlg: ``,
+    experimentalSetupAlg: "",
     alg: `R L U D B F // Single moves, variable spacing.
 B' F' D' U' L' R' // Inverses.
 R L2 R3 L2' R5 L8' R7 // Move amount

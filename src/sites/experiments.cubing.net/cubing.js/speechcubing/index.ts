@@ -11,8 +11,9 @@ const AnySpeechGrammarList = webkitSpeechGrammarList;
 // const AnySpeechRecognitionEvent = webkitSpeechRecognitionEvent;
 
 const colors = "ULFRBDxyzMES".split("");
-const grammar =
-  "#JSGF V1.0; grammar colors; public <color> = " + colors.join(" | ") + " ;";
+const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(
+  " | ",
+)} ;`;
 
 const recognition = new AnySpeechRecognition();
 const speechRecognitionList = new AnySpeechGrammarList();
@@ -35,9 +36,9 @@ const alternativeListElem = document.querySelector("alternative-list")!;
 recognition.onresult = function (event) {
   const latestResult = event.results.item(event.results.length - 1);
   alternativeListElem.textContent =
+    // rome-ignore lint(js/useTemplate): Using a template would make this more confusing.
     "Raw alternatives: " +
     Array.from(latestResult)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       .map((alternative) => alternative.transcript)
       .join(" / ");
   for (const alternative of Array.from(latestResult)) {
@@ -57,7 +58,7 @@ recognition.onresult = function (event) {
       "WIDE",
     ).replace("WHY DO", "WIDE").replace("WHY ARE", "WIDE R");
     switch (transcript) {
-      case "UNDO":
+      case "UNDO": {
         player.experimentalModel.alg.set(
           (async () => {
             const alg = (await player.experimentalModel.alg.get()).alg;
@@ -66,29 +67,37 @@ recognition.onresult = function (event) {
           })(),
         );
         return;
-      case "CLEAR":
+      }
+      case "CLEAR": {
         player.alg = "";
         return;
+      }
       case "MEGAMINX":
       case "PYRAMINX":
-      case "FTO":
+      case "FTO": {
         player.puzzle = transcript.toLowerCase() as any;
         return;
-      case "START":
+      }
+      case "START": {
         player.timestamp = "start";
         return;
-      case "PLAY":
+      }
+      case "PLAY": {
         player.play();
         return;
-      case "TWIZZLE":
+      }
+      case "TWIZZLE": {
         player.controller.visitTwizzleLink();
         return;
-      case "FAST":
+      }
+      case "FAST": {
         player.tempoScale = 5;
         return;
-      case "SLOW":
+      }
+      case "SLOW": {
         player.tempoScale = 1;
         return;
+      }
     }
     transcript = transcript.replace("X", "x").replace("Y", "y").replace(
       "Z",
@@ -109,7 +118,7 @@ recognition.onresult = function (event) {
 
   const color = event.results[0][0].transcript;
   console.log(color);
-  console.log("Confidence: " + event.results[0][0].confidence);
+  console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
 recognition.onspeechend = function () {

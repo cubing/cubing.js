@@ -59,33 +59,40 @@ export class TwistyButtons extends ManagedCustomElement {
 
   #onCommand(command: ButtonCommand) {
     switch (command) {
-      case "fullscreen":
+      case "fullscreen": {
         this.onFullscreenButton();
         break;
-      case "jump-to-start":
+      }
+      case "jump-to-start": {
         this.controller?.jumpToStart({ flash: true });
         break;
-      case "play-step-backwards":
+      }
+      case "play-step-backwards": {
         this.controller?.animationController.play({
           direction: Direction.Backwards,
           untilBoundary: BoundaryType.Move,
         });
         break;
-      case "play-pause":
+      }
+      case "play-pause": {
         this.controller?.togglePlay();
         break;
-      case "play-step":
+      }
+      case "play-step": {
         this.controller?.animationController.play({
           direction: Direction.Forwards,
           untilBoundary: BoundaryType.Move,
         });
         break;
-      case "jump-to-end":
+      }
+      case "jump-to-end": {
         this.controller?.jumpToEnd({ flash: true });
         break;
-      case "twizzle-link":
+      }
+      case "twizzle-link": {
         this.controller?.visitTwizzleLink();
         break;
+      }
       default:
         throw new Error("Missing command");
     }

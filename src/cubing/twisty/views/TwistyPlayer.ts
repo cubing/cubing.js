@@ -291,18 +291,20 @@ export class TwistyPlayer
       let newWrapper: Twisty2DSceneWrapper | Twisty3DSceneWrapper;
       switch (strategy) {
         case "2D":
-        case "experimental-2D-LL":
+        case "experimental-2D-LL": {
           newWrapper = new Twisty2DSceneWrapper(
             this.experimentalModel.twistySceneModel,
             strategy,
           );
           break;
+        }
         case "Cube3D":
-        case "PG3D":
+        case "PG3D": {
           // TODO: Properly wire this up so we can set PG3D for the cube.
           newWrapper = new Twisty3DSceneWrapper(this.experimentalModel);
           this.#initial3DVisualizationWrapper.handleNewValue(newWrapper);
           break;
+        }
         default:
           throw new Error("Invalid visualization");
       }

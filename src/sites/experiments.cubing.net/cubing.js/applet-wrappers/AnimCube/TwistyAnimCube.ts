@@ -101,12 +101,14 @@ export class TwistyAnimCube extends ManagedCustomElement {
 
       process("buttonbar", (value: string) => {
         switch (value) {
-          case "0":
+          case "0": {
             twistyPlayerConfig.controlPanel = "none";
             return;
-          case "1":
+          }
+          case "1": {
             warnOnce("buttonbar=1 is not implemented (yet)");
             return;
+          }
           case "2":
             return;
           default:
@@ -117,9 +119,10 @@ export class TwistyAnimCube extends ManagedCustomElement {
 
       process("hint", (value: string) => {
         switch (value) {
-          case "0":
+          case "0": {
             twistyPlayerConfig.hintFacelets = "none";
             return;
+          }
           default:
             twistyPlayerConfig.hintFacelets = "floating";
             return;

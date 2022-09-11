@@ -215,9 +215,10 @@ class SelectUI {
     (document.body.querySelector("#move-input") as HTMLSelectElement).value =
       "";
     switch (action) {
-      case "gap":
+      case "gap": {
         this.app.showText((await this.app.puzzleGeometry()).writegap());
         break;
+      }
       case "ss": {
         const lines: string[] = [];
         (await this.app.puzzleGeometry()).writeSchreierSims(
@@ -232,11 +233,12 @@ class SelectUI {
         this.app.showText(lines.join("\n"));
         break;
       }
-      case "ksolve":
+      case "ksolve": {
         this.app.showText(
           (await this.app.puzzleGeometry()).writeksolve("TwizzlePuzzle"),
         );
         break;
+      }
       case "svg": {
         const is3D =
           (await this.app.twistyPlayer.experimentalModel.visualizationFormat.get()) !==
@@ -246,7 +248,7 @@ class SelectUI {
         );
         break;
       }
-      case "summary":
+      case "summary": {
         this.app.showText(
           (
             await (
@@ -255,10 +257,12 @@ class SelectUI {
           ).textForTwizzleExplorer(),
         );
         break;
+      }
       case "screenshot":
-      case "screenshot-back":
+      case "screenshot-back": {
         this.app.twistyPlayer.experimentalDownloadScreenshot(); // TODO: back!
         break;
+      }
       case "bluetooth":
       case "keyboard": {
         (async (): Promise<void> => {

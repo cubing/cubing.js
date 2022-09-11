@@ -46,43 +46,49 @@ export async function ftoStickering(
   switch (stickering) {
     case "full":
       break;
-    case "experimental-fto-fc":
+    case "experimental-fto-fc": {
       puzzleStickering.set(
         m.not(experimentalFTO_FC()),
         PieceStickering.Ignored,
       );
       break;
-    case "experimental-fto-f2t":
+    }
+    case "experimental-fto-f2t": {
       puzzleStickering.set(
         m.not(experimentalFTO_F2T()),
         PieceStickering.Ignored,
       );
       puzzleStickering.set(experimentalFTO_FC(), PieceStickering.Dim);
       break;
-    case "experimental-fto-sc":
+    }
+    case "experimental-fto-sc": {
       puzzleStickering.set(
         m.not(experimentalFTO_SC()),
         PieceStickering.Ignored,
       );
       puzzleStickering.set(experimentalFTO_F2T(), PieceStickering.Dim);
       break;
-    case "experimental-fto-l2c":
+    }
+    case "experimental-fto-l2c": {
       puzzleStickering.set(
         m.not(experimentalFTO_L2C()),
         PieceStickering.Ignored,
       );
       puzzleStickering.set(experimentalFTO_SC(), PieceStickering.Dim);
       break;
-    case "experimental-fto-lbt":
+    }
+    case "experimental-fto-lbt": {
       puzzleStickering.set(
         m.not(experimentalFTO_LBT()),
         PieceStickering.Ignored,
       );
       puzzleStickering.set(experimentalFTO_L2C(), PieceStickering.Dim);
       break;
-    case "experimental-fto-l3t":
+    }
+    case "experimental-fto-l3t": {
       puzzleStickering.set(experimentalFTO_LBT(), PieceStickering.Dim);
       break;
+    }
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,

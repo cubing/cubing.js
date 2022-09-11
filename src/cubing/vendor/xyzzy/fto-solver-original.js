@@ -18,7 +18,9 @@ JavaScript engines. Recent Chrome / Node releases should also work, but are not 
 
 function counter(A) {
   let counts = [];
-  for (let a of A) counts[a] = (counts[a] || 0) + 1;
+  for (let a of A) {
+    counts[a] = (counts[a] || 0) + 1;
+  }
   return counts;
 }
 
@@ -79,15 +81,23 @@ Note: SAFETY_MARGIN must be at most 2**20.
 /* Combinatoric functions */
 
 function factorial(n) {
-  if (n < 2) return n;
+  if (n < 2) {
+    return n;
+  }
   let f = 1;
-  for (let i = 2; i <= n; i++) f *= i;
+  for (let i = 2; i <= n; i++) {
+    f *= i;
+  }
   return f;
 }
 
 function C(n, k) {
-  if (k < 0 || k > n) return 0;
-  if (k === 0 || k === n) return 1;
+  if (k < 0 || k > n) {
+    return 0;
+  }
+  if (k === 0 || k === n) {
+    return 1;
+  }
   let c = 1;
   for (let i = 0; i < k; i++) {
     c = ((c * (n - i)) / (i + 1)) | 0;
@@ -106,7 +116,7 @@ function permutation_to_index(perm) {
   let ind = 0;
   while (n > 1) {
     n--;
-    // invariant: f == factorial(n)
+    // invariant: f === factorial(n)
     // also, perm stores meaningful values up to perm[n]
     let e = perm[0];
     ind += e * f;
@@ -140,7 +150,9 @@ function permutation_parity(A) {
   let parity = 0;
   for (let i = 0; i < n - 1; i++) {
     for (let j = i; j < n; j++) {
-      if (A[i] > A[j]) parity ^= 1;
+      if (A[i] > A[j]) {
+        parity ^= 1;
+      }
     }
   }
   return parity;
@@ -158,11 +170,16 @@ function index_to_evenpermutation(ind, n) {
   perm[n - 1] = 0;
   for (let i = n - 2; i >= 0; i--) {
     for (let j = i + 1; j < n; j++) {
-      if (perm[j] >= perm[i]) perm[j]++;
-      else parity ^= 1;
+      if (perm[j] >= perm[i]) {
+        perm[j]++;
+      } else {
+        parity ^= 1;
+      }
     }
   }
-  if (parity === 1) [perm[n - 2], perm[n - 1]] = [perm[n - 1], perm[n - 2]];
+  if (parity === 1) {
+    [perm[n - 2], perm[n - 1]] = [perm[n - 1], perm[n - 2]];
+  }
   return perm;
 }
 
@@ -241,9 +258,13 @@ function random_even_permutation(n) {
 function comb_to_index(l) {
   let bits = l.length;
   let ones = 0;
-  for (let i = 0; i < bits; i++) ones += +(l[i] === 1);
+  for (let i = 0; i < bits; i++) {
+    ones += +(l[i] === 1);
+  }
   let zeros = bits - ones;
-  if (zeros === 0 || ones === 0 || bits === 1) return 0;
+  if (zeros === 0 || ones === 0 || bits === 1) {
+    return 0;
+  }
   let b = C(bits - 1, ones);
   let ind = 0;
   for (let i = 0; zeros > 0 && ones > 0 && bits > 1; i++) {
@@ -290,7 +311,7 @@ function generate_comb_lookup_tables(n, k) {
   // 2 <= n <= 28, 0 <= k <= n
   n |= 0;
   k |= 0;
-  let key = n + " " + k;
+  let key = `${n} ${k}`;
   if (comb_lookup_tables[key]) {
     return comb_lookup_tables[key];
   }
@@ -373,13 +394,17 @@ function generate_comb4_lookup_tables(n, k0, k1, k2, k3) {
 
 function compose(A, B) {
   let C = [];
-  for (let i = 0; i < B.length; i++) C[i] = A[B[i]];
+  for (let i = 0; i < B.length; i++) {
+    C[i] = A[B[i]];
+  }
   return C;
 }
 
 function compose3(A, B, C) {
   let D = [];
-  for (let i = 0; i < C.length; i++) D[i] = A[B[C[i]]];
+  for (let i = 0; i < C.length; i++) {
+    D[i] = A[B[C[i]]];
+  }
   return D;
 }
 
@@ -779,14 +804,14 @@ function random_state() {
 
 function stringify_move_sequence(move_sequence, no_wide = false) {
   if (no_wide) {
-    const U = 0,
-      L = 1,
-      F = 2,
-      R = 3,
-      D = 4,
-      BR = 5,
-      B = 6,
-      BL = 7;
+    const U = 0;
+    const L = 1;
+    const F = 2;
+    const R = 3;
+    const D = 4;
+    const BR = 5;
+    const B = 6;
+    const BL = 7;
     move_sequence = move_sequence.map((x) => x.slice());
     let ordering = [U, L, F, R, D, BR, B, BL];
     let rotations = [
@@ -867,7 +892,7 @@ function simplify_move_sequence(move_sequence, make_noise = false) {
       simplified.push(last_move);
     }
   }
-  if (make_noise && "" + move_sequence !== "" + simplified) {
+  if (make_noise && `${move_sequence}` !== `${simplified}`) {
     console.log(`simplified ${move_sequence} to ${simplified}`);
   }
   return simplified;
@@ -1138,8 +1163,9 @@ function bfs(mtable, goal_states) {
 function* ida_solve_gen(indices, mtables, ptables, moves_left, commute) {
   let ncoords = indices.length;
   let bound = 0;
-  for (let i = 0; i < ncoords; i++)
+  for (let i = 0; i < ncoords; i++) {
     bound = Math.max(bound, ptables[i][indices[i]]);
+  }
   while (bound <= moves_left) {
     //console.log(`searching depth ${bound}`);
     yield* ida_search_gen(indices, mtables, ptables, bound, -1, commute);
@@ -1151,22 +1177,32 @@ function* ida_search_gen(indices, mtables, ptables, bound, last, commute) {
   let ncoords = indices.length;
   let nmoves = mtables[0].length;
   let heuristic = 0;
-  for (let i = 0; i < ncoords; i++)
+  for (let i = 0; i < ncoords; i++) {
     heuristic = Math.max(heuristic, ptables[i][indices[i]]);
-  if (heuristic > bound) return;
+  }
+  if (heuristic > bound) {
+    return;
+  }
   if (bound === 0) {
     yield [];
     return;
   }
-  if (heuristic === 0 && bound === 1) return;
+  if (heuristic === 0 && bound === 1) {
+    return;
+  }
   for (let m = 0; m < nmoves; m++) {
-    if (m === last) continue;
-    if (m < last && commute[m][last]) continue;
+    if (m === last) {
+      continue;
+    }
+    if (m < last && commute[m][last]) {
+      continue;
+    }
     let new_indices = indices.slice();
-    for (let c = 0; c < ncoords; c++)
+    for (let c = 0; c < ncoords; c++) {
       new_indices[c] = mtables[c][m][indices[c]];
+    }
     let r = 1;
-    while (indices.some((_, i) => indices[i] != new_indices[i])) {
+    while (indices.some((_, i) => indices[i] !== new_indices[i])) {
       let subpath_gen = ida_search_gen(
         new_indices,
         mtables,
@@ -1177,7 +1213,9 @@ function* ida_search_gen(indices, mtables, ptables, bound, last, commute) {
       );
       while (true) {
         let { value: subpath, done } = subpath_gen.next();
-        if (done) break;
+        if (done) {
+          break;
+        }
         yield [[m, r]].concat(subpath);
       }
       for (let c = 0; c < ncoords; c++) {
@@ -1317,8 +1355,9 @@ function* solve_phase1_gen(facelets) {
 function* phase1_ida_solve_gen(indices, mtables, ptables, moves_left) {
   let ncoords = indices.length;
   let bound = 0;
-  for (let i = 0; i < ncoords; i++)
+  for (let i = 0; i < ncoords; i++) {
     bound = Math.max(bound, ptables[i][indices[i]]);
+  }
   while (bound <= moves_left) {
     //console.log(`searching depth ${bound}`);
     yield* phase1_ida_search_gen(indices, mtables, ptables, bound, -1);
@@ -1335,21 +1374,29 @@ function* phase1_ida_search_gen(indices, mtables, ptables, bound, last) {
     ptables[2][indices[2]],
   ); //0;
   //for (let i = 0; i < ncoords; i++) heuristic = Math.max(heuristic, ptables[i][indices[i]]);
-  if (heuristic > bound) return;
+  if (heuristic > bound) {
+    return;
+  }
   if (bound === 0) {
     yield [];
     return;
   }
-  if (heuristic === 0 && bound === 1) return;
+  if (heuristic === 0 && bound === 1) {
+    return;
+  }
   for (let m = 0; m < nmoves; m++) {
-    if (m === last) continue;
-    if (m === last - 4) continue;
+    if (m === last) {
+      continue;
+    }
+    if (m === last - 4) {
+      continue;
+    }
     let new_indices = [];
     new_indices[0] = mtables[0][m][indices[0]];
     new_indices[1] = mtables[1][m][indices[1]];
     new_indices[2] = mtables[2][m][indices[2]];
     let r = 1;
-    while (indices.some((_, i) => indices[i] != new_indices[i])) {
+    while (indices.some((_, i) => indices[i] !== new_indices[i])) {
       let subpath_gen = phase1_ida_search_gen(
         new_indices,
         mtables,
@@ -1359,7 +1406,9 @@ function* phase1_ida_search_gen(indices, mtables, ptables, bound, last) {
       );
       while (true) {
         let { value: subpath, done } = subpath_gen.next();
-        if (done) break;
+        if (done) {
+          break;
+        }
         yield [[m, r]].concat(subpath);
       }
       new_indices[0] = mtables[0][m][new_indices[0]];
@@ -1646,8 +1695,8 @@ function generate_phase2_ace_ptable() {
       state !== -1;
       state = ptable.indexOf(depth, state + 1)
     ) {
-      let a = state % Na,
-        ce = (state / Na) | 0;
+      let a = state % Na;
+      let ce = (state / Na) | 0;
       for (let move_index = 0; move_index < 4; move_index++) {
         let new_a = mtable_a[move_index][a];
         let new_ce = mtable_ce[move_index][ce];
@@ -1724,10 +1773,12 @@ function* phase2_ida_search_gen(
     return;
   }
   for (let m = 0; m < 4; m++) {
-    if (m === last) continue;
-    let new_a = a,
-      new_b = b,
-      new_ce = ce;
+    if (m === last) {
+      continue;
+    }
+    let new_a = a;
+    let new_b = b;
+    let new_ce = ce;
     for (let r = 1; r <= 2; r++) {
       new_a = mtable_a[m][new_a];
       new_b = mtable_b[m][new_b];
@@ -1746,7 +1797,9 @@ function* phase2_ida_search_gen(
       );
       while (true) {
         let { value: subpath, done } = subpath_gen.next();
-        if (done) break;
+        if (done) {
+          break;
+        }
         yield [[m, r]].concat(subpath);
       }
     }
@@ -2152,8 +2205,8 @@ function generate_phase3_2gen_depth_table() {
       state !== -1;
       state = table.indexOf(depth, state + 1)
     ) {
-      let ab = state % Nab,
-        ce = (state / Nab) | 0;
+      let ab = state % Nab;
+      let ce = (state / Nab) | 0;
       for (let mi = 0; mi < nmoves; mi++) {
         let weight = weights[mi];
         let new_ab = mtable_ab_pruned[mi][ab];
@@ -2686,8 +2739,8 @@ function phase3_benchmark(solver = solve_phase3_2gen) {
   let start = performance.now();
   solver(solved_state);
   console.log(performance.now() - start);
-  let solve_times = [],
-    move_counts = [];
+  let solve_times = [];
+  let move_counts = [];
   console.log("solving");
   for (let scramble of some_2gen_scrambles) {
     let start = performance.now();
@@ -3227,8 +3280,8 @@ function solver_benchmark(solver = solve) {
   let start = performance.now();
   solver(solved_state);
   console.log(performance.now() - start);
-  let solve_times = [],
-    move_counts = [];
+  let solve_times = [];
+  let move_counts = [];
   console.log("solving");
   for (let scramble of some_scrambles) {
     let start = performance.now();

@@ -323,22 +323,26 @@ class StickerDef {
   ): void {
     let c = 0;
     switch (faceletMeshAppearance) {
-      case "regular":
+      case "regular": {
         c = this.origColor;
         break;
-      case "dim":
+      }
+      case "dim": {
         if (this.origColor === 0xffffff) {
           c = 0xdddddd;
         } else {
           c = new Color(this.origColor).multiplyScalar(0.5).getHex();
         }
         break;
-      case "oriented":
+      }
+      case "oriented": {
         c = 0xff88ff;
         break;
-      case "ignored":
+      }
+      case "ignored": {
         c = 0x444444;
         break;
+      }
       case "invisible":
         c = this.origColor;
     }
@@ -716,12 +720,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
     let modify: (move: Move) => Move = (m) => m;
     switch (transformations.depth) {
-      case "secondSlice":
+      case "secondSlice": {
         modify = (m: Move) => m.modified({ innerLayer: 2 });
         break;
-      case "rotation":
-        modify = (m: Move) => m.modified({ family: m.family + "v" });
+      }
+      case "rotation": {
+        modify = (m: Move) => m.modified({ family: `${m.family}v` });
         break;
+      }
     }
 
     for (const axis of this.stickerDat.axis) {

@@ -232,7 +232,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
       );
     }
 
-    element.addString(")" + grouping.experimentalRepetitionSuffix);
+    element.addString(`)${grouping.experimentalRepetitionSuffix}`);
     element.flushQueue();
     return {
       moveCount: moveCount * Math.abs(grouping.amount),

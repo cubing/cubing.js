@@ -10,7 +10,7 @@ function bracket(n: number): string {
   if (n < 2) {
     return Array(n).fill("␣").join("");
   }
-  return "└" + new Array(n - 2).fill("─").join("") + "┘";
+  return `└${new Array(n - 2).fill("─").join("")}┘`;
 }
 
 function updateInspector(s: string): void {
@@ -21,7 +21,7 @@ function updateInspector(s: string): void {
     for (const [name, v] of extract(parsed)) {
       const parsed = v as Parsed<Alg | AlgNode>;
       inspectorElem.textContent += "\n";
-      inspectorElem.textContent += ("" + name + ": ").padStart(12, " ");
+      inspectorElem.textContent += `${name}: `.padStart(12, " ");
       inspectorElem.textContent += "".padStart(parsed.startCharIndex, " ");
       inspectorElem.textContent += singleLineS.slice(
         parsed.startCharIndex,
