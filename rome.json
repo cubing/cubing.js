@@ -14,8 +14,7 @@
         "noUnusedVariables": "off"
       },
       "ts": {
-        "recommended": true,
-        "useShorthandArrayType": "off"
+        "recommended": true
       }
     }
   }
