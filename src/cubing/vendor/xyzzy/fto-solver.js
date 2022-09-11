@@ -257,7 +257,7 @@ function generate_comb_lookup_tables(n, k) {
   // 2 <= n <= 28, 0 <= k <= n
   n |= 0;
   k |= 0;
-  let key = n + " " + k;
+  let key = `${n} ${k}`;
   if (comb_lookup_tables[key]) {
     return comb_lookup_tables[key];
   }
@@ -847,7 +847,7 @@ function simplify_move_sequence(move_sequence, make_noise = false) {
       simplified.push(last_move);
     }
   }
-  if (make_noise && "" + move_sequence !== "" + simplified) {
+  if (make_noise && `${move_sequence}` !== `${simplified}`) {
     console.log(`simplified ${move_sequence} to ${simplified}`);
   }
   return simplified;

@@ -119,7 +119,7 @@ export class QuantumMove extends Comparable {
     if (this.#innerLayer !== null) {
       s = String(this.#innerLayer) + s;
       if (this.#outerLayer !== null) {
-        s = String(this.#outerLayer) + "-" + s;
+        s = `${String(this.#outerLayer)}-${s}`;
       }
     }
     return s;

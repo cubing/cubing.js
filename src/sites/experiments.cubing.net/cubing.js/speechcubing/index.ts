@@ -11,8 +11,9 @@ const AnySpeechGrammarList = webkitSpeechGrammarList;
 // const AnySpeechRecognitionEvent = webkitSpeechRecognitionEvent;
 
 const colors = "ULFRBDxyzMES".split("");
-const grammar =
-  "#JSGF V1.0; grammar colors; public <color> = " + colors.join(" | ") + " ;";
+const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(
+  " | ",
+)} ;`;
 
 const recognition = new AnySpeechRecognition();
 const speechRecognitionList = new AnySpeechGrammarList();
@@ -34,12 +35,12 @@ const alternativeListElem = document.querySelector("alternative-list")!;
 
 recognition.onresult = function (event) {
   const latestResult = event.results.item(event.results.length - 1);
-  alternativeListElem.textContent =
-    "Raw alternatives: " +
-    Array.from(latestResult)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      .map((alternative) => alternative.transcript)
-      .join(" / ");
+  alternativeListElem.textContent = `Raw alternatives: ${Array.from(
+    latestResult,
+  )
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    .map((alternative) => alternative.transcript)
+    .join(" / ")}`;
   for (const alternative of Array.from(latestResult)) {
     let transcript = alternative.transcript.trim().toUpperCase();
     console.log(alternative);
@@ -109,7 +110,7 @@ recognition.onresult = function (event) {
 
   const color = event.results[0][0].transcript;
   console.log(color);
-  console.log("Confidence: " + event.results[0][0].confidence);
+  console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
 recognition.onspeechend = function () {

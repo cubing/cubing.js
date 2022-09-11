@@ -65,9 +65,7 @@ export function startServer(port) {
         } else {
           response.writeHead(500);
           response.end(
-            "Sorry, check with the site admin for error: " +
-              error.code +
-              " ..\n",
+            `Sorry, check with the site admin for error: ${error.code} ..\n`,
           );
         }
       } else {

@@ -62,7 +62,7 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
           resolve(wrap<WorkerInsideAPI>(worker));
         } else {
           reject(
-            new Error("wrong module instantiation message " + messageData),
+            new Error(`wrong module instantiation message ${messageData}`),
           );
         }
       };

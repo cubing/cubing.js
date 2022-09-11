@@ -12,7 +12,7 @@ const xmlns = "http://www.w3.org/2000/svg";
 let svgCounter = 0;
 function nextSVGID(): string {
   svgCounter += 1;
-  return "svg" + svgCounter.toString();
+  return `svg${svgCounter.toString()}`;
 }
 
 // TODO: This is hardcoded to 3x3x3 SVGs
@@ -280,11 +280,11 @@ export class KPuzzleSVGWrapper {
     idx: number,
     orientation: number,
   ): string {
-    return orbitName + "-l" + idx + "-o" + orientation;
+    return `${orbitName}-l${idx}-o${orientation}`;
   }
 
   private elementByID(id: string): HTMLElement {
     // TODO: Use classes and scope selector to SVG element.
-    return this.wrapperElement.querySelector("#" + id) as HTMLElement;
+    return this.wrapperElement.querySelector(`#${id}`) as HTMLElement;
   }
 }

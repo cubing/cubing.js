@@ -184,7 +184,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
   // `white-space: pre;` mostly matches the formatting of the `<textarea>`, *except* when we end with a newline.
   // So we add an space to ensure that there is a character on the final line (that is very unlikely to trigger extra line wrapping).
   #padSuffix(s: string): string {
-    return s.endsWith("\n") ? s + " " : s;
+    return s.endsWith("\n") ? `${s} ` : s;
   }
 
   #highlightedLeaf: ExperimentalParsed<Move | Pause> | null = null;

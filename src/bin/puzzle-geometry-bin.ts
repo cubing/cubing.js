@@ -141,7 +141,7 @@ if (globalThis.process && process.argv && process.argv.length >= 3) {
       optionlist.push("puzzleorientation", process.argv[argp]);
       argp++;
     } else {
-      throw new Error("Bad option: " + option);
+      throw new Error(`Bad option: ${option}`);
     }
   }
   for (const [name, curDesc] of Object.entries(puzzleList)) {
@@ -152,7 +152,7 @@ if (globalThis.process && process.argv && process.argv.length >= 3) {
   }
   let puzzleDescription: PuzzleDescription;
   if (showargs) {
-    console.log("# " + process.argv.join(" "));
+    console.log(`# ${process.argv.join(" ")}`);
   }
   if (desc !== undefined) {
     const parsed = parsePuzzleDescription(desc);

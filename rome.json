@@ -14,8 +14,7 @@
         "noUnusedVariables": "off",
         "noUnnecessaryContinue": "off",
         "useSingleCaseStatement": "off",
-        "noUnusedTemplateLiteral": "off",
-        "useTemplate": "off"
+        "noUnusedTemplateLiteral": "off"
       },
       "ts": {
         "recommended": true,

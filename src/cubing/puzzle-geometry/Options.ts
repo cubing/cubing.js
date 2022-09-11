@@ -46,7 +46,7 @@ export function parseOptions(argv: string[]): {
       options.puzzleOrientation = JSON.parse(argv[argp]); // TODO: Validate input.
       argp++;
     } else {
-      throw new Error("Bad option: " + option);
+      throw new Error(`Bad option: ${option}`);
     }
   }
   const puzzleDescription = parsePuzzleDescription(argv.slice(argp).join(" "));
@@ -170,7 +170,7 @@ export function parsePGOptionList(optionlist?: any[]): PuzzleGeometryOptions {
         options.puzzleOrientations = asstructured(optionlist[i + 1]);
       } else {
         throw new Error(
-          "Bad option while processing option list " + optionlist[i],
+          `Bad option while processing option list ${optionlist[i]}`,
         );
       }
     }

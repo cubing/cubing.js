@@ -649,7 +649,7 @@ function getmovename(
   let movenameFamily = geo[0] as string;
   let movenamePrefix = "";
   if (bits[0] === 0 && bits[1] === slices) {
-    movenameFamily = movenameFamily + "v";
+    movenameFamily = `${movenameFamily}v`;
   } else if (bits[0] === bits[1]) {
     if (bits[1] > 0) {
       movenamePrefix = String(bits[1] + 1);
@@ -689,7 +689,7 @@ function splitByFaceNames(s: string, facenames: [Quat[], string][]): string[] {
       r.push(currentMatch);
       at += currentMatch.length;
     } else {
-      throw new Error("Could not split " + s + " into face names.");
+      throw new Error(`Could not split ${s} into face names.`);
     }
   }
   return r;
@@ -813,11 +813,11 @@ export class PuzzleGeometry {
         g = dodecahedron();
         break;
       default:
-        throw new Error("Bad shape argument: " + shape);
+        throw new Error(`Bad shape argument: ${shape}`);
     }
     this.rotations = closure(g);
     if (this.options.verbosity) {
-      console.log("# Rotations: " + this.rotations.length);
+      console.log(`# Rotations: ${this.rotations.length}`);
     }
     const baseplane = g[0];
     this.baseplanerot = uniqueplanes(baseplane, this.rotations);
@@ -828,19 +828,19 @@ export class PuzzleGeometry {
     this.net = net;
     this.colors = defaultcolors()[baseplanes.length];
     if (this.options.verbosity > 0) {
-      console.log("# Base planes: " + baseplanes.length);
+      console.log(`# Base planes: ${baseplanes.length}`);
     }
     const baseface = getface(baseplanes);
     const zero = new Quat(0, 0, 0, 0);
     if (this.options.verbosity > 0) {
-      console.log("# Face vertices: " + baseface.length);
+      console.log(`# Face vertices: ${baseface.length}`);
     }
     const facenormal = baseplanes[0].makenormal();
     const edgenormal = baseface[0].sum(baseface[1]).makenormal();
     const vertexnormal = baseface[0].makenormal();
     const boundary = new Quat(1, facenormal.b, facenormal.c, facenormal.d);
     if (this.options.verbosity > 0) {
-      console.log("# Boundary is " + boundary);
+      console.log(`# Boundary is ${boundary}`);
     }
     const planerot = uniqueplanes(boundary, this.rotations);
     const planes = planerot.map((_) => boundary.rotateplane(_));
@@ -875,7 +875,7 @@ export class PuzzleGeometry {
           sawedge = true;
           break;
         default:
-          throw new Error("Bad cut argument: " + cut.cutType);
+          throw new Error(`Bad cut argument: ${cut.cutType}`);
       }
       cutplanes.push(normal.makecut(cut.distance));
       intersects.push(cut.distance < distance);
@@ -1041,7 +1041,7 @@ export class PuzzleGeometry {
     }
     for (let i = 0; i < edgenames.length; i++) {
       if (edgenames[i].length !== 3) {
-        throw new Error("Bad length in edge names " + edgenames[i]);
+        throw new Error(`Bad length in edge names ${edgenames[i]}`);
       }
       const f1 = edgenames[i][1];
       const f2 = edgenames[i][2];
@@ -1094,13 +1094,13 @@ export class PuzzleGeometry {
     }
     this.markedface = markedface;
     if (this.options.verbosity > 1) {
-      console.log("# Face names: " + facenames.map((_) => _[1]).join(" "));
+      console.log(`# Face names: ${facenames.map((_) => _[1]).join(" ")}`);
       // TODO
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      console.log("# Edge names: " + edgenames.map((_) => _[1]).join(" "));
+      console.log(`# Edge names: ${edgenames.map((_) => _[1]).join(" ")}`);
       // TODO
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      console.log("# Vertex names: " + vertexnames.map((_) => _[1]).join(" "));
+      console.log(`# Vertex names: ${vertexnames.map((_) => _[1]).join(" ")}`);
     }
     const geonormals: [Quat, string, string][] = [];
     for (const faceplane of faceplanes) {
@@ -1121,12 +1121,9 @@ export class PuzzleGeometry {
     this.swizzler.setGripNames(geonormalnames);
     if (this.options.verbosity > 0) {
       console.log(
-        "# Distances: face " +
-          1 +
-          " edge " +
-          this.edgedistance +
-          " vertex " +
-          this.vertexdistance,
+        `# Distances: face ${1} edge ${this.edgedistance} vertex ${
+          this.vertexdistance
+        }`,
       );
     }
     // expand cutplanes by rotations.  We only work with one face here.
@@ -1165,7 +1162,7 @@ export class PuzzleGeometry {
     const faces = ft.collect([], true);
     this.faces = faces;
     if (this.options.verbosity > 0) {
-      console.log("# Faces is now " + faces.length);
+      console.log(`# Faces is now ${faces.length}`);
     }
     this.stickersperface = faces.length;
     // the faces when rotated don't preserve the vertex order at this
@@ -1221,7 +1218,7 @@ export class PuzzleGeometry {
       }
     }
     if (this.options.verbosity > 0) {
-      console.log("# Short edge is " + this.shortedge);
+      console.log(`# Short edge is ${this.shortedge}`);
     }
     // add nxnxn cube notation if it has cube face moves
     if (shape === "c" && sawface && !sawedge && !sawvertex) {
@@ -1393,7 +1390,7 @@ export class PuzzleGeometry {
     // this generates our full set of "stickers".
     this.faces = expandfaces(this.baseplanerot, this.faces);
     if (this.options.verbosity > 0) {
-      console.log("# Total stickers is now " + this.faces.length);
+      console.log(`# Total stickers is now ${this.faces.length}`);
     }
     this.facecentermass = new Array(this.faces.length);
     for (let i = 0; i < this.faces.length; i++) {
@@ -1441,7 +1438,7 @@ export class PuzzleGeometry {
     this.moveplanenormals = moveplanenormals;
     const sizes = moveplanesets.map((_) => _.length);
     if (this.options.verbosity > 0) {
-      console.log("# Move plane sets: " + sizes);
+      console.log(`# Move plane sets: ${sizes}`);
     }
     // for each of the move planes, find the rotations that are relevant
     const moverotations: Quat[][] = [];
@@ -1573,7 +1570,7 @@ export class PuzzleGeometry {
             console.log("# Splitting core.");
           }
           for (let suff = 0; suff < arr.length; suff++) {
-            const s2 = s + " " + suff;
+            const s2 = `${s} ${suff}`;
             facelisthash.set(s2, [arr[suff]]);
           }
         }
@@ -1581,7 +1578,7 @@ export class PuzzleGeometry {
     }
     this.facelisthash = facelisthash;
     if (this.options.verbosity > 0) {
-      console.log("# Cubies: " + facelisthash.size);
+      console.log(`# Cubies: ${facelisthash.size}`);
     }
     const cubies: number[][] = [];
     const facetocubie = [];
@@ -1784,15 +1781,13 @@ export class PuzzleGeometry {
       }
       if (this.fixedCubie < 0) {
         throw new Error(
-          "Could not find a cubie of type " +
-            this.options.fixedPieceType +
-            " to fix.",
+          `Could not find a cubie of type ${this.options.fixedPieceType} to fix.`,
         );
       }
     }
     // show the orbits
     if (this.options.verbosity > 0) {
-      console.log("# Cubie orbit sizes " + cubieords);
+      console.log(`# Cubie orbit sizes ${cubieords}`);
     }
     tend(t1);
   }
@@ -1812,7 +1807,7 @@ export class PuzzleGeometry {
     const re = RegExp("^(([0-9]+)-)?([0-9]+)?([^0-9]+)([0-9]+'?)?$");
     const p = mv.match(re);
     if (p === null) {
-      throw new Error("Bad move passed " + mv);
+      throw new Error(`Bad move passed ${mv}`);
     }
     const grip = p[4];
     let loslice = undefined;
@@ -1831,7 +1826,7 @@ export class PuzzleGeometry {
     if (p[5] !== undefined) {
       amountstr = p[5];
       if (amountstr[0] === "'") {
-        amountstr = "-" + amountstr.substring(1);
+        amountstr = `-${amountstr.substring(1)}`;
       }
       amount = parseInt(amountstr, 10);
     }
@@ -1843,7 +1838,7 @@ export class PuzzleGeometry {
   ): [string | undefined, number, number, number, boolean, number] {
     const bm = this.notationMapper.notationToInternal(move); // pluggable notation
     if (bm === null) {
-      throw new Error("Bad move " + move.family);
+      throw new Error(`Bad move ${move.family}`);
     }
     move = bm;
     let grip = move.family;
@@ -1881,7 +1876,7 @@ export class PuzzleGeometry {
       hislice = 2;
     }
     if (geo === undefined) {
-      throw new Error("Bad grip in move " + move.family);
+      throw new Error(`Bad grip in move ${move.family}`);
     }
     if (move.outerLayer !== undefined) {
       loslice = move.outerLayer;
@@ -1916,12 +1911,7 @@ export class PuzzleGeometry {
       hislice > this.moveplanesets[msi].length
     ) {
       throw new Error(
-        "Bad slice spec " +
-          loslice +
-          " " +
-          hislice +
-          " vs " +
-          this.moveplanesets[msi].length,
+        `Bad slice spec ${loslice} ${hislice} vs ${this.moveplanesets[msi].length}`,
       );
     }
     if (
@@ -2311,7 +2301,7 @@ export class PuzzleGeometry {
     const r = [];
     const mvs = [];
     for (let i = 0; i < os.moveops.length; i++) {
-      let movename = "M_" + externalName(this.notationMapper, os.movenames[i]);
+      let movename = `M_${externalName(this.notationMapper, os.movenames[i])}`;
       let doinv = false;
       if (movename[movename.length - 1] === "'") {
         movename = movename.substring(0, movename.length - 1);
@@ -2320,9 +2310,9 @@ export class PuzzleGeometry {
       // gap doesn't like angle brackets in IDs
       mvs.push(movename);
       if (doinv) {
-        r.push(movename + ":=" + os.moveops[i].toPerm().inv().toGap() + ";");
+        r.push(`${movename}:=${os.moveops[i].toPerm().inv().toGap()};`);
       } else {
-        r.push(movename + ":=" + os.moveops[i].toPerm().toGap() + ";");
+        r.push(`${movename}:=${os.moveops[i].toPerm().toGap()};`);
       }
     }
     r.push("Gen:=[");
@@ -2330,9 +2320,9 @@ export class PuzzleGeometry {
     r.push("];");
     const ip = os.solved.identicalPieces();
     r.push(
-      "ip:=[" +
-        ip.map((_) => "[" + _.map((__) => __ + 1).join(",") + "]").join(",") +
-        "];",
+      `ip:=[${ip.map((_) => `[${_.map((__) => __ + 1).join(",")}]`).join(
+        ",",
+      )}];`,
     );
     r.push("# Size(Group(Gen));");
     r.push("# Size(Stabilizer(Group(Gen), ip, OnTuplesSets));");
@@ -2792,10 +2782,10 @@ export class PuzzleGeometry {
       }
     }
     if (!feature1) {
-      throw new Error("Could not find feature " + feature1name);
+      throw new Error(`Could not find feature ${feature1name}`);
     }
     if (!feature2) {
-      throw new Error("Could not find feature " + feature2name);
+      throw new Error(`Could not find feature ${feature2name}`);
     }
     const r1 = feature1.pointrotation(direction1);
     const feature2rot = feature2.rotatepoint(r1);
@@ -2923,7 +2913,7 @@ export class PuzzleGeometry {
         }
       }
       if (gfi < 0) {
-        throw new Error("Could not find first face name " + f0);
+        throw new Error(`Could not find first face name ${f0}`);
       }
       const thisface = bg.facenames[gfi][0];
       for (let j = 1; j < neti.length; j++) {
@@ -3012,15 +3002,9 @@ export class PuzzleGeometry {
   ): string {
     const mappt2d = this.generate2dmapping(w, h, trim, threed);
     function drawedges(id: string, pts: number[][], color: string): string {
-      return (
-        '<polygon id="' +
-        id +
-        '" class="sticker" style="fill: ' +
-        color +
-        '" points="' +
-        pts.map((p) => p[0] + " " + p[1]).join(" ") +
-        '"/>\n'
-      );
+      return `<polygon id="${id}" class="sticker" style="fill: ${color}" points="${pts.map(
+        (p) => `${p[0]} ${p[1]}`,
+      ).join(" ")}"/>\n`;
     }
     // Let's build arrays for faster rendering.  We want to map from geo
     // base face number to color, and we want to map from geo face number
@@ -3045,7 +3029,7 @@ export class PuzzleGeometry {
     // group each base face so we can add a hover element
     for (let j = 0; j < this.baseFaceCount; j++) {
       svg.push("<g>");
-      svg.push("<title>" + this.facenames[j][1] + "</title>\n");
+      svg.push(`<title>${this.facenames[j][1]}</title>\n`);
       for (let ii = 0; ii < this.stickersperface; ii++) {
         const i = j * this.stickersperface + ii;
         const cubie = this.facetocubie[i];
@@ -3053,25 +3037,20 @@ export class PuzzleGeometry {
         const cubiesetnum = this.cubiesetnums[cubie];
         const cubieord = this.cubieordnums[cubie];
         const color = this.graybyori(cubie) ? "#808080" : colormap[pos.p[i]];
-        let id =
-          this.cubiesetnames[cubiesetnum] + "-l" + cubieord + "-o" + cubieori;
+        let id = `${this.cubiesetnames[cubiesetnum]}-l${cubieord}-o${cubieori}`;
         svg.push(drawedges(id, facegeo[i], color));
         if (this.duplicatedFaces[i]) {
           for (let jj = 1; jj < this.duplicatedFaces[i]; jj++) {
-            id = this.cubiesetnames[cubiesetnum] + "-l" + cubieord + "-o" + jj;
+            id = `${this.cubiesetnames[cubiesetnum]}-l${cubieord}-o${jj}`;
             svg.push(drawedges(id, facegeo[i], color));
           }
         }
       }
       svg.push("</g>");
     }
-    const html =
-      '<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n' +
-      '<style type="text/css"><![CDATA[' +
-      ".sticker { stroke: #000000; stroke-width: 1px; }" +
-      "]]></style>\n" +
-      svg.join("") +
-      "</svg>";
+    const html = `<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">\n<style type="text/css"><![CDATA[.sticker { stroke: #000000; stroke-width: 1px; }]]></style>\n${svg.join(
+      "",
+    )}</svg>`;
     return html;
   }
 

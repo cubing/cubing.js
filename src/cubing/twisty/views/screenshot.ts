@@ -74,7 +74,7 @@ export async function getDefaultFilename(
   return `[${puzzleID}]${
     algWithIssues.alg.experimentalNumChildAlgNodes() === 0
       ? ""
-      : " " + algWithIssues.alg.toString()
+      : ` ${algWithIssues.alg.toString()}`
   }`;
 }
 

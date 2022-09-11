@@ -136,14 +136,9 @@ export class StatsPanel {
     this.context.fillRect(0, 0, WIDTH, GRAPH_Y);
     this.context.fillStyle = this.fg;
     this.context.fillText(
-      Math.round(value) +
-        " " +
-        this.name +
-        " (" +
-        Math.round(this.min) +
-        "-" +
-        Math.round(this.max) +
-        ")",
+      `${Math.round(value)} ${this.name} (${Math.round(this.min)}-${Math.round(
+        this.max,
+      )})`,
       TEXT_X,
       TEXT_Y,
     );

@@ -267,13 +267,13 @@ function Search_move2string(obj, len) {
       if (top === 0 && bottom === 0) {
         s += " / ";
       } else {
-        s += "(" + top + ", " + bottom + ") / ";
+        s += `(${top}, ${bottom}) / `;
       }
       top = bottom = 0;
     }
   }
   if (top !== 0 || bottom !== 0) {
-    s += "(" + top + ", " + bottom + ")";
+    s += `(${top}, ${bottom})`;
   }
   return s; // + " (" + len + "t)";
 }

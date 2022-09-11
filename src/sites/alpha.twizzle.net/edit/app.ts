@@ -481,7 +481,7 @@ class ControlPane {
     for (const setupAnchor of ["start", "end"]) {
       const option = document.createElement("option");
       option.value = setupAnchor;
-      option.textContent = "anchored at " + setupAnchor; // TODO
+      option.textContent = `anchored at ${setupAnchor}`; // TODO
       this.setupAnchorSelect.appendChild(option);
       if (setupAnchor === initialSetupAnchor) {
         option.selected = true;

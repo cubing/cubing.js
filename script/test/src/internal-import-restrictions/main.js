@@ -93,7 +93,7 @@ class Target {
           };
         }
 
-        if (resolved.startsWith(forTarget.dirPath + "/")) {
+        if (resolved.startsWith(`${forTarget.dirPath}/`)) {
           return undefined;
         }
         // `src/cubing/vendor` subdirs can be imported directly.

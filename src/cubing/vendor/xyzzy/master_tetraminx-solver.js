@@ -642,7 +642,7 @@ function generate_scramble_sequence(
     for (let i = 0; i < 4; i++) {
       let x = randomUintBelow(3);
       if (x !== 0) {
-        scramble_string += " " + tip_names[i] + suffixes[x];
+        scramble_string += ` ${tip_names[i]}${suffixes[x]}`;
       }
     }
     return scramble_string.trim();
@@ -669,10 +669,10 @@ function generate_scramble_sequence(
     }
   }
   let prepend = amount_pre.map(
-    (x, i) => (x !== 0 ? tip_names[i] + suffixes[x] + " " : ""),
+    (x, i) => (x !== 0 ? `${tip_names[i]}${suffixes[x]} ` : ""),
   ).join("");
   let append = amount_post.map(
-    (x, i) => (x !== 0 ? " " + tip_names[i] + suffixes[x] : ""),
+    (x, i) => (x !== 0 ? ` ${tip_names[i]}${suffixes[x]}` : ""),
   ).join("");
   return prepend + scramble_string + append;
   // this technically has the extremely edge case of the original no-tip scramble being the

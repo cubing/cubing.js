@@ -634,7 +634,7 @@ function create_svg_template(state, colour_scheme) {
       let el = document.createElementNS(svgns, "polygon");
       let [translate_x, translate_y] = translation_amounts[face];
       let theta = rotation_amounts[i][j] * 36;
-      el.setAttribute("class", "facelet loc" + i + "_" + j);
+      el.setAttribute("class", `facelet loc${i}_${j}`);
       el.setAttribute("points", points);
       el.setAttribute(
         "transform",
@@ -654,11 +654,9 @@ function create_svg_template(state, colour_scheme) {
   // create a polygon for each face to serve as an outline
   let face_points = "";
   for (let i = 0; i < 5; i++) {
-    face_points +=
-      Math.sin((Math.PI * 2 * i) / 5) +
-      "," +
-      -Math.cos((Math.PI * 2 * i) / 5) +
-      " ";
+    face_points += `${Math.sin((Math.PI * 2 * i) / 5)},${-Math.cos(
+      (Math.PI * 2 * i) / 5,
+    )} `;
   }
   for (let face of face_names) {
     let el = document.createElementNS(svgns, "polygon");
@@ -687,7 +685,7 @@ function draw_state(svgel, state, colour_scheme) {
   }
   for (let i = 0; i < 20; i++) {
     for (let j = 0; j < 3; j++) {
-      let el = svgel.querySelector(".loc" + i + "_" + j);
+      let el = svgel.querySelector(`.loc${i}_${j}`);
       el.setAttribute(
         "fill",
         colour_scheme[map_piece_to_face(state[0][i], state[1][i] + j)],
@@ -1242,8 +1240,9 @@ function cache_all_tables() {
   );
 
   console.log(
-    "total elapsed: " +
-      ((splits[splits.length - 1] - splits[0]) / 1000).toFixed(3),
+    `total elapsed: ${((splits[splits.length - 1] - splits[0]) / 1000).toFixed(
+      3,
+    )}`,
   );
 }
 

@@ -1966,11 +1966,11 @@ function $getMoveString(this$static) {
     move = fixedMoves[i_0];
     move = ~~(move / 3) * 3 + (2 - (move % 3));
     if (symmove[sym][move] >= 27) {
-      sb = sb + move2str_1[symmove[sym][move] - 9] + " ";
+      sb = `${sb}${move2str_1[symmove[sym][move] - 9]} `;
       rot = move2rot[symmove[sym][move] - 27];
       sym = symmult[sym][rot];
     } else {
-      sb = sb + move2str_1[symmove[sym][move]] + " ";
+      sb = `${sb}${move2str_1[symmove[sym][move]]} `;
     }
   }
   return sb;

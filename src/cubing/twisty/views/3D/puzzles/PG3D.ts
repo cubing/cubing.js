@@ -720,7 +720,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
         modify = (m: Move) => m.modified({ innerLayer: 2 });
         break;
       case "rotation":
-        modify = (m: Move) => m.modified({ family: m.family + "v" });
+        modify = (m: Move) => m.modified({ family: `${m.family}v` });
         break;
     }
 

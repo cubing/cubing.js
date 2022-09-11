@@ -2174,7 +2174,7 @@ function $solution(this$static, facelets) {
   var check;
   check = $verify_0(this$static, facelets);
   if (check !== 0) {
-    return "Error " + (check < 0 ? -check : check);
+    return `Error ${check < 0 ? -check : check}`;
   }
   this$static.solLen = 22;
   this$static.probe = { l: 0, m: 0, h: 0 };

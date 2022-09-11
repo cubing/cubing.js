@@ -18,7 +18,7 @@ function truncateAlgForDisplay(alg: Alg): string {
   str = str.slice(0, 50);
   const lastSpace = str.lastIndexOf(" ");
   if (lastSpace !== -1) {
-    str = str.slice(0, lastSpace) + "…";
+    str = `${str.slice(0, lastSpace)}…`;
   }
   return str;
 }

@@ -71,7 +71,7 @@ import { TwistyPlayer } from "../../../../cubing/twisty";
     const alg = algBuilder.toAlg();
     const grouping = new Grouping(algBuilder.toAlg());
     constructed[varName] = grouping;
-    constructed[varName + "'"] = grouping.invert();
+    constructed[`${varName}'`] = grouping.invert();
     const c = experimentalCountMoves(alg);
     console.log(`Alg ${varName} has ${c} move${c === 1 ? "" : "s"}`);
     update.textContent = `${varName} = ${def} // ${c} move${
