@@ -409,8 +409,8 @@ function generate_random_move_scramble(M, N) {
   // total number of moves = (M+1)(N+1)-1
   let move_sequence = [];
   for (let i = 0; i <= M; i++) {
-    let last = -1,
-      lastlast = -1;
+    let last = -1;
+    let lastlast = -1;
     for (let j = 0; j < N; j++) {
       let m;
       while (true) {
@@ -583,10 +583,10 @@ let rotation_amounts = [
 ];
 let translation_amounts;
 {
-  let A = Math.sin(Math.PI / 5),
-    B = Math.cos(Math.PI / 10);
-  let C = Math.cos(Math.PI / 5),
-    D = Math.sin(Math.PI / 10);
+  let A = Math.sin(Math.PI / 5);
+  let B = Math.cos(Math.PI / 10);
+  let C = Math.cos(Math.PI / 5);
+  let D = Math.sin(Math.PI / 10);
   translation_amounts = {
     U: [0, 0],
     L: [-A - B, C - D],
@@ -756,8 +756,8 @@ function solve_phase1(state) {
     return [[6, 1]];
   }
   let flags = p.map((x) => x >= 15);
-  let depth = 0,
-    sol;
+  let depth = 0;
+  let sol;
   while (sol === undefined) {
     depth++;
     sol = search_phase1(flags, depth, -1);
@@ -789,8 +789,8 @@ function search_phase1(flags, depth, last) {
 }
 
 function index_phase2(state) {
-  let p = state[0].slice(0, 15),
-    o = state[1];
+  let p = state[0].slice(0, 15);
+  let o = state[1];
   let index_c = comb_to_index(p.map((x) => +(x >= 15)));
   let index_o = 243 * index_c;
   for (let i = 0, j = 0; i < 15; i++) {
@@ -822,8 +822,8 @@ function solve_phase2(state) {
 
 function index_phase3(state) {
   let pieces = [5, 6, 7, 8, 14];
-  let p = state[0].slice(0, 15),
-    o = state[1];
+  let p = state[0].slice(0, 15);
+  let o = state[1];
   let index_c = comb_to_index(p.map((x) => +(pieces.indexOf(x) !== -1)));
   let index_o = 243 * index_c;
   for (let i = 0, j = 0; i < 15; i++) {
@@ -853,10 +853,10 @@ function solve_phase3(state) {
 }
 
 function index_phase4(state) {
-  let p = state[0].slice(0, 14),
-    o = state[1];
-  let index_o = 0,
-    perm = [];
+  let p = state[0].slice(0, 14);
+  let o = state[1];
+  let index_o = 0;
+  let perm = [];
   let j = 0;
   for (let i of [0, 1, 2, 3, 4, 9, 10, 11, 12, 13]) {
     if (i !== 13) {
@@ -904,9 +904,9 @@ function solve(state) {
 function cn_solve(state) {
   // Solve with partial colour neutrality. We don't want to check all 120 cases, so we look only
   // at <y, flip>-neutrality, which has 10 cases.
-  let sol_lengths = [],
-    shortest_sol,
-    shortest_sol_length = 999999;
+  let sol_lengths = [];
+  let shortest_sol;
+  let shortest_sol_length = 999999;
   for (let x = 0; x < 2; x++) {
     for (let y = 0; y < 5; y++) {
       let sol = solve(state);
@@ -929,8 +929,8 @@ function generate_phase23_orientation_mtable() {
   if (tables.phase23om) {
     return tables.phase23om;
   }
-  const C15_5 = C(15, 5),
-    THREE = [1, 3, 9, 27, 81, 243];
+  const C15_5 = C(15, 5);
+  const THREE = [1, 3, 9, 27, 81, 243];
   let phase23om = Array(C(15, 5) * THREE[5]);
   tables.phase23om = phase23om;
   for (let i = 0; i < C15_5; i++) {
@@ -1077,8 +1077,8 @@ function generate_phase4_permutation_mtable() {
   if (tables.phase4pm) {
     return tables.phase4pm;
   }
-  const HALFFACT10 = factorial(10) / 2,
-    n = 10;
+  const HALFFACT10 = factorial(10) / 2;
+  const n = 10;
   let pre = [0, 1, 2, 3, 4, -1, -1, -1, -1, 5, 6, 7, 8, 9];
   let post = [0, 1, 2, 3, 4, 9, 10, 11, 12, 13];
   let move_permutations = [
@@ -1147,8 +1147,8 @@ function generate_phase4_near_ptable_list(threshold) {
     return;
   }
   states.sort((x, y) => x - y);
-  let unique_states = [],
-    last = -1;
+  let unique_states = [];
+  let last = -1;
   for (let state of states) {
     if (state !== last) {
       unique_states.push((last = state));
@@ -1159,8 +1159,8 @@ function generate_phase4_near_ptable_list(threshold) {
 }
 
 function binary_search(A, x) {
-  let lo = 0,
-    hi = A.length - 1;
+  let lo = 0;
+  let hi = A.length - 1;
   while (hi - lo > 1) {
     // invariants: hi - lo >= 2; x > A[lo-1]; x < A[hi+1]
     let mid = (lo + hi) >> 1; // lo < mid < hi
@@ -1174,8 +1174,8 @@ function binary_search(A, x) {
 }
 
 function cache_all_tables() {
-  let time = +new Date(),
-    splits = [time];
+  let time = +new Date();
+  let splits = [time];
   console.log("generating phase 2/3 move tables...");
   generate_phase23_orientation_mtable();
   generate_phase23_permutation_mtable();
@@ -1640,8 +1640,8 @@ function generate_fullseparate_ptable() {
 		[0, 1, 1, 1, 0,  0, 0, 1, 1, 1,  1, 1, 0, 0, 0,  1, 1, 0, 0, 0],
 	];
 	*/
-  let goal_states = [0],
-    l = 1;
+  let goal_states = [0];
+  let l = 1;
   while (true) {
     for (let ind of goal_states) {
       for (let m = 12; m < 15; m++) {
@@ -1665,8 +1665,8 @@ function bfs5(mtable, goal_states) {
   let N = mtable.length;
   let nmoves = mtable[0].length;
   let ptable = Array(N).fill(-1);
-  let queue = goal_states.slice(),
-    new_queue = [];
+  let queue = goal_states.slice();
+  let new_queue = [];
   let depth = 0;
   while (queue.length > 0) {
     new_queue.length = 0;

@@ -50,7 +50,11 @@ function FullCube_doMove(obj, move) {
 }
 
 function FullCube_getParity(obj) {
-  var a, b, cnt, i, p;
+  var a;
+  var b;
+  var cnt;
+  var i;
+  var p;
   cnt = 0;
   obj.arr[0] = FullCube_pieceAt(obj, 0);
   for (i = 1; i < 24; ++i) {
@@ -67,7 +71,10 @@ function FullCube_getParity(obj) {
 }
 
 function FullCube_getShapeIdx(obj) {
-  var dlx, drx, ulx, urx;
+  var dlx;
+  var drx;
+  var ulx;
+  var urx;
   urx = obj.ur & 1118481;
   urx |= ~~urx >> 3;
   urx |= ~~urx >> 6;
@@ -94,7 +101,8 @@ function FullCube_getShapeIdx(obj) {
 }
 
 function FullCube_getSquare(obj, sq) {
-  var a, b;
+  var a;
+  var b;
   for (a = 0; a < 8; ++a) {
     obj.prm[a] = ~~((~~FullCube_pieceAt(obj, a * 3 + 1) >> 1) << 24) >> 24;
   }
@@ -149,7 +157,15 @@ function FullCube_FullCube__Ljava_lang_String_2V() {
 async function FullCube_randomCube() {
   const randomUintBelow = await randomUIntBelowFactory();
 
-  var f, i, shape, edge, corner, n_edge, n_corner, rnd, m;
+  var f;
+  var i;
+  var shape;
+  var edge;
+  var corner;
+  var n_edge;
+  var n_corner;
+  var rnd;
+  var m;
   f = new FullCube_FullCube__Ljava_lang_String_2V();
   shape = Shape_ShapeIdx[randomUintBelow(3678)];
   corner = (0x01234567 << 1) | 0x11111111;
@@ -189,7 +205,12 @@ _.ml = 0;
 _.ul = 70195;
 _.ur = 4544119;
 function Search_init2(obj) {
-  var corner, edge, i, j, ml, prun;
+  var corner;
+  var edge;
+  var i;
+  var j;
+  var ml;
+  var prun;
   FullCube_copy(obj.Search_d, obj.Search_c);
   for (i = 0; i < obj.Search_length1; ++i) {
     FullCube_doMove(obj.Search_d, obj.Search_move[i]);
@@ -231,8 +252,8 @@ function Search_init2(obj) {
 
 function Search_move2string(obj, len) {
   var s = "";
-  var top = 0,
-    bottom = 0;
+  var top = 0;
+  var bottom = 0;
   for (var i = len - 1; i >= 0; i--) {
     var val = obj.Search_move[i];
     //console.log(val);
@@ -258,7 +279,9 @@ function Search_move2string(obj, len) {
 }
 
 function Search_phase1(obj, shape, prunvalue, maxl, depth, lm) {
-  var m, prunx, shapex;
+  var m;
+  var prunx;
+  var shapex;
   if (prunvalue === 0 && maxl < 4) {
     return maxl === 0 && Search_init2(obj);
   }
@@ -328,7 +351,13 @@ function Search_phase2(
   depth,
   lm,
 ) {
-  var botEdgeFirstx, cornerx, edgex, m, prun1, prun2, topEdgeFirstx;
+  var botEdgeFirstx;
+  var cornerx;
+  var edgex;
+  var m;
+  var prun1;
+  var prun2;
+  var topEdgeFirstx;
   if (maxl === 0 && !topEdgeFirst && botEdgeFirst) {
     return true;
   }
@@ -486,7 +515,8 @@ function Shape_$clinit() {
 }
 
 function Shape_bottomMove(obj) {
-  var move, moveParity;
+  var move;
+  var moveParity;
   move = 0;
   moveParity = 0;
   do {
@@ -519,7 +549,8 @@ function Shape_setIdx(obj, idx) {
 }
 
 function Shape_topMove(obj) {
-  var move, moveParity;
+  var move;
+  var moveParity;
   move = 0;
   moveParity = 0;
   do {
@@ -545,22 +576,22 @@ function Shape_getShape2Idx(shp) {
 }
 
 function Shape_init() {
-  var count,
-    depth,
-    dl,
-    done,
-    done0,
-    dr,
-    i,
-    idx,
-    m,
-    s,
-    ul,
-    ur,
-    value,
-    p1,
-    p3,
-    temp;
+  var count;
+  var depth;
+  var dl;
+  var done;
+  var done0;
+  var dr;
+  var i;
+  var idx;
+  var m;
+  var s;
+  var ul;
+  var ur;
+  var value;
+  var p1;
+  var p3;
+  var temp;
   count = 0;
   for (i = 0; i < 28561; ++i) {
     dr = Shape_halflayer[i % 13];
@@ -640,12 +671,12 @@ _ = Shape_Shape.prototype = Shape.prototype;
 _.bottom = 0;
 _.Shape_parity = 0;
 _.top = 0;
-var Shape_BottomMove,
-  Shape_ShapeIdx,
-  ShapePrun,
-  Shape_TopMove,
-  Shape_TwistMove,
-  Shape_halflayer;
+var Shape_BottomMove;
+var Shape_ShapeIdx;
+var ShapePrun;
+var Shape_TopMove;
+var Shape_TwistMove;
+var Shape_halflayer;
 let Square_$clinit_ran = false;
 function Square_$clinit() {
   if (Square_$clinit_ran) {
@@ -667,7 +698,10 @@ function Square_$clinit() {
 function Square_Square() {}
 
 function get8Perm(arr) {
-  var i, idx, v, val;
+  var i;
+  var idx;
+  var v;
+  var val;
   idx = 0;
   val = 1985229328;
   for (i = 0; i < 7; ++i) {
@@ -679,7 +713,19 @@ function get8Perm(arr) {
 }
 
 function Square_init() {
-  var check, depth, done, find, i, idx, idxx, inv, j, m, ml, pos, temp;
+  var check;
+  var depth;
+  var done;
+  var find;
+  var i;
+  var idx;
+  var idxx;
+  var inv;
+  var j;
+  var m;
+  var ml;
+  var pos;
+  var temp;
   for (i = 0; i < 12; ++i) {
     Cnk[i][0] = 1;
     Cnk[i][i] = 1;
@@ -763,7 +809,11 @@ function Square_init() {
 }
 
 function set8Perm(arr, idx) {
-  var i, m, p, v, val;
+  var i;
+  var m;
+  var p;
+  var v;
+  var val;
   val = 1985229328;
   for (i = 0; i < 7; ++i) {
     p = fact[7 - i];
@@ -785,7 +835,12 @@ _.cornperm = 0;
 _.edgeperm = 0;
 _.ml = 0;
 _.topEdgeFirst = false;
-var Square_BottomMove, Cnk, SquarePrun, Square_TopMove, Square_TwistMove, fact;
+var Square_BottomMove;
+var Cnk;
+var SquarePrun;
+var Square_TopMove;
+var Square_TwistMove;
+var fact;
 
 function bitCount(x) {
   x -= (~~x >> 1) & 1431655765;
@@ -797,7 +852,10 @@ function bitCount(x) {
 }
 
 function binarySearch(sortedArray, key) {
-  var high, low, mid, midVal;
+  var high;
+  var low;
+  var mid;
+  var midVal;
   low = 0;
   high = sortedArray.length - 1;
   while (low <= high) {

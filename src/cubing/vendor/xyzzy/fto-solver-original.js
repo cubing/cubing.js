@@ -804,14 +804,14 @@ function random_state() {
 
 function stringify_move_sequence(move_sequence, no_wide = false) {
   if (no_wide) {
-    const U = 0,
-      L = 1,
-      F = 2,
-      R = 3,
-      D = 4,
-      BR = 5,
-      B = 6,
-      BL = 7;
+    const U = 0;
+    const L = 1;
+    const F = 2;
+    const R = 3;
+    const D = 4;
+    const BR = 5;
+    const B = 6;
+    const BL = 7;
     move_sequence = move_sequence.map((x) => x.slice());
     let ordering = [U, L, F, R, D, BR, B, BL];
     let rotations = [
@@ -1695,8 +1695,8 @@ function generate_phase2_ace_ptable() {
       state !== -1;
       state = ptable.indexOf(depth, state + 1)
     ) {
-      let a = state % Na,
-        ce = (state / Na) | 0;
+      let a = state % Na;
+      let ce = (state / Na) | 0;
       for (let move_index = 0; move_index < 4; move_index++) {
         let new_a = mtable_a[move_index][a];
         let new_ce = mtable_ce[move_index][ce];
@@ -1776,9 +1776,9 @@ function* phase2_ida_search_gen(
     if (m === last) {
       continue;
     }
-    let new_a = a,
-      new_b = b,
-      new_ce = ce;
+    let new_a = a;
+    let new_b = b;
+    let new_ce = ce;
     for (let r = 1; r <= 2; r++) {
       new_a = mtable_a[m][new_a];
       new_b = mtable_b[m][new_b];
@@ -2205,8 +2205,8 @@ function generate_phase3_2gen_depth_table() {
       state !== -1;
       state = table.indexOf(depth, state + 1)
     ) {
-      let ab = state % Nab,
-        ce = (state / Nab) | 0;
+      let ab = state % Nab;
+      let ce = (state / Nab) | 0;
       for (let mi = 0; mi < nmoves; mi++) {
         let weight = weights[mi];
         let new_ab = mtable_ab_pruned[mi][ab];
@@ -2739,8 +2739,8 @@ function phase3_benchmark(solver = solve_phase3_2gen) {
   let start = performance.now();
   solver(solved_state);
   console.log(performance.now() - start);
-  let solve_times = [],
-    move_counts = [];
+  let solve_times = [];
+  let move_counts = [];
   console.log("solving");
   for (let scramble of some_2gen_scrambles) {
     let start = performance.now();
@@ -3280,8 +3280,8 @@ function solver_benchmark(solver = solve) {
   let start = performance.now();
   solver(solved_state);
   console.log(performance.now() - start);
-  let solve_times = [],
-    move_counts = [];
+  let solve_times = [];
+  let move_counts = [];
   console.log("solving");
   for (let scramble of some_scrambles) {
     let start = performance.now();

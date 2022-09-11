@@ -452,8 +452,8 @@ function generate_phase1_separate_mtable() {
   let mtable_c = [];
   for (let i = 0; i < C12_4; i++) {
     mtable_c[i] = [];
-    let comb = index_to_comb(i, 4, 12),
-      perm = [];
+    let comb = index_to_comb(i, 4, 12);
+    let perm = [];
     for (let j = 0, k = 0; j < 12; j++) {
       if (comb[j] === 0) {
         perm[j] = -1;
@@ -560,8 +560,8 @@ function bfs(mtable, goal_states) {
   let N = mtable.length;
   let nmoves = mtable[0].length;
   let ptable = Array(N).fill(-1);
-  let queue = goal_states.slice(),
-    new_queue = [];
+  let queue = goal_states.slice();
+  let new_queue = [];
   let depth = 0;
   while (queue.length > 0) {
     new_queue.length = 0;

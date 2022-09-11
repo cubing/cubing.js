@@ -16,8 +16,7 @@
         "useSingleCaseStatement": "off",
         "noUnusedTemplateLiteral": "off",
         "useTemplate": "off",
-        "useSimplifiedLogicExpression": "off",
-        "useSingleVarDeclarator": "off"
+        "useSimplifiedLogicExpression": "off"
       },
       "ts": {
         "recommended": true,

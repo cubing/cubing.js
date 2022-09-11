@@ -1,13 +1,13 @@
-var $intern_3 = { 3: 1 },
-  $intern_9 = 4194303,
-  $intern_10 = 1048575,
-  $intern_11 = 524288,
-  $intern_20 = 65535,
-  $intern_26 = { 11: 1, 3: 1 },
-  $intern_27 = { 17: 1, 3: 1 },
-  $intern_28 = 14540032,
-  $intern_29 = 286331153,
-  $intern_30 = { 10: 1, 3: 1 };
+var $intern_3 = { 3: 1 };
+var $intern_9 = 4194303;
+var $intern_10 = 1048575;
+var $intern_11 = 524288;
+var $intern_20 = 65535;
+var $intern_26 = { 11: 1, 3: 1 };
+var $intern_27 = { 17: 1, 3: 1 };
+var $intern_28 = 14540032;
+var $intern_29 = 286331153;
+var $intern_30 = { 10: 1, 3: 1 };
 var _;
 var prototypesByTypeId_0 = {};
 function typeMarkerFn() {}
@@ -198,7 +198,11 @@ function initDims_0(
   index_0,
   count,
 ) {
-  var elementTypeCategory, i, isLastDim, length_0, result;
+  var elementTypeCategory;
+  var i;
+  var isLastDim;
+  var length_0;
+  var result;
   length_0 = dimExprs[index_0];
   isLastDim = index_0 === count - 1;
   elementTypeCategory = isLastDim ? leafElementTypeCategory : 0;
@@ -265,7 +269,9 @@ function initializeArrayElementsWithDefaults(elementTypeCategory, length_0) {
 }
 
 function create(value_0) {
-  var a0, a1, a2;
+  var a0;
+  var a1;
+  var a2;
   a0 = value_0 & $intern_9;
   a1 = (value_0 >> 22) & $intern_9;
   a2 = value_0 < 0 ? $intern_10 : 0;
@@ -277,7 +283,9 @@ function create0(l, m, h) {
 }
 
 function add_1(a, b) {
-  var sum0, sum1, sum2;
+  var sum0;
+  var sum1;
+  var sum2;
   sum0 = a.l + b.l;
   sum1 = a.m + b.m + (sum0 >> 22);
   sum2 = a.h + b.h + (sum1 >> 22);
@@ -289,7 +297,8 @@ function and(a, b) {
 }
 
 function fromInt(value_0) {
-  var rebase, result;
+  var rebase;
+  var result;
   if (value_0 > -129 && value_0 < 128) {
     rebase = value_0 + 128;
     boxedValues == null &&
@@ -309,7 +318,8 @@ function fromInt(value_0) {
 }
 
 function gte(a, b) {
-  var signa, signb;
+  var signa;
+  var signb;
   signa = a.h >> 19;
   signb = b.h >> 19;
   return signa === 0
@@ -334,7 +344,9 @@ function or(a, b) {
 }
 
 function shl(a, n) {
-  var res0, res1, res2;
+  var res0;
+  var res1;
+  var res2;
   n &= 63;
   if (n < 22) {
     res0 = a.l << n;
@@ -353,7 +365,11 @@ function shl(a, n) {
 }
 
 function shr(a, n) {
-  var a2, negative, res0, res1, res2;
+  var a2;
+  var negative;
+  var res0;
+  var res1;
+  var res2;
   n &= 63;
   a2 = a.h;
   negative = (a2 & $intern_11) !== 0;
@@ -375,7 +391,9 @@ function shr(a, n) {
 }
 
 function sub_0(a, b) {
-  var sum0, sum1, sum2;
+  var sum0;
+  var sum1;
+  var sum2;
   sum0 = a.l - b.l;
   sum1 = a.m - b.m + (sum0 >> 22);
   sum2 = a.h - b.h + (sum1 >> 22);
@@ -725,7 +743,10 @@ function init_0(fullInit) {
 }
 
 function initCPermMove() {
-  var c, d, i, j;
+  var c;
+  var d;
+  var i;
+  var j;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 2768; i++) {
@@ -739,7 +760,11 @@ function initCPermMove() {
 }
 
 function initCombPMoveConj() {
-  var c, d, i, j, j0;
+  var c;
+  var d;
+  var i;
+  var j;
+  var j0;
   c = new CubieCube();
   d = new CubieCube();
   CCombPMove = initDims(
@@ -771,7 +796,10 @@ function initCombPMoveConj() {
 }
 
 function initEPermMove() {
-  var c, d, i, j;
+  var c;
+  var d;
+  var i;
+  var j;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 2768; i++) {
@@ -784,7 +812,10 @@ function initEPermMove() {
 }
 
 function initFlipMove() {
-  var c, d, i, j;
+  var c;
+  var d;
+  var i;
+  var j;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 336; i++) {
@@ -797,7 +828,11 @@ function initFlipMove() {
 }
 
 function initMPermMoveConj() {
-  var c, d, i, j, j0;
+  var c;
+  var d;
+  var i;
+  var j;
+  var j0;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 24; i++) {
@@ -826,42 +861,42 @@ function initRawSymPrun(
   PrunFlag,
   fullInit,
 ) {
-  var INV_DEPTH,
-    ISTFP,
-    IS_PHASE2,
-    MAX_DEPTH,
-    MIN_DEPTH,
-    NEXT_AXIS_MAGIC,
-    N_MOVES,
-    N_RAW,
-    N_SIZE,
-    SEARCH_DEPTH,
-    SYM_E2C_MAGIC,
-    SYM_MASK,
-    SYM_SHIFT,
-    check,
-    depth,
-    flip,
-    fsym,
-    i,
-    i0,
-    idx,
-    idxx,
-    inv,
-    j,
-    m,
-    mask,
-    prun,
-    raw,
-    rawx,
-    selArrMask,
-    select,
-    sym,
-    symState,
-    symx,
-    val,
-    val0,
-    xorVal;
+  var INV_DEPTH;
+  var ISTFP;
+  var IS_PHASE2;
+  var MAX_DEPTH;
+  var MIN_DEPTH;
+  var NEXT_AXIS_MAGIC;
+  var N_MOVES;
+  var N_RAW;
+  var N_SIZE;
+  var SEARCH_DEPTH;
+  var SYM_E2C_MAGIC;
+  var SYM_MASK;
+  var SYM_SHIFT;
+  var check;
+  var depth;
+  var flip;
+  var fsym;
+  var i;
+  var i0;
+  var idx;
+  var idxx;
+  var inv;
+  var j;
+  var m;
+  var mask;
+  var prun;
+  var raw;
+  var rawx;
+  var selArrMask;
+  var select;
+  var sym;
+  var symState;
+  var symx;
+  var val;
+  var val0;
+  var xorVal;
   SYM_SHIFT = PrunFlag & 15;
   SYM_E2C_MAGIC = ((PrunFlag >> 4) & 1) === 1 ? $intern_28 : 0;
   IS_PHASE2 = ((PrunFlag >> 5) & 1) === 1;
@@ -962,7 +997,10 @@ function initRawSymPrun(
 }
 
 function initTwistMove() {
-  var c, d, i, j;
+  var c;
+  var d;
+  var i;
+  var j;
   c = new CubieCube();
   d = new CubieCube();
   for (i = 0; i < 324; i++) {
@@ -975,7 +1013,14 @@ function initTwistMove() {
 }
 
 function initUDSliceMoveConj() {
-  var c, d, i, i0, j, j0, k, udslice;
+  var c;
+  var d;
+  var i;
+  var i0;
+  var j;
+  var j0;
+  var k;
+  var udslice;
   c = new CubieCube();
   d = new CubieCube();
   for (i0 = 0; i0 < 495; i0++) {
@@ -1009,22 +1054,22 @@ _.slice_0 = 0;
 _.tsym = 0;
 _.twist = 0;
 _.twistc = 0;
-var CCombPConj,
-  CCombPMove,
-  CPermMove,
-  EPermCCombPPrun,
-  EPermMove,
-  FlipMove,
-  MCPermPrun,
-  MPermConj,
-  MPermMove,
-  TwistFlipPrun,
-  TwistMove,
-  UDSliceConj,
-  UDSliceFlipPrun,
-  UDSliceMove,
-  UDSliceTwistPrun,
-  initLevel = 0;
+var CCombPConj;
+var CCombPMove;
+var CPermMove;
+var EPermCCombPPrun;
+var EPermMove;
+var FlipMove;
+var MCPermPrun;
+var MPermConj;
+var MPermMove;
+var TwistFlipPrun;
+var TwistMove;
+var UDSliceConj;
+var UDSliceFlipPrun;
+var UDSliceMove;
+var UDSliceTwistPrun;
+var initLevel = 0;
 var Lorg_cubing_min2phase_client_CoordCube_2_classLit = createForClass(
   "org.cubing.min2phase.client",
   "CoordCube",
@@ -1146,7 +1191,8 @@ function $URFConjugate(this$static) {
 }
 
 function $copy(this$static, c) {
-  var i, i0;
+  var i;
+  var i0;
   for (i0 = 0; i0 < 8; i0++) {
     this$static.ca[i0] = c.ca[i0];
   }
@@ -1164,7 +1210,8 @@ function $getEPermSym(this$static) {
 }
 
 function $getFlip(this$static) {
-  var i, idx;
+  var i;
+  var idx;
   idx = 0;
   for (i = 0; i < 11; i++) {
     idx = (idx << 1) | (this$static.ea[i] & 1);
@@ -1173,7 +1220,8 @@ function $getFlip(this$static) {
 }
 
 function $getTwist(this$static) {
-  var i, idx;
+  var i;
+  var idx;
   idx = 0;
   for (i = 0; i < 7; i++) {
     idx += (idx << 1) + (this$static.ca[i] >> 3);
@@ -1182,7 +1230,8 @@ function $getTwist(this$static) {
 }
 
 function $invCubieCube(this$static) {
-  var corn, edge;
+  var corn;
+  var edge;
   !this$static.temps && (this$static.temps = new CubieCube());
   for (edge = 0; edge < 12; edge++) {
     this$static.temps.ea[this$static.ea[edge] >> 1] =
@@ -1196,7 +1245,13 @@ function $invCubieCube(this$static) {
 }
 
 function $selfSymmetry(this$static) {
-  var c, cperm, cpermx, d, i, sym, urfInv;
+  var c;
+  var cperm;
+  var cpermx;
+  var d;
+  var i;
+  var sym;
+  var urfInv;
   c = new CubieCube_1(this$static);
   d = new CubieCube();
   cperm = ESym2CSym(EPermR2S[getNPerm(c.ca, 8, false)]) >> 4;
@@ -1234,7 +1289,9 @@ function $setEPerm(this$static, idx) {
 }
 
 function $setFlip(this$static, idx) {
-  var i, parity, val;
+  var i;
+  var parity;
+  var val;
   parity = 0;
   for (i = 10; i >= 0; --i, idx >>= 1) {
     parity ^= val = idx & 1;
@@ -1244,7 +1301,9 @@ function $setFlip(this$static, idx) {
 }
 
 function $setTwist(this$static, idx) {
-  var i, twst, val;
+  var i;
+  var twst;
+  var val;
   twst = 15;
   for (i = 6; i >= 0; --i, idx = ~~(idx / 3)) {
     twst -= val = idx % 3;
@@ -1255,7 +1314,11 @@ function $setTwist(this$static, idx) {
 }
 
 function $verify(this$static) {
-  var c, cornMask, e, edgeMask, sum;
+  var c;
+  var cornMask;
+  var e;
+  var edgeMask;
+  var sum;
   sum = 0;
   edgeMask = 0;
   for (e = 0; e < 12; e++) {
@@ -1292,7 +1355,12 @@ function $verify(this$static) {
 
 function CornConjugate(a, idx, b) {
   $clinit_CubieCube();
-  var corn, ori, oriA, oriB, s, sinv;
+  var corn;
+  var ori;
+  var oriA;
+  var oriB;
+  var s;
+  var sinv;
   sinv = CubeSym[SymMultInv[0][idx]];
   s = CubeSym[idx];
   for (corn = 0; corn < 8; corn++) {
@@ -1306,7 +1374,9 @@ function CornConjugate(a, idx, b) {
 
 function CornMult(a, b, prod) {
   $clinit_CubieCube();
-  var corn, oriA, oriB;
+  var corn;
+  var oriA;
+  var oriB;
   for (corn = 0; corn < 8; corn++) {
     oriA = a.ca[b.ca[corn] & 7] >> 3;
     oriB = b.ca[corn] >> 3;
@@ -1316,7 +1386,10 @@ function CornMult(a, b, prod) {
 }
 
 function CornMultFull(a, b, prod) {
-  var corn, ori, oriA, oriB;
+  var corn;
+  var ori;
+  var oriA;
+  var oriB;
   for (corn = 0; corn < 8; corn++) {
     oriA = a.ca[b.ca[corn] & 7] >> 3;
     oriB = b.ca[corn] >> 3;
@@ -1351,7 +1424,9 @@ function ESym2CSym(idx) {
 
 function EdgeConjugate(a, idx, b) {
   $clinit_CubieCube();
-  var ed, s, sinv;
+  var ed;
+  var s;
+  var sinv;
   sinv = CubeSym[SymMultInv[0][idx]];
   s = CubeSym[idx];
   for (ed = 0; ed < 12; ed++) {
@@ -1392,7 +1467,8 @@ function getSkipMoves() {
 }
 
 function initMove() {
-  var a, p;
+  var a;
+  var p;
   moveCube[0] = new CubieCube_0(15120, 0, 119750400, 0);
   moveCube[3] = new CubieCube_0(21021, 1494, 323403417, 0);
   moveCube[6] = new CubieCube_0(8064, 1236, 29441808, 550);
@@ -1410,7 +1486,9 @@ function initMove() {
 
 function initPermSym2Raw() {
   $clinit_CubieCube();
-  var cc, i, i0;
+  var cc;
+  var i;
+  var i0;
   initSym2Raw(
     40320,
     EPermS2R,
@@ -1435,7 +1513,22 @@ function initPermSym2Raw() {
 }
 
 function initSym() {
-  var c, d, f2, i, i0, i1, i2, j, j0, j1, k, lr2, m, s, t, u4;
+  var c;
+  var d;
+  var f2;
+  var i;
+  var i0;
+  var i1;
+  var i2;
+  var j;
+  var j0;
+  var j1;
+  var k;
+  var lr2;
+  var m;
+  var s;
+  var t;
+  var u4;
   c = new CubieCube();
   d = new CubieCube();
   f2 = new CubieCube_0(28783, 0, 259268407, 0);
@@ -1503,7 +1596,15 @@ function initSym() {
 
 function initSym2Raw(N_RAW, Sym2Raw, Raw2Sym, SymState, coord) {
   $clinit_CubieCube();
-  var c, count, d, i, idx, isEdge, s, symIdx, sym_inc;
+  var c;
+  var count;
+  var d;
+  var i;
+  var idx;
+  var isEdge;
+  var s;
+  var symIdx;
+  var sym_inc;
   c = new CubieCube();
   d = new CubieCube();
   count = 0;
@@ -1548,31 +1649,31 @@ function initSym2Raw(N_RAW, Sym2Raw, Raw2Sym, SymState, coord) {
   return count;
 }
 
-var CubeSym,
-  EPermR2S,
-  EPermS2R,
-  FlipR2S,
-  FlipS2R,
-  FlipS2RF,
-  MPermInv,
-  Perm2CombP,
-  PermInvEdgeSym,
-  Sym8Move,
-  SymMove_0,
-  SymMoveUD,
-  SymMult,
-  SymMultInv,
-  SymStateFlip,
-  SymStatePerm,
-  SymStateTwist,
-  TwistR2S,
-  TwistS2R,
-  firstMoveSym,
-  moveCube,
-  moveCubeSym,
-  urf1,
-  urf2,
-  urfMove;
+var CubeSym;
+var EPermR2S;
+var EPermS2R;
+var FlipR2S;
+var FlipS2R;
+var FlipS2RF;
+var MPermInv;
+var Perm2CombP;
+var PermInvEdgeSym;
+var Sym8Move;
+var SymMove_0;
+var SymMoveUD;
+var SymMult;
+var SymMultInv;
+var SymStateFlip;
+var SymStatePerm;
+var SymStateTwist;
+var TwistR2S;
+var TwistS2R;
+var firstMoveSym;
+var moveCube;
+var moveCubeSym;
+var urf1;
+var urf2;
+var urfMove;
 var Lorg_cubing_min2phase_client_CubieCube_2_classLit = createForClass(
   "org.cubing.min2phase.client",
   "CubieCube",
@@ -1589,7 +1690,11 @@ function $initPhase2(
   edgei,
   corni,
 ) {
-  var depth2, i, i0, prun, ret;
+  var depth2;
+  var i;
+  var i0;
+  var prun;
+  var ret;
   prun = max_0(
     getPruning(
       ($clinit_CoordCube(), EPermCCombPPrun),
@@ -1653,21 +1758,21 @@ function $initPhase2(
 }
 
 function $initPhase2Pre(this$static) {
-  var corni,
-    edgei,
-    i,
-    lastMove,
-    lastPre,
-    m,
-    p2corn,
-    p2csym,
-    p2edge,
-    p2esym,
-    p2mid,
-    p2switch,
-    p2switchMask,
-    p2switchMax,
-    ret;
+  var corni;
+  var edgei;
+  var i;
+  var lastMove;
+  var lastPre;
+  var m;
+  var p2corn;
+  var p2csym;
+  var p2edge;
+  var p2esym;
+  var p2mid;
+  var p2switch;
+  var p2switchMask;
+  var p2switchMax;
+  var ret;
   this$static.isRec = false;
   if (
     gte(
@@ -1815,7 +1920,12 @@ function $initSearch(this$static) {
 }
 
 function $phase1(this$static, node, ssym, maxl, lm) {
-  var axis_0, m, power, prun, ret, skipMoves;
+  var axis_0;
+  var m;
+  var power;
+  var prun;
+  var ret;
+  var skipMoves;
   if (node.prun === 0 && maxl < 5) {
     if (this$static.allowShorter || maxl === 0) {
       this$static.depth1 -= maxl;
@@ -1872,7 +1982,9 @@ function $phase1(this$static, node, ssym, maxl, lm) {
 }
 
 function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
-  var m, ret, skipMoves;
+  var m;
+  var ret;
+  var skipMoves;
   this$static.preMoveLen = this$static.maxPreMoves - maxl;
   if (
     this$static.isRec
@@ -1945,7 +2057,17 @@ function $phase1PreMoves(this$static, maxl, lm, cc, ssym) {
 }
 
 function $phase2(this$static, edge, esym, corn, csym, mid, maxl, depth, lm) {
-  var corni, cornx, csymx, edgei, edgex, esymx, m, midx, moveMask, prun, ret;
+  var corni;
+  var cornx;
+  var csymx;
+  var edgei;
+  var edgex;
+  var esymx;
+  var m;
+  var midx;
+  var moveMask;
+  var prun;
+  var ret;
   if (edge === 0 && corn === 0 && mid === 0) {
     return maxl;
   }
@@ -2067,7 +2189,10 @@ function $solution(this$static, facelets) {
 }
 
 function $verify_0(this$static, facelets) {
-  var center, count, f, i;
+  var center;
+  var count;
+  var f;
+  var i;
   count = 0;
   f = initDim(B_classLit, $intern_30, 0, 54, 7, 1);
   // try {
@@ -2103,7 +2228,9 @@ function $verify_0(this$static, facelets) {
 }
 
 function Search() {
-  var i, i0, i1;
+  var i;
+  var i0;
+  var i1;
   this.move = initDim(I_classLit, $intern_27, 0, 31, 7, 1);
   this.nodeUD = initDim(
     Lorg_cubing_min2phase_client_CoordCube_2_classLit,
@@ -2195,15 +2322,20 @@ _.solLen = 0;
 _.urfIdx = 0;
 _.valid1 = 0;
 _.verbose = 0;
-var MAX_DEPTH2 = 12,
-  MIN_P1LENGTH_PRE = 7;
+var MAX_DEPTH2 = 12;
+var MIN_P1LENGTH_PRE = 7;
 let $clinit_Util_ran = false;
 function $clinit_Util() {
   if ($clinit_Util_ran) {
     return;
   }
   $clinit_Util_ran = true;
-  var i, i0, i1, ix, j, jx;
+  var i;
+  var i0;
+  var i1;
+  var ix;
+  var j;
+  var jx;
   cornerFacelet = initValues(getClassLiteralForArray(
     B_classLit,
     2,
@@ -2329,7 +2461,11 @@ function $clinit_Util() {
 
 function getComb(arr, mask, isEdge) {
   $clinit_Util();
-  var end, i, idxC, perm, r;
+  var end;
+  var i;
+  var idxC;
+  var perm;
+  var r;
   end = arr.length - 1;
   idxC = 0;
   r = 4;
@@ -2342,7 +2478,8 @@ function getComb(arr, mask, isEdge) {
 
 function getNParity(idx, n) {
   $clinit_Util();
-  var i, p;
+  var i;
+  var p;
   p = 0;
   for (i = n - 2; i >= 0; i--) {
     p ^= idx % (n - i);
@@ -2353,7 +2490,10 @@ function getNParity(idx, n) {
 
 function getNPerm(arr, n, isEdge) {
   $clinit_Util();
-  var i, idx, v, val;
+  var i;
+  var idx;
+  var v;
+  var val;
   idx = 0;
   val = { l: 1323536, m: 2777561, h: 1043915 };
   for (i = 0; i < n - 1; i++) {
@@ -2370,7 +2510,10 @@ function getVal(val0, isEdge) {
 
 function setComb(arr, idxC, mask, isEdge) {
   $clinit_Util();
-  var end, fill, i, r;
+  var end;
+  var fill;
+  var i;
+  var r;
   end = arr.length - 1;
   r = 4;
   fill = end;
@@ -2387,7 +2530,12 @@ function setComb(arr, idxC, mask, isEdge) {
 
 function setNPerm(arr, idx, n, isEdge) {
   $clinit_Util();
-  var extract, i, m, p, v, val;
+  var extract;
+  var i;
+  var m;
+  var p;
+  var v;
+  var val;
   val = { l: 1323536, m: 2777561, h: 1043915 };
   extract = { l: 0, m: 0, h: 0 };
   for (p = 2; p <= n; p++) {
@@ -2425,7 +2573,14 @@ function setVal(val0, val, isEdge) {
 
 function toCubieCube(f, ccRet) {
   $clinit_Util();
-  var col1, col2, i, i0, i1, i2, j, ori;
+  var col1;
+  var col2;
+  var i;
+  var i0;
+  var i1;
+  var i2;
+  var j;
+  var ori;
   for (i0 = 0; i0 < 8; i0++) {
     ccRet.ca[i0] = 0;
   }
@@ -2470,9 +2625,17 @@ function toCubieCube(f, ccRet) {
   }
 }
 
-var Cnk, ckmv2bit, cornerFacelet, edgeFacelet, move2str, std2ud, ud2std;
+var Cnk;
+var ckmv2bit;
+var cornerFacelet;
+var edgeFacelet;
+var move2str;
+var std2ud;
+var ud2std;
 function $appendSolMove(this$static, curMove) {
-  var axisCur, axisLast, pow_0;
+  var axisCur;
+  var axisLast;
+  var pow_0;
   if (this$static.length_0 === 0) {
     this$static.moves[this$static.length_0++] = curMove;
     return;
@@ -2515,7 +2678,9 @@ function $setArgs(this$static, verbose, urfIdx, depth1) {
 }
 
 function $toString_2(this$static) {
-  var s, sb, urf;
+  var s;
+  var sb;
+  var urf;
   sb = new StringBuffer();
   urf =
     (this$static.verbose & 2) !== 0
@@ -2572,9 +2737,9 @@ const Lcom_google_gwt_lang_LongLibBase$LongEmul_2_classLit = createForClass(
   null,
 );
 createForClass("com.google.gwt.lang", "ModuleUtils", 257);
-var B_classLit = createForPrimitive("byte", "B"),
-  J_classLit = createForPrimitive("long", "J"),
-  C_classLit = createForPrimitive("char", "C");
+var B_classLit = createForPrimitive("byte", "B");
+var J_classLit = createForPrimitive("long", "J");
+var C_classLit = createForPrimitive("char", "C");
 createForClass("com.google.gwt.user.client.rpc", "XsrfToken", null),
   createForInterface("java.util", "Map/Entry");
 

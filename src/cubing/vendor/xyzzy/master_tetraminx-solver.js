@@ -647,9 +647,9 @@ function generate_scramble_sequence(
     }
     return scramble_string.trim();
   }
-  let amount = [],
-    amount_pre = [],
-    amount_post = [];
+  let amount = [];
+  let amount_pre = [];
+  let amount_post = [];
   for (let i = 0; i < 4; i++) {
     amount[i] = randomUintBelow(3);
     amount_pre[i] = randomUintBelow(3);
@@ -754,10 +754,10 @@ function index_phase1(state) {
   );
 }
 
-let phase1_permtable_m = [],
-  phase1_permtable_minv = [];
-let phase1_permtable_w = [],
-  phase1_permtable_winv = [];
+let phase1_permtable_m = [];
+let phase1_permtable_minv = [];
+let phase1_permtable_w = [];
+let phase1_permtable_winv = [];
 for (let i = 0; i < N_MOVES; i++) {
   let move = moves[i];
   phase1_permtable_m[i] = move.mp;
@@ -918,12 +918,12 @@ function* phase1_ida_search_gen(a, b, c, d, e, f, mtable, ptable, bound, last) {
     if (m < last && moves_commute(m, last)) {
       continue;
     }
-    let A = a,
-      B = b,
-      C = c,
-      D = d,
-      E = e,
-      F = f;
+    let A = a;
+    let B = b;
+    let C = c;
+    let D = d;
+    let E = e;
+    let F = f;
     for (let r = 1; r <= 2; r++) {
       A = mtable[A][m];
       B = mtable[B][m];
@@ -1043,11 +1043,11 @@ function generate_phase1_pairing2c_ptable() {
       if (ptable[index] !== dist) {
         continue;
       }
-      let index0 = index % 864,
-        index1 = Math.floor(index / 864);
+      let index0 = index % 864;
+      let index1 = Math.floor(index / 864);
       for (let m = 0; m < N_MOVES; m++) {
-        let new_index0 = index0,
-          new_index1 = index1;
+        let new_index0 = index0;
+        let new_index1 = index1;
         for (let r = 1; r <= 2; r++) {
           new_index0 = mtable_noc[new_index0][m];
           new_index1 = mtable[new_index1][m];
@@ -1077,8 +1077,8 @@ function generate_phase1_full_ptable() {
   let ptable = new Int8Array(SIZE).fill(-1);
   ptable[0] = 0;
   let dist = 0;
-  let perm = new Int8Array(12),
-    new_perm = new Int8Array(12);
+  let perm = new Int8Array(12);
+  let new_perm = new Int8Array(12);
   while (true) {
     let changed = false;
     let count = 0;
@@ -1091,10 +1091,10 @@ function generate_phase1_full_ptable() {
       let windex = (index - cindex) / 3;
       index_to_evenpermutation12(windex, perm);
       for (let m = 0; m < N_MOVES; m++) {
-        let move_m = phase1_permtable_m[m],
-          move_minv = phase1_permtable_minv[m];
-        let move_w = phase1_permtable_w[m],
-          move_winv = phase1_permtable_winv[m];
+        let move_m = phase1_permtable_m[m];
+        let move_minv = phase1_permtable_minv[m];
+        let move_w = phase1_permtable_w[m];
+        let move_winv = phase1_permtable_winv[m];
         {
           // clockwise move
           let new_cindex = (cindex + phase1_c_update[m]) % 3;
@@ -1213,8 +1213,8 @@ function bfs(mtable, goal_states) {
   let N = mtable.length;
   let nmoves = mtable[0].length;
   let ptable = Array(N).fill(-1);
-  let queue = goal_states.slice(),
-    new_queue = [];
+  let queue = goal_states.slice();
+  let new_queue = [];
   let depth = 0;
   while (queue.length > 0) {
     new_queue.length = 0;
