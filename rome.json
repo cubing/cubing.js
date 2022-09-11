@@ -18,8 +18,7 @@
         "useTemplate": "off",
         "useSimplifiedLogicExpression": "off",
         "useSingleVarDeclarator": "off",
-        "useBlockStatements": "off",
-        "noArguments": "off"
+        "useBlockStatements": "off"
       },
       "ts": {
         "recommended": true,
