@@ -289,17 +289,20 @@ export class TwistyAlgEditor extends ManagedCustomElement {
 
         let newTimestamp: number;
         switch (highlightInfo.where) {
-          case "before":
+          case "before": {
             newTimestamp = moveStartTimestamp;
             break;
+          }
           case "start":
-          case "inside":
+          case "inside": {
             newTimestamp = moveStartTimestamp + duration / 4;
             break;
+          }
           case "end":
-          case "after":
+          case "after": {
             newTimestamp = moveStartTimestamp + duration;
             break;
+          }
           default:
             console.log("invalid where");
             throw new Error("Invalid where!");
@@ -339,16 +342,18 @@ export class TwistyAlgEditor extends ManagedCustomElement {
         this.twistyPlayer = elem;
         return;
       }
-      case ATTRIBUTE_PLACEHOLDER:
+      case ATTRIBUTE_PLACEHOLDER: {
         this.placeholder = newValue;
         return;
-      case ATTRIBUTE_TWISTY_PLAYER_PROP:
+      }
+      case ATTRIBUTE_TWISTY_PLAYER_PROP: {
         if (this.#twistyPlayer) {
           console.log("cannot set prop");
           throw new Error("cannot set prop after twisty player");
         }
         this.#twistyPlayerProp = newValue as TwistyPlayerAlgProp;
         return;
+      }
     }
   }
 

@@ -16,13 +16,15 @@ const UUIDs = {
 // TODO: Expose for testing.
 function giikerMoveToAlgMove(face: number, amount: number): Move {
   switch (amount) {
-    case 3:
+    case 3: {
       amount = -1;
       break;
-    case 9:
+    }
+    case 9: {
       debugLog("Encountered 9", face, amount);
       amount = -2;
       break;
+    }
   }
 
   const family = ["?", "B", "D", "L", "U", "R", "F"][face];

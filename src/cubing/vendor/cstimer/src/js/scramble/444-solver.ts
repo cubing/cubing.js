@@ -234,67 +234,81 @@ function $move(this$static, m_0) {
   const key = m_0 % 3;
   m_0 = ~~(m_0 / 3);
   switch (m_0) {
-    case 0:
+    case 0: {
       swap(this$static.ct, 0, 1, 2, 3, key);
       break;
-    case 1:
+    }
+    case 1: {
       swap(this$static.ct, 16, 17, 18, 19, key);
       break;
-    case 2:
+    }
+    case 2: {
       swap(this$static.ct, 8, 9, 10, 11, key);
       break;
-    case 3:
+    }
+    case 3: {
       swap(this$static.ct, 4, 5, 6, 7, key);
       break;
-    case 4:
+    }
+    case 4: {
       swap(this$static.ct, 20, 21, 22, 23, key);
       break;
-    case 5:
+    }
+    case 5: {
       swap(this$static.ct, 12, 13, 14, 15, key);
       break;
-    case 6:
+    }
+    case 6: {
       swap(this$static.ct, 0, 1, 2, 3, key);
       swap(this$static.ct, 8, 20, 12, 16, key);
       swap(this$static.ct, 9, 21, 13, 17, key);
       break;
-    case 7:
+    }
+    case 7: {
       swap(this$static.ct, 16, 17, 18, 19, key);
       swap(this$static.ct, 1, 15, 5, 9, key);
       swap(this$static.ct, 2, 12, 6, 10, key);
       break;
-    case 8:
+    }
+    case 8: {
       swap(this$static.ct, 8, 9, 10, 11, key);
       swap(this$static.ct, 2, 19, 4, 21, key);
       swap(this$static.ct, 3, 16, 5, 22, key);
       break;
-    case 9:
+    }
+    case 9: {
       swap(this$static.ct, 4, 5, 6, 7, key);
       swap(this$static.ct, 10, 18, 14, 22, key);
       swap(this$static.ct, 11, 19, 15, 23, key);
       break;
-    case 10:
+    }
+    case 10: {
       swap(this$static.ct, 20, 21, 22, 23, key);
       swap(this$static.ct, 0, 8, 4, 14, key);
       swap(this$static.ct, 3, 11, 7, 13, key);
       break;
-    case 11:
+    }
+    case 11: {
       swap(this$static.ct, 12, 13, 14, 15, key);
       swap(this$static.ct, 1, 20, 7, 18, key);
       swap(this$static.ct, 0, 23, 6, 17, key);
+    }
   }
 }
 
 function $rot(this$static, r) {
   switch (r) {
-    case 0:
+    case 0: {
       $move(this$static, 19);
       $move(this$static, 28);
       break;
-    case 1:
+    }
+    case 1: {
       $move(this$static, 21);
       $move(this$static, 32);
       break;
-    case 2:
+    }
+    case 2: {
       swap(this$static.ct, 0, 3, 1, 2, 1);
       swap(this$static.ct, 8, 11, 9, 10, 1);
       swap(this$static.ct, 4, 7, 5, 6, 1);
@@ -302,11 +316,13 @@ function $rot(this$static, r) {
       swap(this$static.ct, 16, 19, 21, 22, 1);
       swap(this$static.ct, 17, 18, 20, 23, 1);
       break;
-    case 3:
+    }
+    case 3: {
       $move(this$static, 18);
       $move(this$static, 29);
       $move(this$static, 24);
       $move(this$static, 35);
+    }
   }
 }
 
@@ -595,73 +611,88 @@ function $move_0(this$static, m_0) {
   const key = m_0 % 3;
   m_0 = ~~(m_0 / 3);
   switch (m_0) {
-    case 0:
+    case 0: {
       swap(this$static.ct, 0, 1, 2, 3, key);
       break;
-    case 1:
+    }
+    case 1: {
       swap(this$static.rl, 0, 1, 2, 3, key);
       break;
-    case 2:
+    }
+    case 2: {
       swap(this$static.ct, 8, 9, 10, 11, key);
       break;
-    case 3:
+    }
+    case 3: {
       swap(this$static.ct, 4, 5, 6, 7, key);
       break;
-    case 4:
+    }
+    case 4: {
       swap(this$static.rl, 4, 5, 6, 7, key);
       break;
-    case 5:
+    }
+    case 5: {
       swap(this$static.ct, 12, 13, 14, 15, key);
       break;
-    case 6:
+    }
+    case 6: {
       swap(this$static.ct, 0, 1, 2, 3, key);
       swap(this$static.rl, 0, 5, 4, 1, key);
       swap(this$static.ct, 8, 9, 12, 13, key);
       break;
-    case 7:
+    }
+    case 7: {
       swap(this$static.rl, 0, 1, 2, 3, key);
       swap(this$static.ct, 1, 15, 5, 9, key);
       swap(this$static.ct, 2, 12, 6, 10, key);
       break;
-    case 8:
+    }
+    case 8: {
       swap(this$static.ct, 8, 9, 10, 11, key);
       swap(this$static.rl, 0, 3, 6, 5, key);
       swap(this$static.ct, 3, 2, 5, 4, key);
       break;
-    case 9:
+    }
+    case 9: {
       swap(this$static.ct, 4, 5, 6, 7, key);
       swap(this$static.rl, 3, 2, 7, 6, key);
       swap(this$static.ct, 11, 10, 15, 14, key);
       break;
-    case 10:
+    }
+    case 10: {
       swap(this$static.rl, 4, 5, 6, 7, key);
       swap(this$static.ct, 0, 8, 4, 14, key);
       swap(this$static.ct, 3, 11, 7, 13, key);
       break;
-    case 11:
+    }
+    case 11: {
       swap(this$static.ct, 12, 13, 14, 15, key);
       swap(this$static.rl, 1, 4, 7, 2, key);
       swap(this$static.ct, 1, 0, 7, 6, key);
+    }
   }
 }
 
 function $rot_0(this$static, r) {
   switch (r) {
-    case 0:
+    case 0: {
       $move_0(this$static, 19);
       $move_0(this$static, 28);
       break;
-    case 1:
+    }
+    case 1: {
       $move_0(this$static, 21);
       $move_0(this$static, 32);
       break;
-    case 2:
+    }
+    case 2: {
       swap(this$static.ct, 0, 3, 1, 2, 1);
       swap(this$static.ct, 8, 11, 9, 10, 1);
       swap(this$static.ct, 4, 7, 5, 6, 1);
       swap(this$static.ct, 12, 15, 13, 14, 1);
       swap(this$static.rl, 0, 3, 5, 6, 1);
       swap(this$static.rl, 1, 2, 4, 7, 1);
+    }
   }
 }
 
@@ -850,59 +881,71 @@ function $move_1(this$static, i_0) {
   switch (i_0) {
     case 0:
     case 1:
-    case 2:
+    case 2: {
       swap(this$static.ud, 0, 1, 2, 3, i_0 % 3);
       break;
-    case 3:
+    }
+    case 3: {
       swap(this$static.rl, 0, 1, 2, 3, 1);
       break;
+    }
     case 4:
     case 5:
-    case 6:
+    case 6: {
       swap(this$static.fb, 0, 1, 2, 3, (i_0 - 1) % 3);
       break;
+    }
     case 7:
     case 8:
-    case 9:
+    case 9: {
       swap(this$static.ud, 4, 5, 6, 7, (i_0 - 1) % 3);
       break;
-    case 10:
+    }
+    case 10: {
       swap(this$static.rl, 4, 5, 6, 7, 1);
       break;
+    }
     case 11:
     case 12:
-    case 13:
+    case 13: {
       swap(this$static.fb, 4, 5, 6, 7, (i_0 + 1) % 3);
       break;
-    case 14:
+    }
+    case 14: {
       swap(this$static.ud, 0, 1, 2, 3, 1);
       swap(this$static.rl, 0, 5, 4, 1, 1);
       swap(this$static.fb, 0, 5, 4, 1, 1);
       break;
-    case 15:
+    }
+    case 15: {
       swap(this$static.rl, 0, 1, 2, 3, 1);
       swap(this$static.fb, 1, 4, 7, 2, 1);
       swap(this$static.ud, 1, 6, 5, 2, 1);
       break;
-    case 16:
+    }
+    case 16: {
       swap(this$static.fb, 0, 1, 2, 3, 1);
       swap(this$static.ud, 3, 2, 5, 4, 1);
       swap(this$static.rl, 0, 3, 6, 5, 1);
       break;
-    case 17:
+    }
+    case 17: {
       swap(this$static.ud, 4, 5, 6, 7, 1);
       swap(this$static.rl, 3, 2, 7, 6, 1);
       swap(this$static.fb, 3, 2, 7, 6, 1);
       break;
-    case 18:
+    }
+    case 18: {
       swap(this$static.rl, 4, 5, 6, 7, 1);
       swap(this$static.fb, 0, 3, 6, 5, 1);
       swap(this$static.ud, 0, 3, 4, 7, 1);
       break;
-    case 19:
+    }
+    case 19: {
       swap(this$static.fb, 4, 5, 6, 7, 1);
       swap(this$static.ud, 0, 7, 6, 1, 1);
       swap(this$static.rl, 1, 4, 7, 2, 1);
+    }
   }
 }
 
@@ -1024,53 +1067,65 @@ function $move_2(this$static, m_0) {
   const key = m_0 % 3;
   m_0 = ~~(m_0 / 3);
   switch (m_0) {
-    case 0:
+    case 0: {
       swap(this$static.ct, 0, 1, 2, 3, key);
       break;
-    case 1:
+    }
+    case 1: {
       swap(this$static.ct, 16, 17, 18, 19, key);
       break;
-    case 2:
+    }
+    case 2: {
       swap(this$static.ct, 8, 9, 10, 11, key);
       break;
-    case 3:
+    }
+    case 3: {
       swap(this$static.ct, 4, 5, 6, 7, key);
       break;
-    case 4:
+    }
+    case 4: {
       swap(this$static.ct, 20, 21, 22, 23, key);
       break;
-    case 5:
+    }
+    case 5: {
       swap(this$static.ct, 12, 13, 14, 15, key);
       break;
-    case 6:
+    }
+    case 6: {
       swap(this$static.ct, 0, 1, 2, 3, key);
       swap(this$static.ct, 8, 20, 12, 16, key);
       swap(this$static.ct, 9, 21, 13, 17, key);
       break;
-    case 7:
+    }
+    case 7: {
       swap(this$static.ct, 16, 17, 18, 19, key);
       swap(this$static.ct, 1, 15, 5, 9, key);
       swap(this$static.ct, 2, 12, 6, 10, key);
       break;
-    case 8:
+    }
+    case 8: {
       swap(this$static.ct, 8, 9, 10, 11, key);
       swap(this$static.ct, 2, 19, 4, 21, key);
       swap(this$static.ct, 3, 16, 5, 22, key);
       break;
-    case 9:
+    }
+    case 9: {
       swap(this$static.ct, 4, 5, 6, 7, key);
       swap(this$static.ct, 10, 18, 14, 22, key);
       swap(this$static.ct, 11, 19, 15, 23, key);
       break;
-    case 10:
+    }
+    case 10: {
       swap(this$static.ct, 20, 21, 22, 23, key);
       swap(this$static.ct, 0, 8, 4, 14, key);
       swap(this$static.ct, 3, 11, 7, 13, key);
       break;
-    case 11:
+    }
+    case 11: {
       swap(this$static.ct, 12, 13, 14, 15, key);
       swap(this$static.ct, 1, 20, 7, 18, key);
       swap(this$static.ct, 0, 23, 6, 17, key);
+    }
   }
 }
 
@@ -1264,108 +1319,129 @@ function $getsym_0(this$static) {
 function $move_4(this$static, i_0) {
   this$static.isStd = false;
   switch (i_0) {
-    case 0:
+    case 0: {
       circle(this$static.edge, 0, 4, 1, 5);
       circle(this$static.edgeo, 0, 4, 1, 5);
       break;
-    case 1:
+    }
+    case 1: {
       $swap_0(this$static.edge, 0, 4, 1, 5);
       $swap_0(this$static.edgeo, 0, 4, 1, 5);
       break;
-    case 2:
+    }
+    case 2: {
       circle(this$static.edge, 0, 5, 1, 4);
       circle(this$static.edgeo, 0, 5, 1, 4);
       break;
-    case 3:
+    }
+    case 3: {
       $swap_0(this$static.edge, 5, 10, 6, 11);
       $swap_0(this$static.edgeo, 5, 10, 6, 11);
       break;
-    case 4:
+    }
+    case 4: {
       circle(this$static.edge, 0, 11, 3, 8);
       circle(this$static.edgeo, 0, 11, 3, 8);
       break;
-    case 5:
+    }
+    case 5: {
       $swap_0(this$static.edge, 0, 11, 3, 8);
       $swap_0(this$static.edgeo, 0, 11, 3, 8);
       break;
-    case 6:
+    }
+    case 6: {
       circle(this$static.edge, 0, 8, 3, 11);
       circle(this$static.edgeo, 0, 8, 3, 11);
       break;
-    case 7:
+    }
+    case 7: {
       circle(this$static.edge, 2, 7, 3, 6);
       circle(this$static.edgeo, 2, 7, 3, 6);
       break;
-    case 8:
+    }
+    case 8: {
       $swap_0(this$static.edge, 2, 7, 3, 6);
       $swap_0(this$static.edgeo, 2, 7, 3, 6);
       break;
-    case 9:
+    }
+    case 9: {
       circle(this$static.edge, 2, 6, 3, 7);
       circle(this$static.edgeo, 2, 6, 3, 7);
       break;
-    case 10:
+    }
+    case 10: {
       $swap_0(this$static.edge, 4, 8, 7, 9);
       $swap_0(this$static.edgeo, 4, 8, 7, 9);
       break;
-    case 11:
+    }
+    case 11: {
       circle(this$static.edge, 1, 9, 2, 10);
       circle(this$static.edgeo, 1, 9, 2, 10);
       break;
-    case 12:
+    }
+    case 12: {
       $swap_0(this$static.edge, 1, 9, 2, 10);
       $swap_0(this$static.edgeo, 1, 9, 2, 10);
       break;
-    case 13:
+    }
+    case 13: {
       circle(this$static.edge, 1, 10, 2, 9);
       circle(this$static.edgeo, 1, 10, 2, 9);
       break;
-    case 14:
+    }
+    case 14: {
       $swap_0(this$static.edge, 0, 4, 1, 5);
       $swap_0(this$static.edgeo, 0, 4, 1, 5);
       circle(this$static.edge, 9, 11);
       circle(this$static.edgeo, 8, 10);
       break;
-    case 15:
+    }
+    case 15: {
       $swap_0(this$static.edge, 5, 10, 6, 11);
       $swap_0(this$static.edgeo, 5, 10, 6, 11);
       circle(this$static.edge, 1, 3);
       circle(this$static.edgeo, 0, 2);
       break;
-    case 16:
+    }
+    case 16: {
       $swap_0(this$static.edge, 0, 11, 3, 8);
       $swap_0(this$static.edgeo, 0, 11, 3, 8);
       circle(this$static.edge, 5, 7);
       circle(this$static.edgeo, 4, 6);
       break;
-    case 17:
+    }
+    case 17: {
       $swap_0(this$static.edge, 2, 7, 3, 6);
       $swap_0(this$static.edgeo, 2, 7, 3, 6);
       circle(this$static.edge, 8, 10);
       circle(this$static.edgeo, 9, 11);
       break;
-    case 18:
+    }
+    case 18: {
       $swap_0(this$static.edge, 4, 8, 7, 9);
       $swap_0(this$static.edgeo, 4, 8, 7, 9);
       circle(this$static.edge, 0, 2);
       circle(this$static.edgeo, 1, 3);
       break;
-    case 19:
+    }
+    case 19: {
       $swap_0(this$static.edge, 1, 9, 2, 10);
       $swap_0(this$static.edgeo, 1, 9, 2, 10);
       circle(this$static.edge, 4, 6);
       circle(this$static.edgeo, 5, 7);
+    }
   }
 }
 
 function $rot_1(this$static, r) {
   this$static.isStd = false;
   switch (r) {
-    case 0:
+    case 0: {
       $move_4(this$static, 14);
       $move_4(this$static, 17);
       break;
-    case 1:
+    }
+    case 1: {
       $circlex(this$static, 11, 5, 10, 6);
       $circlex(this$static, 5, 10, 6, 11);
       $circlex(this$static, 1, 2, 3, 0);
@@ -1373,7 +1449,8 @@ function $rot_1(this$static, r) {
       $circlex(this$static, 8, 4, 9, 7);
       $circlex(this$static, 0, 1, 2, 3);
       break;
-    case 2:
+    }
+    case 2: {
       $swapx(this$static, 4, 5);
       $swapx(this$static, 5, 4);
       $swapx(this$static, 11, 8);
@@ -1386,6 +1463,7 @@ function $rot_1(this$static, r) {
       $swapx(this$static, 0, 0);
       $swapx(this$static, 3, 3);
       $swapx(this$static, 2, 2);
+    }
   }
 }
 
@@ -1786,59 +1864,71 @@ function $move_5(this$static, m_0) {
   const key = m_0 % 3;
   m_0 = ~~(m_0 / 3);
   switch (m_0) {
-    case 0:
+    case 0: {
       swap(this$static.ep, 0, 1, 2, 3, key);
       swap(this$static.ep, 12, 13, 14, 15, key);
       break;
-    case 1:
+    }
+    case 1: {
       swap(this$static.ep, 11, 15, 10, 19, key);
       swap(this$static.ep, 23, 3, 22, 7, key);
       break;
-    case 2:
+    }
+    case 2: {
       swap(this$static.ep, 0, 11, 6, 8, key);
       swap(this$static.ep, 12, 23, 18, 20, key);
       break;
-    case 3:
+    }
+    case 3: {
       swap(this$static.ep, 4, 5, 6, 7, key);
       swap(this$static.ep, 16, 17, 18, 19, key);
       break;
-    case 4:
+    }
+    case 4: {
       swap(this$static.ep, 1, 20, 5, 21, key);
       swap(this$static.ep, 13, 8, 17, 9, key);
       break;
-    case 5:
+    }
+    case 5: {
       swap(this$static.ep, 2, 9, 4, 10, key);
       swap(this$static.ep, 14, 21, 16, 22, key);
       break;
-    case 6:
+    }
+    case 6: {
       swap(this$static.ep, 0, 1, 2, 3, key);
       swap(this$static.ep, 12, 13, 14, 15, key);
       swap(this$static.ep, 9, 22, 11, 20, key);
       break;
-    case 7:
+    }
+    case 7: {
       swap(this$static.ep, 11, 15, 10, 19, key);
       swap(this$static.ep, 23, 3, 22, 7, key);
       swap(this$static.ep, 2, 16, 6, 12, key);
       break;
-    case 8:
+    }
+    case 8: {
       swap(this$static.ep, 0, 11, 6, 8, key);
       swap(this$static.ep, 12, 23, 18, 20, key);
       swap(this$static.ep, 3, 19, 5, 13, key);
       break;
-    case 9:
+    }
+    case 9: {
       swap(this$static.ep, 4, 5, 6, 7, key);
       swap(this$static.ep, 16, 17, 18, 19, key);
       swap(this$static.ep, 8, 23, 10, 21, key);
       break;
-    case 10:
+    }
+    case 10: {
       swap(this$static.ep, 1, 20, 5, 21, key);
       swap(this$static.ep, 13, 8, 17, 9, key);
       swap(this$static.ep, 14, 0, 18, 4, key);
       break;
-    case 11:
+    }
+    case 11: {
       swap(this$static.ep, 2, 9, 4, 10, key);
       swap(this$static.ep, 14, 21, 16, 22, key);
       swap(this$static.ep, 7, 15, 1, 17, key);
+    }
   }
 }
 
@@ -2340,7 +2430,7 @@ function $init2_0(this$static, sym) {
     $move_6(this$static.c1, this$static.move1[i_0]);
   }
   switch (finish_0[sym]) {
-    case 0:
+    case 0: {
       $move_6(this$static.c1, 24);
       $move_6(this$static.c1, 35);
       this$static.move1[this$static.length1] = 24;
@@ -2348,7 +2438,8 @@ function $init2_0(this$static, sym) {
       this$static.add1 = true;
       sym = 19;
       break;
-    case 12869:
+    }
+    case 12869: {
       $move_6(this$static.c1, 18);
       $move_6(this$static.c1, 29);
       this$static.move1[this$static.length1] = 18;
@@ -2356,9 +2447,11 @@ function $init2_0(this$static, sym) {
       this$static.add1 = true;
       sym = 34;
       break;
-    case 735470:
+    }
+    case 735470: {
       this$static.add1 = false;
       sym = 0;
+    }
   }
   $set_2(
     this$static.ct2,
@@ -2597,14 +2690,15 @@ function parity_0(arr) {
 function swap(arr, a, b, c, d, key) {
   let temp;
   switch (key) {
-    case 0:
+    case 0: {
       temp = arr[d];
       arr[d] = arr[c];
       arr[c] = arr[b];
       arr[b] = arr[a];
       arr[a] = temp;
       return;
-    case 1:
+    }
+    case 1: {
       temp = arr[a];
       arr[a] = arr[c];
       arr[c] = temp;
@@ -2612,13 +2706,15 @@ function swap(arr, a, b, c, d, key) {
       arr[b] = arr[d];
       arr[d] = temp;
       return;
-    case 2:
+    }
+    case 2: {
       temp = arr[a];
       arr[a] = arr[b];
       arr[b] = arr[c];
       arr[c] = arr[d];
       arr[d] = temp;
       return;
+    }
   }
 }
 

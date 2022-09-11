@@ -874,15 +874,18 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
             let v4 = new Vector2(x2, y1);
 
             switch (rotate) {
-              case 1:
+              case 1: {
                 [v1, v2, v3, v4] = [v2, v3, v4, v1];
                 break;
-              case 2:
+              }
+              case 2: {
                 [v1, v2, v3, v4] = [v3, v4, v1, v2];
                 break;
-              case 3:
+              }
+              case 3: {
                 [v1, v2, v3, v4] = [v4, v1, v2, v3];
                 break;
+              }
             }
             mesh.geometry.setAttribute(
               "uv",

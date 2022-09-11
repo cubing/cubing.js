@@ -82,12 +82,13 @@ const fn = async (
           //     family: "Rv"
           //   })
           //   break;
-          case "y":
+          case "y": {
             e = { ...e }; // Copy
             e.latestAlgLeaf = move.modified({
               family: "Uv",
             });
             break;
+          }
           // case "z":
           //   // TODO: map this to a corner turn for FTO
           //   e.latestAlgLeaf = modifiedBlockMove(e.latestAlgLeaf, {
@@ -249,12 +250,14 @@ const fn = async (
 
   swipeyPuzzle.setActionListener((action: Action) => {
     switch (action) {
-      case "space":
+      case "space": {
         space();
         break;
-      case "enter":
+      }
+      case "enter": {
         enter();
         break;
+      }
     }
   });
 
@@ -285,15 +288,18 @@ const fn = async (
     new CallbackProxyReceiver(url.toString(), (e: ExperimentalProxyEvent) => {
       console.log(e);
       switch (e.event) {
-        case "move":
+        case "move": {
           algLeafListener(e.data);
           break;
-        case "orientation":
+        }
+        case "orientation": {
           orientationEventListener(e.data);
           break;
-        case "reset":
+        }
+        case "reset": {
           space();
           break;
+        }
       }
     });
   }
@@ -318,12 +324,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const go = new URL(document.location.href).searchParams.get("go");
   switch (go) {
-    case "keyboard":
+    case "keyboard": {
       keyboardCallback();
       break;
-    case "swipe":
+    }
+    case "swipe": {
       swipeCallback();
       break;
+    }
   }
 
   if (getPuzzleID() !== DEFAULT_PUZZLE_ID) {

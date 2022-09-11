@@ -387,38 +387,46 @@ class ControlPane {
     e: CustomEvent<{ action: string }>,
   ): Promise<void> {
     switch (e.detail.action) {
-      case "expand":
+      case "expand": {
         this.twistyPlayer.alg = (
           await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.expand();
         break;
-      case "simplify":
+      }
+      case "simplify": {
         this.twistyPlayer.alg = (
           await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.simplify();
         break;
-      case "clear":
+      }
+      case "clear": {
         this.twistyPlayer.alg = new Alg();
         this.twistyPlayer.experimentalSetupAlg = new Alg();
         this.twistyPlayer.experimentalTitle = null;
         break;
-      case "invert":
+      }
+      case "invert": {
         this.twistyPlayer.alg = (
           await this.twistyPlayer.experimentalModel.alg.get()
         ).alg.invert();
         break;
-      case "solve":
+      }
+      case "solve": {
         this.solve();
         break;
-      case "scramble":
+      }
+      case "scramble": {
         this.scramble();
         break;
-      case "screenshot":
+      }
+      case "screenshot": {
         this.screenshot();
         break;
-      case "connect-input":
+      }
+      case "connect-input": {
         this.connectInput();
         break;
+      }
       default:
         throw new Error(`Unknown tool action! ${e.detail.action}`);
     }

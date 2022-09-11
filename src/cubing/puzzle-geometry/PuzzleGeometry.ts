@@ -797,21 +797,26 @@ export class PuzzleGeometry {
     this.cubies = [];
     let g = null;
     switch (shape) {
-      case "c":
+      case "c": {
         g = cube();
         break;
-      case "o":
+      }
+      case "o": {
         g = octahedron();
         break;
-      case "i":
+      }
+      case "i": {
         g = icosahedron();
         break;
-      case "t":
+      }
+      case "t": {
         g = tetrahedron();
         break;
-      case "d":
+      }
+      case "d": {
         g = dodecahedron();
         break;
+      }
       default:
         throw new Error(`Bad shape argument: ${shape}`);
     }
@@ -859,21 +864,24 @@ export class PuzzleGeometry {
       let normal = null;
       let distance = 0;
       switch (cut.cutType) {
-        case "f":
+        case "f": {
           normal = facenormal;
           distance = 1;
           sawface = true;
           break;
-        case "v":
+        }
+        case "v": {
           normal = vertexnormal;
           distance = this.vertexdistance;
           sawvertex = true;
           break;
-        case "e":
+        }
+        case "e": {
           normal = edgenormal;
           distance = this.edgedistance;
           sawedge = true;
           break;
+        }
         default:
           throw new Error(`Bad cut argument: ${cut.cutType}`);
       }

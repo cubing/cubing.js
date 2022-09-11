@@ -9,7 +9,7 @@ export function reportTypeMismatch(msg: string): void {
   switch (currentReportingLevel) {
     case "error":
       throw new Error(msg);
-    case "warn":
+    case "warn": {
       numWarned++;
       if (numWarned < MAX_NUMBER_OF_TIMES_TO_WARN) {
         if (numWarned + 1 === MAX_NUMBER_OF_TIMES_TO_WARN) {
@@ -17,6 +17,7 @@ export function reportTypeMismatch(msg: string): void {
         }
       }
       return;
+    }
   }
 }
 

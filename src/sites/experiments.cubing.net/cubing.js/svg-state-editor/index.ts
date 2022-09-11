@@ -194,7 +194,7 @@ class Facelet {
 
   click() {
     switch (app.mode) {
-      case "swap":
+      case "swap": {
         if (
           app.cube.selectedFacelet &&
           app.cube.selectedFacelet.type === this.type
@@ -206,9 +206,11 @@ class Facelet {
           this.select();
         }
         break;
-      case "twist":
+      }
+      case "twist": {
         app.cube.twist(this);
         break;
+      }
       default:
         console.error("unexpected mode", app.mode);
         break;

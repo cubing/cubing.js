@@ -108,23 +108,27 @@ export function setURLParams(newParams: PartialURLParamValues): void {
 
   for (const [key, value] of Object.entries(newParams)) {
     switch (key) {
-      case "alg":
+      case "alg": {
         if (algParamEnabled) {
           setParam(key, value.toString());
         }
         setAlgParamEnabled;
         break;
+      }
       case "puzzle":
       case "puzzlegeometry":
-      case "puzzle-description":
+      case "puzzle-description": {
         setParam(key, value);
         break;
-      case "debug-show-render-stats":
+      }
+      case "debug-show-render-stats": {
         setParam(key, value ? "true" : "");
         break;
-      case "tempo":
+      }
+      case "tempo": {
         setParam(key, value);
         break;
+      }
       default:
         console.warn("Unknown param", key, value);
     }

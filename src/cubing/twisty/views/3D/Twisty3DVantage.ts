@@ -214,13 +214,15 @@ export class Twisty3DVantage extends ManagedCustomElement {
       ) => {
         let dragInputEnabled = false;
         switch (dragInputMode) {
-          case "auto":
+          case "auto": {
             dragTracker.start();
             dragInputEnabled = true;
             break;
-          case "none":
+          }
+          case "none": {
             dragTracker.stop();
             break;
+          }
         }
         this.contentWrapper.classList.toggle(
           "drag-input-enabled",

@@ -64,11 +64,12 @@ export async function cubeAppearance(
   switch (stickering) {
     case "full":
       break;
-    case "PLL":
+    case "PLL": {
       dimF2L();
       setPLL();
       break;
-    case "CLS":
+    }
+    case "CLS": {
       dimF2L();
       puzzleStickering.set(cornerDFR(), PieceStickering.Regular);
       puzzleStickering.set(LL(), PieceStickering.Ignoriented);
@@ -78,17 +79,20 @@ export async function cubeAppearance(
         PieceStickering.IgnoreNonPrimary,
       );
       break;
-    case "OLL":
+    }
+    case "OLL": {
       dimF2L();
       setOLL();
       break;
-    case "COLL":
+    }
+    case "COLL": {
       dimF2L();
       puzzleStickering.set(m.and([LL(), EDGES()]), PieceStickering.Ignoriented);
       puzzleStickering.set(m.and([LL(), CENTERS()]), PieceStickering.Dim);
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Regular);
       break;
-    case "OCLL":
+    }
+    case "OCLL": {
       dimF2L();
       dimOLL();
       puzzleStickering.set(
@@ -96,49 +100,58 @@ export async function cubeAppearance(
         PieceStickering.IgnoreNonPrimary,
       );
       break;
-    case "CLL":
+    }
+    case "CLL": {
       dimF2L();
       puzzleStickering.set(
         m.not(m.and([CORNERS(), LL()])),
         PieceStickering.Dim,
       );
       break;
-    case "ELL":
+    }
+    case "ELL": {
       dimF2L();
       puzzleStickering.set(LL(), PieceStickering.Dim);
       puzzleStickering.set(m.and([LL(), EDGES()]), PieceStickering.Regular);
       break;
-    case "ELS":
+    }
+    case "ELS": {
       dimF2L();
       setOLL();
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Ignored);
       puzzleStickering.set(edgeFR(), PieceStickering.Regular);
       puzzleStickering.set(cornerDFR(), PieceStickering.Ignored);
       break;
-    case "LL":
+    }
+    case "LL": {
       dimF2L();
       break;
-    case "F2L":
+    }
+    case "F2L": {
       puzzleStickering.set(LL(), PieceStickering.Ignored);
       break;
-    case "ZBLL":
+    }
+    case "ZBLL": {
       dimF2L();
       puzzleStickering.set(LL(), PieceStickering.PermuteNonPrimary);
       puzzleStickering.set(centerLL(), PieceStickering.Dim); // For PG
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Regular);
       break;
-    case "ZBLS":
+    }
+    case "ZBLS": {
       dimF2L();
       puzzleStickering.set(slotFR(), PieceStickering.Regular);
       setOLL();
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Ignored);
       break;
-    case "VLS":
+    }
+    case "VLS": {
       dimF2L();
       puzzleStickering.set(slotFR(), PieceStickering.Regular);
       setOLL();
       break;
-    case "WVLS":
+    }
+    case "WVLS": {
       dimF2L();
       puzzleStickering.set(slotFR(), PieceStickering.Regular);
       puzzleStickering.set(m.and([LL(), EDGES()]), PieceStickering.Ignoriented);
@@ -148,20 +161,23 @@ export async function cubeAppearance(
         PieceStickering.IgnoreNonPrimary,
       );
       break;
-    case "LS":
+    }
+    case "LS": {
       dimF2L();
       puzzleStickering.set(slotFR(), PieceStickering.Regular);
       puzzleStickering.set(LL(), PieceStickering.Ignored);
       puzzleStickering.set(centerLL(), PieceStickering.Dim);
       break;
-    case "EO":
+    }
+    case "EO": {
       puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
       puzzleStickering.set(
         EDGES(),
         PieceStickering.OrientationWithoutPermutation,
       );
       break;
-    case "EOline":
+    }
+    case "EOline": {
       puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
       puzzleStickering.set(
         EDGES(),
@@ -169,7 +185,8 @@ export async function cubeAppearance(
       );
       puzzleStickering.set(m.and(m.moves(["D", "M"])), PieceStickering.Regular);
       break;
-    case "EOcross":
+    }
+    case "EOcross": {
       puzzleStickering.set(
         EDGES(),
         PieceStickering.OrientationWithoutPermutation,
@@ -177,19 +194,23 @@ export async function cubeAppearance(
       puzzleStickering.set(m.move("D"), PieceStickering.Regular);
       puzzleStickering.set(CORNERS(), PieceStickering.Ignored);
       break;
-    case "CMLL":
+    }
+    case "CMLL": {
       puzzleStickering.set(F2L(), PieceStickering.Dim);
       puzzleStickering.set(L6E(), PieceStickering.Ignored);
       puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Regular);
       break;
-    case "L10P":
+    }
+    case "L10P": {
       puzzleStickering.set(m.not(L6E()), PieceStickering.Dim);
       puzzleStickering.set(m.and([CORNERS(), LL()]), PieceStickering.Regular);
       break;
-    case "L6E":
+    }
+    case "L6E": {
       puzzleStickering.set(m.not(L6E()), PieceStickering.Dim);
       break;
-    case "L6EO":
+    }
+    case "L6EO": {
       puzzleStickering.set(m.not(L6E()), PieceStickering.Dim);
       puzzleStickering.set(
         L6E(),
@@ -200,7 +221,8 @@ export async function cubeAppearance(
         PieceStickering.OrientationStickers,
       ); // For PG
       break;
-    case "Daisy":
+    }
+    case "Daisy": {
       puzzleStickering.set(m.all(), PieceStickering.Ignored);
       puzzleStickering.set(CENTERS(), PieceStickering.Dim);
       puzzleStickering.set(
@@ -212,7 +234,8 @@ export async function cubeAppearance(
         PieceStickering.IgnoreNonPrimary,
       );
       break;
-    case "Cross":
+    }
+    case "Cross": {
       puzzleStickering.set(m.all(), PieceStickering.Ignored);
       puzzleStickering.set(CENTERS(), PieceStickering.Dim);
       puzzleStickering.set(
@@ -224,7 +247,8 @@ export async function cubeAppearance(
         PieceStickering.Regular,
       );
       break;
-    case "2x2x2":
+    }
+    case "2x2x2": {
       puzzleStickering.set(
         m.or(m.moves(["U", "F", "R"])),
         PieceStickering.Ignored,
@@ -234,7 +258,8 @@ export async function cubeAppearance(
         PieceStickering.Dim,
       );
       break;
-    case "2x2x3":
+    }
+    case "2x2x3": {
       puzzleStickering.set(m.all(), PieceStickering.Dim);
       puzzleStickering.set(
         m.or(m.moves(["U", "F", "R"])),
@@ -249,17 +274,21 @@ export async function cubeAppearance(
         PieceStickering.Regular,
       );
       break;
-    case "Void Cube":
+    }
+    case "Void Cube": {
       puzzleStickering.set(CENTERS(), PieceStickering.Invisible);
       break;
+    }
     case "picture":
     // fallthrough
-    case "invisible":
+    case "invisible": {
       puzzleStickering.set(m.all(), PieceStickering.Invisible);
       break;
-    case "centers-only":
+    }
+    case "centers-only": {
       puzzleStickering.set(m.not(CENTERS()), PieceStickering.Ignored);
       break;
+    }
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,

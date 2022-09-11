@@ -214,20 +214,22 @@ class AlgParser {
         const B = this.parseAlgWithStopping(["]"]);
         this.mustConsumeNext("]");
         switch (separator) {
-          case ":":
+          case ":": {
             algBuilder.push(
               addCharIndices(new Conjugate(A, B), savedCharIndex, this.#idx),
             );
             crowded = true;
             algEndIdx = this.#idx;
             continue mainLoop;
-          case ",":
+          }
+          case ",": {
             algBuilder.push(
               addCharIndices(new Commutator(A, B), savedCharIndex, this.#idx),
             );
             crowded = true;
             algEndIdx = this.#idx;
             continue mainLoop;
+          }
           default:
             throw new Error("unexpected parsing error");
         }

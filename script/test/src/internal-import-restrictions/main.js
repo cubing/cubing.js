@@ -40,7 +40,7 @@ class Target {
 
   checkImportable(args, forTarget) {
     switch (args.kind) {
-      case "import-statement":
+      case "import-statement": {
         if (!forTarget.deps.direct.includes(this.name)) {
           console.error(
             `\`cubing/${forTarget.name}\` is not allowed to directly (non-dynamically) import \`cubing/${this.name}\`. Update ${TARGET_INFOS_PATH} to change this.`,
@@ -50,7 +50,8 @@ class Target {
           process.exit(2);
         }
         return;
-      case "dynamic-import":
+      }
+      case "dynamic-import": {
         if (!forTarget.deps.dynamic.includes(this.name)) {
           console.error(
             `\`cubing/${forTarget.name}\` is not allowed to dynamically import \`cubing/${this.name}\`. Update ${TARGET_INFOS_PATH} to change this.`,
@@ -60,6 +61,7 @@ class Target {
           process.exit(2);
         }
         return;
+      }
       default:
         throw new Error(`Unknown kind: ${args.kind}`);
     }

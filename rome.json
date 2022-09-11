@@ -12,8 +12,7 @@
         "noNegationElse": "off",
         "noShoutyConstants": "off",
         "noUnusedVariables": "off",
-        "noUnnecessaryContinue": "off",
-        "useSingleCaseStatement": "off"
+        "noUnnecessaryContinue": "off"
       },
       "ts": {
         "recommended": true,

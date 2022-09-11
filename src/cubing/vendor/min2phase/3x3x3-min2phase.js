@@ -250,15 +250,18 @@ function initializeArrayElementsWithDefaults(elementTypeCategory, length_0) {
   var array = new Array(length_0);
   var initValue;
   switch (elementTypeCategory) {
-    case 6:
+    case 6: {
       initValue = { l: 0, m: 0, h: 0 };
       break;
-    case 7:
+    }
+    case 7: {
       initValue = 0;
       break;
-    case 8:
+    }
+    case 8: {
       initValue = false;
       break;
+    }
     default:
       return array;
   }
@@ -1616,24 +1619,28 @@ function initSym2Raw(N_RAW, Sym2Raw, Raw2Sym, SymState, coord) {
       continue;
     }
     switch (coord) {
-      case 0:
+      case 0: {
         $setFlip(c, i);
         break;
-      case 1:
+      }
+      case 1: {
         $setTwist(c, i);
         break;
+      }
       case 2:
         setNPerm(c.ea, i, 8, true);
     }
     for (s = 0; s < 16; s += sym_inc) {
       isEdge ? EdgeConjugate(c, s, d) : CornConjugate(c, s, d);
       switch (coord) {
-        case 0:
+        case 0: {
           idx = $getFlip(d);
           break;
-        case 1:
+        }
+        case 1: {
           idx = $getTwist(d);
           break;
+        }
         case 2:
           idx = getNPerm(d.ea, 8, true);
       }

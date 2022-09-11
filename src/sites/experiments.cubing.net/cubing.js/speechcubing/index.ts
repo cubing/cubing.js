@@ -58,7 +58,7 @@ recognition.onresult = function (event) {
       "WIDE",
     ).replace("WHY DO", "WIDE").replace("WHY ARE", "WIDE R");
     switch (transcript) {
-      case "UNDO":
+      case "UNDO": {
         player.experimentalModel.alg.set(
           (async () => {
             const alg = (await player.experimentalModel.alg.get()).alg;
@@ -67,29 +67,37 @@ recognition.onresult = function (event) {
           })(),
         );
         return;
-      case "CLEAR":
+      }
+      case "CLEAR": {
         player.alg = "";
         return;
+      }
       case "MEGAMINX":
       case "PYRAMINX":
-      case "FTO":
+      case "FTO": {
         player.puzzle = transcript.toLowerCase() as any;
         return;
-      case "START":
+      }
+      case "START": {
         player.timestamp = "start";
         return;
-      case "PLAY":
+      }
+      case "PLAY": {
         player.play();
         return;
-      case "TWIZZLE":
+      }
+      case "TWIZZLE": {
         player.controller.visitTwizzleLink();
         return;
-      case "FAST":
+      }
+      case "FAST": {
         player.tempoScale = 5;
         return;
-      case "SLOW":
+      }
+      case "SLOW": {
         player.tempoScale = 1;
         return;
+      }
     }
     transcript = transcript.replace("X", "x").replace("Y", "y").replace(
       "Z",
