@@ -1,12 +1,13 @@
 import { Alg } from "./Alg";
 import type { Move } from "./alg-nodes/leaves/Move";
+import type { PuzzleSpecificAlgSimplificationInfo } from "./traversal";
 
 export function experimentalAppendMove(
   alg: Alg,
   newMove: Move,
   options?: {
     coalesce?: boolean; // defaults to false
-    mod?: number;
+    puzzleSpecificAlgSimplificationInfo?: PuzzleSpecificAlgSimplificationInfo;
   },
 ): Alg {
   const oldAlgNodes = Array.from(alg.childAlgNodes());
@@ -19,7 +20,10 @@ export function experimentalAppendMove(
   ) {
     const newAlgNodes = oldAlgNodes.slice(0, oldAlgNodes.length - 1);
     let newAmount = oldLastMove.amount + newMove.amount;
-    const mod = options?.mod;
+    const mod =
+      options?.puzzleSpecificAlgSimplificationInfo?.quantumMoveOrder?.(
+        newMove.quantum,
+      );
     if (mod) {
       newAmount = ((newAmount % mod) + mod) % mod;
       if (newAmount * 2 > mod) {

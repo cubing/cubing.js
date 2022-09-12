@@ -42,19 +42,19 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L"), {
         coalesce: true,
-        mod: 4,
+        puzzleSpecificAlgSimplificationInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg(""));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L3"), {
         coalesce: true,
-        mod: 4,
+        puzzleSpecificAlgSimplificationInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L2"));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L6"), {
         coalesce: true,
-        mod: 4,
+        puzzleSpecificAlgSimplificationInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L"));
   });
@@ -63,7 +63,7 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("L"), new Move("L"), {
         coalesce: true,
-        mod: 3,
+        puzzleSpecificAlgSimplificationInfo: { quantumMoveOrder: () => 3 },
       }),
     ).to.be.identicalAlg(new Alg("L'"));
   });
