@@ -56,7 +56,7 @@ class CatchUpHelper {
     this.lastTimestamp = timestamp;
 
     this.model.catchUpMove.set(
-      (async () => {
+      (async (): Promise<CatchUpMove> => {
         const previousCatchUpMove = await this.model.catchUpMove.get();
         if (previousCatchUpMove.move === null) {
           return previousCatchUpMove;
