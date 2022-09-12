@@ -131,10 +131,12 @@ export abstract class TraversalUp<
 // TOOD: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
 export interface PuzzleSpecificAlgSimplificationInfo {
   quantumMoveOrder?: (quantumMove: QuantumMove) => number;
+  // Commutation is not transitive. For example, on Megaminx: BR and BL both commute with F, but not with each other.
   doQuantumMovesCommute?: (
     quantumMove1: QuantumMove,
     quantumMove2: QuantumMove,
   ) => boolean;
+  // All moves on the same axis *must* commute.
   areQuantumMovesSameAxis?: (
     quantumMove1: QuantumMove,
     quantumMove2: QuantumMove,

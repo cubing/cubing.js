@@ -282,8 +282,10 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
 // simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)));
 // simplifySameAxisMoves(["L2", "R2'", "x2"].map((s) => Move.fromString(s)));
 
-simplifySameAxisMoves(["x", "R'"].map((s) => Move.fromString(s)))[0]
+simplifySameAxisMoves(["l", "L'"].map((s) => Move.fromString(s)))[0]
   .log();
+
+simplifySameAxisMoves(["x", "R'"].map((s) => Move.fromString(s)))[0].log();
 simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)))[0].log();
 simplifySameAxisMoves(["x", "L", "R'"].map((s) => Move.fromString(s)))[0].log();
 simplifySameAxisMoves(["x", "L", "M"].map((s) => Move.fromString(s)))[0].log();
