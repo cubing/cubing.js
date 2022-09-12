@@ -160,7 +160,7 @@ function simplestMove(
     const sliceSpecificInfo = byAxisThenSpecificSlices[axis].get(from);
     if (sliceSpecificInfo) {
       return new Move(
-        new QuantumMove(sliceSpecificInfo.family, to),
+        new QuantumMove(sliceSpecificInfo.family),
         directedAmount * sliceSpecificInfo.direction,
       );
     }
@@ -168,15 +168,18 @@ function simplestMove(
 
   const axisInfo = axisInfos[axis];
   const { sliceDiameter } = axisInfo;
+  console.log({ sliceDiameter });
   // const specificSliceInfo = byAxisThenSpecificSlices[axis].get(from);
-  const near = from + to <= sliceDiameter;
-  if (!near) {
-    from = sliceDiameter - from;
-    to = sliceDiameter - to;
+  const far = from + to > sliceDiameter; // (from + to) / 2 > sliceDiameter / 2
+  if (far) {
+    [from, to] = [sliceDiameter - to, sliceDiameter - from];
   }
+
+  console.log("new", { from, to });
 
   let outerLayer: number | null = from + 1; // change to 1-indexed
   let innerLayer: number | null = to; // already 1-indexed
+  console.log({ outerLayer, innerLayer });
   const slice = outerLayer === innerLayer;
   if (slice) {
     innerLayer = null;
@@ -195,12 +198,12 @@ function simplestMove(
   console.log({ innerLayer, outerLayer, from, to });
 
   const moveSourceType = slice
-    ? near
-      ? MoveSourceType.INDEXABLE_SLICE_NEAR
-      : MoveSourceType.INDEXABLE_SLICE_FAR
-    : near
-    ? MoveSourceType.INDEXABLE_WIDE_NEAR
-    : MoveSourceType.INDEXABLE_WIDE_FAR;
+    ? far
+      ? MoveSourceType.INDEXABLE_SLICE_FAR
+      : MoveSourceType.INDEXABLE_SLICE_NEAR
+    : far
+    ? MoveSourceType.INDEXABLE_WIDE_FAR
+    : MoveSourceType.INDEXABLE_WIDE_NEAR;
   const moveSourceInfo = firstOfType(axis, moveSourceType);
   return new Move(
     new QuantumMove(moveSourceInfo.family, innerLayer, outerLayer),
