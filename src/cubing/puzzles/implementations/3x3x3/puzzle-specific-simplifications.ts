@@ -1,4 +1,4 @@
-import { Move, QuantumMove } from "../../../alg";
+import { Alg, Move, QuantumMove } from "../../../alg";
 import type { PuzzleSpecificAlgSimplificationInfo } from "../../../alg/traversal";
 
 enum Axis {
@@ -58,8 +58,8 @@ const axisInfos: Record<Axis, AxisInfo> = {
     moveSourceInfos: [
       ...makeSourceInfo(["R"], MoveSourceType.INDEXABLE_SLICE_NEAR, 0, 3),
       ...makeSourceInfo(["L'"], MoveSourceType.INDEXABLE_SLICE_FAR, 0, 3),
-      ...makeSourceInfo(["r", "Rw"], MoveSourceType.INDEXABLE_WIDE_NEAR, 0, 3),
-      ...makeSourceInfo(["l'", "Lw'"], MoveSourceType.INDEXABLE_WIDE_FAR, 0, 3),
+      ...makeSourceInfo(["r", "Rw"], MoveSourceType.INDEXABLE_WIDE_NEAR, 0, 2),
+      ...makeSourceInfo(["l'", "Lw'"], MoveSourceType.INDEXABLE_WIDE_FAR, 0, 2),
       ...makeSourceInfo(["M'"], MoveSourceType.SPECIFIC_SLICE, 1, 2), // TODO: remove some indices?
       ...makeSourceInfo(["x", "Uv", "Dv'"], MoveSourceType.ROTATION, 0, 3), // TODO: remove some indices?
     ],
@@ -70,8 +70,8 @@ const axisInfos: Record<Axis, AxisInfo> = {
     moveSourceInfos: [
       ...makeSourceInfo(["U"], MoveSourceType.INDEXABLE_SLICE_NEAR, 0, 3),
       ...makeSourceInfo(["D'"], MoveSourceType.INDEXABLE_SLICE_FAR, 0, 3),
-      ...makeSourceInfo(["u", "Uw"], MoveSourceType.INDEXABLE_WIDE_NEAR, 0, 3),
-      ...makeSourceInfo(["d'", "Dw'"], MoveSourceType.INDEXABLE_WIDE_FAR, 0, 3),
+      ...makeSourceInfo(["u", "Uw"], MoveSourceType.INDEXABLE_WIDE_NEAR, 0, 2),
+      ...makeSourceInfo(["d'", "Dw'"], MoveSourceType.INDEXABLE_WIDE_FAR, 0, 2),
       ...makeSourceInfo(["E'"], MoveSourceType.SPECIFIC_SLICE, 1, 2), // TODO: remove some indices?
       ...makeSourceInfo(["y", "Uv", "Dv'"], MoveSourceType.ROTATION, 0, 3), // TODO: remove some indices?
     ],
@@ -155,7 +155,7 @@ function simplestMove(
   to: number,
   directedAmount: number,
 ): Move {
-  // console.log({ from, to });
+  console.log({ axis, from, to, directedAmount });
   if (from + 1 === to) {
     const sliceSpecificInfo = byAxisThenSpecificSlices[axis].get(from);
     if (sliceSpecificInfo) {
@@ -168,18 +168,26 @@ function simplestMove(
 
   const axisInfo = axisInfos[axis];
   const { sliceDiameter } = axisInfo;
-  // console.log({ sliceDiameter });
+  console.log({ sliceDiameter });
+  if (from === 0 && to === sliceDiameter) {
+    const moveSourceInfo = firstOfType(axis, MoveSourceType.ROTATION);
+    return new Move(
+      new QuantumMove(moveSourceInfo.family),
+      directedAmount * moveSourceInfo.direction,
+    );
+  }
+
   // const specificSliceInfo = byAxisThenSpecificSlices[axis].get(from);
   const far = from + to > sliceDiameter; // (from + to) / 2 > sliceDiameter / 2
   if (far) {
     [from, to] = [sliceDiameter - to, sliceDiameter - from];
   }
 
-  // console.log("new", { from, to });
+  console.log("new", { from, to });
 
   let outerLayer: number | null = from + 1; // change to 1-indexed
   let innerLayer: number | null = to; // already 1-indexed
-  // console.log({ outerLayer, innerLayer });
+  console.log({ outerLayer, innerLayer });
   const slice = outerLayer === innerLayer;
   if (slice) {
     innerLayer = null;
@@ -195,7 +203,7 @@ function simplestMove(
     innerLayer = null;
   }
 
-  // console.log({ innerLayer, outerLayer, from, to });
+  console.log({ innerLayer, outerLayer, from, to });
 
   const moveSourceType = slice
     ? far
@@ -224,6 +232,7 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
   for (const move of moves) {
     const { moveSourceInfo } = byFamily[move.family];
     const directedAmount = move.amount * moveSourceInfo.direction;
+    console.log({ directedAmount });
     switch (moveSourceInfo.type) {
       case MoveSourceType.INDEXABLE_SLICE_NEAR: {
         // We convert to zero-indexing
@@ -240,21 +249,30 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
         break;
       }
       case MoveSourceType.INDEXABLE_WIDE_NEAR: {
+        sliceDeltas[(move.outerLayer ?? 1) - 1] += directedAmount;
+        sliceDeltas[move.innerLayer ?? 2] -= directedAmount;
         break;
       }
       case MoveSourceType.INDEXABLE_WIDE_FAR: {
+        sliceDeltas[sliceDiameter - (move.innerLayer ?? 2)] += directedAmount;
+        sliceDeltas[sliceDiameter - ((move.outerLayer ?? 1) - 1)] -=
+          directedAmount;
         break;
       }
-      case MoveSourceType.SPECIFIC_SLICE:
-      // fallthrough
-      case MoveSourceType.ROTATION: {
+      case MoveSourceType.SPECIFIC_SLICE: {
+        // We convert to zero-indexing (which cancels with the subtraction from the slice width)
         sliceDeltas[moveSourceInfo.from] += directedAmount;
         sliceDeltas[moveSourceInfo.to] -= directedAmount;
         break;
       }
+      case MoveSourceType.ROTATION: {
+        sliceDeltas[0] += directedAmount;
+        sliceDeltas[sliceDiameter] -= directedAmount;
+        break;
+      }
     }
   }
-  // console.log(sliceDeltas);
+  console.log(sliceDeltas);
 
   const nonZeroDeltaIndices: number[] = [];
   let sum = 0;
@@ -269,23 +287,38 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
     throw new Error("inconsistent slice deltas‽");
   }
   // TODO: handle this check in the destructuring assignment?
+  if (nonZeroDeltaIndices.length === 0) {
+    return [];
+  }
+  // TODO: handle this check in the destructuring assignment?
   if (nonZeroDeltaIndices.length !== 2) {
     return moves;
   }
-  // console.log(nonZeroDeltaIndices);
+  console.log(nonZeroDeltaIndices);
   const [from, to] = nonZeroDeltaIndices;
   const directedAmount = sliceDeltas[nonZeroDeltaIndices[0]];
+  // TODO: Handle empty move
   return [simplestMove(axis, from, to, directedAmount)];
 }
+
+simplifySameAxisMoves(["x", "M", "R'"].map((s) => Move.fromString(s)))[0].log();
+process.exit(0);
 
 // simplifySameAxisMoves(["R", "M'", "L'"].map((s) => Move.fromString(s)));
 // simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)));
 // simplifySameAxisMoves(["L2", "R2'", "x2"].map((s) => Move.fromString(s)));
 
-simplifySameAxisMoves(["l", "L'"].map((s) => Move.fromString(s)))[0]
+new Alg(simplifySameAxisMoves(["L", "L2"].map((s) => Move.fromString(s))))
   .log();
+new Alg(
+  simplifySameAxisMoves(["l", "l6'"].map((s) => Move.fromString(s))),
+).log();
+// new Alg(
+//   simplifySameAxisMoves(["r2", "r3"].map((s) => Move.fromString(s))),
+// ).log();
 
-simplifySameAxisMoves(["x", "R'"].map((s) => Move.fromString(s)))[0].log();
+simplifySameAxisMoves(["x", "R'"].map((s) => Move.fromString(s)))[0]
+  .log();
 simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)))[0].log();
 simplifySameAxisMoves(["x", "L", "R'"].map((s) => Move.fromString(s)))[0].log();
 simplifySameAxisMoves(["x", "L", "M"].map((s) => Move.fromString(s)))[0].log();
