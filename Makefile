@@ -48,7 +48,7 @@ test:
 	@echo "    make test-dist  (≈30s)"
 	@echo ""
 	@echo "    make test-all  (≈50s, runs all of the above)"
-	@echo "    make test-fast (45s, runs a subset of the above)"
+	@echo "    make test-fast (≈4s, runs a subset of the above)"
 	@echo ""
 test-fast: build-esm lint build-sites build-bin test-spec
 test-all: test-src test-build test-dist
