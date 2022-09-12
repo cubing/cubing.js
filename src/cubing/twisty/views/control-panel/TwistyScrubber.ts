@@ -4,6 +4,8 @@ import { customElementsShim } from "../node-custom-element-shims";
 import type { DetailedTimelineInfo } from "../../model/props/timeline/DetailedTimelineInfoProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { globalSafeDocument } from "../document";
+import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
+import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
 
 const SLOW_DOWN_SCRUBBING = false;
 
@@ -57,7 +59,10 @@ let currentClickNum = 0;
 
 // Values are integers.
 export class TwistyScrubber extends ManagedCustomElement {
-  constructor(public model?: TwistyPlayerModel) {
+  constructor(
+    public model?: TwistyPlayerModel,
+    public controller?: TwistyPlayerController,
+  ) {
     super();
   }
 
@@ -91,6 +96,7 @@ export class TwistyScrubber extends ManagedCustomElement {
       );
       // console.log("3");
       elem.addEventListener("input", this.onInput.bind(this));
+      elem.addEventListener("keydown", this.onKeypress.bind(this));
 
       return elem;
     })());
@@ -107,6 +113,27 @@ export class TwistyScrubber extends ManagedCustomElement {
     // console.log("on input", value);
     this.model?.playingInfo.set({ playing: false });
     this.model?.timestampRequest.set(value);
+  }
+
+  onKeypress(e: KeyboardEvent): void {
+    switch (e.key) {
+      case "ArrowLeft":
+      // fallthrough
+      case "ArrowRight": {
+        this.controller?.animationController.play({
+          direction:
+            e.key === "ArrowLeft" ? Direction.Backwards : Direction.Forwards,
+          untilBoundary: BoundaryType.Move,
+        });
+        e.preventDefault();
+        break;
+      }
+      case " ": {
+        this.controller?.togglePlay();
+        e.preventDefault();
+        break;
+      }
+    }
   }
 
   async slowDown(e: Event, inputElem: HTMLInputElement): Promise<void> {

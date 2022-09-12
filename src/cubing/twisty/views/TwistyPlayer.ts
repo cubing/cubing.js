@@ -231,7 +231,10 @@ export class TwistyPlayer
       }
     });
 
-    const scrubber = new TwistyScrubber(this.experimentalModel);
+    const scrubber = new TwistyScrubber(
+      this.experimentalModel,
+      this.controller,
+    );
     this.contentWrapper.appendChild(scrubber);
 
     this.buttons = new TwistyButtons(
