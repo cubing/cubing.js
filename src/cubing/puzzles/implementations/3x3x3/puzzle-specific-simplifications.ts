@@ -155,7 +155,7 @@ function simplestMove(
   to: number,
   directedAmount: number,
 ): Move {
-  console.log({ from, to });
+  // console.log({ from, to });
   if (from + 1 === to) {
     const sliceSpecificInfo = byAxisThenSpecificSlices[axis].get(from);
     if (sliceSpecificInfo) {
@@ -168,18 +168,18 @@ function simplestMove(
 
   const axisInfo = axisInfos[axis];
   const { sliceDiameter } = axisInfo;
-  console.log({ sliceDiameter });
+  // console.log({ sliceDiameter });
   // const specificSliceInfo = byAxisThenSpecificSlices[axis].get(from);
   const far = from + to > sliceDiameter; // (from + to) / 2 > sliceDiameter / 2
   if (far) {
     [from, to] = [sliceDiameter - to, sliceDiameter - from];
   }
 
-  console.log("new", { from, to });
+  // console.log("new", { from, to });
 
   let outerLayer: number | null = from + 1; // change to 1-indexed
   let innerLayer: number | null = to; // already 1-indexed
-  console.log({ outerLayer, innerLayer });
+  // console.log({ outerLayer, innerLayer });
   const slice = outerLayer === innerLayer;
   if (slice) {
     innerLayer = null;
@@ -195,7 +195,7 @@ function simplestMove(
     innerLayer = null;
   }
 
-  console.log({ innerLayer, outerLayer, from, to });
+  // console.log({ innerLayer, outerLayer, from, to });
 
   const moveSourceType = slice
     ? far
@@ -254,7 +254,7 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
       }
     }
   }
-  console.log(sliceDeltas);
+  // console.log(sliceDeltas);
 
   const nonZeroDeltaIndices: number[] = [];
   let sum = 0;
@@ -272,7 +272,7 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
   if (nonZeroDeltaIndices.length !== 2) {
     return moves;
   }
-  console.log(nonZeroDeltaIndices);
+  // console.log(nonZeroDeltaIndices);
   const [from, to] = nonZeroDeltaIndices;
   const directedAmount = sliceDeltas[nonZeroDeltaIndices[0]];
   return [simplestMove(axis, from, to, directedAmount)];
