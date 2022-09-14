@@ -34,15 +34,15 @@ function puzzleSpecificExperimentalAppendMove(
   return new Alg([...oldAlgNodes, ...simplifiedAxisMoves]);
 }
 
-puzzleSpecificExperimentalAppendMove(new Alg("R U L x"), new Move("R'"), {
-  puzzleSpecificAlgSimplificationInfo:
-    cube3x3x3.puzzleSpecificAlgSimplificationInfo!,
-}).log();
+// puzzleSpecificExperimentalAppendMove(new Alg("R U L x"), new Move("R'"), {
+//   puzzleSpecificAlgSimplificationInfo:
+//     cube3x3x3.puzzleSpecificAlgSimplificationInfo!,
+// }).log();
 
-puzzleSpecificExperimentalAppendMove(new Alg("R U R' x"), new Move("M'"), {
-  puzzleSpecificAlgSimplificationInfo:
-    cube3x3x3.puzzleSpecificAlgSimplificationInfo!,
-}).log();
+// puzzleSpecificExperimentalAppendMove(new Alg("R U R' x"), new Move("M'"), {
+//   puzzleSpecificAlgSimplificationInfo:
+//     cube3x3x3.puzzleSpecificAlgSimplificationInfo!,
+// }).log();
 
 export function experimentalAppendMove(
   alg: Alg,

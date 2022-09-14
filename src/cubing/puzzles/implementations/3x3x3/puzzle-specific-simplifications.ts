@@ -155,7 +155,7 @@ function simplestMove(
   to: number,
   directedAmount: number,
 ): Move {
-  console.log({ axis, from, to, directedAmount });
+  console.log("simplestMove", { axis, from, to, directedAmount });
   if (from + 1 === to) {
     const sliceSpecificInfo = byAxisThenSpecificSlices[axis].get(from);
     if (sliceSpecificInfo) {
@@ -219,7 +219,10 @@ function simplestMove(
   );
 }
 
-function simplifySameAxisMoves(moves: Move[]): Move[] {
+function simplifySameAxisMoves(
+  moves: Move[],
+  quantumOrderReduce: boolean = true, // TODO
+): Move[] {
   if (moves.length === 0) {
     // TODO: can we use the type system to avoid this?
     return [];
@@ -234,7 +237,10 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
     | null = null;
 
   function adjustValue(idx: number, relativeDelta: number) {
-    const newDelta = (sliceDeltas.get(idx) ?? 0) + relativeDelta;
+    let newDelta = (sliceDeltas.get(idx) ?? 0) + relativeDelta;
+    if (quantumOrderReduce) {
+      newDelta = (newDelta % 4) + (5 % 4) - 1;
+    }
     if (newDelta === 0) {
       sliceDeltas.delete(idx);
     } else {
@@ -243,7 +249,8 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
   }
   // TODO: go as far as possible instead of trying to take all moves, e.g. simplify U y y' to U.
   let suffixLength = 0;
-  for (const move of moves) {
+  // TODO: Reverse iterator?
+  for (const move of Array.from(moves).reverse()) {
     suffixLength++;
     const { moveSourceInfo } = byFamily[move.family];
     const directedAmount = move.amount * moveSourceInfo.direction;
@@ -288,6 +295,7 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
         break;
       }
     }
+    console.log(sliceDeltas);
     if ([0, 2].includes(sliceDeltas.size)) {
       lastCandidateRange = { suffixLength, sliceDeltas: new Map(sliceDeltas) };
     }
@@ -295,15 +303,30 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
   if (sliceDeltas.size === 0) {
     return [];
   }
+  console.log({ lastCandidateRange });
   // TODO: handle this check in the destructuring assignment?
   if (!lastCandidateRange) {
     return moves;
   }
-  const [from, to] = lastCandidateRange.sliceDeltas.keys();
+  let [from, to] = lastCandidateRange.sliceDeltas.keys();
+  if (from > to) {
+    [from, to] = [to, from];
+  }
   const directedAmount = lastCandidateRange.sliceDeltas.get(from)!;
+  console.log({ from, to, directedAmount });
   // TODO: Handle empty move
-  return [simplestMove(axis, from, to, directedAmount)];
+  return [
+    ...moves.slice(0, -lastCandidateRange.suffixLength),
+    ...(directedAmount !== 0
+      ? [simplestMove(axis, from, to, directedAmount)]
+      : []),
+  ];
 }
+
+new Alg(
+  simplifySameAxisMoves(["r", "M'", "M'"].map((s) => Move.fromString(s))),
+).log();
+globalThis.process?.exit(0);
 
 simplifySameAxisMoves(["x", "M", "R'"].map((s) => Move.fromString(s)))[0].log();
 
