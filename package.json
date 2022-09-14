@@ -53,10 +53,10 @@
     }
   },
   "dependencies": {
-    "@types/three": "^0.143.0",
+    "@types/three": "^0.144.0",
     "@types/web-bluetooth": "^0.0.15",
     "comlink": "^4.3.1",
-    "three": "^0.143.0"
+    "three": "^0.144.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4-fix.0",
