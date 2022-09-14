@@ -2511,7 +2511,10 @@ export class PuzzleGeometry {
       }
       hasrotation[k] = sawone;
     }
-    if (this.options.moveList && this.options.addRotations) {
+    if (
+      this.options.addRotations &&
+      (this.options.moveList || this.options.fixedPieceType !== null)
+    ) {
       for (let i = 0; i < this.moverotations.length; i++) {
         addrot[i] = 0;
       }
