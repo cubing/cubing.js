@@ -228,8 +228,23 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
   const axis: Axis = byFamily[moves[0].family].axis;
   const axisInfo = axisInfos[axis];
   const { sliceDiameter } = axisInfo;
-  const sliceDeltas = new Array(sliceDiameter + 1).fill(0);
+  const sliceDeltas = new Map<number, number>();
+  let lastCandidateRange:
+    | { suffixLength: number; sliceDeltas: Map<number, number> }
+    | null = null;
+
+  function adjustValue(idx: number, relativeDelta: number) {
+    const newDelta = (sliceDeltas.get(idx) ?? 0) + relativeDelta;
+    if (newDelta === 0) {
+      sliceDeltas.delete(idx);
+    } else {
+      sliceDeltas.set(idx, newDelta);
+    }
+  }
+  // TODO: go as far as possible instead of trying to take all moves, e.g. simplify U y y' to U.
+  let suffixLength = 0;
   for (const move of moves) {
+    suffixLength++;
     const { moveSourceInfo } = byFamily[move.family];
     const directedAmount = move.amount * moveSourceInfo.direction;
     console.log({ directedAmount });
@@ -237,66 +252,55 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
       case MoveSourceType.INDEXABLE_SLICE_NEAR: {
         // We convert to zero-indexing
         const idx = (move.innerLayer ?? 1) - 1;
-        sliceDeltas[idx] += directedAmount;
-        sliceDeltas[idx + 1] -= directedAmount;
+        adjustValue(idx, directedAmount);
+        adjustValue(idx + 1, -directedAmount);
         break;
       }
       case MoveSourceType.INDEXABLE_SLICE_FAR: {
         // We convert to zero-indexing (which cancels with the subtraction from the slice width)
         const idx = sliceDiameter - (move.innerLayer ?? 1);
-        sliceDeltas[idx] += directedAmount;
-        sliceDeltas[idx + 1] -= directedAmount;
+        adjustValue(idx, directedAmount);
+        adjustValue(idx + 1, -directedAmount);
         break;
       }
       case MoveSourceType.INDEXABLE_WIDE_NEAR: {
-        sliceDeltas[(move.outerLayer ?? 1) - 1] += directedAmount;
-        sliceDeltas[move.innerLayer ?? 2] -= directedAmount;
+        adjustValue((move.outerLayer ?? 1) - 1, directedAmount);
+        adjustValue(move.innerLayer ?? 2, -directedAmount);
         break;
       }
       case MoveSourceType.INDEXABLE_WIDE_FAR: {
-        sliceDeltas[sliceDiameter - (move.innerLayer ?? 2)] += directedAmount;
-        sliceDeltas[sliceDiameter - ((move.outerLayer ?? 1) - 1)] -=
-          directedAmount;
+        adjustValue(sliceDiameter - (move.innerLayer ?? 2), directedAmount);
+        adjustValue(
+          sliceDiameter - ((move.outerLayer ?? 1) - 1),
+          -directedAmount,
+        );
         break;
       }
       case MoveSourceType.SPECIFIC_SLICE: {
         // We convert to zero-indexing (which cancels with the subtraction from the slice width)
-        sliceDeltas[moveSourceInfo.from] += directedAmount;
-        sliceDeltas[moveSourceInfo.to] -= directedAmount;
+        adjustValue(moveSourceInfo.from, directedAmount);
+        adjustValue(moveSourceInfo.to, -directedAmount);
         break;
       }
       case MoveSourceType.ROTATION: {
-        sliceDeltas[0] += directedAmount;
-        sliceDeltas[sliceDiameter] -= directedAmount;
+        adjustValue(0, directedAmount);
+        adjustValue(sliceDiameter, -directedAmount);
         break;
       }
     }
-  }
-  console.log(sliceDeltas);
-
-  const nonZeroDeltaIndices: number[] = [];
-  let sum = 0;
-  for (let i = 0; i < sliceDeltas.length; i++) {
-    if (sliceDeltas[i] !== 0) {
-      nonZeroDeltaIndices.push(i);
-      sum += sliceDeltas[i];
+    if ([0, 2].includes(sliceDeltas.size)) {
+      lastCandidateRange = { suffixLength, sliceDeltas: new Map(sliceDeltas) };
     }
   }
-  if (sum !== 0) {
-    // TODO: can we remove this check at runtime?
-    throw new Error("inconsistent slice deltas‽");
-  }
-  // TODO: handle this check in the destructuring assignment?
-  if (nonZeroDeltaIndices.length === 0) {
+  if (sliceDeltas.size === 0) {
     return [];
   }
   // TODO: handle this check in the destructuring assignment?
-  if (nonZeroDeltaIndices.length !== 2) {
+  if (!lastCandidateRange) {
     return moves;
   }
-  console.log(nonZeroDeltaIndices);
-  const [from, to] = nonZeroDeltaIndices;
-  const directedAmount = sliceDeltas[nonZeroDeltaIndices[0]];
+  const [from, to] = lastCandidateRange.sliceDeltas.keys();
+  const directedAmount = lastCandidateRange.sliceDeltas.get(from)!;
   // TODO: Handle empty move
   return [simplestMove(axis, from, to, directedAmount)];
 }
