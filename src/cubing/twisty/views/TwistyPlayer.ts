@@ -2,6 +2,7 @@ import type { Object3D } from "three";
 import type { ExperimentalStickering } from "..";
 import type { Alg, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
+import type { PuzzleSpecificAlgSimplificationInfo } from "../../alg/traversal";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import { RenderScheduler } from "../controllers/RenderScheduler";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
@@ -410,7 +411,10 @@ export class TwistyPlayer
   // TODO: Animate the new move.
   experimentalAddMove(
     flexibleMove: Move | string,
-    options: { coalesce?: boolean } = {},
+    options?: {
+      coalesce?: boolean;
+      puzzleSpecificAlgSimplificationInfo?: PuzzleSpecificAlgSimplificationInfo;
+    },
   ): void {
     this.experimentalModel.experimentalAddMove(flexibleMove, options);
   }
@@ -418,7 +422,10 @@ export class TwistyPlayer
   // TODO: Animate the new move.
   experimentalAddAlgLeaf(
     algLeaf: AlgLeaf,
-    options: { coalesce?: boolean } = {},
+    options?: {
+      coalesce?: boolean;
+      puzzleSpecificAlgSimplificationInfo?: PuzzleSpecificAlgSimplificationInfo;
+    },
   ): void {
     this.experimentalModel.experimentalAddAlgLeaf(algLeaf, options);
   }

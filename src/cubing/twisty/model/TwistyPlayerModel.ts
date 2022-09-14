@@ -226,7 +226,10 @@ export class TwistyPlayerModel {
 
   experimentalAddAlgLeaf(
     algLeaf: AlgLeaf,
-    options: { coalesce?: boolean; mod?: number } = {},
+    options?: {
+      coalesce?: boolean;
+      puzzleSpecificAlgSimplificationInfo?: PuzzleSpecificAlgSimplificationInfo;
+    },
   ): void {
     const maybeMove = algLeaf.as(Move);
     if (maybeMove) {

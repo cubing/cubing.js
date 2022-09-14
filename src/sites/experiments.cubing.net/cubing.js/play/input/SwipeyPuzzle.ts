@@ -1,5 +1,6 @@
 import { Alg } from "../../../../../cubing/alg";
 import type { AlgLeaf } from "../../../../../cubing/alg/alg-nodes/AlgNode";
+import { puzzles } from "../../../../../cubing/puzzles";
 // import { BackViewLayout } from "../../../../../cubing/twisty";
 import {
   BackViewLayout,
@@ -192,6 +193,8 @@ export class SwipeyPuzzle extends HTMLElement {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddAlgLeaf(algLeaf, {
         coalesce: coalesce(),
+        puzzleSpecificAlgSimplificationInfo:
+          puzzles[this.puzzleName]?.puzzleSpecificAlgSimplificationInfo,
       });
     } catch (e) {
       console.warn("Invalid alg leaf");

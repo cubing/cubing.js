@@ -80,7 +80,7 @@ const axisInfos: Record<Axis, AxisInfo> = {
     sliceDiameter: 3,
     extendsThroughEntirePuzzle: true,
     moveSourceInfos: [
-      ...makeSourceInfo(["B"], MoveSourceType.INDEXABLE_SLICE_NEAR, 0, 3),
+      ...makeSourceInfo(["F"], MoveSourceType.INDEXABLE_SLICE_NEAR, 0, 3),
       ...makeSourceInfo(["B'"], MoveSourceType.INDEXABLE_SLICE_FAR, 0, 3),
       ...makeSourceInfo(["f", "Fw"], MoveSourceType.INDEXABLE_WIDE_NEAR, 0, 3),
       ...makeSourceInfo(["b'", "Bw'"], MoveSourceType.INDEXABLE_WIDE_FAR, 0, 3),
@@ -302,7 +302,6 @@ function simplifySameAxisMoves(moves: Move[]): Move[] {
 }
 
 simplifySameAxisMoves(["x", "M", "R'"].map((s) => Move.fromString(s)))[0].log();
-process.exit(0);
 
 // simplifySameAxisMoves(["R", "M'", "L'"].map((s) => Move.fromString(s)));
 // simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)));
