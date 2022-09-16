@@ -1,5 +1,9 @@
+// To run this file directly:
+// bun run src/bin/order.ts -- <program args>
+
 import { KPuzzle } from "../cubing/kpuzzle";
 import { getPuzzleGeometryByName } from "../cubing/puzzle-geometry";
+import { puzzles } from "../cubing/puzzles";
 
 /*
  *   Given a puzzle name and an algorithm, calculate the order of that
@@ -7,10 +11,10 @@ import { getPuzzleGeometryByName } from "../cubing/puzzle-geometry";
  *   the no-op).
  */
 
-const puzname = process.argv[2];
+const puzzleName = process.argv[2];
 const algString = process.argv[3];
 
-if (!(puzname && algString)) {
+if (!(puzzleName && algString)) {
   console.log("Usage: order <puzzle-geometry-id> <alg>");
   console.log("");
   console.log("Example: order 3x3x3 \"R U R' U R U2' R'\"");
@@ -20,7 +24,11 @@ if (!(puzname && algString)) {
 /*
  *   Turn a name into a geometry.
  */
-const pg = getPuzzleGeometryByName(puzname, { allMoves: true });
-const kpuzzle = new KPuzzle(pg.getKPuzzleDefinition(true));
+
+let kpuzzle = await puzzles[puzzleName].kpuzzle();
+if (!kpuzzle) {
+  const pg = getPuzzleGeometryByName(puzzleName, { allMoves: true });
+  kpuzzle = new KPuzzle(pg.getKPuzzleDefinition(true));
+}
 const order = kpuzzle.algToTransformation(algString).repetitionOrder();
 console.log(order);
