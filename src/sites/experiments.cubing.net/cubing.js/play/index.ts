@@ -231,6 +231,11 @@ const fn = async (
     clearButton.blur();
   }
 
+  function backspace() {
+    swipeyPuzzle.twistyPlayer.experimentalRemoveFinalChild();
+    updateAlgLink();
+  }
+
   async function enter() {
     const url = await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
     // const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
@@ -240,11 +245,15 @@ const fn = async (
   }
 
   window.addEventListener("keydown", (e: KeyboardEvent) => {
+    console.log("e", e.code);
     if (e.which === 32) {
       space();
     }
     if (e.which === 13) {
       enter();
+    }
+    if (e.code === "Backspace") {
+      backspace();
     }
   });
 
