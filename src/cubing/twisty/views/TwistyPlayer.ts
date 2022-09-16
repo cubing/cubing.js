@@ -438,6 +438,10 @@ export class TwistyPlayer
     return observed;
   }
 
+  experimentalRemoveFinalChild(): void {
+    this.experimentalModel;
+  }
+
   attributeChangedCallback(
     attributeName: string,
     _oldValue: string,

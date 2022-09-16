@@ -273,4 +273,27 @@ export class TwistyPlayerModel {
       })(),
     );
   }
+
+  // TODO: allow more than 1?
+  experimentalRemoveFinalChild(): void {
+    this.alg.set(
+      (async () => {
+        const alg = (await this.alg.get()).alg;
+        const children = Array.from(alg.childAlgNodes());
+        const [finalChild] = children.splice(-1);
+        if (!finalChild) {
+          return alg;
+        }
+        this.timestampRequest.set("end");
+        const finalChildMove = finalChild.as(Move);
+        if (finalChildMove) {
+          this.catchUpMove.set({
+            move: finalChildMove.invert(),
+            amount: 0,
+          });
+        }
+        return new Alg(children);
+      })(),
+    );
+  }
 }
