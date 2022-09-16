@@ -13,6 +13,11 @@ function puzzleSpecificExperimentalAppendMove(
 ): Alg {
   const oldAlgNodes = Array.from(alg.childAlgNodes());
   let i;
+  const quantumDirections = new Map<string, 1 | 0 | -1>();
+  quantumDirections.set(
+    newMove.quantum.toString(),
+    Math.sign(newMove.amount) as -1 | 0 | 1,
+  );
   for (i = oldAlgNodes.length - 1; i >= 0; i--) {
     const move = oldAlgNodes[i].as(Move);
     if (!move) {
@@ -26,6 +31,24 @@ function puzzleSpecificExperimentalAppendMove(
     ) {
       break;
     }
+    const quantumKey = move.quantum.toString();
+    const existingQuantumDirectionOnAxis = quantumDirections.get(quantumKey);
+    console.log(
+      "*",
+      quantumKey,
+      move.toString(),
+      existingQuantumDirectionOnAxis,
+      Math.sign(move.amount),
+      existingQuantumDirectionOnAxis !== Math.sign(move.amount),
+      quantumDirections,
+    );
+    if (
+      existingQuantumDirectionOnAxis &&
+      existingQuantumDirectionOnAxis !== Math.sign(move.amount)
+    ) {
+      break;
+    }
+    quantumDirections.set(quantumKey, Math.sign(move.amount) as -1 | 0 | 1);
   }
   const axisMoves = [...(oldAlgNodes.splice(i + 1) as Move[]), newMove];
   console.log(oldAlgNodes, axisMoves);

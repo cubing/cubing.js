@@ -155,7 +155,7 @@ function simplestMove(
   to: number,
   directedAmount: number,
 ): Move {
-  console.log("simplestMove", { axis, from, to, directedAmount });
+  // console.log("simplestMove", { axis, from, to, directedAmount });
   if (from + 1 === to) {
     const sliceSpecificInfo = byAxisThenSpecificSlices[axis].get(from);
     if (sliceSpecificInfo) {
@@ -168,7 +168,7 @@ function simplestMove(
 
   const axisInfo = axisInfos[axis];
   const { sliceDiameter } = axisInfo;
-  console.log({ sliceDiameter });
+  // console.log({ sliceDiameter });
   if (from === 0 && to === sliceDiameter) {
     const moveSourceInfo = firstOfType(axis, MoveSourceType.ROTATION);
     return new Move(
@@ -183,11 +183,11 @@ function simplestMove(
     [from, to] = [sliceDiameter - to, sliceDiameter - from];
   }
 
-  console.log("new", { from, to });
+  // console.log("new", { from, to });
 
   let outerLayer: number | null = from + 1; // change to 1-indexed
   let innerLayer: number | null = to; // already 1-indexed
-  console.log({ outerLayer, innerLayer });
+  // console.log({ outerLayer, innerLayer });
   const slice = outerLayer === innerLayer;
   if (slice) {
     innerLayer = null;
@@ -203,7 +203,7 @@ function simplestMove(
     innerLayer = null;
   }
 
-  console.log({ innerLayer, outerLayer, from, to });
+  // console.log({ innerLayer, outerLayer, from, to });
 
   const moveSourceType = slice
     ? far
@@ -254,7 +254,7 @@ function simplifySameAxisMoves(
     suffixLength++;
     const { moveSourceInfo } = byFamily[move.family];
     const directedAmount = move.amount * moveSourceInfo.direction;
-    console.log({ directedAmount });
+    // console.log({ directedAmount });
     switch (moveSourceInfo.type) {
       case MoveSourceType.INDEXABLE_SLICE_NEAR: {
         // We convert to zero-indexing
@@ -295,7 +295,7 @@ function simplifySameAxisMoves(
         break;
       }
     }
-    console.log(sliceDeltas);
+    // console.log(sliceDeltas);
     if ([0, 2].includes(sliceDeltas.size)) {
       lastCandidateRange = { suffixLength, sliceDeltas: new Map(sliceDeltas) };
     }
@@ -303,7 +303,7 @@ function simplifySameAxisMoves(
   if (sliceDeltas.size === 0) {
     return [];
   }
-  console.log({ lastCandidateRange });
+  // console.log({ lastCandidateRange });
   // TODO: handle this check in the destructuring assignment?
   if (!lastCandidateRange) {
     return moves;
@@ -313,7 +313,7 @@ function simplifySameAxisMoves(
     [from, to] = [to, from];
   }
   const directedAmount = lastCandidateRange.sliceDeltas.get(from)!;
-  console.log({ from, to, directedAmount });
+  // console.log({ from, to, directedAmount });
   // TODO: Handle empty move
   return [
     ...moves.slice(0, -lastCandidateRange.suffixLength),
@@ -326,9 +326,10 @@ function simplifySameAxisMoves(
 new Alg(
   simplifySameAxisMoves(["r", "M'", "M'"].map((s) => Move.fromString(s))),
 ).log();
-globalThis.process?.exit(0);
+// globalThis.process?.exit(0);
 
-simplifySameAxisMoves(["x", "M", "R'"].map((s) => Move.fromString(s)))[0].log();
+simplifySameAxisMoves(["x", "M", "R'"].map((s) => Move.fromString(s)))[0]
+  .log();
 
 // simplifySameAxisMoves(["R", "M'", "L'"].map((s) => Move.fromString(s)));
 // simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)));
