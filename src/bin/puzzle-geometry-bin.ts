@@ -1,4 +1,5 @@
-// To run this file directly: npx ts-node src/puzzle-geometry/bin/puzzle-geometry-bin.ts
+// To run this file directly:
+// bun run src/bin/puzzle-geometry-bin.ts -- <program args>
 
 import {
   type ExperimentalPuzzleBaseShape,
