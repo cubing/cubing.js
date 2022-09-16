@@ -263,7 +263,7 @@ export const binTarget = {
       entryPoints: [
         "src/bin/order.ts",
         "src/bin/puzzle-geometry-bin.ts",
-        "src/bin/import-restrictions-mermaid-diagram.js",
+        "src/bin/import-restrictions-mermaid-diagram.ts",
       ],
       outdir: "dist/bin/",
       format: "esm",
@@ -274,7 +274,10 @@ export const binTarget = {
       sourcemap: dev,
       //
       external,
-      supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
+      supported: {
+        ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED,
+        "top-level-await": true,
+      },
     });
   },
 };
