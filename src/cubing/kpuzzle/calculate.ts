@@ -303,7 +303,7 @@ export function transformationRepetitionOrder(
         if (orientationSum !== 0) {
           cycleLength =
             (cycleLength * orbitDefinition.numOrientations) /
-            gcd(orbitDefinition.numOrientations, orientationSum);
+            gcd(orbitDefinition.numOrientations, Math.abs(orientationSum));
         }
         order = (order * cycleLength) / gcd(order, cycleLength);
       }
