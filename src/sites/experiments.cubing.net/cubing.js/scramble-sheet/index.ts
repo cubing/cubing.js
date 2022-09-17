@@ -20,6 +20,15 @@ for (const [eventID, eventInfo] of Object.entries(twizzleEvents)) {
   });
 }
 
+const additionalInfoInput = document.querySelector("input") as HTMLInputElement;
+additionalInfoInput.value =
+  new URL(location.href).searchParams.get("additional-info") ?? "";
+additionalInfoInput.addEventListener("input", () => {
+  const url = new URL(location.href);
+  url.searchParams.set("additional-info", additionalInfoInput.value);
+  window.history.replaceState("", "", url.toString());
+});
+
 const table = document.querySelector("table")!;
 
 async function addScramble(
@@ -43,9 +52,12 @@ async function addScramble(
   player.classList.add("dim");
   playerTD.appendChild(player);
   const scramble = await randomScrambleForEvent(currentEventID);
-  scrambleTD.textContent = scramble.toString();
+  scrambleTD.textContent = "";
+  const a = scrambleTD.appendChild(document.createElement("a"));
+  a.textContent = scramble.toString();
   player.alg = scramble;
   player.classList.remove("dim");
+  a.href = await player.experimentalModel.twizzleLink();
 }
 
 function addBody(num: number, extra: boolean) {

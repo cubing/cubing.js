@@ -1,175 +1,166 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf8" />
-    <meta name="viewport" content="width=device-width, initial-scale=0.75" />
-    <title>cubing.js | Development Apps</title>
-    <style>
-      body {
-        font-family: Helvetica, sans-serif;
-        font-size: 1.5rem;
-        display: grid;
-        place-content: center;
-        background: rgba(0, 128, 255, 0.1);
-      }
 
-      code {
-        font-size: 1.25em;
-      }
+<head>
+  <meta charset="utf8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.75" />
+  <title>cubing.js | Development Apps</title>
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      font-size: 1.5rem;
+      display: grid;
+      place-content: center;
+      background: rgba(0, 128, 255, 0.1);
+    }
 
-      h2 {
-        margin-top: 0;
-      }
+    code {
+      font-size: 1.25em;
+    }
 
-      section {
-        background: white;
-        padding: 1.5em;
-        margin-top: 0.5em;
-        box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.4);
-        border-radius: 1em;
-      }
-    </style>
-    <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        if (location.hostname === "localhost") {
-          for (const a of document.querySelectorAll("a")) {
-            const devHref = a.getAttribute("data-dev-href");
-            if (devHref) {
-              a.setAttribute("href", devHref);
-            }
+    h2 {
+      margin-top: 0;
+    }
+
+    section {
+      background: white;
+      padding: 1.5em;
+      margin-top: 0.5em;
+      box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.4);
+      border-radius: 1em;
+    }
+
+  </style>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (location.hostname === "localhost") {
+        for (const a of document.querySelectorAll("a")) {
+          const devHref = a.getAttribute("data-dev-href");
+          if (devHref) {
+            a.setAttribute("href", devHref);
           }
         }
-      });
-    </script>
-  </head>
+      }
+    });
+  </script>
+</head>
 
-  <body>
-    <section>
-      <h2><code>cubing.js</code><br />Dev Apps</h2>
-      <div>
-        ✍️
-        <a
-          href="https://alpha.twizzle.net/edit/"
-          data-dev-href="../../alpha.twizzle.net/edit/"
-          >Twizzle Editor</a
-        >
-      </div>
-      <div>
-        🔭
-        <a
-          href="https://alpha.twizzle.net/explore/"
-          data-dev-href="../../alpha.twizzle.net/explore/"
-          >Twizzle Explorer</a
-        >
-      </div>
-      <hr />
-      <div>🌀 <a href="./play/">Play</a></div>
-      <div>📶 <a href="./bluetooth/">Bluetooth</a></div>
-      <div>🖥 <a href="./console/">console</a></div>
-      <hr />
-      <div>
-        🔄
-        <a href="./twisty/twisty-player-config.html"
-          >twisty/twisty-player-config</a
-        >
-      </div>
-      <div>
-        🆕
-        <a href="./twisty/twisty-player-props/">twisty/twisty-player-props</a>
-      </div>
-      <div>🔄 <a href="./twisty/attributes.html">twisty/attributes</a></div>
-      <div>🔄 <a href="./twisty/elements.html">twisty/elements</a></div>
-      <div>🔄 <a href="./twisty/inline.html">twisty/inline</a></div>
-      <div>🔄 <a href="./twisty/svg.html">twisty/svg</a></div>
-      <div>🔄 <a href="./twisty/cube3d.html">twisty/cube3d</a></div>
-      <div>
-        🔄
-        <a href="./twisty/cube3d-stickering.html">twisty/cube3d-stickering</a>
-      </div>
-      <div>
-        🔄
-        <a href="./twisty/2d-stickering.html">twisty/2d-stickering</a>
-      </div>
-      <div>
-        🔄 <a href="./twisty/2d-ll-stickering.html">twisty/2d-ll-stickering</a>
-      </div>
-      <div>
-        🔄 <a href="./twisty/fto-stickering.html">twisty/fto-stickering</a>
-      </div>
-      <div>🔄 <a href="./twisty/pg3d.html">twisty/pg3d</a></div>
-      <div>🔄 <a href="./twisty/pyraminx.html">twisty/pyraminx</a></div>
-      <div>🔄 <a href="./twisty/ll.html">twisty/ll</a></div>
-      <div>🔄 <a href="./twisty/mkbhd.html">twisty/mkbhd</a></div>
-      <div>🔄 <a href="./twisty/supercube.html">twisty/supercube</a></div>
-      <div>
-        🔄 <a href="./twisty/supercube-arrows.html">twisty/supercube-arrows</a>
-      </div>
-      <div>
-        🔄
-        <a href="./twisty/puzzle-description.html">twisty/puzzle-description</a>
-      </div>
-      <div>🔄 <a href="./twisty/simultaneous.html">twisty/simultaneous</a></div>
-      <div>
-        🔄
-        <a href="./twisty/twisty-alg-viewer.html">twisty/twisty-alg-viewer</a>
-      </div>
-      <div>
-        🔄
-        <a href="./twisty/twisty-alg-editor/">twisty/twisty-alg-editor</a>
-      </div>
-      <div>🔗 <a href="./twisty/twizzle-link.html">twisty/twizzle-link</a></div>
-      <div>
-        🚨
-        <a href="./twisty/error-puzzle.html">twisty/error-puzzle</a>
-      </div>
-      <hr />
-      <div>
-        🎬
-        <a href="./twizzle-diaries/intro/">twizzle-diaries/intro</a>
-      </div>
-      <div>🖼 <a href="./kpuzzle/svg.html">KPuzzle SVG</a></div>
-      <div>🇬🇷 <a href="./flag/greece.html">flag/greece</a></div>
-      <div>🕶 <a href="./vr/">VR</a></div>
-      <div>🕶 <a href="./vr/proxy/proxy.html">VR proxy</a></div>
-      <div>🔍 <a href="./spec/binary/">spec/binary</a></div>
-      <div>🔢 <a href="./3x3x3-formats/">3x3x3-formats</a></div>
-      <div>🔠 <a href="./multi-alg/">multi-alg</a></div>
-      <div>↪️ <a href="./stream/reorient.html">stream/reorient</a></div>
-      <div>🤖 <a href="./robot/">robot</a></div>
-      <div>🤖 <a href="./robot/logs/">robot/logs</a></div>
-      <div>📸 <a href="./screenshot/">screenshot</a></div>
-      <div>🔍 <a href="./alg/inspector.html">alg/inspector</a></div>
-      <div>🔀 <a href="./scramble/">scramble</a></div>
-      <div>🗣 <a href="./scramble-sheet/">scramble-sheet</a></div>
-      <div>🗣 <a href="./speechcubing/">speechcubing</a></div>
-      <div>📃 <a href="./stub/">stub</a></div>
-      <div>
-        😲 <a href="./stress-tests/40x40x40.html">stress-tests/40x40x40</a>
-      </div>
-      <div>
-        😲
-        <a href="./stress-tests/2x2x2-devils-alg.html"
-          >stress-tests/2x2x2-devils-alg</a
-        >
-      </div>
-      <div>
-        📦
-        <a href="./applet-wrappers/AnimCube/">applet-wrappers/AnimCube</a>
-      </div>
-      <div>
-        🖼
-        <a href="./svg-state-editor/">svg-state-editor</a>
-      </div>
-      <br />
-      <div>
-        🐙😺 Source code
-        <a href="https://github.com/cubing/cubing.js">on GitHub</a>
-      </div>
-      <br />
-      <div>
-        📖 Stable documentation at
-        <a href="https://js.cubing.net/cubing/">js.cubing.net</a>
-      </div>
-    </section>
-  </body>
+<body>
+  <section>
+    <h2><code>cubing.js</code><br />Dev Apps</h2>
+    <div>
+      ✍️
+      <a href="https://alpha.twizzle.net/edit/" data-dev-href="../../alpha.twizzle.net/edit/">Twizzle Editor</a>
+    </div>
+    <div>
+      🔭
+      <a href="https://alpha.twizzle.net/explore/" data-dev-href="../../alpha.twizzle.net/explore/">Twizzle Explorer</a>
+    </div>
+    <hr />
+    <div>🌀 <a href="./play/">Play</a></div>
+    <div>📶 <a href="./bluetooth/">Bluetooth</a></div>
+    <div>🖥 <a href="./console/">console</a></div>
+    <hr />
+    <div>
+      🔄
+      <a href="./twisty/twisty-player-config.html">twisty/twisty-player-config</a>
+    </div>
+    <div>
+      🆕
+      <a href="./twisty/twisty-player-props/">twisty/twisty-player-props</a>
+    </div>
+    <div>🔄 <a href="./twisty/attributes.html">twisty/attributes</a></div>
+    <div>🔄 <a href="./twisty/elements.html">twisty/elements</a></div>
+    <div>🔄 <a href="./twisty/inline.html">twisty/inline</a></div>
+    <div>🔄 <a href="./twisty/svg.html">twisty/svg</a></div>
+    <div>🔄 <a href="./twisty/cube3d.html">twisty/cube3d</a></div>
+    <div>
+      🔄
+      <a href="./twisty/cube3d-stickering.html">twisty/cube3d-stickering</a>
+    </div>
+    <div>
+      🔄
+      <a href="./twisty/2d-stickering.html">twisty/2d-stickering</a>
+    </div>
+    <div>
+      🔄 <a href="./twisty/2d-ll-stickering.html">twisty/2d-ll-stickering</a>
+    </div>
+    <div>
+      🔄 <a href="./twisty/fto-stickering.html">twisty/fto-stickering</a>
+    </div>
+    <div>🔄 <a href="./twisty/pg3d.html">twisty/pg3d</a></div>
+    <div>🔄 <a href="./twisty/pyraminx.html">twisty/pyraminx</a></div>
+    <div>🔄 <a href="./twisty/ll.html">twisty/ll</a></div>
+    <div>🔄 <a href="./twisty/mkbhd.html">twisty/mkbhd</a></div>
+    <div>🔄 <a href="./twisty/supercube.html">twisty/supercube</a></div>
+    <div>
+      🔄 <a href="./twisty/supercube-arrows.html">twisty/supercube-arrows</a>
+    </div>
+    <div>
+      🔄
+      <a href="./twisty/puzzle-description.html">twisty/puzzle-description</a>
+    </div>
+    <div>🔄 <a href="./twisty/simultaneous.html">twisty/simultaneous</a></div>
+    <div>
+      🔄
+      <a href="./twisty/twisty-alg-viewer.html">twisty/twisty-alg-viewer</a>
+    </div>
+    <div>
+      🔄
+      <a href="./twisty/twisty-alg-editor/">twisty/twisty-alg-editor</a>
+    </div>
+    <div>🔗 <a href="./twisty/twizzle-link.html">twisty/twizzle-link</a></div>
+    <div>
+      🚨
+      <a href="./twisty/error-puzzle.html">twisty/error-puzzle</a>
+    </div>
+    <hr />
+    <div>
+      🎬
+      <a href="./twizzle-diaries/intro/">twizzle-diaries/intro</a>
+    </div>
+    <div>🖼 <a href="./kpuzzle/svg.html">KPuzzle SVG</a></div>
+    <div>🇬🇷 <a href="./flag/greece.html">flag/greece</a></div>
+    <div>🕶 <a href="./vr/">VR</a></div>
+    <div>🕶 <a href="./vr/proxy/proxy.html">VR proxy</a></div>
+    <div>🔍 <a href="./spec/binary/">spec/binary</a></div>
+    <div>🔢 <a href="./3x3x3-formats/">3x3x3-formats</a></div>
+    <div>🔠 <a href="./multi-alg/">multi-alg</a></div>
+    <div>↪️ <a href="./stream/reorient.html">stream/reorient</a></div>
+    <div>🤖 <a href="./robot/">robot</a></div>
+    <div>🤖 <a href="./robot/logs/">robot/logs</a></div>
+    <div>📸 <a href="./screenshot/">screenshot</a></div>
+    <div>🔍 <a href="./alg/inspector.html">alg/inspector</a></div>
+    <div>🔀 <a href="./scramble/">scramble</a></div>
+    <div>🔀 <a href="./scramble-sheet/">scramble-sheet</a></div>
+    <div>🗣 <a href="./speechcubing/">speechcubing</a></div>
+    <div>📃 <a href="./stub/">stub</a></div>
+    <div>
+      😲 <a href="./stress-tests/40x40x40.html">stress-tests/40x40x40</a>
+    </div>
+    <div>
+      😲
+      <a href="./stress-tests/2x2x2-devils-alg.html">stress-tests/2x2x2-devils-alg</a>
+    </div>
+    <div>
+      📦
+      <a href="./applet-wrappers/AnimCube/">applet-wrappers/AnimCube</a>
+    </div>
+    <div>
+      🖼
+      <a href="./svg-state-editor/">svg-state-editor</a>
+    </div>
+    <br />
+    <div>
+      🐙😺 Source code
+      <a href="https://github.com/cubing/cubing.js">on GitHub</a>
+    </div>
+    <br />
+    <div>
+      📖 Stable documentation at
+      <a href="https://js.cubing.net/cubing/">js.cubing.net</a>
+    </div>
+  </section>
+</body>
+
 </html>

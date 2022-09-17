@@ -8,17 +8,25 @@ body {
   place-content: center;
 }
 
-body, select {
+body, select, input {
   font-family: Ubuntu, Tahoma, sans-serif;
   font-size: 1.1rem;
 }
 
 .main {
   margin: 1em;
+  display: grid;
+  gap: 0.5em;
 }
 
 .header {
-  padding: 1em;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns:  1fr auto;
+  gap: 0.25em;
+}
+.header select {
+  text-align: right;;
 }
 
 table {
@@ -39,14 +47,29 @@ table td {
   padding: 0.5em;
 }
 
+table a {
+  color: black;
+  text-decoration: none;
+}
+
+table a:hover {
+  text-decoration: underline;
+}
+
 td:last-child {
   padding: 0.1em;
   text-align: right;
 }
 
 @media print {
-  .header {
-    display: none;
+  .main {
+    margin-bottom: 0;
+  }
+  .header input::placeholder {
+    opacity: 0;
+  }
+  select, input {
+    border: none;
   }
 }
 
