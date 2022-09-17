@@ -5,7 +5,7 @@ interface EventInfo {
   eventName: string;
 }
 
-const wcaEvents: Record<string, EventInfo> = {
+export const wcaEvents: Record<string, EventInfo> = {
   "333": { puzzleID: "3x3x3", eventName: "3x3x3 Cube" },
   "222": { puzzleID: "2x2x2", eventName: "2x2x2 Cube" },
   "444": { puzzleID: "4x4x4", eventName: "4x4x4 Cube" },
@@ -30,7 +30,7 @@ export function wcaEventInfo(event: string): EventInfo | null {
   return wcaEvents[event] ?? null;
 }
 
-const events: Record<string, EventInfo> = {
+export const twizzleEvents: Record<string, EventInfo> = {
   ...wcaEvents,
   fto: { puzzleID: "fto", eventName: "Face-Turning Octahedron" },
   master_tetraminx: {
@@ -49,5 +49,5 @@ const events: Record<string, EventInfo> = {
 
 /** @category Event Info */
 export function eventInfo(event: string): EventInfo | null {
-  return events[event] ?? null;
+  return twizzleEvents[event] ?? null;
 }

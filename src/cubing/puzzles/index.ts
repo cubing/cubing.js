@@ -1,4 +1,4 @@
-export { eventInfo, wcaEventInfo } from "./events";
+export { eventInfo, wcaEventInfo, wcaEvents, twizzleEvents } from "./events";
 export type { PuzzleLoader };
 export { cube2x2x2, cube3x3x3 };
 
