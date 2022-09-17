@@ -267,6 +267,10 @@ const fn = async (
         enter();
         break;
       }
+      case "backspace": {
+        backspace();
+        break;
+      }
     }
   });
 

@@ -16,7 +16,7 @@ export const moveMaps: Record<PuzzleID, string[][]> = {
   "3x3x3": [
     ["", "U'", "U2'", "L", "l", "u'", "L2", "M2", "/enter"],
     ["U", "", "U'", "B", "x'", "B'", "B2", "x2'", "B2'"],
-    ["U2", "U", "", "u", "r'", "R'", "z'", "M2", "R2'"],
+    ["U2", "U", "", "u", "r'", "R'", "/backspace", "M2", "R2'"],
     ["L'", "B'", "u'", "", "y'", "y2'", "F'", "M", "F2"],
     ["l'", "x", "r", "y", "", "y'", "d'", "x'", "d"],
     ["u", "B", "R", "y2", "y", "", "F2'", "M", "F"],
@@ -81,12 +81,13 @@ export const moveMaps: Record<PuzzleID, string[][]> = {
   ],
 };
 
-export type Action = "space" | "enter";
+export type Action = "space" | "enter" | "backspace";
 
 export function actionToUIText(action: Action): string {
   return {
     space: "⏮",
     enter: "▶️",
+    backspace: "⃔",
   }[action];
 }
 
