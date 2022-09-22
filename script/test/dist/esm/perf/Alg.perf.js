@@ -26,7 +26,7 @@ needFolder(
       Alg.fromString(algString);
     }
     const dur = performance.now() - start;
-    console.log(`Alg string: ${algString}`);
+    // console.log(`Alg string: ${algString}`);
     console.log(`Parsing a ${numMoves}-move alg: ${dur}ms`);
   }
 
