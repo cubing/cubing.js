@@ -1,4 +1,3 @@
-import { cube3x3x3 } from "../puzzles";
 import { Alg } from "./Alg";
 import { Move } from "./alg-nodes/leaves/Move";
 import type { PuzzleSpecificAlgSimplificationInfo } from "./traversal";
@@ -8,6 +7,7 @@ function puzzleSpecificExperimentalAppendMove(
   newMove: Move,
   options: {
     coalesce?: boolean; // defaults to false
+    dontUndoSameDirectionFindABetterNameForThisLater?: boolean;
     puzzleSpecificAlgSimplificationInfo: PuzzleSpecificAlgSimplificationInfo;
   },
 ): Alg {
@@ -43,6 +43,7 @@ function puzzleSpecificExperimentalAppendMove(
       quantumDirections,
     );
     if (
+      options?.dontUndoSameDirectionFindABetterNameForThisLater &&
       existingQuantumDirectionOnAxis &&
       existingQuantumDirectionOnAxis !== Math.sign(move.amount)
     ) {

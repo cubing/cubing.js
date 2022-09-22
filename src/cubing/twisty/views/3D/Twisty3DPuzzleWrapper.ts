@@ -194,7 +194,9 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       if (closestMove) {
         this.model.experimentalAddMove(closestMove.move, {
           coalesce: true,
-          mod: closestMove.order,
+          puzzleSpecificAlgSimplificationInfo: {
+            quantumMoveOrder: () => closestMove.order,
+          },
         });
       } else {
         console.info("Skipping move!");
