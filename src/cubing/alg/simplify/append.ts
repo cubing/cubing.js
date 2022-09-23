@@ -1,17 +1,14 @@
 import { Alg } from "../Alg";
 import { Move } from "../alg-nodes/leaves/Move";
-import type { AppendOptions, PuzzleSpecificAlgSimplifyInfo } from "./options";
+import type { AppendOptions } from "./options";
 
 export function experimentalAppendMove(
   alg: Alg,
   newMove: Move,
-  options?: {
-    coalesce?: boolean; // defaults to false
-    puzzleSpecificAlgSimplifyInfo?: PuzzleSpecificAlgSimplifyInfo;
-  },
+  options?: AppendOptions,
 ): Alg {
   if (
-    options?.coalesce &&
+    options?.cancel?.quantum !== "none" &&
     options?.puzzleSpecificAlgSimplifyInfo?.areQuantumMovesSameAxis &&
     options?.puzzleSpecificAlgSimplifyInfo?.doQuantumMovesCommute &&
     options?.puzzleSpecificAlgSimplifyInfo?.simplifySameAxisMoves
@@ -23,21 +20,23 @@ export function experimentalAppendMove(
   const oldAlgNodes = Array.from(alg.childAlgNodes());
   const oldLastMove = oldAlgNodes[oldAlgNodes.length - 1] as Move | undefined;
   if (
-    options?.coalesce &&
+    options?.cancel &&
     oldLastMove &&
     oldLastMove.quantum &&
     oldLastMove.quantum.isIdentical(newMove.quantum)
   ) {
     const newAlgNodes = oldAlgNodes.slice(0, oldAlgNodes.length - 1);
     let newAmount = oldLastMove.amount + newMove.amount;
-    const mod =
-      options?.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder?.(
-        newMove.quantum,
-      );
-    if (mod) {
-      newAmount = ((newAmount % mod) + mod) % mod;
-      if (newAmount * 2 > mod) {
-        newAmount -= mod;
+    if (options?.cancel?.puzzleSpecificModWrap !== "none") {
+      const mod =
+        options?.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder?.(
+          newMove.quantum,
+        );
+      if (mod) {
+        newAmount = ((newAmount % mod) + mod) % mod;
+        if (newAmount * 2 > mod) {
+          newAmount -= mod;
+        }
       }
     }
     if (newAmount !== 0) {
@@ -55,6 +54,9 @@ function puzzleSpecificExperimentalAppendMove(
   options: AppendOptions,
 ): Alg {
   const oldAlgNodes = Array.from(alg.childAlgNodes());
+  if (options?.cancel?.puzzleSpecificModWrap === "none") {
+    return new Alg([...oldAlgNodes, newMove])
+  }
   let i;
   const quantumDirections = new Map<string, 1 | 0 | -1>();
   quantumDirections.set(
@@ -90,7 +92,7 @@ function puzzleSpecificExperimentalAppendMove(
       quantumDirections,
     );
     if (
-      (options?.cancel?.oppositeDirection ?? true) &&
+      (options?.cancel?.quantum === "same-direction") &&
       existingQuantumDirectionOnAxis &&
       existingQuantumDirectionOnAxis !== Math.sign(move.amount)
     ) {

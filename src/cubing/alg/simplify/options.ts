@@ -1,11 +1,23 @@
 import type { Move, QuantumMove } from "../alg-nodes";
 
+// TODO: enums?
+export type QuantumDirectionCancellation =  "any-direction" | "same-direction" | "none";
+export type ModWrap = "centered" | "none" ; // TODO: "positive" | "preserve-sign"
+  
 export interface AppendOptions {
   cancel?: {
-    sameDirection?: boolean; // default: true
-    oppositeDirection?: boolean; // default: true
+    quantum?: QuantumDirectionCancellation; // default: "any-direction"
+    puzzleSpecificModWrap: ModWrap // default: "centered"
   };
   puzzleSpecificAlgSimplifyInfo: PuzzleSpecificAlgSimplifyInfo;
+}
+
+export function getAppendOptionsCancelQuantum(appendOptions?: AppendOptions): QuantumDirectionCancellation {
+  return appendOptions?.cancel?.quantum ?? "any-direction"
+}
+
+export function getAppendOptionsPuzzleSpecificModeWrap(appendOptions?: AppendOptions): ModWrap {
+  return appendOptions?.cancel?.puzzleSpecificModWrap ?? "centered"
 }
 
 export interface SimplifyOptions {
