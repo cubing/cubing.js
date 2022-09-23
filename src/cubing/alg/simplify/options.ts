@@ -28,16 +28,16 @@ export interface SimplifyOptions {
 
 // TOOD: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
 export interface PuzzleSpecificAlgSimplifyInfo {
-  quantumMoveOrder?: (quantumMove: QuantumMove) => number;
+  quantumMoveOrder: (quantumMove: QuantumMove) => number;
   // Commutation is not transitive. For example, on Megaminx: BR and BL both commute with F, but not with each other.
-  doQuantumMovesCommute?: (
+  doQuantumMovesCommute: (
     quantumMove1: QuantumMove,
     quantumMove2: QuantumMove,
   ) => boolean;
   // All moves on the same axis *must* commute.
-  areQuantumMovesSameAxis?: (
+  areQuantumMovesSameAxis: (
     quantumMove1: QuantumMove,
     quantumMove2: QuantumMove,
   ) => boolean;
-  simplifySameAxisMoves?: (moves: Move[]) => Move[];
+  simplifySameAxisMoves: (moves: Move[]) => Move[];
 }
