@@ -194,8 +194,8 @@ export class SwipeyPuzzle extends HTMLElement {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddAlgLeaf(algLeaf, {
         coalesce: coalesce(),
-        puzzleSpecificAlgSimplificationInfo:
-          puzzles[this.puzzleName]?.puzzleSpecificAlgSimplificationInfo,
+        puzzleSpecificAlgSimplifyInfo:
+          puzzles[this.puzzleName]?.puzzleSpecificAlgSimplifyInfo,
       });
     } catch (e) {
       console.warn("Invalid alg leaf");

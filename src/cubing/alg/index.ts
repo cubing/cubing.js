@@ -19,7 +19,7 @@ export type { AlgLeaf, AlgBranch, AlgNode } from "./alg-nodes/AlgNode";
 export { experimentalAlgCubingNetLink } from "./url";
 export type { AlgCubingNetOptions } from "./url";
 
-export { experimentalAppendMove } from "./simplify/simplify";
+export { experimentalAppendMove, PuzzleSpecificAlgSimplifyInfo, SimplifyOptions } from "./simplify";
 export { experimentalIs } from "./is";
 
 // TODO: Find a better way to track parsed algs.

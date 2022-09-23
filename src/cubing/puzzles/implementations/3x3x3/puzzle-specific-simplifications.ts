@@ -1,5 +1,5 @@
 import { Alg, Move, QuantumMove } from "../../../alg";
-import type { PuzzleSpecificAlgSimplificationInfo } from "../../../alg/traversal";
+import type { PuzzleSpecificAlgSimplifyInfo } from "../../../alg";
 
 enum Axis {
   X = "x axis",
@@ -354,7 +354,7 @@ simplifySameAxisMoves(
   ["L", "L", "x", "x"].map((s) => Move.fromString(s)),
 )[0].log();
 
-export const puzzleSpecificAlgSimplificationInfo333: PuzzleSpecificAlgSimplificationInfo =
+export const puzzleSpecificAlgSimplifyInfo333: PuzzleSpecificAlgSimplifyInfo =
   {
     quantumMoveOrder: () => 4,
     doQuantumMovesCommute: areQuantumMovesSameAxis,

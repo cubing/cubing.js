@@ -10,7 +10,7 @@ import {
   TraversalDownUp,
   AlgNode,
 } from "../../../../../cubing/alg";
-import type { SimplifyOptions } from "../../../../../cubing/alg/traversal";
+import type { SimplifyOptions } from "../../../../../cubing/alg";
 
 // TODO: Test that inverses are bijections.
 class Normalize extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
@@ -31,9 +31,9 @@ class Normalize extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
         if (lastMove.quantum.isIdentical(newMove.quantum)) {
           newAlgNodes.pop();
           let newAmount = lastMove.amount + newMove.amount;
-          if (options?.puzzleSpecificAlgSimplificationInfo?.quantumMoveOrder) {
+          if (options?.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder) {
             const order =
-              options.puzzleSpecificAlgSimplificationInfo?.quantumMoveOrder(
+              options.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder(
                 lastMove.quantum,
               );
             newAmount = (((newAmount % order) + order + 1) % order) - 1; // TODO

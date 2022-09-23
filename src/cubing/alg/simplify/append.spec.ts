@@ -1,7 +1,7 @@
 import { expect } from "../../../test/chai-workarounds";
 
 import { Alg } from "../Alg";
-import { experimentalAppendMove } from "./simplify";
+import { experimentalAppendMove } from "./append";
 import { Move } from "../alg-nodes";
 
 describe("operation", () => {
@@ -42,19 +42,19 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L"), {
         coalesce: true,
-        puzzleSpecificAlgSimplificationInfo: { quantumMoveOrder: () => 4 },
+        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg(""));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L3"), {
         coalesce: true,
-        puzzleSpecificAlgSimplificationInfo: { quantumMoveOrder: () => 4 },
+        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L2"));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L6"), {
         coalesce: true,
-        puzzleSpecificAlgSimplificationInfo: { quantumMoveOrder: () => 4 },
+        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L"));
   });
@@ -63,7 +63,7 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("L"), new Move("L"), {
         coalesce: true,
-        puzzleSpecificAlgSimplificationInfo: { quantumMoveOrder: () => 3 },
+        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 3 },
       }),
     ).to.be.identicalAlg(new Alg("L'"));
   });
