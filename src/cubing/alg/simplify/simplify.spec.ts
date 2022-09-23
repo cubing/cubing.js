@@ -1,8 +1,8 @@
-import { expect } from "../../test/chai-workarounds";
+import { expect } from "../../../test/chai-workarounds";
 
-import { Alg } from "./Alg";
-import { experimentalAppendMove } from "./operation";
-import { Move } from "./alg-nodes";
+import { Alg } from "../Alg";
+import { experimentalAppendMove } from "./simplify";
+import { Move } from "../alg-nodes";
 
 describe("operation", () => {
   it("can append moves", () => {
