@@ -1,33 +1,42 @@
 import type { Move, QuantumMove } from "../alg-nodes";
 
 // TODO: enums?
-export type QuantumDirectionCancellation =
-  | "any-direction" // Cancel any moves with the same quantum.
+const DEFAULT_DIRECTIONAL = "any-direction";
+DEFAULT_DIRECTIONAL;
+export type QuantumDirectionalCancellation =
+  | typeof DEFAULT_DIRECTIONAL // Cancel any moves with the same quantum.
   | "same-direction" // Cancel two quantums when have non-zero amounts of the same sign (positive/negative). An amount of 0 always counts as the same direction as any other amount.
   | "none";
 
 // Example input: `R7' . R6' . R5' . R6` on a cube.
+const DEFAULT_MOD_WRAP = "canonical-centered"; // R . R2 . R' . R2
 export type ModWrap =
-  | "gravity" // R . R2' . R' . R2
+  | typeof DEFAULT_MOD_WRAP
   | "none"
-  | "canonical-centered" // R . R2 . R' . R2
+  | "gravity" // R . R2' . R' . R2
   | "canonical-positive" // R . R2 . R3 . R2
   | "preserve-sign"; // R3' . R2' . R' . R2
 
 // TODO: preserve single moves?
 export interface AppendOptions {
-  cancel?: {
-    quantum?: QuantumDirectionCancellation; // default: "any-direction"
-    puzzleSpecificModWrap?: ModWrap; // default: "gravity"
-  };
+  cancel?:
+    | true // Use defaults
+    | {
+      directional?: QuantumDirectionalCancellation; // default:
+      puzzleSpecificModWrap?: ModWrap; // default: "gravity"
+    };
   puzzleSpecific?: PuzzleSpecificAppendOptions;
 }
 
 export class AppendOptionsHelper {
   constructor(public config: AppendOptions = {}) {}
 
-  cancelQuantum(): QuantumDirectionCancellation {
-    return this.config.cancel?.quantum ?? "any-direction";
+  cancelQuantum(): QuantumDirectionalCancellation {
+    const { cancel } = this.config;
+    if (cancel === true) {
+      return DEFAULT_DIRECTIONAL;
+    }
+    return cancel?.directional ?? DEFAULT_DIRECTIONAL;
   }
 
   cancelAny() {
@@ -35,7 +44,10 @@ export class AppendOptionsHelper {
   }
 
   cancelPuzzleSpecificModWrap(): ModWrap {
-    return this.config.cancel?.puzzleSpecificModWrap ?? "gravity";
+    if (this.config.cancel === true) {
+      return DEFAULT_MOD_WRAP;
+    }
+    return this.config.cancel?.puzzleSpecificModWrap ?? DEFAULT_MOD_WRAP;
   }
 }
 

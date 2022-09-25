@@ -2,7 +2,6 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import { Alg } from "../../../../../cubing/alg";
-import { cube3x3x3 } from "../../../../../cubing/puzzles";
 import { normalize } from "./normalize";
 
 const ROBOT_SENT_PREFIX = "robot-sent-";
@@ -18,16 +17,12 @@ function setSession(session: string): void {
 
   (document.querySelector("#left-normalized") as HTMLTextAreaElement).value =
     new Alg(
-      normalize(Alg.fromString(sentText), {
-        puzzleSpecificAppendOptions: { quantumMoveOrder: () => 4 },
-      }),
+      normalize(Alg.fromString(sentText)),
     ).toString();
 
   (document.querySelector("#right-normalized") as HTMLTextAreaElement).value =
     new Alg(
-      normalize(Alg.fromString(receivedText), {
-        puzzleSpecificAppendOptions: cube3x3x3.puzzleSpecificAppendOptions,
-      }),
+      normalize(Alg.fromString(receivedText)),
     ).toString();
 }
 

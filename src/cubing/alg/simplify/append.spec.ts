@@ -8,17 +8,17 @@ describe("operation", () => {
   it("can append moves", () => {
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("U2"), {
-        cancel: { quantum: "none" },
+        cancel: { directional: "none" },
       }),
     ).to.be.identicalAlg(new Alg("R U R' U2"));
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("R2'"), {
-        cancel: { quantum: "none" },
+        cancel: { directional: "none" },
       }),
     ).to.be.identicalAlg(new Alg("R U R' R2'"));
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("R"), {
-        cancel: { quantum: "none" },
+        cancel: { directional: "none" },
       }),
     ).to.be.identicalAlg(new Alg("R U R' R"));
   });
@@ -33,6 +33,22 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("R")),
     ).to.be.identicalAlg(new Alg("R U"));
+    expect(
+      experimentalAppendMove(new Alg("R U R'"), new Move("R'")),
+    ).to.be.identicalAlg(new Alg("R U R2'"));
+    expect(
+      experimentalAppendMove(new Alg("R U R'"), new Move("R'"), {
+        puzzleSpecific: { quantumMoveOrder: () => 4 },
+      }),
+    ).to.be.identicalAlg(new Alg("R U R2"));
+    expect(
+      experimentalAppendMove(new Alg("R U R'"), new Move("R'"), {
+        cancel: {
+          puzzleSpecificModWrap: "gravity",
+        },
+        puzzleSpecific: { quantumMoveOrder: () => 4 },
+      }),
+    ).to.be.identicalAlg(new Alg("R U R2'"));
     expect(
       experimentalAppendMove(new Alg("r"), new Move("r")),
     ).to.be.identicalAlg(new Alg("r2"));
