@@ -27,50 +27,6 @@ export function experimentalAppendMove(
   function output() {
     return new Alg([...outputPrefix, ...outputSuffix]); // TODO: What's the most efficient way to do this?
   }
-  if (!optionsHelper.cancelAny()) {
-    return output();
-  }
-
-  let canCancelMoveBasedOnQuantum: (move: Move) => boolean;
-  const axis = optionsHelper.puzzleSpecificSimplifyOptions()?.axis;
-  if (axis) {
-    canCancelMoveBasedOnQuantum = (move: Move): boolean =>
-      axis.areQuantumMovesSameAxis(addedMove.quantum, move.quantum);
-  } else {
-    const newMoveQuantumString = addedMove.quantum.toString();
-    canCancelMoveBasedOnQuantum = (move: Move): boolean =>
-      move.quantum.toString() === newMoveQuantumString;
-  }
-
-  const sameDirectionOnly = optionsHelper.cancelQuantum() === "same-direction";
-
-  const quantumDirections = new Map<string, 1 | 0 | -1>();
-  quantumDirections.set(
-    addedMove.quantum.toString(),
-    Math.sign(addedMove.amount) as -1 | 0 | 1,
-  );
-  let i: number;
-  for (i = outputPrefix.length - 1; i >= 0; i--) {
-    const move = outputPrefix[i].as(Move);
-    if (!move) {
-      break;
-    }
-    if (!canCancelMoveBasedOnQuantum(move)) {
-      break;
-    }
-    const quantumKey = move.quantum.toString();
-    if (sameDirectionOnly) {
-      const existingQuantumDirectionOnAxis = quantumDirections.get(quantumKey);
-      if (
-        existingQuantumDirectionOnAxis && // Short-circuits, but that's actually okay here.
-        !areSameDirection(existingQuantumDirectionOnAxis, move)
-      ) {
-        break;
-      }
-      quantumDirections.set(quantumKey, Math.sign(move.amount) as -1 | 0 | 1);
-    }
-  }
-  const suffix = [...(outputPrefix.splice(i + 1) as Move[]), addedMove];
 
   function modMove(move: Move): Move {
     if (optionsHelper.cancelPuzzleSpecificModWrap() === "none") {
@@ -108,25 +64,72 @@ export function experimentalAppendMove(
     return move.modified({ amount: offsetAmount });
   }
 
-  if (axis) {
-    // TODO: pass down quantum mod
-    outputSuffix = axis.simplifySameAxisMoves(
-      suffix,
-      optionsHelper.cancelPuzzleSpecificModWrap() !== "none",
-    ).map((m) => modMove(m));
-  } else {
-    let amount = suffix.reduce(
-      (sum: number, move: Move) => sum + move.amount,
-      0,
-    );
-    if (quantumDirections.size !== 1) {
-      throw new Error(
-        "Internal error: multiple quantums when one was expected",
-      );
+  if (optionsHelper.cancelAny()) {
+    let canCancelMoveBasedOnQuantum: (move: Move) => boolean;
+    const axis = optionsHelper.puzzleSpecificSimplifyOptions()?.axis;
+    if (axis) {
+      canCancelMoveBasedOnQuantum = (move: Move): boolean =>
+        axis.areQuantumMovesSameAxis(addedMove.quantum, move.quantum);
+    } else {
+      const newMoveQuantumString = addedMove.quantum.toString();
+      canCancelMoveBasedOnQuantum = (move: Move): boolean =>
+        move.quantum.toString() === newMoveQuantumString;
     }
-    outputSuffix = [modMove(new Move(addedMove.quantum, amount))];
+
+    const sameDirectionOnly =
+      optionsHelper.cancelQuantum() === "same-direction";
+
+    const quantumDirections = new Map<string, 1 | 0 | -1>();
+    quantumDirections.set(
+      addedMove.quantum.toString(),
+      Math.sign(addedMove.amount) as -1 | 0 | 1,
+    );
+    let i: number;
+    for (i = outputPrefix.length - 1; i >= 0; i--) {
+      const move = outputPrefix[i].as(Move);
+      if (!move) {
+        break;
+      }
+      if (!canCancelMoveBasedOnQuantum(move)) {
+        break;
+      }
+      const quantumKey = move.quantum.toString();
+      if (sameDirectionOnly) {
+        const existingQuantumDirectionOnAxis =
+          quantumDirections.get(quantumKey);
+        if (
+          existingQuantumDirectionOnAxis && // Short-circuits, but that's actually okay here.
+          !areSameDirection(existingQuantumDirectionOnAxis, move)
+        ) {
+          break;
+        }
+        quantumDirections.set(quantumKey, Math.sign(move.amount) as -1 | 0 | 1);
+      }
+    }
+    const suffix = [...(outputPrefix.splice(i + 1) as Move[]), addedMove];
+
+    if (axis) {
+      // TODO: pass down quantum mod
+      outputSuffix = axis.simplifySameAxisMoves(
+        suffix,
+        optionsHelper.cancelPuzzleSpecificModWrap() !== "none",
+      );
+    } else {
+      let amount = suffix.reduce(
+        (sum: number, move: Move) => sum + move.amount,
+        0,
+      );
+      if (quantumDirections.size !== 1) {
+        throw new Error(
+          "Internal error: multiple quantums when one was expected",
+        );
+      }
+      outputSuffix = [new Move(addedMove.quantum, amount)];
+    }
   }
-  outputSuffix = outputSuffix.filter((move: Move) => move.amount !== 0);
+  outputSuffix = outputSuffix.map((m) => modMove(m)).filter(
+    (move: Move) => move.amount !== 0,
+  );
   return output();
 }
 

@@ -9,9 +9,10 @@ export type QuantumDirectionalCancellation =
   | "none";
 
 // Example input: `R7' . R6' . R5' . R6` on a cube.
+const DEFAULT_MOD_WRAP = "canonical-centered"; // R . R2 . R' . R2
 export type ModWrap =
-  | "canonical-centered" // R . R2 . R' . R2
-  | "none"
+  | typeof DEFAULT_MOD_WRAP
+  | "none" // R7' . R6' . R5' . R6
   | "gravity" // R . R2' . R' . R2
   | "canonical-positive" // R . R2 . R3 . R2
   | "preserve-sign"; // R3' . R2' . R' . R2
@@ -36,33 +37,25 @@ export class AppendOptionsHelper {
 
   cancelQuantum(): QuantumDirectionalCancellation {
     const { cancel } = this.config;
-    if (cancel === true || cancel === false) {
+    if (cancel === true) {
       return DEFAULT_DIRECTIONAL;
     }
-    return cancel?.directional ?? DEFAULT_DIRECTIONAL;
+    if (cancel === false) {
+      return "none";
+    }
+    return cancel?.directional ?? "none";
   }
 
   cancelAny() {
     return this.config.cancel && this.cancelQuantum() !== "none";
   }
 
-  defaultModWrap(): ModWrap {
-    switch (this.cancelQuantum()) {
-      case "any-direction": {
-        return "canonical-centered";
-      }
-      default: {
-        return "none";
-      }
-    }
-  }
-
   cancelPuzzleSpecificModWrap(): ModWrap {
     const { cancel } = this.config;
     if (cancel === true || cancel === false) {
-      return this.defaultModWrap();
+      return DEFAULT_MOD_WRAP;
     }
-    return cancel?.puzzleSpecificModWrap ?? this.defaultModWrap();
+    return cancel?.puzzleSpecificModWrap ?? DEFAULT_MOD_WRAP;
   }
 
   puzzleSpecificSimplifyOptions(): PuzzleSpecificSimplifyOptions | undefined {

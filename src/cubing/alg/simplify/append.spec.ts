@@ -53,6 +53,7 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("R'"), {
         cancel: {
+          directional: "any-direction",
           puzzleSpecificModWrap: "gravity",
         },
         puzzleSpecificSimplifyOptions: { quantumMoveOrder: () => 4 },
