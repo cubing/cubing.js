@@ -35,17 +35,17 @@ describe("operation", () => {
   it("mod 4 works as expected", () => {
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L"), {
-        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
+        puzzleSpecific: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg(""));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L3"), {
-        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
+        puzzleSpecific: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L2"));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L6"), {
-        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
+        puzzleSpecific: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L"));
   });
@@ -53,7 +53,7 @@ describe("operation", () => {
   it("mod 3 works as expected", () => {
     expect(
       experimentalAppendMove(new Alg("L"), new Move("L"), {
-        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 3 },
+        puzzleSpecific: { quantumMoveOrder: () => 3 },
       }),
     ).to.be.identicalAlg(new Alg("L'"));
   });

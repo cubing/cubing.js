@@ -19,15 +19,14 @@ function setSession(session: string): void {
   (document.querySelector("#left-normalized") as HTMLTextAreaElement).value =
     new Alg(
       normalize(Alg.fromString(sentText), {
-        puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
+        puzzleSpecificAppendOptions: { quantumMoveOrder: () => 4 },
       }),
     ).toString();
 
   (document.querySelector("#right-normalized") as HTMLTextAreaElement).value =
     new Alg(
       normalize(Alg.fromString(receivedText), {
-        puzzleSpecificAlgSimplifyInfo:
-          cube3x3x3.puzzleSpecificAlgSimplifyInfo,
+        puzzleSpecificAppendOptions: cube3x3x3.puzzleSpecificAppendOptions,
       }),
     ).toString();
 }

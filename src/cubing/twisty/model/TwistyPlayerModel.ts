@@ -1,4 +1,9 @@
-import { Alg, experimentalAppendMove, Move, PuzzleSpecificAlgSimplifyInfo } from "../../alg";
+import {
+  Alg,
+  experimentalAppendMove,
+  Move,
+  PuzzleSpecificAppendOptions,
+} from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
 import { URLProp } from "./props/general/URLProp";
@@ -227,7 +232,7 @@ export class TwistyPlayerModel {
     algLeaf: AlgLeaf,
     options?: {
       coalesce?: boolean;
-      puzzleSpecificAlgSimplifyInfo?: PuzzleSpecificAlgSimplifyInfo;
+      puzzleSpecificAppendOptions?: PuzzleSpecificAppendOptions;
     },
   ): void {
     const maybeMove = algLeaf.as(Move);
@@ -250,7 +255,7 @@ export class TwistyPlayerModel {
     flexibleMove: Move | string,
     options: {
       coalesce?: boolean;
-      puzzleSpecificAlgSimplifyInfo?: PuzzleSpecificAlgSimplifyInfo;
+      puzzleSpecificAppendOptions?: PuzzleSpecificAppendOptions;
     } = {},
   ): void {
     const move =
@@ -260,8 +265,7 @@ export class TwistyPlayerModel {
         const alg = (await this.alg.get()).alg;
         const newAlg = experimentalAppendMove(alg, move, {
           coalesce: options?.coalesce,
-          puzzleSpecificAlgSimplifyInfo:
-            options?.puzzleSpecificAlgSimplifyInfo,
+          puzzleSpecificAppendOptions: options?.puzzleSpecificAppendOptions,
         });
         this.timestampRequest.set("end");
         this.catchUpMove.set({

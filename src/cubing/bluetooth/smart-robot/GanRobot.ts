@@ -231,8 +231,7 @@ export class GanRobot extends EventTarget {
   private async queueMoves(moves: Alg): Promise<void> {
     this.moveQueue = this.moveQueue.concat(moves).simplify({
       collapseMoves: true,
-      puzzleSpecificAlgSimplifyInfo:
-        cube3x3x3.puzzleSpecificAlgSimplifyInfo,
+      puzzleSpecificAlgSimplifyInfo: cube3x3x3.puzzleSpecificAlgSimplifyInfo,
     });
     if (!this.locked) {
       // TODO: We're currently iterating over alg nodes instead of leaves to avoid "zip bomps".

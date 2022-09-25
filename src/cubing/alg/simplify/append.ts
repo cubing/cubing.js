@@ -2,7 +2,7 @@ import { Alg } from "../Alg";
 import type { AlgNode } from "../alg-nodes";
 import type { AlgLeaf } from "../alg-nodes/AlgNode";
 import { Move } from "../alg-nodes/leaves/Move";
-import { AppendOptions, AppendOptionsConfig } from "./options";
+import { AppendOptions, AppendOptionsHelper } from "./options";
 
 function areSameDirection(amount1: number, move2: Move): boolean {
   // This multiplication has two properties:
@@ -18,21 +18,21 @@ function offsetMod(x: number, positiveMod: number, offset: number): number {
 export function experimentalAppendMove(
   alg: Alg,
   addedMove: Move,
-  optionsConfig?: AppendOptionsConfig,
+  options?: AppendOptions,
 ): Alg {
-  const options = new AppendOptions(optionsConfig);
+  const optionsHelper = new AppendOptionsHelper(options);
 
   let outputPrefix: AlgNode[] = Array.from(alg.childAlgNodes());
   let outputSuffix: Move[] = [addedMove];
   function output() {
     return new Alg([...outputPrefix, ...outputSuffix]); // TODO: What's the most efficient way to do this?
   }
-  if (!options.cancelAny()) {
+  if (!optionsHelper.cancelAny()) {
     return output();
   }
 
   let canCancelMoveBasedOnQuantum: (move: Move) => boolean;
-  const axis = options.config.puzzleSpecificAlgSimplifyInfo?.axis;
+  const axis = optionsHelper.config.puzzleSpecific?.axis;
   if (axis) {
     canCancelMoveBasedOnQuantum = (move: Move): boolean =>
       axis.areQuantumMovesSameAxis(addedMove.quantum, move.quantum);
@@ -42,7 +42,7 @@ export function experimentalAppendMove(
       move.quantum.toString() === newMoveQuantumString;
   }
 
-  const sameDirectionOnly = options.cancelQuantum() === "same-direction";
+  const sameDirectionOnly = optionsHelper.cancelQuantum() === "same-direction";
 
   const quantumDirections = new Map<string, 1 | 0 | -1>();
   quantumDirections.set(
@@ -73,17 +73,17 @@ export function experimentalAppendMove(
   const suffix = [...(outputPrefix.splice(i + 1) as Move[]), addedMove];
 
   function modMove(move: Move): Move {
-    if (options.cancelPuzzleSpecificModWrap() === "none") {
+    if (optionsHelper.cancelPuzzleSpecificModWrap() === "none") {
       return move;
     }
     const quantumMoveOrder =
-      options.config.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder;
+      optionsHelper.config.puzzleSpecific?.quantumMoveOrder;
     if (!quantumMoveOrder) {
       return move;
     }
     const mod = quantumMoveOrder(addedMove.quantum)!; // TODO: throw if `undefined`?
     let offset: number;
-    switch (options.cancelPuzzleSpecificModWrap()) {
+    switch (optionsHelper.cancelPuzzleSpecificModWrap()) {
       case "gravity": {
         offset = -Math.floor((mod - (move.amount < 0 ? 0 : 1)) / 2); // TODO: dedup this calculation for the most common path?
         break;
@@ -104,7 +104,11 @@ export function experimentalAppendMove(
         throw new Error("Unknown mod wrap");
       }
     }
-    console.log(move.amount, offset, options.cancelPuzzleSpecificModWrap());
+    console.log(
+      move.amount,
+      offset,
+      optionsHelper.cancelPuzzleSpecificModWrap(),
+    );
     let offsetAmount = offsetMod(move.amount, mod, offset);
     return move.modified({ amount: offsetAmount });
   }
@@ -131,7 +135,7 @@ export function experimentalAppendMove(
 export function experimentalAppendNode(
   alg: Alg,
   leaf: AlgLeaf,
-  options: AppendOptionsConfig,
+  options: AppendOptions,
 ): Alg {
   const maybeMove = leaf.as(Move);
   if (maybeMove) {

@@ -20,7 +20,10 @@ export { experimentalAlgCubingNetLink } from "./url";
 export type { AlgCubingNetOptions } from "./url";
 
 export { experimentalAppendMove } from "./simplify";
-export type { PuzzleSpecificAlgSimplifyInfo, SimplifyOptions } from "./simplify";
+export type {
+  PuzzleSpecificAppendOptions as PuzzleSpecificAlgSimplifyInfo,
+  SimplifyOptions,
+} from "./simplify";
 export { experimentalIs } from "./is";
 
 // TODO: Find a better way to track parsed algs.

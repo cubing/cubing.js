@@ -199,8 +199,6 @@ function simplestMove(
     innerLayer = null;
   }
 
-  // console.log({ innerLayer, outerLayer, from, to });
-
   const moveSourceType = slice
     ? far
       ? MoveSourceType.INDEXABLE_SLICE_FAR

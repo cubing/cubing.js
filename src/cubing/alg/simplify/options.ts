@@ -15,16 +15,16 @@ export type ModWrap =
   | "preserve-sign"; // R3' . R2' . R' . R2
 
 // TODO: preserve single moves?
-export interface AppendOptionsConfig {
+export interface AppendOptions {
   cancel?: {
     quantum?: QuantumDirectionCancellation; // default: "any-direction"
     puzzleSpecificModWrap?: ModWrap; // default: "gravity"
   };
-  puzzleSpecificAlgSimplifyInfo?: PuzzleSpecificAlgSimplifyInfo;
+  puzzleSpecific?: PuzzleSpecificAppendOptions;
 }
 
-export class AppendOptions {
-  constructor(public config: AppendOptionsConfig = {}) {}
+export class AppendOptionsHelper {
+  constructor(public config: AppendOptions = {}) {}
 
   cancelQuantum(): QuantumDirectionCancellation {
     return this.config.cancel?.quantum ?? "any-direction";
@@ -39,11 +39,11 @@ export class AppendOptions {
   }
 }
 
-export interface SimplifyOptions extends AppendOptionsConfig {
+export interface SimplifyOptions extends AppendOptions {
   depth?: number | null; // TODO: test
 }
 
-export interface PuzzleSpecificAxisSimplifyInfo {
+export interface PuzzleSpecificAxisAppendInfo {
   // All moves on the same axis *must* commute.
   areQuantumMovesSameAxis: (
     quantumMove1: QuantumMove,
@@ -53,7 +53,7 @@ export interface PuzzleSpecificAxisSimplifyInfo {
 }
 
 // TOOD: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
-export interface PuzzleSpecificAlgSimplifyInfo {
+export interface PuzzleSpecificAppendOptions {
   quantumMoveOrder: (quantumMove: QuantumMove) => number;
   // TODO: implement cancellation for non-axis commuting moves (e.g. Megaminx: `BL R BL'` → `R`)
   // // Commutation is not transitive. For example, on Megaminx: BR and BL both commute with F, but not with each other.
@@ -61,5 +61,5 @@ export interface PuzzleSpecificAlgSimplifyInfo {
   //   quantumMove1: QuantumMove,
   //   quantumMove2: QuantumMove,
   // ) => boolean;
-  axis?: PuzzleSpecificAxisSimplifyInfo;
+  axis?: PuzzleSpecificAxisAppendInfo;
 }
