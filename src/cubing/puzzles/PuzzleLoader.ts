@@ -1,4 +1,4 @@
-import type { PuzzleSpecificAlgSimplifyInfo } from "../alg";
+import type { PuzzleSpecificAppendOptions } from "../alg";
 import type { KPuzzle } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { ExperimentalStickering } from "../twisty";
@@ -20,5 +20,5 @@ export interface PuzzleLoader {
     stickering: ExperimentalStickering,
   ) => Promise<PuzzleAppearance>;
   stickerings?: () => Promise<ExperimentalStickering[]>;
-  puzzleSpecificAlgSimplifyInfo?: PuzzleSpecificAlgSimplifyInfo;
+  puzzleSpecificAppendOptions?: PuzzleSpecificAppendOptions;
 }

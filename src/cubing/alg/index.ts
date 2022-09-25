@@ -21,7 +21,7 @@ export type { AlgCubingNetOptions } from "./url";
 
 export { experimentalAppendMove } from "./simplify";
 export type {
-  PuzzleSpecificAppendOptions as PuzzleSpecificAlgSimplifyInfo,
+  PuzzleSpecificAppendOptions,
   SimplifyOptions,
 } from "./simplify";
 export { experimentalIs } from "./is";

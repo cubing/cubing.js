@@ -230,8 +230,7 @@ export class GanRobot extends EventTarget {
   // TODO: Don't let this resolve until the move is done?
   private async queueMoves(moves: Alg): Promise<void> {
     this.moveQueue = this.moveQueue.concat(moves).simplify({
-      collapseMoves: true,
-      puzzleSpecificAlgSimplifyInfo: cube3x3x3.puzzleSpecificAlgSimplifyInfo,
+      puzzleSpecific: cube3x3x3.puzzleSpecificAppendOptions,
     });
     if (!this.locked) {
       // TODO: We're currently iterating over alg nodes instead of leaves to avoid "zip bomps".

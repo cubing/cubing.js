@@ -31,11 +31,10 @@ class Normalize extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
         if (lastMove.quantum.isIdentical(newMove.quantum)) {
           newAlgNodes.pop();
           let newAmount = lastMove.amount + newMove.amount;
-          if (options?.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder) {
-            const order =
-              options.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder(
-                lastMove.quantum,
-              );
+          if (options?.puzzleSpecificAppendOptions?.quantumMoveOrder) {
+            const order = options.puzzleSpecificAppendOptions?.quantumMoveOrder(
+              lastMove.quantum,
+            );
             newAmount = (((newAmount % order) + order + 1) % order) - 1; // TODO
           }
           if (newAmount !== 0) {

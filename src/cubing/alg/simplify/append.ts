@@ -104,11 +104,6 @@ export function experimentalAppendMove(
         throw new Error("Unknown mod wrap");
       }
     }
-    console.log(
-      move.amount,
-      offset,
-      optionsHelper.cancelPuzzleSpecificModWrap(),
-    );
     let offsetAmount = offsetMod(move.amount, mod, offset);
     return move.modified({ amount: offsetAmount });
   }

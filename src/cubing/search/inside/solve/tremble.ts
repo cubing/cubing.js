@@ -104,8 +104,8 @@ export class TrembleSolver {
         }
         // console.log("sgs done!", sofar.toString(), "|", sgsAlg.toString());
         const newAlg = sofar.concat(sgsAlg).simplify({
-          collapseMoves: true,
-          puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder },
+          cancel: { puzzleSpecificModWrap: "canonical-centered" },
+          puzzleSpecific: { quantumMoveOrder },
         });
 
         const len = experimentalCountMoves(newAlg);

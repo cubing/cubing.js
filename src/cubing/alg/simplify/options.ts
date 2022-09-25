@@ -54,7 +54,7 @@ export interface PuzzleSpecificAxisAppendInfo {
 
 // TOOD: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
 export interface PuzzleSpecificAppendOptions {
-  quantumMoveOrder: (quantumMove: QuantumMove) => number;
+  quantumMoveOrder?: (quantumMove: QuantumMove) => number;
   // TODO: implement cancellation for non-axis commuting moves (e.g. Megaminx: `BL R BL'` → `R`)
   // // Commutation is not transitive. For example, on Megaminx: BR and BL both commute with F, but not with each other.
   // doQuantumMovesCommute?: (

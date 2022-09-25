@@ -1,6 +1,5 @@
-import { Alg, Move, QuantumMove } from "../../../alg";
-import type { PuzzleSpecificAlgSimplifyInfo } from "../../../alg";
-import { simplify } from "../../../alg/simplify";
+import type { PuzzleSpecificAppendOptions } from "../../../alg";
+import { Move, QuantumMove } from "../../../alg";
 
 enum Axis {
   X = "x axis",
@@ -314,7 +313,7 @@ function simplifySameAxisMoves(
   ];
 }
 
-export const puzzleSpecificAlgSimplifyInfo333: PuzzleSpecificAlgSimplifyInfo = {
+export const puzzleSpecificAppendOptions333: PuzzleSpecificAppendOptions = {
   quantumMoveOrder: () => 4,
   // doQuantumMovesCommute: areQuantumMovesSameAxis,
   axis: { areQuantumMovesSameAxis, simplifySameAxisMoves },

@@ -7,13 +7,13 @@ import { Move } from "../alg-nodes";
 describe("operation", () => {
   it("can append moves", () => {
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("U2")),
+      experimentalAppendMove(new Alg("R U R'"), new Move("U2"), {cancel: {quantum: "none"}}),
     ).to.be.identicalAlg(new Alg("R U R' U2"));
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("R2'")),
+      experimentalAppendMove(new Alg("R U R'"), new Move("R2'"), {cancel: {quantum: "none"}}),
     ).to.be.identicalAlg(new Alg("R U R' R2'"));
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("R")),
+      experimentalAppendMove(new Alg("R U R'"), new Move("R"), {cancel: {quantum: "none"}}),
     ).to.be.identicalAlg(new Alg("R U R' R"));
   });
 

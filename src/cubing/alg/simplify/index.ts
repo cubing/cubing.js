@@ -3,5 +3,5 @@ export { experimentalAppendMove, experimentalAppendNode } from "./append";
 export type {
   AppendOptions,
   SimplifyOptions,
-  PuzzleSpecificAppendOptions as PuzzleSpecificAlgSimplifyInfo,
+  PuzzleSpecificAppendOptions,
 } from "./options";
