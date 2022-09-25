@@ -16,7 +16,7 @@ import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundPr
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import {
   ControlPanelThemeWithAuto,
-  controlsLocations
+  controlsLocations,
 } from "../model/props/viewer/ControlPanelProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
@@ -411,16 +411,13 @@ export class TwistyPlayer
   // TODO: Animate the new move.
   experimentalAddMove(
     flexibleMove: Move | string,
-    options?: AppendOptions
+    options?: AppendOptions,
   ): void {
     this.experimentalModel.experimentalAddMove(flexibleMove, options);
   }
 
   // TODO: Animate the new move.
-  experimentalAddAlgLeaf(
-    algLeaf: AlgLeaf,
-    options?: AppendOptions
-  ): void {
+  experimentalAddAlgLeaf(algLeaf: AlgLeaf, options?: AppendOptions): void {
     this.experimentalModel.experimentalAddAlgLeaf(algLeaf, options);
   }
 

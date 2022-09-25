@@ -5,7 +5,7 @@ import { puzzles } from "../../../../../cubing/puzzles";
 import {
   BackViewLayout,
   TwistyPlayer,
-  TwistyPlayerConfig
+  TwistyPlayerConfig,
 } from "../../../../../cubing/twisty";
 import { getSetup, PuzzleID } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
@@ -193,8 +193,7 @@ export class SwipeyPuzzle extends HTMLElement {
     try {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddAlgLeaf(algLeaf, {
-        puzzleSpecific:
-          puzzles[this.puzzleName]?.puzzleSpecificAppendOptions,
+        puzzleSpecific: puzzles[this.puzzleName]?.puzzleSpecificAppendOptions,
       });
     } catch (e) {
       console.warn("Invalid alg leaf");

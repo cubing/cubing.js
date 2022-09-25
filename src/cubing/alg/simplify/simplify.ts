@@ -1,4 +1,3 @@
-import { puzzleSpecificAppendOptions333 } from "../../puzzles/implementations/3x3x3/puzzle-specific-simplifications";
 import { Alg } from "../Alg";
 import type { AlgNode } from "../alg-nodes/AlgNode";
 import { Commutator } from "../alg-nodes/containers/Commutator";

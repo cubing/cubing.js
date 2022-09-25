@@ -1,8 +1,4 @@
-import {
-  Alg,
-  experimentalAppendMove,
-  Move
-} from "../../alg";
+import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { AppendOptions } from "../../alg/simplify";
 import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
@@ -228,10 +224,7 @@ export class TwistyPlayerModel {
     return url.toString();
   }
 
-  experimentalAddAlgLeaf(
-    algLeaf: AlgLeaf,
-    options?: AppendOptions
-  ): void {
+  experimentalAddAlgLeaf(algLeaf: AlgLeaf, options?: AppendOptions): void {
     const maybeMove = algLeaf.as(Move);
     if (maybeMove) {
       this.experimentalAddMove(maybeMove, options);
