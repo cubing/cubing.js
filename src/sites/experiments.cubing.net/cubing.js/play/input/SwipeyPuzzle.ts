@@ -7,7 +7,7 @@ import {
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../../../cubing/twisty";
-import { getSetup, PuzzleID } from "../url-params";
+import { getSetup, PuzzleID, getCancel } from "../url-params";
 import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 
 const DEFAULT_THEME: ThemeType = "transparent-grid";
@@ -193,6 +193,10 @@ export class SwipeyPuzzle extends HTMLElement {
     try {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddAlgLeaf(algLeaf, {
+        cancel: {
+          directional: getCancel() ? "same-direction" : "none",
+          puzzleSpecificModWrap: "none",
+        },
         puzzleSpecificSimplifyOptions:
           puzzles[this.puzzleName]?.puzzleSpecificSimplifyOptions,
       });

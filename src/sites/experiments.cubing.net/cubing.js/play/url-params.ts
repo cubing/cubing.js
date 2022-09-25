@@ -55,7 +55,7 @@ export function debugShowRenderStats(): boolean {
   );
 }
 
-export function cancel(): boolean {
+export function getCancel(): boolean {
   return (
     getURLParamChecked<"true" | "false">("cancel", "true", [
       "true",
