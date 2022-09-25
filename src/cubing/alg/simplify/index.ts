@@ -1,5 +1,5 @@
 export { simplify } from "./simplify";
-export { experimentalAppendMove } from "./append";
+export { experimentalAppendMove, experimentalAppendNode } from "./append";
 export type {
   AppendOptionsConfig as AppendOptions,
   SimplifyOptions,

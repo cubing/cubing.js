@@ -1,6 +1,6 @@
-import { puzzleSpecificAlgSimplifyInfo333 } from "../../puzzles/implementations/3x3x3/puzzle-specific-simplifications";
 import { Alg } from "../Alg";
 import type { AlgNode } from "../alg-nodes";
+import type { AlgLeaf } from "../alg-nodes/AlgNode";
 import { Move } from "../alg-nodes/leaves/Move";
 import { AppendOptions, AppendOptionsConfig } from "./options";
 
@@ -84,11 +84,15 @@ export function experimentalAppendMove(
     const mod = quantumMoveOrder(addedMove.quantum)!; // TODO: throw if `undefined`?
     let offset: number;
     switch (options.cancelPuzzleSpecificModWrap()) {
-      case "centered": {
+      case "gravity": {
+        offset = -Math.floor((mod - (move.amount < 0 ? 0 : 1)) / 2); // TODO: dedup this calculation for the most common path?
+        break;
+      }
+      case "canonical-centered": {
         offset = -Math.floor((mod - 1) / 2); // TODO: dedup this calculation for the most common path?
         break;
       }
-      case "positive": {
+      case "canonical-positive": {
         offset = 0;
         break;
       }
@@ -100,6 +104,7 @@ export function experimentalAppendMove(
         throw new Error("Unknown mod wrap");
       }
     }
+    console.log(move.amount, offset, options.cancelPuzzleSpecificModWrap());
     let offsetAmount = offsetMod(move.amount, mod, offset);
     return move.modified({ amount: offsetAmount });
   }
@@ -123,20 +128,15 @@ export function experimentalAppendMove(
   return output();
 }
 
-for (const puzzleSpecificModWrap of [
-  "none",
-  "centered",
-  "positive",
-  "preserve-sign",
-] as const) {
-  experimentalAppendMove(new Alg("R U R"), new Move("R7'"), {
-    cancel: {
-      puzzleSpecificModWrap,
-    },
-    puzzleSpecificAlgSimplifyInfo: {
-      quantumMoveOrder: () => 4,
-    },
-  }).log(puzzleSpecificModWrap);
+export function experimentalAppendNode(
+  alg: Alg,
+  leaf: AlgLeaf,
+  options: AppendOptionsConfig,
+): Alg {
+  const maybeMove = leaf.as(Move);
+  if (maybeMove) {
+    return experimentalAppendMove(alg, maybeMove, options);
+  } else {
+    return new Alg([...alg.childAlgNodes(), leaf]);
+  }
 }
-
-puzzleSpecificAlgSimplifyInfo333;

@@ -5,12 +5,20 @@ export type QuantumDirectionCancellation =
   | "any-direction" // Cancel any moves with the same quantum.
   | "same-direction" // Cancel two quantums when have non-zero amounts of the same sign (positive/negative). An amount of 0 always counts as the same direction as any other amount.
   | "none";
-export type ModWrap = "centered" | "none" | "positive" | "preserve-sign";
 
+// Example input: `R7' . R6' . R5' . R6` on a cube.
+export type ModWrap =
+  | "gravity" // R . R2' . R' . R2
+  | "none"
+  | "canonical-centered" // R . R2 . R' . R2
+  | "canonical-positive" // R . R2 . R3 . R2
+  | "preserve-sign"; // R3' . R2' . R' . R2
+
+// TODO: preserve single moves?
 export interface AppendOptionsConfig {
   cancel?: {
     quantum?: QuantumDirectionCancellation; // default: "any-direction"
-    puzzleSpecificModWrap?: ModWrap; // default: "centered"
+    puzzleSpecificModWrap?: ModWrap; // default: "gravity"
   };
   puzzleSpecificAlgSimplifyInfo?: PuzzleSpecificAlgSimplifyInfo;
 }
@@ -27,13 +35,11 @@ export class AppendOptions {
   }
 
   cancelPuzzleSpecificModWrap(): ModWrap {
-    return this.config.cancel?.puzzleSpecificModWrap ?? "centered";
+    return this.config.cancel?.puzzleSpecificModWrap ?? "gravity";
   }
 }
 
-export interface SimplifyOptions {
-  collapseMoves?: boolean;
-  puzzleSpecificAlgSimplifyInfo?: PuzzleSpecificAlgSimplifyInfo;
+export interface SimplifyOptions extends AppendOptionsConfig {
   depth?: number | null; // TODO: test
 }
 

@@ -1,5 +1,6 @@
 import { Alg, Move, QuantumMove } from "../../../alg";
 import type { PuzzleSpecificAlgSimplifyInfo } from "../../../alg";
+import { simplify } from "../../../alg/simplify";
 
 enum Axis {
   X = "x axis",
@@ -155,7 +156,6 @@ function simplestMove(
   to: number,
   directedAmount: number,
 ): Move {
-  // console.log("simplestMove", { axis, from, to, directedAmount });
   if (from + 1 === to) {
     const sliceSpecificInfo = byAxisThenSpecificSlices[axis].get(from);
     if (sliceSpecificInfo) {
@@ -168,7 +168,6 @@ function simplestMove(
 
   const axisInfo = axisInfos[axis];
   const { sliceDiameter } = axisInfo;
-  // console.log({ sliceDiameter });
   if (from === 0 && to === sliceDiameter) {
     const moveSourceInfo = firstOfType(axis, MoveSourceType.ROTATION);
     return new Move(
@@ -183,11 +182,8 @@ function simplestMove(
     [from, to] = [sliceDiameter - to, sliceDiameter - from];
   }
 
-  // console.log("new", { from, to });
-
   let outerLayer: number | null = from + 1; // change to 1-indexed
   let innerLayer: number | null = to; // already 1-indexed
-  // console.log({ outerLayer, innerLayer });
   const slice = outerLayer === innerLayer;
   if (slice) {
     innerLayer = null;
@@ -295,7 +291,6 @@ function simplifySameAxisMoves(
         break;
       }
     }
-    // console.log(sliceDeltas);
     if ([0, 2].includes(sliceDeltas.size)) {
       lastCandidateRange = { suffixLength, sliceDeltas: new Map(sliceDeltas) };
     }
@@ -303,7 +298,6 @@ function simplifySameAxisMoves(
   if (sliceDeltas.size === 0) {
     return [];
   }
-  // console.log({ lastCandidateRange });
   // TODO: handle this check in the destructuring assignment?
   if (!lastCandidateRange) {
     return moves;
@@ -313,7 +307,6 @@ function simplifySameAxisMoves(
     [from, to] = [to, from];
   }
   const directedAmount = lastCandidateRange.sliceDeltas.get(from)!;
-  // console.log({ from, to, directedAmount });
   // TODO: Handle empty move
   return [
     ...moves.slice(0, -lastCandidateRange.suffixLength),
@@ -323,39 +316,8 @@ function simplifySameAxisMoves(
   ];
 }
 
-// new Alg(
-//   simplifySameAxisMoves(["r", "M'", "M'"].map((s) => Move.fromString(s))),
-// ).log();
-// // globalThis.process?.exit(0);
-
-// simplifySameAxisMoves(["x", "M", "R'"].map((s) => Move.fromString(s)))[0]
-//   .log();
-
-// // simplifySameAxisMoves(["R", "M'", "L'"].map((s) => Move.fromString(s)));
-// // simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)));
-// // simplifySameAxisMoves(["L2", "R2'", "x2"].map((s) => Move.fromString(s)));
-
-// new Alg(simplifySameAxisMoves(["L", "L2"].map((s) => Move.fromString(s))))
-//   .log();
-// new Alg(
-//   simplifySameAxisMoves(["l", "l6'"].map((s) => Move.fromString(s))),
-// ).log();
-// // new Alg(
-// //   simplifySameAxisMoves(["r2", "r3"].map((s) => Move.fromString(s))),
-// // ).log();
-
-// simplifySameAxisMoves(["x", "R'"].map((s) => Move.fromString(s)))[0]
-//   .log();
-// simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)))[0].log();
-// simplifySameAxisMoves(["x", "L", "R'"].map((s) => Move.fromString(s)))[0].log();
-// simplifySameAxisMoves(["x", "L", "M"].map((s) => Move.fromString(s)))[0].log();
-// simplifySameAxisMoves(["x", "R'", "M"].map((s) => Move.fromString(s)))[0].log();
-// simplifySameAxisMoves(
-//   ["L", "L", "x", "x"].map((s) => Move.fromString(s)),
-// )[0].log();
-
 export const puzzleSpecificAlgSimplifyInfo333: PuzzleSpecificAlgSimplifyInfo = {
   quantumMoveOrder: () => 4,
-  doQuantumMovesCommute: areQuantumMovesSameAxis,
+  // doQuantumMovesCommute: areQuantumMovesSameAxis,
   axis: { areQuantumMovesSameAxis, simplifySameAxisMoves },
 };
