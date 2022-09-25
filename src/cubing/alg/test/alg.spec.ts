@@ -202,11 +202,11 @@ describe("toBeIdentical", () => {
 });
 
 describe("move collapsing ()", () => {
-  it("coalesces U U to U2", () => {
+  it("canceles U U to U2", () => {
     expect(UU.simplify({ cancel: true })).to.be.identicalAlg(U2);
   });
 
-  it("coalesces expanded commutator Sune corectly", () => {
+  it("canceles expanded commutator Sune corectly", () => {
     expect(
       Ex.SuneCommutator.expand().simplify({ cancel: true }),
     ).to.be.identicalAlg(Ex.Sune);

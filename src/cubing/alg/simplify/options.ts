@@ -40,7 +40,7 @@ export class AppendOptionsHelper {
   }
 
   cancelAny() {
-    return this.cancelQuantum() !== "none";
+    return this.config.cancel && this.cancelQuantum() !== "none";
   }
 
   cancelPuzzleSpecificModWrap(): ModWrap {

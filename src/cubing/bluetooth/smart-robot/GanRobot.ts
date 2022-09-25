@@ -285,7 +285,7 @@ export class GanRobot extends EventTarget {
       } else if (
         move.family === (this.experimentalOptions.xAngle ? "B" : "U")
       ) {
-        // We purposely send just the swap, so that U2 will get coalesced
+        // We purposely send just the swap, so that U2 will get cancelled
         await Promise.all([
           this.queueMoves(
             this.experimentalOptions.xAngle ? F_B_SWAP : U_D_SWAP,
