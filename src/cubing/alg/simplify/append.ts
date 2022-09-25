@@ -73,11 +73,43 @@ export function experimentalAppendMove(
     quantumDirections.set(quantumKey, Math.sign(move.amount) as -1 | 0 | 1);
   }
   const suffix = [...(outputPrefix.splice(i + 1) as Move[]), addedMove];
+
+  function modMove(move: Move): Move {
+    if (options.cancelPuzzleSpecificModWrap() === "none") {
+      return move;
+    }
+    const quantumMoveOrder =
+      options.config.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder;
+    if (!quantumMoveOrder) {
+      return move;
+    }
+    const mod = quantumMoveOrder(addedMove.quantum)!; // TODO: throw if `undefined`?
+    let offset: number;
+    switch (options.cancelPuzzleSpecificModWrap()) {
+      case "centered": {
+        offset = -Math.floor((mod - 1) / 2);
+        break;
+      }
+      case "positive": {
+        offset = 0;
+        break;
+      }
+      case "preserve-sign": {
+        offset = move.amount < 0 ? 1 - mod : 0;
+        break;
+      }
+      default: {
+        throw new Error("Unknown mod wrap");
+      }
+    }
+    let offsetAmount = offsetMod(move.amount, mod, offset);
+    return move.modified({ amount: offsetAmount });
+  }
+
   if (axis) {
-    // TODO: quantum mod
-    outputSuffix = axis.simplifySameAxisMoves(suffix);
+    // TODO: pass down quantum mod
+    outputSuffix = axis.simplifySameAxisMoves(suffix).map((m) => modMove(m));
   } else {
-    console.log("s", ...suffix.map((m) => m.toString()));
     let amount = suffix.reduce(
       (sum: number, move: Move) => sum + move.amount,
       0,
@@ -87,38 +119,9 @@ export function experimentalAppendMove(
         "Internal error: multiple quantums when one was expected",
       );
     }
-    let move = new Move(addedMove.quantum, amount);
-    move.log("move");
-    if (options.cancelPuzzleSpecificModWrap() !== "none") {
-      const quantumMoveOrder =
-        options.config.puzzleSpecificAlgSimplifyInfo?.quantumMoveOrder;
-      if (quantumMoveOrder) {
-        const mod = quantumMoveOrder(addedMove.quantum)!; // TODO: throw if `undefined`?
-        let offset: number;
-        switch (options.cancelPuzzleSpecificModWrap()) {
-          case "centered": {
-            offset = -Math.floor((mod - 1) / 2);
-            break;
-          }
-          case "positive": {
-            offset = 0;
-            break;
-          }
-          case "preserve-sign": {
-            offset = amount < 0 ? 1 - mod : 0;
-            break;
-          }
-          default: {
-            throw new Error("Unknown mod wrap");
-          }
-        }
-        console.log(amount, mod, offset);
-        let offsetAmount = offsetMod(amount, mod, offset);
-        move = move.modified({ amount: offsetAmount });
-      }
-    }
-    outputSuffix = amount === 0 ? [] : [move];
+    outputSuffix = [modMove(new Move(addedMove.quantum, amount))];
   }
+  outputSuffix = outputSuffix.filter((move: Move) => move.amount !== 0);
   return output();
 }
 
@@ -145,12 +148,27 @@ for (const puzzleSpecificModWrap of [
 
 puzzleSpecificAlgSimplifyInfo333;
 
-experimentalAppendMove(new Alg("x M"), new Move("R'"), {
-  cancel: {
-    puzzleSpecificModWrap: "centered",
-  },
-  puzzleSpecificAlgSimplifyInfo: puzzleSpecificAlgSimplifyInfo333,
-}).log();
+function test(alg: string, newMove: string) {
+  experimentalAppendMove(Alg.fromString(alg), Move.fromString(newMove), {
+    puzzleSpecificAlgSimplifyInfo: puzzleSpecificAlgSimplifyInfo333,
+  }).log();
+}
+
+test("x M", "R'");
+test("r M'", "M'");
+test("x M", "R'");
+test("R M'", "L'");
+test("x", "L");
+test("L2 R2'", "x2");
+test("L", "L2");
+test("l", "l6'");
+test("r2", "r3");
+test("x", "R'");
+test("x", "L");
+test("x L", "R'");
+test("x L", "M");
+test("x R'", "M");
+test("R'", "x");
 // new Alg(
 //   simplifySameAxisMoves(["r", "M'", "M'"].map((s) => Move.fromString(s))),
 // ).log();
