@@ -193,7 +193,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       );
       if (closestMove) {
         this.model.experimentalAddMove(closestMove.move, {
-          puzzleSpecific: {
+          puzzleSpecificSimplifyOptions: {
             quantumMoveOrder: () => closestMove.order,
           },
         });

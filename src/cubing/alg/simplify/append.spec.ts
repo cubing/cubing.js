@@ -47,7 +47,7 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("R'"), {
         cancel: true,
-        puzzleSpecific: { quantumMoveOrder: () => 4 },
+        puzzleSpecificSimplifyOptions: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("R U R2"));
     expect(
@@ -55,7 +55,7 @@ describe("operation", () => {
         cancel: {
           puzzleSpecificModWrap: "gravity",
         },
-        puzzleSpecific: { quantumMoveOrder: () => 4 },
+        puzzleSpecificSimplifyOptions: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("R U R2'"));
     expect(
@@ -69,19 +69,19 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L"), {
         cancel: true,
-        puzzleSpecific: { quantumMoveOrder: () => 4 },
+        puzzleSpecificSimplifyOptions: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg(""));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L3"), {
         cancel: true,
-        puzzleSpecific: { quantumMoveOrder: () => 4 },
+        puzzleSpecificSimplifyOptions: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L2"));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L6"), {
         cancel: true,
-        puzzleSpecific: { quantumMoveOrder: () => 4 },
+        puzzleSpecificSimplifyOptions: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L"));
   });
@@ -90,7 +90,7 @@ describe("operation", () => {
     expect(
       experimentalAppendMove(new Alg("L"), new Move("L"), {
         cancel: true,
-        puzzleSpecific: { quantumMoveOrder: () => 3 },
+        puzzleSpecificSimplifyOptions: { quantumMoveOrder: () => 3 },
       }),
     ).to.be.identicalAlg(new Alg("L'"));
   });
