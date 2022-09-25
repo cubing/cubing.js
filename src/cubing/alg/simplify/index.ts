@@ -1,7 +1,7 @@
 export { simplify } from "./simplify";
 export { experimentalAppendMove } from "./append";
 export type {
-  AppendOptions,
+  AppendOptionsConfig as AppendOptions,
   SimplifyOptions,
   PuzzleSpecificAlgSimplifyInfo,
 } from "./options";
