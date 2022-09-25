@@ -10,7 +10,7 @@ RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
 RewriteEngine On
 RewriteCond %{HTTPS} on
 RewriteCond %{HTTP_HOST} ^www\. [NC]
-RewriteRule ^(.*)$ https://twizzle.net%{REQUEST_URI} [R=302,L]
+RewriteRule ^(.*)$ https://%{SERVER_NAME}{REQUEST_URI} [R=302,L]
 
 Redirect 307 /diaries https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3NgpDbzN4VkcfjEZSQ_TYQv_OEjbjF&index=1
 
