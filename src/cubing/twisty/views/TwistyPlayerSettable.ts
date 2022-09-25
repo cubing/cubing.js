@@ -1,4 +1,4 @@
-import type { Alg } from "../../alg";
+import type { Alg, AppendCancelOptions } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
@@ -142,6 +142,15 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   }
   get experimentalMovePressInput(): never {
     throw err("experimentalMovePressInput");
+  }
+
+  set experimentalMovePressCancelOptions(movePressCancelOptions: AppendCancelOptions) {
+    this.experimentalModel.twistySceneModel.movePressCancelOptions.set(
+      movePressCancelOptions,
+    );
+  }
+  get experimentalMovePressCancelOptions(): never {
+    throw err("experimentalMovePressCancelOptions");
   }
 
   set cameraLatitude(latitude: number) {

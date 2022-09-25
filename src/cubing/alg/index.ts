@@ -23,6 +23,7 @@ export { experimentalAppendMove } from "./simplify";
 export type {
   PuzzleSpecificSimplifyOptions,
   SimplifyOptions,
+  AppendCancelOptions,
 } from "./simplify";
 export { experimentalIs } from "./is";
 

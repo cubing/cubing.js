@@ -28,6 +28,10 @@ export function constructTwistyPlayer(): TwistyPlayer {
     cameraLatitudeLimit: 90,
     viewerLink: "none",
     experimentalMovePressInput: "basic",
+    experimentalMovePressCancelOptions: {
+      directional: "any-direction",
+      puzzleSpecificModWrap: "canonical-centered", // TODO: hook up the necessary puzzle-specific info
+    },
     hintFacelets: "none",
   };
   Object.assign(config, explorerConfig);

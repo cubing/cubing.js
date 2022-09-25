@@ -17,14 +17,14 @@ export type ModWrap =
   | "canonical-positive" // R . R2 . R3 . R2
   | "preserve-sign"; // R3' . R2' . R' . R2
 
+export interface AppendCancelOptions {
+  directional?: QuantumDirectionalCancellation;
+  puzzleSpecificModWrap?: ModWrap; // Default depends on `directional`
+}
+
 // TODO: preserve single moves even when amount is 0?
 export interface AppendOptions {
-  cancel?:
-    | boolean // Set to `true` to use future-proof defaults.
-    | {
-      directional?: QuantumDirectionalCancellation;
-      puzzleSpecificModWrap?: ModWrap; // Default depends on `directional`
-    };
+  cancel?: boolean | AppendCancelOptions; // Set to `true` to use future-proof defaults.
   // Takes precedence over the direct `puzzleSpecificSimplifyOptions` field.
   puzzleLoader?: {
     puzzleSpecificSimplifyOptions?: PuzzleSpecificSimplifyOptions;

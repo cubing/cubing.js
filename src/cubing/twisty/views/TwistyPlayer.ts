@@ -2,7 +2,7 @@ import type { Object3D } from "three";
 import type { ExperimentalStickering } from "..";
 import type { Alg, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
-import type { AppendOptions } from "../../alg/simplify";
+import type { AppendCancelOptions, AppendOptions } from "../../alg/simplify";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
 import { RenderScheduler } from "../controllers/RenderScheduler";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
@@ -148,7 +148,13 @@ export interface TwistyPlayerConfig {
   // URL-based
   experimentalSprite?: string | null;
   experimentalHintSprite?: string | null;
+  // TODO: Not supported as attributes
+  experimentalMovePressCancelOptions?: AppendCancelOptions; // TODO: Support setting via a simplified attribute enum?
 }
+
+const propOnly: Record<string, boolean> = {
+  experimentalMovePressCancelOptions: true,
+};
 
 /**
  * TwistyPlayer is the heart of `cubing.js`. It can be used to display a puzzle on a web page like this:
@@ -190,7 +196,9 @@ export class TwistyPlayer
 
     // TODO: double-check that these are all getting set sync without causing extra work.
     for (const [propName, value] of Object.entries(config)) {
-      if (!configKeys[propName as TwistyPlayerAttribute]) {
+      if (
+        !(configKeys[propName as TwistyPlayerAttribute] || propOnly[propName])
+      ) {
         console.warn(`Invalid config passed to TwistyPlayer: ${propName}`);
         break;
       }

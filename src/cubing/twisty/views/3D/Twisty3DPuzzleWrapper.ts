@@ -183,7 +183,10 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
     }
 
     const targets = puzzle.experimentalGetControlTargets(); // TODO: sticker targets
-    const [raycaster] = await Promise.all([raycasterPromise]);
+    const [raycaster, movePressCancelOptions] = await Promise.all([
+      raycasterPromise,
+      this.model.twistySceneModel.movePressCancelOptions.get(),
+    ]);
 
     const intersects = raycaster.intersectObjects(targets);
     if (intersects.length > 0) {
@@ -193,7 +196,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       );
       if (closestMove) {
         this.model.experimentalAddMove(closestMove.move, {
-          cancel: true,
+          cancel: movePressCancelOptions,
         });
       } else {
         console.info("Skipping move!");
