@@ -17,11 +17,11 @@ import {
   PuzzleID,
   puzzleIDs,
 } from "../../../../../cubing/twisty/model/props/puzzle/structure/PuzzleIDRequestProp";
-import { TwistyPlayerDebugger } from "../../../../../cubing/twisty/model/props/TwistyPropDebugger";
 import { backgroundThemes } from "../../../../../cubing/twisty/model/props/viewer/BackgroundProp";
 import { controlsLocations } from "../../../../../cubing/twisty/model/props/viewer/ControlPanelProp";
 import { viewerLinkPages } from "../../../../../cubing/twisty/model/props/viewer/ViewerLinkProp";
 import { visualizationFormats } from "../../../../../cubing/twisty/model/props/viewer/VisualizationProp";
+import { TwistyPlayerDebugger } from "./TwistyPropDebugger";
 
 setTwistyDebug({ showRenderStats: true });
 

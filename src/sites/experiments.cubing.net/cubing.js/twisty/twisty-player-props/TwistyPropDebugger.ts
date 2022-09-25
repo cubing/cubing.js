@@ -1,14 +1,14 @@
-import type { Alg } from "../../../alg";
-import { experimentalCountMoves } from "../../../notation";
-import { ClassListManager } from "../../views/ClassListManager";
+import type { Alg } from "../../../../../cubing/alg";
+import { experimentalCountMoves } from "../../../../../cubing/notation";
+import { ClassListManager } from "../../../../../cubing/twisty/views/ClassListManager";
 import {
   CSSSource,
   ManagedCustomElement,
-} from "../../views/ManagedCustomElement";
-import { customElementsShim } from "../../views/node-custom-element-shims";
-import type { TwistyPlayer } from "../../views/TwistyPlayer";
-import type { AlgIssues } from "./puzzle/state/AlgProp";
-import { TwistyPropParent } from "./TwistyProp";
+} from "../../../../../cubing/twisty/views/ManagedCustomElement";
+import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
+import type { TwistyPlayer } from "../../../../../cubing/twisty/views/TwistyPlayer";
+import type { AlgIssues } from "../../../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+import { TwistyPropParent } from "../../../../../cubing/twisty/model/props/TwistyProp";
 
 function truncateAlgForDisplay(alg: Alg): string {
   let str = alg.toString();
