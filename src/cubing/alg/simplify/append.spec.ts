@@ -19,41 +19,32 @@ describe("operation", () => {
 
   it("can coalesce appended moves", () => {
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("U2"), {
-        coalesce: true,
-      }),
+      experimentalAppendMove(new Alg("R U R'"), new Move("U2")),
     ).to.be.identicalAlg(new Alg("R U R' U2"));
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("R2'"), {
-        coalesce: true,
-      }),
+      experimentalAppendMove(new Alg("R U R'"), new Move("R2'")),
     ).to.be.identicalAlg(new Alg("R U R3'"));
     expect(
-      experimentalAppendMove(new Alg("R U R'"), new Move("R"), {
-        coalesce: true,
-      }),
+      experimentalAppendMove(new Alg("R U R'"), new Move("R")),
     ).to.be.identicalAlg(new Alg("R U"));
     expect(
-      experimentalAppendMove(new Alg("r"), new Move("r"), { coalesce: true }),
+      experimentalAppendMove(new Alg("r"), new Move("r")),
     ).to.be.identicalAlg(new Alg("r2"));
   });
 
   it("mod 4 works as expected", () => {
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L"), {
-        coalesce: true,
         puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg(""));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L3"), {
-        coalesce: true,
         puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L2"));
     expect(
       experimentalAppendMove(new Alg("L3"), new Move("L6"), {
-        coalesce: true,
         puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 4 },
       }),
     ).to.be.identicalAlg(new Alg("L"));
@@ -62,7 +53,6 @@ describe("operation", () => {
   it("mod 3 works as expected", () => {
     expect(
       experimentalAppendMove(new Alg("L"), new Move("L"), {
-        coalesce: true,
         puzzleSpecificAlgSimplifyInfo: { quantumMoveOrder: () => 3 },
       }),
     ).to.be.identicalAlg(new Alg("L'"));

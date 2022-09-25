@@ -9,7 +9,7 @@ export function experimentalAppendMove(
 ): Alg {
   if (
     options?.cancel?.quantum !== "none" &&
-    options?.puzzleSpecificAlgSimplifyInfo
+    options?.puzzleSpecificAlgSimplifyInfo.simplifySameAxisMoves
   ) {
     // TODO: avoid `as any`
     return puzzleSpecificExperimentalAppendMove(alg, newMove, options);
@@ -64,16 +64,15 @@ function puzzleSpecificExperimentalAppendMove(
   if (!puzzleSpecificAlgSimplifyInfo) {
     throw new Error("Expected puzzleSpecificAlgSimplifyInfo");
   }
+  const { areQuantumMovesSameAxis } = puzzleSpecificAlgSimplifyInfo;
   for (i = oldAlgNodes.length - 1; i >= 0; i--) {
     const move = oldAlgNodes[i].as(Move);
     if (!move) {
       break;
     }
     if (
-      !puzzleSpecificAlgSimplifyInfo.areQuantumMovesSameAxis!(
-        move.quantum,
-        newMove.quantum,
-      )
+      areQuantumMovesSameAxis &&
+      !areQuantumMovesSameAxis(move.quantum, newMove.quantum)
     ) {
       break;
     }
