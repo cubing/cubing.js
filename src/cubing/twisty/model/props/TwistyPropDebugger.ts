@@ -248,7 +248,9 @@ twisty-prop-debugger.highlighted {
       ),
     );
 
-    for (const [key, value] of Object.entries(this.player.experimentalModel)) {
+    for (const [key, value] of Object.entries(
+      this.player.experimentalModel,
+    ).concat(Object.entries(this.player.experimentalModel.twistySceneModel))) {
       if (value instanceof TwistyPropParent) {
         const twistyPropDebugger = this.addElement(
           new TwistyPropDebugger(key, value),
