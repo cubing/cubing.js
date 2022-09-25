@@ -245,7 +245,6 @@ const fn = async (
   }
 
   window.addEventListener("keydown", (e: KeyboardEvent) => {
-    console.log("e", e.code);
     if (e.which === 32) {
       space();
     }
