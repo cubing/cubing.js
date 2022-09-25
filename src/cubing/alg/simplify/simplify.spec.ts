@@ -67,9 +67,7 @@ describe("simplify", () => {
       }),
     ).to.be.identicalAlg("R R2'");
   });
-});
 
-describe("simplify", () => {
   it("handles mod wrap field", () => {
     expect(
       new Alg(

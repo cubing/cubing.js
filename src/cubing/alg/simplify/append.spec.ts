@@ -95,17 +95,4 @@ describe("operation", () => {
       }),
     ).to.be.identicalAlg(new Alg("L'"));
   });
-
-  it("can concat algs", () => {
-    expect(
-      new Alg("R U2").concat(new Alg("F' D")).isIdentical(new Alg("R U2 F' D")),
-    ).to.be.true;
-    expect(
-      Array.from(new Alg("R U2").concat(new Alg("U R'")).childAlgNodes())
-        .length,
-    ).to.equal(4);
-    expect(
-      new Alg("R U2").concat(new Alg("U R'")).isIdentical(new Alg("R U2 U R'")),
-    ).to.be.true;
-  });
 });
