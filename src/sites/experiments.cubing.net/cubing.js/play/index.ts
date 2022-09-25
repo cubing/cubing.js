@@ -231,6 +231,11 @@ const fn = async (
     clearButton.blur();
   }
 
+  function backspace() {
+    swipeyPuzzle.twistyPlayer.experimentalRemoveFinalChild();
+    updateAlgLink();
+  }
+
   async function enter() {
     const url = await swipeyPuzzle.twistyPlayer.experimentalModel.twizzleLink();
     // const seq = maybeCoalesce(swipeyPuzzle.twistyPlayer.alg);
@@ -246,6 +251,9 @@ const fn = async (
     if (e.which === 13) {
       enter();
     }
+    if (e.code === "Backspace") {
+      backspace();
+    }
   });
 
   swipeyPuzzle.setActionListener((action: Action) => {
@@ -256,6 +264,10 @@ const fn = async (
       }
       case "enter": {
         enter();
+        break;
+      }
+      case "backspace": {
+        backspace();
         break;
       }
     }

@@ -55,9 +55,9 @@ export function debugShowRenderStats(): boolean {
   );
 }
 
-export function coalesce(): boolean {
+export function cancel(): boolean {
   return (
-    getURLParamChecked<"true" | "false">("coalesce", "true", [
+    getURLParamChecked<"true" | "false">("cancel", "true", [
       "true",
       "false",
     ]) === "true"

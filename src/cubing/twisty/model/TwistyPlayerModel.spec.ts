@@ -33,7 +33,7 @@ it("adds alg leaves and moves properly", async () => {
   );
 
   twistyPlayerModel.experimentalAddMove(new Move("F2"), {
-    coalesce: true,
+    cancel: true,
   });
   expect((await twistyPlayerModel.alg.get()).alg).to.be.identicalAlg(
     new Alg("R U R' D2 F"),

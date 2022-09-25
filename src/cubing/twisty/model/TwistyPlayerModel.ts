@@ -1,5 +1,6 @@
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
+import type { AppendOptions } from "../../alg/simplify";
 import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
 import { URLProp } from "./props/general/URLProp";
 import { AlgProp } from "./props/puzzle/state/AlgProp";
@@ -223,10 +224,7 @@ export class TwistyPlayerModel {
     return url.toString();
   }
 
-  experimentalAddAlgLeaf(
-    algLeaf: AlgLeaf,
-    options: { coalesce?: boolean; mod?: number } = {},
-  ): void {
+  experimentalAddAlgLeaf(algLeaf: AlgLeaf, options?: AppendOptions): void {
     const maybeMove = algLeaf.as(Move);
     if (maybeMove) {
       this.experimentalAddMove(maybeMove, options);
@@ -245,23 +243,43 @@ export class TwistyPlayerModel {
   // TODO: Animate the new move.
   experimentalAddMove(
     flexibleMove: Move | string,
-    options: { coalesce?: boolean; mod?: number } = {},
+    options?: AppendOptions,
   ): void {
     const move =
       typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
     this.alg.set(
       (async () => {
         const alg = (await this.alg.get()).alg;
-        const newAlg = experimentalAppendMove(alg, move, {
-          coalesce: options?.coalesce,
-          mod: options?.mod,
-        });
+        const newAlg = experimentalAppendMove(alg, move, options);
         this.timestampRequest.set("end");
         this.catchUpMove.set({
           move: move,
           amount: 0,
         });
         return newAlg;
+      })(),
+    );
+  }
+
+  // TODO: allow more than 1?
+  experimentalRemoveFinalChild(): void {
+    this.alg.set(
+      (async () => {
+        const alg = (await this.alg.get()).alg;
+        const children = Array.from(alg.childAlgNodes());
+        const [finalChild] = children.splice(-1);
+        if (!finalChild) {
+          return alg;
+        }
+        this.timestampRequest.set("end");
+        const finalChildMove = finalChild.as(Move);
+        if (finalChildMove) {
+          this.catchUpMove.set({
+            move: finalChildMove.invert(),
+            amount: 0,
+          });
+        }
+        return new Alg(children);
       })(),
     );
   }

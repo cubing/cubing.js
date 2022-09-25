@@ -13,7 +13,7 @@ async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {
   keyboard.addAlgLeafListener((e: MoveEvent) => {
     console.log("listener", e);
     twistyPlayer.experimentalAddAlgLeaf(e.latestAlgLeaf, {
-      coalesce: true,
+      cancel: true,
     });
   });
 }
@@ -51,7 +51,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     puzzle.addAlgLeafListener((e: MoveEvent) => {
       twistyPlayer.experimentalAddAlgLeaf(e.latestAlgLeaf, {
-        coalesce: true,
+        cancel: true,
       });
     });
 

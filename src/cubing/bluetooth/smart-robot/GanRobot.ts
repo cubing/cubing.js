@@ -1,4 +1,5 @@
 import { Alg, Move } from "../../alg";
+import { cube3x3x3 } from "../../puzzles";
 import type { BluetoothConfig } from "../smart-puzzle/bluetooth-puzzle";
 
 // TODO: Remove this. It's only used for debugging.
@@ -229,8 +230,7 @@ export class GanRobot extends EventTarget {
   // TODO: Don't let this resolve until the move is done?
   private async queueMoves(moves: Alg): Promise<void> {
     this.moveQueue = this.moveQueue.concat(moves).simplify({
-      collapseMoves: true,
-      quantumMoveOrder: (_) => 4,
+      puzzleSpecific: cube3x3x3.puzzleSpecificSimplifyOptions,
     });
     if (!this.locked) {
       // TODO: We're currently iterating over alg nodes instead of leaves to avoid "zip bomps".
@@ -285,7 +285,7 @@ export class GanRobot extends EventTarget {
       } else if (
         move.family === (this.experimentalOptions.xAngle ? "B" : "U")
       ) {
-        // We purposely send just the swap, so that U2 will get coalesced
+        // We purposely send just the swap, so that U2 will get cancelled
         await Promise.all([
           this.queueMoves(
             this.experimentalOptions.xAngle ? F_B_SWAP : U_D_SWAP,

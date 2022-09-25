@@ -16,14 +16,10 @@ function setSession(session: string): void {
     receivedText;
 
   (document.querySelector("#left-normalized") as HTMLTextAreaElement).value =
-    new Alg(
-      normalize(Alg.fromString(sentText), { quantumMoveOrder: () => 4 }),
-    ).toString();
+    new Alg(normalize(Alg.fromString(sentText))).toString();
 
   (document.querySelector("#right-normalized") as HTMLTextAreaElement).value =
-    new Alg(
-      normalize(Alg.fromString(receivedText), { quantumMoveOrder: () => 4 }),
-    ).toString();
+    new Alg(normalize(Alg.fromString(receivedText))).toString();
 }
 
 let sessions: string[] = [];
