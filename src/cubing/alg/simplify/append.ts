@@ -1,5 +1,3 @@
-import { off } from "process";
-import { cube3x3x3 } from "../../puzzles";
 import { puzzleSpecificAlgSimplifyInfo333 } from "../../puzzles/implementations/3x3x3/puzzle-specific-simplifications";
 import { Alg } from "../Alg";
 import type { AlgNode } from "../alg-nodes";
@@ -87,7 +85,7 @@ export function experimentalAppendMove(
     let offset: number;
     switch (options.cancelPuzzleSpecificModWrap()) {
       case "centered": {
-        offset = -Math.floor((mod - 1) / 2);
+        offset = -Math.floor((mod - 1) / 2); // TODO: dedup this calculation for the most common path?
         break;
       }
       case "positive": {
@@ -125,11 +123,6 @@ export function experimentalAppendMove(
   return output();
 }
 
-// console.log(offsetMod(-3, 4, -1));
-// console.log(offsetMod(-4, 4, -1));
-// console.log(offsetMod(-5, 4, -1));
-// console.log(offsetMod(-6, 4, -1));
-
 for (const puzzleSpecificModWrap of [
   "none",
   "centered",
@@ -147,55 +140,3 @@ for (const puzzleSpecificModWrap of [
 }
 
 puzzleSpecificAlgSimplifyInfo333;
-
-function test(alg: string, newMove: string) {
-  experimentalAppendMove(Alg.fromString(alg), Move.fromString(newMove), {
-    puzzleSpecificAlgSimplifyInfo: puzzleSpecificAlgSimplifyInfo333,
-  }).log();
-}
-
-test("x M", "R'");
-test("r M'", "M'");
-test("x M", "R'");
-test("R M'", "L'");
-test("x", "L");
-test("L2 R2'", "x2");
-test("L", "L2");
-test("l", "l6'");
-test("r2", "r3");
-test("x", "R'");
-test("x", "L");
-test("x L", "R'");
-test("x L", "M");
-test("x R'", "M");
-test("R'", "x");
-// new Alg(
-//   simplifySameAxisMoves(["r", "M'", "M'"].map((s) => Move.fromString(s))),
-// ).log();
-// // globalThis.process?.exit(0);
-
-// simplifySameAxisMoves(["x", "M", "R'"].map((s) => Move.fromString(s)))[0]
-//   .log();
-
-// // simplifySameAxisMoves(["R", "M'", "L'"].map((s) => Move.fromString(s)));
-// // simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)));
-// // simplifySameAxisMoves(["L2", "R2'", "x2"].map((s) => Move.fromString(s)));
-
-// new Alg(simplifySameAxisMoves(["L", "L2"].map((s) => Move.fromString(s))))
-//   .log();
-// new Alg(
-//   simplifySameAxisMoves(["l", "l6'"].map((s) => Move.fromString(s))),
-// ).log();
-// // new Alg(
-// //   simplifySameAxisMoves(["r2", "r3"].map((s) => Move.fromString(s))),
-// // ).log();
-
-// simplifySameAxisMoves(["x", "R'"].map((s) => Move.fromString(s)))[0]
-//   .log();
-// simplifySameAxisMoves(["x", "L"].map((s) => Move.fromString(s)))[0].log();
-// simplifySameAxisMoves(["x", "L", "R'"].map((s) => Move.fromString(s)))[0].log();
-// simplifySameAxisMoves(["x", "L", "M"].map((s) => Move.fromString(s)))[0].log();
-// simplifySameAxisMoves(["x", "R'", "M"].map((s) => Move.fromString(s)))[0].log();
-// simplifySameAxisMoves(
-//   ["L", "L", "x", "x"].map((s) => Move.fromString(s)),
-// )[0].log();
