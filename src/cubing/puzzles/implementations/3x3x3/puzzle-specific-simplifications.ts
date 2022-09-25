@@ -214,7 +214,7 @@ function simplestMove(
 
 function simplifySameAxisMoves(
   moves: Move[],
-  quantumOrderReduce: boolean = true, // TODO
+  quantumMod: boolean = true, // TODO
 ): Move[] {
   if (moves.length === 0) {
     // TODO: can we use the type system to avoid this?
@@ -231,8 +231,8 @@ function simplifySameAxisMoves(
 
   function adjustValue(idx: number, relativeDelta: number) {
     let newDelta = (sliceDeltas.get(idx) ?? 0) + relativeDelta;
-    if (quantumOrderReduce) {
-      newDelta = (newDelta % 4) + (5 % 4) - 1;
+    if (quantumMod) {
+      newDelta = (newDelta % 4) + (5 % 4) - 1; // TODO: Use a passed-in `modMove`?
     }
     if (newDelta === 0) {
       sliceDeltas.delete(idx);

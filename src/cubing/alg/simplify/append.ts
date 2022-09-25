@@ -110,7 +110,10 @@ export function experimentalAppendMove(
 
   if (axis) {
     // TODO: pass down quantum mod
-    outputSuffix = axis.simplifySameAxisMoves(suffix).map((m) => modMove(m));
+    outputSuffix = axis.simplifySameAxisMoves(
+      suffix,
+      optionsHelper.cancelPuzzleSpecificModWrap() !== "none",
+    ).map((m) => modMove(m));
   } else {
     let amount = suffix.reduce(
       (sum: number, move: Move) => sum + move.amount,

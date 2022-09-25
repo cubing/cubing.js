@@ -9,21 +9,20 @@ export type QuantumDirectionalCancellation =
   | "none";
 
 // Example input: `R7' . R6' . R5' . R6` on a cube.
-const DEFAULT_MOD_WRAP = "canonical-centered"; // R . R2 . R' . R2
 export type ModWrap =
-  | typeof DEFAULT_MOD_WRAP
+  | "canonical-centered" // R . R2 . R' . R2
   | "none"
   | "gravity" // R . R2' . R' . R2
   | "canonical-positive" // R . R2 . R3 . R2
   | "preserve-sign"; // R3' . R2' . R' . R2
 
-// TODO: preserve single moves?
+// TODO: preserve single moves even when amount is 0?
 export interface AppendOptions {
   cancel?:
     | boolean // Set to `true` to use future-proof defaults.
     | {
       directional?: QuantumDirectionalCancellation;
-      puzzleSpecificModWrap?: ModWrap;
+      puzzleSpecificModWrap?: ModWrap; // Default depends on `directional`
     };
   // Takes precedence over the direct `puzzleSpecificSimplifyOptions` field.
   puzzleLoader?: {
@@ -47,12 +46,23 @@ export class AppendOptionsHelper {
     return this.config.cancel && this.cancelQuantum() !== "none";
   }
 
+  defaultModWrap(): ModWrap {
+    switch (this.cancelQuantum()) {
+      case "any-direction": {
+        return "canonical-centered";
+      }
+      default: {
+        return "none";
+      }
+    }
+  }
+
   cancelPuzzleSpecificModWrap(): ModWrap {
     const { cancel } = this.config;
     if (cancel === true || cancel === false) {
-      return DEFAULT_MOD_WRAP;
+      return this.defaultModWrap();
     }
-    return cancel?.puzzleSpecificModWrap ?? DEFAULT_MOD_WRAP;
+    return cancel?.puzzleSpecificModWrap ?? this.defaultModWrap();
   }
 
   puzzleSpecificSimplifyOptions(): PuzzleSpecificSimplifyOptions | undefined {
@@ -73,7 +83,7 @@ export interface PuzzleSpecificAxisSimplifyInfo {
     quantumMove1: QuantumMove,
     quantumMove2: QuantumMove,
   ) => boolean;
-  simplifySameAxisMoves: (moves: Move[]) => Move[];
+  simplifySameAxisMoves: (moves: Move[], quantumMod: boolean) => Move[];
 }
 
 // TOOD: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
