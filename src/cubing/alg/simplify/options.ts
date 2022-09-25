@@ -20,20 +20,24 @@ export type ModWrap =
 // TODO: preserve single moves?
 export interface AppendOptions {
   cancel?:
-    | true // Use defaults
+    | boolean // Set to `true` to use future-proof defaults.
     | {
-      directional?: QuantumDirectionalCancellation; // default:
-      puzzleSpecificModWrap?: ModWrap; // default: "gravity"
+      directional?: QuantumDirectionalCancellation;
+      puzzleSpecificModWrap?: ModWrap;
     };
-  puzzleSpecific?: PuzzleSpecificSimplifyOptions;
+  // Takes precedence over the direct `puzzleSpecificSimplifyOptions` field.
+  puzzleLoader?: {
+    puzzleSpecificSimplifyOptions?: PuzzleSpecificSimplifyOptions;
+  };
+  puzzleSpecificSimplifyOptions?: PuzzleSpecificSimplifyOptions;
 }
 
 export class AppendOptionsHelper {
-  constructor(public config: AppendOptions = {}) {}
+  constructor(private config: AppendOptions = {}) {}
 
   cancelQuantum(): QuantumDirectionalCancellation {
     const { cancel } = this.config;
-    if (cancel === true) {
+    if (cancel === true || cancel === false) {
       return DEFAULT_DIRECTIONAL;
     }
     return cancel?.directional ?? DEFAULT_DIRECTIONAL;
@@ -44,10 +48,18 @@ export class AppendOptionsHelper {
   }
 
   cancelPuzzleSpecificModWrap(): ModWrap {
-    if (this.config.cancel === true) {
+    const { cancel } = this.config;
+    if (cancel === true || cancel === false) {
       return DEFAULT_MOD_WRAP;
     }
-    return this.config.cancel?.puzzleSpecificModWrap ?? DEFAULT_MOD_WRAP;
+    return cancel?.puzzleSpecificModWrap ?? DEFAULT_MOD_WRAP;
+  }
+
+  puzzleSpecificSimplifyOptions(): PuzzleSpecificSimplifyOptions | undefined {
+    return (
+      this.config.puzzleLoader?.puzzleSpecificSimplifyOptions ??
+      this.config.puzzleSpecificSimplifyOptions
+    );
   }
 }
 

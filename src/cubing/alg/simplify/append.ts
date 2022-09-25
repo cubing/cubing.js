@@ -32,7 +32,7 @@ export function experimentalAppendMove(
   }
 
   let canCancelMoveBasedOnQuantum: (move: Move) => boolean;
-  const axis = optionsHelper.config.puzzleSpecific?.axis;
+  const axis = optionsHelper.puzzleSpecificSimplifyOptions()?.axis;
   if (axis) {
     canCancelMoveBasedOnQuantum = (move: Move): boolean =>
       axis.areQuantumMovesSameAxis(addedMove.quantum, move.quantum);
@@ -77,7 +77,7 @@ export function experimentalAppendMove(
       return move;
     }
     const quantumMoveOrder =
-      optionsHelper.config.puzzleSpecific?.quantumMoveOrder;
+      optionsHelper.puzzleSpecificSimplifyOptions()?.quantumMoveOrder;
     if (!quantumMoveOrder) {
       return move;
     }
