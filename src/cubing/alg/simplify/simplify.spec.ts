@@ -149,6 +149,120 @@ describe("simplify", () => {
         cancel: true,
         puzzleLoader: cube3x3x3,
       }),
-    ).to.be.identicalAlg("()");
+    ).to.be.identicalAlg("");
+    expect(
+      new Alg("L2 (U F)0 S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R, F] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 [R, F] S");
+    expect(
+      new Alg("L2 [R, F F2'] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 [R, F'] S");
+    expect(
+      new Alg("L2 [R, F F'] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R R', F] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R,] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [, F] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R, R] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R, R'] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R, R3] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R, R2] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R, r] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R, L R2 L'] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R, L R2 R L'] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [,] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R: U U'] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 S");
+    expect(
+      new Alg("L2 [R R': U] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 U S");
+    expect(
+      new Alg("L2 [R R': F] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 f");
+    expect(
+      new Alg("L2 [R: r] S").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("L2 r S");
   });
 });
