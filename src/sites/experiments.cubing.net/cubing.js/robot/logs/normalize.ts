@@ -63,6 +63,6 @@ export function normalize(alg: Alg): Alg {
     cancel: {
       puzzleSpecificModWrap: "canonical-centered",
     },
-    puzzleSpecific: cube3x3x3.puzzleSpecificAppendOptions,
+    puzzleSpecific: cube3x3x3.puzzleSpecificSimplifyOptions,
   });
 }

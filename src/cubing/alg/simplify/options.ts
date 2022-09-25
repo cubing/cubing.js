@@ -25,7 +25,7 @@ export interface AppendOptions {
       directional?: QuantumDirectionalCancellation; // default:
       puzzleSpecificModWrap?: ModWrap; // default: "gravity"
     };
-  puzzleSpecific?: PuzzleSpecificAppendOptions;
+  puzzleSpecific?: PuzzleSpecificSimplifyOptions;
 }
 
 export class AppendOptionsHelper {
@@ -55,7 +55,7 @@ export interface SimplifyOptions extends AppendOptions {
   depth?: number | null; // TODO: test
 }
 
-export interface PuzzleSpecificAxisAppendInfo {
+export interface PuzzleSpecificAxisSimplifyInfo {
   // All moves on the same axis *must* commute.
   areQuantumMovesSameAxis: (
     quantumMove1: QuantumMove,
@@ -65,7 +65,7 @@ export interface PuzzleSpecificAxisAppendInfo {
 }
 
 // TOOD: allow "normal" "twisty" puzzles to hardcode axis concepts without hardcoding too much in `Alg` that's not relevant to all puzzles.
-export interface PuzzleSpecificAppendOptions {
+export interface PuzzleSpecificSimplifyOptions {
   quantumMoveOrder?: (quantumMove: QuantumMove) => number;
   // TODO: implement cancellation for non-axis commuting moves (e.g. Megaminx: `BL R BL'` → `R`)
   // // Commutation is not transitive. For example, on Megaminx: BR and BL both commute with F, but not with each other.
@@ -73,5 +73,5 @@ export interface PuzzleSpecificAppendOptions {
   //   quantumMove1: QuantumMove,
   //   quantumMove2: QuantumMove,
   // ) => boolean;
-  axis?: PuzzleSpecificAxisAppendInfo;
+  axis?: PuzzleSpecificAxisSimplifyInfo;
 }

@@ -1,4 +1,4 @@
-import type { PuzzleSpecificAppendOptions } from "../../../alg";
+import type { PuzzleSpecificSimplifyOptions } from "../../../alg";
 import { Move, QuantumMove } from "../../../alg";
 
 enum Axis {
@@ -313,7 +313,7 @@ function simplifySameAxisMoves(
   ];
 }
 
-export const puzzleSpecificAppendOptions333: PuzzleSpecificAppendOptions = {
+export const puzzleSpecificSimplifyOptions333: PuzzleSpecificSimplifyOptions = {
   quantumMoveOrder: () => 4,
   // doQuantumMovesCommute: areQuantumMovesSameAxis,
   axis: { areQuantumMovesSameAxis, simplifySameAxisMoves },

@@ -9,7 +9,7 @@ import {
   cubeAppearance,
   cubeStickerings,
 } from "../../stickerings/cube-stickerings";
-import { puzzleSpecificAppendOptions333 } from "./puzzle-specific-simplifications";
+import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications";
 
 /** @category Specific Puzzles */
 export const cube3x3x3: PuzzleLoader = {
@@ -34,5 +34,5 @@ export const cube3x3x3: PuzzleLoader = {
   appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
     cubeAppearance(cube3x3x3, stickering),
   stickerings: cubeStickerings,
-  puzzleSpecificAppendOptions: puzzleSpecificAppendOptions333,
+  puzzleSpecificSimplifyOptions: puzzleSpecificSimplifyOptions333,
 };
