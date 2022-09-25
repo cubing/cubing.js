@@ -249,8 +249,14 @@ export class TwistyPlayerModel {
       typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
     this.alg.set(
       (async () => {
-        const alg = (await this.alg.get()).alg;
-        const newAlg = experimentalAppendMove(alg, move, options);
+        const [{ alg }, puzzleLoader] = await Promise.all([
+          this.alg.get(),
+          this.puzzleLoader.get(),
+        ]);
+        const newAlg = experimentalAppendMove(alg, move, {
+          ...options,
+          puzzleLoader,
+        });
         this.timestampRequest.set("end");
         this.catchUpMove.set({
           move: move,

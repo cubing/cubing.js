@@ -264,5 +264,11 @@ describe("simplify", () => {
         puzzleLoader: cube3x3x3,
       }),
     ).to.be.identicalAlg("L2 r S");
+    expect(
+      new Alg("U [R, r] [E: d']").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("y");
   });
 });

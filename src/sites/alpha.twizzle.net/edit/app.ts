@@ -364,7 +364,9 @@ class ControlPane {
   ): Promise<void> {
     const move = e.detail.move;
     try {
-      this.twistyPlayer.experimentalAddMove(move, { cancel: true }); // TODO
+      this.twistyPlayer.experimentalAddMove(move, {
+        cancel: true,
+      }); // TODO
     } catch (e) {
       console.info("Ignoring move:", move.toString());
     }
@@ -394,9 +396,18 @@ class ControlPane {
         break;
       }
       case "simplify": {
-        this.twistyPlayer.alg = (
-          await this.twistyPlayer.experimentalModel.alg.get()
-        ).alg.simplify();
+        this.twistyPlayer.experimentalModel.alg.set(
+          (async () => {
+            const [algWithIssues, puzzleLoader] = await Promise.all([
+              this.twistyPlayer.experimentalModel.alg.get(),
+              this.twistyPlayer.experimentalModel.puzzleLoader.get(),
+            ]);
+            return algWithIssues.alg.simplify({
+              cancel: true,
+              puzzleLoader,
+            });
+          })(),
+        );
         break;
       }
       case "clear": {

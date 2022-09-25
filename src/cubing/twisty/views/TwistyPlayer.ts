@@ -409,6 +409,7 @@ export class TwistyPlayer
   }
 
   // TODO: Animate the new move.
+  // TODO: Automatically handle puzzle.
   experimentalAddMove(
     flexibleMove: Move | string,
     options?: AppendOptions,
@@ -417,6 +418,7 @@ export class TwistyPlayer
   }
 
   // TODO: Animate the new move.
+  // TODO: Automatically handle puzzle.
   experimentalAddAlgLeaf(algLeaf: AlgLeaf, options?: AppendOptions): void {
     this.experimentalModel.experimentalAddAlgLeaf(algLeaf, options);
   }
