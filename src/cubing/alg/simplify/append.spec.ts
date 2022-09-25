@@ -3,8 +3,9 @@ import { expect } from "../../../test/chai-workarounds";
 import { Alg } from "../Alg";
 import { experimentalAppendMove } from "./append";
 import { Move } from "../alg-nodes";
+import { cube3x3x3 } from "../../puzzles";
 
-describe("operation", () => {
+describe("append", () => {
   it("can append moves", () => {
     expect(
       experimentalAppendMove(new Alg("R U R'"), new Move("U2"), {
@@ -94,5 +95,32 @@ describe("operation", () => {
         puzzleSpecificSimplifyOptions: { quantumMoveOrder: () => 3 },
       }),
     ).to.be.identicalAlg(new Alg("L'"));
+  });
+
+  it("handles same-direction correctly", () => {
+    expect(
+      experimentalAppendMove(new Alg("R'"), new Move("R"), {
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg(new Alg(""));
+    expect(
+      experimentalAppendMove(new Alg("R'"), new Move("R"), {
+        cancel: { directional: "same-direction" },
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg(new Alg("R' R"));
+    expect(
+      experimentalAppendMove(new Alg("R' M'"), new Move("R"), {
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg(new Alg("M'"));
+    expect(
+      experimentalAppendMove(new Alg("R' M'"), new Move("R"), {
+        cancel: { directional: "same-direction" },
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg(new Alg("R' r"));
   });
 });

@@ -130,4 +130,13 @@ describe("simplify", () => {
       ". R3' . R2' . R' . . R3' . R2' . R' . R . R2 . R3 . . R . R2 . R3 .",
     );
   });
+
+  it("cancels more complex algs correctly", () => {
+    expect(
+      new Alg("R3 M r").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("");
+  });
 });
