@@ -4,11 +4,11 @@ import type { AlgLeaf } from "../alg-nodes/AlgNode";
 import { Move } from "../alg-nodes/leaves/Move";
 import { AppendOptions, AppendOptionsHelper } from "./options";
 
-function areSameDirection(amount1: number, move2: Move): boolean {
+function areSameDirection(direction: -1 | 1, move2: Move): boolean {
   // This multiplication has two properties:
   // - If either amount is 0, returns true.
   // - Otherwise, the signs have to match.
-  return amount1 * Math.sign(move2.amount) !== -1;
+  return direction * Math.sign(move2.amount) >= 0;
 }
 
 function offsetMod(x: number, positiveMod: number, offset: number): number {
@@ -62,13 +62,13 @@ export function experimentalAppendMove(
     if (sameDirectionOnly) {
       const existingQuantumDirectionOnAxis = quantumDirections.get(quantumKey);
       if (
-        existingQuantumDirectionOnAxis &&
-        areSameDirection(existingQuantumDirectionOnAxis, move)
+        existingQuantumDirectionOnAxis && // Short-circuits, but that's actually okay here.
+        !areSameDirection(existingQuantumDirectionOnAxis, move)
       ) {
         break;
       }
+      quantumDirections.set(quantumKey, Math.sign(move.amount) as -1 | 0 | 1);
     }
-    quantumDirections.set(quantumKey, Math.sign(move.amount) as -1 | 0 | 1);
   }
   const suffix = [...(outputPrefix.splice(i + 1) as Move[]), addedMove];
 
