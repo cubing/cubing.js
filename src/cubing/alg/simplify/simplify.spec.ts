@@ -138,5 +138,17 @@ describe("simplify", () => {
         puzzleLoader: cube3x3x3,
       }),
     ).to.be.identicalAlg("");
+    expect(
+      new Alg("U (y' U) U'").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("U (d) U'");
+    expect(
+      new Alg("(U U')").simplify({
+        cancel: true,
+        puzzleLoader: cube3x3x3,
+      }),
+    ).to.be.identicalAlg("()");
   });
 });

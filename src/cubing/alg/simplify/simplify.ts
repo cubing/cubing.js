@@ -18,6 +18,14 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
     return (this.#newPlaceholderAssociationsMap ??= new Map<Grouping, Pause>());
   }
 
+  // TODO: avoid allocations?
+  #descendOptions(options: SimplifyOptions): SimplifyOptions {
+    return {
+      ...options,
+      depth: options.depth ? options.depth - 1 : null,
+    };
+  }
+
   // TODO: Handle
   public *traverseAlg(alg: Alg, options: SimplifyOptions): Generator<AlgNode> {
     if (options.depth === 0) {
@@ -27,10 +35,7 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
 
     let output: AlgNode[] = [];
 
-    const newOptions: SimplifyOptions = {
-      ...options,
-      depth: options.depth ? options.depth - 1 : null,
-    }; // TODO: avoid allocations?
+    const newOptions: SimplifyOptions = this.#descendOptions(options); // TODO: avoid allocations?
     for (const algNode of alg.childAlgNodes()) {
       for (const traversedNode of this.traverseAlgNode(algNode, newOptions)) {
         // TODO: remove empty containers?
@@ -57,11 +62,8 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
       yield grouping;
       return;
     }
-    const newOptions = {
-      depth: options.depth ? options.depth - 1 : null,
-    }; // TODO: avoid allocations?
     const newGrouping = new Grouping(
-      this.traverseAlg(grouping.alg, newOptions),
+      this.traverseAlg(grouping.alg, this.#descendOptions(options)),
       grouping.amount,
     );
 
@@ -89,9 +91,7 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
       yield commutator;
       return;
     }
-    const newOptions = {
-      depth: options.depth ? options.depth - 1 : null,
-    }; // TODO: avoid allocations?
+    const newOptions = this.#descendOptions(options);
     yield new Commutator(
       this.traverseAlg(commutator.A, newOptions),
       this.traverseAlg(commutator.B, newOptions),
@@ -106,9 +106,7 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
       yield conjugate;
       return;
     }
-    const newOptions = {
-      depth: options.depth ? options.depth - 1 : null,
-    }; // TODO: avoid allocations?
+    const newOptions = this.#descendOptions(options);
     yield new Conjugate(
       this.traverseAlg(conjugate.A, newOptions),
       this.traverseAlg(conjugate.B, newOptions),
