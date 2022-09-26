@@ -1,6 +1,7 @@
 import type { PerspectiveCamera } from "three";
 import { THREEJS } from "../heavy-code-imports/3d";
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
+import { newRenderer } from "./3D/RendererPool";
 import { Twisty3DPuzzleWrapper } from "./3D/Twisty3DPuzzleWrapper";
 import { setCameraFromOrbitCoordinates } from "./3D/Twisty3DVantage";
 
@@ -8,6 +9,15 @@ export interface TwistyPlayerScreenshot {
   dataURL: string;
   download: (filename?: string) => Promise<void>;
 }
+
+// TODO: Share with the renderer pool.
+// T cannot be `null`
+const lazy = function <T>(f: () => T): () => T {
+  let cached: T | null = null;
+  return () => (cached ??= f());
+};
+
+const lazyRenderer = lazy(newRenderer);
 
 // TODO: cache
 let cachedCamera: PerspectiveCamera | null = null;
@@ -45,10 +55,7 @@ export async function screenshot(
   const orbitCoordinates = await model.twistySceneModel.orbitCoordinates.get();
   await setCameraFromOrbitCoordinates(camera, orbitCoordinates);
 
-  const renderer = new (await THREEJS).WebGLRenderer({
-    antialias: true,
-    alpha: true,
-  });
+  const renderer = await lazyRenderer();
   renderer.setSize(width, height);
 
   renderer.render(scene, camera);
