@@ -17,6 +17,25 @@ import { pixelRatio } from "../canvas";
 
 const renderers: Promise<WebGLRenderer>[] = [];
 
+// Render result is guaranteed to be available synchronously at resolution time.
+export async function rawRenderPooled(
+  width: number,
+  height: number,
+  scene: Scene,
+  camera: Camera,
+): Promise<HTMLCanvasElement> {
+  // At most one in the pool for now.
+  if (renderers.length === 0) {
+    renderers.push(newRenderer());
+  }
+  const renderer = await renderers[0];
+  // TODO: scissoring
+  renderer.setSize(width, height); // TODO: is it faster if we cache values and only call this when necessary?
+  renderer.render(scene, camera);
+
+  return renderer.domElement;
+}
+
 // let haveSet = false;
 export async function renderPooled(
   width: number,
@@ -32,15 +51,13 @@ export async function renderPooled(
   if (renderers.length === 0) {
     renderers.push(newRenderer());
   }
-  const renderer = await renderers[0];
-  // TODO: scissoring
-  renderer.setSize(width, height); // TODO: is it faster if we cache values and only call this when necessary?
-  renderer.render(scene, camera);
+
+  const rendererCanvas = await rawRenderPooled(width, height, scene, camera);
 
   // TODO: Should we cache this? Seems to take about 0.0001ms to get.
   const context = canvas.getContext("2d")!;
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.drawImage(renderer.domElement, 0, 0);
+  context.drawImage(rendererCanvas, 0, 0);
 }
 
 export async function newRenderer(): Promise<WebGLRenderer> {
