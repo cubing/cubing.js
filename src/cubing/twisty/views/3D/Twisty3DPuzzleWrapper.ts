@@ -10,8 +10,9 @@ import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import type { PuzzlePosition } from "../../controllers/AnimationTypes";
 import type { Schedulable } from "../../controllers/RenderScheduler";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
-import type { Cube3D } from "./puzzles/Cube3D";
+import { Cube3D } from "./puzzles/Cube3D";
 import type { PG3D } from "./puzzles/PG3D";
+import type { ExperimentalPuzzleAppearance } from "../../../puzzles/cubing-private";
 
 export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
   constructor(
@@ -67,6 +68,16 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       ).experimentalUpdateOptions({
         showFoundation: foundationDisplay !== "none",
       });
+      this.scheduleRender();
+    });
+    this.#freshListenerManager.addListener(this.model.twistySceneModel
+      .puzzleAppearance, async (appearance: ExperimentalPuzzleAppearance) => {
+      const twisty3D = await this.twisty3DPuzzle();
+      if (twisty3D instanceof Cube3D) {
+        twisty3D.setAppearance(appearance);
+      } else {
+        (twisty3D as PG3D).experimentalSetAppearance(appearance);
+      }
       this.scheduleRender();
     });
     this.#freshListenerManager.addListener(this.model.twistySceneModel

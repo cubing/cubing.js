@@ -1,6 +1,7 @@
 import { URLProp } from "./props/general/URLProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
+import { PuzzleAppearanceProp } from "./props/puzzle/display/PuzzleAppearanceProp";
 import { SpriteProp } from "./props/puzzle/display/SpriteProp";
 import { StickeringProp } from "./props/puzzle/display/StickeringProp";
 import { DragInputProp } from "./props/puzzle/state/DragInputProp";
@@ -14,6 +15,7 @@ import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 
 export class TwistySceneModel {
   // Depth 0
+  puzzleAppearance = new PuzzleAppearanceProp();
   background = new BackgroundProp();
   dragInput = new DragInputProp();
   foundationDisplay = new FoundationDisplayProp();
