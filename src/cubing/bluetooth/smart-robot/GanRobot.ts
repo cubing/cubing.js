@@ -229,7 +229,7 @@ export class GanRobot extends EventTarget {
   private moveQueue: Alg = new Alg();
   // TODO: Don't let this resolve until the move is done?
   private async queueMoves(moves: Alg): Promise<void> {
-    this.moveQueue = this.moveQueue.concat(moves).simplify({
+    this.moveQueue = this.moveQueue.concat(moves).experimentalSimplify({
       puzzleSpecificSimplifyOptions: cube3x3x3.puzzleSpecificSimplifyOptions,
     });
     if (!this.locked) {

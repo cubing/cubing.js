@@ -271,8 +271,13 @@ export class Alg extends AlgCommon<Alg> {
     return output;
   }
 
-  simplify(options?: SimplifyOptions): Alg {
+  experimentalSimplify(options?: SimplifyOptions): Alg {
     return new Alg(simplify(this, options ?? {}));
+  }
+
+  /** @deprecated */
+  simplify(options?: SimplifyOptions): Alg {
+    return this.experimentalSimplify(options);
   }
 }
 

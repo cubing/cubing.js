@@ -402,7 +402,7 @@ class ControlPane {
               this.twistyPlayer.experimentalModel.alg.get(),
               this.twistyPlayer.experimentalModel.puzzleLoader.get(),
             ]);
-            return algWithIssues.alg.simplify({
+            return algWithIssues.alg.experimentalSimplify({
               cancel: true,
               puzzleLoader,
             });

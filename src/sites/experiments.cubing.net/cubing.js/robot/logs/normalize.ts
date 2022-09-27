@@ -59,7 +59,7 @@ const removeAnnotations: (alg: Alg) => Generator<AlgNode> =
   removeAnnotationsInstance.traverseAlg.bind(removeAnnotationsInstance);
 
 export function normalize(alg: Alg): Alg {
-  return new Alg(removeAnnotations(alg)).simplify({
+  return new Alg(removeAnnotations(alg)).experimentalSimplify({
     cancel: {
       puzzleSpecificModWrap: "canonical-centered",
     },
