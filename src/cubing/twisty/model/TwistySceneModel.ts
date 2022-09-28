@@ -15,7 +15,6 @@ import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 
 export class TwistySceneModel {
   // Depth 0
-  puzzleAppearance = new PuzzleAppearanceProp();
   background = new BackgroundProp();
   dragInput = new DragInputProp();
   foundationDisplay = new FoundationDisplayProp();
@@ -27,6 +26,7 @@ export class TwistySceneModel {
   movePressCancelOptions = new MovePressCancelOptions();
   orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
+  puzzleAppearance = new PuzzleAppearanceProp();
   stickering = new StickeringProp();
 
   // Depth 1
