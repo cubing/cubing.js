@@ -19,7 +19,10 @@ import {
 import type { ExperimentalStickering } from "../../..";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
-import { experimentalStickerings } from "../../../../puzzles/cubing-private";
+import {
+  ExperimentalStickeringMask,
+  experimentalStickerings,
+} from "../../../../puzzles/cubing-private";
 import type {
   FaceletMeshStickeringMask,
   StickeringMask,
@@ -216,6 +219,7 @@ export interface Cube3DOptions {
   showMainStickers?: boolean;
   hintFacelets?: HintFaceletStyle;
   showFoundation?: boolean; // TODO: better name
+  experimentalStickeringMask?: ExperimentalStickeringMask;
   experimentalStickering?: ExperimentalStickering;
   foundationSprite?: Texture | null;
   hintSprite?: Texture | null;
@@ -225,6 +229,7 @@ const cube3DOptionsDefaults: Cube3DOptions = {
   showMainStickers: true,
   hintFacelets: "floating",
   showFoundation: true,
+  experimentalStickeringMask: undefined,
   experimentalStickering: "full",
   foundationSprite: null,
   hintSprite: null,
@@ -591,7 +596,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     this.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
 
     // TODO: Can we construct this directly instead of applying it later? Would that be more code-efficient?
-    if (this.options.experimentalStickering) {
+    if (this.options.experimentalStickeringMask) {
+      this.setStickeringMask(this.options.experimentalStickeringMask);
+    } else if (this.options.experimentalStickering) {
       this.setStickering(this.options.experimentalStickering);
     }
     this.#animateRaiseHintFacelets();
@@ -653,6 +660,9 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
 
   setStickering(stickering: ExperimentalStickering): void {
     // TODO
+    if (this.options.experimentalStickeringMask) {
+      return;
+    }
     (async () => {
       // TODO
       const stickeringMask = await puzzles["3x3x3"].stickeringMask!(
@@ -746,6 +756,13 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       this.scheduleRenderCallback!(); // TODO
     }
 
+    const { experimentalStickeringMask } = options;
+    if (typeof experimentalStickeringMask !== "undefined") {
+      this.options.experimentalStickeringMask = experimentalStickeringMask;
+      this.setStickeringMask(experimentalStickeringMask);
+      this.scheduleRenderCallback!(); // TODO
+    }
+
     const experimentalStickering = options.experimentalStickering;
     if (
       typeof experimentalStickering !== "undefined" &&
@@ -755,8 +772,6 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       ] // TODO: test this
     ) {
       this.options.experimentalStickering = experimentalStickering;
-      // TODO
-      // @ts-ignore
       this.setStickering(experimentalStickering);
       this.scheduleRenderCallback!(); // TODO
     }
