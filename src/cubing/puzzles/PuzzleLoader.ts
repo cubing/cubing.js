@@ -2,7 +2,7 @@ import type { PuzzleSpecificSimplifyOptions } from "../alg";
 import type { KPuzzle } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { ExperimentalStickering } from "../twisty";
-import type { PuzzleAppearance } from "./stickerings/appearance";
+import type { PuzzleAppearance } from "./stickerings/mask";
 
 export interface PuzzleLoader {
   id: string;

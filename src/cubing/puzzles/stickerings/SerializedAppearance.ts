@@ -2,7 +2,7 @@ import type {
   FaceletMeshAppearance,
   PieceAppearance,
   PuzzleAppearance,
-} from "./appearance";
+} from "./mask";
 
 const charMap: Record<string, FaceletMeshAppearance> = {
   "-": "regular",

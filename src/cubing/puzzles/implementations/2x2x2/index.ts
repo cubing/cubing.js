@@ -3,7 +3,7 @@ import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
 import type { PuzzleLoader } from "../../PuzzleLoader";
-import type { PuzzleAppearance } from "../../stickerings/appearance";
+import type { PuzzleAppearance } from "../../stickerings/mask";
 import {
   cubeAppearance,
   cubeStickerings,

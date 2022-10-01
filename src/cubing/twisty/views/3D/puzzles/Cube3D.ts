@@ -23,7 +23,7 @@ import { experimentalStickerings } from "../../../../puzzles/cubing-private";
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
-} from "../../../../puzzles/stickerings/appearance";
+} from "../../../../puzzles/stickerings/mask";
 import type {
   MillisecondTimestamp,
   PuzzlePosition,
