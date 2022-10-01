@@ -521,32 +521,32 @@ class ControlPane {
     initialStickering: string,
     puzzleName: string,
   ): Promise<void> {
-    let appearances: Partial<Record<ExperimentalStickering, { name?: string }>>;
+    let stickerings: Partial<Record<ExperimentalStickering, { name?: string }>>;
 
     // TODO: Look
     const p = puzzles[puzzleName];
     if (p.stickerings) {
-      appearances = {};
+      stickerings = {};
       for (const stickering of await p.stickerings()) {
-        appearances[stickering] = {};
+        stickerings[stickering] = {};
       }
     } else {
-      appearances = { full: {} } as any;
+      stickerings = { full: {} } as any;
     }
 
-    if (!(initialStickering in appearances)) {
+    if (!(initialStickering in stickerings)) {
       // TODO
-      (appearances as any)[UNSUPPORTED_STICKERING] = {};
+      (stickerings as any)[UNSUPPORTED_STICKERING] = {};
       initialStickering = UNSUPPORTED_STICKERING;
     }
 
     this.stickeringSelect.textContent = "";
     let currentOptGroup: HTMLOptGroupElement | null = null;
-    for (const [appearanceName, appearance] of Object.entries(appearances)) {
+    for (const [stickeringName, stickeringMask] of Object.entries(stickerings)) {
       const stickeringGroup =
-        appearanceName === UNSUPPORTED_STICKERING
+        stickeringName === UNSUPPORTED_STICKERING
           ? "Unsupported"
-          : getStickeringGroup(appearanceName, puzzleName as PuzzleID);
+          : getStickeringGroup(stickeringName, puzzleName as PuzzleID);
       if (!currentOptGroup || currentOptGroup.label !== stickeringGroup) {
         currentOptGroup = this.stickeringSelect.appendChild(
           document.createElement("optgroup"),
@@ -554,10 +554,10 @@ class ControlPane {
         currentOptGroup.label = stickeringGroup;
       }
       const option = document.createElement("option");
-      option.value = appearanceName;
-      option.textContent = appearance?.name ?? appearanceName;
+      option.value = stickeringName;
+      option.textContent = stickeringMask?.name ?? stickeringName;
       currentOptGroup.appendChild(option);
-      if (appearanceName === initialStickering) {
+      if (stickeringName === initialStickering) {
         option.selected = true;
       }
     }

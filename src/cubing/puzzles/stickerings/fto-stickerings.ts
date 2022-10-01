@@ -95,7 +95,7 @@ export async function ftoStickering(
       );
       puzzleStickering.set(m.and(m.moves([])), PieceStickering.Dim);
   }
-  return puzzleStickering.toAppearance();
+  return puzzleStickering.toStickeringMask();
 }
 
 export async function ftoStickerings(): Promise<ExperimentalStickering[]> {

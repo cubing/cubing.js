@@ -88,7 +88,7 @@ export class PGPuzzleLoader implements PuzzleLoader {
 }
 
 export class CubePGPuzzleLoader extends PGPuzzleLoader {
-  appearance(stickering: ExperimentalStickering): Promise<StickeringMask> {
+  stickeringMask(stickering: ExperimentalStickering): Promise<StickeringMask> {
     return cubeLikeStickeringMask(this, stickering);
   }
   stickerings = cubeStickerings;

@@ -654,52 +654,52 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     // TODO
     (async () => {
       // TODO
-      const appearance = await puzzles["3x3x3"].stickeringMask!(
+      const stickeringMask = await puzzles["3x3x3"].stickeringMask!(
         stickering ?? "full",
       );
-      this.setAppearance(
-        appearance ?? (await puzzles["3x3x3"].stickeringMask!("full")),
+      this.setStickeringMask(
+        stickeringMask ?? (await puzzles["3x3x3"].stickeringMask!("full")),
       );
     })();
   }
 
-  setAppearance(appearance: StickeringMask): void {
-    for (const [orbitName, orbitAppearance] of Object.entries(
-      appearance.orbits,
+  setStickeringMask(stickeringMask: StickeringMask): void {
+    for (const [orbitName, orbitStickeringMask] of Object.entries(
+      stickeringMask.orbits,
     )) {
       for (
         let pieceIdx = 0;
-        pieceIdx < orbitAppearance.pieces.length;
+        pieceIdx < orbitStickeringMask.pieces.length;
         pieceIdx++
       ) {
-        const pieceAppearance = orbitAppearance.pieces[pieceIdx];
-        if (pieceAppearance) {
+        const pieceStickeringMask = orbitStickeringMask.pieces[pieceIdx];
+        if (pieceStickeringMask) {
           const pieceInfo = this.kpuzzleFaceletInfo[orbitName][pieceIdx];
           for (
             let faceletIdx = 0;
             faceletIdx < pieceInfo.length;
             faceletIdx++
           ) {
-            const faceletAppearance = pieceAppearance.facelets[faceletIdx];
-            if (faceletAppearance) {
+            const faceletStickeringMask = pieceStickeringMask.facelets[faceletIdx];
+            if (faceletStickeringMask) {
               const faceletInfo = pieceInfo[faceletIdx];
 
-              const appearance =
-                typeof faceletAppearance === "string"
-                  ? faceletAppearance
-                  : faceletAppearance?.appearance;
+              const stickeringMask =
+                typeof faceletStickeringMask === "string"
+                  ? faceletStickeringMask
+                  : faceletStickeringMask?.mask;
 
               faceletInfo.facelet.material =
-                axesInfo[faceletInfo.faceIdx].stickerMaterial[appearance];
+                axesInfo[faceletInfo.faceIdx].stickerMaterial[stickeringMask];
               // TODO
-              const hintAppearance =
-                typeof faceletAppearance === "string"
-                  ? appearance
-                  : faceletAppearance.hintAppearance ?? appearance;
+              const hintStickeringMask =
+                typeof faceletStickeringMask === "string"
+                  ? stickeringMask
+                  : faceletStickeringMask.hintMask ?? stickeringMask;
               if (faceletInfo.hintFacelet) {
                 faceletInfo.hintFacelet.material =
                   axesInfo[faceletInfo.faceIdx].hintStickerMaterial[
-                    hintAppearance
+                    hintStickeringMask
                   ];
               }
             }

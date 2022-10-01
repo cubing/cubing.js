@@ -11,8 +11,8 @@ export type FaceletMeshStickeringMask =
   | "invisible";
 
 export type FaceletStickeringMask = {
-  appearance: FaceletMeshStickeringMask;
-  hintAppearance?: FaceletMeshStickeringMask;
+  mask: FaceletMeshStickeringMask;
+  hintMask?: FaceletMeshStickeringMask;
 };
 
 export type PieceStickeringMask = {
@@ -29,31 +29,31 @@ export type StickeringMask = {
   orbits: Record<string, OrbitStickeringMask>;
 };
 
-export function getFaceletAppearance(
-  appearance: StickeringMask,
+export function getFaceletStickeringMask(
+  stickeringMask: StickeringMask,
   orbitName: string,
   pieceIdx: number,
   faceletIdx: number,
   hint: boolean,
 ): FaceletMeshStickeringMask {
-  const orbitAppearance = appearance.orbits[orbitName];
-  const pieceAppearance: PieceStickeringMask | null =
-    orbitAppearance.pieces[pieceIdx];
-  if (pieceAppearance === null) {
+  const orbitStickeringMask = stickeringMask.orbits[orbitName];
+  const pieceStickeringMask: PieceStickeringMask | null =
+    orbitStickeringMask.pieces[pieceIdx];
+  if (pieceStickeringMask === null) {
     return regular;
   }
-  const faceletAppearance: FaceletMeshStickeringMask | FaceletStickeringMask | null =
-    pieceAppearance.facelets[faceletIdx];
-  if (faceletAppearance === null) {
+  const faceletStickeringMask: FaceletMeshStickeringMask | FaceletStickeringMask | null =
+    pieceStickeringMask.facelets[faceletIdx];
+  if (faceletStickeringMask === null) {
     return regular;
   }
-  if (typeof faceletAppearance === "string") {
-    return faceletAppearance;
+  if (typeof faceletStickeringMask === "string") {
+    return faceletStickeringMask;
   }
   if (hint) {
-    return faceletAppearance.hintAppearance ?? faceletAppearance.appearance;
+    return faceletStickeringMask.hintMask ?? faceletStickeringMask.mask;
   }
-  return faceletAppearance.appearance;
+  return faceletStickeringMask.mask;
 }
 
 // TODO: Revert this to a normal enum, or write a standard to codify the names?
@@ -134,7 +134,7 @@ const oiiii: PieceStickeringMask = {
   facelets: [oriented, ignored, ignored, ignored, ignored],
 };
 
-export function getPieceAppearance(
+export function getPieceStickeringMask(
   pieceStickering: PieceStickering,
 ): PieceStickeringMask {
   switch (pieceStickering) {
@@ -177,19 +177,19 @@ export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
     return this;
   }
 
-  toAppearance(): StickeringMask {
-    const appearance: StickeringMask = { orbits: {} };
+  toStickeringMask(): StickeringMask {
+    const stickeringMask: StickeringMask = { orbits: {} };
     for (const [orbitName, pieceStickerings] of this.stickerings.entries()) {
       const pieces: PieceStickeringMask[] = [];
-      const orbitAppearance: OrbitStickeringMask = {
+      const orbitStickeringMask: OrbitStickeringMask = {
         pieces,
       };
-      appearance.orbits[orbitName] = orbitAppearance;
+      stickeringMask.orbits[orbitName] = orbitStickeringMask;
       for (const pieceStickering of pieceStickerings) {
-        pieces.push(getPieceAppearance(pieceStickering));
+        pieces.push(getPieceStickeringMask(pieceStickering));
       }
     }
-    return appearance;
+    return stickeringMask;
   }
 }
 

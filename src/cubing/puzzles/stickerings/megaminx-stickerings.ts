@@ -4,7 +4,7 @@ import type { StickeringMask } from "./mask";
 import { cubeLikeStickeringMask } from "./cube-stickerings";
 
 // TODO: cache calculations?
-export async function megaminxAppearance(
+export async function megaminxStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<StickeringMask> {

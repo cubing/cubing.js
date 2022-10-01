@@ -71,12 +71,12 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       this.scheduleRender();
     });
     this.#freshListenerManager.addListener(this.model.twistySceneModel
-      .stickeringMask, async (appearance: ExperimentalStickeringMask) => {
+      .stickeringMask, async (stickeringMask: ExperimentalStickeringMask) => {
       const twisty3D = await this.twisty3DPuzzle();
       if (twisty3D instanceof Cube3D) {
-        twisty3D.setAppearance(appearance);
+        twisty3D.setStickeringMask(stickeringMask);
       } else {
-        (twisty3D as PG3D).experimentalSetAppearance(appearance);
+        (twisty3D as PG3D).experimentalSetStickeringMask(stickeringMask);
       }
       this.scheduleRender();
     });
@@ -87,12 +87,12 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
         this.scheduleRender();
       } else {
         // TODO: create a prop to handle this.
-        if ("appearance" in this.puzzleLoader) {
-          const [twisty3D, appearancePromise] = await Promise.all([
+        if ("stickeringMask" in this.puzzleLoader) {
+          const [twisty3D, stickeringMaskPromise] = await Promise.all([
             this.twisty3DPuzzle(),
             this.puzzleLoader.stickeringMask!(stickering ?? "full"),
           ]);
-          (twisty3D as PG3D).experimentalSetAppearance(appearancePromise);
+          (twisty3D as PG3D).experimentalSetStickeringMask(stickeringMaskPromise);
           this.scheduleRender();
         }
       }

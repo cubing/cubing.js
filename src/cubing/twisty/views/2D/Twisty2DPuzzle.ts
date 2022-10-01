@@ -101,13 +101,13 @@ export class Twisty2DPuzzle
       if (!this.puzzleLoader?.stickeringMask) {
         return;
       }
-      const appearance = await this.puzzleLoader.stickeringMask(stickering);
-      this.resetSVG(appearance);
+      const stickeringMask = await this.puzzleLoader.stickeringMask(stickering);
+      this.resetSVG(stickeringMask);
     })();
   }
 
   // TODO: do this without constructing a new SVG.
-  private resetSVG(appearance?: StickeringMask): void {
+  private resetSVG(stickeringMask?: StickeringMask): void {
     if (this.svgWrapper) {
       this.removeElement(this.svgWrapper.wrapperElement);
     }
@@ -117,7 +117,7 @@ export class Twisty2DPuzzle
     this.svgWrapper = new KPuzzleSVGWrapper(
       this.kpuzzle,
       this.svgSource!,
-      appearance,
+      stickeringMask,
     ); // TODO
     this.addElement(this.svgWrapper.wrapperElement);
     if (this.#cachedPosition) {

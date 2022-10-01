@@ -17,7 +17,7 @@ class FTOPuzzleLoader extends PGPuzzleLoader {
       inventionYear: 1983, // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
     });
   }
-  appearance(stickering: ExperimentalStickering): Promise<StickeringMask> {
+  stickeringMask(stickering: ExperimentalStickering): Promise<StickeringMask> {
     return ftoStickering(this, stickering);
   }
   stickerings = ftoStickerings;
