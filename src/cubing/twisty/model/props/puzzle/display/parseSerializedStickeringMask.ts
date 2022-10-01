@@ -1,10 +1,16 @@
-import type {
-  FaceletMeshStickeringMask,
-  PieceStickeringMask,
-  StickeringMask,
-} from "./mask";
+// import type {
+//   FaceletMeshStickeringMask,
+//   PieceStickeringMask,
+//   StickeringMask,
+// } from "./mask";
 
-const charMap: Record<string, FaceletMeshStickeringMask> = {
+import type {
+  ExperimentalFaceletMeshStickeringMask,
+  ExperimentalPieceStickeringMask,
+  ExperimentalStickeringMask,
+} from "../../../../../puzzles/cubing-private";
+
+const charMap: Record<string, ExperimentalFaceletMeshStickeringMask> = {
   "-": "regular",
   D: "dim",
   O: "oriented",
@@ -14,8 +20,8 @@ const charMap: Record<string, FaceletMeshStickeringMask> = {
 
 export function parseSerializedStickeringMask(
   serializedStickeringMask: string,
-): StickeringMask {
-  const stickeringMask: StickeringMask = {
+): ExperimentalStickeringMask {
+  const stickeringMask: ExperimentalStickeringMask = {
     orbits: {},
   };
   const serializedOrbits = serializedStickeringMask.split(",");
@@ -32,7 +38,7 @@ export function parseSerializedStickeringMask(
         `Invalid serialized orbit stickering mask (odd number of chars): \`${serializedOrbit}\``,
       );
     }
-    const pieces: PieceStickeringMask[] = [];
+    const pieces: ExperimentalPieceStickeringMask[] = [];
     stickeringMask.orbits[orbitName] = { pieces };
     for (let i = 0; i < serializedOrbitPieces.length; i += 2) {
       const [primary, others] = serializedOrbitPieces.slice(i, i + 2);
