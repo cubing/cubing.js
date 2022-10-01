@@ -593,7 +593,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const options: { stickeringMask?: ExperimentalFaceletMeshStickeringMask } = {};
+      const options: {
+        stickeringMask?: ExperimentalFaceletMeshStickeringMask;
+      } = {};
       if (params.stickeringMask) {
         options.stickeringMask = experimentalGetFaceletStickeringMask(
           params.stickeringMask,
@@ -759,7 +761,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return { move: closestMove, order }; // TODO: push this down
   }
 
-  experimentalSetStickeringMask(stickeringMask: ExperimentalStickeringMask): void {
+  experimentalSetStickeringMask(
+    stickeringMask: ExperimentalStickeringMask,
+  ): void {
     this.params.stickeringMask = stickeringMask;
     for (const orbitName in this.kpuzzle.definition.orbits) {
       const { numPieces, numOrientations: orientations } =

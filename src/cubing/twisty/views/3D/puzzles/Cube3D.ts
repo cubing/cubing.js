@@ -67,7 +67,8 @@ const orientedMaterialHint = new MeshBasicMaterial({
   opacity: 0.5,
 });
 
-interface MaterialMap extends Record<FaceletMeshStickeringMask, MeshBasicMaterial> {
+interface MaterialMap
+  extends Record<FaceletMeshStickeringMask, MeshBasicMaterial> {
   regular: MeshBasicMaterial;
   dim: MeshBasicMaterial;
   ignored: MeshBasicMaterial;
@@ -680,7 +681,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
             faceletIdx < pieceInfo.length;
             faceletIdx++
           ) {
-            const faceletStickeringMask = pieceStickeringMask.facelets[faceletIdx];
+            const faceletStickeringMask =
+              pieceStickeringMask.facelets[faceletIdx];
             if (faceletStickeringMask) {
               const faceletInfo = pieceInfo[faceletIdx];
 

@@ -27,7 +27,8 @@ export const cube2x2x2: PuzzleLoader = {
   pg: getCached(async () => {
     return asyncGetPuzzleGeometry("2x2x2");
   }),
-  stickeringMask: (stickering: ExperimentalStickering): Promise<StickeringMask> =>
-    cubeLikeStickeringMask(cube2x2x2, stickering),
+  stickeringMask: (
+    stickering: ExperimentalStickering,
+  ): Promise<StickeringMask> => cubeLikeStickeringMask(cube2x2x2, stickering),
   stickerings: cubeStickerings,
 };

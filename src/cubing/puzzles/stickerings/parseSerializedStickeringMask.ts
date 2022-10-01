@@ -44,7 +44,9 @@ export function parseSerializedStickeringMask(
       }
       const otherStickeringMask = charMap[others];
       if (!otherStickeringMask) {
-        throw new Error(`Invalid facelet stickering mask identifier: \`${others}\``);
+        throw new Error(
+          `Invalid facelet stickering mask identifier: \`${others}\``,
+        );
       }
       pieces.push({
         facelets: [

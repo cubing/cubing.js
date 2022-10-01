@@ -42,8 +42,10 @@ export function getFaceletStickeringMask(
   if (pieceStickeringMask === null) {
     return regular;
   }
-  const faceletStickeringMask: FaceletMeshStickeringMask | FaceletStickeringMask | null =
-    pieceStickeringMask.facelets[faceletIdx];
+  const faceletStickeringMask:
+    | FaceletMeshStickeringMask
+    | FaceletStickeringMask
+    | null = pieceStickeringMask.facelets[faceletIdx];
   if (faceletStickeringMask === null) {
     return regular;
   }

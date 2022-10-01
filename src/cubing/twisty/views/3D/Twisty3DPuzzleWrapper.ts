@@ -92,7 +92,9 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
             this.twisty3DPuzzle(),
             this.puzzleLoader.stickeringMask!(stickering ?? "full"),
           ]);
-          (twisty3D as PG3D).experimentalSetStickeringMask(stickeringMaskPromise);
+          (twisty3D as PG3D).experimentalSetStickeringMask(
+            stickeringMaskPromise,
+          );
           this.scheduleRender();
         }
       }

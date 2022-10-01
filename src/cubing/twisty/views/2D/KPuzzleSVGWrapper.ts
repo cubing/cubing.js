@@ -117,7 +117,8 @@ export class KPuzzleSVGWrapper {
               if (!pieceStickeringMask) {
                 return;
               }
-              const faceletStickeringMasks = pieceStickeringMask.facelets[orientation];
+              const faceletStickeringMasks =
+                pieceStickeringMask.facelets[orientation];
               if (!faceletStickeringMasks) {
                 return;
               }

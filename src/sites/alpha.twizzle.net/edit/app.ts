@@ -542,7 +542,9 @@ class ControlPane {
 
     this.stickeringSelect.textContent = "";
     let currentOptGroup: HTMLOptGroupElement | null = null;
-    for (const [stickeringName, stickeringMask] of Object.entries(stickerings)) {
+    for (const [stickeringName, stickeringMask] of Object.entries(
+      stickerings,
+    )) {
       const stickeringGroup =
         stickeringName === UNSUPPORTED_STICKERING
           ? "Unsupported"
