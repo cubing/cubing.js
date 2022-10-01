@@ -1,7 +1,7 @@
 import type { KPuzzle } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
 import type {
-  FaceletMeshAppearance,
+  FaceletMeshStickeringMask,
   StickeringMask,
 } from "../../../puzzles/stickerings/mask"; // TODO
 const xmlns = "http://www.w3.org/2000/svg";
@@ -17,7 +17,7 @@ function nextSVGID(): string {
 
 // TODO: This is hardcoded to 3x3x3 SVGs
 const colorMaps: Partial<
-  Record<FaceletMeshAppearance, Record<string, string>>
+  Record<FaceletMeshStickeringMask, Record<string, string>>
 > = {
   dim: {
     white: "#dddddd",

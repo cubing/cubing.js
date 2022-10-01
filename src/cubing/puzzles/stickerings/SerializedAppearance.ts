@@ -1,10 +1,10 @@
 import type {
-  FaceletMeshAppearance,
-  PieceAppearance,
+  FaceletMeshStickeringMask,
+  PieceStickeringMask,
   StickeringMask,
 } from "./mask";
 
-const charMap: Record<string, FaceletMeshAppearance> = {
+const charMap: Record<string, FaceletMeshStickeringMask> = {
   "-": "regular",
   D: "dim",
   O: "oriented",
@@ -32,7 +32,7 @@ export function parseSerializedAppearance(
         `Invalid serialized orbit appearance (odd number of chars): \`${serializedOrbit}\``,
       );
     }
-    const orbitAppearancePieces: PieceAppearance[] = [];
+    const orbitAppearancePieces: PieceStickeringMask[] = [];
     stickeringMask.orbits[orbitName] = { pieces: orbitAppearancePieces };
     for (let i = 0; i < serializedOrbitPieces.length; i += 2) {
       const [primary, others] = serializedOrbitPieces.slice(i, i + 2);

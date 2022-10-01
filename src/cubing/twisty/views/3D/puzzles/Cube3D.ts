@@ -21,7 +21,7 @@ import type { KPuzzle } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import { experimentalStickerings } from "../../../../puzzles/cubing-private";
 import type {
-  FaceletMeshAppearance,
+  FaceletMeshStickeringMask,
   StickeringMask,
 } from "../../../../puzzles/stickerings/mask";
 import type {
@@ -67,7 +67,7 @@ const orientedMaterialHint = new MeshBasicMaterial({
   opacity: 0.5,
 });
 
-interface MaterialMap extends Record<FaceletMeshAppearance, MeshBasicMaterial> {
+interface MaterialMap extends Record<FaceletMeshStickeringMask, MeshBasicMaterial> {
   regular: MeshBasicMaterial;
   dim: MeshBasicMaterial;
   ignored: MeshBasicMaterial;

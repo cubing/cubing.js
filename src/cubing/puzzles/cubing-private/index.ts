@@ -27,6 +27,6 @@ export {
   getFaceletAppearance as experimentalGetFaceletAppearance,
 } from "../stickerings/mask";
 export type {
-  FaceletMeshAppearance as ExperimentalFaceletMeshAppearance,
+  FaceletMeshStickeringMask as ExperimentalFaceletMeshAppearance,
   StickeringMask as ExperimentalStickeringMask,
 } from "../stickerings/mask";
