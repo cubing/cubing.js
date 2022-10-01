@@ -16,7 +16,7 @@ export interface PuzzleLoader {
   svg: () => Promise<string>;
   llSVG?: () => Promise<string>;
   pg?: () => Promise<PuzzleGeometry>;
-  appearance?: (
+  stickeringMask?: (
     stickering: ExperimentalStickering,
   ) => Promise<StickeringMask>;
   stickerings?: () => Promise<ExperimentalStickering[]>;

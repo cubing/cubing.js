@@ -654,11 +654,11 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     // TODO
     (async () => {
       // TODO
-      const appearance = await puzzles["3x3x3"].appearance!(
+      const appearance = await puzzles["3x3x3"].stickeringMask!(
         stickering ?? "full",
       );
       this.setAppearance(
-        appearance ?? (await puzzles["3x3x3"].appearance!("full")),
+        appearance ?? (await puzzles["3x3x3"].stickeringMask!("full")),
       );
     })();
   }

@@ -98,10 +98,10 @@ export class Twisty2DPuzzle
 
   experimentalSetStickering(stickering: ExperimentalStickering): void {
     (async () => {
-      if (!this.puzzleLoader?.appearance) {
+      if (!this.puzzleLoader?.stickeringMask) {
         return;
       }
-      const appearance = await this.puzzleLoader.appearance(stickering);
+      const appearance = await this.puzzleLoader.stickeringMask(stickering);
       this.resetSVG(appearance);
     })();
   }

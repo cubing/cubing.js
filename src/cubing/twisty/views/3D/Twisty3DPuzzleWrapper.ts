@@ -90,7 +90,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
         if ("appearance" in this.puzzleLoader) {
           const [twisty3D, appearancePromise] = await Promise.all([
             this.twisty3DPuzzle(),
-            this.puzzleLoader.appearance!(stickering ?? "full"),
+            this.puzzleLoader.stickeringMask!(stickering ?? "full"),
           ]);
           (twisty3D as PG3D).experimentalSetAppearance(appearancePromise);
           this.scheduleRender();
