@@ -59,9 +59,3 @@ export function parseSerializedAppearance(
   }
   return stickeringMask;
 }
-
-console.log(
-  parseSerializedAppearance(
-    "EDGES:-I-I-I-IDDDDDDDDDDDDDDDD,CORNERS:-I-I-I-IDDDDDDDD,CENTERS:-DDDDD",
-  ),
-);
