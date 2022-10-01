@@ -1,7 +1,7 @@
 import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
-  PuzzleAppearance,
+  StickeringMask,
   PuzzleStickering,
   StickeringManager,
   PieceSet,
@@ -11,7 +11,7 @@ import {
 export async function ftoStickering(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
-): Promise<PuzzleAppearance> {
+): Promise<StickeringMask> {
   const kpuzzle = await puzzleLoader.kpuzzle();
   const puzzleStickering = new PuzzleStickering(kpuzzle);
   const m = new StickeringManager(kpuzzle);

@@ -24,7 +24,7 @@ import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry";
 import {
   ExperimentalFaceletMeshAppearance,
   experimentalGetFaceletAppearance,
-  ExperimentalPuzzleAppearance,
+  ExperimentalStickeringMask,
 } from "../../../../puzzles/cubing-private";
 import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
@@ -460,7 +460,7 @@ class AxisInfo {
 }
 
 export interface PG3DOptions {
-  appearance?: ExperimentalPuzzleAppearance;
+  appearance?: ExperimentalStickeringMask;
 }
 
 const DEFAULT_COLOR_FRACTION = 0.71;
@@ -759,7 +759,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return { move: closestMove, order }; // TODO: push this down
   }
 
-  experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
+  experimentalSetAppearance(appearance: ExperimentalStickeringMask): void {
     this.params.appearance = appearance;
     for (const orbitName in this.kpuzzle.definition.orbits) {
       const { numPieces, numOrientations: orientations } =

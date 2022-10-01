@@ -3,7 +3,7 @@ import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   PieceSet,
   PieceStickering,
-  PuzzleAppearance,
+  StickeringMask,
   PuzzleStickering,
   StickeringManager,
 } from "./mask";
@@ -13,7 +13,7 @@ import { experimentalStickerings } from "./puzzle-stickerings";
 export async function cubeAppearance(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
-): Promise<PuzzleAppearance> {
+): Promise<StickeringMask> {
   const kpuzzle = await puzzleLoader.kpuzzle();
   const puzzleStickering = new PuzzleStickering(kpuzzle);
   const m = new StickeringManager(kpuzzle);

@@ -24,13 +24,13 @@ export type OrbitAppearance = {
   pieces: (PieceAppearance | null)[];
 };
 
-export type PuzzleAppearance = {
+export type StickeringMask = {
   name?: string; // TODO
   orbits: Record<string, OrbitAppearance>;
 };
 
 export function getFaceletAppearance(
-  appearance: PuzzleAppearance,
+  appearance: StickeringMask,
   orbitName: string,
   pieceIdx: number,
   faceletIdx: number,
@@ -177,8 +177,8 @@ export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
     return this;
   }
 
-  toAppearance(): PuzzleAppearance {
-    const appearance: PuzzleAppearance = { orbits: {} };
+  toAppearance(): StickeringMask {
+    const appearance: StickeringMask = { orbits: {} };
     for (const [orbitName, pieceStickerings] of this.stickerings.entries()) {
       const pieces: PieceAppearance[] = [];
       const orbitAppearance: OrbitAppearance = {

@@ -1,6 +1,6 @@
 import type { ExperimentalStickering } from "../../../twisty";
 import { PGPuzzleLoader } from "../../async/async-pg3d";
-import type { PuzzleAppearance } from "../../stickerings/mask";
+import type { StickeringMask } from "../../stickerings/mask";
 import {
   megaminxAppearance,
   megaminxStickerings,
@@ -15,7 +15,7 @@ class MegaminxPuzzleLoader extends PGPuzzleLoader {
       inventionYear: 1981, // Earliest date from https://www.jaapsch.net/puzzles/megaminx.htm
     });
   }
-  appearance(stickering: ExperimentalStickering): Promise<PuzzleAppearance> {
+  appearance(stickering: ExperimentalStickering): Promise<StickeringMask> {
     return megaminxAppearance(this, stickering);
   }
   stickerings = megaminxStickerings;

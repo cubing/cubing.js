@@ -1,5 +1,5 @@
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
-import type { PuzzleAppearance } from "../../../puzzles/stickerings/mask";
+import type { StickeringMask } from "../../../puzzles/stickerings/mask";
 import {
   Direction,
   PositionListener,
@@ -107,7 +107,7 @@ export class Twisty2DPuzzle
   }
 
   // TODO: do this without constructing a new SVG.
-  private resetSVG(appearance?: PuzzleAppearance): void {
+  private resetSVG(appearance?: StickeringMask): void {
     if (this.svgWrapper) {
       this.removeElement(this.svgWrapper.wrapperElement);
     }

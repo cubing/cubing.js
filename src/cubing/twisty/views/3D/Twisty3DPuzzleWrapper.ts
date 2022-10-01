@@ -12,7 +12,7 @@ import type { Schedulable } from "../../controllers/RenderScheduler";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 import { Cube3D } from "./puzzles/Cube3D";
 import type { PG3D } from "./puzzles/PG3D";
-import type { ExperimentalPuzzleAppearance } from "../../../puzzles/cubing-private";
+import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 
 export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
   constructor(
@@ -71,7 +71,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       this.scheduleRender();
     });
     this.#freshListenerManager.addListener(this.model.twistySceneModel
-      .stickeringMask, async (appearance: ExperimentalPuzzleAppearance) => {
+      .stickeringMask, async (appearance: ExperimentalStickeringMask) => {
       const twisty3D = await this.twisty3DPuzzle();
       if (twisty3D instanceof Cube3D) {
         twisty3D.setAppearance(appearance);

@@ -1,7 +1,7 @@
 import type {
   FaceletMeshAppearance,
   PieceAppearance,
-  PuzzleAppearance,
+  StickeringMask,
 } from "./mask";
 
 const charMap: Record<string, FaceletMeshAppearance> = {
@@ -14,8 +14,8 @@ const charMap: Record<string, FaceletMeshAppearance> = {
 
 export function parseSerializedAppearance(
   serializedAppearance: string,
-): PuzzleAppearance {
-  const puzzleAppearance: PuzzleAppearance = {
+): StickeringMask {
+  const stickeringMask: StickeringMask = {
     orbits: {},
   };
   const serializedOrbits = serializedAppearance.split(",");
@@ -33,7 +33,7 @@ export function parseSerializedAppearance(
       );
     }
     const orbitAppearancePieces: PieceAppearance[] = [];
-    puzzleAppearance.orbits[orbitName] = { pieces: orbitAppearancePieces };
+    stickeringMask.orbits[orbitName] = { pieces: orbitAppearancePieces };
     for (let i = 0; i < serializedOrbitPieces.length; i += 2) {
       const [primary, others] = serializedOrbitPieces.slice(i, i + 2);
       const primaryFaceletAppearance = charMap[primary];
@@ -57,7 +57,7 @@ export function parseSerializedAppearance(
       });
     }
   }
-  return puzzleAppearance;
+  return stickeringMask;
 }
 
 console.log(

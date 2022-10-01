@@ -22,7 +22,7 @@ import { puzzles } from "../../../../puzzles";
 import { experimentalStickerings } from "../../../../puzzles/cubing-private";
 import type {
   FaceletMeshAppearance,
-  PuzzleAppearance,
+  StickeringMask,
 } from "../../../../puzzles/stickerings/mask";
 import type {
   MillisecondTimestamp,
@@ -663,7 +663,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     })();
   }
 
-  setAppearance(appearance: PuzzleAppearance): void {
+  setAppearance(appearance: StickeringMask): void {
     for (const [orbitName, orbitAppearance] of Object.entries(
       appearance.orbits,
     )) {

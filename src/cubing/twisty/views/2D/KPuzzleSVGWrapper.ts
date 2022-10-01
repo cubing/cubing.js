@@ -2,7 +2,7 @@ import type { KPuzzle } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
 import type {
   FaceletMeshAppearance,
-  PuzzleAppearance,
+  StickeringMask,
 } from "../../../puzzles/stickerings/mask"; // TODO
 const xmlns = "http://www.w3.org/2000/svg";
 
@@ -63,7 +63,7 @@ export class KPuzzleSVGWrapper {
   constructor(
     public kpuzzle: KPuzzle,
     svgSource: string,
-    experimentalAppearance?: PuzzleAppearance,
+    experimentalAppearance?: StickeringMask,
   ) {
     if (!svgSource) {
       throw new Error(`No SVG definition for puzzle type: ${kpuzzle.name()}`);

@@ -1,13 +1,13 @@
 import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
-import type { PuzzleAppearance } from "./mask";
+import type { StickeringMask } from "./mask";
 import { cubeAppearance } from "./cube-stickerings";
 
 // TODO: cache calculations?
 export async function megaminxAppearance(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
-): Promise<PuzzleAppearance> {
+): Promise<StickeringMask> {
   switch (stickering) {
     case "full":
     case "F2L":

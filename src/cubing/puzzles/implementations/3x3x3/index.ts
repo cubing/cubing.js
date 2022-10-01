@@ -4,7 +4,7 @@ import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
 import { experimental3x3x3KPuzzle } from "../../cubing-private";
 import type { PuzzleLoader } from "../../PuzzleLoader";
-import type { PuzzleAppearance } from "../../stickerings/mask";
+import type { StickeringMask } from "../../stickerings/mask";
 import {
   cubeAppearance,
   cubeStickerings,
@@ -31,7 +31,7 @@ export const cube3x3x3: PuzzleLoader = {
   pg: getCached(async () => {
     return asyncGetPuzzleGeometry("3x3x3");
   }),
-  appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
+  appearance: (stickering: ExperimentalStickering): Promise<StickeringMask> =>
     cubeAppearance(cube3x3x3, stickering),
   stickerings: cubeStickerings,
   puzzleSpecificSimplifyOptions: puzzleSpecificSimplifyOptions333,

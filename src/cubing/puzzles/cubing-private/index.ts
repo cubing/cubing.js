@@ -28,5 +28,5 @@ export {
 } from "../stickerings/mask";
 export type {
   FaceletMeshAppearance as ExperimentalFaceletMeshAppearance,
-  PuzzleAppearance as ExperimentalPuzzleAppearance,
+  StickeringMask as ExperimentalStickeringMask,
 } from "../stickerings/mask";
