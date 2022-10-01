@@ -6,7 +6,7 @@ import {
   PuzzleAppearance,
   PuzzleStickering,
   StickeringManager,
-} from "./appearance";
+} from "./mask";
 import { experimentalStickerings } from "./puzzle-stickerings";
 
 // TODO: cache calculations?

@@ -1,8 +1,8 @@
 import { URLProp } from "./props/general/URLProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
-import { PuzzleAppearanceProp } from "./props/puzzle/display/PuzzleAppearanceProp";
 import { SpriteProp } from "./props/puzzle/display/SpriteProp";
+import { StickeringMaskProp } from "./props/puzzle/display/StickeringMaskProp";
 import { StickeringProp } from "./props/puzzle/display/StickeringProp";
 import { DragInputProp } from "./props/puzzle/state/DragInputProp";
 import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOptions";
@@ -26,8 +26,8 @@ export class TwistySceneModel {
   movePressCancelOptions = new MovePressCancelOptions();
   orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
-  puzzleAppearance = new PuzzleAppearanceProp();
   stickering = new StickeringProp();
+  stickeringMask = new StickeringMaskProp();
 
   // Depth 1
   foundationStickerSprite = new SpriteProp({

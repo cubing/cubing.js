@@ -3,7 +3,7 @@ import type { KState } from "../../../kpuzzle/KState";
 import type {
   FaceletMeshAppearance,
   PuzzleAppearance,
-} from "../../../puzzles/stickerings/appearance"; // TODO
+} from "../../../puzzles/stickerings/mask"; // TODO
 const xmlns = "http://www.w3.org/2000/svg";
 
 // Unique ID mechanism to keep SVG gradient element IDs unique. TODO: Is there

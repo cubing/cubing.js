@@ -2,7 +2,7 @@ import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
-import type { PuzzleAppearance } from "../stickerings/appearance";
+import type { PuzzleAppearance } from "../stickerings/mask";
 import {
   cubeAppearance,
   cubeStickerings,

@@ -1,5 +1,5 @@
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
-import type { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
+import type { PuzzleAppearance } from "../../../puzzles/stickerings/mask";
 import {
   Direction,
   PositionListener,

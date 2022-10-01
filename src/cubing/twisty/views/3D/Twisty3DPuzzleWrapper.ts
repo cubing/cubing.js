@@ -71,7 +71,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       this.scheduleRender();
     });
     this.#freshListenerManager.addListener(this.model.twistySceneModel
-      .puzzleAppearance, async (appearance: ExperimentalPuzzleAppearance) => {
+      .stickeringMask, async (appearance: ExperimentalPuzzleAppearance) => {
       const twisty3D = await this.twisty3DPuzzle();
       if (twisty3D instanceof Cube3D) {
         twisty3D.setAppearance(appearance);

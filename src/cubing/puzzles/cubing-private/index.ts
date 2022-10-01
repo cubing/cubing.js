@@ -25,8 +25,8 @@ export {
 } from "../customPGPuzzleLoader";
 export {
   getFaceletAppearance as experimentalGetFaceletAppearance,
-} from "../stickerings/appearance";
+} from "../stickerings/mask";
 export type {
   FaceletMeshAppearance as ExperimentalFaceletMeshAppearance,
   PuzzleAppearance as ExperimentalPuzzleAppearance,
-} from "../stickerings/appearance";
+} from "../stickerings/mask";

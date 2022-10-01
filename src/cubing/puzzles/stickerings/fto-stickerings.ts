@@ -6,7 +6,7 @@ import {
   StickeringManager,
   PieceSet,
   PieceStickering,
-} from "./appearance";
+} from "./mask";
 
 export async function ftoStickering(
   puzzleLoader: PuzzleLoader,
