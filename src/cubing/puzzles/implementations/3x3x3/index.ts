@@ -6,7 +6,7 @@ import { experimental3x3x3KPuzzle } from "../../cubing-private";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 import type { StickeringMask } from "../../stickerings/mask";
 import {
-  cubeAppearance,
+  cubeLikeStickeringMask,
   cubeStickerings,
 } from "../../stickerings/cube-stickerings";
 import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications";
@@ -32,7 +32,7 @@ export const cube3x3x3: PuzzleLoader = {
     return asyncGetPuzzleGeometry("3x3x3");
   }),
   stickeringMask: (stickering: ExperimentalStickering): Promise<StickeringMask> =>
-    cubeAppearance(cube3x3x3, stickering),
+    cubeLikeStickeringMask(cube3x3x3, stickering),
   stickerings: cubeStickerings,
   puzzleSpecificSimplifyOptions: puzzleSpecificSimplifyOptions333,
 };

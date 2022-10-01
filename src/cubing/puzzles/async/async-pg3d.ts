@@ -4,7 +4,7 @@ import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import type { StickeringMask } from "../stickerings/mask";
 import {
-  cubeAppearance,
+  cubeLikeStickeringMask,
   cubeStickerings,
 } from "../stickerings/cube-stickerings";
 import { getCached } from "./lazy-cached";
@@ -89,7 +89,7 @@ export class PGPuzzleLoader implements PuzzleLoader {
 
 export class CubePGPuzzleLoader extends PGPuzzleLoader {
   appearance(stickering: ExperimentalStickering): Promise<StickeringMask> {
-    return cubeAppearance(this, stickering);
+    return cubeLikeStickeringMask(this, stickering);
   }
   stickerings = cubeStickerings;
 }

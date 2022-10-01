@@ -10,7 +10,7 @@ import {
 import { experimentalStickerings } from "./puzzle-stickerings";
 
 // TODO: cache calculations?
-export async function cubeAppearance(
+export async function cubeLikeStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<StickeringMask> {

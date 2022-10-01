@@ -5,7 +5,7 @@ import { getCached } from "../../async/lazy-cached";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 import type { StickeringMask } from "../../stickerings/mask";
 import {
-  cubeAppearance,
+  cubeLikeStickeringMask,
   cubeStickerings,
 } from "../../stickerings/cube-stickerings";
 
@@ -28,6 +28,6 @@ export const cube2x2x2: PuzzleLoader = {
     return asyncGetPuzzleGeometry("2x2x2");
   }),
   stickeringMask: (stickering: ExperimentalStickering): Promise<StickeringMask> =>
-    cubeAppearance(cube2x2x2, stickering),
+    cubeLikeStickeringMask(cube2x2x2, stickering),
   stickerings: cubeStickerings,
 };
