@@ -23,14 +23,16 @@ export async function screenshot(
     { PerspectiveCamera, Scene },
     puzzleLoader,
     visualizationStrategy,
-    _stickering,
+    _stickering, // TODO
+    _stickeringMaskRequest, // TODO
     _legacyPosition,
     orbitCoordinates,
   ] = await Promise.all([
     THREEJS,
     await model.puzzleLoader.get(),
     await model.visualizationStrategy.get(),
-    await model.twistySceneModel.stickering.get(),
+    await model.twistySceneModel.stickeringRequest.get(),
+    await model.twistySceneModel.stickeringMaskRequest.get(),
     await model.legacyPosition.get(),
     await model.twistySceneModel.orbitCoordinates.get(),
   ]);

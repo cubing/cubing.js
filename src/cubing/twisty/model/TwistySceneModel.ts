@@ -27,8 +27,8 @@ export class TwistySceneModel {
   movePressCancelOptions = new MovePressCancelOptions();
   orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
-  stickeringRequest = new StickeringRequestProp();
   stickeringMaskRequest = new StickeringMaskRequestProp();
+  stickeringRequest = new StickeringRequestProp();
 
   // Depth 1
   foundationStickerSprite = new SpriteProp({
@@ -50,9 +50,9 @@ export class TwistySceneModel {
       strategy: twistyPlayerModel.visualizationStrategy,
     });
     this.stickeringMask = new StickeringMaskProp({
-      stickeringRequest: this.stickeringRequest,
       stickeringMaskRequest: this.stickeringMaskRequest,
-      puzzleID: twistyPlayerModel.puzzleID
-    })
+      stickeringRequest: this.stickeringRequest,
+      puzzleLoader: twistyPlayerModel.puzzleLoader,
+    });
   }
 }

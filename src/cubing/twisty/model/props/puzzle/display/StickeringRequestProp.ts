@@ -10,7 +10,7 @@ export type ExperimentalStickering = keyof typeof experimentalStickerings;
 export function getStickeringGroup(
   stickering: ExperimentalStickering,
   puzzleID: PuzzleID,
-): string {
+): string | null {
   const groups = experimentalStickerings[stickering]?.groups;
   if (!groups) {
     return "Stickering";
@@ -18,8 +18,10 @@ export function getStickeringGroup(
   return groups[puzzleID] ?? "Stickering";
 }
 
-export class StickeringRequestProp extends SimpleTwistyPropSource<ExperimentalStickering> {
-  getDefaultValue(): ExperimentalStickering {
-    return "full"; // TODO: auto
+export class StickeringRequestProp extends SimpleTwistyPropSource<
+  | ExperimentalStickering
+  | null> {
+  getDefaultValue(): ExperimentalStickering | null {
+    return null;
   }
 }

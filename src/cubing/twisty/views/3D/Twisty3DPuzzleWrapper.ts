@@ -1,18 +1,17 @@
 import type { Raycaster, Texture as ThreeTexture } from "three";
 import type { PuzzleLoader } from "../../../puzzles";
-import type { ExperimentalStickering } from "../../../twisty";
+import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
+import type { PuzzlePosition } from "../../controllers/AnimationTypes";
+import type { Schedulable } from "../../controllers/RenderScheduler";
 import { proxy3D } from "../../heavy-code-imports/3d";
 import type { FoundationDisplay } from "../../model/props/puzzle/display/FoundationDisplayProp";
 import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/HintFaceletProp";
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import type { PuzzlePosition } from "../../controllers/AnimationTypes";
-import type { Schedulable } from "../../controllers/RenderScheduler";
-import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 import { Cube3D } from "./puzzles/Cube3D";
 import type { PG3D } from "./puzzles/PG3D";
-import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
+import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 
 export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
   constructor(
@@ -71,7 +70,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       this.scheduleRender();
     });
     this.#freshListenerManager.addListener(this.model.twistySceneModel
-      .stickeringMaskRequest, async (stickeringMask: ExperimentalStickeringMask) => {
+      .stickeringMask, async (stickeringMask: ExperimentalStickeringMask) => {
       const twisty3D = await this.twisty3DPuzzle();
       if (twisty3D instanceof Cube3D) {
         twisty3D.setStickeringMask(stickeringMask);
@@ -80,42 +79,23 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       }
       this.scheduleRender();
     });
-    this.#freshListenerManager.addListener(this.model.twistySceneModel
-      .stickering, async (stickering: ExperimentalStickering) => {
-      if ("setStickering" in (await this.twisty3DPuzzle())) {
-        ((await this.twisty3DPuzzle()) as Cube3D).setStickering(stickering);
-        this.scheduleRender();
-      } else {
-        // TODO: create a prop to handle this.
-        if ("stickeringMask" in this.puzzleLoader) {
-          const [twisty3D, stickeringMaskPromise] = await Promise.all([
-            this.twisty3DPuzzle(),
-            this.puzzleLoader.stickeringMask!(stickering ?? "full"),
-          ]);
-          (twisty3D as PG3D).experimentalSetStickeringMask(
-            stickeringMaskPromise,
-          );
-          this.scheduleRender();
-        }
-      }
-    });
 
     this.#freshListenerManager.addMultiListener3(
       [
-        this.model.twistySceneModel.stickering,
+        this.model.twistySceneModel.stickeringMask,
         this.model.twistySceneModel.foundationStickerSprite,
         this.model.twistySceneModel.hintStickerSprite,
       ],
       async (
         inputs: [
-          stickering: ExperimentalStickering,
+          stickeringMask: ExperimentalStickeringMask,
           foundationSprite: ThreeTexture | null,
           hintSprite: ThreeTexture | null,
         ],
       ) => {
         if ("experimentalUpdateTexture" in (await this.twisty3DPuzzle())) {
           ((await this.twisty3DPuzzle()) as PG3D).experimentalUpdateTexture(
-            inputs[0] === "picture",
+            inputs[0].specialBehaviour === "picture",
             inputs[1],
             inputs[2],
           );
@@ -144,23 +124,17 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
         this.visualizationStrategy === "Cube3D"
       ) {
         // TODO: synchronize
-        const [
-          foundationSprite,
-          hintSprite,
-          experimentalStickeringMask,
-          experimentalStickering,
-        ] = await Promise.all([
-          this.model.twistySceneModel.foundationStickerSprite.get(),
-          this.model.twistySceneModel.hintStickerSprite.get(),
-          this.model.twistySceneModel.stickeringMaskRequest.get(),
-          this.model.twistySceneModel.stickering.get(),
-        ]);
+        const [foundationSprite, hintSprite, experimentalStickeringMask] =
+          await Promise.all([
+            this.model.twistySceneModel.foundationStickerSprite.get(),
+            this.model.twistySceneModel.hintStickerSprite.get(),
+            this.model.twistySceneModel.stickeringMask.get(),
+          ]);
         return (await proxyPromise).cube3DShim(() =>
           this.schedulable.scheduleRender(), {
           foundationSprite,
           hintSprite,
           experimentalStickeringMask,
-          experimentalStickering,
         });
       } else {
         const [hintFacelets, foundationSprite, hintSprite] = await Promise.all([

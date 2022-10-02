@@ -187,7 +187,7 @@ export class TwistyPlayerModel {
       alg,
       setup,
       anchor,
-      experimentalStickering,
+      experimentalStickeringRequest,
     ] = await Promise.all([
       this.viewerLink.get(),
       this.puzzleID.get(),
@@ -213,8 +213,14 @@ export class TwistyPlayerModel {
     if (anchor !== "start") {
       url.searchParams.set("setup-anchor", anchor);
     }
-    if (experimentalStickering !== "full") {
-      url.searchParams.set("experimental-stickering", experimentalStickering);
+    if (
+      experimentalStickeringRequest !== "full" &&
+      experimentalStickeringRequest !== null
+    ) {
+      url.searchParams.set(
+        "experimental-stickering",
+        experimentalStickeringRequest,
+      );
     }
     if (isExplorer && puzzleDescription !== NO_VALUE) {
       url.searchParams.set("puzzle-description", puzzleDescription);

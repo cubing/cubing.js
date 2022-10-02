@@ -25,6 +25,7 @@ export type OrbitStickeringMask = {
 };
 
 export type StickeringMask = {
+  specialBehaviour?: "picture"; // TODO: remove this
   name?: string; // TODO
   orbits: Record<string, OrbitStickeringMask>;
 };

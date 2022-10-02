@@ -1,3 +1,6 @@
+import type { PuzzleID } from "../..";
+import type { KPuzzle } from "../../../kpuzzle";
+import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
 import type { StickeringMask } from "../../../puzzles/stickerings/mask";
 import {
@@ -6,17 +9,15 @@ import {
   PuzzlePosition,
 } from "../../controllers/AnimationTypes";
 import { RenderScheduler } from "../../controllers/RenderScheduler";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
-import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
-import type { ExperimentalStickering, PuzzleID } from "../..";
-import type { KPuzzle } from "../../../kpuzzle";
 import { KPuzzleSVGWrapper } from "./KPuzzleSVGWrapper";
+import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
 
 export interface Twisty2DPuzzleOptions {
-  experimentalStickering?: ExperimentalStickering;
+  experimentalStickeringMask?: ExperimentalStickeringMask;
 }
 
 // <twisty-2d-svg>
@@ -52,8 +53,10 @@ export class Twisty2DPuzzle
       this.onPositionChange.bind(this),
     );
 
-    if (this.options?.experimentalStickering) {
-      this.experimentalSetStickering(this.options.experimentalStickering);
+    if (this.options?.experimentalStickeringMask) {
+      this.experimentalSetStickeringMask(
+        this.options.experimentalStickeringMask,
+      );
     }
   }
 
@@ -96,14 +99,10 @@ export class Twisty2DPuzzle
     this.scheduler.requestAnimFrame();
   }
 
-  experimentalSetStickering(stickering: ExperimentalStickering): void {
-    (async () => {
-      if (!this.puzzleLoader?.stickeringMask) {
-        return;
-      }
-      const stickeringMask = await this.puzzleLoader.stickeringMask(stickering);
-      this.resetSVG(stickeringMask);
-    })();
+  experimentalSetStickeringMask(
+    stickeringMask: ExperimentalStickeringMask,
+  ): void {
+    this.resetSVG(stickeringMask);
   }
 
   // TODO: do this without constructing a new SVG.

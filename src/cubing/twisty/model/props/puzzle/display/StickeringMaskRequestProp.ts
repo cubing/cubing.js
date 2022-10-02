@@ -3,17 +3,19 @@ import { TwistyPropSource } from "../../TwistyProp";
 import { parseSerializedStickeringMask } from "./parseSerializedStickeringMask";
 
 export class StickeringMaskRequestProp extends TwistyPropSource<
-  ExperimentalStickeringMask,
+  ExperimentalStickeringMask | null,
   string | ExperimentalStickeringMask
 > {
-  getDefaultValue(): ExperimentalStickeringMask {
-    return { orbits: {} }; // TODO: auto
+  getDefaultValue(): ExperimentalStickeringMask | null {
+    return null; // TODO: auto
   }
 
   derive(
-    input: string | ExperimentalStickeringMask,
-  ): ExperimentalStickeringMask {
-    if (typeof input === "string") {
+    input: string | ExperimentalStickeringMask | null,
+  ): ExperimentalStickeringMask | null {
+    if (input === null) {
+      return null;
+    } else if (typeof input === "string") {
       return parseSerializedStickeringMask(input);
     } else {
       return input;

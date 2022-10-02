@@ -76,7 +76,7 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   }
 
   set experimentalStickering(stickering: ExperimentalStickering) {
-    this.experimentalModel.twistySceneModel.stickering.set(stickering);
+    this.experimentalModel.twistySceneModel.stickeringRequest.set(stickering);
   }
   get experimentalStickering(): never {
     throw err("stickering");
