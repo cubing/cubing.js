@@ -311,8 +311,8 @@ class ControlPane {
         this.twistyPlayer.experimentalModel.twistySceneModel.stickeringRequest,
         this.twistyPlayer.experimentalModel.puzzleID,
       ],
-      ([stickering, puzzleID]) =>
-        this.updateStickeringSelect(stickering, puzzleID),
+      ([stickeringRequest, puzzleID]) =>
+        this.updateStickeringSelect(stickeringRequest, puzzleID),
     );
 
     this.tempoInput = findOrCreateChildWithClass(
@@ -518,9 +518,10 @@ class ControlPane {
   }
 
   private async updateStickeringSelect(
-    initialStickering: string,
+    initialStickering: string | null,
     puzzleName: string,
   ): Promise<void> {
+    initialStickering ??= "full";
     let stickerings: Partial<Record<ExperimentalStickering, { name?: string }>>;
 
     // TODO: Look

@@ -10,7 +10,7 @@ export type ExperimentalStickering = keyof typeof experimentalStickerings;
 export function getStickeringGroup(
   stickering: ExperimentalStickering,
   puzzleID: PuzzleID,
-): string | null {
+): string {
   const groups = experimentalStickerings[stickering]?.groups;
   if (!groups) {
     return "Stickering";
