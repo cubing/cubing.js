@@ -18,7 +18,7 @@ import {
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../cubing/twisty";
-import { getStickeringGroup } from "../../../cubing/twisty/model/props/puzzle/display/StickeringProp";
+import { getStickeringGroup } from "../../../cubing/twisty/cubing-private";
 import type { AlgWithIssues } from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
 import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
@@ -308,7 +308,7 @@ class ControlPane {
     const freshListenerManager = new FreshListenerManager();
     freshListenerManager.addMultiListener(
       [
-        this.twistyPlayer.experimentalModel.twistySceneModel.stickering,
+        this.twistyPlayer.experimentalModel.twistySceneModel.stickeringRequest,
         this.twistyPlayer.experimentalModel.puzzleID,
       ],
       ([stickering, puzzleID]) =>

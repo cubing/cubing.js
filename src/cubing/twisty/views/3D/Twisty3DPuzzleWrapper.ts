@@ -71,7 +71,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
       this.scheduleRender();
     });
     this.#freshListenerManager.addListener(this.model.twistySceneModel
-      .stickeringMask, async (stickeringMask: ExperimentalStickeringMask) => {
+      .stickeringMaskRequest, async (stickeringMask: ExperimentalStickeringMask) => {
       const twisty3D = await this.twisty3DPuzzle();
       if (twisty3D instanceof Cube3D) {
         twisty3D.setStickeringMask(stickeringMask);
@@ -152,7 +152,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
         ] = await Promise.all([
           this.model.twistySceneModel.foundationStickerSprite.get(),
           this.model.twistySceneModel.hintStickerSprite.get(),
-          this.model.twistySceneModel.stickeringMask.get(),
+          this.model.twistySceneModel.stickeringMaskRequest.get(),
           this.model.twistySceneModel.stickering.get(),
         ]);
         return (await proxyPromise).cube3DShim(() =>

@@ -195,7 +195,7 @@ export class TwistyPlayerModel {
       this.alg.get(),
       this.setupAlg.get(),
       this.setupAnchor.get(),
-      this.twistySceneModel.stickering.get(),
+      this.twistySceneModel.stickeringRequest.get(),
     ]);
 
     const isExplorer = viewerLink === "experimental-twizzle-explorer";

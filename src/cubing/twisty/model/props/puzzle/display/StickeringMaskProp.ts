@@ -1,22 +1,24 @@
 import type { ExperimentalStickeringMask } from "../../../../../puzzles/cubing-private";
-import { TwistyPropSource } from "../../TwistyProp";
-import { parseSerializedStickeringMask } from "./parseSerializedStickeringMask";
+import type { StickeringMask } from "../../../../../puzzles/stickerings/mask";
+import { TwistyPropDerived } from "../../TwistyProp";
+import type { PuzzleID } from "../structure/PuzzleIDRequestProp";
+import type { ExperimentalStickering } from "./StickeringRequestProp";
 
-export class StickeringMaskProp extends TwistyPropSource<
-  ExperimentalStickeringMask,
-  string | ExperimentalStickeringMask
+interface StickeringMaskPropInputs {
+  stickeringRequest: ExperimentalStickering | null
+  stickeringMaskRequest: StickeringMask | null
+  puzzleID: PuzzleID
+}
+
+export class StickeringMaskProp extends TwistyPropDerived<
+StickeringMaskPropInputs,
+StickeringMask
 > {
   getDefaultValue(): ExperimentalStickeringMask {
     return { orbits: {} }; // TODO: auto
   }
 
-  derive(
-    input: string | ExperimentalStickeringMask,
-  ): ExperimentalStickeringMask {
-    if (typeof input === "string") {
-      return parseSerializedStickeringMask(input);
-    } else {
-      return input;
-    }
+  derive(inputs: StickeringMaskPropInputs): StickeringMask {
+    throw new Error();
   }
 }

@@ -17,7 +17,8 @@ export function getStickeringGroup(
   }
   return groups[puzzleID] ?? "Stickering";
 }
-export class StickeringProp extends SimpleTwistyPropSource<ExperimentalStickering> {
+
+export class StickeringRequestProp extends SimpleTwistyPropSource<ExperimentalStickering> {
   getDefaultValue(): ExperimentalStickering {
     return "full"; // TODO: auto
   }

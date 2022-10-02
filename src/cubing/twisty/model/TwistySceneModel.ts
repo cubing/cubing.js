@@ -3,7 +3,8 @@ import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayP
 import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
 import { SpriteProp } from "./props/puzzle/display/SpriteProp";
 import { StickeringMaskProp } from "./props/puzzle/display/StickeringMaskProp";
-import { StickeringProp } from "./props/puzzle/display/StickeringProp";
+import { StickeringMaskRequestProp } from "./props/puzzle/display/StickeringMaskRequestProp";
+import { StickeringRequestProp } from "./props/puzzle/display/StickeringRequestProp";
 import { DragInputProp } from "./props/puzzle/state/DragInputProp";
 import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOptions";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
@@ -26,20 +27,20 @@ export class TwistySceneModel {
   movePressCancelOptions = new MovePressCancelOptions();
   orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
-  stickering = new StickeringProp();
-  stickeringMask = new StickeringMaskProp();
+  stickeringRequest = new StickeringRequestProp();
+  stickeringMaskRequest = new StickeringMaskRequestProp();
 
   // Depth 1
   foundationStickerSprite = new SpriteProp({
     spriteURL: this.foundationStickerSpriteURL,
   });
-
   hintStickerSprite = new SpriteProp({
     spriteURL: this.hintStickerSpriteURL,
   });
 
-  // Depth 4
+  // Dependence on TwistyPlayerModel
   orbitCoordinates: OrbitCoordinatesProp;
+  stickeringMask: StickeringMaskProp;
 
   constructor(public twistyPlayerModel: TwistyPlayerModel) {
     this.orbitCoordinates = new OrbitCoordinatesProp({
@@ -48,5 +49,10 @@ export class TwistySceneModel {
       puzzleID: twistyPlayerModel.puzzleID,
       strategy: twistyPlayerModel.visualizationStrategy,
     });
+    this.stickeringMask = new StickeringMaskProp({
+      stickeringRequest: this.stickeringRequest,
+      stickeringMaskRequest: this.stickeringMaskRequest,
+      puzzleID: twistyPlayerModel.puzzleID
+    })
   }
 }
