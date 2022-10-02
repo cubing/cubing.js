@@ -31,3 +31,7 @@ export type {
   FaceletMeshStickeringMask as ExperimentalFaceletMeshStickeringMask,
   StickeringMask as ExperimentalStickeringMask,
 } from "../stickerings/mask";
+export {
+  getPieceStickeringMask as experimentalGetPieceStickeringMask,
+  PieceStickering as ExperimentalPieceStickering,
+} from "../stickerings/mask";

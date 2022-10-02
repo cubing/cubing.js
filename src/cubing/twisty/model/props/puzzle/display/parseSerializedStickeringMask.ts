@@ -4,18 +4,24 @@
 //   StickeringMask,
 // } from "./mask";
 
-import type {
-  ExperimentalFaceletMeshStickeringMask,
+import {
+  experimentalGetPieceStickeringMask,
+  ExperimentalPieceStickering,
   ExperimentalPieceStickeringMask,
   ExperimentalStickeringMask,
 } from "../../../../../puzzles/cubing-private";
 
-const charMap: Record<string, ExperimentalFaceletMeshStickeringMask> = {
-  "-": "regular",
-  D: "dim",
-  O: "oriented",
-  I: "ignored",
-  X: "invisible",
+const charMap: Record<string, ExperimentalPieceStickering> = {
+  "-": ExperimentalPieceStickering.Regular,
+  D: ExperimentalPieceStickering.Dim,
+  I: ExperimentalPieceStickering.Ignored,
+  // o: ExperimentalPieceStickering.OrientationStickers, // TODO: hack for centers
+  X: ExperimentalPieceStickering.Invisible,
+  O: ExperimentalPieceStickering.IgnoreNonPrimary, // orient color known
+  P: ExperimentalPieceStickering.PermuteNonPrimary, // Example: PLL
+  o: ExperimentalPieceStickering.Ignoriented, // Example: LL edges during CLS
+  "?": ExperimentalPieceStickering.OrientationWithoutPermutation, // ACube: ignore position
+  "@": ExperimentalPieceStickering.Regular, // ACube: ignore orientation // TODO: distinguish from "regular"
 };
 
 export function parseSerializedStickeringMask(
@@ -30,39 +36,14 @@ export function parseSerializedStickeringMask(
       serializedOrbit.split(":");
     if (rest.length > 0) {
       throw new Error(
-        `Invalid serialized orbit stickering mask (too many colones): \`${serializedOrbit}\``,
-      );
-    }
-    if (serializedOrbitPieces.length % 2 !== 0) {
-      throw new Error(
-        `Invalid serialized orbit stickering mask (odd number of chars): \`${serializedOrbit}\``,
+        `Invalid serialized orbit stickering mask (too many colons): \`${serializedOrbit}\``,
       );
     }
     const pieces: ExperimentalPieceStickeringMask[] = [];
     stickeringMask.orbits[orbitName] = { pieces };
-    for (let i = 0; i < serializedOrbitPieces.length; i += 2) {
-      const [primary, others] = serializedOrbitPieces.slice(i, i + 2);
-      const primaryStickeringMask = charMap[primary];
-      if (!primaryStickeringMask) {
-        throw new Error(
-          `Invalid facelet stickering mask identifier: \`${primary}\``,
-        );
-      }
-      const otherStickeringMask = charMap[others];
-      if (!otherStickeringMask) {
-        throw new Error(
-          `Invalid facelet stickering mask identifier: \`${others}\``,
-        );
-      }
-      pieces.push({
-        facelets: [
-          primaryStickeringMask,
-          otherStickeringMask,
-          otherStickeringMask,
-          otherStickeringMask,
-          otherStickeringMask,
-        ],
-      });
+    for (const char of serializedOrbitPieces) {
+      const pieceStickering = charMap[char];
+      pieces.push(experimentalGetPieceStickeringMask(pieceStickering));
     }
   }
   return stickeringMask;

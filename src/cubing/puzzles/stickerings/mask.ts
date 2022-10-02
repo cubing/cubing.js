@@ -93,76 +93,64 @@ const oriented = "oriented";
 const invisible = "invisible";
 const dim = "dim";
 
-// regular
-const r: PieceStickeringMask = {
-  facelets: [regular, regular, regular, regular, regular],
-};
+const pieceStickerings: Record<string, PieceStickeringMask> = {
+  // regular
+  [PieceStickering.Regular]: {
+    // r
+    facelets: [regular, regular, regular, regular, regular],
+  },
 
-// ignored
-const i: PieceStickeringMask = {
-  facelets: [ignored, ignored, ignored, ignored, ignored],
-};
+  // ignored
+  [PieceStickering.Ignored]: {
+    // i
+    facelets: [ignored, ignored, ignored, ignored, ignored],
+  },
 
-// oriented stickers
-const o: PieceStickeringMask = {
-  facelets: [oriented, oriented, oriented, oriented, oriented],
-};
+  // oriented stickers
+  [PieceStickering.OrientationStickers]: {
+    // o
+    facelets: [oriented, oriented, oriented, oriented, oriented],
+  },
 
-// invisible
-const invisiblePiece: PieceStickeringMask = {
-  facelets: [invisible, invisible, invisible, invisible], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
-};
+  // "OLL"
+  [PieceStickering.IgnoreNonPrimary]: {
+    // riiii
+    facelets: [regular, ignored, ignored, ignored, ignored],
+  },
 
-// "OLL"
-const riiii: PieceStickeringMask = {
-  facelets: [regular, ignored, ignored, ignored, ignored],
-};
+  // invisible
+  [PieceStickering.Invisible]: {
+    // invisiblePiece
+    facelets: [invisible, invisible, invisible, invisible], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
+  },
 
-// "PLL"
-const drrrr: PieceStickeringMask = {
-  facelets: [dim, regular, regular, regular, regular],
-};
+  // "PLL"
+  [PieceStickering.PermuteNonPrimary]: {
+    // drrrr
+    facelets: [dim, regular, regular, regular, regular],
+  },
 
-// ignored
-const d: PieceStickeringMask = {
-  facelets: [dim, dim, dim, dim, dim],
-};
+  // ignored
+  [PieceStickering.Dim]: {
+    // d
+    facelets: [dim, dim, dim, dim, dim],
+  },
 
-// "OLL"
-const diiii: PieceStickeringMask = {
-  facelets: [dim, ignored, ignored, ignored, ignored],
-};
-
-// oriented
-const oiiii: PieceStickeringMask = {
-  facelets: [oriented, ignored, ignored, ignored, ignored],
+  // "OLL"
+  [PieceStickering.Ignoriented]: {
+    // diiii
+    facelets: [dim, ignored, ignored, ignored, ignored],
+  },
+  [PieceStickering.OrientationWithoutPermutation]: {
+    // oiiii
+    facelets: [oriented, ignored, ignored, ignored, ignored],
+  },
 };
 
 export function getPieceStickeringMask(
   pieceStickering: PieceStickering,
 ): PieceStickeringMask {
-  switch (pieceStickering) {
-    case PieceStickering.Regular:
-      return r;
-    case PieceStickering.Dim:
-      return d;
-    case PieceStickering.Ignored:
-      return i;
-    case PieceStickering.OrientationStickers:
-      // TODO: Hack for centers. This shouldn't be needed.
-      return o;
-    case PieceStickering.Invisible:
-      // TODO: Hack for centers. This shouldn't be needed.
-      return invisiblePiece;
-    case PieceStickering.IgnoreNonPrimary:
-      return riiii;
-    case PieceStickering.PermuteNonPrimary:
-      return drrrr;
-    case PieceStickering.Ignoriented:
-      return diiii;
-    case PieceStickering.OrientationWithoutPermutation:
-      return oiiii;
-  }
+  return pieceStickerings[pieceStickering];
 }
 
 export class PuzzleStickering extends PieceAnnotation<PieceStickering> {

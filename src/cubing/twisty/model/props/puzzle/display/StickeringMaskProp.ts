@@ -39,7 +39,6 @@ export class StickeringMaskProp extends TwistyPropDerived<
   }
 
   async derive(inputs: StickeringMaskPropInputs): Promise<StickeringMask> {
-    console.log(inputs);
     if (inputs.stickeringMaskRequest) {
       return inputs.stickeringMaskRequest;
     }
