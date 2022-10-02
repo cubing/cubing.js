@@ -4,7 +4,7 @@ import { parseSerializedStickeringMask } from "./parseSerializedStickeringMask";
 
 export class StickeringMaskRequestProp extends TwistyPropSource<
   ExperimentalStickeringMask | null,
-  string | ExperimentalStickeringMask
+  string | ExperimentalStickeringMask | null
 > {
   getDefaultValue(): ExperimentalStickeringMask | null {
     return null; // TODO: auto

@@ -27,6 +27,7 @@ export class TwistySceneModel {
   movePressCancelOptions = new MovePressCancelOptions();
   orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
+  // `stickeringMaskRequest` takes priority over `stickeringRequest`
   stickeringMaskRequest = new StickeringMaskRequestProp();
   stickeringRequest = new StickeringRequestProp();
 
