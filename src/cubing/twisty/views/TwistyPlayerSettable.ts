@@ -79,16 +79,18 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
     this.experimentalModel.twistySceneModel.stickeringRequest.set(stickering);
   }
   get experimentalStickering(): never {
-    throw err("stickering");
+    throw err("experimentalStickering");
   }
 
-  set experimentalStickeringMask(stickeringMask: string | StickeringMask) {
+  set experimentalStickeringMaskOrbits(stickeringMask:
+    | string
+    | StickeringMask) {
     this.experimentalModel.twistySceneModel.stickeringMaskRequest.set(
       stickeringMask,
     );
   }
-  get experimentalStickeringMask(): never {
-    throw err("stickeringMask");
+  get experimentalStickeringMaskOrbits(): never {
+    throw err("experimentalStickeringMaskOrbits");
   }
 
   set backView(backView: BackViewLayoutWithAuto) {

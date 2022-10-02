@@ -56,7 +56,7 @@ export const twistyPlayerAttributeMap = {
   visualization: "visualization",
   "hint-facelets": "hintFacelets",
   "experimental-stickering": "experimentalStickering",
-  "experimental-stickering-mask": "experimentalStickeringMask",
+  "experimental-stickering-mask-orbits": "experimentalStickeringMaskOrbits",
   background: "background",
   "control-panel": "controlPanel",
   "back-view": "backView",
@@ -130,7 +130,7 @@ export interface TwistyPlayerConfig {
   visualization?: VisualizationFormatWithAuto;
   hintFacelets?: HintFaceletStyleWithAuto;
   experimentalStickering?: ExperimentalStickering;
-  experimentalStickeringMask?: ExperimentalStickeringMask;
+  experimentalStickeringMaskOrbits?: ExperimentalStickeringMask;
   background?: BackViewLayoutWithAuto;
   controlPanel?: ControlPanelThemeWithAuto;
   backView?: BackViewLayoutWithAuto;
