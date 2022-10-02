@@ -1,6 +1,9 @@
 import type { PuzzleLoader } from "../../../../../puzzles";
 import type { ExperimentalStickeringMask } from "../../../../../puzzles/cubing-private";
-import type { StickeringMask } from "../../../../../puzzles/stickerings/mask";
+import type {
+  PieceStickeringMask,
+  StickeringMask,
+} from "../../../../../puzzles/stickerings/mask";
 import { TwistyPropDerived } from "../../TwistyProp";
 import type { ExperimentalStickering } from "./StickeringRequestProp";
 
@@ -10,19 +13,21 @@ interface StickeringMaskPropInputs {
   puzzleLoader: PuzzleLoader;
 }
 
-const r = ["regular", "regular", "regular", "regular", "regular"];
+const r: PieceStickeringMask = {
+  facelets: ["regular", "regular", "regular", "regular", "regular"],
+};
 
 async function fullStickeringMask(
   puzzleLoader: PuzzleLoader,
 ): Promise<ExperimentalStickeringMask> {
   const { definition } = await puzzleLoader.kpuzzle();
-  const stickeringMask: ExperimentalStickeringMask = { orbits: {} };
-  for (const [orbitName, orbitDef] of Object.entries(definition)) {
-    stickeringMask.orbits[orbitName] = {
+  const fullStickeringMask: ExperimentalStickeringMask = { orbits: {} };
+  for (const [orbitName, orbitDef] of Object.entries(definition.orbits)) {
+    fullStickeringMask.orbits[orbitName] = {
       pieces: new Array(orbitDef.numPieces).fill(r),
     };
   }
-  return stickeringMask;
+  return fullStickeringMask;
 }
 
 export class StickeringMaskProp extends TwistyPropDerived<
@@ -34,6 +39,7 @@ export class StickeringMaskProp extends TwistyPropDerived<
   }
 
   async derive(inputs: StickeringMaskPropInputs): Promise<StickeringMask> {
+    console.log(inputs);
     if (inputs.stickeringMaskRequest) {
       return inputs.stickeringMaskRequest;
     }
