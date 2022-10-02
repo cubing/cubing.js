@@ -54,4 +54,5 @@ export class StickeringMaskProp extends TwistyPropDerived<
       ) ?? fullStickeringMask(inputs.puzzleLoader)
     );
   }
+  // TODO: Implement canReuseValue?
 }
