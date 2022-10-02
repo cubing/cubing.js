@@ -16,7 +16,6 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
 
     this.#freshListenerManager.addListener(this.model.twistySceneModel
       .stickeringMask, async (stickeringMask: ExperimentalStickeringMask) => {
-      console.log("2D", { stickeringMask });
       (await this.twisty2DPuzzle()).experimentalSetStickeringMask(
         stickeringMask,
       );

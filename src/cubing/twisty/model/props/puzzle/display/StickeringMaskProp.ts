@@ -18,7 +18,6 @@ async function fullStickeringMask(
   const { definition } = await puzzleLoader.kpuzzle();
   const stickeringMask: ExperimentalStickeringMask = { orbits: {} };
   for (const [orbitName, orbitDef] of Object.entries(definition)) {
-    console.log(orbitName);
     stickeringMask.orbits[orbitName] = {
       pieces: new Array(orbitDef.numPieces).fill(r),
     };
