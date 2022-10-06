@@ -763,12 +763,14 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
             4,
         );
         for (let i = 0; i < pieces.length; i++) {
+          const quantumTransformation = this.kpuzzle.moveToTransformation(
+            move.modified({ amount: 1 }),
+          );
           const k =
-            this.kpuzzle.definition.moves[move.family][orbit].permutation[i];
+            quantumTransformation.transformationData[orbit].permutation[i];
           if (
             i !== k ||
-            this.kpuzzle.definition.moves[move.family][orbit].orientation[i] !==
-              0
+            quantumTransformation.transformationData[orbit].orientation[i] !== 0
           ) {
             const j = reid333.stateData[orbit].pieces[i];
             this.pieces[orbit][j].matrix.premultiply(moveMatrix);

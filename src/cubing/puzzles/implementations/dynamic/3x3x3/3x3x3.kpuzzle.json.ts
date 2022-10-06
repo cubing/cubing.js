@@ -329,3 +329,12 @@ cube3x3x3KPuzzleDefinition.moves["Bv"] = {
     orientation: [3, 3, 3, 3, 1, 3],
   },
 };
+
+cube3x3x3KPuzzleDefinition.experimentalDerivedMoves = {
+  "2U": "u U'",
+  "2L": "l L'",
+  "2F": "f F'",
+  "2R": "r R'",
+  "2B": "b B'",
+  "2D": "d D'",
+};
