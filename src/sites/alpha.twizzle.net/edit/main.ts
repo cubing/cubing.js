@@ -6,7 +6,21 @@ import {
   remapLegacyURLParams,
 } from "../../../cubing/twisty/views/twizzle/url-params";
 import { App } from "./app";
-import { getURLParam } from "./url-params";
+
+function getRawBooleanURLParam(
+  paramName: string,
+  defaultValue: boolean,
+): boolean {
+  const value = new URLSearchParams(window.location.search).get(paramName);
+  switch (value) {
+    case "true":
+      return true;
+    case "false":
+      return false;
+    default:
+      return defaultValue;
+  }
+}
 
 remapLegacyURLParams({
   "experimental-setup-alg": "setup-alg",
@@ -15,15 +29,16 @@ remapLegacyURLParams({
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  if (!getURLParam("debug-js")) {
+  if (!getRawBooleanURLParam("debug-js", true)) {
+    console.warn("Disabling JS based on URL param (for testing!)");
     return;
   }
 
-  if (getURLParam("debug-show-render-stats")) {
+  if (getRawBooleanURLParam("debug-show-render-stats", false)) {
     setTwistyDebug({ showRenderStats: true });
   }
 
-  if (getURLParam("debug-carat-niss-notation")) {
+  if (getRawBooleanURLParam("debug-carat-niss-notation", false)) {
     setAlgDebug({ caratNISSNotationEnabled: true });
   }
 

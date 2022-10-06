@@ -4,6 +4,7 @@ import type { Alg, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { AppendCancelOptions, AppendOptions } from "../../alg/simplify";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
+import type { ExperimentalStickeringMask } from "../../puzzles/cubing-private";
 import { RenderScheduler } from "../controllers/RenderScheduler";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
@@ -55,6 +56,7 @@ export const twistyPlayerAttributeMap = {
   visualization: "visualization",
   "hint-facelets": "hintFacelets",
   "experimental-stickering": "experimentalStickering",
+  "experimental-stickering-mask-orbits": "experimentalStickeringMaskOrbits",
   background: "background",
   "control-panel": "controlPanel",
   "back-view": "backView",
@@ -128,6 +130,7 @@ export interface TwistyPlayerConfig {
   visualization?: VisualizationFormatWithAuto;
   hintFacelets?: HintFaceletStyleWithAuto;
   experimentalStickering?: ExperimentalStickering;
+  experimentalStickeringMaskOrbits?: ExperimentalStickeringMask;
   background?: BackViewLayoutWithAuto;
   controlPanel?: ControlPanelThemeWithAuto;
   backView?: BackViewLayoutWithAuto;

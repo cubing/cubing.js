@@ -28,9 +28,10 @@ export class URLParamUpdater {
 
     this.listenToAlgProp(model.alg, "alg");
     this.listenToAlgProp(model.setupAlg, "setup-alg");
-    this.listenToStringSourceProp(
-      model.twistySceneModel.stickering,
+    this.listenToStringOrNullProp(
+      model.twistySceneModel.stickeringRequest,
       "stickering",
+      "full",
     );
     this.listenToStringSourceProp(model.setupAnchor, "setup-anchor");
     this.listenToStringOrNullProp(model.title, "title");
@@ -63,11 +64,12 @@ export class URLParamUpdater {
   }
 
   async listenToStringSourceProp(
-    prop: TwistyPropSource<string>,
+    prop: TwistyPropSource<string | null>,
     key: string,
     defaultString?: string,
   ): Promise<void> {
-    const actualDefaultString = defaultString ?? (await prop.getDefaultValue());
+    const actualDefaultString =
+      defaultString ?? (await prop.getDefaultValue()) ?? ""; // TODO
     prop.addFreshListener((s: string) => {
       this.setURLParam(key, s, actualDefaultString);
     });

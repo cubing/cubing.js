@@ -2,7 +2,9 @@ import { URLProp } from "./props/general/URLProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
 import { SpriteProp } from "./props/puzzle/display/SpriteProp";
-import { StickeringProp } from "./props/puzzle/display/StickeringProp";
+import { StickeringMaskProp } from "./props/puzzle/display/StickeringMaskProp";
+import { StickeringMaskRequestProp } from "./props/puzzle/display/StickeringMaskRequestProp";
+import { StickeringRequestProp } from "./props/puzzle/display/StickeringRequestProp";
 import { DragInputProp } from "./props/puzzle/state/DragInputProp";
 import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOptions";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
@@ -25,19 +27,21 @@ export class TwistySceneModel {
   movePressCancelOptions = new MovePressCancelOptions();
   orbitCoordinatesRequest: OrbitCoordinatesRequestProp =
     new OrbitCoordinatesRequestProp();
-  stickering = new StickeringProp();
+  // `stickeringMaskRequest` takes priority over `stickeringRequest`
+  stickeringMaskRequest = new StickeringMaskRequestProp();
+  stickeringRequest = new StickeringRequestProp();
 
   // Depth 1
   foundationStickerSprite = new SpriteProp({
     spriteURL: this.foundationStickerSpriteURL,
   });
-
   hintStickerSprite = new SpriteProp({
     spriteURL: this.hintStickerSpriteURL,
   });
 
-  // Depth 4
+  // Dependence on TwistyPlayerModel
   orbitCoordinates: OrbitCoordinatesProp;
+  stickeringMask: StickeringMaskProp;
 
   constructor(public twistyPlayerModel: TwistyPlayerModel) {
     this.orbitCoordinates = new OrbitCoordinatesProp({
@@ -45,6 +49,11 @@ export class TwistySceneModel {
       latitudeLimit: this.latitudeLimit,
       puzzleID: twistyPlayerModel.puzzleID,
       strategy: twistyPlayerModel.visualizationStrategy,
+    });
+    this.stickeringMask = new StickeringMaskProp({
+      stickeringMaskRequest: this.stickeringMaskRequest,
+      stickeringRequest: this.stickeringRequest,
+      puzzleLoader: twistyPlayerModel.puzzleLoader,
     });
   }
 }

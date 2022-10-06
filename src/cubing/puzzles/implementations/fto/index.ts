@@ -1,7 +1,7 @@
 import type { ExperimentalStickering } from "../../../twisty";
 import { PGPuzzleLoader } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
-import type { PuzzleAppearance } from "../../stickerings/appearance";
+import type { StickeringMask } from "../../stickerings/mask";
 import {
   ftoStickering,
   ftoStickerings,
@@ -17,7 +17,7 @@ class FTOPuzzleLoader extends PGPuzzleLoader {
       inventionYear: 1983, // http://twistypuzzles.com/cgi-bin/puzzle.cgi?pkey=1663
     });
   }
-  appearance(stickering: ExperimentalStickering): Promise<PuzzleAppearance> {
+  stickeringMask(stickering: ExperimentalStickering): Promise<StickeringMask> {
     return ftoStickering(this, stickering);
   }
   stickerings = ftoStickerings;

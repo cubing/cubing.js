@@ -3,57 +3,61 @@
 import type { Move } from "../../alg";
 import type { KPuzzle } from "../../kpuzzle";
 
-export type FaceletMeshAppearance =
+export type FaceletMeshStickeringMask =
   | "regular"
   | "dim"
   | "oriented"
   | "ignored"
   | "invisible";
 
-export type FaceletAppearance = {
-  appearance: FaceletMeshAppearance;
-  hintAppearance?: FaceletMeshAppearance;
+export type FaceletStickeringMask = {
+  mask: FaceletMeshStickeringMask;
+  hintMask?: FaceletMeshStickeringMask;
 };
 
-export type PieceAppearance = {
+export type PieceStickeringMask = {
   // TODO: foundation?
-  facelets: (FaceletMeshAppearance | FaceletAppearance | null)[];
+  facelets: (FaceletMeshStickeringMask | FaceletStickeringMask | null)[];
 };
 
-export type OrbitAppearance = {
-  pieces: (PieceAppearance | null)[];
+export type OrbitStickeringMask = {
+  pieces: (PieceStickeringMask | null)[];
 };
 
-export type PuzzleAppearance = {
+export type StickeringMask = {
+  specialBehaviour?: "picture"; // TODO: remove this
   name?: string; // TODO
-  orbits: Record<string, OrbitAppearance>;
+  orbits: Record<string, OrbitStickeringMask>;
 };
 
-export function getFaceletAppearance(
-  appearance: PuzzleAppearance,
+export function getFaceletStickeringMask(
+  stickeringMask: StickeringMask,
   orbitName: string,
   pieceIdx: number,
   faceletIdx: number,
   hint: boolean,
-): FaceletMeshAppearance {
-  const orbitAppearance = appearance.orbits[orbitName];
-  const pieceAppearance: PieceAppearance | null =
-    orbitAppearance.pieces[pieceIdx];
-  if (pieceAppearance === null) {
+): FaceletMeshStickeringMask {
+  const orbitStickeringMask = stickeringMask.orbits[orbitName];
+  const pieceStickeringMask: PieceStickeringMask | null =
+    orbitStickeringMask.pieces[pieceIdx];
+  if (pieceStickeringMask === null) {
     return regular;
   }
-  const faceletAppearance: FaceletMeshAppearance | FaceletAppearance | null =
-    pieceAppearance.facelets[faceletIdx];
-  if (faceletAppearance === null) {
+  const faceletStickeringMask:
+    | FaceletMeshStickeringMask
+    | FaceletStickeringMask
+    | null = pieceStickeringMask.facelets?.[faceletIdx];
+  if (faceletStickeringMask === null) {
     return regular;
   }
-  if (typeof faceletAppearance === "string") {
-    return faceletAppearance;
+  if (typeof faceletStickeringMask === "string") {
+    return faceletStickeringMask;
   }
   if (hint) {
-    return faceletAppearance.hintAppearance ?? faceletAppearance.appearance;
+    return faceletStickeringMask.hintMask ?? faceletStickeringMask.mask;
   }
-  return faceletAppearance.appearance;
+  console.log(faceletStickeringMask);
+  return faceletStickeringMask.mask;
 }
 
 // TODO: Revert this to a normal enum, or write a standard to codify the names?
@@ -89,76 +93,64 @@ const oriented = "oriented";
 const invisible = "invisible";
 const dim = "dim";
 
-// regular
-const r: PieceAppearance = {
-  facelets: [regular, regular, regular, regular, regular],
+const pieceStickerings: Record<string, PieceStickeringMask> = {
+  // regular
+  [PieceStickering.Regular]: {
+    // r
+    facelets: [regular, regular, regular, regular, regular],
+  },
+
+  // ignored
+  [PieceStickering.Ignored]: {
+    // i
+    facelets: [ignored, ignored, ignored, ignored, ignored],
+  },
+
+  // oriented stickers
+  [PieceStickering.OrientationStickers]: {
+    // o
+    facelets: [oriented, oriented, oriented, oriented, oriented],
+  },
+
+  // "OLL"
+  [PieceStickering.IgnoreNonPrimary]: {
+    // riiii
+    facelets: [regular, ignored, ignored, ignored, ignored],
+  },
+
+  // invisible
+  [PieceStickering.Invisible]: {
+    // invisiblePiece
+    facelets: [invisible, invisible, invisible, invisible], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
+  },
+
+  // "PLL"
+  [PieceStickering.PermuteNonPrimary]: {
+    // drrrr
+    facelets: [dim, regular, regular, regular, regular],
+  },
+
+  // ignored
+  [PieceStickering.Dim]: {
+    // d
+    facelets: [dim, dim, dim, dim, dim],
+  },
+
+  // "OLL"
+  [PieceStickering.Ignoriented]: {
+    // diiii
+    facelets: [dim, ignored, ignored, ignored, ignored],
+  },
+  [PieceStickering.OrientationWithoutPermutation]: {
+    // oiiii
+    facelets: [oriented, ignored, ignored, ignored, ignored],
+  },
 };
 
-// ignored
-const i: PieceAppearance = {
-  facelets: [ignored, ignored, ignored, ignored, ignored],
-};
-
-// oriented stickers
-const o: PieceAppearance = {
-  facelets: [oriented, oriented, oriented, oriented, oriented],
-};
-
-// invisible
-const invisiblePiece: PieceAppearance = {
-  facelets: [invisible, invisible, invisible, invisible], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
-};
-
-// "OLL"
-const riiii: PieceAppearance = {
-  facelets: [regular, ignored, ignored, ignored, ignored],
-};
-
-// "PLL"
-const drrrr: PieceAppearance = {
-  facelets: [dim, regular, regular, regular, regular],
-};
-
-// ignored
-const d: PieceAppearance = {
-  facelets: [dim, dim, dim, dim, dim],
-};
-
-// "OLL"
-const diiii: PieceAppearance = {
-  facelets: [dim, ignored, ignored, ignored, ignored],
-};
-
-// oriented
-const oiiii: PieceAppearance = {
-  facelets: [oriented, ignored, ignored, ignored, ignored],
-};
-
-export function getPieceAppearance(
+export function getPieceStickeringMask(
   pieceStickering: PieceStickering,
-): PieceAppearance {
-  switch (pieceStickering) {
-    case PieceStickering.Regular:
-      return r;
-    case PieceStickering.Dim:
-      return d;
-    case PieceStickering.Ignored:
-      return i;
-    case PieceStickering.OrientationStickers:
-      // TODO: Hack for centers. This shouldn't be needed.
-      return o;
-    case PieceStickering.Invisible:
-      // TODO: Hack for centers. This shouldn't be needed.
-      return invisiblePiece;
-    case PieceStickering.IgnoreNonPrimary:
-      return riiii;
-    case PieceStickering.PermuteNonPrimary:
-      return drrrr;
-    case PieceStickering.Ignoriented:
-      return diiii;
-    case PieceStickering.OrientationWithoutPermutation:
-      return oiiii;
-  }
+): PieceStickeringMask {
+  return pieceStickerings[pieceStickering];
 }
 
 export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
@@ -177,19 +169,19 @@ export class PuzzleStickering extends PieceAnnotation<PieceStickering> {
     return this;
   }
 
-  toAppearance(): PuzzleAppearance {
-    const appearance: PuzzleAppearance = { orbits: {} };
+  toStickeringMask(): StickeringMask {
+    const stickeringMask: StickeringMask = { orbits: {} };
     for (const [orbitName, pieceStickerings] of this.stickerings.entries()) {
-      const pieces: PieceAppearance[] = [];
-      const orbitAppearance: OrbitAppearance = {
+      const pieces: PieceStickeringMask[] = [];
+      const orbitStickeringMask: OrbitStickeringMask = {
         pieces,
       };
-      appearance.orbits[orbitName] = orbitAppearance;
+      stickeringMask.orbits[orbitName] = orbitStickeringMask;
       for (const pieceStickering of pieceStickerings) {
-        pieces.push(getPieceAppearance(pieceStickering));
+        pieces.push(getPieceStickeringMask(pieceStickering));
       }
     }
-    return appearance;
+    return stickeringMask;
   }
 }
 

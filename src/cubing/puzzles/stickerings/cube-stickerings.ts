@@ -3,17 +3,17 @@ import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   PieceSet,
   PieceStickering,
-  PuzzleAppearance,
+  StickeringMask,
   PuzzleStickering,
   StickeringManager,
-} from "./appearance";
+} from "./mask";
 import { experimentalStickerings } from "./puzzle-stickerings";
 
 // TODO: cache calculations?
-export async function cubeAppearance(
+export async function cubeLikeStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
-): Promise<PuzzleAppearance> {
+): Promise<StickeringMask> {
   const kpuzzle = await puzzleLoader.kpuzzle();
   const puzzleStickering = new PuzzleStickering(kpuzzle);
   const m = new StickeringManager(kpuzzle);
@@ -295,7 +295,7 @@ export async function cubeAppearance(
       );
       puzzleStickering.set(m.and(m.moves([])), PieceStickering.Dim);
   }
-  return puzzleStickering.toAppearance();
+  return puzzleStickering.toStickeringMask();
 }
 
 export async function cubeStickerings(): Promise<ExperimentalStickering[]> {

@@ -3,9 +3,9 @@ import type { ExperimentalStickering } from "../../../twisty";
 import { asyncGetPuzzleGeometry } from "../../async/async-pg3d";
 import { getCached } from "../../async/lazy-cached";
 import type { PuzzleLoader } from "../../PuzzleLoader";
-import type { PuzzleAppearance } from "../../stickerings/appearance";
+import type { StickeringMask } from "../../stickerings/mask";
 import {
-  cubeAppearance,
+  cubeLikeStickeringMask,
   cubeStickerings,
 } from "../../stickerings/cube-stickerings";
 
@@ -27,7 +27,8 @@ export const cube2x2x2: PuzzleLoader = {
   pg: getCached(async () => {
     return asyncGetPuzzleGeometry("2x2x2");
   }),
-  appearance: (stickering: ExperimentalStickering): Promise<PuzzleAppearance> =>
-    cubeAppearance(cube2x2x2, stickering),
+  stickeringMask: (
+    stickering: ExperimentalStickering,
+  ): Promise<StickeringMask> => cubeLikeStickeringMask(cube2x2x2, stickering),
   stickerings: cubeStickerings,
 };

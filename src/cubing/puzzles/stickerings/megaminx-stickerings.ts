@@ -1,13 +1,13 @@
 import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
-import type { PuzzleAppearance } from "./appearance";
-import { cubeAppearance } from "./cube-stickerings";
+import type { StickeringMask } from "./mask";
+import { cubeLikeStickeringMask } from "./cube-stickerings";
 
 // TODO: cache calculations?
-export async function megaminxAppearance(
+export async function megaminxStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
-): Promise<PuzzleAppearance> {
+): Promise<StickeringMask> {
   switch (stickering) {
     case "full":
     case "F2L":
@@ -16,13 +16,13 @@ export async function megaminxAppearance(
     case "PLL":
     case "ELS":
     case "CLS":
-      return cubeAppearance(puzzleLoader, stickering);
+      return cubeLikeStickeringMask(puzzleLoader, stickering);
     default:
       console.warn(
         `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,
       );
   }
-  return cubeAppearance(puzzleLoader, "full");
+  return cubeLikeStickeringMask(puzzleLoader, "full");
 }
 
 export async function megaminxStickerings(): Promise<ExperimentalStickering[]> {

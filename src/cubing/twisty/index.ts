@@ -18,7 +18,7 @@ export {
 } from "./model/props/TwistyProp";
 export type {
   ExperimentalStickering,
-} from "./model/props/puzzle/display/StickeringProp";
+} from "./model/props/puzzle/display/StickeringRequestProp";
 export {
   type BackViewLayout,
   backViewLayouts,

@@ -1,8 +1,8 @@
 import type { PuzzleLoader } from "../../../puzzles";
-import type { ExperimentalStickering } from "../../../twisty";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
+import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { Schedulable } from "../../controllers/RenderScheduler";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { Twisty2DPuzzle } from "./Twisty2DPuzzle";
 
 export class Twisty2DPuzzleWrapper implements Schedulable {
@@ -15,8 +15,10 @@ export class Twisty2DPuzzleWrapper implements Schedulable {
     this.twisty2DPuzzle(); // Start constructing.
 
     this.#freshListenerManager.addListener(this.model.twistySceneModel
-      .stickering, async (stickering: ExperimentalStickering) => {
-      (await this.twisty2DPuzzle()).experimentalSetStickering(stickering);
+      .stickeringMask, async (stickeringMask: ExperimentalStickeringMask) => {
+      (await this.twisty2DPuzzle()).experimentalSetStickeringMask(
+        stickeringMask,
+      );
     });
   }
 

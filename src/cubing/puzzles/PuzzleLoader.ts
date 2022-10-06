@@ -2,7 +2,7 @@ import type { PuzzleSpecificSimplifyOptions } from "../alg";
 import type { KPuzzle } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { ExperimentalStickering } from "../twisty";
-import type { PuzzleAppearance } from "./stickerings/appearance";
+import type { StickeringMask } from "./stickerings/mask";
 
 export interface PuzzleLoader {
   id: string;
@@ -16,9 +16,9 @@ export interface PuzzleLoader {
   svg: () => Promise<string>;
   llSVG?: () => Promise<string>;
   pg?: () => Promise<PuzzleGeometry>;
-  appearance?: (
+  stickeringMask?: (
     stickering: ExperimentalStickering,
-  ) => Promise<PuzzleAppearance>;
+  ) => Promise<StickeringMask>;
   stickerings?: () => Promise<ExperimentalStickering[]>;
   puzzleSpecificSimplifyOptions?: PuzzleSpecificSimplifyOptions;
 }

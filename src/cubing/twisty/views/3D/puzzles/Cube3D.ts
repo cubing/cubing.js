@@ -16,14 +16,12 @@ import {
   Vector2,
   Vector3,
 } from "three";
-import type { ExperimentalStickering } from "../../..";
 import type { KPuzzle } from "../../../../kpuzzle";
-import { puzzles } from "../../../../puzzles";
-import { experimentalStickerings } from "../../../../puzzles/cubing-private";
+import type { ExperimentalStickeringMask } from "../../../../puzzles/cubing-private";
 import type {
-  FaceletMeshAppearance,
-  PuzzleAppearance,
-} from "../../../../puzzles/stickerings/appearance";
+  FaceletMeshStickeringMask,
+  StickeringMask,
+} from "../../../../puzzles/stickerings/mask";
 import type {
   MillisecondTimestamp,
   PuzzlePosition,
@@ -67,7 +65,8 @@ const orientedMaterialHint = new MeshBasicMaterial({
   opacity: 0.5,
 });
 
-interface MaterialMap extends Record<FaceletMeshAppearance, MeshBasicMaterial> {
+interface MaterialMap
+  extends Record<FaceletMeshStickeringMask, MeshBasicMaterial> {
   regular: MeshBasicMaterial;
   dim: MeshBasicMaterial;
   ignored: MeshBasicMaterial;
@@ -215,7 +214,7 @@ export interface Cube3DOptions {
   showMainStickers?: boolean;
   hintFacelets?: HintFaceletStyle;
   showFoundation?: boolean; // TODO: better name
-  experimentalStickering?: ExperimentalStickering;
+  experimentalStickeringMask?: ExperimentalStickeringMask;
   foundationSprite?: Texture | null;
   hintSprite?: Texture | null;
 }
@@ -224,7 +223,7 @@ const cube3DOptionsDefaults: Cube3DOptions = {
   showMainStickers: true,
   hintFacelets: "floating",
   showFoundation: true,
-  experimentalStickering: "full",
+  experimentalStickeringMask: undefined,
   foundationSprite: null,
   hintSprite: null,
 };
@@ -590,8 +589,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     this.scale.set(CUBE_SCALE, CUBE_SCALE, CUBE_SCALE);
 
     // TODO: Can we construct this directly instead of applying it later? Would that be more code-efficient?
-    if (this.options.experimentalStickering) {
-      this.setStickering(this.options.experimentalStickering);
+    if (this.options.experimentalStickeringMask) {
+      this.setStickeringMask(this.options.experimentalStickeringMask);
     }
     this.#animateRaiseHintFacelets();
   }
@@ -650,56 +649,45 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     this.setHintSpriteURL(hintStickerSpriteURL);
   }
 
-  setStickering(stickering: ExperimentalStickering): void {
-    // TODO
-    (async () => {
-      // TODO
-      const appearance = await puzzles["3x3x3"].appearance!(
-        stickering ?? "full",
-      );
-      this.setAppearance(
-        appearance ?? (await puzzles["3x3x3"].appearance!("full")),
-      );
-    })();
-  }
-
-  setAppearance(appearance: PuzzleAppearance): void {
-    for (const [orbitName, orbitAppearance] of Object.entries(
-      appearance.orbits,
+  setStickeringMask(stickeringMask: StickeringMask): void {
+    this.options.experimentalStickeringMask = stickeringMask;
+    for (const [orbitName, orbitStickeringMask] of Object.entries(
+      stickeringMask.orbits,
     )) {
       for (
         let pieceIdx = 0;
-        pieceIdx < orbitAppearance.pieces.length;
+        pieceIdx < orbitStickeringMask.pieces.length;
         pieceIdx++
       ) {
-        const pieceAppearance = orbitAppearance.pieces[pieceIdx];
-        if (pieceAppearance) {
+        const pieceStickeringMask = orbitStickeringMask.pieces[pieceIdx];
+        if (pieceStickeringMask) {
           const pieceInfo = this.kpuzzleFaceletInfo[orbitName][pieceIdx];
           for (
             let faceletIdx = 0;
             faceletIdx < pieceInfo.length;
             faceletIdx++
           ) {
-            const faceletAppearance = pieceAppearance.facelets[faceletIdx];
-            if (faceletAppearance) {
+            const faceletStickeringMask =
+              pieceStickeringMask.facelets[faceletIdx];
+            if (faceletStickeringMask) {
               const faceletInfo = pieceInfo[faceletIdx];
 
-              const appearance =
-                typeof faceletAppearance === "string"
-                  ? faceletAppearance
-                  : faceletAppearance?.appearance;
+              const stickeringMask =
+                typeof faceletStickeringMask === "string"
+                  ? faceletStickeringMask
+                  : faceletStickeringMask?.mask;
 
               faceletInfo.facelet.material =
-                axesInfo[faceletInfo.faceIdx].stickerMaterial[appearance];
+                axesInfo[faceletInfo.faceIdx].stickerMaterial[stickeringMask];
               // TODO
-              const hintAppearance =
-                typeof faceletAppearance === "string"
-                  ? appearance
-                  : faceletAppearance.hintAppearance ?? appearance;
+              const hintStickeringMask =
+                typeof faceletStickeringMask === "string"
+                  ? stickeringMask
+                  : faceletStickeringMask.hintMask ?? stickeringMask;
               if (faceletInfo.hintFacelet) {
                 faceletInfo.hintFacelet.material =
                   axesInfo[faceletInfo.faceIdx].hintStickerMaterial[
-                    hintAppearance
+                    hintStickeringMask
                   ];
               }
             }
@@ -744,18 +732,10 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       this.scheduleRenderCallback!(); // TODO
     }
 
-    const experimentalStickering = options.experimentalStickering;
-    if (
-      typeof experimentalStickering !== "undefined" &&
-      this.options.experimentalStickering !== experimentalStickering &&
-      experimentalStickerings[
-        experimentalStickering
-      ] // TODO: test this
-    ) {
-      this.options.experimentalStickering = experimentalStickering;
-      // TODO
-      // @ts-ignore
-      this.setStickering(experimentalStickering);
+    const { experimentalStickeringMask } = options;
+    if (typeof experimentalStickeringMask !== "undefined") {
+      this.options.experimentalStickeringMask = experimentalStickeringMask;
+      this.setStickeringMask(experimentalStickeringMask);
       this.scheduleRenderCallback!(); // TODO
     }
   }
@@ -838,7 +818,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
       }
 
       if (
-        this.options.experimentalStickering === "picture" &&
+        this.options.experimentalStickeringMask?.specialBehaviour ===
+          "picture" &&
         pictureStickerCoords[orbit] &&
         pictureStickerCoords[orbit][orbitPieceIdx] &&
         pictureStickerCoords[orbit][orbitPieceIdx][i]
@@ -944,7 +925,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     const box = sharedCubieFoundationGeometry();
     return new Mesh(
       box,
-      this.options.experimentalStickering === "picture"
+      this.options.experimentalStickeringMask?.specialBehaviour === "picture"
         ? blackMesh
         : blackTranslucentMesh,
     );
@@ -956,7 +937,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     isHint: boolean,
   ): Mesh {
     const geo =
-      this.options.experimentalStickering === "picture"
+      this.options.experimentalStickeringMask?.specialBehaviour === "picture"
         ? newStickerGeometry()
         : isHint
         ? this.#sharedHintStickerGeometry()
@@ -971,7 +952,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     stickerMesh.position.copy(posAxisInfo.vector);
     stickerMesh.position.multiplyScalar(
       isHint
-        ? this.options.experimentalStickering === "picture"
+        ? this.options.experimentalStickeringMask?.specialBehaviour ===
+          "picture"
           ? EXPERIMENTAL_PICTURE_CUBE_HINT_ELEVATION
           : cubieDimensions.hintStickerElevation
         : cubieDimensions.stickerElevation,

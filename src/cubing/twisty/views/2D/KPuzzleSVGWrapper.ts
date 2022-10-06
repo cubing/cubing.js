@@ -1,9 +1,9 @@
 import type { KPuzzle } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
 import type {
-  FaceletMeshAppearance,
-  PuzzleAppearance,
-} from "../../../puzzles/stickerings/appearance"; // TODO
+  FaceletMeshStickeringMask,
+  StickeringMask,
+} from "../../../puzzles/stickerings/mask"; // TODO
 const xmlns = "http://www.w3.org/2000/svg";
 
 // Unique ID mechanism to keep SVG gradient element IDs unique. TODO: Is there
@@ -17,7 +17,7 @@ function nextSVGID(): string {
 
 // TODO: This is hardcoded to 3x3x3 SVGs
 const colorMaps: Partial<
-  Record<FaceletMeshAppearance, Record<string, string>>
+  Record<FaceletMeshStickeringMask, Record<string, string>>
 > = {
   dim: {
     white: "#dddddd",
@@ -63,7 +63,7 @@ export class KPuzzleSVGWrapper {
   constructor(
     public kpuzzle: KPuzzle,
     svgSource: string,
-    experimentalAppearance?: PuzzleAppearance,
+    experimentalStickeringMask?: StickeringMask,
   ) {
     if (!svgSource) {
       throw new Error(`No SVG definition for puzzle type: ${kpuzzle.name()}`);
@@ -101,31 +101,32 @@ export class KPuzzleSVGWrapper {
           const id = this.elementID(orbitName, idx, orientation);
           const elem = this.elementByID(id);
           let originalColor: string = elem.style.fill;
-          /// TODO: Allow setting appearance dynamically.
-          if (experimentalAppearance) {
+          /// TODO: Allow setting stickering mask dynamically.
+          if (experimentalStickeringMask) {
             (() => {
               // TODO: dedup with Cube3D,,factor out fallback calculations
-              const a = experimentalAppearance.orbits;
+              const a = experimentalStickeringMask.orbits;
               if (!a) {
                 return;
               }
-              const orbitAppearance = a[orbitName];
-              if (!orbitAppearance) {
+              const orbitStickeringMask = a[orbitName];
+              if (!orbitStickeringMask) {
                 return;
               }
-              const pieceAppearance = orbitAppearance.pieces[idx];
-              if (!pieceAppearance) {
+              const pieceStickeringMask = orbitStickeringMask.pieces[idx];
+              if (!pieceStickeringMask) {
                 return;
               }
-              const faceletAppearance = pieceAppearance.facelets[orientation];
-              if (!faceletAppearance) {
+              const faceletStickeringMasks =
+                pieceStickeringMask.facelets[orientation];
+              if (!faceletStickeringMasks) {
                 return;
               }
-              const appearance =
-                typeof faceletAppearance === "string"
-                  ? faceletAppearance
-                  : faceletAppearance?.appearance;
-              const colorMap = colorMaps[appearance];
+              const stickeringMask =
+                typeof faceletStickeringMasks === "string"
+                  ? faceletStickeringMasks
+                  : faceletStickeringMasks?.mask;
+              const colorMap = colorMaps[stickeringMask];
               if (colorMap) {
                 originalColor = colorMap[originalColor];
               }

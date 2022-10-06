@@ -15,6 +15,7 @@ import { ManagedCustomElement } from "./ManagedCustomElement";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
 import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
+import type { StickeringMask } from "../../puzzles/stickerings/mask";
 
 function err(propName: string): Error {
   return new Error(
@@ -75,10 +76,21 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   }
 
   set experimentalStickering(stickering: ExperimentalStickering) {
-    this.experimentalModel.twistySceneModel.stickering.set(stickering);
+    this.experimentalModel.twistySceneModel.stickeringRequest.set(stickering);
   }
   get experimentalStickering(): never {
-    throw err("stickering");
+    throw err("experimentalStickering");
+  }
+
+  set experimentalStickeringMaskOrbits(stickeringMask:
+    | string
+    | StickeringMask) {
+    this.experimentalModel.twistySceneModel.stickeringMaskRequest.set(
+      stickeringMask,
+    );
+  }
+  get experimentalStickeringMaskOrbits(): never {
+    throw err("experimentalStickeringMaskOrbits");
   }
 
   set backView(backView: BackViewLayoutWithAuto) {

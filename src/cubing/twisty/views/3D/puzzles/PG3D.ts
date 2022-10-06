@@ -22,9 +22,9 @@ import type {
 } from "../../../../puzzle-geometry";
 import type { TextureMapper } from "../../../../puzzle-geometry/PuzzleGeometry";
 import {
-  ExperimentalFaceletMeshAppearance,
-  experimentalGetFaceletAppearance,
-  ExperimentalPuzzleAppearance,
+  ExperimentalFaceletMeshStickeringMask,
+  experimentalGetFaceletStickeringMask,
+  ExperimentalStickeringMask,
 } from "../../../../puzzles/cubing-private";
 import type { PuzzlePosition } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
@@ -208,7 +208,7 @@ class Filler {
 
 class StickerDef {
   private origColor: number;
-  private origColorAppearance: number;
+  private origColorStickeringMask: number;
   private faceColor: number;
   private texturePtr?: StickerDef = undefined;
   public twistVal: number = -1;
@@ -225,7 +225,7 @@ class StickerDef {
     stickerDat: StickerDatSticker,
     trim: number,
     options?: {
-      appearance?: ExperimentalFaceletMeshAppearance;
+      stickeringMask?: ExperimentalFaceletMeshStickeringMask;
     },
   ) {
     this.isDup = !!stickerDat.isDup;
@@ -233,9 +233,9 @@ class StickerDef {
     this.stickerStart = filler.ipos;
     const sdColor = new Color(stickerDat.color).getHex();
     this.origColor = sdColor;
-    this.origColorAppearance = sdColor;
-    if (options?.appearance) {
-      this.setAppearance(filler, options.appearance);
+    this.origColorStickeringMask = sdColor;
+    if (options?.stickeringMask) {
+      this.setStickeringMask(filler, options.stickeringMask);
     }
     this.faceColor = sdColor;
     const coords = this.stickerCoords(stickerDat.coords, trim);
@@ -317,12 +317,12 @@ class StickerDef {
     }
   }
 
-  public setAppearance(
+  public setStickeringMask(
     filler: Filler,
-    faceletMeshAppearance: ExperimentalFaceletMeshAppearance,
+    faceletMeshStickeringMask: ExperimentalFaceletMeshStickeringMask,
   ): void {
     let c = 0;
-    switch (faceletMeshAppearance) {
+    switch (faceletMeshStickeringMask) {
       case "regular": {
         c = this.origColor;
         break;
@@ -346,7 +346,7 @@ class StickerDef {
       case "invisible":
         c = this.origColor;
     }
-    this.origColorAppearance = c;
+    this.origColorStickeringMask = c;
     for (let i = 9 * this.stickerStart; i < 9 * this.stickerEnd; i += 3) {
       filler.colors[filler.pos + i] = c >> 16;
       filler.colors[filler.pos + i + 1] = (c >> 8) & 255;
@@ -359,7 +359,7 @@ class StickerDef {
     }
     this.setHintStickers(
       filler,
-      faceletMeshAppearance !== "invisible" && !this.isDup,
+      faceletMeshStickeringMask !== "invisible" && !this.isDup,
     );
   }
 
@@ -405,7 +405,7 @@ class StickerDef {
   }
 
   public setColor(filler: Filler, sd: StickerDef): number {
-    const c = sd.origColorAppearance;
+    const c = sd.origColorStickeringMask;
     if (this.faceColor !== c) {
       this.faceColor = c;
       const sz = filler.pos;
@@ -460,7 +460,7 @@ class AxisInfo {
 }
 
 export interface PG3DOptions {
-  appearance?: ExperimentalPuzzleAppearance;
+  stickeringMask?: ExperimentalStickeringMask;
 }
 
 const DEFAULT_COLOR_FRACTION = 0.71;
@@ -554,7 +554,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.materialArray2 = new Array(8);
     // TODO: the argument enableFoundationOpt really means, do we ever want to display
     // foundations.  But it is presently *used* to mean, show foundations initially
-    // (and maybe experimentalSetAppearance changes this).  So for now we set up the
+    // (and maybe experimentalSetStickeringMask changes this).  So for now we set up the
     // show flag from the enable flag, and turn on the enable flag so later when it's
     // used we will get the foundations.  What this means is the geometry always "pays"
     // for foundations, even if they aren't displayed.
@@ -593,10 +593,12 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       if (!this.stickers[orbit][ori]) {
         this.stickers[orbit][ori] = [];
       }
-      const options: { appearance?: ExperimentalFaceletMeshAppearance } = {};
-      if (params.appearance) {
-        options.appearance = experimentalGetFaceletAppearance(
-          params.appearance,
+      const options: {
+        stickeringMask?: ExperimentalFaceletMeshStickeringMask;
+      } = {};
+      if (params.stickeringMask) {
+        options.stickeringMask = experimentalGetFaceletStickeringMask(
+          params.stickeringMask,
           orbit,
           ord,
           ori,
@@ -608,7 +610,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     // TODO: the argument enableHintStickersOpt really means, do we ever want to display
     // hint stickers.  But it is presently *used* to mean, show hint stickers initially
-    // (and maybe experimentalSetAppearance changes this).  So for now we set up the
+    // (and maybe experimentalSetStickeringMask changes this).  So for now we set up the
     // show flag from the enable flag, and turn on the enable flag so later when it's
     // used we will get the hint stickers.  What this means is the geometry always "pays"
     // for hint stickers, even if they aren't displayed.
@@ -759,15 +761,17 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return { move: closestMove, order }; // TODO: push this down
   }
 
-  experimentalSetAppearance(appearance: ExperimentalPuzzleAppearance): void {
-    this.params.appearance = appearance;
+  experimentalSetStickeringMask(
+    stickeringMask: ExperimentalStickeringMask,
+  ): void {
+    this.params.stickeringMask = stickeringMask;
     for (const orbitName in this.kpuzzle.definition.orbits) {
       const { numPieces, numOrientations: orientations } =
         this.kpuzzle.definition.orbits[orbitName];
       for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
         for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {
-          const faceletAppearance = experimentalGetFaceletAppearance(
-            appearance,
+          const faceletStickeringMask = experimentalGetFaceletStickeringMask(
+            stickeringMask,
             orbitName,
             pieceIdx,
             faceletIdx,
@@ -777,11 +781,11 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
           if (
             this.textured &&
             this.hintMaterialDisposable &&
-            faceletAppearance === "invisible"
+            faceletStickeringMask === "invisible"
           ) {
             // ignore "invisible" if textured hints
           } else {
-            stickerDef.setAppearance(this.filler, faceletAppearance);
+            stickerDef.setStickeringMask(this.filler, faceletStickeringMask);
           }
         }
       }

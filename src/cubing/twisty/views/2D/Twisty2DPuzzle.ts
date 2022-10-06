@@ -1,22 +1,23 @@
+import type { PuzzleID } from "../..";
+import type { KPuzzle } from "../../../kpuzzle";
+import type { ExperimentalStickeringMask } from "../../../puzzles/cubing-private";
 import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
-import type { PuzzleAppearance } from "../../../puzzles/stickerings/appearance";
+import type { StickeringMask } from "../../../puzzles/stickerings/mask";
 import {
   Direction,
   PositionListener,
   PuzzlePosition,
 } from "../../controllers/AnimationTypes";
 import { RenderScheduler } from "../../controllers/RenderScheduler";
+import { FreshListenerManager } from "../../model/props/TwistyProp";
+import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
-import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { FreshListenerManager } from "../../model/props/TwistyProp";
-import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
-import type { ExperimentalStickering, PuzzleID } from "../..";
-import type { KPuzzle } from "../../../kpuzzle";
 import { KPuzzleSVGWrapper } from "./KPuzzleSVGWrapper";
+import { twisty2DSVGCSS } from "./Twisty2DPuzzle.css";
 
 export interface Twisty2DPuzzleOptions {
-  experimentalStickering?: ExperimentalStickering;
+  experimentalStickeringMask?: ExperimentalStickeringMask;
 }
 
 // <twisty-2d-svg>
@@ -52,8 +53,10 @@ export class Twisty2DPuzzle
       this.onPositionChange.bind(this),
     );
 
-    if (this.options?.experimentalStickering) {
-      this.experimentalSetStickering(this.options.experimentalStickering);
+    if (this.options?.experimentalStickeringMask) {
+      this.experimentalSetStickeringMask(
+        this.options.experimentalStickeringMask,
+      );
     }
   }
 
@@ -96,18 +99,14 @@ export class Twisty2DPuzzle
     this.scheduler.requestAnimFrame();
   }
 
-  experimentalSetStickering(stickering: ExperimentalStickering): void {
-    (async () => {
-      if (!this.puzzleLoader?.appearance) {
-        return;
-      }
-      const appearance = await this.puzzleLoader.appearance(stickering);
-      this.resetSVG(appearance);
-    })();
+  experimentalSetStickeringMask(
+    stickeringMask: ExperimentalStickeringMask,
+  ): void {
+    this.resetSVG(stickeringMask);
   }
 
   // TODO: do this without constructing a new SVG.
-  private resetSVG(appearance?: PuzzleAppearance): void {
+  private resetSVG(stickeringMask?: StickeringMask): void {
     if (this.svgWrapper) {
       this.removeElement(this.svgWrapper.wrapperElement);
     }
@@ -117,7 +116,7 @@ export class Twisty2DPuzzle
     this.svgWrapper = new KPuzzleSVGWrapper(
       this.kpuzzle,
       this.svgSource!,
-      appearance,
+      stickeringMask,
     ); // TODO
     this.addElement(this.svgWrapper.wrapperElement);
     if (this.#cachedPosition) {
