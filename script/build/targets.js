@@ -22,7 +22,7 @@ import { writeSyncUsingTempFile } from "./temp.js";
 const PARALLEL = false;
 const PUBLISH_WITH_PRIVATE_FIELDS = true;
 
-const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
+export const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
   ? {
       "class-private-accessor": true,
       "class-private-brand-check": true,

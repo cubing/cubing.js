@@ -110,6 +110,7 @@ jobs:
       - run: make test-dist-esm-scramble-all-events
       - run: make test-dist-esm-parcel
       - run: make test-dist-esm-vite
+      - run: make test-dist-esm-build-size
       - run: make build-sites
       - run: make test-dist-sites-experiments
       - run: make clean

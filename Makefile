@@ -88,6 +88,7 @@ test-dist: \
 	test-dist-esm-plain-esbuild-compat \
 	test-dist-esm-parcel \
 	test-dist-esm-vite \
+	test-dist-esm-build-size \
 	test-dist-sites-experiments # keep CI.yml in sync with this
 test-dist-esm-node-import: build-esm
 	${NODE} script/test/dist/esm/node-import/main.js
@@ -101,6 +102,8 @@ test-dist-esm-parcel: build-esm
 	${NODE} ./script/test/dist/esm/parcel/main.js
 test-dist-esm-vite: build-esm
 	${NODE} ./script/test/dist/esm/vite/main.js
+test-dist-esm-build-size: build-esm
+	${NODE} ./script/test/dist/esm/build-size/main.js
 test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/experiments/main.js
 format:
