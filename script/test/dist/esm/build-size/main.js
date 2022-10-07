@@ -39,7 +39,9 @@ async function bundleSize(entryFile, threeExternal = false) {
 }
 
 function humanSize(numBytes) {
-  return `     ${Math.round(numBytes / 1000)}kB`.slice(-6);
+  return typeof numBytes === "number"
+    ? `     ${Math.round(numBytes / 1000)}kB`.slice(-6)
+    : numBytes;
 }
 
 function mapValues(s) {
@@ -59,9 +61,16 @@ async function bundleSizeSummary(s) {
   return [
     s,
     mapValues({
-      ...bundleSizeWithThree,
-      sizeNoTHREE: bundleSizeNoTHREE.size,
-      gzippedSizeNoTHREE: bundleSizeNoTHREE.gzippedSize,
+      size: bundleSizeWithThree.size,
+      sizeNoTHREE:
+        bundleSizeWithThree.size === bundleSizeNoTHREE.size
+          ? ""
+          : bundleSizeNoTHREE.size,
+      gzippedSize: bundleSizeWithThree.gzippedSize,
+      gzippedSizeNoTHREE:
+        bundleSizeWithThree.gzippedSize === bundleSizeNoTHREE.gzippedSize
+          ? ""
+          : bundleSizeNoTHREE.gzippedSize,
     }),
   ];
 }
