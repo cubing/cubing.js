@@ -277,60 +277,21 @@ export const cube3x3x3KPuzzleDefinition: KPuzzleDefinition = {
   },
 };
 
-cube3x3x3KPuzzleDefinition.moves["Uw"] = cube3x3x3KPuzzleDefinition.moves["u"];
-cube3x3x3KPuzzleDefinition.moves["Lw"] = cube3x3x3KPuzzleDefinition.moves["l"];
-cube3x3x3KPuzzleDefinition.moves["Fw"] = cube3x3x3KPuzzleDefinition.moves["f"];
-cube3x3x3KPuzzleDefinition.moves["Rw"] = cube3x3x3KPuzzleDefinition.moves["r"];
-cube3x3x3KPuzzleDefinition.moves["Bw"] = cube3x3x3KPuzzleDefinition.moves["b"];
-cube3x3x3KPuzzleDefinition.moves["Dw"] = cube3x3x3KPuzzleDefinition.moves["d"];
-
-cube3x3x3KPuzzleDefinition.moves["Rv"] = cube3x3x3KPuzzleDefinition.moves["x"];
-cube3x3x3KPuzzleDefinition.moves["Uv"] = cube3x3x3KPuzzleDefinition.moves["y"];
-cube3x3x3KPuzzleDefinition.moves["Fv"] = cube3x3x3KPuzzleDefinition.moves["z"];
-cube3x3x3KPuzzleDefinition.moves["Lv"] = {
-  EDGES: {
-    permutation: [2, 10, 6, 11, 0, 8, 4, 9, 1, 3, 5, 7],
-    orientation: [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0],
-  },
-  CORNERS: {
-    permutation: [1, 7, 6, 2, 0, 3, 5, 4],
-    orientation: [2, 1, 2, 1, 1, 2, 1, 2],
-  },
-  CENTERS: {
-    permutation: [4, 1, 0, 3, 5, 2],
-    orientation: [2, 1, 0, 3, 2, 0],
-  },
-};
-cube3x3x3KPuzzleDefinition.moves["Dv"] = {
-  EDGES: {
-    permutation: [3, 0, 1, 2, 7, 4, 5, 6, 9, 11, 8, 10],
-    orientation: [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-  },
-  CORNERS: {
-    permutation: [3, 0, 1, 2, 5, 6, 7, 4],
-    orientation: [0, 0, 0, 0, 0, 0, 0, 0],
-  },
-  CENTERS: {
-    permutation: [0, 4, 1, 2, 3, 5],
-    orientation: [3, 0, 0, 0, 0, 1],
-  },
-};
-cube3x3x3KPuzzleDefinition.moves["Bv"] = {
-  EDGES: {
-    permutation: [8, 5, 10, 1, 9, 7, 11, 3, 4, 0, 6, 2],
-    orientation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  },
-  CORNERS: {
-    permutation: [4, 7, 1, 0, 5, 3, 2, 6],
-    orientation: [1, 2, 1, 2, 2, 1, 2, 1],
-  },
-  CENTERS: {
-    permutation: [3, 0, 2, 5, 4, 1],
-    orientation: [3, 3, 3, 3, 1, 3],
-  },
-};
-
 cube3x3x3KPuzzleDefinition.experimentalDerivedMoves = {
+  Uw: "u",
+  Lw: "l",
+  Fw: "f",
+  Rw: "r",
+  Bw: "b",
+  Dw: "d",
+
+  Uv: "y",
+  Lv: "x'",
+  Fv: "z",
+  Rv: "x",
+  Bv: "z'",
+  Dv: "y'",
+
   "2U": "u U'",
   "2L": "l L'",
   "2F": "f F'",
