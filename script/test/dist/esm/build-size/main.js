@@ -100,9 +100,9 @@ console.table(results);
 // TODO: Design actual tests, and take bundle splitting into account.
 
 if (results["twisty"].gzippedSize > 300_000) {
-  throw new Error("❌ Gzipped `cubing/twisty` build size is over 300mB");
+  throw new Error("❌ Gzipped `cubing/twisty` build size is over 300kB");
 } else {
-  console.log("✅ Gzipped `cubing/twisty` build size is ≤ 300mB");
+  console.log("✅ Gzipped `cubing/twisty` build size is ≤ 300kB");
 }
 
 if (results["(total)"].size > 2_000_000) {
