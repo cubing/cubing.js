@@ -136,6 +136,7 @@
     "test-dist-esm-plain-esbuild-compat": "make test-dist-esm-plain-esbuild-compat",
     "test-dist-esm-parcel": "make test-dist-esm-parcel",
     "test-dist-esm-vite": "make test-dist-esm-vite",
+    "test-dist-esm-build-size": "make test-dist-esm-build-size",
     "test-dist-sites-experiments": "make test-dist-sites-experiments",
     "format": "make format",
     "setup": "make setup",
