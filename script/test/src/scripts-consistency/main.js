@@ -51,9 +51,8 @@ function logDifference(from, subtract) {
   if (output.length === 0) {
     console.log("  (none)");
   } else {
-    if (fix) {
-      needsFix = true;
-    } else {
+    needsFix = true;
+    if (!fix) {
       exitCode = 1;
     }
     console.log(output.map((entry) => `  ${entry}`).join("\n"));
@@ -64,6 +63,10 @@ console.log("Makefile targets that are not package.json scripts:");
 logDifference(makefileScriptTargets, packageJSONScripts);
 console.log("package.json scripts that are not Makefile targets:");
 logDifference(packageJSONScripts, makefileScriptTargets);
+
+if (!fix && needsFix) {
+  console.info("\nTo fix, run: `make fix-src-scripts-consistency`\n");
+}
 
 if (exitCode !== 0) {
   process.exit(exitCode);
