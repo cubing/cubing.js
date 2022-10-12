@@ -36,7 +36,7 @@ const alternativeListElem = document.querySelector("alternative-list")!;
 recognition.onresult = function (event) {
   const latestResult = event.results.item(event.results.length - 1);
   alternativeListElem.textContent =
-    // rome-ignore lint(js/useTemplate): Using a template would make this more confusing.
+    // rome-ignore lint(correctness/useTemplate): Using a template would make this more confusing.
     "Raw alternatives: " +
     Array.from(latestResult)
       .map((alternative) => alternative.transcript)
@@ -44,19 +44,23 @@ recognition.onresult = function (event) {
   for (const alternative of Array.from(latestResult)) {
     let transcript = alternative.transcript.trim().toUpperCase();
     console.log(alternative);
-    transcript = transcript.replace("YOUTUBE", "U2").replace(
-      "YOU",
-      "U",
-    ).replace(" PRIME", "'").replace(" WIDE", "w").replace(" TWO", "2").replace(
-      " TO",
-      "2",
-    ).replace("WHY", "Y").replace("DEEP", "D").replace("DEE", "D").replace(
-      "ARE",
-      "R",
-    ).replace("OUR", "R").replace("ALL", "L").replace("EL", "L").replace(
-      "WHITE",
-      "WIDE",
-    ).replace("WHY DO", "WIDE").replace("WHY ARE", "WIDE R");
+    transcript = transcript
+      .replace("YOUTUBE", "U2")
+      .replace("YOU", "U")
+      .replace(" PRIME", "'")
+      .replace(" WIDE", "w")
+      .replace(" TWO", "2")
+      .replace(" TO", "2")
+      .replace("WHY", "Y")
+      .replace("DEEP", "D")
+      .replace("DEE", "D")
+      .replace("ARE", "R")
+      .replace("OUR", "R")
+      .replace("ALL", "L")
+      .replace("EL", "L")
+      .replace("WHITE", "WIDE")
+      .replace("WHY DO", "WIDE")
+      .replace("WHY ARE", "WIDE R");
     switch (transcript) {
       case "UNDO": {
         player.experimentalModel.alg.set(
@@ -99,13 +103,16 @@ recognition.onresult = function (event) {
         return;
       }
     }
-    transcript = transcript.replace("X", "x").replace("Y", "y").replace(
-      "Z",
-      "z",
-    ).replace("WIDE U", "Uw").replace("WIDE F", "Fw").replace(
-      "WIDE L",
-      "Lw",
-    ).replace("WIDE R", "Rw").replace("WIDE B", "Bw").replace("WIDE D", "Dw");
+    transcript = transcript
+      .replace("X", "x")
+      .replace("Y", "y")
+      .replace("Z", "z")
+      .replace("WIDE U", "Uw")
+      .replace("WIDE F", "Fw")
+      .replace("WIDE L", "Lw")
+      .replace("WIDE R", "Rw")
+      .replace("WIDE B", "Bw")
+      .replace("WIDE D", "Dw");
     try {
       kpuzzle.moveToTransformation(transcript);
       player.experimentalAddMove(transcript);

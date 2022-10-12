@@ -40,9 +40,9 @@ function defineClass(typeId, superTypeId, castableTypeMap) {
     _.constructor = _;
     !superTypeId && (_.typeMarker$ = typeMarkerFn);
   }
-  // rome-ignore lint(js/noArguments): Legacy code
+  // rome-ignore lint(correctness/noArguments): Legacy code
   for (var i = 3; i < arguments.length; ++i) {
-    // rome-ignore lint(js/noArguments): Legacy code
+    // rome-ignore lint(correctness/noArguments): Legacy code
     arguments[i].prototype = _;
   }
   clazz && (_.___clazz$ = clazz);
@@ -1147,42 +1147,75 @@ function $clinit_CubieCube() {
   FlipS2RF = initDim(C_classLit, $intern_26, 0, 2688, 7, 1);
   urf1 = new CubieCube_0(2531, 1373, 67026819, 1367);
   urf2 = new CubieCube_0(2089, 1906, 322752913, 2040);
-  urfMove = initValues(getClassLiteralForArray(
-    B_classLit,
-    2,
-  ), $intern_3, 10, 0, [
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      6, 7, 8, 0, 1, 2, 3, 4, 5, 15, 16, 17, 9, 10, 11, 12, 13, 14,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      3, 4, 5, 6, 7, 8, 0, 1, 2, 12, 13, 14, 15, 16, 17, 9, 10, 11,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      2, 1, 0, 5, 4, 3, 8, 7, 6, 11, 10, 9, 14, 13, 12, 17, 16, 15,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      8, 7, 6, 2, 1, 0, 5, 4, 3, 17, 16, 15, 11, 10, 9, 14, 13, 12,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      5, 4, 3, 8, 7, 6, 2, 1, 0, 14, 13, 12, 17, 16, 15, 11, 10, 9,
-    ]),
-  ]);
+  urfMove = initValues(
+    getClassLiteralForArray(B_classLit, 2),
+    $intern_3,
+    10,
+    0,
+    [
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [6, 7, 8, 0, 1, 2, 3, 4, 5, 15, 16, 17, 9, 10, 11, 12, 13, 14],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [3, 4, 5, 6, 7, 8, 0, 1, 2, 12, 13, 14, 15, 16, 17, 9, 10, 11],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [2, 1, 0, 5, 4, 3, 8, 7, 6, 11, 10, 9, 14, 13, 12, 17, 16, 15],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [8, 7, 6, 2, 1, 0, 5, 4, 3, 17, 16, 15, 11, 10, 9, 14, 13, 12],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [5, 4, 3, 8, 7, 6, 2, 1, 0, 14, 13, 12, 17, 16, 15, 11, 10, 9],
+      ),
+    ],
+  );
   initMove();
   initSym();
 }
 
 function $$init(this$static) {
-  this$static.ca = initValues(getClassLiteralForArray(
-    B_classLit,
-    1,
-  ), $intern_30, 0, 7, [0, 1, 2, 3, 4, 5, 6, 7]);
-  this$static.ea = initValues(getClassLiteralForArray(
-    B_classLit,
-    1,
-  ), $intern_30, 0, 7, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]);
+  this$static.ca = initValues(
+    getClassLiteralForArray(B_classLit, 1),
+    $intern_30,
+    0,
+    7,
+    [0, 1, 2, 3, 4, 5, 6, 7],
+  );
+  this$static.ea = initValues(
+    getClassLiteralForArray(B_classLit, 1),
+    $intern_30,
+    0,
+    7,
+    [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],
+  );
 }
 
 function $URFConjugate(this$static) {
@@ -1891,25 +1924,34 @@ function $initSearch(this$static) {
   var i;
   this$static.conjMask = 0;
   this$static.selfSym = $selfSymmetry(this$static.cc);
-  this$static.conjMask |= neq(and(shr(this$static.selfSym, 16), {
-    l: $intern_20,
-    m: 0,
-    h: 0,
-  }), { l: 0, m: 0, h: 0 })
+  this$static.conjMask |= neq(
+    and(shr(this$static.selfSym, 16), {
+      l: $intern_20,
+      m: 0,
+      h: 0,
+    }),
+    { l: 0, m: 0, h: 0 },
+  )
     ? 18
     : 0;
-  this$static.conjMask |= neq(and(shr(this$static.selfSym, 32), {
-    l: $intern_20,
-    m: 0,
-    h: 0,
-  }), { l: 0, m: 0, h: 0 })
+  this$static.conjMask |= neq(
+    and(shr(this$static.selfSym, 32), {
+      l: $intern_20,
+      m: 0,
+      h: 0,
+    }),
+    { l: 0, m: 0, h: 0 },
+  )
     ? 36
     : 0;
-  this$static.conjMask |= neq(and(shr(this$static.selfSym, 48), {
-    l: $intern_20,
-    m: 0,
-    h: 0,
-  }), { l: 0, m: 0, h: 0 })
+  this$static.conjMask |= neq(
+    and(shr(this$static.selfSym, 48), {
+      l: $intern_20,
+      m: 0,
+      h: 0,
+    }),
+    { l: 0, m: 0, h: 0 },
+  )
     ? 56
     : 0;
   this$static.selfSym = and(this$static.selfSym, {
@@ -2343,106 +2385,196 @@ function $clinit_Util() {
   var ix;
   var j;
   var jx;
-  cornerFacelet = initValues(getClassLiteralForArray(
-    B_classLit,
-    2,
-  ), $intern_3, 10, 0, [
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      8, 9, 20,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      6, 18, 38,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      0, 36, 47,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      2, 45, 11,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      29, 26, 15,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      27, 44, 24,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      33, 53, 42,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      35, 17, 51,
-    ]),
-  ]);
-  edgeFacelet = initValues(getClassLiteralForArray(
-    B_classLit,
-    2,
-  ), $intern_3, 10, 0, [
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      5, 10,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      7, 19,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      3, 37,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      1, 46,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      32, 16,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      28, 25,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      30, 43,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      34, 52,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      23, 12,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      21, 41,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      50, 39,
-    ]),
-    initValues(getClassLiteralForArray(B_classLit, 1), $intern_30, 0, 7, [
-      48, 14,
-    ]),
-  ]);
+  cornerFacelet = initValues(
+    getClassLiteralForArray(B_classLit, 2),
+    $intern_3,
+    10,
+    0,
+    [
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [8, 9, 20],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [6, 18, 38],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [0, 36, 47],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [2, 45, 11],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [29, 26, 15],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [27, 44, 24],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [33, 53, 42],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [35, 17, 51],
+      ),
+    ],
+  );
+  edgeFacelet = initValues(
+    getClassLiteralForArray(B_classLit, 2),
+    $intern_3,
+    10,
+    0,
+    [
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [5, 10],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [7, 19],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [3, 37],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [1, 46],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [32, 16],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [28, 25],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [30, 43],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [34, 52],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [23, 12],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [21, 41],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [50, 39],
+      ),
+      initValues(
+        getClassLiteralForArray(B_classLit, 1),
+        $intern_30,
+        0,
+        7,
+        [48, 14],
+      ),
+    ],
+  );
   Cnk = initDims(I_classLit, [$intern_3, $intern_27], [17, 0], 7, [13, 13], 2);
-  move2str = initValues(getClassLiteralForArray(
-    Ljava_lang_String_2_classLit,
-    1,
-  ), $intern_3, 2, 4, [
-    "U ",
-    "U2",
-    "U'",
-    "R ",
-    "R2",
-    "R'",
-    "F ",
-    "F2",
-    "F'",
-    "D ",
-    "D2",
-    "D'",
-    "L ",
-    "L2",
-    "L'",
-    "B ",
-    "B2",
-    "B'",
-  ]);
-  ud2std = initValues(getClassLiteralForArray(
-    I_classLit,
-    1,
-  ), $intern_27, 0, 7, [
-    0, 1, 2, 4, 7, 9, 10, 11, 13, 16, 3, 5, 6, 8, 12, 14, 15, 17,
-  ]);
+  move2str = initValues(
+    getClassLiteralForArray(Ljava_lang_String_2_classLit, 1),
+    $intern_3,
+    2,
+    4,
+    [
+      "U ",
+      "U2",
+      "U'",
+      "R ",
+      "R2",
+      "R'",
+      "F ",
+      "F2",
+      "F'",
+      "D ",
+      "D2",
+      "D'",
+      "L ",
+      "L2",
+      "L'",
+      "B ",
+      "B2",
+      "B'",
+    ],
+  );
+  ud2std = initValues(
+    getClassLiteralForArray(I_classLit, 1),
+    $intern_27,
+    0,
+    7,
+    [0, 1, 2, 4, 7, 9, 10, 11, 13, 16, 3, 5, 6, 8, 12, 14, 15, 17],
+  );
   std2ud = initDim(I_classLit, $intern_27, 0, 18, 7, 1);
   ckmv2bit = initDim(I_classLit, $intern_27, 0, 11, 7, 1);
   for (i0 = 0; i0 < 18; i0++) {

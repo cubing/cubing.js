@@ -14,7 +14,7 @@ export function setDisableStringWorker(disable: boolean): void {
 }
 
 export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
-  // rome-ignore lint(js/noAsyncPromiseExecutor): TODO
+  // rome-ignore lint(correctness/noAsyncPromiseExecutor): TODO
   return new Promise<WorkerInsideAPI>(async (resolve, reject) => {
     const timeoutID = setTimeout(() => {
       reject(new Error("module instantiation timeout"));
