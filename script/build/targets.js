@@ -44,14 +44,19 @@ function plugins(dev) {
     process.env["EXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS"] === "1"
   ) {
     console.log(
-      "\nEXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS is set. In dev mode, the current Chrome tab will refresh after every build.\n",
+      "\nEXPERIMENTAL_CUBING_JS_RELOAD_CHROME_MACOS is set. In dev mode, the current Chrome tab (if it begins with `http://localhost`) will refresh after every build.\n",
     );
     plugins.push({
       name: "refresh",
       setup(build) {
         build.onEnd(() => {
           exec(
-            `osascript -e 'tell application "Google Chrome" to tell the active tab of its first window to reload'`,
+            `osascript -e 'tell application "Google Chrome"
+              set theURL to get URL of the active tab of its first window
+              if theURL starts with "http://localhost" then
+                tell the active tab of its first window to reload
+              end if
+            end tell'`,
           );
         });
       },
