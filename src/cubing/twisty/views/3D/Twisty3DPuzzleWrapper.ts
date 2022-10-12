@@ -9,7 +9,7 @@ import type { HintFaceletStyleWithAuto } from "../../model/props/puzzle/display/
 import { FreshListenerManager } from "../../model/props/TwistyProp";
 import type { VisualizationStrategy } from "../../model/props/viewer/VisualizationStrategyProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
-import { Cube3D } from "./puzzles/Cube3D";
+import type { Cube3D } from "./puzzles/Cube3D";
 import type { PG3D } from "./puzzles/PG3D";
 import type { Twisty3DPuzzle } from "./puzzles/Twisty3DPuzzle";
 
@@ -78,11 +78,11 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
     this.#freshListenerManager.addListener(
       this.model.twistySceneModel.stickeringMask,
       async (stickeringMask: ExperimentalStickeringMask) => {
-        const twisty3D = await this.twisty3DPuzzle();
-        if (twisty3D instanceof Cube3D) {
-          twisty3D.setStickeringMask(stickeringMask);
-        } else {
+        const twisty3D = (await this.twisty3DPuzzle()) as PG3D | Cube3D;
+        if ("experimentalSetStickeringMask" in twisty3D) {
           (twisty3D as PG3D).experimentalSetStickeringMask(stickeringMask);
+        } else {
+          twisty3D.setStickeringMask(stickeringMask);
         }
         this.scheduleRender();
       },
