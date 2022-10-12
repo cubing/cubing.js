@@ -161,8 +161,9 @@ describe("algToString()", () => {
     expect(new Alg([]).toString()).to.eq("");
     expect(new Grouping(new Alg([])).toString()).to.eq("()");
     // TODO: Should this be "[,]"
-    expect(new Alg([new Commutator(new Alg([]), new Alg([]))]).toString()).to
-      .eq("[, ]");
+    expect(
+      new Alg([new Commutator(new Alg([]), new Alg([]))]).toString(),
+    ).to.eq("[, ]");
   });
 
   it("converts Sune to string", () => {

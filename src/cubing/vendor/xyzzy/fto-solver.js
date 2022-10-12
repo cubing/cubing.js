@@ -685,13 +685,13 @@ function convert_move_to_permutations(move) {
     .map((_, i) => get_edge_piece(state, i));
   let ap = Array(12)
     .fill()
-    .map(
-      (_, i) => centreA_piece_facelets.indexOf(move[centreA_piece_facelets[i]]),
+    .map((_, i) =>
+      centreA_piece_facelets.indexOf(move[centreA_piece_facelets[i]]),
     );
   let bp = Array(12)
     .fill()
-    .map(
-      (_, i) => centreB_piece_facelets.indexOf(move[centreB_piece_facelets[i]]),
+    .map((_, i) =>
+      centreB_piece_facelets.indexOf(move[centreB_piece_facelets[i]]),
     );
   return { cp: cp, ep: ep, ap: ap, bp: bp };
 }
@@ -1281,11 +1281,13 @@ function generate_phase1_centre_ptable() {
     return cached_ptables.phase1_centre;
   }
   let [itc, cti] = generate_comb4_lookup_tables(12, 6, 0, 3, 3);
-  let goal_states = itc.filter((x) => {
-    let x6 = (x >> 12) & 3;
-    let x9 = (x >> 18) & 3;
-    return x6 === 2 && x9 === 3;
-  }).map((x) => cti[x]);
+  let goal_states = itc
+    .filter((x) => {
+      let x6 = (x >> 12) & 3;
+      let x9 = (x >> 18) & 3;
+      return x6 === 2 && x9 === 3;
+    })
+    .map((x) => cti[x]);
   return (cached_ptables.phase1_centre = bfs(
     generate_phase1_centreB_mtable(),
     goal_states,
@@ -1418,9 +1420,9 @@ function index_phase2(facelets) {
     .fill()
     .map((_, i) => get_corner_piece(facelets, i));
   let cp_inverse_full = invert_permutation(
-    corners.map(([p, o]) => p + 5 * o).concat(
-      corners.map(([p, o]) => p + 5 * (o ^ 1)),
-    ),
+    corners
+      .map(([p, o]) => p + 5 * o)
+      .concat(corners.map(([p, o]) => p + 5 * (o ^ 1))),
   );
   let cp_inverse = cp_inverse_full.slice(0, 5).map((x) => x % 5);
   let co_inverse = cp_inverse_full.slice(0, 5).map((x) => (x / 5) | 0);
@@ -1467,9 +1469,9 @@ function generate_phase2_centre_mtables() {
     3,
     2,
     0,
-    move_permutations.slice(0, 4).map(
-      (x) => reduce_permutation(x.ap, phase2_keep),
-    ),
+    move_permutations
+      .slice(0, 4)
+      .map((x) => reduce_permutation(x.ap, phase2_keep)),
   );
   let b = generate_mtable_comb4_generic(
     10,
@@ -1477,9 +1479,9 @@ function generate_phase2_centre_mtables() {
     3,
     2,
     0,
-    move_permutations.slice(0, 4).map(
-      (x) => reduce_permutation(x.bp, phase2_keep),
-    ),
+    move_permutations
+      .slice(0, 4)
+      .map((x) => reduce_permutation(x.bp, phase2_keep)),
   );
   return (cached_mtables.phase2_centre = [a, b]);
 }
@@ -1522,9 +1524,9 @@ function generate_phase2_corner_mtable() {
   let mtable = Array(4)
     .fill()
     .map(() => new Uint32Array(N));
-  let permutations = move_permutations.slice(0, 4).map(
-    (x) => invert_permutation(reduce_permutation(x.cp, keep)),
-  );
+  let permutations = move_permutations
+    .slice(0, 4)
+    .map((x) => invert_permutation(reduce_permutation(x.cp, keep)));
   // using the left-action convention here, so take inverses
   for (let i = 0; i < N; i++) {
     let p = index_to_evenpermutation(i >> 3, 5);
@@ -1991,8 +1993,8 @@ obviously has a 6-move 4-gen solution (F U R U' R' F'), but the optimal 2-gen so
 U L' U L' U' L' U' L U' L U L' U L' U L U L' U' L U' L U L'.
 */
 
-let phase3_2gen_facelet_permutations = phase3_2gen_move_seqs.map(
-  (seq) => apply_move_sequence(permutation_from_cycles([], 72), seq),
+let phase3_2gen_facelet_permutations = phase3_2gen_move_seqs.map((seq) =>
+  apply_move_sequence(permutation_from_cycles([], 72), seq),
 );
 let phase3_2gen_piece_permutations = phase3_2gen_facelet_permutations.map(
   convert_move_to_permutations,
@@ -2031,8 +2033,8 @@ function generate_phase3_2gen_edge_mtable() {
   let mtable = Array(phase3_2gen_nmoves)
     .fill()
     .map(() => new Uint32Array(HALFFACT5));
-  let permutations = phase3_2gen_piece_permutations.map(
-    (x) => x.ep.slice(0, 5),
+  let permutations = phase3_2gen_piece_permutations.map((x) =>
+    x.ep.slice(0, 5),
   );
   for (let i = 0; i < HALFFACT5; i++) {
     let p = index_to_evenpermutation(i, 5);
@@ -2067,8 +2069,8 @@ function generate_phase3_2gen_corner_mtable() {
   let mtable = Array(phase3_2gen_nmoves)
     .fill()
     .map(() => new Uint32Array(N));
-  let permutations = phase3_2gen_piece_permutations.map(
-    (x) => reduce_permutation(x.cp, keep).slice(0, 4),
+  let permutations = phase3_2gen_piece_permutations.map((x) =>
+    reduce_permutation(x.cp, keep).slice(0, 4),
   );
   for (let i = 0; i < N; i += 2) {
     let p = index_to_evenpermutation(i >> 1, 4);
@@ -2104,8 +2106,8 @@ function generate_phase3_2gen_centre_mtable() {
     2,
     0,
     2,
-    phase3_2gen_piece_permutations.map(
-      (x) => reduce_permutation(x.ap, phase3_2gen_keep),
+    phase3_2gen_piece_permutations.map((x) =>
+      reduce_permutation(x.ap, phase3_2gen_keep),
     ),
   );
   let mtable_b = generate_mtable_comb4_generic(
@@ -2114,8 +2116,8 @@ function generate_phase3_2gen_centre_mtable() {
     2,
     0,
     2,
-    phase3_2gen_piece_permutations.map(
-      (x) => reduce_permutation(x.bp, phase3_2gen_keep),
+    phase3_2gen_piece_permutations.map((x) =>
+      reduce_permutation(x.bp, phase3_2gen_keep),
     ),
   );
   cached_mtables.phase3_2gen_centreA = mtable_a;
@@ -2494,9 +2496,9 @@ function solve_phase2_and_phase3_fast(
       let { value, done } = gen_t2.next();
       if (!done) {
         let intermediate_facelets = apply_move_sequence(facelets_t2, value);
-        let solution = value.concat(
-          solve_phase3_2gen(intermediate_facelets),
-        ).map(([m, r]) => [m ^ 2, r]);
+        let solution = value
+          .concat(solve_phase3_2gen(intermediate_facelets))
+          .map(([m, r]) => [m ^ 2, r]);
         if (solution.length <= cap) {
           return solution;
         } else if (solution.length < best.length) {

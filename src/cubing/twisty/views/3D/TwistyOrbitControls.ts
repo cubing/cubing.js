@@ -161,8 +161,7 @@ export class TwistyOrbitControls {
       "lastTemperedX" in e.detail.attachedInfo &&
       "lastTemperedY" in e.detail.attachedInfo &&
       "timestamp" in e.detail.attachedInfo &&
-      e.timeStamp - e.detail.attachedInfo.timestamp <
-        60 // TODO
+      e.timeStamp - e.detail.attachedInfo.timestamp < 60 // TODO
     ) {
       new Inertia(
         e.timeStamp, // TODO

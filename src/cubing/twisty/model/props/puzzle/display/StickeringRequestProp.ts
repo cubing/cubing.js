@@ -18,9 +18,7 @@ export function getStickeringGroup(
   return groups[puzzleID] ?? "Stickering";
 }
 
-export class StickeringRequestProp extends SimpleTwistyPropSource<
-  | ExperimentalStickering
-  | null> {
+export class StickeringRequestProp extends SimpleTwistyPropSource<ExperimentalStickering | null> {
   getDefaultValue(): ExperimentalStickering | null {
     return null;
   }

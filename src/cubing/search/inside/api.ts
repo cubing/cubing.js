@@ -209,16 +209,19 @@ export const insideAPI = {
         if (queuedPrefetchTimeoutID) {
           clearTimeout(queuedPrefetchTimeoutID);
         }
-        queuedPrefetchTimeoutID = setTimeout(() => {
-          prefetchPromises.set(
-            eventID,
-            randomScrambleForEvent(eventID, {
-              isPrefetch: true,
-            }),
-          );
-        }, currentPrefetchLevel === PrefetchLevel.Immediate
-          ? 0
-          : IDLE_PREFETCH_TIMEOUT_MS);
+        queuedPrefetchTimeoutID = setTimeout(
+          () => {
+            prefetchPromises.set(
+              eventID,
+              randomScrambleForEvent(eventID, {
+                isPrefetch: true,
+              }),
+            );
+          },
+          currentPrefetchLevel === PrefetchLevel.Immediate
+            ? 0
+            : IDLE_PREFETCH_TIMEOUT_MS,
+        );
       });
     }
     return promise;

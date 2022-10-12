@@ -21,9 +21,8 @@ import {
 export function bufferToSpacedHex(buffer: ArrayBuffer): string {
   // buffer is an ArrayBuffer
   return (
-    Array.prototype.map.call(
-      new Uint8Array(buffer),
-      (x: number) => `00${x.toString(16)}`.slice(-2),
+    Array.prototype.map.call(new Uint8Array(buffer), (x: number) =>
+      `00${x.toString(16)}`.slice(-2),
     ) as string[]
   ).join(" ");
 }
@@ -62,9 +61,9 @@ class App {
 
   binaryTextarea = document.querySelector("#binary") as HTMLTextAreaElement;
   constructor() {
-    const svgWrapper = document.querySelector("#viewer")!.appendChild(
-      document.createElement("div"),
-    );
+    const svgWrapper = document
+      .querySelector("#viewer")!
+      .appendChild(document.createElement("div"));
     (async () => {
       svgWrapper.appendChild((await this.svg).wrapperElement);
     })();
@@ -75,12 +74,11 @@ class App {
     document.querySelector("#apply-alg")!.addEventListener("click", () => {
       this.applyAlg(this.algTextarea.value);
     });
-    document.querySelector("#set-reid-string")?.addEventListener(
-      "click",
-      () => {
+    document
+      .querySelector("#set-reid-string")
+      ?.addEventListener("click", () => {
         this.setReidString(this.reidStringTextarea.value);
-      },
-    );
+      });
     document.querySelector("#set-stickers")!.addEventListener("click", () => {
       this.setStickers(this.stickersTextarea.value);
     });
@@ -147,18 +145,22 @@ class App {
     this.binaryTextarea.value = bufferToSpacedHex(
       reid3x3x3ToTwizzleBinary(state),
     );
-    this.orderElem.textContent =
-      state.experimentalToTransformation()!.repetitionOrder().toString();
-    this.isSolvedIgnoringCenterOriElem.textContent = state.experimentalIsSolved(
-      {
+    this.orderElem.textContent = state
+      .experimentalToTransformation()!
+      .repetitionOrder()
+      .toString();
+    this.isSolvedIgnoringCenterOriElem.textContent = state
+      .experimentalIsSolved({
         ignoreCenterOrientation: true,
         ignorePuzzleOrientation: true,
-      },
-    ).toString();
-    this.isSolvedWithCenterOriElem.textContent = state.experimentalIsSolved({
-      ignoreCenterOrientation: false,
-      ignorePuzzleOrientation: true,
-    }).toString();
+      })
+      .toString();
+    this.isSolvedWithCenterOriElem.textContent = state
+      .experimentalIsSolved({
+        ignoreCenterOrientation: false,
+        ignorePuzzleOrientation: true,
+      })
+      .toString();
   }
 }
 const app = new App();

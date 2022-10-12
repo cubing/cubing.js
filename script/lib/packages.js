@@ -14,6 +14,6 @@ export const packageNames = [
   "twisty",
 ];
 
-export const packageEntryPoints = packageNames.map(
-  (p) => join("src/cubing/", p, "/index.ts"),
+export const packageEntryPoints = packageNames.map((p) =>
+  join("src/cubing/", p, "/index.ts"),
 );

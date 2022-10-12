@@ -106,10 +106,9 @@ class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {
       }
       const appendOptionsHelper = new AppendOptionsHelper(options); // TODO: avoid re-allocating every time.
       if (
-        appendOptionsHelper.puzzleSpecificSimplifyOptions()?.axis?.areQuantumMovesSameAxis(
-          aMove.quantum,
-          bMove.quantum,
-        )
+        appendOptionsHelper
+          .puzzleSpecificSimplifyOptions()
+          ?.axis?.areQuantumMovesSameAxis(aMove.quantum, bMove.quantum)
       ) {
         return true;
       }

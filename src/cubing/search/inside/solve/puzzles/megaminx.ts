@@ -16,22 +16,11 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
       const json: SGSCachedData = await (
         await searchDynamicSideEvents
       ).cachedSGSDataMegaminx();
-      return new TrembleSolver(await (
-        await searchDynamicSideEvents
-      ).cachedMegaminxKPuzzleWithoutMO(), json, [
-        "U",
-        "R",
-        "F",
-        "L",
-        "BR",
-        "BL",
-        "FR",
-        "FL",
-        "DR",
-        "DL",
-        "B",
-        "D",
-      ]);
+      return new TrembleSolver(
+        await (await searchDynamicSideEvents).cachedMegaminxKPuzzleWithoutMO(),
+        json,
+        ["U", "R", "F", "L", "BR", "BL", "FR", "FL", "DR", "DL", "B", "D"],
+      );
     })())
   );
 }

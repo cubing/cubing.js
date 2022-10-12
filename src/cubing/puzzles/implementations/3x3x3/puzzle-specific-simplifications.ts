@@ -225,9 +225,10 @@ function simplifySameAxisMoves(
   const axisInfo = axisInfos[axis];
   const { sliceDiameter } = axisInfo;
   const sliceDeltas = new Map<number, number>();
-  let lastCandidateRange:
-    | { suffixLength: number; sliceDeltas: Map<number, number> }
-    | null = null;
+  let lastCandidateRange: {
+    suffixLength: number;
+    sliceDeltas: Map<number, number>;
+  } | null = null;
 
   function adjustValue(idx: number, relativeDelta: number) {
     let newDelta = (sliceDeltas.get(idx) ?? 0) + relativeDelta;

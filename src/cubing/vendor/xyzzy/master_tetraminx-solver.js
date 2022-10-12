@@ -204,9 +204,9 @@ function permutation_from_cycles(cycles, n) {
   if (cycles.length === 0) {
     return identity_permutation(n);
   }
-  return cycles.map((cycle) => permutation_from_cycle(cycle, n)).reduce(
-    compose,
-  );
+  return cycles
+    .map((cycle) => permutation_from_cycle(cycle, n))
+    .reduce(compose);
   // not very efficient, but this function is only called during init so it's fine
 }
 
@@ -667,12 +667,12 @@ function generate_scramble_sequence(
       amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
     }
   }
-  let prepend = amount_pre.map(
-    (x, i) => (x !== 0 ? `${tip_names[i]}${suffixes[x]} ` : ""),
-  ).join("");
-  let append = amount_post.map(
-    (x, i) => (x !== 0 ? ` ${tip_names[i]}${suffixes[x]}` : ""),
-  ).join("");
+  let prepend = amount_pre
+    .map((x, i) => (x !== 0 ? `${tip_names[i]}${suffixes[x]} ` : ""))
+    .join("");
+  let append = amount_post
+    .map((x, i) => (x !== 0 ? ` ${tip_names[i]}${suffixes[x]}` : ""))
+    .join("");
   return prepend + scramble_string + append;
   // this technically has the extremely edge case of the original no-tip scramble being the
   // trivial scramble and the resulting string will have a double space, but this is Very Rare

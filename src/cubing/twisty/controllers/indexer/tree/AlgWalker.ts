@@ -102,9 +102,13 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     const AB = decA.forward.applyTransformation(decB.forward);
     const ApBp = decA.backward.applyTransformation(decB.backward);
     const ABApBp = AB.applyTransformation(ApBp);
-    const dec = new AlgWalkterDecoration(2 *
-      (decA.moveCount + decB.moveCount), 2 *
-      (decA.duration + decB.duration), ABApBp, ABApBp.invert(), [decA, decB]);
+    const dec = new AlgWalkterDecoration(
+      2 * (decA.moveCount + decB.moveCount),
+      2 * (decA.duration + decB.duration),
+      ABApBp,
+      ABApBp.invert(),
+      [decA, decB],
+    );
     return this.mult(dec, 1, [dec, decA, decB]);
   }
 
@@ -113,11 +117,13 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     const decB = this.traverseAlg(conjugate.B);
     const AB = decA.forward.applyTransformation(decB.forward);
     const ABAp = AB.applyTransformation(decA.backward);
-    const dec = new AlgWalkterDecoration(2 * decA.moveCount +
-      decB.moveCount, 2 * decA.duration + decB.duration, ABAp, ABAp.invert(), [
-      decA,
-      decB,
-    ]);
+    const dec = new AlgWalkterDecoration(
+      2 * decA.moveCount + decB.moveCount,
+      2 * decA.duration + decB.duration,
+      ABAp,
+      ABAp.invert(),
+      [decA, decB],
+    );
     return this.mult(dec, 1, [dec, decA, decB]);
   }
 

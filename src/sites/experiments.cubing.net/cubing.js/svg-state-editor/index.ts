@@ -41,13 +41,13 @@ class App {
       window.history.replaceState("", "", url.toString());
     });
 
-    document.querySelectorAll('input[name="mode"]').forEach((
-      radio: HTMLInputElement,
-    ) => {
-      radio.addEventListener("change", () => {
-        this.mode = radio.value as Mode;
+    document
+      .querySelectorAll('input[name="mode"]')
+      .forEach((radio: HTMLInputElement) => {
+        radio.addEventListener("change", () => {
+          this.mode = radio.value as Mode;
+        });
       });
-    });
   }
 }
 

@@ -1371,14 +1371,8 @@ export class PuzzleGeometry {
     delta = delta.normalize();
     const cosr = delta.b;
     const sinr = delta.c;
-    const x1 = x0
-      .smul(cosr)
-      .sub(y0.smul(sinr))
-      .smul(len);
-    const y1 = y0
-      .smul(cosr)
-      .sum(x0.smul(sinr))
-      .smul(len);
+    const x1 = x0.smul(cosr).sub(y0.smul(sinr)).smul(len);
+    const y1 = y0.smul(cosr).sum(x0.smul(sinr)).smul(len);
     const off = new Quat(
       0,
       targvec[0].b - x1.dot(face[edgen]),
@@ -2325,9 +2319,9 @@ export class PuzzleGeometry {
     r.push("];");
     const ip = os.solved.identicalPieces();
     r.push(
-      `ip:=[${ip.map((_) => `[${_.map((__) => __ + 1).join(",")}]`).join(
-        ",",
-      )}];`,
+      `ip:=[${ip
+        .map((_) => `[${_.map((__) => __ + 1).join(",")}]`)
+        .join(",")}];`,
     );
     r.push("# Size(Group(Gen));");
     r.push("# Size(Stabilizer(Group(Gen), ip, OnTuplesSets));");
@@ -2797,9 +2791,9 @@ export class PuzzleGeometry {
     }
     const r1 = feature1.pointrotation(direction1);
     const feature2rot = feature2.rotatepoint(r1);
-    const r2 = feature2rot.unproject(direction1).pointrotation(
-      direction2.unproject(direction1),
-    );
+    const r2 = feature2rot
+      .unproject(direction1)
+      .pointrotation(direction2.unproject(direction1));
     return r2.mul(r1);
   }
 
@@ -2936,9 +2930,9 @@ export class PuzzleGeometry {
         extendedges(edges2[f1], polyn);
         // what edge are we at?
         const caf0 = connectat[gfi];
-        const mp = thisface[(caf0 + j) % polyn].sum(
-          thisface[(caf0 + j + polyn - 1) % polyn],
-        ).smul(0.5);
+        const mp = thisface[(caf0 + j) % polyn]
+          .sum(thisface[(caf0 + j + polyn - 1) % polyn])
+          .smul(0.5);
         const epi = findelement(bg.edgenames, mp);
         const edgename = bg.edgenames[epi][1];
         const el = splitByFaceNames(edgename, this.facenames);
@@ -3010,9 +3004,9 @@ export class PuzzleGeometry {
   ): string {
     const mappt2d = this.generate2dmapping(w, h, trim, threed);
     function drawedges(id: string, pts: number[][], color: string): string {
-      return `<polygon id="${id}" class="sticker" style="fill: ${color}" points="${pts.map(
-        (p) => `${p[0]} ${p[1]}`,
-      ).join(" ")}"/>\n`;
+      return `<polygon id="${id}" class="sticker" style="fill: ${color}" points="${pts
+        .map((p) => `${p[0]} ${p[1]}`)
+        .join(" ")}"/>\n`;
     }
     // Let's build arrays for faster rendering.  We want to map from geo
     // base face number to color, and we want to map from geo face number

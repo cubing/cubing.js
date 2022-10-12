@@ -19,18 +19,20 @@ const unreorientedPlayer: TwistyPlayer =
 
 const reorienter = new ReorientedStream(twistyStreamSource);
 
-reorienter.addEventListener("move", (
-  e: PuzzleStreamMoveEventRegisterCompatible,
-) => {
-  console.log(e.detail.move.toString());
-  reorientedPlayer.experimentalAddMove(e.detail.move);
-});
-twistyStreamSource.addEventListener("move", (
-  e: PuzzleStreamMoveEventRegisterCompatible,
-) => {
-  if (!"xyz".includes(e.detail.move.family)) {
-    unreorientedPlayer.experimentalAddMove(e.detail.move);
-  }
-});
+reorienter.addEventListener(
+  "move",
+  (e: PuzzleStreamMoveEventRegisterCompatible) => {
+    console.log(e.detail.move.toString());
+    reorientedPlayer.experimentalAddMove(e.detail.move);
+  },
+);
+twistyStreamSource.addEventListener(
+  "move",
+  (e: PuzzleStreamMoveEventRegisterCompatible) => {
+    if (!"xyz".includes(e.detail.move.family)) {
+      unreorientedPlayer.experimentalAddMove(e.detail.move);
+    }
+  },
+);
 
 console.log(reorienter);

@@ -239,15 +239,17 @@ class ControlPane {
       a.href = urlString ? urlString : "";
       a.textContent = urlString ? "🎥 Video" : "";
     });
-    twistyPlayer.experimentalModel.competitionID.addFreshListener((
-      competitionID,
-    ) => {
-      const a = document.querySelector(".competition-url") as HTMLAnchorElement;
-      a.href = competitionID
-        ? `https://www.worldcubeassociation.org/competitions/${competitionID}`
-        : "";
-      a.textContent = competitionID ? "🏆 Competition" : "";
-    });
+    twistyPlayer.experimentalModel.competitionID.addFreshListener(
+      (competitionID) => {
+        const a = document.querySelector(
+          ".competition-url",
+        ) as HTMLAnchorElement;
+        a.href = competitionID
+          ? `https://www.worldcubeassociation.org/competitions/${competitionID}`
+          : "";
+        a.textContent = competitionID ? "🏆 Competition" : "";
+      },
+    );
 
     /*******/
 
@@ -263,17 +265,17 @@ class ControlPane {
       "move-count",
       "span",
     );
-    this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener((
-      algWithIssues: AlgWithIssues,
-    ) => {
-      if (algWithIssues.issues.errors.length === 0) {
-        this.moveCountDisplay.textContent = ` (${experimentalCountMovesETM(
-          algWithIssues.alg,
-        )} ETM)`;
-      } else {
-        this.moveCountDisplay.textContent = "";
-      }
-    });
+    this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener(
+      (algWithIssues: AlgWithIssues) => {
+        if (algWithIssues.issues.errors.length === 0) {
+          this.moveCountDisplay.textContent = ` (${experimentalCountMovesETM(
+            algWithIssues.alg,
+          )} ETM)`;
+        } else {
+          this.moveCountDisplay.textContent = "";
+        }
+      },
+    );
 
     this.algInput = findOrCreateChildWithClass(
       this.element,
@@ -287,18 +289,18 @@ class ControlPane {
       "puzzle",
       "select",
     );
-    this.twistyPlayer.experimentalModel.puzzleID.get().then(
-      (puzzleID) => this.initializePuzzleSelect(puzzleID),
-    );
+    this.twistyPlayer.experimentalModel.puzzleID
+      .get()
+      .then((puzzleID) => this.initializePuzzleSelect(puzzleID));
 
     this.setupAnchorSelect = findOrCreateChildWithClass(
       this.element,
       "setup-anchor",
       "select",
     );
-    this.twistyPlayer.experimentalModel.setupAnchor.get().then(
-      (anchor) => this.initializeSetupAnchorSelect(anchor),
-    );
+    this.twistyPlayer.experimentalModel.setupAnchor
+      .get()
+      .then((anchor) => this.initializeSetupAnchorSelect(anchor));
 
     this.stickeringSelect = findOrCreateChildWithClass(
       this.element,
@@ -475,9 +477,9 @@ class ControlPane {
       for (const puzzleOptInfo of puzzles) {
         const option = document.createElement("option");
         option.value = puzzleOptInfo.name;
-        option.textContent = `${
-          puzzleOptInfo.symbol
-        } ${supportedPuzzles[puzzleOptInfo.name].displayName()}`;
+        option.textContent = `${puzzleOptInfo.symbol} ${supportedPuzzles[
+          puzzleOptInfo.name
+        ].displayName()}`;
         optgroup.appendChild(option);
         if (puzzleOptInfo.name === initialPuzzleName) {
           option.selected = true;

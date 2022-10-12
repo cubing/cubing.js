@@ -755,9 +755,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (transformations.invert) {
       closestMove = closestMove.invert();
     }
-    const order = this.kpuzzle.moveToTransformation(
-      closestMove,
-    ).repetitionOrder();
+    const order = this.kpuzzle
+      .moveToTransformation(closestMove)
+      .repetitionOrder();
     return { move: closestMove, order }; // TODO: push this down
   }
 
@@ -809,9 +809,9 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     if (
       !this.lastPos ||
       this.#pendingStickeringUpdate ||
-      !this.lastPos.state.experimentalToTransformation()!.isIdentical(
-        transformation,
-      )
+      !this.lastPos.state
+        .experimentalToTransformation()!
+        .isIdentical(transformation)
     ) {
       for (const orbit in this.stickers) {
         const pieces = this.stickers[orbit];

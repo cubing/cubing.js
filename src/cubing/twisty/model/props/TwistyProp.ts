@@ -213,20 +213,16 @@ export abstract class TwistyPropDerived<
     }
   }
 
-  #cachedLastSuccessfulCalculation:
-    | {
-      inputs: InputTypes;
-      output: Promise<OutputType>;
-      generation: number;
-    }
-    | null = null;
+  #cachedLastSuccessfulCalculation: {
+    inputs: InputTypes;
+    output: Promise<OutputType>;
+    generation: number;
+  } | null = null;
 
-  #cachedLatestGenerationCalculation:
-    | {
-      output: Promise<OutputType>;
-      generation: number;
-    }
-    | null = null;
+  #cachedLatestGenerationCalculation: {
+    output: Promise<OutputType>;
+    generation: number;
+  } | null = null;
 
   public async get(): Promise<OutputType> {
     const generation = this.lastSourceGeneration;
@@ -269,13 +265,11 @@ export abstract class TwistyPropDerived<
   async #cacheDerive(
     inputsPromise: PromiseOrValue<InputTypes>,
     generation: number,
-    cachedLatestGenerationCalculation:
-      | {
-        inputs: InputTypes;
-        output: Promise<OutputType>;
-        generation: number;
-      }
-      | null = null,
+    cachedLatestGenerationCalculation: {
+      inputs: InputTypes;
+      output: Promise<OutputType>;
+      generation: number;
+    } | null = null,
   ): Promise<OutputType> {
     const inputs = await inputsPromise;
 
@@ -359,8 +353,8 @@ export class FreshListenerManager {
       }
       // We rely on `TwistyProp` caching to give us the full set of latest
       // values efficiently.
-      const promises = (props as TwistyPropParent<any>[]).map(
-        (prop) => prop.get(),
+      const promises = (props as TwistyPropParent<any>[]).map((prop) =>
+        prop.get(),
       );
       const values = await Promise.all(promises);
       listener(values as any); // TODO: fix up types

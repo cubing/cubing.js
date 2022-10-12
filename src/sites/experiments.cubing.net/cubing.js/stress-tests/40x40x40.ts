@@ -60,15 +60,14 @@ setTimeout(() => {
   });
   document.querySelector("#player-wrapper")!.appendChild(player);
 
-  document.querySelector("#show-reconstruction")?.addEventListener(
-    "click",
-    () => {
+  document
+    .querySelector("#show-reconstruction")
+    ?.addEventListener("click", () => {
       const wrapper = document.querySelector("#alg-viewer-wrapper");
       const algViewer = new TwistyAlgViewer({
         twistyPlayer: player,
       });
       wrapper!.textContent = "";
       wrapper!.appendChild(algViewer);
-    },
-  );
+    });
 }, 1000);

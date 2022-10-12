@@ -11,9 +11,9 @@ needFolder(
   "make build-esm",
 );
 
-const dist_entries = packageNames.map(
-  (e) => join("dist/esm/", e, "/index.js"),
-).join(" ");
+const dist_entries = packageNames
+  .map((e) => join("dist/esm/", e, "/index.js"))
+  .join(" ");
 console.log(
   `npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`,
 );

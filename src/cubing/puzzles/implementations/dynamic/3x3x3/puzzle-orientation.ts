@@ -28,8 +28,8 @@ export function puzzleOrientation3x3x3Cache(): KTransformation[][] {
     // We use a new block to avoid keeping a reference to temporary vars.
     // kpuzzle todo
     {
-      const uAlgs: Alg[] = ["", "z", "x", "z'", "x'", "x2"].map(
-        (s) => Alg.fromString(s),
+      const uAlgs: Alg[] = ["", "z", "x", "z'", "x'", "x2"].map((s) =>
+        Alg.fromString(s),
       );
       const yAlg = new Alg("y");
       for (const uAlg of uAlgs) {

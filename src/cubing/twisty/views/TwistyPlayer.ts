@@ -233,15 +233,15 @@ export class TwistyPlayer
     );
     this.addElement(this.#errorElem).classList.add("error-elem");
     this.#errorElem.textContent = "Error";
-    this.experimentalModel.userVisibleErrorTracker.addFreshListener((
-      userVisibleError,
-    ) => {
-      const errorString: string | null = userVisibleError.errors[0] ?? null;
-      this.contentWrapper.classList.toggle("error", !!errorString);
-      if (errorString) {
-        this.#errorElem.textContent = errorString;
-      }
-    });
+    this.experimentalModel.userVisibleErrorTracker.addFreshListener(
+      (userVisibleError) => {
+        const errorString: string | null = userVisibleError.errors[0] ?? null;
+        this.contentWrapper.classList.toggle("error", !!errorString);
+        if (errorString) {
+          this.#errorElem.textContent = errorString;
+        }
+      },
+    );
 
     const scrubber = new TwistyScrubber(
       this.experimentalModel,
@@ -256,20 +256,20 @@ export class TwistyPlayer
     );
     this.contentWrapper.appendChild(this.buttons);
 
-    this.experimentalModel.twistySceneModel.background.addFreshListener((
-      backgroundTheme: BackgroundThemeWithAuto,
-    ) => {
-      this.contentWrapper.classList.toggle(
-        "checkered",
-        backgroundTheme !== "none",
-      );
-    });
+    this.experimentalModel.twistySceneModel.background.addFreshListener(
+      (backgroundTheme: BackgroundThemeWithAuto) => {
+        this.contentWrapper.classList.toggle(
+          "checkered",
+          backgroundTheme !== "none",
+        );
+      },
+    );
 
-    this.experimentalModel.controlPanel.addFreshListener((
-      controlPanel: ControlPanelThemeWithAuto,
-    ) => {
-      this.#controlsManager.setValue(controlPanel);
-    });
+    this.experimentalModel.controlPanel.addFreshListener(
+      (controlPanel: ControlPanelThemeWithAuto) => {
+        this.#controlsManager.setValue(controlPanel);
+      },
+    );
 
     this.experimentalModel.visualizationStrategy.addFreshListener(
       this.#setVisualizationWrapper.bind(this),
@@ -482,8 +482,9 @@ export class TwistyPlayer
     ) {
       // TODO: This has lots of async issues. It should also go into the screenshot impl file.
       const wrapper2D = this.#visualizationWrapper as Twisty2DSceneWrapper;
-      const twisty2DPuzzle =
-        await wrapper2D.currentTwisty2DPuzzleWrapper()!.twisty2DPuzzle();
+      const twisty2DPuzzle = await wrapper2D
+        .currentTwisty2DPuzzleWrapper()!
+        .twisty2DPuzzle();
       const str = new XMLSerializer().serializeToString(
         twisty2DPuzzle.svgWrapper.svgElement,
       );
@@ -494,9 +495,7 @@ export class TwistyPlayer
         "svg",
       );
     } else {
-      await (
-        await screenshot(this.experimentalModel)
-      ).download(filename);
+      await (await screenshot(this.experimentalModel)).download(filename);
     }
   }
 }

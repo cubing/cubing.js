@@ -32,9 +32,9 @@ export function passesFilter(kpuzzle: KPuzzle, state: KState): boolean {
 
   for (const face of "ULFRBD") {
     for (let amount = 1; amount < 4; amount++) {
-      const transformation = kpuzzle.moveToTransformation(
-        new Move(face, amount),
-      ).toKState();
+      const transformation = kpuzzle
+        .moveToTransformation(new Move(face, amount))
+        .toKState();
       if (isEquivalentTranformationIgnoringCENTERS(transformation, state)) {
         return false;
       }

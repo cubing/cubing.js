@@ -25,9 +25,9 @@ window.addEventListener("DOMContentLoaded", async () => {
     alg: new Alg(),
   });
   document.querySelector("#player")!.appendChild(twistyPlayer);
-  document.querySelector("#controls")!.appendChild(
-    new TwistyAlgViewer({ twistyPlayer }),
-  );
+  document
+    .querySelector("#controls")!
+    .appendChild(new TwistyAlgViewer({ twistyPlayer }));
 
   asyncSetup(twistyPlayer);
 

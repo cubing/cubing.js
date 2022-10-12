@@ -37,12 +37,11 @@ describe("TwistyOrbitControls", () => {
     // Uncomment to watch changes.
     // mockModel.orbitCoordinatesProp.addFreshListener(console.log);
 
-    expect(await orbitCoordinatesProp.get()).to.deep
-      .equal({
-        latitude: 35,
-        longitude: 30,
-        distance: 6,
-      });
+    expect(await orbitCoordinatesProp.get()).to.deep.equal({
+      latitude: 35,
+      longitude: 30,
+      distance: 6,
+    });
 
     expect(await orbitCoordinatesProp.get()).to.deep.equal({
       latitude: 35,

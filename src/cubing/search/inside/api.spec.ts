@@ -17,8 +17,8 @@ describe("Internal API", () => {
 
   for (const event of events) {
     it(`Generates scramble string for event: ${event}`, () => {
-      expect(
-        () => insideAPI.randomScrambleStringForEvent(event),
+      expect(() =>
+        insideAPI.randomScrambleStringForEvent(event),
       ).not.to.throw();
     });
   }

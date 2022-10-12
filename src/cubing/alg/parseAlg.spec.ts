@@ -8,8 +8,7 @@ describe("amount", () => {
     // We currently allow `R0'` because some programs might need to go out of their
     // way to avoid producing it in an edge cases. It's interpreted the same as
     // `R0`.
-    expect(parseAlg("R0'").toString()).to
-      .equal("R0");
+    expect(parseAlg("R0'").toString()).to.equal("R0");
     expect(() => parseAlg("R01")).to.throw(
       "Error at char index 1: An amount can only start with 0 if it's exactly the digit 0.",
     );

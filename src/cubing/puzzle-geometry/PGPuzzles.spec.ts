@@ -86,9 +86,9 @@ describe("PuzzleGeometry-Puzzles", () => {
       const pg = getPuzzleGeometryByDesc(desc, {});
       const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
       const sep = ", ";
-      const seq = Object.getOwnPropertyNames(
-        kpuzzleDefinition.moves,
-      ).sort().join(" ");
+      const seq = Object.getOwnPropertyNames(kpuzzleDefinition.moves)
+        .sort()
+        .join(" ");
       let algo = Alg.fromString(seq);
       // TODO:  likely a temporary hack until we resolve how notations are
       // added or set in puzzle geometry.
@@ -100,7 +100,9 @@ describe("PuzzleGeometry-Puzzles", () => {
       algo = new Alg(bms);
       const o = new KPuzzle(kpuzzleDefinition, {
         experimentalPGNotation: new PGNotation(pg, pg.getOrbitsDef(true)),
-      }).algToTransformation(algo).repetitionOrder();
+      })
+        .algToTransformation(algo)
+        .repetitionOrder();
       const dat = [
         name,
         sep,

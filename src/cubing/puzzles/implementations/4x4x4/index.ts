@@ -8,8 +8,9 @@ const cube4x4x4: PuzzleLoader = new CubePGPuzzleLoader({
 });
 
 cube4x4x4.llSVG = getCached(async () => {
-  return (await import("../dynamic/4x4x4/puzzles-dynamic-4x4x4"))
-    .cube4x4x4LLSVG;
+  return (
+    await import("../dynamic/4x4x4/puzzles-dynamic-4x4x4")
+  ).cube4x4x4LLSVG;
 });
 
 export { cube4x4x4 };

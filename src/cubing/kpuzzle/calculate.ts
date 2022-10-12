@@ -231,9 +231,9 @@ class AlgToTransformationTraversal extends TraversalDownUp<
   traverseConjugate(conjugate: Conjugate, kpuzzle: KPuzzle): KTransformation {
     const aTransformation = this.traverseAlg(conjugate.A, kpuzzle);
     const bTransformation = this.traverseAlg(conjugate.B, kpuzzle);
-    return aTransformation.applyTransformation(
-      bTransformation,
-    ).applyTransformation(aTransformation.invert());
+    return aTransformation
+      .applyTransformation(bTransformation)
+      .applyTransformation(aTransformation.invert());
   }
   traversePause(_: Pause, kpuzzle: KPuzzle): KTransformation {
     return kpuzzle.identityTransformation();

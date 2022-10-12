@@ -68,7 +68,9 @@ const testString = JSON.stringify(
     }
   },
   "  ",
-).replace(/"##\[/g, "[").replace(/\]##"/g, "]");
+)
+  .replace(/"##\[/g, "[")
+  .replace(/\]##"/g, "]");
 
 (document.querySelector("#test-string") as HTMLTextAreaElement).value =
   testString;

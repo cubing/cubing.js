@@ -127,9 +127,9 @@ export function experimentalAppendMove(
       outputSuffix = [new Move(addedMove.quantum, amount)];
     }
   }
-  outputSuffix = outputSuffix.map((m) => modMove(m)).filter(
-    (move: Move) => move.amount !== 0,
-  );
+  outputSuffix = outputSuffix
+    .map((m) => modMove(m))
+    .filter((move: Move) => move.amount !== 0);
   return output();
 }
 

@@ -23,9 +23,9 @@ class App {
     const url = new URL(socketOrigin);
     url.pathname = "/register-sender";
     this.proxySender = new ExperimentalWebSocketProxySender(url.toString());
-    document.querySelector("#connect-bluetooth")!.addEventListener(
-      "click",
-      async () => {
+    document
+      .querySelector("#connect-bluetooth")!
+      .addEventListener("click", async () => {
         this.puzzle = await connectSmartPuzzle();
         this.puzzle.addAlgLeafListener(
           this.proxySender.sendMoveEvent.bind(this.proxySender),
@@ -34,19 +34,17 @@ class App {
           this.proxySender.sendOrientationEvent.bind(this.proxySender),
         );
         console.log("Puzzle connected!", this.puzzle);
-      },
-    );
+      });
 
-    document.querySelector("#connect-keyboard")!.addEventListener(
-      "click",
-      async () => {
+    document
+      .querySelector("#connect-keyboard")!
+      .addEventListener("click", async () => {
         this.puzzle = await debugKeyboardConnect();
         this.puzzle.addAlgLeafListener(
           this.proxySender.sendMoveEvent.bind(this.proxySender),
         );
         console.log("Keyboard connected!", this.puzzle);
-      },
-    );
+      });
 
     document.querySelector("#reset")!.addEventListener("click", async () => {
       this.proxySender.sendResetEvent();

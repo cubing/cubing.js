@@ -46,9 +46,8 @@ export class TwistyButtons extends ManagedCustomElement {
     for (const command in buttonCommands) {
       const button = new TwistyButton();
       buttons[command as ButtonCommand] = button;
-      button.htmlButton.addEventListener(
-        "click",
-        () => this.#onCommand(command as ButtonCommand),
+      button.htmlButton.addEventListener("click", () =>
+        this.#onCommand(command as ButtonCommand),
       );
       this.addElement(button);
     }

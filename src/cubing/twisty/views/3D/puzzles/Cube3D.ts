@@ -126,31 +126,46 @@ const axesInfo: AxisInfo[] = [
     0xdddddd,
     1.25,
   ),
-  new AxisInfo(new Vector3(-1, 0, 0), new Euler(
-    0,
-    -TAU / 4,
-    0,
-  ), 0xff8800, 0x884400, 1, { hintDimColor: 0x996600 }),
-  new AxisInfo(new Vector3(0, 0, 1), new Euler(
-    0,
-    0,
-    0,
-  ), 0x00ff00, 0x008800, 1, { hintDimColor: 0x009900 }),
-  new AxisInfo(new Vector3(1, 0, 0), new Euler(
-    0,
-    TAU / 4,
-    0,
-  ), 0xff0000, 0x660000, 1, { hintDimColor: 0x990000 }),
-  new AxisInfo(new Vector3(0, 0, -1), new Euler(
-    0,
-    TAU / 2,
-    0,
-  ), 0x0000ff, 0x000088, 0.75, { hintColor: 0x0044ff, hintDimColor: 0x001866 }),
-  new AxisInfo(new Vector3(0, -1, 0), new Euler(
-    TAU / 4,
-    0,
-    0,
-  ), 0xffff00, 0x888800, 1.25, { hintDimColor: 0xbbbb00 }),
+  new AxisInfo(
+    new Vector3(-1, 0, 0),
+    new Euler(0, -TAU / 4, 0),
+    0xff8800,
+    0x884400,
+    1,
+    { hintDimColor: 0x996600 },
+  ),
+  new AxisInfo(
+    new Vector3(0, 0, 1),
+    new Euler(0, 0, 0),
+    0x00ff00,
+    0x008800,
+    1,
+    { hintDimColor: 0x009900 },
+  ),
+  new AxisInfo(
+    new Vector3(1, 0, 0),
+    new Euler(0, TAU / 4, 0),
+    0xff0000,
+    0x660000,
+    1,
+    { hintDimColor: 0x990000 },
+  ),
+  new AxisInfo(
+    new Vector3(0, 0, -1),
+    new Euler(0, TAU / 2, 0),
+    0x0000ff,
+    0x000088,
+    0.75,
+    { hintColor: 0x0044ff, hintDimColor: 0x001866 },
+  ),
+  new AxisInfo(
+    new Vector3(0, -1, 0),
+    new Euler(TAU / 4, 0, 0),
+    0xffff00,
+    0x888800,
+    1.25,
+    { hintDimColor: 0xbbbb00 },
+  ),
 ];
 
 const face: { [s: string]: number } = {
@@ -286,26 +301,23 @@ const firstPiecePosition: OrbitIndexed<Vector3> = {
   CENTERS: new Vector3(0, 1, 0),
 };
 const orientationRotation: OrbitIndexed<Matrix4[]> = {
-  EDGES: [0, 1].map(
-    (i) =>
-      new Matrix4().makeRotationAxis(
-        firstPiecePosition.EDGES.clone().normalize(),
-        (-i * TAU) / 2,
-      ),
+  EDGES: [0, 1].map((i) =>
+    new Matrix4().makeRotationAxis(
+      firstPiecePosition.EDGES.clone().normalize(),
+      (-i * TAU) / 2,
+    ),
   ),
-  CORNERS: [0, 1, 2].map(
-    (i) =>
-      new Matrix4().makeRotationAxis(
-        firstPiecePosition.CORNERS.clone().normalize(),
-        (-i * TAU) / 3,
-      ),
+  CORNERS: [0, 1, 2].map((i) =>
+    new Matrix4().makeRotationAxis(
+      firstPiecePosition.CORNERS.clone().normalize(),
+      (-i * TAU) / 3,
+    ),
   ),
-  CENTERS: [0, 1, 2, 3].map(
-    (i) =>
-      new Matrix4().makeRotationAxis(
-        firstPiecePosition.CENTERS.clone().normalize(),
-        (-i * TAU) / 4,
-      ),
+  CENTERS: [0, 1, 2, 3].map((i) =>
+    new Matrix4().makeRotationAxis(
+      firstPiecePosition.CENTERS.clone().normalize(),
+      (-i * TAU) / 4,
+    ),
   ),
 };
 const cubieStickerOrder = [face.U, face.F, face.R];
@@ -721,9 +733,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
     if (
       typeof hintFacelets !== "undefined" &&
       this.options.hintFacelets !== hintFacelets &&
-      hintFaceletStyles[
-        hintFacelets
-      ] // TODO: test this
+      hintFaceletStyles[hintFacelets] // TODO: test this
     ) {
       this.options.hintFacelets = hintFacelets;
       for (const hintSticker of this.experimentalHintStickerMeshes) {
