@@ -78,12 +78,8 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
     this.#freshListenerManager.addListener(
       this.model.twistySceneModel.stickeringMask,
       async (stickeringMask: ExperimentalStickeringMask) => {
-        const twisty3D = (await this.twisty3DPuzzle()) as PG3D | Cube3D;
-        if ("experimentalSetStickeringMask" in twisty3D) {
-          (twisty3D as PG3D).experimentalSetStickeringMask(stickeringMask);
-        } else {
-          twisty3D.setStickeringMask(stickeringMask);
-        }
+        const twisty3D = await this.twisty3DPuzzle();
+        twisty3D.setStickeringMask(stickeringMask);
         this.scheduleRender();
       },
     );

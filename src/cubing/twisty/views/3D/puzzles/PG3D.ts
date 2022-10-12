@@ -317,7 +317,7 @@ class StickerDef {
     }
   }
 
-  public setStickeringMask(
+  setStickeringMask(
     filler: Filler,
     faceletMeshStickeringMask: ExperimentalFaceletMeshStickeringMask,
   ): void {
@@ -554,7 +554,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.materialArray2 = new Array(8);
     // TODO: the argument enableFoundationOpt really means, do we ever want to display
     // foundations.  But it is presently *used* to mean, show foundations initially
-    // (and maybe experimentalSetStickeringMask changes this).  So for now we set up the
+    // (and maybe setStickeringMask changes this).  So for now we set up the
     // show flag from the enable flag, and turn on the enable flag so later when it's
     // used we will get the foundations.  What this means is the geometry always "pays"
     // for foundations, even if they aren't displayed.
@@ -610,7 +610,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     }
     // TODO: the argument enableHintStickersOpt really means, do we ever want to display
     // hint stickers.  But it is presently *used* to mean, show hint stickers initially
-    // (and maybe experimentalSetStickeringMask changes this).  So for now we set up the
+    // (and maybe setStickeringMask changes this).  So for now we set up the
     // show flag from the enable flag, and turn on the enable flag so later when it's
     // used we will get the hint stickers.  What this means is the geometry always "pays"
     // for hint stickers, even if they aren't displayed.
@@ -761,9 +761,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     return { move: closestMove, order }; // TODO: push this down
   }
 
-  experimentalSetStickeringMask(
-    stickeringMask: ExperimentalStickeringMask,
-  ): void {
+  setStickeringMask(stickeringMask: ExperimentalStickeringMask): void {
     this.params.stickeringMask = stickeringMask;
     for (const orbitName in this.kpuzzle.definition.orbits) {
       const { numPieces, numOrientations: orientations } =
