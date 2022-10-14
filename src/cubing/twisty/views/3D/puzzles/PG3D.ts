@@ -1009,7 +1009,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       this.hintMaterial = new MeshBasicMaterial({
         vertexColors: true,
         transparent: true,
-        opacity: 0.5,
+        opacity: v,
       });
       this.hintMaterialDisposable = true;
     }
