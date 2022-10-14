@@ -15,4 +15,7 @@ twistyPlayer.experimentalModel.playingInfo.set({
   loop: true,
 });
 
-demoSpinCamera(twistyPlayer, getScaleParam("spinTempo", getScaleParam("tempo")));
+demoSpinCamera(
+  twistyPlayer,
+  getScaleParam("spinTempo", getScaleParam("tempo")),
+);
