@@ -763,27 +763,29 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
 
   setStickeringMask(stickeringMask: ExperimentalStickeringMask): void {
     this.params.stickeringMask = stickeringMask;
-    for (const orbitName in this.kpuzzle.definition.orbits) {
-      const { numPieces, numOrientations: orientations } =
-        this.kpuzzle.definition.orbits[orbitName];
-      for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
-        for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {
-          const faceletStickeringMask = experimentalGetFaceletStickeringMask(
-            stickeringMask,
-            orbitName,
-            pieceIdx,
-            faceletIdx,
-            false,
-          );
-          const stickerDef = this.stickers[orbitName][faceletIdx][pieceIdx];
-          if (
-            this.textured &&
-            this.hintMaterialDisposable &&
-            faceletStickeringMask === "invisible"
-          ) {
-            // ignore "invisible" if textured hints
-          } else {
-            stickerDef.setStickeringMask(this.filler, faceletStickeringMask);
+    if (stickeringMask.specialBehaviour !== "picture") {
+      for (const orbitName in this.kpuzzle.definition.orbits) {
+        const { numPieces, numOrientations: orientations } =
+          this.kpuzzle.definition.orbits[orbitName];
+        for (let pieceIdx = 0; pieceIdx < numPieces; pieceIdx++) {
+          for (let faceletIdx = 0; faceletIdx < orientations; faceletIdx++) {
+            const faceletStickeringMask = experimentalGetFaceletStickeringMask(
+              stickeringMask,
+              orbitName,
+              pieceIdx,
+              faceletIdx,
+              false,
+            );
+            const stickerDef = this.stickers[orbitName][faceletIdx][pieceIdx];
+            if (
+              this.textured &&
+              this.hintMaterialDisposable &&
+              faceletStickeringMask === "invisible"
+            ) {
+              // ignore "invisible" if textured hints
+            } else {
+              stickerDef.setStickeringMask(this.filler, faceletStickeringMask);
+            }
           }
         }
       }
