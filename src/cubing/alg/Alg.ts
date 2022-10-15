@@ -151,16 +151,16 @@ export class Alg extends AlgCommon<Alg> {
   }
 
   commutator(): Alg {
-    let result = [],
-    order = 0,
-    minAmount = 0,
-    maxAmount = 0,
-    maxAlgAmount = 0,
-    outerBracket = false,
-    abMaxScore = 2.5,
-    abMinScore = 5,
-    limit = 0,
-    maxDepth = 0;
+    let result = [];
+    let order = 0;
+    let minAmount = 0;
+    let maxAmount = 0;
+    let maxAlgAmount = 0;
+    let outerBracket = false;
+    let abMaxScore = 2.5;
+    let abMinScore = 5;
+    let limit = 0;
+    let maxDepth = 0;
     let commute = {
         "U": {"class":1, "priority":1},
         "D": {"class":1, "priority":2},
@@ -288,8 +288,8 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function initializeExperssion(expressionOrigin) {
-        const expression = expressionOrigin.replace(/\s/gu, " "),
-            inputStack = [];
+        const expression = expressionOrigin.replace(/\s/gu, " ");
+        const inputStack = [];
         inputStack.push(expression[0]);
         for (let i = 1; i < expression.length; i++) {
             if (isOperator(expression[i]) || isOperator(inputStack.slice(-1))) {
@@ -322,10 +322,10 @@ export class Alg extends AlgCommon<Alg> {
 
     function rpn(inputStack) {
         // Reverse Polish Notation
-        const outputStack = [],
-            operatorStack = [];
-        let match = false,
-            tempOperator = "";
+        const outputStack = [];
+        const operatorStack = [];
+        let match = false;
+        let tempOperator = "";
         while (inputStack.length > 0) {
             const sign = inputStack.shift();
             if (!isOperator(sign)) {
@@ -362,8 +362,8 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function calculate(expression) {
-        let i = 0,
-            j = 0;
+        let i = 0;
+        let j = 0;
         const rpnExpression = [];
         while (expression.length > 0) {
             const sign = expression.shift();
@@ -379,8 +379,8 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function calculateTwo(i, j, sign) {
-        let arr1 = [],
-            arr2 = [];
+        let arr1 = [];
+        let arr2 = [];
         if (typeof i !== "undefined") {
             arr1 = preprocessing(i);
         }
@@ -400,8 +400,8 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function score(algValueOrigin) {
-        let i = 0,
-            j = 0;
+        let i = 0;
+        let j = 0;
         let algValue = algValueOrigin.replace(/\(/gu, "[");
         algValue = algValue.replace(/\)/gu, "]");
         algValue = algValue.replace(/（/gu, "[");
@@ -410,8 +410,8 @@ export class Alg extends AlgCommon<Alg> {
         algValue = algValue.replace(/】/gu, "]");
         algValue = algValue.replace(/，/gu, ",");
         algValue = algValue.replace(/\]\[/gu, "]+[");
-        const expression = rpn(initializeExperssion(algValue)),
-            rpnExpression = [];
+        const expression = rpn(initializeExperssion(algValue));
+        const rpnExpression = [];
         while (expression.length > 0) {
             const sign = expression.shift();
             if (isOperator(sign)) {
@@ -508,8 +508,8 @@ export class Alg extends AlgCommon<Alg> {
                 return [algorithm]; //["Not found."];
             }
         }
-        let count = 0,
-            arrex = [];
+        let count = 0;
+        let arrex = [];
         const locationud = [];
         for (let i = 0; i < arr.length - 1; i++) {
             if (arr[i][0] in commute && arr[i + 1][0] in commute) {
@@ -520,8 +520,8 @@ export class Alg extends AlgCommon<Alg> {
             }
         }
         const number = 2 ** count;
-        let commutatorResult = ["Not found."],
-            flag = false;
+        let commutatorResult = ["Not found."];
+        let flag = false;
         if (maxDepth === 0 || maxDepth > Math.floor((len - 1) / 3)) {
             maxDepth = Math.floor((len - 1) / 3);
         }
@@ -591,8 +591,8 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function commutatorpre(arr1, depth, maxSubDepth) {
-        let count = 0,
-            arrex = [];
+        let count = 0;
+        let arrex = [];
         const locationud = [];
         for (let i = 0; i < arr1.length - 1; i++) {
             if (arr1[i][0] in commute && arr1[i + 1][0] in commute) {
@@ -621,11 +621,11 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function commutatormain(array, depth, maxSubDepth) {
-        let arr1 = simplify(array),
-            text1 = "",
-            text0 = "";
-        const arrbak = arr1.concat(),
-            len = arr1.length;
+        let arr1 = simplify(array);
+        let text1 = "";
+        let text0 = "";
+        const arrbak = arr1.concat();
+        const len = arr1.length;
         if (arr1.length < 3 * depth + 1) {
             return ["Not found."];
         }
@@ -657,10 +657,10 @@ export class Alg extends AlgCommon<Alg> {
                         minj = 1;
                     }
                     for (let j = minj; j <= arr1.length / 2 - 1; j++) {
-                        let part1x = [],
-                            part2x = [];
-                        const commuteAddList1 = [],
-                            commuteAddList2 = [];
+                        let part1x = [];
+                        let part2x = [];
+                        const commuteAddList1 = [];
+                        const commuteAddList2 = [];
                         if (arr1[i - 1][0] === arr1[i + j - 1][0]) {
                             // For [a bx,by c bz]
                             for (let ir = minAmount; ir <= maxAmount; ir++) {
@@ -733,8 +733,8 @@ export class Alg extends AlgCommon<Alg> {
                             }
 
                             if (partb[0] !== "Not found.") {
-                                let part1y = part1x,
-                                    part2y = part2x;
+                                let part1y = part1x;
+                                let part2y = part2x;
                                 const party = simplify(part2x.concat(part1x));
                                 if (party.length < Math.max(part1x.length, part2x.length)) {
                                     if (part1x.length <= part2x.length) {
@@ -748,9 +748,9 @@ export class Alg extends AlgCommon<Alg> {
                                     }
                                 }
                                 // For a b c b' a' d c' d' = a b:[c,b' a' d] = d:[d' a b,c]
-                                let part0 = simplify(repeatEnd(arrbak.slice(0, d), dr)),
-                                    part1 = part1y,
-                                    part2 = part2y;
+                                let part0 = simplify(repeatEnd(arrbak.slice(0, d), dr));
+                                let part1 = part1y;
+                                let part2 = part2y;
                                 if (part0.length > 0 && maxSubDepth === 1) {
                                     const partz = simplify(part0.concat(part2y));
                                     // Avoid a b c b' a' b' c' b = b':[b a b,c], use a b:[c,b' a' b'] instead.
@@ -760,9 +760,9 @@ export class Alg extends AlgCommon<Alg> {
                                         part2 = part1y;
                                     }
                                 }
-                                const part1Output = simplifyfinal(part1),
-                                    part2Output = simplifyfinal(part2),
-                                    part0Output = simplifyfinal(part0);
+                                const part1Output = simplifyfinal(part1);
+                                const part2Output = simplifyfinal(part2);
+                                const part0Output = simplifyfinal(part0);
                                 if (depth === 1) {
                                     text1 = singleOutput(part0Output, part1Output, part2Output);
                                 } else {
@@ -827,8 +827,8 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function displace(array, d, dr) {
-        const arr = array.concat(),
-            arr1 = repeatEnd(arr.slice(0, d), dr);
+        const arr = array.concat();
+        const arr1 = repeatEnd(arr.slice(0, d), dr);
         return simplify(invert(arr1).concat(arr, arr1));
     }
 
@@ -885,8 +885,8 @@ export class Alg extends AlgCommon<Alg> {
         }
         const arr = [];
         for (let i = 0; i < array.length; i++) {
-            const arrayAdd = [array[i][0], normalize(array[i][1])],
-                len = arr.length;
+            const arrayAdd = [array[i][0], normalize(array[i][1])];
+            const len = arr.length;
             if (normalize(arrayAdd[1]) === 0) {
                 continue;
             }
