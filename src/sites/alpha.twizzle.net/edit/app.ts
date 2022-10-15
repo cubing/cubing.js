@@ -424,6 +424,12 @@ class ControlPane {
         ).alg.invert();
         break;
       }
+      case "commutator": {
+        this.twistyPlayer.alg = (
+          await this.twistyPlayer.experimentalModel.alg.get()
+        ).alg.commutator();
+        break;
+      }
       case "solve": {
         this.solve();
         break;
