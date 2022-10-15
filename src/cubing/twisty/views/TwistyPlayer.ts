@@ -130,7 +130,7 @@ export interface TwistyPlayerConfig {
   visualization?: VisualizationFormatWithAuto;
   hintFacelets?: HintFaceletStyleWithAuto;
   experimentalStickering?: ExperimentalStickering;
-  experimentalStickeringMaskOrbits?: ExperimentalStickeringMask;
+  experimentalStickeringMaskOrbits?: ExperimentalStickeringMask | string;
   background?: BackViewLayoutWithAuto;
   controlPanel?: ControlPanelThemeWithAuto;
   backView?: BackViewLayoutWithAuto;
