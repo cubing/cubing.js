@@ -275,8 +275,8 @@ export class Alg extends AlgCommon<Alg> {
       const expression = rpn(initializeExperssion(algValue));
       let expandOut = "";
       if (
-        expression === "Lack·left·parenthesis." ||
-        expression === "Lack·right·parenthesis."
+        expression === "Lack left parenthesis." ||
+        expression === "Lack right parenthesis."
       ) {
         return expression;
       }
@@ -368,8 +368,8 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function calculate(expression) {
-      let i = 0;
-      let j = 0;
+      let i = "";
+      let j = "";
       const rpnExpression = [];
       while (expression.length > 0) {
         const sign = expression.shift();
@@ -395,13 +395,13 @@ export class Alg extends AlgCommon<Alg> {
       }
       switch (sign) {
         case "+":
-          return·simplifyfinal(arr1.concat(arr2));
+          return simplifyfinal(arr1.concat(arr2));
         case ":":
-          return·simplifyfinal(arr1.concat(arr2, invert(arr1)));
+          return simplifyfinal(arr1.concat(arr2, invert(arr1)));
         case ",":
-          return·simplifyfinal(arr1.concat(arr2, invert(arr1), invert(arr2)));
+          return simplifyfinal(arr1.concat(arr2, invert(arr1), invert(arr2)));
         default:
-          return·false;
+          return simplifyfinal(arr1.concat(arr2));
       }
     }
 
@@ -497,6 +497,7 @@ export class Alg extends AlgCommon<Alg> {
       // • order 5 → min -2 (e.g. Megaminx)
       // • order 3 → min -1 (e.g. Pyraminx)
       minAmount = Math.floor(order / 2) + 1 - order;
+      maxAmount = Math.floor(order / 2);
       arr = simplify(arr);
       const len = arr.length;
       if (len === 0) {
@@ -581,11 +582,12 @@ export class Alg extends AlgCommon<Alg> {
       for (let i = 0; i < arr1.length; i++) {
         arr[i] = [];
         arr[i][0] = arr1[i][0];
-        let temp = arr1[i].replace(/[^0-9]/gu, "");
+        const temp = arr1[i].replace(/[^0-9]/gu, "");
         if (temp === "") {
-          temp = 1;
+          arr[i][1] = 1;
+        } else {
+          arr[i][1] = Number(temp);
         }
-        arr[i][1] = Number(temp);
         if (arr[i][1] > maxAlgAmount) {
           maxAlgAmount = arr[i][1];
         }
