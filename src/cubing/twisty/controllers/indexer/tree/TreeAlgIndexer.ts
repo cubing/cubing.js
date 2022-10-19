@@ -4,14 +4,14 @@ import type { KState } from "../../../../kpuzzle/KState";
 import type { Duration, Timestamp } from "../../AnimationTypes";
 import type { AlgIndexer } from "../AlgIndexer";
 import {
-  AlgWalkterDecoration,
+  AlgWalkerDecoration,
   AlgWalker,
   DecoratorConstructor,
 } from "./AlgWalker";
 import { chunkAlgs } from "./chunkAlgs";
 
 export class TreeAlgIndexer implements AlgIndexer {
-  private decoration: AlgWalkterDecoration;
+  private decoration: AlgWalkerDecoration;
   private walker: AlgWalker;
   constructor(private kpuzzle: KPuzzle, alg: Alg) {
     const deccon = new DecoratorConstructor(this.kpuzzle);

@@ -19,28 +19,28 @@ import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { Duration } from "../../AnimationTypes";
 import { AlgDuration, defaultDurationForAmount } from "../AlgDuration";
 
-export class AlgWalkterDecoration {
+export class AlgWalkerDecoration {
   constructor(
     public moveCount: number,
     public duration: number,
     public forward: KTransformation,
     public backward: KTransformation,
-    public children: AlgWalkterDecoration[] = [],
+    public children: AlgWalkerDecoration[] = [],
   ) {}
 }
-export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
+export class DecoratorConstructor extends TraversalUp<AlgWalkerDecoration> {
   private identity: KTransformation;
-  private dummyLeaf: AlgWalkterDecoration;
+  private dummyLeaf: AlgWalkerDecoration;
   private durationFn: TraversalUp<Duration> = new AlgDuration(
     defaultDurationForAmount,
   );
 
-  private cache: { [key: string]: AlgWalkterDecoration } = {};
+  private cache: { [key: string]: AlgWalkerDecoration } = {};
 
   constructor(private kpuzzle: KPuzzle) {
     super();
     this.identity = kpuzzle.identityTransformation();
-    this.dummyLeaf = new AlgWalkterDecoration(
+    this.dummyLeaf = new AlgWalkerDecoration(
       0,
       0,
       this.identity,
@@ -49,11 +49,11 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     );
   }
 
-  public traverseAlg(alg: Alg): AlgWalkterDecoration {
+  public traverseAlg(alg: Alg): AlgWalkerDecoration {
     let moveCount = 0;
     let duration = 0;
     let transformation = this.identity;
-    const child: AlgWalkterDecoration[] = [];
+    const child: AlgWalkerDecoration[] = [];
     for (const algNode of alg.childAlgNodes()) {
       const apd = this.traverseAlgNode(algNode);
       moveCount += apd.moveCount;
@@ -65,7 +65,7 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
       }
       child.push(apd);
     }
-    return new AlgWalkterDecoration(
+    return new AlgWalkerDecoration(
       moveCount,
       duration,
       transformation,
@@ -74,19 +74,19 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     );
   }
 
-  public traverseGrouping(grouping: Grouping): AlgWalkterDecoration {
+  public traverseGrouping(grouping: Grouping): AlgWalkerDecoration {
     const dec = this.traverseAlg(grouping.alg);
     return this.mult(dec, grouping.amount, [dec]);
   }
 
-  public traverseMove(move: Move): AlgWalkterDecoration {
+  public traverseMove(move: Move): AlgWalkerDecoration {
     const key = move.toString();
-    let r: AlgWalkterDecoration | undefined = this.cache[key];
+    let r: AlgWalkerDecoration | undefined = this.cache[key];
     if (r) {
       return r;
     }
     const transformation = this.kpuzzle.moveToTransformation(move);
-    r = new AlgWalkterDecoration(
+    r = new AlgWalkerDecoration(
       1,
       this.durationFn.traverseAlgNode(move),
       transformation,
@@ -96,13 +96,13 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     return r;
   }
 
-  public traverseCommutator(commutator: Commutator): AlgWalkterDecoration {
+  public traverseCommutator(commutator: Commutator): AlgWalkerDecoration {
     const decA = this.traverseAlg(commutator.A);
     const decB = this.traverseAlg(commutator.B);
     const AB = decA.forward.applyTransformation(decB.forward);
     const ApBp = decA.backward.applyTransformation(decB.backward);
     const ABApBp = AB.applyTransformation(ApBp);
-    const dec = new AlgWalkterDecoration(
+    const dec = new AlgWalkerDecoration(
       2 * (decA.moveCount + decB.moveCount),
       2 * (decA.duration + decB.duration),
       ABApBp,
@@ -112,12 +112,12 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     return this.mult(dec, 1, [dec, decA, decB]);
   }
 
-  public traverseConjugate(conjugate: Conjugate): AlgWalkterDecoration {
+  public traverseConjugate(conjugate: Conjugate): AlgWalkerDecoration {
     const decA = this.traverseAlg(conjugate.A);
     const decB = this.traverseAlg(conjugate.B);
     const AB = decA.forward.applyTransformation(decB.forward);
     const ABAp = AB.applyTransformation(decA.backward);
-    const dec = new AlgWalkterDecoration(
+    const dec = new AlgWalkerDecoration(
       2 * decA.moveCount + decB.moveCount,
       2 * decA.duration + decB.duration,
       ABAp,
@@ -127,11 +127,11 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     return this.mult(dec, 1, [dec, decA, decB]);
   }
 
-  public traversePause(pause: Pause): AlgWalkterDecoration {
+  public traversePause(pause: Pause): AlgWalkerDecoration {
     if (pause.experimentalNISSGrouping) {
       return this.dummyLeaf;
     }
-    return new AlgWalkterDecoration(
+    return new AlgWalkerDecoration(
       1,
       this.durationFn.traverseAlgNode(pause),
       this.identity,
@@ -139,22 +139,22 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
     );
   }
 
-  public traverseNewline(_newline: Newline): AlgWalkterDecoration {
+  public traverseNewline(_newline: Newline): AlgWalkerDecoration {
     return this.dummyLeaf;
   }
 
-  public traverseLineComment(_comment: LineComment): AlgWalkterDecoration {
+  public traverseLineComment(_comment: LineComment): AlgWalkerDecoration {
     return this.dummyLeaf;
   }
 
   private mult(
-    apd: AlgWalkterDecoration,
+    apd: AlgWalkerDecoration,
     n: number,
-    child: AlgWalkterDecoration[],
-  ): AlgWalkterDecoration {
+    child: AlgWalkerDecoration[],
+  ): AlgWalkerDecoration {
     const absn = Math.abs(n);
     const st = apd.forward.selfMultiply(n);
-    return new AlgWalkterDecoration(
+    return new AlgWalkerDecoration(
       apd.moveCount * absn,
       apd.duration * absn,
       st,
@@ -164,7 +164,7 @@ export class DecoratorConstructor extends TraversalUp<AlgWalkterDecoration> {
   }
 }
 class WalkerDown {
-  constructor(public apd: AlgWalkterDecoration, public back: boolean) {
+  constructor(public apd: AlgWalkerDecoration, public back: boolean) {
     /**/
   }
 }
@@ -181,7 +181,7 @@ export class AlgWalker extends TraversalDownUp<WalkerDown, boolean> {
   constructor(
     public kpuzzle: KPuzzle,
     public algOrAlgNode: Alg | AlgNode, // TODO: can we keep these separate?
-    public apd: AlgWalkterDecoration,
+    public apd: AlgWalkerDecoration,
   ) {
     super();
     this.i = -1;
