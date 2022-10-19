@@ -127,3 +127,21 @@ export abstract class TraversalUp<
   public abstract traverseNewline(newline: Newline): DataAlgNodeUp;
   public abstract traverseLineComment(comment: LineComment): DataAlgNodeUp;
 }
+
+export function functionFromTraversal<
+  DataDown,
+  DataAlgUp,
+  ConstructorArgs extends unknown[],
+>(
+  traversalConstructor: {
+    new (...args: ConstructorArgs): TraversalDownUp<DataDown, DataAlgUp, any>;
+  },
+  constructorArgs?: ConstructorArgs,
+): undefined extends DataDown
+  ? (alg: Alg) => DataAlgUp
+  : (alg: Alg, v: DataDown) => DataAlgUp {
+  const instance = new traversalConstructor(
+    ...(constructorArgs ?? ([] as any)),
+  );
+  return instance.traverseAlg.bind(instance);
+}

@@ -1,6 +1,6 @@
 import type { Alg } from "./Alg";
 
-import { TraversalUp } from "./traversal";
+import { functionFromTraversal, TraversalUp } from "./traversal";
 import type {
   Commutator,
   Conjugate,
@@ -56,7 +56,4 @@ export class FlatAlgValidator extends ValidatorTraversal {
 
 export type Validator = (a: Alg) => void;
 
-const flatAlgValidatorInstance = new FlatAlgValidator();
-export const validateFlatAlg = flatAlgValidatorInstance.traverseAlg.bind(
-  flatAlgValidatorInstance,
-) as Validator;
+export const validateFlatAlg = functionFromTraversal(FlatAlgValidator);

@@ -26,6 +26,7 @@ import {
   experimentalDirect,
   ExperimentalIterationDirection,
 } from "../../alg/cubing-private";
+import { functionFromTraversal } from "../../alg";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
 
@@ -370,10 +371,7 @@ class AlgToDOMTree extends TraversalDownUp<DataDown, DataUp, DataUp> {
   }
 }
 
-const algToDOMTreeInstance = new AlgToDOMTree();
-const algToDOMTree = algToDOMTreeInstance.traverseAlg.bind(
-  algToDOMTreeInstance,
-) as (alg: Alg, dataDown: DataDown) => DataUp;
+const algToDOMTree = functionFromTraversal(AlgToDOMTree);
 
 class MoveHighlighter {
   moveCharIndexMap: Map<number, TwistyAlgLeafElem> = new Map();

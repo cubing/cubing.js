@@ -10,6 +10,7 @@ import {
   TraversalDownUp,
 } from "../../../alg";
 import type { Parsed } from "../../../alg/parseAlg";
+import { functionFromTraversal } from "../../../alg";
 import type { AnimatedLeafAlgNode } from "../../controllers/indexer/simultaneous-moves/simul-moves";
 
 export type AnimatedLeafAlgNodeInfo = {
@@ -110,7 +111,4 @@ class LeafTokens extends TraversalDownUp<DataDown, DataUp> {
   }
 }
 
-const leafTokensInstance = new LeafTokens();
-export const leafTokens = leafTokensInstance.traverseAlg.bind(
-  leafTokensInstance,
-) as (alg: Parsed<Alg>, dataDown: DataDown) => DataUp;
+export const leafTokens = functionFromTraversal(LeafTokens);

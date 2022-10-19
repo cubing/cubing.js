@@ -10,6 +10,7 @@ import {
   TraversalUp,
   AlgNode,
 } from "../../../../cubing/alg";
+import { functionFromTraversal } from "../../../../cubing/alg";
 
 class Extractor extends TraversalUp<Generator<[string, AlgNode | Alg]>> {
   *traverseAlg(alg: Alg): Generator<[string, AlgNode | Alg]> {
@@ -57,7 +58,4 @@ class Extractor extends TraversalUp<Generator<[string, AlgNode | Alg]>> {
   }
 }
 
-const extractorInstance = new Extractor();
-export const extract = extractorInstance.traverseAlg.bind(
-  extractorInstance,
-) as (alg: Alg) => Generator<[string, AlgNode | Alg]>;
+export const extract = functionFromTraversal(Extractor);

@@ -9,6 +9,7 @@ import {
   Pause,
   TraversalUp,
 } from "../alg";
+import { functionFromTraversal } from "../alg";
 
 // TODO: Include Pause, include amounts
 class CountAnimatedLeaves extends TraversalUp<number, number> {
@@ -51,6 +52,4 @@ class CountAnimatedLeaves extends TraversalUp<number, number> {
   }
 }
 
-const countAnimatedLeavesInstance = new CountAnimatedLeaves();
-export const countAnimatedLeaves: (alg: Alg) => number =
-  countAnimatedLeavesInstance.traverseAlg.bind(countAnimatedLeavesInstance);
+export const countAnimatedLeaves = functionFromTraversal(CountAnimatedLeaves);

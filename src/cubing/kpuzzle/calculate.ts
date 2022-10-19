@@ -9,6 +9,7 @@ import {
   Pause,
   TraversalDownUp,
 } from "../alg";
+import { functionFromTraversal } from "../alg";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
 import type {
@@ -246,10 +247,9 @@ class AlgToTransformationTraversal extends TraversalDownUp<
   }
 }
 
-const algToTransformationInstance = new AlgToTransformationTraversal();
-export const algToTransformation = algToTransformationInstance.traverseAlg.bind(
-  algToTransformationInstance,
-) as (alg: Alg, kpuzzle: KPuzzle) => KTransformation;
+export const algToTransformation = functionFromTraversal(
+  AlgToTransformationTraversal,
+);
 
 export function canConvertStateToUniqueTransformationUncached(
   definition: KPuzzleDefinition,

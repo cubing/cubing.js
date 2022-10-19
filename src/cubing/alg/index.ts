@@ -8,7 +8,11 @@
 
 export { Alg } from "./Alg";
 export { AlgBuilder } from "./AlgBuilder";
-export { TraversalDownUp, TraversalUp } from "./traversal";
+export {
+  TraversalDownUp,
+  TraversalUp,
+  functionFromTraversal,
+} from "./traversal";
 export { Example } from "./example";
 export { keyToMove } from "./keyboard";
 export * from "./alg-nodes";

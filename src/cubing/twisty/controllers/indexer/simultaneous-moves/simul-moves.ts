@@ -9,6 +9,7 @@ import {
   Grouping,
   Newline,
 } from "../../../../alg";
+import { functionFromTraversal } from "../../../../alg";
 import type { MillisecondTimestamp } from "../../AnimationTypes";
 import { defaultDurationForAmount } from "../AlgDuration";
 
@@ -174,11 +175,7 @@ export class LocalSimulMoves extends TraversalUp<LocalAnimLeavesWithRange[]> {
   }
 }
 
-const localSimulMovesInstance = new LocalSimulMoves();
-
-const localSimulMoves = localSimulMovesInstance.traverseAlg.bind(
-  localSimulMovesInstance,
-) as (a: Alg) => LocalAnimLeavesWithRange[];
+const localSimulMoves = functionFromTraversal(LocalSimulMoves);
 
 export function simulMoves(a: Alg): AnimLeafWithRange[] {
   let timestamp = 0;

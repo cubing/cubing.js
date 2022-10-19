@@ -1,4 +1,3 @@
-import type { SimplifyOptions } from "../../../../../cubing/alg";
 import {
   Alg,
   AlgNode,
@@ -9,15 +8,15 @@ import {
   Move,
   Newline,
   Pause,
-  TraversalDownUp,
 } from "../../../../../cubing/alg";
+import {
+  functionFromTraversal,
+  TraversalUp,
+} from "../../../../../cubing/alg/traversal";
 import { cube3x3x3 } from "../../../../../cubing/puzzles";
 
 // TODO: Test that inverses are bijections.
-class RemoveAnnotations extends TraversalDownUp<
-  SimplifyOptions,
-  Generator<AlgNode>
-> {
+class RemoveAnnotations extends TraversalUp<Generator<AlgNode>> {
   // TODO: Handle
   public *traverseAlg(alg: Alg): Generator<AlgNode> {
     yield* alg.childAlgNodes();
@@ -54,9 +53,7 @@ class RemoveAnnotations extends TraversalDownUp<
   }
 }
 
-const removeAnnotationsInstance = new RemoveAnnotations();
-const removeAnnotations: (alg: Alg) => Generator<AlgNode> =
-  removeAnnotationsInstance.traverseAlg.bind(removeAnnotationsInstance);
+const removeAnnotations = functionFromTraversal(RemoveAnnotations);
 
 export function normalize(alg: Alg): Alg {
   return new Alg(removeAnnotations(alg)).experimentalSimplify({

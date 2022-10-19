@@ -11,6 +11,7 @@ import {
   Pause,
   TraversalUp,
 } from "../../../../alg";
+import { functionFromTraversal } from "../../../../alg";
 
 const MIN_CHUNKING_THRESHOLD = 16;
 
@@ -75,7 +76,4 @@ class ChunkAlgs extends TraversalUp<Alg, AlgNode> {
   }
 }
 
-const chunkAlgsInstance = new ChunkAlgs();
-export const chunkAlgs = chunkAlgsInstance.traverseAlg.bind(
-  chunkAlgsInstance,
-) as (alg: Alg) => Alg;
+export const chunkAlgs = functionFromTraversal(ChunkAlgs);

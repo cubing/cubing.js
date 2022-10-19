@@ -10,6 +10,7 @@ import {
   Pause,
   TraversalUp,
 } from "../alg";
+import { functionFromTraversal } from "../alg";
 
 /*
  *   For movecount, that understands puzzle rotations.  This code
@@ -102,14 +103,8 @@ function quantumMetric(move: Move): number {
   }
 }
 
-const countMovesInstance = new CountMoves(baseMetric);
-export const countMoves: (alg: Alg) => number =
-  countMovesInstance.traverseAlg.bind(countMovesInstance);
-
-const countMovesETMInstance = new CountMoves(etmMetric);
-export const countMovesETM: (alg: Alg) => number =
-  countMovesInstance.traverseAlg.bind(countMovesETMInstance);
-
-const countQuantumMovesInstance = new CountMoves(quantumMetric);
-export const countQuantumMoves: (alg: Alg) => number =
-  countQuantumMovesInstance.traverseAlg.bind(countQuantumMovesInstance);
+export const countMoves = functionFromTraversal(CountMoves, [baseMetric]);
+export const countMovesETM = functionFromTraversal(CountMoves, [etmMetric]);
+export const countQuantumMoves = functionFromTraversal(CountMoves, [
+  quantumMetric,
+]);
