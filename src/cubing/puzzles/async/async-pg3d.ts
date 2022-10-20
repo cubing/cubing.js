@@ -6,7 +6,7 @@ import type { StickeringMask } from "../stickerings/mask";
 import {
   cubeLikeStickeringMask,
   cubeStickerings,
-} from "../stickerings/cube-stickerings";
+} from "../stickerings/cube-like-stickerings";
 import { getCached } from "./lazy-cached";
 
 // TODO: modify this to handle TwistyPlayer options

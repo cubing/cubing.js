@@ -7,7 +7,7 @@ import type { StickeringMask } from "../../stickerings/mask";
 import {
   cubeLikeStickeringMask,
   cubeStickerings,
-} from "../../stickerings/cube-stickerings";
+} from "../../stickerings/cube-like-stickerings";
 
 /** @category Specific Puzzles */
 export const cube2x2x2: PuzzleLoader = {

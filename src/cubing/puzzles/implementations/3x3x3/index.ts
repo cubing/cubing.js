@@ -8,7 +8,7 @@ import type { StickeringMask } from "../../stickerings/mask";
 import {
   cubeLikeStickeringMask,
   cubeStickerings,
-} from "../../stickerings/cube-stickerings";
+} from "../../stickerings/cube-like-stickerings";
 import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications";
 
 /** @category Specific Puzzles */

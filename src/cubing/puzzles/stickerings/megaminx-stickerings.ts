@@ -1,18 +1,20 @@
 import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import type { StickeringMask } from "./mask";
-import { cubeLikeStickeringMask } from "./cube-stickerings";
+import { cubeLikeStickeringMask } from "./cube-like-stickerings";
 
 // TODO: cache calculations?
 export async function megaminxStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<StickeringMask> {
+  console.log(puzzleLoader, stickering)
   switch (stickering) {
     case "full":
     case "F2L":
     case "LL":
     case "OLL":
+    case "OCLL":
     case "PLL":
     case "ELS":
     case "CLS":
@@ -26,5 +28,5 @@ export async function megaminxStickeringMask(
 }
 
 export async function megaminxStickerings(): Promise<ExperimentalStickering[]> {
-  return ["full", "F2L", "LL", "OLL", "PLL", "ELS", "CLS"];
+  return ["full", "F2L", "LL", "OLL", "OCLL", "PLL", "ELS", "CLS"];
 }
