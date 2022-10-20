@@ -8,6 +8,7 @@ export const experimentalStickerings: Record<
   OLL: { groups: { "3x3x3": "Last Layer" } },
   PLL: { groups: { "3x3x3": "Last Layer" } },
   LL: { groups: { "3x3x3": "Last Layer" } },
+  EOLL: { groups: { "3x3x3": "Last Layer" } },
   COLL: { groups: { "3x3x3": "Last Layer" } },
   OCLL: { groups: { "3x3x3": "Last Layer" } },
   CLL: { groups: { "3x3x3": "Last Layer" } },
