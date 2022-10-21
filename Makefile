@@ -144,30 +144,3 @@ deploy-experiments: build-site-experiments
 .PHONY: deploy-typedoc
 deploy-typedoc: build-search-worker build-site-typedoc
 	node script/deploy/typedoc.js
-
-
-######## VR ########
-
-
-.PHONY: setup-vr
-setup-vr:
-	adb tcpip 5555
-	adb reverse tcp:333 tcp:333
-	adb reverse tcp:51785 tcp:51785
-
-.PHONY: restart-oculus-browser
-restart-oculus-browser:
-	adb shell am force-stop com.oculus.browser
-	adb shell am start -n com.oculus.browser/.WebVRActivity
-
-# VR_SFTP_PATH = "towns.dreamhost.com:~/vr.cubing.net/"
-# VR_URL       = "https://vr.cubing.net/"
-
-# .PHONY: deploy-vr
-# deploy-vr: clean parcel-build-for-vr-cubing-net
-# 	rsync -avz \
-# 		--exclude .DS_Store \
-# 		--exclude .git \
-# 		./dist/experiments.cubing.net/vr/ \
-# 		${VR_SFTP_PATH}
-# 	echo "\nDone deploying. Go to ${VR_URL}\n"

@@ -1,4 +1,4 @@
-import { rsync } from "./rsync";
+import { rsync } from "./rsync.js";
 
 const experimentsSFTPPath =
   "cubing_deploy@towns.dreamhost.com:~/experiments.cubing.net/cubing.js";

@@ -1,7 +1,8 @@
-import { execPromise } from "../lib/execPromise.js";
 import { default as fetch } from "node-fetch";
 import * as assert from "node:assert";
 import { readFile } from "node:fs/promises";
+import { execPromise } from "../lib/execPromise.js";
+import { execPromiseLogged, rsync } from "./rsync.js";
 
 const gitDescribeVersion = (await execPromise("git describe --tags")).trim();
 const versionFolderName = (
@@ -16,10 +17,6 @@ const twizzleSFTPVersionPath = `${twizzleSFTPVersionsPath}/${versionFolderName}`
 const twizzleSFTPUploadPath = `${twizzleSFTPVersionsPath}/rsync-incomplete/${versionFolderName}`;
 const twizzleURL = "https://alpha.twizzle.net/";
 
-async function execPromiseLogged(cmd) {
-  console.log(cmd);
-  return execPromise(cmd);
-}
 await execPromiseLogged(
   `ssh "${twizzleSSHServer}" "mkdir -p ${twizzleSFTPUploadPath} && [ ! -d ${twizzleSFTPPath} ] || { cp -R ${twizzleSFTPPath}/* ${twizzleSFTPUploadPath} && rm -f ${twizzleSFTPUploadPath}/deploy-versions }"`,
 );
