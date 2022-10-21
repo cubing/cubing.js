@@ -88,10 +88,7 @@ export async function cubeLikeStickeringMask(
     case "EOLL": {
       dimF2L();
       setOLL();
-      puzzleStickering.set(
-        m.and([LL(), CORNERS()]),
-        PieceStickering.Ignored,
-      );
+      puzzleStickering.set(m.and([LL(), CORNERS()]), PieceStickering.Ignored);
       break;
     }
     case "COLL": {

@@ -8,7 +8,7 @@ export async function megaminxStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<StickeringMask> {
-  console.log(puzzleLoader, stickering)
+  console.log(puzzleLoader, stickering);
   switch (stickering) {
     case "full":
     case "F2L":
