@@ -23,4 +23,8 @@ export const expectedPrefixes = [
   "node_modules/jest-diff",
   "node_modules/jest-matcher-utils",
   "node_modules/pretty-format",
+  // `node-fetch`
+  "node_modules/formdata-polyfill",
+  "node_modules/fetch-blob",
+  "node_modules/node-fetch",
 ];
