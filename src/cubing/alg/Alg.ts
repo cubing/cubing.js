@@ -451,7 +451,9 @@ export class Alg extends AlgCommon<Alg> {
     }
 
     function sortRule(a, b) {
-      return score(a) - score(b);
+      const ar = a.replace(/\]\s\[/gu, "]+[");
+      const br = b.replace(/\]\s\[/gu, "]+[");
+      return score(ar) - score(br);
     }
 
     function search(input) {
@@ -859,9 +861,9 @@ export class Alg extends AlgCommon<Alg> {
         }
         return `${setup}:[[${commutatora},${commutatorb}]+${partb}]`;
       } else if (setup === "") {
-        return `[${commutatora},${commutatorb}]${partb}`;
+        return `[${commutatora},${commutatorb}] ${partb}`;
       }
-      return `[${setup}:[${commutatora},${commutatorb}]${partb}]`;
+      return `[${setup}:[${commutatora},${commutatorb}] ${partb}]`;
     }
 
     function singleOutput(setup, commutatora, commutatorb) {
@@ -1009,7 +1011,6 @@ export class Alg extends AlgCommon<Alg> {
         algorithm: input,
         order: 4,
         outerBracket: true,
-        maxDepth: 1,
       })[0];
     }
 
