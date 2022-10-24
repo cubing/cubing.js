@@ -42,9 +42,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: mkdir -p ./dist/
-      - run: echo "js.cubing.net" > ./dist/CNAME
-      - run: echo "hi!" > ./dist/index.html
+      - run: mkdir -p ./dist/sites/js.cubing.net/
+      - run: echo "js.cubing.net" > ./dist/sites/js.cubing.net/CNAME
+      - run: echo "hi!" > ./dist/sites/js.cubing.net/index.html
       - run: find dist -type l -ls
       - run: rm -rf dist/**/.nojekyll
       - run: chmod -R 777 ./dist
@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: github-pages
-          path: ./dist/
+          path: ./dist/sites/js.cubing.net/
           retention-days: 1
       - name: Deploy to GitHub Pages
         id: deployment
