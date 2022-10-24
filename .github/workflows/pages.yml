@@ -1,25 +1,22 @@
-name: GitHub Pages
+name: js.cubing.net
 
-on: [push]
+on:
+  push:
+    branches: [main]
 
 jobs:
-  deploy-pages:
+  build-and-deploy-pages:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x]
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     # https://github.com/actions/deploy-pages#usage
     permissions:
-      pages: write      # to deploy to Pages
-      deployments: write
-      id-token: write   # to verify the deployment originates from an appropriate source
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v2
@@ -41,13 +38,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: mkdir -p ./dist/sites/js.cubing.net/
-      - run: echo "hi!" > ./dist/sites/js.cubing.net/index.html
-      - run: find dist -type l -ls
-      - run: rm -rf dist/**/.nojekyll
-      - run: find dist -type l -ls
+      - run: make build-site-docs
       - name: Upload artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-pages-artifact@v1
         with:
           name: github-pages
           path: ./dist/sites/js.cubing.net/
