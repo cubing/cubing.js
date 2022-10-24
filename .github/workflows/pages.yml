@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: github-pages
-          path: ./dist/sites/js.cubing.net/
+          path: ./dist/sites/js.cubing.net
           retention-days: 1
 
   # Deploy job
