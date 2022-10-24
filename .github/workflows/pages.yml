@@ -18,6 +18,8 @@ jobs:
       - run: mkdir -p ./dist/sites/js.cubing.net/
       - run: echo "hi!" > ./dist/sites/js.cubing.net/index.html
       - run: ls -al ./dist/sites/js.cubing.net/index.html
+      - run: chown -R root ./dist/sites/js.cubing.net/
+      - run: ls -al ./dist/sites/js.cubing.net/index.html
       - name: Upload artifact
         uses: actions/upload-artifact@main
         with:
