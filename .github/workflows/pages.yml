@@ -47,7 +47,7 @@ jobs:
     needs: build-pages
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: "https://js.cubing.net/"
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     # https://github.com/actions/deploy-pages#usage
