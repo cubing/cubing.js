@@ -30,10 +30,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: mkdir -p ./dist/sites/js.cubing.net/
-      - run: echo "hi!" > ./dist/sites/js.cubing.net/index.html
+      - run: make build-site-docs
       - run: find dist -type l -ls
       - run: rm -rf dist/**/.nojekyll
+      - run: sudo chown -R root ./dist/
       - run: find dist -type l -ls
       - name: Upload artifact
         uses: actions/upload-artifact@main
