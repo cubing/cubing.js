@@ -146,7 +146,11 @@
     "lint": "make lint",
     "lint-ci": "make lint-ci",
     "prepack": "make prepack",
-    "postpublish": "make postpublish"
+    "postpublish": "make postpublish",
+    "deploy": "make deploy",
+    "deploy-twizzle": "make deploy-twizzle",
+    "deploy-experiments": "make deploy-experiments",
+    "deploy-typedoc": "make deploy-typedoc"
   },
   "keywords": [
     "cubing",

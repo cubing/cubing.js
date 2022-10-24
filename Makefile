@@ -123,24 +123,16 @@ postpublish:
 	@echo ""
 	@echo "Consider updating \`cdn.cubing.net\` if you have access:"
 	@echo "https://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version"
+deploy: deploy-twizzle deploy-experiments
+deploy-twizzle: build-site-twizzle
+	node script/deploy/twizzle.js
+deploy-experiments: build-site-experiments
+	node script/deploy/experiments.js
+deploy-typedoc: build-search-worker build-site-typedoc
+	node script/deploy/typedoc.js
 
 ######## Only in `Makefile` ########
 
 .PHONY: publish
 publish:
 	npm publish
-
-.PHONY: deploy
-deploy: deploy-twizzle deploy-experiments
-
-.PHONY: deploy-twizzle
-deploy-twizzle: build-site-twizzle
-	node script/deploy/twizzle.js
-
-.PHONY: deploy-experiments
-deploy-experiments: build-site-experiments
-	node script/deploy/experiments.js
-
-.PHONY: deploy-typedoc
-deploy-typedoc: build-search-worker build-site-typedoc
-	node script/deploy/typedoc.js
