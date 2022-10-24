@@ -110,7 +110,8 @@
     "build-sites": "make build-sites",
     "build-site-twizzle": "make build-site-twizzle",
     "build-site-experiments": "make build-site-experiments",
-    "build-site-typedoc": "make build-site-typedoc",
+    "build-site-api": "make build-site-api",
+    "build-site-docs": "make build-site-docs",
     "build-search-worker": "make build-search-worker",
     "generate-js": "make generate-js",
     "generate-js-parsers": "make generate-js-parsers",
@@ -149,8 +150,7 @@
     "postpublish": "make postpublish",
     "deploy": "make deploy",
     "deploy-twizzle": "make deploy-twizzle",
-    "deploy-experiments": "make deploy-experiments",
-    "deploy-typedoc": "make deploy-typedoc"
+    "deploy-experiments": "make deploy-experiments"
   },
   "keywords": [
     "cubing",
