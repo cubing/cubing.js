@@ -25,7 +25,6 @@ body, select, input {
   gap: 0.5em;
 }
 .header .title {
-  text-decoration: underline;
   display: grid;
   place-content: center;
   grid-column: 1 / 3;
