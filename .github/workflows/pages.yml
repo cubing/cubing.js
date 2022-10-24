@@ -1,6 +1,8 @@
 name: GitHub Pages
 
-on: [push]
+on:
+  push:
+    branches: [main, pages-test]
 
 jobs:
   build-and-deploy-pages:
