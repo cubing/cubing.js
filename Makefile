@@ -20,8 +20,10 @@ build-site-twizzle:
 	${NODE} ./script/build/main.js twizzle
 build-site-experiments:
 	${NODE} ./script/build/main.js experiments
-build-site-typedoc:
+build-site-api: build-search-worker
 	npx typedoc src/cubing/*/index.ts
+build-site-docs: build-site-api
+	cp -R ./docs/* ./dist/sites/js.cubing.net/
 build-search-worker:
 	${NODE} ./script/build/main.js search-worker
 generate-js: generate-js-parsers generate-js-svg
@@ -80,7 +82,7 @@ test-build: \
 	build-bin \
 	build-types \
 	build-sites \
-	build-site-typedoc # keep CI.yml in sync with this
+	build-site-api # keep CI.yml in sync with this
 test-dist: \
 	test-dist-esm-node-import \
 	test-dist-esm-scramble-all-events \
@@ -128,8 +130,6 @@ deploy-twizzle: build-site-twizzle
 	node script/deploy/twizzle.js
 deploy-experiments: build-site-experiments
 	node script/deploy/experiments.js
-deploy-typedoc: build-search-worker build-site-typedoc
-	node script/deploy/typedoc.js
 
 ######## Only in `Makefile` ########
 
