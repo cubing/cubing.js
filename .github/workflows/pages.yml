@@ -3,23 +3,12 @@ name: GitHub Pages
 on: [push]
 
 jobs:
-  deploy-pages:
+  build-pages:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [18.x]
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    # https://github.com/actions/deploy-pages#usage
-    permissions:
-      pages: write      # to deploy to Pages
-      deployments: write
-      id-token: write   # to verify the deployment originates from an appropriate source
 
     steps:
       - uses: actions/checkout@v2
@@ -52,6 +41,23 @@ jobs:
           name: github-pages
           path: ./dist/sites/js.cubing.net/
           retention-days: 1
+
+  deploy-pages:
+    runs-on: ubuntu-latest
+    needs: build-pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    # https://github.com/actions/deploy-pages#usage
+    permissions:
+      contents: read
+      pages: write      # to deploy to Pages
+      deployments: write
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
