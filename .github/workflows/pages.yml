@@ -35,6 +35,7 @@ jobs:
       - run: echo "hi!" > ./dist/sites/js.cubing.net/index.html
       - run: find dist -type l -ls
       - run: rm -rf dist/**/.nojekyll
+      - run: chmod -R 777 ./dist
       - run: sudo chown -R root ./dist/
       - run: find dist -type l -ls
       - name: Upload artifact
