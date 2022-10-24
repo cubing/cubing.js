@@ -51,6 +51,9 @@
       // Other
       "*"
     ],
+    "customCss": "./docs/typedoc-theme.css",
+    "name": "cubing.js — API reference",
+    "titleLink": "/cubing/api/",
     "readme": "./src/cubing/typedoc-readme.md"
   }
 }
