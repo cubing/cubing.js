@@ -1,6 +1,16 @@
 name: GitHub Pages
 
-on: [push]
+on:
+  push:
+    branches: [main, pages-test]
+
+# Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+# https://github.com/actions/deploy-pages#usage
+permissions:
+  contents: read
+  pages: write      # to deploy to Pages
+  deployments: write
+  id-token: write   # to verify the deployment originates from an appropriate source
 
 jobs:
   build-pages:
@@ -48,14 +58,6 @@ jobs:
     environment:
       name: github-pages
       url: "https://js.cubing.net/"
-
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
-    # https://github.com/actions/deploy-pages#usage
-    permissions:
-      contents: read
-      pages: write      # to deploy to Pages
-      deployments: write
-      id-token: write   # to verify the deployment originates from an appropriate source
 
     steps:
       - name: Deploy to GitHub Pages
