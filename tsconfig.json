@@ -52,8 +52,13 @@
       "*"
     ],
     "customCss": "./docs/typedoc-theme.css",
-    "name": "cubing.js — API reference",
+    "name": "cubing.js — API Reference",
     "titleLink": "/cubing/api/",
-    "readme": "./src/cubing/typedoc-readme.md"
+    "readme": "./src/cubing/typedoc-readme.md",
+    "includeVersion": true,
+    "hideGenerator": true,
+    "navigationLinks": {
+      "Go to main documentation 🔗": "/cubing/"
+    }
   }
 }
