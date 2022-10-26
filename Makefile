@@ -23,7 +23,7 @@ build-site-experiments:
 build-site-api: build-search-worker
 	npx typedoc src/cubing/*/index.ts
 build-site-docs: build-site-api
-	cp -R ./docs/* ./dist/sites/js.cubing.net/
+	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 build-search-worker:
 	${NODE} ./script/build/main.js search-worker
 generate-js: generate-js-parsers generate-js-svg
