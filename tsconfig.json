@@ -5,6 +5,7 @@
     "declaration": true,
     "declarationDir": "./dist/types",
     "declarationMap": true,
+    "emitDeclarationOnly": true,
     "lib": ["esnext", "dom"],
     "moduleResolution": "node",
     "noImplicitAny": true,
