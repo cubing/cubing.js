@@ -110,7 +110,6 @@
     "build-sites": "make build-sites",
     "build-site-twizzle": "make build-site-twizzle",
     "build-site-experiments": "make build-site-experiments",
-    "build-site-api": "make build-site-api",
     "build-site-docs": "make build-site-docs",
     "build-search-worker": "make build-search-worker",
     "generate-js": "make generate-js",

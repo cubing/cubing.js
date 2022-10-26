@@ -73,7 +73,7 @@ jobs:
       - run: make build-bin
       - run: make build-types
       - run: make build-sites
-      - run: make build-site-api
+      - run: make build-site-docs
       - run: make clean
 
   test-dist:

@@ -20,9 +20,9 @@ build-site-twizzle:
 	${NODE} ./script/build/main.js twizzle
 build-site-experiments:
 	${NODE} ./script/build/main.js experiments
-build-site-api: build-search-worker
+build-site-docs: build-search-worker
+	rm -rf ./dist/sites/js.cubing.net/
 	npx typedoc src/cubing/*/index.ts
-build-site-docs: build-site-api
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 	@echo -e "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
 build-search-worker:
@@ -83,7 +83,7 @@ test-build: \
 	build-bin \
 	build-types \
 	build-sites \
-	build-site-api # keep CI.yml in sync with this
+	build-site-docs # keep CI.yml in sync with this
 test-dist: \
 	test-dist-esm-node-import \
 	test-dist-esm-scramble-all-events \
