@@ -36,7 +36,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          name: github-pages
           path: ./dist/sites/js.cubing.net/
           retention-days: 1
 
