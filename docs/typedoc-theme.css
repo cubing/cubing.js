@@ -6,3 +6,7 @@
 .tsd-page-toolbar a {
   --color-text: white;
 }
+
+.tsd-navigation.settings {
+  display: none;
+}
