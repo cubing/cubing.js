@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build-pages:
     runs-on: ubuntu-latest
