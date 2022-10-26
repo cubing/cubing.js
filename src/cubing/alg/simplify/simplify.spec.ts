@@ -56,7 +56,7 @@ describe("simplify", () => {
         cancel: { directional: "same-direction" },
         puzzleLoader: cube3x3x3,
       }),
-    ).to.be.identicalAlg("R R2");
+    ).to.be.identicalAlg("R R2'");
     expect(
       new Alg("R R2'").experimentalSimplify({
         cancel: {

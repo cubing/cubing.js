@@ -270,11 +270,61 @@ export class Alg extends AlgCommon<Alg> {
     return output;
   }
 
+  /**
+   * `experimentalSimplify` can perform several mostly-syntactic simplifications on an alg:
+   *
+   *     // Logs: R' U3
+   *     import { Alg } from "cubing/alg";
+   *     new Alg("R R2' U U2").experimentalSimplify({ cancel: true }).log()
+   *
+   * You can pass in a `PuzzleLoader` (currently only for 3x3x3) for puzzle-specific simplifications:
+   *
+   *     // Logs: R' U'
+   *     import { Alg } from "cubing/alg";
+   *     import { cube3x3x3 } from "cubing/puzzles";
+   *     new Alg("R R2 U'").experimentalSimplify({ cancel: true, puzzleLoader: cube3x3x3 }).log()
+   *
+   * You can also cancel only moves that are in the same direction:
+   *
+   *     // Logs: R R2' U'
+   *     import { Alg } from "cubing/alg";
+   *     import { cube3x3x3 } from "cubing/puzzles";
+   *     new Alg("R R2' U U2").experimentalSimplify({
+   *       cancel: { directional: "same-direction" },
+   *       puzzleLoader: cube3x3x3
+   *     }).log()
+   *
+   * Additionally, you can specify how moves are "wrapped":
+   *
+   *     import { Alg } from "cubing/alg";
+   *     import { cube3x3x3 } from "cubing/puzzles";
+   *
+   *     function example(puzzleSpecificModWrap) {
+   *       alg.experimentalSimplify({
+   *         cancel: { puzzleSpecificModWrap },
+   *         puzzleLoader: cube3x3x3
+   *       }).log()
+   *     }
+   *
+   *     const alg = new Alg("R7' . R6' . R5' . R6")
+   *     example("none")               // R7' . R6' . R5' . R6
+   *     example("gravity")            // R . R2' . R' . R2
+   *     example("canonical-centered") // R . R2 . R' . R2
+   *     example("canonical-positive") // R . R2 . R3 . R2
+   *     example("preserve-sign")      // R3' . R2' . R' . R2
+   *
+   * Same-axis and simultaneous move canonicalization is not implemented yet:
+   *
+   *     // Logs: R L R
+   *     import { Alg } from "cubing/alg";
+   *     import { cube3x3x3 } from "cubing/puzzles";
+   *     new Alg("R L R").experimentalSimplify({ cancel: true, puzzleLoader: cube3x3x3 }).log()
+   */
   experimentalSimplify(options?: SimplifyOptions): Alg {
     return new Alg(simplify(this, options ?? {}));
   }
 
-  /** @deprecated */
+  /** @deprecated See {@link experimentalSimplify} */
   simplify(options?: SimplifyOptions): Alg {
     return this.experimentalSimplify(options);
   }
