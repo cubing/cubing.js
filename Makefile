@@ -24,7 +24,7 @@ build-site-docs: build-search-worker
 	rm -rf ./dist/sites/js.cubing.net/
 	npx typedoc src/cubing/*/index.ts
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
-	@echo -e "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
+	@echo "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
 build-search-worker:
 	${NODE} ./script/build/main.js search-worker
 generate-js: generate-js-parsers generate-js-svg
