@@ -1,9 +1,4 @@
-import { execPromise } from "../lib/execPromise.js";
-
-export async function execPromiseLogged(cmd) {
-  console.log(cmd);
-  return execPromise(cmd);
-}
+import { execPromiseLogged } from "../lib/execPromise.js";
 
 export async function rsync(localFolder, remoteFolder, options) {
   const excludeArgs = (options?.exclude ?? [".DS_Store", ".git"])

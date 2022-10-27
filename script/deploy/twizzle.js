@@ -1,8 +1,8 @@
 import { default as fetch } from "node-fetch";
 import * as assert from "node:assert";
 import { readFile } from "node:fs/promises";
-import { execPromise } from "../lib/execPromise.js";
-import { execPromiseLogged, rsync } from "./rsync.js";
+import { execPromise, execPromiseLogged } from "../lib/execPromise.js";
+import { rsync } from "./rsync.js";
 
 const gitDescribeVersion = (await execPromise("git describe --tags")).trim();
 const versionFolderName = (

@@ -29,6 +29,11 @@ export function execPromise(cmd, options) {
   });
 }
 
+export async function execPromiseLogged(cmd) {
+  console.log(cmd);
+  return execPromise(cmd);
+}
+
 export function spawnPromise(cmd, args) {
   return new Promise((resolve, reject) => {
     const childProcess = spawn(cmd, args, {
