@@ -1,7 +1,10 @@
 {
   "formatter": {
     "indentStyle": "space",
-    "indentSize": 2
+    "indentSize": 2,
+    "ignore": [
+      "./src/cubing/search/search-worker-inside-generated-string.js"
+    ]
   },
   "linter": {
     "enabled": true,
@@ -18,6 +21,9 @@
         "noNegationElse": "off",
         "noShoutyConstants": "off"
       }
-    }
+    },
+    "ignore": [
+      "./src/cubing/search/search-worker-inside-generated-string.js"
+    ]
   }
 }
