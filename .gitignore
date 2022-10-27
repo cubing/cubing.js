@@ -3,6 +3,9 @@
 /dist
 /node_modules
 
+# Created by `npm pack` by default.
+/*.tgz
+
 # Legacy cache dirs (may appear when building old checkouts)
 # Parcel 1
 /.cache

@@ -137,3 +137,13 @@ deploy-experiments: build-site-experiments
 .PHONY: publish
 publish:
 	npm publish
+
+.PHONY: pack
+pack:
+	# Note that we need to use `./dist/` rather than `./dist/pack/`, because `make
+	# prepack` removes the entire `./dist/` folder (but creates a new `./dist/`
+	# folder). This prevents us from creating a `./dist/pack/` folder (or
+	# similarly, `./.temp/pack/` folder) that will stick around long enough for
+	# `npm pack` to use. The simplest is just to place the result directly in
+	# `./dist/`.
+	npm pack --pack-destination ./dist/
