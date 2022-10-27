@@ -45,16 +45,16 @@ export function experimentalEnsureAlg(alg: FlexibleAlgSource): Alg {
 }
 
 /**
- * Alg is a class that encapsulates a structured alg. To create an alg from a string, use:
+ * `Alg` is a class that encapsulates a structured alg. To create an `Alg` from a string, use:
  *
  *     new Alg("R U R'"); // Convenient
- *     Alg.fromString(dynamicString); // Recommended when user-provided string input.
+ *     Alg.fromString(dynamicString); // Recommended when the string input is user-provided.
  *
- * Once you have an Alg, you can call methods to transform it:
+ * Once you have an `Alg`, you can call methods to transform it:
  *
- *     new Alg("[[R: U], R U R2']").expand().simplify().invert();
+ *     new Alg("[[R: U], R U R2']").expand().experimentalSimplify({cancel: true}).invert().log()
  *
- * To convert an Alg to a string, use .toString():
+ * To convert an `Alg` to a string, use .toString():
  *
  *     new Alg("R U F").invert().toString();
  *
