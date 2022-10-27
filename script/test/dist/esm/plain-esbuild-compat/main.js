@@ -14,13 +14,10 @@ needFolder(
 const dist_entries = packageNames
   .map((e) => join("dist/esm/", e, "/index.js"))
   .join(" ");
-console.log(
-  `npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`,
-);
+const cmd = `npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`;
+console.log(cmd);
 stdout.write(
   "Testing that the ESM build can be transpiled by `esbuild` with default compat settings...",
 );
-await execPromise(
-  `npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`,
-);
+await execPromise(cmd);
 console.log(" ✅ Success!");
