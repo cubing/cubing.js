@@ -233,9 +233,8 @@ export class StickeringManager {
       this.kpuzzle.definition.orbits,
     )) {
       for (let i = 0; i < orbitDef.numPieces; i++) {
-        newPieceSet.stickerings.get(orbitName)![i] = !pieceSet.stickerings.get(
-          orbitName,
-        )![i];
+        newPieceSet.stickerings.get(orbitName)![i] =
+          !pieceSet.stickerings.get(orbitName)![i];
       }
     }
     return newPieceSet;

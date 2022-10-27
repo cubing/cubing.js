@@ -111,7 +111,6 @@ test-dist-sites-experiments: build-sites
 	${NODE} ./script/test/dist/experiments/main.js
 format:
 	${ROME} format --write ./script ./src
-	@echo -e "\n\n\n\n\n\nNOTE: Rome outputs lots of \`Unknown lint rule\` warnings at the moment. These are safe to ignore for now. See https://github.com/rome/tools/issues/3406\n\n\n\n"
 setup:
 	npm ci
 quick-setup:
