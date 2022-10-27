@@ -125,7 +125,6 @@ for (const [name, targetInfo] of Object.entries(targetInfos)) {
 // targets.map(a => console.log(a.dirPath))
 
 (async () => {
-  await execPromise("make build-search-worker");
   for (const currentTarget of targets) {
     build({
       target: "es2020",

@@ -68,7 +68,7 @@ test-spec-with-coverage:
 	${WEB_TEST_RUNNER} --playwright --coverage
 test-spec-watch:
 	${WEB_TEST_RUNNER} --playwright --watch
-test-src-internal-import-restrictions:
+test-src-internal-import-restrictions: build-search-worker
 	${NODE} ./script/test/src/internal-import-restrictions/main.js
 test-src-does-not-import-dist:
 	${NODE} ./script/test/src/does-not-import-dist/main.js

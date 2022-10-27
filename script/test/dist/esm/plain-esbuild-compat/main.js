@@ -19,5 +19,7 @@ console.log(cmd);
 stdout.write(
   "Testing that the ESM build can be transpiled by `esbuild` with default compat settings...",
 );
-await execPromiseLogged(`npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`);
+await execPromiseLogged(
+  `npx esbuild --bundle --splitting --outdir="${OUT_DIR}" --format=esm --minify ${dist_entries}`,
+);
 console.log(" ✅ Success!");
