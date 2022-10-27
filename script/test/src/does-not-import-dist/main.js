@@ -1,6 +1,15 @@
+import { join } from "path";
 import { exit, stderr } from "process";
 import { execPromise } from "../../../lib/execPromise.js";
+import { needFolder } from "../../../lib/need-folder.js";
 import { expectedPrefixes } from "./expected-import-prefixes.js";
+
+for (const folder of ["bin", "esm", "types"]) {
+  needFolder(
+    new URL(join("../../../../dist/", folder), import.meta.url).pathname,
+    "make build",
+  );
+}
 
 // Test that the `dist` dir is not imported from the source (which causes unwanted autocompletion in VSCode).
 // In theory we could test this together with import restrictions, but `npx tsc --explainFiles` lets us test directly against the completions.

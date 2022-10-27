@@ -70,7 +70,7 @@ test-spec-watch:
 	${WEB_TEST_RUNNER} --playwright --watch
 test-src-internal-import-restrictions: build-search-worker
 	${NODE} ./script/test/src/internal-import-restrictions/main.js
-test-src-does-not-import-dist:
+test-src-does-not-import-dist: build
 	${NODE} ./script/test/src/does-not-import-dist/main.js
 test-src-tsc: build-types
 	npx tsc --project ./tsconfig.json
