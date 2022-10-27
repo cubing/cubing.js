@@ -282,7 +282,7 @@ export class Alg extends AlgCommon<Alg> {
    *     // Logs: R' U'
    *     import { Alg } from "cubing/alg";
    *     import { cube3x3x3 } from "cubing/puzzles";
-   *     new Alg("R R2 U'").experimentalSimplify({ cancel: true, puzzleLoader: cube3x3x3 }).log()
+   *     new Alg("R R2' U U2").experimentalSimplify({ cancel: true, puzzleLoader: cube3x3x3 }).log()
    *
    * You can also cancel only moves that are in the same direction:
    *
