@@ -47,7 +47,7 @@ If you have `git`, `node`, and `npm` installed, you can run the `cubing.js` sour
 ```shell
 git clone https://github.com/cubing/cubing.js && cd cubing.js
 make dev
-# Now visit http://localhost:3333
+# Now visit http://cubing.localhost:3333
 ```
 
 To quickly check any changes for issues, try `make test-fast`. Run `make test` for more thorough testing options.

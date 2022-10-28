@@ -34,7 +34,7 @@ git clone https://github.com/cubing/cubing.js && cd cubing.js
 make dev
 ```
 
-This should install a few dependencies and start the server, after which you can open <http://localhost:3333/>. Some tips:
+This should install a few dependencies and start the server, after which you can open <http://cubing.localhost:3333/>. Some tips:
 
 The core library code for `cubing.js` is in [`src/cubing`](./src/cubing/). To test changes, use:
 

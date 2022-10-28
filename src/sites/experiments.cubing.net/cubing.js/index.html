@@ -33,7 +33,7 @@
   </style>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      if (location.hostname === "localhost") {
+      if (location.hostname.split(".").at(-1) === "localhost") {
         for (const a of document.querySelectorAll("a")) {
           const devHref = a.getAttribute("data-dev-href");
           if (devHref) {

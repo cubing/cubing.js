@@ -70,6 +70,7 @@ function siteOptions(srcFolder, dev) {
     entryRoot: join("src", srcFolder),
     outDir: dev ? join(".temp/dev", srcFolder) : join("dist", srcFolder),
     dev,
+    devDomain: "cubing.localhost",
     port: 3333,
     esbuildOptions: {
       target: "es2020",
