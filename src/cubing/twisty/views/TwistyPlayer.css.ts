@@ -15,6 +15,7 @@ export const twistyPlayerCSS = new CSSSource(
 .wrapper {
   display: grid;
   overflow: hidden;
+  contain: size;
   grid-template-rows: 7fr minmax(1.5em, 0.5fr) minmax(2em, 1fr);
 }
 
