@@ -487,7 +487,11 @@ export class TwistyAlgViewer extends HTMLElementShim {
       const timestampPromise = (async (): Promise<MillisecondTimestamp> => {
         const indexer = await twistyPlayer.experimentalModel.indexer.get();
         const offset = offsetIntoMove ? DEFAULT_OFFSET_MS : 0;
-        return (indexer.indexToMoveStartTimestamp(index) ?? -offset) + offset;
+        return (
+          indexer.indexToMoveStartTimestamp(index) +
+          indexer.moveDuration(index) -
+          offset
+        );
       })();
       twistyPlayer.experimentalModel.timestampRequest.set(
         await timestampPromise, // TODO
