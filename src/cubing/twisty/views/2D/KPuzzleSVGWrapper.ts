@@ -147,7 +147,7 @@ export class KPuzzleSVGWrapper {
     for (const hintElem of Array.from(
       svgElem.querySelectorAll(`[${DATA_COPY_ID_ATTRIBUTE}]`),
     )) {
-      const id = hintElem.getAttribute(DATA_COPY_ID_ATTRIBUTE)
+      const id = hintElem.getAttribute(DATA_COPY_ID_ATTRIBUTE);
       hintElem.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
     }
   }
