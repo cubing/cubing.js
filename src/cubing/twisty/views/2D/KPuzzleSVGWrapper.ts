@@ -91,10 +91,14 @@ export class KPuzzleSVGWrapper {
     this.gradientDefs = document.createElementNS(xmlns, "defs");
     svgElem.insertBefore(this.gradientDefs, svgElem.firstChild);
 
+    console.log(kpuzzle.definition.orbits);
+
     for (const orbitName in kpuzzle.definition.orbits) {
       const orbitDefinition = kpuzzle.definition.orbits[orbitName];
+      console.log(orbitName);
 
       for (let idx = 0; idx < orbitDefinition.numPieces; idx++) {
+        console.log({ idx });
         for (
           let orientation = 0;
           orientation < orbitDefinition.numOrientations;
@@ -102,6 +106,9 @@ export class KPuzzleSVGWrapper {
         ) {
           const id = this.elementID(orbitName, idx, orientation);
           const elem = this.elementByID(id);
+
+          console.log(elem);
+
           let originalColor: string = elem.style.fill;
           /// TODO: Allow setting stickering mask dynamically.
           if (experimentalStickeringMask) {

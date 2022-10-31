@@ -3,7 +3,7 @@ import type { KPuzzleDefinition } from "../../../../kpuzzle";
 export const melindas2x2x2x2OrbitJSON: KPuzzleDefinition = {
   name: "Melinda's 2x2x2x2",
   orbits: {
-    CORNERS: { numPieces: 2, numOrientations: 0 },
+    CORNERS: { numPieces: 2, numOrientations: 1 },
   },
   startStateData: {
     CORNERS: {
