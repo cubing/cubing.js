@@ -56,6 +56,9 @@ function plugins(dev) {
               if theURL starts with "http://localhost" then
                 tell the active tab of its first window to reload
               end if
+              if theURL starts with "http://cubing.localhost" then
+                tell the active tab of its first window to reload
+              end if
             end tell'`,
           );
         });
