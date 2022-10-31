@@ -1,11 +1,17 @@
 export const cube3x3x3SVG = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
        "http://www.w3.org/TR/2001/REC-SVG-20050904/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 518 392" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 518 440" preserveAspectRatio="xMidYMid meet">
   <title>3x3x3</title>
   <defs>
     <g id="sticker">
         <rect x="0" y="0" width="1" height="1" stroke="black" stroke-width="0.04px" />
+    </g>
+    <g id="sticker-thin-v">
+        <rect x="0" y="0" width="0.5" height="1" stroke="black" stroke-width="0.04px" style="opacity: 0.3;" />
+    </g>
+    <g id="sticker-thin-h">
+        <rect x="0" y="0" width="1" height="0.5" stroke="black" stroke-width="0.04px" style="opacity: 0.3;" />
     </g>
   </defs>
 
@@ -21,7 +27,20 @@ export const cube3x3x3SVG = `<?xml version="1.0" encoding="UTF-8"?>
 <!--    7 -       . . .                -->
 <!--    8 -       . . .                -->
 
-  <g id="puzzle" transform="translate(5,5) scale(40)">
+  <g id="puzzle" transform="translate(5,40) scale(40)">
+    <!-- Hints -->
+    <use data-copy-id="CORNERS-l0-o1" xlink:href="#sticker-thin-v" transform="translate(6.5,2.1)" style="fill: red"/>
+    <use data-copy-id="EDGES-l1-o1"   xlink:href="#sticker-thin-v" transform="translate(6.5,1.1)" style="fill: red"/>
+    <use data-copy-id="CORNERS-l1-o2" xlink:href="#sticker-thin-v" transform="translate(6.5,0.1)" style="fill: red"/>
+
+    <use data-copy-id="CORNERS-l2-o2" xlink:href="#sticker-thin-h" transform="translate(3.3,-0.6)" style="fill: #26f"/>
+    <use data-copy-id="EDGES-l2-o1"   xlink:href="#sticker-thin-h" transform="translate(4.3,-0.6)" style="fill: #26f"/>
+    <use data-copy-id="CORNERS-l1-o1" xlink:href="#sticker-thin-h" transform="translate(5.3,-0.6)" style="fill: #26f"/>
+
+    <use data-copy-id="CORNERS-l3-o2" xlink:href="#sticker-thin-v" transform="translate(2.6,2.1)" style="fill: orange"/>
+    <use data-copy-id="EDGES-l3-o1"   xlink:href="#sticker-thin-v" transform="translate(2.6,1.1)" style="fill: orange"/>
+    <use data-copy-id="CORNERS-l2-o1" xlink:href="#sticker-thin-v" transform="translate(2.6,0.1)" style="fill: orange"/>
+
     <!-- CORNERS -->
     <use id="CORNERS-l0-o0" xlink:href="#sticker" transform="translate(5.3,2.1)" style="fill: white"/>
     <use id="CORNERS-l0-o1" xlink:href="#sticker" transform="translate(6.5,3.3)" style="fill: red"/>
@@ -125,4 +144,5 @@ export const cube3x3x3SVG = `<?xml version="1.0" encoding="UTF-8"?>
     <use id="CENTERS-l5-o3" xlink:href="#sticker" transform="translate(4.3,7.5)" style="fill: yellow"/>
   </g>
 
-</svg>`;
+</svg>
+`;

@@ -4,7 +4,9 @@ import type {
   FaceletMeshStickeringMask,
   StickeringMask,
 } from "../../../puzzles/stickerings/mask"; // TODO
+
 const xmlns = "http://www.w3.org/2000/svg";
+const DATA_COPY_ID_ATTRIBUTE = "data-copy-id";
 
 // Unique ID mechanism to keep SVG gradient element IDs unique. TODO: Is there
 // something more performant, and that can't be broken by other elements of the
@@ -136,10 +138,18 @@ export class KPuzzleSVGWrapper {
           }
           this.originalColors[id] = originalColor;
           this.gradients[id] = this.newGradient(id, originalColor);
+          console.log(id, this.gradients[id]);
           this.gradientDefs.appendChild(this.gradients[id]);
           elem.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
         }
       }
+    }
+
+    for (const hintElem of Array.from(
+      svgElem.querySelectorAll(`[${DATA_COPY_ID_ATTRIBUTE}]`),
+    )) {
+      const id = hintElem.getAttribute(DATA_COPY_ID_ATTRIBUTE)
+      hintElem.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
     }
   }
 

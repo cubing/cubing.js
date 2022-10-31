@@ -110,7 +110,10 @@ export class App {
   // TODO: avoid modifying `initialConfig`?
   private initializeTwisty(initialConfig: TwistyPlayerConfig): void {
     initialConfig.viewerLink = "none";
-    this.twistyPlayer = new TwistyPlayer(initialConfig);
+    this.twistyPlayer = new TwistyPlayer({
+      ...initialConfig,
+      visualization: "2D",
+    });
     this.puzzlePane.appendChild(this.twistyPlayer);
   }
 
