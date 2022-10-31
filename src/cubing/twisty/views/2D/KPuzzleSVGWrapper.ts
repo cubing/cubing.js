@@ -138,7 +138,6 @@ export class KPuzzleSVGWrapper {
           }
           this.originalColors[id] = originalColor;
           this.gradients[id] = this.newGradient(id, originalColor);
-          console.log(id, this.gradients[id]);
           this.gradientDefs.appendChild(this.gradients[id]);
           elem.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
         }
