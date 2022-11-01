@@ -102,6 +102,7 @@ export class KPuzzleSVGWrapper {
         ) {
           const id = this.elementID(orbitName, idx, orientation);
           const elem = this.elementByID(id);
+
           let originalColor: string = elem.style.fill;
           /// TODO: Allow setting stickering mask dynamically.
           if (experimentalStickeringMask) {

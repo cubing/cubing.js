@@ -18,11 +18,13 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
   VisualizationStrategy
 > {
   derive(inputs: VisualizationStrategyPropInputs): VisualizationStrategy {
+    // TODO: let the puzzle loader tell us.
     switch (inputs.puzzleID) {
       case "clock":
       case "square1":
       case "kilominx":
       case "redi_cube":
+      case "melindas2x2x2x2":
         return "2D";
       case "3x3x3":
         switch (inputs.visualizationRequest) {

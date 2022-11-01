@@ -14,6 +14,7 @@ import { kilominx } from "./implementations/kilominx";
 import type { PuzzleLoader } from "./PuzzleLoader";
 import { rediCube } from "./implementations/redi-cube";
 import { cube4x4x4 } from "./implementations/4x4x4";
+import { melindas2x2x2x2 } from "./implementations/melindas2x2x2x2";
 
 /** @category All Puzzles */
 export const puzzles: Record<string, PuzzleLoader> = {
@@ -60,4 +61,5 @@ export const puzzles: Record<string, PuzzleLoader> = {
   }),
   kilominx,
   redi_cube: rediCube,
+  melindas2x2x2x2,
 };
