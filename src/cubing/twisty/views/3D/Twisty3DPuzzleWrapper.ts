@@ -128,18 +128,24 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
         this.visualizationStrategy === "Cube3D"
       ) {
         // TODO: synchronize
-        const [foundationSprite, hintSprite, experimentalStickeringMask] =
-          await Promise.all([
-            this.model.twistySceneModel.foundationStickerSprite.get(),
-            this.model.twistySceneModel.hintStickerSprite.get(),
-            this.model.twistySceneModel.stickeringMask.get(),
-          ]);
+        const [
+          foundationSprite,
+          hintSprite,
+          experimentalStickeringMask,
+          initialHintFaceletsAnimation,
+        ] = await Promise.all([
+          this.model.twistySceneModel.foundationStickerSprite.get(),
+          this.model.twistySceneModel.hintStickerSprite.get(),
+          this.model.twistySceneModel.stickeringMask.get(),
+          this.model.twistySceneModel.initialHintFaceletsAnimation.get(),
+        ]);
         return (await proxyPromise).cube3DShim(
           () => this.schedulable.scheduleRender(),
           {
             foundationSprite,
             hintSprite,
             experimentalStickeringMask,
+            initialHintFaceletsAnimation,
           },
         );
       } else {

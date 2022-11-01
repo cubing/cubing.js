@@ -9,6 +9,7 @@ import { RenderScheduler } from "../controllers/RenderScheduler";
 import type { TwistyAnimationControllerDelegate } from "../controllers/TwistyAnimationController";
 import { TwistyPlayerController } from "../controllers/TwistyPlayerController";
 import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
+import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
 import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
 import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
@@ -60,6 +61,8 @@ export const twistyPlayerAttributeMap = {
   background: "background",
   "control-panel": "controlPanel",
   "back-view": "backView",
+  "experimental-initial-hint-facelets-animation":
+    "experimentalInitialHintFaceletsAnimation",
   // "indexer": "indexer",
   "viewer-link": "viewerLink",
   "experimental-move-press-input": "experimentalMovePressInput",
@@ -134,6 +137,7 @@ export interface TwistyPlayerConfig {
   background?: BackViewLayoutWithAuto;
   controlPanel?: ControlPanelThemeWithAuto;
   backView?: BackViewLayoutWithAuto;
+  experimentalInitialHintFaceletsAnimation?: InitialHintFaceletsAnimation;
   // "indexer"?: "indexer";
   viewerLink?: ViewerLinkPageWithAuto;
   experimentalMovePressInput?: MovePressInput;

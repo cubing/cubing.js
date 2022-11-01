@@ -111,6 +111,9 @@ export class App {
   private initializeTwisty(initialConfig: TwistyPlayerConfig): void {
     initialConfig.viewerLink = "none";
     this.twistyPlayer = new TwistyPlayer(initialConfig);
+    this.twistyPlayer.experimentalModel.twistySceneModel.initialHintFaceletsAnimation.set(
+      "none",
+    );
     this.puzzlePane.appendChild(this.twistyPlayer);
   }
 

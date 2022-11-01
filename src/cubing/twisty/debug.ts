@@ -1,6 +1,5 @@
 export const twistyDebugGlobals: {
-  animateRaiseHintFacelets: boolean;
-  // WARNING: The current shared renderer implementation has performanc issues, especially in Safari.
+  // WARNING: The current shared renderer implementation has performance issues, especially in Safari.
   // Avoid using for players that are likely to have dimensions approaching 1 megapixel or higher.
   // TODO: use a dedicated renderer while fullscreen?
   // - "auto": Default heuristics.
@@ -9,7 +8,6 @@ export const twistyDebugGlobals: {
   shareAllNewRenderers: "auto" | "always" | "never";
   showRenderStats: boolean;
 } = {
-  animateRaiseHintFacelets: true,
   shareAllNewRenderers: "auto",
   showRenderStats: false,
 };

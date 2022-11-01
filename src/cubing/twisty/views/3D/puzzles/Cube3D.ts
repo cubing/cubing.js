@@ -27,11 +27,11 @@ import type {
   PuzzlePosition,
 } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
-import { twistyDebugGlobals } from "../../../debug";
 import {
   HintFaceletStyle,
   hintFaceletStyles,
 } from "../../../model/props/puzzle/display/HintFaceletProp";
+import type { InitialHintFaceletsAnimation } from "../../../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
 import { TAU } from "../TAU";
 import { haveStartedSharingRenderers } from "../Twisty3DVantage";
 import type { Twisty3DPuzzle } from "./Twisty3DPuzzle";
@@ -232,6 +232,7 @@ export interface Cube3DOptions {
   experimentalStickeringMask?: ExperimentalStickeringMask;
   foundationSprite?: Texture | null;
   hintSprite?: Texture | null;
+  initialHintFaceletsAnimation?: InitialHintFaceletsAnimation;
 }
 
 const cube3DOptionsDefaults: Cube3DOptions = {
@@ -241,6 +242,7 @@ const cube3DOptionsDefaults: Cube3DOptions = {
   experimentalStickeringMask: undefined,
   foundationSprite: null,
   hintSprite: null,
+  initialHintFaceletsAnimation: "auto",
 };
 
 // TODO: Make internal foundation faces one-sided, facing to the outside of the cube.
@@ -615,7 +617,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   // TODO: Generalize this into an animation mechanism.
   #animateRaiseHintFacelets(): void {
     if (
-      !twistyDebugGlobals.animateRaiseHintFacelets ||
+      this.options.initialHintFaceletsAnimation === "none" ||
       haveStartedSharingRenderers()
     ) {
       return;

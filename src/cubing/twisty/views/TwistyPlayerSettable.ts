@@ -16,6 +16,7 @@ import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputP
 import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
 import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
 import type { StickeringMask } from "../../puzzles/stickerings/mask";
+import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
 
 function err(propName: string): Error {
   return new Error(
@@ -225,6 +226,15 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   }
   get experimentalHintSprite(): never {
     throw err("experimentalHintSprite");
+  }
+
+  set experimentalInitialHintFaceletsAnimation(anim: InitialHintFaceletsAnimation) {
+    this.experimentalModel.twistySceneModel.initialHintFaceletsAnimation.set(
+      anim,
+    );
+  }
+  get experimentalInitialHintFaceletsAnimation(): never {
+    throw err("experimentalInitialHintFaceletsAnimation");
   }
 
   set experimentalDragInput(dragInputMode: DragInputMode) {
