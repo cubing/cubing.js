@@ -153,8 +153,8 @@ const axesInfo: AxisInfo[] = [
   new AxisInfo(
     new Vector3(0, 0, -1),
     new Euler(0, TAU / 2, 0),
-    0x0000ff,
-    0x000088,
+    0x2266ff,
+    0x113388,
     0.75,
     { hintColor: 0x0044ff, hintDimColor: 0x001866 },
   ),
