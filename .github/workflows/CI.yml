@@ -11,27 +11,10 @@ jobs:
         node-version: [16.x, 18.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: rome/setup-rome@v0.4
         with:
           version: latest
-      # From https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
-      - name: Cache node_modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: make test-spec-with-coverage
       - run: make lint-ci
@@ -50,24 +33,7 @@ jobs:
         node-version: [16.x, 18.x]
 
     steps:
-      - uses: actions/checkout@v2
-      # From https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
-      - name: Cache node_modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v3
       - run: npm ci
       - run: make build-esm
       - run: make build-bin
@@ -84,24 +50,7 @@ jobs:
         node-version: [16.x, 18.x]
 
     steps:
-      - uses: actions/checkout@v2
-      # From https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows#example-using-the-cache-action
-      - name: Cache node_modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v3
       - run: npm ci
       - run: make build-esm
       - run: make test-dist-esm-node-import
