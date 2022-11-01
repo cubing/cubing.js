@@ -190,8 +190,8 @@ export const insideAPI = {
     }
   },
 
-  setScramblePrefetchLevel(prefetchLevel: PrefetchLevel) {
-    currentPrefetchLevel = prefetchLevel;
+  setScramblePrefetchLevel(prefetchLevel: `${PrefetchLevel}`) {
+    currentPrefetchLevel = prefetchLevel as PrefetchLevel;
   },
 
   randomScrambleForEvent: async (eventID: string): Promise<Alg> => {

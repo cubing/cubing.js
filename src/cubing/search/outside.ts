@@ -1,14 +1,10 @@
 import { Alg } from "../alg";
 // import { preInitialize222 } from "../implementations/2x2x2";
+import type { KState } from "../kpuzzle/KState";
+import type { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
-import {
-  instantiateWorker,
-  setDisableStringWorker,
-  setForceStringWorker,
-} from "./instantiator";
-import type { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
-import type { KState } from "../kpuzzle/KState";
+import { instantiateWorker, mapToAllWorkers } from "./instantiator";
 
 let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
 async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
@@ -63,8 +59,12 @@ export async function randomScrambleForEvent(eventID: string): Promise<Alg> {
 export async function _randomScrambleStringForEvent(
   eventID: string,
 ): Promise<string> {
-  const cwi = await getCachedWorkerInstance();
-  return cwi.randomScrambleStringForEvent(eventID);
+  if (searchOutsideDebugGlobals.forceNewWorkerForEveryScramble) {
+  }
+  const worker = searchOutsideDebugGlobals.forceNewWorkerForEveryScramble
+    ? await instantiateWorker()
+    : await getCachedWorkerInstance();
+  return worker.randomScrambleStringForEvent(eventID);
 }
 
 export async function randomScrambleStringForEvent(
@@ -106,25 +106,42 @@ export async function solveMegaminx(state: KState): Promise<Alg> {
   return Alg.fromString(await cwi.solveMegaminxToString(state.stateData));
 }
 
-export function setDebug(options: {
-  logPerf?: boolean;
-  scramblePrefetchLevel?: `${PrefetchLevel}`;
-  forceStringWorker?: boolean;
-  disableStringWorker?: boolean;
-}): void {
+interface SearchOutsideDebugGlobals {
+  logPerf: boolean;
+  scramblePrefetchLevel: `${PrefetchLevel}`;
+  forceStringWorker: boolean;
+  disableStringWorker: boolean;
+  forceNewWorkerForEveryScramble: boolean;
+}
+export const searchOutsideDebugGlobals: SearchOutsideDebugGlobals = {
+  logPerf: false,
+  scramblePrefetchLevel: "auto",
+  forceStringWorker: false,
+  disableStringWorker: false,
+  forceNewWorkerForEveryScramble: false,
+};
+
+export function setDebug(options: Partial<SearchOutsideDebugGlobals>): void {
   const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
-    getCachedWorkerInstance().then((cwi) => cwi.setDebugMeasurePerf(logPerf));
+    searchOutsideDebugGlobals.logPerf = logPerf;
+    mapToAllWorkers((worker) => worker.setDebugMeasurePerf(logPerf));
   }
   if (typeof scramblePrefetchLevel !== "undefined") {
-    getCachedWorkerInstance().then((cwi) =>
-      cwi.setScramblePrefetchLevel(scramblePrefetchLevel as PrefetchLevel),
+    searchOutsideDebugGlobals.scramblePrefetchLevel = scramblePrefetchLevel;
+    mapToAllWorkers((worker) =>
+      worker.setScramblePrefetchLevel(scramblePrefetchLevel as PrefetchLevel),
     );
   }
   if ("forceStringWorker" in options) {
-    setForceStringWorker(!!options.forceStringWorker);
+    searchOutsideDebugGlobals.forceStringWorker = !!options.forceStringWorker;
   }
   if ("disableStringWorker" in options) {
-    setDisableStringWorker(!!options.disableStringWorker);
+    searchOutsideDebugGlobals.disableStringWorker =
+      !!options.disableStringWorker;
+  }
+  if ("forceNewWorkerForEveryScramble" in options) {
+    searchOutsideDebugGlobals.forceNewWorkerForEveryScramble =
+      !!options.forceNewWorkerForEveryScramble;
   }
 }

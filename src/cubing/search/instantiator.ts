@@ -1,17 +1,9 @@
 import { constructWorker, wrap } from "../vendor/comlink-everywhere/outside";
 import type { WorkerInsideAPI } from "./inside/api";
 import { getWorkerEntryFileURL } from "./inside/search-worker-ts-entry-path-getter";
+import { searchOutsideDebugGlobals } from "./outside";
 
 const MODULE_WORKER_TIMEOUT_MILLISECONDS = 5000;
-
-let forceStringWorker: boolean = false;
-export function setForceStringWorker(force: boolean): void {
-  forceStringWorker = force;
-}
-let disableStringWorker: boolean = false;
-export function setDisableStringWorker(disable: boolean): void {
-  disableStringWorker = disable;
-}
 
 export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
   // rome-ignore lint(correctness/noAsyncPromiseExecutor): TODO
@@ -92,8 +84,28 @@ async function instantiateClassicWorker(): Promise<WorkerInsideAPI> {
   return wrap(worker);
 }
 
+export const allWorkers: Promise<WorkerInsideAPI>[] = [];
+
 export async function instantiateWorker(): Promise<WorkerInsideAPI> {
-  if (forceStringWorker) {
+  const workerPromise = instantiateWorkerImplementation();
+  allWorkers.push(workerPromise);
+  workerPromise.then((worker) => {
+    worker.setDebugMeasurePerf(searchOutsideDebugGlobals.logPerf);
+    worker.setScramblePrefetchLevel(
+      searchOutsideDebugGlobals.scramblePrefetchLevel,
+    );
+  });
+  return workerPromise;
+}
+
+export async function mapToAllWorkers(
+  f: (worker: WorkerInsideAPI) => void,
+): Promise<void> {
+  await Promise.all(allWorkers.map((worker) => worker.then(f)));
+}
+
+async function instantiateWorkerImplementation(): Promise<WorkerInsideAPI> {
+  if (searchOutsideDebugGlobals.forceStringWorker) {
     console.warn(
       "Using the `forceStringWorker` workaround for search worker instantiation. This will require downloading significantly more code than necessary, but the functionality will be the same.",
     );
@@ -105,7 +117,7 @@ export async function instantiateWorker(): Promise<WorkerInsideAPI> {
   } catch (e) {
     const commonErrorPrefix =
       "Could not instantiate module worker (this may happen in Firefox, or when using Parcel).";
-    if (disableStringWorker) {
+    if (searchOutsideDebugGlobals.disableStringWorker) {
       console.error(
         `${commonErrorPrefix} Fallback to string worker is disabled.`,
         e,

@@ -11,14 +11,13 @@ import "cubing/stream";
 import "cubing/twisty";
 
 import { setDebug } from "cubing/search";
-setDebug({ disableStringWorker: true });
+setDebug({ disableStringWorker: true, scramblePrefetchLevel: "none" });
 
 import { randomScrambleForEvent } from "cubing/scramble";
 
-const events = [
+const eventsOrdered = [
   "333",
   "222",
-  "444",
   "555",
   "666",
   "777",
@@ -30,20 +29,27 @@ const events = [
   "pyram",
   "skewb",
   "sq1",
-  "444bf",
   "555bf",
   "333mb",
-  "fto",
   "redi_cube",
-  "kilominx",
   "master_tetraminx",
 ];
 
+const eventsParallel = ["kilominx", "444", "444bf", "fto"];
+
 (async () => {
-  for (const event of events) {
+  setDebug({ forceNewWorkerForEveryScramble: true });
+  const parallelPromise = Promise.all(
+    eventsParallel.map(async (event) =>
+      (await randomScrambleForEvent(event)).log(event),
+    ),
+  );
+  setDebug({ forceNewWorkerForEveryScramble: false });
+  for (const event of eventsOrdered) {
     console.log(`Generating scramble for event: ${event}... `);
-    (await randomScrambleForEvent(event)).log();
+    (await randomScrambleForEvent(event)).log(event);
   }
+  await parallelPromise;
 
   console.log("Success!");
 })();
