@@ -156,7 +156,7 @@ const axesInfo: AxisInfo[] = [
     0x2266ff,
     0x113388,
     0.75,
-    { hintColor: 0x0044ff, hintDimColor: 0x001866 },
+    { hintDimColor: 0x001866 },
   ),
   new AxisInfo(
     new Vector3(0, -1, 0),
