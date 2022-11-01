@@ -578,7 +578,13 @@ class ControlPane {
   }
 
   onPuzzle(puzzle: PuzzleID): void {
-    this.hintFaceletCheckbox.disabled = ["clock", "square1"].includes(puzzle);
+    this.hintFaceletCheckbox.disabled = [
+      "clock",
+      "square1",
+      "kilominx",
+      "redi_cube",
+      "melindas2x2x2x2",
+    ].includes(puzzle);
     this.toolGrid.setButtonEnabled(
       "solve",
       ["2x2x2", "3x3x3", "skewb", "pyraminx", "megaminx"].includes(puzzle),
