@@ -23,7 +23,7 @@ export const puzzleIDs = {
   master_tetraminx: true,
   kilominx: true,
   redi_cube: true,
-  melindas2x2x2x2: true
+  melindas2x2x2x2: true,
 };
 export type PuzzleID = keyof typeof puzzleIDs;
 

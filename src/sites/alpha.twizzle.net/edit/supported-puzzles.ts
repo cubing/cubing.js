@@ -113,7 +113,7 @@ const puzzleData: Partial<
     "2D": true,
     optgroup: OptGroup.Other,
     symbol: GeometrySymbol.Square,
-  }
+  },
 };
 
 const puzzleGroups: Record<string, { name: string; symbol: string }[]> = {};

@@ -61,5 +61,5 @@ export const puzzles: Record<string, PuzzleLoader> = {
   }),
   kilominx,
   redi_cube: rediCube,
-  melindas2x2x2x2
+  melindas2x2x2x2,
 };
