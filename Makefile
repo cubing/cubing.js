@@ -89,7 +89,6 @@ test-dist: \
 	test-dist-esm-scramble-all-events \
 	test-dist-esm-perf \
 	test-dist-esm-plain-esbuild-compat \
-	test-dist-esm-parcel \
 	test-dist-esm-vite \
 	test-dist-esm-build-size \
 	test-dist-sites-experiments # keep CI.yml in sync with this
@@ -101,8 +100,6 @@ test-dist-esm-perf: build-esm
 	${NODE} script/test/dist/esm/perf/*.js
 test-dist-esm-plain-esbuild-compat: build-esm
 	${NODE} script/test/dist/esm/plain-esbuild-compat/main.js
-test-dist-esm-parcel: build-esm
-	${NODE} ./script/test/dist/esm/parcel/main.js
 test-dist-esm-vite: build-esm
 	${NODE} ./script/test/dist/esm/vite/main.js
 test-dist-esm-build-size: build-esm
