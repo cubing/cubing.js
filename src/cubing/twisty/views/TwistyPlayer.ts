@@ -439,7 +439,7 @@ export class TwistyPlayer
   }
 
   static get observedAttributes(): string[] {
-    const observed = [];
+    const observed: string[] = [];
     for (const key of Object.keys(twistyPlayerAttributeMap)) {
       observed.push(key, DATA_ATTRIBUTE_PREFIX + key);
     }
