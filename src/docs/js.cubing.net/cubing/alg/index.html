@@ -75,7 +75,7 @@ alg.log();</span>
           <li><code>alg.invert()</code></li>
           <li><code>alg.concat(alg2)</code></li>
           <li><code>alg.expand()</code></li>
-          <li><code>alg.simplify()</code></li>
+          <li><code>alg.experimentalSimplify()</code></li>
         </ul>
       </p>
       <div class="code-demo">
@@ -103,7 +103,7 @@ const commutator = new Alg(&quot;[R, [U': L']]&quot;);<br>
 const niklas = commutator<b><u>.concat(&quot;U'&quot;)</u></b>;<br>
 niklas.log();<br>
 niklas<b><u>.expand()</u></b>.log();<br>
-niklas<b><u>.expand().simplify()</u></b>.log();
+niklas<b><u>.expand().simplify({cancel: true})</u></b>.log();
 </span>
           </code>
         </div>
@@ -142,7 +142,7 @@ const niklas = new Alg(&quot;[R, [U': L']] U'&quot;);<br>
 const jPerm = antiSune<b><u>.concat(niklas)</u></b>;<br>
 jPerm.log();<br>
 jPerm<b><u>.expand()</u></b>.log();<br>
-jPerm<b><u>.expand()</u></b>.simplify().log();
+jPerm<b><u>.expand()</u></b>.simplify({cancel: true}).log();
 </span>
           </code>
         </div>
@@ -152,13 +152,13 @@ jPerm<b><u>.expand()</u></b>.simplify().log();
           <span><span class="js-object" title="This will show available methods and internal details of the Alg object, depending on your JS environment.">Alg {}</span> &quot;R U2 R' U' R U2' L' U R' U' L&quot;</span>
         </code>
       </div>
-      <p><code>.expand()</code> and <code>.simplify()</code> can also take options:</p>
+      <p><code>.expand()</code> and <code>.experimentalSimplify()</code> can also take options:</p>
       <div class="code-demo">
         <div>
           <code class="sample">
             <span>import { Alg } from &quot;<code class="boilerplate" title="Remove this part of the import path if you are using `npm`.">https://cdn.cubing.net/js/</code>cubing/alg&quot;;<br>
 <br>
-const oll = new Alg(&quot;[F: [R, U]]]&quot;);<br>
+const oll = new Alg(&quot;[F: [R, U]]&quot;);<br>
 <b><u>oll.expand({depth: 1})</u></b>.log();<br>
 </span>
           </code>
