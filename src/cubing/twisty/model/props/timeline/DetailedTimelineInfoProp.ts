@@ -25,7 +25,9 @@ export class DetailedTimelineInfoProp extends TwistyPropDerived<
   DetailedTimelineInfoInputs,
   DetailedTimelineInfo
 > {
-  derive(inputs: DetailedTimelineInfoInputs): DetailedTimelineInfo {
+  protected override derive(
+    inputs: DetailedTimelineInfoInputs,
+  ): DetailedTimelineInfo {
     let timestamp = this.#requestedTimestampToMilliseconds(inputs);
     let atStart: boolean = false;
     let atEnd: boolean = false;
@@ -66,7 +68,10 @@ export class DetailedTimelineInfoProp extends TwistyPropDerived<
     }
   }
 
-  canReuse(v1: DetailedTimelineInfo, v2: DetailedTimelineInfo) {
+  protected override canReuseValue(
+    v1: DetailedTimelineInfo,
+    v2: DetailedTimelineInfo,
+  ) {
     return (
       v1.timestamp === v2.timestamp &&
       v1.timeRange.start === v2.timeRange.start &&

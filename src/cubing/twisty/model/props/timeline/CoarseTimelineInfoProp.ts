@@ -27,7 +27,9 @@ export class CoarseTimelineInfoProp extends TwistyPropDerived<
   CoarseTimelineInfoInputs,
   CoarseTimelineInfo
 > {
-  derive(inputs: CoarseTimelineInfoInputs): CoarseTimelineInfo {
+  protected override derive(
+    inputs: CoarseTimelineInfoInputs,
+  ): CoarseTimelineInfo {
     return {
       playing: inputs.playingInfo.playing,
       atStart: inputs.detailedTimelineInfo.atStart,
@@ -35,7 +37,10 @@ export class CoarseTimelineInfoProp extends TwistyPropDerived<
     };
   }
 
-  canReuseValue(v1: CoarseTimelineInfo, v2: CoarseTimelineInfo): boolean {
+  protected override canReuseValue(
+    v1: CoarseTimelineInfo,
+    v2: CoarseTimelineInfo,
+  ): boolean {
     return (
       v1.playing === v2.playing &&
       v1.atStart === v2.atStart &&

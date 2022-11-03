@@ -20,7 +20,7 @@ export class OrbitCoordinatesProp extends TwistyPropDerived<
   OrbitCoordinatesPropInputs,
   OrbitCoordinates
 > {
-  canReuseValue(v1: OrbitCoordinates, v2: OrbitCoordinates) {
+  override canReuseValue(v1: OrbitCoordinates, v2: OrbitCoordinates) {
     return orbitCoordinatesEqual(v1, v2);
   }
 

@@ -28,7 +28,7 @@ export class KeyboardPuzzle extends BluetoothPuzzle {
     this.target.removeEventListener("keydown", this.listener);
   }
 
-  public async getState(): Promise<KState> {
+  public override async getState(): Promise<KState> {
     return this.state;
   }
 

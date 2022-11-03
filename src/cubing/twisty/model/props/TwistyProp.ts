@@ -28,13 +28,13 @@ export abstract class TwistyPropParent<T> {
   public abstract get(): Promise<T>;
 
   // Don't overwrite this. Overwrite `canReuseValue` instead.
-  canReuse(v1: T, v2: T): boolean {
+  public canReuse(v1: T, v2: T): boolean {
     return v1 === v2 || this.canReuseValue(v1, v2);
   }
 
   // Overwrite with a cheap semantic comparison when possible.
   // Note that this is not called if `v1 === v2` (in which case the value is automatically reused).
-  canReuseValue(_v1: T, _v2: T): boolean {
+  protected canReuseValue(_v1: T, _v2: T): boolean {
     return false;
   }
 
@@ -110,7 +110,7 @@ export abstract class TwistyPropParent<T> {
 
   #freshListeners: Map<(value: T) => void, () => void> = new Map();
   // TODO: Pick a better name.
-  addFreshListener(listener: (value: T) => void): void {
+  public addFreshListener(listener: (value: T) => void): void {
     const staleDropper: StaleDropper<T> = new StaleDropper<T>();
     let lastResult: T | null = null;
     const callback = async () => {
@@ -125,7 +125,7 @@ export abstract class TwistyPropParent<T> {
     this.addRawListener(callback, { initial: true });
   }
 
-  removeFreshListener(listener: (value: T) => void): void {
+  public removeFreshListener(listener: (value: T) => void): void {
     this.removeRawListener(this.#freshListeners.get(listener)!); // TODO: throw a custom error?
     this.#freshListeners.delete(listener);
   }
@@ -166,7 +166,7 @@ export abstract class TwistyPropSource<
     return this.#value;
   }
 
-  async deriveFromPromiseOrValue(
+  protected async deriveFromPromiseOrValue(
     input: PromiseOrValue<InputType>,
     oldValuePromise: Promise<OutputType>,
   ): Promise<OutputType> {
@@ -183,7 +183,7 @@ export abstract class TwistyPropSource<
 export abstract class SimpleTwistyPropSource<
   SimpleType,
 > extends TwistyPropSource<SimpleType> {
-  derive(input: SimpleType): PromiseOrValue<SimpleType> {
+  protected override derive(input: SimpleType): PromiseOrValue<SimpleType> {
     return input;
   }
 }
@@ -327,13 +327,13 @@ export class FreshListenerManager {
 
   // TODO: Figure out the signature to let us do overloads
   /** @deprecated */
-  addMultiListener3<U, V, W>(
+  public addMultiListener3<U, V, W>(
     props: [TwistyPropParent<U>, TwistyPropParent<V>, TwistyPropParent<W>],
     listener: (values: [U, V, W]) => void,
   ): void {
     this.addMultiListener(props as any, listener as any); // TODO
   }
-  addMultiListener<U, V>(
+  public addMultiListener<U, V>(
     props: [TwistyPropParent<U>, TwistyPropParent<V>],
     listener: (values: [U, V]) => void,
   ) {
@@ -372,7 +372,7 @@ export class FreshListenerManager {
     });
   }
 
-  disconnect(): void {
+  public disconnect(): void {
     for (const disconnectionFunction of this.#disconnectionFunctions) {
       disconnectionFunction();
     }

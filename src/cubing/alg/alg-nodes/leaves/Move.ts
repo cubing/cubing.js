@@ -114,7 +114,7 @@ export class QuantumMove extends Comparable {
     );
   }
 
-  toString(): string {
+  override toString(): string {
     let s = this.#family;
     if (this.#innerLayer !== null) {
       s = String(this.#innerLayer) + s;

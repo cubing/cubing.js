@@ -106,7 +106,7 @@ export abstract class TraversalUp<
   DataAlgUp,
   DataAlgNodeUp = DataAlgUp,
 > extends TraversalDownUp<undefined, DataAlgUp, DataAlgNodeUp> {
-  public traverseAlgNode(algNode: AlgNode): DataAlgNodeUp {
+  public override traverseAlgNode(algNode: AlgNode): DataAlgNodeUp {
     return dispatch<unknown, DataAlgUp, DataAlgNodeUp>(
       this,
       algNode,
@@ -114,18 +114,24 @@ export abstract class TraversalUp<
     );
   }
 
-  public traverseIntoAlgNode(algNode: AlgNode): AlgNode {
+  public override traverseIntoAlgNode(algNode: AlgNode): AlgNode {
     return mustBeAlgNode(this.traverseAlgNode(algNode) as any);
   }
 
-  public abstract traverseAlg(alg: Alg): DataAlgUp;
-  public abstract traverseGrouping(grouping: Grouping): DataAlgNodeUp;
-  public abstract traverseMove(move: Move): DataAlgNodeUp;
-  public abstract traverseCommutator(commutator: Commutator): DataAlgNodeUp;
-  public abstract traverseConjugate(conjugate: Conjugate): DataAlgNodeUp;
-  public abstract traversePause(pause: Pause): DataAlgNodeUp;
-  public abstract traverseNewline(newline: Newline): DataAlgNodeUp;
-  public abstract traverseLineComment(comment: LineComment): DataAlgNodeUp;
+  public abstract override traverseAlg(alg: Alg): DataAlgUp;
+  public abstract override traverseGrouping(grouping: Grouping): DataAlgNodeUp;
+  public abstract override traverseMove(move: Move): DataAlgNodeUp;
+  public abstract override traverseCommutator(
+    commutator: Commutator,
+  ): DataAlgNodeUp;
+  public abstract override traverseConjugate(
+    conjugate: Conjugate,
+  ): DataAlgNodeUp;
+  public abstract override traversePause(pause: Pause): DataAlgNodeUp;
+  public abstract override traverseNewline(newline: Newline): DataAlgNodeUp;
+  public abstract override traverseLineComment(
+    comment: LineComment,
+  ): DataAlgNodeUp;
 }
 
 export function functionFromTraversal<

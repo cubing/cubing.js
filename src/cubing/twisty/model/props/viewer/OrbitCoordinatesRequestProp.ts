@@ -34,15 +34,15 @@ export class OrbitCoordinatesRequestProp extends TwistyPropSource<
   OrbitCoordinatesRequest,
   Partial<OrbitCoordinates> | "auto"
 > {
-  getDefaultValue(): OrbitCoordinatesRequest {
+  override getDefaultValue(): OrbitCoordinatesRequest {
     return "auto";
   }
 
-  canReuseValue(v1: OrbitCoordinates, v2: OrbitCoordinates) {
+  protected override canReuseValue(v1: OrbitCoordinates, v2: OrbitCoordinates) {
     return v1 === v2 || orbitCoordinatesEqual(v1, v2);
   }
 
-  async derive(
+  protected override async derive(
     newCoordinates: Partial<OrbitCoordinates> | "auto",
     oldValuePromise: Promise<OrbitCoordinatesRequest>,
   ): Promise<OrbitCoordinatesRequest> {

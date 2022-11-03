@@ -7,11 +7,11 @@ export interface CatchUpMove {
 }
 
 export class CatchUpMoveProp extends SimpleTwistyPropSource<CatchUpMove> {
-  getDefaultValue(): CatchUpMove {
+  override getDefaultValue(): CatchUpMove {
     return { move: null, amount: 0 };
   }
 
-  canReuseValue(v1: CatchUpMove, v2: CatchUpMove) {
+  protected override canReuseValue(v1: CatchUpMove, v2: CatchUpMove) {
     return v1.move === v2.move && v1.amount === v2.amount;
   }
 }

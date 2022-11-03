@@ -13,12 +13,12 @@ export type TimestampRequest =
   | keyof typeof smartTimestamps;
 
 export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampRequest> {
-  getDefaultValue(): TimestampRequest {
+  override getDefaultValue(): TimestampRequest {
     return "opposite-anchor";
   }
 
   // TODO: Support `Promise`
-  set(v: TimestampRequest) {
+  public override set(v: TimestampRequest) {
     if (!this.validInput(v)) {
       // TODO: Generalize this to more props. How do we surface this? Throw an error and catch it from sync setters that call into this?
       return;
@@ -26,7 +26,7 @@ export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampReques
     super.set(v);
   }
 
-  validInput(v: TimestampRequest): boolean {
+  protected validInput(v: TimestampRequest): boolean {
     if (typeof v === "number") {
       return true;
     }

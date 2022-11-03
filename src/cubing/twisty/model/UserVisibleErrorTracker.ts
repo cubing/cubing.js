@@ -12,11 +12,14 @@ export class UserVisibleErrorTracker extends SimpleTwistyPropSource<UserVisibleE
     return EMPTY_ERRORS;
   }
 
-  reset() {
+  public reset() {
     this.set(this.getDefaultValue());
   }
 
-  canReuseValue(_v1: UserVisibleError, _v2: UserVisibleError): boolean {
+  protected override canReuseValue(
+    _v1: UserVisibleError,
+    _v2: UserVisibleError,
+  ): boolean {
     return arrayEquals(_v1.errors, _v2.errors);
   }
 }

@@ -50,7 +50,7 @@ export abstract class AlgCommon<T extends Alg | AlgNode>
     ) => void;
   }
 
-  abstract toString(): string;
+  abstract override toString(): string;
 
   abstract invert(): T;
 

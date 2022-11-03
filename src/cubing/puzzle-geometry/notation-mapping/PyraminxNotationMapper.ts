@@ -112,7 +112,7 @@ export class PyraminxNotationMapper implements NotationMapper {
 }
 
 export class TetraminxNotationMapper extends PyraminxNotationMapper {
-  wcaHack = true;
+  protected override wcaHack = true;
 
   constructor(child: FaceNameSwizzler) {
     super(child);

@@ -70,15 +70,17 @@ function algWithIssuesEquals(a1: AlgWithIssues, a2: AlgWithIssues): boolean {
 }
 
 export class AlgProp extends TwistyPropSource<AlgWithIssues, Alg | string> {
-  getDefaultValue(): AlgWithIssues {
+  override getDefaultValue(): AlgWithIssues {
     return { alg: new Alg(), issues: new AlgIssues() };
   }
 
-  canReuseValue(v1: AlgWithIssues, v2: AlgWithIssues) {
+  protected override canReuseValue(v1: AlgWithIssues, v2: AlgWithIssues) {
     return algWithIssuesEquals(v1, v2);
   }
 
-  async derive(newAlg: Alg | string): Promise<AlgWithIssues> {
+  protected override async derive(
+    newAlg: Alg | string,
+  ): Promise<AlgWithIssues> {
     if (typeof newAlg === "string") {
       return algWithIssuesFromString(newAlg);
     } else {

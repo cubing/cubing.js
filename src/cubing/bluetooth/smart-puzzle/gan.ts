@@ -375,7 +375,7 @@ export class GanCube extends BluetoothPuzzle {
     )[7];
   }
 
-  public async getState(): Promise<KState> {
+  public override async getState(): Promise<KState> {
     const arr: Uint8Array = await decryptState(
       new Uint8Array(await this.readFaceletStatus1Characteristic()),
       this.aesKey,

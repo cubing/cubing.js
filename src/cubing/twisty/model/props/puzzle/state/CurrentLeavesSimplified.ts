@@ -18,7 +18,9 @@ export class CurrentLeavesSimplifiedProp extends TwistyPropDerived<
   CurrentLeavesSimplifiedPropInputs,
   CurrentLeavesSimplified
 > {
-  derive(inputs: CurrentLeavesSimplifiedPropInputs): CurrentLeavesSimplified {
+  protected override derive(
+    inputs: CurrentLeavesSimplifiedPropInputs,
+  ): CurrentLeavesSimplified {
     return {
       stateIndex: inputs.currentMoveInfo.stateIndex,
       movesFinishing: inputs.currentMoveInfo.movesFinishing.map(
@@ -30,7 +32,10 @@ export class CurrentLeavesSimplifiedProp extends TwistyPropDerived<
     };
   }
 
-  canReuse(v1: CurrentLeavesSimplified, v2: CurrentLeavesSimplified): boolean {
+  protected override canReuseValue(
+    v1: CurrentLeavesSimplified,
+    v2: CurrentLeavesSimplified,
+  ): boolean {
     return (
       v1.stateIndex === v2.stateIndex &&
       arrayEqualsCompare(

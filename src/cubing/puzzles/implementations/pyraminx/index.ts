@@ -9,7 +9,7 @@ class PyraminxPuzzleLoader extends PGPuzzleLoader {
       inventedBy: ["Uwe Meffert"],
     });
   }
-  svg = getCached(async () => {
+  override svg = getCached(async () => {
     return (
       await import("../dynamic/side-events/puzzles-dynamic-side-events")
     ).pyraminxSVG;

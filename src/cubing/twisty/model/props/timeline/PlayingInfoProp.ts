@@ -17,7 +17,7 @@ export class PlayingInfoProp extends TwistyPropSource<
   PlayingInfo,
   Partial<PlayingInfo>
 > {
-  async getDefaultValue(): Promise<PlayingInfo> {
+  public override async getDefaultValue(): Promise<PlayingInfo> {
     return {
       direction: Direction.Forwards,
       playing: false,
@@ -26,7 +26,7 @@ export class PlayingInfoProp extends TwistyPropSource<
     };
   }
 
-  async derive(
+  protected override async derive(
     newInfo: Partial<PlayingInfo>,
     oldValuePromise: Promise<PlayingInfo>,
   ): Promise<PlayingInfo> {
@@ -37,7 +37,7 @@ export class PlayingInfoProp extends TwistyPropSource<
     return newValue;
   }
 
-  canReuseValue(v1: PlayingInfo, v2: PlayingInfo) {
+  protected override canReuseValue(v1: PlayingInfo, v2: PlayingInfo) {
     return (
       v1.direction === v2.direction &&
       v1.playing === v2.playing &&
