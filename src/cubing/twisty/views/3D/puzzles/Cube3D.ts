@@ -618,7 +618,8 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
   #animateRaiseHintFacelets(): void {
     if (
       this.options.initialHintFaceletsAnimation === "none" ||
-      haveStartedSharingRenderers()
+      (this.options.initialHintFaceletsAnimation !== "always" &&
+        haveStartedSharingRenderers())
     ) {
       return;
     }
