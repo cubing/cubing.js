@@ -1,6 +1,7 @@
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { AppendOptions } from "../../alg/simplify";
+import { getPartialAppendOptionsForPuzzleSpecificSimplifyOptions } from "../../puzzles/PuzzleLoader";
 import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
 import { URLProp } from "./props/general/URLProp";
 import { AlgProp } from "./props/puzzle/state/AlgProp";
@@ -38,6 +39,9 @@ import { VisualizationFormatProp } from "./props/viewer/VisualizationProp";
 import { VisualizationStrategyProp } from "./props/viewer/VisualizationStrategyProp";
 import { TwistySceneModel } from "./TwistySceneModel";
 import { UserVisibleErrorTracker } from "./UserVisibleErrorTracker";
+
+// From https://stackoverflow.com/a/50918777
+type Without<T, K extends string[]> = Pick<T, Exclude<keyof T, K[number]>>;
 
 export class TwistyPlayerModel {
   // TODO: incorporate error handling into the entire prop graph.
@@ -249,7 +253,10 @@ export class TwistyPlayerModel {
   // TODO: Animate the new move.
   experimentalAddMove(
     flexibleMove: Move | string,
-    options?: AppendOptions,
+    options?: Without<
+      AppendOptions,
+      ["puzzleLoader", "puzzleSpecificSimplifyOptions"] // TODO: figure out how to modify `AppendOptions` to accommodate this (or just accept cancel options for now?)
+    >,
   ): void {
     const move =
       typeof flexibleMove === "string" ? new Move(flexibleMove) : flexibleMove;
@@ -261,7 +268,9 @@ export class TwistyPlayerModel {
         ]);
         const newAlg = experimentalAppendMove(alg, move, {
           ...options,
-          puzzleLoader,
+          ...(await getPartialAppendOptionsForPuzzleSpecificSimplifyOptions(
+            puzzleLoader,
+          )),
         });
         this.timestampRequest.set("end");
         this.catchUpMove.set({

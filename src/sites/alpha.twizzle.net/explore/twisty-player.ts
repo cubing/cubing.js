@@ -30,7 +30,7 @@ export function constructTwistyPlayer(): TwistyPlayer {
     experimentalMovePressInput: "basic",
     experimentalMovePressCancelOptions: {
       directional: "any-direction",
-      puzzleSpecificModWrap: "canonical-centered", // TODO: hook up the necessary puzzle-specific info
+      puzzleSpecificModWrap: "gravity",
     },
     hintFacelets: "none",
   };

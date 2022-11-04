@@ -1,4 +1,5 @@
 import type { PuzzleSpecificSimplifyOptions } from "../alg";
+import type { AppendOptions } from "../alg/simplify";
 import type { KPuzzle } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { ExperimentalStickering } from "../twisty";
@@ -21,4 +22,18 @@ export interface PuzzleLoader {
   ) => Promise<StickeringMask>;
   stickerings?: () => Promise<ExperimentalStickering[]>;
   puzzleSpecificSimplifyOptions?: PuzzleSpecificSimplifyOptions;
+  puzzleSpecificSimplifyOptionsPromise?: Promise<PuzzleSpecificSimplifyOptions>; // TODO
+}
+
+// TODO: consolidate the `puzzleSpecificSimplifyOptionsPromise` with `puzzleSpecificSimplifyOptions` somehow, so that we don't have to do this.
+export async function getPartialAppendOptionsForPuzzleSpecificSimplifyOptions(
+  puzzleLoader: PuzzleLoader,
+): Promise<AppendOptions> {
+  const puzzleSpecificSimplifyOptions =
+    await (puzzleLoader.puzzleSpecificSimplifyOptions ??
+      puzzleLoader.puzzleSpecificSimplifyOptionsPromise);
+  if (!puzzleSpecificSimplifyOptions) {
+    return {};
+  }
+  return { puzzleLoader: { puzzleSpecificSimplifyOptions } };
 }
