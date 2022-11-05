@@ -1,7 +1,7 @@
 import { Alg, experimentalAppendMove, Move } from "../../alg";
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { AppendOptions } from "../../alg/simplify";
-import { getPartialAppendOptionsForPuzzleSpecificSimplifyOptions } from "../../puzzles/PuzzleLoader";
+import { getPartialAppendOptionsForPuzzleSpecificSimplifyOptions } from "../../puzzles/cubing-private";
 import { ArbitraryStringProp } from "./props/general/ArbitraryStringProp";
 import { URLProp } from "./props/general/URLProp";
 import { AlgProp } from "./props/puzzle/state/AlgProp";
