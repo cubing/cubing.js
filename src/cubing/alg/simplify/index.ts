@@ -5,4 +5,5 @@ export type {
   SimplifyOptions,
   PuzzleSpecificSimplifyOptions,
   AppendCancelOptions,
+  QuantumDirectionalCancellation,
 } from "./options";

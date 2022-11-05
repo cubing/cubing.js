@@ -3,3 +3,5 @@ export {
   direct as experimentalDirect,
   IterationDirection as ExperimentalIterationDirection,
 } from "../iteration";
+
+export type { QuantumDirectionalCancellation } from "../simplify";

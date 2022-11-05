@@ -8,6 +8,8 @@ import {
   cubeStickerings,
 } from "../stickerings/cube-like-stickerings";
 import { getCached } from "./lazy-cached";
+import { Move, PuzzleSpecificSimplifyOptions, QuantumMove } from "../../alg";
+import { PLazy } from "../../vendor/p-lazy/p-lazy";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
@@ -85,6 +87,10 @@ export class PGPuzzleLoader implements PuzzleLoader {
     return (this.#cachedSVG ??= (async () =>
       (await this.pg()).generatesvg())());
   }
+
+  puzzleSpecificSimplifyOptionsPromise = puzzleSpecificSimplifyOptionsPromise(
+    this.kpuzzle.bind(this),
+  );
 }
 
 export class CubePGPuzzleLoader extends PGPuzzleLoader {
@@ -92,4 +98,20 @@ export class CubePGPuzzleLoader extends PGPuzzleLoader {
     return cubeLikeStickeringMask(this, stickering);
   }
   stickerings = cubeStickerings;
+}
+
+export function puzzleSpecificSimplifyOptionsPromise(
+  kpuzzlePromiseFn: () => Promise<KPuzzle>,
+): Promise<PuzzleSpecificSimplifyOptions> {
+  return new PLazy(
+    async (resolve: (options: PuzzleSpecificSimplifyOptions) => void) => {
+      const kpuzzle = await kpuzzlePromiseFn();
+      console.log(kpuzzle);
+      resolve({
+        quantumMoveOrder: (m: QuantumMove) => {
+          return kpuzzle.moveToTransformation(new Move(m)).repetitionOrder();
+        },
+      });
+    },
+  );
 }

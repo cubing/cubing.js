@@ -1,4 +1,5 @@
 import { Alg } from "../../../../cubing/alg";
+import type { QuantumDirectionalCancellation } from "../../../../cubing/alg/cubing-private";
 
 // Trick from https://github.com/microsoft/TypeScript/issues/28046#issuecomment-480516434
 export type StringListAsType<T extends ReadonlyArray<unknown>> =
@@ -55,12 +56,11 @@ export function debugShowRenderStats(): boolean {
   );
 }
 
-export function getCancel(): boolean {
-  return (
-    getURLParamChecked<"true" | "false">("cancel", "true", [
-      "true",
-      "false",
-    ]) === "true"
+export function getCancel(): string {
+  return getURLParamChecked<QuantumDirectionalCancellation>(
+    "cancel",
+    "any-direction",
+    ["same-direction", "any-direction", "none"],
   );
 }
 

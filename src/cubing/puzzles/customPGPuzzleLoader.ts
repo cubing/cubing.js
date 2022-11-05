@@ -1,8 +1,7 @@
-import { Move, PuzzleSpecificSimplifyOptions, QuantumMove } from "../alg";
 import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
-import { PLazy } from "../vendor/p-lazy/p-lazy";
+import { puzzleSpecificSimplifyOptionsPromise } from "./async/async-pg3d";
 import type { PuzzleLoader } from "./PuzzleLoader";
 
 // TODO: modify this to handle TwistyPlayer options
@@ -47,13 +46,13 @@ export function customPGPuzzleLoader(
 ): PuzzleLoader {
   const customID = nextCustomID++;
   let cachedKPuzzle: Promise<KPuzzle> | null = null;
-  const kpuzzlePromise = async () => {
+  const kpuzzlePromiseFn = async () => {
     return (cachedKPuzzle ??= asyncGetKPuzzle(desc));
   };
   const puzzleLoader: PuzzleLoader = {
     id: `custom-${customID}`,
     fullName: info?.fullName ?? `Custom Puzzle (instance #${customID})`,
-    kpuzzle: kpuzzlePromise,
+    kpuzzle: kpuzzlePromiseFn,
     svg: async () => {
       const pg = await descAsyncGetPuzzleGeometry(desc);
       return pg.generatesvg();
@@ -61,16 +60,8 @@ export function customPGPuzzleLoader(
     pg: async () => {
       return descAsyncGetPuzzleGeometry(desc);
     },
-    puzzleSpecificSimplifyOptionsPromise: new PLazy(
-      async (resolve: (options: PuzzleSpecificSimplifyOptions) => void) => {
-        const kpuzzle = await kpuzzlePromise();
-        resolve({
-          quantumMoveOrder: (m: QuantumMove) => {
-            return kpuzzle.moveToTransformation(new Move(m)).repetitionOrder();
-          },
-        });
-      },
-    ),
+    puzzleSpecificSimplifyOptionsPromise:
+      puzzleSpecificSimplifyOptionsPromise(kpuzzlePromiseFn),
   };
   if (info?.inventedBy) {
     puzzleLoader.inventedBy = info.inventedBy;

@@ -194,8 +194,8 @@ export class SwipeyPuzzle extends HTMLElement {
       // TODO: allow`TwistyPlayer` to handle this directly.
       this.twistyPlayer.experimentalAddAlgLeaf(algLeaf, {
         cancel: {
-          directional: getCancel() ? "same-direction" : "none",
-          puzzleSpecificModWrap: "none",
+          directional: getCancel() ? "any-direction" : "none",
+          puzzleSpecificModWrap: "gravity",
         },
         puzzleSpecificSimplifyOptions:
           puzzles[this.puzzleName]?.puzzleSpecificSimplifyOptions,
