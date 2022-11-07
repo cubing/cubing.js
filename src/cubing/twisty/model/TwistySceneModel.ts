@@ -6,6 +6,7 @@ import { SpriteProp } from "./props/puzzle/display/SpriteProp";
 import { StickeringMaskProp } from "./props/puzzle/display/StickeringMaskProp";
 import { StickeringMaskRequestProp } from "./props/puzzle/display/StickeringMaskRequestProp";
 import { StickeringRequestProp } from "./props/puzzle/display/StickeringRequestProp";
+import { FaceletScaleProp } from "./props/puzzle/display/FaceletScaleProp";
 import { DragInputProp } from "./props/puzzle/state/DragInputProp";
 import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOptions";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
@@ -32,6 +33,7 @@ export class TwistySceneModel {
   // `stickeringMaskRequest` takes priority over `stickeringRequest`
   stickeringMaskRequest = new StickeringMaskRequestProp();
   stickeringRequest = new StickeringRequestProp();
+  faceletScale = new FaceletScaleProp();
 
   // Depth 1
   foundationStickerSprite = new SpriteProp({

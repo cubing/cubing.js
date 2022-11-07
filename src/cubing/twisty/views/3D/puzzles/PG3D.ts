@@ -529,6 +529,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     enableFoundationOpt: boolean = false,
     enableHintStickersOpt: boolean = false,
     hintStickerHeightScale: number = 1,
+    private faceletScale: "auto" | number = 1,
     private params: PG3DOptions = {},
   ) {
     super();
@@ -574,7 +575,10 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
       normals.push(normal(f.coords));
       totArea += polyarea(f.coords);
     }
-    const colorfrac = DEFAULT_COLOR_FRACTION;
+    const colorfrac =
+      faceletScale !== "auto"
+        ? faceletScale * faceletScale
+        : DEFAULT_COLOR_FRACTION;
     let nonDupStickers = 0;
     for (const sticker of stickers) {
       if (!sticker.isDup) {
@@ -1020,6 +1024,7 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     hintFacelets?: HintFaceletStyle;
     showFoundation?: boolean; // TODO: better name
     hintStickerOpacity?: number;
+    faceletScale?: "auto" | number;
   }): void {
     if (options.hintFacelets !== undefined) {
       this.showHintFacelets(options.hintFacelets !== "none");
@@ -1033,6 +1038,14 @@ export class PG3D extends Object3D implements Twisty3DPuzzle {
     this.#pendingStickeringUpdate = true;
     if (this.lastPos) {
       this.onPositionChange(this.lastPos);
+    }
+    if (
+      typeof options.faceletScale !== "undefined" &&
+      options.faceletScale !== this.faceletScale
+    ) {
+      console.warn(
+        "Dynamic facelet scale is not yet supported for PG3D. For now, re-create the TwistyPlayer to change the facelet scale.",
+      );
     }
     this.updateMaterialArrays();
     this.scheduleRenderCallback();

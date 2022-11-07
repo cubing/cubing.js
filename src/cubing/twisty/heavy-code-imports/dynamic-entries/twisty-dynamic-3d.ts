@@ -1,5 +1,6 @@
 import { cube3x3x3, PuzzleLoader } from "../../../puzzles";
 import type { HintFaceletStyle } from "../../model/props/puzzle/display/HintFaceletProp";
+import type { FaceletScale } from "../../model/props/puzzle/display/FaceletScaleProp";
 import { Cube3D, Cube3DOptions } from "../../views/3D/puzzles/Cube3D";
 import { PG3D } from "../../views/3D/puzzles/PG3D";
 
@@ -22,6 +23,7 @@ export async function pg3dShim(
   renderCallback: () => void,
   puzzleLoader: PuzzleLoader,
   hintFacelets: HintFaceletStyle,
+  faceletScale: FaceletScale,
 ): Promise<PG3D> {
   return new PG3D(
     renderCallback,
@@ -29,5 +31,7 @@ export async function pg3dShim(
     (await puzzleLoader.pg!()).get3d(),
     true,
     hintFacelets === "floating",
+    undefined,
+    faceletScale,
   );
 }

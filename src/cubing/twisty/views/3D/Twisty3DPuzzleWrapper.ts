@@ -83,6 +83,17 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
         this.scheduleRender();
       },
     );
+    this.#freshListenerManager.addListener(
+      this.model.twistySceneModel.faceletScale,
+      async (faceletScale: "auto" | number) => {
+        (
+          (await this.twisty3DPuzzle()) as Cube3D | PG3D
+        ).experimentalUpdateOptions({
+          faceletScale,
+        });
+        this.scheduleRender();
+      },
+    );
 
     this.#freshListenerManager.addMultiListener3(
       [
@@ -149,15 +160,18 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
           },
         );
       } else {
-        const [hintFacelets, foundationSprite, hintSprite] = await Promise.all([
-          this.model.twistySceneModel.hintFacelet.get(),
-          this.model.twistySceneModel.foundationStickerSprite.get(),
-          this.model.twistySceneModel.hintStickerSprite.get(),
-        ]);
+        const [hintFacelets, foundationSprite, hintSprite, faceletScale] =
+          await Promise.all([
+            this.model.twistySceneModel.hintFacelet.get(),
+            this.model.twistySceneModel.foundationStickerSprite.get(),
+            this.model.twistySceneModel.hintStickerSprite.get(),
+            this.model.twistySceneModel.faceletScale.get(),
+          ]);
         const pg3d = (await proxyPromise).pg3dShim(
           () => this.schedulable.scheduleRender(),
           this.puzzleLoader,
           hintFacelets === "auto" ? "floating" : hintFacelets,
+          faceletScale,
         );
         // TODO: Figure out how to do this in one place using the listener.
         pg3d.then((p) =>

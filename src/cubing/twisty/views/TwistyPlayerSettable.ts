@@ -17,6 +17,7 @@ import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorPro
 import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
 import type { StickeringMask } from "../../puzzles/stickerings/mask";
 import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
+import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp";
 
 function err(propName: string): Error {
   return new Error(
@@ -92,6 +93,14 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   }
   get experimentalStickeringMaskOrbits(): never {
     throw err("experimentalStickeringMaskOrbits");
+  }
+
+  set experimentalFaceletScale(faceletScale: FaceletScale) {
+    this.experimentalModel.twistySceneModel.faceletScale.set(faceletScale);
+  }
+
+  get experimentalFaceletScale(): never {
+    throw err("experimentalFaceletScale");
   }
 
   set backView(backView: BackViewLayoutWithAuto) {
