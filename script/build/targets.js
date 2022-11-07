@@ -79,10 +79,6 @@ function siteOptions(srcFolder, dev) {
       target: "es2020",
       plugins: plugins(dev),
       minify: !dev,
-      loader: {
-        ".svg": "copy",
-        ".png": "copy",
-      },
       supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
     },
   };
