@@ -101,19 +101,15 @@ class ButtonListener {
     switch (this.grouping) {
       case ButtonGrouping.All: {
         return this.numberPressed(buttonStates) === this.buttonSpecs.length;
-        break;
       }
       case ButtonGrouping.Any: {
         return this.numberPressed(buttonStates, true) > 0;
-        break;
       }
       case ButtonGrouping.Single: {
         return this.numberPressed(buttonStates) === 1;
-        break;
       }
       case ButtonGrouping.None: {
         return this.numberPressed(buttonStates, true) === 0;
-        break;
       }
       default:
         throw new Error("Unknown grouping");
