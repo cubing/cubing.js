@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "cubing.js dev",
+      "request": "launch",
+      "url": "http://cubing.localhost:3333/"
+    }
+  ]
+}
