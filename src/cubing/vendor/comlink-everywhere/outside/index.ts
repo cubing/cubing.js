@@ -15,7 +15,7 @@ async function nodeWorker(
   options?: { eval?: boolean },
 ): Promise<Worker> {
   const { Worker: NodeWorker } = await import(
-    /* @vite-ignore */ worker_threads_unmangled(),
+    /* @vite-ignore */ worker_threads_unmangled()
   );
   const worker = new NodeWorker(source, options);
   worker.unref();

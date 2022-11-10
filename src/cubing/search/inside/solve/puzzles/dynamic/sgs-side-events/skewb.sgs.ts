@@ -3,7 +3,7 @@ import { parseSGS, SGSCachedData } from "../../../parseSGS";
 
 async function skewbKPuzzleWithoutMO(): Promise<KPuzzle> {
   const { getPuzzleGeometryByName, ExperimentalPGNotation } = await import(
-    "../../../../../../puzzle-geometry",
+    "../../../../../../puzzle-geometry"
   );
   const pg = getPuzzleGeometryByName("skewb", {
     allMoves: true,

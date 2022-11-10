@@ -11,7 +11,7 @@ export async function proxy3D(): Promise<
   typeof import("./dynamic-entries/twisty-dynamic-3d")
 > {
   return (cachedConstructorProxy ??= import(
-    "./dynamic-entries/twisty-dynamic-3d",
+    "./dynamic-entries/twisty-dynamic-3d"
   ));
 }
 
