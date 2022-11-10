@@ -11,12 +11,9 @@
     "rules": {
       "recommended": true,
       "correctness": {
-        "noDelete": "off",
-        "useSimplifiedLogicExpression": "off"
+        "noDelete": "off"
       },
-      "nursery": {
-        "noUnusedVariables": "off"
-      },
+      "nursery": {},
       "style": {
         "noNegationElse": "off",
         "noShoutyConstants": "off"
