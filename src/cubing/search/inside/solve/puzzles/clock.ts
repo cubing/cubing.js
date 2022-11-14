@@ -1,17 +1,13 @@
-import { randomUIntBelowFactory } from "../../../../vendor/random-uint-below";
+import { randomUIntBelow } from "../../../../vendor/random-uint-below";
 
 const pins = ["UR", "DR", "DL", "UL"];
 const backMoves = ["U", "R", "D", "L", "ALL"];
 const frontMoves = pins.concat(backMoves);
 
-const randomUIntBelowPromise = randomUIntBelowFactory();
-
-export async function randomClockScrambleString(): Promise<string> {
-  const randomUIntBelow = await randomUIntBelowPromise;
-
+export function randomClockScrambleString(): string {
   let filteringMoveCount = 0;
 
-  async function randomSuffix(randomUIntBelow: (max: number) => number) {
+  function randomSuffix() {
     const amount = randomUIntBelow(12);
     if (amount !== 0) {
       filteringMoveCount++;
@@ -24,15 +20,15 @@ export async function randomClockScrambleString(): Promise<string> {
   }
 
   const moves = [];
-  async function side(families: string[]): Promise<void> {
+  function side(families: string[]): void {
     for (const family of families) {
-      moves.push(`${family}${await randomSuffix(randomUIntBelow)}`);
+      moves.push(`${family}${randomSuffix()}`);
     }
   }
 
-  await side(frontMoves);
+  side(frontMoves);
   moves.push("y2");
-  await side(backMoves);
+  side(backMoves);
 
   // https://www.worldcubeassociation.org/regulations/#4b3
   if (filteringMoveCount < 2) {

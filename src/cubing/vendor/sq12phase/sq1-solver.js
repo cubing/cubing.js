@@ -9,7 +9,7 @@ Compiled to JavaScript using GWT.
 
 */
 
-import { randomUIntBelowFactory } from "../random-uint-below";
+import { randomUIntBelow } from "../random-uint-below";
 
 function FullCube_copy(obj, c) {
   obj.ul = c.ul;
@@ -154,9 +154,7 @@ function FullCube_FullCube__Ljava_lang_String_2V() {
   this.prm = [];
 }
 
-async function FullCube_randomCube() {
-  const randomUintBelow = await randomUIntBelowFactory();
-
+function FullCube_randomCube() {
   var f;
   var i;
   var shape;
@@ -167,21 +165,21 @@ async function FullCube_randomCube() {
   var rnd;
   var m;
   f = new FullCube_FullCube__Ljava_lang_String_2V();
-  shape = Shape_ShapeIdx[randomUintBelow(3678)];
+  shape = Shape_ShapeIdx[randomUIntBelow(3678)];
   corner = (0x01234567 << 1) | 0x11111111;
   edge = 0x01234567 << 1;
   n_corner = n_edge = 8;
   for (i = 0; i < 24; i++) {
     if (((shape >> i) & 1) === 0) {
       //edge
-      rnd = randomUintBelow(n_edge) << 2;
+      rnd = randomUIntBelow(n_edge) << 2;
       FullCube_setPiece(f, 23 - i, (edge >> rnd) & 0xf);
       m = (1 << rnd) - 1;
       edge = (edge & m) + ((edge >> 4) & ~m);
       --n_edge;
     } else {
       //corner
-      rnd = randomUintBelow(n_corner) << 2;
+      rnd = randomUIntBelow(n_corner) << 2;
       FullCube_setPiece(f, 23 - i, (corner >> rnd) & 0xf);
       FullCube_setPiece(f, 22 - i, (corner >> rnd) & 0xf);
       m = (1 << rnd) - 1;
@@ -190,7 +188,7 @@ async function FullCube_randomCube() {
       ++i;
     }
   }
-  f.ml = randomUintBelow(2);
+  f.ml = randomUIntBelow(2);
   //	console.log(f);
   return f;
 }
@@ -894,7 +892,7 @@ var square1SolverInitialize = function (doneCallback, _, statusCallback) {
   }
 };
 
-var square1SolverGetRandomPosition = async function () {
+var square1SolverGetRandomPosition = function () {
   if (!square1Solver_initialized) {
     square1SolverInitialize();
   }
@@ -906,8 +904,8 @@ var square1SolverGenerate = function (state) {
   return Search_solution(search_search, state);
 };
 
-var square1SolverGetRandomScramble = async function () {
-  var randomState = await square1SolverGetRandomPosition();
+var square1SolverGetRandomScramble = function () {
+  var randomState = square1SolverGetRandomPosition();
   var scrambleString = square1SolverGenerate(randomState);
 
   return {
@@ -916,6 +914,6 @@ var square1SolverGetRandomScramble = async function () {
   };
 };
 
-export async function getRandomSquare1ScrambleString() {
-  return (await square1SolverGetRandomScramble()).scramble_string;
+export function getRandomSquare1ScrambleString() {
+  return square1SolverGetRandomScramble().scramble_string;
 }

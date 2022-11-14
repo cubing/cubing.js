@@ -1,12 +1,8 @@
-import { randomUIntBelowFactory } from "../../../../vendor/random-uint-below";
-
-const randomUIntBelowPromise = randomUIntBelowFactory();
+import { randomUIntBelow } from "../../../../vendor/random-uint-below";
 
 const suffixes = ["++", "--"];
 
-export async function randomMegaminxScrambleString(): Promise<string> {
-  const randomUIntBelow = await randomUIntBelowPromise;
-
+export function randomMegaminxScrambleString(): string {
   function rdPair(): string {
     return `R${suffixes[randomUIntBelow(2)]} D${suffixes[randomUIntBelow(2)]}`;
   }

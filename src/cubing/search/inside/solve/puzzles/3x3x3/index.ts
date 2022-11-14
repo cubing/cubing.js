@@ -1,7 +1,7 @@
 import { Alg, AlgBuilder } from "../../../../../alg";
 import type { KState } from "../../../../../kpuzzle/KState";
 import { puzzles } from "../../../../../puzzles";
-import { randomChoiceFactory } from "../../../../../vendor/random-uint-below";
+import { randomChoice } from "../../../../../vendor/random-uint-below";
 import { mustBeInsideWorker } from "../../../inside-worker";
 import { addOrientationSuffix } from "../../addOrientationSuffix";
 import { dynamic3x3x3min2phase } from "../dynamic/3x3x3";
@@ -13,9 +13,7 @@ export async function random333State(): Promise<KState> {
   const kpuzzle = await puzzles["3x3x3"].kpuzzle();
   let state = kpuzzle.startState();
   for (const piece of sgs3x3x3) {
-    state = state.applyAlg(
-      Alg.fromString(((await randomChoiceFactory()) as any)(piece)),
-    );
+    state = state.applyAlg(Alg.fromString(randomChoice(piece)));
   }
   if (!passesFilter(kpuzzle, state)) {
     return random333State();

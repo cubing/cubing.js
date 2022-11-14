@@ -4,7 +4,7 @@
 
 "use strict";
 
-import { randomUIntBelowFactory } from "../random-uint-below";
+import { randomUIntBelow } from "../random-uint-below";
 
 function counter(A) {
   let counts = [];
@@ -602,35 +602,31 @@ function print_move_sequence(move_sequence) {
   console.log(stringify_move_sequence(move_sequence));
 }
 
-function generate_random_state(randomUintBelow) {
+function generate_random_state() {
   // master pyra has no "nontrivial" restrictions, beyond the usual parity stuff
   let co = Array(4);
   for (let i = 0; i < 4; i++) {
-    co[i] = randomUintBelow(3);
+    co[i] = randomUIntBelow(3);
   }
-  let mp = index_to_evenpermutation(randomUintBelow(factorial(6) / 2), 6);
+  let mp = index_to_evenpermutation(randomUIntBelow(factorial(6) / 2), 6);
   for (let i = 0, parity = 0; i < 6; i++) {
-    let eo = i === 5 ? parity : randomUintBelow(2);
+    let eo = i === 5 ? parity : randomUIntBelow(2);
     parity ^= eo;
     mp[i] += eo * 6;
     mp[i + 6] = (mp[i] + 6) % 12;
   }
-  let wp = index_to_evenpermutation(randomUintBelow(factorial(12) / 2), 12);
-  let cp = index_to_evenpermutation(randomUintBelow(factorial(4) / 2), 4);
+  let wp = index_to_evenpermutation(randomUIntBelow(factorial(12) / 2), 12);
+  let cp = index_to_evenpermutation(randomUIntBelow(factorial(4) / 2), 4);
   return { co: co, mp: mp, wp: wp, cp: cp };
 }
 
-function generate_random_state_scramble(randomUintBelow) {
-  return solve(generate_random_state(randomUintBelow));
+function generate_random_state_scramble() {
+  return solve(generate_random_state(randomUIntBelow));
 }
 
-function generate_scramble_sequence(
-  randomUintBelow,
-  tips = true,
-  obfuscate_tips = false,
-) {
+function generate_scramble_sequence(tips = true, obfuscate_tips = false) {
   let scramble_string = stringify_move_sequence(
-    generate_random_state_scramble(randomUintBelow),
+    generate_random_state_scramble(),
   );
   if (!tips) {
     return scramble_string;
@@ -639,7 +635,7 @@ function generate_scramble_sequence(
   let suffixes = ["0", "", "'"];
   if (!obfuscate_tips) {
     for (let i = 0; i < 4; i++) {
-      let x = randomUintBelow(3);
+      let x = randomUIntBelow(3);
       if (x !== 0) {
         scramble_string += ` ${tip_names[i]}${suffixes[x]}`;
       }
@@ -650,8 +646,8 @@ function generate_scramble_sequence(
   let amount_pre = [];
   let amount_post = [];
   for (let i = 0; i < 4; i++) {
-    amount[i] = randomUintBelow(3);
-    amount_pre[i] = randomUintBelow(3);
+    amount[i] = randomUIntBelow(3);
+    amount_pre[i] = randomUIntBelow(3);
     amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
   }
   let weight = (arr) => arr.filter((x) => x !== 0).length;
@@ -663,7 +659,7 @@ function generate_scramble_sequence(
     )
   ) {
     for (let i = 0; i < 4; i++) {
-      amount_pre[i] = randomUintBelow(3);
+      amount_pre[i] = randomUIntBelow(3);
       amount_post[i] = (amount[i] - amount_pre[i] + 3) % 3;
     }
   }
@@ -1300,7 +1296,6 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
   }
 }
 
-const randomUintBelow = randomUIntBelowFactory();
 export async function randomMasterTetraminxScrambleString() {
-  return generate_scramble_sequence(await randomUintBelow, false);
+  return generate_scramble_sequence(false);
 }

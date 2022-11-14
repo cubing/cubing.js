@@ -54,7 +54,7 @@ also work with recent versions of Edge, Safari, etc.
 "use strict";
 
 import { Alg } from "../../alg";
-import { randomUIntBelowFactory } from "../random-uint-below";
+import { randomUIntBelow } from "../random-uint-below";
 
 let PHASE4_THRESHOLD = 7;
 // change this to 8 to make the individual solves faster, at the cost of slower initialisation
@@ -358,10 +358,10 @@ for (let i = 0; i < moves.length; i++) {
   }
 }
 
-function random_state(randomUintBelow) {
+function random_state() {
   let p = [0];
   for (let i = 1; i < 20; i++) {
-    let r = randomUintBelow(i + 1);
+    let r = randomUIntBelow(i + 1);
     p[i] = p[r];
     p[r] = i;
   }
@@ -370,7 +370,7 @@ function random_state(randomUintBelow) {
   }
   let o = Array(20).fill(0);
   for (let i = 0; i < 19; i++) {
-    o[i] = randomUintBelow(3);
+    o[i] = randomUIntBelow(3);
     o[19] += 3 - o[i];
   }
   o[19] %= 3;
@@ -398,8 +398,8 @@ function apply_move_sequence(state, move_sequence) {
   return state;
 }
 
-function generate_random_state_scramble(randomUintBelow) {
-  return solve(random_state(randomUintBelow));
+function generate_random_state_scramble() {
+  return solve(random_state());
 }
 
 function generate_random_move_scramble(M, N) {
@@ -1691,13 +1691,8 @@ function bfs5(mtable, goal_states) {
   return ptable;
 }
 
-const randomUintBelow = randomUIntBelowFactory();
-export async function getRandomKilominxScramble() {
-  return new Alg(
-    stringify_move_sequence(
-      generate_random_state_scramble(await randomUintBelow),
-    ),
-  );
+export function getRandomKilominxScramble() {
+  return new Alg(stringify_move_sequence(generate_random_state_scramble()));
 }
 
 getRandomKilominxScramble().then((alg) => alg.log());

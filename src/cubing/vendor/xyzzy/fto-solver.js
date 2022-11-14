@@ -11,7 +11,7 @@ This is targeted at Firefox / Spidermonkey releases from 2019 and onwards. It mi
 JavaScript engines. Recent Chrome / Node releases should also work, but are not tested as much.
 */
 
-import { randomUIntBelowFactory } from "../random-uint-below";
+import { randomUIntBelow } from "../random-uint-below";
 
 /* Helper functions */
 
@@ -182,18 +182,18 @@ let [evenpermutation8_to_index, index_to_evenpermutation8] = (() => {
   return [evenpermutation8_to_index, index_to_evenpermutation8];
 })();
 
-function random_permutation(n, randomUintBelow) {
+function random_permutation(n) {
   let p = [0];
   for (let i = 1; i < n; i++) {
-    let r = randomUintBelow(i + 1);
+    let r = randomUIntBelow(i + 1);
     p[i] = p[r];
     p[r] = i;
   }
   return p;
 }
 
-function random_even_permutation(n, randomUintBelow) {
-  let p = random_permutation(n, randomUintBelow);
+function random_even_permutation(n) {
+  let p = random_permutation(n);
   if (permutation_parity(p) === 1) {
     [p[0], p[1]] = [p[1], p[0]];
   }
@@ -729,26 +729,26 @@ let commute_table = (function () {
 */
 
 // generate a random state with the BR-BL corner solved
-function random_state(randomUintBelow) {
+function random_state() {
   let facelets = Array(72);
-  let cp = random_even_permutation(5, randomUintBelow);
+  let cp = random_even_permutation(5);
   cp.push(5);
   let co = Array(4)
     .fill()
-    .map((_) => randomUintBelow(2));
+    .map((_) => randomUIntBelow(2));
   co.push(co.reduce((x, y) => x ^ y));
   co.push(0);
   for (let i = 0; i < 6; i++) {
     set_corner_piece(facelets, i, cp[i], co[i]);
   }
 
-  let ep = random_even_permutation(12, randomUintBelow);
+  let ep = random_even_permutation(12);
   for (let i = 0; i < 12; i++) {
     set_edge_piece(facelets, i, ep[i]);
   }
 
-  let a = random_permutation(12, randomUintBelow).map((x) => (x / 3) | 0);
-  let b = random_permutation(12, randomUintBelow).map((x) => 4 + ((x / 3) | 0));
+  let a = random_permutation(12).map((x) => (x / 3) | 0);
+  let b = random_permutation(12).map((x) => 4 + ((x / 3) | 0));
   for (let i = 0; i < 12; i++) {
     facelets[centreA_piece_facelets[i]] = a[i];
     facelets[centreB_piece_facelets[i]] = b[i];
@@ -852,9 +852,9 @@ function simplify_move_sequence(move_sequence, make_noise = false) {
   return simplified;
 }
 
-function generate_random_state_scramble(randomUintBelow) {
+function generate_random_state_scramble() {
   return stringify_move_sequence(
-    invert_move_sequence(solve(random_state(randomUintBelow), true)),
+    invert_move_sequence(solve(random_state(), true)),
     true,
   );
 }
@@ -2559,7 +2559,6 @@ function solve_phase2_and_phase3_readable(
   return best;
 }
 
-const randomUintBelow = randomUIntBelowFactory();
-export async function randomFTOScrambleString() {
-  return generate_random_state_scramble(await randomUintBelow);
+export function randomFTOScrambleString() {
+  return generate_random_state_scramble();
 }

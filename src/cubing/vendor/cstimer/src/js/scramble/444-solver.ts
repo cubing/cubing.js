@@ -5,7 +5,7 @@ import {
   random333Scramble as getRandomScramble333,
 } from "../../../../../search/inside/solve/puzzles/3x3x3";
 import { circle, Cnk, set8Perm } from "../lib/mathlib";
-import { randomUIntBelowFactory } from "../../../../random-uint-below";
+import { randomUIntBelow } from "../../../../random-uint-below";
 import { mustBeInsideWorker } from "../../../../../search/inside/inside-worker";
 
 function createArray(length1: number, length2?: number) {
@@ -1134,7 +1134,7 @@ function CenterCube_0() {
   }
 }
 
-function CenterCube_1(randomUIntBelow) {
+function CenterCube_1() {
   let i_0;
   let m_0;
   let t;
@@ -1218,7 +1218,7 @@ function CornerCube_1(cperm, twist) {
   $setTwist_0(this, twist);
 }
 
-function CornerCube_2(randomUIntBelow) {
+function CornerCube_2() {
   CornerCube_1.call(this, randomUIntBelow(40320), randomUIntBelow(2187));
 }
 
@@ -1937,7 +1937,7 @@ function EdgeCube_0() {
   }
 }
 
-function EdgeCube_1(randomUIntBelow) {
+function EdgeCube_1() {
   let i_0;
   let m_0;
   let t;
@@ -2080,11 +2080,11 @@ function FullCube_4(c) {
   $copy_4(this, c);
 }
 
-function FullCube_5(randomUIntBelow) {
+function FullCube_5() {
   $$init_3(this);
-  this.edge = new EdgeCube_1(randomUIntBelow);
-  this.center = new CenterCube_1(randomUIntBelow);
-  this.corner = new CornerCube_2(randomUIntBelow);
+  this.edge = new EdgeCube_1();
+  this.center = new CenterCube_1();
+  this.corner = new CornerCube_2();
 }
 
 defineSeed(
@@ -2501,9 +2501,9 @@ function $init3(this$static) {
   return this$static.arr2idx === this$static.arr2.length;
 }
 
-function $randomState(this$static, randomUIntBelow) {
+function $randomState(this$static) {
   init_5();
-  this$static.c = new FullCube_5(randomUIntBelow);
+  this$static.c = new FullCube_5();
   $doSearch(this$static);
   return this$static.solution;
 }
@@ -3000,8 +3000,6 @@ export function initialize(): void {
 export async function random444Scramble(): Promise<Alg> {
   mustBeInsideWorker();
   init();
-  const suffix = Alg.fromString(
-    $randomState(searcher, await randomUIntBelowFactory()),
-  );
+  const suffix = Alg.fromString($randomState(searcher));
   return (await getRandomScramble333()).concat(suffix);
 }

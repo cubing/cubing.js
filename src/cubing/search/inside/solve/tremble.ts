@@ -2,8 +2,8 @@ import { Alg, AlgBuilder, Move, QuantumMove } from "../../../alg";
 import type { KPuzzle, KTransformation } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
 import { experimentalCountMoves } from "../../../notation";
-import { randomChoiceFactory } from "../../../vendor/random-uint-below";
-import type { SGSAction, SGSCachedData } from "./parseSGS";
+import { randomChoice } from "../../../vendor/random-uint-below";
+import type { SGSCachedData } from "./parseSGS";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.
 
@@ -191,12 +191,10 @@ export class TrembleSolver {
   }
 }
 
-export async function randomStateFromSGS(
+export function randomStateFromSGS(
   kpuzzle: KPuzzle,
   sgs: SGSCachedData,
-): Promise<KState> {
-  const randomChoice = await randomChoiceFactory<SGSAction>(); // TODO: make this sync by putting the factory into a TLA
-
+): KState {
   let transformation = kpuzzle.identityTransformation();
   for (const step of sgs.ordering) {
     const sgsAction = randomChoice(Object.values(step.lookup));

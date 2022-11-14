@@ -5,7 +5,7 @@
 "use strict";
 
 import { Alg } from "../../alg";
-import { randomUIntBelowFactory } from "../random-uint-below";
+import { randomUIntBelow } from "../random-uint-below";
 
 function counter(A) {
   let counts = [];
@@ -260,20 +260,20 @@ function print_move_sequence(move_sequence) {
   console.log(stringify_move_sequence(move_sequence));
 }
 
-function generate_random_state(randomUintBelow) {
+function generate_random_state() {
   let p = index_to_evenpermutation(
-    Math.floor(randomUintBelow(factorial(12)) / 2),
+    Math.floor(randomUIntBelow(factorial(12)) / 2),
     12,
   );
   let o = Array(8);
   for (let i = 0; i < 8; i++) {
-    o[i] = randomUintBelow(3);
+    o[i] = randomUIntBelow(3);
   }
   return [p, o];
 }
 
-function generate_random_state_scramble(randomUintBelow) {
-  return solve(generate_random_state(randomUintBelow));
+function generate_random_state_scramble() {
+  return solve(generate_random_state());
 }
 
 function generate_scramble_sequence() {
@@ -705,11 +705,6 @@ function* ida_search_gen(indices, mtables, ptables, bound, last) {
   }
 }
 
-const randomUintBelow = randomUIntBelowFactory();
 export async function getRandomRediCubeScramble() {
-  return new Alg(
-    stringify_move_sequence(
-      generate_random_state_scramble(await randomUintBelow),
-    ),
-  );
+  return new Alg(stringify_move_sequence(generate_random_state_scramble()));
 }

@@ -1,7 +1,7 @@
 import { Alg, AlgBuilder, Move, QuantumMove } from "../../../../alg";
 import {
-  randomChoiceFactory,
-  randomUIntBelowFactory,
+  randomChoice,
+  randomUIntBelow,
 } from "../../../../vendor/random-uint-below";
 
 function numMoves(n: number): number {
@@ -47,10 +47,6 @@ function cachedAxesMoves(n: number): QuantumMove[][] {
 
 // TODO: Document this algorithm and compare to TNoodle.
 export async function bigCubeRandomMoves(n: number): Promise<Alg> {
-  const randomUintBelow = await randomUIntBelowFactory();
-  const randomChoice = await randomChoiceFactory<QuantumMove>();
-  const randomNumChoice = randomChoice as any as (arr: number[]) => number; // TODO: Avoid needing multiple instantiations or recasting.
-
   const axesMoves = cachedAxesMoves(n);
 
   const cachedNumMoves = numMoves(n);
@@ -58,7 +54,7 @@ export async function bigCubeRandomMoves(n: number): Promise<Alg> {
   let currentAxisIdx = 0;
   const currentAxisQuantumMoves = new Set();
   while (algBuilder.experimentalNumAlgNodes() < cachedNumMoves) {
-    const newAxisIdx = randomUintBelow(3);
+    const newAxisIdx = randomUIntBelow(3);
     if (newAxisIdx !== currentAxisIdx) {
       currentAxisQuantumMoves.clear();
     }
@@ -71,7 +67,7 @@ export async function bigCubeRandomMoves(n: number): Promise<Alg> {
       continue;
     }
     currentAxisQuantumMoves.add(quantumMoveStr);
-    algBuilder.push(new Move(quantumMove, randomNumChoice([1, 2, -1])));
+    algBuilder.push(new Move(quantumMove, randomChoice([1, 2, -1])));
   }
 
   return algBuilder.toAlg();

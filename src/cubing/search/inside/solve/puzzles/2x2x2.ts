@@ -3,8 +3,8 @@ import type { KPuzzle } from "../../../../kpuzzle";
 import { KState } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
 import {
-  randomPermute,
-  randomUIntBelowFactory,
+  randomPermuteInPlace,
+  randomUIntBelow,
 } from "../../../../vendor/random-uint-below";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
@@ -46,14 +46,13 @@ export async function solve222(state: KState): Promise<Alg> {
 }
 
 // TODO: factor out and test.
-async function mutatingRandomizeOrbit(
+function mutatingRandomizeOrbit(
   kpuzzle: KPuzzle,
   orbitName: string,
   state: KState,
   options?: { orientationSum?: number },
-): Promise<void> {
-  const randomUIntBelow = await randomUIntBelowFactory();
-  await randomPermute(state.stateData[orbitName].pieces);
+): void {
+  randomPermuteInPlace(state.stateData[orbitName].pieces);
 
   const orbitDef = kpuzzle.definition.orbits[orbitName];
   const ori = state.stateData[orbitName].orientation;
@@ -82,7 +81,7 @@ export async function random222State(): Promise<KState> {
     kpuzzle,
     JSON.parse(JSON.stringify(kpuzzle.startState().stateData)),
   ); // TODO
-  await mutatingRandomizeOrbit(kpuzzle, "CORNERS", stateCopy, {
+  mutatingRandomizeOrbit(kpuzzle, "CORNERS", stateCopy, {
     orientationSum: 0,
   });
   return stateCopy;
