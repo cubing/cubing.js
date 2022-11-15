@@ -1,3 +1,8 @@
 {
-  "postCreateCommand": "npm ci"
+  "postCreateCommand": "npm ci",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+        "version": "19"
+    }
+  }
 }

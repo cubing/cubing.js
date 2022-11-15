@@ -1,3 +1,8 @@
 {
-  "postCreateCommand": "make quick-setup"
+  "postCreateCommand": "make quick-setup",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+        "version": "19"
+    }
+  }
 }
