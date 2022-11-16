@@ -1,4 +1,4 @@
-import { randomUIntBelow } from "../../../../vendor/random-uint-below";
+import { randomUIntBelow } from "random-uint-below";
 
 const suffixes = ["++", "--"];
 

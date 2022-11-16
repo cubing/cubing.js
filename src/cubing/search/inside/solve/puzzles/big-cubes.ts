@@ -1,8 +1,5 @@
 import { Alg, AlgBuilder, Move, QuantumMove } from "../../../../alg";
-import {
-  randomChoice,
-  randomUIntBelow,
-} from "../../../../vendor/random-uint-below";
+import { randomChoice, randomUIntBelow } from "random-uint-below";
 
 function numMoves(n: number): number {
   switch (n) {

@@ -2,10 +2,7 @@ import type { Alg } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { KState } from "../../../../kpuzzle";
 import { puzzles } from "../../../../puzzles";
-import {
-  randomPermuteInPlace,
-  randomUIntBelow,
-} from "../../../../vendor/random-uint-below";
+import { randomPermuteInPlace, randomUIntBelow } from "random-uint-below";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";

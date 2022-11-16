@@ -54,7 +54,7 @@ also work with recent versions of Edge, Safari, etc.
 "use strict";
 
 import { Alg } from "../../alg";
-import { randomUIntBelow } from "../random-uint-below";
+import { randomUIntBelow } from "random-uint-below";
 
 let PHASE4_THRESHOLD = 7;
 // change this to 8 to make the individual solves faster, at the cost of slower initialisation

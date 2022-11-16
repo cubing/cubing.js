@@ -2,7 +2,7 @@ import { Alg, AlgBuilder, Move, QuantumMove } from "../../../alg";
 import type { KPuzzle, KTransformation } from "../../../kpuzzle";
 import type { KState } from "../../../kpuzzle/KState";
 import { experimentalCountMoves } from "../../../notation";
-import { randomChoice } from "../../../vendor/random-uint-below";
+import { randomChoice } from "random-uint-below";
 import type { SGSCachedData } from "./parseSGS";
 
 const DEFAULT_STAGE1_DEPTH_LIMIT = 2; // Moderately performant default.

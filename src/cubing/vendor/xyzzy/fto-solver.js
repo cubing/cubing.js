@@ -11,7 +11,7 @@ This is targeted at Firefox / Spidermonkey releases from 2019 and onwards. It mi
 JavaScript engines. Recent Chrome / Node releases should also work, but are not tested as much.
 */
 
-import { randomUIntBelow } from "../random-uint-below";
+import { randomUIntBelow } from "random-uint-below";
 
 /* Helper functions */
 

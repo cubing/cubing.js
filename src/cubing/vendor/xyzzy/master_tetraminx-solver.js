@@ -4,7 +4,7 @@
 
 "use strict";
 
-import { randomUIntBelow } from "../random-uint-below";
+import { randomUIntBelow } from "random-uint-below";
 
 function counter(A) {
   let counts = [];
