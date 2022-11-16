@@ -4,6 +4,7 @@ export const expectedPrefixes = [
   "node_modules/@types",
   // Library
   "node_modules/comlink",
+  "node_modules/random-uint-below",
   "src",
   // Experiments site
   "node_modules/jszip",
