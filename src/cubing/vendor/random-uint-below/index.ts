@@ -1,5 +1,5 @@
 export {
   randomChoice,
   randomPermuteInPlace,
-} from "./random-choice";
-export { randomUIntBelow } from "./random53BitValue";
+} from "./array-operations";
+export { randomUIntBelow } from "./randomUIntBelow";
