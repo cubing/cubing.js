@@ -1694,5 +1694,3 @@ function bfs5(mtable, goal_states) {
 export function getRandomKilominxScramble() {
   return new Alg(stringify_move_sequence(generate_random_state_scramble()));
 }
-
-getRandomKilominxScramble().then((alg) => alg.log());
