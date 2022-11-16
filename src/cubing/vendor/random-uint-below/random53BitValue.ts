@@ -8,10 +8,22 @@ const MAX_JS_PRECISE_INT = 9007199254740992;
 const UPPER_HALF_MULTIPLIER = 2097152; // 2^21. We have to use multiplication because bit shifts truncate to 32 bits.
 const LOWER_HALF_DIVIDER = 2048;
 
+// TODO: Remove this wrapper once `crypto.getRandomValues` is available in a `node` LTS version without a flag.
+function crypto(): typeof globalThis.crypto {
+  const { crypto } = globalThis;
+  if (!crypto) {
+    const { node: nodeVersion } = globalThis.process?.versions;
+    if (nodeVersion && parseInt(nodeVersion.split(".")[0]) < 19) {
+      throw new Error("`cubing.js` requires `node` 19 or above.");
+    }
+  }
+  return crypto;
+}
+
 function random53BitValue(): number {
   // Construct a random 53-bit value from a 32-bit upper half and a 21-bit lower half.
   const arr = new Uint32Array(2);
-  globalThis.crypto.getRandomValues(arr);
+  crypto().getRandomValues(arr);
   const upper = arr[0];
   const lower = arr[1];
   return (
