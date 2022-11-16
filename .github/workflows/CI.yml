@@ -8,10 +8,14 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [19.x]
 
     steps:
       - uses: actions/checkout@v3
+      - name: Use `node` v${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
       - uses: rome/setup-rome@v0.4
         with:
           version: latest
@@ -30,10 +34,14 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [19]
 
     steps:
       - uses: actions/checkout@v3
+      - name: Use `node` v${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: make build-esm
       - run: make build-bin
@@ -47,10 +55,14 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x]
+        node-version: [19.x]
 
     steps:
       - uses: actions/checkout@v3
+      - name: Use `node` v${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: make build-esm
       - run: make test-dist-esm-node-import
