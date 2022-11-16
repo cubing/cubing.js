@@ -12,7 +12,6 @@
 import { barelyServe } from "barely-a-dev-server";
 import * as esbuild from "esbuild";
 import { exec } from "node:child_process";
-import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { execPromise, spawnPromise } from "../lib/execPromise.js";
@@ -203,19 +202,35 @@ export const staticPackageMetadataTarget = {
     // TODO: use `fs/promises` once we can use a recent enough version of `node`.
     const exports = JSON.parse(await readFile("./package.json")).exports;
     for (const folder of Object.keys(exports)) {
-      if (!(await existsSync(folder))) {
-        await mkdir(folder);
-      }
+      await mkdir(folder, { recursive: true });
       const folderBasename = basename(folder);
       const subpackageJSON = {
-        main: `../dist/esm/${folderBasename}/index.js`,
-        types: `../dist/types/${folderBasename}/index.d.ts`,
+        main: "./index.js",
+        types: "./index.d.ts",
       };
       const packageJSONFilePath = join(folder, "package.json");
       console.log(`Writing: ${packageJSONFilePath}`);
       await writeFile(
         packageJSONFilePath,
         JSON.stringify(subpackageJSON, null, "  "),
+      );
+
+      const indexFilePath = join(folder, "index.js");
+      console.log(`Writing: ${indexFilePath}`);
+      await writeFile(
+        indexFilePath,
+        `export * from ${JSON.stringify(
+          `../dist/esm/${folderBasename}/index.js`,
+        )};\n`,
+      );
+
+      const typesFilePath = join(folder, "index.d.ts");
+      console.log(`Writing: ${typesFilePath}`);
+      await writeFile(
+        typesFilePath,
+        `export * from ${JSON.stringify(
+          `../dist/types/${folderBasename}/index.d.ts`,
+        )};\n`,
       );
 
       try {
