@@ -73,7 +73,13 @@ export class TwizzleLink extends ManagedCustomElement {
       }
 
       if (config.experimentalSetupAlg) {
-        this.addHeading("Setup");
+        this.addHeading(
+          "Setup",
+          async () =>
+            (
+              await this.twistyPlayer?.experimentalModel.setupAlg.get()
+            )?.alg.toString() ?? null,
+        );
 
         const setupAlgDiv = this.addElement(document.createElement("div"));
         setupAlgDiv.classList.add("setup-alg");
@@ -81,7 +87,13 @@ export class TwizzleLink extends ManagedCustomElement {
           config.experimentalSetupAlg,
         ).toString();
       }
-      this.addHeading("Moves");
+      this.addHeading(
+        "Moves",
+        async () =>
+          (
+            await this.twistyPlayer?.experimentalModel.alg.get()
+          )?.alg.toString() ?? null,
+      );
       const twistyAlgViewer = this.addElement(
         new TwistyAlgViewer({ twistyPlayer: this.twistyPlayer }),
       );
@@ -91,10 +103,43 @@ export class TwizzleLink extends ManagedCustomElement {
     }
   }
 
-  addHeading(text: string): HTMLElement {
+  addHeading(
+    text: string,
+    getTextToCopy?: () => Promise<string | null>,
+  ): HTMLElement {
     const headingDiv = this.addElement(document.createElement("div"));
     headingDiv.classList.add("heading");
     headingDiv.textContent = text;
+    if (getTextToCopy) {
+      headingDiv.textContent += " ";
+      const a = headingDiv.appendChild(document.createElement("a"));
+      a.textContent = "📋";
+      a.href = "#";
+      a.title = "Copy to clipboard";
+      async function setAndClear(text: string) {
+        a.textContent = text;
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        if (a.textContent === text) {
+          a.textContent = "📋";
+        }
+      }
+      a.addEventListener("click", async (e) => {
+        e.preventDefault();
+        a.textContent = "📋…";
+        const textToCopy = await getTextToCopy();
+        if (textToCopy) {
+          try {
+            await navigator.clipboard.writeText(textToCopy);
+            setAndClear("📋✅");
+          } catch (e) {
+            setAndClear("📋❌");
+            throw e;
+          }
+        } else {
+          setAndClear("📋❌");
+        }
+      });
+    }
     return headingDiv;
   }
 }
