@@ -6,6 +6,7 @@ import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { globalSafeDocument } from "../document";
 import type { TwistyPlayerController } from "../../controllers/TwistyPlayerController";
 import { BoundaryType, Direction } from "../../controllers/AnimationTypes";
+import type { DarkModeTheme } from "../../model/props/viewer/DarkModeRequestProp";
 
 const SLOW_DOWN_SCRUBBING = false;
 
@@ -80,6 +81,13 @@ export class TwistyScrubber extends ManagedCustomElement {
   async connectedCallback(): Promise<void> {
     this.addCSS(twistyScrubberCSS);
     this.addElement(await this.inputElem());
+    this.model?.twistySceneModel.darkMode.addFreshListener(
+      this.updateDarkMode.bind(this),
+    );
+  }
+
+  updateDarkMode(darkMode: DarkModeTheme): void {
+    this.contentWrapper.classList.toggle("dark-mode", darkMode === "dark");
   }
 
   #inputElem: Promise<HTMLInputElement> | null = null;

@@ -1,4 +1,5 @@
 import { URLProp } from "./props/general/URLProp";
+import { FaceletScaleProp } from "./props/puzzle/display/FaceletScaleProp";
 import { FoundationDisplayProp } from "./props/puzzle/display/FoundationDisplayProp";
 import { HintFaceletProp } from "./props/puzzle/display/HintFaceletProp";
 import { InitialHintFaceletsAnimationProp } from "./props/puzzle/display/InitialHintFaceletsAnimationProp";
@@ -6,11 +7,12 @@ import { SpriteProp } from "./props/puzzle/display/SpriteProp";
 import { StickeringMaskProp } from "./props/puzzle/display/StickeringMaskProp";
 import { StickeringMaskRequestProp } from "./props/puzzle/display/StickeringMaskRequestProp";
 import { StickeringRequestProp } from "./props/puzzle/display/StickeringRequestProp";
-import { FaceletScaleProp } from "./props/puzzle/display/FaceletScaleProp";
 import { DragInputProp } from "./props/puzzle/state/DragInputProp";
 import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOptions";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 import { BackgroundProp } from "./props/viewer/BackgroundProp";
+import { DarkModeProp } from "./props/viewer/DarkModeProp";
+import { DarkModeRequstProp } from "./props/viewer/DarkModeRequestProp";
 import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
 import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
 import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp";
@@ -19,6 +21,7 @@ import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 export class TwistySceneModel {
   // Depth 0
   background = new BackgroundProp();
+  darkModeRequest = new DarkModeRequstProp();
   dragInput = new DragInputProp();
   foundationDisplay = new FoundationDisplayProp();
   foundationStickerSpriteURL = new URLProp();
@@ -36,6 +39,7 @@ export class TwistySceneModel {
   faceletScale = new FaceletScaleProp();
 
   // Depth 1
+  darkMode = new DarkModeProp({ darkModeRequest: this.darkModeRequest });
   foundationStickerSprite = new SpriteProp({
     spriteURL: this.foundationStickerSpriteURL,
   });

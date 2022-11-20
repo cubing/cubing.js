@@ -16,7 +16,8 @@ export const twizzleLinkCSS = new CSSSource(
 .heading {
   background: rgba(255, 230, 210, 1);
   font-weight: bold;
-  padding: 0.25em 0.5em;    display: grid;
+  padding: 0.25em 0.5em;
+  display: grid;
   grid-template-columns: 1fr auto;
 }
 
@@ -40,5 +41,39 @@ twisty-player {
 twisty-player + .heading {
   padding-top: 0.5em;
 }
+
+twisty-alg-viewer {
+  display: inline-block;
+}
 `,
 );
+
+export const twizzleLinkForumTweaksCSS = new CSSSource(`
+.wrapper {
+  background: white;
+}
+
+.heading {
+  background: #4285f422;
+}
+
+.scrollable-region {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.wrapper.dark-mode {
+  background: #262626;
+  color: #929292;
+  border-color: #FFFFFF44;
+}
+
+.wrapper.dark-mode .heading {
+  background: #1d1d1d;
+  color: #ececec;
+}
+
+.heading.title {
+  background: none;
+}
+`);

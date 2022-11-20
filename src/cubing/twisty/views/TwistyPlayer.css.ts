@@ -40,12 +40,25 @@ twisty-scrubber {
   background: rgba(196, 196, 196, 0.5);
 }
 
-.wrapper.checkered {
+.wrapper.checkered,
+.wrapper.checkered-transparent {
   background-color: #EAEAEA;
   background-image: linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD),
     linear-gradient(45deg, #DDD 25%, transparent 25%, transparent 75%, #DDD 75%, #DDD);
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
+}
+
+.wrapper.checkered-transparent {
+  background-color: #F4F4F4;
+  background-image: linear-gradient(45deg, #DDDDDD88 25%, transparent 25%, transparent 75%, #DDDDDD88 75%, #DDDDDD88),
+    linear-gradient(45deg, #DDDDDD88 25%, transparent 25%, transparent 75%, #DDDDDD88 75%, #DDDDDD88);
+}
+
+.wrapper.dark-mode {
+  background-color: #444;
+  background-image: linear-gradient(45deg, #DDDDDD0b 25%, transparent 25%, transparent 75%, #DDDDDD0b 75%, #DDDDDD0b),
+    linear-gradient(45deg, #DDDDDD0b 25%, transparent 25%, transparent 75%, #DDDDDD0b 75%, #DDDDDD0b);
 }
 
 .visualization-wrapper > * {
