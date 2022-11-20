@@ -8,7 +8,7 @@ import { twizzleLinkCSS, twizzleLinkForumTweaksCSS } from "./TwizzleLink.css";
 import { getConfigFromURL } from "./url-params";
 
 /** @category Other Custom Elements */
-export class TwizzleLinkNested extends ManagedCustomElement {
+export class TwizzleLink extends ManagedCustomElement {
   twistyPlayer: TwistyPlayer | null = null;
   a: HTMLAnchorElement | null = null;
   constructor(
@@ -162,15 +162,6 @@ export class TwizzleLinkNested extends ManagedCustomElement {
       });
     }
     return headingDiv;
-  }
-}
-
-export class TwizzleLink extends TwizzleLinkNested {
-  constructor() {
-    super({
-      cdnForumTweaks: true,
-      darkMode: true, //|| document.documentElement.classList.contains("style-dark"),
-    });
   }
 }
 
