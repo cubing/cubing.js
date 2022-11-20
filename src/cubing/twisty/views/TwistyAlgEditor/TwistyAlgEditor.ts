@@ -277,10 +277,7 @@ export class TwistyAlgEditor extends ManagedCustomElement {
             await twistyPlayer.experimentalModel.indexer.get(),
             await twistyPlayer.experimentalModel.timestampRequest.get(),
           ]);
-          if (
-            timestampRequest === "opposite-anchor" &&
-            !this.#onInputHasFired
-          ) {
+          if (timestampRequest === "auto" && !this.#onInputHasFired) {
             return;
           }
           const moveStartTimestamp = indexer.indexToMoveStartTimestamp(

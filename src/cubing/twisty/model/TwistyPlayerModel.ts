@@ -142,6 +142,7 @@ export class TwistyPlayerModel {
       timestampRequest: this.timestampRequest,
       timeRange: this.timeRange,
       setupAnchor: this.setupAnchor,
+      setupAlg: this.setupAlg,
     },
   );
 

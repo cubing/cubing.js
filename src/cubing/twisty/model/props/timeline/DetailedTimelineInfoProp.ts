@@ -5,11 +5,13 @@ import type {
 import type { TimestampRequest } from "./TimestampRequestProp";
 import { TwistyPropDerived } from "../TwistyProp";
 import type { SetupToLocation } from "../puzzle/state/SetupAnchorProp";
+import type { AlgWithIssues } from "../puzzle/state/AlgProp";
 
 interface DetailedTimelineInfoInputs {
   timestampRequest: TimestampRequest;
   timeRange: TimeRange;
   setupAnchor: SetupToLocation;
+  setupAlg: AlgWithIssues;
 }
 
 export interface DetailedTimelineInfo {
@@ -51,6 +53,11 @@ export class DetailedTimelineInfoProp extends TwistyPropDerived<
     inputs: DetailedTimelineInfoInputs,
   ): MillisecondTimestamp {
     switch (inputs.timestampRequest) {
+      case "auto":
+        return inputs.setupAnchor === "start" &&
+          inputs.setupAlg.alg.experimentalIsEmpty()
+          ? inputs.timeRange.end
+          : inputs.timeRange.start;
       case "start":
         return inputs.timeRange.start;
       case "end":

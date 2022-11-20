@@ -2,6 +2,7 @@ import type { MillisecondTimestamp } from "../../../controllers/AnimationTypes";
 import { SimpleTwistyPropSource } from "../TwistyProp";
 
 const smartTimestamps = {
+  auto: true,
   start: true,
   end: true,
   anchor: true,
@@ -14,7 +15,7 @@ export type TimestampRequest =
 
 export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampRequest> {
   override getDefaultValue(): TimestampRequest {
-    return "opposite-anchor";
+    return "auto";
   }
 
   // TODO: Support `Promise`
