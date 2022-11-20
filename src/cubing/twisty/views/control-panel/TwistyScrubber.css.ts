@@ -15,11 +15,15 @@ export const twistyScrubberCSS = new CSSSource(
   overflow: hidden;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  background: rgba(196, 196, 196, 0.75)
+  background: rgba(196, 196, 196, 0.75);
 }
 
 input:not(:disabled) {
   cursor: ew-resize;
+}
+
+.wrapper.dark-mode {
+  background: #666666;
 }
 `,
 );

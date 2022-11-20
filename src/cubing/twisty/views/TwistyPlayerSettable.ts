@@ -1,23 +1,24 @@
 import type { Alg, AppendCancelOptions } from "../../alg";
 import type { PuzzleDescriptionString } from "../../puzzle-geometry/PGPuzzles";
+import type { StickeringMask } from "../../puzzles/stickerings/mask";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
+import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
+import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp";
+import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
+import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
+import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
+import type { IndexerStrategyName } from "../model/props/puzzle/state/IndexerConstructorRequestProp";
+import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
+import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
+import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
-import type { HintFaceletStyleWithAuto } from "../model/props/puzzle/display/HintFaceletProp";
-import type { IndexerStrategyName } from "../model/props/puzzle/state/IndexerConstructorRequestProp";
-import type { TimestampRequest } from "../model/props/timeline/TimestampRequestProp";
+import type { DarkModeThemeWithAuto } from "../model/props/viewer/DarkModeRequestProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
-import type { MillisecondTimestamp } from "../controllers/AnimationTypes";
 import { ManagedCustomElement } from "./ManagedCustomElement";
-import type { MovePressInput } from "../model/props/puzzle/state/MovePressInputProp";
-import type { SetupToLocation } from "../model/props/puzzle/state/SetupAnchorProp";
-import type { DragInputMode } from "../model/props/puzzle/state/DragInputProp";
-import type { StickeringMask } from "../../puzzles/stickerings/mask";
-import type { InitialHintFaceletsAnimation } from "../model/props/puzzle/display/InitialHintFaceletsAnimationProp";
-import type { FaceletScale } from "../model/props/puzzle/display/FaceletScaleProp";
 
 function err(propName: string): Error {
   return new Error(
@@ -114,6 +115,14 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
     this.experimentalModel.twistySceneModel.background.set(backgroundTheme);
   }
   get background(): never {
+    throw err("background");
+  }
+
+  set darkMode(darkMode: DarkModeThemeWithAuto) {
+    console.log("darkMode", darkMode);
+    this.experimentalModel.twistySceneModel.darkModeRequest.set(darkMode);
+  }
+  get darkMode(): never {
     throw err("background");
   }
 

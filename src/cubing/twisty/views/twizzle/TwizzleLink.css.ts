@@ -69,7 +69,8 @@ export const twizzleLinkForumTweaksCSS = new CSSSource(`
 }
 
 .wrapper.dark-mode .heading {
-  background: #1d1d1d
+  background: #1d1d1d;
+  color: #ececec;
 }
 
 .heading.title {

@@ -73,6 +73,7 @@ export class TwizzleLinkNested extends ManagedCustomElement {
           background: this.options?.cdnForumTweaks
             ? "checkered-transparent"
             : "checkered",
+          darkMode: this.options?.darkMode ? "dark" : "light",
           ...config,
           viewerLink: isExplorer ? "experimental-twizzle-explorer" : "auto",
         }),

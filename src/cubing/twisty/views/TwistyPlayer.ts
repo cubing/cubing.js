@@ -20,6 +20,10 @@ import {
   ControlPanelThemeWithAuto,
   controlsLocations,
 } from "../model/props/viewer/ControlPanelProp";
+import type {
+  DarkModeTheme,
+  DarkModeThemeWithAuto,
+} from "../model/props/viewer/DarkModeRequestProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import type { VisualizationStrategy } from "../model/props/viewer/VisualizationStrategyProp";
@@ -59,6 +63,7 @@ export const twistyPlayerAttributeMap = {
   "experimental-stickering": "experimentalStickering",
   "experimental-stickering-mask-orbits": "experimentalStickeringMaskOrbits",
   background: "background",
+  "dark-mode": "darkMode",
   "control-panel": "controlPanel",
   "back-view": "backView",
   "experimental-initial-hint-facelets-animation":
@@ -135,6 +140,7 @@ export interface TwistyPlayerConfig {
   experimentalStickering?: ExperimentalStickering;
   experimentalStickeringMaskOrbits?: ExperimentalStickeringMask | string;
   background?: BackgroundThemeWithAuto;
+  darkMode?: DarkModeThemeWithAuto;
   controlPanel?: ControlPanelThemeWithAuto;
   backView?: BackViewLayoutWithAuto;
   experimentalInitialHintFaceletsAnimation?: InitialHintFaceletsAnimation;
@@ -270,6 +276,15 @@ export class TwistyPlayer
         this.contentWrapper.classList.toggle(
           "checkered-transparent",
           backgroundTheme === "checkered-transparent",
+        );
+      },
+    );
+
+    this.experimentalModel.twistySceneModel.darkMode.addFreshListener(
+      (darkModeTheme: DarkModeTheme) => {
+        this.contentWrapper.classList.toggle(
+          "dark-mode",
+          ["dark"].includes(darkModeTheme),
         );
       },
     );

@@ -55,6 +55,12 @@ twisty-scrubber {
     linear-gradient(45deg, #DDDDDD88 25%, transparent 25%, transparent 75%, #DDDDDD88 75%, #DDDDDD88);
 }
 
+.wrapper.dark-mode {
+  background-color: #444;
+  background-image: linear-gradient(45deg, #DDDDDD0b 25%, transparent 25%, transparent 75%, #DDDDDD0b 75%, #DDDDDD0b),
+    linear-gradient(45deg, #DDDDDD0b 25%, transparent 25%, transparent 75%, #DDDDDD0b 75%, #DDDDDD0b);
+}
+
 .visualization-wrapper > * {
   width: 100%;
   height: 100%;

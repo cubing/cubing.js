@@ -65,10 +65,18 @@ button:enabled {
   background-color: rgba(196, 196, 196, 0.75)
 }
 
+.dark-mode button:enabled {
+  background-color: #88888888;
+}
+
 button:disabled {
   background-color: rgba(0, 0, 0, 0.4);
   opacity: 0.25;
   pointer-events: none;
+}
+
+.dark-mode button:disabled {
+  background-color: #ffffff44;
 }
 
 button:enabled:hover {
