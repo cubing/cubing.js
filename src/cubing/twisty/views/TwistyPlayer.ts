@@ -134,7 +134,7 @@ export interface TwistyPlayerConfig {
   hintFacelets?: HintFaceletStyleWithAuto;
   experimentalStickering?: ExperimentalStickering;
   experimentalStickeringMaskOrbits?: ExperimentalStickeringMask | string;
-  background?: BackViewLayoutWithAuto;
+  background?: BackgroundThemeWithAuto;
   controlPanel?: ControlPanelThemeWithAuto;
   backView?: BackViewLayoutWithAuto;
   experimentalInitialHintFaceletsAnimation?: InitialHintFaceletsAnimation;
@@ -262,9 +262,14 @@ export class TwistyPlayer
 
     this.experimentalModel.twistySceneModel.background.addFreshListener(
       (backgroundTheme: BackgroundThemeWithAuto) => {
+        console.log({ backgroundTheme });
         this.contentWrapper.classList.toggle(
           "checkered",
-          backgroundTheme !== "none",
+          ["auto", "checkered"].includes(backgroundTheme),
+        );
+        this.contentWrapper.classList.toggle(
+          "checkered-transparent",
+          backgroundTheme === "checkered-transparent",
         );
       },
     );
