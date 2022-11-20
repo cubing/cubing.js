@@ -14,6 +14,6 @@ export class DarkModeProp extends TwistyPropDerived<
 > {
   protected derive(inputs: DarkModePropInputs): DarkModeTheme {
     // TODO: Once the theme is ready, use `prefers-color-scheme` for automatic dark mode by default.
-    return inputs.darkModeRequest === "auto" ? "light" : "dark";
+    return inputs.darkModeRequest === "dark" ? "dark" : "light";
   }
 }
