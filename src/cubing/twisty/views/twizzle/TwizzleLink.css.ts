@@ -66,6 +66,7 @@ export const twizzleLinkForumTweaksCSS = new CSSSource(`
   background: #262626;
   color: #929292;
   border-color: #FFFFFF44;
+  color-scheme: dark;
 }
 
 .wrapper.dark-mode .heading {
