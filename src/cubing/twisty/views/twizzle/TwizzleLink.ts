@@ -35,7 +35,6 @@ export class TwizzleLink extends ManagedCustomElement {
   #cssCDNForumTweaksElem: HTMLStyleElement | undefined;
   #scrollableRegion: HTMLDivElement;
   async connectedCallback() {
-    console.log(this.options?.darkMode);
     if (this.options?.darkMode) {
       this.contentWrapper.classList.add("dark-mode");
     }

@@ -119,7 +119,6 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
   }
 
   set darkMode(darkMode: DarkModeThemeWithAuto) {
-    console.log("darkMode", darkMode);
     this.experimentalModel.twistySceneModel.darkModeRequest.set(darkMode);
   }
   get darkMode(): never {

@@ -268,7 +268,6 @@ export class TwistyPlayer
 
     this.experimentalModel.twistySceneModel.background.addFreshListener(
       (backgroundTheme: BackgroundThemeWithAuto) => {
-        console.log({ backgroundTheme });
         this.contentWrapper.classList.toggle(
           "checkered",
           ["auto", "checkered"].includes(backgroundTheme),
