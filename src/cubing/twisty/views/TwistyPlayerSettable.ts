@@ -122,7 +122,7 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
     this.experimentalModel.twistySceneModel.darkModeRequest.set(darkMode);
   }
   get darkMode(): never {
-    throw err("background");
+    throw err("darkMode");
   }
 
   set controlPanel(newControlPanel: ControlPanelThemeWithAuto) {
