@@ -245,6 +245,13 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
     throw err("experimentalHintSprite");
   }
 
+  set fullscreenElement(element: Element | null) {
+    this.experimentalModel.twistySceneModel.fullscreenElement.set(element);
+  }
+  get fullscreenElement(): never {
+    throw err("fullscreenElement");
+  }
+
   set experimentalInitialHintFaceletsAnimation(anim: InitialHintFaceletsAnimation) {
     this.experimentalModel.twistySceneModel.initialHintFaceletsAnimation.set(
       anim,

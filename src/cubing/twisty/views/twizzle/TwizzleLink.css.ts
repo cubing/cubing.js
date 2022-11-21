@@ -45,6 +45,15 @@ twisty-player + .heading {
 twisty-alg-viewer {
   display: inline-block;
 }
+
+.wrapper:fullscreen {
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper:fullscreen twisty-player {
+  height: 50vh;
+}
 `,
 );
 

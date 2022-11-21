@@ -77,6 +77,7 @@ export class TwizzleLink extends ManagedCustomElement {
           viewerLink: isExplorer ? "experimental-twizzle-explorer" : "auto",
         }),
       );
+      this.twistyPlayer.fullscreenElement = this.contentWrapper;
 
       this.#scrollableRegion = this.addElement(document.createElement("div"));
       this.#scrollableRegion.classList.add("scrollable-region");

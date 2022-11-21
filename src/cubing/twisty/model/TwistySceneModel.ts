@@ -13,6 +13,7 @@ import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 import { BackgroundProp } from "./props/viewer/BackgroundProp";
 import { DarkModeProp } from "./props/viewer/DarkModeProp";
 import { DarkModeRequstProp } from "./props/viewer/DarkModeRequestProp";
+import { DOMElementReferenceProp } from "./props/viewer/DOMElementReferenceProp";
 import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
 import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
 import { OrbitCoordinatesRequestProp } from "./props/viewer/OrbitCoordinatesRequestProp";
@@ -25,6 +26,7 @@ export class TwistySceneModel {
   dragInput = new DragInputProp();
   foundationDisplay = new FoundationDisplayProp();
   foundationStickerSpriteURL = new URLProp();
+  fullscreenElement = new DOMElementReferenceProp();
   hintFacelet = new HintFaceletProp();
   hintStickerSpriteURL = new URLProp();
   initialHintFaceletsAnimation = new InitialHintFaceletsAnimationProp();

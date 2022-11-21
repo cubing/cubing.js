@@ -36,7 +36,7 @@ export class TwistyButtons extends ManagedCustomElement {
   constructor(
     public model?: TwistyPlayerModel,
     public controller?: TwistyPlayerController,
-    private fullscreenElement?: HTMLElement,
+    private defaultFullscreenElement?: HTMLElement,
   ) {
     super();
   }
@@ -104,20 +104,23 @@ export class TwistyButtons extends ManagedCustomElement {
   // TODO: Should we have a prop, or a way to query if we're fullscreen?
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
   async onFullscreenButton(): Promise<void> {
-    if (!this.fullscreenElement) {
+    if (!this.defaultFullscreenElement) {
       throw new Error("Attempted to go fullscreen without an element.");
     }
 
-    if (documentFullscreenElement() === this.fullscreenElement) {
+    if (documentFullscreenElement() === this.defaultFullscreenElement) {
       documentExitFullscreen();
     } else {
       // TODO: Propagate button info to `ButtonAppearanceProp`.
       this.buttons?.fullscreen.setIcon("exit-fullscreen");
 
-      requestFullscreen(this.fullscreenElement);
+      requestFullscreen(
+        (await this.model?.twistySceneModel.fullscreenElement.get()) ??
+          this.defaultFullscreenElement,
+      );
 
       const onFullscreen = (): void => {
-        if (documentFullscreenElement() !== this.fullscreenElement) {
+        if (documentFullscreenElement() !== this.defaultFullscreenElement) {
           this.buttons?.fullscreen.setIcon("enter-fullscreen");
           window.removeEventListener("fullscreenchange", onFullscreen);
         }
