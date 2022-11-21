@@ -54,6 +54,10 @@ twisty-alg-viewer {
 .wrapper:fullscreen twisty-player {
   height: 50vh;
 }
+
+.wrapper:fullscreen .scrollable-region {
+  height: 50vh
+}
 `,
 );
 
