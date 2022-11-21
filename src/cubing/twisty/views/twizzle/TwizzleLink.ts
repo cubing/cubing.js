@@ -78,6 +78,9 @@ export class TwizzleLink extends ManagedCustomElement {
         }),
       );
       this.twistyPlayer.fullscreenElement = this.contentWrapper;
+      if (config.experimentalTitle) {
+        this.twistyPlayer.experimentalTitle = config.experimentalTitle;
+      }
 
       this.#scrollableRegion = this.addElement(document.createElement("div"));
       this.#scrollableRegion.classList.add("scrollable-region");

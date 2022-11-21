@@ -193,6 +193,7 @@ export class TwistyPlayerModel {
       setup,
       anchor,
       experimentalStickeringRequest,
+      experimentalTitle,
     ] = await Promise.all([
       this.viewerLink.get(),
       this.puzzleID.get(),
@@ -201,6 +202,7 @@ export class TwistyPlayerModel {
       this.setupAlg.get(),
       this.setupAnchor.get(),
       this.twistySceneModel.stickeringRequest.get(),
+      this.twistySceneModel.twistyPlayerModel.title.get(),
     ]);
 
     const isExplorer = viewerLink === "experimental-twizzle-explorer";
@@ -231,6 +233,9 @@ export class TwistyPlayerModel {
       url.searchParams.set("puzzle-description", puzzleDescription);
     } else if (puzzleID !== "3x3x3") {
       url.searchParams.set("puzzle", puzzleID);
+    }
+    if (experimentalTitle) {
+      url.searchParams.set("title", experimentalTitle);
     }
     return url.toString();
   }
