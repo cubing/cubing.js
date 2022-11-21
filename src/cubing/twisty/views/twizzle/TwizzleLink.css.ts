@@ -49,14 +49,14 @@ twisty-alg-viewer {
 .wrapper:fullscreen {
   width: 100%;
   height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
 }
 
-.wrapper:fullscreen twisty-player {
-  height: 50vh;
-}
-
+.wrapper:fullscreen twisty-player,
 .wrapper:fullscreen .scrollable-region {
-  height: 50vh
+  height: unset;
+  max-height: unset
 }
 `,
 );
