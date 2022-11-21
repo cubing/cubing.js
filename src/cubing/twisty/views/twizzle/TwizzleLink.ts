@@ -145,18 +145,18 @@ export class TwizzleLink extends ManagedCustomElement {
       }
       a.addEventListener("click", async (e) => {
         e.preventDefault();
-        a.textContent = "📋…";
+        a.textContent = "…📋";
         const textToCopy = await getTextToCopy();
         if (textToCopy) {
           try {
             await navigator.clipboard.writeText(textToCopy);
-            setAndClear("📋✅");
+            setAndClear("✅📋");
           } catch (e) {
-            setAndClear("📋❌");
+            setAndClear("❌📋");
             throw e;
           }
         } else {
-          setAndClear("📋❌");
+          setAndClear("❌📋");
         }
       });
     }
