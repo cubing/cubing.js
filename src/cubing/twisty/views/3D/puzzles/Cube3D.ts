@@ -5,6 +5,7 @@ import {
   BufferGeometry,
   DoubleSide,
   Euler,
+  FrontSide,
   Group,
   Matrix4,
   Mesh,
@@ -89,11 +90,11 @@ class AxisInfo {
     this.stickerMaterial = {
       regular: new MeshBasicMaterial({
         color,
-        side: DoubleSide,
+        side: FrontSide, // TODO: set to `DoubleSide` when hint facelets are disabled.
       }),
       dim: new MeshBasicMaterial({
         color: dimColor,
-        side: DoubleSide,
+        side: FrontSide, // TODO: set to `DoubleSide` when hint facelets are disabled.
       }),
       oriented: orientedMaterial,
       ignored: ignoredMaterial,
