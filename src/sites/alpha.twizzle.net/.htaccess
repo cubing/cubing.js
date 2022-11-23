@@ -1,6 +1,6 @@
 # Security headers
 Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" env=HTTPS
-Header always set Content-Security-Policy "default-src self alpha.twizzle.net; img-src self data: alpha.twizzle.net; script-src self alpha.twizzle.net; style-src unsafe-inline; frame-src https://www.youtube.com; frame-ancestors 'none'" env=HTTPS
+Header always set Content-Security-Policy "default-src self alpha.twizzle.net; img-src self data: alpha.twizzle.net; script-src self alpha.twizzle.net; style-src 'unsafe-inline' alpha.twizzle.net; frame-src https://www.youtube.com; frame-ancestors 'none'" env=HTTPS
 Header always set X-Content-Type-Options "nosniff" env=HTTPS
 Header always set X-Frame-Options "DENY" env=HTTPS
 Header always set X-XSS-Protection "0" env=HTTPS
