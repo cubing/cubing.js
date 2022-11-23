@@ -38,7 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
     setTwistyDebug({ showRenderStats: true });
   }
 
-  if (getRawBooleanURLParam("debug-carat-niss-notation", false)) {
+  if (getRawBooleanURLParam("debug-carat-niss-notation", true)) {
     setAlgDebug({ caratNISSNotationEnabled: true });
   }
 
