@@ -159,8 +159,8 @@ export class Twisty3DVantage extends ManagedCustomElement {
 
       canvasInfo.canvas.width = w * pixelRatio();
       canvasInfo.canvas.height = h * pixelRatio();
-      canvasInfo.canvas.style.width = w.toString();
-      canvasInfo.canvas.style.height = h.toString();
+      canvasInfo.canvas.style.width = `${w.toString()}px`;
+      canvasInfo.canvas.style.height = `${h.toString()}px`;
     } else {
       const renderer = await this.renderer();
       renderer.setSize(w, h, true);
