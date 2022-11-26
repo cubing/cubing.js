@@ -174,18 +174,3 @@ declare global {
     "twizzle-link": TwizzleLink;
   }
 }
-export class TwizzleForumLink extends TwizzleLink {
-  constructor() {
-    super({
-      cdnForumTweaks: true,
-      darkMode: document.documentElement.classList.contains("style-dark"),
-    });
-  }
-}
-
-customElementsShim.define("twizzle-forum-link", TwizzleForumLink);
-declare global {
-  interface HTMLElementTagNameMap {
-    "twizzle-forum-link": TwizzleForumLink;
-  }
-}

@@ -30,7 +30,7 @@ export type {
   VisualizationFormat,
 } from "./model/props/viewer/VisualizationProp";
 
-export { TwizzleForumLink as TwizzleLink } from "./views/twizzle/TwizzleLink";
+export { TwizzleLink } from "./views/twizzle/TwizzleLink";
 
 export type {
   MillisecondTimestamp as ExperimentalMillisecondTimestamp,
