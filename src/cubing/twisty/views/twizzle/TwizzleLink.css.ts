@@ -82,7 +82,7 @@ export const twizzleLinkForumTweaksCSS = new CSSSource(`
   color-scheme: dark;
 }
 
-.wrapper.dark-mode .heading {
+.wrapper.dark-mode .heading:not(.title) {
   background: #1d1d1d;
   color: #ececec;
 }
