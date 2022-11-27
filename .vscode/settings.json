@@ -4,5 +4,8 @@
   "[typescript]": {
     "editor.defaultFormatter": "rome.rome"
   },
-  "rome.lspBin": "./node_modules/.bin/rome"
+  "rome.lspBin": "./node_modules/.bin/rome",
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
 }

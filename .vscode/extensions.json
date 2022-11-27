@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "rome.rome"
+  ],
+  "unwantedRecommendations": [
+    "ms-vscode-remote.remote-containers"
+  ]
+}
