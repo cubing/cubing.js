@@ -222,7 +222,7 @@ export const staticPackageMetadataTarget = {
         const typesJS = `export * from "../../types/${folderBasename}";\n`;
         const typesJSFolder = join("./dist/esm/", folder);
         const typesJSFilePath = join(typesJSFolder, "index.d.ts");
-        if (!(await exists(typesJSFolder))) {
+        if (!(await existsSync(typesJSFolder))) {
           await mkdir(typesJSFolder, { recursive: true });
         }
         console.log(`Writing: ${typesJSFilePath}`);
