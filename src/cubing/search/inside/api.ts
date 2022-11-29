@@ -1,7 +1,13 @@
 import type { Alg } from "../../alg";
-import type { KStateData } from "../../kpuzzle";
+import { KPuzzle, KPuzzleDefinition, KStateData } from "../../kpuzzle";
 import { KState } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
+import {
+  serializeDefToTws,
+  serializeKTransformationDataToTws,
+  setKPuzzleDefString,
+  solveState,
+} from "../../vendor/twsearch";
 import { setIsInsideWorker } from "./inside-worker";
 import {
   preInitialize222,
@@ -258,6 +264,20 @@ export const insideAPI = {
 
   setDebugMeasurePerf: async (measure: boolean): Promise<void> => {
     setDebugMeasurePerf(measure);
+  },
+
+  solveTwsearch: async (
+    def: KPuzzleDefinition,
+    stateData: KStateData,
+    options?: { moveSubset?: string[]; startState?: KStateData },
+  ): Promise<string> => {
+    const kpuzzle = new KPuzzle(def);
+    await setKPuzzleDefString(serializeDefToTws(kpuzzle, options));
+    return (
+      await solveState(
+        serializeKTransformationDataToTws("SearchState", stateData, true),
+      )
+    ).toString();
   },
 };
 

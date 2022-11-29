@@ -1,4 +1,5 @@
 import { Alg } from "../alg";
+import type { KPuzzle, KStateData } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import type { KState } from "../kpuzzle/KState";
 import type { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
@@ -104,6 +105,23 @@ export async function solvePyraminx(state: KState): Promise<Alg> {
 export async function solveMegaminx(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
   return Alg.fromString(await cwi.solveMegaminxToString(state.stateData));
+}
+
+export async function solveTwsearch(
+  kpuzzle: KPuzzle,
+  state: KState,
+  options?: { moveSubset?: string[]; startState?: KState },
+): Promise<Alg> {
+  const cwi = await getCachedWorkerInstance();
+  const apiOptions: { moveSubset?: string[]; startState?: KStateData } = {
+    moveSubset: options?.moveSubset,
+  };
+  if (options?.startState) {
+    apiOptions.startState = options.startState.stateData;
+  }
+  return Alg.fromString(
+    await cwi.solveTwsearch(kpuzzle.definition, state.stateData, apiOptions),
+  );
 }
 
 interface SearchOutsideDebugGlobals {

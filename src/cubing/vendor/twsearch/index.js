@@ -1,5 +1,5 @@
 // src/js/api.ts
-import { Alg } from "cubing/alg";
+import { Alg } from "../../../cubing/alg";
 async function importOnce() {
   const fn = (await import("./twsearch-KX2MXVDL.js")).default;
   return await fn();
