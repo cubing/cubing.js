@@ -1,5 +1,10 @@
 import type { Alg } from "../../alg";
-import { KPuzzle, KPuzzleDefinition, KStateData } from "../../kpuzzle";
+import {
+  KPuzzle,
+  KPuzzleDefinition,
+  KStateData,
+  KTransformationData,
+} from "../../kpuzzle";
 import { KState } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import {
@@ -268,8 +273,8 @@ export const insideAPI = {
 
   solveTwsearch: async (
     def: KPuzzleDefinition,
-    stateData: KStateData,
-    options?: { moveSubset?: string[]; startState?: KStateData },
+    stateData: KTransformationData,
+    options?: { moveSubset?: string[]; startState?: KTransformationData },
   ): Promise<string> => {
     const kpuzzle = new KPuzzle(def);
     await setKPuzzleDefString(serializeDefToTws(kpuzzle, options));

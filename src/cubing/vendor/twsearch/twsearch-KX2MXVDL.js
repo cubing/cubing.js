@@ -33,10 +33,10 @@ var Module = (() => {
       err("exiting due to exception: " + toLog);
     }
     if (ENVIRONMENT_IS_NODE) {
-      const { createRequire } = await import("module");
+      const { createRequire } = await import("node:module");
       var require2 = createRequire(import.meta.url);
-      var fs = require2("fs");
-      var nodePath = require2("path");
+      var fs = require2("node:fs");
+      var nodePath = require2("node:path");
       if (ENVIRONMENT_IS_WORKER) {
         scriptDirectory = nodePath.dirname(scriptDirectory) + "/";
       } else {

@@ -34,7 +34,7 @@ export const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
     }
   : {};
 
-const external = ["three", "comlink", "random-uint-below"];
+const external = ["three", "comlink", "random-uint-below", "node:*"];
 
 function plugins(dev) {
   const plugins = [];
@@ -79,6 +79,7 @@ function siteOptions(srcFolder, dev) {
       target: "es2020",
       plugins: plugins(dev),
       minify: !dev,
+      external: ["node:*"], // TODO
       supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
     },
   };
@@ -187,6 +188,7 @@ export const searchWorkerTarget = {
       watch,
       write: false,
       logLevel: "info",
+      external: ["node:*"],
       minify: !dev,
     });
     // Note that we finish writing the initial built file before we return.

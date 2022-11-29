@@ -1,5 +1,5 @@
 import { Alg } from "../alg";
-import type { KPuzzle, KStateData } from "../kpuzzle";
+import type { KPuzzle, KStateData, KTransformationData } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import type { KState } from "../kpuzzle/KState";
 import type { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
@@ -113,14 +113,25 @@ export async function solveTwsearch(
   options?: { moveSubset?: string[]; startState?: KState },
 ): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  const apiOptions: { moveSubset?: string[]; startState?: KStateData } = {
+  const apiOptions: {
+    moveSubset?: string[];
+    startState?: KTransformationData;
+  } = {
     moveSubset: options?.moveSubset,
   };
   if (options?.startState) {
-    apiOptions.startState = options.startState.stateData;
+    apiOptions.startState =
+      options.startState.experimentalToTransformation()!.transformationData;
   }
+  const { ...def } = kpuzzle.definition;
+  delete def.experimentalIsStateSolved;
+  delete def.experimentalDerivedMoves;
   return Alg.fromString(
-    await cwi.solveTwsearch(kpuzzle.definition, state.stateData, apiOptions),
+    await cwi.solveTwsearch(
+      def,
+      state.experimentalToTransformation()!.transformationData,
+      apiOptions,
+    ),
   );
 }
 
