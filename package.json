@@ -149,7 +149,8 @@
     "postpublish": "make postpublish",
     "deploy": "make deploy",
     "deploy-twizzle": "make deploy-twizzle",
-    "deploy-experiments": "make deploy-experiments"
+    "deploy-experiments": "make deploy-experiments",
+    "vendor-twsearch": "make vendor-twsearch"
   },
   "keywords": [
     "cubing",
