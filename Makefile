@@ -170,6 +170,13 @@ deploy-twizzle: build-site-twizzle
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
 	${NODE} script/deploy/experiments.js
+.PHONY: vendor-twsearch
+vendor-twsearch:
+	test -d ../twsearch/ || exit
+	cd ../twsearch/ && make clean build/esm
+	rm -rf src/cubing/vendor/twsearch/*
+	cp -R ../twsearch/build/esm/* src/cubing/vendor/twsearch/
+
 
 ######## Only in `Makefile` ########
 
@@ -178,9 +185,11 @@ node_modules:
 	${NODE} ./script/quick-setup/main.js
 
 .PHONY: publish
+.PHONY: publish
 publish:
 	npm publish
 
+.PHONY: pack
 .PHONY: pack
 pack:
 	# Note that we need to use `./dist/` rather than `./dist/pack/`, because `make
