@@ -166,10 +166,10 @@ postpublish:
 deploy: deploy-twizzle deploy-experiments
 .PHONY: deploy-twizzle
 deploy-twizzle: build-site-twizzle
-	node script/deploy/twizzle.js
+	${NODE} script/deploy/twizzle.js
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
-	node script/deploy/experiments.js
+	${NODE} script/deploy/experiments.js
 
 ######## Only in `Makefile` ########
 
