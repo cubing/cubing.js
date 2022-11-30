@@ -1,3 +1,6 @@
+const module_mangled = "node:m-odu-le";
+const module_unmangled = () => module_mangled.replace(/-/g, "");
+
 // build/wasm-single-file/twsearch.mjs
 var Module = (() => {
   var _scriptDir = import.meta.url;
@@ -33,7 +36,7 @@ var Module = (() => {
       err("exiting due to exception: " + toLog);
     }
     if (ENVIRONMENT_IS_NODE) {
-      const { createRequire } = await import("module");
+      const { createRequire } = await import(module_unmangled());
       var require2 = createRequire(import.meta.url);
       var fs = require2("fs");
       var nodePath = require2("path");
