@@ -172,10 +172,18 @@ deploy-experiments: build-site-experiments
 	${NODE} script/deploy/experiments.js
 .PHONY: vendor-twsearch
 vendor-twsearch:
-	test -d ../twsearch/ || exit
-	cd ../twsearch/ && make clean build/esm
-	rm -rf src/cubing/vendor/twsearch/*
-	cp -R ../twsearch/build/esm/* src/cubing/vendor/twsearch/
+	# test -d ../twsearch/ || exit
+	# cd ../twsearch/ && make clean build/esm
+	# rm -rf src/cubing/vendor/twsearch/*
+	# cp -R ../twsearch/build/esm/* src/cubing/vendor/twsearch/
+	@echo ""
+	@echo "Please follow up with the following:"
+	@echo ""
+	@echo "1. Fix the import of \`cubing/alg\`"
+	@echo "2. Mangle the import of \`\"node:modules\"\`"
+	@echo ""
+	@echo "For reference, see: https://github.com/cubing/cubing.js/commit/7caacb95b38208e7e0b1ee5aead9220c947e047d"
+	@echo ""
 
 
 ######## Only in `Makefile` ########

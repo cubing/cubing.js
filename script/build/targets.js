@@ -34,7 +34,7 @@ export const ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED = PUBLISH_WITH_PRIVATE_FIELDS
     }
   : {};
 
-const external = ["three", "comlink", "random-uint-below", "node:*"];
+const external = ["three", "comlink", "random-uint-below"];
 
 function plugins(dev) {
   const plugins = [];
