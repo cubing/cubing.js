@@ -3,7 +3,9 @@
     "indentStyle": "space",
     "indentSize": 2,
     "ignore": [
-      "./src/cubing/search/search-worker-inside-generated-string.js"
+      "./src/cubing/search/search-worker-inside-generated-string.js",
+      "src/cubing/vendor/twsearch/index.js",
+      "src/cubing/vendor/twsearch/twsearch-AR3QIDYS.js"
     ]
   },
   "linter": {
@@ -20,7 +22,9 @@
       }
     },
     "ignore": [
-      "./src/cubing/search/search-worker-inside-generated-string.js"
+      "./src/cubing/search/search-worker-inside-generated-string.js",
+      "src/cubing/vendor/twsearch/index.js",
+      "src/cubing/vendor/twsearch/twsearch-AR3QIDYS.js"
     ]
   }
 }

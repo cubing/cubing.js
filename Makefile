@@ -170,6 +170,25 @@ deploy-twizzle: build-site-twizzle
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
 	${NODE} script/deploy/experiments.js
+.PHONY: vendor-twsearch
+vendor-twsearch:
+	test -d ../twsearch/ || exit
+	cd ../twsearch/ && make clean build/esm
+	rm -rf src/cubing/vendor/twsearch/*
+	cp -R ../twsearch/build/esm/* src/cubing/vendor/twsearch/
+	@echo ""
+	@echo "Please follow up with the following:"
+	@echo ""
+	@echo "1. Fix the import of \`cubing/alg\`"
+	@echo "2. Mangle the import of \`\"node:modules\"\`"
+	@echo "3. Update the ignore in \`rome.json\`"
+	@echo ""
+	@echo "For reference, see:"
+	@echo ""
+	@echo "1. & 2. https://github.com/cubing/cubing.js/commit/7caacb95b38208e7e0b1ee5aead9220c947e047d"
+	@echo "3. https://github.com/cubing/cubing.js/commit/cd632c219411d378c9554c9cee78507cf96be47d"
+	@echo ""
+
 
 ######## Only in `Makefile` ########
 
@@ -178,9 +197,11 @@ node_modules:
 	${NODE} ./script/quick-setup/main.js
 
 .PHONY: publish
+.PHONY: publish
 publish:
 	npm publish
 
+.PHONY: pack
 .PHONY: pack
 pack:
 	# Note that we need to use `./dist/` rather than `./dist/pack/`, because `make

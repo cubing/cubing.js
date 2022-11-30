@@ -79,6 +79,7 @@ function siteOptions(srcFolder, dev) {
       target: "es2020",
       plugins: plugins(dev),
       minify: !dev,
+      external: ["node:*"], // TODO
       supported: { ...ESM_CLASS_PRIVATE_ESBUILD_SUPPORTED },
     },
   };
@@ -187,6 +188,7 @@ export const searchWorkerTarget = {
       watch,
       write: false,
       logLevel: "info",
+      external: ["node:*"],
       minify: !dev,
     });
     // Note that we finish writing the initial built file before we return.
