@@ -1,7 +1,9 @@
 import { readFile, writeFile } from "fs/promises";
+import { exit } from "process";
 
 const MAKEFILE_PATH = new URL("../../../../Makefile", import.meta.url);
 const PACKAGE_JSON_PATH = new URL("../../../../package.json", import.meta.url);
+const EXPECTED_NON_PHONY_TARGETS = new Set(["node_modules"]);
 
 const fix = process.argv[2] === "--fix";
 
@@ -12,6 +14,7 @@ const SIMPLE_MAKEFILE_TARGET_MATCH = /^([A-Za-z\-]+):/;
 const makefileText = await readFile(MAKEFILE_PATH, "utf-8");
 let inScriptsSection = true;
 const makefileScriptTargets = [];
+let previousLine = "";
 for (const line of makefileText.split("\n")) {
   if (line.includes("Shared with `package.json`")) {
     inScriptsSection = true;
@@ -22,9 +25,32 @@ for (const line of makefileText.split("\n")) {
   if (inScriptsSection) {
     const match = SIMPLE_MAKEFILE_TARGET_MATCH.exec(line);
     if (match) {
-      makefileScriptTargets.push(match[1]);
+      const target = match[1];
+      if (
+        previousLine !== `.PHONY: ${target}` &&
+        !EXPECTED_NON_PHONY_TARGETS.has(target)
+      ) {
+        console.error(
+          `
+The following target is not properly marked as .PHONY: ${target}
+
+This must be fixed by hand. Please do one of the following:
+
+1. Add the following to \`Makefile\` on the line immediately before the target is defined:
+
+.PHONY: ${target}
+
+2. Add "${target}" to \`EXPECTED_NON_PHONY_TARGETS\` in \`${
+            new URL(import.meta.url).pathname
+          }\`
+`,
+        );
+        exit(1);
+      }
+      makefileScriptTargets.push(target);
     }
   }
+  previousLine = line;
 }
 
 const packageJSON = JSON.parse(await readFile(PACKAGE_JSON_PATH, "utf-8"));
