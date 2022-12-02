@@ -1,3 +1,4 @@
+import type { Alg } from "../../../alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
@@ -15,11 +16,13 @@ export interface TwsearchOptions {
   minDepth?: number;
 }
 
+let existingPuzzleDefString: undefined | string;
+
 export async function solveTwsearch(
   def: KPuzzleDefinition,
   stateData: KTransformationData,
   options?: TwsearchOptions,
-): Promise<string> {
+): Promise<Alg> {
   const {
     setArg,
     setKPuzzleDefString,
@@ -40,10 +43,17 @@ export async function solveTwsearch(
     setArg("--randomstart");
     setArg(`--mindepth ${minDepth}`);
   }
-  await setKPuzzleDefString(serializeDefToTws(kpuzzle, options));
-  return (
-    await solveState(
-      serializeKTransformationDataToTws("SearchState", stateData, true),
-    )
-  ).toString();
+
+  const puzzleDefString = serializeDefToTws(kpuzzle, options);
+  if (existingPuzzleDefString && existingPuzzleDefString !== puzzleDefString) {
+    throw new Error(
+      "Attempted to solve two puzzles in the same worker using `twsearch`. This is not currently supported!",
+    );
+  }
+  existingPuzzleDefString = puzzleDefString;
+
+  await setKPuzzleDefString(puzzleDefString);
+  return await solveState(
+    serializeKTransformationDataToTws("SearchState", stateData, true),
+  );
 }
