@@ -1,13 +1,6 @@
 import type { Alg } from "../../alg";
-import {
-  KPuzzle,
-  KPuzzleDefinition,
-  KStateData,
-  KTransformationData,
-} from "../../kpuzzle";
-import { KState } from "../../kpuzzle";
+import { KState, KStateData } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
-import { from } from "../../vendor/p-lazy/p-lazy";
 import { setIsInsideWorker } from "./inside-worker";
 import {
   preInitialize222,
@@ -42,6 +35,7 @@ import {
   solveSkewb,
 } from "./solve/puzzles/skewb";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
+import { solveTwsearch } from "./solve/twsearch";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
 
@@ -180,15 +174,6 @@ export enum PrefetchLevel {
 
 let currentPrefetchLevel = PrefetchLevel.Auto;
 
-export const twsearchPromise: Promise<typeof import("../../vendor/twsearch")> =
-  from(async () => import("../../vendor/twsearch"));
-
-export interface TwsearchOptions {
-  moveSubset?: string[];
-  startState?: KTransformationData;
-  minDepth?: number;
-}
-
 export const insideAPI = {
   initialize: async (eventID: string) => {
     switch (eventID) {
@@ -275,38 +260,7 @@ export const insideAPI = {
     setDebugMeasurePerf(measure);
   },
 
-  solveTwsearch: async (
-    def: KPuzzleDefinition,
-    stateData: KTransformationData,
-    options?: TwsearchOptions,
-  ): Promise<string> => {
-    const {
-      setArg,
-      setKPuzzleDefString,
-      serializeDefToTws,
-      solveState,
-      serializeKTransformationDataToTws,
-    } = await twsearchPromise;
-    const kpuzzle = new KPuzzle(def);
-    if (options && "minDepth" in options) {
-      const { minDepth } = options;
-      if (
-        typeof minDepth !== "number" ||
-        !Number.isInteger(minDepth) ||
-        minDepth < 0
-      ) {
-        throw new Error(`Invalid min depth: ${minDepth}`);
-      }
-      setArg("--randomstart");
-      setArg(`--mindepth ${minDepth}`);
-    }
-    await setKPuzzleDefString(serializeDefToTws(kpuzzle, options));
-    return (
-      await solveState(
-        serializeKTransformationDataToTws("SearchState", stateData, true),
-      )
-    ).toString();
-  },
+  solveTwsearch,
 };
 
 export type WorkerInsideAPI = typeof insideAPI;
