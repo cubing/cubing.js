@@ -1,8 +1,10 @@
 import { randomScrambleForEvent } from "../../../../cubing/search/outside";
 
+const num = parseInt(new URL(location.href).searchParams.get("num") ?? "1000");
+
 const elem = document.querySelector("#results") as HTMLDivElement;
 const latest = document.querySelector("#latest") as HTMLSpanElement;
-const num = document.querySelector("#num") as HTMLSpanElement;
+const numElem = document.querySelector("#num") as HTMLSpanElement;
 const numCancelling = document.querySelector(
   "#num-cancelling",
 ) as HTMLSpanElement;
@@ -14,14 +16,14 @@ const median = document.querySelector("#median") as HTMLSpanElement;
   let total = 0;
   let cancelling = 0;
   const results = [];
-  for (let n = 1; n <= 1000; n++) {
+  for (let n = 1; n <= num; n++) {
     const start = performance.now();
     const scramble = await randomScrambleForEvent("222");
     const ms = Math.floor(performance.now() - start);
     first ??= ms;
     latest.textContent = scramble.toString();
 
-    num.textContent = `${n}`;
+    numElem.textContent = `${n}`;
     numCancelling.textContent = `${cancelling}`;
     elem.textContent += `${ms}ms, `; // This is slow-ish, but we're not measuring it.
     total += ms;
