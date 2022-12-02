@@ -24,7 +24,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [0, 1, 1, 0, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0],
+        orientation: [0, 1, 1, 0, 1, 1, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       FACES: {
         permutation: [
@@ -39,7 +39,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+        orientation: [0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 11, 0, 0],
       },
       FACES: {
         permutation: [
@@ -54,7 +54,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1],
+        orientation: [0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11],
       },
       FACES: {
         permutation: [
@@ -69,7 +69,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0],
+        orientation: [1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0],
       },
       FACES: {
         permutation: [
@@ -84,7 +84,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [1, 1, 1, 1, 1, 1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0],
+        orientation: [1, 1, 1, 1, 1, 1, 0, 0, 0, 11, 0, 11, 0, 0, 0, 0, 0, 0],
       },
       FACES: {
         permutation: [
@@ -99,7 +99,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [0, 1, 1, 0, 1, 1, 0, 1, 1, -1, 0, 0, 0, 0, 0, -1, 0, 0],
+        orientation: [0, 1, 1, 0, 1, 1, 0, 1, 1, 11, 0, 0, 0, 0, 0, 11, 0, 0],
       },
       FACES: {
         permutation: [
@@ -114,7 +114,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, -1, 0, -1],
+        orientation: [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 11, 0, 11],
       },
       FACES: {
         permutation: [
@@ -129,7 +129,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1],
+        orientation: [1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 11, 0, 0, 0, 0, 0, 11],
       },
       FACES: {
         permutation: [
@@ -144,7 +144,7 @@ export const clockJSON: KPuzzleDefinition = {
         permutation: [
           0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
         ],
-        orientation: [1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 0, -1, 0, 0, 0, -1, 0, -1],
+        orientation: [1, 1, 1, 1, 1, 1, 1, 1, 1, 11, 0, 11, 0, 0, 0, 11, 0, 11],
       },
       FACES: {
         permutation: [
