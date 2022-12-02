@@ -150,7 +150,8 @@
     "deploy": "make deploy",
     "deploy-twizzle": "make deploy-twizzle",
     "deploy-experiments": "make deploy-experiments",
-    "vendor-twsearch": "make vendor-twsearch"
+    "vendor-twsearch": "make vendor-twsearch",
+    "update-cdn": "make update-cdn"
   },
   "keywords": [
     "cubing",

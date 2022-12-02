@@ -157,11 +157,7 @@ lint-ci:
 .PHONY: prepack
 prepack: clean test-fast build test-dist-esm-node-import test-dist-esm-plain-esbuild-compat
 .PHONY: postpublish
-postpublish:
-	@echo ""
-	@echo ""
-	@echo "Consider updating \`cdn.cubing.net\` if you have access:"
-	@echo "https://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version"
+postpublish: update-cdn
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
 .PHONY: deploy-twizzle
@@ -177,7 +173,14 @@ vendor-twsearch:
 	rm -rf src/cubing/vendor/twsearch/*
 	cp -R ../twsearch/build/esm/* src/cubing/vendor/twsearch/
 	node script/fix-vendored-twsearch.js
-
+.PHONY: update-cdn
+update-cdn:
+	@echo "--------------------------------"
+	@echo "Updating CDN to the latest \`cubing.js\` release, per:"
+	@echo "https://github.com/cubing/cdn.cubing.net/blob/main/docs/maintenance.md#updating-cdncubingnet-to-a-new-cubing-version"
+	@echo ""
+	test -d ../cdn.cubing.net/ || exit
+	cd ../cdn.cubing.net/ && make roll-cubing
 
 ######## Only in `Makefile` ########
 
