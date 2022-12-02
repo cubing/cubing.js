@@ -1,5 +1,10 @@
 import type { Alg } from "../../alg";
-import { KState, KStateData } from "../../kpuzzle";
+import {
+  KPuzzleDefinition,
+  KState,
+  KStateData,
+  KTransformationData,
+} from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import { setIsInsideWorker } from "./inside-worker";
 import {
@@ -35,7 +40,7 @@ import {
   solveSkewb,
 } from "./solve/puzzles/skewb";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
-import { solveTwsearch } from "./solve/twsearch";
+import { solveTwsearch, TwsearchOptions } from "./solve/twsearch";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
 
@@ -260,7 +265,13 @@ export const insideAPI = {
     setDebugMeasurePerf(measure);
   },
 
-  solveTwsearch,
+  solveTwsearch: async (
+    def: KPuzzleDefinition,
+    stateData: KTransformationData,
+    options?: TwsearchOptions,
+  ): Promise<string> => {
+    return (await solveTwsearch(def, stateData, options)).toString();
+  },
 };
 
 export type WorkerInsideAPI = typeof insideAPI;

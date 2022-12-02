@@ -1,17 +1,13 @@
 import type { Alg } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { KState } from "../../../../kpuzzle";
-import { puzzles } from "../../../../puzzles";
+import { cube2x2x2, puzzles } from "../../../../puzzles";
 import { randomPermuteInPlace, randomUIntBelow } from "random-uint-below";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
-
-// Empirical ly determined depth:
-// - ≈11 moves on average (as opposed to >13 moves for depth 2),
-// - in close to 40ms(on a MacBook Pro).
-const TREMBLE_DEPTH = 3;
+import { solveTwsearch } from "../twsearch";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
 async function getCachedTrembleSolver(): Promise<TrembleSolver> {
@@ -37,9 +33,14 @@ export async function preInitialize222(): Promise<void> {
 // TODO: fix def consistency.
 export async function solve222(state: KState): Promise<Alg> {
   mustBeInsideWorker();
-  const trembleSolver = await getCachedTrembleSolver();
-  const alg = await trembleSolver.solve(state, TREMBLE_DEPTH, () => 4); // TODO: Attach quantum move order lookup to puzzle.
-  return alg;
+  return solveTwsearch(
+    (await cube2x2x2.kpuzzle()).definition,
+    state.experimentalToTransformation()!.transformationData,
+    {
+      moveSubset: "UFLR".split(""),
+      minDepth: 11,
+    },
+  );
 }
 
 // TODO: factor out and test.
