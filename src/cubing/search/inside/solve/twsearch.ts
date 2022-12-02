@@ -42,6 +42,7 @@ export async function solveTwsearch(
     }
     setArg("--randomstart");
     setArg(`--mindepth ${minDepth}`);
+    setArg("--startprunedepth 5");
   }
 
   const puzzleDefString = serializeDefToTws(kpuzzle, options);
