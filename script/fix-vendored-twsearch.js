@@ -14,6 +14,10 @@ for (const fileName of await readdir(DIR)) {
   console.log("Fixing:", filePath);
   let contents = await readFile(filePath, "utf-8");
   switch (fileName) {
+    case ".DS_Store": {
+      // *shakes fist at Apple*
+      break;
+    }
     case "index.js": {
       contents = contents.replace(`"cubing/alg"`, `"../../alg"`);
       break;
