@@ -42,6 +42,7 @@ import { randomScrambleForEvent } from "../../../../cubing/search/outside";
   const scramble222Solution = await experimentalSolveTwsearch(
     kpuzzle2x2x2,
     scramble222Transformation.toKState(),
+    { moveSubset: "ULFR".split("") },
   );
   scramble222.concat(".").concat(scramble222Solution).log();
   if (
