@@ -157,7 +157,7 @@ lint-ci:
 .PHONY: prepack
 prepack: clean test-fast build test-dist-esm-node-import test-dist-esm-plain-esbuild-compat
 .PHONY: postpublish
-postpublish: update-cdn
+postpublish: update-cdn deploy
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
 .PHONY: deploy-twizzle
