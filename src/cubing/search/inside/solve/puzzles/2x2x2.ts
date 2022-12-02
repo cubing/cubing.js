@@ -75,6 +75,7 @@ export async function solve222ForScramble(state: KState): Promise<Alg> {
     {
       moveSubset: "UFLR".split(""),
       minDepth: 11,
+      skipCancelling2x2x2Solutions: true,
     },
   );
 }
