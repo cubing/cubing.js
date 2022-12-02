@@ -1,4 +1,4 @@
-console.info("Loading twsearch v0.3.2");
+console.info("Loading twsearch v0.3.2-1-g8985a950");
 // src/js/api.ts
 import { Alg } from "../../alg";
 async function importOnce() {
@@ -15,6 +15,14 @@ function cwrap(fn, returnType, argTypes, processReturnValue = (v) => v) {
     return processReturnValue((await wrapped)(...args));
   };
 }
+var NoSolutionError = class extends Error {
+};
+function parseResult(s) {
+  if (s === "--no solution--") {
+    throw new NoSolutionError("");
+  }
+  return Alg.fromString(s);
+}
 var stringArg = ["string"];
 var setArg = cwrap(
   "w_arg",
@@ -30,13 +38,13 @@ var solveScramble = cwrap(
   "w_solvescramble",
   "string",
   stringArg,
-  Alg.fromString
+  parseResult
 );
 var solveState = cwrap(
   "w_solveposition",
   "string",
   stringArg,
-  Alg.fromString
+  parseResult
 );
 
 // src/js/serialize.ts
@@ -110,6 +118,7 @@ function serializeDefToTws(kpuzzle, options) {
   return outputLines.join("\n");
 }
 export {
+  NoSolutionError,
   serializeDefToTws,
   serializeKTransformationDataToTws,
   setArg,

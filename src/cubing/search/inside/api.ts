@@ -10,7 +10,7 @@ import { setIsInsideWorker } from "./inside-worker";
 import {
   preInitialize222,
   random222Scramble,
-  solve222,
+  solve222HTMOptimal,
 } from "./solve/puzzles/2x2x2";
 import {
   initialize333,
@@ -243,7 +243,7 @@ export const insideAPI = {
 
   solve222ToString: async (stateData: KStateData): Promise<string> => {
     const state = new KState(await puzzles["2x2x2"].kpuzzle(), stateData);
-    return (await solve222(state)).toString();
+    return (await solve222HTMOptimal(state)).toString();
   },
 
   solveSkewbToString: async (stateData: KStateData): Promise<string> => {

@@ -7,7 +7,8 @@ import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
-import { solveTwsearch } from "../twsearch";
+import { solveTwsearch, twsearchPromise } from "../twsearch";
+import { experimentalNormalize2x2x2Orientation } from "../../../../puzzles/cubing-private";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
 async function getCachedTrembleSolver(): Promise<TrembleSolver> {
@@ -29,9 +30,44 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
 export async function preInitialize222(): Promise<void> {
   await getCachedTrembleSolver();
 }
+// TODO: fix def consistency.
+export async function solve222HTMOptimal(
+  state: KState,
+  maxDepth: number = 11,
+): Promise<Alg> {
+  mustBeInsideWorker();
+  const { normalizedState, normalizationAlg } =
+    experimentalNormalize2x2x2Orientation(state);
+  const orientedResult = await solveTwsearch(
+    (
+      await cube2x2x2.kpuzzle()
+    ).definition,
+    normalizedState.experimentalToTransformation()!.transformationData,
+    {
+      moveSubset: "UFLR".split(""), // TODO: <U, F, R>
+      maxDepth,
+    },
+  );
+  return normalizationAlg.concat(orientedResult);
+}
+
+async function hasHTMSolutionWithFewerMoves(
+  state: KState,
+  filterMin: number,
+): Promise<boolean> {
+  try {
+    (await solve222HTMOptimal(state, filterMin - 1)).log();
+    return true;
+  } catch (e) {
+    if (e instanceof (await twsearchPromise).NoSolutionError) {
+      return false;
+    }
+    throw e;
+  }
+}
 
 // TODO: fix def consistency.
-export async function solve222(state: KState): Promise<Alg> {
+export async function solve222ForScramble(state: KState): Promise<Alg> {
   mustBeInsideWorker();
   return solveTwsearch(
     (await cube2x2x2.kpuzzle()).definition,
@@ -86,5 +122,10 @@ export async function random222State(): Promise<KState> {
 }
 
 export async function random222Scramble(): Promise<Alg> {
-  return await solve222(await random222State());
+  let state = await random222State();
+  while (await hasHTMSolutionWithFewerMoves(state, 4)) {
+    console.info("Filtered out a 2x2x2 state!");
+    state = await random222State();
+  }
+  return (await solve222ForScramble(state)).invert(); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
 }

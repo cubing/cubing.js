@@ -14,9 +14,16 @@ export interface TwsearchOptions {
   moveSubset?: string[];
   startState?: KTransformationData;
   minDepth?: number;
+  maxDepth?: number;
 }
 
 let existingPuzzleDefString: undefined | string;
+
+function mustBeNaturalNumber(meaning: string, n: number): void {
+  if (typeof n !== "number" || !Number.isInteger(n) || n < 0) {
+    throw new Error(`Invalid ${meaning}: ${n}`);
+  }
+}
 
 export async function solveTwsearch(
   def: KPuzzleDefinition,
@@ -31,18 +38,25 @@ export async function solveTwsearch(
     serializeKTransformationDataToTws,
   } = await twsearchPromise;
   const kpuzzle = new KPuzzle(def);
-  if (options && "minDepth" in options) {
-    const { minDepth } = options;
-    if (
-      typeof minDepth !== "number" ||
-      !Number.isInteger(minDepth) ||
-      minDepth < 0
-    ) {
-      throw new Error(`Invalid min depth: ${minDepth}`);
+  setArg("--startprunedepth 5"); // TODO
+  if (options) {
+    let { minDepth, maxDepth } = options;
+    if (typeof minDepth !== "undefined") {
+      mustBeNaturalNumber("minDepth", minDepth);
+      if (typeof maxDepth !== "undefined") {
+        mustBeNaturalNumber("maxDepth", maxDepth);
+      } else {
+        maxDepth = 1000000;
+      }
+
+      setArg("--randomstart");
+      setArg(`--mindepth ${minDepth}`);
+      setArg(`--maxdepth ${maxDepth}`);
+    } else if (typeof maxDepth !== "undefined") {
+      mustBeNaturalNumber("maxDepth", maxDepth);
+      setArg("--mindepth 0");
+      setArg(`--maxdepth ${maxDepth}`);
     }
-    setArg("--randomstart");
-    setArg(`--mindepth ${minDepth}`);
-    setArg("--startprunedepth 5");
   }
 
   const puzzleDefString = serializeDefToTws(kpuzzle, options);
