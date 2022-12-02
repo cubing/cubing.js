@@ -1,18 +1,25 @@
 import { KState } from "../../../../cubing/kpuzzle";
-import { cube3x3x3 } from "../../../../cubing/puzzles";
-import { solveTwsearch } from "../../../../cubing/search/outside";
+import { cube2x2x2, cube3x3x3 } from "../../../../cubing/puzzles";
+import { experimentalSolveTwsearch } from "../../../../cubing/search";
+import { randomScrambleForEvent } from "../../../../cubing/search/outside";
 
 (async () => {
-  const kpuzzle = await cube3x3x3.kpuzzle();
-  const twoGen = kpuzzle
+  const kpuzzle3x3x3 = await cube3x3x3.kpuzzle();
+  const twoGen = kpuzzle3x3x3
     .algToTransformation(
       "R U R U' R U' R U' R U' R' U' R U R U R U R' U' R' U R' U' R' U' R U R' U R U R' U' R U' R' U R' U' R U' R U' R U' R U R U R' U R' U' R U' R U' R U",
     )
     .toKState();
-  (await solveTwsearch(kpuzzle, twoGen, { moveSubset: ["U", "R"] })).log();
+  (
+    await experimentalSolveTwsearch(kpuzzle3x3x3, twoGen, {
+      moveSubset: ["U", "R"],
+    })
+  ).log();
 
-  const solvedState = kpuzzle.identityTransformation().toKState().stateData;
-  const twoFlip = new KState(kpuzzle, {
+  const solvedState = kpuzzle3x3x3
+    .identityTransformation()
+    .toKState().stateData;
+  const twoFlip = new KState(kpuzzle3x3x3, {
     ...solvedState,
     EDGES: {
       ...solvedState["EDGES"],
@@ -20,6 +27,28 @@ import { solveTwsearch } from "../../../../cubing/search/outside";
     },
   });
   (
-    await solveTwsearch(kpuzzle, twoFlip, { moveSubset: ["U", "F", "R"] })
+    await experimentalSolveTwsearch(kpuzzle3x3x3, twoFlip, {
+      moveSubset: ["U", "F", "R"],
+    })
   ).log();
+
+  const scramble222 = await randomScrambleForEvent("222");
+  scramble222.log();
+  (await randomScrambleForEvent("333")).log();
+
+  const kpuzzle2x2x2 = await cube2x2x2.kpuzzle();
+  const scramble222Transformation =
+    kpuzzle2x2x2.algToTransformation(scramble222);
+  const scramble222Solution = await experimentalSolveTwsearch(
+    kpuzzle2x2x2,
+    scramble222Transformation.toKState(),
+  );
+  scramble222.concat(".").concat(scramble222Solution).log();
+  if (
+    !scramble222Transformation
+      .applyAlg(scramble222Solution)
+      .isIdentical(kpuzzle2x2x2.identityTransformation())
+  ) {
+    throw new Error("Invalid solution!");
+  }
 })();
