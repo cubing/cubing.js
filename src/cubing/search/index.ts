@@ -5,6 +5,7 @@ export {
   solvePyraminx,
   solveMegaminx,
   setDebug,
+  solveTwsearch as experimentalSolveTwsearch,
 } from "./outside";
 
 // TODO: handle centers properly.
