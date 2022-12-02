@@ -1,4 +1,4 @@
-console.info("Loading twsearch v0.3.1-4-g2274cf06");
+console.info("Loading twsearch v0.3.2");
 // src/js/api.ts
 import { Alg } from "../../alg";
 async function importOnce() {
