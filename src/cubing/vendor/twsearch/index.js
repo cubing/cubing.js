@@ -1,8 +1,8 @@
-console.info("Loading twsearch v0.3.1-1-gfe6934f5");
+console.info("Loading twsearch v0.3.1-2-gca84fdc3");
 // src/js/api.ts
 import { Alg } from "../../alg";
 async function importOnce() {
-  const fn = (await import("./twsearch-3VIDM5NB.js")).default;
+  const fn = (await import("./twsearch-AX3PCK5B.js")).default;
   return await fn();
 }
 var cachedEmscriptenModule = null;
@@ -16,8 +16,8 @@ function cwrap(fn, returnType, argTypes, processReturnValue = (v) => v) {
   };
 }
 var stringArg = ["string"];
-var setArgs = cwrap(
-  "w_args",
+var setArg = cwrap(
+  "w_arg",
   "void",
   stringArg
 );
@@ -112,7 +112,7 @@ function serializeDefToTws(kpuzzle, options) {
 export {
   serializeDefToTws,
   serializeKTransformationDataToTws,
-  setArgs,
+  setArg,
   setKPuzzleDefString,
   solveScramble,
   solveState
