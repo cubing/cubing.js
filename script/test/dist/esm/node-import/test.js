@@ -11,37 +11,31 @@ import "cubing/stream";
 import "cubing/twisty";
 
 import { KState } from "cubing/kpuzzle";
-import { cube3x3x3 } from "cubing/puzzles";
+import { cube2x2x2 } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
 import { experimentalSolveTwsearch, setDebug } from "cubing/search";
 
 setDebug({ disableStringWorker: true });
 
 (async () => {
-  (await randomScrambleForEvent("222")).log();
+  const scramble222 = await randomScrambleForEvent("222");
+  scramble222.log();
   (await randomScrambleForEvent("333")).log();
 
-  const kpuzzle = await cube3x3x3.kpuzzle();
-  const solvedState = kpuzzle.identityTransformation().toKState().stateData;
-  const sune = new KState(kpuzzle, {
-    EDGES: {
-      pieces: [2, 0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-      orientation: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    },
-    CORNERS: {
-      pieces: [0, 1, 2, 3, 4, 5, 6, 7],
-      orientation: [2, 2, 2, 0, 0, 0, 0, 0],
-    },
-    CENTERS: {
-      pieces: [0, 1, 2, 3, 4, 5],
-      orientation: [2, 0, 0, 0, 0, 0],
-    },
-  });
-  (
-    await experimentalSolveTwsearch(kpuzzle, sune, {
-      moveSubset: ["U", "F", "R"],
-    })
-  ).log();
+  const kpuzzle = await cube2x2x2.kpuzzle();
+  const scramble222Transformation = kpuzzle.algToTransformation(scramble222);
+  const scramble222Solution = await experimentalSolveTwsearch(
+    kpuzzle,
+    scramble222Transformation.toKState(),
+  );
+  scramble222.concat(".").concat(scramble222Solution).log();
+  if (
+    !scramble222Transformation
+      .applyAlg(scramble222Solution)
+      .isIdentical(kpuzzle.identityTransformation())
+  ) {
+    throw new Error("Invalid solution!");
+  }
 
   console.log("Success!");
 })();
