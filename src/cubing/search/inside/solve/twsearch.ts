@@ -45,15 +45,17 @@ export async function solveTwsearch(
   }
 
   const puzzleDefString = serializeDefToTws(kpuzzle, options);
-  if (existingPuzzleDefString && existingPuzzleDefString !== puzzleDefString) {
-    throw new Error(
-      "Attempted to solve two puzzles in the same worker using `twsearch`. This is not currently supported!",
-    );
+  if (existingPuzzleDefString) {
+    if (existingPuzzleDefString !== puzzleDefString) {
+      throw new Error(
+        "Attempted to solve two puzzles in the same worker using `twsearch`. This is not currently supported!",
+      );
+    }
   } else {
     existingPuzzleDefString = puzzleDefString;
+    await setKPuzzleDefString(puzzleDefString);
   }
 
-  await setKPuzzleDefString(puzzleDefString);
   return await solveState(
     serializeKTransformationDataToTws("SearchState", stateData, true),
   );
