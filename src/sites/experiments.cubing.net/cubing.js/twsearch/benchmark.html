@@ -20,7 +20,57 @@
 
 <p>
   Latest: <span id="latest"></span><br>
-  Mean: <span id="mean"></span><br>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table td {
+      border: 1px solid gray;
+      padding: 0.25em;
+    }
+
+    table td:first-child {
+      text-align: right;
+    }
+
+    table td:last-child {
+      text-align: left;
+    }
+
+  </style>
+  </style>
+<table>
+  <tr>
+    <td>
+      <span id="num"></span>
+    </td>
+    <td> scrambles</td>
+  </tr>
+  <tr>
+    <td>
+      <span id="num-cancelling"></span>
+    </td>
+    <td> cancelling scrambles</td>
+  </tr>
+  <tr>
+    <td>
+      <span id="median"></span>
+    </td>
+    <td>median</td>
+  </tr>
+  <tr>
+    <td><span id="mean"></span></td>
+    <td>mean</td>
+  </tr>
+  <tr>
+    <td><span id="rest-mean"></span></td>
+    <td>
+      mean (ignoring first)
+    </td>
+  </tr>
+</table>
 </p>
 
 <div id="results"></div>
