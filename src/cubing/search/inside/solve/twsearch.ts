@@ -49,8 +49,9 @@ export async function solveTwsearch(
     throw new Error(
       "Attempted to solve two puzzles in the same worker using `twsearch`. This is not currently supported!",
     );
+  } else {
+    existingPuzzleDefString = puzzleDefString;
   }
-  existingPuzzleDefString = puzzleDefString;
 
   await setKPuzzleDefString(puzzleDefString);
   return await solveState(
