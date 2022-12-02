@@ -2,9 +2,10 @@ import { Alg } from "../alg";
 import type { KPuzzle } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import type { KState } from "../kpuzzle/KState";
-import type { PrefetchLevel, TwsearchOptions } from "./inside/api";
+import type { PrefetchLevel } from "./inside/api";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
+import type { TwsearchOptions } from "./inside/solve/twsearch";
 import {
   InsideOutsideAPI,
   instantiateWorker,
