@@ -27,7 +27,7 @@ setDebug({ disableStringWorker: true });
   const scramble222Solution = await experimentalSolveTwsearch(
     kpuzzle,
     scramble222Transformation.toKState(),
-    { moveSubset: "ULFR".split("") },
+    { moveSubset: "ULFR".split(""), minDepth: 11 },
   );
   scramble222.concat(".").concat(scramble222Solution).log();
   if (
@@ -36,6 +36,10 @@ setDebug({ disableStringWorker: true });
       .isIdentical(kpuzzle.identityTransformation())
   ) {
     throw new Error("Invalid solution!");
+  }
+  const numMoves = scramble222Solution.experimentalNumChildAlgNodes();
+  if (numMoves < 11) {
+    throw new Error(`Solution too short (at least 11 expected): ${numMoves}`);
   }
 
   console.log("Success!");

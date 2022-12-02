@@ -1,8 +1,8 @@
 import { Alg } from "../alg";
-import type { KPuzzle, KTransformationData } from "../kpuzzle";
+import type { KPuzzle } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import type { KState } from "../kpuzzle/KState";
-import type { PrefetchLevel } from "./inside/api";
+import type { PrefetchLevel, TwsearchOptions } from "./inside/api";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import {
@@ -120,17 +120,13 @@ export async function solveMegaminx(state: KState): Promise<Alg> {
 export async function solveTwsearch(
   kpuzzle: KPuzzle,
   state: KState,
-  options?: { moveSubset?: string[]; startState?: KState },
+  options?: { moveSubset?: string[]; startState?: KState; minDepth?: number },
 ): Promise<Alg> {
-  const apiOptions: {
-    moveSubset?: string[];
-    startState?: KTransformationData;
-  } = {
-    moveSubset: options?.moveSubset,
-  };
-  if (options?.startState) {
+  const { startState, ...otherOptions } = options ?? {};
+  const apiOptions: TwsearchOptions = otherOptions;
+  if (startState) {
     apiOptions.startState =
-      options.startState.experimentalToTransformation()!.transformationData;
+      startState.experimentalToTransformation()!.transformationData;
   }
   const { ...def } = kpuzzle.definition;
   delete def.experimentalIsStateSolved;
