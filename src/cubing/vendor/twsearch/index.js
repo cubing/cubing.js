@@ -1,8 +1,8 @@
 console.info("Loading twsearch v0.3.1-1-gfe6934f5");
 // src/js/api.ts
-import { Alg } from "../../../cubing/alg";
+import { Alg } from "../../alg";
 async function importOnce() {
-  const fn = (await import("./twsearch-AR3QIDYS.js")).default;
+  const fn = (await import("./twsearch-3VIDM5NB.js")).default;
   return await fn();
 }
 var cachedEmscriptenModule = null;

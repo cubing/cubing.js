@@ -5,7 +5,7 @@
     "ignore": [
       "./src/cubing/search/search-worker-inside-generated-string.js",
       "src/cubing/vendor/twsearch/index.js",
-      "src/cubing/vendor/twsearch/twsearch-AR3QIDYS.js"
+      "src/cubing/vendor/twsearch/twsearch-3VIDM5NB.js"
     ]
   },
   "linter": {
@@ -24,7 +24,7 @@
     "ignore": [
       "./src/cubing/search/search-worker-inside-generated-string.js",
       "src/cubing/vendor/twsearch/index.js",
-      "src/cubing/vendor/twsearch/twsearch-AR3QIDYS.js"
+      "src/cubing/vendor/twsearch/twsearch-3VIDM5NB.js"
     ]
   }
 }
