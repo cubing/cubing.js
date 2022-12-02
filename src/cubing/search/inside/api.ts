@@ -7,12 +7,7 @@ import {
 } from "../../kpuzzle";
 import { KState } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
-import {
-  serializeDefToTws,
-  serializeKTransformationDataToTws,
-  setKPuzzleDefString,
-  solveState,
-} from "../../vendor/twsearch";
+import { from } from "../../vendor/p-lazy/p-lazy";
 import { setIsInsideWorker } from "./inside-worker";
 import {
   preInitialize222,
@@ -185,6 +180,9 @@ export enum PrefetchLevel {
 
 let currentPrefetchLevel = PrefetchLevel.Auto;
 
+export const twsearchPromise: Promise<typeof import("../../vendor/twsearch")> =
+  from(async () => import("../../vendor/twsearch"));
+
 export const insideAPI = {
   initialize: async (eventID: string) => {
     switch (eventID) {
@@ -276,6 +274,12 @@ export const insideAPI = {
     stateData: KTransformationData,
     options?: { moveSubset?: string[]; startState?: KTransformationData },
   ): Promise<string> => {
+    const {
+      setKPuzzleDefString,
+      serializeDefToTws,
+      solveState,
+      serializeKTransformationDataToTws,
+    } = await twsearchPromise;
     const kpuzzle = new KPuzzle(def);
     await setKPuzzleDefString(serializeDefToTws(kpuzzle, options));
     return (

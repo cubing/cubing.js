@@ -19,7 +19,6 @@ import { solveTwsearch } from "../../../../cubing/search/outside";
       orientation: [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
   });
-  // TODO: Debug `RuntimeError: memory access out of bounds`
   (
     await solveTwsearch(kpuzzle, twoFlip, { moveSubset: ["U", "F", "R"] })
   ).log();
