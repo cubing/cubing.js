@@ -128,5 +128,7 @@ export async function random222Scramble(): Promise<Alg> {
     console.info("Filtered out a 2x2x2 state!");
     state = await random222State();
   }
-  return (await solve222ForScramble(state)).invert(); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
+  return await solve222ForScramble(
+    state.experimentalToTransformation()!.invert().toKState(),
+  ); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
 }
