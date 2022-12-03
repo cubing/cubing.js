@@ -1,4 +1,4 @@
-import type { Alg } from "../../../../alg";
+import { Alg, Move } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { KState } from "../../../../kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../puzzles";
@@ -66,6 +66,26 @@ async function hasHTMSolutionWithFewerMoves(
   }
 }
 
+function isCancelling(alg: Alg): boolean {
+  let lastFamily: undefined | string;
+  for (let node of alg.childAlgNodes()) {
+    const move = node.as(Move);
+    if (!move) {
+      throw new Error("Unexpected solution with a non-move node!");
+    }
+    const { family } = move;
+    if (
+      lastFamily &&
+      ((lastFamily === "L" && family === "R") ||
+        (lastFamily === "R" && family === "L"))
+    ) {
+      return true;
+    }
+    lastFamily = family;
+  }
+  return false;
+}
+
 // TODO: fix def consistency.
 export async function solve222ForScramble(state: KState): Promise<Alg> {
   mustBeInsideWorker();
@@ -75,7 +95,6 @@ export async function solve222ForScramble(state: KState): Promise<Alg> {
     {
       moveSubset: "UFLR".split(""),
       minDepth: 11,
-      skipCancelling2x2x2Solutions: true,
     },
   );
 }
@@ -128,7 +147,16 @@ export async function random222Scramble(): Promise<Alg> {
     console.info("Filtered out a 2x2x2 state!");
     state = await random222State();
   }
-  return await solve222ForScramble(
-    state.experimentalToTransformation()!.invert().toKState(),
-  ); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
+  const inverseState = state
+    .experimentalToTransformation()!
+    .invert()
+    .toKState(); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
+  let sol = await solve222ForScramble(inverseState);
+  while (isCancelling(sol)) {
+    // Rely on `--randomstart` to find us a non-cancelling with ≈2/3 probability.
+    // TODO: Check that this works for 100% of states.
+    sol = await solve222ForScramble(inverseState);
+  }
+
+  return sol;
 }
