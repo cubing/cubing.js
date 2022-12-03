@@ -15,7 +15,6 @@ export interface TwsearchOptions {
   startState?: KTransformationData;
   minDepth?: number;
   maxDepth?: number;
-  skipCancelling2x2x2Solutions?: boolean;
 }
 
 let existingPuzzleDefString: undefined | string;
@@ -41,9 +40,6 @@ export async function solveTwsearch(
   const kpuzzle = new KPuzzle(def);
   setArg("--startprunedepth 5"); // TODO
   if (options) {
-    if (options.skipCancelling2x2x2Solutions) {
-      setArg("--skipcancelling2x2x2solutions");
-    }
     let { minDepth, maxDepth } = options;
     if (typeof minDepth !== "undefined") {
       mustBeNaturalNumber("minDepth", minDepth);
