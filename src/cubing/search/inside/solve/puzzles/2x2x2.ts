@@ -30,7 +30,26 @@ async function getCachedTrembleSolver(): Promise<TrembleSolver> {
 export async function preInitialize222(): Promise<void> {
   await getCachedTrembleSolver();
 }
+
+export async function solve222HTMSubOptimal(
+  state: KState,
+  maxDepth: number = 11,
+): Promise<Alg> {
+  mustBeInsideWorker();
+  return await solveTwsearch(
+    (
+      await cube2x2x2.kpuzzle()
+    ).definition,
+    state.experimentalToTransformation()!.transformationData,
+    {
+      moveSubset: "UFLR".split(""), // TODO: <U, F, R>
+      maxDepth,
+    },
+  );
+}
+
 // TODO: fix def consistency.
+// TODO: why is this ending up with the wrong rotation sometimes?
 export async function solve222HTMOptimal(
   state: KState,
   maxDepth: number = 11,

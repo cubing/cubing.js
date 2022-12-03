@@ -135,7 +135,7 @@ export async function solveTwsearch(
   const dedicatedWorker = await instantiateWorker();
   try {
     return Alg.fromString(
-      await dedicatedWorker.insideAPI.solveTwsearch(
+      await dedicatedWorker.insideAPI.solveTwsearchToString(
         def,
         state.experimentalToTransformation()!.transformationData,
         apiOptions,
