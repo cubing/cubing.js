@@ -19,7 +19,7 @@ const median = document.querySelector("#median") as HTMLSpanElement;
   for (let n = 1; n <= num; n++) {
     const start = performance.now();
     const scramble = await randomScrambleForEvent("222");
-    const ms = Math.floor(performance.now() - start);
+    const ms = Math.floor(10 * (performance.now() - start)) / 10;
     first ??= ms;
     latest.textContent = scramble.toString();
 
@@ -34,9 +34,11 @@ const median = document.querySelector("#median") as HTMLSpanElement;
     if (unrepeated.includes("L R") || unrepeated.includes("R L")) {
       cancelling++;
     }
-    mean.textContent = `${Math.floor(total / n)}ms`;
+    mean.textContent = `${Math.floor((total / n) * 10) / 10}ms`;
     if (n > 1) {
-      restMean.textContent = `${Math.floor((total - first) / (n - 1))}ms`;
+      restMean.textContent = `${
+        Math.floor(((total - first) / (n - 1)) * 10) / 10
+      }ms`;
     }
 
     results.push(ms);
