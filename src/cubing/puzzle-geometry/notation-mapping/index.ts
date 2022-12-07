@@ -4,9 +4,7 @@ export { NullMapper } from "./NullMapper";
 
 export { FTONotationMapper } from "./FTONotationMapper";
 export { FaceRenamingMapper } from "./FaceRenamingMapper";
-export {
-  MegaminxScramblingNotationMapper,
-} from "./MegaminxScramblingNotationMapper";
+export { MegaminxScramblingNotationMapper } from "./MegaminxScramblingNotationMapper";
 export { NxNxNCubeMapper } from "./NxNxNCubeMapper";
 export {
   PyraminxNotationMapper,

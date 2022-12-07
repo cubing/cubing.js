@@ -12,10 +12,18 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "nursery": {},
+      "nursery": {
+        "useEnumInitializers": "off"
+      },
       "style": {
         "noNegationElse": "off",
         "noShoutyConstants": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
+      "performance": {
+        "noDelete": "off"
       }
     },
     "ignore": [
