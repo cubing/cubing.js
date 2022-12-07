@@ -14,7 +14,7 @@ export interface InsideOutsideAPI {
 }
 
 export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
-  // rome-ignore lint(correctness/noAsyncPromiseExecutor): TODO
+  // rome-ignore lint/correctness/noAsyncPromiseExecutor: TODO
   return new Promise<InsideOutsideAPI>(async (resolve, reject) => {
     const timeoutID = setTimeout(() => {
       reject(new Error("module instantiation timeout"));

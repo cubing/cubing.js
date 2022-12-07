@@ -416,7 +416,7 @@ function generate_random_move_scramble(M, N) {
         m = Math.floor(Math.random() * 6);
         // don't output stuff like U2 U
         if (m === last) {
-          // rome-ignore lint(correctness/noUnnecessaryContinue): Legacy code.
+          // rome-ignore lint/correctness/noUnnecessaryContinue: Legacy code.
           continue;
         }
         // U move never commutes with the others
@@ -425,7 +425,7 @@ function generate_random_move_scramble(M, N) {
         }
         // don't output stuff like L R L because L and R commute
         else if (m === lastlast && ((m - last) * (m - last)) % 5 === 4) {
-          // rome-ignore lint(correctness/noUnnecessaryContinue): Legacy code.
+          // rome-ignore lint/correctness/noUnnecessaryContinue: Legacy code.
           continue;
         } else {
           break;

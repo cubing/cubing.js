@@ -21,7 +21,7 @@ export class SpriteProp extends TwistyPropDerived<
     if (textureURL === null) {
       return null;
     }
-    // rome-ignore lint(correctness/noAsyncPromiseExecutor): TODO: Find a different way to handle `onLoadingError`?
+    // rome-ignore lint/correctness/noAsyncPromiseExecutor: TODO: Find a different way to handle `onLoadingError`?
     return new Promise(async (resolve, _reject) => {
       const onLoadingError = (): void => {
         console.warn("Could not load sprite:", textureURL.toString());
