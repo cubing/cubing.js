@@ -2304,7 +2304,7 @@ function solve_phase3_2gen(facelets, indices = index_phase3_2gen(facelets)) {
       bound,
     );
     for (let solution of gen) {
-      return solution.flatMap((m) => phase3_2gen_move_seqs[m]);
+      return solution.map((m) => phase3_2gen_move_seqs[m]).flat();
     }
     bound++;
   }
@@ -2342,7 +2342,7 @@ function solve_phase3_2gen_readable(
       bound,
     );
     for (let solution of gen) {
-      let expanded = solution.flatMap((m) => phase3_2gen_move_seqs[m]);
+      let expanded = solution.map((m) => phase3_2gen_move_seqs[m]).flat();
       let simplified = simplify_move_sequence(expanded);
       let score = grade_readability(simplified);
       if (score < best_score) {
