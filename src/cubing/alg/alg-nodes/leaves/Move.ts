@@ -149,7 +149,8 @@ export class Move extends AlgCommon<Move> {
         );
         return;
       } else {
-        return Move.fromString(args[0]); // TODO: can we return here?
+        // rome-ignore lint/nursery/noConstructorReturn: https://github.com/rome/tools/issues/4005
+        return Move.fromString(args[0]);
       }
     }
     this.#quantumWithAmount = new QuantumWithAmount<QuantumMove>(

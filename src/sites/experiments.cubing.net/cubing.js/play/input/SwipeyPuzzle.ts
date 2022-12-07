@@ -166,8 +166,8 @@ export class SwipeyPuzzle extends HTMLElement {
       this.puzzleName,
       this.onAlgLeaf.bind(this),
       (action: Action) => this.actionListener(action),
-      true,
       this.theme === "grid-back" ? "blank" : this.theme,
+      true,
     );
     this.appendChild(swipeGrid);
 
@@ -176,8 +176,8 @@ export class SwipeyPuzzle extends HTMLElement {
         this.puzzleName,
         this.onAlgLeaf.bind(this),
         (action: Action) => this.actionListener(action),
-        false,
         "transparent-grid-back",
+        false,
       );
       this.prepend(swipeGridExtra);
     }

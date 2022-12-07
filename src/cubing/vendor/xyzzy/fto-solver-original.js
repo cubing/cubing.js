@@ -2275,7 +2275,7 @@ function solve_phase3_2gen_readable(
       bound,
     );
     for (let solution of gen) {
-      let expanded = solution.map((m) => phase3_2gen_move_seqs[m]).flat();
+      let expanded = solution.flatMap((m) => phase3_2gen_move_seqs[m]);
       let simplified = simplify_move_sequence(expanded);
       let score = grade_readability(simplified);
       if (score < best_score) {
