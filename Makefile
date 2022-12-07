@@ -3,6 +3,24 @@ NODE=node
 ROME=./node_modules/.bin/rome
 WEB_TEST_RUNNER=./node_modules/.bin/wtr
 
+.PHONY: default
+default:
+	@echo "To work on the project, run:"
+	@echo ""
+	@echo "    make dev"
+	@echo ""
+	@echo "To build the project, run:"
+	@echo ""
+	@echo "    npm install"
+	@echo "    make build"
+	@echo ""
+	@echo "To see available tests, run:"
+	@echo ""
+	@echo "    npm install"
+	@echo "    make test-info"
+	@echo ""
+
+
 ######## Shared with `package.json` ########
 
 .PHONY: build
@@ -54,7 +72,9 @@ clean:
 		dist .temp coverage src/cubing/search/search-worker-inside-generated* script/bin/screenshot-src/main.js \
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
 .PHONY: test
-test:
+test: test-info
+.PHONY: test-info
+test-info:
 	@echo "Run one of the following."
 	@echo "(Time estimates are based on a fast computer.)"
 	@echo ""
