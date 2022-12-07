@@ -31,7 +31,7 @@ export class StaleDropper<T> {
   #latestResolvedIdx = 0;
 
   queue(p: Promise<T>): Promise<T> {
-    // rome-ignore lint/correctness/noAsyncPromiseExecutor: This is a very rare case where we *do* want to drop a Promise sometimes.
+    // rome-ignore lint/suspicious/noAsyncPromiseExecutor: This is a very rare case where we *do* want to drop a Promise sometimes.
     return new Promise(async (resolve, reject) => {
       try {
         const idx = ++this.#latestAssignedIdx;

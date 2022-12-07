@@ -40,9 +40,8 @@ function defineClass(typeId, superTypeId, castableTypeMap) {
     _.constructor = _;
     !superTypeId && (_.typeMarker$ = typeMarkerFn);
   }
-  // rome-ignore lint/correctness/noArguments: Legacy code
-  for (var i = 3; i < arguments.length; ++i) {
-    // rome-ignore lint/correctness/noArguments: Legacy code
+  for (let i = 3; i < arguments.length; ++i) {
+    // rome-ignore lint/style/noArguments: Legacy code
     arguments[i].prototype = _;
   }
   clazz && (_.___clazz$ = clazz);
