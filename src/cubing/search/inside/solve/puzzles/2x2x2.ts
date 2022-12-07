@@ -87,7 +87,7 @@ async function hasHTMSolutionWithFewerMoves(
 
 function isCancelling(alg: Alg): boolean {
   let lastFamily: undefined | string;
-  for (let node of alg.childAlgNodes()) {
+  for (const node of alg.childAlgNodes()) {
     const move = node.as(Move);
     if (!move) {
       throw new Error("Unexpected solution with a non-move node!");

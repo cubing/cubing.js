@@ -318,6 +318,7 @@ class AlgParser {
 
     let quantumMove = this.parseQuantumMoveImpl();
     // Only `hadEmptyAbsAmount` is `const`.
+    // rome-ignore lint/nursery/useConst: TODO: https://github.com/rome/tools/issues/4006
     let [amount, hadEmptyAbsAmount] = this.parseAmountAndTrackEmptyAbsAmount();
     const suffix = this.parseMoveSuffix();
 
