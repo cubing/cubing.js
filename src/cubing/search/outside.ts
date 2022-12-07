@@ -43,7 +43,8 @@ export function _preInitializationHintForEvent(
     case "minx":
       return;
     case "333oh":
-      return _preInitializationHintForEvent("333");
+      _preInitializationHintForEvent("333");
+      return;
   }
   (async () => {
     await (await getCachedWorkerInstance()).insideAPI.initialize(eventID);

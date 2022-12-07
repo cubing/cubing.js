@@ -1,9 +1,7 @@
 // @ts-nocheck
 
 import { Alg } from "../../../../../alg";
-import {
-  random333Scramble as getRandomScramble333,
-} from "../../../../../search/inside/solve/puzzles/3x3x3";
+import { random333Scramble as getRandomScramble333 } from "../../../../../search/inside/solve/puzzles/3x3x3";
 import { circle, Cnk, set8Perm } from "../lib/mathlib";
 import { randomUIntBelow } from "random-uint-below";
 import { mustBeInsideWorker } from "../../../../../search/inside/inside-worker";
@@ -137,6 +135,7 @@ function initExpandos(protoType, expandoNames, expandoValues) {
   let i_0 = 0;
   let value;
   for (const name_0 in protoType) {
+    // rome-ignore lint/nursery/noConditionalAssignment: <explanation>
     if ((value = protoType[name_0])) {
       expandoNames[i_0] = name_0;
       expandoValues[i_0] = value;
