@@ -12,9 +12,6 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "correctness": {
-        "noDelete": "off"
-      },
       "nursery": {},
       "style": {
         "noNegationElse": "off",
