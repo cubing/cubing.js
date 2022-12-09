@@ -34,7 +34,7 @@ export const twizzleLinkCSS = new CSSSource(
 
 twisty-player {
   width: 100%;
-  height: 100%;
+  height: 320px;
   resize: vertical;
   overflow-y: hidden;
 }
@@ -72,7 +72,8 @@ export const twizzleLinkForumTweaksCSS = new CSSSource(`
 }
 
 .scrollable-region {
-  max-height: 280px;
+  min-height: 320px;
+  contain: strict;
   overflow-y: auto;
 }
 
