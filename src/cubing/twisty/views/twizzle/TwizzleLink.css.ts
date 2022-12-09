@@ -5,8 +5,8 @@ export const twizzleLinkCSS = new CSSSource(
 .wrapper {
   background: rgb(255, 245, 235);
   display: grid;
-  grid-template-columns: 1fr;
   border: 1px solid rgba(0, 0, 0, 0.25);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
 .setup-alg, twisty-alg-viewer {
@@ -34,6 +34,7 @@ export const twizzleLinkCSS = new CSSSource(
 
 twisty-player {
   width: 100%;
+  height: 100%;
   resize: vertical;
   overflow-y: hidden;
 }
