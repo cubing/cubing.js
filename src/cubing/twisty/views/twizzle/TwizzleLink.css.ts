@@ -4,9 +4,7 @@ export const twizzleLinkCSS = new CSSSource(
   `
 .wrapper {
   background: rgb(255, 245, 235);
-  display: grid;
   border: 1px solid rgba(0, 0, 0, 0.25);
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
 .setup-alg, twisty-alg-viewer {
@@ -17,8 +15,6 @@ export const twizzleLinkCSS = new CSSSource(
   background: rgba(255, 230, 210, 1);
   font-weight: bold;
   padding: 0.25em 0.5em;
-  display: grid;
-  grid-template-columns: 1fr auto;
 }
 
 .heading.title {
@@ -34,7 +30,8 @@ export const twizzleLinkCSS = new CSSSource(
 
 twisty-player {
   width: 100%;
-  height: 320px;
+  min-height: 128px;
+  height: 288px;
   resize: vertical;
   overflow-y: hidden;
 }
@@ -47,17 +44,51 @@ twisty-alg-viewer {
   display: inline-block;
 }
 
-.wrapper:fullscreen {
+.wrapper {
+  container-type: inline-size;
+}
+
+.scrollable-region {
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.scrollable-region {
+  max-height: 18em;
+  overflow-y: auto;
+}
+
+@container (min-width: 512px) {
+  .responsive-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  twisty-player {
+    height: 320px
+  }
+  .scrollable-region {
+    border-top: none;
+    border-left: 1px solid rgba(0, 0, 0, 0.25);
+    contain: strict;
+    max-height: 100cqh;
+  }
+}
+
+.wrapper:fullscreen,
+.wrapper:fullscreen .responsive-wrapper {
   width: 100%;
   height: 100%;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
 }
 
 .wrapper:fullscreen twisty-player,
 .wrapper:fullscreen .scrollable-region {
-  height: unset;
-  max-height: unset
+  height: 50%;
+}
+
+@container (min-width: 512px) {
+  .wrapper:fullscreen twisty-player,
+  .wrapper:fullscreen .scrollable-region {
+    height: 100%;
+  }
 }
 `,
 );
@@ -72,8 +103,6 @@ export const twizzleLinkForumTweaksCSS = new CSSSource(`
 }
 
 .scrollable-region {
-  min-height: 320px;
-  contain: strict;
   overflow-y: auto;
 }
 

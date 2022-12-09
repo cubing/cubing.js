@@ -34,7 +34,10 @@ export class TwizzleLink extends ManagedCustomElement {
   #cssElem: HTMLStyleElement | undefined;
   #cssCDNForumTweaksElem: HTMLStyleElement | undefined;
   #scrollableRegion: HTMLDivElement;
+  #responsiveWrapper: HTMLDivElement;
   async connectedCallback() {
+    this.#responsiveWrapper = this.addElement(document.createElement("div"));
+    this.#responsiveWrapper.classList.add("responsive-wrapper");
     if (this.options?.darkMode) {
       this.contentWrapper.classList.add("dark-mode");
     }
@@ -67,7 +70,7 @@ export class TwizzleLink extends ManagedCustomElement {
         config.experimentalPuzzleDescription = puzzleDescription;
       }
 
-      this.twistyPlayer = this.addElement(
+      this.twistyPlayer = this.#responsiveWrapper.appendChild(
         new TwistyPlayer({
           background: this.options?.cdnForumTweaks
             ? "checkered-transparent"
@@ -82,7 +85,9 @@ export class TwizzleLink extends ManagedCustomElement {
         this.twistyPlayer.experimentalTitle = config.experimentalTitle;
       }
 
-      this.#scrollableRegion = this.addElement(document.createElement("div"));
+      this.#scrollableRegion = this.#responsiveWrapper.appendChild(
+        document.createElement("div"),
+      );
       this.#scrollableRegion.classList.add("scrollable-region");
 
       if (config.experimentalTitle) {
