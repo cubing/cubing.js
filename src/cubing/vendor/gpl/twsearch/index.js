@@ -10,13 +10,13 @@ async function emscriptenModule() {
   return cachedEmscriptenModule ?? (cachedEmscriptenModule = importOnce());
 }
 function cwrap(fn, returnType, argTypes, processReturnValue = (v) => v) {
-  const wrapped = (async () =>
-    (await emscriptenModule()).cwrap(fn, returnType, argTypes))();
+  const wrapped = (async () => (await emscriptenModule()).cwrap(fn, returnType, argTypes))();
   return async (...args) => {
     return processReturnValue((await wrapped)(...args));
   };
 }
-var NoSolutionError = class extends Error {};
+var NoSolutionError = class extends Error {
+};
 function parseResult(s) {
   if (s === "--no solution--") {
     throw new NoSolutionError("");
@@ -24,10 +24,28 @@ function parseResult(s) {
   return Alg.fromString(s);
 }
 var stringArg = ["string"];
-var setArg = cwrap("w_arg", "void", stringArg);
-var setKPuzzleDefString = cwrap("w_setksolve", "void", stringArg);
-var solveScramble = cwrap("w_solvescramble", "string", stringArg, parseResult);
-var solveState = cwrap("w_solveposition", "string", stringArg, parseResult);
+var setArg = cwrap(
+  "w_arg",
+  "void",
+  stringArg
+);
+var setKPuzzleDefString = cwrap(
+  "w_setksolve",
+  "void",
+  stringArg
+);
+var solveScramble = cwrap(
+  "w_solvescramble",
+  "string",
+  stringArg,
+  parseResult
+);
+var solveState = cwrap(
+  "w_solveposition",
+  "string",
+  stringArg,
+  parseResult
+);
 
 // src/js/serialize.ts
 var BLANK_LINE = "";
@@ -38,7 +56,7 @@ function sanitize(s) {
 function serializeKTransformationDataToTws(name, t, forScramble = false) {
   const outputLines = [];
   outputLines.push(
-    `${forScramble ? "ScrambleState" : "MoveTransformation"} ${sanitize(name)}`,
+    `${forScramble ? "ScrambleState" : "MoveTransformation"} ${sanitize(name)}`
   );
   for (const [orbitName, orbitData] of Object.entries(t)) {
     outputLines.push(sanitize(orbitName));
@@ -56,9 +74,7 @@ function serializeDefToTws(kpuzzle, options) {
   outputLines.push(BLANK_LINE);
   for (const [orbitName, orbitInfo] of Object.entries(def.orbits)) {
     outputLines.push(
-      `Set ${sanitize(orbitName)} ${orbitInfo.numPieces} ${
-        orbitInfo.numOrientations
-      }`,
+      `Set ${sanitize(orbitName)} ${orbitInfo.numPieces} ${orbitInfo.numOrientations}`
     );
   }
   outputLines.push(BLANK_LINE);
@@ -87,15 +103,15 @@ function serializeDefToTws(kpuzzle, options) {
     }
   }
   for (const [moveName, moveAlgDef] of Object.entries(
-    def.experimentalDerivedMoves ?? {},
+    def.experimentalDerivedMoves ?? {}
   )) {
     if (include(moveName)) {
       const transformation = kpuzzle.algToTransformation(moveAlgDef);
       outputLines.push(
         serializeKTransformationDataToTws(
           moveName,
-          transformation.transformationData,
-        ),
+          transformation.transformationData
+        )
       );
     }
   }
@@ -108,5 +124,5 @@ export {
   setArg,
   setKPuzzleDefString,
   solveScramble,
-  solveState,
+  solveState
 };
