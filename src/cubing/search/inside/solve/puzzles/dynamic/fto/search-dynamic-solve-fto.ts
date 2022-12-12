@@ -1,1 +1,1 @@
-export * from "../../../../../../vendor/xyzzy/fto-solver";
+export * from "../../../../../../vendor/gpl/xyzzy/fto-solver";
