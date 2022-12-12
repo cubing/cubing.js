@@ -244,7 +244,9 @@ class ControlPane {
       // TODO: also do this for the setup alg?
       const algFeatures = computeAlgFeatures(alg);
       this.caretNISSInfo.hidden = !algFeatures.caretNISS;
-      this.commutatorConjugateInfo.hidden = !(algFeatures.commutator || algFeatures.conjugate);
+      this.commutatorConjugateInfo.hidden = !(
+        algFeatures.commutator || algFeatures.conjugate
+      );
       const which: string[] = [];
       if (algFeatures.commutator) {
         which.push("commutator");
@@ -252,7 +254,9 @@ class ControlPane {
       if (algFeatures.conjugate) {
         which.push("conjugate");
       }
-      this.commutatorConjugateInfo.querySelector("a")!.textContent = `${which.join(" and ")} notation`;
+      this.commutatorConjugateInfo.querySelector(
+        "a",
+      )!.textContent = `${which.join(" and ")} notation`;
       this.square1Info.hidden = !algFeatures.square1;
     });
     twistyPlayer.experimentalModel.videoURL.addFreshListener((url) => {

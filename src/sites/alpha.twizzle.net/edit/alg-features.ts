@@ -11,12 +11,15 @@ import {
   TraversalDownUp,
 } from "../../../cubing/alg";
 
-interface AlgFeatures {
-  commutator: boolean;
-  conjugate: boolean;
-  caretNISS: boolean;
-  square1: boolean;
-}
+const noAlgFeatures = {
+  commutator: false,
+  conjugate: false,
+  caretNISS: false,
+  square1: false,
+} as const satisfies Record<string, false>;
+
+type AlgFeatures = Record<keyof typeof noAlgFeatures, boolean>;
+
 class UsesCaretNISSNotation extends TraversalDownUp<AlgFeatures, void> {
   public traverseAlg(alg: Alg, algFeatures: AlgFeatures): void {
     for (const node of alg.childAlgNodes()) {
@@ -25,7 +28,7 @@ class UsesCaretNISSNotation extends TraversalDownUp<AlgFeatures, void> {
   }
   public traverseGrouping(grouping: Grouping, algFeatures: AlgFeatures): void {
     algFeatures.caretNISS ||= !!grouping.experimentalNISSPlaceholder;
-    algFeatures.square1 ||= !!grouping.experimentalAsSquare1Tuple()
+    algFeatures.square1 ||= !!grouping.experimentalAsSquare1Tuple();
     this.traverseAlg(grouping.alg, algFeatures);
   }
   public traverseMove(_move: Move, _algFeatures: AlgFeatures): void {}
@@ -56,12 +59,7 @@ class UsesCaretNISSNotation extends TraversalDownUp<AlgFeatures, void> {
 const algFeaturesVisitor = functionFromTraversal(UsesCaretNISSNotation);
 
 export function computeAlgFeatures(alg: Alg): AlgFeatures {
-  const algFeatures: AlgFeatures = {
-    commutator: false,
-    conjugate: false,
-    caretNISS: false,
-    square1: false,
-  };
+  const algFeatures: AlgFeatures = { ...noAlgFeatures };
   algFeaturesVisitor(alg, algFeatures);
   return algFeatures;
 }
