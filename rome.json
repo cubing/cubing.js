@@ -1,15 +1,4 @@
 {
-  "formatter": {
-    "indentStyle": "space",
-    "indentSize": 2,
-    "ignore": [
-      "./src/cubing/search/search-worker-inside-generated-string.js",
-      "./src/cubing/vendor/min2phase/*.js",
-      "./src/cubing/vendor/sq12phase/*.js",
-      "./src/cubing/vendor/twsearch/*.js",
-      "./src/cubing/vendor/xyzzy/*.js"
-    ]
-  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -30,10 +19,21 @@
     },
     "ignore": [
       "./src/cubing/search/search-worker-inside-generated-string.js",
-      "./src/cubing/vendor/min2phase/*.js",
-      "./src/cubing/vendor/sq12phase/*.js",
-      "./src/cubing/vendor/twsearch/*.js",
-      "./src/cubing/vendor/xyzzy/*.js"
+      "./src/cubing/vendor/gpl/cs0x7f/min2phase/*.js",
+      "./src/cubing/vendor/gpl/cs0x7f/sq12phase/*.js",
+      "./src/cubing/vendor/gpl/twsearch/*.js",
+      "./src/cubing/vendor/gpl/xyzzy/*.js"
+    ]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentSize": 2,
+    "ignore": [
+      "./src/cubing/search/search-worker-inside-generated-string.js",
+      "./src/cubing/vendor/gpl/cs0x7f/min2phase/*.js",
+      "./src/cubing/vendor/gpl/cs0x7f/sq12phase/*.js",
+      "./src/cubing/vendor/gpl/twsearch/*.js",
+      "./src/cubing/vendor/gpl/xyzzy/*.js"
     ]
   }
 }
