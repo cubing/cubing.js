@@ -1,1 +1,1 @@
-export * from "../../../../../../vendor/sq12phase/sq1-solver";
+export * from "../../../../../../vendor/gpl/cs0x7f/sq12phase/sq1-solver";

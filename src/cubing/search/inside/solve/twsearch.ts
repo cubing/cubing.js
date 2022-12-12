@@ -4,11 +4,11 @@ import {
   KPuzzleDefinition,
   KTransformationData,
 } from "../../../kpuzzle";
-import { from } from "../../../vendor/p-lazy/p-lazy";
+import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 
 export const twsearchPromise: Promise<
-  typeof import("../../../vendor/twsearch")
-> = from(async () => import("../../../vendor/twsearch"));
+  typeof import("../../../vendor/gpl/twsearch")
+> = from(async () => import("../../../vendor/gpl/twsearch"));
 
 export interface TwsearchOptions {
   moveSubset?: string[];

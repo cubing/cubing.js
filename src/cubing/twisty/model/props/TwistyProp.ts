@@ -1,4 +1,4 @@
-import { from } from "../../../vendor/p-lazy/p-lazy";
+import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 import { StaleDropper } from "../PromiseFreshener";
 import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
 

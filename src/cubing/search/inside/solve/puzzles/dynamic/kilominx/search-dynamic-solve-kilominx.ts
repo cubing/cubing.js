@@ -1,1 +1,1 @@
-export * from "../../../../../../vendor/xyzzy/kilosolver";
+export * from "../../../../../../vendor/gpl/xyzzy/kilosolver";
