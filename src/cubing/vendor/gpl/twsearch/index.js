@@ -1,6 +1,6 @@
 console.info("Loading twsearch v0.3.2-1-g8985a950");
 // src/js/api.ts
-import { Alg } from "../../alg";
+import { Alg } from "../../../alg";
 async function importOnce() {
   const fn = (await import("./twsearch-PTN3QM26.js")).default;
   return await fn();
