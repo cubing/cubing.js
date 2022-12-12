@@ -1,4 +1,4 @@
-import { constructWorker, wrap } from "../vendor/comlink-everywhere/outside";
+import { constructWorker, wrap } from "../vendor/apache/comlink-everywhere/outside";
 import { insideAPI, WorkerInsideAPI } from "./inside/api";
 import { getWorkerEntryFileURL } from "./inside/search-worker-ts-entry-path-getter";
 import { searchOutsideDebugGlobals } from "./outside";
