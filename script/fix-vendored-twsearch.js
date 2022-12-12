@@ -1,7 +1,8 @@
 import { readdir, readFile, writeFile } from "fs/promises";
 import { join } from "path";
 
-const DIR = new URL("../src/cubing/vendor/gpl/twsearch", import.meta.url).pathname;
+const DIR = new URL("../src/cubing/vendor/gpl/twsearch", import.meta.url)
+  .pathname;
 const ROME_JSON = new URL("../rome.json", import.meta.url).pathname;
 
 const MODULE_MANGLED_PREFIX = `const module_mangled = "node:m-odu-le";
