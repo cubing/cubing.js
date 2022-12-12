@@ -27,15 +27,15 @@ export function setAlgPartTypeMismatchReportingLevel(
   currentReportingLevel = level;
 }
 
-export const algDebugGlobals: { caratNISSNotationEnabled: boolean } = {
-  caratNISSNotationEnabled: false,
+export const algDebugGlobals: { caretNISSNotationEnabled: boolean } = {
+  caretNISSNotationEnabled: false,
 };
 
 export function setAlgDebug(options: {
-  caratNISSNotationEnabled?: boolean;
+  caretNISSNotationEnabled?: boolean;
 }): void {
-  if ("caratNISSNotationEnabled" in options) {
-    algDebugGlobals.caratNISSNotationEnabled =
-      !!options.caratNISSNotationEnabled;
+  if ("caretNISSNotationEnabled" in options) {
+    algDebugGlobals.caretNISSNotationEnabled =
+      !!options.caretNISSNotationEnabled;
   }
 }

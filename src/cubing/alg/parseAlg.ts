@@ -196,9 +196,9 @@ class AlgParser {
           continue mainLoop;
         }
       } else if (this.tryConsumeNext("^")) {
-        if (!algDebugGlobals.caratNISSNotationEnabled) {
+        if (!algDebugGlobals.caretNISSNotationEnabled) {
           throw new Error(
-            "Alg contained a carat but carat NISS notation is not enabled.",
+            "Alg contained a caret but caret NISS notation is not enabled.",
           );
         }
 
