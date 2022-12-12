@@ -15,6 +15,7 @@ interface AlgFeatures {
   commutator: boolean;
   conjugate: boolean;
   caretNISS: boolean;
+  square1: boolean;
 }
 class UsesCaretNISSNotation extends TraversalDownUp<AlgFeatures, void> {
   public traverseAlg(alg: Alg, algFeatures: AlgFeatures): void {
@@ -24,6 +25,7 @@ class UsesCaretNISSNotation extends TraversalDownUp<AlgFeatures, void> {
   }
   public traverseGrouping(grouping: Grouping, algFeatures: AlgFeatures): void {
     algFeatures.caretNISS ||= !!grouping.experimentalNISSPlaceholder;
+    algFeatures.square1 ||= !!grouping.experimentalAsSquare1Tuple()
     this.traverseAlg(grouping.alg, algFeatures);
   }
   public traverseMove(_move: Move, _algFeatures: AlgFeatures): void {}
@@ -58,6 +60,7 @@ export function computeAlgFeatures(alg: Alg): AlgFeatures {
     commutator: false,
     conjugate: false,
     caretNISS: false,
+    square1: false,
   };
   algFeaturesVisitor(alg, algFeatures);
   return algFeatures;

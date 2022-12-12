@@ -218,6 +218,7 @@ class ControlPane {
   private tempoDisplay: HTMLSpanElement;
   private caretNISSInfo: HTMLElement;
   private commutatorConjugateInfo: HTMLElement;
+  private square1Info: HTMLElement;
   private twistyStreamSource: TwistyStreamSource;
   constructor(
     private app: App,
@@ -252,6 +253,7 @@ class ControlPane {
         which.push("conjugate");
       }
       this.commutatorConjugateInfo.querySelector("a")!.textContent = `${which.join(" and ")} notation`;
+      this.square1Info.hidden = !algFeatures.square1;
     });
     twistyPlayer.experimentalModel.videoURL.addFreshListener((url) => {
       const a = document.querySelector(".video-url") as HTMLAnchorElement;
@@ -355,6 +357,11 @@ class ControlPane {
     this.commutatorConjugateInfo = findOrCreateChildWithClass(
       this.element,
       "commutator-conjugate-info",
+      "p",
+    );
+    this.square1Info = findOrCreateChildWithClass(
+      this.element,
+      "square1-info",
       "p",
     );
     this.hintFaceletCheckbox = findOrCreateChildWithClass(
