@@ -8,7 +8,7 @@ import { puzzles } from "../../puzzles";
 import {
   importKey,
   unsafeDecryptBlock,
-} from "../../vendor/unsafe-raw-aes/unsafe-raw-aes";
+} from "../../vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
 import { debugLog } from "../debug";
 import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
