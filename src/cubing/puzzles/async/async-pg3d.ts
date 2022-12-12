@@ -9,7 +9,7 @@ import {
 } from "../stickerings/cube-like-stickerings";
 import { getCached } from "./lazy-cached";
 import { Move, PuzzleSpecificSimplifyOptions, QuantumMove } from "../../alg";
-import { PLazy } from "../../vendor/p-lazy/p-lazy";
+import { PLazy } from "../../vendor/mit/p-lazy/p-lazy";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
