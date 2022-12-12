@@ -5,10 +5,6 @@ const DIR = new URL("../src/cubing/vendor/gpl/twsearch", import.meta.url)
   .pathname;
 const ROME_JSON = new URL("../rome.json", import.meta.url).pathname;
 
-const MODULE_MANGLED_PREFIX = `const module_mangled = "node:m-odu-le";
-const module_unmangled = () => module_mangled.replace(/-/g, "");
-`;
-
 let dynamicFileName = null;
 for (const fileName of await readdir(DIR)) {
   const filePath = join(DIR, fileName);
@@ -28,10 +24,20 @@ for (const fileName of await readdir(DIR)) {
         throw new Error("Too many files!");
       }
       dynamicFileName = fileName;
-      contents = contents.replace(`"module"`, "module_unmangled()");
-      if (!contents.startsWith(MODULE_MANGLED_PREFIX)) {
-        contents = MODULE_MANGLED_PREFIX + contents;
+      const lines = [];
+      lineLoop: for (const line of contents.split("\n")) {
+        for (const forbidden of [
+          "import.meta.url",
+          "require2",
+          "createRequire",
+        ]) {
+          if (line.includes(forbidden)) {
+            continue lineLoop;
+          }
+        }
+        lines.push(line);
       }
+      contents = lines.join("\n");
       break;
     }
   }

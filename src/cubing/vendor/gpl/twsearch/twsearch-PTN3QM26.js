@@ -1,8 +1,5 @@
-const module_mangled = "node:m-odu-le";
-const module_unmangled = () => module_mangled.replace(/-/g, "");
 // build/wasm-single-file/twsearch.mjs
 var Module = (() => {
-  var _scriptDir = import.meta.url;
   return async function(Module2) {
     Module2 = Module2 || {};
     var Module2 = typeof Module2 != "undefined" ? Module2 : {};
@@ -35,14 +32,9 @@ var Module = (() => {
       err("exiting due to exception: " + toLog);
     }
     if (ENVIRONMENT_IS_NODE) {
-      const { createRequire } = await import(module_unmangled());
-      var require2 = createRequire(import.meta.url);
-      var fs = require2("fs");
-      var nodePath = require2("path");
       if (ENVIRONMENT_IS_WORKER) {
         scriptDirectory = nodePath.dirname(scriptDirectory) + "/";
       } else {
-        scriptDirectory = require2("url").fileURLToPath(new URL("./", import.meta.url));
       }
       read_ = (filename, binary) => {
         var ret = tryParseAsDataURI(filename);
@@ -587,7 +579,6 @@ var Module = (() => {
         };
       } else if (ENVIRONMENT_IS_NODE) {
         try {
-          var crypto_module = require2("crypto");
           return () => crypto_module["randomBytes"](1)[0];
         } catch (e) {
         }
