@@ -8,43 +8,57 @@ import {
   Move,
   Newline,
   Pause,
-  TraversalUp,
+  TraversalDownUp,
 } from "../../../cubing/alg";
 
-class UsesCaretNISSNotation extends TraversalUp<boolean> {
-  public traverseAlg(alg: Alg): boolean {
+interface AlgFeatures {
+  commutator: boolean;
+  conjugate: boolean;
+  caretNISS: boolean;
+}
+class UsesCaretNISSNotation extends TraversalDownUp<AlgFeatures, void> {
+  public traverseAlg(alg: Alg, algFeatures: AlgFeatures): void {
     for (const node of alg.childAlgNodes()) {
-      if (this.traverseAlgNode(node)) {
-        return true;
-      }
+      this.traverseAlgNode(node, algFeatures);
     }
-    return false;
   }
-  public traverseGrouping(grouping: Grouping): boolean {
-    return (
-      !!grouping.experimentalNISSPlaceholder || this.traverseAlg(grouping.alg)
-    );
+  public traverseGrouping(grouping: Grouping, algFeatures: AlgFeatures): void {
+    algFeatures.caretNISS ||= !!grouping.experimentalNISSPlaceholder;
+    this.traverseAlg(grouping.alg, algFeatures);
   }
-  public traverseMove(_move: Move): boolean {
-    return false;
+  public traverseMove(_move: Move, _algFeatures: AlgFeatures): void {}
+  public traverseCommutator(
+    commutator: Commutator,
+    algFeatures: AlgFeatures,
+  ): void {
+    algFeatures.commutator = true;
+    this.traverseAlg(commutator.A, algFeatures);
+    this.traverseAlg(commutator.B, algFeatures);
   }
-  public traverseCommutator(_commutator: Commutator): boolean {
-    return false;
+  public traverseConjugate(
+    conjugate: Conjugate,
+    algFeatures: AlgFeatures,
+  ): void {
+    algFeatures.conjugate = true;
+    this.traverseAlg(conjugate.A, algFeatures);
+    this.traverseAlg(conjugate.B, algFeatures);
   }
-  public traverseConjugate(_conjugate: Conjugate): boolean {
-    return false;
-  }
-  public traversePause(_pause: Pause): boolean {
-    return false;
-  }
-  public traverseNewline(_newline: Newline): boolean {
-    return false;
-  }
-  public traverseLineComment(comment: LineComment): boolean {
-    return false;
-  }
+  public traversePause(_pause: Pause, _algFeatures: AlgFeatures): void {}
+  public traverseNewline(_newline: Newline, _algFeatures: AlgFeatures): void {}
+  public traverseLineComment(
+    _comment: LineComment,
+    _algFeatures: AlgFeatures,
+  ): void {}
 }
 
-export const usesCaretNISSNotation = functionFromTraversal(
-  UsesCaretNISSNotation,
-);
+const algFeaturesVisitor = functionFromTraversal(UsesCaretNISSNotation);
+
+export function computeAlgFeatures(alg: Alg): AlgFeatures {
+  const algFeatures: AlgFeatures = {
+    commutator: false,
+    conjugate: false,
+    caretNISS: false,
+  };
+  algFeaturesVisitor(alg, algFeatures);
+  return algFeatures;
+}
