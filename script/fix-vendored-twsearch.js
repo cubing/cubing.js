@@ -24,7 +24,7 @@ for (const fileName of await readdir(DIR)) {
         throw new Error("Too many files!");
       }
       dynamicFileName = fileName;
-      const lines = [];
+      const lines = ["let _scriptDir;"];
       lineLoop: for (const line of contents.split("\n")) {
         for (const forbidden of [
           "import.meta.url",

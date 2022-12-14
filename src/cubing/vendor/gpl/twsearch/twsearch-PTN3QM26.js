@@ -1,3 +1,4 @@
+let _scriptDir;
 // build/wasm-single-file/twsearch.mjs
 var Module = (() => {
   return async function(Module2) {
