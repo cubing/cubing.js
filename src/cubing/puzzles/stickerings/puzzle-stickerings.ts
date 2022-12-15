@@ -39,6 +39,11 @@ export const experimentalStickerings: Record<
       "6x6x6": "Reduction",
     },
   },
+  PBL: {
+    groups: {
+      "2x2x2": "Ortega",
+    },
+  },
   "Void Cube": { groups: { "3x3x3": "Miscellaneous" } },
   invisible: { groups: { "3x3x3": "Miscellaneous" } },
   picture: { groups: { "3x3x3": "Miscellaneous" } },

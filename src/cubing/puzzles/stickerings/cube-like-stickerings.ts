@@ -289,6 +289,14 @@ export async function cubeLikeStickeringMask(
       puzzleStickering.set(m.not(CENTERS()), PieceStickering.Ignored);
       break;
     }
+    case "PBL": {
+      puzzleStickering.set(m.all(), PieceStickering.Ignored);
+      puzzleStickering.set(
+        m.or(m.moves(["U", "D"])),
+        PieceStickering.PermuteNonPrimary,
+      );
+      break;
+    }
     case "Void Cube": {
       puzzleStickering.set(CENTERS(), PieceStickering.Invisible);
       break;
