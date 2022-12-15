@@ -316,10 +316,15 @@ export async function cubeStickerings(
   puzzleID: PuzzleID,
 ): Promise<ExperimentalStickering[]> {
   const stickerings: ExperimentalStickering[] = [];
+  const stickeringsFallback: ExperimentalStickering[] = [];
   for (const [name, info] of Object.entries(experimentalStickerings)) {
-    if (info.groups && (puzzleID in info.groups || "3x3x3" in info.groups)) {
-      stickerings.push(name);
+    if (info.groups) {
+      if (puzzleID in info.groups) {
+        stickerings.push(name);
+      } else if ("3x3x3" in info.groups) {
+        stickeringsFallback.push(name);
+      }
     }
   }
-  return stickerings;
+  return stickerings.concat(stickeringsFallback);
 }
