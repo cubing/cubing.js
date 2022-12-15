@@ -1,6 +1,6 @@
 import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
-import type { ExperimentalStickering } from "../../twisty";
+import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import type { StickeringMask } from "../stickerings/mask";
 import {
@@ -97,7 +97,7 @@ export class CubePGPuzzleLoader extends PGPuzzleLoader {
   stickeringMask(stickering: ExperimentalStickering): Promise<StickeringMask> {
     return cubeLikeStickeringMask(this, stickering);
   }
-  stickerings = cubeStickerings;
+  stickerings = () => cubeStickerings(this.id as PuzzleID);
 }
 
 export function puzzleSpecificSimplifyOptionsPromise(

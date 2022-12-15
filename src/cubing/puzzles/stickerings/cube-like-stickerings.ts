@@ -1,4 +1,4 @@
-import type { ExperimentalStickering } from "../../twisty";
+import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
   PieceSet,
@@ -281,6 +281,14 @@ export async function cubeLikeStickeringMask(
       );
       break;
     }
+    case "L2C": {
+      puzzleStickering.set(
+        m.or(m.moves(["L", "R", "B", "D"])),
+        PieceStickering.Dim,
+      );
+      puzzleStickering.set(m.not(CENTERS()), PieceStickering.Ignored);
+      break;
+    }
     case "Void Cube": {
       puzzleStickering.set(CENTERS(), PieceStickering.Invisible);
       break;
@@ -304,10 +312,12 @@ export async function cubeLikeStickeringMask(
   return puzzleStickering.toStickeringMask();
 }
 
-export async function cubeStickerings(): Promise<ExperimentalStickering[]> {
+export async function cubeStickerings(
+  puzzleID: PuzzleID,
+): Promise<ExperimentalStickering[]> {
   const stickerings: ExperimentalStickering[] = [];
   for (const [name, info] of Object.entries(experimentalStickerings)) {
-    if (info.groups && "3x3x3" in info.groups) {
+    if (info.groups && (puzzleID in info.groups || "3x3x3" in info.groups)) {
       stickerings.push(name);
     }
   }
