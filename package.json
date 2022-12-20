@@ -152,7 +152,7 @@
     "deploy": "make deploy",
     "deploy-twizzle": "make deploy-twizzle",
     "deploy-experiments": "make deploy-experiments",
-    "vendor-twsearch": "make vendor-twsearch",
+    "roll-vendored-twsearch": "make roll-vendored-twsearch",
     "update-cdn": "make update-cdn"
   },
   "keywords": [

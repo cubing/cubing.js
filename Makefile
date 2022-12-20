@@ -186,8 +186,8 @@ deploy-twizzle: build-site-twizzle
 .PHONY: deploy-experiments
 deploy-experiments: build-site-experiments
 	${NODE} script/deploy/experiments.js
-.PHONY: vendor-twsearch
-vendor-twsearch:
+.PHONY: roll-vendored-twsearch
+roll-vendored-twsearch:
 	test -d ../twsearch/ || exit
 	cd ../twsearch/ && make clean build/esm
 	rm -rf src/cubing/vendor/mpl/twsearch/*
