@@ -7,8 +7,8 @@ import {
 import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 
 export const twsearchPromise: Promise<
-  typeof import("../../../vendor/gpl/twsearch")
-> = from(async () => import("../../../vendor/gpl/twsearch"));
+  typeof import("../../../vendor/mpl/twsearch")
+> = from(async () => import("../../../vendor/mpl/twsearch"));
 
 export interface TwsearchOptions {
   moveSubset?: string[];

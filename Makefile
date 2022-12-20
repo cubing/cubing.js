@@ -190,8 +190,8 @@ deploy-experiments: build-site-experiments
 vendor-twsearch:
 	test -d ../twsearch/ || exit
 	cd ../twsearch/ && make clean build/esm
-	rm -rf src/cubing/vendor/gpl/twsearch/*
-	cp -R ../twsearch/build/esm/* src/cubing/vendor/gpl/twsearch/
+	rm -rf src/cubing/vendor/mpl/twsearch/*
+	cp -R ../twsearch/build/esm/* src/cubing/vendor/mpl/twsearch/
 	node script/fix-vendored-twsearch.js
 .PHONY: update-cdn
 update-cdn:

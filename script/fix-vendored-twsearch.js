@@ -1,7 +1,7 @@
 import { readdir, readFile, writeFile } from "fs/promises";
 import { join } from "path";
 
-const DIR = new URL("../src/cubing/vendor/gpl/twsearch", import.meta.url)
+const DIR = new URL("../src/cubing/vendor/mpl/twsearch", import.meta.url)
   .pathname;
 const ROME_JSON = new URL("../rome.json", import.meta.url).pathname;
 
@@ -47,7 +47,7 @@ for (const fileName of await readdir(DIR)) {
 console.log("Fixing:", ROME_JSON);
 let contents = await readFile(ROME_JSON, "utf-8");
 contents = contents.replaceAll(
-  /"src\/cubing\/vendor\/gpl\/twsearch\/twsearch-.*.js"/g,
-  `"src/cubing/vendor/gpl/twsearch/${dynamicFileName}"`,
+  /"src\/cubing\/vendor\/mpl\/twsearch\/twsearch-.*.js"/g,
+  `"src/cubing/vendor/mpl/twsearch/${dynamicFileName}"`,
 );
 await writeFile(ROME_JSON, contents);
