@@ -1,8 +1,8 @@
-console.info("Loading twsearch v0.3.2-1-g8985a950");
+console.info("Loading twsearch v0.4.0");
 // src/js/api.ts
 import { Alg } from "../../../alg";
 async function importOnce() {
-  const fn = (await import("./twsearch-PTN3QM26.js")).default;
+  const fn = (await import("./twsearch-VUC3P72V.js")).default;
   return await fn();
 }
 var cachedEmscriptenModule = null;
