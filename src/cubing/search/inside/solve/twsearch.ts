@@ -40,7 +40,6 @@ export async function solveTwsearch(
   const kpuzzle = new KPuzzle(def);
   setArg("--startprunedepth 5"); // TODO
   if (options) {
-    // rome-ignore lint/nursery/useConst: TODO: https://github.com/rome/tools/issues/4006
     let { minDepth, maxDepth } = options;
     if (typeof minDepth !== "undefined") {
       mustBeNaturalNumber("minDepth", minDepth);
