@@ -28,7 +28,7 @@ export function setAlgPartTypeMismatchReportingLevel(
 }
 
 export const algDebugGlobals: { caretNISSNotationEnabled: boolean } = {
-  caretNISSNotationEnabled: false,
+  caretNISSNotationEnabled: true,
 };
 
 export function setAlgDebug(options: {
