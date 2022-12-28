@@ -8,7 +8,7 @@ Header always set X-XSS-Protection "0" env=HTTPS
 # Redirect to HTTPS first.
 RewriteEngine on
 RewriteCond %{HTTPS} off
-RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=308,L]
 
 # If on HTTPS, remove the www.
 RewriteEngine On
