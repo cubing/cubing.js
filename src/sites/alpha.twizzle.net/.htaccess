@@ -13,6 +13,7 @@ Header always set X-Content-Type-Options "nosniff" env=HTTPS
 Header always set X-Frame-Options "DENY" env=HTTPS
 Header always set X-XSS-Protection "0" env=HTTPS
 
+# Redirect `index.html` to the folder for the editor and explorer.
 RewriteEngine On
 RewriteCond %{REQUEST_URI} ^/explore/index\.html$ [NC]
 RewriteRule ^explore/index\.html$ /explore/ [R=308,L]
@@ -32,7 +33,9 @@ RewriteCond %{HTTPS} on
 RewriteCond %{HTTP_HOST} ^www\. [NC]
 RewriteRule ^(.*)$ https://%{SERVER_NAME}{REQUEST_URI} [R=308,L]
 
+# Vanity URL for Twizzle Diaries
 Redirect 307 /diaries https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3NgpDbzN4VkcfjEZSQ_TYQv_OEjbjF&index=1
 
+# Limit caching to 5 minutes (does this work properly in Dreamhost?),
 ExpiresActive off
 Header always set Cache-Control "max-age=300; must-revalidate"
