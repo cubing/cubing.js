@@ -5,6 +5,14 @@ Header always set X-Content-Type-Options "nosniff" env=HTTPS
 Header always set X-Frame-Options "DENY" env=HTTPS
 Header always set X-XSS-Protection "0" env=HTTPS
 
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/explore/index\.html$ [NC]
+RewriteRule ^explore/index\.html$ /explore/ [R=308,L]
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/edit/index\.html$ [NC]
+RewriteRule ^edit/index\.html$ /edit/ [R=308,L]
+
 # Redirect to HTTPS first.
 RewriteEngine on
 RewriteCond %{HTTPS} off
@@ -15,9 +23,6 @@ RewriteEngine On
 RewriteCond %{HTTPS} on
 RewriteCond %{HTTP_HOST} ^www\. [NC]
 RewriteRule ^(.*)$ https://%{SERVER_NAME}{REQUEST_URI} [R=308,L]
-
-RewriteRule ^/edit/index.html(\?.*)?$ /edit/$1 [R=308,L]
-RewriteRule ^/explore/index.html(\?.*)?$ /explore/$1 [R=308,L]
 
 Redirect 307 /diaries https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3NgpDbzN4VkcfjEZSQ_TYQv_OEjbjF&index=1
 
