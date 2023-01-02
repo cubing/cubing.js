@@ -24,6 +24,14 @@ body:
   validations:
     required: true
 - type: textarea
+  id: screenshots
+  attributes:
+    label: "🖼 Screenshots"
+    description: "Do you have any screenshots that demonstrate the issue?"
+    placeholder: "Click here and then drag any screenshots into the editor."
+  validations:
+    required: false
+- type: textarea
   id: expected
   attributes:
     label: Expected behaviour
@@ -39,14 +47,6 @@ body:
     placeholder: "Examples: a specific version of `node`, a specific browser, etc."
   validations:
     required: true
-- type: textarea
-  id: screenshots
-  attributes:
-    label: "🖼 Screenshots"
-    description: "Do you have any screenshots that demonstrate the issue?"
-    placeholder: "Click here and then drag any screenshots into the editor."
-  validations:
-    required: false
 - type: textarea
   id: additional
   attributes:

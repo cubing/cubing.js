@@ -23,6 +23,14 @@ body:
   validations:
     required: true
 - type: textarea
+  id: screenshots
+  attributes:
+    label: "🖼 Screenshots"
+    description: "Do you have any screenshots that demonstrate the issue?"
+    placeholder: "Click here and then drag any screenshots into the editor."
+  validations:
+    required: false
+- type: textarea
   id: expected
   attributes:
     label: Expected behaviour
@@ -37,14 +45,6 @@ body:
     placeholder: "Example: Chrome 105 on macOS 12.5.1"
   validations:
     required: true
-- type: textarea
-  id: screenshots
-  attributes:
-    label: "🖼 Screenshots"
-    description: "Do you have any screenshots that demonstrate the issue?"
-    placeholder: "Click here and then drag any screenshots into the editor."
-  validations:
-    required: false
 - type: textarea
   id: additional
   attributes:
