@@ -32,6 +32,24 @@ const ATTRIBUTE_TWISTY_PLAYER_PROP = "twisty-player-prop";
 
 type TwistyPlayerAlgProp = "alg" | "setupAlg";
 
+function pasteIntoTextArea(
+  textArea: HTMLTextAreaElement,
+  text: string,
+): boolean {
+  console.log("pasteInto");
+  const selection = globalThis.getSelection();
+  const firstRange = selection?.getRangeAt(0);
+  console.log(selection?.getRangeAt(0));
+  console.log(firstRange?.commonAncestorContainer, textArea);
+  if (firstRange?.commonAncestorContainer !== textArea) {
+    return false;
+  }
+  const { startOffset, endOffset } = firstRange;
+  const { value } = textArea;
+  textArea.value = value.slice(0, startOffset) + text + value.slice(endOffset);
+  return true;
+}
+
 /** @category Other Custom Elements */
 export class TwistyAlgEditor extends ManagedCustomElement {
   model = new TwistyAlgEditorModel();
@@ -113,6 +131,18 @@ export class TwistyAlgEditor extends ManagedCustomElement {
         },
       );
     }
+  }
+
+  connectedCallback(): void {
+    console.log(this.#textarea);
+    this.#textarea.addEventListener("paste", (e) => {
+      const newText = e.clipboardData?.getData("text").replaceAll("’", "'");
+      console.log({ newText });
+      if (newText && pasteIntoTextArea(this.#textarea, newText)) {
+        console.log("preventing default");
+        e.preventDefault();
+      }
+    });
   }
 
   // TODO
