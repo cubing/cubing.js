@@ -1,5 +1,6 @@
 export { cube2x2x2JSON } from "./2x2x2.kpuzzle.json";
 export { cube2x2x2SVG } from "./2x2x2.kpuzzle.svg";
+export { cube2x2x2LLSVG } from "./2x2x2-ll.kpuzzle.svg";
 export { clockJSON } from "./clock.kpuzzle.json";
 export { clockSVG } from "./clock.kpuzzle.svg";
 export { pyraminxSVG } from "./pyraminx.kpuzzle.svg";
