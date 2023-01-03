@@ -20,11 +20,11 @@ export const cube2x2x2: PuzzleLoader = {
           .cube2x2x2JSON,
       ),
   ),
-  svg: async () => 
+  svg: async () =>
     (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
       .cube2x2x2SVG,
   llSVG: getCached(
-    async () => 
+    async () =>
       (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
         .cube2x2x2LLSVG,
   ),
