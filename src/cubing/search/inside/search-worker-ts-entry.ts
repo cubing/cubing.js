@@ -1,4 +1,4 @@
-import { nodeEndpointPort } from "../../vendor/comlink-everywhere/inside/index";
+import { nodeEndpointPort } from "../../vendor/apache/comlink-everywhere/inside/index";
 import { exposeAPI } from "./worker-guard";
 
 if (exposeAPI.expose) {

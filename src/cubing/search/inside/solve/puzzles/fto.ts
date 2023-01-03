@@ -1,7 +1,7 @@
 import { Alg } from "../../../../alg";
 import type { KState } from "../../../../kpuzzle/KState";
 import { puzzles } from "../../../../puzzles";
-import { from } from "../../../../vendor/p-lazy/p-lazy";
+import { from } from "../../../../vendor/mit/p-lazy/p-lazy";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";

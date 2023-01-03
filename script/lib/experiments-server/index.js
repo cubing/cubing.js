@@ -34,8 +34,8 @@ export function startServer(port) {
       filePath += "index.html";
     }
 
-    var extension = extname(filePath).toLowerCase();
-    var mimeTypes = {
+    const extension = extname(filePath).toLowerCase();
+    const mimeTypes = {
       ".html": "text/html",
       ".js": "text/javascript",
       ".css": "text/css",
@@ -53,7 +53,7 @@ export function startServer(port) {
       ".wasm": "application/wasm",
     };
 
-    var contentType = mimeTypes[extension] || "application/octet-stream";
+    const contentType = mimeTypes[extension] || "application/octet-stream";
 
     readFile(filePath, function (error, content) {
       if (error) {

@@ -1,7 +1,8 @@
-import { from } from "../../../vendor/p-lazy/p-lazy";
+import { from } from "../../../vendor/mit/p-lazy/p-lazy";
 import { StaleDropper } from "../PromiseFreshener";
 import type { UserVisibleErrorTracker } from "../UserVisibleErrorTracker";
 
+// rome-ignore lint/nursery/noBannedTypes: TODO: can we use `satisfies` below instead of using this?
 type InputRecord = {};
 
 export type InputProps<T extends InputRecord> = {

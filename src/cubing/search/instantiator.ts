@@ -1,13 +1,24 @@
-import { constructWorker, wrap } from "../vendor/comlink-everywhere/outside";
-import type { WorkerInsideAPI } from "./inside/api";
+import {
+  constructWorker,
+  wrap,
+} from "../vendor/apache/comlink-everywhere/outside";
+import { insideAPI, WorkerInsideAPI } from "./inside/api";
 import { getWorkerEntryFileURL } from "./inside/search-worker-ts-entry-path-getter";
 import { searchOutsideDebugGlobals } from "./outside";
 
 const MODULE_WORKER_TIMEOUT_MILLISECONDS = 5000;
 
-export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
-  // rome-ignore lint(correctness/noAsyncPromiseExecutor): TODO
-  return new Promise<WorkerInsideAPI>(async (resolve, reject) => {
+export interface WorkerOutsideAPI {
+  terminate: () => void; // `node` can return a `Promise` with an exit code, but we match the web worker API.
+}
+export interface InsideOutsideAPI {
+  insideAPI: WorkerInsideAPI;
+  outsideAPI: WorkerOutsideAPI;
+}
+
+export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
+  // rome-ignore lint/suspicious/noAsyncPromiseExecutor: TODO
+  return new Promise<InsideOutsideAPI>(async (resolve, reject) => {
     const timeoutID = setTimeout(() => {
       reject(new Error("module instantiation timeout"));
     }, MODULE_WORKER_TIMEOUT_MILLISECONDS);
@@ -51,7 +62,7 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
         if (messageData === "comlink-exposed") {
           // We need to clear the timeout so that we don't prevent `node` from exiting in the meantime.
           clearTimeout(timeoutID);
-          resolve(wrap<WorkerInsideAPI>(worker));
+          resolve(wrapWithTerminate(worker));
         } else {
           reject(
             new Error(`wrong module instantiation message ${messageData}`),
@@ -76,35 +87,41 @@ export async function instantiateModuleWorker(): Promise<WorkerInsideAPI> {
   });
 }
 
-async function instantiateClassicWorker(): Promise<WorkerInsideAPI> {
+function wrapWithTerminate(worker: Worker): InsideOutsideAPI {
+  const insideAPI = wrap<WorkerInsideAPI>(worker);
+  const terminate = worker.terminate.bind(worker);
+  return { insideAPI, outsideAPI: { terminate } };
+}
+
+async function instantiateClassicWorker(): Promise<InsideOutsideAPI> {
   const { workerSource } = await import(
     "./search-worker-inside-generated-string.js"
   );
   const worker = await constructWorker(workerSource, { eval: true });
-  return wrap(worker);
+  return wrapWithTerminate(worker);
 }
 
-export const allWorkers: Promise<WorkerInsideAPI>[] = [];
+export const allInsideOutsideAPIPromises: Promise<InsideOutsideAPI>[] = [];
 
-export async function instantiateWorker(): Promise<WorkerInsideAPI> {
-  const workerPromise = instantiateWorkerImplementation();
-  allWorkers.push(workerPromise);
-  workerPromise.then((worker) => {
-    worker.setDebugMeasurePerf(searchOutsideDebugGlobals.logPerf);
-    worker.setScramblePrefetchLevel(
-      searchOutsideDebugGlobals.scramblePrefetchLevel,
-    );
-  });
-  return workerPromise;
+export async function instantiateWorker(): Promise<InsideOutsideAPI> {
+  const insideOutsideAPIPromise = instantiateWorkerImplementation();
+  allInsideOutsideAPIPromises.push(insideOutsideAPIPromise);
+  insideAPI.setDebugMeasurePerf(searchOutsideDebugGlobals.logPerf);
+  insideAPI.setScramblePrefetchLevel(
+    searchOutsideDebugGlobals.scramblePrefetchLevel,
+  );
+  return insideOutsideAPIPromise;
 }
 
 export async function mapToAllWorkers(
-  f: (worker: WorkerInsideAPI) => void,
+  f: (worker: InsideOutsideAPI) => void,
 ): Promise<void> {
-  await Promise.all(allWorkers.map((worker) => worker.then(f)));
+  await Promise.all(
+    allInsideOutsideAPIPromises.map((worker) => worker.then(f)),
+  );
 }
 
-async function instantiateWorkerImplementation(): Promise<WorkerInsideAPI> {
+async function instantiateWorkerImplementation(): Promise<InsideOutsideAPI> {
   if (searchOutsideDebugGlobals.forceStringWorker) {
     console.warn(
       "Using the `forceStringWorker` workaround for search worker instantiation. This will require downloading significantly more code than necessary, but the functionality will be the same.",

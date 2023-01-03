@@ -52,6 +52,10 @@ make dev
 
 To quickly check any changes for issues, try `make test-fast`. Run `make test` for more thorough testing options.
 
+### Developing on Windows
+
+We recommend using Microsoft's [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/about) to develop `cubing.js` on Windows.
+
 ## Acknowledgments
 
 As of this time, `cubing.js` primarily contains code by [Lucas Garron (@lgarron)](https://github.com/lgarron) and [Tom Rokicki (@rokicki)](https://github.com/rokicki). Significant parts of the cubing code also are from:

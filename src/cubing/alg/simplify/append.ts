@@ -22,7 +22,7 @@ export function experimentalAppendMove(
 ): Alg {
   const optionsHelper = new AppendOptionsHelper(options);
 
-  let outputPrefix: AlgNode[] = Array.from(alg.childAlgNodes());
+  const outputPrefix: AlgNode[] = Array.from(alg.childAlgNodes());
   let outputSuffix: Move[] = [addedMove];
   function output() {
     return new Alg([...outputPrefix, ...outputSuffix]); // TODO: What's the most efficient way to do this?
@@ -60,7 +60,7 @@ export function experimentalAppendMove(
         throw new Error("Unknown mod wrap");
       }
     }
-    let offsetAmount = offsetMod(move.amount, mod, offset);
+    const offsetAmount = offsetMod(move.amount, mod, offset);
     return move.modified({ amount: offsetAmount });
   }
 
@@ -115,7 +115,7 @@ export function experimentalAppendMove(
         optionsHelper.cancelPuzzleSpecificModWrap() !== "none",
       );
     } else {
-      let amount = suffix.reduce(
+      const amount = suffix.reduce(
         (sum: number, move: Move) => sum + move.amount,
         0,
       );

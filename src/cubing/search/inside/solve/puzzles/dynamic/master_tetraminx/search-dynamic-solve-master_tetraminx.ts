@@ -1,1 +1,1 @@
-export * from "../../../../../../vendor/xyzzy/master_tetraminx-solver.js";
+export * from "../../../../../../vendor/mpl/xyzzy/master_tetraminx-solver.js";

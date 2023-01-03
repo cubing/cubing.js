@@ -32,6 +32,18 @@ export const experimentalStickerings: Record<
   L6EO: { groups: { "3x3x3": "Roux" } },
   "2x2x2": { groups: { "3x3x3": "Petrus" } },
   "2x2x3": { groups: { "3x3x3": "Petrus" } },
+  L2C: {
+    groups: {
+      "4x4x4": "Reduction",
+      "5x5x5": "Reduction",
+      "6x6x6": "Reduction",
+    },
+  },
+  PBL: {
+    groups: {
+      "2x2x2": "Ortega",
+    },
+  },
   "Void Cube": { groups: { "3x3x3": "Miscellaneous" } },
   invisible: { groups: { "3x3x3": "Miscellaneous" } },
   picture: { groups: { "3x3x3": "Miscellaneous" } },

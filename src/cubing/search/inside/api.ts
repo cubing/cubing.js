@@ -1,12 +1,16 @@
 import type { Alg } from "../../alg";
-import type { KStateData } from "../../kpuzzle";
-import { KState } from "../../kpuzzle";
+import {
+  KPuzzleDefinition,
+  KState,
+  KStateData,
+  KTransformationData,
+} from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import { setIsInsideWorker } from "./inside-worker";
 import {
   preInitialize222,
   random222Scramble,
-  solve222,
+  solve222HTMSubOptimal,
 } from "./solve/puzzles/2x2x2";
 import {
   initialize333,
@@ -36,6 +40,7 @@ import {
   solveSkewb,
 } from "./solve/puzzles/skewb";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
+import { solveTwsearch, TwsearchOptions } from "./solve/twsearch";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
 
@@ -238,7 +243,7 @@ export const insideAPI = {
 
   solve222ToString: async (stateData: KStateData): Promise<string> => {
     const state = new KState(await puzzles["2x2x2"].kpuzzle(), stateData);
-    return (await solve222(state)).toString();
+    return (await solve222HTMSubOptimal(state)).toString();
   },
 
   solveSkewbToString: async (stateData: KStateData): Promise<string> => {
@@ -258,6 +263,14 @@ export const insideAPI = {
 
   setDebugMeasurePerf: async (measure: boolean): Promise<void> => {
     setDebugMeasurePerf(measure);
+  },
+
+  solveTwsearchToString: async (
+    def: KPuzzleDefinition,
+    stateData: KTransformationData,
+    options?: TwsearchOptions,
+  ): Promise<string> => {
+    return (await solveTwsearch(def, stateData, options)).toString();
   },
 };
 

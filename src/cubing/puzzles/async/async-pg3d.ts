@@ -1,6 +1,6 @@
 import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
-import type { ExperimentalStickering } from "../../twisty";
+import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import type { StickeringMask } from "../stickerings/mask";
 import {
@@ -9,7 +9,7 @@ import {
 } from "../stickerings/cube-like-stickerings";
 import { getCached } from "./lazy-cached";
 import { Move, PuzzleSpecificSimplifyOptions, QuantumMove } from "../../alg";
-import { PLazy } from "../../vendor/p-lazy/p-lazy";
+import { PLazy } from "../../vendor/mit/p-lazy/p-lazy";
 
 // TODO: modify this to handle TwistyPlayer options
 export async function asyncGetPuzzleGeometry(
@@ -97,7 +97,7 @@ export class CubePGPuzzleLoader extends PGPuzzleLoader {
   stickeringMask(stickering: ExperimentalStickering): Promise<StickeringMask> {
     return cubeLikeStickeringMask(this, stickering);
   }
-  stickerings = cubeStickerings;
+  stickerings = () => cubeStickerings(this.id as PuzzleID);
 }
 
 export function puzzleSpecificSimplifyOptionsPromise(

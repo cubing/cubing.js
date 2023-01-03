@@ -1,5 +1,5 @@
 import type { PerspectiveCamera, WebGLRenderer } from "three";
-import { Stats } from "../../../vendor/three/examples/jsm/libs/stats.modified.module";
+import { Stats } from "../../../vendor/mit/three/examples/jsm/libs/stats.modified.module";
 import { THREEJS } from "../../heavy-code-imports/3d";
 import { StaleDropper } from "../../model/PromiseFreshener";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";

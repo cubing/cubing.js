@@ -28,14 +28,17 @@ export async function preInitializeSkewb(): Promise<void> {
   await getCachedTrembleSolver();
 }
 
-function resetCenterOrientation(state: KState): KState {
-  return new KState(state.kpuzzle, {
-    CORNERS: state.stateData.CORNERS,
-    CENTERS: {
-      pieces: state.stateData.CENTERS.pieces,
-      orientation: new Array(6).fill(0),
+async function resetCenterOrientation(state: KState): Promise<KState> {
+  return new KState(
+    await (await searchDynamicSideEvents).skewbKPuzzleWithoutMOCached(),
+    {
+      CORNERS: state.stateData.CORNERS,
+      CENTERS: {
+        pieces: state.stateData.CENTERS.pieces,
+        orientation: new Array(6).fill(0),
+      },
     },
-  });
+  );
 }
 
 // TODO: fix def consistency.
@@ -43,7 +46,7 @@ export async function solveSkewb(state: KState): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
   const alg = await trembleSolver.solve(
-    resetCenterOrientation(state),
+    await resetCenterOrientation(state),
     TREMBLE_DEPTH,
     (quantumMove: QuantumMove) => (quantumMove.family === "y" ? 4 : 3), // TODO: Attach quantum move order lookup to puzzle.
   );

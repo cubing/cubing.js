@@ -27,6 +27,7 @@ import "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyStreamSource } from "../../../cubing/twisty/views/stream/TwistyStreamSource";
 import type { TwistyAlgEditor } from "../../../cubing/twisty/views/TwistyAlgEditor/TwistyAlgEditor";
 import { URLParamUpdater } from "../../../cubing/twisty/views/twizzle/url-params";
+import { computeAlgFeatures } from "./alg-features";
 import { findOrCreateChild, findOrCreateChildWithClass } from "./dom";
 import { examples } from "./examples";
 import { APP_TITLE } from "./strings";
@@ -215,6 +216,9 @@ class ControlPane {
   public toolGrid: ButtonGrid;
   public examplesGrid: ButtonGrid;
   private tempoDisplay: HTMLSpanElement;
+  private caretNISSInfo: HTMLElement;
+  private commutatorConjugateInfo: HTMLElement;
+  private square1Info: HTMLElement;
   private twistyStreamSource: TwistyStreamSource;
   constructor(
     private app: App,
@@ -235,6 +239,25 @@ class ControlPane {
     );
     twistyPlayer.experimentalModel.title.addFreshListener((title) => {
       appTitleElem.textContent = title ?? APP_TITLE;
+    });
+    twistyPlayer.experimentalModel.alg.addFreshListener(({ alg }) => {
+      // TODO: also do this for the setup alg?
+      const algFeatures = computeAlgFeatures(alg);
+      this.caretNISSInfo.hidden = !algFeatures.caretNISS;
+      this.commutatorConjugateInfo.hidden = !(
+        algFeatures.commutator || algFeatures.conjugate
+      );
+      const which: string[] = [];
+      if (algFeatures.commutator) {
+        which.push("commutator");
+      }
+      if (algFeatures.conjugate) {
+        which.push("conjugate");
+      }
+      this.commutatorConjugateInfo.querySelector(
+        "a",
+      )!.textContent = `${which.join(" and ")} notation`;
+      this.square1Info.hidden = !algFeatures.square1;
     });
     twistyPlayer.experimentalModel.videoURL.addFreshListener((url) => {
       const a = document.querySelector(".video-url") as HTMLAnchorElement;
@@ -329,6 +352,21 @@ class ControlPane {
       this.element,
       "tempo-display",
       "span",
+    );
+    this.caretNISSInfo = findOrCreateChildWithClass(
+      this.element,
+      "caret-niss-info",
+      "p",
+    );
+    this.commutatorConjugateInfo = findOrCreateChildWithClass(
+      this.element,
+      "commutator-conjugate-info",
+      "p",
+    );
+    this.square1Info = findOrCreateChildWithClass(
+      this.element,
+      "square1-info",
+      "p",
     );
     this.hintFaceletCheckbox = findOrCreateChildWithClass(
       this.element,

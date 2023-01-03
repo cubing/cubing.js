@@ -4,7 +4,7 @@
 
 "use strict";
 
-import { Alg } from "../../alg";
+import { Alg } from "../../../alg";
 import { randomUIntBelow } from "random-uint-below";
 
 function counter(A) {

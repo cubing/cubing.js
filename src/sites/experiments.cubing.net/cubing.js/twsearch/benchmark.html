@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8" />
+  <title>cubing.js | twsearch</title>
+  <script src="./benchmark.js" href="./benchmark.ts" type="module"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75">
+  <link rel="stylesheet" href="../minimal-html-style.css">
+  <style>
+    body {
+      width: min(40em, calc(100vw - 4em));
+      text-align: left;
+    }
+
+  </style>
+</head>
+
+<h2>2x2x2 scrambles</h2>
+
+<p>
+  Latest: <span id="latest"></span><br>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table td {
+      border: 1px solid gray;
+      padding: 0.25em;
+    }
+
+    table td:first-child {
+      text-align: right;
+    }
+
+    table td:last-child {
+      text-align: left;
+    }
+
+  </style>
+  </style>
+<table>
+  <tr>
+    <td>
+      <span id="num"></span>
+    </td>
+    <td> scrambles</td>
+  </tr>
+  <tr>
+    <td>
+      <span id="num-cancelling"></span>
+    </td>
+    <td> cancelling scrambles</td>
+  </tr>
+  <tr>
+    <td>
+      <span id="median"></span>
+    </td>
+    <td>median</td>
+  </tr>
+  <tr>
+    <td><span id="mean"></span></td>
+    <td>mean</td>
+  </tr>
+  <tr>
+    <td><span id="rest-mean"></span></td>
+    <td>
+      mean (ignoring first)
+    </td>
+  </tr>
+</table>
+</p>
+
+<div id="results"></div>
+
+</html>

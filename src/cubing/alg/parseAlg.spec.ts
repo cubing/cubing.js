@@ -76,13 +76,17 @@ describe("Square-1", () => {
 });
 
 describe("NISS", () => {
-  it("does not allow carat NISS notation by default", () => {
-    expect(() => parseAlg("R ^(U) D").toString()).to.throw(
-      "Alg contained a carat but carat NISS notation is not enabled.",
-    );
+  it("does not allow caret NISS notation when disabled", () => {
+    try {
+      setAlgDebug({ caretNISSNotationEnabled: false });
+      expect(() => parseAlg("R ^(U) D").toString()).to.throw(
+        "Alg contained a caret but caret NISS notation is not enabled.",
+      );
+    } finally {
+      setAlgDebug({ caretNISSNotationEnabled: true });
+    }
   });
-  it("parses carat NISS notation", () => {
-    setAlgDebug({ caratNISSNotationEnabled: true });
+  it("parses caret NISS notation by default", () => {
     expect(parseAlg("R ^(U L) D")).to.be.identicalAlg("R . D (U L)'");
   });
 });

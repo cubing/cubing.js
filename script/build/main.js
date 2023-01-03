@@ -1,4 +1,10 @@
-import { build, targets } from "./targets.js";
+import { needFolder } from "../lib/need-folder.js";
+needFolder(
+  new URL("../../node_modules/barely-a-dev-server", import.meta.url).pathname,
+  "npm install",
+);
+
+const { build, targets } = await import("./targets.js");
 
 const targetName = process.argv[2];
 if (!targetName) {

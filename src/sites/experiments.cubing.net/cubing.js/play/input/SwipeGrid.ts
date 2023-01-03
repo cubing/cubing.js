@@ -33,8 +33,8 @@ export class SwipeGrid extends HTMLElement {
     private puzzleName: PuzzleID,
     private moveListener: (move: Move) => void,
     private actionListener: (action: Action) => void,
-    _active: boolean = false, // TODO
     private theme: ThemeType,
+    _active: boolean = false, // TODO
   ) {
     super();
 

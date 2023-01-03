@@ -370,26 +370,30 @@ export class TwistyPlayer
     return canvases;
   }
 
-  /* Get the first available puzzle `Object3D`. This can be inserted into
-     another `three.js` scene, essentially "adopting" it from the
-     `TwistyPlayer`'s scenes while still allowing the `TwistyPlayer` to animate
-     it.
-
-     Note:
-     - This may never resolve if the player never creates the relevant 3D object
-       under the hood (e.g. if the config is set to 2D, or is not valid for
-       rendering a puzzle)
-     - The architecture of `cubing.js` may change significantly, so it is not
-       guaranteed that a `three.js` `Object3D` will be available from the main
-       thread in the future.
-     - This function only returns the current `three.js` puzzle object (once one
-       exists). If you change e.g. the `puzzle` config for the player, then the
-       object will currently become stale. This may be replaced with more
-       convenient behaviour in the future.
-  */
-  /** @deprecated */
+  /**
+   * Get the first available puzzle `Object3D`. This can be inserted into
+   * another `three.js` scene, essentially "adopting" it from the
+   * `TwistyPlayer`'s scenes while still allowing the `TwistyPlayer` to animate
+   * it. The function returns a `Promise` that returns if and when the
+   * `Object3D` is available, and accepts a callback that is called whenever a
+   * render is scheduled for the puzzle (essentially, if something about the
+   * puzzle has changed, like its appearance or current animated state).
+   *
+   * Note:
+   * - This may never resolve if the player never creates the relevant 3D object
+   *   under the hood (e.g. if the config is set to 2D, or is not valid for
+   *   rendering a puzzle)
+   * - The architecture of `cubing.js` may change significantly, so it is not
+   *   guaranteed that a `three.js` `Object3D` will be available from the main
+   *   thread in the future.
+   * - This function only returns the current `three.js` puzzle object (once one
+   *   exists). If you change e.g. the `puzzle` config for the player, then the
+   *   object will currently become stale. This may be replaced with more
+   *   convenient behaviour in the future.
+   *
+   * @deprecated */
   async experimentalCurrentThreeJSPuzzleObject(
-    puzzleChangeCallback?: () => void,
+    puzzleRenderScheduledCallback?: () => void,
   ): Promise<Object3D> {
     this.connectedCallback();
     const sceneWrapper = await this.#initial3DVisualizationWrapper.promise;
@@ -401,7 +405,7 @@ export class TwistyPlayer
       await twisty3DPuzzlePromise;
       await new Promise((resolve) => setTimeout(resolve, 0));
     })();
-    if (puzzleChangeCallback) {
+    if (puzzleRenderScheduledCallback) {
       // We want to notify the callback when the render is *scheduled* (once per
       // render), not when it is run. So we have a stub callback for the
       // scheduler itself, and rely on `scheduler.requestIsPending()` to dedup
@@ -411,7 +415,7 @@ export class TwistyPlayer
         if (!scheduler.requestIsPending()) {
           scheduler.requestAnimFrame();
           await safeToCallback;
-          puzzleChangeCallback();
+          puzzleRenderScheduledCallback();
         }
       });
     }

@@ -1,17 +1,14 @@
-import type { Alg } from "../../../../alg";
+import { Alg, Move } from "../../../../alg";
 import type { KPuzzle } from "../../../../kpuzzle";
 import { KState } from "../../../../kpuzzle";
-import { puzzles } from "../../../../puzzles";
+import { cube2x2x2, puzzles } from "../../../../puzzles";
 import { randomPermuteInPlace, randomUIntBelow } from "random-uint-below";
 import { mustBeInsideWorker } from "../../inside-worker";
 import type { SGSCachedData } from "../parseSGS";
 import { TrembleSolver } from "../tremble";
 import { searchDynamicSideEvents } from "./dynamic/sgs-side-events";
-
-// Empirical ly determined depth:
-// - ≈11 moves on average (as opposed to >13 moves for depth 2),
-// - in close to 40ms(on a MacBook Pro).
-const TREMBLE_DEPTH = 3;
+import { solveTwsearch, twsearchPromise } from "../twsearch";
+import { experimentalNormalize2x2x2Orientation } from "../../../../puzzles/cubing-private";
 
 let cachedTrembleSolver: Promise<TrembleSolver> | null = null;
 async function getCachedTrembleSolver(): Promise<TrembleSolver> {
@@ -34,12 +31,91 @@ export async function preInitialize222(): Promise<void> {
   await getCachedTrembleSolver();
 }
 
-// TODO: fix def consistency.
-export async function solve222(state: KState): Promise<Alg> {
+export async function solve222HTMSubOptimal(
+  state: KState,
+  maxDepth: number = 11,
+): Promise<Alg> {
   mustBeInsideWorker();
-  const trembleSolver = await getCachedTrembleSolver();
-  const alg = await trembleSolver.solve(state, TREMBLE_DEPTH, () => 4); // TODO: Attach quantum move order lookup to puzzle.
-  return alg;
+  return await solveTwsearch(
+    (
+      await cube2x2x2.kpuzzle()
+    ).definition,
+    state.experimentalToTransformation()!.transformationData,
+    {
+      moveSubset: "UFLR".split(""), // TODO: <U, F, R>
+      maxDepth,
+    },
+  );
+}
+
+// TODO: fix def consistency.
+// TODO: why is this ending up with the wrong rotation sometimes?
+export async function solve222HTMOptimal(
+  state: KState,
+  maxDepth: number = 11,
+): Promise<Alg> {
+  mustBeInsideWorker();
+  const { normalizedState, normalizationAlg } =
+    experimentalNormalize2x2x2Orientation(state);
+  const orientedResult = await solveTwsearch(
+    (
+      await cube2x2x2.kpuzzle()
+    ).definition,
+    normalizedState.experimentalToTransformation()!.transformationData,
+    {
+      moveSubset: "UFLR".split(""), // TODO: <U, F, R>
+      maxDepth,
+    },
+  );
+  return normalizationAlg.concat(orientedResult);
+}
+
+async function hasHTMSolutionWithFewerMoves(
+  state: KState,
+  filterMin: number,
+): Promise<boolean> {
+  try {
+    (await solve222HTMOptimal(state, filterMin - 1)).log();
+    return true;
+  } catch (e) {
+    if (e instanceof (await twsearchPromise).NoSolutionError) {
+      return false;
+    }
+    throw e;
+  }
+}
+
+function isCancelling(alg: Alg): boolean {
+  let lastFamily: undefined | string;
+  for (const node of alg.childAlgNodes()) {
+    const move = node.as(Move);
+    if (!move) {
+      throw new Error("Unexpected solution with a non-move node!");
+    }
+    const { family } = move;
+    if (
+      lastFamily &&
+      ((lastFamily === "L" && family === "R") ||
+        (lastFamily === "R" && family === "L"))
+    ) {
+      return true;
+    }
+    lastFamily = family;
+  }
+  return false;
+}
+
+// TODO: fix def consistency.
+export async function solve222ForScramble(state: KState): Promise<Alg> {
+  mustBeInsideWorker();
+  return solveTwsearch(
+    (await cube2x2x2.kpuzzle()).definition,
+    state.experimentalToTransformation()!.transformationData,
+    {
+      moveSubset: "UFLR".split(""),
+      minDepth: 11,
+    },
+  );
 }
 
 // TODO: factor out and test.
@@ -85,5 +161,21 @@ export async function random222State(): Promise<KState> {
 }
 
 export async function random222Scramble(): Promise<Alg> {
-  return await solve222(await random222State());
+  let state = await random222State();
+  while (await hasHTMSolutionWithFewerMoves(state, 4)) {
+    console.info("Filtered out a 2x2x2 state!");
+    state = await random222State();
+  }
+  const inverseState = state
+    .experimentalToTransformation()!
+    .invert()
+    .toKState(); // Note: Inversion is not needed for randomness, but it is more consistent with other code.
+  let sol = await solve222ForScramble(inverseState);
+  while (isCancelling(sol)) {
+    // Rely on `--randomstart` to find us a non-cancelling with ≈2/3 probability.
+    // TODO: Check that this works for 100% of states.
+    sol = await solve222ForScramble(inverseState);
+  }
+
+  return sol;
 }

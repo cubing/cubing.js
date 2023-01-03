@@ -64,7 +64,7 @@ export function currentMoveInfoEquals(
       currentMoveArrayEquals(c1.movesFinishing, c2.movesFinishing) &&
       currentMoveArrayEquals(c1.movesStarting, c2.movesStarting) &&
       c1.latestStart === c2.latestStart &&
-      c2.earliestEnd === c2.earliestEnd);
+      c1.earliestEnd === c2.earliestEnd);
   return eq;
 }
 

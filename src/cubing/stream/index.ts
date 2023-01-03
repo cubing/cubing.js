@@ -15,6 +15,4 @@ export {
   WebSocketProxySender as ExperimentalWebSocketProxySender,
 } from "./websocket-proxy";
 
-export {
-  TwizzleStreamServer as ExperimentalTwizzleStreamServer,
-} from "./twizzle/TwizzleStream";
+export { TwizzleStreamServer as ExperimentalTwizzleStreamServer } from "./twizzle/TwizzleStream";

@@ -1,3 +1,1 @@
-export {
-  getStickeringGroup,
-} from "../model/props/puzzle/display/StickeringRequestProp";
+export { getStickeringGroup } from "../model/props/puzzle/display/StickeringRequestProp";

@@ -1,13 +1,19 @@
 import { Alg } from "../alg";
+import type { KPuzzle } from "../kpuzzle";
 // import { preInitialize222 } from "../implementations/2x2x2";
 import type { KState } from "../kpuzzle/KState";
-import type { PrefetchLevel, WorkerInsideAPI } from "./inside/api";
+import type { PrefetchLevel } from "./inside/api";
 import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TODO: don't reach into `inside` code.
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
-import { instantiateWorker, mapToAllWorkers } from "./instantiator";
+import type { TwsearchOptions } from "./inside/solve/twsearch";
+import {
+  InsideOutsideAPI,
+  instantiateWorker,
+  mapToAllWorkers,
+} from "./instantiator";
 
-let cachedWorkerInstance: Promise<WorkerInsideAPI> | null = null;
-async function getCachedWorkerInstance(): Promise<WorkerInsideAPI> {
+let cachedWorkerInstance: Promise<InsideOutsideAPI> | null = null;
+async function getCachedWorkerInstance(): Promise<InsideOutsideAPI> {
   return await (cachedWorkerInstance ??= instantiateWorker());
 }
 
@@ -37,10 +43,11 @@ export function _preInitializationHintForEvent(
     case "minx":
       return;
     case "333oh":
-      return _preInitializationHintForEvent("333");
+      _preInitializationHintForEvent("333");
+      return;
   }
   (async () => {
-    await (await getCachedWorkerInstance()).initialize(eventID);
+    await (await getCachedWorkerInstance()).insideAPI.initialize(eventID);
   })();
 }
 
@@ -64,7 +71,7 @@ export async function _randomScrambleStringForEvent(
   const worker = searchOutsideDebugGlobals.forceNewWorkerForEveryScramble
     ? await instantiateWorker()
     : await getCachedWorkerInstance();
-  return worker.randomScrambleStringForEvent(eventID);
+  return worker.insideAPI.randomScrambleStringForEvent(eventID);
 }
 
 export async function randomScrambleStringForEvent(
@@ -83,27 +90,63 @@ export async function experimentalSolve3x3x3IgnoringCenters(
   state: KState,
 ): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solve333ToString(state.stateData));
+  return Alg.fromString(await cwi.insideAPI.solve333ToString(state.stateData));
 }
 
 export async function experimentalSolve2x2x2(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solve222ToString(state.stateData));
+  return Alg.fromString(await cwi.insideAPI.solve222ToString(state.stateData));
 }
 
 export async function solveSkewb(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solveSkewbToString(state.stateData));
+  return Alg.fromString(
+    await cwi.insideAPI.solveSkewbToString(state.stateData),
+  );
 }
 
 export async function solvePyraminx(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solvePyraminxToString(state.stateData));
+  return Alg.fromString(
+    await cwi.insideAPI.solvePyraminxToString(state.stateData),
+  );
 }
 
 export async function solveMegaminx(state: KState): Promise<Alg> {
   const cwi = await getCachedWorkerInstance();
-  return Alg.fromString(await cwi.solveMegaminxToString(state.stateData));
+  return Alg.fromString(
+    await cwi.insideAPI.solveMegaminxToString(state.stateData),
+  );
+}
+
+export async function solveTwsearch(
+  kpuzzle: KPuzzle,
+  state: KState,
+  options?: { moveSubset?: string[]; startState?: KState; minDepth?: number },
+): Promise<Alg> {
+  const { startState, ...otherOptions } = options ?? {};
+  const apiOptions: TwsearchOptions = otherOptions;
+  if (startState) {
+    apiOptions.startState =
+      startState.experimentalToTransformation()!.transformationData;
+  }
+  const { ...def } = kpuzzle.definition;
+  delete def.experimentalIsStateSolved;
+  delete def.experimentalDerivedMoves;
+  const dedicatedWorker = await instantiateWorker();
+  try {
+    return Alg.fromString(
+      await dedicatedWorker.insideAPI.solveTwsearchToString(
+        def,
+        state.experimentalToTransformation()!.transformationData,
+        apiOptions,
+      ),
+    );
+  } finally {
+    console.log("Search ended, terminating dedicated `twsearch` worker.");
+    // TODO: support re-using the same worker for multiple searches..
+    await dedicatedWorker.outsideAPI.terminate();
+  }
 }
 
 interface SearchOutsideDebugGlobals {
@@ -125,12 +168,14 @@ export function setDebug(options: Partial<SearchOutsideDebugGlobals>): void {
   const { logPerf, scramblePrefetchLevel } = options;
   if (typeof logPerf !== "undefined") {
     searchOutsideDebugGlobals.logPerf = logPerf;
-    mapToAllWorkers((worker) => worker.setDebugMeasurePerf(logPerf));
+    mapToAllWorkers((worker) => worker.insideAPI.setDebugMeasurePerf(logPerf));
   }
   if (typeof scramblePrefetchLevel !== "undefined") {
     searchOutsideDebugGlobals.scramblePrefetchLevel = scramblePrefetchLevel;
     mapToAllWorkers((worker) =>
-      worker.setScramblePrefetchLevel(scramblePrefetchLevel as PrefetchLevel),
+      worker.insideAPI.setScramblePrefetchLevel(
+        scramblePrefetchLevel as PrefetchLevel,
+      ),
     );
   }
   if ("forceStringWorker" in options) {

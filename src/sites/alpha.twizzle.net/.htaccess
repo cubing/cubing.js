@@ -1,22 +1,41 @@
 # Security headers
 Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" env=HTTPS
-Header always set Content-Security-Policy "default-src self alpha.twizzle.net; img-src self data: alpha.twizzle.net; script-src self alpha.twizzle.net; worker-src self alpha.twizzle.net blob:; style-src 'unsafe-inline' alpha.twizzle.net; frame-src https://www.youtube.com; frame-ancestors 'none'" env=HTTPS
+Header always set Content-Security-Policy "\
+default-src self alpha.twizzle.net ;\
+img-src self alpha.twizzle.net data: ;\
+script-src self alpha.twizzle.net 'unsafe-eval' ;\
+worker-src self alpha.twizzle.net blob: ;\
+connect-src self alpha.twizzle.net api.twizzle.net data: ;\
+style-src 'unsafe-inline' alpha.twizzle.net ;\
+frame-src https://www.youtube.com ;\
+frame-ancestors 'none'" env=HTTPS
 Header always set X-Content-Type-Options "nosniff" env=HTTPS
 Header always set X-Frame-Options "DENY" env=HTTPS
 Header always set X-XSS-Protection "0" env=HTTPS
 
+# Redirect `index.html` to the folder for the editor and explorer.
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/explore/index\.html$ [NC]
+RewriteRule ^explore/index\.html$ /explore/ [R=308,L]
+
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/edit/index\.html$ [NC]
+RewriteRule ^edit/index\.html$ /edit/ [R=308,L]
+
 # Redirect to HTTPS first.
 RewriteEngine on
 RewriteCond %{HTTPS} off
-RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=308,L]
 
 # If on HTTPS, remove the www.
 RewriteEngine On
 RewriteCond %{HTTPS} on
 RewriteCond %{HTTP_HOST} ^www\. [NC]
-RewriteRule ^(.*)$ https://%{SERVER_NAME}{REQUEST_URI} [R=302,L]
+RewriteRule ^(.*)$ https://%{SERVER_NAME}{REQUEST_URI} [R=308,L]
 
+# Vanity URL for Twizzle Diaries
 Redirect 307 /diaries https://www.youtube.com/watch?v=9_kqXn0Mq-o&list=PLFh3NgpDbzN4VkcfjEZSQ_TYQv_OEjbjF&index=1
 
+# Limit caching to 5 minutes (does this work properly in Dreamhost?),
 ExpiresActive off
 Header always set Cache-Control "max-age=300; must-revalidate"

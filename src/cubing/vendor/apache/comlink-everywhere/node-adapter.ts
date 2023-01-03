@@ -41,6 +41,9 @@ function nodeEndpoint(nep: NodeWorker): Worker & {
       listeners.delete(eh);
     },
     nodeWorker: nep,
+    terminate: () => {
+      nep.terminate();
+    },
     // start: nep.start && nep.start.bind(nep),
   } as Worker & {
     nodeWorker?: import("worker_threads").Worker;

@@ -30,5 +30,5 @@ export const cube2x2x2: PuzzleLoader = {
   stickeringMask: (
     stickering: ExperimentalStickering,
   ): Promise<StickeringMask> => cubeLikeStickeringMask(cube2x2x2, stickering),
-  stickerings: cubeStickerings,
+  stickerings: () => cubeStickerings("2x2x2"),
 };
