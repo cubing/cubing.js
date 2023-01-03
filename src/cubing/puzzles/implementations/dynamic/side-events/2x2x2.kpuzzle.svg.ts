@@ -2,7 +2,7 @@ export const cube2x2x2SVG = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
        "http://www.w3.org/TR/2001/REC-SVG-20050904/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 530 394" preserveAspectRatio="xMidYMid meet">
-  <title>2x2x2 test</title>
+  <title>2x2x2</title>
   <defs>
     <g id="sticker">
         <rect x="0" y="0" width="1" height="1" stroke="black" stroke-width="0.04px" />
