@@ -24,9 +24,9 @@ export const cube2x2x2: PuzzleLoader = {
     (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
       .cube2x2x2SVG,
   llSVG: getCached(
-    async () => (
-      await import("../dynamic/side-events/puzzles-dynamic-side-events"))
-        .cube2x2x2LLSVG
+    async () => 
+      (await import("../dynamic/side-events/puzzles-dynamic-side-events"))
+        .cube2x2x2LLSVG,
   ),
   pg: getCached(async () => {
     return asyncGetPuzzleGeometry("2x2x2");
