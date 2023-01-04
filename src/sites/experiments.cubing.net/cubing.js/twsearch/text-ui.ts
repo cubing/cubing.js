@@ -31,14 +31,28 @@ function validateAndSaveInput(
 }
 
 (async () => {
-  (document.querySelector("#reset") as HTMLButtonElement).addEventListener(
-    "click",
-    () => {
-      delete localStorage[LOCALSTORAGE_CHECKED_MOVES];
-      delete localStorage[LOCALSTORAGE_DEF];
-      location.reload();
-    },
-  );
+  (
+    document.querySelector("#reset-def-search") as HTMLButtonElement
+  ).addEventListener("click", () => {
+    delete localStorage[LOCALSTORAGE_DEF];
+    delete localStorage[LOCALSTORAGE_SEARCH];
+    location.reload();
+  });
+  (
+    document.querySelector("#reset-move-subset") as HTMLButtonElement
+  ).addEventListener("click", () => {
+    delete localStorage[LOCALSTORAGE_CHECKED_MOVES];
+    location.reload();
+  });
+  (
+    document.querySelector("#toggle-move-subset") as HTMLButtonElement
+  ).addEventListener("click", () => {
+    for (const checkbox of Array.from(
+      moveSubsetElem.querySelectorAll("input[type=checkbox"),
+    ) as HTMLInputElement[]) {
+      checkbox.checked = !checkbox.checked;
+    }
+  });
 
   const def = document.querySelector("#def") as HTMLTextAreaElement;
   def.value = localStorage[LOCALSTORAGE_DEF]
