@@ -51,8 +51,9 @@ function validateAndSaveInput(
       moveSubsetElem.querySelectorAll("input[type=checkbox"),
     ) as HTMLInputElement[]) {
       checkbox.checked = !checkbox.checked;
-      saveCheckedMoves();
+      checkedMoves[checkbox.value] = !checkedMoves[checkbox.value];
     }
+    saveCheckedMoves();
   });
 
   const def = document.querySelector("#def") as HTMLTextAreaElement;
