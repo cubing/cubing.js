@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8" />
+  <title>cubing.js | twsearch</title>
+  <script src="./text-ui.js" href="./text-ui.ts" type="module"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75">
+  <style>
+    textarea {
+      width: 400px;
+      height: 300px
+    }
+
+  </style>
+</head>
+
+<textarea id="def">{
+  "name": "2x2x2",
+  "orbits": {
+    "CORNERS": {
+      "numPieces": 8,
+      "numOrientations": 3
+    }
+  },
+  "startStateData": {
+    "CORNERS": {
+      "pieces": [0, 1, 2, 3, 4, 5, 6, 7],
+      "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
+    }
+  },
+  "moves": {
+    "U": {
+      "CORNERS": {
+        "permutation": [1, 2, 3, 0, 4, 5, 6, 7],
+        "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    "y": {
+      "CORNERS": {
+        "permutation": [1, 2, 3, 0, 7, 4, 5, 6],
+        "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    "x": {
+      "CORNERS": {
+        "permutation": [4, 0, 3, 5, 7, 6, 2, 1],
+        "orientation": [2, 1, 2, 1, 1, 2, 1, 2]
+      }
+    },
+    "L": {
+      "CORNERS": {
+        "permutation": [0, 1, 6, 2, 4, 3, 5, 7],
+        "orientation": [0, 0, 2, 1, 0, 2, 1, 0]
+      }
+    },
+    "F": {
+      "CORNERS": {
+        "permutation": [3, 1, 2, 5, 0, 4, 6, 7],
+        "orientation": [1, 0, 0, 2, 2, 1, 0, 0]
+      }
+    },
+    "R": {
+      "CORNERS": {
+        "permutation": [4, 0, 2, 3, 7, 5, 6, 1],
+        "orientation": [2, 1, 0, 0, 1, 0, 0, 2]
+      }
+    },
+    "B": {
+      "CORNERS": {
+        "permutation": [0, 7, 1, 3, 4, 5, 2, 6],
+        "orientation": [0, 2, 1, 0, 0, 0, 2, 1]
+      }
+    },
+    "D": {
+      "CORNERS": {
+        "permutation": [0, 1, 2, 3, 5, 6, 7, 4],
+        "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    "z": {
+      "CORNERS": {
+        "permutation": [3, 2, 6, 5, 0, 4, 7, 1],
+        "orientation": [1, 2, 1, 2, 2, 1, 2, 1]
+      }
+    },
+    "Rv": {
+      "CORNERS": {
+        "permutation": [4, 0, 3, 5, 7, 6, 2, 1],
+        "orientation": [2, 1, 2, 1, 1, 2, 1, 2]
+      }
+    },
+    "Uv": {
+      "CORNERS": {
+        "permutation": [1, 2, 3, 0, 7, 4, 5, 6],
+        "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    "Fv": {
+      "CORNERS": {
+        "permutation": [3, 2, 6, 5, 0, 4, 7, 1],
+        "orientation": [1, 2, 1, 2, 2, 1, 2, 1]
+      }
+    },
+    "Lv": {
+      "CORNERS": {
+        "permutation": [1, 7, 6, 2, 0, 3, 5, 4],
+        "orientation": [2, 1, 2, 1, 1, 2, 1, 2]
+      }
+    },
+    "Dv": {
+      "CORNERS": {
+        "permutation": [3, 0, 1, 2, 5, 6, 7, 4],
+        "orientation": [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    "Bv": {
+      "CORNERS": {
+        "permutation": [4, 7, 1, 0, 5, 3, 2, 6],
+        "orientation": [1, 2, 1, 2, 2, 1, 2, 1]
+      }
+    }
+  }
+}</textarea>
+<textarea id="search">{
+  "CORNERS": {
+    "pieces": [0, 1, 2, 3, 4, 5, 6, 7],
+    "orientation": [1, 2, 0, 0, 0, 0, 0, 0]
+  }
+}</textarea>
+<div id="move-subset"></div>
+Min depth: <input id="min-depth" type="number" value="0"><br>
+<button id="go">Search</button>
+<textarea id="results" value=""></textarea>
+
+</html>
