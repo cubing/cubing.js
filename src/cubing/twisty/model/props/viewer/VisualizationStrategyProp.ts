@@ -40,7 +40,7 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
           case "3D":
             return "PG3D";
           case "experimental-2D-LL":
-            if (inputs.puzzleID === "4x4x4") {
+            if (inputs.puzzleID === "4x4x4" || inputs.puzzleID === "2x2x2") {
               // TODO: calculate this based on the `PuzzleLoader`.
               return "experimental-2D-LL";
             } else {
