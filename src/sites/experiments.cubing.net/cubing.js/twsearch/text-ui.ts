@@ -2,15 +2,62 @@ import { KPuzzle, KState } from "../../../../cubing/kpuzzle";
 import { cube2x2x2 } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
 
-(async () => {
-  const def = document.querySelector("#def") as HTMLTextAreaElement;
-  def.value = JSON.stringify((await cube2x2x2.kpuzzle()).definition, null, "  ")
+const LOCALSTORAGE_DEF = "twsearch/text-ui/def";
+const LOCALSTORAGE_SEARCH = "twsearch/text-ui/search";
+const LOCALSTORAGE_CHECKED_MOVES = "twsearch/text-ui/checked-moves";
+
+async function defaultDef() {
+  return JSON.stringify((await cube2x2x2.kpuzzle()).definition, null, "  ")
     .replace(/,\n *(\d)/g, ", $1")
     .replace(/\[\n +(\d)/g, "[$1")
     .replace(/\n +\]/g, "]")
     .replace(/( *)\}\n( *)\}/g, "$2}}");
+}
+
+function validateAndSaveInput(
+  input: HTMLTextAreaElement,
+  localStorageField: string,
+): void {
+  try {
+    new KPuzzle(JSON.parse(input.value));
+    localStorage[localStorageField] = input.value;
+    input.classList.add("valid");
+    input.classList.remove("invalid");
+  } catch (e) {
+    input.classList.add("invalid");
+    input.classList.remove("valid");
+    throw e;
+  }
+}
+
+(async () => {
+  (document.querySelector("#reset") as HTMLButtonElement).addEventListener(
+    "click",
+    () => {
+      delete localStorage[LOCALSTORAGE_CHECKED_MOVES];
+      delete localStorage[LOCALSTORAGE_DEF];
+      location.reload();
+    },
+  );
+
+  const def = document.querySelector("#def") as HTMLTextAreaElement;
+  def.value = localStorage[LOCALSTORAGE_DEF]
+    ? localStorage[LOCALSTORAGE_DEF]
+    : await defaultDef();
+  validateAndSaveInput(def, LOCALSTORAGE_DEF);
+  def.addEventListener("input", () =>
+    validateAndSaveInput(def, LOCALSTORAGE_DEF),
+  );
 
   const search = document.querySelector("#search") as HTMLTextAreaElement;
+  search.value = localStorage[LOCALSTORAGE_SEARCH]
+    ? localStorage[LOCALSTORAGE_SEARCH]
+    : await defaultDef();
+  validateAndSaveInput(search, LOCALSTORAGE_SEARCH);
+  search.addEventListener("input", () =>
+    validateAndSaveInput(search, LOCALSTORAGE_SEARCH),
+  );
+
   const go = document.querySelector("#go") as HTMLButtonElement;
   const moveSubsetElem = document.querySelector(
     "#move-subset",
@@ -20,11 +67,10 @@ import { experimentalSolveTwsearch } from "../../../../cubing/search";
   ) as HTMLTextAreaElement;
   const results = document.querySelector("#results") as HTMLTextAreaElement;
 
-  const CHECKED_MOVES_LOCALSTORAGE = "twsearch/text-ui/checked-moves";
   let checkedMoves: Record<string, boolean> = {};
   try {
     checkedMoves = JSON.parse(
-      localStorage.getItem(CHECKED_MOVES_LOCALSTORAGE) ?? "{}",
+      localStorage.getItem(LOCALSTORAGE_CHECKED_MOVES) ?? "{}",
     );
   } catch {}
 
@@ -71,7 +117,7 @@ import { experimentalSolveTwsearch } from "../../../../cubing/search";
 
   function saveCheckedMoves() {
     localStorage.setItem(
-      CHECKED_MOVES_LOCALSTORAGE,
+      LOCALSTORAGE_CHECKED_MOVES,
       JSON.stringify(checkedMoves),
     );
   }
