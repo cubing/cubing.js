@@ -192,17 +192,18 @@ export class PGOrbitsDef {
       for (let k = 0; k < n; k++) {
         changed[k] = false;
       }
-      // don't consider rotations when optimizing
+      // don't consider rotations when optimizing, for what to keep
+      // but *do* consider rotations for unions.
       for (let j = 0; j < this.moveops.length; j++) {
-        if (!this.isRotation[j]) {
-          for (let k = 0; k < n; k++) {
-            if (
-              this.moveops[j].orbits[i].perm[k] !== k ||
-              this.moveops[j].orbits[i].ori[k] !== 0
-            ) {
+        for (let k = 0; k < n; k++) {
+          if (
+            this.moveops[j].orbits[i].perm[k] !== k ||
+            this.moveops[j].orbits[i].ori[k] !== 0
+          ) {
+            if (!this.isRotation[j]) {
               changed[k] = true;
-              du.union(k, this.moveops[j].orbits[i].perm[k]);
             }
+            du.union(k, this.moveops[j].orbits[i].perm[k]);
           }
         }
       }
