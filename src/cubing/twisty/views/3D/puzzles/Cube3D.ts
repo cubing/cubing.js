@@ -1012,6 +1012,7 @@ export class Cube3D extends Object3D implements Twisty3DPuzzle {
           : cubieDimensions.hintStickerElevation
         : cubieDimensions.stickerElevation,
     );
+    stickerMesh.scale.setScalar(getFaceletScale(this.options));
     return stickerMesh;
   }
 
