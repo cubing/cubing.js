@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8" />
+  <title>Miscellanous 2D
+    Stickering | twisty.js</title>
+  <link href="./demo-grid.css" rel="stylesheet" type="text/css" />
+  <script src="./twisty.js" href="./twisty.ts" type="module"></script>
+</head>
+
+<body>
+  <h1>Miscellanous 2D Stickerings</h1>
+  <div class="content">
+    <div class="case">
+      <h2>Megaminx EOLL</h2>
+      <twisty-player puzzle="megaminx" visualization="experimental-2D-LL" experimental-stickering="EOLL"
+        alg="F R U2 R2' F R F' U2' F'" experimental-setup-anchor="end" control-panel="none" background="none">
+      </twisty-player>
+    </div>
+    <div class="case">
+      <h2>Megaminx CPLL</h2>
+      <twisty-player puzzle="megaminx" visualization="experimental-2D-LL" experimental-stickering="CPLL"
+        alg="R2 U2' R2' U' R2 U2' R2'" experimental-setup-anchor="end" control-panel="none" background="none">
+      </twisty-player>
+    </div>
+  </div>
+  <div class="content">
+    <div class="case">
+      <h2>4x4x4 OLL</h2>
+      <twisty-player puzzle="4x4x4" visualization="experimental-2D-LL" experimental-stickering="OLL"
+        alg="r U2 x r U2 r U2 r' U2 l U2 r' U2 r U2 r' U2 r'" experimental-setup-anchor="end" control-panel="none"
+        background="none">
+      </twisty-player>
+    </div>
+    <div class="case">
+      <h2>4x4x4 ELL</h2>
+      <twisty-player puzzle="4x4x4" visualization="experimental-2D-LL" experimental-stickering="ELL"
+        alg="[2R, [R', U]] [2B, [L', B]]" experimental-setup-anchor="end" control-panel="none" background="none">
+      </twisty-player>
+    </div>
+  </div>
+</body>
+
+</html>

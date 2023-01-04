@@ -1,5 +1,6 @@
 import type { ExperimentalStickering } from "../../../twisty";
 import { PGPuzzleLoader } from "../../async/async-pg3d";
+import { getCached } from "../../async/lazy-cached";
 import type { StickeringMask } from "../../stickerings/mask";
 import {
   megaminxStickeringMask,
@@ -19,6 +20,12 @@ class MegaminxPuzzleLoader extends PGPuzzleLoader {
     return megaminxStickeringMask(this, stickering);
   }
   stickerings = megaminxStickerings;
+
+  llSVG = getCached(async () => {
+    return (
+      await import("../dynamic/megaminx/puzzles-dynamic-megaminx")
+    ).megaminxLLSVG;
+  });
 }
 
 export const megaminx = new MegaminxPuzzleLoader();

@@ -93,6 +93,8 @@ const oriented = "oriented";
 const invisible = "invisible";
 const dim = "dim";
 
+// We specify 5 facelets, because that's the maximum we need for any built-in puzzles (e.g. Megaminx centers or icosa vertices).
+// TODO: use "primary" and "non-primary" fields instead of listing all non-primary facelets.
 const pieceStickerings: Record<string, PieceStickeringMask> = {
   // regular
   [PieceStickering.Regular]: {
@@ -121,7 +123,7 @@ const pieceStickerings: Record<string, PieceStickeringMask> = {
   // invisible
   [PieceStickering.Invisible]: {
     // invisiblePiece
-    facelets: [invisible, invisible, invisible, invisible], // TODO: 4th entry is for void cube. Should be handled properly for all stickerings.
+    facelets: [invisible, invisible, invisible, invisible, invisible],
   },
 
   // "PLL"

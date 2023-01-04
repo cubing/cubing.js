@@ -19,7 +19,7 @@ function nextSVGID(): string {
 
 // TODO: This is hardcoded to 3x3x3 SVGs
 const colorMaps: Partial<
-  Record<FaceletMeshStickeringMask, Record<string, string>>
+  Record<FaceletMeshStickeringMask, string | Record<string, string>>
 > = {
   dim: {
     white: "#dddddd",
@@ -28,6 +28,7 @@ const colorMaps: Partial<
     red: "#660000",
     "rgb(34, 102, 255)": "#000088", // TODO
     yellow: "#888800",
+    "rgb(102, 0, 153)": "rgb(50, 0, 76)",
   },
   oriented: {
     white: "#44ddcc",
@@ -37,22 +38,8 @@ const colorMaps: Partial<
     "rgb(34, 102, 255)": "#44ddcc", // TODO
     yellow: "#44ddcc",
   },
-  ignored: {
-    white: "#444444",
-    orange: "#444444",
-    limegreen: "#444444",
-    red: "#444444",
-    "rgb(34, 102, 255)": "#444444", // TODO
-    yellow: "#444444",
-  },
-  invisible: {
-    white: "#00000000",
-    orange: "#00000000",
-    limegreen: "#00000000",
-    red: "#00000000",
-    "rgb(34, 102, 255)": "#00000000", // TODO
-    yellow: "#00000000",
-  },
+  ignored: "#555555",
+  invisible: "#00000000",
 };
 
 export class KPuzzleSVGWrapper {
@@ -130,7 +117,9 @@ export class KPuzzleSVGWrapper {
                   ? faceletStickeringMasks
                   : faceletStickeringMasks?.mask;
               const colorMap = colorMaps[stickeringMask];
-              if (colorMap) {
+              if (typeof colorMap === "string") {
+                originalColor = colorMap;
+              } else if (colorMap) {
                 originalColor = colorMap[originalColor];
               }
             })();
