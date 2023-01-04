@@ -118,8 +118,10 @@ function validateAndSaveInput(
       if (moveName in checkedMoves) {
         checkbox.checked = checkedMoves[moveName];
       } else {
-        checkedMoves[moveName] = true;
-        checkbox.checked = true;
+        const moveDefault =
+          !moveName.endsWith("v") && moveName.toLowerCase() !== moveName; // Exclude what is probably a rotation.
+        checkedMoves[moveName] = moveDefault;
+        checkbox.checked = moveDefault;
       }
       const label = wrapper.appendChild(document.createElement("label"));
       label.textContent = moveName;
