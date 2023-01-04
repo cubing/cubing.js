@@ -67,7 +67,12 @@ function validateAndSaveInput(
   const search = document.querySelector("#search") as HTMLTextAreaElement;
   search.value = localStorage[LOCALSTORAGE_SEARCH]
     ? localStorage[LOCALSTORAGE_SEARCH]
-    : await defaultDef();
+    : `{
+  "CORNERS": {
+    "pieces": [0, 1, 2, 3, 4, 5, 6, 7],
+    "orientation": [1, 2, 0, 0, 0, 0, 0, 0]
+  }
+}`;
   validateAndSaveInput(search, LOCALSTORAGE_SEARCH);
   search.addEventListener("input", () =>
     validateAndSaveInput(search, LOCALSTORAGE_SEARCH),
@@ -162,6 +167,7 @@ function validateAndSaveInput(
       ).toString();
     } catch (e) {
       results.value = "Error:\n" + e;
+      throw e;
     }
   });
 })();
