@@ -84,11 +84,16 @@ import { experimentalSolveTwsearch } from "../../../../cubing/search";
   go.addEventListener("click", async () => {
     const kpuzzle = new KPuzzle(JSON.parse(def.value));
     const kstate = new KState(kpuzzle, JSON.parse(search.value));
-    results.value = (
-      await experimentalSolveTwsearch(kpuzzle, kstate, {
-        moveSubset: getMoveSubset(),
-        minDepth: parseInt(minDepthElem.value),
-      })
-    ).toString();
+    results.value = "Searching...";
+    try {
+      results.value = (
+        await experimentalSolveTwsearch(kpuzzle, kstate, {
+          moveSubset: getMoveSubset(),
+          minDepth: parseInt(minDepthElem.value),
+        })
+      ).toString();
+    } catch (e) {
+      results.value = "Error:\n" + e;
+    }
   });
 })();
