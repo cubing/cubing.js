@@ -107,6 +107,14 @@ export async function cubeLikeStickeringMask(
       );
       break;
     }
+    case "CPLL": {
+      dimF2L();
+      puzzleStickering.set(
+        m.not(m.and([CORNERS(), LL()])),
+        PieceStickering.Ignoriented,
+      );
+      break;
+    }
     case "CLL": {
       dimF2L();
       puzzleStickering.set(
