@@ -115,6 +115,7 @@ function serializeDefToTws(kpuzzle, options) {
       );
     }
   }
+  console.log(outputLines.join("\n"))
   return outputLines.join("\n");
 }
 export {
