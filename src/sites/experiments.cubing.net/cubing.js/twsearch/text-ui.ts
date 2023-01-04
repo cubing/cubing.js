@@ -31,30 +31,37 @@ import { experimentalSolveTwsearch } from "../../../../cubing/search";
   async function updateMoveSubset(): Promise<void> {
     const kpuzzle = new KPuzzle(JSON.parse(def.value));
     moveSubsetElem.textContent = "";
-    const moves = Object.keys(kpuzzle.definition.moves).concat(
-      Object.keys(kpuzzle.definition.experimentalDerivedMoves ?? {}),
-    );
-    for (const move of moves) {
-      const checkbox = moveSubsetElem.appendChild(
-        document.createElement("input"),
+    const moveNames = Object.keys(kpuzzle.definition.moves)
+      .concat(Object.keys(kpuzzle.definition.experimentalDerivedMoves ?? {}))
+      .sort(function (a, b) {
+        return a.localeCompare(b);
+      });
+    // let lastMoveName = moveNames[0];
+    for (const moveName of moveNames) {
+      const id = `move-${moveName}`;
+      const wrapper = moveSubsetElem.appendChild(
+        document.createElement("label"),
       );
+      wrapper.setAttribute("for", id);
+      wrapper.setAttribute("style", "border: 1px solid; padding: 0 0.5em;");
+      const checkbox = wrapper.appendChild(document.createElement("input"));
       checkbox.type = "checkbox";
-      checkbox.value = move;
-      const id = `move-${move}`;
+      checkbox.value = moveName;
       checkbox.id = id;
-      if (move in checkedMoves) {
-        checkbox.checked = checkedMoves[move];
+      if (moveName in checkedMoves) {
+        checkbox.checked = checkedMoves[moveName];
       } else {
-        checkedMoves[move] = true;
+        checkedMoves[moveName] = true;
         checkbox.checked = true;
       }
-      const label = moveSubsetElem.appendChild(document.createElement("label"));
-      label.textContent = move;
+      const label = wrapper.appendChild(document.createElement("label"));
+      label.textContent = moveName;
       label.setAttribute("for", id);
       checkbox.addEventListener("input", () => {
-        checkedMoves[move] = checkbox.checked;
+        checkedMoves[moveName] = checkbox.checked;
         saveCheckedMoves();
       });
+      // lastMoveName = moveName;
     }
     saveCheckedMoves();
   }
