@@ -132,7 +132,7 @@ export async function solveTwsearch(
   }
   const { ...def } = kpuzzle.definition;
   delete def.experimentalIsStateSolved;
-  delete def.experimentalDerivedMoves;
+  // delete def.experimentalDerivedMoves;
   const dedicatedWorker = await instantiateWorker();
   try {
     return Alg.fromString(

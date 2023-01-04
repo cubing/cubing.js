@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf8" />
+  <title>cubing.js | twsearch</title>
+  <script src="./text-ui.js" href="./text-ui.ts" type="module"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.75">
+  <style>
+    body {
+      font-family: Ubuntu, Verdana, sans-serif;
+    }
+
+    textarea {
+      width: 400px;
+      height: 300px
+    }
+
+    .valid {
+      background: rgba(0, 255, 0, 0.25);
+    }
+
+    .invalid {
+      background: rgba(255, 0, 0, 0.25);
+    }
+
+  </style>
+</head>
+
+<h1><code>twsearch</code> Text UI</h1>
+
+<p>Here be dragons. 🐉</p>
+
+<fieldset>
+  <summary>Definition and search <button id="reset-def-search">Reset to 2x2x2 example</button></summary>
+  <br>
+  <textarea id="def" placeholder="Definition"></textarea>
+  <textarea id="search" placeholder="Search"></textarea>
+</fieldset>
+<br>
+<fieldset>
+  <summary>Move subset <button id="reset-move-subset">Reset to defaults</button>
+  </summary>
+  <br>
+  <div id="move-subset"></div>
+  <button id="toggle-move-subset">Toggle every move</button>
+</fieldset>
+<br>
+<fieldset>
+  <summary>Additional options</summary>
+  <br>
+  Min depth: <input id="min-depth" type="number" value="0">
+</fieldset>
+<br>
+<fieldset>
+  <summary><button id="go">Search</button></summary>
+  <textarea id="results" value=""></textarea>
+</fieldset>
+
+</html>
