@@ -15,6 +15,7 @@ export async function megaminxStickeringMask(
     case "OLL":
     case "EOLL":
     case "OCLL":
+    case "COLL":
     case "EPLL":
     case "CPLL":
     case "PLL":
