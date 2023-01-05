@@ -10,6 +10,7 @@ import "cubing/search";
 import "cubing/stream";
 import "cubing/twisty";
 
+import { Alg } from "cubing/alg";
 import { KState } from "cubing/kpuzzle";
 import { cube2x2x2 } from "cubing/puzzles";
 import { randomScrambleForEvent } from "cubing/scramble";
@@ -18,10 +19,10 @@ import { experimentalSolveTwsearch, setDebug } from "cubing/search";
 setDebug({ disableStringWorker: true });
 
 (async () => {
-  const scramble222 = await randomScrambleForEvent("222");
-  scramble222.log();
+  (await randomScrambleForEvent("222")).log();
   (await randomScrambleForEvent("333")).log();
 
+  const scramble222 = new Alg("R' F2 R F2 R F' U2 R' F' L2 F'");
   const kpuzzle = await cube2x2x2.kpuzzle();
   const scramble222Transformation = kpuzzle.algToTransformation(scramble222);
   const scramble222Solution = await experimentalSolveTwsearch(
