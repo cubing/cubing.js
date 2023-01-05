@@ -29,15 +29,9 @@ const colorMaps: Partial<
     "rgb(34, 102, 255)": "#000088", // TODO
     yellow: "#888800",
     "rgb(102, 0, 153)": "rgb(50, 0, 76)",
+    purple: "#3f003f",
   },
-  oriented: {
-    white: "#44ddcc",
-    orange: "#44ddcc",
-    limegreen: "#44ddcc",
-    red: "#44ddcc",
-    "rgb(34, 102, 255)": "#44ddcc", // TODO
-    yellow: "#44ddcc",
-  },
+  oriented: "#44ddcc",
   ignored: "#555555",
   invisible: "#00000000",
 };

@@ -12,38 +12,38 @@ export const megaminxLLSVG = `<?xml version="1.0" encoding="UTF-8"?>
 
       <path id="CORNERS-l6-o0" style="fill: white;" d="M 140.175781 92.605469 L 179.5 143.480469 L 218.824219 92.605469 L 179.5 64.035156 Z M 140.175781 92.605469 "/>  />
       <path id="CORNERS-l6-o1" style="fill: yellow;" d="M 125.15625 46.378906 L 140.175781 92.605469 L 179.5 64.035156 L 179.5 6.894531 Z M 125.15625 46.378906 "/> />
-      <path id="CORNERS-l6-o2" style="fill: #0000ff;" d="M 179.5 64.035156 L 218.824219 92.605469 L 233.84375 46.378906 L 179.5 6.894531 Z M 179.5 64.035156 "/>  />
+      <path id="CORNERS-l6-o2" style="fill: rgb(34, 102, 255);" d="M 179.5 64.035156 L 218.824219 92.605469 L 233.84375 46.378906 L 179.5 6.894531 Z M 179.5 64.035156 "/>  />
 
       <path id="EDGES-l26-o0" style="fill: white;" d="M 100.851562 121.175781 L 137.082031 174.296875 L 179.5 143.480469 L 140.175781 92.605469 Z M 100.851562 121.175781 "/> />
       <path id="EDGES-l26-o1" style="fill: yellow;" d="M 61.527344 92.605469 L 100.851562 121.175781 L 140.175781 92.605469 L 125.15625 46.378906 Z M 61.527344 92.605469 "/> />
 
       <path id="CORNERS-l1-o0" style="fill: white;" d="M 76.546875 195.976562 L 137.082031 174.296875 L 100.851562 121.175781 L 61.527344 149.75 Z M 76.546875 195.976562 "/> />
-      <path id="CORNERS-l1-o1" style="fill: #660099;" d="M 27.9375 195.976562 L 76.546875 195.976562 L 61.527344 149.75 L 7.179688 132.089844 Z M 27.9375 195.976562 "/>  />
+      <path id="CORNERS-l1-o1" style="fill: purple;" d="M 27.9375 195.976562 L 76.546875 195.976562 L 61.527344 149.75 L 7.179688 132.089844 Z M 27.9375 195.976562 "/>  />
       <path id="CORNERS-l1-o2" style="fill: yellow;" d="M 61.527344 149.75 L 100.851562 121.175781 L 61.527344 92.605469 L 7.179688 132.089844 Z M 61.527344 149.75 "/> />
 
       <path id="EDGES-l1-o0" style="fill: white;" d="M 91.566406 242.207031 L 153.285156 224.164062 L 137.082031 174.296875 L 76.546875 195.976562 Z M 91.566406 242.207031 "/> />
-      <path id="EDGES-l1-o1" style="fill: #660099;" d="M 52.242188 270.777344 L 91.566406 242.207031 L 76.546875 195.976562 L 27.9375 195.976562 Z M 52.242188 270.777344 "/> />
+      <path id="EDGES-l1-o1" style="fill: purple;" d="M 52.242188 270.777344 L 91.566406 242.207031 L 76.546875 195.976562 L 27.9375 195.976562 Z M 52.242188 270.777344 "/> />
 
       <path id="CORNERS-l0-o0" style="fill: white;" d="M 155.195312 288.4375 L 153.285156 224.164062 L 91.566406 242.207031 L 106.585938 288.4375 Z M 155.195312 288.4375 "/> />
-      <path id="CORNERS-l0-o1" style="fill: #006633;" d="M 140.175781 334.664062 L 155.195312 288.4375 L 106.585938 288.4375 L 73 334.664062 Z M 140.175781 334.664062 "/>  />
-      <path id="CORNERS-l0-o2" style="fill: #660099;" d="M 106.585938 288.4375 L 91.566406 242.207031 L 52.242188 270.777344 L 73 334.664062 Z M 106.585938 288.4375 "/>  />
+      <path id="CORNERS-l0-o1" style="fill: limegreen;" d="M 140.175781 334.664062 L 155.195312 288.4375 L 106.585938 288.4375 L 73 334.664062 Z M 140.175781 334.664062 "/>  />
+      <path id="CORNERS-l0-o2" style="fill: purple;" d="M 106.585938 288.4375 L 91.566406 242.207031 L 52.242188 270.777344 L 73 334.664062 Z M 106.585938 288.4375 "/>  />
 
       <path id="EDGES-l0-o0" style="fill: white;" d="M 203.804688 288.4375 L 205.714844 224.164062 L 153.285156 224.164062 L 155.195312 288.4375 Z M 203.804688 288.4375 "/>  />
-      <path id="EDGES-l0-o1" style="fill: #006633;" d="M 218.824219 334.664062 L 203.804688 288.4375 L 155.195312 288.4375 L 140.175781 334.664062 Z M 218.824219 334.664062 "/>  />
+      <path id="EDGES-l0-o1" style="fill: limegreen;" d="M 218.824219 334.664062 L 203.804688 288.4375 L 155.195312 288.4375 L 140.175781 334.664062 Z M 218.824219 334.664062 "/>  />
 
       <path id="CORNERS-l2-o0" style="fill: white;" d="M 267.433594 242.207031 L 205.714844 224.164062 L 203.804688 288.4375 L 252.414062 288.4375 Z M 267.433594 242.207031 "/>  />
-      <path id="CORNERS-l2-o1" style="fill: #ff0000;" d="M 306.757812 270.777344 L 267.433594 242.207031 L 252.414062 288.4375 L 286 334.664062 Z M 306.757812 270.777344 "/> />
-      <path id="CORNERS-l2-o2" style="fill: #006633;" d="M 252.414062 288.4375 L 203.804688 288.4375 L 218.824219 334.664062 L 286 334.664062 Z M 252.414062 288.4375 "/> />
+      <path id="CORNERS-l2-o1" style="fill: red;" d="M 306.757812 270.777344 L 267.433594 242.207031 L 252.414062 288.4375 L 286 334.664062 Z M 306.757812 270.777344 "/> />
+      <path id="CORNERS-l2-o2" style="fill: limegreen;" d="M 252.414062 288.4375 L 203.804688 288.4375 L 218.824219 334.664062 L 286 334.664062 Z M 252.414062 288.4375 "/> />
 
       <path id="EDGES-l7-o0" style="fill: white;" d="M 282.453125 195.976562 L 221.917969 174.296875 L 205.714844 224.164062 L 267.433594 242.207031 Z M 282.453125 195.976562 "/>  />
-      <path id="EDGES-l7-o1" style="fill: #ff0000;" d="M 331.0625 195.976562 L 282.453125 195.976562 L 267.433594 242.207031 L 306.757812 270.777344 Z M 331.0625 195.976562 "/>  />
+      <path id="EDGES-l7-o1" style="fill: red;" d="M 331.0625 195.976562 L 282.453125 195.976562 L 267.433594 242.207031 L 306.757812 270.777344 Z M 331.0625 195.976562 "/>  />
 
       <path id="CORNERS-l7-o0" style="fill: white;" d="M 258.148438 121.175781 L 221.917969 174.296875 L 282.453125 195.976562 L 297.472656 149.75 Z M 258.148438 121.175781 "/>  />
-      <path id="CORNERS-l7-o1" style="fill: #0000ff;" d="M 297.472656 92.605469 L 258.148438 121.175781 L 297.472656 149.75 L 351.820312 132.089844 Z M 297.472656 92.605469 "/>  />
-      <path id="CORNERS-l7-o2" style="fill: #ff0000;" d="M 297.472656 149.75 L 282.453125 195.976562 L 331.0625 195.976562 L 351.820312 132.089844 Z M 297.472656 149.75 "/>  />
+      <path id="CORNERS-l7-o1" style="fill: rgb(34, 102, 255);" d="M 297.472656 92.605469 L 258.148438 121.175781 L 297.472656 149.75 L 351.820312 132.089844 Z M 297.472656 92.605469 "/>  />
+      <path id="CORNERS-l7-o2" style="fill: red;" d="M 297.472656 149.75 L 282.453125 195.976562 L 331.0625 195.976562 L 351.820312 132.089844 Z M 297.472656 149.75 "/>  />
 
       <path id="EDGES-l6-o0" style="fill: white;" d="M 218.824219 92.605469 L 179.5 143.480469 L 221.917969 174.296875 L 258.148438 121.175781 Z M 218.824219 92.605469 "/> />
-      <path id="EDGES-l6-o1" style="fill: #0000ff;" d="M 233.84375 46.378906 L 218.824219 92.605469 L 258.148438 121.175781 L 297.472656 92.605469 Z M 233.84375 46.378906 "/>  />
+      <path id="EDGES-l6-o1" style="fill: rgb(34, 102, 255);" d="M 233.84375 46.378906 L 218.824219 92.605469 L 258.148438 121.175781 L 297.472656 92.605469 Z M 233.84375 46.378906 "/>  />
     </g>
     <g opacity="0">
       <g><title>U</title>
@@ -52,18 +52,18 @@ export const megaminxLLSVG = `<?xml version="1.0" encoding="UTF-8"?>
       <polygon id="CENTERS-l0-o3" xlink:href="#bogus" style="fill: white"/>
       <polygon id="CENTERS-l0-o4" xlink:href="#bogus" style="fill: white"/>
       </g><g><title>F</title>
-      <polygon id="EDGES-l8-o0" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="EDGES-l2-o0" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="CENTERS-l2-o0" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="CENTERS-l2-o1" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="CENTERS-l2-o2" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="CENTERS-l2-o3" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="CENTERS-l2-o4" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="EDGES-l27-o1" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="CORNERS-l19-o1" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="CORNERS-l8-o0" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="EDGES-l3-o0" xlink:href="#bogus" style="fill: #006633"/>
-      <polygon id="CORNERS-l3-o2" xlink:href="#bogus" style="fill: #006633"/>
+      <polygon id="EDGES-l8-o0" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="EDGES-l2-o0" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o0" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o1" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o2" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o3" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="CENTERS-l2-o4" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="EDGES-l27-o1" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="CORNERS-l19-o1" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="CORNERS-l8-o0" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="EDGES-l3-o0" xlink:href="#bogus" style="fill: limegreen"/>
+      <polygon id="CORNERS-l3-o2" xlink:href="#bogus" style="fill: limegreen"/>
       </g><g><title>L</title>
       <polygon id="EDGES-l5-o1" xlink:href="#bogus" style="fill: #660099"/>
       <polygon id="EDGES-l8-o1" xlink:href="#bogus" style="fill: #660099"/>
@@ -91,31 +91,31 @@ export const megaminxLLSVG = `<?xml version="1.0" encoding="UTF-8"?>
       <polygon id="EDGES-l16-o0" xlink:href="#bogus" style="fill: yellow"/>
       <polygon id="CORNERS-l11-o2" xlink:href="#bogus" style="fill: yellow"/>
       </g><g><title>BR</title>
-      <polygon id="EDGES-l21-o0" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="EDGES-l14-o0" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="CENTERS-l5-o0" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="CENTERS-l5-o1" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="CENTERS-l5-o2" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="CENTERS-l5-o3" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="CENTERS-l5-o4" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="EDGES-l18-o1" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="CORNERS-l11-o1" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="CORNERS-l13-o0" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="EDGES-l28-o1" xlink:href="#bogus" style="fill: #0000ff"/>
-      <polygon id="CORNERS-l12-o2" xlink:href="#bogus" style="fill: #0000ff"/>
+      <polygon id="EDGES-l21-o0" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="EDGES-l14-o0" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o0" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o1" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o2" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o3" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CENTERS-l5-o4" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="EDGES-l18-o1" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CORNERS-l11-o1" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CORNERS-l13-o0" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="EDGES-l28-o1" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
+      <polygon id="CORNERS-l12-o2" xlink:href="#bogus" style="fill: rgb(34, 102, 255)"/>
       </g><g><title>R</title>
-      <polygon id="CORNERS-l19-o2" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="EDGES-l19-o1" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="CENTERS-l1-o0" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="CENTERS-l1-o1" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="CENTERS-l1-o2" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="CENTERS-l1-o3" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="CENTERS-l1-o4" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="EDGES-l2-o1" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="EDGES-l21-o1" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="CORNERS-l12-o1" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="EDGES-l15-o1" xlink:href="#bogus" style="fill: #ff0000"/>
-      <polygon id="CORNERS-l14-o0" xlink:href="#bogus" style="fill: #ff0000"/>
+      <polygon id="CORNERS-l19-o2" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="EDGES-l19-o1" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o0" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o1" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o2" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o3" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="CENTERS-l1-o4" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="EDGES-l2-o1" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="EDGES-l21-o1" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="CORNERS-l12-o1" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="EDGES-l15-o1" xlink:href="#bogus" style="fill: red"/>
+      <polygon id="CORNERS-l14-o0" xlink:href="#bogus" style="fill: red"/>
       </g><g><title>C</title>
       <polygon id="CORNERS-l8-o1" xlink:href="#bogus" style="fill: #ffffd0"/>
       <polygon id="EDGES-l9-o1" xlink:href="#bogus" style="fill: #ffffd0"/>
