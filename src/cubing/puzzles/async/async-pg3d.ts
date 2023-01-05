@@ -4,8 +4,8 @@ import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import type { StickeringMask } from "../stickerings/mask";
 import {
+  cubeLikeStickeringList,
   cubeLikeStickeringMask,
-  cubeStickerings,
 } from "../stickerings/cube-like-stickerings";
 import { getCached } from "./lazy-cached";
 import { Move, PuzzleSpecificSimplifyOptions, QuantumMove } from "../../alg";
@@ -97,7 +97,8 @@ export class CubePGPuzzleLoader extends PGPuzzleLoader {
   stickeringMask(stickering: ExperimentalStickering): Promise<StickeringMask> {
     return cubeLikeStickeringMask(this, stickering);
   }
-  stickerings = () => cubeStickerings(this.id as PuzzleID);
+  stickerings = () =>
+    cubeLikeStickeringList(this.id as PuzzleID, { use3x3x3Fallbacks: true });
 }
 
 export function puzzleSpecificSimplifyOptionsPromise(

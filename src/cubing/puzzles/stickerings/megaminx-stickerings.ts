@@ -1,48 +1,32 @@
 import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import type { StickeringMask } from "./mask";
-import { cubeLikeStickeringMask } from "./cube-like-stickerings";
+import {
+  cubeLikeStickeringList,
+  cubeLikeStickeringMask,
+} from "./cube-like-stickerings";
+import { from } from "../../vendor/mit/p-lazy/p-lazy";
 
 // TODO: cache calculations?
 export async function megaminxStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<StickeringMask> {
-  switch (stickering) {
-    case "full":
-    case "F2L":
-    case "LL":
-    case "OLL":
-    case "EOLL":
-    case "OCLL":
-    case "COLL":
-    case "EPLL":
-    case "CPLL":
-    case "PLL":
-    case "ELS":
-    case "CLS":
-      return cubeLikeStickeringMask(puzzleLoader, stickering);
-    default:
-      console.warn(
-        `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,
-      );
+  console.log("foo");
+  // TODO: optimize lookup instead of looking through a list
+  if ((await megaminxStickerings()).includes(stickering)) {
+    console.log(await megaminxStickerings());
+    return cubeLikeStickeringMask(puzzleLoader, stickering);
   }
+  console.warn(
+    `Unsupported stickering for ${puzzleLoader.id}: ${stickering}. Setting all pieces to dim.`,
+  );
   return cubeLikeStickeringMask(puzzleLoader, "full");
 }
 
-export async function megaminxStickerings(): Promise<ExperimentalStickering[]> {
-  return [
-    "full",
-    "F2L",
-    "LL",
-    "OLL",
-    "EOLL",
-    "OCLL",
-    "COLL",
-    "EPLL",
-    "PLL",
-    "CPLL",
-    "ELS",
-    "CLS",
-  ];
+const megaminxStickeringListPromise: Promise<string[]> = from(() =>
+  cubeLikeStickeringList("megaminx"),
+);
+export function megaminxStickerings(): Promise<string[]> {
+  return megaminxStickeringListPromise;
 }

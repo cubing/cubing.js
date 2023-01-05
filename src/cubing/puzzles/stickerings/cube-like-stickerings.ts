@@ -337,8 +337,9 @@ export async function cubeLikeStickeringMask(
   return puzzleStickering.toStickeringMask();
 }
 
-export async function cubeStickerings(
+export async function cubeLikeStickeringList(
   puzzleID: PuzzleID,
+  options?: { use3x3x3Fallbacks: boolean },
 ): Promise<ExperimentalStickering[]> {
   const stickerings: ExperimentalStickering[] = [];
   const stickeringsFallback: ExperimentalStickering[] = [];
@@ -346,7 +347,7 @@ export async function cubeStickerings(
     if (info.groups) {
       if (puzzleID in info.groups) {
         stickerings.push(name);
-      } else if ("3x3x3" in info.groups) {
+      } else if (options?.use3x3x3Fallbacks && "3x3x3" in info.groups) {
         stickeringsFallback.push(name);
       }
     }

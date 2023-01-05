@@ -1,27 +1,38 @@
 import type { PuzzleID } from "../../twisty";
 
+const LL = "Last Layer";
+const LS = "Last Slot";
+const megaAnd3x3x3LL = {
+  "3x3x3": LL,
+  megaminx: LL,
+};
+const megaAnd3x3x3LS = {
+  "3x3x3": LS,
+  megaminx: LS,
+};
+
 export const experimentalStickerings: Record<
   string,
   { groups?: Partial<Record<PuzzleID, string>> }
 > = {
-  full: { groups: { "3x3x3": "Stickering" } }, // default
-  OLL: { groups: { "3x3x3": "Last Layer" } },
-  PLL: { groups: { "3x3x3": "Last Layer" } },
-  LL: { groups: { "3x3x3": "Last Layer" } },
-  EOLL: { groups: { "3x3x3": "Last Layer" } },
-  COLL: { groups: { "3x3x3": "Last Layer" } },
-  OCLL: { groups: { "3x3x3": "Last Layer" } },
-  CPLL: { groups: { "3x3x3": "Last Layer" } },
-  CLL: { groups: { "3x3x3": "Last Layer" } },
-  EPLL: { groups: { "3x3x3": "Last Layer" } },
-  ELL: { groups: { "3x3x3": "Last Layer" } },
-  ZBLL: { groups: { "3x3x3": "Last Layer" } },
-  LS: { groups: { "3x3x3": "Last Slot" } },
-  ELS: { groups: { "3x3x3": "Last Slot" } },
-  CLS: { groups: { "3x3x3": "Last Slot" } },
-  ZBLS: { groups: { "3x3x3": "Last Slot" } },
-  VLS: { groups: { "3x3x3": "Last Slot" } },
-  WVLS: { groups: { "3x3x3": "Last Slot" } },
+  full: { groups: { "3x3x3": "Stickering", megaminx: "Stickering" } }, // default
+  OLL: { groups: megaAnd3x3x3LL },
+  PLL: { groups: megaAnd3x3x3LL },
+  LL: { groups: megaAnd3x3x3LL },
+  EOLL: { groups: megaAnd3x3x3LL },
+  COLL: { groups: megaAnd3x3x3LL },
+  OCLL: { groups: megaAnd3x3x3LL },
+  CPLL: { groups: megaAnd3x3x3LL },
+  CLL: { groups: megaAnd3x3x3LL },
+  EPLL: { groups: megaAnd3x3x3LL },
+  ELL: { groups: megaAnd3x3x3LL },
+  ZBLL: { groups: megaAnd3x3x3LL },
+  LS: { groups: megaAnd3x3x3LS },
+  ELS: { groups: megaAnd3x3x3LS },
+  CLS: { groups: megaAnd3x3x3LS },
+  ZBLS: { groups: megaAnd3x3x3LS },
+  VLS: { groups: megaAnd3x3x3LS },
+  WVLS: { groups: megaAnd3x3x3LS },
   F2L: { groups: { "3x3x3": "CFOP (Fridrich)" } },
   Daisy: { groups: { "3x3x3": "CFOP (Fridrich)" } },
   Cross: { groups: { "3x3x3": "CFOP (Fridrich)" } },

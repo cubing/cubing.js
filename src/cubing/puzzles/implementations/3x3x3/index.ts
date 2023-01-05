@@ -7,7 +7,7 @@ import type { PuzzleLoader } from "../../PuzzleLoader";
 import type { StickeringMask } from "../../stickerings/mask";
 import {
   cubeLikeStickeringMask,
-  cubeStickerings,
+  cubeLikeStickeringList,
 } from "../../stickerings/cube-like-stickerings";
 import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications";
 
@@ -36,6 +36,6 @@ export const cube3x3x3: PuzzleLoader = {
   stickeringMask: (
     stickering: ExperimentalStickering,
   ): Promise<StickeringMask> => cubeLikeStickeringMask(cube3x3x3, stickering),
-  stickerings: () => cubeStickerings("3x3x3"),
+  stickerings: () => cubeLikeStickeringList("3x3x3"),
   puzzleSpecificSimplifyOptions: puzzleSpecificSimplifyOptions333,
 };

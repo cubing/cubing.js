@@ -5,8 +5,8 @@ import { getCached } from "../../async/lazy-cached";
 import type { PuzzleLoader } from "../../PuzzleLoader";
 import type { StickeringMask } from "../../stickerings/mask";
 import {
+  cubeLikeStickeringList,
   cubeLikeStickeringMask,
-  cubeStickerings,
 } from "../../stickerings/cube-like-stickerings";
 
 /** @category Specific Puzzles */
@@ -34,5 +34,6 @@ export const cube2x2x2: PuzzleLoader = {
   stickeringMask: (
     stickering: ExperimentalStickering,
   ): Promise<StickeringMask> => cubeLikeStickeringMask(cube2x2x2, stickering),
-  stickerings: () => cubeStickerings("2x2x2"),
+  stickerings: () =>
+    cubeLikeStickeringList("2x2x2", { use3x3x3Fallbacks: true }),
 };
