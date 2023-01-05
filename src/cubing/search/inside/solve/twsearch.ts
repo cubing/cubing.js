@@ -40,6 +40,17 @@ export async function solveTwsearch(
   const kpuzzle = new KPuzzle(def);
   setArg("--startprunedepth 5"); // TODO
   if (options) {
+    if (options.moveSubset) {
+      const movesArg = options?.moveSubset?.join(",");
+      if (movesArg.includes(" ")) {
+        throw new Error("A move contains a space‽");
+      }
+      if (movesArg.includes("-")) {
+        throw new Error("A move contains a dash");
+      }
+      console.log(movesArg);
+      setArg(`--moves ${movesArg}`);
+    }
     let { minDepth, maxDepth } = options;
     if (typeof minDepth !== "undefined") {
       mustBeNaturalNumber("minDepth", minDepth);
