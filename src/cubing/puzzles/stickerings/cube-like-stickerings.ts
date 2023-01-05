@@ -111,7 +111,7 @@ export async function cubeLikeStickeringMask(
       dimF2L();
       puzzleStickering.set(
         m.and([m.not(CORNERS()), LL()]),
-        PieceStickering.Ignoriented,
+        PieceStickering.Dim,
       );
       break;
     }
