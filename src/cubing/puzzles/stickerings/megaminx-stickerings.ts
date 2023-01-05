@@ -12,10 +12,8 @@ export async function megaminxStickeringMask(
   puzzleLoader: PuzzleLoader,
   stickering: ExperimentalStickering,
 ): Promise<StickeringMask> {
-  console.log("foo");
   // TODO: optimize lookup instead of looking through a list
   if ((await megaminxStickerings()).includes(stickering)) {
-    console.log(await megaminxStickerings());
     return cubeLikeStickeringMask(puzzleLoader, stickering);
   }
   console.warn(
