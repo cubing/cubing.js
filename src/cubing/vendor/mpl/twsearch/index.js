@@ -1,8 +1,8 @@
-console.info("Loading twsearch v0.4.0");
+console.info("Loading twsearch v0.4.0-15-g4cdd1d2b");
 // src/js/api.ts
 import { Alg } from "../../../alg";
 async function importOnce() {
-  const fn = (await import("./twsearch-VUC3P72V.js")).default;
+  const fn = (await import("./twsearch-VGQQFQ4D.js")).default;
   return await fn();
 }
 var cachedEmscriptenModule = null;
@@ -115,7 +115,6 @@ function serializeDefToTws(kpuzzle, options) {
       );
     }
   }
-  console.log(outputLines.join("\n"))
   return outputLines.join("\n");
 }
 export {
