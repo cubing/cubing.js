@@ -18,6 +18,7 @@ export interface TwsearchOptions {
 }
 
 let existingPuzzleDefString: undefined | string;
+let existingMoveSubsetString: undefined | string;
 
 function mustBeNaturalNumber(meaning: string, n: number): void {
   if (typeof n !== "number" || !Number.isInteger(n) || n < 0) {
@@ -39,7 +40,19 @@ export async function solveTwsearch(
   } = await twsearchPromise;
   const kpuzzle = new KPuzzle(def);
   setArg("--startprunedepth 5"); // TODO
+  let moveSubsetString = ""; // TODO: pass the full set of moves, to avoid rotations not being treated as moves.
   if (options) {
+    if (options.moveSubset) {
+      moveSubsetString = options?.moveSubset?.join(",");
+      // TODO: better, reusable validation
+      if (moveSubsetString.includes(" ")) {
+        throw new Error("A move contains a space‽");
+      }
+      if (moveSubsetString.includes("-")) {
+        throw new Error("A move contains a dash");
+      }
+      setArg(`--moves ${moveSubsetString}`); // TODO: remove the need for this.
+    }
     let { minDepth, maxDepth } = options;
     if (typeof minDepth !== "undefined") {
       mustBeNaturalNumber("minDepth", minDepth);
@@ -69,6 +82,15 @@ export async function solveTwsearch(
   } else {
     existingPuzzleDefString = puzzleDefString;
     await setKPuzzleDefString(puzzleDefString);
+  }
+
+  if (
+    typeof existingMoveSubsetString !== "undefined" &&
+    moveSubsetString !== existingMoveSubsetString
+  ) {
+    throw new Error(
+      "Attempted to solve two different move subsets in the same worker using `twsearch`. This is not currently supported!",
+    );
   }
 
   return await solveState(
