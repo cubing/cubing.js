@@ -107,7 +107,6 @@ export function puzzleSpecificSimplifyOptionsPromise(
   return new PLazy(
     async (resolve: (options: PuzzleSpecificSimplifyOptions) => void) => {
       const kpuzzle = await kpuzzlePromiseFn();
-      console.log(kpuzzle);
       resolve({
         quantumMoveOrder: (m: QuantumMove) => {
           return kpuzzle.moveToTransformation(new Move(m)).repetitionOrder();
