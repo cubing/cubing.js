@@ -38,6 +38,7 @@ export async function megaminxStickerings(): Promise<ExperimentalStickering[]> {
     "OLL",
     "EOLL",
     "OCLL",
+    "COLL",
     "EPLL",
     "PLL",
     "CPLL",
