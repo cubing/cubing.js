@@ -15,6 +15,7 @@ export async function megaminxStickeringMask(
     case "OLL":
     case "EOLL":
     case "OCLL":
+    case "EPLL":
     case "CPLL":
     case "PLL":
     case "ELS":
@@ -36,6 +37,7 @@ export async function megaminxStickerings(): Promise<ExperimentalStickering[]> {
     "OLL",
     "EOLL",
     "OCLL",
+    "EPLL",
     "PLL",
     "CPLL",
     "ELS",

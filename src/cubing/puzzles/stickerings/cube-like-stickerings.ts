@@ -123,6 +123,15 @@ export async function cubeLikeStickeringMask(
       );
       break;
     }
+    case "EPLL": {
+      dimF2L();
+      puzzleStickering.set(LL(), PieceStickering.Dim);
+      puzzleStickering.set(
+        m.and([LL(), EDGES()]),
+        PieceStickering.PermuteNonPrimary,
+      );
+      break;
+    }
     case "ELL": {
       dimF2L();
       puzzleStickering.set(LL(), PieceStickering.Dim);
