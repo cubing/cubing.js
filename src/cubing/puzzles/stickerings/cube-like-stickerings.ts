@@ -110,6 +110,10 @@ export async function cubeLikeStickeringMask(
     case "CPLL": {
       dimF2L();
       puzzleStickering.set(
+        m.and([CORNERS(), LL()]),
+        PieceStickering.PermuteNonPrimary,
+      );
+      puzzleStickering.set(
         m.and([m.not(CORNERS()), LL()]),
         PieceStickering.Dim,
       );
