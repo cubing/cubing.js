@@ -82,6 +82,12 @@ section:not(:first-child) {
   border-top: 1px solid #4285f466;
 }
 
+section.inline {
+  margin: -0.5rem -2rem;
+  padding: 0.5rem 2rem;
+  border-top: none;
+}
+
 section:target,
 div:target {
   background: #00448811;
