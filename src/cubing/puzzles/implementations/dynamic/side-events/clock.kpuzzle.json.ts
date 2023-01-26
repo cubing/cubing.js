@@ -234,4 +234,16 @@ export const clockJSON: KPuzzleDefinition = {
       FRAME: { permutation: [0], orientation: [0] },
     },
   },
+  experimentalDerivedMoves: {
+    // TODO: moves with diagonally opposite pins?
+    B_PLUS_: "[y2: ALL_PLUS_']",
+    BU_PLUS_: "[y2: U_PLUS_']",
+    BR_PLUS_: "[y2: L_PLUS_']",
+    BD_PLUS_: "[y2: D_PLUS_']",
+    BL_PLUS_: "[y2: R_PLUS_']",
+    BUR_PLUS_: "[y2: UL_PLUS_']",
+    BUL_PLUS_: "[y2: UR_PLUS_']",
+    BDL_PLUS_: "[y2: DR_PLUS_']",
+    BDR_PLUS_: "[y2: DL_PLUS_']",
+  },
 };
