@@ -1,4 +1,4 @@
-import { Alg } from "../../../../cubing/alg";
+import { Alg, Move } from "../../../../cubing/alg";
 import { KPuzzle, KState } from "../../../../cubing/kpuzzle";
 import { cube2x2x2 } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
@@ -64,17 +64,28 @@ function validateAndSaveInput(
     delete localStorage[LOCALSTORAGE_CHECKED_MOVES];
     location.reload();
   });
-  (
-    document.querySelector("#toggle-move-subset") as HTMLButtonElement
-  ).addEventListener("click", () => {
+
+  function mapCheckboxes(fn: (e: HTMLInputElement) => boolean): void {
     for (const checkbox of Array.from(
       moveSubsetElem.querySelectorAll("input[type=checkbox"),
     ) as HTMLInputElement[]) {
-      checkbox.checked = !checkbox.checked;
+      checkbox.checked = fn(checkbox);
       checkedMoves[checkbox.value] = !checkedMoves[checkbox.value];
     }
     saveCheckedMoves();
-  });
+  }
+
+  (
+    document.querySelector("#toggle-move-subset") as HTMLButtonElement
+  ).addEventListener("click", () => mapCheckboxes((e) => !e.checked));
+
+  (
+    document.querySelector("#move-subset-check-all") as HTMLButtonElement
+  ).addEventListener("click", () => mapCheckboxes((e) => true));
+
+  (
+    document.querySelector("#move-subset-uncheck-all") as HTMLButtonElement
+  ).addEventListener("click", () => mapCheckboxes((e) => false));
 
   const def = document.querySelector("#def") as HTMLTextAreaElement;
   def.value = localStorage[LOCALSTORAGE_DEF]
@@ -115,15 +126,19 @@ function validateAndSaveInput(
     );
   } catch {}
 
+  function moveSortingKey(s: string): string {
+    const move = Move.fromString(s);
+    return `${move.family}|${move.innerLayer ?? "0"}|${move.outerLayer ?? "0"}`;
+  }
+
   async function updateMoveSubset(): Promise<void> {
     const kpuzzle = new KPuzzle(JSON.parse(def.value));
     moveSubsetElem.textContent = "";
     const moveNames = Object.keys(kpuzzle.definition.moves)
       .concat(Object.keys(kpuzzle.definition.experimentalDerivedMoves ?? {}))
       .sort(function (a, b) {
-        return a.localeCompare(b);
+        return moveSortingKey(a).localeCompare(moveSortingKey(b));
       });
-    // let lastMoveName = moveNames[0];
     for (const moveName of moveNames) {
       const id = `move-${moveName}`;
       const wrapper = moveSubsetElem.appendChild(
