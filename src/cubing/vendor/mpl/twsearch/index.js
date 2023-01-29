@@ -1,8 +1,8 @@
-console.info("Loading twsearch v0.4.1-1-g57f93f92");
+console.info("Loading twsearch v0.4.2");
 // src/js/api.ts
 import { Alg } from "../../../alg";
 async function importOnce() {
-  const fn = (await import("./twsearch-Q7TBHLPE.js")).default;
+  const fn = (await import("./twsearch-BDAXZGZU.js")).default;
   return await fn();
 }
 var cachedEmscriptenModule = null;
@@ -53,14 +53,24 @@ var END = "End";
 function sanitize(s) {
   return s.replaceAll(/[^A-Za-z0-9]/g, "_");
 }
-function serializeKTransformationDataToTws(name, t, forScramble = false) {
+function serializeMoveTransformation(name, t) {
   const outputLines = [];
-  outputLines.push(
-    `${forScramble ? "ScrambleState" : "MoveTransformation"} ${sanitize(name)}`
-  );
+  outputLines.push(`MoveTransformation ${sanitize(name)}`);
   for (const [orbitName, orbitData] of Object.entries(t)) {
     outputLines.push(sanitize(orbitName));
     outputLines.push(orbitData.permutation.join(" "));
+    outputLines.push(orbitData.orientation.join(" "));
+  }
+  outputLines.push(END);
+  outputLines.push(BLANK_LINE);
+  return outputLines.join("\n");
+}
+function serializeScrambleState(name, t) {
+  const outputLines = [];
+  outputLines.push(`ScrambleState ${sanitize(name)}`);
+  for (const [orbitName, orbitData] of Object.entries(t)) {
+    outputLines.push(sanitize(orbitName));
+    outputLines.push(orbitData.pieces.join(" "));
     outputLines.push(orbitData.orientation.join(" "));
   }
   outputLines.push(END);
@@ -99,7 +109,7 @@ function serializeDefToTws(kpuzzle, options) {
   }
   for (const [moveName, moveDef] of Object.entries(def.moves)) {
     if (include(moveName)) {
-      outputLines.push(serializeKTransformationDataToTws(moveName, moveDef));
+      outputLines.push(serializeMoveTransformation(moveName, moveDef));
     }
   }
   for (const [moveName, moveAlgDef] of Object.entries(
@@ -108,7 +118,7 @@ function serializeDefToTws(kpuzzle, options) {
     if (include(moveName)) {
       const transformation = kpuzzle.algToTransformation(moveAlgDef);
       outputLines.push(
-        serializeKTransformationDataToTws(
+        serializeMoveTransformation(
           moveName,
           transformation.transformationData
         )
@@ -120,7 +130,8 @@ function serializeDefToTws(kpuzzle, options) {
 export {
   NoSolutionError,
   serializeDefToTws,
-  serializeKTransformationDataToTws,
+  serializeMoveTransformation,
+  serializeScrambleState,
   setArg,
   setKPuzzleDefString,
   solveScramble,

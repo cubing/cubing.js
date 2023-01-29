@@ -2,6 +2,7 @@ import type { Alg } from "../../../alg";
 import {
   KPuzzle,
   KPuzzleDefinition,
+  KStateData,
   KTransformationData,
 } from "../../../kpuzzle";
 import { from } from "../../../vendor/mit/p-lazy/p-lazy";
@@ -28,7 +29,7 @@ function mustBeNaturalNumber(meaning: string, n: number): void {
 
 export async function solveTwsearch(
   def: KPuzzleDefinition,
-  stateData: KTransformationData,
+  stateData: KStateData,
   options?: TwsearchOptions,
 ): Promise<Alg> {
   const {
@@ -36,7 +37,7 @@ export async function solveTwsearch(
     setKPuzzleDefString,
     serializeDefToTws,
     solveState,
-    serializeKTransformationDataToTws,
+    serializeScrambleState,
   } = await twsearchPromise;
   const kpuzzle = new KPuzzle(def);
   setArg("--startprunedepth 5"); // TODO
@@ -93,7 +94,5 @@ export async function solveTwsearch(
     );
   }
 
-  return await solveState(
-    serializeKTransformationDataToTws("SearchState", stateData, true),
-  );
+  return await solveState(serializeScrambleState("SearchState", stateData));
 }

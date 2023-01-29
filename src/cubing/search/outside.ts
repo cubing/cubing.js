@@ -138,7 +138,7 @@ export async function solveTwsearch(
     return Alg.fromString(
       await dedicatedWorker.insideAPI.solveTwsearchToString(
         def,
-        state.experimentalToTransformation()!.transformationData,
+        state.stateData,
         apiOptions,
       ),
     );

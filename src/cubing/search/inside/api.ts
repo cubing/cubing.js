@@ -1,10 +1,5 @@
 import type { Alg } from "../../alg";
-import {
-  KPuzzleDefinition,
-  KState,
-  KStateData,
-  KTransformationData,
-} from "../../kpuzzle";
+import { KPuzzleDefinition, KState, KStateData } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import { setIsInsideWorker } from "./inside-worker";
 import {
@@ -267,7 +262,7 @@ export const insideAPI = {
 
   solveTwsearchToString: async (
     def: KPuzzleDefinition,
-    stateData: KTransformationData,
+    stateData: KStateData,
     options?: TwsearchOptions,
   ): Promise<string> => {
     return (await solveTwsearch(def, stateData, options)).toString();
