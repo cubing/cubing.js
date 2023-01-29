@@ -1,3 +1,4 @@
+import { Alg } from "../../../../cubing/alg";
 import { KPuzzle, KState } from "../../../../cubing/kpuzzle";
 import { cube2x2x2 } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
@@ -6,12 +7,16 @@ const LOCALSTORAGE_DEF = "twsearch/text-ui/def";
 const LOCALSTORAGE_SEARCH = "twsearch/text-ui/search";
 const LOCALSTORAGE_CHECKED_MOVES = "twsearch/text-ui/checked-moves";
 
-async function defaultDef() {
-  return JSON.stringify((await cube2x2x2.kpuzzle()).definition, null, "  ")
+function neatStringify(s: any): string {
+  return JSON.stringify(s, null, "  ")
     .replace(/,\n *(\d)/g, ", $1")
     .replace(/\[\n +(\d)/g, "[$1")
     .replace(/\n +\]/g, "]")
     .replace(/( *)\}\n( *)\}/g, "$2}}");
+}
+
+async function defaultDef() {
+  return neatStringify((await cube2x2x2.kpuzzle()).definition);
 }
 
 function validateAndSaveInput(
@@ -37,6 +42,21 @@ function validateAndSaveInput(
     delete localStorage[LOCALSTORAGE_DEF];
     delete localStorage[LOCALSTORAGE_SEARCH];
     location.reload();
+  });
+  (
+    document.querySelector("#set-search-alg") as HTMLButtonElement
+  ).addEventListener("click", () => {
+    const kpuzzle = new KPuzzle(JSON.parse(def.value));
+    const newSearchState = kpuzzle
+      .startState()
+      .applyAlg(
+        new Alg(
+          (document.querySelector("#search-alg") as HTMLInputElement).value,
+        ),
+      );
+    const newSearchStateString = neatStringify(newSearchState.stateData);
+    search.value = newSearchStateString;
+    localStorage[LOCALSTORAGE_SEARCH] = newSearchStateString;
   });
   (
     document.querySelector("#reset-move-subset") as HTMLButtonElement
