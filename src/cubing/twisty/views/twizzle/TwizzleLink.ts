@@ -3,25 +3,28 @@ import { Alg } from "../../../alg";
 import {
   ExperimentalCommonMetric,
   experimentalCountMetricMoves,
-  experimentalCountMovesETM,
 } from "../../../notation";
 import { puzzles } from "../../../puzzles";
-import type { AlgWithIssues } from "../../model/props/puzzle/state/AlgProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { TwistyAlgViewer } from "../TwistyAlgViewer";
 import { twizzleLinkCSS, twizzleLinkForumTweaksCSS } from "./TwizzleLink.css";
 import { getConfigFromURL } from "./url-params";
-
 /** @category Other Custom Elements */
 
 // Non-breaking space
 const NBSP = "\xa0";
 
-const OBTM_EXPLANATION =
-  "OBTM: rotations count as 0 turns, outer block turns count as 1 turn, slices count as 2 turn";
-const ETM_EXPLANATION = "ETM: all moves (including rotations) count as 1 turn";
+// TODO: calculate descriptions from the cost factors directly.
+const METRIC_EXPLANATIONS: Partial<Record<ExperimentalCommonMetric, string>> = {
+  [ExperimentalCommonMetric.OuterBlockTurnMetric]:
+    'OBTM ("Outer Block Turn Metric"): rotations count as 0 turns, outer block turns count as 1 turn, slices count as 2 turns',
+  [ExperimentalCommonMetric.RangeBlockTurnMetric]:
+    'RBTM ("Range Block Turn Metric"): rotations count as 0 turns, outer block turns and inner block turns (slices or slice ranges) count as 1 turn',
+  [ExperimentalCommonMetric.ExecutionTurnMetric]:
+    'ETM ("Outer Block Turn Metric"): all moves (including rotations) count as 1 turn',
+};
 
 export class TwizzleLink extends ManagedCustomElement {
   twistyPlayer: TwistyPlayer | null = null;
@@ -208,24 +211,41 @@ export function constructMoveCountDisplay(
   model: TwistyPlayerModel,
   elem: HTMLSpanElement = document.createElement("span"),
 ): HTMLSpanElement {
-  model.puzzleAlg.addFreshListener(async (algWithIssues: AlgWithIssues) => {
+  async function update() {
+    const [algWithIssues, puzzleLoader] = await Promise.all([
+      model.puzzleAlg.get(),
+      model.puzzleLoader.get(),
+    ]);
     if (algWithIssues.issues.errors.length !== 0) {
       elem.textContent = "";
       return;
     }
-    const puzzleLoader = await model.puzzleLoader.get();
-    const moveCountETM = experimentalCountMovesETM(algWithIssues.alg);
-    if (puzzleLoader.id === "3x3x3") {
-      elem.textContent = ` (${experimentalCountMetricMoves(
+    let isFirstMetric = true;
+    function addMetric(metric: ExperimentalCommonMetric) {
+      if (isFirstMetric) {
+        isFirstMetric = false;
+      } else {
+        elem.append(" / ");
+      }
+      const span = elem.appendChild(document.createElement("span"));
+      const moveCount = experimentalCountMetricMoves(
         puzzleLoader,
-        ExperimentalCommonMetric.OuterBlockTurnMetric,
+        metric,
         algWithIssues.alg,
-      )}${NBSP}OBTM / ${moveCountETM}${NBSP}ETM)`;
-      elem.title = `${OBTM_EXPLANATION} / ${ETM_EXPLANATION}`;
-    } else {
-      elem.textContent = ` (${moveCountETM}${NBSP}ETM)`;
-      elem.title = ETM_EXPLANATION;
+      );
+      span.textContent = `${moveCount}${NBSP}${metric}`;
+      span.title = METRIC_EXPLANATIONS[metric] ?? "";
     }
-  });
+
+    elem.textContent = "(";
+    if (puzzleLoader.id === "3x3x3") {
+      addMetric(ExperimentalCommonMetric.OuterBlockTurnMetric);
+      addMetric(ExperimentalCommonMetric.RangeBlockTurnMetric);
+    }
+    addMetric(ExperimentalCommonMetric.ExecutionTurnMetric);
+    elem.append(")");
+  }
+  model.puzzleAlg.addFreshListener(update);
+  model.puzzleID.addFreshListener(update);
   return elem;
 }
