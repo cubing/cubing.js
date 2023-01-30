@@ -1,8 +1,10 @@
 import { TwistyPlayer } from "../..";
 import { Alg } from "../../../alg";
-import { experimentalCountMovesETM } from "../../../notation";
-import { CommonMetric } from "../../../notation/commonMetrics";
-import { countMetricMoves } from "../../../notation/CountMoves";
+import {
+  ExperimentalCommonMetric,
+  experimentalCountMetricMoves,
+  experimentalCountMovesETM,
+} from "../../../notation";
 import { puzzles } from "../../../puzzles";
 import type { AlgWithIssues } from "../../model/props/puzzle/state/AlgProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
@@ -210,9 +212,9 @@ export function constructMoveCountDisplay(
     const puzzleLoader = await model.puzzleLoader.get();
     const moveCountETM = experimentalCountMovesETM(algWithIssues.alg);
     if (puzzleLoader.id === "3x3x3") {
-      elem.textContent = ` (${countMetricMoves(
+      elem.textContent = ` (${experimentalCountMetricMoves(
         puzzleLoader,
-        CommonMetric.OuterBlockTurnMetric,
+        ExperimentalCommonMetric.OuterBlockTurnMetric,
         algWithIssues.alg,
       )}${NBSP}OBTM / ${moveCountETM}${NBSP}ETM)`;
     } else {
