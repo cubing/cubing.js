@@ -1,6 +1,8 @@
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
 import { experimentalCountMovesETM } from "../../../cubing/notation";
+import { CommonMetric } from "../../../cubing/notation/commonMetrics";
+import { countMetricMoves } from "../../../cubing/notation/CountMoves";
 import { puzzles } from "../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
 import {
@@ -292,13 +294,22 @@ class ControlPane {
       "span",
     );
     this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener(
-      (algWithIssues: AlgWithIssues) => {
-        if (algWithIssues.issues.errors.length === 0) {
-          this.moveCountDisplay.textContent = ` (${experimentalCountMovesETM(
-            algWithIssues.alg,
-          )} ETM)`;
-        } else {
+      async (algWithIssues: AlgWithIssues) => {
+        if (algWithIssues.issues.errors.length !== 0) {
           this.moveCountDisplay.textContent = "";
+          return;
+        }
+        const puzzleLoader =
+          await this.twistyPlayer.experimentalModel.puzzleLoader.get();
+        const moveCountETM = experimentalCountMovesETM(algWithIssues.alg);
+        if (puzzleLoader.id === "3x3x3") {
+          this.moveCountDisplay.textContent = ` (${countMetricMoves(
+            puzzleLoader,
+            CommonMetric.OuterBlockTurnMetric,
+            algWithIssues.alg,
+          )} OBTM, ${moveCountETM} ETM)`;
+        } else {
+          this.moveCountDisplay.textContent = ` (${moveCountETM} ETM)`;
         }
       },
     );
