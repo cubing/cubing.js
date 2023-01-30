@@ -13,7 +13,7 @@ import {
 } from "../alg";
 import type { PuzzleLoader } from "../puzzles";
 import { CommonMetric } from "./commonMetrics";
-import { countMove3x3x3OBTM } from "./cube3x3x3OBTM";
+import { countMove3x3x3 } from "./cube3x3x3Metrics";
 
 /*
  *   For movecount, that understands puzzle rotations.  This code
@@ -112,22 +112,30 @@ export const countQuantumMoves = functionFromTraversal(CountMoves, [
   quantumMetric,
 ]);
 
-const countMoves3x3x3OBTM = functionFromTraversal(CountMoves, [
-  countMove3x3x3OBTM,
-]);
-
 /**
  * Only implemented so far:
  *
- * - 3x3x3, OBTM
+ * - 3x3x3: OBTM, RBTM, ETM
  */
 export function countMetricMoves(
   puzzle: PuzzleLoader,
   metric: CommonMetric,
   alg: Alg,
 ): number {
-  if (puzzle.id === "3x3x3" && metric === CommonMetric.OuterBlockTurnMetric) {
-    return countMoves3x3x3OBTM(alg);
+  if (puzzle.id === "3x3x3") {
+    switch (metric) {
+      case CommonMetric.OuterBlockTurnMetric:
+      case CommonMetric.RangeBlockTurnMetric:
+      case CommonMetric.ExecutionTurnMetric:
+        return functionFromTraversal(CountMoves, [
+          (move: Move) => countMove3x3x3(metric, move),
+        ])(alg);
+    }
+  } else {
+    switch (metric) {
+      case CommonMetric.ExecutionTurnMetric:
+        return countMovesETM(alg);
+    }
   }
   throw new Error("Unsupported puzzle or metric.");
 }

@@ -52,7 +52,7 @@ function getCache(): Record<string, MoveType> {
  * constantFactor + amountFactor * Math.abs(move.amount)
  *
  */
-const costFactors: Partial<
+const costFactorsByMetric: Partial<
   Record<
     CommonMetric,
     Record<
@@ -64,21 +64,35 @@ const costFactors: Partial<
     >
   >
 > = {
+  // Note: these are hardcoded for 3x3x3. They will not automatically generalize to any other puzzles.
   [CommonMetric.OuterBlockTurnMetric]: {
     [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
     [MoveType.Outer]: { constantFactor: 1, amountFactor: 0 },
     [MoveType.Inner]: { constantFactor: 2, amountFactor: 0 },
   },
+  [CommonMetric.RangeBlockTurnMetric]: {
+    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
+    [MoveType.Outer]: { constantFactor: 1, amountFactor: 0 },
+    [MoveType.Inner]: { constantFactor: 1, amountFactor: 0 },
+  },
+  [CommonMetric.ExecutionTurnMetric]: {
+    [MoveType.Rotation]: { constantFactor: 1, amountFactor: 0 },
+    [MoveType.Outer]: { constantFactor: 1, amountFactor: 0 },
+    [MoveType.Inner]: { constantFactor: 1, amountFactor: 0 },
+  },
 };
 
-export function countMove3x3x3OBTM(move: Move): number {
+export function countMove3x3x3(metric: CommonMetric, move: Move): number {
+  const costFactors = costFactorsByMetric[metric];
+  if (!costFactors) {
+    throw new Error(`Invalid metric for 3x3x3: ${metric}`);
+  }
   const cache = getCache();
   const moveQuantumString = move.quantum.toString();
   if (!(moveQuantumString in cache)) {
-    throw new Error(`Invalid move for 3x3x3 OBTM: ${moveQuantumString}`);
+    throw new Error(`Invalid move for 3x3x3 ${metric}: ${moveQuantumString}`);
   }
   const costType = cache[moveQuantumString];
-  const { constantFactor, amountFactor } =
-    costFactors[CommonMetric.OuterBlockTurnMetric]![costType];
+  const { constantFactor, amountFactor } = costFactors[costType];
   return constantFactor + amountFactor * Math.abs(move.amount);
 }
