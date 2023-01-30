@@ -175,7 +175,9 @@ lint:
 lint-ci:
 	${ROME} ci ./script ./src
 .PHONY: prepack
-prepack: clean test-fast build test-dist-esm-node-import test-dist-esm-plain-esbuild-compat
+prepack: clean build test-dist-esm-node-import test-dist-esm-plain-esbuild-compat
+.PHONY: prepublishOnly
+prepublishOnly: test-all
 .PHONY: postpublish
 postpublish: update-cdn deploy
 .PHONY: deploy
