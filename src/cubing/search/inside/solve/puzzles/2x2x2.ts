@@ -40,7 +40,7 @@ export async function solve222HTMSubOptimal(
     (
       await cube2x2x2.kpuzzle()
     ).definition,
-    state.experimentalToTransformation()!.transformationData,
+    state.stateData,
     {
       moveSubset: "UFLR".split(""), // TODO: <U, F, R>
       maxDepth,
@@ -61,7 +61,7 @@ export async function solve222HTMOptimal(
     (
       await cube2x2x2.kpuzzle()
     ).definition,
-    normalizedState.experimentalToTransformation()!.transformationData,
+    normalizedState.stateData,
     {
       moveSubset: "UFLR".split(""), // TODO: <U, F, R>
       maxDepth,
@@ -110,7 +110,7 @@ export async function solve222ForScramble(state: KState): Promise<Alg> {
   mustBeInsideWorker();
   return solveTwsearch(
     (await cube2x2x2.kpuzzle()).definition,
-    state.experimentalToTransformation()!.transformationData,
+    state.stateData,
     {
       moveSubset: "UFLR".split(""),
       minDepth: 11,
