@@ -22,7 +22,7 @@ const INNER_BLOCK_MOVES_EXPLANATION = "inner block moves (e.g. M or 2-5r)";
 // TODO: calculate descriptions from the cost factors directly.
 const METRIC_EXPLANATIONS: Partial<Record<ExperimentalCommonMetric, string>> = {
   [ExperimentalCommonMetric.OuterBlockTurnMetric]: `OBTM ("Outer Block Turn Metric"): ${INNER_BLOCK_MOVES_EXPLANATION} count as 2 turns, ${OUTER_BLOCK_MOVES_EXPLANATION} count as 1 turn, rotations (e.g. x) count as 0 turns`,
-  [ExperimentalCommonMetric.RangeBlockTurnMetric]: `RBTM ("Range Block Turn Metric"): ${OUTER_BLOCK_MOVES_EXPLANATION} count as 1 turn, ${INNER_BLOCK_MOVES_EXPLANATION} count as 1 turn, rotations (e.g. x) count as 0 turns`,
+  [ExperimentalCommonMetric.RangeBlockTurnMetric]: `RBTM ("Range Block Turn Metric"): ${INNER_BLOCK_MOVES_EXPLANATION} count as 1 turn, ${OUTER_BLOCK_MOVES_EXPLANATION} count as 1 turn, rotations (e.g. x) count as 0 turns`,
   [ExperimentalCommonMetric.ExecutionTurnMetric]: `ETM ("Execution Turn Metric"): all moves (including rotations) count as 1 turn`,
 };
 
