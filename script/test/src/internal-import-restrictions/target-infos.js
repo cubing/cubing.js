@@ -28,7 +28,7 @@ export const targetInfos = {
   },
   notation: {
     deps: {
-      direct: ["alg"],
+      direct: ["alg", "puzzles"], // TODO: remove `puzzles` once we can use the 3x3x3 loader.
       dynamic: [],
     },
   },
