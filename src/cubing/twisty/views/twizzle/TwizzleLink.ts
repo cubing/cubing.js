@@ -21,7 +21,7 @@ const METRIC_EXPLANATIONS: Partial<Record<ExperimentalCommonMetric, string>> = {
   [ExperimentalCommonMetric.OuterBlockTurnMetric]:
     'OBTM ("Outer Block Turn Metric"): rotations count as 0 turns, outer block turns count as 1 turn, slices count as 2 turns',
   [ExperimentalCommonMetric.RangeBlockTurnMetric]:
-    'RBTM ("Range Block Turn Metric"): rotations count as 0 turns, outer block turns and inner block turns (slices or slice ranges) count as 1 turn',
+    'RBTM ("Range Block Turn Metric"): rotations count as 0 turns, outer block turns and inner block moves (slices or slice ranges) count as 1 turn',
   [ExperimentalCommonMetric.ExecutionTurnMetric]:
     'ETM ("Outer Block Turn Metric"): all moves (including rotations) count as 1 turn',
 };
