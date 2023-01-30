@@ -1,8 +1,5 @@
 import { Alg, AlgBuilder, LineComment, Newline } from "../../../cubing/alg";
 import { experimentalEnsureAlg } from "../../../cubing/alg/Alg";
-import { experimentalCountMovesETM } from "../../../cubing/notation";
-import { CommonMetric } from "../../../cubing/notation/commonMetrics";
-import { countMetricMoves } from "../../../cubing/notation/CountMoves";
 import { puzzles } from "../../../cubing/puzzles";
 import { randomScrambleForEvent } from "../../../cubing/scramble";
 import {
@@ -20,8 +17,10 @@ import {
   TwistyPlayer,
   TwistyPlayerConfig,
 } from "../../../cubing/twisty";
-import { getStickeringGroup } from "../../../cubing/twisty/cubing-private";
-import type { AlgWithIssues } from "../../../cubing/twisty/model/props/puzzle/state/AlgProp";
+import {
+  constructMoveCountDisplay,
+  getStickeringGroup,
+} from "../../../cubing/twisty/cubing-private";
 import type { SetupToLocation } from "../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import { FreshListenerManager } from "../../../cubing/twisty/model/props/TwistyProp";
 import { customElementsShim } from "../../../cubing/twisty/views/node-custom-element-shims";
@@ -38,9 +37,6 @@ import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
 
 // TODO: introduce concepts in `cubing/twisty` for "this is a valid twisty-player value, but not for the current puzzle".
 const UNSUPPORTED_STICKERING = "(unsupported stickering)";
-
-// Non-breaking space
-const NBSP = "\xa0";
 
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
   const newAlgBuilder = new AlgBuilder();
@@ -296,25 +292,9 @@ class ControlPane {
       "move-count",
       "span",
     );
-    this.twistyPlayer.experimentalModel.puzzleAlg.addFreshListener(
-      async (algWithIssues: AlgWithIssues) => {
-        if (algWithIssues.issues.errors.length !== 0) {
-          this.moveCountDisplay.textContent = "";
-          return;
-        }
-        const puzzleLoader =
-          await this.twistyPlayer.experimentalModel.puzzleLoader.get();
-        const moveCountETM = experimentalCountMovesETM(algWithIssues.alg);
-        if (puzzleLoader.id === "3x3x3") {
-          this.moveCountDisplay.textContent = ` (${countMetricMoves(
-            puzzleLoader,
-            CommonMetric.OuterBlockTurnMetric,
-            algWithIssues.alg,
-          )}${NBSP}OBTM, ${moveCountETM}${NBSP}ETM)`;
-        } else {
-          this.moveCountDisplay.textContent = ` (${moveCountETM}${NBSP}ETM)`;
-        }
-      },
+    constructMoveCountDisplay(
+      this.twistyPlayer.experimentalModel,
+      this.moveCountDisplay,
     );
 
     this.algInput = findOrCreateChildWithClass(

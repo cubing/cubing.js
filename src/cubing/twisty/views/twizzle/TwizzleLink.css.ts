@@ -15,12 +15,20 @@ export const twizzleLinkCSS = new CSSSource(
   background: rgba(255, 230, 210, 1);
   font-weight: bold;
   padding: 0.25em 0.5em;
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
 
 .heading.title {
   background: rgb(255, 245, 235);
   font-size: 150%;
   white-space: pre;
+}
+
+.heading .move-count {
+  font-weight: initial;
+  text-align: right;
+  opacity: 0.5;
 }
 
 .heading a {
