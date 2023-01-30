@@ -43,6 +43,16 @@ control-pane .metadata-url {
   display: grid;
 }
 
+control-pane .move-count-header {
+  display: grid ;
+  grid-template-columns: auto 1fr;
+}
+
+control-pane .move-count-header .move-count {
+  /* TODO: internationalized layout */
+  text-align: right;
+}
+
 control-pane twisty-alg-editor {
   width: 100%;
   --border-color: rgba(0, 0, 0, 0);

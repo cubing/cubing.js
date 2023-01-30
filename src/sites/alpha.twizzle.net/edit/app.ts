@@ -39,6 +39,9 @@ import { puzzleGroups, supportedPuzzles } from "./supported-puzzles";
 // TODO: introduce concepts in `cubing/twisty` for "this is a valid twisty-player value, but not for the current puzzle".
 const UNSUPPORTED_STICKERING = "(unsupported stickering)";
 
+// Non-breaking space
+const NBSP = "\xa0";
+
 function algAppend(oldAlg: Alg, comment: string, newAlg: Alg): Alg {
   const newAlgBuilder = new AlgBuilder();
   newAlgBuilder.experimentalPushAlg(oldAlg);
@@ -307,9 +310,9 @@ class ControlPane {
             puzzleLoader,
             CommonMetric.OuterBlockTurnMetric,
             algWithIssues.alg,
-          )} OBTM, ${moveCountETM} ETM)`;
+          )}${NBSP}OBTM, ${moveCountETM}${NBSP}ETM)`;
         } else {
-          this.moveCountDisplay.textContent = ` (${moveCountETM} ETM)`;
+          this.moveCountDisplay.textContent = ` (${moveCountETM}${NBSP}ETM)`;
         }
       },
     );
