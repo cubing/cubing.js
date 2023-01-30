@@ -19,6 +19,10 @@ import { getConfigFromURL } from "./url-params";
 // Non-breaking space
 const NBSP = "\xa0";
 
+const OBTM_EXPLANATION =
+  "OBTM: rotations count as 0 turns, outer block turns count as 1 turn, slices count as 2 turn";
+const ETM_EXPLANATION = "ETM: all moves (including rotations) count as 1 turn";
+
 export class TwizzleLink extends ManagedCustomElement {
   twistyPlayer: TwistyPlayer | null = null;
   a: HTMLAnchorElement | null = null;
@@ -217,8 +221,10 @@ export function constructMoveCountDisplay(
         ExperimentalCommonMetric.OuterBlockTurnMetric,
         algWithIssues.alg,
       )}${NBSP}OBTM / ${moveCountETM}${NBSP}ETM)`;
+      elem.title = `${OBTM_EXPLANATION} / ${ETM_EXPLANATION}`;
     } else {
       elem.textContent = ` (${moveCountETM}${NBSP}ETM)`;
+      elem.title = ETM_EXPLANATION;
     }
   });
   return elem;
