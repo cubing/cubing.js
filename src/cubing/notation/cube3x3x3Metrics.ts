@@ -52,7 +52,7 @@ function getCache(): Record<string, MoveType> {
  * constantFactor + amountFactor * Math.abs(move.amount)
  *
  */
-const costFactorsByMetric: Partial<
+export const costFactorsByMetric: Partial<
   Record<
     CommonMetric,
     Record<
@@ -74,6 +74,16 @@ const costFactorsByMetric: Partial<
     [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
     [MoveType.Outer]: { constantFactor: 1, amountFactor: 0 },
     [MoveType.Inner]: { constantFactor: 1, amountFactor: 0 },
+  },
+  [CommonMetric.OuterBlockQuantumTurnMetric]: {
+    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
+    [MoveType.Outer]: { constantFactor: 0, amountFactor: 1 },
+    [MoveType.Inner]: { constantFactor: 0, amountFactor: 2 },
+  },
+  [CommonMetric.RangeBlockQuantumTurnMetric]: {
+    [MoveType.Rotation]: { constantFactor: 0, amountFactor: 0 },
+    [MoveType.Outer]: { constantFactor: 0, amountFactor: 1 },
+    [MoveType.Inner]: { constantFactor: 0, amountFactor: 1 },
   },
   [CommonMetric.ExecutionTurnMetric]: {
     [MoveType.Rotation]: { constantFactor: 1, amountFactor: 0 },
