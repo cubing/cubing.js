@@ -130,6 +130,7 @@ twisty-alg-viewer {
 
 .move-count > span:hover {
   color: rgba(var(--text-color), 1);
+  cursor: help;
 }
 `,
 );

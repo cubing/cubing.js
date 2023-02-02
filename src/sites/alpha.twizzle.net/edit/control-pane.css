@@ -195,6 +195,8 @@ twisty-stream-source {
   white-space: pre-wrap;
   text-align: left;
 }
+
 .move-count > span:hover {
   color: black;
+  cursor: help;
 }
