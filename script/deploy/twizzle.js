@@ -10,7 +10,7 @@ const versionFolderName = (
     `date "+%Y-%m-%d@%H-%M-%S-%Z@${gitDescribeVersion}@unixtime%s"`,
   )
 ).trim();
-const twizzleSSHServer = "cubing_deploy@towns.dreamhost.com";
+const twizzleSSHServer = "cubing_deploy@twizzle.net";
 const twizzleSFTPPath = "~/alpha.twizzle.net";
 const twizzleSFTPVersionsPath = "~/_deploy-versions/alpha.twizzle.net";
 const twizzleSFTPVersionPath = `${twizzleSFTPVersionsPath}/${versionFolderName}`;

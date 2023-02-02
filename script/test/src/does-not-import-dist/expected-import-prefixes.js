@@ -16,14 +16,6 @@ export const expectedPrefixes = [
   // Playwright
   "node_modules/playwright-core",
   "node_modules/playwright",
-  // Jest
-  "node_modules/@babel/parser",
-  "node_modules/@babel/types",
-  "node_modules/@jest/schemas",
-  "node_modules/@sinclair/typebox",
-  "node_modules/jest-diff",
-  "node_modules/jest-matcher-utils",
-  "node_modules/pretty-format",
   // `node-fetch`
   "node_modules/formdata-polyfill",
   "node_modules/fetch-blob",
