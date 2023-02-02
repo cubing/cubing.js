@@ -35,7 +35,8 @@ control-pane .title {
 control-pane h2 {
   margin: 0;
   padding: 0.25em 0.5em;
-  background: rgba(255, 230, 210, 1);
+  --heading-background: 255, 230, 210;
+  background: rgba(var(--heading-background), 1);
   border-top: 1px solid rgba(0, 0, 0, 0.5);
 }
 
@@ -144,7 +145,8 @@ input:disabled + label {
   opacity: 0.3;
 }
 
-expand-button:hover h2 {
+expand-button:hover h2:not(.no-hover-underline),
+expand-button:hover .hover-underline {
   text-decoration: underline;
 }
 
@@ -175,5 +177,24 @@ twisty-stream-source {
 }
 
 .move-count {
-  opacity: 0.3;
+  color: rgba(0, 0, 0, 0.3);
+  text-decoration: none !important;
+}
+
+/* TODO: dedup with <twizzle-link> */
+.move-count > span:hover:before {
+  background-color: rgba(var(--heading-background), 1);
+  color: black;
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  position: absolute;
+  padding: 0.5em;
+  top: 1.5em;
+  right: 0;
+  content: attr(data-before);
+  white-space: pre-wrap;
+  text-align: left;
+}
+.move-count > span:hover {
+  color: black;
 }

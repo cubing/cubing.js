@@ -5,6 +5,12 @@ export const twizzleLinkCSS = new CSSSource(
 .wrapper {
   background: rgb(255, 245, 235);
   border: 1px solid rgba(0, 0, 0, 0.25);
+
+  /* Workaround from https://stackoverflow.com/questions/40010597/how-do-i-apply-opacity-to-a-css-color-variable */
+  --text-color: 0, 0, 0;
+  --heading-background: 255, 230, 210;
+
+  color: rgb(var(--text-color));
 }
 
 .setup-alg, twisty-alg-viewer {
@@ -12,7 +18,8 @@ export const twizzleLinkCSS = new CSSSource(
 }
 
 .heading {
-  background: rgba(255, 230, 210, 1);
+  background: rgba(var(--heading-background), 1);
+  color: rgba(var(--text-color), 1);
   font-weight: bold;
   padding: 0.25em 0.5em;
   display: grid;
@@ -22,13 +29,17 @@ export const twizzleLinkCSS = new CSSSource(
 .heading.title {
   background: rgb(255, 245, 235);
   font-size: 150%;
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 .heading .move-count {
   font-weight: initial;
   text-align: right;
-  opacity: 0.5;
+  color: rgba(var(--text-color), 0.4);
+}
+
+.wrapper.dark-mode .heading .move-count {
+  color: rgba(var(--text-color), 0.7);
 }
 
 .heading a {
@@ -98,16 +109,37 @@ twisty-alg-viewer {
     height: 100%;
   }
 }
+
+/* TODO: dedup with Twizzle Editor */
+.move-count > span:hover:before {
+  background-color: rgba(var(--heading-background), 1);
+  color: rgba(var(--text-color), 1);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  position: absolute;
+  padding: 0.5em;
+  top: 1.5em;
+  right: 0;
+  content: attr(data-before);
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.move-count > span:hover {
+  color: rgba(var(--text-color), 1);
+}
 `,
 );
 
 export const twizzleLinkForumTweaksCSS = new CSSSource(`
 .wrapper {
   background: white;
+  --heading-background: 232, 239, 253
 }
 
-.heading {
-  background: #4285f422;
+.wrapper.dark-mode {
+  --text-color: 236, 236, 236;
+  --heading-background: 29, 29, 29;
 }
 
 .scrollable-region {
@@ -116,14 +148,13 @@ export const twizzleLinkForumTweaksCSS = new CSSSource(`
 
 .wrapper.dark-mode {
   background: #262626;
-  color: #929292;
+  --text-color: 142, 142, 142;
   border-color: #FFFFFF44;
   color-scheme: dark;
 }
 
 .wrapper.dark-mode .heading:not(.title) {
   background: #1d1d1d;
-  color: #ececec;
 }
 
 .heading.title {

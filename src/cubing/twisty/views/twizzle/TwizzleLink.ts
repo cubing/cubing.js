@@ -14,23 +14,41 @@ import { getConfigFromURL } from "./url-params";
 /** @category Other Custom Elements */
 
 // Non-breaking space
-const NBSP = "\xa0";
+// const NBSP = "\xa0";
 
 const OUTER_BLOCK_MOVES_EXPLANATION = "outer block moves (e.g. R, Rw, or 4r)";
 const INNER_BLOCK_MOVES_EXPLANATION = "inner block moves (e.g. M or 2-5r)";
 
 // TODO: calculate descriptions from the cost factors directly.
 const METRIC_EXPLANATIONS: Partial<Record<ExperimentalCommonMetric, string>> = {
-  [ExperimentalCommonMetric.OuterBlockTurnMetric]: `OBTM ("Outer Block Turn Metric"): ${INNER_BLOCK_MOVES_EXPLANATION} count as 2 turns, ${OUTER_BLOCK_MOVES_EXPLANATION} count as 1 turn, rotations (e.g. x) count as 0 turns`,
-  [ExperimentalCommonMetric.RangeBlockTurnMetric]: `RBTM ("Range Block Turn Metric"): ${INNER_BLOCK_MOVES_EXPLANATION} count as 1 turn, ${OUTER_BLOCK_MOVES_EXPLANATION} count as 1 turn, rotations (e.g. x) count as 0 turns`,
-  [ExperimentalCommonMetric.ExecutionTurnMetric]: `ETM ("Execution Turn Metric"): all moves (including rotations) count as 1 turn`,
+  [ExperimentalCommonMetric.OuterBlockTurnMetric]: `HTM = OBTM ("Outer Block Turn Metric"):
+• ${INNER_BLOCK_MOVES_EXPLANATION} count as 2 turns
+• ${OUTER_BLOCK_MOVES_EXPLANATION} count as 1 turn
+• rotations (e.g. x) count as 0 turns`,
+  [ExperimentalCommonMetric.OuterBlockQuantumTurnMetric]: `QTM = OBQTM ("Outer Block Quantum Turn Metric"):
+• ${INNER_BLOCK_MOVES_EXPLANATION} count as 2 turns per quantum (e.g. M2 counts as 4)
+• ${OUTER_BLOCK_MOVES_EXPLANATION} count as 1 turn per quantum (e.g. R2 counts as 2)
+• rotations (e.g. x) count as 0 turns`,
+  [ExperimentalCommonMetric.RangeBlockTurnMetric]: `STM = RBTM ("Range Block Turn Metric"):
+• ${INNER_BLOCK_MOVES_EXPLANATION} count as 1 turn
+• ${OUTER_BLOCK_MOVES_EXPLANATION} count as 1 turn
+• rotations (e.g. x) count as 0 turns`,
+  [ExperimentalCommonMetric.ExecutionTurnMetric]: `ETM ("Execution Turn Metric"):
+• all moves (including rotations) count as 1 turn`,
 };
+const METRIC_ABBREVIATIONS: Partial<Record<ExperimentalCommonMetric, string>> =
+  {
+    [ExperimentalCommonMetric.OuterBlockTurnMetric]: "h",
+    [ExperimentalCommonMetric.OuterBlockQuantumTurnMetric]: "q",
+    [ExperimentalCommonMetric.RangeBlockTurnMetric]: "s",
+    [ExperimentalCommonMetric.ExecutionTurnMetric]: "e",
+  };
 
 export class TwizzleLink extends ManagedCustomElement {
   twistyPlayer: TwistyPlayer | null = null;
   a: HTMLAnchorElement | null = null;
   constructor(
-    private options?: { cdnForumTweaks?: boolean; darkMode: boolean },
+    private options?: { cdnForumTweaks?: boolean; darkMode?: boolean },
   ) {
     super({ mode: "open" });
   }
@@ -225,7 +243,7 @@ export function constructMoveCountDisplay(
       if (isFirstMetric) {
         isFirstMetric = false;
       } else {
-        elem.append(" / ");
+        elem.append(", ");
       }
       const span = elem.appendChild(document.createElement("span"));
       const moveCount = experimentalCountMetricMoves(
@@ -233,13 +251,18 @@ export function constructMoveCountDisplay(
         metric,
         algWithIssues.alg,
       );
-      span.textContent = `${moveCount}${NBSP}${metric}`;
-      span.title = METRIC_EXPLANATIONS[metric] ?? "";
+      const moveNumber = span.appendChild(document.createElement("span"));
+      moveNumber.textContent = moveCount.toString();
+      moveNumber.classList.add("move-number");
+      span.append(`${METRIC_ABBREVIATIONS[metric]}`);
+      // span.title = METRIC_EXPLANATIONS[metric] ?? "";
+      span.setAttribute("data-before", METRIC_EXPLANATIONS[metric] ?? "");
     }
 
     elem.textContent = "(";
     if (puzzleLoader.id === "3x3x3") {
       addMetric(ExperimentalCommonMetric.OuterBlockTurnMetric);
+      addMetric(ExperimentalCommonMetric.OuterBlockQuantumTurnMetric);
       addMetric(ExperimentalCommonMetric.RangeBlockTurnMetric);
     }
     addMetric(ExperimentalCommonMetric.ExecutionTurnMetric);
