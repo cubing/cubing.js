@@ -24,6 +24,9 @@ export const twizzleLinkCSS = new CSSSource(
   padding: 0.25em 0.5em;
   display: grid;
   grid-template-columns: auto 1fr;
+
+  /* For the move count hover elems. */
+  position: sticky;
 }
 
 .heading.title {
