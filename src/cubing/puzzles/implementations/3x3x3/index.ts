@@ -12,7 +12,7 @@ import {
 import { puzzleSpecificSimplifyOptions333 } from "./puzzle-specific-simplifications";
 
 /** @category Specific Puzzles */
-export const cube3x3x3: PuzzleLoader = {
+export const cube3x3x3 = {
   id: "3x3x3",
   fullName: "3×3×3 Cube",
   inventedBy: ["Ernő Rubik"],
@@ -38,4 +38,4 @@ export const cube3x3x3: PuzzleLoader = {
   ): Promise<StickeringMask> => cubeLikeStickeringMask(cube3x3x3, stickering),
   stickerings: () => cubeLikeStickeringList("3x3x3"),
   puzzleSpecificSimplifyOptions: puzzleSpecificSimplifyOptions333,
-};
+} satisfies PuzzleLoader;
