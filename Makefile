@@ -94,7 +94,7 @@ test-all: test-src test-build test-dist
 .PHONY: test-src
 test-src: \
 	test-spec \
-	lint \
+	lint-ci \
 	test-src-tsc \
 	test-src-internal-import-restrictions \
 	test-src-does-not-import-dist \
