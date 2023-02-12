@@ -11,9 +11,7 @@ export const kilominx: PuzzleLoader = {
   fullName: "Kilominx",
   kpuzzle: getCached(async () => {
     const pg = await asyncGetPuzzleGeometry("megaminx + chopasaurus");
-    const kpuzzleDefinition = JSON.parse(
-      JSON.stringify(pg.getKPuzzleDefinition(true)),
-    );
+    const kpuzzleDefinition = structuredClone(pg.getKPuzzleDefinition(true));
     delete kpuzzleDefinition.orbits.CENTERS;
     delete kpuzzleDefinition.orbits.CENTERS2;
     delete kpuzzleDefinition.startStateData.CENTERS;

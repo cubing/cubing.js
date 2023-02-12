@@ -152,7 +152,7 @@ export async function random222State(): Promise<KState> {
   const kpuzzle = await puzzles["2x2x2"].kpuzzle();
   const stateCopy: KState = new KState(
     kpuzzle,
-    JSON.parse(JSON.stringify(kpuzzle.startState().stateData)),
+    structuredClone(kpuzzle.startState().stateData),
   ); // TODO
   mutatingRandomizeOrbit(kpuzzle, "CORNERS", stateCopy, {
     orientationSum: 0,

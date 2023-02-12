@@ -33,9 +33,7 @@ export async function preInitializeMegaminx(): Promise<void> {
 export async function solveMegaminx(state: KState): Promise<Alg> {
   mustBeInsideWorker();
   const trembleSolver = await getCachedTrembleSolver();
-  const stateDataWithoutMO: KStateData = JSON.parse(
-    JSON.stringify(state.stateData),
-  );
+  const stateDataWithoutMO: KStateData = structuredClone(state.stateData);
   stateDataWithoutMO.CENTERS.orientation = new Array(12).fill(0);
   const stateWithoutMO = new KState(
     await (await searchDynamicSideEvents).cachedMegaminxKPuzzleWithoutMO(),
