@@ -21,7 +21,6 @@ export const kilominx: PuzzleLoader = {
       delete (moveDefinition as any).CENTERS2;
     }
     kpuzzleDefinition.name = "kilominx";
-    delete kpuzzleDefinition.experimentalPuzzleDescription;
     const puzzleGeometry = await import("../../../puzzle-geometry");
     const pgNotation = new puzzleGeometry.ExperimentalPGNotation(
       pg,
@@ -30,15 +29,10 @@ export const kilominx: PuzzleLoader = {
     const kpuzzle = new KPuzzle(kpuzzleDefinition, {
       experimentalPGNotation: {
         lookupMove: (move: Move): KTransformationData | null => {
-          if (move.toString() === "x2" || move.toString() === "x2'") {
-            return x2Transformation.transformationData;
-          }
           return pgNotation.lookupMove(move);
         },
       } as ExperimentalPGNotation,
     });
-    const x2Transformation = kpuzzle.algToTransformation("Rv2 Fv Uv'");
-    kpuzzleDefinition.moves["x2"] = x2Transformation;
     return kpuzzle;
   }),
   svg: getCached(async () => {
