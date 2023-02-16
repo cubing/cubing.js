@@ -21,7 +21,7 @@ interface SourceEventDetail<OutputType> {
 
 type SourceEvent<T> = CustomEvent<SourceEventDetail<T>>;
 
-type PromiseOrValue<T> = T | Promise<T>;
+export type PromiseOrValue<T> = T | Promise<T>;
 
 // Values of T must be immutable.
 let globalSourceGeneration = 0; // This is incremented before being used, so 1 will be the first active value.

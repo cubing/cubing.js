@@ -44,3 +44,11 @@ it("adds alg leaves and moves properly", async () => {
     new Alg("R U R' D2 F ."),
   );
 });
+
+it("can handle async timestamp setting", async () => {
+  const twistyPlayerModel = new TwistyPlayerModel();
+  twistyPlayerModel.alg.set("R U R'")
+  expect((await twistyPlayerModel.detailedTimelineInfo.get()).timestamp).to.equal(3000)
+  twistyPlayerModel.timestampRequest.set((async () => 500)());
+  expect((await twistyPlayerModel.detailedTimelineInfo.get()).timestamp).to.equal(500)
+});

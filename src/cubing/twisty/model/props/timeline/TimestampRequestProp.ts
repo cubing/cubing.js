@@ -1,5 +1,5 @@
 import type { MillisecondTimestamp } from "../../../controllers/AnimationTypes";
-import { SimpleTwistyPropSource } from "../TwistyProp";
+import { PromiseOrValue, SimpleTwistyPropSource } from "../TwistyProp";
 
 const smartTimestamps = {
   auto: true,
@@ -18,13 +18,15 @@ export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampReques
     return "auto";
   }
 
-  // TODO: Support `Promise`
-  public override set(v: TimestampRequest) {
-    if (!this.validInput(v)) {
-      // TODO: Generalize this to more props. How do we surface this? Throw an error and catch it from sync setters that call into this?
-      return;
-    }
-    super.set(v);
+  public override set(v: PromiseOrValue<TimestampRequest>) {
+    const currentValue = this.get();
+    super.set((async () => { 
+      if (!this.validInput(await v)) {
+        // TODO: Generalize this to more props. How do we surface this? Throw an error and catch it from sync setters that call into this?
+        return currentValue;
+      }
+      return v;
+    })());
   }
 
   protected validInput(v: TimestampRequest): boolean {
