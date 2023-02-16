@@ -20,13 +20,15 @@ export class TimestampRequestProp extends SimpleTwistyPropSource<TimestampReques
 
   public override set(v: PromiseOrValue<TimestampRequest>) {
     const currentValue = this.get();
-    super.set((async () => { 
-      if (!this.validInput(await v)) {
-        // TODO: Generalize this to more props. How do we surface this? Throw an error and catch it from sync setters that call into this?
-        return currentValue;
-      }
-      return v;
-    })());
+    super.set(
+      (async () => {
+        if (!this.validInput(await v)) {
+          // TODO: Generalize this to more props. How do we surface this? Throw an error and catch it from sync setters that call into this?
+          return currentValue;
+        }
+        return v;
+      })(),
+    );
   }
 
   protected validInput(v: TimestampRequest): boolean {
