@@ -264,42 +264,61 @@ function defaultnets(): any {
   };
 }
 
+enum PGColors {
+  White = "#ffffff",
+  Orange = "#ff8000",
+  Green = "#44ee00",
+  Red = "#ff0000",
+  Blue = "#2266ff",
+  Yellow = "#ffff00",
+
+  Purple = "#8800dd",
+  Gray = "#aaaaaa ",
+  Cream = "#ffffd0",
+  Pink = "#ff66cc",
+
+  DarkBlue = "#0000ff",
+  LightBlue = "#3399ff",
+  DarkGreen = "#008800",
+  LightGreen = "#99ff00",
+}
+
 // TODO: change this back to a const JSON definition.
 function defaultcolors(): any {
   return {
     // the colors should use the same naming convention as the nets, above.
-    4: { F: "#00ff00", D: "#ffff00", L: "#ff0000", R: "#0000ff" },
+    4: { F: "#00ff00", D: PGColors.Yellow, L: PGColors.Red, R: PGColors.Blue },
     6: {
-      U: "#ffffff",
-      F: "#00ff00",
-      R: "#ff0000",
-      D: "#ffff00",
-      B: "#0000ff",
-      L: "#ff8000",
+      U: PGColors.White,
+      F: PGColors.Green,
+      R: PGColors.Red,
+      D: PGColors.Yellow,
+      B: PGColors.Blue,
+      L: PGColors.Orange,
     },
     8: {
-      U: "#ffffff",
-      F: "#ff0000",
-      R: "#00bb00",
-      D: "#ffff00",
-      BB: "#1122ff",
-      L: "#9524c5",
-      BL: "#ff8800",
-      BR: "#aaaaaa",
+      U: PGColors.White,
+      F: PGColors.Red,
+      R: PGColors.Green,
+      D: PGColors.Yellow,
+      BB: PGColors.Blue,
+      L: PGColors.Purple,
+      BL: PGColors.Orange,
+      BR: PGColors.Gray,
     },
     12: {
-      U: "#ffffff",
-      F: "#006633",
-      R: "#ff0000",
-      C: "#ffffd0",
-      A: "#3399ff",
-      L: "#660099",
-      E: "#ff66cc",
-      BF: "#99ff00",
-      BR: "#0000ff",
-      BL: "#ffff00",
-      I: "#ff6633",
-      D: "#999999",
+      U: PGColors.White,
+      F: PGColors.DarkGreen,
+      R: PGColors.Red,
+      C: PGColors.Cream,
+      A: PGColors.LightBlue,
+      L: PGColors.Purple,
+      E: PGColors.Pink,
+      BF: PGColors.LightGreen,
+      BR: PGColors.DarkBlue,
+      BL: PGColors.Yellow,
+      I: PGColors.Orange,
+      D: PGColors.Gray,
     },
     20: {
       R: "#db69f0",
