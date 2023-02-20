@@ -3060,7 +3060,10 @@ export class PuzzleGeometry {
   // colored (vs dividing lines); we default to 0.77 which seems
   // to work pretty well.  It should be a number between probably
   // 0.4 and 0.9.
-  public get3d(options?: { stickerColors?: string[] }): StickerDat {
+  public get3d(options?: {
+    stickerColors?: string[];
+    darkIgnoredOrbits?: boolean;
+  }): StickerDat {
     const stickers = [];
     const rot = this.getInitial3DRotation();
     const faces = [];
@@ -3077,7 +3080,9 @@ export class PuzzleGeometry {
       const cubiesetnum = this.cubiesetnums[cubie];
       const cubieord = this.cubieordnums[cubie];
       let color = this.graybyori(cubie)
-        ? "#808080"
+        ? options?.darkIgnoredOrbits
+          ? "#222222"
+          : "#808080"
         : this.colors[this.facenames[facenum][1]];
       if (options?.stickerColors) {
         color = options.stickerColors[i];

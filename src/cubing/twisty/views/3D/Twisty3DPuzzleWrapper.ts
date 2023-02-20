@@ -172,6 +172,7 @@ export class Twisty3DPuzzleWrapper extends EventTarget implements Schedulable {
           this.puzzleLoader,
           hintFacelets === "auto" ? "floating" : hintFacelets,
           faceletScale,
+          this.puzzleLoader.id === "kilominx", // TODO: generalize to other puzzles
         );
         // TODO: Figure out how to do this in one place using the listener.
         pg3d.then((p) =>

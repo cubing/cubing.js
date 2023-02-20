@@ -24,11 +24,12 @@ export async function pg3dShim(
   puzzleLoader: PuzzleLoader,
   hintFacelets: HintFaceletStyle,
   faceletScale: FaceletScale,
+  darkIgnoredOrbits: boolean,
 ): Promise<PG3D> {
   return new PG3D(
     renderCallback,
     await puzzleLoader.kpuzzle(),
-    (await puzzleLoader.pg!()).get3d(),
+    (await puzzleLoader.pg!()).get3d({ darkIgnoredOrbits }),
     true,
     hintFacelets === "floating",
     undefined,
