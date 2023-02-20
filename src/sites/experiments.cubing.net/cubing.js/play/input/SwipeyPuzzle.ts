@@ -12,6 +12,18 @@ import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
 
 const DEFAULT_THEME: ThemeType = "transparent-grid";
 
+const megaminxAndKilominx = [
+  ["", "U'", "U2'", "L", "dl", "u'", "L2", "", "/enter"],
+  ["U", "", "U'", "BL", "Rv'", "BR'", "BL2", "Rv2'", "BR2'"],
+  ["U2", "U", "", "u", "dr'", "R'", "Fv'", "", "R2'"],
+  ["L'", "BL'", "u'", "", "Uv'", "Uv2'", "F'", "2L", "F2"],
+  ["dl'", "Rv", "dr", "Uv", "", "Uv'", "d'", "Lv", "d"],
+  ["u", "BR", "R", "Uv2", "Uv", "", "F2'", "2R'", "F"],
+  ["L2'", "BL2'", "Fv", "F", "d", "F2", "", "FL", "D"],
+  ["", "Rv2", "", "2L'", "Lv'", "2R", "FL'", "", "FR"],
+  ["/space", "BR2", "R2", "F2'", "d'", "F'", "D'", "FR'", ""],
+];
+
 export const moveMaps: Record<PuzzleID, string[][]> = {
   "3x3x3": [
     ["", "U'", "U2'", "L", "l", "u'", "L2", "M2", "/enter"],
@@ -68,17 +80,8 @@ export const moveMaps: Record<PuzzleID, string[][]> = {
     ["2L2'", "Rv2", "2R2", "2L'", "Lv'", "2R", "D'", "", "D"],
     ["/space", "BR2", "R2", "F2'", "d'", "F'", "D'", "D'", ""],
   ],
-  megaminx: [
-    ["", "U'", "U2'", "L", "dl", "u'", "L2", "", "/enter"],
-    ["U", "", "U'", "BL", "Rv'", "BR'", "BL2", "Rv2'", "BR2'"],
-    ["U2", "U", "", "u", "dr'", "R'", "Fv'", "", "R2'"],
-    ["L'", "BL'", "u'", "", "Uv'", "Uv2'", "F'", "2L", "F2"],
-    ["dl'", "Rv", "dr", "Uv", "", "Uv'", "d'", "Lv", "d"],
-    ["u", "BR", "R", "Uv2", "Uv", "", "F2'", "2R'", "F"],
-    ["L2'", "BL2'", "Fv", "F", "d", "F2", "", "FL", "D"],
-    ["", "Rv2", "", "2L'", "Lv'", "2R", "FL'", "", "FR"],
-    ["/space", "BR2", "R2", "F2'", "d'", "F'", "D'", "FR'", ""],
-  ],
+  megaminx: megaminxAndKilominx,
+  kilominx: megaminxAndKilominx,
 };
 
 export type Action = "space" | "enter" | "backspace";
