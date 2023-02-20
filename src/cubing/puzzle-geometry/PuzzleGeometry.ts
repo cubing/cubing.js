@@ -273,7 +273,7 @@ enum PGColors {
   Yellow = "#ffff00",
 
   Purple = "#8800dd",
-  Gray = "#aaaaaa ",
+  Gray = "#aaaaaa",
   Cream = "#ffffd0",
   Pink = "#ff66cc",
 
