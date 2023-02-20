@@ -100,7 +100,6 @@ const puzzleData: Partial<
     symbol: GeometrySymbol.TriangleUp,
   },
   kilominx: {
-    "2D": true,
     optgroup: OptGroup.Other,
     symbol: GeometrySymbol.Pentagon,
   },

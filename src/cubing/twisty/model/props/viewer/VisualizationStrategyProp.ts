@@ -22,7 +22,6 @@ export class VisualizationStrategyProp extends TwistyPropDerived<
     switch (inputs.puzzleID) {
       case "clock":
       case "square1":
-      case "kilominx":
       case "redi_cube":
       case "melindas2x2x2x2":
         return "2D";
