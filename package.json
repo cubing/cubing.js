@@ -154,6 +154,7 @@
     "deploy-twizzle": "make deploy-twizzle",
     "deploy-experiments": "make deploy-experiments",
     "roll-vendored-twsearch": "make roll-vendored-twsearch",
+    "update-create-cubing-app": "make update-create-cubing-app",
     "update-cdn": "make update-cdn"
   },
   "keywords": [

@@ -179,7 +179,7 @@ prepack: clean build test-dist-esm-node-import test-dist-esm-plain-esbuild-compa
 .PHONY: prepublishOnly
 prepublishOnly: test-all
 .PHONY: postpublish
-postpublish: update-cdn deploy
+postpublish: update-cdn update-create-cubing-app deploy
 .PHONY: deploy
 deploy: deploy-twizzle deploy-experiments
 .PHONY: deploy-twizzle
@@ -195,6 +195,9 @@ roll-vendored-twsearch:
 	rm -rf src/cubing/vendor/mpl/twsearch/*
 	cp -R ../twsearch/build/esm/* src/cubing/vendor/mpl/twsearch/
 	node script/fix-vendored-twsearch.js
+.PHONY: update-create-cubing-app
+update-create-cubing-app:
+	cd ../create-cubing-app && make roll-cubing-commit && git push
 .PHONY: update-cdn
 update-cdn:
 	@echo "--------------------------------"
