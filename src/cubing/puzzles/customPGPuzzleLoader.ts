@@ -14,7 +14,7 @@ export async function descAsyncGetPuzzleGeometry(
     orientCenters: true,
     addRotations: true,
     includeCenterOrbits: false,
-    includeEdgeOrbits: false
+    includeEdgeOrbits: false,
   });
 }
 
