@@ -214,6 +214,7 @@ class ControlPane {
   public stickeringSelect: HTMLSelectElement;
   public tempoInput: HTMLInputElement;
   public hintFaceletCheckbox: HTMLInputElement;
+  public show2DCheckbox: HTMLInputElement;
   public toolGrid: ButtonGrid;
   public examplesGrid: ButtonGrid;
   private tempoDisplay: HTMLSpanElement;
@@ -373,6 +374,16 @@ class ControlPane {
       this.onHintFaceletInput.bind(this),
     );
 
+    this.show2DCheckbox = findOrCreateChildWithClass(
+      this.element,
+      "show-2D",
+      "input",
+    );
+    this.show2DCheckbox.addEventListener(
+      "input",
+      this.onShow2DInput.bind(this),
+    );
+
     this.toolGrid = findOrCreateChildWithClass(
       this.element,
       "tool-grid",
@@ -420,6 +431,13 @@ class ControlPane {
     this.twistyPlayer.hintFacelets = this.hintFaceletCheckbox.checked
       ? "floating"
       : "none";
+  }
+
+  private onShow2DInput(): void {
+    console.log("this.show2DCheckbox", this.show2DCheckbox);
+    this.twistyPlayer.visualization = this.show2DCheckbox.checked
+      ? "2D"
+      : "auto";
   }
 
   private async onToolAction(

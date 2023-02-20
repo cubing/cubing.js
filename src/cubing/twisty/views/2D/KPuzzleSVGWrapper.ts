@@ -84,7 +84,7 @@ export class KPuzzleSVGWrapper {
           const id = this.elementID(orbitName, idx, orientation);
           const elem = this.elementByID(id);
 
-          let originalColor: string = elem.style.fill;
+          let originalColor: string = elem?.style.fill;
           /// TODO: Allow setting stickering mask dynamically.
           if (experimentalStickeringMask) {
             (() => {
@@ -118,12 +118,12 @@ export class KPuzzleSVGWrapper {
               }
             })();
           } else {
-            originalColor = elem.style.fill;
+            originalColor = elem?.style.fill;
           }
           this.originalColors[id] = originalColor;
           this.gradients[id] = this.newGradient(id, originalColor);
           this.gradientDefs.appendChild(this.gradients[id]);
-          elem.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
+          elem?.setAttribute("style", `fill: url(#grad-${this.svgID}-${id})`);
         }
       }
     }
