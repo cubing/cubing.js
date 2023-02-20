@@ -7,22 +7,23 @@ import type { PuzzleLoader } from "./PuzzleLoader";
 // TODO: modify this to handle TwistyPlayer options
 export async function descAsyncGetPuzzleGeometry(
   desc: PuzzleDescriptionString,
+  options?: { includeCenterOrbits?: boolean; includeEdgeOrbits?: boolean },
 ): Promise<PuzzleGeometry> {
   const puzzleGeometry = await import("../puzzle-geometry");
   return puzzleGeometry.getPuzzleGeometryByDesc(desc, {
     allMoves: true,
     orientCenters: true,
     addRotations: true,
-    includeCenterOrbits: false,
-    includeEdgeOrbits: false,
+    ...options,
   });
 }
 
 // TODO: dedup with `cubing/puzzles`
 export async function asyncGetKPuzzle(
   desc: PuzzleDescriptionString,
+  options?: { includeCenterOrbits?: boolean; includeEdgeOrbits?: boolean },
 ): Promise<KPuzzle> {
-  const pg = await descAsyncGetPuzzleGeometry(desc);
+  const pg = await descAsyncGetPuzzleGeometry(desc, options);
   const kpuzzleDefinition: KPuzzleDefinition = pg.getKPuzzleDefinition(true);
   kpuzzleDefinition.name = `description: ${desc}`;
   const puzzleGeometry = await import("../puzzle-geometry");

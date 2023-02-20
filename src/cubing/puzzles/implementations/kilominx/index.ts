@@ -11,8 +11,17 @@ const KILOMINX_PUZZLE_DESCRIPTION = "d f 0.56";
 export const kilominx: PuzzleLoader = {
   id: "kilominx",
   fullName: "Kilominx",
-  kpuzzle: getCached(() => asyncGetKPuzzle(KILOMINX_PUZZLE_DESCRIPTION)),
-  pg: () => descAsyncGetPuzzleGeometry(KILOMINX_PUZZLE_DESCRIPTION),
+  kpuzzle: getCached(() =>
+    asyncGetKPuzzle(KILOMINX_PUZZLE_DESCRIPTION, {
+      includeCenterOrbits: false,
+      includeEdgeOrbits: false,
+    }),
+  ),
+  pg: () =>
+    descAsyncGetPuzzleGeometry(KILOMINX_PUZZLE_DESCRIPTION, {
+      includeCenterOrbits: false,
+      includeEdgeOrbits: false,
+    }),
   svg: getCached(async () => {
     return (
       await import("../dynamic/unofficial/puzzles-dynamic-unofficial")
