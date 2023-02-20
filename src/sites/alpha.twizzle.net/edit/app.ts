@@ -634,7 +634,6 @@ class ControlPane {
     this.hintFaceletCheckbox.disabled = [
       "clock",
       "square1",
-      "kilominx",
       "redi_cube",
       "melindas2x2x2x2",
     ].includes(puzzle);
