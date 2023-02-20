@@ -1,138 +1,114 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf8" />
-    <title>Twizzle Explorer ᴬᴸᴾᴴᴬ</title>
-    <link rel="icon" href="./favicon.ico" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Twizzle Explorer" />
-    <meta name="viewport" content="width=device-width, initial-scale=0.75" />
-    <style>
-      twisty {
-        width: 800px;
-        height: 500px;
-        display: block;
-      }
 
-      #main-config label {
-        white-space: nowrap;
-      }
-    </style>
-    <link href="./index.css" rel="stylesheet" type="text/css" />
-    <script src="./main.js" href="./main.ts" type="module"></script>
-  </head>
+<head>
+  <meta charset="utf8" />
+  <title>Twizzle Explorer ᴬᴸᴾᴴᴬ</title>
+  <link rel="icon" href="./favicon.ico" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Twizzle Explorer" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.75" />
+  <style>
+    twisty {
+      width: 800px;
+      height: 500px;
+      display: block;
+    }
 
-  <body>
-    <dialog id="stuff-for-nerds">
-      <span>The following has been copied to the clipboard.</span>
-      <form method="dialog">
-        <button type="submit">Close</button>
-      </form>
-      <textarea></textarea>
-    </dialog>
-    <div class="title">
-      <span
-        ><span style="text-shadow: 0 0 0.05em black, 0 0 0.05em black">🔭</span>
-        Twizzle Explorer <span style="opacity: 0.3">ᴬᴸᴾᴴᴬ</span></span
-      >
+    #main-config label {
+      white-space: nowrap;
+    }
+
+  </style>
+  <link href="./index.css" rel="stylesheet" type="text/css" />
+  <script src="./main.js" href="./main.ts" type="module"></script>
+</head>
+
+<body>
+  <dialog id="stuff-for-nerds">
+    <span>The following has been copied to the clipboard.</span>
+    <form method="dialog">
+      <button type="submit">Close</button>
+    </form>
+    <textarea></textarea>
+  </dialog>
+  <div class="title">
+    <span><span style="text-shadow: 0 0 0.05em black, 0 0 0.05em black">🔭</span>
+      Twizzle Explorer <span style="opacity: 0.3">ᴬᴸᴾᴴᴬ</span></span>
+  </div>
+  <div class="controls-wrapper">
+    <div class="controls">
+      <select id="puzzle-name">
+        <option value="">custom</option>
+      </select>
+      <span id="puzzle-description-wrapper" hidden>Desc
+        <input type="text" id="puzzle-description-string" value="" size="50" /></span>
+
+      <input type="button" id="scramble" value="Scramble" />
+      <input type="button" id="reset" value="Reset" />
+      <input type="button" id="config-toggle" value="Config" />
+      <select id="actions">
+        <option value="">Actions</option>
+        <option value="summary">Summary</option>
+        <option value="ksolve">KSolve</option>
+        <option value="ss">Schreier-Sims</option>
+        <option value="canon">Canon Seq</option>
+        <option value="gap">GAP</option>
+        <option value="svg">SVG</option>
+        <option value="screenshot">Screenshot (front)</option>
+        <!-- <option value="screenshot-back">Screenshot (back)</option> -->
+        <!-- TODO -->
+      </select>
+      <select id="move-input">
+        <option value="">Input</option>
+        <option value="bluetooth">Bluetooth</option>
+        <option value="keyboard">Keyboard</option>
+      </select>
+      <a href="./help.html" target="_blank"><input type="button" id="help" value="Help" /></a>
+      <span id="main-config" hidden>
+        <label for="visualization-3D"><input type="checkbox" checked id="visualization-3D" />3D</label>
+        <label for="back-view-side-by-side"><input type="checkbox" checked id="back-view-side-by-side" />Side
+          by Side</label>
+        <label for="foundation-display-opaque"><input type="checkbox" id="foundation-display-opaque" checked />Show
+          Foundation</label>
+        <label for="hint-facelets-floating"><input type="checkbox" id="hint-facelets-floating" />Hint
+          Stickers</label>
+        <label for="tempo"><input type="range" id="tempo-scale" min="0.1" max="6" step="0.1" value="1" />Tempo:</label>
+        <span id="tempo-scale-display">1×</span></span>
+      <span id="move-count"></span>
     </div>
-    <div class="controls-wrapper">
-      <div class="controls">
-        <select id="puzzle-name">
-          <option value="">custom</option>
+  </div>
+  <div id="twisty-wrapper"></div>
+  <side-panel>
+    <panel-selector>
+      <button data-tab-id="editor">Edit Alg</button>
+      <button data-tab-id="puzzle-cuts">Puzzle Cuts</button>
+    </panel-selector>
+    <panel-tabs>
+      <twisty-alg-editor class="algarea" id="editor"></twisty-alg-editor>
+      <twisty-puzzle-description-input id="puzzle-cuts" hidden>
+        <select id="puzzle-shape">
+          <option value="c" selected>■ Cube</option>
+          <option value="t">▲ Tetrahedron</option>
+          <option value="o">▼ Octahedron</option>
+          <option value="d">⬟ Dodecahedron</option>
+          <option value="i">▼ Icosahedron</option>
         </select>
-        <span id="puzzle-description-wrapper" hidden
-          >Desc
-          <input type="text" id="puzzle-description-string" value="" size="50"
-        /></span>
+        <h2>Face cuts</h2>
+        <section id="f-cuts">
+          <button class="add inputs-go-before-here">➕ Add face cut</button>
+        </section>
+        <h2>Vertex cuts</h2>
+        <section id="v-cuts">
+          <button class="add inputs-go-before-here">➕ Add vertex cut</button>
+        </section>
+        <h2>Edge cuts</h2>
+        <section id="e-cuts">
+          <button class="add inputs-go-before-here">➕ Add edge cut</button>
+        </section>
+      </twisty-puzzle-description-input>
+    </panel-tabs>
+  </side-panel>
+</body>
 
-        <input type="button" id="scramble" value="Scramble" />
-        <input type="button" id="reset" value="Reset" />
-        <input type="button" id="config-toggle" value="Config" />
-        <select id="actions">
-          <option value="">Actions</option>
-          <option value="summary">Summary</option>
-          <option value="ksolve">KSolve</option>
-          <option value="ss">Schreier-Sims</option>
-          <option value="canon">Canon Seq</option>
-          <option value="gap">GAP</option>
-          <option value="svg">SVG</option>
-          <option value="screenshot">Screenshot (front)</option>
-          <!-- <option value="screenshot-back">Screenshot (back)</option> -->
-          <!-- TODO -->
-        </select>
-        <select id="move-input">
-          <option value="">Input</option>
-          <option value="bluetooth">Bluetooth</option>
-          <option value="keyboard">Keyboard</option>
-        </select>
-        <a href="./help.html" target="_blank"
-          ><input type="button" id="help" value="Help"
-        /></a>
-        <span id="main-config" hidden>
-          <label for="visualization-3D"
-            ><input type="checkbox" checked id="visualization-3D" />3D</label
-          >
-          <label for="back-view-side-by-side"
-            ><input type="checkbox" checked id="back-view-side-by-side" />Side
-            by Side</label
-          >
-          <label for="foundation-display-opaque"
-            ><input
-              type="checkbox"
-              id="foundation-display-opaque"
-              checked
-            />Show Foundation</label
-          >
-          <label for="hint-facelets-floating"
-            ><input type="checkbox" id="hint-facelets-floating" />Hint
-            Stickers</label
-          >
-          <label for="tempo"
-            ><input
-              type="range"
-              id="tempo-scale"
-              min="0.1"
-              max="6"
-              step="0.1"
-              value="1"
-            />Tempo:</label
-          >
-          <span id="tempo-scale-display">1×</span></span
-        >
-        <span id="move-count"></span>
-      </div>
-    </div>
-    <div id="twisty-wrapper"></div>
-    <side-panel>
-      <panel-selector>
-        <button data-tab-id="editor">Edit Alg</button>
-        <button data-tab-id="puzzle-cuts">Puzzle Cuts</button>
-      </panel-selector>
-      <panel-tabs>
-        <twisty-alg-editor class="algarea" id="editor"></twisty-alg-editor>
-        <twisty-puzzle-description-input id="puzzle-cuts" hidden>
-          <select id="puzzle-shape">
-            <option value="c" selected>■ Cube</option>
-            <option value="t">▲ Tetrahedron</option>
-            <option value="o">▼ Octahedron</option>
-            <option value="d">⬟ Dodecahedron</option>
-            <option value="i">▼ Icosahedron</option>
-          </select>
-          <h2>Face cuts</h2>
-          <section id="f-cuts">
-            <button class="add inputs-go-before-here">➕ Add face cut</button>
-          </section>
-          <h2>Vertex cuts</h2>
-          <section id="v-cuts">
-            <button class="add inputs-go-before-here">➕ Add vertex cut</button>
-          </section>
-          <h2>Edge cuts</h2>
-          <section id="e-cuts">
-            <button class="add inputs-go-before-here">➕ Add edge cut</button>
-          </section>
-        </twisty-puzzle-description-input>
-      </panel-tabs>
-    </side-panel>
-  </body>
 </html>
