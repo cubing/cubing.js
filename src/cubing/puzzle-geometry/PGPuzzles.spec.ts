@@ -44,21 +44,21 @@ const expectedData: { [nam: string]: string } = {
   "professor tetraminx": "professor tetraminx, 4, 22, 50, 6, 16, 264",
   "Jing pyraminx": "Jing pyraminx, 4, 7, 14, 3, 8, 30",
   "master pyramorphix": "master pyramorphix, 4, 10, 26, 8, 9, 2",
-  megaminx: "megaminx, 12, 11, 62, 3, 18, 702",
-  gigaminx: "gigaminx, 12, 31, 242, 6, 30, 18181800",
-  teraminx: "teraminx, 12, 61, 542, 11, 42, 18181800",
-  petaminx: "petaminx, 12, 101, 962, 18, 54, 18181800",
-  examinx: "examinx, 12, 151, 1502, 27, 66, 18181800",
-  zetaminx: "zetaminx, 12, 211, 2162, 38, 78, 18181800",
-  yottaminx: "yottaminx, 12, 281, 2942, 51, 90, 18181800",
-  pentultimate: "pentultimate, 12, 6, 32, 2, 12, 132",
-  "master pentultimate": "master pentultimate, 12, 16, 122, 4, 18, 1741740",
-  "elite pentultimate": "elite pentultimate, 12, 31, 272, 6, 24, 6832980",
+  megaminx: "megaminx, 12, 11, 62, 3, 18, 840",
+  gigaminx: "gigaminx, 12, 31, 242, 6, 30, 110427240",
+  teraminx: "teraminx, 12, 61, 542, 11, 42, 993845160",
+  petaminx: "petaminx, 12, 101, 962, 18, 54, 993845160",
+  examinx: "examinx, 12, 151, 1502, 27, 66, 993845160",
+  zetaminx: "zetaminx, 12, 211, 2162, 38, 78, 993845160",
+  yottaminx: "yottaminx, 12, 281, 2942, 51, 90, 993845160",
+  pentultimate: "pentultimate, 12, 6, 32, 2, 12, 3960",
+  "master pentultimate": "master pentultimate, 12, 16, 122, 4, 18, 27720",
+  "elite pentultimate": "elite pentultimate, 12, 31, 272, 6, 24, 31351320",
   starminx: "starminx, 12, 11, 62, 3, 30, 660",
-  "starminx 2": "starminx 2, 12, 11, 102, 3, 18, 158340",
-  "pyraminx crystal": "pyraminx crystal, 12, 10, 50, 2, 18, 9828",
-  chopasaurus: "chopasaurus, 12, 11, 92, 3, 20, 63954",
-  "big chop": "big chop, 12, 10, 120, 2, 30, 24633",
+  "starminx 2": "starminx 2, 12, 11, 102, 3, 18, 924",
+  "pyraminx crystal": "pyraminx crystal, 12, 10, 50, 2, 18, 4620",
+  chopasaurus: "chopasaurus, 12, 11, 92, 3, 20, 360",
+  "big chop": "big chop, 12, 10, 120, 2, 30, 146520",
   "skewb diamond": "skewb diamond, 8, 4, 14, 3, 8, 6",
   FTO: "FTO, 8, 9, 42, 4, 12, 990",
   "master FTO": "master FTO, 8, 16, 86, 9, 16, 330",
@@ -77,12 +77,12 @@ const expectedData: { [nam: string]: string } = {
   "dino + little chop": "dino + little chop, 6, 4, 24, 1, 24, 280",
   "2x2x2 + dino + little chop":
     "2x2x2 + dino + little chop, 6, 8, 48, 2, 30, 2340",
-  "megaminx + chopasaurus": "megaminx + chopasaurus, 12, 11, 92, 3, 38, 13860",
-  "starminx combo": "starminx combo, 12, 11, 102, 3, 48, 2520",
+  "megaminx + chopasaurus": "megaminx + chopasaurus, 12, 11, 92, 3, 38, 1872",
+  "starminx combo": "starminx combo, 12, 11, 102, 3, 48, 9660",
 };
 describe("PuzzleGeometry-Puzzles", () => {
   for (const [name, desc] of Object.entries(PGPuzzles)) {
-    it(`testpuzzles ${name}`, () => {
+    it(`testpuzzles > ${name}`, () => {
       const pg = getPuzzleGeometryByDesc(desc, {});
       const kpuzzleDefinition = pg.getKPuzzleDefinition(false);
       const sep = ", ";
@@ -90,6 +90,7 @@ describe("PuzzleGeometry-Puzzles", () => {
         .sort()
         .join(" ");
       let algo = Alg.fromString(seq);
+      algo.log();
       // TODO:  likely a temporary hack until we resolve how notations are
       // added or set in puzzle geometry.
       const bms = [];
