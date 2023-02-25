@@ -287,7 +287,12 @@ enum PGColors {
 function defaultcolors(): any {
   return {
     // the colors should use the same naming convention as the nets, above.
-    4: { F: "#00ff00", D: PGColors.Yellow, L: PGColors.Red, R: PGColors.Blue },
+    4: {
+      F: PGColors.Green,
+      D: PGColors.Yellow,
+      L: PGColors.Red,
+      R: PGColors.Blue,
+    },
     6: {
       U: PGColors.White,
       F: PGColors.Green,
