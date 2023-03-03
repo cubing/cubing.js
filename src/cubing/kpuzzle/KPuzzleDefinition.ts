@@ -14,13 +14,13 @@ export interface KStateOrbitData {
   orientation: number[];
 }
 
-export interface KOrbitDefinition {
+export interface KPuzzleOrbitDefinition {
   numPieces: number;
   numOrientations: number;
 }
 export interface KPuzzleDefinition {
   name: string;
-  orbits: Record<string, KOrbitDefinition>;
+  orbits: Record<string, KPuzzleOrbitDefinition>;
   startStateData: KStateData;
   moves: Record<string, KTransformationData>;
   experimentalDerivedMoves?: Record<string, string>;

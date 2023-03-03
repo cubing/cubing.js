@@ -13,7 +13,7 @@ import { functionFromTraversal } from "../alg";
 import { combineTransformationData } from "./combine";
 import type { KPuzzle } from "./KPuzzle";
 import type {
-  KOrbitDefinition,
+  KPuzzleOrbitDefinition,
   KTransformationOrbitData,
   KTransformationData,
   KPuzzleDefinition,
@@ -48,7 +48,7 @@ export function isOrbitTransformationDataIdentityUncached(
 }
 
 export function isOrbitTransformationDataIdentical(
-  orbitDefinition: KOrbitDefinition,
+  orbitDefinition: KPuzzleOrbitDefinition,
   orbitTransformationData1: KTransformationOrbitData,
   orbitTransformationData2: KTransformationOrbitData,
   options: {
@@ -102,7 +102,7 @@ export function invertTransformation(
 ): KTransformationData {
   const newTransformationData: KTransformationData = {};
   for (const orbitName in kpuzzle.definition.orbits) {
-    const orbitDefinition: KOrbitDefinition =
+    const orbitDefinition: KPuzzleOrbitDefinition =
       kpuzzle.definition.orbits[orbitName];
     const orbitTransformationData = transformationData[orbitName];
     if (
