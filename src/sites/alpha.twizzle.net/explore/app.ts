@@ -37,7 +37,9 @@ export class TwizzleExplorerApp {
     const moveCountElem = document.querySelector("#move-count")!;
     this.twistyPlayer.experimentalModel.alg.addFreshListener(
       (algWithIssues) => {
-        moveCountElem.textContent = `Moves: ${countMovesETM(algWithIssues.alg)}`;
+        moveCountElem.textContent = `Moves: ${countMovesETM(
+          algWithIssues.alg,
+        )}`;
       },
     );
 
