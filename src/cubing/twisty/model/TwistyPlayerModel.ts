@@ -15,7 +15,6 @@ import { IndexerConstructorProp } from "./props/puzzle/state/IndexerConstructorP
 import { IndexerConstructorRequestProp } from "./props/puzzle/state/IndexerConstructorRequestProp";
 import { IndexerProp } from "./props/puzzle/state/IndexerProp";
 import { LegacyPositionProp } from "./props/puzzle/state/LegacyPositionProp";
-import { NaiveMoveCountProp } from "./props/puzzle/state/NaiveMoveCountProp";
 import { PuzzleAlgProp } from "./props/puzzle/state/PuzzleAlgProp";
 import { SetupAnchorProp } from "./props/puzzle/state/SetupAnchorProp";
 import { SetupTransformationProp } from "./props/puzzle/state/SetupTransformationProp";
@@ -109,8 +108,6 @@ export class TwistyPlayerModel {
     visualizationStrategy: this.visualizationStrategy,
     indexerConstructorRequest: this.indexerConstructorRequest,
   });
-
-  moveCount = new NaiveMoveCountProp({ alg: this.puzzleAlg });
 
   setupAlgTransformation = new AlgTransformationProp({
     setupAlg: this.puzzleSetupAlg,
