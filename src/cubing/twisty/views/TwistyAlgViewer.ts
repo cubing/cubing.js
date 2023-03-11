@@ -27,6 +27,7 @@ import {
   ExperimentalIterationDirection,
 } from "../../alg/cubing-private";
 import { functionFromTraversal } from "../../alg";
+import { firstElementWithId } from "./firstElementWithId";
 
 const DEFAULT_OFFSET_MS = 250; // TODO: make this a fraction?
 
@@ -511,12 +512,13 @@ export class TwistyAlgViewer extends HTMLElementShim {
     newValue: string,
   ): Promise<void> {
     if (attributeName === "for") {
-      const elem = document.getElementById(newValue);
+      let elem: Element | null = document.getElementById(newValue);
       if (!elem) {
-        console.warn("for= elem does not exist");
-        return;
+        console.info("for= elem does not exist, waiting for one");
       }
       await customElements.whenDefined("twisty-player");
+      // TODO: handle intermediate attribute changes
+      elem = await firstElementWithId(newValue);
       if (!(elem instanceof TwistyPlayer)) {
         console.warn("for= elem is not a twisty-player");
         return;
