@@ -56,7 +56,7 @@ const platonicShapeToGeoTowardsViewer: Record<string, string> = {
   t: "FLR",
   c: "URF",
   o: "FLUR",
-  d: "F",
+  d: "FF",
   i: "F",
 };
 async function cameraCoords(
