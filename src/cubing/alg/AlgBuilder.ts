@@ -3,10 +3,10 @@ import type { AlgNode } from "./alg-nodes/AlgNode";
 
 /** @category Alg */
 export class AlgBuilder {
-  #algNode: AlgNode[] = [];
+  #algNodes: AlgNode[] = [];
 
   push(u: AlgNode): void {
-    this.#algNode.push(u);
+    this.#algNodes.push(u);
   }
 
   // TODO: Allow FlexibleAlgSource?
@@ -20,15 +20,15 @@ export class AlgBuilder {
 
   // TODO: can we guarantee this to be fast in the permanent API?
   experimentalNumAlgNodes(): number {
-    return this.#algNode.length;
+    return this.#algNodes.length;
   }
 
   // can be called multiple times, even if you push alg nodes inbetween.
   toAlg(): Alg {
-    return new Alg(this.#algNode);
+    return new Alg(this.#algNodes);
   }
 
   reset(): void {
-    this.#algNode = [];
+    this.#algNodes = [];
   }
 }
