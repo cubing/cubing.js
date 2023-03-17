@@ -104,7 +104,10 @@ export class TrembleSolver {
         }
         // console.log("sgs done!", sofar.toString(), "|", sgsAlg.toString());
         const newAlg = sofar.concat(sgsAlg).experimentalSimplify({
-          cancel: { puzzleSpecificModWrap: "canonical-centered" },
+          cancel: {
+            directional: "any-direction",
+            puzzleSpecificModWrap: "canonical-centered",
+          },
           puzzleSpecificSimplifyOptions: { quantumMoveOrder },
         });
 
