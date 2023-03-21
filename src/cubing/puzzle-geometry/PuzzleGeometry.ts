@@ -5,7 +5,7 @@ import {
   FaceRenamingMapper,
   FTONotationMapper,
   MegaminxScramblingNotationMapper,
-  NotationMapper,
+  type NotationMapper,
   NullMapper,
   NxNxNCubeMapper,
   PyraminxNotationMapper,
@@ -13,11 +13,11 @@ import {
   TetraminxNotationMapper,
 } from "./notation-mapping";
 import {
-  BaseFaceCount,
-  FaceBasedOrientationDescription,
-  FaceBasedOrientationDescriptionLookup,
+  type BaseFaceCount,
+  type FaceBasedOrientationDescription,
+  type FaceBasedOrientationDescriptionLookup,
   PuzzleGeometryFullOptions,
-  PuzzleGeometryOptions,
+  type PuzzleGeometryOptions,
 } from "./Options";
 import { iota, Perm, zeros } from "./Perm";
 import {
@@ -29,7 +29,11 @@ import {
   showcanon,
   VisibleState,
 } from "./PermOriSet";
-import { PGPuzzles, PuzzleDescriptionString, PuzzleName } from "./PGPuzzles";
+import {
+  PGPuzzles,
+  type PuzzleDescriptionString,
+  type PuzzleName,
+} from "./PGPuzzles";
 import {
   closure,
   cube,

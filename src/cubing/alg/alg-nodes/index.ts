@@ -7,6 +7,6 @@ export { Newline } from "./leaves/Newline";
 export { Pause } from "./leaves/Pause";
 import type { AlgNode } from "./AlgNode";
 
-export { AlgNode };
+export type { AlgNode };
 /** @deprecated */
 export type Unit = AlgNode;

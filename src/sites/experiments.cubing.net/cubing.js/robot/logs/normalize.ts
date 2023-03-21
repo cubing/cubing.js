@@ -1,6 +1,6 @@
 import {
   Alg,
-  AlgNode,
+  type AlgNode,
   Commutator,
   Conjugate,
   Grouping,

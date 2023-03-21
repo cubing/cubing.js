@@ -1,4 +1,4 @@
-import { KPuzzle, KPuzzleDefinition } from "../kpuzzle";
+import { KPuzzle, type KPuzzleDefinition } from "../kpuzzle";
 import type { PuzzleGeometry } from "../puzzle-geometry";
 import type { PuzzleDescriptionString } from "../puzzle-geometry/PGPuzzles";
 import { puzzleSpecificSimplifyOptionsPromise } from "./async/async-pg3d";

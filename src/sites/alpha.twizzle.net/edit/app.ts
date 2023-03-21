@@ -12,10 +12,10 @@ import {
 import type { PuzzleStreamMoveEventRegisterCompatible } from "../../../cubing/stream/process/ReorientedStream";
 import "../../../cubing/twisty"; // For `<twisty-alg-editor>` custom elem registration.
 import {
-  ExperimentalStickering,
-  PuzzleID,
+  type ExperimentalStickering,
+  type PuzzleID,
   TwistyPlayer,
-  TwistyPlayerConfig,
+  type TwistyPlayerConfig,
 } from "../../../cubing/twisty";
 import {
   constructMoveCountDisplay,

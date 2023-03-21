@@ -1,23 +1,23 @@
 import { Alg, Move } from "../../../../cubing/alg";
 import {
-  BluetoothPuzzle,
+  type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
   GoCube,
-  OrientationEvent,
+  type OrientationEvent,
 } from "../../../../cubing/bluetooth";
 import type { AlgLeafEvent } from "../../../../cubing/bluetooth/smart-puzzle/bluetooth-puzzle";
 import {
-  ExperimentalProxyEvent,
+  type ExperimentalProxyEvent,
   ExperimentalWebSocketProxySender,
 } from "../../../../cubing/stream";
 import { setTwistyDebug } from "../../../../cubing/twisty";
-import { Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
+import { type Action, SwipeyPuzzle } from "./input/SwipeyPuzzle";
 import {
   debugShowRenderStats,
   DEFAULT_PUZZLE_ID,
   getPuzzleID,
-  PuzzleID,
+  type PuzzleID,
   receivingSocketOrigin,
   sendingSocketOrigin,
 } from "./url-params";

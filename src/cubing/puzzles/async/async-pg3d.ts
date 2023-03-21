@@ -1,4 +1,4 @@
-import { KPuzzle, KPuzzleDefinition } from "../../kpuzzle";
+import { KPuzzle, type KPuzzleDefinition } from "../../kpuzzle";
 import type { PuzzleGeometry } from "../../puzzle-geometry";
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
@@ -8,7 +8,11 @@ import {
   cubeLikeStickeringMask,
 } from "../stickerings/cube-like-stickerings";
 import { getCached } from "./lazy-cached";
-import { Move, PuzzleSpecificSimplifyOptions, QuantumMove } from "../../alg";
+import {
+  Move,
+  type PuzzleSpecificSimplifyOptions,
+  QuantumMove,
+} from "../../alg";
 import { PLazy } from "../../vendor/mit/p-lazy/p-lazy";
 
 // TODO: modify this to handle TwistyPlayer options

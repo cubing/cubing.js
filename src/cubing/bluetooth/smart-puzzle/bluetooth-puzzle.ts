@@ -1,6 +1,9 @@
 import type { AlgLeaf } from "../../alg/alg-nodes/AlgNode";
 import type { KState } from "../../kpuzzle/KState";
-import { BasicRotationTransformer, StreamTransformer } from "../transformer";
+import {
+  BasicRotationTransformer,
+  type StreamTransformer,
+} from "../transformer";
 
 /******** BluetoothPuzzle ********/
 

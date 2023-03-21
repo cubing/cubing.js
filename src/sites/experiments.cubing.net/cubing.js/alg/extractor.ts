@@ -8,7 +8,7 @@ import {
   Newline,
   Pause,
   TraversalUp,
-  AlgNode,
+  type AlgNode,
 } from "../../../../cubing/alg";
 import { functionFromTraversal } from "../../../../cubing/alg";
 

@@ -5,8 +5,8 @@ import type { PuzzleLoader } from "../../../puzzles/PuzzleLoader";
 import type { StickeringMask } from "../../../puzzles/stickerings/mask";
 import {
   Direction,
-  PositionListener,
-  PuzzlePosition,
+  type PositionListener,
+  type PuzzlePosition,
 } from "../../controllers/AnimationTypes";
 import { RenderScheduler } from "../../controllers/RenderScheduler";
 import { FreshListenerManager } from "../../model/props/TwistyProp";

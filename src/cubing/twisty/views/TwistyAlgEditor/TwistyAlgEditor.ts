@@ -23,7 +23,7 @@ import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { TwistyPlayer } from "../TwistyPlayer";
-import { HighlightInfo, TwistyAlgEditorModel } from "./model";
+import { type HighlightInfo, TwistyAlgEditorModel } from "./model";
 import { twistyAlgEditorCSS } from "./TwistyAlgEditor.css";
 
 const ATTRIBUTE_FOR_TWISTY_PLAYER = "for-twisty-player";

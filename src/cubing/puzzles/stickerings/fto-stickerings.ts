@@ -1,10 +1,10 @@
 import type { ExperimentalStickering } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
-  StickeringMask,
+  type StickeringMask,
   PuzzleStickering,
   StickeringManager,
-  PieceSet,
+  type PieceSet,
   PieceStickering,
 } from "./mask";
 

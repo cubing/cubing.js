@@ -17,7 +17,7 @@ import type { PuzzleID } from "../model/props/puzzle/structure/PuzzleIDRequestPr
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import {
-  ControlPanelThemeWithAuto,
+  type ControlPanelThemeWithAuto,
   controlsLocations,
 } from "../model/props/viewer/ControlPanelProp";
 import type {

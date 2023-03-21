@@ -9,7 +9,7 @@ import {
 } from "../../protocol";
 import { puzzles } from "../../puzzles";
 import { debugLog } from "../debug";
-import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 import { flipBitOrder } from "./endianness";
 
 // TODO: Short IDs

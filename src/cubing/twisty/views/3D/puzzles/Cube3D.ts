@@ -29,7 +29,7 @@ import type {
 } from "../../../controllers/AnimationTypes";
 import { smootherStep } from "../../../controllers/easing";
 import {
-  HintFaceletStyle,
+  type HintFaceletStyle,
   hintFaceletStyles,
 } from "../../../model/props/puzzle/display/HintFaceletProp";
 import type { InitialHintFaceletsAnimation } from "../../../model/props/puzzle/display/InitialHintFaceletsAnimationProp";

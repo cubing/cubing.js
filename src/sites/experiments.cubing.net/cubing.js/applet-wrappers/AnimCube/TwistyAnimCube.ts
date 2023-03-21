@@ -1,5 +1,8 @@
 import { Alg } from "../../../../../cubing/alg";
-import { TwistyPlayer, TwistyPlayerConfig } from "../../../../../cubing/twisty";
+import {
+  TwistyPlayer,
+  type TwistyPlayerConfig,
+} from "../../../../../cubing/twisty";
 import { ManagedCustomElement } from "../../../../../cubing/twisty/views/ManagedCustomElement";
 import { customElementsShim } from "../../../../../cubing/twisty/views/node-custom-element-shims";
 

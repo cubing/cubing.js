@@ -1,10 +1,10 @@
 /* tslint:disable no-bitwise */
 
 import { Move } from "../../alg";
-import { KState, KStateData } from "../../kpuzzle";
+import { KState, type KStateData } from "../../kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../puzzles/cubing-private";
 import { debugLog } from "../debug";
-import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
 const MESSAGE_LENGTH = 20;
 

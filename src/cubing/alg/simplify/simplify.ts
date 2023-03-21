@@ -9,7 +9,7 @@ import type { Newline } from "../alg-nodes/leaves/Newline";
 import { Pause } from "../alg-nodes/leaves/Pause";
 import { functionFromTraversal, TraversalDownUp } from "../traversal";
 import { experimentalAppendNode } from "./append";
-import { AppendOptionsHelper, SimplifyOptions } from "./options";
+import { AppendOptionsHelper, type SimplifyOptions } from "./options";
 
 // TODO: Test that inverses are bijections.
 class Simplify extends TraversalDownUp<SimplifyOptions, Generator<AlgNode>> {

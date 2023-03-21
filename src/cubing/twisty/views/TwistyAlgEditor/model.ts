@@ -3,7 +3,7 @@
 import type { Alg } from "../../../alg";
 import type { Parsed } from "../../../alg/parseAlg";
 import {
-  AlgWithIssues,
+  type AlgWithIssues,
   algWithIssuesFromString,
 } from "../../model/props/puzzle/state/AlgProp";
 import {
@@ -12,9 +12,9 @@ import {
   TwistyPropSource,
 } from "../../model/props/TwistyProp";
 import {
-  AnimatedLeafAlgNodeInfo,
+  type AnimatedLeafAlgNodeInfo,
   leafTokens,
-  OrderedLeafTokens,
+  type OrderedLeafTokens,
 } from "./LeafTokens";
 
 export class TwistyAlgEditorValueProp extends SimpleTwistyPropSource<string> {

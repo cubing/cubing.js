@@ -3,14 +3,14 @@ import type { KPuzzle, KTransformation } from "../../../../kpuzzle";
 import type { KState } from "../../../../kpuzzle/KState";
 import {
   Direction,
-  Duration,
-  PuzzlePosition,
-  Timestamp,
+  type Duration,
+  type PuzzlePosition,
+  type Timestamp,
 } from "../../AnimationTypes";
 import type { CurrentMove, CurrentMoveInfo } from "../AlgIndexer";
 import {
-  AnimatedLeafAlgNode,
-  AnimLeafWithRange,
+  type AnimatedLeafAlgNode,
+  type AnimLeafWithRange,
   simulMoves,
 } from "./simul-moves";
 

@@ -1,9 +1,9 @@
 import type { ExperimentalStickering, PuzzleID } from "../../twisty";
 import type { PuzzleLoader } from "../PuzzleLoader";
 import {
-  PieceSet,
+  type PieceSet,
   PieceStickering,
-  StickeringMask,
+  type StickeringMask,
   PuzzleStickering,
   StickeringManager,
 } from "./mask";

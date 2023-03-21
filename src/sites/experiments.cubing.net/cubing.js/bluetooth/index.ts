@@ -1,9 +1,12 @@
 import { Alg } from "../../../../cubing/alg";
 import {
   connectSmartPuzzle,
-  OrientationEvent,
+  type OrientationEvent,
 } from "../../../../cubing/bluetooth";
-import { debugKeyboardConnect, MoveEvent } from "../../../../cubing/bluetooth";
+import {
+  debugKeyboardConnect,
+  type MoveEvent,
+} from "../../../../cubing/bluetooth";
 import { TwistyAlgViewer, TwistyPlayer } from "../../../../cubing/twisty";
 
 async function asyncSetup(twistyPlayer: TwistyPlayer): Promise<void> {

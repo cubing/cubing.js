@@ -1,5 +1,5 @@
 import {
-  ExperimentalProxyEvent,
+  type ExperimentalProxyEvent,
   ExperimentalWebSocketProxyReceiver,
 } from "../../../../cubing/stream";
 

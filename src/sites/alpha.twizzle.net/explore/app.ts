@@ -1,7 +1,7 @@
 import {
   connectSmartPuzzle,
   debugKeyboardConnect,
-  MoveEvent,
+  type MoveEvent,
 } from "../../../cubing/bluetooth";
 import { KTransformation } from "../../../cubing/kpuzzle";
 import {

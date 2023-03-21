@@ -1,7 +1,12 @@
 // Stub file for testing.
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
-import { AlgBuilder, Grouping, Move, AlgNode } from "../../../../cubing/alg";
+import {
+  AlgBuilder,
+  Grouping,
+  Move,
+  type AlgNode,
+} from "../../../../cubing/alg";
 import { experimentalCountMoves } from "../../../../cubing/notation";
 import { TwistyPlayer } from "../../../../cubing/twisty";
 

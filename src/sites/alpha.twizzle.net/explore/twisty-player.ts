@@ -5,7 +5,7 @@ import { getPuzzleGeometryByDesc } from "../../../cubing/puzzle-geometry/PuzzleG
 import {
   setTwistyDebug,
   TwistyPlayer,
-  TwistyPlayerConfig,
+  type TwistyPlayerConfig,
 } from "../../../cubing/twisty";
 import type { OrbitCoordinates } from "../../../cubing/twisty/model/props/viewer/OrbitCoordinatesRequestProp";
 import { positionToOrbitCoordinates } from "../../../cubing/twisty/views/3D/TwistyOrbitControls";

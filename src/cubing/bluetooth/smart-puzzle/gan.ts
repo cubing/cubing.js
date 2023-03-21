@@ -10,7 +10,7 @@ import {
   unsafeDecryptBlock,
 } from "../../vendor/public-domain/unsafe-raw-aes/unsafe-raw-aes";
 import { debugLog } from "../debug";
-import { BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
+import { type BluetoothConfig, BluetoothPuzzle } from "./bluetooth-puzzle";
 
 // This needs to be short enough to capture 6 moves (OBQTM).
 const DEFAULT_INTERVAL_MS = 150;
