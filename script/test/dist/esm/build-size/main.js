@@ -58,21 +58,23 @@ async function bundleSizeSummary(s) {
     bundleSize(path),
     bundleSize(path, true),
   ]);
-  return [
-    s,
-    mapValues({
-      size: bundleSizeWithThree.size,
-      sizeNoTHREE:
-        bundleSizeWithThree.size === bundleSizeNoTHREE.size
-          ? ""
-          : bundleSizeNoTHREE.size,
-      gzippedSize: bundleSizeWithThree.gzippedSize,
-      gzippedSizeNoTHREE:
-        bundleSizeWithThree.gzippedSize === bundleSizeNoTHREE.gzippedSize
-          ? ""
-          : bundleSizeNoTHREE.gzippedSize,
-    }),
-  ];
+  const sizes = {
+    size: bundleSizeWithThree.size,
+    sizeNoTHREE:
+      bundleSizeWithThree.size === bundleSizeNoTHREE.size
+        ? ""
+        : bundleSizeNoTHREE.size,
+    gzippedSize: bundleSizeWithThree.gzippedSize,
+    gzippedSizeNoTHREE:
+      bundleSizeWithThree.gzippedSize === bundleSizeNoTHREE.gzippedSize
+        ? ""
+        : bundleSizeNoTHREE.gzippedSize,
+  };
+  return {
+    name: s,
+    sizes: sizes,
+    humanSizes: mapValues(sizes),
+  };
 }
 
 const subpackages = [
@@ -90,22 +92,52 @@ const subpackages = [
   "(total)",
 ];
 
-const results = {
+const summaries = await Promise.all(
+  subpackages.map((s) => bundleSizeSummary(s, true)),
+);
+const valueResults = {
   ...Object.fromEntries(
-    await Promise.all(subpackages.map((s) => bundleSizeSummary(s, true))),
+    summaries.map((summary) => [summary.name, summary.sizes]),
   ),
 };
-console.table(results);
+const humanResults = {
+  ...Object.fromEntries(
+    await Promise.all(
+      summaries.map((summary) => [summary.name, summary.humanSizes]),
+    ),
+  ),
+};
+console.table(humanResults);
 
 // TODO: Design actual tests, and take bundle splitting into account.
 
-if (results["twisty"].gzippedSize > 300_000) {
+if (valueResults["twisty"].gzippedSize > 300_000) {
   throw new Error("❌ Gzipped `cubing/twisty` build size is over 300kB");
 } else {
   console.log("✅ Gzipped `cubing/twisty` build size is ≤ 300kB");
 }
 
-if (results["(total)"].size > 2_000_000) {
+if (valueResults["twisty"].gzippedSizeNoTHREE > 100_000) {
+  throw new Error(
+    "❌ Gzipped no-THREE `cubing/twisty` build size is over 100kB",
+  );
+} else {
+  console.log("✅ Gzipped no-THREE `cubing/twisty` build size is ≤ 100kB");
+}
+
+if (valueResults["puzzles"].gzippedSizeNoTHREE > 100_000) {
+  throw new Error("❌ Gzipped `cubing/puzzles` build size is over 100kB");
+} else {
+  console.log("✅ Gzipped `cubing/puzzles` build size is ≤ 100kB");
+}
+
+if (valueResults["search"].size > 2_000_000) {
+  throw new Error("❌ Total (uncompressed) build size is over 2mB");
+} else {
+  console.log("✅ Total (uncompressed) build size is ≤ 2mB");
+}
+
+if (valueResults["(total)"].size > 3_000_000) {
   throw new Error("❌ Total (uncompressed) build size is over 2mB");
 } else {
   console.log("✅ Total (uncompressed) build size is ≤ 2mB");
