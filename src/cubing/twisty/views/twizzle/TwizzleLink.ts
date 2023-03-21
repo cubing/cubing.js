@@ -48,7 +48,7 @@ export class TwizzleLink extends ManagedCustomElement {
   twistyPlayer: TwistyPlayer | null = null;
   a: HTMLAnchorElement | null = null;
   constructor(
-    private options?: { cdnForumTweaks?: boolean; darkMode?: boolean },
+    private options?: { cdnForumTweaks?: boolean; colorScheme?: boolean },
   ) {
     super({ mode: "open" });
   }
@@ -75,7 +75,7 @@ export class TwizzleLink extends ManagedCustomElement {
   async connectedCallback() {
     this.#responsiveWrapper = this.addElement(document.createElement("div"));
     this.#responsiveWrapper.classList.add("responsive-wrapper");
-    if (this.options?.darkMode) {
+    if (this.options?.colorScheme) {
       this.contentWrapper.classList.add("dark-mode");
     }
     this.#cssElem = this.addCSS(twizzleLinkCSS);
@@ -112,7 +112,7 @@ export class TwizzleLink extends ManagedCustomElement {
           background: this.options?.cdnForumTweaks
             ? "checkered-transparent"
             : "checkered",
-          darkMode: this.options?.darkMode ? "dark" : "light",
+          colorScheme: this.options?.colorScheme ? "dark" : "light",
           ...config,
           viewerLink: isExplorer ? "experimental-twizzle-explorer" : "auto",
         }),

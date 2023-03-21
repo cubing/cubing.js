@@ -15,7 +15,7 @@ import {
   documentFullscreenElement,
   requestFullscreen,
 } from "./webkit-fullscreen";
-import type { DarkModeTheme } from "../../model/props/viewer/DarkModeRequestProp";
+import type { ColorScheme } from "../../model/props/viewer/ColorSchemeRequestProp";
 
 const buttonCommands = {
   fullscreen: true,
@@ -55,8 +55,8 @@ export class TwistyButtons extends ManagedCustomElement {
     this.buttons = buttons as Record<ButtonCommand, TwistyButton>;
 
     this.model?.buttonAppearance.addFreshListener(this.update.bind(this));
-    this.model?.twistySceneModel.darkMode.addFreshListener(
-      this.updateDarkMode.bind(this),
+    this.model?.twistySceneModel.colorScheme.addFreshListener(
+      this.updateColorScheme.bind(this),
     );
   }
 
@@ -144,9 +144,9 @@ export class TwistyButtons extends ManagedCustomElement {
     }
   }
 
-  updateDarkMode(darkMode: DarkModeTheme): void {
+  updateColorScheme(colorScheme: ColorScheme): void {
     for (const button of Object.values(this.buttons ?? {})) {
-      button.updateDarkMode(darkMode);
+      button.updateColorScheme(colorScheme);
     }
   }
 }
@@ -156,8 +156,8 @@ customElementsShim.define("twisty-buttons", TwistyButtons);
 class TwistyButton extends ManagedCustomElement {
   htmlButton: HTMLButtonElement = document.createElement("button"); // TODO: async?
 
-  updateDarkMode(darkMode: DarkModeTheme): void {
-    this.contentWrapper.classList.toggle("dark-mode", darkMode === "dark");
+  updateColorScheme(colorScheme: ColorScheme): void {
+    this.contentWrapper.classList.toggle("dark-mode", colorScheme === "dark");
   }
 
   connectedCallback() {

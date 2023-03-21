@@ -14,7 +14,7 @@ import type { TimestampRequest } from "../model/props/timeline/TimestampRequestP
 import type { BackgroundThemeWithAuto } from "../model/props/viewer/BackgroundProp";
 import type { BackViewLayoutWithAuto } from "../model/props/viewer/BackViewProp";
 import type { ControlPanelThemeWithAuto } from "../model/props/viewer/ControlPanelProp";
-import type { DarkModeThemeWithAuto } from "../model/props/viewer/DarkModeRequestProp";
+import type { ColorSchemeWithAuto } from "../model/props/viewer/ColorSchemeRequestProp";
 import type { ViewerLinkPageWithAuto } from "../model/props/viewer/ViewerLinkProp";
 import type { VisualizationFormatWithAuto } from "../model/props/viewer/VisualizationProp";
 import { TwistyPlayerModel } from "../model/TwistyPlayerModel";
@@ -118,11 +118,11 @@ export abstract class TwistyPlayerSettable extends ManagedCustomElement {
     throw err("background");
   }
 
-  set darkMode(darkMode: DarkModeThemeWithAuto) {
-    this.experimentalModel.twistySceneModel.darkModeRequest.set(darkMode);
+  set colorScheme(colorScheme: ColorSchemeWithAuto) {
+    this.experimentalModel.twistySceneModel.colorSchemeRequest.set(colorScheme);
   }
-  get darkMode(): never {
-    throw err("darkMode");
+  get colorScheme(): never {
+    throw err("colorScheme");
   }
 
   set controlPanel(newControlPanel: ControlPanelThemeWithAuto) {

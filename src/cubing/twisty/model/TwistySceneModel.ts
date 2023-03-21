@@ -11,8 +11,8 @@ import { DragInputProp } from "./props/puzzle/state/DragInputProp";
 import { MovePressCancelOptions } from "./props/puzzle/state/MovePressCancelOptions";
 import { MovePressInputProp } from "./props/puzzle/state/MovePressInputProp";
 import { BackgroundProp } from "./props/viewer/BackgroundProp";
-import { DarkModeProp } from "./props/viewer/DarkModeProp";
-import { DarkModeRequstProp } from "./props/viewer/DarkModeRequestProp";
+import { ColorSchemeProp } from "./props/viewer/ColorSchemeProp";
+import { ColorSchemeRequstProp } from "./props/viewer/ColorSchemeRequestProp";
 import { DOMElementReferenceProp } from "./props/viewer/DOMElementReferenceProp";
 import { LatitudeLimitProp } from "./props/viewer/LatitudeLimit";
 import { OrbitCoordinatesProp } from "./props/viewer/OrbitCoordinatesProp";
@@ -22,7 +22,7 @@ import type { TwistyPlayerModel } from "./TwistyPlayerModel";
 export class TwistySceneModel {
   // Depth 0
   background = new BackgroundProp();
-  darkModeRequest = new DarkModeRequstProp();
+  colorSchemeRequest = new ColorSchemeRequstProp();
   dragInput = new DragInputProp();
   foundationDisplay = new FoundationDisplayProp();
   foundationStickerSpriteURL = new URLProp();
@@ -41,7 +41,9 @@ export class TwistySceneModel {
   faceletScale = new FaceletScaleProp();
 
   // Depth 1
-  darkMode = new DarkModeProp({ darkModeRequest: this.darkModeRequest });
+  colorScheme = new ColorSchemeProp({
+    colorSchemeRequest: this.colorSchemeRequest,
+  });
   foundationStickerSprite = new SpriteProp({
     spriteURL: this.foundationStickerSpriteURL,
   });
