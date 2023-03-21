@@ -9,7 +9,7 @@ import {
   Pause,
   TraversalDownUp,
   TraversalUp,
-  AlgNode,
+  type AlgNode,
 } from "../../../../alg";
 import {
   experimentalDirectedGenerator,

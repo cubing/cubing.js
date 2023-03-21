@@ -1,6 +1,6 @@
 import type { PuzzleDescriptionString } from "../../../../../puzzle-geometry/PGPuzzles";
 import {
-  NoValueType,
+  type NoValueType,
   NO_VALUE,
   SimpleTwistyPropSource,
 } from "../../TwistyProp";

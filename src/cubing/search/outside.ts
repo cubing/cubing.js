@@ -7,7 +7,7 @@ import { randomClockScrambleString } from "./inside/solve/puzzles/clock"; // TOD
 import { randomMegaminxScrambleString } from "./inside/solve/puzzles/wca-minx"; // TODO: don't reach into `inside` code.
 import type { TwsearchOptions } from "./inside/solve/twsearch";
 import {
-  InsideOutsideAPI,
+  type InsideOutsideAPI,
   instantiateWorker,
   mapToAllWorkers,
 } from "./instantiator";

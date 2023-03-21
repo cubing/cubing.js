@@ -1,4 +1,4 @@
-import { bluetoothConnect, BluetoothConnectOptions } from "../connect";
+import { bluetoothConnect, type BluetoothConnectOptions } from "../connect";
 import type { BluetoothPuzzle } from "./bluetooth-puzzle";
 import { ganConfig } from "./gan";
 import { giiKERConfig } from "./giiker";

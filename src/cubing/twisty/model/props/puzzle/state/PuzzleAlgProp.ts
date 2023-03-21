@@ -1,7 +1,7 @@
 import { Alg } from "../../../../../alg";
 import type { KPuzzle } from "../../../../../kpuzzle";
 import { TwistyPropDerived } from "../../TwistyProp";
-import { AlgIssues, AlgWithIssues } from "./AlgProp";
+import { AlgIssues, type AlgWithIssues } from "./AlgProp";
 
 let validate: boolean = true;
 export function experimentalSetPuzzleAlgValidation(newValidate: boolean): void {

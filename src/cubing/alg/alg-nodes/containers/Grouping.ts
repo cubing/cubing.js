@@ -1,4 +1,4 @@
-import { Alg, experimentalEnsureAlg, FlexibleAlgSource } from "../../Alg";
+import { Alg, experimentalEnsureAlg, type FlexibleAlgSource } from "../../Alg";
 import { AlgCommon, Comparable } from "../../common";
 import { IterationDirection } from "../../iteration";
 import { Move, QuantumMove } from "../leaves/Move";

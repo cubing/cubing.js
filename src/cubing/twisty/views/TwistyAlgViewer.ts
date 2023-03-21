@@ -8,7 +8,7 @@ import {
   Newline,
   Pause,
   TraversalDownUp,
-  AlgNode,
+  type AlgNode,
 } from "../../alg";
 import type { Parsed } from "../../alg/parseAlg";
 import type { AlgWithIssues } from "../model/props/puzzle/state/AlgProp";

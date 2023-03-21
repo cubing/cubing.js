@@ -3,12 +3,12 @@ import type { AlgLeaf } from "../../../../../cubing/alg/alg-nodes/AlgNode";
 import { puzzles } from "../../../../../cubing/puzzles";
 // import { BackViewLayout } from "../../../../../cubing/twisty";
 import {
-  BackViewLayout,
+  type BackViewLayout,
   TwistyPlayer,
-  TwistyPlayerConfig,
+  type TwistyPlayerConfig,
 } from "../../../../../cubing/twisty";
-import { getSetup, PuzzleID, getCancel } from "../url-params";
-import { SwipeGrid, themes, ThemeType } from "./SwipeGrid";
+import { getSetup, type PuzzleID, getCancel } from "../url-params";
+import { SwipeGrid, themes, type ThemeType } from "./SwipeGrid";
 
 const DEFAULT_THEME: ThemeType = "transparent-grid";
 

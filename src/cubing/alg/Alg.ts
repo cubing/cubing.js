@@ -4,7 +4,7 @@ import { AlgCommon, Comparable } from "./common";
 import { experimentalIs, experimentalIsAlgNode } from "./is";
 import { direct, IterationDirection, reverse } from "./iteration";
 import { parseAlg } from "./parseAlg";
-import { simplify, SimplifyOptions } from "./simplify";
+import { simplify, type SimplifyOptions } from "./simplify";
 import { Grouping, Pause } from "./alg-nodes";
 import { LineComment } from "./alg-nodes/leaves/LineComment";
 import { Move } from "./alg-nodes/leaves/Move";

@@ -1,4 +1,4 @@
-import { puzzles, PuzzleLoader } from "../../../../cubing/puzzles";
+import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
 
 interface Piece {
   [orientation: number]: Facelet;

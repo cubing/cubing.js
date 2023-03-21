@@ -2,7 +2,7 @@
 // Feel free to add code here if you need a quick place to run some code, but avoid committing any changes.
 
 import {
-  PuzzleStreamMoveEventRegisterCompatible,
+  type PuzzleStreamMoveEventRegisterCompatible,
   ReorientedStream,
 } from "../../../../cubing/stream/process/ReorientedStream";
 import "../../../../cubing/twisty";

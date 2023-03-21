@@ -2,8 +2,8 @@ import {
   BoundaryType,
   Direction,
   directionScalar,
-  MillisecondTimestamp,
-  TimeRange,
+  type MillisecondTimestamp,
+  type TimeRange,
 } from "./AnimationTypes";
 import { RenderScheduler } from "./RenderScheduler";
 import type {

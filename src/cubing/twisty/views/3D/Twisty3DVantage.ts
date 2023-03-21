@@ -10,7 +10,7 @@ import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import { pixelRatio } from "../canvas";
 import { twisty3DVantageCSS } from "./Twisty3DVantage.css";
-import { DragTracker, PressInfo } from "./DragTracker";
+import { DragTracker, type PressInfo } from "./DragTracker";
 import { newRenderer, renderPooled } from "./RendererPool";
 import { DEGREES_PER_RADIAN } from "./TAU";
 import type { Twisty3DSceneWrapper } from "./Twisty3DSceneWrapper";

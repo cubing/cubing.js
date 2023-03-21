@@ -14,7 +14,7 @@ import { indexerStrategyNames } from "../../../../../cubing/twisty/model/props/p
 import { movePressInputNames } from "../../../../../cubing/twisty/model/props/puzzle/state/MovePressInputProp";
 import { setupToLocations } from "../../../../../cubing/twisty/model/props/puzzle/state/SetupAnchorProp";
 import {
-  PuzzleID,
+  type PuzzleID,
   puzzleIDs,
 } from "../../../../../cubing/twisty/model/props/puzzle/structure/PuzzleIDRequestProp";
 import { backgroundThemes } from "../../../../../cubing/twisty/model/props/viewer/BackgroundProp";

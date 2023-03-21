@@ -5,7 +5,7 @@ import { ExperimentalWebSocketProxySender } from "../../../../../cubing/stream";
 // Import index files from source.
 // This allows Parcel to be faster while only using values exported in the final distribution.
 import {
-  BluetoothPuzzle,
+  type BluetoothPuzzle,
   connectSmartPuzzle,
   debugKeyboardConnect,
 } from "../../../../../cubing/bluetooth";

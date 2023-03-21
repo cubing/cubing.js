@@ -1,5 +1,5 @@
 import {
-  NoValueType,
+  type NoValueType,
   NO_VALUE,
   SimpleTwistyPropSource,
 } from "../../TwistyProp";

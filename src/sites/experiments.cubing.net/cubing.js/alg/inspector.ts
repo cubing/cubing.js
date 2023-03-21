@@ -1,4 +1,4 @@
-import { Alg, AlgNode } from "../../../../cubing/alg";
+import { Alg, type AlgNode } from "../../../../cubing/alg";
 import type { Parsed } from "../../../../cubing/alg/parseAlg";
 import { extract } from "./extractor";
 

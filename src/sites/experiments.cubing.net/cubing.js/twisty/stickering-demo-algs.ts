@@ -1,6 +1,6 @@
 import { Alg } from "../../../../cubing/alg";
 import {
-  ExperimentalStickering,
+  type ExperimentalStickering,
   TwistyPlayer,
 } from "../../../../cubing/twisty";
 import type { VisualizationFormat } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";

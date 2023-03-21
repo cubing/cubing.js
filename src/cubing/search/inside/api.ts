@@ -1,5 +1,5 @@
 import type { Alg } from "../../alg";
-import { KPuzzleDefinition, KState, KStateData } from "../../kpuzzle";
+import { type KPuzzleDefinition, KState, type KStateData } from "../../kpuzzle";
 import { puzzles } from "../../puzzles";
 import { setIsInsideWorker } from "./inside-worker";
 import {
@@ -35,7 +35,7 @@ import {
   solveSkewb,
 } from "./solve/puzzles/skewb";
 import { getRandomSquare1Scramble } from "./solve/puzzles/sq1";
-import { solveTwsearch, TwsearchOptions } from "./solve/twsearch";
+import { solveTwsearch, type TwsearchOptions } from "./solve/twsearch";
 
 const IDLE_PREFETCH_TIMEOUT_MS = 1000;
 

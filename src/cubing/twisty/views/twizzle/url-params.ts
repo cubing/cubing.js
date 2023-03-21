@@ -6,9 +6,9 @@ import type {
 import type { TwistyPlayerModel } from "../../../../cubing/twisty/model/TwistyPlayerModel";
 import type { TwistyPropSource } from "../../../../cubing/twisty/model/props/TwistyProp";
 import {
-  TwistyPlayerAttribute,
+  type TwistyPlayerAttribute,
   twistyPlayerAttributeMap,
-  TwistyPlayerConfig,
+  type TwistyPlayerConfig,
 } from "../../../../cubing/twisty/views/TwistyPlayer";
 
 function updateURL(url: URL): void {

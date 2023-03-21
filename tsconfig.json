@@ -6,7 +6,10 @@
     "declarationDir": "./dist/types",
     "declarationMap": true,
     "emitDeclarationOnly": true,
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -17,10 +20,13 @@
     "target": "es2020",
     "module": "esnext",
     "resolveJsonModule": true,
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
     "rootDir": "./",
     "outDir": "./dist",
-    "types": ["web-bluetooth", "dom-speech-recognition"]
+    "types": [
+      "web-bluetooth",
+      "dom-speech-recognition"
+    ]
   },
   "include": [
     "script",

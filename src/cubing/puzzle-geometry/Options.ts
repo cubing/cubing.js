@@ -1,4 +1,7 @@
-import { parsePuzzleDescription, PuzzleDescription } from "./PuzzleGeometry";
+import {
+  parsePuzzleDescription,
+  type PuzzleDescription,
+} from "./PuzzleGeometry";
 
 export function parseOptions(argv: string[]): {
   puzzleDescription: PuzzleDescription | null;

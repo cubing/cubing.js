@@ -1,7 +1,7 @@
 import { expect } from "../../../../test/chai-workarounds";
 
 import {
-  PuzzleID,
+  type PuzzleID,
   PuzzleIDRequestProp,
 } from "../../model/props/puzzle/structure/PuzzleIDRequestProp";
 import type { TwistyPropParent } from "../../model/props/TwistyProp";

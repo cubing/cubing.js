@@ -1,7 +1,7 @@
 import type { TwistyPlayerModel } from "../model/TwistyPlayerModel";
 import {
   TwistyAnimationController,
-  TwistyAnimationControllerDelegate,
+  type TwistyAnimationControllerDelegate,
 } from "./TwistyAnimationController";
 
 export class TwistyPlayerController {

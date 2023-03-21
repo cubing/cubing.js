@@ -4,8 +4,8 @@ import { ClassListManager } from "../ClassListManager";
 import { ManagedCustomElement } from "../ManagedCustomElement";
 import { customElementsShim } from "../node-custom-element-shims";
 import {
-  ButtonAppearances,
-  ButtonIcon,
+  type ButtonAppearances,
+  type ButtonIcon,
   buttonIcons,
 } from "../../model/props/viewer/ButtonAppearanceProp";
 import type { TwistyPlayerModel } from "../../model/TwistyPlayerModel";
