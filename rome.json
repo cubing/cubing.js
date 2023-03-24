@@ -22,7 +22,8 @@
       "./src/cubing/search/search-worker-inside-generated-string.js",
       "./src/cubing/vendor/gpl/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",
-      "./src/cubing/vendor/mpl/xyzzy/*.js"
+      "./src/cubing/vendor/mpl/xyzzy/*.js",
+      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js"
     ]
   },
   "formatter": {
@@ -32,7 +33,8 @@
       "./src/cubing/search/search-worker-inside-generated-string.js",
       "./src/cubing/vendor/gpl/cs0x7f/**/*",
       "./src/cubing/vendor/mpl/twsearch/*.js",
-      "./src/cubing/vendor/mpl/xyzzy/*.js"
+      "./src/cubing/vendor/mpl/xyzzy/*.js",
+      "./src/sites/experiments.cubing.net/cubing.js/rust/wasm/*.js"
     ]
   }
 }
