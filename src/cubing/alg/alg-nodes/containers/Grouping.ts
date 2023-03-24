@@ -13,6 +13,9 @@ class Square1TupleFormatter {
   quantumD_SQ_: QuantumMove | null = null;
 
   format(grouping: Grouping): string | null {
+    if (grouping.amount !== 1) {
+      return null;
+    }
     const amounts = this.tuple(grouping);
     if (!amounts) {
       return null;
@@ -77,6 +80,11 @@ export class Grouping extends AlgCommon<Grouping> {
   }
 
   invert(): Grouping {
+    const amounts = square1TupleFormatterInstance.tuple(this);
+    if (amounts) {
+      const [moveU, moveD] = amounts;
+      return new Grouping(new Alg([moveU.invert(), moveD.invert()]));
+    }
     return new Grouping(
       this.#quantumWithAmount.quantum,
       -this.#quantumWithAmount.amount,
