@@ -24,6 +24,10 @@ class Square1TupleFormatter {
   }
 
   tuple(grouping: Grouping): [moveU: Move, moveD: Move] | null {
+    if (grouping.amount !== 1) {
+      return null;
+    }
+
     this.quantumU_SQ_ ||= new QuantumMove("U_SQ_");
     this.quantumD_SQ_ ||= new QuantumMove("D_SQ_");
 
@@ -34,11 +38,6 @@ class Square1TupleFormatter {
         U.as(Move)?.quantum.isIdentical(this.quantumU_SQ_) &&
         D.as(Move)?.quantum.isIdentical(this.quantumD_SQ_)
       ) {
-        if (grouping.amount !== 1) {
-          throw new Error(
-            "Square-1 tuples cannot have an amount other than 1.",
-          );
-        }
         return [U as Move, D as Move]; // TODO: can we reuse the casting from above?
       }
     }
