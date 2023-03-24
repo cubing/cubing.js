@@ -282,9 +282,9 @@ enum PGColors {
   Pink = "#ff66cc",
 
   DarkBlue = "#0000ff",
-  LightBlue = "#3399ff",
+  Aqua = "#3399ff",
   DarkGreen = "#008800",
-  LightGreen = "#99ff00",
+  Lime = "#99ff00",
 }
 
 // TODO: change this back to a const JSON definition.
@@ -320,10 +320,10 @@ function defaultcolors(): any {
       FF: PGColors.DarkGreen,
       R: PGColors.Red,
       FR: PGColors.Cream,
-      FL: PGColors.LightBlue,
+      FL: PGColors.Aqua,
       L: PGColors.Purple,
       DR: PGColors.Pink,
-      BB: PGColors.LightGreen,
+      BB: PGColors.Lime,
       BR: PGColors.DarkBlue,
       BL: PGColors.Yellow,
       DL: PGColors.Orange,
