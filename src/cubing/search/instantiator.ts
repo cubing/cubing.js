@@ -71,7 +71,7 @@ export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
       };
 
       if (worker.nodeWorker) {
-        // We have to use `once` so the `unref()` from `comlink-everywhere` allows the process to quite as expected.
+        // We have to use `once` so the `unref()` from `comlink-everywhere` allows the process to quit as expected.
         worker.nodeWorker.once("message", onFirstMessage);
       } else {
         worker.addEventListener("error", onError, {
