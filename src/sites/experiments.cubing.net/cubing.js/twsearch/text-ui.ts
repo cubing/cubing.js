@@ -69,8 +69,9 @@ function validateAndSaveInput(
     for (const checkbox of Array.from(
       moveSubsetElem.querySelectorAll("input[type=checkbox"),
     ) as HTMLInputElement[]) {
-      checkbox.checked = fn(checkbox);
-      checkedMoves[checkbox.value] = !checkedMoves[checkbox.value];
+      const checked = fn(checkbox);
+      checkbox.checked = checked;
+      checkedMoves[checkbox.value] = checked;
     }
     saveCheckedMoves();
   }
