@@ -6,6 +6,7 @@ import {
   type BackViewLayout,
   TwistyPlayer,
   type TwistyPlayerConfig,
+  type VisualizationFormat,
 } from "../../../../../cubing/twisty";
 import { getSetup, type PuzzleID, getCancel } from "../url-params";
 import { SwipeGrid, themes, type ThemeType } from "./SwipeGrid";
@@ -94,12 +95,14 @@ export function actionToUIText(action: Action): string {
   }[action];
 }
 
-function constructTwistyPlayer(puzzleName: PuzzleID): TwistyPlayer {
+function constructTwistyPlayer(puzzleName: PuzzleID, visualization: VisualizationFormat, tempoScale: number): TwistyPlayer {
   const config: TwistyPlayerConfig = {
     alg: new Alg(),
     puzzle: puzzleName,
     controlPanel: "none",
     background: "none",
+    visualization,
+    tempoScale,
     experimentalSetupAlg: getSetup(),
   };
   const backView = new URL(document.location.href).searchParams.get(
@@ -118,11 +121,13 @@ export class SwipeyPuzzle extends HTMLElement {
 
   constructor(
     private puzzleName: PuzzleID,
+    visualization: VisualizationFormat,
+    tempoScale: number,
     private actionListener: (action: Action) => void,
     private algListener: () => void,
   ) {
     super();
-    this.twistyPlayer = constructTwistyPlayer(puzzleName);
+    this.twistyPlayer = constructTwistyPlayer(puzzleName, visualization, tempoScale);
 
     let theme: ThemeType | null = new URL(
       document.location.href,
@@ -144,7 +149,6 @@ export class SwipeyPuzzle extends HTMLElement {
 
   protected connectedCallback() {
     this.appendChild(this.twistyPlayer);
-    this.twistyPlayer.tempoScale = 3;
 
     if (this.puzzleName !== "3x3x3") {
       setTimeout(async () => {

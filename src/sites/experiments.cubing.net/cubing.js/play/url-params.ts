@@ -1,5 +1,7 @@
 import { Alg } from "../../../../cubing/alg";
 import type { QuantumDirectionalCancellation } from "../../../../cubing/alg/cubing-private";
+import type { VisualizationFormat } from "../../../../cubing/twisty";
+import { visualizationFormats } from "../../../../cubing/twisty/model/props/viewer/VisualizationProp";
 
 // Trick from https://github.com/microsoft/TypeScript/issues/28046#issuecomment-480516434
 export type StringListAsType<T extends ReadonlyArray<unknown>> =
@@ -34,6 +36,25 @@ export function getPuzzleID(): PuzzleID {
     DEFAULT_PUZZLE_ID,
     Object.keys(puzzleIDs) as PuzzleID[],
   );
+}
+
+export const DEFAULT_VISUALIZATION = "3D";
+export function getVisualizationFormat(): VisualizationFormat {
+  return getURLParamChecked<VisualizationFormat>(
+    "visualization",
+    DEFAULT_VISUALIZATION,
+    Object.keys(visualizationFormats) as VisualizationFormat[],
+  );
+}
+
+export const DEFAULT_TEMPO_SCALE = 1;
+export function getTempoScale(): number {
+  try {
+    return parseFloat( new URL(location.href).searchParams.get("tempo-scale")!);
+  }catch {
+    console.warn("Invalid tempo scale. Using 1.")
+    return 1;
+  }
 }
 
 export function getSetup(): Alg {

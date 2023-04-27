@@ -20,6 +20,8 @@ import {
   type PuzzleID,
   receivingSocketOrigin,
   sendingSocketOrigin,
+  getVisualizationFormat,
+  getTempoScale,
 } from "./url-params";
 import { CallbackProxyReceiver } from "./websocket-proxy";
 
@@ -354,6 +356,8 @@ window.addEventListener("DOMContentLoaded", () => {
 // Initialize ahead of time so that it can render more quickly.
 const swipeyPuzzle = new SwipeyPuzzle(
   getPuzzleID(),
+  getVisualizationFormat(),
+  getTempoScale(),
   () => {
     /* */
   },
