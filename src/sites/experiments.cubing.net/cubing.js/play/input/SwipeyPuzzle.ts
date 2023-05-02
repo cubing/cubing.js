@@ -95,7 +95,11 @@ export function actionToUIText(action: Action): string {
   }[action];
 }
 
-function constructTwistyPlayer(puzzleName: PuzzleID, visualization: VisualizationFormat, tempoScale: number): TwistyPlayer {
+function constructTwistyPlayer(
+  puzzleName: PuzzleID,
+  visualization: VisualizationFormat,
+  tempoScale: number,
+): TwistyPlayer {
   const config: TwistyPlayerConfig = {
     alg: new Alg(),
     puzzle: puzzleName,
@@ -127,7 +131,11 @@ export class SwipeyPuzzle extends HTMLElement {
     private algListener: () => void,
   ) {
     super();
-    this.twistyPlayer = constructTwistyPlayer(puzzleName, visualization, tempoScale);
+    this.twistyPlayer = constructTwistyPlayer(
+      puzzleName,
+      visualization,
+      tempoScale,
+    );
 
     let theme: ThemeType | null = new URL(
       document.location.href,

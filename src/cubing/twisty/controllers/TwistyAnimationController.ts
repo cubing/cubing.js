@@ -30,9 +30,9 @@ class CatchUpHelper {
 
   tempoScale: number;
   constructor(private model: TwistyPlayerModel) {
-    model.tempoScale.addFreshListener(tempoScale => {
-      this.tempoScale = tempoScale
-    })
+    model.tempoScale.addFreshListener((tempoScale) => {
+      this.tempoScale = tempoScale;
+    });
   }
 
   private scheduler: RenderScheduler = new RenderScheduler(
@@ -57,7 +57,8 @@ class CatchUpHelper {
   lastTimestamp = 0;
   animFrame(timestamp: MillisecondTimestamp): void {
     this.scheduler.requestAnimFrame();
-    const delta = this.tempoScale * (timestamp - this.lastTimestamp) / this.catchUpMs;
+    const delta =
+      (this.tempoScale * (timestamp - this.lastTimestamp)) / this.catchUpMs;
     this.lastTimestamp = timestamp;
 
     this.model.catchUpMove.set(

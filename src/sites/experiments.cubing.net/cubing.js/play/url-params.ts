@@ -50,9 +50,11 @@ export function getVisualizationFormat(): VisualizationFormat {
 export const DEFAULT_TEMPO_SCALE = 1;
 export function getTempoScale(): number {
   try {
-    return parseFloat( new URL(location.href).searchParams.get("tempo-scale")!);
-  }catch {
-    console.warn("Invalid tempo scale. Using 1.")
+    return parseFloat(
+      new URL(location.href).searchParams.get("tempo-scale") ?? "1",
+    );
+  } catch {
+    console.warn("Invalid tempo scale. Using 1.");
     return 1;
   }
 }
