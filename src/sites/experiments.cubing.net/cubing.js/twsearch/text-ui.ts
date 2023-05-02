@@ -195,10 +195,10 @@ function validateAndSaveInput(
   }
 
   go.addEventListener("click", async () => {
-    const kpuzzle = new KPuzzle(JSON.parse(def.value));
-    const kstate = new KState(kpuzzle, JSON.parse(search.value));
     results.value = "Searching...";
     try {
+      const kpuzzle = new KPuzzle(JSON.parse(def.value));
+      const kstate = new KState(kpuzzle, JSON.parse(search.value));
       const options = {
         moveSubset: getMoveSubset(),
         minDepth: parseInt(minDepthElem.value),
@@ -213,7 +213,7 @@ function validateAndSaveInput(
         ).toString();
       }
     } catch (e) {
-      results.value = "Error:\n" + e;
+      results.value = e;
       throw e;
     }
   });
