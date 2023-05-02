@@ -2,6 +2,7 @@ import { Alg, Move } from "../../../../cubing/alg";
 import { KPuzzle, KState } from "../../../../cubing/kpuzzle";
 import { cube2x2x2 } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
+import { solveTwsearchServer } from "./twsearch-server";
 
 const LOCALSTORAGE_DEF = "twsearch/text-ui/def";
 const LOCALSTORAGE_SEARCH = "twsearch/text-ui/search";
@@ -198,12 +199,19 @@ function validateAndSaveInput(
     const kstate = new KState(kpuzzle, JSON.parse(search.value));
     results.value = "Searching...";
     try {
-      results.value = (
-        await experimentalSolveTwsearch(kpuzzle, kstate, {
-          moveSubset: getMoveSubset(),
-          minDepth: parseInt(minDepthElem.value),
-        })
-      ).toString();
+      const options = {
+        moveSubset: getMoveSubset(),
+        minDepth: parseInt(minDepthElem.value),
+      };
+      if ((document.querySelector("#use-server") as HTMLInputElement).checked) {
+        results.value = (
+          await solveTwsearchServer(kpuzzle, kstate, options)
+        ).toString();
+      } else {
+        results.value = (
+          await experimentalSolveTwsearch(kpuzzle, kstate, options)
+        ).toString();
+      }
     } catch (e) {
       results.value = "Error:\n" + e;
       throw e;
