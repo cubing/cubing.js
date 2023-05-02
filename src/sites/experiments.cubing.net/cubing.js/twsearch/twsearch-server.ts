@@ -34,7 +34,7 @@ export async function solveTwsearchServer(
     }),
   });
   if (!response.ok) {
-    throw "Failed!";
+    throw new Error(`Failed! ${await response.text()}`);
   }
   const json = await response.json();
   console.log(json);
