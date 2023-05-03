@@ -241,8 +241,8 @@ function defaultnets(): any {
     8: [
       ["F", "D", "L", "R"],
       ["D", "F", "BR", ""],
-      ["BR", "D", "", "BB"],
-      ["BB", "BR", "U", "BL"],
+      ["BR", "D", "", "B"],
+      ["B", "BR", "U", "BL"],
     ],
     // twelve faces:  dodecahedron; U/F/R/F/BL/BR from megaminx
     12: [
@@ -310,7 +310,7 @@ function defaultcolors(): any {
       F: PGColors.Red,
       R: PGColors.Green,
       D: PGColors.Yellow,
-      BB: PGColors.Blue,
+      B: PGColors.Blue,
       L: PGColors.Purple,
       BL: PGColors.Orange,
       BR: PGColors.Gray,
@@ -374,10 +374,10 @@ const orientationDefaults = {
     c: ["UB", "LU", "FU", "RU", "BU", "DF"],
   },
   8: {
-    v: ["UBBBRR", "URFL", "ULBLBB", "DBRBBBL", "DBLLF", "DFRBR"],
+    v: ["UBBRR", "URFL", "ULBLB", "DBRBBL", "DBLLF", "DFRBR"],
     e: [
       "UL",
-      "UBB",
+      "UB",
       "UR",
       "BRD",
       "BLD",
@@ -386,10 +386,10 @@ const orientationDefaults = {
       "FR",
       "FL",
       "BLL",
-      "BLBB",
-      "BRBB",
+      "BLB",
+      "BRB",
     ],
-    c: ["BBU", "LU", "RU", "BRD", "FD", "BLD", "DF", "UBB"],
+    c: ["B_U", "LU", "RU", "BRD", "FD", "BLD", "DF", "U_B"],
   },
   12: {
     v: [
