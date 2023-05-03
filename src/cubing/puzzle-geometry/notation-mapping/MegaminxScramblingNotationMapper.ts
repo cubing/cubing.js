@@ -31,7 +31,7 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
         return new Move("Uv", move.amount);
       }
       if (move.family === "x" && Math.abs(move.amount) === 2) {
-        return new Move("DRRv", move.amount / 2);
+        return new Move("ERv", move.amount / 2);
       }
     }
     return this.child.notationToInternal(move);
@@ -39,13 +39,13 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
 
   // we never rewrite click moves to these moves.
   public notationToExternal(move: Move): Move | null {
-    if (move.family === "DRRv" && Math.abs(move.amount) === 1) {
+    if (move.family === "ERv" && Math.abs(move.amount) === 1) {
       return new Move(
         new QuantumMove("x", move.innerLayer, move.outerLayer),
         move.amount * 2,
       );
     }
-    if (move.family === "DLLv" && Math.abs(move.amount) === 1) {
+    if (move.family === "ILv" && Math.abs(move.amount) === 1) {
       return new Move(
         new QuantumMove("x", move.innerLayer, move.outerLayer),
         -move.amount * 2,
@@ -57,7 +57,7 @@ export class MegaminxScramblingNotationMapper implements NotationMapper {
         move.amount,
       );
     }
-    if (move.family === "DDv") {
+    if (move.family === "Dv") {
       return new Move("y", -move.amount);
     }
     return this.child.notationToExternal(move);
