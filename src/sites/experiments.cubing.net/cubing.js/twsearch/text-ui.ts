@@ -243,5 +243,6 @@ function validateAndSaveInput(
     const def = kpuzzle.definition;
     setDef(def);
     setSearch(kpuzzle.startState().stateData);
+    location.reload();
   });
 })();
