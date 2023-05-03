@@ -1,6 +1,11 @@
 import { Alg, Move } from "../../../../cubing/alg";
-import { KPuzzle, KState } from "../../../../cubing/kpuzzle";
-import { cube2x2x2 } from "../../../../cubing/puzzles";
+import {
+  KPuzzle,
+  KState,
+  type KPuzzleDefinition,
+  type KStateData,
+} from "../../../../cubing/kpuzzle";
+import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
 import { solveTwsearchServer } from "./twsearch-server";
 
@@ -47,7 +52,7 @@ function validateAndSaveInput(
   (
     document.querySelector("#set-search-alg") as HTMLButtonElement
   ).addEventListener("click", () => {
-    const kpuzzle = new KPuzzle(JSON.parse(def.value));
+    const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
     const newSearchState = kpuzzle
       .startState()
       .applyAlg(
@@ -56,7 +61,7 @@ function validateAndSaveInput(
         ),
       );
     const newSearchStateString = neatStringify(newSearchState.stateData);
-    search.value = newSearchStateString;
+    searchElem.value = newSearchStateString;
     localStorage[LOCALSTORAGE_SEARCH] = newSearchStateString;
   });
   (
@@ -89,17 +94,21 @@ function validateAndSaveInput(
     document.querySelector("#move-subset-uncheck-all") as HTMLButtonElement
   ).addEventListener("click", () => mapCheckboxes((e) => false));
 
-  const def = document.querySelector("#def") as HTMLTextAreaElement;
-  def.value = localStorage[LOCALSTORAGE_DEF]
+  const defElem = document.querySelector("#def") as HTMLTextAreaElement;
+  defElem.value = localStorage[LOCALSTORAGE_DEF]
     ? localStorage[LOCALSTORAGE_DEF]
     : await defaultDef();
-  validateAndSaveInput(def, LOCALSTORAGE_DEF);
-  def.addEventListener("input", () =>
-    validateAndSaveInput(def, LOCALSTORAGE_DEF),
+  validateAndSaveInput(defElem, LOCALSTORAGE_DEF);
+  defElem.addEventListener("input", () =>
+    validateAndSaveInput(defElem, LOCALSTORAGE_DEF),
   );
+  function setDef(def: KPuzzleDefinition) {
+    defElem.value = neatStringify(def);
+    validateAndSaveInput(defElem, LOCALSTORAGE_DEF);
+  }
 
-  const search = document.querySelector("#search") as HTMLTextAreaElement;
-  search.value = localStorage[LOCALSTORAGE_SEARCH]
+  const searchElem = document.querySelector("#search") as HTMLTextAreaElement;
+  searchElem.value = localStorage[LOCALSTORAGE_SEARCH]
     ? localStorage[LOCALSTORAGE_SEARCH]
     : `{
   "CORNERS": {
@@ -107,10 +116,14 @@ function validateAndSaveInput(
     "orientation": [1, 2, 0, 0, 0, 0, 0, 0]
   }
 }`;
-  validateAndSaveInput(search, LOCALSTORAGE_SEARCH);
-  search.addEventListener("input", () =>
-    validateAndSaveInput(search, LOCALSTORAGE_SEARCH),
+  validateAndSaveInput(searchElem, LOCALSTORAGE_SEARCH);
+  searchElem.addEventListener("input", () =>
+    validateAndSaveInput(searchElem, LOCALSTORAGE_SEARCH),
   );
+  function setSearch(state: KStateData) {
+    searchElem.value = neatStringify(state);
+    validateAndSaveInput(searchElem, LOCALSTORAGE_SEARCH);
+  }
 
   const go = document.querySelector("#go") as HTMLButtonElement;
   const moveSubsetElem = document.querySelector(
@@ -134,7 +147,7 @@ function validateAndSaveInput(
   }
 
   async function updateMoveSubset(): Promise<void> {
-    const kpuzzle = new KPuzzle(JSON.parse(def.value));
+    const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
     moveSubsetElem.textContent = "";
     const moveNames = Object.keys(kpuzzle.definition.moves)
       .concat(Object.keys(kpuzzle.definition.experimentalDerivedMoves ?? {}))
@@ -172,7 +185,7 @@ function validateAndSaveInput(
     saveCheckedMoves();
   }
 
-  def.addEventListener("input", updateMoveSubset);
+  defElem.addEventListener("input", updateMoveSubset);
   updateMoveSubset();
 
   function saveCheckedMoves() {
@@ -197,8 +210,8 @@ function validateAndSaveInput(
   go.addEventListener("click", async () => {
     results.value = "Searching...";
     try {
-      const kpuzzle = new KPuzzle(JSON.parse(def.value));
-      const kstate = new KState(kpuzzle, JSON.parse(search.value));
+      const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
+      const kstate = new KState(kpuzzle, JSON.parse(searchElem.value));
       const options = {
         moveSubset: getMoveSubset(),
         minDepth: parseInt(minDepthElem.value),
@@ -216,5 +229,19 @@ function validateAndSaveInput(
       results.value = e;
       throw e;
     }
+  });
+
+  const select = document.querySelector("#puzzle-select") as HTMLSelectElement;
+  for (const [puzzleID, puzzleInfo] of Object.entries(puzzles)) {
+    const option = select.appendChild(document.createElement("option"));
+    option.value = puzzleID;
+    option.textContent = puzzleInfo.fullName;
+  }
+  select.addEventListener("change", async () => {
+    const puzzle = puzzles[select.value];
+    const kpuzzle = await puzzle.kpuzzle();
+    const def = kpuzzle.definition;
+    setDef(def);
+    setSearch(kpuzzle.startState().stateData);
   });
 })();
