@@ -33,9 +33,9 @@ export const cube2x2x2JSON: KPuzzleDefinition = {
   },
   experimentalDerivedMoves: {
     z: "[x: y]",
-    L: "[[x: y]: U]", // TODO: restore `[x: y]` to `z` once `cubing.rs` supports derived moves based on other derived moves.
+    L: "[z: U]",
     F: "[x: U]",
-    R: "[([x: y])': U]", // TODO: restore `[x: y]` to `z` once `cubing.rs` supports derived moves based on other derived moves.
+    R: "[z': U]",
     B: "[x': U]",
     D: "[x2: U]",
     Uv: "y",
