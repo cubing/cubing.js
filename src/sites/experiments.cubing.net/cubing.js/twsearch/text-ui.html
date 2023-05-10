@@ -23,7 +23,6 @@
     .invalid {
       background: rgba(255, 0, 0, 0.25);
     }
-
   </style>
 </head>
 
@@ -62,7 +61,8 @@
 </fieldset>
 <br>
 <fieldset>
-  <input type="checkbox" id="use-server"><label for="use-server">Use local server (experimental)</label>
+  <input type="checkbox" id="use-server"><label for="use-server">Use local <a
+      href="https://github.com/cubing/twsearch/#twsearch-rs"><code>twsearch-rs</code></a> server (experimental)</label>
   <summary><button id="go">Search</button></summary>
   <textarea id="results" value=""></textarea>
 </fieldset>
