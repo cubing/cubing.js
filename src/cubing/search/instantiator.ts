@@ -31,16 +31,14 @@ export async function instantiateModuleWorker(): Promise<InsideOutsideAPI> {
       let url: string | URL;
       if (globalThis.Worker) {
         // Standard browser-like environment.
-        const importSrc = `import "${workerEntryFileURL}";`;
+        const importSrc = `import ${JSON.stringify(
+          workerEntryFileURL.toString(),
+        )};`;
         const blob = new Blob([importSrc], {
           type: "text/javascript",
         });
         url = URL.createObjectURL(blob);
       } else {
-        // `node` < 18 doesn't have `Blob`:
-        // https://nodejs.org/ko/blog/announcements/v18-release-announce/#other-global-apis
-        // But `node` will not let us construct a worker from a `blob:` URL either.
-        //
         // We need to keep the original entry file URL, but we have to wrap it in the `URL` class.
         url = new URL(workerEntryFileURL);
       }
