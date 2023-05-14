@@ -91,7 +91,7 @@ function etmMetric(_move: Move): number {
 }
 
 // TODO: Implement a puzzle-specific way to calculate this.
-function quantumMetric(move: Move): number {
+function rangeBlockTurnMetric(move: Move): number {
   const fam = move.family;
   if (
     (isCharUppercase(fam[0]) && fam[fam.length - 1] === "v") ||
@@ -102,14 +102,22 @@ function quantumMetric(move: Move): number {
   ) {
     return 0;
   } else {
-    return Math.abs(move.amount);
+    return 1;
   }
+}
+
+// TODO: Implement a puzzle-specific way to calculate this.
+function quantumMetric(move: Move): number {
+  return Math.abs(move.amount) * rangeBlockTurnMetric(move);
 }
 
 export const countMoves = functionFromTraversal(CountMoves, [baseMetric]);
 export const countMovesETM = functionFromTraversal(CountMoves, [etmMetric]);
-export const countQuantumMoves = functionFromTraversal(CountMoves, [
+export const countRangeBlockQuantumMovesPG = functionFromTraversal(CountMoves, [
   quantumMetric,
+]);
+export const countRangeBlockMovesPG = functionFromTraversal(CountMoves, [
+  rangeBlockTurnMetric,
 ]);
 
 /**
@@ -118,11 +126,11 @@ export const countQuantumMoves = functionFromTraversal(CountMoves, [
  * - 3x3x3: OBTM, RBTM, ETM
  */
 export function countMetricMoves(
-  puzzle: PuzzleLoader,
+  puzzleLoader: PuzzleLoader,
   metric: CommonMetric,
   alg: Alg,
 ): number {
-  if (puzzle.id === "3x3x3") {
+  if (puzzleLoader.id === "3x3x3") {
     if (metric in costFactorsByMetric) {
       return functionFromTraversal(CountMoves, [
         (move: Move) => countMove3x3x3(metric, move),
@@ -132,6 +140,14 @@ export function countMetricMoves(
     switch (metric) {
       case CommonMetric.ExecutionTurnMetric:
         return countMovesETM(alg);
+      case CommonMetric.RangeBlockTurnMetric:
+        if (puzzleLoader.pg) {
+          return countRangeBlockMovesPG(alg);
+        }
+      case CommonMetric.RangeBlockQuantumTurnMetric:
+        if (puzzleLoader.pg) {
+          return countRangeBlockQuantumMovesPG(alg);
+        }
     }
   }
   throw new Error("Unsupported puzzle or metric.");

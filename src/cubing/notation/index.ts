@@ -3,7 +3,6 @@
 export {
   countMovesETM as experimentalCountMovesETM,
   countMoves as experimentalCountMoves,
-  countQuantumMoves as experimentalCountQuantumMoves,
   countMetricMoves as experimentalCountMetricMoves,
 } from "./CountMoves";
 export { countAnimatedLeaves as experimentalCountAnimatedLeaves } from "./CountAnimatedLeaves";
