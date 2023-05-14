@@ -295,6 +295,7 @@ class ControlPane {
     );
     constructMoveCountDisplay(
       this.twistyPlayer.experimentalModel,
+      true,
       this.moveCountDisplay,
     );
 

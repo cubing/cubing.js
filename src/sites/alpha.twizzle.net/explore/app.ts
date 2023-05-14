@@ -16,7 +16,7 @@ import { getURLParam, setAlgParamEnabled, setURLParams } from "./url-params";
 
 import "./TwistyPuzzleDescriptionInput";
 import type { PuzzleLoader } from "../../../cubing/puzzles";
-import { countMovesETM } from "../../../cubing/notation/CountMoves";
+import { constructMoveCountDisplay } from "../../../cubing/twisty/cubing-private";
 
 export class TwizzleExplorerApp {
   twistyPlayer: TwistyPlayer;
@@ -34,13 +34,11 @@ export class TwizzleExplorerApp {
 
     this.configUI = new ConfigUI(this);
     new SelectUI(this);
-    const moveCountElem = document.querySelector("#move-count")!;
-    this.twistyPlayer.experimentalModel.alg.addFreshListener(
-      (algWithIssues) => {
-        moveCountElem.textContent = `Moves: ${countMovesETM(
-          algWithIssues.alg,
-        )}`;
-      },
+    const moveCountElem = document.querySelector("#move-count")! as HTMLElement;
+    constructMoveCountDisplay(
+      this.twistyPlayer.experimentalModel,
+      false,
+      moveCountElem,
     );
 
     this.dialog = new Dialog();
