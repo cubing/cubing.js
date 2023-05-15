@@ -8,20 +8,29 @@ const postJSONInit: RequestInit = {
   },
 };
 
+export interface TwsearchServerClientOptions {
+  moveSubset?: string[];
+  startState?: KState;
+  searchArgs?: {
+    checkBeforeSolve?: boolean;
+    randomStart?: boolean;
+    minDepth?: number;
+    maxDepth?: number;
+    startPruneDepth?: number;
+    quantumMetric?: boolean;
+  };
+}
+
 // TODO: dedup options with `cubing/search`
 export async function solveTwsearchServer(
   kpuzzle: KPuzzle,
   kstate: KState,
-  options: { moveSubset?: string[]; startState?: KState; minDepth?: number },
+  options: TwsearchServerClientOptions,
 ): Promise<Alg> {
-  console.log(
-    await fetch("http://localhost:2023/v0/config/arg", {
-      method: "POST",
-      body: "--startprunedepth 5", // TODO: do this on the server?
-    }),
-  );
-  if ("minDepth" in options) {
-    console.warn("Ignoring option (not implemented yet): minDepth");
+  if (options.searchArgs) {
+    options.searchArgs.checkBeforeSolve ??= true;
+    options.searchArgs.randomStart ??= true;
+    options.searchArgs.startPruneDepth ??= 5;
   }
   const response = await fetch("http://localhost:2023/v0/solve/state", {
     ...postJSONInit,
@@ -30,6 +39,7 @@ export async function solveTwsearchServer(
       state: kstate.stateData,
       moveSubset: options.moveSubset,
       startState: options.startState,
+      searchArgs: options.searchArgs,
       // TODO: min depth
     }),
   });

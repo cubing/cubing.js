@@ -7,7 +7,10 @@ import {
 } from "../../../../cubing/kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
-import { solveTwsearchServer } from "./twsearch-server";
+import {
+  solveTwsearchServer,
+  type TwsearchServerClientOptions,
+} from "./twsearch-server";
 
 const LOCALSTORAGE_DEF = "twsearch/text-ui/def";
 const LOCALSTORAGE_SEARCH = "twsearch/text-ui/search";
@@ -212,9 +215,11 @@ function validateAndSaveInput(
     try {
       const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
       const kstate = new KState(kpuzzle, JSON.parse(searchElem.value));
-      const options = {
+      const options: TwsearchServerClientOptions = {
         moveSubset: getMoveSubset(),
-        minDepth: parseInt(minDepthElem.value),
+        searchArgs: {
+          minDepth: parseInt(minDepthElem.value),
+        },
       };
       if ((document.querySelector("#use-server") as HTMLInputElement).checked) {
         results.value = (
