@@ -40,23 +40,23 @@ const METRIC_EXPLANATIONS: Partial<Record<ExperimentalCommonMetric, string>> = {
   [ExperimentalCommonMetric.ExecutionTurnMetric]: `ETM ("Execution Turn Metric"):
 • all moves (including rotations) count as 1 turn`,
 };
-const LEGACY_METRIC_ABBREVIATIONS: Partial<
-  Record<ExperimentalCommonMetric, string>
-> = {
-  [ExperimentalCommonMetric.OuterBlockTurnMetric]: "h",
-  [ExperimentalCommonMetric.OuterBlockQuantumTurnMetric]: "q",
-  [ExperimentalCommonMetric.RangeBlockTurnMetric]: "s",
-  [ExperimentalCommonMetric.RangeBlockQuantumTurnMetric]: "sq",
-  [ExperimentalCommonMetric.ExecutionTurnMetric]: "e",
-};
+// const LEGACY_METRIC_ABBREVIATIONS: Partial<
+//   Record<ExperimentalCommonMetric, string>
+// > = {
+//   [ExperimentalCommonMetric.OuterBlockTurnMetric]: "h",
+//   [ExperimentalCommonMetric.OuterBlockQuantumTurnMetric]: "q",
+//   [ExperimentalCommonMetric.RangeBlockTurnMetric]: "s",
+//   [ExperimentalCommonMetric.RangeBlockQuantumTurnMetric]: "sq",
+//   [ExperimentalCommonMetric.ExecutionTurnMetric]: "e",
+// };
 const CONSISTENT_METRIC_ABBREVIATIONS: Partial<
   Record<ExperimentalCommonMetric, string>
 > = {
-  [ExperimentalCommonMetric.OuterBlockTurnMetric]: "ob",
-  [ExperimentalCommonMetric.OuterBlockQuantumTurnMetric]: "obq",
-  [ExperimentalCommonMetric.RangeBlockTurnMetric]: "rb",
-  [ExperimentalCommonMetric.RangeBlockQuantumTurnMetric]: "rbq",
-  [ExperimentalCommonMetric.ExecutionTurnMetric]: "e",
+  [ExperimentalCommonMetric.OuterBlockTurnMetric]: "OB",
+  [ExperimentalCommonMetric.OuterBlockQuantumTurnMetric]: "OBQ",
+  [ExperimentalCommonMetric.RangeBlockTurnMetric]: "RB",
+  [ExperimentalCommonMetric.RangeBlockQuantumTurnMetric]: "RBQ",
+  [ExperimentalCommonMetric.ExecutionTurnMetric]: "E",
 };
 
 export class TwizzleLink extends ManagedCustomElement {
@@ -175,7 +175,7 @@ export class TwizzleLink extends ManagedCustomElement {
       );
 
       this.#moveCountElem = movesHeading.appendChild(
-        constructMoveCountDisplay(this.twistyPlayer.experimentalModel, true),
+        constructMoveCountDisplay(this.twistyPlayer.experimentalModel),
       );
       this.#moveCountElem.classList.add("move-count");
 
@@ -242,7 +242,6 @@ declare global {
 
 export function constructMoveCountDisplay(
   model: TwistyPlayerModel,
-  useLegacyAbbreviations: boolean,
   elem: HTMLSpanElement = document.createElement("span"),
 ): HTMLSpanElement {
   async function update() {
@@ -259,7 +258,7 @@ export function constructMoveCountDisplay(
       if (isFirstMetric) {
         isFirstMetric = false;
       } else {
-        elem.append(", ");
+        elem.append(")(");
       }
       const span = elem.appendChild(document.createElement("span"));
       const moveCount = experimentalCountMetricMoves(
@@ -267,16 +266,10 @@ export function constructMoveCountDisplay(
         metric,
         algWithIssues.alg,
       );
+      span.append(`${CONSISTENT_METRIC_ABBREVIATIONS[metric]}: `);
       const moveNumber = span.appendChild(document.createElement("span"));
       moveNumber.textContent = moveCount.toString();
       moveNumber.classList.add("move-number");
-      span.append(
-        `${
-          (useLegacyAbbreviations
-            ? LEGACY_METRIC_ABBREVIATIONS
-            : CONSISTENT_METRIC_ABBREVIATIONS)[metric]
-        }`,
-      );
       // span.title = METRIC_EXPLANATIONS[metric] ?? "";
       span.setAttribute("data-before", METRIC_EXPLANATIONS[metric] ?? "");
       span.setAttribute("title", METRIC_EXPLANATIONS[metric] ?? "");

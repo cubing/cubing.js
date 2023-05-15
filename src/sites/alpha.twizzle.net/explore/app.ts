@@ -37,7 +37,6 @@ export class TwizzleExplorerApp {
     const moveCountElem = document.querySelector("#move-count")! as HTMLElement;
     constructMoveCountDisplay(
       this.twistyPlayer.experimentalModel,
-      false,
       moveCountElem,
     );
 
