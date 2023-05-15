@@ -7,6 +7,7 @@ import {
 } from "../../../../cubing/kpuzzle";
 import { cube2x2x2, puzzles } from "../../../../cubing/puzzles";
 import { experimentalSolveTwsearch } from "../../../../cubing/search";
+import type { SolveTwsearchOptions } from "../../../../cubing/search/outside";
 import {
   solveTwsearchServer,
   type TwsearchServerClientOptions,
@@ -226,8 +227,12 @@ function validateAndSaveInput(
           await solveTwsearchServer(kpuzzle, kstate, options)
         ).toString();
       } else {
+        const twsearchOptions: SolveTwsearchOptions = {
+          moveSubset: options.searchArgs?.moveSubset,
+          minDepth: options.searchArgs?.minDepth,
+        };
         results.value = (
-          await experimentalSolveTwsearch(kpuzzle, kstate, options)
+          await experimentalSolveTwsearch(kpuzzle, kstate, twsearchOptions)
         ).toString();
       }
     } catch (e) {

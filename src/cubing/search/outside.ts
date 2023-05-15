@@ -119,10 +119,16 @@ export async function solveMegaminx(state: KState): Promise<Alg> {
   );
 }
 
+export interface SolveTwsearchOptions {
+  moveSubset?: string[];
+  startState?: KState;
+  minDepth?: number;
+}
+
 export async function solveTwsearch(
   kpuzzle: KPuzzle,
   state: KState,
-  options?: { moveSubset?: string[]; startState?: KState; minDepth?: number },
+  options?: SolveTwsearchOptions,
 ): Promise<Alg> {
   const { startState, ...otherOptions } = options ?? {};
   const apiOptions: TwsearchOptions = otherOptions;
