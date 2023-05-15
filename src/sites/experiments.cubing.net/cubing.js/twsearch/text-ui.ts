@@ -216,9 +216,9 @@ function validateAndSaveInput(
       const kpuzzle = new KPuzzle(JSON.parse(defElem.value));
       const kstate = new KState(kpuzzle, JSON.parse(searchElem.value));
       const options: TwsearchServerClientOptions = {
-        moveSubset: getMoveSubset(),
         searchArgs: {
           minDepth: parseInt(minDepthElem.value),
+          moveSubset: getMoveSubset(),
         },
       };
       if ((document.querySelector("#use-server") as HTMLInputElement).checked) {

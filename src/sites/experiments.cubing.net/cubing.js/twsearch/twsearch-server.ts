@@ -9,7 +9,6 @@ const postJSONInit: RequestInit = {
 };
 
 export interface TwsearchServerClientOptions {
-  moveSubset?: string[];
   startState?: KState;
   searchArgs?: {
     checkBeforeSolve?: boolean;
@@ -18,6 +17,7 @@ export interface TwsearchServerClientOptions {
     maxDepth?: number;
     startPruneDepth?: number;
     quantumMetric?: boolean;
+    moveSubset?: string[];
   };
 }
 
@@ -37,7 +37,6 @@ export async function solveTwsearchServer(
     body: JSON.stringify({
       definition: kpuzzle.definition,
       state: kstate.stateData,
-      moveSubset: options.moveSubset,
       startState: options.startState,
       searchArgs: options.searchArgs,
       // TODO: min depth
