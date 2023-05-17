@@ -11,7 +11,11 @@ function areSameDirection(direction: -1 | 1, move2: Move): boolean {
   return direction * Math.sign(move2.amount) >= 0;
 }
 
-function offsetMod(x: number, positiveMod: number, offset: number): number {
+export function offsetMod(
+  x: number,
+  positiveMod: number,
+  offset: number = 0,
+): number {
   return ((((x - offset) % positiveMod) + positiveMod) % positiveMod) + offset;
 }
 

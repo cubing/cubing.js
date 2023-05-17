@@ -1,3 +1,5 @@
+import { offsetMod } from "../../alg/cubing-private";
+
 export function arrayEquals<T>(a: readonly T[], b: readonly T[]): boolean {
   if (a === b) {
     return true;
@@ -32,16 +34,10 @@ export function arrayEqualsCompare<T>(
   return true;
 }
 
-// Assumes `offset > 0`. Will produce invalid values if not!
-// We don't check for that, since this can be a hot path.
-export function mod(v: number, m: number, offset = 0): number {
-  return (((v % m) + m + offset) % m) - offset;
-}
-
 export function modIntoRange(
   v: number,
   rangeMin: number,
   rangeMax: number,
 ): number {
-  return mod(v - rangeMin, rangeMax - rangeMin) + rangeMin;
+  return offsetMod(v, rangeMax - rangeMin, rangeMin);
 }

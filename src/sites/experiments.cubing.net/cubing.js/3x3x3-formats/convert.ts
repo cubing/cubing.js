@@ -1,11 +1,22 @@
-import type { KStateOrbitData } from "../../../../cubing/kpuzzle/KPuzzleDefinition";
+import type {
+  KPuzzleDefinition,
+  KStateOrbitData,
+} from "../../../../cubing/kpuzzle/KPuzzleDefinition";
 import { KState } from "../../../../cubing/kpuzzle";
 import { experimental3x3x3KPuzzle } from "../../../../cubing/puzzles/cubing-private";
 
-export function stateToString(state: KState): string {
-  return JSON.stringify(state.stateData, null, "  ")
+function neatStringify(data: any): string {
+  return JSON.stringify(data, null, "  ")
     .replace(/\n +(\d+),/g, "$1, ")
     .replace(/\n +(\d+)\n +/g, "$1");
+}
+
+export function stateToString(state: KState): string {
+  return neatStringify(state.stateData);
+}
+
+export function defToString(state: KPuzzleDefinition): string {
+  return neatStringify(state);
 }
 
 const pieceNames: Record<string, string[]> = {

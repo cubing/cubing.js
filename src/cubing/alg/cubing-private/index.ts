@@ -5,3 +5,5 @@ export {
 } from "../iteration";
 
 export type { QuantumDirectionalCancellation } from "../simplify";
+
+export { offsetMod } from "../simplify/append";

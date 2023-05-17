@@ -1,4 +1,4 @@
-import { mod } from "../../helpers";
+import { modIntoRange } from "../../helpers";
 import { TwistyPropSource } from "../TwistyProp";
 
 export type CoordinateDegrees = number;
@@ -62,7 +62,7 @@ export class OrbitCoordinatesRequestProp extends TwistyPropSource<
       newValue.latitude = Math.min(Math.max(newValue.latitude, -90), 90);
     }
     if (typeof newValue.longitude !== "undefined") {
-      newValue.longitude = mod(newValue.longitude, 360, 180);
+      newValue.longitude = modIntoRange(newValue.longitude, 360, -180);
     }
     return newValue;
   }

@@ -1,14 +1,41 @@
+import { offsetMod } from "../../../../cubing/alg/cubing-private";
+import type { KPuzzle, KState } from "../../../../cubing/kpuzzle";
 import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
+import { defToString, stateToString } from "../3x3x3-formats/convert";
 
-interface Piece {
+interface PieceFacelets {
   [orientation: number]: Facelet;
 }
 
 type Mode = "swap" | "twist";
 
+function flash(elem: Element) {
+  elem.animate([{ opacity: 0.25 }, { opacity: 1 }], {
+    duration: 250,
+    easing: "ease-out",
+  });
+}
+
+// TODO: make this easier to reuse.
+function downloadJSONFile(jsonString: string, fileName: string) {
+  const a = document.createElement("a");
+  a.download = fileName;
+  const blob = new Blob([jsonString], { type: "text/json" });
+  a.href = URL.createObjectURL(blob);
+  a.click();
+}
+
 class App {
   mode: Mode = "swap";
-  cube: Cube;
+  puzzle: Promise<PuzzleStateEditor>;
+  copyStateElem: HTMLTextAreaElement = document.querySelector("#copy-state")!;
+  downloadDefElem: HTMLTextAreaElement =
+    document.querySelector("#download-def")!;
+  downloadStateElem: HTMLTextAreaElement =
+    document.querySelector("#download-state")!;
+  stateElem: HTMLTextAreaElement = document.querySelector(
+    "#display-state-text",
+  )!;
 
   constructor() {
     const puzzleSelect = document.querySelector(
@@ -26,7 +53,9 @@ class App {
     const puzzle = new URL(location.href).searchParams.get("puzzle") || "3x3x3";
     if (puzzle) {
       if (puzzle in puzzles) {
-        this.cube = new Cube(puzzles[puzzle]);
+        this.puzzle = PuzzleStateEditor.createAsync(puzzles[puzzle], () =>
+          this.displayStateText(),
+        );
         puzzleSelect.value = puzzle;
       } else {
         console.error("Invalid puzzle:", puzzle);
@@ -34,7 +63,9 @@ class App {
     }
 
     puzzleSelect?.addEventListener("change", () => {
-      this.cube.setPuzzle(puzzles[puzzleSelect.value]);
+      (async () => {
+        (await this.puzzle).setPuzzle(puzzles[puzzleSelect.value]);
+      })();
 
       const url = new URL(location.href);
       url.searchParams.set("puzzle", puzzleSelect.value);
@@ -48,34 +79,74 @@ class App {
           this.mode = radio.value as Mode;
         });
       });
+
+    this.copyStateElem.addEventListener("click", async () => {
+      navigator.clipboard.writeText(stateToString((await this.puzzle).state));
+    });
+
+    this.downloadDefElem.addEventListener("click", async () => {
+      const def = (await this.puzzle).kpuzzle.definition;
+      downloadJSONFile(defToString(def), `${def.name}.kpuzzle.json`);
+    });
+
+    this.downloadStateElem.addEventListener("click", async () => {
+      const puzzle = await this.puzzle;
+      const { kpuzzle, state } = puzzle;
+      downloadJSONFile(
+        stateToString(state),
+        `${kpuzzle.definition.name}.scramble.json`,
+      );
+    });
+  }
+
+  async displayStateText() {
+    this.stateElem.value = stateToString((await this.puzzle).state);
   }
 }
 
-class Cube {
+class PuzzleStateEditor {
   selectedFacelet: Facelet | null;
-  pieces = new Map<string, { [position: number]: Piece }>();
+  pieces = new Map<string, { [position: number]: PieceFacelets }>();
 
-  puzzle: PuzzleLoader;
+  svg: string;
+  kpuzzle: KPuzzle;
+  state: KState;
 
-  constructor(puzzle: PuzzleLoader) {
-    this.setPuzzle(puzzle);
+  private constructor(private displayStateText: () => void) {
+    this.displayStateText();
   }
 
-  setPuzzle(puzzle: PuzzleLoader) {
-    this.puzzle = puzzle;
+  static async createAsync(
+    puzzle: PuzzleLoader,
+    displayStateText: () => void,
+  ): Promise<PuzzleStateEditor> {
+    const [svg, kpuzzle] = await Promise.all([puzzle.svg(), puzzle.kpuzzle()]);
+    const instance = new PuzzleStateEditor(displayStateText);
+    instance.setPuzzleSync(svg, kpuzzle);
+    return instance;
+  }
 
-    puzzle.svg().then((svg) => {
-      document.querySelector("#puzzle")!.innerHTML = svg;
-      document.querySelector("svg")!.removeAttribute("width");
-      document.querySelector("svg")!.removeAttribute("height");
+  private async setPuzzleSync(svg: string, kpuzzle: KPuzzle) {
+    this.kpuzzle = kpuzzle;
+    this.state = kpuzzle.startState();
 
-      this.displayCube();
-    });
+    document.querySelector("#puzzle")!.innerHTML = svg;
+    document.querySelector("svg")!.removeAttribute("width");
+    document.querySelector("svg")!.removeAttribute("height");
+
+    this.display();
+
     this.selectedFacelet = null;
   }
 
-  displayCube = async () => {
-    const { orbits } = (await this.puzzle.kpuzzle()).definition;
+  async setPuzzle(puzzle: PuzzleLoader) {
+    const [svg, kpuzzle] = await Promise.all([puzzle.svg(), puzzle.kpuzzle()]);
+    this.setPuzzleSync(svg, kpuzzle);
+    this.displayStateText();
+  }
+
+  display() {
+    const { orbits } = this.kpuzzle.definition;
 
     for (const orbitName in orbits) {
       const orbitVal = orbits[orbitName];
@@ -97,17 +168,17 @@ class Cube {
         }
       }
     }
-  };
+  }
 
-  getFaceletByOrientation(piece: Piece, orientation: number) {
+  getFaceletByOrientation(piece: PieceFacelets, orientation: number) {
     return piece[orientation];
   }
 
-  getPieceByFacelet({ position, type }: Facelet) {
+  getPieceByFacelet({ pieceIndex: position, orbit: type }: Facelet) {
     return this.pieces.get(type)![position];
   }
 
-  swapFacelets(facelet1: Facelet, facelet2: Facelet) {
+  swapFaceletFills(facelet1: Facelet, facelet2: Facelet) {
     const temp = facelet1.element.style.fill;
     facelet1.element.style.fill = facelet2.element.style.fill;
     facelet2.element.style.fill = temp;
@@ -116,19 +187,27 @@ class Cube {
   async twist(facelet: Facelet) {
     const piece = this.getPieceByFacelet(facelet);
 
-    const { orbits } = (await this.puzzle.kpuzzle()).definition;
+    const { orbits } = this.kpuzzle.definition;
 
-    const { numOrientations } = orbits[facelet.type];
+    const { numOrientations } = orbits[facelet.orbit];
 
     for (let i = 0; i < numOrientations - 1; i++) {
       const facelet = this.getFaceletByOrientation(piece, i);
       const facelet2Orientation =
-        (numOrientations + facelet.orientation + 1) % numOrientations;
-      this.swapFacelets(
+        (numOrientations + facelet.orientationIndex + 1) % numOrientations;
+      this.swapFaceletFills(
         facelet,
         this.getFaceletByOrientation(piece, facelet2Orientation),
       );
     }
+
+    const stateOrbit = this.state.stateData[facelet.orbit];
+    stateOrbit.orientation[facelet.pieceIndex] = offsetMod(
+      stateOrbit.orientation[facelet.pieceIndex] - 1,
+      numOrientations,
+    );
+    this.displayStateText();
+    flash(facelet.element);
   }
 
   async swap(facelet1: Facelet, facelet2: Facelet) {
@@ -139,76 +218,102 @@ class Cube {
       return;
     }
 
-    const offset = facelet2.orientation - facelet1.orientation;
-
-    const { orbits } = (await this.puzzle.kpuzzle()).definition;
-
-    const { numOrientations } = orbits[facelet1.type];
-
+    const offset = facelet2.orientationIndex - facelet1.orientationIndex;
+    const { orbits } = this.kpuzzle.definition;
+    const { numOrientations } = orbits[facelet1.orbit];
     for (let i = 0; i < numOrientations; i++) {
       const facelet = this.getFaceletByOrientation(piece1, i);
 
-      const facelet2Orientation =
-        (numOrientations + facelet.orientation + offset) % numOrientations;
-      this.swapFacelets(
+      const facelet2Orientation = offsetMod(
+        facelet.orientationIndex + offset,
+        numOrientations,
+      );
+      this.swapFaceletFills(
         facelet,
         this.getFaceletByOrientation(piece2, facelet2Orientation),
       );
     }
+
+    const stateOrbit = this.state.stateData[facelet1.orbit];
+    const piece1Index = stateOrbit.pieces[facelet1.pieceIndex];
+    const piece1Orientation = stateOrbit.orientation[facelet1.pieceIndex];
+    const piece2Index = stateOrbit.pieces[facelet2.pieceIndex];
+    const piece2Orientation = stateOrbit.orientation[facelet2.pieceIndex];
+
+    stateOrbit.pieces[facelet1.pieceIndex] = piece2Index;
+    stateOrbit.orientation[facelet1.pieceIndex] = offsetMod(
+      piece2Orientation - offset,
+      numOrientations,
+    );
+
+    stateOrbit.pieces[facelet2.pieceIndex] = piece1Index;
+    stateOrbit.orientation[facelet2.pieceIndex] = offsetMod(
+      piece1Orientation + offset,
+      numOrientations,
+    );
+    this.displayStateText();
+    flash(facelet1.element);
+    flash(facelet2.element);
   }
 }
 
 class Facelet {
-  type: string;
-  position: number;
-  orientation: number;
+  orbit: string;
+  pieceIndex: number;
+  orientationIndex: number;
   element: HTMLOrSVGImageElement;
 
   constructor(type: string, position: number, orientation: number) {
-    this.type = type;
-    this.orientation = orientation;
-    this.position = position;
+    this.orbit = type;
+    this.orientationIndex = orientation;
+    this.pieceIndex = position;
     this.element = document.getElementById(
       this.getId(),
     )! as HTMLOrSVGImageElement;
-    this.element.onclick = () => this.click();
+    this.element.addEventListener("pointerdown", (e: PointerEvent) => {
+      this.click(e);
+    });
   }
 
   getId() {
-    return `${this.type}-l${this.position}-o${this.orientation}`;
+    return `${this.orbit}-l${this.pieceIndex}-o${this.orientationIndex}`;
   }
 
-  deselect() {
-    app.cube.selectedFacelet = null;
+  async deselect() {
+    (await app.puzzle).selectedFacelet = null;
     this.element.style.opacity = "1";
   }
 
-  select() {
-    if (app.cube.selectedFacelet) {
-      app.cube.selectedFacelet.deselect();
+  async select() {
+    const puzzle = await app.puzzle;
+    if (puzzle.selectedFacelet) {
+      puzzle.selectedFacelet.deselect();
     }
 
-    app.cube.selectedFacelet = this;
+    puzzle.selectedFacelet = this;
     this.element.style.opacity = "0.7";
   }
 
-  click() {
+  async click(e: PointerEvent) {
+    const puzzle = await app.puzzle;
     switch (app.mode) {
       case "swap": {
         if (
-          app.cube.selectedFacelet &&
-          app.cube.selectedFacelet.type === this.type
+          puzzle.selectedFacelet &&
+          puzzle.selectedFacelet.orbit === this.orbit
         ) {
-          app.cube.swap(app.cube.selectedFacelet, this);
-
-          app.cube.selectedFacelet.deselect();
+          puzzle.swap(puzzle.selectedFacelet, this);
+          puzzle.selectedFacelet.deselect();
         } else {
+          puzzle.selectedFacelet?.deselect();
           this.select();
         }
+        e.preventDefault();
         break;
       }
       case "twist": {
-        app.cube.twist(this);
+        puzzle.twist(this);
+        e.preventDefault();
         break;
       }
       default:
