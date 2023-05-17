@@ -11,7 +11,7 @@ const postJSONInit: RequestInit = {
 export interface TwsearchServerClientOptions {
   startState?: KState;
   searchArgs?: {
-    checkBeforeSolve?: boolean;
+    checkBeforeSolve?: "always" | "never" | "auto";
     randomStart?: boolean;
     minDepth?: number;
     maxDepth?: number;
@@ -28,7 +28,6 @@ export async function solveTwsearchServer(
   options: TwsearchServerClientOptions,
 ): Promise<Alg> {
   if (options.searchArgs) {
-    options.searchArgs.checkBeforeSolve ??= true;
     options.searchArgs.randomStart ??= true;
     options.searchArgs.startPruneDepth ??= 5;
   }
