@@ -1,5 +1,5 @@
 import { offsetMod } from "../../../../cubing/alg/cubing-private";
-import type { KPuzzle, KState } from "../../../../cubing/kpuzzle";
+import { KState, type KPuzzle } from "../../../../cubing/kpuzzle";
 import { puzzles, type PuzzleLoader } from "../../../../cubing/puzzles";
 import { defToString, stateToString } from "../3x3x3-formats/convert";
 
@@ -128,7 +128,10 @@ class PuzzleStateEditor {
 
   private async setPuzzleSync(svg: string, kpuzzle: KPuzzle) {
     this.kpuzzle = kpuzzle;
-    this.state = kpuzzle.startState();
+    this.state = new KState(
+      kpuzzle,
+      structuredClone(kpuzzle.startState().stateData),
+    );
 
     document.querySelector("#puzzle")!.innerHTML = svg;
     document.querySelector("svg")!.removeAttribute("width");
