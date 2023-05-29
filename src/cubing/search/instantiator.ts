@@ -10,8 +10,6 @@ import {
   searchWorkerURLNewURLImportMetaURL,
 } from "./worker-workarounds";
 
-const MODULE_WORKER_TIMEOUT_MILLISECONDS = 5000;
-
 export interface WorkerOutsideAPI {
   terminate: () => void; // `node` can return a `Promise` with an exit code, but we match the web worker API.
 }
@@ -54,6 +52,7 @@ export async function instantiateModuleWorker(
         reject(e);
       };
 
+      // TODO: Remove this once we can remove the workarounds for lack of `import.meta.resolve(…)` support.
       const onFirstMessage = (messageData: string) => {
         if (messageData === "comlink-exposed") {
           // We need to clear the timeout so that we don't prevent `node` from exiting in the meantime.
