@@ -133,70 +133,6 @@ export async function build(target, dev) {
   }
 }
 
-let latestBuildSymbol = null;
-const SEARCH_WORKER_PATH =
-  "./src/cubing/search/search-worker-inside-generated-string.js";
-export const searchWorkerTarget = {
-  name: "search-worker",
-  builtYet: false,
-  dependencies: [],
-  buildSelf: async (dev) => {
-    const buildSymbol = Symbol("esbuild");
-    latestBuildSymbol = buildSymbol;
-
-    const writeFile = async (buildResult) => {
-      if (latestBuildSymbol !== buildSymbol) {
-        console.warn("Stale `esbuild`?!");
-        return;
-      }
-      const { contents } = buildResult.outputFiles[0];
-      const contentsString = new TextDecoder("utf-8").decode(contents);
-      if (typeof contentsString !== "string") {
-        throw new Error(
-          "Unexpected non-string for the decoded search worker source.",
-        );
-      }
-      const workerContents = `export const workerSource = ${JSON.stringify(
-        contentsString,
-      )};`;
-      console.log("Writing:", SEARCH_WORKER_PATH);
-      writeSyncUsingTempFile(
-        "search-worker-inside-generated-string.js",
-        SEARCH_WORKER_PATH,
-        workerContents,
-      );
-    };
-
-    let watch = dev;
-    if (dev) {
-      watch = {
-        onRebuild(error, result) {
-          if (error) {
-            console.error("Watch build failed:", error);
-          } else {
-            writeFile(result);
-          }
-        },
-      };
-    }
-
-    const initialBuildResult = await esbuild.build({
-      entryPoints: ["./src/cubing/search/inside/search-worker-js-entry.js"],
-      format: "cjs",
-      target: "es2020",
-      bundle: true,
-      watch,
-      write: false,
-      logLevel: "info",
-      external: ["node:*"],
-      minify: !dev,
-    });
-    // Note that we finish writing the initial built file before we return.
-    // This means that the file is in place before any dependent steps(like Snowpack) start.
-    await writeFile(initialBuildResult);
-  },
-};
-
 export const staticPackageMetadataTarget = {
   name: "static-package-metadata",
   builtYet: false,
@@ -239,7 +175,7 @@ export const staticPackageMetadataTarget = {
 export const esmTarget = {
   name: "esm",
   builtYet: false,
-  dependencies: [searchWorkerTarget, staticPackageMetadataTarget],
+  dependencies: [staticPackageMetadataTarget],
   buildSelf: async (dev) => {
     await esbuild.build({
       // TODO: construct entry points based on `exports` (see `staticPackageMetadataTarget`) and add tests.
@@ -262,7 +198,7 @@ export const esmTarget = {
 export const binTarget = {
   name: "bin",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     await esbuild.build({
       entryPoints: [
@@ -290,7 +226,7 @@ export const binTarget = {
 export const sitesTarget = {
   name: "sites",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     await barelyServe(siteOptions("sites", dev));
   },
@@ -299,7 +235,7 @@ export const sitesTarget = {
 export const twizzleTarget = {
   name: "twizzle",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     await barelyServe(siteOptions("sites/alpha.twizzle.net", dev));
     if (!dev) {
@@ -312,7 +248,7 @@ export const twizzleTarget = {
 export const experimentsTarget = {
   name: "experiments",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     await barelyServe(
       siteOptions("sites/experiments.cubing.net/cubing.js", dev),
@@ -328,7 +264,7 @@ export const experimentsTarget = {
 export const typesTarget = {
   name: "types",
   builtYet: false,
-  dependencies: [searchWorkerTarget],
+  dependencies: [],
   buildSelf: async (dev) => {
     console.warn("Note: The `types` target is slow. Expect several seconds.");
     if (dev) {
@@ -356,7 +292,6 @@ export const allTarget = {
 };
 
 export const targets /*: Record<String, SolverWorker>*/ = {
-  "search-worker": searchWorkerTarget,
   sites: sitesTarget,
   twizzle: twizzleTarget,
   experiments: experimentsTarget,

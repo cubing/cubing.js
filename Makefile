@@ -44,14 +44,11 @@ build-site-twizzle:
 build-site-experiments:
 	${NODE} ./script/build/main.js experiments
 .PHONY: build-site-docs
-build-site-docs: build-search-worker
+build-site-docs:
 	rm -rf ./dist/sites/js.cubing.net/
 	npx typedoc src/cubing/*/index.ts
 	cp -R ./src/docs/js.cubing.net/* ./dist/sites/js.cubing.net/
 	@echo "\n\nNote: The js.cubing.net docs are deployed to GitHub Pages using GitHub Actions when a commit is pushed to the \`main\` branch:\nhttps://github.com/cubing/cubing.js/actions/workflows/pages.yml"
-.PHONY: build-search-worker
-build-search-worker:
-	${NODE} ./script/build/main.js search-worker
 .PHONY: generate-js
 generate-js: generate-js-parsers generate-js-svg
 .PHONY: generate-js-parsers
@@ -69,7 +66,7 @@ link: build
 .PHONY: clean
 clean:
 	rm -rf \
-		dist .temp coverage src/cubing/search/search-worker-inside-generated* script/bin/screenshot-src/main.js \
+		dist .temp coverage script/bin/screenshot-src/main.js \
 		./alg ./bluetooth ./kpuzzle ./notation ./protocol ./puzzle-geometry ./puzzles ./scramble ./search ./stream ./twisty
 .PHONY: test
 test: test-info
@@ -109,7 +106,7 @@ test-spec-with-coverage:
 test-spec-watch:
 	${WEB_TEST_RUNNER} --playwright --watch
 .PHONY: test-src-internal-import-restrictions
-test-src-internal-import-restrictions: build-search-worker
+test-src-internal-import-restrictions:
 	${NODE} ./script/test/src/internal-import-restrictions/main.js
 .PHONY: test-src-does-not-import-dist
 test-src-does-not-import-dist: build
